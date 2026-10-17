@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cérebro A como connectome</title>
+<!-- gerado por tools/connectome_cerebro_a.py a partir de um replay; não editar à mão -->
+<script src="__D3_CDN__"></script>
+<style>
+:root {
+  color-scheme: light;
+  --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink2: #52514e; --muted: #898781;
+  --hair: #e1e0d9; --axis: #c3c2b7; --ring: rgba(11,11,11,0.10);
+  --prior: #9a998f; --mais: #e34948; --menos: #2a78d6;
+  --l-percepcao: #1baf7a; --l-impulsos: #6250d6; --l-memoria_emocao: #e87ba4; --l-planejamento: #eda100; --l-decisao: #008300;
+  --tint: 0.07; --glow: 0;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink2: #c3c2b7; --muted: #898781;
+    --hair: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+    --prior: #6f6e68; --mais: #e66767; --menos: #3987e5;
+    --l-percepcao: #199e70; --l-impulsos: #9085e9; --l-memoria_emocao: #d55181; --l-planejamento: #c98500; --l-decisao: #008300;
+    --tint: 0.10; --glow: 1;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink2: #c3c2b7; --muted: #898781;
+  --hair: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+  --prior: #6f6e68; --mais: #e66767; --menos: #3987e5;
+  --l-percepcao: #199e70; --l-impulsos: #9085e9; --l-memoria_emocao: #d55181; --l-planejamento: #c98500; --l-decisao: #008300;
+  --tint: 0.10; --glow: 1;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+header { padding: 16px 20px 8px; max-width: 1600px; margin: 0 auto; }
+h1 { font-size: 20px; margin: 0 0 4px; font-weight: 650; }
+.aviso { color: var(--ink2); margin: 0; max-width: 1100px; }
+.aviso b { color: var(--ink); }
+main { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 12px; padding: 8px 20px 20px; max-width: 1600px; margin: 0 auto; }
+@media (max-width: 1000px) { main { grid-template-columns: 1fr; padding: 8px 16px 16px; } header { padding: 12px 16px 4px; } }
+.cartao { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; }
+#grafo { position: relative; overflow: hidden; }
+#grafo svg { display: block; width: 100%; height: auto; }
+.controles { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; padding: 10px 12px; border-bottom: 1px solid var(--hair); }
+.controles label { color: var(--ink2); display: inline-flex; gap: 6px; align-items: center; }
+select, button { font: inherit; color: var(--ink); background: var(--page); border: 1px solid var(--axis); border-radius: 6px; padding: 3px 8px; }
+button { cursor: pointer; min-width: 34px; }
+button:hover { border-color: var(--muted); }
+.tocador { padding: 10px 12px 12px; border-top: 1px solid var(--hair); }
+.tocador .linha { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+#cursor { flex: 1 1 300px; accent-color: var(--l-decisao); }
+#faixa { width: 100%; height: 26px; display: block; margin-top: 6px; cursor: pointer; }
+.painel { padding: 12px 14px; }
+.painel h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 14px 0 6px; font-weight: 600; }
+.painel h2:first-child { margin-top: 0; }
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; }
+.kv dt { color: var(--ink2); } .kv dd { margin: 0; font-variant-numeric: tabular-nums; }
+.legenda { display: flex; flex-wrap: wrap; gap: 4px 12px; color: var(--ink2); font-size: 12.5px; }
+.legenda span { display: inline-flex; align-items: center; gap: 5px; }
+.sw { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+.ln { width: 18px; height: 3px; border-radius: 2px; display: inline-block; }
+#tip { position: absolute; pointer-events: none; background: var(--surface); color: var(--ink); border: 1px solid var(--ring);
+       box-shadow: 0 4px 16px rgba(0,0,0,.18); border-radius: 8px; padding: 6px 9px; font-size: 12.5px; display: none; max-width: 320px; z-index: 2; }
+#tip .mu { color: var(--ink2); }
+table { border-collapse: collapse; width: 100%; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 2px 4px; border-bottom: 1px solid var(--hair); }
+th { color: var(--muted); font-weight: 600; }
+td.n { text-align: right; }
+.nota { color: var(--muted); font-size: 12px; margin-top: 8px; }
+.rotulo-no { font-size: 11.5px; fill: var(--ink2); }
+.rotulo-reg { font-size: 12.5px; font-weight: 650; letter-spacing: .03em; text-transform: uppercase; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Cérebro A como connectome</h1>
+  <p class="aviso" id="aviso"></p>
+</header>
+<main>
+  <section class="cartao" id="grafo">
+    <div class="controles">
+      <label>arestas <select id="modo">
+        <option value="w">peso w (prior + aprendido)</option>
+        <option value="d">só o aprendido (w − w0)</option>
+        <option value="p">só o prior do instinto (w0)</option>
+      </select></label>
+      <label><input type="checkbox" id="acender" checked> acender a decisão</label>
+      <label><input type="checkbox" id="soregra"> só a regra que disparou</label>
+      <div class="legenda" id="legenda-arestas"></div>
+    </div>
+    <svg id="svg" role="img" aria-label="grafo dos pesos do cérebro A"></svg>
+    <div id="tip"></div>
+    <div class="tocador">
+      <div class="linha">
+        <button id="ant" title="decisão anterior" aria-label="decisão anterior">◀</button>
+        <button id="tocar" title="tocar ou pausar" aria-label="tocar">▶</button>
+        <button id="prox" title="próxima decisão" aria-label="próxima decisão">▶|</button>
+        <label>velocidade <select id="vel"><option value="2">2/s</option><option value="8" selected>8/s</option><option value="30">30/s</option><option value="120">120/s</option></select></label>
+        <input type="range" id="cursor" min="0" value="0" aria-label="decisão">
+        <span id="pos" style="font-variant-numeric: tabular-nums; color: var(--ink2)"></span>
+      </div>
+      <svg id="faixa" aria-label="lobo decisivo por decisão"></svg>
+      <div class="legenda" id="legenda-faixa" style="margin-top:4px"></div>
+    </div>
+  </section>
+  <aside class="cartao painel">
+    <h2>Decisão</h2>
+    <dl class="kv" id="decisao"></dl>
+    <h2>Contribuição de cada lobo por candidato</h2>
+    <svg id="barras" width="100%" aria-label="contribuição dos lobos por candidato"></svg>
+    <div class="legenda" id="legenda-lobos"></div>
+    <h2>Arestas acesas (maiores termos w·x/S)</h2>
+    <table id="tabela"><thead><tr><th>entrada</th><th>ação</th><th class="n">w·x/S</th><th class="n">Δ</th></tr></thead><tbody></tbody></table>
+    <h2>Tamanho do grafo nesta vida</h2>
+    <dl class="kv" id="tamanho"></dl>
+    <p class="nota" id="nota-vida"></p>
+  </aside>
+</main>
+<script>
+// ?tema=escuro ou ?tema=claro fixa o tema (para a captura); sem o parâmetro, segue o sistema
+{ const t = new URLSearchParams(location.search).get("tema"); if (t) document.documentElement.dataset.theme = t === "escuro" ? "dark" : "light"; }
+const D = __DADOS__;
+const S = D.meta.escala, TETO = D.meta.teto;
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const corLobo = l => css(`--l-${l}`);
+const rot = l => D.meta.rotulo_lobo[l] || l;
+const fmt = (v, c = 3) => (v === null || v === undefined) ? "—" : (Math.abs(v) < 1e-12 ? "0" : (+v).toFixed(c));
+const N = D.decisoes.length;
+const C = D.contagem;
+
+// ---------------------------------------------------------------- aviso honesto
+document.getElementById("aviso").innerHTML =
+  `Não é uma rede de neurônios. É a <b>tabela de pesos inteiros</b> w[regra][ação][entrada] do cérebro A (PoliticaLobos), ` +
+  `com o alvo aprendido e a presença da fruta, desenhada como grafo. Nesta vida: <b>${C.nos} nós</b> e ` +
+  `<b>${C.pesos_total.nao_nulos_fim} pesos não nulos</b> no fim (de ${C.n_pesos_do_cerebro} posições). ` +
+  `O cérebro da mosca do FlyWire tem ${C.comparacao_flywire.neuronios} neurônios e ${C.comparacao_flywire.sinapses} de sinapses ` +
+  `(Dorkenwald et al. 2024). Vida de teste: <b>${D.meta.nome}</b>, pet ${D.meta.pet}, ${D.meta.dias} dias, ${N} decisões, S = ${S}.`;
+
+// ---------------------------------------------------------------- pesos no tempo
+const K = D.arestas.length;
+const PASSO_CK = 50;
+const checkpoints = [];
+{
+  let w = D.arestas.map(a => a.w0_ini);
+  for (let n = 0; n < N; n++) {
+    for (const [i, v] of D.decisoes[n].mud) w[i] = v;
+    if (n % PASSO_CK === 0) checkpoints.push(w.slice());
+  }
+}
+function pesosEm(n) {
+  const base = Math.floor(n / PASSO_CK);
+  const w = checkpoints[base].slice();
+  for (let m = base * PASSO_CK + 1; m <= n; m++) for (const [i, v] of D.decisoes[m].mud) w[i] = v;
+  return w;
+}
+
+// ---------------------------------------------------------------- layout
+const W = 1400;
+const nos = D.nos.map(n => ({ ...n }));
+const porId = Object.fromEntries(nos.map(n => [n.id, n]));
+const col = { entrada: 175, regra: 560, lobo: 820, acao: 1030, classe: 1255 };
+const grupos = g => nos.filter(n => n.grupo === g);
+const ent = grupos("entrada"), reg = grupos("regra"), aco = grupos("acao"), cla = grupos("classe"), lob = grupos("lobo");
+const TOPO = 70;
+const passoE = Math.max(16, Math.min(34, 640 / ent.length));
+const H = Math.max(760, TOPO + ent.length * passoE + 60, TOPO + cla.length * 24 + 60);
+function distribuir(lista, x, y0, y1) {
+  const p = (y1 - y0) / Math.max(1, lista.length);
+  lista.forEach((n, i) => { n.x = x; n.y = y0 + p * (i + 0.5); });
+}
+// entradas em blocos por subgrupo, com um respiro entre blocos
+{
+  let y = TOPO + 10, ultimo = null;
+  ent.forEach(n => { if (n.sub !== ultimo) y += passoE * (ultimo === null ? 0.4 : 1.0); n.x = col.entrada; n.y = y; y += passoE; ultimo = n.sub; });
+  const alt = y - TOPO;
+  const esc = (H - TOPO - 50) / alt;
+  if (esc < 1) ent.forEach(n => n.y = TOPO + (n.y - TOPO) * esc);
+}
+distribuir(reg, col.regra, TOPO + 40, H - 60);
+distribuir(aco, col.acao, TOPO + 60, H - 80);
+distribuir(cla, col.classe, TOPO + 10, H - 40);
+lob.forEach(n => { n.x = col.lobo; n.y = n.lobo === "memoria_emocao" ? TOPO + 70 : H - 120; });
+
+const svg = d3.select("#svg").attr("viewBox", `0 0 ${W} ${H}`);
+const defs = svg.append("defs");
+const f = defs.append("filter").attr("id", "brilho").attr("x", "-50%").attr("y", "-50%").attr("width", "200%").attr("height", "200%");
+f.append("feGaussianBlur").attr("stdDeviation", 3).attr("result", "b");
+const fm = f.append("feMerge"); fm.append("feMergeNode").attr("in", "b"); fm.append("feMergeNode").attr("in", "SourceGraphic");
+
+// regiões (os lobos)
+const regioes = [
+  { lobo: "percepcao", x0: 20, x1: 330, nos: ent },
+  { lobo: "impulsos", x0: 420, x1: 700, nos: reg },
+  { lobo: "memoria_emocao", x0: 735, x1: 905, nos: lob.filter(n => n.lobo === "memoria_emocao"), y0: TOPO + 20, y1: TOPO + 130 },
+  { lobo: "decisao", x0: 940, x1: 1385, nos: aco.concat(cla) },
+];
+if (lob.some(n => n.lobo === "planejamento")) regioes.push({ lobo: "planejamento", x0: 735, x1: 905, nos: [], y0: H - 175, y1: H - 60 });
+const gReg = svg.append("g");
+for (const r of regioes) {
+  const y0 = r.y0 ?? TOPO - 30, y1 = r.y1 ?? H - 18;
+  gReg.append("rect").attr("x", r.x0).attr("y", y0).attr("width", r.x1 - r.x0).attr("height", y1 - y0).attr("rx", 18)
+    .attr("fill", corLobo(r.lobo)).attr("fill-opacity", css("--tint")).attr("stroke", corLobo(r.lobo)).attr("stroke-opacity", 0.35);
+  gReg.append("text").attr("class", "rotulo-reg").attr("x", r.x0 + 14).attr("y", y0 + 20).attr("fill", corLobo(r.lobo)).text(rot(r.lobo));
+}
+gReg.append("text").attr("class", "rotulo-no").attr("x", 1040).attr("y", TOPO - 10).attr("fill", "var(--muted)").text("ações");
+gReg.append("text").attr("class", "rotulo-no").attr("x", 1230).attr("y", TOPO - 10).attr("fill", "var(--muted)").text("classes de alvo");
+
+// as arestas: entrada -> regra -> ação (t, c, s), ação -> classe (m), presença -> comer (f)
+const regIdx = Object.fromEntries(reg.map((n, i) => [n.id, i]));
+const linha = d3.line().curve(d3.curveBasis);
+function caminho(a) {
+  const p = porId[a.de], q = porId[a.para];
+  if (a.via) {
+    const v = porId[a.via];
+    return linha([[p.x + 8, p.y], [(p.x + v.x) / 2, p.y], [v.x - 30, v.y], [v.x, v.y], [v.x + 30, v.y], [(v.x + q.x) / 2, q.y], [q.x - 8, q.y]]);
+  }
+  if (a.tipo === "m") {
+    const off = ((regIdx[`r:${a.regra}`] ?? 0) - reg.length / 2) * 3;
+    return linha([[p.x + 8, p.y], [p.x + 80, p.y + off], [q.x - 80, q.y + off], [q.x - 8, q.y]]);
+  }
+  return linha([[p.x + 8, p.y], [p.x + 200, p.y - 30], [q.x - 300, q.y + 40], [q.x - 8, q.y]]);
+}
+const gA = svg.append("g").attr("fill", "none").attr("stroke-linecap", "round");
+const gL = svg.append("g").attr("fill", "none").attr("stroke-linecap", "round");   // camada acesa
+const arestasSel = gA.selectAll("path").data(D.arestas).join("path").attr("d", caminho);
+const gN = svg.append("g");
+const noSel = gN.selectAll("g").data(nos).join("g").attr("transform", n => `translate(${n.x},${n.y})`);
+noSel.append("circle").attr("r", n => n.grupo === "regra" ? 9 : n.grupo === "lobo" ? 11 : 6)
+  .attr("fill", n => corLobo(n.lobo)).attr("stroke", "var(--surface)").attr("stroke-width", 2);
+noSel.append("text").attr("class", "rotulo-no").attr("dy", "0.32em")
+  .attr("y", n => n.grupo === "regra" || n.grupo === "lobo" ? -16 : 0)
+  .attr("x", n => n.grupo === "entrada" ? -12 : (n.grupo === "regra" || n.grupo === "lobo") ? 0 : 13)
+  .attr("text-anchor", n => n.grupo === "entrada" ? "end" : (n.grupo === "regra" || n.grupo === "lobo") ? "middle" : "start")
+  .text(n => n.rotulo);
+// os rótulos dos subgrupos da percepção
+{
+  const sub = { receptor: "receptores", estado: "estado", mundo: "mundo", corpo: "receptores novos do corpo", social: "entradas sociais", presenca: "presença da fruta" };
+  const vistos = new Set();
+  for (const n of ent) if (!vistos.has(n.sub)) { vistos.add(n.sub);
+    gReg.append("text").attr("class", "rotulo-no").attr("x", col.entrada + 6).attr("y", n.y - passoE * 0.75).attr("dy", "0.32em")
+      .attr("text-anchor", "end").attr("font-style", "italic").attr("fill", "var(--muted)").text(sub[n.sub] || n.sub); }
+}
+
+// ---------------------------------------------------------------- desenho
+const modoSel = document.getElementById("modo"), acenderSel = document.getElementById("acender"), soRegra = document.getElementById("soregra");
+const largura = v => Math.max(0.35, Math.min(9, Math.sqrt(Math.abs(v) / S) * 2.4));
+function corDelta(d) {
+  if (d === 0) return css("--prior");
+  return d > 0 ? css("--mais") : css("--menos");
+}
+document.getElementById("legenda-arestas").innerHTML =
+  `<span><i class="ln" style="background:var(--prior)"></i>prior do instinto (w = w0)</span>` +
+  `<span><i class="ln" style="background:var(--mais)"></i>aprendido acima do prior (w > w0)</span>` +
+  `<span><i class="ln" style="background:var(--menos)"></i>aprendido abaixo do prior (w < w0)</span>` +
+  `<span>espessura ∝ √|peso|; tracejado: peso negativo</span>`;
+document.getElementById("legenda-lobos").innerHTML = D.meta.lobos.concat(["piso"]).map(l =>
+  `<span><i class="sw" style="background:${l === "piso" ? "var(--axis)" : corLobo(l)}"></i>${l === "piso" ? "piso" : rot(l)}</span>`).join("");
+
+let n = 0, wAgora = pesosEm(0);
+function valorAresta(i) {
+  const a = D.arestas[i], w = wAgora[i], d = w - a.w0;
+  return modoSel.value === "w" ? w : modoSel.value === "d" ? d : a.w0;
+}
+function desenharArestas() {
+  const dd = D.decisoes[n];
+  const modo = modoSel.value;
+  const aceso = acenderSel.checked;
+  arestasSel.each(function (a, i) {
+    const v = valorAresta(i), d = wAgora[i] - a.w0;
+    const el = d3.select(this);
+    const fora = soRegra.checked && a.regra && a.regra !== dd.regra;
+    if (v === 0 || fora) { el.attr("display", "none"); return; }
+    el.attr("display", null).attr("stroke-width", largura(v))
+      .attr("stroke", modo === "p" ? css("--prior") : corDelta(d))
+      .attr("stroke-dasharray", v < 0 ? "4 3" : null)
+      .attr("stroke-opacity", aceso ? 0.13 : (modo === "p" || d === 0 ? 0.45 : 0.25 + 0.6 * Math.min(1, Math.abs(d) / TETO)));
+  });
+}
+
+// a camada acesa: os termos w·x/S da decisão n
+function termosDaDecisao(dd) {
+  const out = [];
+  const xs = {};
+  D.meta.entradas.forEach((e, j) => xs[e] = dd.x[j]);
+  (D.meta.receptores_novos || []).forEach((e, j) => xs[e] = dd.xc ? dd.xc[j] : 0);
+  (D.meta.sociais || []).forEach((e, j) => xs[e] = dd.xs ? dd.xs[j] : 0);
+  D.arestas.forEach((a, i) => {
+    if (a.via && a.regra === dd.regra && dd.cands.includes(a.acao)) {
+      const t = (wAgora[i] / S) * (xs[a.entrada] ?? 0);
+      if (t !== 0) out.push({ i, a, t, x: xs[a.entrada] });
+    } else if (a.tipo === "f" && dd.cands.includes("comer") && dd.pres && dd.pres.length) {
+      const j = ["a", "b", "c"].indexOf(a.fruta);
+      const t = (wAgora[i] / S) * (dd.pres[j] || 0);
+      if (t !== 0) out.push({ i, a, t, x: dd.pres[j] });
+    } else if (a.tipo === "m" && dd.alvo && dd.alvo.classes && dd.alvo.classes.includes(a.classe) && a.regra === dd.regra && a.acao === dd.acao) {
+      out.push({ i, a, t: wAgora[i] / S, x: 1, alvo: true });
+    }
+  });
+  return out;
+}
+function desenharAcesa() {
+  const dd = D.decisoes[n];
+  gL.selectAll("*").remove();
+  noSel.select("circle").attr("filter", null).attr("r", nd => nd.grupo === "regra" ? 9 : nd.grupo === "lobo" ? 11 : 6).attr("fill-opacity", 1);
+  if (!acenderSel.checked) { tabela([]); return; }
+  const ts = termosDaDecisao(dd);
+  gL.selectAll("path").data(ts).join("path").attr("d", o => caminho(o.a))
+    .attr("stroke", o => o.t < 0 ? css("--menos") : (o.a.acao === dd.acao || o.alvo ? css("--ink") : css("--ink2")))
+    .attr("stroke-opacity", o => (o.a.acao === dd.acao && (!o.alvo || o.a.classe === dd.alvo.alvo)) ? 0.9 : 0.35)
+    .attr("stroke-width", o => Math.max(0.8, Math.min(10, Math.sqrt(Math.abs(o.t)) * 3.2)))
+    .attr("filter", +css("--glow") ? "url(#brilho)" : null);
+  // as ligações dos lobos que não são pesos: memória/emoção e o plano (tracejadas)
+  for (const lobo of ["memoria_emocao", "planejamento"]) {
+    const ln = porId[`l:${lobo}`];
+    if (!ln) continue;
+    for (const a of dd.cands) {
+      const v = (dd.contrib[lobo] || {})[a];
+      if (!v) continue;
+      const q = porId[`a:${a}`];
+      gL.append("path").attr("d", linha([[ln.x, ln.y], [ln.x + 90, ln.y], [q.x - 90, q.y], [q.x - 8, q.y]]))
+        .attr("stroke", corLobo(lobo)).attr("stroke-width", Math.max(1, Math.min(8, Math.sqrt(Math.abs(v)) * 3)))
+        .attr("stroke-dasharray", "5 4").attr("stroke-opacity", 0.9);
+    }
+  }
+  // os nós: a regra, os candidatos, a ação, a classe escolhida, as entradas pelo valor
+  const xs = {}; D.meta.entradas.forEach((e, j) => xs[`e:${e}`] = dd.x[j]);
+  (D.meta.receptores_novos || []).forEach((e, j) => xs[`e:${e}`] = dd.xc ? dd.xc[j] : 0);
+  (D.meta.sociais || []).forEach((e, j) => xs[`e:${e}`] = dd.xs ? dd.xs[j] : 0);
+  ["a", "b", "c"].forEach((fr, j) => xs[`e:presenca_${fr}`] = dd.pres ? (dd.pres[j] || 0) : 0);
+  noSel.select("circle")
+    .attr("fill-opacity", nd => nd.grupo === "entrada" ? 0.25 + 0.75 * Math.min(1, Math.abs(xs[nd.id] || 0))
+      : nd.grupo === "acao" ? (dd.cands.includes(nd.rotulo) ? 1 : 0.25)
+      : nd.grupo === "regra" ? (nd.rotulo === dd.regra ? 1 : 0.3)
+      : nd.grupo === "classe" ? (dd.alvo && dd.alvo.classes && dd.alvo.classes.includes(nd.rotulo) ? 1 : 0.25) : 1)
+    .attr("r", nd => (nd.id === `r:${dd.regra}` || nd.id === `a:${dd.acao}` || (dd.alvo && nd.id === `k:${dd.alvo.alvo}`)) ? 12
+      : nd.grupo === "regra" ? 9 : nd.grupo === "lobo" ? 11 : 6)
+    .attr("filter", nd => (+css("--glow") && (nd.id === `r:${dd.regra}` || nd.id === `a:${dd.acao}` || (dd.alvo && nd.id === `k:${dd.alvo.alvo}`))) ? "url(#brilho)" : null);
+  tabela(ts.filter(o => !o.alvo));
+}
+function tabela(ts) {
+  const top = ts.slice().sort((p, q) => Math.abs(q.t) - Math.abs(p.t)).slice(0, 10);
+  d3.select("#tabela tbody").selectAll("tr").data(top).join("tr").html(o =>
+    `<td>${o.a.entrada || ("fruta " + o.a.fruta)}</td><td>${o.a.acao || "comer"}</td><td class="n">${fmt(o.t)}</td><td class="n">${wAgora[o.i] - o.a.w0}</td>`);
+}
+
+// ---------------------------------------------------------------- painel da decisão
+const barras = d3.select("#barras");
+function painel() {
+  const dd = D.decisoes[n];
+  const h = Math.floor(dd.hora * 24), mi = Math.round((dd.hora * 24 - h) * 60);
+  const linhas = [["decisão", `${dd.n + 1} de ${N}`], ["dia do pet e hora", `dia ${dd.dia + 1}, ${String(h).padStart(2, "0")}:${String(mi % 60).padStart(2, "0")}`],
+    ["regra (impulsos)", dd.regra], ["candidatos", dd.cands.join(", ")], ["ação", `<b>${dd.acao}</b>`],
+    ["lobo decisivo", `<span style="color:${corLobo(dd.decisivo)}">●</span> ${rot(dd.decisivo)}`], ["u do sorteio", dd.u === null ? "— (regra determinista)" : fmt(dd.u, 4)]];
+  if (dd.alvo) linhas.push(["alvo", `${dd.alvo.alvo ?? "—"} <span style="color:var(--muted)">(padrão ${dd.alvo.padrao ?? "—"})</span>`]);
+  if (dd.alvo_plano) linhas.push(["o plano mudou o alvo", dd.alvo_plano.decidiu ? "sim" : "não"]);
+  if (dd.plano) linhas.push(["o plano mudou a ação", dd.plano.decidiu ? "sim" : "não"]);
+  if (dd.sinal !== undefined) linhas.push(["sinal do corpo depois", dd.sinal]);
+  document.getElementById("decisao").innerHTML = linhas.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("");
+  // barras empilhadas com sinal, uma por candidato
+  const lobos = D.meta.lobos.filter(l => l !== "percepcao").concat(["piso"]);
+  const largB = 300, alt = 22, esq = 96;
+  barras.attr("viewBox", `0 0 ${largB + esq + 44} ${dd.cands.length * (alt + 8) + 18}`).attr("height", dd.cands.length * (alt + 8) + 18);
+  let maxAbs = 0.5;
+  for (const a of dd.cands) { let pos = 0, neg = 0; for (const l of lobos) { const v = (dd.contrib[l] || {})[a] || 0; v > 0 ? pos += v : neg += v; } maxAbs = Math.max(maxAbs, pos, -neg); }
+  const xz = esq + largB * 0.25, esc = (largB * 0.75 - 4) / maxAbs;
+  barras.selectAll("*").remove();
+  barras.append("line").attr("x1", xz).attr("x2", xz).attr("y1", 0).attr("y2", dd.cands.length * (alt + 8)).attr("stroke", "var(--axis)");
+  dd.cands.forEach((a, k) => {
+    const y = k * (alt + 8);
+    barras.append("text").attr("x", esq - 6).attr("y", y + alt / 2).attr("dy", "0.32em").attr("text-anchor", "end")
+      .attr("font-size", 12).attr("font-weight", a === dd.acao ? 700 : 400).attr("fill", "var(--ink)").text(a);
+    let pos = xz, neg = xz;
+    for (const l of lobos) {
+      const v = (dd.contrib[l] || {})[a] || 0;
+      if (!v) continue;
+      const wd = Math.abs(v) * esc;
+      const x = v > 0 ? pos : neg - wd;
+      if (v > 0) pos += wd + 2; else neg -= wd + 2;
+      barras.append("rect").attr("x", x).attr("y", y).attr("width", Math.max(1, wd)).attr("height", alt).attr("rx", 3)
+        .attr("fill", l === "piso" ? "var(--axis)" : corLobo(l)).append("title").text(`${l === "piso" ? "piso" : rot(l)}: ${fmt(v)}`);
+    }
+    barras.append("text").attr("x", pos + 4).attr("y", y + alt / 2).attr("dy", "0.32em").attr("font-size", 11.5)
+      .attr("fill", "var(--ink2)").text(fmt(dd.pesos[a], 2));
+  });
+}
+
+// ---------------------------------------------------------------- tamanho
+{
+  const t = C.pesos_total;
+  const L = [["nós", C.nos], ["posições de peso", C.n_pesos_do_cerebro], ["não nulos no prior", t.nao_nulos_prior],
+    ["não nulos no fim", t.nao_nulos_fim], ["não nulos em algum momento", t.nao_nulos_na_vida], ["aprendidos (w ≠ w0) no fim", t.aprendidos_fim],
+    ["arestas da tabela acesas na vida", C.arestas_t_acesas_na_vida], ["decisões", C.decisoes]];
+  document.getElementById("tamanho").innerHTML = L.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("");
+  document.getElementById("nota-vida").textContent = `Gerado de ${D.meta.config} (semente de teste ${D.meta.semente}), rejogado do log no disco e conferido bit a bit.`;
+}
+
+// ---------------------------------------------------------------- faixa e tocador
+const faixa = d3.select("#faixa");
+const FW = 1000;
+faixa.attr("viewBox", `0 0 ${FW} 26`).attr("preserveAspectRatio", "none");
+const bw = FW / N;
+faixa.selectAll("rect.d").data(D.decisoes).join("rect").attr("class", "d").attr("x", (d, i) => i * bw).attr("y", 4).attr("width", Math.max(bw, 0.6)).attr("height", 18)
+  .attr("fill", d => corLobo(d.decisivo)).attr("fill-opacity", d => d.cands.length > 1 ? 0.95 : 0.35);
+D.decisoes.forEach((d, i) => { if (i > 0 && d.dia !== D.decisoes[i - 1].dia) faixa.append("line").attr("x1", i * bw).attr("x2", i * bw).attr("y1", 0).attr("y2", 26).attr("stroke", "var(--ink2)").attr("stroke-width", 1); });
+const marca = faixa.append("rect").attr("y", 0).attr("height", 26).attr("width", Math.max(2, bw)).attr("fill", "none").attr("stroke", "var(--ink)").attr("stroke-width", 1.5);
+document.getElementById("legenda-faixa").innerHTML = "lobo decisivo de cada decisão (claro: regra com um candidato só; traço: virada do dia) · " +
+  D.meta.lobos.filter(l => l !== "percepcao").map(l => `<span><i class="sw" style="background:${corLobo(l)}"></i>${rot(l)}</span>`).join("");
+faixa.on("click", ev => { const [x] = d3.pointer(ev); ir(Math.floor(x / FW * N)); });
+
+const cursor = document.getElementById("cursor");
+cursor.max = N - 1;
+function ir(m) {
+  n = Math.max(0, Math.min(N - 1, m));
+  wAgora = pesosEm(n);
+  cursor.value = n;
+  document.getElementById("pos").textContent = `${n + 1}/${N}`;
+  marca.attr("x", n * bw);
+  desenharArestas(); desenharAcesa(); painel();
+}
+let timer = null;
+const tocarBtn = document.getElementById("tocar");
+function tocar() {
+  if (timer) { clearInterval(timer); timer = null; tocarBtn.textContent = "▶"; tocarBtn.setAttribute("aria-label", "tocar"); return; }
+  tocarBtn.textContent = "❚❚"; tocarBtn.setAttribute("aria-label", "pausar");
+  timer = setInterval(() => { if (n >= N - 1) { tocar(); return; } ir(n + 1); }, 1000 / +document.getElementById("vel").value);
+}
+tocarBtn.onclick = tocar;
+document.getElementById("vel").onchange = () => { if (timer) { tocar(); tocar(); } };
+document.getElementById("ant").onclick = () => ir(n - 1);
+document.getElementById("prox").onclick = () => ir(n + 1);
+cursor.oninput = () => ir(+cursor.value);
+modoSel.onchange = acenderSel.onchange = soRegra.onchange = () => { desenharArestas(); desenharAcesa(); };
+document.addEventListener("keydown", ev => { if (ev.target.tagName === "SELECT" || ev.target.tagName === "INPUT" && ev.target.type !== "range") return;
+  if (ev.key === "ArrowRight") ir(n + 1); else if (ev.key === "ArrowLeft") ir(n - 1); else if (ev.key === " ") { ev.preventDefault(); tocar(); } });
+
+// ---------------------------------------------------------------- dicas
+const tip = document.getElementById("tip");
+function mostrar(ev, html) {
+  const r = document.getElementById("grafo").getBoundingClientRect();
+  tip.innerHTML = html; tip.style.display = "block";
+  const x = Math.min(ev.clientX - r.left + 14, r.width - 330);
+  tip.style.left = `${Math.max(4, x)}px`; tip.style.top = `${ev.clientY - r.top + 14}px`;
+}
+const esconder = () => tip.style.display = "none";
+arestasSel.style("pointer-events", "visibleStroke").on("mousemove", function (ev, a) {
+  const i = D.arestas.indexOf(a), w = wAgora[i];
+  const alvo = a.tipo === "m" ? `${a.acao} → ${a.classe}` : a.tipo === "f" ? `fruta ${a.fruta} à vista → comer` : `${a.entrada} → ${a.acao}`;
+  mostrar(ev, `<b>${alvo}</b>${a.regra ? `<br><span class="mu">regra</span> ${a.regra}` : ""}<br><span class="mu">w</span> ${w} · <span class="mu">w0</span> ${a.w0} · <span class="mu">Δ</span> ${w - a.w0}<br><span class="mu">w/S</span> ${fmt(w / S)} <span class="mu">(tabela ${a.tipo})</span>`);
+}).on("mouseleave", esconder);
+noSel.on("mousemove", (ev, nd) => mostrar(ev, `<b>${nd.rotulo}</b><br><span class="mu">lobo</span> ${rot(nd.lobo)} · <span class="mu">${nd.grupo}${nd.sub ? " / " + nd.sub : ""}</span>`)).on("mouseleave", esconder);
+
+// começa numa decisão com escolha (mais de um candidato) para a primeira tela já mostrar o sorteio
+ir(Math.max(0, D.decisoes.findIndex((d, i) => i > N / 2 && d.cands.length > 2)));
+</script>
+</body>
+</html>
