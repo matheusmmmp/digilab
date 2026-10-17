@@ -24,7 +24,7 @@ mesma decisão, os mesmos pesos e os mesmos motivos do Python, com paridade. É 
 - **Na `main`, já:** `corpo.ts` (o corpo do Creatures 3, com paridade), `mundo.ts` (o mundo físico, com paridade), o cérebro A em
   `digilab/policies/lobos.py` com o motivo por lobo (`_pesos_efetivos`: `impulsos`, `decisao`, `memoria_emocao`, e os termos das
   chaves ligadas).
-- **Decisões do Matheus:** PW-1 a PW-8 (seção 7). As etapas 1 e 2 podem começar com as recomendações de PW-1 e PW-2; o resto espera.
+- **Decisões do Matheus:** PW-1 e PW-2 decididas em 2026-10-17 (seção 7); PW-3 a PW-8 abertas. As etapas 1 e 2 podem começar.
 - **Prancha:** o painel não tem prancha em `docs/estilo_up/pranchas/` (hoje só o Mapa). A etapa 5 começa pelas duas pranchas
   (`DigiBrainDesktop.html` e `DigiBrain390.html`), no estilo de `docs/estilo_up/DIRETRIZES_REPLICAR.md`.
 
@@ -97,8 +97,8 @@ Cada etapa é um PR, com o relato no corpo. O merge é só do Matheus.
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
-| PW-1 | o que entra no v11 | o da seção 3: núcleo, consequência no corpo, carinho e tapa; sem mundo físico, frutas, dois pets e planejamento | levar mais: cada peça traz uma validação negativa ou aberta para dentro do jogo, e corrigir pede um v12 |
-| PW-2 | o ponto do aprendiz | o worker da etapa 1 propõe a partir da calibração do corpo e da conjunta, com a ressalva de que nada foi validado no jogo | um ponto sem base: deriva até o teto e um pet que muda demais ou nada |
+| PW-1 | o que entra no v11 | **DECIDIDO (Matheus, 2026-10-17): como recomendado.** O da seção 3: núcleo, consequência no corpo, carinho e tapa; sem mundo físico, frutas, dois pets e planejamento | levar mais: cada peça traz uma validação negativa ou aberta para dentro do jogo, e corrigir pede um v12 |
+| PW-2 | o ponto do aprendiz | **DECIDIDO (Matheus, 2026-10-17): como recomendado.** O worker da etapa 1 propõe a partir da calibração do corpo e da conjunta, com a ressalva de que nada foi validado no jogo | um ponto sem base: deriva até o teto e um pet que muda demais ou nada |
 | PW-3 | a vontade com o A | definir no Python primeiro (o D-W4 do #201: a ação de maior desvio aprendido sobre o prior, com a margem de hoje) | sem vontade, o vínculo B e a tela do desejo mudam; definir só na web perde a paridade |
 | PW-4 | a escala do caráter no v11 | medir primeiro; manter se as linhas e formas ficarem perto das do v10 | formas concentradas, e o equilíbrio do combate sai do lugar |
 | PW-5 | a percepção no painel | lista das entradas que mais pesaram, **não barra** | uma barra de percepção não corresponde a nenhuma conta do cérebro |
