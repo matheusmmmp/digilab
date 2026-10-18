@@ -153,8 +153,8 @@ describe("o nucleo dos lobos", () => {
     expect(c.prior.sono_noite.comer.every(w => w === 0)).toBe(true);
   });
 
-  test("o aprendizado e a etapa 3: ligado, falha alto", () => {
-    expect(() => new CerebroA({ ...CLB, aprendizadoLigado: true })).toThrow(/etapa 3/);
+  test("o aprendizado ligado sem o aprendiz falha alto; o teto de pesos tambem", () => {
+    expect(() => new CerebroA({ ...CLB, aprendizadoLigado: true })).toThrow(/aprendiz/);
     expect(() => new CerebroA({ ...CLB, aprendizadoLigado: false, maxPesos: 490 })).toThrow(/teto/);
   });
 
