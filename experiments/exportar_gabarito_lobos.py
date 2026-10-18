@@ -5,11 +5,15 @@ O v11 e o da secao 3 da tarefa (PW-1, DECIDIDO 2026-10-17): os lobos com o apren
 gestos do dono (carinho e tapa), no mundo `padrao`, sem elogio nem bronca, sem mundo fisico, frutas, dois pets e planejamento. O ponto
 (PW-2, DECIDIDO: o worker propoe pela calibracao) e o da calibracao do corpo, SEM numero novo e SEM validacao (secao "Ponto" abaixo).
 
-Duas secoes:
+Tres secoes:
   l0      o nucleo sem aprender e sem corpo: o cerebro tem de ser o instinto, decisao a decisao (G2 da L0); o TS confere contra o
           instinto dele e contra este traco;
   v11     as vidas do pet v11 inteiras: o log (o que o TS rejoga), os motivos de cada decisao (o que o painel DigiBrain mostra), os pesos,
-          os pesos do corpo e o resumo do aprendizado no fim, e o sha256 do estado interno.
+          os pesos do corpo e o resumo do aprendizado no fim, e o sha256 do estado interno;
+  vontade a vontade do v11 (PW-3; `desejo.desejo_lobos`, `PoliticaLobos.desvio_aprendido`): em cada vida da secao v11, o desejo e o
+          desvio aprendido de cada acao do tempo livre em toda decisao, antes de o cerebro decidir (pelo replay do log, com um espiao que so
+          le), e uma grade de observacoes sinteticas (as sondas do carater da web, com os receptores do corpo) contra o cerebro do fim da
+          vida. As secoes l0 e v11 nao mudam com ela.
 
     python experiments/exportar_gabarito_lobos.py      # grava web/app/test/gabaritos/lobos_python.json
 
@@ -23,6 +27,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import random
 import sys
 from dataclasses import replace
 from pathlib import Path
@@ -34,10 +39,14 @@ sys.path.insert(0, str(RAIZ / "experiments"))
 import bancada_v2 as bv  # noqa: E402
 import run_v2_calibracao_corpo as cal  # noqa: E402
 
-from digilab.config import CONFIG_PADRAO, ConfigLobos  # noqa: E402
+from digilab.config import CONFIG_DESEJO, CONFIG_PADRAO, ConfigLobos  # noqa: E402
+from digilab.desejo import desejo_lobos  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
+from digilab.events import LogDeEventos  # noqa: E402
+from digilab.metrics import estados_sonda  # noqa: E402
 from digilab.policies.lobos import PoliticaLobos  # noqa: E402
-from digilab.treino import simular_vida  # noqa: E402
+from digilab.protocol import derivar_semente  # noqa: E402
+from digilab.treino import reproduzir_com_feedback, simular_vida  # noqa: E402
 
 ARQUIVO = RAIZ / "web" / "app" / "test" / "gabaritos" / "lobos_python.json"
 CONFIG_CALIBRACAO = RAIZ / "experiments" / "configs" / "v2_corpo" / "calibracao_adendo5.json"
@@ -89,13 +98,79 @@ def vida_v11(b: bv.Bancada, dono: str, semente: int) -> dict:
             "sha_interno": _sha(json.dumps(interno, sort_keys=True))}
 
 
+# a vontade (PW-3): a grade usa as sondas do carater da web (CCP: 32 estados, semente 9001) com os receptores novos do corpo sorteados pela
+# rng `sonda-corpo` da mesma semente, como a deriva da bancada (bancada.medidas.percepcao_da_sonda)
+GRADE_ESTADOS, GRADE_SEMENTE = 32, 9001
+
+
+def _desejo_dict(d) -> dict | None:
+    return None if d is None else {"tipo": d.tipo, "alvo": d.alvo, "intensidade": d.intensidade}
+
+
+class EspiaoVontade:
+    """Embrulho que so le: antes de cada decisao, o desejo do v11 e o desvio aprendido do cerebro (o da decisao, antes de ele agir)."""
+
+    def __init__(self, politica) -> None:
+        self._p = politica
+        self.decisoes: list[dict] = []
+
+    def agir(self, obs, rng):
+        c = self._p.cerebro
+        k = len(self.decisoes)
+        desvio = c.desvio_aprendido(obs)
+        self.decisoes.append({"k": k, "desvio": {a.value: v for a, v in desvio.items()},
+                              "desejo": _desejo_dict(desejo_lobos(obs, c, k, CONFIG_DESEJO))})
+        return self._p.agir(obs, rng)
+
+    def receber_acao_dono(self, acao, tick: int) -> None:
+        # explicito: o isinstance do PoliticaTreinavel (Protocol) usa getattr_static e nao ve o __getattr__ (sem ele, os gestos nao
+        # chegariam ao cerebro no replay)
+        self._p.receber_acao_dono(acao, tick)
+
+    def __getattr__(self, nome):
+        return getattr(self._p, nome)
+
+
+def vontade_v11(b: bv.Bancada, vida: dict) -> dict:
+    """a vontade de uma vida da secao v11: pelo replay do texto do log com o espiao (o estado interno do replay e o da vida, conferido)"""
+    espec = bv.EspecVida(vida["dono"], BRACO_V11, vida["semente"])
+    fp, fm = b.fabrica_politica(espec), b.fabrica_motor(espec)
+    espioes: list[EspiaoVontade] = []
+
+    def fabrica(cfg=None):
+        e = EspiaoVontade(fp(cfg))
+        espioes.append(e)
+        return e
+    log = LogDeEventos.de_jsonl("\n".join(json.dumps(e, sort_keys=True) for e in vida["log"]) + "\n")
+    motor = reproduzir_com_feedback(log, fabrica, semente=vida["semente"], fabrica_motor=fm)
+    cerebro = motor.politica.cerebro
+    if _sha(json.dumps(motor.politica.estado_interno(), sort_keys=True)) != vida["sha_interno"]:
+        raise RuntimeError(f"vontade: o replay com o espiao nao e a vida {vida['dono']}@{vida['semente']}")
+    cc = b.cfg_corpo_de(espec)
+    rng = random.Random(derivar_semente("sonda-corpo", GRADE_SEMENTE))
+    grade = []
+    for o in estados_sonda(GRADE_ESTADOS, GRADE_SEMENTE):
+        obs = replace(o, corpo=bv.percepcao_da_sonda(o, cc, rng))
+        desvio = cerebro.desvio_aprendido(obs)
+        grade.append({"vetor": list(obs.vetor_estado), "ticks_desde_cuidado": obs.ticks_desde_cuidado,
+                      "corpo": {k: v for k, v in vars(obs.corpo).items() if v is not None},
+                      "desvio": {a.value: v for a, v in desvio.items()},
+                      "desejo": _desejo_dict(desejo_lobos(obs, cerebro, 0, CONFIG_DESEJO))})
+    return {"dono": vida["dono"], "semente": vida["semente"], "decisoes": espioes[0].decisoes, "grade": grade}
+
+
 def gerar() -> dict:
     b = bancada_v11()
     pontos = {"lobos": b.cfg_lobos.__dict__, "consequencia": b.cfg_consequencia.__dict__, "corpo": b.cfg_corpo.__dict__}
+    v11 = [vida_v11(b, d, s) for d, s in VIDAS_V11]
     return {"versao": 1, "braco": BRACO_V11, "dias": DIAS, "orcamento": ORCAMENTO,
             "config": json.loads(json.dumps(pontos, default=list)),
             "l0": [vida_l0(d, s) for d, s in VIDAS_L0],
-            "v11": [vida_v11(b, d, s) for d, s in VIDAS_V11]}
+            "v11": v11,
+            "vontade": {"regra": "tempo_livre", "limiar_vontade": CONFIG_DESEJO.limiar_vontade,
+                        "limiar_necessidade": CONFIG_DESEJO.limiar_necessidade, "grade": {"estados": GRADE_ESTADOS,
+                                                                                         "semente": GRADE_SEMENTE},
+                        "vidas": [vontade_v11(b, v) for v in v11]}}
 
 
 if __name__ == "__main__":
