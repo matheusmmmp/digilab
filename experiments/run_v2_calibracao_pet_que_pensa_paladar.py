@@ -20,6 +20,13 @@ Os passos, um depois do outro, na mesma pasta, cada um com o seu `--passo` (a or
    ao Matheus). Igual a secao 6, no `ganho_gosto` e no `g_plano` escolhidos, pelo orquestrador de antes (`rodar_piloto`), em
    `<pasta>/g_plano/piloto/`.
 
+**Com a fruta ao lado da racao** (`"fruta_ao_lado": true`, o adendo 5: A5.4, A5.5 e A5.8; PJ5-3, PJ5-5 e PJ5-6), os mesmos quatro
+passos, com tres trocas:
+- **a medida do passo 1:** nas decisoes de comer com a racao e uma fruta da regra a vista, a fracao em que o pet come uma fruta madura
+  (qualquer uma), nos dias 4 a 6 (`bancada_v2.fracao_lado_a_lado_dias`); a grade e a faixa vem da config ({S/2, S, 2S, 4S} e [0,25; 0,75]);
+- **a G-APRENDEU do piloto** com o limiar 1/4 (o acaso entre os quatro alvos lado a lado);
+- **as bases** 51101...51505 (as do paladar sem a fruta ao lado, 49101..., e as de antes nao voltam).
+
 Nenhuma regra le a escolha da x, `f_antes`, `q`, `m` nem um contraste entre bracos. Recusa a pasta de cada passo que ja existe, as bases
 da validacao e as da calibracao sem o paladar (45101..., A3.5).
 
@@ -88,6 +95,11 @@ def validar(cfg: dict) -> dict:
     return cfg
 
 
+def ao_lado(cfg: dict) -> bool:
+    """a config do adendo 5 (a fruta ao lado da racao)"""
+    return cfg.get("fruta_ao_lado", False) is True
+
+
 def _com_ganho(cfg: dict, g: int) -> dict:
     return {**{k: v for k, v in cfg.items() if k not in (CHAVE_GOSTO, CHAVE_PLANO)},
             "consequencia": {**cfg.get("consequencia", {}), "ganho_gosto": g}}
@@ -104,15 +116,18 @@ def config_do_plano(cfg: dict, g: int) -> dict:
             CHAVE_PLANO: cfg[CHAVE_PLANO]}
 
 
-def fracoes_do_ponto(medidas: dict, dias: tuple) -> dict:
-    """por unidade (uma vida do P1 na fase 1), a fracao de fruta da regra; a media sobre as unidades com algum consumo na janela"""
+def fracoes_do_ponto(medidas: dict, dias: tuple, ao_lado: bool = False) -> dict:
+    """por unidade (uma vida do P1 na fase 1), a fracao da regra: a de fruta entre os consumos (adendo 3) ou, com a fruta ao lado, a de
+    fruta nas decisoes lado a lado (adendo 5); a media sobre as unidades com algum consumo (ou decisao lado a lado) na janela"""
     por_unidade = []
     for nome in sorted(medidas):
         m = medidas[nome]
         if m["braco"] != BRACO_GOSTO or m["protocolo"] != PROTOCOLO:
             raise ValueError(f"vida {nome} fora da calibracao do ganho_gosto")
-        por_unidade.append({"vida": nome, "semente": m["semente"], "unidade": m.get("unidade"), "x": m["x"],
-                            **bv.fracao_fruta_dias(m, tuple(dias))})
+        if ao_lado != ("ao_lado" in m):
+            raise ValueError(f"vida {nome}: a medida da fruta ao lado {'falta' if ao_lado else 'sobra'}")
+        f = bv.fracao_lado_a_lado_dias(m, tuple(dias)) if ao_lado else bv.fracao_fruta_dias(m, tuple(dias))
+        por_unidade.append({"vida": nome, "semente": m["semente"], "unidade": m.get("unidade"), "x": m["x"], **f})
     com = [u["fracao"] for u in por_unidade if u["fracao"] is not None]
     return {"por_unidade": por_unidade, "n_unidades": len(por_unidade), "sem_consumo": len(por_unidade) - len(com),
             "media": None if not com else sum(com) / len(com)}
@@ -159,13 +174,15 @@ def rodar_ganho_gosto(cfg: dict, pasta: Path, processos: int = 1) -> dict:
     for g, r in zip(grade, resultados):
         if any(m["paladar"]["g_reval"]["ganho_gosto"] != g for m in r["medidas"].values()):
             raise RuntimeError(f"o ponto ganho_gosto {g} tem vidas com outro ganho_gosto")
-        f = fracoes_do_ponto(r["medidas"], dias)
+        f = fracoes_do_ponto(r["medidas"], dias, ao_lado(cfg))
         cpu = [m["custo"]["cpu_s"] for m in r["medidas"].values()]
         pontos.append({"ganho_gosto": g, **f, "parede_s": r["parede_s"], "cpu_s_por_vida": sum(cpu) / len(cpu)})
     e = escolha_ganho(pontos, faixa)
-    out = {"regra": {"medida": "fracao de fruta madura (os tres tipos) entre os consumos no mapa, media sobre as unidades",
-                     "dias": list(dias), "faixa": list(faixa), "grade": grade,
-                     "fonte": "PLANO_ANALISE_V2_PET_QUE_PENSA, adendo 3, A3.3 (PL-8, PJ-3)"},
+    medida = ("fracao das decisoes de comer com a racao e uma fruta da regra a vista em que o pet come uma fruta madura, media sobre as "
+              "unidades" if ao_lado(cfg) else "fracao de fruta madura (os tres tipos) entre os consumos no mapa, media sobre as unidades")
+    fonte = ("PLANO_ANALISE_V2_PET_QUE_PENSA, adendo 5, A5.5 (PJ5-5)" if ao_lado(cfg)
+             else "PLANO_ANALISE_V2_PET_QUE_PENSA, adendo 3, A3.3 (PL-8, PJ-3)")
+    out = {"regra": {"medida": medida, "dias": list(dias), "faixa": list(faixa), "grade": grade, "fonte": fonte},
            "pontos": pontos, "escolha": e, "parede_s": time.time() - t0}
     bv._gravar(saida / "ganho_gosto.json", bv._dump(out))
     bv._gravar(saida / "meta.json", bv._dump(_meta(cfg, processos)))
@@ -224,7 +241,8 @@ def rodar_piloto(cfg: dict, pasta: Path, processos: int = 1) -> dict:
     if not reval["passa"]:
         raise RuntimeError(f"G-REVAL-POSSIVEL falha ({reval['falham']} de {reval['n']} unidades): o T1 e inconclusivo por desenho; o "
                            "piloto nao roda e o plano volta ao Matheus (A3.2)")
-    return cpq.rodar_piloto(config_do_plano(cfg, ganho), pasta / "g_plano", processos)
+    limiar = bv.LIMIAR_APRENDEU_AO_LADO if ao_lado(cfg) else cpq.LIMIAR_APRENDEU
+    return cpq.rodar_piloto(config_do_plano(cfg, ganho), pasta / "g_plano", processos, limiar)
 
 
 def main(argv=None) -> int:

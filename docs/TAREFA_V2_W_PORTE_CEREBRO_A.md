@@ -95,16 +95,18 @@ Cada etapa é um PR, com o relato no corpo. O merge é só do Matheus.
 
 ## 7. Decisões do Matheus
 
+**DECIDIDAS: PW-1 e PW-2 em 2026-10-17, PW-3 a PW-8 em 2026-10-18, todas como recomendado** (a coluna "recomendação" é o que vale).
+
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
 | PW-1 | o que entra no v11 | **DECIDIDO (Matheus, 2026-10-17): como recomendado.** O da seção 3: núcleo, consequência no corpo, carinho e tapa; sem mundo físico, frutas, dois pets e planejamento | levar mais: cada peça traz uma validação negativa ou aberta para dentro do jogo, e corrigir pede um v12 |
 | PW-2 | o ponto do aprendiz | **DECIDIDO (Matheus, 2026-10-17): como recomendado.** O worker da etapa 1 propõe a partir da calibração do corpo e da conjunta, com a ressalva de que nada foi validado no jogo | um ponto sem base: deriva até o teto e um pet que muda demais ou nada |
-| PW-3 | a vontade com o A | definir no Python primeiro (o D-W4 do #201: a ação de maior desvio aprendido sobre o prior, com a margem de hoje) | sem vontade, o vínculo B e a tela do desejo mudam; definir só na web perde a paridade |
-| PW-4 | a escala do caráter no v11 | medir primeiro; manter se as linhas e formas ficarem perto das do v10 | formas concentradas, e o equilíbrio do combate sai do lugar |
-| PW-5 | a percepção no painel | lista das entradas que mais pesaram, **não barra** | uma barra de percepção não corresponde a nenhuma conta do cérebro |
-| PW-6 | memória e emoção no painel | uma barra (o lobo do A) e a emoção de hoje do pet como selo à parte, com a fonte | duas barras sem fonte separada: uma delas seria inventada |
-| PW-7 | o painel nos pets v1 a v10 | **não**: só v11. Os antigos têm o bandit, e um painel para eles seria outro desenho | mostrar o bandit com os nomes dos lobos mistura dois cérebros na mesma tela |
-| PW-8 | o PR #201 | fechar como substituído por esta tarefa, com um comentário apontando para cá | deixá-lo aberto: dois planos do mesmo porte, com recomendações opostas na consequência |
+| PW-3 | a vontade com o A | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** definir no Python primeiro (o D-W4 do #201: a ação de maior desvio aprendido sobre o prior, com a margem de hoje) | sem vontade, o vínculo B e a tela do desejo mudam; definir só na web perde a paridade |
+| PW-4 | a escala do caráter no v11 | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** medir primeiro; manter se as linhas e formas ficarem perto das do v10 | formas concentradas, e o equilíbrio do combate sai do lugar |
+| PW-5 | a percepção no painel | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** lista das entradas que mais pesaram, **não barra** | uma barra de percepção não corresponde a nenhuma conta do cérebro |
+| PW-6 | memória e emoção no painel | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** uma barra (o lobo do A) e a emoção de hoje do pet como selo à parte, com a fonte | duas barras sem fonte separada: uma delas seria inventada |
+| PW-7 | o painel nos pets v1 a v10 | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** **não**: só v11. Os antigos têm o bandit, e um painel para eles seria outro desenho | mostrar o bandit com os nomes dos lobos mistura dois cérebros na mesma tela |
+| PW-8 | o PR #201 | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** fechar como substituído por esta tarefa, com um comentário apontando para cá | deixá-lo aberto: dois planos do mesmo porte, com recomendações opostas na consequência |
 
 ## 8. Fora desta tarefa
 
@@ -137,6 +139,7 @@ Cada etapa é um PR, com o relato no corpo. O merge é só do Matheus.
   - **Leitura descritiva:** na média, o v11 **não** fica mais parado. O ocioso cai, o explorar sobe e o brincar fica igual. O último terço da vida vai no mesmo sentido.
   - **A dispersão entre pets é grande:** em alguns pares, o brincar cai 0,3; em outros, sobe 0,35.
   - **Pela regra da seção 6, a PW-1 não volta ao Matheus.** A dispersão fica registrada para a PW-4 (o caráter) e para o painel ("o que aprendeu").
+- **O corpo do ponto em TS (2026-10-18):** o metabolismo foi portado para o `corpo.ts` (a etapa 4 da `TAREFA_V2_METABOLISMO`, seção 10), com o corpo do ponto do v11 como constante (`CCO_V11`) e paridade bit a bit; o laço do corpo das vidas v11 em TS fica para a etapa 4, que precisa do `Motor` com o corpo por tick e da sujeira da rng do Python.
 
 ## 10. Etapa 2, entregue (2026-10-17)
 
@@ -253,3 +256,58 @@ versão), **o v11 não fica "perto" do v10.** As linhas e as formas ficam; a esc
 - os dois lados têm 100% de ramo arisco (os donos simulados não atendem o bebê, um defeito conhecido).
 
 **Nada mudou.** A decisão volta ao Matheus (PW-4); o pedido está no corpo do PR.
+
+## 13. Etapa 3, entregue (2026-10-18)
+
+- **O aprendizado em TS:** `web/app/motor/lobos.ts`, sobre o núcleo da etapa 2.
+  - A aritmética inteira: `arred`, a regra da L1 com o teto (`atualizarPesos`) e o piso no peso efetivo. Os produtos têm de caber nos inteiros exatos do double, senão falha alto.
+  - O crédito da consequência: `sinalHomeostatico` (o N3 da transição, conferido), `observarConsequencia`, `consequenciaCorpo` e o `sinal_corpo` sobre os receptores, com os canais ligados (`sinalCorpoCanais`, a soma telescópica e o contrato K-6).
+  - As entradas do corpo: os receptores novos (tédio, solidão, estresse, dor e susto) numa tabela à parte, só no tempo livre, com prior 0.
+  - Os gestos: o carinho por `mudancaNoCorpo` e o tapa por `receberAcaoDono`, com `recompensa_tapa`.
+  - A `MemoriaEmocao` (os contadores), os canais e o `estadoInterno`.
+  - O braço `P1-c-tapa` é a `BracoConsequencia`: o sinal da própria ação em `observar`; do dono, só o tapa chega ao cérebro.
+  - A constante nova `CLB_V11` (o ponto do v11) é conferida por `constantes.test.mjs` contra a `config_v11` do gabarito. A lista `experimento` do teste agora filtra as raízes que só o TS tem, como já fazia a `pares`.
+- **G-PAR-L1, passa** (`web/app/test/lobos_v11.test.ts`, no Node). Nas quatro vidas da seção `v11`, 1.152 decisões:
+  - decisão a decisão, o motivo inteiro é o do Python, bit a bit (`toStrictEqual`): regra, candidatos, percepção e percepção do corpo, contribuições, pesos efetivos, `u`, ação, lobo decisivo, `aprendido`, `aprendido_corpo` e `sinal_corpo`;
+  - no fim, batem os `pesos`, o prior, os `pesos_corpo`, o `aprendizado`, a `memoria_emocao`, os `canais` e o `corpo`;
+  - a cobertura: 516 créditos de peso, 72 carinhos e 44 tapas creditados, o piso ativo em 344 candidatos e sete regras. O teto de 16 S nunca é atingido nas vidas; o corte fica coberto pelo teste de unidade;
+  - os controles negativos: um receptor mexido em 1 num gancho e o tapa com outra recompensa são pegos.
+- **O desvio (registro de 2026-10-18):** o corpo do v11 tem o **metabolismo**, que o `corpo.ts` ainda não tem. O laço do motor com o corpo não roda em TS. Por isso o gate rejoga os **ganchos** que o motor do Python fez ao cérebro, gravados pelo exportador num replay do log e conferidos contra a vida, e não o log com o motor.
+- **O gabarito** ganhou os `ganchos`, a `memoria_emocao`, os `canais` e a `config_v11` (as configs que as vidas usaram de fato). As chaves de antes não mudaram. O `tests/test_gabarito_lobos_web.py` confere os ganchos. O cérebro do Python não mudou.
+- **Para a etapa 4:** o `Motor` do v11 precisa do laço do corpo, e o corpo do ponto tem o metabolismo. Há dois caminhos: portar o metabolismo antes (a etapa 4 do metabolismo), ou mudar o ponto do v11 para o corpo sem ele, o que muda o gabarito e o PW-2. A decisão é do Matheus.
+- `npm run tipos` limpo; `npm test` com 34 arquivos e 387 testes passando (17 deles no `lobos_v11.test.ts`); `tests/test_gabarito_lobos_web.py` passa.
+
+## 14. Etapa 4, parte 1, entregue (2026-10-18): o laço do corpo em TS e o gate do laço
+
+A etapa 4 vai em três PRs, na ordem do pedido: (1) o laço do corpo e a rng, com o gate; (2) a vontade e o caráter no Python, que já
+estão no PR #329 (PW-3 e PW-4); (3) o v11 no `Motor`. Este é o primeiro.
+
+- **O laço:** `web/app/motor/motor_corpo.ts` (`MotorCorpo`), o porte do `_laco`, do `_decidir`, do `_aplicar_acao_usuario` e do
+  `_gesto` de `digilab/motor_corpo.py`. O motor portado é o do v11 do Python: `com_corpo(MotorComFeedback)` no mundo `padrao`.
+  - Ele roda sobre o `corpo.ts` (o metabolismo, #333) e o `lobos.ts` (o aprendizado, #327), com o `avancarTick`, o `aplicarAcaoDono` e o
+    `efeitoAcaoPet` de `estado.ts` para o que não é drive.
+  - O G-BYPASS do Python também foi portado: um drive mudado por fora do corpo falha alto.
+  - O `aplicarEvento` é o passo do replay, e o `estadoDict` é o `motor.estado()` do Python.
+  - As ações do dono são alimentar, limpar, brincar, carinho e tapa. O elogio e a bronca falham alto.
+- **A rng:** o `RandomPy` do `mundo.ts` (o MT do CPython), reusado nas duas rng do `engine.Motor`. Nenhum número novo.
+- **O gate do laço** (`web/app/test/laco_v11.test.ts`, no Node): as 4 vidas da seção `v11` rodam pelo laço, evento a evento do log.
+  - Os 3.648 ganchos que o laço faz ao cérebro são os do Python, bit a bit (`toStrictEqual`). Eles incluem a observação com os receptores,
+    a transição, o ocorrido do corpo, a ação do dono com o tick e o antes e depois do carinho.
+  - Batem também os 1.152 motivos e, no fim, os pesos, o prior, os pesos do corpo, o aprendizado, a memória e emoção e os canais.
+  - O `motor.estado()` do fim bate inteiro: os drives, a sujeira, o sono, os cuidados, a ação atual e o corpo (a química, a digestão, o
+    estágio, a janela do tédio e o metabolismo). As ações do pet batem com o tick.
+  - O mesmo log dá a mesma vida duas vezes.
+  - Os controles negativos: outra semente do motor muda os ganchos, e um limpar trocado por alimentar muda o fim.
+- **O gabarito novo:** `web/app/test/gabaritos/lobos_laco_python.json`, do mesmo exportador, com o fim de cada vida do v11. O
+  `lobos_python.json` não mudou. O `tests/test_gabarito_lobos_web.py` confere que os dois estão em dia.
+- **O achado do #333:** o `configCorpo` falha alto com `banheiro: true`.
+- **O replay de uma vida longa** (risco da seção 6; `web/app/test/medir_replay_v11.mjs`, artefato
+  `artifacts_v2_w_porte/replay_v11.json`):
+  - a vida tem 60 dias e 6.719 eventos, com 294 KB de log em JSON;
+  - o replay leva 217 ms (a mediana de 5), 3,6 ms por dia, no Node 24 de um i7-14700KF;
+  - é só descritivo; o tempo no celular fica para o e2e da etapa 5.
+- **Para a parte 3 (o v11 no `Motor`):** ela espera o merge do #329 (o gabarito da vontade) e a decisão da PW-4. O #329 mediu e achou
+  que a escala do caráter não fica perto da do v10, e recomenda a (b), uma escala própria do v11. A semente do pet do jogo e o tick de
+  nascimento (`TICK_INICIAL`) entram no laço como parâmetros: o laço já aceita um estado de nascimento.
+- `npm run tipos` limpo; `npm test` com 36 arquivos e 426 testes (9 deles no `laco_v11.test.ts`); `tests/test_gabarito_lobos_web.py`
+  passa (3).

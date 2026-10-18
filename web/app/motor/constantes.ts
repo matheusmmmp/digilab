@@ -97,6 +97,16 @@ export const CVB = { versaoPet: 10, limNec: .5, limEnergia: .25 };
 /* o cerebro A (motor/lobos.ts; docs/TAREFA_V2_W_PORTE_CEREBRO_A.md, etapa 2): a ConfigLobos do L0. bits: S = 2**bits, a escala dos pesos
    inteiros; escalaTdc: a entrada do tempo sem cuidado, min(1, ticks / escala); maxPesos: o teto de pesos do plano */
 export const CLB = { bits: 10, escalaTdc: 480, maxPesos: 1000 };
+/** o aprendiz dos pets v11 (motor/lobos.ts, W-PORTE etapa 3): o ponto das vidas do gabarito (test/gabaritos/lobos_python.json,
+ *  config_v11), PROPOSTO e nao validado no jogo. O T3 (passo S/2, teto 16 S, piso S/16), o tapa com o valor da bronca, a consequencia
+ *  com o ganho 4 nos drives do N3 (fome, higiene e energia, os indices em Estado.vetor), os canais ligados (a montagem `completa`) e o
+ *  w_novos 2 nos drives novos (w_d inteiros, pelo nome do receptor) */
+export const CLB_V11 = {
+  passo: 512, teto: 16384, piso: 64, recompensaTapa: -1,
+  ganho: 4, drives: [0, 1, 2], canais: true,
+  pesosDrivesCorpo: { fome: 1, higiene: 1, energia: 1, humor: 1, tedio: 2, curiosidade: 2, solidao: 2, estresse: 2, dor: 2, vontade: 1,
+    conforto: 1 } as Readonly<Record<string, number>>,
+};
 export const COB = {
   b0: 1, bVinculo: 2, bTeimosia: 1, bConflito: 2, limiarConflito: .3, probFazerOutra: .5,
   sujeitas: ["alimentar", "limpar", "brincar", "acariciar"] as readonly AcaoDono[], limiarMotivo: .05,
@@ -433,6 +443,16 @@ export const CCO: ConfigCorpo = {
   gasto_atividades_num: 1, gasto_atividades_den: 1,
   paladar: false, meia_vida_sabor: 4, k_meia_vida_sabor: 10427, meia_vida_saciedade: 720, k_meia_vida_saciedade: 63,
   saciedade_num: 1, saciedade_den: 2, paladar_h_min: -512, paladar_h_max: 1024, paladar_h_salgado: 256,
+};
+/* pets v11 (docs/TAREFA_V2_W_PORTE_CEREBRO_A.md; a etapa 4 de docs/TAREFA_V2_METABOLISMO.md): o corpo do ponto do v11, o que muda
+   sobre o CCO (corpo.configCorpo o completa e confere). E a ConfigCorpo que as vidas do v11 do gabarito usaram (config_v11.corpo de
+   test/gabaritos/lobos_python.json): a etapa 6 inteira com o metabolismo, sem o mundo fisico, o banheiro e o paladar; o ponto (2, 1) do
+   adendo 4 (as subidas x 2: o tedio e a solidao, o divisor do estresse / 2; as reducoes x 1) e o gasto 4/5 do adendo 5 (o basal
+   300/150 e as atividades x 4/5, o unico numero do corpo que fechou). PROPOSTOS, nenhum validado no jogo. */
+export const CCO_V11: Partial<ConfigCorpo> = {
+  ligada: true, digestao: true, vida: true, drives_novos: true, gestos: true, metabolismo: true,
+  tedio_sobe: 900, solidao_sobe: 450, estresse_divisor: 128,
+  gasto_basal_acordado: 300, gasto_basal_dormindo: 150, gasto_atividades_num: 4, gasto_atividades_den: 5,
 };
 /* Config.limiar_privacao do Python (Estado.em_privacao: algum de fome, higiene e energia abaixo disto); estado.ts usa o mesmo literal.
    Fica fora de C de proposito: C e conferido folha a folha contra o HTML antigo (test/constantes.test.mjs), que nao o tem */

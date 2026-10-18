@@ -1,6 +1,6 @@
-"""O gabarito do cerebro A para o jogo web (web/app/test/gabaritos/lobos_python.json, etapa 1 do W-PORTE) esta em dia com o Python.
-Se mudar digilab/policies/lobos.py, o corpo, a consequencia ou o ponto do v11, rode `python experiments/exportar_gabarito_lobos.py`; o
-teste do TS (etapas 2 e 3) confere a paridade."""
+"""Os gabaritos do cerebro A para o jogo web (web/app/test/gabaritos/lobos_python.json, etapa 1 do W-PORTE, e lobos_laco_python.json,
+etapa 4) estao em dia com o Python. Se mudar digilab/policies/lobos.py, o corpo, a consequencia ou o ponto do v11, rode
+`python experiments/exportar_gabarito_lobos.py`; os testes do TS (etapas 2 a 4) conferem a paridade."""
 from __future__ import annotations
 
 import json
@@ -31,5 +31,25 @@ def test_gabarito_e_o_v11():
         assert v["aprendizado"]["n_atualizacoes"] > 0 and v["pesos_corpo"]
         assert all("sinal_corpo" in m for m in v["motivos"] if m["regra"] == "tempo_livre")
     assert any(v["aprendizado"]["recompensas"]["tapa"] > 0 for v in g["v11"])
+    # os ganchos do G-PAR-L1 (etapa 3): uma decisao, uma transicao e um gancho do corpo por motivo; o carinho so pelo corpo
+    assert g["config_v11"]["receptores"] == list(G.RECEPTORES_V11)
+    assert g["config_v11"]["corpo"]["drives_novos"] and g["config_v11"]["corpo"]["gestos"]
+    for v in g["v11"]:
+        tipos = [h[0] for h in v["ganchos"]]
+        assert set(tipos) <= {"agir", "observar", "consequencia_corpo", "dono", "carinho"}
+        assert tipos.count("agir") == tipos.count("observar") == tipos.count("consequencia_corpo") == len(v["motivos"])
+        assert tipos.count("carinho") >= v["aprendizado"]["recompensas"]["carinho"] > 0
+        assert "acariciar" not in {h[1] for h in v["ganchos"] if h[0] == "dono"}
     for v in g["l0"]:
         assert all(m["aprendido"] is None for m in v["motivos"])
+
+
+def test_gabarito_do_laco_em_dia():
+    """o fim das vidas do v11 pelo motor (etapa 4, o gate do laco em web/app/test/laco_v11.test.ts): em dia e das mesmas vidas"""
+    atual = json.loads(G.ARQUIVO_LACO.read_text(encoding="utf-8"))
+    assert atual == json.loads(json.dumps(G.gerar_laco(), sort_keys=True))
+    g = json.loads(G.ARQUIVO.read_text(encoding="utf-8"))
+    assert [(v["dono"], v["semente"]) for v in atual["v11"]] == [(v["dono"], v["semente"]) for v in g["v11"]]
+    for laco, vida in zip(atual["v11"], g["v11"]):
+        assert [a for _, a in laco["acoes_pet"]] == [m["acao"] for m in vida["motivos"]]
+        assert laco["estado"]["corpo"]["metabolismo"] and laco["estado"]["tick"] == 1440 * atual["dias"]
