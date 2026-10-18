@@ -255,3 +255,5 @@ de base em `docs/historico/registro_lotes.json`.
 
 
 - [2026-10-14 — FRUTA-AO-LADO (worker A): o dono põe a fruta ao lado da ração, o lado do mundo e do dono](registro/2026-10.md)
+
+- [2026-10-17 — CONNECTOME-CEREBRO-A (worker de uma sessão lateral): o cérebro A desenhado como grafo dos pesos](registro/2026-10.md)
