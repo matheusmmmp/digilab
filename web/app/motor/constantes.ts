@@ -444,6 +444,16 @@ export const CCO: ConfigCorpo = {
   paladar: false, meia_vida_sabor: 4, k_meia_vida_sabor: 10427, meia_vida_saciedade: 720, k_meia_vida_saciedade: 63,
   saciedade_num: 1, saciedade_den: 2, paladar_h_min: -512, paladar_h_max: 1024, paladar_h_salgado: 256,
 };
+/* pets v11 (docs/TAREFA_V2_W_PORTE_CEREBRO_A.md; a etapa 4 de docs/TAREFA_V2_METABOLISMO.md): o corpo do ponto do v11, o que muda
+   sobre o CCO (corpo.configCorpo o completa e confere). E a ConfigCorpo que as vidas do v11 do gabarito usaram (config_v11.corpo de
+   test/gabaritos/lobos_python.json): a etapa 6 inteira com o metabolismo, sem o mundo fisico, o banheiro e o paladar; o ponto (2, 1) do
+   adendo 4 (as subidas x 2: o tedio e a solidao, o divisor do estresse / 2; as reducoes x 1) e o gasto 4/5 do adendo 5 (o basal
+   300/150 e as atividades x 4/5, o unico numero do corpo que fechou). PROPOSTOS, nenhum validado no jogo. */
+export const CCO_V11: Partial<ConfigCorpo> = {
+  ligada: true, digestao: true, vida: true, drives_novos: true, gestos: true, metabolismo: true,
+  tedio_sobe: 900, solidao_sobe: 450, estresse_divisor: 128,
+  gasto_basal_acordado: 300, gasto_basal_dormindo: 150, gasto_atividades_num: 4, gasto_atividades_den: 5,
+};
 /* Config.limiar_privacao do Python (Estado.em_privacao: algum de fome, higiene e energia abaixo disto); estado.ts usa o mesmo literal.
    Fica fora de C de proposito: C e conferido folha a folha contra o HTML antigo (test/constantes.test.mjs), que nao o tem */
 export const LIMIAR_PRIVACAO = .15;

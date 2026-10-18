@@ -2255,6 +2255,48 @@
    "arquivo": "web/app/test/gabaritos/lobos_python.json",
    "chave": "config_v11.consequencia.pesos_drives_corpo[10][1]",
    "nota": "pets v11 (W-PORTE etapa 3): o ponto das vidas do v11 do gabarito (config_v11, as configs que as vidas usaram), PROPOSTO e nao validado no jogo; o w_d de conforto (w_novos 2 nos drives novos do corpo, adendo 4)"
+  },
+  {
+   "web": "CCO_V11.tedio_sobe",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.corpo.tedio_sobe",
+   "nota": "pets v11 (a etapa 4 do metabolismo, para o W-PORTE): o corpo do ponto das vidas do v11 do gabarito (config_v11.corpo, a ConfigCorpo que as vidas usaram), PROPOSTO e nao validado no jogo; a subida do tedio x 2 (m_sobe do ponto (2, 1) do adendo 4); o padrao da ConfigCorpo e 450"
+  },
+  {
+   "web": "CCO_V11.solidao_sobe",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.corpo.solidao_sobe",
+   "nota": "pets v11 (a etapa 4 do metabolismo, para o W-PORTE): o corpo do ponto das vidas do v11 do gabarito (config_v11.corpo, a ConfigCorpo que as vidas usaram), PROPOSTO e nao validado no jogo; a subida da solidao x 2 (m_sobe do ponto (2, 1) do adendo 4); o padrao da ConfigCorpo e 225"
+  },
+  {
+   "web": "CCO_V11.estresse_divisor",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.corpo.estresse_divisor",
+   "nota": "pets v11 (a etapa 4 do metabolismo, para o W-PORTE): o corpo do ponto das vidas do v11 do gabarito (config_v11.corpo, a ConfigCorpo que as vidas usaram), PROPOSTO e nao validado no jogo; o divisor do estresse / 2 (m_sobe do ponto (2, 1) do adendo 4); o padrao da ConfigCorpo e 256"
+  },
+  {
+   "web": "CCO_V11.gasto_basal_acordado",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.corpo.gasto_basal_acordado",
+   "nota": "pets v11 (a etapa 4 do metabolismo, para o W-PORTE): o corpo do ponto das vidas do v11 do gabarito (config_v11.corpo, a ConfigCorpo que as vidas usaram), PROPOSTO e nao validado no jogo; o gasto basal acordado x 4/5 (o gasto do passo 0 fino, adendo 5, fechou); o padrao da ConfigCorpo e 375"
+  },
+  {
+   "web": "CCO_V11.gasto_basal_dormindo",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.corpo.gasto_basal_dormindo",
+   "nota": "pets v11 (a etapa 4 do metabolismo, para o W-PORTE): o corpo do ponto das vidas do v11 do gabarito (config_v11.corpo, a ConfigCorpo que as vidas usaram), PROPOSTO e nao validado no jogo; o gasto basal dormindo x 4/5 (o gasto do passo 0 fino, adendo 5, fechou); o padrao da ConfigCorpo e 187"
+  },
+  {
+   "web": "CCO_V11.gasto_atividades_num",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.corpo.gasto_atividades_num",
+   "nota": "pets v11 (a etapa 4 do metabolismo, para o W-PORTE): o corpo do ponto das vidas do v11 do gabarito (config_v11.corpo, a ConfigCorpo que as vidas usaram), PROPOSTO e nao validado no jogo; o numerador do fator 4/5 do gasto das atividades (adendo 5); o padrao da ConfigCorpo e 1/1"
+  },
+  {
+   "web": "CCO_V11.gasto_atividades_den",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.corpo.gasto_atividades_den",
+   "nota": "pets v11 (a etapa 4 do metabolismo, para o W-PORTE): o corpo do ponto das vidas do v11 do gabarito (config_v11.corpo, a ConfigCorpo que as vidas usaram), PROPOSTO e nao validado no jogo; o denominador do fator 4/5 do gasto das atividades (adendo 5); o padrao da ConfigCorpo e 1/1"
   }
  ],
  "so_web": [

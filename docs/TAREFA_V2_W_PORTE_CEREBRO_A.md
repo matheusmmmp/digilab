@@ -139,6 +139,7 @@ Cada etapa é um PR, com o relato no corpo. O merge é só do Matheus.
   - **Leitura descritiva:** na média, o v11 **não** fica mais parado. O ocioso cai, o explorar sobe e o brincar fica igual. O último terço da vida vai no mesmo sentido.
   - **A dispersão entre pets é grande:** em alguns pares, o brincar cai 0,3; em outros, sobe 0,35.
   - **Pela regra da seção 6, a PW-1 não volta ao Matheus.** A dispersão fica registrada para a PW-4 (o caráter) e para o painel ("o que aprendeu").
+- **O corpo do ponto em TS (2026-10-18):** o metabolismo foi portado para o `corpo.ts` (a etapa 4 da `TAREFA_V2_METABOLISMO`, seção 10), com o corpo do ponto do v11 como constante (`CCO_V11`) e paridade bit a bit; o laço do corpo das vidas v11 em TS fica para a etapa 4, que precisa do `Motor` com o corpo por tick e da sujeira da rng do Python.
 
 ## 10. Etapa 2, entregue (2026-10-17)
 
