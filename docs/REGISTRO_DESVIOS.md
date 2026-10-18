@@ -260,6 +260,7 @@ de base em `docs/historico/registro_lotes.json`.
 
 - [2026-10-17 — W-PORTE, etapa 1 (esta sessão, coordenador e worker): o ponto do v11 e os gabaritos do cérebro A](registro/2026-10.md)
 
+- [2026-10-18 — DIGIBRAIN-V3-E0 (worker de uma sessão lateral): a auditoria da decisão do cérebro A no v11](registro/2026-10.md)
 - [2026-10-18 — W-PORTE, etapa 3 (worker de uma sessão lateral): o G-PAR-L1 pelos ganchos do cérebro, sem o laço do corpo](registro/2026-10.md)
 
 - [2026-10-18 — METABOLISMO, etapa 4 (worker de uma sessão lateral): o metabolismo no corpo.ts, com a paridade, sem o laço do corpo do v11](registro/2026-10.md)
