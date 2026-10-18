@@ -123,29 +123,7 @@ footer a{color:var(--dl-action);font-weight:900;display:inline-flex;align-items:
   .nav-quad[aria-current="page"] .quad{background:#2C73E0;border-color:var(--dl-learned);box-shadow:0 0 10px var(--dl-learned)}
   .dl-nav .nav-quad:focus-visible .quad{box-shadow:0 0 0 3px var(--dl-highlight)}
 }
-@media (min-width:1100px){
-  .topo-desk{position:relative;display:flex;align-items:center;gap:16px;height:76px;box-sizing:border-box;padding:0 24px;overflow:hidden}
-  .topo-globo{position:absolute;right:250px;top:-70px;opacity:.14;pointer-events:none}
-  .topo-tit{position:relative;margin:0;font-size:30px;line-height:1}
-  .topo-abas{position:relative;display:flex;gap:8px}
-  .topo-aba{min-height:40px;padding:0 16px;border-radius:10px;border:2px solid var(--dl-navy);background:#FFFFFF;color:var(--dl-navy);font:inherit;font-family:var(--dl-f-texto);font-weight:900;font-size:14px;cursor:pointer}
-  .topo-aba[aria-selected="true"]{border-color:#FFFFFF;background:var(--dl-navy);color:#FFFFFF}
-  .topo-aba:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
-  .topo-pet{position:relative;margin-left:auto;display:flex;align-items:center;gap:10px;background:#FFFFFF;border-radius:14px;box-shadow:0 0 0 2px var(--dl-navy),0 3px 0 2px var(--dl-navy-deep);padding:5px 12px 5px 5px;color:#13244D}
-  .topo-retrato{width:44px;height:44px;flex:none;border-radius:50%;background:#E8F0FB;border:2px solid #2C73E0;overflow:hidden;display:flex;align-items:flex-start;justify-content:center;padding:0;cursor:pointer;box-sizing:border-box}
-  .topo-retrato img{margin-top:3px;max-width:none;image-rendering:pixelated}
-  .topo-retrato:focus-visible{outline:none;box-shadow:0 0 0 2px var(--dl-navy-deep),0 0 0 5px var(--dl-highlight)}
-  .topo-pet-txt{display:flex;flex-direction:column;gap:2px}
-  .topo-pet-nome{display:flex;align-items:center;gap:6px}
-  .topo-pet-nome b{font-weight:900;font-size:14px;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .topo-pet-sub{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#3A5288}
-  .topo-pet-sub .dl-tag{font-size:10px;padding:0 5px}
-  .topo-relogio{display:flex;flex-direction:column;align-items:flex-end;padding-left:8px;border-left:2px solid #E8F0FB}
-  .topo-relogio .dl-num{font-size:20px;line-height:22px}
-  .topo-relogio .pet-salvo{font-size:10px;font-weight:800}
-  /* o topo substitui os cabecalhos de cada tela */
-  .painel > .tela-cab,.painel > .tabs,.pet-cab,.pet-listra{display:none}
-}
+/* a partir de 1100 px o topo e a barra lateral sao os da casca limpa (estilo/desktop.css) */
 
 /* desktop (secao 6): conteudo com padding 20/24 em colunas que vao ate o fundo da janela (o ultimo card de cada coluna
    cresce); abaixo de 1100 px as colunas somem (display:contents) e a ordem do celular fica a mesma */
@@ -159,13 +137,6 @@ footer a{color:var(--dl-action);font-weight:900;display:inline-flex;align-items:
   .desk-so{display:revert}
 }
 @media (min-width:1100px){ .desk-nao{display:none!important} }
-@media (min-width:1100px){
-  .topo-voltar{position:relative;width:44px;height:44px;flex:none;border-radius:12px;background:#FFFFFF;border:3px solid var(--dl-navy);display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer}
-  .topo-voltar svg{width:20px;height:20px}
-  .topo-voltar svg path{fill:none;stroke:var(--dl-navy);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-  .topo-voltar:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
-  .app .conv-cab{display:none}
-}
 
 /* dica do Bit (tutorial contextual): acima da barra no celular, no canto no desktop; uma frase por vez */
 .dica-bit{position:relative;margin:10px 14px 0;z-index:5;display:flex;align-items:center;gap:10px;background:var(--dl-surface);color:var(--dl-text);border-radius:14px;box-shadow:0 0 0 3px var(--dl-navy),0 5px 0 3px var(--dl-navy-deep);padding:10px 12px}

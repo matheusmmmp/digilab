@@ -270,3 +270,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-18 — W-PORTE, etapa 4, parte 1 (worker de uma sessão lateral): o laço do corpo em TS, a rng do ambiente do Python e o gate do laço](registro/2026-10.md)
 
 - [2026-10-18 — PQP-AO-LADO-CALIBRACAO, a run (worker D): a calibração e o piloto do J5 com a fruta ao lado da ração](registro/2026-10.md)
+
+- [2026-10-18 — UI-DESKTOP (worker "Digilab interface design"): a casca limpa do desktop e a tela do Pet](registro/2026-10.md)
