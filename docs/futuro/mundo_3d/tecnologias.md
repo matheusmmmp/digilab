@@ -1,6 +1,6 @@
 # Mundo 3D, anexo 2: o estudo de tecnologias (WORLD-POC-001, investigação B)
 
-Status: **RASCUNHO, PROPOSTO** (2026-10-18, worker A). Anexo de `docs/futuro/mundo_3d.md`. Pesos e notas são **PROPOSTOS**, sem fonte; o
+Status: **INVESTIGAÇÃO FEITA; W-1 a W-7 DECIDIDAS em 2026-10-18** (worker A). Anexo de `docs/futuro/mundo_3d.md`. Pesos e notas são **PROPOSTOS**, sem fonte; o
 Matheus decide.
 
 **Regra das fontes:**
@@ -120,7 +120,7 @@ ficam:
 Sem a paridade, V e F empatam na prática: a escolha passa a depender do valor de ter física de verdade. O Godot continua atrás, pela
 stack. A escolha entre V e F é a decisão W-1 do documento principal.
 
-## 4. Recomendação (PROPOSTA)
+## 4. Recomendação (DECIDIDA em 2026-10-18: W-1 = V, W-2 = Three.js)
 
 1. **Three.js como renderizador**, imperativo, num canvas dentro do Preact, sem react-three-fiber. Ele ganha pela stack (MIT, sem
    wasm na renderização, imperativo como o `PalcoPet`) e pela leveza.

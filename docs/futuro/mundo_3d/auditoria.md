@@ -1,6 +1,6 @@
 # Mundo 3D, anexo 1: a auditoria técnica do repositório (WORLD-POC-001, investigação A)
 
-Status: **RASCUNHO, PROPOSTO** (2026-10-18, worker A, pela especificação WORLD-POC-001 do Matheus). Anexo de `docs/futuro/mundo_3d.md`.
+Status: **INVESTIGAÇÃO FEITA; W-1 a W-7 DECIDIDAS em 2026-10-18** (worker A, pela especificação WORLD-POC-001 do Matheus). Anexo de `docs/futuro/mundo_3d.md`.
 Só leitura: nada no código mudou. Base: `main` `533ee9b`.
 
 **Legenda:**

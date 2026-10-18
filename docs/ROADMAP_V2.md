@@ -193,6 +193,7 @@ a vez, e nenhum roda sem plano de análise registrado antes. A ordem é a de dep
 | **a fisiologia por espécie** (um corpo-base comum e um perfil herdável) | ideia (#260) | J2 | `docs/futuro/fisiologia_especies.md` |
 | **o connectome do cérebro A** (o grafo dos pesos e dos motivos de cada decisão, como o do FlyWire) | ferramenta de pesquisa (#321); CN-1 a CN-9 DECIDIDAS em 2026-10-18: só fora do jogo até o J5, a aresta pela regra, o corpo químico numa segunda etapa | J5 | `docs/futuro/connectome_cerebro_a.md` |
 | **os seis sistemas novos do corpo** | o Metabolismo energético já entrou (J2). Seguem como ideia, cada um com a condição de entrada: o proprioceptivo, a Termorregulação, o nociceptivo e de reparo (= J10), o imune e toxicológico e o reprodutivo | J2 | `docs/DEFINICOES_CORPO_V2.md`, seção 8.1 |
+| **o mundo 3D** (a vista do mundo físico em Three.js, a física em inteiros no motor, o contrato sensório-motor e o WORLD-POC-01) | investigação feita (WORLD-POC-001, 2026-10-18); W-1 a W-7 decididas pela recomendação; sem tarefa: o POC-01a vem depois do Gate C (W-5). As fases P0–P9 da especificação ficam lidas sobre os marcos J (seção 7 do documento) | J1, M-2, Gate C (J5) | `docs/futuro/mundo_3d.md` |
 
 **Regras que valem para todos os marcos:** chave desligada = a vida de hoje byte a byte; nenhum número sem artefato; nenhuma alegação de
 novidade; nos degraus altos (J8, J9) e nas perguntas do ego (J6), nada de rótulo nem conteúdo escrito à mão no pet livre.
