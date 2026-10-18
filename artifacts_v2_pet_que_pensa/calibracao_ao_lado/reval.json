@@ -1,0 +1,898 @@
+{
+  "falham": 0,
+  "fracao_falha": 0.0,
+  "ganho_gosto": 512,
+  "limiar": 0.25,
+  "meta": {
+    "bancada_sha256": "090985587a2f75a19e9a2a044072793cda92c687a27e41f0b357af879ae915ae",
+    "cfg_lobos": {
+      "alvo_aprendido": false,
+      "alvo_por_arvore": false,
+      "aprendizado_ligado": true,
+      "bits_ponto_fixo": 10,
+      "entradas_sociais": false,
+      "escala_ticks_desde_cuidado": 480.0,
+      "fator_familiaridade": 16,
+      "g_plano": 0,
+      "janela_latencia_ticks": 120,
+      "janela_social_ticks": 240,
+      "maximo_pesos": 1000,
+      "memoria_ganho": 512,
+      "memoria_janela_recencia_ticks": 240,
+      "memoria_ligada": false,
+      "memoria_modo": "relevante",
+      "memoria_permutacao": [],
+      "modelo_outros": false,
+      "paladar": false,
+      "passo": 512,
+      "piso_peso": 64,
+      "presenca_fruta_mundo": false,
+      "recompensa_elogio": 1.0,
+      "recompensa_pedido_ignorado": -0.5,
+      "recompensa_repreensao": -1.0,
+      "recompensa_tapa": -1.0,
+      "teto": 16384,
+      "teto_plano": 2048,
+      "traco_decisoes": 0,
+      "traco_fator": 0,
+      "w0_alvo": 64,
+      "w0_info": 256,
+      "w0_pedido": 256
+    },
+    "config": {
+      "calibracao_g_plano": {
+        "dias": [
+          4,
+          6
+        ],
+        "faixa": [
+          0.1,
+          0.4
+        ],
+        "grade": [
+          256,
+          512,
+          1024
+        ]
+      },
+      "calibracao_ganho_gosto": {
+        "dias": [
+          4,
+          6
+        ],
+        "faixa": [
+          0.25,
+          0.75
+        ],
+        "grade": [
+          512,
+          1024,
+          2048,
+          4096
+        ]
+      },
+      "consequencia": {
+        "canais_ligados": true,
+        "ganho": 4
+      },
+      "corpo": {
+        "gasto_atividades_den": 5,
+        "gasto_atividades_num": 4,
+        "gasto_basal_acordado": 300,
+        "gasto_basal_dormindo": 150
+      },
+      "d_a": 7,
+      "descricao": "Calibracao do pet que pensa com a fruta ao lado da racao (PLANO_ANALISE_V2_PET_QUE_PENSA, adendo 5: A5.4, A5.5 e A5.8; PJ5-1 a PJ5-6). Os quatro passos do orquestrador run_v2_calibracao_pet_que_pensa_paladar.py: (1) o ganho_gosto na grade {S/2, S, 2S, 4S}, o P1 so na fase 1, a fracao das decisoes de comer com a racao e uma fruta da regra a vista em que o pet come uma fruta, nos dias 4 a 6, o menor ponto com a media em [0,25; 0,75] (senao o mais perto, com o desvio); (2) o g_plano pela regra da secao 5 sem mudanca; (3) a G-REVAL-POSSIVEL por unidade, sem vida; (4) o piloto, so com ela passando, com a G-APRENDEU a 1/4 e o T1 lado a lado (A5.3). As 20 unidades das bases 51101...51505 (K_u = 4). O paladar do adendo 3 e a fruta ao lado (as tres frutas, uma de cada, com reposicao, a ConfigFrutaAoLado do A) em todos os bracos e protocolos. O resto e a config da calibracao com o paladar. NAO rodada: precisa do sim do Matheus.",
+      "dono": "atencioso",
+      "fruta_ao_lado": true,
+      "janela": 3,
+      "lobos": {
+        "memoria_ganho": 512,
+        "w0_info": 256,
+        "w0_pedido": 256
+      },
+      "lugar": "comedouro",
+      "montagem": "completa",
+      "mundo": {
+        "mult_queda": 1.0
+      },
+      "n_mao": 2,
+      "orcamento_por_dia": 16,
+      "paladar": true,
+      "passo0": "artifacts_v2_corpo/calibracao/adendo5/passo0/passo0.json",
+      "plano": "docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md",
+      "ponto": "T3",
+      "tipo": "pet_que_pensa",
+      "unidades": {
+        "bases": [
+          51101,
+          51202,
+          51303,
+          51404,
+          51505
+        ],
+        "k": 4,
+        "prefixo": "pet_que_pensa"
+      }
+    },
+    "config_sha256": "e7c50018deaf58d4ad0c14280cd035eb58a39f34c0f4e191ab1e98dd28e781f7",
+    "corpo_sha256": "bcd67b305b3de7a252b260bf0404cd3dfe079e8e5f14fec1ecdbda12878eaef9",
+    "engine_sha256": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+    "lobos_sha256": "ea3c0188edcc51f01c57cce6792ef4ef0798944bbfb3f1f85de91dc17452c587",
+    "metrics_sha256": "be2575c4470fb93dfc9c3302ba6d050d872044fa749bdb12bd588290d0508e1d",
+    "modelo_mundo_sha256": "c516c1d08be1f57911e33edab71d411e8f2f1c91f46b33f465184b8bebaaf3b1",
+    "motor_corpo_sha256": "998d5e6f42918f2de4ce49007922a405305277ea9ff32ba6a79a26460fd405bd",
+    "mundo_sha256": "e9784c550b43a699853a4afbe1d1e99f216561d646a6d550e6591105bb6cbd2d",
+    "orquestrador_g_plano_sha256": "098b4d69db3e6e78b1c48d8d5347475220f587a860c7a3d95ce9eff6c9d2240e",
+    "orquestrador_sha256": "eeff7747e013e512f2190970dc2b4577ad0dc1d3608d5343d65d5ffcbaea0391",
+    "plano": "docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md",
+    "plataforma": "Windows-11-10.0.26200-SP0",
+    "ponto": "T3",
+    "processos": 1,
+    "python": "3.13.0"
+  },
+  "n": 20,
+  "passa": true,
+  "por_unidade": [
+    {
+      "abaixo_de": [
+        "racao",
+        "a",
+        "b"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 18114712633082343566,
+      "sinais": {
+        "a": {
+          "corpo": 523,
+          "gosto": -46,
+          "total": 477
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": -16,
+          "total": 507
+        },
+        "c": {
+          "corpo": 75,
+          "gosto": 9,
+          "total": 84
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 51101,
+        "k": 0
+      },
+      "x": "c"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "a",
+        "b"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 6958302791066770270,
+      "sinais": {
+        "a": {
+          "corpo": 523,
+          "gosto": -52,
+          "total": 471
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": 72,
+          "total": 595
+        },
+        "c": {
+          "corpo": 75,
+          "gosto": 212,
+          "total": 287
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 51101,
+        "k": 1
+      },
+      "x": "c"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "b",
+        "c"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 4355833768401496284,
+      "sinais": {
+        "a": {
+          "corpo": 75,
+          "gosto": 265,
+          "total": 340
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": 31,
+          "total": 554
+        },
+        "c": {
+          "corpo": 523,
+          "gosto": 39,
+          "total": 562
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 51101,
+        "k": 2
+      },
+      "x": "a"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "a",
+        "b"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 4646382752119877192,
+      "sinais": {
+        "a": {
+          "corpo": 523,
+          "gosto": 195,
+          "total": 718
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": 9,
+          "total": 532
+        },
+        "c": {
+          "corpo": 75,
+          "gosto": 412,
+          "total": 487
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 51101,
+        "k": 3
+      },
+      "x": "c"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "a",
+        "b"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 12858649485817505685,
+      "sinais": {
+        "a": {
+          "corpo": 523,
+          "gosto": 44,
+          "total": 567
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": 10,
+          "total": 533
+        },
+        "c": {
+          "corpo": 75,
+          "gosto": 368,
+          "total": 443
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 51202,
+        "k": 0
+      },
+      "x": "c"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "a",
+        "b"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 7629998838859943463,
+      "sinais": {
+        "a": {
+          "corpo": 523,
+          "gosto": 423,
+          "total": 946
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": 397,
+          "total": 920
+        },
+        "c": {
+          "corpo": 75,
+          "gosto": 478,
+          "total": 553
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 51202,
+        "k": 1
+      },
+      "x": "c"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "b",
+        "c"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 16858015394890152341,
+      "sinais": {
+        "a": {
+          "corpo": 75,
+          "gosto": 147,
+          "total": 222
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": 111,
+          "total": 634
+        },
+        "c": {
+          "corpo": 523,
+          "gosto": -96,
+          "total": 427
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 51202,
+        "k": 2
+      },
+      "x": "a"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "a",
+        "b"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 1253247784976602117,
+      "sinais": {
+        "a": {
+          "corpo": 523,
+          "gosto": 141,
+          "total": 664
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": 75,
+          "total": 598
+        },
+        "c": {
+          "corpo": 75,
+          "gosto": 382,
+          "total": 457
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 51202,
+        "k": 3
+      },
+      "x": "c"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "a",
+        "b"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 4300308722127108237,
+      "sinais": {
+        "a": {
+          "corpo": 523,
+          "gosto": -124,
+          "total": 399
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": 61,
+          "total": 584
+        },
+        "c": {
+          "corpo": 75,
+          "gosto": 164,
+          "total": 239
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 51303,
+        "k": 0
+      },
+      "x": "c"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "a",
+        "b"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 10395438949639050965,
+      "sinais": {
+        "a": {
+          "corpo": 523,
+          "gosto": 151,
+          "total": 674
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": 34,
+          "total": 557
+        },
+        "c": {
+          "corpo": 75,
+          "gosto": 403,
+          "total": 478
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 51303,
+        "k": 1
+      },
+      "x": "c"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "a",
+        "c"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 9268216764219717376,
+      "sinais": {
+        "a": {
+          "corpo": 523,
+          "gosto": -207,
+          "total": 316
+        },
+        "b": {
+          "corpo": 75,
+          "gosto": -96,
+          "total": -21
+        },
+        "c": {
+          "corpo": 523,
+          "gosto": -120,
+          "total": 403
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 51303,
+        "k": 2
+      },
+      "x": "b"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "a",
+        "c"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 1558047883150639142,
+      "sinais": {
+        "a": {
+          "corpo": 523,
+          "gosto": -35,
+          "total": 488
+        },
+        "b": {
+          "corpo": 75,
+          "gosto": 367,
+          "total": 442
+        },
+        "c": {
+          "corpo": 523,
+          "gosto": 302,
+          "total": 825
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 51303,
+        "k": 3
+      },
+      "x": "b"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "b"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 2473073224897160773,
+      "sinais": {
+        "a": {
+          "corpo": 75,
+          "gosto": 465,
+          "total": 540
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": 287,
+          "total": 810
+        },
+        "c": {
+          "corpo": 523,
+          "gosto": -52,
+          "total": 471
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 51404,
+        "k": 0
+      },
+      "x": "a"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "b",
+        "c"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 14015843927699315384,
+      "sinais": {
+        "a": {
+          "corpo": 75,
+          "gosto": 154,
+          "total": 229
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": -126,
+          "total": 397
+        },
+        "c": {
+          "corpo": 523,
+          "gosto": 24,
+          "total": 547
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 51404,
+        "k": 1
+      },
+      "x": "a"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "a",
+        "c"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 14650829823614985240,
+      "sinais": {
+        "a": {
+          "corpo": 523,
+          "gosto": 154,
+          "total": 677
+        },
+        "b": {
+          "corpo": 75,
+          "gosto": 378,
+          "total": 453
+        },
+        "c": {
+          "corpo": 523,
+          "gosto": 297,
+          "total": 820
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 51404,
+        "k": 2
+      },
+      "x": "b"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "b",
+        "c"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 17267452060419569847,
+      "sinais": {
+        "a": {
+          "corpo": 75,
+          "gosto": 44,
+          "total": 119
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": -36,
+          "total": 487
+        },
+        "c": {
+          "corpo": 523,
+          "gosto": -152,
+          "total": 371
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 51404,
+        "k": 3
+      },
+      "x": "a"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "b",
+        "c"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 14717762403823960494,
+      "sinais": {
+        "a": {
+          "corpo": 75,
+          "gosto": 263,
+          "total": 338
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": 123,
+          "total": 646
+        },
+        "c": {
+          "corpo": 523,
+          "gosto": -18,
+          "total": 505
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 51505,
+        "k": 0
+      },
+      "x": "a"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "a",
+        "b"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 15047206346831736963,
+      "sinais": {
+        "a": {
+          "corpo": 523,
+          "gosto": -17,
+          "total": 506
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": -36,
+          "total": 487
+        },
+        "c": {
+          "corpo": 75,
+          "gosto": 137,
+          "total": 212
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 51505,
+        "k": 1
+      },
+      "x": "c"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "b",
+        "c"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 13508308426867718161,
+      "sinais": {
+        "a": {
+          "corpo": 75,
+          "gosto": 285,
+          "total": 360
+        },
+        "b": {
+          "corpo": 523,
+          "gosto": 285,
+          "total": 808
+        },
+        "c": {
+          "corpo": 523,
+          "gosto": 194,
+          "total": 717
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 51505,
+        "k": 2
+      },
+      "x": "a"
+    },
+    {
+      "abaixo_de": [
+        "racao",
+        "a",
+        "c"
+      ],
+      "efeito_x_depois": -0.1,
+      "ganho_gosto": 512,
+      "passa": true,
+      "semente": 1861136535781224229,
+      "sinais": {
+        "a": {
+          "corpo": 523,
+          "gosto": 88,
+          "total": 611
+        },
+        "b": {
+          "corpo": 75,
+          "gosto": 266,
+          "total": 341
+        },
+        "c": {
+          "corpo": 523,
+          "gosto": 183,
+          "total": 706
+        },
+        "racao": {
+          "corpo": 1014,
+          "gosto": 32,
+          "total": 1046
+        }
+      },
+      "unidade": {
+        "base": 51505,
+        "k": 3
+      },
+      "x": "b"
+    }
+  ],
+  "regra": "PLANO_ANALISE_V2_PET_QUE_PENSA, adendo 3, A3.2 (PJ-6): a unidade passa se o sinal da x depois da mudanca for menor que o da racao ou o de outra fruta; a premissa, com no maximo 25% das unidades falhando"
+}
