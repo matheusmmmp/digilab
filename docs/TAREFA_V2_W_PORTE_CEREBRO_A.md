@@ -164,3 +164,34 @@ Cada etapa é um PR, com o relato no corpo. O merge é só do Matheus.
 - **O que não foi conferido:** o `sha_interno` (é o `estado_interno` inteiro, com os contadores da memória, que ficam para a etapa 3) e
   a seção `v11` do gabarito (aprendizado e corpo, G-PAR-L1, etapa 3).
 - `npm run tipos` limpo; `npm test` com 33 arquivos e 370 testes passando (13 deles no `lobos.test.ts`).
+
+## 11. PW-4: a medida do caráter, registrada antes de medir (2026-10-18, worker B)
+
+Pedido do Gerente: medir a escala do caráter no v11 contra o v10 (linhas e formas) e não mudar nada se ficar perto. Esta seção fixa a
+medida e o critério de "perto" **antes** da primeira vida. É uma medida descritiva com as sementes dos testes, sem run de pesquisa.
+
+- **Os pets:** 4 donos (atencioso, relapso, aleatório, incoerente) × 5 sementes (101…505), 20 por versão, 2 dias com 16 interações por dia.
+  - **o v10:** o bandit do Python (`PoliticaBandit`, o algoritmo do bandit da web) com os donos de sempre, com elogio e bronca
+    (`simular_vida`);
+  - **o v11:** a vida do gabarito da etapa 1 (`P1-c-tapa` no ponto da PW-2: o corpo, o carinho, o tapa e a consequência).
+- **O caráter, pelo método da web** (`carater.ts`, `caraterPolitica`):
+  - o desvio da política sobre a mesma política recém-nascida (no A, o instinto), em 32 sondas × 100 amostras com a semente 9001;
+  - o eixo é a média dos traços, ÷ 0,05, mais o `DESLOC_CARATER` da web do estágio, cortado em [−1, 1];
+  - é medido no fim da criança (900 min) e no fim do adolescente (1980 min);
+  - no A, as sondas ganham os receptores do corpo pela rng `sonda-corpo` da mesma semente, como a deriva da bancada.
+- **A linha e a forma:** `linha_do_adolescente` e `forma_adulta` do catálogo (com o sparring suficiente).
+- **O que se mede:**
+  - a distribuição das 4 linhas e das 8 formas adultas;
+  - o desvio bruto por eixo (a mediana de |bruto|) e a fração de eixos cortados em ±1.
+- **"Perto" são as três condições juntas:**
+  - **(a) as linhas:** a distância de variação total entre o v11 e o v10 fica dentro do 95º percentil da mesma distância com os rótulos
+    de versão permutados entre os 40 pets (10.000 permutações, rng `pw4-permutacao`);
+  - **(b) as formas:** o mesmo;
+  - **(c) a escala:** a razão das medianas de |bruto| (v11 / v10, os dois estágios juntos) fica em [½, 2], e a fração de eixos cortados do
+    v11 fica no máximo 0,10 acima da do v10.
+- **A decisão:** se as três passam, nada muda (`CCP.escala` e `DESLOC_CARATER` ficam). Se alguma falha, o resultado é registrado e vai ao
+  Matheus, sem mudar nada aqui.
+- **Os limites conhecidos:**
+  - são 20 pets por versão, então o teste por permutação tem pouco poder;
+  - a web do v10 usa o bandit da web (outra rng, com o temperamento), e o `DESLOC_CARATER` foi calibrado nele; aqui o lado do v10 é o
+    mesmo algoritmo no Python.
