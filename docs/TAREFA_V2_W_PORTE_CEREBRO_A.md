@@ -371,6 +371,14 @@ A parte 3 ficou em dois PRs. Este (3a) traz a medida da PW-4 (b), a vontade e o 
   Os pets v1 a v10, as assinaturas e os gabaritos não mudaram.
 - `npm run tipos` limpo; `npm test` com 38 arquivos e 439 testes; os testes Python tocados passam (8).
 
+**As duas decisões do #339, DECIDIDAS (Matheus, 2026-10-18), pelas opções do PR:**
+- **O caráter:** opção (a), aceitar os números PROPOSTOS. O v11 usa a escala 0,015 e os deslocamentos medidos. O custo aceito: 14% dos
+  eixos batem em ±1, e o caçador sai sempre sentinela.
+- **A parte 3b:** opção (a), o v11 é o v10 sem as camadas que dependem da bronca ou que o laço recusa.
+  - Ficam: a evolução (com o caráter do v11), o combate e tudo acima, o treino sem obediência e o vínculo B pelo desejo atendido.
+  - Saem: a educação (as janelas, o petisco e o banheiro), a mentira e a obediência.
+  - A lesão fica, e o tratar só cura.
+
 **Para a parte 3b, a decisão que falta:** o que o v11 do jogo herda dos v4 a v10. O laço do corpo recusa a educação (as janelas, as
 travessuras e a disciplina, resolvidas com a bronca e o petisco), a obediência e o treino com obediência. E a mentira dos v7 é julgada
 com a bronca. O pedido está no corpo do PR.
