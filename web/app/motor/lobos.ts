@@ -545,6 +545,25 @@ export class CerebroA {
     return desvio;
   }
 
+  /** a acao que o agir sortearia com esta `rng`, sem o motivo, o registro e a percepcao do corpo guardada: a sonda do carater (pets v11),
+   *  que sorteia muitas vezes no cerebro vivo sem mexer nele. A mesma conta do agir: os impulsos, o peso efetivo e uma chamada de
+   *  rng.random() so com mais de um candidato */
+  amostrar(obs: ObservacaoLobos, rng: RngCerebro): AcaoPet {
+    const S = this.escala, xCorpoVivo = this.xCorpo;
+    if (this.temCorpo) {
+      if (obs.corpo === undefined) throw new Error("corpo: Observacao sem o campo corpo (o cerebro com a chave do corpo precisa do corpo)");
+      this.xCorpo = this.receptoresNovos.map(r => leituraReceptor(obs.corpo!, r, S) / S);
+    }
+    try {
+      const { regra, candidatos } = impulsos(obs);
+      if (candidatos.length === 1) return candidatos[0];
+      const { efetivos } = this.pesosEfetivos(regra, candidatos, this.percepcao(obs));
+      return candidatos[sortear(candidatos.map(a => efetivos[a]!), rng.random())];
+    } finally {
+      this.xCorpo = xCorpoVivo;
+    }
+  }
+
   /** PoliticaLobos.agir: a percepcao (e a do corpo), os impulsos, o peso efetivo e o sorteio (uma chamada de rng.random() so com mais
    *  de um candidato), o motivo e o registro da decisao para o credito */
   agir(obs: ObservacaoLobos, rng: RngCerebro): AcaoPet {

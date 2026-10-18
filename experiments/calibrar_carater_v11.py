@@ -83,6 +83,8 @@ def leilao_adolescente(pets: list[dict], escala: float) -> tuple[dict, int]:
 
 
 def calibrar() -> dict:
+    if sys.version_info < (3, 12):
+        raise RuntimeError("a calibracao precisa do sum() do Python 3.12 ou mais novo (a soma compensada; o artefato saiu dele)")
     medida = json.loads(MEDIDA.read_text(encoding="utf-8"))
     ccp = medida["constantes_web"]["CCP"]
     v10 = [p for p in medida["pets"] if p["versao"] == "v10"]
