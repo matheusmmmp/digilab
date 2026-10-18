@@ -274,3 +274,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-18 — UI-DESKTOP (worker "Digilab interface design"): a casca limpa do desktop e a tela do Pet](registro/2026-10.md)
 
 - [2026-10-18 — BANHEIRO-FALHA-ALTA (sessão lateral): o `configCorpo` do TS com o banheiro, a ordem E-9 dos gestos](registro/2026-10.md)
+- [2026-10-18 — PQP-VALIDACAO, a run (worker D): a validação do J5 com a fruta ao lado da ração](registro/2026-10.md)
