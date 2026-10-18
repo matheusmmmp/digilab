@@ -329,3 +329,48 @@ Pela PW-4 (b). Esta seção fixa o método e o critério **antes** da primeira v
     máximo 0,10 acima da do v10.
 - **Se fechar,** os números entram no TS como `CCP_V11` e `DESLOC_CARATER_V11`, só nos pets v11. **Se não fechar,** vão ao Matheus sem ligar.
 - **Limite conhecido:** a calibração e a conferência usam os mesmos 20 pets (não há sementes de teste de sobra); a conferência é otimista.
+
+### A medida e o porte, entregues (2026-10-18): o PR da parte 3a
+
+A parte 3 ficou em dois PRs. Este (3a) traz a medida da PW-4 (b), a vontade e o caráter do v11 em TS, com gabarito. O v11 no `Motor`
+(`VERSAO_PET` 11, o laço do corpo, o vínculo B, a tela do desejo e os botões) fica para a parte 3b, que espera uma decisão (abaixo).
+
+- **A medida** (`python experiments/calibrar_carater_v11.py` → `artifacts_v2_w_porte/carater_v11_calibracao.json`), sobre os brutos dos
+  20 pets v11 e 20 pets v10 da medida da seção 12 (nada simulado de novo):
+  - **a escala:** 0,05 × 0,2966 = **0,015**;
+  - **o deslocamento do adolescente:** atento −0,0117, impetuoso +0,0142, paciente −0,0167, resistente +0,0142;
+  - **o do adulto:** atento −0,7917, impetuoso +0,2604, paciente +0,25, resistente 0.
+- **Pelo critério da seção 15, NÃO fecha** (os números ficam PROPOSTOS e vão ao Matheus):
+
+  | condição | medida | faixa | |
+  |---|---|---|---|
+  | as linhas | brigão 0,20, guardião 0,30, caçador 0,30, colosso 0,20 | cada uma em [0,15; 0,35] | **passa** |
+  | a forma de cima | 0,65 | [0,35; 0,65] | **passa**, no limite |
+  | a escala | razão das medianas 0,99; eixos cortados 0,1375 (v10: 0,006) | razão em [½, 2]; cortados ≤ 0,106 | **falha** |
+
+- **A leitura:**
+  - a escala põe a mediana do v11 no lugar da do v10, mas a cauda do A é mais longa. Os pets do dono aleatório desviam muito mais no eixo
+    resistente (até 3,06 vezes a escala) e batem em ±1;
+  - o eixo resistente (comer e emburrar) não sai do zero em 16 dos 20 pets no fim da criança e em 13 no fim do adolescente: o tempo
+    livre não propõe essas ações. Por isso toda a linha caçador sai **sentinela** (a mediana do complementar é 0, e todo pet fica do lado ≥ 0), e o emboscador não aparece;
+  - o deslocamento do adulto no eixo atento (−0,79) é grande: é a mediana dos colossos, que desviam muito no atento;
+  - os 20 pets calibram e conferem ao mesmo tempo, e a conferência é otimista.
+- **A vontade em TS** (`CerebroA.desvioAprendido` e `desejoLobos` em `web/app/motor/lobos.ts`): bate bit a bit com a seção `vontade` do
+  gabarito (`web/app/test/vontade_lobos.test.ts`), nas 288 decisões de cada uma das 4 vidas, rejogadas pelo laço do corpo, e na grade de
+  32 sondas. É pura: o laço com e sem o espião dá a mesma vida. A necessidade de sempre saiu do `Bandit.desejo` para uma função
+  (`necessidade`), sem mudar a conta dos v2 a v10.
+- **O caráter do v11 em TS** (`caraterV11` em `web/app/motor/carater.ts`): o método do Python, não o da web dos v3 a v10, com as sondas de
+  `metrics.estados_sonda`, o corpo da rng `sonda-corpo`, as distribuições pelo `RandomPy` e o cérebro recém-nascido como base. O cérebro
+  é sondado por `CerebroA.amostrar`, que sorteia como o `agir` sem mexer no cérebro.
+  - O gabarito novo é `web/app/test/gabaritos/carater_v11_python.json` (`python experiments/exportar_gabarito_carater_v11.py`): as 4 vidas
+    v11, no fim da criança e do adolescente, com a distribuição, o bruto, o caráter, a linha e a forma.
+  - Bate bit a bit (`web/app/test/carater_v11.test.ts`, 6 testes).
+  - **O achado:** o `sum()` do Python 3.12 em diante soma floats com compensação (Neumaier). O TS porta essa soma (`somaPy`), e o exportador e
+    a calibração recusam o Python 3.10 e o 3.11.
+- **As constantes novas** `CCP_V11` e `DESLOC_CARATER_V11` são conferidas por `constantes.test.mjs` contra o artefato da calibração.
+  Os pets v1 a v10, as assinaturas e os gabaritos não mudaram.
+- `npm run tipos` limpo; `npm test` com 38 arquivos e 439 testes; os testes Python tocados passam (8).
+
+**Para a parte 3b, a decisão que falta:** o que o v11 do jogo herda dos v4 a v10. O laço do corpo recusa a educação (as janelas, as
+travessuras e a disciplina, resolvidas com a bronca e o petisco), a obediência e o treino com obediência. E a mentira dos v7 é julgada
+com a bronca. O pedido está no corpo do PR.
