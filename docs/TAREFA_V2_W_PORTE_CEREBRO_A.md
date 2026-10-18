@@ -137,3 +137,30 @@ Cada etapa é um PR, com o relato no corpo. O merge é só do Matheus.
   - **Leitura descritiva:** na média, o v11 **não** fica mais parado. O ocioso cai, o explorar sobe e o brincar fica igual. O último terço da vida vai no mesmo sentido.
   - **A dispersão entre pets é grande:** em alguns pares, o brincar cai 0,3; em outros, sobe 0,35.
   - **Pela regra da seção 6, a PW-1 não volta ao Matheus.** A dispersão fica registrada para a PW-4 (o caráter) e para o painel ("o que aprendeu").
+
+## 10. Etapa 2, entregue (2026-10-17)
+
+- **O núcleo em TS:** `web/app/motor/lobos.ts`, o porte de `digilab/policies/lobos.py` com o aprendizado desligado (L0), sem as chaves
+  do mundo, das frutas, do corpo e do plano.
+  - a percepção (`percepcao`), a sonda do instinto (`impulsos`, sobre `agirInstinto`, o `PoliticaInstinto.agir` com a regra), a tabela
+    de pesos inteiros no prior (`tabelaPrior`, S = 2^10), o peso efetivo (`ativacao`), o sorteio do `random.choices` (`sortear`) e o
+    motivo com os campos de `_registrar` (`CerebroA.agir`, `motivos`);
+  - com o aprendizado ligado, `CerebroA` falha alto: é a etapa 3. Os contadores da memória e emoção também ficam para a etapa 3; aqui o
+    lobo só contribui com zero, como no Python;
+  - nenhum `Math.exp` ou `Math.log` no núcleo (o teste lê o fonte);
+  - a constante nova `CLB` (`bits`, `escalaTdc`, `maxPesos`) é conferida por `constantes.test.mjs` contra a `ConfigLobos`.
+- **G-PAR-L0, passa** (`web/app/test/lobos.test.ts`, no Node):
+  - as duas vidas da seção `l0` do gabarito, 576 decisões, passam pelas sete regras do instinto;
+  - em cada decisão, a regra, os candidatos, as contribuições por lobo, os pesos efetivos, o `u`, a ação e o lobo decisivo são iguais
+    ao gabarito, bit a bit (`toStrictEqual`, que compara os números por `Object.is`). A rng é chamada uma vez só nas regras com mais de
+    um candidato;
+  - a decisão é a do instinto do TS: o suporte de `distInstinto` (`bandit.ts`) é o dos candidatos, peso / total é a probabilidade dele
+    bit a bit, e o instinto com o mesmo `u` escolhe a mesma ação, com os mesmos pesos;
+  - a observação de cada decisão é refeita da percepção gravada, e a percepção refeita é conferida contra a gravada antes do resto;
+  - os controles negativos: um peso mexido no último bit é pego, e também o mesmo erro nos pesos do instinto.
+- **Leitura de "igual ao instinto do TS":** o TS tinha só `distInstinto`, que dá a distribuição e não a regra. A sonda precisa da regra e
+  da ordem dos candidatos, então `agirInstinto` espelha o `PoliticaInstinto.agir` linha a linha, e o teste amarra os dois instintos do TS
+  (no gabarito e numa grade de 13.824 observações). Nenhum número novo.
+- **O que não foi conferido:** o `sha_interno` (é o `estado_interno` inteiro, com os contadores da memória, que ficam para a etapa 3) e
+  a seção `v11` do gabarito (aprendizado e corpo, G-PAR-L1, etapa 3).
+- `npm run tipos` limpo; `npm test` com 33 arquivos e 370 testes passando (13 deles no `lobos.test.ts`).

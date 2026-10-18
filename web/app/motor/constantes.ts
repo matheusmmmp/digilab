@@ -94,6 +94,9 @@ export const CVI = { inicial: .5, alfa: .1, pesoAtend: 1, pesoCoer: 1, pesoDesej
    com que o pet decidiu a acao atual. versaoPet: a partir de qual versao o vinculo e o B (no Python a variante e escolhida pelo
    config, nao por versao de pet) */
 export const CVB = { versaoPet: 10, limNec: .5, limEnergia: .25 };
+/* o cerebro A (motor/lobos.ts; docs/TAREFA_V2_W_PORTE_CEREBRO_A.md, etapa 2): a ConfigLobos do L0. bits: S = 2**bits, a escala dos pesos
+   inteiros; escalaTdc: a entrada do tempo sem cuidado, min(1, ticks / escala); maxPesos: o teto de pesos do plano */
+export const CLB = { bits: 10, escalaTdc: 480, maxPesos: 1000 };
 export const COB = {
   b0: 1, bVinculo: 2, bTeimosia: 1, bConflito: 2, limiarConflito: .3, probFazerOutra: .5,
   sujeitas: ["alimentar", "limpar", "brincar", "acariciar"] as readonly AcaoDono[], limiarMotivo: .05,
