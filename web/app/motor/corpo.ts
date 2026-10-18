@@ -95,6 +95,10 @@ export function configCorpo(mudancas: Partial<ConfigCorpo> = {}): ConfigCorpo {
   }
   // o Paladar (docs/futuro/paladar.md) ainda nao tem orgao em TS (a etapa 5 do paladar): ligado, falha alto
   if (cc.paladar) throw new Error("ConfigCorpo.paladar ainda nao existe no TS (paladar, etapa 5)");
+  // o banheiro (docs/TAREFA_V2_BANHEIRO.md, secao 3): a vontade, o conforto e as necessidades na zona ainda nao tem quimica em TS (a
+  // etapa 4 do banheiro); ligado, o corpo sairia sem eles em silencio (o achado do #333)
+  if (typeof cc.banheiro !== "boolean") throw new Error(`ConfigCorpo.banheiro e bool: ${cc.banheiro}`);
+  if (cc.banheiro) throw new Error("ConfigCorpo.banheiro ainda nao existe no TS (banheiro, etapa 4)");
   return cc;
 }
 /** CONFIG_CORPO_LIGADA, CONFIG_CORPO_DRIVES e CONFIG_CORPO_METABOLISMO do Python */
