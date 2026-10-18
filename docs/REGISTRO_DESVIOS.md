@@ -258,4 +258,4 @@ de base em `docs/historico/registro_lotes.json`.
 
 - [2026-10-17 — CONNECTOME-CEREBRO-A (worker de uma sessão lateral): o cérebro A desenhado como grafo dos pesos](registro/2026-10.md)
 
-- [2026-10-17 — W-PORTE, etapa 1: o ponto do v11 e os gabaritos do cérebro A](registro/2026-10.md)
+- [2026-10-17 — W-PORTE, etapa 1 (esta sessão, coordenador e worker): o ponto do v11 e os gabaritos do cérebro A](registro/2026-10.md)
