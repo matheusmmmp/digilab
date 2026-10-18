@@ -84,6 +84,13 @@ def test_placeholder_do_modelo_conta_como_vazio(tmp_path):
     assert [i.regra for i in falhas(vr.verificar(c, [], raiz))] == ["seção Decisões do Matheus"]
 
 
+def test_sinal_de_menor_e_maior_dentro_de_codigo_nao_e_placeholder(tmp_path):
+    """Achado da INFRA-POC (#331): um comando citado com argumento genérico não pode virar seção vazia."""
+    raiz = raiz_minima(tmp_path)
+    c = corpo("documentacao", decisoes="nenhuma; o guia cita `python tools/verificar_relato.py --pr <N>`\n\n```bash\nx --arquivo <corpo.md>\n```")
+    assert falhas(vr.verificar(c, [], raiz)) == []
+
+
 def test_tarefa_que_nao_existe_reprova(tmp_path):
     raiz = raiz_minima(tmp_path)
     c = corpo("documentacao", tarefa="`docs/TAREFA_V2_NAO_HA.md`")
