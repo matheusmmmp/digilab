@@ -168,6 +168,7 @@ PODER_PILOTO = {"k_min": 4, "k_max": 10, "replicas": 2000, "alvo": 0.8, "alfa": 
 BOOTSTRAP_PILOTO = {"reamostragens": 10000, "semente": 4242, "nivel": 0.95}
 MARGEM_MINIMA = 0.05                      # secao 6: uma margem <= 0,05 e o teste sem espaco (PROPOSTO)
 LIMIAR_SEM = 0.25                         # G-OPORTUNIDADE e G-EXPOSICAO: no maximo 25% das unidades
+LIMIAR_APRENDEU = 1 / 3                   # G-APRENDEU: o acaso entre os 3 tipos (secao 7); o adendo 5 usa 1/4 (PJ5-3, pelo orquestrador dele)
 VIDAS_POR_UNIDADE = len(bv.BRACOS_PQP) * len(PROTOCOLOS_PILOTO)
 
 
@@ -216,14 +217,14 @@ def _agrupado(difs: dict) -> dict:
     return grupos
 
 
-def premissas(por: dict, boot: dict) -> dict:
+def premissas(por: dict, boot: dict, limiar_aprendeu: float = LIMIAR_APRENDEU) -> dict:
     """G-APRENDEU (f_antes do T1 com o IC95 inferior > 1/3, por braco), G-OPORTUNIDADE (<= 25% sem oportunidade, por braco e teste) e
     G-EXPOSICAO (<= 25% sem exposicao no T2, por braco). No piloto, descritivas."""
     out: dict = {"G-APRENDEU": {}, "G-OPORTUNIDADE": {}, "G-EXPOSICAO": {}}
     for braco in bv.BRACOS_PQP:
         fa = [m["t1"]["f_antes"] for m in por[(braco, "T1")].values() if m["t1"]["f_antes"] is not None]
         ic = bootstrap_ic(fa, boot["reamostragens"], boot["semente"], boot["nivel"]) if len(fa) >= 2 else None
-        out["G-APRENDEU"][braco] = {"n": len(fa), "ic": ic, "passa": ic is not None and ic["ic_inferior"] > 1 / 3}
+        out["G-APRENDEU"][braco] = {"n": len(fa), "ic": ic, "passa": ic is not None and ic["ic_inferior"] > limiar_aprendeu}
         for prot, teste in (("T1", "t1"), ("T2", "t2")):
             ms = list(por[(braco, prot)].values())
             sem = sum(1 for m in ms if m[teste]["sem_oportunidade"])
@@ -268,7 +269,7 @@ def escolher_k_dois(difs_por: dict, deltas: dict, total: int, n_bases: int, pode
     return {"k": e["k"], "n": e["n"], "chega_ao_alvo": bool(chega), "escolhido": e, "tabela": tabela, **poder, "semente": semente}
 
 
-def rodar_piloto(cfg: dict, pasta: Path, processos: int = 1) -> dict:
+def rodar_piloto(cfg: dict, pasta: Path, processos: int = 1, limiar_aprendeu: float = LIMIAR_APRENDEU) -> dict:
     validar(cfg)
     escolha_g = json.loads((pasta / "g_plano.json").read_text(encoding="utf-8"))["escolha"]
     saida = pasta / "piloto"
@@ -317,10 +318,10 @@ def rodar_piloto(cfg: dict, pasta: Path, processos: int = 1) -> dict:
              "processos": processos, "vidas_por_unidade": VIDAS_POR_UNIDADE}
     if n is not None:
         custo["validacao"] = {"n": n["n"], "vidas": n["n"] * VIDAS_POR_UNIDADE, "cpu_h": n["n"] * VIDAS_POR_UNIDADE * cpu_vida / 3600}
-    out = {"g_plano": g, "escolha_g_plano": escolha_g, "unidades": total, "premissas": premissas(por, boot), "margens": mg, "n": n,
+    out = {"g_plano": g, "escolha_g_plano": escolha_g, "unidades": total, "premissas": premissas(por, boot, limiar_aprendeu), "margens": mg, "n": n,
            "poder_secundarios": relato, "descritivo_nao_e_evidencia": descritivo, "custo": custo,
            "valida_validacao": all(mg["com_espaco"].values()),
-           "regras": {"poder": poder, "bootstrap": boot, "margem_minima": MARGEM_MINIMA, "limiar_sem": LIMIAR_SEM,
+           "regras": {"poder": poder, "bootstrap": boot, "margem_minima": MARGEM_MINIMA, "limiar_sem": LIMIAR_SEM, "limiar_aprendeu": limiar_aprendeu,
                       "fonte": "PLANO_ANALISE_V2_PET_QUE_PENSA, secoes 6 e 7"}}
     bv._gravar(saida / "piloto.json", bv._dump(out))
     bv._gravar(saida / "meta.json", bv._dump({**bv.meta(cfg_p), "plano": bv.PLANO_PQP, "g_plano": g,
