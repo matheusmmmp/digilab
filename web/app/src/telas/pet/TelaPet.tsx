@@ -217,6 +217,7 @@ function Necessidades() {
   const { motor: m } = useJogo(), e = m.e, saude = Math.round(e.saude * 100);
   return (
     <div class="necessidades4">
+      <h2 class="desk-so nec-tit">Estado atual</h2>
       {NEC_PET.map(([k, rot]) => (
         <div class="nec" key={k}>
           <span class="nec-rot">{rot}</span>
@@ -358,16 +359,16 @@ function IconeAcao({ a }: { a: AcaoDono }) {
   return em ? <Peca nome={em} escala={2} /> : null;
 }
 
-/** desktop (PetTelaDesktop): as ultimas linhas do registro (o que voce fez e o que ele fez) e o atalho para o Diario */
+/** desktop: as ultimas linhas do registro (o que voce fez e o que ele fez) e o atalho para o Diario; so o que o motor registrou */
 function AgoraHaPouco({ irRegistro }: { irRegistro: () => void }) {
   const { motor: m } = useJogo();
-  const itens = m.historico.filter(h => h.quem === "dono" || h.quem === "pet" || h.quem === "recusa").slice(-3).reverse();
+  const itens = m.historico.filter(h => h.quem === "dono" || h.quem === "pet" || h.quem === "recusa").slice(-5).reverse();
   const texto = (h: (typeof itens)[number]) => h.quem === "pet" ? NOME_PET[h.a as keyof typeof NOME_PET] ?? h.a : h.a;
   return (
     <section class="dl-card pet-recente" aria-labelledby="pet-recente-tit">
-      <span class="pet-recente-cab"><h2 id="pet-recente-tit">Agora há pouco</h2><small>do registro</small></span>
-      <ol>{itens.map((h, i) => <li key={i}><span class="dl-lcd">{hhmm(h.t)}</span><span>{texto(h)}</span></li>)}</ol>
-      <button type="button" class="pet-recente-ver" onClick={irRegistro}>ver no Diário</button>
+      <span class="pet-recente-cab"><h2 id="pet-recente-tit">Atividades recentes</h2><small>do registro</small></span>
+      <ol>{itens.map((h, i) => <li key={i} data-quem={h.quem}><span class="dl-lcd">{hhmm(h.t)}</span><span class="pet-recente-quem">{h.quem === "dono" ? "você" : h.quem === "recusa" ? "recusou" : "ele"}</span><span>{texto(h)}</span></li>)}</ol>
+      <button type="button" class="pet-recente-ver" onClick={irRegistro}>Ver tudo no Diário</button>
     </section>
   );
 }
@@ -386,6 +387,7 @@ export function TelaPet({ abrirMeusPets, irConversar, abrirConfig, irRegistro }:
             <div class={"palco-cena dl-hexcard" + (m.morte ? " palco--morto" : "")}>
               {nascendo > 0 && <><span class="ovo-padrao" style={{ "--padrao": fundoDeco("Icon_Pattern_2") ?? "none" }} aria-hidden="true" /><Deco nome="Digivice_Circle_01" class="ovo-anel gira" /></>}
               <div class="palco-tit">Meu parceiro</div>
+              {nascendo === 0 && !m.morte && <span class="desk-so hab-agora"><i aria-hidden="true" />agora: {NOME_PET[m.acao]}</span>}
               <Emocao />
               <PalcoPet />
               <BalaoCausa />
@@ -399,14 +401,18 @@ export function TelaPet({ abrirMeusPets, irConversar, abrirConfig, irRegistro }:
           <EstadoConfianca />
         </div>
         <aside class="pet-lado">
-          <Necessidades />
-          <Morte />
-          {!m.morte && <Chamados agir={agir} />}
-          {!m.morte && <div class="dl-par"><Desejo /></div>}
+          {/* desktop: os cards formam a coluna da direita e as acoes descem para a barra sob o habitat; abaixo de 1100 px o
+              involucro some (display:contents) e a ordem do celular fica a mesma */}
+          <div class="lado-cards">
+            <Necessidades />
+            <Morte />
+            {!m.morte && <Chamados agir={agir} />}
+            {!m.morte && <div class="dl-par"><Desejo /></div>}
+            <span class="desk-so pet-recente-caixa"><AgoraHaPouco irRegistro={irRegistro} /></span>
+          </div>
           {!m.morte && <div class="acoes-pet" role="group" aria-label="Cuidar e ensinar">
-            {(m.versao >= 4 ? [...ACOES, ...ACOES_V4] : ACOES).map(([a, tipo]) => <button type="button" key={a} class={`dl-btn dl-btn--${tipo}`} onClick={() => agir(a)}><IconeAcao a={a} />{ROTULO_DONO[a]}</button>)}
+            {(m.versao >= 4 ? [...ACOES, ...ACOES_V4] : ACOES).map(([a, tipo]) => <button type="button" key={a} class={`dl-btn dl-btn--${tipo}`} onClick={() => agir(a)}><IconeAcao a={a} /><span>{ROTULO_DONO[a]}</span></button>)}
           </div>}
-          <span class="desk-so pet-recente-caixa"><AgoraHaPouco irRegistro={irRegistro} /></span>
         </aside>
       </div>
     </section>

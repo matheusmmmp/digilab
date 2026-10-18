@@ -133,6 +133,7 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .pet-salvo.erro i{background:var(--dl-erro)}
 .pet-corpo{display:flex;flex-direction:column;gap:10px;padding:0 14px 12px}
 .pet-principal,.pet-lado{display:flex;flex-direction:column;gap:10px;min-width:0}
+.lado-cards{display:contents}   /* desktop: a coluna da direita (estilo/desktop.css) */
 .palco-card{position:relative;background:var(--dl-surface);border-radius:16px;padding:4px;box-shadow:0 0 0 2px var(--dl-border),0 4px 0 2px var(--dl-border-shadow)}
 .palco-cena{position:relative;height:318px;border-radius:12px;overflow:hidden}
 .palco-cena .lcd{position:absolute;left:0;top:0;display:block;image-rendering:pixelated}
