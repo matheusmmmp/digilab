@@ -3,7 +3,7 @@
 Gerado por `tools/gerar_estado_atual.py`. **Não é fonte de verdade:** cada linha copia o que o arquivo citado declara. Quem quer
 saber o estado lê a fonte; quem acha um erro corrige a fonte e regenera este arquivo.
 
-- **Estado curado da V2:** [PAINEL_V2.md](PAINEL_V2.md), atualizado em 2026-10-13 (`main` `ec09483`). É o coordenador quem o mantém.
+- **Estado curado da V2:** [PAINEL_V2.md](PAINEL_V2.md), atualizado em 2026-10-18 (`main` `66bc21b`). Nesta atualização mudaram só o J5, o porte (W), o connectome, as decisões abertas e o risco da saúde do repositório; o resto é o de 2026-10-13. É o coordenador quem o mantém.
 - **Onde cada tipo de informação mora** (implementado, decidido, hipótese, proposta, resultado, problema, próximo passo):
   [INDICE.md](INDICE.md).
 
@@ -110,15 +110,15 @@ lista os `RESULTADO_V2_*.md` que citam a tarefa pelo nome do arquivo.
 
 ## 3. Os últimos 10 desvios registrados
 
-Do índice [REGISTRO_DESVIOS.md](REGISTRO_DESVIOS.md) (239 entradas), na ordem em que entraram.
+Do índice [REGISTRO_DESVIOS.md](REGISTRO_DESVIOS.md) (242 entradas), na ordem em que entraram.
 
-- [2026-10-14 — ORGAO-SEM-DIRECAO (worker A): os candidatos `cheiro_seguir` e `cheiro_virar` e o G-SEM-DIRECAO](registro/2026-10.md)
-- [2026-10-14 — PALADAR, etapa 4 (worker D): o paladar nos braços do J5, as medidas e a calibração montada](registro/2026-10.md)
-- [2026-10-14 — SAUDE-ETAPA-4: os hooks, desligados (worker C)](registro/2026-10.md)
 - [2026-10-14 — ECOSSISTEMA-GENETICO (worker C): o desenho do genoma da V2 e das três formas de gerar o genoma de outro](registro/2026-10.md)
 - [2026-10-14 — PET-QUE-PENSA-PALADAR, a run (worker D): a calibração do `ganho_gosto` e do `g_plano`, a G-REVAL-POSSIVEL e o piloto](registro/2026-10.md)
 - [2026-10-14 — J5-ADENDO-5 (worker C): a fruta ao lado da ração, e as decisões EG marcadas](registro/2026-10.md)
 - [2026-10-14 — FRUTA-AO-LADO (worker A): o dono põe a fruta ao lado da ração, o lado do mundo e do dono](registro/2026-10.md)
 - [2026-10-17 — CONNECTOME-CEREBRO-A (worker de uma sessão lateral): o cérebro A desenhado como grafo dos pesos](registro/2026-10.md)
 - [2026-10-17 — W-PORTE, etapa 1 (esta sessão, coordenador e worker): o ponto do v11 e os gabaritos do cérebro A](registro/2026-10.md)
+- [2026-10-18 — W-PORTE, etapa 3 (worker de uma sessão lateral): o G-PAR-L1 pelos ganchos do cérebro, sem o laço do corpo](registro/2026-10.md)
+- [2026-10-18 — DECISOES-1018 (worker C): PW-3 a PW-8, CN-1 a CN-9 e PJ5-1 a PJ5-6 marcadas; o painel e o roadmap](registro/2026-10.md)
+- [2026-10-18 — PQP-AO-LADO (worker D): a bancada do adendo 5 do J5, a fruta ao lado da ração nos braços e a calibração montada](registro/2026-10.md)
 - [2026-10-18 — INFRA-MULTIAGENTE (esta sessão, coordenador e worker): o relato verificado por categoria e o estado derivado](registro/2026-10.md)

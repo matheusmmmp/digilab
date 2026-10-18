@@ -1751,6 +1751,25 @@ def oportunidade_revalorizacao(fome: int, maduros: Sequence[str], troncos: Mappi
     return True, alvo.get("fruta") == x or (alvo.get("arvore") is not None and troncos.get(alvo["arvore"]) == x)
 
 
+def decisao_lado_a_lado(acao: str, vistos_maduros: Mapping[int, str], ids_ao_lado: set) -> bool:
+    """A fruta ao lado da racao (adendo 5 do plano do J5, A5.5): uma decisao de comer com a racao madura e ao menos uma fruta madura posta
+    pela regra (o id dela em `ids_ao_lado`) a vista. `vistos_maduros` e id -> tipo das comidas maduras a vista."""
+    if acao != "comer":
+        return False
+    return any(t == "racao" for t in vistos_maduros.values()) and any(i in ids_ao_lado for i in vistos_maduros)
+
+
+def oportunidade_lado_a_lado(acao: str, vistos_maduros: Mapping[int, str], ids_ao_lado: set, alvo_id: int | None,
+                             x: str) -> tuple[bool, bool]:
+    """O T1 com a fruta ao lado da racao (adendo 5, A5.3): (e oportunidade, o pet escolheu x). Oportunidade: uma decisao de comer em que a
+    x madura posta pela regra (id em `ids_ao_lado`, tipo x) e a racao madura estao as duas a vista; a fome nao entra (PJ5-2). Escolher x:
+    o alvo do comer e uma dessas x. Comer a racao, outra fruta ou outra x (a de uma arvore) conta como nao escolher."""
+    xs = {i for i, t in vistos_maduros.items() if t == x and i in ids_ao_lado}
+    if acao != "comer" or not xs or not any(t == "racao" for t in vistos_maduros.values()):
+        return False, False
+    return True, alvo_id in xs
+
+
 def busca_transicao(fome: int, maduros: Sequence[str], alvo: Mapping | None, x: str, velhas: set, novas: set,
                     fome_max: int) -> tuple[bool, bool]:
     """O T2 (secao 4): (e busca, vai as novas). Busca: fome <= fome_max, sem a x a vista, e o alvo e uma arvore do tipo x de antes da troca
