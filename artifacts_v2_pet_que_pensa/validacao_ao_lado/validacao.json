@@ -1,0 +1,380 @@
+{
+  "custo": {
+    "cpu_s_por_vida": {
+      "P1": 0.6453125,
+      "P1-plan": 0.796875,
+      "P1-plan-cong": 0.78390625,
+      "P1-plan-desfecho": 0.795625
+    },
+    "parede_s": 330.2013199329376,
+    "processos": 4,
+    "vidas": 400
+  },
+  "leitura": [
+    "Nenhum primario passa, e a leitura 'nenhum passa' da secao 7 so vale para o primario com as premissas de pe (nenhum): o outro nao mediu.",
+    "G-T1 inconclusivo por premissa (G-OPORTUNIDADE P1-plan/T1, G-OPORTUNIDADE P1/T1).",
+    "G-T2 inconclusivo por premissa (G-OPORTUNIDADE P1-plan/T2, G-OPORTUNIDADE P1-plan-desfecho/T2, G-EXPOSICAO P1-plan, G-EXPOSICAO P1-plan-desfecho)."
+  ],
+  "premissas": {
+    "G-APRENDEU": {
+      "P1": {
+        "ic": {
+          "ic_inferior": 0.46,
+          "ic_superior": 0.6266666666666666,
+          "media": 0.54,
+          "n": 50,
+          "nivel": 0.95
+        },
+        "n": 50,
+        "passa": true
+      },
+      "P1-plan": {
+        "ic": {
+          "ic_inferior": 0.46,
+          "ic_superior": 0.6066666666666667,
+          "media": 0.5333333333333333,
+          "n": 50,
+          "nivel": 0.95
+        },
+        "n": 50,
+        "passa": true
+      },
+      "P1-plan-cong": {
+        "ic": {
+          "ic_inferior": 0.46,
+          "ic_superior": 0.6066666666666667,
+          "media": 0.5333333333333333,
+          "n": 50,
+          "nivel": 0.95
+        },
+        "n": 50,
+        "passa": true
+      },
+      "P1-plan-desfecho": {
+        "ic": {
+          "ic_inferior": 0.46,
+          "ic_superior": 0.6066666666666667,
+          "media": 0.5333333333333333,
+          "n": 50,
+          "nivel": 0.95
+        },
+        "n": 50,
+        "passa": true
+      }
+    },
+    "G-EXPOSICAO": {
+      "P1": {
+        "fracao": 0.42,
+        "n": 50,
+        "passa": false,
+        "sem": 21
+      },
+      "P1-plan": {
+        "fracao": 0.42,
+        "n": 50,
+        "passa": false,
+        "sem": 21
+      },
+      "P1-plan-cong": {
+        "fracao": 0.46,
+        "n": 50,
+        "passa": false,
+        "sem": 23
+      },
+      "P1-plan-desfecho": {
+        "fracao": 0.4,
+        "n": 50,
+        "passa": false,
+        "sem": 20
+      }
+    },
+    "G-OPORTUNIDADE": {
+      "P1-plan-cong/T1": {
+        "fracao": 0.32,
+        "n": 50,
+        "passa": false,
+        "sem": 16
+      },
+      "P1-plan-cong/T2": {
+        "fracao": 1.0,
+        "n": 50,
+        "passa": false,
+        "sem": 50
+      },
+      "P1-plan-desfecho/T1": {
+        "fracao": 0.28,
+        "n": 50,
+        "passa": false,
+        "sem": 14
+      },
+      "P1-plan-desfecho/T2": {
+        "fracao": 1.0,
+        "n": 50,
+        "passa": false,
+        "sem": 50
+      },
+      "P1-plan/T1": {
+        "fracao": 0.28,
+        "n": 50,
+        "passa": false,
+        "sem": 14
+      },
+      "P1-plan/T2": {
+        "fracao": 1.0,
+        "n": 50,
+        "passa": false,
+        "sem": 50
+      },
+      "P1/T1": {
+        "fracao": 0.28,
+        "n": 50,
+        "passa": false,
+        "sem": 14
+      },
+      "P1/T2": {
+        "fracao": 1.0,
+        "n": 50,
+        "passa": false,
+        "sem": 50
+      }
+    }
+  },
+  "primarios": {
+    "G-T1": {
+      "categoria": "inconclusivo por premissa",
+      "categoria_do_numero": "equivalente",
+      "contraste": "q(P1-plan) - q(P1)",
+      "delta": 0.21666666666666665,
+      "holm": {
+        "limiar": 0.025,
+        "ordem": 1,
+        "p": 0.6844,
+        "p_ajustado": 1.0,
+        "rejeita": false
+      },
+      "ic90": {
+        "ic_inferior": -0.08666666666666668,
+        "ic_superior": 0.06172839506172839,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -0.09523809523809523,
+        "ic_superior": 0.08045977011494253,
+        "nivel": 0.95
+      },
+      "media": -0.017241379310344827,
+      "motivo": null,
+      "n": 29,
+      "n_grupos": 5,
+      "p_unilateral": 0.6844,
+      "premissas": {
+        "falham": [
+          "G-OPORTUNIDADE P1-plan/T1",
+          "G-OPORTUNIDADE P1/T1"
+        ],
+        "passa": false
+      },
+      "t_pareado": {
+        "gl": 28,
+        "p_unilateral": 0.565808053359761,
+        "t": -0.16723912047850517
+      },
+      "unidades_com_valor": 29
+    },
+    "G-T2": {
+      "categoria": "inconclusivo por premissa",
+      "categoria_do_numero": "inconclusivo",
+      "contraste": "m(P1-plan) - m(P1-plan-desfecho)",
+      "delta": 0.2857142857142857,
+      "holm": {
+        "limiar": 0.05,
+        "ordem": 2,
+        "p": null,
+        "p_ajustado": 1.0,
+        "rejeita": false
+      },
+      "ic90": null,
+      "ic95": null,
+      "media": null,
+      "motivo": "menos de 2 grupos com valor",
+      "n": 0,
+      "n_grupos": 0,
+      "p_unilateral": null,
+      "premissas": {
+        "falham": [
+          "G-OPORTUNIDADE P1-plan/T2",
+          "G-OPORTUNIDADE P1-plan-desfecho/T2",
+          "G-EXPOSICAO P1-plan",
+          "G-EXPOSICAO P1-plan-desfecho"
+        ],
+        "passa": false
+      },
+      "t_pareado": null,
+      "unidades_com_valor": 0
+    }
+  },
+  "regras": {
+    "bootstrap": {
+      "nivel": 0.95,
+      "reamostragens": 10000,
+      "semente": 4242
+    },
+    "fonte": "PLANO_ANALISE_V2_PET_QUE_PENSA, secao 7, com os adendos 5 e 6",
+    "holm": {
+      "alfa": 0.05
+    },
+    "limiar_aprendeu": 0.25,
+    "limiar_sem": 0.25,
+    "margens": {
+      "delta_t1": 0.21666666666666665,
+      "delta_t2": 0.2857142857142857
+    }
+  },
+  "secundarios": {
+    "G-T1-CONG": {
+      "contraste": "q(P1-plan) - q(P1-plan-cong)",
+      "delta": 0.21666666666666665,
+      "holm": {
+        "limiar": 0.0125,
+        "ordem": 1,
+        "p": 0.0114,
+        "p_ajustado": 0.0456,
+        "rejeita": true
+      },
+      "ic90": {
+        "ic_inferior": 0.027777777777777776,
+        "ic_superior": 0.16666666666666666,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": 0.015151515151515152,
+        "ic_superior": 0.1717171717171717,
+        "nivel": 0.95
+      },
+      "media": 0.09313725490196079,
+      "motivo": null,
+      "n": 34,
+      "n_grupos": 5,
+      "p_unilateral": 0.0114,
+      "passa": false,
+      "passa_numero": true,
+      "premissas": {
+        "falham": [
+          "G-OPORTUNIDADE P1-plan/T1",
+          "G-OPORTUNIDADE P1-plan-cong/T1"
+        ],
+        "passa": false
+      },
+      "t_pareado": {
+        "gl": 33,
+        "p_unilateral": 0.030012676404861664,
+        "t": 1.9474961271422342
+      },
+      "unidades_com_valor": 34
+    },
+    "G-T1-DESF": {
+      "contraste": "q(P1-plan-desfecho) - q(P1)",
+      "delta": 0.21666666666666665,
+      "holm": {
+        "limiar": 0.016666666666666666,
+        "ordem": 2,
+        "p": 0.8361,
+        "p_ajustado": 1.0,
+        "rejeita": false
+      },
+      "ic90": {
+        "ic_inferior": -0.12643678160919541,
+        "ic_superior": 0.05333333333333333,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -0.13978494623655913,
+        "ic_superior": 0.07407407407407407,
+        "nivel": 0.95
+      },
+      "media": -0.05172413793103448,
+      "motivo": null,
+      "n": 29,
+      "n_grupos": 5,
+      "p_unilateral": 0.8361,
+      "passa": false,
+      "passa_numero": false,
+      "premissas": {
+        "falham": [
+          "G-OPORTUNIDADE P1-plan-desfecho/T1",
+          "G-OPORTUNIDADE P1/T1"
+        ],
+        "passa": false
+      },
+      "t_pareado": {
+        "gl": 28,
+        "p_unilateral": 0.6813499351164577,
+        "t": -0.47666442719913843
+      },
+      "unidades_com_valor": 29
+    },
+    "G-T2-CONG": {
+      "contraste": "m(P1-plan) - m(P1-plan-cong)",
+      "delta": 0.2857142857142857,
+      "holm": {
+        "limiar": 0.025,
+        "ordem": 3,
+        "p": null,
+        "p_ajustado": 1.0,
+        "rejeita": false
+      },
+      "ic90": null,
+      "ic95": null,
+      "media": null,
+      "motivo": "menos de 2 grupos com valor",
+      "n": 0,
+      "n_grupos": 0,
+      "p_unilateral": null,
+      "passa": false,
+      "passa_numero": false,
+      "premissas": {
+        "falham": [
+          "G-OPORTUNIDADE P1-plan/T2",
+          "G-OPORTUNIDADE P1-plan-cong/T2",
+          "G-EXPOSICAO P1-plan",
+          "G-EXPOSICAO P1-plan-cong"
+        ],
+        "passa": false
+      },
+      "t_pareado": null,
+      "unidades_com_valor": 0
+    },
+    "G-T2-HAB": {
+      "contraste": "m(P1-plan) - m(P1)",
+      "delta": 0.2857142857142857,
+      "holm": {
+        "limiar": 0.05,
+        "ordem": 4,
+        "p": null,
+        "p_ajustado": 1.0,
+        "rejeita": false
+      },
+      "ic90": null,
+      "ic95": null,
+      "media": null,
+      "motivo": "menos de 2 grupos com valor",
+      "n": 0,
+      "n_grupos": 0,
+      "p_unilateral": null,
+      "passa": false,
+      "passa_numero": false,
+      "premissas": {
+        "falham": [
+          "G-OPORTUNIDADE P1-plan/T2",
+          "G-OPORTUNIDADE P1/T2",
+          "G-EXPOSICAO P1-plan",
+          "G-EXPOSICAO P1"
+        ],
+        "passa": false
+      },
+      "t_pareado": null,
+      "unidades_com_valor": 0
+    }
+  },
+  "unidades": 50
+}

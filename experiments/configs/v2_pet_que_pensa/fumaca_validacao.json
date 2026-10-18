@@ -1,0 +1,57 @@
+{
+  "descricao": "Fumaca da validacao do J5, NAO canonica: a mesma config nas sementes dos testes, com 2 dias de fase 1 e 1 de janela; confere o encanamento (as vidas, as premissas, os contrastes, o Holm e as categorias), nunca como resultado.",
+  "bracos": [
+    "P1",
+    "P1-plan",
+    "P1-plan-desfecho",
+    "P1-plan-cong"
+  ],
+  "consequencia": {
+    "canais_ligados": true,
+    "ganho": 4,
+    "ganho_gosto": 512
+  },
+  "dono": "atencioso",
+  "fruta_ao_lado": true,
+  "g_plano": 1024,
+  "lobos": {
+    "memoria_ganho": 512,
+    "w0_info": 256,
+    "w0_pedido": 256
+  },
+  "lugar": "comedouro",
+  "montagem": "completa",
+  "mundo": {
+    "mult_queda": 1.0
+  },
+  "n_mao": 2,
+  "orcamento_por_dia": 16,
+  "paladar": true,
+  "ponto": "T3",
+  "protocolos": [
+    "T1",
+    "T2"
+  ],
+  "tipo": "pet_que_pensa",
+  "validacao": {
+    "margens": {
+      "delta_t1": 0.21666666666666665,
+      "delta_t2": 0.2857142857142857
+    },
+    "limiar_aprendeu": 0.25,
+    "bootstrap": {
+      "reamostragens": 10000,
+      "semente": 4242
+    },
+    "holm": {
+      "alfa": 0.05
+    }
+  },
+  "d_a": 2,
+  "janela": 1,
+  "sementes": [
+    101,
+    202,
+    303
+  ]
+}
