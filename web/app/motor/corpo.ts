@@ -6,11 +6,18 @@
    drives novos (tedio pela variedade, DS-4; curiosidade, so com o mundo fisico; solidao; estresse) e os gestos (o tapa, a dor, o susto
    e o medo da mao no carinho). O grafo do corpo (secao 18) e uma tabela unica, conferida na carga (`checarGrafo`, que falha alto).
 
+   O metabolismo energetico (docs/TAREFA_V2_METABOLISMO.md, secao 3, etapa 4; sub-chave `metabolismo`, que exige a digestao): o
+   `combustivel` e a `reserva`, concentracoes sem receptor (ME-2). A digestao poe no combustivel conversao_num/conversao_den do que
+   digeriu, com o resto guardado; o gasto basal acordado e dormindo (fase 1); as atividades (o brincar do pet e o do dono, o explorar e o
+   andar) tiram do combustivel div_arred(o que somam ao cansaco x gasto_atividades_num, gasto_atividades_den); o armazenamento e a
+   mobilizacao (reacoes com limiar, transferencias 1 por 1 entre a fase 1 e a 2); e a falta, que abaixo de falta_limiar sobe o cansaco
+   (fase 2, o gatilho `abaixo`), a unica ponte para o pet (ME-1). As contas (CONTAS_METABOLISMO) guardam o que entrou e saiu.
+
    So inteiros na quimica: a paridade com o Python e exata (test/corpo.test.ts contra tests/gabaritos/corpo_quimica_python.json). A conta
    e a do Python, linha a linha: div_arred (meio longe do zero, sem o -0 do JS; o de motor/mundo.ts), a meia-vida com o minimo de 1, a
    digestao com o descarte, o tick em fases, o tedio pela janela, o carinho vezes o medo da mao. Nenhum sorteio (o corpo nao tem rng: a
    sujeira e o sono vem do estado do pet, como no Python). Os registros usam os nomes em snake_case do Python de proposito. */
-import { C, CCO, DUR_EVO, LIMIAR_PRIVACAO, TPD, type ConfigCorpo, type ConfigMundo } from "./constantes.ts";
+import { C, CCO, CCO_V11, DUR_EVO, LIMIAR_PRIVACAO, TPD, type ConfigCorpo, type ConfigMundo } from "./constantes.ts";
 import { eNoite } from "./estado.ts";
 import { divArred, TIPOS_COMIDA_MUNDO } from "./mundo.ts";
 import type { AcaoPet } from "./tipos.ts";
@@ -28,6 +35,10 @@ export const ESTAGIOS_CORPO = ["bebe", "crianca", "adolescente", "adulto"] as co
 export type EstagioCorpo = typeof ESTAGIOS_CORPO[number];
 export const NOVOS_CORPO = ["tedio", "curiosidade", "solidao", "estresse"] as const; // etapa 6 (a curiosidade so com o mundo fisico)
 export const GESTOS_CORPO = ["dor", "susto"] as const;                               // etapa 6, gestos
+export const METABOLISMO_CORPO = ["combustivel", "reserva"] as const;                // o metabolismo; sem receptor (ME-2)
+/** as contas do metabolismo, em totais desde o nascimento: o que entrou e saiu do combustivel e da reserva */
+export const CONTAS_METABOLISMO = ["convertido", "descartado_teto", "mobilizado", "gasto_basal", "gasto_atividade", "armazenado"] as const;
+export type ContaMetabolismo = typeof CONTAS_METABOLISMO[number];
 export const DRIVES_DO_ESTRESSE = ["fome", "desconforto", "cansaco", "tedio", "curiosidade", "solidao", "dor"] as const;
 export const ATIVIDADES_TEDIO = ["bola", "brincar", "explorar", "dono_brinca"] as const;   // DS-4
 export type AtividadeTedio = typeof ATIVIDADES_TEDIO[number];
@@ -62,22 +73,43 @@ export function configCorpo(mudancas: Partial<ConfigCorpo> = {}): ConfigCorpo {
     if (!Number.isInteger(v) || v <= 0) throw new Error(`ConfigCorpo.${nome} tem de ser inteiro positivo: ${v}`);
   }
   if (cc.medo_da_mao !== 0 && cc.medo_da_mao !== 1) throw new Error(`ConfigCorpo.medo_da_mao e 0 (sem medo) ou 1: ${cc.medo_da_mao}`);
-  // o metabolismo (docs/TAREFA_V2_METABOLISMO.md) ainda nao tem quimica em TS (a etapa 4 da tarefa): ligado, falha alto
-  if (cc.metabolismo) throw new Error("ConfigCorpo.metabolismo ainda nao existe no TS (TAREFA_V2_METABOLISMO, etapa 4)");
+  // o metabolismo (docs/TAREFA_V2_METABOLISMO.md, secao 3): as conferencias do __post_init__ do Python
+  if (typeof cc.metabolismo !== "boolean") throw new Error(`ConfigCorpo.metabolismo e bool: ${cc.metabolismo}`);
+  if (cc.metabolismo && !cc.digestao) {
+    throw new Error("ConfigCorpo.metabolismo exige ConfigCorpo.digestao (E-9: a comida digerida e o que vira combustivel)");
+  }
+  const positivosM = ["conversao_num", "conversao_den", "gasto_basal_acordado", "gasto_basal_dormindo", "armazenar_limiar",
+    "armazenar_taxa", "mobilizar_limiar", "mobilizar_taxa", "falta_limiar", "falta_cansaco", "gasto_atividades_num",
+    "gasto_atividades_den"] as const;
+  for (const nome of positivosM) {
+    const v = cc[nome];
+    if (!Number.isInteger(v) || v <= 0) throw new Error(`ConfigCorpo.${nome} tem de ser inteiro positivo: ${v}`);
+  }
+  for (const nome of ["combustivel_inicial", "reserva_inicial"] as const) {
+    const v = cc[nome];
+    if (!Number.isInteger(v) || (cc.metabolismo && !(v >= 0 && v <= cc.escala))) throw new Error(`ConfigCorpo.${nome} tem de ser inteiro em [0, C]: ${v}`);
+  }
+  if (cc.metabolismo && !(cc.falta_limiar < cc.mobilizar_limiar && cc.mobilizar_limiar < cc.armazenar_limiar && cc.armazenar_limiar < cc.escala)) {
+    throw new Error("o metabolismo pede falta_limiar < mobilizar_limiar < armazenar_limiar < C: "
+      + `${cc.falta_limiar}, ${cc.mobilizar_limiar}, ${cc.armazenar_limiar}`);
+  }
   // o Paladar (docs/futuro/paladar.md) ainda nao tem orgao em TS (a etapa 5 do paladar): ligado, falha alto
   if (cc.paladar) throw new Error("ConfigCorpo.paladar ainda nao existe no TS (paladar, etapa 5)");
   return cc;
 }
-/** CONFIG_CORPO_LIGADA e CONFIG_CORPO_DRIVES do Python */
+/** CONFIG_CORPO_LIGADA, CONFIG_CORPO_DRIVES e CONFIG_CORPO_METABOLISMO do Python */
 export const CCO_LIGADA = configCorpo({ ligada: true });
 export const CCO_DRIVES = configCorpo({ ligada: true, digestao: true, vida: true, drives_novos: true, gestos: true });
+export const CCO_METABOLISMO = configCorpo({ ...CCO_DRIVES, metabolismo: true });
+/** o corpo dos pets v11: o CCO_V11 (o ponto das vidas do v11 do gabarito) completado e conferido */
+export const CCO_CORPO_V11 = configCorpo(CCO_V11);
 
 /** os quimicos que o corpo tem com estas chaves: os cinco de hoje, os de cada orgao ligado e os da etapa 6 (a curiosidade so com o
  *  mundo fisico) */
 export function quimicosDe(cc: ConfigCorpo, comMundo = false): string[] {
   const novos = cc.drives_novos ? NOVOS_CORPO.filter((n) => n !== "curiosidade" || comMundo) : [];
   return [...QUIMICOS_HOJE, ...(cc.digestao ? ORGAO_DIGESTAO : []), ...(cc.vida ? ORGAO_VIDA : []), ...novos,
-    ...(cc.gestos ? GESTOS_CORPO : [])];
+    ...(cc.gestos ? GESTOS_CORPO : []), ...(cc.metabolismo ? METABOLISMO_CORPO : [])];
 }
 
 // ================================================================== inteiros
@@ -111,6 +143,15 @@ export interface TaxasCorpo {
   pet: Record<AcaoPet, Record<string, number>>;
 }
 
+/** corpo.gasto_da_atividade: o que uma atividade tira do combustivel, div_arred(o cansaco dela x gasto_atividades_num,
+ *  gasto_atividades_den). Com o fator 1/1, o mesmo numero (ME-3). Um gasto que arredonda a zero falha alto. */
+export function gastoDaAtividade(cc: ConfigCorpo, cansaco: number): number {
+  if (cansaco <= 0) throw new Error(`atividade sem cansaco: ${cansaco}`);
+  const g = divArred(cansaco * cc.gasto_atividades_num, cc.gasto_atividades_den);
+  if (g <= 0) throw new Error(`o fator do gasto das atividades zera o gasto de ${cansaco}: ${cc.gasto_atividades_num}/${cc.gasto_atividades_den}`);
+  return g;
+}
+
 /** corpo.taxas_de: a Config de hoje (C, o espelho de config.Config) na escala da ConfigCorpo */
 export function taxasDe(cc: ConfigCorpo): TaxasCorpo {
   const E = cc.escala;
@@ -132,6 +173,10 @@ export function taxasDe(cc: ConfigCorpo): TaxasCorpo {
     emburrar: { tristeza: cc.pet_emburrar_tristeza },
   };
   const pet = Object.fromEntries(ORDEM_PET.map((a) => [a, efeitos[a]])) as Record<AcaoPet, Record<string, number>>;
+  if (cc.metabolismo) {
+    // ME-3: as atividades tiram do combustivel o que somam ao cansaco vezes o fator do gasto; o cansaco de hoje nao muda
+    for (const ef of [pet.brincar, pet.explorar, dono.brincar]) ef.combustivel = menos(gastoDaAtividade(cc, ef.cansaco));
+  }
   return {
     fome_por_tick: g(C.decFome, "decaimento_fome"),
     desconforto_por_tick: g(C.decHig, "decaimento_higiene"),
@@ -150,7 +195,8 @@ export function taxasDe(cc: ConfigCorpo): TaxasCorpo {
 
 // ================================================================== o grafo (secao 18; digilab/corpo_grafo.py)
 export const GATILHOS_TICK = ["tick", "acordado", "dormindo", "noite_acordado", "dia_acordado", "sujeira", "privacao", "sem_privacao",
-  "limiar"] as const;
+  "limiar", "abaixo"] as const;   // abaixo: o metabolismo, um quimico abaixo do limiar (fase 2)
+export const LADOS_REACAO = ["acima", "abaixo"] as const;       // o lado do limiar de uma reacao com limiar (a transferencia)
 export const GATILHOS = [...GATILHOS_TICK, "estimulo"] as const;
 export const LEITURAS_RECEPTOR = ["drive", "falta"] as const;   // drive: S - div_arred(q S, C); falta: div_arred(q S, C)
 export const ORDEM_MEIA_VIDA = 10;                              // "na mesma ordem": a maior meia-vida do par < 10 vezes a menor
@@ -164,7 +210,15 @@ export interface Quimico {
   nome: string; teto: number; descarte: boolean; receptor: string | null; leitura: string | null; meia_vida: number | null;
   k_meia_vida: number | null;
 }
-export interface Reacao { nome: string; consome: string[]; produz: string[]; taxa: number }
+/** uma reacao do tick. Sem limiar (`le` ausente): a digestao, que tira ate `taxa` de cada consumido; o que ela produz sai da fracao
+ *  num/den do consumido (`fracoes`), com o resto guardado. Com limiar (o metabolismo): uma transferencia 1 por 1 de um quimico a outro,
+ *  que so anda com `le` acima (ou abaixo) de `limiar`, ate min(taxa, a distancia ao limiar, o que ha, o que cabe) */
+export interface Reacao {
+  nome: string; consome: string[]; produz: string[]; taxa: number;
+  fracoes?: [string, number, number][]; le?: string | null; lado?: string | null; limiar?: number;
+}
+const fracoesDe = (r: Reacao): [string, number, number][] => r.fracoes ?? [];
+const leDe = (r: Reacao): string | null => r.le ?? null;
 /** uma aresta receptor -> emissor: o emissor le `quimico`, com ganho num/den; sinal +1 (mais do lido, mais efeito) ou -1 */
 export interface Leitura { quimico: string; num: number; den: number; sinal: number }
 export interface Emissor {
@@ -231,16 +285,39 @@ function forma(g: GrafoCorpo): void {
         throw new GrafoInvalido(`${e.nome}: leitura ${JSON.stringify(le)}`);
       }
     }
+    if (e.gatilho === "abaixo" && !(e.le.length === 1 && e.le[0].sinal === -1 && e.divisor === 1 && e.fase === 2)) {
+      throw new GrafoInvalido(`${e.nome}: o gatilho abaixo le um quimico so, com sinal -1 (menos dele, mais efeito), sem divisor, na fase 2`);
+    }
   }
   for (const r of g.reacoes) {
     if (r.consome.length === 0 || !Number.isInteger(r.taxa) || r.taxa <= 0) throw new GrafoInvalido(`${r.nome}: reacao ${JSON.stringify(r)}`);
+    const fr = fracoesDe(r);
+    for (const [q, num, den] of fr) {
+      if (!r.produz.includes(q) || !Number.isInteger(num) || !Number.isInteger(den) || num <= 0 || den <= 0) {
+        throw new GrafoInvalido(`${r.nome}: fracao ${JSON.stringify([q, num, den])}`);
+      }
+    }
+    if (new Set(fr.map(([q]) => q)).size !== fr.length) throw new GrafoInvalido(`${r.nome}: fracao repetida ${JSON.stringify(fr)}`);
+    const lado = r.lado ?? null, limiar = r.limiar ?? 0;
+    if ((leDe(r) === null) !== (lado === null)) throw new GrafoInvalido(`${r.nome}: o limiar de uma reacao pede o quimico lido e o lado juntos`);
+    if (leDe(r) !== null) {
+      if (!(LADOS_REACAO as readonly string[]).includes(lado as string) || r.consome.length !== 1 || r.produz.length !== 1
+        || r.consome[0] === r.produz[0] || fr.length || !Number.isInteger(limiar) || limiar < 0) {
+        throw new GrafoInvalido(`${r.nome}: a reacao com limiar e uma transferencia 1 por 1 de um quimico a outro, com o lado `
+          + `${LADOS_REACAO} e limiar inteiro: ${JSON.stringify(r)}`);
+      }
+    } else if (limiar !== 0) {
+      throw new GrafoInvalido(`${r.nome}: limiar sem o quimico lido`);
+    }
   }
 }
 
 function fechado(g: GrafoCorpo): void {
   const conhecidos = new Set(nomesDoGrafo(g));
   const citados: [string, string][] = [];
-  for (const r of g.reacoes) for (const q of [...r.consome, ...r.produz]) citados.push([r.nome, q]);
+  for (const r of g.reacoes) {
+    for (const q of [...r.consome, ...r.produz, ...(leDe(r) === null ? [] : [leDe(r) as string])]) citados.push([r.nome, q]);
+  }
   for (const e of g.emissores) {
     for (const [q] of e.efeitos) citados.push([e.nome, q]);
     for (const le of e.le) citados.push([e.nome, le.quimico]);
@@ -279,7 +356,44 @@ function arestas(g: GrafoCorpo): Map<string, [number, number]> {
       }
     }
   }
+  // as transferencias com limiar andam 1 por 1 (ganho local 1). "acima": mais do lido, mais do produzido; "abaixo": mais do lido, menos
+  // consumo (mais do consumido). As retroalimentacoes do metabolismo sao negativas e nao viram aresta
+  for (const r of g.reacoes) {
+    const le = leDe(r);
+    if (le === null) continue;
+    for (const alvo of (r.lado === "acima" ? r.produz : r.consome)) if (!out.has(`${le}|${alvo}`)) out.set(`${le}|${alvo}`, [1, 1]);
+  }
   return out;
+}
+
+/** as checagens 2b e 3b (falham alto): o que as transferencias consomem tem fonte, e o que elas tocam chega a um sumidouro de verdade
+ *  (nem o teto nem outra transferencia) */
+function transferencias(g: GrafoCorpo, sumidouros: Record<string, string[]>, fontes: Record<string, string[]>): void {
+  const tr = g.reacoes.filter((r) => leDe(r) !== null);
+  if (!tr.length) return;
+  const transfere = new Set(tr.map((r) => r.nome));
+  const consumidos = [...new Set(tr.flatMap((r) => r.consome))].sort(porTexto);
+  const semFonte = consumidos.filter((q) => fontes[q].length === 0);
+  if (semFonte.length) throw new GrafoInvalido(`quimicos que uma transferencia consome sem fonte (o teto nao repoe; nao automantido): ${semFonte}`);
+  const real = new Set(Object.keys(sumidouros).filter((q) => sumidouros[q].some((x) =>
+    x !== "teto" && !(x.startsWith("reacao:") && transfere.has(x.slice("reacao:".length))))));
+  const passa = new Map<string, Set<string>>();
+  for (const r of tr) {
+    if (!passa.has(r.consome[0])) passa.set(r.consome[0], new Set());
+    passa.get(r.consome[0])!.add(r.produz[0]);
+  }
+  const tocados = [...new Set(tr.flatMap((r) => [...r.consome, ...r.produz]))].sort(porTexto);
+  const presos: string[] = [];
+  for (const q of tocados) {
+    const vistos = new Set<string>();
+    const pilha = [q];
+    while (pilha.length) {
+      const x = pilha.pop() as string;
+      if (!vistos.has(x)) { vistos.add(x); pilha.push(...(passa.get(x) ?? [])); }
+    }
+    if (![...vistos].some((x) => real.has(x))) presos.push(q);
+  }
+  if (presos.length) throw new GrafoInvalido(`estoques que so saem pelo teto (sem sumidouro de verdade pelas transferencias): ${presos}`);
 }
 const parDe = (chave: string): [string, string] => chave.split("|") as [string, string];
 const porTexto = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0);
@@ -318,6 +432,7 @@ export function checarGrafo(g: GrafoCorpo): RelatoGrafo {
   const teto = new Map(g.quimicos.map((q) => [q.nome, q.teto > 0]));
   const semReposicao = Object.keys(sumidouros).filter((q) => sumidouros[q].some((x) => x !== "teto") && fontes[q].length === 0 && !teto.get(q));
   if (semReposicao.length) throw new GrafoInvalido(`quimicos consumidos sem reposicao nem teto (nao automantido): ${semReposicao}`);
+  transferencias(g, sumidouros, fontes);
   const arest = arestas(g);
   const lacos: { ciclo: string[]; ganho: [number, number] }[] = [];
   for (const c of ciclosDoGrafo(arest)) {
@@ -382,7 +497,17 @@ export function grafoDoCorpo(cc: ConfigCorpo, t: TaxasCorpo, comMundo = false): 
     const h = MEIAS_VIDAS[n];
     return quimico(n, E, true, { receptor, leitura: lei, meia_vida: h === undefined ? null : h[1], k_meia_vida: h === undefined ? null : cc[h[0]] });
   });
-  const reacoes: Reacao[] = cc.digestao ? [{ nome: "digestao", consome: ["alimento", "fome"], produz: [], taxa: cc.taxa_digestao }] : [];
+  // a digestao tira o alimento e a fome; com o metabolismo, poe no combustivel uma fracao do que digeriu
+  const fracoes: [string, number, number][] = cc.metabolismo ? [["combustivel", cc.conversao_num, cc.conversao_den]] : [];
+  const reacoes: Reacao[] = cc.digestao
+    ? [{ nome: "digestao", consome: ["alimento", "fome"], produz: fracoes.map(([q]) => q), taxa: cc.taxa_digestao, fracoes }] : [];
+  if (cc.metabolismo) {
+    // as transferencias com limiar: o excedente vai a reserva, e a reserva volta quando o combustivel cai
+    reacoes.push({ nome: "armazenamento", consome: ["combustivel"], produz: ["reserva"], taxa: cc.armazenar_taxa, le: "combustivel",
+      lado: "acima", limiar: cc.armazenar_limiar },
+    { nome: "mobilizacao", consome: ["reserva"], produz: ["combustivel"], taxa: cc.mobilizar_taxa, le: "combustivel", lado: "abaixo",
+      limiar: cc.mobilizar_limiar });
+  }
   const comida = (efeitos: Record<string, number>): [string, number][] => {
     if (cc.digestao && (efeitos.fome ?? 0) < 0) {
       return [...Object.entries(efeitos).filter(([k]) => k !== "fome"), ["alimento", menos(efeitos.fome)]];
@@ -401,6 +526,10 @@ export function grafoDoCorpo(cc: ConfigCorpo, t: TaxasCorpo, comMundo = false): 
   if (cc.vida) em.push(emissor("vida_tick", "tick", 1, [["vida", menos(cc.vida_decaimento)]]));
   const sobe: Record<string, number> = { tedio: cc.tedio_sobe, curiosidade: cc.curiosidade_sobe, solidao: cc.solidao_sobe };
   for (const n of NOVOS_CORPO) if (n in sobe && nomes.includes(n)) em.push(emissor(`${n}_sobe`, "acordado", 1, [[n, sobe[n]]]));
+  if (cc.metabolismo) {
+    em.push(emissor("gasto_basal_acordado", "acordado", 1, [["combustivel", menos(cc.gasto_basal_acordado)]]),
+      emissor("gasto_basal_dormindo", "dormindo", 1, [["combustivel", menos(cc.gasto_basal_dormindo)]]));
+  }
   const degrau = QUIMICOS_DA_PRIVACAO.map((n) => leitura(n, 1, 1));       // um degrau: conta como ganho 1 se entrar num laco
   em.push(emissor("dano_privacao", "privacao", 2, [["dano", t.dano_privacao]], { le: degrau }),
     emissor("dano_cura", "sem_privacao", 2, [["dano", t.dano_cura]]));
@@ -408,6 +537,11 @@ export function grafoDoCorpo(cc: ConfigCorpo, t: TaxasCorpo, comMundo = false): 
     const le = DRIVES_DO_ESTRESSE.filter((n) => nomes.includes(n)).map((n) => leitura(n, 1, cc.estresse_divisor));
     em.push(emissor("estresse_drives", "limiar", 2, [["estresse", 1]], { le, limiar: cc.estresse_limiar, divisor: cc.estresse_divisor,
       variavel: true }));
+  }
+  if (cc.metabolismo) {
+    // a falta de combustivel sobe o cansaco (ME-1, a unica ponte); um degrau, como o dano pela privacao
+    em.push(emissor("falta_combustivel", "abaixo", 2, [["cansaco", cc.falta_cansaco]], { le: [leitura("combustivel", 1, 1, -1)],
+      limiar: cc.falta_limiar }));
   }
   // os estimulos (fase 0): os de hoje pelas taxas, os do mundo e os da etapa 6
   for (const [acao, efeitos] of Object.entries(t.dono)) {
@@ -419,7 +553,8 @@ export function grafoDoCorpo(cc: ConfigCorpo, t: TaxasCorpo, comMundo = false): 
   em.push(emissor("bola", "estimulo", 0, [["tristeza", -1]], { variavel: true }),
     emissor("fruta", "estimulo", 0, comida({ fome: -1, tristeza: -1 }), { variavel: true }),
     emissor("fruta_ruim", "estimulo", 0, [["tristeza", 1]], { variavel: true }),
-    emissor("andar", "estimulo", 0, [["cansaco", 1]], { variavel: true }),
+    emissor("andar", "estimulo", 0, [["cansaco", 1], ...(cc.metabolismo ? [["combustivel", -1] as [string, number]] : [])],
+      { variavel: true }),
     emissor("comida_podre", "estimulo", 0, [["tristeza", 1]], { variavel: true }));
   if (cc.drives_novos) {
     const bases: Record<AtividadeTedio, number> = { bola: cc.tedio_bola, brincar: cc.tedio_brincar, explorar: cc.tedio_explorar,
@@ -484,6 +619,12 @@ export class Corpo {
   digerido_no_tick = 0;
   digerido_total = 0;
   descartado_total = 0;
+  // metabolismo: o resto da conversao (em [0, conversao_den)), as transferencias com limiar e a contabilidade do combustivel e da reserva,
+  // em totais (CONTAS_METABOLISMO); sem o metabolismo, as contas sao null
+  resto_combustivel = 0;
+  private readonly fracoes: [string, number, number][];
+  private readonly transferencias: Reacao[];
+  readonly contas_metabolismo: Record<ContaMetabolismo, number> | null;
   readonly limiares_estagio: number[];
 
   constructor(q: Record<string, number>, opcoes: OpcoesCorpo = {}) {
@@ -507,6 +648,13 @@ export class Corpo {
       if (!Number.isInteger(v) || v < 0 || v > teto) throw new Error(`concentracao de ${nome} fora de [0, ${teto}] ou nao inteira: ${v}`);
     }
     this.q = Object.fromEntries(this.quimicos.map((n) => [n, q[n] + 0]));
+    this.fracoes = fracoesDe(this.grafo.reacoes.find((r) => r.nome === "digestao") ?? { nome: "", consome: [], produz: [], taxa: 0 });
+    for (const [nome] of this.fracoes) {
+      if (nome !== "combustivel") throw new Error(`a digestao produz ${nome}, que o corpo em TS nao tem (so o combustivel do metabolismo)`);
+    }
+    this.transferencias = this.grafo.reacoes.filter((r) => leDe(r) !== null);
+    this.contas_metabolismo = this.cc.metabolismo
+      ? Object.fromEntries(CONTAS_METABOLISMO.map((k) => [k, 0])) as Record<ContaMetabolismo, number> : null;
     this.limiares_estagio = this.cc.vida ? limiaresEstagio(this.cc, opcoes.duracoes ?? DURACOES_PESQUISA) : [];
   }
 
@@ -521,15 +669,29 @@ export class Corpo {
     }
     if (cc.digestao) q.alimento = 0;                // o estado de hoje nao tem estomago: comeca vazio
     if (cc.vida) q.vida = Math.max(0, E - cc.vida_decaimento * estado.tick);
+    if (cc.metabolismo) {
+      q.combustivel = cc.combustivel_inicial;
+      q.reserva = cc.reserva_inicial;
+    }
     for (const nome of quimicosDe(cc, opcoes.comMundo ?? false)) if (!(nome in q)) q[nome] = 0;
     return new Corpo(q, { ...opcoes, cc });
   }
 
   // ---------------------------------------------------------- estimulos
-  private somar(deltas: Record<string, number>): void {
+  /** soma os deltas, cortados em [0, C]. Com o metabolismo, o que sai do combustivel por aqui e gasto (`rubrica`: o basal no tick, as
+   *  atividades nos estimulos) e entra nas contas pelo que de fato saiu; combustivel subindo por aqui falha alto (a conversao e a
+   *  mobilizacao tem caminho proprio) */
+  private somar(deltas: Record<string, number>, rubrica: "gasto_basal" | "gasto_atividade" = "gasto_atividade"): void {
+    const temComb = Object.hasOwn(deltas, "combustivel");
+    if (temComb && !this.contas_metabolismo) throw new Error("quimico fora do corpo: combustivel");
+    const antes = temComb ? this.q.combustivel : 0;
     for (const [nome, d] of Object.entries(deltas)) {
       if (!(nome in this.q)) throw new Error(`quimico fora do corpo: ${nome}`);
       this.q[nome] = Math.min(this.C, Math.max(0, this.q[nome] + d));
+    }
+    if (temComb) {
+      if (deltas.combustivel > 0) throw new Error(`combustivel subindo fora da conversao e da mobilizacao: ${deltas.combustivel}`);
+      (this.contas_metabolismo as Record<ContaMetabolismo, number>)[rubrica] += antes - this.q.combustivel;
     }
   }
 
@@ -614,11 +776,16 @@ export class Corpo {
   }
 
   // ---------------------------------------------------------- o mundo fisico
-  /** o andar: energia - custo x deslocamento (subunidades, inteiro >= 0); um custo fora da grade falha alto */
+  /** o andar: energia - custo x deslocamento (subunidades, inteiro >= 0); um custo fora da grade falha alto. Com o metabolismo, a
+   *  tabela tira do combustivel o gasto da atividade sobre o andar inteiro desta decisao (o arredondamento e um so) */
   estimuloAndar(deslocamento: number, custoPorSubunidade: number): void {
     if (!Number.isInteger(deslocamento) || deslocamento < 0) throw new Error(`deslocamento precisa ser inteiro >= 0: ${deslocamento}`);
     const k = naGrade(custoPorSubunidade, this.C, "custo_energia_por_subunidade");
-    if (deslocamento) this.somar({ cansaco: k * deslocamento });
+    if (deslocamento) {
+      const cansaco = k * deslocamento;
+      this.somar(Object.fromEntries(emissorDoGrafo(this.grafo, "andar").efeitos.map(([q, d]) =>
+        [q, d * (q === "cansaco" ? cansaco : gastoDaAtividade(this.cc, cansaco))])));
+    }
   }
 
   /** comer uma comida do mapa: a racao madura (a do alimentar), a fruta madura (a nutricao do mundo e o efeito da fruta) e a podre
@@ -648,6 +815,17 @@ export class Corpo {
       this.q.fome -= t;
       this.digerido_tick += t;
       this.digerido_total += t;
+      // o que a digestao produz, pela tabela: com o metabolismo, o combustivel sobe num/den do que se digeriu, com o resto guardado
+      for (const [nome, num, den] of this.fracoes) {
+        const resto = this.resto_combustivel + t * num;
+        const v = Math.floor(resto / den);
+        this.resto_combustivel = resto - v * den;
+        const novo = this.q[nome] + v;
+        this.q[nome] = Math.min(this.C, novo);
+        const k = this.contas_metabolismo as Record<ContaMetabolismo, number>;
+        k.convertido += v;
+        k.descartado_teto += novo - this.q[nome];
+      }
     }
     if (this.q.fome === 0 && this.q.alimento > 0) {
       this.descartado_total += this.q.alimento;
@@ -685,7 +863,9 @@ export class Corpo {
         for (const [q, d] of e.efeitos) deltas[q] = (deltas[q] ?? 0) + d * n;
       }
     }
-    this.somar(deltas);
+    this.somar(deltas, "gasto_basal");
+    // metabolismo: as transferencias com limiar, sobre os valores depois da fase 1 (antes da fase 2: a falta ve o que a reserva devolveu)
+    for (const r of this.transferencias) this.transferir(r);
     const privacao = this.emPrivacao();
     deltas = {};
     for (const e of daFase(this.grafo, 2)) {
@@ -696,6 +876,8 @@ export class Corpo {
         v = divArred(soma, e.divisor);
       } else if (e.gatilho === "privacao" || e.gatilho === "sem_privacao") {
         v = privacao === (e.gatilho === "privacao") ? 1 : 0;
+      } else if (e.gatilho === "abaixo") {
+        v = this.q[e.le[0].quimico] < e.limiar ? 1 : 0;
       } else {
         throw new Error(`gatilho ${e.gatilho} fora da fase 2`);
       }
@@ -709,6 +891,19 @@ export class Corpo {
     if (this.cc.digestao) {
       this.digerido_no_tick = this.digerido_tick;     // o tick fechou: a taxa volta inteira no proximo
       this.digerido_tick = 0;
+    }
+  }
+
+  /** uma transferencia com limiar (o metabolismo): com o quimico lido do lado certo do limiar, passa 1 por 1 do consumido ao produzido
+   *  ate min(taxa, a distancia ao limiar, o que ha, o que cabe): nada se perde e nada passa do teto */
+  private transferir(r: Reacao): void {
+    const de = r.consome[0], para = r.produz[0], le = leDe(r) as string, limiar = r.limiar ?? 0;
+    const distancia = r.lado === "acima" ? this.q[le] - limiar : limiar - this.q[le];
+    const t = Math.min(r.taxa, distancia, this.q[de], quimicoDoGrafo(this.grafo, para).teto - this.q[para]);
+    if (t > 0) {
+      this.q[de] -= t;
+      this.q[para] += t;
+      (this.contas_metabolismo as Record<ContaMetabolismo, number>)[para === "reserva" ? "armazenado" : "mobilizado"] += t;
     }
   }
 
@@ -748,6 +943,7 @@ export class Corpo {
     }
     if (this.cc.vida) d.estagio = this.estagio();
     if (this.cc.drives_novos) d.janela_tedio = [...this.janela_tedio];
+    if (this.contas_metabolismo) d.metabolismo = { resto_combustivel: this.resto_combustivel, contas: { ...this.contas_metabolismo } };
     return d;
   }
 }

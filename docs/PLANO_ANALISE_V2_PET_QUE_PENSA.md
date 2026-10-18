@@ -440,8 +440,8 @@ O adendo 3 (A3.3) pede este adendo. A calibração e o piloto rodaram uma vez, n
 
 ## Adendo 5 — a fruta ao lado da ração (2026-10-14, PROPOSTO, antes de qualquer run com ela)
 
-Status: **PROPOSTO**, registrado antes de qualquer vida com a fruta ao lado da ração. Depende das decisões PJ5-1 a PJ5-6 abaixo, todas
-do Matheus.
+Status: registrado antes de qualquer vida com a fruta ao lado da ração. **As decisões PJ5-1 a PJ5-6 estão DECIDIDAS pelo Matheus em
+2026-10-18, todas pela recomendação** (A5.10). A run ainda pede o sim dele (A5.9).
 
 **Por que existe:**
 - **O adendo 4 voltou ao Matheus,** com o T1 sem margem: nenhum braço escolhe a x antes da mudança, mesmo com o paladar.
@@ -567,11 +567,13 @@ Só com a regra do A na `main` (os gates dele passando), a faixa na `FAIXAS_RESE
 
 ### A5.10 Decisões do Matheus (este adendo)
 
+**DECIDIDAS em 2026-10-18: PJ5-1 a PJ5-6, todas como recomendado** (a coluna "recomendação" é o que vale).
+
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
-| PJ5-1 | Quais frutas vão ao lado da ração | **as três de uma vez, uma de cada, com reposição** (a proposta do A), na coluna do lado de fora, com o tipo de cada célula sorteado por unidade | uma por vez, em rodízio: a x só está lá em 1/3 do tempo, e o pet nunca vê duas frutas lado a lado. Só a x: o pet aprende o lugar, não o gosto. Posições fixas por tipo: um tipo fica sempre mais perto do ninho |
-| PJ5-2 | A fome na oportunidade do T1 | **sai:** a oportunidade é a decisão de comer com a x e a ração à vista | manter a fome ≤ S/2: o T1 olha de novo onde a nutrição domina, que é a razão de o adendo 4 ter voltado |
-| PJ5-3 | O limiar da G-APRENDEU | **1/4:** o acaso entre os quatro alvos (a ração e as três frutas), a mesma lógica do 1/3 de antes | 1/2: pede que a x ganhe de tudo junto, inclusive da ração com fome; a premissa pode falhar por nutrição, de novo |
-| PJ5-4 | A regra no T2 depois de `T_m` | **continua, igual nos dois protocolos:** um mundo só | parar no T2: a G-OPORTUNIDADE do T2 melhora, mas o mundo do T1 e o do T2 deixam de ser o mesmo depois da mudança |
-| PJ5-5 | A grade do `ganho_gosto` | **{S/2, S, 2S, 4S}**, pela fração de fruta nas decisões lado a lado, em [0,25; 0,75] | a grade do adendo 3: o adendo 4 mostrou que ela quase não muda a vida |
-| PJ5-6 | As sementes | **51101…51505 nova para a calibração e o piloto; a validação continua em 46101…46505** | reusar 49101…49505: as unidades já foram vistas com o paladar sem a fruta ao lado |
+| PJ5-1 | Quais frutas vão ao lado da ração | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** **as três de uma vez, uma de cada, com reposição** (a proposta do A), na coluna do lado de fora, com o tipo de cada célula sorteado por unidade | uma por vez, em rodízio: a x só está lá em 1/3 do tempo, e o pet nunca vê duas frutas lado a lado. Só a x: o pet aprende o lugar, não o gosto. Posições fixas por tipo: um tipo fica sempre mais perto do ninho |
+| PJ5-2 | A fome na oportunidade do T1 | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** **sai:** a oportunidade é a decisão de comer com a x e a ração à vista | manter a fome ≤ S/2: o T1 olha de novo onde a nutrição domina, que é a razão de o adendo 4 ter voltado |
+| PJ5-3 | O limiar da G-APRENDEU | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** **1/4:** o acaso entre os quatro alvos (a ração e as três frutas), a mesma lógica do 1/3 de antes | 1/2: pede que a x ganhe de tudo junto, inclusive da ração com fome; a premissa pode falhar por nutrição, de novo |
+| PJ5-4 | A regra no T2 depois de `T_m` | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** **continua, igual nos dois protocolos:** um mundo só | parar no T2: a G-OPORTUNIDADE do T2 melhora, mas o mundo do T1 e o do T2 deixam de ser o mesmo depois da mudança |
+| PJ5-5 | A grade do `ganho_gosto` | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** **{S/2, S, 2S, 4S}**, pela fração de fruta nas decisões lado a lado, em [0,25; 0,75] | a grade do adendo 3: o adendo 4 mostrou que ela quase não muda a vida |
+| PJ5-6 | As sementes | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** **51101…51505 nova para a calibração e o piloto; a validação continua em 46101…46505** | reusar 49101…49505: as unidades já foram vistas com o paladar sem a fruta ao lado |
