@@ -187,3 +187,38 @@ Cada etapa é um PR, com o relato no corpo. O merge é só do Matheus.
 - **O gabarito** ganhou os `ganchos`, a `memoria_emocao`, os `canais` e a `config_v11` (as configs que as vidas usaram de fato). As chaves de antes não mudaram. O `tests/test_gabarito_lobos_web.py` confere os ganchos. O cérebro do Python não mudou.
 - **Para a etapa 4:** o `Motor` do v11 precisa do laço do corpo, e o corpo do ponto tem o metabolismo. Há dois caminhos: portar o metabolismo antes (a etapa 4 do metabolismo), ou mudar o ponto do v11 para o corpo sem ele, o que muda o gabarito e o PW-2. A decisão é do Matheus.
 - `npm run tipos` limpo; `npm test` com 34 arquivos e 387 testes passando (17 deles no `lobos_v11.test.ts`); `tests/test_gabarito_lobos_web.py` passa.
+
+## 12. Etapa 4, parte 1, entregue (2026-10-18): o laço do corpo em TS e o gate do laço
+
+A etapa 4 vai em três PRs, na ordem do pedido: (1) o laço do corpo e a rng, com o gate; (2) a vontade e o caráter no Python, que já
+estão no PR #329 (PW-3 e PW-4); (3) o v11 no `Motor`. Este é o primeiro.
+
+- **O laço:** `web/app/motor/motor_corpo.ts` (`MotorCorpo`), o porte do `_laco`, do `_decidir`, do `_aplicar_acao_usuario` e do
+  `_gesto` de `digilab/motor_corpo.py`. O motor portado é o do v11 do Python: `com_corpo(MotorComFeedback)` no mundo `padrao`.
+  - Ele roda sobre o `corpo.ts` (o metabolismo, #333) e o `lobos.ts` (o aprendizado, #327), com o `avancarTick`, o `aplicarAcaoDono` e o
+    `efeitoAcaoPet` de `estado.ts` para o que não é drive.
+  - O G-BYPASS do Python também foi portado: um drive mudado por fora do corpo falha alto.
+  - O `aplicarEvento` é o passo do replay, e o `estadoDict` é o `motor.estado()` do Python.
+  - As ações do dono são alimentar, limpar, brincar, carinho e tapa. O elogio e a bronca falham alto.
+- **A rng:** o `RandomPy` do `mundo.ts` (o MT do CPython), reusado nas duas rng do `engine.Motor`. Nenhum número novo.
+- **O gate do laço** (`web/app/test/laco_v11.test.ts`, no Node): as 4 vidas da seção `v11` rodam pelo laço, evento a evento do log.
+  - Os 3.648 ganchos que o laço faz ao cérebro são os do Python, bit a bit (`toStrictEqual`). Eles incluem a observação com os receptores,
+    a transição, o ocorrido do corpo, a ação do dono com o tick e o antes e depois do carinho.
+  - Batem também os 1.152 motivos e, no fim, os pesos, o prior, os pesos do corpo, o aprendizado, a memória e emoção e os canais.
+  - O `motor.estado()` do fim bate inteiro: os drives, a sujeira, o sono, os cuidados, a ação atual e o corpo (a química, a digestão, o
+    estágio, a janela do tédio e o metabolismo). As ações do pet batem com o tick.
+  - O mesmo log dá a mesma vida duas vezes.
+  - Os controles negativos: outra semente do motor muda os ganchos, e um limpar trocado por alimentar muda o fim.
+- **O gabarito novo:** `web/app/test/gabaritos/lobos_laco_python.json`, do mesmo exportador, com o fim de cada vida do v11. O
+  `lobos_python.json` não mudou. O `tests/test_gabarito_lobos_web.py` confere que os dois estão em dia.
+- **O achado do #333:** o `configCorpo` falha alto com `banheiro: true`.
+- **O replay de uma vida longa** (risco da seção 6; `web/app/test/medir_replay_v11.mjs`, artefato
+  `artifacts_v2_w_porte/replay_v11.json`):
+  - a vida tem 60 dias e 6.719 eventos, com 294 KB de log em JSON;
+  - o replay leva 217 ms (a mediana de 5), 3,6 ms por dia, no Node 24 de um i7-14700KF;
+  - é só descritivo; o tempo no celular fica para o e2e da etapa 5.
+- **Para a parte 3 (o v11 no `Motor`):** ela espera o merge do #329 (o gabarito da vontade) e a decisão da PW-4. O #329 mediu e achou
+  que a escala do caráter não fica perto da do v10, e recomenda a (b), uma escala própria do v11. A semente do pet do jogo e o tick de
+  nascimento (`TICK_INICIAL`) entram no laço como parâmetros: o laço já aceita um estado de nascimento.
+- `npm run tipos` limpo; `npm test` com 36 arquivos e 426 testes (9 deles no `laco_v11.test.ts`); `tests/test_gabarito_lobos_web.py`
+  passa (3).

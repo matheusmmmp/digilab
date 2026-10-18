@@ -18,7 +18,7 @@ export function estadoInicial(): EstadoVida {
 export function vetor(e: EstadoVida): number[] { return [e.fome, e.higiene, e.energia, e.humor, e.saude, e.sujeira / 5, e.dormindo ? 1 : 0, (e.tick % TPD) / TPD]; }
 export function observacao(e: EstadoVida): Observacao { return { v: vetor(e), tdc: e.tick - e.ultimoCuidado }; }
 
-export function avancarTick(e: EstadoVida, rng: Rng): EstadoVida {
+export function avancarTick(e: EstadoVida, rng: Pick<Rng, "random">): EstadoVida {
   const mult = eNoite(e.tick % TPD) ? C.multNoite : 1;
   const n = { ...e };
   n.fome = clamp(e.fome - C.decFome);
@@ -31,7 +31,7 @@ export function avancarTick(e: EstadoVida, rng: Rng): EstadoVida {
   n.tick = e.tick + 1;
   return n;
 }
-export function aplicarAcaoDono(e: EstadoVida, a: AcaoDono, rng: Rng): EstadoVida {
+export function aplicarAcaoDono(e: EstadoVida, a: AcaoDono, rng: Pick<Rng, "random">): EstadoVida {
   const n = { ...e };
   if (a === "alimentar") { n.fome = clamp(n.fome + C.ganhoAlim); if (rng.random() < C.probSujRef) n.sujeira = Math.min(C.sujMax, n.sujeira + 1); }
   else if (a === "limpar") { n.higiene = clamp(n.higiene + C.ganhoLimpar); n.sujeira = Math.max(0, n.sujeira - 1); }

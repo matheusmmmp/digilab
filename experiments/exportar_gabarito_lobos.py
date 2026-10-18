@@ -16,7 +16,12 @@ Duas secoes:
 E `config_v11`: as configs que as vidas do v11 usaram de fato (a ConfigLobos do braco, a ConfigConsequencia e a ConfigCorpo do regime
 `corpo`, com os drives novos, os gestos e o metabolismo); a `config` e a da bancada, de onde elas saem.
 
-    python experiments/exportar_gabarito_lobos.py      # grava web/app/test/gabaritos/lobos_python.json
+    python experiments/exportar_gabarito_lobos.py      # grava web/app/test/gabaritos/lobos_python.json e lobos_laco_python.json
+
+O segundo arquivo (etapa 4, o gate do laco) traz, por vida do v11, o estado do motor no fim (`motor.estado()`: o tick, os drives, a
+sujeira, o sono, os cuidados, a acao atual e o corpo com a quimica, a digestao, o estagio, a janela do tedio e o metabolismo) e as acoes
+do pet com o tick. O TS roda o log pelo laco do corpo dele e confere os ganchos (os do primeiro arquivo) e este fim. Fica num arquivo
+proprio para nao mexer no primeiro, que outras frentes estendem.
 
 Ponto (PW-2), todos PROPOSTOS, nenhum validado (docs/RESULTADO_V2_CALIBRACAO_CORPO.md; docs/RESULTADO_V2_CALIBRACAO_CONJUNTA.md):
   - o aprendiz T3 (passo 512, teto 16 S, piso S/16), a montagem `completa` (canais ligados) e o ganho 4 da consequencia: os da config da
@@ -47,6 +52,7 @@ from digilab.policies.lobos import PoliticaLobos  # noqa: E402
 from digilab.treino import reproduzir_com_feedback, simular_vida  # noqa: E402
 
 ARQUIVO = RAIZ / "web" / "app" / "test" / "gabaritos" / "lobos_python.json"
+ARQUIVO_LACO = RAIZ / "web" / "app" / "test" / "gabaritos" / "lobos_laco_python.json"
 CONFIG_CALIBRACAO = RAIZ / "experiments" / "configs" / "v2_corpo" / "calibracao_adendo5.json"
 DIAS = 3
 ORCAMENTO = 16 * DIAS
@@ -197,8 +203,28 @@ def gerar() -> dict:
             "v11": [vida_v11(b, d, s) for d, s in VIDAS_V11]}
 
 
+def laco_v11(b: bv.Bancada, dono: str, semente: int) -> dict:
+    """O fim da vida do v11 pelo motor (etapa 4): o `estado()` do motor, com o corpo, e as acoes do pet com o tick."""
+    espec = bv.EspecVida(dono, BRACO_V11, semente)
+    motor = b.vida(espec).motor
+    acoes = motor.acoes_recentes(10 ** 9)
+    if not hasattr(motor, "corpo") or len(acoes) != len(motor.politica.estado_interno()["motivos"]):
+        raise RuntimeError(f"{espec.nome}: a vida do v11 sem o corpo ou com acoes fora dos motivos")
+    return {"dono": dono, "semente": semente, "estado": motor.estado(), "acoes_pet": [[t, a.value] for t, a in acoes]}
+
+
+def gerar_laco() -> dict:
+    b = bancada_v11()
+    return {"versao": 1, "braco": BRACO_V11, "dias": DIAS, "v11": [laco_v11(b, d, s) for d, s in VIDAS_V11]}
+
+
+def _gravar(arquivo: Path, g: dict) -> None:
+    arquivo.write_text(json.dumps(g, sort_keys=True, separators=(",", ":")) + "\n", encoding="utf-8", newline="\n")
+
+
 if __name__ == "__main__":
     g = gerar()
-    ARQUIVO.write_text(json.dumps(g, sort_keys=True, separators=(",", ":")) + "\n", encoding="utf-8", newline="\n")
+    _gravar(ARQUIVO, g)
+    _gravar(ARQUIVO_LACO, gerar_laco())
     print(f"{ARQUIVO} ({ARQUIVO.stat().st_size // 1024} KiB): "
-          f"l0 {[len(v['motivos']) for v in g['l0']]}, v11 {[len(v['motivos']) for v in g['v11']]}")
+          f"l0 {[len(v['motivos']) for v in g['l0']]}, v11 {[len(v['motivos']) for v in g['v11']]}; {ARQUIVO_LACO.name}")
