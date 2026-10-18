@@ -1,0 +1,1414 @@
+{
+ "descricao": "PW-4: o carater do v11 contra o v10, pelo metodo da web (docs/TAREFA_V2_W_PORTE_CEREBRO_A.md, secao 11)",
+ "constantes_web": {
+  "CCP": {
+   "estados": 32,
+   "amostras": 100,
+   "semente": 9001,
+   "escala": 0.05
+  },
+  "DESLOC_CARATER": {
+   "adolescente": {
+    "atento": -0.0264,
+    "impetuoso": -0.0088,
+    "paciente": 0.099,
+    "resistente": 0.0536
+   },
+   "adulto": {
+    "atento": -0.05,
+    "impetuoso": 0.0625,
+    "paciente": 0.1875,
+    "resistente": -0.0875
+   }
+  }
+ },
+ "donos": [
+  "atencioso",
+  "relapso",
+  "aleatorio",
+  "incoerente"
+ ],
+ "sementes": [
+  101,
+  202,
+  303,
+  404,
+  505
+ ],
+ "dias": 2,
+ "orcamento": 32,
+ "permutacoes": 10000,
+ "distribuicoes": {
+  "v10": {
+   "linha": {
+    "brigao": 0.1,
+    "guardiao": 0.45,
+    "cacador": 0.2,
+    "colosso": 0.25
+   },
+   "forma": {
+    "duelista": 0.05,
+    "furioso": 0.05,
+    "espelho": 0.1,
+    "muralha": 0.35,
+    "sentinela": 0.05,
+    "emboscador": 0.15,
+    "vigia": 0.15,
+    "tita": 0.1
+   },
+   "ramo": {
+    "sereno": 0.0,
+    "arisco": 1.0
+   }
+  },
+  "v11": {
+   "linha": {
+    "brigao": 0.1,
+    "guardiao": 0.6,
+    "cacador": 0.1,
+    "colosso": 0.2
+   },
+   "forma": {
+    "duelista": 0.05,
+    "furioso": 0.05,
+    "espelho": 0.3,
+    "muralha": 0.3,
+    "sentinela": 0.0,
+    "emboscador": 0.1,
+    "vigia": 0.15,
+    "tita": 0.05
+   },
+   "ramo": {
+    "sereno": 0.0,
+    "arisco": 1.0
+   }
+  }
+ },
+ "criterio": {
+  "linhas": {
+   "tvd": 0.14999999999999997,
+   "p95_nulo": 0.35,
+   "p": 0.8196,
+   "perto": true
+  },
+  "formas": {
+   "tvd": 0.19999999999999998,
+   "p95_nulo": 0.45,
+   "p": 0.9395,
+   "perto": true
+  },
+  "escala": {
+   "mediana_abs_bruto": {
+    "v10": 0.00921875,
+    "v11": 0.002734375
+   },
+   "razao": 0.2966101694915254,
+   "cortados": {
+    "v10": 0.00625,
+    "v11": 0.0
+   },
+   "perto": false
+  },
+  "perto": false
+ },
+ "descritivo_so_desloc": {
+  "v10": {
+   "linha_sem_desvio": "guardiao",
+   "fracao_linha_sem_desvio": 0.45,
+   "fracao_forma_sem_desvio": 0.4
+  },
+  "v11": {
+   "linha_sem_desvio": "guardiao",
+   "fracao_linha_sem_desvio": 0.6,
+   "fracao_forma_sem_desvio": 0.5
+  }
+ },
+ "pets": [
+  {
+   "versao": "v10",
+   "dono": "atencioso",
+   "semente": 101,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": -0.27754999999999996,
+    "paciente": 0.04275,
+    "atento": 0.39859999999999995,
+    "resistente": 0.22235000000000005
+   },
+   "bruto_adolescente": {
+    "impetuoso": -0.013437500000000002,
+    "paciente": -0.0028125000000000003,
+    "atento": 0.021249999999999998,
+    "resistente": 0.008437500000000002
+   },
+   "carater_adulto": {
+    "impetuoso": -0.09062499999999998,
+    "paciente": 0.51875,
+    "atento": -0.13750000000000004,
+    "resistente": -0.02499999999999991
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.007656249999999999,
+    "paciente": 0.0165625,
+    "atento": -0.004375000000000002,
+    "resistente": 0.003125000000000004
+   },
+   "linha": "cacador",
+   "forma": "emboscador"
+  },
+  {
+   "versao": "v10",
+   "dono": "atencioso",
+   "semente": 202,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": -0.18379999999999996,
+    "paciente": 0.4427500000000001,
+    "atento": 0.27985,
+    "resistente": -0.24639999999999992
+   },
+   "bruto_adolescente": {
+    "impetuoso": -0.008749999999999999,
+    "paciente": 0.017187500000000005,
+    "atento": 0.015312499999999998,
+    "resistente": -0.014999999999999998
+   },
+   "carater_adulto": {
+    "impetuoso": -0.1656249999999999,
+    "paciente": 0.38125,
+    "atento": 0.39375,
+    "resistente": -0.26874999999999993
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.011406249999999996,
+    "paciente": 0.009687499999999998,
+    "atento": 0.0221875,
+    "resistente": -0.009062499999999996
+   },
+   "linha": "guardiao",
+   "forma": "muralha"
+  },
+  {
+   "versao": "v10",
+   "dono": "atencioso",
+   "semente": 303,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": -0.024425000000000002,
+    "paciente": -0.20100000000000004,
+    "atento": 0.29235,
+    "resistente": 0.06609999999999999
+   },
+   "bruto_adolescente": {
+    "impetuoso": -0.0007812500000000003,
+    "paciente": -0.015000000000000003,
+    "atento": 0.0159375,
+    "resistente": 0.0006249999999999999
+   },
+   "carater_adulto": {
+    "impetuoso": -0.24062500000000003,
+    "paciente": 0.2124999999999999,
+    "atento": 0.5437499999999998,
+    "resistente": -0.0999999999999999
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.015156250000000001,
+    "paciente": 0.0012499999999999963,
+    "atento": 0.0296875,
+    "resistente": -0.0006249999999999954
+   },
+   "linha": "cacador",
+   "forma": "emboscador"
+  },
+  {
+   "versao": "v10",
+   "dono": "atencioso",
+   "semente": 404,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": -0.39005,
+    "paciente": 0.5239999999999999,
+    "atento": 0.31734999999999997,
+    "resistente": 0.047350000000000135
+   },
+   "bruto_adolescente": {
+    "impetuoso": -0.019062500000000003,
+    "paciente": 0.021249999999999998,
+    "atento": 0.017187499999999998,
+    "resistente": -0.00031249999999999334
+   },
+   "carater_adulto": {
+    "impetuoso": -0.19687499999999997,
+    "paciente": 0.7312500000000001,
+    "atento": -0.03750000000000003,
+    "resistente": -0.12499999999999996
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.01296875,
+    "paciente": 0.027187500000000003,
+    "atento": 0.0006249999999999984,
+    "resistente": -0.0018749999999999982
+   },
+   "linha": "guardiao",
+   "forma": "muralha"
+  },
+  {
+   "versao": "v10",
+   "dono": "atencioso",
+   "semente": 505,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": -0.09005,
+    "paciente": -0.03224999999999997,
+    "atento": 0.26109999999999994,
+    "resistente": 0.059850000000000035
+   },
+   "bruto_adolescente": {
+    "impetuoso": -0.0040625,
+    "paciente": -0.006562499999999999,
+    "atento": 0.014374999999999997,
+    "resistente": 0.0003125000000000017
+   },
+   "carater_adulto": {
+    "impetuoso": -0.215625,
+    "paciente": 0.09374999999999994,
+    "atento": 0.49374999999999997,
+    "resistente": 0.01874999999999996
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.013906250000000002,
+    "paciente": -0.004687500000000003,
+    "atento": 0.0271875,
+    "resistente": 0.005312499999999998
+   },
+   "linha": "cacador",
+   "forma": "sentinela"
+  },
+  {
+   "versao": "v10",
+   "dono": "relapso",
+   "semente": 101,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": -0.168175,
+    "paciente": -0.06975000000000003,
+    "atento": 0.16734999999999994,
+    "resistente": 0.34734999999999994
+   },
+   "bruto_adolescente": {
+    "impetuoso": -0.00796875,
+    "paciente": -0.008437500000000002,
+    "atento": 0.009687499999999998,
+    "resistente": 0.0146875
+   },
+   "carater_adulto": {
+    "impetuoso": -0.22499999999999998,
+    "paciente": 0.24375000000000008,
+    "atento": 0.17499999999999993,
+    "resistente": 0.20624999999999996
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.014374999999999999,
+    "paciente": 0.0028125000000000042,
+    "atento": 0.011249999999999998,
+    "resistente": 0.0146875
+   },
+   "linha": "colosso",
+   "forma": "vigia"
+  },
+  {
+   "versao": "v10",
+   "dono": "relapso",
+   "semente": 202,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": 0.05682499999999992,
+    "paciente": -0.14475000000000007,
+    "atento": 0.17984999999999993,
+    "resistente": -0.04014999999999996
+   },
+   "bruto_adolescente": {
+    "impetuoso": 0.0032812499999999964,
+    "paciente": -0.012187500000000004,
+    "atento": 0.010312499999999997,
+    "resistente": -0.004687499999999998
+   },
+   "carater_adulto": {
+    "impetuoso": -0.18124999999999997,
+    "paciente": 0.5562499999999999,
+    "atento": 0.14374999999999993,
+    "resistente": -0.16250000000000003
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.012187499999999999,
+    "paciente": 0.018437499999999996,
+    "atento": 0.009687499999999998,
+    "resistente": -0.003750000000000001
+   },
+   "linha": "cacador",
+   "forma": "emboscador"
+  },
+  {
+   "versao": "v10",
+   "dono": "relapso",
+   "semente": 303,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": -0.27754999999999996,
+    "paciente": 0.6489999999999998,
+    "atento": -0.02015000000000006,
+    "resistente": 0.034849999999999964
+   },
+   "bruto_adolescente": {
+    "impetuoso": -0.013437500000000002,
+    "paciente": 0.027499999999999993,
+    "atento": 0.00031249999999999697,
+    "resistente": -0.0009375000000000017
+   },
+   "carater_adulto": {
+    "impetuoso": -0.215625,
+    "paciente": 0.53125,
+    "atento": 0.20624999999999993,
+    "resistente": -0.13125
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.01390625,
+    "paciente": 0.017187499999999998,
+    "atento": 0.012812499999999998,
+    "resistente": -0.0021875
+   },
+   "linha": "guardiao",
+   "forma": "muralha"
+  },
+  {
+   "versao": "v10",
+   "dono": "relapso",
+   "semente": 404,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": 0.02245000000000004,
+    "paciente": 0.06775000000000009,
+    "atento": -0.10765000000000002,
+    "resistente": 0.10360000000000003
+   },
+   "bruto_adolescente": {
+    "impetuoso": 0.0015625000000000023,
+    "paciente": -0.0015624999999999957,
+    "atento": -0.004062500000000001,
+    "resistente": 0.002500000000000001
+   },
+   "carater_adulto": {
+    "impetuoso": -0.08125000000000002,
+    "paciente": 0.4749999999999998,
+    "atento": 0.14375,
+    "resistente": -0.28124999999999994
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.007187500000000001,
+    "paciente": 0.014374999999999992,
+    "atento": 0.0096875,
+    "resistente": -0.009687499999999998
+   },
+   "linha": "colosso",
+   "forma": "vigia"
+  },
+  {
+   "versao": "v10",
+   "dono": "relapso",
+   "semente": 505,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": 0.031824999999999964,
+    "paciente": 0.1615000000000001,
+    "atento": -0.03265000000000003,
+    "resistente": -0.08390000000000003
+   },
+   "bruto_adolescente": {
+    "impetuoso": 0.0020312499999999983,
+    "paciente": 0.0031250000000000045,
+    "atento": -0.0003125000000000016,
+    "resistente": -0.006875000000000003
+   },
+   "carater_adulto": {
+    "impetuoso": 0.006249999999999985,
+    "paciente": 0.6499999999999999,
+    "atento": -0.14375000000000002,
+    "resistente": -0.34375
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.0028125000000000008,
+    "paciente": 0.023125,
+    "atento": -0.004687500000000001,
+    "resistente": -0.012812500000000001
+   },
+   "linha": "guardiao",
+   "forma": "espelho"
+  },
+  {
+   "versao": "v10",
+   "dono": "aleatorio",
+   "semente": 101,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": 0.02869999999999996,
+    "paciente": 0.011500000000000038,
+    "atento": -0.05140000000000003,
+    "resistente": 0.09110000000000004
+   },
+   "bruto_adolescente": {
+    "impetuoso": 0.0018749999999999982,
+    "paciente": -0.004374999999999999,
+    "atento": -0.0012500000000000015,
+    "resistente": 0.0018750000000000017
+   },
+   "carater_adulto": {
+    "impetuoso": -0.16875,
+    "paciente": 0.7687499999999997,
+    "atento": -0.07500000000000004,
+    "resistente": -0.1812499999999999
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.011562500000000002,
+    "paciente": 0.029062499999999988,
+    "atento": -0.0012500000000000022,
+    "resistente": -0.0046874999999999955
+   },
+   "linha": "colosso",
+   "forma": "tita"
+  },
+  {
+   "versao": "v10",
+   "dono": "aleatorio",
+   "semente": 202,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": -0.11504999999999992,
+    "paciente": 0.44900000000000007,
+    "atento": -0.10140000000000005,
+    "resistente": -0.008900000000000054
+   },
+   "bruto_adolescente": {
+    "impetuoso": -0.005312499999999996,
+    "paciente": 0.0175,
+    "atento": -0.003750000000000002,
+    "resistente": -0.0031250000000000028
+   },
+   "carater_adulto": {
+    "impetuoso": -0.24374999999999997,
+    "paciente": 0.6312499999999999,
+    "atento": 0.21875,
+    "resistente": -0.1875
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.015312499999999998,
+    "paciente": 0.022187499999999995,
+    "atento": 0.0134375,
+    "resistente": -0.005
+   },
+   "linha": "guardiao",
+   "forma": "muralha"
+  },
+  {
+   "versao": "v10",
+   "dono": "aleatorio",
+   "semente": 303,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": 0.3474499999999999,
+    "paciente": -0.7759999999999999,
+    "atento": 0.28609999999999997,
+    "resistente": -0.09639999999999999
+   },
+   "bruto_adolescente": {
+    "impetuoso": 0.017812499999999995,
+    "paciente": -0.04375,
+    "atento": 0.015624999999999998,
+    "resistente": -0.0075
+   },
+   "carater_adulto": {
+    "impetuoso": 0.40312499999999996,
+    "paciente": -0.10624999999999996,
+    "atento": -0.28750000000000003,
+    "resistente": -0.2374999999999999
+   },
+   "bruto_adulto": {
+    "impetuoso": 0.017031249999999998,
+    "paciente": -0.0146875,
+    "atento": -0.011875000000000002,
+    "resistente": -0.007499999999999995
+   },
+   "linha": "brigao",
+   "forma": "furioso"
+  },
+  {
+   "versao": "v10",
+   "dono": "aleatorio",
+   "semente": 404,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": -0.15255000000000007,
+    "paciente": 0.10524999999999994,
+    "atento": 0.06109999999999997,
+    "resistente": 0.24735000000000004
+   },
+   "bruto_adolescente": {
+    "impetuoso": -0.007187500000000005,
+    "paciente": 0.0003124999999999968,
+    "atento": 0.004374999999999999,
+    "resistente": 0.009687500000000002
+   },
+   "carater_adulto": {
+    "impetuoso": -0.08437499999999998,
+    "paciente": 0.4499999999999999,
+    "atento": 0.11874999999999995,
+    "resistente": -0.22499999999999992
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.00734375,
+    "paciente": 0.013124999999999996,
+    "atento": 0.008437499999999999,
+    "resistente": -0.006874999999999997
+   },
+   "linha": "colosso",
+   "forma": "vigia"
+  },
+  {
+   "versao": "v10",
+   "dono": "aleatorio",
+   "semente": 505,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": 0.19119999999999998,
+    "paciente": -0.007249999999999895,
+    "atento": 0.004849999999999976,
+    "resistente": -0.2713999999999999
+   },
+   "bruto_adolescente": {
+    "impetuoso": 0.01,
+    "paciente": -0.005312499999999995,
+    "atento": 0.0015624999999999988,
+    "resistente": -0.016249999999999997
+   },
+   "carater_adulto": {
+    "impetuoso": 0.26875000000000004,
+    "paciente": 0.09375000000000012,
+    "atento": 0.006249999999999964,
+    "resistente": -0.4625
+   },
+   "bruto_adulto": {
+    "impetuoso": 0.010312500000000002,
+    "paciente": -0.004687499999999994,
+    "atento": 0.0028124999999999986,
+    "resistente": -0.018750000000000003
+   },
+   "linha": "brigao",
+   "forma": "duelista"
+  },
+  {
+   "versao": "v10",
+   "dono": "incoerente",
+   "semente": 101,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": -0.09005,
+    "paciente": 0.33025000000000004,
+    "atento": -0.10765000000000002,
+    "resistente": 0.06609999999999999
+   },
+   "bruto_adolescente": {
+    "impetuoso": -0.0040625,
+    "paciente": 0.011562500000000002,
+    "atento": -0.004062500000000001,
+    "resistente": 0.0006249999999999993
+   },
+   "carater_adulto": {
+    "impetuoso": 0.12499999999999999,
+    "paciente": 0.23124999999999984,
+    "atento": -0.325,
+    "resistente": 0.018749999999999975
+   },
+   "bruto_adulto": {
+    "impetuoso": 0.0031249999999999993,
+    "paciente": 0.002187499999999993,
+    "atento": -0.013750000000000002,
+    "resistente": 0.005312499999999999
+   },
+   "linha": "guardiao",
+   "forma": "espelho"
+  },
+  {
+   "versao": "v10",
+   "dono": "incoerente",
+   "semente": 202,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": 0.15995000000000006,
+    "paciente": 0.2865000000000001,
+    "atento": -0.35764999999999997,
+    "resistente": -0.1401499999999999
+   },
+   "bruto_adolescente": {
+    "impetuoso": 0.008437500000000004,
+    "paciente": 0.009375000000000003,
+    "atento": -0.0165625,
+    "resistente": -0.009687499999999996
+   },
+   "carater_adulto": {
+    "impetuoso": -0.04062500000000002,
+    "paciente": 0.4374999999999999,
+    "atento": 0.10624999999999994,
+    "resistente": -0.28749999999999987
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.005156250000000001,
+    "paciente": 0.012499999999999994,
+    "atento": 0.007812499999999998,
+    "resistente": -0.009999999999999995
+   },
+   "linha": "guardiao",
+   "forma": "muralha"
+  },
+  {
+   "versao": "v10",
+   "dono": "incoerente",
+   "semente": 303,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": -0.25880000000000003,
+    "paciente": 1.0,
+    "atento": -0.38265,
+    "resistente": 0.0036000000000000545
+   },
+   "bruto_adolescente": {
+    "impetuoso": -0.012500000000000002,
+    "paciente": 0.0453125,
+    "atento": -0.017812500000000002,
+    "resistente": -0.0024999999999999974
+   },
+   "carater_adulto": {
+    "impetuoso": -0.025000000000000022,
+    "paciente": 0.9312499999999999,
+    "atento": -0.36874999999999997,
+    "resistente": -0.3374999999999999
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.004375000000000001,
+    "paciente": 0.0371875,
+    "atento": -0.0159375,
+    "resistente": -0.012499999999999997
+   },
+   "linha": "guardiao",
+   "forma": "muralha"
+  },
+  {
+   "versao": "v10",
+   "dono": "incoerente",
+   "semente": 404,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": -0.41505,
+    "paciente": 0.8427499999999999,
+    "atento": -0.12015000000000003,
+    "resistente": 0.21610000000000004
+   },
+   "bruto_adolescente": {
+    "impetuoso": -0.0203125,
+    "paciente": 0.0371875,
+    "atento": -0.0046875000000000016,
+    "resistente": 0.008125000000000002
+   },
+   "carater_adulto": {
+    "impetuoso": -0.22187499999999993,
+    "paciente": 0.94375,
+    "atento": -0.31875,
+    "resistente": -0.006250000000000019
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.014218749999999999,
+    "paciente": 0.0378125,
+    "atento": -0.013437500000000002,
+    "resistente": 0.004062499999999999
+   },
+   "linha": "guardiao",
+   "forma": "muralha"
+  },
+  {
+   "versao": "v10",
+   "dono": "incoerente",
+   "semente": 505,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": -0.1088,
+    "paciente": 0.14900000000000005,
+    "atento": -0.02640000000000007,
+    "resistente": 0.2036000000000001
+   },
+   "bruto_adolescente": {
+    "impetuoso": -0.005,
+    "paciente": 0.0025000000000000022,
+    "atento": -3.5236570605778894e-18,
+    "resistente": 0.007500000000000005
+   },
+   "carater_adulto": {
+    "impetuoso": -0.15312499999999998,
+    "paciente": 0.7874999999999999,
+    "atento": -0.31250000000000006,
+    "resistente": 0.006250000000000019
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.01078125,
+    "paciente": 0.029999999999999995,
+    "atento": -0.013125000000000003,
+    "resistente": 0.004687500000000001
+   },
+   "linha": "colosso",
+   "forma": "tita"
+  },
+  {
+   "versao": "v11",
+   "dono": "atencioso",
+   "semente": 101,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": -0.02754999999999999,
+    "paciente": 0.10525000000000001,
+    "atento": 0.004850000000000028,
+    "resistente": 0.0536
+   },
+   "bruto_adolescente": {
+    "impetuoso": -0.0009374999999999997,
+    "paciente": 0.0003125000000000003,
+    "atento": 0.0015625000000000014,
+    "resistente": 0.0
+   },
+   "carater_adulto": {
+    "impetuoso": -0.03749999999999998,
+    "paciente": 0.29374999999999996,
+    "atento": 0.04375000000000001,
+    "resistente": -0.0875
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.004999999999999999,
+    "paciente": 0.0053124999999999995,
+    "atento": 0.004687500000000001,
+    "resistente": 0.0
+   },
+   "linha": "guardiao",
+   "forma": "muralha"
+  },
+  {
+   "versao": "v11",
+   "dono": "atencioso",
+   "semente": 202,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": -0.074425,
+    "paciente": 0.1865,
+    "atento": 0.017350000000000004,
+    "resistente": 0.0536
+   },
+   "bruto_adolescente": {
+    "impetuoso": -0.0032812500000000003,
+    "paciente": 0.004375,
+    "atento": 0.0021875,
+    "resistente": 0.0
+   },
+   "carater_adulto": {
+    "impetuoso": -0.04999999999999999,
+    "paciente": 0.29374999999999996,
+    "atento": 0.06874999999999999,
+    "resistente": -0.0875
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.005625,
+    "paciente": 0.0053124999999999995,
+    "atento": 0.0059375,
+    "resistente": 0.0
+   },
+   "linha": "guardiao",
+   "forma": "muralha"
+  },
+  {
+   "versao": "v11",
+   "dono": "atencioso",
+   "semente": 303,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": 0.013074999999999988,
+    "paciente": 0.13025,
+    "atento": -0.10139999999999996,
+    "resistente": 0.0536
+   },
+   "bruto_adolescente": {
+    "impetuoso": 0.0010937499999999995,
+    "paciente": 0.0015624999999999997,
+    "atento": -0.003749999999999998,
+    "resistente": 0.0
+   },
+   "carater_adulto": {
+    "impetuoso": 0.050000000000000024,
+    "paciente": 0.31875,
+    "atento": -0.15625,
+    "resistente": -0.0875
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.0006249999999999988,
+    "paciente": 0.006562500000000001,
+    "atento": -0.0053125,
+    "resistente": 0.0
+   },
+   "linha": "guardiao",
+   "forma": "espelho"
+  },
+  {
+   "versao": "v11",
+   "dono": "atencioso",
+   "semente": 404,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": -0.030674999999999994,
+    "paciente": 0.11150000000000002,
+    "atento": 0.004850000000000028,
+    "resistente": 0.0536
+   },
+   "bruto_adolescente": {
+    "impetuoso": -0.0010937499999999999,
+    "paciente": 0.0006250000000000006,
+    "atento": 0.0015625000000000014,
+    "resistente": 0.0
+   },
+   "carater_adulto": {
+    "impetuoso": 0.0062500000000000125,
+    "paciente": 0.16874999999999998,
+    "atento": 0.08124999999999998,
+    "resistente": -0.0875
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.0028124999999999995,
+    "paciente": -0.0009375000000000008,
+    "atento": 0.006562499999999999,
+    "resistente": 0.0
+   },
+   "linha": "guardiao",
+   "forma": "espelho"
+  },
+  {
+   "versao": "v11",
+   "dono": "atencioso",
+   "semente": 505,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": -0.0713,
+    "paciente": 0.174,
+    "atento": 0.023600000000000045,
+    "resistente": 0.0536
+   },
+   "bruto_adolescente": {
+    "impetuoso": -0.003125,
+    "paciente": 0.00375,
+    "atento": 0.0025000000000000022,
+    "resistente": 0.0
+   },
+   "carater_adulto": {
+    "impetuoso": 0.018750000000000017,
+    "paciente": 0.31875,
+    "atento": -0.09375,
+    "resistente": -0.0875
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.0021874999999999993,
+    "paciente": 0.006562500000000001,
+    "atento": -0.0021875,
+    "resistente": 0.0
+   },
+   "linha": "guardiao",
+   "forma": "espelho"
+  },
+  {
+   "versao": "v11",
+   "dono": "relapso",
+   "semente": 101,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": -0.008799999999999988,
+    "paciente": 0.11150000000000002,
+    "atento": -0.03890000000000001,
+    "resistente": 0.0536
+   },
+   "bruto_adolescente": {
+    "impetuoso": 6.505213034913027e-19,
+    "paciente": 0.0006250000000000006,
+    "atento": -0.0006250000000000006,
+    "resistente": 0.0
+   },
+   "carater_adulto": {
+    "impetuoso": 0.05000000000000001,
+    "paciente": 0.21875,
+    "atento": -0.05625000000000001,
+    "resistente": -0.0875
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.0006249999999999995,
+    "paciente": 0.0015624999999999997,
+    "atento": -0.0003125000000000003,
+    "resistente": 0.0
+   },
+   "linha": "guardiao",
+   "forma": "espelho"
+  },
+  {
+   "versao": "v11",
+   "dono": "relapso",
+   "semente": 202,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": -0.0588,
+    "paciente": 0.024000000000000035,
+    "atento": 0.1486,
+    "resistente": 0.0536
+   },
+   "bruto_adolescente": {
+    "impetuoso": -0.0025,
+    "paciente": -0.003749999999999999,
+    "atento": 0.00875,
+    "resistente": 0.0
+   },
+   "carater_adulto": {
+    "impetuoso": -0.003124999999999989,
+    "paciente": 0.11250000000000003,
+    "atento": 0.15625,
+    "resistente": -0.0875
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.00328125,
+    "paciente": -0.003749999999999999,
+    "atento": 0.0103125,
+    "resistente": 0.0
+   },
+   "linha": "cacador",
+   "forma": "emboscador"
+  },
+  {
+   "versao": "v11",
+   "dono": "relapso",
+   "semente": 303,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": -0.02442499999999999,
+    "paciente": 0.11150000000000002,
+    "atento": -0.007649999999999983,
+    "resistente": 0.0536
+   },
+   "bruto_adolescente": {
+    "impetuoso": -0.0007812499999999994,
+    "paciente": 0.0006250000000000006,
+    "atento": 0.0009375000000000008,
+    "resistente": 0.0
+   },
+   "carater_adulto": {
+    "impetuoso": 0.109375,
+    "paciente": -0.14375,
+    "atento": 0.18749999999999994,
+    "resistente": -0.0875
+   },
+   "bruto_adulto": {
+    "impetuoso": 0.0023437500000000003,
+    "paciente": -0.0165625,
+    "atento": 0.011874999999999998,
+    "resistente": 0.0
+   },
+   "linha": "guardiao",
+   "forma": "espelho"
+  },
+  {
+   "versao": "v11",
+   "dono": "relapso",
+   "semente": 404,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": -0.011924999999999991,
+    "paciente": 0.099,
+    "atento": -0.020149999999999994,
+    "resistente": 0.0536
+   },
+   "bruto_adolescente": {
+    "impetuoso": -0.0001562499999999995,
+    "paciente": 0.0,
+    "atento": 0.0003125000000000003,
+    "resistente": 0.0
+   },
+   "carater_adulto": {
+    "impetuoso": -0.340625,
+    "paciente": -0.13124999999999998,
+    "atento": 0.425,
+    "resistente": 0.5625
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.02015625,
+    "paciente": -0.0159375,
+    "atento": 0.02375,
+    "resistente": 0.0325
+   },
+   "linha": "guardiao",
+   "forma": "muralha"
+  },
+  {
+   "versao": "v11",
+   "dono": "relapso",
+   "semente": 505,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": -0.018174999999999986,
+    "paciente": 0.11150000000000002,
+    "atento": -0.020149999999999994,
+    "resistente": 0.0536
+   },
+   "bruto_adolescente": {
+    "impetuoso": -0.00046874999999999933,
+    "paciente": 0.0006250000000000006,
+    "atento": 0.0003125000000000003,
+    "resistente": 0.0
+   },
+   "carater_adulto": {
+    "impetuoso": -0.15000000000000005,
+    "paciente": 0.06875,
+    "atento": 0.30000000000000004,
+    "resistente": 0.10624999999999998
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.010625000000000002,
+    "paciente": -0.0059375,
+    "atento": 0.0175,
+    "resistente": 0.0096875
+   },
+   "linha": "guardiao",
+   "forma": "muralha"
+  },
+  {
+   "versao": "v11",
+   "dono": "aleatorio",
+   "semente": 101,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": 0.344325,
+    "paciente": 0.08024999999999999,
+    "atento": 0.05485,
+    "resistente": -0.71515
+   },
+   "bruto_adolescente": {
+    "impetuoso": 0.01765625,
+    "paciente": -0.0009375000000000008,
+    "atento": 0.0040625,
+    "resistente": -0.0384375
+   },
+   "carater_adulto": {
+    "impetuoso": 0.328125,
+    "paciente": 0.16874999999999998,
+    "atento": 0.19374999999999998,
+    "resistente": -0.84375
+   },
+   "bruto_adulto": {
+    "impetuoso": 0.01328125,
+    "paciente": -0.0009375000000000008,
+    "atento": 0.0121875,
+    "resistente": -0.0378125
+   },
+   "linha": "brigao",
+   "forma": "duelista"
+  },
+  {
+   "versao": "v11",
+   "dono": "aleatorio",
+   "semente": 202,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": -0.20880000000000004,
+    "paciente": 0.14275000000000002,
+    "atento": -0.15764999999999998,
+    "resistente": 0.5411
+   },
+   "bruto_adolescente": {
+    "impetuoso": -0.010000000000000002,
+    "paciente": 0.0021875,
+    "atento": -0.0065625,
+    "resistente": 0.024375
+   },
+   "carater_adulto": {
+    "impetuoso": -0.315625,
+    "paciente": 0.2,
+    "atento": -0.15624999999999997,
+    "resistente": 0.7624999999999998
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.01890625,
+    "paciente": 0.0006250000000000006,
+    "atento": -0.005312499999999999,
+    "resistente": 0.042499999999999996
+   },
+   "linha": "colosso",
+   "forma": "tita"
+  },
+  {
+   "versao": "v11",
+   "dono": "aleatorio",
+   "semente": 303,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": -0.51505,
+    "paciente": -0.057249999999999995,
+    "atento": 0.22984999999999997,
+    "resistente": 0.9661
+   },
+   "bruto_adolescente": {
+    "impetuoso": -0.025312499999999998,
+    "paciente": -0.0078125,
+    "atento": 0.012812500000000001,
+    "resistente": 0.045625
+   },
+   "carater_adulto": {
+    "impetuoso": -0.5062499999999999,
+    "paciente": 0.024999999999999994,
+    "atento": 0.3375000000000001,
+    "resistente": 0.825
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.028437499999999998,
+    "paciente": -0.008125,
+    "atento": 0.019375000000000003,
+    "resistente": 0.045625
+   },
+   "linha": "colosso",
+   "forma": "vigia"
+  },
+  {
+   "versao": "v11",
+   "dono": "aleatorio",
+   "semente": 404,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": -0.2338,
+    "paciente": 0.20525,
+    "atento": -0.05764999999999999,
+    "resistente": 0.42860000000000004
+   },
+   "bruto_adolescente": {
+    "impetuoso": -0.011250000000000001,
+    "paciente": 0.0053124999999999995,
+    "atento": -0.0015624999999999997,
+    "resistente": 0.018750000000000003
+   },
+   "carater_adulto": {
+    "impetuoso": -0.39687500000000003,
+    "paciente": 0.225,
+    "atento": 0.037500000000000006,
+    "resistente": 0.7062499999999999
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.022968750000000003,
+    "paciente": 0.001875,
+    "atento": 0.004375,
+    "resistente": 0.0396875
+   },
+   "linha": "colosso",
+   "forma": "vigia"
+  },
+  {
+   "versao": "v11",
+   "dono": "aleatorio",
+   "semente": 505,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": -0.040049999999999995,
+    "paciente": 0.25525,
+    "atento": -0.12014999999999995,
+    "resistente": 0.0536
+   },
+   "bruto_adolescente": {
+    "impetuoso": -0.0015624999999999999,
+    "paciente": 0.0078125,
+    "atento": -0.004687499999999998,
+    "resistente": 0.0
+   },
+   "carater_adulto": {
+    "impetuoso": -0.50625,
+    "paciente": 0.34375,
+    "atento": 0.012499999999999983,
+    "resistente": 0.8312499999999999
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.0284375,
+    "paciente": 0.0078125,
+    "atento": 0.0031249999999999993,
+    "resistente": 0.0459375
+   },
+   "linha": "guardiao",
+   "forma": "muralha"
+  },
+  {
+   "versao": "v11",
+   "dono": "incoerente",
+   "semente": 101,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": -0.0463,
+    "paciente": 0.1365,
+    "atento": 0.011099999999999999,
+    "resistente": 0.0536
+   },
+   "bruto_adolescente": {
+    "impetuoso": -0.0018750000000000001,
+    "paciente": 0.001875,
+    "atento": 0.001875,
+    "resistente": 0.0
+   },
+   "carater_adulto": {
+    "impetuoso": 0.06875,
+    "paciente": 0.1875,
+    "atento": -0.06250000000000001,
+    "resistente": -0.0875
+   },
+   "bruto_adulto": {
+    "impetuoso": 0.0003125000000000003,
+    "paciente": 0.0,
+    "atento": -0.0006250000000000006,
+    "resistente": 0.0
+   },
+   "linha": "guardiao",
+   "forma": "espelho"
+  },
+  {
+   "versao": "v11",
+   "dono": "incoerente",
+   "semente": 202,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": 0.047449999999999985,
+    "paciente": -0.10724999999999996,
+    "atento": 0.06735000000000002,
+    "resistente": 0.0536
+   },
+   "bruto_adolescente": {
+    "impetuoso": 0.0028124999999999995,
+    "paciente": -0.010312499999999999,
+    "atento": 0.004687500000000001,
+    "resistente": 0.0
+   },
+   "carater_adulto": {
+    "impetuoso": 0.09375,
+    "paciente": 0.11250000000000003,
+    "atento": -0.03749999999999999,
+    "resistente": -0.0875
+   },
+   "bruto_adulto": {
+    "impetuoso": 0.0015625000000000005,
+    "paciente": -0.003749999999999999,
+    "atento": 0.0006250000000000006,
+    "resistente": 0.0
+   },
+   "linha": "cacador",
+   "forma": "emboscador"
+  },
+  {
+   "versao": "v11",
+   "dono": "incoerente",
+   "semente": 303,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": 0.04744999999999999,
+    "paciente": -0.0635,
+    "atento": 0.02360000000000001,
+    "resistente": 0.0536
+   },
+   "bruto_adolescente": {
+    "impetuoso": 0.0028125,
+    "paciente": -0.008125,
+    "atento": 0.0025000000000000005,
+    "resistente": 0.0
+   },
+   "carater_adulto": {
+    "impetuoso": -0.02499999999999998,
+    "paciente": 0.05625000000000002,
+    "atento": 0.25625,
+    "resistente": -0.0875
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.0043749999999999995,
+    "paciente": -0.006562499999999999,
+    "atento": 0.0153125,
+    "resistente": 0.0
+   },
+   "linha": "colosso",
+   "forma": "vigia"
+  },
+  {
+   "versao": "v11",
+   "dono": "incoerente",
+   "semente": 404,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": 0.04432500000000001,
+    "paciente": 0.09275,
+    "atento": -0.12639999999999998,
+    "resistente": 0.0536
+   },
+   "bruto_adolescente": {
+    "impetuoso": 0.0026562500000000006,
+    "paciente": -0.0003125000000000003,
+    "atento": -0.005,
+    "resistente": 0.0
+   },
+   "carater_adulto": {
+    "impetuoso": -0.059375,
+    "paciente": 0.2625,
+    "atento": 0.11875000000000001,
+    "resistente": -0.0875
+   },
+   "bruto_adulto": {
+    "impetuoso": -0.00609375,
+    "paciente": 0.00375,
+    "atento": 0.0084375,
+    "resistente": 0.0
+   },
+   "linha": "guardiao",
+   "forma": "muralha"
+  },
+  {
+   "versao": "v11",
+   "dono": "incoerente",
+   "semente": 505,
+   "ramo": "arisco",
+   "carater_adolescente": {
+    "impetuoso": 0.11932499999999999,
+    "paciente": -0.12599999999999997,
+    "atento": -0.05764999999999996,
+    "resistente": 0.0536
+   },
+   "bruto_adolescente": {
+    "impetuoso": 0.0064062500000000005,
+    "paciente": -0.01125,
+    "atento": -0.001562499999999998,
+    "resistente": 0.0
+   },
+   "carater_adulto": {
+    "impetuoso": 0.31875,
+    "paciente": -0.3749999999999999,
+    "atento": 6.938893903907228e-18,
+    "resistente": -0.0875
+   },
+   "bruto_adulto": {
+    "impetuoso": 0.012812500000000001,
+    "paciente": -0.028124999999999997,
+    "atento": 0.0025000000000000005,
+    "resistente": 0.0
+   },
+   "linha": "brigao",
+   "forma": "furioso"
+  }
+ ],
+ "codigo": {
+  "experiments/medir_carater_v11.py": "35b229d051be83e84a574982a0a4fbe18a723b5f4e9c394c4378bfd44ecd0634",
+  "digilab/policies/lobos.py": "a0fd44981cdf2a622a5f3563a81c112f6bd76825a2c882edf0b27ddb4e18e6c8",
+  "digilab/policies/bandit.py": "07deeb089865965acb745b43d5df57f9b81b3b48253d902f8a1b7b83754b9248",
+  "web/app/motor/constantes.ts": "301cdeb5e038c8e0d3f0f47af4306908bffeb4333098288a948addcaaacca5da"
+ }
+}

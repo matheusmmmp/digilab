@@ -195,3 +195,61 @@ medida e o critério de "perto" **antes** da primeira vida. É uma medida descri
   - são 20 pets por versão, então o teste por permutação tem pouco poder;
   - a web do v10 usa o bandit da web (outra rng, com o temperamento), e o `DESLOC_CARATER` foi calibrado nele; aqui o lado do v10 é o
     mesmo algoritmo no Python.
+
+## 12. PW-3 e PW-4, entregues no Python (2026-10-18, worker B)
+
+### PW-3, a vontade com o A
+
+A definição é a do D-W4 do #201, sem número novo:
+- **`PoliticaLobos.desvio_aprendido(obs)`:** para cada ação que o instinto propõe no tempo livre, o desvio aprendido sobre o prior.
+  - É a contribuição do lobo de decisão no peso efetivo: `ativacao(w − w0, x)` mais, com o corpo, o mesmo nas entradas novas.
+  - Usa a mesma conta e a mesma ordem de soma do `_pesos_efetivos`.
+  - É pura: não muda peso, motivo, registro, memória nem rng.
+  - Fora do v11 (mundo físico, frutas, entradas sociais, pedido, plano), falha alto.
+- **`desejo.desejo_lobos(obs, cerebro, tick)`:**
+  - a necessidade de sempre vem primeiro;
+  - sem ela, a vontade é a ação de maior desvio, se a margem para a segunda for ≥ `limiar_vontade` (0,1, a de hoje);
+  - o desempate é o do bandit (a primeira de `ACOES_PET_HOJE`), e a intensidade é min(1, margem);
+  - o recém-nascido, e o cérebro sem aprender, não têm vontade.
+  - O `desejo_de` de sempre não muda.
+- **O gabarito da web:** `lobos_python.json` ganhou a seção `vontade`. As seções `l0` e `v11` saem iguais (conferido), e o teste do TS da
+  etapa 2 passa.
+  - **por decisão:** em cada decisão das 4 vidas do v11, o desejo e o desvio de cada ação, antes de o cérebro decidir. Saem do replay do
+    log com um espião que só lê, e o replay é conferido contra o sha do estado interno;
+  - **a grade:** 32 sondas com os receptores do corpo, contra o cérebro do fim de cada vida.
+  - Nas 288 decisões de cada vida, a vontade aparece em 139 (atencioso), 207 (relapso), 174 (aleatório) e 220 (incoerente), e a necessidade
+    em 17, 28, 94 e 18. A vontade do fim da vida é `ocioso` no atencioso e no incoerente e `explorar` no relapso e no aleatório.
+- **Testes:** `tests/test_vontade_lobos.py`, 9.
+- **Para a etapa 4 (o A, em TS):** o motor dos v11 chama a vontade do cérebro no lugar do `Bandit.desejo`, com a mesma conta, e confere
+  contra a seção `vontade` do gabarito.
+
+### PW-4, a escala do caráter
+
+Pela medida e pelo critério da seção 11 (`python experiments/medir_carater_v11.py` → `artifacts_v2_w_porte/carater_v11.json`; 20 pets por
+versão), **o v11 não fica "perto" do v10.** As linhas e as formas ficam; a escala não.
+
+| | v10 (bandit) | v11 (A) | o critério |
+|---|---|---|---|
+| linhas: brigão, guardião, caçador, colosso | 0,10, 0,45, 0,20, 0,25 | 0,10, 0,60, 0,10, 0,20 | TVD 0,15, contra o 95º percentil nulo 0,35 (p 0,82): **passa** |
+| formas adultas | muralha 0,35; emboscador e vigia 0,15; espelho e titã 0,10; as outras 0,05 | espelho e muralha 0,30; vigia 0,15; emboscador 0,10; duelista, furioso e titã 0,05; sentinela 0 | TVD 0,20, contra 0,45 (p 0,94): **passa** |
+| a mediana de \|bruto\| por eixo | 0,0092 | 0,0027 | a razão é 0,30, fora de [½, 2]: **falha** |
+| eixos cortados em ±1 | 0,006 | 0 | passa |
+
+**A leitura:**
+- **O A desvia do instinto cerca de um terço do que o bandit desvia do bandit recém-nascido**, nas mesmas sondas, no fim da criança e do
+  adolescente.
+  - Com a escala 0,05, o desvio dele vira um caráter de poucos centésimos.
+  - Quem decide a linha passa a ser quase só o `DESLOC_CARATER` (o deslocamento fixo por estágio da web).
+- **Com o desvio zerado,** a linha seria guardião e a forma seria a do deslocamento:
+  - no v11, 60% das linhas e 50% das formas saem iguais a essas;
+  - no v10, 45% e 40%.
+  - Isto é só descritivo, fora do critério.
+- **As linhas e as formas ficam perto** porque o deslocamento domina nos dois, não porque o caráter do A meça o mesmo que o do bandit.
+
+**Os limites:**
+- são 20 pets por versão, e o teste por permutação tem pouco poder;
+- o lado do v10 é o bandit do Python, e o `DESLOC_CARATER` foi calibrado no bandit da web;
+- as vidas têm 2 dias, só até o adulto;
+- os dois lados têm 100% de ramo arisco (os donos simulados não atendem o bebê, um defeito conhecido).
+
+**Nada mudou.** A decisão volta ao Matheus (PW-4); o pedido está no corpo do PR.
