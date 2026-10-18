@@ -102,7 +102,7 @@ Cada etapa é um PR, com o relato no corpo. O merge é só do Matheus.
 | PW-1 | o que entra no v11 | **DECIDIDO (Matheus, 2026-10-17): como recomendado.** O da seção 3: núcleo, consequência no corpo, carinho e tapa; sem mundo físico, frutas, dois pets e planejamento | levar mais: cada peça traz uma validação negativa ou aberta para dentro do jogo, e corrigir pede um v12 |
 | PW-2 | o ponto do aprendiz | **DECIDIDO (Matheus, 2026-10-17): como recomendado.** O worker da etapa 1 propõe a partir da calibração do corpo e da conjunta, com a ressalva de que nada foi validado no jogo | um ponto sem base: deriva até o teto e um pet que muda demais ou nada |
 | PW-3 | a vontade com o A | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** definir no Python primeiro (o D-W4 do #201: a ação de maior desvio aprendido sobre o prior, com a margem de hoje) | sem vontade, o vínculo B e a tela do desejo mudam; definir só na web perde a paridade |
-| PW-4 | a escala do caráter no v11 | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** medir primeiro; manter se as linhas e formas ficarem perto das do v10 | formas concentradas, e o equilíbrio do combate sai do lugar |
+| PW-4 | a escala do caráter no v11 | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** medir primeiro; manter se as linhas e formas ficarem perto das do v10. **Depois da medida (seção 12, não ficou perto): DECIDIDO (Matheus, 2026-10-18), opção (b):** "uma escala própria do v11 (~0,015) com o deslocamento remedido antes de ligar" (seção 15) | formas concentradas, e o equilíbrio do combate sai do lugar |
 | PW-5 | a percepção no painel | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** lista das entradas que mais pesaram, **não barra** | uma barra de percepção não corresponde a nenhuma conta do cérebro |
 | PW-6 | memória e emoção no painel | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** uma barra (o lobo do A) e a emoção de hoje do pet como selo à parte, com a fonte | duas barras sem fonte separada: uma delas seria inventada |
 | PW-7 | o painel nos pets v1 a v10 | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** **não**: só v11. Os antigos têm o bandit, e um painel para eles seria outro desenho | mostrar o bandit com os nomes dos lobos mistura dois cérebros na mesma tela |
@@ -311,3 +311,66 @@ estão no PR #329 (PW-3 e PW-4); (3) o v11 no `Motor`. Este é o primeiro.
   nascimento (`TICK_INICIAL`) entram no laço como parâmetros: o laço já aceita um estado de nascimento.
 - `npm run tipos` limpo; `npm test` com 36 arquivos e 426 testes (9 deles no `laco_v11.test.ts`); `tests/test_gabarito_lobos_web.py`
   passa (3).
+
+## 15. Etapa 4, parte 3: a escala e o deslocamento próprios do v11, registrados antes de medir (2026-10-18)
+
+Pela PW-4 (b). Esta seção fixa o método e o critério **antes** da primeira vida. Só as sementes dos testes (os 20 pets da seção 11: 4 donos ×
+101…505, 2 dias, 16 interações por dia); sem run de pesquisa. Os números saem PROPOSTOS.
+
+- **A escala do v11:** `CCP.escala` × a razão das medianas de |bruto| (v11 / v10) de `artifacts_v2_w_porte/carater_v11.json`, arredondada a
+  três casas (≈ 0,015).
+- **O deslocamento do v11, pelo método de 2026-09-25** (`docs/registro/2026-09.md`), com a escala nova e o bruto dos pets v11:
+  - **adolescente:** um deslocamento por eixo que leve as 4 linhas para perto de 25%;
+  - **adulto:** em cada linha, menos a mediana do eixo complementar dos pets daquela linha (as formas perto de 50/50).
+- **O critério, as três juntas:**
+  - cada linha entre 15% e 35% dos 20 pets;
+  - a forma de cima (sinal positivo do complementar) entre 35% e 65% dos pets;
+  - a razão das medianas de |bruto| / escala (v11 com a escala nova, v10 com 0,05) em [½, 2], e a fração de eixos cortados do v11 no
+    máximo 0,10 acima da do v10.
+- **Se fechar,** os números entram no TS como `CCP_V11` e `DESLOC_CARATER_V11`, só nos pets v11. **Se não fechar,** vão ao Matheus sem ligar.
+- **Limite conhecido:** a calibração e a conferência usam os mesmos 20 pets (não há sementes de teste de sobra); a conferência é otimista.
+
+### A medida e o porte, entregues (2026-10-18): o PR da parte 3a
+
+A parte 3 ficou em dois PRs. Este (3a) traz a medida da PW-4 (b), a vontade e o caráter do v11 em TS, com gabarito. O v11 no `Motor`
+(`VERSAO_PET` 11, o laço do corpo, o vínculo B, a tela do desejo e os botões) fica para a parte 3b, que espera uma decisão (abaixo).
+
+- **A medida** (`python experiments/calibrar_carater_v11.py` → `artifacts_v2_w_porte/carater_v11_calibracao.json`), sobre os brutos dos
+  20 pets v11 e 20 pets v10 da medida da seção 12 (nada simulado de novo):
+  - **a escala:** 0,05 × 0,2966 = **0,015**;
+  - **o deslocamento do adolescente:** atento −0,0117, impetuoso +0,0142, paciente −0,0167, resistente +0,0142;
+  - **o do adulto:** atento −0,7917, impetuoso +0,2604, paciente +0,25, resistente 0.
+- **Pelo critério da seção 15, NÃO fecha** (os números ficam PROPOSTOS e vão ao Matheus):
+
+  | condição | medida | faixa | |
+  |---|---|---|---|
+  | as linhas | brigão 0,20, guardião 0,30, caçador 0,30, colosso 0,20 | cada uma em [0,15; 0,35] | **passa** |
+  | a forma de cima | 0,65 | [0,35; 0,65] | **passa**, no limite |
+  | a escala | razão das medianas 0,99; eixos cortados 0,1375 (v10: 0,006) | razão em [½, 2]; cortados ≤ 0,106 | **falha** |
+
+- **A leitura:**
+  - a escala põe a mediana do v11 no lugar da do v10, mas a cauda do A é mais longa. Os pets do dono aleatório desviam muito mais no eixo
+    resistente (até 3,06 vezes a escala) e batem em ±1;
+  - o eixo resistente (comer e emburrar) não sai do zero em 16 dos 20 pets no fim da criança e em 13 no fim do adolescente: o tempo
+    livre não propõe essas ações. Por isso toda a linha caçador sai **sentinela** (a mediana do complementar é 0, e todo pet fica do lado ≥ 0), e o emboscador não aparece;
+  - o deslocamento do adulto no eixo atento (−0,79) é grande: é a mediana dos colossos, que desviam muito no atento;
+  - os 20 pets calibram e conferem ao mesmo tempo, e a conferência é otimista.
+- **A vontade em TS** (`CerebroA.desvioAprendido` e `desejoLobos` em `web/app/motor/lobos.ts`): bate bit a bit com a seção `vontade` do
+  gabarito (`web/app/test/vontade_lobos.test.ts`), nas 288 decisões de cada uma das 4 vidas, rejogadas pelo laço do corpo, e na grade de
+  32 sondas. É pura: o laço com e sem o espião dá a mesma vida. A necessidade de sempre saiu do `Bandit.desejo` para uma função
+  (`necessidade`), sem mudar a conta dos v2 a v10.
+- **O caráter do v11 em TS** (`caraterV11` em `web/app/motor/carater.ts`): o método do Python, não o da web dos v3 a v10, com as sondas de
+  `metrics.estados_sonda`, o corpo da rng `sonda-corpo`, as distribuições pelo `RandomPy` e o cérebro recém-nascido como base. O cérebro
+  é sondado por `CerebroA.amostrar`, que sorteia como o `agir` sem mexer no cérebro.
+  - O gabarito novo é `web/app/test/gabaritos/carater_v11_python.json` (`python experiments/exportar_gabarito_carater_v11.py`): as 4 vidas
+    v11, no fim da criança e do adolescente, com a distribuição, o bruto, o caráter, a linha e a forma.
+  - Bate bit a bit (`web/app/test/carater_v11.test.ts`, 6 testes).
+  - **O achado:** o `sum()` do Python 3.12 em diante soma floats com compensação (Neumaier). O TS porta essa soma (`somaPy`), e o exportador e
+    a calibração recusam o Python 3.10 e o 3.11.
+- **As constantes novas** `CCP_V11` e `DESLOC_CARATER_V11` são conferidas por `constantes.test.mjs` contra o artefato da calibração.
+  Os pets v1 a v10, as assinaturas e os gabaritos não mudaram.
+- `npm run tipos` limpo; `npm test` com 38 arquivos e 439 testes; os testes Python tocados passam (8).
+
+**Para a parte 3b, a decisão que falta:** o que o v11 do jogo herda dos v4 a v10. O laço do corpo recusa a educação (as janelas, as
+travessuras e a disciplina, resolvidas com a bronca e o petisco), a obediência e o treino com obediência. E a mentira dos v7 é julgada
+com a bronca. O pedido está no corpo do PR.

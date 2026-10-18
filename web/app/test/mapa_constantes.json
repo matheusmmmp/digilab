@@ -2297,6 +2297,60 @@
    "arquivo": "web/app/test/gabaritos/lobos_python.json",
    "chave": "config_v11.corpo.gasto_atividades_den",
    "nota": "pets v11 (a etapa 4 do metabolismo, para o W-PORTE): o corpo do ponto das vidas do v11 do gabarito (config_v11.corpo, a ConfigCorpo que as vidas usaram), PROPOSTO e nao validado no jogo; o denominador do fator 4/5 do gasto das atividades (adendo 5); o padrao da ConfigCorpo e 1/1"
+  },
+  {
+   "web": "CCP_V11.escala",
+   "arquivo": "artifacts_v2_w_porte/carater_v11_calibracao.json",
+   "chave": "escala_v11",
+   "nota": "pets v11 (W-PORTE etapa 4 parte 3, PW-4 opcao (b)): a calibracao do carater do v11 (experiments/calibrar_carater_v11.py, 20 pets das sementes dos testes), PROPOSTO; a escala nao fecha o criterio da secao 15 (eixos cortados); a escala propria"
+  },
+  {
+   "web": "DESLOC_CARATER_V11.adolescente.atento",
+   "arquivo": "artifacts_v2_w_porte/carater_v11_calibracao.json",
+   "chave": "desloc_v11.adolescente.atento",
+   "nota": "pets v11 (W-PORTE etapa 4 parte 3, PW-4 opcao (b)): a calibracao do carater do v11 (experiments/calibrar_carater_v11.py, 20 pets das sementes dos testes), PROPOSTO; a escala nao fecha o criterio da secao 15 (eixos cortados); o deslocamento do adolescente"
+  },
+  {
+   "web": "DESLOC_CARATER_V11.adolescente.impetuoso",
+   "arquivo": "artifacts_v2_w_porte/carater_v11_calibracao.json",
+   "chave": "desloc_v11.adolescente.impetuoso",
+   "nota": "pets v11 (W-PORTE etapa 4 parte 3, PW-4 opcao (b)): a calibracao do carater do v11 (experiments/calibrar_carater_v11.py, 20 pets das sementes dos testes), PROPOSTO; a escala nao fecha o criterio da secao 15 (eixos cortados); o deslocamento do adolescente"
+  },
+  {
+   "web": "DESLOC_CARATER_V11.adolescente.paciente",
+   "arquivo": "artifacts_v2_w_porte/carater_v11_calibracao.json",
+   "chave": "desloc_v11.adolescente.paciente",
+   "nota": "pets v11 (W-PORTE etapa 4 parte 3, PW-4 opcao (b)): a calibracao do carater do v11 (experiments/calibrar_carater_v11.py, 20 pets das sementes dos testes), PROPOSTO; a escala nao fecha o criterio da secao 15 (eixos cortados); o deslocamento do adolescente"
+  },
+  {
+   "web": "DESLOC_CARATER_V11.adolescente.resistente",
+   "arquivo": "artifacts_v2_w_porte/carater_v11_calibracao.json",
+   "chave": "desloc_v11.adolescente.resistente",
+   "nota": "pets v11 (W-PORTE etapa 4 parte 3, PW-4 opcao (b)): a calibracao do carater do v11 (experiments/calibrar_carater_v11.py, 20 pets das sementes dos testes), PROPOSTO; a escala nao fecha o criterio da secao 15 (eixos cortados); o deslocamento do adolescente"
+  },
+  {
+   "web": "DESLOC_CARATER_V11.adulto.atento",
+   "arquivo": "artifacts_v2_w_porte/carater_v11_calibracao.json",
+   "chave": "desloc_v11.adulto.atento",
+   "nota": "pets v11 (W-PORTE etapa 4 parte 3, PW-4 opcao (b)): a calibracao do carater do v11 (experiments/calibrar_carater_v11.py, 20 pets das sementes dos testes), PROPOSTO; a escala nao fecha o criterio da secao 15 (eixos cortados); o deslocamento do adulto"
+  },
+  {
+   "web": "DESLOC_CARATER_V11.adulto.impetuoso",
+   "arquivo": "artifacts_v2_w_porte/carater_v11_calibracao.json",
+   "chave": "desloc_v11.adulto.impetuoso",
+   "nota": "pets v11 (W-PORTE etapa 4 parte 3, PW-4 opcao (b)): a calibracao do carater do v11 (experiments/calibrar_carater_v11.py, 20 pets das sementes dos testes), PROPOSTO; a escala nao fecha o criterio da secao 15 (eixos cortados); o deslocamento do adulto"
+  },
+  {
+   "web": "DESLOC_CARATER_V11.adulto.paciente",
+   "arquivo": "artifacts_v2_w_porte/carater_v11_calibracao.json",
+   "chave": "desloc_v11.adulto.paciente",
+   "nota": "pets v11 (W-PORTE etapa 4 parte 3, PW-4 opcao (b)): a calibracao do carater do v11 (experiments/calibrar_carater_v11.py, 20 pets das sementes dos testes), PROPOSTO; a escala nao fecha o criterio da secao 15 (eixos cortados); o deslocamento do adulto"
+  },
+  {
+   "web": "DESLOC_CARATER_V11.adulto.resistente",
+   "arquivo": "artifacts_v2_w_porte/carater_v11_calibracao.json",
+   "chave": "desloc_v11.adulto.resistente",
+   "nota": "pets v11 (W-PORTE etapa 4 parte 3, PW-4 opcao (b)): a calibracao do carater do v11 (experiments/calibrar_carater_v11.py, 20 pets das sementes dos testes), PROPOSTO; a escala nao fecha o criterio da secao 15 (eixos cortados); o deslocamento do adulto"
   }
  ],
  "so_web": [
