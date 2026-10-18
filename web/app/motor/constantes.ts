@@ -97,6 +97,16 @@ export const CVB = { versaoPet: 10, limNec: .5, limEnergia: .25 };
 /* o cerebro A (motor/lobos.ts; docs/TAREFA_V2_W_PORTE_CEREBRO_A.md, etapa 2): a ConfigLobos do L0. bits: S = 2**bits, a escala dos pesos
    inteiros; escalaTdc: a entrada do tempo sem cuidado, min(1, ticks / escala); maxPesos: o teto de pesos do plano */
 export const CLB = { bits: 10, escalaTdc: 480, maxPesos: 1000 };
+/** o aprendiz dos pets v11 (motor/lobos.ts, W-PORTE etapa 3): o ponto das vidas do gabarito (test/gabaritos/lobos_python.json,
+ *  config_v11), PROPOSTO e nao validado no jogo. O T3 (passo S/2, teto 16 S, piso S/16), o tapa com o valor da bronca, a consequencia
+ *  com o ganho 4 nos drives do N3 (fome, higiene e energia, os indices em Estado.vetor), os canais ligados (a montagem `completa`) e o
+ *  w_novos 2 nos drives novos (w_d inteiros, pelo nome do receptor) */
+export const CLB_V11 = {
+  passo: 512, teto: 16384, piso: 64, recompensaTapa: -1,
+  ganho: 4, drives: [0, 1, 2], canais: true,
+  pesosDrivesCorpo: { fome: 1, higiene: 1, energia: 1, humor: 1, tedio: 2, curiosidade: 2, solidao: 2, estresse: 2, dor: 2, vontade: 1,
+    conforto: 1 } as Readonly<Record<string, number>>,
+};
 export const COB = {
   b0: 1, bVinculo: 2, bTeimosia: 1, bConflito: 2, limiarConflito: .3, probFazerOutra: .5,
   sujeitas: ["alimentar", "limpar", "brincar", "acariciar"] as readonly AcaoDono[], limiarMotivo: .05,

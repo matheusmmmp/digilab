@@ -8,8 +8,13 @@ gestos do dono (carinho e tapa), no mundo `padrao`, sem elogio nem bronca, sem m
 Duas secoes:
   l0      o nucleo sem aprender e sem corpo: o cerebro tem de ser o instinto, decisao a decisao (G2 da L0); o TS confere contra o
           instinto dele e contra este traco;
-  v11     as vidas do pet v11 inteiras: o log (o que o TS rejoga), os motivos de cada decisao (o que o painel DigiBrain mostra), os pesos,
-          os pesos do corpo e o resumo do aprendizado no fim, e o sha256 do estado interno.
+  v11     as vidas do pet v11 inteiras: o log, os motivos de cada decisao (o que o painel DigiBrain mostra), os pesos, os pesos do corpo,
+          o resumo do aprendizado, a memoria e emocao e os canais no fim, e o sha256 do estado interno. E os `ganchos` (etapa 3, o
+          G-PAR-L1): cada chamada que o motor fez ao cerebro, na ordem, com o que ela levou (a observacao, os receptores do corpo, a acao
+          do dono e o tick), gravadas num replay do log com a politica embrulhada (`_Gravador`, que so grava) e conferidas contra a
+          vida. O TS rejoga os ganchos no cerebro dele: o corpo do v11 tem o metabolismo, que o corpo.ts ainda nao tem.
+E `config_v11`: as configs que as vidas do v11 usaram de fato (a ConfigLobos do braco, a ConfigConsequencia e a ConfigCorpo do regime
+`corpo`, com os drives novos, os gestos e o metabolismo); a `config` e a da bancada, de onde elas saem.
 
     python experiments/exportar_gabarito_lobos.py      # grava web/app/test/gabaritos/lobos_python.json
 
@@ -21,6 +26,7 @@ Ponto (PW-2), todos PROPOSTOS, nenhum validado (docs/RESULTADO_V2_CALIBRACAO_COR
 """
 from __future__ import annotations
 
+import dataclasses
 import hashlib
 import json
 import sys
@@ -36,8 +42,9 @@ import run_v2_calibracao_corpo as cal  # noqa: E402
 
 from digilab.config import CONFIG_PADRAO, ConfigLobos  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
+from digilab.events import LogDeEventos  # noqa: E402
 from digilab.policies.lobos import PoliticaLobos  # noqa: E402
-from digilab.treino import simular_vida  # noqa: E402
+from digilab.treino import reproduzir_com_feedback, simular_vida  # noqa: E402
 
 ARQUIVO = RAIZ / "web" / "app" / "test" / "gabaritos" / "lobos_python.json"
 CONFIG_CALIBRACAO = RAIZ / "experiments" / "configs" / "v2_corpo" / "calibracao_adendo5.json"
@@ -48,6 +55,9 @@ PONTO_CORPO = (2.0, 1.0)                 # (m_sobe, m_reduz) do adendo 4
 W_NOVOS = 2                              # o w_novos do adendo 4
 VIDAS_L0 = (("atencioso", 101), ("aleatorio", 202))
 VIDAS_V11 = (("atencioso", 101), ("relapso", 202), ("aleatorio", 303), ("incoerente", 404))
+# os receptores da PercepcaoCorpo do v11, na ordem dos ganchos: os de hoje e os novos do regime `corpo` sem o mundo fisico (sem a
+# curiosidade, o banheiro, os orgaos e o paladar); um receptor a mais ou a menos falha alto
+RECEPTORES_V11 = ("fome", "higiene", "energia", "humor", "saude", "tedio", "solidao", "estresse", "dor", "susto")
 
 
 def _sha(texto: str) -> str:
@@ -68,6 +78,14 @@ def bancada_v11(dias: int = DIAS, orcamento: int = ORCAMENTO) -> bv.Bancada:
     return replace(b, cfg_consequencia=replace(cc, pesos_drives_corpo=cal.pesos_com_novos(cc.pesos_drives_corpo, W_NOVOS)))
 
 
+def configs_da_vida_v11(b: bv.Bancada) -> dict:
+    """As configs que as vidas do v11 usaram (as mesmas nas quatro: o braco e o regime nao dependem do dono nem da semente)."""
+    espec = bv.EspecVida(VIDAS_V11[0][0], BRACO_V11, VIDAS_V11[0][1])
+    p = b.politica(espec, CONFIG_PADRAO)
+    return {"lobos": p.cerebro.cl.__dict__, "consequencia": p.cfg_consequencia.__dict__, "corpo": b.cfg_corpo_de(espec).__dict__,
+            "receptores": list(RECEPTORES_V11)}
+
+
 def _log(motor) -> list:
     return [json.loads(linha) for linha in motor.log.para_jsonl().splitlines() if linha.strip()]
 
@@ -80,12 +98,92 @@ def vida_l0(dono: str, semente: int) -> dict:
             "sha_interno": _sha(json.dumps(interno, sort_keys=True))}
 
 
+def _corpo(pc) -> list[int]:
+    """os receptores da PercepcaoCorpo na ordem de RECEPTORES_V11; um campo fora dela preenchido, ou um dela vazio, falha alto"""
+    d = dataclasses.asdict(pc)
+    fora = sorted(k for k, v in d.items() if v is not None and k not in RECEPTORES_V11)
+    faltam = [k for k in RECEPTORES_V11 if d[k] is None]
+    if fora or faltam:
+        raise RuntimeError(f"PercepcaoCorpo fora do v11: a mais {fora}, faltando {faltam}")
+    return [d[k] for k in RECEPTORES_V11]
+
+
+def _obs(obs) -> list:
+    """[Estado.vetor, ticks_desde_cuidado, receptores]"""
+    return [list(obs.vetor_estado), obs.ticks_desde_cuidado, _corpo(obs.corpo)]
+
+
+class _Gravador:
+    """Embrulha a politica do braco e grava, na ordem, cada chamada do motor ao cerebro e o que ela levou; nao muda nada (a vida
+    rejogada com ele e conferida contra a original). Os ganchos:
+      ["agir", v, tdc, corpo]                                  a decisao (o u esta no motivo)
+      ["observar", acao, v, tdc, corpo, v', tdc', corpo']      a transicao da decisao (o braco calcula o f_S e o repassa)
+      ["consequencia_corpo", acao, ocorrido, v, tdc, corpo]    o gancho do corpo, depois dos estimulos da propria acao
+      ["dono", acao, tick]                                     receber_acao_dono (no MotorCorpo com gestos: o cuidado e o tapa)
+      ["carinho", v, tdc, corpo, v', tdc', corpo']             mudanca_no_corpo (antes e depois do carinho)"""
+
+    def __init__(self, politica) -> None:
+        self.politica = politica
+        self.ganchos: list = []
+
+    def agir(self, obs, rng):
+        self.ganchos.append(["agir", *_obs(obs)])
+        return self.politica.agir(obs, rng)
+
+    def observar(self, transicao) -> None:
+        self.ganchos.append(["observar", transicao.acao.value, *_obs(transicao.observacao), *_obs(transicao.observacao_seguinte)])
+        self.politica.observar(transicao)
+
+    def consequencia_corpo(self, acao, ocorrido: dict, obs_depois) -> None:
+        if set(ocorrido) != {"acao", "estimulos"}:
+            raise RuntimeError(f"ocorrido do corpo fora do v11: {sorted(ocorrido)}")
+        o = {"acao": ocorrido["acao"], "estimulos": [list(e) for e in ocorrido["estimulos"]]}
+        self.ganchos.append(["consequencia_corpo", acao.value, o, *_obs(obs_depois)])
+        self.politica.consequencia_corpo(acao, ocorrido, obs_depois)
+
+    def receber_acao_dono(self, acao, tick: int) -> None:
+        self.ganchos.append(["dono", acao.value, tick])
+        self.politica.receber_acao_dono(acao, tick)
+
+    def mudanca_no_corpo(self, obs_antes, obs_depois) -> None:
+        self.ganchos.append(["carinho", *_obs(obs_antes), *_obs(obs_depois)])
+        self.politica.mudanca_no_corpo(obs_antes, obs_depois)
+
+    def estado_interno(self) -> dict:
+        return self.politica.estado_interno()
+
+    def __getattr__(self, nome):
+        politica = self.__dict__.get("politica")
+        if politica is None:
+            raise AttributeError(nome)
+        return getattr(politica, nome)
+
+
+def ganchos_v11(b: bv.Bancada, espec: bv.EspecVida, motor) -> list:
+    """Rejoga o log da vida com a politica embrulhada pelo _Gravador e devolve os ganchos; o estado interno do replay tem de ser o
+    da vida (falha alto)."""
+    gravadores: list[_Gravador] = []
+
+    def fabrica(cfg=None):
+        gravadores.append(_Gravador(b.politica(espec, cfg)))
+        return gravadores[-1]
+    r = reproduzir_com_feedback(LogDeEventos.de_jsonl(motor.log.para_jsonl()), fabrica, semente=espec.semente,
+                                fabrica_motor=b.fabrica_motor(espec))
+    if len(gravadores) != 1 or r.politica is not gravadores[0]:
+        raise RuntimeError("o replay dos ganchos nao usou o gravador")
+    if r.politica.estado_interno() != motor.politica.estado_interno():
+        raise RuntimeError(f"{espec.nome}: o replay com o gravador diverge da vida")
+    return gravadores[0].ganchos
+
+
 def vida_v11(b: bv.Bancada, dono: str, semente: int) -> dict:
-    v = b.vida(bv.EspecVida(dono, BRACO_V11, semente))
+    espec = bv.EspecVida(dono, BRACO_V11, semente)
+    v = b.vida(espec)
     interno = v.motor.politica.estado_interno()
     return {"dono": dono, "semente": semente, "gestos": v.gestos, "log": _log(v.motor), "motivos": interno["motivos"],
             "pesos": interno["pesos"], "pesos_prior": interno["pesos_prior"], "pesos_corpo": interno["pesos_corpo"],
-            "aprendizado": interno["aprendizado"], "corpo": interno["corpo"],
+            "aprendizado": interno["aprendizado"], "corpo": interno["corpo"], "memoria_emocao": interno["memoria_emocao"],
+            "canais": interno["canais"], "ganchos": ganchos_v11(b, espec, v.motor),
             "sha_interno": _sha(json.dumps(interno, sort_keys=True))}
 
 
@@ -94,6 +192,7 @@ def gerar() -> dict:
     pontos = {"lobos": b.cfg_lobos.__dict__, "consequencia": b.cfg_consequencia.__dict__, "corpo": b.cfg_corpo.__dict__}
     return {"versao": 1, "braco": BRACO_V11, "dias": DIAS, "orcamento": ORCAMENTO,
             "config": json.loads(json.dumps(pontos, default=list)),
+            "config_v11": json.loads(json.dumps(configs_da_vida_v11(b), default=list)),
             "l0": [vida_l0(d, s) for d, s in VIDAS_L0],
             "v11": [vida_v11(b, d, s) for d, s in VIDAS_V11]}
 
