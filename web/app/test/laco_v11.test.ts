@@ -10,9 +10,9 @@
    politica, as duas como no engine.Motor. */
 import { describe, expect, test } from "vitest";
 import { readFileSync } from "node:fs";
-import { CLB, CLB_V11 } from "../motor/constantes.ts";
 import { CCO_CORPO_V11, configCorpo } from "../motor/corpo.ts";
-import { BracoConsequencia, CerebroA, type MotivoLobos, type ObservacaoLobos } from "../motor/lobos.ts";
+import { type BracoConsequencia, type MotivoLobos, type ObservacaoLobos } from "../motor/lobos.ts";
+import { bracoV11 } from "../motor/pet_v11.ts";
 import { MotorCorpo, type EventoCorpo, type PoliticaCorpo } from "../motor/motor_corpo.ts";
 
 type Gancho = unknown[];
@@ -25,17 +25,6 @@ const ler = (nome: string) => JSON.parse(readFileSync(new URL(`./gabaritos/${nom
 const G = ler("lobos_python.json") as { config_v11: { corpo: Record<string, unknown>; receptores: string[] }; v11: VidaV11[] };
 const L = ler("lobos_laco_python.json") as { versao: number; braco: string; dias: number; v11: LacoV11[] };
 const RECEPTORES = G.config_v11.receptores;
-
-/** o pet v11: o cerebro A com o aprendiz e o corpo do ponto, atras do braco da consequencia */
-function bracoV11(): BracoConsequencia {
-  const co = CCO_CORPO_V11;
-  const cerebro = new CerebroA({
-    aprendizadoLigado: true, ...CLB,
-    aprendiz: { passo: CLB_V11.passo, teto: CLB_V11.teto, piso: CLB_V11.piso, recompensaTapa: CLB_V11.recompensaTapa },
-    corpo: { ligada: co.ligada, drives_novos: co.drives_novos, gestos: co.gestos, banheiro: co.banheiro, escala_receptor: co.escala_receptor },
-  });
-  return new BracoConsequencia(cerebro, { drives: CLB_V11.drives, ganho: CLB_V11.ganho, canais: CLB_V11.canais, pesosDrivesCorpo: CLB_V11.pesosDrivesCorpo });
-}
 
 /** [Estado.vetor, ticks_desde_cuidado, receptores na ordem do gabarito]; um receptor a mais ou a menos falha alto */
 function obs(o: ObservacaoLobos): unknown[] {

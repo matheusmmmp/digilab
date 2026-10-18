@@ -23,10 +23,11 @@
    Nenhuma funcao transcendental (nada de Math.exp ou Math.log): o Chrome difere do Node so no ultimo bit delas, e o nucleo fica fora
    disso. O motivo de cada decisao e o estado do aprendizado usam os nomes em snake_case do Python de proposito: e o mesmo dado de
    `_registrar` e de `estado_interno`, conferido campo a campo. */
-import { C, CLB, type ConfigCorpo } from "./constantes.ts";
+import { necessidade } from "./bandit.ts";
+import { C, CDJ, CLB, type ConfigCorpo } from "./constantes.ts";
 import { eNoite } from "./estado.ts";
 import { divArred } from "./mundo.ts";
-import type { AcaoPet, Observacao } from "./tipos.ts";
+import type { AcaoPet, Desejo, Observacao } from "./tipos.ts";
 
 // ================================================================== os nomes
 /** as sete acoes de sempre, na ordem do enum do Python (ACOES_PET_HOJE): as linhas de cada regra na tabela de pesos */
@@ -524,6 +525,26 @@ export class CerebroA {
     return { contrib, efetivos };
   }
 
+  /** PoliticaLobos.desvio_aprendido, a vontade do v11 (PW-3; o D-W4 do #201): o desvio aprendido sobre o prior de cada acao que o instinto
+   *  propoe na regra `grupo` (o tempo livre), na observacao `obs`. E a contribuicao do lobo de decisao no peso efetivo: ativacao(w - w0, x)
+   *  e, com o corpo, o termo das entradas novas (ativacao(w - w0, x_corpo), prior 0), na mesma ordem de soma. As acoes sao as da linha do
+   *  prior com algum peso nao nulo, na ordem de ACOES_LOBOS. Pura: nao muda peso, motivo, registro nem rng; a percepcao do corpo e
+   *  refeita da `obs`, sem tocar a do agir */
+  desvioAprendido(obs: ObservacaoLobos, grupo: RegraLobos = REGRA_VONTADE): Partial<Record<AcaoPet, number>> {
+    const S = this.escala, x = this.percepcao(obs), prior = this.prior[grupo], pesos = this.pesos[grupo];
+    if (prior === undefined) throw new Error(`regra sem tabela de pesos: ${grupo}`);
+    const acoes = ACOES_LOBOS.filter(a => prior[a].some(w => w !== 0));
+    const desvio: Partial<Record<AcaoPet, number>> = {};
+    for (const a of acoes) desvio[a] = ativacao(pesos[a].map((w, j) => w - prior[a][j]), x, S);
+    const tabela = this.pesosCorpo[grupo];
+    if (tabela !== undefined) {
+      if (obs.corpo === undefined) throw new Error("vontade com o corpo: Observacao sem o campo corpo");
+      const xCorpo = this.receptoresNovos.map(r => leituraReceptor(obs.corpo!, r, S) / S), priorC = this.priorCorpo[grupo]!;
+      for (const a of acoes) desvio[a] = desvio[a]! + ativacao(tabela[a].map((w, j) => w - priorC[a][j]), xCorpo, S);
+    }
+    return desvio;
+  }
+
   /** PoliticaLobos.agir: a percepcao (e a do corpo), os impulsos, o peso efetivo e o sorteio (uma chamada de rng.random() so com mais
    *  de um candidato), o motivo e o registro da decisao para o credito */
   agir(obs: ObservacaoLobos, rng: RngCerebro): AcaoPet {
@@ -782,4 +803,22 @@ export class BracoConsequencia {
   consequenciaCorpo(acao: AcaoPet, ocorrido: OcorridoCorpo, obsDepois: ObservacaoLobos): void {
     this.cerebro.consequenciaCorpo(acao, ocorrido, obsDepois);
   }
+}
+
+// ================================================================== a vontade (PW-3)
+/** a regra da vontade: o tempo livre (lobos.REGRA_VONTADE do Python) */
+export const REGRA_VONTADE: RegraLobos = "tempo_livre";
+
+/** desejo.desejo_lobos, o desejo dos pets v11: a necessidade de sempre e, sem ela, a vontade pelo desvio aprendido do cerebro A no tempo
+ *  livre: a acao de maior desvio, se a margem para a segunda passar CDJ.limiarVontade (empate: a primeira de ACOES_LOBOS), com a
+ *  intensidade min(1, margem). Pura (nao muda o cerebro) */
+export function desejoLobos(obs: ObservacaoLobos, cerebro: CerebroA, tick: number): Desejo | null {
+  const nec = necessidade(obs, tick);
+  if (nec) return nec;
+  const desvio = cerebro.desvioAprendido(obs);
+  const notas = (Object.keys(desvio) as AcaoPet[]).map(a => [desvio[a]!, -ACOES_LOBOS.indexOf(a), a] as const)
+    .sort((p, q) => q[0] - p[0] || q[1] - p[1]);
+  if (notas.length < 2) throw new Error(`vontade com menos de duas acoes no tempo livre: ${notas.map(n => n[2])}`);
+  const margem = notas[0][0] - notas[1][0];
+  return margem < CDJ.limiarVontade ? null : { tick, tipo: "vontade", alvo: notas[0][2], intensidade: Math.min(1, margem) };
 }
