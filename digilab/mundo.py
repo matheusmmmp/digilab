@@ -82,6 +82,13 @@ nada muda. Ligado, cada consumo leva o perfil de gosto do tipo comido (um dict {
 o registro do consumo (`consumos_mundo`, e com ele o `ocorrido["comeu"]` do `comer` e do "achou e comeu") ganha `perfil`, o dict na comida
 madura e None na podre; a fruta na mao (sempre madura) tambem. O mundo nao usa o perfil para nada: nao muda a nutricao, o humor, o cheiro,
 a percepcao, os candidatos nem nenhuma rng. O corpo (o orgao do Paladar, do B) o le daqui.
+
+A fruta ao lado da racao (o RP-2 de docs/futuro/paladar.md; `cfg_fruta_ao_lado`, ConfigFrutaAoLado): so com o mundo e um pet. Desligada,
+nada muda. Ligada, o motor aceita o evento `deixar_fruta(tipo, x, y)` (events.deixar_fruta; o replay o refaz), so logo depois de uma racao
+deixada pelo dono no mesmo tick (a racao de referencia); a fruta nasce madura com a origem `dono_ao_lado` (ORIGEM_AO_LADO), entra em
+`frutas_ao_lado` (tick, id, tipo, x, y, racao) e no resumo do mundo fisico, e o estado() ganha `fruta_ao_lado` (as maduras ao lado no
+chao, por tipo). E fora do orcamento e sem contato (o canal nao a ve; o deixar_bola e o modelo). Quem poe e o `DonoFrutaAoLado`, pelo
+`simular_vida_mundo(..., ao_lado=)`.
 """
 
 from __future__ import annotations
@@ -95,6 +102,7 @@ from .ambiente import PoliticaInstintoBola
 from .config import CONFIG_BOLA, CONFIG_DONOS, CONFIG_MUNDO, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, TICKS_POR_DIA, Config, ConfigMundo
 from .config import CONFIG_BANHEIRO, CONFIG_PQP_MUNDO, ConfigBanheiro, ConfigDonos, ConfigPetQuePensaMundo
 from .config import CONFIG_PALADAR, ConfigPaladar
+from .config import CONFIG_FRUTA_AO_LADO, ConfigFrutaAoLado
 from .config import ConfigOlfato, ConfigOuvido, ConfigSentidos
 from .corpo import leitura_orgao
 from .donos import Visao
@@ -102,6 +110,8 @@ from .engine import Motor
 from .events import (ACOES_BOLA, ACOES_FRUTAS, ACOES_MAO, ACOES_TROCA_ARVORES, FRUTAS, TIPOS_COMIDA_MUNDO, AcaoPet, AcaoUsuario,
                      LogDeEventos, fruta_dada, ler_deixar_bola, ler_deixar_comida, par_da_troca)
 from .events import deixar_bola as evento_deixar_bola
+from .events import deixar_fruta as evento_deixar_fruta
+from .events import ler_deixar_fruta
 from .events import deixar_comida as evento_deixar_comida
 from .frutas import MotorFrutas
 from .policy import Observacao, Transicao
@@ -248,6 +258,11 @@ def direcao_do_cheiro(x: int, y: int, fontes: list[tuple[int, int, int]], cm: Co
     """(cheiro no centro, direcao): a direcao 1 a 8 em que o cheiro medido a 1 celula passa do centro, a maior vence e o empate fica
     com a ordem fixa; 0 sem gradiente. O ponto da medida nao e cortado ao mapa (so conta)."""
     return direcao_do_campo(x, y, fontes, cm.raio_cheiro_celulas * cm.sub, cm.sub)
+
+
+# a fruta ao lado da racao (ConfigFrutaAoLado; o RP-2 de docs/futuro/paladar.md): a origem da comida que o dono poe ao lado da racao,
+# para separar no registro do consumo "comeu a fruta ao lado" de "achou na arvore" e de "a comida do dono"
+ORIGEM_AO_LADO = "dono_ao_lado"
 
 
 # ================================================================== o Paladar, o lado do mundo (docs/futuro/paladar.md, secao 3.1)
@@ -879,6 +894,12 @@ class Mundo:
             raise ValueError(f"deixar_comida invalido: {tipo!r} ({x}, {y})")
         return self.nova_comida(tipo, x, y, tick, "dono")
 
+    def deixar_fruta_ao_lado(self, tipo: str, x: int, y: int, tick: int) -> dict:
+        """a fruta que o dono poe ao lado da racao (ConfigFrutaAoLado), com a origem `dono_ao_lado`; so fruta, dentro do mapa"""
+        if tipo not in FRUTAS or no_mapa(x, y, self.cmf) != (x, y):
+            raise ValueError(f"deixar_fruta invalido: {tipo!r} ({x}, {y})")
+        return self.nova_comida(tipo, x, y, tick, ORIGEM_AO_LADO)
+
     def deixar_bola(self, x: int, y: int, tick: int) -> None:
         """o dono poe a bola parada em (x, y); fora do mapa falha alto"""
         if no_mapa(x, y, self.cmf) != (x, y):
@@ -910,7 +931,7 @@ class MotorMundo(MotorFrutas):
 
     def __init__(self, *a, cfg_mundo: ConfigMundo | None = None, efeito_frutas: dict | None = None, mundo: "Mundo | None" = None,
                  entrada_mundo: int = 0, cfg_banheiro: ConfigBanheiro | None = None, cfg_pqp: ConfigPetQuePensaMundo | None = None,
-                 cfg_paladar: ConfigPaladar | None = None, **kw) -> None:
+                 cfg_paladar: ConfigPaladar | None = None, cfg_fruta_ao_lado: ConfigFrutaAoLado | None = None, **kw) -> None:
         super().__init__(*a, **kw)
         self.cmf = cfg_mundo or CONFIG_MUNDO
         self.cbh = cfg_banheiro or CONFIG_BANHEIRO
@@ -918,6 +939,9 @@ class MotorMundo(MotorFrutas):
         self.cpal = cfg_paladar or CONFIG_PALADAR
         if not isinstance(self.cpal, ConfigPaladar):
             raise TypeError(f"cfg_paladar e uma ConfigPaladar: {self.cpal!r}")
+        self.cfal = cfg_fruta_ao_lado or CONFIG_FRUTA_AO_LADO
+        if not isinstance(self.cfal, ConfigFrutaAoLado):
+            raise TypeError(f"cfg_fruta_ao_lado e uma ConfigFrutaAoLado: {self.cfal!r}")
         if not self.cmf.ligada:
             if efeito_frutas is not None or mundo is not None or entrada_mundo:
                 raise ValueError("efeito_frutas, mundo e entrada_mundo so existem com o mundo ligado")
@@ -927,6 +951,8 @@ class MotorMundo(MotorFrutas):
                 raise PetQuePensaSemChave("o J5 (ConfigPetQuePensaMundo) exige o mundo fisico (ConfigMundo.ligada)")
             if self.cpal.ligada:
                 raise ValueError("o Paladar (ConfigPaladar) exige o mundo fisico (ConfigMundo.ligada): os perfis sao das comidas do mapa")
+            if self.cfal.ligada:
+                raise ValueError("a fruta ao lado (ConfigFrutaAoLado) exige o mundo fisico (ConfigMundo.ligada)")
             return                                     # desligado: o MotorFrutas byte a byte (nem embrulho, nem Mundo)
         if self.cf.ligada or self.cb.ligada:
             raise ValueError("o mundo substitui o cenario do N4 e da A1: ConfigFrutas e ConfigBola desligadas com ConfigMundo.ligada")
@@ -983,6 +1009,11 @@ class MotorMundo(MotorFrutas):
             self.idas_banheiro: list[dict] = []        # a continuacao: cada aliviar com o alvo `banheiro` que segurou a vontade
 
         # dois pets, etapa 3: o grupo e o id do pet nele (o Grupo poe na entrada); fora do grupo, nada disto e usado e a vida e a de hoje
+        if self.cfal.ligada:
+            # a fruta ao lado da racao (RP-2 do paladar): so com um pet, fora do grupo (o registro do grupo nao tem o evento)
+            if mundo is not None:
+                raise ValueError("a fruta ao lado (ConfigFrutaAoLado) roda com um pet, fora do grupo")
+            self.frutas_ao_lado: list[dict] = []        # cada fruta posta: tick, id, tipo, x, y, a racao de referencia
         if self.cpq.ligada:
             # o J5 (TAREFA_V2_PET_QUE_PENSA, secao 2.3): so com um pet (o grupo nao tem a mao nem a troca)
             if mundo is not None:
@@ -1591,6 +1622,14 @@ class MotorMundo(MotorFrutas):
         self._log.anexar(evento)
         self._aplicar_deixar_comida(*ler_deixar_comida(evento))
 
+    def deixar_fruta(self, tipo: str, x: int, y: int) -> None:
+        """a fruta ao lado da racao (ConfigFrutaAoLado): fora do orcamento (o canal nao a ve) e sem contato"""
+        if not (self.cmf.ligada and self.cfal.ligada):
+            raise MundoSemChave("deixar_fruta sem o mundo e a ConfigFrutaAoLado ligados")
+        evento = evento_deixar_fruta(self._estado.tick, tipo, x, y)      # valida tipo e posicao antes do log
+        self._log.anexar(evento)
+        self._aplicar_deixar_fruta(*ler_deixar_fruta(evento))
+
     def deixar_bola(self, x: int, y: int) -> None:
         if not self.cmf.ligada:
             raise MundoSemChave("deixar_bola com ConfigMundo.ligada = False")
@@ -1606,6 +1645,28 @@ class MotorMundo(MotorFrutas):
         self.deixadas.append({"tick": self._tm(tick), "id": c["id"], "tipo": tipo, "x": x, "y": y, "pet": self.pet})
         # contato, como o alimentar de hoje: zera o tempo sem cuidado, soma um cuidado, vinculo e politica recebem `alimentar`
         self._contato(AcaoUsuario.ALIMENTAR, tick)
+
+    def _aplicar_deixar_fruta(self, tipo: str, x: int, y: int) -> None:
+        """A fruta ao lado: a racao de referencia e a ultima racao deixada pelo dono neste tick (sem ela, falha alto: a fruta vai logo
+        depois da racao, no mesmo passo). Sem contato e fora do orcamento (o evento e do log, como o deixar_bola)."""
+        if not (self.cmf.ligada and self.cfal.ligada):
+            raise MundoSemChave("deixar_fruta sem o mundo e a ConfigFrutaAoLado ligados")
+        tm = self._tm(self._estado.tick)
+        racao = next((d for d in reversed(self.deixadas) if d["tick"] == tm and d["tipo"] == "racao"), None)
+        if racao is None:
+            raise ValueError(f"fruta ao lado sem racao deixada no tick {tm}: a fruta vai logo depois da racao, no mesmo passo")
+        c = self.mundo.deixar_fruta_ao_lado(tipo, x, y, tm)
+        self.frutas_ao_lado.append({"tick": tm, "id": c["id"], "tipo": tipo, "x": x, "y": y, "racao": racao["id"]})
+        self._n_eventos += 1                     # e um evento do log, mas NAO e contato
+
+    def ao_lado_no_chao(self) -> dict[str, int]:
+        """as frutas ao lado maduras no chao agora, por tipo (o que o dono olha para repor)"""
+        t = self._tm(self._estado.tick)
+        n = {f: 0 for f in self.cfal.tipos}
+        for c in self.mundo.comidas.values():
+            if c["origem"] == ORIGEM_AO_LADO and self.mundo.situacao(c, t) == "madura":
+                n[c["tipo"]] += 1
+        return n
 
     def _aplicar_deixar_bola(self, x: int, y: int) -> None:
         if not self.cmf.ligada:
@@ -1625,6 +1686,8 @@ class MotorMundo(MotorFrutas):
         if self.cbh.ligada:
             d["banheiro"] = {"alivios": len(self.alivios), "alivios_dentro": self.alivios_dentro,
                              "necessidades": len(self.mundo.necessidades), "na_zona": self.necessidades_na_zona()}
+        if self.cfal.ligada:
+            d["fruta_ao_lado"] = {"no_chao": self.ao_lado_no_chao(), "postas": len(self.frutas_ao_lado)}
         return d
 
     def resumo_mundo_fisico(self) -> dict:
@@ -1644,7 +1707,8 @@ class MotorMundo(MotorFrutas):
                     "necessidades": [dict(n) for n in m.necessidades.values()], "prox_necessidade": m.prox_necessidade,
                     "recolhidas": m.recolhidas, "alivios": self.alivios, "recolhas": self.recolhas,
                     "idas_banheiro": self.idas_banheiro}),
-                **({} if not self.cpq.ligada else {"troncos_vistos": dict(self.troncos_vistos), "trocas_tipo": m.trocas_tipo})}
+                **({} if not self.cpq.ligada else {"troncos_vistos": dict(self.troncos_vistos), "trocas_tipo": m.trocas_tipo}),
+                **({} if not self.cfal.ligada else {"frutas_ao_lado": self.frutas_ao_lado})}
 
     # ------------------------------------------------------------ o avanco em ticks (o grupo, dois pets, etapa 2)
     # O `_avancar(n)` de hoje e: o que cada classe faz uma vez por avanco (o MotorPersonalidade conta o evento de avanco no indice dos
@@ -1689,6 +1753,8 @@ def reproduzir_mundo(log: LogDeEventos, politica_fabrica: Callable, cfg: Config 
             motor._aplicar_deixar_comida(*ler_deixar_comida(evento))
         elif evento.tipo == "deixar_bola":
             motor._aplicar_deixar_bola(*ler_deixar_bola(evento))
+        elif evento.tipo == "deixar_fruta":
+            motor._aplicar_deixar_fruta(*ler_deixar_fruta(evento))
         else:
             raise ValueError(f"tipo de evento desconhecido no log do mundo: {evento.tipo!r}")
     motor._log = LogDeEventos([e for e in log if ate_tick is None or e.tick < ate_tick])
@@ -1710,6 +1776,13 @@ def fabricas_mundo(cfg_mundo: ConfigMundo | None = None, politica_fabrica: Calla
 # ================================================================== o dono
 @dataclass(frozen=True)
 class DeixarComida:
+    tipo: str
+    x: int
+    y: int
+
+
+@dataclass(frozen=True)
+class DeixarFruta:
     tipo: str
     x: int
     y: int
@@ -1763,6 +1836,51 @@ class DonoComLugar:
                 saida.append(DeixarComida("racao", x, y))
             else:
                 saida.append(acao)
+        return saida
+
+
+class DonoFrutaAoLado:
+    """A fruta ao lado da racao (o RP-2 de docs/futuro/paladar.md; ConfigFrutaAoLado): depois de cada racao que o `DonoComLugar` deixa no
+    comedouro, no mesmo passo, o dono poe ao lado as frutas que faltam (as de cada tipo abaixo do `teto_por_tipo` de maduras ao lado no
+    chao), fora do orcamento e sem contato, pelo `simular_vida_mundo(..., ao_lado=)`. As celulas sao a coluna do comedouro + `coluna`, nas
+    linhas do comedouro + `linhas` (os centros, cortados ao mapa); o tipo de cada linha sai de uma permutacao de `tipos` sorteada uma vez
+    na construcao pela rng propria `derivar_semente("fruta-ao-lado", semente)` (um `shuffle`), fixa na vida. So com o DonoComLugar no
+    estilo `comedouro`: com `perto` ou `longe` a racao nao fica no comedouro, e "ao lado" nao teria sentido. Le so o estado() do motor
+    (`fruta_ao_lado.no_chao`) e os lugares do proprio dono. Os depositos (tick, tipo, x, y, a racao) ficam em `depositos`."""
+
+    def __init__(self, dono: DonoComLugar, semente: int, cfg: ConfigFrutaAoLado, cfg_mundo: ConfigMundo | None = None) -> None:
+        if not isinstance(dono, DonoComLugar) or dono.estilo != "comedouro":
+            raise ValueError("a fruta ao lado precisa do DonoComLugar no estilo `comedouro` (a racao no comedouro)")
+        if not cfg.ligada:
+            raise ValueError("DonoFrutaAoLado com a ConfigFrutaAoLado desligada")
+        self.dono, self.cfg = dono, cfg
+        cm = cfg_mundo or dono.cmf
+        self.permutacao = list(cfg.tipos)
+        random.Random(derivar_semente("fruta-ao-lado", semente)).shuffle(self.permutacao)
+        cx, cy = cm.layout.comedouro
+        self.celulas = {f: no_mapa(*centro_da_celula((cx + cfg.coluna, cy + dy), cm), cm) for f, dy in zip(self.permutacao, cfg.linhas)}
+        self._vistos = 0                                  # os lugares do dono ja olhados
+        self.depositos: list[dict] = []
+
+    def acoes(self, estado: dict) -> list[DeixarFruta]:
+        fal = estado.get("fruta_ao_lado")
+        if fal is None:
+            raise ValueError("o DonoFrutaAoLado precisa do estado() do MotorMundo com a ConfigFrutaAoLado ligada (chave `fruta_ao_lado`)")
+        novos = self.dono.lugares[self._vistos:]
+        self._vistos = len(self.dono.lugares)
+        if not novos:
+            return []
+        if any(lg["tick"] != estado["tick"] for lg in novos):
+            raise RuntimeError("racao de outro passo sem a fruta ao lado: a regra roda em todo passo, logo depois do dono")
+        racao = novos[-1]
+        no_chao = dict(fal["no_chao"])
+        saida = []
+        for f in self.cfg.tipos:
+            if no_chao[f] < self.cfg.teto_por_tipo:
+                x, y = self.celulas[f]
+                saida.append(DeixarFruta(f, x, y))
+                no_chao[f] += 1
+                self.depositos.append({"tick": estado["tick"], "tipo": f, "x": x, "y": y, "racao": (racao["x"], racao["y"])})
         return saida
 
 
@@ -1822,7 +1940,8 @@ class CanalMundo(CanalDeInteracao):
 
 def simular_vida_mundo(braco: str, dono, politica, semente: int, dias: int, orcamento: int, fabrica_motor: Callable,
                        cfg: Config | None = None, cfg_donos: ConfigDonos | None = None, rotulo_dono: str | None = None,
-                       canal_classe: type | None = None, carinho: DonoCarinhoBanheiro | None = None) -> Vida:
+                       canal_classe: type | None = None, carinho: DonoCarinhoBanheiro | None = None,
+                       ao_lado: DonoFrutaAoLado | None = None) -> Vida:
     """treino.simular_vida com o CanalMundo: o dono (embrulhado pelo DonoComLugar) deixa a comida e a bola pelos gestos do mundo, que
     gastam o orcamento. A rng do dono e a de sempre (`dono`, semente, rotulo). `canal_classe` troca o canal (o CanalMundoComGestos de
     digilab/gestos.py, com o DonoComGestos); o padrao e o CanalMundo. `carinho` (o DonoCarinhoBanheiro): os carinhos depois do banheiro,
@@ -1847,5 +1966,8 @@ def simular_vida_mundo(braco: str, dono, politica, semente: int, dias: int, orca
         if carinho is not None:
             for acao in carinho.acoes(motor.estado()):
                 motor.observar(acao)
+        if ao_lado is not None:                  # a fruta ao lado da racao: logo depois das acoes do dono do passo, fora do orcamento
+            for acao in ao_lado.acoes(motor.estado()):
+                motor.deixar_fruta(acao.tipo, acao.x, acao.y)
     canal.fechar()
     return Vida(braco=braco, semente_coorte=semente, motor=motor, interacoes=canal.gasto)

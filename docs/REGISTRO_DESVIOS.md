@@ -252,3 +252,6 @@ de base em `docs/historico/registro_lotes.json`.
 
 - [2026-10-14 — PET-QUE-PENSA-PALADAR, a run (worker D): a calibração do `ganho_gosto` e do `g_plano`, a G-REVAL-POSSIVEL e o piloto](registro/2026-10.md)
 - [2026-10-14 — J5-ADENDO-5 (worker C): a fruta ao lado da ração, e as decisões EG marcadas](registro/2026-10.md)
+
+
+- [2026-10-14 — FRUTA-AO-LADO (worker A): o dono põe a fruta ao lado da ração, o lado do mundo e do dono](registro/2026-10.md)

@@ -281,6 +281,23 @@ def deixar_comida(tick: int, tipo: str, x: int, y: int) -> Evento:
     return Evento(tick=tick, tipo="deixar_comida", valor=f"{tipo}|{x}|{y}")
 
 
+def deixar_fruta(tick: int, tipo: str, x: int, y: int) -> Evento:
+    """a fruta que o dono poe ao lado da racao (ConfigFrutaAoLado): fora do orcamento e sem contato; so frutas"""
+    if tipo not in FRUTAS:
+        raise ValueError(f"fruta ao lado desconhecida: {tipo!r}")
+    x, y = _posicao_mundo(x, y)
+    return Evento(tick=tick, tipo="deixar_fruta", valor=f"{tipo}|{x}|{y}")
+
+
+def ler_deixar_fruta(evento: Evento) -> tuple[str, int, int]:
+    if evento.tipo != "deixar_fruta":
+        raise ValueError(f"evento nao e deixar_fruta: {evento.tipo!r}")
+    partes = str(evento.valor).split("|")
+    if len(partes) != 3 or partes[0] not in FRUTAS:
+        raise ValueError(f"deixar_fruta malformado: {evento.valor!r}")
+    return (partes[0],) + _posicao_mundo(_inteiro_do_log(partes[1]), _inteiro_do_log(partes[2]))
+
+
 def deixar_bola(tick: int, x: int, y: int) -> Evento:
     x, y = _posicao_mundo(x, y)
     return Evento(tick=tick, tipo="deixar_bola", valor=f"{x}|{y}")
