@@ -1,0 +1,437 @@
+{
+ "descricao": "PW-4 (b): a escala e o deslocamento proprios do carater do v11 (docs/TAREFA_V2_W_PORTE_CEREBRO_A.md, secao 15)",
+ "medida": {
+  "arquivo": "artifacts_v2_w_porte/carater_v11.json",
+  "sha256": "4e50a131ac092315dc83b17beadab007150cdc3629850a247f25e6bceeed3597"
+ },
+ "escala_v10": 0.05,
+ "razao_medianas": 0.2966101694915254,
+ "escala_v11": 0.015,
+ "desloc_v11": {
+  "adolescente": {
+   "atento": -0.0117,
+   "impetuoso": 0.0142,
+   "paciente": -0.0167,
+   "resistente": 0.0142
+  },
+  "adulto": {
+   "paciente": 0.25,
+   "impetuoso": 0.2604,
+   "resistente": 0.0,
+   "atento": -0.7917
+  }
+ },
+ "rodadas_leilao": 7,
+ "distribuicoes": {
+  "linha": {
+   "brigao": 0.2,
+   "guardiao": 0.3,
+   "cacador": 0.3,
+   "colosso": 0.2
+  },
+  "forma": {
+   "duelista": 0.1,
+   "furioso": 0.1,
+   "espelho": 0.15,
+   "muralha": 0.15,
+   "sentinela": 0.3,
+   "emboscador": 0.0,
+   "vigia": 0.1,
+   "tita": 0.1
+  },
+  "forma_de_cima": 0.65
+ },
+ "criterio": {
+  "linhas": {
+   "ok": true,
+   "faixa": [
+    0.15,
+    0.35
+   ]
+  },
+  "formas": {
+   "ok": true,
+   "forma_de_cima": 0.65,
+   "faixa": [
+    0.35,
+    0.65
+   ]
+  },
+  "escala": {
+   "ok": false,
+   "mediana_v10": 0.18437499999999998,
+   "mediana_v11": 0.18229166666666669,
+   "razao": 0.9887005649717516,
+   "cortados": {
+    "v10": 0.00625,
+    "v11": 0.1375
+   }
+  },
+  "fecha": false
+ },
+ "pets": [
+  {
+   "dono": "atencioso",
+   "semente": 101,
+   "linha": "cacador",
+   "forma": "sentinela",
+   "carater_adolescente": {
+    "atento": 0.09246666666666677,
+    "impetuoso": -0.04829999999999998,
+    "paciente": 0.004133333333333353,
+    "resistente": 0.0142
+   },
+   "carater_adulto": {
+    "atento": -0.4791999999999999,
+    "impetuoso": -0.0729333333333333,
+    "paciente": 0.6041666666666666,
+    "resistente": 0.0
+   }
+  },
+  {
+   "dono": "atencioso",
+   "semente": 202,
+   "linha": "guardiao",
+   "forma": "muralha",
+   "carater_adolescente": {
+    "atento": 0.13413333333333335,
+    "impetuoso": -0.20455000000000004,
+    "paciente": 0.2749666666666667,
+    "resistente": 0.0142
+   },
+   "carater_adulto": {
+    "atento": -0.3958666666666666,
+    "impetuoso": -0.11459999999999998,
+    "paciente": 0.6041666666666666,
+    "resistente": 0.0
+   }
+  },
+  {
+   "dono": "atencioso",
+   "semente": 303,
+   "linha": "guardiao",
+   "forma": "espelho",
+   "carater_adolescente": {
+    "atento": -0.2616999999999999,
+    "impetuoso": 0.08711666666666663,
+    "paciente": 0.08746666666666664,
+    "resistente": 0.0142
+   },
+   "carater_adulto": {
+    "atento": -1.0,
+    "impetuoso": 0.21873333333333345,
+    "paciente": 0.6875,
+    "resistente": 0.0
+   }
+  },
+  {
+   "dono": "atencioso",
+   "semente": 404,
+   "linha": "cacador",
+   "forma": "sentinela",
+   "carater_adolescente": {
+    "atento": 0.09246666666666677,
+    "impetuoso": -0.05871666666666665,
+    "paciente": 0.024966666666666706,
+    "resistente": 0.0142
+   },
+   "carater_adulto": {
+    "atento": -0.3542,
+    "impetuoso": 0.07290000000000005,
+    "paciente": 0.18749999999999994,
+    "resistente": 0.0
+   }
+  },
+  {
+   "dono": "atencioso",
+   "semente": 505,
+   "linha": "guardiao",
+   "forma": "espelho",
+   "carater_adolescente": {
+    "atento": 0.15496666666666684,
+    "impetuoso": -0.19413333333333335,
+    "paciente": 0.2333,
+    "resistente": 0.0142
+   },
+   "carater_adulto": {
+    "atento": -0.9375333333333333,
+    "impetuoso": 0.11456666666666673,
+    "paciente": 0.6875,
+    "resistente": 0.0
+   }
+  },
+  {
+   "dono": "relapso",
+   "semente": 101,
+   "linha": "guardiao",
+   "forma": "espelho",
+   "carater_adolescente": {
+    "atento": -0.05336666666666671,
+    "impetuoso": 0.014200000000000044,
+    "paciente": 0.024966666666666706,
+    "resistente": 0.0142
+   },
+   "carater_adulto": {
+    "atento": -0.8125333333333333,
+    "impetuoso": 0.2187333333333334,
+    "paciente": 0.35416666666666663,
+    "resistente": 0.0
+   }
+  },
+  {
+   "dono": "relapso",
+   "semente": 202,
+   "linha": "cacador",
+   "forma": "sentinela",
+   "carater_adolescente": {
+    "atento": 0.5716333333333333,
+    "impetuoso": -0.1524666666666667,
+    "paciente": -0.26669999999999994,
+    "resistente": 0.0142
+   },
+   "carater_adulto": {
+    "atento": -0.10419999999999985,
+    "impetuoso": 0.04165000000000002,
+    "paciente": 5.551115123125783e-17,
+    "resistente": 0.0
+   }
+  },
+  {
+   "dono": "relapso",
+   "semente": 303,
+   "linha": "cacador",
+   "forma": "sentinela",
+   "carater_adolescente": {
+    "atento": 0.05080000000000005,
+    "impetuoso": -0.0378833333333333,
+    "paciente": 0.024966666666666706,
+    "resistente": 0.0142
+   },
+   "carater_adulto": {
+    "atento": -3.333333333332966e-05,
+    "impetuoso": 0.4166500000000001,
+    "paciente": -0.8541666666666667,
+    "resistente": 0.0
+   }
+  },
+  {
+   "dono": "relapso",
+   "semente": 404,
+   "linha": "colosso",
+   "forma": "vigia",
+   "carater_adolescente": {
+    "atento": 0.009133333333333353,
+    "impetuoso": 0.0037833333333333677,
+    "paciente": -0.0167,
+    "resistente": 0.0142
+   },
+   "carater_adulto": {
+    "atento": 0.7916333333333335,
+    "impetuoso": -1.0,
+    "paciente": -0.8125,
+    "resistente": 1.0
+   }
+  },
+  {
+   "dono": "relapso",
+   "semente": 505,
+   "linha": "guardiao",
+   "forma": "muralha",
+   "carater_adolescente": {
+    "atento": 0.009133333333333353,
+    "impetuoso": -0.017049999999999954,
+    "paciente": 0.024966666666666706,
+    "resistente": 0.0142
+   },
+   "carater_adulto": {
+    "atento": 0.3749666666666668,
+    "impetuoso": -0.44793333333333346,
+    "paciente": -0.14583333333333337,
+    "resistente": 0.6458333333333334
+   }
+  },
+  {
+   "dono": "aleatorio",
+   "semente": 101,
+   "linha": "brigao",
+   "forma": "duelista",
+   "carater_adolescente": {
+    "atento": 0.2591333333333334,
+    "impetuoso": 1.0,
+    "paciente": -0.07920000000000005,
+    "resistente": -1.0
+   },
+   "carater_adulto": {
+    "atento": 0.02080000000000015,
+    "impetuoso": 1.0,
+    "paciente": 0.18749999999999994,
+    "resistente": -1.0
+   }
+  },
+  {
+   "dono": "aleatorio",
+   "semente": 202,
+   "linha": "colosso",
+   "forma": "tita",
+   "carater_adolescente": {
+    "atento": -0.4492,
+    "impetuoso": -0.6524666666666669,
+    "paciente": 0.12913333333333335,
+    "resistente": 1.0
+   },
+   "carater_adulto": {
+    "atento": -1.0,
+    "impetuoso": -1.0,
+    "paciente": 0.2916666666666667,
+    "resistente": 1.0
+   }
+  },
+  {
+   "dono": "aleatorio",
+   "semente": 303,
+   "linha": "colosso",
+   "forma": "vigia",
+   "carater_adolescente": {
+    "atento": 0.8424666666666667,
+    "impetuoso": -1.0,
+    "paciente": -0.5375333333333334,
+    "resistente": 1.0
+   },
+   "carater_adulto": {
+    "atento": 0.499966666666667,
+    "impetuoso": -1.0,
+    "paciente": -0.29166666666666674,
+    "resistente": 1.0
+   }
+  },
+  {
+   "dono": "aleatorio",
+   "semente": 404,
+   "linha": "colosso",
+   "forma": "tita",
+   "carater_adolescente": {
+    "atento": -0.11586666666666665,
+    "impetuoso": -0.7358000000000001,
+    "paciente": 0.33746666666666664,
+    "resistente": 1.0
+   },
+   "carater_adulto": {
+    "atento": -0.5000333333333333,
+    "impetuoso": -1.0,
+    "paciente": 0.375,
+    "resistente": 1.0
+   }
+  },
+  {
+   "dono": "aleatorio",
+   "semente": 505,
+   "linha": "guardiao",
+   "forma": "muralha",
+   "carater_adolescente": {
+    "atento": -0.3241999999999999,
+    "impetuoso": -0.08996666666666665,
+    "paciente": 0.5041333333333333,
+    "resistente": 0.0142
+   },
+   "carater_adulto": {
+    "atento": -0.5833666666666667,
+    "impetuoso": -1.0,
+    "paciente": 0.7708333333333334,
+    "resistente": 1.0
+   }
+  },
+  {
+   "dono": "incoerente",
+   "semente": 101,
+   "linha": "cacador",
+   "forma": "sentinela",
+   "carater_adolescente": {
+    "atento": 0.1133,
+    "impetuoso": -0.11080000000000002,
+    "paciente": 0.10830000000000001,
+    "resistente": 0.0142
+   },
+   "carater_adulto": {
+    "atento": -0.8333666666666667,
+    "impetuoso": 0.2812333333333334,
+    "paciente": 0.25,
+    "resistente": 0.0
+   }
+  },
+  {
+   "dono": "incoerente",
+   "semente": 202,
+   "linha": "cacador",
+   "forma": "sentinela",
+   "carater_adolescente": {
+    "atento": 0.30080000000000007,
+    "impetuoso": 0.20169999999999996,
+    "paciente": -0.7041999999999999,
+    "resistente": 0.0142
+   },
+   "carater_adulto": {
+    "atento": -0.7500333333333332,
+    "impetuoso": 0.3645666666666667,
+    "paciente": 5.551115123125783e-17,
+    "resistente": 0.0
+   }
+  },
+  {
+   "dono": "incoerente",
+   "semente": 303,
+   "linha": "brigao",
+   "forma": "furioso",
+   "carater_adolescente": {
+    "atento": 0.15496666666666672,
+    "impetuoso": 0.2017,
+    "paciente": -0.5583666666666668,
+    "resistente": 0.0142
+   },
+   "carater_adulto": {
+    "atento": 0.2291333333333333,
+    "impetuoso": -0.03126666666666661,
+    "paciente": -0.18749999999999994,
+    "resistente": 0.0
+   }
+  },
+  {
+   "dono": "incoerente",
+   "semente": 404,
+   "linha": "brigao",
+   "forma": "duelista",
+   "carater_adolescente": {
+    "atento": -0.34503333333333336,
+    "impetuoso": 0.19128333333333336,
+    "paciente": -0.03753333333333335,
+    "resistente": 0.0142
+   },
+   "carater_adulto": {
+    "atento": -0.22919999999999985,
+    "impetuoso": -0.14585000000000004,
+    "paciente": 0.5,
+    "resistente": 0.0
+   }
+  },
+  {
+   "dono": "incoerente",
+   "semente": 505,
+   "linha": "brigao",
+   "forma": "furioso",
+   "carater_adolescente": {
+    "atento": -0.11586666666666653,
+    "impetuoso": 0.44128333333333336,
+    "paciente": -0.7667,
+    "resistente": 0.0142
+   },
+   "carater_adulto": {
+    "atento": -0.6250333333333332,
+    "impetuoso": 1.0,
+    "paciente": -1.0,
+    "resistente": 0.0
+   }
+  }
+ ],
+ "codigo": {
+  "experiments/calibrar_carater_v11.py": "fe3dc3baf2b1b6e54dac0c6e5aa8a7e8202ffe35048a3f382da7b99ba3b6439e"
+ }
+}
