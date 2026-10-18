@@ -46,7 +46,7 @@ CAMINHO_ARTEFATO = re.compile(r"\bartifacts[\w-]*/[\w./-]+")
 CAMINHO_TESTE = re.compile(r"\btests/[\w/-]+\.py\b")
 CAMINHO_PLANO = re.compile(r"\bdocs/PLANO_ANALISE_V2_[\w-]+\.md\b")
 LINK_MD = re.compile(r"\[[^\]]*\]\(([^)\s]+)\)")
-SUCESSO = re.compile(r"\b(testes?|su[ií]te|ci|pytest)\b[^.\n]{0,40}\b(passa|passam|passaram|passou|verde|ok)\b", re.I)
+SUCESSO = re.compile(r"\b(testes?|su[ií]te|ci|pytest)\b[^.\n]{0,40}\b(passa|passam|passaram|passou|passed|verde|ok)\b", re.I)
 DOCUMENTO = re.compile(r"(^docs/|\.md$|^\.github/pull_request_template\.md$)")
 CODIGO_PROIBIDO_ARQUITETURA = ("digilab/", "experiments/", "web/app/src/")
 

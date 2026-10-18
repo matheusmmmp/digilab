@@ -215,6 +215,14 @@ def test_experimento_artefato_citado_que_nao_existe_reprova(tmp_path):
     assert [i.regra for i in falhas(vr.verificar(c, [], raiz))] == ["o artefato citado existe"]
 
 
+def test_saida_do_pytest_colada_vira_alerta(tmp_path):
+    raiz = raiz_minima(tmp_path)
+    c = corpo("implementacao", evidencias="- `python -m pytest tests/test_x.py -q` → 53 passed.")
+    (raiz / "tests" / "test_x.py").write_text("", encoding="utf-8")
+    itens = vr.verificar(c, ["tests/test_x.py"], raiz)
+    assert falhas(itens) == [] and [i.coluna for i in itens if i.alerta] == ["DECLARADA"]
+
+
 def test_tabela_separa_declarada_de_verificada(tmp_path):
     raiz = raiz_minima(tmp_path)
     saida = vr.tabela(vr.verificar(corpo("documentacao"), [], raiz))
