@@ -277,3 +277,6 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-18 — BANHEIRO-FALHA-ALTA (sessão lateral): o `configCorpo` do TS com o banheiro, a ordem E-9 dos gestos](registro/2026-10.md)
 - [2026-10-18 — PQP-VALIDACAO, a run (worker D): a validação do J5 com a fruta ao lado da ração](registro/2026-10.md)
 - [2026-10-18 — ROTEAMENTO-MODELOS (ChatGPT Work): escolha de modelo e contexto no CLAUDE.md](registro/2026-10.md)
+
+
+- [2026-10-18 — WORLD-POC-001 (worker A): a investigação do mundo 3D e as decisões W-1 a W-7](registro/2026-10.md)
