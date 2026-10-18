@@ -309,11 +309,13 @@ class CanalSemEnsino(CanalMundo):
 
 
 def simular_vida_fisico(dono, politica, semente: int, dias: int, orcamento: int, rotulo_dono: str, fabrica_motor, carinho=None,
-                        mudanca=None):
+                        mudanca=None, ao_lado=None):
     """O mundo.simular_vida_mundo com o CanalSemEnsino (PMF-3): o dono (embrulhado pelo DonoComLugar) cuida pelos gestos do mundo, que
     gastam o orcamento, e o elogio e a bronca dele ficam fora. A rng do dono e a de sempre (`dono`, semente, rotulo do dono: igual em todo
     braco). `mudanca` (o J5, `RegraMudancaPQP`): os eventos da mudanca do teste depois das acoes do dono do passo (e do carinho), fora do
-    orcamento. Devolve (motor, sinais retirados)."""
+    orcamento. `ao_lado` (o J5 do adendo 5, o `DonoFrutaAoLado` do A): as frutas ao lado da racao, logo depois das acoes do dono do passo
+    (e do carinho), antes da mudanca, fora do orcamento e sem contato, como no `mundo.simular_vida_mundo`. Devolve (motor, sinais
+    retirados)."""
     cfg, cd = CONFIG_PADRAO, CONFIG_DONOS
     total_ticks = dias * TICKS_POR_DIA
     if total_ticks % cd.passo_ticks != 0:
@@ -333,6 +335,9 @@ def simular_vida_fisico(dono, politica, semente: int, dias: int, orcamento: int,
         if carinho is not None:                  # banheiro (#265): o carinho depois das acoes do dono do passo, fora do orcamento
             for acao in carinho.acoes(motor.estado()):
                 motor.observar(acao)
+        if ao_lado is not None:                  # o J5 do adendo 5: a fruta ao lado da racao, fora do orcamento e sem contato
+            for acao in ao_lado.acoes(motor.estado()):
+                motor.deixar_fruta(acao.tipo, acao.x, acao.y)
         if mudanca is not None:                  # o J5: a mudanca do teste (a fruta na mao ou a troca de tipo), fora do orcamento
             for acao in mudanca.acoes(motor.estado()):
                 motor.observar(acao)

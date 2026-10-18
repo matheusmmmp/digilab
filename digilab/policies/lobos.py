@@ -239,6 +239,9 @@ REGRAS_ALVO = {"pedido_necessidade": (AcaoPet.COMER,), "fome_moderada": (AcaoPet
                "tempo_livre": (AcaoPet.EXPLORAR, AcaoPet.BRINCAR), "bola_no_cenario": (AcaoPet.EXPLORAR, AcaoPet.BRINCAR),
                "fruta_no_cenario": (AcaoPet.EXPLORAR, AcaoPet.BRINCAR, AcaoPet.COMER)}
 ESCALA_U_ALVO = 1 << 16                # o u do alvo do MotorMundo: inteiro em [0, 2^16)
+# a vontade do cerebro A (docs/TAREFA_V2_W_PORTE_CEREBRO_A.md, PW-3; o D-W4 do #201): a regra em que o desvio aprendido e lido. O tempo livre
+# e onde o pet escolhe sem necessidade urgente; o desejo.desejo_lobos a usa
+REGRA_VONTADE = "tempo_livre"
 # o Paladar (docs/futuro/paladar.md, secao 3.4): as qualidades (as de corpo.QUALIDADES, conferidas por teste; o cerebro nao importa o
 # corpo), o canal `gosto` e a rota dele (os pesos que leem a identidade da comida: a presenca da fruta e as classes do alvo; nunca a
 # tabela do corpo) e as classes do alvo de comer por tipo, no lugar de `comida` (PL-5)
@@ -1830,6 +1833,36 @@ class PoliticaLobos(Aprendiz):
     def tem_corpo(self) -> bool:
         """O cerebro le o corpo (a chave do corpo ligada)."""
         return self._corpo is not None
+
+    def desvio_aprendido(self, obs: Observacao, grupo: str = REGRA_VONTADE) -> dict[AcaoPet, float]:
+        """A vontade do v11 (PW-3; o D-W4 do #201): o desvio aprendido sobre o prior de cada acao do instinto na regra `grupo` (o tempo
+        livre), na observacao `obs`. E a contribuicao do lobo de decisao no peso efetivo (`_pesos_efetivos`): ativacao(w - w0, x) e, com o
+        corpo, o termo das entradas novas (ativacao(w - w0, x_corpo), prior 0 fora do banheiro), na mesma ordem de soma. As acoes sao as que
+        o instinto propoe na regra (a linha do prior com algum peso nao nulo; com o banheiro, mais o aliviar), na ordem de ACOES_PET_HOJE.
+
+        Pura: nao muda peso, motivo, registro, memoria nem rng (a percepcao e refeita da `obs`, sem tocar a do agir). No recem-nascido,
+        e no cerebro com o aprendizado desligado, todo desvio e 0.0 exato. Fora do v11 (o mundo fisico, as frutas, as entradas sociais, o
+        pedido e o plano somam termos ao lobo de decisao que a vontade ainda nao le), falha alto."""
+        if (self._ve_mundo or self._pesos_social or self._pesos_comer_fruta or self._peso_pedido is not None
+                or self._modelo_mundo is not None):
+            raise NotImplementedError("a vontade do cerebro A (PW-3) e a do v11: sem o mundo fisico, as frutas, as entradas sociais, o "
+                                      "pedido e o plano")
+        if grupo not in self._prior:
+            raise KeyError(f"regra sem tabela de pesos: {grupo!r}")
+        S = self._escala
+        x = self.percepcao(obs)
+        prior, pesos = self._prior[grupo], self._pesos[grupo]
+        acoes = tuple(a for a in ACOES_PET_HOJE + ((AcaoPet.ALIVIAR,) if self._banheiro is not None else ())
+                      if a in prior and (any(prior[a]) or a is AcaoPet.ALIVIAR))
+        desvio = {a: ativacao([w - w0 for w, w0 in zip(pesos[a], prior[a])], x, S) for a in acoes}
+        if grupo in self._pesos_corpo:
+            if obs.corpo is None:
+                raise RuntimeError("vontade com o corpo: Observacao sem o campo corpo")
+            x_corpo = [leitura_receptor(obs.corpo, r, S) / S for r in self._receptores_novos]
+            tabela, prior_c = self._pesos_corpo[grupo], self._prior_corpo[grupo]
+            for a in acoes:
+                desvio[a] = desvio[a] + ativacao([w - w0 for w, w0 in zip(tabela[a], prior_c[a])], x_corpo, S)
+        return desvio
 
     @staticmethod
     def _prior_mundo(cb: ConfigBola, cf: ConfigFrutas) -> dict[str, dict[AcaoPet, dict[str, float]]]:

@@ -1,0 +1,149 @@
+/* Casca limpa do desktop (TAREFA_V2_UI_DESKTOP, 2026-10-18): so a partir de 1100 px; o celular e a faixa de 900-1099 px
+   seguem nos estilos de antes. Cores so pelos tokens --ui-* (estilo/tokens.css). O zoom do desktop (src/escala.ts) continua:
+   o layout e pensado em ~1280 x 720 px de CSS e cresce junto com a janela.
+   Regioes: o cabecalho fixo (64 px), a barra lateral azul-marinho (208 px), a linha da pagina (titulo e abas) e o conteudo.
+   Na tela do Pet: o habitat no centro, a barra das acoes embaixo dele e a coluna de 320 px com o estado e as atividades. */
+/* a linha da pagina so existe no desktop (abaixo de 1100 px cada tela tem o proprio cabecalho com as abas) */
+.topo-pagina{display:none}
+@media (min-width:1100px){
+  body{background:var(--ui-bg)}
+  .app{padding:var(--ui-topo) 0 0 var(--ui-lateral);background:var(--ui-bg);color:var(--ui-text)}
+
+  /* ---------- cabecalho */
+  .topo-desk{position:fixed;top:0;left:0;right:0;z-index:21;display:flex;align-items:center;gap:20px;height:var(--ui-topo);box-sizing:border-box;
+    padding:0 24px 0 20px;background:var(--ui-surface);border-bottom:1px solid var(--ui-border);box-shadow:var(--ui-sombra)}
+  .topo-marca{display:flex;align-items:center;gap:10px;width:calc(var(--ui-lateral) - 40px);flex:none}
+  .topo-frasco{image-rendering:pixelated}
+  .topo-marca b{font-family:var(--dl-f-num);font-weight:900;font-size:22px;letter-spacing:.5px;color:var(--ui-navy)}
+  .topo-marca b span{color:var(--ui-primary-forte)}
+  .topo-relogio{margin-left:auto;display:flex;align-items:baseline;gap:8px;padding-right:20px;border-right:1px solid var(--ui-border);height:36px;align-items:center}
+  .topo-hora{font-family:var(--dl-f-lcd);font-size:22px;color:var(--ui-text)}
+  .topo-dia{font-size:13px;font-weight:800;color:var(--ui-text-2)}
+  .topo-relogio .pet-salvo{font-size:12px;font-weight:800;color:var(--ui-text-2)}
+  .topo-pet{display:flex;align-items:center;gap:10px;color:var(--ui-text)}
+  .topo-retrato{width:40px;height:40px;flex:none;border-radius:50%;background:var(--ui-primary-soft);border:2px solid var(--ui-primary);overflow:hidden;
+    display:flex;align-items:flex-start;justify-content:center;padding:0;cursor:pointer;box-sizing:border-box}
+  .topo-retrato img{margin-top:2px;max-width:none;image-rendering:pixelated}
+  .topo-retrato:hover{border-color:var(--ui-primary-hover)}
+  .topo-retrato:focus-visible{outline:none;box-shadow:var(--ui-foco)}
+  .topo-pet-txt{display:flex;flex-direction:column;gap:2px}
+  .topo-pet-nome{display:flex;align-items:center;gap:6px}
+  .topo-pet-nome b{font-weight:900;font-size:14px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .topo-pet-sub .dl-tag{font-size:10px;padding:0 6px}
+
+  /* ---------- barra lateral */
+  .dl-nav{top:var(--ui-topo);width:var(--ui-lateral);align-items:stretch;gap:4px;padding:16px 12px;background:var(--ui-navy);border-right:0;box-shadow:none}
+  .dl-nav .nav-marca{display:none}
+  .dl-nav button{flex-direction:row;justify-content:flex-start;gap:12px;min-height:44px;padding:0 12px;border-radius:var(--ui-raio-p);
+    font-size:14px;font-weight:700;color:var(--ui-navy-ink);text-align:left;transition:background-color 80ms}
+  .dl-nav button:hover{background:var(--ui-navy-2);color:#FFFFFF}
+  .dl-nav .circ,.nav-quad .quad{width:30px;height:30px;flex:none;border:0;border-radius:8px;background:transparent;box-shadow:none}
+  .dl-nav .circ img,.nav-quad .quad img{max-width:28px;max-height:28px}
+  .dl-nav button[aria-current="page"]{background:var(--ui-primary-forte);color:var(--ui-primary-ink);font-weight:800}
+  .dl-nav button[aria-current="page"] .circ,.nav-quad[aria-current="page"] .quad{background:transparent;box-shadow:none}
+  .dl-nav button:focus-visible{box-shadow:var(--ui-foco)}
+  .dl-nav button:focus-visible .circ,.dl-nav .nav-quad:focus-visible .quad{box-shadow:0 0 0 2px #FFFFFF}
+  .nav-pe{align-items:stretch;gap:4px;padding-top:12px;border-top:1px solid var(--ui-navy-2)}
+  .dl-nav .nav-quad{font-size:14px;gap:12px}
+
+  /* ---------- linha da pagina (titulo, abas) e cabecalhos antigos de cada tela */
+  .painel > .tela-cab,.painel > .tabs,.pet-cab,.pet-listra{display:none}
+  .app .conv-cab{display:none}
+  .topo-pagina{display:flex;align-items:center;gap:16px;padding:20px 24px 0;flex-wrap:wrap}
+  .topo-tit{margin:0;font-family:var(--dl-f-texto);font-weight:900;font-size:24px;color:var(--ui-text)}
+  .topo-abas{display:flex;gap:2px;padding:2px;background:var(--ui-surface);border:1px solid var(--ui-border);border-radius:12px}
+  .topo-aba{min-height:44px;padding:0 16px;border:0;border-radius:9px;background:transparent;color:var(--ui-text-2);font:inherit;font-family:var(--dl-f-texto);font-weight:800;font-size:14px;cursor:pointer}
+  .topo-aba:hover{color:var(--ui-text);background:var(--ui-surface-2)}
+  .topo-aba[aria-selected="true"]{background:var(--ui-primary-forte);color:var(--ui-primary-ink)}
+  .topo-aba:focus-visible{outline:none;box-shadow:var(--ui-foco)}
+  .topo-voltar{width:40px;height:40px;flex:none;border-radius:var(--ui-raio-p);background:var(--ui-surface);border:1px solid var(--ui-border);
+    display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer}
+  .topo-voltar svg{width:18px;height:18px}
+  .topo-voltar svg path{fill:none;stroke:var(--ui-text);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+  .topo-voltar:hover{border-color:var(--ui-primary)}
+  .topo-voltar:focus-visible{outline:none;box-shadow:var(--ui-foco)}
+  .tela.desk{min-height:calc(100dvh / var(--zoom, 1) - var(--ui-topo) - 64px)}
+
+  /* ---------- tela do Pet: habitat, barra das acoes e a coluna da direita */
+  .pet-tela{color:var(--ui-text)}
+  .pet-corpo{display:grid;grid-template-columns:minmax(0,1fr) 320px;grid-template-rows:minmax(0,1fr) auto;grid-template-areas:"hab lado" "acoes lado";
+    gap:16px 20px;padding:16px 24px 20px;height:calc(100dvh / var(--zoom, 1) - var(--ui-topo));min-height:560px;box-sizing:border-box;align-items:stretch}
+  .pet-principal{grid-area:hab;display:flex;flex-direction:column;gap:12px;min-height:0}
+  .pet-lado{display:contents}
+  .lado-cards{grid-area:lado;display:flex;flex-direction:column;gap:12px;min-height:0;overflow:auto;padding:2px}
+
+  /* habitat: o card do palco, limpo; o pet continua no canvas, em escala inteira */
+  .pet-principal .palco-card{flex:1;display:flex;flex-direction:column;min-height:0;padding:0;border-radius:var(--ui-raio);background:var(--ui-surface);
+    border:1px solid var(--ui-border);box-shadow:var(--ui-sombra);overflow:hidden}
+  .pet-principal .palco-cena{flex:1;height:auto;min-height:360px;border-radius:0}
+  .palco-cena .palco-tit,.palco-cena .palco-nome{display:none}
+  .hab-agora{position:absolute;left:16px;top:16px;z-index:2;display:inline-flex;align-items:center;gap:8px;background:var(--ui-surface);color:var(--ui-text);
+    border:1px solid var(--ui-border);border-radius:999px;padding:6px 14px;font-size:13px;font-weight:800;box-shadow:var(--ui-sombra)}
+  .hab-agora i{width:8px;height:8px;border-radius:50%;background:var(--ui-success)}
+  .palco-emocao{left:16px;top:56px;border:1px solid var(--ui-border);border-radius:999px;box-shadow:var(--ui-sombra);background:var(--ui-surface);color:var(--ui-text)}
+  .balao-causa{left:auto;right:16px;top:16px}
+
+  /* fala e Conversar: uma linha leve sob o habitat */
+  .pet-fala-linha{gap:12px}
+  .pet-fala .dl-balao{border:1px solid var(--ui-border);border-radius:12px;box-shadow:none;background:var(--ui-surface);color:var(--ui-text)}
+  .pet-fala .fala-status{border:1px solid var(--ui-border);background:var(--ui-surface);color:var(--ui-text-2)}
+  .pet-conversar{background:var(--ui-surface);color:var(--ui-primary-forte);border:1px solid var(--ui-primary-forte);box-shadow:none;border-radius:12px}
+  .pet-conversar:hover{background:var(--ui-primary-soft)}
+  .pet-conversar svg path:first-child{fill:var(--ui-primary-forte);stroke:var(--ui-primary-forte)}
+  .pet-conversar svg path:last-child{stroke:#FFFFFF}
+
+  /* barra das acoes: botoes com icone em cima e rotulo embaixo */
+  .acoes-pet{grid-area:acoes;display:flex;gap:4px;padding:8px;background:var(--ui-surface);border:1px solid var(--ui-border);border-radius:var(--ui-raio);box-shadow:var(--ui-sombra)}
+  .acoes-pet .dl-btn{flex:1 1 0;min-width:0;min-height:64px;padding:6px 0;flex-direction:column;gap:4px;letter-spacing:-.3px;border-radius:var(--ui-raio-p);border:1px solid var(--ui-border);
+    background:var(--ui-surface-2);color:var(--ui-text);box-shadow:none;font-size:11.5px;font-weight:800;transform:none}
+  .acoes-pet .dl-btn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+  .acoes-pet .dl-btn:hover:not(:disabled){border-color:var(--ui-primary);background:var(--ui-primary-soft)}
+  .acoes-pet .dl-btn:active:not(:disabled){background:var(--ui-primary-forte);color:var(--ui-primary-ink);box-shadow:none;transform:translateY(1px)}
+  .acoes-pet .dl-btn:focus-visible{box-shadow:var(--ui-foco)}
+  .acoes-pet .dl-btn--destaque{border-color:var(--ui-primary);background:var(--ui-primary-soft);color:var(--ui-text)}
+
+  /* coluna da direita: cards brancos de borda fina */
+  .lado-cards > .necessidades4,.pet-tela .dl-card,.pet-recente{background:var(--ui-surface);border:1px solid var(--ui-border);border-radius:var(--ui-raio);box-shadow:var(--ui-sombra);color:var(--ui-text)}
+  .lado-cards > .necessidades4{grid-template-columns:minmax(0,1fr);gap:10px;padding:16px}
+  .nec-tit{margin:0 0 2px;font-size:15px;font-weight:900}
+  .necessidades4 .nec{display:grid;grid-template-columns:96px minmax(0,1fr);align-items:center;gap:10px;padding:0;border:0;background:none}
+  .necessidades4 .nec-rot{font-size:13px;font-weight:800;color:var(--ui-text);text-transform:capitalize}
+  .necessidades4 .dl-seg{gap:0;padding:0;height:10px;border-radius:5px;overflow:hidden;background:var(--ui-bar-track)}
+  .necessidades4 .dl-seg i{height:10px;border-radius:0;background:var(--ui-bar-track)}
+  .necessidades4 .dl-seg i.on{background:var(--ui-primary)}
+  .necessidades4 .dl-seg--necessidade i.on{background:var(--ui-danger)}
+  .necessidades4 .nec-saude{gap:6px}
+  .necessidades4 .dl-vida-topo{font-size:13px;font-weight:800}
+  .necessidades4 .dl-vida-trilho{height:10px;background:var(--ui-bar-track)}
+  .necessidades4 .dl-vida-trilho i{background:var(--ui-success)}
+  .pet-tela .dl-card.chamado{padding:12px}
+  .pet-tela .chamado-ic{background:var(--ui-primary-soft);border:0;box-shadow:none;border-radius:var(--ui-raio-p)}
+  .pet-tela .chamado .dl-btn{min-height:40px;border:0;border-radius:var(--ui-raio-p);background:var(--ui-primary-forte);color:var(--ui-primary-ink);box-shadow:none}
+  .pet-tela .chamado .dl-btn:hover{background:var(--ui-primary-forte-hover)}
+  .pet-tela .chamado--lesao{border-color:var(--ui-danger)}
+  .pet-tela .dl-par{grid-template-columns:minmax(0,1fr)}
+  .pet-tela .dl-desejo--necessidade{background:var(--ui-surface);box-shadow:none;border:1px solid var(--ui-border)}
+
+  /* atividades recentes: cresce ate o fundo da coluna */
+  .pet-recente-caixa{flex:1;display:flex;flex-direction:column;min-height:150px}
+  .pet-recente{flex:1;padding:16px}
+  .pet-recente h2{font-size:15px}
+  .pet-recente-cab small{color:var(--ui-text-2)}
+  .pet-recente ol{gap:0}
+  .pet-recente li{display:grid;grid-template-columns:48px 56px minmax(0,1fr);gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--ui-border);font-size:13px}
+  .pet-recente li:last-child{border-bottom:0}
+  .pet-recente li .dl-lcd{color:var(--ui-text-2)}
+  .pet-recente-quem{justify-self:start;font-size:11px;font-weight:800;padding:1px 8px;border-radius:999px;background:var(--ui-surface-2);color:var(--ui-text-2);border:1px solid var(--ui-border)}
+  .pet-recente li[data-quem="dono"] .pet-recente-quem{background:var(--ui-primary-soft);color:var(--ui-primary-forte);border-color:transparent}
+  .pet-recente-ver{color:var(--ui-primary-forte);text-decoration:none;font-weight:800}
+  .pet-recente-ver:hover{text-decoration:underline}
+  .pet-recente-ver:focus-visible{outline:none;box-shadow:var(--ui-foco);border-radius:6px}
+}
+/* telas mais baixas (1366 x 768 com zoom, ou janelas menores): a coluna da direita rola sozinha antes de o habitat encolher */
+@media (min-width:1100px) and (max-height:760px){
+  .pet-corpo{padding-top:12px;padding-bottom:12px;gap:12px 16px}
+  .acoes-pet .dl-btn{min-height:56px}
+}
+@media (min-width:1100px) and (prefers-reduced-motion:reduce){
+  .dl-nav button{transition:none}
+}

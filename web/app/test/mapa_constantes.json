@@ -2153,6 +2153,204 @@
    "arquivo": "experiments/configs/v21c/validacao.json",
    "chave": "regras_base.mult_morte_subita",
    "nota": "V2C (C4): multiplicador de dano na morte súbita; o padrão de ConfigCombateV2C.mult_morte_subita também é 1,5, mas só vale com a morte súbita ligada pela validação"
+  },
+  {
+   "web": "CLB_V11.passo",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.lobos.passo",
+   "nota": "pets v11 (W-PORTE etapa 3): o ponto das vidas do v11 do gabarito (config_v11, as configs que as vidas usaram), PROPOSTO e nao validado no jogo; o passo do T3 (S/2); e tambem o padrao da ConfigLobos"
+  },
+  {
+   "web": "CLB_V11.teto",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.lobos.teto",
+   "nota": "pets v11 (W-PORTE etapa 3): o ponto das vidas do v11 do gabarito (config_v11, as configs que as vidas usaram), PROPOSTO e nao validado no jogo; o teto do T3 (16 S); o padrao da ConfigLobos e 1 S"
+  },
+  {
+   "web": "CLB_V11.piso",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.lobos.piso_peso",
+   "nota": "pets v11 (W-PORTE etapa 3): o ponto das vidas do v11 do gabarito (config_v11, as configs que as vidas usaram), PROPOSTO e nao validado no jogo; o piso do peso efetivo (S/16)"
+  },
+  {
+   "web": "CLB_V11.recompensaTapa",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.lobos.recompensa_tapa",
+   "nota": "pets v11 (W-PORTE etapa 3): o ponto das vidas do v11 do gabarito (config_v11, as configs que as vidas usaram), PROPOSTO e nao validado no jogo; o tapa com o valor da bronca (CD-10)"
+  },
+  {
+   "web": "CLB_V11.ganho",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.consequencia.ganho",
+   "nota": "pets v11 (W-PORTE etapa 3): o ponto das vidas do v11 do gabarito (config_v11, as configs que as vidas usaram), PROPOSTO e nao validado no jogo; o ganho 4 da consequencia (nao fechou na calibracao conjunta)"
+  },
+  {
+   "web": "CLB_V11.drives",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.consequencia.drives",
+   "nota": "pets v11 (W-PORTE etapa 3): o ponto das vidas do v11 do gabarito (config_v11, as configs que as vidas usaram), PROPOSTO e nao validado no jogo; os drives do N3: fome, higiene e energia (indices em Estado.vetor)"
+  },
+  {
+   "web": "CLB_V11.pesosDrivesCorpo.fome",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.consequencia.pesos_drives_corpo[0][1]",
+   "nota": "pets v11 (W-PORTE etapa 3): o ponto das vidas do v11 do gabarito (config_v11, as configs que as vidas usaram), PROPOSTO e nao validado no jogo; o w_d de fome (w_novos 2 nos drives novos do corpo, adendo 4)"
+  },
+  {
+   "web": "CLB_V11.pesosDrivesCorpo.higiene",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.consequencia.pesos_drives_corpo[1][1]",
+   "nota": "pets v11 (W-PORTE etapa 3): o ponto das vidas do v11 do gabarito (config_v11, as configs que as vidas usaram), PROPOSTO e nao validado no jogo; o w_d de higiene (w_novos 2 nos drives novos do corpo, adendo 4)"
+  },
+  {
+   "web": "CLB_V11.pesosDrivesCorpo.energia",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.consequencia.pesos_drives_corpo[2][1]",
+   "nota": "pets v11 (W-PORTE etapa 3): o ponto das vidas do v11 do gabarito (config_v11, as configs que as vidas usaram), PROPOSTO e nao validado no jogo; o w_d de energia (w_novos 2 nos drives novos do corpo, adendo 4)"
+  },
+  {
+   "web": "CLB_V11.pesosDrivesCorpo.humor",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.consequencia.pesos_drives_corpo[3][1]",
+   "nota": "pets v11 (W-PORTE etapa 3): o ponto das vidas do v11 do gabarito (config_v11, as configs que as vidas usaram), PROPOSTO e nao validado no jogo; o w_d de humor (w_novos 2 nos drives novos do corpo, adendo 4)"
+  },
+  {
+   "web": "CLB_V11.pesosDrivesCorpo.tedio",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.consequencia.pesos_drives_corpo[4][1]",
+   "nota": "pets v11 (W-PORTE etapa 3): o ponto das vidas do v11 do gabarito (config_v11, as configs que as vidas usaram), PROPOSTO e nao validado no jogo; o w_d de tedio (w_novos 2 nos drives novos do corpo, adendo 4)"
+  },
+  {
+   "web": "CLB_V11.pesosDrivesCorpo.curiosidade",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.consequencia.pesos_drives_corpo[5][1]",
+   "nota": "pets v11 (W-PORTE etapa 3): o ponto das vidas do v11 do gabarito (config_v11, as configs que as vidas usaram), PROPOSTO e nao validado no jogo; o w_d de curiosidade (w_novos 2 nos drives novos do corpo, adendo 4)"
+  },
+  {
+   "web": "CLB_V11.pesosDrivesCorpo.solidao",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.consequencia.pesos_drives_corpo[6][1]",
+   "nota": "pets v11 (W-PORTE etapa 3): o ponto das vidas do v11 do gabarito (config_v11, as configs que as vidas usaram), PROPOSTO e nao validado no jogo; o w_d de solidao (w_novos 2 nos drives novos do corpo, adendo 4)"
+  },
+  {
+   "web": "CLB_V11.pesosDrivesCorpo.estresse",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.consequencia.pesos_drives_corpo[7][1]",
+   "nota": "pets v11 (W-PORTE etapa 3): o ponto das vidas do v11 do gabarito (config_v11, as configs que as vidas usaram), PROPOSTO e nao validado no jogo; o w_d de estresse (w_novos 2 nos drives novos do corpo, adendo 4)"
+  },
+  {
+   "web": "CLB_V11.pesosDrivesCorpo.dor",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.consequencia.pesos_drives_corpo[8][1]",
+   "nota": "pets v11 (W-PORTE etapa 3): o ponto das vidas do v11 do gabarito (config_v11, as configs que as vidas usaram), PROPOSTO e nao validado no jogo; o w_d de dor (w_novos 2 nos drives novos do corpo, adendo 4)"
+  },
+  {
+   "web": "CLB_V11.pesosDrivesCorpo.vontade",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.consequencia.pesos_drives_corpo[9][1]",
+   "nota": "pets v11 (W-PORTE etapa 3): o ponto das vidas do v11 do gabarito (config_v11, as configs que as vidas usaram), PROPOSTO e nao validado no jogo; o w_d de vontade (w_novos 2 nos drives novos do corpo, adendo 4)"
+  },
+  {
+   "web": "CLB_V11.pesosDrivesCorpo.conforto",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.consequencia.pesos_drives_corpo[10][1]",
+   "nota": "pets v11 (W-PORTE etapa 3): o ponto das vidas do v11 do gabarito (config_v11, as configs que as vidas usaram), PROPOSTO e nao validado no jogo; o w_d de conforto (w_novos 2 nos drives novos do corpo, adendo 4)"
+  },
+  {
+   "web": "CCO_V11.tedio_sobe",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.corpo.tedio_sobe",
+   "nota": "pets v11 (a etapa 4 do metabolismo, para o W-PORTE): o corpo do ponto das vidas do v11 do gabarito (config_v11.corpo, a ConfigCorpo que as vidas usaram), PROPOSTO e nao validado no jogo; a subida do tedio x 2 (m_sobe do ponto (2, 1) do adendo 4); o padrao da ConfigCorpo e 450"
+  },
+  {
+   "web": "CCO_V11.solidao_sobe",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.corpo.solidao_sobe",
+   "nota": "pets v11 (a etapa 4 do metabolismo, para o W-PORTE): o corpo do ponto das vidas do v11 do gabarito (config_v11.corpo, a ConfigCorpo que as vidas usaram), PROPOSTO e nao validado no jogo; a subida da solidao x 2 (m_sobe do ponto (2, 1) do adendo 4); o padrao da ConfigCorpo e 225"
+  },
+  {
+   "web": "CCO_V11.estresse_divisor",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.corpo.estresse_divisor",
+   "nota": "pets v11 (a etapa 4 do metabolismo, para o W-PORTE): o corpo do ponto das vidas do v11 do gabarito (config_v11.corpo, a ConfigCorpo que as vidas usaram), PROPOSTO e nao validado no jogo; o divisor do estresse / 2 (m_sobe do ponto (2, 1) do adendo 4); o padrao da ConfigCorpo e 256"
+  },
+  {
+   "web": "CCO_V11.gasto_basal_acordado",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.corpo.gasto_basal_acordado",
+   "nota": "pets v11 (a etapa 4 do metabolismo, para o W-PORTE): o corpo do ponto das vidas do v11 do gabarito (config_v11.corpo, a ConfigCorpo que as vidas usaram), PROPOSTO e nao validado no jogo; o gasto basal acordado x 4/5 (o gasto do passo 0 fino, adendo 5, fechou); o padrao da ConfigCorpo e 375"
+  },
+  {
+   "web": "CCO_V11.gasto_basal_dormindo",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.corpo.gasto_basal_dormindo",
+   "nota": "pets v11 (a etapa 4 do metabolismo, para o W-PORTE): o corpo do ponto das vidas do v11 do gabarito (config_v11.corpo, a ConfigCorpo que as vidas usaram), PROPOSTO e nao validado no jogo; o gasto basal dormindo x 4/5 (o gasto do passo 0 fino, adendo 5, fechou); o padrao da ConfigCorpo e 187"
+  },
+  {
+   "web": "CCO_V11.gasto_atividades_num",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.corpo.gasto_atividades_num",
+   "nota": "pets v11 (a etapa 4 do metabolismo, para o W-PORTE): o corpo do ponto das vidas do v11 do gabarito (config_v11.corpo, a ConfigCorpo que as vidas usaram), PROPOSTO e nao validado no jogo; o numerador do fator 4/5 do gasto das atividades (adendo 5); o padrao da ConfigCorpo e 1/1"
+  },
+  {
+   "web": "CCO_V11.gasto_atividades_den",
+   "arquivo": "web/app/test/gabaritos/lobos_python.json",
+   "chave": "config_v11.corpo.gasto_atividades_den",
+   "nota": "pets v11 (a etapa 4 do metabolismo, para o W-PORTE): o corpo do ponto das vidas do v11 do gabarito (config_v11.corpo, a ConfigCorpo que as vidas usaram), PROPOSTO e nao validado no jogo; o denominador do fator 4/5 do gasto das atividades (adendo 5); o padrao da ConfigCorpo e 1/1"
+  },
+  {
+   "web": "CCP_V11.escala",
+   "arquivo": "artifacts_v2_w_porte/carater_v11_calibracao.json",
+   "chave": "escala_v11",
+   "nota": "pets v11 (W-PORTE etapa 4 parte 3, PW-4 opcao (b)): a calibracao do carater do v11 (experiments/calibrar_carater_v11.py, 20 pets das sementes dos testes), PROPOSTO; a escala nao fecha o criterio da secao 15 (eixos cortados); a escala propria"
+  },
+  {
+   "web": "DESLOC_CARATER_V11.adolescente.atento",
+   "arquivo": "artifacts_v2_w_porte/carater_v11_calibracao.json",
+   "chave": "desloc_v11.adolescente.atento",
+   "nota": "pets v11 (W-PORTE etapa 4 parte 3, PW-4 opcao (b)): a calibracao do carater do v11 (experiments/calibrar_carater_v11.py, 20 pets das sementes dos testes), PROPOSTO; a escala nao fecha o criterio da secao 15 (eixos cortados); o deslocamento do adolescente"
+  },
+  {
+   "web": "DESLOC_CARATER_V11.adolescente.impetuoso",
+   "arquivo": "artifacts_v2_w_porte/carater_v11_calibracao.json",
+   "chave": "desloc_v11.adolescente.impetuoso",
+   "nota": "pets v11 (W-PORTE etapa 4 parte 3, PW-4 opcao (b)): a calibracao do carater do v11 (experiments/calibrar_carater_v11.py, 20 pets das sementes dos testes), PROPOSTO; a escala nao fecha o criterio da secao 15 (eixos cortados); o deslocamento do adolescente"
+  },
+  {
+   "web": "DESLOC_CARATER_V11.adolescente.paciente",
+   "arquivo": "artifacts_v2_w_porte/carater_v11_calibracao.json",
+   "chave": "desloc_v11.adolescente.paciente",
+   "nota": "pets v11 (W-PORTE etapa 4 parte 3, PW-4 opcao (b)): a calibracao do carater do v11 (experiments/calibrar_carater_v11.py, 20 pets das sementes dos testes), PROPOSTO; a escala nao fecha o criterio da secao 15 (eixos cortados); o deslocamento do adolescente"
+  },
+  {
+   "web": "DESLOC_CARATER_V11.adolescente.resistente",
+   "arquivo": "artifacts_v2_w_porte/carater_v11_calibracao.json",
+   "chave": "desloc_v11.adolescente.resistente",
+   "nota": "pets v11 (W-PORTE etapa 4 parte 3, PW-4 opcao (b)): a calibracao do carater do v11 (experiments/calibrar_carater_v11.py, 20 pets das sementes dos testes), PROPOSTO; a escala nao fecha o criterio da secao 15 (eixos cortados); o deslocamento do adolescente"
+  },
+  {
+   "web": "DESLOC_CARATER_V11.adulto.atento",
+   "arquivo": "artifacts_v2_w_porte/carater_v11_calibracao.json",
+   "chave": "desloc_v11.adulto.atento",
+   "nota": "pets v11 (W-PORTE etapa 4 parte 3, PW-4 opcao (b)): a calibracao do carater do v11 (experiments/calibrar_carater_v11.py, 20 pets das sementes dos testes), PROPOSTO; a escala nao fecha o criterio da secao 15 (eixos cortados); o deslocamento do adulto"
+  },
+  {
+   "web": "DESLOC_CARATER_V11.adulto.impetuoso",
+   "arquivo": "artifacts_v2_w_porte/carater_v11_calibracao.json",
+   "chave": "desloc_v11.adulto.impetuoso",
+   "nota": "pets v11 (W-PORTE etapa 4 parte 3, PW-4 opcao (b)): a calibracao do carater do v11 (experiments/calibrar_carater_v11.py, 20 pets das sementes dos testes), PROPOSTO; a escala nao fecha o criterio da secao 15 (eixos cortados); o deslocamento do adulto"
+  },
+  {
+   "web": "DESLOC_CARATER_V11.adulto.paciente",
+   "arquivo": "artifacts_v2_w_porte/carater_v11_calibracao.json",
+   "chave": "desloc_v11.adulto.paciente",
+   "nota": "pets v11 (W-PORTE etapa 4 parte 3, PW-4 opcao (b)): a calibracao do carater do v11 (experiments/calibrar_carater_v11.py, 20 pets das sementes dos testes), PROPOSTO; a escala nao fecha o criterio da secao 15 (eixos cortados); o deslocamento do adulto"
+  },
+  {
+   "web": "DESLOC_CARATER_V11.adulto.resistente",
+   "arquivo": "artifacts_v2_w_porte/carater_v11_calibracao.json",
+   "chave": "desloc_v11.adulto.resistente",
+   "nota": "pets v11 (W-PORTE etapa 4 parte 3, PW-4 opcao (b)): a calibracao do carater do v11 (experiments/calibrar_carater_v11.py, 20 pets das sementes dos testes), PROPOSTO; a escala nao fecha o criterio da secao 15 (eixos cortados); o deslocamento do adulto"
   }
  ],
  "so_web": [

@@ -16,13 +16,17 @@ pesquisa, hipótese, desenho  ──►  Matheus/coordenador: nova_tarefa.py
                                                                           implementa, testa, registra desvio
                                   PR com o relato  ◄────────────────────  abre o PR e para
                                   CI: verificar-pr (relato + testes)
-Work lê o PR pelo conector   ◄──  (PENDENTE: IM-3)
+Work lê o PR pelo conector   ◄──  (testado em 2026-10-18; gatilho opcional)
 revisão, inconsistências  ──────► Matheus decide e faz o merge
                                   coordenador: PAINEL_V2 + gerar_estado_atual.py
 ```
 
-**O que é automático hoje:** só o CI no PR. Todo o resto é uma pessoa ou uma sessão fazendo um passo. O Work lendo o PR e o gatilho de PR
-estão **PENDENTES** até o teste (`docs/infra/TESTE_CHATGPT_WORK.md`).
+**O que é automático hoje:**
+- o CI no PR;
+- se o Matheus mantiver a tarefa agendada no Work, o aviso e o resumo de PR alterado, uns 5 min depois.
+
+O Work lê o branch, o PR e o log do CI, mas não vê o que mudou no corpo de um PR. Ele só escreve no GitHub se o conector tiver escrita, e aí escreve em nome do Matheus. Tudo testado em
+2026-10-18 (`docs/infra/TESTE_CHATGPT_WORK.md`). Todo o resto é uma pessoa ou uma sessão fazendo um passo.
 
 ## 2. Como fazer cada coisa
 
@@ -44,8 +48,7 @@ Cole o texto nos `<...>`, revise e faça o commit por PR. A tarefa só vale quan
 2. Abra uma sessão nela.
 3. Mande a mensagem inicial que ele também imprime, tirada do `V2_TRABALHO_PARALELO.md`.
 
-**Recuperar o resultado.** O resultado está no PR: o corpo (o relato), o diff e o resumo do job `verificar-pr`. No Work (depois do IM-3):
-"leia o PR #N". Sem o conector: copie o link ou o corpo.
+**Recuperar o resultado.** O resultado está no PR: o corpo (o relato), o diff e o resumo do job `verificar-pr`. No Work: "leia o PR #N de matheusmmmp/digilab, o corpo e o resultado do check verificar-pr". Ele lê o log do CI. Sem o conector: copie o link ou o corpo.
 
 **Continuar uma pesquisa anterior.** Não dependa do histórico do chat. Comece pela tarefa da frente e pelos documentos que ela cita.
 - Literatura: `docs/referencias/` e as sínteses `*_SINTESE_*.md`.
@@ -168,7 +171,7 @@ rode `git fetch origin` antes, para a base estar atualizada.
 | o ambiente da frente | `python -m venv .venv`, depois `.venv\Scripts\python -m pip install pytest anthropic` | rede |
 | conferir a infra | `.venv\Scripts\python -m pytest tests/test_infra_*.py -q` e `python tools/conferir_saude.py` | — |
 | o Claude Code | o app desktop ou `npm install -g @anthropic-ai/claude-code` | assinatura Claude |
-| o conector do ChatGPT | Settings > Plugins > GitHub (`docs/infra/TESTE_CHATGPT_WORK.md`) | plano pago do ChatGPT; PENDENTE |
+| o conector do ChatGPT | Settings > Plugins > GitHub (`docs/infra/TESTE_CHATGPT_WORK.md`) | plano pago do ChatGPT; testado em 2026-10-18. Com escrita, proteger a `main` antes (IM-7) |
 | check obrigatório | GitHub > Settings > Branches > regra da `main` > exigir `verificar-pr` | decisão IM-1 do Matheus |
 
 ## 5. O que fica com o Matheus, sempre

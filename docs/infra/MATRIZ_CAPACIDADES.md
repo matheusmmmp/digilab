@@ -10,7 +10,7 @@ help.openai.com, e essas páginas foram baixadas com curl. As páginas do Codex 
 - `TESTADO`: rodado neste repositório, com a evidência ao lado.
 - `NÃO CONFIRMADO`: a página não diz, ou só uma fonte secundária diz.
 
-**Nenhuma linha do ChatGPT Work está `TESTADO`:** o teste depende do Matheus (`docs/infra/TESTE_CHATGPT_WORK.md`).
+**ChatGPT Work:** a leitura do repositório, do PR e do CI está `TESTADO` desde 2026-10-18 (`docs/infra/TESTE_CHATGPT_WORK.md`, passos 2 a 4). O gatilho de PR está `TESTADO`: dispara e lê o corpo atual, sem ver o que mudou. A escrita depende da permissão dada ao conector: 403 só com leitura; com escrita, ele comenta e cria branch em nome do Matheus.
 
 **Os tipos:** nativa · configuração (depende de configurar) · paga (paga ou por API) · externa (infraestrutura de fora) · não suportada.
 
@@ -19,9 +19,9 @@ help.openai.com, e essas páginas foram baixadas com curl. As páginas do Codex 
 | capacidade | o que a doc diz | tipo | custo | fonte | status |
 |---|---|---|---|---|---|
 | **ChatGPT Work** | Agente para tarefas longas de vários passos: pesquisa, apps conectados, entregáveis. Lançado em 2026-07-09 nos planos pagos (não no Free nem no Go). Na web e no celular roda na nuvem. | nativa | a cota e os créditos do Codex | [Work e Codex](https://help.openai.com/en/articles/20001275-chatgpt-work-and-codex), [release notes](https://help.openai.com/en/articles/6825453-chatgpt-release-notes) | DOC |
-| Work lê o repositório e os PRs | Pelo conector GitHub, que busca sob demanda o que foi autorizado. Não indexa nem sincroniza o repositório. | configuração | no plano | [conector GitHub](https://help.openai.com/en/articles/11145903-connecting-github-to-chatgpt) | DOC; issues: TESTADO nesta POC (Issue #336 criado e lido pelo conector em 2026-10-18; leitura por sessão Claude Code não testada) |
-| Work reage a evento de PR | Tarefa disparada por webhook (nota de 2026-08-25): PR aberto, pronto para revisão, fechado, revisão, comentário, commit, merge. Planos Plus, Pro, Business, Enterprise e Edu. Ação que pede aprovação fica parada até a revisão. | configuração | no plano | as três acima | DOC; **neste repo: NÃO CONFIRMADO** |
-| Work escreve no GitHub | O app GitHub do ChatGPT **só lê**. Para editar código e fazer push, a doc manda usar o Codex. | não suportada | — | [conector GitHub](https://help.openai.com/en/articles/11145903-connecting-github-to-chatgpt) | DOC |
+| Work lê o repositório e os PRs | Pelo conector GitHub, que busca sob demanda o que foi autorizado. Não indexa nem sincroniza o repositório. | configuração | no plano | [conector GitHub](https://help.openai.com/en/articles/11145903-connecting-github-to-chatgpt) | DOC; **TESTADO** em 2026-10-18 (`docs/infra/TESTE_CHATGPT_WORK.md`, passos 2 a 4): lê arquivos de um branch, o corpo do PR e o log do check do CI; issues: TESTADO nesta POC (Issue #336 criado e lido pelo conector em 2026-10-18; leitura por sessão Claude Code não testada) |
+| Work reage a evento de PR | Tarefa disparada por webhook (nota de 2026-08-25): PR aberto, pronto para revisão, fechado, revisão, comentário, commit, merge. Planos Plus, Pro, Business, Enterprise e Edu. Ação que pede aprovação fica parada até a revisão. | configuração | no plano | as três acima | DOC; **TESTADO** em 2026-10-18: disparou cerca de 5 min depois de uma edição do corpo do #331, notificou o celular e leu o corpo **atual**; não vê o histórico de edições do corpo (não sabe o que mudou) |
+| Work escreve no GitHub | A doc diz que o app GitHub do ChatGPT **só lê**, e que para editar código o caminho é o Codex. | configuração | no plano | [conector GitHub](https://help.openai.com/en/articles/11145903-connecting-github-to-chatgpt) | **TESTADO** em 2026-10-18, **diferente da doc**: só com leitura, comentário e branch dão 403; com escrita dada na instalação, o Work comentou no #331 e criou um branch, assinando como o Matheus via o app "ChatGPT Codex Connector" |
 | Conector GitHub | Settings > Plugins > GitHub, instalar o app no GitHub e escolher os repositórios. Disponível no chat, no deep research ou no agente, conforme o plano. Um repositório novo leva cerca de 5 min para aparecer. | configuração | no plano | idem | DOC |
 | ChatGPT Projects | Juntam chats, arquivos e instruções, com memória padrão ou só do projeto; limite de arquivos por plano (Plus 25, Pro 40). O Work não funciona em projeto com memória só do projeto. A doc não fala em sincronizar com repositório. | nativa | no plano | [Projects](https://help.openai.com/en/articles/10169521-projects-in-chatgpt) | DOC |
 | Codex lê o `AGENTS.md` | Sim, em camadas: o global, depois da raiz do git até a pasta atual, e o mais próximo vale. Limite padrão de 32 KiB. | nativa | — | [AGENTS.md](https://learn.chatgpt.com/docs/agent-configuration/agents-md) | DOC |
@@ -59,13 +59,16 @@ help.openai.com, e essas páginas foram baixadas com curl. As páginas do Codex 
 ## Recomendações
 
 1. **O canal entre os dois lados é o GitHub.** O Claude Code escreve: branch, PR e o relato no corpo do PR. O ChatGPT e o Work leem pelo
-   conector, que só lê. Não há sincronização de conversa nos dois sentidos, e nenhuma doc promete isso.
-2. **A volta é semiautomática:** o Work pode ser disparado por evento de PR (DOC), mas isso precisa ser configurado e testado pelo Matheus.
-   A ida (Work → repositório) passa por uma pessoa, porque o conector não escreve: o Matheus, ou o coordenador, commita a tarefa proposta.
+   conector (só leitura, a menos que o Matheus dê escrita: item 5). Não há sincronização de conversa nos dois sentidos, e nenhuma doc promete isso.
+2. **A volta pode ser automática:** uma tarefa do Work com gatilho "PR alterado" dispara uns 5 min depois e lê o corpo atual e o CI (testado
+   em 2026-10-18), mas não vê o que mudou no corpo. A ida (Work → repositório) passa por uma pessoa enquanto o conector for só de leitura: o
+   Matheus, ou o coordenador, commita a tarefa proposta.
 3. **CI gratuito e sem secrets** para o que o repositório consegue conferir sozinho. Executar o Claude no CI (`claude-code-action`) fica
    fora até decisão, porque gasta tokens ou a assinatura.
-4. **O Codex é a única ferramenta da OpenAI que escreve no repositório.** Se for usado, ele lê o `AGENTS.md` e segue as mesmas regras
+4. **Pela doc, o Codex é a ferramenta da OpenAI que escreve no repositório.** Se for usado, ele lê o `AGENTS.md` e segue as mesmas regras
    (worktree ou branch próprio, PR, sem merge).
+5. **Com escrita no conector, o Work também escreve no GitHub** (testado, ao contrário do que a doc sugere). O protocolo só se sustenta com a
+   `main` protegida (IM-1, IM-7).
 
 ## Limites de permissão, persistência e execução em segundo plano
 
@@ -83,4 +86,3 @@ help.openai.com, e essas páginas foram baixadas com curl. As páginas do Codex 
 - O preço dos runners maiores.
 - A nova data da taxa de self-hosted.
 - O preço exato do Codex por plano.
-- **Tudo o que o Work faz neste repositório**, até o teste com o Matheus.

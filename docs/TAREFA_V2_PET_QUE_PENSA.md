@@ -211,3 +211,36 @@ cérebros, a bancada e a web não mudaram. Interpretações em `docs/registro/20
   - **as recusas:** o estilo, a chave, a fruta sem ração e o grupo.
 - **Fumaça descritiva** (só o encanamento, instinto, atencioso, 5 dias, sementes 101 a 303): o pet comeu de 2 a 16 frutas ao lado por vida.
 - **Para o D:** a bancada liga a regra nos braços do J5 (o `simular_vida_fisico` com o `ao_lado` e a `cfg_fruta_ao_lado` no motor).
+
+## A fruta ao lado da ração, a bancada (D, 2026-10-18; o adendo 5 do plano) — SEM RUN
+
+Sem run; só as sementes dos testes. Interpretações em `docs/registro/2026-10.md`.
+
+- **A chave do J5:** `"fruta_ao_lado": true` (`BancadaPQP.ao_lado`).
+  - Liga a regra do A (`ConfigFrutaAoLado`, `DonoFrutaAoLado`) em todos os braços e nos dois protocolos, com o paladar e o dono no
+    comedouro.
+  - Desligada, a vida e as medidas são as do paladar (G2).
+- **A faixa:** 51101…51505 (A5.8, PJ5-6), em `BASES_PQP_AO_LADO`. Com a fruta ao lado, as 45101… e as 49101… não voltam.
+- **As medidas novas,** em `digilab/metrics.py`:
+  - **a oportunidade do T1 lado a lado** (A5.3, PJ5-2): o comer com a x da regra e a ração à vista, sem a fome;
+  - **a decisão lado a lado** (A5.5): a medida da calibração do `ganho_gosto`.
+- **Os descritivos do A5.6,** na chave `ao_lado` das medidas:
+  - as frutas postas e as comidas pela origem, por tipo e por dia;
+  - as decisões lado a lado por dia;
+  - no T1, a fração das oportunidades em que o alvo padrão seria a x (R-15);
+  - a fração de fruta e a parte dela que veio da regra;
+  - no T2, as x da regra comidas depois da mudança (R-16).
+  - Os pesos `comida:<tipo>` por dia já saem do paladar.
+- **A calibração montada, SEM rodar** (precisa do sim do Matheus): `experiments/configs/v2_pet_que_pensa/calibracao_ao_lado.json` (e a
+  fumaça `fumaca_calibracao_ao_lado.json`), pelo `run_v2_calibracao_pet_que_pensa_paladar.py`. Os passos são os mesmos quatro:
+  1. **`ganho_gosto`** na grade {S/2, S, 2S, 4S}, pela fração lado a lado nos dias 4 a 6, em [0,25; 0,75] (PJ5-5);
+  2. **`g_plano`** pela seção 5;
+  3. **`reval`;**
+  4. **`piloto`,** com a G-APRENDEU a 1/4 (PJ5-3).
+- **Testes** (`tests/test_bancada_pqp_ao_lado.py`, 10):
+  - a faixa;
+  - as medidas em dados;
+  - as recusas da config e o G2;
+  - duas vidas com a fruta ao lado e as medidas recontadas do motor;
+  - a oportunidade nova recontada do replay;
+  - a config do adendo, a G-APRENDEU com o limiar e a fumaça dos quatro passos.

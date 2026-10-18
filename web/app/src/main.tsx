@@ -20,6 +20,7 @@ import "./estilo/crescer.css";
 import "./estilo/lutar.css";
 import "./estilo/diario.css";
 import "./estilo/decoracao.css";
+import "./estilo/desktop.css";
 
 iniciarTema();
 iniciarEscala();

@@ -15,7 +15,7 @@ Cada categoria tem a própria regra de evidência (docs/infra/GUIA_OPERACIONAL.m
 
 Uso:
   python tools/verificar_relato.py --arquivo corpo.md [--base origin/main]   # arquivos mudados por git diff base...HEAD
-  python tools/verificar_relato.py --pr 123                                  # corpo e arquivos pelo gh
+  python tools/verificar_relato.py --pr 123                                  # corpo e arquivos pelo gh (ignora --base)
   python tools/verificar_relato.py --env CORPO_PR --base origin/main          # no CI: o corpo vem por variável de ambiente
   python tools/verificar_relato.py --listar-testes --base origin/main         # os tests/test_*.py mudados, um por linha
 
@@ -77,8 +77,12 @@ def secoes(corpo: str) -> dict[str, str]:
     return saida
 
 
+CODIGO = re.compile(r"```.*?```|`[^`\n]*`", re.S)
+
+
 def vazio(texto: str | None) -> bool:
-    return texto is None or not texto.strip() or bool(PLACEHOLDER.search(texto))
+    """Vazio, ou com um <...> do modelo fora de código (um `--arquivo <corpo.md>` citado num comando não conta; achado da INFRA-POC)."""
+    return texto is None or not texto.strip() or bool(PLACEHOLDER.search(CODIGO.sub("", texto)))
 
 
 def dois_conhecidos(raiz: Path) -> dict[str, tuple[bool, str]]:
