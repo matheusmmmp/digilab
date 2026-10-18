@@ -238,3 +238,68 @@ validação uma vez só, e o resultado negativo registrado como está.
   v11 tem 294 KB (anexo 1). O replay de uma vida com física fica mais caro, e isso é a métrica M5 do POC.
 - **No arranjo F,** o estado da engine (o snapshot do Rapier) teria de entrar no save, ou o replay teria de rodar a física inteira desde o
   nascimento, com a mesma versão da engine.
+
+## 7. O roadmap reconciliado: P0–P9 da especificação × o roadmap da V2
+
+**Sem roadmap paralelo:** cada fase P da especificação é lida como **um agrupamento dos marcos que já existem**:
+- os J1 a J10 e as ideias da seção 8 de `docs/ROADMAP_V2.md`;
+- o porte W;
+- as fases G do `docs/futuro/ecossistema_genetico.md`.
+
+Só a P3 é frente nova (este documento). A numeração P é a prioridade da especificação, não uma dependência linear; o J continua sendo o
+nome do marco.
+
+| fase | o que a especificação pede | os marcos que já existem | o estado (2026-10-18) | entrada | saída |
+|---|---|---|---|---|---|
+| **P0** consolidação do DigiBrain V2 | auditoria, contratos, testes, observabilidade, estabilidade | a rodada de saúde (`TAREFA_V2_SAUDE`); a E0 e o desenho V3 (`digibrain_v3_e0.md`); o porte W (#320 a #335); o connectome (#321); a infraestrutura multiagente (#326, aberto) | em andamento: o v11 no `Motor` (W, etapa 4, parte 3); as V3-1 a V3-8 abertas | — | o v11 jogável na web com o painel DigiBrain; as decisões V3 tomadas |
+| **P1** fisiologia e metabolismo | alimentação, gasto, atividade, repouso | **J2** (o metabolismo ME-1 a ME-7, também no TS, #333); **J4** (o banheiro); **J10** (o dano, adiado) | código pronto; a calibração fecha só com o passo 0; **a validação do corpo não rodou** | P0 | a validação do corpo (34101…34505), que pede o sim do Matheus |
+| **P2** aprendizado por consequências, sem o 3D | mudança de comportamento em ambiente controlado | **J3** (feito na pesquisa); **J1** (negativo: #285, #296); **J5** (a fruta ao lado, #334: o T1 com margem; a validação N = 50 espera o sim); o N3 | o candidato mais perto do **Gate C** é a validação do J5 do adendo 5 | P0, P1 | **um resultado positivo validado** (plano antes, validação uma vez) |
+| **P3** mundo físico 3D | o WORLD-POC-01 | **novo** (este documento); a M-2 e as pranchas do mapa (rodada 16) | proposto | esta investigação aprovada; a W-1 decidida | o **Gate A** |
+| **P4** percepção espacial e autonomia corporificada | sensores, navegação, intenções, consequências físicas | o mundo físico (J1) com o contrato da seção 4 no motor, Python e TS; os órgãos com lado (DP-13, DP-14); o proprioceptivo (ideia, `DEFINICOES_CORPO_V2.md` 8.1); os experimentos EXP-1 a EXP-3 | proposto | P0, P2, P3 | o **Gate B**; e, com o EXP-1 validado, um segundo **Gate C**, já corporificado |
+| **P5** genoma e hereditariedade | variações herdáveis | **G0, G1** (`ecossistema_genetico.md`, EG-1 a EG-8 decididas); a fisiologia por espécie (FE-3 aberta) | ideia decidida, sem tarefa | o organismo estável (P1) | o **Gate D** (a h² do G1, com plano) |
+| **P6** memória e conhecimento avançados | fichas, consolidação, esquecimento, generalização | o **N6** (`MemoriaEpisodios`); o `ModeloMundo` do **J5**; o Digicorpo do **J6** | o código do N6 e do J5 na `main`; o J6 nas etapas 0 a 2 | a memória e o aprendizado validados (P2) | um plano próprio |
+| **P7** reprodução e desenvolvimento | transmissão, variação, desenvolvimento | **G2, G3** (o ovo no `Grupo`; o fatorial criação × seleção); a Vida (o relógio de desenvolvimento do J2) | depende de **dois pets aprendendo de verdade** (J7, inconclusivo por premissa) | P5, J7 | o **Gate E** |
+| **P8** Semantic Thought Decoder | interpretar estados internos | `docs/futuro/decodificador_conceitos.md` (ideia, 2026-10-04); o connectome; o motivo de cada decisão | ideia | os motivos rastreáveis (P0) | um plano próprio |
+| **P9** ecossistema e dispositivos | vários organismos, ecologia, smartwatch | **J7, J8, J9**; **G4**; **o smartwatch e o Vital Bracelet: Ausentes** (nenhum documento no repositório) | J7 degrau 1 no código; o resto, ideia | P2 a P7 | — |
+
+**Os gates da especificação × o que o projeto já usa:**
+
+| gate | a especificação | como fica aqui |
+|---|---|---|
+| **A** viabilidade técnica | a engine, o modelo visual, a física, a integração | o POC-01 aprovado pelos critérios do anexo 3, mais a decisão W-1 (onde mora a física) |
+| **B** organismo corporificado | percepção, decisão, navegação, consequências físicas e fisiológicas | uma demonstração técnica do contrato no motor (Python e TS, com paridade), sem hipótese: não é resultado de pesquisa |
+| **C** aprendizado demonstrável | mudança comportamental mensurável pela experiência | **só com plano de análise antes e validação uma vez**, com o controle do sinal embaralhado (seção 5.2). Um resultado negativo também fecha o gate como "medido" |
+| **D** variabilidade biológica | o genótipo dá diferenças fenotípicas | o G1 do `ecossistema_genetico.md` |
+| **E** reprodução e desenvolvimento | herança, variação e desenvolvimento não roteirizados | o G2 e o G3 |
+
+**O paralelismo:**
+- a P3 (o POC e a vista) é toda web e não espera a P2;
+- a P4 espera a P2, porque mais mundo sem um aprendiz que aprenda repete o J1;
+- da P5 à P8 dá para preparar em paralelo, como a especificação permite.
+
+**O risco principal do roadmap:** pôr a P3 e a P4 na frente da P2. O mundo fica mais bonito e o aprendizado continua não funcionando,
+como o J1 e o J7 já mostraram.
+
+**A linha proposta para as "ideias registradas" da seção 8 do `ROADMAP_V2.md`** (não aplicada; o Matheus confirma):
+
+> | **o mundo 3D** (a vista do mundo físico em Three.js, a física em inteiros no motor, o contrato sensório-motor e o WORLD-POC-01) |
+> investigação feita (WORLD-POC-001, 2026-10-18), sem tarefa; as fases P0–P9 lidas sobre os marcos J | J1, M-2 | `docs/futuro/mundo_3d.md` |
+
+## 8. As decisões do Matheus (com a recomendação e o custo de errar)
+
+| # | decisão | recomendação (PROPOSTA) | o custo de errar |
+|---|---|---|---|
+| W-1 | **onde mora a física:** V (no motor, em inteiros; a vista só desenha) ou F (a engine, o Rapier, como fonte da verdade) | **V**. Mantém a M-1, a seção 2.6 do `mundo_fisico.md`, o determinismo bit a bit e a pesquisa no Python | com V, se a pergunta de pesquisa um dia pedir corpos rígidos de verdade, a física inteira terá de crescer, ou se troca para F depois. Com F, a pesquisa do mundo sai do Python e toda versão da engine muda as vidas |
+| W-2 | a engine de renderização | **Three.js**, imperativo, sem react-three-fiber | trocar de renderizador custa a pasta da vista; o motor não muda (a vista só lê) |
+| W-3 | o pet sabe a própria posição absoluta? (hoje sabe: `PercepcaoMundo.x`, `y` e o `ocorrido`) | manter por enquanto e marcar como acesso privilegiado; trocar por um lugar integrado pelos passos só com uma pergunta que precise disso | mexer agora muda os gabaritos do mundo e o alvo `ponto` sem uma pergunta |
+| W-4 | as paredes e os obstáculos | entram como mecânica nova atrás de chave desligada; a M-1 ("sem áreas fechadas") fica valendo para o mapa de hoje | se entrarem sem chave, as vidas do mundo de hoje mudam |
+| W-5 | a ordem P2 antes de P4 | **sim**: o Gate C (o J5 ou o EXP-1 no 2D) antes de pôr o cérebro no mundo novo | inverter repete o J1 num mundo mais caro |
+| W-6 | a arte do POC | o atlas do UP só local e sem versionar, com um sprite de reserva | um POC que dependa de arte de terceiros não vira produto |
+| W-7 | a localização destes documentos | `docs/futuro/mundo_3d.md` com a pasta `docs/futuro/mundo_3d/` (o precedente do connectome) e uma linha no `ROADMAP_V2.md` | baixo |
+
+## 9. A próxima tarefa recomendada
+
+1. **O Matheus decide** a W-1, a W-2, a W-5 e a W-7.
+2. Com V e Three.js: `docs/TAREFA_V2_WORLD_POC_01.md`, a partir do anexo 3, num PR só de documento.
+3. O POC-01a numa worktree própria, **fora do jogo**, entre 5,5 e 8,5 dias de sessão (PROPOSTO).
+4. **Em paralelo, e com prioridade de pesquisa maior:** a validação do J5 com a fruta ao lado (o Gate C), que já espera o sim.
