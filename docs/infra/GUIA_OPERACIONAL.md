@@ -113,6 +113,22 @@ Isso continua com a revisão e com as skills de auditoria.
 **Custo:** zero enquanto o repositório for público e o workflow usar runner padrão (`docs/infra/MATRIZ_CAPACIDADES.md`). Se o repositório
 virar privado, os minutos passam a contar na cota da conta.
 
+**Conferir um relato antes de abrir o PR.** O job `relato` roda também na máquina, com os mesmos critérios. Antes de abrir o PR, com o
+corpo num arquivo e o branch-base do PR (`origin/main`, ou o branch de baixo num PR empilhado):
+
+```bash
+python tools/verificar_relato.py --arquivo <corpo.md> --base origin/main
+```
+
+Com o PR já aberto, o corpo e os arquivos mudados vêm pelo `gh`:
+
+```bash
+python tools/verificar_relato.py --pr <N>
+```
+
+Os dois imprimem a tabela da conferência e saem com 0 se o relato passa, com 1 se não. O `--arquivo` compara `git diff <base>...HEAD`;
+rode `git fetch origin` antes, para a base estar atualizada.
+
 ## 4. Instalação no Windows (uma vez)
 
 | passo | comando | depende de |
