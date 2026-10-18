@@ -59,7 +59,7 @@ const menos = (x: number): number => 0 - x;   // a negacao sem o -0 do JS
 export function configCorpo(mudancas: Partial<ConfigCorpo> = {}): ConfigCorpo {
   const cc: ConfigCorpo = { ...CCO, ...mudancas };
   const ordem: [string, boolean][] = [["ligada", cc.ligada], ["digestao", cc.digestao], ["vida", cc.vida],
-    ["drives_novos", cc.drives_novos], ["gestos", cc.gestos]];
+    ["drives_novos", cc.drives_novos], ["gestos", cc.gestos], ["banheiro", cc.banheiro]];
   for (let i = 1; i < ordem.length; i++) {
     if (ordem[i][1] && !ordem[i - 1][1]) throw new Error(`ConfigCorpo.${ordem[i][0]} exige ConfigCorpo.${ordem[i - 1][0]} (E-9: um orgao por vez)`);
   }
@@ -96,7 +96,7 @@ export function configCorpo(mudancas: Partial<ConfigCorpo> = {}): ConfigCorpo {
   // o Paladar (docs/futuro/paladar.md) ainda nao tem orgao em TS (a etapa 5 do paladar): ligado, falha alto
   if (cc.paladar) throw new Error("ConfigCorpo.paladar ainda nao existe no TS (paladar, etapa 5)");
   // o banheiro (docs/TAREFA_V2_BANHEIRO.md, secao 3): a vontade, o conforto e as necessidades na zona ainda nao tem quimica em TS (a
-  // etapa 4 do banheiro); ligado, o corpo sairia sem eles em silencio (o achado do #333)
+  // etapa 4 do banheiro); ligado, o corpo sairia sem eles em silencio (o achado do #333). Sem os gestos, a ordem acima falha antes (E-9)
   if (typeof cc.banheiro !== "boolean") throw new Error(`ConfigCorpo.banheiro e bool: ${cc.banheiro}`);
   if (cc.banheiro) throw new Error("ConfigCorpo.banheiro ainda nao existe no TS (banheiro, etapa 4)");
   return cc;
