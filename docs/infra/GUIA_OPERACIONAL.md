@@ -78,6 +78,36 @@ coordenador decide (`V2_TRABALHO_PARALELO.md`, seção 4). Workflows de vários 
 
 Commit de trabalho em andamento só no branch da frente. Nunca `git stash` sem nome.
 
+
+### Protocolo por Issue: ideia, investigação e implementação
+
+Use o Issue como registro curto da ideia e das perguntas. Não cole o histórico inteiro da conversa e não inclua conteúdo que não possa ficar visível no GitHub. **Este repositório está público no momento**; a visibilidade deve ser conferida antes de registrar qualquer dado sensível.
+
+A fonte de verdade muda por etapa:
+
+| etapa | fonte de verdade | uso dos outros artefatos |
+|---|---|---|
+| **REGISTRAR IDEIA** | Issue com ID, origem/contexto, hipótese ou objetivo, motivação, referências, estado PROPOSTO, dependências e questões abertas | comentários registram discussão; não iniciam worker |
+| **ENVIAR PARA INVESTIGAÇÃO** | `docs/TAREFA_V2_<FRENTE>.md`, criado com `tools/nova_tarefa.py` e aprovado/mesclado pelo Matheus antes de abrir o worker | Issue guarda o link e o andamento, sem duplicar o escopo |
+| **RELATAR RESULTADO** | PR: corpo no formato `.github/pull_request_template.md`, diff e resumo do CI | o Issue recebe um comentário curto com o link para o PR |
+| **AUTORIZAR IMPLEMENTAÇÃO** | comentário explícito do Matheus no Issue, ligado ao blob SHA exato da tarefa e à seção 3 | o coordenador cria uma tarefa de implementação separada; o worker só começa depois de ela estar na `main` |
+
+**REGISTRAR IDEIA.** Peça: “Registre essa ideia no Issue do DigiLab.” Resuma a conversa nos campos acima; mantenha o status **PROPOSTO**. A proposta não é decisão nem autorização.
+
+**ENVIAR PARA INVESTIGAÇÃO.** Peça: “Envie a ideia #336 para investigação, sem implementar.” O coordenador preenche uma tarefa a partir de `docs/modelos/TAREFA_V2_MODELO.md`, referencia o Issue e delimita a mudança mínima como auditoria/investigação. Declare que arquitetura e funcionalidade ficam intocadas. Abra PR para a tarefa. **Só após o arquivo de tarefa estar na `main`** o coordenador cria a worktree e abre manualmente uma sessão Claude Code usando a mensagem da seção 3 de `docs/V2_TRABALHO_PARALELO.md`. Criar Issue ou PR não inicia Claude Code automaticamente.
+
+**AUTORIZAR IMPLEMENTAÇÃO.** Depois de revisar o relatório, o Matheus pode comentar no Issue, por exemplo:
+```
+AUTORIZO IMPLEMENTAÇÃO: docs/TAREFA_V2_FRENTE.md
+blob SHA: <SHA do conteúdo aprovado>
+Escopo: seção 3 dessa tarefa
+```
+A aprovação só vale para aquele conteúdo e escopo. Se o blob SHA mudar, é necessária nova autorização. O coordenador abre uma tarefa de implementação separada; a investigação sozinha nunca autoriza código ou mudança de arquitetura. Labels são filtros auxiliares, não aprovação nem fonte de estado. Neste MVP, use apenas labels existentes; não crie um fluxo dependente de labels.
+
+**ENTREGA E RECUPERAÇÃO.** O worker abre um PR e para; não faz merge. O PR é a fonte do relato e das evidências. No Issue, registre apenas o link e o estado curto. Para retomar depois de uma interrupção, use o ID/link do Issue, o caminho da tarefa e o branch/PR; não dependa do histórico do chat. No Work, peça: “Leia o último PR ligado ao Issue #336, confira corpo, diff e check verificar-pr; separe o que foi declarado do que o CI verificou.” Esta sessão criou e leu o Issue #336 pelo conector GitHub; isso não comprova que uma sessão Claude Code consiga lê-lo.
+
+GitHub Actions: use o `verificar-pr` que já existe; esta POC não adiciona Actions, secrets, serviços pagos nem execução automática de agentes.
+
 ## 3. O que o CI confere (`.github/workflows/verificar-pr.yml`)
 
 **Job `relato`** (`tools/verificar_relato.py`). Confere os campos `Tarefa`, `Categoria`, `Executor` e `Branch` e as seções do template. Um
