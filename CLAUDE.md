@@ -62,6 +62,19 @@ evolutivo com IA, inspirado em Tamagotchi e Digimon.
   Matheus.
 - **Nunca usar `git stash` sem nome:** o stash é compartilhado entre as worktrees.
 
+## Escolha de modelo e contexto
+
+- **Escolher pela incerteza, pelo risco e pela possibilidade de verificar o resultado**, não só pelo tamanho da tarefa.
+- **Sonnet é a preferência para implementação com escopo claro. Haiku, para buscas, extrações e ajustes mecânicos delimitados.**
+  **Opus, para arquitetura, método científico, matemática difícil ou diagnóstico complexo**, conforme a disponibilidade da sessão.
+- **Operações determinísticas vão para scripts, ferramentas e CI.** Não abrir um worker só para executar um comando conhecido.
+- **Contexto mínimo suficiente:** passar a tarefa, as regras aplicáveis e os arquivos necessários; devolver síntese e evidências, sem
+  copiar o histórico inteiro. Cada frente longa continua na própria worktree; delegar só o que tiver escopo e entrega claros.
+- **Escalar o modelo quando a análise ou a verificação indicar dificuldade**, com uma síntese do que já foi tentado. Informar no relato
+  o modelo efetivamente usado, quando disponível, e o motivo da escalada; não inferir o modelo de uma sessão.
+- **A seleção efetiva do modelo fica na sessão ou na configuração do agente.** Este arquivo orienta a escolha; não muda o modelo sozinho.
+  Economia de tokens não reduz os gates, o determinismo, a revisão nem a autoridade do Matheus.
+
 ## Arquitetura
 
 - **Event sourcing:** o estado do pet nunca é salvo. Só o log (ações do dono e avanços de tempo); a vida é refeita reprocessando o log.

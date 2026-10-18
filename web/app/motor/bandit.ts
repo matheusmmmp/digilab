@@ -58,6 +58,17 @@ export interface Decisao {
   x: number[]; acao: AcaoPet; amostras: Record<AcaoPet, number[]>; logPrior: Dist; gumbel: Dist; refsMem: Record<string, number | null>;
 }
 
+/** a necessidade de sempre (espelho de desejo._necessidade): a mais baixa abaixo do limiar, ou null. Os pets v2 a v10 (Bandit.desejo) e
+    os v11 (desejoLobos) */
+export function necessidade(obs: Observacao, tick: number): Desejo | null {
+  const nec = ([["fome", 0, "comer"], ["higiene", 1, "limpar"], ["energia", 2, "dormir"], ["humor", 3, "brincar"]] as const)
+    .map(([n, i, alvo]) => [obs.v[i], n, alvo] as const).filter(([v]) => v < CDJ.limiarNecessidade)
+    .sort((a, b) => a[0] - b[0] || (a[1] < b[1] ? -1 : 1));
+  if (!nec.length) return null;
+  const [v, n, alvo] = nec[0];
+  return { tick, tipo: "necessidade", alvo, causa: n, intensidade: (CDJ.limiarNecessidade - v) / CDJ.limiarNecessidade };
+}
+
 export class Bandit {
   bracos: Record<AcaoPet, Braco>;
   ultima: [number[], AcaoPet] | null = null;
@@ -106,10 +117,8 @@ export class Bandit {
   /** desejo (espelho de desejo.py): necessidade abaixo do limiar; senao a vontade = acao de maior media
       da posterior (theta^ . x, sem prior e sem amostra) se a margem passar o limiar. Sem rng. */
   desejo(obs: Observacao, tick: number): Desejo | null {
-    const nec = ([["fome", 0, "comer"], ["higiene", 1, "limpar"], ["energia", 2, "dormir"], ["humor", 3, "brincar"]] as const)
-      .map(([n, i, alvo]) => [obs.v[i], n, alvo] as const).filter(([v]) => v < CDJ.limiarNecessidade)
-      .sort((a, b) => a[0] - b[0] || (a[1] < b[1] ? -1 : 1));
-    if (nec.length) { const [v, n, alvo] = nec[0]; return { tick, tipo: "necessidade", alvo, causa: n, intensidade: (CDJ.limiarNecessidade - v) / CDJ.limiarNecessidade }; }
+    const nec = necessidade(obs, tick);
+    if (nec) return nec;
     const x = this.fx(obs);
     const m = ACOES_PET.map((a, i) => [this.bracos[a].theta().reduce((s, t, j) => s + t * x[j], 0), -i, a] as const).sort((p, q) => q[0] - p[0] || q[1] - p[1]);
     const margem = m[0][0] - m[1][0];

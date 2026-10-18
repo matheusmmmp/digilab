@@ -5,7 +5,8 @@
    O que se rejoga sao os `ganchos` de cada vida: cada chamada que o motor do Python fez ao cerebro, na ordem, com o que ela levou (a
    observacao com os receptores do corpo, a transicao da decisao, o ocorrido do gancho do corpo, a acao do dono e o tick, o antes e o
    depois do carinho). O exportador os grava num replay do log com a politica embrulhada e confere que esse replay e a vida. O laco do
-   motor com o corpo nao roda aqui: o corpo do v11 tem o metabolismo, que o corpo.ts ainda nao tem (o registro de 2026-10-18).
+   motor com o corpo nao roda aqui: o corpo do v11 (com o metabolismo) ja existe no corpo.ts (a etapa 4 do metabolismo; a paridade dele
+   esta em test/metabolismo.test.ts), mas o Motor com o corpo por tick e da etapa 4 do W-PORTE.
 
    Em cada decisao, depois do gancho do corpo, o motivo inteiro e o do Python (toStrictEqual, que compara os numeros por Object.is): a
    regra, os candidatos, a percepcao e a do corpo, as contribuicoes por lobo, os pesos efetivos, o u, a acao, o lobo decisivo, o
@@ -111,7 +112,7 @@ describe("G-PAR-L1: o cerebro A aprendendo (o pet v11) = o gabarito do Python, d
     expect([cl.traco_decisoes, cl.memoria_ligada, cl.w0_info, cl.w0_pedido, cl.alvo_aprendido, cl.entradas_sociais, cl.modelo_outros,
       cl.presenca_fruta_mundo, cl.g_plano, cl.paladar, cc.pesos_janela]).toEqual([0, false, 0, 0, false, false, false, false, 0, false, false]);
     expect([co.ligada, co.drives_novos, co.gestos, co.banheiro, co.paladar, co.escala_receptor]).toEqual([true, true, true, false, false, 1024]);
-    /* o metabolismo esta ligado nas vidas: o laco do corpo nao roda em TS nesta etapa (so os ganchos) */
+    /* o metabolismo esta ligado nas vidas: o laco do corpo nao roda em TS nesta etapa (so os ganchos; o Motor e da etapa 4) */
     expect(co.metabolismo).toBe(true);
   });
 

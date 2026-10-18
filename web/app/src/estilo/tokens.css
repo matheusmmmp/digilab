@@ -59,6 +59,36 @@
   --dl-hex-img:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='48'%3E%3Cpath d='M14 0L28 8V24L14 32L0 24V8ZM14 32V48' fill='none' stroke='%231B3163' stroke-width='1.5'/%3E%3C/svg%3E");
 }
 
+/* Desktop limpo (TAREFA_V2_UI_DESKTOP, 2026-10-18): tokens da casca e da tela do Pet a partir de 1100 px (estilo/desktop.css).
+   Valores do prompt do Matheus (aproximados da referencia, nao extraidos dela). O celular continua nos --dl-*. */
+:root{
+  --ui-primary:#128CFF; --ui-primary-hover:#0876E0; --ui-primary-ink:#FFFFFF; --ui-primary-soft:#E6F2FF;
+  /* o #128CFF do prompt so passa 3,4:1 com branco: fica nas barras, bordas e no foco (3:1); com texto, o forte (5,5:1) */
+  --ui-primary-forte:#0968CB; --ui-primary-forte-hover:#0757AD;
+  --ui-navy:#0B234B; --ui-navy-2:#123266; --ui-navy-ink:#C9D6EE;
+  --ui-bg:#F4F8FF; --ui-surface:#FFFFFF; --ui-surface-2:#F7FAFF; --ui-border:#D7E5F7;
+  --ui-text:#102653; --ui-text-2:#4F6488;      /* texto secundario: #64799C do prompt escurecido para passar 4,5:1 no branco */
+  --ui-success:#48D99A; --ui-warning:#FFCB58; --ui-danger:#FF557F;
+  --ui-bar-track:#E8EFF9; --ui-sombra:0 1px 2px rgba(16,38,83,.06),0 4px 14px rgba(16,38,83,.06);
+  --ui-raio:14px; --ui-raio-p:10px; --ui-topo:64px; --ui-lateral:208px; --ui-foco:0 0 0 3px #FFFFFF,0 0 0 5px #128CFF;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-tema="claro"]){
+    --ui-primary:#3FA3FF; --ui-primary-hover:#1E8EF5; --ui-primary-ink:#06142E; --ui-primary-soft:#123266; --ui-primary-forte:#3FA3FF; --ui-primary-forte-hover:#69B7FF;
+    --ui-navy:#071733; --ui-navy-2:#0F2A57; --ui-navy-ink:#B9C8E6;
+    --ui-bg:#0A1730; --ui-surface:#102347; --ui-surface-2:#13294F; --ui-border:#24406E;
+    --ui-text:#E6EEFF; --ui-text-2:#A9BBDD; --ui-bar-track:#1C335C; --ui-sombra:0 1px 2px rgba(0,0,0,.3);
+    --ui-foco:0 0 0 3px #0A1730,0 0 0 5px #3FA3FF;
+  }
+}
+:root[data-tema="escuro"]{
+  --ui-primary:#3FA3FF; --ui-primary-hover:#1E8EF5; --ui-primary-ink:#06142E; --ui-primary-soft:#123266; --ui-primary-forte:#3FA3FF; --ui-primary-forte-hover:#69B7FF;
+  --ui-navy:#071733; --ui-navy-2:#0F2A57; --ui-navy-ink:#B9C8E6;
+  --ui-bg:#0A1730; --ui-surface:#102347; --ui-surface-2:#13294F; --ui-border:#24406E;
+  --ui-text:#E6EEFF; --ui-text-2:#A9BBDD; --ui-bar-track:#1C335C; --ui-sombra:0 1px 2px rgba(0,0,0,.3);
+  --ui-foco:0 0 0 3px #0A1730,0 0 0 5px #3FA3FF;
+}
+
 /* fundos do atlas (src/atlas.ts poe as imagens em --dl-img-hex-claro/-escuro e marca data-fundos="up") */
 :root[data-fundos="up"]{--dl-img-hex:var(--dl-img-hex-claro);--dl-hex-tam:180px auto;--dl-hex-tam-card:140px auto}
 :root[data-fundos="up"][data-tema="escuro"]{--dl-img-hex:var(--dl-img-hex-escuro)}

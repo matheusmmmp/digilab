@@ -337,6 +337,16 @@ export const DESLOC_CARATER: Record<"adolescente" | "adulto", Carater> = {
   adolescente: { atento: -0.0264, impetuoso: -0.0088, paciente: 0.0990, resistente: 0.0536 },
   adulto: { atento: -0.0500, impetuoso: 0.0625, paciente: 0.1875, resistente: -0.0875 },
 };
+/* o carater dos pets v11 (PW-4, opcao (b), decisao do Matheus de 2026-10-18; docs/TAREFA_V2_W_PORTE_CEREBRO_A.md, secao 15): a escala
+   propria (CCP.escala x a razao das medianas de |bruto| v11 / v10) e o deslocamento remedido para o cerebro A, nas 32 sondas com os
+   receptores do corpo (carater.ts, caraterV11). PROPOSTOS: a calibracao (experiments/calibrar_carater_v11.py ->
+   artifacts_v2_w_porte/carater_v11_calibracao.json, 20 pets das sementes dos testes) fecha as linhas e as formas, mas nao a escala
+   (13,75% dos eixos cortados em +-1, acima do limite de 10,6%) */
+export const CCP_V11 = { escala: .015 };
+export const DESLOC_CARATER_V11: Record<"adolescente" | "adulto", Carater> = {
+  adolescente: { atento: -0.0117, impetuoso: 0.0142, paciente: -0.0167, resistente: 0.0142 },
+  adulto: { atento: -0.7917, impetuoso: 0.2604, paciente: 0.25, resistente: 0 },
+};
 
 /* V2, o mundo fisico minimo (docs/TAREFA_V2_MUNDO_FISICO.md, etapa 5): espelho de ConfigMundo e dos layouts de digilab/config.py.
    O motor do mundo e motor/mundo.ts; a paridade (test/mundo.test.ts) confere estes numeros contra o gabarito do Python. Posicoes do
@@ -443,6 +453,16 @@ export const CCO: ConfigCorpo = {
   gasto_atividades_num: 1, gasto_atividades_den: 1,
   paladar: false, meia_vida_sabor: 4, k_meia_vida_sabor: 10427, meia_vida_saciedade: 720, k_meia_vida_saciedade: 63,
   saciedade_num: 1, saciedade_den: 2, paladar_h_min: -512, paladar_h_max: 1024, paladar_h_salgado: 256,
+};
+/* pets v11 (docs/TAREFA_V2_W_PORTE_CEREBRO_A.md; a etapa 4 de docs/TAREFA_V2_METABOLISMO.md): o corpo do ponto do v11, o que muda
+   sobre o CCO (corpo.configCorpo o completa e confere). E a ConfigCorpo que as vidas do v11 do gabarito usaram (config_v11.corpo de
+   test/gabaritos/lobos_python.json): a etapa 6 inteira com o metabolismo, sem o mundo fisico, o banheiro e o paladar; o ponto (2, 1) do
+   adendo 4 (as subidas x 2: o tedio e a solidao, o divisor do estresse / 2; as reducoes x 1) e o gasto 4/5 do adendo 5 (o basal
+   300/150 e as atividades x 4/5, o unico numero do corpo que fechou). PROPOSTOS, nenhum validado no jogo. */
+export const CCO_V11: Partial<ConfigCorpo> = {
+  ligada: true, digestao: true, vida: true, drives_novos: true, gestos: true, metabolismo: true,
+  tedio_sobe: 900, solidao_sobe: 450, estresse_divisor: 128,
+  gasto_basal_acordado: 300, gasto_basal_dormindo: 150, gasto_atividades_num: 4, gasto_atividades_den: 5,
 };
 /* Config.limiar_privacao do Python (Estado.em_privacao: algum de fome, higiene e energia abaixo disto); estado.ts usa o mesmo literal.
    Fica fora de C de proposito: C e conferido folha a folha contra o HTML antigo (test/constantes.test.mjs), que nao o tem */

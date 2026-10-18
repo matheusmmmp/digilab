@@ -143,6 +143,13 @@ describe("config e taxas", () => {
     expect(() => configCorpo({ ligada: true, medo_da_mao: 2 })).toThrow(/medo_da_mao/);
     expect(() => new Corpo({}, { cc: CCO })).toThrow(/desligada/);
   });
+  test("o banheiro falha alto: sem os gestos, a ordem E-9 do Python; com eles, ainda nao existe no TS (o achado do #333)", () => {
+    expect(() => configCorpo({ ...CCO_DRIVES, gestos: false, banheiro: true }))
+      .toThrow("ConfigCorpo.banheiro exige ConfigCorpo.gestos (E-9: um orgao por vez)");
+    expect(() => configCorpo({ ...CCO_DRIVES, banheiro: true })).toThrow("ConfigCorpo.banheiro ainda nao existe no TS (banheiro, etapa 4)");
+    expect(() => configCorpo({ ...CCO_DRIVES, banheiro: 1 as unknown as boolean })).toThrow(/ConfigCorpo.banheiro e bool/);
+    expect(configCorpo({ ...CCO_DRIVES, banheiro: false }).banheiro).toBe(false);
+  });
   test("as taxas de hoje na escala C sao as do Python (os numeros de config.Config, pelo espelho C)", () => {
     expect(JSON.parse(JSON.stringify(taxasDe(CCO_LIGADA)))).toEqual(G.taxas);
   });

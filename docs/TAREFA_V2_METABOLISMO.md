@@ -189,3 +189,49 @@ Está em `docs/PLANO_ANALISE_V2_CORPO_DRIVES.md`, A3.2b. O texto da ME-7 abaixo 
 | ME-5 | A fome passa a ler o combustível? | **não, por ora:** a fome é a de hoje | sim: a fome muda em toda vida com a chave, e o G-HOJE-M perde a igualdade exata |
 | ME-6 | Em que regimes da bancada o metabolismo entra | **no bloco do corpo:** o P0-q, o P1-q, o P0-c, o P1-c e os acoplados, todos com ele. O G-HOJE do plano (hoje × química) fica sem | só no regime "corpo": o P0-c deixa de decidir igual ao P0-q quando a falta dispara, e o G-P0C quebra |
 | ME-7 | Como os números entram na calibração | **um passo 0 da calibração do corpo, antes da grade dela:** o gasto em {½, 1, 2} × (375, 187), só no P0-q; fica o mais perto de 1 em que a fração do tempo acordado com falta cai em [0,05; 0,30] | calibrar junto da grade do corpo: 3 × 9 pontos, o triplo do custo. Não calibrar: com os números PROPOSTOS a falta pode nunca disparar (o metabolismo não faz nada) ou disparar sempre (o pet vive cansado) |
+
+## 10. Etapa 4, entregue (2026-10-18)
+
+Pedida pelo W-PORTE: o corpo do pet v11 tem o metabolismo (`docs/TAREFA_V2_W_PORTE_CEREBRO_A.md`, seção 11). O Matheus decidiu portar o
+metabolismo antes da etapa 4 do W-PORTE, com o ponto do v11 como está.
+
+- **O porte:** `web/app/motor/corpo.ts`, de `digilab/corpo.py` e `digilab/corpo_grafo.py`, só o motor e a paridade.
+  - O `configCorpo` deixou de falhar com o `metabolismo` ligado e confere o que o `__post_init__` do Python confere: a digestão, os
+    inteiros positivos, os iniciais em [0, C] e os limiares em ordem.
+  - Os químicos `combustivel` e `reserva`, sem receptor, e a contabilidade (`CONTAS_METABOLISMO`), no `paraDict` como no Python.
+  - A conversão na digestão, com o resto (`resto_combustivel`) e o descarte no teto; o gasto basal acordado e dormindo (fase 1).
+  - O gasto das atividades: `gastoDaAtividade`, com o fator `gasto_atividades_num`/`gasto_atividades_den`, no brincar do pet e do dono,
+    no explorar e no andar.
+  - O armazenamento e a mobilização, como reações com limiar, entre a fase 1 e a 2; a falta pelo gatilho `abaixo` (fase 2).
+  - O grafo ganhou o que o Python ganhou: a `Reacao` com `fracoes`, `le`, `lado` e `limiar` (campos opcionais, a tabela de antes não
+    muda), as arestas das transferências e as checagens 2b e 3b.
+  - A constante nova `CCO_V11` (`motor/constantes.ts`): o que o corpo do ponto do v11 muda sobre o `CCO`. O `corpo.ts` a completa em
+    `CCO_CORPO_V11`. O `constantes.test.mjs` confere as 7 folhas contra a `config_v11.corpo` do gabarito do cérebro A.
+- **O gabarito:** `experiments/exportar_gabarito_corpo.py` ganhou a seção `metabolismo_v11`, o corpo do ponto do v11, sem o mundo
+  físico. A config vem do exportador do cérebro A, a mesma que as vidas do v11 usaram: o gasto 4/5 (basal 300/150) e o ponto (2, 1) do
+  adendo 4. A seção traz a config, as taxas das atividades, o grafo, uma grade de 713 casos (com os receptores do v11) e uma sequência de
+  3000 operações com o sha256. As outras seções saem iguais, conferido chave a chave contra o arquivo de antes.
+- **G-PAR, passa** (`web/app/test/metabolismo.test.ts`, no Node, 30 testes):
+  - as seções `metabolismo` e `metabolismo_gasto`: a config, o grafo (a tabela e o relato), a grade, a grade com a conversão 2/3, as
+    grades com o gasto × 1/2 e × 2 e as taxas delas, e a sequência longa, com o sha256 de q, da janela, do resto e das contas;
+  - a seção `metabolismo_v11`, do mesmo jeito, com os receptores do v11 em cada caso e no fim. O `CCO_CORPO_V11` é igual, campo a campo,
+    à `config_v11.corpo` dos dois gabaritos. Um controle negativo (o basal 375, ou o gasto 1/1) é pego;
+  - o paladar não depende do metabolismo (as configs dele no gabarito não o ligam) e fica para a etapa 5 do paladar.
+- **Os gates do Python, em TS, onde o gabarito permite:**
+  - G-GRAFO: as checagens passam em 7 combinações, com e sem o mundo, sem laço novo; as tabelas feitas para falhar falham alto;
+  - G-MEC-M: a conversão com o resto, o basal (375/187 e o 300/150 do v11), cada atividade (1/1 e 4/5), os limiares e a falta;
+  - G-CONS-M: as contas fecham depois de cada operação, nas grades, nas sequências e numa sequência de 6000 com a conversão 2/3;
+  - G-HOJE-M em malha aberta: as vidas de hoje do gabarito (com a digestão e a Vida), rejogadas com o metabolismo. Com o corpo cheio,
+    duas das três vidas não entram em falta, e os químicos de antes dão o mesmo sha256 do Python. Do nascimento, as três entram em falta,
+    e até o tick dela tudo é igual; no tick dela, só o cansaço difere, +500;
+  - G-RECEPTOR-M: os receptores são os mesmos com e sem o metabolismo, e nenhum emissor novo sobe o cansaço fora da falta.
+- **Sem o metabolismo, o corpo sai igual:** os testes de antes do `corpo.ts` passam sem mudança.
+- **O que não foi feito: o laço do corpo do v11.** As quatro vidas da seção `v11` de `lobos_python.json` ainda passam só pelos ganchos
+  (etapa 3 do W-PORTE). Para rodar o laço de verdade em TS, faltam duas peças, as duas fora desta etapa:
+  - o `Motor` do v11 com o corpo por tick, o `_laco` e o `_decidir` de `digilab/motor_corpo.py`: decidir, `acao_pet`, a atividade, o
+    gancho, `passo` e `avancar_um_tick`, mais os gestos do dono. É a etapa 4 do W-PORTE;
+  - a sujeira das vidas, que sai da `rng_ambiente` do Python (`random.Random`, Mersenne Twister). O TS só tem o mulberry32
+    (`motor/rng.ts`). A etapa 4 do W-PORTE precisa de um porte do `random.Random` ou de um gabarito com a sujeira e o sono por tick.
+- **Os desvios:** em `docs/registro/2026-10.md`, 2026-10-18.
+- `npm run tipos` limpo; `npm test` com 35 arquivos e 417 testes passando; `tests/test_corpo_quimica.py` e `tests/test_metabolismo.py`
+  passam (72).

@@ -47,6 +47,11 @@ O conteudo (versao 5):
   outras secoes nao mudaram; a `config` ganhou os campos do paladar.
 - `metabolismo_gasto` (o no `gasto_atividades`): a grade do metabolismo com o fator do gasto das atividades x 1/2 e x 2, e as taxas das
   atividades em cada um. A `config` ganhou os dois campos do fator; as outras secoes nao mudaram.
+- `metabolismo_v11` (a etapa 4 do metabolismo, o corpo do pet v11 em TS; docs/TAREFA_V2_W_PORTE_CEREBRO_A.md): o corpo do ponto do
+  v11, a ConfigCorpo que as vidas do v11 usaram (a do gabarito do cerebro A: o gasto 4/5, basal 300/150, e o ponto (2, 1) do adendo 4),
+  sem o mundo fisico: a config inteira, as taxas das atividades, o grafo (a tabela e o relato), uma grade de estados com cada operacao
+  (o estado, a janela, o resto, as contas e os receptores do v11 depois) e uma sequencia longa num corpo so, do nascimento, com o sha256
+  de q, da janela, do resto e das contas. As outras secoes nao mudaram.
 """
 from __future__ import annotations
 
@@ -578,6 +583,83 @@ def metabolismo_gasto() -> dict:
     return out
 
 
+# ------------------------------------------------------------------ o corpo do ponto do v11 (a etapa 4 do metabolismo, para o W-PORTE)
+
+def _v11() -> tuple[ConfigCorpo, tuple[str, ...]]:
+    """a ConfigCorpo que as vidas do v11 usaram de fato e os receptores delas, do gabarito do cerebro A
+    (experiments/exportar_gabarito_lobos.py): o gasto 4/5 (basal 300/150) e o ponto (2, 1) do adendo 4, sem o mundo fisico"""
+    sys.path.insert(0, str(RAIZ / "experiments"))
+    import exportar_gabarito_lobos as gl
+    return ConfigCorpo(**gl.configs_da_vida_v11(gl.bancada_v11())["corpo"]), gl.RECEPTORES_V11
+
+
+def _ops_v11() -> list[list]:
+    ops = [["passo", dormindo, sujeira, tick] for dormindo in (0, 1) for sujeira in (0, 2) for tick in (600, 1400)]
+    ops += [["dono", a] for a in ("alimentar", "limpar", "brincar", "acariciar", "tapa")]
+    ops += [["pet", a.value] for a in ACOES_PET_HOJE]
+    return ops + [["atividade", a] for a in ("brincar", "explorar", "dono_brinca")]
+
+
+def _estados_v11(rng: random.Random, cc: ConfigCorpo) -> list[tuple[list[int], list[str], int]]:
+    """a grade do metabolismo (_estados_m) sem o mundo fisico: o combustivel e a reserva em volta dos limiares, e sorteados"""
+    C = cc.escala
+    nomes = quimicos_de(cc)
+    n = len(nomes)
+    i_c, i_r, i_a = nomes.index("combustivel"), nomes.index("reserva"), nomes.index("alimento")
+    estados = [([0] * n, [], 0), ([C] * n, [], 0)]
+    for comb in (cc.falta_limiar - 1, cc.falta_limiar, cc.mobilizar_limiar - 1, cc.mobilizar_limiar, cc.armazenar_limiar,
+                 cc.armazenar_limiar + 1, C - 100):
+        for res in (0, 100, C - 50):
+            q = [C // 2] * 5 + [0] * (n - 5)
+            q[i_c], q[i_r], q[i_a] = comb, res, 0
+            estados.append((q, [], 0))
+    for _ in range(8):
+        q = [rng.randrange(C + 1) for _ in range(n)]
+        janela = [rng.choice(ATIVIDADES) for _ in range(rng.randrange(cc.janela_tedio + 1))]
+        estados.append((q, janela, rng.randrange(cc.conversao_den)))
+    return estados
+
+
+def metabolismo_v11() -> dict:
+    """o corpo do ponto do v11 (sem o mundo fisico): a config, o grafo, uma grade de estados com cada operacao (o estado, o resto, as
+    contas e os receptores do v11 depois) e uma sequencia longa num corpo so, do nascimento, com o sha256 de q, da janela, do resto e
+    das contas depois de cada operacao (rng propria: as outras secoes nao mudam)"""
+    rng = random.Random(SEMENTE_CASOS + 10)
+    cc, receptores = _v11()
+    g = grafo_do_corpo(CONFIG_PADRAO, cc, taxas_de(CONFIG_PADRAO, cc))
+    t = taxas_de(CONFIG_PADRAO, cc)
+    casos_v = []
+    for q, janela, resto in _estados_v11(rng, cc):
+        for op in _ops_v11():
+            c = Corpo(dict(zip(quimicos_de(cc), q)), CONFIG_PADRAO, cc)
+            c.janela_tedio = list(janela)
+            c.resto_combustivel = resto
+            _aplicar_e6(c, op)
+            rec = c.receptores()
+            casos_v.append({"q": q, "janela": janela, "resto": resto, "op": op, "q_depois": _q(c), "janela_depois": list(c.janela_tedio),
+                            "resto_depois": c.resto_combustivel, "contas": dict(c.contas_metabolismo),
+                            "receptores": [rec[r] for r in receptores]})
+    c = Corpo.de_estado(Estado(), CONFIG_PADRAO, cc)
+    ops, h, tick = [], hashlib.sha256(), 0
+    escolhas = _ops_v11()[8:]
+    for _ in range(3000):
+        if rng.random() < 0.8:
+            op = ["passo", int(rng.random() < 0.3), rng.randrange(3), tick]
+            tick += 1
+        else:
+            op = rng.choice(escolhas)
+        _aplicar_e6(c, op)
+        ops.append(op)
+        h.update(json.dumps([_q(c), c.janela_tedio, c.resto_combustivel, c.contas_metabolismo], sort_keys=True,
+                            separators=(",", ":")).encode())
+    return {"quimicos": list(quimicos_de(cc)), "config": asdict(cc), "receptores": list(receptores),
+            "taxas_pet": {a.value: d for a, d in t.pet.items()}, "taxas_dono_brincar": t.dono[AcaoUsuario.BRINCAR],
+            "grafo": {"tabela": _tabela_m(g), "relato": checar(g)}, "casos": casos_v,
+            "sequencia": {"ops": ops, "sha256": h.hexdigest(), "q_final": _q(c), "janela_final": list(c.janela_tedio),
+                          "resto_final": c.resto_combustivel, "contas_final": dict(c.contas_metabolismo),
+                          "receptores_final": [c.receptores()[r] for r in receptores]}}
+
+
 # ------------------------------------------------------------------ o Paladar (versao 5, como o metabolismo)
 
 CC_P = replace(ConfigCorpo(ligada=True, digestao=True, vida=True), paladar=True)
@@ -699,6 +781,7 @@ def gabarito() -> dict:
         "banheiro": banheiro(),
         "metabolismo": metabolismo(),
         "metabolismo_gasto": metabolismo_gasto(),
+        "metabolismo_v11": metabolismo_v11(),
         "paladar": paladar(),
     }
 

@@ -25,8 +25,10 @@ let ANEL_Y = 226, ANEL_W = 212, ANEL_H = 60, PES_Y = 242, ESC_MAX = 3, ALT_MAX =
 /* o canvas cobre a cena inteira; backing store em pixels do aparelho (K = devicePixelRatio x zoom do desktop) */
 function ajustarTela(cv: HTMLCanvasElement): { K: number; W: number } {
   const pai = cv.parentElement, W = pai && pai.clientWidth > 0 ? pai.clientWidth : 382, H = pai && pai.clientHeight > 0 ? pai.clientHeight : 318, K = (devicePixelRatio || 1) * zoomAtual();
-  const grande = H >= 400;
-  [ANEL_Y, ANEL_W, ANEL_H, PES_Y, ESC_MAX, ALT_MAX] = grande ? [376, 280, 79, 392, 4, 200] : [226, 212, 60, 242, 3, 150];
+  /* habitat do desktop (TAREFA_V2_UI_DESKTOP): os pes ficam a 76 px do fundo, o que da a geometria da prancha (pes em 392) num
+     habitat de 468 px e acompanha um habitat mais alto; ate 4x e no maximo 45% da altura */
+  const grande = H >= 400, pes = Math.round(H - 76);
+  [ANEL_Y, ANEL_W, ANEL_H, PES_Y, ESC_MAX, ALT_MAX] = grande ? [pes - 16, 280, 79, pes, 4, Math.min(240, Math.round(H * .45))] : [226, 212, 60, 242, 3, 150];
   const bw = Math.round(W * K), bh = Math.round(H * K);
   if (cv.width !== bw || cv.height !== bh) { cv.width = bw; cv.height = bh; cv.style.width = W + "px"; cv.style.height = H + "px"; }
   return { K, W };
