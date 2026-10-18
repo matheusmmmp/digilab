@@ -57,9 +57,8 @@ jobs:
           BASE_REF: ${{ github.base_ref }}
         run: |
           set -euo pipefail
-          # O Python no Windows escreve 
-: tira o  antes de virar nome de arquivo; junta com os testes da infra, sem repetir.
-          mapfile -t testes < <({ python tools/verificar_relato.py --listar-testes --base "origin/$BASE_REF"; ls tests/test_infra_*.py; } | tr -d '' | sort -u)
+          # O Python no Windows escreve CRLF: tira o CR antes de virar nome de arquivo; junta com os testes da infra, sem repetir.
+          mapfile -t testes < <({ python tools/verificar_relato.py --listar-testes --base "origin/$BASE_REF"; ls tests/test_infra_*.py; } | tr -d '\r' | sort -u)
           echo "Testes rodados pelo CI (VERIFICADA), ${#testes[@]} arquivos: ${testes[*]}" | tee -a "$GITHUB_STEP_SUMMARY"
           python -m pytest "${testes[@]}" -q
       - name: Rodada de saúde (G-NADA-PERDIDO, G-CONCAT)
