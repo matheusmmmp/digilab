@@ -80,7 +80,7 @@ aprendiz achou assim que a decisão de comer não via a fruta). **O que sai:** c
 | K3/V2 | **comparação A × B × C**, cada um calibrado com o mesmo orçamento, depois uma validação | D | `brain_comparison.md` |
 | M6 | leitura consolidada da fase 1 e escolha do DigiBrain da web | coordenador + Matheus | — |
 | W | porte do escolhido (pets v11) | A | paridade Python/web |
-| F2, F3 | humanos; genoma | — | planos próprios |
+| F2, F3 | humanos; genoma (o desenho do genoma da fase 3 em `docs/futuro/ecossistema_genetico.md`, EG-1 a EG-8 DECIDIDAS em 2026-10-14: um registro único com seções, o prior como desvio herdável, codificação direta, o aprendido nunca no genoma, a espécie fixa por linhagem; os passos G0 a G5, com a reprodução depois do J7 e antes do J8) | — | planos próprios |
 
 ## 5. Divisão dos workers (próximas rodadas)
 

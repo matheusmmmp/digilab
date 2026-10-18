@@ -1,8 +1,9 @@
 # Ecossistema genético — o código genético de cada entidade, e entidades que geram o de outras (desenho)
 
-Status (2026-10-14): **PROPOSTO, só papel**. É o pedido do Matheus pelo Gerente: um "código genético virtual" de cada entidade, e uma
-entidade que gere o código genético de outra, formando um ecossistema. Este documento não autoriza implementação: as decisões EG-1 a
-EG-8 (seção 8) são do Matheus.
+Status (2026-10-14): **as decisões EG-1 a EG-8 estão DECIDIDAS pelo Matheus, todas pela recomendação** (seção 8). O resto do desenho
+segue PROPOSTO e só papel. É o pedido do Matheus pelo Gerente: um "código genético virtual" de cada entidade, e uma entidade que gere o
+código genético de outra, formando um ecossistema. Este documento não autoriza implementação: cada passo da seção 6 entra com tarefa e
+plano próprios.
 
 **Regras deste desenho:**
 - Os números são PROPOSTOS e SEM FONTE, salvo onde citam o código ou um artefato.
@@ -168,6 +169,8 @@ Na **fase 3** (genoma e gerações), na ordem:
 | RE-6 | **a fadiga do dono** na seleção explícita | a seleção pelo uso (4.2) |
 
 ## 8. Decisões do Matheus
+
+**DECIDIDAS em 2026-10-14: EG-1 a EG-8, todas como recomendado** (a coluna "recomendação" é o que vale).
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
