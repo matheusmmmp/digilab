@@ -42,7 +42,7 @@ Não há run.
 - Executar o Claude no CI (`claude-code-action`), que é pago ou gasta a assinatura.
 - Refatorar o `CLAUDE.md`.
 - Agentes especializados além do par coordenador e worker.
-- Qualquer integração do ChatGPT Work dada como funcionando antes do teste (IM-3).
+- Qualquer integração do ChatGPT Work dada como funcionando antes do teste (IM-3, feito em 2026-10-18).
 
 ## 7. Critérios de aceitação
 
@@ -59,8 +59,10 @@ Não há run.
   - Errar para o não: o formato pode ser ignorado sem ninguém ver.
 - **IM-2, uma linha no `CLAUDE.md`, em "Onde está o quê", apontando para `docs/INDICE.md` e `AGENTS.md`.** Recomendação: sim. Custo de
   errar: baixo; é uma linha e sai fácil.
-- **IM-3, o teste do ChatGPT Work** (`docs/infra/TESTE_CHATGPT_WORK.md`). Recomendação: fazer antes de qualquer outro passo da integração.
-  Custo de não fazer: o fluxo de volta continua sem prova.
+- **IM-3, o teste do ChatGPT Work: FEITO em 2026-10-18** (`docs/infra/TESTE_CHATGPT_WORK.md`). O Work lê o branch, o PR e o CI; o gatilho
+  dispara (sem ver o que mudou no corpo); a escrita dá 403 só com
+  leitura, e funciona quando o conector tem escrita (em nome do Matheus). Fica para o Matheus decidir se mantém a tarefa agendada como revisor de PR
+  novo.
 - **IM-4, quem regenera o `docs/ESTADO_ATUAL.md`.** Recomendação: o coordenador, no fim da rodada, junto com o painel.
   - A alternativa, uma Action que faz commit na `main`, exige escrita do bot na `main`, o que contraria a regra do merge só pelo Matheus.
   - Custo de errar: um índice desatualizado (o CI avisa).
@@ -69,3 +71,8 @@ Não há run.
   confusão sobre o que o Claude Science pode ler.
 - **IM-6, as tarefas antigas com `Status: ABERTA` depois da entrega** (achado da auditoria). Recomendação: não reescrever. O
   `ESTADO_ATUAL.md` mostra o status declarado e os resultados que citam a tarefa, e a correção, se houver, é uma etapa do coordenador.
+- **IM-7, a escrita do ChatGPT Work no GitHub** (achado do IM-3). Com escrita no conector, o Work comenta, cria branch e poderia fazer push,
+  e a `main` não está protegida. Recomendação: proteger a `main` (exigir PR, e o check `verificar-pr` quando o IM-1 sair) antes de manter a
+  escrita; senão, voltar o conector para só leitura.
+  - Custo de errar para o lado permissivo: um push direto na `main`, sem PR nem revisão, em seu nome.
+  - Custo de errar para o lado restrito: a ida Work → repositório continua manual.

@@ -8,8 +8,10 @@ reversível e só de documentação.
 
 ## Resultado em uma linha
 
-**O lado do Claude Code e do GitHub funcionou de ponta a ponta. O lado do ChatGPT Work não foi testado e continua PENDENTE (IM-3).** Por
-isso a prova **não** é sucesso integral.
+**O lado do Claude Code e do GitHub funcionou de ponta a ponta.** O lado do ChatGPT Work foi testado depois, no mesmo dia
+(`docs/infra/TESTE_CHATGPT_WORK.md`): a leitura e o gatilho funcionam. A escrita funciona quando o conector tem escrita, o que pede a `main`
+protegida (IM-7). A etapa 7 abaixo
+ficou com o substituto; o teste do Work feito em seguida é o que conta para ela.
 
 ## As etapas
 
@@ -38,8 +40,8 @@ isso a prova **não** é sucesso integral.
 
 ## O que não foi provado
 
-- **O ChatGPT Work.** Ler o repositório, ler o PR, o gatilho de PR e a ida de uma tarefa para o repositório. Tudo depende do teste com o
-  Matheus (IM-3).
+- **A ida de uma tarefa do Work para o repositório por PR:** o Work comentou e criou um branch, mas não abriu um PR de tarefa
+  (`TESTE_CHATGPT_WORK.md`, passo 6).
 - **Uma tarefa de categoria implementacao, experimento, literatura ou arquitetura num PR real.** Essas regras só foram testadas em
   `tests/test_infra_verificar_relato.py`, com repositórios de teste.
 - **O check obrigatório na `main`** (IM-1): não foi ligado.
