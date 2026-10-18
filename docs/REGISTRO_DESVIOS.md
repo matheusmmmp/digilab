@@ -267,6 +267,8 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-18 — DECISOES-1018 (worker C): PW-3 a PW-8, CN-1 a CN-9 e PJ5-1 a PJ5-6 marcadas; o painel e o roadmap](registro/2026-10.md)
 
 - [2026-10-18 — PQP-AO-LADO (worker D): a bancada do adendo 5 do J5, a fruta ao lado da ração nos braços e a calibração montada](registro/2026-10.md)
+
+- [2026-10-18 — INFRA-MULTIAGENTE (esta sessão, coordenador e worker): o relato verificado por categoria e o estado derivado](registro/2026-10.md)
 - [2026-10-18 — W-PORTE, etapa 4, parte 1 (worker de uma sessão lateral): o laço do corpo em TS, a rng do ambiente do Python e o gate do laço](registro/2026-10.md)
 
 - [2026-10-18 — PQP-AO-LADO-CALIBRACAO, a run (worker D): a calibração e o piloto do J5 com a fruta ao lado da ração](registro/2026-10.md)
