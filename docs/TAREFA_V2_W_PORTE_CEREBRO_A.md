@@ -102,7 +102,7 @@ Cada etapa é um PR, com o relato no corpo. O merge é só do Matheus.
 | PW-1 | o que entra no v11 | **DECIDIDO (Matheus, 2026-10-17): como recomendado.** O da seção 3: núcleo, consequência no corpo, carinho e tapa; sem mundo físico, frutas, dois pets e planejamento | levar mais: cada peça traz uma validação negativa ou aberta para dentro do jogo, e corrigir pede um v12 |
 | PW-2 | o ponto do aprendiz | **DECIDIDO (Matheus, 2026-10-17): como recomendado.** O worker da etapa 1 propõe a partir da calibração do corpo e da conjunta, com a ressalva de que nada foi validado no jogo | um ponto sem base: deriva até o teto e um pet que muda demais ou nada |
 | PW-3 | a vontade com o A | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** definir no Python primeiro (o D-W4 do #201: a ação de maior desvio aprendido sobre o prior, com a margem de hoje) | sem vontade, o vínculo B e a tela do desejo mudam; definir só na web perde a paridade |
-| PW-4 | a escala do caráter no v11 | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** medir primeiro; manter se as linhas e formas ficarem perto das do v10 | formas concentradas, e o equilíbrio do combate sai do lugar |
+| PW-4 | a escala do caráter no v11 | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** medir primeiro; manter se as linhas e formas ficarem perto das do v10. **Depois da medida (seção 12, não ficou perto): DECIDIDO (Matheus, 2026-10-18), opção (b):** "uma escala própria do v11 (~0,015) com o deslocamento remedido antes de ligar" (seção 15) | formas concentradas, e o equilíbrio do combate sai do lugar |
 | PW-5 | a percepção no painel | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** lista das entradas que mais pesaram, **não barra** | uma barra de percepção não corresponde a nenhuma conta do cérebro |
 | PW-6 | memória e emoção no painel | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** uma barra (o lobo do A) e a emoção de hoje do pet como selo à parte, com a fonte | duas barras sem fonte separada: uma delas seria inventada |
 | PW-7 | o painel nos pets v1 a v10 | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** **não**: só v11. Os antigos têm o bandit, e um painel para eles seria outro desenho | mostrar o bandit com os nomes dos lobos mistura dois cérebros na mesma tela |
@@ -311,3 +311,21 @@ estão no PR #329 (PW-3 e PW-4); (3) o v11 no `Motor`. Este é o primeiro.
   nascimento (`TICK_INICIAL`) entram no laço como parâmetros: o laço já aceita um estado de nascimento.
 - `npm run tipos` limpo; `npm test` com 36 arquivos e 426 testes (9 deles no `laco_v11.test.ts`); `tests/test_gabarito_lobos_web.py`
   passa (3).
+
+## 15. Etapa 4, parte 3: a escala e o deslocamento próprios do v11, registrados antes de medir (2026-10-18)
+
+Pela PW-4 (b). Esta seção fixa o método e o critério **antes** da primeira vida. Só as sementes dos testes (os 20 pets da seção 11: 4 donos ×
+101…505, 2 dias, 16 interações por dia); sem run de pesquisa. Os números saem PROPOSTOS.
+
+- **A escala do v11:** `CCP.escala` × a razão das medianas de |bruto| (v11 / v10) de `artifacts_v2_w_porte/carater_v11.json`, arredondada a
+  três casas (≈ 0,015).
+- **O deslocamento do v11, pelo método de 2026-09-25** (`docs/registro/2026-09.md`), com a escala nova e o bruto dos pets v11:
+  - **adolescente:** um deslocamento por eixo que leve as 4 linhas para perto de 25%;
+  - **adulto:** em cada linha, menos a mediana do eixo complementar dos pets daquela linha (as formas perto de 50/50).
+- **O critério, as três juntas:**
+  - cada linha entre 15% e 35% dos 20 pets;
+  - a forma de cima (sinal positivo do complementar) entre 35% e 65% dos pets;
+  - a razão das medianas de |bruto| / escala (v11 com a escala nova, v10 com 0,05) em [½, 2], e a fração de eixos cortados do v11 no
+    máximo 0,10 acima da do v10.
+- **Se fechar,** os números entram no TS como `CCP_V11` e `DESLOC_CARATER_V11`, só nos pets v11. **Se não fechar,** vão ao Matheus sem ligar.
+- **Limite conhecido:** a calibração e a conferência usam os mesmos 20 pets (não há sementes de teste de sobra); a conferência é otimista.
