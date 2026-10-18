@@ -261,3 +261,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-17 — W-PORTE, etapa 1 (esta sessão, coordenador e worker): o ponto do v11 e os gabaritos do cérebro A](registro/2026-10.md)
 
 - [2026-10-18 — W-PORTE, etapa 3 (worker de uma sessão lateral): o G-PAR-L1 pelos ganchos do cérebro, sem o laço do corpo](registro/2026-10.md)
+
+- [2026-10-18 — DECISOES-1018 (worker C): PW-3 a PW-8, CN-1 a CN-9 e PJ5-1 a PJ5-6 marcadas; o painel e o roadmap](registro/2026-10.md)
