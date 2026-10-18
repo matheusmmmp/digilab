@@ -1,7 +1,8 @@
 # O cérebro A como connectome: o desenho
 
-Status (2026-10-17): **PROPOSTO, só papel e um protótipo fora do pacote.** Não autoriza nada no jogo web nem no `digilab/`: as decisões
-CN-1 a CN-9 (seção 9) são do Matheus. O porte do cérebro A para a web segue pausado até o J5.
+Status (2026-10-18): **as decisões CN-1 a CN-9 estão DECIDIDAS pelo Matheus, todas pela recomendação** (seção 9). Continua só papel e um
+protótipo fora do pacote: pela CN-1, o connectome é ferramenta de pesquisa até o J5, e nada vai ao jogo web nem ao `digilab/`. O porte do
+cérebro A para a web saiu da pausa em 2026-10-17 (`docs/TAREFA_V2_W_PORTE_CEREBRO_A.md`, #320), sem o connectome.
 
 **O pedido:** o Matheus perguntou se dá para visualizar a rede do cérebro A como o connectome do FlyWire. Dá, como **grafo dos pesos e dos
 motivos de cada decisão**. O que se desenha é uma tabela de pesos, não uma rede de neurônios, e a tela diz isso.
@@ -194,16 +195,18 @@ contagens.
 
 ## 9. Decisões para o Matheus
 
+**DECIDIDAS em 2026-10-18: CN-1 a CN-9, todas como recomendado** (a coluna da recomendação é o que vale).
+
 Cada uma vem com a recomendação e o custo de errar.
 
 | | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|
-| **CN-1** | Onde o connectome vive: só como ferramenta de pesquisa (Python + HTML estático) ou também no jogo web. | Só ferramenta de pesquisa até o J5; a web espera o porte do A. | Baixo se esperar (a ferramenta segue igual). Ir à web agora duplica o trabalho do porte e arrisca a paridade. |
-| **CN-2** | A aresta de três índices passa pela regra (entrada → regra → ação) ou soma as regras (entrada → ação). | Pela regra, como está. | Somar dá um grafo mais limpo, mas mostra pesos que o cérebro nunca soma: um leitor tira conclusão errada do aprendizado. |
-| **CN-3** | Espessura √\|w\| ou linear. | √\|w\|. | Linear apaga os pesos aprendidos pequenos ao lado dos grandes do prior (a entrada `fruta` em comer passa de 6 S); só estética, fácil de trocar. |
-| **CN-4** | Colorir o aprendido pelo canal do crédito (corpo, fruta, gosto). | Não agora. | Pede registrar o canal por peso, uma mudança na política, atrás de chave e com gabarito. Sem ela a cor fica só prior × aprendido. |
-| **CN-5** | Ler os pesos pelos privados (como o protótipo) ou por um método público de leitura em `lobos.py`. | Privados enquanto for protótipo; o método público só se a ferramenta ficar. | O método público mexe na política (pouco, só leitura, mas com teste e gabarito). Os privados quebram alto se mudarem. |
-| **CN-6** | Desenhar a camada do corpo químico. | Sim, numa segunda etapa, numa aba à parte e ligada pelos receptores. | Pequeno: o grafo do corpo já existe. Fazer junto incha o primeiro passo. |
-| **CN-7** | Versionar as páginas geradas (cerca de 2,5 MB com as capturas em `docs/futuro/connectome_cerebro_a/`) ou só o gerador. | Versionar só as duas de exemplo deste PR; as próximas ficam em `artifacts_connectome/`, ignoradas. | Versionar toda página incha o repositório; não versionar nenhuma tira do PR a prova olhável. |
-| **CN-8** | A vida de exemplo padrão: o J5 `P1-plan` T1 com os números calibrados, ou outra. | A do J5, que é a pergunta aberta (o pet que pensa). | Baixo: a escolha é um argumento da linha de comando. |
-| **CN-9** | O nome na tela: "como connectome" com o aviso fixo, ou um nome que não lembre neurônio ("mapa dos pesos do cérebro A"). | Manter "como connectome" no título, com o aviso fixo e o tamanho ao lado da mosca. | Com o nome, alguém pode ler o grafo como cérebro biológico; sem ele, perde-se a ponte com o pedido. O aviso reduz o primeiro risco. |
+| **CN-1** | Onde o connectome vive: só como ferramenta de pesquisa (Python + HTML estático) ou também no jogo web. | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** Só ferramenta de pesquisa até o J5; a web espera o porte do A. | Baixo se esperar (a ferramenta segue igual). Ir à web agora duplica o trabalho do porte e arrisca a paridade. |
+| **CN-2** | A aresta de três índices passa pela regra (entrada → regra → ação) ou soma as regras (entrada → ação). | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** Pela regra, como está. | Somar dá um grafo mais limpo, mas mostra pesos que o cérebro nunca soma: um leitor tira conclusão errada do aprendizado. |
+| **CN-3** | Espessura √\|w\| ou linear. | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** √\|w\|. | Linear apaga os pesos aprendidos pequenos ao lado dos grandes do prior (a entrada `fruta` em comer passa de 6 S); só estética, fácil de trocar. |
+| **CN-4** | Colorir o aprendido pelo canal do crédito (corpo, fruta, gosto). | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** Não agora. | Pede registrar o canal por peso, uma mudança na política, atrás de chave e com gabarito. Sem ela a cor fica só prior × aprendido. |
+| **CN-5** | Ler os pesos pelos privados (como o protótipo) ou por um método público de leitura em `lobos.py`. | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** Privados enquanto for protótipo; o método público só se a ferramenta ficar. | O método público mexe na política (pouco, só leitura, mas com teste e gabarito). Os privados quebram alto se mudarem. |
+| **CN-6** | Desenhar a camada do corpo químico. | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** Sim, numa segunda etapa, numa aba à parte e ligada pelos receptores. | Pequeno: o grafo do corpo já existe. Fazer junto incha o primeiro passo. |
+| **CN-7** | Versionar as páginas geradas (cerca de 2,5 MB com as capturas em `docs/futuro/connectome_cerebro_a/`) ou só o gerador. | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** Versionar só as duas de exemplo deste PR; as próximas ficam em `artifacts_connectome/`, ignoradas. | Versionar toda página incha o repositório; não versionar nenhuma tira do PR a prova olhável. |
+| **CN-8** | A vida de exemplo padrão: o J5 `P1-plan` T1 com os números calibrados, ou outra. | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** A do J5, que é a pergunta aberta (o pet que pensa). | Baixo: a escolha é um argumento da linha de comando. |
+| **CN-9** | O nome na tela: "como connectome" com o aviso fixo, ou um nome que não lembre neurônio ("mapa dos pesos do cérebro A"). | **DECIDIDO (Matheus, 2026-10-18): como recomendado.** Manter "como connectome" no título, com o aviso fixo e o tamanho ao lado da mosca. | Com o nome, alguém pode ler o grafo como cérebro biológico; sem ele, perde-se a ponte com o pedido. O aviso reduz o primeiro risco. |

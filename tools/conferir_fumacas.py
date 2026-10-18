@@ -48,6 +48,8 @@ FUMACAS = {
     "experiments/configs/v2_pet_que_pensa/fumaca_calibracao.json": ("experiments/run_v2_calibracao_pet_que_pensa.py", []),
     "experiments/configs/v2_pet_que_pensa/fumaca_calibracao_paladar.json": ("experiments/run_v2_calibracao_pet_que_pensa_paladar.py",
                                                                           ["--passo", "ganho_gosto"]),      # paladar, etapa 4: o passo 1
+    "experiments/configs/v2_pet_que_pensa/fumaca_calibracao_ao_lado.json": ("experiments/run_v2_calibracao_pet_que_pensa_paladar.py",
+                                                                          ["--passo", "ganho_gosto"]),      # o adendo 5: o passo 1
     "experiments/configs/v2_experimento_maior/fumaca.json": ("experiments/run_v2_experimento_maior.py", []),
     "experiments/configs/v2_calibracao_conjunta/fumaca.json": ("experiments/run_v2_calibracao_conjunta.py", []),
     "experiments/configs/v2_calibracao_cerebro_c/fumaca.json": ("experiments/run_v2_calibracao_cerebro_c.py", []),
