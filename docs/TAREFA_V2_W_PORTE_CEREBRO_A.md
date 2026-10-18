@@ -168,7 +168,96 @@ Cada etapa é um PR, com o relato no corpo. O merge é só do Matheus.
   a seção `v11` do gabarito (aprendizado e corpo, G-PAR-L1, etapa 3).
 - `npm run tipos` limpo; `npm test` com 33 arquivos e 370 testes passando (13 deles no `lobos.test.ts`).
 
-## 11. Etapa 3, entregue (2026-10-18)
+## 11. PW-4: a medida do caráter, registrada antes de medir (2026-10-18, worker B)
+
+Pedido do Gerente: medir a escala do caráter no v11 contra o v10 (linhas e formas) e não mudar nada se ficar perto. Esta seção fixa a
+medida e o critério de "perto" **antes** da primeira vida. É uma medida descritiva com as sementes dos testes, sem run de pesquisa.
+
+- **Os pets:** 4 donos (atencioso, relapso, aleatório, incoerente) × 5 sementes (101…505), 20 por versão, 2 dias com 16 interações por dia.
+  - **o v10:** o bandit do Python (`PoliticaBandit`, o algoritmo do bandit da web) com os donos de sempre, com elogio e bronca
+    (`simular_vida`);
+  - **o v11:** a vida do gabarito da etapa 1 (`P1-c-tapa` no ponto da PW-2: o corpo, o carinho, o tapa e a consequência).
+- **O caráter, pelo método da web** (`carater.ts`, `caraterPolitica`):
+  - o desvio da política sobre a mesma política recém-nascida (no A, o instinto), em 32 sondas × 100 amostras com a semente 9001;
+  - o eixo é a média dos traços, ÷ 0,05, mais o `DESLOC_CARATER` da web do estágio, cortado em [−1, 1];
+  - é medido no fim da criança (900 min) e no fim do adolescente (1980 min);
+  - no A, as sondas ganham os receptores do corpo pela rng `sonda-corpo` da mesma semente, como a deriva da bancada.
+- **A linha e a forma:** `linha_do_adolescente` e `forma_adulta` do catálogo (com o sparring suficiente).
+- **O que se mede:**
+  - a distribuição das 4 linhas e das 8 formas adultas;
+  - o desvio bruto por eixo (a mediana de |bruto|) e a fração de eixos cortados em ±1.
+- **"Perto" são as três condições juntas:**
+  - **(a) as linhas:** a distância de variação total entre o v11 e o v10 fica dentro do 95º percentil da mesma distância com os rótulos
+    de versão permutados entre os 40 pets (10.000 permutações, rng `pw4-permutacao`);
+  - **(b) as formas:** o mesmo;
+  - **(c) a escala:** a razão das medianas de |bruto| (v11 / v10, os dois estágios juntos) fica em [½, 2], e a fração de eixos cortados do
+    v11 fica no máximo 0,10 acima da do v10.
+- **A decisão:** se as três passam, nada muda (`CCP.escala` e `DESLOC_CARATER` ficam). Se alguma falha, o resultado é registrado e vai ao
+  Matheus, sem mudar nada aqui.
+- **Os limites conhecidos:**
+  - são 20 pets por versão, então o teste por permutação tem pouco poder;
+  - a web do v10 usa o bandit da web (outra rng, com o temperamento), e o `DESLOC_CARATER` foi calibrado nele; aqui o lado do v10 é o
+    mesmo algoritmo no Python.
+
+## 12. PW-3 e PW-4, entregues no Python (2026-10-18, worker B)
+
+### PW-3, a vontade com o A
+
+A definição é a do D-W4 do #201, sem número novo:
+- **`PoliticaLobos.desvio_aprendido(obs)`:** para cada ação que o instinto propõe no tempo livre, o desvio aprendido sobre o prior.
+  - É a contribuição do lobo de decisão no peso efetivo: `ativacao(w − w0, x)` mais, com o corpo, o mesmo nas entradas novas.
+  - Usa a mesma conta e a mesma ordem de soma do `_pesos_efetivos`.
+  - É pura: não muda peso, motivo, registro, memória nem rng.
+  - Fora do v11 (mundo físico, frutas, entradas sociais, pedido, plano), falha alto.
+- **`desejo.desejo_lobos(obs, cerebro, tick)`:**
+  - a necessidade de sempre vem primeiro;
+  - sem ela, a vontade é a ação de maior desvio, se a margem para a segunda for ≥ `limiar_vontade` (0,1, a de hoje);
+  - o desempate é o do bandit (a primeira de `ACOES_PET_HOJE`), e a intensidade é min(1, margem);
+  - o recém-nascido, e o cérebro sem aprender, não têm vontade.
+  - O `desejo_de` de sempre não muda.
+- **O gabarito da web:** `lobos_python.json` ganhou a seção `vontade`. As seções `l0` e `v11` saem iguais (conferido), e o teste do TS da
+  etapa 2 passa.
+  - **por decisão:** em cada decisão das 4 vidas do v11, o desejo e o desvio de cada ação, antes de o cérebro decidir. Saem do replay do
+    log com um espião que só lê, e o replay é conferido contra o sha do estado interno;
+  - **a grade:** 32 sondas com os receptores do corpo, contra o cérebro do fim de cada vida.
+  - Nas 288 decisões de cada vida, a vontade aparece em 139 (atencioso), 207 (relapso), 174 (aleatório) e 220 (incoerente), e a necessidade
+    em 17, 28, 94 e 18. A vontade do fim da vida é `ocioso` no atencioso e no incoerente e `explorar` no relapso e no aleatório.
+- **Testes:** `tests/test_vontade_lobos.py`, 9.
+- **Para a etapa 4 (o A, em TS):** o motor dos v11 chama a vontade do cérebro no lugar do `Bandit.desejo`, com a mesma conta, e confere
+  contra a seção `vontade` do gabarito.
+
+### PW-4, a escala do caráter
+
+Pela medida e pelo critério da seção 11 (`python experiments/medir_carater_v11.py` → `artifacts_v2_w_porte/carater_v11.json`; 20 pets por
+versão), **o v11 não fica "perto" do v10.** As linhas e as formas ficam; a escala não.
+
+| | v10 (bandit) | v11 (A) | o critério |
+|---|---|---|---|
+| linhas: brigão, guardião, caçador, colosso | 0,10, 0,45, 0,20, 0,25 | 0,10, 0,60, 0,10, 0,20 | TVD 0,15, contra o 95º percentil nulo 0,35 (p 0,82): **passa** |
+| formas adultas | muralha 0,35; emboscador e vigia 0,15; espelho e titã 0,10; as outras 0,05 | espelho e muralha 0,30; vigia 0,15; emboscador 0,10; duelista, furioso e titã 0,05; sentinela 0 | TVD 0,20, contra 0,45 (p 0,94): **passa** |
+| a mediana de \|bruto\| por eixo | 0,0092 | 0,0027 | a razão é 0,30, fora de [½, 2]: **falha** |
+| eixos cortados em ±1 | 0,006 | 0 | passa |
+
+**A leitura:**
+- **O A desvia do instinto cerca de um terço do que o bandit desvia do bandit recém-nascido**, nas mesmas sondas, no fim da criança e do
+  adolescente.
+  - Com a escala 0,05, o desvio dele vira um caráter de poucos centésimos.
+  - Quem decide a linha passa a ser quase só o `DESLOC_CARATER` (o deslocamento fixo por estágio da web).
+- **Com o desvio zerado,** a linha seria guardião e a forma seria a do deslocamento:
+  - no v11, 60% das linhas e 50% das formas saem iguais a essas;
+  - no v10, 45% e 40%.
+  - Isto é só descritivo, fora do critério.
+- **As linhas e as formas ficam perto** porque o deslocamento domina nos dois, não porque o caráter do A meça o mesmo que o do bandit.
+
+**Os limites:**
+- são 20 pets por versão, e o teste por permutação tem pouco poder;
+- o lado do v10 é o bandit do Python, e o `DESLOC_CARATER` foi calibrado no bandit da web;
+- as vidas têm 2 dias, só até o adulto;
+- os dois lados têm 100% de ramo arisco (os donos simulados não atendem o bebê, um defeito conhecido).
+
+**Nada mudou.** A decisão volta ao Matheus (PW-4); o pedido está no corpo do PR.
+
+## 13. Etapa 3, entregue (2026-10-18)
 
 - **O aprendizado em TS:** `web/app/motor/lobos.ts`, sobre o núcleo da etapa 2.
   - A aritmética inteira: `arred`, a regra da L1 com o teto (`atualizarPesos`) e o piso no peso efetivo. Os produtos têm de caber nos inteiros exatos do double, senão falha alto.
@@ -188,7 +277,7 @@ Cada etapa é um PR, com o relato no corpo. O merge é só do Matheus.
 - **Para a etapa 4:** o `Motor` do v11 precisa do laço do corpo, e o corpo do ponto tem o metabolismo. Há dois caminhos: portar o metabolismo antes (a etapa 4 do metabolismo), ou mudar o ponto do v11 para o corpo sem ele, o que muda o gabarito e o PW-2. A decisão é do Matheus.
 - `npm run tipos` limpo; `npm test` com 34 arquivos e 387 testes passando (17 deles no `lobos_v11.test.ts`); `tests/test_gabarito_lobos_web.py` passa.
 
-## 12. Etapa 4, parte 1, entregue (2026-10-18): o laço do corpo em TS e o gate do laço
+## 14. Etapa 4, parte 1, entregue (2026-10-18): o laço do corpo em TS e o gate do laço
 
 A etapa 4 vai em três PRs, na ordem do pedido: (1) o laço do corpo e a rng, com o gate; (2) a vontade e o caráter no Python, que já
 estão no PR #329 (PW-3 e PW-4); (3) o v11 no `Motor`. Este é o primeiro.
