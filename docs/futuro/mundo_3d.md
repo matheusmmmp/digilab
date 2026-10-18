@@ -183,3 +183,58 @@ aumenta o número de escolhas do cérebro.
   - **toda troca de versão do Rapier muda as vidas**, e os gabaritos teriam de levar a versão junto;
   - os `Math.sin` e `Math.cos` que entrarem na física também saem do determinismo, como a página do Rapier avisa.
 - **Em qualquer arranjo:** a câmera, a interpolação e a animação ficam fora do log e não mexem na simulação.
+
+## 5. Investigação E: o aprendizado pelas consequências e os experimentos
+
+### 5.1 O que se registra a cada decisão
+
+O registro já existe quase todo, no motivo (`_registrar`) e no `estado_interno`. O contrato acrescenta o que faltava:
+
+| o quê | onde fica | para quem |
+|---|---|---|
+| o estado anterior | a Observação da decisão (o que o pet sentiu) e, à parte, o estado do motor (a verdade) | o cérebro: a Observação; a análise: os dois |
+| a ação escolhida | a Intenção (a ação, o alvo e o `u` do sorteio), já no motivo | os dois |
+| o resultado | a ação executada e o resultado físico, inteiros, no log; o `resultado` percebido na Observação seguinte | a análise: a verdade; o cérebro: o percebido |
+| o estado posterior | a Observação seguinte e o estado do motor | igual ao anterior |
+| as alterações fisiológicas | os receptores antes e depois, e o `sinal_corpo` por drive, já no motivo (`sinal_corpo.drives`) | os dois |
+| a mudança de comportamento | **não se registra por decisão:** é medida depois, entre blocos de decisões e entre braços (5.3) | a análise |
+
+**A separação que impede o falso aprendizado:** o cérebro aprende só do que sentiu. A análise mede com a verdade do motor. Nenhuma
+métrica lê o que o cérebro "acha" que aconteceu.
+
+### 5.2 Por que um roteiro não conta
+
+Um comportamento conta como aprendido quando **muda com a experiência e não muda sem ela**. A especificação proíbe tomar uma sequência
+roteirizada como evidência, e o projeto já tem as ferramentas para isso:
+- **o prior do comportamento é zero:** o instinto não contém a escolha medida. Por exemplo, empurrar a bola quando o tédio está alto não
+  tem peso no prior; a sonda "quem decidiu" (a E0, `docs/futuro/digibrain_v3_e0.md`) mostra se foi o aprendido que decidiu;
+- **o braço sem sinal (P0, o instinto)** vive o mesmo mundo e as mesmas sementes;
+- **o braço com o sinal embaralhado** recebe sinais do mesmo tamanho, permutados entre decisões. Se ele aprende igual, o que aprendeu não
+  foi a consequência (SEM FONTE para este controle no projeto; ele é PROPOSTO aqui);
+- **a reversão:** muda-se a consequência no meio da vida (a bola deixa de reduzir o tédio). O comportamento aprendido tem de desfazer-se,
+  e o roteiro não se desfaz. O J5 já mede algo parecido com a G-REVAL.
+
+### 5.3 Os experimentos (PROPOSTOS; cada um com tarefa e plano de análise próprios antes de rodar)
+
+| experimento | a pergunta | os braços | a métrica | depende de |
+|---|---|---|---|---|
+| **EXP-1 a bola e o tédio** | o pet passa a empurrar a bola quando o tédio está alto, porque empurrar reduz o tédio? | P0, P1, P1 com o sinal embaralhado; mais a reversão no meio | a fração de decisões de `brincar` com a bola entre as decisões com o tédio acima de um limiar, no último terço menos no primeiro terço, por braço, com IC por bootstrap como nas runs da V2 | o empurrão no motor (o POC-01a, no motor) e o tédio da bola (já existe: `ConfigCorpo.tedio_bola`) |
+| **EXP-2 a comida atrás da parede** | o pet passa a ir aonde costuma achar comida que não vê? | P0, P1, P1 com a memória de episódios (N6) | a fração de explorar que chega à comida escondida; o tempo até comer | a oclusão no motor (o cone) |
+| **EXP-3 o obstáculo que custa** | o pet evita um caminho que gasta mais energia (a lama)? | P0, P1 | a escolha entre dois alvos iguais com custos diferentes | um terreno com custo no controlador |
+
+**O que vem antes deles, sem o 3D:** o J1 já mostrou que o P1 perde do instinto no mundo 2D (#285) e que o alvo aprendido atrapalha
+(#296). Antes do EXP-1, o P2 da especificação pede **uma mudança de comportamento demonstrada num ambiente controlado**. O EXP-1 pode
+rodar inteiro no Python, no mundo 2D com o empurrão em inteiros, **sem nenhuma vista 3D**. A vista não muda a ciência no arranjo V.
+
+**As regras de sempre:** as sementes de uma faixa reservada em `experiments/bancada/faixas.py`, a calibração separada da validação, a
+validação uma vez só, e o resultado negativo registrado como está.
+
+## 6. A persistência
+
+- **Event sourcing, como hoje:** o log guarda os gestos do dono (com a posição inteira) e os avanços de tempo. A física inteira, o corpo e
+  o cérebro se refazem pelo log, no Python e no TS.
+- **Nada da vista entra no save:** nem a câmera, nem a interpolação, nem os quadros de animação.
+- **O tamanho:** a física não acrescenta evento, porque o empurrão e a colisão são consequências e não entram no log. O log de 60 dias do
+  v11 tem 294 KB (anexo 1). O replay de uma vida com física fica mais caro, e isso é a métrica M5 do POC.
+- **No arranjo F,** o estado da engine (o snapshot do Rapier) teria de entrar no save, ou o replay teria de rodar a física inteira desde o
+  nascimento, com a mesma versão da engine.
