@@ -164,3 +164,50 @@ Cada etapa é um PR, com o relato no corpo. O merge é só do Matheus.
 - **O que não foi conferido:** o `sha_interno` (é o `estado_interno` inteiro, com os contadores da memória, que ficam para a etapa 3) e
   a seção `v11` do gabarito (aprendizado e corpo, G-PAR-L1, etapa 3).
 - `npm run tipos` limpo; `npm test` com 33 arquivos e 370 testes passando (13 deles no `lobos.test.ts`).
+
+## 11. Etapa 3, entregue (2026-10-18)
+
+- **O gabarito antes, num commit próprio** (`experiments/exportar_gabarito_lobos.py`): cada vida da seção `v11` ganhou dois campos.
+  - `traco`: as chamadas que chegam à `PoliticaLobos`, na ordem, já filtradas pelo braço `P1-c-tapa`. São o `agir`, a consequência
+    (a transição do engine e o `f_S` do braço), o gancho do corpo (o `ocorrido` e a observação depois dos estímulos), o tapa
+    (`receber_acao_dono`) e o carinho (`mudanca_no_corpo`). As observações vão inteiras: o `Estado.vetor`, o `ticks_desde_cuidado` e
+    os receptores do corpo que existem;
+  - `interno`: o `estado_interno` do cérebro sem os motivos;
+  - as seções `l0` e `v11` de antes saem iguais, e duas execuções dão o mesmo arquivo. A bancada refaz cada vida pelo log para conferir o
+    replay, então o exportador grava um traço por cérebro e fica com o da vida. Um gancho que o v11 não tem (`observar`, mundo, fruta)
+    falha alto;
+  - `tests/test_gabarito_lobos_web.py` confere o traço: uma decisão por motivo e, do dono, só o tapa e o carinho, tantos quantos o
+    aprendizado contou.
+- **O aprendizado em TS** (`web/app/motor/lobos.ts`), o do `Aprendiz` e da `PoliticaLobos` do Python, só com as chaves do v11:
+  - o registro de cada decisão (X, P, W), a regra da L1 (`atualizarPesos`) e o piso no peso efetivo;
+  - as entradas do corpo: as leituras dos receptores novos / S, numa tabela à parte só no tempo livre, com prior 0;
+  - o sinal pelo corpo (`sinalCorpo`, `contribuicoesCorpo`) e os canais (`sinalCorpoCanais`, a soma telescópica do K-6), com a
+    conferência do `f_S` do N3 (`sinalHomeostatico`);
+  - o tapa (`receberAcaoDono`): `recompensa_tapa` × S na última decisão;
+  - o carinho (`mudancaNoCorpo`): o `sinalCorpo` dos receptores antes e depois dele, na última decisão;
+  - os contadores da memória e emoção (`MemoriaEmocao`) e o `estadoInterno()`, com os nomes do Python;
+  - o cérebro lê os receptores no formato de `Corpo.receptores()` (`corpo.ts`). Ele recebe a `ConfigCorpo` do pet, mas só lê as chaves e
+    a escala;
+  - tudo em inteiros, e um produto que passe de 2^53 falha alto (o Python tem inteiro sem teto). Nenhum `Math.exp` ou `Math.log`.
+- **G-PAR-L1, passa** (`web/app/test/lobos_l1.test.ts`, no Node):
+  - as quatro vidas do v11 (atencioso 101, relapso 202, aleatório 303, incoerente 404), 1.152 decisões, 72 carinhos e 44 tapas;
+  - cada motivo é igual ao gabarito, bit a bit (`toStrictEqual`), logo depois do gancho do corpo da decisão, com o `sinal_corpo`;
+  - no fim, o estado interno inteiro é igual ao `interno` do gabarito: os pesos, os pesos do corpo, o aprendizado (recompensas,
+    atualizações, cortes, desvio máximo, última decisão), os canais e a memória;
+  - os receptores do traço são exatamente os de `Corpo.receptores()` com o corpo do v11 sem o metabolismo (`CCO_DRIVES`), e o cérebro
+    decide lendo um `Corpo` do TS direto;
+  - controles negativos: sem um carinho, sem um tapa ou com o tapa de sinal trocado, os pesos logo depois do gesto saem outros. Um `f_S`
+    que não é o da transição, ou um gancho do corpo que falta, falham alto.
+- **O que fica de fora e falha alto:** o elogio e a bronca (o v11 não tem, PW-1), o traço de elegibilidade, os pesos da janela (A2.4), a
+  consequência sem o corpo (o N3 sobre o `Estado.vetor`), as frutas, o mundo, o banheiro e o paladar. Os chamados pendentes só nascem no
+  `observar` da fonte dono, fora do v11, então não há o que pagar nem expirar. O `tick_ultima_decisao` fica em −1, como no Python.
+- **Para a etapa 4 (o motor do v11):**
+  - o corpo das vidas do v11 tem o **metabolismo ligado**, mas o `corpo.ts` falha alto com ele. O cérebro não precisa do metabolismo
+    (nenhum receptor novo), mas o motor do v11 precisa: ou o metabolismo entra no TS, ou o Matheus decide o v11 sem ele;
+  - a `config.corpo` do gabarito é a `ConfigCorpo` de base da bancada (tudo desligado). A do corpo de cada vida sai do braço (o regime
+    `corpo` e os gestos);
+  - o v11 do motor vai precisar da `ConfigLobos` e da `ConfigConsequencia` do ponto como constantes do TS, conferidas pelo
+    `constantes.test.mjs`. Aqui o teste as lê da `config` do gabarito.
+- **O `sha_interno` não é conferido byte a byte:** o `json.dumps` do Python escreve `1.0` e `1e-05`, e o JS escreve `1` e `0.00001`. No
+  lugar dele, o estado interno é conferido campo a campo (o `interno` mais os motivos), e esse é o conteúdo que o sha resume.
+- `npm run tipos` limpo; `npm test` com 34 arquivos e 382 testes passando (12 deles no `lobos_l1.test.ts`).
