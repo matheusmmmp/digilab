@@ -57,10 +57,11 @@ jobs:
           BASE_REF: ${{ github.base_ref }}
         run: |
           set -euo pipefail
-          mapfile -t mudados < <(python tools/verificar_relato.py --listar-testes --base "origin/$BASE_REF")
-          echo "Testes mudados no PR: ${#mudados[@]}" | tee -a "$GITHUB_STEP_SUMMARY"
-          python -m pytest tests/test_infra_*.py "${mudados[@]}" -q
-          echo "Rodados pelo CI (VERIFICADA): tests/test_infra_*.py ${mudados[*]}" >> "$GITHUB_STEP_SUMMARY"
+          # O Python no Windows escreve 
+: tira o  antes de virar nome de arquivo; junta com os testes da infra, sem repetir.
+          mapfile -t testes < <({ python tools/verificar_relato.py --listar-testes --base "origin/$BASE_REF"; ls tests/test_infra_*.py; } | tr -d '' | sort -u)
+          echo "Testes rodados pelo CI (VERIFICADA), ${#testes[@]} arquivos: ${testes[*]}" | tee -a "$GITHUB_STEP_SUMMARY"
+          python -m pytest "${testes[@]}" -q
       - name: Rodada de saúde (G-NADA-PERDIDO, G-CONCAT)
         run: python tools/conferir_saude.py
       - name: Estado atual derivado (só aviso)
