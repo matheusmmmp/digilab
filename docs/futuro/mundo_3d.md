@@ -92,3 +92,94 @@ de pesquisa que dependa dele (a W-1, seção 8).
 - **o pixel art:** filtro nearest, e o tamanho na tela em múltiplo inteiro do pixel do sprite, como o `PalcoPet` faz. Com a câmera
   ortográfica, o tamanho do sprite não varia com a distância; com perspectiva, varia, e o múltiplo inteiro se perde. **Recomendação
   PROPOSTA:** a câmera ortográfica inclinada.
+
+## 4. Investigação D: o contrato sensório-motor
+
+O fluxo da especificação, com quem calcula cada passo:
+
+```
+Mundo (motor) ─► Observação ─► DigiBrain ─► Intenção ─► Controlador (motor) ─► Mundo ─► Consequências
+   estado          o que o        decide       o quê e      o caminho, os passos,    física     resultado físico percebido
+   global          pet sente      a cada       sobre o      a colisão                inteira    + receptores do corpo
+   (só o motor)    (relativo)     decisão      que viu                                          ─► registro p/ aprendizado
+```
+
+**A regra:** o DigiBrain não importa o motor, o mundo nem a engine. Ele recebe só a Observação e devolve só a Intenção. Isso já vale
+hoje: a G-RECEPTOR (o cérebro só lê receptores e percepção) e o G-SEM-DIRECAO, que o teste `tests/test_cheiro_orgao.py` confere por AST.
+O contrato abaixo **generaliza o de hoje, não o troca.**
+
+### 4.1 As cinco coisas que a especificação manda separar
+
+| # | o quê | quem produz | quem vê | hoje |
+|---|---|---|---|---|
+| 1 | **a Intenção** | o DigiBrain | o controlador | a `AcaoPet` e o `Alvo` escolhido entre os candidatos (`escolher_alvo`) |
+| 2 | **a ação executada** | o controlador | o log e as métricas; o cérebro só a parte percebida | o `passo_ate`, o `ocorrido["de"]`, `["para"]` e `["deslocamento"]` |
+| 3 | **o resultado físico** | a física do motor | o log e as métricas: a verdade inteira | o `ocorrido["chegou"]`, `["comeu"]` e `["brincou_com_bola"]`; a bola rolando |
+| 4 | **a consequência fisiológica** | o corpo | o cérebro, **só pelos receptores** | a `PercepcaoCorpo` antes e depois, e o `sinal_corpo` (o `consequencia_corpo`) |
+| 5 | **o registro para aprendizado** | o motor monta, o cérebro guarda | o cérebro | o `registro` da decisão (X, P, W) e o motivo; o `ocorrido` do gancho |
+
+**O furo de hoje que o contrato fecha:** o `ocorrido` do `consequencia_mundo` (`digilab/mundo.py:1415`) leva ao cérebro as **posições
+absolutas** `de`, `para` e `alvo.x`, `alvo.y`, e a `PercepcaoMundo` leva o `x`, `y` do próprio pet. O cérebro sabe onde está no mapa,
+como se tivesse um GPS. A percepção dos objetos é relativa (`dx`, `dy`), mas a do próprio lugar não é. Dá para ler isso como um mapa
+cognitivo, mas é acesso privilegiado. A W-3 (seção 8) decide se o contrato novo troca isso por um lugar que o pet integra pelos próprios
+passos.
+
+### 4.2 A Observação (o que o pet sente; PROPOSTA)
+
+Toda distância e direção é **relativa ao pet** e já passou pelo sensor (o cone, a oclusão e o raio). Tudo em inteiros.
+
+| campo | conteúdo | sensor | hoje |
+|---|---|---|---|
+| `vistos` | `(ref, categoria, distancia, setor)` de cada objeto visível, em ordem de distância, até `max_vistos`. O `ref` é um rótulo da percepção, válido enquanto o objeto é visto, e não o id do motor | o cone com oclusão | `vistos` (id, tipo, dx, dy, d) num disco, sem oclusão |
+| `obstaculos` | a distância livre em cada um de 8 setores, até um raio curto (os "bigodes") | 8 raios inteiros | não existe |
+| `contato` | `(categoria, setor)` do que encostou no círculo do pet desde a última decisão: uma parede, a bola, o outro pet | a colisão do motor | não existe; o toque dos dois pets é o mais perto disso |
+| `resultado` | o que o pet percebeu da ação anterior: chegou, parou bloqueado, o alvo sumiu, a bola se afastou (e quanto), comeu | o controlador, filtrado pelo que o pet viu | o `ocorrido`, sem filtro |
+| `corpo` | os receptores (`PercepcaoCorpo`), como hoje | os receptores | igual |
+| `cheiro`, `sons` | os órgãos com lado, como hoje | as narinas e os ouvidos | igual |
+
+### 4.3 A Intenção (o que o pet quer; PROPOSTA)
+
+A Intenção é uma **sub-decisão das ações de hoje**: o `AcaoPet` não ganha membro, para não quebrar o replay da v1 (`mundo_fisico.md`,
+2.1). As intenções da especificação, uma por uma:
+
+| intenção | a ação de hoje | o alvo | o que o controlador faz |
+|---|---|---|---|
+| aproximar-se | `explorar` | um `ref` visto ou um setor | anda até o alcance de interação |
+| investigar | `explorar` | um `ref` visto, ou um ponto lembrado | anda até ver de perto e para |
+| tocar | `brincar` | o `ref` da bola ou do outro pet | anda até o contato e para |
+| empurrar | `brincar` | o `ref` da bola | anda até o contato e continua, passando velocidade à bola |
+| consumir | `comer` | o `ref` da comida | anda até o alcance e come |
+| descansar | `dormir` ou `ocioso` | o ninho ou nenhum | anda até o ninho, ou fica |
+| afastar-se | `explorar` | o setor oposto a um `ref` | anda para longe até uma distância |
+
+A Intenção é discreta, e o cérebro escolhe entre candidatos que o motor oferece, como o `escolher_alvo` de hoje. O espaço contínuo não
+aumenta o número de escolhas do cérebro.
+
+### 4.4 O controlador (o motor)
+
+- **A cada tick:** o caminho na grade (A* inteiro), a velocidade do tick, a colisão com deslize e o contato.
+- **Para quando:** chegou, ficou bloqueado por N ticks, o alvo sumiu da vista, ou deu a hora da próxima decisão (`intervalo_decisao_ticks`
+  = 15).
+- **Devolve a ação executada** (a 2 da tabela 4.1) e o **resultado físico** (a 3). Os dois vão inteiros para o log e para as métricas;
+  ao cérebro vai só a parte percebida (o campo `resultado`).
+
+### 4.5 As frequências
+
+| laço | frequência | onde |
+|---|---|---|
+| a vista | o quadro da tela (`requestAnimationFrame`), interpolando a posição entre dois ticks | navegador |
+| a física | um tick (1 minuto de jogo), com `k` sub-passos inteiros se a bola rápida atravessar a parede (PROPOSTO: `k` = 4) | motor, Python e TS |
+| o corpo | um tick, como hoje | motor |
+| o DigiBrain | uma decisão a cada 15 ticks, como hoje; o controlador executa a Intenção nesses 15 | motor |
+
+### 4.6 O determinismo, e o que uma engine de física faz com ele
+
+- **No arranjo V (recomendado):** a física é a do motor, em inteiros, então a paridade Python/TS é bit a bit como hoje. Os testes de
+  hoje servem de modelo (`web/app/test/mundo.test.ts`, os gabaritos do mundo). A vista não entra no log.
+- **No arranjo F (o Rapier como fonte da verdade):**
+  - o Rapier JS é determinístico entre aparelhos com a mesma versão e a mesma ordem de criação (anexo 2), mas é float, e o Python não o
+    tem;
+  - a pesquisa do mundo teria de rodar no Node, e com isso o método muda: a bancada, as sementes e as métricas, hoje no Python;
+  - **toda troca de versão do Rapier muda as vidas**, e os gabaritos teriam de levar a versão junto;
+  - os `Math.sin` e `Math.cos` que entrarem na física também saem do determinismo, como a página do Rapier avisa.
+- **Em qualquer arranjo:** a câmera, a interpolação e a animação ficam fora do log e não mexem na simulação.
