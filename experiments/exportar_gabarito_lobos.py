@@ -9,7 +9,13 @@ Duas secoes:
   l0      o nucleo sem aprender e sem corpo: o cerebro tem de ser o instinto, decisao a decisao (G2 da L0); o TS confere contra o
           instinto dele e contra este traco;
   v11     as vidas do pet v11 inteiras: o log (o que o TS rejoga), os motivos de cada decisao (o que o painel DigiBrain mostra), os pesos,
-          os pesos do corpo e o resumo do aprendizado no fim, e o sha256 do estado interno.
+          os pesos do corpo e o resumo do aprendizado no fim, e o sha256 do estado interno. Desde a etapa 3 (G-PAR-L1), mais dois campos:
+            traco    as chamadas que chegam ao cerebro, na ordem (o que o lobos.ts rejoga sem o motor, que e a etapa 4): agir, a
+                     consequencia da decisao (a transicao do engine e o f_S do braco), o gancho do corpo, o tapa (receber_acao_dono) e o
+                     carinho (mudanca_no_corpo), com as observacoes inteiras (o Estado.vetor, o ticks_desde_cuidado e os receptores do
+                     corpo que existem);
+            interno  o estado_interno do cerebro sem os motivos (os contadores da memoria, o aprendizado, os pesos, os canais): com os
+                     motivos, e o que o sha256 resume, conferido campo a campo no TS.
 
     python experiments/exportar_gabarito_lobos.py      # grava web/app/test/gabaritos/lobos_python.json
 
@@ -24,7 +30,8 @@ from __future__ import annotations
 import hashlib
 import json
 import sys
-from dataclasses import replace
+from contextlib import contextmanager
+from dataclasses import asdict, replace
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parents[1]
@@ -80,13 +87,83 @@ def vida_l0(dono: str, semente: int) -> dict:
             "sha_interno": _sha(json.dumps(interno, sort_keys=True))}
 
 
+def _obs(o) -> dict:
+    """A observacao que o cerebro le: o Estado.vetor, o ticks_desde_cuidado e os receptores do corpo que existem (os None nao existem)."""
+    if o.corpo is None:
+        raise RuntimeError("v11: observacao sem o corpo")
+    return {"v": list(o.vetor_estado), "tdc": o.ticks_desde_cuidado,
+            "corpo": {k: v for k, v in asdict(o.corpo).items() if v is not None}}
+
+
+# os ganchos do cerebro que o v11 nao usa (o mundo fisico, as frutas): se algum chegar, o traco nao e o do v11
+GANCHOS_FORA_DO_V11 = ("observar", "consequencia_mundo", "fruta_comida", "fruta_na_mao")
+
+
+@contextmanager
+def _gravando(tracos: dict, cc):
+    """Grava, na ordem, as chamadas que chegam a cada PoliticaLobos (pela PoliticaDoBraco, que ja filtrou a fonte do sinal), um traco por
+    cerebro (a bancada refaz a vida pelo log para conferir o replay, com outro cerebro). So le e repassa: a vida e a mesma (o teste do
+    gabarito confere que o log e os motivos nao mudam)."""
+    originais = {n: getattr(PoliticaLobos, n) for n in ("agir", "observar_consequencia", "consequencia_corpo", "receber_acao_dono",
+                                                         "mudanca_no_corpo") + GANCHOS_FORA_DO_V11}
+    ultima_obs = {}
+
+    def do(self) -> list:
+        return tracos.setdefault(id(self), (self, []))[1]
+
+    def agir(self, obs, rng):
+        do(self).append({"t": "agir", "obs": _obs(obs)})
+        ultima_obs[id(self)] = obs
+        return originais["agir"](self, obs, rng)
+
+    def observar_consequencia(self, transicao, f_S, cfg_consequencia=None):
+        if transicao.observacao != ultima_obs[id(self)] or cfg_consequencia != cc:
+            raise RuntimeError("v11: a transicao nao comeca na observacao da decisao, ou a ConfigConsequencia nao e a da bancada")
+        do(self).append({"t": "consequencia", "acao": transicao.acao.value, "depois": _obs(transicao.observacao_seguinte), "f_S": f_S})
+        return originais["observar_consequencia"](self, transicao, f_S, cfg_consequencia)
+
+    def consequencia_corpo(self, acao, ocorrido, obs_depois):
+        do(self).append({"t": "corpo", "acao": acao.value, "ocorrido": json.loads(json.dumps(ocorrido)), "depois": _obs(obs_depois)})
+        return originais["consequencia_corpo"](self, acao, ocorrido, obs_depois)
+
+    def receber_acao_dono(self, acao, tick):
+        do(self).append({"t": "dono", "acao": acao.value, "tick": tick})
+        return originais["receber_acao_dono"](self, acao, tick)
+
+    def mudanca_no_corpo(self, obs_antes, obs_depois):
+        do(self).append({"t": "carinho", "antes": _obs(obs_antes), "depois": _obs(obs_depois)})
+        return originais["mudanca_no_corpo"](self, obs_antes, obs_depois)
+
+    def fora(nome):
+        def gancho(self, *a, **k):
+            raise RuntimeError(f"v11: o gancho {nome} nao faz parte do v11")
+        return gancho
+
+    novos = {"agir": agir, "observar_consequencia": observar_consequencia, "consequencia_corpo": consequencia_corpo,
+             "receber_acao_dono": receber_acao_dono, "mudanca_no_corpo": mudanca_no_corpo,
+             **{n: fora(n) for n in GANCHOS_FORA_DO_V11}}
+    try:
+        for n, f in novos.items():
+            setattr(PoliticaLobos, n, f)
+        yield
+    finally:
+        for n, f in originais.items():
+            setattr(PoliticaLobos, n, f)
+
+
 def vida_v11(b: bv.Bancada, dono: str, semente: int) -> dict:
-    v = b.vida(bv.EspecVida(dono, BRACO_V11, semente))
+    tracos: dict = {}
+    with _gravando(tracos, b.cfg_consequencia):
+        v = b.vida(bv.EspecVida(dono, BRACO_V11, semente))
     interno = v.motor.politica.estado_interno()
+    dono_do_traco, traco = tracos[id(v.motor.politica.cerebro)]
+    if dono_do_traco is not v.motor.politica.cerebro or len(tracos) != 2:
+        raise RuntimeError("v11: esperados dois cerebros, o da vida e o do replay")
+    cerebro = {k: x for k, x in v.motor.politica.cerebro.estado_interno().items() if k != "motivos"}
     return {"dono": dono, "semente": semente, "gestos": v.gestos, "log": _log(v.motor), "motivos": interno["motivos"],
             "pesos": interno["pesos"], "pesos_prior": interno["pesos_prior"], "pesos_corpo": interno["pesos_corpo"],
             "aprendizado": interno["aprendizado"], "corpo": interno["corpo"],
-            "sha_interno": _sha(json.dumps(interno, sort_keys=True))}
+            "sha_interno": _sha(json.dumps(interno, sort_keys=True)), "traco": traco, "interno": cerebro}
 
 
 def gerar() -> dict:

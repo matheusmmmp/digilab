@@ -33,3 +33,19 @@ def test_gabarito_e_o_v11():
     assert any(v["aprendizado"]["recompensas"]["tapa"] > 0 for v in g["v11"])
     for v in g["l0"]:
         assert all(m["aprendido"] is None for m in v["motivos"])
+
+
+def test_traco_do_v11_e_o_da_vida():
+    """etapa 3 (G-PAR-L1): o traco das chamadas ao cerebro tem uma decisao (agir, consequencia, gancho do corpo) por motivo, e do dono so
+    chegam o tapa e o carinho, tantos quantos o aprendizado contou; o interno e o estado do cerebro sem os motivos"""
+    g = json.loads(G.ARQUIVO.read_text(encoding="utf-8"))
+    for v in g["v11"]:
+        tipos = [t["t"] for t in v["traco"]]
+        decisoes = [t for t in tipos if t in ("agir", "consequencia", "corpo")]
+        assert decisoes == ["agir", "consequencia", "corpo"] * len(v["motivos"])
+        assert set(tipos) == {"agir", "consequencia", "corpo", "dono", "carinho"}
+        assert {t["acao"] for t in v["traco"] if t["t"] == "dono"} == {"tapa"}
+        rec = v["aprendizado"]["recompensas"]
+        assert tipos.count("dono") == rec["tapa"] and tipos.count("carinho") == rec["carinho"]
+        assert v["interno"]["aprendizado"] == v["aprendizado"] and v["interno"]["pesos_corpo"] == v["pesos_corpo"]
+        assert "motivos" not in v["interno"] and v["interno"]["n_decisoes"] == len(v["motivos"])
