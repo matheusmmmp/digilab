@@ -44,7 +44,8 @@ export default defineConfig({
     emptyOutDir: true,
     sourcemap: false,
     target: "es2022",
-    rollupOptions: { input: fileURLToPath(new URL("./mundo3d.html", import.meta.url)) },
+    /* a página e a raiz que leva a ela (o endereço "Network" do Vite é a raiz; o celular da M3 entra por ele) */
+    rollupOptions: { input: [fileURLToPath(new URL("./mundo3d.html", import.meta.url)), fileURLToPath(new URL("./index.html", import.meta.url))] },
   },
   preview: { port: 8800, strictPort: true },
 });

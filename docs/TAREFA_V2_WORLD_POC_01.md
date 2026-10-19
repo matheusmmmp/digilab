@@ -204,8 +204,8 @@ preview` na porta 8800, no Chrome instalado. O e2e do jogo não muda. Os scripts
 | oclusão | o pet na célula (6, 2), atrás do obstáculo alto: só esse obstáculo fica semitransparente. 603 dos 1.107 pixels do sprite chegam misturados com a cor dele, e o resto, a cabeça acima do obstáculo, bate com os texels | `e2e.json` (oclusao), `oclusao.png` |
 | M3 desktop | no Chrome headless desta máquina, 60 quadros por segundo de média, com o quadro de 16,7 ms na mediana e 16,8 ms no p95 (canvas de 1100 × 558, 3 pixels por subunidade). É o limite do vsync, e o headless não é o celular | `e2e.json` (M3_desktop_headless) |
 | M3 celular | **falta:** é a medida do Matheus (abaixo) | — |
-| M5 | o mesmo hash do estado no Chrome e no Node para as sementes 101, 202 e 303, com 1.500 e 3.000 ticks. O replay de 1 "dia" de sala (1.440 ticks, 95 decisões fechadas) leva 7,8 ms no Node, a mediana de 5, num i7-14700KF | `e2e.json` (M5_chrome_node), `node.json` (M5_replay_node) |
-| M6 | o build da página tem 559.066 bytes, 141.735 em gzip, quase todo o `three` | `node.json` (M6_build) |
+| M5 | o mesmo hash do estado no Chrome e no Node para as sementes 101, 202 e 303, com 1.500 e 3.000 ticks. O replay de 1 "dia" de sala (1.440 ticks, 95 decisões fechadas) leva 7,11 ms no Node, a mediana de 5, num i7-14700KF | `e2e.json` (M5_chrome_node), `node.json` (M5_replay_node) |
+| M6 | o build da página (a página, a raiz que leva a ela e o JS) tem 559.512 bytes, 142.045 em gzip, quase todo o `three` | `node.json` (M6_build) |
 
 **O atlas no modo dev** (conferido na sessão, sem artefato: a arte fica fora do repositório):
 - o sprite `brasa_crianca_sereno` aparece na sala, com 1 pixel por texel (meia subunidade por texel, com 3 pixels por subunidade);
@@ -215,7 +215,8 @@ preview` na porta 8800, no Chrome instalado. O e2e do jogo não muda. Os scripts
 
 ### A M3 no celular: as instruções para o Matheus
 
-1. No PC, em `web/app`:
+1. **No PC, num terminal aberto dentro de `web/app` do repositório** (não na pasta do usuário: fora de `web/app`, o `npm` não acha os
+   scripts). Por exemplo, `cd D:\Trab\digilab\v2\web\app`, com a `main` que tem o POC. Lá:
 
    ```bash
    npm run poc:build
@@ -225,11 +226,14 @@ preview` na porta 8800, no Chrome instalado. O e2e do jogo não muda. Os scripts
    npm run poc:preview -- --host
    ```
 
-   O Vite mostra um endereço "Network", como `http://192.168.0.10:8800/`. Se o Windows perguntar, permita o Node na rede privada.
-2. No celular, **na mesma rede Wi-Fi**, abra `http://<o endereço Network>:8800/mundo3d.html`.
-3. Espere uns 5 segundos com a página aberta e o pet andando. Toque em **"Medir 10 s"** e não mexa na tela até o botão voltar.
-4. A medida aparece em JSON na caixa embaixo. No http do celular a cópia automática não funciona: segure o texto, selecione tudo e
+   O Vite mostra um endereço "Network", como `http://192.168.0.10:8800/`.
+2. **O Firewall do Windows:** na primeira vez, ele pergunta se o Node pode receber conexões. Permita em **rede privada** (a Wi-Fi de
+   casa precisa estar marcada como privada, e não pública). Sem isso, o celular não abre a página.
+3. No celular, **na mesma rede Wi-Fi**, abra `http://<o endereço Network>:8800/mundo3d.html`. A raiz, `http://<o endereço
+   Network>:8800/`, também leva à página, porque o `poc/index.html` redireciona.
+4. Espere uns 5 segundos com a página aberta e o pet andando. Toque em **"Medir 10 s"** e não mexa na tela até o botão voltar.
+5. A medida aparece em JSON na caixa embaixo. No http do celular a cópia automática não funciona: segure o texto, selecione tudo e
    copie.
-5. Cole o JSON num comentário do PR ou mande ao coordenador. O worker o grava como `artifacts_v2_world_poc/m3_celular.json`.
+6. Cole o JSON num comentário do PR ou mande ao coordenador. O worker o grava como `artifacts_v2_world_poc/m3_celular.json`.
 
 A referência é **30 quadros por segundo** no celular (DECIDIDO: referência, não gate duro). Se der menos, a medida é registrada como está.

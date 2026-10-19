@@ -38,6 +38,11 @@ test.afterAll(() => {
   writeFileSync(ARTEFATOS + "e2e.json", JSON.stringify(medidas, null, 1) + "\n");
 });
 
+test("a raiz do preview leva à página (o endereço \"Network\" do celular)", async ({ page }) => {
+  await page.goto("/");
+  await expect(page).toHaveURL(/\/mundo3d\.html$/);
+});
+
 test("M1: a página abre, o WebGL desenha a sala", async ({ page }) => {
   const r = await page.evaluate(() => ({ webgl: window.__poc.webgl, sprite: window.__poc.sprite, ...window.__poc.pixelsDiferentesDoFundo() }));
   expect(r.webgl).toBe(true);
