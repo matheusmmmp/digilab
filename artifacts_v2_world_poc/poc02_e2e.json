@@ -18,5 +18,33 @@
    "corpo": true,
    "hash": "52d5088f"
   }
- ]
+ ],
+ "M_CORPO": {
+  "comCorpo": true,
+  "receptores": {
+   "fome": 755,
+   "higiene": 1014,
+   "energia": 986,
+   "humor": 704,
+   "saude": 1024,
+   "tedio": 0,
+   "solidao": 0,
+   "estresse": 0,
+   "dor": 0,
+   "susto": 0
+  },
+  "painel": {
+   "fome": 755,
+   "higiene": 1014,
+   "energia": 986,
+   "humor": 704,
+   "saude": 1024,
+   "tedio": 0,
+   "solidao": 0,
+   "estresse": 0,
+   "dor": 0,
+   "susto": 0
+  },
+  "screenshot": "artifacts_v2_world_poc/poc02_painel.png"
+ }
 }

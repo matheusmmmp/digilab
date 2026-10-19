@@ -13,12 +13,18 @@
     .barra { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 8px 0; }
     #fps { font-variant-numeric: tabular-nums; }
     textarea { width: 100%; height: 140px; font: 12px ui-monospace, monospace; }
+    #corpo { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 4px 16px; margin: 8px 0; }
+    #corpo .receptor { display: grid; grid-template-columns: 64px 1fr 40px; align-items: center; gap: 6px; font-size: 13px; }
+    #corpo .nivel { height: 8px; background: #e2dccd; border-radius: 4px; overflow: hidden; }
+    #corpo .nivel > span { display: block; height: 100%; background: #7a9a62; }
+    #corpo .valor { text-align: right; font-variant-numeric: tabular-nums; }
   </style>
 </head>
 <body>
   <main>
-    <h1>WORLD-POC-01a <small id="estado">carregando</small></h1>
+    <h1><span id="titulo">WORLD-POC</span> <small id="estado">carregando</small></h1>
     <div id="palco"><canvas id="tela" role="img" aria-label="A sala do protótipo: o pet, a bola, a comida, as paredes e os obstáculos"></canvas></div>
+    <div id="corpo" aria-label="Os receptores do corpo (0 a 1024)" hidden></div>
     <div class="barra">
       <span id="fps"></span>
       <label>Semente <input id="semente" type="number" value="101" style="width: 6em"></label>
@@ -30,7 +36,8 @@
     </div>
     <p id="aviso" style="color: #9a3412"></p>
     <textarea id="medida" readonly placeholder="A medida da M3 aparece aqui depois de 'Medir 10 s'."></textarea>
-    <p>Protótipo técnico, fora do jogo (docs/TAREFA_V2_WORLD_POC_01.md). A vista só desenha; o mundo é inteiro e determinístico.</p>
+    <p>Protótipo técnico, fora do jogo (docs/TAREFA_V2_WORLD_POC_01.md e docs/TAREFA_V2_WORLD_POC_02.md). A vista só desenha; o mundo é
+      inteiro e determinístico. Com o corpo (o padrão), o pet tem o corpo químico do jogo; <code>?corpo=0</code> volta ao POC-01a.</p>
   </main>
   <script type="module" src="./mundo3d/pagina.ts"></script>
 </body>

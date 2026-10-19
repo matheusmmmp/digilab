@@ -29,7 +29,7 @@ declare global { interface Window { __poc: Poc } }
 test.describe.configure({ mode: "serial" });
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/mundo3d.html?sprite=reserva");
+  await page.goto("/mundo3d.html?sprite=reserva&corpo=0");
   await expect(page.locator("#estado")).toHaveText("pronto");
 });
 
@@ -105,7 +105,7 @@ test("com o userAgent de um celular, a página não mostra o aviso de desktop", 
     userAgent: "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Mobile Safari/537.36",
   });
   const p = await ctx.newPage();
-  await p.goto("/mundo3d.html?sprite=reserva");
+  await p.goto("/mundo3d.html?sprite=reserva&corpo=0");
   await expect(p.locator("#estado")).toHaveText("pronto");
   await expect(p.locator("#aviso")).toHaveText("");
   await ctx.close();
