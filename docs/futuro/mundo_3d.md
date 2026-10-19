@@ -2,7 +2,7 @@
 
 Status: **INVESTIGAÇÃO FEITA; as decisões W-1 a W-7 DECIDIDAS pelo Matheus em 2026-10-18, pela recomendação** (seção 8). Escrito pelo
 worker A, pela especificação WORLD-POC-001 do Matheus. Só investigação: nada no código mudou. **O POC-01a (a P3) avança em paralelo ao
-Gate C**, pela `docs/TAREFA_V2_WORLD_POC_01.md` (o Matheus, 2026-10-19: a W-5 trata do cérebro de verdade no mundo novo, a P4). Os números, os pesos e os nomes novos (fora das W) seguem PROPOSTOS. Nenhuma alegação de novidade.
+Gate C**, pela `docs/TAREFA_V2_WORLD_POC_01.md` (o Matheus, 2026-10-19: a W-5 trata do cérebro de verdade no mundo novo, a P4). **O Gate A foi APROVADO pelo Matheus em 2026-10-19** (o POC-01a, #355 e #358), com duas ressalvas: só um celular, recente, foi medido (testar num Android mais simples quando houver), e o cérebro de verdade no mundo novo (a P4) continua esperando o Gate C. O próximo passo é o Gate B, no POC (`docs/TAREFA_V2_WORLD_POC_02.md`). Os números, os pesos e os nomes novos (fora das W) seguem PROPOSTOS. Nenhuma alegação de novidade.
 
 **Os anexos:**
 - `docs/futuro/mundo_3d/auditoria.md`: o anexo 1, o estado real do repositório (investigação A);
@@ -266,7 +266,7 @@ nome do marco.
 
 | gate | a especificação | como fica aqui |
 |---|---|---|
-| **A** viabilidade técnica | a engine, o modelo visual, a física, a integração | o POC-01 aprovado pelos critérios do anexo 3, mais a decisão W-1 (onde mora a física) |
+| **A** viabilidade técnica | a engine, o modelo visual, a física, a integração | o POC-01 aprovado pelos critérios do anexo 3, mais a decisão W-1 (onde mora a física). **APROVADO em 2026-10-19**, com as ressalvas de um celular só e do cérebro real esperando o Gate C |
 | **B** organismo corporificado | percepção, decisão, navegação, consequências físicas e fisiológicas | uma demonstração técnica do contrato no motor (Python e TS, com paridade), sem hipótese: não é resultado de pesquisa |
 | **C** aprendizado demonstrável | mudança comportamental mensurável pela experiência | **só com plano de análise antes e validação uma vez**, com o controle do sinal embaralhado (seção 5.2). Um resultado negativo também fecha o gate como "medido" |
 | **D** variabilidade biológica | o genótipo dá diferenças fenotípicas | o G1 do `ecossistema_genetico.md` |
@@ -301,8 +301,10 @@ como o J1 e o J7 já mostraram.
 
 ## 9. A próxima tarefa
 
-1. **O POC-01a (a P3), em paralelo ao Gate C:** a `docs/TAREFA_V2_WORLD_POC_01.md` (2026-10-19), a partir do anexo 3, numa worktree
-   própria e **fora do jogo**, entre 5,5 e 8,5 dias de sessão (PROPOSTO).
+1. **O POC-01a (a P3), em paralelo ao Gate C:** a `docs/TAREFA_V2_WORLD_POC_01.md` (2026-10-19), **entregue** (#355, #358). O
+   **Gate A foi APROVADO** em 2026-10-19, com as duas ressalvas do status.
+1b. **O Gate B no POC, ainda com o cérebro de teste:** a `docs/TAREFA_V2_WORLD_POC_02.md`, com o corpo químico (o `corpo.ts`) e as
+   consequências físicas e fisiológicas.
 2. **O Gate C** (W-5): a validação do J5 com a fruta ao lado, ou o EXP-1 no mundo 2D.
 3. **Só depois do Gate C:** o cérebro de verdade no mundo novo (a P4), com tarefa própria.
 4. A linha das "ideias registradas" da seção 8 do `ROADMAP_V2.md` e a linha do `PAINEL_V2.md` foram aplicadas com este documento.
