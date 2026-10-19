@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pet · visual do protótipo (celular)</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&amp;family=Pixelify+Sans:wght@700&amp;display=swap" rel="stylesheet">
+<style>
+/* A tela Pet no celular (390 e 360 px). O protótipo de 2026-10-19 só tem desktop; o celular sai do visual dele: as mesmas cores, os mesmos
+   cards de módulo (borda, cabeçalho com o tracinho azul, ícone e título extrabold), as mesmas barras contínuas, os módulos empilhados na
+   ordem do protótipo (Habitat, Ações, Estado atual). O registro recente não entra no celular (CP-T2): fica em Crescer.
+   A barra lateral vira a barra de baixo, no azul da lateral, com o item ativo no azul primário de canto cortado.
+   Fora, por não terem dado no motor: os mesmos itens da prancha desktop. Números e textos são exemplo de layout. */
+:root{
+  --bg:#eef3fa; --fg:#0d2147; --card:#ffffff; --primary:#1677ff; --primary-fg:#ffffff; --secondary:#e8f0fc; --muted:#f3f7fd; --muted-fg:#6a7b9c;
+  --accent:#e3eefe; --border:#dbe6f5;
+  --hunger:#f43f5e; --energy:#fbbf24; --mood:#1d8bf1; --health:#2dd4a7; --chart5:#6366f1;
+  --sidebar:#0b2556; --sidebar-fg:#e6efff; --sidebar-border:#1d3f7d;
+  --r-md:9.6px; --r-lg:12px; --r-xl:16.8px;
+  --shadow-sm:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px -1px rgba(0,0,0,.1);
+  --shadow-md:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1);
+}
+*{box-sizing:border-box}
+html,body{margin:0;overflow-x:hidden}
+body{background:var(--bg);color:var(--fg);font-family:Nunito,ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh;position:relative}
+svg.i{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* o fundo do protótipo: a grade de 48 px e dois estilhaços */
+.fundo{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.fundo .grade{position:absolute;inset:0;opacity:.35;background-image:linear-gradient(to right,var(--border) 1px,transparent 1px),linear-gradient(to bottom,var(--border) 1px,transparent 1px);background-size:48px 48px}
+.fundo b{position:absolute;display:block;background:var(--primary)}
+
+/* o topo: o retrato e o nome à esquerda, o relógio do jogo e o Conversar à direita */
+.topo{position:relative;z-index:1;display:flex;align-items:center;gap:12px;padding:14px 16px 10px}
+.topo .ret{width:48px;height:48px;flex:none;border-radius:50%;border:2px solid var(--primary);background:#dfeaf8}
+.topo .nome{flex:1;min-width:0}
+.topo .nome p{margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topo .n{font-size:18px;font-weight:800;line-height:1.2}
+.topo .s{font-size:13px;color:var(--muted-fg);font-weight:600}
+.hora{display:flex;align-items:center;gap:6px;flex:none}
+.hora svg{width:22px;height:22px;color:var(--primary)}
+.hora p{margin:0;line-height:1.15}
+.hora .data{font-size:12px}
+.hora .h{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+.conversar{display:flex;width:44px;height:44px;flex:none;align-items:center;justify-content:center;border-radius:var(--r-lg);border:1px solid var(--border);background:var(--card);color:var(--fg)}
+.conversar svg{width:22px;height:22px}
+
+main{position:relative;z-index:1;display:flex;flex-direction:column;gap:12px;padding:0 16px 100px}
+
+/* o módulo do protótipo */
+.mod{display:flex;flex-direction:column;border-radius:var(--r-xl);border:1px solid var(--border);background:rgba(255,255,255,.8);padding:8px;box-shadow:var(--shadow-sm)}
+.mod header{display:flex;align-items:center;gap:10px;padding:6px}
+.mod header .tracinho{height:24px;width:4px;flex:none;border-radius:999px;background:var(--primary)}
+.mod header svg.ic{width:20px;height:20px}
+.mod header h2{margin:0;font-size:16px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mod header .dir{margin-left:auto;display:flex;align-items:center}
+.mod header .recolher{border:0;background:none;padding:4px;color:var(--muted-fg);display:flex}
+.mod header .recolher svg{width:16px;height:16px}
+
+/* o habitat de hoje */
+.habitat{position:relative;height:280px;overflow:hidden;border-radius:var(--r-lg);background:#F4F8FE;
+  background-image:repeating-linear-gradient(60deg,rgba(212,227,247,.55) 0 1px,transparent 1px 40px),repeating-linear-gradient(-60deg,rgba(212,227,247,.55) 0 1px,transparent 1px 40px),repeating-linear-gradient(0deg,rgba(212,227,247,.55) 0 1px,transparent 1px 40px)}
+.habitat .anel{position:absolute;left:50%;bottom:30px;width:190px;height:48px;margin-left:-95px;border-radius:50%;border:9px solid #CDE6FB}
+.habitat .pet{position:absolute;left:50%;bottom:50px;margin-left:-55px}
+.habitat .status{position:absolute;right:12px;top:12px;display:flex;align-items:center;gap:8px;border-radius:999px;background:rgba(255,255,255,.95);padding:6px 14px;box-shadow:var(--shadow-md)}
+.habitat .status svg{width:16px;height:16px;color:var(--primary)}
+.habitat .status span{font-size:14px;font-weight:600}
+
+/* o que o palco de hoje já mostra, com dado no motor, no vocabulário do protótipo: a emoção registrada (pílula à esquerda), a fala
+   (balão do protótipo: branco, contorno #0d2c66, toque = o porquê), a causa registrada e a fonte da fala */
+.habitat .emocao{position:absolute;left:12px;top:12px;display:flex;align-items:center;gap:8px;border-radius:999px;background:rgba(255,255,255,.95);padding:6px 14px;box-shadow:var(--shadow-md);font-size:14px;font-weight:600}
+.habitat .emocao svg{width:16px;height:16px;color:var(--energy);fill:var(--energy)}
+.habitat .fala{position:absolute;left:50%;bottom:150px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;border:2px solid #0d2c66;border-radius:14px;background:#fff;padding:6px 14px;font:inherit;color:var(--fg);box-shadow:var(--shadow-md);white-space:nowrap}
+.habitat .fala b{font-size:15px;font-weight:800}
+.habitat .fala small{font-size:11px;font-weight:600;color:var(--muted-fg)}
+.habitat .fala::after{content:"";position:absolute;left:50%;bottom:-8px;width:12px;height:12px;margin-left:-6px;background:#fff;border-right:2px solid #0d2c66;border-bottom:2px solid #0d2c66;transform:rotate(45deg)}
+.habitat .causa{position:absolute;left:calc(50% + 50px);bottom:128px;display:flex;align-items:center;gap:6px;border-radius:999px;border:1px solid var(--border);background:var(--card);padding:4px 10px;font-size:12px;font-weight:700;color:var(--muted-fg)}
+.habitat .causa svg{width:14px;height:14px;color:var(--primary)}
+.habitat .fonte{position:absolute;left:12px;bottom:12px;display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--muted-fg)}
+.habitat .fonte i{width:8px;height:8px;border-radius:50%;background:var(--health)}
+
+/* o DigiBrain no celular fica onde está hoje: um botão no palco (aqui no canto de baixo, na pílula do protótipo) */
+.habitat .db{position:absolute;right:12px;bottom:10px;display:flex;align-items:center;gap:6px;min-height:44px;border:1px solid var(--border);border-radius:999px;background:rgba(255,255,255,.95);padding:0 14px;font:inherit;font-size:14px;font-weight:700;color:var(--fg);box-shadow:var(--shadow-md)}
+.habitat .db svg{width:18px;height:18px;color:var(--primary)}
+.habitat .fonte{bottom:24px}
+.habitat .causa{left:12px;bottom:62px;white-space:nowrap}
+
+/* as ações: 3 colunas no celular, o primário de cantos cortados */
+.acoes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:4px}
+.bloco{display:flex;height:84px;min-width:0;flex-direction:column;align-items:center;justify-content:center;gap:4px;border-radius:var(--r-lg);border:1px solid var(--border);
+  background:var(--card);color:var(--fg);font:inherit;font-size:15px;font-weight:600}
+.bloco svg{width:30px;height:30px;stroke-width:2.2}
+.bloco.primario{border:0;border-radius:0;background:var(--primary);color:var(--primary-fg);box-shadow:0 10px 15px -3px rgba(22,119,255,.3),0 4px 6px -4px rgba(22,119,255,.3);
+  clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px)}
+
+/* Estado atual */
+.estado{display:flex;flex-direction:column;gap:12px;list-style:none;margin:0;padding:4px 12px 12px}
+.estado li{display:flex;align-items:center;gap:10px;font-size:14px}
+.estado li svg{width:22px;height:22px}
+.estado .rot{width:64px}
+.estado .trilho{height:10px;flex:1;min-width:0;overflow:hidden;border-radius:999px;background:var(--secondary)}
+.estado .trilho i{display:block;height:100%;border-radius:999px}
+.estado .val{width:52px;text-align:right;font-variant-numeric:tabular-nums;color:var(--muted-fg)}
+
+/* o chamado e o desejo */
+.chamado{display:flex;align-items:center;gap:12px;border-radius:var(--r-xl);border:1px solid var(--border);background:rgba(255,255,255,.8);padding:12px;box-shadow:var(--shadow-sm)}
+.chamado .tile{display:flex;width:40px;height:40px;flex:none;align-items:center;justify-content:center;border-radius:var(--r-md);background:var(--secondary);color:var(--hunger)}
+.chamado .tile svg{width:22px;height:22px}
+.chamado .txt{flex:1;min-width:0;font-size:14px}
+.chamado .txt b{display:block;font-weight:800}
+.chamado .txt small{color:var(--muted-fg);font-weight:600}
+.chamado button{flex:none;border:0;border-radius:var(--r-lg);background:var(--primary);color:#fff;font:inherit;font-weight:700;font-size:14px;padding:0 14px;height:44px}
+.desejo{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.des{min-width:0;border-radius:var(--r-xl);padding:8px 12px;font-size:14px;line-height:1.25}
+.des small{display:block;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.des b{display:block;font-weight:800;font-size:15px}
+.des span{font-size:12px;font-weight:600}
+.des.necessidade{background:#fff;border:2px solid var(--hunger);box-shadow:var(--shadow-sm)}
+.des.necessidade small{color:var(--hunger)}
+.des.aprendida{border:2px dashed #6FE3FF;color:#E6FBFF;background-color:#0F3A86;background-image:linear-gradient(rgba(111,227,255,.4) 1px,transparent 1px),linear-gradient(90deg,rgba(111,227,255,.4) 1px,transparent 1px);background-size:10px 10px}
+.des.aprendida small{color:#6FE3FF}
+
+/* a barra de baixo, no azul da lateral do protótipo */
+.nav{position:fixed;z-index:5;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:var(--sidebar);
+  background-image:linear-gradient(to right,rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,.07) 1px,transparent 1px);background-size:24px 24px}
+.nav a{display:flex;min-width:0;height:56px;flex-direction:column;align-items:center;justify-content:center;gap:2px;border-radius:6px;color:rgba(230,239,255,.9);text-decoration:none;font-size:13px;font-weight:600}
+.nav a svg{width:24px;height:24px;stroke-width:1.8}
+.nav a.ativo{background:var(--primary);color:var(--primary-fg);box-shadow:0 6px 20px -6px var(--primary);clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%)}
+
+@media (max-width:370px){
+  .hora .data{display:none}
+  .bloco{font-size:14px}
+  .estado .rot{width:58px}
+}
+</style>
+</head>
+<body>
+<div class="fundo" aria-hidden="true">
+  <div class="grade"></div>
+  <b style="top:-6px;right:12%;height:16px;width:110px;transform:skewX(-45deg)"></b>
+  <b style="top:-6px;right:calc(12% + 122px);height:16px;width:28px;transform:skewX(-45deg);opacity:.4"></b>
+  <b style="right:0;top:160px;height:140px;width:8px;clip-path:polygon(0 12px,100% 0,100% 100%,0 calc(100% - 12px))"></b>
+</div>
+
+<header class="topo">
+  <span class="ret" aria-label="Meus pets"></span>
+  <div class="nome"><p class="n">Agumon</p><p class="s">Rookie · Coragem</p></div>
+  <div class="hora"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    <div><p class="data">Dia 3</p><p class="h">14:20</p></div></div>
+  <a class="conversar" aria-label="Conversar"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></a>
+</header>
+
+<main>
+  <section class="mod" aria-labelledby="t-hab">
+    <header><span class="tracinho"></span><svg class="i ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg><h2 id="t-hab">Habitat</h2>
+      <div class="dir"><button class="recolher" aria-label="Recolher Habitat"><svg class="i" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button></div></header>
+    <div class="habitat">
+      <span class="anel"></span>
+      <svg class="pet" width="110" height="100" viewBox="0 0 44 40" aria-label="pet (placeholder)"><path fill="#F7B7CF" stroke="#173A8A" stroke-width="1.5" d="M6 26c0-11 7-19 16-19s16 8 16 19c0 7-7 11-16 11S6 33 6 26z"/><circle cx="16" cy="22" r="3" fill="#173A8A"/><circle cx="28" cy="22" r="3" fill="#173A8A"/><path d="M18 30h8" stroke="#173A8A" stroke-width="1.5"/></svg>
+      <div class="emocao"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 3 6.5 7 .9-5 4.9 1.2 7L12 18l-6.2 3.3 1.2-7-5-4.9 7-.9z"/></svg><span>alegria</span></div>
+      <button class="fala" aria-expanded="false"><b>Brincar! Brincar!</b><small>toque para ver o porquê</small></button>
+      <span class="causa" role="img" aria-label="causa: carinho + tempo"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z"/></svg>carinho + tempo</span>
+      <span class="fonte"><i aria-hidden="true"></i>frases prontas</span>
+      <button class="db"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5a3 3 0 1 0-6 .1 4 4 0 0 0-2.5 6.3A4 4 0 0 0 6 18a4 4 0 0 0 6 1.9V5zM12 5a3 3 0 1 1 6 .1 4 4 0 0 1 2.5 6.3A4 4 0 0 1 18 18a4 4 0 0 1-6 1.9"/></svg>DigiBrain</button>
+      <div class="status" role="status"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 11h4M8 9v4M15 12h.01M18 10h.01"/><path d="M17.3 5H6.7a4 4 0 0 0-4 3.6L2 15a3 3 0 0 0 5.6 1.5L9 14h6l1.4 2.5A3 3 0 0 0 22 15l-.7-6.4a4 4 0 0 0-4-3.6z"/></svg><span>brincando</span></div>
+    </div>
+  </section>
+
+  <section class="mod" aria-labelledby="t-acoes">
+    <header><span class="tracinho"></span><svg class="i ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 11h4M8 9v4M15 12h.01M18 10h.01"/><path d="M17.3 5H6.7a4 4 0 0 0-4 3.6L2 15a3 3 0 0 0 5.6 1.5L9 14h6l1.4 2.5A3 3 0 0 0 22 15l-.7-6.4a4 4 0 0 0-4-3.6z"/></svg><h2 id="t-acoes">Ações</h2>
+      <div class="dir"><button class="recolher" aria-label="Recolher Ações"><svg class="i" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button></div></header>
+    <div class="acoes">
+      <button class="bloco primario"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9zM7 21h10M19.5 12 22 4M13 3c0 2-2 2-2 4M9 3c0 2-2 2-2 4M17 3c0 2-2 2-2 4"/></svg>Alimentar</button>
+      <button class="bloco"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color:var(--mood)"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg>Limpar</button>
+      <button class="bloco"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color:#ec4899;fill:#ec4899"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z"/></svg>Brincar</button>
+      <button class="bloco"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color:var(--hunger)"><path d="M18 11V6a2 2 0 0 0-4 0M14 10V4a2 2 0 0 0-4 0v2M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.9-6-2.4l-3.6-3.6a2 2 0 0 1 2.8-2.8L7 15"/></svg>Carinho</button>
+      <button class="bloco"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 11V6a2 2 0 0 0-4 0M14 10V4a2 2 0 0 0-4 0v2M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.9-6-2.4l-3.6-3.6a2 2 0 0 1 2.8-2.8L7 15"/><path d="M2 3l3 3M6 2l1 3"/></svg>Tapa</button>
+      <button class="bloco"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color:var(--health)"><path d="M10 3h4v7h7v4h-7v7h-4v-7H3v-4h7z"/></svg>Tratar</button>
+    </div>
+  </section>
+
+  <section class="mod" aria-labelledby="t-est">
+    <header><span class="tracinho"></span><svg class="i ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m18 2 4 4M17 7l3-3M19 9 8.7 19.3a2.4 2.4 0 0 1-3.4 0l-.6-.6a2.4 2.4 0 0 1 0-3.4L15 5M9 11l4 4M5 19l-3 3M14 4l6 6"/></svg><h2 id="t-est">Estado atual</h2>
+      <div class="dir"><button class="recolher" aria-label="Recolher Estado atual"><svg class="i" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button></div></header>
+    <ul class="estado">
+      <li><svg class="i" viewBox="0 0 24 24" style="color:var(--hunger);fill:var(--hunger)" aria-hidden="true"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z"/></svg>
+        <span class="rot">Fome</span><span class="trilho" role="progressbar" aria-label="Fome" aria-valuenow="38" aria-valuemin="0" aria-valuemax="100"><i style="width:38%;background:var(--hunger)"></i></span><span class="val">38/100</span></li>
+      <li><svg class="i" viewBox="0 0 24 24" style="color:rgba(13,33,71,.7);fill:rgba(13,33,71,.7)" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg>
+        <span class="rot">Energia</span><span class="trilho" role="progressbar" aria-label="Energia" aria-valuenow="74" aria-valuemin="0" aria-valuemax="100"><i style="width:74%;background:var(--energy)"></i></span><span class="val">74/100</span></li>
+      <li><svg class="i" viewBox="0 0 24 24" style="color:var(--chart5)" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg>
+        <span class="rot">Higiene</span><span class="trilho" role="progressbar" aria-label="Higiene" aria-valuenow="61" aria-valuemin="0" aria-valuemax="100"><i style="width:61%;background:var(--chart5)"></i></span><span class="val">61/100</span></li>
+      <li><svg class="i" viewBox="0 0 24 24" style="color:var(--fg);fill:var(--energy)" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2" fill="none"/><path d="M9 9h.01M15 9h.01"/></svg>
+        <span class="rot">Humor</span><span class="trilho" role="progressbar" aria-label="Humor" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100"><i style="width:88%;background:var(--mood)"></i></span><span class="val">88/100</span></li>
+      <li><svg class="i" viewBox="0 0 24 24" style="color:var(--health);fill:var(--health)" aria-hidden="true"><path d="M10 3h4v7h7v4h-7v7h-4v-7H3v-4h7z"/></svg>
+        <span class="rot">Saúde</span><span class="trilho" role="progressbar" aria-label="Saúde" aria-valuenow="92" aria-valuemin="0" aria-valuemax="100"><i style="width:92%;background:var(--health)"></i></span><span class="val">92/100</span></li>
+    </ul>
+  </section>
+
+  <div class="chamado"><span class="tile"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8v5M12 17h.01"/><circle cx="12" cy="12" r="10"/></svg></span>
+    <span class="txt"><b>Chamando você</b><small>um carinho atende o pedido</small></span><button>Atender</button></div>
+  <div class="desejo">
+    <div class="des necessidade"><small>Necessidade</small><b>comer</b><span>vem do corpo</span></div>
+    <div class="des aprendida"><small>Vontade aprendida</small><b>brincar</b><span>aprendida com você</span></div>
+  </div>
+
+</main>
+
+<nav class="nav" aria-label="Navegação principal">
+  <a class="ativo" aria-current="page"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 11.5c0-3 2.5-5.5 7-5.5s7 2.5 7 5.5V18a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1z"/><path d="M8 6 6.5 3M16 6l1.5-3"/><circle cx="9.5" cy="12" r=".6"/><circle cx="14.5" cy="12" r=".6"/></svg>Pet</a>
+  <a><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20V10"/><path d="M12 10c0-4 3-6 7-6 0 4-3 6-7 6zM12 13c0-3-2.5-5-6-5 0 3 2.5 5 6 5z"/></svg>Crescer</a>
+  <a><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 17.5 3 6V3h3l11.5 11.5M13 19l6-6M16 16l4 4M19 21l2-2"/></svg>Lutar</a>
+  <a><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2.5zM8 7h7M8 11h5"/></svg>Diário</a>
+</nav>
+</body>
+</html>

@@ -272,6 +272,28 @@ Barra inferior marinho com 4 destinos: **Pet, Crescer, Lutar, Diário**. Ícone 
 - Grades: 2 colunas para pares (desejo, recompensa), 3 para exercícios, 4 para necessidades e
   slots. Sempre com `gap`, nunca com margem solta.
 
+### 8.1 Desvio aprovado: a tela Pet com o visual do protótipo (2026-10-19)
+
+Decisão do Matheus: na tela Pet, o visual do protótipo externo vence este guia. Vale só para a
+tela Pet (com a barra lateral e a barra de baixo que ela usa); as outras telas seguem o guia. As
+pranchas são `PetPrototipoDesktop.html` e `PetPrototipo390.html`. O que muda em relação ao guia:
+
+| assunto | o guia | a tela Pet |
+|---|---|---|
+| cores (§4.1) | `--dl-bg` `#E8F0FB`, borda `#9FC2EF`, ação `#2C73E0`, texto `#13244D` | fundo `#eef3fa`, borda `#dbe6f5`, primário `#1677ff`, texto `#0d2147`, apoio `#6a7b9c`, trilho `#e8f0fc`; lateral `#0b2556`; necessidades fome `#f43f5e`, energia `#fbbf24`, humor `#1d8bf1`, saúde `#2dd4a7` (a higiene, que o protótipo não tem, usa `#6366f1`, da paleta dele) |
+| tipografia (§4.2) | Rubik itálico com contorno, M PLUS Rounded 1c, DotGothic16 | Nunito (400 a 800) em tudo; Pixelify Sans 700 só no logo; títulos de módulo em 16 px 800 |
+| card (§4.3, §7.2) | borda branca de 3 px, contorno de 2 px, sombra dura de 3 px | o módulo do protótipo: canto 16,8 px, borda de 1 px `#dbe6f5`, fundo branco a 80 %, sombra leve, cabeçalho com tracinho azul de 4×24 px, ícone de 20 px e título |
+| botões (§7.1) | contorno marinho, sombra interna | ação em bloco (canto 12, borda de 1 px, ícone de 36 px e rótulo); o primário (Alimentar) em azul cheio de cantos cortados |
+| barras (§7.5) | segmentadas de 5 blocos para necessidades | contínuas de 10 px, cantos redondos, na cor da necessidade, com "x/100" ao lado |
+| ícones (§6) | emotes pixel para estado do pet | ícones de traço de 2 px (o desenho do protótipo, redesenhado em SVG inline); os sprites do pet não mudam |
+| navegação (§7.12) | barra marinho, ícone em círculo de 44 px, ativo com anel ciano | lateral de 240 px `#0b2556` com grade e estilhaços, ativo em azul cheio de canto cortado; no celular, a barra de baixo no mesmo azul e o mesmo ativo |
+| layout (§8) | coluna central de até 480 px no desktop; ordem palco → necessidades → chamado → desejo | desktop: lateral, coluna principal (Habitat e Ações) e coluna de 370 px (Estado atual, chamado, desejo, DigiBrain, Últimas ações); celular: Habitat → Ações → Estado atual → chamado → desejo |
+| fundo | padrão hexagonal | a grade de 48 px e os estilhaços azuis do protótipo; o palco continua o card hexagonal de hoje |
+
+Continua valendo o guia em: só o que o motor registra, os nomes Digimon, o alvo de toque de
+44 px, o foco visível, o `aria-label` dos botões só com ícone, o par necessidade × vontade
+aprendida (§7.6) e o chip de causa (§7.7), a fala por estágio (§9) e os estados especiais (§10).
+
 ---
 
 ## 9. O pet fala conforme o estágio

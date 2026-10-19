@@ -30,14 +30,18 @@ escolhida e o lobo que pesou mais ficam destacados. Entre duas decisões o mapa 
 das duas pranchas são os do gabarito (a vida v11 da semente 101, a decisão 262), desenhados pela mesma conta do componente `MapaPesos`.
 No celular o mapa ocupa a largura da folha. As capturas estão em `capturas/`.
 
-**A tela Pet em módulos** (2026-10-19, pedido do Matheus; **PROPOSTA, espera o ok dele antes do código**, CP-T1). A linguagem visual é a de um
-protótipo externo (cards com ícone e título, as ações em blocos), sem a arquitetura nem os dados dele. Vale a ordem do `UI_GUIDELINES` §8 e
-só o que o motor tem para um pet v11:
+**A tela Pet com o visual do protótipo** (2026-10-19, decisão do Matheus; **PROPOSTA, espera o ok dele antes do código**). O visual do
+protótipo externo da tela Pet vence o `UI_GUIDELINES` nesta tela (o desvio aprovado está no `UI_GUIDELINES`, §8.1): as cores, a tipografia,
+os cards de módulo, as barras, os ícones de traço, a ordem e o espaço vêm do código do protótipo, com as classes do Tailwind traduzidas em
+px. Não vêm a arquitetura (no app é Preact, com os tokens, sem Next, Tailwind, shadcn nem dependência nova), o fundo do quarto (o habitat é
+o de hoje) e nada que o motor não tenha: Próxima evolução, nível e XP, Treinar, Inventário, Mais/Descansar, o rótulo de humor, os tipos de
+registro inventados, os módulos arrastáveis, o card do pesquisador, o "DigiLab OS" e o sino. As pranchas `PetModulos*`, recusadas, saíram.
 
 | prancha | tamanho | o quê |
 |---|---|---|
-| `PetModulos390.html` | 390×844 (fluida até 360) | cabeçalho de sempre; os módulos Meu parceiro (o palco, com a emoção e o botão DigiBrain), Estado atual (as necessidades em grade de 4 com a barra segmentada de 5 e a saúde), o chamado, o par necessidade × vontade aprendida e Cuidar (as seis ações do v11 em blocos, o carinho em destaque); a navegação embaixo. O registro recente não entra no celular (CP-T2: fica em Crescer), e não há "Próxima evolução" (CP-T3) |
-| `PetModulosDesktop.html` | 1280×720 | os mesmos módulos na casca da UI-DESKTOP (#328): Meu parceiro no centro com o "agora", Cuidar embaixo dele, a coluna do DigiBrain sem mudança e, à direita, Estado atual, o chamado, o desejo e as Últimas ações, do registro |
+| `PetPrototipoDesktop.html` | 1280×720 | a barra lateral do protótipo (o logo, Pet, Crescer, Lutar e Diário; Conversar e Ajustes no pé), o topo (o relógio do jogo e o pet), o módulo Habitat (o palco de hoje com a emoção, a fala, a causa e o "agora" na pílula do protótipo), Ações (as seis do v11 em blocos, Alimentar no azul de canto cortado) e, na coluna de 370 px, Estado atual (as cinco necessidades com ícone, barra contínua e "x/100"), o chamado, o desejo, o DigiBrain (módulo recolhido) e Últimas ações, do registro |
+| `PetPrototipo390.html` | 390×844 (fluida até 360) | o celular, derivado do mesmo visual: o topo com o retrato, o relógio e o Conversar; Habitat, Ações e Estado atual empilhados na ordem do protótipo; o chamado e o desejo; a barra de baixo no azul da lateral. O DigiBrain fica no palco, como hoje, e o registro não entra (CP-T2: fica em Crescer) |
 
-As capturas estão em `capturas/`: `PetModulos390.png` (a dobra de 844 px), `PetModulos390_inteira.png` (a página inteira), `PetModulos360.png` e
-`PetModulosDesktop.png`. Os números e os textos são exemplo de layout.
+As capturas estão em `capturas/`: `PetPrototipoDesktop.png`, `PetPrototipo390.png` (a dobra de 844 px), `PetPrototipo390_inteira.png` (a
+página inteira) e `PetPrototipo360.png`. Os números e os textos são exemplo de layout. O protótipo não foi renderizado (rodar o Next dele
+pediria instalar e executar as dependências do ZIP, e a permissão foi negada); a comparação foi feita pelo código, classe a classe.
