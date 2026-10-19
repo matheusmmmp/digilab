@@ -1,6 +1,6 @@
 # TAREFA V2 — WORLD_POC_01 (2026-10-19)
 
-Coordenador: Gerente. Worker: A. Worktree e branch: `v2-world-poc-01`. Status: ABERTA.
+Coordenador: Gerente. Worker: A. Worktree e branch: `v2-world-poc-01`. Status: EM ANDAMENTO.
 
 Categoria: implementacao. Origem: Matheus, 2026-10-19: o WORLD-POC-01a da investigação WORLD-POC-001 (docs/futuro/mundo_3d.md), aprovado em 2026-10-19 para avançar em paralelo ao Gate C.
 
@@ -115,14 +115,13 @@ POC-01a, com estas hipóteses:
 
 ## 8. Precisa do Matheus
 
-- **O celular da M3:** o worker não tem celular. A M3 pede que o Matheus abra a página num celular real e anote os quadros por segundo
-  que a própria página mostra. **Recomendação:** a página mostra o número na tela e o copia em JSON. **Custo de errar:** sem isso, a M3
-  fica Não verificada e o Gate A fica parcial.
-- **O limite da M3** (30 quadros por segundo no celular): PROPOSTO, sem fonte. **Recomendação:** manter, como referência e não como gate
-  duro. **Custo de errar:** um limite alto demais reprova uma arquitetura boa por causa do aparelho.
-- **A dependência `three` no `package.json` do app**, mesmo usada só pela página do POC. **Recomendação:** aceitar, com a G-FRONTEIRA
-  garantindo que o app não a importa. A alternativa é um `package.json` separado em `web/app/poc/`. **Custo de errar:** baixo; dá para
-  separar depois.
+**As três DECIDIDAS em 2026-10-19, pela recomendação** (o Matheus, pelo coordenador):
+
+- **O celular da M3: DECIDIDO.** O Matheus faz a M3 abrindo a página num celular real. A página mostra os quadros por segundo na tela e
+  os copia em JSON. O worker deixa as instruções prontas no PR 2. Sem a medida, a M3 fica Não verificada e o Gate A, parcial.
+- **O limite da M3: DECIDIDO.** Os 30 quadros por segundo no celular são **referência, não gate duro**. O número segue sem fonte.
+- **A dependência `three`: DECIDIDO.** Ela entra no `package.json` do app, **com a versão exata e sem faixa**: a `0.186.1`, publicada
+  em 2026-09-24 (o registro do npm, `docs/futuro/mundo_3d/tecnologias.md`). A G-FRONTEIRA garante que o app não a importa.
 
 ## 9. Execução
 
