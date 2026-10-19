@@ -32,3 +32,4 @@ export * from "./mundo.ts";
 export * from "./corpo.ts";
 export * from "./lobos.ts";
 export * from "./motor_corpo.ts";
+export * from "./digibrain.ts";
