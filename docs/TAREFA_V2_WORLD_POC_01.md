@@ -126,3 +126,48 @@ POC-01a, com estas hipóteses:
 ## 9. Execução
 
 As etapas entregues entram aqui, cada uma numa seção no fim deste documento.
+
+## 10. Etapas E0 a E2, entregues (2026-10-19, PR 1)
+
+**O mundo do POC, sem a vista**, em `web/app/poc/mundo3d/`. Nenhum arquivo importa o jogo nem o motor do jogo, e o contrário também não.
+
+| arquivo | o que faz |
+|---|---|
+| `config.ts` | as constantes, todas PROPOSTAS e SEM FONTE: a sala de 16 × 12 células de 16 subunidades, o pet de raio 6 a 4 por tick, a bola de raio 4, o impulso 10, o atrito 1, a restituição 3/4, o cone de 120 graus e raio de 6 células, os bigodes de 2 células, a decisão a cada 15 ticks |
+| `tipos.ts` | o contrato: a Observação (vistos com `ref`, `distancia` e `setor` relativo; os 8 bigodes; o contato; o resultado percebido; o corpo de brinquedo) e a Intenção (os 7 tipos da especificação, por `ref` ou por setor). Não importa nada |
+| `inteiros.ts` | a conta inteira: o `divArred`, a raiz inteira, as 16 direções em tabela (sem trigonometria), o xorshift32, o FNV-1a e a derivação das sementes |
+| `fisica.ts` | o círculo contra o retângulo e contra o círculo; o movimento uma subunidade por vez em cada eixo (nada atravessa, e o deslize sai sozinho); a bola com reflexão, restituição e atrito |
+| `mundo.ts` | a sala (4 paredes, um obstáculo alto, um baixo), a bola, a comida e o pet. O passo de um tick: o pet anda, empurra a bola se bater nela, come o que alcança, e a comida comida volta numa célula livre sorteada pela rng do ambiente |
+| `controlador.ts` | o A* inteiro (custo 10 e 14, sem cortar canto de sólido, desempate fixo), refeito a cada tick, e a execução da Intenção até chegar, ficar bloqueado, o alvo sumir ou dar a hora |
+| `sensores.ts` | a leitura: o cone com oclusão (a linha inteira do centro ao centro; o alto tapa, o baixo não), os bigodes e o contato. O mapa `ref` → objeto fica com o simulador |
+| `cerebro.ts` | o cérebro de teste: um decisor de regras, que não aprende e não é o cérebro A |
+| `registro.ts`, `simulacao.ts` | o laço do contrato, com as duas rng (a do ambiente e a da política), o log de eventos (`avancar`, `deixar_comida`; um evento desconhecido falha alto), o replay e o registro por decisão |
+| `sprite_reserva.ts` | o sprite de reserva, 16 × 16 com paleta, desenhado à mão (W-6) |
+| `poc/mundo3d.html`, `pagina.ts`, `poc/vite.config.ts` | a página (nesta etapa, só o resumo da vida e o registro em JSON) e a config própria do Vite, que sai em `web/dist_poc/` (não versionado) |
+
+**Os gates** (`web/app/test/poc_mundo3d.test.ts`, 31 testes no Node):
+- **G-FRONTEIRA:** nenhum arquivo do POC, tirando a vista, importa o `three`. O POC só importa a si mesmo, e `motor/` e `src/` não
+  importam o POC. A `vite.config.ts` e o `index.html` do app não citam o POC. O `three` tem versão exata (`0.186.1`). O mundo não usa o
+  DOM, e o `npm run tipos` o compila sem a lib DOM (`tsconfig.poc.json`). Fora do teste: **o build do app sai idêntico ao da `main`**, o
+  mesmo sha256 dos 3 arquivos de `web/dist/`, conferido na sessão com o `package.json` do POC e com o da `main`;
+- **G-COLISAO:** contra a parede e no canto, o pet para encostado (o centro a `r` da face) e nunca a invade. Em diagonal, desliza. A
+  bola a 40 por tick não atravessa uma parede de 2;
+- **G-BOLA:** o empurrão passa o impulso na direção do contato. Solta a 10, a bola anda 10 + 9 + … + 1 = 55 e para. Contra a parede,
+  reflete perdendo velocidade e não a invade;
+- **G-NAVEGA (M4):** o pet chega à comida e a come nos 6 cenários: atrás do alto, contornando o alto, atrás do baixo, de canto a canto, do
+  fundo para a frente e colado na parede. O A* não corta canto e devolve `null` para a célula dentro do obstáculo;
+- **G-SENSOR:** o alto tapa a comida atrás dele e o baixo não. Nada fora do cone aparece. A Observação não tem nenhuma chave `x`, `y`,
+  `pos`, `posicao` ou `id`. Os bigodes e o contato dão os setores relativos certos, e a leitura consome o contato;
+- **G-CONTRATO:** o `cerebro.ts` só importa `./tipos.ts`, e o `tipos.ts` não importa nada;
+- **G-DET (a primeira metade da M5):**
+  - a mesma semente dá o mesmo estado e os mesmos registros, duas vezes;
+  - o replay pelo log refaz a vida;
+  - outra semente dá outra vida (o controle negativo);
+  - um evento desconhecido falha alto;
+- **o laço inteiro:** em 1.500 ticks o pet come e empurra a bola, o registro mostra quanto a bola andou, e o resultado percebido chega na
+  Observação seguinte.
+
+**O que fica para o PR 2:**
+- a vista (`vista.ts`, com o Three.js) e as métricas M1, M2, M3 e M6;
+- a segunda metade da M5: o mesmo hash no Node e no Chrome, pelo e2e;
+- as instruções para o Matheus medir a M3 num celular real.
