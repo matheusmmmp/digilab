@@ -134,3 +134,19 @@ celular.
   - Custo de errar ao ligar: um PR cujo corpo cite a frase literal, num `gh ... --body-file`, é bloqueado. Basta escrever "a frase de
     autorização".
   - Custo de não ligar: a defesa contra o Claude é só a regra escrita.
+
+## 11. Etapa 4 (2026-10-19): os testes do web/app no relato
+
+Achados do worker A no #355 (POC do mundo 3D), repassados pelo Gerente:
+- **O verificador só aceitava `tests/*.py`.** Na categoria implementacao, um PR com testes Vitest reprovava em "há teste no PR". Agora
+  `tools/verificar_relato.py` também aceita `web/app/test/` e `web/app/e2e/` (`*.test.ts`, `*.spec.ts`), com um alerta DECLARADA: o CI não
+  roda Vitest nem Playwright, então a execução desses testes continua só declarada.
+- **Um e2e instável sob carga:** o `web/app/e2e/jogo.spec.ts` ("save v1") falhou uma vez numa rodada com a suíte Python em paralelo e
+  passou nas três variantes rodado sozinho. Provável instabilidade de carga, não regressão.
+  - Recomendação: rodar o e2e sozinho, nunca junto da suíte Python.
+  - Se repetir rodado sozinho, abrir tarefa no `web/app`.
+  - Fica para o coordenador pôr nos riscos do `docs/PAINEL_V2.md`.
+
+**Precisa do Matheus:** decidir se o CI passa a rodar o Vitest (`npm ci` e `npm test` em `web/app`). Recomendação: sim, num job à parte, só
+quando o PR toca `web/app/`, porque é grátis no repositório público. Custo de errar: alguns minutos a mais por PR do jogo; sem ele, o teste
+web continua só declarado. O e2e (Playwright) fica fora até a instabilidade ser entendida.

@@ -129,6 +129,19 @@ def test_implementacao_exige_teste(tmp_path):
     assert falhas(vr.verificar(corpo("implementacao"), ["tools/x.py", "tests/test_x.py"], raiz)) == []
 
 
+def test_implementacao_aceita_teste_do_web_app_com_alerta(tmp_path):
+    """Achado do worker A (#355): os testes Vitest do web/app contam como teste, mas o CI não os roda."""
+    raiz = raiz_minima(tmp_path)
+    (raiz / "web" / "app" / "test").mkdir(parents=True)
+    (raiz / "web" / "app" / "test" / "poc.test.ts").write_text("", encoding="utf-8")
+    c = corpo("implementacao", evidencias="- `npm test` em web/app: `web/app/test/poc.test.ts` → 12 passed.")
+    itens = vr.verificar(c, ["web/app/src/x.ts", "web/app/test/poc.test.ts"], raiz)
+    assert falhas(itens) == []
+    assert any(i.alerta and i.regra == "testes do web/app" for i in itens)
+    sem = vr.verificar(corpo("implementacao"), ["web/app/src/x.ts"], raiz)
+    assert [i.regra for i in falhas(sem)] == ["há teste no PR"]
+
+
 def test_implementacao_teste_citado_que_nao_existe_reprova(tmp_path):
     raiz = raiz_minima(tmp_path)
     c = corpo("implementacao", evidencias="- Testes rodados: `python -m pytest tests/test_nao_ha.py -q` → 3 passed.")
