@@ -1,6 +1,6 @@
 # TAREFA V2 — FRONT-REACT (2026-10-19)
 
-Coordenador: Gerente. Worker: A. Worktree e branch: `v2-front-react`. Status: EM ANDAMENTO (etapa 1).
+Coordenador: Gerente. Worker: A. Worktree e branch: `v2-front-react`. Status: ENTREGUE a etapa 1 (PR, espera o merge); etapas 2 e 3 depois.
 
 Categoria: arquitetura. Origem: Matheus, 2026-10-19: para a interface ficar igual ao protótipo da tela Pet, ele decidiu trocar o Preact
 por React, com as bibliotecas de visual do protótipo (Tailwind, componentes no estilo shadcn, ícones lucide), mantendo o Vite e sem
@@ -37,8 +37,9 @@ gabaritos, as assinaturas, as versões de pet, o POC 3D (`web/app/poc/`) e o ser
   pet v11, em 390 e 1280 px (30 capturas). A referência sai do build de antes da mudança (`npm run capturas -- --update-snapshots`) e fica
   fora do repositório, em `artifacts_v2_front_react/capturas/`; o build de depois compara com ela, com o relógio da página falso e
   pausado (`page.clock`), para o tempo do jogo não andar entre uma captura e outra.
-- Tolerância: 4 pixels por captura, o ruído medido entre duas rodadas do mesmo build (2 pixels no Pet de 390, na borda do balão da fala).
-  Qualquer diferença acima disso é listada no PR, com a captura do diff.
+- Tolerância: zero pixel, sem nova tentativa. Antes de capturar, o teste espera as fontes e a decodificação de todas as imagens e refaz
+  o layout e a pintura da página inteira; sem isso, o texto de um select e dois ícones pequenos saíam ora de um jeito, ora de outro, com o
+  mesmo HTML (até 320 pixels). Qualquer diferença é listada no PR, com a captura do diff.
 
 ## 5. Entrega
 
@@ -62,3 +63,35 @@ proposta; vira tarefa própria depois do ok). O celular das outras telas.
 
 - Etapa 3: as decisões abertas das pranchas (DigiBrain no desktop, a higiene como quinta barra, a ordem no celular, os subtítulos em japonês
   da prancha-mapa). Recomendações no relato das pranchas.
+
+## 9. Etapa 1 entregue (2026-10-19): Preact → React
+
+**O que mudou.**
+- **Dependências**, todas com versão exata:
+  - saíram `preact` 10.29.8 e `@preact/preset-vite` 2.10.6, e com eles 69 pacotes do Babel;
+  - entraram `react` e `react-dom` 19.3.0 (de 2026-09-09; a 19.3.1, de 2026-10-14, tem só 5 dias), `@types/react` e `@types/react-dom`
+    19.3.0 (de 2026-09-09) e `@vitejs/plugin-react` 6.1.1 (de 2026-08-28; a 6.1.2 tem duas semanas).
+- **As telas** (56 arquivos de `src/`), numa troca mecânica:
+  - `class` → `className` (1.399), `for` → `htmlFor` (3), atributos SVG em camelCase (25) e `autocomplete` → `autoComplete`;
+  - `onInput` → `onChange` nos três campos de texto e número (no React, o `onChange` é o evento de cada tecla);
+  - os imports de `preact/hooks` → `react`, `ComponentChildren` → `ReactNode`, `render` → `createRoot`.
+- **À mão:**
+  - `src/css-variaveis.d.ts`: as variáveis CSS (`--x`) no `style`, que o React não tipa;
+  - `FormEvent` no envio da conversa;
+  - o foco ao abrir um modal: o Preact escrevia o atributo `autofocus` e o `showModal()` focava o botão; o React não escreve o atributo.
+    Os dois botões passaram a `data-autofocus`, e o `abrirModal` (`src/componentes/modal.ts`) foca o marcado.
+- **O que não foi tocado:** nada em `web/app/motor/` (o diff contra a `main` é vazio), o save, o replay, a paridade, o POC 3D (o
+  `npm run poc:build` passa) e o servidor.
+
+**O gate.** Rodado no build React e, para comparar, no build Preact do commit anterior à migração (uma worktree separada).
+
+| conferência | Preact (antes) | React (depois) |
+|---|---|---|
+| `npm run tipos` | passa | passa |
+| `npm test` (Vitest) | — | 42 arquivos, 503 testes, todos passam |
+| `npm run e2e` (o jogo) | 70 de 70 | 70 de 70 (antes do conserto do foco: 67, as 3 falhas eram o foco do Resultado da luta) |
+| `npm run capturas` (30 telas, zero pixel) | 30 de 30, em 3 rodadas | 30 de 30, em 5 rodadas: **o jogo sai igual, pixel a pixel** |
+| bundle do app (`web/dist/assets/*.js`) | 532 KB (171 KB gzip) | 766 KB (235 KB gzip): +64 KB gzip, o custo do React DOM |
+
+As referências das capturas ficam fora do repositório, em `artifacts_v2_front_react/capturas/` (30 PNG); `npm run capturas --
+--update-snapshots` as refaz a partir do build de antes de qualquer mudança.
