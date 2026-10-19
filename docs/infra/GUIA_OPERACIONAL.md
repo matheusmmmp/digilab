@@ -124,8 +124,8 @@ Saída 0 quer dizer autorizado; com saída 1, a tabela diz por quê. O blob SHA 
 `git rev-parse origin/main:docs/TAREFA_V2_<FRENTE>.md`.
 
 **Limite:** o `gh` do Claude Code usa o seu token (um app OAuth, não um GitHub App), então um comentário escrito pelo Claude Code com `gh` não
-tem a marca do app. A defesa, nesse caso, é a regra do `AGENTS.md` e do worker: **nenhum agente escreve "AUTORIZO"**. Um hook que bloqueie
-isso é a decisão IM-8.
+tem a marca do app. A defesa, nesse caso, é a regra do `AGENTS.md` e do worker: **nenhum agente escreve "AUTORIZO"**. O hook H4
+(`.claude/hooks/h4_autorizo.py`) bloqueia isso num comando de shell, mas está **desligado** até o seu ok (IM-8).
 
 **ENTREGA E RECUPERAÇÃO.** O worker abre um PR e para; não faz merge. O PR é a fonte do relato e das evidências. No Issue, registre apenas o link e o estado curto. Para retomar depois de uma interrupção, use o ID/link do Issue, o caminho da tarefa e o branch/PR; não dependa do histórico do chat. No Work, peça: “Leia o último PR ligado ao Issue #336, confira corpo, diff e check verificar-pr; separe o que foi declarado do que o CI verificou.” Esta sessão criou e leu o Issue #336 pelo conector GitHub; isso não comprova que uma sessão Claude Code consiga lê-lo.
 

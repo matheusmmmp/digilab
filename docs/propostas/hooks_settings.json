@@ -7,7 +7,10 @@
       },
       {
         "matcher": "Bash|PowerShell",
-        "hooks": [{"type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/h3_main.py\"", "timeout": 30}]
+        "hooks": [
+          {"type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/h3_main.py\"", "timeout": 30},
+          {"type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/h4_autorizo.py\"", "timeout": 30}
+        ]
       }
     ],
     "Stop": [
