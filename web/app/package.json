@@ -15,6 +15,7 @@
     "test": "vitest run",
     "gabaritos": "node test/gerar_gabaritos.mjs",
     "e2e": "npm run build && playwright test",
+    "capturas": "npm run build && playwright test -c playwright.capturas.config.ts",
     "poc": "vite --config poc/vite.config.ts",
     "poc:build": "vite build --config poc/vite.config.ts",
     "poc:preview": "vite preview --config poc/vite.config.ts",
