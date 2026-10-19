@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=390">
+<title>Pet · DigiBrain (celular)</title>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&amp;family=Rubik:ital,wght@1,800;1,900&amp;family=DotGothic16&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../dl-up.css">
+<style>
+/* Pet no celular (UpPet) com o DigiBrain numa folha (DIRETRIZES_REPLICAR, secao 7: sobe de baixo, max. 85% da altura, alca, x ou tocar
+   fora). Abre pelo botao "DigiBrain" no canto do palco; o cabecalho do Pet, com Conversar e Ajustes, nao muda. So pets v11 (PW-7). */
+body{margin:0;width:390px;background:var(--dl-bg)}
+.tela{width:390px;height:844px;position:relative;overflow:hidden;background:var(--dl-bg);color:var(--dl-text);font-family:var(--dl-f-texto)}
+.faixa{height:10px;background:repeating-linear-gradient(90deg,var(--dl-navy) 0 10px,var(--dl-plate) 10px 20px);border-bottom:3px solid var(--dl-navy-deep)}
+.cab{display:flex;align-items:center;gap:10px;padding:12px 14px 10px}
+.ret{width:52px;height:52px;border-radius:50%;background:#FFF;border:3px solid var(--dl-navy);flex:none}
+.nome{display:flex;flex-direction:column;gap:4px}
+.placa{background:var(--dl-plate);color:#FFF;border:2px solid var(--dl-navy-deep);box-shadow:inset 0 3px 0 var(--dl-plate-hi);border-radius:6px;font-weight:900;font-size:15px;padding:1px 10px}
+.tag{font-size:11px;font-weight:900;background:var(--dl-highlight);color:var(--dl-highlight-ink);border-radius:6px;padding:0 6px;align-self:flex-start}
+.hora{margin-left:auto;font-family:var(--dl-f-num);font-style:italic;font-weight:900;font-size:26px;color:#FFF;
+  text-shadow:2px 0 var(--dl-navy),-2px 0 var(--dl-navy),0 2px var(--dl-navy),0 -2px var(--dl-navy),0 4px var(--dl-navy-deep)}
+.qd{width:44px;height:44px;border-radius:12px;background:var(--dl-action);border:3px solid #FFF;box-shadow:0 0 0 2px var(--dl-navy);display:flex;align-items:center;justify-content:center;color:#FFF;font-weight:900;font-size:12px}
+.palco{margin:0 14px;height:318px;border-radius:16px;background:var(--dl-surface);box-shadow:0 0 0 2px var(--dl-border),0 3px 0 2px var(--dl-border-shadow);position:relative}
+.palco-tit{text-align:center;font-weight:900;font-size:15px;color:var(--dl-navy);padding-top:12px}
+.btn-db{position:absolute;right:10px;top:8px;display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 12px;border-radius:999px;
+  background:var(--dl-learned-bg);color:var(--dl-learned-ink);font-weight:900;font-size:12px;border:2px solid #FFF;box-shadow:0 0 0 2px var(--dl-navy)}
+.anel{position:absolute;left:50%;top:226px;width:212px;height:60px;margin-left:-106px;border-radius:50%;border:10px solid #CDE6FB}
+.pet{position:absolute;left:50%;top:104px;margin-left:-66px}
+.necs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 14px 0}
+.necs span{background:#FFF;border-radius:12px;box-shadow:0 0 0 2px var(--dl-border);padding:8px;font-size:12px;font-weight:800;height:44px}
+.nav{position:absolute;left:0;right:0;bottom:0;height:83px;background:var(--dl-navy);border-top:3px solid #FFF;display:flex;justify-content:space-around;align-items:center}
+.nav i{width:44px;height:44px;border-radius:50%;background:var(--dl-plate);display:block}
+.fundo{position:absolute;inset:0;background:rgba(9,20,52,.62)}
+
+/* ---------- a folha do DigiBrain */
+.folha{position:absolute;left:0;right:0;bottom:0;height:688px;background:var(--dl-surface);border-radius:20px 20px 0 0;box-shadow:0 -2px 0 2px var(--dl-border);
+  display:flex;flex-direction:column}
+.alca{width:44px;height:5px;border-radius:3px;background:var(--dl-disabled);margin:8px auto 2px}
+.folha-cab{display:flex;align-items:center;gap:10px;padding:6px 14px 10px;border-bottom:2px solid var(--dl-surface-2)}
+.folha-cab h2{margin:0;flex:1;font-size:18px;font-weight:900;color:var(--dl-navy)}
+.selo{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;color:var(--dl-text-2)}
+.selo i{width:8px;height:8px;border-radius:50%;background:var(--dl-ok)}
+.fechar{width:44px;height:44px;border-radius:12px;background:var(--dl-surface-2);border:2px solid var(--dl-border);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:var(--dl-navy)}
+.rola{flex:1;overflow:auto;padding:12px 14px 20px;display:flex;flex-direction:column;gap:14px}
+.sec-tit{font-size:11px;font-weight:900;letter-spacing:.4px;text-transform:uppercase;color:var(--dl-text-2);margin:0 0 6px}
+.agora-box{border-radius:12px;background:var(--dl-surface-2);box-shadow:0 0 0 2px var(--dl-border);padding:10px 12px}
+.agora-box b{display:block;font-size:15px;font-weight:900}
+.agora-box small{display:block;font-size:12px;font-weight:700;color:var(--dl-text-2);margin-top:2px}
+.barra{display:grid;grid-template-columns:128px 1fr 54px;align-items:center;gap:8px;font-size:13px;font-weight:800;margin:4px 0}
+.barra .trilho{height:10px;border-radius:5px;background:#E8EFF9;position:relative;overflow:hidden}
+.barra .trilho b{position:absolute;top:0;bottom:0;left:0;width:var(--v);background:var(--c);border-radius:5px}
+.barra .trilho b.neg{background:var(--dl-need)}
+.barra em{font-style:normal;font-family:var(--dl-f-lcd);font-weight:400;font-size:13px;text-align:right}
+.emo{display:inline-flex;align-items:center;gap:6px;margin-top:6px;font-size:12px;font-weight:800;padding:2px 10px;border-radius:999px;background:#F3EAFB;color:var(--dl-dark)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:800;padding:4px 10px;border-radius:999px;box-shadow:0 0 0 2px var(--dl-border);background:#FFF}
+.chip .s{color:var(--dl-ok-edge)}
+.chip .s.menos{color:var(--dl-dano)}
+.opc{display:grid;grid-template-columns:1fr 90px 42px;align-items:center;gap:8px;font-size:13px;font-weight:800;margin:4px 0}
+.opc .trilho{height:8px;border-radius:4px;background:#E8EFF9;position:relative}
+.opc .trilho b{position:absolute;inset:0 auto 0 0;width:var(--v);background:var(--dl-border);border-radius:4px}
+.opc.esc .trilho b{background:var(--dl-action)}
+.opc.esc > span:first-child::after{content:" · escolhida";color:var(--dl-action-press)}
+.opc em{font-style:normal;font-family:var(--dl-f-lcd);font-weight:400;text-align:right}
+.apr{display:grid;grid-template-columns:1fr auto;gap:4px 8px;font-size:13px;font-weight:800}
+.apr em{font-style:normal;font-family:var(--dl-f-lcd);font-weight:400}
+.ult{list-style:none;margin:0;padding:0}
+.ult li{display:grid;grid-template-columns:48px 1fr;gap:6px;font-size:13px;font-weight:700;padding:4px 0}
+.lcd{font-family:var(--dl-f-lcd);font-weight:400;color:var(--dl-text-2)}
+.nota{margin:0;font-size:10px;color:var(--dl-muted);font-weight:700}
+</style>
+</head>
+<body>
+<div class="tela">
+  <div class="faixa"></div>
+  <div class="cab">
+    <span class="ret"></span>
+    <span class="nome"><span class="placa">Koromon</span><span class="tag">IN-TRAINING</span></span>
+    <span class="hora">14:20</span>
+    <span class="qd" aria-label="Conversar">Conv.</span><span class="qd" aria-label="Ajustes">⚙</span>
+  </div>
+  <div class="palco">
+    <div class="palco-tit">Meu parceiro</div>
+    <span class="btn-db"><svg width="18" height="16" viewBox="0 0 64 56" aria-hidden="true"><path d="M32 4C20 4 8 11 8 26c0 13 10 24 24 24s24-11 24-24C56 11 44 4 32 4z" fill="#F4F8FE" stroke="#FFF" stroke-width="3"/><path d="M12 18c6 0 10 4 10 10" fill="none" stroke="#FFD23F" stroke-width="6"/><path d="M52 18c-6 0-10 4-10 10" fill="none" stroke="#6FE3FF" stroke-width="6"/></svg>DigiBrain</span>
+    <span class="anel"></span>
+    <svg class="pet" width="132" height="120" viewBox="0 0 44 40" aria-label="pet (placeholder)"><path fill="#F7B7CF" stroke="#173A8A" stroke-width="1.5" d="M6 26c0-11 7-19 16-19s16 8 16 19c0 7-7 11-16 11S6 33 6 26z"/><circle cx="16" cy="22" r="3" fill="#173A8A"/><circle cx="28" cy="22" r="3" fill="#173A8A"/><path d="M18 30h8" stroke="#173A8A" stroke-width="1.5"/></svg>
+  </div>
+  <div class="necs"><span>comida</span><span>energia</span><span>higiene</span><span>humor</span></div>
+  <nav class="nav"><i></i><i></i><i></i><i></i></nav>
+
+  <div class="fundo"></div>
+  <section class="folha" role="dialog" aria-labelledby="db-tit">
+    <span class="alca"></span>
+    <div class="folha-cab">
+      <svg width="32" height="28" viewBox="0 0 64 56" aria-label="o cérebro A (ícone estático)"><path d="M32 4C20 4 8 11 8 26c0 13 10 24 24 24s24-11 24-24C56 11 44 4 32 4z" fill="#F4F8FE" stroke="#173A8A" stroke-width="2"/><path d="M32 6v42" stroke="#173A8A" stroke-width="1.5"/><path d="M12 18c6 0 10 4 10 10" fill="none" stroke="#FFD23F" stroke-width="5" stroke-linecap="round"/><path d="M52 18c-6 0-10 4-10 10" fill="none" stroke="#6FE3FF" stroke-width="5" stroke-linecap="round"/><path d="M14 38c5-2 10-1 13 3" fill="none" stroke="#E5489F" stroke-width="5" stroke-linecap="round"/><path d="M50 38c-5-2-10-1-13 3" fill="none" stroke="#7B3FB8" stroke-width="5" stroke-linecap="round"/></svg>
+      <h2 id="db-tit">DigiBrain</h2>
+      <span class="selo"><i></i>ao vivo</span>
+      <span class="fechar" aria-label="Fechar">×</span>
+    </div>
+    <div class="rola">
+      <div><p class="sec-tit">Agora</p>
+        <div class="agora-box"><b>Tempo livre: foi brincar</b><small>Sem o aprendido, teria ido explorar.</small></div></div>
+      <div><p class="sec-tit">O peso de cada lobo nesta escolha</p>
+        <div class="barra"><span>Impulsos</span><span class="trilho"><b style="--v:100%;--c:#FFD23F"></b></span><em>100%</em></div>
+        <div class="barra"><span>Aprendido</span><span class="trilho"><b style="--v:3%;--c:#6FE3FF"></b></span><em>+3,1%</em></div>
+        <div class="barra"><span>Corpo</span><span class="trilho"><b class="neg" style="--v:3%"></b></span><em>−3,1%</em></div>
+        <div class="barra"><span>Memória e emoção</span><span class="trilho"><b style="--v:0%;--c:#7B3FB8"></b></span><em>0%</em></div>
+        <span class="emo">emoção de hoje: alegria · da memória do pet</span></div>
+      <div><p class="sec-tit">O que mais pesou</p>
+        <div class="chips"><span class="chip">humor 99% <span class="s">a favor</span></span><span class="chip">tédio 40% <span class="s">a favor</span></span><span class="chip">saúde 100% <span class="s menos">contra</span></span></div></div>
+      <div><p class="sec-tit">As opções e a chance de cada uma</p>
+        <div class="opc esc"><span>brincar</span><span class="trilho"><b style="--v:35%"></b></span><em>35%</em></div>
+        <div class="opc"><span>explorar</span><span class="trilho"><b style="--v:30%"></b></span><em>30%</em></div>
+        <div class="opc"><span>à toa</span><span class="trilho"><b style="--v:27%"></b></span><em>27%</em></div>
+        <div class="opc"><span>chamar você</span><span class="trilho"><b style="--v:9%"></b></span><em>9%</em></div></div>
+      <div><p class="sec-tit">O que aprendeu desde que nasceu</p>
+        <div class="apr"><span>mais à toa do que o instinto</span><em>+0,96</em><span>menos chamar você</span><em>−0,86</em><span>menos explorar</span><em>−0,79</em></div></div>
+      <div><p class="sec-tit">Últimas ações</p>
+        <ol class="ult"><li><span class="lcd">14:20</span>brincando</li><li><span class="lcd">14:05</span>explorando</li><li><span class="lcd">13:50</span>à toa</li></ol></div>
+      <p class="nota">números e textos: exemplo de layout · só pets v11 (PW-7)</p>
+    </div>
+  </section>
+</div>
+</body>
+</html>
