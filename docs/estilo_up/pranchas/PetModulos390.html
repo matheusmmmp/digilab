@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pet · módulos (celular)</title>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&amp;family=Rubik:ital,wght@1,800;1,900&amp;family=DotGothic16&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../dl-up.css">
+<style>
+/* A tela Pet no celular na linguagem do protótipo de 2026-10-19 (cards com ícone e título), pedido do Matheus, sem a arquitetura nem os
+   dados dele. A ordem é a do UI_GUIDELINES §8: cabeçalho → palco → necessidades → chamado → desejo, e as ações antes da navegação. Só o
+   que o motor tem para um pet v11. O registro recente NÃO entra no celular (CP-T2: fica em Crescer); sem "Próxima evolução" (CP-T3).
+   Largura fluida até 390 px, para conferir também em 360 px. Números e textos são exemplo de layout, não dado. */
+body{margin:0;background:var(--dl-bg)}
+.tela{max-width:390px;min-height:844px;margin:0 auto;position:relative;background:var(--dl-bg);color:var(--dl-text);font-family:var(--dl-f-texto);
+  display:flex;flex-direction:column}
+.faixa{height:10px;background:repeating-linear-gradient(90deg,var(--dl-navy) 0 10px,var(--dl-plate) 10px 20px);border-bottom:3px solid var(--dl-navy-deep)}
+.cab{display:flex;align-items:center;gap:10px;padding:12px 14px 10px}
+.ret{width:52px;height:52px;border-radius:50%;background:#FFF;border:3px solid var(--dl-action);box-shadow:0 0 0 2px #FFF,0 3px 0 2px var(--dl-navy);flex:none}
+.nome{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1 1 auto}
+.placa{background:var(--dl-plate);color:#FFF;border:2px solid var(--dl-navy-deep);box-shadow:inset 0 3px 0 var(--dl-plate-hi);border-radius:6px;font-weight:900;font-size:15px;padding:1px 10px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;box-sizing:border-box;align-self:flex-start}
+.tags{display:flex;flex-wrap:wrap;gap:2px 6px;align-items:center;min-width:0}
+.tags>*{white-space:nowrap}
+.tag{font-size:11px;font-weight:900;background:var(--dl-highlight);color:var(--dl-highlight-ink);border-radius:6px;padding:0 6px}
+.brasao{font-size:11px;font-weight:800;color:var(--dl-text-2)}
+.hora{margin-left:auto;flex:none;font-family:var(--dl-f-num);font-style:italic;font-weight:900;font-size:26px;color:#FFF;
+  text-shadow:2px 0 var(--dl-navy),-2px 0 var(--dl-navy),0 2px var(--dl-navy),0 -2px var(--dl-navy),0 4px var(--dl-navy-deep)}
+.qd{width:44px;height:44px;border-radius:12px;background:var(--dl-action);border:3px solid #FFF;box-shadow:0 0 0 2px var(--dl-navy);display:flex;align-items:center;justify-content:center;flex:none}
+
+.conteudo{display:flex;flex-direction:column;gap:12px;padding:4px 14px 16px;flex:1}
+
+/* ---------- o módulo: card com cabeçalho de ícone + título (a linguagem do protótipo), dentro das regras do card (§4.3 e §7.2) */
+.mod{background:var(--dl-surface);border-radius:16px;box-shadow:0 0 0 2px var(--dl-border),0 3px 0 2px var(--dl-border-shadow);overflow:hidden}
+.mod-cab{display:flex;align-items:center;gap:8px;min-height:40px;padding:0 12px;border-bottom:2px solid var(--dl-surface-2)}
+.mod-cab .ic{width:26px;height:26px;border-radius:8px;background:var(--dl-surface-2);display:flex;align-items:center;justify-content:center;flex:none}
+.mod-cab h2{margin:0;font-size:15px;font-weight:900;color:var(--dl-navy);flex:1}
+.mod-cab .aside{font-size:12px;font-weight:800;color:var(--dl-text-2)}
+.mod-corpo{padding:10px 12px 12px}
+
+/* ---------- o palco (o card de palco do guia, como módulo): emoção, DigiBrain, anel, pet, plaquinha */
+.cena{position:relative;height:286px;background:var(--dl-surface-2)}
+.emo{position:absolute;left:10px;top:10px;display:inline-flex;align-items:center;gap:6px;background:#FFF;border-radius:999px;box-shadow:0 0 0 2px var(--dl-border);padding:2px 10px 2px 4px;font-size:12px;font-weight:800}
+.emo i{width:20px;height:20px;border-radius:6px;background:#FFE3EF;display:inline-block}
+.btn-db{position:absolute;right:10px;top:8px;display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 12px;border-radius:999px;
+  background:var(--dl-learned-bg);color:var(--dl-learned-ink);font-weight:900;font-size:12px;border:2px solid #FFF;box-shadow:0 0 0 2px var(--dl-navy)}
+.anel{position:absolute;left:50%;top:196px;width:212px;height:60px;margin-left:-106px;border-radius:50%;border:10px solid #CDE6FB;box-sizing:border-box}
+.pet{position:absolute;left:50%;top:92px;margin-left:-66px}
+.nome-palco{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);background:var(--dl-plate);color:#FFF;border:2px solid var(--dl-navy-deep);
+  box-shadow:inset 0 3px 0 var(--dl-plate-hi);border-radius:6px;font-weight:900;font-size:15px;padding:2px 22px}
+
+/* ---------- Estado atual: as necessidades em grade de 4 com a barra segmentada de 5 (§7.5, §8) e a vida contínua */
+.necs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.nec{display:flex;flex-direction:column;align-items:center;gap:5px;background:var(--dl-surface-2);border-radius:10px;padding:7px 6px 8px;font-size:11px;font-weight:800;color:var(--dl-text-2)}
+.nec .ic{width:24px;height:24px;border-radius:6px;background:#E6F2FF}
+.nec .dl-seg{width:100%}
+.nec.baixa{color:#B0216F}
+.nec.baixa .ic{background:#FFE3EF}
+.vida{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;margin-top:10px;font-size:13px;font-weight:800}
+.vida .dl-vida{height:10px}
+.vida em{font-style:normal;font-family:var(--dl-f-lcd);font-size:13px}
+
+/* ---------- chamado (§7.9) e desejo (§7.6), como hoje */
+.chamado{display:flex;align-items:center;gap:10px;background:#FFF;border-radius:12px;padding:8px;box-shadow:0 0 0 2px var(--dl-border),0 3px 0 2px var(--dl-border-shadow)}
+.chamado .tile{width:48px;height:48px;border-radius:10px;background:var(--dl-plate);border:2px solid var(--dl-navy-deep);box-shadow:inset 0 3px 0 var(--dl-plate-hi);flex:none;
+  display:flex;align-items:center;justify-content:center;color:#FFF;font-weight:900;font-size:20px}
+.chamado .txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.chamado b{font-size:14px;font-weight:900}
+.chamado small{font-size:12px;font-weight:700;color:var(--dl-text-2)}
+.chamado .dl-btn{min-height:44px;padding:0 12px;font-size:14px}
+.par{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.des-corpo{display:flex;align-items:center;gap:8px;padding:8px 6px 4px}
+.des-corpo i{width:32px;height:32px;border-radius:8px;flex:none}
+.des-corpo b{display:block;font-size:14px;font-weight:900}
+.des-corpo small{display:block;font-size:11px;font-weight:800}
+.dl-need .des-corpo i{background:#FFE3EF}
+.dl-need .des-corpo small{color:#B0216F}
+.dl-aprendido .des-corpo i{background:rgba(111,227,255,.35)}
+.dl-aprendido .des-corpo small{color:var(--dl-learned-sub)}
+
+/* ---------- Cuidar: as ações do dono em blocos com ícone (a linguagem do protótipo), só as do motor para o v11 */
+.acoes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.acao{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:64px;border-radius:12px;font:inherit;font-weight:900;font-size:13px;
+  background:#FFF;color:var(--dl-navy);border:3px solid var(--dl-navy);box-shadow:inset 0 -4px 0 var(--dl-sec-shadow);padding:6px 4px}
+.acao i{width:26px;height:26px;border-radius:7px;background:#E6F2FF}
+.acao.dest{background:var(--dl-highlight);color:var(--dl-highlight-ink);border:3px solid #FFF;box-shadow:0 0 0 2px var(--dl-navy),inset 0 -4px 0 var(--dl-highlight-press)}
+.acao.dest i{background:#FFF3C4}
+.acao:disabled{background:var(--dl-disabled);color:var(--dl-disabled-ink);border-color:var(--dl-disabled);box-shadow:none}
+.acao:disabled i{background:#DCE4F1}
+.motivo{grid-column:1/-1;font-size:11px;font-weight:800;color:var(--dl-text-2);margin:-2px 2px 0}
+
+/* ---------- navegação: fixa embaixo (§7.12); aqui no fim da página para a captura inteira mostrar tudo */
+.nav{position:sticky;bottom:0;height:83px;background:var(--dl-navy);border-top:3px solid #FFF;display:grid;grid-template-columns:repeat(4,1fr);align-items:center;box-sizing:border-box;padding:8px 8px 12px}
+.nav a{display:flex;flex-direction:column;align-items:center;gap:3px;color:#C7D8F5;font-size:12px;font-weight:800;text-decoration:none}
+.nav a i{width:44px;height:44px;border-radius:50%;background:var(--dl-plate);border:3px solid var(--dl-plate-hi);box-sizing:border-box;display:block}
+.nav a.ativo{color:#FFF;font-weight:900}
+.nav a.ativo i{background:var(--dl-action);border-color:var(--dl-learned);box-shadow:0 0 10px var(--dl-learned)}
+@media (max-width:370px){ .cab{gap:8px} .hora{font-size:22px} }
+.nota{max-width:390px;margin:10px auto 24px;padding:0 14px;font-size:11px;font-weight:700;color:var(--dl-text-2)}
+</style>
+</head>
+<body>
+<div class="tela">
+  <div class="faixa"></div>
+  <header class="cab">
+    <span class="ret" aria-label="Meus pets"></span>
+    <span class="nome"><span class="placa">Agumon</span><span class="tags"><span class="tag">ROOKIE</span><span class="brasao">Coragem</span></span></span>
+    <span class="hora">14:20</span>
+    <span class="qd" aria-label="Conversar"><svg width="22" height="20" viewBox="0 0 22 20" aria-hidden="true"><path d="M3 3h16v10H9l-4 4v-4H3z" fill="none" stroke="#FFF" stroke-width="2.5" stroke-linejoin="round"/></svg></span>
+    <span class="qd" aria-label="Ajustes"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="3.5" fill="none" stroke="#FFF" stroke-width="2.5"/><path d="M10 1.5v3M10 15.5v3M1.5 10h3M15.5 10h3M4 4l2 2M14 14l2 2M4 16l2-2M14 6l2-2" stroke="#FFF" stroke-width="2.5" stroke-linecap="round"/></svg></span>
+  </header>
+
+  <main class="conteudo">
+    <!-- 1. o palco: o card de palco do guia com o cabeçalho de módulo -->
+    <section class="mod" aria-labelledby="t-palco">
+      <div class="mod-cab"><span class="ic"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8l6-5 6 5v6H2z" fill="none" stroke="#173A8A" stroke-width="2.2" stroke-linejoin="round"/></svg></span>
+        <h2 id="t-palco">Meu parceiro</h2></div>
+      <div class="cena">
+        <span class="emo"><i></i>alegria</span>
+        <span class="btn-db"><svg width="18" height="16" viewBox="0 0 64 56" aria-hidden="true"><path d="M32 4C20 4 8 11 8 26c0 13 10 24 24 24s24-11 24-24C56 11 44 4 32 4z" fill="#F4F8FE" stroke="#FFF" stroke-width="3"/><path d="M12 18c6 0 10 4 10 10" fill="none" stroke="#FFD23F" stroke-width="6"/><path d="M52 18c-6 0-10 4-10 10" fill="none" stroke="#6FE3FF" stroke-width="6"/></svg>DigiBrain</span>
+        <span class="anel"></span>
+        <svg class="pet" width="132" height="120" viewBox="0 0 44 40" aria-label="pet (placeholder)"><path fill="#F7B7CF" stroke="#173A8A" stroke-width="1.5" d="M6 26c0-11 7-19 16-19s16 8 16 19c0 7-7 11-16 11S6 33 6 26z"/><circle cx="16" cy="22" r="3" fill="#173A8A"/><circle cx="28" cy="22" r="3" fill="#173A8A"/><path d="M18 30h8" stroke="#173A8A" stroke-width="1.5"/></svg>
+        <span class="nome-palco">Agumon</span>
+      </div>
+    </section>
+
+    <!-- 2. Estado atual: as necessidades (grade de 4, segmentada de 5) e a vida -->
+    <section class="mod" aria-labelledby="t-estado">
+      <div class="mod-cab"><span class="ic"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 14S2 10 2 6a3 3 0 0 1 6-1 3 3 0 0 1 6 1c0 4-6 8-6 8z" fill="none" stroke="#173A8A" stroke-width="2.2" stroke-linejoin="round"/></svg></span>
+        <h2 id="t-estado">Estado atual</h2></div>
+      <div class="mod-corpo">
+        <div class="necs">
+          <div class="nec baixa" aria-label="comida 2 de 5"><i class="ic"></i>comida<span class="dl-seg dl-seg--need"><span class="on"></span><span class="on"></span><span></span><span></span><span></span></span></div>
+          <div class="nec" aria-label="energia 4 de 5"><i class="ic"></i>energia<span class="dl-seg"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span></div>
+          <div class="nec" aria-label="higiene 3 de 5"><i class="ic"></i>higiene<span class="dl-seg"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></span></div>
+          <div class="nec" aria-label="humor 5 de 5"><i class="ic"></i>humor<span class="dl-seg"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></span></div>
+        </div>
+        <div class="vida"><span>Saúde</span><span class="dl-vida" role="img" aria-label="saúde 92 de 100"><i style="width:92%"></i></span><em>92%</em></div>
+      </div>
+    </section>
+
+    <!-- 3. chamado aberto (só quando houver) -->
+    <div class="chamado">
+      <span class="tile">!</span>
+      <span class="txt"><b>Chamando você</b><small>um carinho atende o pedido</small></span>
+      <button type="button" class="dl-btn">Atender</button>
+    </div>
+
+    <!-- 4. desejo: necessidade (rosa, vem do corpo) e vontade aprendida (malha); só o que o motor calculou -->
+    <div class="par">
+      <div class="dl-need"><div class="dl-need__cab">NECESSIDADE</div><div class="des-corpo"><i></i><span><b>comer</b><small>vem do corpo</small></span></div></div>
+      <div class="dl-aprendido dl-malha"><div class="dl-aprendido__cab">VONTADE APRENDIDA</div><div class="des-corpo"><i></i><span><b>brincar</b><small>aprendida com você</small></span></div></div>
+    </div>
+
+    <!-- 5. Cuidar: as ações do dono para o v11 (sem elogio, bronca, petisco e banheiro); o carinho é o destaque da tela -->
+    <section class="mod" aria-labelledby="t-acoes">
+      <div class="mod-cab"><span class="ic"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 2v6M3 4h4M11 3v10M9 11h4" stroke="#173A8A" stroke-width="2.2" stroke-linecap="round"/></svg></span>
+        <h2 id="t-acoes">Cuidar</h2></div>
+      <div class="mod-corpo">
+        <div class="acoes" role="group" aria-label="Cuidar">
+          <button type="button" class="acao"><i></i>Alimentar</button>
+          <button type="button" class="acao"><i></i>Limpar</button>
+          <button type="button" class="acao"><i></i>Brincar</button>
+          <button type="button" class="acao dest"><i></i>Carinho</button>
+          <button type="button" class="acao"><i></i>Tapa</button>
+          <button type="button" class="acao"><i></i>Tratar</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="nav" aria-label="Destinos">
+    <a class="ativo" aria-current="page"><i></i>Pet</a><a><i></i>Crescer</a><a><i></i>Lutar</a><a><i></i>Diário</a>
+  </nav>
+</div>
+<p class="nota">Prancha PetModulos390 (2026-10-19): exemplo de layout. O registro recente fica em Crescer (CP-T2); sem "Próxima evolução"
+  (CP-T3). Ícones e pet são placeholders originais; no app entram os emotes e os ícones de traço que ele já tem.</p>
+</body>
+</html>

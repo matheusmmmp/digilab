@@ -29,3 +29,15 @@ em laranja, a regra que disparou, os candidatos com a chance, as entradas que ma
 escolhida e o lobo que pesou mais ficam destacados. Entre duas decisões o mapa fica parado: nada anima para fingir atividade. Os números
 das duas pranchas são os do gabarito (a vida v11 da semente 101, a decisão 262), desenhados pela mesma conta do componente `MapaPesos`.
 No celular o mapa ocupa a largura da folha. As capturas estão em `capturas/`.
+
+**A tela Pet em módulos** (2026-10-19, pedido do Matheus; **PROPOSTA, espera o ok dele antes do código**, CP-T1). A linguagem visual é a de um
+protótipo externo (cards com ícone e título, as ações em blocos), sem a arquitetura nem os dados dele. Vale a ordem do `UI_GUIDELINES` §8 e
+só o que o motor tem para um pet v11:
+
+| prancha | tamanho | o quê |
+|---|---|---|
+| `PetModulos390.html` | 390×844 (fluida até 360) | cabeçalho de sempre; os módulos Meu parceiro (o palco, com a emoção e o botão DigiBrain), Estado atual (as necessidades em grade de 4 com a barra segmentada de 5 e a saúde), o chamado, o par necessidade × vontade aprendida e Cuidar (as seis ações do v11 em blocos, o carinho em destaque); a navegação embaixo. O registro recente não entra no celular (CP-T2: fica em Crescer), e não há "Próxima evolução" (CP-T3) |
+| `PetModulosDesktop.html` | 1280×720 | os mesmos módulos na casca da UI-DESKTOP (#328): Meu parceiro no centro com o "agora", Cuidar embaixo dele, a coluna do DigiBrain sem mudança e, à direita, Estado atual, o chamado, o desejo e as Últimas ações, do registro |
+
+As capturas estão em `capturas/`: `PetModulos390.png` (a dobra de 844 px), `PetModulos390_inteira.png` (a página inteira), `PetModulos360.png` e
+`PetModulosDesktop.png`. Os números e os textos são exemplo de layout.
