@@ -450,5 +450,5 @@ Pelas decisões PW-5, PW-6 e PW-7. Sem run de pesquisa e sem número novo no cé
   - **O cérebro:** um ícone estático, sem animação. O connectome fica na pesquisa até o J5 (CN-1).
   - **Nenhum rótulo** "pensando" ou "sentindo" (o e2e confere).
 - **Só nos v11 (PW-7):** os pets v1 a v10 não têm o botão nem a coluna, e o layout deles não muda.
-- **Testes:** `npm run tipos` limpo; `npm test` com 40 arquivos e 452 testes; o e2e do painel em 390 e 1280 px, com captura, e o dos pets
+- **Testes:** `npm run tipos` limpo; `npm test` com 40 arquivos e 452 testes; `npm run e2e` com 68 testes, entre eles o do painel em 390 e 1280 px, com captura, e o dos pets
   antigos sem painel; `tests/test_painel_digibrain.py` (4); `python tools/conferir_saude.py` passa.
