@@ -44,6 +44,41 @@
   :root:not([data-tema="claro"]) .db-emo{background:var(--dl-dark-bg);color:var(--dl-dark-ink)}
 }
 
+
+/* ---------- o mapa dos pesos (MapaPesos.tsx; pranchas DigiBrainDesktop e DigiBrain390): sem transicao nem animacao, acende so na decisao */
+.mp,.mp-leg{--mp-fundo:var(--dl-surface);--mp-mais:#E34948;--mp-menos:#2A78D6;--mp-aceso:#F08A00}
+.mp{display:block;width:100%;height:auto;font-family:var(--dl-f-texto)}
+.folha .mp{--mp-fundo:var(--dl-bg)}
+.mp *{transition:none;animation:none}
+.mp-reg rect{fill:var(--c);fill-opacity:.10;stroke:var(--c);stroke-opacity:.45;stroke-width:1}
+.mp-reg text{font-size:8px;font-weight:900;letter-spacing:.3px;text-transform:uppercase;fill:var(--dl-text-2)}
+.mp-reg--percepcao{--c:var(--dl-action)}
+.mp-reg--impulsos{--c:var(--dl-highlight-press)}
+.mp-reg--decisao{--c:#1AA7C9}
+.mp-reg--memoria_emocao{--c:var(--dl-dark)}
+.mp-dest rect{fill-opacity:.22;stroke-opacity:1;stroke-width:2}
+.mp-dest text{fill:var(--dl-text)}
+.mp-reg .mp-mais-peso{font-size:8px;text-transform:none;letter-spacing:0;fill:var(--dl-text)}
+.mp-pesos path,.mp-acesas path{fill:none;stroke-linecap:round}
+.mp-prior{stroke:var(--dl-muted);stroke-opacity:.5}
+.mp-mais{stroke:var(--mp-mais)}
+.mp-menos{stroke:var(--mp-menos)}
+.mp-pesos--fundo{opacity:.4}
+.mp-acesas path{stroke:var(--mp-aceso)}
+.mp-acesas .mp-neg{stroke-dasharray:3 2}
+.mp-no circle{fill:var(--mp-fundo);stroke:var(--dl-muted);stroke-width:1.2}
+.mp-no text{font-size:9px;font-weight:700;fill:var(--dl-text-2);paint-order:stroke;stroke:var(--mp-fundo);stroke-width:3px;stroke-linejoin:round}
+.mp-corpo circle{stroke:var(--dl-ok-edge)}
+.mp-lit circle{fill:var(--mp-aceso);stroke:var(--mp-aceso)}
+.mp-lit text{font-weight:900;fill:var(--dl-text)}
+.mp-cand circle{stroke:var(--dl-action);stroke-width:2}
+.mp-cand text{fill:var(--dl-text)}
+.mp-esc circle{fill:var(--dl-action);stroke:var(--dl-navy)}
+.mp-esc text{font-weight:900}
+.mp .mp-no .mp-pct{font-family:var(--dl-f-lcd);font-weight:400;font-size:9px}
+.mp-leg{display:flex;flex-wrap:wrap;gap:2px 10px;list-style:none;margin:6px 0 0;padding:0;font-size:11px;font-weight:700;color:var(--dl-text-2)}
+.mp-leg i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:4px;background:var(--c)}
+.mp-nota{margin:4px 0 0;font-size:11px;font-weight:700;color:var(--dl-text-2)}
 /* ---------- celular: o botao no canto do palco (na faixa do titulo) e a folha */
 .db-botao{position:absolute;right:6px;top:2px;z-index:3;display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:0 12px;border-radius:999px;
   background:var(--dl-learned-bg);color:var(--dl-learned-ink);font:inherit;font-weight:900;font-size:12px;border:2px solid #FFFFFF;box-shadow:0 0 0 2px var(--dl-navy);cursor:pointer}
@@ -71,4 +106,6 @@
   .digibrain .db-opcoes small{color:var(--ui-primary-forte)}
   .digibrain .db-chips li{box-shadow:none;border:1px solid var(--ui-border);background:var(--ui-surface);padding:3px 10px}
   .digibrain .db-emo{font-size:11px}
+  .digibrain .mp{--mp-fundo:var(--ui-surface)}
+  .digibrain .mp-leg,.digibrain .mp-nota{color:var(--ui-text-2)}
 }

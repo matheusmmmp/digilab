@@ -22,7 +22,7 @@ import { CCO_CORPO_V11 } from "./corpo.ts";
 import { desejoLobos, type BracoConsequencia, type CerebroA, type ObservacaoLobos } from "./lobos.ts";
 import { MotorCorpo, estadoNascimentoPy, type PoliticaCorpo } from "./motor_corpo.ts";
 import { bracoV11 } from "./pet_v11.ts";
-import { leituraAprendido, leituraDecisao, type LeituraDecisao } from "./digibrain.ts";
+import { leituraAprendido, leituraDecisao, mapaDecisao, mapaPesos, type ArestaMapa, type LeituraDecisao, type MapaDecisao } from "./digibrain.ts";
 import { desafiadoDaVersao, regrasDaVersao, type Lutador, type RegrasLuta, type ResultadoLuta, type Desafiado } from "./combate.ts";
 import { ConfiancaCombate } from "./confianca.ts";
 import { aplicarAcaoDono, avancarTick, clamp, efeitoAcaoPet, estadoInicial, observacao, temperamentoDe } from "./estado.ts";
@@ -276,15 +276,26 @@ export class Motor {
   get temVozPropria(): boolean { return this.versao >= 7 && this.versao < 11; }
   /** v11: o cerebro A do pet (null nos v1-v10) */
   get cerebro(): CerebroA | null { return this.v11 ? this.v11.braco.cerebro : null; }
-  /** v11: a leitura do painel DigiBrain (digibrain.ts): a da ultima decisao do cerebro (null antes da primeira) e o "o que aprendeu"
-      na observacao de agora (o desvio aprendido, a base da vontade). null nos v1-v10 (PW-7). So le: nao muda o cerebro nem a rng */
-  digibrain(): { decisao: LeituraDecisao | null; aprendido: ReturnType<typeof leituraAprendido> } | null {
+  /** v11: a leitura do painel DigiBrain (digibrain.ts): a da ultima decisao do cerebro (null antes da primeira), o "o que aprendeu"
+      na observacao de agora (o desvio aprendido, a base da vontade) e o mapa dos pesos. null nos v1-v10 (PW-7). So le: nao muda o
+      cerebro nem a rng */
+  digibrain(): {
+    decisao: LeituraDecisao | null; aprendido: ReturnType<typeof leituraAprendido>;
+    mapa: { receptores: readonly string[]; arestas: ArestaMapa[]; acesas: MapaDecisao | null };
+  } | null {
     const c = this.cerebro;
     if (c === null) return null;
-    const m = c.ultimoMotivo;
+    const m = c.ultimoMotivo, ap = c.cfg.aprendiz;
+    if (ap === undefined) throw new Error("o mapa dos pesos precisa do teto do aprendiz");
     return {
       decisao: m === null ? null : leituraDecisao(m, c.prior[m.regra][m.acao], c.escala, c.receptoresNovos),
       aprendido: leituraAprendido(c.desvioAprendido(this.observacaoAgora())),
+      /* o mapa dos pesos: as arestas com os pesos de agora e as acesas na ultima decisao (o termo da hora da decisao) */
+      mapa: {
+        receptores: c.receptoresNovos,
+        arestas: mapaPesos(c.prior, c.pesos, c.priorCorpo, c.pesosCorpo, c.escala, ap.teto, c.receptoresNovos),
+        acesas: m === null ? null : mapaDecisao(m, c.prior[m.regra][m.acao], c.escala, c.receptoresNovos),
+      },
     };
   }
   /** a observacao de agora, a que o pet le: nos v11, com os receptores do corpo */

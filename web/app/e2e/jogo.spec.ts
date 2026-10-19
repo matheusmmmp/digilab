@@ -1086,6 +1086,63 @@ for (const largura of [390, 1280]) {
     expect(erros).toEqual([]);
   });
 }
+/* o mapa dos pesos (MapaPesos.tsx), no lugar do icone estatico: cada traco e um peso do motor (Motor.digibrain().mapa), e a cada decisao
+   acendem a regra, os candidatos com a chance, a acao escolhida e o lobo que pesou mais; entre duas decisoes nada anima */
+for (const largura of [390, 1280]) {
+  test(`DigiBrain: o mapa dos pesos acende a cada decisão em ${largura} px`, async ({ page }) => {
+    await page.setViewportSize({ width: largura, height: 800 });
+    await semear(page, SAVE_V11);
+    const erros = vigiarErros(page);
+    await page.goto(APP + "#/pet/estado");
+    await expect(page.locator(".pet-tela")).toBeVisible();
+    const desktop = largura >= 1100;
+    if (!desktop) await page.locator(".db-botao").click();
+    const raiz = desktop ? page.locator(".digibrain") : page.locator("dialog.folha[open]");
+    const mapa = raiz.locator("svg.mp");
+    await expect(mapa).toBeVisible();
+    await expect(raiz.locator(".db-cab .db-icone, .db-folha-selo .db-icone")).toHaveCount(0);      /* o icone estatico saiu do painel */
+    /* o mapa e o do motor: o mesmo numero de pesos, a regra, a escolhida, os candidatos, as arestas acesas e o lobo destacado */
+    const conferir = async (): Promise<number> => {
+      const r = await page.evaluate(() => {
+        const s = document.querySelector(".digibrain svg.mp, dialog.folha[open] svg.mp")!, db = (window as any).__digilab.digibrain();
+        return {
+          n: Number(s.getAttribute("data-n")), pesos: s.querySelectorAll(".mp-pesos path").length, acesas: s.querySelectorAll(".mp-acesas path").length,
+          regra: [...s.querySelectorAll("[data-regra].mp-lit")].map(g => g.getAttribute("data-regra")),
+          esc: [...s.querySelectorAll(".mp-esc")].map(g => g.getAttribute("data-acao")),
+          cand: [...s.querySelectorAll(".mp-cand")].map(g => g.getAttribute("data-acao")).sort(),
+          pct: s.querySelectorAll(".mp-pct").length, top: [...s.querySelectorAll("[data-entrada].mp-lit")].map(g => g.getAttribute("data-entrada")).sort(),
+          dest: [...s.querySelectorAll(".mp-dest")].map(g => g.getAttribute("data-lobo")), db,
+        };
+      });
+      const m = r.db.mapa, d = r.db.decisao;
+      expect(r.n).toBe(m.acesas.n);
+      expect(r.pesos).toBe(m.arestas.length);
+      expect(r.acesas).toBe(m.acesas.arestas.length);
+      expect(r.regra).toEqual([m.acesas.regra]);
+      expect(r.esc).toEqual([m.acesas.acao]);
+      expect(r.cand).toEqual(d.chances.map((c: { acao: string }) => c.acao).sort());
+      expect(r.pct).toBe(d.chances.length);
+      expect(r.top).toEqual(d.percepcao.map((p: { entrada: string }) => p.entrada).sort());
+      expect(r.dest).toEqual([m.acesas.lobo_decisivo]);
+      return r.n;
+    };
+    const n0 = await conferir();
+    /* sem animacao nem transicao no mapa */
+    const animado = await page.evaluate(() => {
+      const s = document.querySelector(".digibrain svg.mp, dialog.folha[open] svg.mp")!;
+      return { anim: s.getAnimations({ subtree: true }).length, trans: getComputedStyle(s.querySelector(".mp-acesas path, .mp-pesos path")!).transitionDuration };
+    });
+    expect(animado).toEqual({ anim: 0, trans: "0s" });
+    await mapa.screenshot({ path: test.info().outputPath(`digibrain-mapa-${largura}-n${n0}.png`) });
+    /* o tempo anda e a proxima decisao acende o mapa de novo */
+    await expect.poll(() => page.evaluate(() => (window as any).__digilab.digibrain().mapa.acesas.n), { timeout: 30000 }).toBeGreaterThan(n0);
+    const n1 = await conferir();
+    expect(n1).toBeGreaterThan(n0);
+    await mapa.screenshot({ path: test.info().outputPath(`digibrain-mapa-${largura}-n${n1}.png`) });
+    expect(await raiz.innerText()).not.toMatch(/pensando|sentindo|conectoma|connectome/i);
+    expect(erros).toEqual([]);
+  });
+}
 test("DigiBrain: os pets v1 a v10 não têm o painel (PW-7)", async ({ page }) => {
   for (const largura of [390, 1280]) {
     await page.setViewportSize({ width: largura, height: 800 });

@@ -15,13 +15,51 @@ sys.path.insert(0, str(RAIZ / "experiments"))
 import exportar_gabarito_lobos as GL  # noqa: E402
 import exportar_gabarito_painel_digibrain as G  # noqa: E402
 
-from digilab.painel_digibrain import LOBOS_BARRAS, leitura_aprendido, leitura_decisao  # noqa: E402
+from digilab.painel_digibrain import LOBOS_BARRAS, leitura_aprendido, leitura_decisao, mapa_decisao, mapa_pesos  # noqa: E402
 from digilab.policies.lobos import sortear  # noqa: E402
 
 
 def test_gabarito_do_painel_em_dia():
     atual = json.loads(G.ARQUIVO.read_text(encoding="utf-8"))
     assert atual == json.loads(json.dumps(G.gerar(), sort_keys=True))
+
+
+def test_gabarito_do_mapa_em_dia():
+    atual = json.loads(G.ARQUIVO_MAPA.read_text(encoding="utf-8"))
+    assert atual == json.loads(json.dumps(G.gerar_mapa(), sort_keys=True))
+
+
+def test_mapa_das_vidas():
+    """as arestas: espessura e aprendido pelas contas, o corpo presente; as acesas: o termo da percepcao, forca maxima 1"""
+    g = json.loads(G.ARQUIVO_MAPA.read_text(encoding="utf-8"))
+    lobos = json.loads(GL.ARQUIVO.read_text(encoding="utf-8"))
+    S, teto = g["S"], g["teto"]
+    assert all(a["aprendido"] == 0.0 and a["w"] == a["w0"] for a in g["l0"])
+    for vida, mapa, acesas in zip(lobos["v11"], g["pesos"], g["v11"]):
+        for a in mapa["arestas"]:
+            assert a["w"] != 0 or a["w0"] != 0
+            assert a["espessura"] == (abs(a["w"]) / S) ** 0.5 and -1.0 <= a["aprendido"] <= 1.0
+        assert any(a["entrada"] in g["receptores"] for a in mapa["arestas"])
+        for m, d in zip(vida["motivos"], acesas["decisoes"]):
+            linha = vida["pesos_prior"][m["regra"]][m["acao"]]
+            termo = {x["entrada"]: x["termo"] for x in d["arestas"]}
+            for p in leitura_decisao(m, linha, S, g["receptores"])["percepcao"]:
+                assert termo[p["entrada"]] == p["termo"]
+            assert max(x["forca"] for x in d["arestas"]) == 1.0 and d["lobo_decisivo"] == m["lobo_decisivo"]
+
+
+def test_mapa_falha_alto():
+    lobos = json.loads(GL.ARQUIVO.read_text(encoding="utf-8"))
+    v = lobos["v11"][0]
+    p0 = v["pesos_prior"]
+    with pytest.raises(ValueError):                                          # regra que o mapa nao desenha
+        mapa_pesos({**p0, "bola_no_cenario": p0["tempo_livre"]}, {**p0, "bola_no_cenario": p0["tempo_livre"]}, {}, {}, 1024, 16384, [])
+    alem = json.loads(json.dumps(p0))
+    alem["tempo_livre"]["brincar"][1] = 16385
+    with pytest.raises(ValueError):                                          # alem do teto
+        mapa_pesos(p0, alem, {}, {}, 1024, 16384, [])
+    with pytest.raises(ValueError):
+        mapa_decisao(v["motivos"][0], [1], 1024, [])
 
 
 def test_leitura_das_vidas():

@@ -2,7 +2,7 @@
    digilab/painel_digibrain.py, com paridade bit a bit pelo gabarito (test/gabaritos/painel_digibrain_python.json). A tela nao calcula
    nada: as barras por lobo, a percepcao, as chances, a sonda "quem decidiu" e o "o que aprendeu" saem daqui. Leituras puras do motivo
    e do desvio aprendido: nao mudam peso, motivo, memoria nem rng. */
-import { ACOES_LOBOS, ENTRADAS_LOBOS, sortear, type MotivoLobos } from "./lobos.ts";
+import { ACOES_LOBOS, ENTRADAS_LOBOS, REGRAS_LOBOS, sortear, type MotivoLobos, type RegraLobos } from "./lobos.ts";
 import type { AcaoPet } from "./tipos.ts";
 
 /** quantas entradas a percepcao lista e quantas acoes o "o que aprendeu" lista (N_PERCEPCAO, N_APRENDIDO; so apresentacao) */
@@ -93,4 +93,72 @@ export function leituraAprendido(desvio: Partial<Record<AcaoPet, number>>, n: nu
     return ap > aq ? -1 : ap < aq ? 1 : ACOES_LOBOS.indexOf(p) - ACOES_LOBOS.indexOf(q);
   });
   return acoes.slice(0, n).map(a => ({ acao: a, desvio: desvio[a]! }));
+}
+
+/** uma aresta do mapa dos pesos: o peso w[regra][acao][entrada], com a espessura sqrt(|w| / S) e o aprendido (w - w0) / teto, em [-1, 1] */
+export interface ArestaMapa { regra: RegraLobos; acao: AcaoPet; entrada: string; w: number; w0: number; espessura: number; aprendido: number }
+/** as arestas acesas numa decisao: as da acao escolhida na regra que disparou, com o termo e a forca sqrt(|termo| / o maior |termo|) */
+export interface MapaDecisao {
+  n: number; regra: RegraLobos; acao: AcaoPet; lobo_decisivo: MotivoLobos["lobo_decisivo"];
+  arestas: { entrada: string; termo: number; forca: number }[];
+}
+type Tabela = Partial<Record<RegraLobos, Partial<Record<AcaoPet, readonly number[]>>>>;
+
+/** mapa_pesos: uma aresta por peso com w ou w0 nao nulo, na ordem de REGRAS_LOBOS, ACOES_LOBOS e das entradas (ENTRADAS_LOBOS na tabela
+ *  da decisao; os receptores novos na do corpo). Uma regra fora do mapa levanta erro em vez de sumir */
+export function mapaPesos(prior: Tabela, pesos: Tabela, priorCorpo: Tabela, pesosCorpo: Tabela, S: number, teto: number,
+  receptores: readonly string[]): ArestaMapa[] {
+  const arestas: ArestaMapa[] = [];
+  const tabela = (p0: Tabela, p: Tabela, nomes: readonly string[], tipo: string): void => {
+    const rs = Object.keys(p).sort(), rs0 = Object.keys(p0).sort();
+    if (rs.join() !== rs0.join()) throw new Error(`tabela ${tipo}: regras do prior ${rs0} e dos pesos ${rs} diferem`);
+    const fora = rs.filter(r => !(REGRAS_LOBOS as readonly string[]).includes(r));
+    if (fora.length) throw new Error(`tabela ${tipo}: regras fora do mapa ${fora}`);
+    for (const r of REGRAS_LOBOS) {
+      const pr = p[r], pr0 = p0[r];
+      if (pr === undefined || pr0 === undefined) continue;
+      const as = Object.keys(pr).sort(), as0 = Object.keys(pr0).sort();
+      if (as.some(a => !ACOES_LOBOS.includes(a as AcaoPet)) || as.join() !== as0.join()) throw new Error(`tabela ${tipo}, regra ${r}: acoes ${as} (prior ${as0})`);
+      for (const a of ACOES_LOBOS) {
+        const linha = pr[a], linha0 = pr0[a];
+        if (linha === undefined || linha0 === undefined) continue;
+        if (linha.length !== nomes.length || linha0.length !== nomes.length) {
+          throw new Error(`tabela ${tipo}, ${r}/${a}: ${linha.length} pesos e ${linha0.length} no prior, esperados ${nomes.length}`);
+        }
+        nomes.forEach((e, j) => {
+          const w = linha[j], w0 = linha0[j];
+          if (w === 0 && w0 === 0) return;
+          if (Math.abs(w - w0) > teto) throw new Error(`tabela ${tipo}, ${r}/${a}/${e}: |w - w0| = ${Math.abs(w - w0)} acima do teto ${teto}`);
+          arestas.push({ regra: r, acao: a, entrada: e, w, w0, espessura: Math.sqrt(Math.abs(w) / S), aprendido: (w - w0) / teto });
+        });
+      }
+    }
+  };
+  tabela(prior, pesos, ENTRADAS_LOBOS, "da decisao");
+  tabela(priorCorpo, pesosCorpo, receptores, "do corpo");
+  return arestas;
+}
+
+/** mapa_decisao: o termo de cada entrada na acao escolhida, (w0 / S) x mais o aprendido (o da percepcao de leituraDecisao, com o vies),
+ *  sem os termos zero, e a forca sqrt(|termo| / o maior |termo|) */
+export function mapaDecisao(motivo: MotivoLobos, priorLinha: readonly number[], S: number, receptores: readonly string[]): MapaDecisao {
+  const a = motivo.acao;
+  if (!motivo.candidatos.includes(a)) throw new Error(`acao ${a} fora dos candidatos ${motivo.candidatos}`);
+  if (priorLinha.length !== ENTRADAS_LOBOS.length) throw new Error(`linha do prior com ${priorLinha.length} pesos, esperados ${ENTRADAS_LOBOS.length}`);
+  const x = motivo.percepcao, aprendido = motivo.aprendido, aprendidoCorpo = motivo.aprendido_corpo;
+  let termos: [string, number][] = ENTRADAS_LOBOS.map((e, j) => {
+    let termo = (priorLinha[j] / S) * x[e];
+    if (aprendido !== null) termo = termo + aprendido[a]![j];
+    return [e, termo];
+  });
+  if (aprendidoCorpo !== undefined) {
+    const t = aprendidoCorpo[a]!;
+    if (receptores.length !== t.length) throw new Error(`${receptores.length} receptores para ${t.length} termos do corpo`);
+    receptores.forEach((r, i) => termos.push([r, t[i]]));
+  }
+  termos = termos.filter(([, t]) => t !== 0.0);
+  let maior = 0.0;
+  for (const [, t] of termos) maior = Math.max(maior, Math.abs(t));
+  return { n: motivo.n, regra: motivo.regra, acao: a, lobo_decisivo: motivo.lobo_decisivo,
+    arestas: termos.map(([e, t]) => ({ entrada: e, termo: t, forca: Math.sqrt(Math.abs(t) / maior) })) };
 }

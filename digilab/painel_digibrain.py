@@ -15,11 +15,18 @@ memoria nem rng, e nenhum numero novo entra no cerebro.
 - **"Quem decidiu"** (a sonda contrafactual da auditoria E0, V3-1, `docs/futuro/digibrain_v3_e0.md`): o sorteio so com os impulsos e o
   mesmo `u`. Se a acao sai outra, o aprendido mudou esta decisao. Nao e o `lobo_decisivo`, que mede so o tamanho da contribuicao.
 - **"O que aprendeu"** (`leitura_aprendido`): as acoes de maior |desvio aprendido| sobre o prior, a mesma base da vontade (PW-3).
+- **O mapa dos pesos** (`mapa_pesos` e `mapa_decisao`; o desenho do connectome do #321, `docs/futuro/connectome_cerebro_a.md`, secao 2):
+  cada peso nao nulo `w[regra][acao][entrada]` e uma aresta entrada -> regra -> acao, com a espessura sqrt(|w| / S) (CN-3) e o
+  aprendido (w - w0) / teto, em [-1, 1] (a cor: o prior e 0). A cada decisao acendem as arestas da acao escolhida na regra que
+  disparou, pelo termo de cada uma, (w0 / S) x mais o aprendido (o mesmo termo da percepcao, com o vies), e a forca
+  sqrt(|termo| / o maior |termo| da decisao), em (0, 1] (a raiz, como a espessura: o vies nao apaga os termos pequenos).
 """
 from __future__ import annotations
 
+import math
+
 from .events import ACOES_PET_HOJE
-from .policies.lobos import ENTRADAS, sortear
+from .policies.lobos import ENTRADAS, REGRAS, sortear
 
 N_PERCEPCAO = 3        # quantas entradas a percepcao lista: "as duas ou tres" da tarefa (secao 4); SEM FONTE, so apresentacao
 N_APRENDIDO = 3        # quantas acoes o "o que aprendeu" lista; SEM FONTE, so apresentacao
@@ -105,3 +112,68 @@ def leitura_aprendido(desvio: dict[str, float], n: int = N_APRENDIDO) -> list[di
         raise ValueError(f"acoes fora de ACOES_PET_HOJE: {fora}")
     acoes = sorted((a for a in desvio if desvio[a] != 0.0), key=lambda a: (-abs(desvio[a]), ordem.index(a)))
     return [{"acao": a, "desvio": desvio[a]} for a in acoes[:n]]
+
+
+def mapa_pesos(prior: dict, pesos: dict, prior_corpo: dict, pesos_corpo: dict, S: int, teto: int, receptores: list[str]) -> list[dict]:
+    """As arestas do mapa dos pesos: uma por peso com w ou w0 nao nulo, na ordem das REGRAS, de ACOES_PET_HOJE e das entradas (as de
+    ENTRADAS e depois os receptores novos, na tabela do corpo). `prior` e `pesos` sao a tabela da decisao (regra -> acao -> um peso por
+    entrada) e `prior_corpo` e `pesos_corpo`, a do corpo (regra -> acao -> um peso por receptor novo), com as chaves em texto. Uma regra
+    que o mapa nao desenha (as do mundo) levanta erro em vez de sumir."""
+    acoes = [a.value for a in ACOES_PET_HOJE]
+    arestas = []
+
+    def tabela(p0: dict, p: dict, nomes, tipo: str) -> None:
+        if set(p) != set(p0):
+            raise ValueError(f"tabela {tipo}: regras do prior {sorted(p0)} e dos pesos {sorted(p)} diferem")
+        fora = [r for r in p if r not in REGRAS]
+        if fora:
+            raise ValueError(f"tabela {tipo}: regras fora do mapa {fora}")
+        for r in REGRAS:
+            if r not in p:
+                continue
+            fora = [a for a in p[r] if a not in acoes]
+            if fora or set(p[r]) != set(p0[r]):
+                raise ValueError(f"tabela {tipo}, regra {r}: acoes {sorted(p[r])} (prior {sorted(p0[r])})")
+            for a in acoes:
+                if a not in p[r]:
+                    continue
+                linha, linha0 = p[r][a], p0[r][a]
+                if len(linha) != len(nomes) or len(linha0) != len(nomes):
+                    raise ValueError(f"tabela {tipo}, {r}/{a}: {len(linha)} pesos e {len(linha0)} no prior, esperados {len(nomes)}")
+                for e, w, w0 in zip(nomes, linha, linha0):
+                    if w == 0 and w0 == 0:
+                        continue
+                    if abs(w - w0) > teto:
+                        raise ValueError(f"tabela {tipo}, {r}/{a}/{e}: |w - w0| = {abs(w - w0)} acima do teto {teto}")
+                    arestas.append({"regra": r, "acao": a, "entrada": e, "w": w, "w0": w0,
+                                    "espessura": math.sqrt(abs(w) / S), "aprendido": (w - w0) / teto})
+
+    tabela(prior, pesos, ENTRADAS, "da decisao")
+    tabela(prior_corpo, pesos_corpo, receptores, "do corpo")
+    return arestas
+
+
+def mapa_decisao(motivo: dict, prior_linha: list[int], S: int, receptores: list[str]) -> dict:
+    """As arestas acesas numa decisao: as da acao escolhida na regra que disparou, com termo nao nulo, na ordem das entradas (as de
+    ENTRADAS, com o vies, e depois os receptores novos). O termo e o da percepcao de `leitura_decisao`, (w0 / S) x mais o aprendido; a
+    forca e sqrt(|termo| / o maior |termo| da decisao). Com o lobo decisivo do motivo."""
+    a = motivo["acao"]
+    if a not in motivo["candidatos"]:
+        raise ValueError(f"acao {a} fora dos candidatos {motivo['candidatos']}")
+    if len(prior_linha) != len(ENTRADAS):
+        raise ValueError(f"linha do prior com {len(prior_linha)} pesos, esperados {len(ENTRADAS)}")
+    x, aprendido, aprendido_corpo = motivo["percepcao"], motivo["aprendido"], motivo.get("aprendido_corpo")
+    termos = []
+    for j, e in enumerate(ENTRADAS):
+        termo = (prior_linha[j] / S) * x[e]
+        if aprendido is not None:
+            termo = termo + aprendido[a][j]
+        termos.append((e, termo))
+    if aprendido_corpo is not None:
+        if len(receptores) != len(aprendido_corpo[a]):
+            raise ValueError(f"{len(receptores)} receptores para {len(aprendido_corpo[a])} termos do corpo")
+        termos.extend(zip(receptores, aprendido_corpo[a]))
+    termos = [(e, t) for e, t in termos if t != 0.0]
+    maior = max((abs(t) for _, t in termos), default=0.0)
+    return {"n": motivo["n"], "regra": motivo["regra"], "acao": a, "lobo_decisivo": motivo["lobo_decisivo"],
+            "arestas": [{"entrada": e, "termo": t, "forca": math.sqrt(abs(t) / maior)} for e, t in termos]}
