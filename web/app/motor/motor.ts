@@ -2,7 +2,7 @@
    nunca e salvo, so o registro (acoes do dono, tempo, lutas, intervencoes, treinos); a vida e reconstruida
    reprocessando o registro. Mesma semente + mesmo registro = mesma assinatura, no mesmo runtime. */
 import { CMEN,
-  ACAO_CHAMADO, ACOES_DONO, ACOES_DONO_V4, ACOES_PET, CAT, CDJ, CED, CHAMADO_BEBE, CHE, CLE, CMG, EIXOS_TEMP, baseDe, COB, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
+  ACAO_CHAMADO, ACOES_DONO, ACOES_DONO_JOGO_V11, ACOES_DONO_V4, ACOES_PET, CAT, CDJ, CED, CHAMADO_BEBE, CHE, CLE, CMG, EIXOS_TEMP, baseDe, COB, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
   TICK_INICIAL, VERSAO_PET, CVB,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
@@ -17,7 +17,11 @@ import {
 import { ESTAGIOS_SALAO, RIVAL_SALAO, VERSAO_SALAO, formaRivalSalao, rivalSalao, sementeSalao } from "./salao.ts";
 import { CIT, CIT_V9 } from "./constantes.ts";
 import { cartaDe, chipDe, chipServe, estagioMinimo, itensDosV9, itensValem, porqueItensNaoValem, pontosComChips, vagasDeChip } from "./itens.ts";
-import { caraterDe, caraterPolitica, formaAdultaDe, linhaDoCarater, type QuandoCarater } from "./carater.ts";
+import { caraterDe, caraterPolitica, caraterV11, formaAdultaDe, linhaDoCarater, type QuandoCarater } from "./carater.ts";
+import { CCO_CORPO_V11 } from "./corpo.ts";
+import { desejoLobos, type BracoConsequencia, type CerebroA, type ObservacaoLobos } from "./lobos.ts";
+import { MotorCorpo, estadoNascimentoPy, type PoliticaCorpo } from "./motor_corpo.ts";
+import { bracoV11 } from "./pet_v11.ts";
 import { desafiadoDaVersao, regrasDaVersao, type Lutador, type RegrasLuta, type ResultadoLuta, type Desafiado } from "./combate.ts";
 import { ConfiancaCombate } from "./confianca.ts";
 import { aplicarAcaoDono, avancarTick, clamp, efeitoAcaoPet, estadoInicial, observacao, temperamentoDe } from "./estado.ts";
@@ -202,17 +206,41 @@ export class Motor {
   /** v6: as lutas deste pet no Salao da Fronteira (salao.ts): quantas (uma por tentativa do Tamer em que ele lutou) e quantas venceu. Entra
       na assinatura so depois da primeira (a dos pets que nunca lutaram la nao muda) */
   salao = { tentativas: 0, vitorias: 0 };
+  /** v11: o cerebro A atras do braco da consequencia e o laco do corpo por tick, que roda a vida por baixo (o estado do pet e o do laco;
+      `e` e a copia dele depois de cada passo). null nos v1-v10 */
+  v11: { braco: BracoConsequencia; laco: MotorCorpo } | null = null;
 
   constructor(semente: number, versao: number = VERSAO_PET) {
-    if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10].includes(versao)) throw new Error("versão de pet desconhecida: " + versao);
+    if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].includes(versao)) throw new Error("versão de pet desconhecida: " + versao);
     this.semente = semente; this.versao = versao as VersaoPet;
     this.rEnv = criarRng(semente); this.rPol = criarRng(semente + 1000003);
     /* temperamento do ovo: rng propria, nao mexe nas outras */
     this.temp = temperamentoDe(semente);
+    /* v11: o Bandit nao decide nem aprende para o pet; fica so a memoria por espacos dele, como o lobo de memoria e emocao (D-W7 do
+       #201): a emocao, a fala e as lembrancas */
     this.e = estadoInicial(); this.pol = new Bandit(this.temp, versao);
+    if (versao >= 11) {
+      const braco = bracoV11(), m = this;
+      /* o laco chama o cerebro por aqui: o desejo antes de decidir (como o gabarito da vontade) e, depois da decisao, o que o Motor
+         registra dela (nada que mexa no estado do pet: o efeito da acao e do laco) */
+      const politica: PoliticaCorpo = {
+        agir(o, rng) {
+          const t = m.v11!.laco.estado.tick, d = m.desejoAtual(o, t), a = braco.agir(o, rng);
+          m._decisaoV11(o, a, t, d);
+          return a;
+        },
+        observar: tr => braco.observar(tr),
+        consequenciaCorpo: (a, oc, depois) => braco.consequenciaCorpo(a, oc, depois),
+        receberAcaoDono: (a, tick) => braco.receberAcaoDono(a, tick),
+        mudancaNoCorpo: (antes, depois) => braco.mudancaNoCorpo(antes, depois),
+      };
+      this.v11 = { braco, laco: new MotorCorpo(politica, semente, CCO_CORPO_V11, estadoNascimentoPy(TICK_INICIAL)) };
+      this.e = this.v11.laco.estado;
+    }
     if (versao >= 2) {
-      /* v10: o vinculo B (coerencia por situacao, sem pedido); ate o v9, o de sempre */
-      this.vinc = new Vinculo(versao >= CVB.versaoPet); this.rObed = criarRng(hashSemente("obediencia", semente));
+      /* v10: o vinculo B (coerencia por situacao, sem pedido); ate o v9, o de sempre. v11: sem obediencia (sem a rng dela) */
+      this.vinc = new Vinculo(versao >= CVB.versaoPet);
+      if (versao < 11) this.rObed = criarRng(hashSemente("obediencia", semente));
       this.obed = { pedidos: 0, recusas: 0, fazerOutra: 0 };
       this.dz = { atual: null, vontades: 0, cumpridas: 0, abertas: [], tVontade: 0 };
     }
@@ -225,20 +253,30 @@ export class Motor {
     /* campanha: vitorias por desafio (derivadas das lutas do registro) */
     this.campanha = Object.fromEntries(campanhaDe(versao).map(c => [c.k, 0]));
     if (versao >= 4) {
-      /* rng propria das travessuras: sorteada em TODO slot (numeros comuns), nao mexe nas outras */
-      this.rTrav = criarRng(hashSemente("travessura", semente));
+      /* rng propria das travessuras: sorteada em TODO slot (numeros comuns), nao mexe nas outras. v11: sem a educacao (a disciplina
+         fica 0 e nenhuma janela abre) */
+      if (versao < 11) this.rTrav = criarRng(hashSemente("travessura", semente));
       this.edu = { disciplina: 0, acertos: 0, petiscos: 0, janela: null, proximo: {}, contagem: {} };
       this.lutas = lutasZeradas();
     }
     if (versao >= 7) {
-      /* rng propria da mentira: duas por fala, sempre (numeros comuns), nao mexe nas outras */
-      this.rMentira = criarRng(hashSemente("mentira", semente));
+      /* rng propria da mentira: duas por fala, sempre (numeros comuns), nao mexe nas outras. v11: sem a mentira */
+      if (versao < 11) this.rMentira = criarRng(hashSemente("mentira", semente));
       this.men = { impunes: 0, acertos: 0 };
     }
     /* v8 (M1): a confianca de combate e a novidade por rival (estado derivado das lutas "l"; nenhum evento novo) */
     if (versao >= 8) this.conf = new ConfiancaCombate();
   }
   get disciplina(): number { return this.versao >= 4 ? this.edu.disciplina : 0; }
+  /** pets v4 a v10: a educacao (as janelas, as travessuras, a disciplina, o petisco e o banheiro). Os v11 nao tem (decisao do Matheus
+      de 2026-10-18: ela se resolve com a bronca e o petisco) */
+  get temEducacao(): boolean { return this.versao >= 4 && this.versao < 11; }
+  /** pets v7 a v10: a voz propria (a fala espontanea com janela e mentira). Os v11 nao tem (a mentira se julga com a bronca) */
+  get temVozPropria(): boolean { return this.versao >= 7 && this.versao < 11; }
+  /** v11: o cerebro A do pet (null nos v1-v10) */
+  get cerebro(): CerebroA | null { return this.v11 ? this.v11.braco.cerebro : null; }
+  /** a observacao de agora, a que o pet le: nos v11, com os receptores do corpo */
+  observacaoAgora(): ObservacaoLobos { return this.v11 ? this.v11.laco.observacao() : observacao(this.e); }
 
   /* ---------------------------------------------------------------- heranca (pets v4) */
   /** cruza dois adultos vivos (Ultimate ou Mega): o filho (versao atual) herda temperamento (media + ruido) e especie (de um dos pais) */
@@ -590,12 +628,15 @@ export class Motor {
 
   /* ---------------------------------------------------------------- dono */
   observar(a: AcaoDono): void {
-    if (!(this.versao >= 4 ? ACOES_DONO_V4 : ACOES_DONO).includes(a)) throw new Error("acao de dono desconhecida: " + a);
+    if (!(this.versao >= 11 ? ACOES_DONO_JOGO_V11 : this.versao >= 4 ? ACOES_DONO_V4 : ACOES_DONO).includes(a)) {
+      throw new Error(this.versao >= 11 ? `acao de dono fora dos pets v11: ${a} (sem elogio, bronca, petisco e banheiro)` : "acao de dono desconhecida: " + a);
+    }
     if (this.versao >= 4) { this._conferirMorte(); this._vivo(); }
     this.log.push([this.e.tick, "d", a]);
     this._aplicar(a);
   }
   private _aplicar(a: AcaoDono): void {
+    if (this.versao >= 11) { this._aplicarV11(a); return; }
     if (this.versao >= 4) { this._aplicarV4(a); return; }
     this._aplicarBase(a);
   }
@@ -607,6 +648,27 @@ export class Motor {
     this.pol.receberAcaoDono(a, t);
     this.nDono++;
     if (this.versao >= 2) this.vinc.acaoDono(a, t, this.acao, this.nDono);
+    this._hist({ t, quem: "dono", a });
+  }
+  /** v11: a acao do dono pelo laco do corpo (o cuidado pelo estado de sempre e pelo corpo, o carinho e o tapa so pelo corpo; o cerebro
+      recebe o que o laco manda), sem obediencia e sem janela. A memoria por espacos e o vinculo recebem a acao como nos v10. O tratar
+      so cura a lesao: nao e contato e nao passa pelo corpo (decisao do Matheus de 2026-10-18) */
+  private _aplicarV11(a: AcaoDono): void {
+    if (!(ACOES_DONO_JOGO_V11 as readonly string[]).includes(a)) throw new Error(`acao de dono fora dos pets v11: ${a}`);
+    const t = this.e.tick;
+    this._conferirMorte(); this._vivo();
+    if (a === "tratar_lesao") {
+      if (this.lesionadoDesde !== null) { this.lesionadoDesde = null; this.lutas.tratadas++; }
+      this.nDono++;
+      this._hist({ t, quem: "dono", a });
+      return;
+    }
+    this.v11!.laco.acaoDono(a);
+    this.e = this.v11!.laco.estado;
+    if (this.estagioAtual === "bebe") this._atender(a);
+    this.pol.receberAcaoDono(a, t);
+    this.nDono++;
+    this.vinc.acaoDono(a, t, this.acao, this.nDono);
     this._hist({ t, quem: "dono", a });
   }
   /** v4 (espelho de MotorEducacao._aplicar_acao_usuario): janela, acoes novas e travessuras que se resolvem sozinhas */
@@ -726,12 +788,12 @@ export class Motor {
   /* ---------------------------------------------------------------- voz propria: mentira (pets v7) */
   /** h (0 a 1): sombria e sobrecarga tiram; sem sobrecarga e nao sombrio, h = 1 e o pet nunca mente */
   honestidade(): number {
-    if (this.versao < 7) return 1;
+    if (this.versao < 7 || this.versao >= 11) return 1;
     const f = this.sombria ? CMEN.fatorSombria : 1;
     return Math.max(0, Math.min(1, f * (1 - CMEN.pesoSobrecarga * this.treino.sobrecarga / 100) * this.honestidadeEspecie));
   }
   chanceMentira(): number {
-    if (this.versao < 7) return 0;
+    if (this.versao < 7 || this.versao >= 11) return 0;
     const h = this.honestidade();
     if (h >= 1 || this.men.acertos >= CMEN.acertos) return 0;
     return Math.min(CMEN.tetoChance, CMEN.coefChance * (1 - h) * (1 - this.edu.disciplina / CED.disciplinaMax)
@@ -743,6 +805,7 @@ export class Motor {
       quem chama e a apresentacao) ou null (janela ja aberta, dormindo) */
   falar(gatilho: string): Janela | null {
     if (this.versao < 7) throw new Error("fala espontânea só em pets v7");
+    if (this.versao >= 11) throw new Error("os pets v11 não têm a fala espontânea com mentira");
     if (!/^[a-z_]+$/.test(gatilho)) throw new Error("gatilho de fala inválido: " + gatilho);
     this._conferirMorte(); this._vivo();
     this.log.push([this.e.tick, "fl", gatilho]);
@@ -750,6 +813,7 @@ export class Motor {
   }
   private _falar(gatilho: string): Janela | null {
     if (this.versao < 7) throw new Error("evento de fala num pet anterior ao v7");
+    if (this.versao >= 11) throw new Error("evento de fala com mentira num pet v11");
     const t = this.e.tick;
     this._conferirMorte();
     this._expirar();
@@ -813,8 +877,8 @@ export class Motor {
   }
   /** desejo depois de cada decisao: registra so quando muda; alimenta o vinculo e as metricas (cumprimento:
       vontade com alvo X cumprida se o pet escolhe X em ate kCumprimento ticks) */
-  private _desejo(obs: Observacao, a: AcaoPet, t: number): void {
-    const d = this.desejoAtual(obs, t), u = this.dz.atual, ch = (x: { tipo: string; alvo: string } | null) => x ? x.tipo + ":" + x.alvo : "";
+  private _desejo(obs: Observacao, a: AcaoPet, t: number, desejo?: Desejo | null): void {
+    const d = desejo !== undefined ? desejo : this.desejoAtual(obs, t), u = this.dz.atual, ch = (x: { tipo: string; alvo: string } | null) => x ? x.tipo + ":" + x.alvo : "";
     const mudou = ch(d) !== ch(u);
     if (mudou) {
       if (u && u.tipo === "vontade") this.dz.tVontade += t - u.tick;
@@ -842,6 +906,7 @@ export class Motor {
     this._avancar(n);
   }
   private _avancar(n: number): void {
+    if (this.v11) { this._avancarV11(n); return; }
     for (let i = 0; i < n; i++) {
       if (this.e.tick >= this.prox) {
         const obs = observacao(this.e);
@@ -874,6 +939,39 @@ export class Motor {
     }
     if (this.versao >= 4) this._conferirMorte();      /* o prazo da lesao cai no passo do dono */
   }
+  /** v11: o laco do corpo anda um tick por vez (a decisao, se for a hora, chama o cerebro e o _decisaoV11); o que vem depois do tick e o
+      dos v10 (os chamados do bebe, a evolucao, o treino e a pausa), sem mexer no estado do pet */
+  private _avancarV11(n: number): void {
+    const laco = this.v11!.laco;
+    for (let i = 0; i < n; i++) {
+      laco.passo();
+      this.e = laco.estado;
+      if (this.estagioAtual === "bebe") this._chamados();
+      this._evoluir();
+      const e = this.e;
+      this.treino.avancar(e.tick, e.dormindo, Math.min(e.fome, e.higiene, e.energia) >= CTR.bemCuidado, this.estagioAtual);
+      this._pausaTreino();
+    }
+    this._conferirMorte();
+  }
+  /** v11: o que o Motor registra de uma decisao do cerebro (chamado pelo laco, logo depois do agir). Como nos v10, sem o motivo do
+      Bandit (o motivo do cerebro A fica no cerebro: o painel DigiBrain e a etapa 5), sem o efeito (o do laco) e sem travessuras */
+  private _decisaoV11(obs: ObservacaoLobos, a: AcaoPet, t: number, d: Desejo | null): void {
+    this.acao = a;
+    if (this.versao >= 7) {
+      const v = this.vida5;
+      if (a !== v.anterior && a !== "ocioso") v.episodios.push([t, a]);
+      v.anterior = a;
+    }
+    this.prox = t + C.intervalo;
+    this.pol.observar(obs, a, t);
+    this._desejo(obs, a, t, d);
+    this._conferirMorte();
+    for (const k of ACOES_PET) this.tracos[k] = (1 - CT.alfa) * this.tracos[k] + (k === a ? CT.alfa : 0);
+    this.nDecisoes++;
+    const ult = this.historico[this.historico.length - 1];
+    if (!ult || ult.quem !== "pet" || ult.a !== a) this._hist({ t, quem: "pet", a });
+  }
   /** pedido de pausa: fadiga >= 40. Acabar sem treino = pausa atendida (vinculo sobe); treinar por cima derruba */
   private _pausaTreino(): void {
     if (this.treino.pedePausa && !this.pausaTreino) this.pausaTreino = { treinou: false };
@@ -895,7 +993,7 @@ export class Motor {
   private _treinar(ex: Exercicio): ResultadoSessao {
     const t = this.e.tick;
     let obedece = true, p = 1, contrib: Record<string, number> = {};
-    if (this.versao >= 2) {
+    if (this.versao >= 2 && this.versao < 11) {
       const [conf, nec] = conflitoDono(observacao(this.e).v, "treino");
       [p, contrib] = termosObediencia(this.vinc.valor, this.temp.teimosia, conf, nec);
       obedece = this.rObed.random() < p;
@@ -925,6 +1023,8 @@ export class Motor {
   /** desejo com o pedido de pausa do treino na frente (espelho de MotorTreino._desejo_atual) */
   desejoAtual(obs: Observacao, t: number): Desejo | null {
     if (this.treino.pedePausa) return { tick: t, tipo: "necessidade", alvo: "descansar", causa: "fadiga_treino", intensidade: Math.min(1, this.treino.fadiga / 100) };
+    /* v11: a vontade do cerebro A (PW-3), na observacao com o corpo (observacaoAgora) */
+    if (this.v11) return desejoLobos(obs, this.v11.braco.cerebro, t);
     return this.pol.desejo(obs, t);
   }
 
@@ -991,10 +1091,12 @@ export class Motor {
     this.chamados = { abertos: {}, atendidos: 0, total: 0 }; this.sparring = 0;   /* contadores zeram */
     if (this.versao >= 4) {
       this.lutas = lutasZeradas();
-      this.edu.disciplina = Math.floor(this.edu.disciplina * CED.fatorEvoluir); this.edu.acertos = 0;
-      this._agendar(e2, this.e.tick);
+      if (this.versao < 11) {
+        this.edu.disciplina = Math.floor(this.edu.disciplina * CED.fatorEvoluir); this.edu.acertos = 0;
+        this._agendar(e2, this.e.tick);
+      }
     }
-    if (this.versao >= 7) this.men = { impunes: 0, acertos: 0 };
+    if (this.versao >= 7 && this.versao < 11) this.men = { impunes: 0, acertos: 0 };
     if (!this.gp) { this.gp = new GambitsPet(); this.gp.chipsNoFim = itensDosV9(this.versao); }
     if (this.versao >= 5) this.gp.semear(this.forma, nomeForma(this.forma), this.regras); else this.gp.semear(this.forma);
   }
@@ -1071,12 +1173,17 @@ export class Motor {
       sobrecarga: this.treino.sobrecarga, forma: { ...this.forma } });
     this.chamados = { abertos: {}, atendidos: 0, total: 0 }; this.sparring = 0;
     this.lutas = lutasZeradas();
-    this.edu.disciplina = Math.floor(this.edu.disciplina * CED.fatorEvoluir); this.edu.acertos = 0;
-    this._agendar("mega", this.e.tick);
+    if (this.versao < 11) {
+      this.edu.disciplina = Math.floor(this.edu.disciplina * CED.fatorEvoluir); this.edu.acertos = 0;
+      this._agendar("mega", this.e.tick);
+    }
     this.gp!.promover(this.forma, nomeForma(this.forma));
   }
   /** carater medido agora: pets v3 pelo desvio da politica aprendida; v1/v2 pelos tracos (PROVISORIO) */
-  caraterAgora(quando: QuandoCarater): Carater { return this.versao >= 3 ? caraterPolitica(this, quando) : caraterDe(this.tracos, quando); }
+  caraterAgora(quando: QuandoCarater): Carater {
+    if (this.v11) return caraterV11(this.v11.braco.cerebro, quando);
+    return this.versao >= 3 ? caraterPolitica(this, quando) : caraterDe(this.tracos, quando);
+  }
   /** caráter travado na ultima evolucao que o mediu (adolescente/adulto); antes disso, neutro */
   carater(): Carater | null { const ev = [...this.evolucoes].reverse().find(x => x.carater); return ev ? ev.carater! : null; }
   private _hist(x: ItemHistorico): void { this.historico.push(x); if (this.historico.length > 300) this.historico.shift(); }
@@ -1090,7 +1197,8 @@ export class Motor {
       ...(this.liga.tentativas ? [["liga", this.liga]] : []),
       ...(this.fronteira ? [["fronteira", this.instalacoes]] : []), ...(this.salao.tentativas ? [["salao", this.salao]] : []),
       ...(this.versao >= 7 ? [[this.men, this.honestidadeEspecie]] : []),
-      ...(this.versao >= 8 ? [this.conf!.assinatura()] : [])]);
+      ...(this.versao >= 8 ? [this.conf!.assinatura()] : []),
+      ...(this.v11 ? [["v11", this.v11.braco.cerebro.estadoInterno(), this.v11.laco.estadoDict(), this.v11.laco.proximaDecisao]] : [])]);
   }
   /** v8 (M1): a frase de estado da confianca agora (null nos v1-v7) */
   estadoConfianca(): ReturnType<ConfiancaCombate["estado"]> | null { return this.conf ? this.conf.estado(this.e.tick) : null; }

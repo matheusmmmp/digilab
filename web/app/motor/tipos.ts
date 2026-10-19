@@ -3,7 +3,8 @@
 
 export type AcaoPet = "ocioso" | "dormir" | "comer" | "brincar" | "chamar_atencao" | "explorar" | "emburrar";
 export type AcaoDono = "alimentar" | "limpar" | "brincar" | "acariciar" | "elogiar" | "repreender"
-  | "petisco" | "levar_ao_banheiro" | "tratar_lesao";          /* as 3 ultimas: so pets v4 (educacao-v1) */
+  | "petisco" | "levar_ao_banheiro" | "tratar_lesao"           /* as 3: so pets v4 (educacao-v1) */
+  | "tapa";                                                    /* so pets v11 (o gesto de desaprovacao pelo corpo, S-2) */
 export type TracoCombate = "golpe" | "bloqueio" | "agarrao" | "finta" | "carga";
 export type EixoTemperamento = "curiosidade" | "teimosia" | "sensibilidade" | "rancor";
 export type Temperamento = Readonly<Record<EixoTemperamento, number>>;
@@ -71,7 +72,7 @@ export type EventoFronteira = [tick: number, tipo: "f", fronteira: { campeao: tr
 export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem | EventoConfig | EventoLiberacao
   | EventoItem | EventoCarta | EventoFronteira | EventoFala;
 
-export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
 
 /** estado de vida (camada 1) */
 export interface EstadoVida {

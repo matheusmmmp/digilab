@@ -70,13 +70,14 @@ export function App() {
     const est = mDica.estagioAtual, ids: IdDica[] = [];
     if (nascDica > 0 || (est === "bebe" && mDica.evolucoes.length === 0)) ids.push("ovo");
     if (est === "bebe" && mDica.chamadosAbertos().length) ids.push("chamado");
-    if (est === "crianca") ids.push("rookie", "ensinar");
+    if (est === "crianca") ids.push("rookie", mDica.versao >= 11 ? "ensinar_v11" : "ensinar");
     if (est === "adolescente") ids.push("champion", "lutas_treino");
     if (est === "adulto") ids.push(mDica.versao >= 5 && !mDica.sombria ? "ultimate" : "adulto");
     if (est === "mega") ids.push("adulto");
     if (nascDica === 0 && !mDica.morte && mDica.e.saude < .3) ids.push("saude");
     if (mDica.versao >= 4) {
-      const j = mDica.janelaAberta();
+      /* as janelas so nos pets com a educacao (v4 a v10); a lesao e as vitorias tambem nos v11 */
+      const j = mDica.temEducacao ? mDica.janelaAberta() : null;
       if (j?.tipo === "chamado") ids.push("manha");
       if (j?.tipo === "aviso") ids.push("banheiro");
       if (j?.tipo === "fala") ids.push("fala");

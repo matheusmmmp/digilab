@@ -64,6 +64,7 @@ export function caraterPolitica(m: { pol: Bandit; temp: Temperamento; versao: nu
 /** desvio medio da politica sobre o bandit recem-nascido, por acao do pet, na sonda do carater (os gostos da historia:
     espelho de digilab/historia.desvio_por_acao). Custa uma sonda (~0,15 s): so na hora da fala */
 export function desvioPorAcao(m: { pol: Bandit; temp: Temperamento; versao: number }): [string, number][] {
+  if (m.versao >= 11) throw new Error("os gostos da historia pelo desvio do Bandit nao valem nos pets v11 (o cerebro e o A; a fala e a etapa 6)");
   const guardada = m.pol.ultDecisao;
   const dp = distAcoesSonda(m.pol);
   m.pol.ultDecisao = guardada;
@@ -80,10 +81,11 @@ export function caraterDe(tracos: Record<AcaoPet, number>, quando: QuandoCarater
 }
 /* previsao na aba Evolucao: o carater pela politica custa ~0,15 s; recalcula a cada 2 h de jogo ou acao do dono */
 let cacheCarPrev: { chave: string | null; car: Carater | null } = { chave: null, car: null };
-export function caraterPrevisto(m: { pol: Bandit; temp: Temperamento; versao: number; semente: number; e: { tick: number }; nDono: number; evolucoes: unknown[]; tracos: Record<AcaoPet, number> }, quando: QuandoCarater): Carater {
+export function caraterPrevisto(m: { pol: Bandit; temp: Temperamento; versao: number; semente: number; e: { tick: number }; nDono: number; evolucoes: unknown[]; tracos: Record<AcaoPet, number>; cerebro: CerebroA | null }, quando: QuandoCarater): Carater {
   if (m.versao < 3) return caraterDe(m.tracos, quando);
   const chave = [m.semente, Math.floor(m.e.tick / 120), m.nDono, m.evolucoes.length, quando].join("|");
-  if (cacheCarPrev.chave !== chave) cacheCarPrev = { chave, car: caraterPolitica(m, quando) };
+  /* v11: o carater do cerebro A (caraterV11) */
+  if (cacheCarPrev.chave !== chave) cacheCarPrev = { chave, car: m.versao >= 11 ? caraterV11(m.cerebro!, quando) : caraterPolitica(m, quando) };
   return cacheCarPrev.car!;
 }
 /** eixo dominante decide a linha (empate: ordem fixa); sinal do complementar decide a forma adulta */

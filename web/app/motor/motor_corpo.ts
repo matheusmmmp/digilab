@@ -93,6 +93,11 @@ export class MotorCorpo {
     return this.laco(ticks);
   }
 
+  /** o laco de um tick e a acao do dono sem o log do MotorCorpo: os pets v11 do jogo (motor.ts) gravam o registro do Motor, e o
+   *  MotorCorpo so roda a vida por baixo. A mesma conta do avancar e do observar */
+  passo(): [number, AcaoPet][] { return this.laco(1); }
+  acaoDono(acao: string): void { this.aplicarAcaoUsuario(acao); }
+
   /** o passo do replay: o evento tem de cair no tick de agora (o log e a vida andam juntos) */
   aplicarEvento(e: EventoCorpo): void {
     if (e.tick !== this.estado.tick) throw new Error(`evento no tick ${e.tick}, o motor esta no ${this.estado.tick}`);
