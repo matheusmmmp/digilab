@@ -8,7 +8,7 @@ Categoria: arquitetura. Origem: Matheus, 2026-10-19: investigar como ampliar as 
 
 Na fase 1 da H1 (plasticidade durante a vida versus predisposições herdadas), como aumentar as oportunidades de escolha e o repertório de comportamentos sem confundir número de ações com capacidade de aprender, nem alterar a referência do cérebro A?
 
-A hipótese do Matheus — que poucas ações podem contribuir para os problemas do aprendiz — é uma hipótese a investigar, não uma conclusão. O ponto de partida é o diagnóstico E0 do PR #332 e `docs/futuro/digibrain_v3_e0.md`.
+A hipótese do Matheus — que poucas ações podem contribuir para os problemas do aprendiz — é uma hipótese a investigar, não uma conclusão. O ponto de partida é o diagnóstico E0 do PR #332 e `docs/futuro/digibrain_v3_e0.md`. O desenho do DigiBrain V3 no #332 permanece **PROPOSTO**; esta tarefa é uma investigação documental aberta.
 
 ## 2. Depende de
 
