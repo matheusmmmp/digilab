@@ -314,3 +314,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-19 — WORLD-POC-02 (worker A): o Gate B aprovado e o mundo 3D pausado até o Gate C](registro/2026-10.md)
 
 - [2026-10-19 — PQP-PILOTO-ADENDO8, a run (worker D): o piloto do adendo 8 do J5, parado pela G-EXPOSICAO e pela G-OPORTUNIDADE do T2](registro/2026-10.md)
+
+- [2026-10-19 — V3, o espaço de ações (worker B): os quatro limites medidos e a ligação com o J5](registro/2026-10.md)
