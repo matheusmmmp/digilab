@@ -1,8 +1,8 @@
 # Mundo 3D: o mundo físico com câmera diagonal, sprites sobre corpos invisíveis e o contrato com o DigiBrain
 
 Status: **INVESTIGAÇÃO FEITA; as decisões W-1 a W-7 DECIDIDAS pelo Matheus em 2026-10-18, pela recomendação** (seção 8). Escrito pelo
-worker A, pela especificação WORLD-POC-001 do Matheus. Só investigação: nada no código mudou. **O POC-01a não começa agora:** vem depois
-do Gate C, numa tarefa própria. Os números, os pesos e os nomes novos (fora das W) seguem PROPOSTOS. Nenhuma alegação de novidade.
+worker A, pela especificação WORLD-POC-001 do Matheus. Só investigação: nada no código mudou. **O POC-01a (a P3) avança em paralelo ao
+Gate C**, pela `docs/TAREFA_V2_WORLD_POC_01.md` (o Matheus, 2026-10-19: a W-5 trata do cérebro de verdade no mundo novo, a P4). Os números, os pesos e os nomes novos (fora das W) seguem PROPOSTOS. Nenhuma alegação de novidade.
 
 **Os anexos:**
 - `docs/futuro/mundo_3d/auditoria.md`: o anexo 1, o estado real do repositório (investigação A);
@@ -283,7 +283,7 @@ como o J1 e o J7 já mostraram.
 **A linha das "ideias registradas" da seção 8 do `ROADMAP_V2.md`** (aplicada em 2026-10-18, com a W-7):
 
 > | **o mundo 3D** (a vista do mundo físico em Three.js, a física em inteiros no motor, o contrato sensório-motor e o WORLD-POC-01) |
-> investigação feita (WORLD-POC-001, 2026-10-18), W-1 a W-7 decididas; sem tarefa; o POC-01a depois do Gate C | J1, M-2, Gate C | `docs/futuro/mundo_3d.md` |
+> investigação feita (WORLD-POC-001, 2026-10-18), W-1 a W-7 decididas; o POC-01a em paralelo ao Gate C (`TAREFA_V2_WORLD_POC_01`); a P4 depois do Gate C | J1, M-2, Gate C | `docs/futuro/mundo_3d.md` |
 
 ## 8. As decisões do Matheus (com a recomendação e o custo de errar)
 
@@ -295,13 +295,14 @@ como o J1 e o J7 já mostraram.
 | W-2 | a engine de renderização | **Three.js**, imperativo, sem react-three-fiber, só como vista | trocar de renderizador custa a pasta da vista; o motor não muda (a vista só lê) |
 | W-3 | o pet sabe a própria posição absoluta? (hoje sabe: `PercepcaoMundo.x`, `y` e o `ocorrido`) | **manter**, marcada como acesso privilegiado; trocar por um lugar integrado pelos passos só com uma pergunta que precise disso | mexer agora muda os gabaritos do mundo e o alvo `ponto` sem uma pergunta |
 | W-4 | as paredes e os obstáculos | **atrás de chave desligada**, como mecânica nova; a M-1 ("sem áreas fechadas") fica valendo para o mapa de hoje | se entrarem sem chave, as vidas do mundo de hoje mudam |
-| W-5 | a ordem P2 antes de P4 | **sim**: o Gate C (o J5 ou o EXP-1 no 2D) antes de pôr o cérebro no mundo novo; o POC-01a só depois do Gate C | inverter repete o J1 num mundo mais caro |
+| W-5 | a ordem P2 antes de P4 | **sim**: o Gate C (o J5 ou o EXP-1 no 2D) antes de pôr o cérebro no mundo novo (a P4). O POC-01a (a P3) não espera: avança em paralelo (o Matheus, 2026-10-19) | inverter repete o J1 num mundo mais caro |
 | W-6 | a arte do POC | **o atlas do UP só local**, sem versionar, com um sprite de reserva | um POC que dependa de arte de terceiros não vira produto |
 | W-7 | a localização destes documentos | **`docs/futuro/mundo_3d.md` com a pasta `docs/futuro/mundo_3d/`** (o precedente do connectome) e uma linha no `ROADMAP_V2.md` | baixo |
 
 ## 9. A próxima tarefa
 
-1. **Primeiro, o Gate C** (W-5): a validação do J5 com a fruta ao lado, que já espera o sim, ou o EXP-1 no mundo 2D.
-2. **Depois do Gate C:** a `docs/TAREFA_V2_WORLD_POC_01.md`, a partir do anexo 3, num PR só de documento.
-3. Então o POC-01a, numa worktree própria e **fora do jogo**, entre 5,5 e 8,5 dias de sessão (PROPOSTO).
+1. **O POC-01a (a P3), em paralelo ao Gate C:** a `docs/TAREFA_V2_WORLD_POC_01.md` (2026-10-19), a partir do anexo 3, numa worktree
+   própria e **fora do jogo**, entre 5,5 e 8,5 dias de sessão (PROPOSTO).
+2. **O Gate C** (W-5): a validação do J5 com a fruta ao lado, ou o EXP-1 no mundo 2D.
+3. **Só depois do Gate C:** o cérebro de verdade no mundo novo (a P4), com tarefa própria.
 4. A linha das "ideias registradas" da seção 8 do `ROADMAP_V2.md` e a linha do `PAINEL_V2.md` foram aplicadas com este documento.
