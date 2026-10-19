@@ -67,3 +67,19 @@ git -C D:/Trab/digilab/v2 worktree add D:/Trab/digilab/v2-<frente> -b v2-<frente
 - Usar `git stash` sem etiqueta: a pilha é compartilhada entre worktrees.
 - Fazer merge, mesmo com o PR verde: é do Matheus.
 - Rodar sem plano de análise commitado, ou ajustar olhando a amostra de validação.
+
+## 7. Agentes de fora do Claude Code (2026-10-18) — PROPOSTO
+
+Desenho em `docs/TAREFA_V2_INFRA_MULTIAGENTE.md` e `docs/infra/GUIA_OPERACIONAL.md`. Não muda nenhuma regra acima; só diz onde o ChatGPT, o
+ChatGPT Work e o Codex entram.
+
+- **O ChatGPT e o Work pesquisam, propõem e revisam.** Leem o repositório pelo conector GitHub (testado em 2026-10-18,
+  `docs/infra/TESTE_CHATGPT_WORK.md`). Se o conector tiver escrita, o Work escreve em nome do Matheus: então ele age como worker, em
+  branch próprio e com PR, e a `main` precisa estar protegida (IM-7). A porta de entrada deles é o `AGENTS.md`.
+- **A tarefa proposta por eles entra como qualquer outra:** o coordenador ou o Matheus roda `tools/nova_tarefa.py`, com `--origem`, e
+  commita por PR antes de abrir o worker.
+- **O Codex, se for usado, é um worker:** worktree ou branch próprio, PR, sem merge, com as mesmas sementes e a mesma fila da GPU do
+  coordenador.
+- **O relato de volta é o corpo do PR**, no formato do `.github/pull_request_template.md`. O CI (`verificar-pr`) confere o que dá para
+  conferir no repositório. O resto é declarado e passa pela revisão.
+- **O que continua só do Matheus:** merge, decisão de número, abrir a validação, ligar serviço pago e dar acesso ao GitHub.
