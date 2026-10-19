@@ -6,7 +6,11 @@ experiments/exportar_gabarito_lobos.py, que o tests/test_gabarito_lobos_web.py c
 - `aprendido`: o "o que aprendeu" de cada desvio da secao `vontade` (por decisao e na grade).
 O TS (web/app/motor/digibrain.ts) refaz as mesmas contas dos mesmos motivos e confere bit a bit (web/app/test/digibrain.test.ts).
 
-    python experiments/exportar_gabarito_painel_digibrain.py   # grava web/app/test/gabaritos/painel_digibrain_python.json
+O mapa dos pesos (`mapa_pesos`, `mapa_decisao`) vai num arquivo a parte, `mapa_digibrain_python.json`:
+- `pesos`: as arestas do prior do L0 e dos pesos do fim de cada vida v11 (a tabela da decisao e a do corpo);
+- `v11`: as arestas acesas de cada decisao das quatro vidas v11.
+
+    python experiments/exportar_gabarito_painel_digibrain.py   # grava painel_digibrain_python.json e mapa_digibrain_python.json
 """
 from __future__ import annotations
 
@@ -22,10 +26,11 @@ import bancada_v2 as bv  # noqa: E402
 import exportar_gabarito_lobos as eg  # noqa: E402
 
 from digilab.config import CONFIG_PADRAO  # noqa: E402
-from digilab.painel_digibrain import leitura_aprendido, leitura_decisao  # noqa: E402
+from digilab.painel_digibrain import leitura_aprendido, leitura_decisao, mapa_decisao, mapa_pesos  # noqa: E402
 from digilab.policies.lobos import ConfigLobos, PoliticaLobos  # noqa: E402
 
 ARQUIVO = RAIZ / "web" / "app" / "test" / "gabaritos" / "painel_digibrain_python.json"
+ARQUIVO_MAPA = RAIZ / "web" / "app" / "test" / "gabaritos" / "mapa_digibrain_python.json"
 
 
 def receptores_v11() -> list[str]:
@@ -56,11 +61,37 @@ def gerar() -> dict:
     }
 
 
-def _gravar(g: dict) -> None:
-    ARQUIVO.write_text(json.dumps(g, sort_keys=True, separators=(",", ":")) + "\n", encoding="utf-8", newline="\n")
+def gerar_mapa() -> dict:
+    g = json.loads(eg.ARQUIVO.read_text(encoding="utf-8"))
+    interno = PoliticaLobos(CONFIG_PADRAO, ConfigLobos()).estado_interno()
+    S, prior_l0 = interno["escala"], interno["pesos_prior"]
+    teto = g["config_v11"]["lobos"]["teto"]
+    receptores = receptores_v11()
+
+    def zeros(t: dict) -> dict:
+        return {r: {a: [0] * len(v) for a, v in acoes.items()} for r, acoes in t.items()}
+
+    return {
+        "versao": 1, "S": S, "teto": teto, "receptores": receptores,
+        "l0": mapa_pesos(prior_l0, prior_l0, {}, {}, S, teto, []),
+        "pesos": [{"dono": v["dono"], "semente": v["semente"],
+                   "arestas": mapa_pesos(v["pesos_prior"], v["pesos"], zeros(v["pesos_corpo"]), v["pesos_corpo"], S, teto, receptores)}
+                  for v in g["v11"]],
+        "v11": [{"dono": v["dono"], "semente": v["semente"],
+                 "decisoes": [mapa_decisao(m, v["pesos_prior"][m["regra"]][m["acao"]], S, receptores) for m in v["motivos"]]}
+                for v in g["v11"]],
+    }
+
+
+def _gravar(g: dict, arquivo: Path = ARQUIVO) -> None:
+    arquivo.write_text(json.dumps(g, sort_keys=True, separators=(",", ":")) + "\n", encoding="utf-8", newline="\n")
 
 
 if __name__ == "__main__":
+    gm = gerar_mapa()
+    _gravar(gm, ARQUIVO_MAPA)
+    print(f"{ARQUIVO_MAPA} ({ARQUIVO_MAPA.stat().st_size // 1024} KiB): pesos {[len(v['arestas']) for v in gm['pesos']]}, "
+          f"v11 {[len(v['decisoes']) for v in gm['v11']]}")
     g = gerar()
     _gravar(g)
     print(f"{ARQUIVO} ({ARQUIVO.stat().st_size // 1024} KiB): l0 {[len(v['decisoes']) for v in g['l0']]}, "
