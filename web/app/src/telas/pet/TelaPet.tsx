@@ -26,6 +26,7 @@ import { useTempo } from "../../tempo.ts";
 import { PalcoPet } from "./PalcoPet.tsx";
 import { useDesktop } from "../../desktop.ts";
 import { Folha } from "../../componentes/Folha.tsx";
+import { BotaoDigiBrain, CardDigiBrain } from "../../componentes/DigiBrain.tsx";
 
 export const hhmm = (t: number): string => { const m = t % TPD; return String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0"); };
 export const diaDe = (t: number): number => Math.floor((t - TICK_INICIAL) / TPD) + 1;
@@ -384,7 +385,7 @@ export function TelaPet({ abrirMeusPets, irConversar, abrirConfig, irRegistro }:
     <section class="pet-tela dl" aria-label="Tela do pet">
       <div class="pet-listra dl-faixa" aria-hidden="true" />
       <CabecalhoPet abrirMeusPets={abrirMeusPets} irConversar={irConversar} abrirConfig={abrirConfig} />
-      <div class="pet-corpo">
+      <div class={"pet-corpo" + (m.versao >= 11 ? " pet-corpo--v11" : "")}>
         <div class="pet-principal">
           <section class="palco-card" aria-label="Palco do pet">
             <div class={"palco-cena dl-hexcard" + (m.morte ? " palco--morto" : "")}>
@@ -392,6 +393,7 @@ export function TelaPet({ abrirMeusPets, irConversar, abrirConfig, irRegistro }:
               <div class="palco-tit">Meu parceiro</div>
               {nascendo === 0 && !m.morte && <span class="desk-so hab-agora"><i aria-hidden="true" />agora: {NOME_PET[m.acao]}</span>}
               <Emocao />
+              {nascendo === 0 && <span class="desk-nao"><BotaoDigiBrain /></span>}
               <PalcoPet />
               <BalaoCausa />
               <span class="dl-placa palco-nome">{nascendo > 0 ? "Digi-Egg " + DO_ESP[m.especie] : nomeForma(m.forma)}</span>
@@ -403,6 +405,8 @@ export function TelaPet({ abrirMeusPets, irConversar, abrirConfig, irRegistro }:
           </div>
           <EstadoConfianca />
         </div>
+        {/* pets v11, desktop: o painel DigiBrain numa coluna entre o habitat e a coluna de sempre (prancha DigiBrainDesktop) */}
+        {m.versao >= 11 && <div class="desk-so db-coluna"><CardDigiBrain /></div>}
         <aside class="pet-lado">
           {/* desktop: os cards formam a coluna da direita e as acoes descem para a barra sob o habitat; abaixo de 1100 px o
               involucro some (display:contents) e a ordem do celular fica a mesma */}

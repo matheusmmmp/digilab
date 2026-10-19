@@ -9,6 +9,7 @@ import { leituraAprendido, leituraDecisao, type LeituraDecisao } from "../motor/
 import { tabelaPrior, type MotivoLobos } from "../motor/lobos.ts";
 import { Motor } from "../motor/motor.ts";
 import type { AcaoPet } from "../motor/tipos.ts";
+import { estadoSelo } from "../src/seloDigiBrain.ts";
 
 interface VidaLobos { dono: string; semente: number; motivos: MotivoLobos[]; pesos_prior?: Record<string, Record<string, number[]>> }
 const L = JSON.parse(readFileSync(new URL("./gabaritos/lobos_python.json", import.meta.url), "utf8")) as {
@@ -93,5 +94,17 @@ describe("o painel no Motor", () => {
     }
     expect(a.assinatura()).toBe(b.assinatura());
     expect(a.digibrain()!.aprendido.length).toBeGreaterThan(0);
+  });
+});
+
+describe("o selo do painel", () => {
+  const vivo = { replay: false, velocidade: 10, nascendo: 0, erroSave: false, lutaSegura: false, morto: false };
+  test("ao vivo so com o tempo andando; replay num replay; senao pausado", () => {
+    expect(estadoSelo(vivo)).toBe("vivo");
+    expect(estadoSelo({ ...vivo, replay: true })).toBe("replay");
+    expect(estadoSelo({ ...vivo, replay: true, velocidade: 0 })).toBe("replay");
+    for (const mudanca of [{ velocidade: 0 }, { nascendo: 3 }, { erroSave: true }, { lutaSegura: true }, { morto: true }]) {
+      expect(estadoSelo({ ...vivo, ...mudanca })).toBe("pausado");
+    }
   });
 });
