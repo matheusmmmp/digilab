@@ -1,0 +1,74 @@
+/* O painel DigiBrain dos pets v11 (componentes/DigiBrain.tsx; pranchas DigiBrainDesktop e DigiBrain390). No celular: o botao no canto do
+   palco e o conteudo numa folha (tokens --dl-*). No desktop (>= 1100 px): uma coluna de 296 px entre o habitat e a coluna de sempre (320 px,
+   como nos outros pets); a coluna rola sozinha (tokens --ui-* da casca, estilo/desktop.css). Nada anima. */
+
+/* ---------- o conteudo (os dois tamanhos) */
+.db-conteudo{display:flex;flex-direction:column;gap:14px;font-size:13px}
+.db-conteudo section{min-width:0}
+.db-sec{margin:0 0 6px;font-size:11px;font-weight:900;letter-spacing:.4px;text-transform:uppercase;color:var(--dl-text-2)}
+.db-agora{border-radius:12px;background:var(--dl-surface-2);box-shadow:0 0 0 2px var(--dl-border);padding:10px 12px}
+.db-agora b{display:block;font-size:15px;font-weight:900}
+.db-agora small{display:block;font-size:12px;font-weight:700;color:var(--dl-text-2);margin-top:2px}
+.db-barras,.db-opcoes,.db-chips,.db-aprendeu,.db-ultimas{list-style:none;margin:0;padding:0}
+.db-barras li{display:grid;grid-template-columns:128px minmax(0,1fr) 56px;align-items:center;gap:8px;font-weight:800;margin:4px 0}
+.db-trilho{display:block;height:10px;border-radius:5px;background:#E8EFF9;position:relative;overflow:hidden}
+.db-trilho b{position:absolute;top:0;bottom:0;left:0;border-radius:5px;background:var(--dl-border)}
+.db-barras [data-lobo="impulsos"] .db-trilho b{background:var(--dl-highlight)}
+.db-barras [data-lobo="decisao"] .db-trilho b{background:var(--dl-learned)}
+.db-barras [data-lobo="corpo"] .db-trilho b{background:var(--dl-ok)}
+.db-barras [data-lobo="memoria_emocao"] .db-trilho b{background:var(--dl-dark)}
+.db-barras .db-trilho b.neg{background:var(--dl-need)}
+.db-barras em,.db-opcoes em,.db-aprendeu em{font-style:normal;font-family:var(--dl-f-lcd);font-weight:400;text-align:right;white-space:nowrap}
+.db-emo{display:inline-block;margin-top:6px;font-size:12px;font-weight:800;padding:2px 10px;border-radius:999px;background:#F3EAFB;color:#5A2A8C}
+.db-chips{display:flex;flex-wrap:wrap;gap:6px}
+.db-chips li{display:inline-flex;align-items:center;gap:4px;font-weight:800;padding:4px 10px;border-radius:999px;box-shadow:0 0 0 2px var(--dl-border);background:var(--dl-surface)}
+.db-favor{color:var(--dl-ok-edge)}
+.db-contra{color:var(--dl-dano)}
+.db-opcoes li{display:grid;grid-template-columns:minmax(0,1fr) 90px 42px;align-items:center;gap:8px;font-weight:800;margin:4px 0}
+.db-opcoes .db-trilho{height:8px}
+.db-opcoes li.esc .db-trilho b{background:var(--dl-action)}
+.db-opcoes small{font-size:inherit;color:var(--dl-action-press)}
+.db-aprendeu li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;font-weight:800;margin:3px 0}
+.db-ultimas li{display:grid;grid-template-columns:48px minmax(0,1fr);gap:6px;font-weight:700;padding:3px 0}
+.db-ultimas .dl-lcd{color:var(--dl-text-2)}
+.db-vazio{margin:0;font-size:12px;font-weight:700;color:var(--dl-text-2)}
+.db-selo{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;color:var(--dl-text-2);white-space:nowrap}
+.db-selo i{width:8px;height:8px;border-radius:50%;background:var(--dl-muted)}
+.db-selo--vivo i{background:var(--dl-ok)}
+.db-selo--replay i{background:var(--dl-action)}
+.db-icone{display:block;flex:none}
+:root[data-tema="escuro"] .db-trilho{background:#1C335C}
+:root[data-tema="escuro"] .db-emo{background:var(--dl-dark-bg);color:var(--dl-dark-ink)}
+@media (prefers-color-scheme:dark){
+  :root:not([data-tema="claro"]) .db-trilho{background:#1C335C}
+  :root:not([data-tema="claro"]) .db-emo{background:var(--dl-dark-bg);color:var(--dl-dark-ink)}
+}
+
+/* ---------- celular: o botao no canto do palco (na faixa do titulo) e a folha */
+.db-botao{position:absolute;right:6px;top:2px;z-index:3;display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:0 12px;border-radius:999px;
+  background:var(--dl-learned-bg);color:var(--dl-learned-ink);font:inherit;font-weight:900;font-size:12px;border:2px solid #FFFFFF;box-shadow:0 0 0 2px var(--dl-navy);cursor:pointer}
+.db-botao:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.db-folha-selo{display:flex;align-items:center;gap:10px}
+.folha .db-trilho{background:var(--dl-surface)}      /* a folha tem o fundo --dl-bg, que some com o trilho de sempre */
+
+/* ---------- desktop: a coluna do painel */
+@media (min-width:1100px){
+  .pet-corpo--v11{grid-template-columns:minmax(0,1fr) 296px 320px;grid-template-areas:"hab brain lado" "acoes acoes lado"}
+  .db-coluna{grid-area:brain;display:flex;flex-direction:column;min-height:0}
+  .pet-tela .dl-card.digibrain{flex:1;display:flex;flex-direction:column;min-height:0;padding:0;overflow:hidden}
+  .db-cab{display:flex;align-items:center;gap:10px;padding:14px 16px 10px;border-bottom:1px solid var(--ui-border)}
+  .db-cab h2{flex:1;margin:0;font-size:15px;font-weight:900;color:var(--ui-text)}
+  .db-rola{flex:1;min-height:0;overflow:auto;padding:12px 16px 14px}
+  .digibrain .db-conteudo{font-size:12px;gap:12px}
+  .digibrain .db-sec,.digibrain .db-selo,.digibrain .db-agora small,.digibrain .db-vazio,.digibrain .db-ultimas .dl-lcd{color:var(--ui-text-2)}
+  .digibrain .db-agora{background:var(--ui-surface-2);box-shadow:none;border:1px solid var(--ui-border);border-radius:10px}
+  .digibrain .db-agora b{font-size:14px}
+  .digibrain .db-barras li{grid-template-columns:112px minmax(0,1fr) 50px;margin:3px 0}
+  .digibrain .db-trilho{height:8px;background:var(--ui-bar-track)}
+  .digibrain .db-opcoes li{grid-template-columns:minmax(0,1fr) 60px 40px;margin:3px 0}
+  .digibrain .db-opcoes .db-trilho{height:6px}
+  .digibrain .db-opcoes li.esc .db-trilho b{background:var(--ui-primary)}
+  .digibrain .db-opcoes small{color:var(--ui-primary-forte)}
+  .digibrain .db-chips li{box-shadow:none;border:1px solid var(--ui-border);background:var(--ui-surface);padding:3px 10px}
+  .digibrain .db-emo{font-size:11px}
+}

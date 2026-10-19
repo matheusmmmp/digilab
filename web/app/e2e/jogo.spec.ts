@@ -1034,3 +1034,64 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 
     expect(erros).toEqual([]);
   });
 }
+
+/* ---------------------------------------------------------------- o painel DigiBrain (docs/TAREFA_V2_W_PORTE_CEREBRO_A.md, etapa 5;
+   pranchas DigiBrainDesktop e DigiBrain390): so nos pets v11 (PW-7). No desktop, uma coluna entre o habitat e a coluna de sempre; em
+   390 px, uma folha aberta pelo botao do palco, com o Conversar no cabecalho do Pet. Os numeros sao os do motor (Motor.digibrain) */
+const SAVE_V11 = { semente: 4242, versao: 11, log: [[480, "t", 120], [600, "d", "acariciar"], [600, "t", 120], [720, "d", "tapa"], [720, "t", 120],
+  [840, "d", "alimentar"], [840, "t", 60]] };
+for (const largura of [390, 1280]) {
+  test(`DigiBrain: o painel do pet v11 em ${largura} px`, async ({ page }) => {
+    await page.setViewportSize({ width: largura, height: 800 });
+    await semear(page, SAVE_V11);
+    const erros = vigiarErros(page);
+    await page.goto(APP + "#/pet/estado");
+    await expect(page.locator(".pet-tela")).toBeVisible();
+    const desktop = largura >= 1100;
+    if (desktop) {
+      await expect(page.locator(".db-botao")).toBeHidden();
+      const card = page.locator(".digibrain");
+      await expect(card).toBeVisible();
+      const r = await page.evaluate(() => {
+        const hab = document.querySelector(".palco-card")!.getBoundingClientRect(), db = document.querySelector(".digibrain")!.getBoundingClientRect(),
+          lado = document.querySelector(".lado-cards")!.getBoundingClientRect();
+        return { aDireita: db.left >= hab.right - 1 && lado.left >= db.right - 1, larg: document.documentElement.scrollWidth, janela: innerWidth };
+      });
+      expect(r.aDireita, "o painel entre o habitat e a coluna de sempre").toBe(true);
+      expect(r.larg).toBeLessThanOrEqual(r.janela);
+    } else {
+      await expect(page.locator(".digibrain")).toBeHidden();
+      await expect(page.locator(".pet-cab-bt--conversar")).toBeVisible();          /* o Conversar continua no cabecalho do Pet */
+      await page.locator(".db-botao").click();
+      await expect(page.locator("dialog.folha[open]")).toHaveAttribute("aria-label", "DigiBrain");
+    }
+    const raiz = desktop ? page.locator(".digibrain") : page.locator("dialog.folha[open]");
+    await expect(raiz.locator(".db-selo")).toHaveText("ao vivo");                    /* o tempo do jogo andando */
+    /* o painel le o motor: uma decisao, as barras dos lobos (o piso so quando entra na conta) e uma escolhida */
+    const db = await page.evaluate(() => (window as any).__digilab.digibrain());
+    expect(db).not.toBeNull();
+    expect(db.decisao).not.toBeNull();
+    await expect(raiz.locator(".db-barras li")).toHaveCount(db.decisao.barras.piso === 0 ? 4 : 5);
+    await expect(raiz.locator(".db-barras li[data-lobo='impulsos']")).toBeVisible();
+    await expect(raiz.locator(".db-opcoes li.esc")).toHaveCount(1);
+    await expect(raiz.locator(".db-emo")).toContainText(/memória do pet/);
+    await expect(raiz.locator(".db-ultimas li").first()).toBeVisible();
+    /* nada promete mais do que uma soma de pesos */
+    expect(await raiz.innerText()).not.toMatch(/pensando|sentindo/i);
+    await page.screenshot({ path: test.info().outputPath(`digibrain-${largura}.png`) });     /* a captura do gate da etapa 5 */
+    if (!desktop) {
+      await page.locator("dialog.folha[open] .folha-x").click();
+      await expect(page.locator("dialog.folha[open]")).toHaveCount(0);
+    }
+    expect(erros).toEqual([]);
+  });
+}
+test("DigiBrain: os pets v1 a v10 não têm o painel (PW-7)", async ({ page }) => {
+  for (const largura of [390, 1280]) {
+    await page.setViewportSize({ width: largura, height: 800 });
+    await semear(page, SAVES.v3);
+    await page.goto(APP + "#/pet/estado");
+    await expect(page.locator(".pet-tela")).toBeVisible();
+    await expect(page.locator(".digibrain, .db-botao")).toHaveCount(0);
+  }
+});

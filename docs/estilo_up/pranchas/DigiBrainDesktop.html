@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1280">
+<title>Pet · DigiBrain (desktop)</title>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&amp;family=Rubik:ital,wght@1,800;1,900&amp;family=DotGothic16&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../dl-up.css">
+<style>
+/* Casca do desktop da UI-DESKTOP (#328): cabecalho de 64 px, barra lateral de 208 px, cards brancos de borda fina. Cores pelos tokens
+   --dl-* (o app usa os --ui-* equivalentes de estilo/tokens.css). Pet v11: habitat | DigiBrain (316 px) | coluna de sempre (280 px). */
+body{margin:0;width:1280px;background:var(--dl-bg)}
+.casca{width:1280px;height:720px;position:relative;overflow:hidden;background:#F4F8FF;color:var(--dl-text);font-family:var(--dl-f-texto)}
+.topo{position:absolute;left:0;top:0;right:0;height:64px;background:var(--dl-surface);border-bottom:1px solid #D7E5F7;display:flex;align-items:center;gap:20px;padding:0 24px 0 20px;box-sizing:border-box}
+.marca{width:168px;font-family:var(--dl-f-num);font-style:italic;font-weight:900;font-size:22px;color:var(--dl-navy-deep)}
+.marca span{color:var(--dl-action-press)}
+.relogio{margin-left:auto;display:flex;align-items:center;gap:8px;padding-right:20px;border-right:1px solid #D7E5F7;height:36px}
+.relogio b{font-family:var(--dl-f-lcd);font-weight:400;font-size:22px}
+.relogio small{font-size:13px;font-weight:800;color:var(--dl-text-2)}
+.ponto{width:8px;height:8px;border-radius:50%;background:var(--dl-ok);display:inline-block}
+.mini{display:flex;align-items:center;gap:10px}
+.mini .ret{width:40px;height:40px;border-radius:50%;background:#E6F2FF;border:2px solid var(--dl-action)}
+.mini b{font-size:14px;font-weight:900;display:block}
+.tag{display:inline-block;font-size:10px;font-weight:900;padding:0 6px;border-radius:6px;background:var(--dl-highlight);color:var(--dl-highlight-ink)}
+.lateral{position:absolute;left:0;top:64px;bottom:0;width:208px;background:var(--dl-navy-deep);padding:16px 12px;box-sizing:border-box;display:flex;flex-direction:column;gap:4px}
+.lateral a{display:flex;align-items:center;gap:12px;min-height:44px;padding:0 12px;border-radius:10px;color:#C9D6EE;font-size:14px;font-weight:700;text-decoration:none}
+.lateral a i{width:28px;height:28px;border-radius:8px;background:var(--dl-plate)}
+.lateral a.ativo{background:var(--dl-action-press);color:#FFF;font-weight:800}
+.lateral .pe{margin-top:auto;border-top:1px solid var(--dl-plate);padding-top:12px;display:flex;flex-direction:column;gap:4px}
+.corpo{position:absolute;left:208px;top:64px;right:0;bottom:0;display:grid;grid-template-columns:minmax(0,1fr) 316px 280px;grid-template-rows:minmax(0,1fr) auto;
+  grid-template-areas:"hab brain lado" "acoes acoes lado";gap:16px 20px;padding:16px 24px 20px;box-sizing:border-box}
+.card{background:var(--dl-surface);border:1px solid #D7E5F7;border-radius:14px;box-shadow:0 1px 2px rgba(16,38,83,.06),0 4px 14px rgba(16,38,83,.06)}
+.hab{grid-area:hab;position:relative;overflow:hidden;background:var(--dl-surface-2)}
+.hab .agora{position:absolute;left:16px;top:16px;display:inline-flex;align-items:center;gap:8px;background:var(--dl-surface);border:1px solid #D7E5F7;border-radius:999px;padding:6px 14px;font-size:13px;font-weight:800}
+.hab .anel{position:absolute;left:50%;bottom:62px;width:220px;height:56px;margin-left:-110px;border-radius:50%;border:10px solid #CDE6FB}
+.hab .pet{position:absolute;left:50%;bottom:86px;margin-left:-66px}
+.acoes{grid-area:acoes;display:flex;gap:4px;padding:8px}
+.acoes span{flex:1;min-height:64px;border:1px solid #D7E5F7;border-radius:10px;background:var(--dl-surface-2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11.5px;font-weight:800}
+.acoes span i{width:22px;height:22px;border-radius:6px;background:#E6F2FF}
+.acoes span.dest{border-color:var(--dl-action);background:#E6F2FF}
+.lado{grid-area:lado;display:flex;flex-direction:column;gap:12px;min-height:0}
+.lado .card{padding:16px}
+.lado h2,.brain h2{margin:0;font-size:15px;font-weight:900}
+.nec{display:grid;grid-template-columns:80px 1fr;align-items:center;gap:10px;font-size:13px;font-weight:800;margin-top:10px}
+.nec i{height:10px;border-radius:5px;background:#E8EFF9;position:relative;overflow:hidden}
+.nec i::after{content:"";position:absolute;inset:0 auto 0 0;width:var(--v);background:var(--dl-action)}
+.rec{flex:1}
+.rec li{display:grid;grid-template-columns:44px 40px 1fr;gap:6px;align-items:center;padding:7px 0;border-bottom:1px solid #D7E5F7;font-size:13px}
+.rec li:last-child{border-bottom:0}
+.rec ol{list-style:none;margin:8px 0 0;padding:0}
+.lcd{font-family:var(--dl-f-lcd);font-weight:400;color:var(--dl-text-2)}
+.quem{font-size:11px;font-weight:800;padding:1px 8px;border-radius:999px;background:var(--dl-surface-2);color:var(--dl-text-2);border:1px solid #D7E5F7;justify-self:start}
+.quem.dono{background:#E6F2FF;color:var(--dl-action-press);border-color:transparent}
+
+/* ---------- o card DigiBrain */
+.brain{grid-area:brain;display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.brain-cab{display:flex;align-items:center;gap:10px;padding:14px 16px 10px;border-bottom:1px solid #D7E5F7}
+.brain-cab h2{flex:1}
+.selo{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;color:var(--dl-text-2)}
+.selo i{width:8px;height:8px;border-radius:50%;background:var(--dl-ok)}
+.brain-rola{flex:1;overflow:auto;padding:12px 16px 14px;display:flex;flex-direction:column;gap:12px}
+.sec-tit{font-size:11px;font-weight:900;letter-spacing:.4px;text-transform:uppercase;color:var(--dl-text-2);margin:0 0 6px}
+.agora-box{border-radius:10px;background:var(--dl-surface-2);border:1px solid #D7E5F7;padding:10px 12px}
+.agora-box b{display:block;font-size:14px;font-weight:900}
+.agora-box small{display:block;font-size:12px;font-weight:700;color:var(--dl-text-2);margin-top:2px}
+.barra{display:grid;grid-template-columns:118px 1fr 52px;align-items:center;gap:6px;font-size:12px;font-weight:800;margin:3px 0}
+.barra .trilho{height:8px;border-radius:4px;background:#E8EFF9;position:relative;overflow:hidden}
+.barra .trilho b{position:absolute;top:0;bottom:0;left:0;width:var(--v);background:var(--c);border-radius:4px}
+.barra .trilho b.neg{background:var(--dl-need)}
+.barra em{font-style:normal;font-family:var(--dl-f-lcd);font-weight:400;font-size:12px;text-align:right}
+.emo{display:inline-flex;align-items:center;gap:6px;margin:6px 0 0;font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;background:#F3EAFB;color:var(--dl-dark)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px;border:1px solid #D7E5F7;background:var(--dl-surface)}
+.chip .s{color:var(--dl-ok-edge)}
+.chip .s.menos{color:var(--dl-dano)}
+.opc{display:grid;grid-template-columns:1fr 60px 40px;align-items:center;gap:6px;font-size:12px;font-weight:800;margin:3px 0}
+.opc .trilho{height:6px;border-radius:3px;background:#E8EFF9;position:relative}
+.opc .trilho b{position:absolute;inset:0 auto 0 0;width:var(--v);background:#9FC2EF;border-radius:3px}
+.opc.esc .trilho b{background:var(--dl-action)}
+.opc.esc > span:first-child::after{content:" · escolhida";color:var(--dl-action-press)}
+.opc em{font-style:normal;font-family:var(--dl-f-lcd);font-weight:400;text-align:right}
+.apr{display:grid;grid-template-columns:1fr auto;gap:4px 8px;font-size:12px;font-weight:800}
+.apr em{font-style:normal;font-family:var(--dl-f-lcd);font-weight:400}
+.ult{list-style:none;margin:0;padding:0}
+.ult li{display:grid;grid-template-columns:44px 1fr;gap:6px;font-size:12px;font-weight:700;padding:3px 0}
+.nota{position:absolute;right:8px;bottom:6px;font-size:10px;color:var(--dl-muted);font-weight:700}
+</style>
+</head>
+<body>
+<div class="casca">
+  <header class="topo">
+    <span class="marca">Digi<span>Lab</span></span>
+    <span class="relogio"><b>14:20</b><small>dia 3</small><span class="ponto"></span><small>salvo</small></span>
+    <span class="mini"><span class="ret"></span><span><b>Koromon</b><span class="tag">IN-TRAINING</span></span></span>
+  </header>
+  <nav class="lateral" aria-label="Principal">
+    <a href="#" class="ativo"><i></i>Pet</a><a href="#"><i></i>Crescer</a><a href="#"><i></i>Lutar</a><a href="#"><i></i>Diário</a>
+    <div class="pe"><a href="#"><i></i>Conversar</a><a href="#"><i></i>Ajustes</a></div>
+  </nav>
+  <main class="corpo">
+    <section class="card hab" aria-label="Habitat">
+      <span class="agora"><span class="ponto"></span>agora: brincando</span>
+      <span class="anel"></span>
+      <svg class="pet" width="132" height="120" viewBox="0 0 44 40" aria-label="pet (placeholder)"><path fill="#F7B7CF" stroke="#173A8A" stroke-width="1.5" d="M6 26c0-11 7-19 16-19s16 8 16 19c0 7-7 11-16 11S6 33 6 26z"/><circle cx="16" cy="22" r="3" fill="#173A8A"/><circle cx="28" cy="22" r="3" fill="#173A8A"/><path d="M18 30h8" stroke="#173A8A" stroke-width="1.5"/></svg>
+    </section>
+
+    <section class="card brain" aria-labelledby="db-tit">
+      <div class="brain-cab">
+        <svg width="32" height="28" viewBox="0 0 64 56" aria-label="o cérebro A (ícone estático)"><path d="M32 4C20 4 8 11 8 26c0 13 10 24 24 24s24-11 24-24C56 11 44 4 32 4z" fill="#F4F8FE" stroke="#173A8A" stroke-width="2"/><path d="M32 6v42" stroke="#173A8A" stroke-width="1.5"/><path d="M12 18c6 0 10 4 10 10" fill="none" stroke="#FFD23F" stroke-width="5" stroke-linecap="round"/><path d="M52 18c-6 0-10 4-10 10" fill="none" stroke="#6FE3FF" stroke-width="5" stroke-linecap="round"/><path d="M14 38c5-2 10-1 13 3" fill="none" stroke="#E5489F" stroke-width="5" stroke-linecap="round"/><path d="M50 38c-5-2-10-1-13 3" fill="none" stroke="#7B3FB8" stroke-width="5" stroke-linecap="round"/></svg>
+        <h2 id="db-tit">DigiBrain</h2>
+        <span class="selo"><i></i>ao vivo</span>
+      </div>
+      <div class="brain-rola">
+        <div>
+          <p class="sec-tit">Agora</p>
+          <div class="agora-box"><b>Tempo livre: decidiu brincar</b><small>Sem o aprendido, teria decidido explorar.</small></div>
+        </div>
+        <div>
+          <p class="sec-tit">O peso de cada lobo nesta escolha</p>
+          <div class="lobos">
+              <div class="barra"><span>Impulsos</span><span class="trilho"><b style="--v:100%;--c:#FFD23F"></b></span><em>100%</em></div>
+              <div class="barra"><span>Aprendido</span><span class="trilho"><b style="--v:3%;--c:#6FE3FF"></b></span><em>+3,1%</em></div>
+              <div class="barra"><span>Corpo</span><span class="trilho"><b class="neg" style="--v:3%"></b></span><em>−3,1%</em></div>
+              <div class="barra"><span>Memória e emoção</span><span class="trilho"><b style="--v:0%;--c:#7B3FB8"></b></span><em>0%</em></div>
+          </div>
+          <span class="emo">emoção de hoje: alegria · da memória do pet</span>
+        </div>
+        <div>
+          <p class="sec-tit">O que mais pesou</p>
+          <div class="chips"><span class="chip">humor 99% <span class="s">a favor</span></span><span class="chip">tédio 40% <span class="s">a favor</span></span><span class="chip">saúde 100% <span class="s menos">contra</span></span></div>
+        </div>
+        <div>
+          <p class="sec-tit">As opções e a chance de cada uma</p>
+          <div class="opc esc"><span>brincar</span><span class="trilho"><b style="--v:35%"></b></span><em>35%</em></div>
+          <div class="opc"><span>explorar</span><span class="trilho"><b style="--v:30%"></b></span><em>30%</em></div>
+          <div class="opc"><span>à toa</span><span class="trilho"><b style="--v:27%"></b></span><em>27%</em></div>
+          <div class="opc"><span>chamar você</span><span class="trilho"><b style="--v:9%"></b></span><em>9%</em></div>
+        </div>
+        <div>
+          <p class="sec-tit">O que aprendeu desde que nasceu</p>
+          <div class="apr"><span>mais à toa do que o instinto</span><em>+0,96</em><span>menos chamar você</span><em>−0,86</em><span>menos explorar</span><em>−0,79</em></div>
+        </div>
+        <div>
+          <p class="sec-tit">Últimas ações</p>
+          <ol class="ult"><li><span class="lcd">14:20</span>brincando</li><li><span class="lcd">14:05</span>explorando</li><li><span class="lcd">13:50</span>à toa</li></ol>
+        </div>
+      </div>
+    </section>
+
+    <div class="lado">
+      <section class="card"><h2>Estado atual</h2>
+        <div class="nec">Comida<i style="--v:80%"></i></div><div class="nec">Energia<i style="--v:70%"></i></div><div class="nec">Higiene<i style="--v:90%"></i></div><div class="nec">Humor<i style="--v:95%"></i></div><div class="nec">Saúde<i style="--v:100%"></i></div>
+      </section>
+      <section class="card rec"><h2>Atividades recentes</h2>
+        <ol><li><span class="lcd">14:20</span><span class="quem">ele</span>brincando</li><li><span class="lcd">14:12</span><span class="quem dono">você</span>Carinho</li><li><span class="lcd">14:05</span><span class="quem">ele</span>explorando</li><li><span class="lcd">13:50</span><span class="quem">ele</span>à toa</li><li><span class="lcd">13:41</span><span class="quem dono">você</span>Alimentar</li></ol>
+      </section>
+    </div>
+
+    <div class="card acoes" role="group" aria-label="Cuidar">
+      <span><i></i>Alimentar</span><span><i></i>Limpar</span><span><i></i>Brincar</span><span class="dest"><i></i>Carinho</span><span><i></i>Tapa</span><span><i></i>Tratar</span>
+    </div>
+  </main>
+  <span class="nota">números e textos: exemplo de layout · só pets v11 (PW-7)</span>
+</div>
+</body>
+</html>

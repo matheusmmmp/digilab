@@ -421,3 +421,34 @@ Pelas decisões do Matheus de 2026-10-18 (seção 15). Sem run de pesquisa e sem
   - Os pets v1 a v10, as assinaturas e os gabaritos não mudaram.
   - O e2e (`npm run e2e`, 65 testes) passa. Os dois testes do e2e que esperavam o ovo novo na versão 9 (já falhavam na `main`, com o
     v10) passaram a esperar a 11.
+
+## 17. Etapa 5, entregue (2026-10-18): o painel DigiBrain no jogo web
+
+Pelas decisões PW-5, PW-6 e PW-7. Sem run de pesquisa e sem número novo no cérebro. O registro está em `docs/registro/2026-10.md`.
+
+- **As pranchas primeiro:** `docs/estilo_up/pranchas/DigiBrainDesktop.html` (1280×720) e `DigiBrain390.html` (390×844), com as capturas
+  em `docs/estilo_up/pranchas/capturas/`.
+  - **No desktop,** o painel é uma coluna de 296 px entre o habitat e a coluna de sempre, na casca da UI-DESKTOP (#328).
+  - **Em 390 px,** o painel abre numa folha pelo botão "DigiBrain", na faixa do título do palco. O Conversar continua no cabeçalho do Pet.
+- **As contas, no Python e no motor TS, com paridade bit a bit:** `digilab/painel_digibrain.py` e `web/app/motor/digibrain.ts`. São
+  leituras puras do motivo e do desvio aprendido.
+  - **As barras por lobo:** impulsos, aprendido (w − w0), corpo e memória e emoção, divididos pelo peso efetivo da ação escolhida, com o
+    sinal. O piso só aparece quando entra na conta. A soma do aprendido e do corpo é conferida contra a `decisao` do motivo.
+  - **A percepção (PW-5):** a lista das três entradas de maior |w·x| na ação escolhida, sem o viés.
+  - **As chances** de cada candidato.
+  - **"Quem decidiu"** pela sonda contrafactual (V3-1 da E0): o sorteio só com os impulsos e o mesmo `u`. Nas quatro vidas v11 do
+    gabarito, o aprendido muda 111 das 1.152 decisões.
+  - **"O que aprendeu":** as três ações de maior |desvio aprendido| na observação de agora, a mesma base da vontade.
+  - `Motor.digibrain()` junta as duas leituras, só nos v11.
+  - O gabarito é `web/app/test/gabaritos/painel_digibrain_python.json` (`python experiments/exportar_gabarito_painel_digibrain.py`), e
+    `web/app/test/digibrain.test.ts` confere bit a bit as 1.728 decisões (L0 e v11) e os desvios da seção `vontade`.
+- **O componente:** `web/app/src/componentes/DigiBrain.tsx` lê o motor só por `useJogo()`. A tela só escolhe o texto e formata.
+  - **O estado atual:** a regra e a ação ("Tempo livre: decidiu brincar") e a leitura da sonda.
+  - **A memória e a emoção (PW-6):** uma barra, a do lobo, e a emoção da memória do pet como selo à parte, com a fonte.
+  - **As últimas ações** saem do histórico do replay.
+  - **O selo:** "ao vivo" com o tempo do jogo andando, "pausado" fora disso, e "replay" quando a tela pede.
+  - **O cérebro:** um ícone estático, sem animação. O connectome fica na pesquisa até o J5 (CN-1).
+  - **Nenhum rótulo** "pensando" ou "sentindo" (o e2e confere).
+- **Só nos v11 (PW-7):** os pets v1 a v10 não têm o botão nem a coluna, e o layout deles não muda.
+- **Testes:** `npm run tipos` limpo; `npm test` com 40 arquivos e 452 testes; `npm run e2e` com 68 testes, entre eles o do painel em 390 e 1280 px, com captura, e o dos pets
+  antigos sem painel; `tests/test_painel_digibrain.py` (4); `python tools/conferir_saude.py` passa.
