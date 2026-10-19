@@ -12,6 +12,9 @@ a chave `adendo_7` da bancada (a oportunidade nova do T1, a busca sem a fome e a
 
 Recusa a pasta de cada passo que ja existe e as bases fora das do piloto do adendo 7.
 
+**O adendo 8** (`"adendo_8": true`, por cima do 7; A8.5 e A8.9): o mesmo piloto, sem recalibrar, nas bases 54101...54505, com a chave
+`piloto_adendo8` no lugar da `piloto_adendo7`. Na bancada, a x sai das arvores no T1 em `T_m` e o T2 busca pelas arvores, sem o corte.
+
     python experiments/run_v2_piloto_pet_que_pensa_adendo7.py --config experiments/configs/v2_pet_que_pensa/piloto_adendo7.json \\
         --saida artifacts_v2_pet_que_pensa/piloto_adendo7 --passo reval
 """
@@ -32,6 +35,16 @@ from experiments import run_v2_calibracao_pet_que_pensa as cpq  # noqa: E402
 from experiments import run_v2_calibracao_pet_que_pensa_paladar as cpp  # noqa: E402
 
 CHAVE = "piloto_adendo7"
+CHAVE_8 = "piloto_adendo8"
+
+
+def chave(cfg: dict) -> str:
+    """a chave do orquestrador na config: a do adendo 8 com `adendo_8`, senao a do 7"""
+    return CHAVE_8 if cfg.get("adendo_8") is True else CHAVE
+
+
+def bases_piloto(cfg: dict) -> tuple:
+    return bv.BASES_PQP_ADENDO8["piloto"] if cfg.get("adendo_8") is True else bv.BASES_PQP_ADENDO7["piloto"]
 PASSOS = ("reval", "piloto")
 
 
@@ -42,15 +55,15 @@ def validar(cfg: dict) -> dict:
         raise ValueError("o piloto do adendo 7 e com o paladar, a fruta ao lado e o adendo 7: as tres chaves true")
     if {"bracos", "protocolos"} & set(cfg):
         raise ValueError("a config do piloto do adendo 7 nao traz 'bracos' nem 'protocolos': cada passo os poe")
-    if CHAVE not in cfg or set(cfg[CHAVE]) - {"calibracao"}:
-        raise ValueError(f"{CHAVE!r}: {{'calibracao'}} (vazio so nas sementes dos testes)")
+    if {CHAVE, CHAVE_8} & set(cfg) != {chave(cfg)} or set(cfg[chave(cfg)]) - {"calibracao"}:
+        raise ValueError(f"{chave(cfg)!r} (e so ela): {{'calibracao'}} (vazio so nas sementes dos testes)")
     if "ganho_gosto" not in cfg.get("consequencia", {}) or type(cfg.get("g_plano")) is not int:
         raise ValueError("o piloto do adendo 7 usa o ganho_gosto e o g_plano do adendo 6: na consequencia e em 'g_plano'")
     bv.validar_config_pqp(config_do_piloto(cfg))
     if "unidades" in cfg:
-        if not set(cfg["unidades"]["bases"]) <= set(bv.BASES_PQP_ADENDO7["piloto"]):
-            raise bv.SementeSemPlano(f"o piloto do adendo 7 usa as bases {bv.BASES_PQP_ADENDO7['piloto']} (A7.8)")
-        if "calibracao" not in cfg[CHAVE]:
+        if not set(cfg["unidades"]["bases"]) <= set(bases_piloto(cfg)):
+            raise bv.SementeSemPlano(f"o piloto usa as bases {bases_piloto(cfg)} ({'A8.9' if cfg.get('adendo_8') else 'A7.8'})")
+        if "calibracao" not in cfg[chave(cfg)]:
             raise ValueError("o piloto com as bases do plano confere o ganho_gosto e o g_plano contra a calibracao: a chave 'calibracao'")
         conferir_adendo6(cfg)
     return cfg
@@ -58,7 +71,7 @@ def validar(cfg: dict) -> dict:
 
 def conferir_adendo6(cfg: dict) -> dict:
     """PJ7-5: o `ganho_gosto` e o `g_plano` da config sao os escolhidos na calibracao com a fruta ao lado (o adendo 6). Falha alto."""
-    pasta = RAIZ / cfg[CHAVE]["calibracao"]
+    pasta = RAIZ / cfg[chave(cfg)]["calibracao"]
     gg = json.loads((pasta / "ganho_gosto" / "ganho_gosto.json").read_text(encoding="utf-8"))["escolha"]["ganho_gosto"]
     gp = json.loads((pasta / "g_plano" / "g_plano.json").read_text(encoding="utf-8"))["escolha"]["g_plano"]
     if (cfg["consequencia"]["ganho_gosto"], cfg["g_plano"]) != (gg, gp):
@@ -68,7 +81,7 @@ def conferir_adendo6(cfg: dict) -> dict:
 
 
 def _base(cfg: dict) -> dict:
-    return {k: v for k, v in cfg.items() if k != CHAVE}
+    return {k: v for k, v in cfg.items() if k not in (CHAVE, CHAVE_8)}
 
 
 def config_do_piloto(cfg: dict) -> dict:
@@ -101,7 +114,7 @@ def rodar_piloto(cfg: dict, pasta: Path, processos: int = 1) -> dict:
         raise RuntimeError(f"G-REVAL-POSSIVEL falha ({reval['falham']} de {reval['n']} unidades): o T1 e inconclusivo por desenho; o "
                            "piloto nao roda e o plano volta ao Matheus (A3.2)")
     escolha = {"g_plano": cfg["g_plano"], "fonte": "adendo 6 (PJ7-5: sem recalibrar)",
-               **({"calibracao": cfg[CHAVE]["calibracao"]} if "calibracao" in cfg[CHAVE] else {})}
+               **({"calibracao": cfg[chave(cfg)]["calibracao"]} if "calibracao" in cfg[chave(cfg)] else {})}
     return cpq.piloto(config_do_piloto(cfg), pasta / "piloto", processos, bv.LIMIAR_ACASO_MEDIO, escolha)
 
 

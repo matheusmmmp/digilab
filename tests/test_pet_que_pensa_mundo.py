@@ -32,6 +32,7 @@ import gabarito_pqp_mundo as g  # noqa: E402
 from digilab.config import (CONFIG_DONOS, CONFIG_GRUPO_LIGADA, CONFIG_LOBOS, CONFIG_PADRAO, CONFIG_PQP_MUNDO,  # noqa: E402
                             CONFIG_PQP_MUNDO_LIGADA, TICKS_POR_DIA, ConfigLobos, ConfigPetQuePensaMundo)
 from digilab.donos import Visao, criar_dono  # noqa: E402
+from digilab.events import ACOES_PARAR_ARVORES  # noqa: E402
 from digilab.events import (ACOES_CORPO, ACOES_MAO, ACOES_TROCA_ARVORES, FRUTAS, AcaoPet, AcaoUsuario, dar_fruta,  # noqa: E402
                             fruta_dada, par_da_troca, trocar_arvores)
 from digilab.grupo import Grupo  # noqa: E402
@@ -158,8 +159,9 @@ def test_os_padroes_das_chaves():
 # ================================================================== o enum e as recusas
 def test_eventos_no_fim_do_enum_e_os_de_antes_nao_andaram():
     todos = list(AcaoUsuario)
-    assert todos.index(ACOES_CORPO[0]) == 29 and len(todos) == 36
+    assert todos.index(ACOES_CORPO[0]) == 29 and len(todos) == 39                  # o adendo 8 pos as tres paradas no fim
     assert todos[30:33] == list(ACOES_MAO) and todos[33:36] == list(ACOES_TROCA_ARVORES)
+    assert todos[36:39] == list(ACOES_PARAR_ARVORES)
     assert [fruta_dada(a) for a in ACOES_MAO] == list(FRUTAS) and dar_fruta("c") is AcaoUsuario.DAR_FRUTA_C
     assert [par_da_troca(a) for a in ACOES_TROCA_ARVORES] == [("a", "b"), ("a", "c"), ("b", "c")]
     assert trocar_arvores("c", "a") is AcaoUsuario.TROCAR_ARVORES_A_C

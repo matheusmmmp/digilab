@@ -75,7 +75,8 @@ BASES = {
                   "degrau_1b": (41101, 41202, 41303, 41404, 41505), "dois_donos": (42101, 42202, 42303, 42404, 42505)},
     "rede_de_si": {"calibracao": (43101, 43202, 43303, 43404, 43505), "validacao": (44101, 44202, 44303, 44404, 44505)},
     "pet_que_pensa": {**bv.BASES_PET_QUE_PENSA, "calibracao_paladar": bv.BASES_PQP_PALADAR, "calibracao_ao_lado": bv.BASES_PQP_AO_LADO,
-                      "piloto_adendo7": bv.BASES_PQP_ADENDO7["piloto"], "validacao_adendo7": bv.BASES_PQP_ADENDO7["validacao"]},   # o J5, com o paladar (adendo 3)
+                      "piloto_adendo7": bv.BASES_PQP_ADENDO7["piloto"], "validacao_adendo7": bv.BASES_PQP_ADENDO7["validacao"],
+                      "piloto_adendo8": bv.BASES_PQP_ADENDO8["piloto"], "validacao_adendo8": bv.BASES_PQP_ADENDO8["validacao"]},   # o J5, com o paladar (adendo 3)
 }
 NOVAS = {(43101, 43505): "calibracao e piloto", (44101, 44505): "validacao"}
 K_UNIDADES = 40

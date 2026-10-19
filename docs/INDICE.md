@@ -34,3 +34,5 @@ citados. Status: PROPOSTO (`docs/TAREFA_V2_INFRA_MULTIAGENTE.md`).
 - [`historico/LEIA.md`](historico/LEIA.md): o que cada etapa construiu (o resumo antigo do `CLAUDE.md`, seção a seção).
 - [`V2_TRABALHO_PARALELO.md`](V2_TRABALHO_PARALELO.md): os papéis de coordenador e worker, as worktrees, as sementes e a GPU.
 - [`infra/`](infra/): esta infraestrutura (a matriz de capacidades, a auditoria, o guia operacional, o teste do ChatGPT Work).
+
+- [`TAREFA_V2_V3.md`](TAREFA_V2_V3.md): handoff para investigar o espaço de ações e oportunidades de escolha do DigiBrain V3.

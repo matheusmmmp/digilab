@@ -305,4 +305,8 @@ de base em `docs/historico/registro_lotes.json`.
 
 - [2026-10-19 — WORLD-POC-02, PR 1 (worker A): o corpo químico no POC e o Gate B](registro/2026-10.md)
 
+- [2026-10-19 — PQP-ADENDO8 (worker D): o evento que para as árvores, a bancada do adendo 8 do J5, o piloto e a validação apontando as faixas novas](registro/2026-10.md)
+
+- [2026-10-19 — V3-ESPACO-ACOES: tarefa de investigação para o Claude Code](registro/2026-10.md)
+
 - [2026-10-19 — WORLD-POC-02, PR 2 (worker A): o painel do corpo e a premissa da CP-4 corrigida](registro/2026-10.md)

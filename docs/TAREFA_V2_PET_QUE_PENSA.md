@@ -265,3 +265,24 @@ Sem run; só as sementes dos testes. Interpretações em `docs/registro/2026-10.
   piloto, com o adendo 8.
 - **As fumaças:** `fumaca_piloto_adendo7.json` e `fumaca_validacao_adendo7.json`, também em `tools/conferir_fumacas.py`.
 - **Testes:** `tests/test_bancada_pqp_adendo7.py`, 13.
+
+## O adendo 8, a bancada e o mundo (D, 2026-10-19) — SEM RUN
+
+Sem run; só as sementes dos testes. Interpretações em `docs/registro/2026-10.md`.
+
+- **O mundo:** o evento `parar_arvores_<tipo>` (`Mundo.parar_arvores`), só com a chave do J5.
+  - Em `T_m`, as árvores do tipo param de dar fruta, e as frutas caídas delas saem.
+  - A fruta da regra nunca sai, e o fluxo das quedas anda igual.
+- **A chave do J5:** `"adendo_8": true`, por cima do `adendo_7`. Desligada, as vidas dos adendos 7 e 5 saem iguais aos gabaritos.
+  - **No T1:** a regra da mudança manda a parada das árvores da x depois das frutas na mão.
+  - **No T2:** a busca é pelas árvores, com o alvo na árvore ou na x caída dela (`metrics.busca_arvores`), com ou sem a x à vista e sem
+    o corte.
+- **Os descritivos do A8.7:**
+  - no T1, as x retiradas em `T_m`;
+  - no T2, as buscas com e sem a x à vista, o `m` só sem ela e as x de árvore nova comidas.
+- **As faixas:** `BASES_PQP_ADENDO8`, com o piloto em 54101… e a validação em 55101…. Nenhuma faixa velha volta.
+- **O piloto, montado SEM rodar** (precisa do sim do Matheus): `experiments/configs/v2_pet_que_pensa/piloto_adendo8.json`, pelo
+  `run_v2_piloto_pet_que_pensa_adendo7.py` (os passos `reval` e `piloto`).
+- **A validação:** o orquestrador aceita o adendo 8. A config sai depois do piloto, com o adendo 9.
+- **As fumaças:** `fumaca_piloto_adendo8.json` e `fumaca_validacao_adendo8.json`.
+- **Testes:** `tests/test_bancada_pqp_adendo8.py`, 12.

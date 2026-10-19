@@ -54,6 +54,9 @@ FUMACAS = {
     "experiments/configs/v2_pet_que_pensa/fumaca_piloto_adendo7.json": ("experiments/run_v2_piloto_pet_que_pensa_adendo7.py",
                                                                       ["--passo", "reval"]),      # o adendo 7: o passo 1
     "experiments/configs/v2_pet_que_pensa/fumaca_validacao_adendo7.json": ("experiments/run_v2_validacao_pet_que_pensa.py", []),
+    "experiments/configs/v2_pet_que_pensa/fumaca_piloto_adendo8.json": ("experiments/run_v2_piloto_pet_que_pensa_adendo7.py",
+                                                                      ["--passo", "reval"]),      # o adendo 8: o passo 1
+    "experiments/configs/v2_pet_que_pensa/fumaca_validacao_adendo8.json": ("experiments/run_v2_validacao_pet_que_pensa.py", []),
     "experiments/configs/v2_experimento_maior/fumaca.json": ("experiments/run_v2_experimento_maior.py", []),
     "experiments/configs/v2_calibracao_conjunta/fumaca.json": ("experiments/run_v2_calibracao_conjunta.py", []),
     "experiments/configs/v2_calibracao_cerebro_c/fumaca.json": ("experiments/run_v2_calibracao_cerebro_c.py", []),
