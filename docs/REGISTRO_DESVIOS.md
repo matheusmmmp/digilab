@@ -277,8 +277,11 @@ de base em `docs/historico/registro_lotes.json`.
 
 - [2026-10-18 — W-PORTE, etapa 4, parte 3a (worker de uma sessão lateral): a escala e o deslocamento do caráter do v11, a vontade e o caráter em TS](registro/2026-10.md)
 - [2026-10-18 — BANHEIRO-FALHA-ALTA (sessão lateral): o `configCorpo` do TS com o banheiro, a ordem E-9 dos gestos](registro/2026-10.md)
-
+- [2026-10-18 — PQP-VALIDACAO, a run (worker D): a validação do J5 com a fruta ao lado da ração](registro/2026-10.md)
 - [2026-10-18 — ROTEAMENTO-MODELOS (ChatGPT Work): escolha de modelo e contexto no CLAUDE.md](registro/2026-10.md)
+
+
+- [2026-10-18 — WORLD-POC-001 (worker A): a investigação do mundo 3D e as decisões W-1 a W-7](registro/2026-10.md)
 
 - [2026-10-18 — W-PORTE, etapa 4, parte 3b (worker de uma sessão lateral): o pet v11 no Motor do jogo](registro/2026-10.md)
 
