@@ -10,8 +10,8 @@ export const rotuloRel = (v: number): string => Math.abs(v) < CDJ.limiarTom ? "n
 /** barra segmentada: n de m blocos; marca opcional (limite ou inicio da faixa) */
 export function Seg({ n, m, cls = "", marca }: { n: number; m: number; cls?: string; marca?: number | number[] }) {
   return (
-    <span class={`dl-seg ${cls}`} role="img" aria-label={`${n} de ${m}`}>
-      {Array.from({ length: m }, (_, i) => <i key={i} class={i < n ? "on" : ""} />)}
+    <span className={`dl-seg ${cls}`} role="img" aria-label={`${n} de ${m}`}>
+      {Array.from({ length: m }, (_, i) => <i key={i} className={i < n ? "on" : ""} />)}
       {marca !== undefined && ([] as number[]).concat(marca).map(x => <b key={x} style={{ left: `${x / m * 100}%` }} />)}
     </span>
   );
@@ -20,14 +20,14 @@ export function Seg({ n, m, cls = "", marca }: { n: number; m: number; cls?: str
 export function BarraCarater({ eixo, v }: { eixo: string; v: number }) {
   const rot = Math.abs(v) < CDJ.limiarTom ? "" : rotuloRel(v), f = (Math.max(-1, Math.min(1, v)) + 1) / 2;
   return (
-    <div class="dl-rel">
+    <div className="dl-rel">
       <span style={{ minWidth: "6.5em" }}>{eixo}</span>
-      <span class="dl-rel-trilho" role="img" aria-label={`${eixo}: ${rot || "na faixa comum"}`}><i style={{ width: `${f * 100}%` }} /><b /></span>
-      <span class="dl-rel-rotulo">{rot}</span>
+      <span className="dl-rel-trilho" role="img" aria-label={`${eixo}: ${rot || "na faixa comum"}`}><i style={{ width: `${f * 100}%` }} /><b /></span>
+      <span className="dl-rel-rotulo">{rot}</span>
     </div>
   );
 }
 /** numeros em blocos: valor em cima, rotulo embaixo (como o HTML); itens sao [rotulo, valor] */
 export function Numeros({ itens }: { itens: [string, string | number][] }) {
-  return <div class="kv">{itens.map(([k, v]) => <div key={k}><b>{v}</b><span>{k}</span></div>)}</div>;
+  return <div className="kv">{itens.map(([k, v]) => <div key={k}><b>{v}</b><span>{k}</span></div>)}</div>;
 }

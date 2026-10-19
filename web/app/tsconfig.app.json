@@ -6,7 +6,7 @@
     "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "types": ["vite/client"],
     "jsx": "react-jsx",
-    "jsxImportSource": "preact",
+    "jsxImportSource": "react",
     "resolveJsonModule": true,
     "strict": true,
     "noImplicitOverride": true,

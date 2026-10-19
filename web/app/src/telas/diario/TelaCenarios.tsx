@@ -2,7 +2,7 @@
    vira o pet do jogador (o anterior fica guardado para voltar) e o B vira o rival fixo da arena. Mostra lado a
    lado estado, sinal de aprendizado e JSD da politica media ao prior; 100 lutas A x B. Ferramenta de inspecao
    do porte, nao resultado de pesquisa: uma semente, outro RNG, sem IC. */
-import { useState } from "preact/hooks";
+import { useState } from "react";
 import {
   ACOES_PET, ACOES_V2_OBS, CA, NOME_BOT, NOME_COMB, NOME_DONO, NOME_V2, afinidades, corDominante, hashSemente, jogarV2, lutadorPet,
   nomeForma, observacao, treinarPet, type Motor, type Observacao, type TipoDono,
@@ -110,44 +110,44 @@ export function TelaCenarios() {
     LUTA.rivalFixo = null; previa("arena"); atual = null; lutasTxt = null;
   };
   const L = (rot: string, k: string, f: (x: string | number) => string | number = x => x) => <tr key={k}><td>{rot}</td><td>{f(atual!.ra[k])}</td><td>{f(atual!.rb[k])}</td></tr>;
-  const sec = (t: string) => <tr class="sec" key={t}><td colSpan={3}>{t}</td></tr>;
+  const sec = (t: string) => <tr className="sec" key={t}><td colSpan={3}>{t}</td></tr>;
   const bits = (x: string | number) => dec(x as number, 4);
   const campo = (p: "ca" | "cb", k: "dias" | "pd", rot: string, min: string, max: string, passo: string) => (
-    <label>{rot} <input type="number" min={min} max={max} step={passo} value={form[p][k]} onInput={ev => setForm({ ...form, [p]: { ...form[p], [k]: (ev.target as HTMLInputElement).value } })} /></label>
+    <label>{rot} <input type="number" min={min} max={max} step={passo} value={form[p][k]} onChange={ev => setForm({ ...form, [p]: { ...form[p], [k]: (ev.target as HTMLInputElement).value } })} /></label>
   );
   const dono = (p: "ca" | "cb") => (
     <label>Dono simulado <select value={form[p].dono} onChange={ev => setForm({ ...form, [p]: { ...form[p], dono: (ev.target as HTMLSelectElement).value } })}>
       {Object.entries(NOME_DONO).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select></label>
   );
   return (
-    <div class="tela dl">
-      <div class="lab-intro dl-malha"><b>FERRAMENTA DE PESQUISA</b>
+    <div className="tela dl">
+      <div className="lab-intro dl-malha"><b>FERRAMENTA DE PESQUISA</b>
         <span>Monte dois pets com donos simulados e compare o que cada um aprendeu. O pet A vira o seu; o B vira o rival fixo da arena. Mesma semente, mesmo resultado.</span></div>
-      <fieldset class="lab-pet lab-pet--a"><legend>Pet A · vira o seu</legend>{dono("ca")}{campo("ca", "dias", "Dias de vida", "0.5", "14", "0.5")}{campo("ca", "pd", "Interações por dia", "1", "200", "1")}</fieldset>
-      <fieldset class="lab-pet lab-pet--b"><legend>Pet B · rival fixo</legend>{dono("cb")}{campo("cb", "dias", "Dias de vida", "0.5", "14", "0.5")}{campo("cb", "pd", "Interações por dia", "1", "200", "1")}</fieldset>
-      <label class="lab-semente">Semente <input id="c-semente" class="campo-num" type="number" min="1" step="1" value={form.semente} onInput={ev => setForm({ ...form, semente: (ev.target as HTMLInputElement).value })} /></label>
-      <p class="lab-nota">Simular troca o seu pet atual. Dá para voltar ao anterior em Meus pets. Os pets simulados são da versão sem medalhas: evoluem sem o Tamer e não ganham medalhas.</p>
-      <button type="button" class="dl-btn dl-btn--largo" onClick={montarAMao}>Simular e comparar</button>
-      <details class="dl-apoio"><summary>Cenários prontos</summary>
-        <div class="cenarios">
-          {CENARIOS.map(c => <button type="button" key={c.id} class="cen" onClick={() => comEspera(() => montar(c, 1))}><b>{c.titulo}</b><span>{c.desc}</span></button>)}
+      <fieldset className="lab-pet lab-pet--a"><legend>Pet A · vira o seu</legend>{dono("ca")}{campo("ca", "dias", "Dias de vida", "0.5", "14", "0.5")}{campo("ca", "pd", "Interações por dia", "1", "200", "1")}</fieldset>
+      <fieldset className="lab-pet lab-pet--b"><legend>Pet B · rival fixo</legend>{dono("cb")}{campo("cb", "dias", "Dias de vida", "0.5", "14", "0.5")}{campo("cb", "pd", "Interações por dia", "1", "200", "1")}</fieldset>
+      <label className="lab-semente">Semente <input id="c-semente" className="campo-num" type="number" min="1" step="1" value={form.semente} onChange={ev => setForm({ ...form, semente: (ev.target as HTMLInputElement).value })} /></label>
+      <p className="lab-nota">Simular troca o seu pet atual. Dá para voltar ao anterior em Meus pets. Os pets simulados são da versão sem medalhas: evoluem sem o Tamer e não ganham medalhas.</p>
+      <button type="button" className="dl-btn dl-btn--largo" onClick={montarAMao}>Simular e comparar</button>
+      <details className="dl-apoio"><summary>Cenários prontos</summary>
+        <div className="cenarios">
+          {CENARIOS.map(c => <button type="button" key={c.id} className="cen" onClick={() => comEspera(() => montar(c, 1))}><b>{c.titulo}</b><span>{c.desc}</span></button>)}
         </div>
       </details>
-      {msg && <p class={msg.erro ? "erro" : "resultado"} aria-live="polite">{msg.txt}</p>}
-      {atual && <div class="tabela-rola"><table class="comp"><thead><tr><th /><th>A (seu)</th><th>B (rival)</th></tr></thead><tbody>
+      {msg && <p className={msg.erro ? "erro" : "resultado"} aria-live="polite">{msg.txt}</p>}
+      {atual && <div className="tabela-rola"><table className="comp"><thead><tr><th /><th>A (seu)</th><th>B (rival)</th></tr></thead><tbody>
         {sec("Perfil")}{L("Dono", "dono")}{L("Idade", "idade")}{L("Interações/dia", "porDia")}{L("Interações no total", "total")}
         {sec("Estado no fim")}{L("Saúde", "saude", pct)}{L("Saciedade", "fome", pct)}{L("Higiene", "higiene", pct)}{L("Humor", "humor", pct)}
         {sec("Sinal de aprendizado")}{L("Elogios", "elogio")}{L("Repreensões", "repreensao")}{L("Pedidos atendidos", "atendido")}{L("Pedidos ignorados", "ignorado")}{L("Atualizações do bandit", "atualizacoes")}
         {sec("Quanto o aprendizado afastou a política do prior (JSD, bits)")}{L("No estado atual", "jsdAgora", bits)}{L("Na arena (HP cheio)", "jsdArena", bits)}
         {sec("Na arena")}{L("Regras de combate semeadas por", "topo")}{L("Traço dominante", "dom")}
       </tbody></table></div>}
-      <div class="dl-linha">
-        <button type="button" class="dl-btn" disabled={!LUTA.rivalFixo} onClick={() => { try { rodarLutas(100); } catch (err) { setMsg({ txt: String(err instanceof Error ? err.message : err), erro: true }); } }}>Rodar 100 lutas A × B</button>
-        {temAnterior() && <button type="button" class="dl-btn dl-btn--sec" onClick={voltar}>Voltar ao pet anterior</button>}
+      <div className="dl-linha">
+        <button type="button" className="dl-btn" disabled={!LUTA.rivalFixo} onClick={() => { try { rodarLutas(100); } catch (err) { setMsg({ txt: String(err instanceof Error ? err.message : err), erro: true }); } }}>Rodar 100 lutas A × B</button>
+        {temAnterior() && <button type="button" className="dl-btn dl-btn--sec" onClick={voltar}>Voltar ao pet anterior</button>}
       </div>
-      {lutasTxt && <div class="tabela-rola">
-        <p class="resultado">{lutasTxt.resumo}</p><p class="dl-apoio">{lutasTxt.nota}</p>
-        <table class="comp"><thead><tr><th>Ação usada</th><th>A</th><th>B</th></tr></thead><tbody>{lutasTxt.linhas.map(([a, x, y]) => <tr key={a}><td>{a}</td><td>{x}</td><td>{y}</td></tr>)}</tbody></table>
+      {lutasTxt && <div className="tabela-rola">
+        <p className="resultado">{lutasTxt.resumo}</p><p className="dl-apoio">{lutasTxt.nota}</p>
+        <table className="comp"><thead><tr><th>Ação usada</th><th>A</th><th>B</th></tr></thead><tbody>{lutasTxt.linhas.map(([a, x, y]) => <tr key={a}><td>{a}</td><td>{x}</td><td>{y}</td></tr>)}</tbody></table>
       </div>}
     </div>
   );

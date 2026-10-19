@@ -4,7 +4,7 @@
    com dado do motor (bloco sem dado fica de fora): faixa (resultado, quem venceu, turnos) -> o que mudou (lugar
    aberto, numeros) -> o que decidiu a luta -> regra nova ou "nenhuma regra nova" -> progresso. Elogiar/Repreender
    uma acao da luta nao existe no motor e fica de fora (docs/PENDENCIAS_PRANCHAS.md). */
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "react";
 import { CAT, MEDALHAS, NOME_V2, NPC, cartaDe, chaveRegra, fatorExibicao, itemDe, regraDe, rotuloRegra, type ResultadoLuta, type Turno } from "../../../motor/index.ts";
 import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { abrirModal } from "../../componentes/modal.ts";
@@ -60,7 +60,7 @@ export function momentosDecisivos(res: ResultadoLuta, A: LutadorTela, B: Lutador
 }
 
 function Numeros({ itens }: { itens: [string, string][] }) {
-  return <div class="res-nums">{itens.map(([v, r]) => <div class="res-num" key={r}><span class="dl-num">{v}</span><span>{r}</span></div>)}</div>;
+  return <div className="res-nums">{itens.map(([v, r]) => <div className="res-num" key={r}><span className="dl-num">{v}</span><span>{r}</span></div>)}</div>;
 }
 
 export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continuar: () => void; verReplay: (idx: number) => void }) {
@@ -127,7 +127,7 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
   /* o perdedor nunca maior que o vencedor */
   const sc = sc0 && sv && !empate ? { ...sc0, km: Math.min(sc0.km, sv.km), kd: Math.min(sc0.kd, sv.kd) } : sc0;
   const Img = ({ s, cls, L }: { s: NonNullable<typeof sv>; cls: string; L: LutadorTela }) => (
-    <img class={`dl-pix ${cls}`} src={s.img.url} alt={cls === "res-caido" ? `${L.nomeTela} caído` : L.nomeTela}
+    <img className={`dl-pix ${cls}`} src={s.img.url} alt={cls === "res-caido" ? `${L.nomeTela} caído` : L.nomeTela}
       style={{ "--w": s.img.w, "--h": s.img.h, "--km": s.km, "--kd": s.kd }} />
   );
 
@@ -139,88 +139,88 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
   const md = r.medalha, mdNum = md ? MEDALHAS.findIndex(x => x.id === md.id) + 1 : 0, mdInfo = md ? MEDALHAS[mdNum - 1] : null;
 
   return (
-    <dialog class={`modal-res res dl ${venceu ? "res--vit" : empate ? "res--emp" : "res--der"}`} ref={ref} aria-labelledby="res-tit"
+    <dialog className={`modal-res res dl ${venceu ? "res--vit" : empate ? "res--emp" : "res--der"}`} ref={ref} aria-labelledby="res-tit"
       onClose={() => (replay.current && r.idxLog !== null ? verReplay(r.idxLog) : continuar())}>
-      <div class={`res-faixa ${venceu ? "res-faixa--vit" : "res-faixa--der"}`}>
-        <span class="res-tag">{tag}</span>
-        <h2 class={`res-tit dl-num${titulo.length > 9 ? " res-tit--longo" : ""}`} id="res-tit">{titulo}</h2>
-        <span class="res-sub">{sub}</span>
-        <div class={`res-palco${empate ? " res-palco--empate" : ""}`} aria-hidden="true">
-          <span class="res-anel" />
+      <div className={`res-faixa ${venceu ? "res-faixa--vit" : "res-faixa--der"}`}>
+        <span className="res-tag">{tag}</span>
+        <h2 className={`res-tit dl-num${titulo.length > 9 ? " res-tit--longo" : ""}`} id="res-tit">{titulo}</h2>
+        <span className="res-sub">{sub}</span>
+        <div className={`res-palco${empate ? " res-palco--empate" : ""}`} aria-hidden="true">
+          <span className="res-anel" />
           {sc && <Img s={sc} cls={empate ? "res-lado2" : "res-caido"} L={caido} />}
           {sv && <Img s={sv} cls="res-venc" L={ganhou} />}
         </div>
-        <div class="res-nums-faixa"><Numeros itens={nums} /></div>
+        <div className="res-nums-faixa"><Numeros itens={nums} /></div>
       </div>
-      <div class="res-lado">
-        <div class="res-corpo">
+      <div className="res-lado">
+        <div className="res-corpo">
           {lugarNovo && (proximo !== null
-            ? <div class="res-ilha">
-                <span class="res-ilha-img">{ilha && <img src={ilha} alt="" />}</span>
-                <span class="res-ilha-txt"><span class="res-selo">aberta</span><b>{LUGARES[proximo].nome}</b>
+            ? <div className="res-ilha">
+                <span className="res-ilha-img">{ilha && <img src={ilha} alt="" />}</span>
+                <span className="res-ilha-txt"><span className="res-selo">aberta</span><b>{LUGARES[proximo].nome}</b>
                   <span>sugerido: {LUGARES[proximo].sugerido} · {LUGARES[proximo].rivais.length} {LUGARES[proximo].rivais.length === 1 ? "rival" : "rivais"}</span></span>
               </div>
-            : <div class="res-ilha"><span class="res-ilha-txt"><span class="res-selo">concluída</span><b>Campanha concluída</b>
+            : <div className="res-ilha"><span className="res-ilha-txt"><span className="res-selo">concluída</span><b>Campanha concluída</b>
                 <span>{p.A.nomeTela} venceu {LUGARES[Li].nome}, o último lugar do mapa.</span></span></div>)}
-          {md && mdInfo && <div class="res-medalha" role="status">
+          {md && mdInfo && <div className="res-medalha" role="status">
             <SeloMedalha n={mdNum} ganha tam={40} />
-            <span class="res-ilha-txt"><span class="res-selo">medalha nova</span><b>{mdInfo.nome}</b>
+            <span className="res-ilha-txt"><span className="res-selo">medalha nova</span><b>{mdInfo.nome}</b>
               <span>O Tamer tem {md.n} de {MEDALHAS.length}. Ela é sua: vale para todos os seus pets.</span></span>
           </div>}
           {r.itens.map(x => { const it = itemDe(x.id); return (
-            <div class="res-item" role="status" key={x.n}>
-              <span class="res-ilha-txt"><span class="res-selo">{x.origem === "medalha" ? "item novo" : "carta da revanche"}</span><b>{it.nome}</b>
+            <div className="res-item" role="status" key={x.n}>
+              <span className="res-ilha-txt"><span className="res-selo">{x.origem === "medalha" ? "item novo" : "carta da revanche"}</span><b>{it.nome}</b>
                 <span>{it.efeito} {it.tipo === "carta" ? "Escolha antes de uma luta." : "Equipe em Crescer · Itens."}</span></span>
             </div>); })}
-          {r.carta && <p class="res-carta" role="note">Carta usada: <b>{cartaDe(r.carta).nome}</b>. {cartaDe(r.carta).efeito}{res.turnos.some(tr => tr.cura?.[0]) ? " Ela curou o pet nesta luta." : ""}</p>}
-          {r.titulo && <div class="res-titulo" role="status">
+          {r.carta && <p className="res-carta" role="note">Carta usada: <b>{cartaDe(r.carta).nome}</b>. {cartaDe(r.carta).efeito}{res.turnos.some(tr => tr.cura?.[0]) ? " Ela curou o pet nesta luta." : ""}</p>}
+          {r.titulo && <div className="res-titulo" role="status">
             <SeloMedalha n={0} ouro ganha tam={40} />
-            <span class="res-ilha-txt"><span class="res-selo">medalha de ouro</span><b>Campeão da Liga dos Líderes</b>
+            <span className="res-ilha-txt"><span className="res-selo">medalha de ouro</span><b>Campeão da Liga dos Líderes</b>
               <span>{r.titulo.n === 1 ? "O título é seu, Tamer: a jornada chegou ao fim." : `${r.titulo.forma} também venceu a Liga (título ${r.titulo.n}).`}</span></span>
           </div>}
-          {r.recorde && inst && <div class="res-titulo res-recorde" role="status">
-            <span class="res-recorde-num dl-num" aria-hidden="true">{r.recorde.valor}</span>
-            <span class="res-ilha-txt"><span class="res-selo">recorde novo</span><b>{inst.nome}</b>
+          {r.recorde && inst && <div className="res-titulo res-recorde" role="status">
+            <span className="res-recorde-num dl-num" aria-hidden="true">{r.recorde.valor}</span>
+            <span className="res-ilha-txt"><span className="res-selo">recorde novo</span><b>{inst.nome}</b>
               <span>{r.recorde.valor} vitória{r.recorde.valor === 1 ? "" : "s"} seguida{r.recorde.valor === 1 ? "" : "s"}: o recorde agora é seu, Tamer, com {r.recorde.forma}.</span></span>
           </div>}
-          {serie && <section class="res-serie" aria-labelledby="res-serie-tit">
+          {serie && <section className="res-serie" aria-labelledby="res-serie-tit">
             <h3 id="res-serie-tit">{liga ? `Liga dos Líderes · ${r.nLutas} lutas seguidas, sem cura` : inst ? `${inst.nome} · ${r.nLutas} lutas seguidas, sem cura` : `Resistência · ${r.nLutas} lutas seguidas, sem cura`}</h3>
             <ol>{Array.from({ length: r.nLutas }, (_, i) => {
               const x = serie[i], fimVida = x ? Math.max(0, x.E.L[0].hp) / x.E.L[0].hpMax : 0;
-              return <li key={i} class={!x ? "res-serie-nao" : x.pontosA === 1 ? "res-serie-vit" : "res-serie-der"}>
-                <span class="res-t">Luta {i + 1}</span>
+              return <li key={i} className={!x ? "res-serie-nao" : x.pontosA === 1 ? "res-serie-vit" : "res-serie-der"}>
+                <span className="res-t">Luta {i + 1}</span>
                 <span>{rivaisLista ? <><b>{rivaisLista[i].nomeTela}</b> ({rivaisLista[i].estiloTela}): </> : null}{!x ? "não chegou a lutar" : `${x.pontosA === 1 ? "venceu" : x.pontosA === 0 ? "perdeu" : "empatou"} em ${x.turnos.length} turnos · terminou com ${Math.round(fimVida * 100)}% da vida`}</span>
               </li>;
             })}</ol>
           </section>}
-          {inst?.regra === "sozinho" && <p class="res-arena-nota" role="note">Palácio: {p.A.nomeTela} lutou sem as suas travas, vetos e chips de regra, com as regras que ele mesmo escolheu.</p>}
-          {r.arena?.regra === "vinculo" && <p class="res-arena-nota" role="note">Arena do Lago: {p.A.nomeTela} lutou sem as suas travas e vetos, com as regras que ele mesmo escolheu.</p>}
-          <div class="res-nums-corpo"><Numeros itens={nums} /></div>
-          {momentos.length > 0 && <section class="res-decidiu" aria-labelledby="res-dec-tit">
+          {inst?.regra === "sozinho" && <p className="res-arena-nota" role="note">Palácio: {p.A.nomeTela} lutou sem as suas travas, vetos e chips de regra, com as regras que ele mesmo escolheu.</p>}
+          {r.arena?.regra === "vinculo" && <p className="res-arena-nota" role="note">Arena do Lago: {p.A.nomeTela} lutou sem as suas travas e vetos, com as regras que ele mesmo escolheu.</p>}
+          <div className="res-nums-corpo"><Numeros itens={nums} /></div>
+          {momentos.length > 0 && <section className="res-decidiu" aria-labelledby="res-dec-tit">
             <h3 id="res-dec-tit">O que decidiu a luta</h3>
-            <ol>{momentos.map((l, i) => <li key={i}><span class={`res-t${l.tom ? " res-t--" + l.tom : ""}`}>{l.t}</span><span>{l.txt}</span></li>)}</ol>
+            <ol>{momentos.map((l, i) => <li key={i}><span className={`res-t${l.tom ? " res-t--" + l.tom : ""}`}>{l.t}</span><span>{l.txt}</span></li>)}</ol>
           </section>}
           {r.cenario
-            ? <div class="res-semregra"><span class="dl-num" aria-hidden="true">?</span><span>Contra pet de cenário o seu não aprende.</span></div>
+            ? <div className="res-semregra"><span className="dl-num" aria-hidden="true">?</span><span>Contra pet de cenário o seu não aprende.</span></div>
             : nova
-              ? <section class="res-regra dl-malha" aria-label="Regra nova">
-                  <span class="res-regra-topo"><span>REGRA NOVA · aprendida lutando</span><span class="res-regra-pos">{nova.pos} de {nova.de}</span></span>
-                  <span class="res-regra-txt">{rotuloRegra(regraDe(nova.k)).replace(/^se/, "Se")}</span>
-                  {estadoNova === "livre" && !msgRegra && <span class="res-regra-bts">
-                    <button type="button" class="regra-travar" onClick={() => intervir("travar")}><Peca nome="icone_cadeado" />Travar</button>
-                    <button type="button" class="regra-vetar" onClick={() => intervir("vetar")}>Vetar</button></span>}
-                  {msgRegra && <span class="res-regra-msg" role="status">{msgRegra}</span>}
+              ? <section className="res-regra dl-malha" aria-label="Regra nova">
+                  <span className="res-regra-topo"><span>REGRA NOVA · aprendida lutando</span><span className="res-regra-pos">{nova.pos} de {nova.de}</span></span>
+                  <span className="res-regra-txt">{rotuloRegra(regraDe(nova.k)).replace(/^se/, "Se")}</span>
+                  {estadoNova === "livre" && !msgRegra && <span className="res-regra-bts">
+                    <button type="button" className="regra-travar" onClick={() => intervir("travar")}><Peca nome="icone_cadeado" />Travar</button>
+                    <button type="button" className="regra-vetar" onClick={() => intervir("vetar")}>Vetar</button></span>}
+                  {msgRegra && <span className="res-regra-msg" role="status">{msgRegra}</span>}
                 </section>
-              : r.ativasAntes && <div class="res-semregra"><span class="dl-num" aria-hidden="true">?</span><span>Nenhuma regra nova desta vez.</span></div>}
-          {progresso !== null && <div class="res-prog">
-            <span class="res-prog-rot"><span>lutas de treino</span><span><b>+1</b> · {progresso} de {CAT.sparring}</span></span>
-            <span class="res-prog-barra" role="img" aria-label={`lutas de treino: ${progresso} de ${CAT.sparring}`}>
-              {Array.from({ length: CAT.sparring }, (_, i) => <i key={i} class={i < progresso ? "on" : ""} />)}</span>
+              : r.ativasAntes && <div className="res-semregra"><span className="dl-num" aria-hidden="true">?</span><span>Nenhuma regra nova desta vez.</span></div>}
+          {progresso !== null && <div className="res-prog">
+            <span className="res-prog-rot"><span>lutas de treino</span><span><b>+1</b> · {progresso} de {CAT.sparring}</span></span>
+            <span className="res-prog-barra" role="img" aria-label={`lutas de treino: ${progresso} de ${CAT.sparring}`}>
+              {Array.from({ length: CAT.sparring }, (_, i) => <i key={i} className={i < progresso ? "on" : ""} />)}</span>
           </div>}
         </div>
-        <div class="res-rodape">
-          {r.idxLog !== null && <button type="button" class="dl-btn dl-btn--sec res-replay" onClick={() => { replay.current = true; ref.current?.close(); }}>Ver replay</button>}
-          <button type="button" class="dl-btn res-continuar" autofocus onClick={() => ref.current?.close()}>{proximo !== null ? "Ver o mapa" : "Continuar"}</button>
+        <div className="res-rodape">
+          {r.idxLog !== null && <button type="button" className="dl-btn dl-btn--sec res-replay" onClick={() => { replay.current = true; ref.current?.close(); }}>Ver replay</button>}
+          <button type="button" className="dl-btn res-continuar" data-autofocus onClick={() => ref.current?.close()}>{proximo !== null ? "Ver o mapa" : "Continuar"}</button>
         </div>
       </div>
     </dialog>

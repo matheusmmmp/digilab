@@ -2,7 +2,7 @@
    item 1): as telas leem o motor pelo useJogo() e so mudam o motor por aqui, que avisa todo mundo e grava o
    save. Duas abas no mesmo navegador (o HTML antigo e o app, ou dois apps) nao se sobrescrevem: quando o save
    muda em outra aba, esta relê o save em vez de gravar por cima. */
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useState } from "react";
 import { Motor, PetMorto } from "../motor/index.ts";
 import { CHAVE, gravarSave, lerSave, petExemplo, textoSave, type Armazenamento } from "./save.ts";
 import { CHAVE_TAMER, Tamer, conferirCampeao, conferirItensDasMedalhas, conferirMedalhas, conferirRecordes, gravarTamer, lerTamer, sincronizarPet, type MedalhaGanha } from "./tamer.ts";

@@ -1,7 +1,7 @@
 /* Jornada do jogador (src/jornada.ts): a escolha do brasao antes de todo ovo novo e a mensagem de conclusao ao vencer a Liga dos
    Lideres (pets v6; o chefe da campanha nos v1-v5). Mesmo visual das boas-vindas (tela cheia listrada, ovo no anel); nomes na tela em
    Digimon. */
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "react";
 import { DIGIMON_DA_FORMA, ESPECIES, LIGA, NPC, OVO, chaveSprite, nomeEstagio, nomeForma, type Especie, type Motor, type Ritmo } from "../../motor/index.ts";
 import { dimSprite, imagemAtlas, useAtlas } from "../atlas.ts";
 import { useDesktop } from "../desktop.ts";
@@ -25,36 +25,36 @@ export function EscolherBrasao({ podeVoltar }: { podeVoltar: boolean }) {
     try { chocarDoBrasao(esp, guardarAtivoNoProximoOvo(), ritmo); } catch (err) { setMsg(err instanceof Error ? err.message : String(err)); }
   };
   return (
-    <dialog class="brasao-tela dl" ref={ref} aria-labelledby="br-tit" onCancel={e => { if (!podeVoltar) e.preventDefault(); }} onClose={fecharEscolhaBrasao}>
-      <div class="br-cab">
-        <h1 class="bv-tit br-tit" id="br-tit">Escolha seu brasão</h1>
-        <p class="bv-slogan">O brasão decide a família do seu Digimon. O resto, você decide cuidando.</p>
+    <dialog className="brasao-tela dl" ref={ref} aria-labelledby="br-tit" onCancel={e => { if (!podeVoltar) e.preventDefault(); }} onClose={fecharEscolhaBrasao}>
+      <div className="br-cab">
+        <h1 className="bv-tit br-tit" id="br-tit">Escolha seu brasão</h1>
+        <p className="bv-slogan">O brasão decide a família do seu Digimon. O resto, você decide cuidando.</p>
       </div>
-      <div class="br-ritmo" role="radiogroup" aria-label="Ritmo de crescimento">
+      <div className="br-ritmo" role="radiogroup" aria-label="Ritmo de crescimento">
         {([["rapida", "Rápido", "3 h · 12 h · 18 h por estágio"], ["classica", "Clássico", "6 h · 24 h · 36 h, como os v-pets"]] as [Ritmo, string, string][]).map(([r, t, d]) => (
-          <button type="button" key={r} role="radio" aria-checked={ritmo === r} class={`br-ritmo-op${ritmo === r ? " sel" : ""}`} onClick={() => setRitmo(r)}>
+          <button type="button" key={r} role="radio" aria-checked={ritmo === r} className={`br-ritmo-op${ritmo === r ? " sel" : ""}`} onClick={() => setRitmo(r)}>
             <b>{t}</b><small>{d}</small></button>
         ))}
       </div>
-      <ul class="br-lista">
+      <ul className="br-lista">
         {ESPECIES.map(esp => {
           const ovo = a.tipo === "ok" ? imagemAtlas(a, OVO[esp], desk ? 2 : 1) : null, b = BRASAO[esp];
           return (
             <li key={esp}>
-              <button type="button" class="br-card" onClick={() => escolher(esp)} aria-label={`Brasão da ${b.nome}`}>
-                <Deco nome={b.peca} class="br-brasao" largura={64} altura={44} />
-                <b class="br-nome">{b.nome}</b>
-                {ovo && <img class="dl-pix br-ovo" src={ovo.url} width={ovo.w} height={ovo.h} alt="" />}
-                <span class="br-linha">nasce <b>{d(`${esp}_bebe`)}</b></span>
-                <span class="br-linha">Rookie: <b>{d(`${esp}_crianca_sereno`)}</b> ou <b>{d(`${esp}_crianca_arisco`)}</b></span>
+              <button type="button" className="br-card" onClick={() => escolher(esp)} aria-label={`Brasão da ${b.nome}`}>
+                <Deco nome={b.peca} className="br-brasao" largura={64} altura={44} />
+                <b className="br-nome">{b.nome}</b>
+                {ovo && <img className="dl-pix br-ovo" src={ovo.url} width={ovo.w} height={ovo.h} alt="" />}
+                <span className="br-linha">nasce <b>{d(`${esp}_bebe`)}</b></span>
+                <span className="br-linha">Rookie: <b>{d(`${esp}_crianca_sereno`)}</b> ou <b>{d(`${esp}_crianca_arisco`)}</b></span>
               </button>
             </li>
           );
         })}
       </ul>
-      <div class="br-pe">
-        {msg && <p class="dl-apoio">{msg}</p>}
-        {podeVoltar && <button type="button" class="dl-btn dl-btn--sec" onClick={() => ref.current?.close()}>Voltar</button>}
+      <div className="br-pe">
+        {msg && <p className="dl-apoio">{msg}</p>}
+        {podeVoltar && <button type="button" className="dl-btn dl-btn--sec" onClick={() => ref.current?.close()}>Voltar</button>}
       </div>
     </dialog>
   );
@@ -70,26 +70,26 @@ export function Conclusao({ m, fechar }: { m: Motor; fechar: () => void }) {
   const b = BRASAO[m.especie];
   const lutas = m.log.filter(e => e[1] === "l").length, chefe = NPC[chefeDe(m)]!, liga = terminaNaLiga(m), titulo = liga ? tamerAtual().tituloDe(m.semente) : null;
   return (
-    <dialog class="brasao-tela conclusao-tela dl" ref={ref} aria-labelledby="cc-tit" onClose={fechar}>
-      <div class="bv-centro">
-        <div class="bv-palco" aria-hidden="true">
-          <span class="bv-luz" /><span class="bv-anel" />
-          {spr && <img class="dl-pix bv-ovo cc-pet" src={spr.url} width={spr.w} height={spr.h} alt="" />}
+    <dialog className="brasao-tela conclusao-tela dl" ref={ref} aria-labelledby="cc-tit" onClose={fechar}>
+      <div className="bv-centro">
+        <div className="bv-palco" aria-hidden="true">
+          <span className="bv-luz" /><span className="bv-anel" />
+          {spr && <img className="dl-pix bv-ovo cc-pet" src={spr.url} width={spr.w} height={spr.h} alt="" />}
         </div>
       </div>
-      <div class="bv-texto">
-        <h1 class="bv-tit cc-tit" id="cc-tit">{liga ? "Campeão!" : "Jornada concluída!"}</h1>
-        <p class="bv-slogan">{liga ? `${nomeForma(m.forma)} venceu os ${LIGA.length} líderes da Liga, em sequência, sem cura. A jornada está concluída.`
+      <div className="bv-texto">
+        <h1 className="bv-tit cc-tit" id="cc-tit">{liga ? "Campeão!" : "Jornada concluída!"}</h1>
+        <p className="bv-slogan">{liga ? `${nomeForma(m.forma)} venceu os ${LIGA.length} líderes da Liga, em sequência, sem cura. A jornada está concluída.`
           : `${nomeForma(m.forma)} venceu ${chefe.nome} na ${m.lugares[m.lugarDe(chefe.k)].nome}.`}</p>
-        {liga && <p class="cc-ouro"><SeloMedalha n={0} ouro ganha tam={32} /><span>{titulo && titulo.n > 1 ? `Mais um título para o Tamer (o ${titulo.n}º).` : "A medalha de ouro é sua: ela fica em Lutar · Medalhas."}</span></p>}
-        <p class="cc-texto">
+        {liga && <p className="cc-ouro"><SeloMedalha n={0} ouro ganha tam={32} /><span>{titulo && titulo.n > 1 ? `Mais um título para o Tamer (o ${titulo.n}º).` : "A medalha de ouro é sua: ela fica em Lutar · Medalhas."}</span></p>}
+        <p className="cc-texto">
           Do Digi-Egg ao {nomeEstagio(m.forma)}, com o brasão da <b>{b.nome}</b>, em {diaDe(m.e.tick)} dia{diaDe(m.e.tick) > 1 ? "s" : ""} e {lutas} luta{lutas === 1 ? "" : "s"}.
           Tudo o que ele é saiu do que vocês viveram juntos.
         </p>
-        <ul class="cc-marcos">{marcos(m).map(x => <li key={x.rotulo} class={x.feito ? "feito" : ""}>{x.feito ? "✓" : "·"} {x.rotulo}</li>)}</ul>
-        <div class="bv-pe">
-          <button type="button" class="dl-btn dl-btn--destaque bv-comecar" onClick={() => ref.current?.close()}>Continuar com {nomeForma(m.forma)}</button>
-          <button type="button" class="dl-btn dl-btn--sec" onClick={() => { ref.current?.close(); novoOvoGuardandoAtivo(); }}>Chocar um ovo novo (ele fica guardado)</button>
+        <ul className="cc-marcos">{marcos(m).map(x => <li key={x.rotulo} className={x.feito ? "feito" : ""}>{x.feito ? "✓" : "·"} {x.rotulo}</li>)}</ul>
+        <div className="bv-pe">
+          <button type="button" className="dl-btn dl-btn--destaque bv-comecar" onClick={() => ref.current?.close()}>Continuar com {nomeForma(m.forma)}</button>
+          <button type="button" className="dl-btn dl-btn--sec" onClick={() => { ref.current?.close(); novoOvoGuardandoAtivo(); }}>Chocar um ovo novo (ele fica guardado)</button>
         </div>
       </div>
     </dialog>
@@ -113,25 +113,25 @@ export function ComoJogar({ fechar }: { fechar: () => void }) {
   const p = PAGINAS[i], ultima = i === PAGINAS.length - 1;
   const img = (k: string, alvo: number) => a.tipo === "ok" ? imagemAtlas(a, k, Math.max(1, Math.min(3, Math.floor(alvo / dimSprite(a.dados, k)[1])))) : null;
   return (
-    <dialog class="como-tela dl" ref={ref} aria-labelledby="cj-tit" onClose={fechar}>
-      <div class="cj-topo"><button type="button" class="cj-pular" onClick={() => ref.current?.close()}>Pular</button></div>
-      <div class="cj-corpo">
-        <div class={`cj-cartao dl-hexcard${p.sprites.length > 1 ? " cj-cartao--linha" : ""}`}>
-          {p.faixa && <span class="dl-num cj-faixa">{p.faixa}</span>}
-          {p.chips && <span class="cj-chips">{p.chips.map(([e, t]) => <span class="cj-chip" key={e}><Peca nome={e} escala={2} />{t && <b>{t}</b>}</span>)}</span>}
-          <span class="cj-sprites">{p.sprites.map((k, j) => {
+    <dialog className="como-tela dl" ref={ref} aria-labelledby="cj-tit" onClose={fechar}>
+      <div className="cj-topo"><button type="button" className="cj-pular" onClick={() => ref.current?.close()}>Pular</button></div>
+      <div className="cj-corpo">
+        <div className={`cj-cartao dl-hexcard${p.sprites.length > 1 ? " cj-cartao--linha" : ""}`}>
+          {p.faixa && <span className="dl-num cj-faixa">{p.faixa}</span>}
+          {p.chips && <span className="cj-chips">{p.chips.map(([e, t]) => <span className="cj-chip" key={e}><Peca nome={e} escala={2} />{t && <b>{t}</b>}</span>)}</span>}
+          <span className="cj-sprites">{p.sprites.map((k, j) => {
             const s = img(k, p.sprites.length > 1 ? 64 : 110);
-            return <span class="cj-spr" key={k}>{s && <img class="dl-pix" src={s.url} width={s.w} height={s.h} alt="" />}
-              {p.sprites.length > 1 && <small class="dl-tag dl-tag--estagio">{ROTULO_EST[j]}</small>}</span>;
+            return <span className="cj-spr" key={k}>{s && <img className="dl-pix" src={s.url} width={s.w} height={s.h} alt="" />}
+              {p.sprites.length > 1 && <small className="dl-tag dl-tag--estagio">{ROTULO_EST[j]}</small>}</span>;
           })}</span>
-          <span class="cj-anel" aria-hidden="true" />
+          <span className="cj-anel" aria-hidden="true" />
         </div>
-        <h1 class="bv-tit cj-tit" id="cj-tit">{p.tit}</h1>
-        <p class="cj-txt">{p.txt}</p>
-        <span class="cj-pontos" aria-label={`página ${i + 1} de ${PAGINAS.length}`}>{PAGINAS.map((_, j) => <i key={j} class={j === i ? "on" : ""} />)}</span>
+        <h1 className="bv-tit cj-tit" id="cj-tit">{p.tit}</h1>
+        <p className="cj-txt">{p.txt}</p>
+        <span className="cj-pontos" aria-label={`página ${i + 1} de ${PAGINAS.length}`}>{PAGINAS.map((_, j) => <i key={j} className={j === i ? "on" : ""} />)}</span>
       </div>
-      <div class="cj-pe">
-        <button type="button" class="dl-btn dl-btn--largo" onClick={() => ultima ? ref.current?.close() : setI(i + 1)}>{ultima ? "Chocar meu ovo" : "Próximo"}</button>
+      <div className="cj-pe">
+        <button type="button" className="dl-btn dl-btn--largo" onClick={() => ultima ? ref.current?.close() : setI(i + 1)}>{ultima ? "Chocar meu ovo" : "Próximo"}</button>
       </div>
     </dialog>
   );

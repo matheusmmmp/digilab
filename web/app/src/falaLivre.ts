@@ -10,7 +10,7 @@
    grava o evento "d" na hora pelo mesmo caminho do botao (execucao direta, decisao do Matheus em 2026-10-01 depois do
    gate da rodada 3; a primeira versao pedia confirmacao). E a unica coisa que o texto do jogador faz no pet, e so
    mediada pelo catalogo: fora dele o texto continua nao ensinando nada. */
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useState } from "react";
 import { CMEN, FATORES_TXT, TICK_INICIAL, TPD, hashSemente, nomeForma, type AcaoDono, type FatoHistoria, type Janela, type Motor } from "../motor/index.ts";
 import { agir, noCatalogo, validarComando } from "./acoes.ts";
 import { FALA_LLM, ligarFalaLLM } from "./fala.ts";

@@ -1,12 +1,12 @@
 /// <reference types="vitest/config" />
-/* Vite + Preact (TAREFA_FRONT_TS, Etapa 3). O build sai em web/dist/ (nao versionado) com caminhos relativos,
+/* Vite + React (TAREFA_FRONT_TS, Etapa 3; React no lugar do Preact desde TAREFA_V2_FRONT_REACT). O build sai em web/dist/ (nao versionado) com caminhos relativos,
    para o servidor_local.py servir em /v1/web/dist/. O atlas do Digimon UP fica FORA do repositorio
    (D:/Trab/digilab/Assets): a pagina pede ../../../Assets/digilab_atlas_up.json, que no servidor local cai em
    /Assets/ e no modo dev e servido por este config (so os arquivos do atlas e da decoracao listada em decoracao_nomes.json, nada mais). */
 import { createReadStream, existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { defineConfig, type Plugin } from "vite";
-import preact from "@preact/preset-vite";
+import react from "@vitejs/plugin-react";
 
 const ASSETS = fileURLToPath(new URL("../../../Assets/", import.meta.url));
 /* decoracao do Digimon UP (Assets/gerar_decoracao_up.py): o JSON e so os PNGs da lista do repositorio */
@@ -38,7 +38,7 @@ function atlasDev(): Plugin {
 
 export default defineConfig({
   base: "./",
-  plugins: [preact(), atlasDev()],
+  plugins: [react(), atlasDev()],
   build: { outDir: "../dist", emptyOutDir: true, sourcemap: false, target: "es2022" },
   /* fala por LLM: o servidor local (python servidor/servidor_local.py) responde /api/fala */
   server: { proxy: { "/api": "http://127.0.0.1:8765" } },

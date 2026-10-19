@@ -18,7 +18,9 @@ sem nenhum teste do lado web, e estado de uma tela vaza em outra (ver
 - **Vite + TypeScript, aplicação estática.** Nada de Next.js: não há renderização no servidor,
   rota de API nem SEO; o motor, o registro e o replay rodam no aparelho, e o
   `servidor/servidor_local.py` continua servindo os arquivos e a rota `/api/fala`.
-- **Interface:** Preact (ou Svelte, escolha justificada no plano). Componentes seguem
+- **Interface:** Preact (ou Svelte, escolha justificada no plano). **Atualização de 2026-10-19 (decisão do Matheus):** o Preact
+  sai e entra o React, com Tailwind, shadcn e lucide, mantendo o Vite e o TypeScript e sem Next.js
+  (`docs/TAREFA_V2_FRONT_REACT.md`). Componentes seguem
   `docs/UI_GUIDELINES.md` e o canvas https://claude.ai/artifact/2XHKuofCpCfZeA1N6iVy9g.
 - **Testes:** Vitest para unidade e paridade; Playwright só para o teste de fumaça da Etapa 5.
 - **Pasta:** `web/app/` (código), saída do build em `web/dist/` (não versionada).

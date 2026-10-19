@@ -3,7 +3,7 @@
    evoluisse agora), com estados percorrido/agora/possivel/provavel/fechado/sombria, detalhe
    do no no toque (nunca so no hover, guia 13), por que da forma atual e historico. A forma futura ainda nao
    decidida pelo motor aparece como silhueta, sem nome (guia, secao 5). */
-import { useLayoutEffect, useRef, useState } from "preact/hooks";
+import { useLayoutEffect, useRef, useState } from "react";
 import {
   CAT, CDJ, CLE, CMD, CMG, CSO, DESC_PASSIVA, DESC_TECNICA, FORMAS_AD, LINHAS, LINHA_DA_FORMA, NOME_ARQ, NOME_V2, SOMBRIA, TICK_INICIAL, TPD,
   caraterPrevisto, chaveSprite, formaAdultaDe, linhaDoCarater, nomeArquetipo, nomeEstagio, nomeForma, type Carater, type Forma, type FormaAdultaNormal, type Motor,
@@ -84,12 +84,12 @@ function No({ g, estado, provavel, sombriaNo, sombriaAgora, sub, escolher, v6 }:
   const cls = ["evo-no", `evo-no--${g.est}`, estado, provavel ? "provavel" : "", sombriaNo ? "sombria" : "", estado === "agora" && sombriaAgora ? "sombria-agora" : ""].filter(Boolean).join(" ");
   const det = (revelado ? nomeForma(g) : "Forma ainda não decidida") + ": " + (sombriaNo ? "forma sombria da linha (sobrecarga alta na virada para Ultimate)" : requisito(g, v6));
   return (
-    <button type="button" class={cls} data-id={id + (sombriaNo ? "_s" : "")} aria-label={(revelado ? nomeForma(g) : "forma ainda não decidida") + ", " + (sombriaNo ? "sombria, " : "") + estado} onClick={() => escolher(det)}>
-      {estado === "percorrido" && <span class="evo-ok" aria-hidden="true"><svg viewBox="0 0 12 12" width="10" height="10"><path d="M2 6.5 5 9l5-6" /></svg></span>}
-      {estado === "agora" && <span class="evo-agora">AGORA</span>}
-      <span class="evo-img">{img && <img class="dl-pix" src={img.url} width={img.w} height={img.h} alt="" style={revelado ? {} : { opacity: .45 }} />}</span>
-      <span class="evo-rot">{revelado ? nomeForma(g) : "?"}</span>
-      {sub && <span class="evo-sub">{sub}</span>}
+    <button type="button" className={cls} data-id={id + (sombriaNo ? "_s" : "")} aria-label={(revelado ? nomeForma(g) : "forma ainda não decidida") + ", " + (sombriaNo ? "sombria, " : "") + estado} onClick={() => escolher(det)}>
+      {estado === "percorrido" && <span className="evo-ok" aria-hidden="true"><svg viewBox="0 0 12 12" width="10" height="10"><path d="M2 6.5 5 9l5-6" /></svg></span>}
+      {estado === "agora" && <span className="evo-agora">AGORA</span>}
+      <span className="evo-img">{img && <img className="dl-pix" src={img.url} width={img.w} height={img.h} alt="" style={revelado ? {} : { opacity: .45 }} />}</span>
+      <span className="evo-rot">{revelado ? nomeForma(g) : "?"}</span>
+      {sub && <span className="evo-sub">{sub}</span>}
     </button>
   );
 }
@@ -158,15 +158,15 @@ function Arvore({ m, p }: { m: Motor; p: ReturnType<typeof previsaoEvo> }) {
       provavel={!sombriaNo && idDe(g) === provId} sombriaNo={sombriaNo} sombriaAgora={m.sombria} sub={sub} escolher={setDet} v6={m.versao >= 6} />
   );
   return <>
-    <div class="evo-arv" ref={arv} role="group" aria-label="Árvore de evolução">
-      <svg class="evo-linhas" aria-hidden="true" width={linhas.w} height={linhas.h} viewBox={`0 0 ${linhas.w} ${linhas.h}`}>
-        {linhas.d.map(([d, c], i) => <path key={i} class={`evo-aresta ${c}`} d={d} />)}
+    <div className="evo-arv" ref={arv} role="group" aria-label="Árvore de evolução">
+      <svg className="evo-linhas" aria-hidden="true" width={linhas.w} height={linhas.h} viewBox={`0 0 ${linhas.w} ${linhas.h}`}>
+        {linhas.d.map(([d, c], i) => <path key={i} className={`evo-aresta ${c}`} d={d} />)}
       </svg>
-      <div class="evo-nivel evo-nivel--bebe">{no(bebe, "")}</div>
-      <div class="evo-nivel evo-nivel--crianca">{cri.map(c => no(c, SUB_RAMO[c.ramo!]))}</div>
-      <div class="evo-nivel evo-nivel--linhas">
+      <div className="evo-nivel evo-nivel--bebe">{no(bebe, "")}</div>
+      <div className="evo-nivel evo-nivel--crianca">{cri.map(c => no(c, SUB_RAMO[c.ramo!]))}</div>
+      <div className="evo-nivel evo-nivel--linhas">
         {ado.map(x => (
-          <div class="evo-coluna" key={x.linha}>
+          <div className="evo-coluna" key={x.linha}>
             {no(x, CAT.adolescente[x.linha!].eixo)}
             {aduDe(x.linha!).map(y => no(y, NOME_ARQ[y.adulta!]))}
             {v5 && no(megaDe(x.linha!), "Mega")}
@@ -175,12 +175,12 @@ function Arvore({ m, p }: { m: Motor; p: ReturnType<typeof previsaoEvo> }) {
         ))}
       </div>
     </div>
-    <ul class="evo-legenda" aria-label="Legenda da árvore">
-      <li><span class="evo-mini percorrido" />percorrido</li><li><span class="evo-mini agora" />agora</li>
-      <li><span class="evo-mini possivel" />possível</li><li><span class="evo-mini provavel" />se evoluísse agora</li>
-      <li><span class="evo-mini fechado" />fechado</li><li><span class="evo-mini sombria" />sombria</li>
+    <ul className="evo-legenda" aria-label="Legenda da árvore">
+      <li><span className="evo-mini percorrido" />percorrido</li><li><span className="evo-mini agora" />agora</li>
+      <li><span className="evo-mini possivel" />possível</li><li><span className="evo-mini provavel" />se evoluísse agora</li>
+      <li><span className="evo-mini fechado" />fechado</li><li><span className="evo-mini sombria" />sombria</li>
     </ul>
-    {det ? <p class="dl-card evo-no-det" aria-live="polite">{det}</p> : <p class="dl-apoio" style={{ margin: 0 }}>Toque num nó para ver o que leva até ele.</p>}
+    {det ? <p className="dl-card evo-no-det" aria-live="polite">{det}</p> : <p className="dl-apoio" style={{ margin: 0 }}>Toque num nó para ver o que leva até ele.</p>}
   </>;
 }
 
@@ -207,13 +207,13 @@ export function TelaEvolucao() {
   };
   const alvo = p ? nomeEstagio(p.prox) : "";
   return (
-    <div class="tela dl desk evo-tela">
-      <div class="evo-principal"><h2 class="desk-so evo-arv-tit">Árvore de {BRASAO[m.especie].nome}</h2><Arvore m={m} p={p} /></div>
-      <div class="evo-lado">
-      <div class="desk-col evo-resumo">
-      <p class="evo-selo"><Deco nome={BRASAO[m.especie].peca} class="evo-selo-img" /><span>brasão <b>{BRASAO[m.especie].nome}</b>: as formas da árvore são as deste brasão.</span></p>
+    <div className="tela dl desk evo-tela">
+      <div className="evo-principal"><h2 className="desk-so evo-arv-tit">Árvore de {BRASAO[m.especie].nome}</h2><Arvore m={m} p={p} /></div>
+      <div className="evo-lado">
+      <div className="desk-col evo-resumo">
+      <p className="evo-selo"><Deco nome={BRASAO[m.especie].peca} className="evo-selo-img" /><span>brasão <b>{BRASAO[m.especie].nome}</b>: as formas da árvore são as deste brasão.</span></p>
       <p style={{ margin: 0 }}>Cada evolução é decidida pelo que o pet viveu: cuidado, caráter e lutas de treino.</p>
-      <details class="dl-apoio"><summary>Como funciona</summary>
+      <details className="dl-apoio"><summary>Como funciona</summary>
         <p>Uma moeda por transição (os contadores zeram a cada evolução). <b>In-Training → Rookie</b> ({m.dur.bebe / 60} h): o <b>cuidado</b> decide o ramo; o In-Training chama em horário fixo (fome a cada 30 min, higiene a cada 60, carinho a cada 45) e atender pelo menos 80% dos chamados em até 15 min dá Sereno, menos dá Arisco. <b>Rookie → Champion</b> ({m.dur.crianca / 60} h): o <b>caráter dominante</b> decide a linha e a técnica. <b>Champion → Ultimate</b> ({m.dur.adolescente / 60} h e 10 lutas de treino na arena): o <b>eixo complementar</b> da linha decide o arquétipo e a passiva (as duas formas da linha são o mesmo Ultimate).{m.versao >= 5 ? <> <b>Ultimate → Mega</b> ({m.dur.adulto / 60} h, {CAT.sparring} lutas com {CLE.limiarTaxa * 100}% ou mais de vitórias e vínculo {virgula(CMG.vinculo)} ou mais): o mesmo arquétipo, mais forte. A forma sombria não chega ao Mega.</> : " Pets de versões antigas param no Ultimate."}{m.versao >= 6 ? <> Além disso, cada evolução depois do Rookie pede <b>medalhas do Tamer</b>: {CMD.adolescente} para virar Champion, {CMD.adulto} para Ultimate e {CMD.mega} para Mega. Se o pet cumpre o resto e falta medalha, ele espera pronto e evolui assim que você ganhar a medalha.</> : ""} Caráter: quanto os traços do pet estão acima de um pet comum em cada eixo.</p>
       </details>
       <Numeros itens={[
@@ -228,14 +228,14 @@ export function TelaEvolucao() {
         /* a forma futura ainda nao foi decidida pelo motor: mostra so o porque, sem o nome */
         [p ? `se evoluísse agora: ${p.porque}` : `passiva: ${DESC_PASSIVA[f.adulta!]}`, p ? (p.prox.est === "mega" ? nomeForma(p.prox) : "?") : NOME_ARQ[f.adulta!]],
       ]} />
-      {faltaMed && <p class={`evo-medalha${prontoMed ? " pronto" : ""}`} role="status">{prontoMed ? <b>Pronto para evoluir. </b> : null}{textoFalta(t, rMed!.precisa)}</p>}
+      {faltaMed && <p className={`evo-medalha${prontoMed ? " pronto" : ""}`} role="status">{prontoMed ? <b>Pronto para evoluir. </b> : null}{textoFalta(t, rMed!.precisa)}</p>}
       </div>
-      {ult && <section class="dl-card revel-porque"><h3 class="dl-titulo-card">Por que {nomeForma(f)}?</h3><Porque x={ult} /></section>}
-      <section class="bloco">
+      {ult && <section className="dl-card revel-porque"><h3 className="dl-titulo-card">Por que {nomeForma(f)}?</h3><Porque x={ult} /></section>}
+      <section className="bloco">
         <h2>Histórico</h2>
-        <div class="evo-hist">
-          <div><span class="t">D1 {hhmm(TICK_INICIAL)}</span><span>nasceu: <b>{nomeForma({ esp: m.especie, est: "bebe" })}</b></span></div>
-          {evs.map((x, i) => <div key={i}><span class="t">D{diaDe(x.tick)} {hhmm(x.tick)}</span><span>virou <b>{nomeForma(x.forma)}</b> ({det(x)})</span></div>)}
+        <div className="evo-hist">
+          <div><span className="t">D1 {hhmm(TICK_INICIAL)}</span><span>nasceu: <b>{nomeForma({ esp: m.especie, est: "bebe" })}</b></span></div>
+          {evs.map((x, i) => <div key={i}><span className="t">D{diaDe(x.tick)} {hhmm(x.tick)}</span><span>virou <b>{nomeForma(x.forma)}</b> ({det(x)})</span></div>)}
         </div>
       </section>
       </div>

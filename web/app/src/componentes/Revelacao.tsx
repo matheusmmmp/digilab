@@ -1,6 +1,6 @@
 /* Revelacao da evolucao (desenho UpEvolucao): so evolucoes novas nesta sessao abrem a revelacao; o save antigo
    nao reabre as dele. O "por que" vem so do que o motor registrou na evolucao. */
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "react";
 import {
   CAT, CLE, CMG, CSO, NOME_EST, SOMBRIA, chaveSprite, nomeArquetipo, nomeEstagio, nomeForma, type Evolucao, type Forma, type Motor,
 } from "../../motor/index.ts";
@@ -22,27 +22,27 @@ export function Porque({ x }: { x: Evolucao }) {
     <p style={{ margin: 0 }}>a mesma forma, mais forte: decidido pelo <b>vínculo</b> {x.vinculo!.toFixed(2).replace(".", ",")} (mínimo {String(CMG.vinculo).replace(".", ",")})
       e por {x.sparring} lutas no Ultimate com {CLE.limiarTaxa * 100}% ou mais de vitórias.</p>
     <Seg n={blocos(x.vinculo!, 10)} m={10} cls="dl-seg--acao" marca={CMG.vinculo * 10} />
-    <span class="dl-apoio">traço escuro = vínculo mínimo para o Mega</span>
+    <span className="dl-apoio">traço escuro = vínculo mínimo para o Mega</span>
   </>;
   if (x.estagio === "crianca") return <>
     <p style={{ margin: 0 }}>decidido pelo <b>cuidado</b> no In-Training: {(x.cuidado! * 100).toFixed(0)}% dos chamados atendidos a tempo (limite {CAT.limiarCuidado * 100}%).</p>
     <Seg n={blocos(x.cuidado!, 10)} m={10} cls="dl-seg--acao" marca={CAT.limiarCuidado * 10} />
-    <span class="dl-apoio">traço escuro = limite de {CAT.limiarCuidado * 100}%</span>
+    <span className="dl-apoio">traço escuro = limite de {CAT.limiarCuidado * 100}%</span>
   </>;
   if (x.estagio === "adolescente") {
     const eixo = CAT.adolescente[x.linha!].eixo;
     return <>
       <p style={{ margin: 0 }}>decidido pelo caráter <b>{eixo}</b>, o eixo mais alto ao fim do Rookie.</p>
       {Object.entries(x.carater!).map(([k, v]) => <BarraCarater key={k} eixo={k} v={v} />)}
-      <span class="dl-apoio">traço escuro = pet comum</span>
+      <span className="dl-apoio">traço escuro = pet comum</span>
     </>;
   }
   const somb = SOMBRIA[x.adulta!], lin = somb ? somb.linha : x.forma.linha!, comp = CAT.adulto[lin].comp;
   return <>
-    {somb && <p style={{ margin: 0 }}><span class="dl-tag dl-tag--sombria">sombria</span> sobrecarga {x.sobrecarga!.toFixed(0)} na virada (limite {CSO.sombrio}).</p>}
+    {somb && <p style={{ margin: 0 }}><span className="dl-tag dl-tag--sombria">sombria</span> sobrecarga {x.sobrecarga!.toFixed(0)} na virada (limite {CSO.sombrio}).</p>}
     <p style={{ margin: 0 }}>decidido pelo eixo complementar <b>{comp}</b> e {x.sparring} lutas de treino.</p>
     <BarraCarater eixo={comp} v={x.carater![comp]} />
-    <span class="dl-apoio">traço escuro = pet comum</span>
+    <span className="dl-apoio">traço escuro = pet comum</span>
   </>;
 }
 /** o pet em escala inteira ate 4x (cabe em 224 px de altura, como o Greymon da prancha), animado no idle */
@@ -58,14 +58,14 @@ function Palco({ x }: { x: Evolucao }) {
     const t = setInterval(desenha, a.dados.ms_por_quadro);
     return () => clearInterval(t);
   }, [a, k]);
-  return sp ? <canvas class="dl-pix revel-spr dl-brilho-pet" ref={ref} width={(sp.caixa[0] + 2) * esc} height={(sp.caixa[1] + 2) * esc} /> : null;
+  return sp ? <canvas className="dl-pix revel-spr dl-brilho-pet" ref={ref} width={(sp.caixa[0] + 2) * esc} height={(sp.caixa[1] + 2) * esc} /> : null;
 }
 /** um passo da linha evolutiva: o Digimon que ele foi (1x, cortado) ou "?" no que ainda nao foi decidido */
 function Passo({ f, nivel, atual }: { f: Forma | null; nivel: string; atual: boolean }) {
   const a = useAtlas(), img = f && a.tipo === "ok" ? imagemAtlas(a, chaveSprite(f)) : null;
   return (
-    <li class={`revel-passo${atual ? " atual" : ""}`} aria-current={atual ? "step" : undefined}>
-      <span class="revel-passo-spr">{img ? <img class="dl-pix" src={img.url} width={img.w} height={img.h} alt={nomeForma(f!)} /> : <b>?</b>}</span>
+    <li className={`revel-passo${atual ? " atual" : ""}`} aria-current={atual ? "step" : undefined}>
+      <span className="revel-passo-spr">{img ? <img className="dl-pix" src={img.url} width={img.w} height={img.h} alt={nomeForma(f!)} /> : <b>?</b>}</span>
       <span>{nivel}{f ? "" : " ?"}</span>
     </li>
   );
@@ -81,24 +81,24 @@ function Revelacao({ x, m, fechar }: { x: Evolucao; m: Motor; fechar: () => void
   /* linha ja percorrida: as formas que o pet foi (so o que o motor registrou) */
   const formas: Forma[] = [{ esp: f.esp, est: "bebe" }, ...m.evolucoes.map(v => v.forma)];
   return (
-    <dialog class="revelacao revel-tela dl" ref={ref} aria-labelledby="revel-tit" onClose={fechar}>
-      <div class="revel-topo">
-        <span class="revel-de">{i > 0 ? nomeNivel(ordem[i - 1]) : ""} → {nomeEstagio(f)}</span>
-        <h2 class="dl-num dl-num--grande revel-tit" id="revel-tit" tabIndex={-1}>EVOLUÇÃO!</h2>
+    <dialog className="revelacao revel-tela dl" ref={ref} aria-labelledby="revel-tit" onClose={fechar}>
+      <div className="revel-topo">
+        <span className="revel-de">{i > 0 ? nomeNivel(ordem[i - 1]) : ""} → {nomeEstagio(f)}</span>
+        <h2 className="dl-num dl-num--grande revel-tit" id="revel-tit" tabIndex={-1}>EVOLUÇÃO!</h2>
       </div>
-      <div class="revel-cena">
-        <span class="revel-luz" aria-hidden="true" />
-        <Deco nome="UI_Fx_Glow_Circle_01" largura={300} altura={300} class="revel-glow" />
-        <Deco nome="Digivice_Circle_01" largura={280} altura={280} class="revel-digivice dl-gira" />
-        <span class="revel-anel" aria-hidden="true" />
+      <div className="revel-cena">
+        <span className="revel-luz" aria-hidden="true" />
+        <Deco nome="UI_Fx_Glow_Circle_01" largura={300} altura={300} className="revel-glow" />
+        <Deco nome="Digivice_Circle_01" largura={280} altura={280} className="revel-digivice dl-gira" />
+        <span className="revel-anel" aria-hidden="true" />
         <Palco x={x} />
-        <span class="dl-placa revel-nome">{nomeForma(f)}{nomeArquetipo(f) ? ` · ${nomeArquetipo(f)}` : ""}</span>
+        <span className="dl-placa revel-nome">{nomeForma(f)}{nomeArquetipo(f) ? ` · ${nomeArquetipo(f)}` : ""}</span>
       </div>
-      <ol class="revel-linha" aria-label="Linha evolutiva">
+      <ol className="revel-linha" aria-label="Linha evolutiva">
         {ordem.map((n, j) => <Passo key={n} f={j <= i ? formas[j] ?? null : null} nivel={nomeNivel(n)} atual={j === i} />)}
       </ol>
-      <section class="revel-porque"><span class="revel-porque-cab"><b>Por que {nomeForma(f)}?</b><span>{DECIDIDO[nivelDe(x)]}</span></span><Porque x={x} /></section>
-      <button type="button" class="dl-btn dl-btn--destaque revel-ok" onClick={() => ref.current?.close()}>Continuar</button>
+      <section className="revel-porque"><span className="revel-porque-cab"><b>Por que {nomeForma(f)}?</b><span>{DECIDIDO[nivelDe(x)]}</span></span><Porque x={x} /></section>
+      <button type="button" className="dl-btn dl-btn--destaque revel-ok" onClick={() => ref.current?.close()}>Continuar</button>
     </dialog>
   );
 }

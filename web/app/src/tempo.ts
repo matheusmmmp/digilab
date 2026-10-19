@@ -3,7 +3,7 @@
    por passo, para nao travar depois de um sono do PC. O bebe anda minuto a minuto para parar no instante em que
    um chamado abre; com chamado aberto o tempo cai para 1x ate atender (e volta depois). Durante a luta no palco e com o Resultado
    dela aberto o tempo nao anda (luta.lutaSeguraTempo): o que passou ali e descartado, como na Pausa. */
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useState } from "react";
 import { jogoAtual, mudarMotor } from "./jogo.ts";
 import { lutaSeguraTempo } from "./luta.ts";
 

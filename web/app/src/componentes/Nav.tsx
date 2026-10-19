@@ -1,6 +1,6 @@
 /* Barra de navegacao dos 4 destinos (UI_GUIDELINES 7.12; DIRETRIZES_REPLICAR secao 6): embaixo no celular, coluna a partir de 900 px.
    Cada destino volta para a ultima aba aberta nele. */
-import type { JSX } from "preact";
+import type { JSX } from "react";
 import { OVO } from "../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../atlas.ts";
 import { urlDeco, useDecoracao } from "../decoracao.ts";
@@ -21,9 +21,9 @@ function IconeDestino({ d }: { d: Destino }) {
   useDecoracao();
   if (DECO[d] && urlDeco(DECO[d]![0])) { const [n, w, h] = DECO[d]!; return <Deco nome={n} largura={w} altura={h} />; }
   if (a.tipo !== "ok" || DECO[d]) return ICONE[d];
-  if (d === "pet") { const o = imagemAtlas(a, OVO[m.especie]); return <img class="nav-ovo" src={o.url} width={19} height={26} alt="" />; }
+  if (d === "pet") { const o = imagemAtlas(a, OVO[m.especie]); return <img className="nav-ovo" src={o.url} width={19} height={26} alt="" />; }
   const e = imagemAtlas(a, EMOTE[d]!, 2);
-  return <img class="dl-pix" src={e.url} width={e.w} height={e.h} alt="" />;
+  return <img className="dl-pix" src={e.url} width={e.w} height={e.h} alt="" />;
 }
 const ENGRENAGEM = <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" /><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1" /></svg>;
 const ICONE: Record<Destino, JSX.Element> = {
@@ -41,19 +41,19 @@ export function Nav({ atual, ir, configAberta, abrirConfig }: { atual: Destino |
   useDecoracao();
   const a = useAtlas(), { motor: m } = useJogo(), ovo = a.tipo === "ok" ? imagemAtlas(a, OVO[m.especie]) : null;
   return (
-    <nav class="dl-nav" aria-label="Destinos">
-      <span class="nav-marca" aria-hidden="true">{ovo && <img src={ovo.url} width={26} height={36} alt="" />}<b class="dl-num">DIGILAB</b></span>
+    <nav className="dl-nav" aria-label="Destinos">
+      <span className="nav-marca" aria-hidden="true">{ovo && <img src={ovo.url} width={26} height={36} alt="" />}<b className="dl-num">DIGILAB</b></span>
       {DESTINOS_BARRA.map(d => (
         <button type="button" key={d} aria-current={d === atual ? "page" : undefined} onClick={() => ir(d)}>
-          <span class="circ"><IconeDestino d={d} /></span>{NOME_DESTINO[d]}
+          <span className="circ"><IconeDestino d={d} /></span>{NOME_DESTINO[d]}
         </button>
       ))}
-      <span class="nav-pe">
-        <button type="button" class="nav-quad" aria-current={atual === "conversar" ? "page" : undefined} onClick={() => ir("conversar")}>
-          <span class="quad">{ICONE_CONVERSAR}</span>Conversar
+      <span className="nav-pe">
+        <button type="button" className="nav-quad" aria-current={atual === "conversar" ? "page" : undefined} onClick={() => ir("conversar")}>
+          <span className="quad">{ICONE_CONVERSAR}</span>Conversar
         </button>
-        <button type="button" class="nav-quad" aria-current={configAberta ? "page" : undefined} onClick={abrirConfig}>
-          <span class="quad">{urlDeco("Common_Icon_Setting") ? <Deco nome="Common_Icon_Setting" largura={24} altura={24} /> : ENGRENAGEM}</span>Ajustes
+        <button type="button" className="nav-quad" aria-current={configAberta ? "page" : undefined} onClick={abrirConfig}>
+          <span className="quad">{urlDeco("Common_Icon_Setting") ? <Deco nome="Common_Icon_Setting" largura={24} altura={24} /> : ENGRENAGEM}</span>Ajustes
         </button>
       </span>
     </nav>

@@ -3,7 +3,7 @@
    D:\Trab\digilab\Assets, gerada por Assets\gerar_decoracao_up.py; os nomes permitidos estao em
    decoracao_nomes.json (o vite e o servidor_local.py so servem esses). Cada peca e opcional: o que nao carregar
    entra na lista do aviso visivel e aquele lugar fica com o visual de antes. */
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useState } from "react";
 import NOMES from "../decoracao_nomes.json";
 
 export const DECORACAO_URL = "../../../Assets/digilab_decoracao_up.json";

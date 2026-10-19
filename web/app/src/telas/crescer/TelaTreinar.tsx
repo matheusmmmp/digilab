@@ -3,7 +3,7 @@
    (so forcar); sobrecarga roxa com 30 (aviso) e 60 (sombria); intervalo entre treinos num card; os 6 exercicios
    em grade 3 x 2, o card inteiro e o botao; acima de 60 todos viram FORCAR listrado e a confirmacao e uma folha
    com o que ganha e o que custa. Tudo o que aparece vem do motor (CTR, CSO, APTIDAO e o treino do pet). */
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "react";
 import {
   APTIDAO, CSO, CTR, NOME_ESP, NOME_EXERCICIO, NOME_STAT, STATS, chaveSprite, nomeForma, type Exercicio, type Stat,
 } from "../../../motor/index.ts";
@@ -24,7 +24,7 @@ const n1 = (x: number): string => dec(x, 1).replace(/,0$/, "");
 function IconeTreino({ ex }: { ex: Exercicio }) {
   const a = useAtlas();
   if (a.tipo !== "ok") return null;
-  return <img class="treino-ic" src={imagemAtlas(a, ICONE_TREINO[ex]).url} width={54} height={61} alt="" />;
+  return <img className="treino-ic" src={imagemAtlas(a, ICONE_TREINO[ex]).url} width={54} height={61} alt="" />;
 }
 
 /** sala de treino (prancha TreinoNormal): 190 px de ponta a ponta, fundo do UP, sombra 140 x 16 e o pet em escala
@@ -36,15 +36,15 @@ function Sala() {
   if (a.tipo === "ok" && nascendo === 0) {
     const nome = chaveSprite(m.forma), [, h] = dimSprite(a.dados, nome), esc = Math.max(1, Math.min(3, Math.floor(168 / h)));
     const img = imagemAtlas(a, nome, esc);
-    pet = <img class="dl-pix sala-pet" src={img.url} width={img.w} height={img.h} alt={nomeForma(m.forma)} />;
+    pet = <img className="dl-pix sala-pet" src={img.url} width={img.w} height={img.h} alt={nomeForma(m.forma)} />;
   }
   const estado = bebe ? "In-Training ainda não treina" : t.pedePausa ? "pediu pausa" : !pode ? "descansando" : "pronto para treinar";
   return (
-    <section class="sala-treino" aria-label="Sala de treino" style={fundo ? { backgroundImage: `url(${fundo})` } : {}}>
-      <span class="sala-sombra" aria-hidden="true" />
+    <section className="sala-treino" aria-label="Sala de treino" style={fundo ? { backgroundImage: `url(${fundo})` } : {}}>
+      <span className="sala-sombra" aria-hidden="true" />
       {pet}
-      <span class="sala-estado">{estado}</span>
-      {t.pedePausa && <span class="dl-balao sala-balao"><Grade grade={AMPULHETA} escala={2} cores={CORES_AMPULHETA} alt="" /> pausa?</span>}
+      <span className="sala-estado">{estado}</span>
+      {t.pedePausa && <span className="dl-balao sala-balao"><Grade grade={AMPULHETA} escala={2} cores={CORES_AMPULHETA} alt="" /> pausa?</span>}
     </section>
   );
 }
@@ -52,10 +52,10 @@ function Sala() {
 /** barra segmentada com os rotulos embaixo, cada um na posicao da sua marca */
 function Medidor({ titulo, valor, n, cls, marcas }: { titulo: string; valor: number; n: number; cls: string; marcas: [number, string][] }) {
   return (
-    <div class="med">
-      <span class="med-cab"><b>{titulo}</b><span class={`dl-lcd ${cls === "dl-seg--sombrio" ? "med-roxo" : ""}`}>{valor.toFixed(0)} / 100</span></span>
+    <div className="med">
+      <span className="med-cab"><b>{titulo}</b><span className={`dl-lcd ${cls === "dl-seg--sombrio" ? "med-roxo" : ""}`}>{valor.toFixed(0)} / 100</span></span>
       <Seg n={n} m={10} cls={cls} marca={marcas.map(([x]) => x / 10)} />
-      <span class="med-marcas">{marcas.map(([x, rot]) => <span key={x} style={{ left: `${x}%` }}>{x} · {rot}</span>)}</span>
+      <span className="med-marcas">{marcas.map(([x, rot]) => <span key={x} style={{ left: `${x}%` }}>{x} · {rot}</span>)}</span>
     </div>
   );
 }
@@ -66,18 +66,18 @@ function ConfirmarForcar({ ex, fechar, forcar }: { ex: Exercicio; fechar: () => 
   useEffect(() => { abrirModal(ref.current); }, []);
   const depois = Math.min(CTR.sobreMax, t.sobrecarga + CTR.sobreForcar);
   return (
-    <dialog class="folha dl" ref={ref} aria-labelledby="forcar-tit" onClose={fechar}>
-      <span class="folha-alca" aria-hidden="true" />
-      <div class="folha-cab"><IconeTreino ex={ex} /><span><b id="forcar-tit">Forçar {NOME_EXERCICIO[ex].toLowerCase()}?</b><span class="dl-apoio">A fadiga passou de {CTR.limiteForcar}.</span></span></div>
-      <div class="dl-par">
-        <div class="folha-ganha"><b>GANHA</b><span>rende {n1(CTR.multForcar)}×</span></div>
-        <div class="folha-custa"><b>CUSTA</b><span>+{CTR.sobreForcar} sobrecarga</span>{m.versao >= 2 && <span>vínculo cai</span>}</div>
+    <dialog className="folha dl" ref={ref} aria-labelledby="forcar-tit" onClose={fechar}>
+      <span className="folha-alca" aria-hidden="true" />
+      <div className="folha-cab"><IconeTreino ex={ex} /><span><b id="forcar-tit">Forçar {NOME_EXERCICIO[ex].toLowerCase()}?</b><span className="dl-apoio">A fadiga passou de {CTR.limiteForcar}.</span></span></div>
+      <div className="dl-par">
+        <div className="folha-ganha"><b>GANHA</b><span>rende {n1(CTR.multForcar)}×</span></div>
+        <div className="folha-custa"><b>CUSTA</b><span>+{CTR.sobreForcar} sobrecarga</span>{m.versao >= 2 && <span>vínculo cai</span>}</div>
       </div>
       <Medidor titulo="Sobrecarga" valor={t.sobrecarga} n={blocos(t.sobrecarga / 100, 10)} cls="dl-seg--sombrio" marcas={[[CSO.aviso, "aviso"], [CSO.sombrio, "sombria"]]} />
-      <p class="folha-aviso">Com isso a sobrecarga vai a {depois.toFixed(0)}.{m.estagioAtual !== "adulto" && m.estagioAtual !== "mega" ? ` Sobrecarga ${CSO.sombrio} ou mais na virada para Ultimate leva à forma sombria.` : ""}</p>
-      <div class="folha-bts">
-        <button type="button" class="dl-btn" onClick={() => ref.current?.close()}>Descansar</button>
-        <button type="button" class="dl-btn dl-btn--forcar" onClick={() => { forcar(); ref.current?.close(); }}>Forçar mesmo assim</button>
+      <p className="folha-aviso">Com isso a sobrecarga vai a {depois.toFixed(0)}.{m.estagioAtual !== "adulto" && m.estagioAtual !== "mega" ? ` Sobrecarga ${CSO.sombrio} ou mais na virada para Ultimate leva à forma sombria.` : ""}</p>
+      <div className="folha-bts">
+        <button type="button" className="dl-btn" onClick={() => ref.current?.close()}>Descansar</button>
+        <button type="button" className="dl-btn dl-btn--forcar" onClick={() => { forcar(); ref.current?.close(); }}>Forçar mesmo assim</button>
       </div>
     </dialog>
   );
@@ -88,13 +88,13 @@ function UltimoTreino() {
   const { motor: m } = useJogo(), t = m.treino, pode = t.podeTocar(m.e.tick);
   let ev: (typeof m.log)[number] | null = null;
   for (let i = m.log.length - 1; i >= 0; i--) if (m.log[i][1] === "tr") { ev = m.log[i]; break; }
-  if (!ev) return <div class="dl-card treino-ult"><span class="dl-apoio">Nenhum treino ainda.</span></div>;
+  if (!ev) return <div className="dl-card treino-ult"><span className="dl-apoio">Nenhum treino ainda.</span></div>;
   const ex = ev[2] as Exercicio, [pri, sec] = CTR.exercicios[ex];
   return (
-    <div class="dl-card treino-ult">
+    <div className="dl-card treino-ult">
       <IconeTreino ex={ex} />
-      <span class="treino-ult-txt"><small>último treino · {hhmm(ev[0])}</small><b>{NOME_EXERCICIO[ex]} · {NOME_STAT[pri]} e {NOME_STAT[sec]}</b></span>
-      {!pode && t.ultimo !== null && <span class="dl-lcd treino-ult-prox">próximo em {CTR.intervalo - (m.e.tick - t.ultimo)} min</span>}
+      <span className="treino-ult-txt"><small>último treino · {hhmm(ev[0])}</small><b>{NOME_EXERCICIO[ex]} · {NOME_STAT[pri]} e {NOME_STAT[sec]}</b></span>
+      {!pode && t.ultimo !== null && <span className="dl-lcd treino-ult-prox">próximo em {CTR.intervalo - (m.e.tick - t.ultimo)} min</span>}
     </div>
   );
 }
@@ -105,11 +105,11 @@ function EscolherForcar({ escolher, fechar }: { escolher: (ex: Exercicio) => voi
   const ref = useRef<HTMLDialogElement>(null), ex = useRef<Exercicio | null>(null);
   useEffect(() => { abrirModal(ref.current); }, []);
   return (
-    <dialog class="modal-conf dl" ref={ref} aria-labelledby="forcar-esc-tit" onClose={() => (ex.current ? escolher(ex.current) : fechar())}>
+    <dialog className="modal-conf dl" ref={ref} aria-labelledby="forcar-esc-tit" onClose={() => (ex.current ? escolher(ex.current) : fechar())}>
       <h2 id="forcar-esc-tit">Forçar qual treino?</h2>
       <p>Rende mais, mas gera sobrecarga.</p>
-      <div class="forcar-lista">{EXERCICIOS.map(e => <button type="button" key={e} class="dl-btn dl-btn--sec" onClick={() => { ex.current = e; ref.current?.close(); }}><IconeTreino ex={e} />{NOME_EXERCICIO[e]}</button>)}</div>
-      <button type="button" class="dl-btn dl-btn--sec" onClick={() => ref.current?.close()}>Cancelar</button>
+      <div className="forcar-lista">{EXERCICIOS.map(e => <button type="button" key={e} className="dl-btn dl-btn--sec" onClick={() => { ex.current = e; ref.current?.close(); }}><IconeTreino ex={e} />{NOME_EXERCICIO[e]}</button>)}</div>
+      <button type="button" className="dl-btn dl-btn--sec" onClick={() => ref.current?.close()}>Cancelar</button>
     </dialog>
   );
 }
@@ -131,53 +131,53 @@ export function TelaTreinar({ lutando = false }: { lutando?: boolean }) {
   };
   const apt = APTIDAO[m.especie], fortes = STATS.filter(k => apt[k] > 1).sort((x, y) => apt[y] - apt[x]);
   return (
-    <div class="tela dl desk treino-tela">
-      <div class="desk-col treino-col-esq">
+    <div className="tela dl desk treino-tela">
+      <div className="desk-col treino-col-esq">
       <Sala />
-      <div class="dl-card treino-medidores">
-        <h2 class="desk-so treino-med-tit">Cansaço</h2>
+      <div className="dl-card treino-medidores">
+        <h2 className="desk-so treino-med-tit">Cansaço</h2>
         <Medidor titulo="Fadiga" valor={t.fadiga} n={blocos(t.fadiga / 100, 10)} cls={t.pedePausa ? "dl-seg--necessidade" : ""} marcas={[[CTR.limiarPausa, "pede pausa"], [CTR.limiteForcar, "só forçar"]]} />
         <Medidor titulo="Sobrecarga" valor={t.sobrecarga} n={blocos(t.sobrecarga / 100, 10)} cls="dl-seg--sombrio" marcas={[[CSO.aviso, "aviso"], [CSO.sombrio, "sombria"]]} />
-        <div class="med">
-          <span class="med-cab"><b>Treinado na vida</b><span class="dl-lcd">+{n1(t.total)} / {CTR.tetoVida}</span></span>
-          <span class="dl-apoio">{STATS.filter(k => t.pontos[k] > 0).map(k => `${NOME_STAT[k]} +${dec(t.pontos[k], 1)}`).join(", ") || "nada ainda"}</span>
+        <div className="med">
+          <span className="med-cab"><b>Treinado na vida</b><span className="dl-lcd">+{n1(t.total)} / {CTR.tetoVida}</span></span>
+          <span className="dl-apoio">{STATS.filter(k => t.pontos[k] > 0).map(k => `${NOME_STAT[k]} +${dec(t.pontos[k], 1)}`).join(", ") || "nada ainda"}</span>
         </div>
       </div>
       </div>
-      <div class="desk-col treino-col-dir">
-      <h2 class="desk-so treino-ex-tit"><span>Exercícios</span><small>um treino por vez · {CTR.intervalo} min de intervalo</small></h2>
+      <div className="desk-col treino-col-dir">
+      <h2 className="desk-so treino-ex-tit"><span>Exercícios</span><small>um treino por vez · {CTR.intervalo} min de intervalo</small></h2>
       {!bebe && !pode && (
-        <div class="dl-card treino-intervalo desk-nao"><Peca nome="icone_tempo" reserva="⏳" />
-          <span><b>Próximo treino em {CTR.intervalo - (m.e.tick - t.ultimo!)} min de jogo</b><span class="dl-apoio">a fadiga baixa {CTR.recuperaHora} por hora acordado e zera quando ele dorme</span></span></div>
+        <div className="dl-card treino-intervalo desk-nao"><Peca nome="icone_tempo" reserva="⏳" />
+          <span><b>Próximo treino em {CTR.intervalo - (m.e.tick - t.ultimo!)} min de jogo</b><span className="dl-apoio">a fadiga baixa {CTR.recuperaHora} por hora acordado e zera quando ele dorme</span></span></div>
       )}
-      {bebe && <p class="dl-apoio" style={{ margin: 0 }}>O In-Training ainda não treina.</p>}
-      <div class="treino-grade" role="group" aria-label="Exercícios">
+      {bebe && <p className="dl-apoio" style={{ margin: 0 }}>O In-Training ainda não treina.</p>}
+      <div className="treino-grade" role="group" aria-label="Exercícios">
         {EXERCICIOS.map(ex => {
           const [pri, sec] = CTR.exercicios[ex], des = bebe || !pode || lutando || nascendo > 0;
           return (
-            <button type="button" key={ex} class={`treino-ex${t.forcaria ? " forcar" : ""}`} disabled={des}
+            <button type="button" key={ex} className={`treino-ex${t.forcaria ? " forcar" : ""}`} disabled={des}
               aria-label={`${t.forcaria ? "Forçar" : "Treinar"} ${NOME_EXERCICIO[ex]}${t.forcaria ? ": gera sobrecarga" : ""}`}
               onClick={() => (t.forcaria ? setConfirmar(ex) : treinar(ex))}>
-              {apt[pri] > 1 && <span class="treino-selo">aptidão</span>}
+              {apt[pri] > 1 && <span className="treino-selo">aptidão</span>}
               <IconeTreino ex={ex} />
               <b>{NOME_EXERCICIO[ex]}</b>
-              <span class="treino-ganho">+{n1(CTR.ganhoPri * mult)} {NOME_STAT[pri]} · +{n1(CTR.ganhoSec * mult)} {NOME_STAT[sec]}</span>
-              {t.forcaria && <span class="treino-perigo"><span>FORÇAR<small>+ sobrecarga</small></span></span>}
+              <span className="treino-ganho">+{n1(CTR.ganhoPri * mult)} {NOME_STAT[pri]} · +{n1(CTR.ganhoSec * mult)} {NOME_STAT[sec]}</span>
+              {t.forcaria && <span className="treino-perigo"><span>FORÇAR<small>+ sobrecarga</small></span></span>}
             </button>
           );
         })}
       </div>
-      <p class="treino-legenda desk-nao"><span class="treino-selo">aptidão</span>{fortes.length ? `${NOME_ESP[m.especie]} rende ${fortes.map(k => `${n1(apt[k])}× em ${NOME_STAT[k]}`).join(" e ")}.` : ""} Um treino por vez, com {CTR.intervalo} min de intervalo.</p>
-      <p class="dl-apoio" aria-live="polite" style={{ margin: 0 }}>{msg}</p>
-      <details class="dl-apoio"><summary>Como o treino funciona</summary>
+      <p className="treino-legenda desk-nao"><span className="treino-selo">aptidão</span>{fortes.length ? `${NOME_ESP[m.especie]} rende ${fortes.map(k => `${n1(apt[k])}× em ${NOME_STAT[k]}`).join(" e ")}.` : ""} Um treino por vez, com {CTR.intervalo} min de intervalo.</p>
+      <p className="dl-apoio" aria-live="polite" style={{ margin: 0 }}>{msg}</p>
+      <details className="dl-apoio"><summary>Como o treino funciona</summary>
         <p>Um toque por sessão, com pelo menos 10 min entre elas. Cada exercício sobe um stat principal e um secundário (com a aptidão do brasão e retorno decrescente; tetos de +10 por stat e +36 na vida). A fadiga reduz o ganho e passa com o tempo acordado e com o sono; com fadiga 40 ele pede pausa. Com fadiga 60 o botão vira <b>Forçar</b>: rende mais, mas gera <b>sobrecarga</b>, que não some na evolução. Sobrecarga alta na virada para Ultimate leva à <b>forma sombria</b>. Cada ponto treinado vale 3 pontos de stat no combate. Na arena o treino muda o perfil (stats normalizados); na campanha vale o ganho inteiro.</p>
       </details>
-      <span class="desk-so treino-ult-caixa"><UltimoTreino />
-        <span class="treino-ult-bts">
-          <button type="button" class="dl-btn dl-btn--sec treino-forcar" disabled={!t.forcaria || bebe || !pode || lutando || nascendo > 0}
+      <span className="desk-so treino-ult-caixa"><UltimoTreino />
+        <span className="treino-ult-bts">
+          <button type="button" className="dl-btn dl-btn--sec treino-forcar" disabled={!t.forcaria || bebe || !pode || lutando || nascendo > 0}
             title={t.forcaria ? "rende mais e gera sobrecarga" : `abre com fadiga ${CTR.limiteForcar}`} onClick={() => setEscolher(true)}>
-            <span class="treino-forcar-faixa" aria-hidden="true" />Forçar treino</button>
-          {!t.forcaria && <small class="dl-apoio">abre com fadiga {CTR.limiteForcar}</small>}
+            <span className="treino-forcar-faixa" aria-hidden="true" />Forçar treino</button>
+          {!t.forcaria && <small className="dl-apoio">abre com fadiga {CTR.limiteForcar}</small>}
         </span></span>
       {escolher && <EscolherForcar escolher={ex => { setEscolher(false); setConfirmar(ex); }} fechar={() => setEscolher(false)} />}
       </div>

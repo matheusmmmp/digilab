@@ -1,6 +1,6 @@
 /* Boas-vindas (prancha PvBoasVindas): so na primeira visita (chave propria -boas-vindas; o save nao muda). Tela cheia
    listrada, o ovo da especie no anel com brilhos, DIGILAB, o slogan e Comecar. */
-import { useEffect, useRef } from "preact/hooks";
+import { useEffect, useRef } from "react";
 import { abrirModal, rotaDaTelaCheia } from "./modal.ts";
 import { OVO } from "../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../atlas.ts";
@@ -17,23 +17,23 @@ export function BoasVindas({ fechar }: { fechar: () => void }) {
   useEffect(() => rotaDaTelaCheia("#/inicio"), []);
   const ovo = a.tipo === "ok" ? imagemAtlas(a, OVO[m.especie]) : null;
   return (
-    <dialog class="boas-vindas-tela dl" ref={ref} aria-labelledby="bv-tit" onClose={fechar}>
-      <div class="bv-centro">
-        <div class="bv-palco" aria-hidden="true">
-          <span class="bv-luz" /><span class="bv-anel" />
-          {ovo && <img class="dl-pix bv-ovo" src={ovo.url} width={ovo.w} height={ovo.h} alt="" />}
-          {BRILHOS.map(([x, y, t, o], i) => <span key={i} class="bv-brilho" style={{ left: `${x}px`, top: `${y}px`, width: `${t}px`, height: `${t}px`, opacity: o }} />)}
+    <dialog className="boas-vindas-tela dl" ref={ref} aria-labelledby="bv-tit" onClose={fechar}>
+      <div className="bv-centro">
+        <div className="bv-palco" aria-hidden="true">
+          <span className="bv-luz" /><span className="bv-anel" />
+          {ovo && <img className="dl-pix bv-ovo" src={ovo.url} width={ovo.w} height={ovo.h} alt="" />}
+          {BRILHOS.map(([x, y, t, o], i) => <span key={i} className="bv-brilho" style={{ left: `${x}px`, top: `${y}px`, width: `${t}px`, height: `${t}px`, opacity: o }} />)}
         </div>
       </div>
-      <div class="bv-texto">
-        <h1 class="bv-tit" id="bv-tit">DIGILAB</h1>
-        <p class="bv-slogan">Um pet que aprende com você.</p>
+      <div className="bv-texto">
+        <h1 className="bv-tit" id="bv-tit">DIGILAB</h1>
+        <p className="bv-slogan">Um pet que aprende com você.</p>
         {/* desktop (PvDesktop): as tres coisas que o jogo pede, ao lado do ovo */}
-        <ul class="bv-itens">
+        <ul className="bv-itens">
           {ITENS.map(([ic, t, d]) => <li key={t}><Peca nome={ic} escala={2} /><span><b>{t}</b><small>{d}</small></span></li>)}
         </ul>
-        <div class="bv-pe">
-          <button type="button" class="dl-btn dl-btn--destaque bv-comecar" onClick={() => ref.current?.close()}>Começar</button>
+        <div className="bv-pe">
+          <button type="button" className="dl-btn dl-btn--destaque bv-comecar" onClick={() => ref.current?.close()}>Começar</button>
           <span>o progresso fica neste navegador</span>
         </div>
       </div>

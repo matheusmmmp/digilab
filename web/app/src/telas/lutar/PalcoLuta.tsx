@@ -1,7 +1,7 @@
 /* Palco da luta (desenhos ArenaAoVivo, BatAcao, UpLuta e UpResultado; porte do HTML): vida e guts dos dois,
    turno no hexagono, arena do UP (PVP_Bg_Octagon) com os dois em escala inteira comum, distancia em etiqueta,
    intencao do rival, regra que o pet usou (travar/vetar ali mesmo), linha do turno, resultado e registro. */
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "react";
 import {
   CAT, DIST, NOME_V2, NPC, chaveRegra, expressar, regraDe, rotuloRegra, type EstadoLuta, type MotivoCombate, type Turno,
 } from "../../../motor/index.ts";
@@ -84,12 +84,12 @@ function desenharArena(cv: HTMLCanvasElement, p: Palco): void {
 function Lado({ L, s, rot, rival }: { L: LutadorTela; s: EstadoLuta["L"][number]; rot: string; rival?: boolean }) {
   const a = useAtlas(), img = a.tipo === "ok" ? imagemAtlas(a, L.sprite) : null;
   return (
-    <div class={`hud-lado${rival ? " hud-lado--rival" : ""}`} title={L.estiloTela ? `${L.nomeTela} (${L.estiloTela})` : L.nomeTela}>
-      <span class="hud-ret">{img && <img class="dl-pix" src={img.url} width={img.w} height={img.h} alt="" />}</span>
-      <span class="hud-txt">
-        <span class="hud-nome">{L.nomeTela}<span class="sr-only"> {Math.max(0, s.hp).toFixed(0)} de vida, guts {Math.round(s.guts)}</span></span>
-        <span class="hud-vida" role="img" aria-label={`vida ${rot}`}><i style={{ width: `${Math.max(0, s.hp / s.hpMax * 100)}%` }} /></span>
-        <span class="hud-guts" role="img" aria-label={`guts ${rot}`}><i style={{ width: `${s.guts / s.gutsMax * 100}%` }} /></span>
+    <div className={`hud-lado${rival ? " hud-lado--rival" : ""}`} title={L.estiloTela ? `${L.nomeTela} (${L.estiloTela})` : L.nomeTela}>
+      <span className="hud-ret">{img && <img className="dl-pix" src={img.url} width={img.w} height={img.h} alt="" />}</span>
+      <span className="hud-txt">
+        <span className="hud-nome">{L.nomeTela}<span className="sr-only"> {Math.max(0, s.hp).toFixed(0)} de vida, guts {Math.round(s.guts)}</span></span>
+        <span className="hud-vida" role="img" aria-label={`vida ${rot}`}><i style={{ width: `${Math.max(0, s.hp / s.hpMax * 100)}%` }} /></span>
+        <span className="hud-guts" role="img" aria-label={`guts ${rot}`}><i style={{ width: `${s.guts / s.gutsMax * 100}%` }} /></span>
       </span>
     </div>
   );
@@ -107,32 +107,32 @@ export function Cena({ p, controles = false }: { p: Palco; controles?: boolean }
     return () => { clearInterval(t); sair(); };
   }, [p, p.E, p.tr]);
   return (
-    <section class="luta-arena" aria-label="Palco da luta">
-      <canvas ref={ref} class="arena-cv" width={96} height={48} role="img" aria-label={`Arena: ${p.A.nomeTela} contra ${p.B.nomeTela}`} />
-      <div class="luta-hud">
+    <section className="luta-arena" aria-label="Palco da luta">
+      <canvas ref={ref} className="arena-cv" width={96} height={48} role="img" aria-label={`Arena: ${p.A.nomeTela} contra ${p.B.nomeTela}`} />
+      <div className="luta-hud">
         <Lado L={p.A} s={p.E.L[0]} rot="do seu pet" />
-        <div class="hud-meio">
-          <div class="turno-hex" aria-label="turno"><small>TURNO</small><b class="dl-num">{p.turno ?? "–"}</b></div>
-          <span class="luta-dist">{DIST[p.E.dist]}</span>
+        <div className="hud-meio">
+          <div className="turno-hex" aria-label="turno"><small>TURNO</small><b className="dl-num">{p.turno ?? "–"}</b></div>
+          <span className="luta-dist">{DIST[p.E.dist]}</span>
         </div>
         <Lado L={p.B} s={p.E.L[1]} rot="do rival" rival />
       </div>
-      {p.E.L[1].prep && <span class="luta-intencao-balao"><b class="luta-exclam">!</b>golpe pesado</span>}
-      {p.callout && <span class="luta-callout dl-num dl-num--amarelo">{p.callout}</span>}
-      {controles && luta.lutando && <div class="luta-controles">
-        <button type="button" class="luta-ctl" aria-label={luta.pausado ? "Continuar a animação" : "Pausar a animação"} aria-pressed={luta.pausado} onClick={alternarPausa}>
+      {p.E.L[1].prep && <span className="luta-intencao-balao"><b className="luta-exclam">!</b>golpe pesado</span>}
+      {p.callout && <span className="luta-callout dl-num dl-num--amarelo">{p.callout}</span>}
+      {controles && luta.lutando && <div className="luta-controles">
+        <button type="button" className="luta-ctl" aria-label={luta.pausado ? "Continuar a animação" : "Pausar a animação"} aria-pressed={luta.pausado} onClick={alternarPausa}>
           {luta.pausado ? <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3l9 5-9 5z" /></svg> : <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3h3v10H4zM9 3h3v10H9z" /></svg>}</button>
-        <button type="button" class="luta-ctl luta-ctl--x2" aria-label="Velocidade dobrada" aria-pressed={luta.rapido} onClick={alternarRapido}>×2</button>
+        <button type="button" className="luta-ctl luta-ctl--x2" aria-label="Velocidade dobrada" aria-pressed={luta.rapido} onClick={alternarRapido}>×2</button>
       </div>}
-      {!controles && <span class="luta-previa-rot">prévia · escolha um rival e aperte Lutar</span>}
+      {!controles && <span className="luta-previa-rot">prévia · escolha um rival e aperte Lutar</span>}
     </section>
   );
 }
 /** regra que o pet usou neste turno; travar e vetar direto daqui (so regras do proprio pet) */
 function RegraUsada({ ma, A, semDono }: { ma: MotivoCombate; A: LutadorTela; semDono?: boolean }) {
   const { motor: m } = useJogo(), [msg, setMsg] = useState("");
-  if (ma.exploracao) return <div class="dl-card luta-regra-card"><span class="dl-causa dl-causa--sem">? {A.nomeTela} decidiu ao acaso (exploração)</span></div>;
-  if (ma.regra === "pesado_automatico") return <div class="dl-card luta-regra-card"><span class="dl-apoio">{A.nomeTela} soltou o pesado que tinha preparado.</span></div>;
+  if (ma.exploracao) return <div className="dl-card luta-regra-card"><span className="dl-causa dl-causa--sem">? {A.nomeTela} decidiu ao acaso (exploração)</span></div>;
+  if (ma.regra === "pesado_automatico") return <div className="dl-card luta-regra-card"><span className="dl-apoio">{A.nomeTela} soltou o pesado que tinha preparado.</span></div>;
   const g = A.estilo.gambits;
   if (!g || typeof ma.regra !== "number") return null;
   const final = ma.regra >= g.regras.length, r = final ? null : g.regras[ma.regra], k = r ? chaveRegra(r) : null;
@@ -143,24 +143,24 @@ function RegraUsada({ ma, A, semDono }: { ma: MotivoCombate; A: LutadorTela; sem
     catch (err) { setMsg(err instanceof Error ? err.message : String(err)); }
   };
   return (
-    <div class="luta-regra-card dl-malha">
-      <span class="luta-regra-topo"><span class="luta-regra-cab">REGRA QUE {A.nomeTela.toUpperCase()} USOU</span><span class="luta-regra-sub">aprendida</span></span>
-      <span class="luta-regra-txt">{final ? `sempre → ${NOME_V2[g.final]}` : rotuloRegra(r!)}</span>
-      {doPet && !vetada && !msg && <span class="luta-regra-bts">
-        <button type="button" class="regra-travar" onClick={() => intervir(trav ? "destravar" : "travar")}><Peca nome="icone_cadeado" />{trav ? "Destravar" : "Travar"}</button>
-        <button type="button" class="regra-vetar" onClick={() => intervir("vetar")}>Vetar</button></span>}
-      {msg && <span class="dl-apoio">{msg}</span>}
+    <div className="luta-regra-card dl-malha">
+      <span className="luta-regra-topo"><span className="luta-regra-cab">REGRA QUE {A.nomeTela.toUpperCase()} USOU</span><span className="luta-regra-sub">aprendida</span></span>
+      <span className="luta-regra-txt">{final ? `sempre → ${NOME_V2[g.final]}` : rotuloRegra(r!)}</span>
+      {doPet && !vetada && !msg && <span className="luta-regra-bts">
+        <button type="button" className="regra-travar" onClick={() => intervir(trav ? "destravar" : "travar")}><Peca nome="icone_cadeado" />{trav ? "Destravar" : "Travar"}</button>
+        <button type="button" className="regra-vetar" onClick={() => intervir("vetar")}>Vetar</button></span>}
+      {msg && <span className="dl-apoio">{msg}</span>}
     </div>
   );
 }
 function Log({ p }: { p: Palco }) {
   useFalaLLM();
   return (
-    <ol class="luta-log" aria-label="Registro da luta">
+    <ol className="luta-log" aria-label="Registro da luta">
       {p.log.map(l => {
         /* o tom da fala do seu pet na luta segue o humor dele na vida */
         const resp = falaLLM(motivoParaApi(l.ma, []), l.estPet, l.humor), pet = resp && resp.fonte === "llm" ? "✦ " + resp.texto : expressar(l.ma, l.estPet, l.ma.refs);
-        return <li key={l.t}><span class="luta-t">T{l.t}</span> <b>{l.pet}</b>: {pet} · <b>{l.rival}</b>: {expressar(l.mb, l.estRival, l.mb.refs)}</li>;
+        return <li key={l.t}><span className="luta-t">T{l.t}</span> <b>{l.pet}</b>: {pet} · <b>{l.rival}</b>: {expressar(l.mb, l.estRival, l.mb.refs)}</li>;
       })}
     </ol>
   );
@@ -170,16 +170,16 @@ export function PalcoLuta() {
   const luta = useLuta(), p = luta.palco;
   if (!p) return null;
   return (
-    <div class="palco-luta dl">
+    <div className="palco-luta dl">
       <Cena p={p} controles />
-      <div class="palco-luta-baixo">
-        <section class="dl-card luta-card" aria-live="polite"><h2>Intenção do rival</h2>
-          {p.intencao ? <div class="luta-intencao"><b class="luta-exclam">!</b><span>{p.intencao}</span></div>
-            : <p class="dl-apoio">{p.B.nomeTela} não anunciou nada neste turno.</p>}</section>
-        <section class="dl-card luta-card"><h2>Regra em uso</h2>
-          {p.regra ? <RegraUsada key={p.turno} ma={p.regra.ma} A={p.regra.A} semDono={p.arena?.regra === "vinculo"} /> : <p class="dl-apoio">A luta ainda não começou.</p>}
-          {p.texto && <p class="dl-apoio luta-turno">{p.texto}</p>}</section>
-        <section class="dl-card luta-card luta-card--turnos"><h2>Turnos</h2><Log p={p} /></section>
+      <div className="palco-luta-baixo">
+        <section className="dl-card luta-card" aria-live="polite"><h2>Intenção do rival</h2>
+          {p.intencao ? <div className="luta-intencao"><b className="luta-exclam">!</b><span>{p.intencao}</span></div>
+            : <p className="dl-apoio">{p.B.nomeTela} não anunciou nada neste turno.</p>}</section>
+        <section className="dl-card luta-card"><h2>Regra em uso</h2>
+          {p.regra ? <RegraUsada key={p.turno} ma={p.regra.ma} A={p.regra.A} semDono={p.arena?.regra === "vinculo"} /> : <p className="dl-apoio">A luta ainda não começou.</p>}
+          {p.texto && <p className="dl-apoio luta-turno">{p.texto}</p>}</section>
+        <section className="dl-card luta-card luta-card--turnos"><h2>Turnos</h2><Log p={p} /></section>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 /* Palco do Pet (prancha UpPet; porte do desenharLCD do HTML). Canvas do tamanho da cena (318 px de altura), em
    pixels do aparelho; o sprite entra em escala inteira (ate 3x) sem esticar pelo CSS. Noite, sujeira, sono e o que o pet
    faz vem do motor; o anel de plataforma e o fundo hexagonal do card sao do UP. Sem atlas: placeholders. */
-import { useEffect, useRef } from "preact/hooks";
+import { useEffect, useRef } from "react";
 import { OVO, TPD, chaveSprite, corDominante, eNoite } from "../../../motor/index.ts";
 import { zoomAtual } from "../../escala.ts";
 import { atlasAtual, desenharSprite, dimSprite, escalaSprite, quadroAgora, type AtlasOk } from "../../atlas.ts";
@@ -144,5 +144,5 @@ export function PalcoPet() {
   }, []);
   const { motor: m, nascendo } = jogoAtual();
   const nome = nascendo > 0 ? "ovo" : chaveSprite(m.forma);
-  return <canvas ref={ref} class="lcd" width={W0} height={H} role="img" aria-label={`Tela do pet: ${nome}`} />;
+  return <canvas ref={ref} className="lcd" width={W0} height={H} role="img" aria-label={`Tela do pet: ${nome}`} />;
 }

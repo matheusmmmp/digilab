@@ -1,7 +1,7 @@
 /* Tema da tela: o do sistema (prefers-color-scheme) ou escolhido pelo jogador (claro, escuro). A escolha e uma
    preferencia de tela, numa chave propria (a chave do save nao muda); ?tema=claro|escuro no endereco sobrepoe
    sem gravar (conferencia e screenshots). */
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useState } from "react";
 import { CHAVE } from "./save.ts";
 
 export type Tema = "sistema" | "claro" | "escuro";

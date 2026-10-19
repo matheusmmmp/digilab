@@ -1,7 +1,7 @@
 /* Registro (desenho DiarioRegistro; porte do HTML): o estado nunca e salvo, so o registro. Verificar replay,
    copiar o registro, filtros por tipo com etiqueta colorida, e o ovo novo numa area de risco separada, com
    confirmacao. A contagem diz o que e evento do registro e o que e linha reconstruida (revisao, item 3). */
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "react";
 import { Motor, NOME_PET, NOME_V2, TPD, type ItemHistorico } from "../../../motor/index.ts";
 import { lerLog, type RegistroFala } from "../../falaLivre.ts";
 import { TEXTO_GATILHO } from "../../voz.ts";
@@ -30,16 +30,16 @@ const FILTROS: [Filtro, string][] = [["todos", "tudo"], ["voce", "você"], ["pet
 function FalasDoPet({ agora }: { agora: number }) {
   let falas: RegistroFala[] = [];
   try { falas = lerLog().filter(r => r.voz && r.situacao === "espontanea").reverse().slice(0, 80); } catch { /* log ilegivel: nada */ }
-  if (!falas.length) return <div class="dl-apoio">ele ainda não falou por conta própria</div>;
+  if (!falas.length) return <div className="dl-apoio">ele ainda não falou por conta própria</div>;
   return <>{falas.map((r, i) => {
     const v = r.voz!, revelada = !!v.janela?.falso && agora - r.t >= TPD;
     return (
-      <div class="reg-linha reg-linha--fala" key={i}>
-        <span class="dl-lcd">D{diaDe(r.t)} {hhmm(r.t)}</span><span class="reg-tag reg-pet">fala</span>
-        <span>“{r.fala}”{v.gatilho && <small class="dl-apoio"> · {TEXTO_GATILHO[v.gatilho] ?? v.gatilho}</small>}
-          {revelada && <><span class="reg-tag reg-recusa" title="Passou um dia: dá para saber">ele mentiu</span>
-            {v.verdade && <small class="dl-apoio"> a verdade: {v.verdade}</small>}</>}
-          {v.invencoes.length > 0 && <small class="dl-apoio" title={v.invencoes.join(" · ")}> · inventou {v.invencoes.length}</small>}</span>
+      <div className="reg-linha reg-linha--fala" key={i}>
+        <span className="dl-lcd">D{diaDe(r.t)} {hhmm(r.t)}</span><span className="reg-tag reg-pet">fala</span>
+        <span>“{r.fala}”{v.gatilho && <small className="dl-apoio"> · {TEXTO_GATILHO[v.gatilho] ?? v.gatilho}</small>}
+          {revelada && <><span className="reg-tag reg-recusa" title="Passou um dia: dá para saber">ele mentiu</span>
+            {v.verdade && <small className="dl-apoio"> a verdade: {v.verdade}</small>}</>}
+          {v.invencoes.length > 0 && <small className="dl-apoio" title={v.invencoes.join(" · ")}> · inventou {v.invencoes.length}</small>}</span>
       </div>
     );
   })}</>;
@@ -52,23 +52,23 @@ function ReplayLuta({ idx, fechar }: { idx: number; fechar: () => void }) {
   const [luta] = useState(() => { try { return reconstruirLuta(m, idx); } catch (err) { return err instanceof Error ? err.message : String(err); } });
   useEffect(() => { tit.current?.focus(); }, []);
   if (typeof luta === "string") return (
-    <section class="dl-card reg-replay" aria-labelledby="rep-tit"><h2 id="rep-tit" ref={tit} tabIndex={-1}>Replay da luta</h2>
-      <p class="reg-msg erro"><i aria-hidden="true">!</i>Não foi possível refazer a luta: {luta}</p>
-      <button type="button" class="dl-btn dl-btn--sec" onClick={fechar}>Fechar replay</button></section>
+    <section className="dl-card reg-replay" aria-labelledby="rep-tit"><h2 id="rep-tit" ref={tit} tabIndex={-1}>Replay da luta</h2>
+      <p className="reg-msg erro"><i aria-hidden="true">!</i>Não foi possível refazer a luta: {luta}</p>
+      <button type="button" className="dl-btn dl-btn--sec" onClick={fechar}>Fechar replay</button></section>
   );
   const { res, A, B } = luta, ev = m.log[idx];
   const txt = res.pontosA === 1 ? `${A.nomeTela} venceu` : res.pontosA === 0 ? `${B.nomeTela} venceu` : "Empate";
   return (
-    <section class="dl-card reg-replay" aria-labelledby="rep-tit">
+    <section className="dl-card reg-replay" aria-labelledby="rep-tit">
       <h2 id="rep-tit" ref={tit} tabIndex={-1}>Replay da luta</h2>
-      <p><b>{A.nomeTela} × {B.nomeTela}</b> · <span class="dl-lcd">D{diaDe(ev[0])} {hhmm(ev[0])}</span> · {txt} em {res.turnos.length} turnos ({res.fim === "ko" ? "nocaute" : "limite de turnos"}).</p>
-      <p class="dl-apoio">Refeita do registro (evento {idx + 1} de {m.log.length}): o pet reconstruído até a luta, o mesmo rival e a mesma semente.</p>
-      <ol class="reg-replay-turnos">
-        {res.turnos.map(tr => <li key={tr.t}><span class="dl-lcd">T{tr.t}</span><span>{fraseTurno(tr, A, B, null)}</span></li>)}
+      <p><b>{A.nomeTela} × {B.nomeTela}</b> · <span className="dl-lcd">D{diaDe(ev[0])} {hhmm(ev[0])}</span> · {txt} em {res.turnos.length} turnos ({res.fim === "ko" ? "nocaute" : "limite de turnos"}).</p>
+      <p className="dl-apoio">Refeita do registro (evento {idx + 1} de {m.log.length}): o pet reconstruído até a luta, o mesmo rival e a mesma semente.</p>
+      <ol className="reg-replay-turnos">
+        {res.turnos.map(tr => <li key={tr.t}><span className="dl-lcd">T{tr.t}</span><span>{fraseTurno(tr, A, B, null)}</span></li>)}
       </ol>
-      <div class="reg-replay-bts">
-        <button type="button" class="dl-btn" onClick={() => { reverLuta(idx, NOME_V2); if (LUTA.lutando) location.hash = ENDERECO_LUTA; }}>Ver a luta no palco</button>
-        <button type="button" class="dl-btn dl-btn--sec" onClick={fechar}>Fechar replay</button>
+      <div className="reg-replay-bts">
+        <button type="button" className="dl-btn" onClick={() => { reverLuta(idx, NOME_V2); if (LUTA.lutando) location.hash = ENDERECO_LUTA; }}>Ver a luta no palco</button>
+        <button type="button" className="dl-btn dl-btn--sec" onClick={fechar}>Fechar replay</button>
       </div>
     </section>
   );
@@ -82,10 +82,10 @@ export function TelaRegistro({ irPet }: { irPet: () => void }) {
   /* detalhe: o evento tocado; sem toque, no desktop, o mais novo */
   const ev = evSel !== null ? vis[evSel] : desk ? vis[0] : undefined;
   const detalhe = ev && <>
-    <span class="dl-lcd">D{diaDe(ev.t)} {hhmm(ev.t)}</span>
+    <span className="dl-lcd">D{diaDe(ev.t)} {hhmm(ev.t)}</span>
     <b>{textoLinha(ev)}</b>
-    <span class={`reg-tag reg-${TIPO_REG[ev.quem][2]}`}>{TIPO_REG[ev.quem][1]}</span>
-    <span class="dl-apoio">{evSel === null ? `último evento${filtro === "todos" ? "" : " deste filtro"}` : "evento do registro"}</span>
+    <span className={`reg-tag reg-${TIPO_REG[ev.quem][2]}`}>{TIPO_REG[ev.quem][1]}</span>
+    <span className="dl-apoio">{evSel === null ? `último evento${filtro === "todos" ? "" : " deste filtro"}` : "evento do registro"}</span>
   </>;
   const verificar = () => {
     const t0 = performance.now();
@@ -102,39 +102,39 @@ export function TelaRegistro({ irPet }: { irPet: () => void }) {
     catch { console.log(txt); setMsg({ txt: "Não foi possível copiar automaticamente. O registro está no console do navegador." }); }
   };
   return (
-    <div class={`tela dl desk reg-tela${replay !== null ? " reg-tela--replay" : ""}`}>
+    <div className={`tela dl desk reg-tela${replay !== null ? " reg-tela--replay" : ""}`}>
       {replay !== null && <ReplayLuta idx={replay} fechar={() => setReplay(null)} />}
-      <section class="dl-card reg-cab">
-        <h2 class="desk-so reg-h">Replay</h2>
+      <section className="dl-card reg-cab">
+        <h2 className="desk-so reg-h">Replay</h2>
         <p>O estado do pet nunca é salvo. Só este registro, e a vida é reconstruída a partir dele.</p>
-        <p class="reg-semente"><b>semente</b> <span class="dl-lcd">{m.semente}</span> · <span class="dl-lcd">{m.log.length}</span> <b>eventos</b></p>
-        <div class="reg-bts">
-          <button type="button" class="dl-btn" onClick={verificar}>Verificar replay</button>
-          <button type="button" class="dl-btn dl-btn--sec" onClick={copiar}>Copiar registro</button>
+        <p className="reg-semente"><b>semente</b> <span className="dl-lcd">{m.semente}</span> · <span className="dl-lcd">{m.log.length}</span> <b>eventos</b></p>
+        <div className="reg-bts">
+          <button type="button" className="dl-btn" onClick={verificar}>Verificar replay</button>
+          <button type="button" className="dl-btn dl-btn--sec" onClick={copiar}>Copiar registro</button>
         </div>
-        {msg && <p class={`reg-msg${msg.erro ? " erro" : ""}`} aria-live="polite"><i aria-hidden="true">{msg.erro ? "!" : "✓"}</i>{msg.txt}</p>}
+        {msg && <p className={`reg-msg${msg.erro ? " erro" : ""}`} aria-live="polite"><i aria-hidden="true">{msg.erro ? "!" : "✓"}</i>{msg.txt}</p>}
       </section>
-      <div class="reg-filtros" role="group" aria-label="Filtrar o registro">
-        <h2 class="desk-so reg-h">Mostrar</h2>
-        {FILTROS.map(([f, rot]) => <button type="button" key={f} class="chip" aria-pressed={filtro === f} onClick={() => { setFiltro(f); setEvSel(null); }}>{rot}</button>)}
+      <div className="reg-filtros" role="group" aria-label="Filtrar o registro">
+        <h2 className="desk-so reg-h">Mostrar</h2>
+        {FILTROS.map(([f, rot]) => <button type="button" key={f} className="chip" aria-pressed={filtro === f} onClick={() => { setFiltro(f); setEvSel(null); }}>{rot}</button>)}
       </div>
-      <div class="log" aria-live="polite">
-        <h2 class="desk-so reg-h reg-log-tit"><span>Registro</span><small>dia {diaDe(m.e.tick)} · o mais novo em cima</small></h2>
+      <div className="log" aria-live="polite">
+        <h2 className="desk-so reg-h reg-log-tit"><span>Registro</span><small>dia {diaDe(m.e.tick)} · o mais novo em cima</small></h2>
         {filtro === "falas" ? <FalasDoPet agora={m.e.tick} /> : vis.length ? vis.map((h, i) => {
           const [, rot, cor] = TIPO_REG[h.quem];
-          return <button type="button" class={`reg-linha${h.quem === "recusa" ? " reg-linha--recusa" : ""}`} key={i} aria-pressed={desk ? evSel === i : undefined}
-            onClick={() => setEvSel(i)}><span class="dl-lcd">D{diaDe(h.t)} {hhmm(h.t)}</span><span class={`reg-tag reg-${cor}`}>{rot}</span><span>{textoLinha(h)}</span></button>;
-        }) : <div class="dl-apoio">nada deste tipo nas últimas 80 linhas</div>}
+          return <button type="button" className={`reg-linha${h.quem === "recusa" ? " reg-linha--recusa" : ""}`} key={i} aria-pressed={desk ? evSel === i : undefined}
+            onClick={() => setEvSel(i)}><span className="dl-lcd">D{diaDe(h.t)} {hhmm(h.t)}</span><span className={`reg-tag reg-${cor}`}>{rot}</span><span>{textoLinha(h)}</span></button>;
+        }) : <div className="dl-apoio">nada deste tipo nas últimas 80 linhas</div>}
       </div>
-      {desk ? (ev && <section class="dl-card reg-det" aria-label="Evento escolhido">{detalhe}</section>)
-        : evSel !== null && ev && <Folha titulo="Evento do registro" fechar={() => setEvSel(null)}><div class="reg-det reg-det--folha">{detalhe}</div></Folha>}
-      <p class="dl-apoio">Linhas reconstruídas do registro: {nh > 80 ? `as últimas 80 de ${nh}` : `${nh}`}.</p>
-      <details class="zona-risco">
+      {desk ? (ev && <section className="dl-card reg-det" aria-label="Evento escolhido">{detalhe}</section>)
+        : evSel !== null && ev && <Folha titulo="Evento do registro" fechar={() => setEvSel(null)}><div className="reg-det reg-det--folha">{detalhe}</div></Folha>}
+      <p className="dl-apoio">Linhas reconstruídas do registro: {nh > 80 ? `as últimas 80 de ${nh}` : `${nh}`}.</p>
+      <details className="zona-risco">
         <summary>Novo ovo (apaga este pet)</summary>
-        <p class="dl-apoio">Um ovo novo apaga este pet e o registro dele. Não dá para desfazer.</p>
-        <div class="dl-linha">
-          <button type="button" class="dl-btn dl-btn--sec" onClick={() => setConfirmar(true)}>Novo ovo</button>
-          {confirmar && <button type="button" class="dl-btn dl-btn--perigo" onClick={() => { setConfirmar(false); abrirEscolhaBrasao(); irPet(); }}>Confirmar: apagar este pet</button>}
+        <p className="dl-apoio">Um ovo novo apaga este pet e o registro dele. Não dá para desfazer.</p>
+        <div className="dl-linha">
+          <button type="button" className="dl-btn dl-btn--sec" onClick={() => setConfirmar(true)}>Novo ovo</button>
+          {confirmar && <button type="button" className="dl-btn dl-btn--perigo" onClick={() => { setConfirmar(false); abrirEscolhaBrasao(); irPet(); }}>Confirmar: apagar este pet</button>}
         </div>
       </details>
     </div>
