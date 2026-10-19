@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WORLD-POC-01a</title>
+  <style>
+    body { margin: 0; font: 14px/1.4 system-ui, sans-serif; background: #f4f1ea; color: #1b1b2f; }
+    main { max-width: 960px; margin: 0 auto; padding: 16px; }
+    pre { background: #fff; padding: 12px; overflow: auto; max-height: 50vh; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>WORLD-POC-01a</h1>
+    <p>Protótipo técnico fora do jogo (docs/TAREFA_V2_WORLD_POC_01.md). Nesta etapa só o mundo: a vista em Three.js entra na etapa E3.</p>
+    <p><label>Semente <input id="semente" type="number" value="101"></label>
+       <label>Ticks <input id="ticks" type="number" value="1500"></label>
+       <button id="rodar">Rodar</button> <button id="baixar" disabled>Baixar o registro (JSON)</button></p>
+    <pre id="saida">—</pre>
+  </main>
+  <script type="module" src="./mundo3d/pagina.ts"></script>
+</body>
+</html>
