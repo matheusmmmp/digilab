@@ -76,3 +76,41 @@ Não há run.
   escrita; senão, voltar o conector para só leitura.
   - Custo de errar para o lado permissivo: um push direto na `main`, sem PR nem revisão, em seu nome.
   - Custo de errar para o lado restrito: a ida Work → repositório continua manual.
+
+## 9. Etapa 2 (2026-10-19): a conferência da autorização e a investigação da Issue #336
+
+Pedido do Matheus, depois do merge do #326, do #331 e do #337: fechar a brecha da autorização e a prova com o Claude Code lendo a Issue #336.
+- **A brecha:** o protocolo do #337 aceita um comentário "AUTORIZO IMPLEMENTAÇÃO" do Matheus. Mas o Work, com escrita, comenta como
+  matheusmmmp. **Novo:** `tools/conferir_autorizacao.py`, que só aceita o comentário quando:
+  - o autor é o Matheus, do tipo User;
+  - `performed_via_github_app` é nulo;
+  - o comentário não foi editado;
+  - o blob SHA é o da tarefa na `origin/main`.
+
+  Testes em `tests/test_infra_conferir_autorizacao.py`; o guia e o `AGENTS.md` ganharam a regra.
+- **A investigação:** `docs/TAREFA_V2_INVESTIGA_336.md`, gerada por `tools/nova_tarefa.py` com origem no Work. Um worker novo do Claude
+  Code lê a Issue pelo `gh` e entrega um PR empilhado sobre este.
+
+**Precisa do Matheus:**
+- **IM-8, um hook que bloqueie agente escrevendo "AUTORIZO"** num comando `gh` (o `gh` do Claude Code usa o seu token e não tem a marca de
+  app). Recomendação: sim, no molde do H3, desligado até o seu ok (SA-5). Custo de errar: sem o hook, a defesa é só a regra escrita.
+- **O IM-7 continua:** a `main` sem proteção.
+
+**Resultado da prova de ponta a ponta (2026-10-19).** O ciclo Work → Issue → tarefa → worker do Claude Code → PR → Work fechou com
+artefatos no GitHub:
+1. **Work:** registrou a ideia na Issue #336, via o app.
+2. **Coordenador:** gerou `docs/TAREFA_V2_INVESTIGA_336.md` com `tools/nova_tarefa.py`.
+3. **Worker novo do Claude Code:** leu a Issue pelo `gh`, entregou o #345 (só `docs/infra/INVESTIGACAO_336.md`, PROPOSTO) e comentou na
+   #336.
+4. **CI do #345** (run `39187634250`): `relato` ok, `testes` com 42 passed em 4 arquivos.
+5. **Work:** leu o #345, com corpo, diff e log do run, e separou o declarado do verificado. Tudo foi conferido aqui contra a API: o head
+   `d5da0e9`, as 120 linhas, os 42 testes.
+
+**O que continua só declarado:**
+- que a sessão do worker era nova;
+- os comandos locais dele.
+
+**O que o Work notou sozinho:** o comentário de entrega não tem marca de app e "não identifica quem operou o token". É a brecha do IM-8.
+
+**Achado à parte:** o CI avisa que `actions/checkout@v4` e `actions/setup-python@v5` usam Node.js 20, que está obsoleto. Subir as versões
+é uma melhoria pequena e fica para depois.

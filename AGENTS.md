@@ -39,6 +39,8 @@ associe. A pesquisa fica no Python (`digilab/`, `experiments/`); o jogo, em `web
 - Rodar a validação, escolher sementes fora de `experiments/bancada/faixas.py`, ou ajustar olhando os dados da validação.
 - Mexer em `digilab/engine.py` (o sha está congelado) ou pôr dependência fora da biblioteca padrão em `digilab/`.
 - Colocar credencial, token ou dado pessoal em qualquer arquivo.
+- Escrever um comentário, label ou texto de autorização ("AUTORIZO IMPLEMENTAÇÃO") em nome do Matheus. A autorização é só dele, e
+  `tools/conferir_autorizacao.py` recusa a que vem de um app.
 
 ## O relato de volta
 
