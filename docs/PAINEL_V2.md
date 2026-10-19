@@ -1,6 +1,6 @@
 # PAINEL V2: onde a pesquisa está, em uma página
 
-**Atualizado em 2026-10-18** (`main` `a0c1fcd`). Nesta atualização mudou só o J5 (a validação #342 e o adendo 7); o resto é o da atualização anterior.
+**Atualizado em 2026-10-19** (`main` `8b70aca`). Nesta atualização mudou só o J5 (o piloto #349 e o adendo 8); o resto é o da atualização anterior.
 - Quem atualiza: o coordenador, no fim de cada rodada.
 - Regra (`docs/TAREFA_V2_SAUDE.md`, etapa 5): cada linha cita o documento de onde veio, e aqui não entra número novo.
 - O detalhe de cada marco está na seção 8 do `docs/ROADMAP_V2.md`.
@@ -13,7 +13,7 @@
 | J2 corpo químico | drives como químicos, digestão, Vida, metabolismo | código pronto (etapas 1 a 8). A calibração fecha só com o passo 0: `m_gasto` 4/5 fechou (#293). O resto vai para a calibração final. A validação não rodou |
 | J3 sem elogio e bronca | o pet aprende pela consequência; o carinho e o tapa são gestos no corpo | feito na pesquisa; no produto, numa versão de pet futura |
 | J4 banheiro | aprender o lugar certo; o carinho pesa mais que o limpador | código pronto; poucos alívios dentro (14% a 21% na fumaça). As saídas estão sem decisão, e nada rodou |
-| J5 pet que pensa | prever consequências e planejar | **a validação (#342) é inconclusiva por premissa** nos dois primários: no T1, unidades sem oportunidade depois da mudança acima do limite; no T2, nenhuma busca. O pet escolhe a favorita bem acima do acaso e quase não deixa de escolhê-la depois que ela faz mal, com ou sem o planejador (`docs/RESULTADO_V2_VALIDACAO_PET_QUE_PENSA.md`). **Agora, o adendo 7** (os dois testes consertados numa run só), PJ7-1 a PJ7-6 abertas; depois, o código (o D) e o piloto, com um sim |
+| J5 pet que pensa | prever consequências e planejar | a validação (#342) foi inconclusiva por premissa. **O piloto do adendo 7 (#349) parou na G-OPORTUNIDADE**: no T1, o P1 perde a oportunidade quando come a x numa árvore; no T2, a x comida numa árvore nova encerra a medida antes de qualquer busca. Com o planejador, a escolha da x cai depois da mudança, como descritivo (`docs/RESULTADO_V2_PILOTO_PET_QUE_PENSA_ADENDO7.md`). **Agora, o adendo 8** (DECIDIDO o desenho: a x sai das árvores no T1, e a ida às árvores novas conta como busca no T2), PJ8-1 a PJ8-6 abertas; depois, o código e o piloto, com um sim |
 | J6 ego | o automodelo com corpo (a rede de si) | etapas 0 a 2 na `main`; faltam a 2b e a bancada |
 | J6a livre × condicionado | as frases-modelo só num braço de comparação | decidido (E-11) |
 | J7 dois pets | dois pets de verdade no mesmo mundo | degrau 1 pronto no código. A calibração do K não fechou: **inconclusivo por premissa** até um pet aprender no mundo físico |
@@ -50,6 +50,7 @@
 | J5 com o paladar (#316) | o `ganho_gosto` não fecha; a G-REVAL-POSSIVEL passa; o T1 de novo sem margem | `docs/RESULTADO_V2_CALIBRACAO_PET_QUE_PENSA_PALADAR.md` |
 | J5 com a fruta ao lado, calibração (#334) | o `ganho_gosto` e o `g_plano` fecham; as margens passam; N = 50, com o poder declarado | `docs/RESULTADO_V2_CALIBRACAO_PET_QUE_PENSA_AO_LADO.md` |
 | J5, validação (#342) | **inconclusiva por premissa** nos dois primários (T1: oportunidade; T2: nenhuma busca) | `docs/RESULTADO_V2_VALIDACAO_PET_QUE_PENSA.md` |
+| J5, piloto do adendo 7 (#349) | **parado pela G-OPORTUNIDADE** (T1 do P1 e T2): o corte pela x comida numa árvore, não a janela | `docs/RESULTADO_V2_PILOTO_PET_QUE_PENSA_ADENDO7.md` |
 
 ## 3. Decisões abertas do Matheus
 
@@ -58,7 +59,7 @@
 - **FE-3:** o perfil de cada brasão (`docs/futuro/fisiologia_especies.md`).
 - **As saídas do banheiro:** sem decisão até haver dado (`docs/PLANO_ANALISE_V2_BANHEIRO.md`, seção 7).
 - **A validação do corpo:** espera a calibração final e um sim.
-- **O J5:** as PJ7-1 a PJ7-6 do adendo 7 (`docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md`, A7.10); depois, o sim para o piloto (52101…52505) e outro para a validação (53101…53505).
+- **O J5:** as PJ8-1 a PJ8-6 do adendo 8 (`docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md`, A8.10); depois, o sim para o piloto (54101…54505) e outro para a validação (55101…55505).
 - **O ecossistema genético:** EG-1 a EG-8 decididas (2026-10-14); cada passo G0 a G5 entra com tarefa e plano próprios (`docs/futuro/ecossistema_genetico.md`).
 
 ## 4. Riscos

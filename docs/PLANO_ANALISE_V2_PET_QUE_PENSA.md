@@ -742,3 +742,142 @@ para a validação.
 | PJ7-4 | A fome na busca do T2 | **sai** | manter a fome ≤ S/2: a busca olha onde a ração domina, e o T2 tende a ficar sem busca de novo |
 | PJ7-5 | Recalibrar | **não:** a fase 1 é a mesma, e ficam o `ganho_gosto` = S/2 e o `g_plano` = S do adendo 6. Só o piloto é refeito | recalibrar: mais uma rodada que lê a mesma fase 1 e pode mudar o ponto sem razão |
 | PJ7-6 | As sementes | **52101…52505 para o piloto e 53101…53505 para a validação,** as duas novas | reusar uma faixa velha: as unidades já foram vistas, e a 46101 já foi a validação |
+
+## Adendo 8 — tirar a x das árvores no T1, e contar como busca a ida às árvores novas no T2 (2026-10-19, PROPOSTO, antes de qualquer run)
+
+Status: registrado antes de qualquer vida com ele.
+- **DECIDIDO pelo Matheus (2026-10-19):** as duas mudanças de desenho abaixo:
+  - no T1, tirar a x das árvores depois de `T_m`;
+  - no T2, contar como busca a ida a uma árvore nova com a x à vista.
+- **PROPOSTO:** os detalhes, nas PJ8-1 a PJ8-6 (A8.10).
+
+**A numeração:** o A7.4 reservava o "adendo 8" para os números do piloto. O piloto do adendo 7 parou na G-OPORTUNIDADE, antes de qualquer
+número congelado. Este adendo 8 é de desenho, e os números do piloto novo vão num **adendo 9**.
+
+**O que não muda (do adendo 7):**
+- a pergunta, os quatro braços e a fase 1 inteira (`D_a` = 7, o paladar, a fruta ao lado, `n_mao` = 2, `T_m`);
+- no T1, a oportunidade com qualquer alternativa ao lado (A7.2) e o corte da reexperiência;
+- no T2, a fruta ao lado parando em `T_m` (A7.3) e a busca sem a fome;
+- a janela de 5 dias e a vida de 12;
+- o limiar da G-APRENDEU pelo acaso médio;
+- o `ganho_gosto` = S/2 e o `g_plano` = S do adendo 6;
+- os contrastes, as categorias, o Holm, o bootstrap e os gates de mecanismo.
+
+O piloto do adendo 7 rodou com as PJ7-1 a PJ7-6 pela recomendação, autorizado pelo Matheus (#349).
+
+### A8.1 O que o piloto do adendo 7 mostrou
+
+As bases 52101…52505, 20 unidades (`docs/RESULTADO_V2_PILOTO_PET_QUE_PENSA_ADENDO7.md`; `artifacts_v2_pet_que_pensa/piloto_adendo7/`):
+- **T1:** a G-OPORTUNIDADE falha só no P1, com 6 das 20 unidades sem oportunidade, **todas pelo corte da x comida numa árvore**. Os três
+  braços com o planejador passam (1 de 20).
+- **T2:** 19 ou 20 das 20 unidades ficam sem busca depois da mudança.
+  - de 12 a 15 unidades, pela x comida numa árvore nova assim que vista;
+  - de 1 a 5, por uma fruta da regra que sobrou no chão;
+  - de 0 a 6, pela janela.
+
+  O pet vai às árvores depois de `T_m`, mas com a x já à vista: pela definição da seção 4, isso não é busca.
+- **Descritivo, não é teste:** nos três braços com o planejador, a escolha da x cai de 0,67 para 0,46 depois da mudança. No P1 ela não cai
+  (0,55 para 0,62).
+
+### A8.2 Por que aumentar a vida não resolve
+
+A janela de 5 dias **não** é o que falta, e uma vida mais longa não mudaria o resultado:
+- **no T1,** nenhuma unidade de nenhum braço ficou sem oportunidade pela janela (0 em todos). Todas as que faltaram foram cortadas pela x de
+  uma árvore, com a latência mediana até o corte de **0,44 dia**;
+- **no T2,** a janela explica no máximo **0 a 6** unidades por braço (6 no P1; 0 ou 1 nos três com o planejador). As outras foram cortadas
+  pela x comida, com a mediana até o corte de **1,3 a 1,4 dia**.
+
+O corte chega muito antes do fim da janela. Mais dias depois da mudança só dariam mais tempo para o mesmo corte. O que resolve é tirar a
+causa do corte (T1) ou deixar de cortar e passar a contar (T2).
+
+### A8.3 O T1: a x sai das árvores em `T_m`
+
+- **No protocolo T1, no tick `T_m`** (DECIDIDO):
+  - **as árvores do tipo x param de dar x** até o fim da vida;
+  - **as x caídas dessas árvores que estão no chão nesse tick saem do mundo** (PJ8-1), com um registro.
+  - A x ao lado da ração (a regra) **continua**: é ela que dá a escolha lado a lado.
+  - Antes de `T_m` nada muda, e no T2 nada muda.
+- **O efeito esperado:** depois de `T_m`, a única x do mundo é a da regra, no comedouro. O pet só pode reencontrá-la escolhendo-a numa
+  decisão que conta, ou comendo-a no comedouro sem alternativa à vista. O corte por árvore desaparece por construção, e o P1, o controle do
+  G-T1, deixa de perder a oportunidade por acaso.
+- **O que isso não muda na pergunta:** o T1 continua sendo a revalorização pela mão. A x some das árvores sem sinal nenhum ao cérebro: não
+  há consumo, e não há consequência para creditar. O hábito (o alvo aprendido, as classes por árvore) só muda pela consequência. Os modelos
+  do planejador veem as árvores sem x, e isso entra nos riscos (R-23).
+
+### A8.4 O T2: a ida às árvores novas conta como busca, e a medida não é cortada
+
+- **A busca** (troca a da A7.3; DECIDIDO o sentido, PROPOSTO o detalhe): uma decisão cujo alvo é uma árvore do tipo x de antes (as velhas)
+  ou de depois (as novas), **ou uma x madura caída de uma dessas árvores** (pela origem da comida, PJ8-2). **Com ou sem a x à vista.**
+  - A busca **vai às novas** quando a árvore, ou a origem da x, é uma das novas.
+  - A fome continua fora.
+- **Sem o corte no T2** (PJ8-3): o T2 não muda o efeito da x, então não há revalorização a proteger. Comer a x numa árvore nova é a própria
+  ida às novas.
+- **A medida:** contam as 3 primeiras buscas depois da exposição. O "antes" usa a mesma definição, nas 3 últimas antes de `T_m`. O `m` é
+  o de sempre.
+- **O que muda no que o T2 mede:** com a x à vista contando, uma parte da ida às novas é visão, não mapa.
+  - **O G-T2** (P1-plan × P1-plan-desfecho) continua isolando o mapa: os dois braços têm o mesmo hábito, a mesma visão e o mesmo desfecho.
+    A diferença entre eles depois de `T_m` é só o mapa.
+  - **O G-T2-HAB** (P1-plan × P1) perde parte da proteção do R-5, porque o hábito também vai ao que vê (PJ8-4).
+  - **A busca da definição antiga** (sem a x à vista) sai como descritivo, para separar as duas partes (A8.7).
+
+### A8.5 O que se refaz
+
+- **Nada se recalibra** (PJ8-5): a fase 1 é a mesma.
+- **O piloto é refeito, nas sementes novas** (A8.9): a G-REVAL-POSSIVEL, as premissas, as margens `Δ_T1` e `Δ_T2` pela regra da seção 6
+  com as definições novas, o N pelo poder simulado (K_u de 4 a 10) e o custo. Os números vão no **adendo 9**, num commit antes da
+  validação. Se uma margem ficar ≤ 0,05, ou se uma premissa falhar, o piloto para e o plano volta ao Matheus.
+- **A validação** roda numa faixa nova, uma vez, depois do adendo 9 e de outro sim.
+
+### A8.6 A interface com o código
+
+- **O mundo (o A):** um evento de log que, no tick dele, faz as árvores de um tipo pararem de dar fruta até o fim da vida e retira do chão
+  as frutas daquele tipo caídas dessas árvores (por exemplo, `parar_arvores_<tipo>`, no modelo do `trocar_arvores_<x>_<y>`).
+  - fora do orçamento, com o registro no mundo (o tick, o tipo, as árvores, os ids retirados);
+  - a fruta da regra (a origem `dono_ao_lado`) nunca sai;
+  - desligado, a vida é a de hoje, com o gabarito num commit antes; o replay refaz.
+- **A bancada (o D):**
+  - o protocolo T1 manda o evento em `T_m`;
+  - a busca nova numa função nova em `digilab/metrics.py` (a de hoje fica, para o adendo 7 reproduzir);
+  - o T2 sem o corte;
+  - os descritivos da A8.7;
+  - a config do piloto nas sementes novas, com uma chave do adendo 8 por cima da do adendo 7.
+
+### A8.7 Os descritivos novos (sem gate)
+
+- **No T1:** quantas x foram retiradas em `T_m`, e por que cada unidade sem oportunidade ficou assim (o corte pela regra, a janela).
+- **No T2:**
+  - as buscas separadas em **com a x à vista** e **sem a x à vista** (a definição antiga), por braço, antes e depois;
+  - o `m` refeito só com as buscas sem a x à vista, como leitura (não é teste);
+  - as idas às árvores velhas e às novas por dia, e quantas x de árvore nova o pet comeu.
+
+### A8.8 Os riscos novos
+
+| # | risco | o que o adendo faz |
+|---|---|---|
+| R-23 | **O mapa do P1-plan aprende que as árvores do tipo x não dão mais x**, e o P1-plan-desfecho não aprende (o mapa congela em `T_m`). Isso mexe no G-T1-DESF e no G-T1-CONG | a escolha do T1 é no comedouro, com a x à vista, e o valor da comida vista vem do desfecho, não do mapa. O efeito deve ser pequeno, e o descritivo dos modelos por dia mostra o mapa |
+| R-24 | **O T2 fica diluído:** com a x à vista contando, a visão leva todos os braços às novas, e o contraste do mapa encolhe. O `Δ_T2` pode cair abaixo de 0,05 | a margem sai do piloto; se ficar sem espaço, o plano volta (seção 6). O `m` só sem a x à vista sai como leitura |
+| R-25 | **Tirar a x das árvores muda o mundo do T1 depois de `T_m`,** e o T1 deixa de ter o mesmo mundo do T2 | os protocolos já são vidas separadas e já diferiam depois de `T_m` (a mudança de cada um e a parada da regra no T2) |
+| R-26 | **O P1 come a x da regra sem alternativa à vista** (as outras frutas e a ração já foram comidas), e o corte chega sem oportunidade | o dono repõe a cada ração. O descritivo do motivo de cada unidade mostra se isso pesa |
+
+### A8.9 Sementes
+
+| uso | faixa | bases |
+|---|---|---|
+| o piloto do adendo 8 | **54101…54505** (nova; registrada na `FAIXAS_RESERVADAS` neste PR) | 54101, 54202, 54303, 54404, 54505 (K_u = 4) |
+| a validação do adendo 8 | **55101…55505** (nova; registrada neste PR) | 55101, 55202, 55303, 55404, 55505 (K_u pelo adendo 9) |
+
+**Nenhuma faixa velha volta:**
+- a 52101 foi usada pelo piloto do adendo 7;
+- a 53101 ficou reservada e não foi usada. É substituída pela 55101, porque o desenho mudou depois que o piloto foi visto;
+- as de antes também não voltam (45101, 46101, 49101, 51101).
+
+### A8.10 Decisões do Matheus (este adendo)
+
+| # | decisão | recomendação | custo de errar |
+|---|---|---|---|
+| PJ8-1 | O que "tirar a x das árvores" inclui | **as árvores do tipo x param de dar x, e as x caídas delas que estão no chão em `T_m` saem** | só parar as quedas: as x já caídas ficam até 24 h no chão (12 madura, 12 podre), e o corte por árvore continua no começo da janela, quando a latência mediana é de 0,44 dia |
+| PJ8-2 | A busca do T2 inclui ir comer uma x caída de uma árvore (pela origem) | **sim** | só o alvo na árvore: ir comer a x embaixo de uma árvore nova não conta, e o corte vira "não conta" de novo |
+| PJ8-3 | O corte no T2 | **sai:** o T2 não revaloriza nada | manter: a primeira x comida numa árvore nova encerra a medida de novo (12 a 15 unidades no piloto) |
+| PJ8-4 | O G-T2-HAB (P1-plan × P1) | **continua secundário, com o aviso de que a visão também move o hábito;** o `m` sem a x à vista sai como leitura | tirá-lo: o T2 perde a única comparação com o hábito; lê-lo sem aviso: uma diferença pela visão parece mapa |
+| PJ8-5 | Recalibrar | **não:** a fase 1 é a mesma; só o piloto é refeito | recalibrar: uma rodada a mais que lê a mesma fase 1 |
+| PJ8-6 | As sementes | **54101…54505 para o piloto e 55101…55505 para a validação,** as duas novas; a 53101 não volta | usar a 53101 para a validação: ela foi reservada para um desenho que mudou depois que o piloto foi visto |

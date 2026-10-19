@@ -294,3 +294,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-19 — WORLD-POC-01 (worker A): a tarefa do POC-01a e a leitura da W-5](registro/2026-10.md)
 
 - [2026-10-19 — WORLD-POC-01a, PR 1 (worker A): o mundo do POC sem a vista](registro/2026-10.md)
+
+- [2026-10-19 — J5-ADENDO-8 (worker C): tirar a x das árvores no T1, e contar a ida às árvores novas no T2](registro/2026-10.md)
