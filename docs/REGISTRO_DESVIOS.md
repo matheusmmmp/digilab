@@ -286,3 +286,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-18 — W-PORTE, etapa 4, parte 3b (worker de uma sessão lateral): o pet v11 no Motor do jogo](registro/2026-10.md)
 
 - [2026-10-18 — W-PORTE, etapa 5 (worker de uma sessão lateral): o painel DigiBrain no jogo web](registro/2026-10.md)
+
+- [2026-10-18 — J5-ADENDO-7 (worker C): a validação inconclusiva registrada, e os dois testes consertados numa run só](registro/2026-10.md)

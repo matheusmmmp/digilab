@@ -608,3 +608,137 @@ O adendo 5 (A5.5) pede este adendo. A calibração e o piloto rodaram uma vez, n
   de CPU.
 - **A6.8, a validação (46101…46505) não rodou.** Ela pede o sim do Matheus. Pelo piloto, o T2 dela sai inconclusivo por premissa (o R-16:
   com a x no comedouro, o pet não a busca nas árvores).
+
+## A validação com a fruta ao lado (2026-10-18): inconclusiva por premissa
+
+A validação rodou uma vez, nas bases 46101…46505 (K_u = 10, 50 unidades), com os números do adendo 6. O relatório está em
+`docs/RESULTADO_V2_VALIDACAO_PET_QUE_PENSA.md`, e os artefatos em `artifacts_v2_pet_que_pensa/validacao_ao_lado/`. **Decisão do Matheus
+(2026-10-18), pela recomendação:** o J5 fica registrado como **inconclusivo por premissa**, com o descritivo.
+
+- **O G-T1 é inconclusivo por premissa:** a G-OPORTUNIDADE do T1 falha por pouco nos quatro braços. De 14 a 16 das 50 unidades (28% a 32%)
+  ficam sem oportunidade depois da mudança, contra o limite de 25%.
+- **O G-T2 é inconclusivo por premissa:** nenhuma busca da x nas árvores depois da mudança, em nenhuma unidade (o R-16), e a G-EXPOSICAO
+  também falha.
+- **O descritivo do T1** (não é teste):
+  - antes da mudança, o pet escolhe a favorita em 53% a 54% das oportunidades, acima do acaso entre os quatro alvos (25%) e do que a
+    geometria daria (cerca de 33%);
+  - depois que ela passa a fazer mal, a escolha quase não cai (`q` de −0,06 a 0,03), com ou sem o planejador.
+- **A faixa 46101…46505** foi usada por esta validação e não volta.
+
+## Adendo 7 — os dois testes consertados numa run só (2026-10-18, PROPOSTO, antes de qualquer run)
+
+Status: **PROPOSTO**, registrado antes de qualquer vida com ele. Depende das decisões PJ7-1 a PJ7-6 abaixo, do Matheus. Duas coisas já
+estão **DECIDIDAS pelo Matheus (2026-10-18):** consertar os dois testes numa run só, e, no T2, a fruta ao lado **para** depois de `T_m` (o
+R-16 e a alternativa da PJ5-4).
+
+**O que não muda:**
+- a pergunta (DS-1), os quatro braços e o que os separa (o planejador e o congelamento);
+- a fase 1 inteira: `D_a` = 7, o paladar, a fruta ao lado da ração (adendo 5, A5.1), `n_mao` = 2 e `T_m`;
+- o `q` e o `m`, as 3 primeiras e as 3 últimas, o corte da reexperiência (o primeiro consumo da x no mapa depois de `T_m`);
+- os contrastes, as categorias, o Holm, o bootstrap e os gates de mecanismo;
+- a G-OPORTUNIDADE (no máximo 25% das unidades sem oportunidade), a G-EXPOSICAO e a G-REVAL-POSSIVEL.
+
+### A7.1 Por que as unidades ficaram sem oportunidade (o mecanismo, pelo código)
+
+Pelo `metrics.mudanca_de_escolha`, o "depois" vai da última fruta na mão até o primeiro consumo da x no mapa, venha ele de onde vier. Pela
+`metrics.oportunidade_lado_a_lado`, só conta a decisão de comer com a x da regra **e a ração** à vista. Então uma unidade fica sem
+oportunidade de dois jeitos:
+1. **o corte chega antes:** o pet come a x numa decisão que não conta. A ração já foi comida e só sobram as frutas ao lado, ou a x vem de
+   uma árvore, ou do "achou e comeu" do explorar;
+2. **a janela acaba:** os 3 dias passam sem nenhuma decisão lado a lado.
+
+O relatório da validação não separa os dois casos, e este adendo não os separa olhando a validação: o piloto novo mede isso (A7.6).
+
+### A7.2 O T1: a oportunidade aceita qualquer alternativa ao lado, e a janela cresce
+
+- **A oportunidade** (troca a da A5.3): uma decisão de **comer**, depois da última fruta na mão, em que a x madura posta pela regra está à
+  vista **junto com pelo menos uma alternativa ao lado: a ração madura ou outra fruta madura posta pela regra** (PJ7-1). A fome continua
+  fora.
+- **Escolher x:** o alvo do comer é essa x. Comer a ração ou outra fruta conta como não escolher x.
+- **Por que resolve o caso 1:** o dono repõe as três frutas a cada ração. Depois que o pet come a ração, as outras duas frutas costumam
+  continuar ali, e a decisão passa a contar antes do consumo da x.
+- **A janela depois da mudança:** **5 dias** (era 3; PJ7-2). A vida passa a ter 12 dias, e os dois protocolos ficam com o mesmo tamanho.
+- **A G-APRENDEU:** o limiar passa a ser **o acaso médio das oportunidades** (PJ7-3). Em cada oportunidade, o acaso é 1/k, com k os alvos
+  à vista (a ração e as frutas da regra), e o limiar é a média de 1/k sobre as oportunidades do "antes" do braço. Com os quatro alvos à
+  vista é 1/4, como antes; sem a ração, 1/3.
+
+### A7.3 O T2: a fruta ao lado para em `T_m`, e a busca perde a fome
+
+- **A regra da fruta ao lado no T2** (DECIDIDO): funciona como no adendo 5 até `T_m`. **No passo do dono de `T_m` e depois, o dono não
+  põe mais fruta ao lado.** A ração continua igual, e as frutas ao lado que já estavam no chão seguem o tempo delas (amadurecer,
+  apodrecer, sumir). No T1, a regra continua depois de `T_m`, como antes: é ela que dá a escolha lado a lado.
+- **Os dois protocolos** são iguais até `T_m`; depois, diferem pela mudança de cada um e por esta parada.
+- **A busca** (troca a da seção 4, só no T2): uma decisão **sem a x à vista** em que o alvo escolhido é uma árvore do tipo x de antes (as
+  velhas) ou do de depois (as novas). **A fome sai** (PJ7-4), pela mesma razão da PJ5-2: com o paladar, o pet busca a x pelo gosto, e a
+  fome ≤ S/2 olha onde a ração domina.
+- **A exposição e o corte** ficam iguais.
+- **A janela:** 5 dias, como no T1.
+
+### A7.4 O que se recalibra
+
+**Nada.** A fase 1 é a mesma do adendo 5: o `ganho_gosto` = S/2 e o `g_plano` = S do adendo 6 continuam (PJ7-5). As duas regras de
+calibração leem só a fase 1, e ela não mudou.
+
+O que é refeito, nas sementes novas, é o **piloto** da seção 6:
+- a G-REVAL-POSSIVEL;
+- as margens `Δ_T1` e `Δ_T2`, pela regra da seção 6, com as definições novas;
+- o N pelo poder simulado nos dois primários (K_u de 4 a 10);
+- o custo e as premissas, como relato.
+
+Os números vão num **adendo 8**, num commit antes da validação. Se uma margem ficar ≤ 0,05, a validação não roda e o plano volta ao
+Matheus (seção 6).
+
+### A7.5 A interface com o código
+
+O D (a bancada do J5) e, se for preciso, o A (o dono da fruta ao lado):
+- **a parada no T2:** o `DonoFrutaAoLado` ganha um tick de parada (por exemplo `ate_tick`), ou a bancada deixa de passar a regra a partir
+  de `T_m` no protocolo T2. Desligada (sem tick de parada), a vida é a de hoje, com o gabarito num commit antes;
+- **a oportunidade nova do T1:** uma função nova em `digilab/metrics.py` (a de hoje fica, para o adendo 5 reproduzir), com o teste de
+  resposta conhecida;
+- **a busca sem a fome:** a `busca_transicao` com o limite da fome como argumento (sem limite = a regra nova);
+- **a janela de 5 dias** e a vida de 12 dias, na config;
+- **o limiar da G-APRENDEU** pelo acaso médio;
+- **o motivo de cada unidade sem oportunidade** (A7.6).
+
+### A7.6 Os descritivos novos (sem gate)
+
+- **Por que cada unidade ficou sem oportunidade:** o corte chegou antes (com a origem do consumo da x: a regra, uma árvore, o "achou e
+  comeu") ou a janela acabou;
+- **a latência** até a primeira oportunidade e até o corte, por braço e teste;
+- **no T2,** quantas vezes o pet foi às árvores velhas e às novas, por dia, depois de `T_m`, e quantas frutas ao lado ainda havia no chão;
+- **o acaso médio** de cada braço (o limiar da G-APRENDEU).
+
+### A7.7 Os riscos novos
+
+| # | risco | o que o adendo faz |
+|---|---|---|
+| R-19 | **O corte continua chegando antes** (a x de uma árvore, o "achou e comeu") | a janela maior não ajuda nesse caso, e o descritivo da A7.6 diz quanto pesa. Se a G-OPORTUNIDADE falhar de novo por ele, a próxima opção é tirar a x das árvores no T1 depois de `T_m` (fora deste adendo) |
+| R-20 | **No T2, sem a fruta ao lado, o pet volta a só comer a ração** e não busca árvore nenhuma, como nos adendos 1 e 4 (20 de 20 sem busca) | a busca perde a fome (PJ7-4). Mesmo assim, a premissa pode falhar: é o mesmo mundo dos adendos 1 e 4 depois de `T_m`, com um pet que gosta da x |
+| R-21 | **A vida maior muda a fase 1** | não muda: a fase 1 tem os mesmos `D_a` = 7 dias, e só a janela cresce |
+| R-22 | **O limiar pelo acaso médio é mais fácil** quando a ração some | o limiar acompanha os alvos de cada oportunidade; com os quatro à vista ele é o 1/4 de antes |
+
+### A7.8 Sementes
+
+| uso | faixa | bases |
+|---|---|---|
+| o piloto do adendo 7 (as margens, o N, as premissas) | **52101…52505** (nova; registrada na `FAIXAS_RESERVADAS` neste PR, sem colisão) | 52101, 52202, 52303, 52404, 52505 (K_u = 4) |
+| a validação do adendo 7 | **53101…53505** (nova; registrada neste PR) | 53101, 53202, 53303, 53404, 53505 (K_u pelo adendo 8) |
+
+**Nenhuma faixa velha volta:** nem a 45101 e a 46101 (o desenho sem o paladar, e a validação já rodada), nem a 49101 e a 51101 (o paladar e a
+fruta ao lado).
+
+### A7.9 Quando roda
+
+Só com o código da A7.5 na `main` (com os gates), as faixas na `FAIXAS_RESERVADAS` e o sim do Matheus para o piloto, e depois outro sim
+para a validação.
+
+### A7.10 Decisões do Matheus (este adendo)
+
+| # | decisão | recomendação | custo de errar |
+|---|---|---|---|
+| PJ7-1 | A alternativa na oportunidade do T1 | **qualquer alternativa ao lado:** a ração ou outra fruta da regra | só a ração (A5.3): o pet come a x quando a ração já acabou, o corte chega sem oportunidade, e a G-OPORTUNIDADE falha de novo |
+| PJ7-2 | A janela depois da mudança | **5 dias,** nos dois protocolos (a vida de 12 dias) | 3 (a de hoje): no caso "a janela acaba", nada muda. 7 ou mais: mais custo, e mais tempo para o corte por uma árvore |
+| PJ7-3 | O limiar da G-APRENDEU | **o acaso médio das oportunidades do braço** (1/k por oportunidade) | 1/4 fixo: com a ração fora, o acaso é 1/3, e 1/4 deixa passar um pet que escolhe a x ao acaso |
+| PJ7-4 | A fome na busca do T2 | **sai** | manter a fome ≤ S/2: a busca olha onde a ração domina, e o T2 tende a ficar sem busca de novo |
+| PJ7-5 | Recalibrar | **não:** a fase 1 é a mesma, e ficam o `ganho_gosto` = S/2 e o `g_plano` = S do adendo 6. Só o piloto é refeito | recalibrar: mais uma rodada que lê a mesma fase 1 e pode mudar o ponto sem razão |
+| PJ7-6 | As sementes | **52101…52505 para o piloto e 53101…53505 para a validação,** as duas novas | reusar uma faixa velha: as unidades já foram vistas, e a 46101 já foi a validação |
