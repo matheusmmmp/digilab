@@ -304,3 +304,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-19 — WORLD-POC-02 (worker A): o Gate A aprovado e a tarefa do Gate B](registro/2026-10.md)
 
 - [2026-10-19 — WORLD-POC-02, PR 1 (worker A): o corpo químico no POC e o Gate B](registro/2026-10.md)
+
+- [2026-10-19 — WORLD-POC-02, PR 2 (worker A): o painel do corpo e a premissa da CP-4 corrigida](registro/2026-10.md)

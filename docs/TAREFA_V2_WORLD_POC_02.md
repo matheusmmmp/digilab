@@ -1,6 +1,6 @@
 # TAREFA V2 — WORLD_POC_02 (2026-10-19)
 
-Coordenador: Gerente. Worker: A. Worktree e branch: `v2-world-poc-02`. Status: EM ANDAMENTO.
+Coordenador: Gerente. Worker: A. Worktree e branch: `v2-world-poc-02`. Status: ENTREGUE (E0 a E3; a E4, o Android mais simples, fica para quando houver o aparelho).
 
 Categoria: implementacao. Origem: Matheus, 2026-10-19: o Gate B do mundo 3D (organismo corporificado, ainda com o cérebro de teste), depois do Gate A aprovado em 2026-10-19.
 
@@ -131,7 +131,7 @@ paridade do mundo com o Python fica para a entrada da P4.
 | CP-1 | o contato (bater na parede, no obstáculo, na bola) tem efeito no corpo? | **não**: só registro. Uma dor por batida seria química nova e SEM FONTE; ela é do Sistema nociceptivo (J10, adiado) ou do proprioceptivo, que ainda é ideia (`docs/DEFINICOES_CORPO_V2.md`, 8.1) | baixo: o registro já guarda o contato, e o efeito entra depois, atrás de chave |
 | CP-2 | o `descansar` é dormir? | **sim**: `dormindo` nos ticks da Intenção, em qualquer lugar da sala. O POC não tem ninho; o conforto do ninho (`mundo_fisico.md`, 2.2) fica para depois | médio: sem dormir, o cansaço só sobe e o pet de teste se esgota; com o sono em qualquer lugar, o descanso fica fácil demais |
 | CP-3 | o tick do POC vira 1 minuto de jogo? | **sim**: as taxas do corpo são por minuto. A página do POC-01a anda 10 ticks por segundo, então 1 segundo de tela é 10 minutos de corpo, e um dia passa em 2,4 minutos de tela | baixo: é um protótipo; a velocidade da página é um número só |
-| CP-4 | a sujeira e a higiene | **ficam paradas** (a sujeira em 0): o POC não tem sujeira nem banheiro | baixo: a higiene não muda e não entra em nenhuma consequência |
+| CP-4 | a sujeira e a higiene | **ficam paradas** (a sujeira em 0): o POC não tem sujeira nem banheiro. **A premissa estava errada (corrigida em 2026-10-19):** a sujeira fica em 0, mas a higiene cai pelo próprio corpo, mesmo sem sujeira, e o POC não tem como limpar. O Matheus decidiu, pela recomendação (a), deixar como está: a queda entra como dado (o pet sem dono piora), sem um limpar do dono (seção 10) | baixo: a higiene não muda e não entra em nenhuma consequência |
 | CP-5 | o empurrão na bola conta como brincar no corpo uma vez por decisão ou por empurrão? | **uma vez por decisão** com empurrão, como o `brincou_com_bola` do `ocorrido` do mundo físico do Python | baixo: empurrões seguidos não viram vários brincares |
 | CP-6 | o POC pode importar o `corpo.ts` do `motor/` | **sim**: só o `corpo.ts` e o que ele importa, sem cópia, para o corpo do POC ser o do jogo e da pesquisa. A G-FRONTEIRA confere a lista, e o motor e o jogo continuam sem importar o POC | baixo: copiar duplicaria o corpo e quebraria a paridade com o `corpo.py` sem ninguém ver |
 | CP-7 | o Gate B se fecha no POC (em TS) ou só com o mundo também no Python? | **no POC**: a demonstração técnica do organismo corporificado. A paridade do mundo com o Python (a seção 7 do `mundo_3d.md` pedia "no motor, Python e TS") fica como critério de entrada da P4, junto com o Gate C | médio: se o Gate B exigir o Python, a P4 começa antes do Gate C, o que a W-5 não quer |
@@ -198,3 +198,28 @@ As etapas entregues entram aqui, cada uma numa seção no fim deste documento.
 
   Isso não fere o Gate B, que é a cadeia, mas mostra que um organismo no mundo novo precisa de mais do que o laço: um dono, ou um
   cérebro que procure.
+
+## 11. Etapa E3, entregue (2026-10-19, PR 2), e a premissa da CP-4 corrigida
+
+**O painel do corpo** (`web/app/poc/mundo3d/pagina.ts`, `poc/mundo3d.html`):
+- **a página roda com o corpo ligado por padrão** (o POC-02); `?corpo=0` volta ao POC-01a, e o e2e do POC-01a usa essa forma;
+- **o painel:** abaixo da sala, um painel mostra os dez receptores do corpo (fome, higiene, energia, humor, saúde, tédio, solidão,
+  estresse, dor, susto), cada um com a leitura de 0 a 1024 e uma barra. É só desenho: ele lê `Corpo.receptores()` a cada quadro, e o
+  motor nunca lê a tela;
+- **o título** diz qual POC está rodando.
+
+**Os gates:**
+- **M-CORPO** (`web/app/e2e_poc/corpo.spec.ts`): com a página rodando e depois pausada, os valores do painel são exatamente os
+  receptores do estado, nas mesmas chaves, e o painel aparece (`artifacts_v2_world_poc/poc02_e2e.json`, M_CORPO;
+  `poc02_painel.png`). Com `?corpo=0`, não há corpo nem painel;
+- **G-APP-IGUAL:** o build do app sai idêntico ao da `main`, o mesmo sha256 dos arquivos de `web/dist/`;
+- o e2e da página passa com 10 testes: os 7 do POC-01a, agora com `?corpo=0`, e os 3 do POC-02.
+
+**A premissa da CP-4, corrigida:**
+- a tarefa dizia que a higiene não mudava sem sujeira. Ela cai pelo próprio corpo, e o POC não tem como limpar;
+- na vida de demonstração (`artifacts_v2_world_poc/poc02_laco.json`), a higiene e a fome chegam a 0 e a saúde cai de 1024 para 148
+  em 3.000 ticks;
+- **o Matheus decidiu, pela recomendação (a), deixar como está:** é um dado (o pet sem dono piora), e não entra um limpar do dono.
+
+**A E4** (um Android mais simples, a ressalva 1 do Gate A) fica para quando houver o aparelho, pelas instruções da M3 do POC-01a
+(`docs/TAREFA_V2_WORLD_POC_01.md`, seção 11).

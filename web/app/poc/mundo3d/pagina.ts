@@ -11,6 +11,39 @@ import { PALETA_RESERVA, SPRITE_RESERVA } from "./sprite_reserva.ts";
 import { type FonteSprite, type Pose, Vista } from "./vista.ts";
 
 const TICKS_POR_SEGUNDO = 10;
+/* o POC-02 (docs/TAREFA_V2_WORLD_POC_02.md, etapa E3): a página roda com o corpo químico do jogo; ?corpo=0 volta ao POC-01a */
+const COM_CORPO = new URLSearchParams(location.search).get("corpo") !== "0";
+const novaSimulacao = (semente: number) => new Simulacao(semente, undefined, { corpo: COM_CORPO });
+
+/** os receptores no painel, na ordem e com os nomes da tela; a leitura vai de 0 a 1024 (nos drives de hoje, 1024 é satisfeito; nos
+ *  novos, 1024 é a falta toda) */
+const RECEPTORES_PAINEL: [string, string][] = [
+  ["fome", "fome"], ["higiene", "higiene"], ["energia", "energia"], ["humor", "humor"], ["saude", "saúde"],
+  ["tedio", "tédio"], ["solidao", "solidão"], ["estresse", "estresse"], ["dor", "dor"], ["susto", "susto"],
+];
+
+/** o painel do corpo: só desenho, a leitura dos receptores do estado (o motor nunca lê a tela) */
+function desenharPainel(receptores: Readonly<Record<string, number>> | null): void {
+  const painel = el("corpo");
+  painel.hidden = receptores === null;
+  if (receptores === null) return;
+  if (!painel.childElementCount) {
+    for (const [chave, nome] of RECEPTORES_PAINEL) {
+      const linha = document.createElement("div");
+      linha.className = "receptor";
+      linha.dataset.receptor = chave;
+      linha.innerHTML = `<span class="nome"></span><span class="nivel"><span></span></span><span class="valor"></span>`;
+      (linha.querySelector(".nome") as HTMLElement).textContent = nome;
+      painel.appendChild(linha);
+    }
+  }
+  for (const linha of painel.querySelectorAll<HTMLElement>(".receptor")) {
+    const v = receptores[linha.dataset.receptor!];
+    if (!Number.isInteger(v)) throw new Error(`o painel sem o receptor ${linha.dataset.receptor}`);
+    (linha.querySelector(".valor") as HTMLElement).textContent = String(v);
+    (linha.querySelector(".nivel > span") as HTMLElement).style.width = `${(v / 1024) * 100}%`;
+  }
+}
 const SPRITE_ATLAS = "brasa_crianca_sereno";   // um pet de exemplo do atlas, quadro 0
 const MEDIR_MS = 10_000;
 
@@ -46,8 +79,9 @@ const mediana = (v: number[]) => { const s = [...v].sort((a, b) => a - b); retur
 const p95 = (v: number[]) => { const s = [...v].sort((a, b) => a - b); return s.length ? s[Math.min(s.length - 1, Math.floor(s.length * 0.95))] : 0; };
 
 async function iniciar(): Promise<void> {
+  el("titulo").textContent = COM_CORPO ? "WORLD-POC-02 (com o corpo)" : "WORLD-POC-01a";
   const { fonte, nome } = await fonteDoSprite();
-  let sim = new Simulacao(Number(el<HTMLInputElement>("semente").value));
+  let sim = novaSimulacao(Number(el<HTMLInputElement>("semente").value));
   const canvas = el<HTMLCanvasElement>("tela");
   let vista = new Vista(canvas, sim.mundo, fonte);
   const ajustar = () => {
@@ -81,6 +115,7 @@ async function iniciar(): Promise<void> {
     } else vista.desenhar(poseFixa ?? atual);
     const ms = mediana(quadros);
     el("fps").textContent = ms > 0 ? `${(1000 / ms).toFixed(0)} quadros/s · tick ${sim.mundo.tick} · sprite ${nome}` : "";
+    desenharPainel(sim.corpo === null ? null : sim.corpo.receptores());
     requestAnimationFrame(laco);
   };
   requestAnimationFrame(laco);
@@ -90,7 +125,7 @@ async function iniciar(): Promise<void> {
     el("pausar").textContent = rodando ? "Pausar" : "Continuar";
   });
   el<HTMLButtonElement>("reiniciar").addEventListener("click", () => {
-    sim = new Simulacao(Number(el<HTMLInputElement>("semente").value));
+    sim = novaSimulacao(Number(el<HTMLInputElement>("semente").value));
     vista.renderer.dispose();
     vista = new Vista(canvas, sim.mundo, fonte);
     ajustar();
@@ -160,6 +195,10 @@ async function iniciar(): Promise<void> {
         return s.hash();
       },
       tamanho: () => vista.tamanho,
+      comCorpo: COM_CORPO,
+      receptores: () => (sim.corpo === null ? null : sim.corpo.receptores()),
+      painel: () => Object.fromEntries([...document.querySelectorAll<HTMLElement>("#corpo .receptor")].map(l =>
+        [l.dataset.receptor!, Number((l.querySelector(".valor") as HTMLElement).textContent)])),
     },
   });
   if (!ehCelular()) el("aviso").textContent = "Este aparelho não parece um celular: a medida sai marcada como desktop, e não vale como a M3 do celular.";
