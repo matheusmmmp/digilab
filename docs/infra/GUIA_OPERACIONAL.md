@@ -138,7 +138,7 @@ GitHub Actions: use o `verificar-pr` que já existe; esta POC não adiciona Acti
 
 | categoria | o que é VERIFICADA (o repositório confere) |
 |---|---|
-| implementacao | algum teste mudou ou é citado (`tests/*.py`, ou `web/app/test/` e `web/app/e2e/`), e todo teste citado existe. Quem roda os testes do Python é o job `testes`. **Os do `web/app` (Vitest e Playwright) o CI não roda**: saem como alerta DECLARADA |
+| implementacao | algum teste mudou ou é citado (`tests/*.py`, ou qualquer `*.test.*` e `*.spec.*` sob `web/app/`, como `test/`, `e2e/`, `e2e_poc/` e `poc/`), e todo teste citado existe. Quem roda os testes do Python é o job `testes`. **Os do `web/app` (Vitest e Playwright) o CI não roda**: saem como alerta DECLARADA |
 | experimento | o `PLANO_ANALISE_V2_*` citado existe e o primeiro commit dele vem antes do primeiro commit de todo artefato novo; todo `artifacts*/…` citado existe. A run não é refeita |
 | literatura | Origem, DOIs, Resultados e Limitações estão preenchidos; todo DOI está em `docs/referencias/` e não está marcado como não verificado na tabela; nada mudou fora de `docs/` |
 | arquitetura | o relato diz PROPOSTO; as decisões do Matheus estão listadas; nada mudou em `digilab/`, `experiments/` ou `web/app/src/` |
