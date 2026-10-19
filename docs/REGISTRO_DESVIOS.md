@@ -277,3 +277,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-18 — BANHEIRO-FALHA-ALTA (sessão lateral): o `configCorpo` do TS com o banheiro, a ordem E-9 dos gestos](registro/2026-10.md)
 
 - [2026-10-18 — ROTEAMENTO-MODELOS (ChatGPT Work): escolha de modelo e contexto no CLAUDE.md](registro/2026-10.md)
+
+- [2026-10-18 — W-PORTE, etapa 4, parte 3b (worker de uma sessão lateral): o pet v11 no Motor do jogo](registro/2026-10.md)

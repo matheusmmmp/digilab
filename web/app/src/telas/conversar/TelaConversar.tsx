@@ -21,6 +21,8 @@ const COMO_FALA: Record<string, string> = { bebe: "só emotes", crianca: "ícone
 const MODOS: [ModoFala, string][] = [["template", "Frases prontas"], ["moldura", "Moldura"], ["livre", "Livre"]];
 const NOME_MODO: Record<ModoFala, string> = { template: "Frases prontas", moldura: "Moldura por LLM", livre: "Fala livre no aparelho" };
 const ATALHOS: [AcaoDono, string, string | null][] = [["elogiar", "Elogiar", "emoji_joinha"], ["repreender", "Repreender", null], ["acariciar", "Carinho", "emoji_coracao"]];
+/* pets v11: sem elogio nem bronca; o carinho e o tapa sao gestos no corpo */
+const ATALHOS_V11: [AcaoDono, string, string | null][] = [["acariciar", "Carinho", "emoji_coracao"], ["tapa", "Tapa", null]];
 const MAX_BALOES = 30;
 
 function RetratoPequeno() {
@@ -116,7 +118,7 @@ export function TelaConversar({ voltar }: { voltar: () => void }) {
       <p class="dl-apoio conv-rodape">O que você escreve não ensina o pet nem entra no registro dele. Um pedido claro ("vai comer") vira a ação na hora, como o botão.</p>
 
       <div class="conv-atalhos" role="group" aria-label="Ensinar agora">
-        {ATALHOS.map(([a, rot, em]) => (
+        {(m.versao >= 11 ? ATALHOS_V11 : ATALHOS).map(([a, rot, em]) => (
           <button type="button" key={a} class={`conv-atalho${a === "elogiar" ? " conv-atalho--destaque" : ""}`} disabled={nascendo > 0} onClick={() => agir(a)}>
             {em && <Peca nome={em} escala={2} />}{rot}
           </button>

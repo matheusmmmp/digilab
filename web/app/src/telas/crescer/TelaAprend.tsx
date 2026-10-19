@@ -226,8 +226,9 @@ function confiancaEmPalavras(m: Motor): string {
   return m.conf!.historico.length ? "sem estado marcante: nem confiante nem inseguro" : "ainda não lutou: nem confiante nem inseguro";
 }
 function Jeito() {
-  const { motor: m } = useJogo(), e = m.e, est = m.estagioAtual, des = m.desejoAtual(observacao(e), e.tick);
-  const vinculo = m.versao >= 2
+  const { motor: m } = useJogo(), e = m.e, est = m.estagioAtual, des = m.desejoAtual(m.observacaoAgora(), e.tick);
+  const vinculo = m.versao >= 11 ? `${(m.vinc.valor * 100).toFixed(0)}% · sobe quando você atende uma vontade dele`
+    : m.versao >= 2
     ? `${(m.vinc.valor * 100).toFixed(0)}% · sem conflito, aceita um cuidado com ${(termosObediencia(m.vinc.valor, m.temp.teimosia, 0, null)[0] * 100).toFixed(0)}% de chance`
     : "pet de versão antiga: sem vínculo nem recusa (um pet novo já nasce com eles)";
   const bruto = afinidades(m.tracos), base = BASE_CARATER[est === "adulto" || est === "mega" ? "adulto" : "adolescente"];
@@ -261,8 +262,29 @@ function Jeito() {
   );
 }
 
+/** pets v11: o cerebro e o A (os lobos), nao o Bandit. As secoes do Bandit (Agora, Instinto x aprendido e Decisoes) nao valem para
+    ele; o painel DigiBrain, que mostra o cerebro A, e a etapa 5. Ficam as lembrancas (a memoria por espacos) e o jeito */
+function TelaAprendV11() {
+  const desk = useDesktop();
+  return (
+    <div class={desk ? "tela dl desk aprend-desk" : "tela dl"}>
+      <div class={desk ? "desk-col aprend-col" : ""}>
+        <section class="dl-card bloco">
+          <h2>O cérebro deste pet</h2>
+          <p class="dl-apoio">Ele decide pelo instinto e aprende sozinho com o que as próprias ações fazem no corpo dele: comer quando tem
+            fome, brincar quando está entediado, o seu carinho e o seu tapa. Não há elogio nem bronca. O painel com as decisões do cérebro
+            vem numa próxima versão do jogo.</p>
+        </section>
+        <Lembrancas />
+      </div>
+      <div class={desk ? "desk-col aprend-col" : ""}><Jeito /></div>
+    </div>
+  );
+}
+
 export function TelaAprend() {
-  const [secao, setSecao] = useState<Secao>("Agora"), desk = useDesktop();
+  const [secao, setSecao] = useState<Secao>("Agora"), desk = useDesktop(), { motor: m } = useJogo();
+  if (m.versao >= 11) return <TelaAprendV11 />;
   /* desktop (AprendizadoDesktop): as secoes lado a lado, sem as abas internas */
   if (desk) return (
     <div class="tela dl desk aprend-desk">

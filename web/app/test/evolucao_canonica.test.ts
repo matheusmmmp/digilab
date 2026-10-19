@@ -68,7 +68,7 @@ describe("nomes e sprites no canone", () => {
 
 describe("Ultimate -> Mega (pets v5)", () => {
   /* desde as medalhas do Tamer (docs/DESIGN_MEDALHAS_ARENAS.md) os ovos novos sao v6: v5 + a trava; os v5 seguem aqui */
-  test("ovos novos sao v10 (v5 + medalhas + voz propria + confianca + combate equilibrado + vinculo B)", () => { expect(VERSAO_PET).toBe(10); expect(new Motor(1).versao).toBe(10); });
+  test("ovos novos sao v11 (v5 + medalhas + confianca + combate equilibrado + vinculo B + o cerebro A e o corpo)", () => { expect(VERSAO_PET).toBe(11); expect(new Motor(1).versao).toBe(11); });
 
   test("com tempo, lutas, vitorias e vinculo vira Mega: estagio novo, com a forma adulta do Ultimate", () => {
     const m = ultimate(3101), adulta = m.forma.adulta;

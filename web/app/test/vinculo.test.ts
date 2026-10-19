@@ -81,17 +81,16 @@ describe("vinculo B (pets v10) e paridade com o Python", () => {
     for (let t = 0; t < TPD; t++) expect(situacaoDe(obs(.9, .9, .9, t))[2]).toBe(t >= 1320 || t < 420 ? "1" : "0");
   });
 
-  test("ovos novos sao v10 com o vinculo B; um pet v9 segue com o de hoje", () => {
-    expect(VERSAO_PET).toBe(10); expect(CVB.versaoPet).toBe(10);
-    expect(new Motor(1).vinc.porSituacao).toBe(true);
+  test("os v10 e os v11 (os ovos novos) tem o vinculo B; um pet v9 segue com o de hoje", () => {
+    expect(VERSAO_PET).toBe(11); expect(CVB.versaoPet).toBe(10);
+    for (const v of [10, 11]) { expect(new Motor(1, v).vinc.porSituacao).toBe(true); expect(new Motor(1, v).vinc.assinatura().length).toBe(8); }
     expect(new Motor(1, 9).vinc.porSituacao).toBe(false);
     expect(new Motor(1, 9).vinc.assinatura().length).toBe(7);
-    expect(new Motor(1).vinc.assinatura().length).toBe(8);
-    expect(() => new Motor(1, 11)).toThrow();
+    expect(() => new Motor(1, 12)).toThrow();
   });
 
   test("uma vida v10 com o dono aleatorio da web: nenhum pedido, chaves de coerencia por situacao, replay igual", () => {
-    const m = new Motor(2001), dono = criarDono("aleatorio"), r = criarRng(hashSemente("dono", 2001, "aleatorio"));
+    const m = new Motor(2001, 10), dono = criarDono("aleatorio"), r = criarRng(hashSemente("dono", 2001, "aleatorio"));
     const passos = Math.round(2 * TPD / CD.passo), orc = 32;
     let gasto = 0;
     for (let p = 0; p < passos; p++) {
