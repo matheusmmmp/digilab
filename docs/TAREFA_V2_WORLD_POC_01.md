@@ -1,6 +1,6 @@
 # TAREFA V2 — WORLD_POC_01 (2026-10-19)
 
-Coordenador: Gerente. Worker: A. Worktree e branch: `v2-world-poc-01`. Status: ENTREGUE.
+Coordenador: Gerente. Worker: A. Worktree e branch: `v2-world-poc-01`. Status: ENTREGUE; **o Gate A foi APROVADO pelo Matheus em 2026-10-19**, com duas ressalvas: um celular só, recente (testar num Android mais simples quando houver), e o cérebro de verdade no mundo novo (a P4) esperando o Gate C. O próximo passo é a `docs/TAREFA_V2_WORLD_POC_02.md` (o Gate B).
 
 Categoria: implementacao. Origem: Matheus, 2026-10-19: o WORLD-POC-01a da investigação WORLD-POC-001 (docs/futuro/mundo_3d.md), aprovado em 2026-10-19 para avançar em paralelo ao Gate C.
 

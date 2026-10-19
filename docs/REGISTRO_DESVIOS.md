@@ -300,3 +300,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-19 — W-PORTE, o mapa dos pesos no painel DigiBrain (worker de uma sessão lateral)](registro/2026-10.md)
 
 - [2026-10-19 — WORLD-POC-01a, PR 2 (worker A): a vista em Three.js e as medidas M1 a M6](registro/2026-10.md)
+
+- [2026-10-19 — WORLD-POC-02 (worker A): o Gate A aprovado e a tarefa do Gate B](registro/2026-10.md)
