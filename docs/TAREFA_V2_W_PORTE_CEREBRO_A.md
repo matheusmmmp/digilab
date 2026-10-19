@@ -452,3 +452,40 @@ Pelas decisões PW-5, PW-6 e PW-7. Sem run de pesquisa e sem número novo no cé
 - **Só nos v11 (PW-7):** os pets v1 a v10 não têm o botão nem a coluna, e o layout deles não muda.
 - **Testes:** `npm run tipos` limpo; `npm test` com 40 arquivos e 452 testes; `npm run e2e` com 68 testes, entre eles o do painel em 390 e 1280 px, com captura, e o dos pets
   antigos sem painel; `tests/test_painel_digibrain.py` (4); `python tools/conferir_saude.py` passa.
+
+## 18. O mapa dos pesos acendendo no painel DigiBrain, entregue (2026-10-19)
+
+Pedido do Matheus em 2026-10-19: o mapa do cérebro acendendo no painel, no lugar do ícone estático. A base é o desenho do connectome do
+#321 (`docs/futuro/connectome_cerebro_a.md`, seção 2). Sem run de pesquisa e sem número novo no cérebro. O registro está em
+`docs/registro/2026-10.md`.
+
+- **As pranchas primeiro:** `DigiBrainDesktop.html` e `DigiBrain390.html`, com as capturas refeitas em `docs/estilo_up/pranchas/capturas/`.
+  O mapa fica logo abaixo do "agora", e o ícone estático saiu do cabeçalho do card e da folha (fica só no botão do celular). Os números
+  das pranchas são os do gabarito (a vida v11 da semente 101, a decisão 262), desenhados pela mesma conta do componente.
+- **O mapa:**
+  - **Os nós,** em colunas fixas geradas da estrutura do cérebro A: as dez entradas (com o viés) e os receptores novos do corpo, as sete
+    regras do instinto e as sete ações.
+  - **As arestas:** uma por peso `w[regra][acao][entrada]` com w ou w0 não nulo, da entrada à ação passando pela regra (CN-2). A espessura
+    é √|w|/S (CN-3); a cor é cinza no prior, vermelha no aprendido a mais e azul no aprendido a menos, mais forte quanto mais perto do
+    teto; o peso negativo é tracejado.
+  - **As regiões** são os lobos: percepção, impulsos, decisão, e a memória e emoção numa faixa sem pesos.
+  - **O que acende a cada decisão:** a regra que disparou, os candidatos com a chance, as três entradas que mais pesaram (as da
+    percepção do painel), a ação escolhida, o lobo decisivo do motivo ("pesou mais") e, em laranja, cada termo da ação escolhida, com a
+    espessura pela força √(|termo| / o maior termo). O termo negativo é tracejado.
+  - **Entre duas decisões, nada se mexe:** sem transição nem animação (o e2e confere `getAnimations` e a `transition-duration`).
+- **As contas, no Python e no motor TS, com paridade bit a bit:** `mapa_pesos` e `mapa_decisao` em `digilab/painel_digibrain.py`, e
+  `mapaPesos` e `mapaDecisao` em `web/app/motor/digibrain.ts`. São leituras puras dos pesos e do motivo, e falham alto numa regra que o
+  mapa não desenha, numa linha de tamanho errado e num peso além do teto. O termo aceso é o mesmo da percepção, bit a bit.
+  - `Motor.digibrain()` ganhou o `mapa`: os receptores, as arestas com os pesos de agora e as acesas da última decisão.
+  - O gabarito é `web/app/test/gabaritos/mapa_digibrain_python.json`, gravado pelo mesmo exportador do painel. Ele tem as 14 arestas do
+    prior, as arestas do fim das quatro vidas v11 (68, 64, 86 e 67, das quais 60, 56, 80 e 59 aprendidas) e as acesas das 1.152
+    decisões. `web/app/test/digibrain.test.ts` confere tudo no Node.
+- **O componente:** `web/app/src/componentes/MapaPesos.tsx`, SVG puro, sem biblioteca nova. Lê o motor só por `useJogo()` (pelo
+  `ConteudoDigiBrain`); a tela só posiciona. Nenhum rótulo diz "pensando", "sentindo" ou "connectome": a nota diz que cada traço é um
+  peso do pet.
+- **Só nos v11:** os pets v1 a v10 não têm o painel, e nada neles mudou.
+- **Conferido no navegador** (`npm run dev`) num pet v11, em 1280 px e em 390 px, nos temas claro e escuro: o mapa acompanhou o motor
+  decisão a decisão.
+- **Testes:** `npm run tipos` limpo; `npm test` com 40 arquivos e 455 testes; `npm run e2e` com 70 testes, entre eles o do mapa em 390 e
+  1280 px (o mapa contra `Motor.digibrain()`, nada animado e o mapa aceso de novo na decisão seguinte); `tests/test_painel_digibrain.py`
+  (7); `python tools/conferir_saude.py` passa.

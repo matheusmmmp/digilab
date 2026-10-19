@@ -20,6 +20,12 @@ números e os textos são exemplo de layout, não dado.
 | `DigiBrainDesktop.html` | 1280×720 | o painel DigiBrain dos pets v11 (etapa 5 do W-PORTE, `docs/TAREFA_V2_W_PORTE_CEREBRO_A.md`, seção 4) na casca da UI-DESKTOP (#328): uma coluna entre o habitat e a coluna de sempre, com o "agora", as barras por lobo, a percepção em lista (PW-5), a emoção como selo à parte (PW-6), as chances, o "o que aprendeu" e as últimas ações; a coluna rola sozinha |
 | `DigiBrain390.html` | 390×844 | o mesmo no celular, numa folha que sobe de baixo, aberta pelo botão "DigiBrain" no canto do palco; o cabeçalho do Pet, com Conversar e Ajustes, não muda |
 
-As duas pranchas do DigiBrain usam as cores pelos tokens `--dl-*` (o app usa os `--ui-*` equivalentes do #328 no desktop). O desenho do
-cérebro é um ícone estático com uma cor por lobo: o connectome (#321) é ferramenta de pesquisa até o J5 (CN-1) e não vai ao jogo, e nada
-no painel anima para fingir atividade. As capturas estão em `capturas/`.
+As duas pranchas do DigiBrain usam as cores pelos tokens `--dl-*` (o app usa os `--ui-*` equivalentes do #328 no desktop). Desde
+2026-10-19 o ícone estático do cabeçalho deu lugar ao **mapa dos pesos**, logo abaixo do "agora": o desenho do connectome do #321
+(`docs/futuro/connectome_cerebro_a.md`, seção 2) em colunas fixas, geradas da estrutura do cérebro A. As regiões são os lobos (percepção,
+impulsos, decisão; a memória e emoção, sem pesos). Cada traço é um peso `w[regra][acao][entrada]`, da entrada à ação, passando pela
+regra: a espessura é √|w|/S, e a cor separa o instinto (cinza) do aprendido a mais (vermelho) e a menos (azul). A cada decisão acendem,
+em laranja, a regra que disparou, os candidatos com a chance, as entradas que mais pesaram e os termos da ação escolhida; a ação
+escolhida e o lobo que pesou mais ficam destacados. Entre duas decisões o mapa fica parado: nada anima para fingir atividade. Os números
+das duas pranchas são os do gabarito (a vida v11 da semente 101, a decisão 262), desenhados pela mesma conta do componente `MapaPesos`.
+No celular o mapa ocupa a largura da folha. As capturas estão em `capturas/`.

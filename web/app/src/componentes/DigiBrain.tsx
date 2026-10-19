@@ -1,7 +1,8 @@
 /* O painel DigiBrain dos pets v11 (docs/TAREFA_V2_W_PORTE_CEREBRO_A.md, secao 4 e etapa 5; pranchas DigiBrainDesktop e DigiBrain390).
    So le o motor por useJogo(): todo numero sai de Motor.digibrain() (motor/digibrain.ts, com paridade com o Python), do historico e da
    memoria do pet. A tela so escolhe o texto e formata. Nos pets v1 a v10 nao aparece (PW-7). Nada aqui anima para fingir atividade, e
-   nenhum rotulo diz "pensando" ou "sentindo". */
+   nenhum rotulo diz "pensando" ou "sentindo". Desde 2026-10-19 o desenho do cerebro e o mapa dos pesos (MapaPesos.tsx), que acende a
+   cada decisao; o icone estatico ficou so no botao do celular. */
 import { useState } from "preact/hooks";
 import { EMOCAO_TXT, NOME_PET, type AcaoPet, type LoboBarra, type RegraLobos } from "../../motor/index.ts";
 import { useJogo } from "../jogo.ts";
@@ -10,6 +11,7 @@ import { estadoSelo } from "../seloDigiBrain.ts";
 import { useTempo } from "../tempo.ts";
 import { hhmm } from "../telas/pet/TelaPet.tsx";
 import { Folha } from "./Folha.tsx";
+import { LegendaMapa, MapaPesos } from "./MapaPesos.tsx";
 
 /** a regra do instinto que disparou, em texto do jogo */
 const REGRA_TXT: Record<RegraLobos, string> = {
@@ -37,8 +39,8 @@ const pct = (v: number, casas: number, sinal: boolean): string =>
   (sinal && v > 0 ? "+" : "") + (v * 100).toLocaleString("pt-BR", { minimumFractionDigits: casas, maximumFractionDigits: casas }).replace("-", "−") + "%";
 const num = (v: number): string => (v > 0 ? "+" : "") + v.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace("-", "−");
 
-/** o cerebro A, ICONE ESTATICO: uma cor por lobo (impulsos, aprendido, corpo, memoria e emocao). O connectome (#321) fica na pesquisa ate
-    o J5 (CN-1); nada aqui acende nem anima */
+/** o cerebro A, ICONE ESTATICO do botao do celular: uma cor por lobo (impulsos, aprendido, corpo, memoria e emocao). Nada aqui acende
+    nem anima; o desenho que acende e o mapa dos pesos, dentro do painel */
 export function IconeCerebro({ largura = 32 }: { largura?: number }) {
   return (
     <svg class="db-icone" width={largura} height={Math.round(largura * 56 / 64)} viewBox="0 0 64 56" aria-hidden="true">
@@ -81,6 +83,11 @@ export function ConteudoDigiBrain() {
             : d.quem_decidiu.mudou ? `Sem o aprendido, teria decidido ${ACAO_INF[d.quem_decidiu.acao_instinto]}.`
               : "O instinto sozinho faria o mesmo."}</small></div>
           : <div class="db-agora"><small>Ainda não decidiu nada.</small></div>}
+      </section>
+      <section aria-labelledby="db-mapa" class="db-mapa">
+        <h3 class="db-sec" id="db-mapa">Mapa dos pesos</h3>
+        <MapaPesos mapa={db.mapa} decisao={d} />
+        <LegendaMapa />
       </section>
       {d && <>
         <section aria-labelledby="db-lobos">
@@ -129,7 +136,7 @@ export function CardDigiBrain({ replay = false }: { replay?: boolean }) {
   if (m.versao < 11) return null;
   return (
     <section class="dl-card digibrain" aria-labelledby="db-tit">
-      <div class="db-cab"><IconeCerebro /><h2 id="db-tit">DigiBrain</h2><SeloDigiBrain replay={replay} /></div>
+      <div class="db-cab"><h2 id="db-tit">DigiBrain</h2><SeloDigiBrain replay={replay} /></div>
       <div class="db-rola"><ConteudoDigiBrain /></div>
     </section>
   );
@@ -142,7 +149,7 @@ export function BotaoDigiBrain({ replay = false }: { replay?: boolean }) {
   return <>
     <button type="button" class="db-botao" aria-haspopup="dialog" onClick={() => setAberto(true)}><IconeCerebro largura={18} />DigiBrain</button>
     {aberto && <Folha titulo="DigiBrain" fechar={() => setAberto(false)}>
-      <div class="db-folha-selo"><IconeCerebro /><SeloDigiBrain replay={replay} /></div>
+      <div class="db-folha-selo"><SeloDigiBrain replay={replay} /></div>
       <ConteudoDigiBrain />
     </Folha>}
   </>;
