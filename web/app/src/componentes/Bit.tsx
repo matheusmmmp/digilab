@@ -1,7 +1,7 @@
 /* Professor Agumon, o mentor do tutorial (docs/JORNADA_JOGADOR.md; antes "Bit"): desde 2026-09-28 (pedido do Matheus) e o Agumon de capelo
    de professor do Digimon UP ("Agu", grupo B: falando e apontando a varinha), sprite "guia" do atlas. Sem o atlas,
    volta o robozinho desenhado em pixels aqui mesmo. A faixa da dica fica acima da barra, uma frase por vez. */
-import { useEffect, useRef } from "preact/hooks";
+import { useEffect, useRef } from "react";
 import { desenharSprite, dimSprite, escalaSprite, quadroAgora, useAtlas } from "../atlas.ts";
 import { dispensarDica, DICAS, NOME_MENTOR, useDicaAtual } from "../dicas.ts";
 
@@ -24,7 +24,7 @@ const COR: Record<string, string> = { n: "#173A8A", b: "#9FC2EF", c: "#0F2A66", 
 
 export function RetratoBit({ tam = 40 }: { tam?: number }) {
   return (
-    <svg class="bit" viewBox="0 0 12 12" width={tam} height={tam} aria-hidden="true" shape-rendering="crispEdges">
+    <svg className="bit" viewBox="0 0 12 12" width={tam} height={tam} aria-hidden="true" shapeRendering="crispEdges">
       {GRADE.flatMap((l, y) => [...l].map((c, x) => (COR[c] ? <rect key={`${x}-${y}`} x={x} y={y} width="1" height="1" fill={COR[c]} /> : null)))}
     </svg>
   );
@@ -47,17 +47,17 @@ export function RetratoGuia() {
   }, [a, ok]);
   if (a.tipo !== "ok" || !ok) return <RetratoBit />;
   const [w, h] = dimSprite(a.dados, "guia");
-  return <canvas ref={ref} class="bit bit-guia" style={{ width: `${w}px`, height: `${h}px` }} aria-hidden="true" />;
+  return <canvas ref={ref} className="bit bit-guia" style={{ width: `${w}px`, height: `${h}px` }} aria-hidden="true" />;
 }
 
 export function DicaBit() {
   const id = useDicaAtual();
   if (!id) return null;
   return (
-    <aside class="dica-bit" role="status" aria-live="polite">
+    <aside className="dica-bit" role="status" aria-live="polite">
       <RetratoGuia />
       <p><b>{NOME_MENTOR}:</b> {DICAS[id]}</p>
-      <button type="button" class="dl-btn dl-btn--sec dica-ok" onClick={() => dispensarDica(id)}>Entendi</button>
+      <button type="button" className="dl-btn dl-btn--sec dica-ok" onClick={() => dispensarDica(id)}>Entendi</button>
     </aside>
   );
 }

@@ -1,7 +1,7 @@
 /* Luta (Arena e Campanha): um estado so, compartilhado pelas duas abas; o palco aparece na aba visivel e cada
    aba reinicia o palco para o proprio modo quando abre (a mensagem de um modo nao vaza para o outro, revisao
    item 1). A luta entra no registro na hora (motor.lutar); a animacao so mostra os turnos que o motor ja jogou. */
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useState } from "react";
 import {
   BOTS_V21, BOT_TRACO, CAT, LIGA, NOME_ARQ, NOME_BOT, NOME_ESP, NOME_EST, NPC, RIVAL_LIGA, RIVAL_SALAO, cartaDe, formaRivalSalao, chaveSprite, corDominante, estadoV2, formaLiga, formaRival,
   formaRivalInstalacao, hashSemente, instalacaoDe, jogarV2, lutadorBot, lutadorPet, medalhaDoLider, motivoCombate, nomeForma, type Arena, type Estagio,

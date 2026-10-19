@@ -2,7 +2,7 @@
    (adulto e vivo); pai 2 = um log: um pet em espera ou um arquivo importado de outro dono (fica na espera). Ao cruzar,
    o pai ativo se APOSENTA: sai do jogo e vai para Diario · Geracoes (so para ver); o filho (pet v4, evento de origem
    no comeco do registro) vira o ativo e choca. O outro pai continua onde estava. Nao da para desfazer. */
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useState } from "react";
 import { CHE, EIXOS_TEMP, Motor, hashSemente, type EixoTemperamento, type Especie, type EventoRegistro } from "../motor/index.ts";
 import { jogoAtual, trocarMotor } from "./jogo.ts";
 import { CHAVE_GUARDADOS, abrirGuardado, lerGuardados } from "./pets.ts";

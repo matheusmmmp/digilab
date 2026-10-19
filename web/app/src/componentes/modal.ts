@@ -8,6 +8,9 @@ export function abrirModal(d: HTMLDialogElement | null, voltarPara?: () => HTMLE
   if (!d || d.open) return;
   const antes = document.activeElement instanceof HTMLElement ? document.activeElement : null;
   d.showModal();
+  /* o botão marcado com data-autofocus recebe o foco ao abrir: o React não escreve o atributo autofocus no HTML (o autoFocus
+     dele foca ao montar, com o dialogo ainda fechado), então o showModal sozinho focaria o primeiro botão */
+  d.querySelector<HTMLElement>("[data-autofocus]")?.focus();
   abertos.push(d);
   d.addEventListener("close", () => {
     abertos.splice(abertos.indexOf(d), 1);

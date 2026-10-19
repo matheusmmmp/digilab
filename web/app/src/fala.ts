@@ -1,7 +1,7 @@
 /* Fala do pet na tela (so exibicao; espelho do HTML). O texto vem das tabelas de expressao do motor; a fala por
    LLM (moldura, servidor local /api/fala) so troca o TEXTO do adolescente e do adulto e e validada no servidor
    contra o motivo. Nada disso entra no registro nem nas decisoes. Sem servidor: so template. */
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useState } from "react";
 import { NOME_ESTAGIO_FALA, expressar, type Estagio, type Motivo, type MotivoVida, type Motor } from "../motor/index.ts";
 import { CHAVE } from "./save.ts";
 

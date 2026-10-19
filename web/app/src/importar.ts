@@ -1,7 +1,7 @@
 /* Exportar e importar pets (pranchas MpImportar e MpImportarDesktop). O arquivo .digilab e o proprio save do pet:
    {semente, log, versao}. Importar = replay do registro (tem que abrir); pet novo vai para a espera. Mesma semente com
    outro registro = conflito: o dono escolhe qual fica, e o outro vai para a espera (ninguem e apagado). */
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useState } from "react";
 import { Motor, type EventoRegistro } from "../motor/index.ts";
 import { jogoAtual, trocarMotor } from "./jogo.ts";
 import { CHAVE_GUARDADOS, abrirGuardado, lerGuardados, type Guardado } from "./pets.ts";

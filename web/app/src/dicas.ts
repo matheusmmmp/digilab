@@ -2,7 +2,7 @@
    UMA frase no momento em que a mecanica aparece; some ao tocar em Entendi e nao volta. Do adulto em diante ele se
    despede e o proprio pet explica (a revelacao ja traz o porque). Preferencia e dicas vistas em chaves proprias: o
    save do pet nao muda. */
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useState } from "react";
 import { CHAVE } from "./save.ts";
 
 /** nome na tela do mentor do tutorial (nomes em Digimon; antes "Bit", decisao do Matheus em 2026-09-29) */

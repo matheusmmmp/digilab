@@ -6,7 +6,7 @@
    escreve nao ensina o pet. Comando pelo chat (TAREFA_COMANDO_CHAT): quando o pet entende um pedido claro ("vai comer"),
    a acao entra na hora pelo mesmo caminho do botao (src/acoes.ts; execucao direta desde 2026-10-01) e o historico marca
    "✓ alimentou". */
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { CDJ, OVO, chaveSprite, nomeEstagio, nomeForma, type AcaoDono } from "../../../motor/index.ts";
 import { FEITO_DONO, agir } from "../../acoes.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
@@ -27,9 +27,9 @@ const MAX_BALOES = 30;
 
 function RetratoPequeno() {
   const { motor: m, nascendo } = useJogo(), a = useAtlas();
-  if (a.tipo !== "ok") return <span class="conv-av" aria-hidden="true" />;
+  if (a.tipo !== "ok") return <span className="conv-av" aria-hidden="true" />;
   const img = imagemAtlas(a, nascendo > 0 ? OVO[m.especie] : chaveSprite(m.forma));
-  return <span class="conv-av" aria-hidden="true"><img class="dl-pix" src={img.url} width={img.w} height={img.h} alt="" /></span>;
+  return <span className="conv-av" aria-hidden="true"><img className="dl-pix" src={img.url} width={img.w} height={img.h} alt="" /></span>;
 }
 /** fala do pet: sem base (verificador achou afirmacao sem fato) fica riscada, com a nota embaixo. Pets v7 (voz propria):
     inventar pode, desde que se saiba; a fala fica inteira e a nota marca com o lapis o que ele inventou */
@@ -39,14 +39,14 @@ function BalaoPet({ r }: { r: RegistroFala }) {
   const trechos = semBase ? (v!.afirmacoes || []).filter(x => !x.sustentada).map(x => x.trecho) : [];
   const inventou = voz ? r.voz!.invencoes : [];
   return (
-    <div class="conv-linha">
+    <div className="conv-linha">
       <RetratoPequeno />
-      <div class="conv-pilha">
-        <div class={`conv-balao conv-balao--pet${semBase ? " conv-balao--sembase" : ""}`}>{r.fala}</div>
-        {semBase && <div class="conv-nota"><span class="conv-nota-q">?</span>Sem base{trechos.length ? `: ${trechos.map(t => `«${t}»`).join(", ")}` : ""}{v!.manipulacao ? " · possível manipulação" : ""}.</div>}
-        {inventou.length > 0 && <div class="conv-nota"><span class="conv-nota-q">✎</span>Inventou: {inventou.map(t => `«${t}»`).join(", ")}.</div>}
-        {!voz && v?.erro && <div class="conv-nota"><span class="conv-nota-q">?</span>O verificador não respondeu.</div>}
-        {r.comando_executado && r.comando && <div class="conv-nota conv-nota--feito"><span class="conv-nota-q">✓</span>{FEITO_DONO[r.comando]}</div>}
+      <div className="conv-pilha">
+        <div className={`conv-balao conv-balao--pet${semBase ? " conv-balao--sembase" : ""}`}>{r.fala}</div>
+        {semBase && <div className="conv-nota"><span className="conv-nota-q">?</span>Sem base{trechos.length ? `: ${trechos.map(t => `«${t}»`).join(", ")}` : ""}{v!.manipulacao ? " · possível manipulação" : ""}.</div>}
+        {inventou.length > 0 && <div className="conv-nota"><span className="conv-nota-q">✎</span>Inventou: {inventou.map(t => `«${t}»`).join(", ")}.</div>}
+        {!voz && v?.erro && <div className="conv-nota"><span className="conv-nota-q">?</span>O verificador não respondeu.</div>}
+        {r.comando_executado && r.comando && <div className="conv-nota conv-nota--feito"><span className="conv-nota-q">✓</span>{FEITO_DONO[r.comando]}</div>}
       </div>
     </div>
   );
@@ -67,9 +67,9 @@ function Fatos() {
     ["Vínculo", s.vinculo != null ? [s.vinculo >= .66 ? "alto (sem número)" : s.vinculo >= .33 ? "médio (sem número)" : "baixo (sem número)"] : []],
   ];
   return (
-    <aside class="conv-fatos" aria-label="O que o pet pode citar agora">
-      <div class="conv-fatos-cab dl-malha"><b>O QUE O PET PODE CITAR AGORA</b><span>A fala livre só pode afirmar causa ou lembrança que esteja nesta lista.</span></div>
-      <div class="conv-fatos-lista">
+    <aside className="conv-fatos" aria-label="O que o pet pode citar agora">
+      <div className="conv-fatos-cab dl-malha"><b>O QUE O PET PODE CITAR AGORA</b><span>A fala livre só pode afirmar causa ou lembrança que esteja nesta lista.</span></div>
+      <div className="conv-fatos-lista">
         {sec.filter(([, l]) => l.length).map(([t, l]) => <div key={t}><h3>{t}</h3>{l.map((x, i) => <p key={i}>{x}</p>)}</div>)}
       </div>
     </aside>
@@ -84,50 +84,50 @@ export function TelaConversar({ voltar }: { voltar: () => void }) {
   const nome = nascendo > 0 ? "o ovo" : nomeForma(m.forma), livre = fl.modo === "livre";
   const pronto = livre ? !!fl.status : fl.modo === "moldura" ? llm.ativo : true;
   const direita = livre ? (fl.status ? `${fl.status.modelo} pronto` : fl.statusErro ? "servidor sem a fala livre" : "conferindo…") : r.texto;
-  const enviar = (ev: Event) => { ev.preventDefault(); enviarConversa(msg); setMsg(""); };
+  const enviar = (ev: FormEvent) => { ev.preventDefault(); enviarConversa(msg); setMsg(""); };
   return (
-    <section class="conv-tela dl" aria-labelledby="conv-tit">
-      <div class="conv-cab dl-faixa">
-        <button type="button" class="conv-voltar" aria-label="Voltar para o Pet" onClick={voltar}>
+    <section className="conv-tela dl" aria-labelledby="conv-tit">
+      <div className="conv-cab dl-faixa">
+        <button type="button" className="conv-voltar" aria-label="Voltar para o Pet" onClick={voltar}>
           <svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true"><path d="M10 3 5 8l5 5" /></svg>
         </button>
-        <div class="conv-cab-txt">
-          <h1 class="dl-num" id="conv-tit">Conversar</h1>
+        <div className="conv-cab-txt">
+          <h1 className="dl-num" id="conv-tit">Conversar</h1>
           <span>{nascendo > 0 ? "Digi-Egg" : nomeForma(m.forma)} · {nomeEstagio(m.forma)} · {COMO_FALA[m.estagioAtual]}</span>
         </div>
       </div>
-      <div class="conv-status">
-        <span class="fala-ponto" data-estado={pronto ? "ok" : "off"} aria-hidden="true" />
+      <div className="conv-status">
+        <span className="fala-ponto" data-estado={pronto ? "ok" : "off"} aria-hidden="true" />
         <span>{NOME_MODO[fl.modo]}</span>
-        <span class="conv-status-dir" title={r.titulo}>{direita}</span>
+        <span className="conv-status-dir" title={r.titulo}>{direita}</span>
       </div>
-      <div class="conv-modos" role="group" aria-label="Modo da fala">
-        {MODOS.map(([k, rot]) => <button type="button" key={k} class="dl-chip" aria-pressed={fl.modo === k} onClick={() => escolherModo(k)}>{rot}</button>)}
+      <div className="conv-modos" role="group" aria-label="Modo da fala">
+        {MODOS.map(([k, rot]) => <button type="button" key={k} className="dl-chip" aria-pressed={fl.modo === k} onClick={() => escolherModo(k)}>{rot}</button>)}
       </div>
-      <div class="conv-lista" aria-live="polite">
+      <div className="conv-lista" aria-live="polite">
         {regs.length ? regs.map((x, i) => (
-          <div class="conv-troca" key={i}>
-            {x.situacao === "conversa" && x.fala_jogador && <div class="conv-balao conv-balao--eu">{x.fala_jogador}</div>}
+          <div className="conv-troca" key={i}>
+            {x.situacao === "conversa" && x.fala_jogador && <div className="conv-balao conv-balao--eu">{x.fala_jogador}</div>}
             <BalaoPet r={x} />
           </div>
-        )) : <p class="dl-apoio conv-vazio">{livre ? `Escreva algo para ${nome}.` : "A conversa por texto usa a fala livre (modelo local, experimental). Escolha Livre acima para conversar."}</p>}
-        {fl.pendente && <div class="conv-linha"><RetratoPequeno /><div class="conv-balao conv-balao--pet conv-pensando">…</div></div>}
+        )) : <p className="dl-apoio conv-vazio">{livre ? `Escreva algo para ${nome}.` : "A conversa por texto usa a fala livre (modelo local, experimental). Escolha Livre acima para conversar."}</p>}
+        {fl.pendente && <div className="conv-linha"><RetratoPequeno /><div className="conv-balao conv-balao--pet conv-pensando">…</div></div>}
         <div ref={fim} />
       </div>
       <Fatos />
-      <p class="dl-apoio conv-rodape">O que você escreve não ensina o pet nem entra no registro dele. Um pedido claro ("vai comer") vira a ação na hora, como o botão.</p>
+      <p className="dl-apoio conv-rodape">O que você escreve não ensina o pet nem entra no registro dele. Um pedido claro ("vai comer") vira a ação na hora, como o botão.</p>
 
-      <div class="conv-atalhos" role="group" aria-label="Ensinar agora">
+      <div className="conv-atalhos" role="group" aria-label="Ensinar agora">
         {(m.versao >= 11 ? ATALHOS_V11 : ATALHOS).map(([a, rot, em]) => (
-          <button type="button" key={a} class={`conv-atalho${a === "elogiar" ? " conv-atalho--destaque" : ""}`} disabled={nascendo > 0} onClick={() => agir(a)}>
+          <button type="button" key={a} className={`conv-atalho${a === "elogiar" ? " conv-atalho--destaque" : ""}`} disabled={nascendo > 0} onClick={() => agir(a)}>
             {em && <Peca nome={em} escala={2} />}{rot}
           </button>
         ))}
       </div>
-      <form class="conv-escrever" onSubmit={enviar}>
-        <label for="conv-msg" class="sr-only">Mensagem para {nome}</label>
-        <input id="conv-msg" type="text" maxLength={300} autocomplete="off" placeholder={livre ? `Escreva para ${nome}` : "Escolha Livre para escrever"} disabled={!livre}
-          value={msg} onInput={ev => setMsg((ev.target as HTMLInputElement).value)} />
+      <form className="conv-escrever" onSubmit={enviar}>
+        <label htmlFor="conv-msg" className="sr-only">Mensagem para {nome}</label>
+        <input id="conv-msg" type="text" maxLength={300} autoComplete="off" placeholder={livre ? `Escreva para ${nome}` : "Escolha Livre para escrever"} disabled={!livre}
+          value={msg} onChange={ev => setMsg((ev.target as HTMLInputElement).value)} />
         <button type="submit" aria-label="Enviar" disabled={!livre || !msg.trim()}>
           <svg viewBox="0 0 16 16" width="20" height="20" aria-hidden="true"><path d="M2 8h10M8 4l4 4-4 4" /></svg>
         </button>

@@ -1,7 +1,7 @@
 /* Atlas do Digimon UP (Bandai; so uso pessoal e local). Fica FORA do repositorio, em D:\Trab\digilab\Assets,
    gerado por Assets\gerar_atlas_up.py. Mesmo caminho relativo do HTML: a pagina em /v1/web/dist/ pede
    ../../../Assets/ (no modo dev, o vite.config serve so estes dois arquivos). Se nao carregar: aviso visivel. */
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useState } from "react";
 import { zoomAtual } from "./escala.ts";
 
 export const ATLAS_URL = "../../../Assets/digilab_atlas_up.json";

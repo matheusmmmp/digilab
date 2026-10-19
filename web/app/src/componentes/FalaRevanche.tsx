@@ -10,9 +10,9 @@ export function FalaRevanche() {
   const f = falaVozRecente(m);
   if (!f || f.voz?.gatilho !== "revanche") return null;
   return (
-    <p class="dl-card fala-revanche" aria-live="polite">
+    <p className="dl-card fala-revanche" aria-live="polite">
       <b>{nomeForma(m.forma)}:</b> ✧ {f.fala}{iconeVerif(f.verificacao, f)}
-      <span class="dl-apoio"> (julgue na tela do Pet)</span>
+      <span className="dl-apoio"> (julgue na tela do Pet)</span>
     </p>
   );
 }

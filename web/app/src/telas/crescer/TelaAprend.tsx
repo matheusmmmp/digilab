@@ -3,7 +3,7 @@
    recompensas e as duas barras por acao, rotulo so onde divergem. Decisoes: as ultimas com o chip da causa ou
    "? instinto e acaso", mais desejo e obediencia em blocos. Lembrancas: 4 recentes + 2 duradouras. Jeito:
    temperamento, desejo, vinculo e tracos de combate. Valores exatos recolhidos; tudo vem do motor. */
-import { useState } from "preact/hooks";
+import { useState } from "react";
 import { useDesktop } from "../../desktop.ts";
 import {
   ACOES_PET, BASE_CARATER, CAT, CDJ, CME, COMBATE, EIXOS_TEMP, EMOCAO_TXT, FATORES_ESPACOS, FATORES_TXT, NOME_COMB, NOME_PET,
@@ -61,23 +61,23 @@ function Agora() {
   const des = nascendo > 0 || !acao;
   return (
     <>
-      <section class="ensinar-palco dl-hexcard" aria-label="O que ele acabou de fazer">
-        <span class="ensinar-anel" aria-hidden="true" />
-        {pet && <img class="dl-pix ensinar-pet" src={pet.url} width={pet.w} height={pet.h} alt={nomeForma(m.forma)} />}
-        <div class="ensinar-acabou"><span>ACABOU DE</span><b>{acao ? NOME_PET[acao] : "…"}</b>{desde !== null && <span class="dl-lcd">há {m.e.tick - desde} min</span>}</div>
-        {fala && <span class="dl-balao ensinar-balao">{fala}</span>}
+      <section className="ensinar-palco dl-hexcard" aria-label="O que ele acabou de fazer">
+        <span className="ensinar-anel" aria-hidden="true" />
+        {pet && <img className="dl-pix ensinar-pet" src={pet.url} width={pet.w} height={pet.h} alt={nomeForma(m.forma)} />}
+        <div className="ensinar-acabou"><span>ACABOU DE</span><b>{acao ? NOME_PET[acao] : "…"}</b>{desde !== null && <span className="dl-lcd">há {m.e.tick - desde} min</span>}</div>
+        {fala && <span className="dl-balao ensinar-balao">{fala}</span>}
       </section>
-      <div class="ensinar-bts">
-        <button type="button" class="dl-btn dl-btn--destaque" disabled={des} onClick={() => agir("elogiar")}><Peca nome="emoji_joinha" escala={2} />Elogiar</button>
-        <button type="button" class="dl-btn dl-btn--sec" disabled={des} onClick={() => agir("repreender")}><Peca nome="emoji_exclam" escala={2} />Repreender</button>
+      <div className="ensinar-bts">
+        <button type="button" className="dl-btn dl-btn--destaque" disabled={des} onClick={() => agir("elogiar")}><Peca nome="emoji_joinha" escala={2} />Elogiar</button>
+        <button type="button" className="dl-btn dl-btn--sec" disabled={des} onClick={() => agir("repreender")}><Peca nome="emoji_exclam" escala={2} />Repreender</button>
       </div>
       {acao && (
-        <div class="ensinar-muda dl-malha">
+        <div className="ensinar-muda dl-malha">
           <b>O QUE MUDA</b>
           <span>Ajusta a vontade de {NOME_PET[acao].toLowerCase()} numa situação como esta: {situacao(observacao(m.e).v)}.</span>
         </div>
       )}
-      <p class="dl-apoio">Atender rápido um pedido de atenção também conta como recompensa.</p>
+      <p className="dl-apoio">Atender rápido um pedido de atenção também conta como recompensa.</p>
     </>
   );
 }
@@ -87,28 +87,28 @@ function Politica() {
   const { motor: m } = useJogo(), obs = observacao(m.e), p0 = distInstinto(obs), pm = m.pol.media(obs), r = m.pol.rec;
   return (
     <>
-      <div class="ensinar-cont">
-        <div class="dl-card"><Peca nome="emoji_joinha" escala={2} /><span class="dl-num">{r.elogio}</span><span class="dl-apoio">elogios</span></div>
-        <div class="dl-card"><Peca nome="emoji_exclam" escala={2} /><span class="dl-num">{r.repreensao}</span><span class="dl-apoio">broncas</span></div>
-        <div class="dl-card"><Peca nome="emoji_coracao" escala={2} /><span class="dl-num">{r.atendido}</span><span class="dl-apoio">atendeu rápido</span></div>
+      <div className="ensinar-cont">
+        <div className="dl-card"><Peca nome="emoji_joinha" escala={2} /><span className="dl-num">{r.elogio}</span><span className="dl-apoio">elogios</span></div>
+        <div className="dl-card"><Peca nome="emoji_exclam" escala={2} /><span className="dl-num">{r.repreensao}</span><span className="dl-apoio">broncas</span></div>
+        <div className="dl-card"><Peca nome="emoji_coracao" escala={2} /><span className="dl-num">{r.atendido}</span><span className="dl-apoio">atendeu rápido</span></div>
       </div>
-      <section class="dl-card bloco">
-        <span class="ensinar-cab"><h2>No estado de agora</h2><span class="dl-apoio">{situacao(obs.v)}</span></span>
-        <div class="legenda"><span class="leg-instinto">instinto</span><span class="leg-aprendido">o que aprendeu com você</span></div>
-        <div class="linhas">
+      <section className="dl-card bloco">
+        <span className="ensinar-cab"><h2>No estado de agora</h2><span className="dl-apoio">{situacao(obs.v)}</span></span>
+        <div className="legenda"><span className="leg-instinto">instinto</span><span className="leg-aprendido">o que aprendeu com você</span></div>
+        <div className="linhas">
           {ACOES_PET.map(a => {
             const d = pm[a] - p0[a];
             return (
-              <div class="pol-linha" key={a}>
-                <span class="pol-cab"><b>{NOME_PET[a]}</b>{Math.abs(d) >= .05 && <span class={d > 0 ? "pol-mais" : "pol-menos"}>{d > 0 ? "mais" : "menos"} que o instinto</span>}</span>
-                <div class="bar prior" role="img" aria-label={`instinto ${Math.round(p0[a] * 100)}%`}><i style={{ width: `${(p0[a] * 100).toFixed(1)}%` }} /></div>
-                <div class="bar agora" role="img" aria-label={`aprendido ${Math.round(pm[a] * 100)}%`}><i class="dl-malha" style={{ width: `${(pm[a] * 100).toFixed(1)}%` }} /></div>
+              <div className="pol-linha" key={a}>
+                <span className="pol-cab"><b>{NOME_PET[a]}</b>{Math.abs(d) >= .05 && <span className={d > 0 ? "pol-mais" : "pol-menos"}>{d > 0 ? "mais" : "menos"} que o instinto</span>}</span>
+                <div className="bar prior" role="img" aria-label={`instinto ${Math.round(p0[a] * 100)}%`}><i style={{ width: `${(p0[a] * 100).toFixed(1)}%` }} /></div>
+                <div className="bar agora" role="img" aria-label={`aprendido ${Math.round(pm[a] * 100)}%`}><i className="dl-malha" style={{ width: `${(pm[a] * 100).toFixed(1)}%` }} /></div>
               </div>
             );
           })}
         </div>
-        <p class="dl-apoio">Chance de cada ação agora. O rótulo só aparece onde o que ele aprendeu se afastou 5 pontos ou mais do instinto.</p>
-        <details class="dl-apoio"><summary>Valores exatos</summary>
+        <p className="dl-apoio">Chance de cada ação agora. O rótulo só aparece onde o que ele aprendeu se afastou 5 pontos ou mais do instinto.</p>
+        <details className="dl-apoio"><summary>Valores exatos</summary>
           <p>{ACOES_PET.map(a => `${NOME_PET[a].toLowerCase()} ${pct(p0[a])} → ${pct(pm[a])}`).join(", ")}. Pedidos de atenção ignorados: {r.ignorado} (contam como castigo para chamar atenção).</p>
         </details>
       </section>
@@ -129,35 +129,35 @@ function Decisoes({ max = 8 }: { max?: number }) {
   const dz = m.dz, ob = m.obed;
   return (
     <>
-      <section class="dl-card bloco">
+      <section className="dl-card bloco">
         <h2>Últimas decisões e o porquê</h2>
-        <div class="decisoes">
+        <div className="decisoes">
           {lin.slice(-max).reverse().map((mot, i) => {
             const f = mot.fatores[0];
             return (
-              <div class="dec" key={i}>
-                <span class="dl-lcd">{hhmm(mot.tick)}</span>
-                <span class="dec-corpo"><b>{nomeAcao(mot)}</b>
-                  {f ? <span class="dec-causa" title={falaDe(m, mot)}><IconeFator f={f} />{FATORES_TXT[f]?.marcador ?? f}{mot.fatores.length > 1 ? ` +${mot.fatores.length - 1}` : ""}</span>
-                    : <span class="dec-acaso">? instinto e acaso · ele não sabe dizer</span>}
+              <div className="dec" key={i}>
+                <span className="dl-lcd">{hhmm(mot.tick)}</span>
+                <span className="dec-corpo"><b>{nomeAcao(mot)}</b>
+                  {f ? <span className="dec-causa" title={falaDe(m, mot)}><IconeFator f={f} />{FATORES_TXT[f]?.marcador ?? f}{mot.fatores.length > 1 ? ` +${mot.fatores.length - 1}` : ""}</span>
+                    : <span className="dec-acaso">? instinto e acaso · ele não sabe dizer</span>}
                 </span>
               </div>
             );
           })}
         </div>
       </section>
-      <p class="dl-apoio">A causa só aparece quando o que ele aprendeu mudou a escolha. No resto, decidiram o instinto e o acaso.</p>
+      <p className="dl-apoio">A causa só aparece quando o que ele aprendeu mudou a escolha. No resto, decidiram o instinto e o acaso.</p>
       {m.versao >= 2 && (
-        <section class="dl-card bloco">
+        <section className="dl-card bloco">
           <h2>Desejo e obediência</h2>
-          <div class="ensinar-num">
+          <div className="ensinar-num">
             {([[dz.vontades, "vontades anunciadas"], [dz.vontades ? pct(dz.cumpridas / dz.vontades) : "—", "cumpridas em 1 h"],
               [ob.pedidos ? pct((ob.pedidos - ob.recusas) / ob.pedidos) : "—", "cuidados aceitos"], [ob.recusas - ob.fazerOutra, "recusas"],
               [ob.fazerOutra, "fez outra coisa"], [pct(m.fracaoVontade()), "tempo com vontade"]] as [string | number, string][]).map(([v, k]) => (
-              <span key={k}><span class="dl-num">{v}</span><span class="dl-apoio">{k}</span></span>
+              <span key={k}><span className="dl-num">{v}</span><span className="dl-apoio">{k}</span></span>
             ))}
           </div>
-          <details class="dl-apoio"><summary>Como funciona</summary>
+          <details className="dl-apoio"><summary>Como funciona</summary>
             <p>Cumprimento: das vontades que ele anunciou, quantas ele fez de fato em até 1 h. Se for baixo, a fala promete o que o pet não faz. Obediência: quantos cuidados seus ele aceitou ({ob.pedidos} pedidos).</p>
           </details>
         </section>
@@ -171,42 +171,42 @@ function Lembrancas() {
   const { motor: m } = useJogo(), tick = m.e.tick, f = m.pol.mem.feat(tick);
   if (m.versao < 2) {
     return (
-      <section class="dl-card bloco">
+      <section className="dl-card bloco">
         <h2>O que ele lembra de você</h2>
-        <p class="dl-apoio">Memória curta (pet de versão antiga, sem espaços): quanto você demorou para atender o último pedido de comida ou de limpeza, e as broncas e elogios recentes (somem com o tempo).</p>
+        <p className="dl-apoio">Memória curta (pet de versão antiga, sem espaços): quanto você demorou para atender o último pedido de comida ou de limpeza, e as broncas e elogios recentes (somem com o tempo).</p>
         <Numeros itens={(["Demora com a comida", "Demora para limpar", "Broncas recentes", "Elogios recentes"]).map((k, i) => [k, pct(f[i])])} />
       </section>
     );
   }
   const mem = m.pol.mem as MemoriaEspacos;
   const barra = (rot: string, v: number, cls: string) => (
-    <span class="lem-barra"><span><span>{rot}</span><span>{pct(v)}</span></span><span class="lem-trilho"><i class={cls} style={{ width: pct(Math.min(1, v)) }} /></span></span>
+    <span className="lem-barra"><span><span>{rot}</span><span>{pct(v)}</span></span><span className="lem-trilho"><i className={cls} style={{ width: pct(Math.min(1, v)) }} /></span></span>
   );
   const slot = (x: Lembranca | undefined, i: number, dur: boolean) => x ? (
-    <div class={`lem${dur ? " lem--dur" : ""}`} key={i}>
-      <span class="lem-cab">{EMOTE_MEM[x.cat] ? <Peca nome={EMOTE_MEM[x.cat]} escala={2} /> : x.cat === "demora" ? <Grade grade={AMPULHETA} escala={3} cores={CORES_AMPULHETA} alt="" /> : null}<b>{NOME_MEM[x.cat]}</b></span>
-      {x.emocao && <span class="dl-apoio">sentiu {EMOCAO_TXT[x.emocao][0]}</span>}
+    <div className={`lem${dur ? " lem--dur" : ""}`} key={i}>
+      <span className="lem-cab">{EMOTE_MEM[x.cat] ? <Peca nome={EMOTE_MEM[x.cat]} escala={2} /> : x.cat === "demora" ? <Grade grade={AMPULHETA} escala={3} cores={CORES_AMPULHETA} alt="" /> : null}<b>{NOME_MEM[x.cat]}</b></span>
+      {x.emocao && <span className="dl-apoio">sentiu {EMOCAO_TXT[x.emocao][0]}</span>}
       {barra("força", x.int, "forca")}
       {barra("ativa agora", mem.ativacao(x, tick), "ativa")}
-      <span class="dl-lcd lem-desde">desde D{diaDe(x.criada)} {hhmm(x.criada)}</span>
+      <span className="dl-lcd lem-desde">desde D{diaDe(x.criada)} {hhmm(x.criada)}</span>
     </div>
-  ) : <div class="lem lem--vazio" key={i}>espaço livre</div>;
+  ) : <div className="lem lem--vazio" key={i}>espaço livre</div>;
   const ult = mem.emocoes.length ? mem.emocoes[mem.emocoes.length - 1] : null;
   return (
     <>
-      <span class="ensinar-cab"><h2>Recentes</h2><span class="dl-apoio">{CME.nCurto} espaços · a mais forte de cada tipo fica</span></span>
-      <div class="lem-grade">{Array.from({ length: CME.nCurto }, (_, i) => slot(mem.curto[i], i, false))}</div>
-      <span class="ensinar-cab"><h2>Duradouras</h2><span class="dl-apoio">{CME.nLongo} espaços · depois de 12 h, uma recente tenta entrar</span></span>
-      <div class="lem-grade">{Array.from({ length: CME.nLongo }, (_, i) => slot(mem.longo[i], i, true))}</div>
+      <span className="ensinar-cab"><h2>Recentes</h2><span className="dl-apoio">{CME.nCurto} espaços · a mais forte de cada tipo fica</span></span>
+      <div className="lem-grade">{Array.from({ length: CME.nCurto }, (_, i) => slot(mem.curto[i], i, false))}</div>
+      <span className="ensinar-cab"><h2>Duradouras</h2><span className="dl-apoio">{CME.nLongo} espaços · depois de 12 h, uma recente tenta entrar</span></span>
+      <div className="lem-grade">{Array.from({ length: CME.nLongo }, (_, i) => slot(mem.longo[i], i, true))}</div>
       {ult && (
-        <div class="dl-card lem-ult">
+        <div className="dl-card lem-ult">
           {EMOTE_EMOCAO[ult.nome] && <Peca nome={EMOTE_EMOCAO[ult.nome]} escala={2} />}
           <span><b>Último sentimento: {EMOCAO_TXT[ult.nome][0]}</b>
             <span>{expressarEmocao(ult, ult.cat, m.estagioAtual, ult.ref == null ? null : idxDoOrdinal(m, ult.ref))}</span>
-            <span class="dl-apoio">{ult.eixo ? "pelo temperamento: " + ult.eixo : "reação padrão (nenhum traço de temperamento pesou)"}</span></span>
+            <span className="dl-apoio">{ult.eixo ? "pelo temperamento: " + ult.eixo : "reação padrão (nenhum traço de temperamento pesou)"}</span></span>
         </div>
       )}
-      <details class="dl-apoio"><summary>Como funciona e valores exatos</summary>
+      <details className="dl-apoio"><summary>Como funciona e valores exatos</summary>
         <p>Uma lembrança por tipo; a mais forte fica. Depois de 12 h uma lembrança pode virar duradoura; a cada 4 h acordado ele relembra tudo. O que ele lembra entra no que ele aprende.</p>
         <p>{FATORES_ESPACOS.map((c, i) => `${NOME_MEM[c].toLowerCase()} ${pct(f[i])}`).join(", ")}</p>
       </details>
@@ -235,25 +235,25 @@ function Jeito() {
   const af = Object.fromEntries(COMBATE.map(c => [c, bruto[c] - base[c]])) as Record<string, number>;
   return (
     <>
-      <section class="dl-card bloco">
+      <section className="dl-card bloco">
         <h2>Temperamento e desejo</h2>
-        <div class="jeito"><span class="dl-apoio">Temperamento</span> <b>{expressarTemperamento(m.temp, est)}</b></div>
-        <div class="jeito"><span class="dl-apoio">Desejo</span> <b>{des ? expressarDesejo(des, est) : "…"}</b></div>
-        <div class="jeito"><span class="dl-apoio">Vínculo</span> <b>{vinculo}</b></div>
-        <div class="jeito"><span class="dl-apoio">Confiança</span> <b>{confiancaEmPalavras(m)}</b></div>
+        <div className="jeito"><span className="dl-apoio">Temperamento</span> <b>{expressarTemperamento(m.temp, est)}</b></div>
+        <div className="jeito"><span className="dl-apoio">Desejo</span> <b>{des ? expressarDesejo(des, est) : "…"}</b></div>
+        <div className="jeito"><span className="dl-apoio">Vínculo</span> <b>{vinculo}</b></div>
+        <div className="jeito"><span className="dl-apoio">Confiança</span> <b>{confiancaEmPalavras(m)}</b></div>
         <div>{EIXOS_TEMP.map(k => <BarraCarater key={k} eixo={k} v={m.temp[k]} />)}</div>
-        <details class="dl-apoio"><summary>Como funciona e valores exatos</summary>
+        <details className="dl-apoio"><summary>Como funciona e valores exatos</summary>
           <p>O <b>temperamento</b> vem de nascença (sorteado pela semente, igual a vida inteira): muda <i>como</i> o pet aprende, não <i>o que</i>. O <b>desejo</b> é calculado agora: uma necessidade abaixo do limite ou, se não houver, a ação que ele aprendeu a preferir. A partir do Rookie ele sabe dizer qual dos dois é.</p>
           <p>{"temperamento: " + EIXOS_TEMP.map(k => `${k} ${comSinal(m.temp[k], 2)}`).join(", ")
             + ` (a fala só comenta eixos a partir de ${dec(CDJ.limiarTom, 1)} para mais ou para menos)` + " · desejo: "
             + (des ? `${des.tipo} ${des.alvo}${des.causa ? " (" + des.causa + ")" : ""}, intensidade ${dec(des.intensidade, 2)}` : "nenhum agora")}</p>
         </details>
       </section>
-      <section class="dl-card bloco">
+      <section className="dl-card bloco">
         <h2>Traços de combate</h2>
-        <p class="dl-apoio">Comparados com um pet comum. Na evolução viram <b>caráter</b>.</p>
+        <p className="dl-apoio">Comparados com um pet comum. Na evolução viram <b>caráter</b>.</p>
         <div>{COMBATE.map(c => <BarraCarater key={c} eixo={NOME_COMB[c]} v={af[c] / CAT.escalaCarater} />)}</div>
-        <details class="dl-apoio"><summary>Como funciona e valores exatos</summary>
+        <details className="dl-apoio"><summary>Como funciona e valores exatos</summary>
           <p>Média lenta do que o pet faz no dia a dia. Todo pet dorme e fica à toa muito, e isso conta como bloqueio; por isso a comparação com um pet comum.</p>
           <p>{"diferença para o pet comum: " + COMBATE.map(c => `${NOME_COMB[c].toLowerCase()} ${comSinal(af[c], 3)}`).join(", ")}</p>
         </details>
@@ -267,17 +267,17 @@ function Jeito() {
 function TelaAprendV11() {
   const desk = useDesktop();
   return (
-    <div class={desk ? "tela dl desk aprend-desk" : "tela dl"}>
-      <div class={desk ? "desk-col aprend-col" : ""}>
-        <section class="dl-card bloco">
+    <div className={desk ? "tela dl desk aprend-desk" : "tela dl"}>
+      <div className={desk ? "desk-col aprend-col" : ""}>
+        <section className="dl-card bloco">
           <h2>O cérebro deste pet</h2>
-          <p class="dl-apoio">Ele decide pelo instinto e aprende sozinho com o que as próprias ações fazem no corpo dele: comer quando tem
+          <p className="dl-apoio">Ele decide pelo instinto e aprende sozinho com o que as próprias ações fazem no corpo dele: comer quando tem
             fome, brincar quando está entediado, o seu carinho e o seu tapa. Não há elogio nem bronca. O painel com as decisões do cérebro
             vem numa próxima versão do jogo.</p>
         </section>
         <Lembrancas />
       </div>
-      <div class={desk ? "desk-col aprend-col" : ""}><Jeito /></div>
+      <div className={desk ? "desk-col aprend-col" : ""}><Jeito /></div>
     </div>
   );
 }
@@ -287,16 +287,16 @@ export function TelaAprend() {
   if (m.versao >= 11) return <TelaAprendV11 />;
   /* desktop (AprendizadoDesktop): as secoes lado a lado, sem as abas internas */
   if (desk) return (
-    <div class="tela dl desk aprend-desk">
-      <div class="desk-col aprend-col"><section class="aprend-agora-card"><Agora /></section></div>
-      <div class="desk-col aprend-col"><Politica />
-        <details class="aprend-jeito"><summary>Jeito: temperamento e desejo</summary><Jeito /></details></div>
-      <div class="desk-col aprend-col"><Decisoes max={4} /><Lembrancas /></div>
+    <div className="tela dl desk aprend-desk">
+      <div className="desk-col aprend-col"><section className="aprend-agora-card"><Agora /></section></div>
+      <div className="desk-col aprend-col"><Politica />
+        <details className="aprend-jeito"><summary>Jeito: temperamento e desejo</summary><Jeito /></details></div>
+      <div className="desk-col aprend-col"><Decisoes max={4} /><Lembrancas /></div>
     </div>
   );
   return (
-    <div class="tela dl">
-      <div class="aprend-secoes" role="group" aria-label="Seções">
+    <div className="tela dl">
+      <div className="aprend-secoes" role="group" aria-label="Seções">
         {SECOES.map(s => <button type="button" key={s} aria-pressed={secao === s} onClick={() => setSecao(s)}>{s}</button>)}
       </div>
       {secao === "Agora" ? <Agora /> : secao === "Instinto × aprendido" ? <Politica /> : secao === "Decisões" ? <Decisoes /> : secao === "Lembranças" ? <Lembrancas /> : <Jeito />}

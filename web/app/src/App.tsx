@@ -1,6 +1,6 @@
 /* Esqueleto do app (TAREFA_FRONT_TS, Etapa 3): cabecalho do pet, painel do destino com sub-abas, barra dos
    4 destinos e rodape. A rota vem do endereco (#/destino/aba) ou da aba lembrada, como no HTML. */
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "react";
 import { useAtlas } from "./atlas.ts";
 import { useDecoracao } from "./decoracao.ts";
 import { Nav } from "./componentes/Nav.tsx";
@@ -164,27 +164,27 @@ export function App() {
     abrirMeusPets={() => setMeusPets(true)} voltar={!config && rota.destino === "conversar" ? () => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); } : undefined}
     semTitulo={!config && rota.destino === "pet"} />;
   if (emLuta) return (
-    <div class="app app--tela-cheia">
+    <div className="app app--tela-cheia">
       <TelaLuta sair={sairDaLuta} verReplay={verReplay} sairReplay={sairReplay} pedidoDesistir={pedidoDesistir} fecharPedido={() => setPedidoDesistir(false)} />
     </div>
   );
 
   return (
-    <div class="app">
+    <div className="app">
       {jogo.erroSave && (
-        <div class="aviso" role="alert">
+        <div className="aviso" role="alert">
           O save deste navegador não abriu, e o app não vai gravar por cima dele.
           <p>{jogo.erroSave.erro}. Mostrando o pet de exemplo.</p>
         </div>
       )}
       {atlas.tipo === "erro" && (
-        <div class="aviso" role="alert">
+        <div className="aviso" role="alert">
           Atlas de sprites não carregou.
           <p>{atlas.erro}. Rode <code>python gerar_atlas_up.py</code> em D:\Trab\digilab\Assets.</p>
         </div>
       )}
       {(deco.estado.tipo === "erro" || deco.falhas.size > 0) && (
-        <div class="aviso" role="alert">
+        <div className="aviso" role="alert">
           Parte da decoração do Digimon UP não carregou; esses lugares ficam com o visual de antes.
           <p>{deco.estado.tipo === "erro" ? deco.estado.erro : [...deco.falhas].map(([n, e]) => `${n} (${e})`).join(", ")}.
             Rode <code>python gerar_decoracao_up.py</code> em D:\Trab\digilab\Assets.</p>
@@ -200,21 +200,21 @@ export function App() {
       : config ? <>{topo}<TelaConfig parte={config} abrir={abrirConfig} fechar={() => { setConfig(null); scrollTo(0, 0); }} irPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} /></>
       : rota.destino === "pet" ? <>{topo}<TelaPet abrirMeusPets={() => setMeusPets(true)} irConversar={() => irDestino("conversar")} abrirConfig={() => abrirConfig("principal")} irRegistro={() => ir({ destino: "diario", aba: "registro" })} /></>
       : rota.destino === "conversar" ? <>{topo}<TelaConversar voltar={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} /></> : (<>{topo}
-      <section class="painel" aria-labelledby="tela-titulo">
-        <div class="tela-cab dl-faixa">
-          <Deco nome="TopDeco_Earth2_0" class="cab-globo" />
-          <h1 class="dl-num" id="tela-titulo">{NOME_DESTINO[rota.destino]}</h1>
-          <span class="tela-cab-pet">{jogo.nascendo > 0 ? "Digi-Egg" : nomeForma(jogo.motor.forma)}</span>
+      <section className="painel" aria-labelledby="tela-titulo">
+        <div className="tela-cab dl-faixa">
+          <Deco nome="TopDeco_Earth2_0" className="cab-globo" />
+          <h1 className="dl-num" id="tela-titulo">{NOME_DESTINO[rota.destino]}</h1>
+          <span className="tela-cab-pet">{jogo.nascendo > 0 ? "Digi-Egg" : nomeForma(jogo.motor.forma)}</span>
           {rota.destino === "diario" && (
-            <button type="button" class="cab-engrenagem" aria-label="Configurações" onClick={() => abrirConfig("principal")}>
-              <Deco nome="Common_Icon_Setting" /><span class="cab-engrenagem-reserva" aria-hidden="true">⚙</span>
+            <button type="button" className="cab-engrenagem" aria-label="Configurações" onClick={() => abrirConfig("principal")}>
+              <Deco nome="Common_Icon_Setting" /><span className="cab-engrenagem-reserva" aria-hidden="true">⚙</span>
             </button>
           )}
         </div>
         {abas.length > 1 && (
-          <div class="tabs" role="tablist" aria-label={`Abas de ${NOME_DESTINO[rota.destino]}`}>
+          <div className="tabs" role="tablist" aria-label={`Abas de ${NOME_DESTINO[rota.destino]}`}>
             {abas.map(a => (
-              <button type="button" role="tab" key={a} class="tab" aria-selected={a === rota.aba} onClick={() => ir({ destino: rota.destino, aba: a })}>{NOME_ABA[a]}</button>
+              <button type="button" role="tab" key={a} className="tab" aria-selected={a === rota.aba} onClick={() => ir({ destino: rota.destino, aba: a })}>{NOME_ABA[a]}</button>
             ))}
           </div>
         )}

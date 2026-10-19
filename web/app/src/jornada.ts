@@ -4,7 +4,7 @@
    ovo sai da semente (motor), entao escolher o brasao e sortear sementes ate cair na especie escolhida. A conclusao
    vista fica numa chave propria (sementes dos pets que ja viram a mensagem; a da Liga, noutra, para o pet v6 que viu a do Piedmon
    antes desta parte ver a nova). */
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useState } from "react";
 import { ESPECIES, Motor, VERSAO_LIGA, campanhaDe, hashSemente, type Especie, type Ritmo } from "../motor/index.ts";
 import { jogoAtual, trocarMotor } from "./jogo.ts";
 import { CHAVE, textoSave } from "./save.ts";

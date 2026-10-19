@@ -1,7 +1,7 @@
 /* Diario · Geracoes (prancha HerGeracoes): os pets por geracao. Aposentados (sairam ao cruzar), o ativo (AGORA) e os
    em espera. Cada filho confere a origem: a impressao do registro de cada pai tem que bater com um log que esteja
    neste aparelho; sem o log, a origem fica sem conferir (importar o arquivo resolve). So leitura. */
-import { useMemo } from "preact/hooks";
+import { useMemo } from "react";
 import { Motor, chaveSprite, hashSemente, nomeEstagio, nomeForma } from "../../../motor/index.ts";
 import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { Deco } from "../../componentes/Deco.tsx";
@@ -34,29 +34,29 @@ export function TelaGeracoes() {
   const spr = (m: Motor) => {
     if (a.tipo !== "ok") return null;
     const k = chaveSprite(m.forma), s = imagemAtlas(a, k, Math.max(1, Math.min(2, Math.floor(56 / dimSprite(a.dados, k)[1]))));
-    return <img class="dl-pix" src={s.url} width={s.w} height={s.h} alt="" />;
+    return <img className="dl-pix" src={s.url} width={s.w} height={s.h} alt="" />;
   };
   const conferido = (m: Motor) => !m.origem || m.origem.pais.every(p => porHash.has(p.h));
   return (
-    <div class="ger-tela">
+    <div className="ger-tela">
       {[...grupos.keys()].sort((x, y) => x - y).map(g => (
-        <section key={g} class="ger-linha" aria-labelledby={`ger-${g}`}>
+        <section key={g} className="ger-linha" aria-labelledby={`ger-${g}`}>
           <h3 id={`ger-${g}`}>GERAÇÃO {g}</h3>
-          <div class="ger-cards">
+          <div className="ger-cards">
             {grupos.get(g)!.map((x, i) => (
-              <div key={i} class={`ger-card${x.papel === "ativo" ? " agora" : ""}`}>
-                <span class="ger-spr">{spr(x.m)}</span>
-                <span class="ger-txt"><span class="ger-nome"><b>{nomeForma(x.m.forma)}</b><Deco nome={BRASAO[x.m.especie].peca} largura={24} altura={16} /></span>
+              <div key={i} className={`ger-card${x.papel === "ativo" ? " agora" : ""}`}>
+                <span className="ger-spr">{spr(x.m)}</span>
+                <span className="ger-txt"><span className="ger-nome"><b>{nomeForma(x.m.forma)}</b><Deco nome={BRASAO[x.m.especie].peca} largura={24} altura={16} /></span>
                   <small>{x.papel === "aposentado" ? "aposentado" : x.papel === "ativo" ? "você · agora" : "em espera"} · {nomeEstagio(x.m.forma)} · {diaDe(x.m.e.tick)} d</small>
-                  <span class="ger-tags">{x.papel === "ativo" && <span class="dl-tag dl-tag--ativo">AGORA</span>}
-                    {x.m.origem && <span class={conferido(x.m) ? "ger-ok" : "ger-falta"}>{conferido(x.m) ? "✓ origem conferida" : "! log de um pai ausente"}</span>}</span></span>
+                  <span className="ger-tags">{x.papel === "ativo" && <span className="dl-tag dl-tag--ativo">AGORA</span>}
+                    {x.m.origem && <span className={conferido(x.m) ? "ger-ok" : "ger-falta"}>{conferido(x.m) ? "✓ origem conferida" : "! log de um pai ausente"}</span>}</span></span>
               </div>
             ))}
           </div>
         </section>
       ))}
-      {faltando.length > 0 && <p class="ger-aviso">{faltando.join(". ")}. Importe o arquivo do pai para conferir a origem.</p>}
-      <p class="dl-apoio">Um pet aposentado saiu do jogo ao cruzar: ele fica aqui, só para ver. Nada se perde.</p>
+      {faltando.length > 0 && <p className="ger-aviso">{faltando.join(". ")}. Importe o arquivo do pai para conferir a origem.</p>}
+      <p className="dl-apoio">Um pet aposentado saiu do jogo ao cruzar: ele fica aqui, só para ver. Nada se perde.</p>
     </div>
   );
 }

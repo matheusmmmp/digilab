@@ -1,5 +1,5 @@
 /* Entrada do app. Tema: o do sistema; ?tema=claro|escuro sobrepoe (conferencia e screenshots; nao grava nada). */
-import { render } from "preact";
+import { createRoot } from "react-dom/client";
 import { App } from "./App.tsx";
 import { carregarAtlas } from "./atlas.ts";
 import { carregarDecoracao } from "./decoracao.ts";
@@ -50,4 +50,4 @@ Object.assign(window, { __digilab: { assinatura: () => jogoAtual().motor.assinat
 setTimeout(() => { try { semearGuardados(); } catch (err) { console.error("pets guardados de exemplo:", err); } }, 400);
 const raiz = document.getElementById("app");
 if (!raiz) throw new Error("sem #app na página");
-render(<App />, raiz);
+createRoot(raiz).render(<App />);

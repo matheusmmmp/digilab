@@ -13,15 +13,15 @@ export function EscolhaCarta({ rival }: { rival: string | null }) {
   if (LUTA.carta && t.cartas(LUTA.carta) < 1) LUTA.carta = null;
   if (!tem.length) return null;
   const semCarta = rival ? m.porqueSemCartaV9(rival) : null;
-  if (semCarta) { if (LUTA.carta) LUTA.carta = null; return <p class="dl-apoio carta-escolha-sem">Sem carta nesta luta: {semCarta}.</p>; }
+  if (semCarta) { if (LUTA.carta) LUTA.carta = null; return <p className="dl-apoio carta-escolha-sem">Sem carta nesta luta: {semCarta}.</p>; }
   return (
-    <label class="carta-escolha">
-      <span class="carta-escolha-rot">Carta para esta luta</span>
+    <label className="carta-escolha">
+      <span className="carta-escolha-rot">Carta para esta luta</span>
       <select value={luta.carta ?? ""} disabled={luta.lutando} onChange={e => { LUTA.carta = (e.currentTarget as HTMLSelectElement).value || null; avisarLuta(); }}>
         <option value="">Sem carta</option>
         {tem.map(c => <option key={c.id} value={c.id}>{c.nome} (×{t.cartas(c.id)})</option>)}
       </select>
-      {luta.carta && <span class="carta-escolha-ef">{cartaDe(luta.carta).efeito}</span>}
+      {luta.carta && <span className="carta-escolha-ef">{cartaDe(luta.carta).efeito}</span>}
     </label>
   );
 }
