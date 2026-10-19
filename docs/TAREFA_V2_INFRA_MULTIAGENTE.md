@@ -114,3 +114,23 @@ artefatos no GitHub:
 
 **Achado à parte:** o CI avisa que `actions/checkout@v4` e `actions/setup-python@v5` usam Node.js 20, que está obsoleto. Subir as versões
 é uma melhoria pequena e fica para depois.
+
+## 10. Etapa 3 (2026-10-19): o hook H4 do IM-8, desligado
+
+Depois do merge do #344 e do #345. **Novo:** `.claude/hooks/h4_autorizo.py`, no molde do H3.
+- Um `PreToolUse` em `Bash|PowerShell`.
+- **Bloqueia** (código 2, "deny") o comando de shell que tem a frase de autorização no texto, e o `gh` com arquivo de corpo
+  (`--body-file`, `-F`, `--input`) cujo conteúdo a tem.
+- **Não bloqueia** escrever a frase num documento: o guia cita o modelo.
+- Testes em `tests/test_hook_h4.py`.
+- **Desligado:** ele entra só em `docs/propostas/hooks_settings.json`; o `.claude/settings.json` não muda (SA-5: quem liga é o Matheus).
+
+**Por que "deny" e não "ask":** um "ask" seria aprovado pelo próprio Matheus na sessão, e o comentário sairia com o token dele e sem marca de
+app, que é o que a conferência não consegue separar. Com o H4 ligado, a autorização só pode vir de fora do Claude Code: navegador ou
+celular.
+
+**Precisa do Matheus:**
+- **IM-8, ligar o H4:** copiar a linha do H4 de `docs/propostas/hooks_settings.json` para o `.claude/settings.json`. Recomendação: sim.
+  - Custo de errar ao ligar: um PR cujo corpo cite a frase literal, num `gh ... --body-file`, é bloqueado. Basta escrever "a frase de
+    autorização".
+  - Custo de não ligar: a defesa contra o Claude é só a regra escrita.

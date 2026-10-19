@@ -181,7 +181,7 @@ def test_proposta_e_os_hooks_ligados():
     proposta = json.loads((RAIZ / "docs" / "propostas" / "hooks_settings.json").read_text(encoding="utf-8"))
     comandos = [h["command"] for evento in proposta["hooks"].values() for grupo in evento for h in grupo["hooks"]]
     assert sorted(Path(c.split("/.claude/hooks/")[1].rstrip('"')).name for c in comandos) == \
-        ["h1_engine.py", "h1b_engine_sha.py", "h2_testes.py", "h3_main.py"]
+        ["h1_engine.py", "h1b_engine_sha.py", "h2_testes.py", "h3_main.py", "h4_autorizo.py"]  # o H4 (IM-8) só na proposta
     assert all((HOOKS / Path(c.split("/.claude/hooks/")[1].rstrip('"')).name).exists() for c in comandos)
     ativo = json.loads((RAIZ / ".claude" / "settings.json").read_text(encoding="utf-8"))
     ligados = [h["command"] for evento in ativo["hooks"].values() for grupo in evento for h in grupo["hooks"]]

@@ -142,7 +142,8 @@ def links_quebrados(raiz: Path, caminho_md: str) -> list[str]:
     if not arq.exists():  # o PR apagou o arquivo
         return []
     quebrados = []
-    for alvo in LINK_MD.findall(arq.read_text(encoding="utf-8")):
+    # Um link dentro de código é exemplo, não link (o modelo da linha do índice em docs/REGISTRO_DESVIOS.md; achado do worker A, #350).
+    for alvo in LINK_MD.findall(CODIGO.sub("", arq.read_text(encoding="utf-8"))):
         if re.match(r"^[a-z]+:", alvo) or alvo.startswith("#"):
             continue
         alvo = alvo.split("#", 1)[0]

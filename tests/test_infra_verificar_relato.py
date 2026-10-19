@@ -97,6 +97,19 @@ def test_tarefa_que_nao_existe_reprova(tmp_path):
     assert [i.regra for i in falhas(vr.verificar(c, [], raiz))] == ["a tarefa existe"]
 
 
+def test_link_dentro_de_codigo_nao_e_conferido(tmp_path):
+    """Achado do worker A (#350): o modelo da linha do índice, entre crases no docs/REGISTRO_DESVIOS.md, não é link."""
+    raiz = raiz_minima(tmp_path)
+    (raiz / "docs" / "x.md").write_text(
+        "a linha: `- [AAAA-MM-DD — ...](registro/AAAA-MM.md)`\n\n```\n[exemplo](NAO_HA.md)\n```\n[quebrado](NAO_HA_MESMO.md)\n",
+        encoding="utf-8")
+    assert vr.links_quebrados(raiz, "docs/x.md") == ["NAO_HA_MESMO.md"]
+
+
+def test_o_indice_de_desvios_do_repo_nao_tem_link_quebrado():
+    assert vr.links_quebrados(RAIZ, "docs/REGISTRO_DESVIOS.md") == []
+
+
 def test_documentacao_passa_com_links_bons_e_reprova_com_link_quebrado(tmp_path):
     raiz = raiz_minima(tmp_path)
     (raiz / "docs" / "x.md").write_text("[ok](TAREFA_V2_X.md) [fora](https://x.org) [ancora](#a)\n", encoding="utf-8")
