@@ -310,3 +310,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-19 — V3-ESPACO-ACOES: tarefa de investigação para o Claude Code](registro/2026-10.md)
 
 - [2026-10-19 — WORLD-POC-02, PR 2 (worker A): o painel do corpo e a premissa da CP-4 corrigida](registro/2026-10.md)
+
+- [2026-10-19 — WORLD-POC-02 (worker A): o Gate B aprovado e o mundo 3D pausado até o Gate C](registro/2026-10.md)
