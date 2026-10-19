@@ -5,7 +5,7 @@
      4. a consequência no corpo de brinquedo (a fome e o tédio antes e depois);
      5. o que fica para o aprendizado: a Observação que o cérebro viu e o resultado percebido que ele verá na próxima.
    A verdade (2 a 4) fica aqui, para a análise; ao cérebro só vai a Observação. Exportável em JSON. */
-import type { CorpoPoc, Intencao, Observacao, ParouPor, ResultadoPercebido } from "./tipos.ts";
+import type { Intencao, Observacao, ParouPor, ResultadoPercebido } from "./tipos.ts";
 import type { ContatoMundo } from "./mundo.ts";
 
 export interface AcaoExecutada { ticks: number; distancia: number; parou_por: ParouPor }
@@ -19,6 +19,9 @@ export interface RegistroDecisao {
   intencao: Intencao;
   executada: AcaoExecutada;
   fisico: ResultadoFisico;
-  corpo_antes: CorpoPoc; corpo_depois: CorpoPoc;
+  /** o corpo que o pet sentia antes e sente depois: o de brinquedo (POC-01a) ou os receptores (POC-02) */
+  corpo_antes: Readonly<Record<string, number>>; corpo_depois: Readonly<Record<string, number>>;
   percebido: ResultadoPercebido;
+  /** só com o corpo (POC-02): a consequência fisiológica, falta(antes)^2 - falta(depois)^2 por drive (corpo_poc.consequencia) */
+  consequencia?: Record<string, number>;
 }

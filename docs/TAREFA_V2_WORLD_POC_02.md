@@ -1,6 +1,6 @@
 # TAREFA V2 — WORLD_POC_02 (2026-10-19)
 
-Coordenador: Gerente. Worker: A. Worktree e branch: `v2-world-poc-02`. Status: ABERTA.
+Coordenador: Gerente. Worker: A. Worktree e branch: `v2-world-poc-02`. Status: EM ANDAMENTO.
 
 Categoria: implementacao. Origem: Matheus, 2026-10-19: o Gate B do mundo 3D (organismo corporificado, ainda com o cérebro de teste), depois do Gate A aprovado em 2026-10-19.
 
@@ -123,9 +123,10 @@ mas com o mundo novo; aqui o mundo existe e o corpo já tem paridade. As hipóte
 
 ## 8. Precisa do Matheus
 
-Cada decisão vai com a recomendação e o custo de errar.
+**As sete DECIDIDAS em 2026-10-19, pela recomendação** (o Matheus, pelo coordenador), inclusive a CP-7: o Gate B fecha no POC, em TS, e a
+paridade do mundo com o Python fica para a entrada da P4.
 
-| # | decisão | recomendação | o custo de errar |
+| # | decisão | DECIDIDO (a recomendação) | o custo de errar |
 |---|---|---|---|
 | CP-1 | o contato (bater na parede, no obstáculo, na bola) tem efeito no corpo? | **não**: só registro. Uma dor por batida seria química nova e SEM FONTE; ela é do Sistema nociceptivo (J10, adiado) ou do proprioceptivo, que ainda é ideia (`docs/DEFINICOES_CORPO_V2.md`, 8.1) | baixo: o registro já guarda o contato, e o efeito entra depois, atrás de chave |
 | CP-2 | o `descansar` é dormir? | **sim**: `dormindo` nos ticks da Intenção, em qualquer lugar da sala. O POC não tem ninho; o conforto do ninho (`mundo_fisico.md`, 2.2) fica para depois | médio: sem dormir, o cansaço só sobe e o pet de teste se esgota; com o sono em qualquer lugar, o descanso fica fácil demais |
@@ -138,3 +139,62 @@ Cada decisão vai com a recomendação e o custo de errar.
 ## 9. Execução
 
 As etapas entregues entram aqui, cada uma numa seção no fim deste documento.
+
+## 10. Etapas E0 a E2, entregues (2026-10-19, PR 1)
+
+**E0, a chave e o POC-01a guardado:**
+- a `Simulacao` ganhou a opção `corpo` (desligada por padrão);
+- o **G-POC01-IGUAL** (`web/app/test/poc_mundo3d_corpo.test.ts`) entrou num commit antes do corpo. Com a chave desligada, os hashes das
+  sementes 101, 202 e 303 são os do `artifacts_v2_world_poc/e2e.json`, e os registros saem iguais.
+
+**E1, o corpo no mundo do POC** (`web/app/poc/mundo3d/corpo_poc.ts`, o único ponto do POC que importa o motor, CP-6):
+- **o corpo:** o `Corpo` do `corpo.ts` com a `CCO_V11`, nascido do estado inicial `ESTADO_INICIAL_POC` (PROPOSTO);
+- **por tick, depois do passo do mundo:**
+  - comer chama o `estimuloConsumoMundo("racao", "madura")`;
+  - o primeiro empurrão da decisão chama o `estimuloBola` e a `atividade("bola")` (CP-5);
+  - o corpo anda o `passo`, no estado do começo do tick: `dormindo` no `descansar` (CP-2) e sem sujeira (CP-4);
+- **no fim de cada decisão:** o `estimuloAndar` com o caminho andado;
+- **o contato não chama o corpo** (CP-1);
+- **o registro:** cada chamada fica gravada (`chamadasCorpo`). O estado ganha o `corpo.paraDict()` só com a chave.
+
+**E2, o contrato com o corpo:**
+- **a Observação:** o campo `corpo` passa a ser `Corpo.receptores()` com a chave ligada, e o corpo de brinquedo com ela desligada;
+- **o cérebro:** o `cerebroDeTesteCorpo` (`cerebro.ts`, que continua importando só o `tipos.ts`) decide sobre as faltas dos receptores,
+  com os limiares PROPOSTOS `LIMIARES_CORPO` (exausto 700, fome 350, tédio 300, na escala 1024);
+- **o registro:** cada decisão leva os receptores antes e depois e a `consequencia` por drive, a conta do `contribuicoesCorpo` do
+  `lobos.ts` com todos os pesos 1 (o teste confere contra ele).
+
+**Os gates** (`web/app/test/poc_mundo3d_corpo.test.ts`, 17 testes; os 31 do POC-01a seguem passando):
+- **G-POC01-IGUAL:** passa (3 sementes, os hashes do POC-01a).
+- **G-CORPO-IGUAL:** as 3.150 chamadas de uma vida de 3.000 ticks, refeitas num `Corpo` solto com a conta escrita de novo no teste, dão
+  o mesmo `paraDict()`. Sem uma das comidas, sai outro (o controle negativo).
+- **G-CONSEQUENCIA:**
+  - comer passa pela digestão (o `digerido_total` sobe) e tira a falta de fome, e toda decisão que comeu termina com a consequência da
+    fome positiva;
+  - andar 240 sobe o cansaço o dobro de andar 120, e o combustível com diferença de no máximo 1;
+  - a bola tira do tédio e da tristeza, uma vez por decisão;
+  - o contato não chama o corpo: só os quatro estímulos, e há contato no registro.
+- **G-CONTRATO-CORPO:** a Observação traz exatamente as chaves de `Corpo.receptores()`, sem química e sem posição absoluta.
+- **G-LACO, o Gate B:** a vida da semente 101 fecha as duas cadeias:
+  - **a comida**, na decisão 34: a falta de fome em 691 (acima de 350), a comida vista, `consumir` com o `ref` dela, `chegou` em 2
+    ticks, comeu, e a falta de fome caiu para 243;
+  - **a bola**, na decisão 27: o tédio em 553 (acima de 300), a bola vista, `empurrar`, 52 subunidades andadas, 2 empurrões, a bola
+    de (152, 56) a (185, 78), e o tédio caiu para 276.
+- **G-DET:** no Node, a mesma semente dá a mesma vida, e o replay pelo log a refaz, com o corpo. No Chrome
+  (`web/app/e2e_poc/corpo.spec.ts`), os hashes das sementes 101, 202 e 303 com o corpo são os do Node
+  (`artifacts_v2_world_poc/poc02_e2e.json`).
+- **A G-FRONTEIRA**, mudada pela CP-6: o POC só importa a si mesmo, o `three` (só na vista) e, do motor, o fecho do `corpo.ts`
+  (`corpo.ts`, `constantes.ts`, `estado.ts`, `mundo.ts`...), calculado pelo próprio teste a partir dos imports.
+
+**A vida de demonstração** (`npm run poc:medir02` → `artifacts_v2_world_poc/poc02_laco.json`; só descritiva):
+- a semente 101, 3.000 ticks, 199 decisões fechadas;
+- os resultados das Intenções: 68 descansos, 52 explorações, 6 `consumir` (3 comeram), 73 `empurrar` (57 pararam bloqueados contra
+  uma parede ou um obstáculo);
+- **o achado:** no fim, a fome e a higiene estão em 0 e a saúde caiu de 1024 para 148. Também ficaram no máximo o tédio, a solidão e o
+  estresse. O pet do POC, sem dono e com o cérebro de teste, piora em dois dias de jogo. Duas coisas pesam:
+  - **a higiene cai pelo próprio corpo:** a premissa da CP-4 ("a higiene não muda") estava errada; sem sujeira, ela cai mesmo assim,
+    e o POC não tem como limpar;
+  - a comida é uma só na sala, e o cérebro de teste a acha pouco (só no cone da visão).
+
+  Isso não fere o Gate B, que é a cadeia, mas mostra que um organismo no mundo novo precisa de mais do que o laço: um dono, ou um
+  cérebro que procure.

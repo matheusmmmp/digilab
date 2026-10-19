@@ -154,7 +154,11 @@ async function iniciar(): Promise<void> {
         return { diferentes: n, total: t.largura * t.altura };
       },
       medirFps,
-      hashDe: (semente: number, ticks: number) => { const s = new Simulacao(semente); s.avancar(ticks); return s.hash(); },
+      hashDe: (semente: number, ticks: number, corpo = false) => {
+        const s = new Simulacao(semente, undefined, { corpo });
+        s.avancar(ticks);
+        return s.hash();
+      },
       tamanho: () => vista.tamanho,
     },
   });

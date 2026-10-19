@@ -19,7 +19,8 @@
     "poc:build": "vite build --config poc/vite.config.ts",
     "poc:preview": "vite preview --config poc/vite.config.ts",
     "poc:e2e": "npm run poc:build && playwright test -c playwright.poc.config.ts",
-    "poc:medir": "node poc/medir.mjs"
+    "poc:medir": "node poc/medir.mjs",
+    "poc:medir02": "node poc/medir_poc02.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",

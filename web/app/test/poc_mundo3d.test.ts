@@ -42,9 +42,20 @@ describe("G-FRONTEIRA: o POC fica de fora do jogo, e só a vista conhece a engin
     }
   });
 
-  test("o POC só importa a si mesmo; o motor do jogo e as telas não importam o POC", () => {
+  test("o POC só importa a si mesmo e, do motor, o corpo.ts e o que ele importa (CP-6, POC-02); o motor e as telas não importam o POC", () => {
+    /* o fecho do corpo.ts no motor: os arquivos que ele importa, e os que esses importam */
+    const fecho = new Set<string>();
+    const visitar = (arq: string) => {
+      if (fecho.has(arq)) return;
+      fecho.add(arq);
+      for (const i of importacoes(join(APP, "motor", arq))) if (i.startsWith("./")) visitar(i.slice(2));
+    };
+    visitar("corpo.ts");
     for (const f of arquivos(POC, /\.ts$/)) {
-      for (const i of importacoes(f)) expect(i === "three" || i.startsWith("./"), `${f}: ${i}`).toBe(true);
+      for (const i of importacoes(f)) {
+        const doMotor = i.startsWith("../../motor/") && fecho.has(i.slice("../../motor/".length));
+        expect(i === "three" || i.startsWith("./") || doMotor, `${f}: ${i}`).toBe(true);
+      }
     }
     for (const dir of ["motor", "src"]) for (const f of arquivos(join(APP, dir), /\.tsx?$/)) {
       expect(importacoes(f).some(i => i.includes("poc/")), f).toBe(false);

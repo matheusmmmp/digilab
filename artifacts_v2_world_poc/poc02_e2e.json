@@ -1,0 +1,22 @@
+{
+ "G_DET_corpo_chrome_node": [
+  {
+   "semente": 101,
+   "ticks": 3000,
+   "corpo": true,
+   "hash": "662f2642"
+  },
+  {
+   "semente": 202,
+   "ticks": 3000,
+   "corpo": true,
+   "hash": "5cad90bf"
+  },
+  {
+   "semente": 303,
+   "ticks": 4500,
+   "corpo": true,
+   "hash": "52d5088f"
+  }
+ ]
+}

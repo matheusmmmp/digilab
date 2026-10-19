@@ -39,7 +39,8 @@ export function tapado(m: Mundo, x0: number, y0: number, x1: number, y1: number)
 
 /** a leitura dos sensores; `resultado` é o que o controlador devolveu da Intenção anterior (já filtrado). Com `consumir` (o padrão), os
  *  contatos lidos saem do mundo; sem ele (o fechamento do registro), ficam para a próxima Observação */
-export function ler(m: Mundo, resultado: ResultadoPercebido | null, consumir = true): Leitura {
+export function ler(m: Mundo, resultado: ResultadoPercebido | null, consumir = true,
+  receptores: Readonly<Record<string, number>> | null = null): Leitura {
   const p = m.pet;
   const candidatos: { categoria: Categoria; distancia: number; setor: number; alvo: AlvoMundo; ordem: number }[] = [];
   const objetos: [Categoria, number, number, AlvoMundo, number][] = [["bola", m.bola.x, m.bola.y, { tipo: "bola" }, 0]];
@@ -68,7 +69,8 @@ export function ler(m: Mundo, resultado: ResultadoPercebido | null, consumir = t
   const contato: Contato[] = m.contatos.map(c => ({ categoria: c.categoria, setor: relativo(c.setor, p.orientacao) }))
     .sort((a, b) => a.categoria.localeCompare(b.categoria) || a.setor - b.setor);
   if (consumir) m.contatos = [];
-  const corpo: CorpoPoc = { fome: p.fome, tedio: p.tedio };
+  /* o POC-02: os receptores do corpo químico (uma cópia); o POC-01a: o corpo de brinquedo */
+  const corpo: Readonly<Record<string, number>> = receptores !== null ? { ...receptores } : ({ fome: p.fome, tedio: p.tedio } satisfies CorpoPoc);
   return { obs: { vistos, obstaculos, contato, resultado, corpo }, refs };
 }
 
