@@ -2,7 +2,7 @@
    pelo comando do chat (TAREFA_COMANDO_CHAT). O motor grava o evento "d" de sempre (Motor.observar); aqui ficam so o
    flash do palco e a velocidade do chamado. Nada aqui le a LLM: o comando chega como texto e e validado contra o
    catalogo fechado (AcaoDono) e contra o estado do pet antes de virar o mesmo clique do botao. */
-import { ACOES_DONO_V4, ACOES_EDUCACAO, type AcaoDono, type Motor } from "../motor/index.ts";
+import { ACOES_DONO_JOGO_V11, ACOES_DONO_V4, ACOES_EDUCACAO, type AcaoDono, type Motor } from "../motor/index.ts";
 import { mostrarFlash } from "./flash.ts";
 import { jogoAtual, mudarMotor } from "./jogo.ts";
 import { ajustarVelocidadeChamado } from "./tempo.ts";
@@ -10,16 +10,16 @@ import { ajustarVelocidadeChamado } from "./tempo.ts";
 /** rotulo dos botoes (tela do Pet) e do chip do comando ("Alimentar?") */
 export const ROTULO_DONO: Record<AcaoDono, string> = {
   alimentar: "Alimentar", limpar: "Limpar", brincar: "Brincar", acariciar: "Carinho", elogiar: "Elogiar", repreender: "Repreender",
-  petisco: "Petisco", levar_ao_banheiro: "Banheiro", tratar_lesao: "Tratar",
+  petisco: "Petisco", levar_ao_banheiro: "Banheiro", tratar_lesao: "Tratar", tapa: "Tapa",
 };
 /** o que o dono fez, no historico da conversa ("✓ alimentou") */
 export const FEITO_DONO: Record<AcaoDono, string> = {
   alimentar: "alimentou", limpar: "limpou", brincar: "brincou", acariciar: "fez carinho", elogiar: "elogiou", repreender: "repreendeu",
-  petisco: "deu petisco", levar_ao_banheiro: "levou ao banheiro", tratar_lesao: "tratou a lesão",
+  petisco: "deu petisco", levar_ao_banheiro: "levou ao banheiro", tratar_lesao: "tratou a lesão", tapa: "deu um tapa",
 };
 export const ICONE_DONO: Record<AcaoDono, string> = {
   alimentar: "carne", limpar: "brilho", brincar: "nota", acariciar: "coracao", elogiar: "coracao", repreender: "gota",
-  petisco: "carne", levar_ao_banheiro: "brilho", tratar_lesao: "coracao",
+  petisco: "carne", levar_ao_banheiro: "brilho", tratar_lesao: "coracao", tapa: "gota",
 };
 
 /** o dono so age no pet nascido e vivo */
@@ -47,6 +47,7 @@ export function validarComando(m: Motor, nascendo: number, c: unknown): AcaoDono
   if (!a) return null;
   if (!podeAgir(m, nascendo)) return null;
   if (ACOES_EDUCACAO.includes(a) && m.versao < 4) return null;
+  if (m.versao >= 11 && !ACOES_DONO_JOGO_V11.includes(a)) return null;          /* pets v11: sem elogio, bronca, petisco e banheiro */
   if (a === "tratar_lesao" && m.lesionadoDesde === null) return null;
   return a;
 }

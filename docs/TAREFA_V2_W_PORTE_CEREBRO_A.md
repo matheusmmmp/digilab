@@ -371,6 +371,53 @@ A parte 3 ficou em dois PRs. Este (3a) traz a medida da PW-4 (b), a vontade e o 
   Os pets v1 a v10, as assinaturas e os gabaritos não mudaram.
 - `npm run tipos` limpo; `npm test` com 38 arquivos e 439 testes; os testes Python tocados passam (8).
 
+**As duas decisões do #339, DECIDIDAS (Matheus, 2026-10-18), pelas opções do PR:**
+- **O caráter:** opção (a), aceitar os números PROPOSTOS. O v11 usa a escala 0,015 e os deslocamentos medidos. O custo aceito: 14% dos
+  eixos batem em ±1, e o caçador sai sempre sentinela.
+- **A parte 3b:** opção (a), o v11 é o v10 sem as camadas que dependem da bronca ou que o laço recusa.
+  - Ficam: a evolução (com o caráter do v11), o combate e tudo acima, o treino sem obediência e o vínculo B pelo desejo atendido.
+  - Saem: a educação (as janelas, o petisco e o banheiro), a mentira e a obediência.
+  - A lesão fica, e o tratar só cura.
+
 **Para a parte 3b, a decisão que falta:** o que o v11 do jogo herda dos v4 a v10. O laço do corpo recusa a educação (as janelas, as
 travessuras e a disciplina, resolvidas com a bronca e o petisco), a obediência e o treino com obediência. E a mentira dos v7 é julgada
 com a bronca. O pedido está no corpo do PR.
+
+## 16. Etapa 4, parte 3b, entregue (2026-10-18): o pet v11 no Motor
+
+Pelas decisões do Matheus de 2026-10-18 (seção 15). Sem run de pesquisa e sem número novo.
+
+- **`VERSAO_PET` 11:** os ovos novos são v11. Cada um tem o cérebro A atrás do braço da consequência (`motor/pet_v11.ts`, `bracoV11`, o
+  mesmo que os gates rejogam) e o laço do corpo por tick (`MotorCorpo`, #335).
+  - O laço nasce com a semente do pet e com `estadoNascimentoPy(TICK_INICIAL)`, que é o `estadoInicial()` do jogo.
+  - O estado do pet é o do laço. O `Motor.e` é a cópia dele depois de cada passo, e nada no `Motor` do v11 escreve nele.
+  - As rng do v11 são as do laço (o `RandomPy` do ambiente e o da política); o mulberry32 do jogo não sorteia nada da vida dele.
+- **Ficam,** como nos v10: a evolução (com o caráter do v11, `caraterV11`), o combate e tudo acima, o treino sem obediência, o vínculo B, a
+  lesão e a morte.
+  - **O vínculo B** recebe o desejo do cérebro A. O desejo sai antes de o cérebro decidir, como no gabarito da vontade, e passa pelo
+    `vinc.decisao`.
+  - **A tela do desejo** pede o desejo com a observação com o corpo (`Motor.observacaoAgora`).
+- **Saem, só dos v11:** a educação (as janelas, as travessuras, a disciplina, o petisco e o banheiro), a mentira (a fala espontânea dos
+  v7) e a obediência.
+  - O elogio, a bronca, o petisco e o banheiro falham alto no `observar`, e o `falar` também.
+  - O treino sempre obedece. As amostras do vínculo pelo treino (a pausa e o forçar) ficam.
+- **O tratar só cura:** tira a lesão, sem contato e sem passar pelo corpo.
+- **O dono do v11:** alimentar, limpar, brincar, carinho, tapa e tratar (`ACOES_DONO_JOGO_V11`; o tapa é uma ação nova do registro, só
+  dos v11).
+- **A memória por espaços continua** como o lobo de memória e emoção (D-W7 do #201). Ela fica no `Bandit` do pet, que não decide: só
+  recebe as decisões e as ações do dono, para as lembranças, a emoção e a fala.
+- **As telas:**
+  - os botões do Pet e os atalhos do Conversar trocam o elogio e a bronca pelo carinho e pelo tapa;
+  - o Aprendizado do v11 mostra as lembranças, o jeito e um aviso (as seções do Bandit não valem para o A, e o painel DigiBrain é a
+    etapa 5);
+  - a dica do Rookie fala do corpo e do tapa;
+  - a conversa do v11 segue o caminho de antes da voz própria (a fala do v11 é a etapa 6);
+  - o pet de exemplo do primeiro acesso nasce v11, com carinho no lugar dos dois elogios do roteiro.
+- **Os testes:**
+  - `web/app/test/pet_v11.test.ts`: um ovo novo joga 4 dias com um dono de roteiro, com cuidado, carinho, tapa, treino, medalha e lutas.
+    O cérebro decide e aprende, a vontade chega ao desejo e ao vínculo, a linha sai do caráter do v11 e o replay dá a mesma vida. O
+    caráter da evolução é o do cérebro no tick dela, e o tratar só cura.
+  - Os testes que fixavam o v10 como ovo novo passaram para o v11. Os que testam o comportamento do v10 pedem o v10.
+  - Os pets v1 a v10, as assinaturas e os gabaritos não mudaram.
+  - O e2e (`npm run e2e`, 65 testes) passa. Os dois testes do e2e que esperavam o ovo novo na versão 9 (já falhavam na `main`, com o
+    v10) passaram a esperar a 11.

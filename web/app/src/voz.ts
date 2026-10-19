@@ -43,7 +43,7 @@ const somaCampanha = (m: Motor): number => Object.values(m.campanha).reduce((a, 
 
 /** fatos da historia com o rival pelo nome da tela (o texto e dados.nome, que a mentira usa); a chave segue com o id */
 function fatosDe(m: Motor, comGostos: boolean): FatoHistoria[] {
-  return extrair(registroDoMotor(m, comGostos && m.versao >= 3 ? desvioPorAcao(m) : []), CHIS, nomeRivalTela)
+  return extrair(registroDoMotor(m, comGostos && m.versao >= 3 && m.versao < 11 ? desvioPorAcao(m) : []), CHIS, nomeRivalTela)
     .map(f => typeof f.dados.rival === "string" ? { ...f, dados: { ...f.dados, nome: nomeRivalTela(f.dados.rival) } } : f);
 }
 function chavesHabito(fatos: FatoHistoria[]): Set<string> { return new Set(fatos.filter(f => f.tipo === "H" || f.tipo === "O").map(f => f.chave)); }
@@ -57,7 +57,7 @@ function olhar(m: Motor): Visto {
 
 /** o gatilho de agora, ou null. Atualiza o que ja foi visto (chamar a cada mudanca do pet); agora = relogio em ms */
 export function gatilhoDe(m: Motor, agora: number = Date.now()): string | null {
-  if (m.versao < 7) return null;
+  if (!m.temVozPropria) return null;
   if (!V || V.semente !== m.semente) { V = olhar(m); return null; }            /* ao carregar: so observa */
   const a = olhar(m), t = m.e.tick;
   let g: string | null = null;
@@ -79,13 +79,13 @@ export function gatilhoDe(m: Motor, agora: number = Date.now()): string | null {
 
 /** pode falar agora? (ritmo, janela, sono, estagio) */
 export function podeFalar(m: Motor): boolean {
-  return m.versao >= 7 && !m.morte && m.estagioAtual !== "bebe" && !m.janelaAberta() && !m.e.dormindo
+  return m.temVozPropria && !m.morte && m.estagioAtual !== "bebe" && !m.janelaAberta() && !m.e.dormindo
     && m.e.tick - tickUltimaFala(m) >= RITMO_MIN;
 }
 
 /** o fato de revanche (P) contra este rival, se ele ainda nao falou dela depois da derrota; senao null */
 export function revancheContra(m: Motor, rival: string): FatoHistoria | null {
-  if (m.versao < 7) return null;
+  if (!m.temVozPropria) return null;
   const f = fatosDe(m, false).find(x => x.regra === "revanche" && x.dados.rival === rival);
   if (!f || m.log.some(e => e[1] === "fl" && e[2] === "revanche" && (e[0] as number) >= f.tick)) return null;
   return f;
@@ -118,6 +118,6 @@ export function assuntoDaFala(m: Motor, j: Janela, dadosRecentes: string[][], fo
 
 /** fatos da historia para a CONVERSA (a selecao inteira, sem mentira) */
 export function historiaDaConversa(m: Motor, citados: string[][]): Record<string, unknown>[] {
-  return m.versao >= 7 ? selecionar(fatosDe(m, true), citados).map(paraFato) : [];
+  return m.temVozPropria ? selecionar(fatosDe(m, true), citados).map(paraFato) : [];
 }
 export const JANELA_FALA_MIN = CMEN.janela;

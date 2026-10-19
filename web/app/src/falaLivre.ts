@@ -107,7 +107,7 @@ async function falar(situacao: "espontanea" | "conversa", gatilho: string | null
   const semente = hashSemente("fala-livre", motor.semente, motor.log.length, FL.sessao.length) >>> 1;
   const t = motor.e.tick;
   try {
-    const voz = motor.versao >= 7;
+    const voz = motor.temVozPropria;
     const estado = estadoDoPet(motor, gatilho);
     if (voz) estado.historia = historiaDaConversa(motor, assuntosRecentes());
     const d = await post("/api/fala-livre", { estado, situacao, fala_jogador: falaJogador, historico: FL.sessao.slice(-MAX_TROCAS), semente,
@@ -181,7 +181,7 @@ function falaVoz(m: Motor, gatilho: string, foco: FatoHistoria | null = null): v
 }
 /** pets v7: o dono escolheu (Arena ou Campanha) o rival que venceu o pet e ainda nao foi vencido: ele fala antes da luta */
 export function falaRevanche(m: Motor, rival: string): void {
-  if (m.versao < 7 || !podeFalar(m)) return;
+  if (!m.temVozPropria || !podeFalar(m)) return;
   const f = revancheContra(m, rival);
   if (f) falaVoz(m, "revanche", f);
 }
@@ -195,7 +195,7 @@ export function falaVozRecente(m: Motor): RegistroFala | null {
     Pets v7: os gatilhos da voz propria, em todos os modos (o texto so vem da LLM no modo livre).
     Devolve true quando o balao e da fala livre (a tela nao mostra o template). */
 export function gatilhoFalaLivre(m: Motor): boolean {
-  if (m.versao >= 7) {
+  if (m.temVozPropria) {
     const g = gatilhoDe(m);
     if (g && podeFalar(m)) falaVoz(m, g);
     return !!falaVozRecente(m);

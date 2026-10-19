@@ -111,7 +111,7 @@ function useFala(): VistaFala {
   useEffect(() => { setLivre(gatilhoFalaLivre(m)); }, [revisao, fl.modo]);
   const mot = m.motivo, est = m.estagioAtual;
   const v: VistaFala = { classe: "dl-balao", balao: "…", texto: "", titulo: "Toque para ver o porquê", causa: null, detalhe: "" };
-  const ult = m.versao >= 7 ? falaVozRecente(m) : fl.modo === "livre" ? fl.ultimo : null;
+  const ult = m.temVozPropria ? falaVozRecente(m) : fl.modo === "livre" ? fl.ultimo : null;
   if (livre && ult) {
     v.balao = v.texto = "✧ " + ult.fala + iconeVerif(ult.verificacao, ult);
     v.detalhe = detalheFalaLivre(ult); v.titulo = tituloFalaLivre(ult);
@@ -230,7 +230,7 @@ function Necessidades() {
           <i style={{ width: `${e.saude * 100}%`, ...(e.saude < .3 ? { background: "var(--dl-need)" } : {}) }} />
         </div>
       </div>
-      {m.versao >= 4 && <div class="nec nec-disciplina">
+      {m.temEducacao && <div class="nec nec-disciplina">
         <span class="nec-rot">Disciplina</span>
         <Seg n={blocos(m.disciplina / CED.disciplinaMax, 4)} m={4} cls="dl-seg--acao" />
       </div>}
@@ -305,7 +305,7 @@ function Morte() {
 }
 function Chamados({ agir }: { agir: (a: AcaoDono) => void }) {
   const { motor: m } = useJogo(), ab = m.chamadosAbertos(), tick = m.e.tick;
-  if (m.versao >= 4 && m.estagioAtual !== "bebe") return <JanelaV4 agir={agir} />;
+  if (m.temEducacao && m.estagioAtual !== "bebe") return <JanelaV4 agir={agir} />;
   if (!ab.length && m.acao === "chamar_atencao") return (
     <div class="dl-card chamado">
       <span class="chamado-ic"><Peca nome="emoji_exclam" escala={2} reserva="!" /></span>
@@ -328,7 +328,7 @@ function Chamados({ agir }: { agir: (a: AcaoDono) => void }) {
 }
 /** desejo: necessidade (rosa, vem do corpo) ou vontade aprendida (malha); so o que o motor calculou */
 function Desejo() {
-  const { motor: m } = useJogo(), d = m.desejoAtual(observacao(m.e), m.e.tick);
+  const { motor: m } = useJogo(), d = m.desejoAtual(m.observacaoAgora(), m.e.tick);
   if (!d) return null;
   const em = EMOTE_DESEJO[d.alvo];
   if (d.tipo === "necessidade") return (
@@ -346,6 +346,9 @@ function Desejo() {
 const ACOES: [AcaoDono, string][] = [["alimentar", "sec"], ["limpar", "sec"], ["brincar", "sec"], ["acariciar", "sec"], ["elogiar", "destaque"], ["repreender", "sec"]];
 /* pets v4 (educacao-v1): petisco, banheiro e tratar lesao */
 const ACOES_V4: [AcaoDono, string][] = [["petisco", "sec"], ["levar_ao_banheiro", "sec"], ["tratar_lesao", "sec"]];
+/* pets v11: sem elogio, bronca, petisco e banheiro; o carinho e o tapa sao gestos no corpo (ACOES_DONO_JOGO_V11) */
+const ACOES_V11: [AcaoDono, string][] = [["alimentar", "sec"], ["limpar", "sec"], ["brincar", "sec"], ["acariciar", "destaque"], ["tapa", "sec"],
+  ["tratar_lesao", "sec"]];
 
 /* icone de cada acao do dono (PetTela): prato do guia, gota, nota, coracao, joinha e exclamacao */
 const GOTA = <svg class="ic-gota" viewBox="0 0 8 8" width="24" height="24" aria-hidden="true"><path fill="#2C73E0" d="M3 0h2v2h1v1h1v3h-1v1h-4v-1h-1v-3h1v-1h1z" /><path fill="#BFE3FF" d="M2 3h1v2h-1z" /></svg>;
@@ -411,7 +414,7 @@ export function TelaPet({ abrirMeusPets, irConversar, abrirConfig, irRegistro }:
             <span class="desk-so pet-recente-caixa"><AgoraHaPouco irRegistro={irRegistro} /></span>
           </div>
           {!m.morte && <div class="acoes-pet" role="group" aria-label="Cuidar e ensinar">
-            {(m.versao >= 4 ? [...ACOES, ...ACOES_V4] : ACOES).map(([a, tipo]) => <button type="button" key={a} class={`dl-btn dl-btn--${tipo}`} onClick={() => agir(a)}><IconeAcao a={a} /><span>{ROTULO_DONO[a]}</span></button>)}
+            {(m.versao >= 11 ? ACOES_V11 : m.versao >= 4 ? [...ACOES, ...ACOES_V4] : ACOES).map(([a, tipo]) => <button type="button" key={a} class={`dl-btn dl-btn--${tipo}`} onClick={() => agir(a)}><IconeAcao a={a} /><span>{ROTULO_DONO[a]}</span></button>)}
           </div>}
         </aside>
       </div>

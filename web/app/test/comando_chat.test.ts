@@ -55,7 +55,9 @@ describe("validacao do comando no app", () => {
     const v3 = new Motor(7, 3);
     expect(ac.validarComando(v3, 0, "petisco")).toBeNull();
     expect(ac.validarComando(v3, 0, "brincar")).toBe("brincar");
-    expect(ac.validarComando(m, 0, "petisco")).toBe("petisco");
+    expect(ac.validarComando(new Motor(7, 10), 0, "petisco")).toBe("petisco");
+    /* pets v11 (os ovos novos): sem elogio, bronca, petisco e banheiro */
+    for (const fora of ["petisco", "elogiar", "repreender", "levar_ao_banheiro"]) expect(ac.validarComando(m, 0, fora)).toBeNull();
     expect(ac.validarComando(m, 0, "tratar_lesao")).toBeNull();                     /* sem lesao */
     const lesionado = new Motor(7); lesionado.lesionadoDesde = 5;
     expect(ac.validarComando(lesionado, 0, "tratar_lesao")).toBe("tratar_lesao");
@@ -83,7 +85,7 @@ describe("execucao direta e o registro do pet", () => {
     expect(m.versao).toBe(VERSAO_PET);
     const antes = m.log.map(e => [...e]), n = antes.length;
     await conversar("vai comer", "alimentar");
-    expect(pedidos[pedidos.length - 1].voz).toBe(true);
+    expect(pedidos[pedidos.length - 1].voz).toBeUndefined();          /* os v11 nao tem a voz propria (a mentira) */
     /* o gemeo: o mesmo registro ate antes, mais o clique no botao Alimentar (Motor.observar, como acoes.agir) */
     const gemeo = Motor.reproduzir(m.semente, antes as never, m.versao);
     gemeo.observar("alimentar");

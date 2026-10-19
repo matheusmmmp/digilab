@@ -39,8 +39,12 @@ export const CDJ = { limiarNecessidade: .3, limiarVontade: .1, limiarTom: .2, kC
    nenhum evento novo;
    10 = v9 + vinculo B, previsibilidade + desejo (CVB; docs/V2_VINCULO_PROPOSTA.md, alternativa B, decisao do Matheus de
    2026-10-01; plano docs/PLANO_ANALISE_V2_VINCULO.md; espelho de ConfigVinculoSituacao ligada): o pedido nao abre e a coerencia
-   do feedback agrupa por (acao do pet, situacao do pet); nenhum evento novo */
-export const VERSAO_PET = 10;
+   do feedback agrupa por (acao do pet, situacao do pet); nenhum evento novo;
+   11 = o cerebro A e o corpo (docs/TAREFA_V2_W_PORTE_CEREBRO_A.md, etapa 4): o pet decide e aprende pelos lobos (motor/lobos.ts, a
+   consequencia no corpo), sobre o laco do corpo por tick (motor/motor_corpo.ts); o dono tem carinho e tapa, sem elogio nem bronca; o
+   desejo e a vontade do cerebro A; o carater pelo metodo do Python, com a escala e o deslocamento do v11. Saem a educacao (as janelas, o
+   petisco e o banheiro), a mentira e a obediencia; a lesao fica, e o tratar so cura (decisao do Matheus de 2026-10-18) */
+export const VERSAO_PET = 11;
 /* medalhas do Tamer que cada evolucao pede nos pets v6 (decisao do Matheus, 2026-09-29: 1, 3 e 5; so no jogo), pela
    chave do estagio de destino: Rookie -> Champion (adolescente), Champion -> Ultimate (adulto), Ultimate -> Mega (mega).
    In-Training -> Rookie nao pede medalha. A tabela das medalhas fica em medalhas.ts */
@@ -157,6 +161,8 @@ export const ACOES_PET: readonly AcaoPet[] = ["ocioso", "dormir", "comer", "brin
 export const ACOES_DONO: readonly AcaoDono[] = ["alimentar", "limpar", "brincar", "acariciar", "elogiar", "repreender"];
 export const ACOES_EDUCACAO: readonly AcaoDono[] = ["petisco", "levar_ao_banheiro", "tratar_lesao"];
 export const ACOES_DONO_V4: readonly AcaoDono[] = [...ACOES_DONO, ...ACOES_EDUCACAO];
+/** as acoes do dono dos pets v11: as quatro de cuidado, o tapa (os do laco do corpo, ACOES_DONO_V11 de motor_corpo.ts) e o tratar */
+export const ACOES_DONO_JOGO_V11: readonly AcaoDono[] = ["alimentar", "limpar", "brincar", "acariciar", "tapa", "tratar_lesao"];
 export const COMBATE: readonly TracoCombate[] = ["golpe", "bloqueio", "agarrao", "finta", "carga"];
 
 /* memoria curta dos pets v1 (espelho de digilab/memoria.py, ConfigMemoria) */
