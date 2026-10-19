@@ -73,9 +73,12 @@ FAIXAS_RESERVADAS = (
                    "adendo 3, A3.5, PJ-5)"),
     (51101, 51505, "pet que pensa (J5) com a fruta ao lado da racao, calibracao do ganho_gosto e do g_plano e piloto "
                    "(PLANO_ANALISE_V2_PET_QUE_PENSA, adendo 5, A5.8, PJ5-6)"),
-    (52101, 52505, "pet que pensa (J5), o piloto do adendo 7 (as margens, o N e as premissas; PLANO_ANALISE_V2_PET_QUE_PENSA, A7.8, "
-                   "PJ7-6)"),
-    (53101, 53505, "pet que pensa (J5), a validacao do adendo 7 (PLANO_ANALISE_V2_PET_QUE_PENSA, A7.8, PJ7-6)"),
+    (52101, 52505, "pet que pensa (J5), o piloto do adendo 7, rodado em 2026-10-19 (PLANO_ANALISE_V2_PET_QUE_PENSA, A7.8, PJ7-6; "
+                   "nao volta)"),
+    (53101, 53505, "pet que pensa (J5), reservada para a validacao do adendo 7 e nao usada; substituida pela 55101 (A8.9; nao volta)"),
+    (54101, 54505, "pet que pensa (J5), o piloto do adendo 8 (as margens, o N e as premissas; PLANO_ANALISE_V2_PET_QUE_PENSA, A8.9, "
+                   "PJ8-6)"),
+    (55101, 55505, "pet que pensa (J5), a validacao do adendo 8 (PLANO_ANALISE_V2_PET_QUE_PENSA, A8.9, PJ8-6)"),
     (50001, 50020, "analise de poder, piloto"), (60001, 60160, "confirmatoria"), (69001, 69001, "M1, gate G1"),
     (80001, 82004, "linhagem E1 (piloto, genomas e ambientes)"),
     (20260900, 20261800, "fala, voz, comando e bootstraps (sementes de 2026-09/10 e semente + i)"),
