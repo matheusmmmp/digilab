@@ -79,6 +79,12 @@ class AcaoUsuario(str, Enum):
     TROCAR_ARVORES_A_B = "trocar_arvores_a_b"
     TROCAR_ARVORES_A_C = "trocar_arvores_a_c"
     TROCAR_ARVORES_B_C = "trocar_arvores_b_c"
+    # V2, o J5, adendo 8 (docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md, A8.3 e A8.6; PJ8-1): no T1, em T_m, as arvores de um tipo param de dar
+    # fruta ate o fim da vida, e as frutas daquele tipo caidas delas que estao no chao saem. Fora do orcamento, pelo canal do mundo; so o
+    # MotorMundo com ConfigPetQuePensaMundo.ligada aceita. No fim do enum.
+    PARAR_ARVORES_A = "parar_arvores_a"
+    PARAR_ARVORES_B = "parar_arvores_b"
+    PARAR_ARVORES_C = "parar_arvores_c"
 
 
 # as 6 acoes da v1, na ordem original: donos sorteiam daqui (list(AcaoUsuario) mudaria a
@@ -157,6 +163,22 @@ def par_da_troca(acao: AcaoUsuario) -> tuple[str, str]:
         raise ValueError(f"acao nao e troca de tipo: {acao}")
     _, _, x, y = acao.value.split("_")
     return x, y
+
+
+ACOES_PARAR_ARVORES = tuple(AcaoUsuario(f"parar_arvores_{f}") for f in FRUTAS)
+
+
+def tipo_parado(acao: AcaoUsuario) -> str:
+    """o tipo das arvores que param de dar fruta (J5, adendo 8)"""
+    if acao not in ACOES_PARAR_ARVORES:
+        raise ValueError(f"acao nao e parar arvores: {acao}")
+    return acao.value[len("parar_arvores_"):]
+
+
+def parar_arvores(fruta: str) -> AcaoUsuario:
+    if fruta not in FRUTAS:
+        raise ValueError(f"fruta desconhecida: {fruta!r}")
+    return AcaoUsuario(f"parar_arvores_{fruta}")
 
 
 def trocar_arvores(x: str, y: str) -> AcaoUsuario:

@@ -298,3 +298,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-19 — J5-ADENDO-8 (worker C): tirar a x das árvores no T1, e contar a ida às árvores novas no T2](registro/2026-10.md)
 
 - [2026-10-19 — W-PORTE, o mapa dos pesos no painel DigiBrain (worker de uma sessão lateral)](registro/2026-10.md)
+- [2026-10-19 — PQP-ADENDO8 (worker D): o evento que para as árvores, a bancada do adendo 8 do J5, o piloto e a validação apontando as faixas novas](registro/2026-10.md)
