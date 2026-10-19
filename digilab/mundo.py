@@ -107,6 +107,7 @@ from .config import ConfigOlfato, ConfigOuvido, ConfigSentidos
 from .corpo import leitura_orgao
 from .donos import Visao
 from .engine import Motor
+from .events import ACOES_PARAR_ARVORES, tipo_parado
 from .events import (ACOES_BOLA, ACOES_FRUTAS, ACOES_MAO, ACOES_TROCA_ARVORES, FRUTAS, TIPOS_COMIDA_MUNDO, AcaoPet, AcaoUsuario,
                      LogDeEventos, fruta_dada, ler_deixar_bola, ler_deixar_comida, par_da_troca)
 from .events import deixar_bola as evento_deixar_bola
@@ -686,6 +687,9 @@ class Mundo:
         # o J5 (o pet que pensa): as trocas de tipo por arvore, so depois de `ligar_trocas` (o motor com a ConfigPetQuePensaMundo); sem
         # ela, None e nada muda (nem o resumo)
         self.trocas_tipo: list[dict] | None = None
+        # o J5, adendo 8 (A8.3): as paradas de arvores (o tick, o tipo, as arvores, os ids retirados do chao), so depois da primeira; sem
+        # ela, None e nada muda (nem o resumo)
+        self.paradas_arvores: list[dict] | None = None
         # dois pets, etapa 8 (o degrau 1b): o rastro de cada pet, {id: [(x, y, tick), ...]} em ordem de tick, so depois de `ligar_marcas`
         # (o grupo com a ConfigSentidos ligada); sem ele, None e nada muda (nem o resumo)
         self.marcas: dict[str, list[tuple[int, int, int]]] | None = None
@@ -733,6 +737,29 @@ class Mundo:
                 novas[arv["id"]] = arv["fruta"]
         reg = {"tick": tick, "x": x, "y": y, "arvores": novas}
         self.trocas_tipo.append(reg)
+        return reg
+
+    def parar_arvores(self, tipo: str, tick: int) -> dict:
+        """O J5, adendo 8 (A8.3, PJ8-1): no tick (o mundo ja atualizado ate ele), as arvores que dao `tipo` param de dar fruta ate o fim da
+        vida, e as frutas caidas delas que estao no chao (maduras ou podres) saem do mundo. As de outra origem (a fruta ao lado da racao, a
+        comida do dono) nunca saem. Os sorteios das quedas continuam (o fluxo `mundo-arvores` anda igual), so nada cai dessas arvores."""
+        if self.trocas_tipo is None:
+            raise PetQuePensaSemChave("parar arvores num Mundo sem a ConfigPetQuePensaMundo")
+        if tipo not in FRUTAS:
+            raise ValueError(f"parar arvores de tipo invalido: {tipo!r}")
+        if self.tick_atualizado != tick:
+            raise RuntimeError(f"parar arvores no tick {tick} com o mundo atualizado ate {self.tick_atualizado}")
+        if self.paradas_arvores is None:
+            self.paradas_arvores = []
+        arvores = sorted(a["id"] for a in self.arvores if a["fruta"] == tipo)
+        for a in self.arvores:
+            if a["id"] in arvores:
+                a["parada"] = True
+        retiradas = sorted(c["id"] for c in self.comidas.values() if c["origem"] in arvores)
+        for i in retiradas:
+            del self.comidas[i]
+        reg = {"tick": tick, "tipo": tipo, "arvores": arvores, "retiradas": retiradas}
+        self.paradas_arvores.append(reg)
         return reg
 
     def troncos_perto(self, x: int, y: int) -> list[tuple]:
@@ -827,7 +854,7 @@ class Mundo:
                           for _ in range(n)]
                 no_chao = sum(1 for c in self.comidas.values()
                               if c["origem"] == arv["id"] and self.situacao(c, tk) is not None)
-                cabem = max(0, cm.max_frutas_por_arvore - no_chao)
+                cabem = 0 if arv.get("parada") else max(0, cm.max_frutas_por_arvore - no_chao)
                 ids = [self.nova_comida(arv["fruta"], x, y, tk, arv["id"])["id"] for x, y in pontos[:cabem]]
                 self.quedas.append({"tick": tk, "arvore": arv["id"], "sorteadas": n, "pontos": pontos, "colocadas": ids})
                 arv["recarga_ate"] = tk + cm.recarga_min
@@ -918,6 +945,7 @@ class Mundo:
                     "necessidades": [dict(n) for n in self.necessidades.values()], "prox_necessidade": self.prox_necessidade,
                     "recolhidas": self.recolhidas}),
                 **({} if self.trocas_tipo is None else {"trocas_tipo": self.trocas_tipo}),
+                **({} if self.paradas_arvores is None else {"paradas_arvores": self.paradas_arvores}),
                 **({} if self.marcas is None else {"marcas": {i: [list(m) for m in l] for i, l in sorted(self.marcas.items())}})}
 
 
@@ -1560,13 +1588,15 @@ class MotorMundo(MotorFrutas):
 
     # ------------------------------------------------------------ o dono
     def _aplicar_acao_usuario(self, acao: AcaoUsuario) -> None:
-        if acao in ACOES_MAO or acao in ACOES_TROCA_ARVORES:
+        if acao in ACOES_MAO or acao in ACOES_TROCA_ARVORES or acao in ACOES_PARAR_ARVORES:
             if not (self.cmf.ligada and self.cpq.ligada):
                 raise PetQuePensaSemChave(f"{acao.value} sem o mundo e a ConfigPetQuePensaMundo ligados")
             if acao in ACOES_MAO:
                 self._dar_fruta(fruta_dada(acao))
-            else:
+            elif acao in ACOES_TROCA_ARVORES:
                 self._trocar_arvores(*par_da_troca(acao))
+            else:
+                self._parar_arvores(tipo_parado(acao))
             return
         if self.cmf.ligada and acao in GESTOS_PROIBIDOS:
             raise GestoForaDoMundo(f"{acao.value} numa vida com o mundo: use deixar_comida/deixar_bola")
@@ -1613,6 +1643,13 @@ class MotorMundo(MotorFrutas):
         tm = self._tm(self._estado.tick)
         self.mundo.atualizar(tm)
         self.mundo.trocar_tipos(x, y, tm)
+        self._n_eventos += 1
+
+    def _parar_arvores(self, tipo: str) -> None:
+        """O J5, adendo 8: o mundo anda ate o tick, as arvores do tipo param e as frutas caidas delas saem. Nao e contato."""
+        tm = self._tm(self._estado.tick)
+        self.mundo.atualizar(tm)
+        self.mundo.parar_arvores(tipo, tm)
         self._n_eventos += 1
 
     def deixar_comida(self, tipo: str, x: int, y: int) -> None:
@@ -1708,6 +1745,7 @@ class MotorMundo(MotorFrutas):
                     "recolhidas": m.recolhidas, "alivios": self.alivios, "recolhas": self.recolhas,
                     "idas_banheiro": self.idas_banheiro}),
                 **({} if not self.cpq.ligada else {"troncos_vistos": dict(self.troncos_vistos), "trocas_tipo": m.trocas_tipo}),
+                **({} if m.paradas_arvores is None else {"paradas_arvores": m.paradas_arvores}),
                 **({} if not self.cfal.ligada else {"frutas_ao_lado": self.frutas_ao_lado})}
 
     # ------------------------------------------------------------ o avanco em ticks (o grupo, dois pets, etapa 2)

@@ -12,6 +12,9 @@ contra os artefatos da calibracao (`calibracao`: a pasta dela), e um que difere 
 calibracao com a fruta ao lado (o adendo 6, sem recalibrar, PJ7-5), e as margens, o K_u e o limiar da G-APRENDEU (o acaso medio, PJ7-3)
 vem do piloto do adendo 7 (`piloto`: a pasta do `run_v2_piloto_pet_que_pensa_adendo7.py`, com o `reval.json` e o `piloto/`).
 
+**O adendo 8** (`"adendo_8": true`, por cima do 7): o mesmo, nas bases da validacao dele (55101...55505, A8.9), com os numeros do piloto
+do adendo 8.
+
 **A analise (secao 7):**
 - **as premissas:** a G-APRENDEU (`f_antes` com o limite inferior do IC95 acima do limiar da config: 1/4 no adendo 5, PJ5-3), a
   G-OPORTUNIDADE (no maximo 25% das unidades sem oportunidade, por braco e teste) e a G-EXPOSICAO (no maximo 25% sem exposicao no T2);
@@ -78,9 +81,11 @@ def validar(cfg: dict) -> dict:
         raise ValueError(f"a validacao roda os 4 bracos {list(bv.BRACOS_PQP)} nos protocolos {list(PROTOCOLOS)}")
     bv.validar_config_pqp(_config_bancada(cfg))
     if "unidades" in cfg:
-        bases = bv.BASES_PQP_ADENDO7["validacao"] if adendo_7 else bv.BASES_PET_QUE_PENSA["validacao"]
+        adendo_8 = cfg.get("adendo_8", False) is True
+        bases = (bv.BASES_PQP_ADENDO8["validacao"] if adendo_8 else bv.BASES_PQP_ADENDO7["validacao"] if adendo_7
+                 else bv.BASES_PET_QUE_PENSA["validacao"])
         if not set(cfg["unidades"]["bases"]) <= set(bases):
-            raise bv.SementeSemPlano(f"a validacao do J5 usa as bases {bases} ({'A7.8' if adendo_7 else 'secao 8'})")
+            raise bv.SementeSemPlano(f"a validacao do J5 usa as bases {bases} ({'A8.9' if adendo_8 else 'A7.8' if adendo_7 else 'secao 8'})")
         if "calibracao" not in v:
             raise ValueError("a validacao com as bases do plano confere os numeros contra a calibracao: a chave 'calibracao'")
         conferir_congelados(cfg)

@@ -1791,6 +1791,22 @@ def alvos_ao_lado(vistos_maduros: Mapping[int, str], ids_ao_lado: set) -> int:
     return int(racao) + len({t for i, t in vistos_maduros.items() if i in ids_ao_lado})
 
 
+def busca_arvores(maduros: Sequence[str], alvo: Mapping | None, alvo_origem: str | None, x: str, velhas: set,
+                  novas: set) -> tuple[bool, bool, bool]:
+    """O T2 do adendo 8 (A8.4, PJ8-2): (e busca, vai as novas, com a x a vista). Busca: o alvo e uma arvore do tipo x de antes (as velhas)
+    ou de depois (as novas), ou uma x madura caida de uma dessas arvores (pela origem da comida, `alvo_origem`). Com ou sem a x a vista, e
+    sem a fome. Vai as novas quando a arvore, ou a origem da x, e uma das novas. A do adendo 7 (`busca_transicao`) fica, para ele
+    reproduzir."""
+    if velhas & novas:
+        raise ValueError(f"velhas e novas se cruzam: {sorted(velhas & novas)}")
+    arv = None if alvo is None else alvo.get("arvore")
+    if arv is None and alvo is not None and alvo.get("fruta") == x and alvo_origem in velhas | novas:
+        arv = alvo_origem
+    if arv is None or arv not in velhas | novas:
+        return False, False, False
+    return True, arv in novas, x in maduros
+
+
 def busca_transicao(fome: int, maduros: Sequence[str], alvo: Mapping | None, x: str, velhas: set, novas: set,
                     fome_max: int | None) -> tuple[bool, bool]:
     """O T2 (secao 4): (e busca, vai as novas). Busca: fome <= fome_max, sem a x a vista, e o alvo e uma arvore do tipo x de antes da troca

@@ -1,0 +1,52 @@
+{
+  "descricao": "Piloto do adendo 8 do pet que pensa (PLANO_ANALISE_V2_PET_QUE_PENSA, A8.3 a A8.5 e A8.9; PJ8-1 a PJ8-6), SEM recalibrar: o ganho_gosto S/2 e o g_plano S do adendo 6. O mesmo piloto do adendo 7 (o run_v2_piloto_pet_que_pensa_adendo7.py, os passos reval e piloto), com o adendo 8 por cima: no T1, em T_m as arvores do tipo x param de dar x e as x caidas delas saem; no T2, a busca pelas arvores (o alvo na arvore ou a x caida dela, pela origem), com ou sem a x a vista, e sem o corte. As 20 unidades das bases 54101...54505 (K_u = 4). NAO rodado: precisa do sim do Matheus.",
+  "plano": "docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md",
+  "tipo": "pet_que_pensa",
+  "d_a": 7,
+  "n_mao": 2,
+  "orcamento_por_dia": 16,
+  "dono": "atencioso",
+  "lugar": "comedouro",
+  "ponto": "T3",
+  "montagem": "completa",
+  "lobos": {
+    "memoria_ganho": 512,
+    "w0_pedido": 256,
+    "w0_info": 256
+  },
+  "consequencia": {
+    "ganho": 4,
+    "canais_ligados": true,
+    "ganho_gosto": 512
+  },
+  "mundo": {
+    "mult_queda": 1.0
+  },
+  "corpo": {
+    "gasto_atividades_den": 5,
+    "gasto_atividades_num": 4,
+    "gasto_basal_acordado": 300,
+    "gasto_basal_dormindo": 150
+  },
+  "passo0": "artifacts_v2_corpo/calibracao/adendo5/passo0/passo0.json",
+  "paladar": true,
+  "fruta_ao_lado": true,
+  "janela": 5,
+  "adendo_7": true,
+  "g_plano": 1024,
+  "adendo_8": true,
+  "unidades": {
+    "bases": [
+      54101,
+      54202,
+      54303,
+      54404,
+      54505
+    ],
+    "k": 4,
+    "prefixo": "pet_que_pensa"
+  },
+  "piloto_adendo8": {
+    "calibracao": "artifacts_v2_pet_que_pensa/calibracao_ao_lado"
+  }
+}
