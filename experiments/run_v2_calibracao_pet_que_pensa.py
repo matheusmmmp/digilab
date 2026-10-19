@@ -217,14 +217,24 @@ def _agrupado(difs: dict) -> dict:
     return grupos
 
 
-def premissas(por: dict, boot: dict, limiar_aprendeu: float = LIMIAR_APRENDEU) -> dict:
+def acaso_medio(por: dict, braco: str) -> float | None:
+    """O limiar da G-APRENDEU do adendo 7 (A7.2, PJ7-3): a media de 1/k sobre as oportunidades do "antes" do braco no T1 (as que entram
+    no f_antes, de todas as unidades juntas). Sem nenhuma, None."""
+    ac = [a for m in por[(braco, "T1")].values() for a in m["t1"]["acaso_antes"]]
+    return None if not ac else sum(ac) / len(ac)
+
+
+def premissas(por: dict, boot: dict, limiar_aprendeu: float | str = LIMIAR_APRENDEU) -> dict:
     """G-APRENDEU (f_antes do T1 com o IC95 inferior > 1/3, por braco), G-OPORTUNIDADE (<= 25% sem oportunidade, por braco e teste) e
     G-EXPOSICAO (<= 25% sem exposicao no T2, por braco). No piloto, descritivas."""
     out: dict = {"G-APRENDEU": {}, "G-OPORTUNIDADE": {}, "G-EXPOSICAO": {}}
     for braco in bv.BRACOS_PQP:
         fa = [m["t1"]["f_antes"] for m in por[(braco, "T1")].values() if m["t1"]["f_antes"] is not None]
         ic = bootstrap_ic(fa, boot["reamostragens"], boot["semente"], boot["nivel"]) if len(fa) >= 2 else None
-        out["G-APRENDEU"][braco] = {"n": len(fa), "ic": ic, "passa": ic is not None and ic["ic_inferior"] > limiar_aprendeu}
+        lim = acaso_medio(por, braco) if limiar_aprendeu == bv.LIMIAR_ACASO_MEDIO else limiar_aprendeu
+        out["G-APRENDEU"][braco] = {"n": len(fa), "ic": ic, "passa": ic is not None and lim is not None and ic["ic_inferior"] > lim}
+        if limiar_aprendeu == bv.LIMIAR_ACASO_MEDIO:
+            out["G-APRENDEU"][braco]["limiar"] = lim
         for prot, teste in (("T1", "t1"), ("T2", "t2")):
             ms = list(por[(braco, prot)].values())
             sem = sum(1 for m in ms if m[teste]["sem_oportunidade"])
@@ -269,14 +279,25 @@ def escolher_k_dois(difs_por: dict, deltas: dict, total: int, n_bases: int, pode
     return {"k": e["k"], "n": e["n"], "chega_ao_alvo": bool(chega), "escolhido": e, "tabela": tabela, **poder, "semente": semente}
 
 
-def rodar_piloto(cfg: dict, pasta: Path, processos: int = 1, limiar_aprendeu: float = LIMIAR_APRENDEU) -> dict:
+def rodar_piloto(cfg: dict, pasta: Path, processos: int = 1, limiar_aprendeu: float | str = LIMIAR_APRENDEU) -> dict:
     validar(cfg)
     escolha_g = json.loads((pasta / "g_plano.json").read_text(encoding="utf-8"))["escolha"]
-    saida = pasta / "piloto"
+    return piloto(config_do_piloto(cfg, escolha_g["g_plano"]), pasta / "piloto", processos, limiar_aprendeu, escolha_g)
+
+
+def piloto(cfg_p: dict, saida: Path, processos: int = 1, limiar_aprendeu: float | str = LIMIAR_APRENDEU,
+           escolha_g: dict | None = None) -> dict:
+    """O piloto da secao 6 sobre uma config pronta (os 4 bracos, T1 e T2, o `g_plano`): as premissas, as margens, o N e o custo, em
+    `saida`. O `rodar_piloto` o chama com o `g_plano` da calibracao; o adendo 7 (sem recalibrar, PJ7-5), com o do adendo 6."""
     if saida.exists():
         raise FileExistsError(f"{saida}: a pasta do piloto do J5 ja existe")
-    g = escolha_g["g_plano"]
-    cfg_p = config_do_piloto(cfg, g)
+    if list(cfg_p.get("bracos", [])) != list(bv.BRACOS_PQP) or list(cfg_p.get("protocolos", [])) != list(PROTOCOLOS_PILOTO):
+        raise ValueError(f"o piloto roda os 4 bracos nos protocolos {list(PROTOCOLOS_PILOTO)}")
+    g = cfg_p["g_plano"]
+    escolha_g = escolha_g if escolha_g is not None else {"g_plano": g}
+    if escolha_g["g_plano"] != g:
+        raise ValueError(f"o g_plano da config ({g}) nao e o da escolha ({escolha_g['g_plano']})")
+    cfg = cfg_p
     bv.validar_config_pqp(cfg_p)
     saida.mkdir(parents=True)
     t0 = time.time()

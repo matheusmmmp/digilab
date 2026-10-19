@@ -51,6 +51,9 @@ FUMACAS = {
     "experiments/configs/v2_pet_que_pensa/fumaca_calibracao_ao_lado.json": ("experiments/run_v2_calibracao_pet_que_pensa_paladar.py",
                                                                           ["--passo", "ganho_gosto"]),      # o adendo 5: o passo 1
     "experiments/configs/v2_pet_que_pensa/fumaca_validacao.json": ("experiments/run_v2_validacao_pet_que_pensa.py", []),
+    "experiments/configs/v2_pet_que_pensa/fumaca_piloto_adendo7.json": ("experiments/run_v2_piloto_pet_que_pensa_adendo7.py",
+                                                                      ["--passo", "reval"]),      # o adendo 7: o passo 1
+    "experiments/configs/v2_pet_que_pensa/fumaca_validacao_adendo7.json": ("experiments/run_v2_validacao_pet_que_pensa.py", []),
     "experiments/configs/v2_experimento_maior/fumaca.json": ("experiments/run_v2_experimento_maior.py", []),
     "experiments/configs/v2_calibracao_conjunta/fumaca.json": ("experiments/run_v2_calibracao_conjunta.py", []),
     "experiments/configs/v2_calibracao_cerebro_c/fumaca.json": ("experiments/run_v2_calibracao_cerebro_c.py", []),
@@ -67,7 +70,8 @@ def nome_de(config: str) -> str:
 PARALELOS = {"experiments/run_v2_calibracao_corpo.py", "experiments/run_v2_calibracao_mundo.py", "experiments/run_v2_validacao_mundo.py",
              "experiments/run_v2_mundo_alvo.py", "experiments/run_v2_calibracao_dois_pets.py",
              "experiments/run_v2_calibracao_pet_que_pensa.py", "experiments/run_v2_calibracao_rede_de_si.py",
-             "experiments/run_v2_calibracao_pet_que_pensa_paladar.py", "experiments/run_v2_validacao_pet_que_pensa.py"}
+             "experiments/run_v2_calibracao_pet_que_pensa_paladar.py", "experiments/run_v2_validacao_pet_que_pensa.py",
+             "experiments/run_v2_piloto_pet_que_pensa_adendo7.py"}
 
 
 def rodar(raiz: Path, saida: Path, so: list[str], processos: int = 1) -> dict:

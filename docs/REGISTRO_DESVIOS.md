@@ -288,3 +288,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-18 — W-PORTE, etapa 5 (worker de uma sessão lateral): o painel DigiBrain no jogo web](registro/2026-10.md)
 
 - [2026-10-18 — J5-ADENDO-7 (worker C): a validação inconclusiva registrada, e os dois testes consertados numa run só](registro/2026-10.md)
+- [2026-10-18 — PQP-ADENDO7 (worker D): a bancada do adendo 7 do J5, o piloto e a validação apontando as faixas novas](registro/2026-10.md)
