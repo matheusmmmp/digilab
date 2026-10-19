@@ -203,9 +203,10 @@ preview` na porta 8800, no Chrome instalado. O e2e do jogo não muda. Os scripts
 | M2 | nos quatro cantos da sala (as células (2, 2), (13, 2), (2, 9) e (13, 9)), **os 1.107 pixels do sprite batem com os texels, 0 divergentes**, com 3 pixels por texel e nenhum sólido cobrindo. Os 123 texels opacos do sprite de reserva cobrem 9 pixels cada | `e2e.json` (M2) |
 | oclusão | o pet na célula (6, 2), atrás do obstáculo alto: só esse obstáculo fica semitransparente. 603 dos 1.107 pixels do sprite chegam misturados com a cor dele, e o resto, a cabeça acima do obstáculo, bate com os texels | `e2e.json` (oclusao), `oclusao.png` |
 | M3 desktop | no Chrome headless desta máquina, 60 quadros por segundo de média, com o quadro de 16,7 ms na mediana e 16,8 ms no p95 (canvas de 1100 × 558, 3 pixels por subunidade). É o limite do vsync, e o headless não é o celular | `e2e.json` (M3_desktop_headless) |
-| M3 celular | **falta:** é a medida do Matheus (abaixo) | — |
-| M5 | o mesmo hash do estado no Chrome e no Node para as sementes 101, 202 e 303, com 1.500 e 3.000 ticks. O replay de 1 "dia" de sala (1.440 ticks, 95 decisões fechadas) leva 7,11 ms no Node, a mediana de 5, num i7-14700KF | `e2e.json` (M5_chrome_node), `node.json` (M5_replay_node) |
-| M6 | o build da página (a página, a raiz que leva a ela e o JS) tem 559.512 bytes, 142.045 em gzip, quase todo o `three` | `node.json` (M6_build) |
+| M3 desktop real | no Chrome 155 do Windows do Matheus, não headless (tela de 1920 × 911, canvas de 1100 × 564, 3 pixels por subunidade, sprite de reserva): 60 quadros por segundo de média, com o quadro de 16,7 ms na mediana e 16,8 ms no p95. Ele colou a medida pensando que era a do celular; ela vale como a do desktop real | `m3_desktop_real.json` |
+| M3 celular | **falta:** é a medida do Matheus, num celular (abaixo). A página agora avisa quando o aparelho não parece um celular, e a medida sai com o campo `aparelho` | — |
+| M5 | o mesmo hash do estado no Chrome e no Node para as sementes 101, 202 e 303, com 1.500 e 3.000 ticks. O replay de 1 "dia" de sala (1.440 ticks, 95 decisões fechadas) leva 21,34 ms no Node, a mediana de 5, num i7-14700KF. O tempo varia com a carga da máquina: a rodada anterior, no commit `b1abf4c`, deu 7,11 ms | `e2e.json` (M5_chrome_node), `node.json` (M5_replay_node) |
+| M6 | o build da página (a página, a raiz que leva a ela e o JS) tem 559.961 bytes, 142.278 em gzip, quase todo o `three` | `node.json` (M6_build) |
 
 **O atlas no modo dev** (conferido na sessão, sem artefato: a arte fica fora do repositório):
 - o sprite `brasa_crianca_sereno` aparece na sala, com 1 pixel por texel (meia subunidade por texel, com 3 pixels por subunidade);

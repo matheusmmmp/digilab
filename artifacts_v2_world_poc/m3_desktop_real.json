@@ -1,0 +1,25 @@
+{
+ "origem": "medida do Matheus no botao 'Medir 10 s' da pagina do POC, no desktop real (Windows, Chrome 155, nao headless), colada em 2026-10-19 e repassada pelo coordenador; o JSON da pagina vai integral em `medida`, sem nenhuma mudanca",
+ "aparelho": "desktop (nao e a M3 do celular, que segue pendente)",
+ "medida": {
+  "medida": "M3",
+  "data": "2026-10-19T13:37:42.067Z",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+  "devicePixelRatio": 1,
+  "tela_css": [
+   1920,
+   911
+  ],
+  "canvas_px": [
+   1100,
+   564
+  ],
+  "px_por_sub": 3,
+  "sprite": "reserva",
+  "duracao_s": 10.016,
+  "quadros": 601,
+  "fps_media": 60,
+  "quadro_mediana_ms": 16.7,
+  "quadro_p95_ms": 16.8
+ }
+}

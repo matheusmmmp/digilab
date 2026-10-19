@@ -6,13 +6,13 @@
   "eventos": 1,
   "hash": "a45c6d26",
   "repeticoes": 5,
-  "mediana_ms": 7.11,
+  "mediana_ms": 21.34,
   "tempos_ms": [
-   6.47,
-   6.76,
-   7.11,
-   7.13,
-   7.94
+   12.98,
+   13.84,
+   21.34,
+   23.03,
+   24.62
   ],
   "node": "v24.19.0",
   "cpu": "Intel(R) Core(TM) i7-14700KF"
@@ -20,9 +20,9 @@
  "M6_build": {
   "arquivos": [
    {
-    "arquivo": "assets/mundo3d-CNCWR-e5.js",
-    "bytes": 557453,
-    "gzip": 140796
+    "arquivo": "assets/mundo3d-DQO78MZZ.js",
+    "bytes": 557856,
+    "gzip": 141006
    },
    {
     "arquivo": "index.html",
@@ -31,11 +31,11 @@
    },
    {
     "arquivo": "mundo3d.html",
-    "bytes": 1613,
-    "gzip": 939
+    "bytes": 1659,
+    "gzip": 962
    }
   ],
-  "total_bytes": 559512,
-  "total_gzip": 142045
+  "total_bytes": 559961,
+  "total_gzip": 142278
  }
 }

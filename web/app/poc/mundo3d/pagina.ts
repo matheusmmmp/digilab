@@ -38,6 +38,10 @@ async function fonteDoSprite(): Promise<{ fonte: FonteSprite; nome: string }> {
   }
 }
 
+/** o aparelho parece um celular ou tablet? (o userAgent, e o iPadOS, que se apresenta como Mac, pelo toque) */
+const ehCelular = (): boolean =>
+  /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
+
 const mediana = (v: number[]) => { const s = [...v].sort((a, b) => a - b); return s.length ? s[Math.floor(s.length / 2)] : 0; };
 const p95 = (v: number[]) => { const s = [...v].sort((a, b) => a - b); return s.length ? s[Math.min(s.length - 1, Math.floor(s.length * 0.95))] : 0; };
 
@@ -98,7 +102,8 @@ async function iniciar(): Promise<void> {
       inicio: performance.now(), deltas: [], fim: deltas => {
         const t = vista.tamanho, total = deltas.reduce((a, b) => a + b, 0);
         resolve({
-          medida: "M3", data: new Date().toISOString(), userAgent: navigator.userAgent, devicePixelRatio,
+          medida: "M3", data: new Date().toISOString(), aparelho: ehCelular() ? "celular" : "desktop", userAgent: navigator.userAgent,
+          devicePixelRatio,
           tela_css: [innerWidth, innerHeight], canvas_px: [t.largura, t.altura], px_por_sub: t.pxPorSub, sprite: nome,
           duracao_s: +(total / 1000).toFixed(3), quadros: deltas.length, fps_media: +((deltas.length * 1000) / total).toFixed(2),
           quadro_mediana_ms: +mediana(deltas).toFixed(2), quadro_p95_ms: +p95(deltas).toFixed(2),
@@ -113,6 +118,7 @@ async function iniciar(): Promise<void> {
     el("medir").textContent = "Medir 10 s";
     try { await navigator.clipboard.writeText(JSON.stringify(m)); el("copiado").textContent = "copiado"; }
     catch { el("copiado").textContent = "selecione o texto e copie à mão"; }
+    if (!ehCelular()) el("copiado").textContent += " (atenção: medida de desktop, não é a M3 do celular)";
   });
   el<HTMLButtonElement>("baixar").addEventListener("click", () => {
     const blob = new Blob([JSON.stringify({ semente: sim.semente, log: sim.log, registros: sim.registros }, null, 1)], { type: "application/json" });
@@ -152,6 +158,7 @@ async function iniciar(): Promise<void> {
       tamanho: () => vista.tamanho,
     },
   });
+  if (!ehCelular()) el("aviso").textContent = "Este aparelho não parece um celular: a medida sai marcada como desktop, e não vale como a M3 do celular.";
   el("estado").textContent = "pronto";
 }
 

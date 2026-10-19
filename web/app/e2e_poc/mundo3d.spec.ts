@@ -82,6 +82,8 @@ test("a oclusão: atrás do obstáculo alto, o pet fica coberto pelo obstáculo 
 test("M3 (desktop, headless): os quadros por segundo, só descritivo", async ({ page }) => {
   const m = await page.evaluate(() => window.__poc.medirFps());
   expect(m.quadros as number).toBeGreaterThan(0);
+  expect(m.aparelho).toBe("desktop");                                   // o headless não se passa por celular
+  await expect(page.locator("#aviso")).toContainText("não parece um celular");
   medidas.M3_desktop_headless = m;
 });
 
@@ -96,4 +98,15 @@ test("M5: o mesmo hash do estado no Chrome e no Node", async ({ page }) => {
     res.push({ semente, ticks, hash: chrome });
   }
   medidas.M5_chrome_node = res;
+});
+
+test("com o userAgent de um celular, a página não mostra o aviso de desktop", async ({ browser }) => {
+  const ctx = await browser.newContext({
+    userAgent: "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Mobile Safari/537.36",
+  });
+  const p = await ctx.newPage();
+  await p.goto("/mundo3d.html?sprite=reserva");
+  await expect(p.locator("#estado")).toHaveText("pronto");
+  await expect(p.locator("#aviso")).toHaveText("");
+  await ctx.close();
 });
