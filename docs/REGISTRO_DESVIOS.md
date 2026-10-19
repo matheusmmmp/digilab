@@ -292,3 +292,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-19 — PQP-PILOTO-ADENDO7, a run (worker D): o piloto do adendo 7 do J5, parado pela G-OPORTUNIDADE](registro/2026-10.md)
 
 - [2026-10-19 — WORLD-POC-01 (worker A): a tarefa do POC-01a e a leitura da W-5](registro/2026-10.md)
+
+- [2026-10-19 — WORLD-POC-01a, PR 1 (worker A): o mundo do POC sem a vista](registro/2026-10.md)

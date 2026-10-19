@@ -10,11 +10,13 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "tipos": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.app.json --noEmit",
+    "tipos": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.poc.json --noEmit",
     "teste": "vitest run",
     "test": "vitest run",
     "gabaritos": "node test/gerar_gabaritos.mjs",
-    "e2e": "npm run build && playwright test"
+    "e2e": "npm run build && playwright test",
+    "poc": "vite --config poc/vite.config.ts",
+    "poc:build": "vite build --config poc/vite.config.ts"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",
@@ -25,6 +27,7 @@
     "vitest": "5.0.2"
   },
   "dependencies": {
-    "preact": "10.29.8"
+    "preact": "10.29.8",
+    "three": "0.186.1"
   }
 }
