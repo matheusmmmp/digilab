@@ -244,3 +244,24 @@ Sem run; só as sementes dos testes. Interpretações em `docs/registro/2026-10.
   - duas vidas com a fruta ao lado e as medidas recontadas do motor;
   - a oportunidade nova recontada do replay;
   - a config do adendo, a G-APRENDEU com o limiar e a fumaça dos quatro passos.
+
+## O adendo 7, a bancada (D, 2026-10-18) — SEM RUN
+
+Sem run; só as sementes dos testes. Interpretações em `docs/registro/2026-10.md`.
+
+- **A chave do J5:** `"adendo_7": true` (`BancadaPQP.adendo_7`), com a fruta ao lado. Desligada, as vidas e as medidas do adendo 5 saem
+  iguais ao gabarito gravado antes (`tests/gabaritos/pqp_ao_lado_vidas.json`).
+- **O que ela liga:**
+  - **no T2,** a fruta ao lado para no passo de `T_m` (`FrutaAoLadoAteMudanca`), e a busca perde a fome;
+  - **no T1,** a oportunidade aceita qualquer alternativa ao lado (`metrics.oportunidade_ao_lado`), e cada oportunidade do "antes" guarda o
+    acaso 1/k (`metrics.alvos_ao_lado`);
+  - **a G-APRENDEU** pelo acaso médio do braço;
+  - **os descritivos do A7.6** (a chave `adendo_7` das medidas).
+- **As faixas:** `BASES_PQP_ADENDO7`, com o piloto em 52101… e a validação em 53101…. Nenhuma faixa velha volta com o adendo 7.
+- **O piloto, montado SEM rodar** (precisa do sim do Matheus): `experiments/run_v2_piloto_pet_que_pensa_adendo7.py` com
+  `experiments/configs/v2_pet_que_pensa/piloto_adendo7.json`, nos passos `reval` e `piloto`. Ele usa o `ganho_gosto` e o `g_plano` do
+  adendo 6, conferidos, e a janela de 5 dias.
+- **A validação:** o `run_v2_validacao_pet_que_pensa.py` aceita o adendo 7, com os números do piloto refeito. A config dela sai depois do
+  piloto, com o adendo 8.
+- **As fumaças:** `fumaca_piloto_adendo7.json` e `fumaca_validacao_adendo7.json`, também em `tools/conferir_fumacas.py`.
+- **Testes:** `tests/test_bancada_pqp_adendo7.py`, 13.

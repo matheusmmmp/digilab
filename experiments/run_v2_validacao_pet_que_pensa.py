@@ -8,6 +8,10 @@ e o `g_plano` da calibracao. Os gates de mecanismo (G-SEM-CREDITO, o congelament
 **A config tem de trazer os numeros congelados:** com as bases do plano, o `ganho_gosto`, o `g_plano`, as margens e o K_u sao conferidos
 contra os artefatos da calibracao (`calibracao`: a pasta dela), e um que difere falha alto. Recusa a pasta de saida que ja existe.
 
+**O adendo 7** (`"adendo_7": true`): as bases sao as da validacao dele (53101...53505, A7.8), o `ganho_gosto` e o `g_plano` vem da
+calibracao com a fruta ao lado (o adendo 6, sem recalibrar, PJ7-5), e as margens, o K_u e o limiar da G-APRENDEU (o acaso medio, PJ7-3)
+vem do piloto do adendo 7 (`piloto`: a pasta do `run_v2_piloto_pet_que_pensa_adendo7.py`, com o `reval.json` e o `piloto/`).
+
 **A analise (secao 7):**
 - **as premissas:** a G-APRENDEU (`f_antes` com o limite inferior do IC95 acima do limiar da config: 1/4 no adendo 5, PJ5-3), a
   G-OPORTUNIDADE (no maximo 25% das unidades sem oportunidade, por braco e teste) e a G-EXPOSICAO (no maximo 25% sem exposicao no T2);
@@ -57,20 +61,26 @@ def validar(cfg: dict) -> dict:
     if CHAVE not in cfg:
         raise ValueError(f"config da validacao do J5 sem {CHAVE!r}")
     v = cfg[CHAVE]
-    if set(v) - {"calibracao"} != {"margens", "limiar_aprendeu", "bootstrap", "holm"}:
-        raise ValueError(f"{CHAVE}: margens, limiar_aprendeu, bootstrap, holm (e calibracao com as bases do plano), nao {sorted(v)}")
+    if set(v) - {"calibracao", "piloto"} != {"margens", "limiar_aprendeu", "bootstrap", "holm"}:
+        raise ValueError(f"{CHAVE}: margens, limiar_aprendeu, bootstrap, holm (e calibracao e piloto com as bases do plano), nao {sorted(v)}")
+    adendo_7 = cfg.get("adendo_7", False) is True
+    if ("piloto" in v) != (adendo_7 and "calibracao" in v):
+        raise ValueError("a chave 'piloto' da validacao e a do adendo 7 (com a calibracao): o piloto refeito nas sementes novas")
     if set(v["margens"]) != {"delta_t1", "delta_t2"} or any(not (isinstance(x, float) and x > 0) for x in v["margens"].values()):
         raise ValueError(f"margens da validacao: delta_t1 e delta_t2 > 0, nao {v['margens']}")
     if v["bootstrap"] != {"reamostragens": 10000, "semente": 4242} or v["holm"] != {"alfa": 0.05}:
         raise ValueError("bootstrap {10000, 4242} e Holm alfa 0,05 (secao 7)")
-    if not 0 < v["limiar_aprendeu"] < 1:
+    if adendo_7 and v["limiar_aprendeu"] != bv.LIMIAR_ACASO_MEDIO:
+        raise ValueError(f"o limiar da G-APRENDEU do adendo 7 e o acaso medio (PJ7-3): {bv.LIMIAR_ACASO_MEDIO!r}")
+    if not adendo_7 and not (isinstance(v["limiar_aprendeu"], float) and 0 < v["limiar_aprendeu"] < 1):
         raise ValueError(f"limiar da G-APRENDEU {v['limiar_aprendeu']!r}")
     if list(cfg.get("bracos", [])) != list(bv.BRACOS_PQP) or list(cfg.get("protocolos", [])) != list(PROTOCOLOS):
         raise ValueError(f"a validacao roda os 4 bracos {list(bv.BRACOS_PQP)} nos protocolos {list(PROTOCOLOS)}")
     bv.validar_config_pqp(_config_bancada(cfg))
     if "unidades" in cfg:
-        if not set(cfg["unidades"]["bases"]) <= set(bv.BASES_PET_QUE_PENSA["validacao"]):
-            raise bv.SementeSemPlano(f"a validacao do J5 usa as bases {bv.BASES_PET_QUE_PENSA['validacao']} (secao 8)")
+        bases = bv.BASES_PQP_ADENDO7["validacao"] if adendo_7 else bv.BASES_PET_QUE_PENSA["validacao"]
+        if not set(cfg["unidades"]["bases"]) <= set(bases):
+            raise bv.SementeSemPlano(f"a validacao do J5 usa as bases {bases} ({'A7.8' if adendo_7 else 'secao 8'})")
         if "calibracao" not in v:
             raise ValueError("a validacao com as bases do plano confere os numeros contra a calibracao: a chave 'calibracao'")
         conferir_congelados(cfg)
@@ -82,8 +92,11 @@ def conferir_congelados(cfg: dict) -> dict:
     pasta = RAIZ / cfg[CHAVE]["calibracao"]
     gg = json.loads((pasta / "ganho_gosto" / "ganho_gosto.json").read_text(encoding="utf-8"))["escolha"]
     gp = json.loads((pasta / "g_plano" / "g_plano.json").read_text(encoding="utf-8"))["escolha"]
-    pil = json.loads((pasta / "g_plano" / "piloto" / "piloto.json").read_text(encoding="utf-8"))
-    rv = json.loads((pasta / "reval.json").read_text(encoding="utf-8"))
+    # o piloto: o da calibracao (adendos 5 e 6) ou o refeito do adendo 7 (a pasta `piloto`, com o reval.json dele)
+    dono = RAIZ / cfg[CHAVE]["piloto"] if "piloto" in cfg[CHAVE] else pasta
+    pasta_piloto = dono / "piloto" if "piloto" in cfg[CHAVE] else pasta / "g_plano" / "piloto"
+    pil = json.loads((pasta_piloto / "piloto.json").read_text(encoding="utf-8"))
+    rv = json.loads((dono / "reval.json").read_text(encoding="utf-8"))
     esperado = {"ganho_gosto": gg["ganho_gosto"], "g_plano": gp["g_plano"], "delta_t1": pil["margens"]["delta_t1"],
                 "delta_t2": pil["margens"]["delta_t2"], "k": pil["n"]["k"], "limiar_aprendeu": pil["regras"]["limiar_aprendeu"]}
     tem = {"ganho_gosto": cfg["consequencia"]["ganho_gosto"], "g_plano": cfg["g_plano"], **cfg[CHAVE]["margens"],
@@ -93,7 +106,7 @@ def conferir_congelados(cfg: dict) -> dict:
     if not (rv["passa"] and pil["valida_validacao"]):
         raise ValueError("a calibracao nao deixa a validacao rodar (a G-REVAL-POSSIVEL ou as margens)")
     # o resto da config e o do piloto (o mundo, o corpo, o cerebro, o paladar, a fruta ao lado, os bracos): so as unidades mudam
-    piloto = json.loads((pasta / "g_plano" / "piloto" / "meta.json").read_text(encoding="utf-8"))["config"]
+    piloto = json.loads((pasta_piloto / "meta.json").read_text(encoding="utf-8"))["config"]
     fora = {"descricao", "unidades", CHAVE}
     a, b = {k: v for k, v in piloto.items() if k not in fora}, {k: v for k, v in cfg.items() if k not in fora}
     if a != b:

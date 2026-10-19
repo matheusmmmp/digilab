@@ -1,0 +1,18 @@
+{
+  "P1-plan-desfecho~T2@101": {
+    "log": "6b9656fd76fb880b61d7804a47f99387ff1ec22ee142253b52d6824d5e049dc9",
+    "medidas": "6bda8f4b47cf099d0f93bc4b13e815309c1b8b9bda18819605bff51d88a79f56"
+  },
+  "P1-plan~T1@202": {
+    "log": "4562d1ed3ee1378104d8a7613d838c7011b59fba1fe335005f90d0b91501336e",
+    "medidas": "e30377c4a94e77d95bacc094391c8f819ce84bb41916f72a9fde63753da19878"
+  },
+  "P1~T1@101": {
+    "log": "cde35f0c26103f4183d6f8c6ac51d0e3acb61be894aea5045894d29a833f8e92",
+    "medidas": "44f5e30df1720596b70c6530f5c0dea4a9fd319348b0ec17642377211b2fb8d1"
+  },
+  "P1~T2@202": {
+    "log": "8ccab928bf8e02b16a9ae7e0a7dbe40420ca39d883d39c8ab4c028fb7c90269d",
+    "medidas": "a1f4924afa1e31e7631dc470bf0b758ae799218ae13cb7005e4aa1f89203f685"
+  }
+}

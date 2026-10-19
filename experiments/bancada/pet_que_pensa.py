@@ -28,6 +28,7 @@ from digilab.config import CONFIG_PQP_MUNDO_LIGADA, CONFIG_MODELO_MUNDO_LIGADA, 
 from digilab.modelo_mundo import TIPOS as MODELO_TIPOS, PoliticaComModelo
 from digilab.metrics import busca_transicao, exposto_transicao, mudanca_de_escolha, oportunidade_revalorizacao
 from digilab.metrics import decisao_lado_a_lado, oportunidade_lado_a_lado
+from digilab.metrics import alvos_ao_lado, oportunidade_ao_lado
 from digilab.mundo import ESTILOS_LUGAR, DonoComLugar, MotorMundo, reproduzir_mundo
 from digilab.policies import PoliticaLobos
 from digilab.policies.lobos import arred
@@ -78,6 +79,10 @@ BASES_PQP_PALADAR = (49101, 49202, 49303, 49404, 49505)
 # validacao de cima. As 45101... (sem o paladar) e as 49101... (o paladar sem a fruta ao lado) nao voltam com ela
 BASES_PQP_AO_LADO = (51101, 51202, 51303, 51404, 51505)
 LIMIAR_APRENDEU_AO_LADO = 1 / 4             # PJ5-3: o acaso entre os quatro alvos lado a lado (a racao e as tres frutas)
+# o adendo 7 (A7.8, PJ7-6): o piloto e a validacao dele, as duas faixas novas; nenhuma faixa velha volta com ele
+BASES_PQP_ADENDO7 = {"piloto": (52101, 52202, 52303, 52404, 52505), "validacao": (53101, 53202, 53303, 53404, 53505)}
+JANELA_ADENDO7 = 5                          # PJ7-2: a janela depois da mudanca nos dois protocolos (a vida de 12 dias)
+LIMIAR_ACASO_MEDIO = "acaso_medio"          # PJ7-3: o limiar da G-APRENDEU e o acaso medio 1/k das oportunidades do "antes" do braco
 ROTULO_X_PQP = "pet-que-pensa-x"            # a fruta x da unidade (plano, secao 2)
 ROTULO_Y_PQP = "pet-que-pensa-y"            # a fruta y do T2, entre as outras duas
 D_A_PQP = 7                                 # PP-4: os dias de aprendizado
@@ -283,15 +288,46 @@ class RegraMudancaPQP:
         self.tick: int | None = None
         self.eventos: list[str] = []
 
-    def acoes(self, estado: dict) -> list:
+    def dispara(self, estado: dict) -> bool:
+        """se a mudanca acontece neste passo do dono (so le; o `acoes` e quem a marca)"""
         if self.protocolo == "fase1" or self.tick is not None:
-            return []
-        if estado["tick"] < self.d_a * TICKS_POR_DIA + HORA_MUDANCA_PQP or estado["dormindo"]:
+            return False
+        return not (estado["tick"] < self.d_a * TICKS_POR_DIA + HORA_MUDANCA_PQP or estado["dormindo"])
+
+    def acoes(self, estado: dict) -> list:
+        if not self.dispara(estado):
             return []
         self.tick = estado["tick"]
         acoes = [dar_fruta(self.x)] * self.n_mao if self.protocolo == "T1" else [trocar_arvores(self.x, self.y)]
         self.eventos = [a.value for a in acoes]
         return acoes
+
+
+class FrutaAoLadoAteMudanca:
+    """O T2 do adendo 7 (A7.3, DECIDIDO): a fruta ao lado da racao funciona como no adendo 5 ate `T_m`; no passo do dono de `T_m` e depois,
+    o dono nao poe mais fruta ao lado. A regra da mudanca (`RegraMudancaPQP`) diz o passo: a fruta ao lado roda antes dela no mesmo passo,
+    entao a parada le o `dispara` dela. As frutas que ja estavam no chao seguem o tempo delas. `parada` e o tick do passo em que parou."""
+
+    def __init__(self, ao_lado: DonoFrutaAoLado, regra: RegraMudancaPQP) -> None:
+        if regra.protocolo != "T2":
+            raise ValueError("a parada da fruta ao lado e so do T2 (no T1 a regra continua: e ela que da a escolha lado a lado)")
+        self.ao_lado, self.regra = ao_lado, regra
+        self.parada: int | None = None
+
+    @property
+    def depositos(self) -> list[dict]:
+        return self.ao_lado.depositos
+
+    @property
+    def permutacao(self) -> list:
+        return self.ao_lado.permutacao
+
+    def acoes(self, estado: dict) -> list:
+        if self.parada is None and (self.regra.tick is not None or self.regra.dispara(estado)):
+            self.parada = estado["tick"]
+        if self.parada is not None:
+            return []
+        return self.ao_lado.acoes(estado)
 
 
 @dataclass(frozen=True)
@@ -342,6 +378,7 @@ class BancadaPQP:
     g_plano: int = 0                 # o ganho do plano dos bracos com o planejador (a calibracao, PP-6); o P1 tem sempre 0
     paladar: bool = False            # o adendo 3 (A3.1): as tres chaves do paladar em todos os bracos, o genoma e a x como a favorita
     ao_lado: bool = False            # o adendo 5 (A5.1): a fruta ao lado da racao em todos os bracos e protocolos (exige o paladar)
+    adendo_7: bool = False           # o adendo 7: a parada no T2, a oportunidade nova do T1, a busca sem a fome (exige a fruta ao lado)
 
     def __post_init__(self) -> None:
         if type(self.paladar) is not bool:
@@ -350,6 +387,10 @@ class BancadaPQP:
             raise TypeError(f"ao_lado do J5 e bool: {self.ao_lado!r}")
         if self.ao_lado and not self.paladar:
             raise ValueError("a fruta ao lado do J5 (adendo 5) e com o paladar do adendo 3: 'paladar': true")
+        if type(self.adendo_7) is not bool:
+            raise TypeError(f"adendo_7 do J5 e bool: {self.adendo_7!r}")
+        if self.adendo_7 and not self.ao_lado:
+            raise ValueError("o adendo 7 do J5 e com a fruta ao lado da racao (adendo 5): 'fruta_ao_lado': true")
         if self.ao_lado and self.lugar != "comedouro":
             raise ValueError(f"a fruta ao lado do J5 pede o dono no comedouro (A5.2), nao {self.lugar!r}")
         if self.d_a < 1 or self.janela < 1 or self.n_mao < 1:
@@ -445,6 +486,8 @@ class BancadaPQP:
         dono = DonoComLugar(criar_dono(self.dono), self.lugar, espec.semente, self.dono, self.bancada.cfg_mundo)
         ao_lado = (DonoFrutaAoLado(dono, espec.semente, CONFIG_FRUTA_AO_LADO_LIGADA, self.bancada.cfg_mundo) if self.ao_lado
                    else None)
+        if self.adendo_7 and espec.protocolo == "T2":
+            ao_lado = FrutaAoLadoAteMudanca(ao_lado, regra)
         cpu = time.process_time()
         motor, retirados = simular_vida_fisico(dono, self.politica(espec, CONFIG_PADRAO), espec.semente, dias, orcamento, self.dono,
                                                self.fabrica_motor(espec), mudanca=regra, ao_lado=ao_lado)
@@ -463,6 +506,9 @@ class BancadaPQP:
         if ao_lado is not None and [(d["tick"], d["tipo"], d["x"], d["y"]) for d in ao_lado.depositos] != \
                 [(f["tick"], f["tipo"], f["x"], f["y"]) for f in motor.frutas_ao_lado]:
             raise RuntimeError(f"{espec.nome}: as frutas ao lado do motor nao sao os depositos da regra")
+        if isinstance(ao_lado, FrutaAoLadoAteMudanca):
+            if ao_lado.parada != regra.tick or any(f["tick"] >= regra.tick for f in motor.frutas_ao_lado):
+                raise RuntimeError(f"{espec.nome}: a fruta ao lado nao parou no tick da mudanca ({ao_lado.parada}, {regra.tick})")
         vida = VidaPQP(espec, motor, x, y, regra.tick, list(regra.eventos), dono_n, retirados, cpu)
         self.conferir_replay(vida)
         return vida
@@ -499,7 +545,7 @@ class BancadaPQP:
         regs: list = []
 
         def fp(cfg=None):
-            r = _RegistroPQP(self.politica(espec, cfg), cm, self.cfg_modelo, self.paladar, self.ao_lado)
+            r = _RegistroPQP(self.politica(espec, cfg), cm, self.cfg_modelo, self.paladar, self.ao_lado, self.adendo_7)
             regs.append(r)
             return r
         motor = self.rejogar(vida.motor.log, espec, fp, lambda m: setattr(regs[-1], "motor", m))
@@ -523,7 +569,10 @@ class BancadaPQP:
         if espec.protocolo == "T1":
             linhas = []
             for d in reg.decisoes:
-                if self.ao_lado:            # o adendo 5 (A5.3): a decisao de comer com a x posta pela regra e a racao a vista
+                if self.adendo_7:           # o adendo 7 (A7.2, PJ7-1): a x da regra com qualquer alternativa ao lado
+                    op, esc = oportunidade_ao_lado(d["acao"], d["maduros_id"], d["ids_ao_lado"],
+                                                   None if d["alvo"] is None else d["alvo"]["id"], x)
+                elif self.ao_lado:          # o adendo 5 (A5.3): a decisao de comer com a x posta pela regra e a racao a vista
                     op, esc = oportunidade_lado_a_lado(d["acao"], d["maduros_id"], d["ids_ao_lado"],
                                                        None if d["alvo"] is None else d["alvo"]["id"], x)
                 else:
@@ -531,6 +580,10 @@ class BancadaPQP:
                 linhas.append({"tick": d["tick"], "depois": d["depois"], "conta": op, "sucesso": esc, "reexperiencia": d["comeu"] == x})
             out["t1"] = mudanca_de_escolha(linhas, N_OPORTUNIDADES_PQP, vida.tick_mudanca)
             out["t1"]["q"] = out["t1"]["queda"]
+            if self.adendo_7:               # PJ7-3: o acaso 1/k de cada oportunidade do "antes" (as que entram no f_antes)
+                ks = [alvos_ao_lado(d["maduros_id"], d["ids_ao_lado"]) for d, ln in zip(reg.decisoes, linhas)
+                      if ln["conta"] and not ln["depois"]][-N_OPORTUNIDADES_PQP:]
+                out["t1"]["acaso_antes"] = [1 / k for k in ks]
         elif espec.protocolo == "T2":
             velhas = {i for i, (_ax, _ay, f) in arvores.items() if f == x}
             novas = {i for i, (_ax, _ay, f) in arvores.items() if f == y}
@@ -542,7 +595,8 @@ class BancadaPQP:
                     exposicao = d["tick"]
                     linhas.append({"tick": d["tick"], "depois": True, "conta": False, "sucesso": False, "reexperiencia": d["comeu"] == x})
                     continue
-                busca, nova = busca_transicao(d["fome"], d["maduros"], d["alvo"], x, velhas, novas, fome_max)
+                busca, nova = busca_transicao(d["fome"], d["maduros"], d["alvo"], x, velhas, novas,
+                                              None if self.adendo_7 else fome_max)      # A7.3, PJ7-4: a fome sai da busca
                 conta = busca and (not d["depois"] or exposicao is not None)
                 linhas.append({"tick": d["tick"], "depois": d["depois"], "conta": conta, "sucesso": nova, "reexperiencia": d["comeu"] == x})
             out["t2"] = {**mudanca_de_escolha(linhas, N_OPORTUNIDADES_PQP, vida.tick_mudanca), "exposicao": exposicao,
@@ -564,7 +618,58 @@ class BancadaPQP:
             out["paladar"] = self.medir_paladar(vida, reg)
         if self.ao_lado:
             out["ao_lado"] = self.medir_ao_lado(vida, reg)
+        if self.adendo_7:
+            out["adendo_7"] = self.medir_adendo_7(vida, reg, out)
         return out
+
+    def medir_adendo_7(self, vida: VidaPQP, reg: _RegistroPQP, out: dict) -> dict:
+        """Os descritivos do adendo 7 (A7.6), sem gate, do registro de medicao e do motor (o experimentador):
+        - por que a unidade ficou sem oportunidade: sem nenhuma antes, ou depois porque o corte chegou antes (com a origem do consumo da x:
+          a regra, uma arvore ou o "achou e comeu") ou porque a janela acabou;
+        - as latencias da mudanca ate a primeira oportunidade e ate o corte;
+        - no T2, as decisoes que foram as arvores velhas e as novas por dia, depois de `T_m`, e as frutas ao lado no chao;
+        - no T1, o acaso medio do "antes" da unidade."""
+        espec, x, tm = vida.espec, vida.x, vida.tick_mudanca
+        teste = "t1" if espec.protocolo == "T1" else "t2" if espec.protocolo == "T2" else None
+        r: dict = {}
+        if teste is not None:
+            t = out[teste]
+            corte = t["corte_reexperiencia"]
+            consumo = None
+            if corte is not None:
+                consumo = next((c for c in reg.consumos if c["depois"] and c["situacao"] == "madura" and c["tipo"] == x), None)
+                if consumo is None:
+                    raise RuntimeError(f"{vida.nome}: o corte da reexperiencia sem o consumo da x depois da mudanca")
+            origem = None if consumo is None else ("achou e comeu" if consumo["como"] == "achou"
+                                                   else "regra" if consumo.get("origem") == ORIGEM_AO_LADO else "arvore")
+            if not t["sem_oportunidade"]:
+                motivo = None
+            elif t["n_antes"] == 0:
+                motivo = "sem antes"
+            else:
+                motivo = "corte" if corte is not None else "janela"
+            r["sem_oportunidade"] = {"motivo": motivo, "origem_do_corte": origem if motivo == "corte" else None}
+            r["corte"] = {"tick": corte, "origem": origem, "como": None if consumo is None else consumo["como"],
+                          "latencia_corte": None if corte is None or tm is None else corte - tm, "latencia_oportunidade": t["latencia"]}
+        if espec.protocolo == "T1":
+            ac = out["t1"]["acaso_antes"]
+            r["acaso_medio_antes"] = None if not ac else sum(ac) / len(ac)
+        if espec.protocolo == "T2":
+            arv = _arvores_do_layout(self.bancada.cfg_mundo)
+            velhas = {i for i, (_a, _b, f) in arv.items() if f == x}
+            novas = {i for i, (_a, _b, f) in arv.items() if f == vida.y}
+            dias = self.dias_da_vida(espec.protocolo)
+            por_dia = [{"dia": dia, "velhas": 0, "novas": 0, "ao_lado_no_chao_max": 0} for dia in range(dias)]
+            for d in reg.decisoes:
+                if not d["depois"]:
+                    continue
+                linha = por_dia[d["tick"] // TICKS_POR_DIA]
+                a = None if d["alvo"] is None else d["alvo"]["arvore"]
+                linha["velhas"] += a in velhas
+                linha["novas"] += a in novas
+                linha["ao_lado_no_chao_max"] = max(linha["ao_lado_no_chao_max"], d["ao_lado_no_chao"])
+            r["t2_depois_por_dia"] = por_dia
+        return r
 
     def medir_ao_lado(self, vida: VidaPQP, reg: _RegistroPQP) -> dict:
         """Os descritivos da fruta ao lado da racao (adendo 5, A5.5 e A5.6), sem gate, do registro de medicao e do motor (o experimentador):
@@ -688,9 +793,10 @@ class _RegistroPQP:
     G-SEM-CREDITO em cada fruta na mao e retrata os modelos no fim de cada dia."""
 
     def __init__(self, interna: PoliticaDoBraco, cm: ConfigMundo, cfg_modelo: ConfigModeloMundo, paladar: bool = False,
-                 ao_lado: bool = False) -> None:
+                 ao_lado: bool = False, adendo_7: bool = False) -> None:
         self.interna, self.cm, self.cfg_modelo = interna, cm, cfg_modelo
         self.paladar = paladar
+        self.adendo_7 = adendo_7                 # com o adendo 7: por decisao, as frutas ao lado no chao (o experimentador le o motor)
         self.ao_lado = ao_lado                   # com a fruta ao lado: por decisao, as maduras a vista com o id, as da regra e o alvo padrao
         self.consumos: list[dict] = []           # com o paladar: cada consumo no mapa (a leitura do paladar, o f_gosto, a saciedade)
         self.classes_por_dia: list[dict] = []    # com o paladar: os pesos das classes comida:<tipo> no fim de cada dia
@@ -742,6 +848,8 @@ class _RegistroPQP:
         if self.ao_lado:
             self.decisoes[-1].update({"maduros_id": {i: t for i, t, *_ in pm.vistos if t in FRUTAS or t == "racao"},
                                       "ids_ao_lado": {f["id"] for f in self.motor.frutas_ao_lado}, "padrao_id": None})
+        if self.adendo_7:
+            self.decisoes[-1]["ao_lado_no_chao"] = sum(self.motor.ao_lado_no_chao().values())
         a = self.interna.agir(obs, rng)
         self.decisoes[-1]["acao"] = a.value
         self.decisoes[-1]["n_motivo"] = len(self.cerebro_a().motivos) - 1     # o motivo desta decisao (o plano, a sonda, o fator)
@@ -984,7 +1092,7 @@ def modelos_contra_o_real(retratos: list, motor: MotorMundo, x: str, S: int) -> 
 
 CHAVES_CONFIG_PQP = {"descricao", "plano", "tipo", "bracos", "protocolos", "sementes", "unidades", "d_a", "janela", "n_mao",
                      "orcamento_por_dia", "dono", "lugar", "ponto", "lobos", "montagem", "consequencia", "mundo", "corpo", "passo0",
-                     "g_plano", "paladar", "fruta_ao_lado"}
+                     "g_plano", "paladar", "fruta_ao_lado", "adendo_7"}
 
 
 def validar_config_pqp(cfg: dict) -> dict:
@@ -1026,6 +1134,11 @@ def validar_config_pqp(cfg: dict) -> dict:
         raise ValueError("'fruta_ao_lado' do J5 (adendo 5) e com o paladar: 'paladar': true")
     if ao_lado and cfg.get("lugar", "comedouro") != "comedouro":
         raise ValueError("'fruta_ao_lado' do J5 pede o dono no comedouro (A5.2)")
+    adendo_7 = cfg.get("adendo_7", False)
+    if type(adendo_7) is not bool:
+        raise ValueError(f"'adendo_7' do J5 e bool: {adendo_7!r}")
+    if adendo_7 and not ao_lado:
+        raise ValueError("'adendo_7' do J5 e com a fruta ao lado da racao: 'fruta_ao_lado': true")
     if "ponto" in cfg and cfg["ponto"] not in PONTOS_APRENDIZ:
         raise ValueError(f"ponto do aprendiz {cfg['ponto']!r}: so {sorted(PONTOS_APRENDIZ)}")
     if "montagem" in cfg and cfg["montagem"] not in MONTAGENS:
@@ -1056,9 +1169,11 @@ def validar_config_pqp(cfg: dict) -> dict:
         # com a fruta ao lado (adendo 5, A5.8), a calibracao nova ou a validacao; as do paladar sem ela (49101...) e as de antes nao voltam
         fases = ((BASES_PET_QUE_PENSA["calibracao"], BASES_PET_QUE_PENSA["validacao"]) if not paladar
                  else (BASES_PQP_PALADAR, BASES_PET_QUE_PENSA["validacao"]) if not ao_lado
-                 else (BASES_PQP_AO_LADO, BASES_PET_QUE_PENSA["validacao"]))
+                 else (BASES_PQP_AO_LADO, BASES_PET_QUE_PENSA["validacao"]) if not adendo_7
+                 else (BASES_PQP_ADENDO7["piloto"], BASES_PQP_ADENDO7["validacao"]))
         if "unidades" not in cfg or not any(usadas <= set(f) for f in fases):
-            nota = ("; com a fruta ao lado, A5.8: as 45101... e as 49101... nao voltam" if ao_lado
+            nota = ("; com o adendo 7, A7.8: nenhuma faixa velha volta" if adendo_7
+                    else "; com a fruta ao lado, A5.8: as 45101... e as 49101... nao voltam" if ao_lado
                     else "; com o paladar, A3.5: as 45101... nao voltam e as 51101... sao da fruta ao lado" if paladar
                     else "; as 49101... sao do paladar e as 51101... da fruta ao lado")
             raise SementeSemPlano(f"as bases do plano do J5 sao as de uma fase so, em 'unidades': {fases} (secao 8{nota})")
@@ -1069,6 +1184,8 @@ def validar_config_pqp(cfg: dict) -> dict:
         p0 = json.loads((RAIZ / cfg["passo0"]).read_text(encoding="utf-8"))
         if p0["escolha"]["corpo"] != cfg["corpo"]:
             raise ValueError(f"o corpo da config nao e o do passo 0 ({cfg['passo0']}): {cfg['corpo']} contra {p0['escolha']['corpo']}")
+        if adendo_7 and (int(cfg.get("d_a", D_A_PQP)), int(cfg.get("janela", JANELA_PQP))) != (D_A_PQP, JANELA_ADENDO7):
+            raise ValueError(f"a run do adendo 7 vive d_a = {D_A_PQP} e a janela de {JANELA_ADENDO7} dias (PJ7-2)")
     return cfg
 
 
@@ -1078,7 +1195,8 @@ def bancada_pqp_da_config(cfg: dict) -> BancadaPQP:
     chaves = {k: v for k, v in cfg.items() if k in ("consequencia", "lobos", "ponto", "montagem", "mundo", "corpo", "teto_pesos", "plano")}
     bancada = bancada_da_config({**chaves, "dias": d_a + janela, "orcamento": int(cfg["orcamento_por_dia"]) * (d_a + janela)})
     return BancadaPQP(bancada, d_a, janela, int(cfg.get("n_mao", N_MAO_PQP)), cfg.get("dono", "atencioso"), cfg.get("lugar", "comedouro"),
-                      g_plano=int(cfg.get("g_plano", 0)), paladar=cfg.get("paladar", False), ao_lado=cfg.get("fruta_ao_lado", False))
+                      g_plano=int(cfg.get("g_plano", 0)), paladar=cfg.get("paladar", False), ao_lado=cfg.get("fruta_ao_lado", False),
+                      adendo_7=cfg.get("adendo_7", False))
 
 
 def rodar_pqp(cfg: dict, pasta: Path) -> dict:
@@ -1109,7 +1227,8 @@ def rodar_pqp(cfg: dict, pasta: Path) -> dict:
                                             "ganho_gosto": bp.bancada.cfg_consequencia.ganho_gosto,
                                             "genoma_paladar_sha256": _sha(RAIZ / "digilab" / "genoma_paladar.py")} if bp.paladar else {}),
                                         **({"fruta_ao_lado": True, "cfg_fruta_ao_lado": CONFIG_FRUTA_AO_LADO_LIGADA.__dict__}
-                                           if bp.ao_lado else {})}))
+                                           if bp.ao_lado else {}),
+                                        **({"adendo_7": True} if bp.adendo_7 else {})}))
     return {"vidas": vidas, "medidas": medidas}
 
 

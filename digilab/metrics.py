@@ -1770,14 +1770,36 @@ def oportunidade_lado_a_lado(acao: str, vistos_maduros: Mapping[int, str], ids_a
     return True, alvo_id in xs
 
 
+def oportunidade_ao_lado(acao: str, vistos_maduros: Mapping[int, str], ids_ao_lado: set, alvo_id: int | None,
+                         x: str) -> tuple[bool, bool]:
+    """O T1 do adendo 7 (A7.2, PJ7-1): (e oportunidade, o pet escolheu x). Oportunidade: uma decisao de comer em que a x madura posta pela
+    regra (id em `ids_ao_lado`, tipo x) esta a vista junto com pelo menos uma alternativa ao lado: a racao madura ou outra fruta madura
+    posta pela regra. A fome nao entra. Escolher x: o alvo do comer e uma dessas x. A do adendo 5 (`oportunidade_lado_a_lado`) fica, para
+    ele reproduzir."""
+    xs = {i for i, t in vistos_maduros.items() if t == x and i in ids_ao_lado}
+    alternativa = any(t == "racao" for t in vistos_maduros.values()) or any(
+        i in ids_ao_lado and t != x for i, t in vistos_maduros.items())
+    if acao != "comer" or not xs or not alternativa:
+        return False, False
+    return True, alvo_id in xs
+
+
+def alvos_ao_lado(vistos_maduros: Mapping[int, str], ids_ao_lado: set) -> int:
+    """Os alvos ao lado a vista (A7.2, PJ7-3), para o acaso 1/k da G-APRENDEU: a racao madura conta como um alvo (as racoes no chao sao a
+    mesma escolha) e cada tipo de fruta madura posta pela regra como outro."""
+    racao = any(t == "racao" for t in vistos_maduros.values())
+    return int(racao) + len({t for i, t in vistos_maduros.items() if i in ids_ao_lado})
+
+
 def busca_transicao(fome: int, maduros: Sequence[str], alvo: Mapping | None, x: str, velhas: set, novas: set,
-                    fome_max: int) -> tuple[bool, bool]:
+                    fome_max: int | None) -> tuple[bool, bool]:
     """O T2 (secao 4): (e busca, vai as novas). Busca: fome <= fome_max, sem a x a vista, e o alvo e uma arvore do tipo x de antes da troca
-    (as velhas) ou de depois (as novas: as da y no layout). Antes da mudanca a definicao e a mesma, com as novas ainda dando y."""
+    (as velhas) ou de depois (as novas: as da y no layout). Antes da mudanca a definicao e a mesma, com as novas ainda dando y. Com
+    `fome_max` None, a fome sai da definicao (o adendo 7, A7.3, PJ7-4)."""
     if velhas & novas:
         raise ValueError(f"velhas e novas se cruzam: {sorted(velhas & novas)}")
     arv = None if alvo is None else alvo.get("arvore")
-    if fome > fome_max or x in maduros or arv is None or arv not in velhas | novas:
+    if (fome_max is not None and fome > fome_max) or x in maduros or arv is None or arv not in velhas | novas:
         return False, False
     return True, arv in novas
 
