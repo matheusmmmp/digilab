@@ -7,7 +7,8 @@ O relato é o corpo do PR. Esta ferramenta separa duas coisas:
   que conta.
 
 Cada categoria tem a própria regra de evidência (docs/infra/GUIA_OPERACIONAL.md, seção "O que o CI confere"):
-- implementacao: algum arquivo de teste mudou ou é citado, e todo teste citado existe;
+- implementacao: algum arquivo de teste (tests/*.py, ou web/app/test e web/app/e2e) mudou ou é citado, e todo teste citado existe; os
+  testes do web/app não rodam no CI, então a execução deles fica só declarada;
 - experimento: o plano de análise citado existe e foi commitado antes de todo artefato novo; todo caminho de artefato citado existe;
 - literatura: Origem, DOIs, Resultados e Limitações preenchidos; todo DOI está em docs/referencias; nada mudou fora de docs/;
 - arquitetura: o relato diz PROPOSTO, as decisões do Matheus estão listadas, nada mudou em digilab/, experiments/ ou web/app/src/;
@@ -44,6 +45,8 @@ COMENTARIO = re.compile(r"<!--.*?-->", re.S)
 DOI = re.compile(r"\b10\.\d{4,9}/[^\s\]\)>,;\"'`|{}]+", re.I)
 CAMINHO_ARTEFATO = re.compile(r"\bartifacts[\w-]*/[\w./-]+")
 CAMINHO_TESTE = re.compile(r"\btests/[\w/-]+\.py\b")
+# Os testes do jogo web: Vitest em web/app/test/ e Playwright em web/app/e2e/ (achado do worker A, #355). O CI não roda esses.
+CAMINHO_TESTE_WEB = re.compile(r"\bweb/app/(?:test|e2e)/[\w/.-]+?\.(?:test|spec)\.(?:ts|tsx|js)\b")
 CAMINHO_PLANO = re.compile(r"\bdocs/PLANO_ANALISE_V2_[\w-]+\.md\b")
 LINK_MD = re.compile(r"\[[^\]]*\]\(([^)\s]+)\)")
 SUCESSO = re.compile(r"\b(testes?|su[ií]te|ci|pytest)\b[^\n]{0,60}?\b(passa|passam|passaram|passou|passed|verde|ok)\b", re.I)
@@ -190,11 +193,17 @@ def verificar(corpo_bruto: str, mudados: list[str], raiz: Path) -> list[Item]:
 def _implementacao(corpo, sec, mudados, raiz):
     itens = []
     citados = sorted(set(CAMINHO_TESTE.findall(corpo)))
+    citados_web = sorted(set(CAMINHO_TESTE_WEB.findall(corpo)))
     testes_mudados = [c for c in mudados if c.startswith("tests/") and c.endswith(".py")]
-    itens.append(Item("há teste no PR", "VERIFICADA", bool(citados or testes_mudados),
-                      f"mudados: {len(testes_mudados)}; citados: {len(citados)}"))
-    for c in citados:
+    web_mudados = [c for c in mudados if CAMINHO_TESTE_WEB.fullmatch(c)]
+    itens.append(Item("há teste no PR", "VERIFICADA", bool(citados or testes_mudados or citados_web or web_mudados),
+                      f"Python mudados: {len(testes_mudados)}, citados: {len(citados)}; web mudados: {len(web_mudados)}, "
+                      f"citados: {len(citados_web)}"))
+    for c in citados + citados_web:
         itens.append(Item("o teste citado existe", "VERIFICADA", (raiz / c).exists(), c))
+    if web_mudados or citados_web:
+        itens.append(Item("testes do web/app", "DECLARADA", True,
+                          "o CI não roda Vitest nem Playwright: a execução deles é só declarada no relato", alerta=True))
     return itens
 
 
