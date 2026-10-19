@@ -117,3 +117,4 @@ artifacts_v2_pet_que_pensa/**/vidas/
 artifacts_v2_rede_de_si/**/vidas/
 # W-PORTE (docs/TAREFA_V2_W_PORTE_CEREBRO_A.md): as medidas do porte (o carater do v11, PW-4)
 !artifacts_v2_w_porte/
+!artifacts_v2_world_poc/

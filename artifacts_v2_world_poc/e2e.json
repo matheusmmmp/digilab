@@ -1,0 +1,151 @@
+{
+ "M1": {
+  "webgl": true,
+  "sprite": "reserva",
+  "diferentes": 422688,
+  "total": 613800,
+  "fracao_desenhada": 0.6886,
+  "screenshot": "artifacts_v2_world_poc/m1_sala.png"
+ },
+ "M2": [
+  {
+   "celula": [
+    2,
+    2
+   ],
+   "conferidos": 1107,
+   "divergentes": 0,
+   "texels_opacos": 123,
+   "retangulo": {
+    "x": 262,
+    "y": 102,
+    "w": 48,
+    "h": 48,
+    "pxPorTexel": 3
+   },
+   "largura": 1100,
+   "altura": 558,
+   "pxPorSub": 3,
+   "cobrindo": 0
+  },
+  {
+   "celula": [
+    13,
+    2
+   ],
+   "conferidos": 1107,
+   "divergentes": 0,
+   "texels_opacos": 123,
+   "retangulo": {
+    "x": 790,
+    "y": 102,
+    "w": 48,
+    "h": 48,
+    "pxPorTexel": 3
+   },
+   "largura": 1100,
+   "altura": 558,
+   "pxPorSub": 3,
+   "cobrindo": 0
+  },
+  {
+   "celula": [
+    2,
+    9
+   ],
+   "conferidos": 1107,
+   "divergentes": 0,
+   "texels_opacos": 123,
+   "retangulo": {
+    "x": 262,
+    "y": 360,
+    "w": 48,
+    "h": 48,
+    "pxPorTexel": 3
+   },
+   "largura": 1100,
+   "altura": 558,
+   "pxPorSub": 3,
+   "cobrindo": 0
+  },
+  {
+   "celula": [
+    13,
+    9
+   ],
+   "conferidos": 1107,
+   "divergentes": 0,
+   "texels_opacos": 123,
+   "retangulo": {
+    "x": 790,
+    "y": 360,
+    "w": 48,
+    "h": 48,
+    "pxPorTexel": 3
+   },
+   "largura": 1100,
+   "altura": 558,
+   "pxPorSub": 3,
+   "cobrindo": 0
+  }
+ ],
+ "oclusao": {
+  "celula": [
+   6,
+   2
+  ],
+  "conferidos": 1107,
+  "divergentes": 603,
+  "texels_opacos": 123,
+  "retangulo": {
+   "x": 454,
+   "y": 102,
+   "w": 48,
+   "h": 48,
+   "pxPorTexel": 3
+  },
+  "largura": 1100,
+  "altura": 558,
+  "pxPorSub": 3,
+  "cobrindo": 1,
+  "screenshot": "artifacts_v2_world_poc/oclusao.png"
+ },
+ "M3_desktop_headless": {
+  "medida": "M3",
+  "data": "2026-10-19T13:38:27.681Z",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+  "devicePixelRatio": 1,
+  "tela_css": [
+   1280,
+   900
+  ],
+  "canvas_px": [
+   1100,
+   558
+  ],
+  "px_por_sub": 3,
+  "sprite": "reserva",
+  "duracao_s": 10.016,
+  "quadros": 601,
+  "fps_media": 60,
+  "quadro_mediana_ms": 16.7,
+  "quadro_p95_ms": 16.8
+ },
+ "M5_chrome_node": [
+  {
+   "semente": 101,
+   "ticks": 1500,
+   "hash": "60a50162"
+  },
+  {
+   "semente": 202,
+   "ticks": 1500,
+   "hash": "b291b37d"
+  },
+  {
+   "semente": 303,
+   "ticks": 3000,
+   "hash": "8e1288db"
+  }
+ ]
+}

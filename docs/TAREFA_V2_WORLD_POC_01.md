@@ -1,6 +1,6 @@
 # TAREFA V2 — WORLD_POC_01 (2026-10-19)
 
-Coordenador: Gerente. Worker: A. Worktree e branch: `v2-world-poc-01`. Status: EM ANDAMENTO.
+Coordenador: Gerente. Worker: A. Worktree e branch: `v2-world-poc-01`. Status: ENTREGUE (falta só a M3 no celular, do Matheus).
 
 Categoria: implementacao. Origem: Matheus, 2026-10-19: o WORLD-POC-01a da investigação WORLD-POC-001 (docs/futuro/mundo_3d.md), aprovado em 2026-10-19 para avançar em paralelo ao Gate C.
 
@@ -171,3 +171,69 @@ As etapas entregues entram aqui, cada uma numa seção no fim deste documento.
 - a vista (`vista.ts`, com o Three.js) e as métricas M1, M2, M3 e M6;
 - a segunda metade da M5: o mesmo hash no Node e no Chrome, pelo e2e;
 - as instruções para o Matheus medir a M3 num celular real.
+
+## 11. Etapas E3 e E4, entregues (2026-10-19, PR 2)
+
+**A vista** (`web/app/poc/mundo3d/vista.ts`, o único arquivo do POC que importa o `three`; W-2, imperativo, sem react-three-fiber):
+- **a câmera:** ortográfica e inclinada (M-2), com a elevação de 50 graus (PROPOSTA, sem fonte). Um número inteiro de pixels por
+  subunidade, escolhido pelo tamanho da tela;
+- **a sala:** o chão, as paredes e os obstáculos como caixas de cor lisa por face, sem luz. A parede da frente é baixa, para a sala
+  aparecer;
+- **o pet:** um `THREE.Sprite` com filtro nearest e um número inteiro de pixels por texel, com o pé do sprite alinhado ao pixel da tela.
+  A sombra é um disco no chão. A bola é uma esfera, e a comida, uma caixa;
+- **a oclusão:** três raios na direção do olhar (pelos pés, pelo centro e pelo topo do sprite). O sólido que eles cruzam antes do pet fica
+  semitransparente. É só desenho: a visão do pet é a do motor;
+- **sem gestão de cor e sem antialias:** a cor do texel chega à tela como está.
+
+**A página** (`poc/mundo3d.html`, `pagina.ts`):
+- o mundo anda 10 ticks por segundo, e a vista interpola o pet e a bola entre dois ticks. A interpolação é só desenho;
+- o contador de quadros, o "Medir 10 s" (a M3, em JSON) e o "Baixar o registro";
+- os ganchos `window.__poc` que o e2e usa;
+- **o sprite:** o atlas do Digimon UP só no modo dev e só se existir na máquina (W-6); no build e com `?sprite=reserva`, o sprite de
+  reserva.
+
+**O e2e próprio** (`web/app/playwright.poc.config.ts`, `web/app/e2e_poc/mundo3d.spec.ts`): roda no build da página, servido pelo `vite
+preview` na porta 8800, no Chrome instalado. O e2e do jogo não muda. Os scripts novos são `npm run poc:e2e`, `poc:preview` e `poc:medir`.
+
+**As medidas** (`artifacts_v2_world_poc/`; todas só descritivas, exceto os gates que o teste confere):
+
+| # | o que deu | artefato |
+|---|---|---|
+| M1 | a página abre, o WebGL existe e 68,86% dos pixels do canvas são da sala (não do fundo). O screenshot mostra a sala inclinada, os obstáculos, a bola, a comida e o pet | `e2e.json` (M1), `m1_sala.png` |
+| M2 | nos quatro cantos da sala (as células (2, 2), (13, 2), (2, 9) e (13, 9)), **os 1.107 pixels do sprite batem com os texels, 0 divergentes**, com 3 pixels por texel e nenhum sólido cobrindo. Os 123 texels opacos do sprite de reserva cobrem 9 pixels cada | `e2e.json` (M2) |
+| oclusão | o pet na célula (6, 2), atrás do obstáculo alto: só esse obstáculo fica semitransparente. 603 dos 1.107 pixels do sprite chegam misturados com a cor dele, e o resto, a cabeça acima do obstáculo, bate com os texels | `e2e.json` (oclusao), `oclusao.png` |
+| M3 desktop | no Chrome headless desta máquina, 60 quadros por segundo de média, com o quadro de 16,7 ms na mediana e 16,8 ms no p95 (canvas de 1100 × 558, 3 pixels por subunidade). É o limite do vsync, e o headless não é o celular | `e2e.json` (M3_desktop_headless) |
+| M3 celular | **falta:** é a medida do Matheus (abaixo) | — |
+| M5 | o mesmo hash do estado no Chrome e no Node para as sementes 101, 202 e 303, com 1.500 e 3.000 ticks. O replay de 1 "dia" de sala (1.440 ticks, 95 decisões fechadas) leva 7,11 ms no Node, a mediana de 5, num i7-14700KF | `e2e.json` (M5_chrome_node), `node.json` (M5_replay_node) |
+| M6 | o build da página (a página, a raiz que leva a ela e o JS) tem 559.512 bytes, 142.045 em gzip, quase todo o `three` | `node.json` (M6_build) |
+
+**O atlas no modo dev** (conferido na sessão, sem artefato: a arte fica fora do repositório):
+- o sprite `brasa_crianca_sereno` aparece na sala, com 1 pixel por texel (meia subunidade por texel, com 3 pixels por subunidade);
+- a M2 dele dá 36 divergentes em 1.410 pixels, provavelmente nas bordas semitransparentes da arte. Não verificado.
+
+**O app do jogo continua idêntico:** o sha256 dos 3 arquivos de `web/dist/` é o mesmo com o `package.json` deste PR e com o da `main`.
+
+### A M3 no celular: as instruções para o Matheus
+
+1. **No PC, num terminal aberto dentro de `web/app` do repositório** (não na pasta do usuário: fora de `web/app`, o `npm` não acha os
+   scripts). Por exemplo, `cd D:\Trab\digilab\v2\web\app`, com a `main` que tem o POC. Lá:
+
+   ```bash
+   npm run poc:build
+   ```
+
+   ```bash
+   npm run poc:preview -- --host
+   ```
+
+   O Vite mostra um endereço "Network", como `http://192.168.0.10:8800/`.
+2. **O Firewall do Windows:** na primeira vez, ele pergunta se o Node pode receber conexões. Permita em **rede privada** (a Wi-Fi de
+   casa precisa estar marcada como privada, e não pública). Sem isso, o celular não abre a página.
+3. No celular, **na mesma rede Wi-Fi**, abra `http://<o endereço Network>:8800/mundo3d.html`. A raiz, `http://<o endereço
+   Network>:8800/`, também leva à página, porque o `poc/index.html` redireciona.
+4. Espere uns 5 segundos com a página aberta e o pet andando. Toque em **"Medir 10 s"** e não mexa na tela até o botão voltar.
+5. A medida aparece em JSON na caixa embaixo. No http do celular a cópia automática não funciona: segure o texto, selecione tudo e
+   copie.
+6. Cole o JSON num comentário do PR ou mande ao coordenador. O worker o grava como `artifacts_v2_world_poc/m3_celular.json`.
+
+A referência é **30 quadros por segundo** no celular (DECIDIDO: referência, não gate duro). Se der menos, a medida é registrada como está.

@@ -16,12 +16,16 @@
     "gabaritos": "node test/gerar_gabaritos.mjs",
     "e2e": "npm run build && playwright test",
     "poc": "vite --config poc/vite.config.ts",
-    "poc:build": "vite build --config poc/vite.config.ts"
+    "poc:build": "vite build --config poc/vite.config.ts",
+    "poc:preview": "vite preview --config poc/vite.config.ts",
+    "poc:e2e": "npm run poc:build && playwright test -c playwright.poc.config.ts",
+    "poc:medir": "node poc/medir.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",
     "@preact/preset-vite": "2.10.6",
     "@types/node": "24.19.0",
+    "@types/three": "0.186.0",
     "typescript": "7.0.2",
     "vite": "8.3.1",
     "vitest": "5.0.2"
