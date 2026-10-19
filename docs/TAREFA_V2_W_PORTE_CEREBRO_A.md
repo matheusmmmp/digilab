@@ -486,3 +486,6 @@ Pedido do Matheus em 2026-10-19: o mapa do cérebro acendendo no painel, no luga
 - **Só nos v11:** os pets v1 a v10 não têm o painel, e nada neles mudou.
 - **Conferido no navegador** (`npm run dev`) num pet v11, em 1280 px e em 390 px, nos temas claro e escuro: o mapa acompanhou o motor
   decisão a decisão.
+- **Testes:** `npm run tipos` limpo; `npm test` com 40 arquivos e 455 testes; `npm run e2e` com 70 testes, entre eles o do mapa em 390 e
+  1280 px (o mapa contra `Motor.digibrain()`, nada animado e o mapa aceso de novo na decisão seguinte); `tests/test_painel_digibrain.py`
+  (7); `python tools/conferir_saude.py` passa.
