@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Todas as telas · layout novo (desktop)</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&amp;family=Pixelify+Sans:wght@700&amp;family=M+PLUS+Rounded+1c:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+/* Prancha-mapa: todas as telas do jogo no layout novo (2026-10-19, pedido do Matheus), aproximado da imagem de referência que ele mandou
+   (a casca do protótipo: a lateral escura com o logo e o subtítulo em japonês, as abas no topo, o painel central de cantos cortados com o
+   habitat e as ações embaixo, a coluna de cards à direita e os estilhaços azuis nas bordas). Cada tela tem 1280×800 e aparece reduzida
+   pela metade; o conteúdo de cada uma é o que a tela tem hoje (só o que o motor registra), redistribuído nos módulos.
+   Fora, por não terem dado no motor: nível e XP, Próxima evolução, Treinar/Inventário/Mais na barra do Pet, o clima, o humor "Feliz",
+   o card do pesquisador, o "DigiLab OS", o sino e as abas da imagem que o jogo não tem (Explorar, Laboratório, Comunidade, Loja).
+   Sprites e números são exemplo de layout (o pet é um placeholder). */
+:root{
+  --bg:#eef3fa; --fg:#0d2147; --card:#ffffff; --primary:#1677ff; --primary-2:#0f5fe0; --secondary:#e8f0fc; --muted-fg:#6a7b9c; --border:#dbe6f5; --frame:#c9dcf4;
+  --hunger:#f43f5e; --energy:#fbbf24; --mood:#1d8bf1; --health:#2dd4a7; --hyg:#6366f1; --dark:#7B3FB8;
+  --sidebar:#0b2556; --sidebar-2:#0e2d66; --sidebar-fg:#e6efff; --sidebar-border:#1d3f7d;
+  --shadow-sm:0 1px 3px rgba(13,33,71,.08),0 1px 2px rgba(13,33,71,.06); --shadow-md:0 6px 16px -6px rgba(13,33,71,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:#dfe7f3;color:var(--fg);font-family:Nunito,ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.jp{font-family:"M PLUS Rounded 1c",Nunito,sans-serif;font-weight:500}
+
+/* ---- o mapa: as telas em grade, na metade do tamanho */
+.mapa-cab{padding:28px 32px 8px;max-width:1400px}
+.mapa-cab h1{margin:0;font-size:26px;font-weight:900}
+.mapa-cab p{margin:6px 0 0;color:var(--muted-fg);font-weight:600;max-width:1100px;line-height:1.45}
+.grupo{padding:18px 32px 6px;font-size:13px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--primary)}
+.grade{display:grid;grid-template-columns:repeat(auto-fill,640px);gap:28px 28px;padding:6px 32px 20px}
+.quadro figcaption{font-size:14px;font-weight:800;margin:0 0 8px}
+.quadro figcaption small{font-weight:600;color:var(--muted-fg);margin-left:6px}
+.quadro{margin:0}
+.moldura{width:640px;height:400px;overflow:hidden;border-radius:10px;box-shadow:0 10px 30px -12px rgba(13,33,71,.45)}
+.tela{transform:scale(.5);transform-origin:0 0}
+body.uma .grade{grid-template-columns:1280px;padding:0;gap:0}
+body.uma .moldura{border-radius:0;box-shadow:none}
+body.uma .moldura{width:1280px;height:800px}
+body.uma .tela{transform:none}
+
+/* ---- a tela 1280×800 */
+.tela{position:relative;display:flex;width:1280px;height:800px;overflow:hidden;background:var(--bg)}
+.estilhacos{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.estilhacos .grade48{position:absolute;inset:0;opacity:.35;background-image:linear-gradient(to right,var(--border) 1px,transparent 1px),linear-gradient(to bottom,var(--border) 1px,transparent 1px);background-size:48px 48px}
+.estilhacos b{position:absolute;display:block;background:var(--primary)}
+
+/* lateral */
+.lat{position:relative;z-index:3;width:230px;flex:none;display:flex;flex-direction:column;background:var(--sidebar);color:var(--sidebar-fg);
+  clip-path:polygon(0 0,100% 0,100% calc(100% - 70px),calc(100% - 70px) 100%,0 100%)}
+.lat .cacos{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(to right,rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,.06) 1px,transparent 1px);background-size:24px 24px}
+.lat .cacos b{position:absolute;display:block;background:var(--primary)}
+.logo-caixa{position:relative;height:178px;background:var(--bg);padding:20px 22px 0;clip-path:polygon(0 0,100% 0,100% 100%,0 72%)}
+.logo{display:flex;gap:8px;align-items:flex-start}
+.logo .barras{margin-top:4px;display:flex;gap:4px}
+.logo .barras span{display:block;height:46px;width:12px;transform:skewX(-30deg);background:var(--fg)}
+.logo .barras span:last-child{height:30px;width:8px;background:var(--primary)}
+.logo .marca{font-family:"Pixelify Sans",monospace;font-weight:700;font-size:30px;line-height:1;color:var(--fg)}
+.logo .kana{display:block;font-size:15px;font-weight:700;color:var(--fg);margin-top:3px}
+.logo .sub{display:block;margin-top:6px;font-size:8.5px;font-weight:700;letter-spacing:.2em;line-height:1.3;text-transform:uppercase;color:var(--muted-fg)}
+.lat nav{position:relative;margin-top:-6px;display:flex;flex-direction:column;gap:6px;padding-right:14px}
+.lat nav a{display:flex;align-items:center;gap:14px;padding:10px 0 10px 24px;color:rgba(230,239,255,.92);text-decoration:none}
+.lat nav a svg{width:26px;height:26px;stroke-width:1.8}
+.lat nav a .t{display:flex;flex-direction:column;line-height:1.15}
+.lat nav a .t b{font-size:16px;font-weight:700}
+.lat nav a .t small{font-size:11px;opacity:.6}
+.lat nav a.ativo{background:linear-gradient(90deg,var(--primary),#2b8bff);color:#fff;border-radius:0 8px 8px 0;box-shadow:0 8px 22px -8px var(--primary);
+  clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,0 100%)}
+.lat nav a.ativo .t small{opacity:.85}
+.lat .pe{position:relative;margin-top:auto;display:flex;flex-direction:column;gap:10px;padding:0 18px 84px}
+.lat .pe a{display:flex;align-items:center;gap:12px;border:1px solid var(--sidebar-border);background:rgba(18,51,111,.85);border-radius:12px;padding:11px 14px;color:var(--sidebar-fg);text-decoration:none}
+.lat .pe a svg{width:22px;height:22px}
+.lat .pe a .t{display:flex;flex-direction:column;line-height:1.15}
+.lat .pe a .t b{font-size:14px;font-weight:700}
+.lat .pe a .t small{font-size:10px;opacity:.6}
+.lat .pe a .seta{margin-left:auto;width:16px;height:16px}
+
+/* coluna de conteúdo */
+.col{position:relative;z-index:2;flex:1;min-width:0;display:flex;flex-direction:column}
+.topo{display:flex;align-items:center;height:84px;gap:22px;padding:0 26px 0 30px}
+.abas{display:flex;gap:30px;align-self:stretch;align-items:center}
+.abas a{position:relative;display:flex;flex-direction:column;align-items:center;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#3a4c72;padding:6px 2px}
+.abas a small{font-size:9.5px;letter-spacing:0;text-transform:none;opacity:.6;font-weight:500}
+.abas a.ativo{color:var(--fg);font-weight:900}
+.abas a.ativo::after{content:"";position:absolute;left:-6px;right:-6px;bottom:-6px;height:3px;border-radius:2px;background:var(--primary)}
+.abas .voltar{flex-direction:row;gap:6px;text-transform:none;letter-spacing:0;font-size:14px;color:var(--primary)}
+.abas .voltar svg{width:18px;height:18px}
+.topo .vazio{flex:1}
+.hora{display:flex;align-items:center;gap:10px}
+.hora svg{width:30px;height:30px;color:var(--primary)}
+.hora p{margin:0;line-height:1.25}
+.hora .d{font-size:13px;font-weight:600}
+.hora .h{font-size:16px;font-weight:800;font-variant-numeric:tabular-nums}
+.salvo{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--muted-fg)}
+.salvo i{width:7px;height:7px;border-radius:50%;background:var(--health)}
+.sep{width:1px;height:42px;background:var(--border)}
+.quem{display:flex;align-items:center;gap:12px}
+.quem .ret{width:54px;height:54px;border-radius:50%;border:3px solid var(--primary);background:#dfeaf8;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.quem p{margin:0;line-height:1.2}
+.quem .n{font-size:17px;font-weight:900}
+.quem .s{font-size:12.5px;font-weight:700;color:var(--muted-fg)}
+
+.corpo{flex:1;min-height:0;display:flex;gap:18px;padding:4px 22px 22px 18px}
+.corpo.sem-lado .lado{display:none}
+
+/* o painel central de cantos cortados (a moldura da imagem) */
+.painel{position:relative;flex:1;min-width:0;display:flex;flex-direction:column;gap:12px;padding:14px;background:rgba(255,255,255,.55);
+  border:1px solid var(--frame);clip-path:polygon(22px 0,100% 0,100% calc(100% - 26px),calc(100% - 26px) 100%,0 100%,0 22px);box-shadow:var(--shadow-sm)}
+.painel::before{content:"";position:absolute;left:0;top:0;width:22px;height:22px;background:linear-gradient(135deg,transparent 50%,var(--frame) 50%,var(--frame) calc(50% + 1px),transparent calc(50% + 1px))}
+.painel .canto{position:absolute;right:6px;bottom:6px;width:46px;height:5px;background:var(--primary);transform:skewX(-45deg);opacity:.9}
+.painel.rola{overflow:hidden}
+.lado{width:340px;flex:none;display:flex;flex-direction:column;gap:14px;min-height:0;overflow:hidden}
+
+/* card de módulo: tracinho azul, ícone, título e subtítulo em japonês */
+.mod{position:relative;display:flex;flex-direction:column;border-radius:14px;border:1px solid var(--border);background:rgba(255,255,255,.9);padding:12px 14px;box-shadow:var(--shadow-sm);min-height:0}
+.mod.cresce{flex:1}
+.mod > header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.mod > header .tr{width:4px;height:30px;border-radius:2px;background:var(--primary);flex:none}
+.mod > header svg.ic{width:24px;height:24px}
+.mod > header .t{display:flex;flex-direction:column;line-height:1.15;min-width:0}
+.mod > header .t b{font-size:16.5px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mod > header .t small{font-size:11px;color:var(--muted-fg)}
+.mod > header .dir{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--primary)}
+.mod > header .dir svg{width:16px;height:16px;color:var(--muted-fg)}
+.mod.recolhido{padding:10px 14px}
+.mod.recolhido > header{margin:0}
+
+/* barras do Estado atual */
+.barras-est{display:flex;flex-direction:column;gap:13px;margin:4px 0 2px}
+.barras-est li{display:flex;align-items:center;gap:12px;font-size:13.5px;font-weight:600;list-style:none}
+.barras-est ul{margin:0;padding:0}
+.barras-est svg{width:22px;height:22px}
+.barras-est .r{width:62px}
+.trilho{flex:1;height:9px;border-radius:9px;background:var(--secondary);overflow:hidden}
+.trilho i{display:block;height:100%;border-radius:9px}
+.barras-est .v{width:52px;text-align:right;font-variant-numeric:tabular-nums;color:var(--muted-fg);font-size:12.5px}
+
+/* o habitat de hoje dentro do painel */
+.habitat{position:relative;flex:1;min-height:0;overflow:hidden;border-radius:10px;background:#F4F8FE;
+  background-image:repeating-linear-gradient(60deg,rgba(212,227,247,.6) 0 1px,transparent 1px 40px),repeating-linear-gradient(-60deg,rgba(212,227,247,.6) 0 1px,transparent 1px 40px),repeating-linear-gradient(0deg,rgba(212,227,247,.6) 0 1px,transparent 1px 40px)}
+.habitat .anel{position:absolute;left:50%;bottom:52px;width:260px;height:64px;margin-left:-130px;border-radius:50%;border:12px solid #CDE6FB}
+.habitat .pet{position:absolute;left:50%;bottom:78px;transform:translateX(-50%)}
+.flut{position:absolute;display:flex;align-items:center;gap:12px;border-radius:12px;background:rgba(255,255,255,.95);border:1px solid var(--border);padding:10px 14px;box-shadow:var(--shadow-md)}
+.flut.id{left:16px;top:16px}
+.flut.id .ret{width:64px;height:64px;border-radius:10px;background:#dfeaf8;display:flex;align-items:center;justify-content:center}
+.flut.id .n{font-size:22px;font-weight:900;line-height:1.1}
+.flut.id .e{display:flex;gap:6px;margin-top:6px}
+.etq{display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:6px;border:1.5px solid var(--fg);font-size:10.5px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}
+.etq.azul{border-color:var(--primary);color:var(--primary)}
+.flut.agora{right:16px;top:16px}
+.flut.agora svg{width:30px;height:30px;color:var(--primary)}
+.flut.agora b{display:block;font-size:17px;font-weight:900}
+.flut.agora small{font-size:12px;color:var(--muted-fg);font-weight:600}
+.balao{position:absolute;left:calc(50% + 70px);bottom:250px;display:flex;flex-direction:column;align-items:center;border:2.5px solid #0d2c66;border-radius:12px;background:#fff;padding:8px 14px;box-shadow:var(--shadow-md);white-space:nowrap}
+.balao b{font-size:15px;font-weight:900}
+.balao small{font-size:11px;color:var(--muted-fg);font-weight:600}
+.balao::after{content:"";position:absolute;left:18px;bottom:-9px;width:13px;height:13px;background:#fff;border-right:2.5px solid #0d2c66;border-bottom:2.5px solid #0d2c66;transform:rotate(45deg)}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;border:1px solid var(--border);background:#fff;padding:5px 11px;font-size:12px;font-weight:700;color:var(--muted-fg)}
+.chip svg{width:14px;height:14px;color:var(--primary)}
+.habitat .causa{position:absolute;left:calc(50% + 120px);bottom:110px}
+.habitat .emocao{position:absolute;left:16px;bottom:16px}
+.habitat .fonte{position:absolute;right:16px;bottom:16px}
+.habitat .expandir{position:absolute;right:16px;top:98px;display:flex;align-items:center;gap:6px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.95);padding:8px 12px;font-size:12.5px;font-weight:800;box-shadow:var(--shadow-sm)}
+.habitat .expandir svg{width:16px;height:16px;color:var(--primary)}
+
+/* barra de ações (os blocos da imagem) */
+.acoes{display:grid;gap:12px;height:116px;flex:none}
+.bloco{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:12px;border:1px solid var(--border);background:#fff;font-size:15.5px;font-weight:700;box-shadow:var(--shadow-sm)}
+.bloco svg{width:34px;height:34px;stroke-width:2.2}
+.bloco small{font-size:10.5px;color:var(--muted-fg)}
+.bloco.prim{border:0;border-radius:0;background:linear-gradient(160deg,#2b8bff,var(--primary-2));color:#fff;box-shadow:0 10px 18px -6px rgba(22,119,255,.45);clip-path:polygon(18px 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%,0 18px)}
+.bloco.prim small{color:rgba(255,255,255,.8)}
+.bloco.off{opacity:.45}
+
+/* registro: hora, ícone num quadradinho, texto */
+.lista{list-style:none;margin:0;padding:0}
+.lista li{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid rgba(219,230,245,.8);font-size:13.5px}
+.lista li:last-child{border-bottom:0}
+.lista time{width:40px;color:var(--muted-fg);font-variant-numeric:tabular-nums;font-size:12.5px}
+.lista .q{display:flex;width:30px;height:30px;flex:none;align-items:center;justify-content:center;border-radius:8px;background:var(--secondary);color:var(--primary)}
+.lista .q svg{width:17px;height:17px}
+.lista .tag{margin-left:auto;font-size:10.5px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;border-radius:5px;padding:2px 7px;background:var(--secondary);color:var(--primary)}
+
+/* peças comuns de conteúdo */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:42px;padding:0 18px;border-radius:10px;border:1px solid var(--border);background:#fff;font:inherit;font-size:14px;font-weight:800;color:var(--fg)}
+.btn.prim{border:0;background:var(--primary);color:#fff;box-shadow:0 8px 16px -8px var(--primary)}
+.btn svg{width:18px;height:18px}
+.linha{display:flex;gap:12px;align-items:center}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-content:start}
+.cols4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.mini{font-size:12.5px;color:var(--muted-fg);font-weight:600;line-height:1.4}
+.num{font-size:26px;font-weight:900;line-height:1}
+.cartao{border-radius:12px;border:1px solid var(--border);background:#fff;padding:12px;box-shadow:var(--shadow-sm)}
+.cartao b{font-weight:900}
+.cena{position:relative;border-radius:10px;background:#F4F8FE;background-image:repeating-linear-gradient(60deg,rgba(212,227,247,.6) 0 1px,transparent 1px 34px),repeating-linear-gradient(-60deg,rgba(212,227,247,.6) 0 1px,transparent 1px 34px);overflow:hidden}
+.sil{filter:brightness(0) opacity(.18)}
+.trilho.grosso{height:12px}
+.pilulas{display:flex;gap:8px;flex-wrap:wrap}
+.pilulas span{border-radius:999px;border:1px solid var(--border);background:#fff;padding:5px 12px;font-size:12.5px;font-weight:700}
+.pilulas span.on{background:var(--primary);border-color:var(--primary);color:#fff}
+.des{border-radius:12px;padding:9px 12px;font-size:13px;line-height:1.25}
+.des small{display:block;font-size:10.5px;font-weight:900;letter-spacing:.06em;text-transform:uppercase}
+.des b{display:block;font-size:15px;font-weight:900}
+.des.nec{background:#fff;border:2px solid var(--hunger)}
+.des.nec small{color:var(--hunger)}
+.des.apr{border:2px dashed #6FE3FF;color:#E6FBFF;background:#0F3A86;background-image:linear-gradient(rgba(111,227,255,.35) 1px,transparent 1px),linear-gradient(90deg,rgba(111,227,255,.35) 1px,transparent 1px);background-size:10px 10px}
+.des.apr small{color:#6FE3FF}
+.no{display:flex;flex-direction:column;align-items:center;gap:4px;border-radius:10px;border:1px solid var(--border);background:#fff;padding:8px 4px;font-size:11.5px;font-weight:800}
+.no.agora{border:2px solid var(--primary);box-shadow:0 0 0 3px rgba(22,119,255,.15)}
+.no.fechado{opacity:.4}
+.no.sombria{border-color:var(--dark);color:var(--dark)}
+.no.feito{background:var(--secondary)}
+table.tab{width:100%;border-collapse:collapse;font-size:13px}
+table.tab th{text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted-fg);padding:6px 8px;border-bottom:1px solid var(--border)}
+table.tab td{padding:8px;border-bottom:1px solid rgba(219,230,245,.7)}
+.regra{display:flex;align-items:center;gap:10px;border-radius:10px;border:1px solid var(--border);background:#fff;padding:9px 12px;font-size:13px}
+.regra b{font-size:11px;font-weight:900;color:var(--primary)}
+.regra .ic2{margin-left:auto;display:flex;gap:8px;color:var(--muted-fg)}
+.regra .ic2 svg{width:16px;height:16px}
+.ilha{position:absolute;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11.5px;font-weight:800}
+.ilha span.c{width:74px;height:46px;border-radius:50%;background:#cfe5c8;border:3px solid #fff;box-shadow:var(--shadow-md)}
+.med{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;font-size:12px}
+.med .selo{width:58px;height:58px;border-radius:50%;background:linear-gradient(145deg,#ffe58a,#f5b300);border:3px solid #fff;box-shadow:var(--shadow-md);display:flex;align-items:center;justify-content:center;color:#7a4b00;font-weight:900}
+.med.nao .selo{background:#e3e9f3;color:#9aa8c2}
+.fala-p{max-width:70%;border-radius:14px;padding:10px 14px;font-size:14px;line-height:1.35}
+.fala-p.pet{background:#fff;border:2px solid #0d2c66}
+.fala-p.eu{margin-left:auto;background:var(--primary);color:#fff}
+.campo{display:flex;align-items:center;gap:10px;height:48px;border-radius:12px;border:1px solid var(--border);background:#fff;padding:0 8px 0 16px;color:var(--muted-fg);font-size:14px}
+.campo .btn{margin-left:auto;height:36px}
+.opc{display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;font-size:14px;font-weight:700}
+.opc.on{background:var(--secondary);color:var(--primary)}
+.opc svg{width:20px;height:20px}
+.sw{margin-left:auto;width:42px;height:24px;border-radius:12px;background:var(--primary);position:relative}
+.sw::after{content:"";position:absolute;right:3px;top:3px;width:18px;height:18px;border-radius:50%;background:#fff}
+.sw.off{background:#c7d3e6}
+.sw.off::after{right:auto;left:3px}
+.risco{border:1.5px dashed var(--hunger);border-radius:12px;padding:12px;color:var(--hunger);font-weight:800;font-size:13px}
+</style>
+</head>
+<body>
+<header class="mapa-cab">
+  <h1>Todas as telas no layout novo · desktop 1280×800</h1>
+  <p>Proposta para o ok do Matheus (2026-10-19). A casca segue a imagem de referência: a lateral escura com o logo, os destinos com
+  subtítulo em japonês, as abas da tela no topo, o painel central de cantos cortados e a coluna de cards à direita, que se recolhe
+  (no Pet, recolhida, o habitat e as ações crescem). O conteúdo de cada tela é o de hoje, só o que o motor registra. Sprites e números são
+  exemplo de layout.</p>
+</header>
+<main id="mapa"></main>
+
+<script>
+/* ícones de traço (desenho no estilo lucide, redesenhados aqui) */
+const P = {
+  pet:'<path d="M5 11.5c0-3 2.5-5.5 7-5.5s7 2.5 7 5.5V18a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1z"/><path d="M8 6 6.5 3M16 6l1.5-3"/><circle cx="9.5" cy="12" r=".7"/><circle cx="14.5" cy="12" r=".7"/>',
+  crescer:'<path d="M12 21V10"/><path d="M12 10c0-4 3-6 7-6 0 4-3 6-7 6zM12 13c0-3-2.5-5-6-5 0 3 2.5 5 6 5z"/>',
+  lutar:'<path d="M14.5 17.5 3 6V3h3l11.5 11.5M13 19l6-6M16 16l4 4M19 21l2-2"/>',
+  diario:'<path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2.5zM8 7h7M8 11h5"/>',
+  conversar:'<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/>',
+  ajustes:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/>',
+  seta:'<path d="m9 6 6 6-6 6"/>', voltar:'<path d="m15 6-6 6 6 6"/>', baixo:'<path d="m6 9 6 6 6-6"/>',
+  sol:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+  casa:'<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/>',
+  controle:'<path d="M6 11h4M8 9v4M15 12h.01M18 10h.01"/><path d="M17.3 5H6.7a4 4 0 0 0-4 3.6L2 15a3 3 0 0 0 5.6 1.5L9 14h6l1.4 2.5A3 3 0 0 0 22 15l-.7-6.4a4 4 0 0 0-4-3.6z"/>',
+  seringa:'<path d="m18 2 4 4M17 7l3-3M19 9 8.7 19.3a2.4 2.4 0 0 1-3.4 0l-.6-.6a2.4 2.4 0 0 1 0-3.4L15 5M9 11l4 4M5 19l-3 3M14 4l6 6"/>',
+  camadas:'<path d="m12 2 10 5-10 5L2 7z"/><path d="m2 12 10 5 10-5M2 17l10 5 10-5"/>',
+  cerebro:'<path d="M12 5a3 3 0 1 0-6 .1 4 4 0 0 0-2.5 6.3A4 4 0 0 0 6 18a4 4 0 0 0 6 1.9V5zM12 5a3 3 0 1 1 6 .1 4 4 0 0 1 2.5 6.3A4 4 0 0 1 18 18a4 4 0 0 1-6 1.9"/>',
+  tigela:'<path d="M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9zM7 21h10M19.5 12 22 4M13 3c0 2-2 2-2 4M9 3c0 2-2 2-2 4"/>',
+  gota:'<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>',
+  coracao:'<path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z"/>',
+  mao:'<path d="M18 11V6a2 2 0 0 0-4 0M14 10V4a2 2 0 0 0-4 0v2M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.9-6-2.4l-3.6-3.6a2 2 0 0 1 2.8-2.8L7 15"/>',
+  cruz:'<path d="M10 3h4v7h7v4h-7v7h-4v-7H3v-4h7z"/>',
+  raio:'<path d="M13 2 3 14h9l-1 8 10-12h-9z"/>',
+  sorriso:'<circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/>',
+  estrela:'<path d="m12 2 3 6.5 7 .9-5 4.9 1.2 7L12 18l-6.2 3.3 1.2-7-5-4.9 7-.9z"/>',
+  alerta:'<circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 17h.01"/>',
+  haltere:'<path d="M6 6v12M18 6v12M3 9v6M21 9v6M6 12h12"/>',
+  arvore:'<circle cx="12" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="19" r="2"/><path d="M12 7v5M12 12l-6 5M12 12l6 5"/>',
+  chip:'<rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/>',
+  mapa:'<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/>',
+  medalha:'<circle cx="12" cy="15" r="6"/><path d="M8.5 10 6 2h4l2 5 2-5h4l-2.5 8"/>',
+  torre:'<path d="M6 21V8l6-5 6 5v13M10 21v-5h4v5M9 11h.01M15 11h.01"/>',
+  lista:'<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
+  grade:'<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>',
+  geracao:'<circle cx="12" cy="5" r="2.5"/><circle cx="6" cy="19" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M12 7.5v4M6 16.5 12 11.5l6 5"/>',
+  frasco:'<path d="M9 3h6M10 3v6L4.5 19a1.5 1.5 0 0 0 1.3 2h12.4a1.5 1.5 0 0 0 1.3-2L14 9V3"/><path d="M7 15h10"/>',
+  play:'<path d="m7 4 13 8-13 8z"/>', escudo:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  olho:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  cadeado:'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  enviar:'<path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/>',
+  pausa:'<path d="M8 5v14M16 5v14"/>', tema:'<path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/>', db:'<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>',
+  info:'<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>', expandir:'<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>', recolher:'<path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/>',
+  mais:'<path d="M12 5v14M5 12h14"/>', copiar:'<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>', baixar:'<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>',
+};
+const ic = (n, extra = "") => `<svg class="i ${extra}" viewBox="0 0 24 24" aria-hidden="true">${P[n]}</svg>`;
+const icc = (n, cor, fill) => `<svg class="i" viewBox="0 0 24 24" style="color:${cor};${fill ? "fill:" + cor : ""}" aria-hidden="true">${P[n]}</svg>`;
+/* o pet: placeholder (sem arte de terceiros) */
+const pet = (tam = 120, cor = "#F7B7CF", cls = "") => `<svg class="${cls}" width="${tam}" height="${tam * 40 / 44}" viewBox="0 0 44 40" aria-hidden="true"><path fill="${cor}" stroke="#173A8A" stroke-width="1.5" d="M6 26c0-11 7-19 16-19s16 8 16 19c0 7-7 11-16 11S6 33 6 26z"/><circle cx="16" cy="22" r="3" fill="#173A8A"/><circle cx="28" cy="22" r="3" fill="#173A8A"/><path d="M18 30h8" stroke="#173A8A" stroke-width="1.5"/></svg>`;
+
+const DESTINOS = [["pet", "Pet", "ペット"], ["crescer", "Crescer", "成長"], ["lutar", "Lutar", "バトル"], ["diario", "Diário", "日記"]];
+const ABAS = {
+  pet: [["Pet", "ペット"]],
+  crescer: [["Treinar", "トレーニング"], ["Aprendizado", "学習"], ["Evolução", "進化"], ["Itens", "アイテム"]],
+  lutar: [["Arena", "アリーナ"], ["Campanha", "キャンペーン"], ["Fronteira", "フロンティア"], ["Medalhas", "メダル"]],
+  diario: [["Registro", "記録"], ["Catálogo", "図鑑"], ["Gerações", "世代"], ["Cenários", "シナリオ"]],
+};
+
+function estilhacos() {
+  return `<div class="estilhacos"><div class="grade48"></div>
+    <b style="top:-6px;right:24%;height:22px;width:150px;transform:skewX(-45deg)"></b><b style="top:-6px;right:calc(24% + 166px);height:22px;width:36px;transform:skewX(-45deg);opacity:.4"></b>
+    <b style="right:0;top:120px;height:200px;width:12px;clip-path:polygon(0 16px,100% 0,100% 100%,0 calc(100% - 16px))"></b>
+    <b style="bottom:0;right:10%;height:30px;width:210px;transform:skewX(-45deg)"></b><b style="bottom:0;right:calc(10% + 226px);height:30px;width:50px;transform:skewX(-45deg);opacity:.5"></b>
+    <b style="bottom:8px;left:42%;height:7px;width:90px;transform:skewX(-45deg)"></b>
+    <b style="left:230px;top:46%;height:150px;width:10px;clip-path:polygon(0 0,100% 14px,100% calc(100% - 14px),0 100%)"></b></div>`;
+}
+function lateral(destino, extra) {
+  const nav = DESTINOS.map(([id, nome, jp]) => `<a class="${id === destino && !extra ? "ativo" : ""}">${ic(id)}<span class="t"><b>${nome}</b><small class="jp">${jp}</small></span></a>`).join("");
+  const pe = [["conversar", "Conversar", "会話"], ["ajustes", "Ajustes", "設定"]].map(([id, nome, jp]) =>
+    `<a style="${extra === id ? "background:var(--primary);border-color:var(--primary)" : ""}">${ic(id)}<span class="t"><b>${nome}</b><small class="jp">${jp}</small></span>${ic("seta", "seta")}</a>`).join("");
+  return `<aside class="lat"><div class="cacos">
+      <b style="left:0;top:122px;height:8px;width:100%;transform-origin:left;transform:skewY(-22deg)"></b>
+      <b style="right:0;top:250px;height:140px;width:9px;clip-path:polygon(0 14px,100% 0,100% 100%,0 calc(100% - 14px))"></b>
+      <b style="bottom:250px;left:0;height:11px;width:90px;transform:skewX(-45deg)"></b><b style="bottom:250px;left:98px;height:11px;width:30px;transform:skewX(-45deg);opacity:.6"></b>
+      <b style="bottom:0;right:0;height:70px;width:70px;opacity:.3;clip-path:polygon(100% 0,100% 100%,0 100%)"></b></div>
+    <div class="logo-caixa"><div class="logo"><div class="barras"><span></span><span></span><span></span></div>
+      <div><span class="marca">DIGILAB</span><span class="kana jp">デジラボ</span><span class="sub">Digital Life<br>Data · AI<br>Evolution</span></div></div></div>
+    <nav>${nav}</nav><div class="pe">${pe}</div></aside>`;
+}
+function topo(destino, aba, opts = {}) {
+  let abas;
+  if (opts.titulo) abas = `<a class="voltar">${ic("voltar")}Voltar ao Pet</a><a class="ativo">${opts.titulo}<small class="jp">${opts.tituloJp || ""}</small></a>`;
+  else abas = (ABAS[destino] || []).map(([n, jp]) => `<a class="${n === aba ? "ativo" : ""}">${n}<small class="jp">${jp}</small></a>`).join("");
+  return `<header class="topo"><div class="abas">${abas}</div><div class="vazio"></div>
+    <div class="hora">${ic("sol")}<div><p class="d">Dia 3 · tarde</p><p class="h">14:20</p></div></div>
+    <span class="salvo"><i></i>salvo</span><div class="sep"></div>
+    <div class="quem"><span class="ret">${pet(40)}</span><div><p class="n">${opts.nome || "Agumon"}</p><p class="s">${opts.sub || "Rookie · Coragem"}</p></div></div></header>`;
+}
+function mod(icone, titulo, jp, corpo, o = {}) {
+  const dir = o.dir ?? ic("baixo");
+  return `<section class="mod ${o.cls || ""}" style="${o.style || ""}"><header><span class="tr"></span>${ic(icone, "ic")}<span class="t"><b>${titulo}</b><small class="jp">${jp}</small></span><span class="dir">${dir}</span></header>${corpo}</section>`;
+}
+function tela({ destino, aba, extra, titulo, tituloJp, painel, lado, semLado, nome, sub }) {
+  return `<div class="tela">${estilhacos()}${lateral(destino, extra)}<div class="col">${topo(destino, aba, { titulo, tituloJp, nome, sub })}
+    <div class="corpo ${semLado ? "sem-lado" : ""}"><div class="painel">${painel}<span class="canto"></span></div>${lado ? `<div class="lado">${lado}</div>` : ""}</div></div></div>`;
+}
+
+/* ---------- blocos reaproveitados */
+const ESTADO = mod("seringa", "Estado atual", "ステータス", `<div class="barras-est"><ul>
+  ${[["coracao", "var(--hunger)", 1, "Fome", 38], ["raio", "rgba(13,33,71,.75)", 1, "Energia", 74], ["gota", "var(--hyg)", 0, "Higiene", 61], ["sorriso", "var(--energy)", 1, "Humor", 88], ["cruz", "var(--health)", 1, "Saúde", 92]]
+    .map(([i, c, f, r, v]) => `<li>${icc(i, c, f)}<span class="r">${r}</span><span class="trilho"><i style="width:${v}%;background:${r === "Humor" ? "var(--mood)" : r === "Energia" ? "var(--energy)" : r === "Higiene" ? "var(--hyg)" : c}"></i></span><span class="v">${v}/100</span></li>`).join("")}
+  </ul></div>`);
+const ACOES_V11 = [["tigela", "Alimentar", "ごはん", "#fff", 0], ["gota", "Limpar", "おそうじ", "var(--mood)", 0], ["coracao", "Brincar", "あそぶ", "#ec4899", 1], ["mao", "Carinho", "なでる", "var(--hunger)", 0], ["mao", "Tapa", "たたく", "var(--fg)", 0], ["cruz", "Tratar", "てあて", "var(--health)", 1]];
+const acoes = (alt = 116) => `<div class="acoes" style="grid-template-columns:repeat(6,1fr);height:${alt}px">${ACOES_V11.map(([i, n, jp, c, f], k) =>
+  `<button class="bloco ${k === 0 ? "prim" : ""}">${k === 0 ? ic(i) : icc(i, c, f)}${n}<small class="jp">${jp}</small></button>`).join("")}</div>`;
+const habitat = (grande) => `<div class="habitat">
+  <span class="anel" style="${grande ? "width:340px;height:84px;margin-left:-170px;bottom:70px" : ""}"></span>
+  <span class="pet" style="${grande ? "bottom:104px" : ""}">${pet(grande ? 190 : 140)}</span>
+  <div class="flut id"><span class="ret">${pet(52)}</span><div><div class="n">Agumon</div><div class="e"><span class="etq azul">Rookie</span><span class="etq">Coragem</span></div></div></div>
+  <div class="flut agora">${ic("controle")}<div><b>brincando</b><small>agora · dia 3</small></div></div>
+  <button class="expandir">${ic(grande ? "recolher" : "expandir")}${grande ? "Mostrar colunas" : "Recolher colunas"}</button>
+  <div class="balao" style="${grande ? "bottom:330px;left:calc(50% + 90px)" : ""}"><b>Brincar! Brincar!</b><small>toque para ver o porquê</small></div>
+  <span class="chip causa" style="${grande ? "left:calc(50% + 150px);bottom:150px" : ""}">${ic("coracao")}carinho + tempo</span>
+  <span class="chip emocao">${icc("estrela", "var(--energy)", 1)}alegria</span>
+  <span class="chip fonte"><i style="width:8px;height:8px;border-radius:50%;background:var(--health);display:inline-block"></i>frases prontas</span></div>`;
+const ULTIMAS = mod("camadas", "Últimas ações", "最近のアクション", `<ol class="lista">
+  ${[["14:15", "controle", "Brincou com você", "pet"], ["14:02", "mao", "Você fez carinho", "você"], ["13:45", "tigela", "Comeu a ração", "pet"], ["13:40", "tigela", "Você deu comida", "você"]]
+    .map(([h, i, t, q]) => `<li><time>${h}</time><span class="q">${ic(i)}</span>${t}<span class="tag">${q}</span></li>`).join("")}</ol>`, { dir: "Ver tudo" , cls: "cresce" });
+const CHAMADO = `<div class="cartao linha"><span class="lista"><span class="q" style="color:var(--hunger)">${ic("alerta")}</span></span><div style="flex:1"><b>Chamando você</b><div class="mini">um carinho atende o pedido</div></div><button class="btn prim">Atender</button></div>`;
+const DESEJO = `<div class="cols2"><div class="des nec"><small>Necessidade</small><b>comer</b>vem do corpo</div><div class="des apr"><small>Vontade aprendida</small><b>brincar</b>aprendida com você</div></div>`;
+const DIGIBRAIN_REC = mod("cerebro", "DigiBrain", "デジブレイン", "", { cls: "recolhido", dir: ic("seta") });
+
+/* ---------- as telas */
+const TELAS = [];
+const add = (grupo, nome, nota, html) => TELAS.push({ grupo, nome, nota, html });
+
+add("Pet", "Pet", "o habitat de hoje no painel, as ações embaixo; à direita Estado atual, o chamado, o desejo, o DigiBrain e o registro",
+  tela({ destino: "pet", aba: "Pet", painel: habitat(false) + acoes(), lado: ESTADO + CHAMADO + DESEJO + DIGIBRAIN_REC + ULTIMAS }));
+add("Pet", "Pet · colunas recolhidas", "pedido do Matheus: recolher a coluna da direita; o painel do habitat e as ações crescem",
+  tela({ destino: "pet", aba: "Pet", semLado: true, painel: habitat(true) + acoes(140) }));
+add("Pet", "Pet · DigiBrain aberto (v11)", "o painel de hoje, sem mudança de conteúdo, numa coluna larga no lugar dos cards",
+  tela({ destino: "pet", aba: "Pet", painel: habitat(false) + acoes(), lado: mod("cerebro", "DigiBrain", "デジブレイン", `
+    <div class="linha" style="margin-bottom:8px"><span class="chip" style="color:var(--health)">● ao vivo</span><span class="mini">Agora: <b style="color:var(--fg)">Exausto: decidiu dormir</b></span></div>
+    <div class="cena" style="height:150px;margin-bottom:10px"><svg width="100%" height="150" viewBox="0 0 300 150" aria-label="mapa dos pesos">${Array.from({ length: 14 }, (_, k) => `<path d="M20 ${12 + k * 9} C120 ${20 + (k * 37) % 120}, 180 ${30 + (k * 53) % 100}, 280 ${20 + (k * 29) % 110}" stroke="${k % 4 === 0 ? "#f97316" : k % 3 ? "#9aa8c2" : "#ef4444"}" stroke-width="${1 + (k % 3)}" fill="none" opacity=".7"/>`).join("")}</svg></div>
+    <div class="mini" style="font-weight:800;color:var(--fg);margin-bottom:6px">O peso de cada lobo nesta escolha</div>
+    <div class="barras-est"><ul>${[["Impulsos", 62, "#f97316"], ["Aprendido", 28, "var(--primary)"], ["Corpo", 44, "var(--health)"], ["Memória e emoção", 18, "var(--dark)"]].map(([n, v, c]) => `<li><span class="r" style="width:120px">${n}</span><span class="trilho"><i style="width:${v}%;background:${c}"></i></span><span class="v">${v}%</span></li>`).join("")}</ul></div>
+    <div class="mini" style="font-weight:800;color:var(--fg);margin:10px 0 6px">As opções e a chance de cada uma</div>
+    <div class="pilulas"><span class="on">dormir 71%</span><span>comer 18%</span><span>brincar 8%</span><span>andar 3%</span></div>`, { cls: "cresce", dir: ic("recolher") }) }));
+add("Pet", "Meus pets", "a página de hoje (slots e o detalhe), na casca nova",
+  tela({ destino: "pet", aba: "Pet", titulo: "Meus pets", tituloJp: "マイペット",
+    painel: `<div class="linha" style="justify-content:space-between"><b style="font-size:18px">3 pets</b><div class="linha"><button class="btn">${ic("baixar")}Importar</button><button class="btn prim">${ic("mais")}Novo ovo</button></div></div>
+      <div class="cols4">${[["Agumon", "ATIVO", "Rookie · D3", 1], ["Gabumon", "EM ESPERA", "Champion · D9", 0], ["Tentomon", "EM ESPERA", "Ultimate · D21", 0]].map(([n, e, s, a]) =>
+        `<div class="cartao" style="text-align:center;${a ? "border:2px solid var(--primary)" : ""}"><span class="etq ${a ? "azul" : ""}">${e}</span><div style="margin:8px 0">${pet(70, a ? "#F7B7CF" : "#bcd3f2")}</div><b>${n}</b><div class="mini">${s}</div></div>`).join("")}
+        <div class="cartao" style="text-align:center;border-style:dashed;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted-fg)">${ic("mais")}<b style="color:var(--muted-fg)">espaço livre</b><span class="mini">novo ovo</span></div></div>`,
+    lado: mod("pet", "Agumon", "アグモン", `<div class="cena" style="height:150px;display:flex;align-items:center;justify-content:center">${pet(110)}</div>
+      <div class="mini" style="font-weight:800;color:var(--fg);margin:10px 0 6px">Como ele está</div>
+      <div class="barras-est"><ul>${[["Fome", 38, "var(--hunger)"], ["Energia", 74, "var(--energy)"], ["Higiene", 61, "var(--hyg)"]].map(([n, v, c]) => `<li><span class="r">${n}</span><span class="trilho"><i style="width:${v}%;background:${c}"></i></span><span class="v">${v}</span></li>`).join("")}</ul></div>
+      <div class="pilulas" style="margin:10px 0"><span>Rookie</span><span>vínculo alto</span><span>Coragem</span><span>3 dias de vida</span></div>
+      <div class="linha"><button class="btn">${ic("baixar")}Exportar</button><button class="btn prim">Nova geração</button></div>`, { cls: "cresce" }) }));
+
+add("Crescer", "Crescer · Treinar", "a sala de treino e o cansaço no painel; os exercícios na coluna",
+  tela({ destino: "crescer", aba: "Treinar",
+    painel: `<div class="cena" style="flex:1;display:flex;align-items:flex-end;justify-content:center;padding-bottom:30px">${pet(150)}<div class="flut agora" style="position:absolute">${ic("haltere")}<div><b>pronto para treinar</b><small>um treino por vez · 10 min de intervalo</small></div></div></div>
+      ${mod("raio", "Cansaço", "疲れ", `<div class="barras-est"><ul>${[["Fadiga", 42, "var(--energy)"], ["Sobrecarga", 12, "var(--dark)"], ["Treinado na vida", 58, "var(--primary)"]].map(([n, v, c]) => `<li><span class="r" style="width:130px">${n}</span><span class="trilho grosso"><i style="width:${v}%;background:${c}"></i></span><span class="v">${v}</span></li>`).join("")}</ul></div>`)}`,
+    lado: mod("haltere", "Exercícios", "トレーニング", `<div class="cols2">${["Força", "Defesa", "Velocidade", "Vigor", "Técnica", "Foco"].map((n, k) =>
+      `<div class="cartao" style="padding:10px"><span class="etq ${k < 2 ? "azul" : ""}" style="height:18px;font-size:9px">${k < 2 ? "aptidão" : "comum"}</span><div style="margin-top:6px"><b>${n}</b></div><div class="mini">+${3 - (k % 2)} ${n.toLowerCase()} · +8 fadiga</div></div>`).join("")}</div>
+      <div class="mini" style="margin-top:10px">Próximo treino em 6 min de jogo</div><button class="btn" style="margin-top:8px;width:100%">Forçar treino</button>`, { cls: "cresce" }) }));
+add("Crescer", "Crescer · Aprendizado", "Agora, instinto × aprendido e as lembranças (v11: O cérebro deste pet no lugar)",
+  tela({ destino: "crescer", aba: "Aprendizado",
+    painel: `<div class="cols2" style="flex:1">${mod("estrela", "Agora", "いま", `<div class="cena" style="height:150px;display:flex;align-items:center;justify-content:center">${pet(100)}</div><div class="mini" style="margin:8px 0;font-weight:800;color:var(--fg)">ACABOU DE BRINCAR</div><div class="linha"><button class="btn prim">Elogiar</button><button class="btn">Repreender</button></div>`)}
+      ${mod("cerebro", "Instinto × aprendido", "本能と学習", `<div class="barras-est"><ul>${["brincar", "comer", "dormir", "explorar", "chamar"].map((n, k) => `<li><span class="r" style="width:70px">${n}</span><span class="trilho"><i style="width:${30 + k * 11}%;background:#9aa8c2"></i></span><span class="trilho"><i style="width:${70 - k * 12}%;background:var(--primary)"></i></span></li>`).join("")}</ul></div><div class="mini" style="margin-top:8px">cinza: instinto · azul: aprendido com você</div>`)}</div>`,
+    lado: mod("lista", "Decisões", "決定", `<ol class="lista">${["brincou: humor baixo + você elogiou", "comeu: fome 38", "dormiu: energia 20", "chamou você: sozinho há 2 h"].map((t, k) => `<li><time>14:${15 - k * 4}</time>${t}</li>`).join("")}</ol>`) +
+      mod("camadas", "Lembranças", "思い出", `<div class="cols2">${["elogio · luta", "carinho", "bronca", "espaço livre"].map((t, k) => `<div class="cartao" style="padding:9px;font-size:12.5px;${k === 3 ? "border-style:dashed;color:var(--muted-fg)" : ""}">${t}</div>`).join("")}</div>`, { cls: "cresce" }) }));
+add("Crescer", "Crescer · Evolução", "a árvore do brasão no painel; os números e o porquê na coluna",
+  tela({ destino: "crescer", aba: "Evolução",
+    painel: `<div class="linha"><b style="font-size:18px">Árvore de Coragem</b><span class="mini">toque num nó para ver o que pede</span></div>
+      <div style="flex:1;display:grid;grid-template-columns:repeat(5,1fr);gap:12px;align-items:center">
+        <div><div class="no feito">${pet(40)}Koromon</div></div>
+        <div style="display:flex;flex-direction:column;gap:12px"><div class="no agora">${pet(40)}Agumon<span class="etq azul" style="height:16px;font-size:8px">agora</span></div><div class="no fechado">${pet(40, "#ddd", "sil")}?</div></div>
+        <div style="display:flex;flex-direction:column;gap:8px">${["Greymon", "Tyrannomon", "?", "?"].map((n, k) => `<div class="no ${k ? "fechado" : ""}">${pet(34, k ? "#ddd" : "#ffd0a8", k ? "sil" : "")}${n}${k === 0 ? '<span class="mini">provável</span>' : ""}</div>`).join("")}</div>
+        <div style="display:flex;flex-direction:column;gap:8px">${["?", "?", "?", "?"].map(() => `<div class="no fechado">${pet(30, "#ddd", "sil")}?</div>`).join("")}</div>
+        <div style="display:flex;flex-direction:column;gap:12px"><div class="no fechado">${pet(40, "#ddd", "sil")}Mega</div><div class="no sombria">${pet(40, "#c9a7ef")}sombria</div></div></div>`,
+    lado: mod("arvore", "Agumon", "進化", `<div class="cols2"><div class="cartao"><div class="mini">forma atual</div><b>Agumon</b></div><div class="cartao"><div class="mini">até virar Greymon</div><b>2 dias</b></div><div class="cartao"><div class="mini">experiência de combate</div><b>14</b></div><div class="cartao"><div class="mini">medalhas do Tamer</div><b>1 de 6</b></div></div>`) +
+      mod("info", "Por que Agumon?", "なぜ", `<div class="mini">nasceu do ovo de Coragem; o cuidado nos primeiros dias pesou mais que o treino.</div>`) +
+      mod("lista", "Histórico", "履歴", `<ol class="lista"><li><time>D1</time>Digi-Egg → Koromon</li><li><time>D2</time>Koromon → Agumon</li></ol>`, { cls: "cresce" }) }));
+add("Crescer", "Crescer · Itens", "os chips e as cartas no painel; as vagas e o como funciona na coluna",
+  tela({ destino: "crescer", aba: "Itens",
+    painel: mod("chip", "Chips", "チップ", `<div class="cols3">${["Escudo de Brasa", "Garra Rápida", "Foco Calmo", "Pele Dura", "?", "?"].map((n, k) =>
+      `<div class="cartao" style="${k > 3 ? "border-style:dashed;color:var(--muted-fg)" : ""}"><span class="etq ${k === 0 ? "azul" : ""}" style="height:18px;font-size:9px">${k === 0 ? "equipado" : k > 3 ? "ainda não é seu" : "defesa"}</span><div style="margin-top:6px"><b>${n}</b></div><div class="mini">${k > 3 ? "ganha na Campanha" : "+10% defesa no 1º turno"}</div>${k < 4 ? `<button class="btn" style="margin-top:8px;height:34px;width:100%">${k === 0 ? "Desequipar" : "Equipar"}</button>` : ""}</div>`).join("")}</div>`, { cls: "cresce" }) +
+      mod("camadas", "Cartas", "カード", `<div class="pilulas"><span>Revanche ×2</span><span>Golpe Duplo ×1</span><span>Cura Rápida ×1</span></div>`),
+    lado: mod("chip", "Itens do Tamer", "アイテム", `<div class="cols2"><div class="cartao"><div class="num">4</div><div class="mini">chips</div></div><div class="cartao"><div class="num">4</div><div class="mini">cartas</div></div></div><div class="mini" style="margin-top:10px">Vagas de chip: 1 de 2 em uso</div>`) +
+      mod("info", "Como funciona", "しくみ", `<div class="mini">Chips ficam equipados e valem em toda luta. Cartas valem uma luta e somem. Os itens são do Tamer: passam de um pet para o outro.</div>`, { cls: "cresce" }) }));
+
+add("Lutar", "Lutar · Arena", "o palco de prévia e o Lutar no painel; o rival e as regras de combate na coluna",
+  tela({ destino: "lutar", aba: "Arena",
+    painel: `<div class="cena" style="flex:1;display:flex;align-items:center;justify-content:space-around">${pet(130)}<b style="font-size:34px;color:var(--primary)">×</b>${pet(130, "#bcd3f2")}<div class="flut agora">${ic("lutar")}<div><b>prévia</b><small>escolha um rival e aperte Lutar</small></div></div></div>
+      <div class="linha"><div class="cartao" style="flex:1"><div class="mini">Carta para esta luta</div><b>Revanche ×2 ▾</b></div><button class="btn" style="height:56px">Melhor de 10</button><button class="btn prim" style="height:56px;width:200px;font-size:17px">${ic("lutar")}Lutar</button></div>`,
+    lado: mod("pet", "Rival", "ライバル", `<div class="cols3">${["Bot A", "Bot B", "Bot C", "Gabumon", "Tentomon", "Palmon"].map((n, k) => `<div class="no ${k === 3 ? "agora" : ""}">${pet(34, k < 3 ? "#d6e2f3" : "#bcd3f2")}${n}</div>`).join("")}</div>`) +
+      mod("escudo", "Regras de combate", "ルール", `<div style="display:flex;flex-direction:column;gap:8px">${[["SE vida < 30%", "ENTÃO defender"], ["SE rival cansado", "ENTÃO golpe pesado"], ["SE distância longa", "ENTÃO aproximar"]].map(([a, b]) => `<div class="regra"><span><b>${a}</b><br>${b}</span><span class="ic2">${ic("cadeado")}${ic("alerta")}</span></div>`).join("")}<div class="mini">3 de 5 espaços · lutas de treino para virar Ultimate: 4 de 10</div></div>`, { cls: "cresce" }) }));
+add("Lutar", "Lutar · Campanha", "o mapa das ilhas no painel; a ilha escolhida, o rival e o Desafiar na coluna",
+  tela({ destino: "lutar", aba: "Campanha",
+    painel: `<div class="cena" style="flex:1;background-color:#d9ecfb">
+      ${[["Campina", 12, 60, "VENCIDO"], ["Torre", 30, 30, "VENCIDO"], ["Floresta", 50, 58, "AGORA"], ["Cidadela", 66, 22, "trancado"], ["Lago", 80, 62, "trancado"], ["Espiral", 88, 30, "trancado"]].map(([n, x, y, e]) =>
+        `<div class="ilha" style="left:${x}%;top:${y}%;transform:translate(-50%,-50%)"><span class="c" style="${e === "trancado" ? "filter:grayscale(1);opacity:.6" : ""}"></span>${n}<span class="etq ${e === "AGORA" ? "azul" : ""}" style="height:16px;font-size:8px">${e}</span></div>`).join("")}
+      <div class="ilha" style="left:50%;top:88%;transform:translate(-50%,-50%)"><span class="c" style="background:#c9d8f0;width:110px"></span>Fronteira<span class="etq" style="height:16px;font-size:8px">LIGA</span></div></div>`,
+    lado: mod("mapa", "Floresta", "森", `<div class="mini" style="margin-bottom:8px">sugerido para Rookie · arena: golpes de longe valem mais</div>
+      ${["Palmon · LÍDER", "Goblimon", "Mushroomon"].map((n, k) => `<div class="regra" style="margin-bottom:8px">${pet(30, "#bcd3f2")}<span><b style="color:var(--fg);font-size:13px">${n}</b><br><span class="mini">${k ? "vitórias: 0" : "lição: defender cedo"}</span></span></div>`).join("")}
+      <div class="cartao"><div class="mini">Nesta ilha</div><b>2 tentativas · melhor turno 14 · 1 regra nova</b></div>
+      <div class="linha" style="margin-top:10px"><button class="btn">Treinar antes</button><button class="btn prim" style="flex:1">Desafiar Palmon</button></div>`, { cls: "cresce" }) }));
+add("Lutar", "Lutar · Fronteira", "a Liga e as instalações no painel; os 6 líderes na coluna",
+  tela({ destino: "lutar", aba: "Fronteira",
+    painel: mod("medalha", "Liga dos Líderes", "リーグ", `<div class="linha"><div class="mini" style="flex:1">6 lutas seguidas, sem curar entre elas · a vida passa de uma luta para a outra · uma carta só · perder uma encerra</div><button class="btn prim">Desafiar a Liga</button></div>`) +
+      `<div class="cols2" style="flex:1">${[["Torre", "recorde: andar 7"], ["Palácio", "recorde: 3 vitórias"], ["Fábrica", "escolha 1 de 3 aluguéis"], ["Salão", "um pet de cada nível"]].map(([n, r]) =>
+        `<div class="cartao" style="display:flex;flex-direction:column;gap:6px">${ic("torre")}<b>${n}</b><div class="mini">${r}</div><div class="mini">${ic("cadeado")} Abre depois do título</div></div>`).join("")}</div>`,
+    lado: mod("lista", "Os 6 líderes", "リーダー", `<ol class="lista">${["Palmon · Campina", "Tentomon · Torre", "Gabumon · Floresta", "Biyomon · Cidadela", "Gomamon · Lago", "Patamon · Espiral"].map((n, k) => `<li><span class="q">${k + 1}</span>${n}<span class="tag">Mega</span></li>`).join("")}</ol>`, { cls: "cresce" }) }));
+add("Lutar", "Lutar · Medalhas", "as 6 medalhas no painel; o resumo e os recordes na coluna",
+  tela({ destino: "lutar", aba: "Medalhas",
+    painel: `<div class="cols3" style="flex:1">${["Campina", "Torre", "Floresta", "Cidadela", "Lago", "Espiral"].map((n, k) =>
+      `<div class="cartao med ${k > 1 ? "nao" : ""}"><span class="selo">${k + 1}</span><b>${n}</b><div class="mini">${k > 1 ? "ainda não" : "ganha com Agumon"}</div><div class="mini">libera: ${["Rookie", "Champion", "chip", "Ultimate", "carta", "Mega"][k]}</div></div>`).join("")}</div>`,
+    lado: mod("medalha", "Medalhas do Tamer", "メダル", `<div class="num">2 <span class="mini">de 6</span></div><div class="trilho grosso" style="margin:10px 0"><i style="width:33%;background:var(--energy)"></i></div><div class="mini">Rookie → Champion liberado</div>`) +
+      mod("torre", "Recordes", "記録", `<ol class="lista">${["Torre · —", "Palácio · —", "Fábrica · —", "Salão · —"].map(t => `<li>${t}</li>`).join("")}</ol>`, { cls: "cresce" }) }));
+add("Lutar", "Luta (tela cheia)", "a luta ocupa o painel inteiro; a intenção do rival, a regra em uso e os turnos na coluna",
+  tela({ destino: "lutar", aba: "Arena", titulo: "Luta · Arena", tituloJp: "バトル",
+    painel: `<div class="cena" style="flex:1;background:#e6f0fc"><div style="position:absolute;left:16px;right:16px;top:14px;display:flex;justify-content:space-between">
+        ${[0, 1].map(k => `<div class="cartao" style="width:42%"><b>${k ? "Gabumon" : "Agumon"}</b><div class="trilho grosso" style="margin:6px 0"><i style="width:${k ? 46 : 72}%;background:var(--health)"></i></div><div class="trilho"><i style="width:${k ? 30 : 55}%;background:var(--energy)"></i></div></div>`).join("")}</div>
+        <div style="position:absolute;inset:90px 60px 40px;display:flex;align-items:flex-end;justify-content:space-between">${pet(150)}${pet(150, "#bcd3f2")}</div>
+        <span class="chip" style="position:absolute;left:50%;top:100px;transform:translateX(-50%)">TURNO 7 · distância curta</span></div>
+      <div class="linha"><button class="btn">${ic("pausa")}Pausar</button><button class="btn">×2</button><div style="flex:1"></div><button class="btn">Desistir</button></div>`,
+    lado: mod("olho", "Intenção do rival", "相手の狙い", `<div class="mini">vai tentar golpe pesado</div>`) + mod("escudo", "Regra em uso", "使用中のルール", `<div class="regra"><span><b>SE vida &lt; 30%</b><br>ENTÃO defender</span><span class="ic2">${ic("cadeado")}${ic("alerta")}</span></div>`) +
+      mod("lista", "Turnos", "ターン", `<ol class="lista">${["Agumon atacou: −12", "Gabumon defendeu", "Agumon aproximou", "Gabumon golpe pesado: −18"].map((t, k) => `<li><time>T${7 - k}</time>${t}</li>`).join("")}</ol>`, { cls: "cresce" }) }));
+
+add("Diário", "Diário · Registro", "o registro inteiro no painel, com os filtros; o replay e o detalhe do evento na coluna",
+  tela({ destino: "diario", aba: "Registro",
+    painel: `<div class="pilulas"><span class="on">tudo</span><span>você</span><span>pet</span><span>lutas</span><span>recusas</span><span>treino</span><span>falas</span></div>
+      ${mod("diario", "Registro", "記録", `<ol class="lista">${[["D3 14:15", "controle", "Brincou com você", "pet"], ["D3 14:02", "mao", "Você fez carinho", "você"], ["D3 13:45", "tigela", "Comeu a ração", "pet"], ["D3 13:40", "tigela", "Você deu comida", "você"], ["D3 12:10", "lutar", "Venceu Gabumon na Arena", "luta"], ["D3 11:30", "haltere", "Treinou Força", "treino"], ["D3 10:05", "alerta", "Recusou tomar banho", "recusa"], ["D2 22:40", "conversar", "“Quero brincar!”", "fala"]].map(([h, i, t, q]) => `<li><time style="width:70px">${h}</time><span class="q">${ic(i)}</span>${t}<span class="tag">${q}</span></li>`).join("")}</ol>`, { cls: "cresce", dir: "" })}`,
+    lado: mod("play", "Replay", "リプレイ", `<div class="cols2"><div class="cartao"><div class="mini">semente</div><b>4242</b></div><div class="cartao"><div class="mini">eventos</div><b>312</b></div></div><div class="linha" style="margin-top:10px"><button class="btn">Verificar replay</button><button class="btn">${ic("copiar")}Copiar</button></div>`) +
+      mod("info", "Evento do registro", "イベント", `<b>Venceu Gabumon na Arena</b><div class="mini" style="margin:6px 0 10px">D3 12:10 · 9 turnos · regra nova: defender cedo</div><button class="btn prim">Ver a luta no palco</button>`, { cls: "cresce" }) }));
+add("Diário", "Diário · Catálogo", "as 15 formas no painel; a ficha da forma na coluna",
+  tela({ destino: "diario", aba: "Catálogo",
+    painel: `<div class="linha"><div class="pilulas"><span class="on">Coragem</span><span>Amizade</span><span>Conhecimento</span><span>Sinceridade</span></div><span class="mini" style="margin-left:auto">4 de 15 vistas</span></div>
+      <div style="flex:1;display:grid;grid-template-columns:repeat(5,1fr);gap:10px">${Array.from({ length: 15 }, (_, k) => `<div class="no ${k === 1 ? "agora" : ""}">${k < 4 ? pet(48, ["#F7B7CF", "#ffd0a8", "#bcd3f2", "#cde9c4"][k]) : pet(48, "#ddd", "sil")}${k < 4 ? ["Koromon", "Agumon", "Greymon", "Tyrannomon"][k] : "?"}</div>`).join("")}</div>`,
+    lado: mod("grade", "Ficha: Agumon", "図鑑", `<div class="cena" style="height:120px;display:flex;align-items:center;justify-content:center">${pet(90)}</div><div class="pilulas" style="margin:8px 0"><span>Rookie</span><span class="on">seu pet</span></div>
+      <div class="barras-est"><ul>${["Força", "Defesa", "Velocidade", "Vigor", "Técnica", "Foco"].map((n, k) => `<li><span class="r" style="width:80px">${n}</span><span class="trilho"><i style="width:${40 + (k * 17) % 50}%;background:var(--primary)"></i></span></li>`).join("")}</ul></div>`, { cls: "cresce" }) }));
+add("Diário", "Diário · Gerações", "as gerações em linhas de cards, sem coluna",
+  tela({ destino: "diario", aba: "Gerações", semLado: true,
+    painel: [3, 2, 1].map(g => `<div><div class="mini" style="font-weight:900;color:var(--primary);letter-spacing:.1em;margin-bottom:8px">GERAÇÃO ${g}</div><div class="cols4">${(g === 3 ? [["Agumon", "você · agora"]] : g === 2 ? [["Greymon", "aposentado"], ["Garurumon", "log de outro dono"]] : [["MetalGreymon", "aposentado"], ["WereGarurumon", "aposentado"]]).map(([n, s]) =>
+      `<div class="cartao linha">${pet(50)}<div><b>${n}</b><div class="mini">${s}</div><div class="mini" style="color:var(--health)">✓ origem conferida</div></div></div>`).join("")}</div></div>`).join("") }));
+add("Diário", "Diário · Cenários", "a ferramenta de pesquisa: os dois pets e a comparação",
+  tela({ destino: "diario", aba: "Cenários",
+    painel: `<div class="cols2">${["Pet A · vira o seu", "Pet B · rival fixo"].map(t => mod("frasco", t, "シナリオ", `<div class="cols3">${[["Dono simulado", "atencioso"], ["Dias de vida", "6"], ["Interações por dia", "12"]].map(([a, b]) => `<div class="cartao" style="padding:8px"><div class="mini">${a}</div><b>${b}</b></div>`).join("")}</div>`)).join("")}</div>
+      ${mod("lista", "Comparação A × B", "比較", `<table class="tab"><tr><th></th><th>A</th><th>B</th></tr>${[["Perfil", "atencioso", "ausente"], ["Estado no fim", "Champion", "Rookie"], ["Sinal de aprendizado", "0,42", "0,08"], ["JSD", "0,31", "—"], ["Na arena", "7 V · 3 D", "—"]].map(r => `<tr>${r.map((c, k) => k ? `<td>${c}</td>` : `<td><b>${c}</b></td>`).join("")}</tr>`).join("")}</table>`, { cls: "cresce" })}`,
+    lado: mod("frasco", "Cenários prontos", "プリセット", `<div style="display:flex;flex-direction:column;gap:8px">${["Atencioso × ausente", "Elogio × bronca", "Treino pesado", "Só carinho", "Dono incoerente"].map(n => `<button class="btn" style="justify-content:flex-start">${n}</button>`).join("")}</div>
+      <div class="cartao" style="margin-top:10px"><div class="mini">Semente</div><b>101</b></div><button class="btn prim" style="margin-top:10px;width:100%">Simular e comparar</button>`, { cls: "cresce" }) }));
+
+add("Outras", "Conversar", "a conversa no painel; o que o pet pode citar na coluna",
+  tela({ destino: "pet", extra: "conversar", titulo: "Conversar", tituloJp: "会話",
+    painel: `<div class="linha"><span class="chip" style="color:var(--health)">● frases prontas</span><div class="pilulas" style="margin-left:auto"><span class="on">Frases prontas</span><span>Moldura</span><span>Livre</span></div></div>
+      <div class="cena" style="flex:1;padding:16px;display:flex;flex-direction:column;gap:12px;justify-content:flex-end">
+        <div class="fala-p pet">Brincar! Brincar!</div><div class="fala-p eu">Quer brincar de bola?</div><div class="fala-p pet">Bola! Feliz!</div></div>
+      <div class="linha"><div class="pilulas"><span>Carinho</span><span>Tapa</span></div><div class="campo" style="flex:1">Escreva para Agumon<button class="btn prim">${ic("enviar")}</button></div></div>`,
+    lado: mod("info", "O que o pet pode citar", "話せること", `<ol class="lista">${["Identidade · Agumon, Rookie", "Só os extremos · humor alto", "Estado · fome 38", "Memórias · elogio na luta", "Motivos recentes · brincou", "Vínculo · alto"].map(t => `<li>${t}</li>`).join("")}</ol>`, { cls: "cresce" }) }));
+add("Outras", "Ajustes", "a lista de ajustes na coluna do painel e a parte aberta ao lado",
+  tela({ destino: "pet", extra: "ajustes", titulo: "Ajustes", tituloJp: "設定",
+    painel: `<div style="display:grid;grid-template-columns:260px 1fr;gap:14px;flex:1">
+      <div class="cartao" style="padding:6px">${[["tema", "Aparência", 1], ["conversar", "Fala do pet", 0], ["db", "Registro e replay", 0], ["pausa", "Tempo · TESTE", 0], ["info", "Sobre o Digilab", 0]].map(([i, n, on]) => `<div class="opc ${on ? "on" : ""}">${ic(i)}${n}</div>`).join("")}</div>
+      <div style="display:flex;flex-direction:column;gap:12px">${mod("tema", "Aparência", "外観", `<div class="mini" style="margin-bottom:8px">TEMA</div><div class="pilulas"><span class="on">Claro</span><span>Escuro</span><span>Sistema</span></div><div class="opc" style="padding:12px 0 0">Mostrar dicas<span class="sw"></span></div>`)}
+        ${mod("db", "Registro e replay", "記録", `<div class="linha"><button class="btn">Verificar replay</button><button class="btn">${ic("copiar")}Copiar registro</button><button class="btn">${ic("baixar")}Exportar pet</button></div><div class="risco" style="margin-top:12px">Novo ovo (apaga este pet)</div>`)}</div></div>`, semLado: true }));
+
+/* monta o mapa (com ?tela=N mostra uma tela só, em tamanho real, para a captura) */
+const alvo = document.getElementById("mapa"), q = new URLSearchParams(location.search), uma = q.get("tela");
+if (uma !== null) { document.body.classList.add("uma"); document.querySelector(".mapa-cab").remove(); }
+let grupo = "", html = "";
+TELAS.forEach((t, k) => {
+  if (uma !== null && String(k) !== uma) return;
+  if (uma === null && t.grupo !== grupo) { if (grupo) html += "</div>"; grupo = t.grupo; html += `<div class="grupo">${grupo}</div><div class="grade">`; }
+  html += `<figure class="quadro">${uma === null ? `<figcaption>${t.nome}<small>${t.nota}</small></figcaption>` : ""}<div class="moldura">${t.html}</div></figure>`;
+});
+alvo.innerHTML = uma === null ? html + "</div>" : `<div class="grade">${html}</div>`;
+</script>
+</body>
+</html>
