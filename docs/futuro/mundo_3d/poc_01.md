@@ -1,7 +1,7 @@
 # Mundo 3D, anexo 3: a especificação do WORLD-POC-01
 
-Status: **INVESTIGAÇÃO FEITA; W-1 a W-7 DECIDIDAS em 2026-10-18** (worker A). Anexo de `docs/futuro/mundo_3d.md`. **Não começa agora:** vem depois do Gate C (W-5), quando
-virar `docs/TAREFA_V2_WORLD_POC_01.md`, pelo modelo `docs/modelos/TAREFA_V2_MODELO.md`. Os números e os nomes são PROPOSTOS.
+Status: **INVESTIGAÇÃO FEITA; W-1 a W-7 DECIDIDAS em 2026-10-18** (worker A). Anexo de `docs/futuro/mundo_3d.md`. **Virou a tarefa** `docs/TAREFA_V2_WORLD_POC_01.md`
+(2026-10-19), que avança em paralelo ao Gate C. Os números e os nomes são PROPOSTOS.
 
 ## 1. A pergunta
 
