@@ -45,7 +45,12 @@ for (const [largura, altura] of [[390, 844], [1280, 800]]) {
       await page.evaluate(() => document.fonts.ready);
       await page.clock.runFor(1000);
       await page.waitForLoadState("networkidle");
-      await expect(page).toHaveScreenshot(`${nome}_${largura}.png`, { fullPage: true, animations: "disabled", caret: "hide", threshold: 0, maxDiffPixels: 4 });   /* 4 px: o ruído medido entre duas rodadas do mesmo build (2 px no Pet de 390) */
+      /* toda imagem decodificada antes da captura */
+      await page.evaluate(() => Promise.all([...document.images].map(i => i.decode().catch(() => undefined))));
+      /* refaz o layout e a pintura da página inteira, com as fontes e as imagens já prontas: sem isso o texto de um select
+         ou um ícone pequeno às vezes fica como foi pintado antes de a fonte ou a imagem chegarem */
+      await page.evaluate(() => { const h = document.documentElement; h.style.display = "none"; void h.offsetHeight; h.style.display = ""; void h.offsetHeight; });
+      await expect(page).toHaveScreenshot(`${nome}_${largura}.png`, { fullPage: true, animations: "disabled", caret: "hide", threshold: 0, maxDiffPixels: 0 });
       expect(erros).toEqual([]);
     });
   }

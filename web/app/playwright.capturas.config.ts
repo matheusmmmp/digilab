@@ -8,6 +8,7 @@ export default defineConfig({
   ...base,
   testDir: "e2e_capturas",
   fullyParallel: true,
+  retries: 0,
   workers: 3,
   snapshotPathTemplate: `${PASTA}/{arg}{ext}`,
   use: { ...base.use, colorScheme: "light", deviceScaleFactor: 1 },
