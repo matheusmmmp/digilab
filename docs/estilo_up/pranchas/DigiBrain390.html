@@ -68,6 +68,29 @@ body{margin:0;width:390px;background:var(--dl-bg)}
 .ult li{display:grid;grid-template-columns:48px 1fr;gap:6px;font-size:13px;font-weight:700;padding:4px 0}
 .lcd{font-family:var(--dl-f-lcd);font-weight:400;color:var(--dl-text-2)}
 .nota{margin:0;font-size:10px;color:var(--dl-muted);font-weight:700}
+
+/* ---------- o mapa dos pesos (o componente MapaPesos): uma aresta por peso, entrada -> regra -> acao; acende so na decisao, sem animar */
+.mp{display:block;width:100%;height:auto;font-family:var(--dl-f-texto)}
+.mp-reg rect{fill:var(--c);fill-opacity:.10;stroke:var(--c);stroke-opacity:.45;stroke-width:1}
+.mp-reg text{font-size:8px;font-weight:900;letter-spacing:.3px;text-transform:uppercase;fill:var(--dl-text-2)}
+.mp-reg--percepcao{--c:var(--dl-action)}.mp-reg--impulsos{--c:var(--dl-highlight-press)}.mp-reg--decisao{--c:#1AA7C9}.mp-reg--memoria_emocao{--c:var(--dl-dark)}
+.mp-dest rect{fill-opacity:.22;stroke-opacity:1;stroke-width:2}
+.mp-dest text{fill:var(--dl-text)}
+.mp-reg .mp-mais-peso{font-size:8px;fill:var(--dl-text);text-transform:none;letter-spacing:0}
+.mp-pesos path,.mp-acesas path{fill:none;stroke-linecap:round}
+.mp-prior{stroke:var(--dl-muted);stroke-opacity:.5}.mp-mais{stroke:#E34948}.mp-menos{stroke:#2A78D6}
+.mp-pesos--fundo{opacity:.4}
+.mp-acesas path{stroke:#F08A00}.mp-acesas .mp-neg{stroke-dasharray:3 2}
+.mp-no circle{fill:var(--dl-surface);stroke:var(--dl-muted);stroke-width:1.2}
+.mp-no text{font-size:9px;font-weight:700;fill:var(--dl-text-2);paint-order:stroke;stroke:var(--dl-surface);stroke-width:3px;stroke-linejoin:round}
+.mp-corpo circle{stroke:var(--dl-ok-edge)}
+.mp-lit circle{fill:#F08A00;stroke:#F08A00}.mp-lit text{font-weight:900;fill:var(--dl-text)}
+.mp-cand circle{stroke:var(--dl-action);stroke-width:2}.mp-cand text{fill:var(--dl-text)}
+.mp-esc circle{fill:var(--dl-action);stroke:var(--dl-navy)}.mp-esc text{font-weight:900}
+.mp-pct{font-family:var(--dl-f-lcd);font-weight:400}
+.mp-leg{display:flex;flex-wrap:wrap;gap:2px 10px;list-style:none;margin:6px 0 0;padding:0;font-size:11px;font-weight:700;color:var(--dl-text-2)}
+.mp-leg i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:4px;background:var(--c)}
+.mp-nota{margin:4px 0 0;font-size:11px;font-weight:700;color:var(--dl-text-2)}
 </style>
 </head>
 <body>
@@ -92,27 +115,30 @@ body{margin:0;width:390px;background:var(--dl-bg)}
   <section class="folha" role="dialog" aria-labelledby="db-tit">
     <span class="alca"></span>
     <div class="folha-cab">
-      <svg width="32" height="28" viewBox="0 0 64 56" aria-label="o cérebro A (ícone estático)"><path d="M32 4C20 4 8 11 8 26c0 13 10 24 24 24s24-11 24-24C56 11 44 4 32 4z" fill="#F4F8FE" stroke="#173A8A" stroke-width="2"/><path d="M32 6v42" stroke="#173A8A" stroke-width="1.5"/><path d="M12 18c6 0 10 4 10 10" fill="none" stroke="#FFD23F" stroke-width="5" stroke-linecap="round"/><path d="M52 18c-6 0-10 4-10 10" fill="none" stroke="#6FE3FF" stroke-width="5" stroke-linecap="round"/><path d="M14 38c5-2 10-1 13 3" fill="none" stroke="#E5489F" stroke-width="5" stroke-linecap="round"/><path d="M50 38c-5-2-10-1-13 3" fill="none" stroke="#7B3FB8" stroke-width="5" stroke-linecap="round"/></svg>
       <h2 id="db-tit">DigiBrain</h2>
       <span class="selo"><i></i>ao vivo</span>
       <span class="fechar" aria-label="Fechar">×</span>
     </div>
     <div class="rola">
       <div><p class="sec-tit">Agora</p>
-        <div class="agora-box"><b>Tempo livre: decidiu brincar</b><small>Sem o aprendido, teria decidido explorar.</small></div></div>
+        <div class="agora-box"><b>Tempo livre: decidiu brincar</b><small>Sem o aprendido, teria decidido chamar você.</small></div></div>
+      <div><p class="sec-tit">Mapa dos pesos</p>
+        <div id="mapa"></div>
+        <ul class="mp-leg"><li><i style="--c:var(--dl-muted)"></i>instinto</li><li><i style="--c:#E34948"></i>aprendeu a mais</li><li><i style="--c:#2A78D6"></i>aprendeu a menos</li><li><i style="--c:#F08A00"></i>esta decisão</li></ul>
+        <p class="mp-nota">Cada traço é um peso do pet, da entrada à ação, passando pela regra; a espessura é o tamanho do peso.</p></div>
       <div><p class="sec-tit">O peso de cada lobo nesta escolha</p>
-        <div class="barra"><span>Impulsos</span><span class="trilho"><b style="--v:100%;--c:#FFD23F"></b></span><em>100%</em></div>
-        <div class="barra"><span>Aprendido</span><span class="trilho"><b style="--v:3%;--c:#6FE3FF"></b></span><em>+3,1%</em></div>
-        <div class="barra"><span>Corpo</span><span class="trilho"><b class="neg" style="--v:3%"></b></span><em>−3,1%</em></div>
+        <div class="barra"><span>Impulsos</span><span class="trilho"><b style="--v:96%;--c:#FFD23F"></b></span><em>96%</em></div>
+        <div class="barra"><span>Aprendido</span><span class="trilho"><b style="--v:4%;--c:#6FE3FF"></b></span><em>+4,0%</em></div>
+        <div class="barra"><span>Corpo</span><span class="trilho"><b style="--v:1%;--c:#3FCF6A"></b></span><em>+0,4%</em></div>
         <div class="barra"><span>Memória e emoção</span><span class="trilho"><b style="--v:0%;--c:#7B3FB8"></b></span><em>0%</em></div>
         <span class="emo">emoção de hoje: alegria · da memória do pet</span></div>
       <div><p class="sec-tit">O que mais pesou</p>
-        <div class="chips"><span class="chip">humor 99% <span class="s">a favor</span></span><span class="chip">tédio 40% <span class="s">a favor</span></span><span class="chip">saúde 100% <span class="s menos">contra</span></span></div></div>
+        <div class="chips"><span class="chip">humor 98% <span class="s">a favor</span></span><span class="chip">energia 46% <span class="s">a favor</span></span><span class="chip">saúde 100% <span class="s">a favor</span></span></div></div>
       <div><p class="sec-tit">As opções e a chance de cada uma</p>
-        <div class="opc esc"><span>brincar</span><span class="trilho"><b style="--v:35%"></b></span><em>35%</em></div>
-        <div class="opc"><span>explorar</span><span class="trilho"><b style="--v:30%"></b></span><em>30%</em></div>
-        <div class="opc"><span>à toa</span><span class="trilho"><b style="--v:27%"></b></span><em>27%</em></div>
-        <div class="opc"><span>chamar você</span><span class="trilho"><b style="--v:9%"></b></span><em>9%</em></div></div>
+        <div class="opc esc"><span>brincar</span><span class="trilho"><b style="--v:38%"></b></span><em>38%</em></div>
+        <div class="opc"><span>explorar</span><span class="trilho"><b style="--v:26%"></b></span><em>26%</em></div>
+        <div class="opc"><span>à toa</span><span class="trilho"><b style="--v:35%"></b></span><em>35%</em></div>
+        <div class="opc"><span>chamar você</span><span class="trilho"><b style="--v:1%"></b></span><em>1%</em></div></div>
       <div><p class="sec-tit">O que aprendeu desde que nasceu</p>
         <div class="apr"><span>mais à toa do que o instinto</span><em>+0,96</em><span>menos chamar você</span><em>−0,86</em><span>menos explorar</span><em>−0,79</em></div></div>
       <div><p class="sec-tit">Últimas ações</p>
@@ -121,5 +147,74 @@ body{margin:0;width:390px;background:var(--dl-bg)}
     </div>
   </section>
 </div>
+<script>
+const EX_ARESTAS=[{"regra":"sono_exaustao","acao":"dormir","entrada":"vies","espessura":1.0,"aprendido":0.0},{"regra":"sono_continuar","acao":"dormir","entrada":"vies","espessura":1.0,"aprendido":0.0},{"regra":"sono_noite","acao":"dormir","entrada":"vies","espessura":1.0,"aprendido":0.0},{"regra":"pedido_necessidade","acao":"chamar_atencao","entrada":"vies","espessura":1.0,"aprendido":0.0},{"regra":"abandono","acao":"chamar_atencao","entrada":"vies","espessura":1.0,"aprendido":0.0},{"regra":"abandono","acao":"emburrar","entrada":"vies","espessura":1.0,"aprendido":0.0},{"regra":"fome_moderada","acao":"comer","entrada":"vies","espessura":1.0,"aprendido":0.0},{"regra":"fome_moderada","acao":"chamar_atencao","entrada":"vies","espessura":1.0,"aprendido":0.0},{"regra":"tempo_livre","acao":"ocioso","entrada":"vies","espessura":1.7908185977368003,"aprendido":0.012939453125},{"regra":"tempo_livre","acao":"ocioso","entrada":"fome","espessura":0.3801726581436387,"aprendido":0.009033203125},{"regra":"tempo_livre","acao":"ocioso","entrada":"higiene","espessura":0.369754986443726,"aprendido":0.008544921875},{"regra":"tempo_livre","acao":"ocioso","entrada":"energia","espessura":0.2538762001448738,"aprendido":0.0040283203125},{"regra":"tempo_livre","acao":"ocioso","entrada":"humor","espessura":0.45714808869774354,"aprendido":0.0130615234375},{"regra":"tempo_livre","acao":"ocioso","entrada":"saude","espessura":0.4550068680800324,"aprendido":0.012939453125},{"regra":"tempo_livre","acao":"ocioso","entrada":"sujeira","espessura":0.21194781197266463,"aprendido":0.0028076171875},{"regra":"tempo_livre","acao":"ocioso","entrada":"dormindo","espessura":0.08267972847076846,"aprendido":-0.00042724609375},{"regra":"tempo_livre","acao":"ocioso","entrada":"hora","espessura":0.3915613776919271,"aprendido":0.00958251953125},{"regra":"tempo_livre","acao":"ocioso","entrada":"ticks_sem_cuidado","espessura":0.08838834764831845,"aprendido":0.00048828125},{"regra":"tempo_livre","acao":"brincar","entrada":"vies","espessura":1.0373870420436144,"aprendido":0.0047607421875},{"regra":"tempo_livre","acao":"brincar","entrada":"fome","espessura":0.15934435979977452,"aprendido":0.0015869140625},{"regra":"tempo_livre","acao":"brincar","entrada":"higiene","espessura":0.23593232610221093,"aprendido":0.00347900390625},{"regra":"tempo_livre","acao":"brincar","entrada":"energia","espessura":0.3217384419058438,"aprendido":0.0064697265625},{"regra":"tempo_livre","acao":"brincar","entrada":"humor","espessura":1.7486043541922227,"aprendido":0.00360107421875},{"regra":"tempo_livre","acao":"brincar","entrada":"saude","espessura":0.27599252707274524,"aprendido":0.0047607421875},{"regra":"tempo_livre","acao":"brincar","entrada":"sujeira","espessura":0.03125,"aprendido":-6.103515625e-05},{"regra":"tempo_livre","acao":"brincar","entrada":"dormindo","espessura":0.125,"aprendido":0.0009765625},{"regra":"tempo_livre","acao":"brincar","entrada":"hora","espessura":0.10825317547305482,"aprendido":0.000732421875},{"regra":"tempo_livre","acao":"brincar","entrada":"ticks_sem_cuidado","espessura":0.23799290955824715,"aprendido":0.0035400390625},{"regra":"tempo_livre","acao":"chamar_atencao","entrada":"vies","espessura":0.9228014412645875,"aprendido":-0.00927734375},{"regra":"tempo_livre","acao":"chamar_atencao","entrada":"fome","espessura":0.2460627460628691,"aprendido":-0.0037841796875},{"regra":"tempo_livre","acao":"chamar_atencao","entrada":"higiene","espessura":0.240035804620894,"aprendido":-0.00360107421875},{"regra":"tempo_livre","acao":"chamar_atencao","entrada":"energia","espessura":0.4739297152532219,"aprendido":-0.0140380859375},{"regra":"tempo_livre","acao":"chamar_atencao","entrada":"humor","espessura":0.375,"aprendido":-0.0087890625},{"regra":"tempo_livre","acao":"chamar_atencao","entrada":"saude","espessura":0.385275875185561,"aprendido":-0.00927734375},{"regra":"tempo_livre","acao":"chamar_atencao","entrada":"sujeira","espessura":0.15934435979977452,"aprendido":-0.0015869140625},{"regra":"tempo_livre","acao":"chamar_atencao","entrada":"dormindo","espessura":0.08267972847076846,"aprendido":-0.00042724609375},{"regra":"tempo_livre","acao":"chamar_atencao","entrada":"hora","espessura":0.42042575147105343,"aprendido":-0.01104736328125},{"regra":"tempo_livre","acao":"chamar_atencao","entrada":"ticks_sem_cuidado","espessura":0.21875,"aprendido":-0.00299072265625},{"regra":"tempo_livre","acao":"explorar","entrada":"vies","espessura":1.3513592694024783,"aprendido":-0.0108642578125},{"regra":"tempo_livre","acao":"explorar","entrada":"fome","espessura":0.3247595264191645,"aprendido":-0.006591796875},{"regra":"tempo_livre","acao":"explorar","entrada":"higiene","espessura":0.3521696146745201,"aprendido":-0.00775146484375},{"regra":"tempo_livre","acao":"explorar","entrada":"energia","espessura":1.3919410907075054,"aprendido":-0.00390625},{"regra":"tempo_livre","acao":"explorar","entrada":"humor","espessura":0.40745015032516557,"aprendido":-0.0103759765625},{"regra":"tempo_livre","acao":"explorar","entrada":"saude","espessura":0.41692700200394794,"aprendido":-0.0108642578125},{"regra":"tempo_livre","acao":"explorar","entrada":"sujeira","espessura":0.15934435979977452,"aprendido":-0.0015869140625},{"regra":"tempo_livre","acao":"explorar","entrada":"dormindo","espessura":0.07654655446197431,"aprendido":-0.0003662109375},{"regra":"tempo_livre","acao":"explorar","entrada":"hora","espessura":0.2829807855667943,"aprendido":-0.0050048828125},{"regra":"tempo_livre","acao":"explorar","entrada":"ticks_sem_cuidado","espessura":0.2209708691207961,"aprendido":-0.0030517578125},{"regra":"tempo_livre","acao":"ocioso","entrada":"tedio","espessura":0.0625,"aprendido":0.000244140625},{"regra":"tempo_livre","acao":"ocioso","entrada":"solidao","espessura":0.03125,"aprendido":-6.103515625e-05},{"regra":"tempo_livre","acao":"ocioso","entrada":"estresse","espessura":0.07654655446197431,"aprendido":-0.0003662109375},{"regra":"tempo_livre","acao":"ocioso","entrada":"dor","espessura":0.0625,"aprendido":0.000244140625},{"regra":"tempo_livre","acao":"ocioso","entrada":"susto","espessura":0.0625,"aprendido":0.000244140625},{"regra":"tempo_livre","acao":"brincar","entrada":"tedio","espessura":0.11692679333668567,"aprendido":0.0008544921875},{"regra":"tempo_livre","acao":"brincar","entrada":"solidao","espessura":0.23593232610221093,"aprendido":0.00347900390625},{"regra":"tempo_livre","acao":"brincar","entrada":"estresse","espessura":0.21650635094610965,"aprendido":0.0029296875},{"regra":"tempo_livre","acao":"brincar","entrada":"dor","espessura":0.125,"aprendido":0.0009765625},{"regra":"tempo_livre","acao":"brincar","entrada":"susto","espessura":0.08838834764831845,"aprendido":0.00048828125},{"regra":"tempo_livre","acao":"chamar_atencao","entrada":"tedio","espessura":0.08838834764831845,"aprendido":-0.00048828125},{"regra":"tempo_livre","acao":"chamar_atencao","entrada":"solidao","espessura":0.184877493221863,"aprendido":-0.00213623046875},{"regra":"tempo_livre","acao":"chamar_atencao","entrada":"estresse","espessura":0.2688226645950821,"aprendido":-0.0045166015625},{"regra":"tempo_livre","acao":"chamar_atencao","entrada":"dor","espessura":0.1926379375927805,"aprendido":-0.0023193359375},{"regra":"tempo_livre","acao":"chamar_atencao","entrada":"susto","espessura":0.15309310892394862,"aprendido":-0.00146484375},{"regra":"tempo_livre","acao":"explorar","entrada":"tedio","espessura":0.13258252147247765,"aprendido":-0.0010986328125},{"regra":"tempo_livre","acao":"explorar","entrada":"solidao","espessura":0.2275034340400162,"aprendido":-0.00323486328125},{"regra":"tempo_livre","acao":"explorar","entrada":"estresse","espessura":0.14320549046737,"aprendido":-0.00128173828125},{"regra":"tempo_livre","acao":"explorar","entrada":"dor","espessura":0.09375,"aprendido":-0.00054931640625},{"regra":"tempo_livre","acao":"explorar","entrada":"susto","espessura":0.07654655446197431,"aprendido":-0.0003662109375}];
+const EX_ACESAS={"acao":"brincar","arestas":[{"entrada":"vies","forca":0.5938843669984021,"termo":1.0400390625},{"entrada":"fome","forca":0.02114433221525312,"termo":0.001318359375},{"entrada":"higiene","forca":0.08962359434862904,"termo":0.0236859375},{"entrada":"energia","forca":0.12130313750717533,"termo":0.043390028211805556},{"entrada":"humor","forca":1.0,"termo":2.9488037109375},{"entrada":"saude","forca":0.11652497484004473,"termo":0.0400390625},{"entrada":"sujeira","forca":0.023019033279672193,"termo":-0.0015625},{"entrada":"hora","forca":0.06407150916455942,"termo":-0.012105305989583332},{"entrada":"ticks_sem_cuidado","forca":0.03900414548535955,"termo":0.004486083984375},{"entrada":"tedio","forca":0.014114563997902356,"termo":0.00058746337890625},{"entrada":"solidao","forca":0.05344494584530367,"termo":0.0084228515625},{"entrada":"estresse","forca":0.03729162762611105,"termo":0.004100799560546875},{"entrada":"dor","forca":0.02452638737165106,"termo":0.001773834228515625},{"entrada":"susto","forca":0.019368951236241973,"termo":0.00110626220703125}],"lobo_decisivo":"impulsos","n":262,"regra":"tempo_livre"};
+const EX_LEITURA={"acao":"brincar","barras":{"corpo":0.0038964125755194985,"decisao":0.03973953102582593,"impulsos":0.9563640563986545,"memoria_emocao":0.0,"piso":0.0},"chances":[{"acao":"ocioso","chance":0.3488536509549079},{"acao":"explorar","chance":0.2613075300282142},{"acao":"brincar","chance":0.38399112302896304},{"acao":"chamar_atencao","chance":0.0058476959879148705}],"n":262,"percepcao":[{"entrada":"humor","termo":2.9488037109375,"x":0.975},{"entrada":"energia","termo":0.043390028211805556,"x":0.45805555555555555},{"entrada":"saude","termo":0.0400390625,"x":1.0}],"quem_decidiu":{"acao_instinto":"chamar_atencao","escolha":true,"mudou":true},"regra":"tempo_livre"};
+const EX_RECEPTORES=["tedio", "solidao", "estresse", "dor", "susto"];
+/* o desenho do mapa dos pesos (o mesmo do componente MapaPesos em web/app/src/componentes/MapaPesos.tsx): colunas fixas, geradas da
+   estrutura do cerebro A (as entradas, os receptores novos, as regras, as acoes); os numeros sao os do gabarito (vida v11, semente 101) */
+function svgMapa(arestas, acesas, leitura, receptores) {
+  const ENTRADAS = ["vies", "fome", "higiene", "energia", "humor", "saude", "sujeira", "dormindo", "hora", "ticks_sem_cuidado"];
+  const REGRAS = ["sono_exaustao", "sono_continuar", "sono_noite", "pedido_necessidade", "abandono", "fome_moderada", "tempo_livre"];
+  const ACOES = ["ocioso", "dormir", "comer", "brincar", "chamar_atencao", "explorar", "emburrar"];
+  const TXT_E = { vies: "viés", fome: "comida", higiene: "higiene", energia: "energia", humor: "humor", saude: "saúde", sujeira: "sujeira",
+    dormindo: "dormindo", hora: "hora", ticks_sem_cuidado: "sem cuidado", tedio: "tédio", curiosidade: "curiosidade", solidao: "solidão",
+    estresse: "estresse", dor: "dor", susto: "susto", vontade: "vontade", conforto: "conforto" };
+  const TXT_R = { sono_exaustao: "exausto", sono_continuar: "sono", sono_noite: "noite", pedido_necessidade: "precisando",
+    abandono: "sem cuidado", fome_moderada: "fome", tempo_livre: "tempo livre" };
+  const TXT_A = { ocioso: "à toa", dormir: "dormir", comer: "comer", brincar: "brincar", chamar_atencao: "chamar você", explorar: "explorar",
+    emburrar: "emburrar" };
+  const W = 284, XE = 72, XR = 142, XA = 204, Y0 = 36, SPAN = 192, YB = Y0 + SPAN + 20;
+  const entradas = [...ENTRADAS, ...receptores];
+  const ye = {}; entradas.forEach((e, i) => ye[e] = Y0 + i * SPAN / (entradas.length - 1));
+  const yr = {}; REGRAS.forEach((r, i) => yr[r] = Y0 + i * SPAN / 6);
+  const ya = {}; ACOES.forEach((a, i) => ya[a] = Y0 + i * SPAN / 6);
+  const YM = YB + 8, H = YM + 22;
+  const f = v => Math.round(v * 10) / 10;
+  const curva = (e, r, a) => `M${XE} ${f(ye[e])}C${XE + 34} ${f(ye[e])} ${XR - 30} ${f(yr[r])} ${XR} ${f(yr[r])}C${XR + 26} ${f(yr[r])} ${XA - 26} ${f(ya[a])} ${XA} ${f(ya[a])}`;
+  const aceso = acesas !== null;
+  const top = new Set(aceso ? leitura.percepcao.map(p => p.entrada) : []);
+  const chance = {}; if (aceso) leitura.chances.forEach(c => chance[c.acao] = c.chance);
+  const dest = aceso ? acesas.lobo_decisivo : null;
+  let s = `<svg class="mp" viewBox="0 0 ${W} ${H}" role="img" aria-label="Mapa dos pesos">`;
+  const regiao = (lobo, x, y, w, h, txt) => s += `<g class="mp-reg mp-reg--${lobo}${dest === lobo ? " mp-dest" : ""}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="8"/>`
+    + `<text x="${x + 6}" y="${y + 11}">${txt}</text>${dest === lobo ? `<text class="mp-mais-peso" x="${x + w - 6}" y="${y + h - 5}" text-anchor="end">pesou mais</text>` : ""}</g>`;
+  regiao("percepcao", 0, 4, 94, YB, "percepção");
+  regiao("impulsos", 102, 4, 82, YB, "impulsos");
+  regiao("decisao", 192, 4, 92, YB, "decisão");
+  regiao("memoria_emocao", 0, YM, 284, 18, "memória e emoção: sem pesos");
+  s += `<g class="mp-pesos${aceso ? " mp-pesos--fundo" : ""}">`;
+  for (const a of arestas) {
+    const cls = a.aprendido > 0 ? "mais" : a.aprendido < 0 ? "menos" : "prior";
+    const op = cls === "prior" ? 1 : 0.35 + 0.65 * Math.sqrt(Math.abs(a.aprendido));
+    s += `<path class="mp-${cls}" d="${curva(a.entrada, a.regra, a.acao)}" stroke-width="${f(0.4 + a.espessura * 1.4)}"${cls === "prior" ? "" : ` stroke-opacity="${f(op)}"`}${a.w < 0 ? ' stroke-dasharray="3 2"' : ""}/>`;
+  }
+  s += `</g>`;
+  if (aceso) {
+    s += `<g class="mp-acesas">`;
+    for (const x of acesas.arestas) {
+      s += `<path class="${x.termo < 0 ? "mp-neg" : ""}" d="${curva(x.entrada, acesas.regra, acesas.acao)}" stroke-width="${f(0.6 + 3 * x.forca)}" stroke-opacity="${f(0.35 + 0.65 * x.forca)}"/>`;
+    }
+    s += `</g>`;
+  }
+  s += `<g class="mp-nos">`;
+  entradas.forEach((e, i) => {
+    const corpo = i >= ENTRADAS.length, lit = top.has(e);
+    s += `<g class="mp-no mp-ent${corpo ? " mp-corpo" : ""}${lit ? " mp-lit" : ""}"><circle cx="${XE}" cy="${f(ye[e])}" r="${lit ? 4 : 3}"/><text x="${XE - 7}" y="${f(ye[e] + 3)}" text-anchor="end">${TXT_E[e] ?? e}</text></g>`;
+  });
+  REGRAS.forEach(r => {
+    const lit = aceso && r === acesas.regra;
+    s += `<g class="mp-no mp-regra${lit ? " mp-lit" : ""}"><circle cx="${XR}" cy="${f(yr[r])}" r="${lit ? 5.5 : 4}"/><text x="${XR}" y="${f(yr[r] - 8)}" text-anchor="middle">${TXT_R[r]}</text></g>`;
+  });
+  ACOES.forEach(a => {
+    const cand = a in chance, esc = aceso && a === acesas.acao;
+    s += `<g class="mp-no mp-acao${cand ? " mp-cand" : ""}${esc ? " mp-esc" : ""}"><circle cx="${XA}" cy="${f(ya[a])}" r="${esc ? 6 : cand ? 5 : 4}"/><text x="${XA + 9}" y="${f(ya[a] + 3)}">${TXT_A[a]}${cand ? ` <tspan class="mp-pct">${Math.round(chance[a] * 100)}%</tspan>` : ""}</text></g>`;
+  });
+  s += `</g></svg>`;
+  return s;
+}
+document.getElementById("mapa").innerHTML = svgMapa(EX_ARESTAS, EX_ACESAS, EX_LEITURA, EX_RECEPTORES);
+</script>
 </body>
 </html>
