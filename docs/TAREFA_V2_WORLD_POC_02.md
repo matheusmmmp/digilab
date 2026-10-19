@@ -1,6 +1,6 @@
 # TAREFA V2 — WORLD_POC_02 (2026-10-19)
 
-Coordenador: Gerente. Worker: A. Worktree e branch: `v2-world-poc-02`. Status: ABERTA.
+Coordenador: Gerente. Worker: A. Worktree e branch: `v2-world-poc-02`. Status: EM ANDAMENTO.
 
 Categoria: implementacao. Origem: Matheus, 2026-10-19: o Gate B do mundo 3D (organismo corporificado, ainda com o cérebro de teste), depois do Gate A aprovado em 2026-10-19.
 
@@ -123,9 +123,10 @@ mas com o mundo novo; aqui o mundo existe e o corpo já tem paridade. As hipóte
 
 ## 8. Precisa do Matheus
 
-Cada decisão vai com a recomendação e o custo de errar.
+**As sete DECIDIDAS em 2026-10-19, pela recomendação** (o Matheus, pelo coordenador), inclusive a CP-7: o Gate B fecha no POC, em TS, e a
+paridade do mundo com o Python fica para a entrada da P4.
 
-| # | decisão | recomendação | o custo de errar |
+| # | decisão | DECIDIDO (a recomendação) | o custo de errar |
 |---|---|---|---|
 | CP-1 | o contato (bater na parede, no obstáculo, na bola) tem efeito no corpo? | **não**: só registro. Uma dor por batida seria química nova e SEM FONTE; ela é do Sistema nociceptivo (J10, adiado) ou do proprioceptivo, que ainda é ideia (`docs/DEFINICOES_CORPO_V2.md`, 8.1) | baixo: o registro já guarda o contato, e o efeito entra depois, atrás de chave |
 | CP-2 | o `descansar` é dormir? | **sim**: `dormindo` nos ticks da Intenção, em qualquer lugar da sala. O POC não tem ninho; o conforto do ninho (`mundo_fisico.md`, 2.2) fica para depois | médio: sem dormir, o cansaço só sobe e o pet de teste se esgota; com o sono em qualquer lugar, o descanso fica fácil demais |

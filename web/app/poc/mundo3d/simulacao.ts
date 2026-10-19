@@ -10,6 +10,9 @@ import type { RegistroDecisao } from "./registro.ts";
 import { ler } from "./sensores.ts";
 import type { Cerebro, Observacao, ResultadoPercebido } from "./tipos.ts";
 
+/** as chaves da simulação: `corpo` liga o corpo químico do jogo (o corpo.ts), o POC-02 */
+export interface OpcoesSimulacao { corpo?: boolean }
+
 export type Evento = { tipo: "avancar"; ticks: number } | { tipo: "deixar_comida"; x: number; y: number };
 
 interface EmCurso {
@@ -30,10 +33,14 @@ export class Simulacao {
   private percebido: ResultadoPercebido | null = null;
   readonly semente: number;
   private readonly cerebro: Cerebro;
+  /** a chave do corpo (docs/TAREFA_V2_WORLD_POC_02.md): desligada, o POC-01a byte a byte (G-POC01-IGUAL) */
+  readonly comCorpo: boolean;
 
-  constructor(semente: number, cerebro: Cerebro = cerebroDeTeste) {
+  constructor(semente: number, cerebro: Cerebro = cerebroDeTeste, opcoes: OpcoesSimulacao = {}) {
     this.semente = semente;
     this.cerebro = cerebro;
+    this.comCorpo = opcoes.corpo ?? false;
+    if (this.comCorpo) throw new Error("o corpo do POC entra na etapa E1 (docs/TAREFA_V2_WORLD_POC_02.md)");
     this.mundo = new Mundo(new Rng(derivarSemente(semente, "ambiente")));
     this.rngPolitica = new Rng(derivarSemente(semente, "politica"));
   }
