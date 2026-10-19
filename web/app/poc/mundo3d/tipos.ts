@@ -24,8 +24,11 @@ export interface ResultadoPercebido {
   bola_afastou: number | null;
 }
 
-/** o corpo de brinquedo do POC, na escala inteira [0, 1024] */
+/** o corpo de brinquedo do POC-01a, na escala inteira [0, 1024] */
 export interface CorpoPoc { fome: number; tedio: number }
+
+/** a escala S dos receptores do corpo químico (a `escala_receptor` do corpo, a S do cérebro A) */
+export const ESCALA_RECEPTOR = 1024;
 
 export interface Observacao {
   vistos: Visto[];
@@ -33,7 +36,9 @@ export interface Observacao {
   obstaculos: number[];
   contato: Contato[];
   resultado: ResultadoPercebido | null;
-  corpo: CorpoPoc;
+  /** o corpo que o pet sente: com a chave do corpo desligada (o POC-01a), o de brinquedo (`CorpoPoc`); ligada (o POC-02), os receptores
+   *  do corpo químico, `Corpo.receptores()`, inteiros em [0, S]. Nunca a química */
+  corpo: Readonly<Record<string, number>>;
 }
 
 export type TipoIntencao = "aproximar" | "investigar" | "tocar" | "empurrar" | "consumir" | "descansar" | "afastar";

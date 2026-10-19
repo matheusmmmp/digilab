@@ -1,14 +1,16 @@
-/* O simulador do WORLD-POC-01a: junta o mundo, os sensores, o cérebro e o controlador no laço do contrato
+/* O simulador do WORLD-POC-01a e do POC-02 (com a chave do corpo, o corpo químico do jogo; corpo_poc.ts): junta o mundo, os sensores, o cérebro e o controlador no laço do contrato
    (Mundo -> Observação -> cérebro -> Intenção -> controlador -> Mundo -> consequências), com as duas rng separadas (a do ambiente e a da
    política, derivadas da semente) e o log de eventos (event sourcing, como o jogo). O replay é refazer o log: `reproduzir`. Sem DOM. */
 import { INTERVALO_DECISAO } from "./config.ts";
 import { Controlador } from "./controlador.ts";
-import { cerebroDeTeste } from "./cerebro.ts";
+import { cerebroDeTeste, cerebroDeTesteCorpo } from "./cerebro.ts";
+import { type ChamadaCorpo, aplicar, consequencia, criarCorpoPoc } from "./corpo_poc.ts";
 import { Rng, derivarSemente, distancia, fnv1a } from "./inteiros.ts";
 import { Mundo } from "./mundo.ts";
 import type { RegistroDecisao } from "./registro.ts";
 import { ler } from "./sensores.ts";
-import type { Cerebro, Observacao, ResultadoPercebido } from "./tipos.ts";
+import { ESCALA_RECEPTOR, type Cerebro, type Observacao, type ResultadoPercebido } from "./tipos.ts";
+import type { Corpo } from "../../motor/corpo.ts";
 
 /** as chaves da simulação: `corpo` liga o corpo químico do jogo (o corpo.ts), o POC-02 */
 export interface OpcoesSimulacao { corpo?: boolean }
@@ -22,6 +24,7 @@ interface EmCurso {
   petDe: [number, number]; bolaDe: [number, number];
   comeu0: number; empurroes0: number;
   bolaVista0: number | null;
+  brincou: boolean;            // o POC-02: a bola já contou como brincar nesta decisão (CP-5)
 }
 
 export class Simulacao {
@@ -35,12 +38,16 @@ export class Simulacao {
   private readonly cerebro: Cerebro;
   /** a chave do corpo (docs/TAREFA_V2_WORLD_POC_02.md): desligada, o POC-01a byte a byte (G-POC01-IGUAL) */
   readonly comCorpo: boolean;
+  /** o corpo químico do jogo (só com a chave) e as chamadas feitas a ele, na ordem (a G-CORPO-IGUAL as refaz num Corpo solto) */
+  readonly corpo: Corpo | null;
+  readonly chamadasCorpo: ChamadaCorpo[] = [];
 
-  constructor(semente: number, cerebro: Cerebro = cerebroDeTeste, opcoes: OpcoesSimulacao = {}) {
+  /** sem o cérebro, o de teste da chave: o de brinquedo (POC-01a) ou o dos receptores (POC-02) */
+  constructor(semente: number, cerebro?: Cerebro, opcoes: OpcoesSimulacao = {}) {
     this.semente = semente;
-    this.cerebro = cerebro;
     this.comCorpo = opcoes.corpo ?? false;
-    if (this.comCorpo) throw new Error("o corpo do POC entra na etapa E1 (docs/TAREFA_V2_WORLD_POC_02.md)");
+    this.cerebro = cerebro ?? (this.comCorpo ? cerebroDeTesteCorpo : cerebroDeTeste);
+    this.corpo = this.comCorpo ? criarCorpoPoc() : null;
     this.mundo = new Mundo(new Rng(derivarSemente(semente, "ambiente")));
     this.rngPolitica = new Rng(derivarSemente(semente, "politica"));
   }
@@ -62,22 +69,37 @@ export class Simulacao {
     if (m.tick % INTERVALO_DECISAO === 0) this.decidir();
     const ec = this.emCurso!;
     const antes: [number, number] = [m.pet.x, m.pet.y];
+    const tick0 = m.tick, comeu0 = m.comeu, empurroes0 = m.empurroes;
     const cmd = ec.controlador.passo(m);
     m.passo(cmd.vx, cmd.vy, cmd.podeComer);
     ec.distancia += distancia(m.pet.x - antes[0], m.pet.y - antes[1]);
+    if (this.corpo !== null) {
+      /* as consequências do tick viram estímulos (comer, o primeiro empurrão da decisão), e o corpo anda um passo no estado do começo do
+         tick: dormindo no descansar (CP-2), sem sujeira (CP-4). O contato não chama o corpo (CP-1) */
+      if (m.comeu > comeu0) this.chamar({ t: "consumo" });
+      if (m.empurroes > empurroes0 && !ec.brincou) { this.chamar({ t: "bola" }); ec.brincou = true; }
+      this.chamar({ t: "passo", tick: tick0, dormindo: ec.controlador.intencao.tipo === "descansar", sujeira: 0 });
+    }
   }
+
+  private chamar(ch: ChamadaCorpo): void {
+    aplicar(this.corpo!, ch);
+    this.chamadasCorpo.push(ch);
+  }
+
+  private receptores(): Record<string, number> | null { return this.corpo === null ? null : this.corpo.receptores(); }
 
   /** fecha a decisão em curso e abre a próxima: os sensores leem, o cérebro decide, o controlador recebe a Intenção */
   private decidir(): void {
     this.fechar();
     const m = this.mundo;
-    const { obs, refs } = ler(m, this.percebido);
+    const { obs, refs } = ler(m, this.percebido, true, this.receptores());
     const intencao = this.cerebro.decidir(JSON.parse(JSON.stringify(obs)) as Observacao, this.rngPolitica);
     const controlador = new Controlador(intencao, refs, m);
     this.emCurso = {
-      registro: { n: this.registros.length, tick: m.tick, observacao: obs, intencao, corpo_antes: { fome: m.pet.fome, tedio: m.pet.tedio } },
+      registro: { n: this.registros.length, tick: m.tick, observacao: obs, intencao, corpo_antes: this.receptores() ?? { fome: m.pet.fome, tedio: m.pet.tedio } },
       controlador, distancia: 0, petDe: [m.pet.x, m.pet.y], bolaDe: [m.bola.x, m.bola.y], comeu0: m.comeu, empurroes0: m.empurroes,
-      bolaVista0: distanciaDaBola(obs),
+      bolaVista0: distanciaDaBola(obs), brincou: false,
     };
   }
 
@@ -87,8 +109,9 @@ export class Simulacao {
     if (ec === null) return;
     const m = this.mundo, c = ec.controlador, r = ec.registro;
     const parou_por = c.status ?? "hora";
+    if (this.corpo !== null && ec.distancia > 0) this.chamar({ t: "andar", deslocamento: ec.distancia });   // o andar da decisão inteira
     const comeu = m.comeu - ec.comeu0, empurroes = m.empurroes - ec.empurroes0;
-    const { obs } = ler(m, null, false);
+    const { obs } = ler(m, null, false, this.receptores());
     const bolaVista1 = distanciaDaBola(obs);
     const percebido: ResultadoPercebido = {
       parou_por, comeu: comeu > 0, empurrou: empurroes > 0,
@@ -99,8 +122,9 @@ export class Simulacao {
       executada: { ticks: c.ticks, distancia: ec.distancia, parou_por },
       fisico: { pet_de: ec.petDe, pet_para: [m.pet.x, m.pet.y], bola_de: ec.bolaDe, bola_para: [m.bola.x, m.bola.y], comeu, empurroes,
         contatos: m.contatos.map(k => ({ ...k })) },
-      corpo_antes: r.corpo_antes, corpo_depois: { fome: m.pet.fome, tedio: m.pet.tedio },
+      corpo_antes: r.corpo_antes, corpo_depois: this.receptores() ?? { fome: m.pet.fome, tedio: m.pet.tedio },
       percebido,
+      ...(this.corpo !== null ? { consequencia: consequencia(r.corpo_antes, this.receptores()!, ESCALA_RECEPTOR) } : {}),
     });
     this.percebido = percebido;
     this.emCurso = null;
@@ -108,7 +132,8 @@ export class Simulacao {
 
   /** o estado inteiro (a verdade, em JSON puro) e o hash dele */
   estado() {
-    return { semente: this.semente, mundo: this.mundo.estado(), rng_politica: this.rngPolitica.estado, n_registros: this.registros.length };
+    const base = { semente: this.semente, mundo: this.mundo.estado(), rng_politica: this.rngPolitica.estado, n_registros: this.registros.length };
+    return this.corpo === null ? base : { ...base, corpo: this.corpo.paraDict() };   // sem a chave, o estado do POC-01a byte a byte
   }
   hash(): string { return fnv1a(JSON.stringify(this.estado())); }
 }
@@ -117,8 +142,8 @@ export class Simulacao {
 const distanciaDaBola = (obs: Observacao): number | null => obs.vistos.find(v => v.categoria === "bola")?.distancia ?? null;
 
 /** refaz uma vida pelo log */
-export function reproduzir(semente: number, log: readonly Evento[], cerebro?: Cerebro): Simulacao {
-  const s = new Simulacao(semente, cerebro);
+export function reproduzir(semente: number, log: readonly Evento[], cerebro?: Cerebro, opcoes: OpcoesSimulacao = {}): Simulacao {
+  const s = new Simulacao(semente, cerebro, opcoes);
   for (const e of log) s.aplicarEvento(e);
   return s;
 }
