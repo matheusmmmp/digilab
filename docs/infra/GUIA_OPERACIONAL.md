@@ -107,6 +107,26 @@ Escopo: seção 3 dessa tarefa
 ```
 A aprovação só vale para aquele conteúdo e escopo. Se o blob SHA mudar, é necessária nova autorização. O coordenador abre uma tarefa de implementação separada; a investigação sozinha nunca autoriza código ou mudança de arquitetura. Labels são filtros auxiliares, não aprovação nem fonte de estado. Neste MVP, use apenas labels existentes; não crie um fluxo dependente de labels.
 
+**Conferir a autorização antes de começar a implementação.** O ChatGPT Work, com escrita no conector, comenta **como matheusmmmp**: na tela,
+o comentário dele e o seu parecem iguais (`docs/infra/TESTE_CHATGPT_WORK.md`, passo 6). Por isso o coordenador não confia no nome e roda:
+
+```bash
+python tools/conferir_autorizacao.py --issue <N> --tarefa docs/TAREFA_V2_<FRENTE>.md
+```
+
+O comentário só vale se:
+- o autor é `matheusmmmp`, do tipo User;
+- **`performed_via_github_app` é nulo**, ou seja, não foi escrito pelo app "ChatGPT Codex Connector";
+- não foi editado depois de criado;
+- o blob SHA é o da tarefa hoje na `origin/main`.
+
+Saída 0 quer dizer autorizado; com saída 1, a tabela diz por quê. O blob SHA do conteúdo aprovado sai de
+`git rev-parse origin/main:docs/TAREFA_V2_<FRENTE>.md`.
+
+**Limite:** o `gh` do Claude Code usa o seu token (um app OAuth, não um GitHub App), então um comentário escrito pelo Claude Code com `gh` não
+tem a marca do app. A defesa, nesse caso, é a regra do `AGENTS.md` e do worker: **nenhum agente escreve "AUTORIZO"**. Um hook que bloqueie
+isso é a decisão IM-8.
+
 **ENTREGA E RECUPERAÇÃO.** O worker abre um PR e para; não faz merge. O PR é a fonte do relato e das evidências. No Issue, registre apenas o link e o estado curto. Para retomar depois de uma interrupção, use o ID/link do Issue, o caminho da tarefa e o branch/PR; não dependa do histórico do chat. No Work, peça: “Leia o último PR ligado ao Issue #336, confira corpo, diff e check verificar-pr; separe o que foi declarado do que o CI verificou.” Esta sessão criou e leu o Issue #336 pelo conector GitHub; isso não comprova que uma sessão Claude Code consiga lê-lo.
 
 GitHub Actions: use o `verificar-pr` que já existe; esta POC não adiciona Actions, secrets, serviços pagos nem execução automática de agentes.

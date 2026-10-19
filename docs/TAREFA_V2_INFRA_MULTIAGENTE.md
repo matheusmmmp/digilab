@@ -76,3 +76,22 @@ Não há run.
   escrita; senão, voltar o conector para só leitura.
   - Custo de errar para o lado permissivo: um push direto na `main`, sem PR nem revisão, em seu nome.
   - Custo de errar para o lado restrito: a ida Work → repositório continua manual.
+
+## 9. Etapa 2 (2026-10-19): a conferência da autorização e a investigação da Issue #336
+
+Pedido do Matheus, depois do merge do #326, do #331 e do #337: fechar a brecha da autorização e a prova com o Claude Code lendo a Issue #336.
+- **A brecha:** o protocolo do #337 aceita um comentário "AUTORIZO IMPLEMENTAÇÃO" do Matheus. Mas o Work, com escrita, comenta como
+  matheusmmmp. **Novo:** `tools/conferir_autorizacao.py`, que só aceita o comentário quando:
+  - o autor é o Matheus, do tipo User;
+  - `performed_via_github_app` é nulo;
+  - o comentário não foi editado;
+  - o blob SHA é o da tarefa na `origin/main`.
+
+  Testes em `tests/test_infra_conferir_autorizacao.py`; o guia e o `AGENTS.md` ganharam a regra.
+- **A investigação:** `docs/TAREFA_V2_INVESTIGA_336.md`, gerada por `tools/nova_tarefa.py` com origem no Work. Um worker novo do Claude
+  Code lê a Issue pelo `gh` e entrega um PR empilhado sobre este.
+
+**Precisa do Matheus:**
+- **IM-8, um hook que bloqueie agente escrevendo "AUTORIZO"** num comando `gh` (o `gh` do Claude Code usa o seu token e não tem a marca de
+  app). Recomendação: sim, no molde do H3, desligado até o seu ok (SA-5). Custo de errar: sem o hook, a defesa é só a regra escrita.
+- **O IM-7 continua:** a `main` sem proteção.
