@@ -1,6 +1,6 @@
 # TAREFA V2 — WORLD_POC_01 (2026-10-19)
 
-Coordenador: Gerente. Worker: A. Worktree e branch: `v2-world-poc-01`. Status: ENTREGUE (falta só a M3 no celular, do Matheus).
+Coordenador: Gerente. Worker: A. Worktree e branch: `v2-world-poc-01`. Status: ENTREGUE.
 
 Categoria: implementacao. Origem: Matheus, 2026-10-19: o WORLD-POC-01a da investigação WORLD-POC-001 (docs/futuro/mundo_3d.md), aprovado em 2026-10-19 para avançar em paralelo ao Gate C.
 
@@ -204,7 +204,7 @@ preview` na porta 8800, no Chrome instalado. O e2e do jogo não muda. Os scripts
 | oclusão | o pet na célula (6, 2), atrás do obstáculo alto: só esse obstáculo fica semitransparente. 603 dos 1.107 pixels do sprite chegam misturados com a cor dele, e o resto, a cabeça acima do obstáculo, bate com os texels | `e2e.json` (oclusao), `oclusao.png` |
 | M3 desktop | no Chrome headless desta máquina, 60 quadros por segundo de média, com o quadro de 16,7 ms na mediana e 16,8 ms no p95 (canvas de 1100 × 558, 3 pixels por subunidade). É o limite do vsync, e o headless não é o celular | `e2e.json` (M3_desktop_headless) |
 | M3 desktop real | no Chrome 155 do Windows do Matheus, não headless (tela de 1920 × 911, canvas de 1100 × 564, 3 pixels por subunidade, sprite de reserva): 60 quadros por segundo de média, com o quadro de 16,7 ms na mediana e 16,8 ms no p95. Ele colou a medida pensando que era a do celular; ela vale como a do desktop real | `m3_desktop_real.json` |
-| M3 celular | **falta:** é a medida do Matheus, num celular (abaixo). A página agora avisa quando o aparelho não parece um celular, e a medida sai com o campo `aparelho` | — |
+| M3 celular | **passa a referência de 30 quadros por segundo** (DECIDIDO: referência, não gate duro). Medida do Matheus num iPhone (iOS 26.4, Chrome para iOS 155, que desenha com o WebKit; devicePixelRatio 3, tela de 402 × 684, canvas de 1110 × 1472, 4 pixels por subunidade): 60,66 quadros por segundo de média em 10 s, com o quadro de 17 ms na mediana e no p95. **Ressalvas:** foi com o sprite de reserva, não com o atlas, que só existe no modo dev; e 60 é o teto do desenho da tela nesse navegador, então a folga acima de 60 não foi medida | `m3_celular.json` |
 | M5 | o mesmo hash do estado no Chrome e no Node para as sementes 101, 202 e 303, com 1.500 e 3.000 ticks. O replay de 1 "dia" de sala (1.440 ticks, 95 decisões fechadas) leva 21,34 ms no Node, a mediana de 5, num i7-14700KF. O tempo varia com a carga da máquina: a rodada anterior, no commit `b1abf4c`, deu 7,11 ms | `e2e.json` (M5_chrome_node), `node.json` (M5_replay_node) |
 | M6 | o build da página (a página, a raiz que leva a ela e o JS) tem 559.961 bytes, 142.278 em gzip, quase todo o `three` | `node.json` (M6_build) |
 
@@ -238,3 +238,5 @@ preview` na porta 8800, no Chrome instalado. O e2e do jogo não muda. Os scripts
 6. Cole o JSON num comentário do PR ou mande ao coordenador. O worker o grava como `artifacts_v2_world_poc/m3_celular.json`.
 
 A referência é **30 quadros por segundo** no celular (DECIDIDO: referência, não gate duro). Se der menos, a medida é registrada como está.
+
+**A M3 foi medida em 2026-10-19:** o iPhone do Matheus deu 60,66 quadros por segundo (`artifacts_v2_world_poc/m3_celular.json`). Com ela, as seis medidas do POC-01a estão feitas, e os critérios de aprovação da seção 7 estão todos conferidos. A decisão de dar o **Gate A** por fechado é do Matheus.
