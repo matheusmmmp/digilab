@@ -29,7 +29,7 @@ O mapa arquivo a arquivo e a lista de comandos, movidos inteiros do CLAUDE.md da
 | `experiments/configs/` | `canonico.json` (o portão), `ablacao.json` (ablação treino × cuidado), `fumaca.json` e `ablacao_fumaca.json` (NÃO canônicos). Campo `protocolo` escolhe o protocolo (padrão `arena-v1`) |
 | `artifacts/` | saída da run canônica (evidência; não editar à mão) |
 | `artifacts_ablacao/` | saída da ablação (evidência; não editar à mão) |
-| `web/app/` | **o jogo web** (desde 2026-09-28, TAREFA_FRONT_TS): motor em TypeScript (`motor/`, sem DOM), app Vite + React (`src/`; Preact até 2026-10-19, TAREFA_V2_FRONT_REACT), testes (`test/` Vitest, `e2e/` Playwright). Build em `web/dist/` (não versionado) |
+| `web/app/` | **o jogo web** (desde 2026-09-28, TAREFA_FRONT_TS): motor em TypeScript (`motor/`, sem DOM), app Vite + Preact (`src/`), testes (`test/` Vitest, `e2e/` Playwright). Build em `web/dist/` (não versionado) |
 | `web/digilab_sprites.html` | versão antiga do jogo (só com `?antigo=1`; sem isso redireciona para o app); ainda é a referência dos gabaritos de paridade |
 | `web/digilab.html` | versão web jogável antiga, com placeholders (porte JS; ver abaixo) |
 | `digilab/combate_v2/` | combate V2: `regras.py` (resolução pura, sem rng), `gambits.py` (catálogo fechado de condições, `ListaGambits`, decisão com motivo), `lutador.py` (`CondicaoFisica` × `Estilo`), `partida.py` (laço, log, replay), `bots.py` (5 fixos + adaptativo em gambits; `oraculo` FORA da linguagem) |
@@ -67,7 +67,6 @@ python experiments/run_bateria_v21.py --config experiments/configs/bateria_v21_c
 cd web/app && npm install && npm run build                                  # constrói o jogo web em web/dist/
 python servidor/servidor_local.py                                             # jogo web + fala por LLM em http://localhost:8765/v1/web/dist/
 cd web/app && npm test && npm run tipos && npm run e2e                        # testes do jogo web (paridade, tipos, ponta a ponta)
-cd web/app && npm run capturas                                                # capturas das telas contra a referência, pixel a pixel (TAREFA_V2_FRONT_REACT)
 python experiments/run_treino.py                                             # treino: 5 braços, campanha, S2; rc 0/2
 python experiments/run_bateria_sombria.py                                     # gate S1 (formas sombrias)
 python experiments/run_arena.py --config experiments/configs/memoria.json    # arena v1 + memória, ~2 min
@@ -89,3 +88,8 @@ A tabela acima é a de antes da rodada e fica como está. Desde a etapa 3, o có
 módulo por assunto (a tabela dos módulos está em `experiments/bancada/__init__.py`). O `experiments/bancada_v2.py` ficou como a porta de
 entrada: reexporta todo nome do pacote, e a linha de comando é a mesma. As faixas reservadas ficam em `experiments/bancada/faixas.py`.
 O mapa nó a nó, de onde saiu e para onde foi, está em `docs/historico/bancada_mapa.json`, e a ferramenta é `tools/dividir_bancada.py`.
+
+## Atualizações depois da rodada de saúde
+
+As seções acima são cópias inteiras do CLAUDE.md antigo (o G-NADA-PERDIDO confere). O que mudou depois entra aqui:
+- **2026-10-19, TAREFA_V2_FRONT_REACT (#368):** o app de `web/app/src/` passou de Preact para **React** (Vite mantido). Comando novo: `cd web/app && npm run capturas` — as capturas das telas contra a referência, pixel a pixel.
