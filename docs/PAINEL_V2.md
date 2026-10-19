@@ -22,7 +22,7 @@
 | J10 órgãos e hormônios | dano, cura, morte | adiado (D-5, D-6) |
 | W porte do cérebro A (v11) | o cérebro A no jogo web, com o painel DigiBrain | saiu da pausa em 2026-10-17. Etapas 0 a 2 na `main` (#320, #322, #323: o plano, os gabaritos do Python e o núcleo em TS com o G-PAR-L0); o A na etapa 3 (o aprendizado pela consequência do corpo); o B na PW-3 (a vontade) e na PW-4 (o caráter), primeiro no Python. PW-1 a PW-8 decididas (`docs/TAREFA_V2_W_PORTE_CEREBRO_A.md`) |
 | connectome do cérebro A | o grafo dos pesos e dos motivos de cada decisão | ferramenta de pesquisa (#321, `tools/connectome_cerebro_a.py`); CN-1 a CN-9 decididas em 2026-10-18: fora do jogo até o J5 (`docs/futuro/connectome_cerebro_a.md`) |
-| mundo 3D (WORLD-POC-001) | a vista inclinada em Three.js sobre o mundo físico, com a física em inteiros no motor | investigação feita; W-1 a W-7 decididas em 2026-10-18 pela recomendação; o POC-01a entregue (#355, #358); **o Gate A APROVADO em 2026-10-19** (ressalvas: um celular só; o cérebro real espera o Gate C); o próximo é o Gate B no POC, com o cérebro de teste (`docs/TAREFA_V2_WORLD_POC_02.md`) |
+| mundo 3D (WORLD-POC-001) | a vista inclinada em Three.js sobre o mundo físico, com a física em inteiros no motor | investigação feita; W-1 a W-7 decididas em 2026-10-18 pela recomendação; o POC-01a entregue (#355, #358); **o Gate A APROVADO em 2026-10-19** (ressalvas: um celular só; o cérebro real espera o Gate C); o POC-02 entregue (#362, #363); **o Gate B APROVADO em 2026-10-19** (ressalva: o cérebro de teste, só em TS); **PAUSADO até o Gate C** (a P4 espera o J5) |
 
 ## 2. As runs, uma linha cada
 
