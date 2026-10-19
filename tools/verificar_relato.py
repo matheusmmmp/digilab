@@ -45,8 +45,9 @@ COMENTARIO = re.compile(r"<!--.*?-->", re.S)
 DOI = re.compile(r"\b10\.\d{4,9}/[^\s\]\)>,;\"'`|{}]+", re.I)
 CAMINHO_ARTEFATO = re.compile(r"\bartifacts[\w-]*/[\w./-]+")
 CAMINHO_TESTE = re.compile(r"\btests/[\w/-]+\.py\b")
-# Os testes do jogo web: Vitest em web/app/test/ e Playwright em web/app/e2e/ (achado do worker A, #355). O CI não roda esses.
-CAMINHO_TESTE_WEB = re.compile(r"\bweb/app/(?:test|e2e)/[\w/.-]+?\.(?:test|spec)\.(?:ts|tsx|js)\b")
+# Os testes do jogo web: qualquer *.test.* ou *.spec.* sob web/app/, fora do node_modules: o Vitest em test/, o Playwright em e2e/, e as
+# pastas separadas das POCs, como e2e_poc/ e poc/ (achados do worker A, #355 e #358). O CI não roda esses.
+CAMINHO_TESTE_WEB = re.compile(r"\bweb/app/(?!node_modules/)(?:[\w.-]+/)*[\w.-]+?\.(?:test|spec)\.(?:ts|tsx|js)\b")
 CAMINHO_PLANO = re.compile(r"\bdocs/PLANO_ANALISE_V2_[\w-]+\.md\b")
 LINK_MD = re.compile(r"\[[^\]]*\]\(([^)\s]+)\)")
 SUCESSO = re.compile(r"\b(testes?|su[ií]te|ci|pytest)\b[^\n]{0,60}?\b(passa|passam|passaram|passou|passed|verde|ok)\b", re.I)

@@ -4,6 +4,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
 RAIZ = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RAIZ / "tools"))
 import verificar_relato as vr  # noqa: E402
@@ -140,6 +142,18 @@ def test_implementacao_aceita_teste_do_web_app_com_alerta(tmp_path):
     assert any(i.alerta and i.regra == "testes do web/app" for i in itens)
     sem = vr.verificar(corpo("implementacao"), ["web/app/src/x.ts"], raiz)
     assert [i.regra for i in falhas(sem)] == ["há teste no PR"]
+
+
+@pytest.mark.parametrize("caminho, conta", [
+    ("web/app/test/poc_mundo3d.test.ts", True),
+    ("web/app/e2e/jogo.spec.ts", True),
+    ("web/app/e2e_poc/mundo3d.spec.ts", True),  # o #358: o e2e da POC fica separado do e2e do jogo
+    ("web/app/poc/mundo3d/fisica.test.ts", True),
+    ("web/app/node_modules/x/y.test.ts", False),
+    ("web/app/src/x.ts", False),
+])
+def test_caminhos_de_teste_do_web_app(caminho, conta):
+    assert bool(vr.CAMINHO_TESTE_WEB.fullmatch(caminho)) is conta
 
 
 def test_implementacao_teste_citado_que_nao_existe_reprova(tmp_path):

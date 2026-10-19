@@ -141,6 +141,8 @@ Achados do worker A no #355 (POC do mundo 3D), repassados pelo Gerente:
 - **O verificador só aceitava `tests/*.py`.** Na categoria implementacao, um PR com testes Vitest reprovava em "há teste no PR". Agora
   `tools/verificar_relato.py` também aceita `web/app/test/` e `web/app/e2e/` (`*.test.ts`, `*.spec.ts`), com um alerta DECLARADA: o CI não
   roda Vitest nem Playwright, então a execução desses testes continua só declarada.
+- **E as pastas separadas das POCs** (achado do #358): o `web/app/e2e_poc/` fica separado de propósito, para o e2e do jogo não mudar. Em vez
+  de listar pasta por pasta, agora vale qualquer `*.test.*` ou `*.spec.*` sob `web/app/`, fora do `node_modules`.
 - **Um e2e instável sob carga:** o `web/app/e2e/jogo.spec.ts` ("save v1") falhou uma vez numa rodada com a suíte Python em paralelo e
   passou nas três variantes rodado sozinho. Provável instabilidade de carga, não regressão.
   - Recomendação: rodar o e2e sozinho, nunca junto da suíte Python.
