@@ -1,0 +1,36 @@
+{
+ "M5_replay_node": {
+  "semente": 101,
+  "ticks": 1440,
+  "decisoes": 95,
+  "eventos": 1,
+  "hash": "a45c6d26",
+  "repeticoes": 5,
+  "mediana_ms": 7.8,
+  "tempos_ms": [
+   6.54,
+   7.79,
+   7.8,
+   8.03,
+   8.14
+  ],
+  "node": "v24.19.0",
+  "cpu": "Intel(R) Core(TM) i7-14700KF"
+ },
+ "M6_build": {
+  "arquivos": [
+   {
+    "arquivo": "assets/mundo3d-CNCWR-e5.js",
+    "bytes": 557453,
+    "gzip": 140796
+   },
+   {
+    "arquivo": "mundo3d.html",
+    "bytes": 1613,
+    "gzip": 939
+   }
+  ],
+  "total_bytes": 559066,
+  "total_gzip": 141735
+ }
+}

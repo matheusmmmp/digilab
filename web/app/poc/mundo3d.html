@@ -6,18 +6,30 @@
   <title>WORLD-POC-01a</title>
   <style>
     body { margin: 0; font: 14px/1.4 system-ui, sans-serif; background: #f4f1ea; color: #1b1b2f; }
-    main { max-width: 960px; margin: 0 auto; padding: 16px; }
-    pre { background: #fff; padding: 12px; overflow: auto; max-height: 50vh; }
+    main { max-width: 1100px; margin: 0 auto; padding: 12px 16px; }
+    h1 { font-size: 18px; margin: 4px 0 8px; }
+    #palco { width: 100%; height: min(62vh, 640px); }
+    #tela { display: block; image-rendering: pixelated; }
+    .barra { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 8px 0; }
+    #fps { font-variant-numeric: tabular-nums; }
+    textarea { width: 100%; height: 140px; font: 12px ui-monospace, monospace; }
   </style>
 </head>
 <body>
   <main>
-    <h1>WORLD-POC-01a</h1>
-    <p>Protótipo técnico fora do jogo (docs/TAREFA_V2_WORLD_POC_01.md). Nesta etapa só o mundo: a vista em Three.js entra na etapa E3.</p>
-    <p><label>Semente <input id="semente" type="number" value="101"></label>
-       <label>Ticks <input id="ticks" type="number" value="1500"></label>
-       <button id="rodar">Rodar</button> <button id="baixar" disabled>Baixar o registro (JSON)</button></p>
-    <pre id="saida">—</pre>
+    <h1>WORLD-POC-01a <small id="estado">carregando</small></h1>
+    <div id="palco"><canvas id="tela" role="img" aria-label="A sala do protótipo: o pet, a bola, a comida, as paredes e os obstáculos"></canvas></div>
+    <div class="barra">
+      <span id="fps"></span>
+      <label>Semente <input id="semente" type="number" value="101" style="width: 6em"></label>
+      <button id="reiniciar">Reiniciar</button>
+      <button id="pausar">Pausar</button>
+      <button id="medir">Medir 10 s</button>
+      <button id="baixar">Baixar o registro (JSON)</button>
+      <span id="copiado"></span>
+    </div>
+    <textarea id="medida" readonly placeholder="A medida da M3 aparece aqui depois de 'Medir 10 s'."></textarea>
+    <p>Protótipo técnico, fora do jogo (docs/TAREFA_V2_WORLD_POC_01.md). A vista só desenha; o mundo é inteiro e determinístico.</p>
   </main>
   <script type="module" src="./mundo3d/pagina.ts"></script>
 </body>
