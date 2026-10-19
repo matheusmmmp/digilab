@@ -419,4 +419,5 @@ Pelas decisões do Matheus de 2026-10-18 (seção 15). Sem run de pesquisa e sem
     caráter da evolução é o do cérebro no tick dela, e o tratar só cura.
   - Os testes que fixavam o v10 como ovo novo passaram para o v11. Os que testam o comportamento do v10 pedem o v10.
   - Os pets v1 a v10, as assinaturas e os gabaritos não mudaram.
-
+  - O e2e (`npm run e2e`, 65 testes) passa. Os dois testes do e2e que esperavam o ovo novo na versão 9 (já falhavam na `main`, com o
+    v10) passaram a esperar a 11.
