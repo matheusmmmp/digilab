@@ -26,7 +26,7 @@ import { useJogo } from "../../jogo.ts";
 import { abrirEscolhaBrasao } from "../../jornada.ts";
 import { useTempo } from "../../tempo.ts";
 import { PalcoPet } from "./PalcoPet.tsx";
-import { CenarioPet } from "./CenarioPet.tsx";
+import { CenaPet } from "./CenarioPet.tsx";
 import { useDesktop } from "../../desktop.ts";
 import { Folha } from "../../componentes/Folha.tsx";
 import { BotaoDigiBrain, CardDigiBrain, IconeCerebro } from "../../componentes/DigiBrain.tsx";
@@ -460,7 +460,7 @@ export function TelaPet({ abrirMeusPets, irConversar, abrirConfig, irRegistro }:
       <div className={"pet-home-corpo" + (desk && detalhes ? " pet-home-corpo--detalhes" : "")}>
         <div className="pet-home-principal">
           <section className={"pet-cena" + (m.morte ? " pet-cena--morto" : "")} aria-label="O pet no quarto">
-            <CenarioPet noite={eNoite(m.e.tick % TPD)} />
+            <CenaPet noite={eNoite(m.e.tick % TPD)} />
             {nascendo > 0 && <Deco nome="Digivice_Circle_01" className="ovo-anel gira" />}
             <PalcoPet />
             <div className="cena-topo">

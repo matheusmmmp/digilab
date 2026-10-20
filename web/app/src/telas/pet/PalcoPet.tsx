@@ -9,6 +9,7 @@ import { atlasAtual, desenharSprite, dimSprite, escalaSprite, quadroAgora, type 
 import { S, desenharGrade, gradeDe, paleta } from "../../grades.ts";
 import { flashAtual } from "../../flash.ts";
 import { jogoAtual, passarQuadroOvo } from "../../jogo.ts";
+import { CENA } from "./cenaEstado.ts";
 
 const ICONE_ACAO: Record<string, string> = { dormir: "zz", chamar_atencao: "exclam", emburrar: "raiva", brincar: "nota", explorar: "pergunta", comer: "carne" };
 const EMOTE_ICONE: Record<string, string> = { carne: "emoji_carne", nota: "emoji_nota", exclam: "emoji_exclam", coracao: "emoji_coracao" };
@@ -36,6 +37,7 @@ function desenharPalco(cv: HTMLCanvasElement, cx: CanvasRenderingContext2D, quad
   const { motor: m, nascendo } = jogoAtual(), e = m.e;
   const g = ajustarTela(cv), { K, W } = g, a = atlasAtual(), pal = paleta(corDominante(m.tracos));
   cx.setTransform(1, 0, 0, 1, 0, 0); cx.clearRect(0, 0, cv.width, cv.height); cx.imageSmoothingEnabled = false;
+  if (CENA.modo3d) { desenharExtras3D(cx, g); return; }
   const anelX = (W - g.anelW) / 2, anelY = g.pes - g.anelH / 2;
   if (a.tipo === "ok") {
     /* plataforma (peca pintada do UP, nao pixel art): com suavizacao */
@@ -80,6 +82,23 @@ function desenharPalco(cv: HTMLCanvasElement, cx: CanvasRenderingContext2D, quad
   if (nascendo > 0) { passarQuadroOvo(); return; }
   desenharIconeGrade(cx, g, x, y, larg * u);
   if (e.saude < .3) marcaSaude(cx, K);
+}
+
+/* com a cena 3D ligada (cena3d.ts), o pet, a plataforma e o ovo sao dela; aqui ficam so os extras, em volta do retangulo do sprite que
+   ela informa: a sujeira dos dois lados dos pes, o icone rapido e a marca de saude critica */
+function desenharExtras3D(cx: CanvasRenderingContext2D, g: Geo): void {
+  const r = CENA.ret; if (!r) return;
+  const { motor: m, nascendo } = jogoAtual(), a = atlasAtual(), pal = paleta(corDominante(m.tracos)), K = g.K;
+  const ec = Math.max(2, Math.round(r.h / 40)), pes = r.y + r.h;
+  cx.setTransform(ec * K, 0, 0, ec * K, 0, 0);
+  for (let i = 0; i < m.e.sujeira; i++) {
+    const xc = i < 3 ? r.x - 10 * ec - i * 9 * ec : r.x + r.w + 2 * ec + (i - 3) * 9 * ec;
+    desenharGrade(cx, S.coco, Math.round(xc / ec), Math.round((pes - 6 * ec) / ec), { ...pal, d: "#8A5A2B" });
+  }
+  cx.setTransform(1, 0, 0, 1, 0, 0);
+  if (nascendo > 0) return;
+  if (a.tipo === "ok") desenharIcone(cx, a, g, r.x, r.y, r.w); else desenharIconeGrade(cx, g, r.x, r.y, r.w);
+  if (m.e.saude < .3) marcaSaude(cx, K);
 }
 
 /* saude critica: um quadrado vermelho no canto (o aviso em texto fica no painel de detalhes) */

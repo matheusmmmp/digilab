@@ -244,6 +244,9 @@ test("tempo: o relógio para durante a animação da luta e com o Resultado aber
 });
 
 test("foco visível pelo teclado", async ({ page }) => {
+  /* sem as transicoes do dl-btn: o teste compara o estilo com e sem foco logo depois de trocar, e uma transicao no meio (a maquina
+     ocupada com a cena 3D nos outros workers) dava um falso "sem foco" */
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await semear(page, SAVES.v2);
   await page.goto(APP + "#/pet/estado");
   await expect(page.locator(".pet-tela")).toBeVisible();
@@ -1197,3 +1200,33 @@ for (const [largura, altura] of [[360, 800], [390, 844], [1280, 800]]) {
     expect(erros).toEqual([]);
   });
 }
+/* o cenario da tela Pet: a cena 3D (a vista do POC, import dinamico) quando ha WebGL; sem WebGL, o cenario de reserva em CSS e SVG.
+   Os dois sao decorativos (aria-hidden) */
+test("Pet (Home): a cena 3D com WebGL e o cenário de reserva sem ele", async ({ page, browser }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await semear(page, SAVE_V11);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/pet/estado");
+  const cena = page.locator(".pet-cena .cena3d");
+  await expect(cena).toHaveAttribute("aria-hidden", "true");
+  await expect.poll(() => page.evaluate(() => { const c = document.querySelector<HTMLCanvasElement>(".cena3d canvas"); return c ? c.width * c.height : 0; })).toBeGreaterThan(0);
+  await expect(page.locator(".pet-cena .cena-sala")).toHaveCount(0);
+  expect(erros).toEqual([]);
+  /* sem WebGL: o getContext do WebGL devolve null e a tela fica com a reserva, sem erro */
+  const ctx = await browser.newContext({ baseURL: test.info().project.use.baseURL, viewport: { width: 390, height: 844 } });
+  const p2 = await ctx.newPage();
+  await p2.addInitScript(() => {
+    const orig = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (this: HTMLCanvasElement, tipo: string, ...r: unknown[]) {
+      return /webgl/.test(tipo) ? null : (orig as (...a: unknown[]) => unknown).call(this, tipo, ...r);
+    } as typeof orig;
+  });
+  await semear(p2, SAVE_V11);
+  const erros2 = vigiarErros(p2);
+  await p2.goto(APP + "#/pet/estado");
+  await expect(p2.locator(".pet-cena .cena-sala")).toBeVisible();
+  await expect(p2.locator(".pet-cena .cena-sala")).toHaveAttribute("aria-hidden", "true");
+  await expect(p2.locator(".pet-cena .cena3d")).toHaveCount(0);
+  expect(erros2).toEqual([]);
+  await ctx.close();
+});

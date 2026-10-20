@@ -1,7 +1,9 @@
-/* Cenario da tela Pet (docs/TAREFA_V2_TELA_PET.md): um quarto 2.5D claro, em CSS e SVG, atras do canvas do pet. Parede com janela,
-   paredes laterais em fuga, chao em perspectiva, uma planta e um movel baixo. So decoracao: nenhum dado do jogo aqui, salvo o dia
-   e a noite do motor. E um componente fechado de proposito: quando o habitat virar o mundo 3D (P4), a vista dele entra no lugar
-   deste e o resto da tela nao muda. Os objetos sao desenhados em grade de pixels (image-rendering: pixelated), como o pet. */
+/* Cenario da tela Pet (docs/TAREFA_V2_TELA_PET.md). O cenario e a vista 3D do POC (cena3d.ts, decisao do Matheus de 2026-10-19,
+   opcao b), carregada por import dinamico ao abrir a tela; sem WebGL, ou se ela falhar, fica a reserva: um quarto 2.5D claro em CSS e
+   SVG (parede com janela, paredes laterais em fuga, chao em perspectiva, uma planta e um movel baixo em grade de pixels). Os dois sao
+   so decoracao (aria-hidden): nenhum dado do jogo aqui, salvo o dia e a noite do motor e, na cena 3D, o pet. */
+import { useEffect, useRef, useState } from "react";
+import { CENA } from "./cenaEstado.ts";
 
 /* planta e movel em pixel art: cada letra e uma cor, "." e transparente */
 const PLANTA = [
@@ -41,6 +43,7 @@ function Pixels({ grade, className }: { grade: string[]; className: string }) {
   );
 }
 
+/** a reserva: o quarto em CSS e SVG */
 export function CenarioPet({ noite }: { noite: boolean }) {
   return (
     <div className={"cena-sala" + (noite ? " cena-sala--noite" : "")} aria-hidden="true">
@@ -58,4 +61,48 @@ export function CenarioPet({ noite }: { noite: boolean }) {
       <Pixels grade={MOVEL} className="cena-movel" />
     </div>
   );
+}
+
+/** o navegador desenha WebGL? (sem isso, a reserva) */
+function temWebGL(): boolean {
+  try { const c = document.createElement("canvas"); return !!(c.getContext("webgl2") || c.getContext("webgl")); } catch { return false; }
+}
+/** a M3 pela pagina do jogo: so com ?medir3d=1 no endereco; mede 10 s e mostra o JSON para copiar */
+function MedirCena() {
+  const [txt, setTxt] = useState<string | null>(null), [medindo, setMedindo] = useState(false);
+  const medir = async () => {
+    if (!CENA.medir) { setTxt("a cena 3D nao esta ligada (cenario de reserva)"); return; }
+    setMedindo(true);
+    const m = JSON.stringify(await CENA.medir());
+    setMedindo(false); setTxt(m);
+    try { await navigator.clipboard.writeText(m); } catch { /* sem area de transferencia: o texto fica na tela para copiar a mao */ }
+  };
+  return (
+    <div className="cena3d-medir">
+      <button type="button" className="dl-btn dl-btn--sec" disabled={medindo} onClick={medir}>{medindo ? "Medindo 10 s…" : "Medir 10 s (M3)"}</button>
+      {txt && <textarea readOnly value={txt} aria-label="Medida M3" rows={4} />}
+    </div>
+  );
+}
+/** o cenario: a cena 3D (import dinamico) ou a reserva */
+export function CenaPet({ noite }: { noite: boolean }) {
+  const ref = useRef<HTMLCanvasElement>(null), [reserva, setReserva] = useState(() => !temWebGL());
+  const medir = new URLSearchParams(location.search).get("medir3d") === "1";
+  useEffect(() => {
+    if (reserva) return;
+    let vivo = true, parar: (() => void) | null = null;
+    import("./cena3d.ts")
+      .then(m => {
+        if (!vivo || !ref.current) return;
+        try { parar = m.iniciarCena3D(ref.current, () => setReserva(true)); }
+        catch (err) { console.warn("cena 3D do Pet não subiu; fica o cenário de reserva:", err); setReserva(true); }
+      })
+      .catch(err => { console.warn("cena 3D do Pet não carregou; fica o cenário de reserva:", err); if (vivo) setReserva(true); });
+    return () => { vivo = false; parar?.(); };
+  }, [reserva]);
+  if (reserva) return <CenarioPet noite={noite} />;
+  return <>
+    <div className={"cena3d" + (noite ? " cena3d--noite" : "")} aria-hidden="true"><canvas ref={ref} /></div>
+    {medir && <MedirCena />}
+  </>;
 }
