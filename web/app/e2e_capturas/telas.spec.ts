@@ -43,6 +43,10 @@ for (const [largura, altura] of [[390, 844], [1280, 800]]) {
       page.on("pageerror", e => erros.push(e.message));
       await page.goto(APP + rota);
       await page.evaluate(() => document.fonts.ready);
+      /* a tela Pet: a cena 3D chega por import dinamico (tempo real, fora do relogio falso); so depois dela o relogio anda, senao o
+         numero de quadros desenhados antes da captura varia */
+      await page.waitForFunction(() => !document.querySelector(".pet-cena") || !!document.querySelector(".pet-cena .cena-sala")
+        || (document.querySelector<HTMLCanvasElement>(".pet-cena .cena3d canvas")?.width ?? 0) > 0);
       await page.clock.runFor(1000);
       await page.waitForLoadState("networkidle");
       /* toda imagem decodificada antes da captura */
