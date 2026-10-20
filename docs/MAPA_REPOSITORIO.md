@@ -93,3 +93,4 @@ O mapa nó a nó, de onde saiu e para onde foi, está em `docs/historico/bancada
 
 As seções acima são cópias inteiras do CLAUDE.md antigo (o G-NADA-PERDIDO confere). O que mudou depois entra aqui:
 - **2026-10-19, TAREFA_V2_FRONT_REACT (#368):** o app de `web/app/src/` passou de Preact para **React** (Vite mantido). Comando novo: `cd web/app && npm run capturas` — as capturas das telas contra a referência, pixel a pixel.
+- **2026-10-19, TAREFA_V2_FRONT_REACT, etapa 2:** **Tailwind 4** (só tema e utilidades, sem o preflight; `src/estilo/tailwind.css`, com os tokens `--dl-*` e `--ui-*` no tema), **shadcn** (`components.json`, `src/lib/utils.ts`, `src/componentes/ui/`, alias `@/` = `src/`) e **lucide-react**, sem mudar o visual de nenhuma tela.
