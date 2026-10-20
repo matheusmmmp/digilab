@@ -47,11 +47,11 @@ página inteira) e `PetPrototipo360.png`. Os números e os textos são exemplo d
 pediria instalar e executar as dependências do ZIP, e a permissão foi negada); a comparação foi feita pelo código, classe a classe.
 
 **Todas as telas no layout novo** (2026-10-19, pedido do Matheus; **PROPOSTA, espera o ok dele**). `TelasLayoutDesktop.html` é uma prancha-mapa
-com as 20 telas do desktop (1280×800, reduzidas à metade; `?tela=N` abre uma em tamanho real). A casca se aproxima da imagem de referência
-que ele mandou: a lateral escura com o logo e os destinos com subtítulo em japonês, as abas da tela no topo, o relógio e o pet à direita,
+com as 19 telas do desktop (1280×800, reduzidas à metade; `?tela=N` abre uma em tamanho real). A casca se aproxima da imagem de referência
+que ele mandou: a lateral escura com o logo e os destinos, as abas da tela no topo, o relógio e o pet à direita,
 o painel central de cantos cortados e a coluna de cards à direita, que se recolhe (no Pet, recolhida, o habitat e as ações crescem). As
 telas: Pet (normal, colunas recolhidas, DigiBrain aberto), Meus pets, Crescer (Treinar, Aprendizado, Evolução, Itens), Lutar (Arena,
 Campanha, Fronteira, Medalhas, a luta em tela cheia), Diário (Registro, Catálogo, Gerações, Cenários), Conversar e Ajustes. O conteúdo é o
 que cada tela tem hoje, só o que o motor registra; ficam fora o nível e o XP, a Próxima evolução, o clima, o humor "Feliz", o card do
 pesquisador, o "DigiLab OS", o sino e as abas da imagem que o jogo não tem. As capturas estão em `capturas/TelasLayout_mapa.png` e
-`capturas/TelasLayout_00.png` a `_19.png`, na ordem do mapa.
+`capturas/TelasLayout_00.png` a `_18.png`, na ordem do mapa. Só português: os subtítulos em japonês da primeira versão saíram (pedido do Matheus, 2026-10-19), e os nomes de exercícios, atributos, itens, líderes, lugares, medalhas e formas são os do motor (`web/app/motor/nomes.ts`, `itens.ts`, `medalhas.ts`, `bots.ts`).

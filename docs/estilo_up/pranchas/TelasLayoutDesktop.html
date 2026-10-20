@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Todas as telas · layout novo (desktop)</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&amp;family=Pixelify+Sans:wght@700&amp;family=M+PLUS+Rounded+1c:wght@500;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&amp;family=Pixelify+Sans:wght@700&amp;display=swap" rel="stylesheet">
 <style>
 /* Prancha-mapa: todas as telas do jogo no layout novo (2026-10-19, pedido do Matheus), aproximado da imagem de referência que ele mandou
-   (a casca do protótipo: a lateral escura com o logo e o subtítulo em japonês, as abas no topo, o painel central de cantos cortados com o
+   (a casca do protótipo: a lateral escura com o logo, as abas no topo, o painel central de cantos cortados com o
    habitat e as ações embaixo, a coluna de cards à direita e os estilhaços azuis nas bordas). Cada tela tem 1280×800 e aparece reduzida
    pela metade; o conteúdo de cada uma é o que a tela tem hoje (só o que o motor registra), redistribuído nos módulos.
    Fora, por não terem dado no motor: nível e XP, Próxima evolução, Treinar/Inventário/Mais na barra do Pet, o clima, o humor "Feliz",
@@ -22,7 +22,6 @@
 *{box-sizing:border-box}
 body{margin:0;background:#dfe7f3;color:var(--fg);font-family:Nunito,ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
 svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
-.jp{font-family:"M PLUS Rounded 1c",Nunito,sans-serif;font-weight:500}
 
 /* ---- o mapa: as telas em grade, na metade do tamanho */
 .mapa-cab{padding:28px 32px 8px;max-width:1400px}
@@ -112,7 +111,7 @@ body.uma .tela{transform:none}
 .painel.rola{overflow:hidden}
 .lado{width:340px;flex:none;display:flex;flex-direction:column;gap:14px;min-height:0;overflow:hidden}
 
-/* card de módulo: tracinho azul, ícone, título e subtítulo em japonês */
+/* card de módulo: tracinho azul, ícone e título */
 .mod{position:relative;display:flex;flex-direction:column;border-radius:14px;border:1px solid var(--border);background:rgba(255,255,255,.9);padding:12px 14px;box-shadow:var(--shadow-sm);min-height:0}
 .mod.cresce{flex:1}
 .mod > header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
@@ -242,8 +241,7 @@ table.tab td{padding:8px;border-bottom:1px solid rgba(219,230,245,.7)}
 <body>
 <header class="mapa-cab">
   <h1>Todas as telas no layout novo · desktop 1280×800</h1>
-  <p>Proposta para o ok do Matheus (2026-10-19). A casca segue a imagem de referência: a lateral escura com o logo, os destinos com
-  subtítulo em japonês, as abas da tela no topo, o painel central de cantos cortados e a coluna de cards à direita, que se recolhe
+  <p>Proposta para o ok do Matheus (2026-10-19). A casca segue a imagem de referência: a lateral escura com o logo e os destinos, as abas da tela no topo, o painel central de cantos cortados e a coluna de cards à direita, que se recolhe
   (no Pet, recolhida, o habitat e as ações crescem). O conteúdo de cada tela é o de hoje, só o que o motor registra. Sprites e números são
   exemplo de layout.</p>
 </header>
@@ -297,12 +295,12 @@ const icc = (n, cor, fill) => `<svg class="i" viewBox="0 0 24 24" style="color:$
 /* o pet: placeholder (sem arte de terceiros) */
 const pet = (tam = 120, cor = "#F7B7CF", cls = "") => `<svg class="${cls}" width="${tam}" height="${tam * 40 / 44}" viewBox="0 0 44 40" aria-hidden="true"><path fill="${cor}" stroke="#173A8A" stroke-width="1.5" d="M6 26c0-11 7-19 16-19s16 8 16 19c0 7-7 11-16 11S6 33 6 26z"/><circle cx="16" cy="22" r="3" fill="#173A8A"/><circle cx="28" cy="22" r="3" fill="#173A8A"/><path d="M18 30h8" stroke="#173A8A" stroke-width="1.5"/></svg>`;
 
-const DESTINOS = [["pet", "Pet", "ペット"], ["crescer", "Crescer", "成長"], ["lutar", "Lutar", "バトル"], ["diario", "Diário", "日記"]];
+const DESTINOS = [["pet", "Pet", ""], ["crescer", "Crescer", ""], ["lutar", "Lutar", ""], ["diario", "Diário", ""]];
 const ABAS = {
-  pet: [["Pet", "ペット"]],
-  crescer: [["Treinar", "トレーニング"], ["Aprendizado", "学習"], ["Evolução", "進化"], ["Itens", "アイテム"]],
-  lutar: [["Arena", "アリーナ"], ["Campanha", "キャンペーン"], ["Fronteira", "フロンティア"], ["Medalhas", "メダル"]],
-  diario: [["Registro", "記録"], ["Catálogo", "図鑑"], ["Gerações", "世代"], ["Cenários", "シナリオ"]],
+  pet: [["Pet", ""]],
+  crescer: [["Treinar", ""], ["Aprendizado", ""], ["Evolução", ""], ["Itens", ""]],
+  lutar: [["Arena", ""], ["Campanha", ""], ["Fronteira", ""], ["Medalhas", ""]],
+  diario: [["Registro", ""], ["Catálogo", ""], ["Gerações", ""], ["Cenários", ""]],
 };
 
 function estilhacos() {
@@ -314,30 +312,30 @@ function estilhacos() {
     <b style="left:230px;top:46%;height:150px;width:10px;clip-path:polygon(0 0,100% 14px,100% calc(100% - 14px),0 100%)"></b></div>`;
 }
 function lateral(destino, extra) {
-  const nav = DESTINOS.map(([id, nome, jp]) => `<a class="${id === destino && !extra ? "ativo" : ""}">${ic(id)}<span class="t"><b>${nome}</b><small class="jp">${jp}</small></span></a>`).join("");
-  const pe = [["conversar", "Conversar", "会話"], ["ajustes", "Ajustes", "設定"]].map(([id, nome, jp]) =>
-    `<a style="${extra === id ? "background:var(--primary);border-color:var(--primary)" : ""}">${ic(id)}<span class="t"><b>${nome}</b><small class="jp">${jp}</small></span>${ic("seta", "seta")}</a>`).join("");
+  const nav = DESTINOS.map(([id, nome]) => `<a class="${id === destino && !extra ? "ativo" : ""}">${ic(id)}<span class="t"><b>${nome}</b></span></a>`).join("");
+  const pe = [["conversar", "Conversar", ""], ["ajustes", "Ajustes", ""]].map(([id, nome]) =>
+    `<a style="${extra === id ? "background:var(--primary);border-color:var(--primary)" : ""}">${ic(id)}<span class="t"><b>${nome}</b></span>${ic("seta", "seta")}</a>`).join("");
   return `<aside class="lat"><div class="cacos">
       <b style="left:0;top:122px;height:8px;width:100%;transform-origin:left;transform:skewY(-22deg)"></b>
       <b style="right:0;top:250px;height:140px;width:9px;clip-path:polygon(0 14px,100% 0,100% 100%,0 calc(100% - 14px))"></b>
       <b style="bottom:250px;left:0;height:11px;width:90px;transform:skewX(-45deg)"></b><b style="bottom:250px;left:98px;height:11px;width:30px;transform:skewX(-45deg);opacity:.6"></b>
       <b style="bottom:0;right:0;height:70px;width:70px;opacity:.3;clip-path:polygon(100% 0,100% 100%,0 100%)"></b></div>
     <div class="logo-caixa"><div class="logo"><div class="barras"><span></span><span></span><span></span></div>
-      <div><span class="marca">DIGILAB</span><span class="kana jp">デジラボ</span><span class="sub">Digital Life<br>Data · AI<br>Evolution</span></div></div></div>
+      <div><span class="marca">DIGILAB</span><span class="sub">Digital Life<br>Data · AI<br>Evolution</span></div></div></div>
     <nav>${nav}</nav><div class="pe">${pe}</div></aside>`;
 }
 function topo(destino, aba, opts = {}) {
   let abas;
-  if (opts.titulo) abas = `<a class="voltar">${ic("voltar")}Voltar ao Pet</a><a class="ativo">${opts.titulo}<small class="jp">${opts.tituloJp || ""}</small></a>`;
-  else abas = (ABAS[destino] || []).map(([n, jp]) => `<a class="${n === aba ? "ativo" : ""}">${n}<small class="jp">${jp}</small></a>`).join("");
+  if (opts.titulo) abas = `<a class="voltar">${ic("voltar")}Voltar ao Pet</a><a class="ativo">${opts.titulo}</a>`;
+  else abas = (ABAS[destino] || []).map(([n]) => `<a class="${n === aba ? "ativo" : ""}">${n}</a>`).join("");
   return `<header class="topo"><div class="abas">${abas}</div><div class="vazio"></div>
     <div class="hora">${ic("sol")}<div><p class="d">Dia 3 · tarde</p><p class="h">14:20</p></div></div>
     <span class="salvo"><i></i>salvo</span><div class="sep"></div>
     <div class="quem"><span class="ret">${pet(40)}</span><div><p class="n">${opts.nome || "Agumon"}</p><p class="s">${opts.sub || "Rookie · Coragem"}</p></div></div></header>`;
 }
-function mod(icone, titulo, jp, corpo, o = {}) {
+function mod(icone, titulo, _sub, corpo, o = {}) {
   const dir = o.dir ?? ic("baixo");
-  return `<section class="mod ${o.cls || ""}" style="${o.style || ""}"><header><span class="tr"></span>${ic(icone, "ic")}<span class="t"><b>${titulo}</b><small class="jp">${jp}</small></span><span class="dir">${dir}</span></header>${corpo}</section>`;
+  return `<section class="mod ${o.cls || ""}" style="${o.style || ""}"><header><span class="tr"></span>${ic(icone, "ic")}<span class="t"><b>${titulo}</b></span><span class="dir">${dir}</span></header>${corpo}</section>`;
 }
 function tela({ destino, aba, extra, titulo, tituloJp, painel, lado, semLado, nome, sub }) {
   return `<div class="tela">${estilhacos()}${lateral(destino, extra)}<div class="col">${topo(destino, aba, { titulo, tituloJp, nome, sub })}
@@ -345,13 +343,13 @@ function tela({ destino, aba, extra, titulo, tituloJp, painel, lado, semLado, no
 }
 
 /* ---------- blocos reaproveitados */
-const ESTADO = mod("seringa", "Estado atual", "ステータス", `<div class="barras-est"><ul>
+const ESTADO = mod("seringa", "Estado atual", "", `<div class="barras-est"><ul>
   ${[["coracao", "var(--hunger)", 1, "Fome", 38], ["raio", "rgba(13,33,71,.75)", 1, "Energia", 74], ["gota", "var(--hyg)", 0, "Higiene", 61], ["sorriso", "var(--energy)", 1, "Humor", 88], ["cruz", "var(--health)", 1, "Saúde", 92]]
     .map(([i, c, f, r, v]) => `<li>${icc(i, c, f)}<span class="r">${r}</span><span class="trilho"><i style="width:${v}%;background:${r === "Humor" ? "var(--mood)" : r === "Energia" ? "var(--energy)" : r === "Higiene" ? "var(--hyg)" : c}"></i></span><span class="v">${v}/100</span></li>`).join("")}
   </ul></div>`);
-const ACOES_V11 = [["tigela", "Alimentar", "ごはん", "#fff", 0], ["gota", "Limpar", "おそうじ", "var(--mood)", 0], ["coracao", "Brincar", "あそぶ", "#ec4899", 1], ["mao", "Carinho", "なでる", "var(--hunger)", 0], ["mao", "Tapa", "たたく", "var(--fg)", 0], ["cruz", "Tratar", "てあて", "var(--health)", 1]];
-const acoes = (alt = 116) => `<div class="acoes" style="grid-template-columns:repeat(6,1fr);height:${alt}px">${ACOES_V11.map(([i, n, jp, c, f], k) =>
-  `<button class="bloco ${k === 0 ? "prim" : ""}">${k === 0 ? ic(i) : icc(i, c, f)}${n}<small class="jp">${jp}</small></button>`).join("")}</div>`;
+const ACOES_V11 = [["tigela", "Alimentar", "", "#fff", 0], ["gota", "Limpar", "", "var(--mood)", 0], ["coracao", "Brincar", "", "#ec4899", 1], ["mao", "Carinho", "", "var(--hunger)", 0], ["mao", "Tapa", "", "var(--fg)", 0], ["cruz", "Tratar", "", "var(--health)", 1]];
+const acoes = (alt = 116) => `<div class="acoes" style="grid-template-columns:repeat(6,1fr);height:${alt}px">${ACOES_V11.map(([i, n, , c, f], k) =>
+  `<button class="bloco ${k === 0 ? "prim" : ""}">${k === 0 ? ic(i) : icc(i, c, f)}${n}</button>`).join("")}</div>`;
 const habitat = (grande) => `<div class="habitat">
   <span class="anel" style="${grande ? "width:340px;height:84px;margin-left:-170px;bottom:70px" : ""}"></span>
   <span class="pet" style="${grande ? "bottom:104px" : ""}">${pet(grande ? 190 : 140)}</span>
@@ -362,12 +360,12 @@ const habitat = (grande) => `<div class="habitat">
   <span class="chip causa" style="${grande ? "left:calc(50% + 150px);bottom:150px" : ""}">${ic("coracao")}carinho + tempo</span>
   <span class="chip emocao">${icc("estrela", "var(--energy)", 1)}alegria</span>
   <span class="chip fonte"><i style="width:8px;height:8px;border-radius:50%;background:var(--health);display:inline-block"></i>frases prontas</span></div>`;
-const ULTIMAS = mod("camadas", "Últimas ações", "最近のアクション", `<ol class="lista">
+const ULTIMAS = mod("camadas", "Últimas ações", "", `<ol class="lista">
   ${[["14:15", "controle", "Brincou com você", "pet"], ["14:02", "mao", "Você fez carinho", "você"], ["13:45", "tigela", "Comeu a ração", "pet"], ["13:40", "tigela", "Você deu comida", "você"]]
     .map(([h, i, t, q]) => `<li><time>${h}</time><span class="q">${ic(i)}</span>${t}<span class="tag">${q}</span></li>`).join("")}</ol>`, { dir: "Ver tudo" , cls: "cresce" });
 const CHAMADO = `<div class="cartao linha"><span class="lista"><span class="q" style="color:var(--hunger)">${ic("alerta")}</span></span><div style="flex:1"><b>Chamando você</b><div class="mini">um carinho atende o pedido</div></div><button class="btn prim">Atender</button></div>`;
 const DESEJO = `<div class="cols2"><div class="des nec"><small>Necessidade</small><b>comer</b>vem do corpo</div><div class="des apr"><small>Vontade aprendida</small><b>brincar</b>aprendida com você</div></div>`;
-const DIGIBRAIN_REC = mod("cerebro", "DigiBrain", "デジブレイン", "", { cls: "recolhido", dir: ic("seta") });
+const DIGIBRAIN_REC = mod("cerebro", "DigiBrain", "", "", { cls: "recolhido", dir: ic("seta") });
 
 /* ---------- as telas */
 const TELAS = [];
@@ -378,7 +376,7 @@ add("Pet", "Pet", "o habitat de hoje no painel, as ações embaixo; à direita E
 add("Pet", "Pet · colunas recolhidas", "pedido do Matheus: recolher a coluna da direita; o painel do habitat e as ações crescem",
   tela({ destino: "pet", aba: "Pet", semLado: true, painel: habitat(true) + acoes(140) }));
 add("Pet", "Pet · DigiBrain aberto (v11)", "o painel de hoje, sem mudança de conteúdo, numa coluna larga no lugar dos cards",
-  tela({ destino: "pet", aba: "Pet", painel: habitat(false) + acoes(), lado: mod("cerebro", "DigiBrain", "デジブレイン", `
+  tela({ destino: "pet", aba: "Pet", painel: habitat(false) + acoes(), lado: mod("cerebro", "DigiBrain", "", `
     <div class="linha" style="margin-bottom:8px"><span class="chip" style="color:var(--health)">● ao vivo</span><span class="mini">Agora: <b style="color:var(--fg)">Exausto: decidiu dormir</b></span></div>
     <div class="cena" style="height:150px;margin-bottom:10px"><svg width="100%" height="150" viewBox="0 0 300 150" aria-label="mapa dos pesos">${Array.from({ length: 14 }, (_, k) => `<path d="M20 ${12 + k * 9} C120 ${20 + (k * 37) % 120}, 180 ${30 + (k * 53) % 100}, 280 ${20 + (k * 29) % 110}" stroke="${k % 4 === 0 ? "#f97316" : k % 3 ? "#9aa8c2" : "#ef4444"}" stroke-width="${1 + (k % 3)}" fill="none" opacity=".7"/>`).join("")}</svg></div>
     <div class="mini" style="font-weight:800;color:var(--fg);margin-bottom:6px">O peso de cada lobo nesta escolha</div>
@@ -386,12 +384,12 @@ add("Pet", "Pet · DigiBrain aberto (v11)", "o painel de hoje, sem mudança de c
     <div class="mini" style="font-weight:800;color:var(--fg);margin:10px 0 6px">As opções e a chance de cada uma</div>
     <div class="pilulas"><span class="on">dormir 71%</span><span>comer 18%</span><span>brincar 8%</span><span>andar 3%</span></div>`, { cls: "cresce", dir: ic("recolher") }) }));
 add("Pet", "Meus pets", "a página de hoje (slots e o detalhe), na casca nova",
-  tela({ destino: "pet", aba: "Pet", titulo: "Meus pets", tituloJp: "マイペット",
+  tela({ destino: "pet", aba: "Pet", titulo: "Meus pets", tituloJp: "",
     painel: `<div class="linha" style="justify-content:space-between"><b style="font-size:18px">3 pets</b><div class="linha"><button class="btn">${ic("baixar")}Importar</button><button class="btn prim">${ic("mais")}Novo ovo</button></div></div>
-      <div class="cols4">${[["Agumon", "ATIVO", "Rookie · D3", 1], ["Gabumon", "EM ESPERA", "Champion · D9", 0], ["Tentomon", "EM ESPERA", "Ultimate · D21", 0]].map(([n, e, s, a]) =>
+      <div class="cols4">${[["Agumon", "ATIVO", "Rookie · D3", 1], ["Greymon", "EM ESPERA", "Champion · D9", 0], ["Garudamon", "EM ESPERA", "Ultimate · D21", 0]].map(([n, e, s, a]) =>
         `<div class="cartao" style="text-align:center;${a ? "border:2px solid var(--primary)" : ""}"><span class="etq ${a ? "azul" : ""}">${e}</span><div style="margin:8px 0">${pet(70, a ? "#F7B7CF" : "#bcd3f2")}</div><b>${n}</b><div class="mini">${s}</div></div>`).join("")}
         <div class="cartao" style="text-align:center;border-style:dashed;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted-fg)">${ic("mais")}<b style="color:var(--muted-fg)">espaço livre</b><span class="mini">novo ovo</span></div></div>`,
-    lado: mod("pet", "Agumon", "アグモン", `<div class="cena" style="height:150px;display:flex;align-items:center;justify-content:center">${pet(110)}</div>
+    lado: mod("pet", "Agumon", "", `<div class="cena" style="height:150px;display:flex;align-items:center;justify-content:center">${pet(110)}</div>
       <div class="mini" style="font-weight:800;color:var(--fg);margin:10px 0 6px">Como ele está</div>
       <div class="barras-est"><ul>${[["Fome", 38, "var(--hunger)"], ["Energia", 74, "var(--energy)"], ["Higiene", 61, "var(--hyg)"]].map(([n, v, c]) => `<li><span class="r">${n}</span><span class="trilho"><i style="width:${v}%;background:${c}"></i></span><span class="v">${v}</span></li>`).join("")}</ul></div>
       <div class="pilulas" style="margin:10px 0"><span>Rookie</span><span>vínculo alto</span><span>Coragem</span><span>3 dias de vida</span></div>
@@ -400,110 +398,110 @@ add("Pet", "Meus pets", "a página de hoje (slots e o detalhe), na casca nova",
 add("Crescer", "Crescer · Treinar", "a sala de treino e o cansaço no painel; os exercícios na coluna",
   tela({ destino: "crescer", aba: "Treinar",
     painel: `<div class="cena" style="flex:1;display:flex;align-items:flex-end;justify-content:center;padding-bottom:30px">${pet(150)}<div class="flut agora" style="position:absolute">${ic("haltere")}<div><b>pronto para treinar</b><small>um treino por vez · 10 min de intervalo</small></div></div></div>
-      ${mod("raio", "Cansaço", "疲れ", `<div class="barras-est"><ul>${[["Fadiga", 42, "var(--energy)"], ["Sobrecarga", 12, "var(--dark)"], ["Treinado na vida", 58, "var(--primary)"]].map(([n, v, c]) => `<li><span class="r" style="width:130px">${n}</span><span class="trilho grosso"><i style="width:${v}%;background:${c}"></i></span><span class="v">${v}</span></li>`).join("")}</ul></div>`)}`,
-    lado: mod("haltere", "Exercícios", "トレーニング", `<div class="cols2">${["Força", "Defesa", "Velocidade", "Vigor", "Técnica", "Foco"].map((n, k) =>
-      `<div class="cartao" style="padding:10px"><span class="etq ${k < 2 ? "azul" : ""}" style="height:18px;font-size:9px">${k < 2 ? "aptidão" : "comum"}</span><div style="margin-top:6px"><b>${n}</b></div><div class="mini">+${3 - (k % 2)} ${n.toLowerCase()} · +8 fadiga</div></div>`).join("")}</div>
+      ${mod("raio", "Cansaço", "", `<div class="barras-est"><ul>${[["Fadiga", 42, "var(--energy)"], ["Sobrecarga", 12, "var(--dark)"], ["Treinado na vida", 58, "var(--primary)"]].map(([n, v, c]) => `<li><span class="r" style="width:130px">${n}</span><span class="trilho grosso"><i style="width:${v}%;background:${c}"></i></span><span class="v">${v}</span></li>`).join("")}</ul></div>`)}`,
+    lado: mod("haltere", "Exercícios", "", `<div class="cols2">${[["Levantar pedra", "+2 força · +1 vigor", 0], ["Corrida", "+2 fôlego · +1 recuperação", 0], ["Alvo", "+2 mira · +1 fôlego", 0], ["Esquiva", "+2 guarda · +1 vigor", 1], ["Meditar", "+2 recuperação · +1 guarda", 0], ["Resistência", "+2 vigor · +1 força", 1]].map(([n, g, apt]) =>
+      `<div class="cartao" style="padding:10px">${apt ? '<span class="etq azul" style="height:18px;font-size:9px">aptidão</span>' : ""}<div style="margin-top:6px"><b>${n}</b></div><div class="mini">${g}</div></div>`).join("")}</div>
       <div class="mini" style="margin-top:10px">Próximo treino em 6 min de jogo</div><button class="btn" style="margin-top:8px;width:100%">Forçar treino</button>`, { cls: "cresce" }) }));
 add("Crescer", "Crescer · Aprendizado", "Agora, instinto × aprendido e as lembranças (v11: O cérebro deste pet no lugar)",
   tela({ destino: "crescer", aba: "Aprendizado",
-    painel: `<div class="cols2" style="flex:1">${mod("estrela", "Agora", "いま", `<div class="cena" style="height:150px;display:flex;align-items:center;justify-content:center">${pet(100)}</div><div class="mini" style="margin:8px 0;font-weight:800;color:var(--fg)">ACABOU DE BRINCAR</div><div class="linha"><button class="btn prim">Elogiar</button><button class="btn">Repreender</button></div>`)}
-      ${mod("cerebro", "Instinto × aprendido", "本能と学習", `<div class="barras-est"><ul>${["brincar", "comer", "dormir", "explorar", "chamar"].map((n, k) => `<li><span class="r" style="width:70px">${n}</span><span class="trilho"><i style="width:${30 + k * 11}%;background:#9aa8c2"></i></span><span class="trilho"><i style="width:${70 - k * 12}%;background:var(--primary)"></i></span></li>`).join("")}</ul></div><div class="mini" style="margin-top:8px">cinza: instinto · azul: aprendido com você</div>`)}</div>`,
-    lado: mod("lista", "Decisões", "決定", `<ol class="lista">${["brincou: humor baixo + você elogiou", "comeu: fome 38", "dormiu: energia 20", "chamou você: sozinho há 2 h"].map((t, k) => `<li><time>14:${15 - k * 4}</time>${t}</li>`).join("")}</ol>`) +
-      mod("camadas", "Lembranças", "思い出", `<div class="cols2">${["elogio · luta", "carinho", "bronca", "espaço livre"].map((t, k) => `<div class="cartao" style="padding:9px;font-size:12.5px;${k === 3 ? "border-style:dashed;color:var(--muted-fg)" : ""}">${t}</div>`).join("")}</div>`, { cls: "cresce" }) }));
+    painel: `<div class="cols2" style="flex:1">${mod("estrela", "Agora", "", `<div class="cena" style="height:150px;display:flex;align-items:center;justify-content:center">${pet(100)}</div><div class="mini" style="margin:8px 0;font-weight:800;color:var(--fg)">ACABOU DE BRINCAR</div><div class="linha"><button class="btn prim">Elogiar</button><button class="btn">Repreender</button></div>`)}
+      ${mod("cerebro", "Instinto × aprendido", "", `<div class="barras-est"><ul>${["brincar", "comer", "dormir", "explorar", "chamar atenção"].map((n, k) => `<li><span class="r" style="width:96px">${n}</span><span class="trilho"><i style="width:${30 + k * 11}%;background:#9aa8c2"></i></span><span class="trilho"><i style="width:${70 - k * 12}%;background:var(--primary)"></i></span></li>`).join("")}</ul></div><div class="mini" style="margin-top:8px">cinza: instinto · azul: aprendido com você</div>`)}</div>`,
+    lado: mod("lista", "Decisões", "", `<ol class="lista">${["brincou: humor baixo + você elogiou", "comeu: fome 38", "dormiu: energia 20", "chamou você: sozinho há 2 h"].map((t, k) => `<li><time>14:${15 - k * 4}</time>${t}</li>`).join("")}</ol>`) +
+      mod("camadas", "Lembranças", "", `<div class="cols2">${["elogio · luta", "carinho", "bronca", "espaço livre"].map((t, k) => `<div class="cartao" style="padding:9px;font-size:12.5px;${k === 3 ? "border-style:dashed;color:var(--muted-fg)" : ""}">${t}</div>`).join("")}</div>`, { cls: "cresce" }) }));
 add("Crescer", "Crescer · Evolução", "a árvore do brasão no painel; os números e o porquê na coluna",
   tela({ destino: "crescer", aba: "Evolução",
     painel: `<div class="linha"><b style="font-size:18px">Árvore de Coragem</b><span class="mini">toque num nó para ver o que pede</span></div>
       <div style="flex:1;display:grid;grid-template-columns:repeat(5,1fr);gap:12px;align-items:center">
         <div><div class="no feito">${pet(40)}Koromon</div></div>
-        <div style="display:flex;flex-direction:column;gap:12px"><div class="no agora">${pet(40)}Agumon<span class="etq azul" style="height:16px;font-size:8px">agora</span></div><div class="no fechado">${pet(40, "#ddd", "sil")}?</div></div>
-        <div style="display:flex;flex-direction:column;gap:8px">${["Greymon", "Tyrannomon", "?", "?"].map((n, k) => `<div class="no ${k ? "fechado" : ""}">${pet(34, k ? "#ddd" : "#ffd0a8", k ? "sil" : "")}${n}${k === 0 ? '<span class="mini">provável</span>' : ""}</div>`).join("")}</div>
+        <div style="display:flex;flex-direction:column;gap:12px"><div class="no agora">${pet(40)}Agumon<span class="etq azul" style="height:16px;font-size:8px">agora</span></div><div class="no">${pet(40, "#f6c39a")}Guilmon<span class="mini">possível</span></div></div>
+        <div style="display:flex;flex-direction:column;gap:8px">${["Greymon", "Kyubimon", "Birdramon", "Growlmon"].map((n, k) => `<div class="no ${k ? "fechado" : ""}">${pet(34, k ? "#ddd" : "#ffd0a8", k ? "sil" : "")}${k ? "?" : n}${k === 0 ? '<span class="mini">provável</span>' : ""}</div>`).join("")}</div>
         <div style="display:flex;flex-direction:column;gap:8px">${["?", "?", "?", "?"].map(() => `<div class="no fechado">${pet(30, "#ddd", "sil")}?</div>`).join("")}</div>
-        <div style="display:flex;flex-direction:column;gap:12px"><div class="no fechado">${pet(40, "#ddd", "sil")}Mega</div><div class="no sombria">${pet(40, "#c9a7ef")}sombria</div></div></div>`,
-    lado: mod("arvore", "Agumon", "進化", `<div class="cols2"><div class="cartao"><div class="mini">forma atual</div><b>Agumon</b></div><div class="cartao"><div class="mini">até virar Greymon</div><b>2 dias</b></div><div class="cartao"><div class="mini">experiência de combate</div><b>14</b></div><div class="cartao"><div class="mini">medalhas do Tamer</div><b>1 de 6</b></div></div>`) +
-      mod("info", "Por que Agumon?", "なぜ", `<div class="mini">nasceu do ovo de Coragem; o cuidado nos primeiros dias pesou mais que o treino.</div>`) +
-      mod("lista", "Histórico", "履歴", `<ol class="lista"><li><time>D1</time>Digi-Egg → Koromon</li><li><time>D2</time>Koromon → Agumon</li></ol>`, { cls: "cresce" }) }));
+        <div style="display:flex;flex-direction:column;gap:12px"><div class="no fechado">${pet(40, "#ddd", "sil")}? Mega</div><div class="no sombria">${pet(40, "#c9a7ef")}sombria</div></div></div>`,
+    lado: mod("arvore", "Agumon", "", `<div class="cols2"><div class="cartao"><div class="mini">forma atual</div><b>Agumon</b></div><div class="cartao"><div class="mini">falta para virar Greymon</div><b>1 medalha</b></div><div class="cartao"><div class="mini">experiência de combate</div><b>14</b></div><div class="cartao"><div class="mini">medalhas do Tamer</div><b>1 de 6</b></div></div>`) +
+      mod("info", "Por que Agumon?", "", `<div class="mini">o porquê que o motor registrou quando ele evoluiu (o card de hoje, sem texto novo)</div>`) +
+      mod("lista", "Histórico", "", `<ol class="lista"><li><time>D1</time>Digi-Egg → Koromon</li><li><time>D2</time>Koromon → Agumon</li></ol>`, { cls: "cresce" }) }));
 add("Crescer", "Crescer · Itens", "os chips e as cartas no painel; as vagas e o como funciona na coluna",
   tela({ destino: "crescer", aba: "Itens",
-    painel: mod("chip", "Chips", "チップ", `<div class="cols3">${["Escudo de Brasa", "Garra Rápida", "Foco Calmo", "Pele Dura", "?", "?"].map((n, k) =>
-      `<div class="cartao" style="${k > 3 ? "border-style:dashed;color:var(--muted-fg)" : ""}"><span class="etq ${k === 0 ? "azul" : ""}" style="height:18px;font-size:9px">${k === 0 ? "equipado" : k > 3 ? "ainda não é seu" : "defesa"}</span><div style="margin-top:6px"><b>${n}</b></div><div class="mini">${k > 3 ? "ganha na Campanha" : "+10% defesa no 1º turno"}</div>${k < 4 ? `<button class="btn" style="margin-top:8px;height:34px;width:100%">${k === 0 ? "Desequipar" : "Equipar"}</button>` : ""}</div>`).join("")}</div>`, { cls: "cresce" }) +
-      mod("camadas", "Cartas", "カード", `<div class="pilulas"><span>Revanche ×2</span><span>Golpe Duplo ×1</span><span>Cura Rápida ×1</span></div>`),
-    lado: mod("chip", "Itens do Tamer", "アイテム", `<div class="cols2"><div class="cartao"><div class="num">4</div><div class="mini">chips</div></div><div class="cartao"><div class="num">4</div><div class="mini">cartas</div></div></div><div class="mini" style="margin-top:10px">Vagas de chip: 1 de 2 em uso</div>`) +
-      mod("info", "Como funciona", "しくみ", `<div class="mini">Chips ficam equipados e valem em toda luta. Cartas valem uma luta e somem. Os itens são do Tamer: passam de um pet para o outro.</div>`, { cls: "cresce" }) }));
+    painel: mod("chip", "Chips", "", `<div class="cols3">${["Chip de Força", "Chip de Guarda", "Chip Recuo", "Chip Aparo", "Chip Oportunista", "Chip Perseguidor"].map((n, k) =>
+      `<div class="cartao" style="${k > 3 ? "border-style:dashed;color:var(--muted-fg)" : ""}"><span class="etq ${k === 0 ? "azul" : ""}" style="height:18px;font-size:9px">${k === 0 ? "equipado" : k > 3 ? "ainda não é seu" : k < 2 ? "stat" : "regra"}</span><div style="margin-top:6px"><b>${n}</b></div><div class="mini">${["+1 força · +1 vigor", "+1 guarda · +1 recuperação", "SE o rival prepara o pesado ENTÃO recuar", "SE o rival fez golpe rápido ENTÃO defender", "ganha numa medalha", "ganha numa medalha"][k]}</div>${k < 4 ? `<button class="btn" style="margin-top:8px;height:34px;width:100%">${k === 0 ? "Desequipar" : "Equipar"}</button>` : ""}</div>`).join("")}</div>`, { cls: "cresce" }) +
+      mod("camadas", "Cartas", "", `<div class="pilulas"><span>Carta de Fôlego ×1</span><span>Carta de Cura ×2</span><span>Carta de Foco ×1</span></div>`),
+    lado: mod("chip", "Itens do Tamer", "", `<div class="cols2"><div class="cartao"><div class="num">4</div><div class="mini">chips</div></div><div class="cartao"><div class="num">4</div><div class="mini">cartas</div></div></div><div class="mini" style="margin-top:10px">Vagas de chip: 1 de 2 em uso</div>`) +
+      mod("info", "Como funciona", "", `<div class="mini">Chips ficam equipados e valem em toda luta. Cartas valem uma luta e somem. Os itens são do Tamer: passam de um pet para o outro.</div>`, { cls: "cresce" }) }));
 
 add("Lutar", "Lutar · Arena", "o palco de prévia e o Lutar no painel; o rival e as regras de combate na coluna",
   tela({ destino: "lutar", aba: "Arena",
     painel: `<div class="cena" style="flex:1;display:flex;align-items:center;justify-content:space-around">${pet(130)}<b style="font-size:34px;color:var(--primary)">×</b>${pet(130, "#bcd3f2")}<div class="flut agora">${ic("lutar")}<div><b>prévia</b><small>escolha um rival e aperte Lutar</small></div></div></div>
-      <div class="linha"><div class="cartao" style="flex:1"><div class="mini">Carta para esta luta</div><b>Revanche ×2 ▾</b></div><button class="btn" style="height:56px">Melhor de 10</button><button class="btn prim" style="height:56px;width:200px;font-size:17px">${ic("lutar")}Lutar</button></div>`,
-    lado: mod("pet", "Rival", "ライバル", `<div class="cols3">${["Bot A", "Bot B", "Bot C", "Gabumon", "Tentomon", "Palmon"].map((n, k) => `<div class="no ${k === 3 ? "agora" : ""}">${pet(34, k < 3 ? "#d6e2f3" : "#bcd3f2")}${n}</div>`).join("")}</div>`) +
-      mod("escudo", "Regras de combate", "ルール", `<div style="display:flex;flex-direction:column;gap:8px">${[["SE vida < 30%", "ENTÃO defender"], ["SE rival cansado", "ENTÃO golpe pesado"], ["SE distância longa", "ENTÃO aproximar"]].map(([a, b]) => `<div class="regra"><span><b>${a}</b><br>${b}</span><span class="ic2">${ic("cadeado")}${ic("alerta")}</span></div>`).join("")}<div class="mini">3 de 5 espaços · lutas de treino para virar Ultimate: 4 de 10</div></div>`, { cls: "cresce" }) }));
+      <div class="linha"><div class="cartao" style="flex:1"><div class="mini">Carta para esta luta</div><b>Carta de Cura ▾</b></div><button class="btn" style="height:56px">Melhor de 10</button><button class="btn prim" style="height:56px;width:200px;font-size:17px">${ic("lutar")}Lutar</button></div>`,
+    lado: mod("pet", "Rival", "", `<div class="cols3">${["aleatório", "agressivo", "tartaruga", "Duelista", "Furioso", "Espelho"].map((n, k) => `<div class="no ${k === 3 ? "agora" : ""}">${pet(34, k < 3 ? "#d6e2f3" : "#bcd3f2")}${n}</div>`).join("")}</div>`) +
+      mod("escudo", "Regras de combate", "", `<div style="display:flex;flex-direction:column;gap:8px">${[["SE o rival fez golpe rápido", "ENTÃO defender"], ["SE o rival tem guts abaixo de 20", "ENTÃO preparar pesado"], ["SE o rival fez disparo", "ENTÃO avançar"]].map(([a, b]) => `<div class="regra"><span><b>${a}</b><br>${b}</span><span class="ic2">${ic("cadeado")}${ic("alerta")}</span></div>`).join("")}<div class="mini">3 de 5 espaços · lutas de treino para virar Ultimate: 4 de 10</div></div>`, { cls: "cresce" }) }));
 add("Lutar", "Lutar · Campanha", "o mapa das ilhas no painel; a ilha escolhida, o rival e o Desafiar na coluna",
   tela({ destino: "lutar", aba: "Campanha",
     painel: `<div class="cena" style="flex:1;background-color:#d9ecfb">
-      ${[["Campina", 12, 60, "VENCIDO"], ["Torre", 30, 30, "VENCIDO"], ["Floresta", 50, 58, "AGORA"], ["Cidadela", 66, 22, "trancado"], ["Lago", 80, 62, "trancado"], ["Espiral", 88, 30, "trancado"]].map(([n, x, y, e]) =>
+      ${[["Campina", 12, 60, "VENCIDO"], ["Torre de pedra", 30, 30, "VENCIDO"], ["Floresta", 50, 58, "AGORA"], ["Cidadela", 66, 22, "trancado"], ["Lago", 80, 62, "trancado"], ["Montanha Espiral", 86, 30, "trancado"]].map(([n, x, y, e]) =>
         `<div class="ilha" style="left:${x}%;top:${y}%;transform:translate(-50%,-50%)"><span class="c" style="${e === "trancado" ? "filter:grayscale(1);opacity:.6" : ""}"></span>${n}<span class="etq ${e === "AGORA" ? "azul" : ""}" style="height:16px;font-size:8px">${e}</span></div>`).join("")}
       <div class="ilha" style="left:50%;top:88%;transform:translate(-50%,-50%)"><span class="c" style="background:#c9d8f0;width:110px"></span>Fronteira<span class="etq" style="height:16px;font-size:8px">LIGA</span></div></div>`,
-    lado: mod("mapa", "Floresta", "森", `<div class="mini" style="margin-bottom:8px">sugerido para Rookie · arena: golpes de longe valem mais</div>
-      ${["Palmon · LÍDER", "Goblimon", "Mushroomon"].map((n, k) => `<div class="regra" style="margin-bottom:8px">${pet(30, "#bcd3f2")}<span><b style="color:var(--fg);font-size:13px">${n}</b><br><span class="mini">${k ? "vitórias: 0" : "lição: defender cedo"}</span></span></div>`).join("")}
+    lado: mod("mapa", "Floresta", "", `<div class="mini" style="margin-bottom:8px">a 3ª arena · a medalha da Floresta</div>
+      <div class="regra" style="margin-bottom:8px">${pet(30, "#bcd3f2")}<span><b style="color:var(--fg);font-size:13px">Youkomon · LÍDER</b><br><span class="mini">atirador que vira brigão no turno 10</span></span></div>
       <div class="cartao"><div class="mini">Nesta ilha</div><b>2 tentativas · melhor turno 14 · 1 regra nova</b></div>
-      <div class="linha" style="margin-top:10px"><button class="btn">Treinar antes</button><button class="btn prim" style="flex:1">Desafiar Palmon</button></div>`, { cls: "cresce" }) }));
+      <div class="linha" style="margin-top:10px"><button class="btn">Treinar antes</button><button class="btn prim" style="flex:1">Desafiar Youkomon</button></div>`, { cls: "cresce" }) }));
 add("Lutar", "Lutar · Fronteira", "a Liga e as instalações no painel; os 6 líderes na coluna",
   tela({ destino: "lutar", aba: "Fronteira",
-    painel: mod("medalha", "Liga dos Líderes", "リーグ", `<div class="linha"><div class="mini" style="flex:1">6 lutas seguidas, sem curar entre elas · a vida passa de uma luta para a outra · uma carta só · perder uma encerra</div><button class="btn prim">Desafiar a Liga</button></div>`) +
+    painel: mod("medalha", "Liga dos Líderes", "", `<div class="linha"><div class="mini" style="flex:1">sem cura entre as lutas · os chips valem, as cartas não · no limite de turnos, a luta fica com o líder · perder uma encerra a tentativa</div><button class="btn prim">Desafiar a Liga</button></div>`) +
       `<div class="cols2" style="flex:1">${[["Torre", "recorde: andar 7"], ["Palácio", "recorde: 3 vitórias"], ["Fábrica", "escolha 1 de 3 aluguéis"], ["Salão", "um pet de cada nível"]].map(([n, r]) =>
         `<div class="cartao" style="display:flex;flex-direction:column;gap:6px">${ic("torre")}<b>${n}</b><div class="mini">${r}</div><div class="mini">${ic("cadeado")} Abre depois do título</div></div>`).join("")}</div>`,
-    lado: mod("lista", "Os 6 líderes", "リーダー", `<ol class="lista">${["Palmon · Campina", "Tentomon · Torre", "Gabumon · Floresta", "Biyomon · Cidadela", "Gomamon · Lago", "Patamon · Espiral"].map((n, k) => `<li><span class="q">${k + 1}</span>${n}<span class="tag">Mega</span></li>`).join("")}</ol>`, { cls: "cresce" }) }));
+    lado: mod("lista", "Os 6 líderes", "", `<ol class="lista">${["Gazimon · Campina", "Guardromon · Torre de pedra", "Youkomon · Floresta", "Myotismon · Cidadela", "MarinBullmon · Lago", "Piedmon · Montanha Espiral"].map((n, k) => `<li><span class="q">${k + 1}</span>${n}<span class="tag">Mega</span></li>`).join("")}</ol>`, { cls: "cresce" }) }));
 add("Lutar", "Lutar · Medalhas", "as 6 medalhas no painel; o resumo e os recordes na coluna",
   tela({ destino: "lutar", aba: "Medalhas",
-    painel: `<div class="cols3" style="flex:1">${["Campina", "Torre", "Floresta", "Cidadela", "Lago", "Espiral"].map((n, k) =>
-      `<div class="cartao med ${k > 1 ? "nao" : ""}"><span class="selo">${k + 1}</span><b>${n}</b><div class="mini">${k > 1 ? "ainda não" : "ganha com Agumon"}</div><div class="mini">libera: ${["Rookie", "Champion", "chip", "Ultimate", "carta", "Mega"][k]}</div></div>`).join("")}</div>`,
-    lado: mod("medalha", "Medalhas do Tamer", "メダル", `<div class="num">2 <span class="mini">de 6</span></div><div class="trilho grosso" style="margin:10px 0"><i style="width:33%;background:var(--energy)"></i></div><div class="mini">Rookie → Champion liberado</div>`) +
-      mod("torre", "Recordes", "記録", `<ol class="lista">${["Torre · —", "Palácio · —", "Fábrica · —", "Salão · —"].map(t => `<li>${t}</li>`).join("")}</ol>`, { cls: "cresce" }) }));
+    painel: `<div class="cols3" style="flex:1">${["Campina", "Torre de pedra", "Floresta", "Cidadela", "Lago", "Montanha Espiral"].map((n, k) =>
+      `<div class="cartao med ${k > 1 ? "nao" : ""}"><span class="selo">${k + 1}</span><b>${n}</b><div class="mini">líder: ${["Gazimon", "Guardromon", "Youkomon", "Myotismon", "MarinBullmon", "Piedmon"][k]} · ${k > 1 ? "ainda não" : "ganha"}</div><div class="mini">libera: ${["Champion (1 medalha)", "conta para a próxima evolução", "Ultimate (3 medalhas)", "conta para a próxima evolução", "Mega (5 medalhas)", "a coleção completa e a Fronteira"][k]}</div></div>`).join("")}</div>`,
+    lado: mod("medalha", "Medalhas do Tamer", "", `<div class="num">2 <span class="mini">de 6</span></div><div class="trilho grosso" style="margin:10px 0"><i style="width:33%;background:var(--energy)"></i></div><div class="mini">Champion liberado · Ultimate com 3</div>`) +
+      mod("torre", "Recordes", "", `<ol class="lista">${["Torre · —", "Palácio · —", "Fábrica · —", "Salão · —"].map(t => `<li>${t}</li>`).join("")}</ol>`, { cls: "cresce" }) }));
 add("Lutar", "Luta (tela cheia)", "a luta ocupa o painel inteiro; a intenção do rival, a regra em uso e os turnos na coluna",
-  tela({ destino: "lutar", aba: "Arena", titulo: "Luta · Arena", tituloJp: "バトル",
+  tela({ destino: "lutar", aba: "Arena", titulo: "Luta · Arena", tituloJp: "",
     painel: `<div class="cena" style="flex:1;background:#e6f0fc"><div style="position:absolute;left:16px;right:16px;top:14px;display:flex;justify-content:space-between">
-        ${[0, 1].map(k => `<div class="cartao" style="width:42%"><b>${k ? "Gabumon" : "Agumon"}</b><div class="trilho grosso" style="margin:6px 0"><i style="width:${k ? 46 : 72}%;background:var(--health)"></i></div><div class="trilho"><i style="width:${k ? 30 : 55}%;background:var(--energy)"></i></div></div>`).join("")}</div>
+        ${[0, 1].map(k => `<div class="cartao" style="width:42%"><b>${k ? "Gazimon" : "Agumon"}</b><div class="trilho grosso" style="margin:6px 0"><i style="width:${k ? 46 : 72}%;background:var(--health)"></i></div><div class="trilho"><i style="width:${k ? 30 : 55}%;background:var(--energy)"></i></div></div>`).join("")}</div>
         <div style="position:absolute;inset:90px 60px 40px;display:flex;align-items:flex-end;justify-content:space-between">${pet(150)}${pet(150, "#bcd3f2")}</div>
         <span class="chip" style="position:absolute;left:50%;top:100px;transform:translateX(-50%)">TURNO 7 · distância curta</span></div>
       <div class="linha"><button class="btn">${ic("pausa")}Pausar</button><button class="btn">×2</button><div style="flex:1"></div><button class="btn">Desistir</button></div>`,
-    lado: mod("olho", "Intenção do rival", "相手の狙い", `<div class="mini">vai tentar golpe pesado</div>`) + mod("escudo", "Regra em uso", "使用中のルール", `<div class="regra"><span><b>SE vida &lt; 30%</b><br>ENTÃO defender</span><span class="ic2">${ic("cadeado")}${ic("alerta")}</span></div>`) +
-      mod("lista", "Turnos", "ターン", `<ol class="lista">${["Agumon atacou: −12", "Gabumon defendeu", "Agumon aproximou", "Gabumon golpe pesado: −18"].map((t, k) => `<li><time>T${7 - k}</time>${t}</li>`).join("")}</ol>`, { cls: "cresce" }) }));
+    lado: mod("olho", "Intenção do rival", "", `<div class="mini">preparar pesado</div>`) + mod("escudo", "Regra em uso", "", `<div class="regra"><span><b>SE o rival fez golpe rápido</b><br>ENTÃO defender</span><span class="ic2">${ic("cadeado")}${ic("alerta")}</span></div>`) +
+      mod("lista", "Turnos", "", `<ol class="lista">${["Agumon: golpe rápido, −8", "Gazimon: defender", "Agumon: avançar", "Gazimon: preparar pesado"].map((t, k) => `<li><time>T${7 - k}</time>${t}</li>`).join("")}</ol>`, { cls: "cresce" }) }));
 
 add("Diário", "Diário · Registro", "o registro inteiro no painel, com os filtros; o replay e o detalhe do evento na coluna",
   tela({ destino: "diario", aba: "Registro",
     painel: `<div class="pilulas"><span class="on">tudo</span><span>você</span><span>pet</span><span>lutas</span><span>recusas</span><span>treino</span><span>falas</span></div>
-      ${mod("diario", "Registro", "記録", `<ol class="lista">${[["D3 14:15", "controle", "Brincou com você", "pet"], ["D3 14:02", "mao", "Você fez carinho", "você"], ["D3 13:45", "tigela", "Comeu a ração", "pet"], ["D3 13:40", "tigela", "Você deu comida", "você"], ["D3 12:10", "lutar", "Venceu Gabumon na Arena", "luta"], ["D3 11:30", "haltere", "Treinou Força", "treino"], ["D3 10:05", "alerta", "Recusou tomar banho", "recusa"], ["D2 22:40", "conversar", "“Quero brincar!”", "fala"]].map(([h, i, t, q]) => `<li><time style="width:70px">${h}</time><span class="q">${ic(i)}</span>${t}<span class="tag">${q}</span></li>`).join("")}</ol>`, { cls: "cresce", dir: "" })}`,
-    lado: mod("play", "Replay", "リプレイ", `<div class="cols2"><div class="cartao"><div class="mini">semente</div><b>4242</b></div><div class="cartao"><div class="mini">eventos</div><b>312</b></div></div><div class="linha" style="margin-top:10px"><button class="btn">Verificar replay</button><button class="btn">${ic("copiar")}Copiar</button></div>`) +
-      mod("info", "Evento do registro", "イベント", `<b>Venceu Gabumon na Arena</b><div class="mini" style="margin:6px 0 10px">D3 12:10 · 9 turnos · regra nova: defender cedo</div><button class="btn prim">Ver a luta no palco</button>`, { cls: "cresce" }) }));
+      ${mod("diario", "Registro", "", `<ol class="lista">${[["D3 14:15", "controle", "Brincou com você", "pet"], ["D3 14:02", "mao", "Você fez carinho", "você"], ["D3 13:45", "tigela", "Comeu a ração", "pet"], ["D3 13:40", "tigela", "Você deu comida", "você"], ["D3 12:10", "lutar", "Venceu Gazimon na Campina", "luta"], ["D3 11:30", "haltere", "Treinou Levantar pedra", "treino"], ["D3 10:05", "alerta", "Recusou tomar banho", "recusa"], ["D2 22:40", "conversar", "“Quero brincar!”", "fala"]].map(([h, i, t, q]) => `<li><time style="width:70px">${h}</time><span class="q">${ic(i)}</span>${t}<span class="tag">${q}</span></li>`).join("")}</ol>`, { cls: "cresce", dir: "" })}`,
+    lado: mod("play", "Replay", "", `<div class="cols2"><div class="cartao"><div class="mini">semente</div><b>4242</b></div><div class="cartao"><div class="mini">eventos</div><b>312</b></div></div><div class="linha" style="margin-top:10px"><button class="btn">Verificar replay</button><button class="btn">${ic("copiar")}Copiar</button></div>`) +
+      mod("info", "Evento do registro", "", `<b>Venceu Gazimon na Campina</b><div class="mini" style="margin:6px 0 10px">D3 12:10 · 9 turnos · regra nova: SE o rival fez golpe rápido ENTÃO defender</div><button class="btn prim">Ver a luta no palco</button>`, { cls: "cresce" }) }));
 add("Diário", "Diário · Catálogo", "as 15 formas no painel; a ficha da forma na coluna",
   tela({ destino: "diario", aba: "Catálogo",
     painel: `<div class="linha"><div class="pilulas"><span class="on">Coragem</span><span>Amizade</span><span>Conhecimento</span><span>Sinceridade</span></div><span class="mini" style="margin-left:auto">4 de 15 vistas</span></div>
-      <div style="flex:1;display:grid;grid-template-columns:repeat(5,1fr);gap:10px">${Array.from({ length: 15 }, (_, k) => `<div class="no ${k === 1 ? "agora" : ""}">${k < 4 ? pet(48, ["#F7B7CF", "#ffd0a8", "#bcd3f2", "#cde9c4"][k]) : pet(48, "#ddd", "sil")}${k < 4 ? ["Koromon", "Agumon", "Greymon", "Tyrannomon"][k] : "?"}</div>`).join("")}</div>`,
-    lado: mod("grade", "Ficha: Agumon", "図鑑", `<div class="cena" style="height:120px;display:flex;align-items:center;justify-content:center">${pet(90)}</div><div class="pilulas" style="margin:8px 0"><span>Rookie</span><span class="on">seu pet</span></div>
-      <div class="barras-est"><ul>${["Força", "Defesa", "Velocidade", "Vigor", "Técnica", "Foco"].map((n, k) => `<li><span class="r" style="width:80px">${n}</span><span class="trilho"><i style="width:${40 + (k * 17) % 50}%;background:var(--primary)"></i></span></li>`).join("")}</ul></div>`, { cls: "cresce" }) }));
+      <div style="flex:1;display:grid;grid-template-columns:repeat(5,1fr);gap:10px">${Array.from({ length: 15 }, (_, k) => `<div class="no ${k === 1 ? "agora" : ""}">${k < 4 ? pet(48, ["#F7B7CF", "#ffd0a8", "#bcd3f2", "#cde9c4"][k]) : pet(48, "#ddd", "sil")}${k < 4 ? ["Koromon", "Agumon", "Guilmon", "Greymon"][k] : "?"}</div>`).join("")}</div>`,
+    lado: mod("grade", "Ficha: Agumon", "", `<div class="cena" style="height:120px;display:flex;align-items:center;justify-content:center">${pet(90)}</div><div class="pilulas" style="margin:8px 0"><span>Rookie</span><span class="on">seu pet</span></div>
+      <div class="barras-est"><ul>${["vigor", "fôlego", "recuperação", "força", "mira", "guarda"].map((n, k) => `<li><span class="r" style="width:96px">${n}</span><span class="trilho"><i style="width:${40 + (k * 17) % 50}%;background:var(--primary)"></i></span></li>`).join("")}</ul></div>`, { cls: "cresce" }) }));
 add("Diário", "Diário · Gerações", "as gerações em linhas de cards, sem coluna",
   tela({ destino: "diario", aba: "Gerações", semLado: true,
-    painel: [3, 2, 1].map(g => `<div><div class="mini" style="font-weight:900;color:var(--primary);letter-spacing:.1em;margin-bottom:8px">GERAÇÃO ${g}</div><div class="cols4">${(g === 3 ? [["Agumon", "você · agora"]] : g === 2 ? [["Greymon", "aposentado"], ["Garurumon", "log de outro dono"]] : [["MetalGreymon", "aposentado"], ["WereGarurumon", "aposentado"]]).map(([n, s]) =>
+    painel: [3, 2, 1].map(g => `<div><div class="mini" style="font-weight:900;color:var(--primary);letter-spacing:.1em;margin-bottom:8px">GERAÇÃO ${g}</div><div class="cols4">${(g === 3 ? [["Agumon", "você · agora"]] : g === 2 ? [["Greymon", "aposentado"], ["Birdramon", "log de outro dono"]] : [["MetalGreymon", "aposentado"], ["Garudamon", "aposentado"]]).map(([n, s]) =>
       `<div class="cartao linha">${pet(50)}<div><b>${n}</b><div class="mini">${s}</div><div class="mini" style="color:var(--health)">✓ origem conferida</div></div></div>`).join("")}</div></div>`).join("") }));
 add("Diário", "Diário · Cenários", "a ferramenta de pesquisa: os dois pets e a comparação",
   tela({ destino: "diario", aba: "Cenários",
-    painel: `<div class="cols2">${["Pet A · vira o seu", "Pet B · rival fixo"].map(t => mod("frasco", t, "シナリオ", `<div class="cols3">${[["Dono simulado", "atencioso"], ["Dias de vida", "6"], ["Interações por dia", "12"]].map(([a, b]) => `<div class="cartao" style="padding:8px"><div class="mini">${a}</div><b>${b}</b></div>`).join("")}</div>`)).join("")}</div>
-      ${mod("lista", "Comparação A × B", "比較", `<table class="tab"><tr><th></th><th>A</th><th>B</th></tr>${[["Perfil", "atencioso", "ausente"], ["Estado no fim", "Champion", "Rookie"], ["Sinal de aprendizado", "0,42", "0,08"], ["JSD", "0,31", "—"], ["Na arena", "7 V · 3 D", "—"]].map(r => `<tr>${r.map((c, k) => k ? `<td>${c}</td>` : `<td><b>${c}</b></td>`).join("")}</tr>`).join("")}</table>`, { cls: "cresce" })}`,
-    lado: mod("frasco", "Cenários prontos", "プリセット", `<div style="display:flex;flex-direction:column;gap:8px">${["Atencioso × ausente", "Elogio × bronca", "Treino pesado", "Só carinho", "Dono incoerente"].map(n => `<button class="btn" style="justify-content:flex-start">${n}</button>`).join("")}</div>
-      <div class="cartao" style="margin-top:10px"><div class="mini">Semente</div><b>101</b></div><button class="btn prim" style="margin-top:10px;width:100%">Simular e comparar</button>`, { cls: "cresce" }) }));
+    painel: `<div class="cols2">${["Pet A · vira o seu", "Pet B · rival fixo"].map(t => mod("frasco", t, "", `<div class="cols3">${[["Dono simulado", "atencioso"], ["Dias de vida", "5"], ["Interações por dia", "16"]].map(([a, b]) => `<div class="cartao" style="padding:8px"><div class="mini">${a}</div><b>${b}</b></div>`).join("")}</div>`)).join("")}</div>
+      ${mod("lista", "Comparação A × B", "", `<table class="tab"><tr><th></th><th>A</th><th>B</th></tr>${[["Perfil", "atencioso", "aleatório"], ["Estado no fim", "Champion", "Rookie"], ["Sinal de aprendizado", "0,42", "0,08"], ["JSD", "0,31", "—"], ["Na arena", "7 V · 3 D", "—"]].map(r => `<tr>${r.map((c, k) => k ? `<td>${c}</td>` : `<td><b>${c}</b></td>`).join("")}</tr>`).join("")}</table>`, { cls: "cresce" })}`,
+    lado: mod("frasco", "Cenários prontos", "", `<div style="display:flex;flex-direction:column;gap:8px">${["Ultimate bem cuidado × In-Training aleatório", "Controle da pesquisa", "Mesmo dono, orçamento diferente", "Ultimate negligenciado × Rookie cuidado", "Incoerente × atencioso"].map(n => `<button class="btn" style="justify-content:flex-start">${n}</button>`).join("")}</div>
+      <div class="cartao" style="margin-top:10px"><div class="mini">Semente</div><b>1</b></div><button class="btn prim" style="margin-top:10px;width:100%">Simular e comparar</button>`, { cls: "cresce" }) }));
 
 add("Outras", "Conversar", "a conversa no painel; o que o pet pode citar na coluna",
-  tela({ destino: "pet", extra: "conversar", titulo: "Conversar", tituloJp: "会話",
+  tela({ destino: "pet", extra: "conversar", titulo: "Conversar", tituloJp: "",
     painel: `<div class="linha"><span class="chip" style="color:var(--health)">● frases prontas</span><div class="pilulas" style="margin-left:auto"><span class="on">Frases prontas</span><span>Moldura</span><span>Livre</span></div></div>
       <div class="cena" style="flex:1;padding:16px;display:flex;flex-direction:column;gap:12px;justify-content:flex-end">
         <div class="fala-p pet">Brincar! Brincar!</div><div class="fala-p eu">Quer brincar de bola?</div><div class="fala-p pet">Bola! Feliz!</div></div>
       <div class="linha"><div class="pilulas"><span>Carinho</span><span>Tapa</span></div><div class="campo" style="flex:1">Escreva para Agumon<button class="btn prim">${ic("enviar")}</button></div></div>`,
-    lado: mod("info", "O que o pet pode citar", "話せること", `<ol class="lista">${["Identidade · Agumon, Rookie", "Só os extremos · humor alto", "Estado · fome 38", "Memórias · elogio na luta", "Motivos recentes · brincou", "Vínculo · alto"].map(t => `<li>${t}</li>`).join("")}</ol>`, { cls: "cresce" }) }));
+    lado: mod("info", "O que o pet pode citar", "", `<ol class="lista">${["Identidade · Agumon, Rookie", "Só os extremos · humor alto", "Estado · fome 38", "Memórias · elogio na luta", "Motivos recentes · brincou", "Vínculo · alto"].map(t => `<li>${t}</li>`).join("")}</ol>`, { cls: "cresce" }) }));
 add("Outras", "Ajustes", "a lista de ajustes na coluna do painel e a parte aberta ao lado",
-  tela({ destino: "pet", extra: "ajustes", titulo: "Ajustes", tituloJp: "設定",
+  tela({ destino: "pet", extra: "ajustes", titulo: "Ajustes", tituloJp: "",
     painel: `<div style="display:grid;grid-template-columns:260px 1fr;gap:14px;flex:1">
       <div class="cartao" style="padding:6px">${[["tema", "Aparência", 1], ["conversar", "Fala do pet", 0], ["db", "Registro e replay", 0], ["pausa", "Tempo · TESTE", 0], ["info", "Sobre o Digilab", 0]].map(([i, n, on]) => `<div class="opc ${on ? "on" : ""}">${ic(i)}${n}</div>`).join("")}</div>
-      <div style="display:flex;flex-direction:column;gap:12px">${mod("tema", "Aparência", "外観", `<div class="mini" style="margin-bottom:8px">TEMA</div><div class="pilulas"><span class="on">Claro</span><span>Escuro</span><span>Sistema</span></div><div class="opc" style="padding:12px 0 0">Mostrar dicas<span class="sw"></span></div>`)}
-        ${mod("db", "Registro e replay", "記録", `<div class="linha"><button class="btn">Verificar replay</button><button class="btn">${ic("copiar")}Copiar registro</button><button class="btn">${ic("baixar")}Exportar pet</button></div><div class="risco" style="margin-top:12px">Novo ovo (apaga este pet)</div>`)}</div></div>`, semLado: true }));
+      <div style="display:flex;flex-direction:column;gap:12px">${mod("tema", "Aparência", "", `<div class="mini" style="margin-bottom:8px">TEMA</div><div class="pilulas"><span class="on">Claro</span><span>Escuro</span><span>Sistema</span></div><div class="opc" style="padding:12px 0 0">Mostrar dicas<span class="sw"></span></div>`)}
+        ${mod("db", "Registro e replay", "", `<div class="linha"><button class="btn">Verificar replay</button><button class="btn">${ic("copiar")}Copiar registro</button><button class="btn">${ic("baixar")}Exportar pet</button></div><div class="risco" style="margin-top:12px">Novo ovo (apaga este pet)</div>`)}</div></div>`, semLado: true }));
 
 /* monta o mapa (com ?tela=N mostra uma tela só, em tamanho real, para a captura) */
 const alvo = document.getElementById("mapa"), q = new URLSearchParams(location.search), uma = q.get("tela");
