@@ -19,8 +19,9 @@ const SUB = 16, LARGURA = 16 * SUB, ALTURA = 12 * SUB, ESPESSURA = 8;
 const ELEVACAO_GRAUS = 50;                    // o da vista do POC
 /* as paredes do fundo e dos lados sobem alem do topo da tela (a sala nunca mostra o vazio acima); a do fundo tem a janela */
 const ALTURA_PAREDE = 640, ALTURA_FRENTE = 6, ALTURA_ALTO = 28, ALTURA_BAIXO = 10;
-/* o chao ocupa no maximo 68% da altura da tela: o resto e a parede do fundo, com a janela */
-const FRACAO_CHAO = 0.68;
+/* o chao ocupa no maximo 68% da altura da tela em retrato (o celular) e 78% em paisagem (o modulo do desktop): o resto e a parede do
+   fundo, com a janela, que em paisagem desce e fica mais baixa para caber */
+const FRACAO_CHAO = { retrato: 0.68, paisagem: 0.78 }, JANELA_Y = { retrato: 92, paisagem: 56 }, JANELA_ESCALA = { retrato: 1, paisagem: 60 / 76 };
 /* PROPOSTO, sem fonte: o pet perto da frente, no meio; a plataforma e a sombra sob ele */
 const PET: [number, number] = [LARGURA / 2, ALTURA * 0.68], R_PLATAFORMA = 34, R_SOMBRA = 14;
 /* as cores claras (as do cenario de reserva, CenarioPet): [tampo, frente, lados] */
@@ -69,11 +70,12 @@ class VistaPet {
   private readonly cima: THREE.Vector3;
   private readonly sprite: THREE.Sprite;
   private readonly sombra: THREE.Mesh;
+  private readonly janela: THREE.Group;
   private chave = "";
   private texels: [number, number] = [1, 1];
   private larguraPx = 0;
   private alturaPx = 0;
-  private P = 1;               // pixels do canvas por subunidade (inteiro)
+  private P = 1;               // pixels do canvas por subunidade (inteiro em retrato)
   private pxPorTexel = 1;      // pixels do canvas por texel do sprite (inteiro)
   private desloc = 0;          // quanto a janela da camera desce, em subunidades (multiplo de 1/P)
 
@@ -110,8 +112,9 @@ class VistaPet {
     janela.add(vidro);
     for (const [w, h] of [[3, 76], [120, 3]] as const) janela.add(Object.assign(new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: COR_CAIXILHO })), { renderOrder: 1 }));
     janela.children[1].position.z = janela.children[2].position.z = 0.1;
-    janela.position.set(LARGURA / 2, 92, 0.3);
+    janela.position.set(LARGURA / 2, JANELA_Y.retrato, 0.3);
     this.cena.add(janela);
+    this.janela = janela;
     /* a plataforma e a sombra no chao, sob o pet */
     const plataforma = new THREE.Mesh(new THREE.RingGeometry(R_PLATAFORMA - 7, R_PLATAFORMA, 40), new THREE.MeshBasicMaterial({ color: COR_PLATAFORMA }));
     plataforma.rotation.x = -Math.PI / 2; plataforma.position.set(PET[0], 0.15, PET[1]);
@@ -125,7 +128,7 @@ class VistaPet {
     this.cena.add(this.sprite);
   }
 
-  /** ajusta o canvas a caixa (px de CSS): a sala ate um pouco mais larga que a tela (as paredes dos lados cortam), o chao em ate 68% da
+  /** ajusta o canvas a caixa (px de CSS): a sala ate um pouco mais larga que a tela (as paredes dos lados cortam), o chao em ate 68% (retrato) ou 78% (paisagem) da
    *  altura e encostado embaixo, a parede do fundo no resto; o pet na maior escala inteira que cabe em 42% da altura e 60% da largura */
   ajustar(larguraCss: number, alturaCss: number, razao: number): void {
     const r = Math.max(1, Math.floor(razao));
@@ -133,8 +136,19 @@ class VistaPet {
     this.renderer.setPixelRatio(1);
     this.renderer.setSize(this.larguraPx, this.alturaPx, false);
     this.canvas.style.width = `${this.larguraPx / r}px`; this.canvas.style.height = `${this.alturaPx / r}px`;
-    const e = THREE.MathUtils.degToRad(ELEVACAO_GRAUS);
-    this.P = Math.max(1, Math.floor(Math.min((this.larguraPx * 1.1) / LARGURA, (this.alturaPx * FRACAO_CHAO) / (ALTURA * Math.sin(e)))));
+    const e = THREE.MathUtils.degToRad(ELEVACAO_GRAUS), forma = this.larguraPx > this.alturaPx ? "paisagem" : "retrato";
+    /* pixels do canvas por subunidade: inteiro em retrato (o celular, como no POC); em paisagem (o modulo do desktop), fracionario, para a
+       sala encher a caixa mesmo com 1 pixel do aparelho por pixel de CSS. O pet continua nitido: o tamanho e o canto dele sao contados
+       em pixels inteiros do canvas (desenhar) */
+    const P = Math.min((this.larguraPx * 1.1) / LARGURA, (this.alturaPx * FRACAO_CHAO[forma]) / (ALTURA * Math.sin(e)));
+    this.P = forma === "retrato" ? Math.max(1, Math.floor(P)) : Math.max(1, P);
+    this.janela.position.y = JANELA_Y[forma]; this.janela.scale.y = JANELA_ESCALA[forma];
+    if (forma === "paisagem") {
+      /* a parede que aparece acima do chao, em subunidades: a janela fica no meio dela e ocupa no maximo 60% da altura */
+      const parede = (this.alturaPx * 0.98 - ALTURA * Math.sin(e) * this.P) / (this.P * Math.cos(e));
+      this.janela.scale.y = Math.min(JANELA_ESCALA.paisagem, (parede * 0.6) / 76);
+      this.janela.position.y = Math.min(JANELA_Y.paisagem, parede * 0.55);
+    }
     const meiaL = this.larguraPx / (2 * this.P), meiaA = this.alturaPx / (2 * this.P);
     /* a frente da sala a 2% do fundo do canvas: a janela da camera desce o que sobra (em pixels inteiros) */
     const frenteNaTela = -(ALTURA / 2) * Math.sin(e);
@@ -187,14 +201,18 @@ export function iniciarCena3D(canvas: HTMLCanvasElement, aoPerder: () => void): 
   const vista = new VistaPet(canvas), caixa = canvas.parentElement;
   if (!caixa) throw new Error("cena 3D sem caixa");
   const razao = () => (devicePixelRatio || 1);
-  const ajustar = () => vista.ajustar(caixa.clientWidth, caixa.clientHeight, razao());
-  ajustar();
-  const obs = new ResizeObserver(ajustar); obs.observe(caixa);
   const perdeu = (ev: Event) => { ev.preventDefault(); aoPerder(); };
   canvas.addEventListener("webglcontextlost", perdeu);
   let quadro = 0;
   const desenha = () => { CENA.ret = vista.desenhar(quadro, razao()); quadro++; };
-  desenha();
+  /* a caixa mudou de tamanho (um modulo do quadro cresceu ou recolheu): reenquadra e redesenha na hora o mesmo quadro, sem esperar o
+     proximo e sem avancar o contador (o balanco do pet segue o mesmo ritmo) */
+  const ajustar = () => {
+    vista.ajustar(caixa.clientWidth, caixa.clientHeight, razao());
+    if (caixa.clientWidth > 0 && caixa.clientHeight > 0) CENA.ret = vista.desenhar(Math.max(0, quadro - 1), razao());
+  };
+  ajustar();
+  const obs = new ResizeObserver(ajustar); obs.observe(caixa);
   /* um quadro a cada 120 ms, como o PalcoPet (o idle do atlas e de 120 ms por quadro): a sala e parada */
   const t = setInterval(desenha, 120);
   /* a M3 pela pagina do jogo (docs/TAREFA_V2_TELA_PET.md): 10 s desenhando a cada quadro do navegador, a mesma medida do POC */

@@ -56,7 +56,8 @@ for (const [versao, save] of Object.entries(SAVES)) {
     /* ?escala=0: a assinatura se compara com o HTML antigo, que nao tem a escala de stats (a campanha muda com ela) */
     await page.goto(APP + "?escala=0#/pet/estado");
     await expect(page.locator(".pet-tela")).toBeVisible();
-    await expect(page.locator(".pet-cab .dl-tag--estagio")).toHaveText(/Champion/i);
+    /* o nivel do pet: no topo do desktop (o viewport padrao e de desktop; a tela Pet do desktop nao tem o cabecalho do celular) */
+    await expect(page.locator(".topo-pet .dl-tag--estagio")).toHaveText(/Champion/i);
 
     /* os 5 destinos e as 11 abas, pela barra e pelas abas */
     for (const [destino, aba, rota] of ABAS) {
@@ -1055,16 +1056,14 @@ for (const largura of [390, 1280]) {
     await expect(page.locator(".pet-tela")).toBeVisible();
     const desktop = largura >= 1100;
     if (desktop) {
-      await expect(page.locator(".db-botao")).toBeHidden();
-      await expect(page.locator(".digibrain")).toBeHidden();                          /* sob demanda */
-      await page.locator(".db-abrir").click();
-      const card = page.locator(".pet-detalhes .digibrain");
+      await expect(page.locator(".db-botao")).toHaveCount(0);
+      const card = page.locator("#mod-digibrain .digibrain");                         /* o modulo DigiBrain do quadro, aberto */
       await expect(card).toBeVisible();
       const r = await page.evaluate(() => {
         const cena = document.querySelector(".pet-cena")!.getBoundingClientRect(), db = document.querySelector(".digibrain")!.getBoundingClientRect();
         return { aDireita: db.left >= cena.right - 1, larg: document.documentElement.scrollWidth, janela: innerWidth };
       });
-      expect(r.aDireita, "o painel na coluna de detalhes, a direita do cenario").toBe(true);
+      expect(r.aDireita, "o painel na coluna lateral do quadro, a direita do cenario").toBe(true);
       expect(r.larg).toBeLessThanOrEqual(r.janela);
     } else {
       await expect(page.locator(".digibrain")).toBeHidden();
@@ -1072,7 +1071,7 @@ for (const largura of [390, 1280]) {
       await page.locator(".db-botao").click();
       await expect(page.locator("dialog.folha[open]")).toHaveAttribute("aria-label", "DigiBrain");
     }
-    const raiz = desktop ? page.locator(".digibrain") : page.locator("dialog.folha[open]");
+    const raiz = desktop ? page.locator("#mod-digibrain") : page.locator("dialog.folha[open]");
     await expect(raiz.locator(".db-selo")).toHaveText("ao vivo");                    /* o tempo do jogo andando */
     /* o painel le o motor: uma decisao, as barras dos lobos (o piso so quando entra na conta) e uma escolhida */
     const db = await page.evaluate(() => (window as any).__digilab.digibrain());
@@ -1103,7 +1102,7 @@ for (const largura of [390, 1280]) {
     await page.goto(APP + "#/pet/estado");
     await expect(page.locator(".pet-tela")).toBeVisible();
     const desktop = largura >= 1100;
-    await page.locator(desktop ? ".db-abrir" : ".db-botao").click();
+    if (!desktop) await page.locator(".db-botao").click();
     const raiz = desktop ? page.locator(".digibrain") : page.locator("dialog.folha[open]");
     const mapa = raiz.locator("svg.mp");
     await expect(mapa).toBeVisible();
@@ -1187,10 +1186,11 @@ for (const [largura, altura] of [[360, 800], [390, 844], [1280, 800]]) {
     /* os detalhes: o balao da fala abre o porque */
     await page.locator(".cena-fala").click();
     if (desktop) {
-      await expect(page.locator(".pet-detalhes")).toBeVisible();
-      await expect(page.locator(".pet-detalhes #det-fala-tit")).toHaveText("Por que ele disse isso");
-      await page.locator(".det-fechar").click();
-      await expect(page.locator(".pet-detalhes")).toHaveCount(0);
+      /* no desktop o porque e um modulo do quadro, recolhido no comeco: o balao o abre */
+      await expect(page.locator("#mod-fala .mod-corpo")).toBeVisible();
+      await expect(page.locator("#mod-fala .det-fala .fala-status")).toBeVisible();
+      await page.getByRole("button", { name: "Recolher Por que ele disse isso" }).click();
+      await expect(page.locator("#mod-fala .mod-corpo")).toHaveCount(0);
     } else {
       await expect(page.locator("dialog.folha[open]")).toHaveAttribute("aria-label", "Como ele está");
       await expect(page.locator("dialog.folha[open] .necessidades4")).toBeVisible();
@@ -1229,4 +1229,62 @@ test("Pet (Home): a cena 3D com WebGL e o cenário de reserva sem ele", async ({
   await expect(p2.locator(".pet-cena .cena3d")).toHaveCount(0);
   expect(erros2).toEqual([]);
   await ctx.close();
+});
+
+/* o quadro modular da tela Pet no desktop (docs/TAREFA_V2_PET_QUADRO.md): os modulos que o motor sustenta, arrastaveis entre as duas
+   colunas, com o menu (mover pelo teclado), o recolher de cada modulo e da coluna lateral; o arranjo fica no localStorage (preferencia
+   de quem joga, fora do save) e volta depois de recarregar. No celular nao ha quadro */
+test("Pet (quadro): arrastar, mover pelo menu, recolher e o arranjo salvo", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await semear(page, SAVE_V11);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/pet/estado");
+  const col = (c: string) => page.evaluate(sel => [...document.querySelectorAll(sel + " > .quadro-vaga")].map(e => e.getAttribute("data-modulo")), `.quadro-col--${c}`);
+  await expect(page.locator(".quadro")).toBeVisible();
+  expect(await col("principal")).toEqual(["cenario", "acoes"]);
+  /* a lateral: os modulos do motor (a proxima evolucao so com a proxima forma; o DigiBrain no v11) */
+  expect(await col("lado")).toEqual(["estado", "desejo", "evolucao", "registro", "digibrain", "fala"]);
+  await expect(page.locator("#mod-estado .palco-emocao")).toBeVisible();          /* a emocao registrada a direita do titulo */
+  await expect(page.locator("#mod-evolucao")).toContainText("até virar");
+  await expect(page.locator("#mod-evolucao")).not.toContainText(/n[ií]vel|xp/i);
+  /* o "Ver tudo" do registro leva ao Diario */
+  await page.locator("#mod-registro").getByRole("button", { name: "Ver tudo" }).click();
+  await expect(page).toHaveURL(/#\/diario\/registro$/);
+  await page.locator(".dl-nav").getByRole("button", { name: "Pet", exact: true }).click();
+  /* arrastar as Ultimas acoes para a coluna principal, acima das Acoes */
+  await page.locator("#mod-registro .mod-cab").dragTo(page.locator('.quadro-col--principal [data-modulo="acoes"]'), { targetPosition: { x: 40, y: 8 } });
+  expect(await col("principal")).toEqual(["cenario", "registro", "acoes"]);
+  /* o menu: mover as Acoes para a coluna lateral (o arrastar pelo teclado) */
+  await page.getByRole("button", { name: "Opções do quadro Ações" }).click();
+  await page.getByRole("menuitem", { name: "Mover para a coluna lateral" }).click();
+  expect(await col("principal")).toEqual(["cenario", "registro"]);
+  expect((await col("lado")).at(-1)).toBe("acoes");
+  /* recolher o Estado atual: o corpo some */
+  await page.getByRole("button", { name: "Recolher Estado atual" }).click();
+  await expect(page.locator("#mod-estado .mod-corpo")).toHaveCount(0);
+  /* recolher a coluna lateral: o habitat ganha a largura */
+  const largura = () => page.evaluate(() => document.querySelector(".pet-cena")!.getBoundingClientRect().width);
+  const antes = await largura();
+  await page.getByRole("button", { name: "Recolher a coluna lateral" }).click();
+  await expect(page.locator(".quadro-col--recolhida")).toBeVisible();
+  await expect.poll(largura).toBeGreaterThan(antes + 250);
+  /* o arranjo volta depois de recarregar (localStorage), e o save do pet nao muda */
+  const save = await page.evaluate(c => localStorage.getItem(c), CHAVE);
+  await page.reload();
+  await expect(page.locator(".quadro-col--recolhida")).toBeVisible();
+  await page.getByRole("button", { name: "Mostrar a coluna lateral" }).click();
+  expect(await col("principal")).toEqual(["cenario", "registro"]);
+  await expect(page.locator("#mod-estado .mod-corpo")).toHaveCount(0);
+  /* o arranjo fica numa chave propria; o save do pet so tem o registro (semente, versao e log), nada do quadro */
+  const arranjo = JSON.parse(await page.evaluate(c => localStorage.getItem(c + "-quadro-pet"), CHAVE) ?? "null");
+  expect(arranjo.principal).toEqual(["cenario", "registro"]);
+  expect(Object.keys(JSON.parse(save ?? "{}")).sort()).toEqual(["log", "semente", "versao"]);
+  expect(erros).toEqual([]);
+});
+test("Pet (quadro): no celular não há quadro", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await semear(page, SAVE_V11);
+  await page.goto(APP + "#/pet/estado");
+  await expect(page.locator(".pet-cena")).toBeVisible();
+  await expect(page.locator(".quadro, .mod-cab")).toHaveCount(0);
 });
