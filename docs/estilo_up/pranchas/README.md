@@ -29,3 +29,14 @@ em laranja, a regra que disparou, os candidatos com a chance, as entradas que ma
 escolhida e o lobo que pesou mais ficam destacados. Entre duas decisões o mapa fica parado: nada anima para fingir atividade. Os números
 das duas pranchas são os do gabarito (a vida v11 da semente 101, a decisão 262), desenhados pela mesma conta do componente `MapaPesos`.
 No celular o mapa ocupa a largura da folha. As capturas estão em `capturas/`.
+
+## As telas do celular no modelo novo (2026-10-19)
+
+| prancha | tamanho | o quê |
+|---|---|---|
+| `TelasCelular390.html` | 390×844 e 360×800 | as 22 telas do celular no modelo novo (`docs/TAREFA_V2_PRANCHAS_CELULAR.md`), com o conteúdo que cada tela do app tem hoje; com `?tela=N` (0 a 21) mostra uma tela só, na largura do aparelho |
+
+Os tokens, os ícones e o pet de reserva são os da `TelasLayoutDesktop.html` (branch `v2-tela-pet`). O que a referência mostra e o motor não
+tem fica marcado na tela como "sem dado no motor". As capturas estão em `capturas/TelasCelular390_NN.png`, `capturas/TelasCelular360_NN.png`
+e `capturas/TelasCelular_mapa.png`.
+
