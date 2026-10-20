@@ -1,6 +1,6 @@
 # TAREFA V2 — PET-QUADRO (2026-10-20)
 
-Coordenador: Gerente. Worker: A. Worktree e branch: `v2-pet-quadro`, empilhado sobre `v2-moldura-desktop` (#374). Status: ENTREGUE (PR, espera o ok visual e o merge, depois do #374).
+Coordenador: Gerente. Worker: A. Worktree e branch: `v2-pet-quadro`, a partir da `main` com o #374. Status: ENTREGUE (PR, espera o ok visual e o merge).
 
 Categoria: implementacao. Origem: Matheus, 2026-10-20, pelo Gerente. Na tela Pet do desktop, a coluna da direita vira o quadro modular
 do protótipo: módulos que se arrastam entre as duas colunas e se recolhem; recolhidos, o habitat e as ações crescem.
@@ -13,7 +13,7 @@ save nem o replay? Não vem de uma hipótese da pesquisa: é a interface do jogo
 ## 2. Depende de
 
 - A tela Pet nova com a cena 3D (#373, mergeada).
-- A moldura nova do desktop (#374, aberto): este PR vai empilhado nele.
+- A moldura nova do desktop (#374, mergeada).
 
 ## 3. Mudança mínima
 
@@ -71,7 +71,7 @@ menu é o caminho pelo teclado. A coluna lateral inteira também se recolhe.
 
 ## 8. Precisa do Matheus
 
-O ok visual no antes e depois, e o merge do #374 antes deste.
+O ok visual no antes e depois.
 
 ## 9. Entregue (2026-10-20)
 
@@ -105,7 +105,7 @@ O ok visual no antes e depois, e o merge do #374 antes deste.
 | `npm run tipos` | passa |
 | `npm test` (Vitest) | 43 arquivos, 507 testes, todos passam |
 | `npm run e2e` | 76 de 76: os 74 de antes (os do Pet e do DigiBrain em 1280 ajustados ao quadro) e os 2 novos: arrastar, menu, recolher e o arranjo salvo; no celular não há quadro |
-| `npm run capturas`, 390 px (referência: o build de `v2-moldura-desktop`) | 15 de 15 iguais, pixel a pixel |
+| `npm run capturas`, 390 px (referência: o build de `v2-moldura-desktop`, a mesma árvore da `main` depois do #374) | 15 de 15 iguais, pixel a pixel |
 | `npm run capturas`, 360 px (mesma referência) | 15 de 15 iguais, pixel a pixel |
 | `npm run capturas`, 1280 px | 13 de 15 iguais; mudam só `pet-estado` e `pet-v11`, que é o pedido |
 
