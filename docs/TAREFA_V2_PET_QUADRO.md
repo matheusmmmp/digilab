@@ -1,6 +1,6 @@
 # TAREFA V2 — PET-QUADRO (2026-10-20)
 
-Coordenador: Gerente. Worker: A. Worktree e branch: `v2-pet-quadro`, empilhado sobre `v2-moldura-desktop` (#374). Status: EM ANDAMENTO.
+Coordenador: Gerente. Worker: A. Worktree e branch: `v2-pet-quadro`, empilhado sobre `v2-moldura-desktop` (#374). Status: ENTREGUE (PR, espera o ok visual e o merge, depois do #374).
 
 Categoria: implementacao. Origem: Matheus, 2026-10-20, pelo Gerente. Na tela Pet do desktop, a coluna da direita vira o quadro modular
 do protótipo: módulos que se arrastam entre as duas colunas e se recolhem; recolhidos, o habitat e as ações crescem.
@@ -72,3 +72,52 @@ menu é o caminho pelo teclado. A coluna lateral inteira também se recolhe.
 ## 8. Precisa do Matheus
 
 O ok visual no antes e depois, e o merge do #374 antes deste.
+
+## 9. Entregue (2026-10-20)
+
+**O que mudou (só a partir de 1100 px, só a tela Pet).**
+- **`src/componentes/Quadro.tsx` (novo):**
+  - o quadro de duas colunas e o `Modulo` (alça, traço azul, ícone, título, o que a tela põe à direita, o menu ⋮ e o chevron);
+  - arrastar pelo cabeçalho do módulo (drag and drop do HTML5), com a linha azul de onde ele vai cair e a coluna vazia "Arraste um quadro
+    para cá";
+  - o menu (mover para cima, para baixo e para a outra coluna; fecha com Esc ou com um clique fora);
+  - recolher cada módulo e a coluna lateral inteira;
+  - o arranjo no `localStorage` (`digilab-web-v21-sprites-quadro-pet`), em `try/catch`; um arranjo que não tenha exatamente os módulos
+    de hoje volta ao padrão.
+- **`src/telas/pet/TelaPet.tsx`:**
+  - a `TelaPetDesktop` monta os módulos da seção 3, cada um só com o que o motor tem;
+  - a Próxima evolução usa a `previsaoEvo` da tela Evolução: o estágio que vem e o tempo até lá; a forma seguinte só quando o motor já a
+    decidiu (o Mega); sem próxima evolução, na morte ou no ovo, o módulo não aparece;
+  - o DigiBrain e o porquê da fala saíram dos botões da cena: viraram módulos;
+  - o celular continua o mesmo (o botão DigiBrain na cena e a folha "Como ele está"). O `AgoraHaPouco` saiu: o registro do desktop é o
+    módulo Últimas ações.
+- **`src/App.tsx`:** o atalho da Próxima evolução para Crescer › Evolução.
+- **`src/telas/pet/cena3d.ts`:** a cena se ajusta ao tamanho da caixa (`ResizeObserver`), e recolher a lateral faz o habitat crescer.
+  - Em paisagem, a escala é fracionária e o quarto ocupa mais da caixa; a janela da parede cabe na parede visível.
+  - Em retrato (o celular), tudo continua como antes.
+  - Ao redimensionar, redesenha o mesmo quadro, sem avançar o contador.
+- **`src/estilo/pet_home.css`:** o CSS do quadro e dos módulos, no bloco do desktop.
+
+**Gate.**
+
+| conferência | resultado |
+|---|---|
+| `npm run tipos` | passa |
+| `npm test` (Vitest) | 43 arquivos, 507 testes, todos passam |
+| `npm run e2e` | 76 de 76: os 74 de antes (os do Pet e do DigiBrain em 1280 ajustados ao quadro) e os 2 novos: arrastar, menu, recolher e o arranjo salvo; no celular não há quadro |
+| `npm run capturas`, 390 px (referência: o build de `v2-moldura-desktop`) | 15 de 15 iguais, pixel a pixel |
+| `npm run capturas`, 360 px (mesma referência) | 15 de 15 iguais, pixel a pixel |
+| `npm run capturas`, 1280 px | 13 de 15 iguais; mudam só `pet-estado` e `pet-v11`, que é o pedido |
+
+Notas do gate:
+- A referência de 360 foi tirada de novo do build da base: a antiga dava diferença em `crescer-evolucao` também no próprio build da base.
+- `lutar-fronteira` em 1280 falhou uma vez com a máquina carregada e passou sozinha. O mapa do DigiBrain passou 3 vezes seguidas na
+  repetição.
+
+O antes e o depois em 1280 estão em `docs/estilo_up/pranchas/capturas/`, sem o atlas e sem a decoração do UP:
+- `Quadro_pet-v11.png` e `Quadro_pet-estado.png`: a moldura do #374 e o quadro;
+- `Quadro_pet-v11_recolhida.png`: o quadro e a coluna lateral recolhida, com o habitat e as ações maiores.
+
+**O que ficou para depois.**
+- Com a lateral aberta, o habitat em 1280 fica menor que no #374 (a coluna lateral leva 370 px). Recolher a lateral devolve a largura.
+- Na coluna lateral de 370 px, os módulos de baixo (Últimas ações, DigiBrain) pedem rolagem em 800 px de altura.

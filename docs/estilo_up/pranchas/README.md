@@ -59,3 +59,7 @@ Todas mostram o pet v11 do e2e.
 **A moldura nova do desktop** (2026-10-20, `docs/TAREFA_V2_MOLDURA_DESKTOP.md`): `capturas/Moldura_<tela>.png` põe, para cada uma das 15
 telas do roteiro de capturas em 1280 px, o antes (a `main`) e o depois (a moldura da `TelasLayoutDesktop`) lado a lado. Foram tiradas sem o
 atlas e sem a decoração do Digimon UP.
+
+**O quadro modular da tela Pet no desktop** (2026-10-20, `docs/TAREFA_V2_PET_QUADRO.md`): `capturas/Quadro_pet-v11.png` e
+`capturas/Quadro_pet-estado.png` põem lado a lado o antes (a moldura do #374) e o depois (o quadro). `capturas/Quadro_pet-v11_recolhida.png`
+mostra o quadro e a coluna lateral recolhida. Foram tiradas em 1280 px, sem o atlas e sem a decoração do Digimon UP.
