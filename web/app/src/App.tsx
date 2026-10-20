@@ -161,8 +161,7 @@ export function App() {
   const abrirReplay = (idx: number) => { REPLAY.pedido = idx; ir({ destino: "diario", aba: "registro" }); scrollTo(0, 0); };
   /* desktop (>= 1100 px): topo da casca com titulo, abas e o mini-card do pet */
   const topo = <TopoDesktop titulo={config ? "Configurações" : NOME_DESTINO[rota.destino]} abas={config ? [] : abas} aba={rota.aba} irAba={a => ir({ destino: rota.destino, aba: a })}
-    abrirMeusPets={() => setMeusPets(true)} voltar={!config && rota.destino === "conversar" ? () => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); } : undefined}
-    semTitulo={!config && rota.destino === "pet"} />;
+    abrirMeusPets={() => setMeusPets(true)} voltar={!config && rota.destino === "conversar" ? () => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); } : undefined} />;
   if (emLuta) return (
     <div className="app app--tela-cheia">
       <TelaLuta sair={sairDaLuta} verReplay={verReplay} sairReplay={sairReplay} pedidoDesistir={pedidoDesistir} fecharPedido={() => setPedidoDesistir(false)} />
@@ -191,6 +190,9 @@ export function App() {
         </div>
       )}
       <DicaBit />
+      {/* a moldura do desktop (docs/TAREFA_V2_MOLDURA_DESKTOP.md): o painel de cantos cortados em volta do conteudo de toda tela; no
+          celular e ate 1099 px o envoltorio some (display:contents) */}
+      <div className="moldura">
       {importando && desk ? <><TopoDesktop titulo="Importar pet" abas={[]} aba={null} irAba={() => {}} abrirMeusPets={() => { fecharImportar(); setMeusPets(true); }}
           voltar={fecharImportar} /><ImportarPet pagina fechar={fecharImportar} /></>
       : her && desk ? <><TopoDesktop titulo="Nova geração" abas={[]} aba={null} irAba={() => {}} abrirMeusPets={() => { fecharHeranca(); setMeusPets(true); }}
@@ -228,6 +230,7 @@ export function App() {
             : rota.aba === "catalogo" ? <TelaCatalogo /> : rota.aba === "geracoes" ? <TelaGeracoes /> : <TelaCenarios />}
         </div>
       </section></>)}
+      </div>
       <Nav atual={config ? null : rota.destino} ir={irDestino} configAberta={!!config} abrirConfig={() => abrirConfig("principal")} />
       <RevelacaoEvolucao continuar={() => { ir({ destino: "crescer", aba: "evolucao" }); scrollTo(0, 0); }} />
       {meusPets && !desk && <MeusPets fechar={() => setMeusPets(false)} irRegistro={() => { setMeusPets(false); ir({ destino: "diario", aba: "registro" }); }} />}

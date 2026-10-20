@@ -31,7 +31,9 @@ async function semear(page: Page, save: object): Promise<void> {
   }, [CHAVE, JSON.stringify(save)] as const);
 }
 
-for (const [largura, altura] of [[390, 844], [1280, 800]]) {
+/* as larguras: 390 e 1280; DIGILAB_CAPTURAS_LARGURAS="360" (por exemplo) troca a lista, com a altura do celular abaixo de 1100 px */
+const LARGURAS = (process.env.DIGILAB_CAPTURAS_LARGURAS ?? "390,1280").split(",").map(Number);
+for (const [largura, altura] of LARGURAS.map(l => [l, l >= 1100 ? 800 : l === 390 ? 844 : 800])) {
   for (const [nome, rota, save] of TELAS) {
     test(`${nome} em ${largura} px`, async ({ page }) => {
       await page.setViewportSize({ width: largura, height: altura });
@@ -41,7 +43,12 @@ for (const [largura, altura] of [[390, 844], [1280, 800]]) {
       await page.clock.pauseAt(T0 + 1000);           /* parado desde antes de abrir: o tempo do jogo só anda com runFor */
       const erros: string[] = [];
       page.on("pageerror", e => erros.push(e.message));
+      /* DIGILAB_CAPTURAS_RESERVA=1: sem o atlas e sem a decoracao do UP (so locais), para capturas que vao para o repositorio ou para o
+         PR; os avisos de "nao carregou" ficam escondidos so na captura */
+      const reserva = process.env.DIGILAB_CAPTURAS_RESERVA === "1";
+      if (reserva) await page.route(/\/Assets\/(digilab_atlas_up|digilab_decoracao_up|decoracao_up\/)/, r => r.abort());
       await page.goto(APP + rota);
+      if (reserva) await page.addStyleTag({ content: ".app > .aviso{display:none}" });
       await page.evaluate(() => document.fonts.ready);
       /* a tela Pet: a cena 3D chega por import dinamico (tempo real, fora do relogio falso); so depois dela o relogio anda, senao o
          numero de quadros desenhados antes da captura varia */

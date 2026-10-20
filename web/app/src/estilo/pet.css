@@ -372,7 +372,7 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 }
 /* Conversar no desktop: a tela ocupa a janela abaixo do topo; a conversa rola dentro e a barra de escrever fica no pe */
 @media (min-width:1100px){
-  .conv-tela{height:calc(100dvh / var(--zoom, 1) - 76px);min-height:0;box-sizing:border-box;padding:20px 24px;grid-template-rows:0 auto auto auto minmax(0,1fr) auto auto;row-gap:0}
+  .conv-tela{height:calc(100dvh / var(--zoom, 1) - var(--ui-topo) - var(--ui-moldura-v));min-height:0;box-sizing:border-box;padding:20px 24px;grid-template-rows:0 auto auto auto minmax(0,1fr) auto auto;row-gap:0}
   .conv-lista{margin:0;min-height:0;overflow:auto;background:var(--dl-surface)}
   .conv-rodape{margin:0;background:var(--dl-surface)}
   .conv-escrever{margin:0}

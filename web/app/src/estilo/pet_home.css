@@ -93,8 +93,8 @@
 
 /* ---------- desktop: a casca fica; o cenario ocupa o conteudo e os detalhes viram uma coluna que se recolhe */
 @media (min-width:1100px){
-  .pet-home{min-height:calc(100dvh / var(--zoom, 1) - var(--ui-topo));background:var(--ui-bg)}
-  .pet-home-corpo{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;padding:16px 24px 20px;height:calc(100dvh / var(--zoom, 1) - var(--ui-topo));box-sizing:border-box}
+  .pet-home{min-height:0;background:none}
+  .pet-home-corpo{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;padding:0;height:calc(100dvh / var(--zoom, 1) - var(--ui-topo) - var(--ui-moldura-v));box-sizing:border-box}
   .pet-home-corpo--detalhes{grid-template-columns:minmax(0,1fr) 360px}
   .pet-home-principal{min-height:0;gap:12px}
   .pet-cena{flex:1;height:auto;min-height:380px;border-radius:var(--ui-raio);box-shadow:0 0 0 1px var(--ui-border),var(--ui-sombra)}
