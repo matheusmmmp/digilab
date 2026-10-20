@@ -68,6 +68,8 @@ for (const [versao, save] of Object.entries(SAVES)) {
     /* cuidar */
     await page.locator(".dl-nav").getByRole("button", { name: "Pet", exact: true }).click();
     const d0 = await numLog(page, "d");
+    /* a tela Pet da Home (TAREFA_V2_TELA_PET): tres acoes em destaque e as outras em Mais */
+    await page.locator(".acoes-pet .acao-mais").click();
     for (const a of ["Alimentar", "Limpar", "Brincar", "Carinho", "Elogiar"]) await page.locator(".acoes-pet button", { hasText: a }).click();
     expect(await numLog(page, "d")).toBe(d0 + 5);
 
@@ -242,6 +244,9 @@ test("tempo: o relógio para durante a animação da luta e com o Resultado aber
 });
 
 test("foco visível pelo teclado", async ({ page }) => {
+  /* sem as transicoes do dl-btn: o teste compara o estilo com e sem foco logo depois de trocar, e uma transicao no meio (a maquina
+     ocupada com a cena 3D nos outros workers) dava um falso "sem foco" */
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await semear(page, SAVES.v2);
   await page.goto(APP + "#/pet/estado");
   await expect(page.locator(".pet-tela")).toBeVisible();
@@ -1036,8 +1041,9 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 
 }
 
 /* ---------------------------------------------------------------- o painel DigiBrain (docs/TAREFA_V2_W_PORTE_CEREBRO_A.md, etapa 5;
-   pranchas DigiBrainDesktop e DigiBrain390): so nos pets v11 (PW-7). No desktop, uma coluna entre o habitat e a coluna de sempre; em
-   390 px, uma folha aberta pelo botao do palco, com o Conversar no cabecalho do Pet. Os numeros sao os do motor (Motor.digibrain) */
+   pranchas DigiBrainDesktop e DigiBrain390): so nos pets v11 (PW-7). Sob demanda (TAREFA_V2_TELA_PET): no desktop, o botao do cenario
+   abre a coluna de detalhes, a direita do cenario, com o painel; em 390 px, uma folha aberta pelo botao do cenario, com o Conversar no
+   cabecalho do Pet. Os numeros sao os do motor (Motor.digibrain) */
 const SAVE_V11 = { semente: 4242, versao: 11, log: [[480, "t", 120], [600, "d", "acariciar"], [600, "t", 120], [720, "d", "tapa"], [720, "t", 120],
   [840, "d", "alimentar"], [840, "t", 60]] };
 for (const largura of [390, 1280]) {
@@ -1050,14 +1056,15 @@ for (const largura of [390, 1280]) {
     const desktop = largura >= 1100;
     if (desktop) {
       await expect(page.locator(".db-botao")).toBeHidden();
-      const card = page.locator(".digibrain");
+      await expect(page.locator(".digibrain")).toBeHidden();                          /* sob demanda */
+      await page.locator(".db-abrir").click();
+      const card = page.locator(".pet-detalhes .digibrain");
       await expect(card).toBeVisible();
       const r = await page.evaluate(() => {
-        const hab = document.querySelector(".palco-card")!.getBoundingClientRect(), db = document.querySelector(".digibrain")!.getBoundingClientRect(),
-          lado = document.querySelector(".lado-cards")!.getBoundingClientRect();
-        return { aDireita: db.left >= hab.right - 1 && lado.left >= db.right - 1, larg: document.documentElement.scrollWidth, janela: innerWidth };
+        const cena = document.querySelector(".pet-cena")!.getBoundingClientRect(), db = document.querySelector(".digibrain")!.getBoundingClientRect();
+        return { aDireita: db.left >= cena.right - 1, larg: document.documentElement.scrollWidth, janela: innerWidth };
       });
-      expect(r.aDireita, "o painel entre o habitat e a coluna de sempre").toBe(true);
+      expect(r.aDireita, "o painel na coluna de detalhes, a direita do cenario").toBe(true);
       expect(r.larg).toBeLessThanOrEqual(r.janela);
     } else {
       await expect(page.locator(".digibrain")).toBeHidden();
@@ -1096,7 +1103,7 @@ for (const largura of [390, 1280]) {
     await page.goto(APP + "#/pet/estado");
     await expect(page.locator(".pet-tela")).toBeVisible();
     const desktop = largura >= 1100;
-    if (!desktop) await page.locator(".db-botao").click();
+    await page.locator(desktop ? ".db-abrir" : ".db-botao").click();
     const raiz = desktop ? page.locator(".digibrain") : page.locator("dialog.folha[open]");
     const mapa = raiz.locator("svg.mp");
     await expect(mapa).toBeVisible();
@@ -1151,4 +1158,75 @@ test("DigiBrain: os pets v1 a v10 não têm o painel (PW-7)", async ({ page }) =
     await expect(page.locator(".pet-tela")).toBeVisible();
     await expect(page.locator(".digibrain, .db-botao")).toHaveCount(0);
   }
+});
+
+/* ---------------------------------------------------------------- a tela Pet como a Home da referencia (docs/TAREFA_V2_TELA_PET.md): o cenario
+   com a maior area, tres acoes em destaque (as outras em Mais) e os detalhes sob demanda (folha no celular, coluna no desktop) */
+for (const [largura, altura] of [[360, 800], [390, 844], [1280, 800]]) {
+  test(`Pet (Home): cenário, prioridade, três ações e detalhes sob demanda em ${largura} px`, async ({ page }) => {
+    await page.setViewportSize({ width: largura, height: altura });
+    await semear(page, SAVE_V11);
+    const erros = vigiarErros(page);
+    await page.goto(APP + "#/pet/estado");
+    await expect(page.locator(".pet-cena")).toBeVisible();
+    const desktop = largura >= 1100;
+    const g = await page.evaluate(() => {
+      const r = (s: string) => document.querySelector(s)!.getBoundingClientRect();
+      const cena = r(".pet-cena"), doca = r(".pet-doca"), cv = document.querySelector<HTMLCanvasElement>(".pet-cena canvas")!;
+      return { cena: cena.width * cena.height, doca: doca.width * doca.height, pix: getComputedStyle(cv).imageRendering, larg: document.documentElement.scrollWidth, janela: innerWidth };
+    });
+    expect(g.cena, "o cenario e a maior area").toBeGreaterThan(g.doca * 2);
+    expect(g.pix).toBe("pixelated");
+    expect(g.larg).toBeLessThanOrEqual(g.janela);
+    await expect(page.locator(".acoes-pet .acao-destaque")).toHaveCount(3);
+    await expect(page.locator(".acoes-pet .acao-extra")).toHaveCount(0);
+    await page.locator(".acoes-pet .acao-mais").click();
+    await expect(page.locator(".acoes-pet .acao-extra")).toHaveCount(3);           /* v11: seis acoes, tres em destaque */
+    /* sem fundo de hexagonos no cenario e sem retrato redondo no cabecalho do Pet */
+    expect(await page.locator(".pet-cena .dl-hexcard, .pet-retrato").count()).toBe(0);
+    /* os detalhes: o balao da fala abre o porque */
+    await page.locator(".cena-fala").click();
+    if (desktop) {
+      await expect(page.locator(".pet-detalhes")).toBeVisible();
+      await expect(page.locator(".pet-detalhes #det-fala-tit")).toHaveText("Por que ele disse isso");
+      await page.locator(".det-fechar").click();
+      await expect(page.locator(".pet-detalhes")).toHaveCount(0);
+    } else {
+      await expect(page.locator("dialog.folha[open]")).toHaveAttribute("aria-label", "Como ele está");
+      await expect(page.locator("dialog.folha[open] .necessidades4")).toBeVisible();
+      await page.locator("dialog.folha[open] .folha-x").click();
+      await expect(page.locator("dialog.folha[open]")).toHaveCount(0);
+    }
+    expect(erros).toEqual([]);
+  });
+}
+/* o cenario da tela Pet: a cena 3D (a vista do POC, import dinamico) quando ha WebGL; sem WebGL, o cenario de reserva em CSS e SVG.
+   Os dois sao decorativos (aria-hidden) */
+test("Pet (Home): a cena 3D com WebGL e o cenário de reserva sem ele", async ({ page, browser }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await semear(page, SAVE_V11);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/pet/estado");
+  const cena = page.locator(".pet-cena .cena3d");
+  await expect(cena).toHaveAttribute("aria-hidden", "true");
+  await expect.poll(() => page.evaluate(() => { const c = document.querySelector<HTMLCanvasElement>(".cena3d canvas"); return c ? c.width * c.height : 0; })).toBeGreaterThan(0);
+  await expect(page.locator(".pet-cena .cena-sala")).toHaveCount(0);
+  expect(erros).toEqual([]);
+  /* sem WebGL: o getContext do WebGL devolve null e a tela fica com a reserva, sem erro */
+  const ctx = await browser.newContext({ baseURL: test.info().project.use.baseURL, viewport: { width: 390, height: 844 } });
+  const p2 = await ctx.newPage();
+  await p2.addInitScript(() => {
+    const orig = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (this: HTMLCanvasElement, tipo: string, ...r: unknown[]) {
+      return /webgl/.test(tipo) ? null : (orig as (...a: unknown[]) => unknown).call(this, tipo, ...r);
+    } as typeof orig;
+  });
+  await semear(p2, SAVE_V11);
+  const erros2 = vigiarErros(p2);
+  await p2.goto(APP + "#/pet/estado");
+  await expect(p2.locator(".pet-cena .cena-sala")).toBeVisible();
+  await expect(p2.locator(".pet-cena .cena-sala")).toHaveAttribute("aria-hidden", "true");
+  await expect(p2.locator(".pet-cena .cena3d")).toHaveCount(0);
+  expect(erros2).toEqual([]);
+  await ctx.close();
 });

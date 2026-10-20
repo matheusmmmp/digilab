@@ -262,9 +262,13 @@ Barra inferior marinho com 4 destinos: **Pet, Crescer, Lutar, Diário**. Ícone 
 
 ## 8. Layout
 
-- **Tela Pet (ordem fixa):** cabeçalho → palco (pet, emoção, balão) → necessidades → chamado
-  aberto (se houver) → desejo → navegação. O resto (traços, memórias, temperamento × caráter,
-  vínculo, obediência) fica a um toque, em Crescer.
+- **Tela Pet (ordem fixa; decisão do Matheus de 2026-10-19, `docs/TAREFA_V2_TELA_PET.md`):**
+  - a ordem é cabeçalho → cenário (o pet no quarto 2.5D, com a emoção e o balão) → necessidade
+    prioritária (o chamado aberto, se houver) → três ações em destaque e "Mais" → navegação;
+  - o cenário fica com a maior área;
+  - as necessidades, o desejo, a confiança e o porquê da fala ficam a um toque, num painel sob
+    demanda: folha no celular, coluna recolhível no desktop;
+  - o resto (traços, memórias, temperamento × caráter, vínculo, obediência) continua em Crescer.
 - Largura útil no celular: 100% menos 14 px de cada lado. Conteúdo rola; cabeçalho e navegação
   ficam fixos. Respeitar `env(safe-area-inset-*)`.
 - **Desktop:** coluna central de até 480 px para as telas de pet; telas de dados (Crescer,

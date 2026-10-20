@@ -40,3 +40,18 @@ Os tokens, os ícones e o pet de reserva são os da `TelasLayoutDesktop.html` (b
 tem fica marcado na tela como "sem dado no motor". As capturas estão em `capturas/TelasCelular390_NN.png`, `capturas/TelasCelular360_NN.png`
 e `capturas/TelasCelular_mapa.png`.
 
+**A tela Pet como a Home da referência** (2026-10-19, `docs/TAREFA_V2_TELA_PET.md`): capturas do app, não prancha. O cenário é a vista 3D do POC. Elas foram tiradas com o
+sprite de reserva, sem o atlas e sem a decoração do Digimon UP (só locais), e com os avisos de "não carregou" escondidos só na captura.
+As capturas com o atlas ficam fora do repositório.
+
+| captura | o quê |
+|---|---|
+| `capturas/PetHome390.png` | celular, 390×844 |
+| `capturas/PetHome360.png` | celular, 360×800 |
+| `capturas/PetHome390_mais.png` | celular, com "Mais" aberto |
+| `capturas/PetHome390_detalhes.png` | celular, com a folha "Como ele está" aberta |
+| `capturas/PetHomeDesktop.png` | desktop, 1280×800 |
+| `capturas/PetHomeDesktop_detalhes.png` | desktop, com a coluna de detalhes aberta |
+| `capturas/PetHome390_semwebgl.png`, `capturas/PetHomeDesktop_semwebgl.png` | sem WebGL: o cenário de reserva, em CSS e SVG |
+
+Todas mostram o pet v11 do e2e.

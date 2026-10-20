@@ -44,7 +44,6 @@
   :root:not([data-tema="claro"]) .db-emo{background:var(--dl-dark-bg);color:var(--dl-dark-ink)}
 }
 
-
 /* ---------- o mapa dos pesos (MapaPesos.tsx; pranchas DigiBrainDesktop e DigiBrain390): sem transicao nem animacao, acende so na decisao */
 .mp,.mp-leg{--mp-fundo:var(--dl-surface);--mp-mais:#E34948;--mp-menos:#2A78D6;--mp-aceso:#F08A00}
 .mp{display:block;width:100%;height:auto;font-family:var(--dl-f-texto)}
@@ -88,8 +87,6 @@
 
 /* ---------- desktop: a coluna do painel */
 @media (min-width:1100px){
-  .pet-corpo--v11{grid-template-columns:minmax(0,1fr) 296px 320px;grid-template-areas:"hab brain lado" "acoes acoes lado"}
-  .db-coluna{grid-area:brain;display:flex;flex-direction:column;min-height:0}
   .pet-tela .dl-card.digibrain{flex:1;display:flex;flex-direction:column;min-height:0;padding:0;overflow:hidden}
   .db-cab{display:flex;align-items:center;gap:10px;padding:14px 16px 10px;border-bottom:1px solid var(--ui-border)}
   .db-cab h2{flex:1;margin:0;font-size:15px;font-weight:900;color:var(--ui-text)}
