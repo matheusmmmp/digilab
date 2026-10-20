@@ -55,3 +55,7 @@ As capturas com o atlas ficam fora do repositório.
 | `capturas/PetHome390_semwebgl.png`, `capturas/PetHomeDesktop_semwebgl.png` | sem WebGL: o cenário de reserva, em CSS e SVG |
 
 Todas mostram o pet v11 do e2e.
+
+**A moldura nova do desktop** (2026-10-20, `docs/TAREFA_V2_MOLDURA_DESKTOP.md`): `capturas/Moldura_<tela>.png` põe, para cada uma das 15
+telas do roteiro de capturas em 1280 px, o antes (a `main`) e o depois (a moldura da `TelasLayoutDesktop`) lado a lado. Foram tiradas sem o
+atlas e sem a decoração do Digimon UP.

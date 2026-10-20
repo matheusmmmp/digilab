@@ -1,59 +1,50 @@
-/* Topo da casca do desktop (TAREFA_V2_UI_DESKTOP, 2026-10-18; antes: pranchas *Desktop). Duas partes, so a partir de 1100 px:
-   - o cabecalho fixo de 64 px, claro, em toda a largura: a marca, o relogio do jogo com o "salvo" e o mini-card do pet
-     (retrato de 40 px, que abre Meus pets; nome, brasao e nivel);
-   - a linha da pagina, no comeco do conteudo: Voltar, o titulo, as abas e os botoes da tela. A tela do Pet nao tem essa linha
-     (semTitulo): o habitat ja e o assunto.
-   Abaixo de 1100 px nada disto aparece; cada tela usa o proprio cabecalho. */
+/* Topo da casca do desktop (docs/TAREFA_V2_MOLDURA_DESKTOP.md, prancha TelasLayoutDesktop; antes, TAREFA_V2_UI_DESKTOP), so a partir de
+   1100 px: uma linha fixa a direita da barra lateral, com
+   - a esquerda, as abas da tela (a ativa sublinhada); a tela sem abas mostra o titulo como a aba ativa; o Voltar, quando a tela tem;
+   - os botoes da tela (MpListaDesktop: Novo ovo);
+   - a direita, o relogio do jogo (sol de dia, lua de noite, o dia e a hora), o "salvo" e o pet: retrato (abre Meus pets), nome, nivel
+     e brasao.
+   O logo fica no alto da barra lateral (Nav). Abaixo de 1100 px nada disto aparece; cada tela usa o proprio cabecalho. */
 import type { ReactNode } from "react";
-import { DO_ESP, NOME_ESP, NOME_EST, nomeEstagio, nomeForma } from "../../motor/index.ts";
+import { ChevronLeft, Moon, Sun } from "lucide-react";
+import { DO_ESP, NOME_ESP, NOME_EST, TPD, eNoite, nomeEstagio, nomeForma } from "../../motor/index.ts";
 import { BRASAO } from "../decoracao.ts";
 import { useJogo } from "../jogo.ts";
 import { NOME_ABA, type Aba } from "../rotas.ts";
 import { Retrato, diaDe, hhmm } from "../telas/pet/TelaPet.tsx";
 import { Deco } from "./Deco.tsx";
 
-/* a marca: um frasco de laboratorio em pixel (desenho proprio, 10 x 10) e o nome */
-const FRASCO = (
-  <svg className="topo-frasco" viewBox="0 0 10 10" width="30" height="30" aria-hidden="true" shapeRendering="crispEdges">
-    <path fill="var(--ui-navy)" d="M3 0h4v1H3zM4 1h2v3H4zM3 4h1v1H3zM6 4h1v1H6zM2 5h1v1H2zM7 5h1v1H7zM1 6h1v3H1zM8 6h1v3H8zM2 9h6v1H2z" />
-    <path fill="var(--ui-primary)" d="M2 7h6v2H2zM3 6h4v1H3z" />
-    <path fill="#FFFFFF" d="M3 7h1v1H3zM6 8h1v1H6z" />
-  </svg>
-);
-
-export function TopoDesktop({ titulo, abas, aba, irAba, abrirMeusPets, voltar, acoes, semTitulo }: {
+export function TopoDesktop({ titulo, abas, aba, irAba, abrirMeusPets, voltar, acoes }: {
   titulo: string; abas: readonly Aba[]; aba: Aba | null; irAba: (a: Aba) => void; abrirMeusPets: () => void; voltar?: () => void;
-  acoes?: ReactNode;          /* botoes da tela, na linha da pagina (MpListaDesktop: Novo ovo) */
-  semTitulo?: boolean;                /* a tela do Pet: so o cabecalho, sem a linha da pagina */
+  acoes?: ReactNode;          /* botoes da tela (MpListaDesktop: Novo ovo) */
 }) {
-  const { motor: m, nascendo, erroSave } = useJogo(), ovo = nascendo > 0, e = m.e;
-  return <>
+  const { motor: m, nascendo, erroSave } = useJogo(), ovo = nascendo > 0, e = m.e, noite = eNoite(e.tick % TPD);
+  return (
     <header className="topo-desk">
-      <span className="topo-marca">{FRASCO}<b>Digi<span>Lab</span></b></span>
-      <span className="topo-relogio" aria-label={`${hhmm(e.tick)}, dia ${diaDe(e.tick)}`}>
-        <span className="topo-hora">{hhmm(e.tick)}</span><span className="topo-dia">dia {diaDe(e.tick)}</span>
-        <span className={`pet-salvo${erroSave ? " erro" : ""}`}><i aria-hidden="true" />{erroSave ? "não salva" : "salvo"}</span>
-      </span>
-      <div className="topo-pet">
-        <button type="button" className="topo-retrato" aria-haspopup="dialog" aria-label="Meus pets" onClick={abrirMeusPets}><Retrato m={m} ovo={ovo} /></button>
-        <span className="topo-pet-txt">
-          <span className="topo-pet-nome"><b>{ovo ? "Digi-Egg " + DO_ESP[m.especie] : nomeForma(m.forma)}</b>
-            <Deco nome={BRASAO[m.especie].peca} largura={24} altura={16} alt={NOME_ESP[m.especie]} /></span>
-          <span className="topo-pet-sub"><span className="dl-tag dl-tag--estagio">{ovo ? NOME_EST.ovo : nomeEstagio(m.forma)}</span></span>
-        </span>
-      </div>
-    </header>
-    {!semTitulo && (
-      <div className="topo-pagina">
-        {voltar && <button type="button" className="topo-voltar" aria-label="Voltar ao Pet" onClick={voltar}><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12 4 6 10l6 6" /></svg></button>}
-        <h1 className="topo-tit">{titulo}</h1>
-        {abas.length > 1 && (
+      <div className="topo-esq">
+        {voltar && <button type="button" className="topo-voltar" onClick={voltar}><ChevronLeft size={18} aria-hidden="true" />Voltar ao Pet</button>}
+        {abas.length > 1 ? <>
+          <h1 className="sr-only">{titulo}</h1>
           <div className="topo-abas" role="tablist" aria-label={`Abas de ${titulo}`}>
             {abas.map(a => <button type="button" role="tab" key={a} className="topo-aba" aria-selected={a === aba} onClick={() => irAba(a)}>{NOME_ABA[a]}</button>)}
           </div>
-        )}
-        {acoes && <div className="topo-acoes">{acoes}</div>}
+        </> : <h1 className="topo-tit">{titulo}</h1>}
       </div>
-    )}
-  </>;
+      {acoes && <div className="topo-acoes">{acoes}</div>}
+      <span className="topo-relogio" aria-label={`${hhmm(e.tick)}, dia ${diaDe(e.tick)}`}>
+        {noite ? <Moon className="topo-sol" aria-hidden="true" /> : <Sun className="topo-sol" aria-hidden="true" />}
+        <span className="topo-hora-txt"><span className="topo-dia">dia {diaDe(e.tick)}</span><span className="topo-hora">{hhmm(e.tick)}</span></span>
+        <span className={`pet-salvo${erroSave ? " erro" : ""}`}><i aria-hidden="true" />{erroSave ? "não salva" : "salvo"}</span>
+      </span>
+      <span className="topo-sep" aria-hidden="true" />
+      <div className="topo-pet">
+        <button type="button" className="topo-retrato" aria-haspopup="dialog" aria-label="Meus pets" onClick={abrirMeusPets}><Retrato m={m} ovo={ovo} /></button>
+        <span className="topo-pet-txt">
+          <span className="topo-pet-nome"><b>{ovo ? "Digi-Egg " + DO_ESP[m.especie] : nomeForma(m.forma)}</b></span>
+          <span className="topo-pet-sub"><span className="dl-tag dl-tag--estagio">{ovo ? NOME_EST.ovo : nomeEstagio(m.forma)}</span>
+            <span aria-hidden="true">·</span><Deco nome={BRASAO[m.especie].peca} largura={20} altura={13} alt="" />{NOME_ESP[m.especie]}</span>
+        </span>
+      </div>
+    </header>
+  );
 }

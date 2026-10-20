@@ -1,6 +1,7 @@
 /* Barra de navegacao dos 4 destinos (UI_GUIDELINES 7.12; DIRETRIZES_REPLICAR secao 6): embaixo no celular, coluna a partir de 900 px.
    Cada destino volta para a ultima aba aberta nele. */
 import type { JSX } from "react";
+import { BookOpen, ChevronRight, MessageCircle, PawPrint, Settings, Sprout, Swords, type LucideIcon } from "lucide-react";
 import { OVO } from "../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../atlas.ts";
 import { urlDeco, useDecoracao } from "../decoracao.ts";
@@ -34,6 +35,16 @@ const ICONE: Record<Destino, JSX.Element> = {
   conversar: <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H10l-4 4v-4H4z" /></svg>,
 };
 
+/* desktop (>= 1100 px, docs/TAREFA_V2_MOLDURA_DESKTOP.md, prancha TelasLayoutDesktop): o logo no bloco claro do alto e os icones de
+   traco (lucide) no lugar dos circulos; abaixo de 1100 px ficam escondidos (desk-so) e a barra e a de sempre */
+const ICONE_DESK: Record<Destino, LucideIcon> = { pet: PawPrint, crescer: Sprout, lutar: Swords, diario: BookOpen, conversar: MessageCircle };
+const LOGO = (
+  <span className="nav-logo desk-so" aria-hidden="true">
+    <span className="nav-logo-barras"><i /><i /><i /></span>
+    <span className="nav-logo-txt"><b>DIGILAB</b><small>Digital Life<br />Data · AI<br />Evolution</small></span>
+  </span>
+);
+
 /** a barra (pranchas PetTela e *Desktop): no celular, embaixo, so os 4 destinos (Conversar e Configuracoes ficam no
     cabecalho do Pet); a partir de 900 px, coluna de 96 px com o ovo e DIGILAB no topo, os 4 destinos e, no pe,
     Conversar e Ajustes em quadrados de 46 px */
@@ -42,18 +53,19 @@ export function Nav({ atual, ir, configAberta, abrirConfig }: { atual: Destino |
   const a = useAtlas(), { motor: m } = useJogo(), ovo = a.tipo === "ok" ? imagemAtlas(a, OVO[m.especie]) : null;
   return (
     <nav className="dl-nav" aria-label="Destinos">
+      {LOGO}
       <span className="nav-marca" aria-hidden="true">{ovo && <img src={ovo.url} width={26} height={36} alt="" />}<b className="dl-num">DIGILAB</b></span>
       {DESTINOS_BARRA.map(d => (
         <button type="button" key={d} aria-current={d === atual ? "page" : undefined} onClick={() => ir(d)}>
-          <span className="circ"><IconeDestino d={d} /></span>{NOME_DESTINO[d]}
+          <span className="circ"><IconeDestino d={d} /></span>{(() => { const I = ICONE_DESK[d]; return <I className="nav-ic desk-so" aria-hidden="true" />; })()}{NOME_DESTINO[d]}
         </button>
       ))}
       <span className="nav-pe">
         <button type="button" className="nav-quad" aria-current={atual === "conversar" ? "page" : undefined} onClick={() => ir("conversar")}>
-          <span className="quad">{ICONE_CONVERSAR}</span>Conversar
+          <span className="quad">{ICONE_CONVERSAR}</span><MessageCircle className="nav-ic desk-so" aria-hidden="true" />Conversar<ChevronRight className="nav-seta desk-so" aria-hidden="true" />
         </button>
         <button type="button" className="nav-quad" aria-current={configAberta ? "page" : undefined} onClick={abrirConfig}>
-          <span className="quad">{urlDeco("Common_Icon_Setting") ? <Deco nome="Common_Icon_Setting" largura={24} altura={24} /> : ENGRENAGEM}</span>Ajustes
+          <span className="quad">{urlDeco("Common_Icon_Setting") ? <Deco nome="Common_Icon_Setting" largura={24} altura={24} /> : ENGRENAGEM}</span><Settings className="nav-ic desk-so" aria-hidden="true" />Ajustes<ChevronRight className="nav-seta desk-so" aria-hidden="true" />
         </button>
       </span>
     </nav>
