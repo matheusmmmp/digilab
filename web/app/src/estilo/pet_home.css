@@ -1,0 +1,125 @@
+/* Tela Pet como a Home da referencia (docs/TAREFA_V2_TELA_PET.md, 2026-10-19): o cenario 2.5D com a maior area, a necessidade
+   prioritaria e tres acoes embaixo, o resto sob demanda. Celular primeiro (390 e 360 px); a partir de 1100 px, a casca do desktop
+   (topo e barra lateral) fica e o cenario cresce, com os detalhes numa coluna que se recolhe. */
+
+/* ---------- o cenario: um quarto claro em perspectiva (CenarioPet), atras do canvas do pet */
+.cena-sala{position:absolute;inset:0;overflow:hidden;background:#EEF4FC}
+.cena-parede{position:absolute;inset:0 0 34% 0;background:linear-gradient(180deg,#F8FBFF 0%,#E8F1FB 100%)}
+.cena-janela{position:absolute;left:50%;top:8%;width:min(56%,460px);height:36%;translate:-50% 0;border-radius:10px;overflow:hidden;
+  box-shadow:0 0 0 6px #FFFFFF,0 0 0 8px #D5E4F6,0 14px 28px -16px rgba(23,58,138,.45)}
+.cena-ceu{position:absolute;inset:0;background:linear-gradient(180deg,#8EC7FF 0%,#C4E3FF 55%,#EAF5FF 100%)}
+.cena-nuvem{position:absolute;height:13%;border-radius:999px;background:#FFFFFF;box-shadow:12px -6px 0 2px #FFFFFF,-10px -3px 0 0 #FFFFFF}
+.cena-nuvem--1{left:12%;top:22%;width:24%}
+.cena-nuvem--2{right:12%;top:38%;width:18%;opacity:.9}
+.cena-nuvem--3{left:46%;top:14%;width:12%;opacity:.8}
+.cena-colinas{position:absolute;left:-10%;right:-10%;bottom:-20%;height:46%;border-radius:50% 50% 0 0;background:#BFE3CF}
+.cena-colinas::before{content:"";position:absolute;left:46%;right:-20%;bottom:30%;height:80%;border-radius:50% 50% 0 0;background:#A9D8C0}
+.cena-caixilho{position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent calc(50% - 3px),#FFFFFF calc(50% - 3px),#FFFFFF calc(50% + 3px),transparent calc(50% + 3px)),
+    linear-gradient(180deg,transparent calc(56% - 3px),#FFFFFF calc(56% - 3px),#FFFFFF calc(56% + 3px),transparent calc(56% + 3px))}
+.cena-lateral{position:absolute;top:0;bottom:30%;width:11%;background:linear-gradient(180deg,#E6EFFA,#D8E6F6)}
+.cena-lateral--esq{left:0;clip-path:polygon(0 0,100% 7%,100% 91%,0 100%)}
+.cena-lateral--dir{right:0;clip-path:polygon(0 7%,100% 0,100% 100%,0 91%)}
+.cena-chao{position:absolute;left:0;right:0;bottom:0;height:34%;overflow:hidden;background:linear-gradient(180deg,#E2EDFA 0%,#F5F9FF 100%)}
+.cena-piso{position:absolute;left:-60%;right:-60%;top:0;height:220%;transform-origin:50% 0;transform:perspective(320px) rotateX(62deg);
+  background-image:linear-gradient(90deg,rgba(159,194,239,.5) 1px,transparent 1px),linear-gradient(0deg,rgba(159,194,239,.5) 1px,transparent 1px);background-size:64px 64px}
+.cena-rodape{position:absolute;left:0;right:0;bottom:34%;height:6px;background:#D5E4F6}
+.cena-planta{position:absolute;left:5%;bottom:31%;width:clamp(48px,13%,104px);height:auto;image-rendering:pixelated}
+.cena-movel{position:absolute;right:5%;bottom:32%;width:clamp(64px,18%,150px);height:auto;image-rendering:pixelated}
+/* noite (do motor): o ceu da janela escurece com estrelas e o quarto fica na penumbra */
+.cena-sala--noite .cena-ceu{background:radial-gradient(circle at 20% 30%,#FFFFFF 0 1.5px,transparent 2px),radial-gradient(circle at 70% 20%,#FFFFFF 0 1.5px,transparent 2px),
+  radial-gradient(circle at 45% 55%,#E8ECFF 0 1px,transparent 1.5px),radial-gradient(circle at 85% 50%,#E8ECFF 0 1px,transparent 1.5px),linear-gradient(180deg,#152452,#2B4683)}
+.cena-sala--noite .cena-nuvem{opacity:.18}
+.cena-sala--noite .cena-colinas{background:#2E4A6E}
+.cena-sala--noite .cena-colinas::before{background:#3A5A80}
+.cena-sala--noite::after{content:"";position:absolute;inset:0;background:rgba(21,36,82,.26);pointer-events:none}
+
+/* ---------- a tela no celular */
+.pet-home{background:var(--dl-bg);min-height:calc(100dvh - 96px - env(safe-area-inset-bottom))}
+.pet-home .pet-cab{padding:10px 14px 8px}
+.pet-home .pet-cab-nome{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-height:44px;margin:-4px -6px;padding:4px 6px;
+  border:0;border-radius:12px;background:none;font:inherit;color:inherit;text-align:left;cursor:pointer}
+.pet-home .pet-cab-nome:focus-visible{outline:none;box-shadow:0 0 0 3px var(--dl-highlight)}
+.pet-home-corpo{display:flex;flex-direction:column;gap:10px;padding:0 12px 12px}
+.pet-home-principal{display:flex;flex-direction:column;gap:10px;min-width:0}
+.pet-cena{position:relative;isolation:isolate;height:clamp(340px,calc(100dvh - 326px),660px);border-radius:20px;overflow:hidden;
+  box-shadow:0 0 0 1px #D5E4F6,0 12px 26px -16px rgba(23,58,138,.5)}
+.pet-cena > .lcd{position:absolute;left:0;top:0;z-index:2;display:block;image-rendering:pixelated}
+.pet-cena > .ovo-anel{z-index:1;top:auto;bottom:-8%;translate:-50% 0}
+.pet-cena--morto .cena-sala{filter:grayscale(1) brightness(.92)}
+.cena-topo{position:absolute;left:10px;right:10px;top:10px;z-index:3;display:flex;align-items:flex-start;gap:8px;pointer-events:none}
+.cena-topo > *{pointer-events:auto}
+.cena-topo .palco-emocao{position:static;min-height:32px}
+.cena-topo-dir{margin-left:auto;display:flex;gap:8px}
+.cena-topo .db-botao{position:static;min-height:44px}
+.cena-fala{position:absolute;z-index:3;right:6%;top:40%;max-width:min(52%,320px);min-height:44px;flex-direction:column;align-items:center;
+  text-align:center;cursor:pointer}
+.cena-fala small{font-size:11px;font-weight:700;color:var(--dl-text-2)}
+.pet-cena .balao-causa{left:auto;right:9%;top:auto;bottom:34%;z-index:3}
+
+/* embaixo do cenario: a necessidade prioritaria e as acoes */
+.pet-doca{display:flex;flex-direction:column;gap:10px}
+.pet-prioridade{display:flex;align-items:center;gap:12px;width:100%;min-height:64px;padding:10px 12px;border-radius:16px;border:1px solid #D5E4F6;
+  background:var(--dl-surface);color:var(--dl-text);box-shadow:0 8px 18px -12px rgba(23,58,138,.45);font:inherit;text-align:left;cursor:pointer}
+.pet-prioridade:hover{border-color:var(--dl-border)}
+.pet-prioridade:focus-visible{outline:none;box-shadow:0 0 0 3px var(--dl-highlight)}
+.pet-prioridade-ic{width:40px;height:40px;flex:none;border-radius:12px;background:var(--dl-surface-2);display:flex;align-items:center;justify-content:center;font-weight:900}
+.pet-prioridade-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.pet-prioridade-txt b{font-weight:900;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pet-prioridade-txt span{font-size:13px;font-weight:700;color:var(--dl-text-2)}
+.pet-prioridade-ver{display:flex;align-items:center;gap:2px;flex:none;font-size:13px;font-weight:800;color:var(--dl-action)}
+.pet-pedido{display:flex;flex-direction:column;gap:8px}
+.pet-home .acoes-pet{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.pet-home .acoes-pet .dl-btn{min-height:64px;padding:6px 2px;flex-direction:column;gap:4px;font-size:13px;letter-spacing:-.2px}
+.pet-home .acoes-pet .dl-btn span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pet-home .acoes-pet .dl-btn svg,.pet-home .acoes-pet .dl-btn img{width:24px;height:24px;flex:none}
+.acoes-mais{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;scroll-margin-bottom:calc(108px + env(safe-area-inset-bottom))}
+
+/* o painel de detalhes (folha no celular, coluna no desktop) */
+.pet-detalhes-conteudo{display:flex;flex-direction:column;gap:12px}
+.det-sec{display:flex;flex-direction:column;gap:8px}
+.det-sec h3{margin:0;font-size:15px;font-weight:900}
+.det-fala .fala-status{align-self:flex-start;display:flex;align-items:center;gap:5px;border:2px solid var(--dl-border);border-radius:14px;padding:3px 9px;
+  font-size:11px;font-weight:800;color:var(--dl-text-2);white-space:nowrap}
+.det-fala .fala-ponto{width:8px;height:8px}
+.det-estado{display:flex;flex-direction:column;gap:12px}
+
+/* ---------- desktop: a casca fica; o cenario ocupa o conteudo e os detalhes viram uma coluna que se recolhe */
+@media (min-width:1100px){
+  .pet-home{min-height:calc(100dvh / var(--zoom, 1) - var(--ui-topo));background:var(--ui-bg)}
+  .pet-home-corpo{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;padding:16px 24px 20px;height:calc(100dvh / var(--zoom, 1) - var(--ui-topo));box-sizing:border-box}
+  .pet-home-corpo--detalhes{grid-template-columns:minmax(0,1fr) 360px}
+  .pet-home-principal{min-height:0;gap:12px}
+  .pet-cena{flex:1;height:auto;min-height:380px;border-radius:var(--ui-raio);box-shadow:0 0 0 1px var(--ui-border),var(--ui-sombra)}
+  .cena-topo{left:16px;right:16px;top:16px}
+  .cena-fala{right:18%;top:36%}
+  .det-abrir,.db-abrir{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--ui-border);
+    background:var(--ui-surface);color:var(--ui-text);font:inherit;font-weight:800;font-size:14px;box-shadow:var(--ui-sombra);cursor:pointer}
+  .det-abrir:hover,.db-abrir:hover{border-color:var(--ui-primary)}
+  .det-abrir:focus-visible,.db-abrir:focus-visible,.det-fechar:focus-visible,.pet-prioridade:focus-visible{outline:none;box-shadow:var(--ui-foco)}
+  .pet-doca{flex-direction:row;align-items:stretch;gap:12px}
+  .pet-doca > .pet-prioridade,.pet-doca > .pet-pedido,.pet-doca > .chamado--morte{flex:0 1 420px;min-width:300px}
+  /* com os detalhes abertos o centro estreita: a prioridade e as acoes empilham, para os rotulos caberem inteiros */
+  .pet-home-corpo--detalhes .pet-doca{flex-direction:column}
+  .pet-home-corpo--detalhes .pet-doca > *{flex:none}
+  .pet-prioridade{border-color:var(--ui-border);background:var(--ui-surface);color:var(--ui-text);border-radius:var(--ui-raio);box-shadow:var(--ui-sombra)}
+  .pet-prioridade-ic{background:var(--ui-primary-soft)}
+  .pet-prioridade-txt span{color:var(--ui-text-2)}
+  .pet-prioridade-ver{color:var(--ui-primary-forte)}
+  .pet-home .acoes-pet{flex:1;min-width:0;align-content:start;padding:8px;background:var(--ui-surface);border:1px solid var(--ui-border);border-radius:var(--ui-raio);box-shadow:var(--ui-sombra)}
+  .pet-home .acoes-pet .dl-btn{min-height:64px;border-radius:var(--ui-raio-p);border:1px solid var(--ui-border);background:var(--ui-surface);color:var(--ui-text);box-shadow:none;font-size:14px}
+  .pet-home .acoes-pet .dl-btn:hover:not(:disabled){border-color:var(--ui-primary);background:var(--ui-primary-soft)}
+  .pet-home .acoes-pet .acao-destaque--sugerida{background:var(--ui-primary-forte);border-color:var(--ui-primary-forte);color:var(--ui-primary-ink)}
+  .pet-home .acoes-pet .acao-destaque--sugerida:hover:not(:disabled){background:var(--ui-primary-forte-hover)}
+  .pet-home .acoes-pet .dl-btn:focus-visible{box-shadow:var(--ui-foco)}
+  .acoes-mais{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .pet-detalhes{display:flex;flex-direction:column;gap:12px;min-height:0;overflow:auto;padding:2px}
+  .pet-detalhes-cab{display:flex;align-items:center;justify-content:space-between}
+  .pet-detalhes-cab h2{margin:0;font-size:18px;font-weight:900;color:var(--ui-text)}
+  .det-fechar{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:var(--ui-raio-p);border:1px solid var(--ui-border);
+    background:var(--ui-surface);color:var(--ui-text);cursor:pointer}
+  .pet-detalhes .det-sec,.pet-detalhes .det-estado > .necessidades4{background:var(--ui-surface);border:1px solid var(--ui-border);border-radius:var(--ui-raio);
+    box-shadow:var(--ui-sombra);padding:16px;color:var(--ui-text)}
+  .pet-detalhes .det-estado > .necessidades4{grid-template-columns:minmax(0,1fr);gap:10px}
+  .pet-detalhes .digibrain{flex:none}
+}

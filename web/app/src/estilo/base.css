@@ -49,9 +49,6 @@ button{font:inherit}
 
 /* cabecalho do pet (em todas as telas: quem e o pet, que nivel, que horas) */
 .pet-cab{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding:10px 14px;border-radius:16px;box-shadow:0 0 0 2px var(--dl-border)}
-.pet-retrato{width:52px;height:52px;flex:none;border-radius:50%;overflow:hidden;background:var(--dl-surface-2);
-  border:3px solid #FFFFFF;box-shadow:0 0 0 2px var(--dl-navy-deep);display:flex;align-items:flex-start;justify-content:center}
-.pet-retrato canvas{flex:none}
 .pet-cab-nome{display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap}
 .pet-cab-nome .dl-placa{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pet-relogio{margin-left:auto;color:#FFFFFF;background:rgba(15,42,102,.55);border-radius:6px;padding:2px 8px;white-space:nowrap}
@@ -99,7 +96,6 @@ footer{font-size:.75rem;color:var(--dl-text-2);display:grid;gap:4px;margin:16px 
 footer a{color:var(--dl-action);font-weight:900;display:inline-flex;align-items:center;min-height:44px}
 .dl-nav .nav-ovo{image-rendering:auto;max-width:none}
 .tela-cab-pet{margin-left:auto;background:var(--dl-navy);color:#FFFFFF;border-radius:8px;padding:3px 10px;font-weight:900;font-size:13px;max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-
 
 .dl-deco{image-rendering:auto;max-width:none}
 .tela-cab-ic{filter:drop-shadow(2px 0 0 #173A8A) drop-shadow(-2px 0 0 #173A8A) drop-shadow(0 2px 0 #173A8A) drop-shadow(0 -2px 0 #173A8A)}

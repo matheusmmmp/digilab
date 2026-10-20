@@ -64,9 +64,6 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .boas-vindas{display:grid;gap:4px}
 .boas-vindas h1{margin:0;font-size:2rem;line-height:1.1}
 .boas-vindas p{margin:0;font-weight:800;color:var(--dl-text-2)}
-.pet-retrato{padding:0;cursor:pointer;align-items:center}
-.pet-retrato img{width:auto;height:auto;max-width:none;object-fit:none;image-rendering:pixelated}
-.pet-retrato:focus-visible{outline:none;box-shadow:0 0 0 2px var(--dl-navy-deep),0 0 0 5px var(--dl-highlight)}
 .fala-det{margin:0}
 .fala-ponto{width:10px;height:10px;border-radius:50%;background:#8795B3;flex:none}
 .fala-ponto[data-estado="ok"]{background:var(--dl-ok)}
@@ -89,7 +86,6 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .meus-pets .slot::before,.meus-pets .slot::after{content:"";position:absolute;width:12px;height:12px;border:3px solid var(--dl-highlight)}
 .meus-pets .slot::before{left:-2px;top:-2px;border-right:0;border-bottom:0;border-radius:4px 0 0 0}
 .meus-pets .slot::after{right:-2px;bottom:-2px;border-left:0;border-top:0;border-radius:0 0 4px 0}
-.meus-pets .slot .pet-retrato{cursor:default}
 .acoes-mp{display:flex;flex-wrap:wrap;gap:10px}
 .mp-slots{display:grid;grid-template-columns:minmax(0,1fr) 96px;gap:10px;align-items:stretch}
 .slot-novo{font:inherit;font-weight:900;font-size:.75rem;color:var(--dl-text-2);background:transparent;border:2px dashed var(--dl-border);border-radius:10px;cursor:pointer;display:grid;justify-items:center;align-content:center;gap:4px;min-height:76px}
@@ -112,13 +108,7 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 
 /* tela Pet (pranchas PetTela, 390 px, e PetTelaDesktop, 1280 x 720; substituem a UpPet) */
 .pet-tela{display:flex;flex-direction:column;width:100%;max-width:480px;margin-inline:auto;color:var(--dl-text)}
-.pet-listra{height:10px}
 .pet-cab{position:relative;display:flex;flex-wrap:nowrap;align-items:center;gap:8px;padding:12px 14px 10px;overflow:hidden;border-radius:0;box-shadow:none}
-.pet-cab-globo{position:absolute;right:-40px;top:-60px;opacity:.12;pointer-events:none}
-.pet-retrato{position:relative;width:54px;height:54px;flex:none;border-radius:50%;overflow:hidden;padding:0;cursor:pointer;background:#FFFFFF;border:3px solid var(--dl-action);
-  box-shadow:0 0 0 2px #FFFFFF,0 3px 0 2px var(--dl-navy);display:flex;align-items:flex-start;justify-content:center}
-.pet-retrato img{margin-top:6px;max-width:none;image-rendering:pixelated}
-.pet-retrato:focus-visible{outline:none;box-shadow:0 0 0 2px var(--dl-navy-deep),0 0 0 5px var(--dl-highlight)}
 .pet-cab-nome{position:relative;flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:4px}
 .pet-cab-placa{display:flex;align-items:center;gap:6px;max-width:100%;min-width:0}
 .pet-cab-placa .dl-placa{font-size:15px;padding:2px 12px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -130,15 +120,8 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .pet-salvo{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:#2F7A3E}
 .pet-salvo i{width:8px;height:8px;border-radius:50%;background:var(--dl-ok)}
 .pet-salvo.erro{color:var(--dl-erro)}
-.pet-salvo.erro i{background:var(--dl-erro)}
-.pet-corpo{display:flex;flex-direction:column;gap:10px;padding:0 14px 12px}
-.pet-principal,.pet-lado{display:flex;flex-direction:column;gap:10px;min-width:0}
-.lado-cards{display:contents}   /* desktop: a coluna da direita (estilo/desktop.css) */
-.palco-card{position:relative;background:var(--dl-surface);border-radius:16px;padding:4px;box-shadow:0 0 0 2px var(--dl-border),0 4px 0 2px var(--dl-border-shadow)}
-.palco-cena{position:relative;height:318px;border-radius:12px;overflow:hidden}
-.palco-cena .lcd{position:absolute;left:0;top:0;display:block;image-rendering:pixelated}
-.palco-tit{position:absolute;left:0;right:0;top:0;z-index:1;height:36px;display:flex;align-items:center;justify-content:center;background:var(--dl-palco-tit);
-  border-bottom:2px solid var(--dl-hex);font-weight:900;font-size:15px;color:var(--dl-plate)}
+.pet-salvo.erro i{background:var(--dl-erro)}   /* desktop: a coluna da direita (estilo/desktop.css) */
+
 .palco-emocao{position:absolute;left:10px;top:46px;z-index:2;display:flex;align-items:center;gap:6px;background:#FFFFFF;border:2px solid var(--dl-border);
   border-radius:20px;padding:3px 10px 3px 4px;font-size:12px;font-weight:800;color:var(--dl-plate)}
 .palco-emocao img{width:22px;height:22px}
@@ -148,17 +131,6 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .balao-causa .causa-ic{display:flex}
 .balao-causa .causa-ic img{height:auto}
 .balao-q{font-family:var(--dl-f-num);font-style:italic;font-size:18px;padding:0 4px}
-.palco-nome{position:absolute;left:50%;bottom:12px;z-index:1;transform:translateX(-50%);max-width:calc(100% - 20px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pet-fala{display:grid;gap:6px}
-.pet-fala-topo{display:flex;align-items:center;gap:8px}
-.fala-botao{flex:1;min-width:0;display:block;text-align:left;background:#FFFFFF;color:#13244D;border:3px solid var(--dl-navy);border-radius:4px 14px 14px 14px;
-  box-shadow:0 3px 0 var(--dl-navy-deep);padding:7px 12px;font:inherit;font-weight:800;font-size:14px;line-height:1.3;min-height:44px;cursor:pointer}
-.fala-botao.dl-balao--sombria{background:var(--dl-dark-bg);color:var(--dl-dark-ink);border-color:var(--dl-dark);box-shadow:none}
-.fala-botao small{display:block;font-size:11px;font-weight:700;color:var(--dl-text-2)}
-.fala-botao:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
-.fala-botao .balao-txt{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
-.pet-fala .fala-status{display:flex;align-items:center;gap:5px;background:#FFFFFF;border:2px solid var(--dl-border);border-radius:14px;padding:3px 9px;font-size:11px;font-weight:800;color:#3A5288;white-space:nowrap;flex:none}
-.pet-fala .fala-ponto{width:8px;height:8px}
 .fala-det{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:0}
 .pet-status{color:var(--dl-text-2);font-size:14px}
 /* confianca de combate (M1, pets v8): a frase de estado e, aberta, as lutas do registro que a causaram */
@@ -189,7 +161,6 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .chamado--lesao{border-color:var(--dl-need)}
 .chamado--morte{flex-wrap:wrap}
 .chamado--morte .chamado-txt b{font-size:16px}
-.palco--morto img,.palco--morto canvas{filter:grayscale(1) brightness(.85)}
 .dl-par{gap:10px}
 .dl-desejo-corpo strong{font-size:16px}
 .dl-desejo-icone{width:32px;height:32px;background:var(--dl-plate)}
@@ -200,9 +171,6 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 @media (min-width:1100px){
   .pet-tela{max-width:none;margin:0}
   .pet-cab{padding:12px 24px 10px}
-  .pet-corpo{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:22px;padding:4px 24px 20px;align-items:start}
-  .pet-principal,.pet-lado{gap:12px}
-  .palco-cena{height:468px}
   .balao-causa{left:61%;top:156px}
   .necessidades4{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
@@ -382,18 +350,14 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .pet-cab-bt:focus-visible{outline:none;box-shadow:0 0 0 2px var(--dl-navy-deep),0 0 0 5px var(--dl-highlight)}
 .pet-cab-bt .dl-deco{image-rendering:auto}
 @media (min-width:900px){ .pet-cab-bts{display:none} }
-.pet-cab-brasao--sub{display:none}
 @media (max-width:419px){
   .pet-cab-placa .pet-cab-brasao{display:none}
-  .pet-cab-sub .pet-cab-brasao--sub{display:inline-block}
   .pet-cab-placa .dl-placa{font-size:14px;padding:2px 9px}
 }
 
 /* Pet no desktop (PetTelaDesktop): o topo da casca substitui o cabecalho; palco ate o fundo, Conversar ao lado da fala,
    e "Agora ha pouco" (ultimas linhas do registro) fechando a coluna da direita */
-.pet-fala-linha{display:flex;gap:12px;align-items:stretch;min-width:0}
-.pet-fala-linha > :first-child{flex:1;min-width:0}
-.pet-conversar{flex:none;gap:8px;padding:0 18px;min-height:52px;align-self:center}
+
 .pet-recente{display:flex;flex-direction:column;gap:6px;padding:14px 16px}
 .pet-recente-cab{display:flex;justify-content:space-between;align-items:baseline}
 .pet-recente h2{margin:0;font-size:15px;font-weight:900}
@@ -404,13 +368,7 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .pet-recente-ver{align-self:flex-end;margin-top:auto;background:none;border:0;font:inherit;font-size:12px;font-weight:900;color:var(--dl-plate);text-decoration:underline;cursor:pointer;min-height:36px}
 .pet-recente-ver:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
 @media (min-width:1100px){
-  .app .pet-cab,.app .pet-listra{display:none}
-  .pet-corpo{padding:20px 24px;align-items:stretch;min-height:calc(100dvh / var(--zoom, 1) - 76px);box-sizing:border-box}
-  .pet-principal,.pet-lado{display:flex;flex-direction:column;min-width:0}
-  .pet-principal .palco-card{flex:1;display:flex;flex-direction:column}
-  .pet-principal .palco-cena{flex:1;height:auto;min-height:420px}
-  .pet-recente-caixa{flex:1;display:flex;flex-direction:column}
-  .pet-recente-caixa .pet-recente{flex:1}
+  .app .pet-cab{display:none}
 }
 /* Conversar no desktop: a tela ocupa a janela abaixo do topo; a conversa rola dentro e a barra de escrever fica no pe */
 @media (min-width:1100px){

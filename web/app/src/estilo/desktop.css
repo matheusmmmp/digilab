@@ -47,7 +47,7 @@
   .dl-nav .nav-quad{font-size:14px;gap:12px}
 
   /* ---------- linha da pagina (titulo, abas) e cabecalhos antigos de cada tela */
-  .painel > .tela-cab,.painel > .tabs,.pet-cab,.pet-listra{display:none}
+  .painel > .tela-cab,.painel > .tabs,.pet-cab{display:none}
   .app .conv-cab{display:none}
   .topo-pagina{display:flex;align-items:center;gap:16px;padding:20px 24px 0;flex-wrap:wrap}
   .topo-tit{margin:0;font-family:var(--dl-f-texto);font-weight:900;font-size:24px;color:var(--ui-text)}
@@ -66,31 +66,13 @@
 
   /* ---------- tela do Pet: habitat, barra das acoes e a coluna da direita */
   .pet-tela{color:var(--ui-text)}
-  .pet-corpo{display:grid;grid-template-columns:minmax(0,1fr) 320px;grid-template-rows:minmax(0,1fr) auto;grid-template-areas:"hab lado" "acoes lado";
-    gap:16px 20px;padding:16px 24px 20px;height:calc(100dvh / var(--zoom, 1) - var(--ui-topo));min-height:560px;box-sizing:border-box;align-items:stretch}
-  .pet-principal{grid-area:hab;display:flex;flex-direction:column;gap:12px;min-height:0}
-  .pet-lado{display:contents}
-  .lado-cards{grid-area:lado;display:flex;flex-direction:column;gap:12px;min-height:0;overflow:auto;padding:2px}
 
   /* habitat: o card do palco, limpo; o pet continua no canvas, em escala inteira */
-  .pet-principal .palco-card{flex:1;display:flex;flex-direction:column;min-height:0;padding:0;border-radius:var(--ui-raio);background:var(--ui-surface);
-    border:1px solid var(--ui-border);box-shadow:var(--ui-sombra);overflow:hidden}
-  .pet-principal .palco-cena{flex:1;height:auto;min-height:360px;border-radius:0}
-  .palco-cena .palco-tit,.palco-cena .palco-nome{display:none}
-  .hab-agora{position:absolute;left:16px;top:16px;z-index:2;display:inline-flex;align-items:center;gap:8px;background:var(--ui-surface);color:var(--ui-text);
-    border:1px solid var(--ui-border);border-radius:999px;padding:6px 14px;font-size:13px;font-weight:800;box-shadow:var(--ui-sombra)}
-  .hab-agora i{width:8px;height:8px;border-radius:50%;background:var(--ui-success)}
+
   .palco-emocao{left:16px;top:56px;border:1px solid var(--ui-border);border-radius:999px;box-shadow:var(--ui-sombra);background:var(--ui-surface);color:var(--ui-text)}
   .balao-causa{left:auto;right:16px;top:16px}
 
   /* fala e Conversar: uma linha leve sob o habitat */
-  .pet-fala-linha{gap:12px}
-  .pet-fala .dl-balao{border:1px solid var(--ui-border);border-radius:12px;box-shadow:none;background:var(--ui-surface);color:var(--ui-text)}
-  .pet-fala .fala-status{border:1px solid var(--ui-border);background:var(--ui-surface);color:var(--ui-text-2)}
-  .pet-conversar{background:var(--ui-surface);color:var(--ui-primary-forte);border:1px solid var(--ui-primary-forte);box-shadow:none;border-radius:12px}
-  .pet-conversar:hover{background:var(--ui-primary-soft)}
-  .pet-conversar svg path:first-child{fill:var(--ui-primary-forte);stroke:var(--ui-primary-forte)}
-  .pet-conversar svg path:last-child{stroke:#FFFFFF}
 
   /* barra das acoes: botoes com icone em cima e rotulo embaixo */
   .acoes-pet{grid-area:acoes;display:flex;gap:4px;padding:8px;background:var(--ui-surface);border:1px solid var(--ui-border);border-radius:var(--ui-raio);box-shadow:var(--ui-sombra)}
@@ -103,8 +85,7 @@
   .acoes-pet .dl-btn--destaque{border-color:var(--ui-primary);background:var(--ui-primary-soft);color:var(--ui-text)}
 
   /* coluna da direita: cards brancos de borda fina */
-  .lado-cards > .necessidades4,.pet-tela .dl-card,.pet-recente{background:var(--ui-surface);border:1px solid var(--ui-border);border-radius:var(--ui-raio);box-shadow:var(--ui-sombra);color:var(--ui-text)}
-  .lado-cards > .necessidades4{grid-template-columns:minmax(0,1fr);gap:10px;padding:16px}
+  .pet-tela .dl-card,.pet-recente{background:var(--ui-surface);border:1px solid var(--ui-border);border-radius:var(--ui-raio);box-shadow:var(--ui-sombra);color:var(--ui-text)}
   .nec-tit{margin:0 0 2px;font-size:15px;font-weight:900}
   .necessidades4 .nec{display:grid;grid-template-columns:96px minmax(0,1fr);align-items:center;gap:10px;padding:0;border:0;background:none}
   .necessidades4 .nec-rot{font-size:13px;font-weight:800;color:var(--ui-text);text-transform:capitalize}
@@ -125,7 +106,7 @@
   .pet-tela .dl-desejo--necessidade{background:var(--ui-surface);box-shadow:none;border:1px solid var(--ui-border)}
 
   /* atividades recentes: cresce ate o fundo da coluna */
-  .pet-recente-caixa{flex:1;display:flex;flex-direction:column;min-height:150px}
+
   .pet-recente{flex:1;padding:16px}
   .pet-recente h2{font-size:15px}
   .pet-recente-cab small{color:var(--ui-text-2)}
@@ -141,7 +122,6 @@
 }
 /* telas mais baixas (1366 x 768 com zoom, ou janelas menores): a coluna da direita rola sozinha antes de o habitat encolher */
 @media (min-width:1100px) and (max-height:760px){
-  .pet-corpo{padding-top:12px;padding-bottom:12px;gap:12px 16px}
   .acoes-pet .dl-btn{min-height:56px}
 }
 @media (min-width:1100px) and (prefers-reduced-motion:reduce){

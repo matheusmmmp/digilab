@@ -22,6 +22,7 @@ import "./estilo/diario.css";
 import "./estilo/decoracao.css";
 import "./estilo/desktop.css";
 import "./estilo/digibrain.css";
+import "./estilo/pet_home.css";
 import "./estilo/tailwind.css";
 
 iniciarTema();
