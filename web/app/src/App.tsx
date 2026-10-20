@@ -200,7 +200,7 @@ export function App() {
       : meusPets && desk ? <><TopoDesktop titulo="Meus pets" abas={[]} aba={null} irAba={() => {}} abrirMeusPets={() => {}} voltar={() => setMeusPets(false)}
           acoes={<AcoesMeusPets />} /><MeusPetsDesktop fechar={() => setMeusPets(false)} /></>
       : config ? <>{topo}<TelaConfig parte={config} abrir={abrirConfig} fechar={() => { setConfig(null); scrollTo(0, 0); }} irPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} /></>
-      : rota.destino === "pet" ? <>{topo}<TelaPet abrirMeusPets={() => setMeusPets(true)} irConversar={() => irDestino("conversar")} abrirConfig={() => abrirConfig("principal")} irRegistro={() => ir({ destino: "diario", aba: "registro" })} /></>
+      : rota.destino === "pet" ? <>{topo}<TelaPet abrirMeusPets={() => setMeusPets(true)} irConversar={() => irDestino("conversar")} abrirConfig={() => abrirConfig("principal")} irRegistro={() => ir({ destino: "diario", aba: "registro" })} irEvolucao={() => { ir({ destino: "crescer", aba: "evolucao" }); scrollTo(0, 0); }} /></>
       : rota.destino === "conversar" ? <>{topo}<TelaConversar voltar={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} /></> : (<>{topo}
       <section className="painel" aria-labelledby="tela-titulo">
         <div className="tela-cab dl-faixa">

@@ -3,8 +3,8 @@
    atividades recentes e o DigiBrain) num painel sob demanda: folha no celular, coluna recolhivel no desktop.
    Tudo derivado do motor na hora de desenhar; so mudarMotor() altera o pet. */
 import type { ReactNode } from "react";
-import { useEffect, useState } from "react";
-import { ChevronRight, Ellipsis, PanelRightClose, PanelRightOpen } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowRight, Ban, Brain, ChevronRight, Ellipsis, Gamepad2, Hand, House, Layers, MessageSquareText, PawPrint, Sparkles, Syringe } from "lucide-react";
 import {
   ACAO_CHAMADO, ALVOS_DESEJO, CAT, CED, CLE, CMEN, DO_ESP, NOME_ESP, EMOCAO_TXT, FATORES_TXT, NOME_CHAMADO, NOME_EST, NOME_PET, OVO, TICK_INICIAL, TPD,
   chaveSprite, eNoite, expressarConfianca, nomeEstagio, nomeForma, nomeRivalConfianca, observacao, type AcaoDono, type Chamado, type MotivoVida, type Motor,
@@ -29,7 +29,9 @@ import { PalcoPet } from "./PalcoPet.tsx";
 import { CenaPet } from "./CenarioPet.tsx";
 import { useDesktop } from "../../desktop.ts";
 import { Folha } from "../../componentes/Folha.tsx";
-import { BotaoDigiBrain, CardDigiBrain, IconeCerebro } from "../../componentes/DigiBrain.tsx";
+import { BotaoDigiBrain, ConteudoDigiBrain, SeloDigiBrain } from "../../componentes/DigiBrain.tsx";
+import { Modulo, Quadro, type Arranjo } from "../../componentes/Quadro.tsx";
+import { duracao, previsaoEvo } from "../crescer/TelaEvolucao.tsx";
 
 export const hhmm = (t: number): string => { const m = t % TPD; return String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0"); };
 export const diaDe = (t: number): number => Math.floor((t - TICK_INICIAL) / TPD) + 1;
@@ -153,11 +155,11 @@ function BalaoFala({ v, abrir }: { v: VistaFala; abrir: () => void }) {
   );
 }
 /** no painel: o que ele faz, a causa registrada, o detalhe e a fonte da fala */
-function DetalheFala({ v }: { v: VistaFala }) {
+function DetalheFala({ v, semTitulo = false }: { v: VistaFala; semTitulo?: boolean }) {
   const { motor: m } = useJogo(), { freado } = useTempo(), r = rotuloLLM(), fl = useFalaLivre();
   return (
     <section className="det-sec det-fala" aria-labelledby="det-fala-tit">
-      <h3 id="det-fala-tit">Por que ele disse isso</h3>
+      {!semTitulo && <h3 id="det-fala-tit">Por que ele disse isso</h3>}
       <div className="fala-det">
         <span className="pet-status dl-lcd">{NOME_PET[m.acao]}{freado ? " · tempo em 1x até atender" : ""}</span>{v.causa}
         <span className="dl-apoio">{v.texto && <>“{v.texto}” · </>}{v.detalhe}</span></div>
@@ -344,20 +346,6 @@ function Desejo() {
   );
 }
 
-/** desktop: as ultimas linhas do registro (o que voce fez e o que ele fez) e o atalho para o Diario; so o que o motor registrou */
-function AgoraHaPouco({ irRegistro }: { irRegistro: () => void }) {
-  const { motor: m } = useJogo();
-  const itens = m.historico.filter(h => h.quem === "dono" || h.quem === "pet" || h.quem === "recusa").slice(-5).reverse();
-  const texto = (h: (typeof itens)[number]) => h.quem === "pet" ? NOME_PET[h.a as keyof typeof NOME_PET] ?? h.a : h.a;
-  return (
-    <section className="dl-card pet-recente" aria-labelledby="pet-recente-tit">
-      <span className="pet-recente-cab"><h2 id="pet-recente-tit">Atividades recentes</h2><small>do registro</small></span>
-      <ol>{itens.map((h, i) => <li key={i} data-quem={h.quem}><span className="dl-lcd">{hhmm(h.t)}</span><span className="pet-recente-quem">{h.quem === "dono" ? "você" : h.quem === "recusa" ? "recusou" : "ele"}</span><span>{texto(h)}</span></li>)}</ol>
-      <button type="button" className="pet-recente-ver" onClick={irRegistro}>Ver tudo no Diário</button>
-    </section>
-  );
-}
-
 /* ------------------------------------------------ a necessidade prioritaria */
 type Necessidade = "fome" | "energia" | "higiene" | "humor";
 const ROTULO_BAIXO: Record<Necessidade, string> = { fome: "comida baixa", energia: "energia baixa", higiene: "higiene baixa", humor: "humor baixo" };
@@ -436,28 +424,118 @@ function AcoesPet() {
   );
 }
 
-/* ------------------------------------------------ o painel de detalhes (sob demanda) */
+/* ------------------------------------------------ o painel de detalhes do celular (sob demanda, numa folha) */
 type Secao = "estado" | "fala" | "digibrain";
-function PainelDetalhes({ v, foco, irRegistro }: { v: VistaFala; foco: Secao; irRegistro: () => void }) {
-  const { motor: m } = useJogo(), desk = useDesktop();
+function PainelDetalhes({ v, foco }: { v: VistaFala; foco: Secao }) {
   const secoes: [Secao, ReactNode][] = [
-    ["digibrain", desk && m.versao >= 11 ? <CardDigiBrain key="db" /> : null],
     ["fala", <DetalheFala key="fala" v={v} />],
     ["estado", <div key="estado" className="det-estado"><Necessidades /><div className="dl-par"><Desejo /></div><EstadoConfianca /></div>],
   ];
   secoes.sort(([a], [b]) => (b === foco ? 1 : 0) - (a === foco ? 1 : 0));
-  return <div className="pet-detalhes-conteudo">{secoes.map(([, n]) => n)}{desk && <AgoraHaPouco irRegistro={irRegistro} />}</div>;
+  return <div className="pet-detalhes-conteudo">{secoes.map(([, n]) => n)}</div>;
+}
+
+/* ------------------------------------------------ o desktop: o quadro modular (docs/TAREFA_V2_PET_QUADRO.md) */
+/* a coluna principal com o habitat e as acoes; a lateral com os modulos que o motor sustenta. O arranjo e preferencia de quem joga
+   (localStorage), fora do save */
+const CHAVE_QUADRO = "digilab-web-v21-sprites-quadro-pet";
+const PADRAO_QUADRO: Arranjo = {
+  principal: ["cenario", "acoes"], lado: ["estado", "desejo", "evolucao", "registro", "digibrain", "fala"], recolhidos: ["fala"], ladoRecolhido: false,
+};
+const CRESCE = ["cenario", "registro"] as const;
+const ICONE_QUEM = { dono: Hand, pet: PawPrint, recusa: Ban } as const;
+
+/** a proxima evolucao, so com o que o motor tem (previsaoEvo, o mesmo da tela Evolucao): a forma atual, o nivel que vem e, se o motor ja
+    decidiu (o Mega), a forma seguinte; sem proxima evolucao, nada */
+function ProximaEvolucao({ irEvolucao }: { irEvolucao: () => void }) {
+  const { motor: m } = useJogo(), a = useAtlas(), p = previsaoEvo(m);
+  if (!p) return null;
+  const img = (nome: string) => { if (a.tipo !== "ok") return null; const i = imagemAtlas(a, nome); return <img className="dl-pix evo-mod-spr" src={i.url} width={i.w * 2} height={i.h * 2} alt="" />; };
+  const decidida = p.prox.est === "mega";
+  return (
+    <div className="evo-mod">
+      <div className="evo-mod-formas">
+        <span className="evo-mod-forma">{img(chaveSprite(m.forma))}<small>{nomeForma(m.forma)}</small></span>
+        <ArrowRight className="evo-mod-seta" size={28} aria-hidden="true" />
+        <span className="evo-mod-forma">{decidida ? img(chaveSprite(p.prox)) : <b className="evo-mod-q" aria-hidden="true">?</b>}<small>{decidida ? nomeForma(p.prox) : nomeEstagio(p.prox)}</small></span>
+      </div>
+      <p className="evo-mod-txt">{p.falta > 0 ? <>até virar {nomeEstagio(p.prox)}: <b>{duracao(p.falta)}</b></> : <>o tempo do estágio já passou; o que falta está na árvore</>}</p>
+      <button type="button" className="mod-link" onClick={irEvolucao}>Ver a árvore de evolução</button>
+    </div>
+  );
+}
+/** as ultimas linhas do registro (o que voce fez, o que ele fez e as recusas) */
+function UltimasAcoes() {
+  const { motor: m } = useJogo();
+  const itens = m.historico.filter(h => h.quem === "dono" || h.quem === "pet" || h.quem === "recusa").slice(-8).reverse();
+  const texto = (h: (typeof itens)[number]) => h.quem === "pet" ? NOME_PET[h.a as keyof typeof NOME_PET] ?? h.a : h.a;
+  if (!itens.length) return <p className="mod-vazio">nada no registro ainda</p>;
+  return (
+    <ol className="mod-registro">{itens.map((h, i) => {
+      const I = ICONE_QUEM[h.quem as keyof typeof ICONE_QUEM];
+      return <li key={i} data-quem={h.quem}><time>{hhmm(h.t)}</time><span className="mod-registro-ic"><I size={18} aria-hidden="true" /></span>
+        <span>{h.quem === "dono" ? "você: " : h.quem === "recusa" ? "recusou: " : ""}{texto(h)}</span></li>;
+    })}</ol>
+  );
+}
+function TelaPetDesktop({ irRegistro, irEvolucao }: { irRegistro: () => void; irEvolucao: () => void }) {
+  const { motor: m, nascendo } = useJogo(), fala = useFala(), abrir = useRef<((id: string) => void) | null>(null);
+  const d = m.desejoAtual(m.observacaoAgora(), m.e.tick);
+  const render = (id: string): ReactNode | null => {
+    switch (id) {
+      case "cenario": return (
+        <Modulo icone={House} titulo="Habitat">
+          <section className={"pet-cena" + (m.morte ? " pet-cena--morto" : "")} aria-label="O pet no quarto">
+            <CenaPet noite={eNoite(m.e.tick % TPD)} />
+            {nascendo > 0 && <Deco nome="Digivice_Circle_01" className="ovo-anel gira" />}
+            <PalcoPet />
+            {nascendo === 0 && !m.morte && <BalaoFala v={fala} abrir={() => abrir.current?.("fala")} />}
+            <BalaoCausa />
+          </section>
+        </Modulo>);
+      case "acoes": return (
+        <Modulo icone={Gamepad2} titulo="Ações">
+          <div className="pet-doca"><Prioridade abrirDetalhes={() => abrir.current?.("estado")} />{!m.morte && <AcoesPet />}</div>
+        </Modulo>);
+      case "estado": return (
+        <Modulo icone={Syringe} titulo="Estado atual" aside={<Emocao />}>
+          <div className="det-estado"><Necessidades /><EstadoConfianca /></div>
+        </Modulo>);
+      case "desejo": return (
+        <Modulo icone={Sparkles} titulo="Desejo">
+          {d && !m.morte ? <div className="dl-par"><Desejo /></div> : <p className="mod-vazio">nenhum desejo agora</p>}
+        </Modulo>);
+      case "evolucao": return previsaoEvo(m) && !m.morte && nascendo === 0 ? (
+        <Modulo icone={Layers} titulo="Próxima evolução"><ProximaEvolucao irEvolucao={irEvolucao} /></Modulo>) : null;
+      case "registro": return (
+        <Modulo icone={Layers} titulo="Últimas ações" aside={<button type="button" className="mod-link" onClick={irRegistro}>Ver tudo</button>}>
+          <UltimasAcoes />
+        </Modulo>);
+      case "digibrain": return m.versao >= 11 && nascendo === 0 ? (
+        <Modulo icone={Brain} titulo="DigiBrain" aside={<SeloDigiBrain replay={false} />}>
+          <div className="digibrain digibrain--modulo"><ConteudoDigiBrain /></div>
+        </Modulo>) : null;
+      case "fala": return nascendo === 0 && !m.morte ? (
+        <Modulo icone={MessageSquareText} titulo="Por que ele disse isso"><DetalheFala v={fala} semTitulo /></Modulo>) : null;
+      default: throw new Error("módulo desconhecido no quadro do Pet: " + id);
+    }
+  };
+  return (
+    <section className="pet-tela pet-home pet-home--quadro dl" aria-label="Tela do pet">
+      <Quadro chave={CHAVE_QUADRO} padrao={PADRAO_QUADRO} render={render} cresce={CRESCE} abrirRef={abrir} />
+    </section>
+  );
 }
 
 /* ------------------------------------------------ a tela */
-export function TelaPet({ abrirMeusPets, irConversar, abrirConfig, irRegistro }: { abrirMeusPets: () => void; irConversar: () => void; abrirConfig: () => void; irRegistro: () => void }) {
+export function TelaPet({ abrirMeusPets, irConversar, abrirConfig, irRegistro, irEvolucao }: { abrirMeusPets: () => void; irConversar: () => void; abrirConfig: () => void; irRegistro: () => void; irEvolucao: () => void }) {
   const { motor: m, nascendo } = useJogo(), desk = useDesktop();
   const fala = useFala(), [detalhes, setDetalhes] = useState<Secao | null>(null);
-  const painel = detalhes && <PainelDetalhes v={fala} foco={detalhes} irRegistro={irRegistro} />;
+  if (desk) return <TelaPetDesktop irRegistro={irRegistro} irEvolucao={irEvolucao} />;
   return (
     <section className="pet-tela pet-home dl" aria-label="Tela do pet">
       <CabecalhoPet abrirMeusPets={abrirMeusPets} irConversar={irConversar} abrirConfig={abrirConfig} />
-      <div className={"pet-home-corpo" + (desk && detalhes ? " pet-home-corpo--detalhes" : "")}>
+      <div className="pet-home-corpo">
         <div className="pet-home-principal">
           <section className={"pet-cena" + (m.morte ? " pet-cena--morto" : "")} aria-label="O pet no quarto">
             <CenaPet noite={eNoite(m.e.tick % TPD)} />
@@ -465,12 +543,7 @@ export function TelaPet({ abrirMeusPets, irConversar, abrirConfig, irRegistro }:
             <PalcoPet />
             <div className="cena-topo">
               <Emocao />
-              <span className="cena-topo-dir">
-                {nascendo === 0 && m.versao >= 11 && (desk
-                  ? <button type="button" className="db-abrir" onClick={() => setDetalhes("digibrain")}><IconeCerebro largura={18} />DigiBrain</button>
-                  : <BotaoDigiBrain />)}
-                {desk && !detalhes && <button type="button" className="det-abrir" onClick={() => setDetalhes("estado")}><PanelRightOpen size={18} aria-hidden="true" />Detalhes</button>}
-              </span>
+              <span className="cena-topo-dir">{nascendo === 0 && m.versao >= 11 && <BotaoDigiBrain />}</span>
             </div>
             {nascendo === 0 && !m.morte && <BalaoFala v={fala} abrir={() => setDetalhes("fala")} />}
             <BalaoCausa />
@@ -480,13 +553,7 @@ export function TelaPet({ abrirMeusPets, irConversar, abrirConfig, irRegistro }:
             {!m.morte && <AcoesPet />}
           </div>
         </div>
-        {painel && (desk
-          ? <aside className="pet-detalhes" aria-labelledby="pet-detalhes-tit">
-              <header className="pet-detalhes-cab"><h2 id="pet-detalhes-tit">Detalhes</h2>
-                <button type="button" className="det-fechar" aria-label="Recolher detalhes" onClick={() => setDetalhes(null)}><PanelRightClose size={20} aria-hidden="true" /></button></header>
-              {painel}
-            </aside>
-          : <Folha titulo="Como ele está" fechar={() => setDetalhes(null)}>{painel}</Folha>)}
+        {detalhes && <Folha titulo="Como ele está" fechar={() => setDetalhes(null)}><PainelDetalhes v={fala} foco={detalhes} /></Folha>}
       </div>
     </section>
   );
