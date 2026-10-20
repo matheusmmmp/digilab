@@ -1,6 +1,7 @@
 # TAREFA V2 — FRONT-REACT (2026-10-19)
 
-Coordenador: Gerente. Worker: A. Worktree e branch: `v2-front-react`. Status: ENTREGUE a etapa 1 (PR, espera o merge); etapas 2 e 3 depois.
+Coordenador: Gerente. Worker: A. Worktree e branch: `v2-front-react` (etapa 1), `v2-front-tailwind` (etapa 2). Status: etapa 1 mergeada (#368);
+ENTREGUE a etapa 2 (PR, espera o merge); etapa 3 depois.
 
 Categoria: arquitetura. Origem: Matheus, 2026-10-19: para a interface ficar igual ao protótipo da tela Pet, ele decidiu trocar o Preact
 por React, com as bibliotecas de visual do protótipo (Tailwind, componentes no estilo shadcn, ícones lucide), mantendo o Vite e sem
@@ -95,3 +96,56 @@ proposta; vira tarefa própria depois do ok). O celular das outras telas.
 
 As referências das capturas ficam fora do repositório, em `artifacts_v2_front_react/capturas/` (30 PNG); `npm run capturas --
 --update-snapshots` as refaz a partir do build de antes de qualquer mudança.
+
+## 10. Etapa 2 entregue (2026-10-19): Tailwind, shadcn e lucide, sem mudar o visual
+
+**Dependências**, todas com versão exata:
+
+| pacote | versão | publicada | por quê |
+|---|---|---|---|
+| `tailwindcss` (dev) | 4.3.3 | 2026-07-16 | a do protótipo (^4.3.3); última da linha 4.3, três meses sem versão nova |
+| `@tailwindcss/vite` (dev) | 4.3.3 | 2026-07-16 | o plugin do Tailwind para o Vite (o protótipo usa o do PostCSS, por causa do Next); aceita o Vite ^8 |
+| `class-variance-authority` | 0.7.1 | 2024-11-26 | as variantes dos componentes do shadcn (`cva`); a do protótipo |
+| `clsx` | 2.1.1 | 2024-04-23 | o `cn()` do shadcn; a do protótipo |
+| `tailwind-merge` | 3.7.0 | 2026-09-12 | o `cn()` resolve conflito de classe; a linha 3 é a do Tailwind 4 (o protótipo pede ^3.3.1) |
+| `lucide-react` | 1.48.0 | 2026-09-24 | os ícones do protótipo. Sai versão quase todo dia; esta tem mais de três semanas. O protótipo pede ^1.16.0 |
+
+O `@base-ui/react` do protótipo não entra. Na tela Pet, o protótipo só o usa no menu de mover módulo e nos popovers de Inventário e
+Mais, que somem com os itens sem dado.
+
+**O que entrou.**
+- **`src/estilo/tailwind.css`**, carregado por último no `main.tsx`:
+  - só o tema e as utilidades do Tailwind, **sem o preflight** (o reset dele mudaria todas as telas);
+  - as utilidades saem só das pastas listadas em `@source`. Por enquanto é só `src/componentes/ui`, e nunca o resto de `src/`: um
+    `className` do jogo com nome de utilidade não ganha CSS;
+  - o tema traz os tokens `--dl-*` e `--ui-*` como cores (`bg-dl-surface`, `text-ui-text`...), fontes (`font-dl-num`...), cantos
+    (`rounded-ui`) e sombra (`shadow-ui`);
+  - traz também os nomes semânticos do shadcn (`primary`, `muted-foreground`, `border`...) nos tokens `--ui-*`.
+- **shadcn:** o `components.json` (alias `@/` = `src/`, no `vite.config.ts` e no `tsconfig.app.json`), o `cn()` em `src/lib/utils.ts` e
+  o `Button` em `src/componentes/ui/button.tsx`. É o do shadcn com duas mudanças:
+  - um `<button>` de verdade, sem o primitivo do base-ui;
+  - o alvo de toque de 44 px do guia em todos os tamanhos.
+
+  Nenhuma tela usa o Button ainda; ele entra na etapa 3.
+- **lucide-react:** instalado. Nenhuma tela usa ainda, e o bundle não muda: o build só leva o ícone importado.
+- **`test/ui_shadcn.test.ts`:** confere o `cn()`, o Button (variantes, alvo de 44 px, `className` de fora) e um ícone do lucide, por
+  `renderToStaticMarkup`.
+- **Capturas:** passam a ter uma nova tentativa (`retries: 1`). O mesmo build, sem mudança nenhuma, variou 7 pixels uma vez em cerca de
+  25 rodadas (o Pet v11 de 390); uma diferença de verdade se repete na nova tentativa.
+
+**O gate.** Referência: o build da `main` em `e762425` (React), em `artifacts_v2_front_tailwind/capturas/`.
+
+| conferência | resultado |
+|---|---|
+| `npm run tipos` | passa |
+| `npm test` (Vitest) | 43 arquivos, 507 testes (os 503 de antes e os 4 novos), todos passam |
+| `npm run e2e` (o jogo) | 70 de 70 |
+| `npm run capturas` (30 telas, zero pixel) | 30 de 30, em 5 rodadas: **o visual não mudou** |
+| `npm run poc:build` | passa |
+| CSS do app | 180,8 KB (32,3 KB gzip) → 187,2 KB (33,6 KB gzip): +1,3 KB gzip, o tema e as utilidades do Button |
+| JS do app | 765,9 KB (237,8 KB gzip), igual ao da etapa 1 |
+
+**Para a etapa 3.**
+- Toda tela que passar a Tailwind entra no `@source` do `tailwind.css`.
+- As utilidades ficam numa camada (`@layer utilities`), e o CSS do jogo, fora de camada, ganha delas. Uma tela em Tailwind não pode
+  depender de uma regra global do jogo que pegue os mesmos elementos (`button`, `h2`...), ou precisa sobrepô-la.
