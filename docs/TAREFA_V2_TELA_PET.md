@@ -44,16 +44,21 @@ testes de ponta a ponta que leem a tela Pet.
 - a casca do desktop (o topo e a barra lateral);
 - as capturas das outras 26 telas do roteiro `npm run capturas`, que têm de sair iguais.
 
-**Por que o cenário em CSS e SVG, e não a vista do POC 3D.** O habitat vira o mundo 3D depois do Gate C (P4).
-- Um componente de cenário isolado, atrás do canvas do pet, é trocado inteiro por essa vista quando ela chegar, sem tocar no resto da
-  tela.
-- Trazer o Three.js agora poria cerca de 600 KB no jogo e uma cena 3D sem física nem pet, só para servir de fundo.
+**O cenário: a vista 3D do POC (decisão do Matheus de 2026-10-19, opção b).**
+- O cenário é a vista ortográfica inclinada do WORLD-POC (Three.js só como vista, o arranjo V), carregada por import dinâmico ao abrir a
+  tela Pet, num chunk à parte.
+- Sem WebGL, ou se a cena falhar, fica a reserva: o quarto em CSS e SVG (`CenarioPet`).
+- A cena só desenha a sala, os objetos e o pet como sprite em escala inteira. Nada da física do POC nem o cérebro de teste decidem algo
+  do jogo; o jogo continua com o motor de hoje.
+- A cena é decorativa (`aria-hidden`), e a necessidade e as ações continuam em controles reais.
 
 ## 4. Experimento e gate
 
 Sem run. O gate:
 - `npm run tipos`, `npm run build`, `npm test` e `npm run e2e` passam;
-- `npm run capturas`: só as 4 capturas da tela Pet mudam (`pet-estado` e `pet-v11`, em 390 e 1280), e as outras 26 ficam iguais.
+- `npm run capturas`: só as 4 capturas da tela Pet mudam (`pet-estado` e `pet-v11`, em 390 e 1280), e as outras 26 ficam iguais;
+- o chunk da cena 3D (gzip) e o tempo de abrir a tela Pet medidos;
+- a M3 no celular, pela página do jogo (as instruções na seção 9; o Matheus mede).
 
 ## 5. Entrega
 
@@ -84,11 +89,33 @@ O ok visual nas capturas antes do merge.
 
 **O que mudou na tela Pet** (`web/app/src/telas/pet/`, `src/estilo/pet_home.css`).
 
-- **`CenarioPet.tsx`, novo:** o quarto 2.5D em CSS e SVG.
+- **`cena3d.ts`, novo:** o cenário, a vista do POC só como vista. Carrega por import dinâmico e é o único módulo do app que importa o
+  three.
+  - **É uma cópia adaptada de `poc/mundo3d/vista.ts`, e não um import.** O G-FRONTEIRA (`test/poc_mundo3d.test.ts`, dos Gates A e B)
+    segura que as telas do jogo não importam o POC, e ele continua passando sem mudança. As duas vistas se juntam quando o mundo 3D
+    entrar no jogo (P4).
+  - **Vem do POC:** a câmera ortográfica inclinada (50°), a sala de 16 × 12 células com as paredes e os dois obstáculos (o alto e o
+    baixo), as caixas coloridas por face sem luz, o pet como `THREE.Sprite` com filtro nearest num número inteiro de pixels por texel e
+    o canto alinhado ao pixel, e a sombra.
+  - **Muda para o Pet:**
+    - as cores claras;
+    - as paredes altas e a janela na do fundo;
+    - uma plataforma sob o pet;
+    - o pet desenhado por cima de tudo (o sprite, de frente para a câmera, entraria no obstáculo alto de trás);
+    - sem bola, sem comida e sem oclusão;
+    - o enquadramento: o chão em até 68% da altura e encostado embaixo, e a parede no resto;
+    - o pet parado no meio da sala, que só balança quando brinca ou explora;
+    - um quadro a cada 120 ms, como o palco 2D.
+  - **A textura do pet:** o quadro do idle do atlas (local), pelo `desenharSprite` (a forma sombria inclusive), ou a grade de reserva.
+- **`CenarioPet.tsx`, novo:**
+  - o `CenaPet` liga a cena 3D por import dinâmico ou, sem WebGL ou com falha, a reserva;
+  - a reserva (`CenarioPet`) é o quarto 2.5D em CSS e SVG;
+  - com `?medir3d=1` no endereço, aparece o botão da M3.
   - A parede e a janela (céu, nuvens, colinas), as paredes laterais em fuga e o chão em perspectiva (uma grade em `rotateX`).
   - Uma planta e um móvel baixo em grade de pixels.
   - A noite vem do motor (`eNoite`): céu escuro com estrelas e penumbra.
-- **`PalcoPet.tsx`:** o canvas ficou transparente, por cima do cenário.
+- **`PalcoPet.tsx`:** o canvas ficou transparente, por cima do cenário. Com a cena 3D ligada, desenha só os extras (a sujeira, o ícone
+  rápido e a marca de saúde), em volta do retângulo do sprite que a cena informa (`cenaEstado.ts`). Com a reserva:
   - Desenha a plataforma (a peça do atlas, ou um aro sem ele), a sujeira, o pet ou o ovo e o ícone rápido.
   - O pet sai na maior escala inteira que cabe em 42% da altura e 60% da largura da cena, até 6x, com os pés a 86% da altura.
   - Sem o atlas, o sprite de reserva também sai em escala inteira e com o mesmo movimento.
@@ -126,8 +153,28 @@ Ajustado depois da primeira captura:
 Não copiado da referência, por não ter dado no motor ou por ser ilustração: o número "01 HOME", o logo com japonês, o sino, nível e
 XP, o texto "Parece animado hoje!".
 
-**Por que o cenário em CSS e SVG.** Ver a seção 3: o componente sai inteiro quando a vista do mundo 3D chegar (P4), e o Three.js não
-entra no jogo só para servir de fundo.
+**A cena 3D: custo e tempo de abrir** (Chrome desta máquina, build servido pelo `servidor_local.py`, 3 rodadas cada; artefato: o roteiro
+de medida descrito no PR).
+- **Chunk `cena3d`:** 539 KB, 135 KB em gzip, à parte. O chunk principal ficou em 777 KB (238 KB em gzip), quase igual ao de antes.
+- **Do clique no Pet até o primeiro quadro da cena:**
+
+  | | 1ª vez (baixa o chunk) | depois (chunk em cache) |
+  |---|---|---|
+  | 390 px | 90 a 139 ms | 36 a 40 ms |
+  | 390 px, com a CPU 4× mais lenta (estimativa de celular) | 221 a 250 ms | 80 a 100 ms |
+  | 1280 px | 68 a 94 ms | 36 a 48 ms |
+
+  Não há rede de verdade nessa medida: o servidor é local.
+
+**A M3 no celular, pela página do jogo** (o Matheus mede; critério PROPOSTO, o mesmo da M3 do POC: `fps_media` de pelo menos 30).
+1. No PC: `cd web/app && npm run dev -- --host`. O Vite mostra o endereço da rede (`http://<IP do PC>:5173/`) e serve o atlas local.
+   Se o celular não abrir, libere a porta 5173 no firewall do Windows, como na M3 do POC.
+2. No celular, na mesma rede: abra `http://<IP do PC>:5173/?medir3d=1#/pet/estado`. Na primeira visita o jogo pede o brasão e o ovo; o
+   ovo já aparece na cena 3D.
+3. Na tela Pet, toque em "Medir 10 s (M3)". Durante 10 s a cena desenha a cada quadro do navegador. No fim aparece o JSON da medida:
+   `fps_media`, a mediana e o p95 do quadro, o tamanho do canvas e o aparelho. Ele vai para a área de transferência quando o navegador
+   deixa; se não, copie o texto da caixa.
+4. Cole o JSON no PR.
 
 **Gate.**
 
@@ -135,21 +182,27 @@ entra no jogo só para servir de fundo.
 |---|---|
 | `npm run tipos` | passa |
 | `npm test` (Vitest) | 43 arquivos, 507 testes, todos passam |
-| `npm run e2e` | 73 de 73 |
+| `npm run e2e` | 74 de 74, em duas rodadas |
 | `npm run capturas` (referência: a `main` em `b4a423c`) | 26 iguais, pixel a pixel; mudam só as 4 da tela Pet (`pet-estado` e `pet-v11`, em 390 e 1280), como pedido |
 
 Sobre o e2e:
-- passou de 70 para 73: entrou o teste "Pet (Home)" em 360, 390 e 1280 (o cenário é a maior área, o canvas `pixelated`, três ações e
+- passou de 70 para 74. Entrou o teste da cena: a cena 3D com WebGL (`aria-hidden`, o canvas desenhado, sem a reserva) e, com o WebGL
+  desligado, a reserva sem erro.
+- Mudou o teste de foco pelo teclado, que agora roda com movimento reduzido. Sob carga, com a cena 3D nos outros workers, a transição
+  do `dl-btn` dava um falso "sem foco".
+- Do teste "Pet (Home)": entrou o teste "Pet (Home)" em 360, 390 e 1280 (o cenário é a maior área, o canvas `pixelated`, três ações e
   "Mais", sem hexágono nem retrato redondo, os detalhes abrem e fecham, sem rolagem lateral);
 - dois testes mudaram junto com a tela: o do jogo completo abre "Mais" antes de clicar Elogiar, e o do DigiBrain em 1280 abre o
   painel pelo botão do cenário.
 
 Capturas:
-- versionadas, com o sprite de reserva: `docs/estilo_up/pranchas/capturas/PetHome*.png` (lista no README das pranchas);
+- versionadas, com o sprite de reserva (na cena 3D) e sem WebGL (o cenário de reserva): `docs/estilo_up/pranchas/capturas/PetHome*.png` (lista no README das pranchas);
 - com o atlas: só locais.
 
 **Números escolhidos (PROPOSTOS, de layout):**
-- a escala do pet (42% da altura, 60% da largura, até 6x);
+- a escala do pet (42% da altura, 60% da largura; até 12x na cena 3D, em pixels do canvas, e até 6x na reserva, em px de CSS);
+- o chão da cena 3D em até 68% da altura;
+- o pet em (meio, 68% da profundidade) da sala;
 - os pés a 86% da cena;
 - a altura da cena no celular (`100dvh - 326px`, entre 340 e 660 px).
 
