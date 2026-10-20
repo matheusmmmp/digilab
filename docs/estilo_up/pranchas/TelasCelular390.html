@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Telas do celular · modelo novo</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,800&amp;family=Pixelify+Sans:wght@700&amp;family=M+PLUS+Rounded+1c:wght@500;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,800&amp;family=Pixelify+Sans:wght@700&amp;display=swap" rel="stylesheet">
 <style>
 /* Pranchas do celular no modelo novo (pedido do Matheus de 2026-10-19, pela coordenação). A referência é
    D:\Trab\digilab\_ref\referencia_mobile_2026-10-19.png (fora do repositório): 5 telas de celular (Home com o número grande "01 HOME //",
@@ -214,11 +214,11 @@ const pet = (tam = 120, cor = "#F7B7CF", cls = "") => `<svg class="${cls}" width
 
 
 /* ---------- casca do celular */
-const NAV = [["pet", "Pet", "ペット"], ["crescer", "Crescer", "成長"], ["lutar", "Lutar", "バトル"], ["diario", "Diário", "日記"]];
+const NAV = [["pet", "Pet", ""], ["crescer", "Crescer", ""], ["lutar", "Lutar", ""], ["diario", "Diário", ""]];
 const ABAS = {
-  crescer: [["Treinar", "トレーニング"], ["Aprendizado", "学習"], ["Evolução", "進化"], ["Itens", "アイテム"]],
-  lutar: [["Arena", "アリーナ"], ["Campanha", "キャンペーン"], ["Fronteira", "フロンティア"], ["Medalhas", "メダル"]],
-  diario: [["Registro", "記録"], ["Catálogo", "図鑑"], ["Gerações", "世代"], ["Cenários", "シナリオ"]],
+  crescer: [["Treinar", ""], ["Aprendizado", ""], ["Evolução", ""], ["Itens", ""]],
+  lutar: [["Arena", ""], ["Campanha", ""], ["Fronteira", ""], ["Medalhas", ""]],
+  diario: [["Registro", ""], ["Catálogo", ""], ["Gerações", ""], ["Cenários", ""]],
 };
 const NUM = { pet: "01", crescer: "02", lutar: "03", diario: "04" };
 
@@ -228,12 +228,12 @@ const fundo = () => `<div class="fundo"><div class="grade"></div>
   <b style="left:0;top:520px;height:90px;width:7px;opacity:.55;clip-path:polygon(0 0,100% 12px,100% calc(100% - 12px),0 100%)"></b>
   <b style="bottom:96px;right:8%;height:10px;width:90px;transform:skewX(-45deg);opacity:.7"></b></div>`;
 const nav = (d) => `<nav class="nav" aria-label="Principal">${NAV.map(([id, n, jp]) =>
-  `<a class="${id === d ? "ativo" : ""}" ${id === d ? 'aria-current="page"' : ""}>${ic(id)}${n}<small class="jp">${jp}</small></a>`).join("")}<span class="alca"></span></nav>`;
-const abas = (d, a) => `<div class="abas" role="tablist">${ABAS[d].map(([n, jp]) => `<a role="tab" class="${n === a ? "ativo" : ""}">${n}<small class="jp">${jp}</small></a>`).join("")}</div>`;
+  `<a class="${id === d ? "ativo" : ""}" ${id === d ? 'aria-current="page"' : ""}>${ic(id)}${n}</a>`).join("")}<span class="alca"></span></nav>`;
+const abas = (d, a) => `<div class="abas" role="tablist">${ABAS[d].map(([n, jp]) => `<a role="tab" class="${n === a ? "ativo" : ""}">${n}</a>`).join("")}</div>`;
 const quem = () => `<span style="display:flex;align-items:center;gap:6px;margin-left:auto;padding:4px 10px 4px 4px;border-radius:999px;background:#fff;border:1px solid var(--border);box-shadow:var(--shadow-sm)"><span style="width:34px;height:34px;border-radius:50%;background:#dfeaf8;border:2px solid var(--primary);display:flex;align-items:center;justify-content:center;overflow:hidden">${pet(28)}</span><b style="font-size:13px">Agumon</b></span>`;
 const cab = (jp, pt, num, o = {}) => `<header class="cab">${o.voltar ? `<a class="voltar" aria-label="Voltar">${ic("voltar")}</a>` : ""}
-  <div class="tt"><b class="jp">${jp}</b><small>${pt}</small></div>${num ? `<span class="marca-num" aria-hidden="true">${num}</span>` : ""}${o.dir ?? quem()}</header>`;
-const mod = (icone, titulo, jp, corpo, dir = "") => `<section class="mod"><header><span class="tr"></span>${ic(icone)}<span class="t"><b>${titulo}</b><small class="jp">${jp}</small></span><span class="dir">${dir}</span></header>${corpo}</section>`;
+  <div class="tt"><b>${pt}</b></div>${num ? `<span class="marca-num" aria-hidden="true">${num}</span>` : ""}${o.dir ?? quem()}</header>`;
+const mod = (icone, titulo, jp, corpo, dir = "") => `<section class="mod"><header><span class="tr"></span>${ic(icone)}<span class="t"><b>${titulo}</b></span><span class="dir">${dir}</span></header>${corpo}</section>`;
 const tela = (dest, corpo, o = {}) => `<div class="tela ${o.cls || ""}">${fundo()}${corpo}${o.semNav ? "" : nav(dest)}</div>`;
 const semDado = (t) => `<div class="sem-dado"><b>sem dado no motor:</b> ${t}</div>`;
 const barra = (i, cor, fill, r, v, txt) => `<li>${icc(i, cor, fill)}<span>${r}</span><span class="trilho"><i style="width:${v}%;background:${cor}"></i></span><span class="v">${txt ?? ""}</span></li>`;
@@ -242,7 +242,7 @@ const barra = (i, cor, fill, r, v, txt) => `<li>${icc(i, cor, fill)}<span>${r}</
 function tPet() {
   return tela("pet", `
   <div class="marca"><div class="barras"><span></span><span></span><span></span></div>
-    <div><div class="m">DIGILAB</div><div class="k jp">デジラボ</div><div class="s">Digital life · data · AI</div></div>
+    <div><div class="m">DIGILAB</div><div class="s">Digital life · data · AI</div></div>
     <div class="topo-dir"><a class="bt-ic" aria-label="Conversar">${ic("conversar")}</a><a class="bt-ic" aria-label="Configurações">${ic("ajustes")}</a></div></div>
   <div class="secao"><span class="num" aria-hidden="true">01</span><span class="rot">PET <i>//</i></span>
     <span class="hora" style="margin-left:auto;padding-bottom:6px">${ic("sol")}<span><p class="d">Dia 3 · tarde</p><p class="h">14:20</p></span></span></div>
@@ -260,16 +260,16 @@ function tPet() {
     </div>
     <div class="cartao linha" style="border-color:#ffc9d6;background:#fff6f8"><span class="q" style="width:38px;height:38px;border-radius:10px;background:#ffe4ee;color:var(--hunger);display:flex;align-items:center;justify-content:center">${ic("alerta")}</span>
       <span style="flex:1"><b>Chamando: carinho</b><br><span class="mini">janela aberta</span><span class="trilho" style="display:block;margin-top:6px;height:6px"><i style="width:60%;background:var(--hunger)"></i></span></span><button class="btn prim">Atender</button></div>
-    ${mod("controle", "Ações", "アクション", `<div class="blocos">
-      <button class="bloco prim">${ic("tigela")}Alimentar<small class="jp">ごはん</small></button>
-      <button class="bloco c-azul">${ic("gota")}Limpar<small class="jp">おそうじ</small></button>
-      <button class="bloco c-rosa">${icc("coracao", "#ec4899", 1)}Brincar<small class="jp">あそぶ</small></button>
-      <button class="bloco c-ambar">${ic("mao")}Carinho<small class="jp">なでる</small></button>
-      <button class="bloco c-roxo">${ic("mao")}Tapa<small class="jp">たたく</small></button>
-      <button class="bloco c-verde">${ic("cruz")}Tratar<small class="jp">てあて</small></button></div>`)}
+    ${mod("controle", "Ações", "", `<div class="blocos">
+      <button class="bloco prim">${ic("tigela")}Alimentar</button>
+      <button class="bloco c-azul">${ic("gota")}Limpar</button>
+      <button class="bloco c-rosa">${icc("coracao", "#ec4899", 1)}Brincar</button>
+      <button class="bloco c-ambar">${ic("mao")}Carinho</button>
+      <button class="bloco c-roxo">${ic("mao")}Tapa</button>
+      <button class="bloco c-verde">${ic("cruz")}Tratar</button></div>`)}
     <div class="cols2"><div class="cartao" style="border-color:#ffc9d6"><small style="font:800 10px Nunito;letter-spacing:1px;color:var(--hunger)">NECESSIDADE</small><br><b>comer</b><br><span class="mini">vem do corpo</span></div>
       <div class="cartao" style="background:#0f3a86;border-color:#0f3a86;color:#fff"><small style="font:800 10px Nunito;letter-spacing:1px;color:#8fdcff">VONTADE APRENDIDA</small><br><b>brincar</b><br><span class="mini" style="color:#bfe6ff">aprendida com você</span></div></div>
-    ${mod("seringa", "Estado atual", "ステータス", `<ul class="barras-est">
+    ${mod("seringa", "Estado atual", "", `<ul class="barras-est">
       ${barra("coracao", "var(--hunger)", 1, "Comida", 38)}${barra("raio", "var(--energy)", 1, "Energia", 74)}${barra("gota", "var(--hyg)", 0, "Higiene", 61)}${barra("sorriso", "var(--mood)", 0, "Humor", 88)}
       ${barra("cruz", "var(--health)", 1, "Saúde", 92, "92%")}${barra("medalha", "#3b5079", 0, "Disciplina", 50, "2/4")}</ul>`)}
   </div>`);
@@ -278,10 +278,10 @@ function tPet() {
 /* ---------- 2. Meus pets */
 function tMeusPets() {
   const card = (n, s, st, cor, on) => `<div class="cartao" style="text-align:center;${on ? "border:2px solid var(--primary)" : ""}"><span class="etq ${on ? "cheia" : "cinza"}" style="height:20px;font-size:9.5px">${st}</span><div style="margin:6px 0 2px">${pet(54, cor)}</div><b>${n}</b><div class="mini">${s}</div></div>`;
-  return tela("pet", `${cab("マイペット", "Meus pets", "", { voltar: 1, dir: "" })}<div class="conteudo">
+  return tela("pet", `${cab("", "Meus pets", "", { voltar: 1, dir: "" })}<div class="conteudo">
     <div class="cols3">${card("Agumon", "Rookie · D3", "Ativo", "#F7B7CF", 1)}${card("Gabumon", "Champion · D9", "Guardado", "#b9cff5")}${card("Tentomon", "Ultimate · D21", "Guardado", "#b9cff5")}</div>
-    ${mod("pet", "Agumon", "アグモン", `<div class="linha" style="gap:8px;flex-wrap:wrap"><span class="etq azul">Rookie</span><span class="etq">Coragem</span><span class="etq cinza">3 dias</span></div>`)}
-    ${mod("lista", "Guardados", "保管", `<div class="lista">${["Gabumon · Champion", "Tentomon · Ultimate"].map(t => `<div class="linha" style="min-height:52px;border-top:1px solid #edf2f9"><span style="flex:1;font-weight:700">${t}</span><button class="btn">Ativar</button></div>`).join("")}
+    ${mod("pet", "Agumon", "", `<div class="linha" style="gap:8px;flex-wrap:wrap"><span class="etq azul">Rookie</span><span class="etq">Coragem</span><span class="etq cinza">3 dias</span></div>`)}
+    ${mod("lista", "Guardados", "", `<div class="lista">${["Gabumon · Champion", "Tentomon · Ultimate"].map(t => `<div class="linha" style="min-height:52px;border-top:1px solid #edf2f9"><span style="flex:1;font-weight:700">${t}</span><button class="btn">Ativar</button></div>`).join("")}
       <div class="linha" style="min-height:52px;border-top:1px solid #edf2f9"><span style="flex:1;font-weight:700">Nova geração<br><span class="mini">quando o pet é adulto</span></span><button class="btn prim">Nova geração</button></div></div>`)}
     <div class="cols2"><button class="btn">${ic("baixar")}Exportar registro</button><button class="btn">${ic("mais")}Importar pet</button></div>
     <button class="btn larga">Voltar ao pet anterior</button>
@@ -293,7 +293,7 @@ function tTreinar() {
   const ex = (n, g, apt, ico, c) => `<button class="cartao" style="text-align:left;display:flex;flex-direction:column;gap:6px;min-height:96px">
     <span class="linha" style="gap:8px"><span class="bloco ${c}" style="min-height:36px;width:36px;padding:0;border-radius:10px">${ic(ico)}</span>${apt ? '<span class="etq azul" style="height:20px;font-size:9.5px;margin-left:auto">Aptidão</span>' : ""}</span>
     <b style="font-size:14px">${n}</b><span class="mini">${g}</span></button>`;
-  return tela("crescer", `${cab("トレーニング", "Treinar", "02")}${abas("crescer", "Treinar")}<div class="conteudo">
+  return tela("crescer", `${cab("", "Treinar", "02")}${abas("crescer", "Treinar")}<div class="conteudo">
     <div class="habitat" style="height:250px;background:linear-gradient(180deg,#eaf3ff 0%,#dbe9fc 62%,#cfe0f8 62%,#c4d8f5 100%)">
       <span style="position:absolute;left:18px;top:28px;width:150px;height:110px;border:6px solid #fff;border-radius:6px;background:linear-gradient(180deg,#bfe0ff,#e8f6ff);box-shadow:0 0 0 1px #c3d6f0"></span>
       <span style="position:absolute;left:94px;top:28px;width:6px;height:110px;background:#fff"></span>
@@ -303,10 +303,10 @@ function tTreinar() {
       <span class="chip on" style="position:absolute;left:12px;bottom:12px">${ic("haltere")}pronto para treinar</span></div>
     <div class="cartao linha"><span class="q" style="width:38px;height:38px;border-radius:10px;background:var(--secondary);display:flex;align-items:center;justify-content:center;color:var(--primary)">${ic("info")}</span><span style="flex:1"><b>Próximo treino em 6 min de jogo</b><br><span class="mini">a fadiga baixa por hora acordado e zera quando ele dorme</span></span></div>
     ${semDado("a barra de tempo da referência (\"toque no momento certo\"): o treino é um toque por vez, com intervalo")}
-    ${mod("raio", "Cansaço", "疲れ", `<ul class="barras-est">
+    ${mod("raio", "Cansaço", "", `<ul class="barras-est">
       ${barra("raio", "var(--energy)", 1, "Fadiga", 42, "42")}${barra("alerta", "var(--dark)", 0, "Sobrecarga", 12, "12")}${barra("haltere", "var(--primary)", 0, "Na vida", 58, "+21/36")}</ul>
       <p class="mini" style="margin-top:8px">40 pede pausa · 60 só forçar · sobrecarga 30 avisa, 60 sombria</p>`)}
-    ${mod("haltere", "Exercícios", "トレーニング", `<div class="cols2">
+    ${mod("haltere", "Exercícios", "", `<div class="cols2">
       ${ex("Levantar pedra", "+força · +vigor", 0, "haltere", "c-rosa")}${ex("Corrida", "+fôlego · +vigor", 1, "raio", "c-azul")}${ex("Alvo", "+mira · +força", 0, "olho", "c-ambar")}
       ${ex("Esquiva", "+guarda · +fôlego", 0, "seta", "c-verde")}${ex("Meditar", "+recuperação · +guarda", 1, "estrela", "c-roxo")}${ex("Resistência", "+vigor · +recuperação", 0, "cruz", "c-cinza")}</div>`, "um por vez")}
   </div>`);
@@ -314,16 +314,16 @@ function tTreinar() {
 
 /* ---------- 4. Crescer · Aprendizado (pets v11) */
 function tAprend() {
-  return tela("crescer", `${cab("学習", "Aprendizado", "02")}${abas("crescer", "Aprendizado")}<div class="conteudo">
-    ${mod("cerebro", "O cérebro deste pet", "デジブレイン", `<p class="mini" style="margin-bottom:10px">DigiBrain (cérebro A) · o instinto e o que aprendeu com você</p>
+  return tela("crescer", `${cab("", "Aprendizado", "02")}${abas("crescer", "Aprendizado")}<div class="conteudo">
+    ${mod("cerebro", "O cérebro deste pet", "", `<p class="mini" style="margin-bottom:10px">DigiBrain (cérebro A) · o instinto e o que aprendeu com você</p>
       <ul class="barras-est">${barra("estrela", "#f97316", 1, "Impulsos", 62, "62%")}${barra("cerebro", "var(--primary)", 0, "Aprendido", 28, "28%")}${barra("coracao", "var(--violet)", 0, "Memória", 0, "0%")}</ul>
       <button class="btn larga" style="margin-top:12px">${ic("cerebro")}Abrir o DigiBrain</button>`)}
-    ${mod("camadas", "Lembranças", "思い出", `<div class="cols2">
+    ${mod("camadas", "Lembranças", "", `<div class="cols2">
       <div class="cartao"><span class="etq azul" style="height:20px;font-size:9.5px">ativa agora</span><br><b>elogio · luta</b><br><span class="mini">duradoura · força 0,8</span></div>
       <div class="cartao"><b>carinho</b><br><span class="mini">recente · força 0,5</span></div>
       <div class="cartao"><b>bronca</b><br><span class="mini">recente · força 0,3</span></div>
       <div class="cartao" style="border-style:dashed;color:var(--muted-fg);display:flex;align-items:center;justify-content:center">espaço livre</div></div>`)}
-    ${mod("pet", "Jeito", "性格", `<div class="lista">
+    ${mod("pet", "Jeito", "", `<div class="lista">
       ${[["Temperamento", "cauteloso"], ["Desejo", "brincar"], ["Vínculo", "alto"], ["Confiança", "confiante"], ["Traços de combate", "Golpe · Finta"]].map(([a, b]) => `<div class="linha" style="min-height:44px;border-top:1px solid #edf2f9"><span class="mini" style="flex:1">${a}</span><b>${b}</b></div>`).join("")}</div>`)}
   </div>`);
 }
@@ -332,15 +332,15 @@ function tAprend() {
 function tEvolucao() {
   const no = (n, st, cor) => `<div style="display:flex;flex-direction:column;align-items:center;gap:2px;width:72px"><span style="width:58px;height:58px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:${st === "agora" ? "#fff" : "#eef3fa"};border:${st === "agora" ? "2px solid var(--primary)" : st === "sombria" ? "2px solid var(--dark)" : "1px solid var(--border)"}">${cor ? pet(40, cor) : '<b style="font-size:22px;color:#9db2d3">?</b>'}</span><b style="font-size:11.5px">${n}</b>${st === "agora" ? '<span class="etq cheia" style="height:16px;font-size:8.5px;padding:0 6px">agora</span>' : `<span class="mini" style="font-size:10px">${st}</span>`}</div>`;
   const seta = `<span style="color:#9db2d3;align-self:center;margin-top:-18px">›</span>`;
-  return tela("crescer", `${cab("進化", "Evolução", "02")}${abas("crescer", "Evolução")}<div class="conteudo">
-    ${mod("arvore", "Árvore de Coragem", "進化ツリー", `<div style="display:flex;gap:4px;justify-content:space-between;overflow:hidden">
+  return tela("crescer", `${cab("", "Evolução", "02")}${abas("crescer", "Evolução")}<div class="conteudo">
+    ${mod("arvore", "Árvore de Coragem", "", `<div style="display:flex;gap:4px;justify-content:space-between;overflow:hidden">
       ${no("Koromon", "percorrido", "#f6c9d8")}${seta}${no("Agumon", "agora", "#F7B7CF")}${seta}${no("Greymon", "possível", "#dfe6f2")}${seta}${no("?", "fechado")}</div>
       <div style="display:flex;gap:6px;margin-top:10px;justify-content:flex-end"><span class="chip" style="min-height:28px;font-size:11.5px;border-color:var(--dark);color:var(--dark)">sombria</span><span class="chip" style="min-height:28px;font-size:11.5px">toque num nó: o que ele pede</span></div>`)}
     <div class="cols2"><div class="num-box"><small>forma atual</small><b>Agumon</b></div><div class="num-box"><small>até virar Greymon</small><b>2 dias</b></div>
       <div class="num-box"><small>experiência de combate</small><b>14</b></div><div class="num-box"><small>medalhas do Tamer</small><b>1 de 6</b></div></div>
     <div class="cartao"><span class="mini">se evoluísse agora</span><br><b>Greymon</b></div>
-    ${mod("info", "Por que Agumon?", "なぜ", `<p class="mini" style="font-size:13.5px;line-height:1.5">nasceu do ovo de Coragem; o cuidado nos primeiros dias pesou mais que o treino.</p>`)}
-    ${mod("lista", "Histórico", "履歴", `<div class="lista">${[["D1", "Digi-Egg → Koromon"], ["D2", "Koromon → Agumon"]].map(([d, t]) => `<div class="linha" style="min-height:44px;border-top:1px solid #edf2f9"><span class="mini" style="width:30px">${d}</span><b style="font-size:14px">${t}</b></div>`).join("")}</div>`)}
+    ${mod("info", "Por que Agumon?", "", `<p class="mini" style="font-size:13.5px;line-height:1.5">nasceu do ovo de Coragem; o cuidado nos primeiros dias pesou mais que o treino.</p>`)}
+    ${mod("lista", "Histórico", "", `<div class="lista">${[["D1", "Digi-Egg → Koromon"], ["D2", "Koromon → Agumon"]].map(([d, t]) => `<div class="linha" style="min-height:44px;border-top:1px solid #edf2f9"><span class="mini" style="width:30px">${d}</span><b style="font-size:14px">${t}</b></div>`).join("")}</div>`)}
     ${semDado("o Lv. e a barra de XP da referência; a previsão é o tempo até a próxima forma")}
   </div>`);
 }
@@ -348,26 +348,26 @@ function tEvolucao() {
 /* ---------- 6. Crescer · Itens */
 function tItens() {
   const chip = (n, t, g, st) => `<div class="cartao" style="display:flex;flex-direction:column;gap:6px">${st ? `<span class="etq ${st === "equipado" ? "cheia" : "azul"}" style="height:20px;font-size:9.5px;align-self:flex-start">${st}</span>` : ""}<b>${n}</b><span class="mini">${g}</span>${t ? `<button class="btn" style="min-height:40px">${t}</button>` : ""}</div>`;
-  return tela("crescer", `${cab("アイテム", "Itens", "02")}${abas("crescer", "Itens")}<div class="conteudo">
-    ${mod("chip", "Itens do Tamer", "アイテム", `<div class="cols2"><div class="num-box"><small>chips</small><b>4</b></div><div class="num-box"><small>cartas</small><b>4</b></div></div><p class="mini" style="margin-top:8px">1 de 2 vagas de chip em uso</p>`)}
-    ${mod("chip", "Chips", "チップ", `<div class="cols2">${chip("Escudo de Brasa", "Desequipar", "+10% defesa no 1º turno", "equipado")}${chip("Garra Rápida", "Equipar", "+10% defesa no 1º turno", "defesa")}${chip("Foco Calmo", "Equipar", "+10% defesa no 1º turno", "defesa")}
+  return tela("crescer", `${cab("", "Itens", "02")}${abas("crescer", "Itens")}<div class="conteudo">
+    ${mod("chip", "Itens do Tamer", "", `<div class="cols2"><div class="num-box"><small>chips</small><b>4</b></div><div class="num-box"><small>cartas</small><b>4</b></div></div><p class="mini" style="margin-top:8px">1 de 2 vagas de chip em uso</p>`)}
+    ${mod("chip", "Chips", "", `<div class="cols2">${chip("Escudo de Brasa", "Desequipar", "+10% defesa no 1º turno", "equipado")}${chip("Garra Rápida", "Equipar", "+10% defesa no 1º turno", "defesa")}${chip("Foco Calmo", "Equipar", "+10% defesa no 1º turno", "defesa")}
       <div class="cartao" style="border-style:dashed"><b>?</b><br><span class="mini">ainda não é seu · ganha na Campanha</span></div></div>`)}
-    ${mod("camadas", "Cartas", "カード", `<div class="linha" style="flex-wrap:wrap;gap:6px"><span class="chip">Revanche ×2</span><span class="chip">Golpe Duplo ×1</span><span class="chip">Cura Rápida ×1</span></div>`)}
-    ${mod("info", "Como funciona", "しくみ", `<p class="mini" style="font-size:13px;line-height:1.5">Chips ficam equipados e valem em toda luta. Cartas valem uma luta e somem. Os itens são do Tamer: passam de um pet para o outro.</p>`)}
+    ${mod("camadas", "Cartas", "", `<div class="linha" style="flex-wrap:wrap;gap:6px"><span class="chip">Revanche ×2</span><span class="chip">Golpe Duplo ×1</span><span class="chip">Cura Rápida ×1</span></div>`)}
+    ${mod("info", "Como funciona", "", `<p class="mini" style="font-size:13px;line-height:1.5">Chips ficam equipados e valem em toda luta. Cartas valem uma luta e somem. Os itens são do Tamer: passam de um pet para o outro.</p>`)}
   </div>`);
 }
 
 /* ---------- 7. Lutar · Arena */
 function tArena() {
   const r = (n, on, cor) => `<button class="cartao" style="text-align:center;padding:8px;${on ? "border:2px solid var(--primary)" : ""}">${pet(40, cor || "#b9cff5")}<br><b style="font-size:12.5px">${n}</b></button>`;
-  return tela("lutar", `${cab("アリーナ", "Arena", "03")}${abas("lutar", "Arena")}<div class="conteudo">
+  return tela("lutar", `${cab("", "Arena", "03")}${abas("lutar", "Arena")}<div class="conteudo">
     <div class="habitat" style="height:190px;background:linear-gradient(180deg,#0e2d66,#1650b8 60%,#0b2556);border-color:#0b2556">
       <span style="position:absolute;left:18%;bottom:30px">${pet(96)}</span><b style="position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);font:800 28px Nunito;color:#8fc3ff">×</b><span style="position:absolute;right:16%;bottom:30px">${pet(96, "#b9cff5")}</span>
       <span class="chip" style="position:absolute;left:10px;top:10px">${ic("olho")}prévia</span></div>
-    ${mod("pet", "Agumon", "アグモン", `<p class="mini">Rookie · 3 regras · técnica: Golpe de Brasa</p><p class="mini">lutas de treino para virar Ultimate: 4 de 10</p>`)}
-    ${mod("lutar", "Rival", "ライバル", `<p class="mini" style="margin-bottom:6px">Bots de treino</p><div class="cols3">${r("Bot A")}${r("Bot B")}${r("Bot C")}</div>
+    ${mod("pet", "Agumon", "", `<p class="mini">Rookie · 3 regras · técnica: Golpe de Brasa</p><p class="mini">lutas de treino para virar Ultimate: 4 de 10</p>`)}
+    ${mod("lutar", "Rival", "", `<p class="mini" style="margin-bottom:6px">Bots de treino</p><div class="cols3">${r("Bot A")}${r("Bot B")}${r("Bot C")}</div>
       <p class="mini" style="margin:10px 0 6px">Formas adultas</p><div class="cols3">${r("Gabumon", 1)}${r("Tentomon")}${r("Palmon")}</div>`)}
-    ${mod("info", "Regras de combate", "ルール", `<div class="lista">${["SE vida &lt; 30% · ENTÃO defender", "SE rival cansado · ENTÃO golpe pesado", "SE distância longa · ENTÃO aproximar"].map(t => `<div class="linha" style="min-height:48px;border-top:1px solid #edf2f9"><b style="flex:1;font-size:13.5px">${t}</b>${ic("cadeado")}</div>`).join("")}</div>
+    ${mod("info", "Regras de combate", "", `<div class="lista">${["SE vida &lt; 30% · ENTÃO defender", "SE rival cansado · ENTÃO golpe pesado", "SE distância longa · ENTÃO aproximar"].map(t => `<div class="linha" style="min-height:48px;border-top:1px solid #edf2f9"><b style="flex:1;font-size:13.5px">${t}</b>${ic("cadeado")}</div>`).join("")}</div>
       <p class="mini" style="margin-top:6px">3 de 5 espaços</p>`, "editar")}
     <div class="cols2"><button class="btn">Melhor de 10</button><button class="btn prim">${ic("lutar")}Lutar</button></div>
   </div>`);
@@ -377,12 +377,12 @@ function tArena() {
 function tCampanha() {
   const ilha = (x, y, n, st, cor) => `<div style="position:absolute;left:${x}%;top:${y}px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:3px">
     <span style="width:74px;height:40px;border-radius:50%;background:${cor};border:3px solid #fff;box-shadow:0 4px 0 rgba(13,33,71,.18)"></span><b style="font-size:12px">${n}</b><span class="etq ${st === "agora" ? "cheia" : st === "trancado" ? "cinza" : ""}" style="height:18px;font-size:8.5px;padding:0 6px">${st}</span></div>`;
-  return tela("lutar", `${cab("キャンペーン", "Campanha", "03")}${abas("lutar", "Campanha")}<div class="conteudo">
+  return tela("lutar", `${cab("", "Campanha", "03")}${abas("lutar", "Campanha")}<div class="conteudo">
     <div class="habitat" style="height:350px;background:linear-gradient(180deg,#d6e9ff,#c3ddff)">
       ${ilha(50, 14, "Cidadela", "trancado", "#dfe6f2")}${ilha(22, 70, "Torre", "vencido", "#cfe8c0")}${ilha(78, 70, "Espiral", "trancado", "#dfe6f2")}
       ${ilha(50, 136, "Floresta", "agora", "#cfe8c0")}${ilha(20, 196, "Campina", "vencido", "#cfe8c0")}${ilha(80, 196, "Lago", "trancado", "#dfe6f2")}
       ${ilha(50, 262, "Fronteira", "6 medalhas", "#cbd6f2")}</div>
-    ${mod("mapa", "Floresta", "森", `<p class="mini" style="margin-bottom:8px">sugerido para Rookie · arena: golpes de longe valem mais</p><div class="lista">
+    ${mod("mapa", "Floresta", "", `<p class="mini" style="margin-bottom:8px">sugerido para Rookie · arena: golpes de longe valem mais</p><div class="lista">
       ${[["Palmon", "LÍDER · lição: defender cedo", 1], ["Goblimon", "vitórias: 0"], ["Mushroomon", "vitórias: 0"]].map(([n, s, on]) => `<div class="linha" style="min-height:52px;border-top:1px solid #edf2f9"><span style="width:20px;height:20px;border-radius:50%;border:2px solid ${on ? "var(--primary)" : "#b9c6da"};background:${on ? "radial-gradient(var(--primary) 45%,#fff 50%)" : "#fff"}"></span>${pet(30, "#b9cff5")}<span style="flex:1"><b>${n}</b><br><span class="mini">${s}</span></span></div>`).join("")}</div>`)}
     <div class="cols2"><button class="btn">Treinar antes</button><button class="btn prim">Desafiar Palmon</button></div>
   </div>`);
@@ -390,36 +390,36 @@ function tCampanha() {
 
 /* ---------- 9. Lutar · Fronteira */
 function tFronteira() {
-  return tela("lutar", `${cab("フロンティア", "Fronteira", "03")}${abas("lutar", "Fronteira")}<div class="conteudo">
-    ${mod("medalha", "Liga dos Líderes", "リーグ", `<p class="mini" style="font-size:13px;line-height:1.5">6 lutas seguidas, sem curar entre elas: a vida passa de uma luta para a outra · uma carta só · perder uma encerra</p><button class="btn prim larga" style="margin-top:10px">Desafiar a Liga (6 lutas seguidas)</button>`)}
-    ${mod("lista", "Os 6 líderes", "リーダー", `<div class="lista">${["Palmon · Campina", "Tentomon · Torre", "Gabumon · Floresta", "Biyomon · Cidadela", "Gomamon · Lago", "Patamon · Espiral"].map((t, i) => `<div class="linha" style="min-height:44px;border-top:1px solid #edf2f9"><span class="mini" style="width:18px">${i + 1}</span><b style="flex:1;font-size:13.5px">${t}</b><span class="tag">Mega</span></div>`).join("")}</div>`)}
-    ${mod("torre", "Instalações", "施設", `<div class="cols2">${[["Torre", "recorde: andar 7"], ["Palácio", "recorde: 3 vitórias"], ["Fábrica", "escolha 1 de 3 aluguéis"], ["Salão", "um pet de cada nível"]].map(([n, s]) => `<div class="cartao"><b>${n}</b><br><span class="mini">${s}</span><br><span class="mini">${ic("cadeado")} abre depois do título</span></div>`).join("")}</div>`)}
+  return tela("lutar", `${cab("", "Fronteira", "03")}${abas("lutar", "Fronteira")}<div class="conteudo">
+    ${mod("medalha", "Liga dos Líderes", "", `<p class="mini" style="font-size:13px;line-height:1.5">6 lutas seguidas, sem curar entre elas: a vida passa de uma luta para a outra · uma carta só · perder uma encerra</p><button class="btn prim larga" style="margin-top:10px">Desafiar a Liga (6 lutas seguidas)</button>`)}
+    ${mod("lista", "Os 6 líderes", "", `<div class="lista">${["Palmon · Campina", "Tentomon · Torre", "Gabumon · Floresta", "Biyomon · Cidadela", "Gomamon · Lago", "Patamon · Espiral"].map((t, i) => `<div class="linha" style="min-height:44px;border-top:1px solid #edf2f9"><span class="mini" style="width:18px">${i + 1}</span><b style="flex:1;font-size:13.5px">${t}</b><span class="tag">Mega</span></div>`).join("")}</div>`)}
+    ${mod("torre", "Instalações", "", `<div class="cols2">${[["Torre", "recorde: andar 7"], ["Palácio", "recorde: 3 vitórias"], ["Fábrica", "escolha 1 de 3 aluguéis"], ["Salão", "um pet de cada nível"]].map(([n, s]) => `<div class="cartao"><b>${n}</b><br><span class="mini">${s}</span><br><span class="mini">${ic("cadeado")} abre depois do título</span></div>`).join("")}</div>`)}
   </div>`);
 }
 
 /* ---------- 10. Lutar · Medalhas */
 function tMedalhas() {
   const m = (n, i, ok, lib) => `<div class="cartao" style="text-align:center;padding:10px 6px"><span style="display:inline-flex;width:44px;height:44px;border-radius:50%;align-items:center;justify-content:center;font-weight:800;background:${ok ? "var(--gold)" : "#e5ebf4"};color:${ok ? "#5a3d00" : "#9db2d3"}">${i}</span><br><b style="font-size:13px">${n}</b><br><span class="mini" style="font-size:11px">${ok ? "ganha com Agumon" : "ainda não"}<br>libera: ${lib}</span></div>`;
-  return tela("lutar", `${cab("メダル", "Medalhas", "03")}${abas("lutar", "Medalhas")}<div class="conteudo">
-    ${mod("medalha", "Medalhas do Tamer", "メダル", `<div class="linha"><b style="font-size:34px">2</b><span class="mini">de 6 · Rookie → Champion liberado</span></div>`)}
+  return tela("lutar", `${cab("", "Medalhas", "03")}${abas("lutar", "Medalhas")}<div class="conteudo">
+    ${mod("medalha", "Medalhas do Tamer", "", `<div class="linha"><b style="font-size:34px">2</b><span class="mini">de 6 · Rookie → Champion liberado</span></div>`)}
     <div class="cols3">${m("Campina", 1, 1, "Rookie")}${m("Torre", 2, 1, "Champion")}${m("Floresta", 3, 0, "chip")}${m("Cidadela", 4, 0, "Ultimate")}${m("Lago", 5, 0, "carta")}${m("Espiral", 6, 0, "Mega")}</div>
-    ${mod("estrela", "Recordes", "記録", `<div class="lista">${["Torre", "Palácio", "Fábrica", "Salão"].map(t => `<div class="linha" style="min-height:42px;border-top:1px solid #edf2f9"><span style="flex:1">${t}</span><span class="mini">—</span></div>`).join("")}</div>`)}
+    ${mod("estrela", "Recordes", "", `<div class="lista">${["Torre", "Palácio", "Fábrica", "Salão"].map(t => `<div class="linha" style="min-height:42px;border-top:1px solid #edf2f9"><span style="flex:1">${t}</span><span class="mini">—</span></div>`).join("")}</div>`)}
   </div>`);
 }
 
 /* ---------- 11. Luta em andamento */
 function tLuta() {
   const hud = (n, v, g, dir) => `<div style="flex:1;min-width:0;background:rgba(255,255,255,.95);border-radius:12px;padding:8px 10px;${dir ? "text-align:right" : ""}"><b style="font-size:13.5px">${n}</b><span class="trilho" style="display:block;height:8px;margin-top:4px;${dir ? "transform:scaleX(-1)" : ""}"><i style="width:${v}%;background:${dir ? "var(--hunger)" : "var(--health)"}"></i></span><span class="trilho" style="display:block;height:5px;margin-top:3px;${dir ? "transform:scaleX(-1)" : ""}"><i style="width:${g}%;background:var(--energy)"></i></span></div>`;
-  return tela("lutar", `${cab("バトル", "Luta · Arena", "", { voltar: 1, dir: `<button class="btn" style="margin-left:auto;min-height:40px">Desistir</button>` })}<div class="conteudo">
+  return tela("lutar", `${cab("", "Luta · Arena", "", { voltar: 1, dir: `<button class="btn" style="margin-left:auto;min-height:40px">Desistir</button>` })}<div class="conteudo">
     <div class="habitat" style="height:330px;background:linear-gradient(180deg,#0e2d66,#1650b8 55%,#0b2556);border-color:#0b2556">
       <div style="position:absolute;left:10px;right:10px;top:10px;display:flex;gap:8px;align-items:center">${hud("Agumon", 72, 60)}<span style="flex:none;width:52px;height:52px;background:#0d2147;color:#fff;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);display:flex;flex-direction:column;align-items:center;justify-content:center"><small style="font-size:8px;letter-spacing:1px">TURNO</small><b style="font-size:20px;line-height:1">7</b></span>${hud("Gabumon", 48, 35, 1)}</div>
       <span class="chip" style="position:absolute;left:50%;top:84px;transform:translateX(-50%);font-size:12px">distância curta</span>
       <span style="position:absolute;left:12%;bottom:40px">${pet(110)}</span><span style="position:absolute;right:10%;bottom:40px">${pet(110, "#b9cff5")}</span>
       <span class="chip" style="position:absolute;right:12px;bottom:150px;background:#ffe9b8;border-color:#f5c451;color:#7a4b00;font-weight:800">! golpe pesado</span>
       <div style="position:absolute;left:10px;bottom:10px;display:flex;gap:6px"><button class="btn" style="min-height:40px">${ic("pausa")}Pausar</button><button class="btn" style="min-height:40px">×2</button></div></div>
-    ${mod("olho", "Intenção do rival", "相手の狙い", `<p style="font-weight:700">vai tentar golpe pesado</p>`)}
-    ${mod("info", "Regra em uso", "使用中のルール", `<div class="linha"><b style="flex:1;font-size:13.5px">SE vida &lt; 30% · ENTÃO defender</b><button class="btn" style="min-height:40px">Travar</button><button class="btn" style="min-height:40px">Vetar</button></div>`)}
-    ${mod("lista", "Turnos", "ターン", `<div class="lista">${[["T7", "Agumon atacou: −12"], ["T6", "Gabumon defendeu"], ["T5", "Agumon aproximou"]].map(([t, x]) => `<div class="linha" style="min-height:40px;border-top:1px solid #edf2f9"><span class="mini" style="width:26px">${t}</span><span>${x}</span></div>`).join("")}</div>`)}
+    ${mod("olho", "Intenção do rival", "", `<p style="font-weight:700">vai tentar golpe pesado</p>`)}
+    ${mod("info", "Regra em uso", "", `<div class="linha"><b style="flex:1;font-size:13.5px">SE vida &lt; 30% · ENTÃO defender</b><button class="btn" style="min-height:40px">Travar</button><button class="btn" style="min-height:40px">Vetar</button></div>`)}
+    ${mod("lista", "Turnos", "", `<div class="lista">${[["T7", "Agumon atacou: −12"], ["T6", "Gabumon defendeu"], ["T5", "Agumon aproximou"]].map(([t, x]) => `<div class="linha" style="min-height:40px;border-top:1px solid #edf2f9"><span class="mini" style="width:26px">${t}</span><span>${x}</span></div>`).join("")}</div>`)}
   </div>`, { semNav: 1 });
 }
 
@@ -431,8 +431,8 @@ function tResultado() {
       <div style="font:800 40px Nunito;color:var(--primary);margin:6px 0 2px">Vitória!</div>
       <div class="linha" style="justify-content:center;gap:24px;margin:8px 0">${pet(100)}<span style="opacity:.35;filter:grayscale(1)">${pet(70, "#b9cff5")}</span></div>
       <div class="cols3"><div class="num-box"><small>turnos</small><b>9</b></div><div class="num-box"><small>dano dado</small><b>100</b></div><div class="num-box"><small>dano levado</small><b>52</b></div></div></div>
-    ${mod("info", "O que decidiu a luta", "決め手", `<p class="mini" style="font-size:13.5px;line-height:1.5">no turno 9, defender com a vida baixa segurou o golpe pesado do rival.</p>`)}
-    <section class="mod" style="background:#0f3a86;border-color:#0f3a86;color:#fff"><header><span class="tr" style="background:#6fe3ff"></span><span class="t"><b>Regra nova</b><small class="jp" style="color:#bfe6ff">新しいルール</small></span></header>
+    ${mod("info", "O que decidiu a luta", "", `<p class="mini" style="font-size:13.5px;line-height:1.5">no turno 9, defender com a vida baixa segurou o golpe pesado do rival.</p>`)}
+    <section class="mod" style="background:#0f3a86;border-color:#0f3a86;color:#fff"><header><span class="tr" style="background:#6fe3ff"></span><span class="t"><b>Regra nova</b></span></header>
       <div class="linha"><b style="flex:1;font-size:13.5px">SE rival carrega · ENTÃO golpe</b><button class="btn" style="min-height:40px">Travar</button><button class="btn" style="min-height:40px">Vetar</button></div></section>
     <p class="mini" style="text-align:center">lutas de treino +1 · 5 de 10</p>
     <div class="cols2"><button class="btn">${ic("play")}Ver replay</button><button class="btn prim">Continuar</button></div>
@@ -443,47 +443,47 @@ function tResultado() {
 /* ---------- 13–16. Diário */
 function tRegistro() {
   const l = [["D3 14:15", "controle", "Brincou com você", "pet"], ["D3 14:02", "mao", "Você fez carinho", "você"], ["D3 13:45", "tigela", "Comeu a ração", "pet"], ["D3 12:10", "lutar", "Venceu Gabumon na Arena", "luta"], ["D3 11:30", "haltere", "Treinou Corrida", "treino"], ["D3 10:05", "info", "Recusou tomar banho", "recusa"], ["D2 22:40", "conversar", "“Quero brincar!”", "fala"]];
-  return tela("diario", `${cab("記録", "Registro", "04", { dir: `<a class="bt-ic" style="margin-left:auto" aria-label="Configurações">${ic("ajustes")}</a>` })}${abas("diario", "Registro")}<div class="conteudo">
+  return tela("diario", `${cab("", "Registro", "04", { dir: `<a class="bt-ic" style="margin-left:auto" aria-label="Configurações">${ic("ajustes")}</a>` })}${abas("diario", "Registro")}<div class="conteudo">
     <div class="cols2"><div class="num-box"><small>semente</small><b>4242</b></div><div class="num-box"><small>eventos</small><b>312</b></div></div>
     <div class="cols2"><button class="btn">${ic("play")}Verificar replay</button><button class="btn">${ic("copiar")}Copiar registro</button></div>
     <div class="abas" style="padding:0">${["tudo", "você", "pet", "lutas", "recusas", "treino", "falas"].map((f, i) => `<a class="${i ? "" : "ativo"}" style="min-height:36px">${f}</a>`).join("")}</div>
-    ${mod("lista", "Registro", "記録", `<ol class="lista">${l.map(([h, i, t, q]) => `<li><time>${h.replace(" ", "<br>")}</time><span class="q">${ic(i)}</span>${t}<span class="tag">${q}</span></li>`).join("")}</ol>`)}
+    ${mod("lista", "Registro", "", `<ol class="lista">${l.map(([h, i, t, q]) => `<li><time>${h.replace(" ", "<br>")}</time><span class="q">${ic(i)}</span>${t}<span class="tag">${q}</span></li>`).join("")}</ol>`)}
     <button class="btn larga" style="color:#c8443a;border-color:#f2c4bf">Novo ovo (apaga este pet)</button>
   </div>`);
 }
 function tCatalogo() {
   const f = (n, c, on) => `<div class="cartao" style="text-align:center;padding:8px 4px;${on ? "border:2px solid var(--primary)" : ""}">${c ? pet(40, c) : `<span style="display:inline-block;width:40px;height:36px;border-radius:50%;background:#dfe5ee"></span>`}<br><b style="font-size:11.5px">${n}</b></div>`;
-  return tela("diario", `${cab("図鑑", "Catálogo", "04")}${abas("diario", "Catálogo")}<div class="conteudo">
+  return tela("diario", `${cab("", "Catálogo", "04")}${abas("diario", "Catálogo")}<div class="conteudo">
     <div class="abas" style="padding:0">${["Coragem", "Amizade", "Conhecimento", "Sinceridade"].map((f, i) => `<a class="${i ? "" : "ativo"}" style="min-height:36px">${f}</a>`).join("")}</div>
     <p class="mini">4 de 15 vistas</p>
     <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px">${f("Koromon", "#f6c9d8")}${f("Agumon", "#F7B7CF", 1)}${f("Greymon", "#cfdaf0")}${f("Tyrannomon", "#cfe8c0")}${Array(8).fill(0).map(() => f("?")).join("")}</div>
-    ${mod("grade", "Ficha: Agumon", "図鑑", `<div class="linha" style="gap:6px;margin-bottom:8px"><span class="etq azul">Rookie</span><span class="etq cheia">seu pet</span></div>
+    ${mod("grade", "Ficha: Agumon", "", `<div class="linha" style="gap:6px;margin-bottom:8px"><span class="etq azul">Rookie</span><span class="etq cheia">seu pet</span></div>
       <ul class="barras-est">${[["Força", 40], ["Guarda", 55], ["Fôlego", 70], ["Vigor", 38], ["Mira", 50], ["Recuperação", 62]].map(([r, v]) => `<li style="grid-template-columns:96px 1fr"><span>${r}</span><span class="trilho"><i style="width:${v}%;background:var(--primary)"></i></span></li>`).join("")}</ul>`)}
   </div>`);
 }
 function tGeracoes() {
   const g = (n, s, c) => `<div class="cartao linha">${pet(44, c)}<span style="flex:1"><b>${n}</b><br><span class="mini">${s}</span><br><span class="mini" style="color:#0d8a63">✓ origem conferida</span></span></div>`;
-  return tela("diario", `${cab("世代", "Gerações", "04")}${abas("diario", "Gerações")}<div class="conteudo">
+  return tela("diario", `${cab("", "Gerações", "04")}${abas("diario", "Gerações")}<div class="conteudo">
     <b style="font:800 12px Nunito;letter-spacing:1.5px;color:var(--primary)">GERAÇÃO 3</b>${g("Agumon", "você · agora", "#F7B7CF")}
     <b style="font:800 12px Nunito;letter-spacing:1.5px;color:var(--primary)">GERAÇÃO 2</b>${g("Greymon", "aposentado", "#cfdaf0")}${g("Garurumon", "log de outro dono", "#cfdaf0")}
     <b style="font:800 12px Nunito;letter-spacing:1.5px;color:var(--primary)">GERAÇÃO 1</b>${g("MetalGreymon", "aposentado", "#cfdaf0")}${g("WereGarurumon", "aposentado", "#cfdaf0")}
   </div>`);
 }
 function tCenarios() {
-  return tela("diario", `${cab("シナリオ", "Cenários", "04")}${abas("diario", "Cenários")}<div class="conteudo">
+  return tela("diario", `${cab("", "Cenários", "04")}${abas("diario", "Cenários")}<div class="conteudo">
     <span class="etq azul" style="align-self:flex-start">Ferramenta de pesquisa</span>
     <div class="cols2">${[["Pet A", "vira o seu"], ["Pet B", "rival fixo"]].map(([n, s]) => `<div class="cartao"><b>${n}</b><br><span class="mini">${s}</span><div class="num-box" style="margin-top:8px;padding:8px"><small>dono simulado</small><b style="font-size:15px">atencioso</b></div><div class="cols2" style="margin-top:6px"><div class="num-box" style="padding:8px"><small>dias</small><b style="font-size:15px">6</b></div><div class="num-box" style="padding:8px"><small>por dia</small><b style="font-size:15px">12</b></div></div></div>`).join("")}</div>
     <button class="btn prim larga">${ic("frasco")}Simular e comparar</button>
-    ${mod("lista", "Comparação A × B", "比較", `<div class="lista">${[["Perfil", "atencioso", "ausente"], ["Estado no fim", "Champion", "Rookie"], ["Sinal de aprendizado", "0,42", "0,08"], ["Na arena", "7 V · 3 D", "—"]].map(([a, b, c]) => `<div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:6px;min-height:42px;align-items:center;border-top:1px solid #edf2f9;font-size:13px"><span class="mini">${a}</span><b>${b}</b><b>${c}</b></div>`).join("")}</div>`)}
+    ${mod("lista", "Comparação A × B", "", `<div class="lista">${[["Perfil", "atencioso", "ausente"], ["Estado no fim", "Champion", "Rookie"], ["Sinal de aprendizado", "0,42", "0,08"], ["Na arena", "7 V · 3 D", "—"]].map(([a, b, c]) => `<div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:6px;min-height:42px;align-items:center;border-top:1px solid #edf2f9;font-size:13px"><span class="mini">${a}</span><b>${b}</b><b>${c}</b></div>`).join("")}</div>`)}
     <button class="btn larga">Rodar 100 lutas A × B</button>
-    ${mod("camadas", "Cenários prontos", "プリセット", `<div class="linha" style="flex-wrap:wrap;gap:6px">${["Atencioso × ausente", "Elogio × bronca", "Treino pesado", "Só carinho", "Dono incoerente"].map(t => `<span class="chip">${t}</span>`).join("")}</div>`)}
+    ${mod("camadas", "Cenários prontos", "", `<div class="linha" style="flex-wrap:wrap;gap:6px">${["Atencioso × ausente", "Elogio × bronca", "Treino pesado", "Só carinho", "Dono incoerente"].map(t => `<span class="chip">${t}</span>`).join("")}</div>`)}
   </div>`);
 }
 
 /* ---------- 17. Conversar */
 function tConversar() {
   const b = (t, eu) => `<div style="align-self:${eu ? "flex-end" : "flex-start"};max-width:78%;padding:10px 14px;border-radius:16px;${eu ? "background:var(--primary);color:#fff;border-bottom-right-radius:4px" : "background:#fff;border:2px solid var(--fg);border-bottom-left-radius:4px"};font-weight:700;font-size:14px">${t}</div>`;
-  return tela("pet", `${cab("会話", "Conversar · Agumon", "", { voltar: 1, dir: "" })}
+  return tela("pet", `${cab("", "Conversar · Agumon", "", { voltar: 1, dir: "" })}
     <div class="conteudo" style="padding-bottom:16px">
       <p class="mini">Rookie · fala com frases prontas</p>
       <div class="abas" style="padding:0"><a class="ativo" style="min-height:36px">Frases prontas</a><a style="min-height:36px">Moldura</a><a style="min-height:36px">Livre</a></div>
@@ -496,20 +496,20 @@ function tConversar() {
 /* ---------- 18. Ajustes */
 function tAjustes() {
   const it = (i, t, s) => `<div class="linha" style="min-height:56px;border-top:1px solid #edf2f9">${ic(i)}<span style="flex:1"><b>${t}</b>${s ? `<br><span class="mini">${s}</span>` : ""}</span>${ic("seta")}</div>`;
-  return tela("pet", `${cab("設定", "Ajustes", "", { voltar: 1, dir: "" })}<div class="conteudo">
-    ${mod("tema", "Jogo", "ゲーム", `<div class="lista">${it("tema", "Aparência", "claro · mostrar dicas")}</div>`)}
-    ${mod("conversar", "Fala", "会話", `<div class="lista">${it("conversar", "Fala do pet", "LLM · modo")}</div>`)}
-    ${mod("db", "Dados", "データ", `<div class="lista">${it("db", "Registro e replay", "verificar · copiar · exportar")}${it("pausa", "Tempo", "TESTE · pausa, 1x, acelerar")}</div>`)}
-    ${mod("info", "Sobre", "について", `<div class="lista">${it("info", "Sobre o Digilab")}<div class="linha" style="min-height:52px;border-top:1px solid #edf2f9;opacity:.5"><span style="flex:1"><b>Som</b><br><span class="mini">em breve</span></span></div></div>`)}
+  return tela("pet", `${cab("", "Ajustes", "", { voltar: 1, dir: "" })}<div class="conteudo">
+    ${mod("tema", "Jogo", "", `<div class="lista">${it("tema", "Aparência", "claro · mostrar dicas")}</div>`)}
+    ${mod("conversar", "Fala", "", `<div class="lista">${it("conversar", "Fala do pet", "LLM · modo")}</div>`)}
+    ${mod("db", "Dados", "", `<div class="lista">${it("db", "Registro e replay", "verificar · copiar · exportar")}${it("pausa", "Tempo", "TESTE · pausa, 1x, acelerar")}</div>`)}
+    ${mod("info", "Sobre", "", `<div class="lista">${it("info", "Sobre o Digilab")}<div class="linha" style="min-height:52px;border-top:1px solid #edf2f9;opacity:.5"><span style="flex:1"><b>Som</b><br><span class="mini">em breve</span></span></div></div>`)}
   </div>`, { semNav: 1 });
 }
 
 /* ---------- 19. Escolha do brasão */
 function tBrasao() {
   const b = (n, c, nasce, rk, on) => `<button class="cartao" style="text-align:center;padding:12px 8px;${on ? "border:2px solid var(--primary);box-shadow:0 0 0 4px rgba(22,119,255,.12)" : ""}"><span style="display:inline-block;width:44px;height:56px;border-radius:50% 50% 46% 46%/60% 60% 40% 40%;background:${c};border:2px solid #173a8a"></span><br><b>${n}</b><br><span class="mini">nasce ${nasce}</span><br><span class="mini" style="font-size:11px">Rookie: ${rk}</span></button>`;
-  return tela("pet", `<div class="marca"><div class="barras"><span></span><span></span><span></span></div><div><div class="m">DIGILAB</div><div class="k jp">デジラボ</div></div></div>
-    ${cab("紋章", "Escolha seu brasão", "", { dir: "" })}<div class="conteudo" style="padding-bottom:20px">
-    ${mod("relogio" in P ? "relogio" : "info", "Ritmo", "リズム", `<div class="cols2"><button class="cartao" style="border:2px solid var(--primary);text-align:left"><b>Rápido</b><br><span class="mini">3 h · 12 h · 18 h por estágio</span></button><button class="cartao" style="text-align:left"><b>Clássico</b><br><span class="mini">o ritmo de antes</span></button></div>`)}
+  return tela("pet", `<div class="marca"><div class="barras"><span></span><span></span><span></span></div><div><div class="m">DIGILAB</div></div></div>
+    ${cab("", "Escolha seu brasão", "", { dir: "" })}<div class="conteudo" style="padding-bottom:20px">
+    ${mod("relogio" in P ? "relogio" : "info", "Ritmo", "", `<div class="cols2"><button class="cartao" style="border:2px solid var(--primary);text-align:left"><b>Rápido</b><br><span class="mini">3 h · 12 h · 18 h por estágio</span></button><button class="cartao" style="text-align:left"><b>Clássico</b><br><span class="mini">o ritmo de antes</span></button></div>`)}
     <div class="cols2">${b("Coragem", "#ffd2b3", "Koromon", "Agumon ou Guilmon", 1)}${b("Amizade", "#cfe3ff", "Tsunomon", "Gabumon ou …")}${b("Conhecimento", "#e6dccf", "Motimon", "Tentomon ou …")}${b("Sinceridade", "#d9f2c8", "Tanemon", "Palmon ou …")}</div>
     <button class="btn prim larga">Chocar o ovo de Coragem</button><button class="btn larga">Voltar</button>
   </div>`, { semNav: 1 });
@@ -517,7 +517,7 @@ function tBrasao() {
 
 /* ---------- 20. Ovo chocando */
 function tOvo() {
-  return tela("pet", `<div class="marca"><div class="barras"><span></span><span></span><span></span></div><div><div class="m">DIGILAB</div><div class="k jp">デジラボ</div></div></div>
+  return tela("pet", `<div class="marca"><div class="barras"><span></span><span></span><span></span></div><div><div class="m">DIGILAB</div></div></div>
     <div class="secao"><span class="num" aria-hidden="true">00</span><span class="rot">OVO <i>//</i></span></div>
     <div class="conteudo">
       <div class="habitat" style="height:470px">
@@ -533,8 +533,8 @@ function tOvo() {
 function tRevelacao() {
   return tela("pet", `<div class="conteudo" style="padding:28px 20px 24px;color:#fff;align-items:center;text-align:center">
     <div style="align-self:stretch;text-align:left;font:800 10px Nunito;letter-spacing:2px;color:#9cc7ff">ROOKIE → CHAMPION</div>
-    <div class="jp" style="font:800 64px/1 'M PLUS Rounded 1c';margin-top:18px;text-shadow:0 4px 0 #0a2a78,0 0 24px rgba(111,182,255,.8)">進化!</div>
-    <div style="font:800 italic 32px Nunito;letter-spacing:1px;text-shadow:0 3px 0 #0a2a78">EVOLUÇÃO!</div>
+    
+    <div style="font:800 italic 48px/1 Nunito;letter-spacing:1px;margin-top:26px;text-shadow:0 4px 0 #0a2a78,0 0 24px rgba(111,182,255,.8)">EVOLUÇÃO!</div>
     <div style="position:relative;width:280px;height:280px;margin-top:18px;display:flex;align-items:center;justify-content:center">
       <span style="position:absolute;inset:10px;border-radius:50%;border:8px dashed rgba(143,195,255,.55)"></span><span style="position:absolute;inset:50px;border-radius:50%;background:radial-gradient(rgba(170,215,255,.7),transparent 70%)"></span>
       <span style="position:absolute;bottom:20px;width:220px;height:46px;border-radius:50%;border:4px solid #8fc3ff;box-shadow:0 0 22px #6fb6ff"></span>${pet(170, "#cfdaf0", "")}</div>
@@ -548,7 +548,7 @@ function tRevelacao() {
 
 /* ---------- 22. Morte */
 function tMorte() {
-  return tela("pet", `<div class="marca"><div class="barras"><span></span><span></span><span></span></div><div><div class="m">DIGILAB</div><div class="k jp">デジラボ</div></div></div>
+  return tela("pet", `<div class="marca"><div class="barras"><span></span><span></span><span></span></div><div><div class="m">DIGILAB</div></div></div>
     <div class="secao"><span class="num" aria-hidden="true">01</span><span class="rot">PET <i>//</i></span></div>
     <div class="conteudo">
       <div class="habitat" style="height:300px;filter:grayscale(1);opacity:.7"><span class="anel"></span><span class="pet">${pet(140)}</span></div>

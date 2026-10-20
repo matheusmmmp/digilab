@@ -67,7 +67,8 @@ Estão no corpo do PR e na seção 9.
 
 **A casca:**
 - fundo claro com a grade de 48 px e os estilhaços azuis;
-- nas telas internas, o título em japonês com o subtítulo em português e o número da seção como marca d'água;
+- nas telas internas, o título só em português (sem nenhum caractere japonês, correção do Matheus de 2026-10-19: os títulos em japonês
+  da referência eram só ilustração) e o número da seção como marca d'água;
 - as sub-abas em pílulas que rolam dentro da faixa;
 - a barra de baixo branca (Pet, Crescer, Lutar, Diário), com o item ativo em azul de canto cortado;
 - Conversar e Ajustes no cabeçalho do Pet, como hoje.
