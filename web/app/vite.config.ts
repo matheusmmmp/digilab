@@ -7,6 +7,7 @@ import { createReadStream, existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 
 const ASSETS = fileURLToPath(new URL("../../../Assets/", import.meta.url));
 /* decoracao do Digimon UP (Assets/gerar_decoracao_up.py): o JSON e so os PNGs da lista do repositorio */
@@ -38,7 +39,9 @@ function atlasDev(): Plugin {
 
 export default defineConfig({
   base: "./",
-  plugins: [react(), atlasDev()],
+  plugins: [react(), tailwindcss(), atlasDev()],
+  /* "@/" = src/, o alias dos componentes no estilo shadcn (components.json) */
+  resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
   build: { outDir: "../dist", emptyOutDir: true, sourcemap: false, target: "es2022" },
   /* fala por LLM: o servidor local (python servidor/servidor_local.py) responde /api/fala */
   server: { proxy: { "/api": "http://127.0.0.1:8765" } },
