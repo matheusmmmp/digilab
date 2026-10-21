@@ -348,3 +348,4 @@ de base em `docs/historico/registro_lotes.json`.
 
 
 - [2026-10-21 — GATE-I-GT8 (Claude Code, worktree `v2-gate-i`): a GT-8 decidida](registro/2026-10.md)
+- [2026-10-21 — P4-ETAPA2 (worker D): a paridade Python/TS do contrato (a G-PAR-CONTRATO)](registro/2026-10.md)

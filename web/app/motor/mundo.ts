@@ -9,6 +9,10 @@
 
    Os registros e o `ocorrido` usam os nomes em snake_case do Python de proposito: sao o mesmo dado, conferido campo a campo. */
 import { C, CMU, type ConfigMundo } from "./constantes.ts";
+import {
+  CONFIG_CONTRATO, bigodes, contratoLigado, controlar, relativo, setorDe, solido, validarContrato, visivel, type Andar,
+  type CategoriaSolido, type ConfigContrato, type Solido,
+} from "./contrato.ts";
 
 // ================================================================== sha256 e derivar_semente
 const K256 = new Uint32Array([
@@ -291,6 +295,8 @@ export function lerDeixarBola(e: EventoMundo): [number, number] {
 export type Visto = [number, string, number, number, number];
 export interface PercepcaoMundo {
   x: number; y: number; regiao: number; vistos: Visto[]; cheiro: number; direcao_cheiro: number; alvo_pendente: string | null;
+  /** so com a chave `sensores` do contrato (a PercepcaoContrato do Python): para onde o cone olha; nenhum cerebro a le */
+  orientacao?: number;
 }
 export interface AlvoMundo { tipo: string; x: number; y: number; id: number | null; de: string | null }
 export type AcaoComAlvo = "explorar" | "comer" | "brincar";
@@ -319,6 +325,14 @@ export interface OpcoesMundo {
   efeitoFrutas?: Record<string, number>;
   /** os numeros do estado que o mundo usa (Config do Python) */
   estado?: { ganhoAlimentar: number; probSujeiraPosRefeicao: number; sujeiraMaxima: number; intervalo: number };
+  /** o contrato sensorio-motor da P4 (motor/contrato.ts); desligado por padrao, e o jogo nao o liga */
+  contrato?: ConfigContrato;
+}
+
+/** o registro do contrato numa decisao com alvo (o _registro_contrato do Python) */
+export interface RegistroContrato {
+  tick: number; orientacao: number; parou_por: string; contato: [CategoriaSolido, number][]; obstaculos: number[];
+  resultado: { parou_por: string; comeu: boolean; empurrou: boolean; bola_afastou: null }; trajetoria: [number, number][] | null;
 }
 
 /** O mundo fisico (digilab/mundo.py, MotorMundo ligado): o mesmo estado, os mesmos sorteios e os mesmos registros. */
@@ -329,6 +343,7 @@ export class Mundo {
   private readonly probSujeira: number;
   private readonly sujeiraMaxima: number;
   readonly alcance: number;
+  private readonly intervalo: number;
   private readonly raioPegar: number;
   private readonly raioVisao: number;
   private readonly raioMancha: number;
@@ -358,6 +373,12 @@ export class Mundo {
   readonly decisoes: Record<string, unknown>[] = [];
   readonly regioes: { tick: number; de: number; para: number }[] = [];
   readonly visitas: { arvore: string; chegada: number; saida: number | null; decisoes: number }[] = [];
+  // o contrato da P4 (desligado: nada disto muda o mundo de hoje)
+  readonly cct: ConfigContrato;
+  private solidos: readonly Solido[] = [];                     // os que colidem (as paredes, com a chave delas)
+  private opacos: readonly Solido[] = [];                      // os que tapam (as paredes e os troncos)
+  orientacao = 0;
+  readonly contratoDecisoes: RegistroContrato[] = [];
 
   constructor(op: OpcoesMundo) {
     const cm = this.cm = op.cfg ?? CMU;
@@ -370,6 +391,7 @@ export class Mundo {
     this.probSujeira = es.probSujeiraPosRefeicao;
     this.sujeiraMaxima = es.sujeiraMaxima;
     this.alcance = cm.velocidade * es.intervalo;
+    this.intervalo = es.intervalo;
     this.raioPegar = cm.raio_pegar_celulas * cm.sub;
     this.raioVisao = cm.raio_visao_celulas * cm.sub;
     this.raioMancha = cm.raio_mancha_celulas * cm.sub;
@@ -391,6 +413,25 @@ export class Mundo {
       else throw new Error(`arvore ${id} fora do jardim e da mata: ${nome}`);
       this.arvores.push({ id, x: ax, y: ay, fruta, regiao: nome, p, recarga_ate: 0 });
     }
+    this.cct = validarContrato({ ...(op.contrato ?? CONFIG_CONTRATO) });
+    if (contratoLigado(this.cct)) this.montarContrato();
+  }
+
+  /** as paredes na borda (so com a chave `paredes`; solidas e opacas) e os quadrados dos troncos (com a chave `sensores`; opacos, sem
+      colisao, P4-4), na ordem do Python (o _montar_contrato) */
+  private montarContrato(): void {
+    const cc = this.cct, cm = this.cm;
+    const largura = cm.celulas_x * cm.sub, altura = cm.celulas_y * cm.sub, e = cc.espessura_parede;
+    const paredes = cc.paredes
+      ? [solido(-e, -e, largura + e, 0, "parede", true, true), solido(-e, altura, largura + e, altura + e, "parede", true, true),
+         solido(-e, 0, 0, altura, "parede", true, true), solido(largura, 0, largura + e, altura, "parede", true, true)]
+      : [];
+    const meio = Math.floor(cc.lado_tronco / 2);
+    const troncos = cc.sensores
+      ? this.arvores.map(a => solido(a.x - meio, a.y - meio, a.x - meio + cc.lado_tronco, a.y - meio + cc.lado_tronco, "tronco", false, true))
+      : [];
+    this.solidos = Object.freeze(paredes);
+    this.opacos = Object.freeze([...paredes, ...troncos]);
   }
 
   // ------------------------------------------------------------ a comida e a bola no tempo
@@ -465,19 +506,25 @@ export class Mundo {
   perceber(tick: number): PercepcaoMundo {
     const [x, y] = this.pet;
     const vistos: Visto[] = [];
+    /* com a chave `sensores`: so o que passa pelo cone em torno da orientacao e pela oclusao (o Mundo.perceber com o contrato) */
+    const sens = this.cct.sensores;
+    const ve = (ox: number, oy: number): boolean =>
+      !sens || visivel(x, y, ox, oy, this.orientacao, this.raioVisao, this.cct.cos_meio_cone, this.opacos);
     for (const c of this.comidas.values()) {
       const sit = this.situacao(c, tick);
       if (sit === null) continue;
       const dx = c.x - x, dy = c.y - y, d = distancia(dx, dy);
-      if (d <= this.raioVisao) vistos.push([c.id, sit === "madura" ? c.tipo : c.tipo + "_podre", dx, dy, d]);
+      if (d <= this.raioVisao && ve(c.x, c.y)) vistos.push([c.id, sit === "madura" ? c.tipo : c.tipo + "_podre", dx, dy, d]);
     }
     const [bx, by] = this.bolaEm(tick);
     const db = distancia(bx - x, by - y);
-    if (db <= this.raioVisao) vistos.push([ID_BOLA, "bola", bx - x, by - y, db]);
+    if (db <= this.raioVisao && ve(bx, by)) vistos.push([ID_BOLA, "bola", bx - x, by - y, db]);
     vistos.sort((a, b) => a[4] - b[4] || comparaStr(a[1], b[1]) || a[0] - b[0]);
     const [cheiro, direcao] = direcaoDoCheiro(x, y, this.fontesDeCheiro(tick), this.cm);
-    return { x, y, regiao: regiaoDe(x, this.cm), vistos: vistos.slice(0, this.cm.max_vistos), cheiro, direcao_cheiro: direcao,
-             alvo_pendente: this.pendente ? this.pendente.alvo.tipo : null };
+    const p: PercepcaoMundo = { x, y, regiao: regiaoDe(x, this.cm), vistos: vistos.slice(0, this.cm.max_vistos), cheiro,
+                                direcao_cheiro: direcao, alvo_pendente: this.pendente ? this.pendente.alvo.tipo : null };
+    if (sens) p.orientacao = this.orientacao;
+    return p;
   }
 
   /** antes de cada decisao: o mundo anda ate o tick e o pet percebe (a fome de antes fica para o MF-2) */
@@ -609,8 +656,17 @@ export class Mundo {
       a = escolher ? escolher(ac, cands.slice(), this.percepcao!, u) : null;
       if (a === null) a = this.alvoPadrao(ac, cands);
       else this.validarAlvo(ac, a, cands);
-      const [x1, y1] = a === null ? [x0, y0] : passoAte(x0, y0, a.x, a.y, this.alcance, this.cm);
-      const desloc = distancia(x1 - x0, y1 - y0);
+      let andar: Andar | null = null;
+      let x1: number, y1: number;
+      if (a !== null && this.cct.controlador) {             // a P4: o controlador do contrato, nos ticks da decisao
+        const cm = this.cm;
+        andar = controlar(x0, y0, a.x, a.y, this.raioPegar, this.intervalo, cm.velocidade, this.cct.r_pet, this.solidos, cm.celulas_x,
+                          cm.celulas_y, cm.sub, this.cct.ticks_bloqueado, this.orientacao);
+        [x1, y1] = [andar.x, andar.y];
+      } else {
+        [x1, y1] = a === null ? [x0, y0] : passoAte(x0, y0, a.x, a.y, this.alcance, this.cm);
+      }
+      const desloc = andar === null ? distancia(x1 - x0, y1 - y0) : andar.andado;
       this.pet = [x1, y1];
       if (ac === "comer") e.fome = this.fomeAntes;
       const energiaAntes = e.energia;
@@ -640,11 +696,39 @@ export class Mundo {
       }
       ocorrido = { acao, u, alvo: a, de: [x0, y0], para: [x1, y1], deslocamento: desloc, energia_gasta: energiaAntes - e.energia,
                    chegou, comeu, brincou_com_bola: bola };
+      if (contratoLigado(this.cct) && a !== null) ocorrido.contrato = this.registroContrato(tick, x0, y0, x1, y1, andar, chegou, comeu);
     } else {
       this.pendente = null;
     }
     this.registrarDecisao(tick, acao, [x0, y0], regiaoAntes, a, ocorrido, regra);
     return { estado: e, ocorrido };
+  }
+
+  /** o que o contrato registra numa decisao com alvo (o _registro_contrato do Python): a orientacao anda com o ultimo deslocamento
+      (sem o controlador, o da decisao inteira); parado, fica */
+  private registroContrato(tick: number, x0: number, y0: number, x1: number, y1: number, andar: Andar | null, chegou: boolean,
+                           comeu: Record<string, unknown> | null): RegistroContrato {
+    let parouPor: string, contatos: [CategoriaSolido, number][], trajetoria: [number, number][] | null;
+    if (andar !== null) {
+      this.orientacao = andar.orientacao;
+      parouPor = andar.parou_por;
+      contatos = andar.contatos.map(c => [c[0], c[1]]);
+      trajetoria = andar.trajetoria.map(q => [q[0], q[1]]);
+    } else {
+      if (x1 !== x0 || y1 !== y0) this.orientacao = setorDe(x1 - x0, y1 - y0);
+      parouPor = chegou ? "chegou" : "hora";
+      contatos = [];
+      trajetoria = null;
+    }
+    const contato = contatos.map((c): [CategoriaSolido, number] => [c[0], relativo(c[1], this.orientacao)])
+      .sort((p, q) => comparaStr(p[0], q[0]) || p[1] - q[1]);
+    const reg: RegistroContrato = {
+      tick, orientacao: this.orientacao, parou_por: parouPor, contato,
+      obstaculos: bigodes(x1, y1, this.cct.r_pet, this.orientacao, this.solidos, this.cct.raio_bigode),
+      resultado: { parou_por: parouPor, comeu: comeu !== null, empurrou: false, bola_afastou: null }, trajetoria,
+    };
+    this.contratoDecisoes.push(reg);
+    return reg;
   }
 
   private registrarDecisao(tick: number, acao: string, antes: [number, number], regiaoAntes: number, a: AlvoMundo | null,
@@ -693,6 +777,7 @@ export class Mundo {
       quedas: this.quedas, consumos: this.consumos, sumidas: this.sumidas, deixadas: this.deixadas, bolas_deixadas: this.bolasDeixadas,
       rolagens: this.rolagens, decisoes: this.decisoes, regioes: this.regioes, visitas: this.visitas,
       manchas_abertas: [...this.manchasAbertas.values()].map(v => ({ ...v })),
+      ...(contratoLigado(this.cct) ? { orientacao: this.orientacao, contrato_decisoes: this.contratoDecisoes } : {}),
     };
   }
 }
