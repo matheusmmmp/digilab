@@ -2224,6 +2224,30 @@ CONFIG_FRUTA_AO_LADO = ConfigFrutaAoLado()
 CONFIG_FRUTA_AO_LADO_LIGADA = ConfigFrutaAoLado(ligada=True)
 
 
+# V3-3/V3-4, a competicao entre as regras urgentes (docs/TAREFA_V2_V3_COMPETICAO.md, secao 3; CR-1 a CR-7 decididas pelo Matheus em
+# 2026-10-21). Uma config propria, como a do banheiro, para a ConfigLobos (e o gabarito da web, que a guarda inteira) nao mudar. O status
+# de cada campo esta em policies/lobos.PARAMETROS_COMPETICAO.
+@dataclass(frozen=True)
+class ConfigCompeticao:
+    """ligada            as regras urgentes que valem disputam um sorteio comum (o `sono_exaustao` fica forcado; o tempo livre so sem
+                       urgente; cada acao vem da regra mais urgente que a propoe, CR-3). Desligada: a decisao de hoje, byte a byte
+    kappa_instinto     o prior forte (CR-1): o peso efetivo das propostas da regra do instinto (a primeira que vale) vezes kappa. Com uma
+                       regra so, o kappa cancela no sorteio proporcional, e a decisao e a de hoje"""
+
+    ligada: bool = False
+    kappa_instinto: int = 16
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigCompeticao.ligada e bool: {self.ligada!r}")
+        if type(self.kappa_instinto) is not int or self.kappa_instinto < 1:
+            raise ValueError(f"ConfigCompeticao.kappa_instinto e inteiro >= 1: {self.kappa_instinto!r}")
+
+
+CONFIG_COMPETICAO = ConfigCompeticao()
+CONFIG_COMPETICAO_LIGADA = ConfigCompeticao(ligada=True)
+
+
 # =====================================================================
 # V2, a P4 (docs/TAREFA_V2_P4_CEREBRO_MUNDO.md, secao 3.1; P4-1, P4-2 e P4-4 decididas pelo Matheus em 2026-10-21): o contrato
 # sensorio-motor do POC (web/app/poc/mundo3d/, docs/futuro/mundo_3d.md, secao 4) no mundo do motor, so com o mundo fisico e um pet.
