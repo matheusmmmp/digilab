@@ -340,3 +340,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-21 — GATE-I (Claude Code, worktree `v2-gate-i`): as GI decididas, o marco, a tarefa e o plano do Gate I](registro/2026-10.md)
 
 - [2026-10-21 — V3-COMPETICAO, a etapa 0 (worker B): a G0-R1-PODE-APRENDER passa, e a disputa é do pet negligenciado](registro/2026-10.md)
+
+- [2026-10-21 — GATE-I-DECISOES (Claude Code, worktree `v2-gate-i`): as GT-1 a GT-7 decididas; a GT-8 fica aberta](registro/2026-10.md)
