@@ -164,6 +164,10 @@ sempre a regra registrada (conferido nas 26.880 decisões e em 20.000 observaç�
 - **"O planejador revaloriza" vale para o piloto do adendo 7.** No do adendo 8, a escolha da x não cai com o planejador (0,52 → 0,55 a
   0,68).
 
+**Correção (2026-10-21, a etapa 0 da V3-9, `docs/TAREFA_V2_V3_CREDITO_CANAL.md`, seção 10):** no crédito à x depois da mudança, quem
+compensa a queda do humor (−364 por crédito) é a nutrição (+281), e não o gosto (+56) (`artifacts_v2_v3/credito_canal_etapa0.json`, o J5
+do adendo 8). Nenhum peso de comer chega ao teto do J5 (16·S).
+
 ## 4. As três direções, comparadas [PROPOSTA]
 
 | direção | o que muda | que limite ataca | o que fica de fora | risco |
