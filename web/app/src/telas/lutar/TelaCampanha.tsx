@@ -1,7 +1,8 @@
-/* Campanha (desenho CampMapa; porte do HTML): uma ilha do UP por lugar, nuvem nos trancados, marcador com o NPC
-   em 1x, caminho entre os lugares, o pet no proximo desafio; cartao do lugar com os rivais, a licao, os stats e
-   o historico de tentativas (contado do registro). A luta acontece no palco desta aba. */
-import { useEffect } from "react";
+/* Exploracao (a aba que era a Campanha; docs/TAREFA_V2_EXPLORACAO.md): o mapa 3D de ilhas (MapaExploracao.tsx) com o cartao de cada
+   lugar; no celular o cartao abre a folha do lugar, no desktop o lugar fica na coluna da direita. Sem WebGL, fica a tela de antes
+   (desenho CampMapa; porte do HTML): uma ilha do UP por lugar, nuvem nos trancados, marcador com o NPC em 1x, caminho entre os lugares,
+   o pet no proximo desafio; cartao do lugar com os rivais, a licao, os stats e o historico de tentativas (contado do registro). */
+import { useEffect, useState } from "react";
 import {
   ARENAS, MEDALHAS, MEDALHAS_LIGA, MEDALHA_POR_ID, NOME_V2, NPC, STATS, VERSAO_LIGA, chaveSprite, medalhaDoLider, nomeEstagio, nomeEstiloNPC, type Lugar, type Motor,
 } from "../../../motor/index.ts";
@@ -16,6 +17,9 @@ import { ENDERECO_LUTA } from "../../rotas.ts";
 import { useDesktop } from "../../desktop.ts";
 import { FalaRevanche } from "../../componentes/FalaRevanche.tsx";
 import { EscolhaCarta } from "../../componentes/EscolhaCarta.tsx";
+import { Folha } from "../../componentes/Folha.tsx";
+import { temWebGL } from "../../webgl.ts";
+import { MapaExploracao } from "./MapaExploracao.tsx";
 
 /* coordenadas da prancha CampMapa (mapa de 390 x 420), em % para acompanhar a largura: ilha 150 px, centro do lugar
    (trilho, plaquinha, marcador do pet) e o pad embaixo */
@@ -221,17 +225,41 @@ function DetalheDesk({ irTreinar }: { irTreinar: () => void }) {
   );
 }
 
-export function TelaCampanha({ voltarPet, irTreinar }: { voltarPet: () => void; irTreinar: () => void }) {
-  const desk = useDesktop(), { motor: m } = useJogo(), v5 = m.lugares.length === ILHA_V5.length, v6 = m.lugares.length === ILHA_V6.length;
-  const luta = useLuta();
-  /* a aba abre com o palco do proprio modo (a mensagem da arena nao aparece aqui) */
-  useEffect(() => { if (!LUTA.palco || LUTA.palco.modo !== "campanha") previa("campanha"); }, []);
+/** como funciona a campanha (no celular, embaixo do mapa) */
+function ComoFunciona({ m }: { m: Motor }) {
+  const v5 = m.lugares.length === ILHA_V5.length, v6 = m.lugares.length === ILHA_V6.length;
+  return <details className="dl-apoio"><summary>Como funciona</summary><p>{v6 ? "Seis" : v5 ? "Quatro" : "Três"} lugares pelo mapa, em sequência: o próximo só abre depois de vencer um rival do anterior. Na Torre há três rivais com estilos diferentes.{v5 || v6 ? " No alto fica a Montanha Espiral, com os Mestres das Trevas: ela é pensada para o Mega." : ""}{v6 ? " Cada lugar é uma arena com um líder e uma regra própria: a Torre pune o golpe impulsivo, o líder da Floresta muda de padrão no meio da luta, a Cidadela pede três vitórias seguidas sem cura e no Lago o pet luta sozinho, sem as suas travas e vetos. Acima de tudo fica a Fronteira: com as seis medalhas, a Liga dos Líderes." : ""} Todo pet bem treinado vence qualquer um deles; sem treino, a luta vira sorte. {m.versao >= 6 ? " O líder de cada lugar dá uma medalha ao Tamer na primeira vitória; as medalhas liberam as evoluções (Lutar · Medalhas)." : ""} Os NPCs têm stats iguais em todos os atributos (somando de 72 a 110; um pet sem treino tem 60), lutam com um estilo fixo e são imprevisíveis; o primeiro tem o tamanho de um Rookie. <b>Treine o pet no estágio sugerido</b> para vencer com segurança (na campanha o treino vale inteiro, stats absolutos). As lutas entram no registro e ensinam as regras de combate do seu pet.</p></details>;
+}
+/** sem WebGL (ou se a vista 3D falhar): a tela de antes, com o mapa 2D e o cartao do lugar */
+function CampanhaReserva({ irTreinar }: { irTreinar: () => void }) {
+  const desk = useDesktop(), { motor: m } = useJogo();
+  useLuta();
   return (
     <div className="tela dl desk camp-tela">
       <div className="camp-principal"><Mapa /></div>
       <div className="camp-lado">{desk ? <DetalheDesk irTreinar={irTreinar} /> : <Detalhe />}
-      {!desk && <details className="dl-apoio"><summary>Como funciona</summary><p>{v6 ? "Seis" : v5 ? "Quatro" : "Três"} lugares pelo mapa, em sequência: o próximo só abre depois de vencer um rival do anterior. Na Torre há três rivais com estilos diferentes.{v5 || v6 ? " No alto fica a Montanha Espiral, com os Mestres das Trevas: ela é pensada para o Mega." : ""}{v6 ? " Cada lugar é uma arena com um líder e uma regra própria: a Torre pune o golpe impulsivo, o líder da Floresta muda de padrão no meio da luta, a Cidadela pede três vitórias seguidas sem cura e no Lago o pet luta sozinho, sem as suas travas e vetos. Acima de tudo fica a Fronteira: com as seis medalhas, a Liga dos Líderes." : ""} Todo pet bem treinado vence qualquer um deles; sem treino, a luta vira sorte. {m.versao >= 6 ? " O líder de cada lugar dá uma medalha ao Tamer na primeira vitória; as medalhas liberam as evoluções (Lutar · Medalhas)." : ""} Os NPCs têm stats iguais em todos os atributos (somando de 72 a 110; um pet sem treino tem 60), lutam com um estilo fixo e são imprevisíveis; o primeiro tem o tamanho de um Rookie. <b>Treine o pet no estágio sugerido</b> para vencer com segurança (na campanha o treino vale inteiro, stats absolutos). As lutas entram no registro e ensinam as regras de combate do seu pet.</p></details>}
+      {!desk && <ComoFunciona m={m} />}
       </div>
     </div>
   );
+}
+/** a Exploracao: o mapa 3D; no celular o cartao abre a folha do lugar, no desktop o lugar fica na coluna da direita */
+function TelaExploracao({ irTreinar, aoFalhar }: { irTreinar: () => void; aoFalhar: () => void }) {
+  const desk = useDesktop(), { motor: m } = useJogo(), [folha, setFolha] = useState(false);
+  useLuta();
+  const L = m.lugares[m.lugarDe(campAtual(m))];
+  return (
+    <div className="tela dl desk camp-tela camp-tela--expl">
+      <div className="camp-principal"><MapaExploracao desk={desk} aoFalhar={aoFalhar} abrir={i => { escolherLugar(i); if (!desk) setFolha(true); }} /></div>
+      {desk ? <div className="camp-lado"><DetalheDesk irTreinar={irTreinar} /></div> : <ComoFunciona m={m} />}
+      {!desk && folha && <Folha titulo={L.nome} fechar={() => setFolha(false)}><Detalhe /></Folha>}
+    </div>
+  );
+}
+
+export function TelaCampanha({ irTreinar }: { voltarPet: () => void; irTreinar: () => void }) {
+  const [reserva, setReserva] = useState(() => !temWebGL());
+  /* a aba abre com o palco do proprio modo (a mensagem da arena nao aparece aqui) */
+  useEffect(() => { if (!LUTA.palco || LUTA.palco.modo !== "campanha") previa("campanha"); }, []);
+  return reserva ? <CampanhaReserva irTreinar={irTreinar} /> : <TelaExploracao irTreinar={irTreinar} aoFalhar={() => setReserva(true)} />;
 }

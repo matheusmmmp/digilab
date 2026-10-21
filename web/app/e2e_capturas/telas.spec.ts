@@ -13,31 +13,37 @@ const APP = `${PREFIXO}/web/dist/`, CHAVE = "digilab-web-v21-sprites";
 /* o mesmo pet v11 do teste do DigiBrain (e2e/jogo.spec.ts) */
 const SAVE_V11 = { semente: 4242, versao: 11, log: [[480, "t", 120], [600, "d", "acariciar"], [600, "t", 120], [720, "d", "tapa"], [720, "t", 120],
   [840, "d", "alimentar"], [840, "t", 60]] };
-const TELAS: [string, string, object][] = [
+/* a Exploracao de um pet v6 (docs/TAREFA_V2_EXPLORACAO.md): o save das arenas do e2e (a Cidadela e o proximo desafio) e o Tamer com as 3
+   primeiras medalhas: seis ilhas, vencidas, abertas e trancadas, e a Fronteira trancada */
+const SAVE_ARENAS = JSON.parse(readFileSync(new URL("../e2e/save_arenas.json", import.meta.url), "utf8"));
+const TAMER_3 = { versao: 1, log: ["campina", "torre", "floresta"].map((id, i) =>
+  ["medalha", { id, n: i + 1, quando: 1 + i, pet: SAVE_ARENAS.semente, forma: "DinoBeemon", tick: 900 + i }]) };
+const TELAS: [string, string, object, object?][] = [
   ["pet-estado", "#/pet/estado", SAVES.v3], ["crescer-treinar", "#/crescer/treinar", SAVES.v3], ["crescer-aprend", "#/crescer/aprend", SAVES.v3],
   ["crescer-evolucao", "#/crescer/evolucao", SAVES.v3], ["crescer-itens", "#/crescer/itens", SAVES.v3], ["lutar-arena", "#/lutar/arena", SAVES.v3],
   ["lutar-campanha", "#/lutar/campanha", SAVES.v3], ["lutar-fronteira", "#/lutar/fronteira", SAVES.v3], ["lutar-medalhas", "#/lutar/medalhas", SAVES.v3],
   ["diario-registro", "#/diario/registro", SAVES.v3], ["diario-catalogo", "#/diario/catalogo", SAVES.v3], ["diario-cenarios", "#/diario/cenarios", SAVES.v3],
   ["conversar", "#/conversar/chat", SAVES.v3], ["config", "#/config", SAVES.v3], ["pet-v11", "#/pet/estado", SAVE_V11],
+  ["lutar-exploracao-v6", "#/lutar/campanha", SAVE_ARENAS, TAMER_3],
 ];
 
 /** semeia o save por uma página da mesma origem que não é o app (como em e2e/jogo.spec.ts) */
-async function semear(page: Page, save: object): Promise<void> {
+async function semear(page: Page, save: object, tamer: object = { versao: 1, log: [] }): Promise<void> {
   await page.goto("/Assets/digilab_atlas_up.json");
-  await page.evaluate(([chave, s]) => {
-    localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", JSON.stringify({ versao: 1, log: [] }));
+  await page.evaluate(([chave, s, t]) => {
+    localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", t);
     localStorage.setItem(chave + "-descarte", "5"); localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
     localStorage.setItem(chave, s);
-  }, [CHAVE, JSON.stringify(save)] as const);
+  }, [CHAVE, JSON.stringify(save), JSON.stringify(tamer)] as const);
 }
 
 /* as larguras: 390 e 1280; DIGILAB_CAPTURAS_LARGURAS="360" (por exemplo) troca a lista, com a altura do celular abaixo de 1100 px */
 const LARGURAS = (process.env.DIGILAB_CAPTURAS_LARGURAS ?? "390,1280").split(",").map(Number);
 for (const [largura, altura] of LARGURAS.map(l => [l, l >= 1100 ? 800 : l === 390 ? 844 : 800])) {
-  for (const [nome, rota, save] of TELAS) {
+  for (const [nome, rota, save, tamer] of TELAS) {
     test(`${nome} em ${largura} px`, async ({ page }) => {
       await page.setViewportSize({ width: largura, height: altura });
-      await semear(page, save);
+      await semear(page, save, tamer);
       const T0 = new Date("2026-10-19T12:00:00Z").getTime();
       await page.clock.install({ time: T0 });
       await page.clock.pauseAt(T0 + 1000);           /* parado desde antes de abrir: o tempo do jogo só anda com runFor */
@@ -54,6 +60,8 @@ for (const [largura, altura] of LARGURAS.map(l => [l, l >= 1100 ? 800 : l === 39
          numero de quadros desenhados antes da captura varia */
       await page.waitForFunction(() => !document.querySelector(".pet-cena") || !!document.querySelector(".pet-cena .cena-sala")
         || (document.querySelector<HTMLCanvasElement>(".pet-cena .cena3d canvas")?.width ?? 0) > 0);
+      /* a Exploracao: o mapa 3D tambem chega por import dinamico; espera ele desenhar (ou a tela cair no mapa 2D) */
+      await page.waitForFunction(() => !document.querySelector(".camp-tela--expl") || !!document.querySelector(".mapa-expl[data-pronto]"));
       await page.clock.runFor(1000);
       await page.waitForLoadState("networkidle");
       /* toda imagem decodificada antes da captura */

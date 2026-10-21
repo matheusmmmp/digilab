@@ -78,13 +78,13 @@ export function TelaItens() {
             <p><b>Os itens pedem treino:</b> com menos da metade do treino típico do nível, os chips não fazem efeito e a carta não pode ser usada.
               <b>Chip de stat:</b> +1 ponto de treino, só no espaço que ainda falta no teto do estágio e da vida (1/4 do treino típico no máximo).
               <b>Chip de regra:</b> a regra entra no fim da lista de combate, depois das regras do pet e sem tirar nenhuma: completa a forma, não
-              passa na frente dela. <b>Carta:</b> só na Campanha (desafiantes e líderes), escolhida antes da luta; uma por luta. A carta da revanche
+              passa na frente dela. <b>Carta:</b> só na Exploração (desafiantes e líderes), escolhida antes da luta; uma por luta. A carta da revanche
               vem com um pet do nível da arena, no máximo uma por líder a cada 24 h do relógio do pet.</p></details>
           : <details className="dl-apoio"><summary>Como funciona</summary>
             <p><b>Chip de stat:</b> +2 pontos de treino, mas só no espaço que ainda falta no teto do estágio e da vida, e todos os chips de stat
               juntos valem no máximo 1/4 do treino típico do estágio: o chip adianta o treino, não passa do teto. <b>Chip de regra:</b> uma regra
               nova entra no topo da lista de combate do pet (sai a de nota mais baixa se a lista estiver cheia); o pet não a troca enquanto o chip
-              estiver equipado, e você pode travá-la, não vetá-la. <b>Carta:</b> escolha antes de uma luta na Campanha ou na Arena; uma por luta.
+              estiver equipado, e você pode travá-la, não vetá-la. <b>Carta:</b> escolha antes de uma luta na Exploração ou na Arena; uma por luta.
               A carta da revanche vem com um pet do nível da arena, no máximo uma por líder a cada 24 h do relógio do pet. Os números dos itens
               ainda são provisórios.</p></details>}
         </section>
@@ -102,7 +102,7 @@ export function TelaItens() {
               <li key={it.id} className={`item-card${n ? "" : " item-falta"}`}>
                 <span className="item-cab"><b className="item-nome">{it.nome}</b><span className="dl-tag item-tag item-tag--carta">carta</span><span className="item-qtd dl-num">×{n}</span></span>
                 <span className="item-efeito">{it.efeito}</span>
-                <span className="item-onde">{n ? "Escolha antes de uma luta (Campanha ou Arena)." : "Nenhuma agora."} Vem da {deOnde(it)}.</span>
+                <span className="item-onde">{n ? "Escolha antes de uma luta (Exploração ou Arena)." : "Nenhuma agora."} Vem da {deOnde(it)}.</span>
               </li>
             );
           })}</ul>
