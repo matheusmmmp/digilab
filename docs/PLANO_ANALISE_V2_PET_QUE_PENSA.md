@@ -881,3 +881,49 @@ causa do corte (T1) ou deixar de cortar e passar a contar (T2).
 | PJ8-4 | O G-T2-HAB (P1-plan × P1) | **continua secundário, com o aviso de que a visão também move o hábito;** o `m` sem a x à vista sai como leitura | tirá-lo: o T2 perde a única comparação com o hábito; lê-lo sem aviso: uma diferença pela visão parece mapa |
 | PJ8-5 | Recalibrar | **não:** a fase 1 é a mesma; só o piloto é refeito | recalibrar: uma rodada a mais que lê a mesma fase 1 |
 | PJ8-6 | As sementes | **54101…54505 para o piloto e 55101…55505 para a validação,** as duas novas; a 53101 não volta | usar a 53101 para a validação: ela foi reservada para um desenho que mudou depois que o piloto foi visto |
+
+## Adendo 9 — as margens, o K_u e o poder do piloto do adendo 8 (2026-10-19, números congelados, antes da validação)
+
+O adendo 8 (A8.5) pede este adendo, num commit antes da validação.
+- **O piloto:** rodou uma vez nas bases 54101…54505 (K_u = 4, 20 unidades), com a config
+  `experiments/configs/v2_pet_que_pensa/piloto_adendo8.json` sem mudança e o código da `main` `cf8581a`.
+- **A fonte dos números:** `artifacts_v2_pet_que_pensa/piloto_adendo8/` (`reval.json` e `piloto/piloto.json`), com o relatório em
+  `docs/RESULTADO_V2_PILOTO_PET_QUE_PENSA_ADENDO8.md`.
+- **A decisão do Matheus (2026-10-19):** validar agora, com o **T1 como primário**. As premissas do T1 passaram pela primeira vez no
+  piloto. O T2 sai como o plano manda: as premissas dele falharam no piloto, e ele provavelmente sai inconclusivo por premissa.
+- **Nada foi escolhido olhando o primário.**
+
+- **A9.1, os números da fase 1, sem recalibrar** (PJ7-5, PJ8-5): o `ganho_gosto` = S/2 (512) e o `g_plano` = S (1024), do adendo 6.
+- **A9.2, a G-REVAL-POSSIVEL do piloto passa:** 0 de 20 unidades falham.
+- **A9.3, as margens:**
+  - **`Δ_T1` = 0,2583:** ½ × a média de `f_antes` do P1-plan no T1, nas 20 unidades;
+  - **`Δ_T2` = 0,3229:** ½ × a média de 1 − `f_antes` do P1-plan no T2, nas 16 unidades com busca antes.
+  - As duas passam de 0,05.
+- **A9.4, o K_u = 10 (N = 50), sem chegar a 0,8 nos dois primários.** A regra da seção 6 roda a validação com o poder declarado.
+  - **O poder do G-T1** (α 0,025, o Holm de 2) vai de 0,34 a 0,74:
+
+    | K_u | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+    |---|---|---|---|---|---|---|---|
+    | poder | 0,34 | 0,41 | 0,49 | 0,57 | 0,63 | 0,69 | **0,74** |
+
+  - **O poder do G-T2** é 0,99 a K_u = 4 e 1,00 a partir de 5. O N efetivo dele a K_u = 10 é 20, descontadas as unidades sem
+    oportunidade no piloto.
+  - **Os secundários** a K_u = 10 (α 0,0125):
+
+    | secundário | poder |
+    |---|---|
+    | G-T1-CONG | 1,00 |
+    | G-T1-DESF | 0,65 |
+    | G-T2-CONG | 1,00 |
+    | G-T2-HAB | 0,99 |
+
+    O G-T2-HAB leva o aviso da PJ8-4: a visão também move o hábito.
+- **A9.5, o limiar da G-APRENDEU:** o acaso médio do braço (PJ7-3). Ele sai da própria validação, braço a braço.
+- **A9.6, as premissas no piloto** (só relato):
+  - **G-APRENDEU passa nos quatro braços;**
+  - **G-OPORTUNIDADE:** passa no T1 (de 0 a 1 de 20 unidades sem oportunidade) e falha no T2 (de 9 a 12 de 20);
+  - **G-EXPOSICAO falha:** de 8 a 10 de 20 unidades sem exposição.
+- **A9.7, o custo:** 1,06 s de CPU por vida de 12 dias. N = 50 dá 400 vidas, cerca de 7 min de CPU.
+- **A9.8, a validação:** roda uma vez, nas bases 55101…55505 com K_u = 10, com a config
+  `experiments/configs/v2_pet_que_pensa/validacao_adendo8.json`, pelo `run_v2_validacao_pet_que_pensa.py`. O orquestrador confere os
+  números contra estes artefatos. A leitura é a da seção 7, e nada se ajusta olhando a validação.
