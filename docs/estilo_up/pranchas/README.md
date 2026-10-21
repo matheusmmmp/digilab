@@ -63,3 +63,8 @@ atlas e sem a decoração do Digimon UP.
 **O quadro modular da tela Pet no desktop** (2026-10-20, `docs/TAREFA_V2_PET_QUADRO.md`): `capturas/Quadro_pet-v11.png` e
 `capturas/Quadro_pet-estado.png` põem lado a lado o antes (a moldura do #374) e o depois (o quadro). `capturas/Quadro_pet-v11_recolhida.png`
 mostra o quadro e a coluna lateral recolhida. Foram tiradas em 1280 px, sem o atlas e sem a decoração do Digimon UP.
+
+**A Exploração** (2026-10-21, `docs/TAREFA_V2_EXPLORACAO.md`): a aba que era a Campanha, com o mapa 3D de ilhas de voxels.
+`capturas/Exploracao_390.png`, `capturas/Exploracao_360.png` e `capturas/Exploracao_1280.png` são o celular (rolado até o marcador) e o
+desktop. `capturas/Exploracao_390_folha.png` é a folha de um lugar, e `capturas/Exploracao_390_inteira.png`, a página inteira. Foram tiradas
+sem o atlas e sem a decoração do Digimon UP, com o pet v6 do e2e das arenas.
