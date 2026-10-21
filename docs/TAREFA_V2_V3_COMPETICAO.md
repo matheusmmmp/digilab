@@ -1,7 +1,7 @@
 # TAREFA V2 — V3_COMPETICAO: a competição entre as regras urgentes (V3-3 e V3-4) (2026-10-21)
 
-Coordenador: Gerente (Claude Code). Worker do desenho: Claude Code (worker B). Worktree e branch: `v2-v3-competicao`. Status: ETAPA 0 ENTREGUE, a
-G0-R1-PODE-APRENDER passa (seção 10); a CR-1 a CR-7 DECIDIDAS em 2026-10-21; o código (etapas 1 e 2) não começou.
+Coordenador: Gerente (Claude Code). Worker do desenho: Claude Code (worker B). Worktree e branch: `v2-v3-competicao`. Status: O CÓDIGO ENTREGUE atrás da
+chave desligada (seção 11); a G0-R1-PODE-APRENDER passou (seção 10); a CR-1 a CR-7 DECIDIDAS em 2026-10-21; o plano (etapa 3) e as runs não começaram.
 
 Categoria: implementacao (a tarefa); o PR deste desenho é `arquitetura`. Origem: Matheus, 2026-10-21: parar a V3-9 na G0-PODE-MUDAR
 (#376) e seguir para a V3-3/V3-4, pela recomendação do `docs/futuro/v3_espaco_acoes.md` (seção 8) e do E0
@@ -302,4 +302,55 @@ CR-7. Pela seção 5, o próximo passo são as etapas 1 e 2 (o gabarito e o cód
     3.619.726).
 
 **O κ = 16** sai da regra da CR-2 (DECIDIDA). O número segue SEM FONTE e entra em `config.py` com o status, na etapa 2.
+
+## 11. Resumo das etapas 1 e 2 (2026-10-21): o código atrás da chave
+
+**O que entrou** (a seção 3, com três desvios de forma, abaixo):
+- **a chave:** `ConfigCompeticao` (`digilab/config.py`; `ligada` False, `kappa_instinto` 16), com o status em
+  `policies/lobos.PARAMETROS_COMPETICAO`:
+  - a chave é PROPOSTA;
+  - o κ é DECIDIDO pela regra da CR-2, e o número segue SEM FONTE;
+  - o cérebro A a recebe por `PoliticaLobos(..., cfg_competicao=...)`, e a bancada por `Bancada.cfg_competicao`, que é `None` por padrão;
+- **as regras que valem:** `regras_que_valem`, `candidatos_da_regra` e `propostas_da_disputa` (`lobos.py`), o espelho do
+  `PoliticaInstinto.agir` pelas mesmas expressões. O `policy.py` não mudou;
+- **a disputa:** `_disputa`. As regras urgentes que valem propõem; cada ação vem da regra mais urgente (CR-3). O peso é o peso efetivo
+  da tabela da regra (com o piso), e as propostas da regra do instinto vão vezes κ (CR-1). O `sono_exaustao` fica forçado, e o tempo livre
+  só entra sem urgente. Com uma regra só, a decisão é a de hoje: o código nem passa pela disputa;
+- **o crédito:** `_aplicar_sinal`. Cada tabela que propôs recebe a L1 nas suas propostas, com os P da disputa e o W sem o κ (seção 3.3);
+- **o motivo honesto:**
+  - `_registrar_disputa` põe no motivo `competicao`, com as regras, as propostas, o κ, os pesos sem o κ, `acao_do_instinto`,
+    `abertura_decidiu`, `acao_sem_aprendido` e `aprendido_decidiu`;
+  - o `motivo_lobos` (`digilab/motivo.py`) refaz o "impulso decidiu" com o κ, confere contra o registro e cita a regra de onde veio a
+    ação;
+  - o estado interno ganha o contador `competicao` só com a chave ligada;
+- **o que não mudou:** `engine.py`, `policy.py`, o motor, o corpo, o mundo, a web e o v11 do jogo.
+  - O n_pesos é o mesmo com e sem a chave, e o teto de pesos não muda.
+
+**Os desvios de forma** (registrados em `docs/registro/2026-10.md`):
+1. **a chave numa config própria,** e não em dois campos da `ConfigLobos` (a seção 3.2). O gabarito da web (`lobos_python.json`) guarda a
+   `ConfigLobos` inteira, e o `test_gabarito_dos_lobos_em_dia` o refaz. Dois campos novos mudariam o gabarito com a chave desligada;
+2. **as regras que valem dentro do `lobos.py`,** e não num módulo novo `digilab/competicao.py`. As condições são os literais em float do
+   instinto, e um módulo novo teria de passar no G-INT (só inteiros) dos módulos novos. O `lobos.py` já decide em float (o peso efetivo
+   e o sorteio). Na competição, o κ é inteiro e o crédito segue inteiro (`atualizar_pesos`);
+3. **o campo `cfg_competicao` na `Bancada`,** para a run da etapa 4 montar o R1 e o R1-congelado (o P0 da bancada com a chave).
+
+**Os gates** (`tests/test_competicao_regras.py`, 10 testes, e `tests/test_competicao_etapa0.py`):
+
+| gate | o que confere |
+|---|---|
+| **G-R1-REGRAS** | em 20.000 observações aleatórias, a primeira regra que vale é a `ultima_regra` do instinto, e a ação dele está nos candidatos |
+| **G2** | desligada (`None` e `ConfigCompeticao()`), as vidas saem iguais ao gabarito do E0 (gravado antes, no #383) |
+| **G-R1-UMA-REGRA** | ligada, a vida do atencioso 101, em que nenhuma decisão abre, tem o log e o motor de hoje |
+| **G-R1-SEGURANCA** | ligada, com a energia < 0,25 a decisão é dormir, forçada, sem sorteio e sem disputa |
+| **G-R1-CREDITO** | numa decisão aberta sintética, só as duas linhas propostas mudam, cada uma pela L1 com o P da disputa; os fatores somam zero |
+| **G1** | ligada, o replay do log serializado refaz a vida bit a bit, os motivos incluídos |
+| R1-congelado | o P0 com a chave: as decisões abrem, e os pesos ficam no prior |
+| o motivo honesto | o `motivo_lobos` de cada decisão aberta cita a regra da ação, e o "aprendido decidiu" confere com o registro |
+| n_pesos e a chave fora do v11 | o mesmo n_pesos; com as frutas, a chave falha alto; o κ inválido falha alto |
+
+**O G-INT** não se aplica: não há módulo novo. A competição usa o float do `lobos.py` como a decisão de hoje, e o crédito segue em
+inteiros.
+
+**Uma vida ligada, para ilustrar** (o relapso 101 dos testes; não é resultado): 347 de 1.344 decisões abrem. A abertura muda a ação em
+39 delas, e o aprendido decide em 44.
 
