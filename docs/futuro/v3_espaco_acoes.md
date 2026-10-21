@@ -155,6 +155,15 @@ sempre a regra registrada (conferido nas 26.880 decisões e em 20.000 observaç�
   somado, num peso que só a própria escolha move.
 - **Para o V3,** isto pesa a favor de um crédito por canal até o alvo (o humor separado do gosto). Não pesa a favor de mais verbos.
 
+**Correção (2026-10-19, o desenho da V3-9, `docs/TAREFA_V2_V3_CREDITO_CANAL.md`, seção 0):**
+- **As 36 vezes depois da mudança são reexperiência.** Ficam fora da janela que o T1 conta, que para no primeiro consumo da x no mapa. A
+  x na mão não credita o A. Por isso, no T1 como está, um crédito que só aprende com a própria escolha não muda nada; o teste da V3-9 é o
+  da reexperiência.
+- **Separar por canal e ler pela soma dá o peso de hoje,** porque a regra da L1 é linear no sinal. É preciso uma peça a mais (a decisão
+  CC-1).
+- **"O planejador revaloriza" vale para o piloto do adendo 7.** No do adendo 8, a escolha da x não cai com o planejador (0,52 → 0,55 a
+  0,68).
+
 ## 4. As três direções, comparadas [PROPOSTA]
 
 | direção | o que muda | que limite ataca | o que fica de fora | risco |
