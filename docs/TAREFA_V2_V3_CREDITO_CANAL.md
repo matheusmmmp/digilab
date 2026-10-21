@@ -1,10 +1,7 @@
 # TAREFA V2 — V3_CREDITO_CANAL: o crédito do "querer" por canal até o alvo (2026-10-19)
 
 Coordenador: Gerente (Claude Code). Worker do desenho: Claude Code (worker B). Worktree e branch: `v2-v3-credito-canal`. Status: PARADA na G0-PODE-MUDAR
-(etapa 0 entregue em 2026-10-21; a CC-1 volta ao Matheus, seção 10).
-
-Coordenador: Gerente (Claude Code). Worker do desenho: Claude Code (worker B). Worktree e branch: `v2-v3-credito-canal`. Status: ABERTA
-(o desenho entregue, #369; as CC-1 a CC-6 DECIDIDAS pelo Matheus em 2026-10-21, pela recomendação; o código não começou).
+(as CC-1 a CC-6 DECIDIDAS em 2026-10-21 pela recomendação; a etapa 0 entregue no mesmo dia, #376; a G0-PODE-MUDAR não passou e o Matheus decidiu PARAR a V3-9 aqui e seguir para a V3-3/V3-4, 2026-10-21).
 
 Categoria: implementacao (a tarefa); o PR deste desenho é `arquitetura`. Origem: Matheus, 2026-10-19: seguiu a recomendação V3-9 de
 `docs/futuro/v3_espaco_acoes.md` (seção 8), antes da V3-3/V3-4 e da V3-10.
