@@ -1,0 +1,39 @@
+{
+  "descricao": "Fumaca do piloto da competicao, NAO canonica: as sementes dos testes (2 unidades); confere o encanamento, nunca como resultado.",
+  "plano": "docs/PLANO_ANALISE_V2_V3_COMPETICAO.md",
+  "dias": 14,
+  "orcamento_por_dia": 16,
+  "kappa": 16,
+  "bootstrap": {
+    "reamostragens": 10000,
+    "semente": 4242,
+    "nivel": 0.95
+  },
+  "poder": {
+    "k_min": 4,
+    "k_max": 10,
+    "replicas": 2000,
+    "alvo": 0.8,
+    "alfa": 0.025,
+    "semente": 4242,
+    "alfas_relato": [
+      0.025,
+      0.0167
+    ]
+  },
+  "g_abre": {
+    "limiar": 0.05
+  },
+  "holm": {
+    "alfa": 0.05
+  },
+  "fase": "piloto",
+  "unidades": {
+    "bases": [
+      101,
+      202
+    ],
+    "k": 1,
+    "prefixo": "competicao"
+  }
+}

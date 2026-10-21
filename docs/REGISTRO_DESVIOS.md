@@ -342,3 +342,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-21 — V3-COMPETICAO, a etapa 0 (worker B): a G0-R1-PODE-APRENDER passa, e a disputa é do pet negligenciado](registro/2026-10.md)
 
 - [2026-10-21 — V3-COMPETICAO, o código (worker B): a chave numa config própria e as regras dentro do lobos.py](registro/2026-10.md)
+
+- [2026-10-21 — V3-COMPETICAO, o orquestrador (worker B): as medidas pelo motivo da decisão e o prefixo `competicao`](registro/2026-10.md)
