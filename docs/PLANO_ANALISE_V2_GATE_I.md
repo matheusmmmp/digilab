@@ -1,8 +1,8 @@
 # Plano de análise — V2: o Gate I, o pet integrado aprende na vida pela consequência?
 
 Status (2026-10-21): **PROPOSTO**, registrado **antes de qualquer run** e antes do código da tarefa (`docs/TAREFA_V2_GATE_I.md`). As GI-1
-a GI-5 estão DECIDIDAS (`docs/futuro/gate_integracao_pet.md`, seção 7). As decisões deste plano (as mesmas da tarefa): as GT-1 a GT-7
-DECIDIDAS pelo Matheus em 2026-10-21, pela recomendação; a GT-8 (o prefixo) aberta.
+a GI-5 estão DECIDIDAS (`docs/futuro/gate_integracao_pet.md`, seção 7). As decisões deste plano (as mesmas da tarefa): as GT-1 a GT-8
+DECIDIDAS pelo Matheus em 2026-10-21, pela recomendação.
 
 **Regras deste plano:**
 - Os números novos são PROPOSTOS, SEM FONTE, salvo onde citam um artefato.
@@ -159,7 +159,7 @@ entram como evidência. Ele roda com o sim do Matheus.
 | o piloto | **63101…63505** (nova; DECIDIDA, GT-6) | 63101, 63202, 63303, 63404, 63505 (K_u = 4) |
 | a validação | **64101…64505** (nova; DECIDIDA, GT-6) | 64101, 64202, 64303, 64404, 64505 (K_u do adendo 1) |
 
-- **O prefixo das unidades:** `"pet_que_pensa"` (GT-8). A x e a fruta ao lado saem pelas derivações do J5, e as unidades são outras
+- **O prefixo das unidades:** `"pet_que_pensa"` (GT-8, DECIDIDA). A x e a fruta ao lado saem pelas derivações do J5, e as unidades são outras
   porque as bases são outras.
 - **Conferências em 2026-10-21,** no `origin/main` (`0647d3e`):
   - as duas faixas estão fora de `FAIXAS_RESERVADAS` e de `FAIXAS_QUEIMADAS`, e fora das propostas da P4 (61101 e 62101) e da V3-3
@@ -198,14 +198,14 @@ entram como evidência. Ele roda com o sim do Matheus.
 
 ## 12. Decisões do Matheus
 
-As de `docs/TAREFA_V2_GATE_I.md` (seção 8). **As GT-1 a GT-7 DECIDIDAS em 2026-10-21, pela recomendação; a GT-8 aberta.** As que
+As de `docs/TAREFA_V2_GATE_I.md` (seção 8). **As GT-1 a GT-8 DECIDIDAS em 2026-10-21, pela recomendação.** As que
 tocam este plano:
 - **GT-3:** os dois controles, com o I-APRENDE passando só contra os dois;
 - **GT-4:** como embaralhar;
 - **GT-5:** a medida;
 - **GT-6:** as faixas;
 - **GT-7:** os gates de mecanismo;
-- **GT-8:** o prefixo (ABERTA).
+- **GT-8:** o prefixo, `"pet_que_pensa"` (DECIDIDA).
 
 ## 13. Referências
 
