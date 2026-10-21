@@ -4,6 +4,7 @@
    so decoracao (aria-hidden): nenhum dado do jogo aqui, salvo o dia e a noite do motor e, na cena 3D, o pet. */
 import { useEffect, useRef, useState } from "react";
 import { CENA } from "./cenaEstado.ts";
+import { temWebGL } from "../../webgl.ts";
 
 /* planta e movel em pixel art: cada letra e uma cor, "." e transparente */
 const PLANTA = [
@@ -63,10 +64,6 @@ export function CenarioPet({ noite }: { noite: boolean }) {
   );
 }
 
-/** o navegador desenha WebGL? (sem isso, a reserva) */
-function temWebGL(): boolean {
-  try { const c = document.createElement("canvas"); return !!(c.getContext("webgl2") || c.getContext("webgl")); } catch { return false; }
-}
 /** a M3 pela pagina do jogo: so com ?medir3d=1 no endereco; mede 10 s e mostra o JSON para copiar */
 function MedirCena() {
   const [txt, setTxt] = useState<string | null>(null), [medindo, setMedindo] = useState(false);

@@ -174,6 +174,23 @@ class ModeloMundo:
         eles (o mundo sem a chave do J5), so a conta. O mapa congelado nao aprende lugar novo (PP-8)."""
         x, y = pm.x, pm.y
         troncos = getattr(pm, "troncos", ())
+        if getattr(pm, "orientacao", None) is not None:
+            # a P4 (P4-2): a percepcao veio dos sensores do contrato (o cone e a oclusao). As arvores vistas sao os troncos dela; o
+            # comedouro, que nao e objeto da percepcao, fica com a conta do raio (o acesso privilegiado da posicao, W-3)
+            arvores = {nome: (lx, ly) for nome, lx, ly in self.lugares if nome != COMEDOURO}
+            vistas = set()
+            for ident, dx, dy, _d in troncos:
+                if ident not in arvores or arvores[ident] != (x + dx, y + dy):
+                    raise RuntimeError(f"modelos do mundo: tronco {ident!r} em ({x + dx}, {y + dy}) fora do layout dos modelos")
+                vistas.add(ident)
+            for nome, lx, ly in self.lugares:
+                ve = nome in vistas if nome != COMEDOURO else dentro(lx - x, ly - y, self.raio_visao)
+                if nome not in self.lugares_vistos and ve:
+                    if "mapa" in self.congelados:
+                        self.ignoradas["mapa"] += 1
+                    else:
+                        self.lugares_vistos[nome] = k
+            return
         if troncos:
             arvores = {nome: (lx, ly) for nome, lx, ly in self.lugares if nome != COMEDOURO}
             por_conta = {nome for nome, (lx, ly) in arvores.items() if dentro(lx - x, ly - y, self.raio_visao)}

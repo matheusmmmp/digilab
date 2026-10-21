@@ -78,9 +78,9 @@ export const BRASAO: Record<string, { peca: NomeDeco; esquerda: NomeDeco; direit
   ferrugem: { peca: "Crest_Combine_4", esquerda: "Crest_Left_4", direita: "Crest_Right_4", nome: "Conhecimento" },
   limo: { peca: "Crest_Combine_5", esquerda: "Crest_Left_5", direita: "Crest_Right_5", nome: "Sinceridade" },
 };
-/** fundo ilustrado da luta de cada NPC da campanha (recortes sem o chefe; a arena fica com o octogono) */
+/** fundo ilustrado da luta de cada NPC da campanha (recortes sem o chefe; a arena fica com o octogono). O Gazimon, da Campina, ficou sem:
+    o recorte dele tinha um pergaminho com glifos orientais (docs/TAREFA_V2_EXPLORACAO.md) */
 export const FUNDO_NPC: Record<string, NomeDeco> = {
-  npc_tier1_brutamontes: "campina_gazimon",
   npc_tier2_sentinela: "torre_tortomon",
   npc_tier2_carcereiro: "torre_guardromon",
   npc_tier2_porteiro: "torre_devidramon",

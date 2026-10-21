@@ -16,7 +16,7 @@ const APP = `${PREFIXO}/web/dist/`, HTML = `${PREFIXO}/web/digilab_sprites.html?
 const ABAS: [string, string, string][] = [
   ["Pet", "", "pet/estado"], ["Crescer", "Treinar", "crescer/treinar"], ["Crescer", "Aprendizado", "crescer/aprend"], ["Crescer", "Evolução", "crescer/evolucao"],
   ["Crescer", "Itens", "crescer/itens"],
-  ["Lutar", "Arena", "lutar/arena"], ["Lutar", "Campanha", "lutar/campanha"], ["Lutar", "Fronteira", "lutar/fronteira"], ["Lutar", "Medalhas", "lutar/medalhas"], ["Diário", "Registro", "diario/registro"], ["Diário", "Catálogo", "diario/catalogo"],
+  ["Lutar", "Arena", "lutar/arena"], ["Lutar", "Exploração", "lutar/campanha"], ["Lutar", "Fronteira", "lutar/fronteira"], ["Lutar", "Medalhas", "lutar/medalhas"], ["Diário", "Registro", "diario/registro"], ["Diário", "Catálogo", "diario/catalogo"],
   ["Diário", "Cenários", "diario/cenarios"], ["Conversar", "", "conversar/chat"],
 ];
 
@@ -126,7 +126,7 @@ for (const [versao, save] of Object.entries(SAVES)) {
     expect(await numLog(page, "l")).toBe(lAntes);
     await page.goBack();
     await expect(page).toHaveURL(/#\/lutar\/arena$/);
-    await page.getByRole("tab", { name: "Campanha" }).click();
+    await page.getByRole("tab", { name: "Exploração" }).click();
     await page.locator(".camp-lutar:not([disabled])").click();
     await expect(res).toBeVisible({ timeout: 90_000 });
     await page.locator(".res-continuar").click();
@@ -277,7 +277,8 @@ for (const largura of [390, 899, 900, 1099, 1100, 1280]) {
     await page.setViewportSize({ width: largura, height: 800 });
     await semear(page, SAVES.v3);
     const lateral = largura >= 900, desktop = largura >= 1100;
-    for (const [rota, esq, dir] of [["crescer/evolucao", ".evo-arv", ".evo-hist"], ["lutar/campanha", ".mapa-ilhas", ".camp-lutar"], ["conversar/chat", ".conv-lista", ".conv-status"]]) {
+    /* a Exploracao: o mapa 3D e, no desktop, o lugar na coluna da direita (no celular o lugar abre na folha: o cartao fica no mapa) */
+    for (const [rota, esq, dir] of [["crescer/evolucao", ".evo-arv", ".evo-hist"], ["lutar/campanha", ".mapa-expl", desktop ? ".camp-lutar" : ".expl-cartao"], ["conversar/chat", ".conv-lista", ".conv-status"]]) {
       await page.goto(APP + "#/" + rota);
       await page.waitForTimeout(500);
       const r = await page.evaluate(([e, d]) => {
@@ -433,7 +434,7 @@ test("arenas: a Cidadela pede três lutas seguidas sem cura e dá a medalha; no 
   await semear(page, SAVE_ARENAS, undefined, TAMER_3);
   const erros = vigiarErros(page);
   await page.goto(APP + "#/lutar/campanha");
-  await expect(page.locator(".mapa-ilhas img.ilha")).toHaveCount(7);
+  await expect(page.locator(".expl-cartao")).toHaveCount(7);
   const cartao = page.locator(".camp-arena");
   await expect(cartao).toContainText("Arena · Resistência");
   await expect(cartao).toContainText("líder: Myotismon");
@@ -473,47 +474,92 @@ test("arenas: a Cidadela pede três lutas seguidas sem cura e dá a medalha; no 
   expect(erros).toEqual([]);
 });
 
-/* a campanha dos pets v6: seis ilhas e a Fronteira no alto (trancada com 3 medalhas), celular (360, 390) e desktop (1280), claro e escuro */
+/* a Exploracao dos pets v6 (docs/TAREFA_V2_EXPLORACAO.md): o mapa 3D de seis ilhas e a Fronteira no alto (trancada com 3 medalhas), os
+   cartoes com o que o motor tem e o marcador do proximo desafio; no celular o cartao abre a folha do lugar. Celular (360, 390) e desktop
+   (1280), claro e escuro */
 for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 1280]) {
-  test(`arenas: campanha com 6 ilhas e a Fronteira em ${largura} px, tema ${tema === "light" ? "claro" : "escuro"}`, async ({ page }) => {
+  test(`exploração: o mapa 3D com 6 ilhas e a Fronteira em ${largura} px, tema ${tema === "light" ? "claro" : "escuro"}`, async ({ page }) => {
     await page.setViewportSize({ width: largura, height: 800 });
     await page.emulateMedia({ colorScheme: tema });
     await semear(page, SAVE_ARENAS, undefined, TAMER_3);
     const erros = vigiarErros(page);
     await page.goto(APP + "#/lutar/campanha");
-    await expect(page.locator(".mapa-ilhas img.ilha")).toHaveCount(7);
-    await expect(page.locator(".mapa-ilhas .lugar")).toHaveCount(7);
-    await expect(page.locator(".mapa-ilhas .lugar--fronteira")).toContainText("6 medalhas");
-    await expect(page.locator(".camp-arena")).toBeVisible();
-    await page.waitForTimeout(600);
+    await expect(page.getByRole("tab", { name: "Exploração" })).toHaveAttribute("aria-selected", "true");
+    await expect(page.locator(".mapa-expl[data-pronto]")).toBeVisible();
+    await expect(page.locator(".mapa-ilhas")).toHaveCount(0);
+    await expect(page.locator(".expl-cartao")).toHaveCount(7);
+    await expect(page.locator(".expl-cartao--fronteira")).toContainText("abre com as 6 medalhas (3 de 6)");
+    await expect(page.locator(".expl-cartao").nth(0)).toContainText("vencido · ");
+    await expect(page.locator(".expl-cartao").nth(3)).toContainText("sugerido: Ultimate");
+    await expect(page.locator(".expl-cartao").nth(4)).toContainText("vença alguém em Cidadela");
+    await expect(page.locator(".expl-cartao.expl-cartao--trancado")).toHaveCount(3);
+    await expect(page.locator(".expl-marcador")).toContainText("próximo desafio");
+    await expect(page.locator(".expl-cartao").nth(3)).toHaveAttribute("aria-label", "4. Cidadela: sugerido: Ultimate; próximo desafio");
+    /* nada do que o motor nao tem: nem nivel numerico, nem "???" */
+    await expect(page.locator(".mapa-expl")).not.toContainText(/Nv\.|\?\?\?/);
+    await page.waitForTimeout(400);
     const r = await page.evaluate(desk => {
-      const mapa = document.querySelector(".mapa-ilhas")!.getBoundingClientRect();
-      const caixas = [...document.querySelectorAll(".mapa-ilhas .lugar")].map(e => e.getBoundingClientRect());
-      const ilhas = [...document.querySelectorAll(".mapa-ilhas img.ilha")].map(e => e.getBoundingClientRect());
+      const mapa = document.querySelector(".mapa-expl-mundo")!.getBoundingClientRect(), tela = document.querySelector<HTMLCanvasElement>(".mapa-expl-tela")!;
+      const caixas = [...document.querySelectorAll(".expl-cartao")].map(e => e.getBoundingClientRect());
       const sobrepoe = caixas.some((a, i) => caixas.some((b, j) => j > i && a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom));
-      const fora = ilhas.filter(b => b.left < mapa.left - 1 || b.right > mapa.right + 1 || b.top < mapa.top - 1 || b.bottom > mapa.bottom + 1).length;
-      /* no celular o cartao do lugar sobe sobre o pe do mapa: nenhuma plaquinha pode ficar embaixo dele */
-      const det = document.querySelector(".camp-det"), limite = det ? Math.min(mapa.bottom, det.getBoundingClientRect().top) : mapa.bottom;
-      const placasFora = caixas.filter(b => b.left < mapa.left - 1 || b.right > mapa.right + 1 || b.bottom > limite + 1).length;
+      const fora = caixas.filter(b => b.left < mapa.left - 1 || b.right > mapa.right + 1 || b.top < mapa.top - 1 || b.bottom > mapa.bottom + 1).length;
       const visivel = (e: Element) => (e as HTMLElement).offsetParent !== null;
       const pequenos = [...document.querySelector(desk ? ".camp-tela" : "body")!.querySelectorAll("button, select, input, summary, a")].filter(visivel).flatMap(e => {
         const b = e.getBoundingClientRect();
         return b.height < 44 || b.width < 44 ? [`${e.tagName}.${(e as HTMLElement).className} ${Math.round(b.width)}x${Math.round(b.height)}`] : [];
       });
-      const nomes = [...document.querySelectorAll(".mapa-ilhas .lugar-placa")].map(e => e.textContent);
-      return { larg: document.documentElement.scrollWidth, janela: innerWidth, sobrepoe, fora, placasFora, pequenos, nomes, alt: mapa.height, largMapa: mapa.width };
+      const nomes = [...document.querySelectorAll(".expl-nome")].map(e => e.textContent);
+      return { larg: document.documentElement.scrollWidth, janela: innerWidth, sobrepoe, fora, pequenos, nomes, alt: mapa.height, largMapa: mapa.width,
+        canvas: [tela.width, tela.height] };
     }, largura >= 1100);
     expect(r.nomes).toEqual(["Campina", "Torre de pedra", "Floresta", "Cidadela", "Lago", "Montanha Espiral", "Fronteira"]);
     expect(r.larg, "rolagem lateral").toBeLessThanOrEqual(r.janela);
-    expect(r.sobrepoe, "plaquinhas dos lugares sobrepostas").toBe(false);
-    expect(r.fora, "ilhas fora do mapa").toBe(0);
-    expect(r.placasFora, "plaquinhas fora do mapa").toBe(0);
+    expect(r.sobrepoe, "cartões dos lugares sobrepostos").toBe(false);
+    expect(r.fora, "cartões fora do mapa").toBe(0);
     expect(r.pequenos, "alvos menores que 44 px").toEqual([]);
-    expect(r.alt / r.largMapa, "o mapa das seis ilhas e mais alto que largo").toBeGreaterThan(1.3);
-    await expect(page.locator(".camp-arena")).toContainText("líder: Myotismon");
+    expect(r.canvas[0] * r.canvas[1], "a vista 3D desenhou").toBeGreaterThan(0);
+    if (largura < 1100) {
+      expect(r.alt / r.largMapa, "no celular o mapa é mais alto que largo e a página rola").toBeGreaterThan(2);
+      /* o cartao do lugar abre a folha com o detalhe (a arena, o Desafiar) */
+      await expect(page.locator(".camp-arena")).toHaveCount(0);
+      await page.locator(".expl-cartao").nth(3).click();
+      const folha = page.locator("dialog.folha[open]");
+      await expect(folha).toHaveAttribute("aria-label", "Cidadela");
+      await expect(folha.locator(".camp-arena")).toContainText("líder: Myotismon");
+      await expect(folha.locator(".camp-lutar")).toContainText("Desafiar Myotismon (3 lutas seguidas)");
+      await folha.locator(".folha-x").click();
+      await expect(page.locator("dialog.folha[open]")).toHaveCount(0);
+      /* um lugar trancado tambem abre: o detalhe diz o que falta */
+      await page.locator(".expl-cartao").nth(4).click();
+      await expect(page.locator("dialog.folha[open] .camp-det-txt")).toContainText("Trancado: vença alguém em Cidadela antes.");
+    } else {
+      await expect(page.locator(".camp-lado .camp-arena")).toContainText("líder: Myotismon");
+      await page.locator(".expl-cartao").nth(1).click();
+      await expect(page.locator(".camp-lado .campd-faixa")).toContainText("Torre de pedra");
+      await expect(page.locator(".expl-cartao").nth(1)).toHaveClass(/\bsel\b/);
+    }
     expect(erros).toEqual([]);
   });
 }
+/* sem WebGL: a Exploracao fica com a tela de antes (o mapa 2D das ilhas e o cartao do lugar), sem erro */
+test("exploração: sem WebGL, o mapa 2D de antes", async ({ browser }) => {
+  const ctx = await browser.newContext({ baseURL: test.info().project.use.baseURL, viewport: { width: 390, height: 844 } });
+  const p = await ctx.newPage();
+  await p.addInitScript(() => {
+    const orig = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (this: HTMLCanvasElement, tipo: string, ...r: unknown[]) {
+      return /webgl/.test(tipo) ? null : (orig as (...a: unknown[]) => unknown).call(this, tipo, ...r);
+    } as typeof orig;
+  });
+  await semear(p, SAVE_ARENAS, undefined, TAMER_3);
+  const erros = vigiarErros(p);
+  await p.goto(APP + "#/lutar/campanha");
+  await expect(p.locator(".mapa-ilhas .lugar")).toHaveCount(7);
+  await expect(p.locator(".mapa-expl")).toHaveCount(0);
+  await expect(p.locator(".camp-arena")).toContainText("líder: Myotismon");
+  expect(erros).toEqual([]);
+  await ctx.close();
+});
 
 /* ---------------------------------------------------------------- itens do Tamer (medalhas parte 3, docs/DESIGN_MEDALHAS_ARENAS.md
    secao 13): o lider da o item com a medalha; o chip se equipa em Crescer · Itens e vale na luta; a carta se escolhe antes da luta */
@@ -632,7 +678,9 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 
     expect(r.pequenos, "alvos menores que 44 px").toEqual([]);
     expect(r.aoLado, "desktop: os itens ao lado do resumo").toBe(largura >= 1100);
     /* a escolha da carta na campanha, no mesmo tamanho */
-    await irPara(page, "Lutar", "Campanha", "lutar/campanha");
+    await irPara(page, "Lutar", "Exploração", "lutar/campanha");
+    /* no celular a escolha da carta fica na folha do lugar */
+    if (largura < 1100) await page.locator(".expl-cartao.sel").click();
     await expect(page.locator(".carta-escolha select")).toBeVisible();
     const c = await page.evaluate(() => ({ larg: document.documentElement.scrollWidth, janela: innerWidth, alt: document.querySelector(".carta-escolha select")!.getBoundingClientRect().height }));
     expect(c.larg).toBeLessThanOrEqual(c.janela);
@@ -654,8 +702,8 @@ test("fronteira: com as 6 medalhas a ilha abre; a Liga tem 6 lutas sem cura, dá
   const erros = vigiarErros(page);
   /* a ilha no alto do mapa, aberta, leva a Lutar · Fronteira */
   await page.goto(APP + "#/lutar/campanha");
-  const ilha = page.locator(".mapa-ilhas .lugar--fronteira");
-  await expect(ilha).toContainText("LIGA");
+  const ilha = page.locator(".expl-cartao--fronteira");
+  await expect(ilha).toContainText("a Liga dos Líderes está aberta");
   await ilha.click();
   await expect(page).toHaveURL(/#\/lutar\/fronteira$/);
   await expect(page.locator(".fr-card")).toHaveCount(6);

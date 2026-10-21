@@ -87,6 +87,10 @@ FAIXAS_RESERVADAS = (
                    "pelo Matheus em 2026-10-21)"),
     (59101, 59505, "competicao entre as regras urgentes (V3-3/V3-4), a validacao (TAREFA_V2_V3_COMPETICAO, CR-6, decidida pelo Matheus em "
                    "2026-10-21)"),
+    (61101, 61505, "P4, o cerebro A com o planejador no mundo corporificado, o piloto (PLANO_ANALISE_V2_P4_CORPORIFICADO, PC-1, "
+                   "aprovada pelo Matheus em 2026-10-21)"),
+    (62101, 62505, "P4, o cerebro A com o planejador no mundo corporificado, a validacao (PLANO_ANALISE_V2_P4_CORPORIFICADO, PC-1, "
+                   "aprovada pelo Matheus em 2026-10-21)"),
     (50001, 50020, "analise de poder, piloto"), (60001, 60160, "confirmatoria"), (69001, 69001, "M1, gate G1"),
     (80001, 82004, "linhagem E1 (piloto, genomas e ambientes)"),
     (20260900, 20261800, "fala, voz, comando e bootstraps (sementes de 2026-09/10 e semente + i)"),

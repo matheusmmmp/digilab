@@ -11,7 +11,7 @@ export const DESTINOS: Record<Destino, readonly Aba[]> = {
 export const ORDEM_DESTINOS: readonly Destino[] = ["pet", "crescer", "lutar", "diario", "conversar"];
 export const NOME_DESTINO: Record<Destino, string> = { pet: "Pet", crescer: "Crescer", lutar: "Lutar", diario: "Diário", conversar: "Conversar" };
 export const NOME_ABA: Record<Aba, string> = {
-  estado: "Estado", treinar: "Treinar", aprend: "Aprendizado", evolucao: "Evolução", itens: "Itens", arena: "Arena", campanha: "Campanha", fronteira: "Fronteira", medalhas: "Medalhas",
+  estado: "Estado", treinar: "Treinar", aprend: "Aprendizado", evolucao: "Evolução", itens: "Itens", arena: "Arena", campanha: "Exploração", fronteira: "Fronteira", medalhas: "Medalhas",
   registro: "Registro", catalogo: "Catálogo", geracoes: "Gerações", cenarios: "Cenários", chat: "Conversa",
 };
 export const DESTINO_DA_ABA = Object.fromEntries(Object.entries(DESTINOS).flatMap(([d, abas]) => abas.map(a => [a, d]))) as Record<Aba, Destino>;
