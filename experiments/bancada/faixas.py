@@ -82,6 +82,10 @@ FAIXAS_RESERVADAS = (
     (56101, 56505, "credito por canal ate o alvo (V3-9), o piloto (TAREFA_V2_V3_CREDITO_CANAL, CC-6, decidida pelo Matheus em 2026-10-21)"),
     (57101, 57505, "credito por canal ate o alvo (V3-9), a validacao (TAREFA_V2_V3_CREDITO_CANAL, CC-6, decidida pelo Matheus em "
                    "2026-10-21)"),
+    (58101, 58505, "competicao entre as regras urgentes (V3-3/V3-4), o piloto e a calibracao (TAREFA_V2_V3_COMPETICAO, CR-6, decidida "
+                   "pelo Matheus em 2026-10-21)"),
+    (59101, 59505, "competicao entre as regras urgentes (V3-3/V3-4), a validacao (TAREFA_V2_V3_COMPETICAO, CR-6, decidida pelo Matheus em "
+                   "2026-10-21)"),
     (61101, 61505, "P4, o cerebro A com o planejador no mundo corporificado, o piloto (PLANO_ANALISE_V2_P4_CORPORIFICADO, PC-1, "
                    "aprovada pelo Matheus em 2026-10-21)"),
     (62101, 62505, "P4, o cerebro A com o planejador no mundo corporificado, a validacao (PLANO_ANALISE_V2_P4_CORPORIFICADO, PC-1, "

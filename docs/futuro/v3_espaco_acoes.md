@@ -116,6 +116,8 @@ sempre a regra registrada (conferido nas 26.880 decisões e em 20.000 observaç�
 - **[OBSERVADO]** (`v11.credito`):
   - **as decisões forçadas:** 2.658 aplicações de crédito e **0** com algum peso mudado. Elas levam **45,9% do |sinal|**;
   - **as decisões com escolha:** 19.402 aplicações, com o peso mudado em 93,6% (o resto tem sinal zero).
+  - **Correção (2026-10-21, `docs/TAREFA_V2_V3_COMPETICAO.md`, seção 10):** o espião contava a vida e o replay. As contagens absolutas
+    estão em dobro (1.329 e 9.701 aplicações); as frações valem.
 - **Por regra:**
   - o tempo livre e a fome moderada mudam o peso em 93,3% e 99,8% das aplicações;
   - todas as regras de um candidato, em 0%.

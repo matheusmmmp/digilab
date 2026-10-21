@@ -1,8 +1,10 @@
 # Gate I: o pet integrado (corpo químico, mundo, aprendizado na vida e replay no mesmo pet)
 
-Status (2026-10-21): **PROPOSTA**, só papel. É o pedido do Matheus de 2026-10-21, pelo Gerente: aumentar a chance de o cérebro, o corpo
+Status (2026-10-21): **as decisões GI-1 a GI-5 DECIDIDAS pelo Matheus em 2026-10-21, pela recomendação** (seção 7). O Gate I é um
+marco do `docs/ROADMAP_V2.md` (seção 8), **ainda não implementado**: a tarefa está em `docs/TAREFA_V2_GATE_I.md`, e o plano, em
+`docs/PLANO_ANALISE_V2_GATE_I.md`, ambos PROPOSTOS. O desenho abaixo é a proposta original, só papel. É o pedido do Matheus de 2026-10-21, pelo Gerente: aumentar a chance de o cérebro, o corpo
 químico, o aprendizado durante a vida e a genética convergirem para criaturas integradas, na direção da vida artificial que o Creatures
-exemplifica. Nada aqui está decidido, e nada aqui diz que a integração já existe. As decisões GI-1 a GI-5 (seção 7) são do Matheus.
+exemplifica. Nada aqui diz que a integração já existe.
 
 **Regras deste documento:**
 - Nenhum número novo, nenhuma semente, nenhuma faixa e nenhum gene novo. As medidas exatas do gate saem de um plano de análise próprio,
@@ -110,7 +112,8 @@ que falha não para a V2. Ele condiciona só o que depende dele (seção 4).
     comparação por "não aprende": a parte aprendida mudou menos de 1% das escolhas (`docs/RESULTADO_V2_CALIBRACAO_CEREBRO_B.md`);
   - **o cérebro C** (`digilab/policies/cerebro_c.py`): na comparação A × C (#197), empate nos dois critérios; pela regra do M6 o
     escolhido seria o C, por pouco, e o A ficou como o cérebro da web (rodada 15; `docs/PAINEL_V2.md`).
-- **A decisão** é a GI-1 (seção 7). Este documento não a toma.
+- **A decisão** é a GI-1 (seção 7), DECIDIDA em 2026-10-21: integrar tudo ao redor do A agora; uma rede recorrente ou outro modelo
+  só como pergunta própria, com o modelo definido, depois do Gate I.
 
 ## 6. A genética: o escopo proposto e o que não está definido
 
@@ -129,15 +132,17 @@ que falha não para a V2. Ele condiciona só o que depende dele (seção 4).
   - **Evoluir a arquitetura do cérebro só entra se a GI-1 escolher um cérebro com estrutura variável e se uma tarefa própria a
     especificar.** Até lá, o desenho não promete evolução de arquitetura neural.
 
-## 7. Decisões do Matheus (todas abertas, PROPOSTAS)
+## 7. Decisões do Matheus
+
+**DECIDIDAS em 2026-10-21: GI-1 a GI-5, todas pela recomendação** (pelo Gerente; a coluna "recomendação" é o que vale).
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
-| **GI-1** | o cérebro do pet integrado: (1) integrar o corpo, o mundo, o aprendizado e a genética **ao redor do cérebro A**; ou (2) adotar **também** uma rede recorrente, ou outro modelo de cérebro explicitamente definido | **(1) agora:** o Gate I e a genética ao redor do A, que é o único com aprendizado validado em parte no mundo (o G-T1) e com porte na web. **(2) só como pergunta própria**, com o modelo definido numa tarefa e comparado com o A na mesma linha de base integrada, depois do Gate I. As alternativas de (2): voltar ao B (já saiu por "não aprende"); uma rede recorrente modular com aprendizado hebbiano e modulação química, mais perto do que Cliff e Grand (1999) descrevem, que ainda não está definida no repositório; ou o C | **(1), se o destino pedir uma rede recorrente:** o genoma do prior, o Gate I e o porte web ficam feitos para as tabelas do A, os genes de topologia não têm o que codificar, e a troca depois refaz o caminho. **(2) agora:** os resultados do J5 e da P4 não passam para o cérebro novo, que pede calibração e um gate de aprendizado próprio; o Gate I espera um cérebro sem resultado, e a última rede recorrente do projeto (o B) não aprendeu |
-| **GI-2** | a linha de base integrada | **a configuração da validação do J5 com o adendo 8** (o corpo químico, o mundo 2D com a fruta ao lado, o cérebro A com o planejador), no mundo 2D de hoje | a do J1 (sem o planejador): o aprendiz perde do instinto ali (#285), e o I-APRENDE tende a falhar por construção. Esperar o mundo da P4: o gate passa a depender do contrato, sem que a pergunta peça |
-| **GI-3** | o critério do I-APRENDE | **uma validação nova na linha de base, com o controle do sinal embaralhado** (`mundo_3d.md`, seção 5.2) ou o braço sem aprendizado, com plano próprio | contar o G-T1 do J5 (#370): ele compara o planejador com o hábito, os dois aprendendo, e o G-T1-CONG não passou; o gate passaria com um resultado que não isola o aprendizado pela consequência. A validação nova custa um plano e uma run curta |
-| **GI-4** | o lugar do gate | **antes do G1 e do G2 genéticos, depois do Gate C em parte, em paralelo à P4, no mundo 2D;** o G0 pode vir antes | depois da P4: a genética espera o contrato sem razão. Sem o gate: a h² e a reprodução medem um pet que não junta as peças |
-| **GI-5** | o escopo genético | **o de hoje** (o corpo, os desvios do prior e a plasticidade, em codificação direta); a topologia fora até a GI-1 escolher um cérebro com estrutura variável e uma tarefa a especificar | prometer a topologia agora: um gene sem o que codificar no A, e uma expectativa que o desenho não sustenta |
+| **GI-1** (DECIDIDA) | o cérebro do pet integrado: (1) integrar o corpo, o mundo, o aprendizado e a genética **ao redor do cérebro A**; ou (2) adotar **também** uma rede recorrente, ou outro modelo de cérebro explicitamente definido | **(1) agora:** o Gate I e a genética ao redor do A, que é o único com aprendizado validado em parte no mundo (o G-T1) e com porte na web. **(2) só como pergunta própria**, com o modelo definido numa tarefa e comparado com o A na mesma linha de base integrada, depois do Gate I. As alternativas de (2): voltar ao B (já saiu por "não aprende"); uma rede recorrente modular com aprendizado hebbiano e modulação química, mais perto do que Cliff e Grand (1999) descrevem, que ainda não está definida no repositório; ou o C | **(1), se o destino pedir uma rede recorrente:** o genoma do prior, o Gate I e o porte web ficam feitos para as tabelas do A, os genes de topologia não têm o que codificar, e a troca depois refaz o caminho. **(2) agora:** os resultados do J5 e da P4 não passam para o cérebro novo, que pede calibração e um gate de aprendizado próprio; o Gate I espera um cérebro sem resultado, e a última rede recorrente do projeto (o B) não aprendeu |
+| **GI-2** (DECIDIDA) | a linha de base integrada | **a configuração da validação do J5 com o adendo 8** (o corpo químico, o mundo 2D com a fruta ao lado, o cérebro A com o planejador), no mundo 2D de hoje | a do J1 (sem o planejador): o aprendiz perde do instinto ali (#285), e o I-APRENDE tende a falhar por construção. Esperar o mundo da P4: o gate passa a depender do contrato, sem que a pergunta peça |
+| **GI-3** (DECIDIDA) | o critério do I-APRENDE | **uma validação nova na linha de base, com o controle do sinal embaralhado** (`mundo_3d.md`, seção 5.2) ou o braço sem aprendizado, com plano próprio | contar o G-T1 do J5 (#370): ele compara o planejador com o hábito, os dois aprendendo, e o G-T1-CONG não passou; o gate passaria com um resultado que não isola o aprendizado pela consequência. A validação nova custa um plano e uma run curta |
+| **GI-4** (DECIDIDA) | o lugar do gate | **antes do G1 e do G2 genéticos, depois do Gate C em parte, em paralelo à P4, no mundo 2D;** o G0 pode vir antes | depois da P4: a genética espera o contrato sem razão. Sem o gate: a h² e a reprodução medem um pet que não junta as peças |
+| **GI-5** (DECIDIDA) | o escopo genético | **o de hoje** (o corpo, os desvios do prior e a plasticidade, em codificação direta); a topologia fora até a GI-1 escolher um cérebro com estrutura variável e uma tarefa a especificar | prometer a topologia agora: um gene sem o que codificar no A, e uma expectativa que o desenho não sustenta |
 
 ## 8. Referências
 
