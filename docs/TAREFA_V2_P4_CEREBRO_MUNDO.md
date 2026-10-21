@@ -212,6 +212,26 @@ Os números novos (os do contrato, a G-CUSTO) continuam PROPOSTOS. A tabela abai
   - os do POC-02 (as mesmas sementes, com o corpo ligado, 3000 ticks).
 - **Interpretações** em `docs/registro/2026-10.md`.
 
+### Etapa 1, o contrato no Python (worker D, 2026-10-21)
+
+- **As faixas** 61101…61505 (o piloto) e 62101…62505 (a validação) entraram na `FAIXAS_RESERVADAS`, com o plano da P4 como fonte.
+- **O código, atrás da `ConfigContrato`** (`digilab/config.py`; desligada por padrão, os números do POC PROPOSTOS e SEM FONTE):
+  - `digilab/contrato.py`: o porte do POC em inteiros (o cone, a oclusão, os bigodes, o bloqueio e o deslize, o A\*, o controlador e o
+    empurrão da bola);
+  - `digilab/mundo.py`: a chave `sensores` monta a `PercepcaoContrato` (a de hoje, filtrada pelo cone e pela oclusão dos troncos, mais
+    a `orientacao`); a chave `controlador` anda pelo controlador nos 15 ticks da decisão; as `paredes` ficam desligadas (W-4). O
+    registro de cada decisão com alvo vai para `contrato_decisoes`;
+  - `digilab/modelo_mundo.py`: com a percepção do contrato, o mapa do planejador vê as árvores pelos troncos do cone.
+- **O cérebro não ganha entrada** (P4-2): os campos de hoje, mais a orientação, que nenhum lobo lê.
+- **Os gates:**
+  - **G2:** os gabaritos da etapa 0 e os do mundo do J5, com a chave explícita desligada, saem iguais;
+  - **G1:** o replay das vidas com as chaves (o instinto, o cérebro A e a vida de 12 dias do J5 com o planejador);
+  - **G-INT:** nenhum float no `contrato.py`, pela AST;
+  - **G-CUSTO:** a razão 2,17 numa vida de 12 dias do P1-plan (`tools/custo_p4_contrato.py`).
+- **O achado para o adendo 1:** com a orientação do último deslocamento, o pet chega menos ao alvo (de 69% a 46% das decisões com alvo
+  na vida da G-CUSTO) e oscila no alvo do cheiro, chegando de costas para a comida. A regra não mudou.
+- **Interpretações** em `docs/registro/2026-10.md`.
+
 ## Referências
 
 Nenhuma referência externa: o esboço só usa os documentos do repositório citados no texto e não alega novidade.

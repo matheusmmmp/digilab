@@ -336,3 +336,4 @@ de base em `docs/historico/registro_lotes.json`.
 
 
 - [2026-10-21 — GATE-INTEGRACAO (Claude Code, worktree `v2-gate-integracao`): o Gate I, a decisão do cérebro e o escopo genético](registro/2026-10.md)
+- [2026-10-21 — P4-ETAPA1 (worker D): o contrato sensório-motor no mundo do motor em Python](registro/2026-10.md)
