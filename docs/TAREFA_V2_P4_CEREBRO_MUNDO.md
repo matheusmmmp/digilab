@@ -185,6 +185,19 @@ Todas PROPOSTAS, com a recomendação primeiro.
   - portar o cérebro com o planejador para o POC, em paralelo.
 - **O que não se fez:** nenhum código mudou, nenhuma vida rodou, e nenhuma faixa foi reservada.
 
+### Etapa 0, os gabaritos (worker D, 2026-10-21)
+
+- **O commit dos gabaritos** (`70ecadf`) vem antes de qualquer código da P4, e dois testes os conferem (o G2).
+- **No Python** (`tests/gabarito_p4.py` → `tests/gabaritos/p4_vidas_de_hoje.json`, conferido por `tests/test_p4_gabaritos.py`):
+  - o J1 pela bancada: 36 vidas do mundo físico (P0, P0z, P1 e P3, os dois layouts, o comedouro e longe, na montagem simples; o P1 e o
+    P3 na completa);
+  - o J5 com o adendo 8: os quatro braços, T1 e T2, nas sementes 101 e 202 (16 vidas).
+- **No TS** (`web/app/test/p4_etapa0.test.ts` → `web/app/test/gabaritos/p4_etapa0_ts.json`):
+  - o sha256 dos gabaritos do Python que o `mundo.test.ts` e o `lobos_v11.test.ts` leem;
+  - os hashes do POC-01a (as três sementes do e2e);
+  - os do POC-02 (as mesmas sementes, com o corpo ligado, 3000 ticks).
+- **Interpretações** em `docs/registro/2026-10.md`.
+
 ## Referências
 
 Nenhuma referência externa: o esboço só usa os documentos do repositório citados no texto e não alega novidade.
