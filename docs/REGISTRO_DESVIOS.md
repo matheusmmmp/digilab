@@ -333,3 +333,6 @@ de base em `docs/historico/registro_lotes.json`.
 
 
 - [2026-10-21 — V3-COMPETICAO, o desenho (worker B): o que a abertura alcança e o preço do prior forte](registro/2026-10.md)
+
+
+- [2026-10-21 — GATE-INTEGRACAO (Claude Code, worktree `v2-gate-integracao`): o Gate I, a decisão do cérebro e o escopo genético](registro/2026-10.md)
