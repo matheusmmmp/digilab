@@ -58,6 +58,9 @@ for (const [largura, altura] of LARGURAS.map(l => [l, l >= 1100 ? 800 : l === 39
       /* DIGILAB_CAPTURAS_RESERVA=1: sem o atlas e sem a decoracao do UP (so locais), para capturas que vao para o repositorio ou para o
          PR; os avisos de "nao carregou" ficam escondidos so na captura */
       const reserva = process.env.DIGILAB_CAPTURAS_RESERVA === "1";
+      /* o momento da evolucao com movimento reduzido: o anel do Digivice (decoracao local) gira sem parar, e duas fotos seguidas da mesma
+         pagina variavam 2 pixels na borda dele */
+      if (SO_JANELA.has(nome)) await page.emulateMedia({ reducedMotion: "reduce" });
       if (reserva) await page.route(/\/Assets\/(digilab_atlas_up|digilab_decoracao_up|decoracao_up\/)/, r => r.abort());
       await page.goto(APP + rota);
       if (reserva) await page.addStyleTag({ content: ".app > .aviso{display:none}" });
