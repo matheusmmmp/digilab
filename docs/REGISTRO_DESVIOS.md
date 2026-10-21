@@ -326,3 +326,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-21 — V3-CREDITO-CANAL, a etapa 0 (worker B): as tabelas sombra e a G0-PODE-MUDAR, que não passa](registro/2026-10.md)
 
 - [2026-10-21 — GATEC-P4 (Claude Code, worktree `v2-gatec-p4`): o Gate C em parte, as CC decididas e o esboço da P4](registro/2026-10.md)
+- [2026-10-21 — P4-ETAPA0 (worker D): os gabaritos das vidas de hoje que a P4 vai tocar, no Python e no TS](registro/2026-10.md)
