@@ -2246,3 +2246,48 @@ class ConfigCompeticao:
 
 CONFIG_COMPETICAO = ConfigCompeticao()
 CONFIG_COMPETICAO_LIGADA = ConfigCompeticao(ligada=True)
+
+
+# =====================================================================
+# V2, a P4 (docs/TAREFA_V2_P4_CEREBRO_MUNDO.md, secao 3.1; P4-1, P4-2 e P4-4 decididas pelo Matheus em 2026-10-21): o contrato
+# sensorio-motor do POC (web/app/poc/mundo3d/, docs/futuro/mundo_3d.md, secao 4) no mundo do motor, so com o mundo fisico e um pet.
+# Tres chaves, todas desligadas por padrao (desligadas, a vida de hoje byte a byte; o G2 contra tests/gabaritos/p4_vidas_de_hoje.json):
+#   - `sensores`: a visao vira um cone em torno da orientacao do pet, com a oclusao pelos troncos (opacos, sem colisao: P4-4); os `vistos`
+#     e os `troncos` da PercepcaoMundo de hoje so trazem o que passa (o adaptador da P4-2: o cerebro nao ganha entrada). Os bigodes, o
+#     contato e o resultado percebido vao ao `ocorrido` e ao registro da decisao;
+#   - `controlador`: o andar de uma decisao sai do controlador (o A* inteiro na grade de celulas, o bloqueio e o deslize), tick a tick, nos
+#     ticks da decisao, no lugar do `passo_ate` em linha reta;
+#   - `paredes` (W-4): as paredes na borda do mapa, solidas e opacas. Fica desligada no plano da P4.
+# Os numeros sao os do POC (web/app/poc/mundo3d/config.ts), todos PROPOSTOS e SEM FONTE; o `lado_tronco` e novo (o POC nao tem arvores).
+@dataclass(frozen=True)
+class ConfigContrato:
+    sensores: bool = False                   # PROPOSTO: a chave dos sensores (o cone, a oclusao, os bigodes, o contato)
+    controlador: bool = False                # PROPOSTO: a chave do controlador (o A*, o bloqueio, o deslize)
+    paredes: bool = False                    # PROPOSTO (W-4): as paredes na borda do mapa; desligada no plano da P4 (P4-4)
+    cos_meio_cone: int = 512                 # PROPOSTO, SEM FONTE (o COS_MEIO_CONE do POC): cos(60 graus) x 1024, o cone de 120 graus
+    raio_bigode: int = 32                    # PROPOSTO, SEM FONTE (o RAIO_BIGODE do POC): 2 celulas de 16 subunidades
+    r_pet: int = 6                           # PROPOSTO, SEM FONTE (o R_PET do POC): o circulo do pet no chao
+    ticks_bloqueado: int = 3                 # PROPOSTO, SEM FONTE (o TICKS_BLOQUEADO do POC): ticks sem sair do lugar ate desistir
+    lado_tronco: int = 8                     # PROPOSTO, SEM FONTE: o lado do quadrado opaco do tronco, centrado na arvore (meia celula)
+    espessura_parede: int = 8                # PROPOSTO, SEM FONTE (o ESPESSURA_PAREDE do POC)
+
+    @property
+    def ligada(self) -> bool:
+        return self.sensores or self.controlador or self.paredes
+
+    def __post_init__(self) -> None:
+        for nome in ("sensores", "controlador", "paredes"):
+            if type(getattr(self, nome)) is not bool:
+                raise TypeError(f"ConfigContrato.{nome} e bool: {getattr(self, nome)!r}")
+        for nome in ("cos_meio_cone", "raio_bigode", "r_pet", "ticks_bloqueado", "lado_tronco", "espessura_parede"):
+            v = getattr(self, nome)
+            if type(v) is not int or v < 0:
+                raise ValueError(f"ConfigContrato.{nome} e inteiro >= 0: {v!r}")
+        if not 0 < self.cos_meio_cone <= 1024:
+            raise ValueError(f"ConfigContrato.cos_meio_cone em (0, 1024]: {self.cos_meio_cone!r}")
+        if self.r_pet == 0 or self.ticks_bloqueado == 0 or self.lado_tronco == 0:
+            raise ValueError("ConfigContrato: r_pet, ticks_bloqueado e lado_tronco positivos")
+
+
+CONFIG_CONTRATO = ConfigContrato()
+CONFIG_CONTRATO_LIGADO = ConfigContrato(sensores=True, controlador=True)

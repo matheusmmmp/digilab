@@ -77,6 +77,17 @@ liga, so com o mundo e so com um pet (fora do grupo). Desligado, nada muda. Liga
   x. As quedas ate o tick do evento usam o tipo antigo e as frutas que ja estao no chao ficam como cairam. O registro e do `Mundo`
   (`trocas_tipo`), e o replay o refaz pelo log.
 
+O contrato sensorio-motor da P4 (docs/TAREFA_V2_P4_CEREBRO_MUNDO.md, secao 3.1, etapa 1; as contas em digilab/contrato.py):
+`cfg_contrato` (ConfigContrato) liga, so com o mundo e so com um pet (fora do grupo). Desligado, nada muda (nem o resumo). Ligado:
+- `sensores`: a percepcao da decisao sai como PercepcaoContrato, com os mesmos campos e a `orientacao`: os vistos e os troncos sao os de
+  hoje que passam pelo cone em torno da orientacao e pela oclusao. Os troncos sao quadrados opacos de `lado_tronco`, sem colisao (P4-4),
+  e o tronco nao tapa a si mesmo. O cerebro nao ganha entrada (P4-2);
+- `controlador`: nas acoes com alvo, o pet anda pelo controlador do POC nos ticks da decisao (o A* refeito a cada tick, o bloqueio e o
+  deslize), em vez do salto do `passo_ate`; o deslocamento e o comprimento andado; o `chegou` continua o do raio de pegar;
+- `paredes` (W-4; desligada no plano da P4): as quatro paredes na borda do mapa, que colidem e tapam;
+- a orientacao (16 setores) vem do ultimo deslocamento e comeca no setor 0, como no POC; parado, fica. O registro de cada decisao com alvo
+  (`contrato_decisoes` e o `ocorrido["contrato"]`): a orientacao, por que parou, o contato, os bigodes, o resultado e a trajetoria.
+
 O Paladar, o lado do mundo (docs/futuro/paladar.md, secao 3.1, etapa 1): `cfg_paladar` (ConfigPaladar) liga, so com o mundo. Desligado,
 nada muda. Ligado, cada consumo leva o perfil de gosto do tipo comido (um dict {qualidade: inteiro em [0, C]}, uma copia do da config):
 o registro do consumo (`consumos_mundo`, e com ele o `ocorrido["comeu"]` do `comer` e do "achou e comeu") ganha `perfil`, o dict na comida
@@ -103,6 +114,8 @@ from .config import CONFIG_BOLA, CONFIG_DONOS, CONFIG_MUNDO, CONFIG_MUNDO_LIGADA
 from .config import CONFIG_BANHEIRO, CONFIG_PQP_MUNDO, ConfigBanheiro, ConfigDonos, ConfigPetQuePensaMundo
 from .config import CONFIG_PALADAR, ConfigPaladar
 from .config import CONFIG_FRUTA_AO_LADO, ConfigFrutaAoLado
+from .config import CONFIG_CONTRATO, ConfigContrato
+from . import contrato as ct
 from .config import ConfigOlfato, ConfigOuvido, ConfigSentidos
 from .corpo import leitura_orgao
 from .donos import Visao
@@ -292,6 +305,16 @@ class PercepcaoMundo:
     direcao_cheiro: int
     alvo_pendente: str | None
     troncos: tuple = ()
+
+
+@dataclass(frozen=True)
+class PercepcaoContrato(PercepcaoMundo):
+    """A P4 (docs/TAREFA_V2_P4_CEREBRO_MUNDO.md, secao 3.2; P4-2): a PercepcaoMundo de hoje montada pelos sensores do contrato, com a chave
+    `sensores` da ConfigContrato. Os `vistos` e os `troncos` so trazem o que passa pelo cone em torno da `orientacao` e pela oclusao dos
+    troncos (e das paredes, com a chave delas). O cerebro nao ganha entrada: os campos sao os de hoje, mais a `orientacao`, que nenhum
+    lobo le; o ModeloMundo a usa so para saber que a visao foi a do cone."""
+
+    orientacao: int = 0
 
 
 @dataclass(frozen=True)
@@ -868,10 +891,17 @@ class Mundo:
                 for c in self.comidas.values() if self.situacao(c, tick) == "madura"]
 
     def perceber(self, x: int, y: int, tick: int, alvo_pendente: str | None = None, troncos: bool = False,
-                 cheiro: bool = True) -> PercepcaoMundo:
+                 cheiro: bool = True, contrato: tuple | None = None) -> PercepcaoMundo:
         """Pura (nao sorteia nem muda nada): o que um pet em (x, y) percebe agora (MF-3); `alvo_pendente` e o do pet. `troncos` (o J5):
         os troncos a vista entram na percepcao. `cheiro` False (o orgao do Olfato da comida, dois pets, secao 5.6; G-SEM-DIRECAO): o
-        cheiro e a direcao do cheiro nem sao calculados e ficam 0; o pet so sente o cheiro pelos receptores do corpo."""
+        cheiro e a direcao do cheiro nem sao calculados e ficam 0; o pet so sente o cheiro pelos receptores do corpo. `contrato` (a P4,
+        com a chave `sensores`): (orientacao, cos_meio, opacos, quadrados dos troncos); os vistos e os troncos passam pelo cone e pela
+        oclusao (o tronco nao tapa a si mesmo), e a percepcao sai como PercepcaoContrato."""
+        def ve(ox: int, oy: int, proprio=None) -> bool:
+            if contrato is None:
+                return True
+            orientacao, cos_meio, opacos, _q = contrato
+            return ct.visivel(x, y, ox, oy, orientacao, self.raio_visao, cos_meio, tuple(o for o in opacos if o is not proprio))
         vistos = []
         for c in self.comidas.values():
             sit = self.situacao(c, tick)
@@ -879,15 +909,22 @@ class Mundo:
                 continue
             dx, dy = c["x"] - x, c["y"] - y
             d = distancia(dx, dy)
-            if d <= self.raio_visao:
+            if d <= self.raio_visao and ve(c["x"], c["y"]):
                 vistos.append((c["id"], c["tipo"] if sit == "madura" else c["tipo"] + "_podre", dx, dy, d))
         bx, by = self.bola_em(tick)
         d = distancia(bx - x, by - y)
-        if d <= self.raio_visao:
+        if d <= self.raio_visao and ve(bx, by):
             vistos.append((ID_BOLA, "bola", bx - x, by - y, d))
         vistos.sort(key=lambda v: (v[4], v[1], v[0]))
         intensidade, direcao = direcao_do_cheiro(x, y, self.fontes_de_cheiro(tick), self.cmf) if cheiro else (0, 0)
         p = PercepcaoMundo(x, y, regiao_de(x, self.cmf), tuple(vistos[:self.cmf.max_vistos]), intensidade, direcao, alvo_pendente)
+        if contrato is not None:
+            quadrados = contrato[3]
+            p = PercepcaoContrato(**{**p.__dict__, "orientacao": contrato[0]})
+            if troncos:
+                return replace(p, troncos=tuple(t for t in self.troncos_perto(x, y)
+                                                if ve(x + t[1], y + t[2], quadrados.get(t[0]))))
+            return p
         return replace(p, troncos=tuple(self.troncos_perto(x, y))) if troncos else p
 
     def maduras_perto(self, x: int, y: int, tick: int, raio: int) -> list[tuple[int, str, int]]:
@@ -959,8 +996,12 @@ class MotorMundo(MotorFrutas):
 
     def __init__(self, *a, cfg_mundo: ConfigMundo | None = None, efeito_frutas: dict | None = None, mundo: "Mundo | None" = None,
                  entrada_mundo: int = 0, cfg_banheiro: ConfigBanheiro | None = None, cfg_pqp: ConfigPetQuePensaMundo | None = None,
-                 cfg_paladar: ConfigPaladar | None = None, cfg_fruta_ao_lado: ConfigFrutaAoLado | None = None, **kw) -> None:
+                 cfg_paladar: ConfigPaladar | None = None, cfg_fruta_ao_lado: ConfigFrutaAoLado | None = None,
+                 cfg_contrato: ConfigContrato | None = None, **kw) -> None:
         super().__init__(*a, **kw)
+        self.cct = cfg_contrato or CONFIG_CONTRATO
+        if not isinstance(self.cct, ConfigContrato):
+            raise TypeError(f"cfg_contrato e uma ConfigContrato: {self.cct!r}")
         self.cmf = cfg_mundo or CONFIG_MUNDO
         self.cbh = cfg_banheiro or CONFIG_BANHEIRO
         self.cpq = cfg_pqp or CONFIG_PQP_MUNDO
@@ -981,6 +1022,8 @@ class MotorMundo(MotorFrutas):
                 raise ValueError("o Paladar (ConfigPaladar) exige o mundo fisico (ConfigMundo.ligada): os perfis sao das comidas do mapa")
             if self.cfal.ligada:
                 raise ValueError("a fruta ao lado (ConfigFrutaAoLado) exige o mundo fisico (ConfigMundo.ligada)")
+            if self.cct.ligada:
+                raise ValueError("o contrato da P4 (ConfigContrato) exige o mundo fisico (ConfigMundo.ligada)")
             return                                     # desligado: o MotorFrutas byte a byte (nem embrulho, nem Mundo)
         if self.cf.ligada or self.cb.ligada:
             raise ValueError("o mundo substitui o cenario do N4 e da A1: ConfigFrutas e ConfigBola desligadas com ConfigMundo.ligada")
@@ -1049,6 +1092,12 @@ class MotorMundo(MotorFrutas):
             self.troncos_vistos: dict[str, int] = {}     # id -> o primeiro tick do mundo em que o pet viu o tronco
             self.mundo.ligar_trocas()
 
+        if self.cct.ligada:
+            # a P4 (docs/TAREFA_V2_P4_CEREBRO_MUNDO.md, secao 3.1): o contrato, so com um pet (o grupo nao tem o controlador nem o cone)
+            if mundo is not None:
+                raise ValueError("o contrato da P4 (ConfigContrato) roda com um pet, fora do grupo")
+            self._montar_contrato()
+
         self._grupo = None
         self.ident: str | None = None
         self._social: PercepcaoSocial | None = None     # a percepcao social da decisao (None sozinho)
@@ -1070,6 +1119,30 @@ class MotorMundo(MotorFrutas):
         self.a_vista: dict[str, int] = {}               # decisoes com cada outro a vista
         self.decisoes_no_grupo = 0                      # decisoes com outro pet presente
         self.politica = _PoliticaComMundo(self.politica, self)
+
+    # ------------------------------------------------------------ a P4: o contrato sensorio-motor (ConfigContrato)
+    def _montar_contrato(self) -> None:
+        """Os solidos do contrato: as paredes na borda do mapa (so com a chave `paredes`; solidas e opacas) e os quadrados dos troncos (com a
+        chave `sensores`; opacos, sem colisao, P4-4). A orientacao do pet comeca no setor 0, como no POC."""
+        cc, cm = self.cct, self.cmf
+        largura, altura, e = cm.celulas_x * cm.sub, cm.celulas_y * cm.sub, cc.espessura_parede
+        paredes = ()
+        if cc.paredes:
+            paredes = (ct.Solido(-e, -e, largura + e, 0, "parede", True, True), ct.Solido(-e, altura, largura + e, altura + e, "parede", True, True),
+                       ct.Solido(-e, 0, 0, altura, "parede", True, True), ct.Solido(largura, 0, largura + e, altura, "parede", True, True))
+        meio = cc.lado_tronco // 2
+        self._quadrados_troncos = {a["id"]: ct.Solido(a["x"] - meio, a["y"] - meio, a["x"] - meio + cc.lado_tronco,
+                                                      a["y"] - meio + cc.lado_tronco, "tronco", False, True)
+                                   for a in self.mundo.arvores} if cc.sensores else {}
+        self._solidos = paredes                                   # os que colidem (o controlador e os bigodes)
+        self._opacos = paredes + tuple(self._quadrados_troncos.values())
+        self.orientacao = 0
+        self.contrato_decisoes: list[dict] = []                   # por decisao com alvo: o que o controlador e os sensores registraram
+
+    def _contrato_da_percepcao(self) -> tuple | None:
+        if not self.cct.sensores:
+            return None
+        return (self.orientacao, self.cct.cos_meio_cone, self._opacos, self._quadrados_troncos)
 
     # ------------------------------------------------------------ o que e do mundo (lido do Mundo)
     @property
@@ -1147,7 +1220,8 @@ class MotorMundo(MotorFrutas):
         """Pura (nao sorteia nem muda nada): o que o pet percebe agora."""
         x, y = self.pet
         pend = self._pendente["alvo"].tipo if self._pendente is not None else None
-        return self.mundo.perceber(x, y, self._tm(tick), pend, troncos=self.cpq.ligada, cheiro=not self._olfato_comida())
+        return self.mundo.perceber(x, y, self._tm(tick), pend, troncos=self.cpq.ligada, cheiro=not self._olfato_comida(),
+                                   contrato=self._contrato_da_percepcao())
 
     def _observacao_depois_mundo(self) -> Observacao:
         """A observacao seguinte da decisao, com a consequencia do mundo aplicada (o MotorCorpo poe o `obs.corpo` por cima)."""
@@ -1403,11 +1477,19 @@ class MotorMundo(MotorFrutas):
                 alvo = self.alvo_padrao(acao, cands)
             else:
                 self._validar_alvo(acao, alvo, cands)
-            x1, y1 = (x0, y0) if alvo is None else passo_ate(x0, y0, alvo.x, alvo.y, self._alcance, self.cmf)
+            andar = None
+            if alvo is not None and self.cct.controlador:      # a P4: o controlador do contrato, nos ticks da decisao
+                cm = self.cmf
+                andar = ct.controlar(x0, y0, alvo.x, alvo.y, self._raio_pegar, self.cfg.intervalo_decisao_ticks, cm.velocidade,
+                                     self.cct.r_pet, self._solidos, cm.celulas_x, cm.celulas_y, cm.sub, self.cct.ticks_bloqueado,
+                                     self.orientacao)
+                x1, y1 = andar.x, andar.y
+            else:
+                x1, y1 = (x0, y0) if alvo is None else passo_ate(x0, y0, alvo.x, alvo.y, self._alcance, self.cmf)
             if self._grupo is not None:
                 self._tick_social = {"tick": self._tm(tick), "de": (x0, y0), "alvo": alvo, "pendente_antes": self._pendente_antes,
                                      "social": self._id_social(alvo), "comeu": None}
-            desloc = distancia(x1 - x0, y1 - y0)
+            desloc = distancia(x1 - x0, y1 - y0) if andar is None else andar.andado
             self.pet = (x1, y1)
             e = self._estado
             if acao is AcaoPet.COMER:
@@ -1443,6 +1525,8 @@ class MotorMundo(MotorFrutas):
             ocorrido = {"acao": acao.value, "u": u, "alvo": None if alvo is None else alvo.para_dict(), "de": (x0, y0),
                         "para": (x1, y1), "deslocamento": desloc, "energia_gasta": energia_antes - self._estado.energia,
                         "chegou": chegou, "comeu": comeu, "brincou_com_bola": bola}
+            if self.cct.ligada and alvo is not None:
+                ocorrido["contrato"] = self._registro_contrato(tick, x0, y0, x1, y1, andar, chegou, comeu)
         elif acao is AcaoPet.ALIVIAR:
             alvo, ocorrido = self._aliviar(tick, x0, y0)
             if self._grupo is not None:                      # como os outros ramos: o alvo do aliviar nunca e comida (sem disputa)
@@ -1461,6 +1545,25 @@ class MotorMundo(MotorFrutas):
             self._olfato_anterior = self._leitura_olfato_decisao()   # a leitura desta decisao, para a seguinte (uma narina: subiu ou caiu)
         self._registrar_decisao(tick, acao, (x0, y0), regiao_antes, alvo, ocorrido)
         return ocorrido
+
+    def _registro_contrato(self, tick: int, x0: int, y0: int, x1: int, y1: int, andar, chegou: bool, comeu: dict | None) -> dict:
+        """A P4: o que o contrato registra numa decisao com alvo (o registro da secao 5.1 do mundo_3d.md e o `ocorrido`). A orientacao anda
+        com o ultimo deslocamento (sem o controlador, o da decisao inteira); parado, fica. Os bigodes e o contato saem dos solidos que
+        colidem (as paredes, com a chave delas); o resultado percebido e o do POC (`tipos.ts`), sem a bola fisica (a do J5 rola sorteada)."""
+        if andar is not None:
+            self.orientacao = andar.orientacao
+            parou_por, contatos, trajetoria = andar.parou_por, [list(c) for c in andar.contatos], [list(p) for p in andar.trajetoria]
+        else:
+            if (x1, y1) != (x0, y0):
+                self.orientacao = ct.setor_de(x1 - x0, y1 - y0)
+            parou_por, contatos, trajetoria = ("chegou" if chegou else "hora"), [], None
+        contato = sorted([c[0], ct.relativo(c[1], self.orientacao)] for c in contatos)
+        reg = {"tick": self._tm(tick), "orientacao": self.orientacao, "parou_por": parou_por, "contato": contato,
+               "obstaculos": ct.bigodes(x1, y1, self.cct.r_pet, self.orientacao, self._solidos, self.cct.raio_bigode),
+               "resultado": {"parou_por": parou_por, "comeu": comeu is not None, "empurrou": False, "bola_afastou": None},
+               "trajetoria": trajetoria}
+        self.contrato_decisoes.append(reg)
+        return reg
 
     def _aliviar(self, tick: int, x0: int, y0: int) -> tuple[Alvo, dict]:
         """O `aliviar` (secoes 3 e 4): o alvo (`banheiro` ou `aqui`, pelo gancho do cerebro com o u da rng `alvo`; sem gancho, `aqui`),
@@ -1746,7 +1849,8 @@ class MotorMundo(MotorFrutas):
                     "idas_banheiro": self.idas_banheiro}),
                 **({} if not self.cpq.ligada else {"troncos_vistos": dict(self.troncos_vistos), "trocas_tipo": m.trocas_tipo}),
                 **({} if m.paradas_arvores is None else {"paradas_arvores": m.paradas_arvores}),
-                **({} if not self.cfal.ligada else {"frutas_ao_lado": self.frutas_ao_lado})}
+                **({} if not self.cfal.ligada else {"frutas_ao_lado": self.frutas_ao_lado}),
+                **({} if not self.cct.ligada else {"orientacao": self.orientacao, "contrato_decisoes": self.contrato_decisoes})}
 
     # ------------------------------------------------------------ o avanco em ticks (o grupo, dois pets, etapa 2)
     # O `_avancar(n)` de hoje e: o que cada classe faz uma vez por avanco (o MotorPersonalidade conta o evento de avanco no indice dos
