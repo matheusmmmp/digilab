@@ -1,7 +1,7 @@
 # TAREFA V2 — V3_COMPETICAO: a competição entre as regras urgentes (V3-3 e V3-4) (2026-10-21)
 
-Coordenador: Gerente (Claude Code). Worker do desenho: Claude Code (worker B). Worktree e branch: `v2-v3-competicao`. Status: ABERTA (só o
-desenho; o código não começou).
+Coordenador: Gerente (Claude Code). Worker do desenho: Claude Code (worker B). Worktree e branch: `v2-v3-competicao`. Status: ETAPA 0 ENTREGUE, a
+G0-R1-PODE-APRENDER passa (seção 10); a CR-1 a CR-7 DECIDIDAS em 2026-10-21; o código (etapas 1 e 2) não começou.
 
 Categoria: implementacao (a tarefa); o PR deste desenho é `arquitetura`. Origem: Matheus, 2026-10-21: parar a V3-9 na G0-PODE-MUDAR
 (#376) e seguir para a V3-3/V3-4, pela recomendação do `docs/futuro/v3_espaco_acoes.md` (seção 8) e do E0
@@ -225,17 +225,18 @@ As duas estão livres em `experiments/bancada/faixas.py` e nas configs.
 
 ## 9. Precisa do Matheus
 
-Todas PROPOSTAS, com a recomendação primeiro.
+**Todas DECIDIDAS pelo Matheus em 2026-10-21, pela recomendação** (a primeira opção de cada linha). Os números delas (o
+0,9 da CR-2 e os 10% da CR-7) continuam SEM FONTE.
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
-| **CR-1** | a forma do prior forte | **multiplicar por κ o peso efetivo das propostas da regra do instinto.** Com uma regra só, o κ cancela e o R1 é o A, o que dá um gate exato (G-R1-UMA-REGRA), e a L1 vale igual (seção 3.3). As outras: **somar um bônus β** (achata as proporções dentro da regra, então o R1 deixa de ser o A até com uma regra só); **o vencedor leva tudo por urgência** (é o A de hoje, sem crédito) | com o β, toda decisão do fome moderada muda, e o efeito do R1 se mistura com uma mudança no comer que não é a abertura |
-| **CR-2** | quanto vale o κ | **fixado por uma regra só do prior, antes de qualquer desfecho: a menor potência de 2 com que, nos pesos de nascimento, a ação do instinto fica com pelo menos 0,9 na mediana das decisões abertas da etapa 0** (PROPOSTO, SEM FONTE). A outra: **calibrar o κ** nas sementes do piloto contra o `D_FE` (M10) | κ grande demais: o R1 fica igual ao R1-congelado, porque a massa de crédito some (seção 0, item 2). Pequeno demais: o pet perde o instinto no nascimento, e o efeito vira de sobrevivência. Calibrar custa uma run e, sem plano próprio, é ajustar olhando |
-| **CR-3** | como as propostas se juntam | **por ação, da regra mais urgente que a propõe** (uma tabela por ação na decisão) | por par (regra, ação): o `dormir` do `sono_continuar` e o do `sono_noite` contariam duas vezes, e o sono ganharia peso só por ter duas regras |
-| **CR-4** | onde o experimento roda | **no v11 sem o mundo** (o mundo do E0), como a V3-3 decidiu | no J1 primeiro: o mundo físico já deu negativo duas vezes, e um terceiro negativo não diria se foi a abertura ou o mundo |
-| **CR-5** | o primário | **o `D_FE`** (R0 − R1, dias 8 a 14), **com a saúde e a privação de sono por não inferioridade e o R1-congelado como secundário de mecanismo** | um primário de influência (a fração de forçadas, a TV do E0) passa por construção: a abertura muda essas medidas sem o pet ficar melhor |
-| **CR-6** | as faixas | **pedir 58101…58505 (piloto e calibração) e 59101…59505 (validação)** | usar uma faixa já usada compromete aquela frente; as queimadas não voltam |
-| **CR-7** | o limiar da G0-R1-PODE-APRENDER | **10% da massa de crédito de hoje,** no κ da CR-2 (PROPOSTO, SEM FONTE) | sem porta: o código entra e a validação gasta uma faixa para achar o R1 igual ao R1-congelado. Porta alta demais: pára uma peça que ensinaria um pouco |
+| **CR-1** (DECIDIDA) | a forma do prior forte | **multiplicar por κ o peso efetivo das propostas da regra do instinto.** Com uma regra só, o κ cancela e o R1 é o A, o que dá um gate exato (G-R1-UMA-REGRA), e a L1 vale igual (seção 3.3). As outras: **somar um bônus β** (achata as proporções dentro da regra, então o R1 deixa de ser o A até com uma regra só); **o vencedor leva tudo por urgência** (é o A de hoje, sem crédito) | com o β, toda decisão do fome moderada muda, e o efeito do R1 se mistura com uma mudança no comer que não é a abertura |
+| **CR-2** (DECIDIDA) | quanto vale o κ | **fixado por uma regra só do prior, antes de qualquer desfecho: a menor potência de 2 com que, nos pesos de nascimento, a ação do instinto fica com pelo menos 0,9 na mediana das decisões abertas da etapa 0** (PROPOSTO, SEM FONTE). A outra: **calibrar o κ** nas sementes do piloto contra o `D_FE` (M10) | κ grande demais: o R1 fica igual ao R1-congelado, porque a massa de crédito some (seção 0, item 2). Pequeno demais: o pet perde o instinto no nascimento, e o efeito vira de sobrevivência. Calibrar custa uma run e, sem plano próprio, é ajustar olhando |
+| **CR-3** (DECIDIDA) | como as propostas se juntam | **por ação, da regra mais urgente que a propõe** (uma tabela por ação na decisão) | por par (regra, ação): o `dormir` do `sono_continuar` e o do `sono_noite` contariam duas vezes, e o sono ganharia peso só por ter duas regras |
+| **CR-4** (DECIDIDA) | onde o experimento roda | **no v11 sem o mundo** (o mundo do E0), como a V3-3 decidiu | no J1 primeiro: o mundo físico já deu negativo duas vezes, e um terceiro negativo não diria se foi a abertura ou o mundo |
+| **CR-5** (DECIDIDA) | o primário | **o `D_FE`** (R0 − R1, dias 8 a 14), **com a saúde e a privação de sono por não inferioridade e o R1-congelado como secundário de mecanismo** | um primário de influência (a fração de forçadas, a TV do E0) passa por construção: a abertura muda essas medidas sem o pet ficar melhor |
+| **CR-6** (DECIDIDA) | as faixas | **pedir 58101…58505 (piloto e calibração) e 59101…59505 (validação)** | usar uma faixa já usada compromete aquela frente; as queimadas não voltam |
+| **CR-7** (DECIDIDA) | o limiar da G0-R1-PODE-APRENDER | **10% da massa de crédito de hoje,** no κ da CR-2 (PROPOSTO, SEM FONTE) | sem porta: o código entra e a validação gasta uma faixa para achar o R1 igual ao R1-congelado. Porta alta demais: pára uma peça que ensinaria um pouco |
 
 ## Referências
 
@@ -249,3 +250,56 @@ As do E0 (`docs/futuro/digibrain_v3_e0.md`, seção 3.1) continuam valendo, com 
 - o limiar de 10%;
 - a forma das propostas;
 - a margem de não inferioridade.
+
+## 10. Resumo da etapa 0 (2026-10-21): a disputa sombra e a G0-R1-PODE-APRENDER
+
+**A G0-R1-PODE-APRENDER passa.** Com o κ = 16 (pela regra da CR-2), a massa de crédito nova é **15,6% da de hoje**, acima dos 10% da
+CR-7. Pela seção 5, o próximo passo são as etapas 1 e 2 (o gabarito e o código), quando o Matheus mandar.
+
+- **O que rodou:**
+  - a medição `experiments/medir_competicao_etapa0.py`, com o artefato `artifacts_v2_v3/competicao_etapa0.json`, igual em duas execuções;
+  - as 20 vidas do E0: o v11, 4 donos × as sementes dos testes, 14 dias. Não houve run de pesquisa.
+- **A sombra não muda a vida:**
+  - as 20 vidas saem iguais ao gabarito gravado antes, num commit próprio (`tests/gabaritos/competicao_vidas_de_hoje.json`);
+  - a sombra da vida e a do replay são iguais;
+  - as regras refeitas dão a regra registrada, e o peso refeito da regra do instinto é o do motivo (tudo falha alto).
+- **[OBSERVADO] O alcance:**
+  - forçadas: 55,3% (o mesmo do E0);
+  - abertas pela disputa: **17,4%** das decisões, 31,5% das forçadas;
+  - forçadas depois da abertura: **37,9%**. A seção 0 previa cerca de 37,5%; a diferença é o `sono_exaustao`, que fica fora;
+  - **as abertas levam 50,1% do |sinal| das forçadas.**
+- **[OBSERVADO] O κ e o preço:**
+
+  | κ | mediana de P_inst (nascimento / hoje) | massa nova / massa de hoje (hoje) | abertas em que a ação mudaria (hoje) |
+  |---|---|---|---|
+  | 1 | 0,50 / 0,37 | 43,2% | 57,5% |
+  | 4 | 0,80 / 0,70 | 35,8% | 28,4% |
+  | 8 | 0,89 / 0,83 | 25,3% | 16,4% |
+  | **16** | **0,94 / 0,90** | **15,6%** | **8,9%** |
+  | 32 | 0,97 / 0,95 | 8,8% | 5,1% |
+
+  - A troca da seção 0 (item 2) aparece inteira: o κ que guarda o instinto é o que encolhe o crédito.
+  - No κ = 16, a abertura muda a ação em cerca de 9% das abertas e ensina 15,6% a mais do que o A ensina hoje.
+- **[OBSERVADO] Onde abre, por dono** (κ = 16, os pesos de hoje):
+
+  | dono | forçadas | abertas | \|sinal\| das forçadas nas abertas | massa nova / hoje |
+  |---|---|---|---|---|
+  | relapso | 74,2% | 37,2% | 84,6% | 49,5% |
+  | aleatório | 61,6% | 31,9% | 57,4% | 16,9% |
+  | atencioso | 43,6% | 0,1% | 1,8% | 0,2% |
+  | incoerente | 41,7% | 0,3% | 2,3% | 0,2% |
+
+  - **A disputa é quase toda do pet negligenciado.** Com o atencioso e o incoerente, quase nada abre: o pet deles não fica com fome nem
+    abandonado o bastante para duas urgências valerem juntas.
+  - **Isto pesa no plano (etapa 3):** um `D_FE` médio sobre os quatro donos dilui o efeito pela metade dos donos. O plano deve decidir
+    se o primário é por dono ou só nos donos em que a disputa abre (PROPOSTA, para o Matheus no plano).
+- **As aberturas mais comuns:** pedido + fome moderada (1.044); abandono + fome moderada (955); sono contínuo + pedido + fome (641);
+  sono contínuo + fome (618); sono contínuo + abandono (423).
+- **[OBSERVADO] Uma correção à medição do V3** (`artifacts_v2_v3/espaco_acoes.json`): cada vida do v11 tem duas políticas, a vida e o
+  replay, e o espião do crédito contava as duas.
+  - As contagens absolutas de lá estão em dobro: as 2.658 aplicações nas forçadas são 1.329, e as 19.402 com escolha são 9.701.
+  - As frações (45,9%, 0 pesos mudados, 93,6%) valem como estão. Aqui o |sinal| das forçadas dá os mesmos 45,9% (1.660.402 de
+    3.619.726).
+
+**O κ = 16** sai da regra da CR-2 (DECIDIDA). O número segue SEM FONTE e entra em `config.py` com o status, na etapa 2.
+
