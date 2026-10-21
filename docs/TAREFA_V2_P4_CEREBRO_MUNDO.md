@@ -143,7 +143,10 @@ cabem (uma premissa falha), o plano volta ao Matheus, como no J5.
 - trocar a posição absoluta (W-3);
 - o jogo: a Tela Pet e o produto. Levar o planejador ao jogo pede uma decisão própria (o M6; "pesquisa no Python, um DigiBrain na web");
 - o crédito por canal (V3-9);
-- os dois pets no contrato (J7).
+- os dois pets no contrato (J7);
+- **a integração completa do pet** (o Gate I, PROPOSTO em `docs/futuro/gate_integracao_pet.md`). A P4 é integração sensório-motora:
+  troca a percepção e o andar, com o mesmo cérebro, corpo e protocolo do J5. Um G-T1 corporificado que passe é uma evidência do
+  aprendizado com o contrato, mas não fecha o Gate I nem a genética.
 
 ## 7. Critérios de aceitação
 
