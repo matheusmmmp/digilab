@@ -1,8 +1,8 @@
 # TAREFA V2 — GATE_I: o pet integrado (corpo químico, mundo, aprendizado na vida e replay no mesmo pet) (2026-10-21)
 
 Coordenador: Gerente (Claude Code). Worker da tarefa e do plano: Claude Code (worktree `v2-gate-i`). Worker da execução: a definir.
-Worktree e branch da execução: `v2-gate-i-<etapa>`. Status: **ABERTA** (a tarefa e o plano entregues, #382; as GT-1 a GT-7 DECIDIDAS pelo Matheus em
-2026-10-21, pela recomendação; a GT-8 aberta; nenhuma etapa de código começou; **o Gate I não está implementado**).
+Worktree e branch da execução: `v2-gate-i-<etapa>`. Status: **ABERTA** (a tarefa e o plano entregues, #382; as GT-1 a GT-8 DECIDIDAS pelo Matheus em
+2026-10-21, pela recomendação; nenhuma etapa de código começou; **o Gate I não está implementado**).
 
 Categoria: implementacao (a tarefa, com o piloto e a validação como experimento); o PR desta tarefa é só de documento. Origem: Matheus,
 2026-10-21: as GI-1 a GI-5 de `docs/futuro/gate_integracao_pet.md`, DECIDIDAS pela recomendação.
@@ -27,8 +27,7 @@ consequência e refaz a vida pelo log?** É o Gate I do `gate_integracao_pet.md`
   - o mundo 2D (J1);
   - o cérebro A com o planejador e o mundo do J5 com o adendo 8 (#289, #290, #294, #295, o código do adendo 8);
   - a config `experiments/configs/v2_pet_que_pensa/validacao_adendo8.json`.
-- **As decisões da seção 8:** as GT-1 a GT-7 DECIDIDAS em 2026-10-21; a GT-8 (o prefixo) aberta, e ela precisa estar decidida antes
-  da etapa 1.
+- **As decisões da seção 8:** as GT-1 a GT-8 DECIDIDAS em 2026-10-21, pela recomendação.
 - **Não depende** da P4, do mundo 3D, da web nem da genética.
 
 ## 3. Mudança mínima
@@ -123,8 +122,10 @@ G1 e o G2 genéticos continuam esperando (GI-4).
 - **GT-6:** as faixas 63101…63505 (o piloto) e 64101…64505 (a validação), registradas na etapa 1;
 - **GT-7:** o I-CORPO e o I-MUNDO como gates de mecanismo.
 
-**A GT-8 (o prefixo das unidades) continua aberta:** a decisão de 2026-10-21 não a citou. A tabela abaixo é a que foi levada ao
-Matheus. As do plano (as medidas, o N, as faixas) estão na seção 12 dele e repetem a numeração.
+- **GT-8** (decidida depois, também em 2026-10-21): o prefixo das unidades é `"pet_que_pensa"`, o do J5, com as bases novas 63101 e
+  64101.
+
+A tabela abaixo é a que foi levada ao Matheus. As do plano (as medidas, o N, as faixas) estão na seção 12 dele e repetem a numeração.
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
@@ -135,7 +136,7 @@ Matheus. As do plano (as medidas, o N, as faixas) estão na seção 12 dele e re
 | **GT-5** (DECIDIDA) | a medida do I-APRENDE | **a mudança na escolha da x lado a lado** (a favorita, que faz bem), no último terço menos no primeiro terço da vida, por unidade | o nível no fim: confunde o aprender com a atração que o pet já tem ao nascer. Outra medida (o `D_FE`): o J1 mostrou que ela não separa o aprendiz do instinto |
 | **GT-6** (DECIDIDA) | as faixas | **pedir ao coordenador 63101…63505 (o piloto) e 64101…64505 (a validação),** registradas na etapa 1 | uma faixa já usada: as unidades já foram vistas |
 | **GT-7** (DECIDIDA) | o I-CORPO e o I-MUNDO | **gates de mecanismo,** conferidos em toda vida e falhando alto, e não contrastes com IC | contrastes: mais primários, menos poder, e uma pergunta que o código já responde por construção |
-| **GT-8** (ABERTA) | o prefixo das unidades | **`"pet_que_pensa"`, o do J5,** com as bases novas | um prefixo novo: uma linha na `PREFIXOS_UNIDADES` e unidades que não se comparam com as do J5 |
+| **GT-8** (DECIDIDA) | o prefixo das unidades | **`"pet_que_pensa"`, o do J5,** com as bases novas | um prefixo novo: uma linha na `PREFIXOS_UNIDADES` e unidades que não se comparam com as do J5 |
 
 ## 9. Resumo da etapa
 

@@ -345,3 +345,6 @@ de base em `docs/historico/registro_lotes.json`.
 
 - [2026-10-21 — V3-COMPETICAO, o código (worker B): a chave numa config própria e as regras dentro do lobos.py](registro/2026-10.md)
 - [2026-10-21 — P4-ETAPA1 (worker D): o contrato sensório-motor no mundo do motor em Python](registro/2026-10.md)
+
+
+- [2026-10-21 — GATE-I-GT8 (Claude Code, worktree `v2-gate-i`): a GT-8 decidida](registro/2026-10.md)
