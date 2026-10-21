@@ -101,6 +101,7 @@ from ..config import (CONFIG_BOLA, CONFIG_CONSEQUENCIA, CONFIG_FRUTAS, CONFIG_LO
                       TICKS_POR_DIA, Config, ConfigBanheiro, ConfigBola, ConfigConsequencia, ConfigCorpo, ConfigFrutas, ConfigLobos,
                       ConfigMundo)
 from ..config import CONFIG_MODELO_MUNDO_LIGADA, ConfigModeloMundo
+from ..config import ConfigCompeticao
 from ..events import ACOES_PET_HOJE, FRUTAS, AcaoPet, AcaoUsuario
 from ..modelo_mundo import TIPOS as TIPOS_COMIDA_MODELO, ModeloMundo, raiz_inteira
 from ..policy import Observacao, PoliticaInstinto, Transicao
@@ -179,6 +180,12 @@ PARAMETROS_LOBOS_PET_QUE_PENSA: dict[str, tuple[str, str]] = {
 }
 PARAMETROS_LOBOS_PALADAR: dict[str, tuple[str, str]] = {
     "paladar": ("PROPOSTO", "a chave; docs/futuro/paladar.md, secao 3.4 (PL-1, PL-5, PL-6 decididas): o canal gosto e as classes"),
+}
+# a competicao entre as regras urgentes (V3-3/V3-4; docs/TAREFA_V2_V3_COMPETICAO.md, secoes 3 e 9): a ConfigCompeticao (config.py), a parte
+PARAMETROS_COMPETICAO: dict[str, tuple[str, str]] = {
+    "ligada": ("PROPOSTO", "a chave; TAREFA_V2_V3_COMPETICAO, secao 3 (V3-3/V3-4 e CR-1, CR-3 decididas pelo Matheus em 2026-10-21)"),
+    "kappa_instinto": ("DECIDIDO", "CR-2 (Matheus, 2026-10-21): a menor potencia de 2 com o instinto >= 0,9 na mediana das decisoes "
+                                   "abertas, nos pesos de nascimento; a etapa 0 (#383) deu 16. SEM FONTE"),
 }
 PARAMETROS_LOBOS = {**PARAMETROS_LOBOS_L0, **PARAMETROS_LOBOS_L1, **PARAMETROS_LOBOS_N5, **PARAMETROS_LOBOS_REVISAO,
                     **PARAMETROS_LOBOS_N6_N7, **PARAMETROS_LOBOS_CORPO, **PARAMETROS_LOBOS_DOIS_PETS, **PARAMETROS_LOBOS_PET_QUE_PENSA,
@@ -333,6 +340,63 @@ def impulsos(instinto: PoliticaInstinto, obs: Observacao) -> tuple[str, tuple[Ac
     if a1 is a0:
         raise NotImplementedError("instinto chamou random() sem que o resultado dependesse dele")
     return regra, (a0, a1)
+
+
+# ------------------------------------------------------------------ a competicao entre as regras urgentes: as regras que valem
+
+
+REGRAS_INSTINTO = ("sono_exaustao", "sono_continuar", "sono_noite", "pedido_necessidade", "abandono", "fome_moderada", "tempo_livre")
+REGRA_SEGURANCA = "sono_exaustao"           # a V3-4: o sono da exaustao fica forcado, fora da disputa
+REGRAS_URGENTES = REGRAS_INSTINTO[1:-1]     # as que disputam (o tempo livre so entra sem urgente)
+
+
+def regras_que_valem(obs: Observacao, cfg: Config) -> tuple[str, ...]:
+    """As regras do `PoliticaInstinto.agir` cuja condicao vale em `obs`, na ordem dele, com as mesmas expressoes (o espelho e conferido
+    por teste: a primeira e sempre a `ultima_regra` do instinto). O tempo livre vale sempre (e o caso de nada mais valer)."""
+    fome, higiene, energia, humor, saude, sujeira, dormindo, hora = obs.vetor_estado
+    valem = []
+    if energia < 0.25:
+        valem.append("sono_exaustao")
+    if dormindo > 0.5 and energia < 0.85:
+        valem.append("sono_continuar")
+    if cfg.e_noite(int(hora * 1440)) and energia < 0.55:
+        valem.append("sono_noite")
+    if fome < 0.25 or higiene < 0.25:
+        valem.append("pedido_necessidade")
+    if obs.ticks_desde_cuidado > cfg.janela_atencao_ticks:
+        valem.append("abandono")
+    if fome < 0.45:
+        valem.append("fome_moderada")
+    valem.append("tempo_livre")
+    return tuple(valem)
+
+
+def candidatos_da_regra(regra: str, obs: Observacao) -> tuple[AcaoPet, ...]:
+    """Os candidatos que o instinto propoe numa regra urgente, na ordem do `impulsos` (o fome moderada: comer, depois chamar)."""
+    if regra in ("sono_exaustao", "sono_continuar", "sono_noite"):
+        return (AcaoPet.DORMIR,)
+    if regra == "pedido_necessidade":
+        return (AcaoPet.CHAMAR_ATENCAO,)
+    if regra == "abandono":
+        return (AcaoPet.EMBURRAR if obs.vetor_estado[INDICE_HUMOR] < 0.35 else AcaoPet.CHAMAR_ATENCAO,)
+    if regra == "fome_moderada":
+        return (AcaoPet.COMER, AcaoPet.CHAMAR_ATENCAO)
+    raise KeyError(f"regra sem candidatos fixos: {regra!r}")
+
+
+def propostas_da_disputa(valem: tuple[str, ...], obs: Observacao) -> dict[AcaoPet, str] | None:
+    """A V3-4 e a CR-3: acao -> a regra mais urgente que a propoe, na ordem das regras e, dentro de cada uma, na dos candidatos. None sem
+    disputa: o `sono_exaustao` vale, menos de duas regras urgentes valem, ou elas propoem uma acao so."""
+    if REGRA_SEGURANCA in valem:
+        return None
+    urgentes = [r for r in valem if r in REGRAS_URGENTES]
+    if len(urgentes) < 2:
+        return None
+    prop: dict[AcaoPet, str] = {}
+    for r in urgentes:
+        for a in candidatos_da_regra(r, obs):
+            prop.setdefault(a, r)
+    return prop if len(prop) >= 2 else None
 
 
 # ------------------------------------------------------------------ percepcao, ativacao, sorteio, inteiros
@@ -794,6 +858,9 @@ class Aprendiz:
         self._modelo_mundo: ModeloMundo | None = None
         self._plano_na_decisao: dict | None = None
         self._pc_na_decisao = None
+        # a competicao entre as regras (V3-3/V3-4): so a PoliticaLobos com a ConfigCompeticao ligada; None em todo o resto (nada muda)
+        self._competicao: ConfigCompeticao | None = None
+        self._n_abertas = 0
         n = self.n_pesos()
         if n >= self.cl.maximo_pesos:
             raise ValueError(f"{n} pesos, teto {self.cl.maximo_pesos}")
@@ -1441,8 +1508,15 @@ class Aprendiz:
         f_corpo = f_S if alvos is None else alvos["corpo"]
         f_fruta = f_S if alvos is None else alvos["fruta"]
         g = registro["regra"]
-        self._cortes_teto += atualizar_pesos(self._pesos[g], self._prior[g], registro, f_corpo, self.cl.passo, self.cl.teto,
-                                             self._escala)
+        if "competicao" in registro:
+            # a competicao entre as regras (secao 3.3): cada tabela que propos recebe a L1 nas suas propostas, com os P da disputa (a
+            # escolhida, S - P; as outras, -P), e o W sem o kappa
+            for r, cands in registro["competicao"]["tabelas"].items():
+                self._cortes_teto += atualizar_pesos(self._pesos[r], self._prior[r], {**registro, "candidatos": cands}, f_corpo,
+                                                     self.cl.passo, self.cl.teto, self._escala)
+        else:
+            self._cortes_teto += atualizar_pesos(self._pesos[g], self._prior[g], registro, f_corpo, self.cl.passo, self.cl.teto,
+                                                 self._escala)
         if "corpo" in registro:
             # CORPO: as entradas novas da regra (as leituras dos receptores novos, X = a leitura) pela mesma regra, com o canal do corpo
             self._cortes_teto += atualizar_pesos(self._pesos_corpo[g], self._prior_corpo[g], {**registro, "X": registro["corpo"]["X"]},
@@ -1498,6 +1572,9 @@ class Aprendiz:
                     d["fruta"]["I"] = dict(s["I"])
             if "presenca" in r:
                 d["presenca"] = dict(r["presenca"])
+            if "competicao" in r:
+                d["competicao"] = {"tabelas": {g: [a.value for a in c] for g, c in r["competicao"]["tabelas"].items()},
+                                   "kappa": r["competicao"]["kappa"]}
             if "pedido" in r:
                 d["pedido"] = dict(r["pedido"])
             if "fruta" in r and "Pd" in r["fruta"]:
@@ -1549,6 +1626,8 @@ class Aprendiz:
             "motivos": [dict(m) for m in self.motivos],
             "aprendizado": self._estado_aprendizado(),
         }
+        if self._competicao is not None:          # a competicao entre as regras (V3-3/V3-4), so com a chave ligada
+            d["competicao"] = {"kappa": self._competicao.kappa_instinto, "abertas": self._n_abertas}
         if self._prior_fruta:                     # LOBOS-MUNDO, so no mundo das frutas: a sub-decisao da fruta
             d["pesos_fruta"] = dict(self._pesos_fruta)
             d["pesos_fruta_prior"] = dict(self._prior_fruta)
@@ -1602,7 +1681,8 @@ class PoliticaLobos(Aprendiz):
                  cfg_bola: ConfigBola | None = None, cfg_frutas: ConfigFrutas | None = None,
                  cfg_mundo: ConfigMundo | None = None, cfg_corpo: ConfigCorpo | None = None,
                  cfg_banheiro: ConfigBanheiro | None = None, cfg_modelo: ConfigModeloMundo | None = None,
-                 cfg_consequencia: ConfigConsequencia | None = None, h_paladar: dict | None = None) -> None:
+                 cfg_consequencia: ConfigConsequencia | None = None, h_paladar: dict | None = None,
+                 cfg_competicao: ConfigCompeticao | None = None) -> None:
         cl = cfg_lobos or CONFIG_LOBOS
         # o banheiro (TAREFA_V2_BANHEIRO, secoes 2 e 4): exige o mundo fisico e o corpo com a sub-chave banheiro; o corpo com a vontade
         # exige a chave do banheiro no cerebro (sem ela o pet teria a vontade e nenhuma acao para alivia-la)
@@ -1828,6 +1908,20 @@ class PoliticaLobos(Aprendiz):
             self._drives_plano = self._drives_corpo(self._cc_plano, True)
             if self.n_pesos() != n_sem_plano:
                 raise RuntimeError("o planejador mudou o n_pesos do A (PQ-6: o A ganha 0 pesos)")
+        # a competicao entre as regras urgentes (V3-3/V3-4; docs/TAREFA_V2_V3_COMPETICAO.md, secao 3): a primeira versao e so a do v11 sem
+        # o mundo (CR-4), sem o traco (o R2) e sem as pecas que somam termos ao lobo de decisao nas regras urgentes; com qualquer uma,
+        # falha alto. Funciona com o aprendizado desligado (o R1-congelado). Desligada (ou None), nada muda
+        if cfg_competicao is not None:
+            if set(PARAMETROS_COMPETICAO) != {f.name for f in fields(cfg_competicao)}:
+                raise ValueError("ConfigCompeticao e PARAMETROS_COMPETICAO com campos diferentes")
+            if cfg_competicao.ligada:
+                if (fisico or self._ve_mundo or self._banheiro is not None or self._modelo_mundo is not None or self._peso_pedido is not None
+                        or self._memoria is not None or self._pesos_social or self._pesos_comer_fruta or cl.traco_decisoes):
+                    raise ValueError("a competicao entre as regras (V3-3/V3-4) e so a do v11 sem o mundo: sem o mundo fisico, as frutas, a "
+                                     "bola, o banheiro, o planejador, o pedido, a memoria, as entradas sociais e o traco")
+                if type(self._instinto) is not PoliticaInstinto:
+                    raise RuntimeError(f"a competicao espelha o PoliticaInstinto, nao {type(self._instinto).__name__}")
+                self._competicao = cfg_competicao
 
     @property
     def tem_corpo(self) -> bool:
@@ -2260,6 +2354,9 @@ class PoliticaLobos(Aprendiz):
             self._humor_na_decisao = obs.vetor_estado[INDICE_HUMOR]
             self._memoria.promover(self._tick_na_decisao)
         contrib, pesos = self._pesos_efetivos(regra, candidatos, x)
+        disputa = self._disputa(obs, regra, candidatos, x, contrib, pesos) if self._competicao is not None else None
+        if disputa is not None:
+            candidatos, pesos, contrib = disputa["candidatos"], disputa["pesos"], disputa["contrib"]
         if len(candidatos) == 1:
             u, acao = None, candidatos[0]
         else:
@@ -2269,6 +2366,8 @@ class PoliticaLobos(Aprendiz):
         self._fruta_na_decisao = self._ve_frutas and obs.fruta > 0.0
         self._info_na_decisao = obs.info_frutas
         self._registrar(regra, candidatos, acao, x, pesos, contrib, u)
+        if disputa is not None:
+            self._registrar_disputa(disputa, regra, acao, x, u)
         if self._pesos_corpo:
             S = self._escala
             self.motivos[-1]["percepcao_corpo"] = dict(zip(self._receptores_novos, self._x_corpo))
@@ -2306,6 +2405,66 @@ class PoliticaLobos(Aprendiz):
             # FRUTA-NO-CENARIO: a entrada de cada fruta (presenca x S) para o credito da decisao de comer (so pela consequencia)
             self._registro_decisao["presenca"] = {f: arred(p * self._escala) for f, p in zip(FRUTAS, self._presenca_na_decisao)}
         return acao
+
+    # ------------------------------------------------------------- a competicao entre as regras urgentes (V3-3/V3-4)
+
+    def _disputa(self, obs: Observacao, regra: str, candidatos: tuple[AcaoPet, ...], x: list[float], contrib: dict,
+                 pesos: dict) -> dict | None:
+        """A disputa da decisao (docs/TAREFA_V2_V3_COMPETICAO.md, secao 3.2), ou None se nao ha (a decisao de hoje, byte a byte). As
+        propostas sao as acoes das regras urgentes que valem, cada uma da regra mais urgente que a propoe (CR-3); o peso de cada uma e o
+        peso efetivo da tabela da sua regra (`_pesos_efetivos`, o mesmo de hoje, com o piso), e o das propostas da regra do instinto (a
+        primeira, `regra`) vai vezes kappa (CR-1). So le: nao muda peso, motivo nem registro, e nao consome rng."""
+        valem = regras_que_valem(obs, self.cfg)
+        if valem[0] != regra:
+            raise RuntimeError(f"competicao: as regras refeitas ({valem}) nao dao a regra do instinto {regra!r}")
+        prop = propostas_da_disputa(valem, obs)
+        if prop is None:
+            return None
+        if tuple(a for a, r in prop.items() if r == regra) != candidatos:
+            raise RuntimeError(f"competicao: as propostas da regra {regra!r} nao sao os candidatos do instinto {candidatos}")
+        kappa = self._competicao.kappa_instinto
+        por_regra: dict[str, list] = {}
+        for a, r in prop.items():
+            por_regra.setdefault(r, []).append(a)
+        sem_kappa: dict = {}
+        contrib_d: dict = {lobo: {} for lobo in contrib}
+        for r, cands in por_regra.items():
+            if r in self._pesos_corpo or r in self._pesos_social:
+                raise RuntimeError(f"competicao: a regra urgente {r!r} com entradas do corpo ou sociais")
+            c_r, p_r = (contrib, pesos) if r == regra else self._pesos_efetivos(r, tuple(cands), x)
+            if set(c_r) != set(contrib):
+                raise RuntimeError(f"competicao: as contribuicoes da regra {r!r} tem outros lobos ({sorted(c_r)})")
+            for a in cands:
+                sem_kappa[a] = p_r[a]
+                for lobo in c_r:
+                    contrib_d[lobo][a] = c_r[lobo][a]
+        ordem = tuple(prop)
+        return {"candidatos": ordem, "pesos": {a: (kappa * sem_kappa[a] if prop[a] == regra else sem_kappa[a]) for a in ordem},
+                "sem_kappa": sem_kappa, "contrib": contrib_d, "propostas": prop, "kappa": kappa,
+                "por_regra": {r: tuple(c) for r, c in por_regra.items()}, "regras": tuple(r for r in valem if r in REGRAS_URGENTES)}
+
+    def _registrar_disputa(self, disputa: dict, regra: str, acao: AcaoPet, x: list[float], u: float) -> None:
+        """Depois do `_registrar` de uma decisao aberta: o motivo honesto (`competicao`: as regras, as propostas, o kappa, a acao que o A
+        daria com o mesmo u e a que o prior com o kappa daria, e quem decidiu), o termo aprendido de cada proposta pela tabela da sua regra,
+        e o registro do credito com o W sem o kappa e a tabela de cada proposta (secao 3.3: d log p(a*) / d w_a = (1[a=a*] - p_a) / w_a)."""
+        S = self._escala
+        ordem, prop, kappa = disputa["candidatos"], disputa["propostas"], disputa["kappa"]
+        do_instinto = disputa["por_regra"][regra]
+        a_inst = do_instinto[0] if len(do_instinto) == 1 else do_instinto[sortear([disputa["sem_kappa"][a] for a in do_instinto], u)]
+        prior_kappa = [disputa["contrib"]["impulsos"][a] * (kappa if prop[a] == regra else 1) for a in ordem]
+        sem_aprendido = ordem[sortear(prior_kappa, u)]
+        m = self.motivos[-1]
+        m["competicao"] = {"regras": list(disputa["regras"]), "propostas": {a.value: r for a, r in prop.items()}, "kappa": kappa,
+                           "pesos_sem_kappa": {a.value: v for a, v in disputa["sem_kappa"].items()},
+                           "acao_do_instinto": a_inst.value, "abertura_decidiu": acao is not a_inst,
+                           "acao_sem_aprendido": sem_aprendido.value, "aprendido_decidiu": acao is not sem_aprendido}
+        if self._aprende:
+            m["aprendido"] = {a.value: termos([w - w0 for w, w0 in zip(self._pesos[prop[a]][a], self._prior[prop[a]][a])], x, S)
+                              for a in ordem}
+            reg = self._registro_decisao
+            reg["W"] = {a: max(1, arred(disputa["sem_kappa"][a] * S)) for a in ordem}
+            reg["competicao"] = {"tabelas": dict(disputa["por_regra"]), "kappa": kappa}
+        self._n_abertas += 1
 
     def _pesos_das_frutas(self, presentes: list[str], incentivos: dict, memoria: dict | None,
                           sem_info: bool = False) -> tuple[list, dict | None, dict | None]:

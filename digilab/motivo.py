@@ -301,7 +301,24 @@ def _motivo_lobos_decisao(registro: dict, tick: int, ref_ultimo_cuidado: int | N
     acao = AcaoPet(registro["acao"])
     candidatos = list(registro["candidatos"])
     prior = registro["contribuicoes"]["impulsos"]
-    if len(candidatos) == 1:
+    comp = registro.get("competicao")
+    if comp is not None:
+        # a competicao entre as regras (V3-3/V3-4; docs/TAREFA_V2_V3_COMPETICAO.md, secao 3.4): o prior da disputa e o das propostas com o
+        # kappa na regra do instinto, e o impulso que decidiu e o da regra de onde veio a acao escolhida (a mais urgente que a propoe)
+        kappa = comp["kappa"]
+        prior_kappa = [prior[a] * (kappa if comp["propostas"][a] == registro["regra"] else 1) for a in candidatos]
+        impulso_decidiu = candidatos[sortear_lobos(prior_kappa, registro["u"])] == registro["acao"]
+        if impulso_decidiu != (not comp["aprendido_decidiu"]):
+            raise RuntimeError("motivo da competicao: o impulso refeito nao e o do registro (aprendido_decidiu)")
+        if impulso_decidiu:
+            p = registro["percepcao"]
+            obs = Observacao(vetor_estado=(p["fome"], p["higiene"], p["energia"], p["humor"], p["saude"], p["sujeira"],
+                                           p["dormindo"], p["hora"]), ticks_desde_cuidado=0, total_cuidados=0)
+            regra_da_acao = comp["propostas"][registro["acao"]]
+            m = motivo_instinto(regra_da_acao, obs, acao, tick, ref_ultimo_cuidado)
+            return m, {"valor_decidiu": False, "fator_formula_literal": None, "lobo": "impulsos",
+                       "competicao": {"regra_da_acao": regra_da_acao, "abertura_decidiu": comp["abertura_decidiu"]}}
+    elif len(candidatos) == 1:
         impulso_decidiu = True
     else:
         impulso_decidiu = candidatos[sortear_lobos([prior[a] for a in candidatos], registro["u"])] == registro["acao"]
@@ -346,6 +363,8 @@ def _motivo_lobos_decisao(registro: dict, tick: int, ref_ultimo_cuidado: int | N
     intensidade = (positivos[0][0] / soma_pos) if fatores and soma_pos > 0 else 0.0
     refs = (ref_ultimo_cuidado,) if "tempo_sem_cuidado" in fatores and ref_ultimo_cuidado is not None else ()
     diag = {"valor_decidiu": True, "fator_formula_literal": None, "lobo": "decisao"}
+    if comp is not None:
+        diag["competicao"] = {"regra_da_acao": comp["propostas"][registro["acao"]], "abertura_decidiu": comp["abertura_decidiu"]}
     return Motivo("vida", acao.value, fatores, refs, min(1.0, intensidade), False, tick=tick), diag
 
 

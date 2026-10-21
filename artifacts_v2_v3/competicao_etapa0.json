@@ -1,0 +1,557 @@
+{
+ "analise": {
+  "abertas_por_regras": {
+   "abandono+fome_moderada": 955,
+   "pedido_necessidade+abandono": 1,
+   "pedido_necessidade+abandono+fome_moderada": 254,
+   "pedido_necessidade+fome_moderada": 1044,
+   "sono_continuar+abandono": 423,
+   "sono_continuar+abandono+fome_moderada": 223,
+   "sono_continuar+fome_moderada": 618,
+   "sono_continuar+pedido_necessidade": 227,
+   "sono_continuar+pedido_necessidade+abandono+fome_moderada": 119,
+   "sono_continuar+pedido_necessidade+fome_moderada": 641,
+   "sono_noite+abandono": 51,
+   "sono_noite+abandono+fome_moderada": 25,
+   "sono_noite+fome_moderada": 22,
+   "sono_noite+pedido_necessidade": 26,
+   "sono_noite+pedido_necessidade+abandono+fome_moderada": 8,
+   "sono_noite+pedido_necessidade+fome_moderada": 36
+  },
+  "g0_r1_pode_aprender": {
+   "kappa": 16,
+   "limiar": 0.1,
+   "massa_nova_sobre_hoje": 0.15568757991471743,
+   "passa": true
+  },
+  "geral": {
+   "abs_f": {
+    "forcadas": 1660402,
+    "frac_das_forcadas_nas_abertas": 0.5010545638947677,
+    "nas_abertas": 831952,
+    "total": 3619726
+   },
+   "decisoes": 26880,
+   "frac_abertas": 0.1738467261904762,
+   "frac_das_forcadas_que_abrem": 0.3146377592243469,
+   "frac_forcadas": 0.5525297619047619,
+   "frac_forcadas_depois_da_abertura": 0.3786830357142857,
+   "massa_hoje": 2036997.26171875,
+   "por_kappa": {
+    "1": {
+     "hoje": {
+      "frac_abertas_que_mudariam": 0.5750053498823026,
+      "massa_nova": 879694.8721335898,
+      "massa_nova_sobre_hoje": 0.4318586424565602,
+      "mediana_p_inst": 0.3723417801268046
+     },
+     "nascimento": {
+      "frac_abertas_que_mudariam": 0.5750053498823026,
+      "massa_nova": 999927.5000000001,
+      "massa_nova_sobre_hoje": 0.4908830850151928,
+      "mediana_p_inst": 0.5
+     }
+    },
+    "16": {
+     "hoje": {
+      "frac_abertas_que_mudariam": 0.08923603680719024,
+      "massa_nova": 317135.1739698985,
+      "massa_nova_sobre_hoje": 0.15568757991471743,
+      "mediana_p_inst": 0.9046854755745397
+     },
+     "nascimento": {
+      "frac_abertas_que_mudariam": 0.08110421570725444,
+      "massa_nova": 282377.1604358434,
+      "massa_nova_sobre_hoje": 0.13862422190866522,
+      "mediana_p_inst": 0.9411764705882353
+     }
+    },
+    "2": {
+     "hoje": {
+      "frac_abertas_que_mudariam": 0.4275625936229403,
+      "massa_nova": 872141.8593812025,
+      "massa_nova_sobre_hoje": 0.4281507274316699,
+      "mediana_p_inst": 0.5426370974326821
+     },
+     "nascimento": {
+      "frac_abertas_que_mudariam": 0.40659105499679005,
+      "massa_nova": 922133.0933333333,
+      "massa_nova_sobre_hoje": 0.45269235784601314,
+      "mediana_p_inst": 0.6666666666666666
+     }
+    },
+    "32": {
+     "hoje": {
+      "frac_abertas_que_mudariam": 0.05093087952065055,
+      "massa_nova": 178255.47399927911,
+      "massa_nova_sobre_hoje": 0.08750894139586281,
+      "mediana_p_inst": 0.9499578667198536
+     },
+     "nascimento": {
+      "frac_abertas_que_mudariam": 0.043441044297025465,
+      "massa_nova": 154954.25380565826,
+      "massa_nova_sobre_hoje": 0.07606993721479677,
+      "mediana_p_inst": 0.9696969696969697
+     }
+    },
+    "4": {
+     "hoje": {
+      "frac_abertas_que_mudariam": 0.2837577573293388,
+      "massa_nova": 729412.0050640847,
+      "massa_nova_sobre_hoje": 0.35808197623625243,
+      "mediana_p_inst": 0.703518796916994
+     },
+     "nascimento": {
+      "frac_abertas_que_mudariam": 0.2653541622084314,
+      "massa_nova": 716909.4367346938,
+      "massa_nova_sobre_hoje": 0.3519442319376461,
+      "mediana_p_inst": 0.8
+     }
+    },
+    "8": {
+     "hoje": {
+      "frac_abertas_que_mudariam": 0.16413438904344105,
+      "massa_nova": 514788.4021445703,
+      "massa_nova_sobre_hoje": 0.2527192411197495,
+      "mediana_p_inst": 0.8259595352751178
+     },
+     "nascimento": {
+      "frac_abertas_que_mudariam": 0.14829873742777658,
+      "massa_nova": 477060.2291031526,
+      "massa_nova_sobre_hoje": 0.23419777633899475,
+      "mediana_p_inst": 0.8888888888888888
+     }
+    }
+   }
+  },
+  "kappa_cr2": 16,
+  "por_dono": {
+   "aleatorio": {
+    "abs_f": {
+     "forcadas": 520660,
+     "frac_das_forcadas_nas_abertas": 0.5737717512388123,
+     "nas_abertas": 298740,
+     "total": 1137075
+    },
+    "decisoes": 6720,
+    "frac_abertas": 0.31875,
+    "frac_das_forcadas_que_abrem": 0.5176413726437893,
+    "frac_forcadas": 0.6157738095238096,
+    "frac_forcadas_depois_da_abertura": 0.2970238095238095,
+    "massa_hoje": 530662.6640625,
+    "por_kappa": {
+     "1": {
+      "hoje": {
+       "frac_abertas_que_mudariam": 0.5252100840336135,
+       "massa_nova": 258162.81215479056,
+       "massa_nova_sobre_hoje": 0.4864913807548082,
+       "mediana_p_inst": 0.3653444519735718
+      },
+      "nascimento": {
+       "frac_abertas_que_mudariam": 0.5863678804855276,
+       "massa_nova": 345489.0,
+       "massa_nova_sobre_hoje": 0.6510520211749987,
+       "mediana_p_inst": 0.3333333333333333
+      }
+     },
+     "16": {
+      "hoje": {
+       "frac_abertas_que_mudariam": 0.08216619981325864,
+       "massa_nova": 89829.65950799153,
+       "massa_nova_sobre_hoje": 0.16927827335787776,
+       "mediana_p_inst": 0.9020618495987665
+      },
+      "nascimento": {
+       "frac_abertas_que_mudariam": 0.08216619981325864,
+       "massa_nova": 92302.72809946311,
+       "massa_nova_sobre_hoje": 0.17393861364362342,
+       "mediana_p_inst": 0.8888888888888888
+      }
+     },
+     "2": {
+      "hoje": {
+       "frac_abertas_que_mudariam": 0.39589169000933705,
+       "massa_nova": 255531.08026399804,
+       "massa_nova_sobre_hoje": 0.4815320495845215,
+       "mediana_p_inst": 0.5351681788190206
+      },
+      "nascimento": {
+       "frac_abertas_que_mudariam": 0.41876750700280113,
+       "massa_nova": 316201.08777777775,
+       "massa_nova_sobre_hoje": 0.5958608155265591,
+       "mediana_p_inst": 0.5
+      }
+     },
+     "32": {
+      "hoje": {
+       "frac_abertas_que_mudariam": 0.04715219421101774,
+       "massa_nova": 50115.52996013791,
+       "massa_nova_sobre_hoje": 0.09443952505811759,
+       "mediana_p_inst": 0.9485094817336495
+      },
+      "nascimento": {
+       "frac_abertas_que_mudariam": 0.04481792717086835,
+       "massa_nova": 50218.292381308966,
+       "massa_nova_sobre_hoje": 0.09463317429732421,
+       "mediana_p_inst": 0.9411764705882353
+      }
+     },
+     "4": {
+      "hoje": {
+       "frac_abertas_que_mudariam": 0.25770308123249297,
+       "massa_nova": 211618.8301705795,
+       "massa_nova_sobre_hoje": 0.39878221043577244,
+       "mediana_p_inst": 0.6972111409635414
+      },
+      "nascimento": {
+       "frac_abertas_que_mudariam": 0.2721755368814192,
+       "massa_nova": 241728.07755102037,
+       "massa_nova_sobre_hoje": 0.4555211698906149,
+       "mediana_p_inst": 0.6666666666666666
+      }
+     },
+     "8": {
+      "hoje": {
+       "frac_abertas_que_mudariam": 0.1568627450980392,
+       "massa_nova": 147436.03124246426,
+       "massa_nova_sobre_hoje": 0.27783381275359453,
+       "mediana_p_inst": 0.8215962340837747
+      },
+      "nascimento": {
+       "frac_abertas_que_mudariam": 0.15546218487394958,
+       "massa_nova": 158054.25359453112,
+       "massa_nova_sobre_hoje": 0.2978431766511388,
+       "mediana_p_inst": 0.8
+      }
+     }
+    }
+   },
+   "atencioso": {
+    "abs_f": {
+     "forcadas": 235265,
+     "frac_das_forcadas_nas_abertas": 0.01832401759717765,
+     "nas_abertas": 4311,
+     "total": 521664
+    },
+    "decisoes": 6720,
+    "frac_abertas": 0.001488095238095238,
+    "frac_das_forcadas_que_abrem": 0.0034164673727365906,
+    "frac_forcadas": 0.4355654761904762,
+    "frac_forcadas_depois_da_abertura": 0.43407738095238096,
+    "massa_hoje": 386688.34765625,
+    "por_kappa": {
+     "1": {
+      "hoje": {
+       "frac_abertas_que_mudariam": 0.6,
+       "massa_nova": 4311.0,
+       "massa_nova_sobre_hoje": 0.011148512816921759,
+       "mediana_p_inst": 0.5
+      },
+      "nascimento": {
+       "frac_abertas_que_mudariam": 0.6,
+       "massa_nova": 4311.0,
+       "massa_nova_sobre_hoje": 0.011148512816921759,
+       "mediana_p_inst": 0.5
+      }
+     },
+     "16": {
+      "hoje": {
+       "frac_abertas_que_mudariam": 0.1,
+       "massa_nova": 954.6851211072657,
+       "massa_nova_sobre_hoje": 0.0024688748106677923,
+       "mediana_p_inst": 0.9411764705882353
+      },
+      "nascimento": {
+       "frac_abertas_que_mudariam": 0.1,
+       "massa_nova": 954.6851211072657,
+       "massa_nova_sobre_hoje": 0.0024688748106677923,
+       "mediana_p_inst": 0.9411764705882353
+      }
+     },
+     "2": {
+      "hoje": {
+       "frac_abertas_que_mudariam": 0.5,
+       "massa_nova": 3832.0,
+       "massa_nova_sobre_hoje": 0.009909789170597118,
+       "mediana_p_inst": 0.6666666666666666
+      },
+      "nascimento": {
+       "frac_abertas_que_mudariam": 0.5,
+       "massa_nova": 3832.0,
+       "massa_nova_sobre_hoje": 0.009909789170597118,
+       "mediana_p_inst": 0.6666666666666666
+      }
+     },
+     "32": {
+      "hoje": {
+       "frac_abertas_que_mudariam": 0.0,
+       "massa_nova": 506.71074380165163,
+       "massa_nova_sobre_hoje": 0.001310385344872343,
+       "mediana_p_inst": 0.9696969696969697
+      },
+      "nascimento": {
+       "frac_abertas_que_mudariam": 0.0,
+       "massa_nova": 506.71074380165163,
+       "massa_nova_sobre_hoje": 0.001310385344872343,
+       "mediana_p_inst": 0.9696969696969697
+      }
+     },
+     "4": {
+      "hoje": {
+       "frac_abertas_que_mudariam": 0.4,
+       "massa_nova": 2759.0399999999986,
+       "massa_nova_sobre_hoje": 0.007135048202829922,
+       "mediana_p_inst": 0.8
+      },
+      "nascimento": {
+       "frac_abertas_que_mudariam": 0.4,
+       "massa_nova": 2759.0399999999986,
+       "massa_nova_sobre_hoje": 0.007135048202829922,
+       "mediana_p_inst": 0.8
+      }
+     },
+     "8": {
+      "hoje": {
+       "frac_abertas_que_mudariam": 0.2,
+       "massa_nova": 1703.111111111111,
+       "massa_nova_sobre_hoje": 0.004404350742487608,
+       "mediana_p_inst": 0.8888888888888888
+      },
+      "nascimento": {
+       "frac_abertas_que_mudariam": 0.2,
+       "massa_nova": 1703.111111111111,
+       "massa_nova_sobre_hoje": 0.004404350742487608,
+       "mediana_p_inst": 0.8888888888888888
+      }
+     }
+    }
+   },
+   "incoerente": {
+    "abs_f": {
+     "forcadas": 287158,
+     "frac_das_forcadas_nas_abertas": 0.022694823059082457,
+     "nas_abertas": 6517,
+     "total": 821994
+    },
+    "decisoes": 6720,
+    "frac_abertas": 0.002976190476190476,
+    "frac_das_forcadas_que_abrem": 0.007145409074669525,
+    "frac_forcadas": 0.41651785714285716,
+    "frac_forcadas_depois_da_abertura": 0.41354166666666664,
+    "massa_hoje": 665622.181640625,
+    "por_kappa": {
+     "1": {
+      "hoje": {
+       "frac_abertas_que_mudariam": 0.4,
+       "massa_nova": 6517.0,
+       "massa_nova_sobre_hoje": 0.009790839577997392,
+       "mediana_p_inst": 0.5
+      },
+      "nascimento": {
+       "frac_abertas_que_mudariam": 0.4,
+       "massa_nova": 6517.0,
+       "massa_nova_sobre_hoje": 0.009790839577997392,
+       "mediana_p_inst": 0.5
+      }
+     },
+     "16": {
+      "hoje": {
+       "frac_abertas_que_mudariam": 0.05,
+       "massa_nova": 1443.2110726643589,
+       "massa_nova_sobre_hoje": 0.002168213608968279,
+       "mediana_p_inst": 0.9411764705882353
+      },
+      "nascimento": {
+       "frac_abertas_que_mudariam": 0.05,
+       "massa_nova": 1443.2110726643589,
+       "massa_nova_sobre_hoje": 0.002168213608968279,
+       "mediana_p_inst": 0.9411764705882353
+      }
+     },
+     "2": {
+      "hoje": {
+       "frac_abertas_que_mudariam": 0.4,
+       "massa_nova": 5792.888888888889,
+       "massa_nova_sobre_hoje": 0.008702968513775458,
+       "mediana_p_inst": 0.6666666666666666
+      },
+      "nascimento": {
+       "frac_abertas_que_mudariam": 0.4,
+       "massa_nova": 5792.888888888889,
+       "massa_nova_sobre_hoje": 0.008702968513775458,
+       "mediana_p_inst": 0.6666666666666666
+      }
+     },
+     "32": {
+      "hoje": {
+       "frac_abertas_que_mudariam": 0.0,
+       "massa_nova": 766.0018365472891,
+       "massa_nova_sobre_hoje": 0.001150805753887661,
+       "mediana_p_inst": 0.9696969696969697
+      },
+      "nascimento": {
+       "frac_abertas_que_mudariam": 0.0,
+       "massa_nova": 766.0018365472891,
+       "massa_nova_sobre_hoje": 0.001150805753887661,
+       "mediana_p_inst": 0.9696969696969697
+      }
+     },
+     "4": {
+      "hoje": {
+       "frac_abertas_que_mudariam": 0.25,
+       "massa_nova": 4170.879999999998,
+       "massa_nova_sobre_hoje": 0.006266137329918328,
+       "mediana_p_inst": 0.8
+      },
+      "nascimento": {
+       "frac_abertas_que_mudariam": 0.25,
+       "massa_nova": 4170.879999999998,
+       "massa_nova_sobre_hoje": 0.006266137329918328,
+       "mediana_p_inst": 0.8
+      }
+     },
+     "8": {
+      "hoje": {
+       "frac_abertas_que_mudariam": 0.1,
+       "massa_nova": 2574.617283950617,
+       "massa_nova_sobre_hoje": 0.003867986006122426,
+       "mediana_p_inst": 0.8888888888888888
+      },
+      "nascimento": {
+       "frac_abertas_que_mudariam": 0.1,
+       "massa_nova": 2574.617283950617,
+       "massa_nova_sobre_hoje": 0.003867986006122426,
+       "mediana_p_inst": 0.8888888888888888
+      }
+     }
+    }
+   },
+   "relapso": {
+    "abs_f": {
+     "forcadas": 617319,
+     "frac_das_forcadas_nas_abertas": 0.8462140319672649,
+     "nas_abertas": 522384,
+     "total": 1138993
+    },
+    "decisoes": 6720,
+    "frac_abertas": 0.37217261904761906,
+    "frac_das_forcadas_que_abrem": 0.5014033680834001,
+    "frac_forcadas": 0.7422619047619048,
+    "frac_forcadas_depois_da_abertura": 0.37008928571428573,
+    "massa_hoje": 454024.068359375,
+    "por_kappa": {
+     "1": {
+      "hoje": {
+       "frac_abertas_que_mudariam": 0.6189524190323871,
+       "massa_nova": 610704.0599787993,
+       "massa_nova_sobre_hoje": 1.3450918189989147,
+       "mediana_p_inst": 0.37577085087407186
+      },
+      "nascimento": {
+       "frac_abertas_que_mudariam": 0.5665733706517393,
+       "massa_nova": 643610.5,
+       "massa_nova_sobre_hoje": 1.4175691221077757,
+       "mediana_p_inst": 0.5
+      }
+     },
+     "16": {
+      "hoje": {
+       "frac_abertas_que_mudariam": 0.09556177528988405,
+       "massa_nova": 224907.61826813532,
+       "massa_nova_sobre_hoje": 0.4953649683833799,
+       "mediana_p_inst": 0.905940895700457
+      },
+      "nascimento": {
+       "frac_abertas_que_mudariam": 0.08036785285885646,
+       "massa_nova": 187676.53614260867,
+       "massa_nova_sobre_hoje": 0.41336252683867963,
+       "mediana_p_inst": 0.9411764705882353
+      }
+     },
+     "2": {
+      "hoje": {
+       "frac_abertas_que_mudariam": 0.45461815273890444,
+       "massa_nova": 606985.8902283156,
+       "massa_nova_sobre_hoje": 1.3369024519375619,
+       "mediana_p_inst": 0.5462695341093067
+      },
+      "nascimento": {
+       "frac_abertas_que_mudariam": 0.39584166333466614,
+       "massa_nova": 596307.1166666667,
+       "massa_nova_sobre_hoje": 1.3133821711730709,
+       "mediana_p_inst": 0.6666666666666666
+      }
+     },
+     "32": {
+      "hoje": {
+       "frac_abertas_que_mudariam": 0.0547780887644942,
+       "massa_nova": 126867.23145879226,
+       "massa_nova_sobre_hoje": 0.2794284274779298,
+       "mediana_p_inst": 0.950649516723353
+      },
+      "nascimento": {
+       "frac_abertas_que_mudariam": 0.042782886845261894,
+       "massa_nova": 103463.24884400034,
+       "massa_nova_sobre_hoje": 0.22788053773859795,
+       "mediana_p_inst": 0.9696969696969697
+      }
+     },
+     "4": {
+      "hoje": {
+       "frac_abertas_que_mudariam": 0.30587764894042385,
+       "massa_nova": 510863.2548935052,
+       "massa_nova_sobre_hoje": 1.1251898092969381,
+       "mediana_p_inst": 0.7065644404925469
+      },
+      "nascimento": {
+       "frac_abertas_que_mudariam": 0.2590963614554178,
+       "massa_nova": 468251.4391836734,
+       "massa_nova_sobre_hoje": 1.031336159943479,
+       "mediana_p_inst": 0.8
+      }
+     },
+     "8": {
+      "hoje": {
+       "frac_abertas_que_mudariam": 0.17073170731707318,
+       "massa_nova": 363074.6425070443,
+       "massa_nova_sobre_hoje": 0.7996814878537646,
+       "mediana_p_inst": 0.8280548026520685
+      },
+      "nascimento": {
+       "frac_abertas_que_mudariam": 0.14234306277489003,
+       "massa_nova": 314728.24711355974,
+       "massa_nova_sobre_hoje": 0.6931972753136998,
+       "mediana_p_inst": 0.8888888888888888
+      }
+     }
+    }
+   }
+  }
+ },
+ "braco": "P1-c-tapa (v11)",
+ "dias": 14,
+ "donos": [
+  "atencioso",
+  "relapso",
+  "aleatorio",
+  "incoerente"
+ ],
+ "kappas": [
+  1,
+  2,
+  4,
+  8,
+  16,
+  32
+ ],
+ "orcamento": 224,
+ "p_inst_min": 0.9,
+ "sementes": [
+  101,
+  202,
+  303,
+  404,
+  505
+ ],
+ "versao": 1
+}

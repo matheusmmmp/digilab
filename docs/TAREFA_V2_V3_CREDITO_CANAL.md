@@ -1,7 +1,7 @@
 # TAREFA V2 — V3_CREDITO_CANAL: o crédito do "querer" por canal até o alvo (2026-10-19)
 
-Coordenador: Gerente (Claude Code). Worker do desenho: Claude Code (worker B). Worktree e branch: `v2-v3-credito-canal`. Status: ABERTA
-(só o desenho; o código não começou).
+Coordenador: Gerente (Claude Code). Worker do desenho: Claude Code (worker B). Worktree e branch: `v2-v3-credito-canal`. Status: PARADA na G0-PODE-MUDAR
+(as CC-1 a CC-6 DECIDIDAS em 2026-10-21 pela recomendação; a etapa 0 entregue no mesmo dia, #376; a G0-PODE-MUDAR não passou e o Matheus decidiu PARAR a V3-9 aqui e seguir para a V3-3/V3-4, 2026-10-21).
 
 Categoria: implementacao (a tarefa); o PR deste desenho é `arquitetura`. Origem: Matheus, 2026-10-19: seguiu a recomendação V3-9 de
 `docs/futuro/v3_espaco_acoes.md` (seção 8), antes da V3-3/V3-4 e da V3-10.
@@ -110,6 +110,8 @@ a favorita **depois de reexperimentar** que ela passou a fazer mal, mais depress
 
 ### 3.3 O que conferir na conta antes do código [HIPÓTESE]
 
+**Corrigido na etapa 0 (seção 10):** no J5 o teto não é 1024. O J5 usa o ponto T3, com teto = 16·S = 16384, e nenhum peso chega lá.
+
 A C1 só muda o comportamento onde um peso satura. No P1 do J5, a soma das classes `comida:x` chegou a 2.694
 (`artifacts_v2_v3/espaco_acoes.json`). Isso está perto do máximo 3 × (64 + 1024) = 3.264, **se** as três chaves de comer existem
 nessa vida. A etapa 0 confere isso antes de qualquer linha em `digilab/`.
@@ -173,16 +175,24 @@ calibração nas sementes dela, antes do piloto.
 
 ## 8. Precisa do Matheus
 
-Todas PROPOSTAS, com a recomendação primeiro.
+**Todas DECIDIDAS pelo Matheus em 2026-10-21, pela recomendação** (pelo Gerente):
+- **CC-1:** o teto por grupo (C1), com a etapa 0 das tabelas sombra como porta (o G0-PODE-MUDAR);
+- **CC-2:** três grupos, o humor, o gosto e a nutrição;
+- **CC-3:** só nas três chaves de comer;
+- **CC-4:** o T1-R como primário, com o T1 como controle negativo;
+- **CC-5:** um plano próprio, sem tocar no do J5;
+- **CC-6:** as faixas 56101…56505 (o piloto) e 57101…57505 (a validação). Elas entram na `FAIXAS_RESERVADAS` no PR da primeira etapa que mexe em código (a etapa 0), antes de qualquer run; o PR da decisão foi só papel.
+
+A tabela abaixo é a do desenho, como foi levada ao Matheus.
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
-| **CC-1** | a peça que faz o canal importar (seção 0, item 1) | **C1, o teto por grupo,** com a etapa 0 como porta. Não traz número novo e não toca a G-SEM-CREDITO. Testa exatamente a hipótese (o gosto saturado mascara o humor no mesmo peso). As outras: **C2,** o grupo aprende também com a x na mão (passa a poder mudar o T1, mas a G-SEM-CREDITO deixa de valer no braço, e ele vira um "desfecho de um passo", que repete o P1-plan sem o mapa); **C3,** a leitura pesada pela falta de cada drive (logo depois da x na mão, o humor cai e **aumenta** o peso do humor velho, positivo, da x: piora antes de melhorar); **C4,** o passo por grupo (um número novo, SEM FONTE, com calibração) | sem nenhuma peça: o código entra, e o pet se comporta como hoje (a linearidade). Com a C2 sem querer: o J5 perde o controle do hábito. Com a C1 sem saturação: a etapa 0 pega isso antes do código |
-| **CC-2** | os grupos | **três: o humor, o gosto e a nutrição** (o resto do corpo) | um por drive: até 12 grupos por classe, os pesos se multiplicam, e a soma volta a misturar o que importa. Dois (corpo e fruta, a rota de hoje): o humor e o gosto ficam juntos, e é a mistura que a V3-9 quer desfazer |
-| **CC-3** | onde | **só nas três chaves de comer** | também no explorar e no brincar: mais pesos, e o T2 do J5 (as árvores) passa a depender da chave, sem pergunta para isso |
-| **CC-4** | o teste no J5 | **o T1-R** (com reexperiência) como primário do plano novo, com o T1 como controle negativo | o T1 como primário: com a C1 o resultado nulo é certo por desenho, e uma faixa de validação se gasta para confirmar o desenho |
-| **CC-5** | a ordem com o J5 | **um plano próprio,** com o mundo do adendo 8 e o P1 como controle, sem tocar no plano do J5 | um braço novo no plano do J5: muda um plano que já tem piloto e faixa de validação (55101), e mistura a pergunta do planejador com a do crédito |
-| **CC-6** | as faixas, se houver run | **pedir ao coordenador 56101…56505** (piloto) e **57101…57505** (validação). Nenhuma das duas está em `experiments/bancada/faixas.py` nem nas configs. A etapa 0 usa só as sementes dos testes | usar uma faixa do J5: as calibrações e validações do J5 ficam comprometidas, e as faixas queimadas não voltam |
+| **CC-1** (DECIDIDA) | a peça que faz o canal importar (seção 0, item 1) | **C1, o teto por grupo,** com a etapa 0 como porta. Não traz número novo e não toca a G-SEM-CREDITO. Testa exatamente a hipótese (o gosto saturado mascara o humor no mesmo peso). As outras: **C2,** o grupo aprende também com a x na mão (passa a poder mudar o T1, mas a G-SEM-CREDITO deixa de valer no braço, e ele vira um "desfecho de um passo", que repete o P1-plan sem o mapa); **C3,** a leitura pesada pela falta de cada drive (logo depois da x na mão, o humor cai e **aumenta** o peso do humor velho, positivo, da x: piora antes de melhorar); **C4,** o passo por grupo (um número novo, SEM FONTE, com calibração) | sem nenhuma peça: o código entra, e o pet se comporta como hoje (a linearidade). Com a C2 sem querer: o J5 perde o controle do hábito. Com a C1 sem saturação: a etapa 0 pega isso antes do código |
+| **CC-2** (DECIDIDA) | os grupos | **três: o humor, o gosto e a nutrição** (o resto do corpo) | um por drive: até 12 grupos por classe, os pesos se multiplicam, e a soma volta a misturar o que importa. Dois (corpo e fruta, a rota de hoje): o humor e o gosto ficam juntos, e é a mistura que a V3-9 quer desfazer |
+| **CC-3** (DECIDIDA) | onde | **só nas três chaves de comer** | também no explorar e no brincar: mais pesos, e o T2 do J5 (as árvores) passa a depender da chave, sem pergunta para isso |
+| **CC-4** (DECIDIDA) | o teste no J5 | **o T1-R** (com reexperiência) como primário do plano novo, com o T1 como controle negativo | o T1 como primário: com a C1 o resultado nulo é certo por desenho, e uma faixa de validação se gasta para confirmar o desenho |
+| **CC-5** (DECIDIDA) | a ordem com o J5 | **um plano próprio,** com o mundo do adendo 8 e o P1 como controle, sem tocar no plano do J5 | um braço novo no plano do J5: muda um plano que já tem piloto e faixa de validação (55101), e mistura a pergunta do planejador com a do crédito |
+| **CC-6** (DECIDIDA) | as faixas, se houver run | **pedir ao coordenador 56101…56505** (piloto) e **57101…57505** (validação). Nenhuma das duas está em `experiments/bancada/faixas.py` nem nas configs. A etapa 0 usa só as sementes dos testes | usar uma faixa do J5: as calibrações e validações do J5 ficam comprometidas, e as faixas queimadas não voltam |
 
 ## 9. Resumo da etapa (o desenho, 2026-10-19)
 
@@ -208,3 +218,55 @@ Todas PROPOSTAS, com a recomendação primeiro.
   - o T1-R;
   - os grupos;
   - o limiar de 0,05 da G0-PODE-MUDAR.
+
+## 10. Resumo da etapa 0 (2026-10-21): as tabelas sombra e a G0-PODE-MUDAR
+
+**A G0-PODE-MUDAR não passa: a C1 não tem o que mudar nestas vidas. Pela seção 5, a tarefa para antes de tocar em `digilab/`, e a CC-1
+volta ao Matheus.**
+
+- **O que rodou:**
+  - a medição `experiments/medir_credito_canal_etapa0.py`, com o artefato `artifacts_v2_v3/credito_canal_etapa0.json`, igual em duas
+    execuções;
+  - o P1, no T1 do J5, na fumaça do piloto do adendo 8 com a duração do piloto (7 + 5 dias);
+  - as sementes dos testes (101…505): 5 vidas, sem run de pesquisa.
+- **As sombras não mudam a vida:**
+  - as 10 vidas (P1 e P1-plan) saem iguais ao gabarito gravado antes, num commit próprio (`tests/gabaritos/credito_canal_vidas_de_hoje.json`);
+  - a medida confere o gabarito de novo com os embrulhos, e as sombras da vida e as dos dois replays saem iguais;
+  - a tabela sombra escalar é a de verdade, peso a peso, depois de cada crédito (falha alto);
+  - a leitura refeita é o `P` registrado.
+- **[OBSERVADO] O teto:** o J5 usa o ponto T3, com teto = 16·S = 16384, e não o 1024 da `ConfigLobos`.
+  - **Nenhum crédito de comer foi cortado no teto,** nem no escalar nem em grupo nenhum.
+  - O maior afastamento de um peso da x do seu prior, no fim, é 3004 (18% do teto).
+  - **A hipótese da seção 3.3 estava errada:** ali usei o teto da `ConfigLobos` (1024) e não o do ponto T3.
+- **[OBSERVADO] A G0-PODE-MUDAR,** nas 67 oportunidades do T1-R (as 5 vidas juntas):
+  - a mediana de \|P_c1(x) − P_hoje(x)\| é **0,0**, contra o limiar de 0,05;
+  - a C1 mudaria a classe sorteada (com o mesmo `u`) em **0** delas.
+- **[OBSERVADO] A linearidade,** a seção 0, conferida nas vidas:
+  - sem teto, a soma dos grupos difere da tabela escalar em no máximo 5 unidades, dentro do arredondamento;
+  - a P(x) difere em no máximo 0,0008.
+- **[OBSERVADO] O crédito à x por grupo** (média por crédito):
+
+  | | n | humor | gosto | nutrição | total |
+  |---|---|---|---|---|---|
+  | antes de `T_m` | 41 | +266 | +139 | +243 | +649 |
+  | depois | 29 | −364 | +56 | +281 | −27 |
+
+  - **Depois da mudança, quem compensa a queda do humor é a nutrição, e não o gosto.** Isso corrige a leitura da seção 0, que
+    atribuía a compensação ao gosto.
+  - O total fica perto de zero, então o peso somado mal se move. As tabelas por grupo se separam muito (numa vida, o humor da x vai a
+    −1207 e a nutrição a +2242), mas a soma esconde isso.
+- **[OBSERVADO, no J5] O planejador já revaloriza:** a validação do adendo 8 passou no G-T1 (0,197, IC95 [0,075; 0,323]), e o G-T1-DESF
+  também (`docs/RESULTADO_V2_VALIDACAO_PET_QUE_PENSA_ADENDO8.md`). O modelo do desfecho faz o que a V3-9 queria para o hábito, mas pelo
+  caminho do planejador.
+
+### 10.1 A CC-1 de novo (PROPOSTA, para o Matheus)
+
+| opção | o que é | o que a etapa 0 diz | custo de errar |
+|---|---|---|---|
+| **(a) parar a V3-9 aqui e seguir para a V3-3/V3-4 (recomendada)** | as sombras ficam no repositório como instrumento, e o próximo passo é a competição entre as regras | a C1 não muda nada; as outras peças trazem número novo SEM FONTE (C3, C4) ou repetem o desfecho que o J5 já validou (C2) | perder uma revalorização do hábito que talvez exista com a C3. Ela fica medível depois, com o mesmo instrumento |
+| (b) uma etapa 0b com a C3 nas sombras | a leitura pesada pela falta de cada drive, medida do mesmo jeito, sem tocar em `digilab/` | os grupos se separam muito (o humor negativo, a nutrição positiva), então uma leitura que os pese diferente teria o que mudar | a forma do peso é SEM FONTE. Antes da reexperiência, ela aumenta o humor velho da x (seção 8), e escolher a forma olhando as sombras é calibrar sem plano |
+| (c) a C2, aprender com a mão | um desfecho por tipo e grupo no cérebro A | o J5 já mostra que o desfecho revaloriza (G-T1-DESF) | repete o P1-plan-desfecho sem o mapa, e a G-SEM-CREDITO cai no braço |
+| (d) a C4, o passo por grupo | um passo maior no humor | — | um número novo, SEM FONTE, com calibração |
+
+**As faixas 56101…56505 e 57101…57505** ficam registradas (CC-6) e não foram usadas.
+

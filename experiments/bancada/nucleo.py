@@ -16,7 +16,7 @@ from digilab.ambiente import DonoComBola, MotorAmbiente, PoliticaInstintoBola, r
 from digilab.config import (CONFIG_BOLA, CONFIG_BOLA_LIGADA, CONFIG_CONSEQUENCIA, CONFIG_FRUTAS_LIGADA, CONFIG_INFORMACAO_LIGADA,
                             CONFIG_LOBOS_APRENDIZ, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, CONFIG_PEDIDO_LIGADA, TICKS_POR_DIA, ConfigBola,
                             ConfigConsequencia, ConfigFrutas, ConfigInformacao, ConfigLobos, ConfigMundo, ConfigPedido)
-from digilab.config import ConfigCorpo
+from digilab.config import ConfigCompeticao, ConfigCorpo
 from digilab.config import CONFIG_TROCA_DIGESTAO, ConfigTrocaDigestao
 from digilab.config import CONFIG_GRUPO_LIGADA, ConfigGrupo
 from digilab.grupo import Grupo, PetDoGrupo, RegistroGrupo, reproduzir_grupo, sementes_do_grupo, simular_grupo
@@ -77,6 +77,9 @@ class Bancada:
     cfg_troca_digestao: ConfigTrocaDigestao = CONFIG_TROCA_DIGESTAO   # rede de si, 2b: a taxa lenta do P1-c-lenta (RS-3)
     metabolismo: bool = True                             # adendo 3 (A3.1): False tira o metabolismo dos bracos do corpo, so para
                                                          # refazer as vidas de antes dele (os gabaritos do G2); fora da config
+    cfg_competicao: ConfigCompeticao | None = None       # V3-3/V3-4 (TAREFA_V2_V3_COMPETICAO): a competicao entre as regras urgentes
+                                                         # em todo cerebro A da bancada (o R1 e, com o aprendizado desligado, o
+                                                         # R1-congelado); None ou desligada: a vida de hoje
 
     def __post_init__(self) -> None:
         if self.dias <= 0 or self.orcamento <= 0:
@@ -187,7 +190,7 @@ class Bancada:
         if b.pesos_janela:                  # P1-cw (A2.4, #236): o peso de cada drive pela falta recente; o resto do P1 igual
             cc = replace(cc, pesos_janela=True)
         return PoliticaDoBraco(PoliticaLobos(cfg, cl, cfg_bola=cb, cfg_frutas=cf, cfg_mundo=cm, cfg_corpo=self.cfg_corpo_de(espec),
-                                             cfg_banheiro=self.cfg_banheiro_de(espec)), b, cc)
+                                             cfg_banheiro=self.cfg_banheiro_de(espec), cfg_competicao=self.cfg_competicao), b, cc)
 
     def cfg_corpo_de(self, espec: EspecVida) -> ConfigCorpo | None:
         """A ConfigCorpo da vida pelo regime do braco: None em "hoje" (e nos bracos sem regime: a vida de antes); a da bancada em

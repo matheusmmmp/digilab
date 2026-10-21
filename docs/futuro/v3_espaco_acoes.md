@@ -116,6 +116,8 @@ sempre a regra registrada (conferido nas 26.880 decisões e em 20.000 observaç�
 - **[OBSERVADO]** (`v11.credito`):
   - **as decisões forçadas:** 2.658 aplicações de crédito e **0** com algum peso mudado. Elas levam **45,9% do |sinal|**;
   - **as decisões com escolha:** 19.402 aplicações, com o peso mudado em 93,6% (o resto tem sinal zero).
+  - **Correção (2026-10-21, `docs/TAREFA_V2_V3_COMPETICAO.md`, seção 10):** o espião contava a vida e o replay. As contagens absolutas
+    estão em dobro (1.329 e 9.701 aplicações); as frações valem.
 - **Por regra:**
   - o tempo livre e a fome moderada mudam o peso em 93,3% e 99,8% das aplicações;
   - todas as regras de um candidato, em 0%.
@@ -163,6 +165,10 @@ sempre a regra registrada (conferido nas 26.880 decisões e em 20.000 observaç�
   CC-1).
 - **"O planejador revaloriza" vale para o piloto do adendo 7.** No do adendo 8, a escolha da x não cai com o planejador (0,52 → 0,55 a
   0,68).
+
+**Correção (2026-10-21, a etapa 0 da V3-9, `docs/TAREFA_V2_V3_CREDITO_CANAL.md`, seção 10):** no crédito à x depois da mudança, quem
+compensa a queda do humor (−364 por crédito) é a nutrição (+281), e não o gosto (+56) (`artifacts_v2_v3/credito_canal_etapa0.json`, o J5
+do adendo 8). Nenhum peso de comer chega ao teto do J5 (16·S).
 
 ## 4. As três direções, comparadas [PROPOSTA]
 

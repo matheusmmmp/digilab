@@ -322,3 +322,25 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-19 — PQP-VALIDACAO-ADENDO8, a run (worker D): a validação do J5 com o adendo 8 — o G-T1 passa](registro/2026-10.md)
 
 - [2026-10-19 — V3-CREDITO-CANAL, o desenho (worker B): a soma linear e o corte da reexperiência no T1](registro/2026-10.md)
+
+- [2026-10-21 — V3-CREDITO-CANAL, a etapa 0 (worker B): as tabelas sombra e a G0-PODE-MUDAR, que não passa](registro/2026-10.md)
+
+- [2026-10-21 — GATEC-P4 (Claude Code, worktree `v2-gatec-p4`): o Gate C em parte, as CC decididas e o esboço da P4](registro/2026-10.md)
+- [2026-10-21 — P4-ETAPA0 (worker D): os gabaritos das vidas de hoje que a P4 vai tocar, no Python e no TS](registro/2026-10.md)
+
+
+- [2026-10-21 — P4-PLANO (Claude Code, worktree `v2-p4-plano`): as P4 decididas e o plano da replicação do T1](registro/2026-10.md)
+
+
+- [2026-10-21 — V3-COMPETICAO, o desenho (worker B): o que a abertura alcança e o preço do prior forte](registro/2026-10.md)
+
+
+- [2026-10-21 — GATE-INTEGRACAO (Claude Code, worktree `v2-gate-integracao`): o Gate I, a decisão do cérebro e o escopo genético](registro/2026-10.md)
+
+- [2026-10-21 — GATE-I (Claude Code, worktree `v2-gate-i`): as GI decididas, o marco, a tarefa e o plano do Gate I](registro/2026-10.md)
+
+- [2026-10-21 — V3-COMPETICAO, a etapa 0 (worker B): a G0-R1-PODE-APRENDER passa, e a disputa é do pet negligenciado](registro/2026-10.md)
+
+- [2026-10-21 — GATE-I-DECISOES (Claude Code, worktree `v2-gate-i`): as GT-1 a GT-7 decididas; a GT-8 fica aberta](registro/2026-10.md)
+
+- [2026-10-21 — V3-COMPETICAO, o código (worker B): a chave numa config própria e as regras dentro do lobos.py](registro/2026-10.md)

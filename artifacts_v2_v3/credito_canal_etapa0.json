@@ -1,0 +1,4520 @@
+{
+ "analise": {
+  "cl": {
+   "passo": 512,
+   "teto": 16384,
+   "w0_alvo": 64
+  },
+  "cortes_no_teto": {
+   "c1_gosto": 0,
+   "c1_humor": 0,
+   "c1_nutricao": 0,
+   "escalar": 0
+  },
+  "credito_x_por_grupo": {
+   "antes": {
+    "f": 648.5365853658536,
+    "gosto": 139.09756097560975,
+    "humor": 266.2682926829268,
+    "n": 41,
+    "nutricao": 243.17073170731706
+   },
+   "depois": {
+    "f": -26.862068965517242,
+    "gosto": 56.44827586206897,
+    "humor": -364.0,
+    "n": 29,
+    "nutricao": 280.6896551724138
+   }
+  },
+  "g0_pode_mudar": {
+   "frac_abs_dp_acima_do_limiar": 0.0,
+   "frac_c1_mudaria_a_classe": 0.0,
+   "limiar": 0.05,
+   "media_dp_c1_menos_hoje": 4.594185335129055e-07,
+   "mediana_abs_dp": 0.0,
+   "passa": false
+  },
+  "linearidade": {
+   "dentro_do_arredondamento": true,
+   "dif_p_grupos_sem_teto_contra_escalar_sem_teto_max": 0.0007784216398369695,
+   "max_dif": 5
+  },
+  "max_abs_w_x_menos_prior_fim": 3004,
+  "oportunidades": {
+   "antes": 106,
+   "depois_t1r": 67
+  },
+  "p_x_media": {
+   "antes": {
+    "c1": 0.31286058259057037,
+    "hoje": 0.3128713306083385
+   },
+   "depois_t1r": {
+    "c1": 0.32318854040706807,
+    "hoje": 0.3231880809885346
+   }
+  },
+  "por_vida": [
+   {
+    "f_antes": 0.3333333333333333,
+    "f_r": 0.0,
+    "mediana_abs_dp": 0.0,
+    "oportunidades_depois": 16,
+    "reexperiencias_depois": 1,
+    "semente": 101,
+    "t1": {
+     "f_antes": 0.3333333333333333,
+     "f_depois": 0.0,
+     "queda": 0.3333333333333333,
+     "sem_oportunidade": false
+    },
+    "x": "c"
+   },
+   {
+    "f_antes": 0.6666666666666666,
+    "f_r": 0.3333333333333333,
+    "mediana_abs_dp": 0.0,
+    "oportunidades_depois": 8,
+    "reexperiencias_depois": 3,
+    "semente": 202,
+    "t1": {
+     "f_antes": 0.6666666666666666,
+     "f_depois": 0.5,
+     "queda": 0.16666666666666663,
+     "sem_oportunidade": false
+    },
+    "x": "b"
+   },
+   {
+    "f_antes": 0.6666666666666666,
+    "f_r": 1.0,
+    "mediana_abs_dp": 0.0,
+    "oportunidades_depois": 10,
+    "reexperiencias_depois": 7,
+    "semente": 303,
+    "t1": {
+     "f_antes": 0.6666666666666666,
+     "f_depois": 0.3333333333333333,
+     "queda": 0.3333333333333333,
+     "sem_oportunidade": false
+    },
+    "x": "c"
+   },
+   {
+    "f_antes": 1.0,
+    "f_r": 0.3333333333333333,
+    "mediana_abs_dp": 0.00015310039590887836,
+    "oportunidades_depois": 15,
+    "reexperiencias_depois": 8,
+    "semente": 404,
+    "t1": {
+     "f_antes": 1.0,
+     "f_depois": 1.0,
+     "queda": 0.0,
+     "sem_oportunidade": false
+    },
+    "x": "b"
+   },
+   {
+    "f_antes": 0.3333333333333333,
+    "f_r": 0.6666666666666666,
+    "mediana_abs_dp": 0.0,
+    "oportunidades_depois": 18,
+    "reexperiencias_depois": 3,
+    "semente": 505,
+    "t1": {
+     "f_antes": 0.3333333333333333,
+     "f_depois": 0.0,
+     "queda": 0.3333333333333333,
+     "sem_oportunidade": false
+    },
+    "x": "b"
+   }
+  ]
+ },
+ "braco": "P1",
+ "chaves": [
+  "pedido_necessidade:comer",
+  "fome_moderada:comer",
+  "fruta_no_cenario:comer"
+ ],
+ "config": "experiments/configs/v2_pet_que_pensa/fumaca_piloto_adendo8.json",
+ "duracao": {
+  "d_a": 7,
+  "janela": 5
+ },
+ "grupos": [
+  "humor",
+  "gosto",
+  "nutricao"
+ ],
+ "protocolo": "T1",
+ "sementes": [
+  101,
+  202,
+  303,
+  404,
+  505
+ ],
+ "versao": 1,
+ "vidas": [
+  {
+   "cl": {
+    "passo": 512,
+    "teto": 16384,
+    "w0_alvo": 64
+   },
+   "cortes_no_teto": {
+    "c1_gosto": 0,
+    "c1_humor": 0,
+    "c1_nutricao": 0,
+    "escalar": 0
+   },
+   "creditos_comer": 152,
+   "creditos_x": {
+    "antes": [
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:c",
+      "f": 1180,
+      "f_grupos": {
+       "gosto": 387,
+       "humor": 277,
+       "nutricao": 516
+      },
+      "k": 85
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:c",
+      "f": 687,
+      "f_grupos": {
+       "gosto": 268,
+       "humor": 322,
+       "nutricao": 97
+      },
+      "k": 206
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:c",
+      "f": 396,
+      "f_grupos": {
+       "gosto": 237,
+       "humor": 1,
+       "nutricao": 158
+      },
+      "k": 280
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:c",
+      "f": 1170,
+      "f_grupos": {
+       "gosto": 365,
+       "humor": 313,
+       "nutricao": 492
+      },
+      "k": 471
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:c",
+      "f": 1129,
+      "f_grupos": {
+       "gosto": 209,
+       "humor": 365,
+       "nutricao": 555
+      },
+      "k": 484
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:c",
+      "f": 313,
+      "f_grupos": {
+       "gosto": 45,
+       "humor": 274,
+       "nutricao": -6
+      },
+      "k": 516
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:c",
+      "f": 391,
+      "f_grupos": {
+       "gosto": 63,
+       "humor": 131,
+       "nutricao": 197
+      },
+      "k": 565
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:c",
+      "f": 712,
+      "f_grupos": {
+       "gosto": 136,
+       "humor": 58,
+       "nutricao": 518
+      },
+      "k": 619
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:c",
+      "f": 470,
+      "f_grupos": {
+       "gosto": 105,
+       "humor": 371,
+       "nutricao": -6
+      },
+      "k": 679
+     }
+    ],
+    "depois": [
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:c",
+      "f": -494,
+      "f_grupos": {
+       "gosto": 60,
+       "humor": -528,
+       "nutricao": -26
+      },
+      "k": 751
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:c",
+      "f": -358,
+      "f_grupos": {
+       "gosto": 122,
+       "humor": -469,
+       "nutricao": -11
+      },
+      "k": 801
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:c",
+      "f": -334,
+      "f_grupos": {
+       "gosto": 116,
+       "humor": -457,
+       "nutricao": 7
+      },
+      "k": 863
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:c",
+      "f": -259,
+      "f_grupos": {
+       "gosto": 235,
+       "humor": -485,
+       "nutricao": -9
+      },
+      "k": 997
+     }
+    ]
+   },
+   "decisoes": 1152,
+   "k_mudanca": 704,
+   "linearidade": {
+    "creditos": 152,
+    "limite_do_arredondamento": 456,
+    "max_dif_soma_dos_grupos_contra_escalar_sem_teto": 1
+   },
+   "oportunidades": [
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": false,
+     "k": 35,
+     "p_c1": 0.8947368421052632,
+     "p_escalar_sem_teto": 0.8947368421052632,
+     "p_grupos_sem_teto": 0.8947368421052632,
+     "p_hoje": 0.8947368421052632,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 525,
+     "w_x": {
+      "gosto": 0,
+      "hoje": 64,
+      "humor": 0,
+      "nutricao": 64
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 85,
+     "p_c1": 0.8095238095238095,
+     "p_escalar_sem_teto": 0.8095238095238095,
+     "p_grupos_sem_teto": 0.8095238095238095,
+     "p_hoje": 0.8095238095238095,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 1275,
+     "w_x": {
+      "gosto": 0,
+      "hoje": 64,
+      "humor": 0,
+      "nutricao": 64
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 175,
+     "p_c1": 0.13513513513513514,
+     "p_escalar_sem_teto": 0.13513513513513514,
+     "p_grupos_sem_teto": 0.13513513513513514,
+     "p_hoje": 0.13513513513513514,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 2625,
+     "w_x": {
+      "gosto": 35,
+      "hoje": 170,
+      "humor": 25,
+      "nutricao": 110
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 176,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 2640,
+     "w_x": {
+      "gosto": -5,
+      "hoje": -97,
+      "humor": 25,
+      "nutricao": -117
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 192,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 2880,
+     "w_x": {
+      "gosto": -5,
+      "hoje": -97,
+      "humor": 25,
+      "nutricao": -117
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 194,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 2910,
+     "w_x": {
+      "gosto": -5,
+      "hoje": -97,
+      "humor": 25,
+      "nutricao": -117
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 196,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 2940,
+     "w_x": {
+      "gosto": -5,
+      "hoje": -97,
+      "humor": 25,
+      "nutricao": -117
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 197,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 2955,
+     "w_x": {
+      "gosto": -5,
+      "hoje": -97,
+      "humor": 25,
+      "nutricao": -117
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 261,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 3915,
+     "w_x": {
+      "gosto": -5,
+      "hoje": -97,
+      "humor": 25,
+      "nutricao": -117
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": false,
+     "k": 262,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 3930,
+     "w_x": {
+      "gosto": -13,
+      "hoje": -583,
+      "humor": 0,
+      "nutricao": -569
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 280,
+     "p_c1": 0.8873483535528596,
+     "p_escalar_sem_teto": 0.8873483535528596,
+     "p_grupos_sem_teto": 0.8873483535528596,
+     "p_hoje": 0.8873483535528596,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 4200,
+     "w_x": {
+      "gosto": -5,
+      "hoje": -97,
+      "humor": 25,
+      "nutricao": -117
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": false,
+     "k": 378,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 5670,
+     "w_x": {
+      "gosto": -13,
+      "hoje": -583,
+      "humor": 0,
+      "nutricao": -569
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 402,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 6030,
+     "w_x": {
+      "gosto": 8,
+      "hoje": -75,
+      "humor": 25,
+      "nutricao": -108
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 471,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 7065,
+     "w_x": {
+      "gosto": 8,
+      "hoje": -75,
+      "humor": 25,
+      "nutricao": -108
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 484,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 7260,
+     "w_x": {
+      "gosto": 8,
+      "hoje": -75,
+      "humor": 25,
+      "nutricao": -108
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 515,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 7725,
+     "w_x": {
+      "gosto": 8,
+      "hoje": -75,
+      "humor": 25,
+      "nutricao": -108
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 516,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 7740,
+     "w_x": {
+      "gosto": 8,
+      "hoje": -75,
+      "humor": 25,
+      "nutricao": -108
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 563,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 8445,
+     "w_x": {
+      "gosto": 8,
+      "hoje": -75,
+      "humor": 25,
+      "nutricao": -108
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 564,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 8460,
+     "w_x": {
+      "gosto": 8,
+      "hoje": -75,
+      "humor": 25,
+      "nutricao": -108
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 565,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 8475,
+     "w_x": {
+      "gosto": 8,
+      "hoje": -75,
+      "humor": 25,
+      "nutricao": -108
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 619,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 9285,
+     "w_x": {
+      "gosto": 8,
+      "hoje": -75,
+      "humor": 25,
+      "nutricao": -108
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 674,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 10110,
+     "w_x": {
+      "gosto": 8,
+      "hoje": -75,
+      "humor": 25,
+      "nutricao": -108
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 675,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 10125,
+     "w_x": {
+      "gosto": 8,
+      "hoje": -75,
+      "humor": 25,
+      "nutricao": -108
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 677,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 10155,
+     "w_x": {
+      "gosto": 8,
+      "hoje": -75,
+      "humor": 25,
+      "nutricao": -108
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 678,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 10170,
+     "w_x": {
+      "gosto": 8,
+      "hoje": -75,
+      "humor": 25,
+      "nutricao": -108
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 679,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 10185,
+     "w_x": {
+      "gosto": 8,
+      "hoje": -75,
+      "humor": 25,
+      "nutricao": -108
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 743,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 11145,
+     "w_x": {
+      "gosto": 8,
+      "hoje": -75,
+      "humor": 25,
+      "nutricao": -108
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 744,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 11160,
+     "w_x": {
+      "gosto": 8,
+      "hoje": -75,
+      "humor": 25,
+      "nutricao": -108
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 745,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 11175,
+     "w_x": {
+      "gosto": 8,
+      "hoje": -75,
+      "humor": 25,
+      "nutricao": -108
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 749,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 11235,
+     "w_x": {
+      "gosto": 8,
+      "hoje": -75,
+      "humor": 25,
+      "nutricao": -108
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 750,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 11250,
+     "w_x": {
+      "gosto": 8,
+      "hoje": -75,
+      "humor": 25,
+      "nutricao": -108
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 801,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 12015,
+     "w_x": {
+      "gosto": 8,
+      "hoje": -75,
+      "humor": 25,
+      "nutricao": -108
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 848,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 12720,
+     "w_x": {
+      "gosto": 8,
+      "hoje": -75,
+      "humor": 25,
+      "nutricao": -108
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 849,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 12735,
+     "w_x": {
+      "gosto": 8,
+      "hoje": -75,
+      "humor": 25,
+      "nutricao": -108
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 850,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 12750,
+     "w_x": {
+      "gosto": 8,
+      "hoje": -75,
+      "humor": 25,
+      "nutricao": -108
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 862,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 12930,
+     "w_x": {
+      "gosto": 8,
+      "hoje": -75,
+      "humor": 25,
+      "nutricao": -108
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "pedido_necessidade:comer",
+     "depois": true,
+     "k": 916,
+     "p_c1": 0.047619047619047616,
+     "p_escalar_sem_teto": 0.047619047619047616,
+     "p_grupos_sem_teto": 0.047619047619047616,
+     "p_hoje": 0.047619047619047616,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 13740,
+     "w_x": {
+      "gosto": 0,
+      "hoje": 64,
+      "humor": 0,
+      "nutricao": 64
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 937,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 14055,
+     "w_x": {
+      "gosto": 8,
+      "hoje": -75,
+      "humor": 25,
+      "nutricao": -108
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 938,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 14070,
+     "w_x": {
+      "gosto": 8,
+      "hoje": -75,
+      "humor": 25,
+      "nutricao": -108
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": true,
+     "k": 994,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 14910,
+     "w_x": {
+      "gosto": -13,
+      "hoje": -583,
+      "humor": 0,
+      "nutricao": -569
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 995,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 14925,
+     "w_x": {
+      "gosto": 8,
+      "hoje": -75,
+      "humor": 25,
+      "nutricao": -108
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 996,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 14940,
+     "w_x": {
+      "gosto": 8,
+      "hoje": -75,
+      "humor": 25,
+      "nutricao": -108
+     }
+    }
+   ],
+   "semente": 101,
+   "t1": {
+    "f_antes": 0.3333333333333333,
+    "f_depois": 0.0,
+    "queda": 0.3333333333333333,
+    "sem_oportunidade": false
+   },
+   "tick_mudanca": 10560,
+   "w_x_fim": {
+    "gosto": {
+     "fome_moderada:comer": -13,
+     "fruta_no_cenario:comer": 8,
+     "pedido_necessidade:comer": -21
+    },
+    "hoje": {
+     "fome_moderada:comer": -583,
+     "fruta_no_cenario:comer": -75,
+     "pedido_necessidade:comer": -274
+    },
+    "humor": {
+     "fome_moderada:comer": 0,
+     "fruta_no_cenario:comer": 25,
+     "pedido_necessidade:comer": 0
+    },
+    "nutricao": {
+     "fome_moderada:comer": -569,
+     "fruta_no_cenario:comer": -108,
+     "pedido_necessidade:comer": -253
+    }
+   },
+   "x": "c"
+  },
+  {
+   "cl": {
+    "passo": 512,
+    "teto": 16384,
+    "w0_alvo": 64
+   },
+   "cortes_no_teto": {
+    "c1_gosto": 0,
+    "c1_humor": 0,
+    "c1_nutricao": 0,
+    "escalar": 0
+   },
+   "creditos_comer": 172,
+   "creditos_x": {
+    "antes": [
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": 398,
+      "f_grupos": {
+       "gosto": 243,
+       "humor": 171,
+       "nutricao": -16
+      },
+      "k": 43
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": 595,
+      "f_grupos": {
+       "gosto": 225,
+       "humor": 382,
+       "nutricao": -12
+      },
+      "k": 320
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": 463,
+      "f_grupos": {
+       "gosto": 211,
+       "humor": 263,
+       "nutricao": -11
+      },
+      "k": 391
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": 271,
+      "f_grupos": {
+       "gosto": 152,
+       "humor": 101,
+       "nutricao": 18
+      },
+      "k": 441
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": 727,
+      "f_grupos": {
+       "gosto": 88,
+       "humor": 397,
+       "nutricao": 242
+      },
+      "k": 499
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": 601,
+      "f_grupos": {
+       "gosto": 174,
+       "humor": 433,
+       "nutricao": -6
+      },
+      "k": 608
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": 512,
+      "f_grupos": {
+       "gosto": 181,
+       "humor": 332,
+       "nutricao": -1
+      },
+      "k": 703
+     }
+    ],
+    "depois": [
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": 346,
+      "f_grupos": {
+       "gosto": 89,
+       "humor": -157,
+       "nutricao": 414
+      },
+      "k": 771
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": -60,
+      "f_grupos": {
+       "gosto": 106,
+       "humor": -436,
+       "nutricao": 270
+      },
+      "k": 833
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": -1,
+      "f_grupos": {
+       "gosto": 112,
+       "humor": -445,
+       "nutricao": 332
+      },
+      "k": 899
+     }
+    ]
+   },
+   "decisoes": 1152,
+   "k_mudanca": 704,
+   "linearidade": {
+    "creditos": 172,
+    "limite_do_arredondamento": 516,
+    "max_dif_soma_dos_grupos_contra_escalar_sem_teto": 5
+   },
+   "oportunidades": [
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 43,
+     "p_c1": 0.058823529411764705,
+     "p_escalar_sem_teto": 0.058823529411764705,
+     "p_grupos_sem_teto": 0.058823529411764705,
+     "p_hoje": 0.058823529411764705,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 645,
+     "w_x": {
+      "gosto": 0,
+      "hoje": 64,
+      "humor": 0,
+      "nutricao": 64
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": false,
+     "k": 310,
+     "p_c1": 0.052202283849918436,
+     "p_escalar_sem_teto": 0.052202283849918436,
+     "p_grupos_sem_teto": 0.052202283849918436,
+     "p_hoje": 0.052202283849918436,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 4650,
+     "w_x": {
+      "gosto": 0,
+      "hoje": 64,
+      "humor": 0,
+      "nutricao": 64
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 320,
+     "p_c1": 0.749326805385557,
+     "p_escalar_sem_teto": 0.749326805385557,
+     "p_grupos_sem_teto": 0.749326805385557,
+     "p_hoje": 0.749326805385557,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 4800,
+     "w_x": {
+      "gosto": 1830,
+      "hoje": 3061,
+      "humor": 1288,
+      "nutricao": -57
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 391,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 5865,
+     "w_x": {
+      "gosto": 1839,
+      "hoje": 3086,
+      "humor": 1304,
+      "nutricao": -58
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": false,
+     "k": 489,
+     "p_c1": 0.8677966101694915,
+     "p_escalar_sem_teto": 0.8685326547921968,
+     "p_grupos_sem_teto": 0.8677966101694915,
+     "p_hoje": 0.8685326547921968,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 7335,
+     "w_x": {
+      "gosto": -33,
+      "hoje": -252,
+      "humor": 0,
+      "nutricao": -219
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 499,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 7485,
+     "w_x": {
+      "gosto": 1839,
+      "hoje": 3086,
+      "humor": 1304,
+      "nutricao": -58
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": false,
+     "k": 578,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 8670,
+     "w_x": {
+      "gosto": -35,
+      "hoje": -520,
+      "humor": 0,
+      "nutricao": -486
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 608,
+     "p_c1": 0.5926993275696446,
+     "p_escalar_sem_teto": 0.5927775643488282,
+     "p_grupos_sem_teto": 0.5926993275696446,
+     "p_hoje": 0.5927775643488282,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 9120,
+     "w_x": {
+      "gosto": 1839,
+      "hoje": 3086,
+      "humor": 1304,
+      "nutricao": -58
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": false,
+     "k": 675,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 10125,
+     "w_x": {
+      "gosto": -35,
+      "hoje": -520,
+      "humor": 0,
+      "nutricao": -486
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 703,
+     "p_c1": 0.7246175243393602,
+     "p_escalar_sem_teto": 0.7246813441483199,
+     "p_grupos_sem_teto": 0.7246175243393602,
+     "p_hoje": 0.7246813441483199,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 10545,
+     "w_x": {
+      "gosto": 1851,
+      "hoje": 3127,
+      "humor": 1333,
+      "nutricao": -58
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": true,
+     "k": 770,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 11550,
+     "w_x": {
+      "gosto": -35,
+      "hoje": -520,
+      "humor": 0,
+      "nutricao": -486
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 771,
+     "p_c1": 0.5987830386004944,
+     "p_escalar_sem_teto": 0.5988593155893536,
+     "p_grupos_sem_teto": 0.5987830386004944,
+     "p_hoje": 0.5988593155893536,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 11565,
+     "w_x": {
+      "gosto": 1859,
+      "hoje": 3150,
+      "humor": 1348,
+      "nutricao": -58
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": true,
+     "k": 830,
+     "p_c1": 0.34076539101497505,
+     "p_escalar_sem_teto": 0.34076539101497505,
+     "p_grupos_sem_teto": 0.34076539101497505,
+     "p_hoje": 0.34076539101497505,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 12450,
+     "w_x": {
+      "gosto": -35,
+      "hoje": -520,
+      "humor": 0,
+      "nutricao": -486
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 832,
+     "p_c1": 0.604420731707317,
+     "p_escalar_sem_teto": 0.6044960944941894,
+     "p_grupos_sem_teto": 0.604420731707317,
+     "p_hoje": 0.6044960944941894,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 12480,
+     "w_x": {
+      "gosto": 1865,
+      "hoje": 3173,
+      "humor": 1338,
+      "nutricao": -31
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 833,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 12495,
+     "w_x": {
+      "gosto": 1857,
+      "hoje": 3122,
+      "humor": 1338,
+      "nutricao": -74
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": true,
+     "k": 896,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 13440,
+     "w_x": {
+      "gosto": -36,
+      "hoje": -621,
+      "humor": 0,
+      "nutricao": -587
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 897,
+     "p_c1": 0.5916587677725118,
+     "p_escalar_sem_teto": 0.5917361637604246,
+     "p_grupos_sem_teto": 0.5916587677725118,
+     "p_hoje": 0.5917361637604246,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 13455,
+     "w_x": {
+      "gosto": 1857,
+      "hoje": 3122,
+      "humor": 1338,
+      "nutricao": -74
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 899,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 13485,
+     "w_x": {
+      "gosto": 1851,
+      "hoje": 3068,
+      "humor": 1338,
+      "nutricao": -121
+     }
+    }
+   ],
+   "semente": 202,
+   "t1": {
+    "f_antes": 0.6666666666666666,
+    "f_depois": 0.5,
+    "queda": 0.16666666666666663,
+    "sem_oportunidade": false
+   },
+   "tick_mudanca": 10560,
+   "w_x_fim": {
+    "gosto": {
+     "fome_moderada:comer": -36,
+     "fruta_no_cenario:comer": 1851,
+     "pedido_necessidade:comer": 0
+    },
+    "hoje": {
+     "fome_moderada:comer": -621,
+     "fruta_no_cenario:comer": 3068,
+     "pedido_necessidade:comer": 64
+    },
+    "humor": {
+     "fome_moderada:comer": 0,
+     "fruta_no_cenario:comer": 1338,
+     "pedido_necessidade:comer": 0
+    },
+    "nutricao": {
+     "fome_moderada:comer": -587,
+     "fruta_no_cenario:comer": -121,
+     "pedido_necessidade:comer": 64
+    }
+   },
+   "x": "b"
+  },
+  {
+   "cl": {
+    "passo": 512,
+    "teto": 16384,
+    "w0_alvo": 64
+   },
+   "cortes_no_teto": {
+    "c1_gosto": 0,
+    "c1_humor": 0,
+    "c1_nutricao": 0,
+    "escalar": 0
+   },
+   "creditos_comer": 177,
+   "creditos_x": {
+    "antes": [
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:c",
+      "f": 384,
+      "f_grupos": {
+       "gosto": 282,
+       "humor": 109,
+       "nutricao": -7
+      },
+      "k": 127
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:c",
+      "f": 560,
+      "f_grupos": {
+       "gosto": 175,
+       "humor": 390,
+       "nutricao": -5
+      },
+      "k": 207
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:c",
+      "f": 629,
+      "f_grupos": {
+       "gosto": 140,
+       "humor": 175,
+       "nutricao": 314
+      },
+      "k": 267
+     },
+     {
+      "chave": "fome_moderada:comer",
+      "classe": "comida:c",
+      "f": 1408,
+      "f_grupos": {
+       "gosto": 279,
+       "humor": 418,
+       "nutricao": 711
+      },
+      "k": 390
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:c",
+      "f": 1035,
+      "f_grupos": {
+       "gosto": 114,
+       "humor": 362,
+       "nutricao": 559
+      },
+      "k": 393
+     },
+     {
+      "chave": "fome_moderada:comer",
+      "classe": "comida:c",
+      "f": 1255,
+      "f_grupos": {
+       "gosto": 206,
+       "humor": 436,
+       "nutricao": 613
+      },
+      "k": 515
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:c",
+      "f": 317,
+      "f_grupos": {
+       "gosto": 135,
+       "humor": 186,
+       "nutricao": -4
+      },
+      "k": 580
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:c",
+      "f": 924,
+      "f_grupos": {
+       "gosto": 133,
+       "humor": 426,
+       "nutricao": 365
+      },
+      "k": 644
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:c",
+      "f": -13,
+      "f_grupos": {
+       "gosto": 0,
+       "humor": 0,
+       "nutricao": -13
+      },
+      "k": 674
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:c",
+      "f": 678,
+      "f_grupos": {
+       "gosto": 99,
+       "humor": 433,
+       "nutricao": 146
+      },
+      "k": 675
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:c",
+      "f": 375,
+      "f_grupos": {
+       "gosto": 7,
+       "humor": 361,
+       "nutricao": 7
+      },
+      "k": 676
+     }
+    ],
+    "depois": [
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:c",
+      "f": 95,
+      "f_grupos": {
+       "gosto": 8,
+       "humor": -135,
+       "nutricao": 222
+      },
+      "k": 741
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:c",
+      "f": -11,
+      "f_grupos": {
+       "gosto": 0,
+       "humor": 0,
+       "nutricao": -11
+      },
+      "k": 784
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:c",
+      "f": 503,
+      "f_grupos": {
+       "gosto": 96,
+       "humor": -143,
+       "nutricao": 550
+      },
+      "k": 785
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:c",
+      "f": 184,
+      "f_grupos": {
+       "gosto": 109,
+       "humor": -496,
+       "nutricao": 571
+      },
+      "k": 834
+     },
+     {
+      "chave": "fome_moderada:comer",
+      "classe": "comida:c",
+      "f": 375,
+      "f_grupos": {
+       "gosto": 115,
+       "humor": -349,
+       "nutricao": 609
+      },
+      "k": 884
+     },
+     {
+      "chave": "fome_moderada:comer",
+      "classe": "comida:c",
+      "f": 73,
+      "f_grupos": {
+       "gosto": 0,
+       "humor": -527,
+       "nutricao": 600
+      },
+      "k": 893
+     },
+     {
+      "chave": "fome_moderada:comer",
+      "classe": "comida:c",
+      "f": 410,
+      "f_grupos": {
+       "gosto": 109,
+       "humor": -274,
+       "nutricao": 575
+      },
+      "k": 942
+     },
+     {
+      "chave": "fome_moderada:comer",
+      "classe": "comida:c",
+      "f": 172,
+      "f_grupos": {
+       "gosto": 20,
+       "humor": -506,
+       "nutricao": 658
+      },
+      "k": 957
+     }
+    ]
+   },
+   "decisoes": 1152,
+   "k_mudanca": 706,
+   "linearidade": {
+    "creditos": 177,
+    "limite_do_arredondamento": 531,
+    "max_dif_soma_dos_grupos_contra_escalar_sem_teto": 1
+   },
+   "oportunidades": [
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 37,
+     "p_c1": 0.052502050861361775,
+     "p_escalar_sem_teto": 0.052545155993431854,
+     "p_grupos_sem_teto": 0.052502050861361775,
+     "p_hoje": 0.052545155993431854,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 555,
+     "w_x": {
+      "gosto": 0,
+      "hoje": 64,
+      "humor": 0,
+      "nutricao": 64
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 39,
+     "p_c1": 0.052502050861361775,
+     "p_escalar_sem_teto": 0.052545155993431854,
+     "p_grupos_sem_teto": 0.052502050861361775,
+     "p_hoje": 0.052545155993431854,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 585,
+     "w_x": {
+      "gosto": 0,
+      "hoje": 64,
+      "humor": 0,
+      "nutricao": 64
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 41,
+     "p_c1": 0.051766639276910435,
+     "p_escalar_sem_teto": 0.05180921052631579,
+     "p_grupos_sem_teto": 0.051766639276910435,
+     "p_hoje": 0.05180921052631579,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 615,
+     "w_x": {
+      "gosto": 0,
+      "hoje": 63,
+      "humor": 0,
+      "nutricao": 63
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 42,
+     "p_c1": 0.05102880658436214,
+     "p_escalar_sem_teto": 0.051070840197693576,
+     "p_grupos_sem_teto": 0.05102880658436214,
+     "p_hoje": 0.051070840197693576,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 630,
+     "w_x": {
+      "gosto": 0,
+      "hoje": 62,
+      "humor": 0,
+      "nutricao": 62
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 54,
+     "p_c1": 0.05102880658436214,
+     "p_escalar_sem_teto": 0.051070840197693576,
+     "p_grupos_sem_teto": 0.05102880658436214,
+     "p_hoje": 0.051070840197693576,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 810,
+     "w_x": {
+      "gosto": 0,
+      "hoje": 62,
+      "humor": 0,
+      "nutricao": 62
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 113,
+     "p_c1": 0.020444444444444446,
+     "p_escalar_sem_teto": 0.020444444444444446,
+     "p_grupos_sem_teto": 0.020444444444444446,
+     "p_hoje": 0.020444444444444446,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 1695,
+     "w_x": {
+      "gosto": 0,
+      "hoje": 23,
+      "humor": 0,
+      "nutricao": 23
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 114,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 1710,
+     "w_x": {
+      "gosto": 0,
+      "hoje": -1,
+      "humor": 0,
+      "nutricao": -1
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 115,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 1725,
+     "w_x": {
+      "gosto": 0,
+      "hoje": -1,
+      "humor": 0,
+      "nutricao": -1
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 116,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 1740,
+     "w_x": {
+      "gosto": 0,
+      "hoje": -1,
+      "humor": 0,
+      "nutricao": -1
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 125,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 1875,
+     "w_x": {
+      "gosto": 0,
+      "hoje": -1,
+      "humor": 0,
+      "nutricao": -1
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 171,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 2565,
+     "w_x": {
+      "gosto": 0,
+      "hoje": -1,
+      "humor": 0,
+      "nutricao": -1
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 172,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 2580,
+     "w_x": {
+      "gosto": 0,
+      "hoje": -1,
+      "humor": 0,
+      "nutricao": -1
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 196,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 2940,
+     "w_x": {
+      "gosto": 0,
+      "hoje": -1,
+      "humor": 0,
+      "nutricao": -1
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 197,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 2955,
+     "w_x": {
+      "gosto": 0,
+      "hoje": -1,
+      "humor": 0,
+      "nutricao": -1
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 205,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 3075,
+     "w_x": {
+      "gosto": 0,
+      "hoje": -1,
+      "humor": 0,
+      "nutricao": -1
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 206,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 3090,
+     "w_x": {
+      "gosto": 0,
+      "hoje": -1,
+      "humor": 0,
+      "nutricao": -1
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 207,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 3105,
+     "w_x": {
+      "gosto": 0,
+      "hoje": -1,
+      "humor": 0,
+      "nutricao": -1
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 267,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 4005,
+     "w_x": {
+      "gosto": 0,
+      "hoje": -1,
+      "humor": 0,
+      "nutricao": -1
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": false,
+     "k": 390,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 5850,
+     "w_x": {
+      "gosto": 0,
+      "hoje": 64,
+      "humor": 0,
+      "nutricao": 64
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 393,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 5895,
+     "w_x": {
+      "gosto": 0,
+      "hoje": -1,
+      "humor": 0,
+      "nutricao": -1
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": false,
+     "k": 515,
+     "p_c1": 0.8903436988543372,
+     "p_escalar_sem_teto": 0.8896156991005724,
+     "p_grupos_sem_teto": 0.8903436988543372,
+     "p_hoje": 0.8896156991005724,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 7725,
+     "w_x": {
+      "gosto": 0,
+      "hoje": 64,
+      "humor": 0,
+      "nutricao": 64
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 575,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 8625,
+     "w_x": {
+      "gosto": 0,
+      "hoje": -1,
+      "humor": 0,
+      "nutricao": -1
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 577,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 8655,
+     "w_x": {
+      "gosto": 0,
+      "hoje": -1,
+      "humor": 0,
+      "nutricao": -1
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 578,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 8670,
+     "w_x": {
+      "gosto": 0,
+      "hoje": -1,
+      "humor": 0,
+      "nutricao": -1
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 580,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 8700,
+     "w_x": {
+      "gosto": 0,
+      "hoje": -1,
+      "humor": 0,
+      "nutricao": -1
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 644,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 9660,
+     "w_x": {
+      "gosto": 0,
+      "hoje": -1,
+      "humor": 0,
+      "nutricao": -1
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 738,
+     "p_c1": 0.01821668264621285,
+     "p_escalar_sem_teto": 0.01821668264621285,
+     "p_grupos_sem_teto": 0.01821668264621285,
+     "p_hoje": 0.01821668264621285,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 11070,
+     "w_x": {
+      "gosto": 3,
+      "hoje": 19,
+      "humor": 13,
+      "nutricao": 3
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 740,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 11100,
+     "w_x": {
+      "gosto": -17,
+      "hoje": -273,
+      "humor": 13,
+      "nutricao": -269
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 741,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 11115,
+     "w_x": {
+      "gosto": -17,
+      "hoje": -273,
+      "humor": 13,
+      "nutricao": -269
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 784,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": false,
+     "sucesso": true,
+     "tick": 11760,
+     "w_x": {
+      "gosto": -17,
+      "hoje": -273,
+      "humor": 13,
+      "nutricao": -269
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 785,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 11775,
+     "w_x": {
+      "gosto": -17,
+      "hoje": -273,
+      "humor": 13,
+      "nutricao": -269
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 834,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 12510,
+     "w_x": {
+      "gosto": -17,
+      "hoje": -273,
+      "humor": 13,
+      "nutricao": -269
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": true,
+     "k": 884,
+     "p_c1": 0.11265164644714037,
+     "p_escalar_sem_teto": 0.11188204683434519,
+     "p_grupos_sem_teto": 0.11265164644714037,
+     "p_hoje": 0.11188204683434519,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 13260,
+     "w_x": {
+      "gosto": 11,
+      "hoje": 129,
+      "humor": 23,
+      "nutricao": 96
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": true,
+     "k": 893,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 13395,
+     "w_x": {
+      "gosto": 416,
+      "hoje": 1450,
+      "humor": -1207,
+      "nutricao": 2242
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": true,
+     "k": 942,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 14130,
+     "w_x": {
+      "gosto": 416,
+      "hoje": 1450,
+      "humor": -1207,
+      "nutricao": 2242
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": true,
+     "k": 957,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 14355,
+     "w_x": {
+      "gosto": 416,
+      "hoje": 1450,
+      "humor": -1207,
+      "nutricao": 2242
+     }
+    }
+   ],
+   "semente": 303,
+   "t1": {
+    "f_antes": 0.6666666666666666,
+    "f_depois": 0.3333333333333333,
+    "queda": 0.3333333333333333,
+    "sem_oportunidade": false
+   },
+   "tick_mudanca": 10590,
+   "w_x_fim": {
+    "gosto": {
+     "fome_moderada:comer": 416,
+     "fruta_no_cenario:comer": -17,
+     "pedido_necessidade:comer": 0
+    },
+    "hoje": {
+     "fome_moderada:comer": 1450,
+     "fruta_no_cenario:comer": -273,
+     "pedido_necessidade:comer": 64
+    },
+    "humor": {
+     "fome_moderada:comer": -1207,
+     "fruta_no_cenario:comer": 13,
+     "pedido_necessidade:comer": 0
+    },
+    "nutricao": {
+     "fome_moderada:comer": 2242,
+     "fruta_no_cenario:comer": -269,
+     "pedido_necessidade:comer": 64
+    }
+   },
+   "x": "c"
+  },
+  {
+   "cl": {
+    "passo": 512,
+    "teto": 16384,
+    "w0_alvo": 64
+   },
+   "cortes_no_teto": {
+    "c1_gosto": 0,
+    "c1_humor": 0,
+    "c1_nutricao": 0,
+    "escalar": 0
+   },
+   "creditos_comer": 148,
+   "creditos_x": {
+    "antes": [
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": 92,
+      "f_grupos": {
+       "gosto": -16,
+       "humor": 113,
+       "nutricao": -5
+      },
+      "k": 31
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": 688,
+      "f_grupos": {
+       "gosto": 6,
+       "humor": 241,
+       "nutricao": 441
+      },
+      "k": 111
+     },
+     {
+      "chave": "fome_moderada:comer",
+      "classe": "comida:b",
+      "f": 966,
+      "f_grupos": {
+       "gosto": 7,
+       "humor": 260,
+       "nutricao": 699
+      },
+      "k": 194
+     },
+     {
+      "chave": "fome_moderada:comer",
+      "classe": "comida:b",
+      "f": 939,
+      "f_grupos": {
+       "gosto": 3,
+       "humor": 260,
+       "nutricao": 676
+      },
+      "k": 202
+     },
+     {
+      "chave": "fome_moderada:comer",
+      "classe": "comida:b",
+      "f": 779,
+      "f_grupos": {
+       "gosto": -15,
+       "humor": 186,
+       "nutricao": 608
+      },
+      "k": 388
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": 455,
+      "f_grupos": {
+       "gosto": 7,
+       "humor": 145,
+       "nutricao": 303
+      },
+      "k": 485
+     },
+     {
+      "chave": "fome_moderada:comer",
+      "classe": "comida:b",
+      "f": 1017,
+      "f_grupos": {
+       "gosto": 7,
+       "humor": 393,
+       "nutricao": 617
+      },
+      "k": 583
+     },
+     {
+      "chave": "fome_moderada:comer",
+      "classe": "comida:b",
+      "f": 911,
+      "f_grupos": {
+       "gosto": 6,
+       "humor": 232,
+       "nutricao": 673
+      },
+      "k": 654
+     }
+    ],
+    "depois": [
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": -45,
+      "f_grupos": {
+       "gosto": 0,
+       "humor": 0,
+       "nutricao": -45
+      },
+      "k": 745
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": -349,
+      "f_grupos": {
+       "gosto": 3,
+       "humor": -331,
+       "nutricao": -21
+      },
+      "k": 748
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": -272,
+      "f_grupos": {
+       "gosto": 4,
+       "humor": -358,
+       "nutricao": 82
+      },
+      "k": 804
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": 58,
+      "f_grupos": {
+       "gosto": 3,
+       "humor": -467,
+       "nutricao": 522
+      },
+      "k": 847
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": -425,
+      "f_grupos": {
+       "gosto": 3,
+       "humor": -422,
+       "nutricao": -6
+      },
+      "k": 897
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": 19,
+      "f_grupos": {
+       "gosto": 3,
+       "humor": -477,
+       "nutricao": 493
+      },
+      "k": 946
+     },
+     {
+      "chave": "fome_moderada:comer",
+      "classe": "comida:b",
+      "f": 135,
+      "f_grupos": {
+       "gosto": 3,
+       "humor": -477,
+       "nutricao": 609
+      },
+      "k": 1022
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": 84,
+      "f_grupos": {
+       "gosto": 3,
+       "humor": -447,
+       "nutricao": 528
+      },
+      "k": 1073
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": -449,
+      "f_grupos": {
+       "gosto": 1,
+       "humor": -445,
+       "nutricao": -5
+      },
+      "k": 1086
+     }
+    ]
+   },
+   "decisoes": 1152,
+   "k_mudanca": 706,
+   "linearidade": {
+    "creditos": 148,
+    "limite_do_arredondamento": 444,
+    "max_dif_soma_dos_grupos_contra_escalar_sem_teto": 2
+   },
+   "oportunidades": [
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": false,
+     "k": 29,
+     "p_c1": 0.047619047619047616,
+     "p_escalar_sem_teto": 0.047619047619047616,
+     "p_grupos_sem_teto": 0.047619047619047616,
+     "p_hoje": 0.047619047619047616,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 435,
+     "w_x": {
+      "gosto": 0,
+      "hoje": 64,
+      "humor": 0,
+      "nutricao": 64
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 30,
+     "p_c1": 0.05,
+     "p_escalar_sem_teto": 0.05,
+     "p_grupos_sem_teto": 0.05,
+     "p_hoje": 0.05,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 450,
+     "w_x": {
+      "gosto": 0,
+      "hoje": 64,
+      "humor": 0,
+      "nutricao": 64
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 31,
+     "p_c1": 0.02533783783783784,
+     "p_escalar_sem_teto": 0.02611625947767481,
+     "p_grupos_sem_teto": 0.02533783783783784,
+     "p_hoje": 0.02611625947767481,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 465,
+     "w_x": {
+      "gosto": -8,
+      "hoje": 31,
+      "humor": 0,
+      "nutricao": 38
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 111,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 1665,
+     "w_x": {
+      "gosto": -265,
+      "hoje": 1510,
+      "humor": 1817,
+      "nutricao": -42
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": false,
+     "k": 194,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 2910,
+     "w_x": {
+      "gosto": -12,
+      "hoje": -421,
+      "humor": 0,
+      "nutricao": -408
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": false,
+     "k": 202,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 3030,
+     "w_x": {
+      "gosto": -12,
+      "hoje": -421,
+      "humor": 0,
+      "nutricao": -408
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": false,
+     "k": 388,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 5820,
+     "w_x": {
+      "gosto": -12,
+      "hoje": -421,
+      "humor": 0,
+      "nutricao": -408
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 485,
+     "p_c1": 0.9917808219178083,
+     "p_escalar_sem_teto": 0.9910050840829097,
+     "p_grupos_sem_teto": 0.9917808219178083,
+     "p_hoje": 0.9910050840829097,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 7275,
+     "w_x": {
+      "gosto": -265,
+      "hoje": 1510,
+      "humor": 1817,
+      "nutricao": -42
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": false,
+     "k": 583,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 8745,
+     "w_x": {
+      "gosto": -12,
+      "hoje": -421,
+      "humor": 0,
+      "nutricao": -408
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": false,
+     "k": 654,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 9810,
+     "w_x": {
+      "gosto": -12,
+      "hoje": -421,
+      "humor": 0,
+      "nutricao": -408
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 745,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": false,
+     "sucesso": true,
+     "tick": 11175,
+     "w_x": {
+      "gosto": -265,
+      "hoje": 1511,
+      "humor": 1817,
+      "nutricao": -41
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 748,
+     "p_c1": 0.5960552268244576,
+     "p_escalar_sem_teto": 0.5960552268244576,
+     "p_grupos_sem_teto": 0.5960552268244576,
+     "p_hoje": 0.5960552268244576,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 11220,
+     "w_x": {
+      "gosto": -265,
+      "hoje": 1511,
+      "humor": 1817,
+      "nutricao": -41
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": true,
+     "k": 801,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 12015,
+     "w_x": {
+      "gosto": -12,
+      "hoje": -421,
+      "humor": 0,
+      "nutricao": -408
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 804,
+     "p_c1": 0.5882589465219139,
+     "p_escalar_sem_teto": 0.5882589465219139,
+     "p_grupos_sem_teto": 0.5882589465219139,
+     "p_hoje": 0.5882589465219139,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 12060,
+     "w_x": {
+      "gosto": -265,
+      "hoje": 1463,
+      "humor": 1772,
+      "nutricao": -44
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 847,
+     "p_c1": 0.5682362330407024,
+     "p_escalar_sem_teto": 0.5686900958466453,
+     "p_grupos_sem_teto": 0.5682362330407024,
+     "p_hoje": 0.5686900958466453,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 12705,
+     "w_x": {
+      "gosto": -264,
+      "hoje": 1424,
+      "humor": 1720,
+      "nutricao": -32
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": true,
+     "k": 894,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 13410,
+     "w_x": {
+      "gosto": -12,
+      "hoje": -421,
+      "humor": 0,
+      "nutricao": -408
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 896,
+     "p_c1": 0.5725129844186976,
+     "p_escalar_sem_teto": 0.5729708116753298,
+     "p_grupos_sem_teto": 0.5725129844186976,
+     "p_hoje": 0.5729708116753298,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 13440,
+     "w_x": {
+      "gosto": -264,
+      "hoje": 1433,
+      "humor": 1648,
+      "nutricao": 49
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 897,
+     "p_c1": 0.5649920255183413,
+     "p_escalar_sem_teto": 0.5654429369513169,
+     "p_grupos_sem_teto": 0.5649920255183413,
+     "p_hoje": 0.5654429369513169,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 13455,
+     "w_x": {
+      "gosto": -264,
+      "hoje": 1417,
+      "humor": 1648,
+      "nutricao": 33
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 946,
+     "p_c1": 0.5310778914240756,
+     "p_escalar_sem_teto": 0.5310778914240756,
+     "p_grupos_sem_teto": 0.5310778914240756,
+     "p_hoje": 0.5310778914240756,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 14190,
+     "w_x": {
+      "gosto": -264,
+      "hoje": 1350,
+      "humor": 1582,
+      "nutricao": 32
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": true,
+     "k": 1022,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 15330,
+     "w_x": {
+      "gosto": -12,
+      "hoje": -421,
+      "humor": 0,
+      "nutricao": -408
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 1073,
+     "p_c1": 0.2975824175824176,
+     "p_escalar_sem_teto": 0.29742800615519893,
+     "p_grupos_sem_teto": 0.2975824175824176,
+     "p_hoje": 0.29742800615519893,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 16095,
+     "w_x": {
+      "gosto": -263,
+      "hoje": 1353,
+      "humor": 1497,
+      "nutricao": 120
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 1083,
+     "p_c1": 0.30155599386368614,
+     "p_escalar_sem_teto": 0.30140289346777727,
+     "p_grupos_sem_teto": 0.30155599386368614,
+     "p_hoje": 0.30140289346777727,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 16245,
+     "w_x": {
+      "gosto": -262,
+      "hoje": 1375,
+      "humor": 1378,
+      "nutricao": 260
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 1084,
+     "p_c1": 0.2777901537090666,
+     "p_escalar_sem_teto": 0.27762923351158647,
+     "p_grupos_sem_teto": 0.2777901537090666,
+     "p_hoje": 0.27762923351158647,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 16260,
+     "w_x": {
+      "gosto": -262,
+      "hoje": 1246,
+      "humor": 1378,
+      "nutricao": 131
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 1085,
+     "p_c1": 0.27686134641105664,
+     "p_escalar_sem_teto": 0.27670011148272017,
+     "p_grupos_sem_teto": 0.27686134641105664,
+     "p_hoje": 0.27670011148272017,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 16275,
+     "w_x": {
+      "gosto": -262,
+      "hoje": 1241,
+      "humor": 1378,
+      "nutricao": 126
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 1086,
+     "p_c1": 0.27686134641105664,
+     "p_escalar_sem_teto": 0.27670011148272017,
+     "p_grupos_sem_teto": 0.27686134641105664,
+     "p_hoje": 0.27670011148272017,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 16290,
+     "w_x": {
+      "gosto": -262,
+      "hoje": 1241,
+      "humor": 1378,
+      "nutricao": 126
+     }
+    }
+   ],
+   "semente": 404,
+   "t1": {
+    "f_antes": 1.0,
+    "f_depois": 1.0,
+    "queda": 0.0,
+    "sem_oportunidade": false
+   },
+   "tick_mudanca": 10590,
+   "w_x_fim": {
+    "gosto": {
+     "fome_moderada:comer": -12,
+     "fruta_no_cenario:comer": -262,
+     "pedido_necessidade:comer": 0
+    },
+    "hoje": {
+     "fome_moderada:comer": -421,
+     "fruta_no_cenario:comer": 1107,
+     "pedido_necessidade:comer": 64
+    },
+    "humor": {
+     "fome_moderada:comer": 0,
+     "fruta_no_cenario:comer": 1245,
+     "pedido_necessidade:comer": 0
+    },
+    "nutricao": {
+     "fome_moderada:comer": -408,
+     "fruta_no_cenario:comer": 125,
+     "pedido_necessidade:comer": 64
+    }
+   },
+   "x": "b"
+  },
+  {
+   "cl": {
+    "passo": 512,
+    "teto": 16384,
+    "w0_alvo": 64
+   },
+   "cortes_no_teto": {
+    "c1_gosto": 0,
+    "c1_humor": 0,
+    "c1_nutricao": 0,
+    "escalar": 0
+   },
+   "creditos_comer": 163,
+   "creditos_x": {
+    "antes": [
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": -41,
+      "f_grupos": {
+       "gosto": 0,
+       "humor": 0,
+       "nutricao": -41
+      },
+      "k": 40
+     },
+     {
+      "chave": "fome_moderada:comer",
+      "classe": "comida:b",
+      "f": 1285,
+      "f_grupos": {
+       "gosto": 272,
+       "humor": 430,
+       "nutricao": 583
+      },
+      "k": 41
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": 651,
+      "f_grupos": {
+       "gosto": 237,
+       "humor": 415,
+       "nutricao": -1
+      },
+      "k": 338
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": 249,
+      "f_grupos": {
+       "gosto": 132,
+       "humor": 125,
+       "nutricao": -8
+      },
+      "k": 379
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": 477,
+      "f_grupos": {
+       "gosto": 219,
+       "humor": 251,
+       "nutricao": 7
+      },
+      "k": 603
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": 555,
+      "f_grupos": {
+       "gosto": 179,
+       "humor": 379,
+       "nutricao": -3
+      },
+      "k": 687
+     }
+    ],
+    "depois": [
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": -370,
+      "f_grupos": {
+       "gosto": 41,
+       "humor": -400,
+       "nutricao": -11
+      },
+      "k": 747
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": -255,
+      "f_grupos": {
+       "gosto": 41,
+       "humor": -328,
+       "nutricao": 32
+      },
+      "k": 792
+     },
+     {
+      "chave": "fruta_no_cenario:comer",
+      "classe": "comida:b",
+      "f": -256,
+      "f_grupos": {
+       "gosto": 111,
+       "humor": -364,
+       "nutricao": -3
+      },
+      "k": 870
+     },
+     {
+      "chave": "fome_moderada:comer",
+      "classe": "comida:b",
+      "f": 457,
+      "f_grupos": {
+       "gosto": 100,
+       "humor": -200,
+       "nutricao": 557
+      },
+      "k": 908
+     },
+     {
+      "chave": "fome_moderada:comer",
+      "classe": "comida:b",
+      "f": 248,
+      "f_grupos": {
+       "gosto": 24,
+       "humor": -433,
+       "nutricao": 657
+      },
+      "k": 923
+     }
+    ]
+   },
+   "decisoes": 1152,
+   "k_mudanca": 704,
+   "linearidade": {
+    "creditos": 163,
+    "limite_do_arredondamento": 489,
+    "max_dif_soma_dos_grupos_contra_escalar_sem_teto": 1
+   },
+   "oportunidades": [
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 40,
+     "p_c1": 0.8947368421052632,
+     "p_escalar_sem_teto": 0.8947368421052632,
+     "p_grupos_sem_teto": 0.8947368421052632,
+     "p_hoje": 0.8947368421052632,
+     "reexperiencia": false,
+     "sucesso": true,
+     "tick": 600,
+     "w_x": {
+      "gosto": 0,
+      "hoje": 64,
+      "humor": 0,
+      "nutricao": 64
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": false,
+     "k": 41,
+     "p_c1": 0.9444444444444444,
+     "p_escalar_sem_teto": 0.9444444444444444,
+     "p_grupos_sem_teto": 0.9444444444444444,
+     "p_hoje": 0.9444444444444444,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 615,
+     "w_x": {
+      "gosto": 0,
+      "hoje": 64,
+      "humor": 0,
+      "nutricao": 64
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": false,
+     "k": 252,
+     "p_c1": 0.07797427652733119,
+     "p_escalar_sem_teto": 0.078714859437751,
+     "p_grupos_sem_teto": 0.07797427652733119,
+     "p_hoje": 0.078714859437751,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 3780,
+     "w_x": {
+      "gosto": 7,
+      "hoje": 98,
+      "humor": 11,
+      "nutricao": 79
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 253,
+     "p_c1": 0.010762020482555113,
+     "p_escalar_sem_teto": 0.010763888888888889,
+     "p_grupos_sem_teto": 0.010762020482555113,
+     "p_hoje": 0.010763888888888889,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 3795,
+     "w_x": {
+      "gosto": 0,
+      "hoje": 62,
+      "humor": 0,
+      "nutricao": 62
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 255,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 3825,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -7,
+      "humor": 0,
+      "nutricao": -6
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 258,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 3870,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -7,
+      "humor": 0,
+      "nutricao": -6
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 262,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 3930,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -7,
+      "humor": 0,
+      "nutricao": -6
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 264,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 3960,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -7,
+      "humor": 0,
+      "nutricao": -6
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 282,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 4230,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -7,
+      "humor": 0,
+      "nutricao": -6
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": false,
+     "k": 323,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 4845,
+     "w_x": {
+      "gosto": -45,
+      "hoje": -200,
+      "humor": 11,
+      "nutricao": -167
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 324,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 4860,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -7,
+      "humor": 0,
+      "nutricao": -6
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 337,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 5055,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -7,
+      "humor": 0,
+      "nutricao": -6
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 376,
+     "p_c1": 0.17873974515622273,
+     "p_escalar_sem_teto": 0.1787709497206704,
+     "p_grupos_sem_teto": 0.17873974515622273,
+     "p_hoje": 0.1787709497206704,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 5640,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -7,
+      "humor": 0,
+      "nutricao": -6
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 377,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 5655,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -104,
+      "humor": 0,
+      "nutricao": -103
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 378,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 5670,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -104,
+      "humor": 0,
+      "nutricao": -103
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 379,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 5685,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -104,
+      "humor": 0,
+      "nutricao": -103
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": false,
+     "k": 476,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 7140,
+     "w_x": {
+      "gosto": -45,
+      "hoje": -200,
+      "humor": 11,
+      "nutricao": -167
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": false,
+     "k": 583,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 8745,
+     "w_x": {
+      "gosto": -45,
+      "hoje": -200,
+      "humor": 11,
+      "nutricao": -167
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 596,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 8940,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -104,
+      "humor": 0,
+      "nutricao": -103
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 597,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 8955,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -104,
+      "humor": 0,
+      "nutricao": -103
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 598,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 8970,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -104,
+      "humor": 0,
+      "nutricao": -103
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 599,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 8985,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -104,
+      "humor": 0,
+      "nutricao": -103
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 600,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 9000,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -104,
+      "humor": 0,
+      "nutricao": -103
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 601,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 9015,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -104,
+      "humor": 0,
+      "nutricao": -103
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 602,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 9030,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -104,
+      "humor": 0,
+      "nutricao": -103
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 603,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 9045,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -104,
+      "humor": 0,
+      "nutricao": -103
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 673,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 10095,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -104,
+      "humor": 0,
+      "nutricao": -103
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 675,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 10125,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -104,
+      "humor": 0,
+      "nutricao": -103
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 676,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 10140,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -104,
+      "humor": 0,
+      "nutricao": -103
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 677,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 10155,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -104,
+      "humor": 0,
+      "nutricao": -103
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 678,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 10170,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -104,
+      "humor": 0,
+      "nutricao": -103
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 685,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 10275,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -104,
+      "humor": 0,
+      "nutricao": -103
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 686,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 10290,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -104,
+      "humor": 0,
+      "nutricao": -103
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": false,
+     "k": 687,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 10305,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -104,
+      "humor": 0,
+      "nutricao": -103
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 743,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 11145,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -104,
+      "humor": 0,
+      "nutricao": -103
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 744,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 11160,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -104,
+      "humor": 0,
+      "nutricao": -103
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 745,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 11175,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -104,
+      "humor": 0,
+      "nutricao": -103
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 746,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 11190,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -104,
+      "humor": 0,
+      "nutricao": -103
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 747,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 11205,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -104,
+      "humor": 0,
+      "nutricao": -103
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 785,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 11775,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -104,
+      "humor": 0,
+      "nutricao": -103
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 787,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 11805,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -104,
+      "humor": 0,
+      "nutricao": -103
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 788,
+     "p_c1": 0.17883339154732797,
+     "p_escalar_sem_teto": 0.17886462882096069,
+     "p_grupos_sem_teto": 0.17883339154732797,
+     "p_hoje": 0.17886462882096069,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 11820,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -104,
+      "humor": 0,
+      "nutricao": -103
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": true,
+     "k": 847,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 12705,
+     "w_x": {
+      "gosto": -45,
+      "hoje": -200,
+      "humor": 11,
+      "nutricao": -167
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 851,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 12765,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -126,
+      "humor": 0,
+      "nutricao": -125
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 852,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 12780,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -126,
+      "humor": 0,
+      "nutricao": -125
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 853,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 12795,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -126,
+      "humor": 0,
+      "nutricao": -125
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 854,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 12810,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -126,
+      "humor": 0,
+      "nutricao": -125
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 866,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 12990,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -126,
+      "humor": 0,
+      "nutricao": -125
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 867,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 13005,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -126,
+      "humor": 0,
+      "nutricao": -125
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fruta_no_cenario:comer",
+     "depois": true,
+     "k": 868,
+     "p_c1": 0.0,
+     "p_escalar_sem_teto": 0.0,
+     "p_grupos_sem_teto": 0.0,
+     "p_hoje": 0.0,
+     "reexperiencia": false,
+     "sucesso": false,
+     "tick": 13020,
+     "w_x": {
+      "gosto": -1,
+      "hoje": -126,
+      "humor": 0,
+      "nutricao": -125
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": true,
+     "k": 908,
+     "p_c1": 0.30889894419306185,
+     "p_escalar_sem_teto": 0.3088057901085645,
+     "p_grupos_sem_teto": 0.30889894419306185,
+     "p_hoje": 0.3088057901085645,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 13620,
+     "w_x": {
+      "gosto": -45,
+      "hoje": -200,
+      "humor": 11,
+      "nutricao": -167
+     }
+    },
+    {
+     "c1_mudaria": false,
+     "chave": "fome_moderada:comer",
+     "depois": true,
+     "k": 923,
+     "p_c1": 1.0,
+     "p_escalar_sem_teto": 1.0,
+     "p_grupos_sem_teto": 1.0,
+     "p_hoje": 1.0,
+     "reexperiencia": true,
+     "sucesso": true,
+     "tick": 13845,
+     "w_x": {
+      "gosto": -10,
+      "hoje": -42,
+      "humor": -58,
+      "nutricao": 26
+     }
+    }
+   ],
+   "semente": 505,
+   "t1": {
+    "f_antes": 0.3333333333333333,
+    "f_depois": 0.0,
+    "queda": 0.3333333333333333,
+    "sem_oportunidade": false
+   },
+   "tick_mudanca": 10560,
+   "w_x_fim": {
+    "gosto": {
+     "fome_moderada:comer": -10,
+     "fruta_no_cenario:comer": -1,
+     "pedido_necessidade:comer": 0
+    },
+    "hoje": {
+     "fome_moderada:comer": -42,
+     "fruta_no_cenario:comer": -126,
+     "pedido_necessidade:comer": 64
+    },
+    "humor": {
+     "fome_moderada:comer": -58,
+     "fruta_no_cenario:comer": 0,
+     "pedido_necessidade:comer": 0
+    },
+    "nutricao": {
+     "fome_moderada:comer": 26,
+     "fruta_no_cenario:comer": -125,
+     "pedido_necessidade:comer": 64
+    }
+   },
+   "x": "b"
+  }
+ ]
+}
