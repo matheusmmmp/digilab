@@ -92,3 +92,16 @@ O CPU por vida de 12 dias foi 0,90 s no P1 e de 1,09 a 1,10 s nos braços com o 
   com os modelos congelados. É leitura do número, não do gate.
 - **O rótulo "pensou" na tela** (R-7) pede os dois primários e o fator do plano no motivo. Com o T2 inconclusivo, não vale.
 - **Nada foi ajustado olhando a validação.**
+
+## 6. A decisão do Matheus: o Gate C aprovado em parte (2026-10-21)
+
+**O Matheus decidiu em 2026-10-21, pela recomendação do Gerente: o Gate C fica APROVADO EM PARTE.**
+- **O que está demonstrado:** a revalorização pelo planejador. O G-T1 passa, e o G-T1-DESF mostra que o modelo do desfecho sozinho basta
+  para ela (seção 5).
+- **O que fica pendente:** a busca, o T2 (o mapa). Ela não foi medida, porque as premissas falharam, e fica para um plano próprio, ainda
+  sem tarefa. O resultado não diz que o mapa não funciona.
+- **O que isso libera:** a P4 do `docs/futuro/mundo_3d.md` (o cérebro A no mundo 3D) com o planejador. O esboço da tarefa está em
+  `docs/TAREFA_V2_P4_CEREBRO_MUNDO.md`.
+- **O que não muda:**
+  - o rótulo "pensa" (R-7) continua sem valer, porque pede os dois primários;
+  - os números acima são os da validação, e nada foi refeito.
