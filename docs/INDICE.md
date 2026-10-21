@@ -37,3 +37,4 @@ citados. Status: PROPOSTO (`docs/TAREFA_V2_INFRA_MULTIAGENTE.md`).
 
 - [`TAREFA_V2_V3.md`](TAREFA_V2_V3.md): handoff para investigar o espaço de ações e oportunidades de escolha do DigiBrain V3.
 - [`TAREFA_V2_V3_CREDITO_CANAL.md`](TAREFA_V2_V3_CREDITO_CANAL.md): a V3-9, o crédito do "querer" por canal até o alvo (o desenho, PROPOSTO).
+- [`TAREFA_V2_V3_COMPETICAO.md`](TAREFA_V2_V3_COMPETICAO.md): a V3-3/V3-4, a competição entre as regras urgentes (o desenho, PROPOSTO).
