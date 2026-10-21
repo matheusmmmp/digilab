@@ -55,7 +55,7 @@ do ovo, como hoje, e a sua chave desligada.
 | `prior` | **desvios do prior do instinto** em algumas regras do cérebro A | o ponto de partida dos lobos; o aprendido continua por cima | Baldwin (EG-2) |
 | `plasticidade` | o passo, o teto e a sensibilidade por canal de reforço | o quanto e de onde o pet aprende | H-R4; H3 do plano da V2 |
 
-**O escopo e o que não está definido** (PROPOSTO em 2026-10-21, `docs/futuro/gate_integracao_pet.md`, seção 6): as seções acima mudam
+**O escopo e o que não está definido** (DECIDIDO pelo Matheus em 2026-10-21, a GI-5; `docs/futuro/gate_integracao_pet.md`, seção 6): as seções acima mudam
 **valores** (os traços do corpo, os desvios do prior do A, a plasticidade e as que já existem). **Codificar a topologia** ou outra
 estrutura de uma rede neural **não está definido:** o A não tem topologia para codificar, porque a estrutura dele (as regras, os
 candidatos e as entradas) é fixa. A codificação indireta da EG-3 gera pesos, não topologia. Evoluir a arquitetura do cérebro só entra
@@ -163,10 +163,12 @@ Na **fase 3** (genoma e gerações), na ordem:
 
 **O J8** (a escada de cognição social: tradição e convenção) depende de gerações, então depende do G2.
 
-**A linha de base integrada** (PROPOSTO em 2026-10-21, `docs/futuro/gate_integracao_pet.md`; não muda a EG-7): o G1 e o G2 só medem
+**A linha de base integrada** (DECIDIDO pelo Matheus em 2026-10-21, a GI-4; `docs/futuro/gate_integracao_pet.md`; não muda a EG-7): o G1 e o G2 só medem
 ou reproduzem sobre um pet que passou no **Gate I** (o corpo químico, o mundo, o aprendizado na vida e o replay no mesmo pet). Sem
 isso, a h² mediria um pet que não junta as peças, e uma geração herdaria de um pet que não aprende no mundo. **O G0 pode vir antes**,
-porque é só infraestrutura (o genoma no log e o replay, com o genoma vazio = a vida de hoje) e não mede nada.
+porque é só infraestrutura (o genoma no log e o replay, com o genoma vazio = a vida de hoje) e não mede nada. O Gate I é um marco do
+`docs/ROADMAP_V2.md` (seção 8), com tarefa e plano em `docs/TAREFA_V2_GATE_I.md` e `docs/PLANO_ANALISE_V2_GATE_I.md`, e ainda não
+está implementado.
 
 ## 7. Riscos
 
