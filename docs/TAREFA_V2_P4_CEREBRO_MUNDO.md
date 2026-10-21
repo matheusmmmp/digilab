@@ -1,8 +1,9 @@
 # TAREFA V2 — P4_CEREBRO_MUNDO: o cérebro A com o planejador no mundo 3D (2026-10-21)
 
 Coordenador: Gerente (Claude Code). Worker do esboço: Claude Code (worktree `v2-gatec-p4`). Worker da execução: a definir. Worktree e
-branch da execução: `v2-p4-cerebro-mundo`, um branch por etapa. Status: **ESBOÇO** (todo PROPOSTO; nenhuma etapa começou; as P4-1 a
-P4-8 da seção 8 estão abertas).
+branch da execução: `v2-p4-cerebro-mundo`, um branch por etapa. Status: **ABERTA** (o esboço entregue, #377; as P4-1 a P4-8
+DECIDIDAS pelo Matheus em 2026-10-21, pela recomendação; o plano da etapa 4 em `docs/PLANO_ANALISE_V2_P4_CORPORIFICADO.md`, PROPOSTO;
+nenhuma etapa de código começou).
 
 Categoria: implementacao (a tarefa, com as runs das etapas 4 e 5 como experimento); o PR deste esboço é `arquitetura`. Origem: Matheus,
 2026-10-21: o Gate C aprovado em parte (a validação do J5 com o adendo 8, #370) libera a P4 do `docs/futuro/mundo_3d.md` com o
@@ -56,12 +57,12 @@ cone com oclusão e o controlador), e não pela visão em disco e pelo passo ret
   - a W-4 (as paredes atrás de chave desligada);
   - a W-5, cumprida em parte pelo Gate C de 2026-10-21;
   - a CP-7 (a paridade como entrada).
-- **As decisões abertas:** as P4-1 a P4-8 (seção 8). Nenhuma etapa começa antes delas.
+- **As decisões:** as P4-1 a P4-8 (seção 8), DECIDIDAS em 2026-10-21, pela recomendação.
 - **Não depende do crédito por canal** (V3-9): o P1-plan não ganha a chave (`docs/TAREFA_V2_V3_CREDITO_CANAL.md`, seção 6).
 
 ## 3. O desenho e a mudança mínima
 
-### 3.1 A rota: o contrato vai ao mundo do motor (P4-1) [PROPOSTA]
+### 3.1 A rota: o contrato vai ao mundo do motor (P4-1, DECIDIDA)
 
 - **O contrato do POC entra no mundo do motor,** atrás de uma chave desligada (`ConfigMundo.contrato`, PROPOSTO), em `digilab/mundo.py`
   e em `web/app/motor/mundo.ts`. Se o `mundo.py` ficar grande demais, a parte nova vai num módulo próprio que ele usa.
@@ -76,7 +77,7 @@ cone com oclusão e o controlador), e não pela visão em disco e pelo passo ret
 - **Por quê:** fica um mundo só, o do J5, que já tem a paridade do J1 e as chaves do J5. O POC tem o contrato, mas não tem as árvores,
   as frutas nem o dono do J5.
 
-### 3.2 O cérebro lê o contrato por um adaptador no motor (P4-2) [PROPOSTA]
+### 3.2 O cérebro lê o contrato por um adaptador no motor (P4-2, DECIDIDA)
 
 - **A percepção:** com a chave dos sensores ligada, o motor monta a `PercepcaoMundo` de hoje a partir dos sensores do contrato.
   - Os `vistos` e os `troncos` passam pelo cone e pela oclusão.
@@ -88,7 +89,7 @@ cone com oclusão e o controlador), e não pela visão em disco e pelo passo ret
   a escolha na Intenção da tabela 4.3 do `mundo_3d.md`, e o controlador a executa nos 15 ticks.
 - **O que isso testa:** o mesmo cérebro, com outra percepção e com um corpo que anda de outro jeito.
 
-### 3.3 O lado TS do cérebro (P4-7) [PROPOSTA]
+### 3.3 O lado TS do cérebro (P4-7, DECIDIDA)
 
 Para o POC mostrar o cérebro de verdade, o TS precisa do que o `lobos.ts` e o `mundo.ts` ainda não têm:
 - as chaves do mundo do cérebro A: o alvo aprendido, as classes por árvore e o paladar;
@@ -114,7 +115,7 @@ importar o fecho do `mundo.ts` e do `lobos.ts`, além do do `corpo.ts`. O motor 
 | **1, o contrato no Python** | a seção 3.1 no `mundo.py`, atrás das duas chaves, com testes de resposta conhecida: o cone, a oclusão, o A*, o bloqueio, o contato e o empurrão | G2; **G1** (o replay bit a bit); **G-INT** (nenhum float na física e nos sensores, conferido pela AST); **G-CUSTO** (PROPOSTO, SEM FONTE: o CPU de uma vida de 12 dias com as chaves fica abaixo de 3 vezes o de hoje, que é de 1,09 a 1,10 s com o planejador) | PR `implementacao` |
 | **2, a paridade** (a entrada da CP-7) | o mesmo no `mundo.ts`, e os gabaritos do Python com as chaves ligadas | **G-PAR-CONTRATO:** o mesmo log e a mesma semente dão, decisão a decisão e campo a campo, o mesmo estado do mundo, a mesma percepção e o mesmo resultado, com o cérebro de teste dos dois lados, nas sementes dos testes | PR `implementacao` |
 | **3, o cérebro no contrato** (Python) | a seção 3.2: o adaptador, os troncos pelo cone e o cérebro A com o planejador nas vidas do J5 com as chaves | G2; G1; a G-RECEPTOR, o G-SEM-DIRECAO, a G-SEM-CREDITO e o congelamento continuam passando; uma fumaça dos braços (P4-5) roda até o fim | PR `implementacao` |
-| **4, o plano** | `docs/PLANO_ANALISE_V2_P4_CORPORIFICADO.md`: a pergunta da seção 1, os braços (P4-5), as premissas do J5 (a G-APRENDEU, a G-OPORTUNIDADE, a G-EXPOSICAO e a G-REVAL-POSSIVEL), o contraste, a margem, o N com o poder e as faixas (P4-8) | — (o plano é commitado antes da primeira vida) | PR próprio |
+| **4, o plano** | `docs/PLANO_ANALISE_V2_P4_CORPORIFICADO.md` (escrito em 2026-10-21, PROPOSTO): a pergunta da seção 1, os braços (P4-5), as premissas do T1 do J5 (a G-APRENDEU, a G-OPORTUNIDADE e a G-REVAL-POSSIVEL; a G-EXPOSICAO é do T2, que não roda), o contraste, a margem, o N com o poder e as faixas (P4-8) | — (o plano é commitado antes da primeira vida) | PR próprio |
 | **5, piloto e validação** | o piloto (as premissas, a margem, o N) e a validação **uma vez**, cada um com o sim do Matheus | os do plano | runs nas faixas da P4-8 |
 | **6, o cérebro no POC** (TS) | a seção 3.3, em paralelo às etapas 4 e 5 (não lê resultado): as peças no TS, e o POC desenhando uma vida do motor com o cérebro A e o planejador | **G-PAR-CEREBRO:** o motivo, o estado interno e os modelos, decisão a decisão, contra o Python; a G-FRONTEIRA nova; o G2 do jogo (o v11 sem as chaves sai igual); o e2e do POC | PR `implementacao` |
 
@@ -160,18 +161,28 @@ cabem (uma premissa falha), o plano volta ao Matheus, como no J5.
 
 ## 8. Precisa do Matheus
 
-Todas PROPOSTAS, com a recomendação primeiro.
+**Todas DECIDIDAS pelo Matheus em 2026-10-21, pela recomendação** (pelo Gerente):
+- **P4-1:** o contrato vai ao mundo do motor (o `mundo.py` e o `motor/mundo.ts`), com o POC como referência;
+- **P4-2:** o cérebro lê o contrato por um adaptador no motor, sem entrada nova;
+- **P4-3:** o primeiro experimento é a replicação do T1 do J5 com o contrato (o plano: `docs/PLANO_ANALISE_V2_P4_CORPORIFICADO.md`);
+- **P4-4:** as paredes desligadas, e os troncos opacos à visão, sem colisão;
+- **P4-5:** os quatro braços do J5, com o G-T1 como primário;
+- **P4-6:** nenhum número se recalibra;
+- **P4-7:** a etapa 6 (o cérebro no POC) em paralelo às etapas 4 e 5, sem mudar o jogo;
+- **P4-8:** as faixas novas, escolhidas pelo plano sem colisão.
+
+Os números novos (os do contrato, a G-CUSTO) continuam PROPOSTOS. A tabela abaixo é a do esboço, como foi levada ao Matheus.
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
-| **P4-1** | a rota | **o contrato vai ao mundo do motor** (o `mundo.py` e o `motor/mundo.ts`), com o código do POC como referência (3.1) | portar o mundo do POC para o Python: ficam dois mundos para manter, e o do POC não tem as árvores, as frutas nem o dono do J5. A replicação teria de refazer o mundo do J5 dentro dele |
-| **P4-2** | como o cérebro lê o contrato | **por um adaptador no motor:** a `PercepcaoMundo` de hoje, filtrada pelo cone e pela oclusão. O cérebro não ganha entrada (3.2) | o cérebro lendo a Observação nova: pesos novos, calibração nova e duas mudanças de uma vez (a percepção e o cérebro). Um resultado negativo não diria qual das duas falhou |
-| **P4-3** | o primeiro experimento | **a replicação do T1 do J5 com o contrato:** a mesma pergunta e o mesmo contraste, num mundo corporificado. O EXP-1 vem depois, com plano próprio | o EXP-1 primeiro: uma pergunta nova num mundo novo, sem resultado anterior para comparar. **Seguir a recomendação muda a letra da seção 7 do `mundo_3d.md`,** que pedia o EXP-1 validado como saída da P4; o EXP-1 continua, só que depois |
-| **P4-4** | o que tapa a visão | **as paredes desligadas (W-4); os troncos opacos à visão, sem colisão** (PROPOSTO). Hoje nada é sólido no mundo do J5 (o `mundo.py` não tem colisão), e os troncos são os únicos objetos fixos dele | as paredes ligadas: duas mudanças de uma vez, e o layout do J5 muda. Os troncos transparentes: o cone é a única diferença, e a oclusão não é exercitada |
-| **P4-5** | os braços | **os quatro do J5** (P1, P1-plan, P1-plan-desfecho e P1-plan-cong), com o G-T1 como primário e os mesmos secundários | só o P1 e o P1-plan: custa menos, mas sem o G-T1-DESF o desfecho não se separa do mapa, e o mapa entra sem controle (R-P4) |
-| **P4-6** | os números | **nenhum se recalibra:** os do adendo 9 no cérebro, e os do POC no contrato, todos PROPOSTOS; o piloto diz se cabem | recalibrar antes: uma rodada a mais, que lê a fase 1 de um mundo novo. Não recalibrar quando o cone muda muito: as premissas falham, e o custo é um piloto |
-| **P4-7** | a ordem do TS | **a etapa 6 em paralelo às etapas 4 e 5, só no POC;** o jogo não muda | o TS primeiro: a pesquisa espera a web, e a paridade do cérebro se refaz quando o mundo mudar. Sem o TS: o POC continua com o cérebro de teste, e a CP-7 fica pela metade |
-| **P4-8** | as faixas | **pedir ao coordenador duas faixas novas quando o plano existir** (o piloto e a validação). As etapas 0 a 3 usam só as sementes dos testes | usar uma faixa do J5: as unidades já foram vistas, e as faixas do J5 não voltam |
+| **P4-1** (DECIDIDA) | a rota | **o contrato vai ao mundo do motor** (o `mundo.py` e o `motor/mundo.ts`), com o código do POC como referência (3.1) | portar o mundo do POC para o Python: ficam dois mundos para manter, e o do POC não tem as árvores, as frutas nem o dono do J5. A replicação teria de refazer o mundo do J5 dentro dele |
+| **P4-2** (DECIDIDA) | como o cérebro lê o contrato | **por um adaptador no motor:** a `PercepcaoMundo` de hoje, filtrada pelo cone e pela oclusão. O cérebro não ganha entrada (3.2) | o cérebro lendo a Observação nova: pesos novos, calibração nova e duas mudanças de uma vez (a percepção e o cérebro). Um resultado negativo não diria qual das duas falhou |
+| **P4-3** (DECIDIDA) | o primeiro experimento | **a replicação do T1 do J5 com o contrato:** a mesma pergunta e o mesmo contraste, num mundo corporificado. O EXP-1 vem depois, com plano próprio | o EXP-1 primeiro: uma pergunta nova num mundo novo, sem resultado anterior para comparar. **Seguir a recomendação muda a letra da seção 7 do `mundo_3d.md`,** que pedia o EXP-1 validado como saída da P4; o EXP-1 continua, só que depois |
+| **P4-4** (DECIDIDA) | o que tapa a visão | **as paredes desligadas (W-4); os troncos opacos à visão, sem colisão** (PROPOSTO). Hoje nada é sólido no mundo do J5 (o `mundo.py` não tem colisão), e os troncos são os únicos objetos fixos dele | as paredes ligadas: duas mudanças de uma vez, e o layout do J5 muda. Os troncos transparentes: o cone é a única diferença, e a oclusão não é exercitada |
+| **P4-5** (DECIDIDA) | os braços | **os quatro do J5** (P1, P1-plan, P1-plan-desfecho e P1-plan-cong), com o G-T1 como primário e os mesmos secundários | só o P1 e o P1-plan: custa menos, mas sem o G-T1-DESF o desfecho não se separa do mapa, e o mapa entra sem controle (R-P4) |
+| **P4-6** (DECIDIDA) | os números | **nenhum se recalibra:** os do adendo 9 no cérebro, e os do POC no contrato, todos PROPOSTOS; o piloto diz se cabem | recalibrar antes: uma rodada a mais, que lê a fase 1 de um mundo novo. Não recalibrar quando o cone muda muito: as premissas falham, e o custo é um piloto |
+| **P4-7** (DECIDIDA) | a ordem do TS | **a etapa 6 em paralelo às etapas 4 e 5, só no POC;** o jogo não muda | o TS primeiro: a pesquisa espera a web, e a paridade do cérebro se refaz quando o mundo mudar. Sem o TS: o POC continua com o cérebro de teste, e a CP-7 fica pela metade |
+| **P4-8** (DECIDIDA) | as faixas | **pedir ao coordenador duas faixas novas quando o plano existir** (o piloto e a validação). As etapas 0 a 3 usam só as sementes dos testes | usar uma faixa do J5: as unidades já foram vistas, e as faixas do J5 não voltam |
 
 ## 9. Resumo da etapa (o esboço, 2026-10-21)
 
