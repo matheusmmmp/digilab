@@ -79,6 +79,9 @@ FAIXAS_RESERVADAS = (
     (54101, 54505, "pet que pensa (J5), o piloto do adendo 8 (as margens, o N e as premissas; PLANO_ANALISE_V2_PET_QUE_PENSA, A8.9, "
                    "PJ8-6)"),
     (55101, 55505, "pet que pensa (J5), a validacao do adendo 8 (PLANO_ANALISE_V2_PET_QUE_PENSA, A8.9, PJ8-6)"),
+    (56101, 56505, "credito por canal ate o alvo (V3-9), o piloto (TAREFA_V2_V3_CREDITO_CANAL, CC-6, decidida pelo Matheus em 2026-10-21)"),
+    (57101, 57505, "credito por canal ate o alvo (V3-9), a validacao (TAREFA_V2_V3_CREDITO_CANAL, CC-6, decidida pelo Matheus em "
+                   "2026-10-21)"),
     (50001, 50020, "analise de poder, piloto"), (60001, 60160, "confirmatoria"), (69001, 69001, "M1, gate G1"),
     (80001, 82004, "linhagem E1 (piloto, genomas e ambientes)"),
     (20260900, 20261800, "fala, voz, comando e bootstraps (sementes de 2026-09/10 e semente + i)"),
