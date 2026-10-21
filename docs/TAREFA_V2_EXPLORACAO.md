@@ -1,6 +1,6 @@
 # TAREFA V2 — EXPLORACAO (2026-10-21)
 
-Coordenador: Gerente. Worker: A. Worktree e branch: `v2-exploracao`, a partir da `main` (59d8e4b). Status: ENTREGUE (PR, espera o ok visual e o merge).
+Coordenador: Gerente. Worker: A. Worktree e branch: `v2-exploracao`, a partir da `main` (59d8e4b), com a `main` mesclada em cc1fb7e. Status: ENTREGUE (PR, espera o ok visual e o merge).
 
 Categoria: implementacao. Origem: Matheus, 2026-10-21, pelo Gerente. A referência é a quarta tela de
 `D:\Trab\digilab\_ref\referencia_mobile_2026-10-19.png` (local, não versionada): o mapa isométrico de blocos 3D, o marcador, os cartões
@@ -141,12 +141,12 @@ O ok visual nas capturas.
 | conferência | resultado |
 |---|---|
 | `npm run tipos` | passa |
-| `npm test` (Vitest) | 44 arquivos, 539 testes, todos passam; os 32 novos são de `test/mapa_exploracao.test.ts`, com 3, 4 e 7 ilhas no celular (360 a 899 px) e em 5 caixas de desktop: nenhum cartão sobre outro ou sobre outra ilha, nenhuma ilha sobre outra, tudo dentro da caixa |
-| `npm run e2e` | E2E_FINAL |
-| `npm run capturas`, 390 e 1280 px (referência: o build da `main` 59d8e4b) | 11 telas iguais, pixel a pixel; mudam `lutar-campanha` (o pedido) e `lutar-arena`, `lutar-fronteira` e `lutar-medalhas`, só no nome da aba |
+| `npm test` (Vitest) | 45 arquivos, 547 testes, todos passam (depois de mesclar a `main`, que trouxe 8); os 32 novos são de `test/mapa_exploracao.test.ts`, com 3, 4 e 7 ilhas no celular (360 a 899 px) e em 5 caixas de desktop: nenhum cartão sobre outro ou sobre outra ilha, nenhuma ilha sobre outra, tudo dentro da caixa |
+| `npm run e2e` | 77 de 77 (os 76 de antes, com os da campanha ajustados, e o novo da reserva sem WebGL), no código final antes de mesclar a `main`; a `main` mesclada só trouxe testes do Vitest, nada em `src/` |
+| `npm run capturas`, 390 e 1280 px (referência: o build da `main` 59d8e4b; a `main` mesclada não muda `src/`) | 11 telas iguais, pixel a pixel; mudam `lutar-campanha` (o pedido) e `lutar-arena`, `lutar-fronteira` e `lutar-medalhas`, só no nome da aba |
 | `npm run capturas`, 360 px (mesma referência) | o mesmo: 11 iguais, 4 de Lutar mudam |
 | captura nova `lutar-exploracao-v6` (390 e 1280) | sem referência da `main` (é nova); gravada no branch e conferida de novo, igual |
-| determinismo do branch | gravado e conferido de novo nas 48 capturas (390, 1280 e 360): todas iguais |
+| determinismo do branch | gravado e conferido de novo nas 48 capturas (390, 1280 e 360); as da Exploração saem iguais em todas as rodadas |
 
 Notas do gate:
 - O e2e da campanha foi ajustado à tela nova:
@@ -157,8 +157,9 @@ Notas do gate:
 - **As diferenças das outras abas de Lutar:** estão na faixa das abas, de 66 a 110 px no celular e de 34 a 66 px no desktop. A única
   exceção é `lutar-medalhas` em 390: tem também 4 pixels soltos no padrão do fundo, com 1/255 de diferença num canal. Os dois builds,
   rodados de novo, são estáveis.
-- Uma rodada de conferência do branch teve 2 capturas instáveis com a máquina carregada; passaram na nova tentativa, e a rodada seguinte
-  deu 32 de 32.
+- Instabilidade fora da Exploração: em algumas rodadas de conferência do branch, `diario-registro` e `lutar-medalhas` em 390 variaram de 22 a
+  38 pixels e passaram na nova tentativa; na rodada seguinte, 32 de 32. As capturas `lutar-campanha` e `lutar-exploracao-v6` saíram
+  iguais em todas.
 
 **As capturas** (em `docs/estilo_up/pranchas/capturas/`, sem o atlas e sem a decoração do UP; o pet v6 do e2e das arenas, com o Tamer de 3
 medalhas):
