@@ -330,3 +330,6 @@ de base em `docs/historico/registro_lotes.json`.
 
 
 - [2026-10-21 — P4-PLANO (Claude Code, worktree `v2-p4-plano`): as P4 decididas e o plano da replicação do T1](registro/2026-10.md)
+
+
+- [2026-10-21 — V3-COMPETICAO, o desenho (worker B): o que a abertura alcança e o preço do prior forte](registro/2026-10.md)
