@@ -1,17 +1,23 @@
-/* Evolucao (pranchas EvoArvore e EvoPorque; porte do HTML): arvore de cima para baixo (In-Training, 2 Rookie,
+/* Evolucao (docs/TAREFA_V2_EVOLUCAO.md: composicao propria na linguagem da moldura nova e do momento da evolucao; antes, pranchas EvoArvore e
+   EvoPorque): a forma atual em destaque (o pet na plataforma de luz, o nome, o estagio e quanto falta), a proxima evolucao com as medalhas
+   que faltam, a arvore, o porque da forma atual e o historico em linha do tempo, com "Ver a revelacao de novo" em cada evolucao.
+   A arvore: de cima para baixo (In-Training, 2 Rookie,
    4 Champion e, embaixo de cada um, os 2 arquetipos do Ultimate da linha, o Mega (pets v5) e a sombria), resumo (forma atual, quanto falta, o porque se
    evoluisse agora), com estados percorrido/agora/possivel/provavel/fechado/sombria, detalhe
    do no no toque (nunca so no hover, guia 13), por que da forma atual e historico. A forma futura ainda nao
    decidida pelo motor aparece como silhueta, sem nome (guia, secao 5). */
 import { useLayoutEffect, useRef, useState } from "react";
+import { GitBranch, History, Info, Sparkles } from "lucide-react";
 import {
   CAT, CDJ, CLE, CMD, CMG, CSO, DESC_PASSIVA, DESC_TECNICA, FORMAS_AD, LINHAS, LINHA_DA_FORMA, NOME_ARQ, NOME_V2, SOMBRIA, TICK_INICIAL, TPD,
-  caraterPrevisto, chaveSprite, formaAdultaDe, linhaDoCarater, nomeArquetipo, nomeEstagio, nomeForma, type Carater, type Forma, type FormaAdultaNormal, type Motor,
+  caraterPrevisto, chaveSprite, corDominante, formaAdultaDe, linhaDoCarater, nomeArquetipo, nomeEstagio, nomeForma, type Carater, type Forma, type FormaAdultaNormal, type Motor,
 } from "../../../motor/index.ts";
 import { dimSprite, imagemAtlas, silhuetaAtlas, useAtlas } from "../../atlas.ts";
 import { Numeros, rotuloRel } from "../../componentes/Barras.tsx";
 import { Deco } from "../../componentes/Deco.tsx";
-import { Porque } from "../../componentes/Revelacao.tsx";
+import { SeloMedalha } from "../../componentes/Medalha.tsx";
+import { PetGrande, Porque, reverEvolucao } from "../../componentes/Revelacao.tsx";
+import { useDesktop } from "../../desktop.ts";
 import { BRASAO } from "../../decoracao.ts";
 import { tamerAtual, useJogo } from "../../jogo.ts";
 import { medalhasQueFaltam, textoFalta } from "../../tamer.ts";
@@ -205,39 +211,69 @@ export function TelaEvolucao() {
     return m.sparring < CAT.sparring ? `${CAT.sparring - m.sparring} lutas` : faltaTaxa ? `vitórias ${Math.round((taxa ?? 0) * 100)}% de ${Math.round(CLE.limiarTaxa * 100)}%`
       : faltaMed ? med() : "";
   };
-  const alvo = p ? nomeEstagio(p.prox) : "";
+  const alvo = p ? nomeEstagio(p.prox) : "", cor = corDominante(m.tracos), arq = nomeArquetipo(f), br = BRASAO[m.especie], desk = useDesktop();
   return (
-    <div className="tela dl desk evo-tela">
-      <div className="evo-principal"><h2 className="desk-so evo-arv-tit">Árvore de {BRASAO[m.especie].nome}</h2><Arvore m={m} p={p} /></div>
-      <div className="evo-lado">
-      <div className="desk-col evo-resumo">
-      <p className="evo-selo"><Deco nome={BRASAO[m.especie].peca} className="evo-selo-img" /><span>brasão <b>{BRASAO[m.especie].nome}</b>: as formas da árvore são as deste brasão.</span></p>
-      <p style={{ margin: 0 }}>Cada evolução é decidida pelo que o pet viveu: cuidado, caráter e lutas de treino.</p>
-      <details className="dl-apoio"><summary>Como funciona</summary>
-        <p>Uma moeda por transição (os contadores zeram a cada evolução). <b>In-Training → Rookie</b> ({m.dur.bebe / 60} h): o <b>cuidado</b> decide o ramo; o In-Training chama em horário fixo (fome a cada 30 min, higiene a cada 60, carinho a cada 45) e atender pelo menos 80% dos chamados em até 15 min dá Sereno, menos dá Arisco. <b>Rookie → Champion</b> ({m.dur.crianca / 60} h): o <b>caráter dominante</b> decide a linha e a técnica. <b>Champion → Ultimate</b> ({m.dur.adolescente / 60} h e 10 lutas de treino na arena): o <b>eixo complementar</b> da linha decide o arquétipo e a passiva (as duas formas da linha são o mesmo Ultimate).{m.versao >= 5 ? <> <b>Ultimate → Mega</b> ({m.dur.adulto / 60} h, {CAT.sparring} lutas com {CLE.limiarTaxa * 100}% ou mais de vitórias e vínculo {virgula(CMG.vinculo)} ou mais): o mesmo arquétipo, mais forte. A forma sombria não chega ao Mega.</> : " Pets de versões antigas param no Ultimate."}{m.versao >= 6 ? <> Além disso, cada evolução depois do Rookie pede <b>medalhas do Tamer</b>: {CMD.adolescente} para virar Champion, {CMD.adulto} para Ultimate e {CMD.mega} para Mega. Se o pet cumpre o resto e falta medalha, ele espera pronto e evolui assim que você ganhar a medalha.</> : ""} Caráter: quanto os traços do pet estão acima de um pet comum em cada eixo.</p>
-      </details>
-      <Numeros itens={[
-        ["forma atual", nomeForma(f) + (nomeArquetipo(f) ? ` · ${nomeArquetipo(f)}` : "")],
-        [p ? (espera ? `falta para virar ${alvo}` : `até virar ${alvo}`) : "forma final",
-          p ? (espera ? falta() : duracao(Math.max(0, p.falta))) : "—"],
-        ...(m.versao >= 4 ? [["experiência de combate: cada vitória o deixa mais preciso na luta",
-          `${m.vitoriasVida} ${m.vitoriasVida === 1 ? "vitória" : "vitórias"}${m.vitoriasVida * CLE.expPorVitoria >= CLE.expMax ? " (máximo)" : ""}`] as [string, string]] : []),
-        ...(rMed ? [[`medalhas do Tamer (precisa de ${rMed.precisa} para virar ${alvo})`, `${rMed.tem} de ${rMed.precisa}`] as [string, string]] : []),
-        ...(m.versao >= 4 && (f.est === "adolescente" || rMega) ? [["vitórias nas lutas deste estágio (precisa de 80% para evoluir)",
-          m.lutas.lutas ? `${m.lutas.vitorias} de ${m.lutas.lutas}` : "nenhuma luta"] as [string, string]] : []),
-        /* a forma futura ainda nao foi decidida pelo motor: mostra so o porque, sem o nome */
-        [p ? `se evoluísse agora: ${p.porque}` : `passiva: ${DESC_PASSIVA[f.adulta!]}`, p ? (p.prox.est === "mega" ? nomeForma(p.prox) : "?") : NOME_ARQ[f.adulta!]],
-      ]} />
-      {faltaMed && <p className={`evo-medalha${prontoMed ? " pronto" : ""}`} role="status">{prontoMed ? <b>Pronto para evoluir. </b> : null}{textoFalta(t, rMed!.precisa)}</p>}
+    <div className="tela dl desk evo-tela evt">
+      <div className="evo-principal">
+        {/* a forma atual em destaque: o pet na plataforma de luz, como no momento da evolucao */}
+        <section className="evt-heroi" aria-label="Forma atual">
+          <span className="evm-estilhacos" aria-hidden="true"><i /><i /><i /><i /></span>
+          <div className="evt-heroi-palco">
+            <span className="evm-plataforma evt-plataforma" aria-hidden="true"><i /><i /><i /></span>
+            <span className="evt-heroi-pet"><PetGrande f={f} alvo={desk ? [210, 170] : [150, 130]} cor={cor} sombria={m.sombria} /></span>
+          </div>
+          <div className="evt-heroi-txt">
+            <span className="evt-rot">forma atual</span>
+            <b className="evt-nome">{nomeForma(f)}</b>
+            <span className="evt-estagio">{nomeEstagio(f)}{arq ? ` · ${arq}` : ""}</span>
+            <span className="evt-brasao"><Deco nome={br.peca} largura={30} altura={20} className="evm-brasao-img" />brasão {br.nome}</span>
+            <span className="evt-prazo"><b>{p ? (espera ? falta() || "pronto" : duracao(Math.max(0, p.falta))) : "forma final"}</b>
+              <small>{p ? (espera ? `falta para virar ${alvo}` : `até virar ${alvo}`) : "não há próxima evolução"}</small></span>
+          </div>
+        </section>
+        <section className="evt-painel evt-arvore" aria-labelledby="evt-arv-tit">
+          <h2 className="evt-tit" id="evt-arv-tit"><GitBranch size={18} aria-hidden="true" />Árvore de {br.nome}</h2>
+          <Arvore m={m} p={p} />
+        </section>
       </div>
-      {ult && <section className="dl-card revel-porque"><h3 className="dl-titulo-card">Por que {nomeForma(f)}?</h3><Porque x={ult} /></section>}
-      <section className="bloco">
-        <h2>Histórico</h2>
-        <div className="evo-hist">
-          <div><span className="t">D1 {hhmm(TICK_INICIAL)}</span><span>nasceu: <b>{nomeForma({ esp: m.especie, est: "bebe" })}</b></span></div>
-          {evs.map((x, i) => <div key={i}><span className="t">D{diaDe(x.tick)} {hhmm(x.tick)}</span><span>virou <b>{nomeForma(x.forma)}</b> ({det(x)})</span></div>)}
-        </div>
-      </section>
+      <div className="evo-lado">
+        <section className="evt-painel evt-prox" aria-labelledby="evt-prox-tit">
+          <h2 className="evt-tit" id="evt-prox-tit"><Sparkles size={18} aria-hidden="true" />{p ? `Próxima evolução: ${alvo}` : "Forma final"}</h2>
+          {rMed && (
+            <div className="evt-selos" aria-label={`medalhas do Tamer: ${rMed.tem} de ${rMed.precisa}`}>
+              {Array.from({ length: rMed.precisa }, (_, k) => <SeloMedalha key={k} n={k + 1} ganha={k < rMed.tem} tam={26} />)}
+              <span>{rMed.tem} de {rMed.precisa} medalhas do Tamer</span>
+            </div>
+          )}
+          {faltaMed && <p className={`evo-medalha${prontoMed ? " pronto" : ""}`} role="status">{prontoMed ? <b>Pronto para evoluir. </b> : null}{textoFalta(t, rMed!.precisa)}</p>}
+          <Numeros itens={[
+            ...(m.versao >= 4 ? [["experiência de combate: cada vitória o deixa mais preciso na luta",
+              `${m.vitoriasVida} ${m.vitoriasVida === 1 ? "vitória" : "vitórias"}${m.vitoriasVida * CLE.expPorVitoria >= CLE.expMax ? " (máximo)" : ""}`] as [string, string]] : []),
+            ...(m.versao >= 4 && (f.est === "adolescente" || rMega) ? [["vitórias nas lutas deste estágio (precisa de 80% para evoluir)",
+              m.lutas.lutas ? `${m.lutas.vitorias} de ${m.lutas.lutas}` : "nenhuma luta"] as [string, string]] : []),
+            /* a forma futura ainda nao foi decidida pelo motor: mostra so o porque, sem o nome */
+            [p ? `se evoluísse agora: ${p.porque}` : `passiva: ${DESC_PASSIVA[f.adulta!]}`, p ? (p.prox.est === "mega" ? nomeForma(p.prox) : "?") : NOME_ARQ[f.adulta!]],
+          ]} />
+        </section>
+        {ult && <section className="evt-painel revel-porque evt-porque"><h2 className="evt-tit"><Info size={18} aria-hidden="true" />Por que {nomeForma(f)}?</h2><Porque x={ult} /></section>}
+        <section className="evt-painel evt-hist" aria-labelledby="evt-hist-tit">
+          <h2 className="evt-tit" id="evt-hist-tit"><History size={18} aria-hidden="true" />Histórico</h2>
+          <ol className="evo-hist evt-linha">
+            <li><span className="evt-ponto" aria-hidden="true" /><span className="t">D1 {hhmm(TICK_INICIAL)}</span><span>nasceu: <b>{nomeForma({ esp: m.especie, est: "bebe" })}</b></span></li>
+            {evs.map((x, i) => (
+              <li key={i}><span className="evt-ponto evt-ponto--evo" aria-hidden="true" /><span className="t">D{diaDe(x.tick)} {hhmm(x.tick)}</span>
+                <span>virou <b>{nomeForma(x.forma)}</b> ({det(x)})</span>
+                <button type="button" className="evt-rever" aria-label={`Ver a revelação de novo: ${nomeForma(x.forma)}`} onClick={() => reverEvolucao(i)}>Ver a revelação de novo</button></li>
+            ))}
+          </ol>
+        </section>
+        <section className="evt-painel evt-como">
+          <p className="evo-selo"><Deco nome={br.peca} className="evo-selo-img" /><span>brasão <b>{br.nome}</b>: as formas da árvore são as deste brasão.</span></p>
+          <p style={{ margin: 0 }}>Cada evolução é decidida pelo que o pet viveu: cuidado, caráter e lutas de treino.</p>
+          <details className="dl-apoio"><summary>Como funciona</summary>
+            <p>Uma moeda por transição (os contadores zeram a cada evolução). <b>In-Training → Rookie</b> ({m.dur.bebe / 60} h): o <b>cuidado</b> decide o ramo; o In-Training chama em horário fixo (fome a cada 30 min, higiene a cada 60, carinho a cada 45) e atender pelo menos 80% dos chamados em até 15 min dá Sereno, menos dá Arisco. <b>Rookie → Champion</b> ({m.dur.crianca / 60} h): o <b>caráter dominante</b> decide a linha e a técnica. <b>Champion → Ultimate</b> ({m.dur.adolescente / 60} h e 10 lutas de treino na arena): o <b>eixo complementar</b> da linha decide o arquétipo e a passiva (as duas formas da linha são o mesmo Ultimate).{m.versao >= 5 ? <> <b>Ultimate → Mega</b> ({m.dur.adulto / 60} h, {CAT.sparring} lutas com {CLE.limiarTaxa * 100}% ou mais de vitórias e vínculo {virgula(CMG.vinculo)} ou mais): o mesmo arquétipo, mais forte. A forma sombria não chega ao Mega.</> : " Pets de versões antigas param no Ultimate."}{m.versao >= 6 ? <> Além disso, cada evolução depois do Rookie pede <b>medalhas do Tamer</b>: {CMD.adolescente} para virar Champion, {CMD.adulto} para Ultimate e {CMD.mega} para Mega. Se o pet cumpre o resto e falta medalha, ele espera pronto e evolui assim que você ganhar a medalha.</> : ""} Caráter: quanto os traços do pet estão acima de um pet comum em cada eixo.</p>
+          </details>
+        </section>
       </div>
     </div>
   );

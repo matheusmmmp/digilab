@@ -18,6 +18,11 @@ const SAVE_V11 = { semente: 4242, versao: 11, log: [[480, "t", 120], [600, "d", 
 const SAVE_ARENAS = JSON.parse(readFileSync(new URL("../e2e/save_arenas.json", import.meta.url), "utf8"));
 const TAMER_3 = { versao: 1, log: ["campina", "torre", "floresta"].map((id, i) =>
   ["medalha", { id, n: i + 1, quando: 1 + i, pet: SAVE_ARENAS.semente, forma: "DinoBeemon", tick: 900 + i }]) };
+/* a Evolucao (docs/TAREFA_V2_EVOLUCAO.md): o pet v11 do e2e que vira Champion quando o relogio anda (o momento, em tela cheia: so a janela,
+   sem a pagina inteira por baixo) e a aba com o pet v6 das arenas */
+const SAVE_EVO = JSON.parse(readFileSync(new URL("../e2e/save_evolucao.json", import.meta.url), "utf8"));
+const TAMER_1 = { versao: 1, log: [["medalha", { id: "campina", n: 1, quando: 1, pet: SAVE_EVO.semente, forma: "Agumon", tick: 490 }]] };
+const SO_JANELA = new Set(["evolucao-momento"]);
 const TELAS: [string, string, object, object?][] = [
   ["pet-estado", "#/pet/estado", SAVES.v3], ["crescer-treinar", "#/crescer/treinar", SAVES.v3], ["crescer-aprend", "#/crescer/aprend", SAVES.v3],
   ["crescer-evolucao", "#/crescer/evolucao", SAVES.v3], ["crescer-itens", "#/crescer/itens", SAVES.v3], ["lutar-arena", "#/lutar/arena", SAVES.v3],
@@ -25,6 +30,7 @@ const TELAS: [string, string, object, object?][] = [
   ["diario-registro", "#/diario/registro", SAVES.v3], ["diario-catalogo", "#/diario/catalogo", SAVES.v3], ["diario-cenarios", "#/diario/cenarios", SAVES.v3],
   ["conversar", "#/conversar/chat", SAVES.v3], ["config", "#/config", SAVES.v3], ["pet-v11", "#/pet/estado", SAVE_V11],
   ["lutar-exploracao-v6", "#/lutar/campanha", SAVE_ARENAS, TAMER_3],
+  ["evolucao-momento", "#/crescer/evolucao", SAVE_EVO, TAMER_1], ["crescer-evolucao-v6", "#/crescer/evolucao", SAVE_ARENAS, TAMER_3],
 ];
 
 /** semeia o save por uma página da mesma origem que não é o app (como em e2e/jogo.spec.ts) */
@@ -63,13 +69,15 @@ for (const [largura, altura] of LARGURAS.map(l => [l, l >= 1100 ? 800 : l === 39
       /* a Exploracao: o mapa 3D tambem chega por import dinamico; espera ele desenhar (ou a tela cair no mapa 2D) */
       await page.waitForFunction(() => !document.querySelector(".camp-tela--expl") || !!document.querySelector(".mapa-expl[data-pronto]"));
       await page.clock.runFor(1000);
+      /* o momento da evolucao: o pet evolui enquanto o relogio anda, e a revelacao abre */
+      if (SO_JANELA.has(nome)) await page.locator("dialog.revelacao[open]").waitFor();
       await page.waitForLoadState("networkidle");
       /* toda imagem decodificada antes da captura */
       await page.evaluate(() => Promise.all([...document.images].map(i => i.decode().catch(() => undefined))));
       /* refaz o layout e a pintura da página inteira, com as fontes e as imagens já prontas: sem isso o texto de um select
          ou um ícone pequeno às vezes fica como foi pintado antes de a fonte ou a imagem chegarem */
       await page.evaluate(() => { const h = document.documentElement; h.style.display = "none"; void h.offsetHeight; h.style.display = ""; void h.offsetHeight; });
-      await expect(page).toHaveScreenshot(`${nome}_${largura}.png`, { fullPage: true, animations: "disabled", caret: "hide", threshold: 0, maxDiffPixels: 0 });
+      await expect(page).toHaveScreenshot(`${nome}_${largura}.png`, { fullPage: !SO_JANELA.has(nome), animations: "disabled", caret: "hide", threshold: 0, maxDiffPixels: 0 });
       expect(erros).toEqual([]);
     });
   }
