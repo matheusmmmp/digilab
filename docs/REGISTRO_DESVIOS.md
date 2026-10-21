@@ -336,3 +336,5 @@ de base em `docs/historico/registro_lotes.json`.
 
 
 - [2026-10-21 — GATE-INTEGRACAO (Claude Code, worktree `v2-gate-integracao`): o Gate I, a decisão do cérebro e o escopo genético](registro/2026-10.md)
+
+- [2026-10-21 — V3-COMPETICAO, a etapa 0 (worker B): a G0-R1-PODE-APRENDER passa, e a disputa é do pet negligenciado](registro/2026-10.md)

@@ -1,7 +1,7 @@
 # TAREFA V2 — V3_COMPETICAO: a competição entre as regras urgentes (V3-3 e V3-4) (2026-10-21)
 
-Coordenador: Gerente (Claude Code). Worker do desenho: Claude Code (worker B). Worktree e branch: `v2-v3-competicao`. Status: ETAPA 0 (as decisões CR-1 a
-CR-7 DECIDIDAS pelo Matheus em 2026-10-21, pela recomendação; o código não começou).
+Coordenador: Gerente (Claude Code). Worker do desenho: Claude Code (worker B). Worktree e branch: `v2-v3-competicao`. Status: ETAPA 0 ENTREGUE, a
+G0-R1-PODE-APRENDER passa (seção 10); a CR-1 a CR-7 DECIDIDAS em 2026-10-21; o código (etapas 1 e 2) não começou.
 
 Categoria: implementacao (a tarefa); o PR deste desenho é `arquitetura`. Origem: Matheus, 2026-10-21: parar a V3-9 na G0-PODE-MUDAR
 (#376) e seguir para a V3-3/V3-4, pela recomendação do `docs/futuro/v3_espaco_acoes.md` (seção 8) e do E0
@@ -250,3 +250,56 @@ As do E0 (`docs/futuro/digibrain_v3_e0.md`, seção 3.1) continuam valendo, com 
 - o limiar de 10%;
 - a forma das propostas;
 - a margem de não inferioridade.
+
+## 10. Resumo da etapa 0 (2026-10-21): a disputa sombra e a G0-R1-PODE-APRENDER
+
+**A G0-R1-PODE-APRENDER passa.** Com o κ = 16 (pela regra da CR-2), a massa de crédito nova é **15,6% da de hoje**, acima dos 10% da
+CR-7. Pela seção 5, o próximo passo são as etapas 1 e 2 (o gabarito e o código), quando o Matheus mandar.
+
+- **O que rodou:**
+  - a medição `experiments/medir_competicao_etapa0.py`, com o artefato `artifacts_v2_v3/competicao_etapa0.json`, igual em duas execuções;
+  - as 20 vidas do E0: o v11, 4 donos × as sementes dos testes, 14 dias. Não houve run de pesquisa.
+- **A sombra não muda a vida:**
+  - as 20 vidas saem iguais ao gabarito gravado antes, num commit próprio (`tests/gabaritos/competicao_vidas_de_hoje.json`);
+  - a sombra da vida e a do replay são iguais;
+  - as regras refeitas dão a regra registrada, e o peso refeito da regra do instinto é o do motivo (tudo falha alto).
+- **[OBSERVADO] O alcance:**
+  - forçadas: 55,3% (o mesmo do E0);
+  - abertas pela disputa: **17,4%** das decisões, 31,5% das forçadas;
+  - forçadas depois da abertura: **37,9%**. A seção 0 previa cerca de 37,5%; a diferença é o `sono_exaustao`, que fica fora;
+  - **as abertas levam 50,1% do |sinal| das forçadas.**
+- **[OBSERVADO] O κ e o preço:**
+
+  | κ | mediana de P_inst (nascimento / hoje) | massa nova / massa de hoje (hoje) | abertas em que a ação mudaria (hoje) |
+  |---|---|---|---|
+  | 1 | 0,50 / 0,37 | 43,2% | 57,5% |
+  | 4 | 0,80 / 0,70 | 35,8% | 28,4% |
+  | 8 | 0,89 / 0,83 | 25,3% | 16,4% |
+  | **16** | **0,94 / 0,90** | **15,6%** | **8,9%** |
+  | 32 | 0,97 / 0,95 | 8,8% | 5,1% |
+
+  - A troca da seção 0 (item 2) aparece inteira: o κ que guarda o instinto é o que encolhe o crédito.
+  - No κ = 16, a abertura muda a ação em cerca de 9% das abertas e ensina 15,6% a mais do que o A ensina hoje.
+- **[OBSERVADO] Onde abre, por dono** (κ = 16, os pesos de hoje):
+
+  | dono | forçadas | abertas | \|sinal\| das forçadas nas abertas | massa nova / hoje |
+  |---|---|---|---|---|
+  | relapso | 74,2% | 37,2% | 84,6% | 49,5% |
+  | aleatório | 61,6% | 31,9% | 57,4% | 16,9% |
+  | atencioso | 43,6% | 0,1% | 1,8% | 0,2% |
+  | incoerente | 41,7% | 0,3% | 2,3% | 0,2% |
+
+  - **A disputa é quase toda do pet negligenciado.** Com o atencioso e o incoerente, quase nada abre: o pet deles não fica com fome nem
+    abandonado o bastante para duas urgências valerem juntas.
+  - **Isto pesa no plano (etapa 3):** um `D_FE` médio sobre os quatro donos dilui o efeito pela metade dos donos. O plano deve decidir
+    se o primário é por dono ou só nos donos em que a disputa abre (PROPOSTA, para o Matheus no plano).
+- **As aberturas mais comuns:** pedido + fome moderada (1.044); abandono + fome moderada (955); sono contínuo + pedido + fome (641);
+  sono contínuo + fome (618); sono contínuo + abandono (423).
+- **[OBSERVADO] Uma correção à medição do V3** (`artifacts_v2_v3/espaco_acoes.json`): cada vida do v11 tem duas políticas, a vida e o
+  replay, e o espião do crédito contava as duas.
+  - As contagens absolutas de lá estão em dobro: as 2.658 aplicações nas forçadas são 1.329, e as 19.402 com escolha são 9.701.
+  - As frações (45,9%, 0 pesos mudados, 93,6%) valem como estão. Aqui o |sinal| das forçadas dá os mesmos 45,9% (1.660.402 de
+    3.619.726).
+
+**O κ = 16** sai da regra da CR-2 (DECIDIDA). O número segue SEM FONTE e entra em `config.py` com o status, na etapa 2.
+
