@@ -1,6 +1,6 @@
 # PAINEL V2: onde a pesquisa está, em uma página
 
-**Atualizado em 2026-10-19** (`main` `8b70aca`). Nesta atualização mudou só o J5 (o piloto #349 e o adendo 8); o resto é o da atualização anterior.
+**Atualizado em 2026-10-21** (`main` `59d8e4b`). Nesta atualização mudaram o J5 (o piloto #364, a validação #370 e o Gate C aprovado em parte), o mundo 3D (a P4 liberada) e as decisões do crédito por canal (CC-1 a CC-6); o resto é o da atualização anterior.
 - Quem atualiza: o coordenador, no fim de cada rodada.
 - Regra (`docs/TAREFA_V2_SAUDE.md`, etapa 5): cada linha cita o documento de onde veio, e aqui não entra número novo.
 - O detalhe de cada marco está na seção 8 do `docs/ROADMAP_V2.md`.
@@ -13,7 +13,7 @@
 | J2 corpo químico | drives como químicos, digestão, Vida, metabolismo | código pronto (etapas 1 a 8). A calibração fecha só com o passo 0: `m_gasto` 4/5 fechou (#293). O resto vai para a calibração final. A validação não rodou |
 | J3 sem elogio e bronca | o pet aprende pela consequência; o carinho e o tapa são gestos no corpo | feito na pesquisa; no produto, numa versão de pet futura |
 | J4 banheiro | aprender o lugar certo; o carinho pesa mais que o limpador | código pronto; poucos alívios dentro (14% a 21% na fumaça). As saídas estão sem decisão, e nada rodou |
-| J5 pet que pensa | prever consequências e planejar | a validação (#342) foi inconclusiva por premissa. **O piloto do adendo 7 (#349) parou na G-OPORTUNIDADE**: no T1, o P1 perde a oportunidade quando come a x numa árvore; no T2, a x comida numa árvore nova encerra a medida antes de qualquer busca. Com o planejador, a escolha da x cai depois da mudança, como descritivo (`docs/RESULTADO_V2_PILOTO_PET_QUE_PENSA_ADENDO7.md`). **Agora, o adendo 8** (DECIDIDO o desenho: a x sai das árvores no T1, e a ida às árvores novas conta como busca no T2), PJ8-1 a PJ8-6 abertas; depois, o código e o piloto, com um sim |
+| J5 pet que pensa | prever consequências e planejar | **a validação do adendo 8 (#370): o G-T1 passa**, o primeiro primário do J5 a passar: `q`(P1-plan) − `q`(P1) = 0,197, IC95 [0,075; 0,323], o Holm rejeita. O G-T2 é inconclusivo por premissa; o G-T1-DESF passa e o G-T1-CONG não; o rótulo "pensa" (R-7) não vale (`docs/RESULTADO_V2_VALIDACAO_PET_QUE_PENSA_ADENDO8.md`). **O Gate C APROVADO EM PARTE pelo Matheus em 2026-10-21:** a revalorização pelo planejador está demonstrada; a busca (o T2) fica pendente, com plano próprio |
 | J6 ego | o automodelo com corpo (a rede de si) | etapas 0 a 2 na `main`; faltam a 2b e a bancada |
 | J6a livre × condicionado | as frases-modelo só num braço de comparação | decidido (E-11) |
 | J7 dois pets | dois pets de verdade no mesmo mundo | degrau 1 pronto no código. A calibração do K não fechou: **inconclusivo por premissa** até um pet aprender no mundo físico |
@@ -22,7 +22,7 @@
 | J10 órgãos e hormônios | dano, cura, morte | adiado (D-5, D-6) |
 | W porte do cérebro A (v11) | o cérebro A no jogo web, com o painel DigiBrain | saiu da pausa em 2026-10-17. Etapas 0 a 2 na `main` (#320, #322, #323: o plano, os gabaritos do Python e o núcleo em TS com o G-PAR-L0); o A na etapa 3 (o aprendizado pela consequência do corpo); o B na PW-3 (a vontade) e na PW-4 (o caráter), primeiro no Python. PW-1 a PW-8 decididas (`docs/TAREFA_V2_W_PORTE_CEREBRO_A.md`) |
 | connectome do cérebro A | o grafo dos pesos e dos motivos de cada decisão | ferramenta de pesquisa (#321, `tools/connectome_cerebro_a.py`); CN-1 a CN-9 decididas em 2026-10-18: fora do jogo até o J5 (`docs/futuro/connectome_cerebro_a.md`) |
-| mundo 3D (WORLD-POC-001) | a vista inclinada em Three.js sobre o mundo físico, com a física em inteiros no motor | investigação feita; W-1 a W-7 decididas em 2026-10-18 pela recomendação; o POC-01a entregue (#355, #358); **o Gate A APROVADO em 2026-10-19** (ressalvas: um celular só; o cérebro real espera o Gate C); o POC-02 entregue (#362, #363); **o Gate B APROVADO em 2026-10-19** (ressalva: o cérebro de teste, só em TS); **PAUSADO até o Gate C** (a P4 espera o J5) |
+| mundo 3D (WORLD-POC-001) | a vista inclinada em Three.js sobre o mundo físico, com a física em inteiros no motor | investigação feita; W-1 a W-7 decididas em 2026-10-18 pela recomendação; o POC-01a entregue (#355, #358); **o Gate A APROVADO em 2026-10-19** (ressalvas: um celular só; o cérebro real espera o Gate C); o POC-02 entregue (#362, #363); **o Gate B APROVADO em 2026-10-19** (ressalva: o cérebro de teste, só em TS); **a P4 liberada com o planejador em 2026-10-21** (o Gate C em parte), com o esboço da tarefa em `docs/TAREFA_V2_P4_CEREBRO_MUNDO.md` e as P4-1 a P4-8 abertas |
 
 ## 2. As runs, uma linha cada
 
@@ -51,6 +51,8 @@
 | J5 com a fruta ao lado, calibração (#334) | o `ganho_gosto` e o `g_plano` fecham; as margens passam; N = 50, com o poder declarado | `docs/RESULTADO_V2_CALIBRACAO_PET_QUE_PENSA_AO_LADO.md` |
 | J5, validação (#342) | **inconclusiva por premissa** nos dois primários (T1: oportunidade; T2: nenhuma busca) | `docs/RESULTADO_V2_VALIDACAO_PET_QUE_PENSA.md` |
 | J5, piloto do adendo 7 (#349) | **parado pela G-OPORTUNIDADE** (T1 do P1 e T2): o corte pela x comida numa árvore, não a janela | `docs/RESULTADO_V2_PILOTO_PET_QUE_PENSA_ADENDO7.md` |
+| J5, piloto do adendo 8 (#364) | as premissas do T1 passam pela primeira vez; as do T2 falham; `Δ_T1` = 0,258, `Δ_T2` = 0,323, K_u = 10. O Matheus mandou validar com o T1 como primário (adendo 9) | `docs/RESULTADO_V2_PILOTO_PET_QUE_PENSA_ADENDO8.md` |
+| J5, validação do adendo 8 (#370) | **o G-T1 passa** (0,197, IC95 [0,075; 0,323]); o G-T2 inconclusivo por premissa; o G-T1-DESF passa, o G-T1-CONG não. O Gate C aprovado em parte (2026-10-21) | `docs/RESULTADO_V2_VALIDACAO_PET_QUE_PENSA_ADENDO8.md` |
 
 ## 3. Decisões abertas do Matheus
 
@@ -59,7 +61,9 @@
 - **FE-3:** o perfil de cada brasão (`docs/futuro/fisiologia_especies.md`).
 - **As saídas do banheiro:** sem decisão até haver dado (`docs/PLANO_ANALISE_V2_BANHEIRO.md`, seção 7).
 - **A validação do corpo:** espera a calibração final e um sim.
-- **O J5:** as PJ8-1 a PJ8-6 do adendo 8 (`docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md`, A8.10); depois, o sim para o piloto (54101…54505) e outro para a validação (55101…55505).
+- **O J5:** o Gate C foi aprovado em parte (2026-10-21). A busca (o T2, o mapa) espera um plano próprio, ainda sem tarefa.
+- **A P4 (o cérebro A com o planejador no mundo 3D):** as P4-1 a P4-8 do esboço (`docs/TAREFA_V2_P4_CEREBRO_MUNDO.md`, seção 8).
+- **O crédito por canal (V3-9):** as CC-1 a CC-6 DECIDIDAS em 2026-10-21, pela recomendação (`docs/TAREFA_V2_V3_CREDITO_CANAL.md`, seção 8); a etapa 0 (as tabelas sombra) é a porta, e as faixas 56101…56505 e 57101…57505 estão decididas (entram na `FAIXAS_RESERVADAS` com a etapa 0).
 - **O ecossistema genético:** EG-1 a EG-8 decididas (2026-10-14); cada passo G0 a G5 entra com tarefa e plano próprios (`docs/futuro/ecossistema_genetico.md`).
 
 ## 4. Riscos

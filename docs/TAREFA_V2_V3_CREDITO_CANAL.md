@@ -3,6 +3,9 @@
 Coordenador: Gerente (Claude Code). Worker do desenho: Claude Code (worker B). Worktree e branch: `v2-v3-credito-canal`. Status: PARADA na G0-PODE-MUDAR
 (etapa 0 entregue em 2026-10-21; a CC-1 volta ao Matheus, seção 10).
 
+Coordenador: Gerente (Claude Code). Worker do desenho: Claude Code (worker B). Worktree e branch: `v2-v3-credito-canal`. Status: ABERTA
+(o desenho entregue, #369; as CC-1 a CC-6 DECIDIDAS pelo Matheus em 2026-10-21, pela recomendação; o código não começou).
+
 Categoria: implementacao (a tarefa); o PR deste desenho é `arquitetura`. Origem: Matheus, 2026-10-19: seguiu a recomendação V3-9 de
 `docs/futuro/v3_espaco_acoes.md` (seção 8), antes da V3-3/V3-4 e da V3-10.
 
@@ -175,16 +178,24 @@ calibração nas sementes dela, antes do piloto.
 
 ## 8. Precisa do Matheus
 
-Todas PROPOSTAS, com a recomendação primeiro.
+**Todas DECIDIDAS pelo Matheus em 2026-10-21, pela recomendação** (pelo Gerente):
+- **CC-1:** o teto por grupo (C1), com a etapa 0 das tabelas sombra como porta (o G0-PODE-MUDAR);
+- **CC-2:** três grupos, o humor, o gosto e a nutrição;
+- **CC-3:** só nas três chaves de comer;
+- **CC-4:** o T1-R como primário, com o T1 como controle negativo;
+- **CC-5:** um plano próprio, sem tocar no do J5;
+- **CC-6:** as faixas 56101…56505 (o piloto) e 57101…57505 (a validação). Elas entram na `FAIXAS_RESERVADAS` no PR da primeira etapa que mexe em código (a etapa 0), antes de qualquer run; o PR da decisão foi só papel.
+
+A tabela abaixo é a do desenho, como foi levada ao Matheus.
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
-| **CC-1** | a peça que faz o canal importar (seção 0, item 1) | **C1, o teto por grupo,** com a etapa 0 como porta. Não traz número novo e não toca a G-SEM-CREDITO. Testa exatamente a hipótese (o gosto saturado mascara o humor no mesmo peso). As outras: **C2,** o grupo aprende também com a x na mão (passa a poder mudar o T1, mas a G-SEM-CREDITO deixa de valer no braço, e ele vira um "desfecho de um passo", que repete o P1-plan sem o mapa); **C3,** a leitura pesada pela falta de cada drive (logo depois da x na mão, o humor cai e **aumenta** o peso do humor velho, positivo, da x: piora antes de melhorar); **C4,** o passo por grupo (um número novo, SEM FONTE, com calibração) | sem nenhuma peça: o código entra, e o pet se comporta como hoje (a linearidade). Com a C2 sem querer: o J5 perde o controle do hábito. Com a C1 sem saturação: a etapa 0 pega isso antes do código |
-| **CC-2** | os grupos | **três: o humor, o gosto e a nutrição** (o resto do corpo) | um por drive: até 12 grupos por classe, os pesos se multiplicam, e a soma volta a misturar o que importa. Dois (corpo e fruta, a rota de hoje): o humor e o gosto ficam juntos, e é a mistura que a V3-9 quer desfazer |
-| **CC-3** | onde | **só nas três chaves de comer** | também no explorar e no brincar: mais pesos, e o T2 do J5 (as árvores) passa a depender da chave, sem pergunta para isso |
-| **CC-4** | o teste no J5 | **o T1-R** (com reexperiência) como primário do plano novo, com o T1 como controle negativo | o T1 como primário: com a C1 o resultado nulo é certo por desenho, e uma faixa de validação se gasta para confirmar o desenho |
-| **CC-5** | a ordem com o J5 | **um plano próprio,** com o mundo do adendo 8 e o P1 como controle, sem tocar no plano do J5 | um braço novo no plano do J5: muda um plano que já tem piloto e faixa de validação (55101), e mistura a pergunta do planejador com a do crédito |
-| **CC-6** | as faixas, se houver run | **pedir ao coordenador 56101…56505** (piloto) e **57101…57505** (validação). Nenhuma das duas está em `experiments/bancada/faixas.py` nem nas configs. A etapa 0 usa só as sementes dos testes | usar uma faixa do J5: as calibrações e validações do J5 ficam comprometidas, e as faixas queimadas não voltam |
+| **CC-1** (DECIDIDA) | a peça que faz o canal importar (seção 0, item 1) | **C1, o teto por grupo,** com a etapa 0 como porta. Não traz número novo e não toca a G-SEM-CREDITO. Testa exatamente a hipótese (o gosto saturado mascara o humor no mesmo peso). As outras: **C2,** o grupo aprende também com a x na mão (passa a poder mudar o T1, mas a G-SEM-CREDITO deixa de valer no braço, e ele vira um "desfecho de um passo", que repete o P1-plan sem o mapa); **C3,** a leitura pesada pela falta de cada drive (logo depois da x na mão, o humor cai e **aumenta** o peso do humor velho, positivo, da x: piora antes de melhorar); **C4,** o passo por grupo (um número novo, SEM FONTE, com calibração) | sem nenhuma peça: o código entra, e o pet se comporta como hoje (a linearidade). Com a C2 sem querer: o J5 perde o controle do hábito. Com a C1 sem saturação: a etapa 0 pega isso antes do código |
+| **CC-2** (DECIDIDA) | os grupos | **três: o humor, o gosto e a nutrição** (o resto do corpo) | um por drive: até 12 grupos por classe, os pesos se multiplicam, e a soma volta a misturar o que importa. Dois (corpo e fruta, a rota de hoje): o humor e o gosto ficam juntos, e é a mistura que a V3-9 quer desfazer |
+| **CC-3** (DECIDIDA) | onde | **só nas três chaves de comer** | também no explorar e no brincar: mais pesos, e o T2 do J5 (as árvores) passa a depender da chave, sem pergunta para isso |
+| **CC-4** (DECIDIDA) | o teste no J5 | **o T1-R** (com reexperiência) como primário do plano novo, com o T1 como controle negativo | o T1 como primário: com a C1 o resultado nulo é certo por desenho, e uma faixa de validação se gasta para confirmar o desenho |
+| **CC-5** (DECIDIDA) | a ordem com o J5 | **um plano próprio,** com o mundo do adendo 8 e o P1 como controle, sem tocar no plano do J5 | um braço novo no plano do J5: muda um plano que já tem piloto e faixa de validação (55101), e mistura a pergunta do planejador com a do crédito |
+| **CC-6** (DECIDIDA) | as faixas, se houver run | **pedir ao coordenador 56101…56505** (piloto) e **57101…57505** (validação). Nenhuma das duas está em `experiments/bancada/faixas.py` nem nas configs. A etapa 0 usa só as sementes dos testes | usar uma faixa do J5: as calibrações e validações do J5 ficam comprometidas, e as faixas queimadas não voltam |
 
 ## 9. Resumo da etapa (o desenho, 2026-10-19)
 
