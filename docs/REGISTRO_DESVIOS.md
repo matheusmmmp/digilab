@@ -336,3 +336,5 @@ de base em `docs/historico/registro_lotes.json`.
 
 
 - [2026-10-21 — GATE-INTEGRACAO (Claude Code, worktree `v2-gate-integracao`): o Gate I, a decisão do cérebro e o escopo genético](registro/2026-10.md)
+
+- [2026-10-21 — GATE-I (Claude Code, worktree `v2-gate-i`): as GI decididas, o marco, a tarefa e o plano do Gate I](registro/2026-10.md)
