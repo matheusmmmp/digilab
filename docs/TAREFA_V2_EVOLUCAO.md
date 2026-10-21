@@ -1,6 +1,6 @@
 # TAREFA V2 — EVOLUCAO (2026-10-21)
 
-Coordenador: Gerente. Worker: A. Worktree e branch: `v2-evolucao`, a partir da `main` (30500c3). Status: EM ANDAMENTO.
+Coordenador: Gerente. Worker: A. Worktree e branch: `v2-evolucao`, a partir da `main` (30500c3). Status: ENTREGUE (PR, espera o ok visual e o merge).
 
 Categoria: implementacao. Origem: Matheus, 2026-10-21, pelo Gerente. A referência é a quinta tela de
 `D:\Trab\digilab\_ref\referencia_mobile_2026-10-19.png` (local, não versionada): a tela azul cheia "EVOLUÇÃO!", o pet evoluído grande
@@ -83,3 +83,65 @@ depuração.
 ## 8. Precisa do Matheus
 
 O ok visual nas capturas.
+
+## 9. Entregue (2026-10-21)
+
+**O que mudou.**
+- **`src/componentes/Revelacao.tsx`:** o momento recomposto.
+  - **A tela:** cheia e azul, com a grade e os estilhaços em CSS. No alto, "Rookie → Champion" e "EVOLUÇÃO!".
+  - **A cena:** o raio e a plataforma de luz são próprios; o glow e o anel do Digivice do UP entram só com a decoração local. O pet fica
+    grande em escala inteira (`PetGrande`: o idle do atlas, ou a grade de reserva com a cor do pet).
+  - **O cartão:** o NOME, o estágio, o arquétipo e o brasão.
+  - **Embaixo:**
+    - "de → para", com os dois pets pequenos. A forma de antes sai do registro (`formaAntes`);
+    - "O que decidiu": o `Porque` de antes;
+    - nos v6 em diante, "Esta evolução pediu N medalhas do Tamer". Quando a derivação é exata, vem também "Foi liberada pela Medalha da X"
+      (`medalhasDaEvolucao`: a evolução cai no tick de um "u" que levou o pet de N-1 para N medalhas, e a medalha é a de número N do Tamer).
+  - **O Continuar:** amarelo e largo. No celular fica no pé da tela enquanto os detalhes rolam, e leva a Crescer › Evolução como antes.
+  - **A partir de 900 px:** o pet à esquerda e os detalhes à direita, por cima da moldura.
+  - **Movimento:** o pet surge com um brilho de 0,7 s, parado com `prefers-reduced-motion`.
+  - **Rever:** `reverEvolucao(i)` reabre o momento de qualquer evolução do pet.
+  - A linha evolutiva de antes saiu: o "de → para" e a árvore da aba dizem o mesmo.
+- **`src/telas/crescer/TelaEvolucao.tsx`:** a aba recomposta.
+  - **O destaque:** a forma atual no mesmo azul do momento, com o pet na plataforma, o nome, o estágio, o arquétipo, o brasão e quanto falta.
+  - **Próxima evolução:** os selos das medalhas (k de N), a frase das medalhas que faltam (a mesma de antes), a experiência de combate, as
+    vitórias do estágio e o "se evoluísse agora".
+  - **A árvore:** a de antes, num painel com título.
+  - **O resto:** o porquê da forma atual; o histórico em linha do tempo, com "Ver a revelação de novo" em cada evolução; o brasão e o "Como
+    funciona".
+  - **No celular:** destaque, próxima evolução, árvore, porquê, histórico e "Como funciona", nessa ordem.
+- **`src/estilo/evolucao.css` (novo)** e **`src/estilo/pet.css`** (sem as regras antigas da revelação).
+- **`e2e/gerar_save_evolucao.mjs` e `e2e/save_evolucao.json` (novos):** um Agumon v11 no Rookie, a 4 min do fim do estágio, que já conhece
+  a Medalha da Campina. Quando o relógio da página anda, ele vira Greymon e o momento abre, sem rota de depuração.
+
+**Gate.**
+
+| conferência | resultado |
+|---|---|
+| `npm run tipos` | passa |
+| `npm test` (Vitest) | 45 arquivos, 547 testes, todos passam |
+| `npm run e2e` | 80 de 80: os 77 de antes e os 3 novos (o momento em 390 e em 1280 com a aba e o rever; a reserva sem o atlas); o teste das medalhas confere também "Foi liberada pela Medalha da Campina". Os 4 testes da evolução e das medalhas rodaram de novo depois do último ajuste de CSS e passam |
+| `npm run capturas`, 390 e 1280 px (referência: o build da `main` 30500c3) | 15 telas iguais, pixel a pixel; muda `crescer-evolucao` (o pedido); `evolucao-momento` e `crescer-evolucao-v6` são novas, sem referência |
+| `npm run capturas`, 360 px (mesma referência) | o mesmo: 15 iguais, muda `crescer-evolucao` |
+| determinismo do branch | 54 capturas gravadas e conferidas duas vezes, sem nova tentativa: todas iguais |
+
+Notas do gate:
+- O momento é capturado com movimento reduzido. O anel do Digivice (decoração local) gira sem parar, e duas fotos seguidas da mesma página
+  variavam 2 pixels na borda dele.
+- O glow e o anel ficaram sem `mix-blend-mode`, que também variava 1/255 entre capturas.
+
+**As capturas** (em `docs/estilo_up/pranchas/capturas/`, sem o atlas e sem a decoração do UP: o pet é a grade de reserva):
+- `Evolucao_momento_390.png`, `Evolucao_momento_360.png` e `Evolucao_momento_1280.png`: o momento do Agumon que vira Greymon;
+- `Evolucao_aba_390.png`, `Evolucao_aba_360.png` e `Evolucao_aba_1280.png`: a aba com o pet v6 das arenas (DinoBeemon, 3 medalhas);
+- `Evolucao_aba_390_inteira.png`: a aba inteira em 390.
+
+A comparação com a quinta tela da referência fica fora do repositório, porque a referência não é versionada.
+
+**Diferenças para a referência.**
+- O "EVOLUTION SYSTEM" do canto não entra.
+- Embaixo do cartão há os detalhes (de → para, o que decidiu, as medalhas), que a referência não tem.
+- O Continuar é amarelo e largo, como lá, mas fica fixo no pé do celular.
+
+**O que ficou para depois.**
+- Algumas regras antigas da aba no `crescer.css` (`.evo-resumo`, o cartão da `.evo-principal`) ficaram sem uso ou sobrescritas pelo
+  `evolucao.css`. Saem numa limpeza, sem mudar a tela.
