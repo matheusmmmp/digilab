@@ -77,6 +77,8 @@ BASES = {
     "pet_que_pensa": {**bv.BASES_PET_QUE_PENSA, "calibracao_paladar": bv.BASES_PQP_PALADAR, "calibracao_ao_lado": bv.BASES_PQP_AO_LADO,
                       "piloto_adendo7": bv.BASES_PQP_ADENDO7["piloto"], "validacao_adendo7": bv.BASES_PQP_ADENDO7["validacao"],
                       "piloto_adendo8": bv.BASES_PQP_ADENDO8["piloto"], "validacao_adendo8": bv.BASES_PQP_ADENDO8["validacao"]},   # o J5, com o paladar (adendo 3)
+    # a competicao entre as regras urgentes (PLANO_ANALISE_V2_V3_COMPETICAO, secao 11; experiments/run_v2_competicao.py)
+    "competicao": {"piloto": (58101, 58202, 58303, 58404, 58505), "validacao": (59101, 59202, 59303, 59404, 59505)},
 }
 NOVAS = {(43101, 43505): "calibracao e piloto", (44101, 44505): "validacao"}
 K_UNIDADES = 40

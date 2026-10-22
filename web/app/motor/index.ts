@@ -29,6 +29,7 @@ export * from "./donos.ts";
 export * from "./historia.ts";
 export * from "./mentira.ts";
 export * from "./mundo.ts";
+export * from "./contrato.ts";
 export * from "./corpo.ts";
 export * from "./lobos.ts";
 export * from "./motor_corpo.ts";

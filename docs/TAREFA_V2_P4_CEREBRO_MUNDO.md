@@ -232,6 +232,44 @@ Os números novos (os do contrato, a G-CUSTO) continuam PROPOSTOS. A tabela abai
   na vida da G-CUSTO) e oscila no alvo do cheiro, chegando de costas para a comida. A regra não mudou.
 - **Interpretações** em `docs/registro/2026-10.md`.
 
+### Etapa 2, a paridade Python/TS (worker D, 2026-10-21)
+
+- **O código, no TS, atrás da chave desligada** (o jogo não a liga):
+  - `web/app/motor/contrato.ts`: o espelho, função a função, do `digilab/contrato.py`, com a mesma conta inteira, a mesma ordem dos
+    vizinhos do A\* e os mesmos empates (o heap de (f, h, índice));
+  - `web/app/motor/mundo.ts`: a opção `contrato` do `Mundo`, com a percepção pelo cone e pela oclusão (a `orientacao` na percepção só com
+    os sensores), os troncos opacos sem colisão, as paredes (desligadas no plano), o controlador, a orientação e o registro de cada
+    decisão com alvo, como no Python.
+- **O gabarito:** `experiments/exportar_gabarito_contrato.py` grava `web/app/test/gabaritos/contrato_python.json`, e
+  `tests/test_gabarito_contrato_web.py` confere que ele está em dia. Ele traz as contas em casos sorteados (o controlador com muros
+  finos, contatos e o pet preso numa caixa) e 7 vidas de 3 dias com as chaves (juntas, separadas e com as paredes), com o instinto, o
+  cérebro aleatório, os lobos e um cérebro de teste que explora até a borda.
+- **A G-PAR-CONTRATO passa** (`web/app/test/contrato.test.ts`, 18 testes): o mundo em TS rejoga cada vida decisão a decisão (a
+  percepção, os candidatos, o ocorrido com o registro do contrato, o estado e a percepção depois), o resumo e os próximos sorteios. A
+  falha mostra o primeiro campo que diverge (R-P2); duas mutações de propósito (a borda do cone e o custo da diagonal) a fizeram falhar.
+- **O G2 do jogo:** com a chave explícita desligada, as 4 vidas do gabarito do mundo saem iguais; a suíte do TS e a da etapa 0 passam.
+- **A CP-7** fica registrada como cumprida no `docs/futuro/mundo_3d.md`.
+- **Interpretações** em `docs/registro/2026-10.md`.
+
+### Etapa 3, o cérebro no contrato (worker D, 2026-10-22)
+
+- **A chave da bancada:** a config do J5 ganha `"contrato": true` (a `BancadaPQP.contrato`), que liga no motor os sensores e o
+  controlador (`CONFIG_CONTRATO_LIGADO`; as paredes desligadas, P4-4) em todos os braços. Com ela, só as sementes dos testes: a run da P4
+  é do plano dela, com as faixas da P4-8. O `meta.json` grava a chave e a `ConfigContrato`.
+- **O adaptador** é o da etapa 1: a percepção de hoje pelo cone e pela oclusão (os troncos opacos), e o mapa do planejador vê as árvores
+  pelos troncos do cone. O cérebro A, o planejador e os números do adendo 9 não mudam (P4-6).
+- **Os gates** (`tests/test_bancada_p4_contrato.py`):
+  - **G2:** com `"contrato": false`, as 16 vidas do J5 do gabarito da etapa 0 saem iguais;
+  - **a fumaça dos quatro braços** (P4-5), no T1, nas sementes 101 e 202, pelo `rodar_pqp`: as 8 vidas rodam até o fim, são rejogadas
+    do disco (**G1**, os modelos do mundo incluídos) e medidas, com o **G-SEM-CREDITO** e o **congelamento** conferidos;
+  - **P4-2:** trocar por lixo o registro do contrato no `ocorrido` e a `orientacao` da percepção não muda nada da vida (o log, o
+    estado, o mundo, o cérebro e os modelos). Tirar a `orientacao` faz o mapa voltar à conta do raio, e a vida falha alto;
+  - **a G-RECEPTOR e o G-SEM-DIRECAO** continuam passando nos testes deles (o corpo, o órgão do cheiro, os modelos e o paladar);
+  - **nenhum número se recalibra:** a bancada com e sem a chave tem o mesmo `g_plano`, a mesma consequência, os mesmos lobos e o mesmo
+    corpo.
+- **A G-CUSTO** (`tools/custo_p4_contrato.py`) passa a ligar o contrato pela chave da bancada.
+- **Interpretações** em `docs/registro/2026-10.md`.
+
 ## Referências
 
 Nenhuma referência externa: o esboço só usa os documentos do repositório citados no texto e não alega novidade.
