@@ -14,14 +14,7 @@
 .dl-btn--forcar:disabled{background-image:none;background:var(--dl-disabled);color:var(--dl-disabled-ink);border:4px dashed var(--dl-disabled-ink)}
 .dl-btn--forcar:disabled small{color:var(--dl-disabled-ink)}
 
-/* Treinar (pranchas TreinoNormal, TreinoPausa, TreinoForcar; valores copiados do style="..." da prancha) */
-.sala-treino{position:relative;height:190px;margin:0 -14px;border-bottom:4px solid #FFFFFF;box-shadow:0 2px 0 var(--dl-border);overflow:hidden;
-  background:#C9B7A8 center/auto 100% no-repeat;display:flex;align-items:flex-end;justify-content:center;padding-bottom:20px}
-.sala-sombra{position:absolute;left:50%;bottom:10px;width:140px;height:16px;margin-left:-70px;border-radius:50%;background:rgba(0,0,0,.3)}
-.sala-pet{position:relative;max-width:none}
-.sala-estado{position:absolute;top:10px;left:10px;background:#FFFFFF;border:2px solid var(--dl-navy);border-radius:8px;color:var(--dl-navy);font-size:11px;font-weight:900;padding:2px 8px}
-.sala-balao{position:absolute;top:40px;right:14px;font-weight:800}
-.sala-balao::after{content:"";position:absolute;left:12px;bottom:-15px;width:9px;height:9px;border-radius:50%;background:#FFFFFF;border:3px solid var(--dl-navy)}
+/* Treinar: os medidores e os exercicios (a sala e o resto em treino.css) */
 .treino-medidores{display:grid;gap:10px}
 .med{display:grid;gap:4px}
 .med-cab{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:12px;font-weight:900}
@@ -227,7 +220,6 @@
   .treino-col-esq > :last-child{flex-grow:1}
   .treino-col-dir > :last-child{flex-grow:0}
   .tela .treino-med-tit{margin:0;font-size:17px;font-weight:900}
-  .treino-col-esq .treino-medidores{align-content:start}
   .tela .treino-ex-tit{display:flex;justify-content:space-between;align-items:baseline;margin:0;font-size:17px;font-weight:900}
   .treino-ex-tit small{font-size:12px;font-weight:700;color:var(--dl-text-2)}
   .treino-col-dir .treino-grade{flex-grow:1;grid-auto-rows:1fr;gap:14px}
@@ -236,7 +228,6 @@
   .treino-col-dir .treino-ex b{font-size:16px}
   .treino-col-dir .treino-ex .treino-ganho{font-size:12px}
   .treino-col-dir > details{flex:none}
-  .treino-col-esq .sala-treino{margin:0;height:225px;border:3px solid var(--dl-navy);border-radius:16px;box-shadow:0 0 0 3px #FFFFFF,0 0 0 5px var(--dl-border)}
 }
 /* Aprendizado no desktop (AprendizadoDesktop): Agora | Instinto x aprendido | Decisoes e Lembrancas */
 @media (min-width:1100px){

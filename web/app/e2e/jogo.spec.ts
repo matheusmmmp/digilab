@@ -1409,3 +1409,73 @@ test("evolução: sem o atlas, o pet de reserva no momento e na aba", async ({ p
   await rev.getByRole("button", { name: "Continuar" }).click();
   await expect(page.locator(".evt-heroi .evm-spr--reserva")).toBeVisible();
 });
+
+/* a aba Treinar (docs/TAREFA_V2_TREINO.md). save_treino_pausa.json e save_treino_forcar.json (e2e/gerar_save_treino.mjs): um Palmon v11 no
+   Rookie que treinou 3 vezes (fadiga entre 40 e 60: pede pausa) ou 4 (fadiga acima de 60: so Forcar) */
+const SAVE_TR_PAUSA = JSON.parse(readFileSync(new URL("./save_treino_pausa.json", import.meta.url), "utf8"));
+const SAVE_TR_FORCAR = JSON.parse(readFileSync(new URL("./save_treino_forcar.json", import.meta.url), "utf8"));
+const SEM_JAPONES = /[぀-ヿ㐀-鿿ｦ-ﾟ]/;
+for (const largura of [390, 1280]) {
+  test(`treino: a sala, o stat em foco, o cansaço, os exercícios e a pausa em ${largura} px`, async ({ page }) => {
+    await page.setViewportSize({ width: largura, height: largura >= 1100 ? 800 : 844 });
+    await semear(page, SAVE_TR_PAUSA);
+    const erros = vigiarErros(page);
+    await page.goto(APP + "#/crescer/treinar");
+    await expect(page.locator(".trn-sala")).toBeVisible();
+    await expect(page.locator(".trn-estado")).toHaveText("pediu pausa");
+    await expect(page.locator(".trn-balao")).toContainText("pausa?");
+    await expect(page.locator(".trn-pet .evm-spr")).toBeVisible();
+    /* o stat em foco: o principal do ultimo exercicio (Alvo: mira), de 10, e o do estagio e da vida */
+    await expect(page.locator(".trn-foco")).toContainText("stat do último treino · Alvo");
+    await expect(page.locator(".trn-foco")).toContainText(/Mira \+\d+,\d de 10/);
+    await expect(page.locator(".trn-foco")).toContainText(/no estágio [\d,]+ de 10 · na vida [\d,]+ de 36/);
+    await expect(page.locator(".trn-vida li")).toHaveCount(6);
+    await expect(page.locator(".treino-ex")).toHaveCount(6);
+    await expect(page.locator(".treino-ex.forcar")).toHaveCount(0);
+    await expect(page.locator(".trn-ultimo")).toContainText("Alvo · mira e fôlego");
+    const texto = await page.locator(".treino-tela").textContent() ?? "";
+    expect(SEM_JAPONES.test(texto), "nenhum caractere japonês").toBe(false);
+    expect(/\b(Nv|Lv|XP)\b/.test(texto), "nem nível nem XP").toBe(false);
+    const r = await page.evaluate(() => Object.fromEntries([".trn-sala", ".trn-foco", ".trn-medidores", ".trn-exercicios", ".trn-vida", ".trn-ultimo"]
+      .map(c => { const b = document.querySelector(c)!.getBoundingClientRect(); return [c, [b.left, b.top]]; })));
+    if (largura < 1100) {
+      /* celular: uma coluna, nesta ordem */
+      const tops = [".trn-sala", ".trn-foco", ".trn-medidores", ".trn-exercicios", ".trn-vida", ".trn-ultimo"].map(c => r[c][1]);
+      expect(tops).toEqual([...tops].sort((a, b) => a - b));
+    } else {
+      /* desktop: a sala, o stat em foco e o treinado na vida a esquerda; o cansaco e os exercicios a direita */
+      expect(r[".trn-medidores"][0]).toBeGreaterThan(r[".trn-sala"][0] + 200);
+      expect(r[".trn-exercicios"][0]).toBeGreaterThan(r[".trn-vida"][0] + 200);
+    }
+    expect(erros).toEqual([]);
+  });
+}
+test("treino: com fadiga acima de 60 os exercícios viram Forçar, a folha confirma e o treino entra no registro", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await semear(page, SAVE_TR_FORCAR);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/crescer/treinar");
+  await expect(page.locator(".treino-ex.forcar")).toHaveCount(6);
+  const l0 = await numLog(page, "tr");
+  /* o intervalo de 10 min passa com o relogio do app (10 min/s) */
+  await page.locator(".treino-ex.forcar:not([disabled])").first().click();
+  const folha = page.locator("dialog.folha[open]");
+  await expect(folha).toContainText("Forçar levantar pedra?");
+  await folha.getByRole("button", { name: "Forçar mesmo assim" }).click();
+  await expect(page.locator(".trn-msg")).toContainText("Forçado:");
+  expect(await numLog(page, "tr")).toBe(l0 + 1);
+  await expect(page.locator(".trn-medidores")).toContainText("25 / 100");
+  await expect(page.locator(".trn-ultimo")).toContainText("Levantar pedra");
+  expect(erros).toEqual([]);
+});
+/* sem o atlas do UP (o CI, as capturas do repositorio): a sala em CSS, o pet da grade de reserva e os icones do lucide */
+test("treino: sem o atlas, a sala em CSS, o pet de reserva e os ícones de reserva", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await semear(page, SAVE_TR_PAUSA);
+  await page.route(/\/Assets\/(digilab_atlas_up|digilab_decoracao_up|decoracao_up\/)/, r => r.abort());
+  await page.goto(APP + "#/crescer/treinar");
+  await expect(page.locator(".trn-sala .trn-janela")).toBeVisible();
+  await expect(page.locator(".trn-sala.trn-sala--up")).toHaveCount(0);
+  await expect(page.locator(".trn-pet .evm-spr--reserva")).toBeVisible();
+  await expect(page.locator(".treino-grade .treino-ic--reserva")).toHaveCount(6);
+});
