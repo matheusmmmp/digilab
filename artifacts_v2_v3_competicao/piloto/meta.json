@@ -1,0 +1,206 @@
+{
+  "bracos": {
+    "P0": {
+      "braco": "P0-c-tapa",
+      "competicao_ligada": false
+    },
+    "R0": {
+      "braco": "P1-c-tapa",
+      "competicao_ligada": false
+    },
+    "R1": {
+      "braco": "P1-c-tapa",
+      "competicao_ligada": true
+    },
+    "R1-cong": {
+      "braco": "P0-c-tapa",
+      "competicao_ligada": true
+    }
+  },
+  "config": {
+    "bootstrap": {
+      "nivel": 0.95,
+      "reamostragens": 10000,
+      "semente": 4242
+    },
+    "descricao": "O piloto da competicao (PLANO_ANALISE_V2_V3_COMPETICAO, secao 6): as margens, o N, a G-ABRE e o custo; nao e evidencia.",
+    "dias": 14,
+    "fase": "piloto",
+    "g_abre": {
+      "limiar": 0.05
+    },
+    "holm": {
+      "alfa": 0.05
+    },
+    "kappa": 16,
+    "orcamento_por_dia": 16,
+    "plano": "docs/PLANO_ANALISE_V2_V3_COMPETICAO.md",
+    "poder": {
+      "alfa": 0.025,
+      "alfas_relato": [
+        0.025,
+        0.0167
+      ],
+      "alvo": 0.8,
+      "k_max": 10,
+      "k_min": 4,
+      "replicas": 2000,
+      "semente": 4242
+    },
+    "unidades": {
+      "bases": [
+        58101,
+        58202,
+        58303,
+        58404,
+        58505
+      ],
+      "k": 4,
+      "prefixo": "competicao"
+    }
+  },
+  "config_arquivo": "experiments/configs/v2_competicao/piloto.json",
+  "config_sha256": "fa9de4d18911b2de6820475fdb006b2551971882b6299be65751ba51679cff14",
+  "duracao_s": 221.6899197101593,
+  "fase": "piloto",
+  "fim": "2026-10-22T09:32:34",
+  "git_head": "f0e07c991dfcaf6b1904a5a192aeb7d4c7a5b9c3",
+  "git_limpo": true,
+  "inicio": "2026-10-22T09:28:53",
+  "modo": "piloto",
+  "orquestrador_sha256": "e03b531facb4ddecb8700e02dca69c41c3dc471eff5993e56a3f1e4fa7adf3a8",
+  "plano": "docs/PLANO_ANALISE_V2_V3_COMPETICAO.md",
+  "plano_sha256": "e5a8da9e0cc828318a02dfb8307cf0ae68bf8ac765822901f0c67cf96dd72d87",
+  "processos": 4,
+  "python": "3.13.0",
+  "sha256": {
+    "config.py": "69eca98caaf395e3b8b159ac923d70d0219a25a8543ef6bc593a3647c302c9e0",
+    "engine.py": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+    "lobos.py": "3442c17db795683d6d5d824081425d06d8643dc963cd3e654ecc9fbb80321a20",
+    "metrics.py": "d112c9e303c67af6defa4a181994341769b54bd1f1310dff0791f8746a69d165",
+    "motivo.py": "2763ab8403c241575658f7e8f981b388c2be3f2cf695887a6953237dfbd37b04"
+  },
+  "unidades": [
+    {
+      "base": 58101,
+      "genoma": 3928844838175095642,
+      "k": 0,
+      "semente": 353209410929024878
+    },
+    {
+      "base": 58101,
+      "genoma": 10220730571612833192,
+      "k": 1,
+      "semente": 14507943368767161840
+    },
+    {
+      "base": 58101,
+      "genoma": 6630138225914691797,
+      "k": 2,
+      "semente": 3625441978253300577
+    },
+    {
+      "base": 58101,
+      "genoma": 10040133362639835175,
+      "k": 3,
+      "semente": 12853199010115681411
+    },
+    {
+      "base": 58202,
+      "genoma": 6707255000186836338,
+      "k": 0,
+      "semente": 9167663863325325405
+    },
+    {
+      "base": 58202,
+      "genoma": 6061618873427225832,
+      "k": 1,
+      "semente": 12624914737148221821
+    },
+    {
+      "base": 58202,
+      "genoma": 7591399331958590821,
+      "k": 2,
+      "semente": 15622159643291526600
+    },
+    {
+      "base": 58202,
+      "genoma": 13610613137119762482,
+      "k": 3,
+      "semente": 8315403290289846611
+    },
+    {
+      "base": 58303,
+      "genoma": 5431621405743306651,
+      "k": 0,
+      "semente": 4547446031674415512
+    },
+    {
+      "base": 58303,
+      "genoma": 13993881473362571191,
+      "k": 1,
+      "semente": 14729067116033748399
+    },
+    {
+      "base": 58303,
+      "genoma": 6795351530054451149,
+      "k": 2,
+      "semente": 3269607868286520374
+    },
+    {
+      "base": 58303,
+      "genoma": 2907938430776650737,
+      "k": 3,
+      "semente": 9461042390530542062
+    },
+    {
+      "base": 58404,
+      "genoma": 10369392170969752607,
+      "k": 0,
+      "semente": 9674896032165000922
+    },
+    {
+      "base": 58404,
+      "genoma": 15619141736405835305,
+      "k": 1,
+      "semente": 11595712486574998726
+    },
+    {
+      "base": 58404,
+      "genoma": 2372988088058500874,
+      "k": 2,
+      "semente": 13601920775776834402
+    },
+    {
+      "base": 58404,
+      "genoma": 10825532224583693518,
+      "k": 3,
+      "semente": 14977428421035482017
+    },
+    {
+      "base": 58505,
+      "genoma": 7342413975498975281,
+      "k": 0,
+      "semente": 6535571254928488174
+    },
+    {
+      "base": 58505,
+      "genoma": 15873724810133278603,
+      "k": 1,
+      "semente": 16561581750293829661
+    },
+    {
+      "base": 58505,
+      "genoma": 11583252104009213563,
+      "k": 2,
+      "semente": 17162278976372018561
+    },
+    {
+      "base": 58505,
+      "genoma": 10709532280301626480,
+      "k": 3,
+      "semente": 9067793258506655971
+    }
+  ],
+  "vidas_parede_s": 221.04140710000001
+}
