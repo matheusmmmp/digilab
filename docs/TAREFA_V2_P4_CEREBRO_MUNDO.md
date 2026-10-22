@@ -270,6 +270,19 @@ Os números novos (os do contrato, a G-CUSTO) continuam PROPOSTOS. A tabela abai
 - **A G-CUSTO** (`tools/custo_p4_contrato.py`) passa a ligar o contrato pela chave da bancada.
 - **Interpretações** em `docs/registro/2026-10.md`.
 
+### Etapa 4, o plano: o adendo 1, parte A (worker D, 2026-10-22)
+
+- **Só documento,** num commit antes de qualquer vida: o adendo 1, parte A, no fim do `docs/PLANO_ANALISE_V2_P4_CORPORIFICADO.md`.
+- **O que ele fixa:**
+  - o que as etapas 1 a 3 deixaram no contrato (A1.1), com o achado de que o contato nunca acontece no mundo do plano;
+  - **a regra da orientação** (a PC-8, nova): a recomendação é manter a do POC no piloto, com as chegadas e a oscilação como
+    descritivos (A1.2 e A1.3);
+  - as regras das premissas, do contraste, da margem e do N, repetidas da seção 6 e 7 (A1.4);
+  - as faixas 61101 e 62101, conferidas na `FAIXAS_RESERVADAS`, e o custo estimado do piloto e da validação (A1.5);
+  - o que o código da etapa 5 precisa antes do piloto (A1.6), sem rodar nada.
+- **A parte B** (a G-REVAL-POSSIVEL, as premissas, a margem, o K_u e o poder medidos) vem depois do piloto, antes da validação.
+- **O piloto não rodou:** ele precisa do sim do Matheus, e as PC-2 a PC-8 estão abertas.
+
 ## Referências
 
 Nenhuma referência externa: o esboço só usa os documentos do repositório citados no texto e não alega novidade.
