@@ -87,8 +87,11 @@ function desenharPalco(cv: HTMLCanvasElement, cx: CanvasRenderingContext2D, quad
 /* com a cena 3D ligada (cena3d.ts), o pet, a plataforma e o ovo sao dela; aqui ficam so os extras, em volta do retangulo do sprite que
    ela informa: a sujeira dos dois lados dos pes, o icone rapido e a marca de saude critica */
 function desenharExtras3D(cx: CanvasRenderingContext2D, g: Geo): void {
+  const { motor: m, nascendo } = jogoAtual();
+  /* o ovo e desenhado pela cena 3D, mas a contagem dos quadros chocando continua daqui (sem ela o ovo nao choca nunca) */
+  if (nascendo > 0) passarQuadroOvo();
   const r = CENA.ret; if (!r) return;
-  const { motor: m, nascendo } = jogoAtual(), a = atlasAtual(), pal = paleta(corDominante(m.tracos)), K = g.K;
+  const a = atlasAtual(), pal = paleta(corDominante(m.tracos)), K = g.K;
   const ec = Math.max(2, Math.round(r.h / 40)), pes = r.y + r.h;
   cx.setTransform(ec * K, 0, 0, ec * K, 0, 0);
   for (let i = 0; i < m.e.sujeira; i++) {
