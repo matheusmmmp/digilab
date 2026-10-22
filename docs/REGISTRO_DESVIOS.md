@@ -355,3 +355,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-22 — V3-COMPETICAO, o piloto (worker B): as margens com escala, o K = 10 subpotenciado e a G-ABRE passando](registro/2026-10.md)
 
 - [2026-10-22 — P4-ETAPA3 (worker D): o cérebro A com o planejador nas vidas do J5 com o contrato](registro/2026-10.md)
+
+- [2026-10-22 — V3-COMPETICAO, a validação (worker B): todos os gates passam, e a disputa ajuda onde o pet é negligenciado](registro/2026-10.md)

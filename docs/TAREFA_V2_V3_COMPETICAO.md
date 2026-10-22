@@ -1,7 +1,7 @@
 # TAREFA V2 — V3_COMPETICAO: a competição entre as regras urgentes (V3-3 e V3-4) (2026-10-21)
 
-Coordenador: Gerente (Claude Code). Worker do desenho: Claude Code (worker B). Worktree e branch: `v2-v3-competicao`. Status: O PILOTO RODOU
-(seção 13; 2026-10-22); a validação não começou; o plano com a PC-1 a PC-6 DECIDIDAS e o adendo 1; o código atrás da chave (seção 11).
+Coordenador: Gerente (Claude Code). Worker do desenho: Claude Code (worker B). Worktree e branch: `v2-v3-competicao`. Status: A VALIDAÇÃO RODOU
+(seção 14; 2026-10-22): todos os gates passam, "a disputa ajuda, e o aprendido usa a abertura"; o piloto (seção 13); o código atrás da chave (seção 11).
 
 Categoria: implementacao (a tarefa); o PR deste desenho é `arquitetura`. Origem: Matheus, 2026-10-21: parar a V3-9 na G0-PODE-MUDAR
 (#376) e seguir para a V3-3/V3-4, pela recomendação do `docs/futuro/v3_espaco_acoes.md` (seção 8) e do E0
@@ -406,4 +406,21 @@ O plano (`docs/PLANO_ANALISE_V2_V3_COMPETICAO.md`) tem a PC-1 a PC-6 DECIDIDAS p
 - **A G-ABRE do piloto passa:** 0,121 [0,110; 0,131].
 - **O custo da validação:** cerca de 33 min de CPU.
 - **A validação não rodou.**
+
+## 14. Resumo da validação (2026-10-22)
+
+**A autorização:** o Matheus, em 2026-10-22 ("sim para a validacao de competicao"), repassada pelo Gerente. A validação rodou uma vez:
+- a config `validacao.json` do adendo 1 (K = 10, as bases 59101…59505), commitada antes, em `7edddc3`;
+- 800 vidas, todas rejogadas do disco, com os gates de mecanismo em toda vida.
+
+O resultado está em `docs/RESULTADO_V2_VALIDACAO_COMPETICAO.md`.
+
+- **A G-ABRE passa:** 0,118 [0,112; 0,125].
+- **O G-R1** (`D_FE`(R0) − `D_FE`(R1)) dá **0,0124 [0,0093; 0,0156]**, na categoria **"a disputa ajuda"**. O superior do IC90 passa do
+  `Δ_R1` (0,0022). O poder declarado era de 0,49 no `Δ_R1`. Ele pesava sobre um empate, e o resultado não é um empate.
+- **O G-R1-CONG passa:** 0,0113 [0,0086; 0,0140].
+- **A segurança passa:** a privação (−0,0216 [−0,0291; −0,0149]) e a saúde (−0,0317 [−0,0423; −0,0226]) ficam do lado bom, dentro das
+  margens. Os três secundários rejeitam no Holm, com p < 0,0001 no bootstrap.
+- **A leitura do plano:** "a disputa ajuda, e o aprendido usa a abertura".
+- **Descritivo:** o ganho mora no relapso (0,036) e no aleatório (0,015), onde a disputa abre. O R0 e o P0 empatam neste mundo.
 
