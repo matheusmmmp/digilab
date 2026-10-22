@@ -2,7 +2,8 @@
 chaves do contrato (os sensores e o controlador) fica abaixo de 3 vezes o de hoje.
 
 A vida e a da validacao do adendo 8 (experiments/configs/v2_pet_que_pensa/validacao_adendo8.json: o paladar, a fruta ao lado, o T1 de 12
-dias, o cerebro A com o planejador), numa semente dos testes. A unica diferenca entre as duas medidas e o `cfg_contrato` no motor. Mede o
+dias, o cerebro A com o planejador), numa semente dos testes. A unica diferenca entre as duas medidas e a chave `contrato` da
+bancada do J5 (o `cfg_contrato` no motor). Mede o
 `time.process_time` da vida (sem as medidas da bancada), o melhor de `--repeticoes`, e um descritivo do andar das duas vidas (as
 chegadas e os consumos). Nao e run de pesquisa: nada vai para resultado.
 
@@ -14,7 +15,6 @@ import argparse
 import json
 import sys
 import time
-from dataclasses import fields
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parents[1]
@@ -22,43 +22,16 @@ sys.path.insert(0, str(RAIZ))
 sys.path.insert(0, str(RAIZ / "experiments"))
 
 import bancada_v2 as bv  # noqa: E402
-from bancada import pet_que_pensa as pqp  # noqa: E402
-
-from digilab.config import CONFIG_CONTRATO_LIGADO  # noqa: E402
 
 CONFIG = RAIZ / "experiments" / "configs" / "v2_pet_que_pensa" / "validacao_adendo8.json"
 LIMITE = 3                                     # a G-CUSTO: abaixo de 3 vezes o de hoje
 SEMENTES_TESTE = (101, 202, 303, 404, 505)
 
 
-class BancadaComContrato(pqp.BancadaPQP):
-    """a bancada do J5 com o contrato da P4 ligado no motor, so para esta medida (a bancada da P4 e a etapa 3). A fabrica da bancada chama
-    com_corpo(MotorMundoMudanca)(...) com os kwargs fixos; o contrato entra trocando, so durante a chamada, a classe que o com_corpo
-    devolve por uma subclasse com o cfg_contrato."""
-
-    def fabrica_motor(self, espec):
-        base = super().fabrica_motor(espec)
-
-        class ComContrato(pqp.com_corpo(pqp.MotorMundoMudanca)):
-            def __init__(self, *a, **kw):
-                super().__init__(*a, cfg_contrato=CONFIG_CONTRATO_LIGADO, **kw)
-
-        def fm(politica, cfg, semente):
-            antes = pqp.com_corpo
-            pqp.com_corpo = lambda _m: ComContrato
-            try:
-                return base(politica, cfg, semente)
-            finally:
-                pqp.com_corpo = antes
-        return fm
-
-
 def bancada(contrato: bool):
-    cfg = {k: v for k, v in json.loads(CONFIG.read_text(encoding="utf-8")).items() if k != "validacao"}   # o bloco da run sai
-    bp = bv.bancada_pqp_da_config(cfg)
-    if not contrato:
-        return bp
-    return BancadaComContrato(**{f.name: getattr(bp, f.name) for f in fields(bp) if f.init})
+    """a bancada do J5 da config da validacao do adendo 8, nas sementes dos testes, com a chave `contrato` da bancada (a etapa 3)"""
+    cfg = {k: v for k, v in json.loads(CONFIG.read_text(encoding="utf-8")).items() if k not in ("validacao", "unidades")}
+    return bv.bancada_pqp_da_config({**cfg, "sementes": list(SEMENTES_TESTE), "contrato": contrato})
 
 
 def medir(contrato: bool, braco: str, semente: int, repeticoes: int) -> tuple[float, object]:
