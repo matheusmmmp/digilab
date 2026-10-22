@@ -26,6 +26,7 @@ from digilab.mundo import alvo_padrao_de
 from digilab.events import ACOES_MAO, ACOES_TROCA_ARVORES, dar_fruta, fruta_dada, trocar_arvores
 from digilab.events import ACOES_PARAR_ARVORES, parar_arvores
 from digilab.config import CONFIG_PQP_MUNDO_LIGADA, CONFIG_MODELO_MUNDO_LIGADA, ConfigModeloMundo
+from digilab.config import CONFIG_CONTRATO_LIGADO
 from digilab.modelo_mundo import TIPOS as MODELO_TIPOS, PoliticaComModelo
 from digilab.metrics import busca_transicao, exposto_transicao, mudanca_de_escolha, oportunidade_revalorizacao
 from digilab.metrics import decisao_lado_a_lado, oportunidade_lado_a_lado
@@ -389,6 +390,8 @@ class BancadaPQP:
     ao_lado: bool = False            # o adendo 5 (A5.1): a fruta ao lado da racao em todos os bracos e protocolos (exige o paladar)
     adendo_7: bool = False           # o adendo 7: a parada no T2, a oportunidade nova do T1, a busca sem a fome (exige a fruta ao lado)
     adendo_8: bool = False           # o adendo 8, por cima do 7: a x sai das arvores no T1 em T_m; no T2, a busca pelas arvores, sem corte
+    contrato: bool = False           # a P4 (TAREFA_V2_P4_CEREBRO_MUNDO, secao 3.2): o contrato sensorio-motor ligado no motor (os sensores
+                                     # e o controlador, CONFIG_CONTRATO_LIGADO) em todos os bracos; o cerebro nao ganha entrada (P4-2)
 
     def __post_init__(self) -> None:
         if type(self.paladar) is not bool:
@@ -405,6 +408,8 @@ class BancadaPQP:
             raise TypeError(f"adendo_8 do J5 e bool: {self.adendo_8!r}")
         if self.adendo_8 and not self.adendo_7:
             raise ValueError("o adendo 8 do J5 vai por cima do adendo 7: 'adendo_7': true")
+        if type(self.contrato) is not bool:
+            raise TypeError(f"contrato do J5 (a P4) e bool: {self.contrato!r}")
         if self.ao_lado and self.lugar != "comedouro":
             raise ValueError(f"a fruta ao lado do J5 pede o dono no comedouro (A5.2), nao {self.lugar!r}")
         if self.d_a < 1 or self.janela < 1 or self.n_mao < 1:
@@ -484,6 +489,8 @@ class BancadaPQP:
             kw["cfg_paladar"] = CONFIG_PALADAR_LIGADA
         if self.ao_lado:
             kw["cfg_fruta_ao_lado"] = CONFIG_FRUTA_AO_LADO_LIGADA
+        if self.contrato:
+            kw["cfg_contrato"] = CONFIG_CONTRATO_LIGADO
         cm, corpo, efeito = self.bancada.cfg_mundo, self.cfg_corpo(), efeitos_pqp(x, cf)
         return lambda politica, cfg, semente: com_corpo(MotorMundoMudanca)(
             politica, cfg, semente, NEUTRO, "brasa", obediencia_desligada=True, cfg_mundo=cm, efeito_frutas=efeito,
@@ -1149,7 +1156,7 @@ def modelos_contra_o_real(retratos: list, motor: MotorMundo, x: str, S: int) -> 
 
 CHAVES_CONFIG_PQP = {"descricao", "plano", "tipo", "bracos", "protocolos", "sementes", "unidades", "d_a", "janela", "n_mao",
                      "orcamento_por_dia", "dono", "lugar", "ponto", "lobos", "montagem", "consequencia", "mundo", "corpo", "passo0",
-                     "g_plano", "paladar", "fruta_ao_lado", "adendo_7", "adendo_8"}
+                     "g_plano", "paladar", "fruta_ao_lado", "adendo_7", "adendo_8", "contrato"}
 
 
 def validar_config_pqp(cfg: dict) -> dict:
@@ -1201,6 +1208,9 @@ def validar_config_pqp(cfg: dict) -> dict:
         raise ValueError(f"'adendo_8' do J5 e bool: {adendo_8!r}")
     if adendo_8 and not adendo_7:
         raise ValueError("'adendo_8' do J5 vai por cima do adendo 7: 'adendo_7': true")
+    contrato = cfg.get("contrato", False)
+    if type(contrato) is not bool:
+        raise ValueError(f"'contrato' do J5 (a P4) e bool: {contrato!r}")
     if "ponto" in cfg and cfg["ponto"] not in PONTOS_APRENDIZ:
         raise ValueError(f"ponto do aprendiz {cfg['ponto']!r}: so {sorted(PONTOS_APRENDIZ)}")
     if "montagem" in cfg and cfg["montagem"] not in MONTAGENS:
@@ -1224,6 +1234,9 @@ def validar_config_pqp(cfg: dict) -> dict:
         if queimadas:
             raise SementeSemPlano(f"sementes/bases {queimadas} na faixa queimada {ini}...{fim} ({motivo}): nao usar para nada")
     fora = sorted(usadas - SEMENTES_TESTE)
+    if fora and contrato:
+        raise SementeSemPlano(f"sementes/bases {fora} com o contrato da P4: a run da P4 e do plano dela "
+                              f"(PLANO_ANALISE_V2_P4_CORPORIFICADO), com o orquestrador e as faixas da P4-8; aqui, so as dos testes")
     if fora:
         if cfg.get("plano") != PLANO_PQP or not (RAIZ / PLANO_PQP).is_file():
             raise SementeSemPlano(f"sementes/bases {fora} fora das dos testes: precisa do plano do J5 ({PLANO_PQP}, campo 'plano')")
@@ -1260,7 +1273,7 @@ def bancada_pqp_da_config(cfg: dict) -> BancadaPQP:
     bancada = bancada_da_config({**chaves, "dias": d_a + janela, "orcamento": int(cfg["orcamento_por_dia"]) * (d_a + janela)})
     return BancadaPQP(bancada, d_a, janela, int(cfg.get("n_mao", N_MAO_PQP)), cfg.get("dono", "atencioso"), cfg.get("lugar", "comedouro"),
                       g_plano=int(cfg.get("g_plano", 0)), paladar=cfg.get("paladar", False), ao_lado=cfg.get("fruta_ao_lado", False),
-                      adendo_7=cfg.get("adendo_7", False), adendo_8=cfg.get("adendo_8", False))
+                      adendo_7=cfg.get("adendo_7", False), adendo_8=cfg.get("adendo_8", False), contrato=cfg.get("contrato", False))
 
 
 def rodar_pqp(cfg: dict, pasta: Path) -> dict:
@@ -1293,7 +1306,8 @@ def rodar_pqp(cfg: dict, pasta: Path) -> dict:
                                         **({"fruta_ao_lado": True, "cfg_fruta_ao_lado": CONFIG_FRUTA_AO_LADO_LIGADA.__dict__}
                                            if bp.ao_lado else {}),
                                         **({"adendo_7": True} if bp.adendo_7 else {}),
-                                        **({"adendo_8": True} if bp.adendo_8 else {})}))
+                                        **({"adendo_8": True} if bp.adendo_8 else {}),
+                                        **({"contrato": True, "cfg_contrato": CONFIG_CONTRATO_LIGADO.__dict__} if bp.contrato else {})}))
     return {"vidas": vidas, "medidas": medidas}
 
 
