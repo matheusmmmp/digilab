@@ -232,6 +232,25 @@ Os números novos (os do contrato, a G-CUSTO) continuam PROPOSTOS. A tabela abai
   na vida da G-CUSTO) e oscila no alvo do cheiro, chegando de costas para a comida. A regra não mudou.
 - **Interpretações** em `docs/registro/2026-10.md`.
 
+### Etapa 2, a paridade Python/TS (worker D, 2026-10-21)
+
+- **O código, no TS, atrás da chave desligada** (o jogo não a liga):
+  - `web/app/motor/contrato.ts`: o espelho, função a função, do `digilab/contrato.py`, com a mesma conta inteira, a mesma ordem dos
+    vizinhos do A\* e os mesmos empates (o heap de (f, h, índice));
+  - `web/app/motor/mundo.ts`: a opção `contrato` do `Mundo`, com a percepção pelo cone e pela oclusão (a `orientacao` na percepção só com
+    os sensores), os troncos opacos sem colisão, as paredes (desligadas no plano), o controlador, a orientação e o registro de cada
+    decisão com alvo, como no Python.
+- **O gabarito:** `experiments/exportar_gabarito_contrato.py` grava `web/app/test/gabaritos/contrato_python.json`, e
+  `tests/test_gabarito_contrato_web.py` confere que ele está em dia. Ele traz as contas em casos sorteados (o controlador com muros
+  finos, contatos e o pet preso numa caixa) e 7 vidas de 3 dias com as chaves (juntas, separadas e com as paredes), com o instinto, o
+  cérebro aleatório, os lobos e um cérebro de teste que explora até a borda.
+- **A G-PAR-CONTRATO passa** (`web/app/test/contrato.test.ts`, 18 testes): o mundo em TS rejoga cada vida decisão a decisão (a
+  percepção, os candidatos, o ocorrido com o registro do contrato, o estado e a percepção depois), o resumo e os próximos sorteios. A
+  falha mostra o primeiro campo que diverge (R-P2); duas mutações de propósito (a borda do cone e o custo da diagonal) a fizeram falhar.
+- **O G2 do jogo:** com a chave explícita desligada, as 4 vidas do gabarito do mundo saem iguais; a suíte do TS e a da etapa 0 passam.
+- **A CP-7** fica registrada como cumprida no `docs/futuro/mundo_3d.md`.
+- **Interpretações** em `docs/registro/2026-10.md`.
+
 ## Referências
 
 Nenhuma referência externa: o esboço só usa os documentos do repositório citados no texto e não alega novidade.

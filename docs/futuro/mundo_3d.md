@@ -315,4 +315,8 @@ como o J1 e o J7 já mostraram.
    (o plano em `docs/PLANO_ANALISE_V2_P4_CORPORIFICADO.md`), e não o EXP-1; as paredes ficam desligadas e os troncos opacos, sem
    colisão; os quatro braços do J5; nenhum número recalibrado; o cérebro no POC em paralelo, sem mudar o jogo. O mundo 3D deixa de
    estar PAUSADO.
+   **A CP-7 está cumprida (2026-10-21, a etapa 2 da P4, worker D):** a G-PAR-CONTRATO passa. O contrato está no mundo do motor nos
+   dois lados (`digilab/contrato.py` e `web/app/motor/contrato.ts`, atrás da `ConfigContrato` desligada). O mundo em TS rejoga, decisão a
+   decisão e campo a campo, 7 vidas do Python com as chaves e o cérebro de teste dos dois lados, e reproduz as contas do contrato em
+   casos sorteados (`web/app/test/contrato.test.ts`, contra `experiments/exportar_gabarito_contrato.py`). O jogo não muda.
 4. A linha das "ideias registradas" da seção 8 do `ROADMAP_V2.md` e a linha do `PAINEL_V2.md` foram aplicadas com este documento.
