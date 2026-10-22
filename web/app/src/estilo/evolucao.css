@@ -1,0 +1,136 @@
+/* Evolucao (docs/TAREFA_V2_EVOLUCAO.md): o momento da evolucao (Revelacao.tsx, .evm) e a aba Crescer · Evolucao (TelaEvolucao.tsx, .evt).
+   O azul, a grade e os estilhacos sao CSS, sem asset; a plataforma de luz tambem. O glow e o anel do Digivice sao do UP e so aparecem com
+   a decoracao local, sem mistura de cores (a mistura com o fundo variava 1/255 entre uma captura e outra). */
+
+/* ---------------------------------------------------------------- o fundo azul (o momento e o destaque da aba) */
+.evm,.evt-heroi{color:#FFFFFF;background-color:#0D3AA6;
+  background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px),
+    radial-gradient(ellipse at 50% 38%,#2F7CF6 0%,#1450C8 40%,#0B2A7A 78%,#071A52 100%);
+  background-size:32px 32px,32px 32px,100% 100%}
+.evm-estilhacos{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.evm-estilhacos i{position:absolute;display:block;background:linear-gradient(90deg,rgba(130,200,255,.6),rgba(47,124,246,.1));transform:skewX(-35deg)}
+.evm-estilhacos i:nth-child(1){left:-40px;top:11%;width:130px;height:24px}
+.evm-estilhacos i:nth-child(2){right:-30px;top:24%;width:96px;height:16px}
+.evm-estilhacos i:nth-child(3){left:-20px;bottom:20%;width:76px;height:14px}
+.evm-estilhacos i:nth-child(4){right:-50px;bottom:7%;width:160px;height:30px}
+
+/* ---------------------------------------------------------------- a plataforma de luz */
+.evm-plataforma{position:absolute;left:50%;bottom:14px;width:260px;height:64px;margin-left:-130px;pointer-events:none}
+.evm-plataforma i{position:absolute;inset:0;display:block;border-radius:50%}
+.evm-plataforma i:nth-child(1){background:radial-gradient(ellipse at center,#FFFFFF 0,#C8EEFF 26%,#62B8FF 52%,rgba(47,124,246,0) 72%)}
+.evm-plataforma i:nth-child(2){inset:12px 34px;border:2px solid rgba(255,255,255,.9);box-shadow:0 0 14px #9FE8FF,inset 0 0 10px #9FE8FF}
+.evm-plataforma i:nth-child(3){inset:-8px -28px;border:2px solid rgba(160,225,255,.45)}
+.evm-spr{display:block;image-rendering:pixelated}
+
+/* ---------------------------------------------------------------- o momento */
+.revelacao.evm{position:fixed;inset:0;width:100%;max-width:none;height:100%;max-height:none;margin:0;padding:0;border:0;overflow:auto}
+.evm::backdrop{background:#071A52}
+.evm[open]{display:block}
+.evm-corpo{position:relative;box-sizing:border-box;min-height:100%;display:flex;flex-direction:column;align-items:center;gap:14px;padding:20px 16px 24px}
+.evm-palco{display:flex;flex-direction:column;align-items:center;width:100%;max-width:420px}
+.evm-topo{display:flex;flex-direction:column;align-items:center;gap:4px}
+.evm .revel-de{padding:2px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.14);color:#DBE8FF;
+  font-size:12px;font-weight:900;letter-spacing:.04em}
+.evm-tit{margin:2px 0 0;font-family:var(--dl-f-num);font-style:italic;font-weight:900;font-size:46px;line-height:1.05;letter-spacing:1px;color:#FFFFFF;
+  text-shadow:0 0 18px rgba(120,200,255,.9),0 3px 0 #0B2A7A}
+.evm-tit:focus{outline:none}
+.evm-cena{position:relative;width:100%;height:300px;display:flex;align-items:flex-end;justify-content:center}
+.evm-raio{position:absolute;left:50%;bottom:40px;width:180px;height:260px;margin-left:-90px;opacity:.55;
+  background:linear-gradient(to top,rgba(170,228,255,.75),rgba(170,228,255,0));clip-path:polygon(16% 100%,84% 100%,100% 0,0 0)}
+.evm-glow{position:absolute;left:50%;top:-12px;margin-left:-160px;opacity:.45;pointer-events:none}
+.evm-digivice{position:absolute;left:50%;top:0;margin-left:-150px;opacity:.6;pointer-events:none}
+.evm-pet{position:relative;z-index:1;margin-bottom:36px;filter:drop-shadow(0 0 2px #FFFFFF) drop-shadow(0 0 14px #9FE8FF);animation:evm-surge .7s ease-out both}
+@keyframes evm-surge{
+  from{opacity:0;transform:translateY(10px) scale(.9);filter:brightness(3) drop-shadow(0 0 24px #FFFFFF)}
+  to{opacity:1;transform:none;filter:drop-shadow(0 0 2px #FFFFFF) drop-shadow(0 0 14px #9FE8FF)}
+}
+.evm-cartao{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:220px;padding:10px 24px;border-radius:14px;
+  background:rgba(9,30,90,.88);border:2px solid #8FD0FF;box-shadow:0 0 18px rgba(80,170,255,.5)}
+.evm-nome{font-size:24px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;line-height:1.15;text-align:center}
+.evm-estagio{font-size:14px;font-weight:800;color:#CFE3FF}
+.evm-brasao,.evt-brasao{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:800;color:#A9C8F5}
+.evm-brasao-img{width:30px;height:auto}
+.evm-detalhes{display:flex;flex-direction:column;gap:10px;width:100%;max-width:420px}
+.evm-bloco{display:grid;gap:8px;padding:12px;border-radius:14px;background:var(--dl-surface);color:var(--dl-text);text-align:left;box-shadow:0 4px 14px rgba(7,26,82,.35)}
+.evm-bloco p{margin:0}
+.evm-depara{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center}
+.evm-forma{display:flex;align-items:center;gap:8px;min-width:0}
+.evm-forma > span:last-child{display:grid;min-width:0}
+.evm-forma b{font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.evm-forma small{font-size:11px;font-weight:800;color:var(--dl-text-2)}
+.evm-mini{display:flex;align-items:center;justify-content:center;width:56px;height:56px;flex:none;overflow:hidden;border-radius:12px;background:var(--dl-surface-2)}
+.evm-mini .evm-spr{max-width:56px;max-height:56px}
+.evm-seta{font-size:22px;font-weight:900;color:var(--dl-action)}
+.revel-porque-cab{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.revel-porque-cab b{font-size:15px}
+.revel-porque-cab span{padding:2px 8px;border-radius:6px;background:var(--dl-bg);color:var(--dl-plate);font-size:11px;font-weight:900}
+.evm-medalhas{grid-template-columns:auto minmax(0,1fr);align-items:center;font-size:13px;font-weight:700}
+.evm-selos{display:flex;gap:2px}
+.evm .evm-continuar{min-height:54px;margin-top:4px;border:0;border-radius:14px;background:#FFC93C;color:#1B2A4E;font-size:17px;font-weight:900;
+  box-shadow:0 5px 0 #C78F00,0 10px 24px rgba(7,26,82,.45)}
+/* no celular o Continuar fica no pe da tela enquanto os detalhes rolam (como na referencia) */
+.evm .evm-continuar{position:sticky;bottom:14px;z-index:2}
+.evm .evm-continuar:hover{background:#FFD45E}
+.evm .evm-continuar:focus-visible{outline:3px solid #FFFFFF;outline-offset:3px}
+@media (prefers-reduced-motion:reduce){ .evm-pet{animation:none} }
+/* a partir de 900 px (a barra lateral e o desktop): o pet a esquerda e os detalhes a direita, por cima da moldura */
+@media (min-width:900px){
+  .evm-corpo{flex-direction:row;align-items:center;justify-content:center;gap:56px;padding:32px 48px}
+  .evm-palco{max-width:520px}
+  .evm-tit{font-size:64px}
+  .evm-cena{height:400px}
+  .evm-plataforma{width:340px;height:84px;margin-left:-170px}
+  .evm-raio{width:240px;height:340px;margin-left:-120px}
+  .evm-detalhes{max-width:440px}
+}
+
+/* ---------------------------------------------------------------- a aba Crescer · Evolucao */
+.evt-heroi{position:relative;overflow:hidden;display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:18px;box-shadow:0 6px 18px rgba(11,42,122,.25)}
+.evt-heroi .evm-estilhacos{position:absolute}
+.evt-heroi-palco{position:relative;flex:none;width:150px;height:150px;display:flex;align-items:flex-end;justify-content:center}
+.evt-plataforma{width:150px;height:40px;margin-left:-75px;bottom:4px}
+.evt-heroi-pet{position:relative;z-index:1;margin-bottom:22px;filter:drop-shadow(0 0 2px #FFFFFF) drop-shadow(0 0 10px #9FE8FF)}
+.evt-heroi-txt{position:relative;display:flex;flex-direction:column;gap:2px;min-width:0}
+.evt-rot{font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#A9C8F5}
+.evt-nome{font-size:22px;font-weight:900;letter-spacing:.04em;line-height:1.1;text-transform:uppercase;overflow-wrap:anywhere}
+.evt-estagio{font-size:13px;font-weight:800;color:#CFE3FF}
+.evt-prazo{display:inline-flex;flex-direction:column;align-self:flex-start;margin-top:6px;padding:6px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.12)}
+.evt-prazo b{font-size:18px;line-height:1.2}
+.evt-prazo small{font-size:11px;font-weight:800;color:#CFE3FF}
+.evt-painel{display:grid;gap:10px;min-width:0;padding:12px 14px;border-radius:16px;background:var(--dl-surface);color:var(--dl-text);box-shadow:0 0 0 1px var(--ui-border),var(--ui-sombra)}
+.evt-tit{display:flex;align-items:center;gap:8px;margin:0;font-size:16px;font-weight:900}
+.evt-tit::before{content:"";flex:none;width:4px;height:20px;border-radius:999px;background:var(--ui-primary)}
+.evt-tit svg{flex:none}
+.evt-selos{display:flex;flex-wrap:wrap;align-items:center;gap:4px}
+.evt-selos span{margin-left:6px;font-size:13px;font-weight:800}
+.evt-porque p{margin:0}
+.evt-linha{list-style:none;margin:0;padding:0 0 0 6px;display:grid}
+.evt-linha li{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:0 0 14px 18px;border-left:2px solid var(--ui-border);font-size:.84375rem}
+.evt-linha li:last-child{padding-bottom:0;border-left-color:transparent}
+.evt-ponto{position:absolute;left:-7px;top:2px;width:12px;height:12px;box-sizing:border-box;border-radius:50%;background:var(--dl-surface);border:2px solid var(--ui-primary)}
+.evt-ponto--evo{background:var(--ui-primary)}
+.evt-linha .t{font-size:12px;font-weight:800;color:var(--dl-text-2)}
+.evt-rever{min-height:44px;margin-top:4px;padding:0 12px;border:1px solid var(--ui-border);border-radius:10px;background:var(--ui-surface-2);color:var(--ui-primary-forte);
+  font:inherit;font-size:13px;font-weight:800;cursor:pointer}
+.evt-rever:hover{border-color:var(--ui-primary)}
+.evt-rever:focus-visible{outline:none;box-shadow:var(--ui-foco)}
+.evt-como{gap:8px}
+/* no celular e ate 1099 px as colunas somem (display:contents): a ordem e destaque, proxima evolucao, arvore, porque, historico e como funciona */
+@media (max-width:1099px){
+  .evt-heroi{order:1}
+  .evt-prox{order:2}
+  .evt-arvore{order:3}
+  .evt-porque{order:4}
+  .evt-hist{order:5}
+  .evt-como{order:6}
+}
+@media (min-width:1100px){
+  .evt .evo-principal{padding:0;background:none;box-shadow:none;gap:14px}
+  .evt-heroi{gap:24px;padding:18px 24px}
+  .evt-heroi-palco{width:220px;height:190px}
+  .evt-plataforma{width:210px;height:52px;margin-left:-105px}
+  .evt-nome{font-size:28px}
+  .evt .evo-lado{gap:14px}
+  /* na coluna da direita os numeros da proxima evolucao vao um por linha */
+  .evt-prox .kv{grid-template-columns:minmax(0,1fr)}
+}

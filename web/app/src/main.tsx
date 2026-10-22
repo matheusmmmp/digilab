@@ -17,6 +17,7 @@ import "./estilo/tokens.css";
 import "./estilo/base.css";
 import "./estilo/pet.css";
 import "./estilo/crescer.css";
+import "./estilo/evolucao.css";
 import "./estilo/lutar.css";
 import "./estilo/diario.css";
 import "./estilo/decoracao.css";

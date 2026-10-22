@@ -316,6 +316,8 @@ test("medalhas: vencer o líder dá a medalha e libera a evolução", async ({ p
   const rev = page.locator("dialog.revelacao[open]");
   await expect(rev).toBeVisible();
   await expect(rev.locator(".revel-de")).toContainText("Rookie → Champion");
+  /* a evolucao caiu no tick do evento "u" que deu a 1a medalha: a derivacao e exata, e o momento diz qual medalha a liberou */
+  await expect(rev.locator(".evm-medalhas")).toContainText("Esta evolução pediu 1 medalha do Tamer. Foi liberada pela Medalha da Campina.");
   await rev.getByRole("button", { name: "Continuar" }).click();
   await expect(page).toHaveURL(/#\/crescer\/evolucao$/);
   const t = await lerTamer(page);
@@ -1335,4 +1337,75 @@ test("Pet (quadro): no celular não há quadro", async ({ page }) => {
   await page.goto(APP + "#/pet/estado");
   await expect(page.locator(".pet-cena")).toBeVisible();
   await expect(page.locator(".quadro, .mod-cab")).toHaveCount(0);
+});
+
+/* o momento da evolucao e a aba Crescer · Evolucao (docs/TAREFA_V2_EVOLUCAO.md). save_evolucao.json (e2e/gerar_save_evolucao.mjs): um pet
+   v11 no Rookie a 4 min do fim do estagio, que ja conhece a medalha que o Champion pede; o relogio do app anda e ele evolui na hora */
+const SAVE_EVO = JSON.parse(readFileSync(new URL("./save_evolucao.json", import.meta.url), "utf8"));
+const TAMER_1 = { versao: 1, log: [["medalha", { id: "campina", n: 1, quando: 1, pet: SAVE_EVO.semente, forma: "Agumon", tick: 490 }]] };
+const JAPONES = /[぀-ヿ㐀-鿿ｦ-ﾟ]/;
+for (const largura of [390, 1280]) {
+  test(`evolução: o momento em ${largura} px, a aba nova e o "Ver a revelação de novo"`, async ({ page }) => {
+    await page.setViewportSize({ width: largura, height: largura >= 1100 ? 800 : 844 });
+    await semear(page, SAVE_EVO, undefined, TAMER_1);
+    const erros = vigiarErros(page);
+    await page.goto(APP + "#/crescer/evolucao");
+    const rev = page.locator("dialog.revelacao[open]");
+    await expect(rev).toBeVisible();
+    await expect(rev.locator(".revel-tit")).toHaveText("EVOLUÇÃO!");
+    await expect(rev.locator(".revel-de")).toHaveText("Rookie → Champion");
+    await expect(rev.locator(".evm-nome")).toHaveText("Greymon");
+    await expect(rev.locator(".evm-estagio")).toHaveText("Champion");
+    await expect(rev.locator(".evm-brasao")).toContainText("brasão Coragem");
+    await expect(rev.locator(".evm-depara")).toContainText("Agumon");
+    await expect(rev.locator(".evm-depara")).toContainText("Greymon");
+    await expect(rev.locator(".revel-porque")).toContainText("decidido pelo caráter");
+    /* a medalha veio antes (o "u" do comeco): pediu 1, sem dizer qual liberou */
+    await expect(rev.locator(".evm-medalhas")).toHaveText(/Esta evolução pediu 1 medalha do Tamer\.$/);
+    await expect(page).toHaveURL(/#\/evolucao$/);
+    const r = await rev.evaluate((d, j) => {
+      const spr = d.querySelector<HTMLElement>(".evm-pet .evm-spr")!.getBoundingClientRect(), ok = d.querySelector<HTMLElement>(".evm-continuar")!.getBoundingClientRect();
+      return { spr: [spr.width, spr.height], okVisivel: ok.bottom <= innerHeight + 1 && ok.top >= 0, japones: new RegExp(j).test(d.textContent ?? ""), nivel: /\b(Nv|Lv|XP)\b/.test(d.textContent ?? "") };
+    }, JAPONES.source);
+    expect(r.spr[0], "o pet grande").toBeGreaterThan(150);
+    expect(r.okVisivel, "o Continuar à vista, sem rolar").toBe(true);
+    expect(r.japones, "nenhum caractere japonês").toBe(false);
+    expect(r.nivel, "nem nível nem XP").toBe(false);
+    await rev.getByRole("button", { name: "Continuar" }).click();
+    await expect(page).toHaveURL(/#\/crescer\/evolucao$/);
+    await expect(page.locator("dialog.revelacao[open]")).toHaveCount(0);
+    /* a aba: a forma atual em destaque, a proxima evolucao com as medalhas, a arvore, o porque e o historico */
+    await expect(page.locator(".evt-heroi .evt-nome")).toHaveText("Greymon");
+    await expect(page.locator(".evt-heroi .evt-prazo")).toContainText("até virar Ultimate");
+    await expect(page.locator(".evt-prox .evt-selos")).toContainText("1 de 3 medalhas do Tamer");
+    await expect(page.locator(".evo-arv")).toBeVisible();
+    await expect(page.locator(".evt-porque")).toContainText("Por que Greymon?");
+    await expect(page.locator(".evo-hist li")).toHaveCount(3);
+    expect(JAPONES.test(await page.locator(".evo-tela").textContent() ?? "")).toBe(false);
+    /* o historico reabre o momento de qualquer evolucao */
+    await page.getByRole("button", { name: "Ver a revelação de novo: Agumon" }).click();
+    await expect(rev).toBeVisible();
+    await expect(rev.locator(".revel-de")).toHaveText("In-Training → Rookie");
+    await expect(rev.locator(".evm-nome")).toHaveText("Agumon");
+    await expect(rev.locator(".revel-porque")).toContainText("decidido pelo cuidado");
+    await expect(rev.locator(".evm-medalhas")).toHaveCount(0);
+    await rev.getByRole("button", { name: "Continuar" }).click();
+    await expect(page.locator("dialog.revelacao[open]")).toHaveCount(0);
+    await expect(page).toHaveURL(/#\/crescer\/evolucao$/);
+    expect(erros).toEqual([]);
+  });
+}
+/* sem o atlas do UP (o CI, as capturas do repositorio): o pet do momento e o do destaque saem da grade de pixels de reserva, nitidos */
+test("evolução: sem o atlas, o pet de reserva no momento e na aba", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await semear(page, SAVE_EVO, undefined, TAMER_1);
+  await page.route(/\/Assets\/(digilab_atlas_up|digilab_decoracao_up|decoracao_up\/)/, r => r.abort());
+  await page.goto(APP + "#/crescer/evolucao");
+  const rev = page.locator("dialog.revelacao[open]");
+  await expect(rev).toBeVisible();
+  await expect(rev.locator(".evm-pet .evm-spr--reserva")).toBeVisible();
+  const w = await rev.locator(".evm-pet .evm-spr--reserva").evaluate(e => (e as HTMLImageElement).naturalWidth);
+  expect(w).toBeGreaterThan(100);
+  await rev.getByRole("button", { name: "Continuar" }).click();
+  await expect(page.locator(".evt-heroi .evm-spr--reserva")).toBeVisible();
 });

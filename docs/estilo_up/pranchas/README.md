@@ -68,3 +68,8 @@ mostra o quadro e a coluna lateral recolhida. Foram tiradas em 1280 px, sem o at
 `capturas/Exploracao_390.png`, `capturas/Exploracao_360.png` e `capturas/Exploracao_1280.png` são o celular (rolado até o marcador) e o
 desktop. `capturas/Exploracao_390_folha.png` é a folha de um lugar, e `capturas/Exploracao_390_inteira.png`, a página inteira. Foram tiradas
 sem o atlas e sem a decoração do Digimon UP, com o pet v6 do e2e das arenas.
+
+**A Evolução** (2026-10-21, `docs/TAREFA_V2_EVOLUCAO.md`): `capturas/Evolucao_momento_<largura>.png` é o momento da evolução em 390, 360 e
+1280 px (um Agumon que vira Greymon). `capturas/Evolucao_aba_<largura>.png` é a aba Crescer › Evolução recomposta, com o pet v6 das arenas,
+e `capturas/Evolucao_aba_390_inteira.png`, a aba inteira. Foram tiradas sem o atlas e sem a decoração do Digimon UP: o pet é a grade de
+reserva.
