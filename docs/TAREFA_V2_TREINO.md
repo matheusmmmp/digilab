@@ -1,6 +1,6 @@
 # TAREFA V2 — TREINO (2026-10-22)
 
-Coordenador: Gerente. Worker: A. Worktree e branch: `v2-treino`, a partir da `main` (d873327). Status: EM ANDAMENTO.
+Coordenador: Gerente. Worker: A. Worktree e branch: `v2-treino`, a partir da `main` (d873327), com a `main` mesclada em 61336e7. Status: ENTREGUE (PR, espera o ok visual e o merge).
 
 Categoria: implementacao. Origem: Matheus, 2026-10-22 (o "sim" à proposta do mapeamento enviado ao Gerente no mesmo dia). A referência é a
 terceira tela de `D:\Trab\digilab\_ref\referencia_mobile_2026-10-19.png` (local, não versionada; só a composição): a sala de treino, o pet
@@ -72,3 +72,55 @@ um pet v11 no Rookie que já treinou e pede pausa (fadiga entre 40 e 60), e outr
 ## 8. Precisa do Matheus
 
 O ok visual nas capturas.
+
+## 9. Entregue (2026-10-22)
+
+**O que mudou.**
+- **`src/telas/crescer/TelaTreinar.tsx`:**
+  - **A sala:** clara, em CSS (parede, janela, chão). O fundo do UP só com o atlas local. O pet fica grande na plataforma de luz (o
+    `PetGrande` da Evolução: atlas ou grade de reserva), com o chip do estado e o balão "pausa?".
+  - **O stat em foco:** o principal do último exercício, "Mira +1,1 de 10", com a barra e "no estágio x de 10 · na vida y de 36". No
+    Mega, os tetos são os de `CMG`.
+  - **Cansaço:** fadiga e sobrecarga, os medidores de antes.
+  - **Os exercícios:** a grade de antes. Os ícones do UP só com o atlas; sem ele, os do lucide (Dumbbell, Footprints, Crosshair, Wind,
+    Flower2, Shield).
+  - **O resto:** "Treinado na vida" stat a stat (de 0 a 10) e o total; o último treino (do evento "tr"), agora também no celular.
+  - **A ordem no celular:** sala, stat em foco, cansaço, exercícios, treinado na vida, último treino e "Como o treino funciona".
+  - **Desktop, na moldura:** à esquerda, a sala, o stat em foco e o treinado na vida; à direita, o cansaço, os exercícios, o último treino e
+    o Forçar.
+  - O cartão "Próximo treino em N min" do celular saiu: o chip da sala diz "descansando: próximo em N min".
+- **`src/estilo/treino.css` (novo)**, e o `crescer.css` sem as regras da sala antiga.
+- **`e2e/gerar_save_treino.mjs`, `e2e/save_treino_pausa.json` e `e2e/save_treino_forcar.json` (novos):** um Palmon v11 no Rookie que treinou
+  3 vezes (fadiga 56,5: pede pausa) ou 4 (fadiga 74,8: só Forçar). Conferidos: refeitos do registro e com mais 10 min de jogo, continuam
+  acordados e na faixa.
+
+**Gate.**
+
+| conferência | resultado |
+|---|---|
+| `npm run tipos` | passa |
+| `npm test` (Vitest) | 46 arquivos, 565 testes, todos passam (depois de mesclar a `main`) |
+| `npm run e2e` | 84 de 84: os 80 de antes e os 4 novos (a tela em 390 e em 1280 com a pausa; o Forçar com a folha e o registro; a reserva sem o atlas) |
+| `npm run capturas`, 390 e 1280 px (referência: o build da `main` d873327; a `main` mesclada só muda o motor, nada em `src/`) | 17 telas iguais, pixel a pixel; muda `crescer-treinar` (o pedido); `treino-pausa` e `treino-forcar` são novas |
+| `npm run capturas`, 360 px (mesma referência) | 17 iguais; muda `crescer-treinar`; `diario-registro` alterna entre dois estados (22 pixels) também no build da `main` (nota abaixo) |
+| determinismo do branch | 60 capturas gravadas e conferidas duas vezes, sem nova tentativa: todas iguais |
+
+Notas do gate:
+- Três capturas da referência saíram anômalas na primeira gravação: `crescer-aprend` e `evolucao-momento` em 390 e `diario-registro` em 360.
+  Rodado de novo, o próprio build da `main` diferia delas com os mesmos pixels que o branch (12, 304 e 22). As três foram regravadas a
+  partir do build da `main`.
+- `diario-registro` em 360 continua alternando entre dois estados (22 pixels) nos dois builds, a `main` e o branch. É uma instabilidade
+  que já existia (vista também na Exploração) e não vem desta tarefa.
+
+**As capturas** (em `docs/estilo_up/pranchas/capturas/`, sem o atlas e sem a decoração do UP: a sala em CSS, o pet da grade de reserva e os
+ícones do lucide):
+- `Treino_pausa_390.png`, `Treino_pausa_360.png` e `Treino_pausa_1280.png`: o pet que pede pausa;
+- `Treino_pausa_390_inteira.png`: a página inteira;
+- `Treino_forcar_390.png`, `Treino_forcar_390_folha.png` e `Treino_forcar_1280.png`: só Forçar, e a folha de confirmação.
+
+A comparação com a terceira tela da referência fica fora do repositório, porque a referência não é versionada.
+
+**Diferenças para a referência.**
+- Não há saco de pancada nem pet golpeando: o motor não tem animação por exercício.
+- Não há a barra "toque no momento certo", nem "Lv. 3 120/300", nem o "03".
+- Os medidores, os exercícios e o treinado na vida vêm do motor e não estão na referência.
