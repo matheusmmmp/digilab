@@ -1,0 +1,52 @@
+/* Treinar (docs/TAREFA_V2_TREINO.md): a sala clara em CSS (parede com janela e chao; o fundo do UP so com o atlas local), o pet na plataforma
+   de luz da Evolucao (evolucao.css), o stat em foco, o treinado na vida e o ultimo treino. Os medidores e a grade dos exercicios sao os de
+   antes (crescer.css). */
+.trn-sala{position:relative;height:260px;margin:0 -14px;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;
+  background:linear-gradient(#EEF5FF 0 62%,#D6E5F8 62% 63.5%,#C6D9F1 63.5% 100%);border-bottom:1px solid var(--ui-border)}
+.trn-sala--up{background:#C9B7A8 center/cover no-repeat}
+.trn-janela{position:absolute;left:50%;top:22px;width:200px;height:92px;margin-left:-100px;display:flex;gap:6px;padding:6px;box-sizing:border-box;
+  border-radius:6px;background:#FFFFFF;box-shadow:0 2px 0 #C9D8EE}
+.trn-janela i{flex:1;display:block;border-radius:2px;background:linear-gradient(160deg,#CBE9FF,#8CC8FF)}
+.trn-plataforma{bottom:16px;width:220px;height:52px;margin-left:-110px}
+.trn-pet{position:relative;z-index:1;margin-bottom:34px;filter:drop-shadow(0 0 2px #FFFFFF) drop-shadow(0 0 10px #9FE8FF)}
+.trn-estado{position:absolute;top:10px;left:10px;z-index:2;padding:3px 10px;border-radius:999px;border:2px solid var(--dl-navy);background:#FFFFFF;
+  color:var(--dl-navy);font-size:12px;font-weight:900}
+.trn-estado--pausa{border-color:#B86E00;background:#FFF4DC;color:#8A5200}
+.trn-balao{position:absolute;top:48px;right:16px;z-index:2;font-weight:800}
+.trn-card{display:grid;gap:8px;padding:12px 14px;border-radius:16px;background:var(--dl-surface);color:var(--dl-text);box-shadow:0 0 0 1px var(--ui-border),var(--ui-sombra)}
+.trn-foco{grid-template-columns:auto minmax(0,1fr);align-items:center;gap:12px}
+.trn-foco-ic{display:flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:14px;background:var(--ui-primary-soft);color:var(--ui-primary-forte)}
+.trn-foco-ic .treino-ic{width:44px;height:auto}
+.trn-foco-txt{display:grid;gap:4px;min-width:0}
+.trn-rot{font-size:11px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;color:var(--dl-text-2)}
+.trn-foco b{font-size:18px;font-weight:900}
+.trn-foco b small{font-size:13px;font-weight:800;color:var(--dl-text-2)}
+.trn-foco-sub{font-size:12px;font-weight:800;color:var(--dl-text-2)}
+.trn-barra{display:block;height:10px;overflow:hidden;border-radius:999px;background:var(--ui-bar-track)}
+.trn-barra i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--ui-primary),#5FB6FF)}
+.trn-tit{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:0;font-size:16px;font-weight:900}
+.trn-tit small{font-size:12px;font-weight:700;color:var(--dl-text-2)}
+.trn-stats{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.trn-stats li{display:grid;grid-template-columns:96px minmax(0,1fr) 44px;align-items:center;gap:10px;font-size:13px;font-weight:800}
+.trn-stats b{font-size:13px;text-align:right}
+.treino-ic--reserva{display:flex;align-items:center;justify-content:center;width:50px;height:50px;color:var(--ui-primary-forte)}
+.treino-ex:disabled .treino-ic--reserva{color:inherit}
+.trn-exercicios,.trn-ultimo{display:grid;gap:10px;min-width:0}
+/* no celular (e ate 1099 px) as colunas somem: a sala, o stat em foco, o cansaco, os exercicios, o treinado na vida, o ultimo treino */
+@media (max-width:1099px){
+  .trn-sala{order:1}
+  .trn-foco{order:2}
+  .trn-medidores{order:3}
+  .trn-exercicios{order:4}
+  .trn-vida{order:5}
+  .trn-ultimo{order:6}
+  .trn-como{order:7}
+}
+@media (min-width:1100px){
+  .trn.treino-tela{grid-template-columns:minmax(320px,400px) minmax(0,1fr)}
+  .trn .trn-sala{margin:0;height:300px;border-radius:18px;border:1px solid var(--ui-border)}
+  .trn .treino-col-esq > :last-child{flex-grow:0}
+  .trn .trn-exercicios{flex-grow:1;align-content:start}
+  .trn .trn-ultimo{display:flex;align-items:center;gap:14px}
+  .trn .trn-ultimo .treino-ult{flex:1}
+}

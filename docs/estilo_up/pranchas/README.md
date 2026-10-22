@@ -73,3 +73,7 @@ sem o atlas e sem a decoração do Digimon UP, com o pet v6 do e2e das arenas.
 1280 px (um Agumon que vira Greymon). `capturas/Evolucao_aba_<largura>.png` é a aba Crescer › Evolução recomposta, com o pet v6 das arenas,
 e `capturas/Evolucao_aba_390_inteira.png`, a aba inteira. Foram tiradas sem o atlas e sem a decoração do Digimon UP: o pet é a grade de
 reserva.
+
+**O Treino** (2026-10-22, `docs/TAREFA_V2_TREINO.md`): `capturas/Treino_pausa_<largura>.png` é a aba Crescer › Treinar recomposta, em 390, 360
+e 1280 px, com um pet que pede pausa. `capturas/Treino_forcar_*.png` mostra o pet que só pode Forçar, com a folha de confirmação, e
+`capturas/Treino_pausa_390_inteira.png`, a página inteira. Foram tiradas sem o atlas e sem a decoração do Digimon UP.
