@@ -1,7 +1,7 @@
 # TAREFA V2 — V3_COMPETICAO: a competição entre as regras urgentes (V3-3 e V3-4) (2026-10-21)
 
-Coordenador: Gerente (Claude Code). Worker do desenho: Claude Code (worker B). Worktree e branch: `v2-v3-competicao`. Status: O ORQUESTRADOR ENTREGUE
-(seção 12); o plano com a PC-1 a PC-6 DECIDIDAS em 2026-10-21; o código atrás da chave (seção 11); o piloto não rodou.
+Coordenador: Gerente (Claude Code). Worker do desenho: Claude Code (worker B). Worktree e branch: `v2-v3-competicao`. Status: O PILOTO RODOU
+(seção 13; 2026-10-22); a validação não começou; o plano com a PC-1 a PC-6 DECIDIDAS e o adendo 1; o código atrás da chave (seção 11).
 
 Categoria: implementacao (a tarefa); o PR deste desenho é `arquitetura`. Origem: Matheus, 2026-10-21: parar a V3-9 na G0-PODE-MUDAR
 (#376) e seguir para a V3-3/V3-4, pela recomendação do `docs/futuro/v3_espaco_acoes.md` (seção 8) e do E0
@@ -391,4 +391,19 @@ O plano (`docs/PLANO_ANALISE_V2_V3_COMPETICAO.md`) tem a PC-1 a PC-6 DECIDIDAS p
   vidas) ficaria em cerca de 36 min de CPU.
 
 **O piloto não rodou.** Ele gasta a faixa 58101…58505, e o pedido foi preparar o código.
+
+## 13. Resumo do piloto (2026-10-22)
+
+**A autorização:** o Matheus, em 2026-10-22 ("Pode fazer o piloto da competicao"), repassada pelo Gerente.
+
+- **A run:**
+  - a config `piloto.json`, sem mudança, da `main` `f0e07c9` com a árvore limpa;
+  - as bases 58101…58505, K = 4: 320 vidas, 222 s com 4 processos;
+  - todas rejogadas do disco, com os gates de mecanismo em toda vida.
+  - O resultado está em `docs/RESULTADO_V2_PILOTO_COMPETICAO.md`, e os números congelados no adendo 1 do plano.
+- **As margens:** `Δ_R1` = 0,0022 (o R0 ganha do P0 por 0,0044, então a margem tem escala), `Δ_priv` = 0,0281 e `Δ_saude` = 0,0219.
+- **O N:** K = 10 (N = 50). O poder do G-R1 no `Δ_R1` fica em 0,49 e é declarado; nenhum K de 4 a 10 chega a 0,8.
+- **A G-ABRE do piloto passa:** 0,121 [0,110; 0,131].
+- **O custo da validação:** cerca de 33 min de CPU.
+- **A validação não rodou.**
 
