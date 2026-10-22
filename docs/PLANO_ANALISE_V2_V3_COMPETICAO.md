@@ -1,6 +1,6 @@
 # Plano de análise — V2/V3: a competição entre as regras urgentes (V3-3/V3-4)
 
-Data: 2026-10-21. Status: **PROPOSTO** (as decisões PC-1 a PC-6, seção 12, são do Matheus). Tarefa: `docs/TAREFA_V2_V3_COMPETICAO.md`
+Data: 2026-10-21. Status: **DECIDIDO** (as decisões PC-1 a PC-6, seção 12, DECIDIDAS pelo Matheus em 2026-10-21, pela recomendação). Tarefa: `docs/TAREFA_V2_V3_COMPETICAO.md`
 (as CR-1 a CR-7 DECIDIDAS em 2026-10-21; a etapa 0, #383; o código, etapas 1 e 2). Commitado antes de qualquer vida nas faixas 58101…58505
 e 59101…59505.
 
@@ -189,16 +189,17 @@ validação com K = 10, 800 vidas, também.
 
 ## 12. Decisões do Matheus
 
-Todas PROPOSTAS; a recomendação vem primeiro.
+**DECIDIDAS em 2026-10-21: PC-1 a PC-6, todas como recomendado** (a coluna "recomendação" é o que vale). Os números delas
+(o 0,05 da G-ABRE, o ½ e o ¼ das margens) continuam SEM FONTE.
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
-| **PC-1** | a estatística do primário | **a média das 4 células (donos)**, com a margem na mesma escala. Numa vida em que nada abre, a diferença é zero exato e não acrescenta variância | só no relapso e no aleatório: escolher os donos depois de ver onde a disputa abre (na etapa 0, nas sementes dos testes) é escolher o recorte pelo dado; fica descritivo |
-| **PC-2** | a margem do primário | **½ × [`D_FE`(P0) − `D_FE`(R0)] no piloto**, sem ler o R1 | uma margem fixa sem escala neste mundo: sem referência, ela vira arbítrio; ler o R1 no piloto para a margem é calibrar pelo resultado |
-| **PC-3** | as margens da segurança | **¼ da privação do P0 e ¼ de (1 − saúde do P0) no piloto**, a convenção do plano do corpo | mais frouxas: aceitar um pet bem pior de cuidar como "não inferior"; mais apertadas: a segurança vira o gate mais difícil e esconde o primário |
-| **PC-4** | o limiar da G-ABRE | **0,05** do limite inferior do IC95 da fração de abertas no R1 | sem premissa: um empate seria lido como "a disputa não ajuda" mesmo se ela quase não acontecesse |
-| **PC-5** | o R1-congelado | **`P0-c-tapa` com a chave** (o mesmo corpo e o mesmo dono, sem aprender) | o `P0` comum: outro corpo, e o contraste mediria o corpo, não o aprendizado |
-| **PC-6** | o horizonte | **14 dias, os do E0 e do v11** | mais longo: mais tempo para as tabelas das regras forçadas aprenderem, mas outro mundo, sem o E0 de referência e com o metabolismo em aberto |
+| **PC-1** (DECIDIDA) | a estatística do primário | **a média das 4 células (donos)**, com a margem na mesma escala. Numa vida em que nada abre, a diferença é zero exato e não acrescenta variância | só no relapso e no aleatório: escolher os donos depois de ver onde a disputa abre (na etapa 0, nas sementes dos testes) é escolher o recorte pelo dado; fica descritivo |
+| **PC-2** (DECIDIDA) | a margem do primário | **½ × [`D_FE`(P0) − `D_FE`(R0)] no piloto**, sem ler o R1 | uma margem fixa sem escala neste mundo: sem referência, ela vira arbítrio; ler o R1 no piloto para a margem é calibrar pelo resultado |
+| **PC-3** (DECIDIDA) | as margens da segurança | **¼ da privação do P0 e ¼ de (1 − saúde do P0) no piloto**, a convenção do plano do corpo | mais frouxas: aceitar um pet bem pior de cuidar como "não inferior"; mais apertadas: a segurança vira o gate mais difícil e esconde o primário |
+| **PC-4** (DECIDIDA) | o limiar da G-ABRE | **0,05** do limite inferior do IC95 da fração de abertas no R1 | sem premissa: um empate seria lido como "a disputa não ajuda" mesmo se ela quase não acontecesse |
+| **PC-5** (DECIDIDA) | o R1-congelado | **`P0-c-tapa` com a chave** (o mesmo corpo e o mesmo dono, sem aprender) | o `P0` comum: outro corpo, e o contraste mediria o corpo, não o aprendizado |
+| **PC-6** (DECIDIDA) | o horizonte | **14 dias, os do E0 e do v11** | mais longo: mais tempo para as tabelas das regras forçadas aprenderem, mas outro mundo, sem o E0 de referência e com o metabolismo em aberto |
 
 ## 13. Artefatos e reprodução
 

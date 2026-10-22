@@ -1998,3 +1998,37 @@ def brier_skill_multiclasse(decisoes: Sequence[tuple[Sequence[str], Mapping[str,
         return {**base, "brier": brier, "brier_base": 0.0, "frequencias": frequencias,
                 "fora": "a base nao tem variancia (a classe e sempre a mesma, ou um candidato so)"}
     return {**base, "brier": brier, "brier_base": brier_base, "frequencias": frequencias, "bss": 1.0 - brier / brier_base}
+
+
+# ------------------------------------------------------------------ V3-3/V3-4, a competicao entre as regras urgentes
+# (docs/PLANO_ANALISE_V2_V3_COMPETICAO.md, secao 5): os descritivos da disputa e a exaustao, por decisao, nas decisoes de uma janela.
+
+
+def competicao_nas_decisoes(decisoes: Sequence[tuple[int, int, Mapping | None]], janela: tuple[int, int] = JANELA_8_14) -> dict:
+    """A disputa (secao 5). O cerebro fornece, por decisao, (tick, candidatos, competicao), com `competicao` o bloco do motivo da decisao
+    aberta (None nas outras): as forcadas (um candidato so), as abertas e, nas abertas, a fracao em que a abertura mudou a acao
+    (`abertura_decidiu`) e em que o aprendido decidiu (`aprendido_decidiu`). Uma aberta tem dois candidatos ou mais (falha alto). Falha
+    alto sem decisao na janela; as fracoes das abertas sao None sem aberta."""
+    ini, fim = _checar_janela(janela)
+    sel = [(n, c) for t, n, c in decisoes if ini <= t < fim]
+    if not sel:
+        raise ValueError("competicao sem decisao na janela")
+    for n, c in sel:
+        if type(n) is not int or n < 1 or (c is not None and n < 2):
+            raise ValueError(f"decisao com {n!r} candidatos e competicao {c is not None}")
+    abertas = [c for _, c in sel if c is not None]
+    total = len(sel)
+    return {"n": total, "frac_forcadas": sum(1 for n, _ in sel if n == 1) / total, "abertas": len(abertas),
+            "frac_abertas": len(abertas) / total,
+            "frac_abertura_decidiu": sum(1 for c in abertas if c["abertura_decidiu"]) / len(abertas) if abertas else None,
+            "frac_aprendido_decidiu": sum(1 for c in abertas if c["aprendido_decidiu"]) / len(abertas) if abertas else None}
+
+
+def exaustao_nas_decisoes(decisoes: Sequence[tuple[int, float]], janela: tuple[int, int] = JANELA_8_14, limiar: float = 0.25) -> dict:
+    """A exaustao (secao 5, so descritiva): a fracao das decisoes da janela com a energia (0-1, a da `Observacao`) abaixo de `limiar`, a
+    condicao do `sono_exaustao` do instinto. Falha alto sem decisao na janela."""
+    ini, fim = _checar_janela(janela)
+    sel = [_escala01("energia", e) for t, e in decisoes if ini <= t < fim]
+    if not sel:
+        raise ValueError("exaustao sem decisao na janela")
+    return {"n": len(sel), "frac": sum(1 for e in sel if e < limiar) / len(sel)}

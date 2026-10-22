@@ -120,3 +120,6 @@ artifacts_v2_rede_de_si/**/vidas/
 !artifacts_v2_world_poc/
 # DigiBrain V3 (docs/futuro/digibrain_v3_e0.md, docs/futuro/v3_espaco_acoes.md): as medicoes descritivas do E0 e do espaco de acoes
 !artifacts_v2_v3/
+# a competicao entre as regras urgentes (docs/PLANO_ANALISE_V2_V3_COMPETICAO.md, secao 13): o piloto e a validacao entram; as vidas, nao
+!artifacts_v2_v3_competicao/
+artifacts_v2_v3_competicao/**/vidas/

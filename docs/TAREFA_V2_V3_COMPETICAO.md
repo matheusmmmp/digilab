@@ -1,7 +1,7 @@
 # TAREFA V2 — V3_COMPETICAO: a competição entre as regras urgentes (V3-3 e V3-4) (2026-10-21)
 
-Coordenador: Gerente (Claude Code). Worker do desenho: Claude Code (worker B). Worktree e branch: `v2-v3-competicao`. Status: O CÓDIGO ENTREGUE atrás da
-chave desligada (seção 11); a G0-R1-PODE-APRENDER passou (seção 10); a CR-1 a CR-7 DECIDIDAS em 2026-10-21; o plano (etapa 3) e as runs não começaram.
+Coordenador: Gerente (Claude Code). Worker do desenho: Claude Code (worker B). Worktree e branch: `v2-v3-competicao`. Status: O ORQUESTRADOR ENTREGUE
+(seção 12); o plano com a PC-1 a PC-6 DECIDIDAS em 2026-10-21; o código atrás da chave (seção 11); o piloto não rodou.
 
 Categoria: implementacao (a tarefa); o PR deste desenho é `arquitetura`. Origem: Matheus, 2026-10-21: parar a V3-9 na G0-PODE-MUDAR
 (#376) e seguir para a V3-3/V3-4, pela recomendação do `docs/futuro/v3_espaco_acoes.md` (seção 8) e do E0
@@ -353,4 +353,42 @@ inteiros.
 
 **Uma vida ligada, para ilustrar** (o relapso 101 dos testes; não é resultado): 347 de 1.344 decisões abrem. A abertura muda a ação em
 39 delas, e o aprendido decide em 44.
+
+## 12. Resumo da etapa 4, a parte do código (2026-10-21): o orquestrador e a fumaça
+
+O plano (`docs/PLANO_ANALISE_V2_V3_COMPETICAO.md`) tem a PC-1 a PC-6 DECIDIDAS pelo Matheus em 2026-10-21, pela recomendação.
+
+- **O orquestrador:** `experiments/run_v2_competicao.py`, com as configs em `experiments/configs/v2_competicao/` (`fumaca.json`,
+  `fumaca_validacao.json` e `piloto.json`).
+  - A config da validação entra depois do adendo 1, que dá o K.
+  - O orquestrador confere a config contra o plano a letra: as faixas, o K, o κ, o bootstrap, o poder, a G-ABRE e o Holm.
+  - O piloto recusa as bases da validação, e a validação se recusa a rodar sem o piloto, sem o adendo 1 no plano ou com a margem sem
+    escala (PC-2).
+- **As vidas, por unidade:** 4 braços × 4 donos.
+  - Toda vida é gravada e rejogada do disco (G1).
+  - Os gates de mecanismo falham alto em toda vida: desligada, nenhuma aberta; ligada, o `sono_exaustao` forçado; o R1-cong com os pesos
+    no prior.
+- **As medidas:** saem das decisões do próprio cérebro. O estado de cada decisão é o da `Observacao`, guardado no motivo, e a decisão k
+  cai no tick k × 15. As contas são as de `metrics.py`:
+  - o `D_FE`;
+  - o `cuidado_preservado`, com a privação pela própria `Estado.em_privacao`;
+  - e as duas novas: `competicao_nas_decisoes` (as forçadas, as abertas e quem decidiu) e `exaustao_nas_decisoes`.
+- **A análise** segue as seções 7 e 9 do plano:
+  - as margens, que não leem o R1 (falha alto se lerem);
+  - o K pelo poder simulado (`run_v2_calibracao_mundo.escolher_k`);
+  - a G-ABRE;
+  - o G-R1, com as categorias do J1 (`categoria_g_mf1`);
+  - o Holm sobre o G-R1-CONG e as duas não inferioridades. A não inferioridade é testada pelo contraste de Δ − d.
+- **O prefixo de unidades `competicao`** entrou em `experiments/bancada/faixas.py`.
+- **O `.gitignore`:** o `artifacts_v2_v3_competicao/` entra no git, menos as vidas.
+- **Os testes:** `tests/test_run_v2_competicao.py`, com 4 testes:
+  - as medidas novas;
+  - a config contra o plano;
+  - as margens sem o R1;
+  - a fumaça do piloto de ponta a ponta, mais a análise da validação sobre as mesmas medidas.
+- **A fumaça** (as sementes dos testes, 2 unidades; os números não são resultado) roda as duas fases. O piloto leva cerca de 50 s com 2
+  processos. O custo por unidade é de cerca de 43 s de CPU (16 vidas com o replay), e a validação com K = 10 (50 unidades, 800
+  vidas) ficaria em cerca de 36 min de CPU.
+
+**O piloto não rodou.** Ele gasta a faixa 58101…58505, e o pedido foi preparar o código.
 
