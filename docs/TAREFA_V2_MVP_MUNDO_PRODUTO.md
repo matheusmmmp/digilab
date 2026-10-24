@@ -149,5 +149,6 @@ Todas PROPOSTAS, com a recomendação primeiro.
   mascarado, em dois cenários: o do produto (`mvp_produto_python.json`, o mesmo cenário nos dois lados) e o da pesquisa
   (`mvp_mundo_python.json`, o gabarito da etapa 0).
 - **O achado da fruta:** no Python, o A do v11 quebra quando come uma fruta caída das árvores. A opção 1 tira as árvores do mundo do
-  produto, e o A não mudou.
+  produto, e o A não mudou. Se o layout fica depois do MVP, reavalia-se quando o cérebro modular e as frutas forem especificados
+  (nota do Matheus, 2026-10-24).
 - **Interpretações e achados** em `docs/registro/2026-10.md`.
