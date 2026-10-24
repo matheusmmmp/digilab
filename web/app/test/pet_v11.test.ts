@@ -35,9 +35,9 @@ function viverDias(m: Motor, dias: number): AcaoDono[] {
 }
 
 describe("o pet v11 no Motor", () => {
-  test("o ovo novo e v11: o cerebro A e o laco do corpo, sem educacao, mentira nem obediencia", () => {
-    expect(VERSAO_PET).toBe(11);
-    const m = new Motor(4242);
+  test("o pet v11: o cerebro A e o laco do corpo, sem educacao, mentira nem obediencia (os ovos novos sao v12: o v11 com o mundo)", () => {
+    expect(VERSAO_PET).toBe(12);
+    const m = new Motor(4242, 11);
     expect(m.versao).toBe(11);
     expect(m.cerebro).not.toBeNull();
     expect(m.e).toBe(m.v11!.laco.estado);
@@ -48,7 +48,7 @@ describe("o pet v11 no Motor", () => {
   });
 
   test("alguns dias: decide pelo cerebro, aprende com o corpo, tem vontade, evolui pelo carater do v11, e o replay da a mesma vida", () => {
-    const m = new Motor(4242), feitas = viverDias(m, 4);
+    const m = new Motor(4242, 11), feitas = viverDias(m, 4);
     expect(m.e).toBe(m.v11!.laco.estado);
     /* o cerebro decidiu cada decisao do pet e aprendeu: pesos fora do prior, carinhos e tapas creditados */
     const c = m.cerebro!;
@@ -78,7 +78,7 @@ describe("o pet v11 no Motor", () => {
   });
 
   test("o carater da evolucao e o do cerebro no tick da evolucao", () => {
-    const m = new Motor(777);
+    const m = new Motor(777, 11);
     let carEsperado = null;
     for (let p = 0; p < 5000 && !m.evolucoes.some(x => x.estagio === "adolescente"); p++) {
       if (m.estagioAtual === "crianca" && m.medalhas === 0) m.liberar(1);
@@ -95,7 +95,7 @@ describe("o pet v11 no Motor", () => {
   });
 
   test("o tratar so cura: nao e contato e nao passa pelo corpo", () => {
-    const m = new Motor(99);
+    const m = new Motor(99, 11);
     m.avancar(30);
     m.lesionadoDesde = m.e.tick;
     const antes = { ...m.e }, corpo = JSON.stringify(m.v11!.laco.corpo.paraDict());

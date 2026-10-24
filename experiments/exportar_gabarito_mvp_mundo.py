@@ -76,13 +76,13 @@ def _bancada():
     return gl.bancada_v11()
 
 
-def vida(nome: str, cerebro: str, dono: str, lugar: str, semente: int) -> dict:
+def vida(nome: str, cerebro: str, dono: str, lugar: str, semente: int, cm=CM) -> dict:
     b = _bancada()
     espec = bv.EspecVida(dono, gl.BRACO_V11, semente)
     cc = b.cfg_corpo_de(espec)
     politica = b.politica(espec, CONFIG_PADRAO) if cerebro == "a_v11" else PoliticaInstintoMundo(CONFIG_PADRAO)
-    fm = (lambda p, cfg, s: MotorMundoCorpoGravado(p, cfg, s, obediencia_desligada=True, cfg_mundo=CM, cfg_corpo=cc))  # noqa: E731
-    d = DonoComLugar(criar_dono(dono), lugar, semente, dono, CM)
+    fm = (lambda p, cfg, s: MotorMundoCorpoGravado(p, cfg, s, obediencia_desligada=True, cfg_mundo=cm, cfg_corpo=cc))  # noqa: E731
+    d = DonoComLugar(criar_dono(dono), lugar, semente, dono, cm)
     m = simular_vida_mundo(dono, d, politica, semente, DIAS, 16 * DIAS, fm, rotulo_dono=dono).motor
     resumo = m.resumo_mundo_fisico()
     del resumo["rngs"]

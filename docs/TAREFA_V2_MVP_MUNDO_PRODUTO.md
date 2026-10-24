@@ -153,3 +153,27 @@ da etapa 0: o `Corpo` TS já tem `comMundo`, a curiosidade e os estímulos do mu
 - **Os testes:** o do Python confere o arquivo byte a byte, a cobertura do laço e que gravar não muda a vida; o do TS confere as vidas
   ponto a ponto e os arquivos pinados.
 - **Interpretações e achados** em `docs/registro/2026-10.md`.
+
+### Etapa 1, o pet v12 com o mundo (worker D, 2026-10-24)
+
+- **O motor TS e a paridade; a tela é da etapa 2.** O `VERSAO_PET` passa a 12 (MV-1): o laço do corpo do v11 ganha o `Mundo`
+  (`web/app/motor/motor_corpo_mundo.ts`, o porte do `com_corpo(MotorMundo)`), e o v11 e os anteriores ficam iguais.
+- **O evento `"dc"`** (`deixar_comida`, só a ração, MV-3): com o replay e a validação (fora do mapa, não inteiro, tipo que não é ração,
+  malformado e num pet anterior ao v12 falham alto). O botão Alimentar dos v12 põe a ração no comedouro, como reserva temporária;
+  nenhum texto de tela mudou. A MV-6 foi decidida no #402 (usar os sprites de Digimon do projeto); a troca dos textos de "uso
+  pessoal" pelo crédito e pela procedência é da etapa 2.
+- **O laço:** o pet percebe antes de decidir, o comer não dá fome por si (MF-2), e a consequência do mundo vem antes do cérebro. O andar, a
+  comida do mapa (com o efeito do alimentar, sem digestão, MV-9), a novidade e a atividade viram estímulos no corpo, com a curiosidade
+  (MV-8). O carinho e o tapa ficam fora do mundo (MV-7). O cérebro é o A do v11, com o alvo padrão do motor e sem as chaves do mundo (MV-2).
+- **O mundo do produto** (a opção 1 do Matheus, 2026-10-24): o v12 roda o layout padrão sem árvores, só com a ração do jogador
+  (`CONFIG_MUNDO_MVP` no `digilab/config.py`, `CMU_MVP` no `motor/constantes.ts`; PROPOSTOS, SEM FONTE). Só o produto o usa: a bancada e a
+  pesquisa seguem com o layout padrão, e um teste confere que ele não vaza. O gabarito dele (`mvp_produto_python.json`) entrou num commit
+  próprio, antes do código.
+- **Os gates:** o G2 (`mvp_etapa0_ts.json` intacto e o teste passando, com o v11 fixado), o G1 (o replay do v12 bit a bit, incremental,
+  pelo `Motor.reproduzir` e pelo JSON do save), o G-PAR e o G-EVENTO. O G-PAR é decisão a decisão, com o corpo inteiro e sem campo
+  mascarado, em dois cenários: o do produto (`mvp_produto_python.json`, o mesmo cenário nos dois lados) e o da pesquisa
+  (`mvp_mundo_python.json`, o gabarito da etapa 0).
+- **O achado da fruta:** no Python, o A do v11 quebra quando come uma fruta caída das árvores. A opção 1 tira as árvores do mundo do
+  produto, e o A não mudou. Se o layout fica depois do MVP, reavalia-se quando o cérebro modular e as frutas forem especificados
+  (nota do Matheus, 2026-10-24).
+- **Interpretações e achados** em `docs/registro/2026-10.md`.

@@ -260,7 +260,8 @@ export function registroDoMotor(m: {
   const adulto = m.evolucoes.find(e => e.estagio === "adulto");
   return {
     tickFinal: m.e.tick,
-    acoesDono: m.log.filter(ev => ev[1] === "d").map(ev => [ev[0] as number, ev[2] as string]),
+    /* pets v12: a racao deixada pelo dono (o "dc") e o alimentar dele */
+    acoesDono: m.log.filter(ev => ev[1] === "d" || ev[1] === "dc").map(ev => [ev[0] as number, ev[1] === "dc" ? "alimentar" : ev[2] as string]),
     acoesPet: m.vida5.episodios.map(([t, a]) => [t, a] as [number, string]),
     janelas: m.janelasFechadas.map(j => ({ tipo: j.tipo, falso: j.falso, desfecho: j.desfecho, inicio: j.inicio, fim: j.fim })),
     sessoesTreino: m.vida5.sessoes.map(([t, e]) => [t, e] as [number, string]),

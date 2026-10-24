@@ -39,21 +39,23 @@ describe("save", () => {
   });
   test("save que nao abre falha alto (nao vira pet de exemplo em silencio)", () => {
     for (const bruto of ["{", JSON.stringify({ semente: 1.5, log: [] }), JSON.stringify({ semente: 1, log: [[480, "x", 1]] }),
-      JSON.stringify({ semente: 1, log: [[999, "t", 1]] }), JSON.stringify({ semente: 1, log: [], versao: 12 })]) {
+      JSON.stringify({ semente: 1, log: [[999, "t", 1]] }), JSON.stringify({ semente: 1, log: [], versao: 13 })]) {
       const l = lerSave(armaz({ [CHAVE]: bruto }));
       expect(l.tipo, bruto).toBe("erro");
       if (l.tipo === "erro") expect(l.bruto).toBe(bruto);
     }
   });
   test("texto do save: {semente, log, versao}", () => {
+    /* os v12: o botao Alimentar poe a racao no comedouro (o evento "dc") */
     const m = new Motor(7); m.avancar(30); m.observar("alimentar");
-    expect(textoSave(m)).toBe(JSON.stringify({ semente: 7, log: [[480, "t", 30], [510, "d", "alimentar"]], versao: VERSAO_PET }));
+    const [x, y] = m.mundo!.comedouro;
+    expect(textoSave(m)).toBe(JSON.stringify({ semente: 7, log: [[480, "t", 30], [510, "dc", { tipo: "racao", x, y }]], versao: VERSAO_PET }));
   });
   test("pet de exemplo e o do HTML (semente 20260924, meio dia)", () => {
     const m = petExemplo();
     expect(m.semente).toBe(20260924);
     expect(m.e.tick).toBe(480 + 45 + 60 + 30 + 120 + 90 + 60 + 45 + 30);
-    expect(m.log.filter(e => e[1] === "d")).toHaveLength(7);
+    expect(m.log.filter(e => e[1] === "d" || e[1] === "dc")).toHaveLength(7);           /* os v12: o alimentar vira o "dc" */
   });
 });
 

@@ -43,8 +43,13 @@ export const CDJ = { limiarNecessidade: .3, limiarVontade: .1, limiarTom: .2, kC
    11 = o cerebro A e o corpo (docs/TAREFA_V2_W_PORTE_CEREBRO_A.md, etapa 4): o pet decide e aprende pelos lobos (motor/lobos.ts, a
    consequencia no corpo), sobre o laco do corpo por tick (motor/motor_corpo.ts); o dono tem carinho e tapa, sem elogio nem bronca; o
    desejo e a vontade do cerebro A; o carater pelo metodo do Python, com a escala e o deslocamento do v11. Saem a educacao (as janelas, o
-   petisco e o banheiro), a mentira e a obediencia; a lesao fica, e o tratar so cura (decisao do Matheus de 2026-10-18) */
-export const VERSAO_PET = 11;
+   petisco e o banheiro), a mentira e a obediencia; a lesao fica, e o tratar so cura (decisao do Matheus de 2026-10-18);
+   12 = o v11 com o mundo fisico (docs/TAREFA_V2_MVP_MUNDO_PRODUTO.md, etapa 1; MV-1): o laco do corpo ganha o Mundo
+   (motor/motor_corpo_mundo.ts); o dono deixa a racao num lugar (o evento "dc"; MV-3, MV-5) e o pet percebe, anda ate ela e come por
+   iniciativa propria, com o mesmo efeito no corpo do alimentar de hoje e sem digestao (MV-9); o botao Alimentar poe a racao no
+   comedouro (reserva temporaria); o carinho e o tapa ficam fora do mundo, como no v11 (MV-7); o cerebro e o A do v11, com o alvo
+   padrao do motor e sem as chaves do mundo (MV-2) */
+export const VERSAO_PET = 12;
 /* medalhas do Tamer que cada evolucao pede nos pets v6 (decisao do Matheus, 2026-09-29: 1, 3 e 5; so no jogo), pela
    chave do estagio de destino: Rookie -> Champion (adolescente), Champion -> Ultimate (adulto), Ultimate -> Mega (mega).
    In-Training -> Rookie nao pede medalha. A tabela das medalhas fica em medalhas.ts */
@@ -410,6 +415,10 @@ export const CMU: ConfigMundo = {
   bola_min_celulas: 3, bola_max_celulas: 10, mult_bola_campo: 2, atrito: 8,
   perto_max_celulas: 2, longe_min_celulas: 20, longe_max_celulas: 30, raio_mancha_celulas: 3,
 };
+/* o mundo do produto no MVP (config.LAYOUT_MUNDO_MVP e CONFIG_MUNDO_MVP; a opcao 1 do Matheus de 2026-10-24): o layout padrao sem
+   arvores, so com a racao do jogador. So o pet v12 o usa; a pesquisa e os outros gabaritos seguem com o CMU. PROPOSTO, SEM FONTE. */
+export const LAYOUT_MUNDO_MVP: LayoutMundo = { ...LAYOUT_MUNDO_PADRAO, nome: "mvp", arvores: [] };
+export const CMU_MVP: ConfigMundo = { ...CMU, layout: LAYOUT_MUNDO_MVP };
 
 /* V2, o corpo do Creatures 3 por baixo dos drives (docs/TAREFA_V2_CORPO_DRIVES.md, etapa 7): espelho da ConfigCorpo de
    digilab/config.py, campo a campo (snake_case de proposito, conferido pelo nome contra o gabarito do Python). O motor do corpo e
