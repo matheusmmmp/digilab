@@ -86,8 +86,9 @@ evolutivo com IA, inspirado em Tamagotchi e Digimon.
   - `treino.MotorComFeedback`, `ambiente.MotorAmbiente` (bola) e `frutas.MotorFrutas`;
   - `mundo.MotorMundo` (o mapa físico) e `motor_corpo.com_corpo(...)` (o corpo químico, `corpo.py`);
   - `grupo.Grupo` (dois pets no mesmo `Mundo`).
-- **A política** fica sob o `Protocol` `Politica` (`agir`, `observar`, `estado_interno`). A de referência (a linha de base) é a `PoliticaLobos`, e os módulos do DigiBrain modular cumprem o mesmo `Protocol`; ganchos como
-  `receber_acao_dono`, `consequencia_mundo` e `consequencia_corpo` ligam o motor ao aprendizado.
+- **A política** fica sob o `Protocol` `Politica` (`agir`, `observar`, `estado_interno`). A de referência (a linha de base) é a
+  `PoliticaLobos`, e os módulos do DigiBrain modular cumprem o mesmo `Protocol`; ganchos como `receber_acao_dono`,
+  `consequencia_mundo` e `consequencia_corpo` ligam o motor ao aprendizado.
 - **A bancada** (o pacote `experiments/bancada/`, um módulo por assunto, com o `experiments/bancada_v2.py` como porta de entrada) monta
   toda vida de pesquisa: (genoma, mundo, dono, braço, semente), o modo acoplado e as medidas. Os orquestradores das runs ficam em
   `experiments/run_v2_*.py`, com as configs em `experiments/configs/`.
