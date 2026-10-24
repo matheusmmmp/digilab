@@ -136,7 +136,8 @@ Todas PROPOSTAS, com a recomendação primeiro.
   (`web/app/motor/motor_corpo_mundo.ts`, o porte do `com_corpo(MotorMundo)`), e o v11 e os anteriores ficam iguais.
 - **O evento `"dc"`** (`deixar_comida`, só a ração, MV-3): com o replay e a validação (fora do mapa, não inteiro, tipo que não é ração,
   malformado e num pet anterior ao v12 falham alto). O botão Alimentar dos v12 põe a ração no comedouro, como reserva temporária;
-  nenhum texto de tela mudou (MV-6 pendente).
+  nenhum texto de tela mudou. A MV-6 foi decidida no #402 (usar os sprites de Digimon do projeto); a troca dos textos de "uso
+  pessoal" pelo crédito e pela procedência é da etapa 2.
 - **O laço:** o pet percebe antes de decidir, o comer não dá fome por si (MF-2), e a consequência do mundo vem antes do cérebro. O andar, a
   comida do mapa (com o efeito do alimentar, sem digestão, MV-9), a novidade e a atividade viram estímulos no corpo, com a curiosidade
   (MV-8). O carinho e o tapa ficam fora do mundo (MV-7). O cérebro é o A do v11, com o alvo padrão do motor e sem as chaves do mundo (MV-2).
