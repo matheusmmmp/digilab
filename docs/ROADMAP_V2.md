@@ -10,6 +10,35 @@ Base: `docs/PLANO_V2_PESQUISA.md` (hipóteses e gates), `docs/DEFINICOES_V2.md` 
 nós N0–N11, decisões A1–A12) e `docs/research/digibrain/` (estudo: fontes, mecanismos, hipóteses, comparação de cérebros).
 Os números valem pelo artefato apontado. Nenhuma etapa roda sem tarefa e plano de análise commitados antes.
 
+## 0. A direção de 2026-10-24: o produto primeiro e o DigiBrain modular
+
+**DECIDIDO pelo Matheus em 2026-10-24** (o PROMPT MESTRE, repassado pelo Gerente):
+- o produto jogável vem primeiro (`docs/PRODUTO_VISAO.md`);
+- o DigiBrain caminha para um cérebro **modular** (`docs/ARQUITETURA_DIGIBRAIN_MODULAR.md`);
+- o cérebro A fica como linha de base, controle e fallback condicionado, não como o cérebro final da web.
+
+**Ficam SUPERADAS, sem apagar o que está abaixo:**
+- a regra "pesquisa no Python, um DigiBrain na web" (2026-10-01);
+- o M6 (rodada 15, "o DigiBrain da web é o cérebro A").
+
+O estado real está em `docs/AUDITORIA_V2_PRODUTO_MODULAR.md`. **Os detalhes técnicos continuam PROPOSTOS:** as decisões DM, MV, ME e AF
+estão nas tarefas abaixo.
+
+| marco | o que entrega | depende de | tarefa |
+|---|---|---|---|
+| **MVP** | o mundo físico no jogo: o jogador põe a comida num lugar, e o pet percebe, vai, come e sente no corpo | o `Mundo` TS e o contrato (na `main`); **não depende da P4** nem do modular | `docs/TAREFA_V2_MVP_MUNDO_PRODUTO.md` |
+| **ESPEC** | o contrato de cada módulo | a arquitetura | `docs/TAREFA_V2_DIGIBRAIN_MODULAR_ESPEC.md` |
+| **CRIT-A** | os critérios do A como baseline e fallback, decididos antes da avaliação | — | `docs/TAREFA_V2_CEREBRO_A_BASELINE.md` |
+| **PROTO** | o protótipo modular e a avaliação dos mecanismos | ESPEC, CRIT-A | `docs/TAREFA_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md` |
+| **MEM** | a memória autobiográfica, com influência causal | ESPEC | `docs/TAREFA_V2_MEMORIA_AUTOBIOGRAFICA.md` |
+| **INTEG** | o modular no jogo, módulo a módulo | MVP, PROTO | `docs/TAREFA_V2_DIGIBRAIN_MODULAR_PRODUTO.md` |
+| **DEPOIS** | multiplayer, social, genética ampla, comunicação avançada | MVP; o Gate I para a genética | `docs/TAREFA_V2_FASES_POSTERIORES.md` |
+
+**As rodadas do A** (a auditoria, seção 9; a recomendação DM-8 espera o Matheus):
+- **pausar:** o piloto e a validação da P4, e a run do Gate I com o A;
+- **manter:** o contrato do motor (para o MVP), os critérios do Gate I (para o modular), o A no jogo para os pets v11;
+- **encerrada:** a V3-3/4, validada (#396).
+
 ## 1. A pergunta e as duas regras de casa
 
 > **Em que condições a plasticidade durante a vida produz vantagem adaptativa sobre as predisposições herdadas?**
@@ -34,7 +63,7 @@ Os números valem pelo artefato apontado. Nenhuma etapa roda sem tarefa e plano 
 | V2 | A transição que a política recebe é medida **logo depois do efeito da ação do pet**, antes do tempo passar e antes de qualquer ação do dono | `digilab/engine.py`, `_avancar` (sem mudar o motor) | ✔ O valor homeostático da própria ação sai de `observacao` → `observacao_seguinte` **sem o cuidado do dono misturado**. Limite: só o efeito imediato; consequência atrasada (saúde) pede janela de crédito, decisão do plano do N3 |
 | V3 | O modo "mesmos eventos" (registro reproduzido em malha aberta) já existe | `experiments/run_v2_l1.py`: `log_so_cuidado`, `vidas_acopladas` | ✔ É a base do "só cuidado" acoplado, do braço P2e e do modo acoplado da comparação de cérebros |
 | V4 | Controle de capacidade, G3-T, eficiência amostral, norma de reação | `digilab/policies/camada_unica.py`; `metrics.acerto_na_tarefa`, `eficiencia_amostral`, `norma_de_reacao` (branch da L1) | ✔ prontos para reuso depois do merge da L1 |
-| V5 | **Não dá para acrescentar ações ao pet** | `digilab/policies/bandit.py`: `ACOES = tuple(AcaoPet)` | ✖ Um membro novo em `AcaoPet` muda o bandit e quebra a reprodução da v1. Bola e frutas entram como **sub-decisão** de uma ação que já existe (a bola já fez assim, opção A do #113), ou num enum próprio da V2 |
+| V5 | **Não dá para acrescentar ações ao pet** | `digilab/policies/bandit.py`: `ACOES = tuple(AcaoPet)` | ✖ Um membro novo em `AcaoPet` muda o bandit e quebra a reprodução da v1. Bola e frutas entram como **sub-decisão**. (Nota de 2026-10-24: desatualizado; o `ALIVIAR` entrou no fim do enum, com `ACOES_PET_HOJE`, `digilab/events.py:211-222`.) de uma ação que já existe (a bola já fez assim, opção A do #113), ou num enum próprio da V2 |
 | V6 | Entrada nova na percepção | `policy.Observacao` (congelada) | ✔ com ressalva: a informação do dono (N5) entra por um gancho do motor da V2, como o `receber_acao_dono`, e vira entrada do lobo de percepção; a `Observacao` e o `engine.py` não mudam |
 | V7 | Canais de reforço têm eventos no mundo? | `state.py`, `educacao.py`, `confianca.py` | ✖ quase nenhum: não há comida distinta, ameaça, social além do dono; dor (lesões) e novidade (M1) existem mas não reforçam. Os canais esperam o mundo (frutas primeiro) |
 | V8 | O genoma já modula a sensibilidade ao reforço | `digilab/temperamento.py` (sensibilidade e teimosia escalam elogio e bronca) | ✔ precedente; no E1 esse genoma explicou 4,9%. Os canais por genoma (H-R4) só são novidade se vierem da consequência no mundo |
@@ -78,8 +107,8 @@ aprendiz achou assim que a decisão de comer não via a fruta). **O que sai:** c
 | K2 | **calibração conjunta** do cérebro A montado, numa faixa só | B | regra registrada no plano |
 | V1 | **validação única**: experimento maior + ablações | B (com D) | as predições registradas antes + um contraste por peça |
 | K3/V2 | **comparação A × B × C**, cada um calibrado com o mesmo orçamento, depois uma validação | D | `brain_comparison.md` |
-| M6 | leitura consolidada da fase 1 e escolha do DigiBrain da web | coordenador + Matheus | — |
-| W | porte do escolhido (pets v11), com o painel DigiBrain (`docs/TAREFA_V2_W_PORTE_CEREBRO_A.md`; PW-1 a PW-8 decididas em 2026-10-17 e 2026-10-18) | A (as etapas de código; as 0 a 2 na `main`: #320, #322, #323; a 3 em curso), B (a PW-3, a vontade, e a PW-4, o caráter, primeiro no Python) | paridade Python/web |
+| M6 | leitura consolidada da fase 1 e escolha do DigiBrain da web (**SUPERADO em 2026-10-24:** a direção modular, seção 0) | coordenador + Matheus | — |
+| W | porte do escolhido (pets v11), com o painel DigiBrain (`docs/TAREFA_V2_W_PORTE_CEREBRO_A.md`; PW-1 a PW-8 decididas em 2026-10-17 e 2026-10-18) | A (as etapas de código; as 0 a 2 na `main`: #320, #322, #323; as etapas 1 a 5 e o mapa dos pesos entregues, seções 9 a 18 da tarefa; desde 2026-10-24, o A fica no jogo para os pets v11 e como fallback condicionado), B (a PW-3, a vontade, e a PW-4, o caráter, primeiro no Python) | paridade Python/web |
 | F2, F3 | humanos; genoma (o desenho do genoma da fase 3 em `docs/futuro/ecossistema_genetico.md`, EG-1 a EG-8 DECIDIDAS em 2026-10-14: um registro único com seções, o prior como desvio herdável, codificação direta, o aprendido nunca no genoma, a espécie fixa por linhagem; os passos G0 a G5, com a reprodução depois do J7 e antes do J8; DECIDIDO em 2026-10-21 (GI-4): o G1 e o G2 só depois do Gate I, o marco do pet integrado, `docs/futuro/gate_integracao_pet.md`, e o G0 pode vir antes) | — | planos próprios |
 
 ## 5. Divisão dos workers (próximas rodadas)
@@ -149,7 +178,7 @@ Rodada 14 (2026-10-07): a comparação A × C (#197) e a leitura da validação 
 - **M6 adiado:** espera o descritivo do platô de 1/3 (Q-1, `docs/TAREFA_V2_DESCRITIVO_PLATO.md`, chat D).
 - **Depois:** o M6, a leitura consolidada da fase 1 e as perguntas novas (Q-3 e o controle de cuidado em malha fechada).
 
-Rodada 15 (2026-10-07): **M6 decidido.** O DigiBrain da web é o cérebro A, os lobos. Pela regra seria o C; o A foi escolhido por evidência
+Rodada 15 (2026-10-07): **M6 decidido** (SUPERADO em 2026-10-24, seção 0). O DigiBrain da web é o cérebro A, os lobos. Pela regra seria o C; o A foi escolhido por evidência
 descritiva posterior (`docs/DESCRITIVO_V2_PLATO.md`, `REGISTRO_DESVIOS`).
 - **W:** começa pelo plano do porte, pets v11 (`docs/TAREFA_V2_W_PLANO_PORTE.md`, chat A).
 - **Perguntas abertas:**
@@ -181,7 +210,7 @@ a vez, e nenhum roda sem plano de análise registrado antes. A ordem é a de dep
 | J8 | **escada de cognição social**: informação, reputação, normas, tradição; os degraus altos são pergunta, não feature | ideia | J7; tradição e convenção também da fase 3 (genoma e gerações) | `docs/futuro/cognicao_social.md` |
 | J9 | **ego social**: orgulho, reputação, comparação com outros pets | ideia | J6 e J8 | `docs/futuro/ego_existencia.md`, etapa 7 |
 | J10 | **órgãos com dano, cura e morte; hormônios** | adiados (D-5, D-6); SEM FONTE primária. É o Sistema nociceptivo e de reparo da lista abaixo | J2 fechado | `docs/DEFINICOES_CORPO_V2.md` |
-| Gate I | **o pet integrado**: o mesmo pet recebe o corpo químico, percebe e age no mundo, aprende na vida pela consequência e refaz a vida pelo log | **marco decidido, não implementado:** GI-1 a GI-5 DECIDIDAS em 2026-10-21, pela recomendação (ao redor do cérebro A; a linha de base é a configuração da validação do J5 com o adendo 8, no mundo 2D; o I-APRENDE por uma validação nova com controle; antes do G1 e do G2 genéticos, em paralelo à P4; a genética com o escopo de hoje). A tarefa e o plano estão escritos, PROPOSTOS; nenhuma etapa de código começou | J1, J2, Gate C (em parte); vem antes do G1 e do G2 genéticos | `docs/futuro/gate_integracao_pet.md`, `docs/TAREFA_V2_GATE_I.md`, `docs/PLANO_ANALISE_V2_GATE_I.md` |
+| Gate I | **o pet integrado**: o mesmo pet recebe o corpo químico, percebe e age no mundo, aprende na vida pela consequência e refaz a vida pelo log | **marco decidido, não implementado; repensado em 2026-10-24:** os critérios servem ao pet modular, e a run com o A só vale como baseline (DM-8). Antes: GI-1 a GI-5 DECIDIDAS em 2026-10-21, pela recomendação (ao redor do cérebro A; a linha de base é a configuração da validação do J5 com o adendo 8, no mundo 2D; o I-APRENDE por uma validação nova com controle; antes do G1 e do G2 genéticos, em paralelo à P4; a genética com o escopo de hoje). A tarefa e o plano estão escritos, PROPOSTOS; nenhuma etapa de código começou | J1, J2, Gate C (em parte); vem antes do G1 e do G2 genéticos | `docs/futuro/gate_integracao_pet.md`, `docs/TAREFA_V2_GATE_I.md`, `docs/PLANO_ANALISE_V2_GATE_I.md` |
 
 **As ideias registradas** (nenhuma tem tarefa de código aberta; cada uma entra com tarefa e plano próprios):
 
