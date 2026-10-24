@@ -14,6 +14,7 @@ sirva a pasta por HTTP, por exemplo pelo `servidor_local.py`.
 |---|---|---|
 | `MapaDesktop.html` | 1280×720 | mapa do mundo físico em vista inclinada; a câmera segue o pet, e a bandeja e a bola ficam na lateral (`docs/futuro/mundo_fisico.md`, 2.3 e 2.6) |
 | `Mapa390.html` | 390×844 | o mesmo no celular: o mapa na tela inteira e a bandeja aberta embaixo; o arrasto começa na bandeja, e um dedo no mapa move a câmera |
+| `MundoComida390.html` | 2 × 390×844 | o MVP do mundo no jogo, etapa 2 (`docs/TAREFA_V2_MVP_MUNDO_PRODUTO.md`): o gesto (arrastar a ração da barra de ações e soltar no chão da cena) e o caminho acessível (tocar em "Pôr ração" e depois no chão, ou escolher o comedouro, perto do pet ou longe pelo teclado); só o que o motor do v12 tem, com o Alimentar descrito como reserva |
 
 A cena usa a projeção do protótipo `docs/futuro/mundo_fisico_vistas.html`: escala s(y) = 0,5 + 0,5·y/300 e a altura com expoente 1,25. Os
 números e os textos são exemplo de layout, não dado.
