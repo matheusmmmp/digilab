@@ -1799,6 +1799,13 @@ class ConfigMundo:
 CONFIG_MUNDO = ConfigMundo()
 CONFIG_MUNDO_LIGADA = ConfigMundo(ligada=True)
 
+# O mundo do produto no MVP (docs/TAREFA_V2_MVP_MUNDO_PRODUTO.md, etapa 1; decisao do Matheus de 2026-10-24, a opcao 1): o layout
+# padrao sem arvores, so com a racao do jogador. So o jogo (o pet v12) e o gabarito dele (experiments/exportar_gabarito_mvp_produto.py)
+# o usam; a bancada e os cenarios de pesquisa seguem com o LAYOUT_MUNDO_PADRAO (tests/test_gabarito_mvp_produto_web.py confere que
+# ele nao vaza). PROPOSTO, SEM FONTE: o motivo e o A v11 sem as chaves do mundo, que nao come a fruta do mundo (registro 2026-10-24).
+LAYOUT_MUNDO_MVP = replace(LAYOUT_MUNDO_PADRAO, nome="mvp", arvores=())                  # PROPOSTO, SEM FONTE
+CONFIG_MUNDO_MVP = replace(CONFIG_MUNDO_LIGADA, layout=LAYOUT_MUNDO_MVP)                  # PROPOSTO, SEM FONTE
+
 
 # =====================================================================
 # V2, o banheiro (docs/TAREFA_V2_BANHEIRO.md; BN-1 a BN-6 decididas em 2026-10-07). Desligado por padrao: a vida de hoje byte a byte.
