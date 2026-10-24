@@ -1,8 +1,9 @@
 # TAREFA V2 — MVP_MUNDO_PRODUTO: o mundo físico no jogo, com a comida posta pelo jogador (2026-10-24)
 
 Coordenador: Gerente (Claude Code). Worker: a definir (o A, dono da web, é o candidato natural). Worktree e branch: `v2-mvp-mundo-<etapa>`.
-Status: **etapa 0 entregue** (os gabaritos, #401, 2026-10-24); **a etapa 1 liberada** pelas decisões de 2026-10-24 (seção 8):
-as MV-1, MV-3 a MV-5 e MV-7 a MV-9 DECIDIDAS pela recomendação, a MV-2 DECIDIDA com redação do Matheus, a MV-6 DECIDIDA (definitiva).
+Status: **MVP na `main`** (2026-10-24): a etapa 0 (#401), a etapa 1 (#403, o pet v12 com o mundo e o G-PAR) e a etapa 2 (#404, a tela,
+o gesto e o caminho acessível). As MV-1 a MV-10 DECIDIDAS (seção 8). **Ressalva de produto registrada no fim da seção 9:** a cadeia
+funciona, mas o cérebro A vai pouco à comida; a resposta é o protótipo modular, não mexer no A.
 
 Categoria: implementacao. Origem: Matheus, 2026-10-24, o PROMPT MESTRE (seção 7): o primeiro produto jogável, com o mundo físico
 integrado ao jogo. **Esta tarefa absorve o #399** (`docs/futuro/comida_arrastar.md`, que não foi mergeado). O conteúdo dele está
@@ -209,4 +210,8 @@ da etapa 0: o `Corpo` TS já tem `comMundo`, a curiosidade e os estímulos do mu
   - as capturas contra a `main` (c13a0ac): em 390, 1280 e 360 px, mudam só `config` (o texto da MV-6), e `pet-v12` é nova; as outras 19
     telas saíram iguais, pixel a pixel.
 - **Interpretações e números da vista** em `docs/registro/2026-10.md` (MVP-ETAPA2).
+- **Ressalva de produto do Matheus, ao autorizar o merge (2026-10-24):** o E2E-COMIDA comprova que a interação funciona num
+  cenário preparado (o save pouco antes de uma refeição), **não que o cérebro A vá buscar comida com frequência numa vida comum.**
+  O relato da etapa 2 aponta esse limite (o diagnóstico de 20 vidas acima). A decisão: levá-lo à tarefa do protótipo modular
+  (`docs/TAREFA_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`), **sem alterar o A** nesta etapa nem nas seguintes do MVP (MV-2).
 
