@@ -111,4 +111,21 @@ Todas PROPOSTAS, com a recomendação primeiro.
 
 ## 9. Resumo da etapa
 
-(vazio: nenhuma etapa começou)
+### Etapa 0, os gabaritos (worker D, 2026-10-24)
+
+- **Num commit próprio, antes de qualquer mudança de código,** e sem mecânica nem chave nova. As MV-1 a MV-6 continuam com o Matheus.
+- **No TS** (`web/app/test/mvp_etapa0.test.ts` → `web/app/test/gabaritos/mvp_etapa0_ts.json`), o G2 do MVP:
+  - **as vidas do jogo:** três pets v11 de hoje (as sementes 101, 202 e 303), com o dono de roteiro do `pet_v11.test.ts` e um dono mais
+    calmo. Cada uma tem o log inteiro e, num replay incremental, a assinatura (sha256) a cada 25 eventos e no fim, com o estado interno do
+    cérebro A;
+  - **as vidas do `lobos_v11.test.ts` e as do laço:** o sha256 dos gabaritos do Python que o G-PAR do v11, do mundo, do contrato e do MVP
+    leem (8 arquivos).
+- **No Python** (`experiments/exportar_gabarito_mvp_mundo.py` → `web/app/test/gabaritos/mvp_mundo_python.json`, conferido por
+  `tests/test_gabarito_mvp_mundo_web.py`), o gabarito do laço para o G-PAR da etapa 1:
+  - quatro vidas de 3 dias do pet com o corpo do v11 no mundo físico de hoje, com o dono com lugar: três com o cérebro A do v11 (sem as
+    chaves do mundo, o alvo padrão do motor, como a MV-2 recomenda) e uma com o instinto do mundo no mesmo corpo;
+  - decisão a decisão, o traço do mundo (a percepção, os candidatos, o alvo, o ocorrido, o estado) e o corpo antes e depois (os
+    químicos, os receptores e os estímulos: o andar, a comida, a novidade), mais o log, o resumo e o corpo no fim.
+- **Os testes:** o do Python confere o arquivo byte a byte, a cobertura do laço e que gravar não muda a vida; o do TS confere as vidas
+  ponto a ponto e os arquivos pinados.
+- **Interpretações e achados** em `docs/registro/2026-10.md`.
