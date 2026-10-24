@@ -123,6 +123,16 @@ pela recomendação; a MV-2 com a redação dele, abaixo; **a MV-6 DECIDIDA, em 
 | **MV-8** (DECIDIDA) | a paridade de `curiosidade`, novidade e atividade (achado da etapa 0: o corpo do TS não os tem) | **portar os três ao corpo do TS na etapa 1,** dentro do G-PAR: o gabarito Python já os contém; paridade parcial (mascarar campos) não é paridade | não portar: o G-PAR falha ou vira comparação parcial; portar depois: o corpo do TS diverge do Python por uma etapa |
 | **MV-9** (DECIDIDA) | comer no mundo × o botão "Alimentar"; a digestão (achado da etapa 0: o corpo do v11 não tem digestão) | **o efeito no corpo é o mesmo nos dois caminhos** (a ração tira da `fome` direto, como hoje); a diferença é o comportamento e o evento no registro (`deixar_comida` com lugar × `alimentar`). **A digestão fica fora do MVP:** entra pelo inventário de órgãos do prompt mestre, como mecânica própria atrás de chave | digestão agora: mecânica nova com números sem fonte no caminho crítico; sem decidir: a etapa 1 inventa por conta |
 
+**Decidida na etapa 1 (2026-10-24, à noite), depois da parada do worker D:**
+
+| # | decisão | decisão do Matheus | custo de errar |
+|---|---|---|---|
+| **MV-10** (DECIDIDA) | o A v11 sem as chaves do mundo quebra ao comer fruta caída das árvores do layout padrão (`digilab/policies/lobos.py:1250`, `fruta_comida`; 9 de 30 vidas de diagnóstico, sementes de teste) | **A opção 1:** "No MVP v12, use um layout sem árvores, apenas com a ração do jogador. Limite essa configuração ao produto; preserve os cenários de pesquisa e os gabaritos existentes. Antes de implementar, registre o gabarito específico e confirme que o G-PAR compara o mesmo cenário em Python e TypeScript, sem mascarar campos nem alterar o cérebro A. Se não for possível manter essas condições, pare e reporte antes de mudar o escopo." A config do layout é PROPOSTA e só do produto; a bancada segue com o layout padrão | mudar o A (`fruta_comida` no-op): mexe no baseline congelado por um caso que a MV-3 já exclui do MVP. O laço não entregar `fruta_comida`: o jogo faz vidas que o Python não faz |
+
+Dois ajustes de engenharia da mesma parada, sem mecânica nem número, aprovados pelo Gerente como desvio: o laço do mundo em TS aceita
+`elogiar`/`repreender` só no modo de paridade (opção do construtor, padrão recusar; o jogo v12 recusa como o v11); e a correção do achado
+da etapa 0: o `Corpo` TS já tem `comMundo`, a curiosidade e os estímulos do mundo, falta o laço ligá-los (a MV-8 fica menor).
+
 ## 9. Resumo da etapa
 
 ### Etapa 0, os gabaritos (worker D, 2026-10-24)
