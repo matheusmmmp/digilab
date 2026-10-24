@@ -12,6 +12,10 @@ Status (2026-10-21): **PROPOSTO**, registrado **antes de qualquer run** e antes 
 `docs/TAREFA_V2_P4_CEREBRO_MUNDO.md`, com as P4-1 a P4-8 DECIDIDAS pelo Matheus em 2026-10-21. As decisões deste plano (PC-1 a PC-7,
 seção 12) estão abertas.
 
+**Atualização (2026-10-22):** a PC-1 (as faixas) foi aprovada pelo Matheus em 2026-10-21, e as faixas estão na `FAIXAS_RESERVADAS`. As
+etapas 1 a 3 da tarefa estão na `main` (#384, #390, #394). O **adendo 1, parte A** (no fim) fixa o que elas deixaram no contrato, a regra
+da orientação (a PC-8, nova) e as regras do piloto, antes de qualquer vida. A parte B (os números do piloto) vem antes da validação.
+
 **Regras deste plano:**
 - Os números novos são PROPOSTOS, SEM FONTE, salvo onde citam um artefato.
 - O que não está aqui é descritivo pós hoc.
@@ -228,6 +232,7 @@ replay de toda vida é conferido bit a bit (G1).
 
 - **Adendo 1:** a G-REVAL-POSSIVEL, as premissas, a margem, o N, o custo e o que a etapa 1 fixou no contrato (seção 6). É obrigatório
   antes da validação.
+  Ele vem em duas partes: a A, antes do piloto (o contrato fixado, a orientação e as regras), e a B, com os números do piloto.
 - **Nenhum adendo muda o primário deste plano.**
 
 ## 11. Artefatos e reprodução
@@ -263,3 +268,127 @@ Só a do T1, do plano do J5, com o mesmo status de leitura. Nenhuma referência 
 | referência | DOI | quanto foi lido | o que sustenta aqui |
 |---|---|---|---|
 | Adams e Dickinson (1981). Instrumental Responding following Reinforcer Devaluation. Q. J. Exp. Psychol. B | `10.1080/14640748108400816` | resumo (OpenAlex) | o T1: a aversão à comida, feita fora do contexto da resposta, reduz a resposta em extinção |
+
+## Adendo 1 — o contrato fixado, a regra da orientação e as regras do piloto (2026-10-22, PROPOSTO, antes de qualquer vida)
+
+O adendo 1 vem em **duas partes**, porque a margem, o K_u e o poder só saem do piloto (seção 6):
+- **a parte A (esta):** o que as etapas 1 a 3 fixaram no contrato, a regra da orientação (a questão aberta dos #384 e #394), as regras
+  das premissas, do contraste, da margem e do N, as faixas e o custo estimado. Vai num commit próprio, antes de qualquer vida;
+- **a parte B:** os números do piloto (a G-REVAL-POSSIVEL, as premissas, a margem, o K_u, o poder e o custo medido), num commit antes da
+  validação, como o adendo 9 do J5.
+
+Nada aqui muda o primário (seção 10). Os números novos são PROPOSTOS; os do contrato são os do POC, SEM FONTE.
+
+### A1.1 O que as etapas 1 a 3 fixaram no contrato
+
+As etapas foram entregues em #384 (o contrato no Python), #390 (a paridade com o TS) e #394 (o cérebro no contrato). As interpretações de
+cada uma estão em `docs/registro/2026-10.md` (P4-ETAPA1 a P4-ETAPA3).
+- **As 16 direções são as do motor** (o `DIR16` do `mundo.py`, y para o sul), não as do POC. O setor de um vetor e a orientação seguem
+  essa tabela.
+- **O tronco** é um quadrado opaco de `lado_tronco` = 8 (meia célula), centrado na árvore, sem colisão (P4-4). O número é novo (SEM
+  FONTE). O tronco não tapa a si mesmo.
+- **O controlador** roda nos 15 ticks da decisão, sobre o mundo daquele tick, só nas três ações com alvo. O `chegou` continua o do raio
+  de pegar. **O `deslocamento` passa a ser o comprimento andado,** e o custo de energia do andar vem dele: o caminho pelo A\* é pelo
+  menos tão longo quanto a linha reta.
+- **A bola** continua a do J5 (a rolagem sorteada no `brincar`). O empurrão do POC está portado, mas não está ligado.
+- **O comedouro** continua visto pela conta do raio no `ModeloMundo`; as árvores, pelos troncos do cone.
+- **O contato nunca acontece no mundo deste plano.** Os troncos não colidem, as paredes ficam desligadas, e mesmo com elas o pet para a
+  `r_pet` = 6 da parede, já dentro do raio de pegar. O `contato` do registro sai sempre vazio, e o cérebro não o lê.
+- **A Intenção** da tabela 4.3 do `mundo_3d.md` fica implícita: o `comer` é consumir, o `brincar` com a bola é tocar, e o `explorar` é
+  aproximar-se ou investigar.
+- **A chave na bancada do J5** é `"contrato": true`. Com ela, a bancada recusa sementes fora das dos testes; o orquestrador da P4 (a
+  etapa 5) abre as faixas da seção 8.
+- **O cérebro não lê nada novo** (P4-2): com o registro do contrato e a `orientacao` trocados por lixo, a vida sai igual (#394).
+
+### A1.2 A regra da orientação (a PC-8, nova)
+
+**O que se viu**, só nas sementes dos testes e sem valor de evidência:
+- Na vida de 12 dias da G-CUSTO (P1-plan, T1, semente 101, a config da validação do adendo 8; `python tools/custo_p4_contrato.py`):
+  - as decisões com alvo que chegam caem de 159 de 231 (69%) sem o contrato para 132 de 289 (46%) com ele;
+  - os consumos caem de 125 para 85.
+- Numa vida de 3 dias do instinto (semente 101), o pet oscila no alvo do cheiro: anda 60 para o sul, chega de costas para a comida e não
+  a vê; na decisão seguinte o cheiro aponta para o norte, ele volta e fica de costas de novo.
+- **A causa** é a regra da seção 2: a orientação é a do último deslocamento. Ao fim do andar, o cone olha para a frente, e o que o pet
+  procura costuma ter ficado atrás ou ao lado.
+
+**As opções:**
+
+| opção | a regra | o que resolve | o custo |
+|---|---|---|---|
+| **(a)** | o último deslocamento, como no POC e na seção 2 | nada; é a regra de hoje | as premissas podem falhar pelo andar, e não pela pergunta |
+| (b) | no fim do andar, olhar para o alvo | o pet que não chegou fica de frente para o que buscava | não resolve a oscilação vista: no cheiro, o pet chega ao ponto, e o alvo está debaixo dele |
+| (c) | parado ou ao chegar, virar para a direção do cheiro, se houver cheiro | a oscilação vista | uma regra nova, sem precedente no POC, escolhida olhando duas vidas; usa a conta do cheiro do motor |
+| (d) | parado, olhar em volta (o disco) | as oportunidades voltam | o cone deixa de valer onde mais importa, e o plano perde o que pergunta |
+
+**A recomendação: (a), sem mudar a regra no piloto.**
+- O piloto existe para as premissas, e nada se recalibra (P4-6). Escolher uma regra olhando duas vidas de teste seria ajustar o mundo para a
+  premissa passar.
+- O custo de errar é baixo: o piloto custa minutos de CPU (A1.5). Se a G-OPORTUNIDADE ou a G-APRENDEU falharem, o plano volta ao Matheus
+  como manda a seção 6, com a regra como a primeira suspeita e com os descritivos de A1.3 para dizer se foi ela.
+- **Se a regra mudar depois,** a mudança é de código nos dois lados (o `mundo.py`, o `mundo.ts`, os gabaritos e a G-PAR-CONTRATO), entra
+  atrás de chave, e o piloto se refaz numa faixa nova, pedida ao coordenador. As unidades do piloto de 61101 não voltam para isso.
+
+### A1.3 Os descritivos novos do andar (sem gate)
+
+Somam-se aos da seção 4, em todos os braços, no piloto e na validação:
+- **as chegadas:** a fração das decisões com alvo que terminam em `chegou`, por braço, contra a mesma conta na ponte (PC-2);
+- **a oscilação:** as decisões de `comer` ou `explorar` com alvo no cheiro em que o deslocamento tem o sentido oposto ao da decisão
+  anterior (o setor relativo de 6 a 10) e o pet não comeu;
+- **a orientação na oportunidade:** em cada decisão de comer depois de `T_m`, se a x da regra estava no disco e atrás do pet (fora do
+  cone), contado junto de "o que o cone escondeu".
+
+### A1.4 As regras do piloto e da validação (fixadas agora)
+
+Repetem a seção 6 e a seção 7, sem mudança, para o piloto ler um texto só:
+- **A G-REVAL-POSSIVEL** (A3.2 do J5): o orquestrador a calcula em cada unidade do piloto antes de qualquer vida, e grava o
+  `reval.json`, como no piloto do adendo 7 do J5. Ela não lê vida, e o contrato não muda a conta. **Se mais de 25% das unidades falham,
+  o piloto não roda**, e o T1 é inconclusivo por desenho. O mesmo vale na validação, nas unidades dela.
+- **A G-APRENDEU:** em cada braço, `f_antes` com o limite inferior do IC95 acima do acaso médio das oportunidades do braço (1/k por
+  oportunidade, PJ7-3). Se falha, o T1 daquele braço é inconclusivo por premissa.
+- **A G-OPORTUNIDADE:** no máximo 25% das unidades sem oportunidade, por braço. Se falha, o T1 daquele braço é inconclusivo por premissa.
+- **O primário** é o G-T1-C, `q`(P1-plan) − `q`(P1), a α = 0,05, com as quatro categorias da seção 7. **Os secundários** (o G-T1-C-DESF e
+  o G-T1-C-CONG) usam o limite inferior do IC95 com o Holm de 2.
+- **A margem:** `Δ_T1` = ½ × a média de `f_antes` do P1-plan no piloto. **Se for ≤ 0,05, a validação não roda,** e o plano volta ao
+  Matheus.
+- **O N:** o menor K_u de 4 a 15 (PC-4) com poder simulado ≥ 0,8 no G-T1-C, a α = 0,05. O método é o bootstrap do J5 das diferenças por
+  unidade do piloto, deslocadas para a margem, com 2.000 réplicas por K_u e as unidades sem oportunidade descontadas na taxa do piloto.
+  Se nem K_u = 15 chega a 0,8, a validação roda com 15, e o poder sai declarado.
+- **A leitura da validação:** o bootstrap sobre as unidades, agrupado por base, com 10.000 reamostragens e a semente 4242.
+- **Se uma premissa falhar no piloto,** o piloto para e relata, e o plano volta ao Matheus. Nada se ajusta para ela passar.
+
+### A1.5 As faixas e o custo estimado
+
+**As faixas são as da seção 8, já registradas** na `FAIXAS_RESERVADAS` (`experiments/bancada/faixas.py`, no `origin/main` `61336e7`):
+- **o piloto:** 61101…61505, bases 61101, 61202, 61303, 61404 e 61505, K_u = 4 (20 unidades);
+- **a validação:** 62101…62505, bases 62101, 62202, 62303, 62404 e 62505, com o K_u da parte B;
+- **o prefixo:** `"pet_que_pensa"` (PC-5).
+
+**As conferências de 2026-10-22,** no `origin/main` `61336e7`:
+- as duas faixas estão na `FAIXAS_RESERVADAS` desde o #384, com o plano como fonte, e fora de `FAIXAS_QUEIMADAS`;
+- as faixas da competição (58101…58505 e 59101…59505) também estão lá, sem sobrepor as da P4;
+- `git grep -w` das 10 bases em `.py`, `.md` e `.json` (fora os artefatos e os gabaritos) só acha o próprio plano, a tarefa, o registro, a
+  `faixas.py` e o teste da etapa 3, que confere a recusa de 61101. O plano do Gate I cita 61101 e 62101 só para dizer que as evita.
+
+**O custo estimado** (PROPOSTO; a medida da G-CUSTO, #384): uma vida de 12 dias com o contrato custa cerca de 3,8 s de CPU, contra
+1,75 s sem ele, na mesma máquina.
+- **O piloto:** 20 unidades × (4 braços + 4 vidas das chaves separadas da PC-3) = 160 vidas, cerca de 10 min de CPU de vida, mais o
+  replay do disco e a medida.
+- **A validação com K_u = 15:** 75 unidades × (4 braços + 2 vidas da ponte da PC-2) = 450 vidas, cerca de 30 min de CPU de vida, mais o
+  replay e a medida.
+
+### A1.6 O que o código precisa antes do piloto (a etapa 5, sem rodar)
+
+- **As configs** `experiments/configs/v2_p4/{piloto,validacao}.json`, com o campo `"plano"` e as faixas da seção 8.
+- **O orquestrador:** o T1 com os quatro braços, o `reval.json` antes das vidas, a recusa das sementes da validação no piloto e da pasta
+  que já existe, e o `meta.json` com as chaves do contrato.
+- **As chaves separadas (PC-3)** precisam de um modo na chave da bancada: hoje `"contrato": true` liga os sensores e o controlador juntos.
+- **A ponte (PC-2)** usa a mesma bancada com `"contrato": false`, nas mesmas unidades da validação.
+- **Os descritivos** da seção 4 e de A1.3.
+
+### A1.7 Decisões do Matheus (antes do piloto)
+
+A PC-1 (as faixas) foi aprovada em 2026-10-21. As PC-2 a PC-7 da seção 12 continuam abertas, com as recomendações de lá. A PC-8 é nova:
+
+| # | decisão | recomendação | custo de errar |
+|---|---|---|---|
+| **PC-8** | a regra da orientação | **(a), o último deslocamento, como no POC,** sem mudar no piloto; as chegadas e a oscilação saem como descritivos (A1.3) | trocar agora: uma regra escolhida olhando duas vidas de teste, mais código nos dois lados antes do piloto. Manter e errar: um piloto de minutos que volta ao Matheus com a regra como a primeira suspeita |
