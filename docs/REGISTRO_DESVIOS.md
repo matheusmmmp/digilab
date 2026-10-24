@@ -362,3 +362,4 @@ de base em `docs/historico/registro_lotes.json`.
 
 - [2026-10-22 — P4-ETAPA4 (worker D): o adendo 1, parte A, do plano da P4](registro/2026-10.md)
 - [2026-10-24 — MVP-ETAPA0 (worker D): os gabaritos do MVP, o v11 de hoje no TS e o laço do pet com o mundo no Python](registro/2026-10.md)
+- [2026-10-24 — MVP-ETAPA1 (worker D): o pet v12 com o mundo físico, o evento da comida e o G-PAR do laço](registro/2026-10.md)

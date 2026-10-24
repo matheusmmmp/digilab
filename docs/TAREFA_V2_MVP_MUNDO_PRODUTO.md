@@ -129,3 +129,19 @@ Todas PROPOSTAS, com a recomendação primeiro.
 - **Os testes:** o do Python confere o arquivo byte a byte, a cobertura do laço e que gravar não muda a vida; o do TS confere as vidas
   ponto a ponto e os arquivos pinados.
 - **Interpretações e achados** em `docs/registro/2026-10.md`.
+
+### Etapa 1, o pet v12 com o mundo (worker D, 2026-10-24)
+
+- **O motor TS e a paridade; a tela é da etapa 2.** O `VERSAO_PET` passa a 12 (MV-1): o laço do corpo do v11 ganha o `Mundo`
+  (`web/app/motor/motor_corpo_mundo.ts`, o porte do `com_corpo(MotorMundo)`), e o v11 e os anteriores ficam iguais.
+- **O evento `"dc"`** (`deixar_comida`, só a ração, MV-3): com o replay e a validação (fora do mapa, não inteiro, tipo que não é ração,
+  malformado e num pet anterior ao v12 falham alto). O botão Alimentar dos v12 põe a ração no comedouro, como reserva temporária;
+  nenhum texto de tela mudou (MV-6 pendente).
+- **O laço:** o pet percebe antes de decidir, o comer não dá fome por si (MF-2), e a consequência do mundo vem antes do cérebro. O andar, a
+  comida do mapa (com o efeito do alimentar, sem digestão, MV-9), a novidade e a atividade viram estímulos no corpo, com a curiosidade
+  (MV-8). O carinho e o tapa ficam fora do mundo (MV-7). O cérebro é o A do v11, com o alvo padrão do motor e sem as chaves do mundo (MV-2).
+- **Os gates:** o G2 (`mvp_etapa0_ts.json` intacto e o teste passando, com o v11 fixado), o G1 (o replay do v12 bit a bit, incremental,
+  pelo `Motor.reproduzir` e pelo JSON do save), o G-PAR (as quatro vidas do `mvp_mundo_python.json` decisão a decisão, com o corpo inteiro)
+  e o G-EVENTO.
+- **Pendente:** o A do v11 quebra no Python quando come uma fruta caída das árvores do mundo (decisão da MV-2 levada ao Gerente).
+- **Interpretações e achados** em `docs/registro/2026-10.md`.
