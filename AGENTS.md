@@ -7,7 +7,8 @@ um agente de fora pode fazer. Status: PROPOSTO (`docs/TAREFA_V2_INFRA_MULTIAGENT
 ## O que é
 
 Projeto de pesquisa pessoal do Matheus: um pet virtual com IA (vida artificial). Não é trabalho de mestrado nem de programa nenhum; não
-associe. A pesquisa fica no Python (`digilab/`, `experiments/`); o jogo, em `web/app/`.
+associe. A pesquisa fica no Python (`digilab/`, `experiments/`); o jogo, em `web/app/`. Desde 2026-10-24, o produto jogável vem
+primeiro e o DigiBrain é modular, com o cérebro A como linha de base (`docs/PRODUTO_VISAO.md`, `docs/ARQUITETURA_DIGIBRAIN_MODULAR.md`).
 
 ## Ordem de leitura (pare quando tiver o que precisa)
 

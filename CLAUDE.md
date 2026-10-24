@@ -6,9 +6,12 @@ Contexto para o Claude Code. Este arquivo diz só o que muda o que o Claude faz;
 
 Projeto de pesquisa pessoal do Matheus (**não é a pesquisa de mestrado dele**; nunca associar ao mestrado nem ao programa): um pet virtual
 evolutivo com IA, inspirado em Tamagotchi e Digimon.
-- **A pesquisa (V2, desde 2026-10-01)** fica no Python: como um aprendiz com cérebro herdado (o DigiBrain, cérebro A, os lobos em
-  `digilab/policies/lobos.py`) aprende num mundo com corpo químico, objetos, outro pet e um dono.
-- **O jogo** fica em `web/app/` e roda o DigiBrain escolhido.
+- **A direção (2026-10-24):** o produto jogável vem primeiro (`docs/PRODUTO_VISAO.md`), e o DigiBrain caminha para um cérebro
+  **modular** (`docs/ARQUITETURA_DIGIBRAIN_MODULAR.md`). O cérebro A (os lobos em `digilab/policies/lobos.py`) é a linha de base, o
+  controle e o fallback condicionado, não o cérebro final.
+- **A pesquisa** fica no Python e serve ao produto e aos mecanismos do DigiBrain: um pet com corpo químico, objetos, outro pet e um
+  dono.
+- **O jogo** fica em `web/app/` e roda hoje o A v11. O modular entra por módulos, cada um com paridade.
 - **Onde a V2 está agora:** `docs/PAINEL_V2.md`, uma página.
 
 ## Regras não negociáveis
@@ -47,7 +50,8 @@ evolutivo com IA, inspirado em Tamagotchi e Digimon.
 - **Decisões que valem:**
   - a pergunta do efeito do dono está encerrada (`docs/LEITURA_CONSOLIDADA_DONO.md`): só se reabre com pergunta nova sobre o aprendiz;
   - o bandit está congelado e só reproduz a v1;
-  - o cérebro da web é o A (M6, rodada 15 do roadmap).
+  - o produto jogável vem primeiro, e o DigiBrain é modular; o A é a linha de base, o controle e o fallback condicionado (2026-10-24;
+    substitui o M6 e a regra "um DigiBrain na web, o A" de 2026-10-01).
 
 ## Trabalho em paralelo
 
@@ -82,7 +86,7 @@ evolutivo com IA, inspirado em Tamagotchi e Digimon.
   - `treino.MotorComFeedback`, `ambiente.MotorAmbiente` (bola) e `frutas.MotorFrutas`;
   - `mundo.MotorMundo` (o mapa físico) e `motor_corpo.com_corpo(...)` (o corpo químico, `corpo.py`);
   - `grupo.Grupo` (dois pets no mesmo `Mundo`).
-- **A política** fica sob o `Protocol` `Politica` (`agir`, `observar`, `estado_interno`). A da V2 é a `PoliticaLobos`; ganchos como
+- **A política** fica sob o `Protocol` `Politica` (`agir`, `observar`, `estado_interno`). A de referência (a linha de base) é a `PoliticaLobos`, e os módulos do DigiBrain modular cumprem o mesmo `Protocol`; ganchos como
   `receber_acao_dono`, `consequencia_mundo` e `consequencia_corpo` ligam o motor ao aprendizado.
 - **A bancada** (o pacote `experiments/bancada/`, um módulo por assunto, com o `experiments/bancada_v2.py` como porta de entrada) monta
   toda vida de pesquisa: (genoma, mundo, dono, braço, semente), o modo acoplado e as medidas. Os orquestradores das runs ficam em
