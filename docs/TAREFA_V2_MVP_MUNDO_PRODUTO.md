@@ -177,3 +177,36 @@ da etapa 0: o `Corpo` TS já tem `comMundo`, a curiosidade e os estímulos do mu
   produto, e o A não mudou. Se o layout fica depois do MVP, reavalia-se quando o cérebro modular e as frutas forem especificados
   (nota do Matheus, 2026-10-24).
 - **Interpretações e achados** em `docs/registro/2026-10.md`.
+
+### Etapa 2, a tela (worker A, 2026-10-24)
+
+- **A prancha primeiro, num commit próprio:** `docs/estilo_up/pranchas/MundoComida390.html`, com o gesto e o caminho acessível em 390 px.
+  Só o que o motor do v12 tem: as regiões, o ninho, o comedouro, a ração e o pet.
+- **A cena segue o motor (E2E-CENA):**
+  - nos pets v12, a cena 3D desenha o mapa do motor, o modo mundo de `src/telas/pet/cena3d.ts`: o chão das regiões do layout, o ninho,
+    o comedouro, a ração (madura ou podre) e a bola nas posições do `Motor.mundo`, e o pet na dele, interpolado;
+  - a câmera mostra 16 × 12 células em volta do pet (o enquadramento da sala) e o segue;
+  - sem WebGL, a reserva do mundo (`src/telas/pet/MundoReserva.tsx`) mostra a mesma janela vista de cima;
+  - a vista só lê o motor; a câmera e a interpolação (`src/telas/pet/vistaMundo.ts`) ficam fora do log;
+  - os pets v1 a v11 continuam com a sala de sempre, e as capturas deles não mudaram.
+- **O gesto e o caminho acessível (MV-4),** em `src/telas/pet/PorRacao.tsx`:
+  - o gesto: arrastar "Pôr ração" e soltar no chão. O ponto vira a posição do mapa pela vista (`CENA.mundo.paraMundo`) e chama
+    `deixarComida("racao", x, y)` por `mudarMotor()`;
+  - o toque: tocar no botão e depois no chão;
+  - o teclado: um lugar nomeado (o comedouro, perto do pet, longe);
+  - fora do chão, nada entra no registro;
+  - o Alimentar continua como reserva temporária, descrito assim na tela.
+- **A MV-6:** os textos de "uso pessoal" viraram o crédito e a procedência (`docs/UI_GUIDELINES.md`, 5.1). O atlas segue fora do git, e o
+  e2e e as capturas usam o sprite de reserva.
+- **O save do e2e** (`web/app/e2e/save_mundo.json`, de `web/app/e2e/gerar_save_mundo.mjs`) é um ponto da vida pouco antes de uma
+  refeição: o cérebro A vai pouco à comida, o que é comportamento do cérebro e não bloqueia (seção 0).
+- **Os gates:**
+  - os testes de engenharia: `npm run tipos` sem erro; `npm test`, 50 arquivos e 600 testes, com os 6 novos de `test/vista_mundo.test.ts`;
+    `npm run e2e`, 91 de 91, com os 7 novos do mundo;
+  - o E2E-COMIDA: pelo gesto com a cena 3D (390 e 1280) e com a reserva sem WebGL, pelo toque e pelo teclado, o pet come a ração posta e a
+    fome cai; soltar fora do chão não põe nada; recarregar refaz a vida com o evento `dc`;
+  - o ovo de um pet novo chocando na cena 3D, que o e2e não cobria antes;
+  - as capturas contra a `main` (c13a0ac): em 390, 1280 e 360 px, mudam só `config` (o texto da MV-6), e `pet-v12` é nova; as outras 19
+    telas saíram iguais, pixel a pixel.
+- **Interpretações e números da vista** em `docs/registro/2026-10.md` (MVP-ETAPA2).
+

@@ -78,3 +78,9 @@ reserva.
 **O Treino** (2026-10-22, `docs/TAREFA_V2_TREINO.md`): `capturas/Treino_pausa_<largura>.png` é a aba Crescer › Treinar recomposta, em 390, 360
 e 1280 px, com um pet que pede pausa. `capturas/Treino_forcar_*.png` mostra o pet que só pode Forçar, com a folha de confirmação, e
 `capturas/Treino_pausa_390_inteira.png`, a página inteira. Foram tiradas sem o atlas e sem a decoração do Digimon UP.
+
+**O mundo no jogo, etapa 2** (2026-10-24, `docs/TAREFA_V2_MVP_MUNDO_PRODUTO.md`): a prancha `MundoComida390.html` e as capturas do app com
+o Gomamon v12 do e2e. `capturas/MundoComida_racao_<largura>.png` mostra, em 390, 360 e 1280 px, a ração posta perto do pet.
+`capturas/MundoComida_faixa_390.png` mostra a faixa dos lugares (o caminho acessível), e `capturas/MundoComida_reserva_390.png`, a reserva
+sem WebGL. Foram tiradas sem o atlas e sem a decoração do Digimon UP: o pet é a grade de reserva.
+

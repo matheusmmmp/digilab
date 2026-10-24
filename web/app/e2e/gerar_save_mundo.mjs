@@ -1,9 +1,10 @@
-// Save do e2e do mundo no jogo (docs/TAREFA_V2_MVP_MUNDO_PRODUTO.md, etapa 2; E2E-COMIDA): um pet v12 cujo dono usou o botao Alimentar (a
-// racao no comedouro, a reserva temporaria) a cada 2 h desde o nascimento, parado pouco antes de uma refeicao. O cerebro do momento (o A v11, MV-2) vai pouco a comida: nas sementes
-// 6500 a 6519, uma ou duas refeicoes em dois dias, o primeiro no comeco do Rookie. O save fica num ponto em que a racao posta "perto do
-// pet" (o lugar nomeado da tela: 2 celulas a leste, src/telas/pet/vistaMundo.ts), com o relogio do app andando de 0 a 60 min de jogo, e
-// a que o pet come em ate ESPERA min de jogo, com a fome do motor caindo (a saciedade `e.fome` sobe). O registro termina num avanco de
-// tempo. Nenhum numero novo do jogo: os do motor (CMU_MVP); ESPERA, PASSO_DONO e a faixa de pontos sao do teste.
+// Save do e2e do mundo no jogo (docs/TAREFA_V2_MVP_MUNDO_PRODUTO.md, etapa 2; E2E-COMIDA): um pet v12 cujo dono usou o botao Alimentar
+// (a racao no comedouro, a reserva temporaria) a cada 2 h desde o nascimento, parado pouco antes de uma refeicao. O cerebro do momento (o
+// A v11, MV-2) vai pouco a comida: nas sementes 6500 a 6519, uma ou duas refeicoes em dois dias, a primeira no comeco do Rookie
+// (docs/registro/2026-10.md, MVP-ETAPA2). O save fica num ponto em que a racao posta "perto do pet" (o lugar nomeado da tela: 2 celulas a
+// leste, src/telas/pet/vistaMundo.ts), com o relogio do app andando de 0 a 60 min de jogo, e a que o pet come em ate ESPERA min de jogo,
+// com a fome do motor caindo (a saciedade `e.fome` sobe). O registro termina num avanco de tempo. Nenhum numero novo do jogo: os do motor
+// (CMU_MVP); ESPERA, PASSO_DONO e a faixa de pontos sao do teste.
 // uso (em web/app): node --experimental-strip-types e2e/gerar_save_mundo.mjs
 import { writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
