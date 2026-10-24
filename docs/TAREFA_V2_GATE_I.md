@@ -1,5 +1,14 @@
 # TAREFA V2 — GATE_I: o pet integrado (corpo químico, mundo, aprendizado na vida e replay no mesmo pet) (2026-10-21)
 
+> **Nota (2026-10-24), a direção nova:** o Matheus decidiu, no PROMPT MESTRE, que o produto jogável vem primeiro, que o DigiBrain
+> caminha para um cérebro **modular**, e que o cérebro A fica como linha de base, controle e fallback condicionado, e não como o cérebro
+> final da web. As decisões "a web roda um DigiBrain, o A" (2026-10-01) e o M6 (rodada 15) estão **SUPERADAS** desde 2026-10-24; o
+> texto abaixo fica como estava, como registro. Ver `docs/ARQUITETURA_DIGIBRAIN_MODULAR.md` e `docs/AUDITORIA_V2_PRODUTO_MODULAR.md`.
+>
+> **Esta tarefa com a direção nova:** a linha de base com o P1-plan (o A) passa a ser um **baseline**, e a etapa de código só abre
+> com essa função declarada (`docs/TAREFA_V2_CEREBRO_A_BASELINE.md`, seção 1). Os critérios do gate servem ao protótipo modular.
+> Recomendação desta auditoria (DM-8): **pausar** a execução até o Matheus decidir.
+
 Coordenador: Gerente (Claude Code). Worker da tarefa e do plano: Claude Code (worktree `v2-gate-i`). Worker da execução: a definir.
 Worktree e branch da execução: `v2-gate-i-<etapa>`. Status: **ABERTA** (a tarefa e o plano entregues, #382; as GT-1 a GT-8 DECIDIDAS pelo Matheus em
 2026-10-21, pela recomendação; nenhuma etapa de código começou; **o Gate I não está implementado**).

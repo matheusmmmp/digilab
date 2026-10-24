@@ -3,6 +3,11 @@
 Seções movidas inteiras do CLAUDE.md da raiz na etapa 1 da rodada de saúde (`docs/TAREFA_V2_SAUDE.md`, 2026-10-13). As regras do jogo
 web que valem hoje estão em `web/app/CLAUDE.md`; a regra dos assets da Bandai continua resumida no `CLAUDE.md` da raiz.
 
+> **Nota (2026-10-24):** a frase acima e a seção dos assets abaixo estão desatualizadas. A seção "Assets da Bandai" saiu do
+> `CLAUDE.md` em 2026-10-13 (rodada de saúde), e a regra de uso pessoal, de não publicar e do repositório privado foi retirada pelo
+> Matheus em 2026-10-22 e 2026-10-24 (relatado pelo Gerente). Vale a regra de procedência de `docs/UI_GUIDELINES.md`, seção 5.1. O
+> repositório já é público (`.github/workflows/verificar-pr.yml`). O texto abaixo fica como registro.
+
 ## Evolução canônica no jogo (2026-09-29, `docs/DESIGN_EVOLUCAO_CANONICA.md`)
 
 Pedido do Matheus ("tem que seguir o cânone"), só no jogo web; o Python da pesquisa segue com 4 estágios.

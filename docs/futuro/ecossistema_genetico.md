@@ -1,5 +1,14 @@
 # Ecossistema genético — o código genético de cada entidade, e entidades que geram o de outras (desenho)
 
+> **Nota (2026-10-24), a direção nova:** o Matheus decidiu, no PROMPT MESTRE, que o produto jogável vem primeiro, que o DigiBrain
+> caminha para um cérebro **modular**, e que o cérebro A fica como linha de base, controle e fallback condicionado, e não como o cérebro
+> final da web. As decisões "a web roda um DigiBrain, o A" (2026-10-01) e o M6 (rodada 15) estão **SUPERADAS** desde 2026-10-24; o
+> texto abaixo fica como estava, como registro. Ver `docs/ARQUITETURA_DIGIBRAIN_MODULAR.md` e `docs/AUDITORIA_V2_PRODUTO_MODULAR.md`.
+>
+> **O genoma do cérebro com a direção nova:** a seção `prior` ("desvios do prior do instinto em algumas regras do cérebro A") passa
+> a ler-se como os parâmetros inatos de **cada módulo** do cérebro modular (`docs/ARQUITETURA_DIGIBRAIN_MODULAR.md`, seção 9). A
+> topologia continua fora (a GI-5), e nada disso está implementado.
+
 Status (2026-10-14): **as decisões EG-1 a EG-8 estão DECIDIDAS pelo Matheus, todas pela recomendação** (seção 8). O resto do desenho
 segue PROPOSTO e só papel. É o pedido do Matheus pelo Gerente: um "código genético virtual" de cada entidade, e uma entidade que gere o
 código genético de outra, formando um ecossistema. Este documento não autoriza implementação: cada passo da seção 6 entra com tarefa e

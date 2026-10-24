@@ -1,5 +1,14 @@
 # Adendo — memória, emoção e habituação inspiradas no Dwarf Fortress
 
+> **Nota (2026-10-24), a direção nova:** o Matheus decidiu, no PROMPT MESTRE, que o produto jogável vem primeiro, que o DigiBrain
+> caminha para um cérebro **modular**, e que o cérebro A fica como linha de base, controle e fallback condicionado, e não como o cérebro
+> final da web. As decisões "a web roda um DigiBrain, o A" (2026-10-01) e o M6 (rodada 15) estão **SUPERADAS** desde 2026-10-24; o
+> texto abaixo fica como estava, como registro. Ver `docs/ARQUITETURA_DIGIBRAIN_MODULAR.md` e `docs/AUDITORIA_V2_PRODUTO_MODULAR.md`.
+>
+> **A memória com a direção nova:** o "fora de escopo" das memórias que mudam o temperamento é confrontado em
+> `docs/ARQUITETURA_DIGIBRAIN_MODULAR.md`, seção 5. A proposta (DM-6) é a influência gradual nas **facetas adquiridas,** nunca no
+> temperamento inato, e a tarefa é `docs/TAREFA_V2_MEMORIA_AUTOBIOGRAFICA.md`.
+
 Texto como recebido do pesquisador (2026-09-25).
 
 Este adendo **altera** duas tarefas já escritas. Leia junto com elas:

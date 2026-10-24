@@ -1,5 +1,15 @@
 # PLANO — Digilab V2: a pesquisa primeiro (revisão 2)
 
+> **Nota (2026-10-24), a direção nova:** o Matheus decidiu, no PROMPT MESTRE, que o produto jogável vem primeiro, que o DigiBrain
+> caminha para um cérebro **modular**, e que o cérebro A fica como linha de base, controle e fallback condicionado, e não como o cérebro
+> final da web. As decisões "a web roda um DigiBrain, o A" (2026-10-01) e o M6 (rodada 15) estão **SUPERADAS** desde 2026-10-24; o
+> texto abaixo fica como estava, como registro. Ver `docs/ARQUITETURA_DIGIBRAIN_MODULAR.md` e `docs/AUDITORIA_V2_PRODUTO_MODULAR.md`.
+>
+> Também superados aqui: "a V2 começa pela pesquisa; o jogo como produto vem depois" (o status e a fase 4: o produto jogável vem
+> primeiro, `docs/PRODUTO_VISAO.md`), e, na seção 5, "porte para a web de qualquer cérebro que não seja o escolhido" (o modular vai à
+> web por módulos, com paridade). A pergunta maior da seção 2 continua útil como pergunta sobre os módulos de aprendizagem e memória
+> (`docs/ARQUITETURA_DIGIBRAIN_MODULAR.md`, seção 11).
+
 Status: a pergunta e a arquitetura estão **DECIDIDAS** pelo Matheus (2026-10-01); os gates e os números continuam **PROPOSTOS**.
 Decisão anterior do Matheus que continua valendo: a V2 começa pela pesquisa; o jogo como produto (arte própria, servidor,
 escala) vem depois e depende do que a pesquisa encontrar. Este é o plano de alto nível. Cada etapa ganha o próprio plano de
@@ -74,7 +84,9 @@ Três definições valem para toda a V2:
 
 Validação contra o código (`ROADMAP_V2.md`, seção 2): cabe sem mudar o `engine.py` e reaproveita o aprendiz da L1. Os dois
 bloqueios são estes:
-- `AcaoPet` não pode ganhar membros, porque o bandit usa `tuple(AcaoPet)`: bola e frutas entram como sub-decisão.
+- `AcaoPet` não pode ganhar membros, porque o bandit usa `tuple(AcaoPet)`: bola e frutas entram como sub-decisão. (Nota de
+  2026-10-24: desatualizado. O `ALIVIAR` entrou no fim do enum, com a lista do bandit fixada em `ACOES_PET_HOJE`,
+  `digilab/events.py:211-222`.)
 - O mundo ainda tem poucos eventos para os canais.
 
 **Pesquisa no Python, produto na web (decisão de 2026-10-01).** Todos os experimentos e a comparação entre cérebros (DigiBrain A
@@ -132,8 +144,8 @@ reconhecimento do próprio pet, preferência, sucesso do treino, tempo de uso.
 
 Pré-condições:
 - aprovação de comitê de ética **antes de qualquer coleta**;
-- uma decisão sobre a arte: os sprites da Bandai não podem sair do uso pessoal, então ou arte própria, ou sessão local sem
-  distribuição;
+- uma decisão sobre a arte (tomada pelo Matheus em 2026-10-22 e confirmada em 2026-10-24, relatadas pelo Gerente: os sprites do
+  Digimon UP podem ser publicados; a regra de procedência está em `docs/UI_GUIDELINES.md`, seção 5.1);
 - o DigiBrain escolhido já portado para a web.
 
 Gates: reconhecimento acima do acaso com IC fora de 0,5; preferência correlacionada ao sucesso; nenhum participante com o pet morto

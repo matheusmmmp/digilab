@@ -41,8 +41,8 @@ sem nenhum teste do lado web, e estado de uma tela vaza em outra (ver
    `tests/`. `digilab/engine.py` continua congelado; o pacote `digilab/` continua só com
    biblioteca padrão.
 6. **Sprites de terceiros continuam fora do repositório.** O app carrega o atlas de
-   `D:\Trab\digilab\Assets\` pelo mesmo caminho relativo de hoje; o aviso de uso pessoal fica
-   no rodapé.
+   `D:\Trab\digilab\Assets\` pelo mesmo caminho relativo de hoje; o crédito fica no rodapé
+   (nota de 2026-10-24: o "uso pessoal" saiu; vale `docs/UI_GUIDELINES.md`, seção 5.1).
 7. **Falhar alto.** Evento desconhecido no registro, sprite sem mapa, constante divergente:
    erro visível, nunca valor padrão silencioso.
 8. Português nos comentários, sem acento em identificadores (igual ao Python).

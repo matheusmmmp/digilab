@@ -153,7 +153,7 @@ O inventário com os sete campos por sistema está na seção 7 de `docs/DEFINIC
 | `docs/referencias/CONTEXTO_DIGILAB_2026-09-29.md:14-15, 162` | "Tem que continuar privado" | nota de superação |
 | `web/app/src/telas/config/TelaConfig.tsx:184-185` (texto na tela), `web/digilab_sprites.html:1034, 2925-2927`, os comentários de `web/app/src/atlas.ts:1` e `decoracao.ts:1-2`, `web/app/package.json:5` ("repositório privado") | "Não publicar nem distribuir", "Uso pessoal; repositorio privado" | **não muda aqui** (é código ou texto de tela); vai para a tarefa do MVP |
 
-**A regra de procedência** está na seção 8 de `docs/UI_GUIDELINES.md`, e é a que vale daqui em diante.
+**A regra de procedência** está na seção 5.1 de `docs/UI_GUIDELINES.md`, e é a que vale daqui em diante.
 
 **O que continua:**
 - o atlas fora do git (ele mora em `D:\Trab\digilab\Assets`, fora da árvore);

@@ -1,5 +1,15 @@
 # TAREFA V2 — P4_CEREBRO_MUNDO: o cérebro A com o planejador no mundo 3D (2026-10-21)
 
+> **Nota (2026-10-24), a direção nova:** o Matheus decidiu, no PROMPT MESTRE, que o produto jogável vem primeiro, que o DigiBrain
+> caminha para um cérebro **modular**, e que o cérebro A fica como linha de base, controle e fallback condicionado, e não como o cérebro
+> final da web. As decisões "a web roda um DigiBrain, o A" (2026-10-01) e o M6 (rodada 15) estão **SUPERADAS** desde 2026-10-24; o
+> texto abaixo fica como estava, como registro. Ver `docs/ARQUITETURA_DIGIBRAIN_MODULAR.md` e `docs/AUDITORIA_V2_PRODUTO_MODULAR.md`.
+>
+> **A P4 com a direção nova:** o contrato sensório-motor no motor (as etapas 1 a 3, na `main`) serve ao MVP
+> (`docs/TAREFA_V2_MVP_MUNDO_PRODUTO.md`). O piloto e a validação do G-T1 corporificado só testam o A, e a recomendação desta
+> auditoria é **pausá-los** (DM-8). O mundo no jogo **não espera** a P4. Também superada: a frase da seção 6, "pede uma decisão própria
+> (o M6; pesquisa no Python, um DigiBrain na web)".
+
 Coordenador: Gerente (Claude Code). Worker do esboço: Claude Code (worktree `v2-gatec-p4`). Worker da execução: a definir. Worktree e
 branch da execução: `v2-p4-cerebro-mundo`, um branch por etapa. Status: **ABERTA** (o esboço entregue, #377; as P4-1 a P4-8
 DECIDIDAS pelo Matheus em 2026-10-21, pela recomendação; o plano da etapa 4 em `docs/PLANO_ANALISE_V2_P4_CORPORIFICADO.md`, PROPOSTO;

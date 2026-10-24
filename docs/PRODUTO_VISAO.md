@@ -74,7 +74,7 @@ Elas estão em `docs/TAREFA_V2_FASES_POSTERIORES.md`.
 
 ## 5. Assets
 
-**A regra de procedência e autorização** (`docs/UI_GUIDELINES.md`, seção 8) vale para todo asset.
+**A regra de procedência e autorização** (`docs/UI_GUIDELINES.md`, seção 5.1) vale para todo asset.
 
 **Os sprites do Digimon UP** são assets **autorizados pelo Matheus.** Ele decidiu, relatado pelo Gerente:
 - em 2026-10-22, retirar a regra de uso pessoal e publicar uma versão pelo túnel Cloudflare;

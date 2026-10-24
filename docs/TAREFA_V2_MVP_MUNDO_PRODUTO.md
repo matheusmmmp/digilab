@@ -107,7 +107,7 @@ Todas PROPOSTAS, com a recomendação primeiro.
 | **MV-3** | quais comidas se arrastam (CA-1) | **só a ração no MVP;** as frutas depois, com o paladar no TS | as frutas já: o paladar no TS (a etapa 5 do corpo) entra no caminho do MVP |
 | **MV-4** | o caminho acessível | **escolher a comida e tocar no chão, ou escolher um lugar nomeado (o comedouro, perto, longe) por teclado** | só o arrastar: o celular e o teclado ficam sem caminho |
 | **MV-5** | os limites (CA-3) | **os do motor do mundo de hoje** (quantas no chão, amadurecer, apodrecer); nada novo | inventar limites agora: número novo sem fonte |
-| **MV-6** | os textos de "uso pessoal" na tela (`TelaConfig.tsx:184-185`) e nos comentários do atlas | **trocar pelo crédito e pela procedência** (a regra de `docs/UI_GUIDELINES.md`, seção 8), junto com a primeira etapa de tela | manter: a tela contradiz a decisão do Matheus sobre os sprites |
+| **MV-6** | os textos de "uso pessoal" na tela (`TelaConfig.tsx:184-185`) e nos comentários do atlas | **trocar pelo crédito e pela procedência** (a regra de `docs/UI_GUIDELINES.md`, seção 5.1), junto com a primeira etapa de tela | manter: a tela contradiz a decisão do Matheus sobre os sprites |
 
 ## 9. Resumo da etapa
 

@@ -1,5 +1,13 @@
 # Resultado — comparação dos DigiBrains A × C (K3/V2)
 
+> **Nota (2026-10-24), a direção nova:** o Matheus decidiu, no PROMPT MESTRE, que o produto jogável vem primeiro, que o DigiBrain
+> caminha para um cérebro **modular**, e que o cérebro A fica como linha de base, controle e fallback condicionado, e não como o cérebro
+> final da web. As decisões "a web roda um DigiBrain, o A" (2026-10-01) e o M6 (rodada 15) estão **SUPERADAS** desde 2026-10-24; o
+> texto abaixo fica como estava, como registro. Ver `docs/ARQUITETURA_DIGIBRAIN_MODULAR.md` e `docs/AUDITORIA_V2_PRODUTO_MODULAR.md`.
+>
+> "A escolha do DigiBrain da web é do Matheus": ela foi feita no M6 (o A) e está superada pela direção modular. O resultado (o
+> empate A × C) continua valendo como está.
+
 Tarefa `docs/TAREFA_V2_COMPARACAO_A_C.md` (rodada 13, worker D). Plano: `docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md`, seções 2 a 8 e
 adendos 1 e 2. O adendo 2 foi commitado depois do piloto e antes da validação (`dcda45f`).
 

@@ -33,7 +33,8 @@ senha (decisao do Matheus, 2026-09-24): o link aleatorio do tunel vira a unica p
   app, Assets inteiro, gasto) responde 404;
 - a API paga do Claude fica desligada, salvo --claude-remoto (quem tiver a senha gasta o credito,
   ate o teto de --limite-usd).
-Os sprites sao da Bandai, sem licenca: o link e para uso pessoal; nao compartilhar (CLAUDE.md).
+Os sprites sao do Digimon UP (Bandai), autorizados pelo Matheus (2026-10-22 e 2026-10-24; a regra de procedencia esta em
+docs/UI_GUIDELINES.md, secao 5.1). Quem publica e o Matheus; o atlas continua fora do git.
 """
 
 from __future__ import annotations

@@ -1,5 +1,13 @@
 # Plano de análise — comparação dos DigiBrains A × B × C (K3/V2)
 
+> **Nota (2026-10-24), a direção nova:** o Matheus decidiu, no PROMPT MESTRE, que o produto jogável vem primeiro, que o DigiBrain
+> caminha para um cérebro **modular**, e que o cérebro A fica como linha de base, controle e fallback condicionado, e não como o cérebro
+> final da web. As decisões "a web roda um DigiBrain, o A" (2026-10-01) e o M6 (rodada 15) estão **SUPERADAS** desde 2026-10-24; o
+> texto abaixo fica como estava, como registro. Ver `docs/ARQUITETURA_DIGIBRAIN_MODULAR.md` e `docs/AUDITORIA_V2_PRODUTO_MODULAR.md`.
+>
+> O propósito deste plano (escolher o DigiBrain da web pelo M6) está superado. Os resultados continuam como evidência sobre o A, o B e
+> o C, e o B e o C ficam como referência para os módulos (`docs/ARQUITETURA_DIGIBRAIN_MODULAR.md`, seção 2).
+
 Status: **registrado antes de qualquer dado e antes de os cérebros B e C existirem** (2026-10-05). Tarefa
 `docs/TAREFA_V2_PLANO_COMPARACAO_CEREBROS.md`; etapa K3/V2 do `docs/ROADMAP_V2.md` (revisão 3); base
 `docs/research/digibrain/synthesis/brain_comparison.md`; calibração do A em `docs/PLANO_CALIBRACAO_CONJUNTA_V2.md` (K-1 a K-11,

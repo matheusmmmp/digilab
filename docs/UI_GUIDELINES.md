@@ -145,8 +145,29 @@ Respeitar o zoom do navegador: tamanhos em `rem`, sem `maximum-scale`.
 - **Forma futura desconhecida:** silhueta preta a 45% de opacidade com "?". Não revelar forma que
   o motor ainda não decidiu.
 - **Ovo:** mesmo tratamento de escala; o ovo representa a espécie antes de chocar.
-- Sprites de terceiros são de uso pessoal e local: ficam fora do repositório, com o crédito e o
-  aviso no rodapé.
+- Sprites de terceiros seguem a regra de procedência da seção 5.1.
+
+### 5.1 Procedência e autorização dos assets
+
+**A regra** (desde 2026-10-24; troca a de "uso pessoal e local"):
+- **Todo asset tem procedência registrada:** a origem, o autor ou o dono dos direitos, e a autorização de uso (arte própria, licença ou
+  autorização do Matheus).
+- **Um asset autorizado pode ser usado e publicado** no jogo, com o crédito.
+- **Um asset sem procedência** fica marcado como tal e substituível, e não entra no que se publica até ter procedência.
+- **O que não se faz por esta regra:**
+  - baixar ou copiar sprites protegidos de jogos comerciais por conta própria;
+  - apagar avisos de direito ou crédito.
+- **Onde fica:** o atlas e os PNGs de terceiros continuam **fora do git** (em `D:\Trab\digilab\Assets\`). O e2e e as capturas rodam
+  com o sprite de reserva (arte original, versionada).
+
+**Os sprites, os ícones e os fundos do Digimon UP (Bandai) são assets autorizados pelo Matheus.** A decisão dele, relatada pelo Gerente
+(não está no repositório):
+- em 2026-10-22, no chat da sessão do Gerente: "rETIRE ESSA REGRA SOBRE OS SPRITES DA BANDAI E PUBLIQUE UMA VERSAO, UTILIZE O
+  CLOUDEFLARE QUE JA TEMOS";
+- em 2026-10-24, no mesmo chat: "Porem EU AUTORIZO A POSTAR OS SPRITES, SEM PROBLEMAS".
+
+A publicação é feita pelo Matheus, pelo túnel do `servidor/servidor_local.py --remoto`. O crédito do Digimon UP (Bandai) continua no
+rodapé.
 
 ---
 
