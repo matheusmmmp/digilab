@@ -1,0 +1,31 @@
+/* O mundo fisico na tela Pet dos v12 (docs/TAREFA_V2_MVP_MUNDO_PRODUTO.md, etapa 2; prancha MundoComida390.html): a reserva do mundo
+   (MundoReserva.tsx), o canto com a regiao e a racao no chao, a barra "Por racao" (o gesto e o toque) e a faixa dos lugares (o caminho
+   acessivel). A cena 3D do modo mundo fica em cena3d.ts. */
+.cena-mundo{position:absolute;inset:0;overflow:hidden;background:#EEF4FC}
+.cena-mundo > span,.cena-mundo > img{position:absolute;display:block}
+.cena-mundo-regiao{bottom:0}
+.cena-mundo-ninho{width:44px;height:16px;margin:-8px 0 0 -22px;border-radius:50%;background:#C9D6EC;box-shadow:inset 0 -3px 0 #B8C8E6}
+.cena-mundo-comedouro{width:24px;height:12px;margin:-9px 0 0 -12px;border-radius:5px;background:#FFFFFF;box-shadow:0 0 0 2px #8FA4C8,inset 0 -4px 0 #C9D6EC}
+.cena-mundo-racao{width:14px;height:8px;margin:-6px 0 0 -7px;border-radius:50%;background:#9B6A3C;box-shadow:inset 0 2px 0 #C08A55}
+.cena-mundo-racao--podre{background:#6B6B3A;box-shadow:inset 0 2px 0 #87874D}
+.cena-mundo-bola{width:12px;height:12px;margin:-12px 0 0 -6px;border-radius:50%;background:#378ADD;box-shadow:inset -2px -2px 0 #2468B4}
+.cena-mundo-sombra{width:40px;height:10px;margin:-5px 0 0 -20px;border-radius:50%;background:rgba(23,58,138,.18)}
+.cena-mundo-pet{max-width:none;image-rendering:pixelated}
+.mundo-info{position:absolute;left:10px;bottom:10px;z-index:3;max-width:calc(100% - 20px);padding:3px 10px;border-radius:999px;border:2px solid var(--dl-navy);
+  background:#FFFFFF;color:var(--dl-navy);font-size:12px;font-weight:900;pointer-events:none}
+
+/* a barra "Por racao": o botao que se arrasta ou se toca, e a dica (ou a mensagem do ultimo lugar) */
+.racao-barra{display:flex;align-items:center;gap:10px;min-width:0}
+.racao-bt{flex:none;min-height:48px;gap:6px;touch-action:none;cursor:grab;box-shadow:0 0 0 3px #FFD23F,0 3px 0 3px #E0A800}
+.racao-bt:active{cursor:grabbing}
+.racao-bt--ativo{background:#FFF6CC}
+.racao-dica{min-width:0;font-size:12px;font-weight:700;line-height:1.35;color:var(--dl-text-2)}
+.racao-fantasma{position:fixed;z-index:60;transform:translate(-50%,-50%);pointer-events:none;filter:drop-shadow(0 3px 2px rgba(15,42,102,.35))}
+/* a faixa dos lugares e o toque no chao, por cima da cena */
+.racao-toque{position:absolute;inset:0;z-index:4;cursor:crosshair}
+.racao-faixa{position:absolute;left:10px;right:10px;top:10px;z-index:5;display:grid;gap:8px;padding:8px 10px;border-radius:14px;background:#FFFFFF;
+  box-shadow:0 0 0 2px var(--dl-navy),0 4px 0 2px var(--dl-navy-deep);color:var(--dl-text)}
+.racao-faixa b{font-size:14px;font-weight:900}
+.racao-lugares{display:flex;flex-wrap:wrap;gap:6px}
+.racao-lugar{min-height:44px;padding:0 12px;font-size:13px}
+.acao-reserva{display:block;font-size:10px;font-weight:800;opacity:.75}

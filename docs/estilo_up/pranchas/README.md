@@ -4,8 +4,8 @@ Pranchas novas desenhadas fora do canvas e guardadas no repositório **sem image
 - o pet, os ícones da barra e o brasão são placeholders originais (vetor);
 - o fundo hexagonal fica de fora (`--dl-img-hex: none`).
 
-A cópia com os sprites e as imagens de `img/` fica em `D:\Trab\digilab\Assets\Pranchas_UP\`, fora do repositório (uso pessoal, regra dos
-assets do `CLAUDE.md`), listada no `index.html` de lá.
+A cópia com os sprites e as imagens de `img/` fica em `D:\Trab\digilab\Assets\Pranchas_UP\`, fora do repositório (a regra dos
+assets: `docs/UI_GUIDELINES.md`, seção 5.1), listada no `index.html` de lá.
 
 Tokens e componentes: `../dl-up.css` (`--dl-*`, `dl-*`). Medidas e casca: `docs/estilo_up/DIRETRIZES_REPLICAR.md`. Para abrir com o CSS,
 sirva a pasta por HTTP, por exemplo pelo `servidor_local.py`.
@@ -14,6 +14,7 @@ sirva a pasta por HTTP, por exemplo pelo `servidor_local.py`.
 |---|---|---|
 | `MapaDesktop.html` | 1280×720 | mapa do mundo físico em vista inclinada; a câmera segue o pet, e a bandeja e a bola ficam na lateral (`docs/futuro/mundo_fisico.md`, 2.3 e 2.6) |
 | `Mapa390.html` | 390×844 | o mesmo no celular: o mapa na tela inteira e a bandeja aberta embaixo; o arrasto começa na bandeja, e um dedo no mapa move a câmera |
+| `MundoComida390.html` | 2 × 390×844 | o MVP do mundo no jogo, etapa 2 (`docs/TAREFA_V2_MVP_MUNDO_PRODUTO.md`): o gesto (arrastar a ração da barra de ações e soltar no chão da cena) e o caminho acessível (tocar em "Pôr ração" e depois no chão, ou escolher o comedouro, perto do pet ou longe pelo teclado); só o que o motor do v12 tem, com o Alimentar descrito como reserva |
 
 A cena usa a projeção do protótipo `docs/futuro/mundo_fisico_vistas.html`: escala s(y) = 0,5 + 0,5·y/300 e a altura com expoente 1,25. Os
 números e os textos são exemplo de layout, não dado.
@@ -77,3 +78,9 @@ reserva.
 **O Treino** (2026-10-22, `docs/TAREFA_V2_TREINO.md`): `capturas/Treino_pausa_<largura>.png` é a aba Crescer › Treinar recomposta, em 390, 360
 e 1280 px, com um pet que pede pausa. `capturas/Treino_forcar_*.png` mostra o pet que só pode Forçar, com a folha de confirmação, e
 `capturas/Treino_pausa_390_inteira.png`, a página inteira. Foram tiradas sem o atlas e sem a decoração do Digimon UP.
+
+**O mundo no jogo, etapa 2** (2026-10-24, `docs/TAREFA_V2_MVP_MUNDO_PRODUTO.md`): a prancha `MundoComida390.html` e as capturas do app com
+o Gomamon v12 do e2e. `capturas/MundoComida_racao_<largura>.png` mostra, em 390, 360 e 1280 px, a ração posta perto do pet.
+`capturas/MundoComida_faixa_390.png` mostra a faixa dos lugares (o caminho acessível), e `capturas/MundoComida_reserva_390.png`, a reserva
+sem WebGL. Foram tiradas sem o atlas e sem a decoração do Digimon UP: o pet é a grade de reserva.
+

@@ -26,6 +26,8 @@ const SO_JANELA = new Set(["evolucao-momento"]);
 /* o Treinar (docs/TAREFA_V2_TREINO.md): o Palmon v11 que pede pausa e o que so pode Forcar (e2e/gerar_save_treino.mjs) */
 const SAVE_TR_PAUSA = JSON.parse(readFileSync(new URL("../e2e/save_treino_pausa.json", import.meta.url), "utf8"));
 const SAVE_TR_FORCAR = JSON.parse(readFileSync(new URL("../e2e/save_treino_forcar.json", import.meta.url), "utf8"));
+/* o mundo no jogo (docs/TAREFA_V2_MVP_MUNDO_PRODUTO.md, etapa 2): o Gomamon v12 do e2e do mundo, com a racao no comedouro */
+const SAVE_MUNDO = JSON.parse(readFileSync(new URL("../e2e/save_mundo.json", import.meta.url), "utf8"));
 const TELAS: [string, string, object, object?][] = [
   ["pet-estado", "#/pet/estado", SAVES.v3], ["crescer-treinar", "#/crescer/treinar", SAVES.v3], ["crescer-aprend", "#/crescer/aprend", SAVES.v3],
   ["crescer-evolucao", "#/crescer/evolucao", SAVES.v3], ["crescer-itens", "#/crescer/itens", SAVES.v3], ["lutar-arena", "#/lutar/arena", SAVES.v3],
@@ -35,6 +37,7 @@ const TELAS: [string, string, object, object?][] = [
   ["lutar-exploracao-v6", "#/lutar/campanha", SAVE_ARENAS, TAMER_3],
   ["evolucao-momento", "#/crescer/evolucao", SAVE_EVO, TAMER_1], ["crescer-evolucao-v6", "#/crescer/evolucao", SAVE_ARENAS, TAMER_3],
   ["treino-pausa", "#/crescer/treinar", SAVE_TR_PAUSA], ["treino-forcar", "#/crescer/treinar", SAVE_TR_FORCAR],
+  ["pet-v12", "#/pet/estado", SAVE_MUNDO],
 ];
 
 /** semeia o save por uma página da mesma origem que não é o app (como em e2e/jogo.spec.ts) */

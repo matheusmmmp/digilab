@@ -37,7 +37,8 @@ function desenharPalco(cv: HTMLCanvasElement, cx: CanvasRenderingContext2D, quad
   const { motor: m, nascendo } = jogoAtual(), e = m.e;
   const g = ajustarTela(cv), { K, W } = g, a = atlasAtual(), pal = paleta(corDominante(m.tracos));
   cx.setTransform(1, 0, 0, 1, 0, 0); cx.clearRect(0, 0, cv.width, cv.height); cx.imageSmoothingEnabled = false;
-  if (CENA.modo3d) { desenharExtras3D(cx, g); return; }
+  /* a cena 3D, ou a reserva do mundo dos v12 (MundoReserva), desenha o pet: aqui ficam os extras */
+  if (CENA.modo3d || CENA.modoMundo) { desenharExtras3D(cx, g); return; }
   const anelX = (W - g.anelW) / 2, anelY = g.pes - g.anelH / 2;
   if (a.tipo === "ok") {
     /* plataforma (peca pintada do UP, nao pixel art): com suavizacao */
