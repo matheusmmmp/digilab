@@ -1,5 +1,14 @@
 # Mundo 3D: o mundo físico com câmera diagonal, sprites sobre corpos invisíveis e o contrato com o DigiBrain
 
+> **Nota (2026-10-24), a direção nova:** o Matheus decidiu, no PROMPT MESTRE, que o produto jogável vem primeiro, que o DigiBrain
+> caminha para um cérebro **modular**, e que o cérebro A fica como linha de base, controle e fallback condicionado, e não como o cérebro
+> final da web. As decisões "a web roda um DigiBrain, o A" (2026-10-01) e o M6 (rodada 15) estão **SUPERADAS** desde 2026-10-24; o
+> texto abaixo fica como estava, como registro. Ver `docs/ARQUITETURA_DIGIBRAIN_MODULAR.md` e `docs/AUDITORIA_V2_PRODUTO_MODULAR.md`.
+>
+> **O mundo 3D com a direção nova:** a W-5 (o cérebro no mundo novo só depois do Gate C) não segura mais o **produto:** o mundo
+> físico vai ao jogo pela `docs/TAREFA_V2_MVP_MUNDO_PRODUTO.md`, com o cérebro do momento. "DigiBrain (lobos)" passa a ler-se como
+> "DigiBrain (módulos; os lobos são a linha de base)".
+
 Status: **INVESTIGAÇÃO FEITA; as decisões W-1 a W-7 DECIDIDAS pelo Matheus em 2026-10-18, pela recomendação** (seção 8). Escrito pelo
 worker A, pela especificação WORLD-POC-001 do Matheus. Só investigação: nada no código mudou. **O POC-01a (a P3) avança em paralelo ao
 Gate C**, pela `docs/TAREFA_V2_WORLD_POC_01.md` (o Matheus, 2026-10-19: a W-5 trata do cérebro de verdade no mundo novo, a P4). **O Gate A foi APROVADO pelo Matheus em 2026-10-19** (o POC-01a, #355 e #358), com duas ressalvas: só um celular, recente, foi medido (testar num Android mais simples quando houver), e o cérebro de verdade no mundo novo (a P4) continua esperando o Gate C. **O Gate B foi APROVADO pelo Matheus em 2026-10-19** (o POC-02, #362 e #363), com a ressalva de que foi com o cérebro de teste e só em TS (CP-7). **O Gate C foi APROVADO EM PARTE pelo Matheus em 2026-10-21** (a validação do J5 com o adendo 8, #370): a revalorização pelo planejador está demonstrada (o G-T1 passa), e a busca (o T2, o mapa) fica pendente, com plano próprio. **Isso libera a P4 com o planejador:** a tarefa está em `docs/TAREFA_V2_P4_CEREBRO_MUNDO.md`, com as P4-1 a P4-8 DECIDIDAS pelo Matheus em 2026-10-21, pela recomendação, e o plano da replicação do T1 em `docs/PLANO_ANALISE_V2_P4_CORPORIFICADO.md`. Os números, os pesos e os nomes novos (fora das W) seguem PROPOSTOS. Nenhuma alegação de novidade.

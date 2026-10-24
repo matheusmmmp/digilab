@@ -3,6 +3,11 @@
 Documento para passar a outra LLM. Leia inteiro antes de qualquer tarefa. Os números vêm do `CLAUDE.md` do
 repositório e dos artefatos citados; **se for usar um número, confira no artefato, não neste texto**.
 
+> **Nota (2026-10-24):** este contexto é de 2026-09-29. Duas coisas mudaram: o repositório é público, e a regra dos sprites da
+> Bandai ("privado", "só uso pessoal", "nunca os sprites da Bandai" em material publicado) foi retirada pelo Matheus em
+> 2026-10-22 e 2026-10-24 (relatado pelo Gerente; `docs/UI_GUIDELINES.md`, seção 5.1). A direção do cérebro também mudou
+> (`docs/ARQUITETURA_DIGIBRAIN_MODULAR.md`).
+
 ## 1. O que é
 
 - **Projeto de pesquisa pessoal do Matheus.** NÃO é a pesquisa de mestrado dele (o mestrado é outro tema, no

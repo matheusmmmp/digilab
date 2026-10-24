@@ -1,7 +1,7 @@
 # Assets do Digimon UP: onde aplicar
 
-Pasta: `D:\Trab\digilab\Assets\Digimon Up Assets\Digimon Up Assets\Sprite\`. Uso pessoal e
-local, fora do repositório (entram no atlas, como os sprites). Referência visual: canvas, página
+Pasta: `D:\Trab\digilab\Assets\Digimon Up Assets\Digimon Up Assets\Sprite\`. Fora do
+repositório (entram no atlas, como os sprites); assets autorizados pelo Matheus (`docs/UI_GUIDELINES.md`, seção 5.1). Referência visual: canvas, página
 **Assets** (`AssetsGuia`, `AssetsDiario`, `AssetsEvolucao`) e página **Configurações**.
 
 | arquivo | o que é | onde usar |

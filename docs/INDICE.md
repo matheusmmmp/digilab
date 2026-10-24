@@ -14,6 +14,24 @@ citados. Status: PROPOSTO (`docs/TAREFA_V2_INFRA_MULTIAGENTE.md`).
 - [`ESTADO_ATUAL.md`](ESTADO_ATUAL.md): o índice derivado das tarefas, dos planos e dos últimos desvios. Gerado por
   `tools/gerar_estado_atual.py`; não é fonte.
 
+- **A direção de 2026-10-24** (o produto primeiro, o DigiBrain modular, o A como baseline e fallback):
+  - [`PRODUTO_VISAO.md`](PRODUTO_VISAO.md): a visão, o escopo e o MVP;
+  - [`ARQUITETURA_DIGIBRAIN_MODULAR.md`](ARQUITETURA_DIGIBRAIN_MODULAR.md): os módulos, as rotas versionadas, a literatura, DM-1 a DM-9;
+  - [`AUDITORIA_V2_PRODUTO_MODULAR.md`](AUDITORIA_V2_PRODUTO_MODULAR.md): o estado real do código, dos PRs e dos documentos.
+- **As tarefas da direção nova:** [`TAREFA_V2_MVP_MUNDO_PRODUTO.md`](TAREFA_V2_MVP_MUNDO_PRODUTO.md),
+  [`TAREFA_V2_DIGIBRAIN_MODULAR_ESPEC.md`](TAREFA_V2_DIGIBRAIN_MODULAR_ESPEC.md),
+  [`TAREFA_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`](TAREFA_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md),
+  [`TAREFA_V2_MEMORIA_AUTOBIOGRAFICA.md`](TAREFA_V2_MEMORIA_AUTOBIOGRAFICA.md),
+  [`TAREFA_V2_DIGIBRAIN_MODULAR_PRODUTO.md`](TAREFA_V2_DIGIBRAIN_MODULAR_PRODUTO.md),
+  [`TAREFA_V2_CEREBRO_A_BASELINE.md`](TAREFA_V2_CEREBRO_A_BASELINE.md),
+  [`TAREFA_V2_FASES_POSTERIORES.md`](TAREFA_V2_FASES_POSTERIORES.md).
+- **Onde um documento disser "a web roda um DigiBrain, o A" ou "o M6 escolheu o A",** vale a decisão de 2026-10-24: essas duas
+  decisões estão SUPERADAS. Os documentos principais têm uma nota no topo. Ficaram **datados, sem nota**, e são da rodada de saúde:
+  - `docs/research/digibrain/synthesis/brain_comparison.md`, `open_questions.md` e `sources/nornbrain.md`;
+  - `docs/futuro/decodificador_conceitos.md`, `paladar.md`, `connectome_cerebro_a.md`;
+  - `docs/DECISAO_PRODUTO_SEM_ELOGIO_BRONCA.md`, `TAREFA_V2_W_PLANO_PORTE.md`, `TAREFA_V2_PET_QUE_PENSA.md` (o "v11 pausado"),
+    `TAREFA_V2_DOIS_PETS.md`, `TAREFA_V2_CORPO_DRIVES.md` (seção 15), `V2_INVENTARIO_JOGO.md` e `MAPA_REPOSITORIO.md`.
+
 ## Nível 2: a frente em que se vai trabalhar
 
 | tipo de informação | onde mora |

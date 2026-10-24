@@ -180,6 +180,61 @@ rede.
 `EXECUTADO` = código na `main` com gates. `ESPECIFICADO` = escrito numa tarefa com decisões, sem código ou com código em curso.
 `IDEIA` = só neste documento ou num `docs/futuro/`.
 
+### 7.1 O inventário de 2026-10-24 (pela auditoria do código)
+
+Feito na `main` `a06e19d` para o PROMPT MESTRE (`docs/AUDITORIA_V2_PRODUTO_MODULAR.md`, seção 5). É o estado que vale; a tabela da seção
+7.2 fica como registro.
+
+**Os estados:**
+- **LIGADO-JOGO:** implementado e ligado ao comportamento no jogo (o pet v11, o `CCO_V11` em `web/app/motor/constantes.ts:468-472`) e na
+  pesquisa;
+- **LIGADO-PESQUISA:** implementado e ligado, só no Python;
+- **NÃO INTEGRADO:** implementado, sem cérebro que o leia, ou fora do produto;
+- **PROPOSTO** e **FUTURO.**
+
+**A coluna "MVP"** diz se o sistema entra no primeiro produto jogável (`docs/TAREFA_V2_MVP_MUNDO_PRODUTO.md`). O MVP prioriza perceber a
+comida, buscá-la, comê-la e refletir a consequência no corpo.
+
+| sistema | entradas | estado | sinais ao cérebro | decisões que influencia | MVP | evidência | estado e próxima etapa |
+|---|---|---|---|---|---|---|---|
+| **Visão** (ambiental e social) | as posições do `Mundo`, num raio de 6 células; com a P4, o cone e a oclusão (`PercepcaoContrato`) | o registro dos vistos no motor | `PercepcaoMundo.vistos` (as entradas `bola` e `fruta`), `PercepcaoSocial` | os candidatos a alvo, o alvo padrão, o planejador, a novidade | **sim** (perceber a comida) | `tests/test_mundo*.py`; J1 (#285); J5 (#370) | LIGADO-PESQUISA; no jogo, pelo MVP |
+| **Olfato alimentar** (a leitura pronta) | a intensidade do cheiro no mundo | — | `cheiro`, `direcao_cheiro` | o candidato `cheiro`; o explorar com cheiro forte | **sim** (achar a comida fora da vista) | runs do J1 e do J5 | LIGADO-PESQUISA; no jogo, pelo MVP |
+| **Órgão do Olfato** (as narinas, DP-13) | a intensidade em cada narina | `adaptacao_<receptor>` | `olfato_comida[_esq/_dir]`, `olfato_outro[...]` | só o alvo, pelo motor; nenhum cérebro lê o receptor | não | `tests/test_orgaos.py`, `test_cheiro_orgao.py`; só o custo medido | NÃO INTEGRADO; um módulo M-SENS que o leia |
+| **Tato cutâneo** (carinho e tapa) | os gestos do dono | `dor`, `susto`, `estresse`, `solidao`, `conforto`; o medo da mão | os receptores; o tapa pelo `receber_acao_dono` | o crédito à última decisão; as entradas do tempo livre | sim (já no jogo) | `tests/test_corpo_gestos.py`; web `laco_v11.test.ts` | LIGADO-JOGO |
+| **Tato social** (o toque) | o outro pet | — | `toque_<tipo>` | as entradas sociais | não | `tests/test_grupo_social.py` | LIGADO-PESQUISA (dois pets) |
+| **Paladar** | o perfil do tipo comido | `sabor_q`, `saciedade_q` | `paladar_*`; o canal `gosto` | as classes `comida:<tipo>`; o planejador | não no MVP (MV-3); depois, com as frutas | `tests/test_paladar_*.py`; o J5 com o `ganho_gosto` S/2 | LIGADO-PESQUISA; o TS é a etapa 5 do corpo |
+| **Sistema digestivo e metabólico** (a digestão) | o alimento (a ração, a fruta) | `alimento`; a reação da digestão | nenhum receptor direto | indireto: a fome, a vontade, o combustível | **sim** (a consequência de comer) | `tests/test_corpo_digestao.py`; web `corpo.test.ts` | LIGADO-JOGO (indireto) |
+| **Metabolismo energético** | o digerido e as atividades | `combustivel`, `reserva` | só pelo `energia` (a falta sobe o cansaço) | indireto, pelo cansaço | sim (já no jogo) | `tests/test_metabolismo.py`; o `m_gasto` 4/5 fechou (#293) | LIGADO-JOGO (indireto) |
+| **Sistema neuroquímico** (fome, desconforto, cansaço, tristeza, dano) | as reações e os emissores | 5 químicos de falta, C = 450000 | `fome`, `higiene`, `energia`, `humor`, `saude` | as entradas da percepção; o `sinal_corpo` | **sim** (a fome que cai ao comer) | `tests/test_corpo*.py`; web `corpo.test.ts` | LIGADO-JOGO; **a validação do corpo não rodou** |
+| **Homeostase** (o `sinal_corpo` por canal) | os receptores | — | o sinal de reforço por drive | o aprendizado | **sim** | o piloto do J2 (não é evidência) | LIGADO-JOGO |
+| **Hormônios** H1 a H3 | — | — | — | — | não | — | PROPOSTO (D-6); o M-AFETO do modular |
+| **Dor** (nocicepção) | o tapa | `dor`, com meia-vida 60 | o receptor `dor` | o sinal e as entradas | não | `tests/test_corpo_risco.py` | LIGADO-JOGO; o sistema nociceptivo e de reparo é FUTURO |
+| **Saúde e dano** | a privação | `dano` | o receptor `saude` (entrada) | só como entrada | não | `tests/test_corpo*.py` | LIGADO-JOGO (entrada); o reparo, a força vital e a morte por órgão são FUTURO (J10) |
+| **Sono e cansaço** | o dia, a noite, o andar, as atividades | `cansaco`; `Estado.dormindo` | `energia` | as regras de sono; a ação `dormir` | sim (já no jogo) | `tests/test_corpo*.py` | LIGADO-JOGO |
+| **Sistema excretor** (o banheiro) | o tempo e o digerido | `vontade`, `conforto`; a necessidade no chão | `vontade`, `conforto` | o instinto do alívio; o alvo aprendido | não | `tests/test_banheiro_*.py`; **nenhuma run com artefato** | LIGADO-PESQUISA; o TS é a etapa 4 |
+| **Tédio, solidão, estresse, susto** | o tempo, a variedade, os gestos | os químicos dos drives novos | os receptores novos (o susto fica fora do sinal) | o aprendizado | não (já no jogo) | `tests/test_corpo_drives.py`, `test_corpo_risco.py` | LIGADO-JOGO |
+| **Curiosidade** | a novidade no mundo | o químico | o receptor | o aprendizado | não | `tests/test_corpo_drives.py` | LIGADO-PESQUISA (exige o mundo) |
+| **Audição** (a leitura e os ouvidos, DP-14) | os sons do `Grupo` | `adaptacao_*` | `ouvido_<som>[...]` | nenhuma: nenhum cérebro lê | não | `tests/test_orgaos.py`, `test_sentidos_mundo.py` | NÃO INTEGRADO |
+| **Relógio de desenvolvimento** (a Vida) | o tempo | `vida` | nenhum receptor | nenhuma: o motor só confere o estágio | não | `tests/test_corpo_vida.py` | NÃO INTEGRADO (por desenho) |
+| **Digicorpo** (a rede de si) | todos os receptores | a rede que prevê | nenhum: só observa | nenhuma | não | `docs/RESULTADO_V2_CALIBRACAO_REDE_DE_SI.md` (margem negativa) | em desenvolvimento |
+| **Proprioceptivo** | a direção do último passo (o gancho) | — | — | só põe as narinas e os ouvidos | não | — | PROPOSTO |
+| **Termorregulação**; **imune e toxicológico** | — | — | — | — | não | — | FUTURO |
+
+**O que o cérebro modular precisa receber, de forma explícita** (`docs/ARQUITETURA_DIGIBRAIN_MODULAR.md`, seção 2):
+- **o M-SENS:** a visão e o olfato;
+- **o M-AFETO:** os receptores do Sistema neuroquímico, dos drives novos, da dor e do susto;
+- **o M-PLAST:** o sinal da homeostase.
+
+A G-RECEPTOR continua: o cérebro só lê receptores e a percepção.
+
+**A genética** poderá especificar os parâmetros da fisiologia no futuro (a seção `corpo` do `docs/futuro/ecossistema_genetico.md`). Hoje
+nenhum gene muda as taxas do corpo.
+
+### 7.2 A tabela de antes (até 2026-10-23), como registro
+
+Ela ficou atrás do código: o Tato cutâneo, os drives novos, o Sistema excretor, o `MotorCorpo` e o sinal aparecem como ESPECIFICADO, mas
+estão implementados.
+
 | item | estado | onde |
 |---|---|---|
 | **Sistema neuroquímico:** a química dos drives de hoje (5 químicos, C = 450000, receptores na escala S) | **EXECUTADO** | W-CORPO-QUIMICA, `digilab/corpo.py`, `tests/test_corpo_quimica.py` |
@@ -243,7 +298,7 @@ alegação de novidade: o Creatures modelou corpo químico e órgãos em 1997 (s
 
 | # | sistema | o que faria | condição de entrada | o que já existe |
 |---|---|---|---|---|
-| 1 | **Metabolismo energético** (conversão, armazenamento, mobilização) | a energia como químico: o alimento digerido vira reserva, e a reserva é mobilizada quando o corpo gasta | **avaliar antes** se entra como reações novas no grafo **sem duplicar o cansaço** | **A verificação do Gerente, conferida em `corpo.py` (2026-10-08):** não há químico de energia. A digestão consome `alimento` e `fome` (e, com o banheiro, produz `vontade`). O `cansaco` sobe por emissores (acordado de dia, acordado à noite, o andar) e cai dormindo. Não há conversão nem reserva |
+| 1 | **Metabolismo energético** (conversão, armazenamento, mobilização; **implementado e ligado no jogo desde o J2**, nota de 2026-10-24, seção 7.1) | a energia como químico: o alimento digerido vira reserva, e a reserva é mobilizada quando o corpo gasta | **avaliar antes** se entra como reações novas no grafo **sem duplicar o cansaço** | **A verificação do Gerente, conferida em `corpo.py` (2026-10-08):** não há químico de energia. A digestão consome `alimento` e `fome` (e, com o banheiro, produz `vontade`). O `cansaco` sobe por emissores (acordado de dia, acordado à noite, o andar) e cai dormindo. Não há conversão nem reserva |
 | 2 | **Sistema proprioceptivo** (postura, orientação, movimento) | o pet sente a própria posição e o próprio movimento | quando houver movimento corporal relevante | a direção do último passo, que a opção (b) da DP-13 usa para pôr as narinas |
 | 3 | **Termorregulação** | o calor e o frio do corpo | só se o mundo tiver temperatura | nada |
 | 4 | **Sistema nociceptivo e de reparo** | a dor, o dano e a cura do corpo como um sistema | unir à seção 5 (os órgãos com força vital, dano e cura), **depois da D-5** | os químicos `dano`, `dor` e `susto`; os emissores `dano_privacao` e `dano_cura`; o tapa |

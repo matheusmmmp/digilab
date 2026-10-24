@@ -1,5 +1,14 @@
 # DigiBrain: estrutura de estudo
 
+> **Nota (2026-10-24), a direção nova:** o Matheus decidiu, no PROMPT MESTRE, que o produto jogável vem primeiro, que o DigiBrain
+> caminha para um cérebro **modular**, e que o cérebro A fica como linha de base, controle e fallback condicionado, e não como o cérebro
+> final da web. As decisões "a web roda um DigiBrain, o A" (2026-10-01) e o M6 (rodada 15) estão **SUPERADAS** desde 2026-10-24; o
+> texto abaixo fica como estava, como registro. Ver `docs/ARQUITETURA_DIGIBRAIN_MODULAR.md` e `docs/AUDITORIA_V2_PRODUTO_MODULAR.md`.
+>
+> Correções de citação achadas na auditoria de 2026-10-24 (`docs/ARQUITETURA_DIGIBRAIN_MODULAR.md`, seção 10): o aprendizado
+> hebbiano é do resumo de Cliff e Grand (1999), não do de 1997; Adams (2021) e Castro e Gudwin (2013) são usados aqui além do que a
+> tabela verificada sustenta. Os arquivos de mecanismo não foram reescritos.
+
 Status: **estudo, não desenho** (2026-10-01). Esta pasta organiza a pesquisa que alimenta o cérebro do pet da V2 (o
 "DigiBrain"). Ela **não escolhe arquitetura**, não autoriza mecânica e não muda nada do motor. O desenho é do Matheus; a
 ordem de implementação está em `docs/ARQUITETURA_V2_VALIDACAO.md` e `docs/ROADMAP_V2.md`.

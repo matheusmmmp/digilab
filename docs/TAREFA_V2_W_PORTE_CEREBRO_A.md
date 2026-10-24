@@ -1,5 +1,14 @@
 # TAREFA V2 — W-PORTE: o cérebro A no jogo web, com o painel DigiBrain (2026-10-17)
 
+> **Nota (2026-10-24), a direção nova:** o Matheus decidiu, no PROMPT MESTRE, que o produto jogável vem primeiro, que o DigiBrain
+> caminha para um cérebro **modular**, e que o cérebro A fica como linha de base, controle e fallback condicionado, e não como o cérebro
+> final da web. As decisões "a web roda um DigiBrain, o A" (2026-10-01) e o M6 (rodada 15) estão **SUPERADAS** desde 2026-10-24; o
+> texto abaixo fica como estava, como registro. Ver `docs/ARQUITETURA_DIGIBRAIN_MODULAR.md` e `docs/AUDITORIA_V2_PRODUTO_MODULAR.md`.
+>
+> "Levar o DigiBrain escolhido (o A, M6) para o jogo": o A fica no jogo como o cérebro dos pets v11 e como o fallback condicionado,
+> não como o cérebro final. **O status abaixo está desatualizado:** as etapas 1 a 5 e o mapa dos pesos foram entregues (as seções 9 a
+> 18). O painel, que hoje só conhece a estrutura do A (PW-7), passa a mostrar os módulos na `docs/TAREFA_V2_DIGIBRAIN_MODULAR_PRODUTO.md`.
+
 Coordenador: esta sessão. Worker: a abrir, um por etapa. Worktree e branch: `v2-w-porte-cerebro-a` (o plano); cada etapa de código na
 sua. Status: **ABERTA, só papel.** Nenhum código foi escrito para esta tarefa.
 

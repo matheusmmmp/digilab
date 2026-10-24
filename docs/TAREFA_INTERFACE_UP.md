@@ -24,9 +24,10 @@ fórmula, motor ou log muda.
    textos das pranchas são **exemplos de layout**, não dados. Se um elemento do desenho não tiver
    fonte no motor web (ex.: chip de causa, fala "sem base" do verificador, janela de chamado,
    sobrecarga), **não inventar**: omitir o elemento e listar como lacuna no relatório.
-3. **Sprites de terceiros: uso pessoal e local.** Nenhum PNG do Digimon UP entra no repositório.
+3. **Sprites de terceiros: fora do repositório.** Nenhum PNG do Digimon UP entra no repositório.
    O atlas novo fica em `D:\Trab\digilab\Assets\` (como o atual) e o HTML o carrega por caminho
-   relativo. Manter o aviso de uso pessoal no rodapé, com o crédito atualizado.
+   relativo. Manter o crédito no rodapé. (Nota de 2026-10-24: o "uso pessoal" saiu; vale a regra de
+   procedência de `docs/UI_GUIDELINES.md`, seção 5.1.)
 4. **Layout independente do sprite.** O espaço de cada sprite vem do tamanho nativo do quadro,
    ampliado só em escala inteira (1× listas/retratos, 2× cards, 3× palco, 4× revelação), com
    `image-rendering: pixelated` / `imageSmoothingEnabled = false`. Trocar a arte não pode

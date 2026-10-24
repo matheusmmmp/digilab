@@ -1,5 +1,14 @@
 # Gate I: o pet integrado (corpo químico, mundo, aprendizado na vida e replay no mesmo pet)
 
+> **Nota (2026-10-24), a direção nova:** o Matheus decidiu, no PROMPT MESTRE, que o produto jogável vem primeiro, que o DigiBrain
+> caminha para um cérebro **modular**, e que o cérebro A fica como linha de base, controle e fallback condicionado, e não como o cérebro
+> final da web. As decisões "a web roda um DigiBrain, o A" (2026-10-01) e o M6 (rodada 15) estão **SUPERADAS** desde 2026-10-24; o
+> texto abaixo fica como estava, como registro. Ver `docs/ARQUITETURA_DIGIBRAIN_MODULAR.md` e `docs/AUDITORIA_V2_PRODUTO_MODULAR.md`.
+>
+> **O Gate I com a direção nova:** os quatro critérios (I-CORPO, I-MUNDO, I-APRENDE, I-REPLAY) continuam úteis, agora para o pet
+> com o cérebro modular. A GI-1 ("tudo ao redor do cérebro A") está SUPERADA. A run com o A, quando rodar, vale só como baseline
+> (`docs/TAREFA_V2_CEREBRO_A_BASELINE.md`). A GI-5 (a topologia fora) continua até a especificação do modular dizer outra coisa.
+
 Status (2026-10-21): **as decisões GI-1 a GI-5 DECIDIDAS pelo Matheus em 2026-10-21, pela recomendação** (seção 7). O Gate I é um
 marco do `docs/ROADMAP_V2.md` (seção 8), **ainda não implementado**: a tarefa está em `docs/TAREFA_V2_GATE_I.md`, e o plano, em
 `docs/PLANO_ANALISE_V2_GATE_I.md`, ambos PROPOSTOS. O desenho abaixo é a proposta original, só papel. É o pedido do Matheus de 2026-10-21, pelo Gerente: aumentar a chance de o cérebro, o corpo

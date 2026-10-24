@@ -1,5 +1,13 @@
 # Tarefa — memória, motivo e expressão por estágio (revisada para o combate V2)
 
+> **Nota (2026-10-24), a direção nova:** o Matheus decidiu, no PROMPT MESTRE, que o produto jogável vem primeiro, que o DigiBrain
+> caminha para um cérebro **modular**, e que o cérebro A fica como linha de base, controle e fallback condicionado, e não como o cérebro
+> final da web. As decisões "a web roda um DigiBrain, o A" (2026-10-01) e o M6 (rodada 15) estão **SUPERADAS** desde 2026-10-24; o
+> texto abaixo fica como estava, como registro. Ver `docs/ARQUITETURA_DIGIBRAIN_MODULAR.md` e `docs/AUDITORIA_V2_PRODUTO_MODULAR.md`.
+>
+> A memória autobiográfica que decide e muda as facetas está em `docs/TAREFA_V2_MEMORIA_AUTOBIOGRAFICA.md`. A história desta tarefa
+> continua só para a expressão: ela não decide (`docs/AUDITORIA_V2_PRODUTO_MODULAR.md`, seção 4).
+
 Leia o `CLAUDE.md` inteiro e `docs/ESPEC_COMBATE_V2.md` antes de começar.
 Todas as regras do `CLAUDE.md` valem: `engine.py` não muda, determinismo
 bit a bit, só stdlib em `digilab/`, parâmetros em `config.py`, falhar alto.

@@ -1,0 +1,73 @@
+# TAREFA V2 — DIGIBRAIN_MODULAR_PROTOTIPO: o protótipo e a avaliação dos mecanismos do DigiBrain modular (2026-10-24)
+
+Coordenador: Gerente (Claude Code). Worker: a definir. Worktree e branch: `v2-modular-prototipo-<etapa>`. Status: **ABERTA, só papel.**
+Começa depois da especificação aprovada.
+
+Categoria: implementacao (com a avaliação como experimento). Origem: Matheus, 2026-10-24, o PROMPT MESTRE (seções 1, 6 e 9).
+
+## 0. Os cinco pontos
+
+| ponto | resposta |
+|---|---|
+| a capacidade | um cérebro modular mínimo que percebe, mantém estado, sente o corpo, propõe, escolhe e aprende nos cenários do MVP |
+| o marco que desbloqueia | a integração no produto (`docs/TAREFA_V2_DIGIBRAIN_MODULAR_PRODUTO.md`) e a avaliação do fallback (`docs/TAREFA_V2_CEREBRO_A_BASELINE.md`) |
+| a evidência | os testes de mecanismo por módulo; a ablação por módulo nos cenários do MVP; a comparação com o A como baseline, com plano de análise antes |
+| as dependências reais | a especificação aprovada; o mundo do motor com o contrato (na `main`); os cenários do MVP |
+| se o gate falhar | o diagnóstico segue os critérios de `docs/TAREFA_V2_CEREBRO_A_BASELINE.md`, que separam a falha de implementação (conserta-se) da limitação da arquitetura (vai ao Matheus). **Nunca um gate novo só para validar o A** |
+
+## 1. Pergunta
+
+O cérebro modular mínimo faz o que o MVP pede (perceber a comida, ir, comer e aprender com a consequência) por meio dos próprios módulos, e
+cada módulo pesa como a especificação diz?
+
+## 2. Depende de
+
+- `docs/ESPEC_DIGIBRAIN_MODULAR.md` aprovado;
+- as DM-1 a DM-5;
+- os critérios de `docs/TAREFA_V2_CEREBRO_A_BASELINE.md`, escritos **antes** da avaliação.
+
+## 3. Mudança mínima (PROPOSTA)
+
+1. **Os módulos da DM-3,** num pacote próprio (por exemplo `digilab/digibrain/`, um arquivo por módulo). Eles cumprem o `Protocol`
+   `Politica` e ficam atrás de uma chave, com o A e o `engine.py` intactos.
+2. **Os testes de mecanismo** de cada módulo, com resposta conhecida.
+3. **Os cenários do MVP na bancada:** a comida posta num lugar, o pet sozinho, o corpo químico, o mundo com o contrato.
+4. **A avaliação,** com um plano de análise próprio commitado antes:
+   - a ablação por módulo (desligar, congelar, embaralhar o sinal);
+   - o A como baseline;
+   - o custo por decisão.
+
+## 4. Experimento e gate
+
+- **O plano:** `docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`, commitado antes da primeira vida.
+- **As sementes:** faixas novas, pedidas ao coordenador quando o plano existir.
+- **Os gates** (PROPOSTOS, no plano):
+  - **o G-MECANISMO:** cada módulo passa nos seus testes;
+  - **o G-ABLA:** desligar cada módulo muda o comportamento no sentido que a especificação prevê;
+  - **o G-MVP:** a cadeia comida → corpo acontece com o cérebro modular numa fração das vidas que o plano fixa;
+  - **o G-CUSTO.**
+
+## 5. Entrega
+
+- Um PR por etapa: o código, os testes e a suíte inteira com a contagem.
+- O plano antes da run.
+- O `RESULTADO_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md` depois.
+
+## 6. Fora desta tarefa
+
+- a web;
+- a memória autobiográfica completa (tarefa própria; aqui só o M-MEM mínimo da DM-3);
+- o genoma;
+- dois pets.
+
+## 7. Critérios de aceitação
+
+- Os testes de mecanismo passam.
+- O replay é bit a bit.
+- Com a chave desligada, as vidas de hoje saem byte a byte.
+- O plano foi commitado antes da run.
+- O resultado está registrado como está, inclusive se for negativo.
+
+## 8. Precisa do Matheus
+
+As decisões que a especificação e o plano abrirem (as faixas, os limiares dos gates, o que entra no primeiro protótipo).

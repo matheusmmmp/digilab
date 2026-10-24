@@ -15,7 +15,8 @@ Vale junto com o `CLAUDE.md` da raiz. O histórico da fala (as versões do promp
 - **Teto de gasto TOTAL** (`--limite-usd`, padrão US$ 2), acumulado em `servidor/gasto_fala.json`, fora do git: não zera ao reiniciar. Uma
   chamada que passaria do teto não é feita e cai no template. Modelo sem preço na tabela não liga.
 - **Acesso remoto** (túnel): só com `--remoto`, que libera só as rotas do jogo e deixa a API paga desligada, salvo `--claude-remoto`. Sem
-  `--remoto`, um pedido vindo por túnel leva 403. O túnel aponta sempre para `http://127.0.0.1:<porta>`. O link é de uso pessoal.
+  `--remoto`, um pedido vindo por túnel leva 403. O túnel aponta sempre para `http://127.0.0.1:<porta>`. Os sprites do Digimon UP são autorizados pelo Matheus
+  (`docs/UI_GUIDELINES.md`, seção 5.1); quem publica é ele.
 - **A fala livre** só foi aprovada com o `gemma2:9b`, no Ollama local, e fica desligada por padrão.
 
 ## Comandos
