@@ -140,8 +140,14 @@ Todas PROPOSTAS, com a recomendação primeiro.
 - **O laço:** o pet percebe antes de decidir, o comer não dá fome por si (MF-2), e a consequência do mundo vem antes do cérebro. O andar, a
   comida do mapa (com o efeito do alimentar, sem digestão, MV-9), a novidade e a atividade viram estímulos no corpo, com a curiosidade
   (MV-8). O carinho e o tapa ficam fora do mundo (MV-7). O cérebro é o A do v11, com o alvo padrão do motor e sem as chaves do mundo (MV-2).
+- **O mundo do produto** (a opção 1 do Matheus, 2026-10-24): o v12 roda o layout padrão sem árvores, só com a ração do jogador
+  (`CONFIG_MUNDO_MVP` no `digilab/config.py`, `CMU_MVP` no `motor/constantes.ts`; PROPOSTOS, SEM FONTE). Só o produto o usa: a bancada e a
+  pesquisa seguem com o layout padrão, e um teste confere que ele não vaza. O gabarito dele (`mvp_produto_python.json`) entrou num commit
+  próprio, antes do código.
 - **Os gates:** o G2 (`mvp_etapa0_ts.json` intacto e o teste passando, com o v11 fixado), o G1 (o replay do v12 bit a bit, incremental,
-  pelo `Motor.reproduzir` e pelo JSON do save), o G-PAR (as quatro vidas do `mvp_mundo_python.json` decisão a decisão, com o corpo inteiro)
-  e o G-EVENTO.
-- **Pendente:** o A do v11 quebra no Python quando come uma fruta caída das árvores do mundo (decisão da MV-2 levada ao Gerente).
+  pelo `Motor.reproduzir` e pelo JSON do save), o G-PAR e o G-EVENTO. O G-PAR é decisão a decisão, com o corpo inteiro e sem campo
+  mascarado, em dois cenários: o do produto (`mvp_produto_python.json`, o mesmo cenário nos dois lados) e o da pesquisa
+  (`mvp_mundo_python.json`, o gabarito da etapa 0).
+- **O achado da fruta:** no Python, o A do v11 quebra quando come uma fruta caída das árvores. A opção 1 tira as árvores do mundo do
+  produto, e o A não mudou.
 - **Interpretações e achados** em `docs/registro/2026-10.md`.
