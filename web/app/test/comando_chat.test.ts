@@ -80,7 +80,7 @@ describe("log de apresentacao", () => {
 });
 
 describe("execucao direta e o registro do pet", () => {
-  test('"vai comer" grava na hora exatamente o evento "d" do botao Alimentar (mesma assinatura)', async () => {
+  test('"vai comer" grava na hora exatamente o evento do botao Alimentar (mesma assinatura; nos v12, a racao no comedouro)', async () => {
     const m = jogoNovo();
     expect(m.versao).toBe(VERSAO_PET);
     const antes = m.log.map(e => [...e]), n = antes.length;
@@ -90,7 +90,8 @@ describe("execucao direta e o registro do pet", () => {
     const gemeo = Motor.reproduzir(m.semente, antes as never, m.versao);
     gemeo.observar("alimentar");
     expect(m.log.length).toBe(n + 1);
-    expect(m.log[n]).toEqual([m.e.tick, "d", "alimentar"]);
+    const [x, y] = m.mundo!.comedouro;
+    expect(m.log[n]).toEqual([m.e.tick, "dc", { tipo: "racao", x, y }]);
     expect(m.log[n]).toEqual(gemeo.log[n]);
     expect(m.assinatura()).toBe(gemeo.assinatura());
     /* o log de apresentacao marca a execucao; o save saiu igual ao motor */

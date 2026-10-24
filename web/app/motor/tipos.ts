@@ -69,10 +69,12 @@ export type EventoCarta = [tick: number, tipo: "k", carta: { id: string }];
 /** pets v6 (Fronteira, medalhas parte 4b): o Tamer venceu a Liga dos Lideres, e as instalacoes da Fronteira abrem para este pet a partir
     deste tick (como o "u" das medalhas: o motor do pet nunca le o Tamer por fora; o replay le este evento). Um por pet */
 export type EventoFronteira = [tick: number, tipo: "f", fronteira: { campeao: true }];
+/** pets v12 (o mundo fisico, MV-1): o dono deixa a comida num ponto do mapa (subunidades inteiras do Mundo). So a racao no MVP (MV-3) */
+export type EventoComida = [tick: number, tipo: "dc", comida: { tipo: "racao"; x: number; y: number }];
 export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem | EventoConfig | EventoLiberacao
-  | EventoItem | EventoCarta | EventoFronteira | EventoFala;
+  | EventoItem | EventoCarta | EventoFronteira | EventoFala | EventoComida;
 
-export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
+export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 
 /** estado de vida (camada 1) */
 export interface EstadoVida {

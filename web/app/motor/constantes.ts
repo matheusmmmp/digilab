@@ -43,8 +43,13 @@ export const CDJ = { limiarNecessidade: .3, limiarVontade: .1, limiarTom: .2, kC
    11 = o cerebro A e o corpo (docs/TAREFA_V2_W_PORTE_CEREBRO_A.md, etapa 4): o pet decide e aprende pelos lobos (motor/lobos.ts, a
    consequencia no corpo), sobre o laco do corpo por tick (motor/motor_corpo.ts); o dono tem carinho e tapa, sem elogio nem bronca; o
    desejo e a vontade do cerebro A; o carater pelo metodo do Python, com a escala e o deslocamento do v11. Saem a educacao (as janelas, o
-   petisco e o banheiro), a mentira e a obediencia; a lesao fica, e o tratar so cura (decisao do Matheus de 2026-10-18) */
-export const VERSAO_PET = 11;
+   petisco e o banheiro), a mentira e a obediencia; a lesao fica, e o tratar so cura (decisao do Matheus de 2026-10-18);
+   12 = o v11 com o mundo fisico (docs/TAREFA_V2_MVP_MUNDO_PRODUTO.md, etapa 1; MV-1): o laco do corpo ganha o Mundo
+   (motor/motor_corpo_mundo.ts); o dono deixa a racao num lugar (o evento "dc"; MV-3, MV-5) e o pet percebe, anda ate ela e come por
+   iniciativa propria, com o mesmo efeito no corpo do alimentar de hoje e sem digestao (MV-9); o botao Alimentar poe a racao no
+   comedouro (reserva temporaria); o carinho e o tapa ficam fora do mundo, como no v11 (MV-7); o cerebro e o A do v11, com o alvo
+   padrao do motor e sem as chaves do mundo (MV-2) */
+export const VERSAO_PET = 12;
 /* medalhas do Tamer que cada evolucao pede nos pets v6 (decisao do Matheus, 2026-09-29: 1, 3 e 5; so no jogo), pela
    chave do estagio de destino: Rookie -> Champion (adolescente), Champion -> Ultimate (adulto), Ultimate -> Mega (mega).
    In-Training -> Rookie nao pede medalha. A tabela das medalhas fica em medalhas.ts */

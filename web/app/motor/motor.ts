@@ -21,6 +21,8 @@ import { caraterDe, caraterPolitica, caraterV11, formaAdultaDe, linhaDoCarater, 
 import { CCO_CORPO_V11 } from "./corpo.ts";
 import { desejoLobos, type BracoConsequencia, type CerebroA, type ObservacaoLobos } from "./lobos.ts";
 import { MotorCorpo, estadoNascimentoPy, type PoliticaCorpo } from "./motor_corpo.ts";
+import { MotorCorpoMundo } from "./motor_corpo_mundo.ts";
+import { eventoDeixarComida, lerDeixarComida, type Mundo } from "./mundo.ts";
 import { bracoV11 } from "./pet_v11.ts";
 import { leituraAprendido, leituraDecisao, mapaDecisao, mapaPesos, type ArestaMapa, type LeituraDecisao, type MapaDecisao } from "./digibrain.ts";
 import { desafiadoDaVersao, regrasDaVersao, type Lutador, type RegrasLuta, type ResultadoLuta, type Desafiado } from "./combate.ts";
@@ -208,11 +210,11 @@ export class Motor {
       na assinatura so depois da primeira (a dos pets que nunca lutaram la nao muda) */
   salao = { tentativas: 0, vitorias: 0 };
   /** v11: o cerebro A atras do braco da consequencia e o laco do corpo por tick, que roda a vida por baixo (o estado do pet e o do laco;
-      `e` e a copia dele depois de cada passo). null nos v1-v10 */
+      `e` e a copia dele depois de cada passo). null nos v1-v10. Nos v12, o laco e o com o mundo fisico (MotorCorpoMundo) */
   v11: { braco: BracoConsequencia; laco: MotorCorpo } | null = null;
 
   constructor(semente: number, versao: number = VERSAO_PET) {
-    if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].includes(versao)) throw new Error("versão de pet desconhecida: " + versao);
+    if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].includes(versao)) throw new Error("versão de pet desconhecida: " + versao);
     this.semente = semente; this.versao = versao as VersaoPet;
     this.rEnv = criarRng(semente); this.rPol = criarRng(semente + 1000003);
     /* temperamento do ovo: rng propria, nao mexe nas outras */
@@ -235,7 +237,11 @@ export class Motor {
         receberAcaoDono: (a, tick) => braco.receberAcaoDono(a, tick),
         mudancaNoCorpo: (antes, depois) => braco.mudancaNoCorpo(antes, depois),
       };
-      this.v11 = { braco, laco: new MotorCorpo(politica, semente, CCO_CORPO_V11, estadoNascimentoPy(TICK_INICIAL)) };
+      /* v12: o laco com o mundo fisico (MV-1); a regra de cada decisao vai ao registro do mundo, como o ultima_regra do Python */
+      const laco = versao >= 12
+        ? new MotorCorpoMundo(politica, semente, CCO_CORPO_V11, estadoNascimentoPy(TICK_INICIAL), { regra: () => braco.cerebro.ultimaRegra })
+        : new MotorCorpo(politica, semente, CCO_CORPO_V11, estadoNascimentoPy(TICK_INICIAL));
+      this.v11 = { braco, laco };
       this.e = this.v11.laco.estado;
     }
     if (versao >= 2) {
@@ -298,6 +304,8 @@ export class Motor {
       },
     };
   }
+  /** v12: o mundo fisico do pet (null nos v1-v11). A tela so le */
+  get mundo(): Mundo | null { return this.v11 && this.v11.laco instanceof MotorCorpoMundo ? this.v11.laco.mundo : null; }
   /** a observacao de agora, a que o pet le: nos v11, com os receptores do corpo */
   observacaoAgora(): ObservacaoLobos { return this.v11 ? this.v11.laco.observacao() : observacao(this.e); }
 
@@ -655,8 +663,37 @@ export class Motor {
       throw new Error(this.versao >= 11 ? `acao de dono fora dos pets v11: ${a} (sem elogio, bronca, petisco e banheiro)` : "acao de dono desconhecida: " + a);
     }
     if (this.versao >= 4) { this._conferirMorte(); this._vivo(); }
+    /* v12: o botao Alimentar e a reserva temporaria do MVP; poe a racao no comedouro (o lugar padrao do DonoComLugar) */
+    if (this.versao >= 12 && a === "alimentar") { const [x, y] = this.mundo!.comedouro; this.deixarComida("racao", x, y); return; }
     this.log.push([this.e.tick, "d", a]);
     this._aplicar(a);
+  }
+  /** v12: o dono deixa a racao em (x, y) do mapa do mundo (subunidades inteiras). Tipo que nao e racao (MV-3), posicao fora do mapa ou
+      nao inteira falham alto antes do registro. O mundo de hoje nao tem obstaculo (o contrato da P4 fica desligado no jogo) */
+  deixarComida(tipo: string, x: number, y: number): void {
+    this._validarComida(tipo, x, y);
+    this._conferirMorte(); this._vivo();
+    this.log.push([this.e.tick, "dc", { tipo: "racao", x, y }]);
+    this._deixarComida(tipo, x, y);
+  }
+  private _validarComida(tipo: unknown, x: unknown, y: unknown): void {
+    if (this.versao < 12) throw new Error("a comida num lugar do mundo é só de pets v12");
+    if (tipo !== "racao") throw new Error(`só a ração vai ao chão nos pets v12 (MV-3): ${String(tipo)}`);
+    lerDeixarComida(eventoDeixarComida(this.e.tick, tipo, x, y));
+  }
+  /** v12: a racao no mundo e o contato do alimentar de hoje (MotorMundo._aplicar_deixar_comida): no laco, o mundo e o cerebro; aqui, o
+      chamado do bebe, a memoria por espacos, o vinculo e o historico, como o alimentar dos v11 */
+  private _deixarComida(tipo: string, x: number, y: number): void {
+    this._validarComida(tipo, x, y);
+    this._conferirMorte(); this._vivo();
+    const t = this.e.tick, laco = this.v11!.laco as MotorCorpoMundo;
+    laco.comidaDoDono(tipo, x, y);
+    this.e = laco.estado;
+    if (this.estagioAtual === "bebe") this._atender("alimentar");
+    this.pol.receberAcaoDono("alimentar", t);
+    this.nDono++;
+    this.vinc.acaoDono("alimentar", t, this.acao, this.nDono);
+    this._hist({ t, quem: "dono", a: "alimentar" });
   }
   private _aplicar(a: AcaoDono): void {
     if (this.versao >= 11) { this._aplicarV11(a); return; }
@@ -1221,7 +1258,8 @@ export class Motor {
       ...(this.fronteira ? [["fronteira", this.instalacoes]] : []), ...(this.salao.tentativas ? [["salao", this.salao]] : []),
       ...(this.versao >= 7 ? [[this.men, this.honestidadeEspecie]] : []),
       ...(this.versao >= 8 ? [this.conf!.assinatura()] : []),
-      ...(this.v11 ? [["v11", this.v11.braco.cerebro.estadoInterno(), this.v11.laco.estadoDict(), this.v11.laco.proximaDecisao]] : [])]);
+      ...(this.v11 ? [["v11", this.v11.braco.cerebro.estadoInterno(), this.v11.laco.estadoDict(), this.v11.laco.proximaDecisao]] : []),
+      ...(this.versao >= 12 ? [["mundo", this.mundo!.resumo(), [...(this.v11!.laco as MotorCorpoMundo).vistosEm]]] : [])]);
   }
   /** v8 (M1): a frase de estado da confianca agora (null nos v1-v7) */
   estadoConfianca(): ReturnType<ConfiancaCombate["estado"]> | null { return this.conf ? this.conf.estado(this.e.tick) : null; }
@@ -1242,6 +1280,14 @@ export class Motor {
       case "u": this._liberar(ev[2].n); break;
       case "i": this._item(ev[2].op, ev[2].id); break;
       case "k": this._armarCarta(ev[2].id); break;
+      case "dc": {
+        const c = ev[2] as unknown;
+        if (!c || typeof c !== "object" || Object.keys(c).sort().join() !== "tipo,x,y")
+          throw new Error(`evento de comida inválido no registro (tick ${t}): ${JSON.stringify(c)}`);
+        const { tipo, x, y } = c as Record<string, unknown>;
+        this._validarComida(tipo, x, y);
+        this._deixarComida(tipo as string, x as number, y as number); break;
+      }
       case "f":
         if (!ev[2] || typeof ev[2] !== "object" || Object.keys(ev[2]).length !== 1 || ev[2].campeao !== true)
           throw new Error(`evento da Fronteira inválido no registro (tick ${t}): ${JSON.stringify(ev[2])}`);

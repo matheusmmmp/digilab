@@ -123,7 +123,7 @@ describe("o painel no Motor", () => {
   test("so nos v11 (PW-7); antes da primeira decisao, so o que aprendeu (nada, no recem-nascido)", () => {
     expect(new Motor(4242, 10).digibrain()).toBeNull();
     const m = new Motor(4242);
-    expect(m.versao).toBe(11);
+    expect(m.versao).toBe(12);                                      /* os v12 (o v11 com o mundo) tambem */
     const p = m.digibrain()!;
     expect(p.decisao).toBeNull();
     expect(p.aprendido).toEqual([]);

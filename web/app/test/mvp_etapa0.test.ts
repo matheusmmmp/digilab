@@ -65,7 +65,7 @@ function pontos(semente: number, versao: number, log: Evento[]): { m: Motor; pts
 
 function gerar(): Gabarito {
   const vidas = VIDAS.map(([semente, dias, dono]) => {
-    const m = new Motor(semente);
+    const m = new Motor(semente, 11);                    // o v11 de hoje (os ovos novos sao v12 desde a etapa 1)
     viverDias(m, dias, dono);
     const log = JSON.parse(JSON.stringify(m.log)) as Evento[];
     const { pts } = pontos(semente, m.versao, log);
@@ -108,7 +108,7 @@ describe("G2 do MVP (etapa 0): o lado TS de hoje", () => {
 
   test("o mesmo roteiro, jogado de novo hoje, da o mesmo log (o dono e o motor deterministas)", () => {
     const [semente, dias, dono] = VIDAS[0];
-    const m = new Motor(semente);
+    const m = new Motor(semente, 11);
     viverDias(m, dias, dono);
     expect(JSON.parse(JSON.stringify(m.log))).toEqual(G.vidas[0].log);
   });

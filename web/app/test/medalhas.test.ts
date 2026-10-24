@@ -54,7 +54,7 @@ describe("pets v1-v5 nao mudam", () => {
     expect(m.requisitosEvolucao()?.medalhas ?? null).toBeNull();
     expect(() => m.liberar(1)).toThrow(/v6/);
   });
-  test("ovos novos sao v11 (v6 + confianca + combate equilibrado + vinculo B + o cerebro A e o corpo)", () => { expect(VERSAO_PET).toBe(11); expect(new Motor(1).versao).toBe(11); });
+  test("ovos novos sao v12 (v6 + confianca + combate equilibrado + vinculo B + o cerebro A e o corpo + o mundo fisico)", () => { expect(VERSAO_PET).toBe(12); expect(new Motor(1).versao).toBe(12); });
 });
 
 describe("a trava (pets v6)", () => {

@@ -108,8 +108,8 @@ describe("combate V21E: so nos pets v9", () => {
     for (const v of [1, 2, 3, 4, 5]) { expect(regrasDaVersao(v)).toBeNull(); expect(new Motor(123, v).regras).toBeNull(); }
     for (const v of [6, 7, 8]) { expect(regrasDaVersao(v)).toBe(CV21D); expect(new Motor(123, v).regras).toBe(CV21D); }
     expect(regrasDaVersao(9)).toBe(CV21E);
-    expect(new Motor(123).versao).toBe(11);                       /* o v10 (vinculo B) e o v11 (o cerebro A) herdam a V21E */
-    for (const v of [10, 11]) { expect(regrasDaVersao(v)).toBe(CV21E); expect(new Motor(123, v).regras).toBe(CV21E); }
+    expect(new Motor(123).versao).toBe(12);                       /* o v10 (vinculo B), o v11 (o cerebro A) e o v12 (o mundo) herdam a V21E */
+    for (const v of [10, 11, 12]) { expect(regrasDaVersao(v)).toBe(CV21E); expect(new Motor(123, v).regras).toBe(CV21E); }
   });
 
   test("bots: as quatro formas da V21E com a lista nova so contra pet v9; o resto igual a V21D", () => {

@@ -33,8 +33,8 @@ export interface PoliticaCorpo {
   mudancaNoCorpo(antes: ObservacaoLobos, depois: ObservacaoLobos): void;
 }
 
-/** um evento do log do Python (events.py): o avanco e a acao do dono */
-export interface EventoCorpo { tick: number; tipo: "avanco" | "acao_usuario"; valor: number | string }
+/** um evento do log do Python (events.py): o avanco e a acao do dono (e, no laco com o mundo dos v12, a comida deixada pelo dono) */
+export interface EventoCorpo { tick: number; tipo: "avanco" | "acao_usuario" | "deixar_comida"; valor: number | string }
 
 /** as acoes do dono que o v11 aceita: as quatro de cuidado e o tapa (o carinho e o tapa sao gestos, CD-6) */
 export const ACOES_DONO_V11 = ["alimentar", "limpar", "brincar", "acariciar", VALOR_TAPA] as const;
@@ -63,11 +63,13 @@ export class MotorCorpo {
   /** quantas vezes o gancho `consequenciaCorpo` e o `mudancaNoCorpo` (o carinho) foram chamados */
   consequencias = 0;
   mudancas = 0;
-  private readonly rngAmbiente: RandomPy;
-  private readonly rngPolitica: RandomPy;
-  private estimulos: (string | number)[][] = [];
+  protected readonly rngAmbiente: RandomPy;
+  protected readonly rngPolitica: RandomPy;
+  protected estimulos: (string | number)[][] = [];
 
-  constructor(politica: PoliticaCorpo, semente: number, cc: ConfigCorpo = CCO_CORPO_V11, estado: EstadoVida = estadoNascimentoPy()) {
+  /** `comMundo`: o corpo do laco com o mundo fisico (motor_corpo_mundo.ts, os v12), com a curiosidade (CD-8); os v11 nascem sem */
+  constructor(politica: PoliticaCorpo, semente: number, cc: ConfigCorpo = CCO_CORPO_V11, estado: EstadoVida = estadoNascimentoPy(),
+              comMundo = false) {
     if (!Number.isSafeInteger(semente)) throw new Error(`semente do motor tem de ser inteira: ${semente}`);
     if (!cc.ligada || !cc.drives_novos || !cc.gestos) {
       throw new Error("o laco do v11 e o do regime `corpo`: ConfigCorpo ligada, com os drives novos e os gestos");
@@ -77,7 +79,7 @@ export class MotorCorpo {
     this.cc = cc;
     this.rngAmbiente = new RandomPy(semente);
     this.rngPolitica = new RandomPy(semente + DESLOCAMENTO_RNG_POLITICA);
-    this.corpo = Corpo.deEstado(estado, { cc });
+    this.corpo = Corpo.deEstado(estado, { cc, comMundo });
     this.estado = this.corpo.noEstado(estado);
   }
 
@@ -121,19 +123,19 @@ export class MotorCorpo {
     return { v: vetor(this.estado), tdc: this.estado.tick - this.estado.ultimoCuidado, corpo: this.corpo.receptores() };
   }
 
-  private conferirSincronia(onde: string): void {
+  protected conferirSincronia(onde: string): void {
     const leitura = this.corpo.drives();
     const fora = DRIVES.filter((d) => this.estado[d] !== leitura[d]);
     if (fora.length) throw new ForaDoCorpo(`${onde}, tick ${this.estado.tick}: drive mudado por fora do corpo ${fora}`);
   }
 
-  private conferirEstimulo(onde: string, permitidos: ReadonlySet<string>): void {
+  protected conferirEstimulo(onde: string, permitidos: ReadonlySet<string>): void {
     const leitura = this.corpo.drives();
     const fora = DRIVES.filter((d) => !permitidos.has(d) && this.estado[d] !== leitura[d]);
     if (fora.length) throw new ForaDoCorpo(`${onde}, tick ${this.estado.tick}: drive mudado por fora do estimulo ${fora}`);
   }
 
-  private sincronizar(): void {
+  protected sincronizar(): void {
     this.estado = this.corpo.noEstado(this.estado);
   }
 
@@ -153,7 +155,7 @@ export class MotorCorpo {
 
   /** MotorCorpo._decidir, sem a bola e sem o mundo: a decisao, o efeito do pet (o float so deixa o dormindo), a transicao, a atividade
    *  do tedio e o gancho do corpo */
-  private decidir(produzidas: [number, AcaoPet][]): void {
+  protected decidir(produzidas: [number, AcaoPet][]): void {
     const intervalo = C.intervalo;
     const obs = this.observacao();
     const acao = this.politica.agir(obs, this.rngPolitica);
@@ -182,8 +184,11 @@ export class MotorCorpo {
   }
 
   // ------------------------------------------------------------ o dono (MotorCorpo._aplicar_acao_usuario e MotorComFeedback)
-  private aplicarAcaoUsuario(acao: string): void {
-    if (!(ACOES_DONO_V11 as readonly string[]).includes(acao)) {
+  /** as acoes do dono que este laco aceita (as do v11; o laco com o mundo troca) */
+  protected acoesAceitas(): readonly string[] { return ACOES_DONO_V11; }
+
+  protected aplicarAcaoUsuario(acao: string): void {
+    if (!this.acoesAceitas().includes(acao)) {
       throw new Error(`acao do dono fora do v11: ${acao} (so ${ACOES_DONO_V11}; o v11 nao tem elogio nem bronca)`);
     }
     const a = acao as AcaoDonoV11;
