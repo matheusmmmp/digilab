@@ -1479,3 +1479,171 @@ test("treino: sem o atlas, a sala em CSS, o pet de reserva e os ícones de reser
   await expect(page.locator(".trn-pet .evm-spr--reserva")).toBeVisible();
   await expect(page.locator(".treino-grade .treino-ic--reserva")).toHaveCount(6);
 });
+
+/* ---------------------------------------------------------------- o mundo no jogo, etapa 2 (docs/TAREFA_V2_MVP_MUNDO_PRODUTO.md: o
+   E2E-COMIDA e o E2E-CENA). save_mundo.json (e2e/gerar_save_mundo.mjs): um Gomamon v12 com fome, que come a racao posta perto dele em
+   qualquer ponto da proxima hora de jogo (o relogio do app anda enquanto o teste mexe). A tela poe a racao pelo gesto (arrastar "Por
+   racao" e soltar no chao), pelo toque (tocar no botao e depois no chao) e pelo teclado (um lugar nomeado); a cena (3D e a reserva) desenha
+   o pet e a racao onde o motor diz. Os dados vem do motor por window.__digilab (so leitura) */
+const SAVE_MUNDO = JSON.parse(readFileSync(new URL("./save_mundo.json", import.meta.url), "utf8"));
+type MundoE2e = { pet: [number, number]; comedouro: [number, number]; comidas: { id: number; x: number; y: number; situacao: string | null }[];
+  consumos: { id: number; tick: number; situacao: string; fome_antes: number; fome_depois: number }[]; fome: number; acao: string;
+  lugares: Record<"comedouro" | "perto" | "longe", [number, number]> };
+const lerMundo = (page: Page) => page.evaluate(() => (window as any).__digilab.mundo() as MundoE2e);
+const lerCena = (page: Page) => page.evaluate(() => (window as any).__digilab.cena() as { pet: [number, number]; modo3d: boolean } | null);
+const naTela = (page: Page, x: number, y: number) => page.evaluate(([a, b]) => (window as any).__digilab.cenaPara(a, b) as [number, number], [x, y] as const);
+const ultimoDc = async (page: Page) => JSON.parse(await page.evaluate(() => (window as any).__digilab.registro())).log.filter((e: unknown[]) => e[1] === "dc").at(-1);
+/** arrasta "Por racao" ate o ponto do cliente, com o mouse (o gesto) */
+async function arrastarRacao(page: Page, alvo: [number, number]): Promise<void> {
+  const b = (await page.locator(".racao-bt").boundingBox())!;
+  await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(b.x + b.width / 2 + 20, b.y - 20, { steps: 4 });
+  await page.mouse.move(alvo[0], alvo[1], { steps: 12 });
+  await page.mouse.up();
+}
+/** o pet come a racao `id` (o E2E-COMIDA): a refeicao entra nos consumos do motor, madura, e a fome cai (a saciedade sobe) */
+async function esperarComer(page: Page, id: number): Promise<void> {
+  await expect.poll(async () => (await lerMundo(page)).consumos.some(c => c.id === id), { timeout: 90_000, message: "o pet comeu a ração posta" }).toBe(true);
+  const c = (await lerMundo(page)).consumos.find(x => x.id === id)!;
+  expect(c.situacao).toBe("madura");
+  expect(c.fome_depois, "a fome cai: a saciedade sobe").toBeGreaterThan(c.fome_antes);
+}
+/** a cena segue o motor (o E2E-CENA): a posicao desenhada do pet chega a do motor */
+async function cenaSegueMotor(page: Page): Promise<void> {
+  await expect.poll(async () => {
+    const [m, c] = [await lerMundo(page), await lerCena(page)];
+    return c ? Math.hypot(c.pet[0] - m.pet[0], c.pet[1] - m.pet[1]) : 1e9;
+  }, { timeout: 10_000, message: "a posição desenhada do pet segue a do motor" }).toBeLessThan(1);
+}
+for (const [nome, largura, semWebGL] of [["a cena 3D", 390, false], ["a reserva sem WebGL", 390, true], ["a cena 3D no desktop", 1280, false]] as const) {
+  test(`mundo: arrastar a ração até o chão, o pet anda até ela e come, com ${nome}`, async ({ browser }) => {
+    test.setTimeout(180_000);
+    const ctx = await browser.newContext({ baseURL: test.info().project.use.baseURL, viewport: { width: largura, height: largura >= 1100 ? 800 : 844 } });
+    const page = await ctx.newPage();
+    if (semWebGL) await page.addInitScript(() => {
+      const orig = HTMLCanvasElement.prototype.getContext;
+      HTMLCanvasElement.prototype.getContext = function (this: HTMLCanvasElement, tipo: string, ...r: unknown[]) {
+        return /webgl/.test(tipo) ? null : (orig as (...a: unknown[]) => unknown).call(this, tipo, ...r);
+      } as typeof orig;
+    });
+    await semear(page, SAVE_MUNDO);
+    const erros = vigiarErros(page);
+    await page.goto(APP + "#/pet/estado");
+    await expect(page.locator(semWebGL ? ".pet-cena .cena-mundo" : ".pet-cena .cena3d")).toBeVisible();
+    await expect(page.locator(semWebGL ? ".pet-cena .cena3d" : ".pet-cena .cena-mundo")).toHaveCount(0);
+    await expect.poll(() => lerCena(page)).not.toBeNull();
+    await cenaSegueMotor(page);
+    await expect(page.locator(".mundo-info")).toContainText("rações no chão");
+    /* o gesto: soltar 2 celulas a leste do pet (o "perto"), no ponto da tela que a vista da */
+    const m0 = await lerMundo(page), alvo = m0.lugares.perto, ids0 = m0.comidas.map(c => c.id);
+    await arrastarRacao(page, await naTela(page, alvo[0], alvo[1]));
+    const dc = await ultimoDc(page);
+    expect(dc[2].tipo).toBe("racao");
+    expect(Math.abs(dc[2].x - alvo[0]) + Math.abs(dc[2].y - alvo[1]), "o ponto solto vira a posição do mapa").toBeLessThanOrEqual(2);
+    const nova = (await lerMundo(page)).comidas.find(c => !ids0.includes(c.id))!;
+    expect([nova.x, nova.y]).toEqual([dc[2].x, dc[2].y]);
+    await expect(page.locator(".racao-dica")).toContainText("Ração posta na casa.");
+    /* a cena desenha a racao onde o motor diz (no 3D, o ponto do mapa volta ao mesmo ponto da tela; na reserva, o elemento) */
+    if (semWebGL) await expect(page.locator(".cena-mundo-racao")).toHaveCount((await lerMundo(page)).comidas.filter(c => c.situacao).length);
+    await esperarComer(page, nova.id);
+    await cenaSegueMotor(page);
+    expect(erros).toEqual([]);
+    await ctx.close();
+  });
+}
+test("mundo: o caminho acessível, pelo toque no chão e por um lugar nomeado pelo teclado; Esc fecha sem pôr nada", async ({ page }) => {
+  test.setTimeout(180_000);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await semear(page, SAVE_MUNDO);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/pet/estado");
+  await expect.poll(() => lerCena(page)).not.toBeNull();
+  const bt = page.getByRole("button", { name: /^Pôr ração/ });
+  /* o toque: tocar no botao abre a faixa; tocar no chao poe ali */
+  await bt.click();
+  await expect(page.locator(".racao-faixa")).toContainText("Toque no chão para pôr a ração");
+  await expect(bt).toHaveAttribute("aria-pressed", "true");
+  const m0 = await lerMundo(page), [cx, cy] = await naTela(page, m0.lugares.perto[0] + 32, m0.lugares.perto[1]);
+  await page.mouse.click(cx, cy);
+  await expect(page.locator(".racao-faixa")).toHaveCount(0);
+  const dc1 = await ultimoDc(page);
+  expect(Math.abs(dc1[2].x - (m0.lugares.perto[0] + 32)) + Math.abs(dc1[2].y - m0.lugares.perto[1])).toBeLessThanOrEqual(2);
+  /* Esc fecha sem por nada */
+  const n1 = JSON.parse(await page.evaluate(() => (window as any).__digilab.registro())).log.filter((e: unknown[]) => e[1] === "dc").length;
+  await bt.focus();
+  await page.keyboard.press("Enter");
+  await expect(page.locator(".racao-faixa")).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.locator(".racao-faixa")).toHaveCount(0);
+  expect(JSON.parse(await page.evaluate(() => (window as any).__digilab.registro())).log.filter((e: unknown[]) => e[1] === "dc").length).toBe(n1);
+  /* o teclado: Enter abre, o foco vai ao Comedouro; Tab ao "Perto do pet" e Enter poe exatamente no lugar nomeado */
+  await bt.focus();
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("button", { name: "Comedouro", exact: true })).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(page.getByRole("button", { name: "Perto do pet", exact: true })).toBeFocused();
+  const perto = (await lerMundo(page)).lugares.perto;
+  await page.keyboard.press("Enter");
+  const dc2 = await ultimoDc(page);
+  expect([dc2[2].x, dc2[2].y]).toEqual(perto);
+  expect(erros).toEqual([]);
+});
+test("mundo: soltar fora do chão não põe nada; recarregar refaz a vida com a ração do registro", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await semear(page, SAVE_MUNDO);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/pet/estado");
+  await expect.poll(() => lerCena(page)).not.toBeNull();
+  const reg = async () => JSON.parse(await page.evaluate(() => (window as any).__digilab.registro())).log as unknown[][];
+  const n0 = (await reg()).filter(e => e[1] === "dc").length;
+  /* no ceu da cena (acima do chao) e fora da cena: nenhum evento */
+  const caixa = (await page.locator(".pet-cena").boundingBox())!;
+  await arrastarRacao(page, [caixa.x + caixa.width / 2, caixa.y + 8]);
+  await arrastarRacao(page, [caixa.x + caixa.width / 2, caixa.y + caixa.height + 120]);
+  expect((await reg()).filter(e => e[1] === "dc").length).toBe(n0);
+  await expect(page.locator(".racao-dica")).toContainText("fora do mapa nada é posto");
+  /* pelo teclado, e recarregar: o evento dc fica no registro, e a vida refeita tem a racao no mesmo lugar */
+  await page.getByRole("button", { name: /^Pôr ração/ }).click();
+  await page.getByRole("button", { name: "Longe", exact: true }).click();
+  const antes = await reg(), dc = antes.filter(e => e[1] === "dc").at(-1)!, i = antes.lastIndexOf(dc);
+  await page.reload();
+  await expect.poll(() => lerCena(page)).not.toBeNull();
+  const depois = await reg();
+  expect(depois.slice(0, i + 1)).toEqual(antes.slice(0, i + 1));
+  const m = await lerMundo(page), p = dc[2] as { x: number; y: number };
+  expect(m.comidas.some(c => c.x === p.x && c.y === p.y) || m.consumos.length > 0).toBe(true);
+  expect(erros).toEqual([]);
+});
+test("mundo: o Alimentar dos v12 é a reserva temporária, descrita assim, e põe a ração no comedouro", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await semear(page, SAVE_MUNDO);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/pet/estado");
+  const al = page.getByRole("button", { name: "Alimentar (reserva: põe a ração no comedouro)" });
+  await expect(al).toHaveAttribute("title", "Reserva temporária: põe a ração no comedouro");
+  await expect(page.locator(".racao-dica")).toContainText("Alimentar é a reserva: põe no comedouro.");
+  await al.click();
+  const dc = await ultimoDc(page), m = await lerMundo(page);
+  expect([dc[2].x, dc[2].y]).toEqual(m.comedouro);
+  expect(erros).toEqual([]);
+});
+/* o ovo de um pet novo (v12) chocando na cena 3D: a contagem dos quadros do ovo continua no PalcoPet com a cena 3D (o conserto do #398) */
+test("mundo: o ovo novo choca na cena 3D", async ({ page }) => {
+  await page.goto("/Assets/digilab_atlas_up.json");
+  await page.evaluate(([c, s]) => {
+    localStorage.clear(); localStorage.setItem(c + "-boas-vindas", "1"); localStorage.setItem(c + "-dicas-ligadas", "0");
+    localStorage.setItem(c, s); localStorage.setItem(c + "-guardados", "[]");
+  }, [CHAVE, JSON.stringify(SAVES.v3)] as const);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/pet/estado");
+  await page.locator("dialog.med-aviso[open]").getByRole("button", { name: "Escolher o brasão do ovo novo" }).click();
+  await page.locator("dialog.brasao-tela[open] .br-card").first().click();
+  await expect(page.locator(".pet-cena .cena3d")).toBeVisible();
+  await expect.poll(() => page.evaluate(() => document.querySelector<HTMLCanvasElement>(".cena3d canvas")?.width ?? 0)).toBeGreaterThan(0);
+  const lcd = page.locator(".pet-cena canvas.lcd");
+  await expect(lcd).toHaveAttribute("aria-label", "Tela do pet: ovo");
+  await expect(lcd).not.toHaveAttribute("aria-label", "Tela do pet: ovo", { timeout: 20_000 });
+  await expect(page.locator(".mundo-info")).toBeVisible();
+  expect(erros).toEqual([]);
+});

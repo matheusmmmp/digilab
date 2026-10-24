@@ -4,8 +4,8 @@ Pranchas novas desenhadas fora do canvas e guardadas no repositório **sem image
 - o pet, os ícones da barra e o brasão são placeholders originais (vetor);
 - o fundo hexagonal fica de fora (`--dl-img-hex: none`).
 
-A cópia com os sprites e as imagens de `img/` fica em `D:\Trab\digilab\Assets\Pranchas_UP\`, fora do repositório (uso pessoal, regra dos
-assets do `CLAUDE.md`), listada no `index.html` de lá.
+A cópia com os sprites e as imagens de `img/` fica em `D:\Trab\digilab\Assets\Pranchas_UP\`, fora do repositório (a regra dos
+assets: `docs/UI_GUIDELINES.md`, seção 5.1), listada no `index.html` de lá.
 
 Tokens e componentes: `../dl-up.css` (`--dl-*`, `dl-*`). Medidas e casca: `docs/estilo_up/DIRETRIZES_REPLICAR.md`. Para abrir com o CSS,
 sirva a pasta por HTTP, por exemplo pelo `servidor_local.py`.

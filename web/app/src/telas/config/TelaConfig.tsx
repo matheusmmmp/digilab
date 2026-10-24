@@ -59,7 +59,7 @@ function Principal({ abrir, atual = null }: { abrir: (p: ParteConfig) => void; a
       <Linha ic={<Deco nome={ICONE.registro} />} titulo="Registro e replay" resumo={`semente ${m.semente} · ${m.log.length} eventos · exportar`} abrir={() => abrir("dados")} atual={atual === "dados"} />
       <Linha ic={<Deco nome={ICONE.tempo} />} titulo="Tempo" tag="TESTE" resumo={velocidade === 0 ? "pausado" : `velocidade ${nomeVelocidade(velocidade)}`} abrir={() => abrir("dados")} />
       <h2 className="cfg-secao">SOBRE</h2>
-      <Linha ic={<Deco nome="Digivice_Circle_01" />} titulo="Sobre o Digilab" resumo="versão, créditos e uso pessoal" abrir={() => abrir("sobre")} atual={atual === "sobre"} />
+      <Linha ic={<Deco nome="Digivice_Circle_01" />} titulo="Sobre o Digilab" resumo="versão, créditos e procedência" abrir={() => abrir("sobre")} atual={atual === "sobre"} />
       <div className="cfg-linha cfg-linha--off" aria-disabled="true">
         <span className="cfg-ic" aria-hidden="true">♪</span>
         <span className="cfg-txt"><b>Som</b><small>o jogo ainda não tem som (proposta; desligado)</small></span>
@@ -181,8 +181,10 @@ function Sobre() {
       </div>
       <section className="dl-card cfg-bloco"><h2 className="cfg-bloco-tit">Sobre</h2>
         <p>Um pet virtual que aprende com o dono. O estado nunca é salvo, só o registro do que aconteceu; a vida é refeita a partir dele, sempre igual.</p></section>
-      <section className="dl-card cfg-bloco"><h2 className="cfg-bloco-tit">Só para uso pessoal</h2>
-        <p>Sprites, ícones e fundos do Digimon UP (Bandai), usados só neste computador como protótipo. Não publicar nem distribuir.</p></section>
+      {/* a procedencia dos assets (docs/UI_GUIDELINES.md, secao 5.1; a MV-6, decisao definitiva do Matheus de 2026-10-24) */}
+      <section className="dl-card cfg-bloco"><h2 className="cfg-bloco-tit">Créditos e procedência</h2>
+        <p>Os sprites, os ícones e os fundos são do Digimon UP (Bandai), com o crédito, e o uso neste projeto foi autorizado pelo Matheus. O atlas
+          fica fora do repositório; sem ele, o jogo usa os sprites de reserva, de arte própria.</p></section>
     </div>
   );
 }

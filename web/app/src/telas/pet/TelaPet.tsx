@@ -27,6 +27,7 @@ import { abrirEscolhaBrasao } from "../../jornada.ts";
 import { useTempo } from "../../tempo.ts";
 import { PalcoPet } from "./PalcoPet.tsx";
 import { CenaPet } from "./CenarioPet.tsx";
+import { BarraRacao, FaixaRacao, InfoMundo } from "./PorRacao.tsx";
 import { useDesktop } from "../../desktop.ts";
 import { Folha } from "../../componentes/Folha.tsx";
 import { BotaoDigiBrain, ConteudoDigiBrain, SeloDigiBrain } from "../../componentes/DigiBrain.tsx";
@@ -414,7 +415,11 @@ function AcoesPet() {
   const sugerida = resumoAgora(m, nascendo).acao;
   const destaque = [...new Set([...(sugerida ? [sugerida] : []), ...DESTAQUE_PADRAO])].filter(a => todas.includes(a)).slice(0, 3);
   const resto = todas.filter(a => !destaque.includes(a));
-  const botao = (a: AcaoDono, cls: string) => <button type="button" key={a} className={`dl-btn ${cls}`} onClick={() => agir(a)}><IconeAcao a={a} /><span>{ROTULO_DONO[a]}</span></button>;
+  /* v12: o Alimentar e a reserva temporaria do MVP (poe a racao no comedouro); a interacao planejada e por a racao no lugar (BarraRacao) */
+  const reserva = (a: AcaoDono) => !!m.mundo && a === "alimentar";
+  const botao = (a: AcaoDono, cls: string) => <button type="button" key={a} className={`dl-btn ${cls}`} onClick={() => agir(a)}
+    aria-label={reserva(a) ? `${ROTULO_DONO[a]} (reserva: põe a ração no comedouro)` : undefined} title={reserva(a) ? "Reserva temporária: põe a ração no comedouro" : undefined}>
+    <IconeAcao a={a} /><span>{ROTULO_DONO[a]}</span>{reserva(a) && <small className="acao-reserva">reserva</small>}</button>;
   return (
     <div className="acoes-pet" role="group" aria-label="Cuidar e ensinar">
       {destaque.map((a, i) => botao(a, i === 0 && sugerida === a ? "acao-destaque acao-destaque--sugerida" : "dl-btn--sec acao-destaque"))}
@@ -486,16 +491,18 @@ function TelaPetDesktop({ irRegistro, irEvolucao }: { irRegistro: () => void; ir
       case "cenario": return (
         <Modulo icone={House} titulo="Habitat">
           <section className={"pet-cena" + (m.morte ? " pet-cena--morto" : "")} aria-label="O pet no quarto">
-            <CenaPet noite={eNoite(m.e.tick % TPD)} />
+            <CenaPet noite={eNoite(m.e.tick % TPD)} mundo={!!m.mundo} />
             {nascendo > 0 && <Deco nome="Digivice_Circle_01" className="ovo-anel gira" />}
             <PalcoPet />
             {nascendo === 0 && !m.morte && <BalaoFala v={fala} abrir={() => abrir.current?.("fala")} />}
             <BalaoCausa />
+            {m.mundo && <InfoMundo />}
+            {m.mundo && nascendo === 0 && !m.morte && <FaixaRacao />}
           </section>
         </Modulo>);
       case "acoes": return (
         <Modulo icone={Gamepad2} titulo="Ações">
-          <div className="pet-doca"><Prioridade abrirDetalhes={() => abrir.current?.("estado")} />{!m.morte && <AcoesPet />}</div>
+          <div className="pet-doca"><Prioridade abrirDetalhes={() => abrir.current?.("estado")} />{m.mundo && nascendo === 0 && !m.morte && <BarraRacao />}{!m.morte && <AcoesPet />}</div>
         </Modulo>);
       case "estado": return (
         <Modulo icone={Syringe} titulo="Estado atual" aside={<Emocao />}>
@@ -538,7 +545,7 @@ export function TelaPet({ abrirMeusPets, irConversar, abrirConfig, irRegistro, i
       <div className="pet-home-corpo">
         <div className="pet-home-principal">
           <section className={"pet-cena" + (m.morte ? " pet-cena--morto" : "")} aria-label="O pet no quarto">
-            <CenaPet noite={eNoite(m.e.tick % TPD)} />
+            <CenaPet noite={eNoite(m.e.tick % TPD)} mundo={!!m.mundo} />
             {nascendo > 0 && <Deco nome="Digivice_Circle_01" className="ovo-anel gira" />}
             <PalcoPet />
             <div className="cena-topo">
@@ -547,9 +554,12 @@ export function TelaPet({ abrirMeusPets, irConversar, abrirConfig, irRegistro, i
             </div>
             {nascendo === 0 && !m.morte && <BalaoFala v={fala} abrir={() => setDetalhes("fala")} />}
             <BalaoCausa />
+            {m.mundo && <InfoMundo />}
+            {m.mundo && nascendo === 0 && !m.morte && <FaixaRacao />}
           </section>
           <div className="pet-doca">
             <Prioridade abrirDetalhes={() => setDetalhes("estado")} />
+            {m.mundo && nascendo === 0 && !m.morte && <BarraRacao />}
             {!m.morte && <AcoesPet />}
           </div>
         </div>

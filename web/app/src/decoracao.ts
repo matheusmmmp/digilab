@@ -1,5 +1,5 @@
-/* Decoracao da interface com os assets do Digimon UP (Bandai; so uso pessoal e local): brasoes, aneis, icones,
-   molduras e os fundos das lutas da campanha (docs/ASSETS_UP.md). Fica FORA do repositorio, em
+/* Decoracao da interface com os assets do Digimon UP (Bandai; com o credito, autorizados pelo Matheus para este projeto: docs/UI_GUIDELINES.md,
+   secao 5.1): brasoes, aneis, icones, molduras e os fundos das lutas da campanha (docs/ASSETS_UP.md). Fica FORA do repositorio, em
    D:\Trab\digilab\Assets, gerada por Assets\gerar_decoracao_up.py; os nomes permitidos estao em
    decoracao_nomes.json (o vite e o servidor_local.py so servem esses). Cada peca e opcional: o que nao carregar
    entra na lista do aviso visivel e aquele lugar fica com o visual de antes. */

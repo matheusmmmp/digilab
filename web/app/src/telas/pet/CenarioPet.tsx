@@ -1,10 +1,13 @@
 /* Cenario da tela Pet (docs/TAREFA_V2_TELA_PET.md). O cenario e a vista 3D do POC (cena3d.ts, decisao do Matheus de 2026-10-19,
    opcao b), carregada por import dinamico ao abrir a tela; sem WebGL, ou se ela falhar, fica a reserva: um quarto 2.5D claro em CSS e
    SVG (parede com janela, paredes laterais em fuga, chao em perspectiva, uma planta e um movel baixo em grade de pixels). Os dois sao
-   so decoracao (aria-hidden): nenhum dado do jogo aqui, salvo o dia e a noite do motor e, na cena 3D, o pet. */
+   so decoracao (aria-hidden): nenhum dado do jogo aqui, salvo o dia e a noite do motor e, na cena 3D, o pet.
+   Nos pets v12 (o mundo fisico; docs/TAREFA_V2_MVP_MUNDO_PRODUTO.md, etapa 2), a cena 3D desenha o mapa do motor (o modo mundo) e a
+   reserva e a do mundo (MundoReserva.tsx): o pet, a racao e a bola nas posicoes do Motor.mundo. */
 import { useEffect, useRef, useState } from "react";
 import { CENA } from "./cenaEstado.ts";
 import { temWebGL } from "../../webgl.ts";
+import { MundoReserva } from "./MundoReserva.tsx";
 
 /* planta e movel em pixel art: cada letra e uma cor, "." e transparente */
 const PLANTA = [
@@ -81,8 +84,8 @@ function MedirCena() {
     </div>
   );
 }
-/** o cenario: a cena 3D (import dinamico) ou a reserva */
-export function CenaPet({ noite }: { noite: boolean }) {
+/** o cenario: a cena 3D (import dinamico) ou a reserva; `mundo`: o pet tem o mundo fisico (v12), e as duas desenham o mapa */
+export function CenaPet({ noite, mundo = false }: { noite: boolean; mundo?: boolean }) {
   const ref = useRef<HTMLCanvasElement>(null), [reserva, setReserva] = useState(() => !temWebGL());
   const medir = new URLSearchParams(location.search).get("medir3d") === "1";
   useEffect(() => {
@@ -96,8 +99,8 @@ export function CenaPet({ noite }: { noite: boolean }) {
       })
       .catch(err => { console.warn("cena 3D do Pet não carregou; fica o cenário de reserva:", err); if (vivo) setReserva(true); });
     return () => { vivo = false; parar?.(); };
-  }, [reserva]);
-  if (reserva) return <CenarioPet noite={noite} />;
+  }, [reserva, mundo]);
+  if (reserva) return mundo ? <MundoReserva /> : <CenarioPet noite={noite} />;
   return <>
     <div className={"cena3d" + (noite ? " cena3d--noite" : "")} aria-hidden="true"><canvas ref={ref} /></div>
     {medir && <MedirCena />}

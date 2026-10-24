@@ -2,7 +2,7 @@
   "name": "digilab-web",
   "private": true,
   "version": "0.0.0",
-  "description": "Jogo web do Digilab em TypeScript (TAREFA_FRONT_TS). Uso pessoal; repositorio privado.",
+  "description": "Jogo web do Digilab em TypeScript (TAREFA_FRONT_TS). Sprites do Digimon UP (Bandai) com o credito, autorizados pelo Matheus (docs/UI_GUIDELINES.md, 5.1).",
   "type": "module",
   "engines": {
     "node": ">=24"
