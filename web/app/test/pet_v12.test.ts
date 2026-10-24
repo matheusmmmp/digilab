@@ -7,7 +7,7 @@
        do alimentar de hoje, MV-9); o botao Alimentar poe a racao no comedouro (a reserva temporaria);
      - o carinho e o tapa ficam fora do mundo (MV-7) e o v12 nao tem elogio nem bronca, como o v11. */
 import { describe, expect, test } from "vitest";
-import { TPD, VERSAO_PET } from "../motor/constantes.ts";
+import { CMU_MVP, TPD, VERSAO_PET } from "../motor/constantes.ts";
 import { Motor } from "../motor/motor.ts";
 import { MotorCorpoMundo } from "../motor/motor_corpo_mundo.ts";
 import type { AcaoDono, EventoRegistro } from "../motor/tipos.ts";
@@ -38,6 +38,9 @@ describe("o pet v12 no Motor", () => {
     expect(m.mundo).not.toBeNull();
     expect(m.cerebro).not.toBeNull();
     expect("curiosidade" in m.observacaoAgora().corpo!).toBe(true);
+    /* o mundo do produto (a opcao 1 do Matheus, 2026-10-24): sem arvores, so a racao do jogador */
+    expect(m.mundo!.cm).toBe(CMU_MVP);
+    expect(m.mundo!.arvores).toEqual([]);
     expect(new Motor(4242, 11).mundo).toBeNull();
     expect("curiosidade" in new Motor(4242, 11).observacaoAgora().corpo!).toBe(false);
     for (const a of ["elogiar", "repreender", "petisco", "levar_ao_banheiro"] as AcaoDono[]) expect(() => m.observar(a)).toThrow(/v11/);
@@ -51,7 +54,6 @@ describe("o pet v12 no Motor", () => {
     expect(m.log[m.log.length - 1]).toEqual([m.e.tick, "dc", { tipo: "racao", x, y }]);
     expect(m.e.fome).toBe(fome);
     expect(m.e.ultimoCuidado).toBe(m.e.tick);
-    /* o id segue o das frutas que ja cairam: o relogio do mundo e o do pet, que nasce no tick 480 (o mundo anda desde o 0) */
     expect(m.mundo!.deixadas).toEqual([{ tick: m.e.tick, id: expect.any(Number), tipo: "racao", x, y, pet: [...m.mundo!.pet] }]);
     expect(m.mundo!.comidas.get(m.mundo!.deixadas[0].id as number)).toMatchObject({ tipo: "racao", x, y, origem: "dono" });
   });
@@ -67,6 +69,8 @@ describe("o pet v12 no Motor", () => {
       expect(doDono.every((c) => (c.fome_depois as number) > (c.fome_antes as number))).toBe(true);
       expect(mu.decisoes.some((d) => (d.deslocamento as number) > 0)).toBe(true);
       expect(mu.decisoes.some((d) => d.comeu !== null)).toBe(true);
+      expect(mu.quedas).toEqual([]);
+      expect(mu.consumos.every((c) => c.tipo === "racao" && c.origem === "dono")).toBe(true);
       /* G1: o replay do registro, evento a evento, e pelo caminho publico e pelo save (o JSON do registro) */
       const r = new Motor(semente, 12);
       for (const ev of m.log) r.aplicarEvento(ev);

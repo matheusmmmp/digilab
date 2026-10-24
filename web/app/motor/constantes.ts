@@ -415,6 +415,10 @@ export const CMU: ConfigMundo = {
   bola_min_celulas: 3, bola_max_celulas: 10, mult_bola_campo: 2, atrito: 8,
   perto_max_celulas: 2, longe_min_celulas: 20, longe_max_celulas: 30, raio_mancha_celulas: 3,
 };
+/* o mundo do produto no MVP (config.LAYOUT_MUNDO_MVP e CONFIG_MUNDO_MVP; a opcao 1 do Matheus de 2026-10-24): o layout padrao sem
+   arvores, so com a racao do jogador. So o pet v12 o usa; a pesquisa e os outros gabaritos seguem com o CMU. PROPOSTO, SEM FONTE. */
+export const LAYOUT_MUNDO_MVP: LayoutMundo = { ...LAYOUT_MUNDO_PADRAO, nome: "mvp", arvores: [] };
+export const CMU_MVP: ConfigMundo = { ...CMU, layout: LAYOUT_MUNDO_MVP };
 
 /* V2, o corpo do Creatures 3 por baixo dos drives (docs/TAREFA_V2_CORPO_DRIVES.md, etapa 7): espelho da ConfigCorpo de
    digilab/config.py, campo a campo (snake_case de proposito, conferido pelo nome contra o gabarito do Python). O motor do corpo e

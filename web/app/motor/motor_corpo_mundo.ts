@@ -1,6 +1,8 @@
 /* O laco do motor com o corpo e o mundo fisico, o dos pets v12 (docs/TAREFA_V2_MVP_MUNDO_PRODUTO.md, etapa 1; MV-1): o porte do
    com_corpo(MotorMundo) de digilab/motor_corpo.py e digilab/mundo.py, sobre o laco do v11 (motor_corpo.ts) e o Mundo (mundo.ts). O
-   gabarito e o test/gabaritos/mvp_mundo_python.json (experiments/exportar_gabarito_mvp_mundo.py), decisao a decisao.
+   gabarito e o test/gabaritos/mvp_mundo_python.json (experiments/exportar_gabarito_mvp_mundo.py), decisao a decisao, com o mundo da
+   pesquisa (o padrao); o pet v12 roda o mundo do produto (CMU_MVP, sem arvores, so a racao do jogador: a opcao 1 do Matheus de
+   2026-10-24), com o gabarito test/gabaritos/mvp_produto_python.json (experiments/exportar_gabarito_mvp_produto.py).
 
    O que muda do laco do v11, na ordem do Python:
      - o corpo nasce com o mundo (a curiosidade, CD-8);
@@ -20,7 +22,7 @@
    `paridade`: o laco aceita tambem o elogio e a bronca, como o MotorCorpo do Python, so para rejogar o gabarito (os donos sinteticos
    da etapa 0 os usam). O jogo nao liga: o v12, como o v11, nao tem elogio nem bronca. */
 import { C } from "./constantes.ts";
-import type { ConfigCorpo } from "./constantes.ts";
+import type { ConfigCorpo, ConfigMundo } from "./constantes.ts";
 import { CCO_CORPO_V11 } from "./corpo.ts";
 import { efeitoAcaoPet } from "./estado.ts";
 import { ACOES_DONO_V11, MotorCorpo, estadoNascimentoPy, type EventoCorpo, type PoliticaCorpo } from "./motor_corpo.ts";
@@ -39,6 +41,8 @@ export interface OpcoesLacoMundo {
   regra?: () => string | null;
   /** aceitar o elogio e a bronca (so a paridade com o gabarito do Python) */
   paridade?: boolean;
+  /** o mundo (o `cfg_mundo` do Python); sem ele, o da pesquisa (CMU, o layout padrao) */
+  cfgMundo?: ConfigMundo;
 }
 
 /** as acoes do dono no laco com o mundo: as do v11 sem o alimentar (ele vira o deixar_comida) */
@@ -56,7 +60,7 @@ export class MotorCorpoMundo extends MotorCorpo {
               opcoes: OpcoesLacoMundo = {}) {
     super(politica, semente, cc, estado, true);
     if (!cc.drives_novos) throw new Error("o laco com o mundo e o do regime `corpo` com os drives novos (a novidade e a atividade)");
-    this.mundo = new Mundo({ semente });
+    this.mundo = new Mundo({ semente, cfg: opcoes.cfgMundo });
     this.regra = opcoes.regra ?? (() => null);
     this.paridade = opcoes.paridade ?? false;
   }

@@ -15,7 +15,7 @@ import {
   type IdInstalacao, type Instalacao,
 } from "./instalacoes.ts";
 import { ESTAGIOS_SALAO, RIVAL_SALAO, VERSAO_SALAO, formaRivalSalao, rivalSalao, sementeSalao } from "./salao.ts";
-import { CIT, CIT_V9 } from "./constantes.ts";
+import { CIT, CIT_V9, CMU_MVP } from "./constantes.ts";
 import { cartaDe, chipDe, chipServe, estagioMinimo, itensDosV9, itensValem, porqueItensNaoValem, pontosComChips, vagasDeChip } from "./itens.ts";
 import { caraterDe, caraterPolitica, caraterV11, formaAdultaDe, linhaDoCarater, type QuandoCarater } from "./carater.ts";
 import { CCO_CORPO_V11 } from "./corpo.ts";
@@ -237,9 +237,11 @@ export class Motor {
         receberAcaoDono: (a, tick) => braco.receberAcaoDono(a, tick),
         mudancaNoCorpo: (antes, depois) => braco.mudancaNoCorpo(antes, depois),
       };
-      /* v12: o laco com o mundo fisico (MV-1); a regra de cada decisao vai ao registro do mundo, como o ultima_regra do Python */
+      /* v12: o laco com o mundo fisico (MV-1), o do produto (CMU_MVP: sem arvores, so a racao do jogador; a opcao 1 do Matheus de
+         2026-10-24); a regra de cada decisao vai ao registro do mundo, como o ultima_regra do Python */
       const laco = versao >= 12
-        ? new MotorCorpoMundo(politica, semente, CCO_CORPO_V11, estadoNascimentoPy(TICK_INICIAL), { regra: () => braco.cerebro.ultimaRegra })
+        ? new MotorCorpoMundo(politica, semente, CCO_CORPO_V11, estadoNascimentoPy(TICK_INICIAL),
+                              { regra: () => braco.cerebro.ultimaRegra, cfgMundo: CMU_MVP })
         : new MotorCorpo(politica, semente, CCO_CORPO_V11, estadoNascimentoPy(TICK_INICIAL));
       this.v11 = { braco, laco };
       this.e = this.v11.laco.estado;
