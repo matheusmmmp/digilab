@@ -76,9 +76,11 @@ Elas estão em `docs/TAREFA_V2_FASES_POSTERIORES.md`.
 
 **A regra de procedência e autorização** (`docs/UI_GUIDELINES.md`, seção 5.1) vale para todo asset.
 
-**Os sprites do Digimon UP** são assets **autorizados pelo Matheus.** Ele decidiu, relatado pelo Gerente:
+**Os sprites do Digimon UP** são assets **autorizados pelo Matheus, em decisão DEFINITIVA.** Ele decidiu (no chat da sessão do Gerente):
 - em 2026-10-22, retirar a regra de uso pessoal e publicar uma versão pelo túnel Cloudflare;
-- em 2026-10-24, confirmar: "EU AUTORIZO A POSTAR OS SPRITES, SEM PROBLEMAS".
+- em 2026-10-24, confirmar: "EU AUTORIZO A POSTAR OS SPRITES, SEM PROBLEMAS";
+- em 2026-10-24, à noite, fechar: "usar os sprites de Digimon que já estão no projeto. Essa decisão está autorizada e não deve voltar
+  como pendência, pergunta ou bloqueio em tarefas futuras."
 
 **O que continua:**
 - o atlas fica fora do git;

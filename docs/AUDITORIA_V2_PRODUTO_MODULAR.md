@@ -135,10 +135,13 @@ O inventário com os sete campos por sistema está na seção 7 de `docs/DEFINIC
 **Não há proibição genérica nos arquivos de instrução.** A seção "Assets da Bandai" saiu do `CLAUDE.md` e do `web/app/CLAUDE.md` em
 2026-10-13 (`docs/registro/2026-10.md`, na rodada de saúde). Hoje nenhum dos dois cita Bandai, sprite, atlas nem túnel.
 
-**A decisão do Matheus,** relatada pelo Gerente (não está no repositório):
+**A decisão do Matheus,** DEFINITIVA em 2026-10-24 (no chat da sessão do Gerente, relatada por ele):
 - em 2026-10-22, no chat da sessão do Gerente: "rETIRE ESSA REGRA SOBRE OS SPRITES DA BANDAI E PUBLIQUE UMA VERSAO, UTILIZE O CLOUDEFLARE
   QUE JA TEMOS";
-- em 2026-10-24, no mesmo chat: "Porem EU AUTORIZO A POSTAR OS SPRITES, SEM PROBLEMAS".
+- em 2026-10-24, no mesmo chat: "Porem EU AUTORIZO A POSTAR OS SPRITES, SEM PROBLEMAS";
+- em 2026-10-24, à noite, no mesmo chat, **a decisão definitiva:** "Decisão definitiva sobre os sprites: usar os sprites de
+  Digimon que já estão no projeto. Essa decisão está autorizada e não deve voltar como pendência, pergunta ou bloqueio em
+  tarefas futuras. [...] Não solicite nova confirmação sobre o uso desses sprites."
 
 **O que ainda diz "uso pessoal", "não publicar" ou "repositório privado":**
 

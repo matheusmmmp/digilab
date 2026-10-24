@@ -1,7 +1,8 @@
 # TAREFA V2 — MVP_MUNDO_PRODUTO: o mundo físico no jogo, com a comida posta pelo jogador (2026-10-24)
 
 Coordenador: Gerente (Claude Code). Worker: a definir (o A, dono da web, é o candidato natural). Worktree e branch: `v2-mvp-mundo-<etapa>`.
-Status: **ABERTA, só papel.** Nenhum código. As decisões MV-1 a MV-6 (seção 8) estão abertas.
+Status: **etapa 0 entregue** (os gabaritos, #401, 2026-10-24); **a etapa 1 liberada** pelas decisões de 2026-10-24 (seção 8):
+as MV-1, MV-3 a MV-5 e MV-7 a MV-9 DECIDIDAS pela recomendação, a MV-2 DECIDIDA com redação do Matheus, a MV-6 DECIDIDA (definitiva).
 
 Categoria: implementacao. Origem: Matheus, 2026-10-24, o PROMPT MESTRE (seção 7): o primeiro produto jogável, com o mundo físico
 integrado ao jogo. **Esta tarefa absorve o #399** (`docs/futuro/comida_arrastar.md`, que não foi mergeado). O conteúdo dele está
@@ -30,7 +31,7 @@ no replay?
 - o corpo do v11 (`MotorCorpo` em TS);
 - a cena 3D da Tela Pet (`src/telas/pet/cena3d.ts`) e a reserva (`CenarioPet.tsx`).
 
-**Decisões:** as MV-1 a MV-6.
+**Decisões:** as MV-1 a MV-9 (seção 8).
 
 ## 3. Mudança mínima (PROPOSTA)
 
@@ -55,6 +56,14 @@ no replay?
    - a cena 3D e a reserva desenham o pet e os objetos nas posições do motor, interpoladas;
    - a vista só lê;
    - a câmera e a interpolação ficam fora do log.
+
+7. **Pelos achados da etapa 0** (as MV-7 a MV-9):
+   - **o carinho e o tapa ficam fora do mundo,** como no v11: eventos diretos do dono ao pet (`receber_acao_dono`), sem proximidade
+     nem posição do dono; o mundo carrega só a comida e o lugar (MV-7);
+   - **o receptor `curiosidade` e os estímulos da novidade e da atividade** entram no corpo do TS nesta etapa, dentro do G-PAR; sem
+     mascarar campos do gabarito (MV-8);
+   - **comer no mundo tem o mesmo efeito no corpo que o botão "Alimentar"** (a ração tira da `fome` direto, como hoje); a diferença
+     é o comportamento (perceber, andar, consumir por iniciativa) e o evento no registro. **A digestão fica fora** (MV-9).
 
 **O que NÃO muda:** o `engine.py`; o cérebro A; os pets v1 a v11; o Python de pesquisa, salvo os gabaritos novos.
 
@@ -86,7 +95,8 @@ no replay?
 - as frutas do paladar no jogo (a CA-1 do #399, aqui a MV-3);
 - objetos além da comida (a bola, brinquedos);
 - dois pets e qualquer coisa online;
-- o lugar da comida como pergunta de pesquisa (a CA-2 do #399: a pergunta do dono está encerrada).
+- o lugar da comida como pergunta de pesquisa (a CA-2 do #399: a pergunta do dono está encerrada);
+- a digestão (o `alimento` do corpo) e a proximidade do dono: entram pelo inventário de órgãos do prompt mestre, atrás de chave (MV-7, MV-9).
 
 ## 7. Critérios de aceitação
 
@@ -98,16 +108,30 @@ no replay?
 
 ## 8. Precisa do Matheus
 
-Todas PROPOSTAS, com a recomendação primeiro.
+**Decididas em 2026-10-24 pelo Matheus** (relatado pelo Gerente, no chat da sessão do Gerente): as MV-1, MV-3, MV-4, MV-5 e MV-7 a MV-9
+pela recomendação; a MV-2 com a redação dele, abaixo; **a MV-6 DECIDIDA, em decisão definitiva dele** na mesma noite (abaixo).
 
-| # | decisão | recomendação | custo de errar |
+| # | decisão | recomendação / decisão | custo de errar |
 |---|---|---|---|
-| **MV-1** | a versão de pet do mundo | **uma versão nova (a próxima livre, v12)**, com o v11 intacto; o cérebro modular fica com a seguinte | pôr o mundo no v11: os saves dos v11 quebram |
-| **MV-2** | o cérebro no MVP | **o A v11 do jogo, com o alvo padrão do motor;** a troca pelo modular vem pela tarefa de integração | esperar o modular: o MVP espera a pesquisa de novo. Portar as chaves do mundo do A: trabalho num cérebro que deixa de ser o alvo |
-| **MV-3** | quais comidas se arrastam (CA-1) | **só a ração no MVP;** as frutas depois, com o paladar no TS | as frutas já: o paladar no TS (a etapa 5 do corpo) entra no caminho do MVP |
-| **MV-4** | o caminho acessível | **escolher a comida e tocar no chão, ou escolher um lugar nomeado (o comedouro, perto, longe) por teclado** | só o arrastar: o celular e o teclado ficam sem caminho |
-| **MV-5** | os limites (CA-3) | **os do motor do mundo de hoje** (quantas no chão, amadurecer, apodrecer); nada novo | inventar limites agora: número novo sem fonte |
-| **MV-6** | os textos de "uso pessoal" na tela (`TelaConfig.tsx:184-185`) e nos comentários do atlas | **trocar pelo crédito e pela procedência** (a regra de `docs/UI_GUIDELINES.md`, seção 5.1), junto com a primeira etapa de tela | manter: a tela contradiz a decisão do Matheus sobre os sprites |
+| **MV-1** (DECIDIDA) | a versão de pet do mundo | **uma versão nova (a próxima livre, v12)**, com o v11 intacto; o cérebro modular fica com a seguinte | pôr o mundo no v11: os saves dos v11 quebram |
+| **MV-2** (DECIDIDA, redação do Matheus) | o cérebro no MVP | **O cérebro A pode permanecer temporariamente no MVP para viabilizar o produto, mas apenas como implementação substituível, baseline e fallback condicional.** Roda com o alvo padrão do motor e sem ganhar as chaves do mundo. **A integração do cérebro modular segue como direção prioritária, com tarefa e gate explícitos** (`docs/TAREFA_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md` e `..._PRODUTO.md`), e **não depende de novas rodadas de validação do A nem de retrabalho estrutural do mundo.** **Critério de entrada do modular, em dois gates distintos:** (i) **o gate de compatibilidade**, o protótipo cumpre o `Protocol` `Politica`, passa o G-PAR Python/TS e o E2E-COMIDA desta tarefa no mesmo v12 (o laço do pet não muda; só a política) — ele demonstra a integração técnica e **não basta** para declarar aprendizado nem qualidade comportamental; (ii) **o gate de prontidão**, a avaliação do aprendizado e do comportamento do modular, que fica na tarefa própria do protótipo (`docs/TAREFA_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`), com o plano e os gates dela. O A só deixa de ser o cérebro do MVP com os dois. **Reavaliação da MV-2:** no PR da etapa 1 do protótipo modular, ou, antes, se a etapa 1 do MVP precisar de qualquer mudança no A além de ligá-lo ao laço | esperar o modular: o MVP espera a pesquisa de novo. Portar as chaves do mundo do A: trabalho num cérebro que deixa de ser o alvo |
+| **MV-3** (DECIDIDA) | quais comidas se arrastam (CA-1) | **só a ração no MVP;** as frutas depois, com o paladar no TS | as frutas já: o paladar no TS (a etapa 5 do corpo) entra no caminho do MVP |
+| **MV-4** (DECIDIDA) | o caminho acessível | **escolher a comida e tocar no chão, ou escolher um lugar nomeado (o comedouro, perto, longe) por teclado** | só o arrastar: o celular e o teclado ficam sem caminho |
+| **MV-5** (DECIDIDA) | os limites (CA-3) | **os do motor do mundo de hoje** (quantas no chão, amadurecer, apodrecer); nada novo | inventar limites agora: número novo sem fonte |
+| **MV-6** (DECIDIDA, definitiva) | os textos de "uso pessoal" na tela (`TelaConfig.tsx:184-185`) e nos comentários do atlas | **Usar os sprites de Digimon que já estão no projeto; trocar os textos pelo crédito e pela procedência** (`docs/UI_GUIDELINES.md`, seção 5.1), junto com a primeira etapa de tela (a etapa 2). **A decisão do Matheus, 2026-10-24, à noite, no chat da sessão do Gerente:** "Decisão definitiva sobre os sprites: usar os sprites de Digimon que já estão no projeto. Essa decisão está autorizada e não deve voltar como pendência, pergunta ou bloqueio em tarefas futuras. [...] Não solicite nova confirmação sobre o uso desses sprites." Antes, ela ficou PENDENTE por algumas horas, porque a autorização estava no repositório só como relato do Gerente; a decisão definitiva fecha isso. **Nenhuma tarefa futura reabre, pergunta ou bloqueia por causa dos sprites.** Continua: o atlas fora do git, o e2e com o sprite de reserva | manter "uso pessoal": a tela contradiz a decisão. Reabrir a pergunta: desobedece a decisão definitiva |
+| **MV-7** (DECIDIDA) | o canal do carinho e do tapa no v12 (achado da etapa 0: a bancada recusa o braço do v11 no mundo físico) | **ficam fora do mundo, como no v11:** eventos diretos do dono ao pet (`receber_acao_dono`), sem proximidade nem posição do dono; o mundo só carrega a comida e o lugar. É o que o gabarito da etapa 0 já faz (`com_corpo(MotorMundo)` + gestos como eventos). A proximidade do dono fica para a tarefa dos órgãos | passar os gestos pelo mundo agora: física do toque e posição do dono que o motor não tem; regra e número novos sem fonte |
+| **MV-8** (DECIDIDA) | a paridade de `curiosidade`, novidade e atividade (achado da etapa 0: o corpo do TS não os tem) | **portar os três ao corpo do TS na etapa 1,** dentro do G-PAR: o gabarito Python já os contém; paridade parcial (mascarar campos) não é paridade | não portar: o G-PAR falha ou vira comparação parcial; portar depois: o corpo do TS diverge do Python por uma etapa |
+| **MV-9** (DECIDIDA) | comer no mundo × o botão "Alimentar"; a digestão (achado da etapa 0: o corpo do v11 não tem digestão) | **o efeito no corpo é o mesmo nos dois caminhos** (a ração tira da `fome` direto, como hoje); a diferença é o comportamento e o evento no registro (`deixar_comida` com lugar × `alimentar`). **A digestão fica fora do MVP:** entra pelo inventário de órgãos do prompt mestre, como mecânica própria atrás de chave | digestão agora: mecânica nova com números sem fonte no caminho crítico; sem decidir: a etapa 1 inventa por conta |
+
+**Decidida na etapa 1 (2026-10-24, à noite), depois da parada do worker D:**
+
+| # | decisão | decisão do Matheus | custo de errar |
+|---|---|---|---|
+| **MV-10** (DECIDIDA) | o A v11 sem as chaves do mundo quebra ao comer fruta caída das árvores do layout padrão (`digilab/policies/lobos.py:1250`, `fruta_comida`; 9 de 30 vidas de diagnóstico, sementes de teste) | **A opção 1:** "No MVP v12, use um layout sem árvores, apenas com a ração do jogador. Limite essa configuração ao produto; preserve os cenários de pesquisa e os gabaritos existentes. Antes de implementar, registre o gabarito específico e confirme que o G-PAR compara o mesmo cenário em Python e TypeScript, sem mascarar campos nem alterar o cérebro A. Se não for possível manter essas condições, pare e reporte antes de mudar o escopo." A config do layout é PROPOSTA e só do produto; a bancada segue com o layout padrão | mudar o A (`fruta_comida` no-op): mexe no baseline congelado por um caso que a MV-3 já exclui do MVP. O laço não entregar `fruta_comida`: o jogo faz vidas que o Python não faz |
+
+Dois ajustes de engenharia da mesma parada, sem mecânica nem número, aprovados pelo Gerente como desvio: o laço do mundo em TS aceita
+`elogiar`/`repreender` só no modo de paridade (opção do construtor, padrão recusar; o jogo v12 recusa como o v11); e a correção do achado
+da etapa 0: o `Corpo` TS já tem `comMundo`, a curiosidade e os estímulos do mundo, falta o laço ligá-los (a MV-8 fica menor).
 
 ## 9. Resumo da etapa
 

@@ -160,11 +160,16 @@ Respeitar o zoom do navegador: tamanhos em `rem`, sem `maximum-scale`.
 - **Onde fica:** o atlas e os PNGs de terceiros continuam **fora do git** (em `D:\Trab\digilab\Assets\`). O e2e e as capturas rodam
   com o sprite de reserva (arte original, versionada).
 
-**Os sprites, os ícones e os fundos do Digimon UP (Bandai) são assets autorizados pelo Matheus.** A decisão dele, relatada pelo Gerente
-(não está no repositório):
+**Os sprites, os ícones e os fundos do Digimon UP (Bandai) são assets autorizados pelo Matheus.** A decisão dele, em três mensagens no
+chat da sessão do Gerente (relatadas pelo Gerente, como toda decisão dele neste repositório):
 - em 2026-10-22, no chat da sessão do Gerente: "rETIRE ESSA REGRA SOBRE OS SPRITES DA BANDAI E PUBLIQUE UMA VERSAO, UTILIZE O
   CLOUDEFLARE QUE JA TEMOS";
-- em 2026-10-24, no mesmo chat: "Porem EU AUTORIZO A POSTAR OS SPRITES, SEM PROBLEMAS".
+- em 2026-10-24, no mesmo chat: "Porem EU AUTORIZO A POSTAR OS SPRITES, SEM PROBLEMAS";
+- em 2026-10-24, à noite, no mesmo chat, **a decisão definitiva:** "Decisão definitiva sobre os sprites: usar os sprites de
+  Digimon que já estão no projeto. Essa decisão está autorizada e não deve voltar como pendência, pergunta ou bloqueio em
+  tarefas futuras. [...] Não solicite nova confirmação sobre o uso desses sprites."
+
+**A decisão é DEFINITIVA.** Não volta como pendência, pergunta ou bloqueio em tarefa nenhuma, e ninguém pede confirmação nova. O que vale daqui em diante é o crédito e a procedência pelo padrão desta seção.
 
 A publicação é feita pelo Matheus, pelo túnel do `servidor/servidor_local.py --remoto`. O crédito do Digimon UP (Bandai) continua no
 rodapé.
