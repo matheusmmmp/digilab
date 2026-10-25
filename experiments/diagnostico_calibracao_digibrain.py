@@ -24,18 +24,6 @@ sys.path.insert(0, str(RAIZ / "experiments"))
 import bancada_v2 as bv  # noqa: E402
 import run_v2_digibrain_prototipo as orq  # noqa: E402
 
-from digilab.config import ConfigDigibrainInatos  # noqa: E402
-from digilab.digibrain import DigiBrain  # noqa: E402
-
-
-def _tuplas(v):
-    return tuple(_tuplas(x) for x in v) if isinstance(v, list) else v
-
-
-def inatos_da_rodada(meta: dict) -> ConfigDigibrainInatos:
-    """os valores da rodada, do meta.json (o JSON troca as tuplas por listas)"""
-    return ConfigDigibrainInatos(**{k: _tuplas(v) for k, v in meta["inatos"].items()})
-
 
 def diagnosticar(pasta: Path) -> dict:
     meta = json.loads((pasta / "meta.json").read_text(encoding="utf-8"))
@@ -43,7 +31,7 @@ def diagnosticar(pasta: Path) -> dict:
     if meta["fase"] != "calibracao":
         raise ValueError("o diagnostico e so da calibracao")
     passo = orq.CONFIG_PADRAO.intervalo_decisao_ticks
-    inatos = inatos_da_rodada(meta)
+    inatos = orq.inatos_do_meta(meta)
     gravadas = json.loads((pasta / "medidas.json").read_text(encoding="utf-8"))
     falhas = {"acoes": Counter(), "reflexo": Counter(), "racao_entre_as_unidades": Counter(), "janelas": 0, "decisoes": 0}
     teto, total_h = Counter(), 0
@@ -53,8 +41,8 @@ def diagnosticar(pasta: Path) -> dict:
         s = u["semente"]
         for dono, lugar in orq.CELULAS:
             texto = (pasta / "vidas" / "M3" / f"{dono}_{lugar}_{s}.jsonl").read_text(encoding="utf-8")
-            _, fm = orq.fabricas("M3", dono, s, cfg["dias"], cfg["orcamento_por_dia"])
-            reg = orq.Registro(DigiBrain(orq.CONFIG_PADRAO, orq.config_do_braco("M3"), orq.CM, inatos=inatos), inatos.escala)
+            fp, fm = orq.fabricas("M3", dono, s, cfg["dias"], cfg["orcamento_por_dia"], inatos=inatos)
+            reg = fp(None)
             motor = orq.reproduzir_mundo(orq.LogDeEventos.de_jsonl(texto), lambda c=None, reg=reg: reg, semente=s, fabrica_motor=fm)
             c = orq.cerebro_de(reg)
             refeitas = json.loads(json.dumps(orq.medidas(motor, reg, "M3", cfg["dias"])))
