@@ -488,3 +488,54 @@ relato do Gerente):
 
 **Pressuposto deste plano, não decisão dele:** as subchaves `p1` e o modo do `g_apr`. A etapa 1a as propõe e as implementa atrás da
 chave.
+
+## Adendo 1: os valores calibrados (2026-10-25, worker D, Claude Code, Opus 5.5)
+
+**O que é:** a calibração da seção 6.1, autorizada pelo Matheus em 2026-10-25 ("Siga o recomendado"), despachada pelo Gerente.
+- **Escopo:** só o M3, nas bases 63101 e 63202, com K = 2, 14 dias e as 12 células (48 vidas por rodada), pelo
+  `experiments/run_v2_digibrain_prototipo.py`.
+- **Rodadas:** três, o máximo.
+- **Os outros braços** não foram rodados nem olhados.
+- **Nenhuma vida** da faixa 64101…64505 nem das bases do piloto.
+- **O critério não fechou em nenhuma rodada.** Pela seção 6.1, ficam os valores da melhor rodada, a 3, e o que não fechou vai ao
+  registro, sem bloquear.
+
+**Os valores congelados** (`ConfigDigibrainInatos`, `digilab/config.py`; continuam PROPOSTOS, e o Matheus decide). Só mudou o que a
+seção 6.1 permite, e os sinais da tabela 4.5 da espec ficam; nenhuma equação, subchave nem número do motor, do corpo ou do mundo mudou:
+
+| valor | partida (rodada 1) | congelado (rodada 3) | rodada da mudança | por quê |
+|---|---|---|---|---|
+| `eta_h` (o passo do P2) | S/16 | S/128 | 2 | na rodada 1, 283 dos 7 728 pesos de hábito acabaram no teto; o hábito de comer saturava (`pesos_no_teto` máximo 0,0745) |
+| `w_pers` | S/2 | 2S | 2 | a persistência quase não decidia (0,0002): na segunda decisão de uma intenção, h = mul(S/2, 256) = 128 |
+| `tau_c` (ticks) | 60 | 30 | 2 | o mesmo motivo: o C da intenção nova sobe de 256 para 512 |
+| `W⁰[dormir, u_energia]` | 2S | 3S | 2 | nas rações elegíveis que não fecharam, 43,6% das decisões da janela estavam sob o reflexo do sono, e a exaustão era 0,3114 |
+| `W⁰[explorar, u_energia]` | −S | −2S | 2 | o mesmo: o pet cansado explorava e chegava ao reflexo |
+| `W⁰[comer, u_fome]` | 2S | 3S | 3 | na rodada 2, o hábito menor tirou a vontade de comer com fome moderada (3,53 refeições por dia, contra 4,44) |
+| `W⁰[comer, vies]` | −S | −17S/16 | 3 | mantém o ponto do T-CADEIA-2 (a falta da fome 307) abaixo do limiar inato, com o peso maior da fome |
+| `W⁰[dormir, u_fome]` | −S/2 | −S | 3 | na rodada 2, dormir passou a ganhar do comer: cerca de metade das decisões nas janelas que não fecharam era dormir |
+
+**Os critérios, rodada a rodada** (a ordem da seção 6.1; o T-CADEIA-1 passa nas três, em `tests/test_digibrain_vidas.py`):
+
+| critério | rodada 1 | rodada 2 | rodada 3 |
+|---|---|---|---|
+| o fechamento do M3, a mediana das vidas (≥ 0,5) | 0,4000 | 0,3350 | **0,4123** |
+| `pesos_no_teto` (= 0 em toda vida; o máximo) | 0,0745 | **0** | **0** |
+| G-PESA, o incentivo (≥ 0,01) | 0,0006 | 0,0089 | 0,0077 |
+| G-PESA, o hábito | **0,3061** | **0,1657** | **0,1659** |
+| G-PESA, a memória | **0,1139** | **0,1351** | **0,1228** |
+| G-PESA, a persistência | 0,0002 | 0,0016 | 0,0014 |
+| fecha | não | não | não |
+
+- **Os artefatos de cada número:** `artifacts_v2_digibrain_prototipo/calibracao/rodada_<n>/`. O `resultado.json` traz os critérios; o
+  `medidas.json`, as 48 vidas; o `meta.json`, os valores, o commit e as sementes; o `diagnostico.json` (de
+  `experiments/diagnostico_calibracao_digibrain.py`, que rejoga as vidas do disco com os valores da rodada e confere que as medidas
+  refeitas são as gravadas) traz o reflexo, as ações e a ração nas janelas que não fecharam, o hábito no teto e as intenções. As vidas
+  ficam fora do git; os commits das rodadas são o 659cd70, o c9db542 e o 4924863.
+- **A melhor rodada é a 3:** na ordem dos critérios, as três passam o T-CADEIA-1, e a rodada 3 tem a maior mediana. Ela e a 2 são as
+  únicas com o teto em 0.
+- **O que não fechou** (o registro, seção "DIGIBRAIN-MODULAR-CALIBRACAO"):
+  - a mediana do fechamento: 0,4123;
+  - a G-PESA do incentivo (0,0077) e da persistência (0,0014).
+
+  O G-MVP e as G-ABLA-P1 e G-ABLA-PERS do piloto e da avaliação ficam sujeitos a isso; a seção 5.3 já lê um contraste com a G-PESA
+  falhando como inconclusivo por premissa.

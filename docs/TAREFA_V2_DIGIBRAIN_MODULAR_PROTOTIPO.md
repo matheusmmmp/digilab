@@ -184,3 +184,18 @@ com os testes T-PONTO-1 a T-PONTO-4.
   `experiments/configs/v2_digibrain_prototipo/`. Nenhuma vida das faixas rodou.
 - **Fica para depois:** a calibração (seção 6.1 do plano), despachada depois de o G-MECANISMO passar na `main`; a etapa 1b no TS.
 - **Interpretações e achados** em `docs/registro/2026-10.md`.
+
+## 14. A calibração dos valores de partida (worker D, 2026-10-25)
+
+- **Três rodadas** da seção 6.1 do plano: só o M3, nas bases 63101 e 63202, com K = 2 (48 vidas por rodada). Nenhuma vida do piloto nem
+  da avaliação, e nenhum outro braço olhado.
+- **O critério não fechou em nenhuma.** Ficam os valores da rodada 3, a melhor, congelados pelo adendo 1 do plano e ainda PROPOSTOS:
+  - a mediana do fechamento do M3 fica em 0,4123, contra o limiar de 0,5;
+  - o teto do hábito fica em 0;
+  - a G-PESA do hábito (0,1659) e a da memória (0,1228) passam;
+  - a do incentivo (0,0077) e a da persistência (0,0014) não passam.
+
+  Os artefatos estão em `artifacts_v2_digibrain_prototipo/calibracao/`.
+- **O que mudou** (o adendo 1 tem a tabela de antes e depois): o passo do hábito, a persistência (`w_pers`, `tau_c`), os pesos da
+  energia em dormir e em explorar, e os da fome em comer e em dormir. Os sinais ficam, e nenhuma equação mudou.
+- **Interpretações e o que ficou fora do alcance da calibração** em `docs/registro/2026-10.md`.
