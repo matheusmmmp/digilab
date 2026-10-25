@@ -6,8 +6,11 @@
   - as cerca de 80 unidades da seção 2 reconciliadas com as ~16 da estimativa da seção 12 (só as unidades de comportamento, seção 2.1);
   - o protótipo implementa **só a memória episódica mínima**; a memória autobiográfica consolidada é **etapa planejada, com critério
     de conclusão**, não resolvida pelo protótipo (seção 9);
-  - o candidato `lembranca` **AUTORIZADO** para a v13, Python e TS, atrás da chave, com o gabarito G2 antes da implementação; a v12 e o
+  - o lugar lembrado **AUTORIZADO** para a v13, Python e TS, atrás da chave, com o gabarito G2 antes da implementação; a v12 e o
     A preservados; a medição do A para o orçamento é pontual e só de desempenho (seções 11 e 12).
+- **A PE-14 REVISTA em 2026-10-25, depois da etapa 0** (o achado do D, PR #410): o lugar lembrado **não é um candidato novo do explorar
+  do motor; é o alvo `Alvo.ponto` que o motor Python já aceita**, produzido pelo M-MEM, só em EXPLORAR, com coordenadas inteiras dentro
+  do mapa (seções 4.1, 11 e 15). O espelho TS ganha o mesmo `ponto`, com o gabarito das vidas v12 em TS gravado e conferido antes.
 - **As fontes da PE-1 aplicadas em 2026-10-25** (`docs/referencias/DM_REVISAO_SUBSTRATO_NEURAL.md`, as trocas T-a1 a T-e2), com as
   decisões D-0, D-1 e D-2 do Matheus DECIDIDAS (seção 15).
 - O protótipo (`docs/TAREFA_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`) começa depois deste documento entrar na `main`, pela etapa 0 (os
@@ -393,7 +396,7 @@ O formato de cada contrato:
 |---|---|
 | **entradas** | do motor: a `Observacao` no `agir(obs, rng)`; os candidatos a alvo no `escolher_alvo(acao, candidatos, percepcao, u)`; a consequência no `consequencia_mundo(acao, ocorrido, obs_depois)` e no `consequencia_corpo(...)`; os gestos no `receber_acao_dono(acao, tick)`; a `Transicao` no `observar` |
 | **estado** | a intenção escolhida no `agir`, à espera do `escolher_alvo` e da consequência; uma pendência por decisão |
-| **saídas** | a `AcaoPet` do `agir`; o alvo do `escolher_alvo`, **que tem de estar entre os candidatos do motor** (senão, `raise`); o `estado_interno()` com o estado de todos os módulos; o `ultimo_motivo` |
+| **saídas** | a `AcaoPet` do `agir`; o alvo do `escolher_alvo`, **que tem de estar entre os candidatos do motor** (senão, `raise`), **com uma exceção só:** em EXPLORAR, o alvo `Alvo.ponto(x, y)` produzido pelo M-MEM (o lugar lembrado), que o motor valida à parte (abaixo); o `estado_interno()` com o estado de todos os módulos; o `ultimo_motivo` |
 | **atualização** | encaminha a Observação ao M-SENS e ao M-AFETO; a consequência ao M-AFETO (o r), ao M-PLAST, ao M-MEM e ao M-ESTADO |
 | **rng** | repassa a do `agir` ao M-ARB; ignora o `u` do `escolher_alvo` |
 | **aritmética** | nenhuma conta própria |
@@ -402,10 +405,19 @@ O formato de cada contrato:
 **As falhas altas** (o padrão do A, `lobos.py:2318-2330`): `raise` quando:
 - a Observação chega sem `corpo` ou sem `mundo`;
 - uma decisão fica sem o gancho de consequência;
-- o alvo escolhido não está entre os candidatos.
+- o alvo escolhido não está entre os candidatos, salvo o `ponto` do lugar lembrado em EXPLORAR, que o motor valida por conta própria.
 
-[EXISTE] o `Protocol` `Politica` (`policy.py:81`) e os ganchos do A. **O lugar lembrado** pede ao motor um tipo de candidato novo, o
-`lembranca` no `explorar`, atrás da chave. É uma mudança no `mundo.py` e no TS, não no `engine.py` (PE-14).
+[EXISTE] o `Protocol` `Politica` (`policy.py:81`) e os ganchos do A. **O lugar lembrado é um alvo produzido pelo M-MEM, não um
+candidato fornecido pelo explorar do motor** (a PE-14 REVISTA em 2026-10-25, decisão do Matheus depois do achado da etapa 0):
+- [EXISTE] o motor Python já aceita, **só em EXPLORAR**, um `Alvo.ponto(x, y)` fora da lista de candidatos (`mundo.py:321-334`,
+  `_validar_alvo` em `mundo.py:1415-1422`): `id` e `de` vazios, `x` e `y` inteiros e dentro do mapa (`no_mapa(x, y) == (x, y)`),
+  senão `raise`. **A validação dos demais alvos não relaxa:** fora de EXPLORAR, e para qualquer outro tipo, o alvo tem de estar entre os
+  candidatos;
+- o M-ADAPT entrega o `ponto` quando o M-ARB escolhe "explorar o lugar lembrado" (seção 4.6), e registra que o alvo veio do M-MEM;
+- **o explorar do motor Python não muda.** Nenhum candidato `lembranca` entra na lista; o gabarito `tests/gabaritos/digibrain_vidas_de_hoje.json`
+  (as 196 vidas da etapa 0, com os candidatos de cada sub-decisão) é o G2 que confere que a lista continua a mesma;
+- **o espelho TS não tem o `ponto` hoje** e ganha o mesmo tratamento, atrás da chave da v13, **só depois de gravado e conferido o gabarito
+  das vidas v12 do jogo em TS**, reproduzindo a versão atual byte a byte; a v12 e o A preservados.
 
 ### 4.2 M-SENS, a codificação sensorial
 
@@ -843,9 +855,11 @@ análise próprio (`docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`), comm
 
 **O motor:**
 - **o `engine.py` não muda** (`ENGINE_SHA256_V0`). O cérebro entra pelo `Protocol` `Politica`;
-- **o candidato `lembranca`** do explorar (PE-14) é uma camada do `MotorMundo` atrás da chave da v13, no Python e no TS.
-  **AUTORIZADO pelo Matheus em 2026-10-25,** nestas condições: só na v13; nos dois lados; atrás da chave; **o gabarito G2 das vidas de
-  hoje gravado num commit próprio antes da implementação**; a v12 e o A preservados byte a byte;
+- **o lugar lembrado** (PE-14, REVISTA em 2026-10-25) **usa o `Alvo.ponto` que o motor Python já aceita em EXPLORAR** (seção 4.1); o
+  explorar do motor Python não ganha candidato novo. **No TS,** o `ponto` entra atrás da chave da v13, **só depois do gabarito das vidas
+  v12 do jogo em TS, gravado e conferido contra a versão atual**. Condições do Matheus: só na v13; a v12 e o A preservados byte a byte; a
+  validação do `ponto` só em EXPLORAR, com coordenadas inteiras dentro do mapa; a validação dos demais alvos não relaxa. O G2 do Python é
+  o gabarito da etapa 0 (`tests/gabaritos/digibrain_vidas_de_hoje.json`, 196 vidas);
 - **o log:** nenhum evento novo. O cérebro determinístico não grava nada, e a vida se refaz pelo log de sempre. O modo livre gravado
   não se aplica.
 
@@ -986,7 +1000,7 @@ que entra com o valor recomendado e se decide pela avaliação, com o plano de a
 | **PE-11** | a habituação e a novidade no M-SENS | no protótipo | **um integrador por classe** (seção 4.2) | por item: o custo e a memória sobem; nenhuma: a novidade não pesa |
 | **PE-12** | a escala dos pesos aprendidos: S = 1024 ou uma escala maior só para os passos pequenos | antes | **S = 1024,** o do A; trocar só se um passo der 0 na conta (o T-PLAST-1 mostra) | escala pequena: os passos pequenos arredondam para 0, e nada aprende; escala grande sem necessidade: a paridade e os testes ficam mais caros |
 | **PE-13** | se uma rede de taxa pequena, desenhada à mão, com uma recorrência pelo estado e modulação difusa, basta para chamar o protótipo de "cérebro neural" nos documentos e na tela | antes (é do Matheus) | **chamar de "rede pequena de unidades" nos documentos técnicos** e manter "DigiBrain" como nome do produto, sem prometer mais | prometer mais: a seção 2 não sustenta; chamar de menos: o nome do projeto perde o sentido |
-| **PE-14** | o lugar lembrado no motor: o candidato novo `lembranca` no explorar, atrás da chave da v13 | antes | **o candidato novo,** no Python e no TS, com o G2 | sem o candidato: o M-MEM não leva o pet a lugar nenhum fora da vista e fica sem efeito no MVP |
+| **PE-14** | o lugar lembrado no motor: o candidato novo `lembranca` no explorar, atrás da chave da v13 | antes | ~~o candidato novo, no Python e no TS, com o G2~~ **REVISTA em 2026-10-25 (Matheus, depois do achado da etapa 0):** o lugar lembrado é um alvo `Alvo.ponto` produzido pelo M-MEM, que o motor Python já aceita só em EXPLORAR, com coordenadas inteiras dentro do mapa; nenhum candidato novo no explorar; a validação dos demais alvos não relaxa; no TS, o mesmo `ponto` só depois do gabarito das vidas v12 em TS (seções 4.1 e 11) | sem o `ponto` no TS: a paridade quebra; relaxar a validação dos outros alvos: o G2 deixa de proteger o explorar de hoje |
 | **PE-15** | as licenças do CfC e do NCP | antes de qualquer reúso da forma II | **conferir e registrar** antes de copiar qualquer código ou equação de software. **FEITA quanto à licença do código em 2026-10-25:** o CfC (`raminmh/CfC`) e o `ncps` (`mlech26l/ncps`) estão em Apache-2.0; as patentes não foram buscadas (seção 3) | reusar sem conferir: risco de licença no produto (DM-9) |
 | **PE-16** | a capacidade e a codificação do M-MEM mínimo (N_ep; todo consumo vira episódio) | no protótipo | **N_ep = 16; todo consumo e toda visita viram episódio;** o limiar fino é a ME-1 da tarefa da memória | pequeno: o pet esquece o comedouro; grande sem limiar: ruído e custo |
 
@@ -1010,3 +1024,16 @@ com o plano de análise.
 - **D-2:** a predição de Lengyel e Dayan (2007), "memória cedo, hábito depois", entra como **leitura descritiva, SEM gate**, marcada
   [HIPÓTESE] com fonte (seção 2.5), e é item para o plano de análise do protótipo;
 - **a PE-15** fica FEITA quanto à licença do código (CfC e `ncps` em Apache-2.0); as patentes não foram buscadas.
+
+**A PE-14 REVISTA em 2026-10-25 (Matheus), depois da etapa 0** (PR #410; o achado do D, registro "DIGIBRAIN-MODULAR-PROTOTIPO, etapa 0"):
+adotar o `Alvo.ponto` já aceito pelo motor Python; o lugar lembrado é alvo do M-MEM, não candidato do explorar; a validação especial
+aceita `ponto` só em EXPLORAR, com coordenadas inteiras dentro do mapa, e a dos demais alvos não relaxa; antes de qualquer alteração no
+espelho TS, o gabarito das vidas v12 em TS, conferido contra a versão atual; a v12 e o A preservados. **Os testes que a etapa 1 precisa
+ter antes de rodar** (planejados, com resposta conhecida):
+- **T-PONTO-1:** o M-ADAPT entrega `Alvo.ponto` só em EXPLORAR e só quando o M-MEM recuperou um lugar; em qualquer outra ação, alvo fora
+  dos candidatos dá `raise`;
+- **T-PONTO-2:** `ponto` fora do mapa ou com coordenada não inteira dá `raise` no motor (o comportamento de hoje, `mundo.py:1415-1422`);
+- **T-PONTO-3 (G2):** com a chave desligada, as 196 vidas de `digibrain_vidas_de_hoje.json` saem byte a byte, listas de candidatos
+  inclusive;
+- **T-PONTO-4 (TS, antes de qualquer mudança no espelho):** o gabarito das vidas v12 do jogo em TS, gravado e conferido contra a versão
+  atual; depois, o `ponto` no TS com o mesmo `raise` e o G-PAR decisão a decisão.
