@@ -26,9 +26,10 @@ BASES_COMPARACAO = {"calibracao": (28101, 28202, 28303, 28404, 28505), "validaca
 # PLANO_ANALISE_V2_COMPARACAO_CEREBROS, secao 6.2; o do mundo fisico, PLANO_ANALISE_V2_MUNDO_FISICO, secao 4; o do corpo,
 # PLANO_ANALISE_V2_CORPO_DRIVES, secao 4; o do banheiro, PLANO_ANALISE_V2_BANHEIRO, secao 3; o dos dois pets, PLANO_ANALISE_V2_DOIS_PETS,
 # secao 8; o da rede de si, PLANO_ANALISE_V2_REDE_DE_SI, secao 8; o do pet que pensa, PLANO_ANALISE_V2_PET_QUE_PENSA, secao 8; o da
-# competicao entre as regras, PLANO_ANALISE_V2_V3_COMPETICAO, secao 4)
+# competicao entre as regras, PLANO_ANALISE_V2_V3_COMPETICAO, secao 4; o do prototipo do DigiBrain modular,
+# PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO, secao 3)
 PREFIXOS_UNIDADES = ("experimento-maior", "n6", "n7", "comparacao-cerebros", "mundo", "corpo", "banheiro", "dois_pets", "rede_de_si",
-                     "pet_que_pensa", "competicao")
+                     "pet_que_pensa", "competicao", "digibrain_prototipo")
 # faixas queimadas: continuam reservadas e nao podem ser usadas para nada (adendo 4.1 do PLANO_ANALISE_V2_EXPERIMENTO_MAIOR)
 FAIXAS_QUEIMADAS = ((15101, 15505, "a validacao antiga do experimento maior: run indevida parada em 2026-10-06 (PR #183)"),)
 # faixas reservadas ou ja usadas no repositorio (fonte ao lado); o teste tambem varre experiments/configs/. Intervalos fechados.

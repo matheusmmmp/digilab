@@ -79,6 +79,9 @@ BASES = {
                       "piloto_adendo8": bv.BASES_PQP_ADENDO8["piloto"], "validacao_adendo8": bv.BASES_PQP_ADENDO8["validacao"]},   # o J5, com o paladar (adendo 3)
     # a competicao entre as regras urgentes (PLANO_ANALISE_V2_V3_COMPETICAO, secao 11; experiments/run_v2_competicao.py)
     "competicao": {"piloto": (58101, 58202, 58303, 58404, 58505), "validacao": (59101, 59202, 59303, 59404, 59505)},
+    # o prototipo do DigiBrain modular (PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO, secao 9; experiments/run_v2_digibrain_prototipo.py)
+    "digibrain_prototipo": {"calibracao": (63101, 63202), "piloto": (63303, 63404, 63505),
+                            "avaliacao": (64101, 64202, 64303, 64404, 64505)},
 }
 NOVAS = {(43101, 43505): "calibracao e piloto", (44101, 44505): "validacao"}
 K_UNIDADES = 40

@@ -62,7 +62,8 @@ def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
     nomes = re.compile(r"\b(ConfigDigibrain\w*|CONFIG_DIGIBRAIN\w*)\b|digilab\.digibrain|from \.digibrain|from \.\.digibrain")
     citam = {p.relative_to(RAIZ).as_posix() for pasta in ("digilab", "experiments", "tools") for p in (RAIZ / pasta).rglob("*.py")
              if nomes.search(p.read_text(encoding="utf-8"))}
-    assert {c for c in citam if not c.startswith("digilab/digibrain/")} == {"digilab/config.py"}
+    assert {c for c in citam if not c.startswith("digilab/digibrain/")} == {"digilab/config.py",
+                                                                             "experiments/run_v2_digibrain_prototipo.py"}
 
 
 def test_o_digibrain_so_existe_com_a_chave_ligada_e_e_a_v13():
