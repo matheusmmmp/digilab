@@ -6,7 +6,7 @@ governa a dinamica mora aqui e entra no PROTOCOLO.md congelado.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field, replace
+from dataclasses import dataclass, field, fields, replace
 
 TICKS_POR_DIA = 1440  # 1 tick = 1 minuto simulado
 
@@ -2311,6 +2311,17 @@ CONFIG_CONTRATO_LIGADO = ConfigContrato(sensores=True, controlador=True)
 #   - `p2`: o habito hebbiano do M-PLAST alem do P1 (PE-2);
 #   - `m_mem`: a memoria episodica minima, os episodios de alimentacao (DM-3; a secao 4.6);
 #   - `persistencia`: a persistencia da intencao no M-ESTADO (a secao 4.4).
+# A etapa 1a (docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md, secao 2) pede mais duas, PROPOSTAS:
+#   - `p1`: o modelo do desfecho do M-PLAST (o braco M0, o inato sozinho, o desliga);
+#   - `controle_g_apr`: os controles do V3 (docs/futuro/digibrain_v3_e0.md, secao 4.3) para o `g_apr`:
+#       "nenhum"       o `g_apr` da excitacao da propria vida, com `modula_g_apr` (o M4); g0 sem ela (M0 a M3);
+#       "embaralhado"  a excitacao de outra vida, a serie E da vida doadora decisao a decisao, com `modula_g_apr` (o M4-emb; a serie vem
+#                      ao `DigiBrain` como dado, `serie_e_doadora`);
+#       "constante"    o `g_apr` fixo em `g_apr_constante`, sem `modula_g_apr` (o M4-con: a media do `g_apr` das vidas M4 do piloto).
+# Com uma subchave desligada, o termo do modulo e 0 em toda decisao (o DigiBrain levanta erro se nao for).
+CONTROLES_G_APR = ("nenhum", "embaralhado", "constante")
+
+
 @dataclass(frozen=True)
 class ConfigDigibrain:
     ligada: bool = False                     # PROPOSTO: a chave do cerebro modular (a v13, DM-5)
@@ -2318,12 +2329,161 @@ class ConfigDigibrain:
     p2: bool = True                          # PROPOSTO (PE-2): o P2 atras da subchave, com a ablacao
     m_mem: bool = True                       # PROPOSTO (DM-3): o M-MEM minimo
     persistencia: bool = True                # PROPOSTO (secao 4.4): a persistencia da intencao
+    p1: bool = True                          # PROPOSTO (etapa 1a; plano, secao 2): o P1, que o braco M0 desliga
+    controle_g_apr: str = "nenhum"           # PROPOSTO (etapa 1a; plano, secao 2): o controle do V3 do g_apr (CONTROLES_G_APR)
+    g_apr_constante: int = 0                 # PROPOSTO (plano, secao 2): o g_apr do M4-con, na escala S; so com o controle "constante"
 
     def __post_init__(self) -> None:
-        for nome in ("ligada", "modula_g_apr", "p2", "m_mem", "persistencia"):
+        for nome in ("ligada", "modula_g_apr", "p2", "m_mem", "persistencia", "p1"):
             if type(getattr(self, nome)) is not bool:
                 raise TypeError(f"ConfigDigibrain.{nome} e bool: {getattr(self, nome)!r}")
+        if self.controle_g_apr not in CONTROLES_G_APR:
+            raise ValueError(f"ConfigDigibrain.controle_g_apr: so {CONTROLES_G_APR}, nao {self.controle_g_apr!r}")
+        if type(self.g_apr_constante) is not int:
+            raise TypeError(f"ConfigDigibrain.g_apr_constante e int: {self.g_apr_constante!r}")
+        if self.controle_g_apr == "embaralhado" and not self.modula_g_apr:
+            raise ValueError("o controle embaralhado e a excitacao de outra vida modulando o g_apr: exige modula_g_apr")
+        if self.controle_g_apr == "constante" and (self.modula_g_apr or self.g_apr_constante <= 0):
+            raise ValueError("o controle constante e o g_apr fixo, sem a excitacao: modula_g_apr desligada e g_apr_constante > 0")
+        if self.controle_g_apr != "constante" and self.g_apr_constante != 0:
+            raise ValueError("g_apr_constante so com o controle constante")
 
 
 CONFIG_DIGIBRAIN = ConfigDigibrain()
 CONFIG_DIGIBRAIN_LIGADA = ConfigDigibrain(ligada=True)
+
+
+# Os valores de partida do DigiBrain modular (docs/ESPEC_DIGIBRAIN_MODULAR.md, secoes 2 a 7; o registro `ParametrosInatos` do M-GEN,
+# secao 4.9): todos postos a mao na etapa 1a, PROPOSTOS e SEM FONTE salvo onde a linha diz; a calibracao (plano, secao 6.1) so muda as
+# magnitudes (os sinais da tabela da secao 4.5 ficam). Todo valor e um inteiro na escala S = 1024 (o v inteiro representa v/S), salvo as
+# constantes de tempo (em ticks), as distancias (em subunidades do mundo) e as contagens. O genoma futuro escreve este registro; o
+# aprendido nunca entra nele (EG-5).
+#
+# As caracteristicas de contexto z (secao 2.1, ~20; a ordem e a das linhas de W0 e de H): o vies, as urgencias dos onze receptores do
+# prototipo (secao 6), o contexto do M-SENS, as conjuncoes, duas conjuncoes com a urgencia (a fome sem comida, para chamar e explorar;
+# o tempo sem cuidado com o humor baixo, para emburrar: a tabela da secao 4.5), e o estado (F do M-ESTADO, V e E do M-AFETO).
+RECEPTORES_DIGIBRAIN = ("fome", "higiene", "energia", "humor", "saude", "tedio", "curiosidade", "solidao", "estresse", "dor", "susto")
+CARACTERISTICAS_DIGIBRAIN = (("vies",) + tuple(f"u_{r}" for r in RECEPTORES_DIGIBRAIN)
+                             + ("noite", "dormindo", "sem_cuidado", "comida_vista", "sem_comida", "bola_vista", "fome_sem_comida",
+                                "cuidado_humor", "F", "V", "E"))
+# os tipos de alvo das unidades (secao 4.5): as classes do objeto visto e os alvos sem objeto (o cheiro, o vagar, o lugar lembrado)
+TIPOS_ALVO_DIGIBRAIN = ("racao", "a", "b", "c", "podre", "bola", "cheiro", "vagar", "ponto")
+COMPORTAMENTOS_DIGIBRAIN = ("ocioso", "dormir", "comer", "brincar", "chamar_atencao", "explorar", "emburrar")   # a ordem de ACOES_PET_HOJE
+_S = 1024
+
+
+def _linha(**w: int) -> tuple:
+    """uma linha de W0: (caracteristica, peso) so dos pesos nao nulos, na ordem de CARACTERISTICAS_DIGIBRAIN"""
+    fora = set(w) - set(CARACTERISTICAS_DIGIBRAIN)
+    if fora:
+        raise KeyError(f"caracteristicas desconhecidas: {sorted(fora)}")
+    return tuple((c, w[c]) for c in CARACTERISTICAS_DIGIBRAIN if c in w)
+
+
+@dataclass(frozen=True)
+class ConfigDigibrainInatos:
+    escala: int = _S                          # DECIDIDO (PE-12): S = 1024, o do A (ConfigLobos.bits_ponto_fixo = 10)
+    a_max: int = 4 * _S                       # PROPOSTO (secao 1): o teto da ativacao, phi(v) = clamp(v, 0, A_max)
+    # as constantes de tempo, em ticks (secao 1: k = div_arred(S x Delta, tau), com tau >= Delta = 15)
+    tau_hab: int = 120                        # PROPOSTO, SEM FONTE: a habituacao por classe (M-SENS, PE-11)
+    tau_v: int = 240                          # PROPOSTO, SEM FONTE: a valencia (M-AFETO)
+    tau_e: int = 120                          # PROPOSTO, SEM FONTE: a excitacao (M-AFETO)
+    tau_c: int = 60                           # PROPOSTO, SEM FONTE: o compromisso C (M-ESTADO, PE-6)
+    tau_f_sobe: int = 60                      # PROPOSTO, SEM FONTE: a frustracao F sobe no fim sem a meta (M-ESTADO)
+    tau_f_desce: int = 480                    # PROPOSTO, SEM FONTE: a frustracao F decai a cada decisao (M-ESTADO)
+    # M-SENS
+    escala_cuidado: int = 480                 # PROPOSTO: o mesmo corte do A (ConfigLobos.escala_ticks_desde_cuidado = 480)
+    # M-AFETO: a urgencia u_r = clamp(mul(a_r, falta) + mul(b_r, max(0, falta - lambda_r)), 0, S), a mesma curva nos onze receptores
+    urgencia_a: int = _S // 2                 # PROPOSTO, SEM FONTE
+    urgencia_b: int = 3 * _S // 2             # PROPOSTO, SEM FONTE
+    urgencia_lambda: int = _S // 2            # PROPOSTO, SEM FONTE
+    ganho_r: int = 4                          # PROPOSTO: o ganho do sinal_corpo, o do A (ConfigConsequencia.ganho = 4, o do N3)
+    r_norm: int = 2                           # PROPOSTO, SEM FONTE: r_n = clamp(div_arred(r, R_n), -S, S)
+    fora_do_r: tuple = ("susto",)             # PROPOSTO: o susto fica fora do r, como no A (lobos.DRIVES_NOVOS_SINAL)
+    g0: int = _S                              # PROPOSTO, SEM FONTE: o g_apr sem modulacao (com g_apr = S, o P1 e a conta do ModeloMundo)
+    beta_e: int = _S                          # PROPOSTO, SEM FONTE: g_apr = clamp(g0 + mul(beta_E, E), g_min, g_max)
+    g_min: int = _S // 2                      # PROPOSTO, SEM FONTE
+    g_max: int = 2 * _S                       # PROPOSTO, SEM FONTE
+    e0: int = _S // 2                         # PROPOSTO, SEM FONTE: g_exp = clamp(e0 + mul(beta_T, tedio) - mul(beta_U, max u), 0, e_max)
+    beta_t: int = _S // 2                     # PROPOSTO, SEM FONTE
+    beta_u: int = _S // 2                     # PROPOSTO, SEM FONTE
+    e_max: int = _S                           # PROPOSTO, SEM FONTE
+    # M-IMPULSO: os pesos inatos (os sinais da tabela da secao 4.5; as magnitudes PROPOSTAS, SEM FONTE), uma linha por comportamento
+    w0: tuple = (
+        ("ocioso", _linha(vies=_S // 8, u_fome=-_S // 4, u_energia=-_S // 4, u_higiene=-_S // 4, u_tedio=-_S // 4)),
+        ("dormir", _linha(vies=-_S // 2, u_energia=2 * _S, noite=_S // 2, dormindo=_S // 2, u_fome=-_S // 2)),
+        ("comer", _linha(vies=-_S, u_fome=2 * _S)),
+        ("brincar", _linha(vies=-_S // 4, bola_vista=_S, u_tedio=_S // 2, u_humor=_S // 2, u_fome=-_S // 2, u_energia=-_S // 2)),
+        ("chamar_atencao", _linha(vies=-_S // 2, fome_sem_comida=2 * _S, u_higiene=_S, sem_cuidado=_S // 4, comida_vista=-_S,
+                                  u_solidao=_S // 2, u_estresse=_S // 4)),
+        ("explorar", _linha(vies=_S // 8, u_tedio=_S, u_curiosidade=_S, F=_S // 2, fome_sem_comida=_S // 2, u_energia=-_S)),
+        ("emburrar", _linha(vies=-_S // 2, cuidado_humor=2 * _S)),
+    )
+    w0_prox: tuple = (("comer", _S // 2), ("brincar", _S // 4))       # PROPOSTO, SEM FONTE: aproximar-se do que esta perto
+    w0_nov: tuple = (("brincar", _S // 8),)                           # PROPOSTO, SEM FONTE: o novo atrai na bola (pelo sinal)
+    # o termo inato do tipo do alvo (secao 4.5: comer + comida boa, - podre), somado como uma constante
+    w0_tipo: tuple = (("comer", (("racao", _S // 4), ("a", _S // 4), ("b", _S // 4), ("c", _S // 4), ("podre", -2 * _S))),)
+    # M-ARB
+    epsilon: int = _S // 8                    # PROPOSTO, SEM FONTE: w = a + mul(g_exp, epsilon), so nas unidades com a > 0
+    lambda_sono: int = _S // 4                # PROPOSTO: o reflexo do sono, a leitura da energia abaixo de S/4 (o 0,25 do sono_exaustao)
+    # M-PLAST
+    eta_d: int = _S // 4                      # PROPOSTO: o passo do P1, o passo_desfecho do ModeloMundo (S/4, PP-6)
+    eta_h: int = _S // 16                     # PROPOSTO, SEM FONTE: o passo do P2
+    h_max: int = _S // 2                      # PROPOSTO, SEM FONTE: o corte do habito, |H| <= H_max (PE-10: sem decaimento)
+    c_g: int = _S                             # PROPOSTO, SEM FONTE: G = clamp(div_arred(c_G x valor_previsto, S_V), 0, G_max) x prox / S
+    s_v: int = _S                             # PROPOSTO, SEM FONTE
+    g_max_incentivo: int = _S                 # PROPOSTO, SEM FONTE
+    # M-ESTADO
+    w_pers: int = _S // 2                     # PROPOSTO, SEM FONTE (PE-6): h = mul(w_pers, C)
+    n_desiste: int = 3                        # PROPOSTO (PE-6, a regra do alcance): o raio da visao (96) pelo alcance (60), 2 decisoes, mais 1
+    # M-MEM
+    n_ep: int = 16                            # PROPOSTO, SEM FONTE (PE-16)
+    lambda_busca: int = _S // 4               # PROPOSTO, SEM FONTE: a pista, a urgencia da fome acima deste limiar
+    d_max: int = 1024                         # PROPOSTO, SEM FONTE: a distancia (subunidades) em que o lugar lembrado deixa de atrair
+    w_mem: int = _S                           # PROPOSTO, SEM FONTE: M = mul(w_mem, valor)
+
+    def __post_init__(self) -> None:
+        for f in fields(self):
+            if f.name in ("w0", "w0_prox", "w0_nov", "w0_tipo", "fora_do_r"):
+                continue
+            if type(getattr(self, f.name)) is not int:
+                raise TypeError(f"ConfigDigibrainInatos.{f.name} e inteiro: {getattr(self, f.name)!r}")
+        if self.escala != _S:
+            raise ValueError(f"o DigiBrain modular usa S = {_S} (PE-12)")
+        if tuple(b for b, _ in self.w0) != COMPORTAMENTOS_DIGIBRAIN:
+            raise ValueError(f"W0: uma linha por comportamento, na ordem de ACOES_PET_HOJE: {[b for b, _ in self.w0]}")
+        for b, linha in self.w0:
+            for c, w in linha:
+                if c not in CARACTERISTICAS_DIGIBRAIN or type(w) is not int:
+                    raise ValueError(f"W0[{b}]: ({c!r}, {w!r})")
+        for tabela in (self.w0_prox, self.w0_nov):
+            for b, w in tabela:
+                if b not in COMPORTAMENTOS_DIGIBRAIN or type(w) is not int:
+                    raise ValueError(f"W0_prox ou W0_nov: ({b!r}, {w!r})")
+        for b, tipos in self.w0_tipo:
+            if b not in COMPORTAMENTOS_DIGIBRAIN:
+                raise ValueError(f"W0_tipo: comportamento {b!r}")
+            for t, w in tipos:
+                if t not in TIPOS_ALVO_DIGIBRAIN or type(w) is not int:
+                    raise ValueError(f"W0_tipo[{b}]: ({t!r}, {w!r})")
+        if any(r not in RECEPTORES_DIGIBRAIN for r in self.fora_do_r):
+            raise ValueError(f"fora_do_r: {self.fora_do_r}")
+        for tau in (self.tau_hab, self.tau_v, self.tau_e, self.tau_c, self.tau_f_sobe, self.tau_f_desce):
+            if tau < 15:
+                raise ValueError(f"constante de tempo abaixo do passo do cerebro (15 ticks): {tau}")
+        if not 0 < self.g_min <= self.g0 <= self.g_max or self.r_norm <= 0 or self.s_v <= 0 or self.n_ep <= 0 or self.n_desiste <= 0 \
+                or self.escala_cuidado <= 0 or self.d_max <= 0 or self.h_max <= 0:
+            raise ValueError("ConfigDigibrainInatos: g_min <= g0 <= g_max; r_norm, s_v, n_ep, n_desiste, escala_cuidado, d_max e h_max "
+                             "positivos")
+
+
+CONFIG_DIGIBRAIN_INATOS = ConfigDigibrainInatos()
+# o status de cada campo (conferido por teste contra os campos da dataclass): tudo PROPOSTO, salvo a escala (PE-12)
+PARAMETROS_DIGIBRAIN_INATOS: dict[str, tuple[str, str]] = {
+    f.name: (("DECIDIDO", "PE-12 (2026-10-25): S = 1024, o do A") if f.name == "escala" else
+             ("PROPOSTO", "docs/ESPEC_DIGIBRAIN_MODULAR.md, secoes 2 a 7; valor de partida a mao (etapa 1a), SEM FONTE salvo o que o "
+                          "comentario do campo cita"))
+    for f in fields(ConfigDigibrainInatos)}
+# a versao do pet do cerebro modular (DM-5, DECIDIDA em 2026-10-25): a v13, so com a ConfigDigibrain ligada. Os saves v1 a v12, as
+# assinaturas e os gabaritos nao mudam; no jogo (web/app/), a v13 entra na etapa 1b
+VERSAO_PET_DIGIBRAIN = 13
