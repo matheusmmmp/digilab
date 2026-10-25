@@ -2358,6 +2358,8 @@ CONFIG_DIGIBRAIN_LIGADA = ConfigDigibrain(ligada=True)
 # magnitudes (os sinais da tabela da secao 4.5 ficam). Todo valor e um inteiro na escala S = 1024 (o v inteiro representa v/S), salvo as
 # constantes de tempo (em ticks), as distancias (em subunidades do mundo) e as contagens. O genoma futuro escreve este registro; o
 # aprendido nunca entra nele (EG-5).
+# A calibracao (2026-10-25, tres rodadas nas bases 63101 e 63202, so o M3): os valores abaixo sao os da rodada 3, a melhor, congelados
+# pelo adendo 1 do plano para o piloto; continuam PROPOSTOS (o Matheus decide). Cada valor mudado diz a rodada no comentario.
 #
 # As caracteristicas de contexto z (secao 2.1, ~20; a ordem e a das linhas de W0 e de H): o vies, as urgencias dos onze receptores do
 # prototipo (secao 6), o contexto do M-SENS, as conjuncoes, duas conjuncoes com a urgencia (a fome sem comida, para chamar e explorar;

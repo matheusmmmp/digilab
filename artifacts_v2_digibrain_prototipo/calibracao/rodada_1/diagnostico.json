@@ -1,0 +1,39 @@
+{
+  "falhas": {
+    "acoes": {
+      "brincar": 0.0204020402040204,
+      "chamar_atencao": 0.05870587058705871,
+      "comer": 0.20322032203220322,
+      "dormir": 0.5043004300430043,
+      "explorar": 0.21317131713171317,
+      "ocioso": 0.00020002000200020003
+    },
+    "decisoes": 19998,
+    "frac_racao_entre_as_unidades": 0.20097009700970098,
+    "frac_reflexo": 0.43564356435643564,
+    "janelas": 2500
+  },
+  "frac_decisoes_com_intencao": 0.02171688988095238,
+  "habito_no_teto": {
+    "pesos": 7728,
+    "por_comportamento": {
+      "brincar": 3,
+      "chamar_atencao": 0,
+      "comer": 270,
+      "dormir": 0,
+      "emburrar": 0,
+      "explorar": 10,
+      "ocioso": 0
+    },
+    "total": 283
+  },
+  "intencoes_que_acabaram": {
+    "meta|1": 4479,
+    "meta|2": 65,
+    "meta|3": 1,
+    "trocou|1": 1286,
+    "trocou|2": 24
+  },
+  "pasta": "artifacts_v2_digibrain_prototipo/calibracao/rodada_1",
+  "rodada": 1
+}
