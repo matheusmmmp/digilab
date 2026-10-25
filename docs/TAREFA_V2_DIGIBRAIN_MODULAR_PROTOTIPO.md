@@ -1,7 +1,7 @@
 # TAREFA V2 — DIGIBRAIN_MODULAR_PROTOTIPO: o protótipo e a avaliação dos mecanismos do DigiBrain modular (2026-10-24)
 
 Coordenador: Gerente (Claude Code). Worker: a definir. Worktree e branch: `v2-modular-prototipo-<etapa>`. Status: **ABERTA, só papel.**
-Começa depois da especificação aprovada.
+**Não começa até a revisão da especificação pelo Matheus** (2026-10-25): nenhuma implementação nem experimento antes dela.
 
 Categoria: implementacao (com a avaliação como experimento). Origem: Matheus, 2026-10-24, o PROMPT MESTRE (seções 1, 6 e 9).
 
@@ -27,7 +27,7 @@ cada módulo pesa como a especificação diz?
 ## 2. Depende de
 
 - `docs/ESPEC_DIGIBRAIN_MODULAR.md` aprovado;
-- as DM-1 a DM-5;
+- as DM-1 a DM-9 (DECIDIDAS em 2026-10-25; a versão do pet modular é a **v13**, DM-5);
 - os critérios de `docs/TAREFA_V2_CEREBRO_A_BASELINE.md`, escritos **antes** da avaliação.
 
 ## 3. Mudança mínima (PROPOSTA)
