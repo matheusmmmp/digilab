@@ -162,3 +162,23 @@ com os testes T-PONTO-1 a T-PONTO-4.
 - **Fica para depois, pela ordem do plano:** o porte dos módulos do cérebro para TS e o G-PAR, depois da 1a do D na `main` e dos
   gabaritos Python dela; a medição da v13.
 - **Interpretações e achados** em `docs/registro/2026-10.md` (DIGIBRAIN-MODULAR-PROTOTIPO, etapa 1b).
+
+## 13. Etapa 1a, os módulos, os testes de mecanismo e o código da avaliação (worker D, 2026-10-25)
+
+- **Os módulos** da espec no pacote `digilab/digibrain/`, atrás da `ConfigDigibrain`: M-SENS, M-AFETO, M-ESTADO, M-IMPULSO, M-MEM,
+  M-ARB, M-PLAST (P1 e P2) e o M-ADAPT completo. A aritmética é inteira (S = 1024), na forma I, com uma `rng.random()` por decisão com
+  dois candidatos ou mais, o reflexo do sono fora do sorteio e as seis sondas de mesmo u. O lugar lembrado vai como `Alvo.ponto`, só em
+  EXPLORAR e só com o M-MEM tendo recuperado um lugar; o motor não ganha candidato.
+- **As subchaves:** `p1` e `controle_g_apr` ("nenhum", "embaralhado", "constante"), com o `g_apr_constante`. Com uma subchave
+  desligada, o termo do módulo é 0 em toda decisão, com `raise` se não for. Os valores de partida ficam em `ConfigDigibrainInatos`
+  (PROPOSTOS, SEM FONTE), e a v13 é o `VERSAO_PET_DIGIBRAIN`, só com a chave.
+- **Os testes:**
+  - os de mecanismo, em `tests/test_digibrain_mecanismo.py`;
+  - o G1, o T-CADEIA-1 e os T-PONTO-1 a 3, em `tests/test_digibrain_vidas.py`;
+  - o G-INT, a G-RECEPTOR, o G-SEM-DIRECAO e o `engine.py`, em `tests/test_digibrain_etapa0.py`;
+  - o G2 é o `tests/test_gabarito_digibrain.py`, sem mudança.
+- **O código da avaliação:** as medidas da seção 4 do plano em `digilab/metrics.py`; o orquestrador
+  `experiments/run_v2_digibrain_prototipo.py`, com os 9 braços, as 12 células, as três fases e o Holm da seção 5.2.1; as configs em
+  `experiments/configs/v2_digibrain_prototipo/`. Nenhuma vida das faixas rodou.
+- **Fica para depois:** a calibração (seção 6.1 do plano), despachada depois de o G-MECANISMO passar na `main`; a etapa 1b no TS.
+- **Interpretações e achados** em `docs/registro/2026-10.md`.

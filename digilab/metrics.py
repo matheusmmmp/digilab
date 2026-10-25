@@ -2032,3 +2032,141 @@ def exaustao_nas_decisoes(decisoes: Sequence[tuple[int, float]], janela: tuple[i
     if not sel:
         raise ValueError("exaustao sem decisao na janela")
     return {"n": len(sel), "frac": sum(1 for e in sel if e < limiar) / len(sel)}
+
+
+# --- o prototipo do DigiBrain modular (docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md, secao 4; PROPOSTAS na etapa 1a)
+MODULOS_SONDA = ("incentivo", "habito", "memoria", "persistencia", "afeto")    # as sondas "quem decidiu" da espec, secao 7
+
+
+def cadeia_comida_corpo(racoes: Sequence[tuple[int, int, float | None]], consumos: Sequence[tuple[int, int, str, int, int]], dias: int,
+                        w_ticks: int = 120, limiar_fome: float = 0.5) -> dict:
+    """A cadeia comida -> corpo (secao 4, a medida do G-MVP; PPM-4). `racoes` = (id, tick posta, fome) de cada racao posta pelo dono, com a
+    fome (o estado, 0-1) da primeira decisao do pet em ou depois da posta (None sem decisao depois: fica fora, contada); `consumos` = (id,
+    tick, tipo, falta da fome antes, falta depois) de cada consumo do pet, com a falta do receptor (inteira) na decisao e logo depois da
+    consequencia. A racao e elegivel com a fome abaixo de `limiar_fome`; fechada se o pet a come ate t0 + W (W = 8 decisoes, 120 ticks) e
+    a falta da fome cai na decisao do consumo. Sai: as elegiveis, as fechadas, a taxa (None sem elegivel), a latencia de cada fechada e as
+    refeicoes de racao por dia (todo consumo de racao, elegivel ou nao)."""
+    if dias <= 0 or w_ticks <= 0:
+        raise ValueError(f"dias {dias!r} e W {w_ticks!r} positivos")
+    primeiro: dict = {}
+    for ident, tick, tipo, antes, depois in sorted(consumos, key=lambda c: (c[1], c[0])):
+        if ident in primeiro:
+            raise ValueError(f"comida {ident} consumida duas vezes")
+        primeiro[ident] = (tick, tipo, antes, depois)
+    elegiveis, sem_decisao, fechadas, latencias = 0, 0, 0, []
+    for ident, t0, fome in racoes:
+        if fome is None:
+            sem_decisao += 1
+            continue
+        if _escala01("fome", fome) >= limiar_fome:
+            continue
+        elegiveis += 1
+        c = primeiro.get(ident)
+        if c is None:
+            continue
+        tick, tipo, antes, depois = c
+        if tipo != "racao" or tick < t0:
+            raise ValueError(f"o consumo {ident} nao e da racao posta em {t0}: {c!r}")
+        if tick <= t0 + w_ticks and depois < antes:
+            fechadas += 1
+            latencias.append(tick - t0)
+    return {"elegiveis": elegiveis, "fechadas": fechadas, "taxa": fechadas / elegiveis if elegiveis else None, "latencias": latencias,
+            "sem_decisao": sem_decisao, "refeicoes_por_dia": sum(1 for c in consumos if c[2] == "racao") / dias}
+
+
+def influencia_por_modulo(decisoes: Sequence[tuple[int, Mapping[str, bool]]], janela: tuple[int, int] = JANELA_8_14,
+                          modulos: Sequence[str] = MODULOS_SONDA) -> dict:
+    """A influencia de cada modulo (secao 4; espec, secao 7): a fracao das decisoes da janela com `<modulo>_decidiu`, e a mesma fracao
+    em cada dia da janela (None num dia sem decisao). `decisoes` = (tick, {modulo: decidiu}). Generaliza o `competicao_nas_decisoes`.
+    Falha alto sem decisao na janela ou com um modulo faltando."""
+    ini, fim = _checar_janela(janela)
+    sel = [(t, d) for t, d in decisoes if ini <= t < fim]
+    if not sel:
+        raise ValueError("influencia sem decisao na janela")
+    for _, d in sel:
+        if any(type(d.get(m)) is not bool for m in modulos):
+            raise ValueError(f"decisao sem a sonda de todos os modulos {list(modulos)}: {d!r}")
+    dias = range(ini // TICKS_POR_DIA, (fim + TICKS_POR_DIA - 1) // TICKS_POR_DIA)
+    por_dia = {}
+    for m in modulos:
+        serie = []
+        for dia in dias:
+            ds = [d for t, d in sel if t // TICKS_POR_DIA == dia]
+            serie.append(sum(1 for d in ds if d[m]) / len(ds) if ds else None)
+        por_dia[m] = serie
+    return {"n": len(sel), "frac": {m: sum(1 for _, d in sel if d[m]) / len(sel) for m in modulos}, "por_dia": por_dia}
+
+
+def falta_ao_comer(decisoes: Sequence[tuple[int, bool, float]], janela: tuple[int, int] = JANELA_8_14) -> dict:
+    """A falta da fome ao comer (secao 4; a G-ABLA-P1): a media da falta da fome (a interocepcao, 0-1) nas decisoes da janela que
+    escolheram comer a racao. `decisoes` = (tick, escolheu comer a racao, falta). None sem decisao de comer."""
+    ini, fim = _checar_janela(janela)
+    sel = [_escala01("falta", f) for t, comeu, f in decisoes if ini <= t < fim and comeu]
+    return {"n": len(sel), "media": sum(sel) / len(sel) if sel else None}
+
+
+def repeticao_apos_alivio(decisoes: Sequence[tuple[int, object, str, float | None]], janela: tuple[int, int] = JANELA_8_14) -> dict:
+    """O indice de "ganhou, fica" (secao 4; a G-ABLA-P2; medida nossa, SEM FONTE). `decisoes` = (tick, contexto, acao, r da consequencia
+    dela, ou None sem ela). Em cada contexto, cada par de decisoes seguidas naquele contexto, com a primeira na janela e com o r dela:
+    P(a mesma acao | r > 0) - P(a mesma acao | r <= 0). None sem os dois lados."""
+    ini, fim = _checar_janela(janela)
+    ultimo: dict = {}
+    lados = {True: [0, 0], False: [0, 0]}
+    for t, ctx, acao, r in sorted(decisoes, key=lambda d: d[0]):
+        anterior = ultimo.get(ctx)
+        if anterior is not None and ini <= anterior[0] < fim and anterior[2] is not None:
+            lado = lados[anterior[2] > 0]
+            lado[0] += 1
+            lado[1] += acao == anterior[1]
+        ultimo[ctx] = (t, acao, r)
+    n_pos, n_nao = lados[True][0], lados[False][0]
+    p_pos = lados[True][1] / n_pos if n_pos else None
+    p_nao = lados[False][1] / n_nao if n_nao else None
+    return {"n_pos": n_pos, "n_nao_pos": n_nao, "p_pos": p_pos, "p_nao_pos": p_nao,
+            "indice": None if p_pos is None or p_nao is None else p_pos - p_nao}
+
+
+def intencoes_com_meta(intencoes: Sequence[tuple[int, bool]], janela: tuple[int, int] = JANELA_8_14) -> dict:
+    """A fracao das intencoes que acabam com a meta (secao 4; a G-ABLA-PERS): `intencoes` = (tick em que comecou, acabou com a meta), so
+    as que acabaram e comecaram na janela. None sem intencao."""
+    ini, fim = _checar_janela(janela)
+    sel = [m for t, m in intencoes if ini <= t < fim]
+    if any(type(m) is not bool for m in sel):
+        raise ValueError(f"meta nao booleana: {sel!r}")
+    return {"n": len(sel), "frac": sum(sel) / len(sel) if sel else None}
+
+
+def pesos_no_teto(pesos: Sequence[int], teto: int) -> float:
+    """A fracao dos pesos de habito no teto (em +teto ou -teto) no fim da vida (o G6 da V2; a PE-10). Falha alto sem peso ou com um alem
+    do teto."""
+    if not pesos or teto <= 0:
+        raise ValueError("pesos_no_teto sem peso ou com teto nao positivo")
+    if any(abs(p) > teto for p in pesos):
+        raise ValueError(f"peso alem do teto {teto}")
+    return sum(1 for p in pesos if abs(p) == teto) / len(pesos)
+
+
+def centro_temporal(serie: Sequence[float]) -> float | None:
+    """O dia medio de uma serie diaria de fracoes (o dia 1 primeiro), ponderado pela fracao: sum_d d f_d / sum_d f_d. None com a serie
+    toda em 0 (a leitura D-2). Falha alto com valor None ou negativo."""
+    if any(f is None or f < 0 for f in serie):
+        raise ValueError(f"serie com valor ausente ou negativo: {serie!r}")
+    total = sum(serie)
+    return None if total == 0 else sum((d + 1) * f for d, f in enumerate(serie)) / total
+
+
+def entropia_acoes(acoes: Sequence[str]) -> float | None:
+    """A entropia (bits) da distribuicao das acoes escolhidas (a leitura D-1, a exploracao). None sem acao."""
+    if not acoes:
+        return None
+    n = len(acoes)
+    cont: dict = {}
+    for a in acoes:
+        cont[a] = cont.get(a, 0) + 1
+    return -sum((c / n) * math.log2(c / n) for c in cont.values())
+
+
+def media_absoluta(valores: Sequence[float]) -> float | None:
+    """A media dos valores absolutos (a leitura D-1, a taxa de aprendizado: a mudanca do desfecho por consumo, a do habito por
+    consequencia). None sem valor."""
+    return sum(abs(v) for v in valores) / len(valores) if valores else None
