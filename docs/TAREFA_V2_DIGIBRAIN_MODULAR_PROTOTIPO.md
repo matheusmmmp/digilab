@@ -78,3 +78,19 @@ cada módulo pesa como a especificação diz?
 ## 8. Precisa do Matheus
 
 As decisões que a especificação e o plano abrirem (as faixas, os limiares dos gates, o que entra no primeiro protótipo).
+
+## 9. Etapa 0, os gabaritos, a chave e o esqueleto (worker D, 2026-10-25)
+
+- **Os gabaritos primeiro (commit 0b9130d):** `tests/gabaritos/digibrain_vidas_de_hoje.json`, 196 vidas com a lista de candidatos de
+  cada sub-decisão do mundo. É o G2 do `lembranca`. 184 vidas reusam os casos dos gabaritos da bancada no mundo (o J1 do P4, os dois pets,
+  o plano do J5 e os sentidos), e a impressão de cada uma é conferida contra a fonte. As outras 12 ligam o Olfato da comida. O v12 no
+  layout do produto e o A no layout padrão ficam pelos gabaritos do MVP (#403), que já têm os candidatos.
+- **A chave:** `ConfigDigibrain` em `digilab/config.py`, desligada, PROPOSTA, com as subchaves `modula_g_apr` (desligada, PE-4), `p2`,
+  `m_mem` e `persistencia`. Nada fora do pacote a lê, e um teste confere.
+- **O esqueleto:** `digilab/digibrain/`. O M-ADAPT (`adapt.py`) cumpre o `Politica`, com as falhas altas da seção 4.1. Os módulos (sens,
+  afeto, estado, impulso, mem, arb, plast e os ganchos vazios) levantam NotImplementedError. Nenhuma equação.
+- **Os gates:** o G2, o G-INT e a G-RECEPTOR pela AST, e o `engine.py` intacto, em `tests/test_digibrain_etapa0.py` e
+  `tests/test_gabarito_digibrain.py`.
+- **Fica para a etapa do `lembranca`:** o G2 das vidas v12 do jogo, no TS, antes da mudança TS; e o alvo `ponto` que o motor já aceita
+  no explorar (o achado do registro).
+- **Interpretações e achados** em `docs/registro/2026-10.md`.
