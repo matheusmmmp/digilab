@@ -6,6 +6,9 @@ análise.** Roda em paralelo à etapa 0 do protótipo (com o D); as duas não de
 
 Este arquivo registra o despacho, que chegou por mensagem entre sessões (relato do Gerente), e a entrega.
 
+**Status:** CONCLUÍDA. A busca entrou na `main` pelo #408 (`34a5263`). As decisões D-0, D-1 e D-2 foram DECIDIDAS pelo Matheus em
+2026-10-25 (seção 5). As trocas foram aplicadas na espec pela tarefa documental da D-0 (branch `v2-modular-espec-fontes`).
+
 ## 1. A pergunta
 
 A PE-1 de `docs/ESPEC_DIGIBRAIN_MODULAR.md` (seção 15) foi decidida pelo Matheus em 2026-10-25: os SEM FONTE da seção 2 trocam por
@@ -61,3 +64,21 @@ As escolhas SEM FONTE das seções 2 e 14 da espec têm fonte verificada? Em esp
 
 **As trocas propostas** são 10, de T-a1 a T-e2. Com elas vão as decisões D-0 a D-2 para o Matheus (a síntese, seção 8). A espec não
 mudou.
+
+## 5. As decisões do Matheus (2026-10-25)
+
+Por relato do Gerente, depois do merge do #408:
+- **D-0, aplicar todas as trocas:** T-a1 a T-e2 e as duas linhas sem número (Luce e o acumulador com inibição mútua), em
+  `docs/ESPEC_DIGIBRAIN_MODULAR.md`.
+  - **A condição do Matheus:** em cada troca, o texto separa "a fonte afirma" da "leitura do Digilab".
+  - **As três NÃO LOCALIZADA continuam SEM FONTE,** escritas como escolha nossa: o ponto fixo, o sinal homeostático como terceiro
+    fator e "o mais recente do lugar manda".
+  - **Aplicadas** no branch `v2-modular-espec-fontes`, numa tarefa documental, antes de qualquer vida do modular.
+- **D-1, a PE-4:**
+  - **a decisão fica:** a excitação modula o `g_apr`, atrás da subchave, desligada no primeiro braço, com a ablação;
+  - **o registro, nas palavras do Matheus:** Doya (2002) associa a velocidade de aprendizagem à acetilcolina, e a excitação no Digilab é
+    HIPÓTESE EXPERIMENTAL, não conclusão da literatura.
+- **D-2, a predição de Lengyel e Dayan (2007), "memória cedo, hábito depois":**
+  - entra como leitura descritiva, **SEM gate**, marcada [HIPÓTESE] com fonte, na seção 2.5 da espec;
+  - é item para o plano de análise do protótipo.
+- **A PE-15** fica feita quanto à licença do código: CfC e `ncps` em Apache-2.0. As patentes não foram buscadas.

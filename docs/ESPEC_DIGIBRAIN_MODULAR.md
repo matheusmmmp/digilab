@@ -8,6 +8,8 @@
     de conclusão**, não resolvida pelo protótipo (seção 9);
   - o candidato `lembranca` **AUTORIZADO** para a v13, Python e TS, atrás da chave, com o gabarito G2 antes da implementação; a v12 e o
     A preservados; a medição do A para o orçamento é pontual e só de desempenho (seções 11 e 12).
+- **As fontes da PE-1 aplicadas em 2026-10-25** (`docs/referencias/DM_REVISAO_SUBSTRATO_NEURAL.md`, as trocas T-a1 a T-e2), com as
+  decisões D-0, D-1 e D-2 do Matheus DECIDIDAS (seção 15).
 - O protótipo (`docs/TAREFA_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`) começa depois deste documento entrar na `main`, pela etapa 0 (os
   gabaritos e a chave desligada) e pelo plano de análise.
 - **O que está decidido** e não se rediscute aqui: a direção modular (2026-10-24) e as DM-1 a DM-9 (2026-10-25), com as condições do
@@ -27,6 +29,10 @@
 
 As referências são só as verificadas (a skill `literatura-digilab` e as tabelas de `docs/referencias/`), lidas em metadados e resumo,
 nunca no texto completo. Onde não há fonte, está escrito SEM FONTE. Nenhuma alegação de novidade.
+
+**Nas fontes aplicadas em 2026-10-25** (a D-0, depois da busca da PE-1), o texto separa duas coisas: **"a fonte afirma"** (o que o
+resumo ou o título dela diz) e **"leitura do Digilab"** (o que nós tiramos dela, que é hipótese nossa). Um "NÃO LOCALIZADA" daquela
+busca fica escrito como escolha nossa, SEM FONTE.
 
 ## 0. Em uma página
 
@@ -89,6 +95,9 @@ se decidem pela avaliação.
   implementações fazem a mesma conta. A qualidade se mede pelos testes de mecanismo (seção 10) e pela avaliação do protótipo.
 - **O precedente** de redes em aritmética só inteira, com treino, é Jacob et al. (2018), `10.1109/cvpr.2018.00286`, VERIFICADA por título
   e metadados. Sustenta só que pesos em ponto fixo podem ser treináveis, e não a forma desta rede.
+- **O integrador e a unidade de taxa em ponto fixo, como substrato de criatura, são escolha nossa, SEM FONTE** (NÃO LOCALIZADA na busca
+  de 2026-10-25). O Jacob et al. trata de redes sem estado; o ponto fixo se sustenta pelo requisito de paridade do repositório, não pela
+  literatura.
 
 **O tempo:**
 - **Um passo do cérebro é uma decisão do motor:** Δ = `intervalo_decisao_ticks` = 15 ticks (`config.py:55`). O cérebro não roda entre
@@ -134,7 +143,7 @@ São **unidades de taxa:** cada uma tem uma atividade inteira em [0, S] ou [0, A
 | **conjunções** | M-SENS | comida à vista (a maior proximidade entre as comidas boas), sem comida (`S − comida à vista`), bola à vista | [0, S] | [HIPÓTESE]; o C já usa conjunções fixas herdadas (`cerebro_c.py`, "fome x fruta presente") |
 | **urgência** | M-AFETO | uma por receptor, com a curva inata da necessidade (seção 4.3) | [0, S] | [HIPÓTESE] |
 | **afeto** | M-AFETO | valência (com sinal) e excitação | [−S, S]; [0, S] | [HIPÓTESE] |
-| **moduladores** | M-AFETO | o ganho da aprendizagem `g_apr` e o ganho da exploração `g_exp` | [0, 2S] | [HIPÓTESE], com o [MECANISMO] de Cliff e Grand (1999) |
+| **moduladores** | M-AFETO | o ganho da aprendizagem `g_apr` e o ganho da exploração `g_exp` | [0, 2S] | [HIPÓTESE], com o [MECANISMO] de Cliff e Grand (1999) e a [INSPIRAÇÃO] de Cañamero (1997): a fonte afirma, numa criatura, motivações vindas do corpo (com excitação e saciedade) e "hormônios" que mudam a intensidade do comportamento; leitura do Digilab: usar esses sinais como ganhos do aprendizado e da exploração |
 | **estado** | M-ESTADO | a força do compromisso `C` com a intenção em curso; a frustração `F`; a habituação por classe de objeto | [0, S] | [HIPÓTESE] |
 | **comportamento** | M-IMPULSO | uma por par (comportamento, alvo) possível na decisão: comer cada comida vista ou o cheiro; brincar com a bola ou sem alvo; explorar (vagar, o cheiro ou um lugar lembrado); dormir; chamar o dono; emburrar; ficar ocioso | [0, A_max] | [HIPÓTESE] |
 
@@ -155,7 +164,7 @@ unidade e por decisão, e entram na estimativa como os "~20 integradores" e como
 | de → para | o que é | muda? | tamanho (protótipo) | marca |
 |---|---|---|---|---|
 | contexto z → comportamento | **os pesos inatos** `W⁰[b, j]` | não: são o inato (o gancho do genoma, seção 4.9) | ≤ 7 comportamentos × ~20 | [HIPÓTESE]; substitui as regras do instinto |
-| contexto z → comportamento | **os pesos de hábito** `H[b, j]`, com partida 0 | sim, pela regra P2 | ≤ 7 × ~20 | [MECANISMO] o hebbiano modulado de Cliff e Grand (1999); [HIPÓTESE] a forma |
+| contexto z → comportamento | **os pesos de hábito** `H[b, j]`, com partida 0 | sim, pela regra P2 | ≤ 7 × ~20 | [MECANISMO] o hebbiano modulado de Cliff e Grand (1999), e a plasticidade modulada em agentes que forrageiam de Niv et al. (2002) e Nogueira et al. (2013) (seção 2.4); [HIPÓTESE] a forma |
 | objeto → comportamento-com-alvo | proximidade, novidade e incentivo do item o vão à unidade (b, o) | os pesos `W⁰_prox[b]` e `W⁰_nov[b]` não; o incentivo, sim (P1) | por item | [HIPÓTESE] |
 | interocepção → modelo do desfecho | `d̂[c, r]`: quanto cada receptor r muda ao comer a classe c | sim, pela regra P1 | 6 classes × até 11 receptores | [EXISTE] o desfecho do `ModeloMundo` (`modelo_mundo.py`), adaptado |
 | M-MEM → comportamento "explorar o lugar P" | o valor lembrado do lugar | sim, por episódio (P3) | ≤ N_ep episódios | [HIPÓTESE]; o N6 é o precedente de desenho |
@@ -203,6 +212,14 @@ G[comer,o] = clamp( div_arred(c_G · valor_previsto(corpo, d̂[c,·]), S_V), 0, 
 
 São três regras, todas locais, todas em inteiros e todas multiplicadas pelo ganho `g_apr` do M-AFETO.
 
+**O ganho `g_apr` e a excitação (a PE-4, com a D-1 de 2026-10-25):**
+- **a decisão fica:** a excitação modula o `g_apr`, atrás da subchave, **desligada no primeiro braço**, com a ablação e os controles
+  embaralhado e constante (seção 4.3);
+- **a fonte afirma:** Doya (2002), `10.1016/s0893-6080(02)00044-8`, VERIFICADA (resumo), propõe que os neuromoduladores levam sinais
+  globais que regulam os metaparâmetros do aprendizado, e **associa a velocidade de aprendizagem à acetilcolina** (e a aleatoriedade da
+  escolha à noradrenalina). McGaugh (2005), `10.1101/lm.93405`, VERIFICADA só pelo título, liga a excitação emocional à consolidação;
+- **leitura do Digilab:** a excitação no `g_apr` é **HIPÓTESE EXPERIMENTAL, não conclusão da literatura.**
+
 **P1, o modelo do desfecho** (o quê cada coisa faz ao corpo). Em cada consumo percebido da classe c, para cada receptor r:
 
 ```
@@ -230,7 +247,30 @@ H[b*,j] ← clamp( H[b*,j] + mul( mul(g_apr, η_h), mul(r_n, e_j) ), −H_max, H
   - [MECANISMO] Cliff e Grand (1999), `10.1162/106454699568683`, VERIFICADA: a rede do norn tem "aprendizado hebbiano e modulação
     hormonal". Sustenta a combinação, não a regra;
   - a regra de três fatores do C é o precedente no código (`cerebro_c.py:33`), com o empate com o A (#197);
-  - a elegibilidade e os três fatores, como termos da literatura, estão SEM FONTE (`docs/ARQUITETURA_DIGIBRAIN_MODULAR.md`, seção 10).
+  - [MECANISMO] **os três fatores.** A fonte afirma: as regras neo-hebbianas de três fatores dependem da atividade pré-sináptica, de
+    variáveis pós-sinápticas e de um sinal neuromodulador (Frémaux e Gerstner 2016, `10.3389/fncir.2015.00085`), e o terceiro fator pode
+    codificar recompensa, erro, estatística da população ou atenção (Kuśmierz et al. 2017, `10.1016/j.conb.2017.08.020`). As duas
+    VERIFICADAS (resumo), e as duas tratam de sinapses e STDP. Leitura do Digilab: o P2 é essa forma em unidades de taxa, com o pré
+    `e_j`, o pós 1 na escolhida e o terceiro fator `r_n`;
+  - [MECANISMO] **a elegibilidade.** A fonte afirma: a coativação marca a sinapse com um traço de elegibilidade, e o peso só muda se o
+    terceiro fator chegar enquanto a marca existe (Gerstner et al. 2018, `10.3389/fncir.2018.00053`, VERIFICADA, resumo). Leitura do
+    Digilab: o `e_j` guardado da decisão até a consequência é essa marca, com uma marca só;
+  - **o sinal homeostático do corpo como terceiro fator é escolha nossa, SEM FONTE** (NÃO LOCALIZADA na busca de 2026-10-25). As peças
+    estão separadas na literatura: o terceiro fator genérico (acima) e a recompensa como redução do desvio homeostático (Keramati e
+    Gutkin 2014). A junção é do Digilab;
+  - [MECANISMO] **os precedentes em agentes.** A fonte afirma: regras de plasticidade moduladas por recompensa, evoluídas, em abelhas que
+    forrageiam (Niv et al. 2002, `10.1177/1059-712302-010001-01`), e uma rede plástica neuromodulada que gera forrageamento num
+    personagem virtual (Nogueira et al. 2013, `10.1162/978-0-262-31709-2-ch083`), as duas VERIFICADAS (resumo). Leitura do Digilab: o
+    P2 segue a mesma família, com regra posta à mão e não evoluída.
+- **O crédito (a PE-3, por opção):**
+  - [MECANISMO] **as opções.** A fonte afirma: a ação estendida no tempo, com início e término, é o arcabouço das opções (Sutton, Precup e
+    Singh 1999, só título e metadados), com as políticas internas e o término aprendidos juntos (Bacon et al. 2017,
+    `10.1609/aaai.v31i1.10916`, resumo) e com uma leitura neural do comportamento hierárquico (Botvinick et al. 2009,
+    `10.1016/j.cognition.2008.08.011`, resumo). Elas sustentam a intenção como unidade estendida, não a regra de crédito;
+  - **a escolha por opção, e não por janela de K decisões, é do Digilab.** A comparação direta é NÃO LOCALIZADA, e a literatura
+    verificada sustenta o traço como ponte temporal (Gerstner et al. 2018), o que joga a favor da janela. A escolha vem da evidência
+    interna: com o traço ligado, o A piorou o que se queria medir (`docs/RESULTADO_V2_REVISAO_APRENDIZ.md`). Leitura do Digilab: o
+    crédito por opção é uma elegibilidade que dura a opção inteira. O T-PLAST-2, com intenções longas, separa os dois.
 
 **P3, o episódio** (onde e quando; o M-MEM, seção 4.6): cada consumo e cada visita a um lugar lembrado vira um episódio. A recuperação
 muda a unidade "explorar o lugar P". Não muda peso nenhum.
@@ -258,6 +298,13 @@ A trajetória esperada, cada passo com o teste que a confere (seção 10). É **
    - entre comidas diferentes, prefere a de maior alívio previsto (T-CADEIA-2, T-IMPULSO-2).
 3. **Os lugares:** as refeições no comedouro viram episódios. Com fome e sem comida à vista, "explorar o comedouro" ganha peso, e o pet
    vai ao lugar onde o dono costuma pôr a ração (T-MEM-2).
+
+   **A ordem "memória cedo, hábito depois" (a D-2 de 2026-10-25), [HIPÓTESE] com fonte:**
+   - **a fonte afirma:** Lengyel e Dayan (2007), NIPS 20, VERIFICADA sem DOI (resumo), defendem um controle episódico ao lado do modelo
+     do mundo e do hábito, útil sobretudo bem no começo do aprendizado, antes de o hábito se formar;
+   - **leitura do Digilab:** o termo M do M-MEM pesaria mais nas primeiras refeições, e o hábito H do P2 depois;
+   - **entra como leitura descritiva, SEM gate.** É um item para o plano de análise do protótipo: a fração das decisões em que o termo M
+     e o termo H decidiram (a sonda da seção 7), ao longo da vida.
 4. **O mundo muda:** uma visita ao lugar lembrado sem comida vira um episódio de valor zero, que passa na frente na recuperação daquele
    lugar. O pet deixa de voltar lá (T-MEM-4).
 5. **Os hábitos:** o P2 reforça o comportamento em que o corpo melhorou, no contexto em que ele aconteceu. Por exemplo:
@@ -280,6 +327,8 @@ A trajetória esperada, cada passo com o teste que a confere (seção 10). É **
 - **A inspiração no Creatures é de desenho:**
   - [INSPIRAÇÃO] Grand, Cliff e Malhotra (1997), `10.1145/267658.267663`: a rede, a bioquímica e o genoma juntos;
   - [MECANISMO] só o hebbiano com modulação hormonal de Cliff e Grand (1999);
+  - o Creatures não é o único precedente: a plasticidade modulada em agentes que forrageiam está em Niv et al. (2002) e em Nogueira et
+    al. (2013) (seção 2.4), e as motivações vindas do corpo, com "hormônios", numa criatura, em Cañamero (1997) (seção 2.1);
   - o manual, a wiki e o openc2e são pista, nunca "o Creatures faz X";
   - o NORNBRAIN só se estuda (DM-9).
 
@@ -288,7 +337,7 @@ A trajetória esperada, cada passo com o teste que a confere (seção 10). É **
 | | **forma I: integradores com vazamento (a do protótipo, DM-1)** | **forma II: rede recorrente de taxa (a comparar só se a I não bastar)** |
 |---|---|---|
 | **a equação** | por variável: `y ← y + mul(k, u − y)`, com `k = div_arred(S·Δ, τ)`. Sem acoplamento entre as variáveis, fora o compromisso, que volta como viés (seção 2.2) | `y ← y + mul(k, φ_s(W_rec·y + W_in·u + b) − y)`, com φ_s uma sigmoide dura em inteiros (`clamp(S/2 + v/4, 0, S)`). É a discretização de Euler de uma rede recorrente de tempo contínuo |
-| **a variante com portas** (do tipo CfC) | — | `y ← mul(σ_f, y) + mul(S − σ_f, h)`, com `σ_f = φ_s(W_f·[y,u])` e `h = φ(W_h·[y,u])`: a porta decide quanto do estado fica. A forma fechada do CfC (Hasani et al. 2022) usa a exponencial; aqui ela vira a porta dura, sem transcendentais. **É [HIPÓTESE] e CORPUS:** o CfC e o NCP são pista, e **as licenças do software não foram conferidas** (DM-9: conferir antes de qualquer reúso) |
+| **a variante com portas** (do tipo CfC) | — | `y ← mul(σ_f, y) + mul(S − σ_f, h)`, com `σ_f = φ_s(W_f·[y,u])` e `h = φ(W_h·[y,u])`: a porta decide quanto do estado fica. A forma fechada do CfC (Hasani et al. 2022) usa a exponencial; aqui ela vira a porta dura, sem transcendentais. **A fonte afirma:** a LTC são sistemas lineares de primeira ordem modulados por portas não lineares, com a constante de tempo acoplada ao estado (Hasani et al. 2021, `10.1609/aaai.v35i9.16936`, VERIFICADA, resumo); o CfC é a aproximação dela em forma fechada, com erro limitado, sem solucionador numérico (Hasani et al. 2022, VERIFICADA, resumo); o NCP existe como publicação revisada (Lechner et al. 2020, VERIFICADA só pelo título). **Leitura do Digilab:** a porta dura em inteiros é [HIPÓTESE] nossa, SEM FONTE. **As licenças foram conferidas em 2026-10-25** (PE-15): o código do CfC (`raminmh/CfC`) e o `ncps` (`mlech26l/ncps`; PyPI 1.0.1) estão em **Apache-2.0**; as patentes de terceiros **não foram buscadas**; nenhum código é copiado |
 | **onde mora** | M-SENS (a habituação), M-AFETO (a valência, a excitação), M-ESTADO (`C`, `F`) | o mesmo estado, num vetor só, com `W_rec` aprendível ou fixo |
 | **o custo por decisão** | O(n) produtos, n ≈ 20 variáveis | O(n² + n·m) produtos; com n = 20 e m = 40, cerca de 1 200. A variante com portas, o dobro |
 | **a paridade** | trivial (somas e produtos inteiros) | exata em inteiros, se φ_s for linear por partes; **não** em float (o B só reproduzia no mesmo runtime) |
@@ -303,8 +352,26 @@ Por exemplo:
 
 Sem o gatilho, a forma II não entra. É a PE-8.
 
-**Sem fonte verificada no repositório:** os integradores com vazamento e as redes recorrentes de tempo contínuo como modelo neural.
-Os dois ficam [HIPÓTESE] de desenho (PE-1).
+**As fontes das duas formas** (a PE-1, aplicada em 2026-10-25; `docs/referencias/DM_REVISAO_SUBSTRATO_NEURAL.md`, seções 3 e 4):
+- [MECANISMO] **a unidade de taxa e a população.** A fonte afirma: uma rede de neurônios de resposta graduada tem as mesmas propriedades
+  coletivas do modelo binário (Hopfield 1984, `10.1073/pnas.81.10.3088`), e populações de neurônios excitatórios e inibitórios se
+  descrevem por equações diferenciais acopladas (Wilson e Cowan 1972, `10.1016/s0006-3495(72)86068-5`). As duas VERIFICADAS (resumo);
+- [MECANISMO] **a CTRNN como sistema nervoso de agente.** A fonte afirma: as redes recorrentes de tempo contínuo são usadas como
+  sistemas nervosos simples de agentes autônomos, e mesmo circuitos de um e dois neurônios têm dinâmica rica (Beer 1995,
+  `10.1177/105971239500300405`, VERIFICADA, resumo). O resultado de aproximação de Funahashi e Nakamura (1993),
+  `10.1016/s0893-6080(05)80125-x`, está VERIFICADO só pelo título;
+- [MECANISMO] **o integrador com vazamento como unidade de decisão.** A fonte afirma: a escolha é uma acumulação gradual, com vazamento,
+  estocástica e competitiva, em unidades de decisão não lineares (Usher e McClelland 2001, `10.1037/0033-295x.108.3.550`, VERIFICADA,
+  resumo);
+- **leitura do Digilab:** a forma I é a discretização de Euler do integrador com vazamento, a equação de cada unidade de uma CTRNN sem
+  os pesos recorrentes, e a forma II é a CTRNN de Beer discretizada. O Beer mostra que a riqueza vem do acoplamento, que a forma I não
+  tem: é o risco da tabela e o gatilho acima;
+- **o ponto fixo continua SEM FONTE,** escolha nossa (seção 1);
+- **o contraponto.** A fonte afirma: CTRNN evoluídas aprendem por reforço sem uma regra que mude os pesos, com o aprender na
+  dinâmica (Yamauchi e Beer 1994, `10.1177/105971239400200301`, VERIFICADA, resumo). Leitura do Digilab: o protótipo faz o oposto, com
+  plasticidade explícita (P1 e P2).
+
+As duas formas continuam [HIPÓTESE] de desenho quanto à suficiência para o pet: as fontes sustentam o modelo, não que ele baste.
 
 ## 4. O contrato de cada módulo
 
@@ -387,6 +454,8 @@ Sem isso, "modular" não se separa de "aprender mais depressa em média" (PE-4).
 **O sustento:**
 - [MECANISMO] a modulação química da aprendizagem: Cliff e Grand (1999);
 - a excitação que modula a consolidação, McGaugh (2005), `10.1101/lm.93405`: VERIFICADA só pelo título, [HIPÓTESE];
+- **a D-1 (2026-10-25):** Doya (2002) associa a velocidade de aprendizagem à acetilcolina, e não à excitação. A excitação no `g_apr` é
+  HIPÓTESE EXPERIMENTAL, não conclusão da literatura (seção 2.4);
 - o prazer que melhora a viabilidade: Lewis e Cañamero (2016), `10.1177/1059712316666331`, VERIFICADA (resumo), [MECANISMO] para o
   M-AFETO em geral, não para estas equações.
 
@@ -481,9 +550,19 @@ propósito:
 
 **O sustento:**
 - [MECANISMO] um módulo de memória episódica por cenas acoplado a uma criatura: Castro e Gudwin (2013), `10.4018/jse.2013010102`,
-  VERIFICADA. **Sem** afirmar que a cena recuperada informa a escolha: a tabela não sustenta isso;
-- **a regra "o mais recente do lugar manda"** é escolha nossa, SEM FONTE. Os sorteios do *Dwarf Fortress* (NÃO VERIFICADA EM FONTE
-  PRIMÁRIA) não entram.
+  VERIFICADA. **Sem** afirmar que a cena recuperada informa a escolha: esta fonte não sustenta isso;
+- [MECANISMO] **em animais, a memória do lugar da comida guiando a busca.** A fonte afirma: gaios lembram o que esconderam, onde e
+  quando; buscam de preferência as larvas frescas logo depois de esconder e aprendem depressa a não buscá-las depois de um intervalo em
+  que elas estragam (Clayton e Dickinson 1998, `10.1038/26216`, VERIFICADA, resumo). Leitura do Digilab: o M-MEM mínimo segue esse
+  padrão de comportamento (onde está a comida guia a busca, e o desfecho muda a busca seguinte); o T-MEM-4 é a nossa versão de "não
+  buscar onde estragou". A fonte não sustenta mecanismo nenhum;
+- [MECANISMO] **em agentes, o episódio como fonte de valor.** A fonte afirma: dar memória episódica ao aprendizado por reforço permite
+  aproximar valores e aprender com poucos dados (Gershman e Daw 2017, `10.1146/annurev-psych-122414-033625`, VERIFICADA, resumo). Os
+  preprints de controle episódico, Blundell et al. (2016, arXiv:1606.04460) e Pritzel et al. (2017, arXiv:1703.01988), revisão por pares
+  não conferida, ficam como pista;
+- **a regra "o mais recente do lugar manda"** é escolha nossa, SEM FONTE (NÃO LOCALIZADA na busca de 2026-10-25: o Clayton e Dickinson
+  mostra que o quando importa, não uma regra de recência). Os sorteios do *Dwarf Fortress* (NÃO VERIFICADA EM FONTE PRIMÁRIA) não
+  entram. N_ep = 16 e o despejo pelo menor |r| também são PROPOSTOS e SEM FONTE.
 
 O gancho da memória consolidada está na seção 9.
 
@@ -507,8 +586,11 @@ O gancho da memória consolidada está na seção 9.
    Na ordem fixa: comportamento, depois a ordem dos `vistos`. É a conta do `sortear` do A (`lobos.py:433`), feita em inteiros.
 
 **Escolhas ainda abertas:**
-- **o sorteio proporcional (a regra de Luce)** fica no protótipo para manter a contagem da rng e a sonda com o mesmo `u`;
-- **um acumulador com inibição mútua,** recorrente, é a alternativa da PE-5.
+- **o sorteio proporcional (a regra de Luce)** fica no protótipo para manter a contagem da rng e a sonda com o mesmo `u`. A fonte: o
+  axioma de escolha de Luce existe na literatura (Luce 1977, `10.1016/0022-2496(77)90032-3`, VERIFICADA só pelo título; o conteúdo não
+  foi lido). Leitura do Digilab: o sorteio proporcional é essa regra, feita em inteiros;
+- **um acumulador com inibição mútua,** recorrente, é a alternativa da PE-5. A fonte afirma: a escolha como acumulação com vazamento e
+  competição entre unidades de decisão, para qualquer número de alternativas (Usher e McClelland 2001, VERIFICADA, resumo).
 
 **O sustento:**
 - [MECANISMO] o aprendizado localizado por módulo sob um portão: Jacobs et al. (1991), `10.1162/neco.1991.3.1.79`, VERIFICADA. Aqui
@@ -677,7 +759,9 @@ São as peças com evidência a favor ou neutras de engenharia.
 ## 9. A memória: o M-MEM mínimo e o gancho da memória consolidada (DM-3)
 
 **No protótipo** entra só o M-MEM mínimo da seção 4.6: os episódios de alimentação e de visita, a recuperação pela fome sem comida à
-vista e o termo no "explorar o lugar". **Isto é memória episódica mínima, e só isto.**
+vista e o termo no "explorar o lugar". **Isto é memória episódica mínima, e só isto.** As fontes dela, com a separação entre o que a
+fonte afirma e a leitura do Digilab, estão na seção 4.6: Clayton e Dickinson (1998) em animais, Gershman e Daw (2017) em agentes, e a
+regra de recência SEM FONTE.
 
 **O que o protótipo não resolve (a condição da DM-3, repetida na revisão de 2026-10-25):** a memória autobiográfica consolidada, a que
 muda as facetas adquiridas e as decisões futuras, **é uma etapa planejada**, a tarefa `docs/TAREFA_V2_MEMORIA_AUTOBIOGRAFICA.md` (as
@@ -831,26 +915,56 @@ legibilidade. Na L1, a camada única foi mais legível que os lobos (a arquitetu
 | Grand e Cliff (1998), `10.1023/a:1010042522104` | VERIFICADA, só metadados | não sustenta conteúdo | não usada para conteúdo |
 | Keramati e Gutkin (2014), `10.7554/elife.04811` | VERIFICADA | a recompensa como redução do desvio homeostático | o r; o incentivo (seção 2.3) |
 | Berridge e Robinson (1998), `10.1016/s0165-0173(98)00019-8`; Berridge, Robinson e Aldridge (2009), `10.1016/j.coph.2008.12.014` | VERIFICADAS | impacto hedônico, aprendizado e saliência de incentivo como componentes separados; querer, gostar e aprender dissociáveis | a separação entre o incentivo, o paladar e o M-PLAST |
-| Sutton, Precup e Singh (1999), `10.1016/s0004-3702(99)00052-1` | VERIFICADA, título e metadados | o formalismo das opções | a intenção como opção; o crédito por opção |
+| Sutton, Precup e Singh (1999), `10.1016/s0004-3702(99)00052-1` | VERIFICADA, título e metadados | o formalismo das opções | a intenção como opção (não a regra de crédito) |
+| Bacon, Harb e Precup (2017), `10.1609/aaai.v31i1.10916`; Botvinick, Niv e Barto (2009), `10.1016/j.cognition.2008.08.011` | VERIFICADAS, resumo | as políticas internas e o término das opções aprendidos juntos; o comportamento hierárquico lido pelo aprendizado por reforço hierárquico | a intenção como unidade estendida no tempo (seção 2.4); não a escolha por opção contra a janela |
+| Sutton (1988), `10.1007/bf00115009`; Singh e Sutton (1996), `10.1007/bf00114726` | VERIFICADAS, só título | a existência do TD(λ) e dos traços de substituição | o traço que o modular deixa (seção 8.1) |
+| Hebb (2005, reedição do original de 1949), `10.4324/9781410612403` | VERIFICADA, descrição da editora | o livro propõe a regra de Hebb e a assembleia de células; nenhuma forma matemática | o nome do hebbiano (P2) |
+| Frémaux e Gerstner (2016), `10.3389/fncir.2015.00085`; Kuśmierz, Isomura e Toyoizumi (2017), `10.1016/j.conb.2017.08.020` | VERIFICADAS, resumo | as regras neo-hebbianas de três fatores (pré, pós e modulador); o terceiro fator pode ser recompensa, erro, estatística ou atenção | o P2 (seção 2.4); não o sinal homeostático como terceiro fator |
+| Gerstner et al. (2018), `10.3389/fncir.2018.00053` | VERIFICADA, resumo | o traço de elegibilidade que espera o terceiro fator, na escala de segundos | a elegibilidade do P2; o traço joga a favor da janela (PE-3) |
+| Izhikevich (2007), `10.1093/cercor/bhl152` | VERIFICADA, resumo | um sinal de reforço global e difuso escolhe as sinapses certas sobre marcas locais (em pulsos) | o modulador difuso, em geral |
+| Doya (2002), `10.1016/s0893-6080(02)00044-8` | VERIFICADA, resumo | os neuromoduladores como sinais globais que regulam os metaparâmetros: a velocidade de aprendizagem com a acetilcolina, a aleatoriedade da escolha com a noradrenalina (teoria) | o `g_apr` e o `g_exp` como metaparâmetros; a D-1 (a excitação no `g_apr` é HIPÓTESE EXPERIMENTAL) |
+| Niv et al. (2002), `10.1177/1059-712302-010001-01`; Nogueira et al. (2013), `10.1162/978-0-262-31709-2-ch083` | VERIFICADAS, resumo | regras de plasticidade evoluídas em abelhas que forrageiam; rede plástica neuromodulada gerando forrageamento num personagem virtual | os precedentes do P2 em agentes (seções 2.2, 2.4 e 2.6) |
+| Cañamero (1997), `10.1145/267658.267688` | VERIFICADA, resumo | numa criatura, motivações vindas do corpo (excitação, saciedade) e "hormônios" que mudam a intensidade do comportamento | [INSPIRAÇÃO] do M-AFETO e dos moduladores (seção 2.1); não a curva das urgências |
+| Hopfield (1984), `10.1073/pnas.81.10.3088`; Wilson e Cowan (1972), `10.1016/s0006-3495(72)86068-5` | VERIFICADAS, resumo | os neurônios de resposta graduada; as populações excitatórias e inibitórias por equações diferenciais | a unidade de taxa e a população (seção 3) |
+| Beer (1995), `10.1177/105971239500300405`; Yamauchi e Beer (1994), `10.1177/105971239400200301` | VERIFICADAS, resumo | a CTRNN como sistema nervoso simples de agente autônomo, com dinâmica rica mesmo pequena; CTRNN evoluídas que aprendem sem regra de pesos | as formas I e II (seção 3) |
+| Funahashi e Nakamura (1993), `10.1016/s0893-6080(05)80125-x` | VERIFICADA, só título | a existência do resultado de aproximação por CTRNN | a forma II |
+| Usher e McClelland (2001), `10.1037/0033-295x.108.3.550` | VERIFICADA, resumo | a escolha por acumulação com vazamento e competição em unidades de decisão | o integrador com vazamento (seção 3); o acumulador da PE-5 (seção 4.7) |
+| Luce (1977), `10.1016/0022-2496(77)90032-3` | VERIFICADA, só título | a existência do axioma de escolha de Luce | o sorteio proporcional (seção 4.7) |
+| Clayton e Dickinson (1998), `10.1038/26216` | VERIFICADA, resumo | gaios lembram o que, onde e quando esconderam; a busca muda com o desfecho | o M-MEM (seções 4.6 e 9), como padrão de comportamento; não o mecanismo nem a regra de recência |
+| Gershman e Daw (2017), `10.1146/annurev-psych-122414-033625` | VERIFICADA, resumo | a memória episódica no aprendizado por reforço, para aproximar valores com poucos dados | o M-MEM em agentes (seção 4.6) |
+| Lengyel e Dayan (2007), NIPS 20, sem DOI | VERIFICADA (sem DOI), resumo | o controle episódico útil sobretudo cedo, antes do hábito | a D-2: "memória cedo, hábito depois", leitura descritiva sem gate (seção 2.5) |
+| Blundell et al. (2016), arXiv:1606.04460; Pritzel et al. (2017), arXiv:1703.01988 | preprints, resumo; revisão por pares não conferida | controle episódico em agentes | pista para o M-MEM |
 | Brooks (1986), `10.1109/jra.1986.1087032`; Bryson (2003), `10.1007/3-540-36559-1_7` | VERIFICADAS, título e metadados | arquitetura por camadas de competência; desenho modular por competências nomeadas | o M-IMPULSO |
 | Jacobs et al. (1991), `10.1162/neco.1991.3.1.79` | VERIFICADA | aprendizado localizado por módulo sob um portão | o precedente do aprendizado por módulo (seção 4.7) |
 | Khetarpal et al. (2020), arXiv:2006.15085 | VERIFICADA | as *affordances* em aprendizado por reforço | quais unidades existem em cada decisão |
-| Castro e Gudwin (2013), `10.4018/jse.2013010102` | VERIFICADA | um módulo de memória episódica por cenas numa criatura | o M-MEM, sem dizer que a cena informa a escolha |
+| Castro e Gudwin (2013), `10.4018/jse.2013010102` | VERIFICADA | um módulo de memória episódica por cenas numa criatura | o M-MEM, sem dizer que a cena informa a escolha (isso vem de Clayton e Dickinson, abaixo) |
 | Lewis e Cañamero (2016), `10.1177/1059712316666331` | VERIFICADA, resumo | o prazer melhora a viabilidade e a flexibilidade | o M-AFETO, em geral |
-| McGaugh (2005), `10.1101/lm.93405` | VERIFICADA, só título | — | [HIPÓTESE]: a excitação modulando a aprendizagem |
-| Jacob et al. (2018), `10.1109/cvpr.2018.00286` | VERIFICADA, título e metadados | redes treinadas para inferência em aritmética só inteira | a aritmética (seção 1) |
-| Hasani et al. (2022), `10.1038/s42256-022-00556-7`; Lechner et al. (2020), `10.1038/s42256-020-00237-3` | CORPUS (pista) | — | a forma II, como [HIPÓTESE]; **as licenças não foram conferidas** (DM-9) |
-| NORNBRAIN | software não revisado, "nunca evidência"; código em PolyForm Noncommercial 1.0.0 | — | só estudo (DM-9); nada dele entra |
+| McGaugh (2005), `10.1101/lm.93405` | VERIFICADA, só título | a excitação emocional e a consolidação (pelo título) | a direção "excitação → consolidação"; a excitação no `g_apr` é HIPÓTESE EXPERIMENTAL (D-1) |
+| Jacob et al. (2018), `10.1109/cvpr.2018.00286` | VERIFICADA, título e metadados | redes treinadas para inferência em aritmética só inteira | a aritmética (seção 1); não o integrador em ponto fixo |
+| Hasani et al. (2021), `10.1609/aaai.v35i9.16936`; Hasani et al. (2022), `10.1038/s42256-022-00556-7` | VERIFICADAS, resumo | a LTC (sistemas de primeira ordem modulados por portas); o CfC (a forma fechada dela, sem solucionador) | a variante com portas da forma II (seção 3); a porta dura é nossa |
+| Lechner et al. (2020), `10.1038/s42256-020-00237-3` | VERIFICADA, só título | a existência do NCP | a forma II |
+| CfC (`raminmh/CfC`) e `ncps` (`mlech26l/ncps`) | software; licenças conferidas em 2026-10-25 | **Apache-2.0**; patentes não buscadas | a PE-15, feita quanto à licença do código; nada copiado |
+| NORNBRAIN | software não revisado, "nunca evidência"; código em PolyForm Noncommercial 1.0.0 (reconferido em 2026-10-25) | — | só estudo (DM-9); nada dele entra |
 
-**SEM FONTE no repositório,** e por isso marcados nas seções:
-- o hebbiano como regra (de Hebb);
-- os traços de elegibilidade;
-- as regras de três fatores como termo da literatura;
-- os integradores com vazamento e as redes recorrentes de tempo contínuo como modelo neural;
-- a regra de Luce;
-- os acumuladores com inibição mútua;
-- a curva das urgências;
-- a regra "o mais recente do lugar manda".
+A busca e as tabelas: `docs/referencias/DM_REVISAO_SUBSTRATO_NEURAL.md` e `docs/referencias/dm_referencias_verificadas.csv`
+(2026-10-25). Todas as leituras são de metadados e resumo, nunca de texto completo.
+
+**Os SEM FONTE de antes, item a item:**
+- **o hebbiano como regra (de Hebb):** agora Hebb (2005 [1949]), só a descrição da editora (seção 2.4);
+- **os traços de elegibilidade:** agora Gerstner et al. (2018) (seção 2.4);
+- **as regras de três fatores como termo da literatura:** agora Frémaux e Gerstner (2016) e Kuśmierz et al. (2017) (seção 2.4);
+- **os integradores com vazamento e as redes recorrentes de tempo contínuo como modelo neural:** agora Hopfield (1984), Wilson e Cowan
+  (1972), Beer (1995) e Usher e McClelland (2001) (seção 3);
+- **a regra de Luce:** agora Luce (1977), só título (seção 4.7);
+- **os acumuladores com inibição mútua:** agora Usher e McClelland (2001) (seção 4.7).
+
+**Continuam SEM FONTE, escritos como escolha nossa:**
+- **o integrador e a unidade de taxa em ponto fixo como substrato de criatura** (NÃO LOCALIZADA; seção 1);
+- **o sinal homeostático do corpo como terceiro fator** (NÃO LOCALIZADA; seção 2.4);
+- **a regra "o mais recente do lugar manda"** (NÃO LOCALIZADA; seção 4.6);
+- **a escolha do crédito por opção contra a janela** (a comparação é NÃO LOCALIZADA; a escolha vem da evidência interna; seção 2.4);
+- **a curva das urgências** (seção 4.5);
+- **a porta dura em inteiros da forma II** (seção 3).
 
 ## 15. As decisões a pesquisar antes de implementar
 
@@ -861,8 +975,8 @@ que entra com o valor recomendado e se decide pela avaliação, com o plano de a
 |---|---|---|---|---|
 | **PE-1** | a forma neural do estado sem fonte verificada (integradores e redes de tempo contínuo) | antes | **seguir com os integradores como [HIPÓTESE] de desenho** e pedir uma busca de literatura própria (a categoria `literatura`) sobre integradores com vazamento, redes recorrentes de tempo contínuo e regras de três fatores, para trocar os SEM FONTE por fontes ou por "não localizada" | sem a busca, a seção 2 fica sustentada só pelo Creatures e pelo código; com a busca antes de tudo, o protótipo espera uma rodada de literatura |
 | **PE-2** | o P2 (o hábito hebbiano) no primeiro protótipo, ou só o P1 | antes | **os dois, o P2 atrás da subchave,** com a ablação. A L1 do A como braço de comparação do P2, se o plano achar que responde a algo | só o P1: o pet aprende o que as coisas fazem, mas não muda o que faz em cada contexto. Os dois sem subchave: nada se atribui |
-| **PE-3** | o crédito: por opção (a decisão que começou a intenção) ou por janela de K decisões | antes | **por opção** | a janela: o traço do A piorou o que se queria medir; por opção sem teste: uma intenção longa pode creditar um começo que nada teve com o fim (o T-PLAST-2 com intenções longas confere) |
-| **PE-4** | o que modula o `g_apr` (a excitação? o estresse? a dor?) e se ele entra ligado | antes | **a excitação, atrás da subchave desligada no primeiro braço,** com os controles embaralhado e constante do V3 | ligada sem controle: "modular" e "aprender mais depressa" não se separam (o risco do V3, seção 4) |
+| **PE-3** | o crédito: por opção (a decisão que começou a intenção) ou por janela de K decisões | antes | **por opção** (fontes aplicadas em 2026-10-25: o arcabouço das opções tem fonte; a escolha contra a janela é do Digilab, pela evidência interna, e a literatura verificada sustenta o traço; seção 2.4) | a janela: o traço do A piorou o que se queria medir; por opção sem teste: uma intenção longa pode creditar um começo que nada teve com o fim (o T-PLAST-2 com intenções longas confere) |
+| **PE-4** | o que modula o `g_apr` (a excitação? o estresse? a dor?) e se ele entra ligado | antes | **a excitação, atrás da subchave desligada no primeiro braço,** com os controles embaralhado e constante do V3. **D-1 (2026-10-25):** a decisão fica; Doya (2002) associa a velocidade de aprendizagem à acetilcolina, e a excitação no Digilab é HIPÓTESE EXPERIMENTAL, não conclusão da literatura (seção 2.4) | ligada sem controle: "modular" e "aprender mais depressa" não se separam (o risco do V3, seção 4) |
 | **PE-5** | a arbitragem: o sorteio proporcional ou um acumulador recorrente com inibição mútua | no protótipo | **o sorteio proporcional,** que mantém a contagem da rng e a sonda de mesmo `u` | o acumulador antes do tempo: a sonda de mesmo `u` deixa de valer e o custo da paridade sobe; nunca testá-lo: a competição fica não neural |
 | **PE-6** | as constantes da persistência (τ do compromisso, `w_pers`, `N_desiste`) | no protótipo | **o N_desiste pelo alcance:** as decisões que o pet leva para cruzar o raio da visão, mais uma | curto: o pet desiste no caminho; longo: insiste num alvo que sumiu |
 | **PE-7** | o incentivo: o `valor_previsto` sobre o d̂ (revaloriza pelo estado) ou um valor escalar por classe | antes | **o `valor_previsto`** (a peça com o G-T1) | escalar: perde a revalorização, e o pet saciado continua querendo o mesmo |
@@ -873,16 +987,26 @@ que entra com o valor recomendado e se decide pela avaliação, com o plano de a
 | **PE-12** | a escala dos pesos aprendidos: S = 1024 ou uma escala maior só para os passos pequenos | antes | **S = 1024,** o do A; trocar só se um passo der 0 na conta (o T-PLAST-1 mostra) | escala pequena: os passos pequenos arredondam para 0, e nada aprende; escala grande sem necessidade: a paridade e os testes ficam mais caros |
 | **PE-13** | se uma rede de taxa pequena, desenhada à mão, com uma recorrência pelo estado e modulação difusa, basta para chamar o protótipo de "cérebro neural" nos documentos e na tela | antes (é do Matheus) | **chamar de "rede pequena de unidades" nos documentos técnicos** e manter "DigiBrain" como nome do produto, sem prometer mais | prometer mais: a seção 2 não sustenta; chamar de menos: o nome do projeto perde o sentido |
 | **PE-14** | o lugar lembrado no motor: o candidato novo `lembranca` no explorar, atrás da chave da v13 | antes | **o candidato novo,** no Python e no TS, com o G2 | sem o candidato: o M-MEM não leva o pet a lugar nenhum fora da vista e fica sem efeito no MVP |
-| **PE-15** | as licenças do CfC e do NCP | antes de qualquer reúso da forma II | **conferir e registrar** antes de copiar qualquer código ou equação de software | reusar sem conferir: risco de licença no produto (DM-9) |
+| **PE-15** | as licenças do CfC e do NCP | antes de qualquer reúso da forma II | **conferir e registrar** antes de copiar qualquer código ou equação de software. **FEITA quanto à licença do código em 2026-10-25:** o CfC (`raminmh/CfC`) e o `ncps` (`mlech26l/ncps`) estão em Apache-2.0; as patentes não foram buscadas (seção 3) | reusar sem conferir: risco de licença no produto (DM-9) |
 | **PE-16** | a capacidade e a codificação do M-MEM mínimo (N_ep; todo consumo vira episódio) | no protótipo | **N_ep = 16; todo consumo e toda visita viram episódio;** o limiar fino é a ME-1 da tarefa da memória | pequeno: o pet esquece o comedouro; grande sem limiar: ruído e custo |
 
 **DECIDIDAS em 2026-10-25 (Matheus):** as nove PE "antes" (1, 2, 3, 4, 7, 9, 12, 13 e 14), **pelas recomendações da tabela**, com
 estas notas da revisão:
 - **PE-1:** a busca de literatura (categoria `literatura`) roda **em paralelo** à etapa 0 do protótipo (os gabaritos e a chave
   desligada, que não dependem da forma do estado), não antes dela; os SEM FONTE da seção 2 trocam por fontes ou por "não localizada"
-  antes da primeira vida;
+  antes da primeira vida. **Feito em 2026-10-25:** a busca (`docs/referencias/DM_REVISAO_SUBSTRATO_NEURAL.md`, PR #408) e a
+  aplicação das trocas nesta espec (D-0);
 - **PE-13:** "rede pequena de unidades" nos documentos técnicos e na tela do motivo; "DigiBrain" como nome do produto;
 - **PE-14:** autorizada para a v13, Python e TS, atrás da chave, com o gabarito G2 antes da implementação (seção 11).
 
 As sete "no protótipo" (5, 6, 8, 10, 11, 16; a 15 só antes da forma II) entram com o valor recomendado e se decidem pela avaliação,
 com o plano de análise.
+
+**DECIDIDAS em 2026-10-25 (Matheus), depois da busca da PE-1** (`docs/referencias/DM_REVISAO_SUBSTRATO_NEURAL.md`, seção 8):
+- **D-0:** aplicar todas as trocas T-a1 a T-e2 e as duas linhas sem número (Luce e o acumulador), sempre separando "a fonte afirma" da
+  "leitura do Digilab". Aplicadas nesta revisão, nas seções 1, 2.1, 2.2, 2.4, 2.5, 2.6, 3, 4.3, 4.6, 4.7, 9, 14 e 15;
+- **D-1:** a PE-4 fica (a excitação modula o `g_apr`, atrás da subchave, desligada no primeiro braço, com a ablação). Doya (2002)
+  associa a velocidade de aprendizagem à acetilcolina; **a excitação no Digilab é HIPÓTESE EXPERIMENTAL, não conclusão da literatura**;
+- **D-2:** a predição de Lengyel e Dayan (2007), "memória cedo, hábito depois", entra como **leitura descritiva, SEM gate**, marcada
+  [HIPÓTESE] com fonte (seção 2.5), e é item para o plano de análise do protótipo;
+- **a PE-15** fica FEITA quanto à licença do código (CfC e `ncps` em Apache-2.0); as patentes não foram buscadas.
