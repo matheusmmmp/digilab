@@ -7,7 +7,7 @@
   - o DigiBrain caminha para um cérebro **modular;**
   - o cérebro A fica como linha de base, controle e fallback condicionado.
 - **Todo o resto deste documento é PROPOSTO:** as interfaces, os nomes dos módulos, a forma do estado, a ordem e os critérios. Nada aqui
-  está implementado, e nenhum detalhe técnico está aprovado. As decisões abertas são a DM-1 a DM-9 (seção 11).
+  está implementado. As decisões técnicas DM-1 a DM-9 estão DECIDIDAS (seção 13, 2026-10-24 e 2026-10-25); a especificação é a próxima entrega.
 - O estado real de cada peça está em `docs/AUDITORIA_V2_PRODUTO_MODULAR.md`. As tarefas estão na seção 12.
 
 **Regras deste documento:**
@@ -266,18 +266,21 @@ algo.
 - **o protótipo (3)** vem antes da integração (5);
 - **os critérios do A (6)** são escritos antes do protótipo ser avaliado.
 
-## 13. Decisões abertas do Matheus
+## 13. Decisões do Matheus
 
-Todas PROPOSTAS, com a recomendação primeiro.
+**Todas DECIDIDAS** (a DM-8 em 2026-10-24; as outras em 2026-10-25, no chat da sessão do Gerente, pelas recomendações, com as
+condições dele anotadas em cada linha). A DM-5 mudou de v12 para **v13**, porque a v12 ficou com o MVP e o A (MV-1). O que ele pediu ao
+fim: **a especificação vem para revisão antes de aprovar implementação ou experimento, comparada com a visão do produto e da pesquisa;
+o protótipo não começa até essa revisão.**
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
-| **DM-1** | a forma do estado dinâmico (M-ESTADO, M-AFETO) | **começar por integradores com vazamento em ponto fixo** (um estado por variável, com uma constante de tempo), e comparar no protótipo com uma forma recorrente (do tipo CfC) só se a primeira não bastar | começar pela recorrente: a última (o B) não aprendeu, e o float quebra a paridade. Ficar só no integrador: pode faltar expressividade, e a avaliação do protótipo existe para ver isso |
-| **DM-2** | onde fica a referência de cada módulo | **implementação de referência e espelho com G-PAR, em ponto fixo,** como o A v11 | só TS: muda o método da pesquisa. Float: o replay no jogo se perde |
-| **DM-3** | a granularidade do primeiro protótipo | **os módulos que o MVP pede** (M-SENS, M-AFETO, M-ESTADO, M-IMPULSO, M-ARB, M-PLAST, M-ADAPT) e um M-MEM mínimo (episódios de comida); o M-PERS e o M-GEN depois | todos de uma vez: nada se atribui a nada, e o protótipo demora |
-| **DM-4** | as rotas versionadas da seção 6 | **aceitar as rotas como estão** (o `engine.py` intacto, o ponto fixo, as ações no fim do enum, a v12) | sem rota: cada frente reabre a regra; regras afrouxadas: o replay e a paridade se perdem |
-| **DM-5** | a versão de pet do modular | **v12** para o primeiro cérebro modular no jogo, e uma versão nova a cada mudança que altere a vida | sem versão: os saves dos v11 quebram |
-| **DM-6** | a memória que muda a personalidade | **nas facetas adquiridas, nunca no temperamento inato** (seção 5) | no temperamento: o inato e o adquirido se misturam, e a genética mede o que a vida fez |
-| **DM-7** | as peças do A reaproveitadas | **decidir na espec (tarefa 1), módulo a módulo,** com a evidência de cada peça | reaproveitar tudo: o modular vira o A com outro nome; nada: perde-se o que funcionou (o planejador, a disputa) |
+| **DM-1** (DECIDIDA 2026-10-25) | a forma do estado dinâmico (M-ESTADO, M-AFETO) | **começar por integradores com vazamento em ponto fixo** (um estado por variável, com uma constante de tempo), e comparar no protótipo com uma forma recorrente (do tipo CfC) só se a primeira não bastar. **A condição do Matheus:** a especificação descreve separadamente **o substrato neural** do cérebro modular (os neurônios ou unidades, as conexões, a ativação, a plasticidade e como o aprendizado altera o comportamento ao longo da vida); integradores, impulsos e regras de arbitragem, por si só, não bastam para caracterizar o protótipo como cérebro neural. Onde a literatura e a especificação ainda não sustentarem uma escolha, fica explícito como **decisão a pesquisar antes de implementar** | começar pela recorrente: a última (o B) não aprendeu, e o float quebra a paridade. Ficar só no integrador: pode faltar expressividade, e a avaliação do protótipo existe para ver isso |
+| **DM-2** (DECIDIDA 2026-10-25) | onde fica a referência de cada módulo | **implementação de referência em Python e espelho TS com G-PAR, em ponto fixo,** como o A v11. **A condição do Matheus:** a paridade não é tratada como evidência de aprendizagem nem de qualidade comportamental | só TS: muda o método da pesquisa. Float: o replay no jogo se perde |
+| **DM-3** (DECIDIDA 2026-10-25) | a granularidade do primeiro protótipo | **os módulos que o laço do MVP pede** (M-SENS, M-AFETO, M-ESTADO, M-IMPULSO, M-ARB, M-PLAST, M-ADAPT) e um M-MEM mínimo (a memória episódica de alimentação); o M-PERS e o M-GEN em fases posteriores. **A condição do Matheus:** a memória autobiográfica consolidada fica registrada como **etapa própria** (`docs/TAREFA_V2_MEMORIA_AUTOBIOGRAFICA.md`), com influência causal futura nas decisões e nas facetas adquiridas | todos de uma vez: nada se atribui a nada, e o protótipo demora |
+| **DM-4** (DECIDIDA 2026-10-25) | as rotas versionadas da seção 6 | **aceitar as rotas como estão** (o `engine.py` intacto, o ponto fixo, as ações no fim do enum, a versão de pet nova) | sem rota: cada frente reabre a regra; regras afrouxadas: o replay e a paridade se perdem |
+| **DM-5** (DECIDIDA 2026-10-25) | a versão de pet do modular | **v13** para o primeiro pet com o cérebro modular no jogo. **A v12 permanece como o MVP com o A** (MV-1); cada mudança posterior que altere a vida usa uma versão nova | sem versão: os saves quebram. Reusar a v12: o save do MVP muda de cérebro |
+| **DM-6** (DECIDIDA 2026-10-25) | a memória que muda a personalidade | **as mudanças aprendidas afetam as facetas adquiridas, nunca o temperamento inato** (seção 5) | no temperamento: o inato e o adquirido se misturam, e a genética mede o que a vida fez |
+| **DM-7** (DECIDIDA 2026-10-25) | as peças do A reaproveitadas | **decidir na especificação, módulo a módulo,** justificando cada escolha com a evidência de cada peça. **A condição do Matheus:** o modular não deve ser apenas o A reorganizado | reaproveitar tudo: o modular vira o A com outro nome; nada: perde-se o que funcionou (o planejador, a disputa) |
 | **DM-8** (DECIDIDA 2026-10-24) | o que pausa das rodadas do A | **a seção 9 da auditoria:** pausar o piloto e a validação da P4 e a run do Gate I com o A; manter o contrato e os critérios | continuar: a pesquisa segue validando o A e adia o produto; parar tudo: perde-se o contrato do motor, que o MVP usa |
-| **DM-9** | o NORNBRAIN, o CfC e o NCP | **só estudo;** nenhum código do NORNBRAIN (licença não comercial); conferir a licença do CfC e do NCP antes de qualquer reúso | reusar sem conferir: risco de licença no produto |
+| **DM-9** (DECIDIDA 2026-10-25) | o NORNBRAIN, o CfC e o NCP | **só estudo;** nenhum código do NORNBRAIN (licença não comercial); conferir a licença do CfC e do NCP antes de qualquer reúso | reusar sem conferir: risco de licença no produto |
