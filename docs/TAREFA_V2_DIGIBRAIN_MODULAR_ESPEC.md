@@ -102,3 +102,20 @@ As DM-1 a DM-9 estão DECIDIDAS pelas recomendações de `docs/ARQUITETURA_DIGIB
 - **DM-9:** o NORNBRAIN só para estudo; as licenças do CfC e do NCP conferidas antes de qualquer reúso.
 
 **O que ainda vai a ele:** as decisões que a especificação abrir (a lista do item 9 da seção 3), levadas com recomendação e custo de errar.
+
+## 9. Entrega (2026-10-25)
+
+`docs/ESPEC_DIGIBRAIN_MODULAR.md`, pelo C (Claude Code, Opus 5.5), no branch `v2-modular-espec`. Os 11 itens da seção 3:
+- os contratos, na seção 4;
+- as formas do estado, na seção 3;
+- o corpo, na seção 6;
+- o motivo, na seção 7;
+- as peças do A, na seção 8;
+- os testes, na seção 10;
+- a versão, na seção 11;
+- o orçamento, na seção 12;
+- o substrato neural, na seção 2;
+- a memória, na seção 9;
+- a comparação com a visão, na seção 13.
+
+**As 16 decisões a pesquisar** estão na seção 15, nove delas antes do protótipo. **O gate continua sendo a revisão do Matheus.**
