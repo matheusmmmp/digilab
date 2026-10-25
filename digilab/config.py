@@ -2298,3 +2298,32 @@ class ConfigContrato:
 
 CONFIG_CONTRATO = ConfigContrato()
 CONFIG_CONTRATO_LIGADO = ConfigContrato(sensores=True, controlador=True)
+
+
+# =====================================================================
+# V2, o DigiBrain modular (docs/ESPEC_DIGIBRAIN_MODULAR.md, secao 11; docs/TAREFA_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md, etapa 0; a direcao de
+# 2026-10-24, as DM-1 a DM-9 e as PE "antes" DECIDIDAS em 2026-10-25). O cerebro modular e o pacote digilab/digibrain/ (na etapa 0, so o
+# esqueleto: o M-ADAPT e os modulos sem equacao). Desligada por padrao: na etapa 0 nada no motor, na bancada nem no jogo le esta chave, e a
+# vida de hoje sai byte a byte (o G2 contra tests/gabaritos/digibrain_vidas_de_hoje.json, com os candidatos de cada sub-decisao do mundo).
+# Ligada, o pet usa o cerebro modular (a v13, DM-5). As subchaves sao as pecas que a avaliacao desliga (a ablacao, secao 11) e so valem com
+# a chave ligada:
+#   - `modula_g_apr`: a excitacao do M-AFETO modula o ganho da aprendizagem (PE-4); desligada no primeiro braco (g_apr = g0 constante);
+#   - `p2`: o habito hebbiano do M-PLAST alem do P1 (PE-2);
+#   - `m_mem`: a memoria episodica minima, os episodios de alimentacao (DM-3; a secao 4.6);
+#   - `persistencia`: a persistencia da intencao no M-ESTADO (a secao 4.4).
+@dataclass(frozen=True)
+class ConfigDigibrain:
+    ligada: bool = False                     # PROPOSTO: a chave do cerebro modular (a v13, DM-5)
+    modula_g_apr: bool = False               # PROPOSTO (PE-4): desligada no primeiro braco, com os controles embaralhado e constante do V3
+    p2: bool = True                          # PROPOSTO (PE-2): o P2 atras da subchave, com a ablacao
+    m_mem: bool = True                       # PROPOSTO (DM-3): o M-MEM minimo
+    persistencia: bool = True                # PROPOSTO (secao 4.4): a persistencia da intencao
+
+    def __post_init__(self) -> None:
+        for nome in ("ligada", "modula_g_apr", "p2", "m_mem", "persistencia"):
+            if type(getattr(self, nome)) is not bool:
+                raise TypeError(f"ConfigDigibrain.{nome} e bool: {getattr(self, nome)!r}")
+
+
+CONFIG_DIGIBRAIN = ConfigDigibrain()
+CONFIG_DIGIBRAIN_LIGADA = ConfigDigibrain(ligada=True)
