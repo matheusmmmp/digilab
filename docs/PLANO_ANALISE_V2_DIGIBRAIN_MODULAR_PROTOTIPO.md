@@ -1,13 +1,15 @@
 # Plano de análise — o protótipo do DigiBrain modular, etapa 1
 
-Data: 2026-10-25. Status: **PROPOSTO, aguardando a revisão do Matheus.** Nenhuma vida do cérebro modular roda antes dela (seção 13).
+Data: 2026-10-25. Status: **revisto pelo Matheus em 2026-10-25** (relato do Gerente): as PPM-1 a PPM-9 e os AF DECIDIDOS (seção 13),
+com quatro correções pedidas e feitas nesta versão (o poder com o Holm, a regra operacional do Holm, a ordem dos gates, o G-MVP como
+condição necessária). **Sem vidas e sem merge até o Matheus revisar esta versão corrigida.** Os números continuam PROPOSTOS e SEM FONTE.
 Tarefa: `docs/TAREFA_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md` (seções 3, 4 e 10). Especificação: `docs/ESPEC_DIGIBRAIN_MODULAR.md` (a direção
 aprovada, as PE "antes" decididas, a PE-14 revista, as D-0 a D-2). Critérios do baseline e do fallback:
-`docs/TAREFA_V2_CEREBRO_A_BASELINE.md` (D1 a D6, AF-1 a AF-6, ainda abertas).
+`docs/TAREFA_V2_CEREBRO_A_BASELINE.md` (D1 a D6; os AF-1 a AF-6 DECIDIDOS em 2026-10-25, seção 13).
 
 **As regras deste documento:**
 - **Todo número novo é PROPOSTO e SEM FONTE,** mesmo onde a marca não se repete a cada linha. Os limiares estão na seção 13, com a
-  recomendação e o custo de errar.
+  recomendação, o custo de errar e a decisão do Matheus.
 - **Nenhuma alegação de novidade.** As referências são as da espec (seção 14 dela), todas verificadas, lidas em metadados e resumo.
 - **O A não muda.** Ele entra só como baseline (`docs/TAREFA_V2_CEREBRO_A_BASELINE.md`, seção 1), uma vez, na avaliação única.
 - **Nenhuma vida roda nesta tarefa.** Os números de contexto abaixo vêm de documentos; nenhum entra como evidência.
@@ -146,13 +148,22 @@ log), e as listas do motor (os `lugares` do `DonoComLugar`, os consumos do mundo
 
 ### 5.1 Os de engenharia (pré-condição, não evidência; DM-2)
 
-Valem antes de qualquer vida e não dizem nada sobre a aprendizagem nem sobre a qualidade do comportamento (espec, seção 11):
-- **G1:** o replay é bit a bit;
-- **G2:** com a chave desligada, as vidas de hoje saem byte a byte: as 196 de `tests/gabaritos/digibrain_vidas_de_hoje.json` (o T-PONTO-3)
-  e os gabaritos do MVP;
-- **G-INT, G-RECEPTOR e G-SEM-DIRECAO;**
-- **G-PAR:** o espelho TS refaz os gabaritos do Python decisão a decisão (etapa 1b);
-- **T-PONTO-1 a T-PONTO-4** (espec, seção 15).
+Nenhum deles diz nada sobre a aprendizagem nem sobre a qualidade do comportamento (espec, seção 11). **Cada um bloqueia uma coisa só,**
+e a tabela diz qual (a correção 3 da revisão):
+
+| gate | o que confere | o que ele bloqueia | o que ele **não** bloqueia |
+|---|---|---|---|
+| **G1** | o replay bit a bit | **a calibração Python** (e toda vida depois) | — |
+| **G2** | com a chave desligada, as vidas de hoje byte a byte: as 196 de `tests/gabaritos/digibrain_vidas_de_hoje.json` e os gabaritos do MVP | **a calibração Python** | — |
+| **G-INT, G-RECEPTOR, G-SEM-DIRECAO** | sem float, sem `/` e sem `math` no pacote; o cérebro só lê a Observação; sem a direção do cheiro fora do motor | **a calibração Python** | — |
+| **T-PONTO-1 a 3** | o `ponto` só em EXPLORAR e só com o M-MEM; o `raise` fora do mapa; o G2 das 196 vidas | **a calibração Python** | — |
+| **G-MECANISMO** (seção 5.2) | os testes de mecanismo | **a calibração Python** | — |
+| **T-PONTO-4** | o gabarito das vidas v12 em TS, depois o `ponto` no TS | a mudança no espelho TS (etapa 1b) | **as vidas da pesquisa Python** |
+| **G-PAR** | o espelho TS refaz os gabaritos do Python decisão a decisão | a integração TS (etapa 1b) e o gate de compatibilidade do produto (a MV-2, i) | **as vidas da pesquisa Python** |
+| **G-CUSTO** (seção 5.4) | o orçamento no navegador | o gate de prontidão do produto (seção 5.6) | **as vidas da pesquisa Python** |
+
+**Em uma frase:** a calibração, o piloto e a avaliação Python esperam só os cinco primeiros; o TS anda ao lado e só segura a integração
+no jogo.
 
 ### 5.2 Os de avaliação
 
@@ -161,23 +172,40 @@ Todos os limiares são PROPOSTOS e SEM FONTE; o custo de errar de cada um está 
 | gate | o que confere | a regra | papel | o critério do baseline |
 |---|---|---|---|---|
 | **G-MECANISMO** | os testes de mecanismo da seção 10 da espec que a etapa 1 cobre: T-SENS-1 a 3, T-AFETO-1 a 3, T-ESTADO-1 e 2, T-IMPULSO-1 e 2, T-MEM-1 a 4, T-ARB-1 e 2, T-PLAST-1 a 3, T-ADAPT-1 e 2, T-MOTIVO-1, T-CADEIA-1 e 2 | todos passam (binário) | **pré-condição da calibração.** Com um falhando, nenhuma vida roda | D1; o T-CADEIA-1 é o D3 (o oráculo) |
-| **G-MVP** | a cadeia comida → corpo no M3 | a fração das vidas do M3 com a taxa de fechamento ≥ 0,5: o limite inferior do IC95 ≥ 0,8. As vidas sem ração elegível ficam fora e são contadas | **o primário**, o gate de prontidão do produto (a MV-2, ii) | D4 |
-| **G-ABLA-P1** | `falta_ao_comer`(M0) − `falta_ao_comer`(M1) | limite inferior do IC95 > 0, Holm | a família G-ABLA | D2 |
-| **G-ABLA-P2** | `repeticao_apos_alivio`(M2) − idem(M1) | limite inferior do IC95 > 0, Holm | a família G-ABLA | D2 |
-| **G-ABLA-MEM** | taxa de fechamento(M3) − idem(M2), **só nas células do comedouro** (4 por unidade) | limite inferior do IC95 > 0, Holm | a família G-ABLA | D2 |
-| **G-ABLA-PERS** | `intencoes_com_meta`(M3) − idem(M3-sp) | limite inferior do IC95 > 0, Holm | a família G-ABLA | D2 |
-| **G-MOD-CON** | `D_FE`(M4-con) − `D_FE`(M4) | limite inferior do IC95 > 0, Holm (com o G-MOD-EMB) | secundário: a hipótese experimental da D-1 | — |
-| **G-MOD-EMB** | `D_FE`(M4-emb) − `D_FE`(M4) | idem | secundário | — |
-| **G-CUSTO** | o orçamento da seção 12 da espec | os quatro itens dentro (seção 5.4) | gate de produto, na etapa 1b | D5 |
+| **G-MVP** | a cadeia comida → corpo no M3 | a fração das vidas do M3 com a taxa de fechamento ≥ 0,5: o limite inferior do IC95 ≥ 0,8. As vidas sem ração elegível ficam fora e são contadas | **o primário da pesquisa;** condição **necessária, não suficiente,** do gate de prontidão do produto (a MV-2, ii; seção 5.6) | D4 |
+| **G-ABLA-P1** | `falta_ao_comer`(M0) − `falta_ao_comer`(M1) | o Holm da família G-ABLA (seção 5.2.1) | a família G-ABLA | D2 |
+| **G-ABLA-P2** | `repeticao_apos_alivio`(M2) − idem(M1) | o Holm da família G-ABLA (seção 5.2.1) | a família G-ABLA | D2 |
+| **G-ABLA-MEM** | taxa de fechamento(M3) − idem(M2), **só nas células do comedouro** (4 por unidade) | o Holm da família G-ABLA (seção 5.2.1) | a família G-ABLA | D2 |
+| **G-ABLA-PERS** | `intencoes_com_meta`(M3) − idem(M3-sp) | o Holm da família G-ABLA (seção 5.2.1) | a família G-ABLA | D2 |
+| **G-MOD-CON** | `D_FE`(M4-con) − `D_FE`(M4) | o Holm da família G-MOD (seção 5.2.1) | secundário: a hipótese experimental da D-1 | — |
+| **G-MOD-EMB** | `D_FE`(M4-emb) − `D_FE`(M4) | o Holm da família G-MOD (seção 5.2.1) | secundário | — |
+| **G-CUSTO** | o orçamento da seção 12 da espec | os quatro itens dentro (seção 5.4) | gate de produto, na etapa 1b; não bloqueia as vidas Python | D5 |
 
 **Por que a G-ABLA-MEM só no comedouro:** a espec prevê o efeito no lugar "onde o dono costuma pôr a ração" (o T-MEM-2). Perto e longe, o
 lugar sorteado muda a cada ração, e o M-MEM pode até atrapalhar (a visita vazia). Os dois ficam como leitura descritiva da mesma medida.
 A restrição está escrita antes de qualquer vida.
 
-**O Holm:** a família G-ABLA (4 contrastes) com α = 0,05; a família G-MOD (2) com α = 0,05, separada. O G-MVP é único e não entra.
+#### 5.2.1 A regra operacional do Holm (uma só, escrita antes de qualquer vida)
 
-**A estatística:** o `contraste_pareado` sobre as unidades, agrupado por base, 10 000 reamostragens, semente 4242 (a convenção dos planos
-anteriores). Para o G-MVP, a fração de vidas por unidade (média das 12 células) e o mesmo bootstrap.
+A correção 2 da revisão. **Os gates das duas famílias decidem pelo p do bootstrap, e não pelo IC95:**
+1. **o p de cada contraste:** o `p_unilateral` do `contraste_pareado` (`digilab/metrics.py`), a fração das médias reamostradas ≤ 0, com
+   o contraste orientado para a direção prevista (positivo = a direção da espec). O bootstrap é o da convenção: sobre as unidades,
+   agrupado por base, 10 000 reamostragens, semente 4242;
+2. **o Holm:** o `holm` do `digilab/metrics.py`, com α = 0,05 sobre a família inteira. Os p em ordem crescente; o do posto i (i = 1…m)
+   comparado a 0,05/(m − i + 1); rejeita até o primeiro que não passa, e dali em diante nenhum rejeita;
+   - **a família G-ABLA:** m = 4 (P1, P2, MEM, PERS), os limiares 0,0125, 0,0167, 0,025 e 0,05;
+   - **a família G-MOD:** m = 2 (CON, EMB), os limiares 0,025 e 0,05;
+3. **o gate passa** quando o Holm rejeita a hipótese nula daquele contraste (`rejeita` verdadeiro);
+4. **a família não encolhe:** um contraste inconclusivo por premissa (a G-PESA, seção 5.3) entra no Holm com o p que tiver, mas a leitura
+   dele é "inconclusivo por premissa", qualquer que seja o p. Um contraste sem p (menos de 2 bases com valor) entra com p = 1, como o
+   `holm` já faz;
+5. **o IC95 percentil** de cada contraste sai no relato como **descritivo** do tamanho do efeito. Ele não decide gate nenhum das duas
+   famílias.
+
+**O G-MVP** é um gate único, fora das famílias, e fica com a regra da tabela: o limite inferior do IC95 percentil (bilateral, logo a
+0,025 unilateral) da fração de vidas ≥ 0,8. A fração por unidade é a média das 12 células, e o bootstrap é o mesmo do item 1.
+
+**As premissas** (seção 5.3) também ficam pelo IC95: elas não testam a direção prevista, só se a medida existe.
 
 ### 5.3 As premissas
 
@@ -205,7 +233,7 @@ Os critérios D1 a D6 são os de `docs/TAREFA_V2_CEREBRO_A_BASELINE.md`, seção
 | G-MECANISMO | G-MVP | G-ABLA | leitura |
 |---|---|---|---|
 | falha | — | — | falha de implementação (D1): conserta o módulo; nenhuma vida roda |
-| passa | passa | os 4 passam | **o modular vai à comida pelos próprios módulos, e cada um pesa no sentido previsto** |
+| passa | passa | os 4 passam | **o modular vai à comida pelos próprios módulos, e cada um pesa no sentido previsto** (na pesquisa Python; o produto pronto pede também a seção 5.6) |
 | passa | passa | algum falha ou é inconclusivo por premissa | o produto funciona; o módulo que não pesou vai ao diagnóstico da fiação (D2), não ao fallback |
 | passa | falha | qualquer | com o oráculo (o T-CADEIA-1, D3) passando, a aprendizagem não chega lá: falha de implementação ou de calibração (D4), não da arquitetura |
 | passa | inconclusivo por premissa | qualquer | registrado; os donos e a elegibilidade dizem por quê |
@@ -214,6 +242,23 @@ Os critérios D1 a D6 são os de `docs/TAREFA_V2_CEREBRO_A_BASELINE.md`, seção
   hipótese experimental, registrado como está.
 - **Por dono e por lugar, só descritivo.**
 - **Gate que falha não para a V2.** O resultado negativo fica registrado como está.
+
+### 5.6 O G-MVP é necessário, não suficiente, para o produto
+
+A correção 4 da revisão. **O G-MVP passar na pesquisa Python não declara o produto pronto.** O A só deixa de ser o cérebro do MVP com os
+dois gates da MV-2 (`docs/TAREFA_V2_MVP_MUNDO_PRODUTO.md`, seção 8):
+- **(i) o gate de compatibilidade:** o cérebro modular cumpre o `Protocol` `Politica`, passa o **G-PAR** Python/TS e o **E2E-COMIDA** no
+  jogo, na v13 (o laço do pet não muda; só a política);
+- **(ii) o gate de prontidão:** o **G-MVP** deste plano, **e** o **G-CUSTO** medido na web (seção 5.4), **e** o **E2E-COMIDA** no jogo
+  com o cérebro modular, numa vida comum e não só num save preparado (a ressalva do Matheus no #404).
+
+| o que passou | o que se pode dizer |
+|---|---|
+| só o G-MVP (Python) | o cérebro modular faz a cadeia na pesquisa Python. **O produto não está pronto** |
+| o G-MVP e o G-PAR | a mesma cadeia vale no TS, conta por conta. Falta o custo e o jogo |
+| o G-MVP, o G-PAR, o G-CUSTO na web e o E2E-COMIDA no jogo | os dois gates da MV-2 fechados: a troca do A pelo modular no MVP pode ir ao Matheus |
+
+**O E2E-COMIDA com a v13** é teste da integração (a tarefa do produto do modular), não deste plano. Aqui ele aparece só como condição.
 
 ## 6. A calibração, o piloto e o poder
 
@@ -251,12 +296,27 @@ M10 (montar, calibrar junto, validar uma vez): **só no M3,** com todos os módu
 
 - **O efeito de planejamento:** a metade do efeito médio observado no piloto, para cada contraste. A metade porque o piloto é pequeno e
   tende a superestimar o efeito.
-- **O K:** o menor de 4 a 10 por base com poder simulado ≥ 0,8 em todos os gates da família G-ABLA e no G-MVP.
-- **O método:** o da A1.9 (o plano da competição, seção 7): um bootstrap das diferenças por unidade do piloto, centradas e deslocadas para
-  o efeito de planejamento, 2 000 réplicas por K, o teste unilateral a 0,025 (no Holm, ao α do posto mais exigente), a semente 4242.
+- **O K:** o menor de 4 a 10 por base com poder simulado ≥ 0,8 **em cada um** dos quatro contrastes da família G-ABLA e no G-MVP.
+- **O método** (a correção 1 da revisão), sobre o da A1.9 (o plano da competição, seção 7):
+  - **a réplica:** um bootstrap das unidades do piloto, com as quatro diferenças de cada unidade juntas (a correlação entre os contrastes
+    fica), cada diferença centrada e deslocada para o efeito de planejamento dela; K × 5 unidades por réplica; 2 000 réplicas por K; a
+    semente 4242;
+  - **o teste em cada réplica** é o mesmo do gate: o p unilateral do bootstrap agrupado por base (seção 5.2.1), com 1 000 reamostragens
+    internas, para o custo da simulação caber (a avaliação usa 10 000);
+  - **o α de cada contraste da G-ABLA é 0,0125** (= 0,05/4), nos quatro;
+  - **o poder é por contraste:** a fração das réplicas em que aquele contraste tem p ≤ 0,0125.
+- **Por que 0,0125, e não o Holm completo na simulação:** o Holm rejeita toda hipótese que o limiar fixo de 0,05/4 rejeita (o limiar do
+  primeiro posto é o menor dos quatro). Então o poder por contraste no Holm é **no mínimo** o poder a 0,0125. Simular a 0,0125 dá um K
+  conservador, nunca otimista, e com uma conta só por contraste. Simular o Holm completo daria um K menor ou igual, à custa de fazer o
+  poder de um contraste depender do efeito dos outros três no piloto.
+- **O poder conjunto** (as quatro rejeitam na mesma réplica, a 0,0125) sai no adendo 2 só como relato. Ele não entra no critério do K.
+- **O G-MVP,** gate único, fora do Holm:
+  - **o valor de planejamento:** 0,8 + ½ × (a fração de vidas do M3 com a cadeia no piloto − 0,8);
+  - **o teste em cada réplica:** o limite inferior do IC95 percentil ≥ 0,8 (logo 0,025 unilateral);
+  - **se a fração do piloto for ≤ 0,8,** não há poder a calcular; o G-MVP sai da conta do K, e o relato diz isso.
+- **A família G-MOD:** o poder de cada contraste a 0,025 (= 0,05/2), pelo mesmo argumento. É só relato e não entra no K.
 - **Se nem K = 10 chega a 0,8,** a avaliação roda com 10, e o poder sai declarado. **Se o efeito do piloto tiver o sinal contrário ao
   previsto,** aquele contraste não entra na conta do K, e o relato diz isso.
-- **O G-MOD** entra só como relato do poder.
 
 **O adendo 2** guarda o K, o poder de cada gate, as premissas do piloto, o valor do M4-con e o custo, num commit antes da avaliação.
 
@@ -326,16 +386,23 @@ as visitas ao lugar lembrado e quantas foram vazias (o T-MEM-4 na vida).
 | piloto do N | **63101…63505** | 63303, 63404, 63505 (K = 2) |
 | avaliação única | **64101…64505** | 64101, 64202, 64303, 64404, 64505 (K do adendo 2) |
 
-- **Reservadas pelo Gerente em 2026-10-25; a aprovação do Matheus está pendente** (PPM-1). As duas linhas entram em
+- **Reservadas pelo Gerente e aprovadas pelo Matheus em 2026-10-25** (PPM-1). As duas linhas estão em
   `experiments/bancada/faixas.py` (`FAIXAS_RESERVADAS`) neste PR, com a fonte. É a única mudança de código desta tarefa.
 - **O prefixo** `"digibrain_prototipo"` entra no `PREFIXOS_UNIDADES` com o orquestrador (seção 10), com o teste de colisão.
 - **As sementes dos testes** (101…505) servem à fumaça do orquestrador e aos testes de mecanismo.
 
 ## 10. A ordem das etapas que este plano pressupõe
 
-**Os gates de engenharia são pré-condição, não evidência de aprendizagem (DM-2).** Nenhum deles entra na leitura da seção 5.5.
+**Os gates de engenharia são pré-condição, não evidência de aprendizagem (DM-2).** Nenhum deles entra na leitura da seção 5.5. **Há dois
+trilhos, e o TS não bloqueia o Python** (a correção 3 da revisão; a tabela da seção 5.1):
 
-1. **Etapa 1a, Python:**
+| trilho | os passos, em ordem | o que precisa passar antes | o que sai |
+|---|---|---|---|
+| **Python (a pesquisa)** | 1. etapa 1a; 2. o código da avaliação; 3. a calibração; 4. o piloto; 5. a avaliação única | antes do passo 3: G1, G2, G-INT, G-RECEPTOR, G-SEM-DIRECAO, T-PONTO-1 a 3 e o G-MECANISMO | o G-MVP, as G-ABLA, as G-MOD, os descritivos |
+| **TS (a integração, etapa 1b)** | 6. o gabarito v12 em TS; 7. o `ponto` no TS; 8. o cérebro em TS e o G-PAR; 9. a medição do custo | antes do passo 7: a primeira parte do T-PONTO-4 (o gabarito v12 em TS) | o G-PAR, o G-CUSTO e, com a tarefa do produto, o E2E-COMIDA na v13 |
+
+**O trilho Python:**
+1. **Etapa 1a:**
    - os módulos (seção 1), com as subchaves `p1` e o modo do `g_apr` (PROPOSTAS), cada mudança atrás da chave, com o G2;
    - os testes de mecanismo (G-MECANISMO), o T-CADEIA-0 (o A só lido), o T-CADEIA-1 (o oráculo, D3) e o T-CADEIA-2;
    - os T-PONTO-1 a 3 (o `ponto` em EXPLORAR; o `raise` fora do mapa; o G2 das 196 vidas);
@@ -346,17 +413,20 @@ as visitas ao lugar lembrado e quantas foram vazias (o T-MEM-4 na vida).
 3. **A calibração** (63101, 63202) → o adendo 1.
 4. **O piloto** (63303 a 63505) → o adendo 2.
 5. **A avaliação única** (64101 a 64505) → `docs/RESULTADO_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`.
-6. **Etapa 1b, TS,** nesta ordem:
-   - **o gabarito das vidas v12 do jogo em TS primeiro,** gravado e conferido contra a versão atual (a primeira parte do T-PONTO-4);
-   - **o `ponto` no espelho TS,** atrás da chave da v13, com o mesmo `raise` (o resto do T-PONTO-4);
-   - **o cérebro modular em TS e o G-PAR** decisão a decisão, contra os gabaritos do Python com os valores do adendo 1. **Recomendação:** o
-     porte do cérebro só depois do adendo 1, para não portar duas vezes; o gabarito v12 e o `ponto` podem andar antes;
-   - **a medição pontual do A v11 no navegador** (só desempenho), depois a da v13: o G-CUSTO.
 
-- **A etapa 1b não espera a avaliação Python,** e a avaliação não espera a 1b. O G-CUSTO e o gate de compatibilidade da MV-2 (i) dependem
-  da 1b; o G-MVP e as G-ABLA, só do Python.
-- **Antes da calibração,** os critérios do baseline (AF-1 a AF-6) precisam estar decididos (`TAREFA_V2_CEREBRO_A_BASELINE`, seção 7: "os
-  critérios estão decididos antes da avaliação").
+**O trilho TS (etapa 1b):**
+
+6. **o gabarito das vidas v12 do jogo em TS primeiro,** gravado e conferido contra a versão atual (a primeira parte do T-PONTO-4);
+7. **o `ponto` no espelho TS,** atrás da chave da v13, com o mesmo `raise` (o resto do T-PONTO-4);
+8. **o cérebro modular em TS e o G-PAR** decisão a decisão, contra os gabaritos do Python com os valores do adendo 1. **Recomendação:** o
+   porte do cérebro só depois do adendo 1, para não portar duas vezes; os passos 6 e 7 podem andar antes;
+9. **a medição pontual do A v11 no navegador** (só desempenho), depois a da v13: o G-CUSTO.
+
+- **O G-PAR e o T-PONTO-4 não bloqueiam nenhuma vida da pesquisa Python.** Eles bloqueiam a integração TS e o gate de compatibilidade
+  da MV-2 (i).
+- **O produto pronto** pede os dois trilhos: o G-MVP do Python **e** o G-PAR, o G-CUSTO na web e o E2E-COMIDA no jogo (seção 5.6).
+- **Os critérios do baseline** (AF-1 a AF-6) foram decididos em 2026-10-25 (seção 13); a condição "decididos antes da avaliação"
+  (`TAREFA_V2_CEREBRO_A_BASELINE`, seção 7) está cumprida.
 
 ## 11. Riscos
 
@@ -377,22 +447,34 @@ as visitas ao lugar lembrado e quantas foram vazias (o T-MEM-4 na vida).
   a config, as sementes, a `ConfigDigibrain` de cada braço) e o resumo. As vidas ficam fora do git; os artefatos, num commit próprio.
 - O orquestrador e a config entram num PR de código antes da calibração, com a fumaça (seção 10, passo 2).
 
-## 13. Precisa do Matheus
+## 13. Decisões do Matheus
 
-Todas PROPOSTAS, com a recomendação primeiro. **Nenhuma vida roda antes da revisão deste plano.** Os números são SEM FONTE.
+**DECIDIDAS em 2026-10-25 (Matheus, por relato do Gerente),** na revisão do #412:
+- **as PPM-1 a PPM-7 e a PPM-9: aprovadas pelas recomendações** (a coluna "recomendação" é o que vale);
+- **a PPM-8: aprovada depois de corrigir o cálculo de poder.** A correção está na seção 6.3 desta versão (o α de 0,0125 por contraste, o
+  poder por contraste), e esta versão volta à revisão dele;
+- **as quatro correções pedidas,** feitas nesta versão: o poder com o Holm (seção 6.3), a regra operacional do Holm (seção 5.2.1), a ordem
+  dos gates (seções 5.1 e 10) e o G-MVP como condição necessária, não suficiente (seção 5.6).
 
-| # | decisão | recomendação | custo de errar |
+**Sem vidas e sem merge até o Matheus revisar a versão corrigida.** Os números das decisões continuam SEM FONTE.
+
+| # | decisão | recomendação (o que vale) | custo de errar |
 |---|---|---|---|
-| **PPM-1** | as faixas | **63101…63505 para a calibração e o piloto; 64101…64505 para a avaliação única,** como o Gerente reservou | sem faixa aprovada, nenhuma vida pode rodar; faixas trocadas depois deixam linhas órfãs na tabela |
-| **PPM-2** | os braços | **os 9 da seção 2:** a escada M0 a M3, o M3-sp (a persistência, que a espec manda desligar), o M4 com os dois controles do V3 e o A11 só na avaliação | sem o M3-sp: a persistência não tem ablação, e o D2 fica sem ela; com o A no piloto: o A volta a ser medido além do baseline |
-| **PPM-3** | o cenário | **o MVP como o jogo roda:** o `CONFIG_MUNDO_MVP`, o contrato desligado, os 4 donos sem ensino × 3 lugares, 14 dias; e **a permissão para o orquestrador desta avaliação usar o layout do MVP** (a lista do teste do layout; a MV-10 limitou o layout ao produto) | o layout padrão: as árvores voltam, e a pergunta deixa de ser a do produto; o contrato ligado: a visão em cone muda o que o pet vê, e o G-PAR com o v12 deixa de valer para o mesmo cenário |
-| **PPM-4** | o G-MVP | **W = 8 decisões (2 h); a ração elegível com a fome abaixo de 0,5; a vida com a cadeia com a taxa ≥ 0,5; o limite inferior do IC95 da fração de vidas ≥ 0,8;** a G-ELEGIVEL com 80% das vidas e 3 rações | mais frouxo: um pet que come metade das vezes passa como pronto para o produto; mais apertado: o gate mede a paciência do dono, não o cérebro |
-| **PPM-5** | as G-ABLA | **as quatro medidas e direções da seção 5.2,** a do M-MEM só no comedouro, o Holm a 0,05; a G-PESA com 0,01 | sem a G-PESA: um módulo que não decide nunca lê como "não ajuda"; todas as células na G-ABLA-MEM: o perto e o longe diluem o único lugar em que a espec prevê efeito |
-| **PPM-6** | o G-CUSTO | **o orçamento da seção 12 da espec,** sem número novo; o A medido uma vez, só em desempenho | sem orçamento decidido, o D5 vira impressão (AF-4) |
-| **PPM-7** | a calibração | **só o M3, as constantes do `ParametrosInatos`, os quatro critérios da seção 6.1, três rodadas,** nas bases 63101 e 63202 | calibrar cada braço: a ablação mede a calibração, não o módulo; sem limite de rodadas: a calibração vira busca pelo resultado |
-| **PPM-8** | o piloto e o N | **K = 2 nas bases 63303 a 63505 (6 unidades, 576 vidas); o efeito de planejamento na metade do piloto; o K de 4 a 10 com poder ≥ 0,8** | piloto maior: mais CPU antes de saber se o módulo pesa; o efeito do piloto inteiro: a avaliação fica subpotenciada se o piloto exagerou |
-| **PPM-9** | a reavaliação depois do conserto (AF-3) | **numa faixa nova, por adendo,** com o resultado das 64101…64505 registrado como está | reusar as 64101…64505: a avaliação deixa de rodar uma vez só |
+| **PPM-1** (DECIDIDA) | as faixas | **63101…63505 para a calibração e o piloto; 64101…64505 para a avaliação única,** como o Gerente reservou | sem faixa aprovada, nenhuma vida pode rodar; faixas trocadas depois deixam linhas órfãs na tabela |
+| **PPM-2** (DECIDIDA) | os braços | **os 9 da seção 2:** a escada M0 a M3, o M3-sp (a persistência, que a espec manda desligar), o M4 com os dois controles do V3 e o A11 só na avaliação | sem o M3-sp: a persistência não tem ablação, e o D2 fica sem ela; com o A no piloto: o A volta a ser medido além do baseline |
+| **PPM-3** (DECIDIDA) | o cenário | **o MVP como o jogo roda:** o `CONFIG_MUNDO_MVP`, o contrato desligado, os 4 donos sem ensino × 3 lugares, 14 dias; e **a permissão para o orquestrador desta avaliação usar o layout do MVP** (a lista do teste do layout; a MV-10 limitou o layout ao produto) | o layout padrão: as árvores voltam, e a pergunta deixa de ser a do produto; o contrato ligado: a visão em cone muda o que o pet vê, e o G-PAR com o v12 deixa de valer para o mesmo cenário |
+| **PPM-4** (DECIDIDA) | o G-MVP | **W = 8 decisões (2 h); a ração elegível com a fome abaixo de 0,5; a vida com a cadeia com a taxa ≥ 0,5; o limite inferior do IC95 da fração de vidas ≥ 0,8;** a G-ELEGIVEL com 80% das vidas e 3 rações | mais frouxo: um pet que come metade das vezes passa como pronto para o produto; mais apertado: o gate mede a paciência do dono, não o cérebro |
+| **PPM-5** (DECIDIDA) | as G-ABLA | **as quatro medidas e direções da seção 5.2,** a do M-MEM só no comedouro, o Holm a 0,05 (pelo p do bootstrap, seção 5.2.1); a G-PESA com 0,01 | sem a G-PESA: um módulo que não decide nunca lê como "não ajuda"; todas as células na G-ABLA-MEM: o perto e o longe diluem o único lugar em que a espec prevê efeito |
+| **PPM-6** (DECIDIDA) | o G-CUSTO | **o orçamento da seção 12 da espec,** sem número novo; o A medido uma vez, só em desempenho | sem orçamento decidido, o D5 vira impressão (AF-4) |
+| **PPM-7** (DECIDIDA) | a calibração | **só o M3, as constantes do `ParametrosInatos`, os quatro critérios da seção 6.1, três rodadas,** nas bases 63101 e 63202 | calibrar cada braço: a ablação mede a calibração, não o módulo; sem limite de rodadas: a calibração vira busca pelo resultado |
+| **PPM-8** (DECIDIDA depois da correção do poder) | o piloto e o N | **K = 2 nas bases 63303 a 63505 (6 unidades, 576 vidas); o efeito de planejamento na metade do piloto; o K de 4 a 10 com poder ≥ 0,8 por contraste, a 0,0125 (seção 6.3)** | piloto maior: mais CPU antes de saber se o módulo pesa; o efeito do piloto inteiro: a avaliação fica subpotenciada se o piloto exagerou |
+| **PPM-9** (DECIDIDA) | a reavaliação depois do conserto (AF-3) | **numa faixa nova, por adendo,** com o resultado das 64101…64505 registrado como está | reusar as 64101…64505: a avaliação deixa de rodar uma vez só |
 
-**Dependem de decisões já abertas,** que não são deste plano:
-- **os AF-1 a AF-6** (`docs/TAREFA_V2_CEREBRO_A_BASELINE.md`, seção 8): precisam estar decididos antes da calibração;
-- **as subchaves `p1` e o modo do `g_apr`:** a etapa 1a as propõe e as implementa atrás da chave; este plano só as pressupõe.
+**Os critérios do baseline e do fallback** (`docs/TAREFA_V2_CEREBRO_A_BASELINE.md`, seção 8), DECIDIDOS em 2026-10-25 (Matheus, por
+relato do Gerente):
+- **AF-1, AF-2, AF-3 e AF-6:** aprovados pelas recomendações;
+- **AF-4:** usa o orçamento já definido na espec (seção 12), o mesmo do G-CUSTO (seção 5.4);
+- **AF-5:** já está decidida pela DM-8, sem reabertura.
+
+**Pressuposto deste plano, não decisão dele:** as subchaves `p1` e o modo do `g_apr`. A etapa 1a as propõe e as implementa atrás da
+chave.

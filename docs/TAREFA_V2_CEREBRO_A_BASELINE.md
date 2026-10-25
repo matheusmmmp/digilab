@@ -1,7 +1,8 @@
 # TAREFA V2 — CEREBRO_A_BASELINE: os critérios para manter o cérebro A como baseline e para recorrer a ele como fallback (2026-10-24)
 
-Coordenador: Gerente (Claude Code). Worker: a definir (método). Status: **ABERTA, só papel.** Os critérios são PROPOSTOS. Eles precisam ser
-decididos pelo Matheus **antes** da avaliação do protótipo modular. As decisões AF-1 a AF-6 estão na seção 8.
+Coordenador: Gerente (Claude Code). Worker: a definir (método). Status: **os critérios DECIDIDOS pelo Matheus em 2026-10-25** (por relato do
+Gerente, na revisão do plano do protótipo, #412), antes da avaliação do protótipo modular. As decisões AF-1 a AF-6 estão na seção 8. Os
+números continuam PROPOSTOS e SEM FONTE onde a seção 4 diz.
 
 Categoria: arquitetura. Origem: Matheus, 2026-10-24, o PROMPT MESTRE (seção 1, "Papel do cérebro A").
 - O A não está descartado, mas não é o cérebro final da web.
@@ -81,13 +82,19 @@ O plano da avaliação os fixa antes da run, com a decisão do Matheus.
 
 ## 8. Precisa do Matheus
 
-Todas PROPOSTAS, com a recomendação primeiro.
+**DECIDIDAS em 2026-10-25 (Matheus, por relato do Gerente),** na revisão de `docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`
+(#412):
+- **AF-1, AF-2, AF-3 e AF-6:** aprovadas pelas recomendações (a coluna "recomendação" é o que vale);
+- **AF-4:** usa o orçamento já definido na espec (`docs/ESPEC_DIGIBRAIN_MODULAR.md`, seção 12);
+- **AF-5:** já está decidida pela DM-8, sem reabertura.
+
+A tabela abaixo é a da proposta, com a recomendação primeiro.
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
-| **AF-1** | os critérios D1 a D6 | **como estão:** o fallback só por D3 ou D5, depois de D1, D2 e D4 resolvidos | o fallback pelo D6 sozinho: o produto volta ao A porque a primeira versão do modular perdeu, que é o que o pedido proíbe |
-| **AF-2** | o que é "representativo" | **os quatro pontos da seção 2** | um protótipo menor: uma limitação de implementação parece da arquitetura |
-| **AF-3** | quantas rodadas de diagnóstico e conserto antes de discutir o fallback | **duas** (PROPOSTO, SEM FONTE) | uma: a primeira implementação decide; muitas: o produto espera |
-| **AF-4** | o orçamento do navegador (D5) | **fixado na especificação, medido no protótipo,** a partir do custo do A v11 no mesmo aparelho | sem orçamento: o D5 vira impressão |
-| **AF-5** | as rodadas do A em curso | **as da seção 9 da auditoria** (pausar o piloto e a validação da P4; o Gate I só com o A como baseline) | continuar: a pesquisa segue validando o A |
-| **AF-6** | o A no jogo enquanto o modular não entra | **os pets v11 continuam com o A,** sem mudança | trocar antes: o jogo fica sem cérebro que funcione |
+| **AF-1** (DECIDIDA) | os critérios D1 a D6 | **como estão:** o fallback só por D3 ou D5, depois de D1, D2 e D4 resolvidos | o fallback pelo D6 sozinho: o produto volta ao A porque a primeira versão do modular perdeu, que é o que o pedido proíbe |
+| **AF-2** (DECIDIDA) | o que é "representativo" | **os quatro pontos da seção 2** | um protótipo menor: uma limitação de implementação parece da arquitetura |
+| **AF-3** (DECIDIDA) | quantas rodadas de diagnóstico e conserto antes de discutir o fallback | **duas** (PROPOSTO, SEM FONTE) | uma: a primeira implementação decide; muitas: o produto espera |
+| **AF-4** (DECIDIDA) | o orçamento do navegador (D5) | **fixado na especificação, medido no protótipo,** a partir do custo do A v11 no mesmo aparelho | sem orçamento: o D5 vira impressão |
+| **AF-5** (DECIDIDA) | as rodadas do A em curso | **as da seção 9 da auditoria** (pausar o piloto e a validação da P4; o Gate I só com o A como baseline) | continuar: a pesquisa segue validando o A |
+| **AF-6** (DECIDIDA) | o A no jogo enquanto o modular não entra | **os pets v11 continuam com o A,** sem mudança | trocar antes: o jogo fica sem cérebro que funcione |
