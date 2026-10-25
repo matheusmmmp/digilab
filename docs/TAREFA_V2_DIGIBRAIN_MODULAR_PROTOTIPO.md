@@ -109,3 +109,17 @@ com os testes T-PONTO-1 a T-PONTO-4.
 3. o plano de análise `docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md` commitado, com as faixas de sementes pedidas ao coordenador,
    os gates G-MECANISMO, G-ABLA, G-MVP e G-CUSTO com os limiares PROPOSTOS, a leitura descritiva de Lengyel e Dayan (D-2) e a leitura
    secundária da PE-4 (D-1); **o plano vai ao Matheus antes da primeira vida.**
+
+## 11. O plano de análise (o C, Claude Code, Opus 5.5, 2026-10-25)
+
+- **Entregue:** `docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md` (#412).
+- **Revisto pelo Matheus em 2026-10-25** (por relato do Gerente): as PPM-1 a PPM-7 e a PPM-9 aprovadas pelas recomendações; a PPM-8
+  depois da correção do poder; os AF-1 a AF-6 decididos (`docs/TAREFA_V2_CEREBRO_A_BASELINE.md`, seção 8). As quatro correções pedidas
+  estão na versão corrigida: o poder a 0,0125 por contraste, a regra do Holm pelo p do bootstrap, a ordem dos gates em dois trilhos (o
+  TS não bloqueia o Python) e o G-MVP como condição necessária, não suficiente, do produto pronto. **Sem vidas e sem merge até o Matheus
+  revisar a versão corrigida.**
+- **As faixas** 63101…63505 (a calibração e o piloto) e 64101…64505 (a avaliação única), reservadas pelo Gerente e aprovadas pelo Matheus
+  (PPM-1), estão em `experiments/bancada/faixas.py`.
+- **O que o plano pressupõe da etapa 1a,** além dos módulos: uma subchave `p1` e o modo do `g_apr` na `ConfigDigibrain`, e o orquestrador
+  na lista do teste do layout do MVP (PPM-3).
+- **Interpretações e achados** em `docs/registro/2026-10.md`.

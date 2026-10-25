@@ -91,6 +91,10 @@ FAIXAS_RESERVADAS = (
                    "aprovada pelo Matheus em 2026-10-21)"),
     (62101, 62505, "P4, o cerebro A com o planejador no mundo corporificado, a validacao (PLANO_ANALISE_V2_P4_CORPORIFICADO, PC-1, "
                    "aprovada pelo Matheus em 2026-10-21)"),
+    (63101, 63505, "DigiBrain modular, o prototipo: o piloto e a calibracao dos valores de partida "
+                   "(PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO, PPM-1, aprovada pelo Matheus em 2026-10-25)"),
+    (64101, 64505, "DigiBrain modular, o prototipo: a avaliacao unica (PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO, PPM-1, aprovada "
+                   "pelo Matheus em 2026-10-25)"),
     (50001, 50020, "analise de poder, piloto"), (60001, 60160, "confirmatoria"), (69001, 69001, "M1, gate G1"),
     (80001, 82004, "linhagem E1 (piloto, genomas e ambientes)"),
     (20260900, 20261800, "fala, voz, comando e bootstraps (sementes de 2026-09/10 e semente + i)"),

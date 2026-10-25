@@ -85,7 +85,8 @@
   - a arquitetura modular: DM-1 a DM-9 DECIDIDAS (`docs/ARQUITETURA_DIGIBRAIN_MODULAR.md`, seção 13); a especificação aprovada na direção (2026-10-25) com as nove PE "antes" decididas; abertas só as PE "no protótipo", pela avaliação;
   - o MVP: MV-1 a MV-9 (`docs/TAREFA_V2_MVP_MUNDO_PRODUTO.md`): todas DECIDIDAS em 2026-10-24 (a MV-6 por decisão definitiva do Matheus sobre os sprites);
   - a memória autobiográfica: ME-1 a ME-7 (`docs/TAREFA_V2_MEMORIA_AUTOBIOGRAFICA.md`);
-  - o A como baseline e fallback: AF-1 a AF-6 (`docs/TAREFA_V2_CEREBRO_A_BASELINE.md`).
+  - o A como baseline e fallback: AF-1 a AF-6 DECIDIDAS em 2026-10-25 (`docs/TAREFA_V2_CEREBRO_A_BASELINE.md`, seção 8; a AF-4 pelo
+    orçamento da espec, seção 12; a AF-5 pela DM-8);
 - **A P4:** as P4-1 a P4-8 decididas; o #395 aberto; o piloto e a validação em pausa pela DM-8, DECIDIDA em 2026-10-24.
 - **O crédito por canal (V3-9):** as CC-1 a CC-6 DECIDIDAS em 2026-10-21, pela recomendação (`docs/TAREFA_V2_V3_CREDITO_CANAL.md`, seção 8); a etapa 0 (as tabelas sombra) é a porta, e as faixas 56101…56505 e 57101…57505 estão decididas (entram na `FAIXAS_RESERVADAS` com a etapa 0).
 - **O ecossistema genético:** EG-1 a EG-8 decididas (2026-10-14); cada passo G0 a G5 entra com tarefa e plano próprios (`docs/futuro/ecossistema_genetico.md`).
