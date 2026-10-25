@@ -416,8 +416,13 @@ candidato fornecido pelo explorar do motor** (a PE-14 REVISTA em 2026-10-25, dec
 - o M-ADAPT entrega o `ponto` quando o M-ARB escolhe "explorar o lugar lembrado" (seção 4.6), e registra que o alvo veio do M-MEM;
 - **o explorar do motor Python não muda.** Nenhum candidato `lembranca` entra na lista; o gabarito `tests/gabaritos/digibrain_vidas_de_hoje.json`
   (as 196 vidas da etapa 0, com os candidatos de cada sub-decisão) é o G2 que confere que a lista continua a mesma;
-- **o espelho TS não tem o `ponto` hoje** e ganha o mesmo tratamento, atrás da chave da v13, **só depois de gravado e conferido o gabarito
-  das vidas v12 do jogo em TS**, reproduzindo a versão atual byte a byte; a v12 e o A preservados.
+- **o espelho TS já validava o `ponto` como o Python** (`web/app/motor/mundo.ts`, `validarAlvo`: só em EXPLORAR, inteiro e dentro do
+  mapa, os demais alvos sem relaxar; achado do worker A na etapa 1b, #413). **O que faltava era o laço do jogo perguntar o alvo ao
+  cérebro:** o `MotorCorpoMundo` passava sempre `null`. A etapa 1b pôs o gancho `escolherAlvo` na política e o laço só o pergunta com a
+  opção `digibrain` (a v13, desligada por padrão), **depois de gravado e conferido o gabarito das vidas v12 do jogo em TS**
+  (`web/app/test/gabaritos/v12_jogo_ts.json`, reproduzido byte a byte antes da mudança); a v12 e o A preservados. Uma versão anterior
+  desta seção dizia que o TS não tinha o `ponto`: a leitura do Gerente só tinha olhado `web/app/src`, e o motor fica em
+  `web/app/motor`.
 
 ### 4.2 M-SENS, a codificação sensorial
 

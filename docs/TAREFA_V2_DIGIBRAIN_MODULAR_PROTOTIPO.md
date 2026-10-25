@@ -1,6 +1,8 @@
 # TAREFA V2 — DIGIBRAIN_MODULAR_PROTOTIPO: o protótipo e a avaliação dos mecanismos do DigiBrain modular (2026-10-24)
 
-Coordenador: Gerente (Claude Code). Worker: a definir. Worktree e branch: `v2-modular-prototipo-<etapa>`. Status: **ABERTA, só papel.**
+Coordenador: Gerente (Claude Code). Workers: D (etapas 0 e 1a), A (etapa 1b). Worktree e branch: `v2-modular-prototipo-<etapa>`.
+Status: **EM ANDAMENTO: a etapa 0 (#410), a 1b (#413) e a 1a (#414) na `main` em 2026-10-25; nenhuma vida das faixas rodou; o próximo
+passo é a calibração (plano, seção 6.1), despachada só com o ok do Matheus.**
 **A revisão da especificação pelo Matheus aconteceu em 2026-10-25** (`docs/TAREFA_V2_DIGIBRAIN_MODULAR_ESPEC.md`, seção 10): a direção
 aprovada, as PE "antes" decididas. **Começa depois do #407 entrar na `main`,** pela etapa 0 (os gabaritos e a chave desligada), com o
 `lembranca` autorizado para a v13 atrás da chave e com G2 antes; a v12 e o A preservados; nenhuma medição do A além da pontual de

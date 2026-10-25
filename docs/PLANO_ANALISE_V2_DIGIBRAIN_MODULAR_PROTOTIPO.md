@@ -140,6 +140,14 @@ log), e as listas do motor (os `lugares` do `DonoComLugar`, os consumos do mundo
 | `pesos_no_teto` | a fração dos H em ±H_max no fim da vida (o G6 da V2, espec, seção 2.4; a PE-10) |
 | `centro_temporal` | o dia médio de uma série diária de frações, ponderado pela fração (None com a série toda em 0). Serve à leitura D-2 |
 
+- **As medidas acima entraram no `digilab/metrics.py` na etapa 1a (#414, worker D), antes de qualquer vida,** com leituras PROPOSTAS
+  onde o texto deste plano deixava margem. **Elas estão escritas na seção da etapa 1a de `docs/registro/2026-10.md` e valem como parte
+  deste plano:** não mudam depois de olhar as vidas. As três que mudam o que se mede: a **intenção** só existe nas unidades com alvo de
+  identidade fixa (a comida `id`, a bola, o lugar lembrado), e o cheiro e o vagar não geram compromisso nem frustração (afeta
+  `intencoes_com_meta` e a persistência do G-ABLA); a **sonda sem u** (decisão com um candidato só) fica com o candidato de maior peso
+  (afeta `influencia_por_modulo`); "o **receptor da fome cai**" na E2E-COMIDA é lido como a falta do M-SENS cair. Também: o contexto z
+  tem 23 características (`CARACTERISTICAS_DIGIBRAIN`), não ~20, e duas conjunções com a urgência ficam no M-IMPULSO, não no M-SENS.
+  Nenhuma dessas leituras foi ajustada olhando para uma vida das faixas: nenhuma rodou.
 - **O índice de "ganhou, fica" é medida nossa, SEM FONTE.** Ele mede o que o P2 faz por construção (reforça a ação escolhida no contexto
   em que o corpo melhorou), e não uma teoria do hábito.
 - **O custo** (seção 5.4) não é medida do `metrics.py`: é o cronômetro do navegador e a contagem do `estado_interno`, na etapa 1b.
@@ -158,7 +166,7 @@ e a tabela diz qual (a correção 3 da revisão):
 | **G-INT, G-RECEPTOR, G-SEM-DIRECAO** | sem float, sem `/` e sem `math` no pacote; o cérebro só lê a Observação; sem a direção do cheiro fora do motor | **a calibração Python** | — |
 | **T-PONTO-1 a 3** | o `ponto` só em EXPLORAR e só com o M-MEM; o `raise` fora do mapa; o G2 das 196 vidas | **a calibração Python** | — |
 | **G-MECANISMO** (seção 5.2) | os testes de mecanismo | **a calibração Python** | — |
-| **T-PONTO-4** | o gabarito das vidas v12 em TS, depois o `ponto` no TS | a mudança no espelho TS (etapa 1b) | **as vidas da pesquisa Python** |
+| **T-PONTO-4** | o gabarito das vidas v12 em TS, depois o gancho do `ponto` no laço do TS (a validação do `Mundo` TS já existia; #413) | a mudança no espelho TS (etapa 1b) | **as vidas da pesquisa Python** |
 | **G-PAR** | o espelho TS refaz os gabaritos do Python decisão a decisão | a integração TS (etapa 1b) e o gate de compatibilidade do produto (a MV-2, i) | **as vidas da pesquisa Python** |
 | **G-CUSTO** (seção 5.4) | o orçamento no navegador | o gate de prontidão do produto (seção 5.6) | **as vidas da pesquisa Python** |
 
@@ -398,8 +406,8 @@ trilhos, e o TS não bloqueia o Python** (a correção 3 da revisão; a tabela d
 
 | trilho | os passos, em ordem | o que precisa passar antes | o que sai |
 |---|---|---|---|
-| **Python (a pesquisa)** | 1. etapa 1a; 2. o código da avaliação; 3. a calibração; 4. o piloto; 5. a avaliação única | antes do passo 3: G1, G2, G-INT, G-RECEPTOR, G-SEM-DIRECAO, T-PONTO-1 a 3 e o G-MECANISMO | o G-MVP, as G-ABLA, as G-MOD, os descritivos |
-| **TS (a integração, etapa 1b)** | 6. o gabarito v12 em TS; 7. o `ponto` no TS; 8. o cérebro em TS e o G-PAR; 9. a medição do custo | antes do passo 7: a primeira parte do T-PONTO-4 (o gabarito v12 em TS) | o G-PAR, o G-CUSTO e, com a tarefa do produto, o E2E-COMIDA na v13 |
+| **Python (a pesquisa)** | 1. etapa 1a (feita, #414); 2. o código da avaliação (feito, #414); 3. a calibração; 4. o piloto; 5. a avaliação única | antes do passo 3: G1, G2, G-INT, G-RECEPTOR, G-SEM-DIRECAO, T-PONTO-1 a 3 e o G-MECANISMO | o G-MVP, as G-ABLA, as G-MOD, os descritivos |
+| **TS (a integração, etapa 1b)** | 6. o gabarito v12 em TS (feito, #413); 7. o gancho do `ponto` no laço do TS (feito, #413); 8. o cérebro em TS e o G-PAR; 9. a medição do custo (a do A feita, #413; a da v13 no passo 8) | antes do passo 7: a primeira parte do T-PONTO-4 (o gabarito v12 em TS) | o G-PAR, o G-CUSTO e, com a tarefa do produto, o E2E-COMIDA na v13 |
 
 **O trilho Python:**
 1. **Etapa 1a:**
@@ -416,8 +424,10 @@ trilhos, e o TS não bloqueia o Python** (a correção 3 da revisão; a tabela d
 
 **O trilho TS (etapa 1b):**
 
-6. **o gabarito das vidas v12 do jogo em TS primeiro,** gravado e conferido contra a versão atual (a primeira parte do T-PONTO-4);
-7. **o `ponto` no espelho TS,** atrás da chave da v13, com o mesmo `raise` (o resto do T-PONTO-4);
+6. **o gabarito das vidas v12 do jogo em TS primeiro,** gravado e conferido contra a versão atual (a primeira parte do T-PONTO-4).
+   **Feito no #413** (`web/app/test/gabaritos/v12_jogo_ts.json`, 5 vidas, byte a byte antes da mudança);
+7. **o gancho do `ponto` no laço do TS,** atrás da opção `digibrain` da v13, desligada por padrão (o resto do T-PONTO-4). **Feito no
+   #413:** o `Mundo` do TS já validava o `ponto` como o Python; o que faltava era o laço perguntar o alvo ao cérebro;
 8. **o cérebro modular em TS e o G-PAR** decisão a decisão, contra os gabaritos do Python com os valores do adendo 1. **Recomendação:** o
    porte do cérebro só depois do adendo 1, para não portar duas vezes; os passos 6 e 7 podem andar antes;
 9. **a medição pontual do A v11 no navegador** (só desempenho), depois a da v13: o G-CUSTO.
