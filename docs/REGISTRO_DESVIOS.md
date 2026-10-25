@@ -375,3 +375,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-25 — DIGIBRAIN-MODULAR-PLANO, a revisão do Matheus (Claude Code, Opus 5.5, worktree `v2-modular-plano`): as decisões e as quatro correções](registro/2026-10.md)
 - [2026-10-25 — DIGIBRAIN-MODULAR-PROTOTIPO, etapa 1b (worker A, Claude Code, Opus 5.5, worktree `v2-modular-prototipo-1b`): o gabarito v12 em TS, o `ponto` no laço e o custo do A](registro/2026-10.md)
 - [2026-10-25 — DIGIBRAIN-MODULAR-PROTOTIPO, etapa 1a (worker D, Claude Code, Opus 5.5, worktree `v2-modular-prototipo-1a`): os módulos, os testes de mecanismo e o código da avaliação](registro/2026-10.md)
+- [2026-10-25 — DIGIBRAIN-MODULAR, a etapa 1 na `main` e a correção do `ponto` no TS (Gerente, worktree `v2-merge-r18`)](registro/2026-10.md)
