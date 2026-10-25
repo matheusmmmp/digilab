@@ -2412,8 +2412,8 @@ class ConfigDigibrainInatos:
     w0: tuple = (
         ("ocioso", _linha(vies=_S // 8, u_fome=-_S // 4, u_energia=-_S // 4, u_higiene=-_S // 4, u_tedio=-_S // 4)),
         ("dormir", _linha(vies=-_S // 2, u_energia=3 * _S, noite=_S // 2, dormindo=_S // 2,
-                          u_fome=-_S // 2)),                                      # rodada 2: u_energia 2S -> 3S
-        ("comer", _linha(vies=-_S, u_fome=2 * _S)),
+                          u_fome=-_S)),                    # rodada 2: u_energia 2S -> 3S; rodada 3: u_fome -S/2 -> -S
+        ("comer", _linha(vies=-17 * _S // 16, u_fome=3 * _S)),   # rodada 3: vies -S -> -17S/16, u_fome 2S -> 3S
         ("brincar", _linha(vies=-_S // 4, bola_vista=_S, u_tedio=_S // 2, u_humor=_S // 2, u_fome=-_S // 2, u_energia=-_S // 2)),
         ("chamar_atencao", _linha(vies=-_S // 2, fome_sem_comida=2 * _S, u_higiene=_S, sem_cuidado=_S // 4, comida_vista=-_S,
                                   u_solidao=_S // 2, u_estresse=_S // 4)),
