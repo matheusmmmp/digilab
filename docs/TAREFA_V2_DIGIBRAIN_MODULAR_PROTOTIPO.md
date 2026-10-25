@@ -94,3 +94,18 @@ As decisões que a especificação e o plano abrirem (as faixas, os limiares dos
 - **Fica para a etapa do `lembranca`:** o G2 das vidas v12 do jogo, no TS, antes da mudança TS; e o alvo `ponto` que o motor já aceita
   no explorar (o achado do registro).
 - **Interpretações e achados** em `docs/registro/2026-10.md`.
+
+## 10. A PE-14 revista e o que a etapa 1 precisa antes de rodar (Gerente, 2026-10-25)
+
+**A decisão do Matheus, depois do achado da etapa 0:** adotar o `Alvo.ponto` já aceito pelo motor Python. O lugar lembrado é um alvo
+produzido pelo M-MEM, não um candidato fornecido pelo explorar do motor. A validação especial aceita `ponto` só em EXPLORAR, com
+coordenadas inteiras dentro do mapa; a validação dos demais alvos não relaxa. Antes de qualquer alteração no espelho TS, o gabarito das
+vidas v12 em TS, gravado e conferido contra a versão atual. A v12 e o A preservados. A espec registra a revisão nas seções 4.1, 11 e 15,
+com os testes T-PONTO-1 a T-PONTO-4.
+
+**Antes da primeira vida do cérebro modular,** nesta ordem:
+1. a espec atualizada (feito: #409 e este PR);
+2. a linha da arquitetura sobre Hebb e os traços corrigida (feito: este PR);
+3. o plano de análise `docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md` commitado, com as faixas de sementes pedidas ao coordenador,
+   os gates G-MECANISMO, G-ABLA, G-MVP e G-CUSTO com os limiares PROPOSTOS, a leitura descritiva de Lengyel e Dayan (D-2) e a leitura
+   secundária da PE-4 (D-1); **o plano vai ao Matheus antes da primeira vida.**
