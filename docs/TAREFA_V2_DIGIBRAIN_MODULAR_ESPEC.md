@@ -1,7 +1,8 @@
 # TAREFA V2 — DIGIBRAIN_MODULAR_ESPEC: a especificação técnica do DigiBrain modular (2026-10-24)
 
 Coordenador: Gerente (Claude Code). Worker: o C (arquitetura e método; Opus). Worktree e branch: `v2-modular-espec`. Status:
-**DESPACHADA em 2026-10-25,** com as DM-1 a DM-9 DECIDIDAS (seção 8). Nenhum código. **O gate é a revisão do Matheus** (seção 4).
+**GATE PASSADO em 2026-10-25:** a direção da especificação APROVADA pelo Matheus, com as nove PE "antes" DECIDIDAS e três correções
+feitas (seção 10). Nenhum código.
 
 Categoria: arquitetura. Origem: Matheus, 2026-10-24, o PROMPT MESTRE (seções 1 e 6). A direção modular está DECIDIDA, e esta tarefa
 especifica os detalhes técnicos.
@@ -102,3 +103,36 @@ As DM-1 a DM-9 estão DECIDIDAS pelas recomendações de `docs/ARQUITETURA_DIGIB
 - **DM-9:** o NORNBRAIN só para estudo; as licenças do CfC e do NCP conferidas antes de qualquer reúso.
 
 **O que ainda vai a ele:** as decisões que a especificação abrir (a lista do item 9 da seção 3), levadas com recomendação e custo de errar.
+
+## 9. Entrega (2026-10-25)
+
+`docs/ESPEC_DIGIBRAIN_MODULAR.md`, pelo C (Claude Code, Opus 5.5), no branch `v2-modular-espec`. Os 11 itens da seção 3:
+- os contratos, na seção 4;
+- as formas do estado, na seção 3;
+- o corpo, na seção 6;
+- o motivo, na seção 7;
+- as peças do A, na seção 8;
+- os testes, na seção 10;
+- a versão, na seção 11;
+- o orçamento, na seção 12;
+- o substrato neural, na seção 2;
+- a memória, na seção 9;
+- a comparação com a visão, na seção 13.
+
+**As 16 decisões a pesquisar** estão na seção 15, nove delas antes do protótipo. **O gate continua sendo a revisão do Matheus.**
+
+## 10. A revisão do Matheus (2026-10-25)
+
+**Aprovada a direção** da especificação, e as PE-1, 2, 3, 4, 7, 9, 12, 13 e 14 **pelas recomendações apresentadas** (a tabela da
+seção 15 da espec, com a nota do Gerente de rodar a busca da PE-1 em paralelo à etapa 0). **Três correções pedidas antes do merge,**
+feitas no mesmo PR (#407):
+1. as cerca de 80 unidades da seção 2 reconciliadas com as ~16 da seção 12: as 16 são só as unidades de comportamento do M-IMPULSO,
+   as únicas que fazem o produto com as características (espec, seção 2.1);
+2. explícito que o protótipo implementa **memória episódica mínima**, e que a memória autobiográfica consolidada (facetas adquiridas e
+   decisões futuras) **é etapa planejada, com critério de conclusão**, não resolvida pelo protótipo (espec, seção 9);
+3. o candidato `lembranca` **autorizado** para a v13, Python e TS, atrás da chave, **com o gabarito G2 antes da implementação**; a v12 e
+   o A preservados; **qualquer medição do A para o orçamento é pontual e só de desempenho**, sem nova campanha de validação
+   comportamental (espec, seções 11 e 12).
+
+**O que vem depois do merge:** a etapa 0 do protótipo (`docs/TAREFA_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`: os gabaritos e a chave
+desligada), a busca de literatura da PE-1 em paralelo, e o plano de análise commitado antes da primeira vida.
