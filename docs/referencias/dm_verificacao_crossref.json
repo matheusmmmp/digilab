@@ -1,0 +1,516 @@
+{
+ "10.1177/105971239500300405": {
+  "doi": "10.1177/105971239500300405",
+  "status": 200,
+  "title": "On the Dynamics of Small Continuous-Time Recurrent Neural Networks",
+  "type": "journal-article",
+  "year": 1995,
+  "cont": "Adaptive Behavior",
+  "pub": "SAGE Publications",
+  "au": [
+   "Beer"
+  ],
+  "page": "469-509",
+  "upd": [],
+  "abs": "Dynamical neural networks are being increasingly employed in a variety of contexts, including as simple model nervous systems for autonomous agents. For this reason, there is a growing need for a comprehensive understanding of their dynamical properties. Using a combination of elementary analysis and numerical studies, this article begins a systematic examination of the dynamics of continuous-time recurrent neural networks. Specifically, a fairly complete description of the possible dynamical behavior and bifurcations of one- and two-neuron circuits is given, along with a few specific results for larger networks. This analysis provides both qualitative insight and, in many cases, quantitative formulas for predicting the dynamical behavior of particular circuits and how that behavior changes as network parameters are varied. These results demonstrate that even small circuits are capable of a rich variety of dynamical behavior (including chaotic dynamics). An approach to understanding the dynamics of circuits with time-varying inputs is also presented. Finally, based on this analysis, several strategies for focusing evolutionary searches into fruitful regions of network parameter space are suggested.",
+  "fonte_resumo": "Crossref"
+ },
+ "10.1177/105971239400200301": {
+  "doi": "10.1177/105971239400200301",
+  "status": 200,
+  "title": "Sequential Behavior and Learning in Evolved Dynamical Neural Networks",
+  "type": "journal-article",
+  "year": 1994,
+  "cont": "Adaptive Behavior",
+  "pub": "SAGE Publications",
+  "au": [
+   "Yamauchi",
+   "Beer"
+  ],
+  "page": "219-246",
+  "upd": [],
+  "abs": "This article explores the use of a real-valued modular genetic algorithm to evolve continuous-time recurrent neural networks capable of sequential behavior and learning. We evolve networks that can generate a fixed sequence of outputs in response to an external trigger occurring at varying intervals of time. We also evolve networks that can learn to generate one of a set of possible sequences based on reinforcement from the environment. Finally, we utilize concepts from dynamical systems theory to understand the operation of some of these evolved networks. A novel feature of our approach is that we assume neither an a priori discretization of states or time nor an a priori learning algorithm that explicitly modifies network parameters during learning. Rather, we merely expose dynamical neural networks to tasks that require sequential behavior and learning and allow the genetic algorithm to evolve network dynamics capable of accomplishing these tasks.",
+  "fonte_resumo": "Crossref"
+ },
+ "10.1073/pnas.81.10.3088": {
+  "doi": "10.1073/pnas.81.10.3088",
+  "status": 200,
+  "title": "Neurons with graded response have collective computational properties like those of two-state neurons.",
+  "type": "journal-article",
+  "year": 1984,
+  "cont": "Proceedings of the National Academy of Sciences",
+  "pub": "National Academy of Sciences",
+  "au": [
+   "Hopfield"
+  ],
+  "page": "3088-3092",
+  "upd": [],
+  "abs": "A model for a large network of \"neurons\" with a graded response (or sigmoid input-output relation) is studied. This deterministic system has collective properties in very close correspondence with the earlier stochastic model based on McCulloch - Pitts neurons. The content- addressable memory and other emergent collective properties of the original model also are present in the graded response model. The idea that such collective properties are used in biological systems is given added credence by the continued presence of such properties for more nearly biological \"neurons.\" Collective analog electrical circuits of the kind described will certainly function. The collective states of the two models have a simple correspondence. The original model will continue to be useful for simulations, because its connection to graded response systems is established. Equations that include the effect of action potentials in the graded response system are also developed.",
+  "fonte_resumo": "Crossref"
+ },
+ "10.1016/s0006-3495(72)86068-5": {
+  "doi": "10.1016/s0006-3495(72)86068-5",
+  "status": 200,
+  "title": "Excitatory and Inhibitory Interactions in Localized Populations of Model Neurons",
+  "type": "journal-article",
+  "year": 1972,
+  "cont": "Biophysical Journal",
+  "pub": "Elsevier BV",
+  "au": [
+   "Wilson",
+   "Cowan"
+  ],
+  "page": "1-24",
+  "upd": [],
+  "abs": "1. Biophys J. 1972 Jan;12(1):1-24. doi: 10.1016/S0006-3495(72)86068-5.\n\nExcitatory and inhibitory interactions in localized populations of model \nneurons.\n\nWilson HR, Cowan JD.\n\nCoupled nonlinear differential equations are derived for the dynamics of \nspatially localized populations containing both excitatory and inhibitory model \nneurons. Phase plane methods and numerical solutions are then used to \ninvestigate population responses to various types of stimuli. The results \nobtained show simple and multiple hysteresis phenomena and limit cycle activity. \nThe latter is particularly interesting since the frequency of the limit cycle \noscillation is found to be a monotonic function of stimulus intensity. Finally, \nit is proved that the existence of limit cycle dynamics in response to one class \nof stimuli implies the existence of multiple stable states and hysteresis in \nresponse to a different class of stimuli. The relation between these findings \nand a number of experiments is discussed.\n\nDOI: 10.1016/S0006-3495(72)86068-5\nPMCID: PMC1484078\nPMID: 4332108 [Indexed for MEDLINE]",
+  "fonte_resumo": "PubMed 4332108"
+ },
+ "10.1145/267658.267688": {
+  "doi": "10.1145/267658.267688",
+  "status": 200,
+  "title": "Modeling motivations and emotions as a basis for intelligent behavior",
+  "type": "proceedings-article",
+  "year": 1997,
+  "cont": "Proceedings of the first international conference on Autonomous agents  - AGENTS '97",
+  "pub": "ACM Press",
+  "au": [
+   "Cañamero"
+  ],
+  "page": "148-155",
+  "upd": [],
+  "abs": "We report on an experiment to implement an autonomous creature situated in a two-dimensional world, that shows various learning and problem-solving capabilities, within the Society of Mind framework. This goal is approached from a developmental perspective, where phases in the experiment correspond broadly to cognitive stages in the development of an infant. This paper describes the first stage, the creature being a newborn whose behavior is strongly driven by motivational states---impulses to action based on bodily needs---and basic emotions---peripheral and cognitive responsestriggered by the recognition of a significant event. Physiological parameters are used to model both concepts, which are seen by analogy with control systems. Motivations drive behavior selection and organization based on the notions of arousal and satiation, and the exploitation principle. Emotions exert further control by sending \"hormones\" that may affect the intensity of the selected behavior, enable it, or p...",
+  "fonte_resumo": "OpenAlex"
+ },
+ "10.1037/0033-295x.108.3.550": {
+  "doi": "10.1037/0033-295x.108.3.550",
+  "status": 200,
+  "title": "The time course of perceptual choice: The leaky, competing accumulator model.",
+  "type": "journal-article",
+  "year": 2001,
+  "cont": "Psychological Review",
+  "pub": "American Psychological Association (APA)",
+  "au": [
+   "Usher",
+   "McClelland"
+  ],
+  "page": "550-592",
+  "upd": [],
+  "abs": "The time course of perceptual choice is discussed in a model of gradual, leaky, stochastic, and competitive information accumulation in nonlinear decision units. Special cases of the model match a classical diffusion process, but leakage and competition work together to address several challenges to existing diffusion, random walk, and accumulator models. The model accounts for data from choice tasks using both time-controlled (e.g., response signal) and standard reaction time paradigms and its adequacy compares favorably with other approaches. A new paradigm that controls the time of arrival of information supporting different choice alternatives provides further support. The model captures choice behavior regardless of the number of alternatives, accounting for the log-linear relation between reaction time and number of alternatives (Hick's law) and explains a complex pattern of visual and contextual priming in visual word identification.",
+  "fonte_resumo": "OpenAlex"
+ },
+ "10.1016/0022-2496(77)90032-3": {
+  "doi": "10.1016/0022-2496(77)90032-3",
+  "status": 200,
+  "title": "The choice axiom after twenty years",
+  "type": "journal-article",
+  "year": 1977,
+  "cont": "Journal of Mathematical Psychology",
+  "pub": "Elsevier BV",
+  "au": [
+   "Luce"
+  ],
+  "page": "215-233",
+  "upd": [],
+  "abs": "",
+  "fonte_resumo": "nenhuma (só título e metadados)"
+ },
+ "10.4324/9781410612403": {
+  "doi": "10.4324/9781410612403",
+  "status": 200,
+  "title": "The Organization of Behavior",
+  "type": "monograph",
+  "year": 2005,
+  "cont": "",
+  "pub": "Psychology Press",
+  "au": [
+   "Hebb"
+  ],
+  "page": null,
+  "upd": [],
+  "abs": "Since its publication in 1949, D.O. Hebb's, The Organization of Behavior has been one of the most influential books in the fields of psychology and neuroscience. However, the original edition has been unavailable since 1966, ensuring that Hebb's comment that a classic normally means \"cited but not read\" is true in his case. This new edition rectifies a long-standing problem for behavioral neuroscientists--the inability to obtain one of the most cited publications in the field. The Organization of Behavior played a significant part in stimulating the investigation of the neural foundations of behavior and continues to be inspiring because it provides a general framework for relating behavior to synaptic organization through the dynamics of neural networks. D.O. Hebb was also the first to examine the mechanisms by which environment and experience can influence brain structure and function, and his ideas formed the basis for work on enriched environments as stimulants for behavioral development. References to Hebb, the Hebbian cell assembly, the Hebb synapse, and the Hebb rule increase each year. These forceful ideas of 1949 are now applied in engineering, robotics, and computer science, as well as neurophysiology, neuroscience, and psychology--a tribute to Hebb's foresight in developing a foundational neuropsychological theory of the organization of behavior.",
+  "fonte_resumo": "OpenAlex"
+ },
+ "10.1016/s0893-6080(05)80125-x": {
+  "doi": "10.1016/s0893-6080(05)80125-x",
+  "status": 200,
+  "title": "Approximation of dynamical systems by continuous time recurrent neural networks",
+  "type": "journal-article",
+  "year": 1993,
+  "cont": "Neural Networks",
+  "pub": "Elsevier BV",
+  "au": [
+   "Funahashi",
+   "Nakamura"
+  ],
+  "page": "801-806",
+  "upd": [],
+  "abs": "",
+  "fonte_resumo": "nenhuma (só título e metadados)"
+ },
+ "10.1609/aaai.v35i9.16936": {
+  "doi": "10.1609/aaai.v35i9.16936",
+  "status": 200,
+  "title": "Liquid Time-constant Networks",
+  "type": "journal-article",
+  "year": 2021,
+  "cont": "Proceedings of the AAAI Conference on Artificial Intelligence",
+  "pub": "Association for the Advancement of Artificial Intelligence (AAAI)",
+  "au": [
+   "Hasani",
+   "Lechner",
+   "Amini",
+   "Rus",
+   "Grosu"
+  ],
+  "page": "7657-7666",
+  "upd": [],
+  "abs": "We introduce a new class of time-continuous recurrent neural network models. Instead of declaring a learning system's dynamics by implicit nonlinearities, we construct networks of linear first-order dynamical systems modulated via nonlinear interlinked gates. The resulting models represent dynamical systems with varying (i.e., liquid) time-constants coupled to their hidden state, with outputs being computed by numerical differential equation solvers. These neural networks exhibit stable and bounded behavior, yield superior expressivity within the family of neural ordinary differential equations, and give rise to improved performance on time-series prediction tasks. To demonstrate these properties, we first take a theoretical approach to find bounds over their dynamics, and compute their expressive power by the trajectory length measure in a latent trajectory space. We then conduct a series of time-series prediction experiments to manifest the approximation capability of Liquid Time-Constant Networks (LTCs) compared to classical and modern RNNs.",
+  "fonte_resumo": "Crossref"
+ },
+ "10.1038/s42256-022-00556-7": {
+  "doi": "10.1038/s42256-022-00556-7",
+  "status": 200,
+  "title": "Closed-form continuous-time neural networks",
+  "type": "journal-article",
+  "year": 2022,
+  "cont": "Nature Machine Intelligence",
+  "pub": "Springer Science and Business Media LLC",
+  "au": [
+   "Hasani",
+   "Lechner",
+   "Amini",
+   "Liebenwein",
+   "Ray",
+   "Tschaikowski",
+   "Teschl",
+   "Rus"
+  ],
+  "page": "992-1003",
+  "upd": [],
+  "abs": "Abstract\n                  Continuous-time neural networks are a class of machine learning systems that can tackle representation learning on spatiotemporal decision-making tasks. These models are typically represented by continuous differential equations. However, their expressive power when they are deployed on computers is bottlenecked by numerical differential equation solvers. This limitation has notably slowed down the scaling and understanding of numerous natural physical phenomena such as the dynamics of nervous systems. Ideally, we would circumvent this bottleneck by solving the given dynamical system in closed form. This is known to be intractable in general. Here, we show that it is possible to closely approximate the interaction between neurons and synapses—the building blocks of natural and artificial neural networks—constructed by liquid time-constant networks efficiently in closed form. To this end, we compute a tightly bounded approximation of the solution of an integral appearing in liquid time-constant dynamics that has had no known closed-form solution so far. This closed-form solution impacts the design of continuous-time and continuous-depth neural models. For instance, since time appears explicitly in closed form, the formulation relaxes the need for complex numerical solvers. Consequently, we obtain models that are between one and five orders of magnitude faster in training and inference compared with differential equation-based counterparts. More importantly, in contrast to ordinary differential equation-based continuous networks, closed-form networks can scale remarkably well compared with other deep learning instances. Lastly, as these models are derived from liquid networks, they show good performance in time-series modelling compared with advanced recurrent neural network models.",
+  "fonte_resumo": "Crossref"
+ },
+ "10.1038/s42256-020-00237-3": {
+  "doi": "10.1038/s42256-020-00237-3",
+  "status": 200,
+  "title": "Neural circuit policies enabling auditable autonomy",
+  "type": "journal-article",
+  "year": 2020,
+  "cont": "Nature Machine Intelligence",
+  "pub": "Springer Science and Business Media LLC",
+  "au": [
+   "Lechner",
+   "Hasani",
+   "Amini",
+   "Henzinger",
+   "Rus",
+   "Grosu"
+  ],
+  "page": "642-652",
+  "upd": [],
+  "abs": "",
+  "fonte_resumo": "nenhuma (só título e metadados)"
+ },
+ "10.3389/fncir.2015.00085": {
+  "doi": "10.3389/fncir.2015.00085",
+  "status": 200,
+  "title": "Neuromodulated Spike-Timing-Dependent Plasticity, and Theory of Three-Factor Learning Rules",
+  "type": "journal-article",
+  "year": 2016,
+  "cont": "Frontiers in Neural Circuits",
+  "pub": "Frontiers Media SA",
+  "au": [
+   "Frémaux",
+   "Gerstner"
+  ],
+  "page": null,
+  "upd": [],
+  "abs": "Classical Hebbian learning puts the emphasis on joint pre- and postsynaptic activity, but neglects the potential role of neuromodulators. Since neuromodulators convey information about novelty or reward, the influence of neuromodulators on synaptic plasticity is useful not just for action learning in classical conditioning, but also to decide \"when\" to create new memories in response to a flow of sensory stimuli. In this review, we focus on timing requirements for pre- and postsynaptic activity in conjunction with one or several phasic neuromodulatory signals. While the emphasis of the text is on conceptual models and mathematical theories, we also discuss some experimental evidence for neuromodulation of Spike-Timing-Dependent Plasticity. We highlight the importance of synaptic mechanisms in bridging the temporal gap between sensory stimulation and neuromodulatory signals, and develop a framework for a class of neo-Hebbian three-factor learning rules that depend on presynaptic activity, postsynaptic variables as well as the influence of neuromodulators.",
+  "fonte_resumo": "OpenAlex"
+ },
+ "10.3389/fncir.2018.00053": {
+  "doi": "10.3389/fncir.2018.00053",
+  "status": 200,
+  "title": "Eligibility Traces and Plasticity on Behavioral Time Scales: Experimental Support of NeoHebbian Three-Factor Learning Rules",
+  "type": "journal-article",
+  "year": 2018,
+  "cont": "Frontiers in Neural Circuits",
+  "pub": "Frontiers Media SA",
+  "au": [
+   "Gerstner",
+   "Lehmann",
+   "Liakoni",
+   "Corneil",
+   "Brea"
+  ],
+  "page": null,
+  "upd": [],
+  "abs": "Most elementary behaviors such as moving the arm to grasp an object or walking into the next room to explore a museum evolve on the time scale of seconds; in contrast, neuronal action potentials occur on the time scale of a few milliseconds. Learning rules of the brain must therefore bridge the gap between these two different time scales. Modern theories of synaptic plasticity have postulated that the co-activation of pre- and postsynaptic neurons sets a flag at the synapse, called an eligibility trace, that leads to a weight change only if an additional factor is present while the flag is set. This third factor, signaling reward, punishment, surprise, or novelty, could be implemented by the phasic activity of neuromodulators or specific neuronal inputs signaling special events. While the theoretical framework has been developed over the last decades, experimental evidence in support of eligibility traces on the time scale of seconds has been collected only during the last few years. Here we review, in the context of three-factor rules of synaptic plasticity, four key experiments that support the role of synaptic eligibility traces in combination with a third factor as a biological implementation of neoHebbian three-factor learning rules.",
+  "fonte_resumo": "OpenAlex"
+ },
+ "10.1016/j.conb.2017.08.020": {
+  "doi": "10.1016/j.conb.2017.08.020",
+  "status": 200,
+  "title": "Learning with three factors: modulating Hebbian plasticity with errors",
+  "type": "journal-article",
+  "year": 2017,
+  "cont": "Current Opinion in Neurobiology",
+  "pub": "Elsevier BV",
+  "au": [
+   "Kuśmierz",
+   "Isomura",
+   "Toyoizumi"
+  ],
+  "page": "170-177",
+  "upd": [],
+  "abs": "Synaptic plasticity is a central theme in neuroscience. A framework of three-factor learning rules provides a powerful abstraction, helping to navigate through the abundance of models of synaptic plasticity. It is well-known that the dopamine modulation of learning is related to reward, but theoretical models predict other functional roles of the modulatory third factor; it may encode errors for supervised learning, summary statistics of the population activity for unsupervised learning or attentional feedback. Specialized structures may be needed in order to generate and propagate third factors in the neural network.",
+  "fonte_resumo": "OpenAlex"
+ },
+ "10.1093/cercor/bhl152": {
+  "doi": "10.1093/cercor/bhl152",
+  "status": 200,
+  "title": "Solving the Distal Reward Problem through Linkage of STDP and Dopamine Signaling",
+  "type": "journal-article",
+  "year": 2007,
+  "cont": "Cerebral Cortex",
+  "pub": "Oxford University Press (OUP)",
+  "au": [
+   "Izhikevich"
+  ],
+  "page": "2443-2452",
+  "upd": [],
+  "abs": "In Pavlovian and instrumental conditioning, reward typically comes seconds after reward-triggering actions, creating an explanatory conundrum known as \"distal reward problem\": How does the brain know what firing patterns of what neurons are responsible for the reward if 1) the patterns are no longer there when the reward arrives and 2) all neurons and synapses are active during the waiting period to the reward? Here, we show how the conundrum is resolved by a model network of cortical spiking neurons with spike-timing-dependent plasticity (STDP) modulated by dopamine (DA). Although STDP is triggered by nearly coincident firing patterns on a millisecond timescale, slow kinetics of subsequent synaptic plasticity is sensitive to changes in the extracellular DA concentration during the critical period of a few seconds. Random firings during the waiting period to the reward do not affect STDP and hence make the network insensitive to the ongoing activity-the key feature that distinguishes our approach from previous theoretical studies, which implicitly assume that the network be quiet during the waiting period or that the patterns be preserved until the reward arrives. This study emphasizes the importance of precise firing patterns in brain dynamics and suggests how a global diffusive reinforcement signal in the form of extracellular DA can selectively influence the right synapses at the right time.",
+  "fonte_resumo": "OpenAlex"
+ },
+ "10.1016/s0893-6080(02)00044-8": {
+  "doi": "10.1016/s0893-6080(02)00044-8",
+  "status": 200,
+  "title": "Metalearning and neuromodulation",
+  "type": "journal-article",
+  "year": 2002,
+  "cont": "Neural Networks",
+  "pub": "Elsevier BV",
+  "au": [
+   "Doya"
+  ],
+  "page": "495-506",
+  "upd": [],
+  "abs": "1. Neural Netw. 2002 Jun-Jul;15(4-6):495-506. doi: 10.1016/s0893-6080(02)00044-8.\n\nMetalearning and neuromodulation.\n\nDoya K(1).\n\nAuthor information:\n(1)ATR Human Information Science Laboratories, CREST, Japan Science and \nTechnology Corporation, Kyoto. doya@atr.co.jp\n\nThis paper presents a computational theory on the roles of the ascending \nneuromodulatory systems from the viewpoint that they mediate the global signals \nthat regulate the distributed learning mechanisms in the brain. Based on the \nreview of experimental data and theoretical models, it is proposed that dopamine \nsignals the error in reward prediction, serotonin controls the time scale of \nreward prediction, noradrenaline controls the randomness in action selection, \nand acetylcholine controls the speed of memory update. The possible interactions \nbetween those neuromodulators and the environment are predicted on the basis of \ncomputational theory of metalearning.\n\nDOI: 10.1016/s0893-6080(02)00044-8\nPMID: 12371507 [Indexed for MEDLINE]",
+  "fonte_resumo": "PubMed 12371507"
+ },
+ "10.1016/j.neunet.2018.07.013": {
+  "doi": "10.1016/j.neunet.2018.07.013",
+  "status": 200,
+  "title": "Born to learn: The inspiration, progress, and future of evolved plastic artificial neural networks",
+  "type": "journal-article",
+  "year": 2018,
+  "cont": "Neural Networks",
+  "pub": "Elsevier BV",
+  "au": [
+   "Soltoggio",
+   "Stanley",
+   "Risi"
+  ],
+  "page": "48-67",
+  "upd": [],
+  "abs": "1. Neural Netw. 2018 Dec;108:48-67. doi: 10.1016/j.neunet.2018.07.013. Epub 2018 \nAug 7.\n\nBorn to learn: The inspiration, progress, and future of evolved plastic \nartificial neural networks.\n\nSoltoggio A(1), Stanley KO(2), Risi S(3).\n\nAuthor information:\n(1)Department of Computer Science, Loughborough University, LE11 3TU, \nLoughborough, UK. Electronic address: a.soltoggio@lboro.ac.uk.\n(2)Department of Computer Science, University of Central Florida, Orlando, FL, \nUSA. Electronic address: kstanley@cs.ucf.edu.\n(3)IT University of Copenhagen, Copenhagen, Denmark. Electronic address: \nsebr@itu.dk.\n\nBiological neural networks are systems of extraordinary computational \ncapabilities shaped by evolution, development, and lifelong learning. The \ninterplay of these elements leads to the emergence of biological intelligence. \nInspired by such intricate natural phenomena, Evolved Plastic Artificial Neural \nNetworks (EPANNs) employ simulated evolution in-silico to breed plastic neural \nnetworks with the aim to autonomously design and create learning systems. EPANN \nexperiments evolve networks that include both innate properties and the ability \nto change and learn in response to experiences in different environments and \nproblem domains. EPANNs' aims include autonomously creating learning systems, \nbootstrapping learning from scratch, recovering performance in unseen \nconditions, testing the computational advantages of particular neural \ncomponents, and deriving hypotheses on the emergence of biological learning. \nThus, EPANNs may include a large variety of different neuron types and dynamics, \nnetwork architectures, plasticity rules, and other factors. While EPANNs have \nseen considerable progress over the last two decades, current scientific and \ntechnological advances in artificial neural networks are setting the conditions \nfor radically new approaches and results. Exploiting the increased availability \nof computational resources and of simulation environments, the often challenging \ntask of hand-designing learning neural networks could be replaced by more \nautonomous and creative processes. This paper brings together a variety of \ninspiring ideas that define the field of EPANNs. The main methods and results \nare reviewed. Finally, new opportunities and possible developments are \npresented.\n\nCopyright © 2018 Elsevier Ltd. All rights reserved.\n\nDOI: 10.1016/j.neunet.2018.07.013\nPMID: 30142505 [Indexed for MEDLINE]",
+  "fonte_resumo": "PubMed 30142505"
+ },
+ "10.1177/1059-712302-010001-01": {
+  "doi": "10.1177/1059-712302-010001-01",
+  "status": 200,
+  "title": "Evolution of Reinforcement Learning in Uncertain Environments: A Simple                Explanation for Complex Foraging Behaviors",
+  "type": "journal-article",
+  "year": 2002,
+  "cont": "Adaptive Behavior",
+  "pub": "SAGE Publications",
+  "au": [
+   "Niv",
+   "Joel",
+   "Meilijson",
+   "Ruppin"
+  ],
+  "page": "5-24",
+  "upd": [],
+  "abs": "Reinforcement learning is a fundamental process by which organisms learn to achieve goals from their interactions with the environment. Using evolutionary computation techniques we evolve (near-)optimal neuronal learning rules in a simple neural network model of reinforcement learning in bumblebees foraging for nectar. The resulting neural networks exhibit efficient reinforcement learning, allowing the bees to respond rapidly to changes in reward contingencies. The evolved synaptic plasticity dynamics give rise to varying exploration/exploitation levels and to the well-documented choice strategies of risk aversion and probability matching. Additionally, risk aversion is shown to emerge even when bees are evolved in a completely risk-less environment. In contrast to existing theories in economics and game theory, risk-averse behavior is shown to be a direct consequence of (near-)optimal reinforcement learning, without requiring additional assumptions such as the existence of a nonlinear subjective utility function for rewards. Our results are corroborated by a rigorous mathematical analysis, and their robustness in real-world situations is supported by experiments in a mobile robot. Thus we provide a biologically founded, parsimonious, and novel explanation for risk aversion and probability matching.",
+  "fonte_resumo": "Crossref"
+ },
+ "10.1162/978-0-262-31709-2-ch083": {
+  "doi": "10.1162/978-0-262-31709-2-ch083",
+  "status": 200,
+  "title": "Evolving Plastic Neuromodulated Networks for Behavior Emergence of\n                        Autonomous Virtual Characters",
+  "type": "proceedings-article",
+  "year": 2013,
+  "cont": "Advances in Artificial Life, ECAL 2013",
+  "pub": "MIT Press",
+  "au": [
+   "Nogueira",
+   "F. de Brito",
+   "Vidal",
+   "Cavalcante-Neto"
+  ],
+  "page": "577-584",
+  "upd": [],
+  "abs": "This paper addresses the problem of generating natural behavior of autonomous virtual characters.Inspired by the fields of Embodied and Enactive Artificial Intelligence, we postulate that natural behavior is the result of a coupling between the agent and the world where it lives, which leads to a coherence between its actions and its surroundings.In this work, we present the tools that we have been using to study that idea: a controller based on a plastic neuromodulated neural network, which is capable of molding itself to received stimuli; and a simple novel method for genetic encoding of artificial neural networks.We show the capabilities of the controller in generating interesting foraging behavior of an autonomous virtual robot, and discuss the advantages of its emergent characteristics when compared with traditional approaches.",
+  "fonte_resumo": "OpenAlex"
+ },
+ "10.1007/s10994-017-5666-0": {
+  "doi": "10.1007/s10994-017-5666-0",
+  "status": 200,
+  "title": "Emotion in reinforcement learning agents and robots: a survey",
+  "type": "journal-article",
+  "year": 2017,
+  "cont": "Machine Learning",
+  "pub": "Springer Science and Business Media LLC",
+  "au": [
+   "Moerland",
+   "Broekens",
+   "Jonker"
+  ],
+  "page": "443-480",
+  "upd": [],
+  "abs": "This article provides the first survey of computational models of emotion in reinforcement learning (RL) agents. The survey focuses on agent/robot emotions, and mostly ignores human user emotions. Emotions are recognized as functional in decision-making by influencing motivation and action selection. Therefore, computational emotion models are usually grounded in the agent’s decision making architecture, of which RL is an important subclass. Studying emotions in RL-based agents is useful for three research fields. For machine learning (ML) researchers, emotion models may improve learning efficiency. For the interactive ML and human–robot interaction community, emotions can communicate state and enhance user investment. Lastly, it allows affective modelling researchers to investigate their emotion theories in a successful AI agent class. This survey provides background on emotion theory and RL. It systematically addresses (1) from what underlying dimensions (e.g. homeostasis, appraisal) emotions can be derived and how these can be modelled in RL-agents, (2) what types of emotions have been derived from these dimensions, and (3) how these emotions may either influence the learning efficiency of the agent or be useful as social signals. We also systematically compare evaluation criteria, and draw connections to important RL sub-domains like (intrinsic) motivation and model-based RL. In short, this survey provides both a practical overview for engineers wanting to implement emotions in their RL agents, and identifies challenges and directions for future emotion-RL research.",
+  "fonte_resumo": "OpenAlex"
+ },
+ "10.1007/bf00114726": {
+  "doi": "10.1007/bf00114726",
+  "status": 200,
+  "title": "Reinforcement learning with replacing eligibility traces",
+  "type": "journal-article",
+  "year": 1996,
+  "cont": "Machine Learning",
+  "pub": "Springer Science and Business Media LLC",
+  "au": [
+   "Singh",
+   "Sutton"
+  ],
+  "page": "123-158",
+  "upd": [],
+  "abs": "",
+  "fonte_resumo": "nenhuma (só título e metadados)"
+ },
+ "10.1007/bf00115009": {
+  "doi": "10.1007/bf00115009",
+  "status": 200,
+  "title": "Learning to predict by the methods of temporal differences",
+  "type": "journal-article",
+  "year": 1988,
+  "cont": "Machine Learning",
+  "pub": "Springer Science and Business Media LLC",
+  "au": [
+   "Sutton"
+  ],
+  "page": "9-44",
+  "upd": [],
+  "abs": "",
+  "fonte_resumo": "nenhuma (só título e metadados)"
+ },
+ "10.1609/aaai.v31i1.10916": {
+  "doi": "10.1609/aaai.v31i1.10916",
+  "status": 200,
+  "title": "The Option-Critic Architecture",
+  "type": "journal-article",
+  "year": 2017,
+  "cont": "Proceedings of the AAAI Conference on Artificial Intelligence",
+  "pub": "Association for the Advancement of Artificial Intelligence (AAAI)",
+  "au": [
+   "Bacon",
+   "Harb",
+   "Precup"
+  ],
+  "page": null,
+  "upd": [],
+  "abs": "Temporal abstraction is key to scaling up learning and planning in reinforcement learning. While planning with temporally extended actions is well understood, creating such abstractions autonomously from data has remained challenging.We tackle this problem in the framework of options [Sutton,Precup and Singh, 1999; Precup, 2000]. We derive policy gradient theorems for options and propose a new option-critic architecture capable of learning both the internal policies and the termination conditions of options, in tandem with the policy over options, and without the need to provide any additional rewards or subgoals. Experimental results in both discrete and continuous environments showcase the flexibility and efficiency of the framework.",
+  "fonte_resumo": "Crossref"
+ },
+ "10.1016/j.cognition.2008.08.011": {
+  "doi": "10.1016/j.cognition.2008.08.011",
+  "status": 200,
+  "title": "Hierarchically organized behavior and its neural foundations: A reinforcement learning perspective",
+  "type": "journal-article",
+  "year": 2009,
+  "cont": "Cognition",
+  "pub": "Elsevier BV",
+  "au": [
+   "Botvinick",
+   "Niv",
+   "Barto"
+  ],
+  "page": "262-280",
+  "upd": [],
+  "abs": "1. Cognition. 2009 Dec;113(3):262-280. doi: 10.1016/j.cognition.2008.08.011. Epub\n 2008 Oct 15.\n\nHierarchically organized behavior and its neural foundations: a reinforcement \nlearning perspective.\n\nBotvinick MM(1), Niv Y(2), Barto AG(3).\n\nAuthor information:\n(1)Princeton Neuroscience Institute, Department of Psychology, Princeton \nUniversity, Green Hall, Princeton, NJ 08540, United States. Electronic address: \nmatthewb@princeton.edu.\n(2)Princeton Neuroscience Institute, Department of Psychology, Princeton \nUniversity, Green Hall, Princeton, NJ 08540, United States.\n(3)University of Massachussetts, Amherst, Department of Computer Science, United \nStates.\n\nResearch on human and animal behavior has long emphasized its hierarchical \nstructure-the divisibility of ongoing behavior into discrete tasks, which are \ncomprised of subtask sequences, which in turn are built of simple actions. The \nhierarchical structure of behavior has also been of enduring interest within \nneuroscience, where it has been widely considered to reflect prefrontal cortical \nfunctions. In this paper, we reexamine behavioral hierarchy and its neural \nsubstrates from the point of view of recent developments in computational \nreinforcement learning. Specifically, we consider a set of approaches known \ncollectively as hierarchical reinforcement learning, which extend the \nreinforcement learning paradigm by allowing the learning agent to aggregate \nactions into reusable subroutines or skills. A close look at the components of \nhierarchical reinforcement learning suggests how they might map onto neural \nstructures, in particular regions within the dorsolateral and orbital prefrontal \ncortex. It also suggests specific ways in which hierarchical reinforcement \nlearning might provide a complement to existing psychological models of \nhierarchically structured behavior. A particularly important question that \nhierarchical reinforcement learning brings to the fore is that of how learning \nidentifies new action routines that are likely to provide useful building blocks \nin solving a wide range of future problems. Here and at many other points, \nhierarchical reinforcement learning offers an appealing framework for \ninvestigating the computational and neural underpinnings of hierarchically \nstructured behavior.\n\nDOI: 10.1016/j.cognition.2008.08.011\nPMCID: PMC2783353\nPMID: 18926527 [Indexed for MEDLINE]",
+  "fonte_resumo": "PubMed 18926527"
+ },
+ "10.1038/26216": {
+  "doi": "10.1038/26216",
+  "status": 200,
+  "title": "Episodic-like memory during cache recovery by scrub jays",
+  "type": "journal-article",
+  "year": 1998,
+  "cont": "Nature",
+  "pub": "Springer Science and Business Media LLC",
+  "au": [
+   "Clayton",
+   "Dickinson"
+  ],
+  "page": "272-274",
+  "upd": [],
+  "abs": "1. Nature. 1998 Sep 17;395(6699):272-4. doi: 10.1038/26216.\n\nEpisodic-like memory during cache recovery by scrub jays.\n\nClayton NS(1), Dickinson A.\n\nAuthor information:\n(1)Section of Neurobiology, Physiology & Behavior, University of California at \nDavis, 95616, USA. nsclayton@ucdavis.edu\n\nComment in\n    Nature. 1998 Sep 17;395(6699):215-6. doi: 10.1038/26094.\n\nThe recollection of past experiences allows us to recall what a particular event \nwas, and where and when it occurred, a form of memory that is thought to be \nunique to humans. It is known, however, that food-storing birds remember the \nspatial location and contents of their caches. Furthermore, food-storing animals \nadapt their caching and recovery strategies to the perishability of food stores, \nwhich suggests that they are sensitive to temporal factors. Here we show that \nscrub jays (Aphelocoma coerulescens) remember 'when' food items are stored by \nallowing them to recover perishable 'wax worms' (wax-moth larvae) and \nnon-perishable peanuts which they had previously cached in visuospatially \ndistinct sites. Jays searched preferentially for fresh wax worms, their favoured \nfood, when allowed to recover them shortly after caching. However, they rapidly \nlearned to avoid searching for worms after a longer interval during which the \nworms had decayed. The recovery preference of jays demonstrates memory of where \nand when particular food items were cached, thereby fulfilling the behavioural \ncriteria for episodic-like memory in non-human animals.\n\nDOI: 10.1038/26216\nPMID: 9751053 [Indexed for MEDLINE]",
+  "fonte_resumo": "PubMed 9751053"
+ },
+ "10.1037/h0061626": {
+  "doi": "10.1037/h0061626",
+  "status": 200,
+  "title": "Cognitive maps in rats and men.",
+  "type": "journal-article",
+  "year": 1948,
+  "cont": "Psychological Review",
+  "pub": "American Psychological Association (APA)",
+  "au": [
+   "Tolman"
+  ],
+  "page": "189-208",
+  "upd": [],
+  "abs": "",
+  "fonte_resumo": "nenhuma (só título e metadados)"
+ },
+ "10.1146/annurev-psych-122414-033625": {
+  "doi": "10.1146/annurev-psych-122414-033625",
+  "status": 200,
+  "title": "Reinforcement Learning and Episodic Memory in Humans and Animals: An Integrative Framework",
+  "type": "journal-article",
+  "year": 2017,
+  "cont": "Annual Review of Psychology",
+  "pub": "Annual Reviews",
+  "au": [
+   "Gershman",
+   "Daw"
+  ],
+  "page": "101-128",
+  "upd": [],
+  "abs": "We review the psychology and neuroscience of reinforcement learning (RL), which has experienced significant progress in the past two decades, enabled by the comprehensive experimental study of simple learning and decision-making tasks. However, one challenge in the study of RL is computational: The simplicity of these tasks ignores important aspects of reinforcement learning in the real world: (a) State spaces are high-dimensional, continuous, and partially observable; this implies that (b) data are relatively sparse and, indeed, precisely the same situation may never be encountered twice; furthermore, (c) rewards depend on the long-term consequences of actions in ways that violate the classical assumptions that make RL tractable. A seemingly distinct challenge is that, cognitively, theories of RL have largely involved procedural and semantic memory, the way in which knowledge about action values or world models extracted gradually from many experiences can drive choice. This focus on semantic memory leaves out many aspects of memory, such as episodic memory, related to the traces of individual events. We suggest that these two challenges are related. The computational challenge can be dealt with, in part, by endowing RL systems with episodic memory, allowing them to (a) efficiently approximate value functions over complex state spaces, (b) learn with very little data, and (c) bridge long-term dependencies between actions and rewards. We review the computational theory underlying this proposal and the empirical evidence to support it. Our proposal suggests that the ubiquitous and diverse roles of memory in RL may function as part of an integrated learning system.",
+  "fonte_resumo": "Crossref"
+ },
+ "10.1016/j.cogsys.2011.10.002": {
+  "doi": "10.1016/j.cogsys.2011.10.002",
+  "status": 200,
+  "title": "Enhancing intelligent agents with episodic memory",
+  "type": "journal-article",
+  "year": 2012,
+  "cont": "Cognitive Systems Research",
+  "pub": "Elsevier BV",
+  "au": [
+   "Nuxoll",
+   "Laird"
+  ],
+  "page": "34-48",
+  "upd": [],
+  "abs": "",
+  "fonte_resumo": "nenhuma (só título e metadados)"
+ },
+ "_sem_doi_e_arxiv": {
+  "arXiv:1606.04460": "API do arXiv, 2026-10-25: Model-Free Episodic Control; Blundell, Uria, Pritzel, Li, Ruderman et al.; 2016-06-14; sem journal_ref",
+  "arXiv:1703.01988": "API do arXiv, 2026-10-25: Neural Episodic Control; Pritzel, Uria, Srinivasan, Puigdomènech, Vinyals et al.; 2017-03-06; sem journal_ref",
+  "papers.nips.cc/paper/3311": "OpenAlex, 2026-10-25: Hippocampal Contributions to Control: The Third Way; Lengyel, Dayan; 2007; fonte 'neural information processing systems'; resumo no OpenAlex; página do NIPS com o mesmo título"
+ }
+}
