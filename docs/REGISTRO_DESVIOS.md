@@ -366,3 +366,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-24 — MVP-ETAPA2 (worker A): a tela do mundo no jogo, o gesto e o caminho acessível da ração](registro/2026-10.md)
 - [2026-10-25 — DIGIBRAIN-MODULAR, as decisões DM-1 a DM-9 (Gerente, worktree `v2-merge-r18`)](registro/2026-10.md)
 - [2026-10-25 — DIGIBRAIN-MODULAR-ESPEC (Claude Code, Opus 5.5, worktree `v2-modular-espec`): a especificação técnica do modular](registro/2026-10.md)
+- [2026-10-25 — DIGIBRAIN-MODULAR-ESPEC, a revisão do Matheus (Gerente, worktree `v2-merge-r18`)](registro/2026-10.md)

@@ -39,7 +39,7 @@
 | mundo 3D (WORLD-POC-001) | a vista inclinada em Three.js sobre o mundo físico, com a física em inteiros no motor | investigação feita; W-1 a W-7 decididas em 2026-10-18 pela recomendação; o POC-01a entregue (#355, #358); **o Gate A APROVADO em 2026-10-19** (ressalvas: um celular só; o cérebro real espera o Gate C); o POC-02 entregue (#362, #363); **o Gate B APROVADO em 2026-10-19** (ressalva: o cérebro de teste, só em TS); **a P4 liberada com o planejador em 2026-10-21** (o Gate C em parte), com o esboço da tarefa em `docs/TAREFA_V2_P4_CEREBRO_MUNDO.md` as P4-1 a P4-8 DECIDIDAS (2026-10-21); as etapas 0 a 3 da P4 na `main` (o contrato no motor, Python e TS, #384, #390, #394); o #395 (o adendo 1, parte A) aberto, sem run. **Desde 2026-10-24:** o contrato serve ao MVP, e o piloto e a validação do A estão em pausa pela recomendação DM-8 |
 | Gate I, o pet integrado | o mesmo pet recebe o corpo químico, percebe e age no mundo, aprende na vida e refaz a vida pelo log | marco decidido, **não implementado** (GI-1 a GI-5, GT-1 a GT-8 decididas em 2026-10-21); **repensado em 2026-10-24:** os critérios servem ao pet modular, e a GI-1 ("ao redor do A") está superada (`docs/futuro/gate_integracao_pet.md`) |
 | MVP, o mundo no jogo | o jogador põe a comida num lugar; o pet percebe, vai, come e sente no corpo | **etapas 0, 1 e 2 na `main`** (#401, #403, #404, 2026-10-24: os gabaritos; o pet v12 com o mundo, o G-PAR e o layout sem árvores só do produto; a tela com o gesto e o caminho acessível, a MV-6 aplicada); MV-1..10 DECIDIDAS. A ressalva de produto registrada: o A vai pouco à comida, e isso vai ao protótipo modular (`docs/TAREFA_V2_MVP_MUNDO_PRODUTO.md`, seção 9) |
-| DigiBrain modular | o cérebro modular do produto | **direção decidida** (2026-10-24); DM-1..9 DECIDIDAS (2026-10-25); **a especificação despachada ao C** (`docs/TAREFA_V2_DIGIBRAIN_MODULAR_ESPEC.md`), com o gate na revisão do Matheus; **o protótipo não começa antes dessa revisão**; nenhum código |
+| DigiBrain modular | o cérebro modular do produto | **direção decidida** (2026-10-24); DM-1..9 DECIDIDAS (2026-10-25); **a especificação entregue pelo C e aprovada na direção pelo Matheus** (2026-10-25; `docs/ESPEC_DIGIBRAIN_MODULAR.md`, PR #407), com as nove PE "antes" decididas e o `lembranca` autorizado para a v13 atrás da chave; **próximo: a etapa 0 do protótipo** (gabaritos, chave desligada) depois do merge; nenhum código ainda |
 
 ## 2. As runs, uma linha cada
 
@@ -82,7 +82,7 @@
 - **A validação do corpo:** espera a calibração final e um sim.
 - **O J5:** o Gate C foi aprovado em parte (2026-10-21). A busca (o T2, o mapa) espera um plano próprio, ainda sem tarefa.
 - **A direção nova (2026-10-24):**
-  - a arquitetura modular: DM-1 a DM-9 DECIDIDAS (`docs/ARQUITETURA_DIGIBRAIN_MODULAR.md`, seção 13); abertas só as que a especificação trouxer;
+  - a arquitetura modular: DM-1 a DM-9 DECIDIDAS (`docs/ARQUITETURA_DIGIBRAIN_MODULAR.md`, seção 13); a especificação aprovada na direção (2026-10-25) com as nove PE "antes" decididas; abertas só as PE "no protótipo", pela avaliação;
   - o MVP: MV-1 a MV-9 (`docs/TAREFA_V2_MVP_MUNDO_PRODUTO.md`): todas DECIDIDAS em 2026-10-24 (a MV-6 por decisão definitiva do Matheus sobre os sprites);
   - a memória autobiográfica: ME-1 a ME-7 (`docs/TAREFA_V2_MEMORIA_AUTOBIOGRAFICA.md`);
   - o A como baseline e fallback: AF-1 a AF-6 (`docs/TAREFA_V2_CEREBRO_A_BASELINE.md`).

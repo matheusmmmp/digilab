@@ -1,8 +1,15 @@
 # Especificação técnica do DigiBrain modular (2026-10-25)
 
 **Status:**
-- **PROPOSTA, para a revisão do Matheus.** É o gate da tarefa (`docs/TAREFA_V2_DIGIBRAIN_MODULAR_ESPEC.md`, seção 4): **nenhuma
-  implementação nem experimento começa antes dela**, e o protótipo (`docs/TAREFA_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`) espera.
+- **A direção APROVADA pelo Matheus em 2026-10-25** (o gate da tarefa, `docs/TAREFA_V2_DIGIBRAIN_MODULAR_ESPEC.md`, seção 4), com as
+  nove PE "antes" DECIDIDAS pelas recomendações (seção 15) e três correções pedidas por ele, feitas nesta revisão:
+  - as cerca de 80 unidades da seção 2 reconciliadas com as ~16 da estimativa da seção 12 (só as unidades de comportamento, seção 2.1);
+  - o protótipo implementa **só a memória episódica mínima**; a memória autobiográfica consolidada é **etapa planejada, com critério
+    de conclusão**, não resolvida pelo protótipo (seção 9);
+  - o candidato `lembranca` **AUTORIZADO** para a v13, Python e TS, atrás da chave, com o gabarito G2 antes da implementação; a v12 e o
+    A preservados; a medição do A para o orçamento é pontual e só de desempenho (seções 11 e 12).
+- O protótipo (`docs/TAREFA_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`) começa depois deste documento entrar na `main`, pela etapa 0 (os
+  gabaritos e a chave desligada) e pelo plano de análise.
 - **O que está decidido** e não se rediscute aqui: a direção modular (2026-10-24) e as DM-1 a DM-9 (2026-10-25), com as condições do
   Matheus (`docs/ARQUITETURA_DIGIBRAIN_MODULAR.md`, seção 13).
 - **Todo o resto é PROPOSTO:** os nomes, as formas, as equações, as constantes e a ordem.
@@ -64,8 +71,9 @@ Sem comida à vista e com fome, as alternativas são duas: ir ao lugar onde já 
 - o alvo é escolhido junto com a ação;
 - a memória dos lugares entra na decisão.
 
-**O que vai ao Matheus:** a revisão deste documento e as 16 decisões a pesquisar antes de implementar (seção 15), cada uma com a
-recomendação e o custo de errar.
+**O que foi ao Matheus:** a revisão deste documento e as 16 decisões a pesquisar antes de implementar (seção 15), cada uma com a
+recomendação e o custo de errar. As nove "antes" estão DECIDIDAS (2026-10-25); as sete "no protótipo" entram com o valor recomendado e
+se decidem pela avaliação.
 
 ## 1. Convenções
 
@@ -131,9 +139,16 @@ São **unidades de taxa:** cada uma tem uma atividade inteira em [0, S] ou [0, A
 | **comportamento** | M-IMPULSO | uma por par (comportamento, alvo) possível na decisão: comer cada comida vista ou o cheiro; brincar com a bola ou sem alvo; explorar (vagar, o cheiro ou um lugar lembrado); dormir; chamar o dono; emburrar; ficar ocioso | [0, A_max] | [HIPÓTESE] |
 
 **O tamanho, PROPOSTO:**
-- **cerca de 80 unidades** no regime do v12 (corpo do v11 com mundo, sem as árvores);
+- **cerca de 80 unidades** no regime do v12 (corpo do v11 com mundo, sem as árvores), somando todas as populações da tabela;
 - **cerca de 20 características de contexto** z (o viés, as urgências, as conjunções, `F`, a valência e a excitação), que entram em
   todos os comportamentos.
+
+**As 80 e as 16 (a reconciliação pedida na revisão de 2026-10-25):** as ~16 unidades da estimativa de operações da seção 12 **são só
+as unidades de comportamento** do M-IMPULSO, os pares (comportamento, alvo) da última linha da tabela: no máximo 18 (até 8 "comer" e o
+cheiro; "brincar" com a bola ou sem alvo; "explorar" por vagar, pelo cheiro ou pelo lugar lembrado; dormir, chamar, emburrar, ocioso), ~16
+no regime típico, com menos itens à vista. **Só elas fazem o produto com as ~20 características** (a equação da seção 2.3). As outras
+~64 (interocepção, contexto, objeto, conjunções, urgência, afeto, moduladores, estado) são entradas ou integradores, com uma conta por
+unidade e por decisão, e entram na estimativa como os "~20 integradores" e como as características.
 
 ### 2.2 As conexões
 
@@ -662,7 +677,19 @@ São as peças com evidência a favor ou neutras de engenharia.
 ## 9. A memória: o M-MEM mínimo e o gancho da memória consolidada (DM-3)
 
 **No protótipo** entra só o M-MEM mínimo da seção 4.6: os episódios de alimentação e de visita, a recuperação pela fome sem comida à
-vista e o termo no "explorar o lugar".
+vista e o termo no "explorar o lugar". **Isto é memória episódica mínima, e só isto.**
+
+**O que o protótipo não resolve (a condição da DM-3, repetida na revisão de 2026-10-25):** a memória autobiográfica consolidada, a que
+muda as facetas adquiridas e as decisões futuras, **é uma etapa planejada**, a tarefa `docs/TAREFA_V2_MEMORIA_AUTOBIOGRAFICA.md` (as
+etapas M0 a M7), **e não está resolvida pelo protótipo** nem por este documento. O protótipo deixa só a interface abaixo e o gancho
+causal. **O critério de conclusão dessa etapa** (a seção 7 da tarefa da memória, mais a validação causal da seção 4 dela):
+- cada etapa M0 a M7 com os testes da seção 3 da tarefa passando;
+- o replay bit a bit (G1), e a chave desligada dando a vida de hoje (G2);
+- a sonda contrafactual mostrando que uma lembrança recuperada **mudou uma decisão** (M4), e cada mudança de faceta adquirida apontando
+  os episódios consolidados que a causaram, com o temperamento inato igual ao do nascimento (M5, DM-6);
+- o teste de fidelidade da fala falhando quando ela alega uma causa por memória sem o registro (M6).
+
+Até isso passar, nenhum documento descreve a memória autobiográfica como feita.
 
 **A interface que a etapa da memória autobiográfica herda** (`docs/TAREFA_V2_MEMORIA_AUTOBIOGRAFICA.md`, etapas M0 a M7):
 
@@ -732,7 +759,9 @@ análise próprio (`docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`), comm
 
 **O motor:**
 - **o `engine.py` não muda** (`ENGINE_SHA256_V0`). O cérebro entra pelo `Protocol` `Politica`;
-- **o candidato `lembranca`** do explorar (PE-14) é uma camada do `MotorMundo` atrás da chave da v13, no Python e no TS;
+- **o candidato `lembranca`** do explorar (PE-14) é uma camada do `MotorMundo` atrás da chave da v13, no Python e no TS.
+  **AUTORIZADO pelo Matheus em 2026-10-25,** nestas condições: só na v13; nos dois lados; atrás da chave; **o gabarito G2 das vidas de
+  hoje gravado num commit próprio antes da implementação**; a v12 e o A preservados byte a byte;
 - **o log:** nenhum evento novo. O cérebro determinístico não grava nada, e a vida se refaz pelo log de sempre. O modo livre gravado
   não se aplica.
 
@@ -751,8 +780,8 @@ se comporta bem (DM-2).
 
 | medida | o que se sabe hoje | o orçamento proposto | como se mede |
 |---|---|---|---|
-| **o CPU por decisão no navegador** | o A em Python: 339,5 µs por decisão com o motor e o mundo, "quase todo do motor e do mundo" (`docs/RESULTADO_V2_COMPARACAO_CEREBROS.md`); o A v11 no navegador **nunca foi medido** | o cérebro modular ≤ 2× o cérebro do A v11, no mesmo aparelho e no mesmo navegador (AF-4: o orçamento parte do custo do A) | o A v11 medido primeiro; depois a v13, com e sem as sondas |
-| **as operações por decisão** (a estimativa) | — | ~16 unidades × ~20 características × 7 somas (a decisão e as seis sondas) ≈ 2 200 produtos inteiros, mais ~20 integradores | contagem no protótipo |
+| **o CPU por decisão no navegador** | o A em Python: 339,5 µs por decisão com o motor e o mundo, "quase todo do motor e do mundo" (`docs/RESULTADO_V2_COMPARACAO_CEREBROS.md`); o A v11 no navegador **nunca foi medido** | o cérebro modular ≤ 2× o cérebro do A v11, no mesmo aparelho e no mesmo navegador (AF-4: o orçamento parte do custo do A) | o A v11 medido primeiro; depois a v13, com e sem as sondas. **A medição do A é pontual e só de desempenho** (tempo por decisão e por replay), **sem nova campanha de validação comportamental** do A (Matheus, 2026-10-25) |
+| **as operações por decisão** (a estimativa) | — | ~16 **unidades de comportamento** (os pares (b, o) do M-IMPULSO, a reconciliação da seção 2.1; as outras ~64 unidades não fazem produto) × ~20 características × 7 somas (a decisão e as seis sondas) ≈ 2 200 produtos inteiros, mais ~20 integradores | contagem no protótipo |
 | **o tamanho do log** | o A: 6 168 B por dia (a mesma fonte) | **+0 B por dia:** nenhum evento novo | o log de uma vida v13 contra o da v12 com as mesmas ações do dono |
 | **o estado aprendível** | o A: 762 a 763 parâmetros | ≤ 1 000 inteiros: H (7 × ~20), d̂ (6 × 11), N_ep episódios (16 × ~15 campos), ~20 integradores | contagem no `estado_interno` |
 | **o replay ao abrir o save** | 96 decisões por dia (1 440 / 15); uma vida de 14 dias tem 1 344 | o replay de 14 dias da v13 ≤ 1,5× o da v12 no mesmo aparelho | cronometrar o carregamento |
@@ -777,7 +806,8 @@ O D5 de `docs/TAREFA_V2_CEREBRO_A_BASELINE.md` só vale com esse orçamento deci
 **Onde a espec fica aquém da visão:**
 - **o treino, o crescimento, a batalha e a evolução** não tocam o cérebro nesta especificação, como no MVP ("nada novo no MVP");
 - **as frutas e o paladar** ficam fora do protótipo (o v12 é só a ração). O d̂ por classe já os recebe quando entrarem;
-- **o "cérebro neural"** é uma rede de taxa pequena desenhada à mão (seção 2.6). O quanto isso basta é a PE-13.
+- **o "cérebro neural"** é uma rede de taxa pequena desenhada à mão (seção 2.6). A PE-13 está DECIDIDA: "rede pequena de unidades"
+  nos documentos técnicos, "DigiBrain" como nome do produto.
 
 **Onde a espec serve à pergunta da pesquisa:**
 - a pergunta maior ("em que condições a plasticidade durante a vida produz vantagem adaptativa sobre as predisposições herdadas?") vira
@@ -846,4 +876,13 @@ que entra com o valor recomendado e se decide pela avaliação, com o plano de a
 | **PE-15** | as licenças do CfC e do NCP | antes de qualquer reúso da forma II | **conferir e registrar** antes de copiar qualquer código ou equação de software | reusar sem conferir: risco de licença no produto (DM-9) |
 | **PE-16** | a capacidade e a codificação do M-MEM mínimo (N_ep; todo consumo vira episódio) | no protótipo | **N_ep = 16; todo consumo e toda visita viram episódio;** o limiar fino é a ME-1 da tarefa da memória | pequeno: o pet esquece o comedouro; grande sem limiar: ruído e custo |
 
-**Para o protótipo começar,** o Matheus precisa decidir as PE "antes": 1, 2, 3, 4, 7, 9, 12, 13 e 14. A PE-15 só bloqueia a forma II.
+**DECIDIDAS em 2026-10-25 (Matheus):** as nove PE "antes" (1, 2, 3, 4, 7, 9, 12, 13 e 14), **pelas recomendações da tabela**, com
+estas notas da revisão:
+- **PE-1:** a busca de literatura (categoria `literatura`) roda **em paralelo** à etapa 0 do protótipo (os gabaritos e a chave
+  desligada, que não dependem da forma do estado), não antes dela; os SEM FONTE da seção 2 trocam por fontes ou por "não localizada"
+  antes da primeira vida;
+- **PE-13:** "rede pequena de unidades" nos documentos técnicos e na tela do motivo; "DigiBrain" como nome do produto;
+- **PE-14:** autorizada para a v13, Python e TS, atrás da chave, com o gabarito G2 antes da implementação (seção 11).
+
+As sete "no protótipo" (5, 6, 8, 10, 11, 16; a 15 só antes da forma II) entram com o valor recomendado e se decidem pela avaliação,
+com o plano de análise.
