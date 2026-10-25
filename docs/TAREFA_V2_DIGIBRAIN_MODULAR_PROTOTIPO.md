@@ -12,10 +12,14 @@ Categoria: implementacao (com a avaliação como experimento). Origem: Matheus, 
 | a capacidade | um cérebro modular mínimo que percebe, mantém estado, sente o corpo, propõe, escolhe e aprende nos cenários do MVP |
 | o marco que desbloqueia | a integração no produto (`docs/TAREFA_V2_DIGIBRAIN_MODULAR_PRODUTO.md`) e a avaliação do fallback (`docs/TAREFA_V2_CEREBRO_A_BASELINE.md`) |
 | a evidência | os testes de mecanismo por módulo; a ablação por módulo nos cenários do MVP; a comparação com o A como baseline, com plano de análise antes |
-| as dependências reais | a especificação aprovada; o mundo do motor com o contrato (na `main`); os cenários do MVP |
+| as dependências reais | a especificação aprovada; o mundo do motor com o contrato (na `main`); os cenários do MVP (na `main` desde 2026-10-24, #401, #403 e #404: o pet v12, o layout do produto e o E2E-COMIDA) |
 | se o gate falhar | o diagnóstico segue os critérios de `docs/TAREFA_V2_CEREBRO_A_BASELINE.md`, que separam a falha de implementação (conserta-se) da limitação da arquitetura (vai ao Matheus). **Nunca um gate novo só para validar o A** |
 
 ## 1. Pergunta
+
+**A evidência que motiva esta tarefa agora** (registro MVP-ETAPA2, 2026-10-24): com o MVP na `main`, o cérebro A no v12 come 1 ou 2 vezes
+por vida em 20 vidas de 2 dias, e numa delas não vai à ração posta a 2 células em 10 h (diagnóstico, não resultado). A cadeia do produto
+funciona; o que falta é o cérebro ir à comida. A decisão do Matheus: o limite vem para cá, sem alterar o A.
 
 O cérebro modular mínimo faz o que o MVP pede (perceber a comida, ir, comer e aprender com a consequência) por meio dos próprios módulos, e
 cada módulo pesa como a especificação diz?
