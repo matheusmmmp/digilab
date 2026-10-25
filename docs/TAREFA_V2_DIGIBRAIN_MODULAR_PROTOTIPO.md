@@ -123,3 +123,42 @@ com os testes T-PONTO-1 a T-PONTO-4.
 - **O que o plano pressupõe da etapa 1a,** além dos módulos: uma subchave `p1` e o modo do `g_apr` na `ConfigDigibrain`, e o orquestrador
   na lista do teste do layout do MVP (PPM-3).
 - **Interpretações e achados** em `docs/registro/2026-10.md`.
+
+## 12. Etapa 1b, o trilho TS: o gabarito v12, o `ponto` no laço e o custo do A (worker A, 2026-10-25)
+
+- **O gabarito das vidas v12 do jogo em TS primeiro, num commit próprio (36eb1bc), antes de qualquer mudança no espelho:**
+  - `web/app/test/gabaritos/v12_jogo_ts.json`, de `web/app/test/v12_jogo_ts.test.ts`: cinco vidas do pet v12 como o jogo as roda (o
+    `Motor`, o mundo do produto `CMU_MVP` e o A v11), de 3 e 4 dias, com quatro donos (o botão Alimentar, a ração perto do pet, os três
+    lugares nomeados da tela e um roteiro com tapa, treino, medalha e lutas);
+  - em cada vida: o log, a assinatura a cada 25 eventos e no fim, os candidatos e o alvo de cada sub-decisão do mundo (o sha256 da lista
+    e as contagens por ação e por tipo de candidato no explorar, como no `tests/gabaritos/digibrain_vidas_de_hoje.json`), a impressão do
+    mundo e o estado do cérebro no fim;
+  - **o TS de antes da mudança o reproduz byte a byte** (8 testes, no próprio commit).
+- **O `ponto` no espelho TS (6060a31):**
+  - **achado:** o `Mundo` do TS já validava o `ponto` como o Python (`web/app/motor/mundo.ts`, `validarAlvo`): só em EXPLORAR, sem id e
+    sem `de`, inteiro e dentro do mapa, senão o mesmo erro, e os outros alvos sem relaxar. O que faltava era o laço do jogo perguntar o
+    alvo ao cérebro, como o `escolher_alvo` do Python: o `MotorCorpoMundo` passava sempre `null`;
+  - **o que mudou:** a política ganhou o gancho opcional `escolherAlvo` (`motor/motor_corpo.ts`), e o laço só o pergunta com a chave
+    `digibrain` (`OpcoesLacoMundo`, desligada; a v13). A validação do `Mundo` não mudou e não ganhou chave: é a do Python, que também não
+    tem. O explorar não ganhou candidato;
+  - **os testes** (`web/app/test/ponto_v13.test.ts`): desligada, o gancho nunca é chamado e a vida sai igual; ligada, o `ponto` entra só
+    no explorar e se refaz pelo log; fora do mapa ou não inteiro, erro; no comer, no brincar, com id ou `de`, ou um candidato com a
+    posição mudada, erro.
+- **A medição pontual do A v11 no navegador (3e47a0a), só desempenho, uma vez:**
+  - `web/app/test/custo_a_v11_navegador.json`, de `web/app/test/medir_custo_a.mjs`;
+  - o pet v12 do jogo no Chrome 155 instalado, sem janela, com isolamento de origem, num i7-14700KF com Windows 11. Medianas de 7
+    repetições de uma vida de 14 dias (1 344 decisões):
+    - **37,19 µs** por decisão inteira (o motor, o mundo, o corpo e o cérebro);
+    - **5,65 µs** dentro do cérebro A;
+    - **49,47 ms** para refazer os 14 dias pelo log;
+  - o log tem 23 759 bytes em JSON;
+  - é a referência do orçamento: o cérebro da v13 até 2 × 5,65 µs, e o replay de 14 dias da v13 até 1,5 × o da v12, no mesmo aparelho e
+    no mesmo navegador.
+- **Os testes:**
+  - `npm run tipos` sem erro;
+  - `npm test` com 52 arquivos e 612 testes, dos quais 12 são novos (8 do gabarito v12 e 4 do `ponto`);
+  - `npm run e2e` com 91 de 91;
+  - `python tools/conferir_saude.py` passa.
+- **Fica para depois, pela ordem do plano:** o porte dos módulos do cérebro para TS e o G-PAR, depois da 1a do D na `main` e dos
+  gabaritos Python dela; a medição da v13.
+- **Interpretações e achados** em `docs/registro/2026-10.md` (DIGIBRAIN-MODULAR-PROTOTIPO, etapa 1b).

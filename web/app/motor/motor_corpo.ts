@@ -17,7 +17,7 @@ import { C, TPD } from "./constantes.ts";
 import { CCO_CORPO_V11, Corpo, DRIVE_DO_QUIMICO, VALOR_TAPA } from "./corpo.ts";
 import { aplicarAcaoDono, avancarTick, efeitoAcaoPet, vetor } from "./estado.ts";
 import type { ObservacaoLobos, OcorridoCorpo, RngCerebro, TransicaoLobos } from "./lobos.ts";
-import { RandomPy } from "./mundo.ts";
+import { RandomPy, type EscolherAlvo } from "./mundo.ts";
 import type { ConfigCorpo } from "./constantes.ts";
 import type { AcaoDono, AcaoPet, EstadoVida } from "./tipos.ts";
 
@@ -31,6 +31,9 @@ export interface PoliticaCorpo {
   consequenciaCorpo(acao: AcaoPet, ocorrido: OcorridoCorpo, obsDepois: ObservacaoLobos): void;
   receberAcaoDono(acao: string, tick: number): void;
   mudancaNoCorpo(antes: ObservacaoLobos, depois: ObservacaoLobos): void;
+  /** o `escolher_alvo` do Python (mundo.py): o laco com o mundo so o pergunta com a chave da v13 (OpcoesLacoMundo.digibrain); o A nao o
+   *  tem (o alvo dele e o padrao do motor, MV-2) */
+  escolherAlvo?: EscolherAlvo;
 }
 
 /** um evento do log do Python (events.py): o avanco e a acao do dono (e, no laco com o mundo dos v12, a comida deixada pelo dono) */
