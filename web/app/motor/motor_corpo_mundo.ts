@@ -17,7 +17,8 @@
        eventos diretos ao pet, sem posicao do dono (MV-7).
 
    O cerebro A fica como no v11 (MV-2): sem as chaves do mundo, o alvo e o padrao do motor (o `escolher_alvo` dos lobos devolve null) e o
-   `consequencia_mundo` dele nao faz nada; nenhum dos dois e chamado aqui. O `fruta_comida` tambem nao (o A do TS nao o tem).
+   `consequencia_mundo` dele nao faz nada; nenhum dos dois e chamado aqui. So a chave da v13 (`digibrain`, desligada; o modular, DM-5)
+   faz o laco perguntar o alvo ao cerebro, com o `ponto` do lugar lembrado aceito so no explorar (a PE-14 revista; T-PONTO-4). O `fruta_comida` tambem nao (o A do TS nao o tem).
 
    `paridade`: o laco aceita tambem o elogio e a bronca, como o MotorCorpo do Python, so para rejogar o gabarito (os donos sinteticos
    da etapa 0 os usam). O jogo nao liga: o v12, como o v11, nao tem elogio nem bronca. */
@@ -43,6 +44,10 @@ export interface OpcoesLacoMundo {
   paridade?: boolean;
   /** o mundo (o `cfg_mundo` do Python); sem ele, o da pesquisa (CMU, o layout padrao) */
   cfgMundo?: ConfigMundo;
+  /** a chave da v13 (o `ConfigDigibrain.ligada` do Python, DM-5), desligada: so com ela o laco pergunta o alvo ao cerebro
+   *  (`politica.escolherAlvo`, o `escolher_alvo` do Python), e o Mundo valida o que vier (os candidatos e, so no explorar, o `ponto`
+   *  inteiro dentro do mapa; T-PONTO-4). Desligada (o v12 e o A), o alvo e o padrao do motor, como hoje */
+  digibrain?: boolean;
 }
 
 /** as acoes do dono no laco com o mundo: as do v11 sem o alimentar (ele vira o deixar_comida) */
@@ -55,6 +60,7 @@ export class MotorCorpoMundo extends MotorCorpo {
   readonly vistosEm = new Map<number, number>();
   private readonly regra: () => string | null;
   private readonly paridade: boolean;
+  private readonly digibrain: boolean;
 
   constructor(politica: PoliticaCorpo, semente: number, cc: ConfigCorpo = CCO_CORPO_V11, estado: EstadoVida = estadoNascimentoPy(),
               opcoes: OpcoesLacoMundo = {}) {
@@ -63,6 +69,7 @@ export class MotorCorpoMundo extends MotorCorpo {
     this.mundo = new Mundo({ semente, cfg: opcoes.cfgMundo });
     this.regra = opcoes.regra ?? (() => null);
     this.paridade = opcoes.paridade ?? false;
+    this.digibrain = opcoes.digibrain ?? false;
   }
 
   // ------------------------------------------------------------ o dono
@@ -162,7 +169,8 @@ export class MotorCorpoMundo extends MotorCorpo {
   /** a consequencia do MotorMundo (andar, comer, brincar, o MF-2 e o registro), com o Estado em float, antes do corpo */
   protected consequenciaDoMundo(acao: AcaoPet): OcorridoMundo | null {
     const e = this.estado;
-    const r = this.mundo.consequencia(e.tick, acao, { fome: e.fome, energia: e.energia, humor: e.humor, sujeira: e.sujeira }, null,
+    const escolher = this.digibrain ? this.politica.escolherAlvo ?? null : null;
+    const r = this.mundo.consequencia(e.tick, acao, { fome: e.fome, energia: e.energia, humor: e.humor, sujeira: e.sujeira }, escolher,
                                       this.regra());
     this.estado = { ...this.estado, ...r.estado };
     return r.ocorrido as OcorridoMundo | null;
