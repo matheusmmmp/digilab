@@ -684,3 +684,18 @@ seção 6.1 permite, e os sinais da tabela 4.5 da espec ficam; nenhuma equação
 - o g_apr do M4-con (PROPOSTO: 1 919);
 - se a avaliação roda assim, com o G-ABLA-PERS esperado inconclusivo por premissa e o G-MVP esperado abaixo do limiar;
 - o que fazer com as células iguais do comedouro.
+
+**As decisões do Matheus (2026-10-26), DECIDIDAS, registradas pelo Gerente antes da primeira vida da faixa 64101…64505:**
+- **K = 10 por base** (50 unidades; 5 400 vidas com o A11).
+- **O g_apr do M4-con = 1 919** (a média das vidas M4 do piloto, arredondada).
+- **As 12 células são a análise principal.** A duplicação do comedouro fica registrada: no comedouro, com o filtro `sem_ensino`, a vida
+  do dono incoerente é byte a byte a do atencioso, em todo braço; há 11 células distintas e o comedouro do atencioso pesa duas vezes na
+  média por unidade, inclusive no G-ABLA-MEM. **A leitura com 11 células entra só como análise descritiva, sem gate** (seção 8), ao lado
+  da principal.
+- **A avaliação única roda com os valores atuais, sem novos ajustes.** Fica explícito, antes de rodar: **o G-MVP pode falhar** (no piloto,
+  a fração ficou em 0,5 contra o limiar 0,8, com as mesmas 6 células fechando em toda unidade), e **o contraste da persistência
+  (G-ABLA-PERS) será inconclusivo por premissa se a G-PESA da persistência falhar** (no piloto, 0,0017 contra ≥ 0,01). Os dois saem
+  registrados como estão, sem ajuste depois de olhar a faixa.
+- **Nada disto declara o produto pronto** (seção 5.6): o G-MVP é necessário, não suficiente, e o gate de compatibilidade do produto
+  (G-PAR, G-CUSTO, E2E-COMIDA na web) é outro.
+- A avaliação é despachada pelo Gerente só depois de haver disco para as vidas (o D: estava com 1 GB livre em 2026-10-26).
