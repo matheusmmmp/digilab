@@ -981,6 +981,10 @@ janela); as refeições fora de episódio.
     (abaixo);
   - **"sumiu":** sem cheiro e sem comida vista;
   - **"desistiu":** depois de N_desiste_cheiro decisões sem "meta" nem "achou".
+- **A frustração nos fins da busca (DECIDIDO pelo Matheus, 2026-10-26, depois do #425 e antes da primeira vida da 65xxx):** o
+  "achou" **não sobe o F**. Nas palavras dele: "Altere a regra para que o resultado 'achou' não aumente a frustração." O "achou"
+  continua sendo um fim sem a meta, com o motivo "achou", a contagem em `fins` e a opção composta como estão. O "sumiu", o "desistiu"
+  e o "trocou" continuam subindo o F. Só com a subchave `intencao_cheiro` ligada; desligada, nada muda.
 - **O N_desiste_cheiro (PROPOSTO), pela regra da PE-6** (a mesma que deu o `n_desiste` = 3, `config.py:2442`: o raio da visão pelo
   alcance, mais uma decisão): do raio do cheiro ao raio da visão, ⌈(384 − 96) / 60⌉ + 1 = **6 decisões**. Na calibração, 5 a 8.
 
