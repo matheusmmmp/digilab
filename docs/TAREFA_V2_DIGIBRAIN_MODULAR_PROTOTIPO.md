@@ -201,3 +201,23 @@ com os testes T-PONTO-1 a T-PONTO-4.
 - **O que mudou** (o adendo 1 tem a tabela de antes e depois): o passo do hábito, a persistência (`w_pers`, `tau_c`), os pesos da
   energia em dormir e em explorar, e os da fome em comer e em dormir. Os sinais ficam, e nenhuma equação mudou.
 - **Interpretações e o que ficou fora do alcance da calibração** em `docs/registro/2026-10.md`.
+
+## 15. O piloto do N (worker D, 2026-10-26)
+
+- **A nota que vem antes:** a calibração não atingiu os critérios de fechamento. Os valores da rodada 3 são a melhor rodada disponível,
+  não uma calibração bem-sucedida.
+- **O que rodou:** só o piloto da seção 6.2 do plano. As bases 63303, 63404 e 63505, com K = 2, os 8 braços do modular nas 12 células:
+  576 vidas, sem o A11, com os valores de hoje. Nenhuma vida da avaliação.
+- **Os números** estão no adendo 2 do plano, e os artefatos em `artifacts_v2_digibrain_prototipo/piloto/`. Eles não são evidência.
+  - **G-MVP:** 0,5 em todas as unidades.
+  - **G-ABLA-P1:** 0,043; **G-ABLA-MEM:** 0,087; **G-ABLA-PERS:** 0,020.
+  - **Com o sinal contrário:** o G-ABLA-P2 (−0,016) e os dois G-MOD.
+- **As premissas:** a G-PESA do incentivo (no M1), do hábito e da memória ficam acima de 0,01. A da persistência fica em 0,0017. A
+  G-ELEGIVEL é 1,0.
+- **PROPOSTOS:**
+  - o K de 10 por base, decidido pelo G-ABLA-PERS;
+  - o g_apr do M4-con, 1 919;
+  - o custo, cerca de 2,3 s de CPU por vida.
+- **Um achado:** no comedouro, as vidas do dono incoerente são iguais às do atencioso. As interpretações estão em
+  `docs/registro/2026-10.md`.
+- **O próximo passo** é a revisão do Matheus. A avaliação não começa sem ela.
