@@ -378,3 +378,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-25 — DIGIBRAIN-MODULAR, a etapa 1 na `main` e a correção do `ponto` no TS (Gerente, worktree `v2-merge-r18`)](registro/2026-10.md)
 - [2026-10-25 — DIGIBRAIN-MODULAR-CALIBRACAO (worker D, Claude Code, Opus 5.5, worktree `v2-modular-calibracao`): três rodadas, o critério não fecha](registro/2026-10.md)
 - [2026-10-26 — DIGIBRAIN-MODULAR, a calibração na `main` sem fechar e o despacho do piloto (Gerente, worktree `v2-merge-r18`)](registro/2026-10.md)
+- [2026-10-26 — DIGIBRAIN-MODULAR-PILOTO (worker D, Claude Code, Opus 5.5, worktree `v2-modular-piloto`): o piloto do N, as premissas e o K proposto](registro/2026-10.md)

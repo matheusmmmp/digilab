@@ -545,3 +545,142 @@ seção 6.1 permite, e os sinais da tabela 4.5 da espec ficam; nenhuma equação
 
   O G-MVP e as G-ABLA-P1 e G-ABLA-PERS do piloto e da avaliação ficam sujeitos a isso; a seção 5.3 já lê um contraste com a G-PESA
   falhando como inconclusivo por premissa.
+
+## Adendo 2: o piloto do N (2026-10-26, worker D, Claude Code, Opus 5.5)
+
+**A nota antes de tudo** (a decisão do Matheus de 2026-10-26, a mesma do adendo 1):
+- **A calibração não atingiu os critérios de fechamento.** A mediana do fechamento do M3 ficou em 0,412, contra ≥ 0,5. A G-PESA do
+  incentivo ficou em 0,0077, e a da persistência em 0,0014, contra ≥ 0,01.
+- **Os valores da rodada 3 são a melhor rodada disponível, não uma calibração bem-sucedida.**
+- O piloto rodou com eles, conforme o plano. **Rodou só o piloto.**
+- Este adendo vai ao Matheus para revisão antes de qualquer decisão sobre a avaliação (seção 6.4). A avaliação não começa
+  automaticamente.
+- Toda leitura do G-MVP, do G-ABLA-P1 e do G-ABLA-PERS carrega esta nota.
+
+**O que é:** o piloto da seção 6.2, autorizado pelo Matheus em 2026-10-26 e despachado pelo Gerente.
+- **Escopo:** as bases 63303, 63404 e 63505, com K = 2 (6 unidades), os 8 braços do modular (M0, M1, M2, M3, M3-sp, M4, M4-emb e M4-con)
+  nas 12 células e 14 dias. São **576 vidas, sem o A11.**
+- **Como rodou:** pela `experiments/configs/v2_digibrain_prototipo/piloto.json` e o `experiments/run_v2_digibrain_prototipo.py`, no
+  commit `c3a4d82`, com a árvore limpa.
+- **Os valores:** os do `config.py` (a rodada 3). Nenhum valor mudou no piloto.
+- **O que não rodou:** nenhuma vida da faixa 64101…64505 e nenhuma preparação da avaliação.
+- **As conferências:**
+  - toda vida foi rejogada do disco e conferida bit a bit (G1), com as falhas altas de cada braço;
+  - antes da run, passaram o G2 (as 196 vidas e o gabarito do MVP), o G1, o G-MECANISMO e os T-PONTO (59 testes).
+- **Os números do piloto não entram como evidência.** Nenhum gate é lido aqui; o p sai só como descrição.
+
+**Os artefatos** ficam em `artifacts_v2_digibrain_prototipo/piloto/`; as vidas ficam fora do git.
+- **`meta.json`:** o commit, as sementes, os valores e o g_apr do M4-con;
+- **`medidas.json`:** as 576 vidas;
+- **`resultado.json`:** a análise do orquestrador (os contrastes, as premissas, o K e o custo);
+- **`relato.json`:** o IC do G-MVP e as premissas por braço e por célula. Sai de `experiments/relato_piloto_digibrain.py`, que só lê os
+  outros três.
+
+**A ordem do M4-con:** o orquestrador resolve em duas passadas, na mesma run.
+- **Primeiro** rodam os seis braços que não dependem do M4.
+- **Depois** rodam o M4-emb (com a série E do doador) e o M4-con.
+- **O g_apr fixo do M4-con** é a média das vidas M4 da própria run: **1 918,54, arredondado para 1 919** (PROPOSTO). É o valor que o
+  `adendo_do_piloto()` entrega à avaliação.
+
+**O tamanho de efeito de cada contraste,** sem leitura de gate:
+- positivo = a direção da espec;
+- 6 unidades em 3 bases;
+- o IC95 percentil vem do bootstrap agrupado por base, com 10 000 reamostragens e a semente 4242.
+
+| contraste | a medida | média | IC95 | p unilateral (descritivo) |
+|---|---|---|---|---|
+| G-MVP | a fração de vidas do M3 com a taxa de fechamento ≥ 0,5 | 0,5000 | [0,5000; 0,5000] | — (o limiar é 0,8) |
+| G-ABLA-P1 | `falta_ao_comer`(M0) − (M1) | 0,0429 | [0,0362; 0,0551] | 0,0000 |
+| G-ABLA-P2 | `repeticao_apos_alivio`(M2) − (M1) | −0,0155 | [−0,0275; 0,0024] | 0,9644 |
+| G-ABLA-MEM | a taxa de fechamento(M3) − (M2), só no comedouro | 0,0872 | [−0,0049; 0,1995] | 0,0360 |
+| G-ABLA-PERS | `intencoes_com_meta`(M3) − (M3-sp) | 0,0204 | [0,0038; 0,0320] | 0,0000 |
+| G-MOD-CON | `D_FE`(M4-con) − (M4) | −0,0172 | [−0,0262; −0,0086] | 1,0000 |
+| G-MOD-EMB | `D_FE`(M4-emb) − (M4) | −0,0039 | [−0,0077; 0,0024] | 0,9640 |
+
+- **O G-MVP não varia entre as unidades.** Em toda unidade, as mesmas 6 das 12 células fecham a cadeia: o comedouro do aleatório e do
+  relapso, e o perto dos quatro donos. As outras 6 não fecham.
+  - A fração é 0,5 nas seis unidades.
+  - A mediana da taxa de fechamento do M3 é 0,390.
+- **Os sinais contrários:** o G-ABLA-P2 e os dois G-MOD saem com o sinal oposto ao previsto. Nos G-MOD, o M4 tem mais déficit que o M4-con
+  e que o M4-emb.
+
+**As premissas** (seção 5.3). O IC95 decide a premissa, mas aqui ela só é relatada:
+
+| premissa | braço | média | IC95 | o limiar |
+|---|---|---|---|---|
+| G-PESA, o incentivo | M1 | 0,0190 | [0,0181; 0,0205] | limite inferior > 0,01 |
+| G-PESA, o hábito | M2 | 0,1724 | [0,1661; 0,1784] | idem |
+| G-PESA, a memória | M3 | 0,1163 | [0,1062; 0,1279] | idem |
+| G-PESA, a persistência | M3 | 0,0017 | [0,0012; 0,0022] | idem |
+| G-ELEGIVEL | M3 | 1,0 (as 72 vidas têm 3 rações elegíveis ou mais) | — | ≥ 0,8 |
+
+- **Por braço e por célula:** o `relato.json` traz a fração de cada módulo em cada um dos 8 braços e em cada célula, e a G-ELEGIVEL de
+  cada braço e célula.
+- **A G-ELEGIVEL** é 1,0 em todos os braços e em todas as células: nenhuma vida ficou sem ração elegível.
+- **A premissa do incentivo no M1, por lugar:**
+  - no longe, de 0,0072 a 0,0109;
+  - no comedouro e no perto, de 0,0141 a 0,0367.
+- **A premissa da persistência no M3** fica de 0,0005 a 0,0032 em todas as células; nenhuma passa de 0,01.
+
+**O que o piloto sugere sobre o incentivo e a persistência,** os dois que quase não pesaram na calibração (leitura minha, sem gate):
+- **O incentivo:**
+  - a calibração mediu a G-PESA dele no M3 (0,0077), mas o plano mede a premissa no M1, onde o incentivo entra sozinho;
+  - no M1 do piloto, ela fica em 0,0190, com o IC inteiro acima de 0,01;
+  - no M3 do piloto, continua em 0,0089. O hábito e a memória tomam as decisões que o incentivo decidiria;
+  - o contraste do P1 tem o IC inteiro positivo;
+  - se a avaliação repetir isso, a premissa do G-ABLA-P1 passa.
+- **A persistência:**
+  - a premissa fica em 0,0017 no M3, longe de 0,01, em todas as células;
+  - o contraste `intencoes_com_meta` sai positivo (0,0204);
+  - com a premissa assim, a seção 5.3 lê o G-ABLA-PERS como **inconclusivo por premissa,** qualquer que seja o p. É o que se espera da
+    avaliação com os valores de hoje;
+  - a explicação provável continua a do diagnóstico da calibração: só 2,28% das decisões têm uma intenção em curso.
+
+**O K pela seção 6.3:**
+- o efeito de planejamento é a metade do efeito do piloto;
+- 2 000 réplicas por K, 1 000 reamostragens internas, a semente 4242;
+- α = 0,0125 nos G-ABLA.
+
+| K por base | G-ABLA-P1 | G-ABLA-MEM | G-ABLA-PERS | os três juntos (só relato) |
+|---|---|---|---|---|
+| 4 | 1,000 | 0,599 | 0,525 | 0,337 |
+| 5 | 1,000 | 0,680 | 0,578 | 0,408 |
+| 6 | 1,000 | 0,731 | 0,664 | 0,487 |
+| 7 | 1,000 | 0,806 | 0,693 | 0,564 |
+| 8 | 1,000 | 0,857 | 0,736 | 0,636 |
+| 9 | 1,000 | 0,859 | 0,767 | 0,669 |
+| 10 | 1,000 | 0,893 | **0,800** | 0,716 |
+
+- **O K PROPOSTO: 10 por base** (50 unidades). É o menor K com poder ≥ 0,8 nos três contrastes que entram na conta. Quem decide é o
+  G-ABLA-PERS, que chega a 0,800 justo no K = 10.
+- **Ficam fora da conta, como a seção 6.3 manda:**
+  - o G-ABLA-P2: o sinal do piloto é o contrário do previsto;
+  - o G-MVP: a fração do piloto (0,5) não passa de 0,8, e não há poder a calcular;
+  - os dois G-MOD: o sinal é o contrário, e nenhum poder foi calculado para eles.
+- **O custo de errar o K:**
+  - com K = 10, a avaliação tem 5 400 vidas;
+  - um K menor, por exemplo 7, já cobre o P1 e o MEM. Mas deixaria o poder do PERS em 0,69, num contraste que deve sair inconclusivo por
+    premissa de qualquer jeito;
+  - a regra da seção 6.3 não abre essa exceção, e por isso a proposta é 10.
+
+**O custo em Python** (do `resultado.json`: a CPU de cada vida, com a gravação, o replay e as conferências):
+- **por vida:** de 2,27 a 2,40 s, conforme o braço; o M3 é o mais caro;
+- **o piloto:** as 576 vidas levaram 233 s de parede em 8 processos, e a run inteira, 269 s;
+- **a avaliação com K = 10** (5 400 vidas, com o A11): estimada em 12 553 s de CPU. São cerca de 3,5 h, ou cerca de meia hora em 8
+  processos. A estimativa supõe que o A11 custa a média dos braços do modular; ele não rodou no piloto.
+
+**Um achado nas células** (o registro, seção "DIGIBRAIN-MODULAR-PILOTO"):
+- **No comedouro, a vida do dono incoerente é byte a byte a mesma do atencioso.** Isso vale nos 8 braços e nas 6 unidades (48 de 48
+  pares), e também nas 4 vidas da rodada 3 da calibração.
+- **No perto e no longe,** as vidas dos dois diferem.
+- **O porquê (leitura minha):** com o filtro `sem_ensino`, o incoerente fica sem o elogio e a repreensão, e o que sobra dele é o cuidado
+  do atencioso.
+- **Na prática,** há 11 células distintas, e o comedouro do atencioso pesa duas vezes. Isso vale também no G-ABLA-MEM: 2 das 4 células
+  dele são iguais.
+- Nada foi mudado; é pergunta para o Matheus.
+
+**Para o Matheus decidir, antes da avaliação** (o PR deste adendo leva as opções):
+- o K (PROPOSTO: 10);
+- o g_apr do M4-con (PROPOSTO: 1 919);
+- se a avaliação roda assim, com o G-ABLA-PERS esperado inconclusivo por premissa e o G-MVP esperado abaixo do limiar;
+- o que fazer com as células iguais do comedouro.
