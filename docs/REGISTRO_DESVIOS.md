@@ -380,3 +380,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-26 — DIGIBRAIN-MODULAR, a calibração na `main` sem fechar e o despacho do piloto (Gerente, worktree `v2-merge-r18`)](registro/2026-10.md)
 - [2026-10-26 — DIGIBRAIN-MODULAR-PILOTO (worker D, Claude Code, Opus 5.5, worktree `v2-modular-piloto`): o piloto do N, as premissas e o K proposto](registro/2026-10.md)
 - [2026-10-26 — DIGIBRAIN-MODULAR, o piloto na `main` e as decisões da avaliação única (Gerente, worktree `v2-merge-r18`)](registro/2026-10.md)
+- [2026-10-26 — DIGIBRAIN-MODULAR-AVALIACAO, a queda da primeira run (worker D, Claude Code, Opus 5.5, worktree `v2-modular-avaliacao`)](registro/2026-10.md)
+- [2026-10-26 — DIGIBRAIN-MODULAR-AVALIACAO (worker D, Claude Code, Opus 5.5, worktree `v2-modular-avaliacao`): a avaliação única, o G-MVP falha](registro/2026-10.md)

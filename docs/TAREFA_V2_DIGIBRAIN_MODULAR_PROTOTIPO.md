@@ -222,3 +222,23 @@ com os testes T-PONTO-1 a T-PONTO-4.
 - **Um achado:** no comedouro, as vidas do dono incoerente são iguais às do atencioso. As interpretações estão em
   `docs/registro/2026-10.md`.
 - **O próximo passo** é a revisão do Matheus. A avaliação não começa sem ela.
+
+## 16. A avaliação única (worker D, 2026-10-26)
+
+- **Antes de tudo:** a calibração não atingiu os critérios de fechamento. Os valores da rodada 3 são a melhor rodada disponível, não uma
+  calibração bem-sucedida, e nada aqui declara o produto pronto (plano, seção 5.6).
+- **O que rodou:** a avaliação da seção 6.4, uma vez.
+  - As bases 64101 a 64505, com K = 10, os 9 braços e as 12 células: 5 400 vidas.
+  - O g_apr do M4-con = 1 919.
+  - A fronteira foi o commit `5fc8943`.
+  - A primeira run, com 16 processos, caiu antes de qualquer medida. A segunda, com 8 processos e autorizada pelo Matheus, refez byte a
+    byte as 336 vidas da queda.
+- **O resultado** (`docs/RESULTADO_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`):
+  - **o G-MVP falha,** com 0,485 e IC95 [0,475; 0,495] contra 0,8. A leitura é D4, falha de implementação ou de calibração;
+  - **passam** o G-ABLA-MEM e o G-ABLA-P1;
+  - **o G-ABLA-P2 não passa,** porque o sinal é o contrário;
+  - **o G-ABLA-PERS é inconclusivo por premissa,** com a persistência em 0,0014;
+  - **os G-MOD não passam.**
+- **A leitura com 11 células** é só descritiva e não muda nenhum sinal.
+- **Os artefatos** estão em `artifacts_v2_digibrain_prototipo/avaliacao/`, e os achados em `docs/registro/2026-10.md`.
+- **O próximo passo** é decisão do Matheus.
