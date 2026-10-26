@@ -499,6 +499,12 @@ chave.
 - **Nenhuma vida** da faixa 64101…64505 nem das bases do piloto.
 - **O critério não fechou em nenhuma rodada.** Pela seção 6.1, ficam os valores da melhor rodada, a 3, e o que não fechou vai ao
   registro, sem bloquear.
+- **A decisão do Matheus (2026-10-26), registrada como ele pediu:** **a calibração não atingiu os critérios de fechamento** (a mediana do
+  fechamento do M3 ficou em 0,412 contra ≥ 0,5; a G-PESA do incentivo em 0,0077 e a da persistência em 0,0014 contra ≥ 0,01). **Os
+  valores da rodada 3 são a melhor rodada disponível, não uma calibração bem-sucedida.** O piloto (seção 6.2) roda com eles, conforme o
+  plano; **só o piloto:** a avaliação única (seção 6.4) não começa automaticamente. Depois do piloto, os resultados e as premissas
+  (G-PESA e G-ELEGIVEL) vão ao Matheus para revisão antes de qualquer decisão sobre a avaliação. Toda leitura do G-MVP, do G-ABLA-P1 e do
+  G-ABLA-PERS nas fases seguintes carrega esta nota.
 
 **Os valores congelados** (`ConfigDigibrainInatos`, `digilab/config.py`; continuam PROPOSTOS, e o Matheus decide). Só mudou o que a
 seção 6.1 permite, e os sinais da tabela 4.5 da espec ficam; nenhuma equação, subchave nem número do motor, do corpo ou do mundo mudou:
