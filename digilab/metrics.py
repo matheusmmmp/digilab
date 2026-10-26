@@ -2241,17 +2241,19 @@ def visitas_vazias(visitas: Sequence[tuple[int, int, int, Sequence[tuple[int, in
     return {"visitas": len(visitas), "vazias": vazias, "acharam": len(visitas) - vazias}
 
 
-def episodios_de_fome(decisoes: Sequence[tuple[int, float, int | None, frozenset]], refeicoes: Sequence[tuple[int, bool, int, int]],
+def episodios_de_fome(decisoes: Sequence[tuple[int, float, int | None, frozenset]], refeicoes: Sequence[tuple[int, bool, bool, int, int]],
                       w_base: int, raio_pegar: int, passo: int, limiar_fome: float = 0.5, corte_d0: int | None = None) -> dict:
     """O G-MVP por episodio de fome (a DX-2 do adendo 3, A3.3; DECIDIDA pelo Matheus em 2026-10-26 como a medida primaria).
 
     `decisoes` = (k, fome, d0, oferta) de cada decisao do pet, k = 0, 1, ... seguidas: a fome (o estado, 0-1), a distancia (subunidades)
     do pet a racao do dono madura e nao comida mais proxima no chao (None sem ela) e o conjunto dos ids dessas racoes (a oferta O(k)).
-    `refeicoes` = (k, racao do dono, falta da fome antes, falta depois) de cada consumo do pet.
+    `refeicoes` = (k, racao do dono, madura, falta da fome antes, falta depois) de cada consumo do pet.
 
     F(k) = fome < `limiar_fome`. A fome continua e um trecho maximo de decisoes seguidas com F; cada uma tem no maximo um episodio, que
     abre na primeira decisao k_i dela com oferta (d0 = a distancia em k_i; W = janela_w(d0)). O episodio acaba no primeiro destes:
-      - "fechou" (o sucesso): numa decisao k_i <= k <= k_i + W, o pet come uma racao do dono (madura ou podre) e a falta cai;
+      - "fechou" (o sucesso): numa decisao k_i <= k <= k_i + W, o pet come uma racao do dono que reduz a fome: madura, com a falta da
+        fome caindo na decisao do consumo. Comer racao podre nao fecha (a correcao de 2026-10-26 do adendo, #424: a podre so baixa o
+        humor), nao encerra o episodio e sai contada como refeicao no episodio sem fechar;
       - "saciado_por_outra_comida": a fome continua acaba (F deixa de valer) dentro da janela sem o "fechou";
       - "janela_vencida": a decisao k_i + W passa sem o "fechou";
       - "vida_acabou": a vida acaba com o episodio aberto.
@@ -2262,12 +2264,12 @@ def episodios_de_fome(decisoes: Sequence[tuple[int, float, int | None, frozenset
     if [d[0] for d in decisoes] != list(range(len(decisoes))):
         raise ValueError("as decisoes do episodio sao k = 0, 1, ... seguidas")
     refe: dict = {}
-    for k, do_dono, antes, depois in refeicoes:
+    for k, do_dono, madura, antes, depois in refeicoes:
         if k in refe:
             raise ValueError(f"duas refeicoes na decisao {k}")
-        if not 0 <= k < len(decisoes) or type(do_dono) is not bool:
-            raise ValueError(f"refeicao fora das decisoes ou sem a origem: {(k, do_dono)!r}")
-        refe[k] = (do_dono, antes, depois)
+        if not 0 <= k < len(decisoes) or type(do_dono) is not bool or type(madura) is not bool:
+            raise ValueError(f"refeicao fora das decisoes ou sem a origem e a situacao: {(k, do_dono, madura)!r}")
+        refe[k] = (do_dono, madura and depois < antes)          # reduz a fome: madura e a falta cai
     episodios: list = []
     aberto = None
     fome_continua, usada = False, False
@@ -2299,14 +2301,14 @@ def episodios_de_fome(decisoes: Sequence[tuple[int, float, int | None, frozenset
             aberto["oferta_mudou"] = True                     # uma racao da oferta de k_i apodreceu, sumiu ou foi comida
         r = refe.get(k)
         if r is not None and r[0]:
-            if aberto is not None and k <= aberto["k"] + aberto["w"] and r[2] < r[1]:
+            if aberto is not None and k <= aberto["k"] + aberto["w"] and r[1]:
                 fechar(aberto, "fechou", k)
                 aberto = None
             elif aberto is not None:
                 fora["no_episodio_sem_fechar"] += 1
             else:
                 fora["fora_de_episodio"] += 1
-                if vencido is not None and F and r[2] < r[1]:
+                if vencido is not None and F and r[1]:
                     latencias_depois.append(k - vencido)
                     vencido = None
         if aberto is not None and k == aberto["k"] + aberto["w"]:

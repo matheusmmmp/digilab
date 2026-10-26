@@ -388,4 +388,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-26 — DIGIBRAIN-MODULAR, a revisão 2 do adendo 3 (Gerente, worktree `v2-merge-r18`)](registro/2026-10.md)
 - [2026-10-26 — DIGIBRAIN-MODULAR, a revisão 3 do adendo 3: sem exclusão do denominador (Gerente, worktree `v2-merge-r18`)](registro/2026-10.md)
 - [2026-10-26 — DIGIBRAIN-MODULAR, o adendo 3 aprovado (Gerente, worktree `v2-merge-r18`)](registro/2026-10.md)
+- [2026-10-26 — DIGIBRAIN-MODULAR, a correção da ração podre no adendo 3 e as decisões futuras (Gerente, worktree `v2-merge-r18`)](registro/2026-10.md)
 - [2026-10-26 — DIGIBRAIN-MODULAR-CONSERTO (worker D, Claude Code, Opus 5.5, worktree `v2-modular-conserto`): a implementação do adendo 3](registro/2026-10.md)

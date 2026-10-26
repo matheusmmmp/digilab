@@ -548,7 +548,7 @@ def test_t_episodio_1_abre_e_fecha():
     # tres racoes postas com a fome continua, uma comida: um episodio, fechado; a medida (a) da 1 de 3
     fomes = [0.8, 0.4, 0.4, 0.4, 0.4, 0.4, 0.9]
     ofertas = [{}, {}, {1: 100}, {1: 90, 2: 300}, {1: 40, 2: 300, 3: 200}, {2: 300, 3: 200}, {2: 300, 3: 200}]
-    r = _ep(_decs(fomes, ofertas), [(4, True, 700, 300)])
+    r = _ep(_decs(fomes, ofertas), [(4, True, True, 700, 300)])
     assert (r["n"], r["fechados"], r["taxa"]) == (1, 1, 1.0) and r["episodios"] == [[2, 100, 8 + n_min_decisoes(100, 16, 60), 4, "fechou"]]
     assert r["latencias"] == [2]
     racoes = [(1, 30, 0.4), (2, 45, 0.4), (3, 60, 0.4)]
@@ -557,8 +557,8 @@ def test_t_episodio_1_abre_e_fecha():
     # a fome comeca ja com racao no chao: abre na primeira decisao da fome
     r = _ep(_decs([0.9, 0.3, 0.3], [{5: 50}, {5: 50}, {5: 50}]), [])
     assert r["episodios"][0][:2] == [1, 50] and r["motivos"]["vida_acabou"] == 1
-    # sem queda da falta (a podre), nao fecha
-    r = _ep(_decs([0.3] * 12, [{5: 10}] * 12), [(1, True, 700, 700)])
+    # sem queda da falta, nao fecha
+    r = _ep(_decs([0.3] * 12, [{5: 10}] * 12), [(1, True, True, 700, 700)])
     assert r["fechados"] == 0 and r["no_episodio_sem_fechar"] == 1 and r["motivos"]["janela_vencida"] == 1
 
 
@@ -570,7 +570,7 @@ def test_t_episodio_2_sem_repeticao_nem_sobreposicao():
     w = 8 + n_min_decisoes(500, 16, 60)
     assert r["n"] == 1 and r["episodios"] == [[0, 500, w, w, "janela_vencida"]]
     # fechou e a fome continua (uma racao nao basta): a mesma fome, sem episodio novo
-    r = _ep(_decs([0.1] * 20, [{1: 10, 2: 10}] * 20), [(1, True, 900, 700)])
+    r = _ep(_decs([0.1] * 20, [{1: 10, 2: 10}] * 20), [(1, True, True, 900, 700)])
     assert r["n"] == 1 and r["motivos"]["fechou"] == 1
     # um episodio novo so depois de F deixar de valer em ao menos uma decisao
     fomes = [0.3] * 12 + [0.6] + [0.3] * 12
@@ -582,33 +582,39 @@ def test_t_episodio_2_sem_repeticao_nem_sobreposicao():
 
 def test_t_episodio_3_a_refeicao_conta_uma_vez():
     # duas refeicoes na mesma janela: a primeira fecha; a segunda e fora de episodio
-    r = _ep(_decs([0.1] * 12, [{1: 10, 2: 20}] * 12), [(2, True, 900, 800), (4, True, 800, 700)])
+    r = _ep(_decs([0.1] * 12, [{1: 10, 2: 20}] * 12), [(2, True, True, 900, 800), (4, True, True, 800, 700)])
     assert (r["n"], r["fechados"], r["fora_de_episodio"]) == (1, 1, 1)
     # uma refeicao sem fome nao entra na taxa
-    r = _ep(_decs([0.9] * 5, [{1: 10}] * 5), [(2, True, 100, 50)])
+    r = _ep(_decs([0.9] * 5, [{1: 10}] * 5), [(2, True, True, 100, 50)])
     assert (r["n"], r["taxa"], r["fora_de_episodio"]) == (0, None, 1)
     # a refeicao depois da janela vencida, na mesma fome: fora de episodio, com a latencia contada a parte
-    r = _ep(_decs([0.3] * 15, [{1: 10}] * 15), [(12, True, 700, 300)])
+    r = _ep(_decs([0.3] * 15, [{1: 10}] * 15), [(12, True, True, 700, 300)])
     assert r["motivos"]["janela_vencida"] == 1 and r["fora_de_episodio"] == 1 and r["latencias_depois_da_janela"] == [12]
     with pytest.raises(ValueError, match="duas refeicoes"):
-        _ep(_decs([0.3] * 3, [{1: 10}] * 3), [(1, True, 700, 300), (1, True, 700, 300)])
+        _ep(_decs([0.3] * 3, [{1: 10}] * 3), [(1, True, True, 700, 300), (1, True, True, 700, 300)])
 
 
 def test_t_episodio_4_sem_exclusao_do_denominador():
     # a fome que acaba por outra comida dentro da janela: falha, no denominador
-    r = _ep(_decs([0.3, 0.3, 0.3, 0.7, 0.7], [{1: 200}] * 5), [(2, False, 700, 300)])
+    r = _ep(_decs([0.3, 0.3, 0.3, 0.7, 0.7], [{1: 200}] * 5), [(2, False, True, 700, 300)])
     assert r["motivos"]["saciado_por_outra_comida"] == 1 and (r["n"], r["fechados"], r["taxa"]) == (1, 0, 0.0)
     # a racao que apodrece ou some na janela nao encerra o episodio; a janela vencida e falha
     ofertas = [{1: 200}] * 3 + [{}] * 12
     r = _ep(_decs([0.3] * 15, ofertas), [])
     w = 8 + n_min_decisoes(200, 16, 60)
     assert r["episodios"] == [[0, 200, w, w, "janela_vencida"]] and r["oferta_mudou"] == 1 and r["taxa"] == 0.0
-    # a racao podre comida na janela com a falta caindo fecha (a oferta ja sem ela)
-    r = _ep(_decs([0.3] * 15, ofertas), [(5, True, 700, 650)])
-    assert r["motivos"]["fechou"] == 1 and r["taxa"] == 1.0
+    # a correcao de 2026-10-26 (#424): a racao podre comida na janela nao fecha (no motor a falta nao cai; mesmo com a falta caindo, a
+    # podre nao conta), nao encerra o episodio e, sem outra racao que reduza a fome ate o fim da janela, e falha no denominador
+    for podre in ((5, True, False, 700, 700), (5, True, False, 700, 650)):
+        r = _ep(_decs([0.3] * 15, ofertas), [podre])
+        assert r["episodios"] == [[0, 200, w, w, "janela_vencida"]] and r["no_episodio_sem_fechar"] == 1 and r["taxa"] == 0.0
+    # uma racao madura comida depois da podre, ainda na janela, fecha
+    ofertas2 = [{1: 200}] * 3 + [{2: 40}] * 12
+    r = _ep(_decs([0.3] * 15, ofertas2), [(5, True, False, 700, 700), (7, True, True, 700, 300)])
+    assert r["episodios"] == [[0, 200, w, 7, "fechou"]] and r["taxa"] == 1.0 and r["no_episodio_sem_fechar"] == 1
     # o denominador e sempre o numero de episodios
     fomes = [0.3] * 12 + [0.7] + [0.3] * 3 + [0.7] + [0.3] * 12
-    r = _ep(_decs(fomes, [{1: 30}] * len(fomes)), [(1, True, 900, 500), (14, False, 900, 600)])
+    r = _ep(_decs(fomes, [{1: 30}] * len(fomes)), [(1, True, True, 900, 500), (14, False, True, 900, 600)])
     assert r["n"] == sum(r["motivos"].values()) == 3 and r["taxa"] == 1 / 3
     assert r["por_d0"] == {"ate_corte": {"n": 3, "fechados": 1}, "alem_do_corte": {"n": 0, "fechados": 0}}
 

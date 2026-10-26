@@ -569,7 +569,7 @@ def _medidas_conserto_mundo(motor, registro: Registro, dias: int, consumos: list
     refeicoes = []
     for c in motor.consumos_mundo:
         k = (c["tick"] - entrada) // passo
-        refeicoes.append((k, c["id"] in ids_dono, es[k][5], registro.falta_depois[k]))
+        refeicoes.append((k, c["id"] in ids_dono, c["situacao"] == "madura", es[k][5], registro.falta_depois[k]))
     ep = episodios_de_fome(decs, refeicoes, G_MVP_EP["w_decisoes"], g["raio_pegar"], g["passo"], G_MVP_EP["fome_elegivel"],
                            g["corte_d0"])
     ep["com_cadeia"] = None if ep["taxa"] is None else ep["taxa"] >= G_MVP_EP["taxa_vida"]

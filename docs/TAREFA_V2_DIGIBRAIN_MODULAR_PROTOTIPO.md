@@ -9,7 +9,7 @@ falhar e o G-ABLA-PERS inconclusivo se a premissa falhar; não declara o produto
 o G-MVP falhou (0,485), a memória e o incentivo passaram, o hábito saiu ao contrário, a persistência inconclusiva por premissa.
 O diagnóstico (`docs/PROPOSTA_DIAGNOSTICO_DIGIBRAIN_MODULAR.md`) aprovado pelo Matheus em 2026-10-26, com replay no piloto; as vidas
 do piloto foram apagadas na limpeza do disco e regeradas do `c3a4d82` (iguais fora dos campos de relógio; "Opção 1" do Matheus); o
-diagnóstico (#422) na `main` em 2026-10-26; **o adendo 3 do plano APROVADO pelo Matheus em 2026-10-26 (revisão 3, com os ajustes pedidos por ele
+diagnóstico (#422) na `main` em 2026-10-26; **o adendo 3 do plano APROVADO pelo Matheus em 2026-10-26 (revisão 3, mais a correção da ração podre; com os ajustes pedidos por ele
 em 2026-10-26), para a revisão dele: nada implementado nem executado antes da aprovação.**
 **A revisão da especificação pelo Matheus aconteceu em 2026-10-25** (`docs/TAREFA_V2_DIGIBRAIN_MODULAR_ESPEC.md`, seção 10): a direção
 aprovada, as PE "antes" decididas. **Começa depois do #407 entrar na `main`,** pela etapa 0 (os gabaritos e a chave desligada), com o
