@@ -2039,13 +2039,15 @@ MODULOS_SONDA = ("incentivo", "habito", "memoria", "persistencia", "afeto")    #
 
 
 def cadeia_comida_corpo(racoes: Sequence[tuple[int, int, float | None]], consumos: Sequence[tuple[int, int, str, int, int]], dias: int,
-                        w_ticks: int = 120, limiar_fome: float = 0.5) -> dict:
+                        w_ticks: int = 120, limiar_fome: float = 0.5, w_ticks_por_racao: Mapping[int, int] | None = None) -> dict:
     """A cadeia comida -> corpo (secao 4, a medida do G-MVP; PPM-4). `racoes` = (id, tick posta, fome) de cada racao posta pelo dono, com a
     fome (o estado, 0-1) da primeira decisao do pet em ou depois da posta (None sem decisao depois: fica fora, contada); `consumos` = (id,
     tick, tipo, falta da fome antes, falta depois) de cada consumo do pet, com a falta do receptor (inteira) na decisao e logo depois da
     consequencia. A racao e elegivel com a fome abaixo de `limiar_fome`; fechada se o pet a come ate t0 + W (W = 8 decisoes, 120 ticks) e
     a falta da fome cai na decisao do consumo. Sai: as elegiveis, as fechadas, a taxa (None sem elegivel), a latencia de cada fechada e as
-    refeicoes de racao por dia (todo consumo de racao, elegivel ou nao)."""
+    refeicoes de racao por dia (todo consumo de racao, elegivel ou nao).
+    Com `w_ticks_por_racao` ({id: W em ticks}, o adendo 3 do plano, A3.2: a W(d) de cada racao elegivel), a janela de cada racao e a dela
+    no lugar de `w_ticks` (a leitura descritiva da medida por racao com a W(d)); sem a W de uma elegivel, falha alto."""
     if dias <= 0 or w_ticks <= 0:
         raise ValueError(f"dias {dias!r} e W {w_ticks!r} positivos")
     primeiro: dict = {}
@@ -2067,7 +2069,12 @@ def cadeia_comida_corpo(racoes: Sequence[tuple[int, int, float | None]], consumo
         tick, tipo, antes, depois = c
         if tipo != "racao" or tick < t0:
             raise ValueError(f"o consumo {ident} nao e da racao posta em {t0}: {c!r}")
-        if tick <= t0 + w_ticks and depois < antes:
+        w = w_ticks
+        if w_ticks_por_racao is not None:
+            if ident not in w_ticks_por_racao or w_ticks_por_racao[ident] <= 0:
+                raise ValueError(f"a racao elegivel {ident} sem a janela W(d) dela")
+            w = w_ticks_por_racao[ident]
+        if tick <= t0 + w and depois < antes:
             fechadas += 1
             latencias.append(tick - t0)
     return {"elegiveis": elegiveis, "fechadas": fechadas, "taxa": fechadas / elegiveis if elegiveis else None, "latencias": latencias,
@@ -2105,16 +2112,20 @@ def falta_ao_comer(decisoes: Sequence[tuple[int, bool, float]], janela: tuple[in
     return {"n": len(sel), "media": sum(sel) / len(sel) if sel else None}
 
 
-def repeticao_apos_alivio(decisoes: Sequence[tuple[int, object, str, float | None]], janela: tuple[int, int] = JANELA_8_14) -> dict:
+def repeticao_apos_alivio(decisoes: Sequence[tuple[int, object, str, float | None]], janela: tuple[int, int] = JANELA_8_14,
+                          acoes: Iterable[str] | None = None) -> dict:
     """O indice de "ganhou, fica" (secao 4; a G-ABLA-P2; medida nossa, SEM FONTE). `decisoes` = (tick, contexto, acao, r da consequencia
     dela, ou None sem ela). Em cada contexto, cada par de decisoes seguidas naquele contexto, com a primeira na janela e com o r dela:
-    P(a mesma acao | r > 0) - P(a mesma acao | r <= 0). None sem os dois lados."""
+    P(a mesma acao | r > 0) - P(a mesma acao | r <= 0). None sem os dois lados.
+    Com `acoes` (a DX-5 do adendo 3, A3.5: ACOES_R_POSSIVEL, ou uma acao so para o indice por acao), so os pares cuja primeira decisao e
+    de uma dessas acoes; o pareamento por contexto continua sobre todas as decisoes (os indices por acao somam os pares do total)."""
     ini, fim = _checar_janela(janela)
+    filtro = None if acoes is None else frozenset(acoes)
     ultimo: dict = {}
     lados = {True: [0, 0], False: [0, 0]}
     for t, ctx, acao, r in sorted(decisoes, key=lambda d: d[0]):
         anterior = ultimo.get(ctx)
-        if anterior is not None and ini <= anterior[0] < fim and anterior[2] is not None:
+        if anterior is not None and ini <= anterior[0] < fim and anterior[2] is not None and (filtro is None or anterior[1] in filtro):
             lado = lados[anterior[2] > 0]
             lado[0] += 1
             lado[1] += acao == anterior[1]
@@ -2170,3 +2181,149 @@ def media_absoluta(valores: Sequence[float]) -> float | None:
     """A media dos valores absolutos (a leitura D-1, a taxa de aprendizado: a mudanca do desfecho por consumo, a do habito por
     consequencia). None sem valor."""
     return sum(abs(v) for v in valores) / len(valores) if valores else None
+
+
+# --- o conserto do DigiBrain modular (docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md, adendo 3, APROVADO pelo Matheus em 2026-10-26)
+# A DX-5 (A3.5): as acoes em que o r de uma decisao pode ser positivo e pode nao ser, pela regra de recompensa do motor (o r ve so o
+# estimulo imediato da propria acao: `efeito_da_acao_do_pet`, o andar, a comida e a bola do mundo; o tempo e o dono vem depois do gancho).
+# Fora: dormir, ocioso e chamar a atencao (r = 0 sempre) e emburrar (r <= 0 sempre). Fixada pelo T-HABITO-1
+# (tests/test_digibrain_conserto.py).
+ACOES_R_POSSIVEL = ("comer", "brincar", "explorar", "aliviar")
+MOTIVOS_EPISODIO = ("fechou", "janela_vencida", "saciado_por_outra_comida", "vida_acabou")
+
+
+def n_min_decisoes(d: int, raio_pegar: int, passo: int) -> int:
+    """O minimo de decisoes andando ate pegar uma comida a d subunidades, em linha reta (A3.2): max(0, ceil((d - raio_pegar) / passo)).
+    Com d <= raio_pegar, 0 (o pet a pega sem andar). Inteiros, so das constantes do motor."""
+    for nome, v in (("d", d), ("raio_pegar", raio_pegar), ("passo", passo)):
+        if type(v) is not int or v < 0:
+            raise ValueError(f"{nome} inteiro nao negativo: {v!r}")
+    if passo == 0:
+        raise ValueError("passo por decisao 0")
+    return max(0, -(-(d - raio_pegar) // passo))
+
+
+def janela_w(d: int, w_base: int, raio_pegar: int, passo: int) -> int:
+    """A W(d0) do adendo 3 (A3.2): w_base + n_min(d0) decisoes depois da decisao k0 (a decisao da posta conta, e anda). A mesma funcao em
+    todo braco e lugar: so depende de d0 e das constantes do motor."""
+    if type(w_base) is not int or w_base <= 0:
+        raise ValueError(f"w_base inteiro positivo: {w_base!r}")
+    return w_base + n_min_decisoes(d, raio_pegar, passo)
+
+
+def visitas_vazias_v1(comeu_na_visita: Sequence[bool]) -> int:
+    """A `visitas_vazias` do prototipo (o #420), mantida com este nome pela DX-1 (A3.1): as visitas ao lugar lembrado cuja propria decisao
+    nao comeu. `comeu_na_visita` = um booleano por visita."""
+    if any(type(c) is not bool for c in comeu_na_visita):
+        raise ValueError(f"comeu_na_visita nao booleano: {comeu_na_visita!r}")
+    return sum(1 for c in comeu_na_visita if not c)
+
+
+def visitas_vazias(visitas: Sequence[tuple[int, int, int, Sequence[tuple[int, int, int]]]], consumos: Sequence[tuple[int, int]],
+                   r_lugar: int) -> dict:
+    """A DX-1 (A3.1), a medida corrigida. `visitas` = (k, px, py, as comidas maduras no chao no tick da chegada, (id, x, y)): a visita e a
+    opcao que comeca no `explorar/ponto` e termina com `chegou` no ponto P = (px, py), na decisao k. `consumos` = (decisao, id) de cada
+    consumo do pet. O lugar visitado e o disco de raio `r_lugar` (subunidades) em torno de P; a visita achou se, na decisao k ou na k + 1,
+    o pet consome uma comida que, no tick da chegada, estava madura no chao dentro do lugar. Comer comida fora do lugar, ou depois da k + 1,
+    deixa a visita vazia. Sai: as visitas, as vazias e as que acharam."""
+    if type(r_lugar) is not int or r_lugar <= 0:
+        raise ValueError(f"r_lugar inteiro positivo: {r_lugar!r}")
+    por_decisao: dict = {}
+    for k, ident in consumos:
+        if k in por_decisao:
+            raise ValueError(f"dois consumos na decisao {k}")
+        por_decisao[k] = ident
+    vazias = 0
+    for k, px, py, comidas in visitas:
+        lugar = {i for i, x, y in comidas if math.isqrt((x - px) * (x - px) + (y - py) * (y - py)) <= r_lugar}
+        if not any(por_decisao.get(kk) in lugar for kk in (k, k + 1)):
+            vazias += 1
+    return {"visitas": len(visitas), "vazias": vazias, "acharam": len(visitas) - vazias}
+
+
+def episodios_de_fome(decisoes: Sequence[tuple[int, float, int | None, frozenset]], refeicoes: Sequence[tuple[int, bool, int, int]],
+                      w_base: int, raio_pegar: int, passo: int, limiar_fome: float = 0.5, corte_d0: int | None = None) -> dict:
+    """O G-MVP por episodio de fome (a DX-2 do adendo 3, A3.3; DECIDIDA pelo Matheus em 2026-10-26 como a medida primaria).
+
+    `decisoes` = (k, fome, d0, oferta) de cada decisao do pet, k = 0, 1, ... seguidas: a fome (o estado, 0-1), a distancia (subunidades)
+    do pet a racao do dono madura e nao comida mais proxima no chao (None sem ela) e o conjunto dos ids dessas racoes (a oferta O(k)).
+    `refeicoes` = (k, racao do dono, falta da fome antes, falta depois) de cada consumo do pet.
+
+    F(k) = fome < `limiar_fome`. A fome continua e um trecho maximo de decisoes seguidas com F; cada uma tem no maximo um episodio, que
+    abre na primeira decisao k_i dela com oferta (d0 = a distancia em k_i; W = janela_w(d0)). O episodio acaba no primeiro destes:
+      - "fechou" (o sucesso): numa decisao k_i <= k <= k_i + W, o pet come uma racao do dono (madura ou podre) e a falta cai;
+      - "saciado_por_outra_comida": a fome continua acaba (F deixa de valer) dentro da janela sem o "fechou";
+      - "janela_vencida": a decisao k_i + W passa sem o "fechou";
+      - "vida_acabou": a vida acaba com o episodio aberto.
+    Todo fim que nao e o "fechou" e falha e fica no denominador (sem exclusao); a oferta que apodrece ou some dentro da janela nao encerra o
+    episodio (sai contada, so descritiva). Uma refeicao fecha no maximo um episodio; as refeicoes de racao fora de episodio aberto nao contam
+    para a taxa e saem contadas a parte, com a latencia (desde k_i) da primeira que fecharia depois de uma janela vencida na mesma fome.
+    Com `corte_d0`, o fechamento estratificado por d0 (ate o corte e alem dele), descritivo."""
+    if [d[0] for d in decisoes] != list(range(len(decisoes))):
+        raise ValueError("as decisoes do episodio sao k = 0, 1, ... seguidas")
+    refe: dict = {}
+    for k, do_dono, antes, depois in refeicoes:
+        if k in refe:
+            raise ValueError(f"duas refeicoes na decisao {k}")
+        if not 0 <= k < len(decisoes) or type(do_dono) is not bool:
+            raise ValueError(f"refeicao fora das decisoes ou sem a origem: {(k, do_dono)!r}")
+        refe[k] = (do_dono, antes, depois)
+    episodios: list = []
+    aberto = None
+    fome_continua, usada = False, False
+    vencido = None                       # o k_i do episodio vencido na fome continua em curso (a latencia depois da janela)
+    fora = {"fora_de_episodio": 0, "no_episodio_sem_fechar": 0}
+    latencias_depois = []
+
+    def fechar(ep: dict, motivo: str, k: int) -> None:
+        ep["fim"], ep["motivo"] = k, motivo
+        episodios.append(ep)
+
+    for k, fome, d0, oferta in decisoes:
+        F = _escala01("fome", fome) < limiar_fome
+        if (d0 is None) != (not oferta):
+            raise ValueError(f"decisao {k}: a distancia e a oferta discordam ({d0!r}, {sorted(oferta)!r})")
+        if not F:
+            if aberto is not None:
+                fechar(aberto, "saciado_por_outra_comida", k)
+                aberto = None
+            fome_continua, usada, vencido = False, False, None
+        else:
+            if not fome_continua:
+                fome_continua, usada, vencido = True, False, None
+            if aberto is None and not usada and d0 is not None:
+                aberto = {"k": k, "d0": d0, "w": janela_w(d0, w_base, raio_pegar, passo), "oferta": frozenset(oferta),
+                          "oferta_mudou": False}
+                usada = True
+        if aberto is not None and aberto["oferta"] - frozenset(oferta):
+            aberto["oferta_mudou"] = True                     # uma racao da oferta de k_i apodreceu, sumiu ou foi comida
+        r = refe.get(k)
+        if r is not None and r[0]:
+            if aberto is not None and k <= aberto["k"] + aberto["w"] and r[2] < r[1]:
+                fechar(aberto, "fechou", k)
+                aberto = None
+            elif aberto is not None:
+                fora["no_episodio_sem_fechar"] += 1
+            else:
+                fora["fora_de_episodio"] += 1
+                if vencido is not None and F and r[2] < r[1]:
+                    latencias_depois.append(k - vencido)
+                    vencido = None
+        if aberto is not None and k == aberto["k"] + aberto["w"]:
+            vencido = aberto["k"]
+            fechar(aberto, "janela_vencida", k)
+            aberto = None
+    if aberto is not None:
+        fechar(aberto, "vida_acabou", len(decisoes) - 1)
+    n = len(episodios)
+    fechados = sum(1 for e in episodios if e["motivo"] == "fechou")
+    out = {"n": n, "fechados": fechados, "taxa": fechados / n if n else None,
+           "motivos": {m: sum(1 for e in episodios if e["motivo"] == m) for m in MOTIVOS_EPISODIO},
+           "oferta_mudou": sum(1 for e in episodios if e["oferta_mudou"]),
+           "latencias": [e["fim"] - e["k"] for e in episodios if e["motivo"] == "fechou"], "latencias_depois_da_janela": latencias_depois,
+           **fora, "episodios": [[e["k"], e["d0"], e["w"], e["fim"], e["motivo"]] for e in episodios]}
+    if corte_d0 is not None:
+        out["por_d0"] = {nome: {"n": len(es), "fechados": sum(1 for e in es if e["motivo"] == "fechou")}
+                         for nome, es in (("ate_corte", [e for e in episodios if e["d0"] <= corte_d0]),
+                                          ("alem_do_corte", [e for e in episodios if e["d0"] > corte_d0]))}
+    return out

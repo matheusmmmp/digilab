@@ -179,6 +179,9 @@ braços com memória, também todas. Leitura minha do código, sem gate: a visit
 decisão seguinte (`digilab/digibrain/adapt.py`, a consequência). Por isso a medida `visitas_vazias` não separa a visita que achou comida
 da que não achou. Isso fica registrado como achado; nada mudou.
 
+> **Nota (2026-10-26, a implementação do adendo 3):** a correção desta medida é a DX-1 do adendo 3 do plano (A3.1). A medida de hoje fica
+> com o nome `visitas_vazias_v1` nas runs novas, ao lado da corrigida. Os números acima e o `avaliacao/medidas.json` não mudam.
+
 ## 4. O custo em Python
 
 Do `resultado.json`, `custo`: a CPU por vida, com a gravação, o replay e as conferências.

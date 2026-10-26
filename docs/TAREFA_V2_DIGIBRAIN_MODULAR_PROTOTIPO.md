@@ -247,3 +247,30 @@ com os testes T-PONTO-1 a T-PONTO-4.
 - **A leitura com 11 células** é só descritiva e não muda nenhum sinal.
 - **Os artefatos** estão em `artifacts_v2_digibrain_prototipo/avaliacao/`, e os achados em `docs/registro/2026-10.md`.
 - **O próximo passo** é decisão do Matheus.
+
+## 17. A implementação do adendo 3, o conserto (worker D, 2026-10-26)
+
+- **O que é:** o código do adendo 3 do plano (A3.1 a A3.8, APROVADO pelo Matheus em 2026-10-26), com os testes de A3.7. **Nenhuma vida das
+  faixas 64xxx, 65xxx e 66xxx rodou.** A calibração e o piloto do conserto voltam ao Matheus antes de rodar.
+- **O G2 primeiro:** o gabarito das vidas do modular de hoje (`tests/gabaritos/digibrain_modular_de_hoje.json`) foi gravado num commit
+  próprio, antes das subchaves. Desligadas, as 192 vidas saem byte a byte, e as 196 e as do MVP também.
+- **No cérebro** (`digilab/digibrain/` e `digilab/config.py`; o motor, o corpo, o mundo, o `engine.py`, o A e a v12 sem mudança):
+  - **DX-3:** a subchave `cheiro_inato`, com o `w0_tipo_cheiro` = S/4;
+  - **DX-4:** a subchave `intencao_cheiro`, com a busca pelo cheiro, os fins "meta", "achou", "sumiu" e "desistiu" (o
+    `n_desiste_cheiro` = 6) e a opção composta do crédito. Os dois números seguem PROPOSTOS.
+- **Em `digilab/metrics.py`:**
+  - a DX-1: a `visitas_vazias` corrigida, com R_lugar = 76, e a `visitas_vazias_v1`;
+  - a DX-2: o `episodios_de_fome`, com a W(d) (`n_min_decisoes` e `janela_w`), e a medida por ração com a W(d) como opção do
+    `cadeia_comida_corpo`;
+  - a DX-5: o filtro `acoes` do `repeticao_apos_alivio` e o `ACOES_R_POSSIVEL`.
+- **No orquestrador** (`experiments/run_v2_digibrain_prototipo.py`):
+  - **as fases:** `calibracao_conserto`, `piloto_conserto` e `reavaliacao`, com as configs da calibração, do piloto e das três fumaças.
+    A reavaliação espera o adendo 4;
+  - **os braços:** os 9 com as duas subchaves ligadas, mais o M3-sem-inato, o M3-sem-intencao e o M3-420;
+  - **as medidas:** as do adendo;
+  - **a análise:** o G-MVP por episódio como o primário, o de hoje como secundário, a família G-DX (Holm com 2) e a DX-5;
+  - **em toda vida:** o T-CENARIO-1 e o crédito por opção falham alto.
+- **Os testes:** `tests/test_digibrain_conserto.py` e `tests/test_gabarito_digibrain_modular.py`. Nenhum critério de parada de A3.8
+  disparou. O T-ALCANCE-1 e o T-HABITO-1 conferem a convenção da janela e a tabela da DX-5 sem mudança.
+- **As interpretações** estão em `docs/registro/2026-10.md`, na seção "DIGIBRAIN-MODULAR-CONSERTO".
+- **O próximo passo** é decisão do Matheus: a calibração do conserto (65101 e 65202, só o M3\*).

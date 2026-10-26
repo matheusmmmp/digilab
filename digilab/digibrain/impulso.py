@@ -17,11 +17,14 @@ u_humor)`), a frustracao F do M-ESTADO e a valencia V e a excitacao E do M-AFETO
               + habito = sum_j H[b,j] z_j (P2)
               + memoria = M, so explorar o lugar lembrado (M-MEM)
               + persistencia = h, so a intencao em curso (M-ESTADO) )
+**A DX-3** (o adendo 3 do plano, A3.4; a subchave `cheiro_inato`): o inato da unidade `comer/cheiro` soma o `w0_tipo_cheiro` (o cheiro de
+comida vale como comida, sem a proximidade). Desligada, o termo e o de hoje (o W0_tipo do comer nao tem o tipo `cheiro`). O cerebro
+continua lendo so se ha cheiro (o G-SEM-DIRECAO).
 Sem estado e sem rng."""
 from __future__ import annotations
 
-from ..config import (CARACTERISTICAS_DIGIBRAIN, COMPORTAMENTOS_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, RECEPTORES_DIGIBRAIN,
-                      ConfigDigibrainInatos)
+from ..config import (CARACTERISTICAS_DIGIBRAIN, COMPORTAMENTOS_DIGIBRAIN, CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, RECEPTORES_DIGIBRAIN,
+                      ConfigDigibrain, ConfigDigibrainInatos)
 from ..modelo_mundo import raiz_inteira
 from ._comum import chave_unidade, mul, phi
 
@@ -31,8 +34,9 @@ TERMOS = ("inato", "prox", "nov", "incentivo", "habito", "memoria", "persistenci
 class Impulso:
     """o M-IMPULSO (docstring do modulo)"""
 
-    def __init__(self, inatos: ConfigDigibrainInatos | None = None) -> None:
+    def __init__(self, inatos: ConfigDigibrainInatos | None = None, cfg_digibrain: ConfigDigibrain | None = None) -> None:
         self.p = inatos or CONFIG_DIGIBRAIN_INATOS
+        self.cd = cfg_digibrain or CONFIG_DIGIBRAIN
         self.S = self.p.escala
         idx = {c: j for j, c in enumerate(CARACTERISTICAS_DIGIBRAIN)}
         self.w0 = {}
@@ -44,6 +48,10 @@ class Impulso:
         self.w0_prox = dict(self.p.w0_prox)
         self.w0_nov = dict(self.p.w0_nov)
         self.w0_tipo = {b: dict(t) for b, t in self.p.w0_tipo}
+        if "cheiro" in self.w0_tipo.get("comer", {}):
+            raise ValueError("o tipo `cheiro` do comer fica no w0_tipo_cheiro, atras da subchave `cheiro_inato` (DX-3)")
+        if self.cd.cheiro_inato:
+            self.w0_tipo["comer"] = {**self.w0_tipo.get("comer", {}), "cheiro": self.p.w0_tipo_cheiro}
 
     def contexto_z(self, sens: dict, afeto: dict, contexto: dict) -> list[int]:
         S = self.S

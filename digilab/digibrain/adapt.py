@@ -47,7 +47,7 @@ from .estado import EstadoDinamico
 from .impulso import Impulso
 from .mem import Memoria
 from .plast import Plasticidade
-from .sens import Sens
+from .sens import COMIDAS_BOAS, Sens, classe_do_tipo
 
 
 class DigibrainDesligado(RuntimeError):
@@ -85,7 +85,7 @@ class Modulos:
 def montar_modulos(cfg: Config, cd: ConfigDigibrain, cm: ConfigMundo, inatos: ConfigDigibrainInatos,
                    serie_e_doadora: tuple | None) -> Modulos:
     return Modulos(sens=Sens(cfg, cm, inatos), afeto=Afeto(cfg, cd, inatos, serie_e_doadora), estado=EstadoDinamico(cfg, cd, inatos),
-                   impulso=Impulso(inatos), mem=Memoria(cm, inatos), arb=Arbitragem(inatos), plast=Plasticidade(cd, inatos))
+                   impulso=Impulso(inatos, cd), mem=Memoria(cm, inatos), arb=Arbitragem(inatos), plast=Plasticidade(cd, inatos))
 
 
 def intencao_da_unidade(unidade: dict) -> Intencao:
@@ -142,7 +142,7 @@ class DigiBrain:
         self._conferir_desligadas(unidades)
         unidade = esc["unidade"]
         fins = m.estado.escolhida(unidade, z, afeto["g_apr"], k)
-        creditos = [c for c in (m.plast.creditar(f) for f in fins) if c is not None]
+        creditos = _creditar(m.plast, fins)
         intencao = intencao_da_unidade(unidade)
         urg = afeto["urgencias"]
         self.motivos.append({
@@ -160,8 +160,11 @@ class DigiBrain:
             "falta_fome": sens["falta"].get("fome"),
             "contexto": {"drive": max(sorted(urg), key=lambda r: urg[r]) if urg else None,
                          "comida_vista": sens["conjuncoes"]["comida_vista"] > 0, "noite": sens["contexto"]["noite"] > 0},
-            "fins": [_fim(f) for f in fins if f["motivo"] != "unica"], "creditos": creditos, "gestos": self._gestos,
+            "fins": _registrados(fins), "creditos": creditos, "gestos": self._gestos,
             "consequencia": None})
+        entregue = [_fim(f) for f in fins if not f.get("registro", True)]
+        if entregue:                                  # a busca guardada (DX-4), entregue sem a opcao composta: so com a subchave
+            self.motivos[-1]["busca_entregue"] = entregue
         self._gestos = []
         self._pendencia = {"k": k, "intencao": intencao, "unidade": unidade, "sens": sens, "g_apr": afeto["g_apr"], "pediu": False,
                            "alvo": None, "corpo": None, "transicao": None, "mundo": None}
@@ -283,8 +286,10 @@ class DigiBrain:
         elif chave[1] == "ponto":
             px, py = chave[2]
             d = raiz_inteira((px - pos1[0]) * (px - pos1[0]) + (py - pos1[1]) * (py - pos1[1]))
-        fins = m.estado.consequencia(cons["r_n"], ocorrido, {"visto": visto, "d": d, "ha_cheiro": pm1.direcao_cheiro != 0})
-        creditos = [c for c in (m.plast.creditar(f) for f in fins) if c is not None]
+        fins = m.estado.consequencia(cons["r_n"], ocorrido, {
+            "visto": visto, "d": d, "ha_cheiro": pm1.direcao_cheiro != 0,
+            "comida_boa_vista": any(classe_do_tipo(v[1]) in COMIDAS_BOAS for v in pm1.vistos)})
+        creditos = _creditar(m.plast, fins)
         episodio = None
         if self.cd.m_mem:
             base = {"decisao": p["k"], "regiao": pm1.regiao, "delta": dict(zip(recs, [b - a for a, b in zip(l0, l1)])), "r": cons["r"],
@@ -300,9 +305,22 @@ class DigiBrain:
                                                                        "situacao": comeu["situacao"], "como": comeu["como"]},
                                   "chegou": None if ocorrido is None else ocorrido["chegou"], "p1": p1, "creditos": creditos,
                                   "episodio": episodio}
-        motivo["fins"] = motivo["fins"] + [_fim(f) for f in fins if f["motivo"] != "unica"]
+        motivo["fins"] = motivo["fins"] + _registrados(fins)
+
+
+def _creditar(plast: Plasticidade, fins: list[dict]) -> list[dict]:
+    """as opcoes que acabaram ao P2, salvo a busca guardada no "achou" (DX-4: o credito dela segue pela opcao composta)"""
+    return [c for c in (plast.creditar(f) for f in fins if f.get("credito", True)) if c is not None]
+
+
+def _registrados(fins: list[dict]) -> list[dict]:
+    """os fins para o registro: sem as opcoes de uma decisao e sem a busca entregue depois do "achou" (ja registrada nele)"""
+    return [_fim(f) for f in fins if f["motivo"] != "unica" and f.get("registro", True)]
 
 
 def _fim(f: dict) -> dict:
-    """o resumo de uma opcao que acabou, para o registro"""
-    return {"chave": chave_json(f["chave"]), "inicio": f["inicio"], "n": f["n"], "motivo": f["motivo"], "meta": f["meta"], "r": f["r"]}
+    """o resumo de uma opcao que acabou, para o registro (a opcao composta da DX-4 marcada)"""
+    out = {"chave": chave_json(f["chave"]), "inicio": f["inicio"], "n": f["n"], "motivo": f["motivo"], "meta": f["meta"], "r": f["r"]}
+    if f.get("composta"):
+        out["composta"] = True
+    return out

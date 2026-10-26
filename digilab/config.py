@@ -2319,6 +2319,12 @@ CONFIG_CONTRATO_LIGADO = ConfigContrato(sensores=True, controlador=True)
 #                      ao `DigiBrain` como dado, `serie_e_doadora`);
 #       "constante"    o `g_apr` fixo em `g_apr_constante`, sem `modula_g_apr` (o M4-con: a media do `g_apr` das vidas M4 do piloto).
 # Com uma subchave desligada, o termo do modulo e 0 em toda decisao (o DigiBrain levanta erro se nao for).
+# O adendo 3 do plano (A3.4, APROVADO pelo Matheus em 2026-10-26) pede mais duas, separadas, desligadas por padrao (desligadas, a vida do
+# modular sai byte a byte: tests/gabaritos/digibrain_modular_de_hoje.json):
+#   - `cheiro_inato` (DX-3): o peso inato do tipo `cheiro` no comer, `ConfigDigibrainInatos.w0_tipo_cheiro`, somado ao inato da unidade
+#     `comer/cheiro` (o cheiro de comida vale como comida, sem a proximidade);
+#   - `intencao_cheiro` (DX-4): a unidade `comer/cheiro` abre intencao (a busca), com os fins "meta", "achou", "sumiu" e "desistiu" (o
+#     `ConfigDigibrainInatos.n_desiste_cheiro`) e a opcao composta do credito (a busca que acha comida e segue no `comer/comida`).
 CONTROLES_G_APR = ("nenhum", "embaralhado", "constante")
 
 
@@ -2332,9 +2338,11 @@ class ConfigDigibrain:
     p1: bool = True                          # PROPOSTO (etapa 1a; plano, secao 2): o P1, que o braco M0 desliga
     controle_g_apr: str = "nenhum"           # PROPOSTO (etapa 1a; plano, secao 2): o controle do V3 do g_apr (CONTROLES_G_APR)
     g_apr_constante: int = 0                 # PROPOSTO (plano, secao 2): o g_apr do M4-con, na escala S; so com o controle "constante"
+    cheiro_inato: bool = False               # DECIDIDO (adendo 3, A3.4 e A3.10, 2026-10-26): a DX-3, desligada por padrao
+    intencao_cheiro: bool = False            # DECIDIDO (adendo 3, A3.4 e A3.10, 2026-10-26): a DX-4, desligada por padrao
 
     def __post_init__(self) -> None:
-        for nome in ("ligada", "modula_g_apr", "p2", "m_mem", "persistencia", "p1"):
+        for nome in ("ligada", "modula_g_apr", "p2", "m_mem", "persistencia", "p1", "cheiro_inato", "intencao_cheiro"):
             if type(getattr(self, nome)) is not bool:
                 raise TypeError(f"ConfigDigibrain.{nome} e bool: {getattr(self, nome)!r}")
         if self.controle_g_apr not in CONTROLES_G_APR:
@@ -2440,6 +2448,10 @@ class ConfigDigibrainInatos:
     # M-ESTADO
     w_pers: int = 2 * _S                      # PROPOSTO, SEM FONTE (PE-6): h = mul(w_pers, C); calibracao, rodada 2: S/2 -> 2S
     n_desiste: int = 3                        # PROPOSTO (PE-6, a regra do alcance): o raio da visao (96) pelo alcance (60), 2 decisoes, mais 1
+    # o adendo 3 (A3.4), so com as subchaves da ConfigDigibrain; a calibracao do conserto (bases 65101 e 65202) pode mudar os dois
+    w0_tipo_cheiro: int = _S // 4             # PROPOSTO, SEM FONTE (DX-3): o peso do tipo `cheiro` no comer, o mesmo da racao (S/8 a S/2)
+    n_desiste_cheiro: int = 6                 # PROPOSTO (DX-4, a regra da PE-6): do raio do cheiro (384) ao da visao (96) pelo alcance (60),
+                                              # ceil(288 / 60) = 5 decisoes, mais 1 (5 a 8)
     # M-MEM
     n_ep: int = 16                            # PROPOSTO, SEM FONTE (PE-16)
     lambda_busca: int = _S // 4               # PROPOSTO, SEM FONTE: a pista, a urgencia da fome acima deste limiar
@@ -2476,9 +2488,9 @@ class ConfigDigibrainInatos:
             if tau < 15:
                 raise ValueError(f"constante de tempo abaixo do passo do cerebro (15 ticks): {tau}")
         if not 0 < self.g_min <= self.g0 <= self.g_max or self.r_norm <= 0 or self.s_v <= 0 or self.n_ep <= 0 or self.n_desiste <= 0 \
-                or self.escala_cuidado <= 0 or self.d_max <= 0 or self.h_max <= 0:
-            raise ValueError("ConfigDigibrainInatos: g_min <= g0 <= g_max; r_norm, s_v, n_ep, n_desiste, escala_cuidado, d_max e h_max "
-                             "positivos")
+                or self.escala_cuidado <= 0 or self.d_max <= 0 or self.h_max <= 0 or self.n_desiste_cheiro <= 0:
+            raise ValueError("ConfigDigibrainInatos: g_min <= g0 <= g_max; r_norm, s_v, n_ep, n_desiste, escala_cuidado, d_max, h_max e "
+                             "n_desiste_cheiro positivos")
 
 
 CONFIG_DIGIBRAIN_INATOS = ConfigDigibrainInatos()

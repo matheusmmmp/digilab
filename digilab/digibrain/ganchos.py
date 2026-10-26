@@ -19,10 +19,10 @@ CAMPOS_POR_MODULO = {
     "sens": ("tau_hab", "escala_cuidado"),
     "afeto": ("tau_v", "tau_e", "urgencia_a", "urgencia_b", "urgencia_lambda", "ganho_r", "r_norm", "fora_do_r", "g0", "beta_e",
               "g_min", "g_max", "e0", "beta_t", "beta_u", "e_max"),
-    "impulso": ("w0", "w0_prox", "w0_nov", "w0_tipo"),
+    "impulso": ("w0", "w0_prox", "w0_nov", "w0_tipo", "w0_tipo_cheiro"),
     "arb": ("epsilon", "lambda_sono"),
     "plast": ("eta_d", "eta_h", "h_max", "c_g", "s_v", "g_max_incentivo"),
-    "estado": ("tau_c", "tau_f_sobe", "tau_f_desce", "w_pers", "n_desiste"),
+    "estado": ("tau_c", "tau_f_sobe", "tau_f_desce", "w_pers", "n_desiste", "n_desiste_cheiro"),
     "mem": ("n_ep", "lambda_busca", "d_max", "w_mem"),
 }
 
