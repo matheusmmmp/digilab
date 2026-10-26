@@ -197,6 +197,9 @@ def test_a_config_segue_o_plano():
         with pytest.raises(FileNotFoundError):
             orq.modo_da_config({**{k: v for k, v in _cfg("calibracao.json").items() if k != "rodada"}, "fase": "avaliacao",
                                 "unidades": {"bases": list(orq.BASES["avaliacao"]), "k": 4, "prefixo": orq.PREFIXO}})
+    if (RAIZ / orq.SAIDA["piloto"] / "resultado.json").exists():
+        assert orq.adendo_do_piloto() == {"k": 10, "g_apr_m4_con": 1919}          # as decisoes do Matheus no fim do adendo 2
+        assert orq.modo_da_config(_cfg("avaliacao.json")) == "avaliacao"
     assert orq.PREFIXO in bv.PREFIXOS_UNIDADES and orq.BRACOS == ("M0", "M1", "M2", "M3", "M3-sp", "M4", "M4-emb", "M4-con", "A11")
     assert len(orq.CELULAS) == 12
 
@@ -223,6 +226,15 @@ def test_a_fumaca_de_ponta_a_ponta(tmp_path):
     assert [res["G-ABLA"][g]["holm"]["limiar"] for g in sorted(res["G-ABLA"], key=lambda g: res["G-ABLA"][g]["holm"]["ordem"])] == \
         [0.05 / 4, 0.05 / 3, 0.05 / 2, 0.05]
     assert r["meta"]["g_apr_m4_con"] > 0
+    d11 = res["descritivo_11_celulas"]
+    assert d11["celulas"] == 11 and orq.CELULA_DUPLICADA not in orq.CELULAS_11 and "passa" not in json.dumps(d11)
+    assert set(d11["contrastes"]) == set(orq.FAMILIA_ABLA + orq.FAMILIA_MOD) and d11["contrastes"]["G-ABLA-MEM"]["celulas"] == 3
+    assert d11["G-ELEGIVEL"]["vidas"] == 2 * 11
+    # a celula duplicada nao entra: mexer nela nao muda a leitura de 11 celulas, e muda a das 12
+    trocados = [{**x, "influencia": {**x["influencia"], "persistencia": 0.5}}
+                if x["braco"] == "M3" and (x["dono"], x["lugar"]) == orq.CELULA_DUPLICADA else x for x in regs]
+    assert orq.descritivo_11_celulas(trocados, cfg)["G-PESA"] == d11["G-PESA"]
+    assert orq.g_pesa(trocados, cfg["bootstrap"], cfg["g_pesa"])["persistencia"]["media"] != res["G-PESA"]["persistencia"]["media"]
     pil = orq.analisar_piloto([x for x in regs if x["braco"] != "A11"], {**cfg, "poder": {**orq.PODER, "replicas": 10,
                                                                                             "reamostragens_internas": 20, "k_max": 4}})
     assert pil["n"]["k"] == 4 and pil["g_apr_m4"]["m4_con"] > 0
