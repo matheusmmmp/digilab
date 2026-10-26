@@ -3,8 +3,9 @@
 Coordenador: Gerente (Claude Code). Workers: D (etapas 0 e 1a), A (etapa 1b). Worktree e branch: `v2-modular-prototipo-<etapa>`.
 Status: **EM ANDAMENTO: a etapa 0 (#410), a 1b (#413) e a 1a (#414) na `main` em 2026-10-25; a calibração (#416) na `main` em
 2026-10-26, sem atingir o critério de fechamento em três rodadas (os valores da rodada 3 ficam como a melhor rodada disponível, não
-como calibração bem-sucedida); o piloto (plano, seção 6.2) autorizado pelo Matheus e despachado; a avaliação única não começa sem
-revisão dele depois do piloto.**
+como calibração bem-sucedida); o piloto (#418) na `main` em 2026-10-26, com o adendo 2; **a avaliação única decidida pelo Matheus em
+2026-10-26** (K = 10, g_apr do M4-con 1 919, 12 células como principal e 11 como descritiva, valores atuais sem ajuste, o G-MVP pode
+falhar e o G-ABLA-PERS inconclusivo se a premissa falhar; não declara o produto pronto), a despachar quando houver disco.**
 **A revisão da especificação pelo Matheus aconteceu em 2026-10-25** (`docs/TAREFA_V2_DIGIBRAIN_MODULAR_ESPEC.md`, seção 10): a direção
 aprovada, as PE "antes" decididas. **Começa depois do #407 entrar na `main`,** pela etapa 0 (os gabaritos e a chave desligada), com o
 `lembranca` autorizado para a v13 atrás da chave e com G2 antes; a v12 e o A preservados; nenhuma medição do A além da pontual de
