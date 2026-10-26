@@ -2358,6 +2358,8 @@ CONFIG_DIGIBRAIN_LIGADA = ConfigDigibrain(ligada=True)
 # magnitudes (os sinais da tabela da secao 4.5 ficam). Todo valor e um inteiro na escala S = 1024 (o v inteiro representa v/S), salvo as
 # constantes de tempo (em ticks), as distancias (em subunidades do mundo) e as contagens. O genoma futuro escreve este registro; o
 # aprendido nunca entra nele (EG-5).
+# A calibracao (2026-10-25, tres rodadas nas bases 63101 e 63202, so o M3): os valores abaixo sao os da rodada 3, a melhor, congelados
+# pelo adendo 1 do plano para o piloto; continuam PROPOSTOS (o Matheus decide). Cada valor mudado diz a rodada no comentario.
 #
 # As caracteristicas de contexto z (secao 2.1, ~20; a ordem e a das linhas de W0 e de H): o vies, as urgencias dos onze receptores do
 # prototipo (secao 6), o contexto do M-SENS, as conjuncoes, duas conjuncoes com a urgencia (a fome sem comida, para chamar e explorar;
@@ -2388,7 +2390,7 @@ class ConfigDigibrainInatos:
     tau_hab: int = 120                        # PROPOSTO, SEM FONTE: a habituacao por classe (M-SENS, PE-11)
     tau_v: int = 240                          # PROPOSTO, SEM FONTE: a valencia (M-AFETO)
     tau_e: int = 120                          # PROPOSTO, SEM FONTE: a excitacao (M-AFETO)
-    tau_c: int = 60                           # PROPOSTO, SEM FONTE: o compromisso C (M-ESTADO, PE-6)
+    tau_c: int = 30                           # PROPOSTO, SEM FONTE: o compromisso C (M-ESTADO, PE-6); calibracao, rodada 2: 60 -> 30
     tau_f_sobe: int = 60                      # PROPOSTO, SEM FONTE: a frustracao F sobe no fim sem a meta (M-ESTADO)
     tau_f_desce: int = 480                    # PROPOSTO, SEM FONTE: a frustracao F decai a cada decisao (M-ESTADO)
     # M-SENS
@@ -2411,12 +2413,14 @@ class ConfigDigibrainInatos:
     # M-IMPULSO: os pesos inatos (os sinais da tabela da secao 4.5; as magnitudes PROPOSTAS, SEM FONTE), uma linha por comportamento
     w0: tuple = (
         ("ocioso", _linha(vies=_S // 8, u_fome=-_S // 4, u_energia=-_S // 4, u_higiene=-_S // 4, u_tedio=-_S // 4)),
-        ("dormir", _linha(vies=-_S // 2, u_energia=2 * _S, noite=_S // 2, dormindo=_S // 2, u_fome=-_S // 2)),
-        ("comer", _linha(vies=-_S, u_fome=2 * _S)),
+        ("dormir", _linha(vies=-_S // 2, u_energia=3 * _S, noite=_S // 2, dormindo=_S // 2,
+                          u_fome=-_S)),                    # rodada 2: u_energia 2S -> 3S; rodada 3: u_fome -S/2 -> -S
+        ("comer", _linha(vies=-17 * _S // 16, u_fome=3 * _S)),   # rodada 3: vies -S -> -17S/16, u_fome 2S -> 3S
         ("brincar", _linha(vies=-_S // 4, bola_vista=_S, u_tedio=_S // 2, u_humor=_S // 2, u_fome=-_S // 2, u_energia=-_S // 2)),
         ("chamar_atencao", _linha(vies=-_S // 2, fome_sem_comida=2 * _S, u_higiene=_S, sem_cuidado=_S // 4, comida_vista=-_S,
                                   u_solidao=_S // 2, u_estresse=_S // 4)),
-        ("explorar", _linha(vies=_S // 8, u_tedio=_S, u_curiosidade=_S, F=_S // 2, fome_sem_comida=_S // 2, u_energia=-_S)),
+        ("explorar", _linha(vies=_S // 8, u_tedio=_S, u_curiosidade=_S, F=_S // 2, fome_sem_comida=_S // 2,
+                            u_energia=-2 * _S)),                                  # rodada 2: u_energia -S -> -2S
         ("emburrar", _linha(vies=-_S // 2, cuidado_humor=2 * _S)),
     )
     w0_prox: tuple = (("comer", _S // 2), ("brincar", _S // 4))       # PROPOSTO, SEM FONTE: aproximar-se do que esta perto
@@ -2428,13 +2432,13 @@ class ConfigDigibrainInatos:
     lambda_sono: int = _S // 4                # PROPOSTO: o reflexo do sono, a leitura da energia abaixo de S/4 (o 0,25 do sono_exaustao)
     # M-PLAST
     eta_d: int = _S // 4                      # PROPOSTO: o passo do P1, o passo_desfecho do ModeloMundo (S/4, PP-6)
-    eta_h: int = _S // 16                     # PROPOSTO, SEM FONTE: o passo do P2
+    eta_h: int = _S // 128                    # PROPOSTO, SEM FONTE: o passo do P2; calibracao, rodada 2: S/16 -> S/128
     h_max: int = _S // 2                      # PROPOSTO, SEM FONTE: o corte do habito, |H| <= H_max (PE-10: sem decaimento)
     c_g: int = _S                             # PROPOSTO, SEM FONTE: G = clamp(div_arred(c_G x valor_previsto, S_V), 0, G_max) x prox / S
     s_v: int = _S                             # PROPOSTO, SEM FONTE
     g_max_incentivo: int = _S                 # PROPOSTO, SEM FONTE
     # M-ESTADO
-    w_pers: int = _S // 2                     # PROPOSTO, SEM FONTE (PE-6): h = mul(w_pers, C)
+    w_pers: int = 2 * _S                      # PROPOSTO, SEM FONTE (PE-6): h = mul(w_pers, C); calibracao, rodada 2: S/2 -> 2S
     n_desiste: int = 3                        # PROPOSTO (PE-6, a regra do alcance): o raio da visao (96) pelo alcance (60), 2 decisoes, mais 1
     # M-MEM
     n_ep: int = 16                            # PROPOSTO, SEM FONTE (PE-16)

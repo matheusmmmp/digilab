@@ -50,7 +50,7 @@ import exportar_gabarito_lobos as gl  # noqa: E402
 import run_v2_calibracao_mundo as rc  # noqa: E402
 from bancada.regras_mundo import simular_vida_fisico  # noqa: E402
 from digilab.config import (CONFIG_DIGIBRAIN_INATOS, CONFIG_DIGIBRAIN_LIGADA, CONFIG_MUNDO_MVP, CONFIG_PADRAO,  # noqa: E402
-                            TICKS_POR_DIA, ConfigDigibrain)
+                            TICKS_POR_DIA, ConfigDigibrain, ConfigDigibrainInatos)
 from digilab.digibrain import DigiBrain  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
 from digilab.events import LogDeEventos  # noqa: E402
@@ -215,9 +215,20 @@ class Registro:
         return getattr(interna, nome)
 
 
+def _tuplas(v):
+    return tuple(_tuplas(x) for x in v) if isinstance(v, list) else v
+
+
+def inatos_do_meta(meta: dict) -> ConfigDigibrainInatos:
+    """os valores de partida de uma run, do meta.json dela (o JSON troca as tuplas por listas): para rejogar as vidas de uma rodada antiga
+    da calibracao com os valores dela"""
+    return ConfigDigibrainInatos(**{k: _tuplas(v) for k, v in meta["inatos"].items()})
+
+
 def fabricas(braco: str, dono: str, semente: int, dias: int, orcamento_por_dia: int, serie_e: tuple | None = None,
-             g_apr_con: int | None = None):
-    """(a fabrica do cerebro, a do motor) da vida: o motor e o mesmo em todo braco"""
+             g_apr_con: int | None = None, inatos: ConfigDigibrainInatos | None = None):
+    """(a fabrica do cerebro, a do motor) da vida: o motor e o mesmo em todo braco. `inatos` (so para rejogar uma rodada antiga): os
+    valores daquela rodada; None, os de hoje (CONFIG_DIGIBRAIN_INATOS)"""
     b = bancada(dias, orcamento_por_dia)
     espec = bv.EspecVida(dono, gl.BRACO_V11, semente)
     cc = b.cfg_corpo_de(espec)
@@ -232,7 +243,7 @@ def fabricas(braco: str, dono: str, semente: int, dias: int, orcamento_por_dia: 
         cd = config_do_braco(braco, g_apr_con)
 
         def fp(cfg=None):
-            return Registro(DigiBrain(cfg or CONFIG_PADRAO, cd, CM, serie_e_doadora=serie_e), CONFIG_DIGIBRAIN_INATOS.escala)
+            return Registro(DigiBrain(cfg or CONFIG_PADRAO, cd, CM, inatos=inatos, serie_e_doadora=serie_e), CONFIG_DIGIBRAIN_INATOS.escala)
     return fp, fm
 
 
