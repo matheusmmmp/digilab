@@ -5,7 +5,10 @@ Status: **EM ANDAMENTO: a etapa 0 (#410), a 1b (#413) e a 1a (#414) na `main` em
 2026-10-26, sem atingir o critério de fechamento em três rodadas (os valores da rodada 3 ficam como a melhor rodada disponível, não
 como calibração bem-sucedida); o piloto (#418) na `main` em 2026-10-26, com o adendo 2; **a avaliação única decidida pelo Matheus em
 2026-10-26** (K = 10, g_apr do M4-con 1 919, 12 células como principal e 11 como descritiva, valores atuais sem ajuste, o G-MVP pode
-falhar e o G-ABLA-PERS inconclusivo se a premissa falhar; não declara o produto pronto), a despachar quando houver disco.**
+falhar e o G-ABLA-PERS inconclusivo se a premissa falhar; não declara o produto pronto). A avaliação (#420) na `main` em 2026-10-26:
+o G-MVP falhou (0,485), a memória e o incentivo passaram, o hábito saiu ao contrário, a persistência inconclusiva por premissa.
+O diagnóstico (`docs/PROPOSTA_DIAGNOSTICO_DIGIBRAIN_MODULAR.md`) aprovado pelo Matheus em 2026-10-26, com replay no piloto; as vidas
+do piloto foram apagadas na limpeza do disco, e a regeração espera decisão.**
 **A revisão da especificação pelo Matheus aconteceu em 2026-10-25** (`docs/TAREFA_V2_DIGIBRAIN_MODULAR_ESPEC.md`, seção 10): a direção
 aprovada, as PE "antes" decididas. **Começa depois do #407 entrar na `main`,** pela etapa 0 (os gabaritos e a chave desligada), com o
 `lembranca` autorizado para a v13 atrás da chave e com G2 antes; a v12 e o A preservados; nenhuma medição do A além da pontual de
