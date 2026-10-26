@@ -604,6 +604,29 @@ def leitura(mecanismo_passa: bool, mvp: dict, elegivel: dict, abla: dict, pesa: 
     return "o G-MVP falha: com o oraculo passando, a aprendizagem nao chega la (D4), falha de implementacao ou de calibracao"
 
 
+CELULA_DUPLICADA = ("incoerente", "comedouro")    # com o sem_ensino, a vida e byte a byte a do atencioso no comedouro (adendo 2)
+CELULAS_11 = tuple(c for c in CELULAS if c != CELULA_DUPLICADA)
+
+
+def descritivo_11_celulas(registros: list[dict], cfg: dict) -> dict:
+    """a leitura com 11 celulas, sem a duplicata do comedouro (a decisao do Matheus no fim do adendo 2): os mesmos contrastes, premissas e
+    a fracao do G-MVP sobre as mesmas vidas, so sem a celula incoerente/comedouro. So descritiva: sem Holm, sem "passa", sem gate."""
+    boot = cfg["bootstrap"]
+    fc = por_unidade(registros, "M3", None, lambda r: None if r["com_cadeia"] is None else float(r["com_cadeia"]), CELULAS_11)
+    contrastes = {}
+    for nome, (a, b, med, celulas) in {**CONTRASTES_ABLA, **CONTRASTES_MOD}.items():
+        cs = tuple(c for c in celulas if c != CELULA_DUPLICADA)
+        contrastes[nome] = {"celulas": len(cs), **contraste(por_unidade(registros, a, b, med, cs), boot)}
+    pesa = {mod: {"braco": braco, **contraste(por_unidade(registros, braco, None, lambda x, mod=mod: x["influencia"][mod], CELULAS_11),
+                                               boot)}
+            for mod, braco in cfg["g_pesa"]["bracos"].items()}
+    m3 = [r for r in registros if r["braco"] == "M3" and (r["dono"], r["lugar"]) != CELULA_DUPLICADA]
+    return {"aviso": "descritivo, sem gate: a analise principal e a das 12 celulas (decisao do Matheus, 2026-10-26)",
+            "fora": list(CELULA_DUPLICADA), "celulas": len(CELULAS_11), "G-MVP": contraste(fc, boot), "contrastes": contrastes,
+            "G-PESA": pesa, "G-ELEGIVEL": {"frac_vidas": sum(1 for r in m3 if r["cadeia"]["elegiveis"] >= cfg["g_elegivel"]["racoes"])
+                                                         / len(m3), "vidas": len(m3)}}
+
+
 def analisar(registros: list[dict], cfg: dict, mecanismo_passa: bool = True) -> dict:
     """a avaliacao (secao 5): os gates, as premissas e as leituras; o A11, se veio, so descritivo"""
     boot, alfa = cfg["bootstrap"], cfg["holm"]["alfa"]
@@ -617,7 +640,7 @@ def analisar(registros: list[dict], cfg: dict, mecanismo_passa: bool = True) -> 
     mvp, el = g_mvp(registros, boot, cfg["g_mvp"]), g_elegivel(registros, cfg["g_elegivel"])
     out = {"G-MVP": mvp, "G-ELEGIVEL": el, "G-ABLA": abla, "G-PESA": pesa, "G-MOD": mod, "holm_alfa": alfa,
            "leitura": leitura(mecanismo_passa, mvp, el, abla, pesa), "D-2": leitura_d2(registros, boot), "D-1": leitura_d1(registros, boot),
-           "descritivos": descritivos(registros)}
+           "descritivos": descritivos(registros), "descritivo_11_celulas": descritivo_11_celulas(registros, cfg)}
     if any(r["braco"] == "A11" for r in registros):
         out["comparacao_com_o_a"] = comparacao_com_o_a(registros, boot)
     return out
