@@ -384,3 +384,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-26 — DIGIBRAIN-MODULAR-AVALIACAO (worker D, Claude Code, Opus 5.5, worktree `v2-modular-avaliacao`): a avaliação única, o G-MVP falha](registro/2026-10.md)
 - [2026-10-26 — DIGIBRAIN-MODULAR, a avaliação na `main`, o diagnóstico aprovado e as vidas apagadas na limpeza (Gerente, worktree `v2-merge-r18`)](registro/2026-10.md)
 - [2026-10-26 — DIGIBRAIN-MODULAR-DIAGNOSTICO (worker D, Claude Code, Opus 5.5, worktree `v2-modular-diagnostico`): o diagnóstico com replay no piloto](registro/2026-10.md)
+- [2026-10-26 — DIGIBRAIN-MODULAR, o diagnóstico na `main` e o adendo 3 proposto (Gerente, worktree `v2-merge-r18`)](registro/2026-10.md)
+- [2026-10-26 — DIGIBRAIN-MODULAR, a revisão 2 do adendo 3 (Gerente, worktree `v2-merge-r18`)](registro/2026-10.md)
+- [2026-10-26 — DIGIBRAIN-MODULAR, a revisão 3 do adendo 3: sem exclusão do denominador (Gerente, worktree `v2-merge-r18`)](registro/2026-10.md)
+- [2026-10-26 — DIGIBRAIN-MODULAR, o adendo 3 aprovado (Gerente, worktree `v2-merge-r18`)](registro/2026-10.md)
