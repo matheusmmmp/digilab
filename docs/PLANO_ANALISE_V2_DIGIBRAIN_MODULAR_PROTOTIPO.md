@@ -700,9 +700,9 @@ seção 6.1 permite, e os sinais da tabela 4.5 da espec ficam; nenhuma equação
   (G-PAR, G-CUSTO, E2E-COMIDA na web) é outro.
 - A avaliação é despachada pelo Gerente só depois de haver disco para as vidas (o D: estava com 1 GB livre em 2026-10-26).
 
-## Adendo 3: o conserto depois do diagnóstico (2026-10-26, Gerente; PROPOSTO, revisão 2, para a revisão do Matheus)
+## Adendo 3: o conserto depois do diagnóstico (2026-10-26, Gerente; PROPOSTO, revisão 3, para a revisão do Matheus)
 
-**Status: PROPOSTO, revisão 2. Nada deste adendo está decidido, implementado ou executado.** Ele segue o pedido do Matheus de
+**Status: PROPOSTO, revisão 3. Nada deste adendo está decidido, implementado ou executado.** Ele segue o pedido do Matheus de
 2026-10-26, depois do merge do diagnóstico (#422): preparar o adendo 3 para revisão, sem implementar mudança, sem rodar vida nem
 simulação nova antes da aprovação dele, preservando o resultado do #420 e sem reutilizar a faixa 64xxx. As fontes são a proposta aprovada
 (`docs/PROPOSTA_DIAGNOSTICO_DIGIBRAIN_MODULAR.md`), o resultado do diagnóstico (`docs/RESULTADO_V2_DIGIBRAIN_MODULAR_DIAGNOSTICO.md`),
@@ -714,6 +714,9 @@ citada linha a linha. Toda conta de alcance abaixo sai das constantes do motor, 
 - **DX-2:** a medida por episódio é a primária recomendada pelo Matheus, com a por ração como secundária obrigatória. O episódio foi
   redefinido: um por fome, sem episódio novo a cada janela vencida, sem sobreposição, e uma refeição fecha no máximo um episódio. Os
   limiares ficam explícitos, com a justificativa para a nova unidade (A3.3);
+- **revisão 3 (2026-10-26), pedida pelo Matheus:** as saídas do denominador saíram. "Saciado por outra comida" é falha e fica no
+  denominador. A oferta que apodrece ou some pela idade é condição normal do mundo e não exclui nada. No cenário da avaliação não há
+  causa externa ao pet que invalide a oferta, nem outra comida, e o T-CENARIO-1 confirma (A3.3, A3.7 e A3.8);
 - **W(d):** a fórmula com o `max(0, …)`, a convenção da decisão da posta, o T-ALCANCE-1 para validá-la e a aplicação igual a todos os
   braços e lugares (A3.2);
 - **DX-4:** o crédito da refeição chega à busca pelo cheiro pela opção composta, com testes para a busca que come e a que não come (A3.4);
@@ -843,7 +846,8 @@ obrigatória; o #420 sem alteração. A decisão final vem com a aprovação do 
 | fecha se | **esta** ração é comida em t₀ ≤ t ≤ t₀ + 120 e a falta da fome cai | uma ração do dono é comida na janela W(d₀) e a falta da fome cai |
 | a vida com a cadeia | a taxa de fechamento ≥ 0,5 | a taxa de fechamento dos episódios ≥ 0,5 |
 | o gate | o limite inferior do IC95 da fração de vidas do M3 com a cadeia (a média das células por unidade) ≥ 0,8 | o mesmo |
-| a premissa | G-ELEGIVEL: ≥ 80 % das vidas do M3 com 3 rações elegíveis ou mais | G-ELEGIVEL-EP: ≥ 80 % das vidas do M3 com 3 episódios contados ou mais |
+| o denominador | todas as rações elegíveis | **todos os episódios**, sem exclusão: todo episódio que não fecha é falha (A3.3, "os desfechos") |
+| a premissa | G-ELEGIVEL: ≥ 80 % das vidas do M3 com 3 rações elegíveis ou mais | G-ELEGIVEL-EP: ≥ 80 % das vidas do M3 com 3 episódios ou mais |
 
 **O episódio de fome, redefinido (PROPOSTO, em `digilab/metrics.py`).** Em cada decisão k, duas condições, lidas do estado do motor:
 - **F(k), a fome:** a fome (o estado, 0 a 1, o mesmo `_escala01("fome")` de hoje) abaixo de 0,5;
@@ -855,14 +859,35 @@ obrigatória; o #420 sem alteração. A decisão final vem com a aprovação do 
 - **Início:** a primeira decisão k_i de uma fome contínua em que O(k_i) vale. Isso cobre os dois casos: a fome começa com ração no chão,
   ou o dono põe a primeira ração durante uma fome que estava sem oferta. Guarda d₀ = a distância do pet à ração mais próxima em k_i.
 - **Encerramento, o primeiro que acontecer:**
-  - **"fechou":** numa decisão k em k_i ≤ k ≤ k_i + W(d₀), o pet come uma ração do dono e a falta da fome cai na decisão do consumo (a
-    condição de hoje). É o sucesso;
-  - **"janela vencida":** a decisão k_i + W(d₀) passa sem o "fechou". É a falha;
-  - **"saciado por outra comida":** a fome contínua acaba (F deixa de valer) dentro da janela sem consumo de ração do dono (o pet comeu
-    uma fruta, por exemplo). O episódio sai do denominador e é contado à parte, porque a fome foi resolvida por comida, mas não pela
-    ração; nem sucesso nem falha da cadeia da ração;
-  - **"oferta acabou":** toda ração do dono some do chão dentro da janela sem ser comida pelo pet (apodreceu ou foi comida por outro
-    pet, com dois pets). Sai do denominador e é contado à parte: a falta foi da oferta, não do pet.
+  - **"fechou":** numa decisão k em k_i ≤ k ≤ k_i + W(d₀), o pet come uma ração do dono (madura ou podre, como na medida de hoje) e a
+    falta da fome cai na decisão do consumo (a condição de hoje). É o **sucesso**;
+  - **"não fechou":** qualquer outro fim. É **falha da cadeia da ração** e fica no denominador. O motivo vai ao registro do episódio, só
+    como leitura descritiva, e nunca o tira da conta:
+    - **"janela vencida":** a decisão k_i + W(d₀) passa sem o "fechou";
+    - **"saciado por outra comida":** a fome contínua acaba (F deixa de valer) dentro da janela sem consumo de ração do dono. O episódio
+      acaba ali, como falha;
+    - **a oferta muda dentro da janela** (a ração apodrece ou some pela idade): não encerra o episódio. A janela segue até o "fechou"
+      ou até vencer, e a ração podre ainda pode fechar.
+
+**Os desfechos, sem exclusão do denominador (a regra pedida pelo Matheus em 2026-10-26):**
+- **Comer outra comida no lugar da ração não facilita o G-MVP:** "saciado por outra comida" é falha e conta no denominador.
+- **Nenhum episódio sai do denominador por perda da oferta.** Uma exclusão só seria possível com a oferta invalidada por uma causa
+  **externa ao pet**, definida antes da avaliação. No cenário da avaliação essa causa não existe, então **não há exclusão nenhuma**:
+  - **o cenário** (o orquestrador, `run_v2_digibrain_prototipo.py:1-5`): o layout do produto **sem árvores, só a ração do dono**, o
+    **pet sozinho**, os quatro donos só com o cuidado; o `alimentar` do dono vira a ração no chão (`DonoComLugar`, `mundo.py:1942`);
+  - **a ração sai do chão de dois modos só:** o pet a come (é a cadeia: sucesso ou falha pela regra acima), ou ela some pela idade,
+    depois de 1 440 min madura e 720 min podre (`mundo.py:826-834` e `850-854`; `config.py:1776-1777`). A idade é **uma condição normal
+    do mundo**, não uma causa externa: conta como falha se a janela acaba sem o "fechou";
+  - **não há** outro pet que coma a ração, nem gesto do dono que a tire do chão;
+  - **outra comida é impossível no cenário:** sem árvores não cai fruta, e os donos não oferecem fruta (o `oferecer_fruta` é só do
+    `MotorFrutas`, fora desta composição; `events.py:50-54`). No replay do piloto, as únicas comidas consumidas foram a ração e a ração
+    podre (`diagnostico/replay_piloto.json`, `comeu_por_escolha`);
+  - **a fome só sobe comendo:** a digestão do cenário é a taxa C, tudo no mesmo tick (DECIDIDO, CD-3; `corpo.py:191`), a digestão lenta
+    está desligada, e com o mundo o comer só dá fome com comida (MF-2). Então "saciado por outra comida" não pode acontecer aqui.
+- **Os testes confirmam o cenário** (T-CENARIO-1 e T-EPISODIO-4, A3.7): se algum desses casos ocorrer numa vida de teste do cenário, a
+  implementação para e volta ao Matheus (A3.8). A regra de falha vale de todo modo; nenhuma exclusão fica aberta para mudar o gate.
+- **Se um cenário futuro tiver frutas, outro pet ou um gesto que tire a ração,** a regra deste adendo continua: comer outra comida é
+  falha. Uma exclusão por causa externa precisaria de um adendo novo, antes da avaliação desse cenário.
 
 **Sem episódios repetidos nem sobrepostos:**
 - **Depois de "janela vencida",** nenhum episódio novo abre enquanto a mesma fome contínua dura, mesmo que a oferta continue e mesmo que
@@ -885,10 +910,12 @@ obrigatória; o #420 sem alteração. A decisão final vem com a aprovação do 
   agora conta oportunidades independentes, não rações repetidas;
 - **o limiar do gate, 0,8 no limite inferior do IC95:** é sobre a fração de **vidas**, e a unidade de vida não muda; o bootstrap é o
   mesmo (10 000 reamostragens, semente 4242, a média das células por unidade);
-- **o mínimo de 3 episódios contados por vida e os 80 % da premissa:** os mesmos da G-ELEGIVEL. Com um episódio por fome contínua, as
-  vidas terão menos episódios que rações elegíveis; o mínimo de 3 continua sendo o menor número com que uma taxa por vida (0, 1/3, 2/3,
-  1) separa "a maioria" de "a minoria". Se menos de 80 % das vidas do M3 tiverem 3 episódios contados, o G-MVP (b) é **inconclusivo por
-  premissa**, como hoje. Quantos episódios as vidas terão não foi calculado (seria simulação nova); o piloto da 65xxx mostra, e o
+- **o denominador, todos os episódios:** a taxa por vida é fechados / episódios, com todo episódio que não fecha contado como falha. Na
+  unidade nova, isso é o que a ração elegível era na medida (a): toda oportunidade conta;
+- **o mínimo de 3 episódios por vida e os 80 % da premissa:** os mesmos da G-ELEGIVEL. Com um episódio por fome contínua, as vidas terão
+  menos episódios que rações elegíveis; o mínimo de 3 continua sendo o menor número com que uma taxa por vida (0, 1/3, 2/3, 1) separa
+  "a maioria" de "a minoria". Se menos de 80 % das vidas do M3 tiverem 3 episódios, o G-MVP (b) é **inconclusivo por premissa**, como
+  hoje. Quantos episódios as vidas terão não foi calculado (seria simulação nova); o piloto da 65xxx mostra, e o
   adendo 4 traz.
 
 **A validade de cada uma.**
@@ -910,8 +937,8 @@ obrigatória; o #420 sem alteração. A decisão final vem com a aprovação do 
     são os da PPM-4; o #420 não muda; (a) sai sempre ao lado;
   - **contra, perde a ração específica:** comer outra ração do dono conta. A ligação com o gesto do jogador fica para o gate do produto,
     que já a testa no jogo (o E2E-COMIDA, seção 5.6);
-  - **contra, as saídas do denominador:** "saciado por outra comida" e "oferta acabou" podem esconder falhas se forem muitas. Por isso
-    saem contadas por braço e célula, e a fração delas vai ao relato ao lado da taxa.
+  - **sem saída do denominador:** todo episódio conta, e todo fim que não é o "fechou" é falha (acima). Os motivos das falhas saem
+    contados por braço e célula, só como leitura.
 
 **O custo de errar:**
 - **(b) primária e ela estar errada:** um gate que passa por uma medida mais branda; mitigado porque (a) sai sempre ao lado e porque o
@@ -919,7 +946,8 @@ obrigatória; o #420 sem alteração. A decisão final vem com a aprovação do 
 - **(a) primária:** a reavaliação gasta a faixa 66xxx num gate que quase não pode passar, e a decisão sobre o produto fica sem informação.
 
 **As leituras descritivas, sem gate:** a medida por ração com a janela W(d) (para separar o efeito da janela do efeito da unidade); o
-fechamento estratificado por d₀; as saídas do denominador; as refeições fora de episódio.
+fechamento estratificado por d₀; os motivos das falhas (janela vencida, saciado por outra comida, a ração apodrecida ou sumida na
+janela); as refeições fora de episódio.
 
 ### A3.4 DX-3 e DX-4: o cheiro, em duas subchaves separadas
 
@@ -1040,7 +1068,8 @@ Todos com as sementes dos testes (101…505) ou sequências sintéticas; nenhum 
 | **T-EPISODIO-1** | o episódio em sequências sintéticas: abre na primeira decisão de uma fome contínua com oferta; fecha com a primeira refeição de ração na janela; três rações postas e uma comida dão um episódio fechado (a medida (a) dá 1 de 3) |
 | **T-EPISODIO-2** | sem repetição: com a mesma fome contínua e a oferta continuando (e com o dono pondo mais ração), a janela vencida não abre episódio novo; depois de "fechou" com a fome continuando, também não; um episódio novo só abre depois de F deixar de valer em ao menos uma decisão; nunca há dois episódios abertos |
 | **T-EPISODIO-3** | a refeição conta uma vez: duas refeições na mesma janela fecham um episódio só; uma refeição fora de episódio não entra na taxa e sai contada à parte |
-| **T-EPISODIO-4** | as saídas do denominador: a fome que acaba por fruta dentro da janela dá "saciado por outra comida"; a ração que some sem ser comida dá "oferta acabou"; as duas ficam fora da taxa e contadas |
+| **T-EPISODIO-4** | sem exclusão: em sequências sintéticas, a fome que acaba por outra comida dentro da janela encerra o episódio como falha e conta no denominador; a ração que apodrece ou some pela idade dentro da janela não encerra o episódio, e a janela vencida conta como falha no denominador; a ração podre comida na janela com a falta caindo fecha; o denominador é sempre o número de episódios |
+| **T-CENARIO-1** | o cenário da avaliação, nas vidas de teste do orquestrador (as sementes dos testes, todos os braços e células): (i) toda comida consumida é ração do dono, e nenhuma fruta existe no mundo; (ii) a fome nunca sobe numa decisão sem consumo; (iii) toda ração sai do chão só por consumo do pet ou pela regra da idade; (iv) há um pet só. Se qualquer item falhar, para e volta ao Matheus |
 | **T-EPISODIO-5** | a W(d) sai das constantes do motor; uma constante diferente falha alto |
 | **T-CHEIRO-1** | a DX-3: a ativação do `comer/cheiro` é a de hoje mais w, só com a subchave |
 | **T-PERS-CHEIRO-1** | a DX-4: a intenção abre no `comer/cheiro`; acaba em "meta" ao comer, em "achou" ao ver comida, em "sumiu" sem cheiro e sem comida, em "desistiu" depois de N_desiste_cheiro decisões |
@@ -1057,6 +1086,8 @@ Todos com as sementes dos testes (101…505) ou sequências sintéticas; nenhum 
   - **se a DX-4, inclusive a opção composta, precisar de mudança fora do pacote `digilab/digibrain/`** (o orquestrador e as medidas à
     parte), **ou de ler a distância ou a direção do cheiro, para e volta ao Matheus antes de implementar;**
   - se o T-PERS-CHEIRO-2 ou o 3 não passarem com o desenho de A3.4, para e volta ao Matheus;
+  - se o T-CENARIO-1 mostrar outra comida, fome subindo sem consumo, ração saindo do chão por outra via ou outro pet, para e volta ao
+    Matheus. Nenhuma exclusão do denominador é criada para isso;
   - se o T-ALCANCE-1 discordar da convenção de A3.2, para e volta ao Matheus antes de fixar a W(d);
   - se o T-HABITO-1 discordar da tabela de A3.5, a tabela muda pelo teste e vai ao registro antes de qualquer vida;
   - se o T-CADEIA-1 falhar com uma subchave ligada, ela volta ao desenho.
@@ -1064,7 +1095,7 @@ Todos com as sementes dos testes (101…505) ou sequências sintéticas; nenhum 
   seção 6.1; no máximo três rodadas; o critério de fechamento da seção 6.1, com a medida primária decidida em A3.3 no lugar da taxa de
   hoje; se não fechar, fica a melhor rodada, registrada como não fechada.
 - **No piloto (65303, 65404 e 65505):** os 12 braços (os 9 de hoje com as subchaves ligadas, mais os três de A3.4), K = 2, sem leitura de
-  gate; o adendo 4 traz o efeito, as premissas (inclusive quantos episódios contados as vidas têm), as saídas do denominador, o g_apr do
+  gate; o adendo 4 traz o efeito, as premissas (inclusive quantos episódios as vidas têm), os motivos das falhas, o g_apr do
   M4-con, o K e o custo, e vai ao Matheus antes da reavaliação.
 - **Na reavaliação (66101 a 66505):** roda uma vez, com as regras deste adendo e do adendo 4. Se o G-MVP primário falhar de novo, o
   resultado é registrado e o protótipo da etapa 1 para aí; o próximo passo vai ao Matheus, sem rodada de conserto automática.
@@ -1079,8 +1110,8 @@ Todos com as sementes dos testes (101…505) ou sequências sintéticas; nenhum 
 
 ### A3.10 Para o Matheus decidir, na revisão 2
 
-1. **A definição do episódio** (A3.3): uma por fome contínua, com os quatro encerramentos e as duas saídas do denominador ("saciado por
-   outra comida" e "oferta acabou").
+1. **A definição do episódio** (A3.3): uma por fome contínua; o sucesso é o "fechou"; todo outro fim é falha e fica no denominador,
+   sem exclusão; a oferta que apodrece ou some pela idade não encerra o episódio.
 2. **A medida primária:** (b) por episódio, com (a) por ração como secundária obrigatória, como o Matheus recomendou.
 3. **A convenção da janela e a W(d)** (A3.2): a decisão da posta conta e anda; W(d₀) = 8 + n_min(d₀) depois dela, igual em todo braço
    e lugar.
