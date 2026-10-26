@@ -699,3 +699,290 @@ seção 6.1 permite, e os sinais da tabela 4.5 da espec ficam; nenhuma equação
 - **Nada disto declara o produto pronto** (seção 5.6): o G-MVP é necessário, não suficiente, e o gate de compatibilidade do produto
   (G-PAR, G-CUSTO, E2E-COMIDA na web) é outro.
 - A avaliação é despachada pelo Gerente só depois de haver disco para as vidas (o D: estava com 1 GB livre em 2026-10-26).
+
+## Adendo 3: o conserto depois do diagnóstico (2026-10-26, Gerente; PROPOSTO, para a revisão do Matheus)
+
+**Status: PROPOSTO. Nada deste adendo está decidido, implementado ou executado.** Ele segue o pedido do Matheus de 2026-10-26, depois do
+merge do diagnóstico (#422): preparar o adendo 3 para revisão, sem implementar mudança, sem rodar vida nem simulação nova antes da
+aprovação dele, preservando o resultado do #420 e sem reutilizar a faixa 64xxx. As fontes são a proposta aprovada
+(`docs/PROPOSTA_DIAGNOSTICO_DIGIBRAIN_MODULAR.md`), o resultado do diagnóstico (`docs/RESULTADO_V2_DIGIBRAIN_MODULAR_DIAGNOSTICO.md`),
+os artefatos `artifacts_v2_digibrain_prototipo/avaliacao/` e `artifacts_v2_digibrain_prototipo/diagnostico/`, e a leitura do código
+citada linha a linha. Toda conta de alcance abaixo sai das constantes do motor, não de vidas.
+
+### A3.0 O que não muda
+
+- **O resultado do #420 fica como está:** o G-MVP falhou (0,485), o G-ABLA-MEM e o G-ABLA-P1 passaram, o G-ABLA-PERS ficou inconclusivo
+  por premissa, o G-ABLA-P2 saiu ao contrário, nenhum G-MOD passou. Nenhum artefato da `avaliacao/` é refeito, e nenhuma medida nova é
+  aplicada a ele.
+- **A faixa 64101…64505 está usada e não volta.** Nada deste adendo lê ou rejoga as vidas dela.
+- **O motor, o corpo, o mundo, o `engine.py`, o A e a v12 não mudam.** As mudanças de mecanismo (DX-3 e DX-4) ficam no pacote
+  `digilab/digibrain/`, atrás de subchaves desligadas, com o G2 antes.
+- **O G-ABLA-P2 e o índice "ganhou, fica" de hoje continuam como estão,** inclusive na reavaliação.
+- **A DX-6 (o crédito pela última consequência) e a DX-7 (o limiar do sono, `lambda_sono`) não entram nesta etapa.**
+
+### A3.1 DX-1: a correção da medida `visitas_vazias`
+
+- **O defeito:** a medida conta como vazia toda visita cuja própria decisão não come
+  (`experiments/run_v2_digibrain_prototipo.py:372`). A visita é a decisão de explorar até o lugar lembrado; o comer, quando há, vem numa
+  decisão seguinte. Por isso as 32,2 visitas por vida do M3 da avaliação saíram todas vazias (`diagnostico/avaliacao.json`, 1.6).
+- **A definição corrigida (PROPOSTA):** uma visita é uma opção que começa com a unidade `explorar/ponto` e termina com `chegou`. Ela
+  "achou" se a própria decisão da chegada ou a decisão seguinte consome uma comida; senão, é vazia.
+- **O que muda:** só a medida, em `digilab/metrics.py` (as métricas existem uma vez só), chamada pelo orquestrador. A codificação do
+  episódio na memória (`adapt.py`, o ramo `nao_havia`) é comportamento e não muda.
+- **O resultado registrado fica intacto:** o `medidas.json` da avaliação continua com a medida antiga; o RESULTADO do #420 ganha só uma
+  nota apontando para este adendo. A medida corrigida aparece só nas runs novas (65xxx e 66xxx), sempre ao lado da antiga, rotulada
+  `visitas_vazias_v1` (a de hoje) e `visitas_vazias` (a corrigida).
+
+### A3.2 A janela da cadeia e o alcance pela regra do motor (pré-requisito da DX-2, da DX-3 e da DX-4)
+
+**As constantes** (`digilab/config.py`, `Config` e `ConfigMundo`):
+
+| o quê | valor | linha |
+|---|---|---|
+| o intervalo entre decisões | 15 ticks | `config.py:55` |
+| a velocidade | 4 subunidades por tick, logo 60 por decisão (3,75 células) | `config.py:1744` |
+| a célula | 16 subunidades | `config.py:1742` |
+| o raio de pegar | 1 célula (16 subunidades) | `config.py:1746` |
+| o raio da visão | 6 células | `config.py:1748` |
+| o raio do cheiro | 24 células | `config.py:1752` |
+| o passo do alvo `cheiro` | 8 células na direção do cheiro | `config.py:1755` |
+| o "longe" | sorteado a 20 a 30 células do pet, na posta, cortado ao mapa | `config.py:1785-1786`; `mundo.py:1957-1970` |
+
+**A regra do movimento** (`mundo.py:1462-1507`): numa decisão com alvo, o pet anda até 60 subunidades na direção do alvo (`passo_ate`),
+e come se termina a até 16 subunidades da comida, na mesma decisão. Andar só acontece nas decisões de comer, explorar e brincar; dormir,
+ocioso, chamar a atenção e emburrar não andam.
+
+**A janela de hoje** (`metrics.py:2041`, `cadeia_comida_corpo`; o orquestrador, `run_v2_digibrain_prototipo.py:313-327`): a ração
+posta no tick t₀ fecha se é comida num tick t com t₀ ≤ t ≤ t₀ + 120. A posta cai no tick de uma decisão (no log, o `deixar_comida`
+vem antes do `avanco` do mesmo tick), então a janela tem **até 9 decisões com deslocamento: a do próprio tick da posta e as 8 seguintes**.
+Esta contagem é leitura de código; o diagnóstico (#422) contou 8. O T-ALCANCE-1 (A3.7) fixa a contagem antes de qualquer vida. Se ela
+for 8, as conclusões abaixo ficam mais fortes, não mais fracas.
+
+**O mínimo de decisões andando**, em linha reta e sem desvio: n_min(d) = ⌈(d − 16) / 60⌉, com d em subunidades.
+
+| distância na posta | subunidades | n_min | folga numa janela de 9 |
+|---|---|---|---|
+| 20 células (o mínimo do longe) | 320 | 6 | 3 |
+| 24 células (o raio do cheiro) | 384 | 7 | 2 |
+| 30 células (o máximo do longe) | 480 | 8 | 1 |
+
+**A conclusão: a janela é suficiente só no limite, e não na prática.**
+- **No limite, sim:** um pet acordado que anda reto para a ração em 6 a 8 das 9 decisões a alcança.
+- **Na prática, não:**
+  - **o sono:** no replay do piloto, dormir ocupa 0,525 da janela nas rações que não fecham e 0,510 nas que fecham (M3, todas as
+    células; `diagnostico/replay_piloto.json`). Com 4 decisões de sono na janela, sobram no máximo 5 andando: 18,75 células mais o raio
+    de pegar, menos que as 20 células do mínimo do longe. **Nenhuma ração longe fecha com 4 decisões de sono na janela, qualquer que
+    seja o cérebro;**
+  - **a percepção:** antes de a ração entrar na visão (6 células), o único alvo dirigido é o `cheiro`, que aponta para o cheiro mais forte
+    (pode ser de uma fruta), e além de 24 células a ração não tem cheiro. Um quarto das rações longe que não fecharam estava além de 24
+    células na posta (`replay_piloto.json`, M3, longe);
+  - **o que aconteceu:** as rações longe que fecharam estavam a 4,7 células na mediana, já perto do pet; as que não fecharam, a 20,5.
+- **A janela fixa mistura duas coisas:** a latência do cérebro (perceber, decidir, ir) e o tempo de viagem, que é física. No perto e no
+  comedouro a viagem é curta, e a janela mede o cérebro; no longe, a viagem come a janela inteira.
+
+**A regra de medição PROPOSTA, W(d):**
+- **W(d₀) = 8 + n_min(d₀) decisões,** com d₀ a distância do pet à ração na decisão da posta, lida do estado do motor (não do cérebro). As
+  8 decisões são a folga da PPM-4, sem mudança: o tempo para perceber, decidir e dormir. O n_min é o tempo mínimo de viagem pela regra do
+  motor, e não depende de vida nenhuma.
+- **O que ela faz:** no longe, a janela vai a 14 a 16 decisões; no perto (até 2 células) e no comedouro com o pet ao lado, a 8 ou 9. A
+  latência do cérebro tem a mesma folga em todo lugar.
+- **As alternativas, e por que não:**
+  - **contar só as decisões acordado:** desculparia o sono com fome e com comida, que é parte da cadeia que o gate testa; e o diagnóstico
+    mostra que o sono não separa as rações que fecham das que não fecham;
+  - **uma janela fixa maior para todos:** um número sem regra, que infla o fechamento no perto e no comedouro;
+  - **tirar as rações além do cheiro:** a memória (M-MEM) pode levar o pet a um lugar sem cheiro, e tirá-las esconderia isso. Em vez
+    disso, o fechamento sai **estratificado** pela distância na posta (até 24 células e além), como leitura descritiva.
+- **Onde ela vale:** em toda medida de cadeia nova deste adendo (A3.3). O G-MVP de hoje, com a janela fixa, continua calculado como está.
+
+### A3.3 DX-2: qual medida é o critério primário da próxima avaliação
+
+**As duas medidas.**
+
+| | **(a) o G-MVP de hoje, por ração** | **(b) o G-MVP por episódio de fome** |
+|---|---|---|
+| a unidade | cada ração posta pelo dono com o pet com fome (a fome abaixo de 0,5 na primeira decisão em ou depois da posta) | cada episódio: um trecho em que o pet está com fome e há ração do dono no chão |
+| fecha se | **esta** ração é comida em até 120 ticks e a falta da fome cai | **qualquer** ração do dono é comida em até W(d₀) decisões (A3.2) e a falta da fome cai |
+| a vida com a cadeia | a taxa de fechamento ≥ 0,5 | a taxa de fechamento dos episódios ≥ 0,5 |
+| o gate | o limite inferior do IC95 da fração de vidas do M3 com a cadeia (a média das células por unidade) ≥ 0,8 | o mesmo |
+| a premissa | G-ELEGIVEL: ≥ 80 % das vidas do M3 com 3 rações elegíveis ou mais | G-ELEGIVEL-EP: ≥ 80 % das vidas do M3 com 3 episódios ou mais |
+
+**A definição PROPOSTA do episódio** (para a medida (b), em `digilab/metrics.py`):
+- **Abre** na decisão k em que, ao mesmo tempo: a fome (o estado, 0 a 1, o mesmo `_escala01("fome")` de hoje) está abaixo de 0,5; há ao
+  menos uma ração posta pelo dono, madura e não comida, no chão; e nenhum episódio está aberto. Guarda d₀ = a distância do pet à ração
+  mais próxima, lida do estado do motor.
+- **Fecha com a cadeia** se, nas decisões k a k + W(d₀), o pet come uma ração do dono e a falta da fome cai na decisão do consumo (a mesma
+  condição de hoje). **Fecha sem a cadeia** se a janela acaba antes.
+- **Depois de fechar,** um episódio novo pode abrir na decisão seguinte, se as condições valem de novo. Um pet que continua com fome e
+  com ração no chão abre episódios seguidos; cada um é uma tentativa.
+- **Fica fora:** a fruta e a ração podre não fecham episódio (como hoje, a cadeia é a da ração do dono); fome sem ração no chão não abre
+  episódio (a falta é do dono, não do pet).
+- **Os números (PROPOSTOS, os da PPM-4, sem mudança):** o corte da fome 0,5, a taxa por vida 0,5, o limiar 0,8, o mínimo de 3 episódios
+  e os 80 % da premissa; o mesmo bootstrap (10 000 reamostragens, semente 4242).
+
+**A validade de cada uma.**
+- **(a) por ração:**
+  - **a favor:** foi pré-registrada antes de qualquer dado; compara direto com o #420; liga a cadeia à ração que o dono pôs, como o gesto
+    do produto;
+  - **contra, a oferta abundante:** cada ração conta. No comedouro do atencioso, o pet é o mais bem alimentado das 12 células (6,47
+    refeições por dia, privação 0,087) e tem 0 % das vidas com a cadeia, porque o dono põe 109,6 rações elegíveis por vida e o pet já
+    comeu outra (`diagnostico/avaliacao.json`, 1.1). No longe do atencioso e do incoerente, são 166 rações elegíveis por vida;
+  - **contra, a janela fixa:** ela não cabe a viagem do longe com o sono observado (A3.2);
+  - **o efeito no gate:** no #420, o comedouro do atencioso e o do incoerente ficaram em 0 % por um motivo que nenhum cérebro conserta (o
+    pet já saciado). Com essas 2 células em 0 %, a fração por unidade fica em 10/12 = 0,83 no máximo, mesmo com as outras 10 perfeitas,
+    e o limite inferior do IC95 ≥ 0,8 fica quase impossível. **Mantida como primária, a reavaliação tende a falhar por construção, sem
+    informar sobre o cérebro.**
+- **(b) por episódio:**
+  - **a favor:** mede o que o gate quer medir, a cadeia "com fome e com comida, o pet come e o corpo responde", sem contar rações
+    repetidas; a oferta abundante não vira falha; a viagem entra pela regra do motor;
+  - **contra, foi definida depois de ver os dados:** é um grau de liberdade a mais. A mitigação: a definição e o limiar ficam fixos antes
+    de qualquer vida da 65xxx; os motivos são dois defeitos de validade mostrados nos artefatos do #420, não o valor do gate; o limiar é o
+    mesmo; o #420 não muda;
+  - **contra, perde a ração específica:** comer outra ração conta. A ligação com o gesto do jogador fica para o gate do produto, que já a
+    testa no jogo (o E2E-COMIDA, seção 5.6);
+  - **contra, é endógena:** o número de episódios depende do pet (quem come pouco abre mais episódios fracassados). Isso puxa a medida
+    para baixo, não para cima, e o mínimo de 3 episódios por vida cobre o pet que quase nunca tem fome.
+
+**A recomendação do Gerente: (b), o G-MVP por episódio, como critério primário da reavaliação,** com:
+- **(a), o G-MVP de hoje, sem mudança, como secundária obrigatória,** para a comparação direta com o #420;
+- **a medida por ração com a janela W(d)** como leitura descritiva, para separar o efeito da janela do efeito da unidade;
+- o registro da troca como desvio, com os motivos acima, antes da primeira vida da 65xxx.
+
+**O custo de errar:**
+- **escolher (b) e ela estar errada:** um gate que passa por uma medida mais branda; mitigado porque (a) sai sempre ao lado e porque o
+  produto ainda exige o G-PAR, o G-CUSTO e o E2E-COMIDA;
+- **manter (a):** a reavaliação gasta a faixa 66xxx num gate que quase não pode passar, e a decisão sobre o produto fica sem informação.
+
+**Até a decisão do Matheus, (b) fica como secundária,** e o resto deste adendo vale com qualquer das duas como primária.
+
+### A3.4 DX-3 e DX-4: o cheiro, em duas subchaves separadas
+
+**DX-3, o peso inato do cheiro (subchave `cheiro_inato` da `ConfigDigibrain`, desligada por padrão):**
+- **O que muda:** a linha `("cheiro", w)` entra no `w0_tipo` do comer (`config.py:2429`), e o termo inato da unidade `comer/cheiro`
+  passa a somar w (`impulso.py:102`). Hoje a unidade `comer/cheiro` fica S/4 abaixo da `comer/racao` com a mesma fome, porque não tem o
+  peso do tipo nem a proximidade.
+- **O valor de partida (PROPOSTO, SEM FONTE):** w = S/4, o mesmo da ração (o cheiro de comida vale como comida, sem a proximidade). Na
+  calibração da 65xxx, ele pode ir a S/8 ou S/2, e o sinal fica.
+- **O que não muda:** o cérebro continua lendo só se há cheiro (`ha_cheiro`); a intensidade e a direção não entram (G-SEM-DIRECAO).
+
+**DX-4, a intenção no cheiro (subchave `intencao_cheiro`, desligada por padrão):**
+- **O que muda:** a unidade `comer/cheiro` passa a abrir intenção (`estado.py:24`, `TIPOS_INTENCAO`), com a meta "comer qualquer
+  comida". Com a persistência ligada, a intenção soma o termo h = w_pers × C (`estado.py:47-52`), como as outras.
+- **Como acaba, sem ler a distância nem a direção do cheiro.** A proposta dizia "sem a distância do cheiro cair", mas o cérebro não lê
+  essa distância, e lê-la quebraria o G-SEM-DIRECAO. Esta é uma correção do Gerente, a decidir:
+  - **"meta":** o pet come qualquer comida;
+  - **"achou" (novo, conta como meta):** uma comida entra nos `vistos`; a intenção acaba, e o `comer/comida` abre a sua;
+  - **"sumiu":** sem cheiro e sem comida vista;
+  - **"desistiu":** depois de N_desiste_cheiro decisões sem "meta" nem "achou".
+- **O N_desiste_cheiro (PROPOSTO), pela regra da PE-6** (a mesma que deu o `n_desiste` = 3, `config.py:2442`: o raio da visão pelo
+  alcance, mais uma decisão): do raio do cheiro ao raio da visão, ⌈(384 − 96) / 60⌉ + 1 = **6 decisões**. Na calibração, 5 a 8.
+- **O crédito:** a opção da intenção no cheiro junta as decisões da caminhada e entrega a soma ao P2 quando acaba, como as outras
+  intenções. Isso muda o crédito do `comer/cheiro` (hoje, decisão a decisão, sempre negativo), sem a DX-6.
+
+**Os braços, para separar as duas contribuições:**
+- **M3\*** = o M3 com as duas subchaves ligadas. **Todos os braços modulares da reavaliação** (M0, M1, M2, M3-sp, M4, M4-con, M4-emb)
+  ligam as duas, para que os contrastes de hoje continuem com o mesmo sentido.
+- **Três braços novos:** M3\*−inato (só a `intencao_cheiro`), M3\*−intencao (só o `cheiro_inato`) e M3-420 (as duas desligadas, o M3 do
+  #420 com os valores calibrados da 65xxx). Com o M3\*, são as quatro células de um 2 × 2.
+- **Os contrastes (família G-DX, secundária, Holm com 2):**
+  - **G-DX-INATO:** M3\* − M3\*−inato;
+  - **G-DX-INTENCAO:** M3\* − M3\*−intencao;
+  - na medida primária decidida em A3.3, nas células do longe (a leitura principal da família) e em todas as células;
+  - **a interação** (M3\* − M3\*−inato − M3\*−intencao + M3-420) e os quatro braços lado a lado ficam descritivos.
+- **As medidas de mecanismo, por braço e lugar (descritivas):** as decisões ao cheiro por episódio, a fração das rações que entram na visão
+  dentro da janela, a menor distância na janela, os fins das intenções no cheiro (meta, achou, sumiu, desistiu) e a fração de decisões de
+  sono na janela.
+- **Uma nota sobre a persistência:** com a DX-4, a intenção no cheiro só muda a escolha pelo termo de persistência. O M3-sp (sem
+  persistência) com a DX-4 ligada tem a intenção sem efeito na escolha, e o G-DX-INTENCAO e o G-ABLA-PERS passam a medir quase a mesma
+  coisa no longe. A premissa G-PESA da persistência continua valendo para o G-ABLA-PERS.
+- **O custo:** 12 braços em vez de 9, um terço a mais de vidas por unidade.
+
+### A3.5 DX-5: o índice do hábito pelas ações com recompensa possível (secundária exploratória)
+
+- **O resultado original do P2 fica:** o G-ABLA-P2 da reavaliação usa o índice de hoje, sem mudança, e o −0,011 do #420 não é revisto.
+- **A regra, pelas recompensas do modelo, não pelo resultado:** o r de uma decisão é o `sinal_corpo` entre o corpo na decisão e o corpo
+  logo depois do gancho `consequencia_corpo` (`afeto.py:97-107`; `adapt.py:265-266`). O gancho vem logo depois dos estímulos da própria
+  ação e antes do tempo e do dono (`motor_corpo.py:30-33` e `341-368`). Então o r só vê o estímulo imediato da ação
+  (`policy.py:168-198`, `efeito_da_acao_do_pet`, mais o andar, a comida e a bola do mundo).
+- **O "ganhou, fica" só tem sentido nas ações em que r > 0 e r ≤ 0 são ambos possíveis por essa regra.** Pela leitura do código:
+
+| ação | o estímulo imediato | r > 0 possível? | no índice da DX-5 |
+|---|---|---|---|
+| comer | a fome, com comida do mapa | sim | **entra** |
+| brincar | o humor (e a bola), menos energia | sim | **entra** |
+| explorar | o humor (+0,01), menos energia, e a comida achada | sim | **entra** |
+| aliviar (só com o banheiro) | a necessidade | sim | **entra**, quando existe |
+| dormir | só marca `dormindo`; a energia volta nos ticks, depois do gancho | não, r = 0 sempre | fica fora |
+| ocioso | nenhum | não, r = 0 sempre | fica fora |
+| chamar a atenção | nenhum; a resposta do dono vem depois | não, r = 0 sempre | fica fora |
+| emburrar | o humor (−0,01) | não, r ≤ 0 sempre | fica fora |
+
+- **A diferença para a proposta:** a proposta tirava o comer e o dormir ("sem consumo"). A regra acima tira as ações em que o r não pode
+  ser positivo e mantém o comer, que pode. O diagnóstico já mostrou que o "sem consumo" da proposta sai negativo nos três lugares; esta
+  regra não foi escolhida por isso, e o valor dela no piloto **não foi calculado** (seria simulação nova).
+- **Um teste fixa a classificação** (T-HABITO-1, A3.7): ele confere, no motor, que dormir, ocioso e chamar a atenção dão r = 0 e emburrar
+  r ≤ 0 em todo estado de um conjunto de teste, e que comer, brincar e explorar dão r > 0 em algum. Se o teste discordar da tabela, a
+  tabela muda pelo teste, antes de qualquer vida.
+- **Exploratória:** sem gate, sem Holm, sem sinal esperado pré-registrado; sai por ação, por lugar e no total, ao lado do índice de hoje.
+
+### A3.6 O que fica fora desta etapa e a questão aberta
+
+- **DX-6, o crédito pela última consequência:** não. O diagnóstico mostrou opções de uma decisão; a hipótese H-P2b não se sustentou como
+  escrita.
+- **DX-7, o limiar do sono:** não. O sono não separa as rações que fecham das que não fecham (0,510 contra 0,525).
+- **Questão aberta, registrada para revisão depois da reavaliação: o retorno zero do dormir.** Dormir dá r = 0 em toda decisão, porque
+  a energia volta nos ticks, depois do gancho de consequência, e o r não vê o tempo que passa. O mesmo vale para chamar a atenção (a
+  resposta do dono vem depois). Mexer nisso é mexer no momento do gancho, no motor ou no corpo; pelo critério de parada da proposta
+  (seção 5), volta ao Matheus. Nenhuma mudança agora.
+
+### A3.7 Os testes, antes de qualquer vida
+
+Todos com as sementes dos testes (101…505); nenhum usa as faixas 64xxx, 65xxx ou 66xxx.
+
+| teste | o que confere |
+|---|---|
+| **G2** | com as subchaves `cheiro_inato` e `intencao_cheiro` desligadas, as 196 vidas do gabarito do protótipo e as do MVP saem byte a byte; o gabarito é o de hoje, já commitado |
+| **G2-SEPARADO** | cada subchave ligada sozinha muda só as vidas dos braços que a ligam, e nada fora do pacote `digibrain` e do orquestrador lê a chave (o teste de hoje, estendido) |
+| **G1** | o replay refaz cada vida, com as subchaves ligadas |
+| **G-MECANISMO, G-SEM-DIRECAO, G-INT, G-RECEPTOR** | os de hoje passam, com as duas subchaves ligadas; o G-SEM-DIRECAO confere pela AST que a DX-4 não lê a distância nem a direção do cheiro |
+| **T-CADEIA-1** | o oráculo passa com as duas ligadas; se falhar com uma delas, ela volta ao desenho |
+| **T-ALCANCE-1** | uma vida de teste com uma ração a d células e um pet que anda reto para ela: o consumo sai na decisão n_min(d) contada da posta, e a janela de hoje tem o número de decisões de A3.2; se discordar, para e volta ao Matheus antes da W(d) |
+| **T-VISITA-1** | a DX-1 numa sequência sintética: visita com o comer na decisão seguinte conta como "achou"; visita sem comer, vazia; a `visitas_vazias_v1` dá o número de hoje |
+| **T-EPISODIO-1** | a DX-2 em sequências sintéticas: abre e fecha como em A3.3; três rações postas e uma comida dão um episódio fechado (a medida (a) dá 1 de 3); fome sem ração não abre |
+| **T-EPISODIO-2** | a W(d) sai das constantes do motor; uma constante diferente falha alto |
+| **T-CHEIRO-1** | a DX-3: a ativação do `comer/cheiro` é a de hoje mais w, só com a subchave |
+| **T-PERS-CHEIRO-1 e 2** | a DX-4: a intenção abre no `comer/cheiro`; acaba em "meta" ao comer, em "achou" ao ver comida, em "sumiu" sem cheiro e sem comida, em "desistiu" depois de N_desiste_cheiro decisões; o crédito junta as decisões da opção |
+| **T-HABITO-1** | a classificação da DX-5 (A3.5) pela regra do motor |
+| **o artefato do #420** | o sha256 do `avaliacao/medidas.json` e do `avaliacao/resultado.json` não muda em nenhum commit desta etapa |
+
+### A3.8 Os critérios de parada
+
+- **Na implementação:**
+  - qualquer quebra do G2 ou do G1 para tudo, e se conserta antes de seguir;
+  - se uma mudança exigir mexer no motor, no corpo, no mundo, no `engine.py` ou no A, para e volta ao Matheus;
+  - se a DX-4 precisar ler a distância ou a direção do cheiro, para e volta ao Matheus;
+  - se o T-ALCANCE-1 discordar da contagem de A3.2, para e volta ao Matheus antes de fixar a W(d);
+  - se o T-CADEIA-1 falhar com uma subchave ligada, ela volta ao desenho.
+- **Na calibração (65101 e 65202):** só no M3\*; só o peso do cheiro (S/8 a S/2), o N_desiste_cheiro (5 a 8) e os valores da lista da
+  seção 6.1; no máximo três rodadas; o critério de fechamento da seção 6.1, com a medida primária decidida em A3.3 no lugar da taxa de
+  hoje; se não fechar, fica a melhor rodada, registrada como não fechada.
+- **No piloto (65303, 65404 e 65505):** os 12 braços (os 9 de hoje com as subchaves ligadas, mais os três de A3.4), K = 2, sem leitura de
+  gate; o adendo 4 traz o efeito, as premissas, o g_apr do M4-con, o K e o custo, e vai ao Matheus antes da reavaliação.
+- **Na reavaliação (66101 a 66505):** roda uma vez, com as regras deste adendo e do adendo 4. Se o G-MVP primário falhar de novo, o
+  resultado é registrado e o protótipo da etapa 1 para aí; o próximo passo vai ao Matheus, sem rodada de conserto automática.
+
+### A3.9 As faixas (reservadas em `experiments/bancada/faixas.py` pelo #421; nenhuma vida delas rodou)
+
+| faixa | uso | bases |
+|---|---|---|
+| **65101…65505** | a calibração do conserto e o piloto | calibração 65101 e 65202 (K = 2); piloto 65303, 65404 e 65505 (K = 2) |
+| **66101…66505** | a reavaliação, uma vez | 66101, 66202, 66303, 66404 e 66505 (K do adendo 4) |
+| 64101…64505 | a avaliação do #420 | **usada; não volta** |
+
+### A3.10 Para o Matheus decidir
+
+1. **A medida primária da reavaliação** (A3.3): (b) por episódio, recomendada, ou (a) a de hoje. A outra sai como secundária.
+2. **A regra W(d)** da janela (A3.2): recomendada para toda medida de cadeia nova.
+3. **A correção da regra de fim da DX-4** (A3.4): sem a distância do cheiro, com "achou" e N_desiste_cheiro = 6.
+4. **Os três braços novos e o 2 × 2** (A3.4), com um terço a mais de vidas.
+5. **A regra da DX-5** (A3.5): as ações com r > 0 possível, no lugar do "sem consumo".
+6. **O adendo inteiro,** para que a implementação comece. Nada é implementado nem executado antes disso.
