@@ -1,0 +1,1154 @@
+{
+ "M0|aleatorio|comedouro|101": {
+  "decisoes": 288,
+  "estado": "297459164d3e9178310fc908d70f00718e9f21c50326057488f93cfdc5d12de2",
+  "log": "991fd07be9add190d483fc75e09dd0d6d7286178369e1ad85139ad53935d4afa",
+  "medidas": "33f24f037ad87c58238cd5ca9e8f404e13a7987d1b379b29408f8bbe97a789a1"
+ },
+ "M0|aleatorio|comedouro|202": {
+  "decisoes": 288,
+  "estado": "447d66a7d03e6ece82406e3e23892e5a8a19584e1d238a55e3884e86de369253",
+  "log": "72db9e0fca1f75f1b90b9e5e2f059e19b157904944d00c36c496634eb91de09a",
+  "medidas": "76bcefb7e67d651475da90e767c0356b0cbfbd09b386a22b4649e97d40273e44"
+ },
+ "M0|aleatorio|longe|101": {
+  "decisoes": 288,
+  "estado": "a3ebb32d415e592a6657e89f7f79553c9a0e7f4bd59ab0f3a7f1c3fc6346aae3",
+  "log": "6dc412c1227313302fa8c60b8f8a7f8b30de70b1c510991a6592a1b4cdbf1652",
+  "medidas": "39eb794dabd5089c6500d80df9e8888cb181a6b1510ff7e628774fc88d94084a"
+ },
+ "M0|aleatorio|longe|202": {
+  "decisoes": 288,
+  "estado": "be55862cb982ef4737f96cde627a654ed97cde12b064141f5b9acec031a4739d",
+  "log": "936a3a605694d09ccafd0b029ed8e1e5a2e7e2736a91c46a40ee701edb55315f",
+  "medidas": "4e7d09e48b2abc33ce452064f86fac111ac9164a72d505df31c93e6dbf4603e5"
+ },
+ "M0|aleatorio|perto|101": {
+  "decisoes": 288,
+  "estado": "e74d9bb4dfdc123d63cc554c2278db7b2c596d4d9a9c703fc1974484c00e67d4",
+  "log": "7b7e38de984553433c1c0d23fbbe014dfacaac0d805f0a23cbe79615d0a23f74",
+  "medidas": "860edb85b8829fc57fb9cf1e363c14a8dee759ead7b11b7b0dc794e33a9ecbde"
+ },
+ "M0|aleatorio|perto|202": {
+  "decisoes": 288,
+  "estado": "0ca0eca400ec897b3cb3d28504194b0b44f04d337c0da02827ee49cebc84ac29",
+  "log": "a47b6d35f0d879a6ca5fa9eec7446d13dedcb8b3fd8f80260d1f39929993c987",
+  "medidas": "5d3e59b66ec7011d938fbd6c8062f51ed380df5303ac694a56648b10a4e7a463"
+ },
+ "M0|atencioso|comedouro|101": {
+  "decisoes": 288,
+  "estado": "98c3c62d879dfca2c3941daa3022457fce3f54be2e388601b8661c49d5b56ec7",
+  "log": "dc837da079d14a0abeaa8da959cf413a376f06061a8ce5df9975bce813a8729a",
+  "medidas": "f697ee904231a776badcf2ee0b4bb9a2c5744a149bcc1b13e9eda808ed9c0368"
+ },
+ "M0|atencioso|comedouro|202": {
+  "decisoes": 288,
+  "estado": "0fb28d9c3c9ab4501117422a8444450d8f765b89d3551fba0f462d6ef84c6b50",
+  "log": "fb13725189a45b41c8e7d2aaa60e7feae21ffd071b15630c82d017b2ec2b7956",
+  "medidas": "8bbc4e8de580c9889b9798e38334b48efed16aaf9288cd16263e6e1fb94b54dd"
+ },
+ "M0|atencioso|longe|101": {
+  "decisoes": 288,
+  "estado": "6219a54213d449ffc7f31f48e20dc4c1584dac0807fa81226712327d9cfea968",
+  "log": "3212ae58b4b03d5ac69b3d62775526700147a7e7b3c9cd177f031c8b1450a62a",
+  "medidas": "3eaa9c21327a9a3168f8af030fd1a4be8bf7dc6c96d3dc47df047902841646f7"
+ },
+ "M0|atencioso|longe|202": {
+  "decisoes": 288,
+  "estado": "be55ede5aa62dfb955bca70a1dbb729e7cc002f809b0490a6c8b26dc99a8bad0",
+  "log": "d68c3c2e3025284e4c3901f83934bb466b4cfe32e9fe35bd430a792b2b4e024b",
+  "medidas": "8481c9aa9a5f57892a7de8033b60a835e44dc58b6ed26676f8a81dc96b5308af"
+ },
+ "M0|atencioso|perto|101": {
+  "decisoes": 288,
+  "estado": "1af3bb0fd54946d50aa78139839634594aa39dd989bf68982e70a3d9724f6a35",
+  "log": "1e13a40f7f7581e774dd3db8c60327d0f6e4cd91bbf0c034273606d3bcb55236",
+  "medidas": "1d8d0dca286b1eeba6809ff8b3760243c565b04e1e88a8da6dd050e865f1fb27"
+ },
+ "M0|atencioso|perto|202": {
+  "decisoes": 288,
+  "estado": "58a6352852dbecdd7ecb95f63109619764620120af36cbcbdbec88c06bf3ea71",
+  "log": "fd4feb97bd347e5f5fb07824e5fdae2a582b35d18b6c8b2a271b62c3b8a22dc1",
+  "medidas": "e811249884755f993635fba2ec38323716d84e625bcb74af0d67fb613b5d572c"
+ },
+ "M0|incoerente|comedouro|101": {
+  "decisoes": 288,
+  "estado": "98c3c62d879dfca2c3941daa3022457fce3f54be2e388601b8661c49d5b56ec7",
+  "log": "dc837da079d14a0abeaa8da959cf413a376f06061a8ce5df9975bce813a8729a",
+  "medidas": "f697ee904231a776badcf2ee0b4bb9a2c5744a149bcc1b13e9eda808ed9c0368"
+ },
+ "M0|incoerente|comedouro|202": {
+  "decisoes": 288,
+  "estado": "0fb28d9c3c9ab4501117422a8444450d8f765b89d3551fba0f462d6ef84c6b50",
+  "log": "fb13725189a45b41c8e7d2aaa60e7feae21ffd071b15630c82d017b2ec2b7956",
+  "medidas": "8bbc4e8de580c9889b9798e38334b48efed16aaf9288cd16263e6e1fb94b54dd"
+ },
+ "M0|incoerente|longe|101": {
+  "decisoes": 288,
+  "estado": "f7269753b6fac503c94c6eba4dccedd070a473c6d3a149886a4baac18cff4009",
+  "log": "374ce908aff2b7a8af29412ad8a5746bb770fe0d6cff7cb2a7c0f448e645a2f3",
+  "medidas": "63edc83b1b35c88d78ffc80650f2b36c05d1ede677b21f616eb27405a4e333e1"
+ },
+ "M0|incoerente|longe|202": {
+  "decisoes": 288,
+  "estado": "f1b1296c07a13671c39187eac37d3252be87c3c8799ce9e4f45e801cc5e90b7f",
+  "log": "38c95523b354dea75999a7a3c6465d36d011cf2cece4dca1ca9b5217dd7ae45c",
+  "medidas": "e8cbbf072389cc6bbb8199a7c155ca0ecf19d67f8078a1370f0ce312addb92eb"
+ },
+ "M0|incoerente|perto|101": {
+  "decisoes": 288,
+  "estado": "1bcf13f11ae791812832aca78b4721ebc1482416c729614dd131d1b97234aab6",
+  "log": "6d1ea3da68cc43f1cc8d30a61dcdbd49a26d07062f6e823cef547e22f2c870ce",
+  "medidas": "0e33fa97f91803ec2ac580b098f122a13fb29b55b4cb1199038d12817e5f23aa"
+ },
+ "M0|incoerente|perto|202": {
+  "decisoes": 288,
+  "estado": "6e30675fbb7857d643fa44fffafb5ca4da78bc7a4b06967bd8ad7785198e68d0",
+  "log": "4897463720d848e364babcf87cb694d8346cfe497114c900d9f900b85d8192b6",
+  "medidas": "ebc50df4ad1b925e5294fe065f5676a473aecd52d2cf5bd18f2799c07dfaa21c"
+ },
+ "M0|relapso|comedouro|101": {
+  "decisoes": 288,
+  "estado": "256c4a391b7fff860d3423109ab7ab114efa5c992c586500de2c0669415a3281",
+  "log": "d42eef4dd7c41e97d5e72b163ce761a08bb39bb3821b0cda81aafb81295db712",
+  "medidas": "ed28e7abbcfc73d3e135c941ca3118bd998459d71f6376e0cb9748e8368811f9"
+ },
+ "M0|relapso|comedouro|202": {
+  "decisoes": 288,
+  "estado": "8535196e502394ee6a8c1b7dde364d6259fd4addfd5abd3a9fea26be98499d07",
+  "log": "d4df6e0d678e23b3e5da46fffba0ec32d2c37d9931d3cb923e99750fa90161e7",
+  "medidas": "df29c515511da0b61179405868fa5cfaee647a2022444e61f3c14aff5214ddff"
+ },
+ "M0|relapso|longe|101": {
+  "decisoes": 288,
+  "estado": "243e0f4d20bb663e24594f25e1113c18c9818da006eaa1dfdb430ae0fb6ab92f",
+  "log": "46d379b0cc8fd311479d00b0b8c18888309aa769513b96250f9ae2db9d54b5a6",
+  "medidas": "9b525c7befeba3db3036dd6a1d37d522f477292fd97f641b473ed7f56c022ed8"
+ },
+ "M0|relapso|longe|202": {
+  "decisoes": 288,
+  "estado": "d2bf64147cb5180046e33b43bf28e5e9d74131c683433db668f0995f944b5c07",
+  "log": "30768295104c5d5bccfd417484c4ba270d5f27adb4fdc8a4c1876be07d832b34",
+  "medidas": "5f7e1bbd4571943f2274e6b9a9353d41ef045cc72952a52c7d422b50911efb64"
+ },
+ "M0|relapso|perto|101": {
+  "decisoes": 288,
+  "estado": "8fae17ef722e70d305966579468a9b315a2b835c0e1362e59c007f6a52ece820",
+  "log": "4837389d4cdf95994389338758a3ea09bf80d13e8ef8f12d462db1b16a61d3fd",
+  "medidas": "823d8ba6cc764f959e193a177d0ec96acec94617e7c2dc98d7bc5848ab09c46d"
+ },
+ "M0|relapso|perto|202": {
+  "decisoes": 288,
+  "estado": "b439125a954e57def15676cb70b3d4965ad5a2057e76a6c70945f152d87ec77d",
+  "log": "d5f00f3b9165e1bf7bb1f3a4afe8071b36add8c469ca2d3a874ee814e207ae70",
+  "medidas": "683f268036d0c9ac5c14c4a0346118d0f1e0537e62ccc05890e2c6b49fcdd553"
+ },
+ "M1|aleatorio|comedouro|101": {
+  "decisoes": 288,
+  "estado": "0d6aecbb8881ec9a82346ef85357e400d6dd85d3ffc61c253c66e81dc03a698c",
+  "log": "991fd07be9add190d483fc75e09dd0d6d7286178369e1ad85139ad53935d4afa",
+  "medidas": "2fe8ba3e73e9d355dedb8cf463c05b615f1f5d8e50a71ad1fb5f24a3537a8ee1"
+ },
+ "M1|aleatorio|comedouro|202": {
+  "decisoes": 288,
+  "estado": "19d0578e2ae76b2a26f7f585f95ac54ac8d708de140838260397fc6c92ee9a1e",
+  "log": "72db9e0fca1f75f1b90b9e5e2f059e19b157904944d00c36c496634eb91de09a",
+  "medidas": "d6b6d29757df40263b034c8989e470358487b401bc7b430698d60ad9db5baebe"
+ },
+ "M1|aleatorio|longe|101": {
+  "decisoes": 288,
+  "estado": "7da5ffc192cade1df5942a72d9630b7334df1601e75468b373e7c1f1aeb5214c",
+  "log": "a623b7b70c9f782e46b9b5153c14f4344a9fee09f514521047fc624fd55e1f1f",
+  "medidas": "9721a56dd745a1ef53dbd9480367381267609b79bf0a1a8569be570637566e49"
+ },
+ "M1|aleatorio|longe|202": {
+  "decisoes": 288,
+  "estado": "4a008fc32cfe4d7dd54536c66a0763c3abff501566f8a1912d70ed4730d8216f",
+  "log": "936a3a605694d09ccafd0b029ed8e1e5a2e7e2736a91c46a40ee701edb55315f",
+  "medidas": "19d6984b94b6e1fc085f522cd466094836e0696a626909c0335de7bc56e953d0"
+ },
+ "M1|aleatorio|perto|101": {
+  "decisoes": 288,
+  "estado": "ba803a384778671c42b1c83146700f95f1c172c3e8c160bcbbd210da73229d00",
+  "log": "085674cce5725c031e182fc520f34b319815b78bd48d1b8b60c0de0ff7d9af93",
+  "medidas": "993d8a9e3de19f6dcae1561838e0785aad47c11db569d1d0da965ea0278a0df0"
+ },
+ "M1|aleatorio|perto|202": {
+  "decisoes": 288,
+  "estado": "86cc90aba06970c1ae238218a672f3ffef3ffae1d3d4917d00f9f0432d246ea2",
+  "log": "4aa0a15f51814c464a279cb021b6e0d8ee274451402968161f7e04675f1e87c4",
+  "medidas": "7cf0cffef043f812bcdf93cb1a9b743e73158a11034b9a54a4bc6388610c3bfd"
+ },
+ "M1|atencioso|comedouro|101": {
+  "decisoes": 288,
+  "estado": "93f16cee7177b3d049c47b11cfb9b4dc25b314c86da95814442df3aefe5c7794",
+  "log": "05a584e6aa73dd6d7101a62e49ebfc1d9adb5ddc59c0b6c6ab94839336ba7568",
+  "medidas": "f397ccd29e4551539685af31426dc0ce2104995763d8e5c81f159e073029a761"
+ },
+ "M1|atencioso|comedouro|202": {
+  "decisoes": 288,
+  "estado": "67c7746b1b8b76e23d226c77e9d317163cf34bc27d01b671a0680f5555696da0",
+  "log": "54d483821cce517e9248d6be87764ca65960b0b5ff6eccc58e1fd8371e742d51",
+  "medidas": "398e8c28bc4234467a3fe80e0ed77ffd21ca28e392cf73d8184faead977343b3"
+ },
+ "M1|atencioso|longe|101": {
+  "decisoes": 288,
+  "estado": "bfedfef532dfae5a330a33f972f797331371326881374fdfd16e859ffb0e7edd",
+  "log": "dafc2413b36437c7871a0beafa2013c401780e1cd0ddf9d14c61f85079065e65",
+  "medidas": "5fa6e2b71c709e6b8464d1317b4819b1727db03a3d5785506a419725fe41ad85"
+ },
+ "M1|atencioso|longe|202": {
+  "decisoes": 288,
+  "estado": "63a6ed3b1314a1df7bc9367aefcdf838478732f25b916bc84abee35f3d7708c5",
+  "log": "5c9fe342b882c6669e62f114baaad818e6830f972d1b51bc4d8167eeca87d163",
+  "medidas": "1634965f8b8b5d07837c5889791bc8a06e632d00b859787abd57a5af9b4b3bf3"
+ },
+ "M1|atencioso|perto|101": {
+  "decisoes": 288,
+  "estado": "91f683f0b858bdc5a7c23f9938a80969632bb99dfe1dc86659311979c1ea7b14",
+  "log": "9b63c88a2e7b560c64639dce14ab9bd480a1bab5f62af9d8ea8f8d3475d48c60",
+  "medidas": "ce561242c6ef7793113d9a35ddc680ed599a999dfed72a6a35aa5772c513bf10"
+ },
+ "M1|atencioso|perto|202": {
+  "decisoes": 288,
+  "estado": "301fbbf8d277ccfe87fa26b80c54788f2b769410070ecee9b405bad02ad2974f",
+  "log": "c825943d3e6d23b7c35359b3744dcfc1f3d480e4544c973da32e26b1126f2d29",
+  "medidas": "24f0d2a78c3a27774a3bd18925653187f66ed3da86d074d23c8fdeb5f2e5cf0e"
+ },
+ "M1|incoerente|comedouro|101": {
+  "decisoes": 288,
+  "estado": "93f16cee7177b3d049c47b11cfb9b4dc25b314c86da95814442df3aefe5c7794",
+  "log": "05a584e6aa73dd6d7101a62e49ebfc1d9adb5ddc59c0b6c6ab94839336ba7568",
+  "medidas": "f397ccd29e4551539685af31426dc0ce2104995763d8e5c81f159e073029a761"
+ },
+ "M1|incoerente|comedouro|202": {
+  "decisoes": 288,
+  "estado": "67c7746b1b8b76e23d226c77e9d317163cf34bc27d01b671a0680f5555696da0",
+  "log": "54d483821cce517e9248d6be87764ca65960b0b5ff6eccc58e1fd8371e742d51",
+  "medidas": "398e8c28bc4234467a3fe80e0ed77ffd21ca28e392cf73d8184faead977343b3"
+ },
+ "M1|incoerente|longe|101": {
+  "decisoes": 288,
+  "estado": "c143eb4ea70bd36072f871963f8dfe19cec83350e06b49043892fd5a904db839",
+  "log": "bdc05405a8394fbefb18f7db7837a140ab0a4ab9816b9e391347db1cfb2d1cef",
+  "medidas": "e598cc55b2c1c58245ab76a807568fb5537f8ad5863c853ec3a08529f14f6c7b"
+ },
+ "M1|incoerente|longe|202": {
+  "decisoes": 288,
+  "estado": "82590b1b3e3af8f2e35c727042a84c11adea41353da8ccec9a48c7247df81e34",
+  "log": "38c95523b354dea75999a7a3c6465d36d011cf2cece4dca1ca9b5217dd7ae45c",
+  "medidas": "33019bd46b5162fe735f89164532e3ea9d40d02680623c8fc95607bd621bcbb6"
+ },
+ "M1|incoerente|perto|101": {
+  "decisoes": 288,
+  "estado": "b5c7952d73223388a4b4edbf94ef4237deef0f68062da18a4e0266ef121ed85e",
+  "log": "43bf9dd4b66e034046a9892c519bf1d219b8fa6e2104603acf94129a57b47b67",
+  "medidas": "b8a56f6642e0731f089f6c358c12fdb0f93746f154313d843cc10d8af9ab9e2e"
+ },
+ "M1|incoerente|perto|202": {
+  "decisoes": 288,
+  "estado": "b63a9bbdae652f5854ddd76ab63636c824fefbbc06abe7d1ae05abd8f734f8a6",
+  "log": "46fe6d8fde758d0b48b9803900ac202c5bc7d748dd2e35ca27d57d0de93ab61f",
+  "medidas": "39791ce81f4345a073cc983821849e94a2f80171fbebae03cb63c9544460f45a"
+ },
+ "M1|relapso|comedouro|101": {
+  "decisoes": 288,
+  "estado": "6d583d6b381f9e21e0722d8796a11800edd1e288b0df26f30a6a8a3545f86945",
+  "log": "d42eef4dd7c41e97d5e72b163ce761a08bb39bb3821b0cda81aafb81295db712",
+  "medidas": "d2b547dd355484641bc6c46fa4f7ecf6be89554347297b3419f9f75259d6732f"
+ },
+ "M1|relapso|comedouro|202": {
+  "decisoes": 288,
+  "estado": "1e0419b3ed853978af157c7ee34ab5959d91f5316b88fbacb4a85aecb1624d98",
+  "log": "d4df6e0d678e23b3e5da46fffba0ec32d2c37d9931d3cb923e99750fa90161e7",
+  "medidas": "692b887109738de7e0d8a55d0bfadefd51379e908f5aaa54a2e792f0ddc56cad"
+ },
+ "M1|relapso|longe|101": {
+  "decisoes": 288,
+  "estado": "9484561580881692bbface67915e047f611f807fe34ca78abe72c86d7de2b127",
+  "log": "46d379b0cc8fd311479d00b0b8c18888309aa769513b96250f9ae2db9d54b5a6",
+  "medidas": "0e737223340a5f611550b1d66cf23575c88257c4fb99f44e31e909a0eee83440"
+ },
+ "M1|relapso|longe|202": {
+  "decisoes": 288,
+  "estado": "81bd2fca2851063362c15d3d266bc779da1d69d1654ef8dbc3cf8ff92001272d",
+  "log": "30768295104c5d5bccfd417484c4ba270d5f27adb4fdc8a4c1876be07d832b34",
+  "medidas": "7a1555557dfa3470822c8ac9a946aa482cc1f411b6b6cb4d9c2df85396a20895"
+ },
+ "M1|relapso|perto|101": {
+  "decisoes": 288,
+  "estado": "29072f92be6263bdfe036237a2ba8933ce9099de13448ca7275d2b47918ebe15",
+  "log": "fec246c5c6264b77f5f23f998510e97c0c6f053994fb6775160fe1be03aadbc0",
+  "medidas": "3c54d7c374d0886ca7aa59255e34869c5d794af2e10d84e2ea4d2c826ad4bfc5"
+ },
+ "M1|relapso|perto|202": {
+  "decisoes": 288,
+  "estado": "fe531e13b90f6ef2218c73d52ec27932868d7cebcd80c141c8ffcec32614d570",
+  "log": "296b2ba862d746acc91a2a10d0f343b0d373bbe4acffa031348e11607d3cdf24",
+  "medidas": "2df4a32f9cc78727824782e75e4e751c846e7b7f68c1e5b9c90c41289ab5f6a1"
+ },
+ "M2|aleatorio|comedouro|101": {
+  "decisoes": 288,
+  "estado": "0201fae3e7a3a9e9eb2602c1dff4a780fe407ce21c476a4eba106447308f7f4f",
+  "log": "991fd07be9add190d483fc75e09dd0d6d7286178369e1ad85139ad53935d4afa",
+  "medidas": "acccb6e4b829b586774a68b9e06a6b7ca124aba3ec46fd8939b267bb3e3c4490"
+ },
+ "M2|aleatorio|comedouro|202": {
+  "decisoes": 288,
+  "estado": "e09d167a8ab2abb9909a86682e2d672656b903c9735ac9908ff4ffd91d935a43",
+  "log": "72db9e0fca1f75f1b90b9e5e2f059e19b157904944d00c36c496634eb91de09a",
+  "medidas": "8fad8f0eb29f22bf5c461e479676d9c1cd71ad6ac9ac66456e5872ef26adec1f"
+ },
+ "M2|aleatorio|longe|101": {
+  "decisoes": 288,
+  "estado": "66c0f6ca7017e873b22aa616ed2e850e1f3929c16854f866b005893769788326",
+  "log": "40aeb9a024807cc1ab9727e80f602c6061c6286c75fd3abbad03b9d6a5926511",
+  "medidas": "bf18298b1657437a21078569567d7c576d6ba9914bc51005a31dd18705781036"
+ },
+ "M2|aleatorio|longe|202": {
+  "decisoes": 288,
+  "estado": "3a65de0815d811a0844bf12fdce33abd43db759fbc22f8079e5f55c9e20a33f5",
+  "log": "2ee6cc953c9a0c63d1a55a7f57f5a1ddda100f18f1d7e5fa6e4e309dc3d2c3d3",
+  "medidas": "4033687e81ddf7f30017fef720ce645313577ba850b1b971c8695dff3ba8c6de"
+ },
+ "M2|aleatorio|perto|101": {
+  "decisoes": 288,
+  "estado": "ebba2a8412b6ae02102c0cfc946fec7a95a3227a551cce4be665049cf7e2eadd",
+  "log": "afcd56f3b9b87197815e7c5ecd48a65ce9597fe0a91b5f0a05941bd91ed60e5f",
+  "medidas": "22729dc3f5e9b6739cec816a809540510dc3e3b7a28ac0ac26039564d10ae05a"
+ },
+ "M2|aleatorio|perto|202": {
+  "decisoes": 288,
+  "estado": "ba2bdc85b1b006d390b7cd40312641eda229c52e1ae5e0dec5339c65e6e903d3",
+  "log": "1b9de1ec44d54f67dda430e9506c90a7468926e8b70ac9987b05091cb13b23e1",
+  "medidas": "1b99493e0b3b534d32d765080f62a7ad1ea27059d4fa52c6d6c5ee978aeeb8d4"
+ },
+ "M2|atencioso|comedouro|101": {
+  "decisoes": 288,
+  "estado": "89cd5b9e1d64a9e185fefb4187679af4384aedac6dde0ad7d6a3743d82bf6f3b",
+  "log": "d17d9e45e36b27787bf6fa2bd019e0ac4a12ea40406b6d2e6605e899c18822a2",
+  "medidas": "807b9f74e7c0b943c8e9680b9b4d8ae36fe0c894de2454835fcb6b5b0222da59"
+ },
+ "M2|atencioso|comedouro|202": {
+  "decisoes": 288,
+  "estado": "b12daef999e04074553d1d712f699bac4bec1b9e3e2239dc871f54093f1eb1cf",
+  "log": "afbfad070d6e801a5443df1e329ea5fa5417ca729fea4ff43c8e100c3968c4b7",
+  "medidas": "b167e9b23684e1285b461a110b7b3d3f00432f63b33cf487c96b642609be6767"
+ },
+ "M2|atencioso|longe|101": {
+  "decisoes": 288,
+  "estado": "c326e7598c3114842c72165fa9ac677860a60c05898cc704f9a69dcdebf79296",
+  "log": "9f419cc1bd29af27c1eb62018f81f4274a61d9eaab954b27548dc28e44b7840d",
+  "medidas": "240bd2afcee62bff0c9edd34731c05593a4a36e836497247c1a4a4a17d920ec8"
+ },
+ "M2|atencioso|longe|202": {
+  "decisoes": 288,
+  "estado": "3cd371e3da7b2dfcb0e1ef172f800dca00cdd474520e08eb957ec7e9f95094f0",
+  "log": "631ffb06992deec31ec54f6c69cc1e2bb589ef9b66d909f37c9e9a561dd32fbd",
+  "medidas": "60bf8cbb192622e7a64629c463396a4a8eee40bfa78f7baf23e3669acd0d73ef"
+ },
+ "M2|atencioso|perto|101": {
+  "decisoes": 288,
+  "estado": "76213ac48f742b0599982002f7ed2904fde00259bd92386e49e3d8ecf28c0ce8",
+  "log": "d1c8d936cf8fc8908d71daed94b614dfcb9db8759ef5ccc2b620bc89bf78d7ca",
+  "medidas": "ede28e3f4b7bea79b044e3ce1f418e8e39df4a87f27778a16fc9e7610357fc59"
+ },
+ "M2|atencioso|perto|202": {
+  "decisoes": 288,
+  "estado": "35d684870b1eabe587e1248c21fb1ed2252183e911ab0f3ec89004237e5c6f0c",
+  "log": "bf34c88a1af65100b784e6d866088f416db925375e0893c2d973a1a21e58dbae",
+  "medidas": "663d55123086ad669047850242bc7cd6a0503e73f1b0899f07ac44733df54427"
+ },
+ "M2|incoerente|comedouro|101": {
+  "decisoes": 288,
+  "estado": "89cd5b9e1d64a9e185fefb4187679af4384aedac6dde0ad7d6a3743d82bf6f3b",
+  "log": "d17d9e45e36b27787bf6fa2bd019e0ac4a12ea40406b6d2e6605e899c18822a2",
+  "medidas": "807b9f74e7c0b943c8e9680b9b4d8ae36fe0c894de2454835fcb6b5b0222da59"
+ },
+ "M2|incoerente|comedouro|202": {
+  "decisoes": 288,
+  "estado": "b12daef999e04074553d1d712f699bac4bec1b9e3e2239dc871f54093f1eb1cf",
+  "log": "afbfad070d6e801a5443df1e329ea5fa5417ca729fea4ff43c8e100c3968c4b7",
+  "medidas": "b167e9b23684e1285b461a110b7b3d3f00432f63b33cf487c96b642609be6767"
+ },
+ "M2|incoerente|longe|101": {
+  "decisoes": 288,
+  "estado": "182619611f3feb7b927102afa3e4b82b86618d011416f7033f0f53f5d58d213f",
+  "log": "dfbcaa08788e727e146eca0cd0721b65588896b7ff8c739367cd9c989b78b23f",
+  "medidas": "d0a8f4822d7c4e281283e8cfa58b21ecdaa998014e6bf0e5f19ba0eb1d46f003"
+ },
+ "M2|incoerente|longe|202": {
+  "decisoes": 288,
+  "estado": "28ee64db2e75a1ad4053bc1ff66f68c3013cc0e01b5b2e61a1014d8123bfdcd4",
+  "log": "fb8eace6fc5cc6fa8ecabcfbf046a7310e4eae5bcfed8c3ef97c6b2821e64ed8",
+  "medidas": "bd5b66ae934b93d12d0af7646e82241bd56ea5bd30099fa01dcaabda5c8e982a"
+ },
+ "M2|incoerente|perto|101": {
+  "decisoes": 288,
+  "estado": "2c3f1c2ca7c73c7dc5a2b592c746b7ac8f51e4f16db3a66ec5a218dbef2447e6",
+  "log": "7a20b94b42c1a843b18cf830192022688a62ec043b5f7a4dabe8a42b8b5f0d76",
+  "medidas": "2b868a88c775396f02a46b554bbe5db99e6f09421a1bc85cbbe1193b9d83b57c"
+ },
+ "M2|incoerente|perto|202": {
+  "decisoes": 288,
+  "estado": "aa6325d1c3983b9e106b527e4429bb0a76a6cb9198031c7d4fb9cc2ed186227d",
+  "log": "46fe6d8fde758d0b48b9803900ac202c5bc7d748dd2e35ca27d57d0de93ab61f",
+  "medidas": "efe207c64426c5ded7e25f046755eb2a28f45379120a3cd17ee16d974fdf8f50"
+ },
+ "M2|relapso|comedouro|101": {
+  "decisoes": 288,
+  "estado": "5292aa2413990a8bc5900ea29dab70cbb6b20706bd5609042e4cf1957390e4d0",
+  "log": "d42eef4dd7c41e97d5e72b163ce761a08bb39bb3821b0cda81aafb81295db712",
+  "medidas": "02625b82bc6fa5cfdc2410f7c87f57c8211c4f86737fd79687963b4e09dbd3a1"
+ },
+ "M2|relapso|comedouro|202": {
+  "decisoes": 288,
+  "estado": "995f4a72d22b7e696b9a315fbcddf00f70fd95f9a3254796822a6ee86a8cde94",
+  "log": "d4df6e0d678e23b3e5da46fffba0ec32d2c37d9931d3cb923e99750fa90161e7",
+  "medidas": "45c6a733efea278d11bafbee78b09112bd65028024678fa0693d15fc3ed5f523"
+ },
+ "M2|relapso|longe|101": {
+  "decisoes": 288,
+  "estado": "d89ede2525c56513a7311de0ee129ace5a24e986a03fc5ea6d3a7bc07507bd50",
+  "log": "03eb7fd71a230ed2c958573575db18c755b08ff624f74685054df329845e8fbe",
+  "medidas": "245124b0e8f36266e9027f6bd3fb760c39affe61d6e10feb7430684e0680695a"
+ },
+ "M2|relapso|longe|202": {
+  "decisoes": 288,
+  "estado": "b53f1b890c50536238e4b5d8494baac8c02183b606a159aa1af8f0cf5d36d224",
+  "log": "24aa318a39f79235c6dae69229ef1a22fd82d4ce9940a450bbf21b8dbec42498",
+  "medidas": "fb5a7fb458ce549a1c64f0735fd89b42d3fbdf87bdf8d7251f51dc924a711367"
+ },
+ "M2|relapso|perto|101": {
+  "decisoes": 288,
+  "estado": "88fc2a019224a2c14273a64e82b64c1e2b189d0d9ddcaccdf349c3f7e4c5f728",
+  "log": "fec246c5c6264b77f5f23f998510e97c0c6f053994fb6775160fe1be03aadbc0",
+  "medidas": "d49df193dfd07dd11baaeb4556d00c1d88b4a1adf7b8a8d1a60dd8ad44d57558"
+ },
+ "M2|relapso|perto|202": {
+  "decisoes": 288,
+  "estado": "e824c912e536f043ec1fbbbbc4a30610c3b70607f4335af4db26c00087d84f9a",
+  "log": "56e061c7d887f51c2bdd768a622c9801c6c897cc9c01fbd15f98c8f00f4bf4c7",
+  "medidas": "a26aa9bcbaf139de696e12d4fdaa940acf622fc475d9a1a0041847f7e9653207"
+ },
+ "M3-sp|aleatorio|comedouro|101": {
+  "decisoes": 288,
+  "estado": "df0e57ab16f9c556d8f15782d5318189dd6837b4874b142781574715c5c3dde4",
+  "log": "991fd07be9add190d483fc75e09dd0d6d7286178369e1ad85139ad53935d4afa",
+  "medidas": "aed25b949ded9b084c0b4995dfe85595918a2e079c2eebb662b4950821e43e44"
+ },
+ "M3-sp|aleatorio|comedouro|202": {
+  "decisoes": 288,
+  "estado": "b3bc8ffcc56941532d74f6b3a5c5400f847903d45e74c027764bc5cc73d11352",
+  "log": "72db9e0fca1f75f1b90b9e5e2f059e19b157904944d00c36c496634eb91de09a",
+  "medidas": "3f3eb69dd14aa1c34355582cbe9fcd71411d4c32acd5f14751b18978cb53ad3d"
+ },
+ "M3-sp|aleatorio|longe|101": {
+  "decisoes": 288,
+  "estado": "c45f57f713c336e2e955d7265d5d43c2caa160c5b0c126cf3241c1c39349b38f",
+  "log": "d504d0e62e1a6594088f8fe0598ecf7b1d07bbbcae591972f609fcfdcd943293",
+  "medidas": "4865fa6bfb8cd9f94e6895528d2e8773c72e39cc58b494d451f0bbcf7267ed4d"
+ },
+ "M3-sp|aleatorio|longe|202": {
+  "decisoes": 288,
+  "estado": "5d5145e766336ae7f3817fe121fbd7f7f03de4ed74e017184b05a79e02897a68",
+  "log": "57af73c378708355333e368a6e2943e808c7384121c86ab64e984a4cd8dc0812",
+  "medidas": "1e5738fae3e14f02174336b8da3c2ae63bd49941f26491e33c81dee420c04b50"
+ },
+ "M3-sp|aleatorio|perto|101": {
+  "decisoes": 288,
+  "estado": "a57c446d71c154e96d948802f88b199d657539022b7cae5d4d2dc0555b459aa6",
+  "log": "0e24d10cd2142e80500ea973f2f9178beb22afcfda69de4d331799dd728caee5",
+  "medidas": "5931d39230a3493d0d6fb6f01b53caeebe95d3c95eae49a5e5714e77dd74bd3c"
+ },
+ "M3-sp|aleatorio|perto|202": {
+  "decisoes": 288,
+  "estado": "0a2a562c4e50a6323362edd02af80fcdea74d19295054ea76bbb624da83d2535",
+  "log": "15816db1d45754cefb07a66a61a724dfb2a07deeddb249b2bb508e41b6156a56",
+  "medidas": "db900d02d2d4497013c09a248c97cda5b6bc2b7426687e2914fcf88e40b26cec"
+ },
+ "M3-sp|atencioso|comedouro|101": {
+  "decisoes": 288,
+  "estado": "294362a7a1fb976978f802b563afc259e26e149017bdb9d6b84777b98e328c8c",
+  "log": "f3183b80b99f170dfb4d33adb1609a0d29dbe36914cf0181acf842d43aa97b49",
+  "medidas": "1d201269b84c7bdb6199e6fd9f639804df2e584a08f36d04e5ee2f1e83a59a4d"
+ },
+ "M3-sp|atencioso|comedouro|202": {
+  "decisoes": 288,
+  "estado": "bfcd7d03fd026ca5175c8d10ea0f701c04a4b3a5492b9ae22f5fc982f2c70d20",
+  "log": "afbfad070d6e801a5443df1e329ea5fa5417ca729fea4ff43c8e100c3968c4b7",
+  "medidas": "71ac31aa53fd054e916997b3e359d4ff4be0f3874e3b5344192ac81b6299f12b"
+ },
+ "M3-sp|atencioso|longe|101": {
+  "decisoes": 288,
+  "estado": "17626c4ec25a54834fbdaf0b2dd5ce553c428c2130dd7528594ac3a75b57cd30",
+  "log": "dc9fbc14cdee6743f73363eeabc61100f2846dc005f0d4b60e1fdfd7b8096231",
+  "medidas": "b408541b8e8efbb0941a2578313c777ee0c0324b343fd7848856dd1eb7c83b65"
+ },
+ "M3-sp|atencioso|longe|202": {
+  "decisoes": 288,
+  "estado": "23372a365bf1469da7cb8ff8b9617688a85d206e975d3cf57a692a4fc5937f2e",
+  "log": "7bcddb634b06726f96ccd5a092f81190af1095f6032414c85085f85ce874e768",
+  "medidas": "27dcf2a8934f2af45261aed77432206889f92a87899155e15b84f2cd7bea0bce"
+ },
+ "M3-sp|atencioso|perto|101": {
+  "decisoes": 288,
+  "estado": "982cd62ea85ab93da462720ec14c2c6ff723cf2758799785a3db2ae79217afd9",
+  "log": "d1c8d936cf8fc8908d71daed94b614dfcb9db8759ef5ccc2b620bc89bf78d7ca",
+  "medidas": "d419bcf169a3d99c5396e89db0429d2827205e8c11ab1c463d6d5fe4a6ce8a85"
+ },
+ "M3-sp|atencioso|perto|202": {
+  "decisoes": 288,
+  "estado": "d7a1e947b4827f019ee845d62f87190522a5d74ed30904bab1d416a107bca359",
+  "log": "27da8117bbfcdc3a5f554d78aeb409702bb04d132e4fed6cd6f9c62ad4a0b424",
+  "medidas": "29e39aef5f3f798c930edd83e193804c10663d619c1cc548e293e5df96adff1e"
+ },
+ "M3-sp|incoerente|comedouro|101": {
+  "decisoes": 288,
+  "estado": "294362a7a1fb976978f802b563afc259e26e149017bdb9d6b84777b98e328c8c",
+  "log": "f3183b80b99f170dfb4d33adb1609a0d29dbe36914cf0181acf842d43aa97b49",
+  "medidas": "1d201269b84c7bdb6199e6fd9f639804df2e584a08f36d04e5ee2f1e83a59a4d"
+ },
+ "M3-sp|incoerente|comedouro|202": {
+  "decisoes": 288,
+  "estado": "bfcd7d03fd026ca5175c8d10ea0f701c04a4b3a5492b9ae22f5fc982f2c70d20",
+  "log": "afbfad070d6e801a5443df1e329ea5fa5417ca729fea4ff43c8e100c3968c4b7",
+  "medidas": "71ac31aa53fd054e916997b3e359d4ff4be0f3874e3b5344192ac81b6299f12b"
+ },
+ "M3-sp|incoerente|longe|101": {
+  "decisoes": 288,
+  "estado": "0c783fce5153752c977ea54ae2ef2d089eb8c7fe11d2d028a87e38e4ac1712c5",
+  "log": "27f34274155affe9ad217ddb7930d0cdeed14330fd20d40084e09c53b3b48170",
+  "medidas": "e58e810f72aa5d86f027f2bb36799b5eff8c637a3d5a81b7d02a36d8fd56ea8e"
+ },
+ "M3-sp|incoerente|longe|202": {
+  "decisoes": 288,
+  "estado": "b26bf4cdea772c962d92321ae683ed2a27a46193fd8a4d9e88a56b48745dc30e",
+  "log": "c4c26e5993e061c1c812e91ce752fc8f3d24cadd5bae4a279169dbcff259dbd2",
+  "medidas": "eb91f4a7fd81a76089b28c2e2b306d5b8e5ddac76fa1cebf67ce6b86c9ade714"
+ },
+ "M3-sp|incoerente|perto|101": {
+  "decisoes": 288,
+  "estado": "9d2456b2f2fec1b59cbed4cb00c1379beae32bd0836e6409eff9b55bdf77475e",
+  "log": "7a20b94b42c1a843b18cf830192022688a62ec043b5f7a4dabe8a42b8b5f0d76",
+  "medidas": "cb0175e293d1c0aa01bc692fe3084068331e13a8a807d2dff2bd0572ad29e66b"
+ },
+ "M3-sp|incoerente|perto|202": {
+  "decisoes": 288,
+  "estado": "9334c66dda34190d90c968f7d9d5ead0bec0c3cf340048b89ee0579916223c7b",
+  "log": "ce09da93e18a55d0384e3058447944f7a6b2e2bed95031ef238efdcb2a62882d",
+  "medidas": "a391a76fdf3fecce5fc6f77c13b1bb4573ef15fa46dc60117cf65f2cff7f4128"
+ },
+ "M3-sp|relapso|comedouro|101": {
+  "decisoes": 288,
+  "estado": "679908eefdbf7237c831549a2a8cc4ef3ea17c02ed036f8582266bfd3d9be615",
+  "log": "d42eef4dd7c41e97d5e72b163ce761a08bb39bb3821b0cda81aafb81295db712",
+  "medidas": "51ed068369956e64966d0ffd01d96c64417bc469f27e8d1a357ae81895934ce4"
+ },
+ "M3-sp|relapso|comedouro|202": {
+  "decisoes": 288,
+  "estado": "cbc0b85f2ff27d5ed9ed2a78ff54e98debfa3e45a70fd7b35da3202b0945eab2",
+  "log": "d4df6e0d678e23b3e5da46fffba0ec32d2c37d9931d3cb923e99750fa90161e7",
+  "medidas": "b1d9b6ef35e1be03bac9edead5041de8b9a3b850589355b13fcf3e4cd6df9669"
+ },
+ "M3-sp|relapso|longe|101": {
+  "decisoes": 288,
+  "estado": "258d17639132a5c5410e4a33a1aa351d054f13392868b0309aae84bc4f630cce",
+  "log": "e4ef9ca7e646c619c1890a717a57c1f240b2150246725dcb1a0fea1fb40ebeef",
+  "medidas": "c3ed757b36ca467811cbd8c216d1c34c8951b4688d3d630981b65a11bbf123b0"
+ },
+ "M3-sp|relapso|longe|202": {
+  "decisoes": 288,
+  "estado": "3015bfd3c9022deabf0bd736b899499d96c54164a68e7df573d86482435933d7",
+  "log": "15ea5d9b5316962c416452acd2a560bbedf94f2e5601779d95a38b9aa656be81",
+  "medidas": "16762e5db9f8902e3a9957426201cf44d83397dd46d1c10c356ee27725bafce3"
+ },
+ "M3-sp|relapso|perto|101": {
+  "decisoes": 288,
+  "estado": "0dbff00e5e4b7a44f037b26b43a57fb7d5dfea1ee9006995d5d0b788efc27485",
+  "log": "a37930785e2ecbbb249995d3fe61d85d58268f6e589b9e72b5068c3c57214daf",
+  "medidas": "0d07e2b975f46f2e6257274e476607b7b5fb24420ed8d56e764abbf88c1fcac9"
+ },
+ "M3-sp|relapso|perto|202": {
+  "decisoes": 288,
+  "estado": "2e60f5b6ea99005c5fe454508b569772d0dd7f33029d745d903dd28c546419f4",
+  "log": "dbc02a63dd0b6e13cb21b4f51491d6ceee4499286eef4754fbc6c3be01c8c5b0",
+  "medidas": "b7b2ed96995a4b8898e86539c133ce531f02a5d38159036cdabca15b9e4d07b7"
+ },
+ "M3|aleatorio|comedouro|101": {
+  "decisoes": 288,
+  "estado": "9e3dfc1cec348c5785a209140e19fa442a3c3925396b9503dfe9063b3532ccf7",
+  "log": "991fd07be9add190d483fc75e09dd0d6d7286178369e1ad85139ad53935d4afa",
+  "medidas": "aed25b949ded9b084c0b4995dfe85595918a2e079c2eebb662b4950821e43e44"
+ },
+ "M3|aleatorio|comedouro|202": {
+  "decisoes": 288,
+  "estado": "e71c58afb08fcb53db03d80b498391c45e1607ef5c1528b8c7653849aa5b45db",
+  "log": "72db9e0fca1f75f1b90b9e5e2f059e19b157904944d00c36c496634eb91de09a",
+  "medidas": "3f3eb69dd14aa1c34355582cbe9fcd71411d4c32acd5f14751b18978cb53ad3d"
+ },
+ "M3|aleatorio|longe|101": {
+  "decisoes": 288,
+  "estado": "343f36572bc00d017d46768e6e68d6f13ae9cee2811153c69bf7ef77eec22f83",
+  "log": "75c37b5e1efaa73f49084aa74b8d8a28ff0f06ae345f091648e0bc3ee528a404",
+  "medidas": "d7e3e197595f3475478caeef0c3a6c203f21bf9679537695a9de3adc6df41700"
+ },
+ "M3|aleatorio|longe|202": {
+  "decisoes": 288,
+  "estado": "339a7bd967dc4cea9700f81c8a7bb29f157715a2250e6cd1a4019ab40e819895",
+  "log": "57af73c378708355333e368a6e2943e808c7384121c86ab64e984a4cd8dc0812",
+  "medidas": "1e5738fae3e14f02174336b8da3c2ae63bd49941f26491e33c81dee420c04b50"
+ },
+ "M3|aleatorio|perto|101": {
+  "decisoes": 288,
+  "estado": "0d0b4de9ad9fda3011a490adaa26e5c6bdce96c411bfaf3e24d45dcd36741046",
+  "log": "0e24d10cd2142e80500ea973f2f9178beb22afcfda69de4d331799dd728caee5",
+  "medidas": "5931d39230a3493d0d6fb6f01b53caeebe95d3c95eae49a5e5714e77dd74bd3c"
+ },
+ "M3|aleatorio|perto|202": {
+  "decisoes": 288,
+  "estado": "0a2a562c4e50a6323362edd02af80fcdea74d19295054ea76bbb624da83d2535",
+  "log": "15816db1d45754cefb07a66a61a724dfb2a07deeddb249b2bb508e41b6156a56",
+  "medidas": "db900d02d2d4497013c09a248c97cda5b6bc2b7426687e2914fcf88e40b26cec"
+ },
+ "M3|atencioso|comedouro|101": {
+  "decisoes": 288,
+  "estado": "294362a7a1fb976978f802b563afc259e26e149017bdb9d6b84777b98e328c8c",
+  "log": "f3183b80b99f170dfb4d33adb1609a0d29dbe36914cf0181acf842d43aa97b49",
+  "medidas": "1d201269b84c7bdb6199e6fd9f639804df2e584a08f36d04e5ee2f1e83a59a4d"
+ },
+ "M3|atencioso|comedouro|202": {
+  "decisoes": 288,
+  "estado": "bfcd7d03fd026ca5175c8d10ea0f701c04a4b3a5492b9ae22f5fc982f2c70d20",
+  "log": "afbfad070d6e801a5443df1e329ea5fa5417ca729fea4ff43c8e100c3968c4b7",
+  "medidas": "71ac31aa53fd054e916997b3e359d4ff4be0f3874e3b5344192ac81b6299f12b"
+ },
+ "M3|atencioso|longe|101": {
+  "decisoes": 288,
+  "estado": "4b0fbddbc077ce436e824c6bcb7b5eddaf550c1832c2269462a5761913e6f4e8",
+  "log": "ca935cb239604714f57507a51ebe97aabf26b668e4e4d56df27e5db1746606d3",
+  "medidas": "437e1088e27d568c15e3d6a80cdb0366869a8fb1f5c76c184d205b2d4793e1fc"
+ },
+ "M3|atencioso|longe|202": {
+  "decisoes": 288,
+  "estado": "bb63a903160d5f03fabf73e24674efa8f79b8d67a4f076092d5f8745a1066116",
+  "log": "0e1c69a005a115d20db883ba81bdab3786405be8dbe4be846f51eacb931f8e9f",
+  "medidas": "bd82cd5ac7e202f1b9a71a48dc1fd1bfce9d762463807b7df04555b9c3f548b6"
+ },
+ "M3|atencioso|perto|101": {
+  "decisoes": 288,
+  "estado": "982cd62ea85ab93da462720ec14c2c6ff723cf2758799785a3db2ae79217afd9",
+  "log": "d1c8d936cf8fc8908d71daed94b614dfcb9db8759ef5ccc2b620bc89bf78d7ca",
+  "medidas": "d419bcf169a3d99c5396e89db0429d2827205e8c11ab1c463d6d5fe4a6ce8a85"
+ },
+ "M3|atencioso|perto|202": {
+  "decisoes": 288,
+  "estado": "d7a1e947b4827f019ee845d62f87190522a5d74ed30904bab1d416a107bca359",
+  "log": "27da8117bbfcdc3a5f554d78aeb409702bb04d132e4fed6cd6f9c62ad4a0b424",
+  "medidas": "29e39aef5f3f798c930edd83e193804c10663d619c1cc548e293e5df96adff1e"
+ },
+ "M3|incoerente|comedouro|101": {
+  "decisoes": 288,
+  "estado": "294362a7a1fb976978f802b563afc259e26e149017bdb9d6b84777b98e328c8c",
+  "log": "f3183b80b99f170dfb4d33adb1609a0d29dbe36914cf0181acf842d43aa97b49",
+  "medidas": "1d201269b84c7bdb6199e6fd9f639804df2e584a08f36d04e5ee2f1e83a59a4d"
+ },
+ "M3|incoerente|comedouro|202": {
+  "decisoes": 288,
+  "estado": "bfcd7d03fd026ca5175c8d10ea0f701c04a4b3a5492b9ae22f5fc982f2c70d20",
+  "log": "afbfad070d6e801a5443df1e329ea5fa5417ca729fea4ff43c8e100c3968c4b7",
+  "medidas": "71ac31aa53fd054e916997b3e359d4ff4be0f3874e3b5344192ac81b6299f12b"
+ },
+ "M3|incoerente|longe|101": {
+  "decisoes": 288,
+  "estado": "7aa9988cf9dc356d5b3a02c2ad9ab510f79149a129f24a1e00b8e573977c0c5b",
+  "log": "27f34274155affe9ad217ddb7930d0cdeed14330fd20d40084e09c53b3b48170",
+  "medidas": "e58e810f72aa5d86f027f2bb36799b5eff8c637a3d5a81b7d02a36d8fd56ea8e"
+ },
+ "M3|incoerente|longe|202": {
+  "decisoes": 288,
+  "estado": "a88f6b98cd7de3b5fa68781ed0d11225b6989d3f3fd638172a362a61aef8324a",
+  "log": "6d813937f48517652c16f8b44f2f28b025e369a7bcd75919e78191b91227eeab",
+  "medidas": "02e02e0e62963b5ea4098081f9af884a815c61f11ea847fd2b3a40136317ad03"
+ },
+ "M3|incoerente|perto|101": {
+  "decisoes": 288,
+  "estado": "9d2456b2f2fec1b59cbed4cb00c1379beae32bd0836e6409eff9b55bdf77475e",
+  "log": "7a20b94b42c1a843b18cf830192022688a62ec043b5f7a4dabe8a42b8b5f0d76",
+  "medidas": "cb0175e293d1c0aa01bc692fe3084068331e13a8a807d2dff2bd0572ad29e66b"
+ },
+ "M3|incoerente|perto|202": {
+  "decisoes": 288,
+  "estado": "9334c66dda34190d90c968f7d9d5ead0bec0c3cf340048b89ee0579916223c7b",
+  "log": "ce09da93e18a55d0384e3058447944f7a6b2e2bed95031ef238efdcb2a62882d",
+  "medidas": "a391a76fdf3fecce5fc6f77c13b1bb4573ef15fa46dc60117cf65f2cff7f4128"
+ },
+ "M3|relapso|comedouro|101": {
+  "decisoes": 288,
+  "estado": "570a9e94dbd31705fca4f20e6d1c49912fdced144142b2ccf3293b3554ea3ba6",
+  "log": "d42eef4dd7c41e97d5e72b163ce761a08bb39bb3821b0cda81aafb81295db712",
+  "medidas": "51ed068369956e64966d0ffd01d96c64417bc469f27e8d1a357ae81895934ce4"
+ },
+ "M3|relapso|comedouro|202": {
+  "decisoes": 288,
+  "estado": "9f415299a1f5fb3d86650812530308a513855e64fa24a0dd01327d3c9f58b5a4",
+  "log": "d4df6e0d678e23b3e5da46fffba0ec32d2c37d9931d3cb923e99750fa90161e7",
+  "medidas": "b1d9b6ef35e1be03bac9edead5041de8b9a3b850589355b13fcf3e4cd6df9669"
+ },
+ "M3|relapso|longe|101": {
+  "decisoes": 288,
+  "estado": "d2b9be5d201f4a1afbc5af3c46b75f29d04c6d923f5646f3931852efd7a86487",
+  "log": "9692c968d0aa3bf82a7bedabff2ab817e3310c84fc36a61785c0f09ac7983ec8",
+  "medidas": "bb2772e0d758b38977fefde98ae9dca21e52f75d65f5e50e3824335d3c5d3355"
+ },
+ "M3|relapso|longe|202": {
+  "decisoes": 288,
+  "estado": "7c316e4c001594cd9abc040ae176fa8021a030727507a9270aae9e3ca6ac4c15",
+  "log": "15ea5d9b5316962c416452acd2a560bbedf94f2e5601779d95a38b9aa656be81",
+  "medidas": "16762e5db9f8902e3a9957426201cf44d83397dd46d1c10c356ee27725bafce3"
+ },
+ "M3|relapso|perto|101": {
+  "decisoes": 288,
+  "estado": "4c9965849649c40cc3d37e6598739f11ad607bf188f82d835752696e11b1d0d3",
+  "log": "a37930785e2ecbbb249995d3fe61d85d58268f6e589b9e72b5068c3c57214daf",
+  "medidas": "0d07e2b975f46f2e6257274e476607b7b5fb24420ed8d56e764abbf88c1fcac9"
+ },
+ "M3|relapso|perto|202": {
+  "decisoes": 288,
+  "estado": "b4486a54d064ee1e3aebd9d470da9c1c630ebe00584d07248e375fcaec5c2225",
+  "log": "dbc02a63dd0b6e13cb21b4f51491d6ceee4499286eef4754fbc6c3be01c8c5b0",
+  "medidas": "b7b2ed96995a4b8898e86539c133ce531f02a5d38159036cdabca15b9e4d07b7"
+ },
+ "M4-con|aleatorio|comedouro|101": {
+  "decisoes": 288,
+  "estado": "09de7adaec8ec70af50aa2fda2e6e98fe354c0cb3c9af1ab9e839d3b8dd1be2b",
+  "log": "991fd07be9add190d483fc75e09dd0d6d7286178369e1ad85139ad53935d4afa",
+  "medidas": "1aa1a36424d5a1ac40975a30962fba36d9e318da8f8d21c9eae288f1f5e3bc5e"
+ },
+ "M4-con|aleatorio|comedouro|202": {
+  "decisoes": 288,
+  "estado": "c89b0d809c123f1c6d8cab9cb75c8ff89ae0e60a38f8e2931fe45beef0124f09",
+  "log": "72db9e0fca1f75f1b90b9e5e2f059e19b157904944d00c36c496634eb91de09a",
+  "medidas": "f316738674883ef30ff2ca681b645d595a43ee7e0145041dbca6a80e29a0a434"
+ },
+ "M4-con|aleatorio|longe|101": {
+  "decisoes": 288,
+  "estado": "e73ec0c5e48f23007dfe256efc9d579ec4af4e322fb32bad676b53126677472e",
+  "log": "1c759098d5ee4beea863d47118546d9e3bf8f0ce48c5d475244168543a7b749e",
+  "medidas": "79531c3cf86eb46d1376cd64525ddc5b1d28d02bb634f4942e0eaf3a26e53032"
+ },
+ "M4-con|aleatorio|longe|202": {
+  "decisoes": 288,
+  "estado": "e184eb9365d2df789c4a6892560667aff9cd8821b7cfe0aa6547b729a4165f5f",
+  "log": "cb6064f6d2ab4ecad989b93935d412e849a26f72ba99ec33f1341f2d62874dda",
+  "medidas": "23f8fb7b5effeec128f63c1cc9e23fccca281b7b2084a2de67bec94315d697c9"
+ },
+ "M4-con|aleatorio|perto|101": {
+  "decisoes": 288,
+  "estado": "401d17583653b3171752530ef1b873fa99970e497d7e1f7cdf21402cd6451010",
+  "log": "be41c7b6e1ceb19d1288f740aecf16a4b9f2ff5ce47bcc3cfc21293d9a90e1a6",
+  "medidas": "8dc7c0fc514af0afd4939545b75686e5044c210a77ec6bc08e1194971738d8a1"
+ },
+ "M4-con|aleatorio|perto|202": {
+  "decisoes": 288,
+  "estado": "15ead251ebc57b4554548c77b10c1b963beaa09af64b4ddf00ad98177ec9deed",
+  "log": "36114cfd62f675b4fda926b13e05508183dbcc44c7ae41c602b7edc2fdb09391",
+  "medidas": "3402ccfabf14c351f25f1836e2b50438f3f6ec202d2fd8d03d880b638763211c"
+ },
+ "M4-con|atencioso|comedouro|101": {
+  "decisoes": 288,
+  "estado": "2a452966c77d3787de974f58212767546ef0d82a5ca660133ff9a786aebb3424",
+  "log": "83bcbc4e333b95180c68c017f59b63693ae93266a266e600c9bd6b41218784a7",
+  "medidas": "eb40d340e64b6f674a7b24c3dcb65925ca80ba5aa4b8ef35ae516bdf822ec36c"
+ },
+ "M4-con|atencioso|comedouro|202": {
+  "decisoes": 288,
+  "estado": "01047f26072c335e4c4c491d73f25f9b8b0adf6a245490e6c8fb60133ee6dd08",
+  "log": "b0c857b3d810a4526304a9d82af62fb6fbd4f437da3aa4dda0bf724d582bda15",
+  "medidas": "6ba9c98170812877cfed00dde870e8b8cd53f5b5667226c5888062142edc2a06"
+ },
+ "M4-con|atencioso|longe|101": {
+  "decisoes": 288,
+  "estado": "e48432643a4338e929cea6899a8c47792c963d745532e4b34f39e840694ac053",
+  "log": "bc7d58e0c8d4ae58ddc6e1b5a8526df4070df87a67a5fd61296e1932b9d93ef8",
+  "medidas": "97e0263a2b604843a4ceb85dcfabbb7add230ec5ad70c32714881d9cb0c1b0de"
+ },
+ "M4-con|atencioso|longe|202": {
+  "decisoes": 288,
+  "estado": "13c8a8bcc2818e823f057b54660026a42b92f1158967013a59a1c7f00b1054df",
+  "log": "0e1c69a005a115d20db883ba81bdab3786405be8dbe4be846f51eacb931f8e9f",
+  "medidas": "c5b27be0e9c76654def8910f960c2a003a53d4d547c700db57a73f151f293367"
+ },
+ "M4-con|atencioso|perto|101": {
+  "decisoes": 288,
+  "estado": "5a69952873f722ef0f439f46aed79b1c9fe318a7935f6af3dab7b9faf895fe58",
+  "log": "09a15e13a58b6339c6b20bb866459b5d8969ddec748558f67c38db2f7f8c95e1",
+  "medidas": "0dda9c8d87e2b1980074c7816f04a34e0128165cd773f560df749be0e2833c04"
+ },
+ "M4-con|atencioso|perto|202": {
+  "decisoes": 288,
+  "estado": "0de9c9aa4b8085a5da7e777fcd116b61cadf5c84a1d40520a051d748bc358cd7",
+  "log": "5c806c8be23c50e7b20e3163a782fcc5795f947cbcdddb255236c3089b41265d",
+  "medidas": "abff6636060e4d17b9fe7c3877bfb382b17bca62397a6b6bcd110888f1b742db"
+ },
+ "M4-con|incoerente|comedouro|101": {
+  "decisoes": 288,
+  "estado": "2a452966c77d3787de974f58212767546ef0d82a5ca660133ff9a786aebb3424",
+  "log": "83bcbc4e333b95180c68c017f59b63693ae93266a266e600c9bd6b41218784a7",
+  "medidas": "eb40d340e64b6f674a7b24c3dcb65925ca80ba5aa4b8ef35ae516bdf822ec36c"
+ },
+ "M4-con|incoerente|comedouro|202": {
+  "decisoes": 288,
+  "estado": "01047f26072c335e4c4c491d73f25f9b8b0adf6a245490e6c8fb60133ee6dd08",
+  "log": "b0c857b3d810a4526304a9d82af62fb6fbd4f437da3aa4dda0bf724d582bda15",
+  "medidas": "6ba9c98170812877cfed00dde870e8b8cd53f5b5667226c5888062142edc2a06"
+ },
+ "M4-con|incoerente|longe|101": {
+  "decisoes": 288,
+  "estado": "ad4163f14c9c645dbc4746bd443e83355a7f6ef2cad218dc99e0e0c96c063e32",
+  "log": "ca186e442c85a6d9e97cd20936db07b9a8b638e6a130e27e3b9ab877e3ba51da",
+  "medidas": "f1e64cde1c42efbd454706c6e92070c46bf0b6bd9d5c8d292b390cf89d85821f"
+ },
+ "M4-con|incoerente|longe|202": {
+  "decisoes": 288,
+  "estado": "cfa26689c005c60cf06658b601e367914207c8372353e945bfe231ef3a861f7f",
+  "log": "19abf002593d19085fcf51e4b9d2bba249504ae1e5f808a9baa5bf8fff997b2c",
+  "medidas": "954f2c85e2588e25fd2f13cc56e271afb65eec2e5490682b64c5d5b30171c6f0"
+ },
+ "M4-con|incoerente|perto|101": {
+  "decisoes": 288,
+  "estado": "c8dc052b22f90ca811b9362c660ff123b912db884dbe351dc6c1e40ae241f5b0",
+  "log": "664d00cc285cc3282d320c6d087e84e0cdf27a4c1de59dac2bcbf450b25f73e7",
+  "medidas": "a74d0d29f2d6e01bd6f098407481ce295a1b3f4fb6a71e213d5bdd370b5d1846"
+ },
+ "M4-con|incoerente|perto|202": {
+  "decisoes": 288,
+  "estado": "6bab70ff3437bba0bbf30366a41316175d617e371ada18cb614f00b8a5dbe270",
+  "log": "b50860a251a74988344e853e6cd326d4105f8ca04edd7eba90b6721a102d477f",
+  "medidas": "4f5751729b4653d2922ad3eb8709e2312d418ca87f2662e45826d76813859a20"
+ },
+ "M4-con|relapso|comedouro|101": {
+  "decisoes": 288,
+  "estado": "1e6ed7d119f9c28868acc3e61f826ad9fe8d474f96f5e449a697e8cc9b69984d",
+  "log": "d42eef4dd7c41e97d5e72b163ce761a08bb39bb3821b0cda81aafb81295db712",
+  "medidas": "db7663e47810d5aceef52ce2adea21a154726096d01bed7d2010e827fce20a89"
+ },
+ "M4-con|relapso|comedouro|202": {
+  "decisoes": 288,
+  "estado": "007a4015040bbf179a39f2f62fee4169e3cfc71ca15ac573ac0f5a6713937577",
+  "log": "d4df6e0d678e23b3e5da46fffba0ec32d2c37d9931d3cb923e99750fa90161e7",
+  "medidas": "a68c6b43286f3c105338399f814ef70ae11336adc757c33eee56e4ae5a711f71"
+ },
+ "M4-con|relapso|longe|101": {
+  "decisoes": 288,
+  "estado": "d80704754d5b4499f2c3c5094a5ef7d76c475e67f2086d0173f85357970a5cda",
+  "log": "9692c968d0aa3bf82a7bedabff2ab817e3310c84fc36a61785c0f09ac7983ec8",
+  "medidas": "03da824d783a3a18e314aa85166fbc10c20484b20c940b112bfb7adf196629b0"
+ },
+ "M4-con|relapso|longe|202": {
+  "decisoes": 288,
+  "estado": "a3a4a2385f9c6b413cabf63f143e8f753692f8601d707ef7e31f688a2d6386d5",
+  "log": "eaf029d58fdd6d68e4335adce8c6f15a5a66e01ad7854c236b1d72518076a7ed",
+  "medidas": "b1b18660e773d5f37e55862db930a065a32e2aa71252466b7ee457f3fdd912ab"
+ },
+ "M4-con|relapso|perto|101": {
+  "decisoes": 288,
+  "estado": "e872febb8eba91e8a83d6a55eb7be23541913aeae8bcc569bdf8fee37a38ddfa",
+  "log": "a3838c90633408501de5b52b473884583f1c3153df630f436d827ac4506ae3c8",
+  "medidas": "c221eda25925bbfefd0a6b5d689bc5ed1621ad2255c050a416248679a0ed496e"
+ },
+ "M4-con|relapso|perto|202": {
+  "decisoes": 288,
+  "estado": "697a9db40dbc21691666fd68b7b6c052b778ce26d2d55953dfb38bbc667772bf",
+  "log": "dbc02a63dd0b6e13cb21b4f51491d6ceee4499286eef4754fbc6c3be01c8c5b0",
+  "medidas": "73aafc81b20d736630870626dc9ec6d0cf6b3104436fdbc0436098b400e8dc92"
+ },
+ "M4-emb|aleatorio|comedouro|101": {
+  "decisoes": 288,
+  "estado": "eef4a2a2611e850816f1f5bebaec9a351b64cd521f7384307fee7e4360f81d41",
+  "log": "991fd07be9add190d483fc75e09dd0d6d7286178369e1ad85139ad53935d4afa",
+  "medidas": "7bffd4856b752d5b04d3e1f303f6f5d992ea8c0fd25e13df4b1c2baf3acc3150"
+ },
+ "M4-emb|aleatorio|comedouro|202": {
+  "decisoes": 288,
+  "estado": "5ae72ecd48d91518227e5968370a28a0c3f5ed1270c92921ba4f644a58b36404",
+  "log": "72db9e0fca1f75f1b90b9e5e2f059e19b157904944d00c36c496634eb91de09a",
+  "medidas": "cd972e126c8c550a68187cb3e124a7a306c26251186efcc55055458b0bb51e2c"
+ },
+ "M4-emb|aleatorio|longe|101": {
+  "decisoes": 288,
+  "estado": "58bf3331691f3356668fdee3d39aff0fc8c5138f5a8686dc61549f8373692a32",
+  "log": "75e69f9b23403ecfdbde5e9c5373dc450bcd2afaf8672f01396eafc20c3c7adc",
+  "medidas": "84e13ed2bb4e239083a3090f840e89f347babda9de2742a784e2be705ffe2ef7"
+ },
+ "M4-emb|aleatorio|longe|202": {
+  "decisoes": 288,
+  "estado": "29a0fe12e36980f0cdbcaa78c118439730d9ae9b51d2f0f42eef90211cd40624",
+  "log": "3bc14990b9280ceaf4481815822629c9349618e855a21d5733dfe568ffc2af83",
+  "medidas": "3170af4a821a90aaf73b6fce63561fe13c1398f76ebbc17b736e206506c03f5a"
+ },
+ "M4-emb|aleatorio|perto|101": {
+  "decisoes": 288,
+  "estado": "142269d55eb6c3ac012e74d822354bbc8a2527676b132cfbbc3bbb2cf2bc4ba5",
+  "log": "4c00a217d2e5b7328fa209e72fae3c650f5555e81a51dc5d885a6ce9a545e2bd",
+  "medidas": "b639a197dc425a7b9b642549ed611dcacab3ee233479f09163035a741381be24"
+ },
+ "M4-emb|aleatorio|perto|202": {
+  "decisoes": 288,
+  "estado": "1ac00487cc3d27c3ab9ad088d2d0f661ec5f2292bd6b7066efa1f1b5a2bfbb73",
+  "log": "e003220e834ecfd46df07d2a30f485c3113106ecb504ddac13b9452ba783576e",
+  "medidas": "1a9a858f0ffe8937adba31ec6fc986e176855bf0f640e13e9bc508e917fc2068"
+ },
+ "M4-emb|atencioso|comedouro|101": {
+  "decisoes": 288,
+  "estado": "07e63708b29484ecfec23f4c47fb52e448442ea2b68d3f47f6b8df3f526a781b",
+  "log": "3a3f0fe30313bdd632a34ba772efbddd3e3982ac27800f8dc35c0bae1248460d",
+  "medidas": "6e5b4c3c0565a02fd25945eed9d1a01d486c1d2cb0481d7c087b67532ef89ec5"
+ },
+ "M4-emb|atencioso|comedouro|202": {
+  "decisoes": 288,
+  "estado": "32b32518ff26e0bab083a89729acafd5df7d5eff220a664ea53ac2db9aa4222b",
+  "log": "afbfad070d6e801a5443df1e329ea5fa5417ca729fea4ff43c8e100c3968c4b7",
+  "medidas": "aef240c540f543bd269114fbc831cf26d600a5c60d1afcd4f4bb82a3812412de"
+ },
+ "M4-emb|atencioso|longe|101": {
+  "decisoes": 288,
+  "estado": "71ff8de06e7c02aaf59771574943da318701338b7866da9ce81a17857517f53b",
+  "log": "ca935cb239604714f57507a51ebe97aabf26b668e4e4d56df27e5db1746606d3",
+  "medidas": "c03dfa81afae00c1f11cbd4913a25eb48b976705a48cbf7be0d9f3688f8cf602"
+ },
+ "M4-emb|atencioso|longe|202": {
+  "decisoes": 288,
+  "estado": "4669a788ab4d2e8a64b865f358635151a30b3c182f069c3a071cde922e9257bf",
+  "log": "30cf8161ad0be2cf97abdb6c24d3636cfa6d49dd979cbb2c1c57620c768ed85c",
+  "medidas": "a1553c446166305cb06f440137b88c4b16e5589a384061c2cee0c786f6a3ab76"
+ },
+ "M4-emb|atencioso|perto|101": {
+  "decisoes": 288,
+  "estado": "86debf2f94a592406524bb64ae350dd71818ce958a2058a0fe31716a08515652",
+  "log": "4ec5beb840635b8a730f0bfd0496225a4802070d8903ded55a3f11f38f1a2de8",
+  "medidas": "b56e2e22916a0df6fa918e3d685d8ab2a98dcdd332130cac20e398b8708ee056"
+ },
+ "M4-emb|atencioso|perto|202": {
+  "decisoes": 288,
+  "estado": "f55dee3095d11b7064a73f677ec963b0f325109ddb709237ce866d6c2f021e26",
+  "log": "0c15884da09bbad28457fe40a9420aea8658d6f3e28a5c299bd383655357c6e2",
+  "medidas": "94e426c8a435ca9a3ab054d5bd8dbeb6ffbbde8d831ab8422384b40babbad19e"
+ },
+ "M4-emb|incoerente|comedouro|101": {
+  "decisoes": 288,
+  "estado": "07e63708b29484ecfec23f4c47fb52e448442ea2b68d3f47f6b8df3f526a781b",
+  "log": "3a3f0fe30313bdd632a34ba772efbddd3e3982ac27800f8dc35c0bae1248460d",
+  "medidas": "6e5b4c3c0565a02fd25945eed9d1a01d486c1d2cb0481d7c087b67532ef89ec5"
+ },
+ "M4-emb|incoerente|comedouro|202": {
+  "decisoes": 288,
+  "estado": "32b32518ff26e0bab083a89729acafd5df7d5eff220a664ea53ac2db9aa4222b",
+  "log": "afbfad070d6e801a5443df1e329ea5fa5417ca729fea4ff43c8e100c3968c4b7",
+  "medidas": "aef240c540f543bd269114fbc831cf26d600a5c60d1afcd4f4bb82a3812412de"
+ },
+ "M4-emb|incoerente|longe|101": {
+  "decisoes": 288,
+  "estado": "45f371b16b832e976c3b65a83311533b85f48578d2ade28fe3acdb2caff2f1dd",
+  "log": "30433e076f467098e66765ec49bec3ae607585f19c5750a41c4ea621d3816b48",
+  "medidas": "1ab1e7b972c5829dd6a150f092c779101f161dbf16c0d03ac3cdbdf9e1d79de2"
+ },
+ "M4-emb|incoerente|longe|202": {
+  "decisoes": 288,
+  "estado": "5d48a0f25072aee13ade551fc787cb0416511e269f0905110e71160ea9311f6b",
+  "log": "19abf002593d19085fcf51e4b9d2bba249504ae1e5f808a9baa5bf8fff997b2c",
+  "medidas": "2f3609509ebec64ecc0634c8fda41eae44519132ff8ee868f6e10e688c643d0b"
+ },
+ "M4-emb|incoerente|perto|101": {
+  "decisoes": 288,
+  "estado": "7016cbc422b34cb297c6c92e65f30229c6ce9562819168267b86786386ec9f96",
+  "log": "664d00cc285cc3282d320c6d087e84e0cdf27a4c1de59dac2bcbf450b25f73e7",
+  "medidas": "bd9aad10c56c5ab4d1cdcc618780c69b17221b69a171180b4ddd70e37e08d0d9"
+ },
+ "M4-emb|incoerente|perto|202": {
+  "decisoes": 288,
+  "estado": "309714ba73dc47e45c89624ab0ffa9d533ced4f31fa8cacdbad83b18c35d23ce",
+  "log": "b50860a251a74988344e853e6cd326d4105f8ca04edd7eba90b6721a102d477f",
+  "medidas": "7e37fde956a074be6296b5f9ae1c0c414a701fcca892df74e87c7e69908bbf5b"
+ },
+ "M4-emb|relapso|comedouro|101": {
+  "decisoes": 288,
+  "estado": "6b75f3c6801e96a8d959cc9313fb72d320a107603d39fdcac41095717ab2e16e",
+  "log": "d42eef4dd7c41e97d5e72b163ce761a08bb39bb3821b0cda81aafb81295db712",
+  "medidas": "2a23746fa77c3c9ce969882170e4bca1137e4773377c0387ab60d563f3439486"
+ },
+ "M4-emb|relapso|comedouro|202": {
+  "decisoes": 288,
+  "estado": "848b676300a9dac2e8732a595eec4b1afecd81d41f7a547478add83c2accfd1c",
+  "log": "d4df6e0d678e23b3e5da46fffba0ec32d2c37d9931d3cb923e99750fa90161e7",
+  "medidas": "e0d5a0a7cc4c79b60493544c4e1a0ae7d497d86bfc7d94308d184bfef144bd96"
+ },
+ "M4-emb|relapso|longe|101": {
+  "decisoes": 288,
+  "estado": "1f2c8692469ca243c0d7d20e054d0589e24075e4a94345b5f4eda2696a6d1401",
+  "log": "9692c968d0aa3bf82a7bedabff2ab817e3310c84fc36a61785c0f09ac7983ec8",
+  "medidas": "c23f72af3c2b4415ae4486d00881785e8ec0f779df75a149e937c4c4d0fe93ca"
+ },
+ "M4-emb|relapso|longe|202": {
+  "decisoes": 288,
+  "estado": "450708244315addf811fd4c8e9c43716d025ee64aff02ec31737ba48dbeb4ab8",
+  "log": "daf9b0201c34abbda3c9a5ee5a434ec18e200634633ec492e4650eed5e31727e",
+  "medidas": "96cbb7fc26fb4226c0e0c5dcae1cd4916fa4dba17a152eac7553696b962af7f2"
+ },
+ "M4-emb|relapso|perto|101": {
+  "decisoes": 288,
+  "estado": "11411723663ed08bc53312877ff0f751feeb73c4ffb93568855e90f09ac9bd50",
+  "log": "ae1441dfdc33a46b137a5628c5198bb212fe3e0b457a428571ee514b2d203e6b",
+  "medidas": "725cc06848e1801b5ec06c3082cceb1a83f257074b71ef2c7e99797d2d0096f6"
+ },
+ "M4-emb|relapso|perto|202": {
+  "decisoes": 288,
+  "estado": "41bf550417ac7053a8711989c73b3668fe168d22dfdad42da28efda94744489e",
+  "log": "77dc1449cfc173f2518c929402d94bc0324c11cfef4cf88d937944255d447c76",
+  "medidas": "45faf0f244721f942e5ef9dfaf525cbb35cafedd255bed08d487b3f07cbb5049"
+ },
+ "M4|aleatorio|comedouro|101": {
+  "decisoes": 288,
+  "estado": "9067b82a7c6f82eb67757489ed8adbb42881e761cc8c1227c312439aa83511c7",
+  "log": "991fd07be9add190d483fc75e09dd0d6d7286178369e1ad85139ad53935d4afa",
+  "medidas": "35235d86c2c47535412b4930913d233a0b3cd1b93079beb72a1ee4fb79d42e52"
+ },
+ "M4|aleatorio|comedouro|202": {
+  "decisoes": 288,
+  "estado": "6b7b460cb7a25dcb5f3a7d699d7f4ec9b1e85a7fac1445fb48aef22b3c77a74d",
+  "log": "72db9e0fca1f75f1b90b9e5e2f059e19b157904944d00c36c496634eb91de09a",
+  "medidas": "d8af9d1957c7bb5870c8a2667992cf8634874a5bdaca7119ff7756e3933ad04f"
+ },
+ "M4|aleatorio|longe|101": {
+  "decisoes": 288,
+  "estado": "03c06ec69fe3eca920dde31234c1e1d13dc63050c6a3d1efa3e6f9370a3965de",
+  "log": "1c759098d5ee4beea863d47118546d9e3bf8f0ce48c5d475244168543a7b749e",
+  "medidas": "067919d8ec3d68f6948bbae2305624d15878fbaa885df938d5cc185223c6d6f9"
+ },
+ "M4|aleatorio|longe|202": {
+  "decisoes": 288,
+  "estado": "56d7f52443a9e118c4fee07e32341fa0deff434971b7192479bc3cbfa6c03a17",
+  "log": "2d34d892f5d8b6aac1ba454917da4dcbaf62f3bee24f70da8369868f433fba82",
+  "medidas": "5cb6b92df730886db20a3abdbacff7953066f927a054888d153c1e6575e585bc"
+ },
+ "M4|aleatorio|perto|101": {
+  "decisoes": 288,
+  "estado": "c90744fc5a0cf941428e08b6e4f3244490b78cb760bc17d7b8f3ca062fd98c13",
+  "log": "49c65c55774e92602c5a4289b9ea16c0cbd5ea45f9f91caede7182882e0dacb3",
+  "medidas": "f47600a235cd4754d0e3dc79d84f293a7b42268247705eb61c79a6d8b6d8a165"
+ },
+ "M4|aleatorio|perto|202": {
+  "decisoes": 288,
+  "estado": "d4fe40e492366b9d92352f89a99a0b2638670cf44da50a04c9c6c92c768ce67c",
+  "log": "930a5e214e754956ffdabd71eb888ba2892494ea5bf4b0d1f982d5bea2c3fa17",
+  "medidas": "1ca4c607a78d24cc72b605cb4314e2df95ee89b72591019f419ebd17743a173e"
+ },
+ "M4|atencioso|comedouro|101": {
+  "decisoes": 288,
+  "estado": "21260cb4add3abf7d8f958d65ee9c0280d89ff9efab44481bee3ed8564a5219d",
+  "log": "3a3f0fe30313bdd632a34ba772efbddd3e3982ac27800f8dc35c0bae1248460d",
+  "medidas": "01aabdc34353fb2a1460fc44b9b0af0bb93d0185ba79e18a79a2fb4b5060f975"
+ },
+ "M4|atencioso|comedouro|202": {
+  "decisoes": 288,
+  "estado": "c6c1ab9162a629b2eb975948b0920d510175f174fbdd670e6ed64a8577a4861d",
+  "log": "afbfad070d6e801a5443df1e329ea5fa5417ca729fea4ff43c8e100c3968c4b7",
+  "medidas": "3b0df0ba67cc37942788cc3f3ea6c8f451dbc12c32230dd2f7e09807eaf60374"
+ },
+ "M4|atencioso|longe|101": {
+  "decisoes": 288,
+  "estado": "a832fb9fcc0b374d2779a81fd6edf0ec5c3b30f75846d2c4475fc047528f481e",
+  "log": "ca935cb239604714f57507a51ebe97aabf26b668e4e4d56df27e5db1746606d3",
+  "medidas": "c8a1f0ff15d6116c66fc911c993f73b569834d12da5cfdeff4dc8701982cb3f6"
+ },
+ "M4|atencioso|longe|202": {
+  "decisoes": 288,
+  "estado": "8d9c673a1ada1d5ae5b5034e6a599c312cd438693b279b5c7053cdb2224e6439",
+  "log": "30cf8161ad0be2cf97abdb6c24d3636cfa6d49dd979cbb2c1c57620c768ed85c",
+  "medidas": "8dfb82abdfcfdc36f3e7891eb6bd139a6960000c2e37a996f51d96b9cd8f37cc"
+ },
+ "M4|atencioso|perto|101": {
+  "decisoes": 288,
+  "estado": "0051621f9b51586c44a3603600729e957ba1d143d3a2fdd14884d0eaf51a4fbf",
+  "log": "4ec5beb840635b8a730f0bfd0496225a4802070d8903ded55a3f11f38f1a2de8",
+  "medidas": "1a0d2e9c69d8b1649ea9fea3097d51ca9d3dcea14ced404f7a99c1abdaff39ac"
+ },
+ "M4|atencioso|perto|202": {
+  "decisoes": 288,
+  "estado": "33a103f8449ff0aaf07b14fc7da307b171fdba9c7f39a512e633ab3ab160f8d6",
+  "log": "0c15884da09bbad28457fe40a9420aea8658d6f3e28a5c299bd383655357c6e2",
+  "medidas": "11b10e90663a360042d12e8fa257df5d2bfacca2fb9f9123f40e5f857624d48d"
+ },
+ "M4|incoerente|comedouro|101": {
+  "decisoes": 288,
+  "estado": "21260cb4add3abf7d8f958d65ee9c0280d89ff9efab44481bee3ed8564a5219d",
+  "log": "3a3f0fe30313bdd632a34ba772efbddd3e3982ac27800f8dc35c0bae1248460d",
+  "medidas": "01aabdc34353fb2a1460fc44b9b0af0bb93d0185ba79e18a79a2fb4b5060f975"
+ },
+ "M4|incoerente|comedouro|202": {
+  "decisoes": 288,
+  "estado": "c6c1ab9162a629b2eb975948b0920d510175f174fbdd670e6ed64a8577a4861d",
+  "log": "afbfad070d6e801a5443df1e329ea5fa5417ca729fea4ff43c8e100c3968c4b7",
+  "medidas": "3b0df0ba67cc37942788cc3f3ea6c8f451dbc12c32230dd2f7e09807eaf60374"
+ },
+ "M4|incoerente|longe|101": {
+  "decisoes": 288,
+  "estado": "0a04713ae8ac56939c9e53d97edb598a78470dd287d91a760a1f39d885b8e5b2",
+  "log": "0c761b834a48c8641a503ccc93db2541a4416a62397df8c4ce3c75b3f3f29b89",
+  "medidas": "6dac6a7083889aef3ad3d635a66cc5a4b7a5c7b3f3e6c02cb23db5e1af00ae32"
+ },
+ "M4|incoerente|longe|202": {
+  "decisoes": 288,
+  "estado": "dfdbb87b7e1af8d5732bb58e9aea10f14fe4417797638f4e1493950a5cbf0b5d",
+  "log": "19abf002593d19085fcf51e4b9d2bba249504ae1e5f808a9baa5bf8fff997b2c",
+  "medidas": "870ad9f18f52e64bb2a38d079a8fcd887aaae64e3d08d3b28ddae98365e213ae"
+ },
+ "M4|incoerente|perto|101": {
+  "decisoes": 288,
+  "estado": "d3aa700529af49b09e0f3042c473720875b27e4dfcc161081093ca7d711589a5",
+  "log": "7863e296e6aa713f6073b0289f4910ded82cad068192aeeb16bebfd1fcea49d5",
+  "medidas": "0fb97c7c20e5def2e8c8d6e8694136e0d2b137b54c87dda38c3ab676dc743097"
+ },
+ "M4|incoerente|perto|202": {
+  "decisoes": 288,
+  "estado": "a77665d52fa5a1b8de600cfd960cbe96ac1084e2303b4e177fcc41062b03d800",
+  "log": "b50860a251a74988344e853e6cd326d4105f8ca04edd7eba90b6721a102d477f",
+  "medidas": "400e17b1fc21a0894446638f8d1d29f230506b2dce228b79585df9d91941b670"
+ },
+ "M4|relapso|comedouro|101": {
+  "decisoes": 288,
+  "estado": "874695b3671f8570cb645e01249c063b13b5c393cc95fa54acea600b2e8eb979",
+  "log": "d42eef4dd7c41e97d5e72b163ce761a08bb39bb3821b0cda81aafb81295db712",
+  "medidas": "21e5ed3bba9c42bf8dcd40ff2962bbbc9a21fc39a44e9454cd42daebda08b3b2"
+ },
+ "M4|relapso|comedouro|202": {
+  "decisoes": 288,
+  "estado": "a16ad8f50376fba8448c41de568590b9e545a080048f7165682002dfb828fb77",
+  "log": "d4df6e0d678e23b3e5da46fffba0ec32d2c37d9931d3cb923e99750fa90161e7",
+  "medidas": "77c895d4530cbb1c7189a0e423b8c98b48eedbcee4088cc13f94271d29373910"
+ },
+ "M4|relapso|longe|101": {
+  "decisoes": 288,
+  "estado": "ef9aef8b9ba9449acb49bddae108cfdd4157705248d4f212234d068af9bbefe7",
+  "log": "9692c968d0aa3bf82a7bedabff2ab817e3310c84fc36a61785c0f09ac7983ec8",
+  "medidas": "3e925d0d73b5df9618574cef9513bb6e81ef0b0e043348eeee505c1aa90844f2"
+ },
+ "M4|relapso|longe|202": {
+  "decisoes": 288,
+  "estado": "15f22121e18a411869ce3faeb6970eff021add65a49b472e176ef525d20de200",
+  "log": "ad684cf4e31650d1f1b681d68aa642376c833f910176f266a53074e27258f1c3",
+  "medidas": "a223cb9447cf611b9dc8d809beac0b6853f73abcfb15c8a6d2da8061665f42c5"
+ },
+ "M4|relapso|perto|101": {
+  "decisoes": 288,
+  "estado": "60b6656aece6169d035101fc3df64b86a8c4ee7d96fafb64b9bb27a303c10f5d",
+  "log": "ae1441dfdc33a46b137a5628c5198bb212fe3e0b457a428571ee514b2d203e6b",
+  "medidas": "f0d6c837b870436da610f1532f262f1a80f22314aacceb7e4ec355eeb3156c7e"
+ },
+ "M4|relapso|perto|202": {
+  "decisoes": 288,
+  "estado": "fc6080bf629a1d4ef533a5a53735a56dd8311abf207d485e674d1c5f83393a48",
+  "log": "77dc1449cfc173f2518c929402d94bc0324c11cfef4cf88d937944255d447c76",
+  "medidas": "9c3d1781592ee75898ad4e70a9999f44a04d52af69fed2fe6d82c7037847be2e"
+ }
+}
