@@ -861,15 +861,25 @@ obrigatória; o #420 sem alteração. A decisão final vem com a aprovação do 
 - **Início:** a primeira decisão k_i de uma fome contínua em que O(k_i) vale. Isso cobre os dois casos: a fome começa com ração no chão,
   ou o dono põe a primeira ração durante uma fome que estava sem oferta. Guarda d₀ = a distância do pet à ração mais próxima em k_i.
 - **Encerramento, o primeiro que acontecer:**
-  - **"fechou":** numa decisão k em k_i ≤ k ≤ k_i + W(d₀), o pet come uma ração do dono (madura ou podre, como na medida de hoje) e a
-    falta da fome cai na decisão do consumo (a condição de hoje). É o **sucesso**;
+  - **"fechou":** numa decisão k em k_i ≤ k ≤ k_i + W(d₀), o pet come uma ração do dono **que reduz a fome**: a falta da fome cai na
+    decisão do consumo (a condição de hoje). É o **sucesso**. **Comer ração podre não fecha** (correção de 2026-10-26, abaixo);
   - **"não fechou":** qualquer outro fim. É **falha da cadeia da ração** e fica no denominador. O motivo vai ao registro do episódio, só
     como leitura descritiva, e nunca o tira da conta:
     - **"janela vencida":** a decisão k_i + W(d₀) passa sem o "fechou";
     - **"saciado por outra comida":** a fome contínua acaba (F deixa de valer) dentro da janela sem consumo de ração do dono. O episódio
       acaba ali, como falha;
-    - **a oferta muda dentro da janela** (a ração apodrece ou some pela idade): não encerra o episódio. A janela segue até o "fechou"
-      ou até vencer, e a ração podre ainda pode fechar.
+    - **a oferta muda dentro da janela** (a ração apodrece ou some pela idade): não encerra o episódio, que fica no denominador. A
+      janela segue até o "fechou" ou até vencer. Se até o fim da janela o pet não comer nenhuma ração que efetivamente reduza a fome, o
+      episódio é **falha**, mesmo que tenha comido ração podre.
+
+**Correção de 2026-10-26, a ração podre (pedida pelo Matheus depois da aprovação; a regra do gate não muda de sentido):**
+- **No código, comer ração podre não alimenta:** só baixa o humor em 0,10, e a fome fica igual (`digilab/mundo.py:1431-1439`). Só a ração
+  madura soma o ganho de alimentar.
+- **Por isso o consumo de ração podre não fecha o episódio:** o sucesso exige a redução da fome. A versão aprovada dizia que "a ração
+  podre ainda pode fechar"; isso estava errado e foi corrigido aqui.
+- **Comer ração podre na janela** não encerra o episódio nem o tira do denominador; a janela segue, e o episódio só fecha com uma ração
+  que reduza a fome.
+- **O resultado do #420 não muda,** e a medida por ração de hoje (a secundária) também não: ela já exigia a falta caindo.
 
 **Os desfechos, sem exclusão do denominador (a regra pedida pelo Matheus em 2026-10-26):**
 - **Comer outra comida no lugar da ração não facilita o G-MVP:** "saciado por outra comida" é falha e conta no denominador.
@@ -1070,7 +1080,7 @@ Todos com as sementes dos testes (101…505) ou sequências sintéticas; nenhum 
 | **T-EPISODIO-1** | o episódio em sequências sintéticas: abre na primeira decisão de uma fome contínua com oferta; fecha com a primeira refeição de ração na janela; três rações postas e uma comida dão um episódio fechado (a medida (a) dá 1 de 3) |
 | **T-EPISODIO-2** | sem repetição: com a mesma fome contínua e a oferta continuando (e com o dono pondo mais ração), a janela vencida não abre episódio novo; depois de "fechou" com a fome continuando, também não; um episódio novo só abre depois de F deixar de valer em ao menos uma decisão; nunca há dois episódios abertos |
 | **T-EPISODIO-3** | a refeição conta uma vez: duas refeições na mesma janela fecham um episódio só; uma refeição fora de episódio não entra na taxa e sai contada à parte |
-| **T-EPISODIO-4** | sem exclusão: em sequências sintéticas, a fome que acaba por outra comida dentro da janela encerra o episódio como falha e conta no denominador; a ração que apodrece ou some pela idade dentro da janela não encerra o episódio, e a janela vencida conta como falha no denominador; a ração podre comida na janela com a falta caindo fecha; o denominador é sempre o número de episódios |
+| **T-EPISODIO-4** | sem exclusão: em sequências sintéticas, a fome que acaba por outra comida dentro da janela encerra o episódio como falha e conta no denominador; a ração que apodrece ou some pela idade dentro da janela não encerra o episódio, e a janela vencida conta como falha no denominador; **a ração podre comida na janela não fecha** (a falta da fome não cai), não encerra o episódio e, sem outra ração que reduza a fome até o fim da janela, o episódio é falha no denominador; uma ração madura comida depois da podre, ainda na janela, fecha; o denominador é sempre o número de episódios |
 | **T-CENARIO-1** | o cenário da avaliação, nas vidas de teste do orquestrador (as sementes dos testes, todos os braços e células): (i) toda comida consumida é ração do dono, e nenhuma fruta existe no mundo; (ii) a fome nunca sobe numa decisão sem consumo; (iii) toda ração sai do chão só por consumo do pet ou pela regra da idade; (iv) há um pet só. Se qualquer item falhar, para e volta ao Matheus |
 | **T-EPISODIO-5** | a W(d) sai das constantes do motor; uma constante diferente falha alto |
 | **T-CHEIRO-1** | a DX-3: a ativação do `comer/cheiro` é a de hoje mais w, só com a subchave |
@@ -1113,7 +1123,8 @@ Todos com as sementes dos testes (101…505) ou sequências sintéticas; nenhum 
 ### A3.10 As decisões (DECIDIDAS pelo Matheus em 2026-10-26, com a aprovação do adendo na revisão 3)
 
 1. **A definição do episódio** (A3.3): uma por fome contínua; o sucesso é o "fechou"; todo outro fim é falha e fica no denominador,
-   sem exclusão; a oferta que apodrece ou some pela idade não encerra o episódio.
+   sem exclusão; a oferta que apodrece ou some pela idade não encerra o episódio; **comer ração podre não fecha** (correção de
+   2026-10-26).
 2. **A medida primária:** (b) por episódio, com (a) por ração como secundária obrigatória, como o Matheus recomendou.
 3. **A convenção da janela e a W(d)** (A3.2): a decisão da posta conta e anda; W(d₀) = 8 + n_min(d₀) depois dela, igual em todo braço
    e lugar.
