@@ -700,9 +700,11 @@ seção 6.1 permite, e os sinais da tabela 4.5 da espec ficam; nenhuma equação
   (G-PAR, G-CUSTO, E2E-COMIDA na web) é outro.
 - A avaliação é despachada pelo Gerente só depois de haver disco para as vidas (o D: estava com 1 GB livre em 2026-10-26).
 
-## Adendo 3: o conserto depois do diagnóstico (2026-10-26, Gerente; PROPOSTO, revisão 3, para a revisão do Matheus)
+## Adendo 3: o conserto depois do diagnóstico (2026-10-26, Gerente; revisão 3, APROVADO pelo Matheus em 2026-10-26)
 
-**Status: PROPOSTO, revisão 3. Nada deste adendo está decidido, implementado ou executado.** Ele segue o pedido do Matheus de
+**Status: APROVADO pelo Matheus em 2026-10-26, na revisão 3 ("Aprovo o adendo 3 e autorizo o merge do #423"). As decisões de
+A3.10 valem como DECIDIDAS; os números novos (o peso do cheiro, o N_desiste_cheiro, o R_lugar) seguem PROPOSTOS até a calibração. Nada
+implementado nem executado no momento da aprovação; nenhuma vida das faixas 65xxx e 66xxx rodou.** O adendo seguiu o pedido do Matheus de
 2026-10-26, depois do merge do diagnóstico (#422): preparar o adendo 3 para revisão, sem implementar mudança, sem rodar vida nem
 simulação nova antes da aprovação dele, preservando o resultado do #420 e sem reutilizar a faixa 64xxx. As fontes são a proposta aprovada
 (`docs/PROPOSTA_DIAGNOSTICO_DIGIBRAIN_MODULAR.md`), o resultado do diagnóstico (`docs/RESULTADO_V2_DIGIBRAIN_MODULAR_DIAGNOSTICO.md`),
@@ -1108,7 +1110,7 @@ Todos com as sementes dos testes (101…505) ou sequências sintéticas; nenhum 
 | **66101…66505** | a reavaliação, uma vez | 66101, 66202, 66303, 66404 e 66505 (K do adendo 4) |
 | 64101…64505 | a avaliação do #420 | **usada; não volta** |
 
-### A3.10 Para o Matheus decidir, na revisão 2
+### A3.10 As decisões (DECIDIDAS pelo Matheus em 2026-10-26, com a aprovação do adendo na revisão 3)
 
 1. **A definição do episódio** (A3.3): uma por fome contínua; o sucesso é o "fechou"; todo outro fim é falha e fica no denominador,
    sem exclusão; a oferta que apodrece ou some pela idade não encerra o episódio.
@@ -1117,4 +1119,5 @@ Todos com as sementes dos testes (101…505) ou sequências sintéticas; nenhum 
    e lugar.
 4. **O lugar visitado da DX-1** (A3.1): R_lugar = 76 subunidades, o alcance de uma decisão mais o raio de pegar.
 5. **A opção composta da DX-4** (A3.4), e a regra de fim com "achou" e N_desiste_cheiro = 6.
-6. **O adendo inteiro,** para que a implementação comece. Nada é implementado nem executado antes disso.
+6. **O adendo inteiro,** para que a implementação comece. **APROVADO.** A implementação segue a ordem de A3.7 e A3.8 e para antes de
+   qualquer vida da 65xxx: a calibração e o piloto voltam ao Matheus antes de rodar.

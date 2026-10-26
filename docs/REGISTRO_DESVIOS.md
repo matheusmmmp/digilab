@@ -387,3 +387,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-26 — DIGIBRAIN-MODULAR, o diagnóstico na `main` e o adendo 3 proposto (Gerente, worktree `v2-merge-r18`)](registro/2026-10.md)
 - [2026-10-26 — DIGIBRAIN-MODULAR, a revisão 2 do adendo 3 (Gerente, worktree `v2-merge-r18`)](registro/2026-10.md)
 - [2026-10-26 — DIGIBRAIN-MODULAR, a revisão 3 do adendo 3: sem exclusão do denominador (Gerente, worktree `v2-merge-r18`)](registro/2026-10.md)
+- [2026-10-26 — DIGIBRAIN-MODULAR, o adendo 3 aprovado (Gerente, worktree `v2-merge-r18`)](registro/2026-10.md)
