@@ -11,7 +11,7 @@ frustracao F em [0, S]. A atualizacao:
     e uma intencao, I* <- a nova, com C <- mul(k_C, S);
   - na consequencia: com a meta (comeu a comida, brincou com a bola, chegou ao lugar), C = 0; o alvo fora dos `vistos` depois de andar e
     sem cheiro ("sumiu"), ou `n_sp >= N_desiste` decisoes sem a distancia cair ("desistiu"), a intencao acaba sem a meta;
-  - acabou sem a meta: F <- F + mul(k_F, S - F).
+  - acabou sem a meta: F <- F + mul(k_F, S - F) (menos no "achou" da busca, abaixo).
 
 O credito (PE-3, por opcao; o M-PLAST, secao 4.8): cada opcao guarda a elegibilidade e_j = z_j da decisao que a comecou, soma o r_n de
 cada consequencia dela, e e entregue ao P2 quando acaba (com a meta, sem ela, ou na propria consequencia, nas opcoes de uma decisao).
@@ -19,7 +19,8 @@ cada consequencia dela, e e entregue ao P2 quando acaba (com a meta, sem ela, ou
 **A DX-4** (o adendo 3 do plano, A3.4; a subchave `intencao_cheiro`): a unidade `comer/cheiro` tambem abre intencao, a busca, com a meta
 "comer uma comida". A busca acaba, sem ler a distancia nem a direcao do cheiro (o G-SEM-DIRECAO), no primeiro destes:
   - "meta": o pet come uma comida numa decisao da busca (C = 0, o F nao sobe);
-  - "achou": uma comida boa (racao, a, b, c) esta nos `vistos` depois de andar;
+  - "achou": uma comida boa (racao, a, b, c) esta nos `vistos` depois de andar (o F nao sobe: decisao do Matheus de 2026-10-26; continua
+    um fim sem a meta, com o motivo e a contagem em `fins`);
   - "sumiu": sem cheiro e sem comida boa a vista;
   - "desistiu": `n_desiste_cheiro` decisoes da busca sem "meta" nem "achou";
   - "trocou": como as outras intencoes.
@@ -68,9 +69,9 @@ class EstadoDinamico:
         return {"F": self.F, "persistencia": h, "I": None if self.I is None else self.I["chave"],
                 "C": 0 if self.I is None else self.I["C"], "n_sp": 0 if self.I is None else self.I["n_sp"]}
 
-    def _acabar(self, motivo: str, meta: bool) -> dict:
+    def _acabar(self, motivo: str, meta: bool, frustra: bool = True) -> dict:
         I = self.I
-        if not meta:
+        if not meta and frustra:
             self.F = self.F + mul(self.k_f_sobe, self.S - self.F, self.S)
         self.fins[motivo] += 1
         self.I = None
@@ -135,7 +136,7 @@ class EstadoDinamico:
         if ocorrido is not None and ocorrido["comeu"] is not None:
             return [self._acabar("meta", True)]
         if depois["comida_boa_vista"]:
-            fim = self._acabar("achou", False)
+            fim = self._acabar("achou", False, frustra=False)       # o "achou" nao sobe o F (decisao de 2026-10-26)
             self.guardada = fim
             return [{**fim, "credito": False}]                         # guardada: o credito segue pela opcao composta
         if not depois["ha_cheiro"]:

@@ -215,26 +215,33 @@ def test_t_pers_cheiro_1_a_busca_abre_e_acaba():
     f0 = est.F
     fins = est.consequencia(300, {**NADA, "comeu": {"id": 9}}, _depois())
     assert [(f["motivo"], f["meta"], f["r"]) for f in fins] == [("meta", True, 290)] and est.F == f0 and est.I is None
-    # "achou": comida boa a vista depois de andar (guardada: sem credito agora)
+    # "achou": comida boa a vista depois de andar (guardada: sem credito agora); o F nao sobe (decisao do Matheus de 2026-10-26)
+    est.F = S // 4                                                                             # um F nao nulo, para ver que nao muda
     est.contexto()
     est.escolhida(tm._unidade(BUSCA), Z0, S, 2)
+    f0 = est.F
     fins = est.consequencia(-5, NADA, _depois(comida=True))
-    assert [(f["motivo"], f["credito"]) for f in fins] == [("achou", False)] and est.guardada is not None and est.I is None
+    assert [(f["motivo"], f["credito"], f["meta"]) for f in fins] == [("achou", False, False)] and est.guardada is not None and est.I is None
+    assert est.F == f0
     est.contexto()
     est.escolhida(tm._unidade(chave_unidade("dormir")), Z0, S, 3)
     est.consequencia(0, None, _depois())
     # "sumiu": sem cheiro e sem comida boa a vista
     est.contexto()
     est.escolhida(tm._unidade(BUSCA), Z0, S, 4)
+    f0 = est.F
     assert [f["motivo"] for f in est.consequencia(-5, NADA, _depois(cheiro=False))] == ["sumiu"]
+    assert est.F == f0 + mul(est.k_f_sobe, S - f0, S) > f0                                    # o "sumiu" continua subindo o F
     # "desistiu": N_desiste_cheiro decisoes sem meta nem achou
     fins = []
     for i in range(P.n_desiste_cheiro):
         est.contexto()
         est.escolhida(tm._unidade(BUSCA), Z0, S, 5 + i)
         assert not fins
+        f0 = est.F
         fins = est.consequencia(-1, NADA, _depois())
     assert [(f["motivo"], f["n"]) for f in fins] == [("desistiu", P.n_desiste_cheiro)]
+    assert est.F == f0 + mul(est.k_f_sobe, S - f0, S) > f0                                    # o "desistiu" continua subindo o F
     assert est.estado_interno()["fins"] == {"meta": 1, "trocou": 0, "sumiu": 1, "desistiu": 1, "achou": 1}
     # sem a subchave, a busca e uma opcao de uma decisao, como hoje
     hoje = EstadoDinamico(CONFIG_PADRAO, CONFIG_DIGIBRAIN_LIGADA)
