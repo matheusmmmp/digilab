@@ -223,3 +223,89 @@ O registro está na seção "2026-10-26 — DIGIBRAIN-MODULAR-AVALIACAO" de `doc
   a ser os padrões do `digilab/config.py`, e o gabarito G2 do #425 foi regravado por eles num commit próprio. O merge do #427 não aprovou
   todos os critérios: a G-PESA da persistência falhou nas três rodadas, e a persistência segue como ablação inconclusiva por premissa
   (seção 5.3). O congelamento não muda isso.
+
+## 7. O piloto do conserto (2026-10-27, worker D, Claude Code, Opus 5.5; adendo 3, A3.8 e A3.13)
+
+**Antes dos números:**
+- **é uma avaliação exploratória dos braços** (a autorização do Matheus em 2026-10-27). Pela seção 6.2, nenhum número do piloto é
+  evidência, e o piloto não tem leitura de gate (A3.8). **Ele não prova superioridade do cérebro modular;**
+- **a persistência:** o G-ABLA-PERS é **inconclusivo por premissa** (seção 5.3). A G-PESA dela falhou nas três rodadas do #427 e falha
+  de novo aqui. O piloto não demonstra a contribuição da persistência;
+- **os valores** são os calibrados do #428 (`eta_h` S/256, `w_pers` 4S, `tau_c` 15, o cheiro S/4 e 6), que seguem PROPOSTOS.
+
+**Como rodou:** registrado em A3.13 antes da primeira vida, no commit `4adce20`, de onde a run saiu com a árvore limpa (o `meta.json`:
+`git_head`, `git_limpo` = true e o sha256 da config `bdffc2af…4735`, o registrado).
+- As bases 65303, 65404 e 65505, com K = 2 (6 unidades), os 12 braços nas 12 células, 14 dias e 8 processos: **864 vidas,** em 313 s de
+  parede para as vidas e 375 s no total.
+- Toda vida foi rejogada do disco bit a bit dentro da run (o G1).
+- Nenhuma vida das faixas 64xxx, 65101/65202 ou 66xxx rodou.
+- Os artefatos estão em `artifacts_v2_digibrain_prototipo/conserto/piloto/`: o `meta.json`, o `medidas.json` e o `resultado.json`. As
+  vidas ficam fora do git, na worktree `v2-modular-piloto-conserto`. Todos os números abaixo saem do `resultado.json`, salvo o tempo e o
+  M4-con (o `meta.json`).
+
+**O efeito de cada contraste,** só como relato (positivo = a direção da espec; 6 unidades em 3 bases; o IC95 percentil do bootstrap
+agrupado por base, 10 000 reamostragens, semente 4242; o p unilateral é descritivo):
+
+| contraste | a medida | média | IC95 | p |
+|---|---|---|---|---|
+| G-ABLA-P1 | `falta_ao_comer`(M0) − (M1) | 0,0341 | [0,0105; 0,0553] | 0,0000 |
+| G-ABLA-P2 | o índice de repetição (M2) − (M1) | −0,0120 | [−0,0264; −0,0048] | 1,0000 |
+| G-ABLA-MEM | o fechamento (M3) − (M2), no comedouro | 0,1660 | [0,1208; 0,2137] | 0,0000 |
+| G-ABLA-PERS | `intencoes_com_meta`(M3) − (M3-sp) | −0,0012 | [−0,0152; 0,0078] | 0,5923 |
+| G-MOD-CON | `D_FE`(M4-con) − (M4) | −0,0054 | [−0,0099; 0,0007] | 0,9669 |
+| G-MOD-EMB | `D_FE`(M4-emb) − (M4) | −0,0024 | [−0,0083; 0,0010] | 0,7015 |
+| G-DX-INATO, longe | o fechamento por episódio (M3\*) − (M3\*−inato) | 0,0403 | [0,0082; 0,0687] | 0,0000 |
+| G-DX-INTENCAO, longe | o fechamento por episódio (M3\*) − (M3\*−intencao) | 0,0227 | [−0,0482; 0,0739] | 0,2539 |
+| G-DX-INATO, todas | idem, nas 12 células | 0,0227 | [0,0054; 0,0386] | 0,0000 |
+| G-DX-INTENCAO, todas | idem, nas 12 células | 0,0080 | [−0,0262; 0,0290] | 0,2539 |
+
+- **O G-ABLA-P2 e os dois G-MOD** saem com o sinal contrário ao previsto, como no piloto do #420. O G-ABLA-PERS também (−0,0012), e a
+  leitura dele é a de premissa, acima.
+- **O 2 × 2 do cheiro, no longe** (o fechamento por episódio, a média das unidades): M3\* 0,4564; M3\*−intencao 0,4336; M3\*−inato 0,4161;
+  M3-420 0,3416. A interação é −0,0517 [−0,0924; 0,0110]. Nas 12 células: 0,7515, 0,7434, 0,7288 e 0,7041.
+
+**O G-MVP** (sem gate; só o poder):
+- **por episódio (a primária, A3.3):** a fração de vidas do M3\* com o fechamento ≥ 0,5 é **0,8056.** O valor de planejamento fica em
+  0,8028;
+- **por ração (a secundária obrigatória):** **0,4722.**
+
+**As premissas** (seção 5.3; A3.3), só relatadas:
+
+| premissa | braço | média | IC95 | o limiar |
+|---|---|---|---|---|
+| G-PESA, o incentivo | M1 | 0,0191 | [0,0173; 0,0215] | limite inferior > 0,01 |
+| G-PESA, o hábito | M2 | 0,0805 | [0,0678; 0,0884] | idem |
+| G-PESA, a memória | M3\* | 0,1219 | [0,1140; 0,1297] | idem |
+| G-PESA, a persistência | M3\* | **0,0033** | [0,0029; 0,0039] | idem: **falha** |
+| G-ELEGIVEL | M3\* | 1,0 (as 72 vidas) | — | ≥ 0,8 |
+| G-ELEGIVEL-EP | M3\* | 1,0 (as 72 vidas) | — | ≥ 0,8 |
+
+- **Quantos episódios as vidas têm:** no M3\*, a média é 16,8 e a mediana 15, com o mínimo 5. Em todos os braços modulares, todas as vidas
+  têm 3 episódios ou mais.
+
+**O K** (seção 6.3): **10, e o alvo não é alcançado.**
+- Entram na conta o G-ABLA-P1 (efeito de planejamento 0,0171), o G-ABLA-MEM (0,0830) e o G-MVP por episódio (0,8028).
+- O G-ABLA-P2, o G-ABLA-PERS e os dois G-MOD saem da conta, pelo sinal contrário.
+- O P1 e o MEM já passam de 0,8 com K = 4 (0,968 e 0,994).
+- **O G-MVP não chega:** o poder dele fica entre 0,105 e 0,126 de K = 4 a 10 (0,1085 com K = 10), porque a fração do piloto (0,8056) quase
+  não passa do limiar. Pela seção 6.3, o K fica em 10, e o poder sai declarado.
+- A G-DX fica fora do K: com K = 10, o poder é 0,417 (INATO) e 0,201 (INTENCAO).
+
+**O valor do M4-con da reavaliação:** a média do `g_apr` das vidas M4 é 1 922,89, que arredonda para **1 923** (PROPOSTO).
+
+**O custo:** de 2,05 a 2,19 s de CPU por vida nos braços modulares, e 1,78 s no A11. A reavaliação estimada, com K = 10 e os 12 braços (7 200
+vidas), fica em 15 273 s de CPU.
+
+**Os descritivos** (sem gate):
+- **a comparação com o A11** (seção 7; a diferença bruta, M3\* − A11):
+  - o fechamento por episódio: +0,2800 [0,2349; 0,3128];
+  - a fração de vidas com a cadeia por episódio: +0,0694 [0,0000; 0,1667];
+  - as refeições por dia: +2,3135;
+  - a privação: −0,5783;
+- **a DX-5** (A3.5, exploratória), M2 − M1, pelas ações com recompensa possível: −0,0298 [−0,0490; −0,0113] no total. No comer, +0,0552
+  [0,0303; 0,0777]; no explorar, −0,0332 [−0,0556; −0,0170]. O brincar e o aliviar ficam sem valor (menos de 2 grupos). O índice de hoje
+  é −0,0120;
+- **as medidas de mecanismo do cheiro**, por braço e lugar, estão no `descritivos_conserto` do `resultado.json`.
+
+**O que fica para o Matheus:** a leitura do piloto e o adendo 4 (A3.8), que traz para a reavaliação (66101 a 66505) o efeito, as
+premissas, o M4-con, o K e o custo. Nada da reavaliação começou.

@@ -1,0 +1,444 @@
+{
+  "bracos": {
+    "A11": null,
+    "M0": {
+      "cheiro_inato": true,
+      "intencao_cheiro": true,
+      "m_mem": false,
+      "p1": false,
+      "p2": false
+    },
+    "M1": {
+      "cheiro_inato": true,
+      "intencao_cheiro": true,
+      "m_mem": false,
+      "p2": false
+    },
+    "M2": {
+      "cheiro_inato": true,
+      "intencao_cheiro": true,
+      "m_mem": false
+    },
+    "M3": {
+      "cheiro_inato": true,
+      "intencao_cheiro": true
+    },
+    "M3-420": {},
+    "M3-sem-inato": {
+      "intencao_cheiro": true
+    },
+    "M3-sem-intencao": {
+      "cheiro_inato": true
+    },
+    "M3-sp": {
+      "cheiro_inato": true,
+      "intencao_cheiro": true,
+      "persistencia": false
+    },
+    "M4": {
+      "cheiro_inato": true,
+      "intencao_cheiro": true,
+      "modula_g_apr": true
+    },
+    "M4-con": {
+      "cheiro_inato": true,
+      "controle_g_apr": "constante",
+      "intencao_cheiro": true
+    },
+    "M4-emb": {
+      "cheiro_inato": true,
+      "controle_g_apr": "embaralhado",
+      "intencao_cheiro": true,
+      "modula_g_apr": true
+    }
+  },
+  "config": {
+    "bootstrap": {
+      "nivel": 0.95,
+      "reamostragens": 10000,
+      "semente": 4242
+    },
+    "descricao": "Piloto do conserto (adendo 3, A3.8; registrado em A3.13 antes da primeira vida): os 12 bracos (os 9 de hoje com as subchaves ligadas, mais M3-sem-inato, M3-sem-intencao e M3-420), bases 65303 a 65505, K = 2, com os valores calibrados do #428 (PROPOSTOS). Avaliacao exploratoria dos bracos, autorizada pelo Matheus em 2026-10-27: nenhum numero e evidencia.",
+    "dias": 14,
+    "fase": "piloto_conserto",
+    "g_elegivel": {
+      "frac_vidas": 0.8,
+      "racoes": 3
+    },
+    "g_elegivel_ep": {
+      "episodios": 3,
+      "frac_vidas": 0.8
+    },
+    "g_mvp": {
+      "fome_elegivel": 0.5,
+      "limiar": 0.8,
+      "taxa_vida": 0.5,
+      "w_decisoes": 8
+    },
+    "g_mvp_ep": {
+      "fome_elegivel": 0.5,
+      "limiar": 0.8,
+      "taxa_vida": 0.5,
+      "w_decisoes": 8
+    },
+    "g_pesa": {
+      "bracos": {
+        "habito": "M2",
+        "incentivo": "M1",
+        "memoria": "M3",
+        "persistencia": "M3"
+      },
+      "limiar": 0.01
+    },
+    "holm": {
+      "alfa": 0.05
+    },
+    "orcamento_por_dia": 16,
+    "plano": "docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md",
+    "poder": {
+      "alfa_abla": 0.0125,
+      "alfa_mod": 0.025,
+      "alvo": 0.8,
+      "k_max": 10,
+      "k_min": 4,
+      "n_bases": 5,
+      "reamostragens_internas": 1000,
+      "replicas": 2000,
+      "semente": 4242
+    },
+    "unidades": {
+      "bases": [
+        65303,
+        65404,
+        65505
+      ],
+      "k": 2,
+      "prefixo": "digibrain_prototipo"
+    }
+  },
+  "config_arquivo": "experiments/configs/v2_digibrain_prototipo/piloto_conserto.json",
+  "config_sha256": "bdffc2af32c31b056252ad30f83e8f514c66542c1f6819322b1c76827e974735",
+  "duracao_s": 374.6724750995636,
+  "fase": "piloto_conserto",
+  "fim": "2026-10-27T16:42:57",
+  "g_apr_m4_con": 1923,
+  "git_head": "4adce20bc3ba48b480d27576dbde21735a2de489",
+  "git_limpo": true,
+  "inatos": {
+    "a_max": 4096,
+    "beta_e": 1024,
+    "beta_t": 512,
+    "beta_u": 512,
+    "c_g": 1024,
+    "d_max": 1024,
+    "e0": 512,
+    "e_max": 1024,
+    "epsilon": 128,
+    "escala": 1024,
+    "escala_cuidado": 480,
+    "eta_d": 256,
+    "eta_h": 4,
+    "fora_do_r": [
+      "susto"
+    ],
+    "g0": 1024,
+    "g_max": 2048,
+    "g_max_incentivo": 1024,
+    "g_min": 512,
+    "ganho_r": 4,
+    "h_max": 512,
+    "lambda_busca": 256,
+    "lambda_sono": 256,
+    "n_desiste": 3,
+    "n_desiste_cheiro": 6,
+    "n_ep": 16,
+    "r_norm": 2,
+    "s_v": 1024,
+    "tau_c": 15,
+    "tau_e": 120,
+    "tau_f_desce": 480,
+    "tau_f_sobe": 60,
+    "tau_hab": 120,
+    "tau_v": 240,
+    "urgencia_a": 512,
+    "urgencia_b": 1536,
+    "urgencia_lambda": 512,
+    "w0": [
+      [
+        "ocioso",
+        [
+          [
+            "vies",
+            128
+          ],
+          [
+            "u_fome",
+            -256
+          ],
+          [
+            "u_higiene",
+            -256
+          ],
+          [
+            "u_energia",
+            -256
+          ],
+          [
+            "u_tedio",
+            -256
+          ]
+        ]
+      ],
+      [
+        "dormir",
+        [
+          [
+            "vies",
+            -512
+          ],
+          [
+            "u_fome",
+            -1024
+          ],
+          [
+            "u_energia",
+            3072
+          ],
+          [
+            "noite",
+            512
+          ],
+          [
+            "dormindo",
+            512
+          ]
+        ]
+      ],
+      [
+        "comer",
+        [
+          [
+            "vies",
+            -1088
+          ],
+          [
+            "u_fome",
+            3072
+          ]
+        ]
+      ],
+      [
+        "brincar",
+        [
+          [
+            "vies",
+            -256
+          ],
+          [
+            "u_fome",
+            -512
+          ],
+          [
+            "u_energia",
+            -512
+          ],
+          [
+            "u_humor",
+            512
+          ],
+          [
+            "u_tedio",
+            512
+          ],
+          [
+            "bola_vista",
+            1024
+          ]
+        ]
+      ],
+      [
+        "chamar_atencao",
+        [
+          [
+            "vies",
+            -512
+          ],
+          [
+            "u_higiene",
+            1024
+          ],
+          [
+            "u_solidao",
+            512
+          ],
+          [
+            "u_estresse",
+            256
+          ],
+          [
+            "sem_cuidado",
+            256
+          ],
+          [
+            "comida_vista",
+            -1024
+          ],
+          [
+            "fome_sem_comida",
+            2048
+          ]
+        ]
+      ],
+      [
+        "explorar",
+        [
+          [
+            "vies",
+            128
+          ],
+          [
+            "u_energia",
+            -2048
+          ],
+          [
+            "u_tedio",
+            1024
+          ],
+          [
+            "u_curiosidade",
+            1024
+          ],
+          [
+            "fome_sem_comida",
+            512
+          ],
+          [
+            "F",
+            512
+          ]
+        ]
+      ],
+      [
+        "emburrar",
+        [
+          [
+            "vies",
+            -512
+          ],
+          [
+            "cuidado_humor",
+            2048
+          ]
+        ]
+      ]
+    ],
+    "w0_nov": [
+      [
+        "brincar",
+        128
+      ]
+    ],
+    "w0_prox": [
+      [
+        "comer",
+        512
+      ],
+      [
+        "brincar",
+        256
+      ]
+    ],
+    "w0_tipo": [
+      [
+        "comer",
+        [
+          [
+            "racao",
+            256
+          ],
+          [
+            "a",
+            256
+          ],
+          [
+            "b",
+            256
+          ],
+          [
+            "c",
+            256
+          ],
+          [
+            "podre",
+            -2048
+          ]
+        ]
+      ]
+    ],
+    "w0_tipo_cheiro": 256,
+    "w_mem": 1024,
+    "w_pers": 4096
+  },
+  "inicio": "2026-10-27T16:36:42",
+  "modo": "piloto_conserto",
+  "orquestrador_sha256": "aedec21ccf07f1eaa6ac95a19558d3a4129de440e10091251043c41280d4cbc8",
+  "plano": "docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md",
+  "plano_sha256": "a1ce02386774627d983bf5a7a31a444cfa8c2a443c13b6272a4951e8e3e748c1",
+  "processos": 8,
+  "python": "3.13.0",
+  "sha256": {
+    "config.py": "a370c02422e83195651644a526217c5dd42b0cc2606e1cb807157c531c6c5dc8",
+    "digibrain/__init__.py": "3d50ce23bd4001f607018485282fbea22b021d7e4f825c070b9be87197cb2b55",
+    "digibrain/_comum.py": "164ef9c3e5781f68a711d50de9a014751073ea7343540e5d6af9feff0a81d160",
+    "digibrain/adapt.py": "89a4813c7ce7105f59dc6d015299363dc78ad3a494e93dea2216811e61ddddc7",
+    "digibrain/afeto.py": "e890523b5239b6b12818997a5d82ff5f722f390ecf3f69ebcfd60324c43c525f",
+    "digibrain/arb.py": "5f30c965bca799b2a6c63be2efd83f873e2341f8b6815b744922caa0725d427f",
+    "digibrain/estado.py": "44a6def7ce5dc3e52b0eef5ee3631cfe2114c5ace8fd3b5642972ed7074f3035",
+    "digibrain/ganchos.py": "7c3b3fe8005d466ad29af630d07312b62a72a6f5d2ec6d886725189cf28be7a7",
+    "digibrain/impulso.py": "59bef1ffb7c1997c426eafc37092a15c004c6df7e14c2bb478fa6119fcf4675d",
+    "digibrain/mem.py": "97f5653b908db18a9ff4932795b6e82ee3d720e646aa7593e9d97e58508139fa",
+    "digibrain/plast.py": "6739a7032a7a45328b251916c54e81b91755c34168409b12b5ba3044c681b0b8",
+    "digibrain/sens.py": "fa58b1e6161ca6388027a5ce6cc8a111b25f1cc7ab0eb9fe9ca6a1e135872d8a",
+    "engine.py": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+    "metrics.py": "9e5218a75464567315778c83fa3da8e3e6e61e39decb67c65d64e308be75449f"
+  },
+  "unidades": [
+    {
+      "base": 65303,
+      "genoma": 16549544454476170860,
+      "k": 0,
+      "semente": 378265587196057549
+    },
+    {
+      "base": 65303,
+      "genoma": 15283982531608408700,
+      "k": 1,
+      "semente": 2488048605924536279
+    },
+    {
+      "base": 65404,
+      "genoma": 3342863206677342342,
+      "k": 0,
+      "semente": 18248547870840914847
+    },
+    {
+      "base": 65404,
+      "genoma": 10183811846873327235,
+      "k": 1,
+      "semente": 14705069307519721102
+    },
+    {
+      "base": 65505,
+      "genoma": 14261275897504782754,
+      "k": 0,
+      "semente": 17228996903855666652
+    },
+    {
+      "base": 65505,
+      "genoma": 2724488246642759237,
+      "k": 1,
+      "semente": 12603040957793181339
+    }
+  ],
+  "vidas_parede_s": 312.6837022999971
+}

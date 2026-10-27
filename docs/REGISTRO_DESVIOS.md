@@ -393,3 +393,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-26 — DIGIBRAIN-MODULAR-ACHOU (worker D, Claude Code, Opus 5.5, worktree `v2-modular-achou`): o "achou" da busca não sobe a frustração](registro/2026-10.md)
 - [2026-10-27 — DIGIBRAIN-MODULAR-CALIBRACAO-CONSERTO (worker D, Claude Code, Opus 5.5, worktree `v2-modular-calibracao-conserto`): a calibração do conserto, rodada a rodada](registro/2026-10.md)
 - [2026-10-27 — DIGIBRAIN-MODULAR-CONGELAMENTO (worker D, Claude Code, Opus 5.5, worktree `v2-modular-congelamento`): os valores da rodada 3 do #427 no `config.py` e o gabarito G2 regravado](registro/2026-10.md)
+- [2026-10-27 — DIGIBRAIN-MODULAR-PILOTO-CONSERTO (worker D, Claude Code, Opus 5.5, worktree `v2-modular-piloto-conserto`): o piloto do conserto, avaliação exploratória dos braços](registro/2026-10.md)
