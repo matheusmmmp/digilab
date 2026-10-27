@@ -1,5 +1,5 @@
 {
-  "descricao": "Calibracao do conserto (adendo 3, A3.8; A3.11): so o M3* (as duas subchaves do cheiro ligadas, o achou sem F do #426), bases 65101 e 65202, K = 2. Rodada 2: w_pers 2S -> 4S e eta_h S/128 -> S/256 (o campo inatos), o resto como na rodada 1 (o peso do cheiro S/4 e o N_desiste_cheiro 6); justificada pela rodada 1 em A3.11.",
+  "descricao": "Calibracao do conserto (adendo 3, A3.8; A3.11): so o M3* (as duas subchaves do cheiro ligadas, o achou sem F do #426), bases 65101 e 65202, K = 2. Rodada 3 (a ultima): a rodada 2 (w_pers 4S, eta_h S/256) com tau_c 30 -> 15 (o campo inatos); o peso do cheiro S/4 e o N_desiste_cheiro 6; justificada pela rodada 2 em A3.11.",
   "plano": "docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md",
   "dias": 14,
   "orcamento_por_dia": 16,
@@ -42,7 +42,7 @@
     }
   },
   "fase": "calibracao_conserto",
-  "rodada": 2,
+  "rodada": 3,
   "unidades": {
     "bases": [
       65101,
@@ -63,6 +63,7 @@
   },
   "inatos": {
     "w_pers": 4096,
-    "eta_h": 4
+    "eta_h": 4,
+    "tau_c": 15
   }
 }

@@ -1,7 +1,8 @@
 """O diagnostico de uma rodada da calibracao do conserto (docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md, A3.11): rejoga do disco as
 vidas M3* da rodada (o log de cada uma, em vidas/M3/), com os valores da propria rodada (os `inatos` do meta.json), e conta, so lendo:
   - o incentivo de cada classe antes da proximidade (o `Plasticidade.incentivo`): o valor, os zeros e os que batem no G_max;
-  - a fracao das decisoes com uma intencao em curso, por tipo (o limite do que a persistencia pode decidir);
+  - a fracao das decisoes com uma intencao em curso, por tipo; as decisoes com o termo da persistencia h > 0 (so da segunda decisao de
+    uma intencao em diante) e, delas, as que a persistencia decidiu (a sonda sem_persistencia): o limite do que ela pode decidir;
   - os termos medios da unidade escolhida (inato, habito, memoria, incentivo, persistencia), por terco da vida.
 As medidas refeitas de cada vida tem de ser as gravadas no medidas.json da rodada (senao falha alto). Nada muda na vida. Grava
 diagnostico.json na pasta da rodada.
@@ -52,6 +53,7 @@ def diagnosticar(pasta: Path) -> dict:
     inatos = orq.inatos_do_meta(meta)
     gravadas = json.loads((pasta / "medidas.json").read_text(encoding="utf-8"))
     intencoes, decisoes = Counter(), 0
+    pers = Counter()
     termos = {t: {terco: [] for terco in range(3)} for t in TERMOS}
     incentivos: list = []
     for u in meta["unidades"]:
@@ -74,6 +76,10 @@ def diagnosticar(pasta: Path) -> dict:
                 I = m["estado"]["I"]
                 if I is not None:
                     intencoes[f"{I[0]}/{I[1]}"] += 1
+                if any(x["termos"]["persistencia"] > 0 for x in m["unidades"]):
+                    pers["decisoes_com_h"] += 1
+                    pers["decidiu_com_h"] += bool(m["sondas"].get("persistencia_decidiu"))
+                pers["decidiu"] += bool(m["sondas"].get("persistencia_decidiu"))
                 escolhida = next((x for x in m["unidades"] if x["chave"] == m["escolha"]), None)
                 if escolhida is not None:
                     if tuple(escolhida["termos"]) != TERMOS:
@@ -90,6 +96,8 @@ def diagnosticar(pasta: Path) -> dict:
     return {"rodada": cfg["rodada"], "inatos": meta["inatos"], "vidas": len(gravadas), "decisoes": decisoes,
             "incentivo_antes_da_proximidade": incentivo,
             "intencao_em_curso": {"frac": sum(intencoes.values()) / decisoes, "por_tipo": dict(intencoes)},
+            "persistencia": {**pers, "frac_com_h": pers["decisoes_com_h"] / decisoes,
+                             "frac_decidiu_dado_h": pers["decidiu_com_h"] / pers["decisoes_com_h"] if pers["decisoes_com_h"] else None},
             "termos_da_escolhida_por_terco": {t: [statistics.fmean(v) if v else None for v in (por[0], por[1], por[2])]
                                               for t, por in termos.items()}}
 

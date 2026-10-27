@@ -290,6 +290,13 @@
       "explorar/ponto": 1381
     }
   },
+  "persistencia": {
+    "decidiu": 159,
+    "decidiu_com_h": 159,
+    "decisoes_com_h": 2045,
+    "frac_com_h": 0.03169952876984127,
+    "frac_decidiu_dado_h": 0.07775061124694377
+  },
   "rodada": 1,
   "termos_da_escolhida_por_terco": {
     "habito": [
