@@ -1136,3 +1136,54 @@ Todos com as sementes dos testes (101…505) ou sequências sintéticas; nenhum 
 5. **A opção composta da DX-4** (A3.4), e a regra de fim com "achou" e N_desiste_cheiro = 6.
 6. **O adendo inteiro,** para que a implementação comece. **APROVADO.** A implementação segue a ordem de A3.7 e A3.8 e para antes de
    qualquer vida da 65xxx: a calibração e o piloto voltam ao Matheus antes de rodar.
+
+### A3.11 A calibração do conserto (65101 e 65202): o registro de cada rodada, antes da primeira vida dela (worker D, Claude Code, Opus 5.5)
+
+**A autorização do Matheus (2026-10-26, pelo Gerente):** "Depois que o PR for integrado e o M3 estiver completo, calibrem nas bases
+65101 e 65202, começando com peso do cheiro S/4 e limite de 6 decisões de busca, com no máximo três rodadas. Antes de cada rodada,
+registre a configuração e os critérios de avaliação. Não ultrapasse três rodadas." O PR é o #426 (o "achou" sem frustração), na `main` em
+`7e34fab`.
+
+**O que vale para as três rodadas:**
+- **Escopo:** só o M3\* (o M3 com as subchaves `cheiro_inato` e `intencao_cheiro` ligadas, e o "achou" sem F do #426). As bases são 65101
+  e 65202, com K = 2, 14 dias, 16 interações por dia e as 12 células: **48 vidas por rodada**.
+  - Pelo `experiments/run_v2_digibrain_prototipo.py`, com a config `experiments/configs/v2_digibrain_prototipo/calibracao_conserto.json`
+    (o campo `rodada`) e 8 processos.
+  - Nenhum outro braço, nenhuma outra base, nenhum piloto, nenhuma reavaliação.
+- **O que pode mudar entre as rodadas (A3.8):**
+  - o peso do cheiro `w0_tipo_cheiro`, de S/8 a S/2;
+  - o `n_desiste_cheiro`, de 5 a 8;
+  - os valores da lista da seção 6.1 (a magnitude dos W⁰ com os sinais da tabela 4.5, as curvas a_r, b_r e λ_r, os τ, os η, o `w_mem`, o
+    `w_pers`, o `N_desiste` pela regra da PE-6, o `H_max` e o g₀).
+  - Cada mudança é justificada pelo resultado da rodada anterior e registrada aqui antes da primeira vida da rodada.
+  - Nenhuma equação, subchave nem número do motor, do corpo ou do mundo muda.
+- **Os critérios de fechamento, nesta ordem** (a seção 6.1, com a medida primária de A3.3 no lugar da taxa de hoje; o
+  `analisar_calibracao(..., conserto=True)` do orquestrador):
+  1. o T-CADEIA-1 passa com os valores da rodada e as duas subchaves (`tests/test_digibrain_vidas.py` e o T-CADEIA-1 de
+     `tests/test_digibrain_conserto.py`), conferido antes da run;
+  2. **a taxa de fechamento por episódio de fome do M3\*** (o `episodios_fome`, A3.3: os episódios que fecharam sobre todos os
+     episódios, sem exclusão, com a W(d) e a regra da ração podre do #424), **na mediana das 48 vidas, ≥ 0,5**;
+  3. nenhum H no teto: o `pesos_no_teto` = 0 em toda vida (o máximo das 48);
+  4. a G-PESA de cada módulo do M3\* (incentivo, hábito, memória e persistência), a média das 48 vidas, com a fração ≥ 0,01.
+  - **Fecha** se os quatro passam.
+- **Descritivos, sem critério:** os do `descritivos_conserto` (os fins das buscas, as decisões ao cheiro, a fração das rações na visão e o
+  sono na janela) e a taxa por ração com a W(d), lidos para justificar a rodada seguinte.
+- **A melhor rodada,** se nenhuma fechar: na ordem dos critérios, primeiro a que passa o T-CADEIA-1, depois a de maior mediana do
+  fechamento por episódio. Ela fica registrada como não fechada, e a faixa que não fecha não bloqueia (seção 6.1).
+- **Os artefatos:** `artifacts_v2_digibrain_prototipo/conserto/calibracao/rodada_<n>/`:
+  - o `meta.json` (os valores, o commit, a config com o sha e as sementes);
+  - o `medidas.json` (as 48 vidas);
+  - o `resultado.json` (os critérios).
+  - As vidas ficam fora do git.
+
+**Rodada 1 (registrada antes da primeira vida):**
+- **Os valores:** os de `digilab/config.py` em `7e34fab`, sem mudança. O `w0_tipo_cheiro` = S/4 = 256 e o `n_desiste_cheiro` = 6, o
+  pedido pelo Matheus. O resto é o congelado do adendo 1 (por exemplo `eta_h` = S/128, `w_pers` = 2S, `tau_c` = 30, `n_desiste` = 3), com
+  S = 1024.
+- **Os sha256:**
+  - `digilab/config.py` = `6ae53605114aa7e3186b1bf8ed5ecd7d055438e0d320636a7a33fe3d5da8b97f`;
+  - `digilab/engine.py` = `48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630` (o congelado);
+  - `digilab/metrics.py` = `9e5218a75464567315778c83fa3da8e3e6e61e39decb67c65d64e308be75449f`;
+  - a config `calibracao_conserto.json` (`rodada` = 1) = `25521336430a1fc76b98bfa8d538fbd69068212e7bd45c6902ba4b0c7b85337d`.
+- **O commit:** este registro é o commit da run. O `meta.json` grava o `git_head` e se a árvore estava limpa (`git_limpo`), e a run roda com a árvore limpa.
+- **Os critérios:** os quatro acima, sem mudança.
