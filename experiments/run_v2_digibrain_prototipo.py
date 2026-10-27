@@ -129,6 +129,14 @@ MODULO_DO_GATE = {"G-ABLA-P1": "incentivo", "G-ABLA-P2": "habito", "G-ABLA-MEM":
 CHAVES_CONFIG = {"descricao", "plano", "fase", "unidades", "dias", "orcamento_por_dia", "bootstrap", "poder", "holm", "g_mvp",
                  "g_elegivel", "g_pesa", "rodada"}
 CHAVES_CONFIG_CONSERTO = CHAVES_CONFIG | {"g_mvp_ep", "g_elegivel_ep"}
+# A3.8 e A3.11: o que a calibracao do conserto pode mudar (o campo opcional "inatos" da config, so nela), com a faixa de cada valor.
+# O peso do cheiro de S/8 a S/2 e o N_desiste_cheiro de 5 a 8 (A3.8); da lista da secao 6.1, os escalares: as curvas a_r, b_r e
+# lambda_r, os tau (>= Delta = 15 ticks, secao 1 da espec), os eta, o w_mem, o w_pers, o H_max e o g0 (o N_desiste fica na regra da PE-6,
+# e os W0 sao tuplas: entram so por uma revisao deste orquestrador). O digilab/config.py nao muda na calibracao.
+_S_INATOS = CONFIG_DIGIBRAIN_INATOS.escala
+FAIXAS_INATOS_CONSERTO = {"w0_tipo_cheiro": (_S_INATOS // 8, _S_INATOS // 2), "n_desiste_cheiro": (5, 8)} | {
+    n: (1, None) for n in ("urgencia_a", "urgencia_b", "urgencia_lambda", "eta_d", "eta_h", "w_mem", "w_pers", "h_max", "g0")} | {
+    n: (CONFIG_PADRAO.intervalo_decisao_ticks, None) for n in ("tau_hab", "tau_v", "tau_e", "tau_c", "tau_f_sobe", "tau_f_desce")}
 
 
 # ================================================================== a config
@@ -160,10 +168,27 @@ def adendo_do_piloto_conserto() -> dict:
     return {"k": r["n"]["k"], "g_apr_m4_con": r["g_apr_m4"]["m4_con"]}
 
 
+def inatos_da_config(cfg: dict) -> ConfigDigibrainInatos:
+    """os valores da run: os de hoje (CONFIG_DIGIBRAIN_INATOS) com o campo "inatos" da config por cima, so na calibracao do conserto e so
+    nos campos e nas faixas de FAIXAS_INATOS_CONSERTO (A3.8); fora disso, falha alto"""
+    mudar = cfg.get("inatos", {})
+    if not mudar:
+        return CONFIG_DIGIBRAIN_INATOS
+    if cfg.get("fase") != "calibracao_conserto":
+        raise ValueError("o campo inatos da config e so da calibracao do conserto (A3.8)")
+    for nome, valor in mudar.items():
+        if nome not in FAIXAS_INATOS_CONSERTO:
+            raise ValueError(f"inatos.{nome}: a calibracao do conserto so muda {sorted(FAIXAS_INATOS_CONSERTO)} (A3.8)")
+        lo, hi = FAIXAS_INATOS_CONSERTO[nome]
+        if type(valor) is not int or valor < lo or (hi is not None and valor > hi):
+            raise ValueError(f"inatos.{nome} = {valor!r}: fora da faixa [{lo}, {hi}] (A3.8)")
+    return replace(CONFIG_DIGIBRAIN_INATOS, **mudar)
+
+
 def modo_da_config(cfg: dict) -> str:
     """'fumaca' (as sementes dos testes) ou a fase ('calibracao', 'piloto', 'avaliacao'), que segue o plano a letra."""
     esperadas = _sem_rodada(cfg) - {"descricao"}
-    faltam, sobram = esperadas - set(cfg), set(cfg) - _sem_rodada(cfg)
+    faltam, sobram = esperadas - set(cfg), set(cfg) - _sem_rodada(cfg) - {"inatos"}
     if faltam or sobram:
         raise ValueError(f"config: faltam {sorted(faltam)}, sobram {sorted(sobram)}")
     fase = cfg["fase"]
@@ -186,6 +211,7 @@ def modo_da_config(cfg: dict) -> str:
         erros.append("rodada da calibracao: 1, 2 ou 3 (secao 6.1; A3.8)")
     if fase in FASES_CONSERTO and (cfg["g_mvp_ep"] != G_MVP_EP or cfg["g_elegivel_ep"] != G_ELEGIVEL_EP):
         erros.append("g_mvp_ep ou g_elegivel_ep (adendo 3, A3.3)")
+    inatos_da_config(cfg)
     if erros:
         raise ValueError(f"config fora do plano: {erros}")
     outras = set().union(*(range(BASES[f][0], BASES[f][-1] + 1) for f in BASES if f != fase))
@@ -304,9 +330,9 @@ def fabricas(braco: str, dono: str, semente: int, dias: int, orcamento_por_dia: 
 
 
 def viver(braco: str, dono: str, lugar: str, semente: int, dias: int, orcamento_por_dia: int, serie_e: tuple | None = None,
-          g_apr_con: int | None = None, conserto: bool = False):
-    """uma vida: (o motor, o registro, as fabricas); `conserto`, os bracos do adendo 3"""
-    fp, fm = fabricas(braco, dono, semente, dias, orcamento_por_dia, serie_e, g_apr_con, conserto=conserto)
+          g_apr_con: int | None = None, conserto: bool = False, inatos: ConfigDigibrainInatos | None = None):
+    """uma vida: (o motor, o registro, as fabricas); `conserto`, os bracos do adendo 3; `inatos`, os da calibracao do conserto (A3.11)"""
+    fp, fm = fabricas(braco, dono, semente, dias, orcamento_por_dia, serie_e, g_apr_con, inatos=inatos, conserto=conserto)
     registro = fp(CONFIG_PADRAO)
     d = DonoComLugar(criar_dono(dono), lugar, semente, dono, CM)
     motor, _ = simular_vida_fisico(d, registro, semente, dias, orcamento_por_dia * dias, dono, fm)
@@ -653,8 +679,9 @@ def _vida_gravada(cfg: dict, braco: str, dono: str, lugar: str, unidade: dict, p
     """uma vida: vivida, gravada, rejogada do disco (G1), conferida (as falhas altas) e medida"""
     c0, p0 = time.process_time(), time.perf_counter()
     conserto = cfg["fase"] in FASES_CONSERTO
+    inatos = inatos_da_config(cfg)
     motor, registro, fab = viver(braco, dono, lugar, unidade["semente"], cfg["dias"], cfg["orcamento_por_dia"], serie_e, g_apr_con,
-                                 conserto=conserto)
+                                 conserto=conserto, inatos=None if inatos is CONFIG_DIGIBRAIN_INATOS else inatos)
     nome = f"{braco}|{dono}|{lugar}|{unidade['semente']}"
     arquivo = Path(pasta) / "vidas" / braco / f"{dono}_{lugar}_{unidade['semente']}.jsonl"
     arquivo.parent.mkdir(parents=True, exist_ok=True)
@@ -1262,7 +1289,7 @@ def rodar(cfg: dict, pasta: Path, processos: int, caminho_config: Path | None = 
             "git_limpo": rc._git("status", "--porcelain") == "", "processos": processos, "unidades": unidades,
             "bracos": {b: (None if b == "A11" else (SUBCHAVES_CONSERTO if fase in FASES_CONSERTO else SUBCHAVES)[b])
                        for b in BRACOS_DA_FASE[fase]},
-            "inatos": json.loads(json.dumps(CONFIG_DIGIBRAIN_INATOS.__dict__)),
+            "inatos": json.loads(json.dumps(inatos_da_config(cfg).__dict__)),
             "sha256": {n: rc._sha_arquivo(RAIZ / "digilab" / n) for n in ("config.py", "engine.py", "metrics.py")}
             | {f"digibrain/{p.name}": rc._sha_arquivo(p) for p in sorted((RAIZ / "digilab" / "digibrain").glob("*.py"))},
             "inicio": time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime(inicio))}

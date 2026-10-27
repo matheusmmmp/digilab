@@ -1,0 +1,332 @@
+{
+  "decisoes": 64512,
+  "inatos": {
+    "a_max": 4096,
+    "beta_e": 1024,
+    "beta_t": 512,
+    "beta_u": 512,
+    "c_g": 1024,
+    "d_max": 1024,
+    "e0": 512,
+    "e_max": 1024,
+    "epsilon": 128,
+    "escala": 1024,
+    "escala_cuidado": 480,
+    "eta_d": 256,
+    "eta_h": 8,
+    "fora_do_r": [
+      "susto"
+    ],
+    "g0": 1024,
+    "g_max": 2048,
+    "g_max_incentivo": 1024,
+    "g_min": 512,
+    "ganho_r": 4,
+    "h_max": 512,
+    "lambda_busca": 256,
+    "lambda_sono": 256,
+    "n_desiste": 3,
+    "n_desiste_cheiro": 6,
+    "n_ep": 16,
+    "r_norm": 2,
+    "s_v": 1024,
+    "tau_c": 30,
+    "tau_e": 120,
+    "tau_f_desce": 480,
+    "tau_f_sobe": 60,
+    "tau_hab": 120,
+    "tau_v": 240,
+    "urgencia_a": 512,
+    "urgencia_b": 1536,
+    "urgencia_lambda": 512,
+    "w0": [
+      [
+        "ocioso",
+        [
+          [
+            "vies",
+            128
+          ],
+          [
+            "u_fome",
+            -256
+          ],
+          [
+            "u_higiene",
+            -256
+          ],
+          [
+            "u_energia",
+            -256
+          ],
+          [
+            "u_tedio",
+            -256
+          ]
+        ]
+      ],
+      [
+        "dormir",
+        [
+          [
+            "vies",
+            -512
+          ],
+          [
+            "u_fome",
+            -1024
+          ],
+          [
+            "u_energia",
+            3072
+          ],
+          [
+            "noite",
+            512
+          ],
+          [
+            "dormindo",
+            512
+          ]
+        ]
+      ],
+      [
+        "comer",
+        [
+          [
+            "vies",
+            -1088
+          ],
+          [
+            "u_fome",
+            3072
+          ]
+        ]
+      ],
+      [
+        "brincar",
+        [
+          [
+            "vies",
+            -256
+          ],
+          [
+            "u_fome",
+            -512
+          ],
+          [
+            "u_energia",
+            -512
+          ],
+          [
+            "u_humor",
+            512
+          ],
+          [
+            "u_tedio",
+            512
+          ],
+          [
+            "bola_vista",
+            1024
+          ]
+        ]
+      ],
+      [
+        "chamar_atencao",
+        [
+          [
+            "vies",
+            -512
+          ],
+          [
+            "u_higiene",
+            1024
+          ],
+          [
+            "u_solidao",
+            512
+          ],
+          [
+            "u_estresse",
+            256
+          ],
+          [
+            "sem_cuidado",
+            256
+          ],
+          [
+            "comida_vista",
+            -1024
+          ],
+          [
+            "fome_sem_comida",
+            2048
+          ]
+        ]
+      ],
+      [
+        "explorar",
+        [
+          [
+            "vies",
+            128
+          ],
+          [
+            "u_energia",
+            -2048
+          ],
+          [
+            "u_tedio",
+            1024
+          ],
+          [
+            "u_curiosidade",
+            1024
+          ],
+          [
+            "fome_sem_comida",
+            512
+          ],
+          [
+            "F",
+            512
+          ]
+        ]
+      ],
+      [
+        "emburrar",
+        [
+          [
+            "vies",
+            -512
+          ],
+          [
+            "cuidado_humor",
+            2048
+          ]
+        ]
+      ]
+    ],
+    "w0_nov": [
+      [
+        "brincar",
+        128
+      ]
+    ],
+    "w0_prox": [
+      [
+        "comer",
+        512
+      ],
+      [
+        "brincar",
+        256
+      ]
+    ],
+    "w0_tipo": [
+      [
+        "comer",
+        [
+          [
+            "racao",
+            256
+          ],
+          [
+            "a",
+            256
+          ],
+          [
+            "b",
+            256
+          ],
+          [
+            "c",
+            256
+          ],
+          [
+            "podre",
+            -2048
+          ]
+        ]
+      ]
+    ],
+    "w0_tipo_cheiro": 256,
+    "w_mem": 1024,
+    "w_pers": 2048
+  },
+  "incentivo_antes_da_proximidade": {
+    "bola": {
+      "max": 1024,
+      "mediana": 161,
+      "n": 914,
+      "no_teto": 36,
+      "p90": 765,
+      "zero": 387
+    },
+    "podre": {
+      "max": 0,
+      "mediana": 0,
+      "n": 3045,
+      "no_teto": 0,
+      "p90": 0,
+      "zero": 3045
+    },
+    "racao": {
+      "max": 1024,
+      "mediana": 159,
+      "n": 17010,
+      "no_teto": 3388,
+      "p90": 1024,
+      "zero": 537
+    }
+  },
+  "intencao_em_curso": {
+    "frac": 0.03335813492063492,
+    "por_tipo": {
+      "brincar/bola": 9,
+      "comer/cheiro": 611,
+      "comer/comida": 151,
+      "explorar/ponto": 1381
+    }
+  },
+  "rodada": 1,
+  "termos_da_escolhida_por_terco": {
+    "habito": [
+      28.607142857142858,
+      126.50478980654762,
+      233.53255208333334
+    ],
+    "inato": [
+      1006.1996372767857,
+      1176.7384207589287,
+      1171.7520926339287
+    ],
+    "incentivo": [
+      12.407087053571429,
+      14.193452380952381,
+      12.509207589285714
+    ],
+    "memoria": [
+      17.365559895833332,
+      41.446986607142854,
+      61.61928013392857
+    ],
+    "nov": [
+      0.03571428571428571,
+      0.08049665178571429,
+      0.020554315476190476
+    ],
+    "persistencia": [
+      6.505952380952381,
+      3.4047619047619047,
+      3.0952380952380953
+    ],
+    "prox": [
+      11.875465029761905,
+      14.253255208333334,
+      14.169921875
+    ]
+  },
+  "vidas": 48
+}

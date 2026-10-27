@@ -1187,3 +1187,49 @@ registre a configuração e os critérios de avaliação. Não ultrapasse três 
   - a config `calibracao_conserto.json` (`rodada` = 1) = `25521336430a1fc76b98bfa8d538fbd69068212e7bd45c6902ba4b0c7b85337d`.
 - **O commit:** este registro é o commit da run. O `meta.json` grava o `git_head` e se a árvore estava limpa (`git_limpo`), e a run roda com a árvore limpa.
 - **Os critérios:** os quatro acima, sem mudança.
+
+**Rodada 1, o resultado** (`artifacts_v2_digibrain_prototipo/conserto/calibracao/rodada_1/`; a run no commit `38e5015`, com a árvore
+limpa e o sha da config igual ao registrado; 48 vidas, 3 min com 8 processos). **Não fecha:**
+
+| critério | rodada 1 |
+|---|---|
+| T-CADEIA-1 (as duas subchaves) | passa |
+| o fechamento por episódio do M3\*, a mediana das vidas (≥ 0,5) | **0,8209** |
+| `pesos_no_teto` (o máximo; = 0) | **0** |
+| G-PESA, o incentivo (≥ 0,01) | 0,0086 |
+| G-PESA, o hábito | **0,1572** |
+| G-PESA, a memória | **0,1202** |
+| G-PESA, a persistência | 0,0022 |
+
+- **O que o diagnóstico mostra** (o `diagnostico.json` da rodada, de `experiments/diagnostico_calibracao_conserto_digibrain.py`, que
+  rejoga as 48 vidas do disco com os valores da rodada e confere que as medidas refeitas são as gravadas):
+  - **o incentivo é empurrado pelo hábito ao longo da vida.** Na unidade escolhida, o termo do hábito sobe de 29 para 127 e depois para
+    234 nos três terços da vida; o do incentivo fica em 12 a 14 (o incentivo da ração antes da proximidade tem mediana 159, e 20% das
+    17 010 amostras batem no G_max). A influência do incentivo por dia cai de 0,026 (dia 4) para 0,005 (dia 14), e a G-PESA lê os dias
+    8 a 14;
+  - **a persistência só pode decidir em 3,3% das decisões,** as que têm uma intenção em curso (explorar/ponto 1 381, comer/cheiro 611,
+    comer/comida 151 e brincar/bola 9, de 64 512 decisões). Na unidade escolhida o termo dela fica em 3 a 7;
+  - **o cheiro:** a busca acaba quase sempre em "achou" (727 de 1 297 fins), "trocou" (546) ou "sumiu" (24); nenhuma "desistiu" com 6.
+    O fechamento por episódio já passa com folga (0,82), então o peso do cheiro e o N_desiste_cheiro não mudam.
+
+**Rodada 2 (registrada antes da primeira vida):**
+- **O que muda e por quê** (só valores da lista da seção 6.1; o peso do cheiro S/4 e o N_desiste_cheiro 6 ficam):
+  - **`eta_h` (o passo do P2): S/128 → S/256 (8 → 4).** O hábito cresce pela metade e deixa ao incentivo mais decisões na janela dos
+    dias 8 a 14, onde a influência dele caiu abaixo de 0,01. A G-PESA do hábito (0,157) tem folga para cair;
+  - **`w_pers`: 2S → 4S (2 048 → 4 096).** Na segunda decisão de uma intenção, h = mul(4S, 512) = 2 048 em vez de 1 024. A fração das
+    decisões com intenção não muda (é estrutural), mas a persistência passa a decidir mais vezes nelas. Foi a mesma alavanca da
+    rodada 2 do adendo 1 (S/2 → 2S levou a persistência de 0,0002 a 0,0016).
+- **Como os valores entram:** pelo campo `inatos` da config (`{"w_pers": 4096, "eta_h": 4}`). O orquestrador ganhou o
+  `inatos_da_config` (`FAIXAS_INATOS_CONSERTO`: só na calibração do conserto, só nos campos e nas faixas de A3.8; fora disso, falha alto).
+  O `digilab/config.py` não muda na calibração: os padrões, as vidas dos outros braços e o gabarito G2 ficam os de hoje. O `meta.json`
+  grava os valores usados, e o diagnóstico e o replay os leem de lá.
+- **Os critérios:** os quatro de A3.11, sem mudança.
+- **Os valores da rodada:** `w_pers` = 4 096 e `eta_h` = 4. O resto é o de `digilab/config.py`, com o mesmo sha256 da rodada 1
+  (`6ae53605114aa7e3186b1bf8ed5ecd7d055438e0d320636a7a33fe3d5da8b97f`): o `w0_tipo_cheiro` = 256, o `n_desiste_cheiro` = 6, o `tau_c` = 30
+  e o `n_desiste` = 3.
+- **Os sha256:**
+  - a config `calibracao_conserto.json` (`rodada` = 2, `inatos` = `{"w_pers": 4096, "eta_h": 4}`) =
+    `c2d5d5681dc8ab61346d1a4c859f1eb8cfeeb27c948edf3e264d8dc86ab369bd`;
+  - o orquestrador `experiments/run_v2_digibrain_prototipo.py` = `aedec21ccf07f1eaa6ac95a19558d3a4129de440e10091251043c41280d4cbc8`;
+  - o `engine.py` e o `metrics.py` são os da rodada 1.
+- **O commit:** este registro é o commit da run.
