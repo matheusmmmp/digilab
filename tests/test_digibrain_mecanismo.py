@@ -193,6 +193,9 @@ def test_t_estado_1_o_integrador_e_a_meia_vida():
         for n in range(1, 41):
             y = integrar(y, S, k, S)
             assert abs(y - S * (1 - (1 - k / S) ** n)) <= n
+        if k == S:                  # tau = Delta (o tau_c do A3.12): o integrador chega a S numa decisao, e nao ha meia-vida
+            assert tau == delta and integrar(0, S, k, S) == S
+            continue
         meia = math.log(0.5) / math.log(1 - k / S)                       # em decisoes
         assert abs(meia - math.log(2) * tau / delta) <= 0.5 * meia + 1     # a meia-vida da tabela de tau (Euler, k pequeno)
 
@@ -212,7 +215,10 @@ def test_t_estado_2_a_intencao_persiste_e_acaba():
     ctx = est.contexto()
     assert ctx["persistencia"] == {comer: mul(P.w_pers, c1, S)}
     est.escolhida(_unidade(comer, 80), z, S, 1)
-    assert est.I["C"] > c1                                                # escolheu de novo: o C sobe
+    if c1 < S:
+        assert est.I["C"] > c1                                            # escolheu de novo: o C sobe
+    else:                                                                 # tau_c = Delta (A3.12): o C ja e S na primeira decisao
+        assert ganho_de_tau(P.tau_c, CONFIG_PADRAO.intervalo_decisao_ticks, S) == S and est.I["C"] == S
     f0 = est.F
     fins = est.consequencia(5, {"comeu": None, "brincou_com_bola": False, "chegou": False}, {"visto": False, "d": None, "ha_cheiro": False})
     assert [f["motivo"] for f in fins] == ["sumiu"] and est.I is None and est.F > f0 and fins[0]["r"] == 15

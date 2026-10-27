@@ -118,10 +118,12 @@ def test_os_inatos_da_calibracao_do_conserto_so_nos_campos_e_faixas_de_a3_8(tmp_
     for nome in ("piloto_conserto.json", "fumaca_piloto_conserto.json"):
         with pytest.raises(ValueError, match="so da calibracao do conserto"):
             orq.modo_da_config({**_cfg(nome), "inatos": {"w_pers": 4 * S}})
-    fum = {**_cfg("fumaca_calibracao_conserto.json"), "dias": 1, "inatos": {"w_pers": 4 * S, "eta_h": S // 256}}
+    # os valores de antes do congelamento da rodada 3 do #427 (2S e S/128), diferentes dos de hoje
+    fum = {**_cfg("fumaca_calibracao_conserto.json"), "dias": 1, "inatos": {"w_pers": 2 * S, "eta_h": S // 128}}
+    assert (P.w_pers, P.eta_h) != (2 * S, S // 128)
     assert orq.modo_da_config(fum) == "fumaca"
     run = orq.rodar(fum, tmp_path / "r", 1)
-    assert run["meta"]["inatos"]["w_pers"] == 4 * S and run["meta"]["inatos"]["eta_h"] == S // 256
+    assert run["meta"]["inatos"]["w_pers"] == 2 * S and run["meta"]["inatos"]["eta_h"] == S // 128
     hoje = orq.rodar({**fum, "inatos": {}}, tmp_path / "h", 1)
     assert run["registros"] and [r["vida"] for r in run["registros"]] == [r["vida"] for r in hoje["registros"]]
     assert any(a != b for a, b in zip(run["registros"], hoje["registros"]))       # os valores chegam a vida
