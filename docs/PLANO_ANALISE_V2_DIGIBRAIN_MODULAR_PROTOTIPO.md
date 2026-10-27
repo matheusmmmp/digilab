@@ -1277,3 +1277,40 @@ limpa e o sha da config igual ao registrado; 48 vidas, 27 s com 8 processos). **
     `aedec21ccf07f1eaa6ac95a19558d3a4129de440e10091251043c41280d4cbc8`).
 - **Os critérios:** os quatro de A3.11, sem mudança. **Depois desta rodada a calibração para,** com a melhor rodada pela regra acima.
 - **O commit:** este registro é o commit da run.
+
+**Rodada 3, o resultado, e o fim da calibração do conserto** (`artifacts_v2_digibrain_prototipo/conserto/calibracao/rodada_3/`; a run
+no commit `9c04ecf`, com a árvore limpa e o sha da config igual ao registrado; 48 vidas, 27 s com 8 processos). **O critério não fechou em
+nenhuma das três rodadas.**
+
+| critério | rodada 1 | rodada 2 | rodada 3 |
+|---|---|---|---|
+| T-CADEIA-1 (as duas subchaves) | passa | passa | passa |
+| o fechamento por episódio do M3\*, a mediana das vidas (≥ 0,5) | **0,8209** | **0,7857** | **0,8397** |
+| `pesos_no_teto` (o máximo; = 0) | **0** | **0** | **0** |
+| G-PESA, o incentivo (≥ 0,01) | 0,0086 | **0,0147** | **0,0149** |
+| G-PESA, o hábito | **0,1572** | **0,0728** | **0,0758** |
+| G-PESA, a memória | **0,1202** | **0,1143** | **0,1117** |
+| G-PESA, a persistência | 0,0022 | 0,0023 | 0,0027 |
+| decisões com h > 0 (de 64 512) | 2 045 | 1 867 | 1 792 |
+| a persistência decidiu, dado h > 0 | 7,8% | 10,8% | 12,8% |
+| fecha | não | não | não |
+
+- **A melhor rodada é a 3,** pela regra registrada antes da rodada 1: as três passam o T-CADEIA-1, e ela tem a maior mediana do
+  fechamento por episódio. É também a que passa mais critérios (cinco de seis, como a rodada 2).
+- **O que não fechou:** só a G-PESA da persistência (0,0027 contra ≥ 0,01). Com o `tau_c` no mínimo e o h no teto da ativação, a
+  persistência decide 12,8% das decisões em que ela existe, mas essas decisões são só cerca de 3% da vida, e o resto é estrutural (A3.11,
+  rodada 2). Com as alavancas da lista da seção 6.1, a persistência não chega a 0,01. Pela seção 5.3, um contraste com a G-PESA falhando
+  é lido como inconclusivo por premissa (o G-ABLA-PERS, como no #420).
+- **Os valores da melhor rodada** (todos PROPOSTOS; o Matheus decide):
+
+| valor | hoje (`digilab/config.py`) | a rodada 3 | por quê |
+|---|---|---|---|
+| `w0_tipo_cheiro` | S/4 | S/4 | o pedido pelo Matheus; o fechamento passou nas três rodadas |
+| `n_desiste_cheiro` | 6 | 6 | o pedido pelo Matheus; nenhuma busca acabou em "desistiu" |
+| `eta_h` | S/128 | **S/256** | rodada 2: o hábito empurrava o incentivo para baixo de 0,01 na janela dos dias 8 a 14 |
+| `w_pers` | 2S | **4S** | rodada 2: a persistência decidia pouco nas decisões em que existe |
+| `tau_c` (ticks) | 30 | **15** | rodada 3: C = S na primeira decisão, h no teto na segunda |
+
+- **Os valores não foram escritos no `digilab/config.py`.** As rodadas os passaram pelo campo `inatos` da config da calibração. Escrevê-los
+  como padrão muda as vidas de todos os braços modulares (o `eta_h`, o `w_pers` e o `tau_c` valem para todos) e o gabarito G2 do #425.
+  Isso vai ao Matheus junto com o piloto (65303 a 65505), que não começou.

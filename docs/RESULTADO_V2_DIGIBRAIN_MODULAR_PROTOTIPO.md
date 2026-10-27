@@ -199,3 +199,23 @@ Do `resultado.json`, `custo`: a CPU por vida, com a gravação, o replay e as co
 - **As células iguais do comedouro** e **a medida das visitas vazias** ficam como achados.
 
 O registro está na seção "2026-10-26 — DIGIBRAIN-MODULAR-AVALIACAO" de `docs/registro/2026-10.md`.
+
+## 6. A calibração do conserto (2026-10-27, worker D, Claude Code, Opus 5.5; adendo 3, A3.11)
+
+- **O que rodou:** só o M3\* (as duas subchaves do cheiro, o "achou" sem frustração do #426), nas bases 65101 e 65202, com K = 2, as 12
+  células e 14 dias: 48 vidas por rodada, três rodadas (o máximo). Cada rodada foi registrada em A3.11, num commit empurrado antes da
+  primeira vida. Nenhum outro braço e nenhuma outra base rodaram.
+- **O critério não fechou.** A melhor rodada é a 3:
+  - o fechamento por episódio do M3\*, a mediana das vidas: 0,8397 (≥ 0,5);
+  - o teto do hábito: 0;
+  - a G-PESA do incentivo 0,0149, do hábito 0,0758 e da memória 0,1117;
+  - a G-PESA da persistência: **0,0027, abaixo de 0,01**.
+- **Os valores da rodada 3** (PROPOSTOS; não escritos no `digilab/config.py`): `eta_h` S/256, `w_pers` 4S, `tau_c` 15, o peso do cheiro
+  S/4 e o N_desiste_cheiro 6.
+- **A persistência tem um teto estrutural.** O termo h só existe da segunda decisão de uma intenção em diante, cerca de 3% das decisões, e
+  a ativação é cortada em A_max. Com as alavancas permitidas, ela não chega a 0,01.
+- **Os números da calibração não são evidência** do G-MVP nem das ablações (a seção 6.1). Nada aqui afirma superioridade do modular.
+- **Os artefatos** estão em `artifacts_v2_digibrain_prototipo/conserto/calibracao/rodada_<n>/`: o `meta.json`, o `medidas.json`, o
+  `resultado.json` e o `diagnostico.json`. As vidas ficam fora do git, na worktree `v2-modular-calibracao-conserto`.
+- **O que fica para o Matheus:** congelar (ou não) os valores da rodada 3, o que muda as vidas de todos os braços modulares e o gabarito
+  G2, e o piloto do conserto (65303 a 65505), que não começou.
