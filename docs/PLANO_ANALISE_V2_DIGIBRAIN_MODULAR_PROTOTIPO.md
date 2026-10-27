@@ -1426,3 +1426,12 @@ leitura de gate**):
 - `vidas/<braço>/<dono>_<lugar>_<semente>.jsonl`: o log de cada vida, **fora do git**, na worktree `v2-modular-piloto-conserto`.
 Os três `.json` entram no git. O RESULTADO ganha uma seção com os números deles, e a leitura vai ao Matheus. O adendo 4 (A3.8) não é
 escrito neste PR: ele vem depois da leitura do Matheus.
+
+**O piloto rodou** do commit `4adce20`, com a árvore limpa e o sha da config igual ao registrado: 864 vidas, 375 s, 8 processos. Os
+números estão na seção 7 do `docs/RESULTADO_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`, todos tirados dos artefatos. Em resumo, sem leitura de
+gate:
+- **o G-MVP por episódio:** 0,8056;
+- **a G-PESA da persistência:** 0,0033, falhando de novo; o G-ABLA-PERS segue inconclusivo por premissa;
+- **o K:** 10, sem chegar ao alvo, porque o poder do G-MVP fica em 0,1085;
+- **o M4-con:** 1 923.
+O adendo 4 vem depois da leitura do Matheus.
