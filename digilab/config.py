@@ -2398,7 +2398,8 @@ class ConfigDigibrainInatos:
     tau_hab: int = 120                        # PROPOSTO, SEM FONTE: a habituacao por classe (M-SENS, PE-11)
     tau_v: int = 240                          # PROPOSTO, SEM FONTE: a valencia (M-AFETO)
     tau_e: int = 120                          # PROPOSTO, SEM FONTE: a excitacao (M-AFETO)
-    tau_c: int = 30                           # PROPOSTO, SEM FONTE: o compromisso C (M-ESTADO, PE-6); calibracao, rodada 2: 60 -> 30
+    tau_c: int = 15                           # PROPOSTO, SEM FONTE: o compromisso C (M-ESTADO, PE-6); calibracao, rodada 2: 60 -> 30;
+                                              # calibracao do conserto (#427, rodada 3, A3.11): 30 -> 15
     tau_f_sobe: int = 60                      # PROPOSTO, SEM FONTE: a frustracao F sobe no fim sem a meta (M-ESTADO)
     tau_f_desce: int = 480                    # PROPOSTO, SEM FONTE: a frustracao F decai a cada decisao (M-ESTADO)
     # M-SENS
@@ -2440,13 +2441,15 @@ class ConfigDigibrainInatos:
     lambda_sono: int = _S // 4                # PROPOSTO: o reflexo do sono, a leitura da energia abaixo de S/4 (o 0,25 do sono_exaustao)
     # M-PLAST
     eta_d: int = _S // 4                      # PROPOSTO: o passo do P1, o passo_desfecho do ModeloMundo (S/4, PP-6)
-    eta_h: int = _S // 128                    # PROPOSTO, SEM FONTE: o passo do P2; calibracao, rodada 2: S/16 -> S/128
+    eta_h: int = _S // 256                    # PROPOSTO, SEM FONTE: o passo do P2; calibracao, rodada 2: S/16 -> S/128;
+                                              # calibracao do conserto (#427, rodada 3, A3.11): S/128 -> S/256
     h_max: int = _S // 2                      # PROPOSTO, SEM FONTE: o corte do habito, |H| <= H_max (PE-10: sem decaimento)
     c_g: int = _S                             # PROPOSTO, SEM FONTE: G = clamp(div_arred(c_G x valor_previsto, S_V), 0, G_max) x prox / S
     s_v: int = _S                             # PROPOSTO, SEM FONTE
     g_max_incentivo: int = _S                 # PROPOSTO, SEM FONTE
     # M-ESTADO
-    w_pers: int = 2 * _S                      # PROPOSTO, SEM FONTE (PE-6): h = mul(w_pers, C); calibracao, rodada 2: S/2 -> 2S
+    w_pers: int = 4 * _S                      # PROPOSTO, SEM FONTE (PE-6): h = mul(w_pers, C); calibracao, rodada 2: S/2 -> 2S;
+                                              # calibracao do conserto (#427, rodada 3, A3.11): 2S -> 4S
     n_desiste: int = 3                        # PROPOSTO (PE-6, a regra do alcance): o raio da visao (96) pelo alcance (60), 2 decisoes, mais 1
     # o adendo 3 (A3.4), so com as subchaves da ConfigDigibrain; a calibracao do conserto (bases 65101 e 65202) pode mudar os dois
     w0_tipo_cheiro: int = _S // 4             # PROPOSTO, SEM FONTE (DX-3): o peso do tipo `cheiro` no comer, o mesmo da racao (S/8 a S/2)

@@ -1314,3 +1314,37 @@ nenhuma das três rodadas.**
 - **Os valores não foram escritos no `digilab/config.py`.** As rodadas os passaram pelo campo `inatos` da config da calibração. Escrevê-los
   como padrão muda as vidas de todos os braços modulares (o `eta_h`, o `w_pers` e o `tau_c` valem para todos) e o gabarito G2 do #425.
   Isso vai ao Matheus junto com o piloto (65303 a 65505), que não começou.
+
+### A3.12 O congelamento dos valores da rodada 3 do #427 (2026-10-27, autorizado pelo Matheus; worker D, Claude Code, Opus 5.5)
+
+- **O merge do #427 não aprova todos os critérios:** a G-PESA da persistência falhou nas três rodadas (A3.11). O que o Matheus autorizou
+  foi gravar os valores da melhor rodada como os padrões do modular, antes do piloto.
+- **O que muda, só em `digilab/config.py` (`ConfigDigibrainInatos`):**
+
+| valor | antes (o #425 e o #427) | agora |
+|---|---|---|
+| `eta_h` | S/128 (8) | **S/256 (4)** |
+| `w_pers` | 2S (2 048) | **4S (4 096)** |
+| `tau_c` (ticks) | 30 | **15** |
+| `w0_tipo_cheiro` | S/4 | S/4 (não muda) |
+| `n_desiste_cheiro` | 6 | 6 (não muda) |
+
+  - Nada mais muda: o motor, o corpo, o mundo, o pacote do cérebro, o orquestrador e os critérios são os do #427.
+  - Os três valores continuam PROPOSTOS, SEM FONTE no `config.py`, com a origem (o #427, rodada 3) no comentário de cada campo.
+  - Eles valem para **todos os braços modulares** (M0 a M4-con e os três de A3.4), com ou sem as subchaves do cheiro.
+  - O commit dos valores é o `7e44e9f`. Com o `tau_c` = Δ = 15, o ganho do compromisso é k_C = S: o C chega a S na primeira decisão
+    da intenção, e o integrador não tem meia-vida. O T-ESTADO-1 e o T-ESTADO-2 pressupunham τ > Δ e agora cobrem esse caso.
+- **O gabarito G2 regravado** (`tests/gabaritos/digibrain_modular_de_hoje.json`): é o gabarito regravado pelos valores calibrados da
+  rodada 3 do #427, num commit próprio, separado do commit dos valores.
+  - **O anterior** é o do #425 (o commit `5f7e986`, sha256 `c45f0c8083da32090c84bfdd75976b683840b82c48970ce9fc817837bdbc669d`), gravado
+    antes das subchaves, com `eta_h` S/128, `w_pers` 2S e `tau_c` 30.
+  - **O novo** (o commit `6cf9927`) tem o sha256 `ca07b0a81b201f9d833ec799babc690f1c659482896cfa642c401f99b51a2daf`. O G2 passa a
+    dizer: com as duas subchaves desligadas, as vidas do modular são as do #420 **com os valores calibrados**.
+  - **O que mudou, das 24 vidas de cada braço do gabarito:** o log mudou em 17 a 20 vidas do M2 em diante e em nenhuma do M0 e do M1; o
+    estado interno mudou em todas do M2 em diante, em 13 do M0 e em 7 do M1; as medidas, em todas do M2 em diante e em 3 do M0. O número de
+    decisões não mudou em nenhuma.
+- **O M3-420 passa a ser "o M3 do #420 com os valores calibrados"** (A3.4). Ele não é mais o M3 do #420 byte a byte.
+- **A persistência segue como ablação inconclusiva por premissa** (seção 5.3): o G-ABLA-PERS do piloto e da reavaliação é lido assim se
+  a G-PESA dela falhar, como no #420 e nas três rodadas. **O congelamento não muda isso.**
+- **As vidas já gravadas** (o #420 e as rodadas do #427) foram vividas com os valores de antes. As do #427 se refazem do disco com o
+  `inatos` do `meta.json` de cada rodada (`inatos_do_meta`).

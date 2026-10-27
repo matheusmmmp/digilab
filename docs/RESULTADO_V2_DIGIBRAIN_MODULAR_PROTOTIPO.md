@@ -219,3 +219,7 @@ O registro está na seção "2026-10-26 — DIGIBRAIN-MODULAR-AVALIACAO" de `doc
   `resultado.json` e o `diagnostico.json`. As vidas ficam fora do git, na worktree `v2-modular-calibracao-conserto`.
 - **O que fica para o Matheus:** congelar (ou não) os valores da rodada 3, o que muda as vidas de todos os braços modulares e o gabarito
   G2, e o piloto do conserto (65303 a 65505), que não começou.
+- **O congelamento (2026-10-27, autorizado pelo Matheus; A3.12):** os valores da rodada 3 (`eta_h` S/256, `w_pers` 4S, `tau_c` 15) passaram
+  a ser os padrões do `digilab/config.py`, e o gabarito G2 do #425 foi regravado por eles num commit próprio. O merge do #427 não aprovou
+  todos os critérios: a G-PESA da persistência falhou nas três rodadas, e a persistência segue como ablação inconclusiva por premissa
+  (seção 5.3). O congelamento não muda isso.
