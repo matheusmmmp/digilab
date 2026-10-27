@@ -1,6 +1,8 @@
 """Gabarito das vidas do DigiBrain modular de hoje (docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md, adendo 3, A3.7: o G2 das
-subchaves `cheiro_inato` e `intencao_cheiro`): gravado com o codigo da main (fa09444) ANTES das duas subchaves. Com as duas desligadas,
-estas vidas tem de sair iguais, byte a byte.
+subchaves `cheiro_inato` e `intencao_cheiro`). Com as duas desligadas, estas vidas tem de sair iguais, byte a byte.
+  - o primeiro (o do #425, commit 5f7e986) foi gravado com o codigo da main (fa09444) ANTES das duas subchaves;
+  - o de hoje foi REGRAVADO pelos valores calibrados da rodada 3 do #427 (A3.12: eta_h S/256, w_pers 4S, tau_c 15), num commit proprio,
+    depois do commit dos valores. As vidas sao as do #420 com os valores calibrados (o M3-420 de A3.4).
 
 O gabarito das 196 vidas (tests/gabarito_digibrain.py) e o do MVP (web/app/test/gabaritos/mvp_produto_python.json) nao montam o
 DigiBrain: so conferem que o motor de hoje nao muda. Estas vidas montam o cerebro modular, pelo orquestrador do prototipo
@@ -11,7 +13,8 @@ DigiBrain: so conferem que o motor de hoje nao muda. Estas vidas montam o cerebr
 De cada vida: o sha256 do log (o JSONL do motor), o do estado interno do cerebro (os motivos de cada decisao, os modulos) e o das medidas
 do orquestrador (sem o `custo`, que e o relogio), e o numero de decisoes.
 
-    python tests/gabarito_digibrain_modular.py      # grava tests/gabaritos/digibrain_modular_de_hoje.json (so com o codigo de antes)
+    python tests/gabarito_digibrain_modular.py      # grava tests/gabaritos/digibrain_modular_de_hoje.json (so com o codigo de antes
+                                                    # da mudanca, ou por uma decisao de regravar, como a do A3.12)
 """
 from __future__ import annotations
 

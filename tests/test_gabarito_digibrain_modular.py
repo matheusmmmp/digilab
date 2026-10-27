@@ -1,5 +1,6 @@
 """O G2 das subchaves `cheiro_inato` e `intencao_cheiro` (docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md, adendo 3, A3.7): o
-gabarito tests/gabaritos/digibrain_modular_de_hoje.json, gravado antes das subchaves, esta em dia com o Python byte a byte. Com as duas
+gabarito tests/gabaritos/digibrain_modular_de_hoje.json, gravado antes das subchaves e regravado pelos valores calibrados da rodada 3
+do #427 (A3.12), esta em dia com o Python byte a byte. Com as duas
 desligadas (o padrao), as vidas do cerebro modular saem as de hoje: o log, o estado interno do cerebro e as medidas do orquestrador.
 Sementes: so as dos testes."""
 from __future__ import annotations
