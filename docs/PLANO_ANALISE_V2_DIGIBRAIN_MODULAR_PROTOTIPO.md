@@ -1348,3 +1348,81 @@ nenhuma das três rodadas.**
   a G-PESA dela falhar, como no #420 e nas três rodadas. **O congelamento não muda isso.**
 - **As vidas já gravadas** (o #420 e as rodadas do #427) foram vividas com os valores de antes. As do #427 se refazem do disco com o
   `inatos` do `meta.json` de cada rodada (`inatos_do_meta`).
+
+### A3.13 O piloto do conserto (65303, 65404 e 65505): o registro, antes da primeira vida (2026-10-27, worker D, Claude Code, Opus 5.5)
+
+**O que é:** o piloto do conserto de A3.8, autorizado pelo Matheus em 2026-10-27 (pelo Gerente, depois do #428 na `main` em `57aa3a2`)
+como **avaliação exploratória dos braços.** Ele roda com os valores calibrados do #428 (A3.12), que seguem PROPOSTOS até a avaliação do
+piloto; nada aqui os torna definitivos.
+
+**O que o piloto não é:**
+- **ele não prova superioridade do cérebro modular,** nem sobre o A11 nem em absoluto. Pela seção 6.2, os números dele não são
+  evidência;
+- **ele não demonstra a contribuição da persistência.** O G-ABLA-PERS é lido como **inconclusivo por premissa** (seção 5.3), porque a
+  G-PESA da persistência falhou nas três rodadas do #427 (0,0027 na melhor, a rodada 3) e o congelamento não mudou isso (A3.12). O
+  contraste sai no relato com o número que tiver, e a leitura dele continua "inconclusivo por premissa", qualquer que seja o valor;
+- **nenhuma vida das faixas 64xxx, 65101/65202 ou 66xxx roda.** Só as bases 65303, 65404 e 65505.
+
+**A configuração exata:**
+- **o arquivo:** `experiments/configs/v2_digibrain_prototipo/piloto_conserto.json`, com o sha256
+  `bdffc2af32c31b056252ad30f83e8f514c66542c1f6819322b1c76827e974735`. Em relação à `main`, só a `descricao` mudou (ela dizia "não
+  rodado"); os números são os de A3.8;
+- **o commit:** este registro é o commit da run, a partir de `57aa3a2`; a run sai dele com a árvore limpa, e o `meta.json` grava o
+  `git_head`, o `git_limpo` e o sha da config;
+- **os outros sha256** (os de `57aa3a2`, que este commit não toca):
+  - o orquestrador `experiments/run_v2_digibrain_prototipo.py` = `aedec21ccf07f1eaa6ac95a19558d3a4129de440e10091251043c41280d4cbc8`;
+  - `digilab/config.py` (com os valores do #428) = `a370c02422e83195651644a526217c5dd42b0cc2606e1cb807157c531c6c5dc8`;
+  - `digilab/engine.py` = `48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630`;
+  - `digilab/metrics.py` = `9e5218a75464567315778c83fa3da8e3e6e61e39decb67c65d64e308be75449f`;
+- **as bases:** 65303, 65404 e 65505, com **K = 2** por base: 6 unidades (as sementes e os genomas saem de
+  `bancada_v2.unidades_derivadas` com o prefixo `digibrain_prototipo`, e o `meta.json` os grava);
+- **as células:** os 4 donos × os 3 lugares (12), **14 dias**, orçamento de 16 por dia;
+- **os processos:** 8;
+- **o comando:** `python experiments/run_v2_digibrain_prototipo.py --config experiments/configs/v2_digibrain_prototipo/piloto_conserto.json
+  --processos 8`;
+- **as vidas:** 12 braços × 12 células × 6 unidades = **864**. Cada vida é rejogada do disco bit a bit dentro da run (o G1).
+
+**Os braços** (os 12 de A3.4 e A3.8; os 8 modulares de hoje com as duas subchaves do cheiro ligadas, mais os três novos e o A11):
+
+| braço | o que é |
+|---|---|
+| M0 | sem P1, sem P2 e sem M-MEM, com o `cheiro_inato` e a `intencao_cheiro` |
+| M1 | sem P2 e sem M-MEM, com as duas subchaves |
+| M2 | sem M-MEM, com as duas subchaves |
+| M3 (o M3\*) | completo, com as duas subchaves |
+| M3-sp | o M3\* sem a persistência |
+| M4 | o M3\* com a modulação do `g_apr` |
+| M4-emb | o M4 com a série E embaralhada, lida da vida M4 da outra unidade da mesma base, na mesma célula |
+| M4-con | o M3\* com o `g_apr` fixo na média do `g_apr` das vidas M4 desta run, arredondada (o `meta.json` grava o valor) |
+| M3-sem-inato | o M3 só com a `intencao_cheiro` |
+| M3-sem-intencao | o M3 só com o `cheiro_inato` |
+| M3-420 | o M3 com as duas desligadas: o M3 do #420 com os valores calibrados (A3.4, A3.12) |
+| A11 | o cérebro A, só para a comparação descritiva (seção 7) |
+
+**Os critérios, e o que cada um decide no piloto** (os do plano, sem critério novo e sem mudar limiar; pela A3.8, **o piloto não tem
+leitura de gate**):
+- **o efeito de cada contraste** (seções 5.2 e 6.2; A3.4): as famílias G-ABLA (P1, P2, MEM, PERS) e G-MOD (CON, EMB), e a G-DX (INATO e
+  INTENCAO, nas células do longe), com o p, o Holm e o IC95 **só como relato.** O efeito serve para o K;
+- **o G-MVP:** a medida primária é a por episódio (A3.3; a fração de vidas do M3\* com o fechamento ≥ 0,5, limiar 0,8). A por ração (a de
+  hoje) sai ao lado, como secundária obrigatória. No piloto, a primária só entra no poder;
+- **as premissas** (seção 5.3; A3.3): a G-PESA de cada módulo (no braço dele: o incentivo no M1, o hábito no M2, a memória e a
+  persistência no M3; limite inferior do IC95 > 0,01), a G-ELEGIVEL, a G-ELEGIVEL-EP (≥ 80% das vidas do M3 com 3 episódios ou mais) e
+  quantos episódios as vidas têm. No piloto elas são relatadas e dizem o que a reavaliação vai ler como inconclusivo por premissa;
+- **o K** (seção 6.3): o menor de 4 a 10 por base com poder simulado ≥ 0,8 em cada contraste da G-ABLA que entra na conta e no G-MVP. O
+  efeito de planejamento é a metade do efeito do piloto, com α = 0,0125 na G-ABLA. O G-MVP entra com 0,8 + ½ × (a fração − 0,8) e sai da
+  conta se a fração for ≤ 0,8. Um contraste com o efeito do piloto de sinal contrário (ou 0) sai da conta, e o relato diz isso. A G-MOD (α
+  = 0,025) e a G-DX ficam só no relato do poder, fora do K. Se nem K = 10 chegar a 0,8, o K é 10 e o poder sai declarado;
+- **o valor do M4-con da reavaliação:** a média do `g_apr` das vidas M4 do piloto (seção 6.2);
+- **o custo:** o CPU por vida, e a estimativa da reavaliação com o K e os 12 braços;
+- **os descritivos:** as medidas de mecanismo do cheiro por braço e lugar (A3.4), a DX-5 (A3.5, exploratória) e a comparação com o A11
+  (seção 7). Nenhum tem gate.
+
+**Os artefatos esperados** (`artifacts_v2_digibrain_prototipo/conserto/piloto/`):
+- `meta.json`: a config, os sha256, o commit, a árvore limpa, as unidades, os braços, os valores inatos, o `g_apr_m4_con` e o tempo;
+- `medidas.json`: as medidas de cada vida;
+- `resultado.json`: o que a seção 6.2 e a A3.8 pedem (`contrastes_so_relato`, `premissas`, `G-MVP_piloto`, `G-MVP_racao_piloto`, `n`,
+  `g_apr_m4`, `custo`, `descritivos`, `descritivos_conserto`, `DX-5`, `comparacao_com_o_a`). É o arquivo que a reavaliação lê, depois do
+  adendo 4;
+- `vidas/<braço>/<dono>_<lugar>_<semente>.jsonl`: o log de cada vida, **fora do git**, na worktree `v2-modular-piloto-conserto`.
+Os três `.json` entram no git. O RESULTADO ganha uma seção com os números deles, e a leitura vai ao Matheus. O adendo 4 (A3.8) não é
+escrito neste PR: ele vem depois da leitura do Matheus.
