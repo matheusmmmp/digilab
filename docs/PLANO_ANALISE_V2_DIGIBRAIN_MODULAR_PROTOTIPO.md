@@ -1136,3 +1136,181 @@ Todos com as sementes dos testes (101…505) ou sequências sintéticas; nenhum 
 5. **A opção composta da DX-4** (A3.4), e a regra de fim com "achou" e N_desiste_cheiro = 6.
 6. **O adendo inteiro,** para que a implementação comece. **APROVADO.** A implementação segue a ordem de A3.7 e A3.8 e para antes de
    qualquer vida da 65xxx: a calibração e o piloto voltam ao Matheus antes de rodar.
+
+### A3.11 A calibração do conserto (65101 e 65202): o registro de cada rodada, antes da primeira vida dela (worker D, Claude Code, Opus 5.5)
+
+**A autorização do Matheus (2026-10-26, pelo Gerente):** "Depois que o PR for integrado e o M3 estiver completo, calibrem nas bases
+65101 e 65202, começando com peso do cheiro S/4 e limite de 6 decisões de busca, com no máximo três rodadas. Antes de cada rodada,
+registre a configuração e os critérios de avaliação. Não ultrapasse três rodadas." O PR é o #426 (o "achou" sem frustração), na `main` em
+`7e34fab`.
+
+**O que vale para as três rodadas:**
+- **Escopo:** só o M3\* (o M3 com as subchaves `cheiro_inato` e `intencao_cheiro` ligadas, e o "achou" sem F do #426). As bases são 65101
+  e 65202, com K = 2, 14 dias, 16 interações por dia e as 12 células: **48 vidas por rodada**.
+  - Pelo `experiments/run_v2_digibrain_prototipo.py`, com a config `experiments/configs/v2_digibrain_prototipo/calibracao_conserto.json`
+    (o campo `rodada`) e 8 processos.
+  - Nenhum outro braço, nenhuma outra base, nenhum piloto, nenhuma reavaliação.
+- **O que pode mudar entre as rodadas (A3.8):**
+  - o peso do cheiro `w0_tipo_cheiro`, de S/8 a S/2;
+  - o `n_desiste_cheiro`, de 5 a 8;
+  - os valores da lista da seção 6.1 (a magnitude dos W⁰ com os sinais da tabela 4.5, as curvas a_r, b_r e λ_r, os τ, os η, o `w_mem`, o
+    `w_pers`, o `N_desiste` pela regra da PE-6, o `H_max` e o g₀).
+  - Cada mudança é justificada pelo resultado da rodada anterior e registrada aqui antes da primeira vida da rodada.
+  - Nenhuma equação, subchave nem número do motor, do corpo ou do mundo muda.
+- **Os critérios de fechamento, nesta ordem** (a seção 6.1, com a medida primária de A3.3 no lugar da taxa de hoje; o
+  `analisar_calibracao(..., conserto=True)` do orquestrador):
+  1. o T-CADEIA-1 passa com os valores da rodada e as duas subchaves (`tests/test_digibrain_vidas.py` e o T-CADEIA-1 de
+     `tests/test_digibrain_conserto.py`), conferido antes da run;
+  2. **a taxa de fechamento por episódio de fome do M3\*** (o `episodios_fome`, A3.3: os episódios que fecharam sobre todos os
+     episódios, sem exclusão, com a W(d) e a regra da ração podre do #424), **na mediana das 48 vidas, ≥ 0,5**;
+  3. nenhum H no teto: o `pesos_no_teto` = 0 em toda vida (o máximo das 48);
+  4. a G-PESA de cada módulo do M3\* (incentivo, hábito, memória e persistência), a média das 48 vidas, com a fração ≥ 0,01.
+  - **Fecha** se os quatro passam.
+- **Descritivos, sem critério:** os do `descritivos_conserto` (os fins das buscas, as decisões ao cheiro, a fração das rações na visão e o
+  sono na janela) e a taxa por ração com a W(d), lidos para justificar a rodada seguinte.
+- **A melhor rodada,** se nenhuma fechar: na ordem dos critérios, primeiro a que passa o T-CADEIA-1, depois a de maior mediana do
+  fechamento por episódio. Ela fica registrada como não fechada, e a faixa que não fecha não bloqueia (seção 6.1).
+- **Os artefatos:** `artifacts_v2_digibrain_prototipo/conserto/calibracao/rodada_<n>/`:
+  - o `meta.json` (os valores, o commit, a config com o sha e as sementes);
+  - o `medidas.json` (as 48 vidas);
+  - o `resultado.json` (os critérios).
+  - As vidas ficam fora do git.
+
+**Rodada 1 (registrada antes da primeira vida):**
+- **Os valores:** os de `digilab/config.py` em `7e34fab`, sem mudança. O `w0_tipo_cheiro` = S/4 = 256 e o `n_desiste_cheiro` = 6, o
+  pedido pelo Matheus. O resto é o congelado do adendo 1 (por exemplo `eta_h` = S/128, `w_pers` = 2S, `tau_c` = 30, `n_desiste` = 3), com
+  S = 1024.
+- **Os sha256:**
+  - `digilab/config.py` = `6ae53605114aa7e3186b1bf8ed5ecd7d055438e0d320636a7a33fe3d5da8b97f`;
+  - `digilab/engine.py` = `48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630` (o congelado);
+  - `digilab/metrics.py` = `9e5218a75464567315778c83fa3da8e3e6e61e39decb67c65d64e308be75449f`;
+  - a config `calibracao_conserto.json` (`rodada` = 1) = `25521336430a1fc76b98bfa8d538fbd69068212e7bd45c6902ba4b0c7b85337d`.
+- **O commit:** este registro é o commit da run. O `meta.json` grava o `git_head` e se a árvore estava limpa (`git_limpo`), e a run roda com a árvore limpa.
+- **Os critérios:** os quatro acima, sem mudança.
+
+**Rodada 1, o resultado** (`artifacts_v2_digibrain_prototipo/conserto/calibracao/rodada_1/`; a run no commit `38e5015`, com a árvore
+limpa e o sha da config igual ao registrado; 48 vidas, 3 min com 8 processos). **Não fecha:**
+
+| critério | rodada 1 |
+|---|---|
+| T-CADEIA-1 (as duas subchaves) | passa |
+| o fechamento por episódio do M3\*, a mediana das vidas (≥ 0,5) | **0,8209** |
+| `pesos_no_teto` (o máximo; = 0) | **0** |
+| G-PESA, o incentivo (≥ 0,01) | 0,0086 |
+| G-PESA, o hábito | **0,1572** |
+| G-PESA, a memória | **0,1202** |
+| G-PESA, a persistência | 0,0022 |
+
+- **O que o diagnóstico mostra** (o `diagnostico.json` da rodada, de `experiments/diagnostico_calibracao_conserto_digibrain.py`, que
+  rejoga as 48 vidas do disco com os valores da rodada e confere que as medidas refeitas são as gravadas):
+  - **o incentivo é empurrado pelo hábito ao longo da vida.** Na unidade escolhida, o termo do hábito sobe de 29 para 127 e depois para
+    234 nos três terços da vida; o do incentivo fica em 12 a 14 (o incentivo da ração antes da proximidade tem mediana 159, e 20% das
+    17 010 amostras batem no G_max). A influência do incentivo por dia cai de 0,026 (dia 4) para 0,005 (dia 14), e a G-PESA lê os dias
+    8 a 14;
+  - **a persistência só pode decidir em 3,3% das decisões,** as que têm uma intenção em curso (explorar/ponto 1 381, comer/cheiro 611,
+    comer/comida 151 e brincar/bola 9, de 64 512 decisões). Na unidade escolhida o termo dela fica em 3 a 7;
+  - **o cheiro:** a busca acaba quase sempre em "achou" (727 de 1 297 fins), "trocou" (546) ou "sumiu" (24); nenhuma "desistiu" com 6.
+    O fechamento por episódio já passa com folga (0,82), então o peso do cheiro e o N_desiste_cheiro não mudam.
+
+**Rodada 2 (registrada antes da primeira vida):**
+- **O que muda e por quê** (só valores da lista da seção 6.1; o peso do cheiro S/4 e o N_desiste_cheiro 6 ficam):
+  - **`eta_h` (o passo do P2): S/128 → S/256 (8 → 4).** O hábito cresce pela metade e deixa ao incentivo mais decisões na janela dos
+    dias 8 a 14, onde a influência dele caiu abaixo de 0,01. A G-PESA do hábito (0,157) tem folga para cair;
+  - **`w_pers`: 2S → 4S (2 048 → 4 096).** Na segunda decisão de uma intenção, h = mul(4S, 512) = 2 048 em vez de 1 024. A fração das
+    decisões com intenção não muda (é estrutural), mas a persistência passa a decidir mais vezes nelas. Foi a mesma alavanca da
+    rodada 2 do adendo 1 (S/2 → 2S levou a persistência de 0,0002 a 0,0016).
+- **Como os valores entram:** pelo campo `inatos` da config (`{"w_pers": 4096, "eta_h": 4}`). O orquestrador ganhou o
+  `inatos_da_config` (`FAIXAS_INATOS_CONSERTO`: só na calibração do conserto, só nos campos e nas faixas de A3.8; fora disso, falha alto).
+  O `digilab/config.py` não muda na calibração: os padrões, as vidas dos outros braços e o gabarito G2 ficam os de hoje. O `meta.json`
+  grava os valores usados, e o diagnóstico e o replay os leem de lá.
+- **Os critérios:** os quatro de A3.11, sem mudança.
+- **Os valores da rodada:** `w_pers` = 4 096 e `eta_h` = 4. O resto é o de `digilab/config.py`, com o mesmo sha256 da rodada 1
+  (`6ae53605114aa7e3186b1bf8ed5ecd7d055438e0d320636a7a33fe3d5da8b97f`): o `w0_tipo_cheiro` = 256, o `n_desiste_cheiro` = 6, o `tau_c` = 30
+  e o `n_desiste` = 3.
+- **Os sha256:**
+  - a config `calibracao_conserto.json` (`rodada` = 2, `inatos` = `{"w_pers": 4096, "eta_h": 4}`) =
+    `c2d5d5681dc8ab61346d1a4c859f1eb8cfeeb27c948edf3e264d8dc86ab369bd`;
+  - o orquestrador `experiments/run_v2_digibrain_prototipo.py` = `aedec21ccf07f1eaa6ac95a19558d3a4129de440e10091251043c41280d4cbc8`;
+  - o `engine.py` e o `metrics.py` são os da rodada 1.
+- **O commit:** este registro é o commit da run.
+
+**Rodada 2, o resultado** (`artifacts_v2_digibrain_prototipo/conserto/calibracao/rodada_2/`; a run no commit `5c748c3`, com a árvore
+limpa e o sha da config igual ao registrado; 48 vidas, 27 s com 8 processos). **Não fecha:**
+
+| critério | rodada 1 | rodada 2 |
+|---|---|---|
+| T-CADEIA-1 (as duas subchaves) | passa | passa |
+| o fechamento por episódio do M3\*, a mediana das vidas (≥ 0,5) | **0,8209** | **0,7857** |
+| `pesos_no_teto` (o máximo; = 0) | **0** | **0** |
+| G-PESA, o incentivo (≥ 0,01) | 0,0086 | **0,0147** |
+| G-PESA, o hábito | **0,1572** | **0,0728** |
+| G-PESA, a memória | **0,1202** | **0,1143** |
+| G-PESA, a persistência | 0,0022 | 0,0023 |
+
+- **O incentivo passa:** com o hábito mais lento (o termo dele na unidade escolhida, de 11 a 88 nos três terços, contra 29 a 234), a
+  influência do incentivo por dia fica entre 0,010 e 0,024 até o dia 14.
+- **A persistência não sai do lugar, e o diagnóstico mostra por quê** (o `diagnostico.json` ganhou a contagem da persistência; o da
+  rodada 1 foi refeito com ela, e os outros campos não mudaram):
+  - o termo h só existe da segunda decisão de uma intenção em diante. As decisões com h > 0 são 2 045 na rodada 1 e 1 867 na rodada 2,
+    de 64 512 (cerca de 3%), e isso é estrutural: as intenções acabam quase sempre na primeira consequência;
+  - nessas decisões, a persistência decidiu 159 vezes na rodada 1 (7,8%) e 202 na rodada 2 (10,8%). Dobrar o `w_pers` subiu a fração,
+    mas a G-PESA lê a fração de todas as decisões dos dias 8 a 14;
+  - a ativação de cada unidade é cortada em A_max = 4S (`phi`, M-IMPULSO). Com o `w_pers` = 4S, um C perto de S já leva a unidade da
+    intenção ao teto, e um `w_pers` maior só satura. O A_max não está na lista da seção 6.1.
+- **A regra da melhor rodada, registrada antes da rodada 1, fica como está:** entre as que não fecham, a de maior mediana do fechamento
+  por episódio. Por ela, a rodada 1 (0,8209) fica à frente da rodada 2 (0,7857), embora a rodada 2 passe um critério a mais (o
+  incentivo). O relato leva as duas leituras ao Matheus, sem mudar a regra depois de ver os números.
+
+**Rodada 3, a última (registrada antes da primeira vida):**
+- **O que muda e por quê:** a rodada 2 com **`tau_c` 30 → 15 ticks**, o mínimo (τ ≥ Δ = 15). O ganho do compromisso vai a k_C = S, então
+  C = S já na primeira decisão da intenção, e h = mul(4S, S) = 4S na segunda (antes, h = 2 048 na segunda e 3 072 na terceira). É o
+  máximo que a persistência pode somar dentro da lista da 6.1, com a ativação no teto A_max.
+  - O `eta_h` S/256 e o `w_pers` 4S ficam, porque o incentivo passou com eles.
+  - O peso do cheiro (S/4) e o N_desiste_cheiro (6) ficam, porque o fechamento passa com folga.
+- **O que se espera, sem ser critério:** pela contagem acima, é provável que a persistência continue abaixo de 0,01. A rodada mede o teto
+  dela com as alavancas permitidas.
+- **Os valores da rodada:** `inatos` = `{"w_pers": 4096, "eta_h": 4, "tau_c": 15}`. O resto é o de `digilab/config.py`, com o mesmo sha
+  das rodadas 1 e 2.
+- **Os sha256:**
+  - a config `calibracao_conserto.json` (`rodada` = 3) = `80a64615d65c8b0c5ca6275681eac5137174dba21055951e8a1ad3c3dbaf0ed8`;
+  - o orquestrador, o `engine.py` e o `metrics.py` são os da rodada 2 (o orquestrador =
+    `aedec21ccf07f1eaa6ac95a19558d3a4129de440e10091251043c41280d4cbc8`).
+- **Os critérios:** os quatro de A3.11, sem mudança. **Depois desta rodada a calibração para,** com a melhor rodada pela regra acima.
+- **O commit:** este registro é o commit da run.
+
+**Rodada 3, o resultado, e o fim da calibração do conserto** (`artifacts_v2_digibrain_prototipo/conserto/calibracao/rodada_3/`; a run
+no commit `9c04ecf`, com a árvore limpa e o sha da config igual ao registrado; 48 vidas, 27 s com 8 processos). **O critério não fechou em
+nenhuma das três rodadas.**
+
+| critério | rodada 1 | rodada 2 | rodada 3 |
+|---|---|---|---|
+| T-CADEIA-1 (as duas subchaves) | passa | passa | passa |
+| o fechamento por episódio do M3\*, a mediana das vidas (≥ 0,5) | **0,8209** | **0,7857** | **0,8397** |
+| `pesos_no_teto` (o máximo; = 0) | **0** | **0** | **0** |
+| G-PESA, o incentivo (≥ 0,01) | 0,0086 | **0,0147** | **0,0149** |
+| G-PESA, o hábito | **0,1572** | **0,0728** | **0,0758** |
+| G-PESA, a memória | **0,1202** | **0,1143** | **0,1117** |
+| G-PESA, a persistência | 0,0022 | 0,0023 | 0,0027 |
+| decisões com h > 0 (de 64 512) | 2 045 | 1 867 | 1 792 |
+| a persistência decidiu, dado h > 0 | 7,8% | 10,8% | 12,8% |
+| fecha | não | não | não |
+
+- **A melhor rodada é a 3,** pela regra registrada antes da rodada 1: as três passam o T-CADEIA-1, e ela tem a maior mediana do
+  fechamento por episódio. É também a que passa mais critérios (cinco de seis, como a rodada 2).
+- **O que não fechou:** só a G-PESA da persistência (0,0027 contra ≥ 0,01). Com o `tau_c` no mínimo e o h no teto da ativação, a
+  persistência decide 12,8% das decisões em que ela existe, mas essas decisões são só cerca de 3% da vida, e o resto é estrutural (A3.11,
+  rodada 2). Com as alavancas da lista da seção 6.1, a persistência não chega a 0,01. Pela seção 5.3, um contraste com a G-PESA falhando
+  é lido como inconclusivo por premissa (o G-ABLA-PERS, como no #420).
+- **Os valores da melhor rodada** (todos PROPOSTOS; o Matheus decide):
+
+| valor | hoje (`digilab/config.py`) | a rodada 3 | por quê |
+|---|---|---|---|
+| `w0_tipo_cheiro` | S/4 | S/4 | o pedido pelo Matheus; o fechamento passou nas três rodadas |
+| `n_desiste_cheiro` | 6 | 6 | o pedido pelo Matheus; nenhuma busca acabou em "desistiu" |
+| `eta_h` | S/128 | **S/256** | rodada 2: o hábito empurrava o incentivo para baixo de 0,01 na janela dos dias 8 a 14 |
+| `w_pers` | 2S | **4S** | rodada 2: a persistência decidia pouco nas decisões em que existe |
+| `tau_c` (ticks) | 30 | **15** | rodada 3: C = S na primeira decisão, h no teto na segunda |
+
+- **Os valores não foram escritos no `digilab/config.py`.** As rodadas os passaram pelo campo `inatos` da config da calibração. Escrevê-los
+  como padrão muda as vidas de todos os braços modulares (o `eta_h`, o `w_pers` e o `tau_c` valem para todos) e o gabarito G2 do #425.
+  Isso vai ao Matheus junto com o piloto (65303 a 65505), que não começou.

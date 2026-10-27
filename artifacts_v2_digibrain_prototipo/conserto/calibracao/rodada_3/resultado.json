@@ -1,0 +1,377 @@
+{
+  "aviso": "o T-CADEIA-1 e conferido por tests/test_digibrain_vidas.py antes da run; os bracos da ablacao nao sao olhados",
+  "criterios": {
+    "g_pesa": {
+      "habito": {
+        "passa": true,
+        "valor": 0.0757688492063492
+      },
+      "incentivo": {
+        "passa": true,
+        "valor": 0.014880952380952382
+      },
+      "memoria": {
+        "passa": true,
+        "valor": 0.11166914682539682
+      },
+      "persistencia": {
+        "passa": false,
+        "valor": 0.0027281746031746026
+      }
+    },
+    "pesos_no_teto": {
+      "passa": true,
+      "valor": 0.0
+    },
+    "taxa_mediana": {
+      "medida": "a taxa de fechamento por episodio (A3.3)",
+      "passa": true,
+      "valor": 0.8397435897435898
+    }
+  },
+  "descritivos": {
+    "M3": {
+      "d_fe": 0.5838239207864858,
+      "episodios_sairam": 2848,
+      "exaustao": 0.2228112599206349,
+      "fins": {
+        "achou": 601,
+        "meta": 3588,
+        "sumiu": 24,
+        "trocou": 1599
+      },
+      "influencia": {
+        "afeto": 0.009269593253968254,
+        "aprendido": 0.1818266369047619,
+        "habito": 0.0757688492063492,
+        "incentivo": 0.014880952380952382,
+        "memoria": 0.11166914682539682,
+        "persistencia": 0.0027281746031746026
+      },
+      "pesos_no_teto": 0.0,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.6372040963955027
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7421944547784391
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.6398899946263228
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.4229051029265873
+        },
+        "atencioso|longe": {
+          "d_fe": 0.7335867848875661
+        },
+        "atencioso|perto": {
+          "d_fe": 0.43932325768849206
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.4229051029265873
+        },
+        "incoerente|longe": {
+          "d_fe": 0.5958312045304233
+        },
+        "incoerente|perto": {
+          "d_fe": 0.4395613839285714
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.5919095672123016
+        },
+        "relapso|longe": {
+          "d_fe": 0.7621027095734126
+        },
+        "relapso|perto": {
+          "d_fe": 0.5784733899636243
+        }
+      },
+      "privacao": 0.28562127976190477,
+      "refeicoes_por_dia": 3.133928571428571,
+      "visitas_lugar_lembrado": 1511,
+      "visitas_vazias": 1511
+    }
+  },
+  "descritivos_conserto": {
+    "M3|comedouro": {
+      "cheiro": {
+        "achou": 227,
+        "busca_entregue_sozinha": 174,
+        "comer_cheiro_por_episodio": 0.6086956521739131,
+        "compostas": 53,
+        "compostas_com_refeicao": 48,
+        "decisoes_comer_cheiro": 168,
+        "decisoes_dormir": 875,
+        "decisoes_explorar_cheiro": 103,
+        "decisoes_nos_episodios": 1763,
+        "episodios": 276,
+        "fins_busca": {
+          "achou": 227,
+          "trocou": 41
+        },
+        "frac_achou_com_refeicao": 0.21145374449339208,
+        "sono_na_janela": 0.4963131026659104
+      },
+      "com_cadeia_ep": 1.0,
+      "episodios": 276,
+      "fechados": 242,
+      "fora_de_episodio": 605,
+      "latencia_depois_da_janela": 17.606060606060606,
+      "latencia_media": 4.607438016528926,
+      "motivos": {
+        "fechou": 242,
+        "janela_vencida": 33,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 1
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 6,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 0,
+          "n": 0
+        },
+        "ate_corte": {
+          "fechados": 242,
+          "n": 276
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 1015,
+        "fechadas": 295,
+        "taxa_agregada": 0.29064039408866993
+      },
+      "por_racao_w": {
+        "elegiveis": 1015,
+        "fechadas": 334,
+        "taxa_agregada": 0.32906403940886697
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 1.39673566584169,
+        "elegiveis": 1015,
+        "entraram_na_visao": 442,
+        "visiveis_em_k0": 516
+      },
+      "taxa_agregada": 0.8768115942028986,
+      "taxa_media_das_vidas": 0.8606657870638134,
+      "vidas": 16,
+      "visitas": {
+        "lugar_lembrado": 204,
+        "vazias": 204,
+        "vazias_v1": 204
+      }
+    },
+    "M3|longe": {
+      "cheiro": {
+        "achou": 252,
+        "busca_entregue_sozinha": 210,
+        "comer_cheiro_por_episodio": 0.9947643979057592,
+        "compostas": 42,
+        "compostas_com_refeicao": 38,
+        "decisoes_comer_cheiro": 190,
+        "decisoes_dormir": 924,
+        "decisoes_explorar_cheiro": 108,
+        "decisoes_nos_episodios": 2042,
+        "episodios": 191,
+        "fins_busca": {
+          "achou": 252,
+          "sumiu": 24,
+          "trocou": 386
+        },
+        "frac_achou_com_refeicao": 0.15079365079365079,
+        "sono_na_janela": 0.4524975514201763
+      },
+      "com_cadeia_ep": 0.4375,
+      "episodios": 191,
+      "fechados": 82,
+      "fora_de_episodio": 435,
+      "latencia_depois_da_janela": 34.80392156862745,
+      "latencia_media": 5.695121951219512,
+      "motivos": {
+        "fechou": 82,
+        "janela_vencida": 106,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 3
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 15,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 7,
+          "n": 30
+        },
+        "ate_corte": {
+          "fechados": 75,
+          "n": 161
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 1551,
+        "fechadas": 103,
+        "taxa_agregada": 0.06640876853642812
+      },
+      "por_racao_w": {
+        "elegiveis": 1551,
+        "fechadas": 126,
+        "taxa_agregada": 0.08123791102514506
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 14.169973452810513,
+        "elegiveis": 1551,
+        "entraram_na_visao": 183,
+        "visiveis_em_k0": 89
+      },
+      "taxa_agregada": 0.4293193717277487,
+      "taxa_media_das_vidas": 0.4074449855699856,
+      "vidas": 16,
+      "visitas": {
+        "lugar_lembrado": 731,
+        "vazias": 731,
+        "vazias_v1": 731
+      }
+    },
+    "M3|perto": {
+      "cheiro": {
+        "achou": 122,
+        "busca_entregue_sozinha": 101,
+        "comer_cheiro_por_episodio": 0.25901639344262295,
+        "compostas": 21,
+        "compostas_com_refeicao": 20,
+        "decisoes_comer_cheiro": 79,
+        "decisoes_dormir": 505,
+        "decisoes_explorar_cheiro": 53,
+        "decisoes_nos_episodios": 1025,
+        "episodios": 305,
+        "fins_busca": {
+          "achou": 122,
+          "trocou": 2
+        },
+        "frac_achou_com_refeicao": 0.16393442622950818,
+        "sono_na_janela": 0.4926829268292683
+      },
+      "com_cadeia_ep": 1.0,
+      "episodios": 305,
+      "fechados": 294,
+      "fora_de_episodio": 448,
+      "latencia_depois_da_janela": 19.818181818181817,
+      "latencia_media": 2.122448979591837,
+      "motivos": {
+        "fechou": 294,
+        "janela_vencida": 11,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 0
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 0,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 0,
+          "n": 0
+        },
+        "ate_corte": {
+          "fechados": 294,
+          "n": 305
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 668,
+        "fechadas": 381,
+        "taxa_agregada": 0.5703592814371258
+      },
+      "por_racao_w": {
+        "elegiveis": 668,
+        "fechadas": 388,
+        "taxa_agregada": 0.5808383233532934
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 0.886578505330879,
+        "elegiveis": 668,
+        "entraram_na_visao": 0,
+        "visiveis_em_k0": 668
+      },
+      "taxa_agregada": 0.9639344262295082,
+      "taxa_media_das_vidas": 0.9478836114865526,
+      "vidas": 16,
+      "visitas": {
+        "lugar_lembrado": 576,
+        "vazias": 576,
+        "vazias_v1": 576
+      }
+    },
+    "M3|todos": {
+      "cheiro": {
+        "achou": 601,
+        "busca_entregue_sozinha": 485,
+        "comer_cheiro_por_episodio": 0.5660621761658031,
+        "compostas": 116,
+        "compostas_com_refeicao": 106,
+        "decisoes_comer_cheiro": 437,
+        "decisoes_dormir": 2304,
+        "decisoes_explorar_cheiro": 264,
+        "decisoes_nos_episodios": 4830,
+        "episodios": 772,
+        "fins_busca": {
+          "achou": 601,
+          "sumiu": 24,
+          "trocou": 429
+        },
+        "frac_achou_com_refeicao": 0.17637271214642264,
+        "sono_na_janela": 0.47701863354037266
+      },
+      "com_cadeia_ep": 0.8125,
+      "episodios": 772,
+      "fechados": 618,
+      "fora_de_episodio": 1488,
+      "latencia_depois_da_janela": 29.78767123287671,
+      "latencia_media": 3.56957928802589,
+      "motivos": {
+        "fechou": 618,
+        "janela_vencida": 150,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 4
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 21,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 7,
+          "n": 30
+        },
+        "ate_corte": {
+          "fechados": 611,
+          "n": 742
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 3234,
+        "fechadas": 779,
+        "taxa_agregada": 0.24087816944959803
+      },
+      "por_racao_w": {
+        "elegiveis": 3234,
+        "fechadas": 848,
+        "taxa_agregada": 0.2622139764996908
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 5.484429207994361,
+        "elegiveis": 3234,
+        "entraram_na_visao": 625,
+        "visiveis_em_k0": 1273
+      },
+      "taxa_agregada": 0.8005181347150259,
+      "taxa_media_das_vidas": 0.7386647947067839,
+      "vidas": 48,
+      "visitas": {
+        "lugar_lembrado": 1511,
+        "vazias": 1511,
+        "vazias_v1": 1511
+      }
+    }
+  },
+  "fase": "calibracao_conserto",
+  "fecha": false,
+  "modo": "calibracao_conserto",
+  "plano": "docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md",
+  "rodada": 3
+}

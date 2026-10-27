@@ -391,3 +391,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-26 — DIGIBRAIN-MODULAR, a correção da ração podre no adendo 3 e as decisões futuras (Gerente, worktree `v2-merge-r18`)](registro/2026-10.md)
 - [2026-10-26 — DIGIBRAIN-MODULAR-CONSERTO (worker D, Claude Code, Opus 5.5, worktree `v2-modular-conserto`): a implementação do adendo 3](registro/2026-10.md)
 - [2026-10-26 — DIGIBRAIN-MODULAR-ACHOU (worker D, Claude Code, Opus 5.5, worktree `v2-modular-achou`): o "achou" da busca não sobe a frustração](registro/2026-10.md)
+- [2026-10-27 — DIGIBRAIN-MODULAR-CALIBRACAO-CONSERTO (worker D, Claude Code, Opus 5.5, worktree `v2-modular-calibracao-conserto`): a calibração do conserto, rodada a rodada](registro/2026-10.md)

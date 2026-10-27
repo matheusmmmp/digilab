@@ -102,6 +102,31 @@ def test_as_fases_do_conserto_seguem_o_adendo():
             orq.modo_da_config(cfg)
 
 
+def test_os_inatos_da_calibracao_do_conserto_so_nos_campos_e_faixas_de_a3_8(tmp_path):
+    """o campo "inatos" da config (A3.11): sem ele, os de hoje; com ele, so na calibracao do conserto e so nas faixas de A3.8; a vida usa
+    os valores, o replay do disco os refaz (G1) e o meta da run os grava"""
+    cal = {k: v for k, v in _cfg("calibracao_conserto.json").items() if k != "inatos"}      # a config de cada rodada pode trazer o campo
+    assert orq.inatos_da_config(cal) is CONFIG_DIGIBRAIN_INATOS and orq.inatos_da_config({**cal, "inatos": {}}) is CONFIG_DIGIBRAIN_INATOS
+    novo = orq.inatos_da_config({**cal, "inatos": {"w_pers": 4 * S, "eta_h": S // 256, "w0_tipo_cheiro": S // 8}})
+    assert (novo.w_pers, novo.eta_h, novo.w0_tipo_cheiro) == (4 * S, S // 256, S // 8) and novo.tau_c == P.tau_c
+    assert orq.modo_da_config({**cal, "inatos": {"n_desiste_cheiro": 8}}) == "calibracao_conserto"
+    for ruim, msg in (({"w0_tipo_cheiro": S // 16}, "faixa"), ({"w0_tipo_cheiro": S}, "faixa"), ({"n_desiste_cheiro": 4}, "faixa"),
+                      ({"n_desiste_cheiro": 9}, "faixa"), ({"tau_c": 14}, "faixa"), ({"w_pers": 0}, "faixa"), ({"eta_h": 8.0}, "faixa"),
+                      ({"n_desiste": 4}, "so muda"), ({"c_g": 2 * S}, "so muda"), ({"w0": ()}, "so muda")):
+        with pytest.raises(ValueError, match=msg):
+            orq.modo_da_config({**cal, "inatos": ruim})
+    for nome in ("piloto_conserto.json", "fumaca_piloto_conserto.json"):
+        with pytest.raises(ValueError, match="so da calibracao do conserto"):
+            orq.modo_da_config({**_cfg(nome), "inatos": {"w_pers": 4 * S}})
+    fum = {**_cfg("fumaca_calibracao_conserto.json"), "dias": 1, "inatos": {"w_pers": 4 * S, "eta_h": S // 256}}
+    assert orq.modo_da_config(fum) == "fumaca"
+    run = orq.rodar(fum, tmp_path / "r", 1)
+    assert run["meta"]["inatos"]["w_pers"] == 4 * S and run["meta"]["inatos"]["eta_h"] == S // 256
+    hoje = orq.rodar({**fum, "inatos": {}}, tmp_path / "h", 1)
+    assert run["registros"] and [r["vida"] for r in run["registros"]] == [r["vida"] for r in hoje["registros"]]
+    assert any(a != b for a, b in zip(run["registros"], hoje["registros"]))       # os valores chegam a vida
+
+
 # ================================================================== G2, G2-SEPARADO e G1
 def test_g2_separado_cada_subchave_muda_so_os_bracos_que_a_ligam():
     """o M3-420 do conserto e o M3 do prototipo byte a byte (as duas desligadas); cada subchave sozinha muda a vida; o A11 nao muda"""
