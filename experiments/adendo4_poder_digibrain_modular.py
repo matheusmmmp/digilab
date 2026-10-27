@@ -30,7 +30,7 @@ sys.path.insert(0, str(RAIZ))
 sys.path.insert(0, str(RAIZ / "experiments"))
 
 import run_v2_digibrain_prototipo as orq  # noqa: E402
-from digilab.metrics import ic_percentil, t_unilateral  # noqa: E402
+from digilab.metrics import holm, ic_percentil, t_unilateral  # noqa: E402
 from digilab.protocol import derivar_semente  # noqa: E402
 
 PILOTO = RAIZ / "artifacts_v2_digibrain_prototipo" / "conserto" / "piloto" / "medidas.json"
@@ -131,6 +131,88 @@ def largura_mvp(fracoes: list[float], rng: random.Random) -> dict:
     return {"k": K_REAVALIACAO, "largura_mediana_A": statistics.median(la), "largura_mediana_C": statistics.median(lc)}
 
 
+def ep_monte_carlo(p: float, replicas: int) -> dict:
+    """a incerteza de uma taxa simulada: o erro padrao binomial e o intervalo de Wilson de 95 %"""
+    z = 1.959963984540054
+    ep = math.sqrt(p * (1 - p) / replicas)
+    centro = (p + z * z / (2 * replicas)) / (1 + z * z / replicas)
+    meio = z * math.sqrt(p * (1 - p) / replicas + z * z / (4 * replicas * replicas)) / (1 + z * z / replicas)
+    return {"ep": ep, "wilson95": [centro - meio, centro + meio]}
+
+
+FAMILIAS = {"G-ABLA": orq.FAMILIA_ABLA, "G-MOD": orq.FAMILIA_MOD, "G-DX": orq.FAMILIA_DX}
+# o metodo por contraste da proposta (A4.4): o t sobre as unidades (C), salvo no G-MOD-EMB, cujas unidades de uma base dependem umas das
+# outras pela serie E doadora (a secao 2: o doador e a unidade seguinte da mesma base), e por isso o t sobre as medias de base (D)
+METODO_PROPOSTO = {n: "C" for n in orq.FAMILIA_ABLA + orq.FAMILIA_MOD + orq.FAMILIA_DX} | {"G-MOD-EMB": "D"}
+REPLICAS_FAMILIA = 4000
+
+
+def familias_holm(unidades: list[dict], efeitos: dict, rng: random.Random) -> dict:
+    """o Holm no nivel da familia (alfa 0,05): as unidades do piloto sorteadas inteiras (a correlacao entre os contrastes da mesma unidade
+    fica), cada contraste centrado e deslocado para o efeito dado (0 = a nula verdadeira). Por familia e por metodo (A, C e o proposto):
+    a taxa de algum contraste nulo rejeitado (o erro da familia, FWER) e o poder de cada contraste nao nulo"""
+    medias = {n: statistics.fmean(u[n] for u in unidades) for ns in FAMILIAS.values() for n in ns}
+    metodos = ("A", "C", "proposto")
+    fwer = {f: {m: 0 for m in metodos} for f in FAMILIAS}
+    poder = {f: {m: {n: 0 for n in ns if efeitos.get(n)} for m in metodos} for f, ns in FAMILIAS.items()}
+    for _ in range(REPLICAS_FAMILIA):
+        sorteio = [[unidades[rng.randrange(len(unidades))] for _ in range(K_REAVALIACAO)] for _ in range(N_BASES)]
+        for f, ns in FAMILIAS.items():
+            ps = {"A": {}, "C": {}, "D": {}}
+            for n in ns:
+                grupos = [[u[n] - medias[n] + efeitos.get(n, 0.0) for u in g] for g in sorteio]
+                medias_b = _medias_bootstrap(grupos, REAMOSTRAGENS, rng)
+                ps["A"][n] = sum(1 for m in medias_b if m <= 0.0) / REAMOSTRAGENS
+                ps["C"][n] = _t_p([x for g in grupos for x in g])
+                ps["D"][n] = _t_p([statistics.fmean(g) for g in grupos])
+            ps["proposto"] = {n: ps[METODO_PROPOSTO[n]][n] for n in ns}
+            for m in metodos:
+                h = holm(ps[m], 0.05)
+                fwer[f][m] += any(h[n]["rejeita"] for n in ns if not efeitos.get(n))
+                for n in poder[f][m]:
+                    poder[f][m][n] += h[n]["rejeita"]
+    return {"efeitos": efeitos, "replicas": REPLICAS_FAMILIA,
+            "fwer": {f: {m: {"taxa": c / REPLICAS_FAMILIA, **ep_monte_carlo(c / REPLICAS_FAMILIA, REPLICAS_FAMILIA)} for m, c in d.items()}
+                     for f, d in fwer.items()},
+            "poder": {f: {m: {n: c / REPLICAS_FAMILIA for n, c in d.items()} for m, d in dm.items()} for f, dm in poder.items()}}
+
+
+FORMAS = {
+    "normal": lambda r: r.gauss(0.0, 1.0),
+    "exponencial (assimetria +2)": lambda r: r.expovariate(1.0) - 1.0,
+    "exponencial invertida (assimetria -2)": lambda r: 1.0 - r.expovariate(1.0),
+    "lognormal sigma 1 (assimetria ~6)": lambda r: math.exp(r.gauss(0.0, 1.0)) - math.exp(0.5),
+    "lognormal invertida": lambda r: math.exp(0.5) - math.exp(r.gauss(0.0, 1.0)),
+    "t com 3 gl (cauda pesada)": lambda r: r.gauss(0.0, 1.0) / math.sqrt(sum(r.gauss(0.0, 1.0) ** 2 for _ in range(3)) / 3),
+    "gama k 4 invertida (assimetria -1)": lambda r: 4.0 - r.gammavariate(4.0, 1.0),
+    "gama k 16 invertida (assimetria -0,5)": lambda r: 16.0 - r.gammavariate(16.0, 1.0),
+}
+
+
+def assimetria(valores: list[float]) -> float | None:
+    """o coeficiente de assimetria amostral (g1, o momento de ordem 3 sobre o dp ao cubo); None sem variacao"""
+    m = statistics.fmean(valores)
+    m2 = statistics.fmean((x - m) ** 2 for x in valores)
+    return None if m2 == 0.0 else statistics.fmean((x - m) ** 3 for x in valores) / m2 ** 1.5
+
+
+def sensibilidade_forma(rng: random.Random) -> dict:
+    """o erro do tipo I do t sobre as unidades (C) e do bootstrap do plano (A) com formas de distribuicao fixas, de media 0, no lugar das 6
+    unidades do piloto: o t nao depende da escala, so da forma, e as 6 unidades do piloto quase nao informam a forma"""
+    out = {}
+    for nome, gerar in FORMAS.items():
+        rej = {m: {a: 0 for a in ALFAS} for m in "AC"}
+        for _ in range(REPLICAS_NULA):
+            grupos = [[gerar(rng) for _ in range(K_REAVALIACAO)] for _ in range(N_BASES)]
+            medias_b = _medias_bootstrap(grupos, REAMOSTRAGENS, rng)
+            p = {"A": sum(1 for m in medias_b if m <= 0.0) / REAMOSTRAGENS, "C": _t_p([x for g in grupos for x in g])}
+            for m in rej:
+                for a in ALFAS:
+                    rej[m][a] += p[m] <= a
+        out[nome] = {m: {str(a): rej[m][a] / REPLICAS_NULA for a in ALFAS} for m in rej}
+    return {"replicas": REPLICAS_NULA, "formas": out}
+
+
 def main() -> None:
     medidas = json.loads(PILOTO.read_text(encoding="utf-8"))
     reg = [r for r in medidas.values() if r["braco"] != "A11"]
@@ -150,12 +232,24 @@ def main() -> None:
     rng = random.Random(derivar_semente("adendo4-digibrain", SEMENTE))
     sob_nula = {n: nula(v, rng) for n, v in {**difs, "G-MVP-EP": [f - limiar for f in fracoes]}.items()}
     poder = {n: poder_t(v, ALFA_DO_CONTRASTE[n], rng) for n, v in difs.items() if statistics.fmean(v) > 0}
+    for v in sob_nula.values():
+        if "rejeicao_sob_a_nula" in v:
+            v["ep_monte_carlo"] = {m: {a: ep_monte_carlo(p, REPLICAS_NULA)["ep"] for a, p in d.items()}
+                                   for m, d in v["rejeicao_sob_a_nula"].items()}
+    chaves = sorted(set.intersection(*(set(orq.por_unidade(reg, a, b, med, cel)) for a, b, med, cel in contrastes.values())))
+    por_u = {n: orq.por_unidade(reg, a, b, med, cel) for n, (a, b, med, cel) in contrastes.items()}
+    unidades_juntas = [{n: por_u[n][k] for n in contrastes} for k in chaves]
+    planejamento = {n: statistics.fmean(difs[n]) / 2 for n in difs if statistics.fmean(difs[n]) > 0}
+    familia = {"nula_global": familias_holm(unidades_juntas, {}, rng),
+               "nula_parcial": familias_holm(unidades_juntas, planejamento, rng)}
     out = {"fonte": str(PILOTO.relative_to(RAIZ)).replace("\\", "/"), "n_bases": N_BASES, "k_reavaliacao": K_REAVALIACAO,
            "g_mvp_ep": {"fracao_piloto": frac, "por_unidade": fracoes, "dp": statistics.stdev(fracoes), "limiar": limiar,
                         "verdades": verdades, "poder_por_k": mvp, "replicas": cfg_poder["replicas"],
                         "reamostragens_internas": cfg_poder["reamostragens_internas"]},
            "sob_a_nula": {"replicas": REPLICAS_NULA, "reamostragens": REAMOSTRAGENS, "contrastes": sob_nula},
-           "poder_t_k10": poder, "largura_ic95_g_mvp_ep": largura_mvp(fracoes, rng)}
+           "poder_t_k10": poder, "largura_ic95_g_mvp_ep": largura_mvp(fracoes, rng),
+           "familias_holm": familia, "metodo_proposto": METODO_PROPOSTO, "sensibilidade_forma": sensibilidade_forma(rng),
+           "assimetria_piloto": {n: assimetria(v) for n, v in {**difs, "G-MVP-EP": fracoes}.items()}}
     SAIDA.parent.mkdir(parents=True, exist_ok=True)
     SAIDA.write_bytes((json.dumps(out, ensure_ascii=False, indent=1, sort_keys=True) + "\n").encode("utf-8"))   # LF, o mesmo sha no git
     print(f"gravado {SAIDA.relative_to(RAIZ)}")
