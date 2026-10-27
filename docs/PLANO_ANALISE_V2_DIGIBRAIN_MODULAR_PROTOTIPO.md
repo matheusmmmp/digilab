@@ -1435,3 +1435,215 @@ gate:
 - **o K:** 10, sem chegar ao alvo, porque o poder do G-MVP fica em 0,1085;
 - **o M4-con:** 1 923.
 O adendo 4 vem depois da leitura do Matheus.
+
+## Adendo 4: a reavaliação por estimativa (2026-10-27, Gerente; PROPOSTO para a revisão do Matheus)
+
+**Status: PROPOSTO. Não aprovado. Nenhuma vida da faixa 66xxx foi registrada nem rodou, e nenhuma roda antes de três passos:**
+1. **a aprovação deste adendo pelo Matheus;**
+2. **a implementação das mudanças de leitura de A4.7,** com os testes, num PR próprio;
+3. **o registro da run num commit empurrado,** antes da primeira vida.
+
+**A decisão que este adendo cumpre** (Matheus, 2026-10-27, sobre a proposta do Gerente): "seguir a opção 2, como avaliação por
+estimativa." Pedidos dele para o adendo:
+- **o G-MVP:** manter o limiar de 0,8 registrado, mas tratá-lo só como estimativa com intervalo de confiança, sem "passa" nem "falha";
+- **o que não se afirma:** deixar explícito que a avaliação não demonstra prontidão do protótipo nem superioridade modular;
+- **a persistência:** mantê-la como inconclusiva por premissa;
+- **o poder:** diferenciar o cálculo para 0,8028 (13,1 % com K = 10) do cálculo para 0,8056 (21,4 % com K = 10), e apresentar os dois como
+  aproximações;
+- **o bootstrap com cinco bases:** investigar se o problema afeta também os intervalos e os testes das ablações, e propor como corrigir ou
+  limitar essa interpretação antes de qualquer execução.
+
+**As fontes:**
+- **o piloto do conserto:** `artifacts_v2_digibrain_prototipo/conserto/piloto/` (o #429, na `main` em `1a16678`);
+- **as contas novas deste adendo:** o `experiments/adendo4_poder_digibrain_modular.py`, que só reamostra as unidades do piloto. Nenhuma
+  vida roda. Ele grava `artifacts_v2_digibrain_prototipo/conserto/adendo4/poder.json` (sha256 `ba8e62b3…1494`), e rodado duas vezes sai
+  igual, byte a byte.
+
+### A4.0 O que não muda
+
+- **O limiar do G-MVP:** 0,8, como na seção 5.2 e em A3.3. O número fica escrito no plano e é a referência da leitura em A4.2. Ele não é
+  reduzido nem alterado por causa do piloto.
+- **O desenho:** os 12 braços de A3.4 e A3.8, as 12 células, os 14 dias e as bases 66101, 66202, 66303, 66404 e 66505.
+- **As medidas:** a primária é por episódio (A3.3), e a por ração é a secundária obrigatória.
+- **Os valores calibrados do #428:** seguem PROPOSTOS.
+- **O G-ABLA-PERS é inconclusivo por premissa** (seção 5.3). A G-PESA da persistência falhou nas três rodadas do #427 (0,0027 na melhor) e
+  no piloto (0,0033). A reavaliação não demonstra a contribuição da persistência, qualquer que seja o p.
+- **Os resultados anteriores:** nada aqui muda o #420, a 64xxx (queimada) nem os artefatos dele.
+
+### A4.1 A pergunta muda
+
+- **A pergunta registrada era confirmatória:** o protótipo atinge o critério (o limite inferior do IC95 da fração ≥ 0,8)?
+- **A pergunta desta reavaliação é de estimativa:** quanto o protótipo fecha, com que incerteza?
+- **Por que mudou** (a proposta do Gerente, 2026-10-27, com as contas de A4.3):
+  - o piloto deu 0,8056, praticamente no limiar;
+  - para o teste confirmatório ter poder de 0,8, o K precisaria ser cerca de 70 vezes o orçamento registrado (K = 10, seção 6.3);
+  - com K = 10, o teste falharia na maior parte das vezes mesmo com o protótipo um pouco acima de 0,8.
+- **É uma mudança de pergunta, registrada antes de qualquer vida, e não uma correção do critério.** Nada se ajusta depois de ver a 66xxx.
+- **A 66xxx roda uma vez.** Usada para estimar, ela não serve depois como confirmatória. Um teste confirmatório futuro do G-MVP precisa de
+  faixa nova e de adendo novo.
+
+### A4.2 O G-MVP como estimativa
+
+- **O que sai:** a fração de vidas do M3\* com o fechamento por episódio ≥ 0,5 (A3.3), com o IC95 de A4.4. **Sem "passa" e sem "falha".**
+  O G-MVP por ração (o secundário obrigatório) sai do mesmo jeito.
+- **Onde fica o 0,8:** ao lado do IC, como referência. O relato diz em que posição o IC fica em relação a ele, numa destas três frases:
+  - "o IC95 inteiro acima de 0,8";
+  - "o IC95 contém 0,8";
+  - "o IC95 inteiro abaixo de 0,8".
+  Nenhuma das três é aprovação ou reprovação do gate.
+- **O que a avaliação não demonstra,** explícito em todo relato e resultado dela:
+  - **a prontidão do protótipo.** O G-MVP é parte do gate de prontidão (seção 5.6, ii), e sem "passa" esse gate não é cumprido. O A segue
+    como o cérebro do MVP;
+  - **a superioridade modular.** A comparação com o A11 (seção 7) segue descritiva. Os contrastes são entre os braços do próprio modular e
+    medem módulos, não arquiteturas.
+- **A precisão esperada com K = 10:** a largura mediana do IC95 do G-MVP por episódio é 0,035 pelo t sobre as unidades (A4.4). Uma
+  aproximação, pela reamostragem das 6 unidades do piloto. Pelo bootstrap do plano daria 0,028, estreito demais (A4.4).
+
+### A4.3 O poder do G-MVP confirmatório (aproximações)
+
+- **O que é:** só a justificativa de A4.1. A reavaliação não usa o poder.
+- **O método:** o `poder_por_k` do orquestrador, sem mudança: 2 000 réplicas, 1 000 reamostragens internas, 5 bases, o limite inferior do
+  IC95 ≥ 0,8.
+- **A base:** as 6 unidades do piloto, cada uma a média das 12 células: 0,75; 0,917; 0,833; 0,75; 0,75; 0,833. O desvio padrão é 0,068.
+- **Os dois valores verdadeiros supostos:**
+  - **0,8028:** a regra do plano (seção 6.3), o limiar mais metade da margem do piloto;
+  - **0,8056:** o observado no piloto, mais otimista.
+- **São aproximações, por três razões:**
+  - as 6 unidades estimam mal a variabilidade, e os valores saem em múltiplos de 1/12;
+  - o teste do plano tem o defeito de A4.4, então o poder dele está superestimado;
+  - o valor verdadeiro não é conhecido.
+
+| K por base | 4 | 10 | 20 | 40 | 80 | 150 | 250 | 400 | 600 | 800 | 1 000 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| poder com 0,8028 (a regra do plano) | 0,105 | **0,131** | 0,146 | 0,192 | 0,255 | 0,375 | 0,497 | 0,623 | 0,772 | 0,851 | 0,892 |
+| poder com 0,8056 (o observado) | 0,136 | **0,214** | 0,279 | 0,386 | 0,569 | 0,796 | 0,900 | 0,974 | 0,997 | 1,000 | 1,000 |
+| passa com o valor no limiar exato, 0,80 | 0,054 | 0,075 | 0,074 | 0,072 | 0,075 | 0,086 | 0,086 | 0,073 | 0,086 | 0,079 | 0,075 |
+
+- **Com 0,8028:** o poder de 0,8 exige K entre 600 e 800 por base, cerca de 3 500 unidades e 300 h de CPU com os 12 braços.
+- **Com 0,8056:** exige K ≈ 150.
+- **Nos dois casos, o orçamento registrado (K = 10) fica muito abaixo.**
+- **A última linha mostra o defeito de A4.4:** com o valor verdadeiro exatamente no limiar, o gate passaria em 5 % a 9 % das réplicas, e não
+  nos 2,5 % nominais.
+
+### A4.4 O bootstrap com cinco bases: o que afeta e a correção
+
+**O achado.** O bootstrap da convenção (seção 5.2.1) reamostra as 5 bases, e não as unidades. Com só 5 grupos:
+- o bootstrap percentil subestima a variabilidade da média, porque a variância das 5 somas reamostradas tem o fator (n − 1)/n = 0,8;
+- ele também não tem a cauda da t com 4 graus de liberdade.
+
+**As unidades são independentes por construção.** Cada uma tem semente e genoma próprios, derivados por hash de (prefixo, base, k)
+(`experiments/bancada/faixas.py`, a regra E3). A base é só um rótulo de sementes, sem nada em comum entre as unidades dela.
+
+**O que afeta: todos os testes e intervalos da reavaliação, não só o G-MVP.** As contas usam as diferenças por unidade do piloto,
+centradas em zero (a nula verdadeira), com K = 10 e 5 bases. São 2 000 réplicas com 1 000 reamostragens. A taxa de rejeição esperada é o α
+de cada coluna.
+
+| contraste | A, o do plano: α 0,0125 / 0,025 / 0,05 | C, t sobre as 50 unidades | D, t sobre as 5 médias de base | cobertura do IC95, A / C |
+|---|---|---|---|---|
+| G-ABLA-P1 | 0,062 / 0,082 / 0,106 | 0,011 / 0,025 / 0,048 | 0,013 / 0,022 / 0,048 | 0,831 / 0,946 |
+| G-ABLA-P2 | 0,061 / 0,074 / 0,098 | 0,009 / 0,019 / 0,045 | 0,011 / 0,021 / 0,044 | 0,851 / 0,953 |
+| G-ABLA-MEM | 0,063 / 0,075 / 0,107 | 0,016 / 0,027 / 0,051 | 0,010 / 0,024 / 0,046 | 0,852 / 0,953 |
+| G-ABLA-PERS | 0,068 / 0,084 / 0,108 | 0,011 / 0,021 / 0,040 | 0,011 / 0,022 / 0,050 | 0,833 / 0,950 |
+| G-MOD-CON | 0,080 / 0,098 / 0,129 | 0,023 / 0,038 / 0,069 | 0,019 / 0,034 / 0,065 | 0,831 / 0,945 |
+| G-MOD-EMB | 0,066 / 0,082 / 0,105 | 0,011 / 0,024 / 0,053 | 0,015 / 0,026 / 0,047 | 0,841 / 0,954 |
+| G-DX-INATO | 0,072 / 0,089 / 0,117 | 0,017 / 0,028 / 0,058 | 0,014 / 0,024 / 0,056 | 0,825 / 0,953 |
+| G-DX-INTENCAO | 0,059 / 0,075 / 0,103 | 0,015 / 0,029 / 0,051 | 0,016 / 0,026 / 0,045 | 0,845 / 0,952 |
+| G-MVP-EP (a fração − 0,8) | 0,053 / 0,071 / 0,094 | 0,009 / 0,019 / 0,045 | 0,012 / 0,022 / 0,041 | 0,835 / 0,945 |
+
+**O que a tabela diz:**
+- **O teste do plano (A) erra muito.** No α = 0,0125 (o primeiro limiar do Holm da G-ABLA), ele rejeita a nula verdadeira em cerca de
+  6 % das vezes, 5 vezes o nominal. O IC95 dele cobre o valor verdadeiro em só 83 % a 85 % das vezes.
+- **As alternativas ficam perto do nominal.** O t sobre as unidades (C) e o t sobre as médias de base (D) erram perto do α e cobrem perto de
+  95 %. O C fica um pouco acima do nominal no G-MOD-CON, cuja distribuição tem cauda pesada (0,023 no α 0,0125); o D fica perto do nominal.
+- **A premissa G-PESA usa o mesmo bootstrap** (o limite inferior do IC95 > 0,01) e herda o defeito: ela passa com mais facilidade do que
+  deveria. A persistência falha de qualquer forma (0,0033, com a média abaixo de 0,01), então a leitura dela não muda.
+
+**A proposta: decidir pelo t sobre as unidades (o C), com o bootstrap do plano rebaixado a descritivo.**
+1. **Nas famílias G-ABLA, G-MOD e G-DX:** o p de cada contraste passa a ser o `t_pareado.p_unilateral` que o `contraste_pareado`
+   (`digilab/metrics.py`) já calcula e relata, como conferência, sobre as unidades. O Holm não muda: as mesmas famílias, a mesma ordem, os
+   mesmos α. O p do bootstrap sai ao lado, rotulado "a convenção da seção 5.2.1, anticonservadora com 5 bases (A4.4)".
+2. **Os IC95, inclusive o do G-MVP de A4.2 e o da G-PESA:** saem pelo t sobre as unidades (média ± t₀,₉₇₅;n−1 × dp/√n). O cálculo entra em
+   `digilab/metrics.py` (as métricas existem uma vez só), ao lado do `contraste_pareado`, com teste. O IC percentil do bootstrap sai ao
+   lado, como descritivo.
+3. **Por que o C e não o D:**
+   - os dois ficam perto do nominal;
+   - o D trata as 5 bases como as unidades e perde quase todo o poder (4 graus de liberdade);
+   - as bases não têm nada em comum, então o agrupamento não é exigido pelo desenho;
+   - o C já é calculado hoje.
+4. **Por que agora:** é uma correção do método, registrada antes de qualquer vida da 66xxx e sem olhar para ela. Ela não muda limiar, α,
+   família nem medida.
+5. **A alternativa, se o Matheus preferir não mudar o teste:** manter o A e limitar a leitura. Todo p e todo IC da reavaliação levariam a
+   ressalva de A4.4, com a taxa de erro de cerca de 6 % no α 0,0125, e nenhum "passa" das famílias seria lido como confirmação. A
+   recomendação do Gerente é a correção. A ressalva sozinha deixaria um teste que se sabe errado decidindo o Holm.
+
+**O poder com a correção (K = 10, o t sobre as unidades, o efeito de planejamento do plano, que é a metade do piloto):**
+
+| contraste | efeito de planejamento | α | poder com K = 10 |
+|---|---|---|---|
+| G-ABLA-P1 | 0,0171 | 0,0125 | 1,000 |
+| G-ABLA-MEM | 0,0830 | 0,0125 | 1,000 |
+| G-DX-INATO | 0,0201 | 0,025 | 0,283 |
+| G-DX-INTENCAO | 0,0114 | 0,025 | 0,096 |
+
+- **O P2, a PERS e os dois G-MOD** tiveram o sinal contrário no piloto e ficam fora da conta, como na seção 6.3.
+- **O P1 e a MEM mantêm poder alto.** O poder da G-DX cai em relação ao que o piloto relatou com o teste A (0,417 e 0,201), que o
+  superestimava.
+
+**O que fica fora deste adendo e vai ao Matheus como questão aberta:** a mesma convenção, com 5 bases, decidiu os testes de outras
+validações da V2, inclusive o #420. Este adendo não reabre nenhum resultado anterior. Se e como revisá-los é uma decisão à parte.
+
+### A4.5 O K, o M4-con e o custo
+
+- **K = 10 por base** (seção 6.3: "Se nem K = 10 chega a 0,8, a avaliação roda com 10, e o poder sai declarado"). São 50 unidades e
+  7 200 vidas com o A11.
+- **O `g_apr` do M4-con:** 1 923, a média do `g_apr` das vidas M4 do piloto (seção 6.2).
+- **O custo estimado:** 15 273 s de CPU (cerca de 4,2 h), pelo `resultado.json` do piloto. Com 8 processos, perto de uma hora de parede.
+
+### A4.6 A leitura da reavaliação (no lugar da tabela da seção 5.5)
+
+- **A tabela da seção 5.5 não se aplica.** Ela condiciona a leitura do G-ABLA ao G-MVP passar, e aqui o G-MVP não tem passa nem falha.
+- **O G-MECANISMO** (os testes de mecanismo, a pré-condição) continua binário: com um falhando, nenhuma vida roda.
+- **As famílias G-ABLA, G-MOD e G-DX** saem com o Holm de A4.4. Um contraste rejeitado lê-se: "o módulo pesa no sentido previsto dentro do
+  M3\*, nestas condições". Não se lê como "o modular vai à comida pelos próprios módulos", que exige o G-MVP passar (seção 5.5), nem como
+  superioridade da arquitetura.
+- **O G-ABLA-PERS:** inconclusivo por premissa (A4.0), qualquer que seja o p.
+- **As premissas** (G-PESA, G-ELEGIVEL e G-ELEGIVEL-EP) e os descritivos (a DX-5, as medidas do cheiro e o A11) seguem como no plano, com
+  os IC de A4.4.
+
+### A4.7 O que precisa mudar no código antes de qualquer vida (o PR de implementação, depois da aprovação)
+
+- **No `experiments/run_v2_digibrain_prototipo.py`:**
+  - a análise da reavaliação deixa de calcular "passa" para o G-MVP por episódio e para o por ração. Ela grava a estimativa, o IC de A4.4 e
+    a posição do IC em relação a 0,8;
+  - o p do Holm passa a ser o do t sobre as unidades, nas três famílias;
+  - o p do bootstrap e o IC percentil ficam ao lado, rotulados;
+  - a leitura de A4.6 substitui a da seção 5.5.
+- **No `digilab/metrics.py`:** o IC95 pelo t sobre as unidades, ao lado do `contraste_pareado`, com teste. A conta do `contraste_pareado` de
+  hoje não muda.
+- **Os testes:**
+  - o G-MVP da reavaliação não tem chave "passa";
+  - o Holm usa o p do t;
+  - o IC t confere com uma conta à mão;
+  - o G2, o G1 e o G-MECANISMO seguem passando. As vidas não mudam, só a análise.
+- **A trava:** hoje o orquestrador aceita a reavaliação assim que o texto "## Adendo 4" existe no plano. A implementação faz a reavaliação
+  exigir também a marca de aprovação deste adendo (o status "APROVADO pelo Matheus"), para um adendo só PROPOSTO não liberar vidas.
+- **Se alguma dessas mudanças exigir mexer no motor, no corpo, no mundo, no `engine.py`, no cérebro ou nas medidas por vida:** para e volta
+  ao Matheus.
+
+### A4.8 Os critérios de parada
+
+- **Antes da reavaliação:**
+  - sem a aprovação deste adendo e o PR de A4.7 na `main`, nenhuma vida da 66xxx;
+  - qualquer quebra do G2, do G1 ou do G-MECANISMO para tudo.
+- **O registro da run,** num commit empurrado antes da primeira vida: o commit, a config com o sha, as bases, o K, os braços e a leitura
+  deste adendo. O Gerente confere o escopo antes das vidas.
+- **A reavaliação roda uma vez.** O resultado é registrado como está, e nada se ajusta olhando para ele. O próximo passo vai ao Matheus.
+
+### A4.9 Para o Matheus decidir
+
+1. **A aprovação deste adendo,** com a pergunta de estimativa de A4.1 e a leitura de A4.2 e A4.6.
+2. **A correção do teste (A4.4).**
+   - **A recomendação do Gerente:** decidir pelo t sobre as unidades, com o bootstrap descritivo.
+   - **O custo de errar, se a correção for errada:** é pequeno. As vidas não mudam, e os dois p ficam gravados.
+   - **O custo de não corrigir:** o Holm decide com cerca de 6 % de erro onde o nominal é 1,25 %.
+3. **As validações anteriores com a mesma convenção** (A4.4, a questão aberta): ficam como estão, ou se abre uma revisão à parte?
