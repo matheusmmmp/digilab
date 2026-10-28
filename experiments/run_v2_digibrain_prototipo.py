@@ -28,7 +28,10 @@ bracos, uma vez so). Nelas os bracos sao os de SUBCHAVES_CONSERTO: os 8 do modul
 M3* do adendo), mais o M3-sem-inato (so a `intencao_cheiro`), o M3-sem-intencao (so o `cheiro_inato`) e o M3-420 (as duas desligadas),
 e o A11. As medidas ganham as do adendo (`_medidas_conserto_mundo` e `_medidas_conserto_cerebro`): o episodio de fome com a W(d) (a
 primaria, A3.3), a medida por racao com a W(d), a DX-1 (com a `visitas_vazias_v1` ao lado), a DX-5 e o mecanismo do cheiro; e a analise,
-o G-MVP por episodio como o primario, o de hoje como secundario obrigatorio, e a familia G-DX (Holm com 2). Em toda vida (de toda fase), o
+o G-MVP por episodio como o primario, o de hoje como secundario obrigatorio, e a familia G-DX (Holm com 2). A reavaliacao e por estimativa
+(o adendo 4, A4.7; `analisar_conserto`): os dois G-MVP sem "passa", com o IC pelo t e a posicao em relacao a 0,8; o Holm das tres familias
+pelo p do t sobre as unidades (o G-MOD-EMB, pelas medias de base), com o g1 e a ressalva; o bootstrap ao lado, rotulado; a leitura de A4.6.
+Ela exige o adendo 4 APROVADO pelo Matheus no cabecalho (`exigir_adendo_aprovado`). Em toda vida (de toda fase), o
 T-CENARIO-1 (`conferir_cenario`) e o credito por opcao (`conferir_credito`) falham alto. Nas fases do prototipo (63xxx e 64xxx), as vidas
 e as medidas sao as de hoje, byte a byte (tests/gabaritos/digibrain_modular_de_hoje.json).
 
@@ -69,11 +72,11 @@ from digilab.config import (CONFIG_DIGIBRAIN_INATOS, CONFIG_DIGIBRAIN_LIGADA, CO
 from digilab.digibrain import DigiBrain  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
 from digilab.events import LogDeEventos  # noqa: E402
-from digilab.metrics import (ACOES_R_POSSIVEL, JANELA_8_14, MODULOS_SONDA, MOTIVOS_EPISODIO, cadeia_comida_corpo,  # noqa: E402
+from digilab.metrics import (ACOES_R_POSSIVEL, JANELA_8_14, MODULOS_SONDA, MOTIVOS_EPISODIO, assimetria_g1, cadeia_comida_corpo,  # noqa: E402
                              centro_temporal, contraste_pareado, deficit_fome_energia, entropia_acoes, episodios_de_fome,
-                             exaustao_nas_decisoes, falta_ao_comer, holm, ic_percentil, influencia_por_modulo, intencoes_com_meta,
+                             exaustao_nas_decisoes, falta_ao_comer, holm, ic_percentil, ic_t, influencia_por_modulo, intencoes_com_meta,
                              janela_dias, janela_w, media_absoluta, pesos_no_teto, privacao_nas_decisoes, repeticao_apos_alivio,
-                             visitas_vazias, visitas_vazias_v1)
+                             t_medias_de_grupo, visitas_vazias, visitas_vazias_v1)
 from digilab.motor_corpo import com_corpo  # noqa: E402
 from digilab.mundo import ESTILOS_LUGAR, DonoComLugar, MotorMundo, reproduzir_mundo  # noqa: E402
 from digilab.protocol import derivar_semente  # noqa: E402
@@ -157,13 +160,29 @@ def adendo_do_piloto() -> dict:
     return {"k": r["n"]["k"], "g_apr_m4_con": r["g_apr_m4"]["m4_con"]}
 
 
+def exigir_adendo_aprovado(plano: str, n: int) -> None:
+    """a trava de A4.7: o adendo n tem de estar no plano E com o status "APROVADO pelo Matheus" no cabecalho dele (o titulo e o paragrafo
+    do status, antes da primeira subsecao); so o titulo, ou um status PROPOSTO, nao libera vidas"""
+    linhas = plano.splitlines()
+    titulo = [i for i, x in enumerate(linhas) if x.startswith(f"## Adendo {n}:") or x == f"## Adendo {n}"]
+    if len(titulo) != 1:
+        raise RuntimeError(f"o adendo {n} nao esta no plano (ou esta mais de uma vez): {len(titulo)} titulos")
+    cabecalho = []
+    for x in linhas[titulo[0] + 1:]:
+        if x.startswith("## ") or x.startswith("### "):
+            break
+        cabecalho.append(x)
+    status = [x for x in cabecalho if x.startswith("**Status:")]
+    if len(status) != 1 or not status[0].startswith("**Status: APROVADO pelo Matheus"):
+        raise RuntimeError(f"o adendo {n} nao esta APROVADO pelo Matheus no cabecalho (A4.7): {status or 'sem a linha do status'}")
+
+
 def adendo_do_piloto_conserto() -> dict:
     """O K e o g_apr do M4-con da reavaliacao: os do piloto do conserto (A3.8), que o adendo 4 do plano registra num commit antes dela."""
     caminho = RAIZ / SAIDA["piloto_conserto"] / "resultado.json"
     if not caminho.exists():
         raise FileNotFoundError("a reavaliacao precisa do piloto do conserto e do adendo 4 (A3.8): rode o piloto antes")
-    if "## Adendo 4" not in (RAIZ / PLANO).read_text(encoding="utf-8"):
-        raise RuntimeError("o adendo 4 (o efeito, as premissas, o g_apr do M4-con, o K e o custo do piloto do conserto) nao esta no plano")
+    exigir_adendo_aprovado((RAIZ / PLANO).read_text(encoding="utf-8"), 4)
     r = json.loads(caminho.read_text(encoding="utf-8"))
     return {"k": r["n"]["k"], "g_apr_m4_con": r["g_apr_m4"]["m4_con"]}
 
@@ -829,27 +848,29 @@ def g_elegivel(registros: list[dict], cfg_el: dict) -> dict:
     return {"frac_vidas": frac, "vidas": len(vs), "passa": frac >= cfg_el["frac_vidas"]}
 
 
-def comparacao_com_o_a(registros: list[dict], boot: dict, conserto: bool = False) -> dict:
-    """a comparacao descritiva com o A (secao 7, o D6): M3 - A11 e M0 - A11, sem Holm e sem margem; no conserto, tambem o episodio"""
+def comparacao_com_o_a(registros: list[dict], boot: dict, conserto: bool = False, est=contraste) -> dict:
+    """a comparacao descritiva com o A (secao 7, o D6): M3 - A11 e M0 - A11, sem Holm e sem margem; no conserto, tambem o episodio. `est`:
+    o contraste (na reavaliacao, o contraste_t de A4.4.6)"""
     meds = {"d_fe": "d_fe", "privacao": "privacao", "refeicoes_por_dia": lambda r: r["cadeia"]["refeicoes_por_dia"],
             "taxa": lambda r: r["cadeia"]["taxa"], "com_cadeia": lambda r: None if r["com_cadeia"] is None else float(r["com_cadeia"])}
     if conserto:
         meds.update({"taxa_ep": lambda r: r["episodios_fome"]["taxa"],
                      "com_cadeia_ep": lambda r: None if r["episodios_fome"]["com_cadeia"] is None else float(r["episodios_fome"]["com_cadeia"])})
-    return {f"{b} - A11": {n: contraste(por_unidade(registros, b, "A11", m), boot) for n, m in meds.items()} for b in ("M3", "M0")}
+    return {f"{b} - A11": {n: est(por_unidade(registros, b, "A11", m), boot) for n, m in meds.items()} for b in ("M3", "M0")}
 
 
-def leitura_d2(registros: list[dict], boot: dict) -> dict:
-    """D-2 (secao 8): centro_temporal(habito) - centro_temporal(memoria) no M3, por unidade; positiva e a ordem prevista. Sem gate."""
+def leitura_d2(registros: list[dict], boot: dict, est=contraste) -> dict:
+    """D-2 (secao 8): centro_temporal(habito) - centro_temporal(memoria) no M3, por unidade; positiva e a ordem prevista. Sem gate. `est`:
+    o contraste (na reavaliacao, o contraste_t de A4.4.6)"""
     def dif(r):
         h, m = (centro_temporal([0.0 if f is None else f for f in r["influencia_por_dia"][x]]) for x in ("habito", "memoria"))
         return None if h is None or m is None else h - m
-    por_lugar = {lugar: contraste(por_unidade(registros, "M3", None, dif, tuple(c for c in CELULAS if c[1] == lugar)), boot)
+    por_lugar = {lugar: est(por_unidade(registros, "M3", None, dif, tuple(c for c in CELULAS if c[1] == lugar)), boot)
                  for lugar in LUGARES}
-    return {"habito_menos_memoria": contraste(por_unidade(registros, "M3", None, dif), boot), "por_lugar": por_lugar}
+    return {"habito_menos_memoria": est(por_unidade(registros, "M3", None, dif), boot), "por_lugar": por_lugar}
 
 
-def leitura_d1(registros: list[dict], boot: dict) -> dict:
+def leitura_d1(registros: list[dict], boot: dict, est=contraste) -> dict:
     """D-1 (secao 8): M4 - M4-con na exploracao (a fracao e a entropia das acoes por dia) e na taxa de aprendizado (|delta d| e |delta H|),
     cada diferenca pelo desvio padrao das unidades do M4-con. Sem gate."""
     out = {}
@@ -858,7 +879,7 @@ def leitura_d1(registros: list[dict], boot: dict) -> dict:
         nivel = list(por_unidade(registros, "M4-con", None, nome).values())
         dp = statistics.stdev(nivel) if len(nivel) > 1 else None
         padr = {k: v / dp for k, v in difs.items()} if dp else {}
-        out[nome] = {"bruto": contraste(difs, boot), "dp_m4_con": dp, "padronizado": contraste(padr, boot) if padr else None}
+        out[nome] = {"bruto": est(difs, boot), "dp_m4_con": dp, "padronizado": est(padr, boot) if padr else None}
     return out
 
 
@@ -943,14 +964,15 @@ def _interacao(registros: list[dict], celulas: tuple) -> dict:
     return {k: a[k] - b[k] - c[k] + d[k] for k in a if k in b and k in c and k in d}
 
 
-def familia_dx(registros: list[dict], boot: dict, alfa: float) -> dict:
+def familia_dx(registros: list[dict], boot: dict, alfa: float, fam=None, est=contraste) -> dict:
     """a familia G-DX (secundaria, Holm com 2): a leitura principal nas celulas do longe; a de todas as celulas ao lado, com o seu Holm; a
-    interacao do 2 x 2 e os quatro bracos lado a lado, descritivos"""
+    interacao do 2 x 2 e os quatro bracos lado a lado, descritivos. `fam` e `est`: a familia e o contraste (na reavaliacao, os de A4.4.6)"""
+    fam = familia if fam is None else fam
     out = {"principal": "longe"}
     for nome, celulas in (("longe", CELULAS_LONGE), ("todas", CELULAS)):
-        out[nome] = {"contrastes": familia(registros, contrastes_dx(celulas), boot, alfa),
-                     "interacao": contraste(_interacao(registros, celulas), boot),
-                     "quatro_bracos": {b: contraste(por_unidade(registros, b, None, _taxa_ep, celulas), boot) for b in BRACOS_2X2}}
+        out[nome] = {"contrastes": fam(registros, contrastes_dx(celulas), boot, alfa),
+                     "interacao": est(_interacao(registros, celulas), boot),
+                     "quatro_bracos": {b: est(por_unidade(registros, b, None, _taxa_ep, celulas), boot) for b in BRACOS_2X2}}
     return out
 
 
@@ -987,7 +1009,7 @@ def episodios_por_vida(registros: list[dict]) -> dict:
     return out
 
 
-def leitura_dx5(registros: list[dict], boot: dict) -> dict:
+def leitura_dx5(registros: list[dict], boot: dict, est=contraste) -> dict:
     """A DX-5 (A3.5), exploratoria, sem gate, sem Holm e sem sinal esperado: o "ganhou, fica" so nas acoes com r > 0 possivel, M2 - M1 (ao
     lado do indice de hoje, que fica no G-ABLA-P2), no total, por lugar e por acao; e o nivel de cada braco"""
     def med(acao: str | None = None):
@@ -996,11 +1018,11 @@ def leitura_dx5(registros: list[dict], boot: dict) -> dict:
         return lambda r: r["repeticao_r_possivel"]["por_acao"][acao]["indice"]
     modulares = sorted({r["braco"] for r in registros} - {"A11"})
     return {"aviso": "exploratoria (A3.5): sem gate, sem Holm, sem sinal esperado; o G-ABLA-P2 usa o indice de hoje",
-            "M2 - M1": {"total": contraste(por_unidade(registros, "M2", "M1", med()), boot),
-                        "por_lugar": {lugar: contraste(por_unidade(registros, "M2", "M1", med(), tuple(c for c in CELULAS if c[1] == lugar)),
+            "M2 - M1": {"total": est(por_unidade(registros, "M2", "M1", med()), boot),
+                        "por_lugar": {lugar: est(por_unidade(registros, "M2", "M1", med(), tuple(c for c in CELULAS if c[1] == lugar)),
                                                        boot) for lugar in LUGARES},
-                        "por_acao": {a: contraste(por_unidade(registros, "M2", "M1", med(a)), boot) for a in ACOES_R_POSSIVEL}},
-            "indice_de_hoje, M2 - M1": contraste(por_unidade(registros, "M2", "M1", lambda r: r["repeticao"]["indice"]), boot),
+                        "por_acao": {a: est(por_unidade(registros, "M2", "M1", med(a)), boot) for a in ACOES_R_POSSIVEL}},
+            "indice_de_hoje, M2 - M1": est(por_unidade(registros, "M2", "M1", lambda r: r["repeticao"]["indice"]), boot),
             "nivel": {b: {"total": _media(med()(r) for r in registros if r["braco"] == b),
                           "por_acao": {a: _media(med(a)(r) for r in registros if r["braco"] == b) for a in ACOES_R_POSSIVEL}}
                       for b in modulares}}
@@ -1051,34 +1073,159 @@ def descritivos_conserto(registros: list[dict]) -> dict:
     return out
 
 
-def analisar_conserto(registros: list[dict], cfg: dict, mecanismo_passa: bool = True) -> dict:
-    """a reavaliacao (o adendo 3; o K e o g_apr do M4-con do adendo 4): o G-MVP por episodio (o primario, A3.3) com a G-ELEGIVEL-EP; o
-    G-MVP e a G-ELEGIVEL de hoje (secundarios obrigatorios, sem mudanca); as familias G-ABLA e G-MOD como no plano; a familia G-DX (A3.4);
-    a DX-5 (A3.5, exploratoria); os descritivos; o A11 so na comparacao descritiva"""
-    boot, alfa = cfg["bootstrap"], cfg["holm"]["alfa"]
-    abla = familia(registros, CONTRASTES_ABLA, boot, alfa)
-    pesa = g_pesa(registros, boot, cfg["g_pesa"])
-    for g in FAMILIA_ABLA:
-        abla[g]["premissa_g_pesa"] = pesa[MODULO_DO_GATE[g]]["passa"]
-        abla[g]["leitura"] = ("inconclusivo por premissa: o modulo nao pesa" if not abla[g]["premissa_g_pesa"]
-                              else ("passa" if abla[g]["passa"] else "nao passa"))
-    mod = familia(registros, CONTRASTES_MOD, boot, alfa)
-    mvp_ep, el_ep = g_mvp_ep(registros, boot, cfg["g_mvp_ep"]), g_elegivel_ep(registros, cfg["g_elegivel_ep"])
-    mvp, el = g_mvp(registros, boot, cfg["g_mvp"]), g_elegivel(registros, cfg["g_elegivel"])
-    d11 = descritivo_11_celulas(registros, cfg)
-    d11["G-MVP-EP"] = contraste(por_unidade(registros, "M3", None, _com_cadeia_ep, CELULAS_11), boot)
-    out = {"primaria": "G-MVP-EP", "G-MVP-EP": mvp_ep, "G-ELEGIVEL-EP": el_ep,
-           "G-MVP": {**mvp, "papel": "secundaria obrigatoria (A3.3): o G-MVP pre-registrado, por racao, sem mudanca"},
-           "G-ELEGIVEL": el, "G-ABLA": abla, "G-PESA": pesa, "G-MOD": mod, "G-DX": familia_dx(registros, boot, alfa), "holm_alfa": alfa,
-           "leitura": leitura(mecanismo_passa, mvp_ep, el_ep, abla, pesa, conserto=True), "D-2": leitura_d2(registros, boot),
-           "D-1": leitura_d1(registros, boot), "DX-5": leitura_dx5(registros, boot), "episodios_por_vida": episodios_por_vida(registros),
-           "descritivos": descritivos(registros), "descritivos_conserto": descritivos_conserto(registros), "descritivo_11_celulas": d11}
-    if any(r["braco"] == "A11" for r in registros):
-        out["comparacao_com_o_a"] = comparacao_com_o_a(registros, boot, conserto=True)
+# ------------------------------------------------------------------ a reavaliacao por estimativa (o adendo 4: A4.2, A4.4.6, A4.6 e A4.7)
+ROTULO_BOOTSTRAP = "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+POR_MEDIAS_DE_BASE = ("G-MOD-EMB",)       # A4.4.2: o M4-emb le a serie E da outra unidade da base, em anel; a base e o grupo independente
+LIMIAR_G1 = -0.5                          # PROPOSTO (A4.4.6, A4.9), sem fonte externa: a forma mais branda em que o t passa do nominal
+RESSALVA_G1 = "assimetria negativa: o erro do tipo I do t pode passar do nominal (A4.4.5; com g1 = -1, cerca de 1,8 vez)"
+NAO_DEMONSTRA = ("a prontidao do prototipo: o G-MVP e parte do gate de prontidao (secao 5.6, ii), e sem passa esse gate nao e cumprido; "
+                 "o A segue como o cerebro do MVP (A4.2)",
+                 "a superioridade modular: a comparacao com o A11 (secao 7) segue descritiva; os contrastes sao entre os bracos do proprio "
+                 "modular e medem modulos, nao arquiteturas (A4.2)")
+
+
+def contraste_t(difs: dict, boot: dict, por_base: bool = False) -> dict:
+    """o contraste da reavaliacao (A4.4.6): o p e o IC95 pelo t sobre as unidades (o t_pareado do contraste_pareado e o ic_t), ou, com
+    `por_base`, pelo t sobre as medias de base (o G-MOD-EMB, A4.4.2); a assimetria g1 das diferencas por unidade e, com g1 <= LIMIAR_G1, a
+    ressalva (ela nao muda o p nem a decisao); o p do bootstrap e o IC percentil ao lado, rotulados (o `contraste` de hoje, sem mudanca)"""
+    b = contraste(difs, boot)
+    grupos: dict = {}
+    for (base, _), d in sorted(difs.items()):
+        grupos.setdefault(base, []).append(d)
+    valores = [d for _, d in sorted(difs.items())]
+    if por_base:
+        t = t_medias_de_grupo(grupos)
+        teste = {"teste": "t sobre as medias de base (A4.4.2)", "p_unilateral": t["p_unilateral"], "ic95": t["ic"], "t": t["t"],
+                 "gl": t["gl"], "medias_base": t["medias_grupo"], "motivo": t["motivo"]}
+    else:
+        ic = ic_t(valores)
+        tp = b["t_pareado"]
+        motivo = ic["motivo"] or b["motivo"] or (None if tp is not None else "sem variacao entre as unidades")
+        teste = {"teste": "t sobre as unidades (A4.4.6)", "p_unilateral": None if tp is None else tp["p_unilateral"],
+                 "ic95": {"ic_inferior": ic["ic_inferior"], "ic_superior": ic["ic_superior"], "nivel": ic["nivel"]},
+                 "t": None if tp is None else tp["t"], "gl": ic["gl"], "motivo": motivo}
+    g1 = assimetria_g1(valores)
+    return {"n": b["n"], "n_grupos": b["n_grupos"], "media": b["media"], **teste, "g1": g1,
+            "ressalva_assimetria": RESSALVA_G1 if g1 is not None and g1 <= LIMIAR_G1 else None,
+            "bootstrap": {"rotulo": ROTULO_BOOTSTRAP, "p_unilateral": b["p_unilateral"], "ic95": b["ic95"], "ic90": b["ic90"],
+                          "motivo": b["motivo"]}}
+
+
+def familia_t(registros: list[dict], contrastes: dict, boot: dict, alfa: float) -> dict:
+    """uma familia da reavaliacao (A4.4.6): o Holm de hoje (as mesmas familias, ordem e alfa) sobre o p do t; sem chave "passa" (a leitura
+    e a de A4.6)"""
+    out = {}
+    for nome, (a, b, med, celulas) in contrastes.items():
+        out[nome] = {"contraste": f"{med if isinstance(med, str) else 'medida'}({a}) - ({b})", "celulas": len(celulas),
+                     **contraste_t(por_unidade(registros, a, b, med, celulas), boot, nome in POR_MEDIAS_DE_BASE)}
+    h = holm({n: out[n]["p_unilateral"] for n in contrastes}, alfa)
+    for n in contrastes:
+        out[n]["holm"] = h[n]
     return out
 
 
-def descritivo_11_celulas(registros: list[dict], cfg: dict) -> dict:
+def g_pesa_t(registros: list[dict], boot: dict, cfg_pesa: dict) -> dict:
+    """a premissa por modulo (secao 5.3) na reavaliacao: o limite inferior do IC95 pelo t > 0,01 (A4.4.6, item 5)"""
+    out = {}
+    for mod, braco in cfg_pesa["bracos"].items():
+        r = contraste_t(por_unidade(registros, braco, None, lambda x, mod=mod: x["influencia"][mod]), boot)
+        out[mod] = {"braco": braco, **r, "passa": r["ic95"]["ic_inferior"] is not None and r["ic95"]["ic_inferior"] > cfg_pesa["limiar"]}
+    return out
+
+
+def posicao_do_ic(ic: dict, referencia: float) -> str | None:
+    """a posicao do IC95 em relacao a referencia, numa das tres frases de A4.2 (nenhuma e aprovacao ou reprovacao)"""
+    if ic["ic_inferior"] is None:
+        return None
+    ref = f"{referencia:g}".replace(".", ",")
+    if ic["ic_inferior"] > referencia:
+        return f"o IC95 inteiro acima de {ref}"
+    if ic["ic_superior"] < referencia:
+        return f"o IC95 inteiro abaixo de {ref}"
+    return f"o IC95 contem {ref}"
+
+
+def g_mvp_estimativa(fracoes: dict, boot: dict, referencia: float, medida: str) -> dict:
+    """o G-MVP da reavaliacao como estimativa (A4.2): a fracao, o IC95 pelo t sobre as unidades, o IC percentil do bootstrap (descritivo) e
+    a posicao do IC em relacao a referencia. Sem "passa" e sem "falha"."""
+    b = contraste(fracoes, boot)
+    ic = ic_t([v for _, v in sorted(fracoes.items())])
+    ic95 = {"ic_inferior": ic["ic_inferior"], "ic_superior": ic["ic_superior"], "nivel": ic["nivel"]}
+    return {"medida": medida, "n": ic["n"], "n_grupos": b["n_grupos"], "estimativa": ic["media"], "ic95": ic95,
+            "ic95_metodo": "t sobre as unidades (A4.4.6)", "ic95_percentil": b["ic95"], "ic95_percentil_rotulo": ROTULO_BOOTSTRAP,
+            "referencia": referencia, "posicao": posicao_do_ic(ic95, referencia), "motivo": ic["motivo"],
+            "aviso": "estimativa, sem passa nem falha (A4.2); a referencia nao e gate"}
+
+
+def _leitura_contraste(c: dict, inconclusivo: bool = False) -> str:
+    if inconclusivo:
+        return "inconclusivo por premissa: o modulo nao pesa (secao 5.3; A4.0)"
+    if not c["holm"]["rejeita"]:
+        return "o Holm nao rejeita"
+    frase = "o Holm rejeita: o modulo pesa no sentido previsto dentro do M3*, nestas condicoes (A4.6)"
+    if c["ressalva_assimetria"] is not None:
+        frase += f"; {c['ressalva_assimetria']}: a rejeicao nao e lida como confirmacao (A4.4.6)"
+    return frase
+
+
+def leitura_reavaliacao(mecanismo_passa: bool, mvp_ep: dict, el_ep: dict, abla: dict, mod: dict, dx: dict, pesa: dict) -> dict:
+    """a leitura de A4.6, no lugar da tabela da secao 5.5 (que condiciona o G-ABLA ao G-MVP passar, e aqui o G-MVP nao tem passa nem
+    falha). O G-MECANISMO continua binario; o G-ABLA-PERS e inconclusivo por premissa qualquer que seja o p (A4.0)."""
+    if not mecanismo_passa:
+        return {"G-MECANISMO": "falha de implementacao (D1): o G-MECANISMO nao passa; nenhuma leitura vale"}
+    inconclusivos = {g for g in FAMILIA_ABLA if g == "G-ABLA-PERS" or not pesa[MODULO_DO_GATE[g]]["passa"]}
+    return {"tabela_5_5": "nao se aplica (A4.6): a leitura e esta",
+            "G-MVP-EP": (f"estimativa {mvp_ep['estimativa']}, {mvp_ep['posicao']}; sem passa nem falha (A4.2)" if el_ep["passa"] else
+                         "inconclusivo por premissa (G-ELEGIVEL-EP): menos de 80 % das vidas do M3 com 3 episodios"),
+            "G-ABLA": {g: _leitura_contraste(abla[g], g in inconclusivos) for g in FAMILIA_ABLA},
+            "G-MOD": {"contrastes": {g: _leitura_contraste(mod[g]) for g in FAMILIA_MOD},
+                      "ressalva_da_familia": "o erro de familia da G-MOD fica um pouco acima de 5 % (5,9 % na nula global; A4.4.6, item 4); "
+                                             "secundaria, lida a parte (secao 5.5)"},
+            "G-DX": {nome: {g: _leitura_contraste(dx[nome]["contrastes"][g]) for g in FAMILIA_DX} for nome in ("longe", "todas")},
+            "nao_se_le_como": "um contraste rejeitado nao se le como 'o modular vai a comida pelos proprios modulos' (exige o G-MVP passar, "
+                              "secao 5.5) nem como superioridade da arquitetura (A4.6)",
+            "nao_demonstra": list(NAO_DEMONSTRA)}
+
+
+def analisar_conserto(registros: list[dict], cfg: dict, mecanismo_passa: bool = True) -> dict:
+    """a reavaliacao (o adendo 3; o adendo 4, a estimativa): o G-MVP por episodio (o primario, A3.3) e o por racao (o secundario
+    obrigatorio) como estimativas com IC, sem "passa" (A4.2); as familias G-ABLA, G-MOD e G-DX com o Holm sobre o p do t (o G-MOD-EMB pelas
+    medias de base), o g1 e a ressalva (A4.4.6); a G-PESA com o IC t; as premissas de elegibilidade; a DX-5 (A3.5, exploratoria), os
+    descritivos e o A11 so na comparacao descritiva, com os IC de A4.4; e a leitura de A4.6 no lugar da tabela da secao 5.5"""
+    boot, alfa = cfg["bootstrap"], cfg["holm"]["alfa"]
+    pesa = g_pesa_t(registros, boot, cfg["g_pesa"])
+    abla = familia_t(registros, CONTRASTES_ABLA, boot, alfa)
+    for g in FAMILIA_ABLA:
+        abla[g]["premissa_g_pesa"] = pesa[MODULO_DO_GATE[g]]["passa"]
+    mod = familia_t(registros, CONTRASTES_MOD, boot, alfa)
+    dx = familia_dx(registros, boot, alfa, fam=familia_t, est=contraste_t)
+    fc_ep, fc = fracao_com_cadeia_ep(registros), fracao_com_cadeia(registros)
+    mvp_ep = {**g_mvp_estimativa(fc_ep["por_unidade"], boot, cfg["g_mvp_ep"]["limiar"],
+                                 "a fracao de vidas do M3 com a taxa de fechamento dos episodios de fome >= 0,5 (media das celulas por "
+                                 "unidade; A3.3)"), "vidas_sem_episodio": fc_ep["vidas_sem_episodio"]}
+    mvp = {**g_mvp_estimativa(fc["por_unidade"], boot, cfg["g_mvp"]["limiar"],
+                              "a fracao de vidas do M3 com a taxa de fechamento >= 0,5 (media das celulas por unidade)"),
+           "vidas_sem_elegivel": fc["vidas_sem_elegivel"],
+           "papel": "secundaria obrigatoria (A3.3): o G-MVP pre-registrado, por racao, como estimativa (A4.2)"}
+    el_ep, el = g_elegivel_ep(registros, cfg["g_elegivel_ep"]), g_elegivel(registros, cfg["g_elegivel"])
+    d11 = descritivo_11_celulas(registros, cfg, est=contraste_t)
+    d11["G-MVP-EP"] = contraste_t(por_unidade(registros, "M3", None, _com_cadeia_ep, CELULAS_11), boot)
+    out = {"pergunta": "estimativa (A4.1): quanto o prototipo fecha, com que incerteza", "primaria": "G-MVP-EP", "G-MVP-EP": mvp_ep,
+           "G-ELEGIVEL-EP": el_ep, "G-MVP": mvp, "G-ELEGIVEL": el, "G-ABLA": abla, "G-PESA": pesa, "G-MOD": mod, "G-DX": dx,
+           "holm_alfa": alfa,
+           "metodo": {"holm": "o p do t sobre as unidades; no G-MOD-EMB, o do t sobre as medias de base (A4.4.6)",
+                      "ic95": "pelo t (A4.4.6); o percentil do bootstrap ao lado, descritivo", "bootstrap": ROTULO_BOOTSTRAP,
+                      "limiar_g1": LIMIAR_G1, "ressalva_g1": RESSALVA_G1},
+           "leitura": leitura_reavaliacao(mecanismo_passa, mvp_ep, el_ep, abla, mod, dx, pesa),
+           "D-2": leitura_d2(registros, boot, est=contraste_t), "D-1": leitura_d1(registros, boot, est=contraste_t),
+           "DX-5": leitura_dx5(registros, boot, est=contraste_t), "episodios_por_vida": episodios_por_vida(registros),
+           "descritivos": descritivos(registros), "descritivos_conserto": descritivos_conserto(registros), "descritivo_11_celulas": d11}
+    if any(r["braco"] == "A11" for r in registros):
+        out["comparacao_com_o_a"] = comparacao_com_o_a(registros, boot, conserto=True, est=contraste_t)
+    return out
+
+
+def descritivo_11_celulas(registros: list[dict], cfg: dict, est=contraste) -> dict:
     """a leitura com 11 celulas, sem a duplicata do comedouro (a decisao do Matheus no fim do adendo 2): os mesmos contrastes, premissas e
     a fracao do G-MVP sobre as mesmas vidas, so sem a celula incoerente/comedouro. So descritiva: sem Holm, sem "passa", sem gate."""
     boot = cfg["bootstrap"]
@@ -1086,13 +1233,13 @@ def descritivo_11_celulas(registros: list[dict], cfg: dict) -> dict:
     contrastes = {}
     for nome, (a, b, med, celulas) in {**CONTRASTES_ABLA, **CONTRASTES_MOD}.items():
         cs = tuple(c for c in celulas if c != CELULA_DUPLICADA)
-        contrastes[nome] = {"celulas": len(cs), **contraste(por_unidade(registros, a, b, med, cs), boot)}
-    pesa = {mod: {"braco": braco, **contraste(por_unidade(registros, braco, None, lambda x, mod=mod: x["influencia"][mod], CELULAS_11),
-                                               boot)}
+        por_base = {"por_base": True} if est is not contraste and nome in POR_MEDIAS_DE_BASE else {}     # o G-MOD-EMB (A4.4.2)
+        contrastes[nome] = {"celulas": len(cs), **est(por_unidade(registros, a, b, med, cs), boot, **por_base)}
+    pesa = {mod: {"braco": braco, **est(por_unidade(registros, braco, None, lambda x, mod=mod: x["influencia"][mod], CELULAS_11), boot)}
             for mod, braco in cfg["g_pesa"]["bracos"].items()}
     m3 = [r for r in registros if r["braco"] == "M3" and (r["dono"], r["lugar"]) != CELULA_DUPLICADA]
     return {"aviso": "descritivo, sem gate: a analise principal e a das 12 celulas (decisao do Matheus, 2026-10-26)",
-            "fora": list(CELULA_DUPLICADA), "celulas": len(CELULAS_11), "G-MVP": contraste(fc, boot), "contrastes": contrastes,
+            "fora": list(CELULA_DUPLICADA), "celulas": len(CELULAS_11), "G-MVP": est(fc, boot), "contrastes": contrastes,
             "G-PESA": pesa, "G-ELEGIVEL": {"frac_vidas": sum(1 for r in m3 if r["cadeia"]["elegiveis"] >= cfg["g_elegivel"]["racoes"])
                                                          / len(m3), "vidas": len(m3)}}
 

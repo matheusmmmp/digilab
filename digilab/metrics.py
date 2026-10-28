@@ -942,6 +942,74 @@ def contraste_pareado(grupos: Mapping[object, Sequence[float]], reamostragens: i
     return out
 
 
+# docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md, adendo 4 (A4.4.6): com 5 bases, o bootstrap das bases e anticonservador; o IC e o p
+# saem do t sobre as unidades (ou sobre as medias de base, quando as unidades da mesma base dependem umas das outras). O contraste_pareado
+# acima nao muda.
+def quantil_t(gl: int, nivel: float = 0.95) -> float:
+    """O quantil bilateral da t de Student: o t com P(T >= t) = (1 - nivel) / 2 (t_0,975;gl com nivel 0,95), pela bissecao sobre
+    t_unilateral."""
+    if gl < 1:
+        raise ValueError("gl < 1")
+    if not 0.0 < nivel < 1.0:
+        raise ValueError(f"nivel fora de (0, 1): {nivel!r}")
+    cauda = (1.0 - nivel) / 2.0
+    lo, hi = 0.0, 1.0
+    while t_unilateral(hi, gl) > cauda:
+        hi *= 2.0
+    for _ in range(200):
+        meio = (lo + hi) / 2.0
+        lo, hi = (meio, hi) if t_unilateral(meio, gl) > cauda else (lo, meio)
+    return (lo + hi) / 2.0
+
+
+def ic_t(valores: Sequence[float], nivel: float = 0.95) -> dict:
+    """O IC pelo t sobre os valores (as unidades independentes): media +- t_(1+nivel)/2;n-1 x dp / raiz(n), com o dp amostral (n - 1).
+    Com menos de 2 valores nao ha IC: ele fica None, com o motivo. Sem variacao, o IC e o ponto."""
+    xs = [float(x) for x in valores]
+    n = len(xs)
+    out: dict = {"n": n, "media": (sum(xs) / n) if xs else None, "dp": None, "gl": None, "ic_inferior": None, "ic_superior": None,
+                 "nivel": nivel, "motivo": None}
+    if n < 2:
+        out["motivo"] = "menos de 2 valores"
+        return out
+    media = out["media"]
+    dp = math.sqrt(sum((x - media) ** 2 for x in xs) / (n - 1))
+    meia = quantil_t(n - 1, nivel) * dp / math.sqrt(n)
+    out.update({"dp": dp, "gl": n - 1, "ic_inferior": media - meia, "ic_superior": media + meia})
+    return out
+
+
+def t_medias_de_grupo(grupos: Mapping[object, Sequence[float]], nivel: float = 0.95) -> dict:
+    """O t sobre as medias dos grupos (a base, quando as unidades dela nao sao independentes; A4.4.2): cada grupo vira um valor, a media
+    das unidades dele, e o teste e o IC sao os do t com (grupos - 1) graus de liberdade. O p e unilateral, P(T >= t) (positivo = a direcao
+    predita). Com menos de 2 grupos, ou sem variacao entre as medias, o p fica None, com o motivo."""
+    medias = [sum(map(float, v)) / len(v) for _, v in sorted(grupos.items(), key=lambda kv: repr(kv[0])) if len(v)]
+    ic = ic_t(medias, nivel)
+    out = {"n_grupos": len(medias), "medias_grupo": medias, "media": ic["media"], "t": None, "gl": ic["gl"], "p_unilateral": None,
+           "ic": {"ic_inferior": ic["ic_inferior"], "ic_superior": ic["ic_superior"], "nivel": nivel}, "motivo": ic["motivo"]}
+    if ic["motivo"] is not None:
+        return out
+    if ic["dp"] == 0.0:
+        out["motivo"] = "sem variacao entre as medias dos grupos"
+        return out
+    t = ic["media"] / (ic["dp"] / math.sqrt(len(medias)))
+    out.update({"t": t, "p_unilateral": t_unilateral(t, len(medias) - 1)})
+    return out
+
+
+def assimetria_g1(valores: Sequence[float]) -> float | None:
+    """A assimetria amostral g1: o momento central de ordem 3 sobre o de ordem 2 elevado a 3/2 (os dois com divisor n). None sem variacao
+    (a forma nao existe) ou com menos de 2 valores."""
+    xs = [float(x) for x in valores]
+    if len(xs) < 2:
+        return None
+    m = sum(xs) / len(xs)
+    m2 = sum((x - m) ** 2 for x in xs) / len(xs)
+    if m2 == 0.0:
+        return None
+    return (sum((x - m) ** 3 for x in xs) / len(xs)) / m2 ** 1.5
+
+
 def holm(p: Mapping[str, float | None], alfa: float) -> dict:
     """Correcao de Holm (passo a passo descendente) sobre a familia inteira. p None (o contraste nao teve teste) conta como 1: a
     familia nao encolhe. Por hipotese: o p, a ordem, o limiar alfa/(m - i), se rejeita e o p ajustado."""
