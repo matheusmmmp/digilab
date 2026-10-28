@@ -41,7 +41,7 @@ from digilab.digibrain.estado import EstadoDinamico  # noqa: E402
 from digilab.digibrain.plast import Plasticidade  # noqa: E402
 from digilab.events import AcaoPet  # noqa: E402
 from digilab.metrics import (ACOES_R_POSSIVEL, cadeia_comida_corpo, episodios_de_fome, janela_w, n_min_decisoes,  # noqa: E402
-                             repeticao_apos_alivio, visitas_vazias, visitas_vazias_v1)
+                             repeticao_apos_alivio, t_medias_de_grupo, visitas_vazias, visitas_vazias_v1)
 from digilab.mundo import Alvo  # noqa: E402
 
 P = CONFIG_DIGIBRAIN_INATOS
@@ -667,6 +667,23 @@ def test_t_cenario_1_e_a_fumaca_da_reavaliacao(tmp_path):
     assert sorted(x["holm"]["limiar"] for x in res["G-DX"]["longe"]["contrastes"].values()) == [0.05 / 2, 0.05]
     assert res["G-DX"]["longe"]["contrastes"]["G-DX-INATO"]["celulas"] == 4
     assert res["G-ABLA"]["G-ABLA-P2"]["contraste"].startswith("medida(M2)")            # o indice de hoje, sem mudanca
+    # a reavaliacao por estimativa (A4.7): o G-MVP sem "passa", o Holm pelo p do t, o G-MOD-EMB pelas medias de base, a leitura de A4.6
+    frases = {None, "o IC95 inteiro acima de 0,8", "o IC95 contem 0,8", "o IC95 inteiro abaixo de 0,8"}
+    for g in ("G-MVP-EP", "G-MVP"):
+        assert "passa" not in res[g] and res[g]["referencia"] == 0.8 and res[g]["posicao"] in frases
+    for fam in (res["G-ABLA"], res["G-MOD"], res["G-DX"]["longe"]["contrastes"], res["G-DX"]["todas"]["contrastes"]):
+        for c in fam.values():
+            assert "passa" not in c and c["holm"]["p"] == c["p_unilateral"] and c["bootstrap"]["rotulo"] == orq.ROTULO_BOOTSTRAP
+            assert "g1" in c and "ressalva_assimetria" in c
+    grupos: dict = {}
+    for (base, _), d in sorted(orq.por_unidade(regs, "M4-emb", "M4", "d_fe").items()):
+        grupos.setdefault(base, []).append(d)
+    assert res["G-MOD"]["G-MOD-EMB"]["teste"].startswith("t sobre as medias de base")
+    assert res["G-MOD"]["G-MOD-EMB"]["p_unilateral"] == t_medias_de_grupo(grupos)["p_unilateral"]
+    assert res["G-MOD"]["G-MOD-CON"]["teste"].startswith("t sobre as unidades")
+    assert all(res["G-PESA"][m]["teste"].startswith("t sobre as unidades") for m in res["G-PESA"])
+    assert res["leitura"]["tabela_5_5"].startswith("nao se aplica")
+    assert res["leitura"]["G-ABLA"]["G-ABLA-PERS"].startswith("inconclusivo por premissa") and len(res["leitura"]["nao_demonstra"]) == 2
     for x in regs:
         ep = x["episodios_fome"]
         assert ep["n"] == sum(ep["motivos"].values()) and all(w == orq.w_de(d0) for _, d0, w, _, _ in ep["episodios"])

@@ -274,3 +274,28 @@ com os testes T-PONTO-1 a T-PONTO-4.
   disparou. O T-ALCANCE-1 e o T-HABITO-1 conferem a convenção da janela e a tabela da DX-5 sem mudança.
 - **As interpretações** estão em `docs/registro/2026-10.md`, na seção "DIGIBRAIN-MODULAR-CONSERTO".
 - **O próximo passo** é decisão do Matheus: a calibração do conserto (65101 e 65202, só o M3\*).
+
+## 18. A implementação da A4.7, a reavaliação por estimativa (worker D, 2026-10-27)
+
+- **O que é:** o código de A4.7 do adendo 4 (APROVADO pelo Matheus em 2026-10-27), com os testes. **Nenhuma vida da 66xxx foi registrada
+  nem rodou.** O registro da reavaliação vem depois do merge, com o escopo conferido pelo Gerente.
+- **Em `digilab/metrics.py`** (só biblioteca padrão; o `contraste_pareado` não muda):
+  - `quantil_t` e `ic_t`: o IC pelo t sobre as unidades, média ± t₀,₉₇₅;n−1 × dp/√n;
+  - `t_medias_de_grupo`: o t sobre as médias de grupo, com o p unilateral e o IC;
+  - `assimetria_g1`: a assimetria amostral g1.
+- **No orquestrador** (`experiments/run_v2_digibrain_prototipo.py`), só a análise da reavaliação (`analisar_conserto`):
+  - **os dois G-MVP** (por episódio e por ração) sem "passa": a estimativa, o IC pelo t, o IC percentil ao lado e a posição do IC em
+    relação a 0,8, numa das três frases de A4.2;
+  - **as famílias G-ABLA, G-MOD e G-DX:** o Holm de hoje sobre o p do t sobre as unidades. O G-MOD-EMB usa o t sobre as médias de base.
+    O p do bootstrap e o IC percentil saem ao lado, rotulados como anticonservadores (A4.4);
+  - **cada contraste** grava o g1 e, com g1 ≤ −0,5, a ressalva de A4.4.6, sem mudar o p nem o Holm;
+  - **a G-PESA** usa o IC pelo t;
+  - **a leitura de A4.6** substitui a tabela da seção 5.5. O G-ABLA-PERS é inconclusivo por premissa qualquer que seja o p;
+  - **os descritivos** (a DX-5, o 2 × 2 do cheiro, o A11, a D-1, a D-2 e as 11 células) ganham os IC pelo t. As funções recebem o
+    contraste como parâmetro, e o padrão é o de hoje;
+  - **a trava:** a reavaliação exige o status "APROVADO pelo Matheus" no cabeçalho do adendo 4 (`exigir_adendo_aprovado`).
+- **As fases antigas não mudam:** a avaliação do #420, os dois pilotos e as seis rodadas de calibração se refazem byte a byte das medidas
+  gravadas. O teste confere a avaliação e as calibrações; os pilotos, pela simulação do poder, foram conferidos à parte.
+- **Os testes:** `tests/test_digibrain_reavaliacao.py` (novo) e a fumaça da reavaliação em `tests/test_digibrain_conserto.py`.
+- **As interpretações** estão em `docs/registro/2026-10.md`, na seção "DIGIBRAIN-MODULAR-A47".
+- **O próximo passo**, depois do merge: o registro da reavaliação (66101 a 66505), com a conferência do Gerente.
