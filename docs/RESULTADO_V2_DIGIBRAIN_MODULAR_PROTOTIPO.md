@@ -309,3 +309,109 @@ vidas), fica em 15 273 s de CPU.
 
 **O que fica para o Matheus:** a leitura do piloto e o adendo 4 (A3.8), que traz para a reavaliação (66101 a 66505) o efeito, as
 premissas, o M4-con, o K e o custo. Nada da reavaliação começou.
+
+## 8. A reavaliação na 66xxx (2026-10-29, worker D, Claude Code, Opus 5.5; adendo 4, A4.10)
+
+**Antes dos números** (a leitura do adendo 4, como foi decidida):
+- **é uma estimativa** (A4.1): quanto o protótipo fecha, com que incerteza. **O G-MVP é só estimativa, sem passa nem falha** (A4.2). O 0,8
+  é só referência, não gate;
+- **a avaliação não demonstra a prontidão do protótipo nem a superioridade modular** (A4.2 e A4.6):
+  - sem passa, o gate de prontidão (seção 5.6, ii) não é cumprido, e o A segue como o cérebro do MVP;
+  - a comparação com o A11 segue descritiva. Os contrastes são entre os braços do próprio modular: medem módulos, não arquiteturas;
+  - um contraste rejeitado não se lê como "o modular vai à comida pelos próprios módulos" (isso exige o G-MVP passar, seção 5.5);
+- **a persistência:** o G-ABLA-PERS é **inconclusivo por premissa** qualquer que seja o p (seção 5.3; A4.0). A G-PESA dela falha de novo
+  aqui;
+- **a ressalva do g1:** um contraste com g1 ≤ −0,5 sai com a frase de A4.4.6, e uma rejeição nele não é lida como confirmação. **O
+  limiar −0,5 segue PROPOSTO** (A4.9);
+- **a G-MOD tem o erro de família a 5,9 % sob a nula global** (A4.4.4), registrado como ressalva da família. A G-MOD é secundária;
+- **os valores** são os calibrados do #428 (`eta_h` S/256, `w_pers` 4S, `tau_c` 15, o cheiro S/4 e 6), que seguem PROPOSTOS.
+
+**Como rodou:** registrado em A4.10 antes da primeira vida (#432). A run saiu do commit `988cf0d`, com a árvore limpa, uma vez (o
+`meta.json`: `git_head`, `git_limpo` = true, o sha256 da config `d1d99106…325e`, o registrado, e os sha do orquestrador, do `config.py`,
+do `engine.py` e do `metrics.py`, iguais aos de A4.10).
+- **As bases** 66101, 66202, 66303, 66404 e 66505, com K = 10 (50 unidades). Os 12 braços nas 12 células, 14 dias, orçamento de 16, o
+  M4-con com o `g_apr` 1 923: **7 200 vidas.**
+- **4 processos,** pela decisão do Matheus sobre a máquina (o registro "DIGIBRAIN-MODULAR-REAVALIACAO-PROCESSOS"). Nenhum processo
+  morreu.
+- **O tempo:** 7 060 s de parede para as vidas e 7 065 s no total (cerca de 1 h 58 min), acima da estimativa de 1 h 30 min. O custo por
+  vida subiu: de 3,15 a 3,25 s de CPU nos braços modulares e 2,70 s no A11, contra 2,05 a 2,19 e 1,78 s no piloto.
+- **Toda vida foi rejogada do disco bit a bit dentro da run** (o G1), e o G-MECANISMO foi conferido em cada uma. Nada divergiu.
+- **Os artefatos** estão em `artifacts_v2_digibrain_prototipo/reavaliacao/`:
+  - o `meta.json` (sha256 `0c3dca0e…198e`);
+  - o `medidas.json` (54 MB, sha256 `73ae8a8a…df01`), no git sem compressão, pela decisão do Gerente;
+  - o `resultado.json` (sha256 `18eddd7a…813c`).
+  - As 7 200 vidas (518 MB) ficam fora do git, na worktree `v2-modular-reavaliacao`. Todos os números abaixo saem do `resultado.json`,
+    salvo o tempo (o `meta.json`).
+
+**O G-MVP** (a estimativa; o IC95 pelo t sobre as 50 unidades; o percentil do bootstrap ao lado, descritivo e anticonservador com 5
+bases):
+
+| | a medida | estimativa | IC95 (t) | IC95 (percentil) | em relação a 0,8 |
+|---|---|---|---|---|---|
+| **G-MVP-EP** (a primária, A3.3) | a fração de vidas do M3\* com o fechamento por episódio ≥ 0,5 | **0,8083** | [0,7909; 0,8257] | [0,7967; 0,8217] | o IC95 contém 0,8 |
+| G-MVP (por ração, a secundária obrigatória) | a fração de vidas do M3\* com o fechamento ≥ 0,5 | **0,4050** | [0,3871; 0,4229] | [0,3883; 0,4183] | o IC95 inteiro abaixo de 0,8 |
+
+- **As premissas de elegibilidade passam:** o G-ELEGIVEL-EP e o G-ELEGIVEL dão 1,0 (as 600 vidas do M3\*). Nenhuma vida fica sem
+  episódio.
+- **A leitura** (A4.2): a estimativa por episódio fica em 0,81, com o IC95 contendo a referência. Por ração, fica em 0,41. Sem passa nem
+  falha.
+
+**As famílias com o Holm** (α 0,05 por família; o p unilateral do t sobre as 50 unidades, salvo o G-MOD-EMB, pelo t sobre as 5 médias de
+base; positivo = a direção da espec):
+
+| contraste | a medida (células) | média | IC95 (t) | p | p Holm | rejeita | g1 | a leitura (A4.6) |
+|---|---|---|---|---|---|---|---|---|
+| G-ABLA-P1 | `falta_ao_comer`(M0) − (M1) (12) | 0,0427 | [0,0373; 0,0482] | < 10⁻²⁰ | < 10⁻¹⁹ | sim | −0,04 | o módulo pesa no sentido previsto dentro do M3\*, nestas condições |
+| G-ABLA-MEM | o fechamento (M3\*) − (M2) (4, comedouro) | 0,1356 | [0,1150; 0,1562] | < 10⁻¹⁷ | < 10⁻¹⁶ | sim | 0,07 | idem |
+| G-ABLA-PERS | `intencoes_com_meta`(M3\*) − (M3-sp) (12) | 0,0033 | [−0,0019; 0,0085] | 0,1048 | 0,2097 | não | −0,36 | **inconclusivo por premissa** |
+| G-ABLA-P2 | o índice de repetição (M2) − (M1) (12) | −0,0176 | [−0,0217; −0,0134] | 1,0000 | 1,0000 | não | 0,62 | o Holm não rejeita |
+| G-MOD-EMB | `D_FE`(M4-emb) − (M4) (12) | 0,0013 | [−0,0020; 0,0045] | 0,1719 | 0,3439 | não | **−0,55** | o Holm não rejeita; a ressalva do g1 |
+| G-MOD-CON | `D_FE`(M4-con) − (M4) (12) | 0,0011 | [−0,0037; 0,0060] | 0,3234 | 0,3439 | não | 0,29 | o Holm não rejeita |
+| G-DX-INATO, longe | o fechamento por episódio (M3\*) − (M3\*−inato) (4) | 0,0129 | [−0,0132; 0,0390] | 0,1623 | 0,3247 | não | −0,01 | o Holm não rejeita |
+| G-DX-INTENCAO, longe | idem, (M3\*) − (M3\*−intencao) (4) | 0,0005 | [−0,0204; 0,0214] | 0,4799 | 0,4799 | não | 0,52 | o Holm não rejeita |
+| G-DX-INATO, todas | idem, nas 12 células | 0,0076 | [−0,0077; 0,0229] | 0,1607 | 0,3214 | não | −0,19 | o Holm não rejeita |
+| G-DX-INTENCAO, todas | idem, nas 12 células | 0,0008 | [−0,0096; 0,0113] | 0,4376 | 0,4376 | não | **−0,63** | o Holm não rejeita; a ressalva do g1 |
+
+- **O G-MOD-EMB pelas 5 médias de base:** 0,0006, 0,0056, −0,0014, 0,0008 e 0,0006 (t = 1,07, 4 gl).
+- **As ressalvas do g1** caem em dois contrastes, o G-MOD-EMB e o G-DX-INTENCAO nas 12 células. Nenhum deles é rejeitado, e a ressalva
+  não muda o p, o Holm nem a decisão gravada. Os dois rejeitados (o P1 e o MEM) têm g1 perto de zero.
+- **A G-MOD** não rejeita nenhum dos dois, com a ressalva da família (5,9 % sob a nula global).
+- **O G-ABLA-P2** sai com o sinal contrário ao previsto, como no piloto do #420 e no do conserto.
+- **O 2 × 2 do cheiro, no longe** (o fechamento por episódio, a média das unidades): M3\* 0,4339; M3\*−intencao 0,4334; M3\*−inato
+  0,4211; M3-420 0,4272. A interação é 0,0066 [−0,0300; 0,0432]. Nas 12 células: 0,7360, 0,7352, 0,7284 e 0,7292, com a interação 0,0016
+  [−0,0159; 0,0191].
+
+**As premissas, a G-PESA** (seção 5.3; o limite inferior do IC95 pelo t > 0,01):
+
+| módulo | braço | média | IC95 (t) | passa |
+|---|---|---|---|---|
+| o incentivo | M1 | 0,0192 | [0,0185; 0,0199] | sim |
+| o hábito | M2 | 0,0817 | [0,0793; 0,0842] | sim |
+| a memória | M3\* | 0,1101 | [0,1062; 0,1139] | sim |
+| a persistência | M3\* | **0,0035** | [0,0033; 0,0037] | **não** |
+
+- **Quantos episódios as vidas têm:** no M3\*, a média é 16,6 e a mediana 15, com o mínimo 4. Todas as vidas dos braços modulares têm 3
+  episódios ou mais; no A11, 57,8 %.
+
+**Os descritivos** (sem gate; o IC95 pelo t):
+- **a comparação com o A11** (seção 7; a diferença bruta, M3\* − A11):
+  - o fechamento por episódio: +0,3189 [0,2893; 0,3486];
+  - a fração de vidas com a cadeia por episódio: +0,1733 [0,1255; 0,2211];
+  - as refeições por dia: +2,2833 [2,2415; 2,3252];
+  - a privação: −0,5383 [−0,5554; −0,5212];
+  - o `D_FE`: −0,0670 [−0,0739; −0,0601];
+- **a DX-5** (A3.5, exploratória), M2 − M1, pelas ações com recompensa possível: −0,0211 [−0,0285; −0,0137] no total. No comer, +0,0242
+  [0,0027; 0,0456]; no explorar, −0,0175 [−0,0263; −0,0086]. O brincar e o aliviar ficam sem valor;
+- **a D-2** (o hábito menos a memória): 0,7607 [0,5710; 0,9503]. **A D-1** (a entropia por dia, padronizada): −0,2066 [−0,4192; 0,0059];
+- **a leitura com 11 células** (sem a duplicata do comedouro): o G-MVP-EP fica em 0,7909 [0,7719; 0,8099], e o G-MVP por ração, em 0,4418
+  [0,4223; 0,4614];
+- **as medidas de mecanismo do cheiro**, por braço e lugar, estão no `descritivos_conserto` do `resultado.json`.
+
+**O que fica para o Matheus:**
+- **a leitura da reavaliação:**
+  - o G-MVP-EP estimado em 0,81, com o IC95 contendo 0,8, e o G-MVP por ração em 0,41;
+  - os módulos do incentivo e da memória pesam no sentido previsto dentro do M3\*, nestas condições;
+  - o G-ABLA-P2 (o hábito), os dois G-MOD e a G-DX não rejeitam;
+  - a persistência segue inconclusiva por premissa;
+- **o que a reavaliação não diz:** que o protótipo está pronto, ou que o modular é superior ao A;
+- **o que segue PROPOSTO:** os valores do #428 e o limiar −0,5 do g1.
