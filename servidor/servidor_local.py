@@ -29,7 +29,7 @@ senha (decisao do Matheus, 2026-09-24): o link aleatorio do tunel vira a unica p
     cloudflared tunnel --url http://127.0.0.1:8765
 - senha obrigatoria (HTTP Basic, qualquer usuario; variavel DIGILAB_SENHA, nunca na linha de comando);
 - so as rotas do jogo: /v1/web/*.html, o build do app em /v1/web/dist/ (so o que fica dentro dele),
-  /Assets/digilab_atlas.png, /Assets/digilab_atlas_up.{png,json}, a decoracao listada em web/app/decoracao_nomes.json, /Assets/sons/{mapa.json,*.mp3}, /Assets/arena_up/{dados,sprites,efeitos,mapas}/<nome simples>, /Assets/evolucao_up/{mapa.json,quadros/<nome simples>.webp} e /api/fala*; o resto (repo, .git, v0, codigo do
+  /Assets/digilab_atlas.png, /Assets/digilab_atlas_up.{png,json}, a decoracao listada em web/app/decoracao_nomes.json, /Assets/sons/{mapa.json,*.mp3}, /Assets/arena_up/{dados,sprites,efeitos,mapas}/<nome simples>, /Assets/evolucao_up/{mapa.json,pacotes/<nome simples>.bin} e /api/fala*; o resto (repo, .git, v0, codigo do
   app, Assets inteiro, gasto) responde 404;
 - a API paga do Claude fica desligada, salvo --claude-remoto (quem tiver a senha gasta o credito,
   ate o teto de --limite-usd).
@@ -114,8 +114,8 @@ def rota_do_app(caminho: str) -> bool:
 ROTA_SOM = re.compile(r"/Assets/sons/(mapa\.json|[A-Za-z0-9_]+\.mp3)")
 # arena em tempo real (Assets/gerar_arena_up.py): os JSON de dados/ e os PNG/JPG de sprites/, efeitos/ e mapas/, de nome simples
 ROTA_ARENA = re.compile(r"/Assets/arena_up/(dados/[a-z]+\.json|(sprites|efeitos)/[A-Za-z0-9_-]+\.png|mapas/[a-z0-9_]+\.(png|jpg))")
-# cena de evolucao do Digimon UP (Assets/gerar_evolucao_up.py, src/evolucaoUp.ts): so o mapa.json e os WebP de nome simples de quadros/
-ROTA_EVOLUCAO = re.compile(r"/Assets/evolucao_up/(mapa\.json|quadros/[a-z0-9_]+\.webp)")
+# cena de evolucao do Digimon UP (Assets/gerar_evolucao_up.py, src/evolucaoUp.ts): so o mapa.json e os pacotes de nome simples de pacotes/
+ROTA_EVOLUCAO = re.compile(r"/Assets/evolucao_up/(mapa\.json|pacotes/[a-z0-9_]+\.bin)")
 
 
 def rota_permitida(caminho: str) -> bool:

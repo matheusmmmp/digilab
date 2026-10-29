@@ -24,8 +24,8 @@ const SOM_ROTA = /^\/Assets\/sons\/(mapa\.json|[A-Za-z0-9_]+\.mp3)$/;
 /* arena em tempo real (Assets/gerar_arena_up.py, src/arenaTempoReal.ts): os JSON de dados/ e os PNG/JPG de sprites/, efeitos/ e mapas/ (nome simples) */
 const ARENA_ROTA = /^\/Assets\/arena_up\/(dados\/[a-z]+\.json|(sprites|efeitos)\/[A-Za-z0-9_-]+\.png|mapas\/[a-z0-9_]+\.(png|jpg))$/;
 const TIPO_ARENA: Record<string, string> = { json: "application/json", png: "image/png", jpg: "image/jpeg" };
-/* cena de evolucao (Assets/gerar_evolucao_up.py, src/evolucaoUp.ts): o mapa.json e os WebP de nome simples de quadros/ */
-const EVOLUCAO_ROTA = /^\/Assets\/evolucao_up\/(mapa\.json|quadros\/[a-z0-9_]+\.webp)$/;
+/* cena de evolucao (Assets/gerar_evolucao_up.py, src/evolucaoUp.ts): o mapa.json e os pacotes de nome simples de pacotes/ */
+const EVOLUCAO_ROTA = /^\/Assets\/evolucao_up\/(mapa\.json|pacotes\/[a-z0-9_]+\.bin)$/;
 
 /** dev: serve so o atlas, a decoracao listada, os sons, a arena em tempo real e a cena de evolucao (nada mais da pasta Assets) */
 function atlasDev(): Plugin {
@@ -36,7 +36,7 @@ function atlasDev(): Plugin {
         const caminho = (req.url || "").split("?")[0];
         const tipo = ATLAS[caminho] ?? (SOM_ROTA.test(caminho) ? (caminho.endsWith(".json") ? "application/json" : "audio/mpeg")
           : ARENA_ROTA.test(caminho) ? TIPO_ARENA[caminho.split(".").pop()!]
-          : EVOLUCAO_ROTA.test(caminho) ? (caminho.endsWith(".json") ? "application/json" : "image/webp") : undefined);
+          : EVOLUCAO_ROTA.test(caminho) ? (caminho.endsWith(".json") ? "application/json" : "application/octet-stream") : undefined);
         if (!tipo) return next();
         const arq = ASSETS + caminho.slice("/Assets/".length);
         if (!existsSync(arq)) { res.statusCode = 404; res.end("asset nao encontrado: " + arq); return; }

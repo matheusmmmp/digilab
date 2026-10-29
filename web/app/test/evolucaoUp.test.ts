@@ -7,7 +7,7 @@ import {
 } from "../src/evolucaoUp.ts";
 
 const q = (digimon: QuadroCena["digimon"], clipe: QuadroCena["clipe"], clipe_ms: number | null, camadas = ["bk"]): QuadroCena =>
-  ({ camadas, osso: [0, 0, 1, 1], digimon, clipe, clipe_ms });
+  ({ camadas, pedacos: camadas.map((_, i) => [i * 10, 10] as [number, number]), osso: [0, 0, 1, 1], digimon, clipe, clipe_ms });
 const mapa = (): MapaEvolucao => ({
   versao: 1, w: 650, h: 500, fps: 30, camera: [1300, 1000], escala_digimon: 4.2,
   cenas: {
@@ -41,15 +41,19 @@ test("escolherCena: forma que pede cena inexistente falha alto", () => {
 
 test("sequencia: a Summon, depois a revelacao; o 'herda' continua o Digimon e o clipe da Summon", () => {
   const s = sequencia(mapa(), "tamers_mega");
-  expect(s.map(p => p.arquivo)).toEqual(["tamers_mega_0000", "revelacao_0000", "revelacao_0001", "revelacao_0002"]);
+  expect(s.map(p => p.pacote)).toEqual(["tamers_mega", "revelacao", "revelacao", "revelacao"]);
+  expect(s[3].pedacos).toEqual([[0, 10], [10, 10], [20, 10]]);
   expect(s.map(p => [p.digimon, p.clipe, p.clipe_ms])).toEqual([["antes", "Idle", 500], ["antes", "Idle", 533], ["antes", "Idle", 567], ["depois", "Evol", 0]]);
   expect(s[3].camadas).toEqual(["bk", "t00n", "t03a"]);
   const a = sequencia(mapa(), "zero2");
   expect(a[1].digimon).toBeNull();                       /* a Summon terminou sem Digimon: a revelacao herda o nada */
 });
 
-test("sequencia: 'herda' na Summon e cena vazia falham alto", () => {
+test("sequencia: 'herda' na Summon, cena vazia e camadas sem pedaco falham alto", () => {
   const m = mapa();
+  m.revelacao.quadros[0].pedacos = [];
+  expect(() => sequencia(m, "zero2")).toThrow(/nao casam/);
+  m.revelacao.quadros[0].pedacos = [[0, 10]];
   m.cenas.zero2.quadros = [q("herda", null, null)];
   expect(() => sequencia(m, "zero2")).toThrow(/herda/);
   m.cenas.zero2.quadros = [];

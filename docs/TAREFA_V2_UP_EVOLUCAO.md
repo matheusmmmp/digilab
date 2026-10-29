@@ -173,8 +173,8 @@ pedidas ao Matheus** (todas PROPOSTAS; o custo de errar é refazer a conversão,
   sequência Summon + revelação (`sequencia`); o quadro do pet no clipe (`quadroDigimon`: o `Evol` não repete e segue no `Idle`, e sem o
   atlas de clipes vale o `Idle` do atlas atual); o centro do corpo e o lugar do pet no osso (`centroDoCorpo`, `lugarDigimon`); e a carga
   do mapa e dos quadros, que falha alto.
-- `web/app/src/componentes/CenaEvolucao.tsx` (novo): a cena no canvas 2D. Baixa todos os quadros da cena antes de tocar, com "carregando a
-  cena… N%", e decodifica numa janela de 20 quadros. Desenha o fundo, depois o pet do app no osso (com vizinho mais próximo, fora da
+- `web/app/src/componentes/CenaEvolucao.tsx` (novo): a cena no canvas 2D. Baixa os dois pacotes da cena (a Summon e a revelação) antes de
+  tocar, com "carregando a cena… N%", e decodifica numa janela de 20 quadros. Espera o atlas, se a Revelação abrir antes de ele chegar. Desenha o fundo, depois o pet do app no osso (com vizinho mais próximo, fora da
   escala inteira: decisão 3), depois a frente por trecho: o aditivo com `lighter` e o normal por cima. O relógio só anda com o quadro
   pronto. Toca a música da linha e o `sfx_evolution_sfx` com a queda na revelação, pelo `src/som.ts`. Tem o "Pular".
 - `Revelacao.tsx`: com a chave ligada e sem movimento reduzido, a cena abre antes do cartão. No fim, no "Pular" ou com o erro, vem o
@@ -182,10 +182,15 @@ pedidas ao Matheus** (todas PROPOSTAS; o custo de errar é refazer a conversão,
   segue o caminho de hoje.
 - `atlas.ts`: o véu da forma sombria (`quadroSombrio`) passa a ser exportado, para a cena usar o mesmo.
 - O servidor: o `vite.config.ts` e o `servidor_local.py`, também no modo remoto, servem só `/Assets/evolucao_up/mapa.json` e
-  `/Assets/evolucao_up/quadros/<nome simples>.webp` (`tests/test_servidor_remoto.py`).
-- Fora do git, em `D:\Trab\digilab\Assets\`: `evolucao_up/quadros/` (os WebP), `evolucao_up/mapa.json` (gerado por
-  `gerar_evolucao_up.py`) e as ferramentas em `evolucao_up/ferramentas/`: `converter.html`, `servidor_conversao.py` e `webp.py` (a
-  conversão) e `verificar_chave_ligada.mjs` (a verificação). Procedência: UI_GUIDELINES 5.1 (D3).
+  `/Assets/evolucao_up/pacotes/<nome simples>.bin` (`tests/test_servidor_remoto.py`).
+- Fora do git, em `D:\Trab\digilab\Assets\`:
+  - o que o jogo serve: `evolucao_up/pacotes/` (7 pacotes, 34,5 MB: os WebP dos quadros, um atrás do outro) e `evolucao_up/mapa.json`
+    (264 KB), gerados por `gerar_evolucao_up.py`;
+  - o que fica para refazer: `evolucao_up/mestres/` (os PNG sem perda, 654 MB), `evolucao_up/quadros/` (os 5.852 WebP soltos, 47 MB em
+    disco) e `evolucao_up/cenas_meta/`;
+  - as ferramentas em `evolucao_up/ferramentas/`: `converter.html`, `servidor_conversao.py` e `webp.py` (a conversão) e
+    `verificar_chave_ligada.mjs` (a verificação).
+  - Procedência: UI_GUIDELINES 5.1 (D3).
 
 **Interpretações do worker:**
 - **A revelação é uma só para as seis cenas:** o Flash e 5 s do Loop da Adventure, com esqueletos novos, como o protótipo faz nas cinco
@@ -200,5 +205,30 @@ pedidas ao Matheus** (todas PROPOSTAS; o custo de errar é refazer a conversão,
   fica com o Matheus.
 - **A música** começa com a cena e para quando a Revelação fecha. Sem a cena (chave desligada, forma sem cena ou erro), o efeito toca no
   cartão, como hoje.
-- **Números PROPOSTOS, SEM FONTE:** a janela de 20 quadros e os 8 downloads em paralelo.
+- **Um pacote por cena, em vez de um arquivo por quadro:** com 1.700 WebP soltos, o servidor local levou de 31 a 42 s para entregar uma
+  cena de ~11 MB, porque atende um pedido por vez. Com um pacote, o mesmo levou menos de 1 s (a verificação abaixo).
+- **Números PROPOSTOS, SEM FONTE:** a janela de 20 quadros.
+
+**A conversão:** 6 Summons (451 quadros na Adventure, 370 nas outras) e a revelação (301 quadros), com até 5 imagens por quadro (o fundo e
+até 4 trechos de frente). São 34,5 MB no total; uma evolução baixa de 6,6 MB (Jogress) a 11,6 MB (Adventure). As 57 formas com linha se
+dividem assim: Adventure 32, Zero2 9, Tamers 7, Jogress 4, Tamers Mega 3, Dramon 2. Todas as cenas têm forma do DigiLab.
+
+**A verificação com a chave ligada** (`ferramentas/verificar_chave_ligada.mjs`, num build local com a chave ligada só para isso; a fonte
+voltou a `false`; Chrome headless, servidor local; saída em `evolucao_up/verificacao_chave_ligada/`, com o `relato.txt`):
+- o momento do save do e2e (Agumon → Greymon, cena Adventure), em 390 e 1280 px: a cena carregou em menos de 1 s e o cartão veio 25,5 s
+  a 26 s depois de abrir (15 s de Summon e 10 s de revelação), sem erro na página. As fotos de 1 a 22 s substituem o vídeo, porque gravar
+  vídeo pedia baixar o ffmpeg do Playwright, e não baixei;
+- as seis cenas: o mapa servido troca a cena do Greymon, e cada uma tocou até o cartão (22,6 s a 23,3 s; a Adventure, 25,5 s), sem erro
+  (`seis_cenas_8s.png`, `tira_adventure_1280.png`, `tira_390.png`);
+- o "Pular" leva ao cartão; com movimento reduzido, a cena nem monta;
+- sem o `mapa.json` ou sem o pacote da cena: o aviso visível ("A cena da evolução não tocou: HTTP 404 em …") e o cartão
+  (`aviso_*_390.png`);
+- a verificação achou e corrigiu três problemas: a Revelação abria antes de o atlas chegar, e a cena desistia; o carimbo do
+  `requestAnimationFrame` e o `performance.now` estavam em bases diferentes sob o relógio do Playwright, e o relógio da cena pulava; e o
+  texto do aviso estourava a largura em 390 px.
+
+**O celular de referência (decisão 4): NÃO VERIFICADO.** O worker não tem o aparelho, e a emulação não vale (POC-01, M3). Roteiro para o
+Matheus: trocar a chave para `true` em `web/app/src/evolucaoUp.ts`, rodar `npm run build` e abrir pelo túnel do
+`servidor/servidor_local.py --remoto` uma evolução (ou o "Ver a revelação de novo" de Crescer · Evolução). Anotar quanto tempo leva o
+"carregando a cena", se a cena anda sem soluço e se o cartão chega no fim; depois voltar a chave para `false`.
 
