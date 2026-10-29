@@ -350,7 +350,7 @@ paridade. Fica fora desta correção, como ideia.
 
 - `npm test`: 643 passados (57 arquivos).
 - `npm run tipos`: limpo.
-- `npm run e2e`: ver o relato do PR. O e2e entra na arena com o pet do save v3 (Kabuterimon) e vê o nome dele no lado azul, contra o
+- `npm run e2e`: 98 passados (os 97 do #446, com o teste da luta trocado pelo do pet, e mais o do pet sem Digimon). O e2e entra na arena com o pet do save v3 (Kabuterimon) e vê o nome dele no lado azul, contra o
   rival do estágio; a revanche dá a mesma luta; sem o Digimon do pet nos dados, o aviso aparece e a luta não começa.
 - O `package.json` e o `package-lock.json` não mudaram.
 
