@@ -415,3 +415,200 @@ base; positivo = a direção da espec):
   - a persistência segue inconclusiva por premissa;
 - **o que a reavaliação não diz:** que o protótipo está pronto, ou que o modular é superior ao A;
 - **o que segue PROPOSTO:** os valores do #428 e o limiar −0,5 do g1.
+
+## 9. O descritivo da reavaliação (2026-10-29, worker D, Claude Code, Opus 5.5; exploratório, pós hoc)
+
+**Antes dos números:**
+- **é um descritivo exploratório e pós hoc, como o #199:**
+  - nenhuma vida, nenhum replay, nenhuma faixa nova;
+  - nenhum teste de hipótese, nenhum IC e nenhum gate;
+  - nada aqui muda a leitura do adendo 4 (a seção 8) nem os valores PROPOSTOS.
+- **A comparação com o A11 é só descritiva,** sem leitura de superioridade (A4.2).
+- **A fonte e o script:**
+  - os números saem de `experiments/descritivo_reavaliacao_digibrain.py`, que lê três `medidas.json`: o da reavaliação, o do piloto do
+    conserto e o da avaliação única (#420), todos no git;
+  - ele grava `artifacts_v2_digibrain_prototipo/descritivo_reavaliacao/descritivo.json`, com o sha256 de cada fonte e o do próprio
+    script;
+  - antes de gravar, refaz as duas frações do G-MVP pela regra do orquestrador e confere que são as do `resultado.json` da reavaliação
+    (0,4050 e 0,8083). Se não forem, falha alto.
+- **As contas:**
+  - cada número é uma soma sobre as vidas ou uma média por vida (as vidas com valor), como no #422;
+  - as frações e as taxas são as de cada medida, com o limiar 0,5 da vida.
+
+### 9.1 O episódio contra a ração, no M3\* (600 vidas)
+
+**As mesmas vidas, duas contas:**
+
+| | por ração (o G-MVP) | por ração com a W(d) | por episódio (o G-MVP-EP) |
+|---|---|---|---|
+| a fração das vidas com a taxa ≥ 0,5 | 0,405 | 0,418 | 0,808 |
+| a taxa por vida, média (mediana) | 0,399 (0,297) | 0,429 (0,393) | 0,736 (0,827) |
+| a taxa sobre as somas | 0,234 (9 386 de 40 118) | 0,255 | 0,785 (7 845 de 9 988) |
+
+- **A tabela 2 × 2 das vidas:**
+  - 242 vidas passam de 0,5 nas duas medidas, e 114 em nenhuma;
+  - **243 passam só por episódio;**
+  - 1 passa só por ração.
+- **A diferença está quase toda nessas 243 vidas.** Pelo episódio, a vida fecha; pela ração, não.
+
+**A primeira causa é o denominador.** As duas medidas contam coisas diferentes (`digilab/metrics.py`):
+- a por ração conta **cada ração** posta com a fome abaixo de 0,5, e cada uma só fecha se o pet comer **aquela** ração em 8 decisões;
+- a por episódio conta **um episódio** por trecho contínuo de fome. Ele fecha se, na janela W(d0), o pet comer **qualquer** ração madura
+  do dono que baixe a fome.
+
+Nas somas, a identidade é exata:
+
+> taxa por ração = (rações fechadas por episódio fechado) × (taxa por episódio) × (episódios por ração elegível)
+
+| | rações elegíveis por episódio | rações fechadas por episódio fechado | taxa por episódio | taxa por ração |
+|---|---|---|---|---|
+| **M3\*, todas** | **4,02** | 1,20 | 0,785 | 0,234 |
+| atencioso | 6,32 | 1,20 | 0,854 | 0,163 |
+| incoerente | 6,32 | 1,20 | 0,856 | 0,162 |
+| aleatório | 1,85 | 1,32 | 0,708 | 0,507 |
+| relapso | 1,52 | 1,11 | 0,717 | 0,524 |
+| comedouro | 3,79 | 1,25 | 0,816 | 0,270 |
+| perto | 1,92 | 1,22 | 0,964 | 0,612 |
+| longe | **7,81** | 0,98 | 0,447 | **0,056** |
+
+- **A leitura:**
+  - num trecho de fome, o dono põe em média 4 rações, e o pet fecha cerca de 1,2 delas;
+  - a medida por ração conta as outras 2,8 como falhas, mesmo quando o episódio fechou;
+  - o atencioso e o incoerente põem 6,3 rações por episódio e chegam à taxa por ração mais baixa (0,16), com a taxa por episódio mais
+    alta (0,85). No relapso e no aleatório, com cerca de 1,5 a 1,9 ração por episódio, as frações das vidas ficam perto (0,66 · 0,67 e 0,64 · 0,73);
+  - **no longe, as duas coisas se somam:** 7,8 rações por episódio e menos da metade dos episódios fechando.
+- **A célula incoerente/comedouro** repete a atencioso/comedouro em todos os números deste descritivo. É a duplicata conhecida, a que a
+  leitura com 11 células tira.
+
+**A segunda causa é a janela, pequena:** com a W(d) no lugar das 8 decisões fixas, a taxa por ração sobe de 0,234 para 0,255, e a fração
+das vidas, de 0,405 para 0,418. No longe, sobe de 0,056 para 0,072.
+
+**Onde as rações elegíveis ficam** (na janela W(d) de cada uma; as 40 118):
+
+| | visível em k0 | entrou na visão na janela | nunca na visão na janela | a menor distância, média por vida |
+|---|---|---|---|---|
+| todas | 37 % | 21 % | 42 % | 5,4 células |
+| comedouro | 45 % | 48 % | 7 % | 1,6 |
+| perto | 100 % | 0 % | 0 % | 0,9 |
+| longe | 6 % | 12 % | **82 %** | 13,7 |
+
+O `medidas.json` guarda essas contagens por vida, não o destino de cada ração. Por isso não dá para cruzar a visão com o fechamento ração a
+ração. Uma ração nunca vista ainda pode fechar pelo cheiro.
+
+**Onde os episódios não fecham:**
+- **os fins:** dos 9 988 episódios, 7 845 fecham, 2 117 vencem a janela e 26 acabam com a vida. Nenhum é saciado por outra comida. Em 306,
+  a oferta muda dentro da janela;
+- **pela distância da ração mais próxima na abertura** (d0):
+
+  | | episódios | fecham | taxa |
+  |---|---|---|---|
+  | na visão (até 6 células) | 6 115 | 5 769 | 0,94 |
+  | só no cheiro (até 24 células) | 3 420 | 1 984 | 0,58 |
+  | além do cheiro | 453 | 92 | 0,20 |
+
+  - no perto, quase todos os episódios abrem na visão (4 117 de 4 172);
+  - no longe, só 433 de 2 503 abrem na visão: 1 629 abrem no cheiro, e 441 além dele.
+- **depois da janela:** em 2 060 dos 2 117 episódios vencidos, o pet come uma ração do dono mais tarde na mesma fome, com a mediana de 21 decisões
+  depois da abertura.
+- **As trocas de meta** (os fins das intenções na vida inteira, por vida):
+
+  | | a meta | trocou | achou | as buscas pelo cheiro que trocaram |
+  |---|---|---|---|---|
+  | todas | 71,7 | 35,3 | 12,2 | 9,5 |
+  | comedouro | 69,9 | 17,7 | 11,9 | 2,6 |
+  | perto | 79,0 | 12,8 | 7,1 | 0,1 |
+  | longe | 66,2 | **75,3** | 17,6 | **25,7** |
+
+  - a troca de meta é cerca de quatro vezes mais frequente no longe que no comedouro;
+  - a busca pelo cheiro só troca com alguma frequência no longe.
+- **As refeições:** o pet come 3,18 rações por dia. Das 26 688 refeições de ração, 7 845 fecham um episódio, e 18 843 caem fora de
+  episódio aberto: com a fome acima de 0,5, ou depois de o episódio daquela fome fechar ou vencer.
+
+**Por dono e por lugar** (a fração das vidas ≥ 0,5, por ração e por episódio):
+
+| | comedouro | perto | longe |
+|---|---|---|---|
+| atencioso | 0,00 · 1,00 | 0,42 · 1,00 | 0,00 · 0,68 |
+| relapso | 0,98 · 1,00 | 1,00 · 1,00 | 0,00 · 0,00 |
+| aleatório | 0,92 · 0,98 | 1,00 · 1,00 | 0,00 · 0,22 |
+| incoerente | 0,00 · 1,00 | 0,54 · 1,00 | 0,00 · 0,82 |
+
+- **Nenhuma vida do longe passa de 0,5 por ração,** com qualquer dono.
+- **No comedouro,** o atencioso e o incoerente fecham por episódio em toda vida, e por ração em nenhuma: 7,2 rações por episódio.
+- **No relapso e no aleatório,** fora do longe, as duas medidas quase coincidem.
+
+### 9.2 O hábito ao contrário (o G-ABLA-P2, M2 − M1)
+
+O índice "ganhou, fica" (a média por vida), nas três runs:
+
+| | avaliação única (#420) | piloto do conserto | reavaliação |
+|---|---|---|---|
+| M1 | −0,083 | −0,088 | −0,083 |
+| M2 | −0,094 | −0,100 | −0,101 |
+| **M2 − M1, todas** | −0,011 | −0,012 | **−0,018** |
+| M2 − M1, comedouro | +0,008 | 0,000 | −0,004 |
+| M2 − M1, perto | +0,004 | +0,001 | −0,004 |
+| M2 − M1, **longe** | **−0,046** | **−0,038** | **−0,045** |
+| M2 − M1, atencioso/longe | −0,099 | −0,087 | −0,085 |
+| M2 − M1, incoerente/longe | −0,099 | −0,065 | −0,082 |
+| M2 − M1, relapso (todos os lugares) | +0,022 | +0,014 | +0,013 |
+
+**O padrão é o mesmo nas três runs:**
+- a diferença negativa mora no **longe,** e dentro dele no **atencioso e no incoerente;**
+- no comedouro e no perto, o M2 − M1 fica perto de zero;
+- no relapso, ele é positivo nas três.
+- A diferença da reavaliação é um pouco maior. O comedouro e o perto saem levemente negativos, e o perto, que era positivo no #420,
+  também.
+
+**Por ação** (a DX-5: só os pares cuja primeira decisão é de uma ação com r possível). Os números são M1 / M2 / M2 − M1. O `medidas.json`
+do #420 não tem a DX-5, que veio no adendo 3, então a comparação por ação é só com o piloto:
+
+| | piloto, todas | reavaliação, todas | reavaliação, comedouro | reavaliação, perto | reavaliação, longe |
+|---|---|---|---|---|---|
+| com r possível (total) | 0,009 / −0,020 / −0,030 | 0,002 / −0,019 / −0,021 | +0,013 (M2 − M1) | +0,008 | **−0,086** |
+| comer | −0,072 / −0,043 / +0,029 | −0,068 / −0,056 / +0,012 | +0,002 | +0,047 | −0,004 |
+| explorar | 0,034 / 0,000 / −0,034 | 0,025 / 0,007 / −0,018 | +0,021 | +0,002 | **0,056 / −0,021 / −0,077** |
+| brincar | (poucas vidas: 3 e 4) | (14 e 18 vidas) | — | — | — |
+| aliviar | (nenhum par) | (nenhum par) | — | — | — |
+
+- **O explorar no longe** é onde o M2 perde: o M1 fica +0,056 depois de um r positivo do explorar, e o M2, −0,021. O piloto dá +0,079 e
+  −0,025; o #422 achou +0,055 e −0,091. **O mesmo sinal nas três leituras.**
+- **No comer, o hábito sobe o "ganhou, fica"** no piloto, nos três lugares (+0,018, +0,027 e +0,043). Na reavaliação, isso só acontece
+  claramente no perto (+0,047); no comedouro (+0,002) e no longe (−0,004), fica perto de zero. É a parte da H-P2a do #422 que esta run não
+  repete.
+- **As ações sem r** (dormir, chamar a atenção, ocioso, emburrar):
+  - elas abrem cerca de dois terços dos pares (0,678 no M1 e 0,669 no M2), sempre do lado r ≤ 0;
+  - nelas, o pet repete a ação 36 % e 35 % das vezes. Isso puxa o índice para baixo nos dois braços: o total do M1 é −0,083, e o das ações
+    com r possível, +0,002;
+  - **a diferença M2 − M1 quase não vem delas:** −0,021 nas ações com r possível, contra −0,018 no total. A conta dos pares sem r sai do
+    total menos a DX-5 (o lado r > 0 é o mesmo nos dois, e o script confere).
+- **O lado r > 0:** o M2 fica menos depois de um r positivo que o M1 (0,236 contra 0,262), e só um pouco menos depois de um r ≤ 0 (0,337
+  contra 0,345).
+
+### 9.3 O A11 ao lado (só descritivo, sem leitura de superioridade)
+
+As mesmas contas do 9.1, nas 600 vidas do A11:
+
+| | M3\* | A11 |
+|---|---|---|
+| a fração das vidas ≥ 0,5, por ração · por episódio | 0,405 · 0,808 | **0,000** · 0,635 |
+| a taxa sobre as somas, por ração · por episódio | 0,234 · 0,785 | 0,033 · 0,630 |
+| rações elegíveis por episódio | 4,02 | **10,81** |
+| rações fechadas por episódio fechado | 1,20 | **0,56** |
+| refeições de ração por dia | 3,18 | 0,89 |
+| refeições fora de episódio aberto | 71 % | 47 % |
+| as rações visíveis em k0 · nunca na visão | 37 % · 42 % | 63 % · 33 % |
+| episódios na visão: n, taxa | 6 115, 0,94 | 5 495, 0,64 |
+| episódios vencidos · com o fim da vida | 2 117 · 26 | 2 351 · 1 |
+
+- **Nenhuma vida do A11 passa de 0,5 por ração;** 381 das 600 passam por episódio.
+- **O A11 fecha um episódio sem fechar a ração elegível com mais frequência que o M3\*:**
+  - fecha 0,56 ração por episódio fechado, e 0,04 no comedouro;
+  - come pouco (0,89 ração por dia);
+  - as somas são compatíveis com o A11 comer, no episódio, uma ração que não é a elegível daquela janela (uma posta antes, sem fome), ou
+    comê-la depois das 8 decisões. O `medidas.json` não guarda qual ração fechou cada episódio, então isso não se confirma daqui.
+- **O relapso e o aleatório,** no A11, têm 18 a 22 rações por episódio, e as vidas comem 0,07 a 0,08 ração por dia.
+- O A11 não grava os fins das intenções nem o cheiro: essas linhas ficam sem ele.
+
+**O que fica para o Matheus:** a leitura deste descritivo, que é só exploratório. As sugestões estão no PR, nas "Questões abertas", e
+nenhuma mecânica mudou.
