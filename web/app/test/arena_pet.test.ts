@@ -3,7 +3,7 @@
 // Digimon aleatorio). Dados SINTETICOS versionados; o mapeamento das 60 formas nos dados reais so roda com Assets/arena_up presente.
 import { expect, test } from "vitest";
 import { existsSync, readFileSync } from "node:fs";
-import { configCpu, criarLuta, lutarAteOFim, rivaisDoEstagio, sortearRival, sorteiosPorFluxo, type DadosArena } from "../arena/index.ts";
+import { configCpu, configLutaPet, criarLuta, lutarAteOFim, lutarPet, rivaisDoEstagio, sortearRival, sorteiosPorFluxo, type DadosArena } from "../arena/index.ts";
 import { digimonNaArena, petNaArena } from "../src/arenaTempoReal.ts";
 import { DIGIMON_DA_FORMA, chaveSprite, type Forma } from "../motor/index.ts";
 
@@ -40,6 +40,19 @@ test("1 contra 1 pela IA: a luta termina, e a mesma semente da a mesma luta", ()
   expect(b).toEqual(a);
   expect(() => criarLuta(configCpu("campo", [], ["Delta"]), SINT, sorteiosPorFluxo(1))).toThrow(/de 1 a 3/);
   expect(() => criarLuta(configCpu("campo", ["Alfa", "Alfa", "Alfa", "Alfa"], ["Delta"]), SINT, sorteiosPorFluxo(1))).toThrow(/de 1 a 3/);
+});
+
+test("luta do pet sem tela: pet e rival na entrada, o resultado na saida; a mesma entrada, o mesmo resultado", () => {
+  const e = { pet: "Kabuterimon", rival: "Delta", cena: "castelo" as const, semente: 404 };
+  const r = lutarPet(SINT, e);
+  expect(r.fim).toBe(true);
+  expect(["pet", "rival", null]).toContain(r.vencedor);
+  expect(lutarPet(SINT, e)).toEqual(r);
+  /* e a mesma luta que a tela assiste (a tela usa configLutaPet): 1 contra 1, as duas pela IA, nivel 1 */
+  const cfg = configLutaPet(e);
+  expect([cfg.a.equipe, cfg.b.equipe, cfg.jogador, cfg.a.nivel, cfg.b.nivel]).toEqual([["Kabuterimon"], ["Delta"], false, 1, 1]);
+  const m = lutarAteOFim(cfg, SINT, sorteiosPorFluxo(404));
+  expect([m.vencedor === "a" ? "pet" : m.vencedor === "b" ? "rival" : null, m.relogio]).toEqual([r.vencedor, r.relogio]);
 });
 
 const REAIS = new URL("../../../../Assets/arena_up/dados/", import.meta.url);

@@ -1741,14 +1741,19 @@ test("arena em tempo real: o pet do jogador luta sozinho, pela IA, contra um riv
   await page.goto(APP + "?arena_tr=1#/lutar/arena");
   await page.getByRole("link", { name: "Arena em tempo real" }).click();
   await expect(page).toHaveURL(/#\/lutar\/tempo-real$/);
-  /* o lado azul e o pet do save (Kabuterimon), sozinho; o rival e do mesmo estagio (Champion: so o Delta nos dados sinteticos) */
+  /* o lado azul e o pet do save (Kabuterimon); antes da luta, so a arena, o rival e Lutar (a luta nao comeca sozinha) */
   await expect(page.getByTestId("arena-tr-pet")).toContainText("Kabuterimon");
-  await expect(page.getByTestId("arena-tr-confronto")).toContainText("Rival: Delta");
-  /* sem modo do jogador, sem teclado e sem equipes: so Lutar, Revanche, a arena e o rival */
   await expect(page.getByText(/WASD|Você \(azul\)|Sortear equipes|CPU × CPU/)).toHaveCount(0);
-  await expect(page.getByTestId("arena-tr").getByRole("combobox")).toHaveCount(2);
+  const arena = page.getByTestId("arena-tr");
+  await expect(arena.getByRole("combobox")).toHaveCount(2);
+  expect(await page.evaluate(() => (window as any).__arenaTr)).toBeUndefined();
   await page.getByLabel("Arena", { exact: true }).selectOption("castelo");
   await page.getByRole("button", { name: "Lutar", exact: true }).click();
+  /* durante a luta nao ha controle nenhum: so o Voltar do cabecalho; o rival e do mesmo estagio (so o Delta nos dados sinteticos) */
+  await expect(page.getByTestId("arena-tr-lutando")).toBeVisible();
+  await expect(page.getByTestId("arena-tr-confronto")).toContainText("Rival: Delta");
+  await expect(arena.getByRole("combobox")).toHaveCount(0);
+  await expect(arena.getByRole("button")).toHaveText(["Voltar"]);
   const fim = async () => {
     for (let k = 0; k < 60 && !(await page.evaluate(() => (window as any).__arenaTr?.fim === true)); k++) await page.clock.runFor(10_000);
     return page.evaluate(() => ({ ...(window as any).__arenaTr }));
@@ -1758,7 +1763,11 @@ test("arena em tempo real: o pet do jogador luta sozinho, pela IA, contra um riv
   expect(a.fim).toBe(true);
   expect([a.azul, a.vermelho]).toEqual([["Kabuterimon"], ["Delta"]]);
   await expect(page.getByTestId("arena-tr-log")).toContainText(/venceu|Empate/);
+  /* depois da luta: o resultado, Revanche e Nova luta */
+  await expect(page.getByTestId("arena-tr-resultado")).toContainText(/Kabuterimon (venceu|perdeu)|Empate/);
+  await expect(page.getByRole("button", { name: "Nova luta" })).toBeVisible();
   await page.getByRole("button", { name: "Revanche (mesma semente)" }).click();
+  await expect(arena.getByRole("button")).toHaveText(["Voltar"]);
   await page.waitForFunction(s => (window as any).__arenaTr?.relogio < 1000 && (window as any).__arenaTr?.semente === s, a.semente);
   const b = await fim();
   expect(b).toEqual(a);

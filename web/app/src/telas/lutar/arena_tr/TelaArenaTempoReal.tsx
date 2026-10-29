@@ -1,20 +1,18 @@
 /* Lutar · Arena em tempo real (docs/TAREFA_V2_UP_ARENA.md, secao 12), atras da chave ARENA_TEMPO_REAL. E o pet do jogador que luta,
    sozinho, pela IA da arena, contra um rival do mesmo estagio; o jogador assiste (correcao do Matheus, 2026-10-29: "a batalha em tempo
-   real, mas e ele que joga, nao sou eu"). A simulacao e a de arena/ (passo fixo, sorteios com semente); esta tela so le a luta e desenha.
-   Nada aqui toca no pet, no log ou no save: a luta nao da nem tira nada do pet. */
+   real, mas e ele que joga, nao sou eu"; "nao e para pressionar botao nenhum"): a tela so tem o que inicia a luta (arena, rival, Lutar) e
+   o que vem depois dela (o resultado, Revanche, Nova luta); durante a luta nao ha controle nenhum. A simulacao e a de arena/ (pet.ts:
+   configLutaPet, a mesma da luta sem tela); esta tela so le a luta e desenha. Nada aqui toca no pet, no log ou no save. */
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  CENAS, IDS_CENA, MUNDO, OPCOES_PADRAO, PASSO_MS, STATS_PADRAO, criarLuta, passo, rivaisDoEstagio, sortearRival, sorteiosPorFluxo,
-  type ConfigLuta, type Evento, type IdCena, type Lado, type Luta,
+  CENAS, IDS_CENA, MUNDO, PASSO_MS, configLutaPet, criarLuta, passo, rivaisDoEstagio, sortearRival, sorteiosPorFluxo,
+  type Evento, type IdCena, type Lado, type Luta,
 } from "../../../../arena/index.ts";
 import { carregarArenaTr, falhasImagem, imagemArena, petNaArena, type EstadoArenaTr, type PacoteArena } from "../../../arenaTempoReal.ts";
 import { useJogo } from "../../../jogo.ts";
 import { aplicarEventosVisuais, arquivosCena, desenhar, indexarEfeitos, visualNovo, type Imagens, type Visual } from "./desenho.ts";
 import { NOME_ATR, textoEvento } from "./log.ts";
 
-/** o nivel do jogo dos dois lados na arena: 1 (PROPOSTO, SEM FONTE). O estagio do pet ja entra pelo status do Digimon dele
-    (status.json, com EQ.pesoEstagio) e o rival e do mesmo estagio; somar um nivel pelo estagio contaria o estagio duas vezes */
-const NIVEL_ARENA = 1;
 const NOME_ESTAGIO: Record<string, string> = { InTraining1: "Bebê I", InTraining2: "In-Training", Rookie: "Rookie", Champion: "Champion", Ultimate: "Ultimate", Mega: "Mega", Armor: "Armor" };
 
 let pedido: Promise<PacoteArena> | null = null;
@@ -61,6 +59,9 @@ function Arena({ pacote }: { pacote: PacoteArena }) {
   const [log, setLog] = useState<{ k: number; t: string; txt: string; lado: Lado | null }[]>([]);
   const [placar, setPlacar] = useState({ a: 0, b: 0, e: 0 });
   const [atual, setAtual] = useState<{ semente: number; cena: IdCena; rival: string } | null>(null);
+  /* a fase: sem luta ainda (atual null), lutando (sem controle nenhum) ou o depois (resultado) */
+  const [lutando, setLutando] = useState(false);
+  const [resultado, setResultado] = useState<{ vencedor: Lado | null; relogio: number } | null>(null);
   const [falhas, setFalhas] = useState<string[]>([]);
   const [erro, setErro] = useState<string | null>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -74,9 +75,7 @@ function Arena({ pacote }: { pacote: PacoteArena }) {
     const sd = repetir?.semente ?? Math.floor(Math.random() * 2 ** 31);
     const id: IdCena = repetir?.cena ?? (cena === "aleatoria" ? IDS_CENA.filter(k => k !== "campo")[Math.floor(Math.random() * (IDS_CENA.length - 1))] : cena);
     const rival = repetir?.rival ?? (escolhaRival === "sorteado" ? sortearRival(candidatos, sd) : escolhaRival);
-    const lado = (n: string) => ({ equipe: [n], fonte: "jogo" as const, nivel: NIVEL_ARENA, generico: { ...STATS_PADRAO } });
-    const cfg: ConfigLuta = { cena: id, dific: OPCOES_PADRAO.dific, forca: OPCOES_PADRAO.forca, ritmo: OPCOES_PADRAO.ritmo, pvel: OPCOES_PADRAO.pvel,
-      jogador: false, a: lado(pet.nome), b: lado(rival) };
+    const cfg = configLutaPet({ pet: pet.nome, rival, cena: id, semente: sd });
     /* as imagens antes da luta: sprites, as folhas dos efeitos dos golpes e os mapas da arena */
     const todos = [pet.nome, rival], donos = new Set(["_comum"]);
     for (const n of todos) {
@@ -95,17 +94,17 @@ function Arena({ pacote }: { pacote: PacoteArena }) {
     vivo.current = { L, v: visualNovo(), im, acc: 0, semente: sd };
     nLog.current = 0;
     setLog([]); registrar(inicio, L);
-    setAtual({ semente: sd, cena: id, rival });
+    setAtual({ semente: sd, cena: id, rival }); setResultado(null); setLutando(true);
   }
 
   function registrar(ev: Evento[], L: Luta) {
     const novas = ev.map(textoEvento).filter(x => x !== null).map(x => ({ k: nLog.current++, t: (L.relogio / 1000).toFixed(1).replace(".", ","), ...x }));
     if (novas.length) setLog(l => [...novas.reverse(), ...l].slice(0, 80));
-    for (const e of ev) if (e.tipo === "fim") setPlacar(p => e.vencedor ? { ...p, [e.vencedor]: p[e.vencedor] + 1 } : { ...p, e: p.e + 1 });
+    for (const e of ev) if (e.tipo === "fim") {
+      setPlacar(p => e.vencedor ? { ...p, [e.vencedor]: p[e.vencedor] + 1 } : { ...p, e: p.e + 1 });
+      setResultado({ vencedor: e.vencedor, relogio: e.relogio }); setLutando(false);
+    }
   }
-
-  /* comeca uma luta quando os dados chegam (so com um pet que pode lutar) */
-  useEffect(() => { if (pet.ok) void lutar(); /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, [pet.ok]);
 
   /* o laco: acumula o tempo real e da passos fixos de PASSO_MS */
   useEffect(() => {
@@ -165,15 +164,24 @@ function Arena({ pacote }: { pacote: PacoteArena }) {
           {atual && <span className="arena-tr-nota"><b>{CENAS[atual.cena].nome}.</b> {CENAS[atual.cena].desc}</span>}
           {atual && <span className="arena-tr-nota" data-testid="arena-tr-semente">semente {atual.semente}</span>}
         </div>
-        <div className="arena-tr-acoes">
-          <button type="button" className="dl-btn" onClick={() => void lutar()}>Lutar</button>
-          <button type="button" className="dl-btn dl-btn--sec" onClick={() => atual && void lutar(atual)} disabled={!atual}>Revanche (mesma semente)</button>
-          <label className="arena-tr-escolha">Arena <select aria-label="Arena" value={cena} onChange={e => setCena(e.target.value as IdCena | "aleatoria")}>
-            <option value="aleatoria">Arena aleatória</option>{IDS_CENA.map(id => <option key={id} value={id}>{CENAS[id].nome}</option>)}</select></label>
-          <label className="arena-tr-escolha">Rival <select aria-label="Rival" value={escolhaRival} onChange={e => setEscolhaRival(e.target.value)}>
-            <option value="sorteado">Sorteado (mesmo estágio)</option>{candidatos.map(n => <option key={n} value={n}>{n.replace(/_/g, " ")}</option>)}</select></label>
-        </div>
-        <p className="arena-tr-nota">Seu pet luta sozinho, pela IA da arena; você assiste. A luta não muda nada no pet. A arena e o rival valem a partir da próxima luta.</p>
+        {resultado && !lutando && (
+          <p className="arena-tr-resultado" data-testid="arena-tr-resultado">
+            {resultado.vencedor === "a" ? `${pet.tela} venceu` : resultado.vencedor === "b" ? `${pet.tela} perdeu` : "Empate"} em {(resultado.relogio / 1000).toFixed(1).replace(".", ",")} s.
+          </p>
+        )}
+        {lutando ? (
+          <p className="arena-tr-nota" data-testid="arena-tr-lutando">{pet.tela} está lutando sozinho. Assista.</p>
+        ) : (
+          <div className="arena-tr-acoes">
+            <button type="button" className="dl-btn" onClick={() => void lutar()}>{atual ? "Nova luta" : "Lutar"}</button>
+            {atual && <button type="button" className="dl-btn dl-btn--sec" onClick={() => void lutar(atual)}>Revanche (mesma semente)</button>}
+            <label className="arena-tr-escolha">Arena <select aria-label="Arena" value={cena} onChange={e => setCena(e.target.value as IdCena | "aleatoria")}>
+              <option value="aleatoria">Arena aleatória</option>{IDS_CENA.map(id => <option key={id} value={id}>{CENAS[id].nome}</option>)}</select></label>
+            <label className="arena-tr-escolha">Rival <select aria-label="Rival" value={escolhaRival} onChange={e => setEscolhaRival(e.target.value)}>
+              <option value="sorteado">Sorteado (mesmo estágio)</option>{candidatos.map(n => <option key={n} value={n}>{n.replace(/_/g, " ")}</option>)}</select></label>
+          </div>
+        )}
+        {!atual && <p className="arena-tr-nota">Seu pet luta sozinho, pela IA da arena; você só escolhe a arena e o rival e assiste. A luta não muda nada no pet.</p>}
       </div>
       {(recuos.tag.length > 0 || recuos.semGolpe.length > 0) && (
         <details className="arena-tr-recuos dl-card" data-testid="recuos-arena-tr">

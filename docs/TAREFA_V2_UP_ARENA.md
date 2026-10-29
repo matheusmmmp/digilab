@@ -341,6 +341,20 @@ criado de `origin/main` em `f2693a9`, com o #446.
 - **A equipe tem de 1 a 3 Digimon** (`ConfigLado.equipe`); a medição continua com 3, e a paridade com o protótipo não muda.
 - **Continua igual:** nada toca o motor do pet, o log nem o save, e a luta não dá nem tira nada do pet.
 
+### 12.1a O complemento: nenhum botão durante a luta
+
+**Complemento do Matheus (2026-10-29, pela coordenação):** "não é para pressionar botão nenhum; é o pet lutando sozinho." Durante a luta
+não há controle nenhum. A tela tem só o que inicia a luta e o que vem depois dela:
+- **antes:** a arena, o rival e "Lutar". A luta não começa sozinha ao abrir a tela;
+- **durante:** só a luta, o registro e o "Voltar" do cabeçalho, que sai da tela e não é controle da luta;
+- **depois:** o resultado ("<pet> venceu em <tempo> s", "perdeu" ou "Empate"), "Revanche (mesma semente)", "Nova luta" e as escolhas.
+
+**A decisão de 2026-10-29:** o Matheus decidiu que a batalha em tempo real substitui o combate por turnos no jogo inteiro, e a coordenação
+está fazendo o plano. Esta correção é o primeiro passo. Por isso, a luta do pet tem uma entrada sem tela em `web/app/arena/pet.ts`:
+- `lutarPet(dados, { pet, rival, cena, semente })` devolve `{ vencedor: "pet" | "rival" | null, fim, relogio, vidaPet, vidaRival }`;
+- a tela usa a mesma `configLutaPet` e só assiste passo a passo;
+- nenhum código da simulação saiu: a entrada do jogador continua em `sim.ts`, coberta pelos testes, mas nenhuma tela a usa.
+
 ### 12.2 Ideia (sem tarefa)
 
 Ligar o resultado da arena ao pet (ganho, treino, evolução, medalha) seria mecânica nova, com versão de pet (`VERSAO_PET`) e com
@@ -348,7 +362,7 @@ paridade. Fica fora desta correção, como ideia.
 
 ### 12.3 As entregas conferidas
 
-- `npm test`: 643 passados (57 arquivos).
+- `npm test`: 644 passados (57 arquivos), com o complemento.
 - `npm run tipos`: limpo.
 - `npm run e2e`: 98 passados (os 97 do #446, com o teste da luta trocado pelo do pet, e mais o do pet sem Digimon). O e2e entra na arena com o pet do save v3 (Kabuterimon) e vê o nome dele no lado azul, contra o
   rival do estágio; a revanche dá a mesma luta; sem o Digimon do pet nos dados, o aviso aparece e a luta não começa.
