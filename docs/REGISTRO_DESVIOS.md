@@ -402,3 +402,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-29 — DIGIBRAIN-MODULAR-LONGE (Claude Code, Opus 5.5, worktree `v2-modular-longe`): a proposta para a falha no longe](registro/2026-10.md)
 - [2026-10-29 — DIGIBRAIN-MODULAR-LONGE-L0 (worker D, Claude Code, Opus 5.5, worktree `v2-modular-longe-l0`): o registro da L0, antes do replay](registro/2026-10.md)
 - [2026-10-29 — DIGIBRAIN-MODULAR-LONGE-L2 (Claude Code, Opus 5.5, worktree `v2-modular-l2`): a espec da L-2, a intenção suspensa no cochilo](registro/2026-10.md)
+- [2026-10-29 — DIGIBRAIN-MODULAR-LONGE-L2 (worker D, Claude Code, Opus 5.5, worktree `v2-modular-longe-l2`): a parte (b) da L-2, o código e o registro da avaliação](registro/2026-10.md)

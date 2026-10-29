@@ -74,8 +74,16 @@ def test_a_regra_como_registrada():
                                                        "status": "PROPOSTOS, SEM FONTE (a secao 2 da proposta)"}
 
 
-def test_o_codigo_de_hoje_e_o_da_run():
+def test_a_l0_rodou_com_o_codigo_da_run_e_a_trava_recusa_outro():
+    """a L0 conferiu, quando rodou, que o codigo era o da run (gravado no l0.json); depois dela o codigo pode mudar (a L-2), e a trava
+    recusa rejogar com outro codigo"""
     import json
-    meta = json.loads(l0.META.read_text(encoding="utf-8"))
-    assert l0.conferir_codigo(meta)["iguais_ao_meta"]
+    gravado = json.loads(l0.SAIDA.read_text(encoding="utf-8"))
+    assert gravado["codigo"] == {"arquivos": 15, "iguais_ao_meta": True} and gravado["g1"]["todas_iguais"]
     assert l0._sha(l0.MEDIDAS) == l0.SHA_MEDIDAS
+    meta = json.loads(l0.META.read_text(encoding="utf-8"))
+    hoje = {**meta, "sha256": {rel: l0._sha(l0.RAIZ / "digilab" / rel) for rel in meta["sha256"]},
+            "orquestrador_sha256": l0._sha(l0.RAIZ / "experiments" / "run_v2_digibrain_prototipo.py")}
+    assert l0.conferir_codigo(hoje)["iguais_ao_meta"]
+    with pytest.raises(RuntimeError, match="nao e o da run"):
+        l0.conferir_codigo({**hoje, "sha256": {**hoje["sha256"], "engine.py": "0" * 64}})

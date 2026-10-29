@@ -1945,3 +1945,134 @@ resultado. Se e como revisá-las é uma questão aberta do Matheus (A4.9).
   já existe;
 - **a única exceção:** as sementes dos testes, sozinhas (101 a 505), dão o modo `fumaca`. A fumaça exige `--saida` e não lê os adendos
   nem o K da reavaliação. É o encanamento dos testes, nunca resultado.
+
+## Adendo 5: a avaliação da L-2, a intenção suspensa no cochilo (2026-10-29, worker D, Claude Code, Opus 5.5)
+
+**Status: PROPOSTO.** Registrado antes de qualquer vida. Nenhuma vida da faixa roda sem a conferência do Gerente e a autorização do
+Matheus. Quando rodar, no máximo 4 processos (a máquina).
+
+**De onde vem:** a seção 7 da `docs/ESPEC_LONGE_L2_DIGIBRAIN_MODULAR.md` (o #436). O Matheus aprovou as decisões LS-1 a LS-7 como
+recomendadas em 2026-10-29. Este adendo repete o desenho e os critérios da seção 7 **sem mudá-los**, e acrescenta só o que a espec deixou
+para o plano: a faixa, o número de unidades, as medidas na forma de medir e o que falta antes da primeira vida.
+
+**O que este adendo não afirma:** que a L-2 conserta o longe, que o modular supera o A, ou que algum cérebro está pronto (a espec,
+seção 8).
+
+### A5.1 O desenho (a espec, seção 7.1, como está)
+
+- **A pergunta:** a suspensão diminui as buscas quebradas no longe e aumenta o fechamento por episódio no longe, sem piorar o comedouro,
+  o perto e o corpo?
+- **Os braços:**
+  - **o par primário:** o M3\* de hoje (o "M3" de `SUBCHAVES_CONSERTO`, com o `cheiro_inato` e a `intencao_cheiro`) e o **M3\*+S** (o
+    mesmo, com a `intencao_suspensa`);
+  - **o par descritivo** (LS-6): o M0 do conserto e o **M0+S**, sem critério;
+  - **o A11 não entra.**
+- **As células:** as 12 de hoje (4 donos × comedouro, perto e longe), 14 dias, orçamento de 16 por dia.
+- **O pareamento:** as quatro vidas de cada unidade e célula têm a mesma semente e o mesmo genoma (a regra E3, como na reavaliação).
+- **Os valores:** os inatos de hoje (os do #428, que seguem PROPOSTOS), e os dois da suspensão como a LS-4 decidiu (`n_suspensa_max` = 6 e
+  `lambda_retomar` = S/4). **Nenhuma calibração** (LS-4).
+
+### A5.2 As sementes
+
+- **A faixa: 67101 a 67505,** reservada em `experiments/bancada/faixas.py`, a pedido do Gerente em 2026-10-29. A 64xxx e a 66xxx estão
+  gastas para uso confirmatório e não entram em nada, nem na conta do poder.
+- **O piloto** (A5.6): as bases **67101 e 67202,** com K = 5, 10 unidades. Ele só serve para medir o rho da A5.6 e não tem leitura de
+  critério.
+- **A avaliação:** as bases **67303, 67404 e 67505,** com o K da regra da A5.6, uma vez.
+- **As unidades:** a regra E3 (`bancada_v2.unidades_derivadas`, o prefixo do protótipo), como na reavaliação.
+
+### A5.3 As medidas (a espec, seção 7.2, como está, e a forma de medir)
+
+| a medida | o lugar | o papel |
+|---|---|---|
+| as buscas trocadas por vida, com o motivo (o reflexo, outra unidade) | os três | o mecanismo (C-L2-1) |
+| as buscas que acabam em "expirou", por vida | os três | o mecanismo (C-L2-1) e o pet preso (C-L2-4) |
+| a taxa de fechamento **por episódio** (a do G-MVP-EP) | o longe | o efeito (C-L2-2) |
+| a taxa de fechamento **por ração** | o longe | relatada, com o teto de cerca de 0,13; sem critério (PL-3) |
+| as taxas por episódio e por ração | o comedouro e o perto | não pode piorar (C-L2-3) |
+| a exaustão e a privação de fome (S-5) | os três | não pode piorar (C-L2-3) |
+| as S-1 a S-4 e a S-6 | os três | o pet preso (C-L2-4) e a leitura |
+| as M-L2 e M-L3 da L0, refeitas | o longe | descritivas |
+
+**A forma de medir,** pelo registro da decisão, que com a subchave grava a `suspensa` e o `retomou` em cada motivo e o `n_susp` em cada
+fim de uma intenção que já foi suspensa (o commit `f20618e`):
+- **as buscas trocadas:** os fins `trocou` de `comer/cheiro`, com o motivo pelo `reflexo` da decisão (a forma do M-L2 da L0). No M3\*+S, o
+  reflexo não troca uma busca, e a troca por ele deve cair a 0;
+- **as expiradas:** os fins `expirou` de `comer/cheiro`;
+- **a medida do C-L2-1:** por unidade, no longe, as buscas trocadas mais as expiradas, por vida;
+- **S-1:** o `n_susp` de cada intenção suspensa ao acabar, e a fração dos fins dela em `expirou`;
+- **S-2:** os fins das intenções com o `n_susp` (as que voltaram ou acabaram suspensas) contra os das sem ele (as nunca suspensas): a
+  fração em `meta` ou `achou`;
+- **S-3:** nas decisões com o `retomou`, o andado líquido até o fim da intenção, em direção à ração madura mais próxima na retomada (a
+  forma do M-L3);
+- **S-4:** a fração das retomadas com um reflexo nas 2 decisões seguintes;
+- **S-5:** a `exaustao` e a `privacao` que o orquestrador já grava;
+- **S-6:** nas decisões com o `retomou`, a fração com a sonda `persistencia_decidiu`.
+
+### A5.4 Os critérios (a espec, seção 7.3, copiados como estão)
+
+Os limiares são os da espec, **PROPOSTOS, SEM FONTE.** A LS-7 os aprovou para esta avaliação sem mudá-los, e nada aqui os ajusta.
+
+| # | o critério | passa se |
+|---|---|---|
+| **C-L2-1** | o mecanismo age | no longe do par primário, as buscas trocadas mais as expiradas, por vida, caem pelo menos à metade da média do M3\*, e o IC95 da diferença pareada fica abaixo de 0 |
+| **C-L2-2** | o longe por episódio | o limite inferior do IC95 da diferença pareada (M3\*+S − M3\*) na taxa por episódio do longe fica acima de 0 |
+| **C-L2-3** | não piorar | no comedouro e no perto, por episódio e por ração, o limite inferior do IC95 da diferença pareada fica acima de −0,03; e, nos três lugares, o limite superior da diferença na exaustão e na privação (S-5) fica abaixo de +0,02 |
+| **C-L2-4** | o pet não fica preso | no M3\*+S, no máximo 25 % das suspensões acabam em "expirou" (S-1), e a fração de retomadas que acaba em meta ou achou não fica mais de 0,10 abaixo da fração das buscas nunca suspensas (S-2) |
+
+**Como se leem juntos** (a espec, como está):
+- o C-L2-3 é uma conjunção: todas as comparações dele têm de passar, sem correção de multiplicidade (a regra da interseção-união; SEM FONTE
+  verificada no repositório);
+- a suspensão só segue para o jogo com o C-L2-1, o C-L2-3 e o C-L2-4. O C-L2-2 diz se o longe melhorou; sem ele, a leitura volta ao
+  Matheus com a regra da parte (a) (a espec, seção 4).
+
+**A análise:** a diferença pareada por unidade (a média das 4 células do lugar), com o IC95 pelo t sobre as unidades, como no adendo 4.
+Estimativa com intervalo; nada além dos critérios.
+
+### A5.5 A regra da parte (a), aplicada na leitura (a espec, seção 4, como está)
+
+A parte (a) só volta ao Matheus, como espec própria, se:
+- a (b) passa o C-L2-1 e o C-L2-3; **e**
+- no longe do M3\*+S, as buscas trocadas por outra unidade, com ração a menos de R, ficam acima do dobro das do comedouro no mesmo braço;
+  **e**
+- o C-L2-2 não mostra melhora no longe.
+
+### A5.6 O número de unidades e o poder
+
+**O poder** sai de `experiments/poder_l2_digibrain.py`, gravado em `artifacts_v2_digibrain_prototipo/l2/poder.json` (sha256
+`4cb10998…c504`). Ele só lê o `medidas.json` do piloto do conserto (as 6 unidades do M3\*, 65303 a 65505):
+- **a dispersão** entre as unidades vem do piloto;
+- **o desvio da diferença pareada** depende da correlação rho entre as duas vidas do par, que nenhum artefato mede: a tabela dá rho = 0;
+  0,5 e 0,8;
+- **a conta** é a aproximação normal do t não central, um pouco otimista com poucas unidades.
+
+**O que a tabela mostra:**
+- **o C-L2-2** depende do efeito, que não se conhece. Com K = 30 e rho = 0,5, o poder é 0,53 para +0,03, 0,93 para +0,05 e 1,0 para
+  +0,10;
+- **o C-L2-3 tem uma comparação que domina:** a privação no longe, com a margem +0,02 e o desvio de 0,092 entre as unidades. O poder dela,
+  com K = 50, é 0,18 (rho = 0), 0,32 (rho = 0,5) e 0,67 (rho = 0,8). Com K = 100, é 0,33, 0,58 e 0,93;
+- **a conjunção do C-L2-3,** pelo produto das 10 comparações tratadas como independentes (uma aproximação): com K = 50, de 0,04 a 0,67;
+  com K = 100, de 0,27 a 0,93.
+
+**A regra do K** (PROPOSTA, SEM FONTE):
+1. **o piloto** (A5.2) roda os quatro braços nas 12 células. O rho de cada medida do C-L2-3 é a correlação, entre as unidades, do M3\* e
+   do M3\*+S no lugar. Ele só serve para esta conta;
+2. **o K da avaliação** é o menor da grade (10, 20, 30, 50, 100 e 200 unidades) em que o poder da conjunção do C-L2-3, com os rho do
+   piloto, chega a 0,8, arredondado para cima ao múltiplo de 3: as unidades se dividem por igual entre as três bases da avaliação;
+3. **se nenhum K da grade chega a 0,8,** ou o K passa de 100, o K volta ao Matheus com o custo em vidas antes de rodar. As margens não
+   mudam: a LS-7 as fixou.
+
+**O custo:** cerca de 3,2 s de CPU por vida (a reavaliação). O piloto tem 480 vidas (4 braços × 12 células × 10 unidades), cerca de 7 min
+com 4 processos. A avaliação tem 48 × K vidas: com K = 50, 2 400, cerca de 35 min; com K = 100, 4 800, cerca de 70 min.
+
+### A5.7 O que falta antes da primeira vida
+
+- **O orquestrador:**
+  - os braços M3\*+S e M0+S;
+  - as fases `l2_piloto` e `l2_avaliacao`, com as bases da A5.2;
+  - a trava, que exige o adendo 5 APROVADO pelo Matheus no cabeçalho (a `exigir_adendo_aprovado` de A4.7);
+  - as medidas da A5.3;
+  - a análise da A5.4 e a regra do K da A5.6.
+  Isso vai num commit próprio, com testes nas sementes dos testes, antes do piloto, para o Gerente conferir.
+- **A autorização do Matheus** para o piloto e, depois do K, para a avaliação, uma vez.
+- **Os testes de mecanismo,** de vidas, os gabaritos (o do modular e o do conserto) e a suíte, antes de cada run.

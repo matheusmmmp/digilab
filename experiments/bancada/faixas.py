@@ -100,6 +100,9 @@ FAIXAS_RESERVADAS = (
                    "(PROPOSTA_DIAGNOSTICO_DIGIBRAIN_MODULAR, secao 6, aprovada pelo Matheus em 2026-10-26)"),
     (66101, 66505, "DigiBrain modular, a reavaliacao depois do conserto, uma vez (PROPOSTA_DIAGNOSTICO_DIGIBRAIN_MODULAR, secao 6, "
                    "aprovada pelo Matheus em 2026-10-26)"),
+    (67101, 67505, "DigiBrain modular, a L-2 do longe: o piloto (67101, 67202) e a avaliacao (67303 a 67505), uma vez "
+                   "(PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO, adendo 5, PROPOSTO; ESPEC_LONGE_L2_DIGIBRAIN_MODULAR, secao 7; pedida pelo "
+                   "Gerente em 2026-10-29)"),
     (50001, 50020, "analise de poder, piloto"), (60001, 60160, "confirmatoria"), (69001, 69001, "M1, gate G1"),
     (80001, 82004, "linhagem E1 (piloto, genomas e ambientes)"),
     (20260900, 20261800, "fala, voz, comando e bootstraps (sementes de 2026-09/10 e semente + i)"),

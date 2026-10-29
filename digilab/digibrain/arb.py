@@ -65,13 +65,19 @@ class Arbitragem:
             return max(positivos, key=lambda i: (w[i], -i))
         return sortear_inteiro(w, u)
 
-    def escolher(self, unidades: list[dict], afeto: dict, sens: dict, rng) -> dict:
-        p, S = self.p, self.S
+    def reflexo(self, sens: dict) -> bool:
+        """o reflexo do sono: a leitura da energia abaixo de `lambda_sono` (a conta de sempre, sem rng). O M-ADAPT a chama uma vez por
+        decisao e passa o valor ao M-ESTADO e ao `escolher` (a L-2, secao 2.3)"""
         energia = sens["leitura"].get("energia")
         if energia is None:
             raise RuntimeError("M-ARB: o reflexo do sono le a energia, e ela nao esta na percepcao do corpo")
+        return energia < self.p.lambda_sono
+
+    def escolher(self, unidades: list[dict], afeto: dict, sens: dict, rng, reflexo: bool | None = None) -> dict:
+        p = self.p
+        if reflexo is None:
+            reflexo = self.reflexo(sens)
         w = self.pesos([x["a"] for x in unidades], afeto["g_exp"])
-        reflexo = energia < p.lambda_sono
         if reflexo:
             i = next(j for j, x in enumerate(unidades) if x["acao"] == "dormir")
             u = None
