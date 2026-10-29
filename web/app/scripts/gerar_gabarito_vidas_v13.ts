@@ -3,7 +3,7 @@
    do Motor a cada evento; test/vidas_v13.test.ts as refaz e confere tudo, bit a bit, depois da remocao. As vidas cobrem o que um pet v13 faz:
    o cuidado pelo laco do corpo e o mundo (alimentar, a racao no chao, limpar, brincar, carinho, tapa, tratar), as medalhas e as evolucoes,
    o treino (e o forcar), as lutas em tempo real (bots, a campanha, os lideres), as travas e os vetos, os chips e as cartas, e o ritmo
-   classico. Grava test/gabaritos/vidas_v13_ts.json.
+   classico. Grava test/gabaritos/v13_vidas_ts.json.
      node scripts/gerar_gabarito_vidas_v13.ts */
 import { writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -69,5 +69,5 @@ gravar("campanha_mundo", adulto);
 gravar("filho", viver(1305, 1, { lutas: ["aleatorio"] }, Motor.cruzar(adulto, adulto, 1305, 1306, "teste")));
 gravar("ritmo_classico", viver(1303, 2, { classica: true, lutas: ["aleatorio", "atirador"] }));
 gravar("adultos", viver(1304, 5, { lutas: ["aleatorio", "aleatorio", "contragolpe", "duelista"] }));
-writeFileSync(fileURLToPath(new URL("../test/gabaritos/vidas_v13_ts.json", import.meta.url)),
+writeFileSync(fileURLToPath(new URL("../test/gabaritos/v13_vidas_ts.json", import.meta.url)),
   JSON.stringify({ gerado_por: "web/app/scripts/gerar_gabarito_vidas_v13.ts", versao_pet: VERSAO_PET, vidas }) + "\n");

@@ -118,7 +118,7 @@ function ConfirmarForcar({ ex, fechar, forcar }: { ex: Exercicio; fechar: () => 
       <div className="folha-cab"><IconeTreino ex={ex} /><span><b id="forcar-tit">Forçar {NOME_EXERCICIO[ex].toLowerCase()}?</b><span className="dl-apoio">A fadiga passou de {CTR.limiteForcar}.</span></span></div>
       <div className="dl-par">
         <div className="folha-ganha"><b>GANHA</b><span>rende {n1(CTR.multForcar)}×</span></div>
-        <div className="folha-custa"><b>CUSTA</b><span>+{CTR.sobreForcar} sobrecarga</span>{m.versao >= 2 && <span>vínculo cai</span>}</div>
+        <div className="folha-custa"><b>CUSTA</b><span>+{CTR.sobreForcar} sobrecarga</span><span>vínculo cai</span></div>
       </div>
       <Medidor titulo="Sobrecarga" valor={t.sobrecarga} n={blocos(t.sobrecarga / 100, 10)} cls="dl-seg--sombrio" marcas={[[CSO.aviso, "aviso"], [CSO.sombrio, "sombria"]]} />
       <p className="folha-aviso">Com isso a sobrecarga vai a {depois.toFixed(0)}.{m.estagioAtual !== "adulto" && m.estagioAtual !== "mega" ? ` Sobrecarga ${CSO.sombrio} ou mais na virada para Ultimate leva à forma sombria.` : ""}</p>

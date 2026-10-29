@@ -37,8 +37,8 @@ function copiaSincronizada(t: Tamer, semente: number, log: Motor["log"], versao:
 export function candidatosSalao(t: Tamer = tamerAtual()): CandidatoSalao[] {
   const out: CandidatoSalao[] = [], a = jogoAtual().motor;
   const junta = (origem: OrigemPet, m: Motor) => out.push({ origem, semente: m.semente, m, nome: nomeForma(m.forma), est: m.estagioAtual, erro: m.porqueNaoSalao() });
-  if (a.versao >= VERSAO_SALAO) junta("ativo", a);
-  lerGuardados().forEach((g, i) => { if ((g.versao ?? 1) >= VERSAO_SALAO) junta(i, copiaSincronizada(t, g.semente, g.log, g.versao)); });
+  junta("ativo", a);
+  lerGuardados().forEach((g, i) => junta(i, copiaSincronizada(t, g.semente, g.log, g.versao)));
   return out;
 }
 /** os estagios do Salao sem nenhum pet que possa lutar */

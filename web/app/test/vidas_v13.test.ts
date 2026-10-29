@@ -1,12 +1,12 @@
 // O gabarito das vidas v13 (COMBATE-TR, etapa R2b): gravado num commit proprio, antes de tirar do motor os ramos das versoes v1-v12 (D-9).
-// Cada vida de test/gabaritos/vidas_v13_ts.json (scripts/gerar_gabarito_vidas_v13.ts) se refaz pelo registro, e o sha256 da assinatura do
+// Cada vida de test/gabaritos/v13_vidas_ts.json (scripts/gerar_gabarito_vidas_v13.ts) se refaz pelo registro, e o sha256 da assinatura do
 // Motor confere a cada evento, bit a bit. Se a remocao mudar uma vida de hoje, este teste para tudo.
 import { describe, expect, test } from "vitest";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { Motor, type EventoRegistro } from "../motor/index.ts";
 
-const GAB = JSON.parse(readFileSync(new URL("./gabaritos/vidas_v13_ts.json", import.meta.url), "utf8")) as {
+const GAB = JSON.parse(readFileSync(new URL("./gabaritos/v13_vidas_ts.json", import.meta.url), "utf8")) as {
   versao_pet: number; vidas: { nome: string; semente: number; log: EventoRegistro[]; assinaturas: string[] }[];
 };
 const sha = (x: string): string => createHash("sha256").update(x).digest("hex");

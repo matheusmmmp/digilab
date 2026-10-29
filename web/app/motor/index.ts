@@ -26,8 +26,6 @@ export * from "./motivo.ts";
 export * from "./expressao.ts";
 export * from "./motor.ts";
 export * from "./donos.ts";
-export * from "./historia.ts";
-export * from "./mentira.ts";
 export * from "./mundo.ts";
 export * from "./contrato.ts";
 export * from "./corpo.ts";

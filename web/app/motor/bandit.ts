@@ -1,8 +1,8 @@
 /* Camada 2 — instinto (distribuicao exata) e bandit linear com Thompson sampling (espelho de
    policies/bandit.py + memoria + temperamento). O registro da decisao e somente leitura (motivo). */
-import { ACOES_PET, C, CB, CDJ, CTP, FATORES_ESPACOS, FATORES_MEMORIA, NF, TEMP_NEUTRO, TICK_INICIAL, VERSAO_PET } from "./constantes.ts";
+import { ACOES_PET, C, CB, CDJ, CTP, FATORES_ESPACOS, NF, TEMP_NEUTRO, TICK_INICIAL, VERSAO_PET } from "./constantes.ts";
 import { eNoite } from "./estado.ts";
-import { Memoria, MemoriaEspacos, type MemoriaPolitica } from "./memoria.ts";
+import { MemoriaEspacos, type MemoriaPolitica } from "./memoria.ts";
 import type { Rng } from "./rng.ts";
 import type { AcaoDono, AcaoPet, Desejo, Observacao, Temperamento } from "./tipos.ts";
 
@@ -88,9 +88,10 @@ export class Bandit {
       repr: CB.repr * (1 - CTP.kTeimosia * temp.teimosia) * (1 - CTP.kSensibilidade * temp.sensibilidade),
     };
     const fr = Math.exp(CTP.kRancor * temp.rancor);
-    /* v2: memoria por espacos (rancor escala demora e bronca); v1: memoria curta antiga */
-    this.v2 = versao >= 2; this.fatMem = this.v2 ? FATORES_ESPACOS : FATORES_MEMORIA;
-    this.mem = this.v2 ? new MemoriaEspacos({ demora: fr, bronca: fr }, temp) : new Memoria(fr);
+    /* a memoria por espacos (rancor escala demora e bronca); a memoria curta dos pets v1 saiu com o descarte 6 (COMBATE-TR, R2b) */
+    this.v2 = true; this.fatMem = FATORES_ESPACOS;
+    this.mem = new MemoriaEspacos({ demora: fr, bronca: fr }, temp);
+    void versao;
   }
   /** features do bandit v1 + memoria (tick = desde o ultimo cuidado + tick desse cuidado) */
   fx(obs: Observacao): number[] { return features(obs).concat(this.mem.feat(obs.tdc + this.tUlt)); }

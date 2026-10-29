@@ -32,10 +32,10 @@ export function entradasDoMapa(m: Motor): Entrada[] {
     const vit = L.rivais.reduce((n, k) => n + m.campanha[k], 0), aberto = m.desafioAberto(L.rivais[0]);
     const situacao: Situacao = vit ? "vencido" : aberto ? "aberto" : "trancado";
     const texto = vit ? `vencido · ${vit} vitória${vit === 1 ? "" : "s"}` : aberto ? `sugerido: ${nivelDoLugar(L)}` : `vença alguém em ${Ls[i - 1].nome}`;
-    const md = m.versao >= 6 ? L.rivais.map(medalhaDoLider).find(x => x) ?? null : null;
+    const md = L.rivais.map(medalhaDoLider).find(x => x) ?? null;
     return { nome: L.nome, tema, situacao, texto, selo: md ? { n: MEDALHAS.indexOf(md) + 1, ganha: t.tem(md.id), ouro: false } : null, fronteira: false };
   });
-  if (m.versao >= VERSAO_LIGA && Ls.length === 6) {
+  if (Ls.length === 6) {
     const aberta = m.medalhas >= MEDALHAS_LIGA, campeao = m.liga.titulos > 0;
     out.push({
       nome: "Fronteira", tema: "fronteira", situacao: campeao ? "vencido" : aberta ? "aberto" : "trancado", fronteira: true,

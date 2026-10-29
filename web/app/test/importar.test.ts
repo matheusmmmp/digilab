@@ -18,7 +18,6 @@ test("arquivo invalido falha alto com o motivo", () => {
 });
 
 test("o pet de antes da luta em tempo real (v1-v12) nao abre pelo arquivo: o motivo diz a versao (COMBATE-TR, E2)", () => {
-  const m = new Motor(31, 12); m.avancar(200);
-  expect(() => lerArquivo(textoSave(m), "a")).toThrow(/versão 12 .*combate por turnos/);
+  expect(() => lerArquivo(JSON.stringify({ semente: 31, log: [[480, "t", 200]], versao: 12 }), "a")).toThrow(/versão 12 .*combate por turnos/);
   expect(() => lerArquivo(JSON.stringify({ semente: 1, log: [] }), "a")).toThrow(/versão 1 /);
 });

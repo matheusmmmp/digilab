@@ -1,7 +1,7 @@
 // A luta em tempo real no Motor (COMBATE-TR, etapa R2; docs/ESPEC_COMBATE_TR.md, itens 3 e 4): os pets v13 lutam pelo nucleo combate_tr,
 // tudo o que o resultado alimenta continua (o aprendizado pelo saldo de cada acao, os contadores, a lesao, a confianca, a historia), as
-// series, a Liga e a Fabrica passam pelo mesmo nucleo, o replay refaz igual sem cache (D-2) e cabe no teto de custo; uma vida v13 sem luta
-// e a vida v12 de hoje, bit a bit.
+// series, a Liga e a Fabrica passam pelo mesmo nucleo, o replay refaz igual sem cache (D-2) e cabe no teto de custo (as vidas v13 de
+// hoje, bit a bit: test/vidas_v13.test.ts).
 import { describe, expect, test } from "vitest";
 import {
   CV21E_TR, DUR_EVO, LUTAS_SERIE_FABRICA, Motor, NOME_BOT, TentativaFabrica, VERSAO_FABRICA_TR, VERSAO_PET, hashSemente, jogarSerie,
@@ -87,21 +87,6 @@ describe("os pets v13 lutam em tempo real", () => {
     const msPorLuta = (performance.now() - t0) / n;
     /* o teto (PROPOSTO, SEM FONTE; espec D-2): 10 ms por luta, 10 s para 1 000 */
     expect(msPorLuta * 1000).toBeLessThan(10_000);
-  });
-
-  test("uma vida v13 sem luta e a vida v12, bit a bit (a luta em tempo real so muda as lutas)", () => {
-    const viver = (m: Motor) => {
-      for (let p = 0; p < 40; p++) {
-        m.avancar(30);
-        if (m.e.fome < .6) m.observar("alimentar");
-        if (m.e.sujeira >= 2) m.observar("limpar");
-        if (p % 5 === 0) m.observar("acariciar");
-      }
-      return m;
-    };
-    const a = viver(new Motor(606, 12)), b = viver(new Motor(606, 13));
-    expect(b.log).toEqual(a.log);
-    expect(b.assinatura()).toBe(a.assinatura());
   });
 });
 

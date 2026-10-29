@@ -20,7 +20,6 @@ import { useJogo } from "../../jogo.ts";
 const COMO_FALA: Record<string, string> = { bebe: "só emotes", crianca: "ícones e sons", adolescente: "frases curtas", adulto: "frases" };
 const MODOS: [ModoFala, string][] = [["template", "Frases prontas"], ["moldura", "Moldura"], ["livre", "Livre"]];
 const NOME_MODO: Record<ModoFala, string> = { template: "Frases prontas", moldura: "Moldura por LLM", livre: "Fala livre no aparelho" };
-const ATALHOS: [AcaoDono, string, string | null][] = [["elogiar", "Elogiar", "emoji_joinha"], ["repreender", "Repreender", null], ["acariciar", "Carinho", "emoji_coracao"]];
 /* pets v11: sem elogio nem bronca; o carinho e o tapa sao gestos no corpo */
 const ATALHOS_V11: [AcaoDono, string, string | null][] = [["acariciar", "Carinho", "emoji_coracao"], ["tapa", "Tapa", null]];
 const MAX_BALOES = 30;
@@ -31,21 +30,18 @@ function RetratoPequeno() {
   const img = imagemAtlas(a, nascendo > 0 ? OVO[m.especie] : chaveSprite(m.forma));
   return <span className="conv-av" aria-hidden="true"><img className="dl-pix" src={img.url} width={img.w} height={img.h} alt="" /></span>;
 }
-/** fala do pet: sem base (verificador achou afirmacao sem fato) fica riscada, com a nota embaixo. Pets v7 (voz propria):
-    inventar pode, desde que se saiba; a fala fica inteira e a nota marca com o lapis o que ele inventou */
+/** fala do pet: sem base (verificador achou afirmacao sem fato) fica riscada, com a nota embaixo */
 function BalaoPet({ r }: { r: RegistroFala }) {
-  const v = r.verificacao, voz = !!r.voz;
-  const semBase = !voz && !!v && !v.erro && ((v.nao_suportadas ?? 0) > 0 || !!v.manipulacao);
+  const v = r.verificacao;
+  const semBase = !!v && !v.erro && ((v.nao_suportadas ?? 0) > 0 || !!v.manipulacao);
   const trechos = semBase ? (v!.afirmacoes || []).filter(x => !x.sustentada).map(x => x.trecho) : [];
-  const inventou = voz ? r.voz!.invencoes : [];
   return (
     <div className="conv-linha">
       <RetratoPequeno />
       <div className="conv-pilha">
         <div className={`conv-balao conv-balao--pet${semBase ? " conv-balao--sembase" : ""}`}>{r.fala}</div>
         {semBase && <div className="conv-nota"><span className="conv-nota-q">?</span>Sem base{trechos.length ? `: ${trechos.map(t => `«${t}»`).join(", ")}` : ""}{v!.manipulacao ? " · possível manipulação" : ""}.</div>}
-        {inventou.length > 0 && <div className="conv-nota"><span className="conv-nota-q">✎</span>Inventou: {inventou.map(t => `«${t}»`).join(", ")}.</div>}
-        {!voz && v?.erro && <div className="conv-nota"><span className="conv-nota-q">?</span>O verificador não respondeu.</div>}
+        {v?.erro && <div className="conv-nota"><span className="conv-nota-q">?</span>O verificador não respondeu.</div>}
         {r.comando_executado && r.comando && <div className="conv-nota conv-nota--feito"><span className="conv-nota-q">✓</span>{FEITO_DONO[r.comando]}</div>}
       </div>
     </div>
@@ -118,7 +114,7 @@ export function TelaConversar({ voltar }: { voltar: () => void }) {
       <p className="dl-apoio conv-rodape">O que você escreve não ensina o pet nem entra no registro dele. Um pedido claro ("vai comer") vira a ação na hora, como o botão.</p>
 
       <div className="conv-atalhos" role="group" aria-label="Ensinar agora">
-        {(m.versao >= 11 ? ATALHOS_V11 : ATALHOS).map(([a, rot, em]) => (
+        {ATALHOS_V11.map(([a, rot, em]) => (
           <button type="button" key={a} className={`conv-atalho${a === "elogiar" ? " conv-atalho--destaque" : ""}`} disabled={nascendo > 0} onClick={() => agir(a)}>
             {em && <Peca nome={em} escala={2} />}{rot}
           </button>

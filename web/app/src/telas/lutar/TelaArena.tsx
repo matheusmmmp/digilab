@@ -12,7 +12,6 @@ import { EditorRegras, RegrasCompactas } from "./EditorRegras.tsx";
 import { useDesktop } from "../../desktop.ts";
 import { Cena } from "./PalcoLuta.tsx";
 import { ENDERECO_LUTA } from "../../rotas.ts";
-import { FalaRevanche } from "../../componentes/FalaRevanche.tsx";
 import { EscolhaCarta } from "../../componentes/EscolhaCarta.tsx";
 
 function CardRival({ k, adulto = false }: { k: string; adulto?: boolean }) {
@@ -89,7 +88,6 @@ export function TelaArena({ voltarPet, verReplay }: { voltarPet: () => void; ver
       </div>
       <div className="desk-col arena-col-meio">
       {luta.rivalFixo && <p className="dl-apoio">Rival do cenário: pet de dono {NOME_DONO[luta.rivalFixo.tipo]}, {luta.rivalFixo.dias} dia(s), lutando com o estilo da linha dele. Troque o rival nos cards para voltar aos bots.</p>}
-      <FalaRevanche />
       <EscolhaCarta rival={luta.rival} />
       <div className="arena-acoes">
         <button type="button" className="dl-btn dl-btn--sec" disabled={luta.lutando} onClick={melhorDe10}>Melhor de 10</button>

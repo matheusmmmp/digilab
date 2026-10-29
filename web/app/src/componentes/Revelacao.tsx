@@ -59,7 +59,7 @@ export function formaAntes(m: Motor, i: number): Forma {
     de um evento "u" que levou o pet de uma medalha a menos para o numero pedido (ele esperava pronto), e a medalha e a de numero n do
     Tamer. null nos pets v1-v5 e nas evolucoes que nao pedem medalha */
 export function medalhasDaEvolucao(m: Motor, x: Evolucao): { pediu: number; liberou: string | null } | null {
-  const pediu = m.versao >= 6 ? (CMD as Partial<Record<string, number>>)[x.estagio] ?? 0 : 0;
+  const pediu = (CMD as Partial<Record<string, number>>)[x.estagio] ?? 0;
   if (!pediu) return null;
   let antes = 0, liberou: string | null = null;
   for (const ev of m.log) {

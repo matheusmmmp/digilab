@@ -31,7 +31,7 @@ const vitorias = (n: number): string => `${n} vitória${n === 1 ? "" : "s"}`;
 
 /** uma instalacao da Fronteira: a regra em uma frase, o recorde do Tamer, o que este pet fez nela e "Tentar". Antes do titulo, trancada */
 function CartaoInstalacao({ x, m, t, lutando }: { x: Instalacao; m: Motor; t: Tamer; lutando: boolean }) {
-  const v6 = m.versao >= 6, erro = v6 ? m.porqueNaoInstalacao(x.id) : "a Fronteira é só dos pets v6 em diante", rec = t.recorde(x.id), c = v6 ? m.instalacoes[x.id] : null;
+  const erro = m.porqueNaoInstalacao(x.id), rec = t.recorde(x.id), c = m.instalacoes[x.id];
   const tentar = () => { lutarInstalacao(x.id, NOME_V2); if (LUTA.lutando) location.hash = ENDERECO_LUTA; };
   return (
     <li className={`dl-card fr-inst-card${t.titulo ? "" : " fr-inst-card--fechada"}`} aria-labelledby={`fr-inst-${x.id}`}>
@@ -50,9 +50,9 @@ function CartaoInstalacao({ x, m, t, lutando }: { x: Instalacao; m: Motor; t: Ta
 
 export function TelaFronteira() {
   const { motor: m, erroTamer } = useJogo(), luta = useLuta(), a = useAtlas(), t = tamerAtual();
-  useEffect(() => { if (!LUTA.lutando && m.versao >= 6 && (!LUTA.palco || LUTA.palco.modo !== "fronteira")) previa("fronteira"); }, []);
-  const v6 = m.versao >= 6, erro = v6 ? m.porqueNaoLiga() : "a Fronteira é só dos pets v6 em diante";
-  const nLiga = v6 ? m.liga.tentativas : 0;
+  useEffect(() => { if (!LUTA.lutando && (!LUTA.palco || LUTA.palco.modo !== "fronteira")) previa("fronteira"); }, []);
+  const erro = m.porqueNaoLiga();
+  const nLiga = m.liga.tentativas;
   /* a ultima tentativa, refeita do registro (so muda com luta nova da Liga) */
   const ult = useMemo(() => (nLiga ? ultimaTentativa(m) : null), [nLiga, m.semente]);
   const img = (k: string, cls: string) => { if (a.tipo !== "ok") return null; const i = imagemAtlas(a, k); return <img className={`dl-pix ${cls}`} src={i.url} width={i.w} height={i.h} alt="" />; };
@@ -75,7 +75,7 @@ export function TelaFronteira() {
             ? <div className={`fr-titulo${meu ? " meu" : ""}`} role="status"><SeloMedalha n={0} ouro ganha tam={40} />
                 <span><b>Campeão da Liga</b><span>{meu ? `${meu.forma} venceu os ${LIGA.length} no dia ${diaDe(meu.tick)}.` : `O título é seu desde ${titulo.forma}, no dia ${diaDe(titulo.tick)}.`}</span></span></div>
             : null}
-          {v6 && m.medalhas < MEDALHAS_LIGA
+          {m.medalhas < MEDALHAS_LIGA
             ? <p className="med-espera" role="status"><b>A Fronteira abre com as {MEDALHAS_LIGA} medalhas.</b> {textoFalta(t, MEDALHAS_LIGA)}</p>
             : erro ? <p className="dl-apoio">Agora não dá para desafiar a Liga: {erro}.</p> : null}
           {nLiga > 0 && <p className="fr-conta"><span><b className="dl-num">{nLiga}</b> tentativa{nLiga === 1 ? "" : "s"}</span><span><b className="dl-num">{m.liga.titulos}</b> título{m.liga.titulos === 1 ? "" : "s"}</span></p>}
