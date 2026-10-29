@@ -62,6 +62,9 @@ describe("(a) o chamado de fome do bebe pela fome do corpo", () => {
     }
     expect(abriuHoje).toBeGreaterThan(0);
     expect(abriuChave).toBe(0);
+    /* a fome do bebe sem cuidado: nasce em 0,80 e chega a ~0,65 no fim dos 180 min (por isso o chamado quase nao abre no bebe) */
+    expect(chave.e.fome).toBeGreaterThan(.6);
+    expect(chave.e.fome).toBeLessThan(.7);
     /* a chave so mexe no chamado: a vida do pet (o estado, o mundo e o cerebro) e a mesma */
     expect(chave.e).toEqual(hoje.e);
     expect(JSON.stringify(chave.mundo!.resumo())).toBe(JSON.stringify(hoje.mundo!.resumo()));
@@ -107,6 +110,30 @@ describe("(a) o chamado de fome do bebe pela fome do corpo", () => {
     expect(fechou).not.toBeNull();
     expect(fechou!.fome).toBeGreaterThanOrEqual(LIM);
     expect(r.mundo!.consumos.length).toBeGreaterThan(0);
+  });
+});
+
+describe("o mesmo descompasso na higiene e no carinho (so relatado; a tarefa nao os muda)", () => {
+  test("pelo relogio, o chamado de higiene abre com o pet limpo e o de carinho com o humor alto", () => {
+    const vistos: Record<string, number[]> = { higiene: [], carinho: [] };
+    for (const s of [101, 202, 303]) for (const ch of [null, AMBAS]) {
+      const m = pet(s, ch);
+      let antes: string[] = [];
+      for (let t = 1; t < m.dur.bebe; t++) {
+        m.avancar(1);
+        const ab = m.chamadosAbertos();
+        for (const c of ab) if (!antes.includes(c) && c !== "fome") {
+          vistos[c].push(c === "higiene" ? m.e.higiene : m.e.humor);
+          if (c === "higiene") expect(m.e.sujeira).toBe(0);
+        }
+        antes = ab;
+      }
+    }
+    /* as mesmas aberturas com e sem as chaves do produto (elas nao mexem na higiene nem no carinho) */
+    expect(vistos.higiene.length).toBe(12);
+    expect(vistos.carinho.length).toBe(18);
+    expect(Math.min(...vistos.higiene)).toBeGreaterThan(.9);
+    expect(Math.min(...vistos.carinho)).toBeGreaterThan(.6);
   });
 });
 
