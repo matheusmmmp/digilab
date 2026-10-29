@@ -515,7 +515,7 @@ def rodar(cfg: dict, pasta: Path, processos: int, caminho_config: Path | None = 
             "orquestrador_sha256": rc._sha_arquivo(Path(__file__)), "prototipo_sha256": rc._sha_arquivo(Path(orq.__file__)),
             "git_head": rc._git("rev-parse", "HEAD"), "git_limpo": rc._git("status", "--porcelain") == "", "processos": processos,
             "unidades": unidades, "bracos": {b: {**orq.SUBCHAVES_CONSERTO, **orq.SUBCHAVES_L2}[b] for b in BRACOS},
-            "inatos": json.loads(json.dumps(orq.CONFIG_DIGIBRAIN_INATOS.__dict__)),
+            "inatos": json.loads(json.dumps(orq.inatos_da_config(cfg).__dict__)),     # os de hoje (a config da L-2 nao muda inatos)
             "sha256": {n: rc._sha_arquivo(RAIZ / "digilab" / n) for n in ("config.py", "engine.py", "metrics.py")}
             | {f"digibrain/{p.name}": rc._sha_arquivo(p) for p in sorted((RAIZ / "digilab" / "digibrain").glob("*.py"))},
             "inicio": time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime(inicio))}
