@@ -307,6 +307,6 @@ Registrado como está, sem ajuste (D5).
 
 - `npm test`: 638 passados (56 arquivos).
 - `npm run tipos`: limpo.
-- `npm run e2e`: ver o relato do PR.
+- `npm run e2e`: 97 passados, os 94 de antes mais os 3 da arena.
 - `pytest tests/test_servidor_remoto.py`: 14 passados.
 - O `package.json` e o `package-lock.json` não mudaram.

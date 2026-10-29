@@ -12,6 +12,8 @@ As fases (o campo "fase" da config; a faixa 67101...67505, reservada para a L-2)
                   criterios C-L2-1 a C-L2-4 (A5.4) e a regra da parte (a) (A5.5)
 As duas exigem o adendo 5 APROVADO no cabecalho (`exigir_adendo_aprovado`) e recusam as sementes de qualquer outra fase (o piloto, as da
 avaliacao). Na fumaca (as sementes dos testes) as fases rodam sem a faixa, sem a trava e sem o K, com menos dias se a config pedir.
+As medidas saem em 12 partes, uma por braco e lugar, com o sha256 de cada uma em `medidas_indice.json` (a A5.9: o medidas.json inteiro
+da avaliacao passaria do limite do GitHub); o resultado sai das partes gravadas, relidas (`ler_medidas`).
 
     python experiments/run_v2_digibrain_l2.py --config experiments/configs/v2_digibrain_prototipo/l2_piloto.json --processos 4
 """
@@ -75,6 +77,8 @@ def k_da_avaliacao() -> int:
     plano = _plano()
     if "### A5.9" not in plano:
         raise RuntimeError("a avaliacao da L-2 precisa do K fixado no plano (A5.9): commit antes")
+    if plano.count("\n### A5.9") != 1:
+        raise RuntimeError("a A5.9 esta no plano mais de uma vez")
     secao = plano[plano.index("### A5.9"):]
     secao = secao[:secao.index("\n## ")] if "\n## " in secao else secao
     ks = [int(m.group(1)) for x in secao.splitlines() for m in [PADRAO_K.match(x)] if m]
@@ -439,6 +443,60 @@ def analisar(registros: list[dict], fase: str) -> dict:
     return {"criterios": criterios(registros), "mecanismo": mecanismo(registros), "descritivos": descritivos(registros)}
 
 
+# ================================================================== as medidas em partes (a A5.9: o medidas.json inteiro da avaliacao
+# passaria do limite do GitHub)
+LIMITE_PARTE_BYTES = 50 * 1024 * 1024
+INDICE = "medidas_indice.json"
+
+
+def _arquivo_da_parte(braco: str, lugar: str) -> str:
+    return f"medidas_{braco}_{lugar}.json"
+
+
+def gravar_medidas(pasta: Path, registros: list[dict]) -> str:
+    """as medidas em 12 partes, uma por braco e lugar (abaixo de 50 MB cada, ou falha alto), e o indice com o sha256, as vidas e o tamanho
+    de cada parte; devolve o sha256 do indice"""
+    partes = {}
+    vistas = set()
+    for b in BRACOS:
+        for lu in orq.LUGARES:
+            vs = sorted((r for r in registros if r["braco"] == b and r["lugar"] == lu), key=lambda r: r["vida"])
+            arquivo = _arquivo_da_parte(b, lu)
+            bv._gravar(pasta / arquivo, bv._dump({r["vida"]: r for r in vs}))
+            tamanho = (pasta / arquivo).stat().st_size
+            if tamanho >= LIMITE_PARTE_BYTES:
+                raise RuntimeError(f"a parte {arquivo} tem {tamanho} bytes, acima do limite de {LIMITE_PARTE_BYTES}")
+            partes[f"{b}|{lu}"] = {"arquivo": arquivo, "sha256": bv._sha(pasta / arquivo), "vidas": len(vs), "bytes": tamanho}
+            vistas.update(r["vida"] for r in vs)
+    if len(vistas) != len(registros):
+        raise RuntimeError("vidas fora das partes (braco ou lugar desconhecido) ou repetidas")
+    bv._gravar(pasta / INDICE, bv._dump({"vidas": len(registros), "limite_bytes": LIMITE_PARTE_BYTES, "partes": partes}))
+    return bv._sha(pasta / INDICE)
+
+
+def ler_medidas(pasta: Path) -> dict:
+    """as medidas de uma run da L-2: pelas partes do indice (conferindo o sha256 e as vidas de cada uma) ou, nas runs de antes da A5.9 (o
+    piloto), pelo medidas.json inteiro"""
+    pasta = Path(pasta)
+    if not (pasta / INDICE).exists():
+        if not (pasta / "medidas.json").exists():
+            raise FileNotFoundError(f"{pasta}: sem o {INDICE} e sem o medidas.json")
+        return json.loads((pasta / "medidas.json").read_text(encoding="utf-8"))
+    indice = json.loads((pasta / INDICE).read_text(encoding="utf-8"))
+    out: dict = {}
+    for nome, p in sorted(indice["partes"].items()):
+        caminho = pasta / p["arquivo"]
+        if bv._sha(caminho) != p["sha256"]:
+            raise RuntimeError(f"a parte {p['arquivo']} nao tem o sha256 do indice")
+        vidas = json.loads(caminho.read_text(encoding="utf-8"))
+        if len(vidas) != p["vidas"] or set(vidas) & set(out):
+            raise RuntimeError(f"a parte {p['arquivo']} com as vidas erradas ou repetidas")
+        out.update(vidas)
+    if len(out) != indice["vidas"]:
+        raise RuntimeError(f"as partes somam {len(out)} vidas, e o indice diz {indice['vidas']}")
+    return dict(sorted(out.items()))
+
+
 # ================================================================== a run
 def rodar(cfg: dict, pasta: Path, processos: int, caminho_config: Path | None = None) -> dict:
     if processos > 4:
@@ -457,7 +515,7 @@ def rodar(cfg: dict, pasta: Path, processos: int, caminho_config: Path | None = 
             "orquestrador_sha256": rc._sha_arquivo(Path(__file__)), "prototipo_sha256": rc._sha_arquivo(Path(orq.__file__)),
             "git_head": rc._git("rev-parse", "HEAD"), "git_limpo": rc._git("status", "--porcelain") == "", "processos": processos,
             "unidades": unidades, "bracos": {b: {**orq.SUBCHAVES_CONSERTO, **orq.SUBCHAVES_L2}[b] for b in BRACOS},
-            "inatos": json.loads(json.dumps(orq.CONFIG_DIGIBRAIN_INATOS.__dict__)),
+            "inatos": json.loads(json.dumps(orq.inatos_da_config(cfg).__dict__)),     # os de hoje (a config da L-2 nao muda inatos)
             "sha256": {n: rc._sha_arquivo(RAIZ / "digilab" / n) for n in ("config.py", "engine.py", "metrics.py")}
             | {f"digibrain/{p.name}": rc._sha_arquivo(p) for p in sorted((RAIZ / "digilab" / "digibrain").glob("*.py"))},
             "inicio": time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime(inicio))}
@@ -468,11 +526,14 @@ def rodar(cfg: dict, pasta: Path, processos: int, caminho_config: Path | None = 
     t0 = time.perf_counter()
     registros = [r for s in rc._executar([(tarefa, (cfg, u, str(pasta))) for u in unidades], processos) for r in s]
     meta["vidas_parede_s"] = time.perf_counter() - t0
-    resultado = {"modo": modo, "fase": fase, "plano": PLANO, **analisar(registros, fase)}
+    meta["medidas_indice_sha256"] = gravar_medidas(pasta, registros)
+    lidos = ler_medidas(pasta)                    # o resultado sai das partes gravadas (elas o refazem)
+    if bv._dump(lidos) != bv._dump({r["vida"]: r for r in registros}):
+        raise RuntimeError("as partes do medidas gravadas nao sao as medidas da run")
+    resultado = {"modo": modo, "fase": fase, "plano": PLANO, **analisar(list(lidos.values()), fase)}
     meta["fim"] = time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime())
     meta["duracao_s"] = time.time() - inicio
     meta["python"] = platform.python_version()
-    bv._gravar(pasta / "medidas.json", bv._dump({r["vida"]: r for r in sorted(registros, key=lambda r: r["vida"])}))
     bv._gravar(pasta / "resultado.json", bv._dump(resultado))
     bv._gravar(pasta / "meta.json", bv._dump(meta))
     return {"meta": meta, "registros": registros, "resultado": resultado}
