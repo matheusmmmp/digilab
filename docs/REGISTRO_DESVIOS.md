@@ -399,3 +399,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-28 — DIGIBRAIN-MODULAR-REAVALIACAO (worker D, Claude Code, Opus 5.5, worktree `v2-modular-reavaliacao`): o registro da reavaliação, antes da primeira vida](registro/2026-10.md)
 - [2026-10-28 — DIGIBRAIN-MODULAR-REAVALIACAO-PROCESSOS (worker D, Claude Code, Opus 5.5, worktree `v2-modular-reavaliacao`): a reavaliação roda com 4 processos](registro/2026-10.md)
 - [2026-10-29 — DIGIBRAIN-MODULAR-DESCRITIVO-REAVALIACAO (worker D, Claude Code, Opus 5.5, worktree `v2-modular-descritivo-reav`): o descritivo da reavaliação, só com os artefatos](registro/2026-10.md)
+- [2026-10-29 — DIGIBRAIN-MODULAR-LONGE (Claude Code, Opus 5.5, worktree `v2-modular-longe`): a proposta para a falha no longe](registro/2026-10.md)
