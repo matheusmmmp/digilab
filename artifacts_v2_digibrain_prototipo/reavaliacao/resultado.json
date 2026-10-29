@@ -1,0 +1,6665 @@
+{
+  "D-1": {
+    "entropia_dia": {
+      "bruto": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": -0.00630290686015247,
+            "ic_superior": -0.00030916303154311187,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": -0.007031478566686527,
+            "ic_superior": 0.00024560267973773234,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.9732,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "g1": 0.16134649171146603,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": -0.006649405439187801,
+          "ic_superior": 9.324008556845951e-05,
+          "nivel": 0.95
+        },
+        "media": -0.0032780826768096707,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.9717891175802535,
+        "ressalva_assimetria": null,
+        "t": -1.9539967653326034,
+        "teste": "t sobre as unidades (A4.4.6)"
+      },
+      "dp_m4_con": 0.015863875544852826,
+      "padronizado": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": -0.3973119205538336,
+            "ic_superior": -0.019488493254312157,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": -0.4432383843913824,
+            "ic_superior": 0.015481883921953755,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.9732,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "g1": 0.16134649171146587,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": -0.41915390853814777,
+          "ic_superior": 0.005877509900076849,
+          "nivel": 0.95
+        },
+        "media": -0.20663819931903546,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.9717891175802535,
+        "ressalva_assimetria": null,
+        "t": -1.9539967653326034,
+        "teste": "t sobre as unidades (A4.4.6)"
+      }
+    },
+    "exploracao": {
+      "bruto": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": 0.0005890376984126982,
+            "ic_superior": 0.0029191468253968243,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.0004551091269841274,
+            "ic_superior": 0.0031622023809523793,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.0003,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "g1": -0.7210907397421195,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": 0.0003701179588687161,
+          "ic_superior": 0.0028888106125598547,
+          "nivel": 0.95
+        },
+        "media": 0.0016294642857142853,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.006140560624490995,
+        "ressalva_assimetria": "assimetria negativa: o erro do tipo I do t pode passar do nominal (A4.4.5; com g1 = -1, cerca de 1,8 vez)",
+        "t": 2.6001831335467567,
+        "teste": "t sobre as unidades (A4.4.6)"
+      },
+      "dp_m4_con": 0.0065441307546826805,
+      "padronizado": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": 0.09001007475151834,
+            "ic_superior": 0.4460709809791036,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.06954462617643635,
+            "ic_superior": 0.483211980244993,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.0003,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "g1": -0.7210907397421195,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": 0.05655723773610061,
+          "ic_superior": 0.44143534425756303,
+          "nivel": 0.95
+        },
+        "media": 0.24899629099683182,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.006140560624490995,
+        "ressalva_assimetria": "assimetria negativa: o erro do tipo I do t pode passar do nominal (A4.4.5; com g1 = -1, cerca de 1,8 vez)",
+        "t": 2.6001831335467567,
+        "teste": "t sobre as unidades (A4.4.6)"
+      }
+    },
+    "taxa_p1": {
+      "bruto": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": 0.1386115046725335,
+            "ic_superior": 0.9486078443255986,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.042171430109466036,
+            "ic_superior": 0.9967602446858125,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.0187,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "g1": 0.09598952489430669,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": 0.10281755356650901,
+          "ic_superior": 1.057481161748507,
+          "nivel": 0.95
+        },
+        "media": 0.580149357657508,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.009120807554985918,
+        "ressalva_assimetria": null,
+        "t": 2.442438934495768,
+        "teste": "t sobre as unidades (A4.4.6)"
+      },
+      "dp_m4_con": 2.4978407733011827,
+      "padronizado": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": 0.05549253025017384,
+            "ic_superior": 0.3797711425263928,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.016883153866421863,
+            "ic_superior": 0.3990487525625901,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.0187,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "g1": 0.09598952489430673,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": 0.041162573157385,
+          "ic_superior": 0.4233581151575665,
+          "nivel": 0.95
+        },
+        "media": 0.23226034415747573,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.009120807554985918,
+        "ressalva_assimetria": null,
+        "t": 2.442438934495768,
+        "teste": "t sobre as unidades (A4.4.6)"
+      }
+    },
+    "taxa_p2": {
+      "bruto": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": -0.11274511002408996,
+            "ic_superior": -0.08435989237261955,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": -0.11538295889983216,
+            "ic_superior": -0.08344962743230905,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 1.0,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "g1": 0.09010059028868099,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": -0.12386951752497474,
+          "ic_superior": -0.06791065889065276,
+          "nivel": 0.95
+        },
+        "media": -0.09589008820781375,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.9999999950390374,
+        "ressalva_assimetria": null,
+        "t": -6.887143571236842,
+        "teste": "t sobre as unidades (A4.4.6)"
+      },
+      "dp_m4_con": 0.11151129333470834,
+      "padronizado": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": -1.0110644998590252,
+            "ic_superior": -0.7565143390401535,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": -1.0347199413560988,
+            "ic_superior": -0.7483513547083489,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 1.0,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "g1": 0.09010059028868106,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": -1.1108248664390645,
+          "ic_superior": -0.6090025221644102,
+          "nivel": 0.95
+        },
+        "media": -0.8599136943017374,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.9999999950390374,
+        "ressalva_assimetria": null,
+        "t": -6.887143571236842,
+        "teste": "t sobre as unidades (A4.4.6)"
+      }
+    }
+  },
+  "D-2": {
+    "habito_menos_memoria": {
+      "bootstrap": {
+        "ic90": {
+          "ic_inferior": 0.5453619365658536,
+          "ic_superior": 0.9336540056380891,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.49951619709758366,
+          "ic_superior": 0.960335691206739,
+          "nivel": 0.95
+        },
+        "motivo": null,
+        "p_unilateral": 0.0,
+        "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+      },
+      "g1": 0.5012124591324877,
+      "gl": 49,
+      "ic95": {
+        "ic_inferior": 0.5710171022381736,
+        "ic_superior": 0.9503191854329291,
+        "nivel": 0.95
+      },
+      "media": 0.7606681438355514,
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 5,
+      "p_unilateral": 7.73046916255242e-11,
+      "ressalva_assimetria": null,
+      "t": 8.060171210502444,
+      "teste": "t sobre as unidades (A4.4.6)"
+    },
+    "por_lugar": {
+      "comedouro": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": 1.2392307727386938,
+            "ic_superior": 1.740504207878107,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 1.2001275664871436,
+            "ic_superior": 1.7796074141296572,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.0,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "g1": -0.26976010988602606,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": 1.279265026053289,
+          "ic_superior": 1.7222377385298597,
+          "nivel": 0.95
+        },
+        "media": 1.5007513822915743,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 1.405089558003125e-18,
+        "ressalva_assimetria": null,
+        "t": 13.616517360988162,
+        "teste": "t sobre as unidades (A4.4.6)"
+      },
+      "longe": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": -0.5898059886921403,
+            "ic_superior": -0.3514734992019718,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": -0.6067707988876304,
+            "ic_superior": -0.33098917305349623,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 1.0,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "g1": -0.030702736863853802,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": -0.6342946464193582,
+          "ic_superior": -0.3291641706880914,
+          "nivel": 0.95
+        },
+        "media": -0.48172940855372476,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.9999999657208068,
+        "ressalva_assimetria": null,
+        "t": -6.345295323952335,
+        "teste": "t sobre as unidades (A4.4.6)"
+      },
+      "perto": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": 1.0181530817347673,
+            "ic_superior": 1.7504130742770727,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.9214727160888496,
+            "ic_superior": 1.7876542720470312,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.0,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "g1": 0.34796691232649246,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": 0.9188459756048041,
+          "ic_superior": 1.8664451074886967,
+          "nivel": 0.95
+        },
+        "media": 1.3926455415467505,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 1.6283721725958395e-07,
+        "ressalva_assimetria": null,
+        "t": 5.906771967650341,
+        "teste": "t sobre as unidades (A4.4.6)"
+      }
+    }
+  },
+  "DX-5": {
+    "M2 - M1": {
+      "por_acao": {
+        "aliviar": {
+          "bootstrap": {
+            "ic90": null,
+            "ic95": null,
+            "motivo": "menos de 2 grupos com valor",
+            "p_unilateral": null,
+            "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+          },
+          "g1": null,
+          "gl": null,
+          "ic95": {
+            "ic_inferior": null,
+            "ic_superior": null,
+            "nivel": 0.95
+          },
+          "media": null,
+          "motivo": "menos de 2 valores",
+          "n": 0,
+          "n_grupos": 0,
+          "p_unilateral": null,
+          "ressalva_assimetria": null,
+          "t": null,
+          "teste": "t sobre as unidades (A4.4.6)"
+        },
+        "brincar": {
+          "bootstrap": {
+            "ic90": null,
+            "ic95": null,
+            "motivo": "menos de 2 grupos com valor",
+            "p_unilateral": null,
+            "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+          },
+          "g1": null,
+          "gl": null,
+          "ic95": {
+            "ic_inferior": null,
+            "ic_superior": null,
+            "nivel": 0.95
+          },
+          "media": null,
+          "motivo": "menos de 2 valores",
+          "n": 0,
+          "n_grupos": 0,
+          "p_unilateral": null,
+          "ressalva_assimetria": null,
+          "t": null,
+          "teste": "t sobre as unidades (A4.4.6)"
+        },
+        "comer": {
+          "bootstrap": {
+            "ic90": {
+              "ic_inferior": 0.007373417742753804,
+              "ic_superior": 0.039168863168418055,
+              "nivel": 0.9
+            },
+            "ic95": {
+              "ic_inferior": 0.0021900236163342845,
+              "ic_superior": 0.04104782110630173,
+              "nivel": 0.95
+            },
+            "motivo": null,
+            "p_unilateral": 0.0103,
+            "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+          },
+          "g1": 0.0899515404475824,
+          "gl": 49,
+          "ic95": {
+            "ic_inferior": 0.0027020982380929585,
+            "ic_superior": 0.045647371084447205,
+            "nivel": 0.95
+          },
+          "media": 0.024174734661270084,
+          "motivo": null,
+          "n": 50,
+          "n_grupos": 5,
+          "p_unilateral": 0.014068785190764843,
+          "ressalva_assimetria": null,
+          "t": 2.2624584695627297,
+          "teste": "t sobre as unidades (A4.4.6)"
+        },
+        "explorar": {
+          "bootstrap": {
+            "ic90": {
+              "ic_inferior": -0.022777383775571987,
+              "ic_superior": -0.012176832998800227,
+              "nivel": 0.9
+            },
+            "ic95": {
+              "ic_inferior": -0.023787038122675047,
+              "ic_superior": -0.01110974564641745,
+              "nivel": 0.95
+            },
+            "motivo": null,
+            "p_unilateral": 1.0,
+            "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+          },
+          "g1": -0.7624152346983151,
+          "gl": 49,
+          "ic95": {
+            "ic_inferior": -0.026324498186817424,
+            "ic_superior": -0.008591695114080486,
+            "nivel": 0.95
+          },
+          "media": -0.017458096650448954,
+          "motivo": null,
+          "n": 50,
+          "n_grupos": 5,
+          "p_unilateral": 0.9998776128481192,
+          "ressalva_assimetria": "assimetria negativa: o erro do tipo I do t pode passar do nominal (A4.4.5; com g1 = -1, cerca de 1,8 vez)",
+          "t": -3.9568880985420263,
+          "teste": "t sobre as unidades (A4.4.6)"
+        }
+      },
+      "por_lugar": {
+        "comedouro": {
+          "bootstrap": {
+            "ic90": {
+              "ic_inferior": 0.0008046108870830751,
+              "ic_superior": 0.025501741064198478,
+              "nivel": 0.9
+            },
+            "ic95": {
+              "ic_inferior": -0.0012644214166114029,
+              "ic_superior": 0.027658470016249347,
+              "nivel": 0.95
+            },
+            "motivo": null,
+            "p_unilateral": 0.037,
+            "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+          },
+          "g1": 0.23404603920039677,
+          "gl": 49,
+          "ic95": {
+            "ic_inferior": -0.00300489980504302,
+            "ic_superior": 0.029118992132969767,
+            "nivel": 0.95
+          },
+          "media": 0.013057046163963373,
+          "motivo": null,
+          "n": 50,
+          "n_grupos": 5,
+          "p_unilateral": 0.054374286050951404,
+          "ressalva_assimetria": null,
+          "t": 1.6336200290914868,
+          "teste": "t sobre as unidades (A4.4.6)"
+        },
+        "longe": {
+          "bootstrap": {
+            "ic90": {
+              "ic_inferior": -0.09145154652564194,
+              "ic_superior": -0.07915566412746208,
+              "nivel": 0.9
+            },
+            "ic95": {
+              "ic_inferior": -0.09265542500331225,
+              "ic_superior": -0.07842906633340571,
+              "nivel": 0.95
+            },
+            "motivo": null,
+            "p_unilateral": 1.0,
+            "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+          },
+          "g1": 0.004565135098991286,
+          "gl": 49,
+          "ic95": {
+            "ic_inferior": -0.09983332942904746,
+            "ic_superior": -0.06984944988789982,
+            "nivel": 0.95
+          },
+          "media": -0.08484138965847364,
+          "motivo": null,
+          "n": 50,
+          "n_grupos": 5,
+          "p_unilateral": 0.9999999999999988,
+          "ressalva_assimetria": null,
+          "t": -11.372454689015568,
+          "teste": "t sobre as unidades (A4.4.6)"
+        },
+        "perto": {
+          "bootstrap": {
+            "ic90": {
+              "ic_inferior": -0.00012306493048016204,
+              "ic_superior": 0.015878068808118807,
+              "nivel": 0.9
+            },
+            "ic95": {
+              "ic_inferior": -0.0017115243829171297,
+              "ic_superior": 0.016675153600463597,
+              "nivel": 0.95
+            },
+            "motivo": null,
+            "p_unilateral": 0.0533,
+            "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+          },
+          "g1": 0.29309530099192466,
+          "gl": 49,
+          "ic95": {
+            "ic_inferior": -0.004753967182469378,
+            "ic_superior": 0.020907513456280415,
+            "nivel": 0.95
+          },
+          "media": 0.008076773136905519,
+          "motivo": null,
+          "n": 50,
+          "n_grupos": 5,
+          "p_unilateral": 0.1059272566429178,
+          "ressalva_assimetria": null,
+          "t": 1.2649997496502003,
+          "teste": "t sobre as unidades (A4.4.6)"
+        }
+      },
+      "total": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": -0.027001417747019432,
+            "ic_superior": -0.015193504058502703,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": -0.02756766496265054,
+            "ic_superior": -0.014627210087629579,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 1.0,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "g1": -0.5732403676273671,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": -0.028516931173486235,
+          "ic_superior": -0.013677943876793885,
+          "nivel": 0.95
+        },
+        "media": -0.02109743752514006,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.9999996785144979,
+        "ressalva_assimetria": "assimetria negativa: o erro do tipo I do t pode passar do nominal (A4.4.5; com g1 = -1, cerca de 1,8 vez)",
+        "t": -5.714256258828796,
+        "teste": "t sobre as unidades (A4.4.6)"
+      }
+    },
+    "aviso": "exploratoria (A3.5): sem gate, sem Holm, sem sinal esperado; o G-ABLA-P2 usa o indice de hoje",
+    "indice_de_hoje, M2 - M1": {
+      "bootstrap": {
+        "ic90": {
+          "ic_inferior": -0.02228504846437716,
+          "ic_superior": -0.0124979347302949,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.02296198681154441,
+          "ic_superior": -0.011754370707305093,
+          "nivel": 0.95
+        },
+        "motivo": null,
+        "p_unilateral": 1.0,
+        "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+      },
+      "g1": 0.6216942935773777,
+      "gl": 49,
+      "ic95": {
+        "ic_inferior": -0.021674729612120525,
+        "ic_superior": -0.013446722756135156,
+        "nivel": 0.95
+      },
+      "media": -0.01756072618412784,
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 5,
+      "p_unilateral": 0.9999999999873416,
+      "ressalva_assimetria": null,
+      "t": -8.5779219933341,
+      "teste": "t sobre as unidades (A4.4.6)"
+    },
+    "nivel": {
+      "M0": {
+        "por_acao": {
+          "aliviar": null,
+          "brincar": 0.0,
+          "comer": -0.12963776833473042,
+          "explorar": 0.03782039397179699
+        },
+        "total": 0.010418306599038194
+      },
+      "M1": {
+        "por_acao": {
+          "aliviar": null,
+          "brincar": 0.025267714741398956,
+          "comer": -0.06834174831671411,
+          "explorar": 0.02477059706831371
+        },
+        "total": 0.002133552602953793
+      },
+      "M2": {
+        "por_acao": {
+          "aliviar": null,
+          "brincar": 0.048758019777111625,
+          "comer": -0.05604347841156638,
+          "explorar": 0.00695898749044463
+        },
+        "total": -0.01928668875155969
+      },
+      "M3": {
+        "por_acao": {
+          "aliviar": null,
+          "brincar": 0.06380775657091446,
+          "comer": -0.07513443247778714,
+          "explorar": 0.04408204798981779
+        },
+        "total": 0.011486654878002194
+      },
+      "M3-420": {
+        "por_acao": {
+          "aliviar": null,
+          "brincar": 0.1040909090909091,
+          "comer": -0.053480323603280165,
+          "explorar": 0.043593098094545535
+        },
+        "total": 0.013201793710936412
+      },
+      "M3-sem-inato": {
+        "por_acao": {
+          "aliviar": null,
+          "brincar": 0.09960372960372961,
+          "comer": -0.051668961548987404,
+          "explorar": 0.04408142922596003
+        },
+        "total": 0.01315248885788906
+      },
+      "M3-sem-intencao": {
+        "por_acao": {
+          "aliviar": null,
+          "brincar": 0.008312489979156647,
+          "comer": -0.03961060747815141,
+          "explorar": 0.043038052065381485
+        },
+        "total": 0.016728938634077067
+      },
+      "M3-sp": {
+        "por_acao": {
+          "aliviar": null,
+          "brincar": -0.03949220713926596,
+          "comer": -0.030027832296544668,
+          "explorar": 0.047547978348835285
+        },
+        "total": 0.019619799111372762
+      },
+      "M4": {
+        "por_acao": {
+          "aliviar": null,
+          "brincar": 0.017660565345862658,
+          "comer": -0.01617582241856827,
+          "explorar": 0.04343123052818307
+        },
+        "total": 0.011379451343919312
+      },
+      "M4-con": {
+        "por_acao": {
+          "aliviar": null,
+          "brincar": 0.049531300955240457,
+          "comer": 0.0023328947291639253,
+          "explorar": 0.041549938126785556
+        },
+        "total": 0.0098724670153223
+      },
+      "M4-emb": {
+        "por_acao": {
+          "aliviar": null,
+          "brincar": 0.04086391338038152,
+          "comer": -0.014131070169999703,
+          "explorar": 0.04725773925037171
+        },
+        "total": 0.012780132040737906
+      }
+    }
+  },
+  "G-ABLA": {
+    "G-ABLA-MEM": {
+      "bootstrap": {
+        "ic90": {
+          "ic_inferior": 0.11614174347325182,
+          "ic_superior": 0.15558442666130923,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.11539433107439334,
+          "ic_superior": 0.1575210247368387,
+          "nivel": 0.95
+        },
+        "motivo": null,
+        "p_unilateral": 0.0,
+        "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+      },
+      "celulas": 4,
+      "contraste": "medida(M3) - (M2)",
+      "g1": 0.07127209110114581,
+      "gl": 49,
+      "holm": {
+        "limiar": 0.016666666666666666,
+        "ordem": 2,
+        "p": 4.113207641548498e-18,
+        "p_ajustado": 1.2339622924645493e-17,
+        "rejeita": true
+      },
+      "ic95": {
+        "ic_inferior": 0.1150184318981495,
+        "ic_superior": 0.15616623029399032,
+        "nivel": 0.95
+      },
+      "media": 0.1355923310960699,
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 5,
+      "p_unilateral": 4.113207641548498e-18,
+      "premissa_g_pesa": true,
+      "ressalva_assimetria": null,
+      "t": 13.244110330959199,
+      "teste": "t sobre as unidades (A4.4.6)"
+    },
+    "G-ABLA-P1": {
+      "bootstrap": {
+        "ic90": {
+          "ic_inferior": 0.03768734980459367,
+          "ic_superior": 0.0474495832090214,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.03728682431968304,
+          "ic_superior": 0.04790319679307245,
+          "nivel": 0.95
+        },
+        "motivo": null,
+        "p_unilateral": 0.0,
+        "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+      },
+      "celulas": 12,
+      "contraste": "falta_ao_comer(M0) - (M1)",
+      "g1": -0.03802147508440549,
+      "gl": 49,
+      "holm": {
+        "limiar": 0.0125,
+        "ordem": 1,
+        "p": 3.4480250114369224e-21,
+        "p_ajustado": 1.379210004574769e-20,
+        "rejeita": true
+      },
+      "ic95": {
+        "ic_inferior": 0.03731699850108165,
+        "ic_superior": 0.048177539140381004,
+        "nivel": 0.95
+      },
+      "media": 0.04274726882073133,
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 5,
+      "p_unilateral": 3.4480250114369224e-21,
+      "premissa_g_pesa": true,
+      "ressalva_assimetria": null,
+      "t": 15.819443199024837,
+      "teste": "t sobre as unidades (A4.4.6)"
+    },
+    "G-ABLA-P2": {
+      "bootstrap": {
+        "ic90": {
+          "ic_inferior": -0.02228504846437716,
+          "ic_superior": -0.0124979347302949,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.02296198681154441,
+          "ic_superior": -0.011754370707305093,
+          "nivel": 0.95
+        },
+        "motivo": null,
+        "p_unilateral": 1.0,
+        "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+      },
+      "celulas": 12,
+      "contraste": "medida(M2) - (M1)",
+      "g1": 0.6216942935773777,
+      "gl": 49,
+      "holm": {
+        "limiar": 0.05,
+        "ordem": 4,
+        "p": 0.9999999999873416,
+        "p_ajustado": 0.9999999999873416,
+        "rejeita": false
+      },
+      "ic95": {
+        "ic_inferior": -0.021674729612120525,
+        "ic_superior": -0.013446722756135156,
+        "nivel": 0.95
+      },
+      "media": -0.01756072618412784,
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 5,
+      "p_unilateral": 0.9999999999873416,
+      "premissa_g_pesa": true,
+      "ressalva_assimetria": null,
+      "t": -8.5779219933341,
+      "teste": "t sobre as unidades (A4.4.6)"
+    },
+    "G-ABLA-PERS": {
+      "bootstrap": {
+        "ic90": {
+          "ic_inferior": -0.0009055563629777378,
+          "ic_superior": 0.008189748810803667,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.0018422973791725242,
+          "ic_superior": 0.008638843516820444,
+          "nivel": 0.95
+        },
+        "motivo": null,
+        "p_unilateral": 0.0991,
+        "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+      },
+      "celulas": 12,
+      "contraste": "intencoes_com_meta(M3) - (M3-sp)",
+      "g1": -0.3628438629451275,
+      "gl": 49,
+      "holm": {
+        "limiar": 0.025,
+        "ordem": 3,
+        "p": 0.10482870449205561,
+        "p_ajustado": 0.20965740898411123,
+        "rejeita": false
+      },
+      "ic95": {
+        "ic_inferior": -0.0019192125535524946,
+        "ic_superior": 0.008527576783993563,
+        "nivel": 0.95
+      },
+      "media": 0.0033041821152205346,
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 5,
+      "p_unilateral": 0.10482870449205561,
+      "premissa_g_pesa": false,
+      "ressalva_assimetria": null,
+      "t": 1.271204452041191,
+      "teste": "t sobre as unidades (A4.4.6)"
+    }
+  },
+  "G-DX": {
+    "longe": {
+      "contrastes": {
+        "G-DX-INATO": {
+          "bootstrap": {
+            "ic90": {
+              "ic_inferior": -0.014468374783970754,
+              "ic_superior": 0.04026655226868076,
+              "nivel": 0.9
+            },
+            "ic95": {
+              "ic_inferior": -0.019004141670163337,
+              "ic_superior": 0.04480231915487334,
+              "nivel": 0.95
+            },
+            "motivo": null,
+            "p_unilateral": 0.2224,
+            "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+          },
+          "celulas": 4,
+          "contraste": "medida(M3) - (M3-sem-inato)",
+          "g1": -0.00845485805510022,
+          "gl": 49,
+          "holm": {
+            "limiar": 0.025,
+            "ordem": 1,
+            "p": 0.16233438175636905,
+            "p_ajustado": 0.3246687635127381,
+            "rejeita": false
+          },
+          "ic95": {
+            "ic_inferior": -0.013155261183487883,
+            "ic_superior": 0.03895343866819788,
+            "nivel": 0.95
+          },
+          "media": 0.012899088742355,
+          "motivo": null,
+          "n": 50,
+          "n_grupos": 5,
+          "p_unilateral": 0.16233438175636905,
+          "ressalva_assimetria": null,
+          "t": 0.9949083125063061,
+          "teste": "t sobre as unidades (A4.4.6)"
+        },
+        "G-DX-INTENCAO": {
+          "bootstrap": {
+            "ic90": {
+              "ic_inferior": -0.018802274114774115,
+              "ic_superior": 0.014965455253380952,
+              "nivel": 0.9
+            },
+            "ic95": {
+              "ic_inferior": -0.023108426811406683,
+              "ic_superior": 0.018565675939127956,
+              "nivel": 0.95
+            },
+            "motivo": null,
+            "p_unilateral": 0.3917,
+            "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+          },
+          "celulas": 4,
+          "contraste": "medida(M3) - (M3-sem-intencao)",
+          "g1": 0.5245113134379891,
+          "gl": 49,
+          "holm": {
+            "limiar": 0.05,
+            "ordem": 2,
+            "p": 0.4798719451323253,
+            "p_ajustado": 0.4798719451323253,
+            "rejeita": false
+          },
+          "ic95": {
+            "ic_inferior": -0.020376391996346468,
+            "ic_superior": 0.021431885221731343,
+            "nivel": 0.95
+          },
+          "media": 0.0005277466126924388,
+          "motivo": null,
+          "n": 50,
+          "n_grupos": 5,
+          "p_unilateral": 0.4798719451323253,
+          "ressalva_assimetria": null,
+          "t": 0.05073380655287955,
+          "teste": "t sobre as unidades (A4.4.6)"
+        }
+      },
+      "interacao": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": -0.024448275816890356,
+            "ic_superior": 0.033120982109565704,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": -0.02937991886424548,
+            "ic_superior": 0.0378795114199526,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.3039,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "g1": 0.3354838621113398,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": -0.029958272764987543,
+          "ic_superior": 0.04321809567341728,
+          "nivel": 0.95
+        },
+        "media": 0.006629911454214866,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.3586592092214942,
+        "ressalva_assimetria": null,
+        "t": 0.3641423089740891,
+        "teste": "t sobre as unidades (A4.4.6)"
+      },
+      "quatro_bracos": {
+        "M3": {
+          "bootstrap": {
+            "ic90": {
+              "ic_inferior": 0.42062462659889127,
+              "ic_superior": 0.4469965983663739,
+              "nivel": 0.9
+            },
+            "ic95": {
+              "ic_inferior": 0.41842978304375367,
+              "ic_superior": 0.4494697501715691,
+              "nivel": 0.95
+            },
+            "motivo": null,
+            "p_unilateral": 0.0,
+            "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+          },
+          "g1": 0.2063476704849915,
+          "gl": 49,
+          "ic95": {
+            "ic_inferior": 0.4153773871728799,
+            "ic_superior": 0.45252214604244273,
+            "nivel": 0.95
+          },
+          "media": 0.4339497666076613,
+          "motivo": null,
+          "n": 50,
+          "n_grupos": 5,
+          "p_unilateral": 1.0518683961916782e-42,
+          "ressalva_assimetria": null,
+          "t": 46.95438773448866,
+          "teste": "t sobre as unidades (A4.4.6)"
+        },
+        "M3-420": {
+          "bootstrap": {
+            "ic90": {
+              "ic_inferior": 0.4161643932263127,
+              "ic_superior": 0.4389077055125816,
+              "nivel": 0.9
+            },
+            "ic95": {
+              "ic_inferior": 0.4141214043524415,
+              "ic_superior": 0.4410976916100755,
+              "nivel": 0.95
+            },
+            "motivo": null,
+            "p_unilateral": 0.0,
+            "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+          },
+          "g1": 0.20578235028336783,
+          "gl": 49,
+          "ic95": {
+            "ic_inferior": 0.4102472434035533,
+            "ic_superior": 0.4440584420101043,
+            "nivel": 0.95
+          },
+          "media": 0.4271528427068288,
+          "motivo": null,
+          "n": 50,
+          "n_grupos": 5,
+          "p_unilateral": 2.453622334208275e-44,
+          "ressalva_assimetria": null,
+          "t": 50.77582638591737,
+          "teste": "t sobre as unidades (A4.4.6)"
+        },
+        "M3-sem-inato": {
+          "bootstrap": {
+            "ic90": {
+              "ic_inferior": 0.4051749351010187,
+              "ic_superior": 0.4353713096329195,
+              "nivel": 0.9
+            },
+            "ic95": {
+              "ic_inferior": 0.40241976410242664,
+              "ic_superior": 0.4377707027879241,
+              "nivel": 0.95
+            },
+            "motivo": null,
+            "p_unilateral": 0.0,
+            "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+          },
+          "g1": 0.1546754230771339,
+          "gl": 49,
+          "ic95": {
+            "ic_inferior": 0.397571789564223,
+            "ic_superior": 0.4445295661663896,
+            "nivel": 0.95
+          },
+          "media": 0.4210506778653063,
+          "motivo": null,
+          "n": 50,
+          "n_grupos": 5,
+          "p_unilateral": 3.131637832300351e-37,
+          "ressalva_assimetria": null,
+          "t": 36.038035743607125,
+          "teste": "t sobre as unidades (A4.4.6)"
+        },
+        "M3-sem-intencao": {
+          "bootstrap": {
+            "ic90": {
+              "ic_inferior": 0.4158871059925627,
+              "ic_superior": 0.44821975985830476,
+              "nivel": 0.9
+            },
+            "ic95": {
+              "ic_inferior": 0.4113709950180538,
+              "ic_superior": 0.4498030968644359,
+              "nivel": 0.95
+            },
+            "motivo": null,
+            "p_unilateral": 0.0,
+            "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+          },
+          "g1": -0.398796230124679,
+          "gl": 49,
+          "ic95": {
+            "ic_inferior": 0.41245246005630737,
+            "ic_superior": 0.4543915799336305,
+            "nivel": 0.95
+          },
+          "media": 0.43342201999496893,
+          "motivo": null,
+          "n": 50,
+          "n_grupos": 5,
+          "p_unilateral": 3.701533304104573e-40,
+          "ressalva_assimetria": null,
+          "t": 41.53612003094883,
+          "teste": "t sobre as unidades (A4.4.6)"
+        }
+      }
+    },
+    "principal": "longe",
+    "todas": {
+      "contrastes": {
+        "G-DX-INATO": {
+          "bootstrap": {
+            "ic90": {
+              "ic_inferior": -0.010924745012354598,
+              "ic_superior": 0.024479330083010432,
+              "nivel": 0.9
+            },
+            "ic95": {
+              "ic_inferior": -0.013711804640212101,
+              "ic_superior": 0.027216665435872627,
+              "nivel": 0.95
+            },
+            "motivo": null,
+            "p_unilateral": 0.2385,
+            "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+          },
+          "celulas": 12,
+          "contraste": "medida(M3) - (M3-sem-inato)",
+          "g1": -0.18635502937011983,
+          "gl": 49,
+          "holm": {
+            "limiar": 0.025,
+            "ordem": 1,
+            "p": 0.16070998573043765,
+            "p_ajustado": 0.3214199714608753,
+            "rejeita": false
+          },
+          "ic95": {
+            "ic_inferior": -0.007657523501738479,
+            "ic_superior": 0.022878086089005926,
+            "nivel": 0.95
+          },
+          "media": 0.007610281293633724,
+          "motivo": null,
+          "n": 50,
+          "n_grupos": 5,
+          "p_unilateral": 0.16070998573043765,
+          "ressalva_assimetria": null,
+          "t": 1.00167856743294,
+          "teste": "t sobre as unidades (A4.4.6)"
+        },
+        "G-DX-INTENCAO": {
+          "bootstrap": {
+            "ic90": {
+              "ic_inferior": -0.004442681421414688,
+              "ic_superior": 0.006304944360533704,
+              "nivel": 0.9
+            },
+            "ic95": {
+              "ic_inferior": -0.005135147520241161,
+              "ic_superior": 0.006814060758725815,
+              "nivel": 0.95
+            },
+            "motivo": null,
+            "p_unilateral": 0.4073,
+            "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+          },
+          "celulas": 12,
+          "contraste": "medida(M3) - (M3-sem-intencao)",
+          "g1": -0.629591234234362,
+          "gl": 49,
+          "holm": {
+            "limiar": 0.05,
+            "ordem": 2,
+            "p": 0.43756309510557684,
+            "p_ajustado": 0.43756309510557684,
+            "rejeita": false
+          },
+          "ic95": {
+            "ic_inferior": -0.009630522219999407,
+            "ic_superior": 0.011273831209253213,
+            "nivel": 0.95
+          },
+          "media": 0.0008216544946269035,
+          "motivo": null,
+          "n": 50,
+          "n_grupos": 5,
+          "p_unilateral": 0.43756309510557684,
+          "ressalva_assimetria": "assimetria negativa: o erro do tipo I do t pode passar do nominal (A4.4.5; com g1 = -1, cerca de 1,8 vez)",
+          "t": 0.1579744172874136,
+          "teste": "t sobre as unidades (A4.4.6)"
+        }
+      },
+      "interacao": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": -0.010761518797034747,
+            "ic_superior": 0.013594662043491164,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": -0.012992892648364094,
+            "ic_superior": 0.016186334526181595,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.3793,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "g1": 0.2191958357330407,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": -0.015893253244061867,
+          "ic_superior": 0.019086695121879372,
+          "nivel": 0.95
+        },
+        "media": 0.0015967209389087511,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.4275966297473769,
+        "ressalva_assimetria": null,
+        "t": 0.18346115470890767,
+        "teste": "t sobre as unidades (A4.4.6)"
+      },
+      "quatro_bracos": {
+        "M3": {
+          "bootstrap": {
+            "ic90": {
+              "ic_inferior": 0.7284464032715486,
+              "ic_superior": 0.7442031359048633,
+              "nivel": 0.9
+            },
+            "ic95": {
+              "ic_inferior": 0.727598239584612,
+              "ic_superior": 0.7451245385571755,
+              "nivel": 0.95
+            },
+            "motivo": null,
+            "p_unilateral": 0.0,
+            "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+          },
+          "g1": 0.021935378154276233,
+          "gl": 49,
+          "ic95": {
+            "ic_inferior": 0.7263729822892583,
+            "ic_superior": 0.7456066693531388,
+            "nivel": 0.95
+          },
+          "media": 0.7359898258211985,
+          "motivo": null,
+          "n": 50,
+          "n_grupos": 5,
+          "p_unilateral": 9.584720090532977e-68,
+          "ressalva_assimetria": null,
+          "t": 153.79546561583118,
+          "teste": "t sobre as unidades (A4.4.6)"
+        },
+        "M3-420": {
+          "bootstrap": {
+            "ic90": {
+              "ic_inferior": 0.7220670782194822,
+              "ic_superior": 0.7337743711004262,
+              "nivel": 0.9
+            },
+            "ic95": {
+              "ic_inferior": 0.7211721449890072,
+              "ic_superior": 0.7345131387032567,
+              "nivel": 0.95
+            },
+            "motivo": null,
+            "p_unilateral": 0.0,
+            "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+          },
+          "g1": -0.1302426395459574,
+          "gl": 49,
+          "ic95": {
+            "ic_inferior": 0.7183860989658778,
+            "ic_superior": 0.7399231229778157,
+            "nivel": 0.95
+          },
+          "media": 0.7291546109718468,
+          "motivo": null,
+          "n": 50,
+          "n_grupos": 5,
+          "p_unilateral": 3.812313094806266e-65,
+          "ressalva_assimetria": null,
+          "t": 136.0718221269026,
+          "teste": "t sobre as unidades (A4.4.6)"
+        },
+        "M3-sem-inato": {
+          "bootstrap": {
+            "ic90": {
+              "ic_inferior": 0.7178120226146949,
+              "ic_superior": 0.7392565384754819,
+              "nivel": 0.9
+            },
+            "ic95": {
+              "ic_inferior": 0.7169864704689907,
+              "ic_superior": 0.7424676799468078,
+              "nivel": 0.95
+            },
+            "motivo": null,
+            "p_unilateral": 0.0,
+            "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+          },
+          "g1": -0.15753386237846023,
+          "gl": 49,
+          "ic95": {
+            "ic_inferior": 0.7158660424779286,
+            "ic_superior": 0.7408930465772012,
+            "nivel": 0.95
+          },
+          "media": 0.7283795445275649,
+          "motivo": null,
+          "n": 50,
+          "n_grupos": 5,
+          "p_unilateral": 6.1664523178245666e-62,
+          "ressalva_assimetria": null,
+          "t": 116.97233037626059,
+          "teste": "t sobre as unidades (A4.4.6)"
+        },
+        "M3-sem-intencao": {
+          "bootstrap": {
+            "ic90": {
+              "ic_inferior": 0.729703903538676,
+              "ic_superior": 0.7411339208097726,
+              "nivel": 0.9
+            },
+            "ic95": {
+              "ic_inferior": 0.7287600595724036,
+              "ic_superior": 0.7427512265396627,
+              "nivel": 0.95
+            },
+            "motivo": null,
+            "p_unilateral": 0.0,
+            "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+          },
+          "g1": -0.45910788175564454,
+          "gl": 49,
+          "ic95": {
+            "ic_inferior": 0.7248201589800591,
+            "ic_superior": 0.7455161836730841,
+            "nivel": 0.95
+          },
+          "media": 0.7351681713265716,
+          "motivo": null,
+          "n": 50,
+          "n_grupos": 5,
+          "p_unilateral": 3.6415465841268637e-66,
+          "ressalva_assimetria": null,
+          "t": 142.76903648277593,
+          "teste": "t sobre as unidades (A4.4.6)"
+        }
+      }
+    }
+  },
+  "G-ELEGIVEL": {
+    "frac_vidas": 1.0,
+    "passa": true,
+    "vidas": 600
+  },
+  "G-ELEGIVEL-EP": {
+    "frac_vidas": 1.0,
+    "passa": true,
+    "vidas": 600
+  },
+  "G-MOD": {
+    "G-MOD-CON": {
+      "bootstrap": {
+        "ic90": {
+          "ic_inferior": -0.004491030299272492,
+          "ic_superior": 0.007303234747023809,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.0053153228339947135,
+          "ic_superior": 0.007644460496582889,
+          "nivel": 0.95
+        },
+        "motivo": null,
+        "p_unilateral": 0.3473,
+        "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+      },
+      "celulas": 12,
+      "contraste": "d_fe(M4-con) - (M4)",
+      "g1": 0.2922430620717322,
+      "gl": 49,
+      "holm": {
+        "limiar": 0.05,
+        "ordem": 2,
+        "p": 0.3233706208147082,
+        "p_ajustado": 0.3438670726368722,
+        "rejeita": false
+      },
+      "ic95": {
+        "ic_inferior": -0.0037410202241542363,
+        "ic_superior": 0.005969225967099555,
+        "nivel": 0.95
+      },
+      "media": 0.0011141028714726595,
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 5,
+      "p_unilateral": 0.3233706208147082,
+      "ressalva_assimetria": null,
+      "t": 0.4611363086020688,
+      "teste": "t sobre as unidades (A4.4.6)"
+    },
+    "G-MOD-EMB": {
+      "bootstrap": {
+        "ic90": {
+          "ic_inferior": -0.00018924320712081208,
+          "ic_superior": 0.0032252322393077565,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.0005504062637786576,
+          "ic_superior": 0.0036308690889550223,
+          "nivel": 0.95
+        },
+        "motivo": null,
+        "p_unilateral": 0.1213,
+        "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+      },
+      "celulas": 12,
+      "contraste": "d_fe(M4-emb) - (M4)",
+      "g1": -0.5480325794823767,
+      "gl": 4,
+      "holm": {
+        "limiar": 0.025,
+        "ordem": 1,
+        "p": 0.1719335363184361,
+        "p_ajustado": 0.3438670726368722,
+        "rejeita": false
+      },
+      "ic95": {
+        "ic_inferior": -0.001987629603640099,
+        "ic_superior": 0.0044899770738781935,
+        "nivel": 0.95
+      },
+      "media": 0.0012511737351190472,
+      "medias_base": [
+        0.0005841107942019372,
+        0.005630441537147261,
+        -0.0013966738315696634,
+        0.0008064797591490373,
+        0.0006315104166666646
+      ],
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 5,
+      "p_unilateral": 0.1719335363184361,
+      "ressalva_assimetria": "assimetria negativa: o erro do tipo I do t pode passar do nominal (A4.4.5; com g1 = -1, cerca de 1,8 vez)",
+      "t": 1.0725613225884256,
+      "teste": "t sobre as medias de base (A4.4.2)"
+    }
+  },
+  "G-MVP": {
+    "aviso": "estimativa, sem passa nem falha (A4.2); a referencia nao e gate",
+    "estimativa": 0.405,
+    "ic95": {
+      "ic_inferior": 0.38709088819336995,
+      "ic_superior": 0.4229091118066301,
+      "nivel": 0.95
+    },
+    "ic95_metodo": "t sobre as unidades (A4.4.6)",
+    "ic95_percentil": {
+      "ic_inferior": 0.38833333333333336,
+      "ic_superior": 0.41833333333333333,
+      "nivel": 0.95
+    },
+    "ic95_percentil_rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)",
+    "medida": "a fracao de vidas do M3 com a taxa de fechamento >= 0,5 (media das celulas por unidade)",
+    "motivo": null,
+    "n": 50,
+    "n_grupos": 5,
+    "papel": "secundaria obrigatoria (A3.3): o G-MVP pre-registrado, por racao, como estimativa (A4.2)",
+    "posicao": "o IC95 inteiro abaixo de 0,8",
+    "referencia": 0.8,
+    "vidas_sem_elegivel": 0
+  },
+  "G-MVP-EP": {
+    "aviso": "estimativa, sem passa nem falha (A4.2); a referencia nao e gate",
+    "estimativa": 0.8083333333333332,
+    "ic95": {
+      "ic_inferior": 0.7909167517177644,
+      "ic_superior": 0.825749914948902,
+      "nivel": 0.95
+    },
+    "ic95_metodo": "t sobre as unidades (A4.4.6)",
+    "ic95_percentil": {
+      "ic_inferior": 0.7966666666666667,
+      "ic_superior": 0.8216666666666668,
+      "nivel": 0.95
+    },
+    "ic95_percentil_rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)",
+    "medida": "a fracao de vidas do M3 com a taxa de fechamento dos episodios de fome >= 0,5 (media das celulas por unidade; A3.3)",
+    "motivo": null,
+    "n": 50,
+    "n_grupos": 5,
+    "posicao": "o IC95 contem 0,8",
+    "referencia": 0.8,
+    "vidas_sem_episodio": 0
+  },
+  "G-PESA": {
+    "habito": {
+      "bootstrap": {
+        "ic90": {
+          "ic_inferior": 0.08054315476190477,
+          "ic_superior": 0.08301339285714286,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.08039434523809524,
+          "ic_superior": 0.08307291666666666,
+          "nivel": 0.95
+        },
+        "motivo": null,
+        "p_unilateral": 0.0,
+        "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+      },
+      "braco": "M2",
+      "g1": 0.09408830462749182,
+      "gl": 49,
+      "ic95": {
+        "ic_inferior": 0.07925472097787944,
+        "ic_superior": 0.08421254092688246,
+        "nivel": 0.95
+      },
+      "media": 0.08173363095238095,
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 5,
+      "p_unilateral": 6.406866143345022e-50,
+      "passa": true,
+      "ressalva_assimetria": null,
+      "t": 66.258913188485,
+      "teste": "t sobre as unidades (A4.4.6)"
+    },
+    "incentivo": {
+      "bootstrap": {
+        "ic90": {
+          "ic_inferior": 0.018521825396825394,
+          "ic_superior": 0.01984375,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.018484623015873013,
+          "ic_superior": 0.019866071428571427,
+          "nivel": 0.95
+        },
+        "motivo": null,
+        "p_unilateral": 0.0,
+        "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+      },
+      "braco": "M1",
+      "g1": -0.2953572099041958,
+      "gl": 49,
+      "ic95": {
+        "ic_inferior": 0.018511035041031642,
+        "ic_superior": 0.01986198083198423,
+        "nivel": 0.95
+      },
+      "media": 0.019186507936507936,
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 5,
+      "p_unilateral": 8.70097145331774e-47,
+      "passa": true,
+      "ressalva_assimetria": null,
+      "t": 57.0810931044134,
+      "teste": "t sobre as unidades (A4.4.6)"
+    },
+    "memoria": {
+      "bootstrap": {
+        "ic90": {
+          "ic_inferior": 0.10669394841269841,
+          "ic_superior": 0.11326636904761905,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.1059499007936508,
+          "ic_superior": 0.11361607142857143,
+          "nivel": 0.95
+        },
+        "motivo": null,
+        "p_unilateral": 0.0,
+        "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+      },
+      "braco": "M3",
+      "g1": -0.35758458338536087,
+      "gl": 49,
+      "ic95": {
+        "ic_inferior": 0.10619898091113936,
+        "ic_superior": 0.11393990797774953,
+        "nivel": 0.95
+      },
+      "media": 0.11006944444444444,
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 5,
+      "p_unilateral": 8.21601120416223e-47,
+      "passa": true,
+      "ressalva_assimetria": null,
+      "t": 57.14892493283511,
+      "teste": "t sobre as unidades (A4.4.6)"
+    },
+    "persistencia": {
+      "bootstrap": {
+        "ic90": {
+          "ic_inferior": 0.003363095238095238,
+          "ic_superior": 0.003611111111111111,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.003340773809523809,
+          "ic_superior": 0.0036235119047619046,
+          "nivel": 0.95
+        },
+        "motivo": null,
+        "p_unilateral": 0.0,
+        "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+      },
+      "braco": "M3",
+      "g1": 0.2737263670849946,
+      "gl": 49,
+      "ic95": {
+        "ic_inferior": 0.0032686777466022685,
+        "ic_superior": 0.003695607967683445,
+        "nivel": 0.95
+      },
+      "media": 0.003482142857142857,
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 5,
+      "p_unilateral": 2.708213354921652e-35,
+      "passa": false,
+      "ressalva_assimetria": null,
+      "t": 32.78113243021141,
+      "teste": "t sobre as unidades (A4.4.6)"
+    }
+  },
+  "comparacao_com_o_a": {
+    "M0 - A11": {
+      "com_cadeia": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": 0.19333333333333333,
+            "ic_superior": 0.21333333333333332,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.19166666666666665,
+            "ic_superior": 0.21666666666666665,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.0,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "g1": 0.8792935233528835,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": 0.18966548787835188,
+          "ic_superior": 0.21700117878831474,
+          "nivel": 0.95
+        },
+        "media": 0.2033333333333333,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 2.00257194008559e-33,
+        "ressalva_assimetria": null,
+        "t": 29.895979793998006,
+        "teste": "t sobre as unidades (A4.4.6)"
+      },
+      "com_cadeia_ep": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": 0.16,
+            "ic_superior": 0.195,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.15666666666666665,
+            "ic_superior": 0.19666666666666668,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.0,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "g1": -0.5628099046575625,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": 0.1314505685639025,
+          "ic_superior": 0.22521609810276413,
+          "nivel": 0.95
+        },
+        "media": 0.17833333333333332,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 3.3576539609329116e-10,
+        "ressalva_assimetria": "assimetria negativa: o erro do tipo I do t pode passar do nominal (A4.4.5; com g1 = -1, cerca de 1,8 vez)",
+        "t": 7.644051121640617,
+        "teste": "t sobre as unidades (A4.4.6)"
+      },
+      "d_fe": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": -0.05580089630180776,
+            "ic_superior": -0.04934046440972223,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": -0.05615976238701499,
+            "ic_superior": -0.04894499056161817,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 1.0,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "g1": 0.0956286018708449,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": -0.05917296377820453,
+          "ic_superior": -0.04593178917042862,
+          "nivel": 0.95
+        },
+        "media": -0.05255237647431658,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 1.0,
+        "ressalva_assimetria": null,
+        "t": -15.951448046468823,
+        "teste": "t sobre as unidades (A4.4.6)"
+      },
+      "privacao": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": -0.5339335317460318,
+            "ic_superior": -0.5196577380952381,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": -0.5353497023809524,
+            "ic_superior": -0.5186483134920635,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 1.0,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "g1": 0.07537699151521642,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": -0.5431036570582819,
+          "ic_superior": -0.510487612782988,
+          "nivel": 0.95
+        },
+        "media": -0.526795634920635,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 1.0,
+        "ressalva_assimetria": null,
+        "t": -64.91501262562264,
+        "teste": "t sobre as unidades (A4.4.6)"
+      },
+      "refeicoes_por_dia": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": 1.8079761904761904,
+            "ic_superior": 1.8419047619047617,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 1.805,
+            "ic_superior": 1.8447619047619048,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.0,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "g1": -0.2287879636772602,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": 1.7829007935470222,
+          "ic_superior": 1.8668611112148825,
+          "nivel": 0.95
+        },
+        "media": 1.8248809523809524,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 9.401360123405829e-56,
+        "ressalva_assimetria": null,
+        "t": 87.35640060631624,
+        "teste": "t sobre as unidades (A4.4.6)"
+      },
+      "taxa": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": 0.261222917995203,
+            "ic_superior": 0.2650479084013574,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.2608443746572493,
+            "ic_superior": 0.2652322841364217,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.0,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "g1": 0.4809030947229283,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": 0.2585373514405541,
+          "ic_superior": 0.2681755217044872,
+          "nivel": 0.95
+        },
+        "media": 0.26335643657252067,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 1.3415520457614583e-60,
+        "ressalva_assimetria": null,
+        "t": 109.82054871040783,
+        "teste": "t sobre as unidades (A4.4.6)"
+      },
+      "taxa_ep": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": 0.26881152285813026,
+            "ic_superior": 0.2944378005173344,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.26592513697190484,
+            "ic_superior": 0.29622936443665326,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.0,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "g1": -0.7880297669769786,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": 0.2528757793577375,
+          "ic_superior": 0.31037354401772727,
+          "nivel": 0.95
+        },
+        "media": 0.28162466168773237,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 3.2194466577681404e-25,
+        "ressalva_assimetria": "assimetria negativa: o erro do tipo I do t pode passar do nominal (A4.4.5; com g1 = -1, cerca de 1,8 vez)",
+        "t": 19.685841689299046,
+        "teste": "t sobre as unidades (A4.4.6)"
+      }
+    },
+    "M3 - A11": {
+      "com_cadeia": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": 0.39166666666666666,
+            "ic_superior": 0.415,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.38833333333333336,
+            "ic_superior": 0.41833333333333333,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.0,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "g1": 0.23387022793081647,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": 0.38709088819336995,
+          "ic_superior": 0.4229091118066301,
+          "nivel": 0.95
+        },
+        "media": 0.405,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 5.035136984209821e-42,
+        "ressalva_assimetria": null,
+        "t": 45.444909821604774,
+        "teste": "t sobre as unidades (A4.4.6)"
+      },
+      "com_cadeia_ep": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": 0.15,
+            "ic_superior": 0.19666666666666668,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.145,
+            "ic_superior": 0.2016666666666667,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.0,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "g1": -0.27553301465289365,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": 0.12552459682475015,
+          "ic_superior": 0.22114206984191648,
+          "nivel": 0.95
+        },
+        "media": 0.1733333333333333,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 1.1980060214323372e-09,
+        "ressalva_assimetria": null,
+        "t": 7.2858309981314635,
+        "teste": "t sobre as unidades (A4.4.6)"
+      },
+      "d_fe": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": -0.06971184957837302,
+            "ic_superior": -0.06401456149415785,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": -0.0704187290564374,
+            "ic_superior": -0.06357002948633157,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 1.0,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "g1": -0.1954898091976457,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": -0.07386231527026833,
+          "ic_superior": -0.060126443272500614,
+          "nivel": 0.95
+        },
+        "media": -0.06699437927138448,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 1.0,
+        "ressalva_assimetria": null,
+        "t": -19.60272280238167,
+        "teste": "t sobre as unidades (A4.4.6)"
+      },
+      "privacao": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": -0.5486607142857143,
+            "ic_superior": -0.5280357142857143,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": -0.5504637896825397,
+            "ic_superior": -0.5261036706349206,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 1.0,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "g1": -0.43645411210482854,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": -0.5554467268438106,
+          "ic_superior": -0.5212497017276181,
+          "nivel": 0.95
+        },
+        "media": -0.5383482142857143,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 1.0,
+        "ressalva_assimetria": null,
+        "t": -63.27165808753645,
+        "teste": "t sobre as unidades (A4.4.6)"
+      },
+      "refeicoes_por_dia": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": 2.2641666666666667,
+            "ic_superior": 2.302619047619048,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 2.2616666666666667,
+            "ic_superior": 2.305,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.0,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "g1": 0.5610105473848787,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": 2.2414619517973473,
+          "ic_superior": 2.325204714869319,
+          "nivel": 0.95
+        },
+        "media": 2.283333333333333,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 1.4888988736709602e-60,
+        "ressalva_assimetria": null,
+        "t": 109.58630827203216,
+        "teste": "t sobre as unidades (A4.4.6)"
+      },
+      "taxa": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": 0.3699931406183095,
+            "ic_superior": 0.38145443638862775,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.36879171975315456,
+            "ic_superior": 0.3822363227472978,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.0,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "g1": -0.17299753450430239,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": 0.369423332668216,
+          "ic_superior": 0.38160470983223643,
+          "nivel": 0.95
+        },
+        "media": 0.3755140212502262,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 3.715503601125608e-63,
+        "ressalva_assimetria": null,
+        "t": 123.89792519160667,
+        "teste": "t sobre as unidades (A4.4.6)"
+      },
+      "taxa_ep": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": 0.30189152447434753,
+            "ic_superior": 0.33613928223512013,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.2982300967283469,
+            "ic_superior": 0.33962229800011395,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.0,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "g1": -0.4320550217513635,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": 0.2892922520283123,
+          "ic_superior": 0.34856014270014846,
+          "nivel": 0.95
+        },
+        "media": 0.3189261973642304,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 5.115156056203887e-27,
+        "ressalva_assimetria": null,
+        "t": 21.62743372270902,
+        "teste": "t sobre as unidades (A4.4.6)"
+      }
+    }
+  },
+  "custo": {
+    "avaliacao_estimada": null,
+    "cpu_por_unidade": 456.74125000000004,
+    "cpu_por_vida": {
+      "A11": 2.6985677083333335,
+      "M0": 3.1521875,
+      "M1": 3.146015625,
+      "M2": 3.19171875,
+      "M3": 3.2294270833333334,
+      "M3-420": 3.2438541666666665,
+      "M3-sem-inato": 3.238515625,
+      "M3-sem-intencao": 3.247421875,
+      "M3-sp": 3.2408072916666666,
+      "M4": 3.2303125,
+      "M4-con": 3.2271614583333332,
+      "M4-emb": 3.21578125
+    }
+  },
+  "descritivo_11_celulas": {
+    "G-ELEGIVEL": {
+      "frac_vidas": 1.0,
+      "vidas": 550
+    },
+    "G-MVP": {
+      "bootstrap": {
+        "ic90": {
+          "ic_inferior": 0.42727272727272725,
+          "ic_superior": 0.45272727272727276,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.4236363636363636,
+          "ic_superior": 0.4563636363636363,
+          "nivel": 0.95
+        },
+        "motivo": null,
+        "p_unilateral": 0.0,
+        "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+      },
+      "g1": 0.23387022793081952,
+      "gl": 49,
+      "ic95": {
+        "ic_inferior": 0.4222809689382217,
+        "ic_superior": 0.46135539469814185,
+        "nivel": 0.95
+      },
+      "media": 0.4418181818181818,
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 5,
+      "p_unilateral": 5.035136984209821e-42,
+      "ressalva_assimetria": null,
+      "t": 45.44490982160479,
+      "teste": "t sobre as unidades (A4.4.6)"
+    },
+    "G-MVP-EP": {
+      "bootstrap": {
+        "ic90": {
+          "ic_inferior": 0.78,
+          "ic_superior": 0.8036363636363636,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.7781818181818183,
+          "ic_superior": 0.8054545454545454,
+          "nivel": 0.95
+        },
+        "motivo": null,
+        "p_unilateral": 0.0,
+        "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+      },
+      "g1": -0.09330151513495807,
+      "gl": 49,
+      "ic95": {
+        "ic_inferior": 0.7719091836921067,
+        "ic_superior": 0.8099089981260751,
+        "nivel": 0.95
+      },
+      "media": 0.7909090909090909,
+      "motivo": null,
+      "n": 50,
+      "n_grupos": 5,
+      "p_unilateral": 7.746787959111955e-55,
+      "ressalva_assimetria": null,
+      "t": 83.65258344475161,
+      "teste": "t sobre as unidades (A4.4.6)"
+    },
+    "G-PESA": {
+      "habito": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": 0.07798971861471862,
+            "ic_superior": 0.08027597402597403,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.07779220779220779,
+            "ic_superior": 0.08037608225108225,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.0,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "braco": "M2",
+        "g1": 0.1300575822964609,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": 0.0765080181806063,
+          "ic_superior": 0.08156016363757553,
+          "nivel": 0.95
+        },
+        "media": 0.07903409090909091,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 8.123117029731268e-49,
+        "ressalva_assimetria": null,
+        "t": 62.87425939442737,
+        "teste": "t sobre as unidades (A4.4.6)"
+      },
+      "incentivo": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": 0.017021103896103895,
+            "ic_superior": 0.01833874458874459,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.01698051948051948,
+            "ic_superior": 0.01838203463203463,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.0,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "braco": "M1",
+        "g1": 0.1394105348048314,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": 0.017036245790061254,
+          "ic_superior": 0.018326308322492855,
+          "nivel": 0.95
+        },
+        "media": 0.017681277056277055,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 4.8470224753775935e-46,
+        "ressalva_assimetria": null,
+        "t": 55.08547940872733,
+        "teste": "t sobre as unidades (A4.4.6)"
+      },
+      "memoria": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": 0.11456439393939394,
+            "ic_superior": 0.12149080086580087,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.11376352813852814,
+            "ic_superior": 0.12197781385281385,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.0,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "braco": "M3",
+        "g1": -0.3661319266922698,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": 0.11402644331220209,
+          "ic_superior": 0.12240212811636934,
+          "nivel": 0.95
+        },
+        "media": 0.11821428571428572,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 1.1758141548060344e-46,
+        "ressalva_assimetria": null,
+        "t": 56.726227598286115,
+        "teste": "t sobre as unidades (A4.4.6)"
+      },
+      "persistencia": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": 0.003528138528138528,
+            "ic_superior": 0.00375,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.003509199134199134,
+            "ic_superior": 0.003768939393939394,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.0,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "braco": "M3",
+        "g1": 0.2844371406955217,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": 0.003422521036547675,
+          "ic_superior": 0.0038556174915908526,
+          "nivel": 0.95
+        },
+        "media": 0.003639069264069264,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 6.700423630145536e-36,
+        "ressalva_assimetria": null,
+        "t": 33.77069192839572,
+        "teste": "t sobre as unidades (A4.4.6)"
+      }
+    },
+    "aviso": "descritivo, sem gate: a analise principal e a das 12 celulas (decisao do Matheus, 2026-10-26)",
+    "celulas": 11,
+    "contrastes": {
+      "G-ABLA-MEM": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": 0.1460522544074766,
+            "ic_superior": 0.18670976242190845,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.14342563782694107,
+            "ic_superior": 0.19203148003420945,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.0,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "celulas": 3,
+        "g1": -0.06253529990849052,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": 0.1407672905170938,
+          "ic_superior": 0.19140958042849793,
+          "nivel": 0.95
+        },
+        "media": 0.16608843547279586,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 4.937672052225618e-18,
+        "ressalva_assimetria": null,
+        "t": 13.181363152557884,
+        "teste": "t sobre as unidades (A4.4.6)"
+      },
+      "G-ABLA-P1": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": 0.03523259465039485,
+            "ic_superior": 0.044790827680700245,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.034541128496669675,
+            "ic_superior": 0.04588457644671548,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.0,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "celulas": 11,
+        "g1": -0.11408807269486686,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": 0.034544400039539486,
+          "ic_superior": 0.045781137738334435,
+          "nivel": 0.95
+        },
+        "media": 0.04016276888893696,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 1.706960247698059e-19,
+        "ressalva_assimetria": null,
+        "t": 14.365398210266648,
+        "teste": "t sobre as unidades (A4.4.6)"
+      },
+      "G-ABLA-P2": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": -0.022173649061012806,
+            "ic_superior": -0.012710357735994868,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": -0.023057971590218405,
+            "ic_superior": -0.011306851490122163,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 1.0,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "celulas": 11,
+        "g1": 0.5872594841528844,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": -0.021858606862248692,
+          "ic_superior": -0.013260412009109724,
+          "nivel": 0.95
+        },
+        "media": -0.01755950943567921,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.9999999999539942,
+        "ressalva_assimetria": null,
+        "t": -8.208038068640828,
+        "teste": "t sobre as unidades (A4.4.6)"
+      },
+      "G-ABLA-PERS": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": -0.0023052052637107566,
+            "ic_superior": 0.007542393470463264,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": -0.002815275465910436,
+            "ic_superior": 0.007882849993021848,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.1931,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "celulas": 11,
+        "g1": -0.3527838929009188,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": -0.0030934608878305137,
+          "ic_superior": 0.008031461847851242,
+          "nivel": 0.95
+        },
+        "media": 0.002469000480010364,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.18837976025471304,
+        "ressalva_assimetria": null,
+        "t": 0.8919868196792421,
+        "teste": "t sobre as unidades (A4.4.6)"
+      },
+      "G-MOD-CON": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": -0.005026137566137574,
+            "ic_superior": 0.007053507996632995,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": -0.0057182801226551274,
+            "ic_superior": 0.0074073051948051905,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.3546,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "celulas": 11,
+        "g1": 0.37169334017093364,
+        "gl": 49,
+        "ic95": {
+          "ic_inferior": -0.00437489664097578,
+          "ic_superior": 0.006056195793212424,
+          "nivel": 0.95
+        },
+        "media": 0.0008406495761183222,
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.37369373711821957,
+        "ressalva_assimetria": null,
+        "t": 0.32390635629566145,
+        "teste": "t sobre as unidades (A4.4.6)"
+      },
+      "G-MOD-EMB": {
+        "bootstrap": {
+          "ic90": {
+            "ic_inferior": -0.0002604457521644997,
+            "ic_superior": 0.00371582153379028,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": -0.0006160587271524757,
+            "ic_superior": 0.004184112103174603,
+            "nivel": 0.95
+          },
+          "motivo": null,
+          "p_unilateral": 0.1213,
+          "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+        },
+        "celulas": 11,
+        "g1": -0.5452019137627642,
+        "gl": 4,
+        "ic95": {
+          "ic_inferior": -0.002371019064284237,
+          "ic_superior": 0.005160358289873461,
+          "nivel": 0.95
+        },
+        "media": 0.0013946696127946122,
+        "medias_base": [
+          0.0008469125781625757,
+          0.006546557840307834,
+          -0.0015225499037999028,
+          0.0006404434974747539,
+          0.00046198405182779935
+        ],
+        "motivo": null,
+        "n": 50,
+        "n_grupos": 5,
+        "p_unilateral": 0.1809630466223182,
+        "ressalva_assimetria": "assimetria negativa: o erro do tipo I do t pode passar do nominal (A4.4.5; com g1 = -1, cerca de 1,8 vez)",
+        "t": 1.0282909586714684,
+        "teste": "t sobre as medias de base (A4.4.2)"
+      }
+    },
+    "fora": [
+      "incoerente",
+      "comedouro"
+    ]
+  },
+  "descritivos": {
+    "A11": {
+      "d_fe": 0.6418871132330247,
+      "exaustao": 0.023950892857142855,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.707177214781746
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7066715426587301
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.7066278720238095
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.6057618799603175
+        },
+        "atencioso|longe": {
+          "d_fe": 0.6275531828703703
+        },
+        "atencioso|perto": {
+          "d_fe": 0.48841953207671956
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.6057618799603175
+        },
+        "incoerente|longe": {
+          "d_fe": 0.6498162483465609
+        },
+        "incoerente|perto": {
+          "d_fe": 0.48339570601851856
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.7069218452380953
+        },
+        "relapso|longe": {
+          "d_fe": 0.707384972718254
+        },
+        "relapso|perto": {
+          "d_fe": 0.7071534821428571
+        }
+      },
+      "privacao": 0.813891369047619,
+      "refeicoes_por_dia": 0.8938095238095239
+    },
+    "M0": {
+      "d_fe": 0.5893347367587081,
+      "episodios_sairam": 0,
+      "exaustao": 0.1969965277777778,
+      "fins": {
+        "achou": 9312,
+        "desistiu": 5,
+        "meta": 21428,
+        "sumiu": 334,
+        "trocou": 6942
+      },
+      "influencia": {
+        "afeto": 0.007058531746031746,
+        "aprendido": 0.0015302579365079364,
+        "habito": 0.0,
+        "incentivo": 0.0,
+        "memoria": 0.0,
+        "persistencia": 0.0015302579365079364
+      },
+      "pesos_no_teto": 0.0,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.6257448106812169
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7133238839285714
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.6220861111111111
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.4895302281746032
+        },
+        "atencioso|longe": {
+          "d_fe": 0.7124468072089947
+        },
+        "atencioso|perto": {
+          "d_fe": 0.4691284565145503
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.4895302281746032
+        },
+        "incoerente|longe": {
+          "d_fe": 0.7185353571428571
+        },
+        "incoerente|perto": {
+          "d_fe": 0.4654954935515873
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.5514859176587301
+        },
+        "relapso|longe": {
+          "d_fe": 0.6773550834986772
+        },
+        "relapso|perto": {
+          "d_fe": 0.5373544634589947
+        }
+      },
+      "privacao": 0.28709573412698414,
+      "refeicoes_por_dia": 2.7186904761904764,
+      "visitas_lugar_lembrado": 0,
+      "visitas_vazias": 0
+    },
+    "M1": {
+      "d_fe": 0.5800380176642417,
+      "episodios_sairam": 0,
+      "exaustao": 0.1915376984126984,
+      "fins": {
+        "achou": 7337,
+        "desistiu": 5,
+        "meta": 23613,
+        "sumiu": 314,
+        "trocou": 7148
+      },
+      "influencia": {
+        "afeto": 0.00663938492063492,
+        "aprendido": 0.020550595238095236,
+        "habito": 0.0,
+        "incentivo": 0.019186507936507936,
+        "memoria": 0.0,
+        "persistencia": 0.0013566468253968253
+      },
+      "pesos_no_teto": 0.0,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.6158967336309523
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7024837896825398
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.6109295130621694
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.47850763806216934
+        },
+        "atencioso|longe": {
+          "d_fe": 0.6753219568452381
+        },
+        "atencioso|perto": {
+          "d_fe": 0.4532225066137566
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.47850763806216934
+        },
+        "incoerente|longe": {
+          "d_fe": 0.6961104050925926
+        },
+        "incoerente|perto": {
+          "d_fe": 0.454274332010582
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.5810300330687831
+        },
+        "relapso|longe": {
+          "d_fe": 0.6664570816798941
+        },
+        "relapso|perto": {
+          "d_fe": 0.5477145841600529
+        }
+      },
+      "privacao": 0.29027529761904763,
+      "refeicoes_por_dia": 2.886904761904762,
+      "visitas_lugar_lembrado": 0,
+      "visitas_vazias": 0
+    },
+    "M2": {
+      "d_fe": 0.574005742669753,
+      "episodios_sairam": 0,
+      "exaustao": 0.18952876984126982,
+      "fins": {
+        "achou": 8471,
+        "desistiu": 6,
+        "meta": 26471,
+        "sumiu": 330,
+        "trocou": 7523
+      },
+      "influencia": {
+        "afeto": 0.011006944444444444,
+        "aprendido": 0.08888888888888889,
+        "habito": 0.08173363095238095,
+        "incentivo": 0.015109126984126984,
+        "memoria": 0.0,
+        "persistencia": 0.001800595238095238
+      },
+      "pesos_no_teto": 0.0,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.6403905770502645
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7011148090277777
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.6216634391534391
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.4491318361441799
+        },
+        "atencioso|longe": {
+          "d_fe": 0.6509648222552911
+        },
+        "atencioso|perto": {
+          "d_fe": 0.43988581762566137
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.4491318361441799
+        },
+        "incoerente|longe": {
+          "d_fe": 0.6654202182539684
+        },
+        "incoerente|perto": {
+          "d_fe": 0.44071384755291004
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.5942344841269841
+        },
+        "relapso|longe": {
+          "d_fe": 0.666457267691799
+        },
+        "relapso|perto": {
+          "d_fe": 0.568959957010582
+        }
+      },
+      "privacao": 0.28191468253968255,
+      "refeicoes_por_dia": 3.1885714285714286,
+      "visitas_lugar_lembrado": 0,
+      "visitas_vazias": 0
+    },
+    "M3": {
+      "d_fe": 0.5748927339616402,
+      "episodios_sairam": 33924,
+      "exaustao": 0.21374751984126983,
+      "fins": {
+        "achou": 7303,
+        "desistiu": 5,
+        "meta": 43030,
+        "sumiu": 330,
+        "trocou": 21164
+      },
+      "influencia": {
+        "afeto": 0.010300099206349207,
+        "aprendido": 0.1784970238095238,
+        "habito": 0.07304563492063491,
+        "incentivo": 0.01486111111111111,
+        "memoria": 0.11006944444444446,
+        "persistencia": 0.003482142857142857
+      },
+      "pesos_no_teto": 0.0,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.6304791079695767
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7274288698743386
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.6295787681878307
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.4364416865079365
+        },
+        "atencioso|longe": {
+          "d_fe": 0.6457612466931216
+        },
+        "atencioso|perto": {
+          "d_fe": 0.4400700636574074
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.4364416865079365
+        },
+        "incoerente|longe": {
+          "d_fe": 0.6558692220568783
+        },
+        "incoerente|perto": {
+          "d_fe": 0.4401887648809524
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.5770519361772487
+        },
+        "relapso|longe": {
+          "d_fe": 0.7055408738425926
+        },
+        "relapso|perto": {
+          "d_fe": 0.5738605811838624
+        }
+      },
+      "privacao": 0.2755431547619048,
+      "refeicoes_por_dia": 3.177142857142857,
+      "visitas_lugar_lembrado": 16851,
+      "visitas_vazias": 16844
+    },
+    "M3-420": {
+      "d_fe": 0.5770447705853174,
+      "episodios_sairam": 34316,
+      "exaustao": 0.21347718253968254,
+      "fins": {
+        "meta": 43497,
+        "trocou": 15711
+      },
+      "influencia": {
+        "afeto": 0.01056795634920635,
+        "aprendido": 0.1819890873015873,
+        "habito": 0.07431795634920635,
+        "incentivo": 0.014583333333333334,
+        "memoria": 0.1135813492063492,
+        "persistencia": 0.0023933531746031743
+      },
+      "pesos_no_teto": 0.0,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.6297748644179895
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7375717278439153
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.6260543287037037
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.4418317294973545
+        },
+        "atencioso|longe": {
+          "d_fe": 0.6579122602513228
+        },
+        "atencioso|perto": {
+          "d_fe": 0.44179479580026454
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.4418317294973545
+        },
+        "incoerente|longe": {
+          "d_fe": 0.6471380919312169
+        },
+        "incoerente|perto": {
+          "d_fe": 0.4411527364417989
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.5785443138227513
+        },
+        "relapso|longe": {
+          "d_fe": 0.7090048817791005
+        },
+        "relapso|perto": {
+          "d_fe": 0.571925787037037
+        }
+      },
+      "privacao": 0.277703373015873,
+      "refeicoes_por_dia": 3.152857142857143,
+      "visitas_lugar_lembrado": 17437,
+      "visitas_vazias": 17428
+    },
+    "M3-sem-inato": {
+      "d_fe": 0.579214877507716,
+      "episodios_sairam": 34089,
+      "exaustao": 0.21597718253968254,
+      "fins": {
+        "achou": 5818,
+        "desistiu": 2,
+        "meta": 43219,
+        "sumiu": 268,
+        "trocou": 20990
+      },
+      "influencia": {
+        "afeto": 0.01044890873015873,
+        "aprendido": 0.18112103174603175,
+        "habito": 0.07356646825396825,
+        "incentivo": 0.014511408730158729,
+        "memoria": 0.11337301587301586,
+        "persistencia": 0.0029340277777777776
+      },
+      "pesos_no_teto": 0.0,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.6294386656746032
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.728096378968254
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.6264023536706349
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.43843102513227517
+        },
+        "atencioso|longe": {
+          "d_fe": 0.6822061400462962
+        },
+        "atencioso|perto": {
+          "d_fe": 0.44179161375661374
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.43843102513227517
+        },
+        "incoerente|longe": {
+          "d_fe": 0.6542275512566137
+        },
+        "incoerente|perto": {
+          "d_fe": 0.4411180348875661
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.5799745494378307
+        },
+        "relapso|longe": {
+          "d_fe": 0.7191965162037037
+        },
+        "relapso|perto": {
+          "d_fe": 0.5712646759259259
+        }
+      },
+      "privacao": 0.2816939484126984,
+      "refeicoes_por_dia": 3.154404761904762,
+      "visitas_lugar_lembrado": 17200,
+      "visitas_vazias": 17194
+    },
+    "M3-sem-intencao": {
+      "d_fe": 0.5773890813767637,
+      "episodios_sairam": 34391,
+      "exaustao": 0.21459573412698413,
+      "fins": {
+        "meta": 43518,
+        "trocou": 15397
+      },
+      "influencia": {
+        "afeto": 0.00994047619047619,
+        "aprendido": 0.1796875,
+        "habito": 0.0736904761904762,
+        "incentivo": 0.014764384920634921,
+        "memoria": 0.11222718253968253,
+        "persistencia": 0.002306547619047619
+      },
+      "pesos_no_teto": 0.0,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.627549267526455
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7305635085978835
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.6295921684854497
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.43292612268518516
+        },
+        "atencioso|longe": {
+          "d_fe": 0.6617139087301587
+        },
+        "atencioso|perto": {
+          "d_fe": 0.4400420667989418
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.43292612268518516
+        },
+        "incoerente|longe": {
+          "d_fe": 0.6699199710648148
+        },
+        "incoerente|perto": {
+          "d_fe": 0.4403802132936508
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.5822303687169312
+        },
+        "relapso|longe": {
+          "d_fe": 0.7059764227843915
+        },
+        "relapso|perto": {
+          "d_fe": 0.5748488351521164
+        }
+      },
+      "privacao": 0.2789186507936508,
+      "refeicoes_por_dia": 3.169404761904762,
+      "visitas_lugar_lembrado": 17379,
+      "visitas_vazias": 17376
+    },
+    "M3-sp": {
+      "d_fe": 0.57845315737985,
+      "episodios_sairam": 34326,
+      "exaustao": 0.21671875,
+      "fins": {
+        "achou": 7352,
+        "meta": 43418,
+        "sumiu": 323,
+        "trocou": 22592
+      },
+      "influencia": {
+        "afeto": 0.010009920634920634,
+        "aprendido": 0.18018353174603174,
+        "habito": 0.0725,
+        "incentivo": 0.014908234126984127,
+        "memoria": 0.11322420634920635,
+        "persistencia": 0.0
+      },
+      "pesos_no_teto": 0.0,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.6340697767857143
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7308240459656085
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.6288520932539682
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.43609869130291
+        },
+        "atencioso|longe": {
+          "d_fe": 0.6584278753306879
+        },
+        "atencioso|perto": {
+          "d_fe": 0.44056428654100527
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.43609869130291
+        },
+        "incoerente|longe": {
+          "d_fe": 0.6734092294973544
+        },
+        "incoerente|perto": {
+          "d_fe": 0.43981883184523807
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.5803825355489418
+        },
+        "relapso|longe": {
+          "d_fe": 0.7072442584325397
+        },
+        "relapso|perto": {
+          "d_fe": 0.5756475727513227
+        }
+      },
+      "privacao": 0.28148561507936504,
+      "refeicoes_por_dia": 3.160952380952381,
+      "visitas_lugar_lembrado": 17392,
+      "visitas_vazias": 17386
+    },
+    "M4": {
+      "d_fe": 0.5787982555527997,
+      "episodios_sairam": 37498,
+      "exaustao": 0.22303323412698414,
+      "fins": {
+        "achou": 8787,
+        "desistiu": 4,
+        "meta": 46846,
+        "sumiu": 307,
+        "trocou": 21709
+      },
+      "influencia": {
+        "afeto": 0.014685019841269843,
+        "aprendido": 0.25105654761904767,
+        "habito": 0.1569890873015873,
+        "incentivo": 0.008618551587301588,
+        "memoria": 0.11325644841269841,
+        "persistencia": 0.0034722222222222216
+      },
+      "pesos_no_teto": 0.0,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.6426848164682539
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7190424975198413
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.6426052786044975
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.4483957126322751
+        },
+        "atencioso|longe": {
+          "d_fe": 0.6351594527116402
+        },
+        "atencioso|perto": {
+          "d_fe": 0.4403313467261905
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.4483957126322751
+        },
+        "incoerente|longe": {
+          "d_fe": 0.6437675330687831
+        },
+        "incoerente|perto": {
+          "d_fe": 0.4408213177910053
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.5910260656415344
+        },
+        "relapso|longe": {
+          "d_fe": 0.7116764054232805
+        },
+        "relapso|perto": {
+          "d_fe": 0.5816729274140211
+        }
+      },
+      "privacao": 0.2767733134920635,
+      "refeicoes_por_dia": 3.5379761904761904,
+      "visitas_lugar_lembrado": 17393,
+      "visitas_vazias": 17391
+    },
+    "M4-con": {
+      "d_fe": 0.5799123584242725,
+      "episodios_sairam": 37163,
+      "exaustao": 0.2244593253968254,
+      "fins": {
+        "achou": 8955,
+        "desistiu": 4,
+        "meta": 46565,
+        "sumiu": 325,
+        "trocou": 22090
+      },
+      "influencia": {
+        "afeto": 0.01461061507936508,
+        "aprendido": 0.25462549603174606,
+        "habito": 0.16224454365079366,
+        "incentivo": 0.008313492063492063,
+        "memoria": 0.11190972222222222,
+        "persistencia": 0.0035689484126984125
+      },
+      "pesos_no_teto": 0.0,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.6454945601851851
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7174114145171957
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.6423442881944444
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.4525178017526455
+        },
+        "atencioso|longe": {
+          "d_fe": 0.6292601207010582
+        },
+        "atencioso|perto": {
+          "d_fe": 0.44194829117063494
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.4525178017526455
+        },
+        "incoerente|longe": {
+          "d_fe": 0.65944384755291
+        },
+        "incoerente|perto": {
+          "d_fe": 0.44135792906746035
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.5903208085317461
+        },
+        "relapso|longe": {
+          "d_fe": 0.7044101893187831
+        },
+        "relapso|perto": {
+          "d_fe": 0.5819212483465609
+        }
+      },
+      "privacao": 0.2771701388888889,
+      "refeicoes_por_dia": 3.5615476190476194,
+      "visitas_lugar_lembrado": 16860,
+      "visitas_vazias": 16856
+    },
+    "M4-emb": {
+      "d_fe": 0.5800494292879189,
+      "episodios_sairam": 37383,
+      "exaustao": 0.2231795634920635,
+      "fins": {
+        "achou": 8810,
+        "desistiu": 4,
+        "meta": 46727,
+        "sumiu": 310,
+        "trocou": 21990
+      },
+      "influencia": {
+        "afeto": 0.014759424603174602,
+        "aprendido": 0.2515203373015873,
+        "habito": 0.15718998015873017,
+        "incentivo": 0.008685515873015873,
+        "memoria": 0.11329117063492063,
+        "persistencia": 0.0034325396825396824
+      },
+      "pesos_no_teto": 0.0,
+      "por_celula": {
+        "aleatorio|comedouro": {
+          "d_fe": 0.6449852174272486
+        },
+        "aleatorio|longe": {
+          "d_fe": 0.7248824785052911
+        },
+        "aleatorio|perto": {
+          "d_fe": 0.6407613541666666
+        },
+        "atencioso|comedouro": {
+          "d_fe": 0.44806843171296296
+        },
+        "atencioso|longe": {
+          "d_fe": 0.6435450124007935
+        },
+        "atencioso|perto": {
+          "d_fe": 0.43945362929894183
+        },
+        "incoerente|comedouro": {
+          "d_fe": 0.44806843171296296
+        },
+        "incoerente|longe": {
+          "d_fe": 0.642323587962963
+        },
+        "incoerente|perto": {
+          "d_fe": 0.4394320386904762
+        },
+        "relapso|comedouro": {
+          "d_fe": 0.5895665401785714
+        },
+        "relapso|longe": {
+          "d_fe": 0.7164781167328043
+        },
+        "relapso|perto": {
+          "d_fe": 0.5830283126653439
+        }
+      },
+      "privacao": 0.27992063492063496,
+      "refeicoes_por_dia": 3.535357142857143,
+      "visitas_lugar_lembrado": 17296,
+      "visitas_vazias": 17292
+    }
+  },
+  "descritivos_conserto": {
+    "A11|comedouro": {
+      "com_cadeia_ep": 0.7,
+      "episodios": 2519,
+      "fechados": 1594,
+      "fora_de_episodio": 861,
+      "latencia_depois_da_janela": 13.277241379310345,
+      "latencia_media": 5.20138017565872,
+      "motivos": {
+        "fechou": 1594,
+        "janela_vencida": 925,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 0
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 420,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 0,
+          "n": 0
+        },
+        "ate_corte": {
+          "fechados": 1594,
+          "n": 2519
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 23214,
+        "fechadas": 64,
+        "taxa_agregada": 0.0027569570087016457
+      },
+      "por_racao_w": {
+        "elegiveis": 23214,
+        "fechadas": 108,
+        "taxa_agregada": 0.004652364952184027
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 3.158196227412157,
+        "elegiveis": 23214,
+        "entraram_na_visao": 1506,
+        "visiveis_em_k0": 19851
+      },
+      "taxa_agregada": 0.6327907899960302,
+      "taxa_media_das_vidas": 0.4493930605626258,
+      "vidas": 200
+    },
+    "A11|longe": {
+      "com_cadeia_ep": 0.51,
+      "episodios": 1221,
+      "fechados": 734,
+      "fora_de_episodio": 819,
+      "latencia_depois_da_janela": 14.0,
+      "latencia_media": 5.772479564032698,
+      "motivos": {
+        "fechou": 734,
+        "janela_vencida": 487,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 0
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 256,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 23,
+          "n": 57
+        },
+        "ate_corte": {
+          "fechados": 711,
+          "n": 1164
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 23444,
+        "fechadas": 355,
+        "taxa_agregada": 0.015142467155775465
+      },
+      "por_racao_w": {
+        "elegiveis": 23444,
+        "fechadas": 418,
+        "taxa_agregada": 0.017829721890462377
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 16.714504153086505,
+        "elegiveis": 23444,
+        "entraram_na_visao": 1249,
+        "visiveis_em_k0": 1413
+      },
+      "taxa_agregada": 0.6011466011466011,
+      "taxa_media_das_vidas": 0.3372522626176937,
+      "vidas": 200
+    },
+    "A11|perto": {
+      "com_cadeia_ep": 0.695,
+      "episodios": 2616,
+      "fechados": 1676,
+      "fora_de_episodio": 1824,
+      "latencia_depois_da_janela": 12.522267206477732,
+      "latencia_media": 4.613961813842482,
+      "motivos": {
+        "fechou": 1676,
+        "janela_vencida": 939,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 1
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 529,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 0,
+          "n": 0
+        },
+        "ate_corte": {
+          "fechados": 1676,
+          "n": 2616
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 22059,
+        "fechadas": 1834,
+        "taxa_agregada": 0.08314066820798767
+      },
+      "por_racao_w": {
+        "elegiveis": 22059,
+        "fechadas": 1844,
+        "taxa_agregada": 0.08359399791468335
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 0.9262959456375404,
+        "elegiveis": 22059,
+        "entraram_na_visao": 0,
+        "visiveis_em_k0": 22059
+      },
+      "taxa_agregada": 0.6406727828746177,
+      "taxa_media_das_vidas": 0.4645455621905851,
+      "vidas": 200
+    },
+    "A11|todos": {
+      "com_cadeia_ep": 0.635,
+      "episodios": 6356,
+      "fechados": 4004,
+      "fora_de_episodio": 3504,
+      "latencia_depois_da_janela": 13.077492877492878,
+      "latencia_media": 5.060189810189811,
+      "motivos": {
+        "fechou": 4004,
+        "janela_vencida": 2351,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 1
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 1205,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 23,
+          "n": 57
+        },
+        "ate_corte": {
+          "fechados": 3981,
+          "n": 6299
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 68717,
+        "fechadas": 2253,
+        "taxa_agregada": 0.032786646681316124
+      },
+      "por_racao_w": {
+        "elegiveis": 68717,
+        "fechadas": 2370,
+        "taxa_agregada": 0.034489282128148786
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 6.932998775378734,
+        "elegiveis": 68717,
+        "entraram_na_visao": 2755,
+        "visiveis_em_k0": 43323
+      },
+      "taxa_agregada": 0.6299559471365639,
+      "taxa_media_das_vidas": 0.41706362845696815,
+      "vidas": 600
+    },
+    "M0|comedouro": {
+      "cheiro": {
+        "achou": 2978,
+        "busca_entregue_sozinha": 2560,
+        "comer_cheiro_por_episodio": 0.6307256819351518,
+        "compostas": 418,
+        "compostas_com_refeicao": 383,
+        "decisoes_comer_cheiro": 2451,
+        "decisoes_dormir": 14089,
+        "decisoes_explorar_cheiro": 2840,
+        "decisoes_nos_episodios": 28876,
+        "episodios": 3886,
+        "fins_busca": {
+          "achou": 2978,
+          "trocou": 842
+        },
+        "frac_achou_com_refeicao": 0.12860980523841503,
+        "sono_na_janela": 0.48791383848178416
+      },
+      "com_cadeia_ep": 0.935,
+      "episodios": 3886,
+      "fechados": 2718,
+      "fora_de_episodio": 5531,
+      "latencia_depois_da_janela": 19.859154929577464,
+      "latencia_media": 4.602649006622516,
+      "motivos": {
+        "fechou": 2718,
+        "janela_vencida": 1153,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 15
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 186,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 0,
+          "n": 10
+        },
+        "ate_corte": {
+          "fechados": 2718,
+          "n": 3876
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 14762,
+        "fechadas": 1879,
+        "taxa_agregada": 0.12728627557241567
+      },
+      "por_racao_w": {
+        "elegiveis": 14762,
+        "fechadas": 2294,
+        "taxa_agregada": 0.15539899742582305
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 2.355319197514416,
+        "elegiveis": 14762,
+        "entraram_na_visao": 6215,
+        "visiveis_em_k0": 6995
+      },
+      "taxa_agregada": 0.6994338651569737,
+      "taxa_media_das_vidas": 0.7094178707825317,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 0,
+        "vazias": 0,
+        "vazias_v1": 0
+      }
+    },
+    "M0|longe": {
+      "cheiro": {
+        "achou": 4577,
+        "busca_entregue_sozinha": 3995,
+        "comer_cheiro_por_episodio": 1.1305067903279231,
+        "compostas": 582,
+        "compostas_com_refeicao": 485,
+        "decisoes_comer_cheiro": 3413,
+        "decisoes_dormir": 13181,
+        "decisoes_explorar_cheiro": 2198,
+        "decisoes_nos_episodios": 30927,
+        "episodios": 3019,
+        "fins_busca": {
+          "achou": 4577,
+          "desistiu": 5,
+          "sumiu": 334,
+          "trocou": 4372
+        },
+        "frac_achou_com_refeicao": 0.10596460563688005,
+        "sono_na_janela": 0.4261971739903644
+      },
+      "com_cadeia_ep": 0.505,
+      "episodios": 3019,
+      "fechados": 1449,
+      "fora_de_episodio": 4792,
+      "latencia_depois_da_janela": 32.5265604249668,
+      "latencia_media": 5.494824016563147,
+      "motivos": {
+        "fechou": 1449,
+        "janela_vencida": 1559,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 11
+      },
+      "no_episodio_sem_fechar": 4,
+      "oferta_mudou": 471,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 69,
+          "n": 459
+        },
+        "ate_corte": {
+          "fechados": 1380,
+          "n": 2560
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 19869,
+        "fechadas": 949,
+        "taxa_agregada": 0.04776284664552821
+      },
+      "por_racao_w": {
+        "elegiveis": 19869,
+        "fechadas": 1264,
+        "taxa_agregada": 0.06361668931501334
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 13.130719464838267,
+        "elegiveis": 19869,
+        "entraram_na_visao": 2646,
+        "visiveis_em_k0": 1053
+      },
+      "taxa_agregada": 0.47996025173898643,
+      "taxa_media_das_vidas": 0.47632979770207357,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 0,
+        "vazias": 0,
+        "vazias_v1": 0
+      }
+    },
+    "M0|perto": {
+      "cheiro": {
+        "achou": 1757,
+        "busca_entregue_sozinha": 1479,
+        "comer_cheiro_por_episodio": 0.2546543976032527,
+        "compostas": 278,
+        "compostas_com_refeicao": 274,
+        "decisoes_comer_cheiro": 1190,
+        "decisoes_dormir": 9628,
+        "decisoes_explorar_cheiro": 1622,
+        "decisoes_nos_episodios": 19494,
+        "episodios": 4673,
+        "fins_busca": {
+          "achou": 1757,
+          "trocou": 24
+        },
+        "frac_achou_com_refeicao": 0.15594763801935116,
+        "sono_na_janela": 0.49389555760746895
+      },
+      "com_cadeia_ep": 1.0,
+      "episodios": 4673,
+      "fechados": 4260,
+      "fora_de_episodio": 4083,
+      "latencia_depois_da_janela": 15.4529262086514,
+      "latencia_media": 2.6241784037558684,
+      "motivos": {
+        "fechou": 4260,
+        "janela_vencida": 398,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 15
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 153,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 0,
+          "n": 0
+        },
+        "ate_corte": {
+          "fechados": 4260,
+          "n": 4673
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 9654,
+        "fechadas": 3821,
+        "taxa_agregada": 0.3957944893308473
+      },
+      "por_racao_w": {
+        "elegiveis": 9654,
+        "fechadas": 3856,
+        "taxa_agregada": 0.3994199295628755
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 0.8863615324880272,
+        "elegiveis": 9654,
+        "entraram_na_visao": 0,
+        "visiveis_em_k0": 9654
+      },
+      "taxa_agregada": 0.9116199443612241,
+      "taxa_media_das_vidas": 0.9103172019494963,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 0,
+        "vazias": 0,
+        "vazias_v1": 0
+      }
+    },
+    "M0|todos": {
+      "cheiro": {
+        "achou": 9312,
+        "busca_entregue_sozinha": 8034,
+        "comer_cheiro_por_episodio": 0.6092589393677664,
+        "compostas": 1278,
+        "compostas_com_refeicao": 1142,
+        "decisoes_comer_cheiro": 7054,
+        "decisoes_dormir": 36898,
+        "decisoes_explorar_cheiro": 6660,
+        "decisoes_nos_episodios": 79297,
+        "episodios": 11578,
+        "fins_busca": {
+          "achou": 9312,
+          "desistiu": 5,
+          "sumiu": 334,
+          "trocou": 5238
+        },
+        "frac_achou_com_refeicao": 0.12263745704467353,
+        "sono_na_janela": 0.4653139463031388
+      },
+      "com_cadeia_ep": 0.8133333333333334,
+      "episodios": 11578,
+      "fechados": 8427,
+      "fora_de_episodio": 14406,
+      "latencia_depois_da_janela": 25.574299835255353,
+      "latencia_media": 3.7559036430520947,
+      "motivos": {
+        "fechou": 8427,
+        "janela_vencida": 3110,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 41
+      },
+      "no_episodio_sem_fechar": 4,
+      "oferta_mudou": 810,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 69,
+          "n": 469
+        },
+        "ate_corte": {
+          "fechados": 8358,
+          "n": 11109
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 44285,
+        "fechadas": 6649,
+        "taxa_agregada": 0.1501411313085695
+      },
+      "por_racao_w": {
+        "elegiveis": 44285,
+        "fechadas": 7414,
+        "taxa_agregada": 0.16741560347747544
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 5.45746673161357,
+        "elegiveis": 44285,
+        "entraram_na_visao": 8861,
+        "visiveis_em_k0": 17702
+      },
+      "taxa_agregada": 0.7278459146657453,
+      "taxa_media_das_vidas": 0.6986882901447005,
+      "vidas": 600,
+      "visitas": {
+        "lugar_lembrado": 0,
+        "vazias": 0,
+        "vazias_v1": 0
+      }
+    },
+    "M1|comedouro": {
+      "cheiro": {
+        "achou": 2396,
+        "busca_entregue_sozinha": 1992,
+        "comer_cheiro_por_episodio": 0.7476361265079883,
+        "compostas": 404,
+        "compostas_com_refeicao": 351,
+        "decisoes_comer_cheiro": 2293,
+        "decisoes_dormir": 12143,
+        "decisoes_explorar_cheiro": 2183,
+        "decisoes_nos_episodios": 24618,
+        "episodios": 3067,
+        "fins_busca": {
+          "achou": 2396,
+          "trocou": 1047
+        },
+        "frac_achou_com_refeicao": 0.1464941569282137,
+        "sono_na_janela": 0.493256966447315
+      },
+      "com_cadeia_ep": 0.92,
+      "episodios": 3067,
+      "fechados": 2044,
+      "fora_de_episodio": 6907,
+      "latencia_depois_da_janela": 21.998997995991985,
+      "latencia_media": 4.919275929549902,
+      "motivos": {
+        "fechou": 2044,
+        "janela_vencida": 1012,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 11
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 89,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 0,
+          "n": 22
+        },
+        "ate_corte": {
+          "fechados": 2044,
+          "n": 3045
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 14517,
+        "fechadas": 2122,
+        "taxa_agregada": 0.14617345181511332
+      },
+      "por_racao_w": {
+        "elegiveis": 14517,
+        "fechadas": 2582,
+        "taxa_agregada": 0.17786043948474203
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 3.503811378738028,
+        "elegiveis": 14517,
+        "entraram_na_visao": 7137,
+        "visiveis_em_k0": 5046
+      },
+      "taxa_agregada": 0.6664492989892403,
+      "taxa_media_das_vidas": 0.6687644018064143,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 0,
+        "vazias": 0,
+        "vazias_v1": 0
+      }
+    },
+    "M1|longe": {
+      "cheiro": {
+        "achou": 3890,
+        "busca_entregue_sozinha": 3327,
+        "comer_cheiro_por_episodio": 1.1610689779703864,
+        "compostas": 563,
+        "compostas_com_refeicao": 471,
+        "decisoes_comer_cheiro": 3215,
+        "decisoes_dormir": 12668,
+        "decisoes_explorar_cheiro": 2089,
+        "decisoes_nos_episodios": 29491,
+        "episodios": 2769,
+        "fins_busca": {
+          "achou": 3890,
+          "desistiu": 5,
+          "sumiu": 314,
+          "trocou": 4556
+        },
+        "frac_achou_com_refeicao": 0.12107969151670951,
+        "sono_na_janela": 0.42955477942423115
+      },
+      "com_cadeia_ep": 0.395,
+      "episodios": 2769,
+      "fechados": 1242,
+      "fora_de_episodio": 5353,
+      "latencia_depois_da_janela": 32.714771953710006,
+      "latencia_media": 5.578904991948471,
+      "motivos": {
+        "fechou": 1242,
+        "janela_vencida": 1512,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 15
+      },
+      "no_episodio_sem_fechar": 3,
+      "oferta_mudou": 341,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 87,
+          "n": 493
+        },
+        "ate_corte": {
+          "fechados": 1155,
+          "n": 2276
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 19490,
+        "fechadas": 1022,
+        "taxa_agregada": 0.052437147255002564
+      },
+      "por_racao_w": {
+        "elegiveis": 19490,
+        "fechadas": 1325,
+        "taxa_agregada": 0.06798358132375577
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 13.498578885739368,
+        "elegiveis": 19490,
+        "entraram_na_visao": 2427,
+        "visiveis_em_k0": 969
+      },
+      "taxa_agregada": 0.4485373781148429,
+      "taxa_media_das_vidas": 0.4447597134118032,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 0,
+        "vazias": 0,
+        "vazias_v1": 0
+      }
+    },
+    "M1|perto": {
+      "cheiro": {
+        "achou": 1051,
+        "busca_entregue_sozinha": 869,
+        "comer_cheiro_por_episodio": 0.1572463768115942,
+        "compostas": 182,
+        "compostas_com_refeicao": 181,
+        "decisoes_comer_cheiro": 651,
+        "decisoes_dormir": 6371,
+        "decisoes_explorar_cheiro": 823,
+        "decisoes_nos_episodios": 13161,
+        "episodios": 4140,
+        "fins_busca": {
+          "achou": 1051,
+          "trocou": 8
+        },
+        "frac_achou_com_refeicao": 0.17221693625118933,
+        "sono_na_janela": 0.48408175670541753
+      },
+      "com_cadeia_ep": 1.0,
+      "episodios": 4140,
+      "fechados": 3990,
+      "fora_de_episodio": 4711,
+      "latencia_depois_da_janela": 15.028985507246377,
+      "latencia_media": 1.9388471177944862,
+      "motivos": {
+        "fechou": 3990,
+        "janela_vencida": 142,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 8
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 19,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 0,
+          "n": 0
+        },
+        "ate_corte": {
+          "fechados": 3990,
+          "n": 4140
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 7987,
+        "fechadas": 4353,
+        "taxa_agregada": 0.5450106422937273
+      },
+      "por_racao_w": {
+        "elegiveis": 7987,
+        "fechadas": 4392,
+        "taxa_agregada": 0.5498935770627269
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 0.8863533775676582,
+        "elegiveis": 7987,
+        "entraram_na_visao": 0,
+        "visiveis_em_k0": 7987
+      },
+      "taxa_agregada": 0.9637681159420289,
+      "taxa_media_das_vidas": 0.9583146255682804,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 0,
+        "vazias": 0,
+        "vazias_v1": 0
+      }
+    },
+    "M1|todos": {
+      "cheiro": {
+        "achou": 7337,
+        "busca_entregue_sozinha": 6188,
+        "comer_cheiro_por_episodio": 0.6173817161186849,
+        "compostas": 1149,
+        "compostas_com_refeicao": 1003,
+        "decisoes_comer_cheiro": 6159,
+        "decisoes_dormir": 31182,
+        "decisoes_explorar_cheiro": 5095,
+        "decisoes_nos_episodios": 67270,
+        "episodios": 9976,
+        "fins_busca": {
+          "achou": 7337,
+          "desistiu": 5,
+          "sumiu": 314,
+          "trocou": 5611
+        },
+        "frac_achou_com_refeicao": 0.13670437508518468,
+        "sono_na_janela": 0.4635350081760071
+      },
+      "com_cadeia_ep": 0.7716666666666666,
+      "episodios": 9976,
+      "fechados": 7276,
+      "fora_de_episodio": 16971,
+      "latencia_depois_da_janela": 27.672552783109406,
+      "latencia_media": 3.3974711379879055,
+      "motivos": {
+        "fechou": 7276,
+        "janela_vencida": 2666,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 34
+      },
+      "no_episodio_sem_fechar": 3,
+      "oferta_mudou": 449,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 87,
+          "n": 515
+        },
+        "ate_corte": {
+          "fechados": 7189,
+          "n": 9461
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 41994,
+        "fechadas": 7497,
+        "taxa_agregada": 0.17852550364337763
+      },
+      "por_racao_w": {
+        "elegiveis": 41994,
+        "fechadas": 8299,
+        "taxa_agregada": 0.1976234700195266
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 5.962914547348352,
+        "elegiveis": 41994,
+        "entraram_na_visao": 9564,
+        "visiveis_em_k0": 14002
+      },
+      "taxa_agregada": 0.7293504410585405,
+      "taxa_media_das_vidas": 0.6906129135954994,
+      "vidas": 600,
+      "visitas": {
+        "lugar_lembrado": 0,
+        "vazias": 0,
+        "vazias_v1": 0
+      }
+    },
+    "M2|comedouro": {
+      "cheiro": {
+        "achou": 2965,
+        "busca_entregue_sozinha": 2504,
+        "comer_cheiro_por_episodio": 0.9181266846361186,
+        "compostas": 461,
+        "compostas_com_refeicao": 401,
+        "decisoes_comer_cheiro": 2725,
+        "decisoes_dormir": 11749,
+        "decisoes_explorar_cheiro": 1965,
+        "decisoes_nos_episodios": 24139,
+        "episodios": 2968,
+        "fins_busca": {
+          "achou": 2965,
+          "trocou": 1212
+        },
+        "frac_achou_com_refeicao": 0.13524451939291737,
+        "sono_na_janela": 0.4867227308504909
+      },
+      "com_cadeia_ep": 0.91,
+      "episodios": 2968,
+      "fechados": 2018,
+      "fora_de_episodio": 8529,
+      "latencia_depois_da_janela": 22.14101184068891,
+      "latencia_media": 5.124380574826561,
+      "motivos": {
+        "fechou": 2018,
+        "janela_vencida": 941,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 9
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 27,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 0,
+          "n": 23
+        },
+        "ate_corte": {
+          "fechados": 2018,
+          "n": 2945
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 14061,
+        "fechadas": 2585,
+        "taxa_agregada": 0.18384183201763743
+      },
+      "por_racao_w": {
+        "elegiveis": 14061,
+        "fechadas": 3157,
+        "taxa_agregada": 0.22452172676196572
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 3.4447128948315147,
+        "elegiveis": 14061,
+        "entraram_na_visao": 7107,
+        "visiveis_em_k0": 4958
+      },
+      "taxa_agregada": 0.6799191374663073,
+      "taxa_media_das_vidas": 0.6792933349487293,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 0,
+        "vazias": 0,
+        "vazias_v1": 0
+      }
+    },
+    "M2|longe": {
+      "cheiro": {
+        "achou": 4170,
+        "busca_entregue_sozinha": 3573,
+        "comer_cheiro_por_episodio": 1.3148951554591468,
+        "compostas": 597,
+        "compostas_com_refeicao": 507,
+        "decisoes_comer_cheiro": 3637,
+        "decisoes_dormir": 13130,
+        "decisoes_explorar_cheiro": 1983,
+        "decisoes_nos_episodios": 29694,
+        "episodios": 2766,
+        "fins_busca": {
+          "achou": 4170,
+          "desistiu": 6,
+          "sumiu": 330,
+          "trocou": 4608
+        },
+        "frac_achou_com_refeicao": 0.12158273381294964,
+        "sono_na_janela": 0.4421768707482993
+      },
+      "com_cadeia_ep": 0.47,
+      "episodios": 2766,
+      "fechados": 1295,
+      "fora_de_episodio": 5736,
+      "latencia_depois_da_janela": 32.245959241040055,
+      "latencia_media": 5.758301158301158,
+      "motivos": {
+        "fechou": 1295,
+        "janela_vencida": 1460,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 11
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 254,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 106,
+          "n": 530
+        },
+        "ate_corte": {
+          "fechados": 1189,
+          "n": 2236
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 19391,
+        "fechadas": 1036,
+        "taxa_agregada": 0.05342684750657521
+      },
+      "por_racao_w": {
+        "elegiveis": 19391,
+        "fechadas": 1417,
+        "taxa_agregada": 0.07307513795059564
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 13.04468043302383,
+        "elegiveis": 19391,
+        "entraram_na_visao": 2674,
+        "visiveis_em_k0": 965
+      },
+      "taxa_agregada": 0.46818510484454084,
+      "taxa_media_das_vidas": 0.46525660909867567,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 0,
+        "vazias": 0,
+        "vazias_v1": 0
+      }
+    },
+    "M2|perto": {
+      "cheiro": {
+        "achou": 1336,
+        "busca_entregue_sozinha": 1093,
+        "comer_cheiro_por_episodio": 0.18630007110689736,
+        "compostas": 243,
+        "compostas_com_refeicao": 242,
+        "decisoes_comer_cheiro": 786,
+        "decisoes_dormir": 5942,
+        "decisoes_explorar_cheiro": 657,
+        "decisoes_nos_episodios": 12542,
+        "episodios": 4219,
+        "fins_busca": {
+          "achou": 1336,
+          "trocou": 17
+        },
+        "frac_achou_com_refeicao": 0.18113772455089822,
+        "sono_na_janela": 0.47376813905278264
+      },
+      "com_cadeia_ep": 1.0,
+      "episodios": 4219,
+      "fechados": 4105,
+      "fora_de_episodio": 5101,
+      "latencia_depois_da_janela": 14.702702702702704,
+      "latencia_media": 1.7878197320341047,
+      "motivos": {
+        "fechou": 4105,
+        "janela_vencida": 112,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 2
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 4,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 0,
+          "n": 0
+        },
+        "ate_corte": {
+          "fechados": 4105,
+          "n": 4219
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 8073,
+        "fechadas": 5018,
+        "taxa_agregada": 0.6215780998389694
+      },
+      "por_racao_w": {
+        "elegiveis": 8073,
+        "fechadas": 5079,
+        "taxa_agregada": 0.6291341508732813
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 0.8843048034504112,
+        "elegiveis": 8073,
+        "entraram_na_visao": 0,
+        "visiveis_em_k0": 8073
+      },
+      "taxa_agregada": 0.972979378999763,
+      "taxa_media_das_vidas": 0.9676082295907878,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 0,
+        "vazias": 0,
+        "vazias_v1": 0
+      }
+    },
+    "M2|todos": {
+      "cheiro": {
+        "achou": 8471,
+        "busca_entregue_sozinha": 7170,
+        "comer_cheiro_por_episodio": 0.7181754244951271,
+        "compostas": 1301,
+        "compostas_com_refeicao": 1150,
+        "decisoes_comer_cheiro": 7148,
+        "decisoes_dormir": 30821,
+        "decisoes_explorar_cheiro": 4605,
+        "decisoes_nos_episodios": 66375,
+        "episodios": 9953,
+        "fins_busca": {
+          "achou": 8471,
+          "desistiu": 6,
+          "sumiu": 330,
+          "trocou": 5837
+        },
+        "frac_achou_com_refeicao": 0.13575728957620115,
+        "sono_na_janela": 0.46434651600753296
+      },
+      "com_cadeia_ep": 0.7933333333333333,
+      "episodios": 9953,
+      "fechados": 7418,
+      "fora_de_episodio": 19366,
+      "latencia_depois_da_janela": 27.64393016646366,
+      "latencia_media": 3.3886492315988135,
+      "motivos": {
+        "fechou": 7418,
+        "janela_vencida": 2513,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 22
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 285,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 106,
+          "n": 553
+        },
+        "ate_corte": {
+          "fechados": 7312,
+          "n": 9400
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 41525,
+        "fechadas": 8639,
+        "taxa_agregada": 0.20804334738109573
+      },
+      "por_racao_w": {
+        "elegiveis": 41525,
+        "fechadas": 9653,
+        "taxa_agregada": 0.23246237206502107
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 5.791232710435252,
+        "elegiveis": 41525,
+        "entraram_na_visao": 9781,
+        "visiveis_em_k0": 13996
+      },
+      "taxa_agregada": 0.7453029237415855,
+      "taxa_media_das_vidas": 0.7040527245460643,
+      "vidas": 600,
+      "visitas": {
+        "lugar_lembrado": 0,
+        "vazias": 0,
+        "vazias_v1": 0
+      }
+    },
+    "M3-420|comedouro": {
+      "cheiro": {
+        "achou": 0,
+        "busca_entregue_sozinha": 0,
+        "comer_cheiro_por_episodio": 0.43377885783718106,
+        "compostas": 0,
+        "compostas_com_refeicao": 0,
+        "decisoes_comer_cheiro": 1428,
+        "decisoes_dormir": 10841,
+        "decisoes_explorar_cheiro": 1536,
+        "decisoes_nos_episodios": 22105,
+        "episodios": 3292,
+        "fins_busca": {},
+        "frac_achou_com_refeicao": null,
+        "sono_na_janela": 0.49043202895272564
+      },
+      "com_cadeia_ep": 0.995,
+      "episodios": 3292,
+      "fechados": 2651,
+      "fora_de_episodio": 7999,
+      "latencia_depois_da_janela": 18.01134521880065,
+      "latencia_media": 4.4703885326291966,
+      "motivos": {
+        "fechou": 2651,
+        "janela_vencida": 623,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 18
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 34,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 0,
+          "n": 7
+        },
+        "ate_corte": {
+          "fechados": 2651,
+          "n": 3285
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 13060,
+        "fechadas": 3292,
+        "taxa_agregada": 0.25206738131699846
+      },
+      "por_racao_w": {
+        "elegiveis": 13060,
+        "fechadas": 3786,
+        "taxa_agregada": 0.2898928024502297
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 1.6281390977643815,
+        "elegiveis": 13060,
+        "entraram_na_visao": 6318,
+        "visiveis_em_k0": 5722
+      },
+      "taxa_agregada": 0.8052855407047388,
+      "taxa_media_das_vidas": 0.8020210446650486,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 3401,
+        "vazias": 3401,
+        "vazias_v1": 3401
+      }
+    },
+    "M3-420|longe": {
+      "cheiro": {
+        "achou": 0,
+        "busca_entregue_sozinha": 0,
+        "comer_cheiro_por_episodio": 0.6509046052631579,
+        "compostas": 0,
+        "compostas_com_refeicao": 0,
+        "decisoes_comer_cheiro": 1583,
+        "decisoes_dormir": 11530,
+        "decisoes_explorar_cheiro": 1349,
+        "decisoes_nos_episodios": 26022,
+        "episodios": 2432,
+        "fins_busca": {},
+        "frac_achou_com_refeicao": null,
+        "sono_na_janela": 0.4430866190146799
+      },
+      "com_cadeia_ep": 0.425,
+      "episodios": 2432,
+      "fechados": 1077,
+      "fora_de_episodio": 5604,
+      "latencia_depois_da_janela": 39.22452107279693,
+      "latencia_media": 5.571959145775302,
+      "motivos": {
+        "fechou": 1077,
+        "janela_vencida": 1350,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 5
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 284,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 91,
+          "n": 405
+        },
+        "ate_corte": {
+          "fechados": 986,
+          "n": 2027
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 19669,
+        "fechadas": 1116,
+        "taxa_agregada": 0.05673903096242819
+      },
+      "por_racao_w": {
+        "elegiveis": 19669,
+        "fechadas": 1434,
+        "taxa_agregada": 0.0729066043011846
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 13.784388857874594,
+        "elegiveis": 19669,
+        "entraram_na_visao": 2182,
+        "visiveis_em_k0": 1096
+      },
+      "taxa_agregada": 0.4428453947368421,
+      "taxa_media_das_vidas": 0.4271528427068288,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 7537,
+        "vazias": 7529,
+        "vazias_v1": 7537
+      }
+    },
+    "M3-420|perto": {
+      "cheiro": {
+        "achou": 0,
+        "busca_entregue_sozinha": 0,
+        "comer_cheiro_por_episodio": 0.14429845143125294,
+        "compostas": 0,
+        "compostas_com_refeicao": 0,
+        "decisoes_comer_cheiro": 615,
+        "decisoes_dormir": 6314,
+        "decisoes_explorar_cheiro": 681,
+        "decisoes_nos_episodios": 12977,
+        "episodios": 4262,
+        "fins_busca": {},
+        "frac_achou_com_refeicao": null,
+        "sono_na_janela": 0.4865531324651306
+      },
+      "com_cadeia_ep": 1.0,
+      "episodios": 4262,
+      "fechados": 4110,
+      "fora_de_episodio": 5043,
+      "latencia_depois_da_janela": 14.45138888888889,
+      "latencia_media": 1.8082725060827252,
+      "motivos": {
+        "fechou": 4110,
+        "janela_vencida": 144,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 8
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 5,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 0,
+          "n": 0
+        },
+        "ate_corte": {
+          "fechados": 4110,
+          "n": 4262
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 7993,
+        "fechadas": 4993,
+        "taxa_agregada": 0.6246715876391843
+      },
+      "por_racao_w": {
+        "elegiveis": 7993,
+        "fechadas": 5059,
+        "taxa_agregada": 0.6329288127111222
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 0.888431429859684,
+        "elegiveis": 7993,
+        "entraram_na_visao": 0,
+        "visiveis_em_k0": 7993
+      },
+      "taxa_agregada": 0.9643359924917879,
+      "taxa_media_das_vidas": 0.9582899455436626,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 6499,
+        "vazias": 6498,
+        "vazias_v1": 6499
+      }
+    },
+    "M3-420|todos": {
+      "cheiro": {
+        "achou": 0,
+        "busca_entregue_sozinha": 0,
+        "comer_cheiro_por_episodio": 0.3631083516923693,
+        "compostas": 0,
+        "compostas_com_refeicao": 0,
+        "decisoes_comer_cheiro": 3626,
+        "decisoes_dormir": 28685,
+        "decisoes_explorar_cheiro": 3566,
+        "decisoes_nos_episodios": 61104,
+        "episodios": 9986,
+        "fins_busca": {},
+        "frac_achou_com_refeicao": null,
+        "sono_na_janela": 0.4694455354804923
+      },
+      "com_cadeia_ep": 0.8066666666666666,
+      "episodios": 9986,
+      "fechados": 7838,
+      "fora_de_episodio": 18646,
+      "latencia_depois_da_janela": 31.162633107454017,
+      "latencia_media": 3.225822914008676,
+      "motivos": {
+        "fechou": 7838,
+        "janela_vencida": 2117,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 31
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 323,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 91,
+          "n": 412
+        },
+        "ate_corte": {
+          "fechados": 7747,
+          "n": 9574
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 40722,
+        "fechadas": 9401,
+        "taxa_agregada": 0.23085801286773733
+      },
+      "por_racao_w": {
+        "elegiveis": 40722,
+        "fechadas": 10279,
+        "taxa_agregada": 0.25241883993909925
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 5.433653128499553,
+        "elegiveis": 40722,
+        "entraram_na_visao": 8500,
+        "visiveis_em_k0": 14811
+      },
+      "taxa_agregada": 0.7848988584017624,
+      "taxa_media_das_vidas": 0.7291546109718466,
+      "vidas": 600,
+      "visitas": {
+        "lugar_lembrado": 17437,
+        "vazias": 17428,
+        "vazias_v1": 17437
+      }
+    },
+    "M3-sem-inato|comedouro": {
+      "cheiro": {
+        "achou": 1814,
+        "busca_entregue_sozinha": 1556,
+        "comer_cheiro_por_episodio": 0.43865495304453195,
+        "compostas": 258,
+        "compostas_com_refeicao": 232,
+        "decisoes_comer_cheiro": 1448,
+        "decisoes_dormir": 10810,
+        "decisoes_explorar_cheiro": 1545,
+        "decisoes_nos_episodios": 22028,
+        "episodios": 3301,
+        "fins_busca": {
+          "achou": 1814,
+          "trocou": 415
+        },
+        "frac_achou_com_refeicao": 0.1278941565600882,
+        "sono_na_janela": 0.4907390593789722
+      },
+      "com_cadeia_ep": 0.995,
+      "episodios": 3301,
+      "fechados": 2674,
+      "fora_de_episodio": 8099,
+      "latencia_depois_da_janela": 17.823051948051948,
+      "latencia_media": 4.443156320119671,
+      "motivos": {
+        "fechou": 2674,
+        "janela_vencida": 618,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 9
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 28,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 0,
+          "n": 10
+        },
+        "ate_corte": {
+          "fechados": 2674,
+          "n": 3291
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 12927,
+        "fechadas": 3294,
+        "taxa_agregada": 0.25481550243676027
+      },
+      "por_racao_w": {
+        "elegiveis": 12927,
+        "fechadas": 3805,
+        "taxa_agregada": 0.29434516902606944
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 1.6024546676827895,
+        "elegiveis": 12927,
+        "entraram_na_visao": 6174,
+        "visiveis_em_k0": 5848
+      },
+      "taxa_agregada": 0.810057558315662,
+      "taxa_media_das_vidas": 0.8065190877073032,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 3277,
+        "vazias": 3277,
+        "vazias_v1": 3277
+      }
+    },
+    "M3-sem-inato|longe": {
+      "cheiro": {
+        "achou": 3024,
+        "busca_entregue_sozinha": 2655,
+        "comer_cheiro_por_episodio": 0.7242951907131011,
+        "compostas": 368,
+        "compostas_com_refeicao": 297,
+        "decisoes_comer_cheiro": 1747,
+        "decisoes_dormir": 11370,
+        "decisoes_explorar_cheiro": 1251,
+        "decisoes_nos_episodios": 25623,
+        "episodios": 2412,
+        "fins_busca": {
+          "achou": 3024,
+          "desistiu": 2,
+          "sumiu": 268,
+          "trocou": 4760
+        },
+        "frac_achou_com_refeicao": 0.09821428571428571,
+        "sono_na_janela": 0.44374195059126564
+      },
+      "com_cadeia_ep": 0.415,
+      "episodios": 2412,
+      "fechados": 1062,
+      "fora_de_episodio": 5507,
+      "latencia_depois_da_janela": 38.23148869836321,
+      "latencia_media": 5.548964218455744,
+      "motivos": {
+        "fechou": 1062,
+        "janela_vencida": 1340,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 10
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 287,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 88,
+          "n": 403
+        },
+        "ate_corte": {
+          "fechados": 974,
+          "n": 2009
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 19768,
+        "fechadas": 1084,
+        "taxa_agregada": 0.05483609874544719
+      },
+      "por_racao_w": {
+        "elegiveis": 19768,
+        "fechadas": 1396,
+        "taxa_agregada": 0.07061918251719951
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 13.739752528607049,
+        "elegiveis": 19768,
+        "entraram_na_visao": 2315,
+        "visiveis_em_k0": 1073
+      },
+      "taxa_agregada": 0.44029850746268656,
+      "taxa_media_das_vidas": 0.4210506778653063,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 7398,
+        "vazias": 7393,
+        "vazias_v1": 7398
+      }
+    },
+    "M3-sem-inato|perto": {
+      "cheiro": {
+        "achou": 980,
+        "busca_entregue_sozinha": 833,
+        "comer_cheiro_por_episodio": 0.14708646616541354,
+        "compostas": 147,
+        "compostas_com_refeicao": 146,
+        "decisoes_comer_cheiro": 626,
+        "decisoes_dormir": 6334,
+        "decisoes_explorar_cheiro": 676,
+        "decisoes_nos_episodios": 12989,
+        "episodios": 4256,
+        "fins_busca": {
+          "achou": 980,
+          "trocou": 11
+        },
+        "frac_achou_com_refeicao": 0.1489795918367347,
+        "sono_na_janela": 0.4876433905612441
+      },
+      "com_cadeia_ep": 1.0,
+      "episodios": 4256,
+      "fechados": 4100,
+      "fora_de_episodio": 5055,
+      "latencia_depois_da_janela": 14.52027027027027,
+      "latencia_media": 1.8102439024390244,
+      "motivos": {
+        "fechou": 4100,
+        "janela_vencida": 148,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 8
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 5,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 0,
+          "n": 0
+        },
+        "ate_corte": {
+          "fechados": 4100,
+          "n": 4256
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 7987,
+        "fechadas": 4982,
+        "taxa_agregada": 0.6237636158757982
+      },
+      "por_racao_w": {
+        "elegiveis": 7987,
+        "fechadas": 5049,
+        "taxa_agregada": 0.6321522474020282
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 0.8869570196350387,
+        "elegiveis": 7987,
+        "entraram_na_visao": 0,
+        "visiveis_em_k0": 7987
+      },
+      "taxa_agregada": 0.9633458646616542,
+      "taxa_media_das_vidas": 0.957568868010085,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 6525,
+        "vazias": 6524,
+        "vazias_v1": 6525
+      }
+    },
+    "M3-sem-inato|todos": {
+      "cheiro": {
+        "achou": 5818,
+        "busca_entregue_sozinha": 5044,
+        "comer_cheiro_por_episodio": 0.38328819339953857,
+        "compostas": 773,
+        "compostas_com_refeicao": 675,
+        "decisoes_comer_cheiro": 3821,
+        "decisoes_dormir": 28514,
+        "decisoes_explorar_cheiro": 3472,
+        "decisoes_nos_episodios": 60640,
+        "episodios": 9969,
+        "fins_busca": {
+          "achou": 5818,
+          "desistiu": 2,
+          "sumiu": 268,
+          "trocou": 5186
+        },
+        "frac_achou_com_refeicao": 0.1160192506015813,
+        "sono_na_janela": 0.4702176781002638
+      },
+      "com_cadeia_ep": 0.8033333333333333,
+      "episodios": 9969,
+      "fechados": 7836,
+      "fora_de_episodio": 18661,
+      "latencia_depois_da_janela": 30.375671714704445,
+      "latencia_media": 3.2154160285860134,
+      "motivos": {
+        "fechou": 7836,
+        "janela_vencida": 2106,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 27
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 320,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 88,
+          "n": 413
+        },
+        "ate_corte": {
+          "fechados": 7748,
+          "n": 9556
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 40682,
+        "fechadas": 9360,
+        "taxa_agregada": 0.23007718401258542
+      },
+      "por_racao_w": {
+        "elegiveis": 40682,
+        "fechadas": 10250,
+        "taxa_agregada": 0.2519541812103633
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 5.409721405308292,
+        "elegiveis": 40682,
+        "entraram_na_visao": 8489,
+        "visiveis_em_k0": 14908
+      },
+      "taxa_agregada": 0.7860367138128197,
+      "taxa_media_das_vidas": 0.7283795445275648,
+      "vidas": 600,
+      "visitas": {
+        "lugar_lembrado": 17200,
+        "vazias": 17194,
+        "vazias_v1": 17200
+      }
+    },
+    "M3-sem-intencao|comedouro": {
+      "cheiro": {
+        "achou": 0,
+        "busca_entregue_sozinha": 0,
+        "comer_cheiro_por_episodio": 0.5916841160634161,
+        "compostas": 0,
+        "compostas_com_refeicao": 0,
+        "decisoes_comer_cheiro": 1978,
+        "decisoes_dormir": 10850,
+        "decisoes_explorar_cheiro": 1449,
+        "decisoes_nos_episodios": 22160,
+        "episodios": 3343,
+        "fins_busca": {},
+        "frac_achou_com_refeicao": null,
+        "sono_na_janela": 0.48962093862815886
+      },
+      "com_cadeia_ep": 0.985,
+      "episodios": 3343,
+      "fechados": 2715,
+      "fora_de_episodio": 8081,
+      "latencia_depois_da_janela": 16.76872964169381,
+      "latencia_media": 4.440883977900553,
+      "motivos": {
+        "fechou": 2715,
+        "janela_vencida": 616,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 12
+      },
+      "no_episodio_sem_fechar": 2,
+      "oferta_mudou": 39,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 0,
+          "n": 11
+        },
+        "ate_corte": {
+          "fechados": 2715,
+          "n": 3332
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 12517,
+        "fechadas": 3380,
+        "taxa_agregada": 0.2700327554525845
+      },
+      "por_racao_w": {
+        "elegiveis": 12517,
+        "fechadas": 3830,
+        "taxa_agregada": 0.30598386194775107
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 1.4702760175213891,
+        "elegiveis": 12517,
+        "entraram_na_visao": 6011,
+        "visiveis_em_k0": 5808
+      },
+      "taxa_agregada": 0.8121447801376009,
+      "taxa_media_das_vidas": 0.8141217611927942,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 3364,
+        "vazias": 3364,
+        "vazias_v1": 3364
+      }
+    },
+    "M3-sem-intencao|longe": {
+      "cheiro": {
+        "achou": 0,
+        "busca_entregue_sozinha": 0,
+        "comer_cheiro_por_episodio": 0.9568,
+        "compostas": 0,
+        "compostas_com_refeicao": 0,
+        "decisoes_comer_cheiro": 2392,
+        "decisoes_dormir": 11754,
+        "decisoes_explorar_cheiro": 1172,
+        "decisoes_nos_episodios": 26446,
+        "episodios": 2500,
+        "fins_busca": {},
+        "frac_achou_com_refeicao": null,
+        "sono_na_janela": 0.4444528473115027
+      },
+      "com_cadeia_ep": 0.44,
+      "episodios": 2500,
+      "fechados": 1132,
+      "fora_de_episodio": 5500,
+      "latencia_depois_da_janela": 37.93793103448276,
+      "latencia_media": 5.430212014134276,
+      "motivos": {
+        "fechou": 1132,
+        "janela_vencida": 1356,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 12
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 283,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 82,
+          "n": 447
+        },
+        "ate_corte": {
+          "fechados": 1050,
+          "n": 2053
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 19677,
+        "fechadas": 1102,
+        "taxa_agregada": 0.05600447222645728
+      },
+      "por_racao_w": {
+        "elegiveis": 19677,
+        "fechadas": 1406,
+        "taxa_agregada": 0.07145398180616964
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 13.81338271854334,
+        "elegiveis": 19677,
+        "entraram_na_visao": 2314,
+        "visiveis_em_k0": 1113
+      },
+      "taxa_agregada": 0.4528,
+      "taxa_media_das_vidas": 0.43342201999496893,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 7360,
+        "vazias": 7357,
+        "vazias_v1": 7360
+      }
+    },
+    "M3-sem-intencao|perto": {
+      "cheiro": {
+        "achou": 0,
+        "busca_entregue_sozinha": 0,
+        "comer_cheiro_por_episodio": 0.1964114832535885,
+        "compostas": 0,
+        "compostas_com_refeicao": 0,
+        "decisoes_comer_cheiro": 821,
+        "decisoes_dormir": 6325,
+        "decisoes_explorar_cheiro": 655,
+        "decisoes_nos_episodios": 12942,
+        "episodios": 4180,
+        "fins_busca": {},
+        "frac_achou_com_refeicao": null,
+        "sono_na_janela": 0.4887188997063823
+      },
+      "com_cadeia_ep": 1.0,
+      "episodios": 4180,
+      "fechados": 4031,
+      "fora_de_episodio": 5162,
+      "latencia_depois_da_janela": 13.875,
+      "latencia_media": 1.8563631853138178,
+      "motivos": {
+        "fechou": 4031,
+        "janela_vencida": 144,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 5
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 1,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 0,
+          "n": 0
+        },
+        "ate_corte": {
+          "fechados": 4031,
+          "n": 4180
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 8013,
+        "fechadas": 4919,
+        "taxa_agregada": 0.6138774491451392
+      },
+      "por_racao_w": {
+        "elegiveis": 8013,
+        "fechadas": 4998,
+        "taxa_agregada": 0.623736428304006
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 0.8946438962912776,
+        "elegiveis": 8013,
+        "entraram_na_visao": 0,
+        "visiveis_em_k0": 8013
+      },
+      "taxa_agregada": 0.964354066985646,
+      "taxa_media_das_vidas": 0.9579607327919519,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 6655,
+        "vazias": 6655,
+        "vazias_v1": 6655
+      }
+    },
+    "M3-sem-intencao|todos": {
+      "cheiro": {
+        "achou": 0,
+        "busca_entregue_sozinha": 0,
+        "comer_cheiro_por_episodio": 0.5179088097376036,
+        "compostas": 0,
+        "compostas_com_refeicao": 0,
+        "decisoes_comer_cheiro": 5191,
+        "decisoes_dormir": 28929,
+        "decisoes_explorar_cheiro": 3276,
+        "decisoes_nos_episodios": 61548,
+        "episodios": 10023,
+        "fins_busca": {},
+        "frac_achou_com_refeicao": null,
+        "sono_na_janela": 0.4700233963735621
+      },
+      "com_cadeia_ep": 0.8083333333333333,
+      "episodios": 10023,
+      "fechados": 7878,
+      "fora_de_episodio": 18743,
+      "latencia_depois_da_janela": 29.957828405235094,
+      "latencia_media": 3.2605991368367606,
+      "motivos": {
+        "fechou": 7878,
+        "janela_vencida": 2116,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 29
+      },
+      "no_episodio_sem_fechar": 2,
+      "oferta_mudou": 323,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 82,
+          "n": 458
+        },
+        "ate_corte": {
+          "fechados": 7796,
+          "n": 9565
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 40207,
+        "fechadas": 9401,
+        "taxa_agregada": 0.23381500733703087
+      },
+      "por_racao_w": {
+        "elegiveis": 40207,
+        "fechadas": 10234,
+        "taxa_agregada": 0.2545327927972741
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 5.392767544118668,
+        "elegiveis": 40207,
+        "entraram_na_visao": 8325,
+        "visiveis_em_k0": 14934
+      },
+      "taxa_agregada": 0.7859922178988327,
+      "taxa_media_das_vidas": 0.7351681713265716,
+      "vidas": 600,
+      "visitas": {
+        "lugar_lembrado": 17379,
+        "vazias": 17376,
+        "vazias_v1": 17379
+      }
+    },
+    "M3-sp|comedouro": {
+      "cheiro": {
+        "achou": 2420,
+        "busca_entregue_sozinha": 2021,
+        "comer_cheiro_por_episodio": 0.5878234398782344,
+        "compostas": 397,
+        "compostas_com_refeicao": 370,
+        "decisoes_comer_cheiro": 1931,
+        "decisoes_dormir": 10737,
+        "decisoes_explorar_cheiro": 1576,
+        "decisoes_nos_episodios": 21911,
+        "episodios": 3285,
+        "fins_busca": {
+          "achou": 2420,
+          "trocou": 617
+        },
+        "frac_achou_com_refeicao": 0.15289256198347106,
+        "sono_na_janela": 0.49002783989776827
+      },
+      "com_cadeia_ep": 1.0,
+      "episodios": 3285,
+      "fechados": 2693,
+      "fora_de_episodio": 8060,
+      "latencia_depois_da_janela": 17.731497418244405,
+      "latencia_media": 4.516895655402896,
+      "motivos": {
+        "fechou": 2693,
+        "janela_vencida": 581,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 11
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 36,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 1,
+          "n": 10
+        },
+        "ate_corte": {
+          "fechados": 2692,
+          "n": 3275
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 12594,
+        "fechadas": 3397,
+        "taxa_agregada": 0.2697316182309036
+      },
+      "por_racao_w": {
+        "elegiveis": 12594,
+        "fechadas": 3879,
+        "taxa_agregada": 0.3080038113387327
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 1.511029117460656,
+        "elegiveis": 12594,
+        "entraram_na_visao": 5997,
+        "visiveis_em_k0": 5822
+      },
+      "taxa_agregada": 0.8197869101978691,
+      "taxa_media_das_vidas": 0.8249566367581057,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 3509,
+        "vazias": 3509,
+        "vazias_v1": 3509
+      }
+    },
+    "M3-sp|longe": {
+      "cheiro": {
+        "achou": 3435,
+        "busca_entregue_sozinha": 2988,
+        "comer_cheiro_por_episodio": 0.9433569346105789,
+        "compostas": 447,
+        "compostas_com_refeicao": 374,
+        "decisoes_comer_cheiro": 2265,
+        "decisoes_dormir": 11445,
+        "decisoes_explorar_cheiro": 1251,
+        "decisoes_nos_episodios": 25644,
+        "episodios": 2401,
+        "fins_busca": {
+          "achou": 3435,
+          "sumiu": 323,
+          "trocou": 5472
+        },
+        "frac_achou_com_refeicao": 0.10887918486171762,
+        "sono_na_janela": 0.44630322882545626
+      },
+      "com_cadeia_ep": 0.36,
+      "episodios": 2401,
+      "fechados": 1033,
+      "fora_de_episodio": 5570,
+      "latencia_depois_da_janela": 38.6547256097561,
+      "latencia_media": 5.369796708615683,
+      "motivos": {
+        "fechou": 1033,
+        "janela_vencida": 1356,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 12
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 263,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 89,
+          "n": 429
+        },
+        "ate_corte": {
+          "fechados": 944,
+          "n": 1972
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 19697,
+        "fechadas": 1085,
+        "taxa_agregada": 0.05508453063918363
+      },
+      "por_racao_w": {
+        "elegiveis": 19697,
+        "fechadas": 1428,
+        "taxa_agregada": 0.07249835000253846
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 13.709721885282038,
+        "elegiveis": 19697,
+        "entraram_na_visao": 2455,
+        "visiveis_em_k0": 1089
+      },
+      "taxa_agregada": 0.4302374010828821,
+      "taxa_media_das_vidas": 0.41346967076611035,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 7485,
+        "vazias": 7481,
+        "vazias_v1": 7485
+      }
+    },
+    "M3-sp|perto": {
+      "cheiro": {
+        "achou": 1497,
+        "busca_entregue_sozinha": 1266,
+        "comer_cheiro_por_episodio": 0.20701168614357263,
+        "compostas": 231,
+        "compostas_com_refeicao": 230,
+        "decisoes_comer_cheiro": 868,
+        "decisoes_dormir": 6542,
+        "decisoes_explorar_cheiro": 710,
+        "decisoes_nos_episodios": 13312,
+        "episodios": 4193,
+        "fins_busca": {
+          "achou": 1497,
+          "trocou": 19
+        },
+        "frac_achou_com_refeicao": 0.15364061456245826,
+        "sono_na_janela": 0.4914362980769231
+      },
+      "com_cadeia_ep": 1.0,
+      "episodios": 4193,
+      "fechados": 4029,
+      "fora_de_episodio": 5167,
+      "latencia_depois_da_janela": 13.980519480519481,
+      "latencia_media": 1.9193348225366096,
+      "motivos": {
+        "fechou": 4029,
+        "janela_vencida": 156,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 8
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 3,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 0,
+          "n": 0
+        },
+        "ate_corte": {
+          "fechados": 4029,
+          "n": 4193
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 8068,
+        "fechadas": 4912,
+        "taxa_agregada": 0.6088249876053545
+      },
+      "por_racao_w": {
+        "elegiveis": 8068,
+        "fechadas": 4989,
+        "taxa_agregada": 0.618368864650471
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 0.8885768204121822,
+        "elegiveis": 8068,
+        "entraram_na_visao": 0,
+        "visiveis_em_k0": 8068
+      },
+      "taxa_agregada": 0.9608871929406153,
+      "taxa_media_das_vidas": 0.9542770714201536,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 6398,
+        "vazias": 6396,
+        "vazias_v1": 6398
+      }
+    },
+    "M3-sp|todos": {
+      "cheiro": {
+        "achou": 7352,
+        "busca_entregue_sozinha": 6275,
+        "comer_cheiro_por_episodio": 0.51260249013058,
+        "compostas": 1075,
+        "compostas_com_refeicao": 974,
+        "decisoes_comer_cheiro": 5064,
+        "decisoes_dormir": 28724,
+        "decisoes_explorar_cheiro": 3537,
+        "decisoes_nos_episodios": 60867,
+        "episodios": 9879,
+        "fins_busca": {
+          "achou": 7352,
+          "sumiu": 323,
+          "trocou": 6108
+        },
+        "frac_achou_com_refeicao": 0.132480957562568,
+        "sono_na_janela": 0.47191417352588433
+      },
+      "com_cadeia_ep": 0.7866666666666666,
+      "episodios": 9879,
+      "fechados": 7755,
+      "fora_de_episodio": 18797,
+      "latencia_depois_da_janela": 30.85979482169028,
+      "latencia_media": 3.2809800128949065,
+      "motivos": {
+        "fechou": 7755,
+        "janela_vencida": 2093,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 31
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 302,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 90,
+          "n": 439
+        },
+        "ate_corte": {
+          "fechados": 7665,
+          "n": 9440
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 40359,
+        "fechadas": 9394,
+        "taxa_agregada": 0.2327609702916326
+      },
+      "por_racao_w": {
+        "elegiveis": 40359,
+        "fechadas": 10296,
+        "taxa_agregada": 0.25511038430089944
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 5.369775941051626,
+        "elegiveis": 40359,
+        "entraram_na_visao": 8452,
+        "visiveis_em_k0": 14979
+      },
+      "taxa_agregada": 0.7849984816276951,
+      "taxa_media_das_vidas": 0.7309011263147899,
+      "vidas": 600,
+      "visitas": {
+        "lugar_lembrado": 17392,
+        "vazias": 17386,
+        "vazias_v1": 17392
+      }
+    },
+    "M3|comedouro": {
+      "cheiro": {
+        "achou": 2375,
+        "busca_entregue_sozinha": 1968,
+        "comer_cheiro_por_episodio": 0.5831572592816179,
+        "compostas": 407,
+        "compostas_com_refeicao": 384,
+        "decisoes_comer_cheiro": 1932,
+        "decisoes_dormir": 10689,
+        "decisoes_explorar_cheiro": 1399,
+        "decisoes_nos_episodios": 21674,
+        "episodios": 3313,
+        "fins_busca": {
+          "achou": 2375,
+          "trocou": 513
+        },
+        "frac_achou_com_refeicao": 0.1616842105263158,
+        "sono_na_janela": 0.4931715419396512
+      },
+      "com_cadeia_ep": 0.995,
+      "episodios": 3313,
+      "fechados": 2703,
+      "fora_de_episodio": 8031,
+      "latencia_depois_da_janela": 17.10200668896321,
+      "latencia_media": 4.337772844987051,
+      "motivos": {
+        "fechou": 2703,
+        "janela_vencida": 600,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 10
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 25,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 0,
+          "n": 12
+        },
+        "ate_corte": {
+          "fechados": 2703,
+          "n": 3301
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 12568,
+        "fechadas": 3388,
+        "taxa_agregada": 0.269573520050923
+      },
+      "por_racao_w": {
+        "elegiveis": 12568,
+        "fechadas": 3822,
+        "taxa_agregada": 0.30410566518141313
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 1.5647473244990677,
+        "elegiveis": 12568,
+        "entraram_na_visao": 6015,
+        "visiveis_em_k0": 5716
+      },
+      "taxa_agregada": 0.815876848777543,
+      "taxa_media_das_vidas": 0.8162927210803933,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 3264,
+        "vazias": 3264,
+        "vazias_v1": 3264
+      }
+    },
+    "M3|longe": {
+      "cheiro": {
+        "achou": 3516,
+        "busca_entregue_sozinha": 3065,
+        "comer_cheiro_por_episodio": 0.9788254095085897,
+        "compostas": 450,
+        "compostas_com_refeicao": 376,
+        "decisoes_comer_cheiro": 2450,
+        "decisoes_dormir": 11839,
+        "decisoes_explorar_cheiro": 1220,
+        "decisoes_nos_episodios": 26500,
+        "episodios": 2503,
+        "fins_busca": {
+          "achou": 3516,
+          "desistiu": 5,
+          "sumiu": 330,
+          "trocou": 5142
+        },
+        "frac_achou_com_refeicao": 0.10693970420932879,
+        "sono_na_janela": 0.44675471698113206
+      },
+      "com_cadeia_ep": 0.43,
+      "episodios": 2503,
+      "fechados": 1120,
+      "fora_de_episodio": 5644,
+      "latencia_depois_da_janela": 37.263477600607445,
+      "latencia_media": 5.464285714285714,
+      "motivos": {
+        "fechou": 1120,
+        "janela_vencida": 1372,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 11
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 280,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 92,
+          "n": 441
+        },
+        "ate_corte": {
+          "fechados": 1028,
+          "n": 2062
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 19546,
+        "fechadas": 1096,
+        "taxa_agregada": 0.05607285378082472
+      },
+      "por_racao_w": {
+        "elegiveis": 19546,
+        "fechadas": 1416,
+        "taxa_agregada": 0.0724444899212115
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 13.739211969346611,
+        "elegiveis": 19546,
+        "entraram_na_visao": 2385,
+        "visiveis_em_k0": 1108
+      },
+      "taxa_agregada": 0.44746304434678386,
+      "taxa_media_das_vidas": 0.4339497666076613,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 6939,
+        "vazias": 6932,
+        "vazias_v1": 6939
+      }
+    },
+    "M3|perto": {
+      "cheiro": {
+        "achou": 1412,
+        "busca_entregue_sozinha": 1170,
+        "comer_cheiro_por_episodio": 0.19678811121764142,
+        "compostas": 242,
+        "compostas_com_refeicao": 241,
+        "decisoes_comer_cheiro": 821,
+        "decisoes_dormir": 6340,
+        "decisoes_explorar_cheiro": 654,
+        "decisoes_nos_episodios": 12957,
+        "episodios": 4172,
+        "fins_busca": {
+          "achou": 1412,
+          "trocou": 22
+        },
+        "frac_achou_com_refeicao": 0.1706798866855524,
+        "sono_na_janela": 0.4893107972524504
+      },
+      "com_cadeia_ep": 1.0,
+      "episodios": 4172,
+      "fechados": 4022,
+      "fora_de_episodio": 5168,
+      "latencia_depois_da_janela": 13.696551724137931,
+      "latencia_media": 1.8652411735454997,
+      "motivos": {
+        "fechou": 4022,
+        "janela_vencida": 145,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 5
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 1,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 0,
+          "n": 0
+        },
+        "ate_corte": {
+          "fechados": 4022,
+          "n": 4172
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 8004,
+        "fechadas": 4902,
+        "taxa_agregada": 0.6124437781109445
+      },
+      "por_racao_w": {
+        "elegiveis": 8004,
+        "fechadas": 4984,
+        "taxa_agregada": 0.6226886556721639
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 0.8931746273199154,
+        "elegiveis": 8004,
+        "entraram_na_visao": 0,
+        "visiveis_em_k0": 8004
+      },
+      "taxa_agregada": 0.964046021093001,
+      "taxa_media_das_vidas": 0.957726989775541,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 6648,
+        "vazias": 6648,
+        "vazias_v1": 6648
+      }
+    },
+    "M3|todos": {
+      "cheiro": {
+        "achou": 7303,
+        "busca_entregue_sozinha": 6203,
+        "comer_cheiro_por_episodio": 0.5209251101321586,
+        "compostas": 1099,
+        "compostas_com_refeicao": 1001,
+        "decisoes_comer_cheiro": 5203,
+        "decisoes_dormir": 28868,
+        "decisoes_explorar_cheiro": 3273,
+        "decisoes_nos_episodios": 61131,
+        "episodios": 9988,
+        "fins_busca": {
+          "achou": 7303,
+          "desistiu": 5,
+          "sumiu": 330,
+          "trocou": 5677
+        },
+        "frac_achou_com_refeicao": 0.13706695878406133,
+        "sono_na_janela": 0.47223176457116683
+      },
+      "com_cadeia_ep": 0.8083333333333333,
+      "episodios": 9988,
+      "fechados": 7845,
+      "fora_de_episodio": 18843,
+      "latencia_depois_da_janela": 29.751941747572815,
+      "latencia_media": 3.2309751434034415,
+      "motivos": {
+        "fechou": 7845,
+        "janela_vencida": 2117,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 26
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 306,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 92,
+          "n": 453
+        },
+        "ate_corte": {
+          "fechados": 7753,
+          "n": 9535
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 40118,
+        "fechadas": 9386,
+        "taxa_agregada": 0.2339598185353208
+      },
+      "por_racao_w": {
+        "elegiveis": 40118,
+        "fechadas": 10222,
+        "taxa_agregada": 0.25479834488259634
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 5.399044640388532,
+        "elegiveis": 40118,
+        "entraram_na_visao": 8400,
+        "visiveis_em_k0": 14828
+      },
+      "taxa_agregada": 0.7854425310372447,
+      "taxa_media_das_vidas": 0.7359898258211985,
+      "vidas": 600,
+      "visitas": {
+        "lugar_lembrado": 16851,
+        "vazias": 16844,
+        "vazias_v1": 16851
+      }
+    },
+    "M4-con|comedouro": {
+      "cheiro": {
+        "achou": 2921,
+        "busca_entregue_sozinha": 2439,
+        "comer_cheiro_por_episodio": 0.6539493293591654,
+        "compostas": 482,
+        "compostas_com_refeicao": 445,
+        "decisoes_comer_cheiro": 2194,
+        "decisoes_dormir": 11080,
+        "decisoes_explorar_cheiro": 1519,
+        "decisoes_nos_episodios": 22480,
+        "episodios": 3355,
+        "fins_busca": {
+          "achou": 2921,
+          "trocou": 688
+        },
+        "frac_achou_com_refeicao": 0.15234508729887025,
+        "sono_na_janela": 0.4928825622775801
+      },
+      "com_cadeia_ep": 0.99,
+      "episodios": 3355,
+      "fechados": 2734,
+      "fora_de_episodio": 10171,
+      "latencia_depois_da_janela": 17.09344262295082,
+      "latencia_media": 4.522677395757133,
+      "motivos": {
+        "fechou": 2734,
+        "janela_vencida": 612,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 9
+      },
+      "no_episodio_sem_fechar": 1,
+      "oferta_mudou": 20,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 4,
+          "n": 15
+        },
+        "ate_corte": {
+          "fechados": 2730,
+          "n": 3340
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 13013,
+        "fechadas": 3891,
+        "taxa_agregada": 0.29900868362406824
+      },
+      "por_racao_w": {
+        "elegiveis": 13013,
+        "fechadas": 4600,
+        "taxa_agregada": 0.35349266118496886
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 1.471086943225326,
+        "elegiveis": 13013,
+        "entraram_na_visao": 6252,
+        "visiveis_em_k0": 6175
+      },
+      "taxa_agregada": 0.814903129657228,
+      "taxa_media_das_vidas": 0.8163995196138878,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 3482,
+        "vazias": 3482,
+        "vazias_v1": 3482
+      }
+    },
+    "M4-con|longe": {
+      "cheiro": {
+        "achou": 4062,
+        "busca_entregue_sozinha": 3551,
+        "comer_cheiro_por_episodio": 1.078714859437751,
+        "compostas": 510,
+        "compostas_com_refeicao": 436,
+        "decisoes_comer_cheiro": 2686,
+        "decisoes_dormir": 11964,
+        "decisoes_explorar_cheiro": 1291,
+        "decisoes_nos_episodios": 26279,
+        "episodios": 2490,
+        "fins_busca": {
+          "achou": 4062,
+          "desistiu": 4,
+          "sumiu": 325,
+          "trocou": 5441
+        },
+        "frac_achou_com_refeicao": 0.10733628754308222,
+        "sono_na_janela": 0.4552684653145097
+      },
+      "com_cadeia_ep": 0.42,
+      "episodios": 2490,
+      "fechados": 1130,
+      "fora_de_episodio": 6206,
+      "latencia_depois_da_janela": 36.522041763341065,
+      "latencia_media": 5.43716814159292,
+      "motivos": {
+        "fechou": 1130,
+        "janela_vencida": 1345,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 15
+      },
+      "no_episodio_sem_fechar": 1,
+      "oferta_mudou": 240,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 95,
+          "n": 453
+        },
+        "ate_corte": {
+          "fechados": 1035,
+          "n": 2037
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 19662,
+        "fechadas": 1149,
+        "taxa_agregada": 0.05843759536161123
+      },
+      "por_racao_w": {
+        "elegiveis": 19662,
+        "fechadas": 1500,
+        "taxa_agregada": 0.07628928898382667
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 13.67120407923732,
+        "elegiveis": 19662,
+        "entraram_na_visao": 2454,
+        "visiveis_em_k0": 1066
+      },
+      "taxa_agregada": 0.4538152610441767,
+      "taxa_media_das_vidas": 0.4410106574282271,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 6455,
+        "vazias": 6451,
+        "vazias_v1": 6455
+      }
+    },
+    "M4-con|perto": {
+      "cheiro": {
+        "achou": 1972,
+        "busca_entregue_sozinha": 1600,
+        "comer_cheiro_por_episodio": 0.22066470721229933,
+        "compostas": 372,
+        "compostas_com_refeicao": 364,
+        "decisoes_comer_cheiro": 976,
+        "decisoes_dormir": 6297,
+        "decisoes_explorar_cheiro": 572,
+        "decisoes_nos_episodios": 13162,
+        "episodios": 4423,
+        "fins_busca": {
+          "achou": 1972,
+          "trocou": 23
+        },
+        "frac_achou_com_refeicao": 0.1845841784989858,
+        "sono_na_janela": 0.47842273210758246
+      },
+      "com_cadeia_ep": 1.0,
+      "episodios": 4423,
+      "fechados": 4286,
+      "fora_de_episodio": 5388,
+      "latencia_depois_da_janela": 14.727272727272727,
+      "latencia_media": 1.7701819878674756,
+      "motivos": {
+        "fechou": 4286,
+        "janela_vencida": 132,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 5
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 0,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 0,
+          "n": 0
+        },
+        "ate_corte": {
+          "fechados": 4286,
+          "n": 4423
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 8407,
+        "fechadas": 5774,
+        "taxa_agregada": 0.6868086118710598
+      },
+      "por_racao_w": {
+        "elegiveis": 8407,
+        "fechadas": 5859,
+        "taxa_agregada": 0.6969192339716903
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 0.8974370548925785,
+        "elegiveis": 8407,
+        "entraram_na_visao": 0,
+        "visiveis_em_k0": 8407
+      },
+      "taxa_agregada": 0.9690255482704047,
+      "taxa_media_das_vidas": 0.9628111991280184,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 6923,
+        "vazias": 6923,
+        "vazias_v1": 6923
+      }
+    },
+    "M4-con|todos": {
+      "cheiro": {
+        "achou": 8955,
+        "busca_entregue_sozinha": 7590,
+        "comer_cheiro_por_episodio": 0.5703155434359174,
+        "compostas": 1364,
+        "compostas_com_refeicao": 1245,
+        "decisoes_comer_cheiro": 5856,
+        "decisoes_dormir": 29341,
+        "decisoes_explorar_cheiro": 3382,
+        "decisoes_nos_episodios": 61921,
+        "episodios": 10268,
+        "fins_busca": {
+          "achou": 8955,
+          "desistiu": 4,
+          "sumiu": 325,
+          "trocou": 6152
+        },
+        "frac_achou_com_refeicao": 0.1390284757118928,
+        "sono_na_janela": 0.47384570662618497
+      },
+      "com_cadeia_ep": 0.8033333333333333,
+      "episodios": 10268,
+      "fechados": 8150,
+      "fora_de_episodio": 21765,
+      "latencia_depois_da_janela": 29.284520884520884,
+      "latencia_media": 3.201963190184049,
+      "motivos": {
+        "fechou": 8150,
+        "janela_vencida": 2089,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 29
+      },
+      "no_episodio_sem_fechar": 2,
+      "oferta_mudou": 260,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 99,
+          "n": 468
+        },
+        "ate_corte": {
+          "fechados": 8051,
+          "n": 9800
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 41082,
+        "fechadas": 10814,
+        "taxa_agregada": 0.2632296382844068
+      },
+      "por_racao_w": {
+        "elegiveis": 41082,
+        "fechadas": 11959,
+        "taxa_agregada": 0.2911007253785113
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 5.346576025785075,
+        "elegiveis": 41082,
+        "entraram_na_visao": 8706,
+        "visiveis_em_k0": 15648
+      },
+      "taxa_agregada": 0.7937280872613947,
+      "taxa_media_das_vidas": 0.7400737920567111,
+      "vidas": 600,
+      "visitas": {
+        "lugar_lembrado": 16860,
+        "vazias": 16856,
+        "vazias_v1": 16860
+      }
+    },
+    "M4-emb|comedouro": {
+      "cheiro": {
+        "achou": 2864,
+        "busca_entregue_sozinha": 2355,
+        "comer_cheiro_por_episodio": 0.6541804015582859,
+        "compostas": 509,
+        "compostas_com_refeicao": 466,
+        "decisoes_comer_cheiro": 2183,
+        "decisoes_dormir": 11127,
+        "decisoes_explorar_cheiro": 1537,
+        "decisoes_nos_episodios": 22506,
+        "episodios": 3337,
+        "fins_busca": {
+          "achou": 2864,
+          "trocou": 605
+        },
+        "frac_achou_com_refeicao": 0.1627094972067039,
+        "sono_na_janela": 0.4944014929352173
+      },
+      "com_cadeia_ep": 0.99,
+      "episodios": 3337,
+      "fechados": 2721,
+      "fora_de_episodio": 10018,
+      "latencia_depois_da_janela": 16.764026402640265,
+      "latencia_media": 4.570378537302462,
+      "motivos": {
+        "fechou": 2721,
+        "janela_vencida": 609,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 7
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 20,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 2,
+          "n": 18
+        },
+        "ate_corte": {
+          "fechados": 2719,
+          "n": 3319
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 13054,
+        "fechadas": 3863,
+        "taxa_agregada": 0.2959246208058833
+      },
+      "por_racao_w": {
+        "elegiveis": 13054,
+        "fechadas": 4509,
+        "taxa_agregada": 0.34541136816301515
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 1.4374639568259022,
+        "elegiveis": 13054,
+        "entraram_na_visao": 6167,
+        "visiveis_em_k0": 6267
+      },
+      "taxa_agregada": 0.8154030566376985,
+      "taxa_media_das_vidas": 0.8179873033186413,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 3565,
+        "vazias": 3565,
+        "vazias_v1": 3565
+      }
+    },
+    "M4-emb|longe": {
+      "cheiro": {
+        "achou": 3949,
+        "busca_entregue_sozinha": 3459,
+        "comer_cheiro_por_episodio": 1.0552147239263803,
+        "compostas": 490,
+        "compostas_com_refeicao": 414,
+        "decisoes_comer_cheiro": 2580,
+        "decisoes_dormir": 11968,
+        "decisoes_explorar_cheiro": 1251,
+        "decisoes_nos_episodios": 26287,
+        "episodios": 2445,
+        "fins_busca": {
+          "achou": 3949,
+          "desistiu": 4,
+          "sumiu": 310,
+          "trocou": 5344
+        },
+        "frac_achou_com_refeicao": 0.10483666751076222,
+        "sono_na_janela": 0.45528207859398184
+      },
+      "com_cadeia_ep": 0.415,
+      "episodios": 2445,
+      "fechados": 1077,
+      "fora_de_episodio": 6198,
+      "latencia_depois_da_janela": 37.86880244088482,
+      "latencia_media": 5.489322191272052,
+      "motivos": {
+        "fechou": 1077,
+        "janela_vencida": 1358,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 10
+      },
+      "no_episodio_sem_fechar": 2,
+      "oferta_mudou": 248,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 104,
+          "n": 476
+        },
+        "ate_corte": {
+          "fechados": 973,
+          "n": 1969
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 19680,
+        "fechadas": 1093,
+        "taxa_agregada": 0.055538617886178865
+      },
+      "por_racao_w": {
+        "elegiveis": 19680,
+        "fechadas": 1461,
+        "taxa_agregada": 0.07423780487804878
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 13.669244852551458,
+        "elegiveis": 19680,
+        "entraram_na_visao": 2433,
+        "visiveis_em_k0": 1056
+      },
+      "taxa_agregada": 0.4404907975460123,
+      "taxa_media_das_vidas": 0.42711583263228,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 6841,
+        "vazias": 6837,
+        "vazias_v1": 6841
+      }
+    },
+    "M4-emb|perto": {
+      "cheiro": {
+        "achou": 1997,
+        "busca_entregue_sozinha": 1649,
+        "comer_cheiro_por_episodio": 0.22446637594675234,
+        "compostas": 348,
+        "compostas_com_refeicao": 347,
+        "decisoes_comer_cheiro": 978,
+        "decisoes_dormir": 6381,
+        "decisoes_explorar_cheiro": 585,
+        "decisoes_nos_episodios": 13224,
+        "episodios": 4357,
+        "fins_busca": {
+          "achou": 1997,
+          "trocou": 23
+        },
+        "frac_achou_com_refeicao": 0.17376064096144217,
+        "sono_na_janela": 0.48253176043557167
+      },
+      "com_cadeia_ep": 1.0,
+      "episodios": 4357,
+      "fechados": 4207,
+      "fora_de_episodio": 5474,
+      "latencia_depois_da_janela": 14.027972027972028,
+      "latencia_media": 1.8074637508913716,
+      "motivos": {
+        "fechou": 4207,
+        "janela_vencida": 143,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 7
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 1,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 0,
+          "n": 0
+        },
+        "ate_corte": {
+          "fechados": 4207,
+          "n": 4357
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 8360,
+        "fechadas": 5609,
+        "taxa_agregada": 0.6709330143540669
+      },
+      "por_racao_w": {
+        "elegiveis": 8360,
+        "fechadas": 5699,
+        "taxa_agregada": 0.6816985645933015
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 0.8992475900454218,
+        "elegiveis": 8360,
+        "entraram_na_visao": 0,
+        "visiveis_em_k0": 8360
+      },
+      "taxa_agregada": 0.9655726417259582,
+      "taxa_media_das_vidas": 0.9581612846770944,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 6890,
+        "vazias": 6890,
+        "vazias_v1": 6890
+      }
+    },
+    "M4-emb|todos": {
+      "cheiro": {
+        "achou": 8810,
+        "busca_entregue_sozinha": 7463,
+        "comer_cheiro_por_episodio": 0.566229411184535,
+        "compostas": 1347,
+        "compostas_com_refeicao": 1227,
+        "decisoes_comer_cheiro": 5741,
+        "decisoes_dormir": 29476,
+        "decisoes_explorar_cheiro": 3373,
+        "decisoes_nos_episodios": 62017,
+        "episodios": 10139,
+        "fins_busca": {
+          "achou": 8810,
+          "desistiu": 4,
+          "sumiu": 310,
+          "trocou": 5972
+        },
+        "frac_achou_com_refeicao": 0.13927355278093076,
+        "sono_na_janela": 0.47528903365206315
+      },
+      "com_cadeia_ep": 0.8016666666666666,
+      "episodios": 10139,
+      "fechados": 8005,
+      "fora_de_episodio": 21690,
+      "latencia_depois_da_janela": 30.005339805825244,
+      "latencia_media": 3.2419737663960024,
+      "motivos": {
+        "fechou": 8005,
+        "janela_vencida": 2110,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 24
+      },
+      "no_episodio_sem_fechar": 2,
+      "oferta_mudou": 269,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 106,
+          "n": 494
+        },
+        "ate_corte": {
+          "fechados": 7899,
+          "n": 9645
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 41094,
+        "fechadas": 10565,
+        "taxa_agregada": 0.2570934929673432
+      },
+      "por_racao_w": {
+        "elegiveis": 41094,
+        "fechadas": 11669,
+        "taxa_agregada": 0.28395872876819
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 5.3353187998075935,
+        "elegiveis": 41094,
+        "entraram_na_visao": 8600,
+        "visiveis_em_k0": 15683
+      },
+      "taxa_agregada": 0.7895255942400631,
+      "taxa_media_das_vidas": 0.7344214735426718,
+      "vidas": 600,
+      "visitas": {
+        "lugar_lembrado": 17296,
+        "vazias": 17292,
+        "vazias_v1": 17296
+      }
+    },
+    "M4|comedouro": {
+      "cheiro": {
+        "achou": 2896,
+        "busca_entregue_sozinha": 2373,
+        "comer_cheiro_por_episodio": 0.6516686531585221,
+        "compostas": 522,
+        "compostas_com_refeicao": 485,
+        "decisoes_comer_cheiro": 2187,
+        "decisoes_dormir": 11198,
+        "decisoes_explorar_cheiro": 1551,
+        "decisoes_nos_episodios": 22533,
+        "episodios": 3356,
+        "fins_busca": {
+          "achou": 2896,
+          "trocou": 589
+        },
+        "frac_achou_com_refeicao": 0.16747237569060774,
+        "sono_na_janela": 0.4969600142013935
+      },
+      "com_cadeia_ep": 0.995,
+      "episodios": 3356,
+      "fechados": 2751,
+      "fora_de_episodio": 10015,
+      "latencia_depois_da_janela": 16.59259259259259,
+      "latencia_media": 4.574336604870956,
+      "motivos": {
+        "fechou": 2751,
+        "janela_vencida": 595,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 10
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 13,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 4,
+          "n": 18
+        },
+        "ate_corte": {
+          "fechados": 2747,
+          "n": 3338
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 13063,
+        "fechadas": 3922,
+        "taxa_agregada": 0.3002373114904693
+      },
+      "por_racao_w": {
+        "elegiveis": 13063,
+        "fechadas": 4571,
+        "taxa_agregada": 0.3499196203016153
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 1.4860140542324702,
+        "elegiveis": 13063,
+        "entraram_na_visao": 6009,
+        "visiveis_em_k0": 6387
+      },
+      "taxa_agregada": 0.8197258641239571,
+      "taxa_media_das_vidas": 0.8198762603963355,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 3866,
+        "vazias": 3866,
+        "vazias_v1": 3866
+      }
+    },
+    "M4|longe": {
+      "cheiro": {
+        "achou": 3956,
+        "busca_entregue_sozinha": 3454,
+        "comer_cheiro_por_episodio": 1.032428050263478,
+        "compostas": 502,
+        "compostas_com_refeicao": 430,
+        "decisoes_comer_cheiro": 2547,
+        "decisoes_dormir": 11936,
+        "decisoes_explorar_cheiro": 1278,
+        "decisoes_nos_episodios": 26121,
+        "episodios": 2467,
+        "fins_busca": {
+          "achou": 3956,
+          "desistiu": 4,
+          "sumiu": 307,
+          "trocou": 5418
+        },
+        "frac_achou_com_refeicao": 0.10869565217391304,
+        "sono_na_janela": 0.4569503464645305
+      },
+      "com_cadeia_ep": 0.42,
+      "episodios": 2467,
+      "fechados": 1095,
+      "fora_de_episodio": 6225,
+      "latencia_depois_da_janela": 37.2993145468393,
+      "latencia_media": 5.337899543378995,
+      "motivos": {
+        "fechou": 1095,
+        "janela_vencida": 1360,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 12
+      },
+      "no_episodio_sem_fechar": 1,
+      "oferta_mudou": 233,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 93,
+          "n": 460
+        },
+        "ate_corte": {
+          "fechados": 1002,
+          "n": 2007
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 19606,
+        "fechadas": 1107,
+        "taxa_agregada": 0.05646230745690095
+      },
+      "por_racao_w": {
+        "elegiveis": 19606,
+        "fechadas": 1453,
+        "taxa_agregada": 0.07410996633683566
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 13.65713537055,
+        "elegiveis": 19606,
+        "entraram_na_visao": 2419,
+        "visiveis_em_k0": 1047
+      },
+      "taxa_agregada": 0.4438589379813539,
+      "taxa_media_das_vidas": 0.42726080236413055,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 6706,
+        "vazias": 6704,
+        "vazias_v1": 6706
+      }
+    },
+    "M4|perto": {
+      "cheiro": {
+        "achou": 1935,
+        "busca_entregue_sozinha": 1573,
+        "comer_cheiro_por_episodio": 0.21495327102803738,
+        "compostas": 362,
+        "compostas_com_refeicao": 359,
+        "decisoes_comer_cheiro": 943,
+        "decisoes_dormir": 6324,
+        "decisoes_explorar_cheiro": 603,
+        "decisoes_nos_episodios": 13143,
+        "episodios": 4387,
+        "fins_busca": {
+          "achou": 1935,
+          "trocou": 19
+        },
+        "frac_achou_com_refeicao": 0.1855297157622739,
+        "sono_na_janela": 0.48116868294909837
+      },
+      "com_cadeia_ep": 1.0,
+      "episodios": 4387,
+      "fechados": 4229,
+      "fora_de_episodio": 5403,
+      "latencia_depois_da_janela": 13.470967741935484,
+      "latencia_media": 1.7528966658784582,
+      "motivos": {
+        "fechou": 4229,
+        "janela_vencida": 155,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 3
+      },
+      "no_episodio_sem_fechar": 0,
+      "oferta_mudou": 1,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 0,
+          "n": 0
+        },
+        "ate_corte": {
+          "fechados": 4229,
+          "n": 4387
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 8315,
+        "fechadas": 5644,
+        "taxa_agregada": 0.6787733012627781
+      },
+      "por_racao_w": {
+        "elegiveis": 8315,
+        "fechadas": 5728,
+        "taxa_agregada": 0.6888755261575465
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 0.8980752127342346,
+        "elegiveis": 8315,
+        "entraram_na_visao": 0,
+        "visiveis_em_k0": 8315
+      },
+      "taxa_agregada": 0.9639844996580806,
+      "taxa_media_das_vidas": 0.9564580380511614,
+      "vidas": 200,
+      "visitas": {
+        "lugar_lembrado": 6821,
+        "vazias": 6821,
+        "vazias_v1": 6821
+      }
+    },
+    "M4|todos": {
+      "cheiro": {
+        "achou": 8787,
+        "busca_entregue_sozinha": 7400,
+        "comer_cheiro_por_episodio": 0.5560235063663076,
+        "compostas": 1386,
+        "compostas_com_refeicao": 1274,
+        "decisoes_comer_cheiro": 5677,
+        "decisoes_dormir": 29458,
+        "decisoes_explorar_cheiro": 3432,
+        "decisoes_nos_episodios": 61797,
+        "episodios": 10210,
+        "fins_busca": {
+          "achou": 8787,
+          "desistiu": 4,
+          "sumiu": 307,
+          "trocou": 6026
+        },
+        "frac_achou_com_refeicao": 0.1449869124843519,
+        "sono_na_janela": 0.4766898069485574
+      },
+      "com_cadeia_ep": 0.805,
+      "episodios": 10210,
+      "fechados": 8075,
+      "fora_de_episodio": 21643,
+      "latencia_depois_da_janela": 29.543161978661495,
+      "latencia_media": 3.200247678018576,
+      "motivos": {
+        "fechou": 8075,
+        "janela_vencida": 2110,
+        "saciado_por_outra_comida": 0,
+        "vida_acabou": 25
+      },
+      "no_episodio_sem_fechar": 1,
+      "oferta_mudou": 247,
+      "por_d0": {
+        "alem_do_corte": {
+          "fechados": 97,
+          "n": 478
+        },
+        "ate_corte": {
+          "fechados": 7978,
+          "n": 9732
+        }
+      },
+      "por_racao_hoje": {
+        "elegiveis": 40984,
+        "fechadas": 10673,
+        "taxa_agregada": 0.2604186999804802
+      },
+      "por_racao_w": {
+        "elegiveis": 40984,
+        "fechadas": 11752,
+        "taxa_agregada": 0.2867460472379465
+      },
+      "racao_na_janela": {
+        "d_min_media_celulas": 5.347074879172235,
+        "elegiveis": 40984,
+        "entraram_na_visao": 8428,
+        "visiveis_em_k0": 15749
+      },
+      "taxa_agregada": 0.7908912830558276,
+      "taxa_media_das_vidas": 0.7345317002705425,
+      "vidas": 600,
+      "visitas": {
+        "lugar_lembrado": 17393,
+        "vazias": 17391,
+        "vazias_v1": 17393
+      }
+    }
+  },
+  "episodios_por_vida": {
+    "A11": {
+      "frac_3_ou_mais": 0.5783333333333334,
+      "media": 10.593333333333334,
+      "mediana": 4.0,
+      "minimo": 1
+    },
+    "M0": {
+      "frac_3_ou_mais": 1.0,
+      "media": 19.296666666666667,
+      "mediana": 18.0,
+      "minimo": 6
+    },
+    "M1": {
+      "frac_3_ou_mais": 1.0,
+      "media": 16.626666666666665,
+      "mediana": 15.0,
+      "minimo": 4
+    },
+    "M2": {
+      "frac_3_ou_mais": 1.0,
+      "media": 16.588333333333335,
+      "mediana": 15.0,
+      "minimo": 4
+    },
+    "M3": {
+      "frac_3_ou_mais": 1.0,
+      "media": 16.64666666666667,
+      "mediana": 15.0,
+      "minimo": 4
+    },
+    "M3-420": {
+      "frac_3_ou_mais": 1.0,
+      "media": 16.643333333333334,
+      "mediana": 15.0,
+      "minimo": 4
+    },
+    "M3-sem-inato": {
+      "frac_3_ou_mais": 1.0,
+      "media": 16.615,
+      "mediana": 15.0,
+      "minimo": 4
+    },
+    "M3-sem-intencao": {
+      "frac_3_ou_mais": 1.0,
+      "media": 16.705,
+      "mediana": 15.0,
+      "minimo": 3
+    },
+    "M3-sp": {
+      "frac_3_ou_mais": 1.0,
+      "media": 16.465,
+      "mediana": 15.0,
+      "minimo": 3
+    },
+    "M4": {
+      "frac_3_ou_mais": 1.0,
+      "media": 17.016666666666666,
+      "mediana": 15.0,
+      "minimo": 5
+    },
+    "M4-con": {
+      "frac_3_ou_mais": 1.0,
+      "media": 17.113333333333333,
+      "mediana": 15.0,
+      "minimo": 3
+    },
+    "M4-emb": {
+      "frac_3_ou_mais": 1.0,
+      "media": 16.898333333333333,
+      "mediana": 15.0,
+      "minimo": 5
+    }
+  },
+  "fase": "reavaliacao",
+  "holm_alfa": 0.05,
+  "leitura": {
+    "G-ABLA": {
+      "G-ABLA-MEM": "o Holm rejeita: o modulo pesa no sentido previsto dentro do M3*, nestas condicoes (A4.6)",
+      "G-ABLA-P1": "o Holm rejeita: o modulo pesa no sentido previsto dentro do M3*, nestas condicoes (A4.6)",
+      "G-ABLA-P2": "o Holm nao rejeita",
+      "G-ABLA-PERS": "inconclusivo por premissa: o modulo nao pesa (secao 5.3; A4.0)"
+    },
+    "G-DX": {
+      "longe": {
+        "G-DX-INATO": "o Holm nao rejeita",
+        "G-DX-INTENCAO": "o Holm nao rejeita"
+      },
+      "todas": {
+        "G-DX-INATO": "o Holm nao rejeita",
+        "G-DX-INTENCAO": "o Holm nao rejeita"
+      }
+    },
+    "G-MOD": {
+      "contrastes": {
+        "G-MOD-CON": "o Holm nao rejeita",
+        "G-MOD-EMB": "o Holm nao rejeita"
+      },
+      "ressalva_da_familia": "o erro de familia da G-MOD fica um pouco acima de 5 % (5,9 % na nula global; A4.4.6, item 4); secundaria, lida a parte (secao 5.5)"
+    },
+    "G-MVP-EP": "estimativa 0.8083333333333332, o IC95 contem 0,8; sem passa nem falha (A4.2)",
+    "nao_demonstra": [
+      "a prontidao do prototipo: o G-MVP e parte do gate de prontidao (secao 5.6, ii), e sem passa esse gate nao e cumprido; o A segue como o cerebro do MVP (A4.2)",
+      "a superioridade modular: a comparacao com o A11 (secao 7) segue descritiva; os contrastes sao entre os bracos do proprio modular e medem modulos, nao arquiteturas (A4.2)"
+    ],
+    "nao_se_le_como": "um contraste rejeitado nao se le como 'o modular vai a comida pelos proprios modulos' (exige o G-MVP passar, secao 5.5) nem como superioridade da arquitetura (A4.6)",
+    "tabela_5_5": "nao se aplica (A4.6): a leitura e esta"
+  },
+  "metodo": {
+    "bootstrap": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)",
+    "holm": "o p do t sobre as unidades; no G-MOD-EMB, o do t sobre as medias de base (A4.4.6)",
+    "ic95": "pelo t (A4.4.6); o percentil do bootstrap ao lado, descritivo",
+    "limiar_g1": -0.5,
+    "ressalva_g1": "assimetria negativa: o erro do tipo I do t pode passar do nominal (A4.4.5; com g1 = -1, cerca de 1,8 vez)"
+  },
+  "modo": "reavaliacao",
+  "pergunta": "estimativa (A4.1): quanto o prototipo fecha, com que incerteza",
+  "plano": "docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md",
+  "primaria": "G-MVP-EP"
+}

@@ -1,0 +1,66 @@
+{
+  "descricao": "Reavaliacao do conserto, por estimativa (adendo 4, APROVADO pelo Matheus em 2026-10-27; registrada em A4.10 antes da primeira vida): os 12 bracos (os 9 de hoje com as subchaves ligadas, mais M3-sem-inato, M3-sem-intencao e M3-420), bases 66101 a 66505, K = 10 (o do piloto do conserto, A4.5), com os valores calibrados do #428 (PROPOSTOS) e o g_apr do M4-con do piloto (1 923). Roda uma vez; o G-MVP sai como estimativa, sem passa nem falha.",
+  "plano": "docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md",
+  "dias": 14,
+  "orcamento_por_dia": 16,
+  "bootstrap": {
+    "reamostragens": 10000,
+    "semente": 4242,
+    "nivel": 0.95
+  },
+  "poder": {
+    "k_min": 4,
+    "k_max": 10,
+    "replicas": 2000,
+    "reamostragens_internas": 1000,
+    "alvo": 0.8,
+    "alfa_abla": 0.0125,
+    "alfa_mod": 0.025,
+    "semente": 4242,
+    "n_bases": 5
+  },
+  "holm": {
+    "alfa": 0.05
+  },
+  "g_mvp": {
+    "w_decisoes": 8,
+    "fome_elegivel": 0.5,
+    "taxa_vida": 0.5,
+    "limiar": 0.8
+  },
+  "g_elegivel": {
+    "frac_vidas": 0.8,
+    "racoes": 3
+  },
+  "g_pesa": {
+    "limiar": 0.01,
+    "bracos": {
+      "incentivo": "M1",
+      "habito": "M2",
+      "memoria": "M3",
+      "persistencia": "M3"
+    }
+  },
+  "fase": "reavaliacao",
+  "unidades": {
+    "bases": [
+      66101,
+      66202,
+      66303,
+      66404,
+      66505
+    ],
+    "k": 10,
+    "prefixo": "digibrain_prototipo"
+  },
+  "g_mvp_ep": {
+    "w_decisoes": 8,
+    "fome_elegivel": 0.5,
+    "taxa_vida": 0.5,
+    "limiar": 0.8
+  },
+  "g_elegivel_ep": {
+    "frac_vidas": 0.8,
+    "episodios": 3
+  }
+}

@@ -1762,3 +1762,186 @@ resultado. Se e como revisá-las é uma questão aberta do Matheus (A4.9).
 3. **Em aberto, para o Matheus:**
    - as validações anteriores com a mesma convenção (A4.4): ficam como estão, ou se abre uma revisão à parte?
    - o retorno zero do dormir (A3.6).
+
+### A4.10 A reavaliação (66101 a 66505): o registro, antes da primeira vida (2026-10-28, worker D, Claude Code, Opus 5.5)
+
+**O que é:** o registro de A4.8, depois do PR de A4.7 (o #431) na `main` em `93523e3`, com o merge autorizado pelo Matheus em 2026-10-28.
+- **Nenhuma vida roda neste registro.** O Gerente confere o escopo, e a run só começa depois de ele liberar por mensagem.
+- **A reavaliação roda uma vez.** O resultado é registrado como está, e nada se ajusta olhando para ele (A4.8).
+- **Os valores calibrados do #428 seguem PROPOSTOS.** Nada aqui os torna definitivos.
+
+**1. As sementes e as unidades:**
+- **as bases:** 66101, 66202, 66303, 66404 e 66505, da faixa 66101 a 66505, já reservada em `experiments/bancada/faixas.py` (a fonte é a
+  PROPOSTA_DIAGNOSTICO_DIGIBRAIN_MODULAR, seção 6);
+- **K = 10 por base** (A4.5): o `n.k` do `resultado.json` do piloto do conserto, que o orquestrador lê (`adendo_do_piloto_conserto`).
+  São **50 unidades**;
+- **a derivação** (a regra E3; `bancada_v2.unidades_derivadas`, com o prefixo `digibrain_prototipo`). A unidade k da base b, com
+  k = 0 a 9, tem:
+  - a semente `derivar_semente("digibrain_prototipo", b, k)`;
+  - o genoma `derivar_semente("digibrain_prototipo-genoma", b, k)`.
+
+  A função falha alto com colisão, e o `meta.json` grava as 50 unidades:
+  - **a primeira** (66101, k = 0): a semente 17726104078491772386 e o genoma 16814212922965156843;
+  - **a última** (66505, k = 9): a semente 12622119303600028215 e o genoma 11028243305523479797;
+- **nenhuma vida da faixa existe em disco.** Em 2026-10-28 foram conferidas as 13 worktrees com `artifacts_v2_digibrain_prototipo/`:
+  - nenhuma tem a pasta `reavaliacao/`;
+  - nenhum dos 7 320 logs de vida (`.jsonl`) tem no nome uma das 50 sementes.
+
+**2. Os braços e as células:**
+- **a configuração de cada braço:**
+  - as subchaves estão em `SUBCHAVES_CONSERTO` (`experiments/run_v2_digibrain_prototipo.py`), e o `meta.json` as grava;
+  - os valores dos inatos são os padrões de `digilab/config.py` (`ConfigDigibrainInatos`), com os do #428: `eta_h` S/256, `w_pers` 4S e
+    `tau_c` 15. Todos seguem PROPOSTOS;
+  - a config da reavaliação não tem o campo `inatos`, que só a calibração do conserto pode ter (A3.8).
+
+| braço | o que é |
+|---|---|
+| M0 | sem P1, sem P2 e sem M-MEM, com o `cheiro_inato` e a `intencao_cheiro` |
+| M1 | sem P2 e sem M-MEM, com as duas subchaves |
+| M2 | sem M-MEM, com as duas subchaves |
+| M3 (o M3\*) | completo, com as duas subchaves |
+| M3-sp | o M3\* sem a persistência |
+| M4 | o M3\* com a modulação do `g_apr` |
+| M4-emb | o M4 com a série E embaralhada, lida da vida M4 da unidade seguinte da mesma base, na mesma célula (a última usa a primeira: o anel de A4.4.2) |
+| M4-con | o M3\* com o `g_apr` fixo em **1 923**, a média do piloto do conserto (A4.5) |
+| M3-sem-inato | o M3 só com a `intencao_cheiro` |
+| M3-sem-intencao | o M3 só com o `cheiro_inato` |
+| M3-420 | o M3 com as duas subchaves desligadas: o M3 do #420 com os valores calibrados |
+| A11 | o cérebro A, só para a comparação descritiva (seção 7) |
+
+- **as células:** os 4 donos (atencioso, relapso, aleatório, incoerente) × os 3 lugares (comedouro, perto, longe), 12 por unidade;
+- **o tempo:** 14 dias, com orçamento de 16 por dia;
+- **as vidas:** 12 braços × 12 células × 50 unidades = **7 200**. O M4-emb e o M4-con rodam numa segunda passada, depois das vidas M4.
+
+**3. As métricas:**
+- **O que cada vida grava** (`medidas.json`, uma entrada por vida; as funções de `digilab/metrics.py`, como no piloto):
+  - **as medidas de hoje** (seção 4): `d_fe`, `d_fe_vida`, `privacao`, `exaustao`, a `cadeia` por ração, `com_cadeia`, `latencia_media` e
+    as `acoes`;
+  - **as do conserto** (A3.1 a A3.5):
+    - `episodios_fome`, com a taxa por episódio, o n e o `com_cadeia`;
+    - `cadeia_w` e `racao_na_janela`;
+  - **as do cérebro**, nos 11 braços modulares:
+    - a `influencia`, para a G-PESA;
+    - `falta_ao_comer`, `repeticao` e `intencoes_com_meta`;
+    - `pesos_no_teto` e `g_apr_media`;
+    - a DX-1 (`visitas_vazias`, com a v1 ao lado), a DX-5 (`repeticao_r_possivel`) e o mecanismo do `cheiro`;
+  - **o custo** da vida, em CPU e em parede.
+- **As conferências durante a run:**
+  - cada vida é rejogada do disco bit a bit (o G1);
+  - o cenário e o mecanismo do braço são conferidos (o G-MECANISMO por vida);
+  - qualquer falha levanta erro e para a run.
+- **A medida por unidade:**
+  - **num contraste:** a diferença célula a célula (braço a − braço b), na mesma semente, no mesmo dono e no mesmo lugar, com a média
+    tirada nas células do contraste (`por_unidade`);
+  - **no G-MVP:** o nível do próprio M3\*.
+
+  Cada unidade dá um valor por contraste.
+- **Os contrastes** (a diferença é a − b; as famílias, as ordens e os α são os do plano, A4.4.6):
+
+| família | contraste | a − b | medida | células | o teste (A4.4.6) |
+|---|---|---|---|---|---|
+| G-ABLA (Holm, m = 4, α 0,05) | G-ABLA-P1 | M0 − M1 | `falta_ao_comer` | as 12 | t pareado sobre as 50 unidades |
+| | G-ABLA-P2 | M2 − M1 | `repeticao.indice` | as 12 | t sobre as 50 unidades |
+| | G-ABLA-MEM | M3 − M2 | a taxa da `cadeia` | as 4 do comedouro | t sobre as 50 unidades |
+| | G-ABLA-PERS | M3 − M3-sp | `intencoes_com_meta` | as 12 | t sobre as 50 unidades; **inconclusivo por premissa** |
+| G-MOD (Holm, m = 2, α 0,05) | G-MOD-CON | M4-con − M4 | `d_fe` | as 12 | t sobre as 50 unidades |
+| | G-MOD-EMB | M4-emb − M4 | `d_fe` | as 12 | **t sobre as 5 médias de base** (4 gl), por causa do anel |
+| G-DX (Holm, m = 2, α 0,05) | G-DX-INATO | M3 − M3-sem-inato | a taxa por episódio | as 4 do longe (a leitura principal; as 12 saem ao lado, com o seu Holm) | t sobre as 50 unidades |
+| | G-DX-INTENCAO | M3 − M3-sem-intencao | a taxa por episódio | as 4 do longe (idem) | t sobre as 50 unidades |
+
+- **As saídas do `resultado.json`** (`analisar_conserto`, A4.7):
+  - **a pergunta e a primária:** `pergunta` (a de estimativa de A4.1) e `primaria` = `G-MVP-EP`;
+  - **os dois G-MVP** (sem "passa"):
+    - **`G-MVP-EP`:** a fração de vidas do M3\* com a taxa de fechamento por episódio ≥ 0,5, por unidade. Saem a estimativa, o **IC95
+      pelo t** sobre as 50 frações, o IC percentil do bootstrap ao lado (descritivo e rotulado) e a posição do IC em relação a 0,8, numa
+      das três frases de A4.2;
+    - **`G-MVP`:** o mesmo, por ração (o secundário obrigatório);
+  - **as famílias `G-ABLA`, `G-MOD` e `G-DX`**, cada contraste com:
+    - a estimativa, o IC95 e o p unilateral do t; no G-MOD-EMB, pelo t sobre as 5 médias de base;
+    - o `holm`, com a ordem, o limiar, o `rejeita` e o p ajustado;
+    - o **g1** das 50 diferenças por unidade, com a ressalva quando g1 ≤ −0,5;
+    - o p e o IC do bootstrap, sob a chave `bootstrap`, rotulados "a convenção da seção 5.2.1, anticonservadora com 5 bases (A4.4)";
+  - **as premissas:**
+    - a `G-PESA`: o limite inferior do IC95 pelo t > 0,01, no braço de cada módulo;
+    - a `G-ELEGIVEL` e a `G-ELEGIVEL-EP`;
+    - os `episodios_por_vida`;
+  - **o `metodo`:** o teste do Holm, o IC, o rótulo do bootstrap, o limiar do g1 e a ressalva;
+  - **a `leitura`:** a de A4.6, com `nao_demonstra`;
+  - **os descritivos, sem gate:**
+    - a `D-1`, a `D-2` e a `DX-5`;
+    - os `descritivos`, os `descritivos_conserto` e o `descritivo_11_celulas`;
+    - a `comparacao_com_o_a`, com o A11;
+  - **o `custo`:** o CPU por vida.
+
+**4. Os critérios e a leitura** (os de A4.2, A4.4.6 e A4.6, sem critério novo e sem mudar limiar):
+- **O G-MVP é só estimativa, sem "passa" nem "falha".** O limiar de 0,8 fica como referência e não muda. A posição do IC sai numa das três
+  frases de A4.2, e nenhuma delas aprova ou reprova o gate.
+- **A avaliação não demonstra a prontidão do protótipo:** sem "passa", o gate de prontidão da seção 5.6 não é cumprido, e o A segue como
+  o cérebro do MVP.
+- **Ela também não demonstra a superioridade modular:** a comparação com o A11 segue descritiva, e os contrastes medem módulos, não
+  arquiteturas.
+- **O G-ABLA-PERS é inconclusivo por premissa,** qualquer que seja o p. A G-PESA da persistência falhou nas três rodadas do #427 e no
+  piloto (0,0033).
+- **Um contraste rejeitado pelo Holm** lê-se: "o módulo pesa no sentido previsto dentro do M3\*, nestas condições". Não se lê como "o
+  modular vai à comida pelos próprios módulos" nem como superioridade da arquitetura.
+- **A ressalva do g1:**
+  - com g1 ≤ −0,5, o contraste sai com a frase de A4.4.6, e uma rejeição nele não é lida como confirmação;
+  - a ressalva não muda o p, o Holm nem a decisão gravada;
+  - **o limiar −0,5 segue PROPOSTO** (A4.9).
+- **A G-MOD tem o erro de família a 5,9 % sob a nula global** (A4.4.4, pela simulação com as 6 unidades do piloto), registrado como
+  ressalva da família. A G-MOD é secundária (seção 5.2).
+- **O G-MECANISMO continua binário:** com um teste de mecanismo falhando, nenhuma vida roda. Antes da run, rodam:
+  - o `tests/test_digibrain_mecanismo.py` e o `tests/test_digibrain_vidas.py`;
+  - os gabaritos (o G2);
+  - os testes da reavaliação.
+
+**5. A configuração, o comando e os artefatos:**
+- **a config:** `experiments/configs/v2_digibrain_prototipo/reavaliacao.json`, com o sha256
+  `d1d99106929b873ac86d4e55c4689f877df021af876c156f12113eaa69c5325e`. Em relação à do piloto do conserto, mudam só a `descricao`, a
+  `fase` (`reavaliacao`), as bases e o K, e um teste confere isso;
+- **o commit:** este registro é o commit da run, a partir de `93523e3`. A run sai dele, na worktree `v2-modular-reavaliacao`, com a
+  árvore limpa, e o `meta.json` grava o `git_head`, o `git_limpo` e os sha da config e do plano;
+- **os outros sha256** (os de `93523e3`, que este commit não toca):
+  - o orquestrador, `experiments/run_v2_digibrain_prototipo.py`: `ef24a83bbcd78ef40dd08b9972a00b8768704d0cc9c6f9ee64369e3030faa446`;
+  - `digilab/config.py`, com os valores do #428: `a370c02422e83195651644a526217c5dd42b0cc2606e1cb807157c531c6c5dc8`;
+  - `digilab/engine.py`: `48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630`;
+  - `digilab/metrics.py`, com a A4.7: `abf142c4f8f1eca2f81922614a20cea994894b417e56fe9902873a9efb56bf98`;
+  - o `resultado.json` do piloto do conserto, de onde saem o K e o `g_apr` do M4-con:
+    `7824b337242435db264c26b50edfbc281fcc1a32b8a1eb55918ee4070834c294`;
+- **o comando** (4 processos; trocado de 8 em 2026-10-28, pela decisão do Matheus sobre a máquina, no registro
+  "DIGIBRAIN-MODULAR-REAVALIACAO-PROCESSOS"; o número de processos não muda nenhuma vida nem o resultado):
+  `python experiments/run_v2_digibrain_prototipo.py --config experiments/configs/v2_digibrain_prototipo/reavaliacao.json --processos 4`;
+- **o tempo estimado:**
+  - pelo custo do piloto, 15 273 s de CPU (A4.5);
+  - o piloto rodou as 864 vidas dele em 313 s de parede, com 8 processos. Na mesma proporção, as 7 200 levariam cerca de 45 min com
+    8; com 4 processos, cerca do dobro;
+  - com a análise, cerca de 1 h 30 min;
+- **os artefatos** (`artifacts_v2_digibrain_prototipo/reavaliacao/`):
+  - **`meta.json`:** a config, os sha256, o commit, a árvore limpa, as 50 unidades, os braços, os inatos, o `adendo_4` (o K e o `g_apr`),
+    o sha do `resultado.json` do piloto, o `g_apr_m4_con` e o tempo;
+  - **`medidas.json`:** as medidas de cada vida. Pelo piloto (7,5 kB por vida), cerca de 54 MB: acima do aviso de 50 MB do GitHub, abaixo
+    do limite de 100 MB;
+  - **`resultado.json`:** o item 3;
+  - **`vidas/<braço>/<dono>_<lugar>_<semente>.jsonl`:** o log de cada vida, **fora do git**, na worktree `v2-modular-reavaliacao`. Pelo
+    piloto, cerca de 0,5 GB;
+- **o que vai para o git:** os três `.json`, com `git add -f` (a pasta `artifacts_*/` é ignorada), como no piloto. O RESULTADO ganha uma
+  seção com os números deles, e a leitura vai ao Matheus;
+- **se a pasta já existir,** a run se recusa a gravar por cima (seção 6.4).
+
+**6. A trava** (em `tests/test_digibrain_reavaliacao.py`; nenhum destes testes roda vida):
+- **`test_a_trava_exige_o_adendo_4_aprovado_no_cabecalho`:** o `exigir_adendo_aprovado` aceita o plano atual. Ele falha alto com o status
+  PROPOSTO, sem a linha do status ou com o APROVADO numa subseção;
+- **`test_a_trava_vale_na_config_da_reavaliacao`:** com o plano trocado por um PROPOSTO, o `modo_da_config` da reavaliação falha;
+- **`test_a_config_registrada_da_reavaliacao_segue_o_plano`:**
+  - a config registrada dá o modo `reavaliacao`;
+  - o K e o `g_apr` do M4-con saem 10 e 1 923;
+  - as unidades saem 50, nas cinco bases;
+  - só a `descricao`, a `fase`, as bases e o K diferem da config do piloto;
+- **`test_a_reavaliacao_recusa_sementes_fora_de_66101_a_66505`:** a run recusa, com `SementeSemPlano`:
+  - as bases do piloto do conserto e as da 64xxx;
+  - uma base a menos, uma a mais ou uma trocada;
+  - uma semente dos testes misturada às da faixa;
+- **`test_a_reavaliacao_recusa_outro_k_ou_outros_dias_e_nao_grava_por_cima`:** a run recusa K = 9 e 13 dias, e não grava numa pasta que
+  já existe;
+- **a única exceção:** as sementes dos testes, sozinhas (101 a 505), dão o modo `fumaca`. A fumaça exige `--saida` e não lê os adendos
+  nem o K da reavaliação. É o encanamento dos testes, nunca resultado.

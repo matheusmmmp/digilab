@@ -1,8 +1,8 @@
 """A reavaliacao por estimativa (docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md, adendo 4, A4.7): o IC pelo t, o t sobre as medias
 de base e a assimetria g1 no digilab/metrics.py (com contas a mao); o contraste da reavaliacao (o p do Holm pelo t, o G-MOD-EMB pelas
 medias de base, a ressalva do g1 sem mudar o p nem a decisao); o G-MVP sem "passa"; a trava do adendo 4 APROVADO; e as analises das fases
-antigas, que se refazem iguais dos artefatos gravados. Nenhuma vida da 66xxx: so as sementes dos testes (a fumaca fica em
-tests/test_digibrain_conserto.py)."""
+antigas, que se refazem iguais dos artefatos gravados; e o registro da reavaliacao (A4.10): a config registrada, as sementes fora
+de 66101 a 66505 recusadas. Nenhuma vida da 66xxx: so as sementes dos testes (a fumaca fica em tests/test_digibrain_conserto.py)."""
 from __future__ import annotations
 
 import json
@@ -178,6 +178,57 @@ def test_a_trava_vale_na_config_da_reavaliacao(tmp_path, monkeypatch):
     monkeypatch.setattr(orq, "RAIZ", tmp_path)
     with pytest.raises(RuntimeError, match="nao esta APROVADO"):
         orq.modo_da_config(cfg)
+
+
+# ================================================================== o registro da reavaliacao (A4.10), sem vida nenhuma
+CONFIG_REAVALIACAO = RAIZ / "experiments/configs/v2_digibrain_prototipo/reavaliacao.json"
+
+
+def _cfg_reavaliacao() -> dict:
+    return json.loads(CONFIG_REAVALIACAO.read_text(encoding="utf-8"))
+
+
+def test_a_config_registrada_da_reavaliacao_segue_o_plano():
+    """a config de A4.10: o plano de hoje passa a trava, o modo e o da reavaliacao, o K e o g_apr do M4-con sao os do piloto do conserto
+    (A4.5), as 50 unidades sao as das bases 66101 a 66505, e so a descricao, a fase, as bases e o K mudam em relacao a do piloto"""
+    orq.exigir_adendo_aprovado(PLANO, 4)
+    cfg = _cfg_reavaliacao()
+    assert orq.modo_da_config(cfg) == "reavaliacao"
+    assert orq.adendo_do_piloto_conserto() == {"k": 10, "g_apr_m4_con": 1923}
+    us = bv.unidades_derivadas(cfg["unidades"]["bases"], cfg["unidades"]["k"], orq.PREFIXO)
+    assert len(us) == 50 and {u["base"] for u in us} == set(orq.BASES["reavaliacao"]) == set(range(66101, 66506, 101))
+    piloto = json.loads((RAIZ / "experiments/configs/v2_digibrain_prototipo/piloto_conserto.json").read_text(encoding="utf-8"))
+    assert {k for k in cfg if cfg[k] != piloto[k]} == {"descricao", "fase", "unidades"}
+    assert {k for k in cfg["unidades"] if cfg["unidades"][k] != piloto["unidades"][k]} == {"bases", "k"}
+    assert orq.BRACOS_DA_FASE["reavaliacao"] == orq.BRACOS_CONSERTO and len(orq.BRACOS_CONSERTO) == 12
+
+
+@pytest.mark.parametrize("bases", [
+    [65303, 65404, 65505],                          # o piloto do conserto
+    [64101, 64202, 64303, 64404, 64505],            # a avaliacao do #420 (queimada)
+    [66101, 66202, 66303, 66404],                   # uma base a menos
+    [66101, 66202, 66303, 66404, 66505, 67101],     # uma base a mais, fora da faixa
+    [66101, 66202, 66303, 66404, 66506],            # uma base trocada, fora da faixa
+    [101, 66202, 66303, 66404, 66505],              # uma semente dos testes misturada
+])
+def test_a_reavaliacao_recusa_sementes_fora_de_66101_a_66505(bases):
+    cfg = _cfg_reavaliacao()
+    cfg["unidades"] = {**cfg["unidades"], "bases": bases}
+    with pytest.raises(bv.SementeSemPlano):
+        orq.modo_da_config(cfg)
+
+
+def test_a_reavaliacao_recusa_outro_k_ou_outros_dias_e_nao_grava_por_cima(tmp_path):
+    for campo, valor, msg in (("k", 9, "K 9"), ("dias", 13, "dias 13")):
+        cfg = _cfg_reavaliacao()
+        if campo == "k":
+            cfg["unidades"] = {**cfg["unidades"], "k": valor}
+        else:
+            cfg[campo] = valor
+        with pytest.raises(ValueError, match=msg):
+            orq.modo_da_config(cfg)
+    with pytest.raises(FileExistsError):                # a pasta de saida ja existe: nenhuma vida roda (secao 6.4)
+        orq.rodar(_cfg_reavaliacao(), tmp_path, 1)
 
 
 # ================================================================== as fases antigas se refazem iguais (A4.7)
