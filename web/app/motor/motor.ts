@@ -2,7 +2,7 @@
    nunca e salvo, so o registro (acoes do dono, tempo, lutas, intervencoes, treinos); a vida e reconstruida
    reprocessando o registro. Mesma semente + mesmo registro = mesma assinatura, no mesmo runtime. */
 import { CMEN,
-  ACAO_CHAMADO, ACOES_DONO, ACOES_DONO_JOGO_V11, ACOES_DONO_V4, ACOES_PET, CAT, CDJ, CED, CHAMADO_BEBE, CHE, CLE, CMG, EIXOS_TEMP, baseDe, COB, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
+  ACAO_CHAMADO, ACOES_DONO, ACOES_DONO_JOGO_V11, ACOES_DONO_V4, ACOES_PET, CAT, CDJ, CED, CHAMADO_BEBE, CHAMADO_FOME_CORPO, CHE, CLE, CMG, EIXOS_TEMP, baseDe, COB, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
   TICK_INICIAL, VERSAO_PET, CVB,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
@@ -35,7 +35,7 @@ import { criarRng, hashSemente, type Rng } from "./rng.ts";
 import { TreinoPet, type ResultadoSessao } from "./treino.ts";
 import { Vinculo, conflitoDono, termosObediencia } from "./vinculo.ts";
 import type {
-  AcaoDono, AcaoPet, Carater, Chamado, Desejo, Especie, Estagio, EstadoVida, EventoRegistro, Exercicio, Forma, FormaAdulta,
+  AcaoDono, AcaoPet, Carater, Chamado, ChavesProduto, Desejo, Especie, Estagio, EstadoVida, EventoRegistro, Exercicio, Forma, FormaAdulta,
   EstagioTreino, ItemHistorico, Linha, MotivoVida, Observacao, OpGambit, OpItem, Origem, Ramo, Ritmo, Stats, Temperamento, VersaoPet,
 } from "./tipos.ts";
 
@@ -154,6 +154,11 @@ export class Motor {
   falaFria = false;
   sombria = false;
   chamados: Chamados = { abertos: {}, atendidos: 0, total: 0 };
+  /** pets v12 do jogo: as chaves do produto (EventoProduto, no comeco do registro); sem o evento, as duas desligadas */
+  produto: ChavesProduto = { chamadoPelaFome: false, decisaoNaComida: false };
+  /** com o chamadoPelaFome: o tick em que o ultimo chamado de fome abriu (derivado do registro; fora da assinatura) */
+  private ultimoChamadoFome: number | null = null;
+  private produtoLido = false;
   sparring = 0;
   motivos: MotivoVida[] = [];
   motivo: MotivoVida | null = null;
@@ -336,8 +341,25 @@ export class Motor {
     const [b, c, a] = dur === "classica" ? DUR_CLASSICA : [DUR_EVO.bebe, DUR_EVO.crianca, DUR_EVO.adolescente];
     this.ritmo = dur; this.dur = { bebe: b, crianca: c, adolescente: a, adulto: dur === "classica" ? CMG.durClassica : CMG.durRapida };
   }
+  /** pets v12: as chaves do produto, uma vez, no comeco do registro (antes de qualquer decisao, acao do dono ou avanco; depois do ritmo e
+      da origem, se houver). O jogo liga nos ovos novos (src/produto.ts); a pesquisa e os gabaritos nunca chamam */
+  ligarProduto(ch: ChavesProduto): void {
+    const v = { chamadoPelaFome: ch.chamadoPelaFome, decisaoNaComida: ch.decisaoNaComida };
+    this._produto(v);
+    this.log.push([this.e.tick, "p", v]);
+  }
+  private _produto(ch: unknown): void {
+    if (this.versao < 12) throw new Error("as chaves do produto são só de pets v12");
+    if (!ch || typeof ch !== "object" || Object.keys(ch).sort().join() !== "chamadoPelaFome,decisaoNaComida"
+        || !Object.values(ch).every(x => typeof x === "boolean"))
+      throw new Error(`chaves do produto inválidas: ${JSON.stringify(ch)}`);
+    if (this.produtoLido || this.nDecisoes || this.nDono || this.e.tick !== TICK_INICIAL)
+      throw new Error("as chaves do produto vão uma vez, no começo do registro");
+    this.produto = { ...(ch as ChavesProduto) }; this.produtoLido = true;
+    (this.v11!.laco as MotorCorpoMundo).decidirNaComida = this.produto.decisaoNaComida;
+  }
   registrarOrigem(o: Origem): void {
-    if (this.log.some(ev => ev[1] !== "c")) throw new Error("a origem precisa ser o primeiro evento do registro");
+    if (this.log.some(ev => ev[1] !== "c" && ev[1] !== "p")) throw new Error("a origem precisa ser o primeiro evento do registro");
     this.log.push([this.e.tick, "o", o]);
     this._origem(o);
   }
@@ -1095,11 +1117,27 @@ export class Motor {
       min, higiene a cada 60, carinho a cada 45); conta como atendido se o dono fizer a acao certa dentro da
       janela de 15 min. Chamado novo do mesmo tipo com um aberto: o aberto conta como perdido. */
   private _chamados(): void {
-    const tk = this.e.tick, t = tk - TICK_INICIAL, ab = this.chamados.abertos;
+    const tk = this.e.tick, t = tk - TICK_INICIAL, ab = this.chamados.abertos, pelaFome = this.produto.chamadoPelaFome;
     for (const tipo of Object.keys(ab) as Chamado[]) if (tk - ab[tipo]! > CAT.janelaChamado) { this.chamados.total++; delete ab[tipo]; }
     for (const [tipo, iv] of Object.entries(CHAMADO_BEBE) as [Chamado, number][]) if (t > 0 && t < this.dur.bebe && t % iv === 0) {
+      if (pelaFome && tipo === "fome") continue;
       if (tipo in ab) this.chamados.total++;
       ab[tipo] = tk;
+    }
+    if (pelaFome) this._chamadoFome(tk, t);
+  }
+  /** a chave chamadoPelaFome: o chamado de fome abre quando a fome do corpo fica abaixo do limiar (CHAMADO_FOME_CORPO), no maximo um a
+      cada CHAMADO_BEBE.fome ticks. Fecha como atendido com o alimentar do dono (o _atender, como hoje) ou quando a fome volta ao limiar (nos
+      v12, ela so sobe comendo a racao que o dono deixou); como perdido, quando a janela passa (como hoje) */
+  private _chamadoFome(tk: number, t: number): void {
+    const ab = this.chamados.abertos, lim = CHAMADO_FOME_CORPO.limiar;
+    if ("fome" in ab) {
+      if (this.e.fome >= lim) { this.chamados.atendidos++; this.chamados.total++; delete ab.fome; }
+      return;
+    }
+    if (t > 0 && t < this.dur.bebe && this.e.fome < lim && (this.ultimoChamadoFome === null || tk - this.ultimoChamadoFome >= CHAMADO_BEBE.fome)) {
+      ab.fome = tk;
+      this.ultimoChamadoFome = tk;
     }
   }
   private _atender(a: AcaoDono): void {
@@ -1278,6 +1316,7 @@ export class Motor {
       case "tr": this._treinar(ev[2]); break;
       case "o": this._origem(ev[2]); break;
       case "c": this._config(ev[2].dur); break;
+      case "p": this._produto(ev[2]); break;
       case "fl": this._falar(ev[2]); break;
       case "u": this._liberar(ev[2].n); break;
       case "i": this._item(ev[2].op, ev[2].id); break;

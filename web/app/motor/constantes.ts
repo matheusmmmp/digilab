@@ -323,6 +323,11 @@ export const DUR_EVO = { bebe: 180, crianca: 720, adolescente: 1080 };
 /* ritmo classico (ConfigDuracoes.canonica, v-pets: 6 h, 24 h, 36 h): bebe, crianca, adolescente em minutos */
 export const DUR_CLASSICA = [360, 1440, 2160];
 export const CHAMADO_BEBE: Record<Chamado, number> = { fome: 30, higiene: 60, carinho: 45 };
+/** a chave `chamadoPelaFome` (pets v12 do jogo, EventoProduto): o chamado de fome do bebe abre quando a fome do corpo fica abaixo do
+    limiar, e nao pelo relogio. O limiar e o fome_moderada do instinto (lobos.ts, agirInstinto: o pet so come abaixo dele), para o chamado
+    e o comer do pet andarem juntos. Um por intervalo de CHAMADO_BEBE.fome no maximo (um perdido nao reabre a cada janela). PROPOSTO
+    (worker A, 2026-10-29) */
+export const CHAMADO_FOME_CORPO = { limiar: .45 };
 export const ACAO_CHAMADO: Record<Chamado, readonly AcaoDono[]> = { fome: ["alimentar"], higiene: ["limpar"], carinho: ["acariciar", "brincar"] };
 export const FORMAS_AD: readonly FormaAdultaNormal[] = ["duelista", "furioso", "espelho", "muralha", "sentinela", "emboscador", "vigia", "tita"];
 export const LINHA_DA_FORMA = Object.fromEntries(LINHAS.flatMap(l => Object.keys(CAT.adulto[l].formas).map(f => [f, l]))) as Record<FormaAdultaNormal, Linha>;

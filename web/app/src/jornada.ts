@@ -7,6 +7,7 @@
 import { useEffect, useState } from "react";
 import { ESPECIES, Motor, VERSAO_LIGA, campanhaDe, hashSemente, type Especie, type Ritmo } from "../motor/index.ts";
 import { jogoAtual, trocarMotor } from "./jogo.ts";
+import { ligarProduto } from "./produto.ts";
 import { CHAVE, textoSave } from "./save.ts";
 import { CHAVE_GUARDADOS, lerGuardados } from "./pets.ts";
 
@@ -48,7 +49,7 @@ export function chocarDoBrasao(esp: Especie, guardarAtivo = false, ritmo: Ritmo 
   const m = new Motor(sementeDoBrasao(esp));
   if (m.especie !== esp) throw new Error("ovo de outro brasão");
   if (ritmo !== "rapida") m.configurar(ritmo);
-  trocarMotor(m, "novo", 16);
+  trocarMotor(ligarProduto(m), "novo", 16);
   guardarNoProximoOvo = false;
   fecharEscolhaBrasao();
 }

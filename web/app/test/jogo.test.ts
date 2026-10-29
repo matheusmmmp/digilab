@@ -2,7 +2,7 @@
 // o tempo grava no maximo a cada 2 s e o pendente sai ao fechar a aba.
 import { describe, expect, test } from "vitest";
 import { CHAVE, textoSave, type Armazenamento } from "../src/save.ts";
-import { VERSAO_PET } from "../motor/index.ts";
+import { TICK_INICIAL, VERSAO_PET } from "../motor/index.ts";
 import { gravarPendente, iniciarJogo, jogoAtual, mudarMotor, novoPet } from "../src/jogo.ts";
 
 const armaz = (dados: Record<string, string> = {}) => {
@@ -49,13 +49,15 @@ describe("jogo", () => {
     gravarPendente();                               /* nada pendente: nao grava de novo */
     expect(a.escritas()).toBe(n0 + 2);
   });
-  test("ovo novo: troca o pet, grava e choca por 16 quadros", () => {
+  test("ovo novo: troca o pet, grava e choca por 16 quadros; o registro comeca com as chaves do produto (src/produto.ts)", () => {
     const a = armaz();
     iniciarJogo(a);
     novoPet();
     const j = jogoAtual();
     expect(j.nascendo).toBe(16);
-    expect(j.motor.log).toEqual([]);
-    expect(JSON.parse(a.dados[CHAVE])).toEqual({ semente: j.motor.semente, log: [], versao: VERSAO_PET });
+    const log = [[TICK_INICIAL, "p", { chamadoPelaFome: true, decisaoNaComida: true }]];
+    expect(j.motor.log).toEqual(log);
+    expect(j.motor.produto).toEqual({ chamadoPelaFome: true, decisaoNaComida: true });
+    expect(JSON.parse(a.dados[CHAVE])).toEqual({ semente: j.motor.semente, log, versao: VERSAO_PET });
   });
 });
