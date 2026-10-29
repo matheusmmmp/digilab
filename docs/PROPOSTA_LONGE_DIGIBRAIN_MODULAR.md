@@ -329,7 +329,7 @@ Propostas pelo C, com a recomendação primeiro. **O Matheus decidiu as cinco em
 - **os braços M0 e M3\*,** nas 12 células (4 donos × comedouro, perto e longe), nas 50 unidades da reavaliação (as bases 66101, 66202,
   66303, 66404 e 66505, com K = 10): **1 200 vidas,** 600 por braço;
 - **os logs:** os que a run da reavaliação gravou do commit `988cf0d` (o #432), em
-  `D:\Trab\digilab2-modular-reavaliacaortifacts_v2_digibrain_prototipoeavaliacaoidas\M0\` e `...\M3\`, fora do git. **O script
+  `D:\Trab\digilab\v2-modular-reavaliacao\artifacts_v2_digibrain_prototipo\reavaliacao\vidas\M0\` e `...\M3\`, fora do git. **O script
   só lê esses arquivos:** nada lá é apagado, movido nem alterado.
 
 **O G1 da L0** (a conferência, antes de qualquer número). Em cada vida, o replay:
@@ -394,3 +394,8 @@ Propostas pelo C, com a recomendação primeiro. **O Matheus decidiu as cinco em
 - **o tempo estimado:** cerca de 5 s de CPU por vida (a vida mais a captura), 1 200 vidas em 4 processos: cerca de 25 min.
 
 **A leitura** vai numa seção do RESULTADO, rotulada como diagnóstico. Ela diz qual opção a regra aponta e não muda limiar nenhum.
+
+**O resultado da L0** (o diagnóstico, 2026-10-29): na seção 10 de `docs/RESULTADO_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`.
+- **O G1 passou nas 1 200 vidas,** e a regra registrada aponta a **L-2** (a decisão), no M3\* e no M0.
+- **A percepção não pesa pela regra:** 5,8 % das decisões têm a direção fora de toda ração, contra o critério de 25 %.
+- **A decisão pesa:** 99,9 % das buscas trocadas são quebradas, 80 % delas pelo reflexo do sono.
