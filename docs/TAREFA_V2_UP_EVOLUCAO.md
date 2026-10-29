@@ -1,6 +1,6 @@
 # TAREFA V2 — UP-EVOLUCAO: a cena oficial de digievolução na Revelação (2026-10-29)
 
-Coordenador: sessão de coordenação da integração UP (Claude Code). Worker: Claude Code (Opus 5.5). Worktree e branch: `v2-up-evolucao`. Status: ETAPA 0 ENTREGUE, à espera do Matheus (seção 10; liberada em 2026-10-29)
+Coordenador: sessão de coordenação da integração UP (Claude Code). Worker: Claude Code (Opus 5.5). Worktree e branch: `v2-up-evolucao`. Status: A TELA EM ANDAMENTO (a etapa 0 na seção 10, decidida na seção 9; liberada em 2026-10-29)
 (D3 e D4 decididas; a UP-ATLAS na `main`, #441).
 
 Categoria: implementacao. Origem: Matheus, 2026-10-29: `D:\Trab\digilab\remaster\LEVANTAMENTO_INTEGRACAO.md`, seção 5, e o protótipo em
@@ -88,6 +88,13 @@ evolução (`TelaEvolucao.tsx`) além do "rever" que já abre a Revelação; o s
 - **D4 DECIDIDA (Matheus, 2026-10-29, "siga as recomendações"):** as linhas oficiais do UP ficam só como referência visual (escolher a
   cena e a música); as regras de evolução do DigiLab não mudam.
 - **A pilha não muda** (Matheus, 2026-10-29): seção 3.
+- **As quatro da etapa 0 DECIDIDAS (Matheus, 2026-10-29, no chat da coordenação, "aceitou as quatro recomendações"; relatadas pelo
+  coordenador):**
+  1. os quadros servem, com a frente separada por trecho da ordem de desenho;
+  2. o formato: 650×500, 30 quadros/s, WebP q80;
+  3. o Digimon segue o osso fora da escala inteira só durante a cena, com vizinho mais próximo; o cartão continua a 4×. É exceção à seção 5
+     do `docs/UI_GUIDELINES.md`, com a nota lá;
+  4. a medida no celular de referência vai junto com o e2e da tela.
 
 ## 10. Relato da etapa 0 (2026-10-29, worker UP-EVOLUCAO, Claude Code, Opus 5.5, worktree `v2-up-evolucao`)
 
@@ -158,4 +165,40 @@ pedidas ao Matheus** (todas PROPOSTAS; o custo de errar é refazer a conversão,
    inteira mais próxima e perde o crescimento contínuo da Tamers Mega. Recomendação: seguir o osso só durante a cena, como desvio
    registrado da seção 5; o cartão da Revelação continua a 4×.
 4. **A medida no celular de referência** (roteiro acima), antes da etapa de tela, ou junto com o e2e dela.
+
+## 11. Relato da tela (2026-10-29, worker UP-EVOLUCAO, Claude Code, Opus 5.5, worktree `v2-up-evolucao`)
+
+**O que entrou (seção 3, itens 2 a 6):**
+- `web/app/src/evolucaoUp.ts` (novo): a chave `CENA_EVOLUCAO_UP`, desligada; a escolha da cena pela forma nova (`escolherCena`); a
+  sequência Summon + revelação (`sequencia`); o quadro do pet no clipe (`quadroDigimon`: o `Evol` não repete e segue no `Idle`, e sem o
+  atlas de clipes vale o `Idle` do atlas atual); o centro do corpo e o lugar do pet no osso (`centroDoCorpo`, `lugarDigimon`); e a carga
+  do mapa e dos quadros, que falha alto.
+- `web/app/src/componentes/CenaEvolucao.tsx` (novo): a cena no canvas 2D. Baixa todos os quadros da cena antes de tocar, com "carregando a
+  cena… N%", e decodifica numa janela de 20 quadros. Desenha o fundo, depois o pet do app no osso (com vizinho mais próximo, fora da
+  escala inteira: decisão 3), depois a frente por trecho: o aditivo com `lighter` e o normal por cima. O relógio só anda com o quadro
+  pronto. Toca a música da linha e o `sfx_evolution_sfx` com a queda na revelação, pelo `src/som.ts`. Tem o "Pular".
+- `Revelacao.tsx`: com a chave ligada e sem movimento reduzido, a cena abre antes do cartão. No fim, no "Pular" ou com o erro, vem o
+  cartão de hoje. Asset ausente dá um aviso visível ("A cena da evolução não tocou: …") e cai no cartão. Com a chave desligada, o código
+  segue o caminho de hoje.
+- `atlas.ts`: o véu da forma sombria (`quadroSombrio`) passa a ser exportado, para a cena usar o mesmo.
+- O servidor: o `vite.config.ts` e o `servidor_local.py`, também no modo remoto, servem só `/Assets/evolucao_up/mapa.json` e
+  `/Assets/evolucao_up/quadros/<nome simples>.webp` (`tests/test_servidor_remoto.py`).
+- Fora do git, em `D:\Trab\digilab\Assets\`: `evolucao_up/quadros/` (os WebP), `evolucao_up/mapa.json` (gerado por
+  `gerar_evolucao_up.py`) e as ferramentas em `evolucao_up/ferramentas/`: `converter.html`, `servidor_conversao.py` e `webp.py` (a
+  conversão) e `verificar_chave_ligada.mjs` (a verificação). Procedência: UI_GUIDELINES 5.1 (D3).
+
+**Interpretações do worker:**
+- **A revelação é uma só para as seis cenas:** o Flash e 5 s do Loop da Adventure, com esqueletos novos, como o protótipo faz nas cinco
+  cenas sem Flash. Na própria Adventure, o protótipo segue no mesmo esqueleto; na etapa 0, isso diferiu em 3 dos 39 quadros conferidos.
+- **Os esqueletos não foram copiados** (item 2): com os quadros, o pet é o sprite do atlas do app, e o mapa leva só a cena e a música.
+- **A sombra do pet aparece na cena:** os quadros do atlas de clipes já vêm com a sombra achatada, e o protótipo a esconde. O centro do
+  corpo é o do primeiro quadro do `Idle` com a sombra. Para tirar a sombra, seria preciso gerar outro atlas pelos cels; fica proposto.
+- **A reserva `Evol` vai sem o efeito `Levelup_0_Partner`:** das 60 formas do pet, 57 têm linha oficial; as 3 sem linha (Seadramon,
+  MegaSeadramon e MetalSeadramon) também não têm `Evol` e caem na Revelação de hoje. Nenhuma forma chega à reserva, então o efeito não
+  foi convertido. A reserva toca o `Evol` a 4× e segue no cartão.
+- **A forma sombria (item 6), proposta:** a cena toca com o véu roxo do atlas no pet novo. A alternativa é a Revelação de hoje. A decisão
+  fica com o Matheus.
+- **A música** começa com a cena e para quando a Revelação fecha. Sem a cena (chave desligada, forma sem cena ou erro), o efeito toca no
+  cartão, como hoje.
+- **Números PROPOSTOS, SEM FONTE:** a janela de 20 quadros e os 8 downloads em paralelo.
 

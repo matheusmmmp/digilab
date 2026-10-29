@@ -132,9 +132,10 @@ export function quadroAgora(a: AtlasOk, nome: string, parado = false, clipe: Cli
   return c ? quadroDoClipe(c.ms, c.loop, performance.now() - t0) : Math.floor(performance.now() / a.dados.ms_por_quadro) % s.quadros.length;
 }
 
-/* forma sombria: o mesmo quadro com veu roxo (#7B3FB8) e contorno de 1 px (proposta aprovada na Etapa 0) */
+/* forma sombria: o mesmo quadro com veu roxo (#7B3FB8) e contorno de 1 px (proposta aprovada na Etapa 0); a cena da evolucao
+   (src/evolucaoUp.ts) usa o mesmo veu */
 const cacheSombrio = new Map<string, HTMLCanvasElement>();
-function quadroSombrio(img: HTMLImageElement, q: Quadro): HTMLCanvasElement {
+export function quadroSombrio(img: HTMLImageElement, q: Quadro): HTMLCanvasElement {
   const ch = q.join(",") + (img.src);
   const c0 = cacheSombrio.get(ch);
   if (c0) return c0;
