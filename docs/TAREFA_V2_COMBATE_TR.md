@@ -1,7 +1,7 @@
 # TAREFA V2 — COMBATE-TR: a batalha em tempo real como o combate do jogo inteiro (2026-10-29)
 
 Coordenador: sessão de coordenação da integração UP (Claude Code). Worker: a definir. Worktree e branch: `v2-combate-tr`. Status: ABERTA
-(etapa R0 liberada pelo Matheus em 2026-10-29).
+(etapa R0 entregue no #449; D-1 a D-9 DECIDIDAS e etapa R1 liberada pelo Matheus em 2026-10-29).
 
 Categoria: arquitetura (R0) e implementacao (R1–R4). Origem: Matheus, 2026-10-29, no chat da coordenação: "a ideia é a batalha em tempo
 real ser a mecânica de batalha do jogo inteiro. Então todas as sessões onde tem batalha, arena e qualquer coisa do gênero, é a batalha
@@ -165,3 +165,44 @@ A especificação está em `docs/ESPEC_COMBATE_TR.md`, toda PROPOSTA. Nenhum có
   o tempo das ações vem do DigiLab, e não do UP.
 
 O desvio e as interpretações estão em `docs/registro/2026-10.md`. A R1 espera a resposta do Matheus.
+
+## 11. R1: o resultado (worker, Claude Code, Opus 5.5, 2026-10-29)
+
+O núcleo da luta em tempo real está em `web/app/motor/combate_tr/`, sem tela e atrás da chave `COMBATE_TR`, desligada. Nenhuma luta do
+jogo passa por ele: o `Motor.lutar` só o liga na R2. As decisões D-1 a D-9 foram aceitas pelo Matheus como recomendadas (seção 8 da
+espec).
+
+- **O que entrou:**
+  - `constantes_tr.ts` traz o relógio e o espaço. O T de 2 s (125 passos), o limite de 80 s e a morte súbita aos 50 s são DECIDIDOS
+    (D-5); o resto é PROPOSTO, com a fonte ou SEM FONTE.
+  - `controlador.ts` traz a legalidade, as condições do catálogo em tempo real e a decisão (o `decidirV2` de hoje).
+  - `luta.ts` traz o estado, o passo de 16 ms e o `jogarTR`, com as mesmas opções do `jogarV2`: as regras V21E, o começo dado, o
+    desafiado e a carta de Cura.
+  - O `motor/index.ts` exporta o núcleo.
+- **A luta é a do DigiLab:**
+  - o perfil é o do `perfilDe` (E5);
+  - o Guts tem custo, regeneração por T e os bônus da defesa e do carregar;
+  - as ações, as quatro técnicas e as passivas usam os números de hoje (`CV`, `CV21`, `CSO`);
+  - as interações de hoje ficam: o parry, a interrupção do preparo, a esquiva, o contra-golpe, a marca, a pele dura, a sentinela e o
+    vigia.
+  - Os dados do UP não entram (D-1).
+- **O controlador:** o lutador livre decide no passo múltiplo de 16, e há uma decisão por ação. O ε usa uma RNG de política por lado,
+  e o oráculo falha alto (D-6).
+- **O saldo de cada ação** (o causado menos o recebido, sobre a vida do começo) sai no resultado, para o `aprender` da R2.
+- **Os testes:**
+  - `web/app/test/combate_tr.test.ts` cobre a chave, o determinismo por semente nas 64 lutas das formas adultas e a semente que não muda
+    nada sem ε;
+  - cobre também as RNG separadas e as mecânicas (o parry, a interrupção, a esquiva, o Guts, o limite e o desafiado, a cura e o começo
+    dado, a escala e o oráculo), o saldo que fecha com o dano e o motivo de cada ação;
+  - `web/app/test/combate_tr_sem_dom.test.mjs` confere o núcleo sem DOM, sem relógio e sem `Math.random`, a aritmética da D-7 e as
+    importações.
+- **A medida:** `web/app/scripts/medir_combate_tr.ts`, com a saída em `web/app/scripts/medicoes/combate_tr.json`. Foram 560 lutas: as
+  8 formas adultas umas contra as outras e os 6 bots clássicos contra elas, cada par em 5 sementes.
+  - **A duração:** média de 46,9 s, mediana de 45,1 s e p90 de 80 s; 483 lutas acabaram por KO e 77 no limite.
+  - **O custo:** 0,86 ms por luta e 1,47 ms por luta no limite, no Node 24. Refazer 1 000 lutas leva 0,86 s. Uma luta por turnos, nos
+    mesmos pares, leva 0,094 ms.
+  - É menos que a estimativa da R0 (4,7 ms por luta de 100 s, sobre a simulação do UP), porque a luta é mais curta e não tem a IA nem a
+    geometria do UP.
+  - Nada foi calibrado.
+
+As interpretações do worker estão em `docs/registro/2026-10.md`. A R2 (o `Motor.lutar`, a v13, o descarte com aviso) espera o Matheus.
