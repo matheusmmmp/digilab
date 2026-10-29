@@ -79,3 +79,34 @@ UP-EVOLUCAO); som na arena em tempo real (vai com a UP-ARENA); reaproveitar o c�
   músicas e a arte das arenas) seguem a mesma regra dos sprites: `docs/UI_GUIDELINES.md`, seção 5.1, com a procedência registrada, fora do
   git, com o crédito, e o e2e sem eles.
 - **A pilha não muda** (Matheus, 2026-10-29): seção 3.
+
+## 10. Relato da etapa (2026-10-29, worker UP-SOM, Claude Code, Sonnet 5.5, worktree `v2-up-som`)
+
+**O que entrou:**
+- `web/app/src/som.ts` (novo): Web Audio sem biblioteca, `criarSom(dep)` com dependências injetáveis e a instância `SOM`; `tocar(evento, forma,
+  habilidade)`, `tocarEvolucao`, `tocarMusica` (início e laço em amostras a 44,1 kHz, `ATRASO_MP3` 1105), carregamento preguiçoso do `mapa.json` e dos
+  MP3, aviso uma vez (`AvisoSom`) quando falta arquivo. Desligado, não cria contexto nem pede arquivo.
+- Configuração: a seção SOM (interruptor e volume) troca a linha "o jogo ainda não tem som". Lembrados em `localStorage`
+  (`digilab-web-v21-sprites-som` e `-som-volume`), fora do save.
+- Luta (`luta.ts`, `somDoTurno`): quem fez `golpe_rapido`, `disparo` ou `pesado` toca o golpe da forma dele; quem causou dano toca o acerto e o fim.
+  Disparo e pesado usam o conjunto de habilidade; o golpe rápido, o de ataque. Pular a animação não toca.
+- Revelação: `tocarEvolucao(0)` (a queda do `sfx_evolution_sfx`, a partir de 15,45 s: a Revelação do app abre já no instante da virada).
+- Servidor: `vite.config.ts` e `servidor_local.py` servem `/Assets/sons/mapa.json` e `/Assets/sons/<nome>.mp3` (nome simples, sem caminho), também no modo remoto.
+- Fora do git: `D:\Trab\digilab\Assets\gerar_sons_up.py` gera `Assets/sons/` (150 MP3 de golpe + 5 músicas + `sfx_evolution_sfx`, 8,9 MB) e o `mapa.json`.
+  Procedência: UI_GUIDELINES 5.1 (D3).
+
+**Não mudou:** motor, `engine.py`, save, log, RNG do motor, `package.json` e lockfile (`npm ci` só instalou).
+
+**Cobertura do mapa (critério 4):** 75 chaves de sprite com som. Sem som: `brasa_adulto_vigia` (Wargrowlmon), `oraculo` (Jijimon) e `guia` (Agu).
+Dos 15 Digimon mudos do levantamento (seção 6), só o Wargrowlmon está no catálogo de sprites do DigiLab (`brasa_adulto_vigia`); `oraculo` (Jijimon) e `guia` (Agu)
+não estão no mapa de sons do protótipo. Os outros 14 mudos não aparecem em nenhuma forma, NPC ou bot do DigiLab (conferido contra `catalogo_sprites_up.json`).
+Tocar forma sem som é silêncio, sem erro (teste de unidade).
+
+**Testes:** `npm test` 621 passados (53 arquivos; `som.test.ts` com 9 novos); `npm run tipos` limpo; `tests/test_servidor_remoto.py` 13 passados;
+`npm run e2e` 93 passados (2 novos de som).
+
+**PROPOSTOS (SEM FONTE):** volume padrão 0,6 ao ligar; variação como tom de ±variação/3 (como a arena; o custo de errar é só de ouvido);
+disparar `fim` junto do acerto.
+
+**Propostas de outros pontos, sem código:** estalo ao comer e ao receber o carinho (efeitos de interface, hoje sem instante mapeado); fanfarra na
+medalha; música de fundo por estágio na Pet; os 194 sons de interface/gacha quando houver o instante.

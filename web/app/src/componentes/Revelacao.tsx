@@ -15,6 +15,7 @@ import { Deco } from "./Deco.tsx";
 import { SeloMedalha } from "./Medalha.tsx";
 import { abrirModal, rotaDaTelaCheia } from "./modal.ts";
 import { ehLuta } from "../rotas.ts";
+import { SOM } from "../som.ts";
 import { useLuta } from "../luta.ts";
 import { tamerAtual, useJogo } from "../jogo.ts";
 import { BarraCarater, Seg, blocos } from "./Barras.tsx";
@@ -105,6 +106,8 @@ function Revelacao({ i, m, fechar }: { i: number; m: Motor; fechar: () => void }
   /* abre no topo (o foco inicial iria para o Continuar, embaixo, e rolaria a tela) */
   useEffect(() => { const d = ref.current; if (!d) return; abrirModal(d); d.scrollTop = 0; d.querySelector<HTMLElement>(".revel-tit")?.focus(); }, []);
   useEffect(() => rotaDaTelaCheia("#/evolucao"), []);
+  /* so apresentacao: o efeito da evolucao (src/som.ts; desligado por padrao); a revelacao daqui e imediata, entao a queda cai no começo */
+  useEffect(() => { void SOM.tocarEvolucao(0); return () => SOM.pararEvolucao(); }, []);
   return (
     <dialog className="revelacao evm dl" ref={ref} aria-labelledby="revel-tit" onClose={fechar}>
       <span className="evm-estilhacos" aria-hidden="true"><i /><i /><i /><i /></span>

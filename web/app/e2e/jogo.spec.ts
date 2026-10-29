@@ -1647,3 +1647,47 @@ test("mundo: o ovo novo choca na cena 3D", async ({ page }) => {
   await expect(page.locator(".mundo-info")).toBeVisible();
   expect(erros).toEqual([]);
 });
+
+/* UP-SOM: o som e desligado por padrao. Desligado, nenhuma requisicao de audio sai (nem em uma luta inteira); ligar e lembrado ao
+   recarregar e nao entra no save exportado; ligado com os arquivos ausentes, o aviso aparece e o jogo segue. */
+test("som: desligado por padrão não pede áudio nem em uma luta; ligar é lembrado e fica fora do save", async ({ page }) => {
+  test.setTimeout(180_000);
+  await semear(page, SAVES.v3);
+  const erros = vigiarErros(page), pedidos: string[] = [];
+  page.on("request", r => { if (/\/Assets\/sons\/|\.mp3(\?|$)/.test(r.url())) pedidos.push(r.url()); });
+  await page.goto(APP + "#/pet/estado");
+  await irPara(page, "Lutar", "Arena", "lutar/arena");
+  await page.locator(".lutar-grande").click();
+  await expect(page).toHaveURL(/#\/lutar\/luta$/);
+  await expect(page.locator("dialog.modal-res[open]")).toBeVisible({ timeout: 90_000 });
+  expect(pedidos, "pediu áudio com o som desligado").toEqual([]);
+  await page.locator(".res-continuar").click();
+  /* Configuração: padrão desligado; ligar e mexer no volume ficam no localStorage do app e voltam ao recarregar */
+  await page.locator(".dl-nav .nav-quad", { hasText: "Ajustes" }).click();
+  const chave = page.getByRole("switch", { name: /Som do jogo/ }), vol = page.getByLabel("Volume do som");
+  await expect(chave).not.toBeChecked();
+  await chave.check();
+  await vol.fill("0.3");
+  await page.reload();
+  await page.locator(".dl-nav .nav-quad", { hasText: "Ajustes" }).click();
+  await expect(page.getByRole("switch", { name: /Som do jogo/ })).toBeChecked();
+  await expect(page.getByLabel("Volume do som")).toHaveValue("0.3");
+  const guardado = await page.evaluate(([c]) => ({ som: localStorage.getItem(c + "-som"), vol: localStorage.getItem(c + "-som-volume"), save: localStorage.getItem(c) }), [CHAVE] as const);
+  expect(guardado.som).toBe("1"); expect(guardado.vol).toBe("0.3");
+  expect(guardado.save).not.toMatch(/som/i);
+  const reg = await page.evaluate(() => (window as any).__digilab.registro());
+  expect(reg).not.toMatch(/som/i);
+  expect(erros.filter(e => !/sons?\//i.test(e) && !/mp3|mapa de sons|Failed to load resource/i.test(e))).toEqual([]);
+});
+
+test("som: ligado com os arquivos ausentes mostra o aviso e a tela segue", async ({ page }) => {
+  await semear(page, SAVES.v3);
+  await page.route(/\/Assets\/sons\//, r => r.fulfill({ status: 404, body: "ausente" }));
+  await page.goto(APP + "#/pet/estado");
+  await page.locator(".dl-nav .nav-quad", { hasText: "Ajustes" }).click();
+  await page.getByRole("switch", { name: /Som do jogo/ }).check();
+  await expect(page.getByTestId("aviso-som").first()).toBeVisible();
+  await expect(page.getByTestId("aviso-som").first()).toContainText("mapa de sons");
+  await page.getByRole("switch", { name: /Som do jogo/ }).uncheck();
+  await expect(page.getByRole("switch", { name: /Som do jogo/ })).not.toBeChecked();
+});

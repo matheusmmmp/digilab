@@ -1,8 +1,7 @@
 /* Configuracoes (desenhos CfgPrincipal, CfgAparencia, CfgDados, CfgFala, CfgSobre): tela aberta pela engrenagem do
-   Diario. So junta o que o app ja tinha (tema, registro e replay, tempo de teste, fala) num lugar; nada aqui muda
+   Diario. So junta o que o app ja tinha (tema, registro e replay, tempo de teste, fala, som) num lugar; nada aqui muda
    o motor, as regras ou o save, a nao ser pelas mesmas acoes de antes (tempo e ovo novo, via jogo.ts/tempo.ts).
-   Opcoes dos desenhos que o app nao tem (tamanho do texto, reduzir movimento, dicas) ficam de fora; o som aparece
-   desligado, como proposta. */
+   Opcoes dos desenhos que o app nao tem (tamanho do texto, reduzir movimento) ficam de fora. */
 import type { ReactNode } from "react";
 import { useState } from "react";
 import { Motor } from "../../../motor/index.ts";
@@ -16,6 +15,8 @@ import { useJogo } from "../../jogo.ts";
 import { abrirEscolhaBrasao } from "../../jornada.ts";
 import type { ParteConfig } from "../../rotas.ts";
 import { useDesktop } from "../../desktop.ts";
+import { AvisoSom } from "../../componentes/AvisoSom.tsx";
+import { SOM, useSom } from "../../som.ts";
 import { dicasLigadas, ligarDicas } from "../../dicas.ts";
 import { textoSave } from "../../save.ts";
 import { NOME_TEMA, escolherTema, useTema, type Tema } from "../../tema.ts";
@@ -60,11 +61,23 @@ function Principal({ abrir, atual = null }: { abrir: (p: ParteConfig) => void; a
       <Linha ic={<Deco nome={ICONE.tempo} />} titulo="Tempo" tag="TESTE" resumo={velocidade === 0 ? "pausado" : `velocidade ${nomeVelocidade(velocidade)}`} abrir={() => abrir("dados")} />
       <h2 className="cfg-secao">SOBRE</h2>
       <Linha ic={<Deco nome="Digivice_Circle_01" />} titulo="Sobre o Digilab" resumo="versão, créditos e procedência" abrir={() => abrir("sobre")} atual={atual === "sobre"} />
-      <div className="cfg-linha cfg-linha--off" aria-disabled="true">
-        <span className="cfg-ic" aria-hidden="true">♪</span>
-        <span className="cfg-txt"><b>Som</b><small>o jogo ainda não tem som (proposta; desligado)</small></span>
-      </div>
+      <h2 className="cfg-secao">SOM</h2>
+      <Som />
     </div>
+  );
+}
+/** liga/desliga e volume do som (src/som.ts); ficam no localStorage do app, nao no save. Ligar e o gesto que o navegador pede */
+function Som() {
+  const som = useSom();
+  return (
+    <section className="dl-card cfg-bloco" aria-label="Som">
+      <label className="cfg-switch"><span><b>Som do jogo</b><small>golpes e impactos na luta e o efeito da evolução; desligado, nada é baixado</small></span>
+        <input type="checkbox" role="switch" checked={som.ligado} onChange={e => SOM.ligar((e.target as HTMLInputElement).checked)} /></label>
+      <label className="cfg-switch"><span><b>Volume</b><small>{Math.round(som.volume * 100)}%</small></span>
+        <input type="range" min={0} max={1} step={0.05} value={som.volume} aria-label="Volume do som" disabled={!som.ligado}
+          onChange={e => SOM.volume(Number((e.target as HTMLInputElement).value))} style={{ width: 140 }} /></label>
+      <AvisoSom />
+    </section>
   );
 }
 function Aparencia() {

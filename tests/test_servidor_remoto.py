@@ -70,6 +70,14 @@ def test_remoto_serve_so_o_que_fica_dentro_do_build_do_app():
         assert not rota_permitida(fora), fora
 
 
+def test_remoto_serve_so_o_mapa_e_os_mp3_de_sons():
+    for ok in ("/Assets/sons/mapa.json", "/Assets/sons/sfx_dm_devimon_skill.mp3", "/Assets/sons/EVO.mp3", "/Assets/sons/Target_red_shock.mp3?v=1"):
+        assert rota_permitida(ok), ok
+    for fora in ("/Assets/sons/", "/Assets/sons/../catalogo_sprites_up.json", "/Assets/sons/%2e%2e/catalogo_sprites_up.json", "/Assets/sons/a/b.mp3",
+                 "/Assets/sons/x.wav", "/Assets/sons/x.mp3/..", "/Assets/sons/..%5cx.mp3", "/Assets/sons/gerar_sons_up.py"):
+        assert not rota_permitida(fora), fora
+
+
 def test_remoto_serve_so_a_decoracao_listada():
     nomes = json.loads((Path(__file__).resolve().parents[1] / "web" / "app" / "decoracao_nomes.json").read_text(encoding="utf-8"))["pecas"]
     assert "campina_gazimon" in nomes and "Common_Icon_Setting" in nomes
