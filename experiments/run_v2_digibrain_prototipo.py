@@ -437,8 +437,11 @@ def conferir_credito(braco: str, c) -> None:
             busca = g is not None and ks < g["n"]
             esperada = ["comer", "cheiro", None] if busca else f["chave"]
             if ms[k]["escolha"] != esperada:
+                # o cochilo da intencao suspensa: o da unidade esperada ou, na opcao composta, o da busca, tambem depois da ultima decisao
+                # propria dela (a busca suspensa que, ao acordar, acha a comida e e herdada pela ida na mesma decisao)
                 cochilo = ms[k].get("suspensa")
-                if not (suspensa and ms[k]["reflexo"] and cochilo is not None and cochilo["chave"] == esperada):
+                donas = (esperada, ["comer", "cheiro", None]) if g is not None else (esperada,)
+                if not (suspensa and ms[k]["reflexo"] and cochilo is not None and cochilo["chave"] in donas):
                     raise RuntimeError(f"{braco}: a decisao {k} nao e da unidade da opcao {f['chave']}")
                 k += 1
                 continue
