@@ -13,6 +13,7 @@ import { jogoAtual, mudarMotor, mudarTamer, tamerAtual } from "./jogo.ts";
 import { ehLuta } from "./rotas.ts";
 import { conferirRevanche, type Campeao, type ItemGanho, type MedalhaGanha, type Recorde } from "./tamer.ts";
 import { falaRevanche } from "./falaLivre.ts";
+import { SOM } from "./som.ts";
 
 /* bots classicos: Digimon do mapa da Etapa 0 (so rotulo) */
 import { DIGIMON_BOT } from "./nomesRivais.ts";
@@ -282,6 +283,19 @@ export function lutarInstalacao(id: IdInstalacao, nomeAcaoV2: Record<string, str
       serie, nLutas: serie.length, arena: null, carta: null, itens: [], lideres: null, titulo: null, instalacao: inst, rivais, recorde };
   }, inst);
 }
+/** so apresentacao (src/som.ts, desligado por padrao): quem golpeou toca o golpe da forma dele; quem levou dano, o acerto. O pesado e o
+    disparo usam o som de habilidade. Nada disto toca o motor, o registro ou a RNG */
+const GOLPES = ["golpe_rapido", "disparo", "pesado"];
+function somDoTurno(tr: Turno, A: LutadorTela, B: LutadorTela): void {
+  if (!SOM.estado().ligado) return;
+  const lados: [LutadorTela, string][] = [[A, tr.a], [B, tr.b]];
+  lados.forEach(([L, acao], i) => {
+    if (!GOLPES.includes(acao)) return;
+    const hab = acao !== "golpe_rapido";
+    void SOM.tocar("golpe", L.sprite, hab);
+    if (tr.dano[1 - i]) { void SOM.tocar("acerto", L.sprite, hab); void SOM.tocar("fim", L.sprite, hab); }
+  });
+}
 /** a animacao de uma luta ja decidida (ou das lutas seguidas da Cidadela, uma depois da outra, com "luta k de n" no palco):
     um turno por vez (pausa e x2); no fim chama fim(palco) e para. nLutas: quantas lutas a serie tem (as jogadas podem ser
     menos: ela para na primeira que nao for vitoria) */
@@ -333,6 +347,7 @@ function animar(serie: ResultadoLuta[], nLutas: number, A: LutadorTela, Bs: Luta
       log: [{ t: tr.t, pet: A.nomeTela, rival: B.nomeTela, ma, mb, estPet: A.estagioFala, estRival: B.estagioFala, humor: jogoAtual().motor.e.humor }, ...p.log].slice(0, 8),
     });
     avisarLuta();
+    somDoTurno(tr, A, B);
     agendar();
   };
   /* proximo turno: parado enquanto pausado; x2 corta a espera pela metade */

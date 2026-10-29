@@ -29,7 +29,7 @@ senha (decisao do Matheus, 2026-09-24): o link aleatorio do tunel vira a unica p
     cloudflared tunnel --url http://127.0.0.1:8765
 - senha obrigatoria (HTTP Basic, qualquer usuario; variavel DIGILAB_SENHA, nunca na linha de comando);
 - so as rotas do jogo: /v1/web/*.html, o build do app em /v1/web/dist/ (so o que fica dentro dele),
-  /Assets/digilab_atlas.png, /Assets/digilab_atlas_up.{png,json}, a decoracao listada em web/app/decoracao_nomes.json e /api/fala*; o resto (repo, .git, v0, codigo do
+  /Assets/digilab_atlas.png, /Assets/digilab_atlas_up.{png,json}, a decoracao listada em web/app/decoracao_nomes.json, /Assets/sons/{mapa.json,*.mp3} e /api/fala*; o resto (repo, .git, v0, codigo do
   app, Assets inteiro, gasto) responde 404;
 - a API paga do Claude fica desligada, salvo --claude-remoto (quem tiver a senha gasta o credito,
   ate o teto de --limite-usd).
@@ -110,9 +110,13 @@ def rota_do_app(caminho: str) -> bool:
     return alvo == base or base in alvo.parents
 
 
+# sons do Digimon UP (Assets/gerar_sons_up.py): so o mapa.json e MP3 de nome simples dentro de /Assets/sons/ (nada de caminho)
+ROTA_SOM = re.compile(r"/Assets/sons/(mapa\.json|[A-Za-z0-9_]+\.mp3)")
+
+
 def rota_permitida(caminho: str) -> bool:
     c = caminho.split("?", 1)[0]
-    return c in ROTAS_REMOTAS or c == "/" or rota_do_app(c)
+    return c in ROTAS_REMOTAS or c == "/" or rota_do_app(c) or ROTA_SOM.fullmatch(c) is not None
 
 
 class ServidorJogo(ThreadingHTTPServer):

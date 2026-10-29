@@ -19,6 +19,9 @@ const ATLAS: Record<string, string> = {
   ...Object.fromEntries(DECORACAO.map(n => [`/Assets/decoracao_up/${n}.png`, "image/png"])),
 };
 
+/* sons do Digimon UP (Assets/gerar_sons_up.py, src/som.ts): o mapa.json e so os MP3 dentro de Assets/sons/ (nome simples, nada de caminho) */
+const SOM_ROTA = /^\/Assets\/sons\/(mapa\.json|[A-Za-z0-9_]+\.mp3)$/;
+
 /** dev: serve so o atlas e a decoracao listada (nada mais da pasta Assets) */
 function atlasDev(): Plugin {
   return {
@@ -26,7 +29,7 @@ function atlasDev(): Plugin {
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         const caminho = (req.url || "").split("?")[0];
-        const tipo = ATLAS[caminho];
+        const tipo = ATLAS[caminho] ?? (SOM_ROTA.test(caminho) ? (caminho.endsWith(".json") ? "application/json" : "audio/mpeg") : undefined);
         if (!tipo) return next();
         const arq = ASSETS + caminho.slice("/Assets/".length);
         if (!existsSync(arq)) { res.statusCode = 404; res.end("asset nao encontrado: " + arq); return; }

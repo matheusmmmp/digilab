@@ -14,6 +14,7 @@ import { falaLLM, motivoParaApi, useFalaLLM } from "../../fala.ts";
 import { S, desenharGrade, paleta } from "../../grades.ts";
 import { mudarMotor, useJogo } from "../../jogo.ts";
 import { LUTA, alternarPausa, alternarRapido, useLuta, type LutadorTela, type Palco } from "../../luta.ts";
+import { AvisoSom } from "../../componentes/AvisoSom.tsx";
 import { abrirModal } from "../../componentes/modal.ts";
 
 const XS = [[27, 69], [18, 78], [10, 86]];   /* centro do seu pet e do rival por distancia (em 96 avos da largura) */
@@ -172,6 +173,7 @@ export function PalcoLuta() {
   return (
     <div className="palco-luta dl">
       <Cena p={p} controles />
+      <AvisoSom />
       <div className="palco-luta-baixo">
         <section className="dl-card luta-card" aria-live="polite"><h2>Intenção do rival</h2>
           {p.intencao ? <div className="luta-intencao"><b className="luta-exclam">!</b><span>{p.intencao}</span></div>

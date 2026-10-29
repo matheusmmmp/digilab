@@ -25,6 +25,7 @@ import { TelaArena } from "./telas/lutar/TelaArena.tsx";
 import { TelaCampanha } from "./telas/lutar/TelaCampanha.tsx";
 import { TelaMedalhas } from "./telas/lutar/TelaMedalhas.tsx";
 import { TelaFronteira } from "./telas/lutar/TelaFronteira.tsx";
+import { AvisoSom } from "./componentes/AvisoSom.tsx";
 import { AvisoPetsDescartados } from "./componentes/Medalha.tsx";
 import { CHAVE_AVISO_V6 } from "./tamer.ts";
 import { TelaConversar } from "./telas/conversar/TelaConversar.tsx";
@@ -170,6 +171,7 @@ export function App() {
 
   return (
     <div className="app">
+      <AvisoSom />
       {jogo.erroSave && (
         <div className="aviso" role="alert">
           O save deste navegador não abriu, e o app não vai gravar por cima dele.
