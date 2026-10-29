@@ -1,8 +1,8 @@
 # TAREFA V2 — UP-ARENA: a arena em tempo real no jogo web (2026-10-29)
 
 Coordenador: sessão de coordenação da integração UP (Claude Code). Worker: Claude Code, Opus 5.5. Worktree e branch: `v2-up-arena`.
-Status: PORTE ENTREGUE, esperando a revisão e o merge do Matheus (etapa 0 na seção 10, porte na seção 11; D1–D5 e P1–P4 decididas;
-a UP-ATLAS e a UP-SOM na `main`, #441 e #440).
+Status: CORREÇÃO DO PET ENTREGUE, esperando a revisão e o merge do Matheus (etapa 0 na seção 10, porte na seção 11, no #446; a
+correção "é o pet que luta" na seção 12, branch `v2-up-arena-pet`; D1–D5 e P1–P4 decididas).
 
 Categoria: implementacao. Origem: Matheus, 2026-10-29: `D:\Trab\digilab\remaster\LEVANTAMENTO_INTEGRACAO.md`, seção 4,
 `D:\Trab\digilab\remaster\arena_equilibrio.md` e o protótipo `remaster/fonte/site/arena.html` (publicado em
@@ -310,3 +310,47 @@ Registrado como está, sem ajuste (D5).
 - `npm run e2e`: 97 passados, os 94 de antes mais os 3 da arena.
 - `pytest tests/test_servidor_remoto.py`: 14 passados.
 - O `package.json` e o `package-lock.json` não mudaram.
+
+## 12. A correção: é o pet do jogador que luta, sozinho, pela IA (worker, Claude Code, Opus 5.5, 2026-10-29)
+
+**A correção do Matheus (2026-10-29, pela coordenação):** "Por que na batalha em tempo real não é o meu Digimon que tá lutando, é um
+Digimon aleatório? E por que eu tô tendo que clicar? A ideia é batalhar sozinho, é ele executar a ação. A batalha em tempo real, mas é ele
+que joga, não sou eu." O erro foi de escopo da tarefa: a seção 6 deixava "ligar a arena ao pet" de fora. Branch `v2-up-arena-pet`,
+criado de `origin/main` em `f2693a9`, com o #446.
+
+### 12.1 O que mudou
+
+- **O lado azul é o pet atual, sozinho, 1 contra 1.** A forma do pet passa por `chaveSprite` e `DIGIMON_DA_FORMA` e vira o Digimon do
+  atlas da arena. A comparação ignora caixa, espaço e sublinhado (`src/arenaTempoReal.ts`, `petNaArena` e `digimonNaArena`).
+  - O apelido `Ankylomon` → `Ankiromon` é o único nome que o atlas escreve de outro jeito.
+  - O status vem do `status.json` daquele Digimon, com o `EQ.pesoEstagio`, como na medição.
+- **O nível:** os dois lados lutam no nível 1 (PROPOSTO, SEM FONTE). É uma interpretação do worker: o estágio do pet já entra pelo status
+  do Digimon dele, e o rival é do mesmo estágio. Somar um nível pelo estágio contaria o estágio duas vezes.
+- **O pet é controlado pela IA da arena,** como no CPU × CPU. A tela perdeu o modo "Você × CPU", as instruções de teclado, o teclado e o
+  mouse, as equipes de 3, o "Sortear equipes" e as opções de ritmo, atributo, dificuldade e velocidade. Ficaram "Lutar", "Revanche (mesma
+  semente)", a escolha da arena e a do rival. A entrada do jogador continua na simulação, coberta pelos testes.
+- **O rival** (proposta do coordenador, PROPOSTO, SEM FONTE): um parceiro do mesmo estágio, com status próprio, golpe e atlas, sem o
+  próprio Digimon do pet (`arena/rival.ts`).
+  - Ele é sorteado com a semente da luta, no fluxo `rival`; a revanche repete a semente, a arena e o rival.
+  - Um seletor permite trocá-lo.
+- **Sem pet que possa lutar, um aviso visível e nenhuma luta:** vale para o ovo, para a forma sem Digimon no atlas da arena e para o
+  Digimon sem status próprio no jogo.
+  - Nos dados reais, 57 das 60 formas lutam.
+  - Não lutam o **DemiVeemon** (In-Training de ferrugem), o **Ankylomon** (Champion de ferrugem, guardião) e o **WarGrowlmon** (Ultimate
+    de brasa, colosso): os três estão no atlas, mas não no `status.json` do jogo.
+- **A equipe tem de 1 a 3 Digimon** (`ConfigLado.equipe`); a medição continua com 3, e a paridade com o protótipo não muda.
+- **Continua igual:** nada toca o motor do pet, o log nem o save, e a luta não dá nem tira nada do pet.
+
+### 12.2 Ideia (sem tarefa)
+
+Ligar o resultado da arena ao pet (ganho, treino, evolução, medalha) seria mecânica nova, com versão de pet (`VERSAO_PET`) e com
+paridade. Fica fora desta correção, como ideia.
+
+### 12.3 As entregas conferidas
+
+- `npm test`: 643 passados (57 arquivos).
+- `npm run tipos`: limpo.
+- `npm run e2e`: ver o relato do PR. O e2e entra na arena com o pet do save v3 (Kabuterimon) e vê o nome dele no lado azul, contra o
+  rival do estágio; a revanche dá a mesma luta; sem o Digimon do pet nos dados, o aviso aparece e a luta não começa.
+- O `package.json` e o `package-lock.json` não mudaram.
+

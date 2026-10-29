@@ -32,7 +32,8 @@ export interface DadosArena {
 
 // ---------- configuracao de uma luta ----------
 export type FonteStats = "jogo" | "generico";
-export interface ConfigLado { equipe: [string, string, string]; fonte: FonteStats; nivel: number; generico: StatsGenericos }
+/** a equipe tem de 1 a 3 Digimon (a tela usa 1: o pet sozinho contra o rival; a medicao, 3) */
+export interface ConfigLado { equipe: string[]; fonte: FonteStats; nivel: number; generico: StatsGenericos }
 export interface ConfigLuta {
   cena: IdCena;
   dific: Dificuldade;

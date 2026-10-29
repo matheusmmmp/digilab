@@ -2,29 +2,20 @@
 .arena-tr-entrada{display:flex;justify-content:flex-end;padding:10px 12px 0}
 .arena-tr .tela-cab{display:flex;align-items:center;gap:12px}
 .arena-tr .arena-tr-voltar{margin-left:auto;min-height:40px}
-.arena-tr-corpo{display:grid;gap:12px;padding:12px;grid-template-columns:minmax(0,1fr)}
+.arena-tr-corpo{display:grid;gap:12px;padding:12px;grid-template-columns:minmax(0,1fr);max-width:1100px;margin:0 auto}
 .arena-tr-palco{display:grid;gap:8px}
-.arena-tr-canvas{width:100%;height:auto;aspect-ratio:480/280;image-rendering:pixelated;border-radius:8px;background:#0d1016;touch-action:none;cursor:crosshair}
+.arena-tr-canvas{width:100%;height:auto;aspect-ratio:480/280;image-rendering:pixelated;border-radius:8px;background:#0d1016}
+.arena-tr-confronto{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 14px;margin:0;font-weight:800}
+.arena-tr-azul b{color:#2c73e0}
+.arena-tr-vermelho b{color:#d6336c}
 .arena-tr-linha{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline}
-.arena-tr-acoes{display:flex;flex-wrap:wrap;gap:8px}
+.arena-tr-acoes{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:flex-end}
+.arena-tr-escolha{display:grid;gap:2px;font-weight:800;font-size:.8125rem}
+.arena-tr-escolha select{font:inherit;font-weight:700;min-height:44px;border:2px solid var(--dl-navy);border-radius:8px;padding:2px 6px;background:#fff;color:var(--dl-navy)}
 .arena-tr-nota{font-size:.8125rem;color:var(--dl-text);margin:0}
-.arena-tr-opcoes{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:flex-end}
-.arena-tr-opcoes label{display:grid;gap:2px;font-weight:800;font-size:.8125rem}
-.arena-tr-opcoes select,.arena-tr-opcoes input{font:inherit;font-weight:700;min-height:36px;border:2px solid var(--dl-navy);border-radius:8px;padding:2px 6px;background:#fff;color:var(--dl-navy)}
-.arena-tr-opcoes input[aria-invalid="true"]{border-color:var(--dl-erro)}
-.arena-tr-opcoes small{font-weight:700;font-size:.6875rem;color:var(--dl-text)}
-.arena-tr-equipe{display:flex;flex-wrap:wrap;gap:8px;border:2px solid var(--dl-border);border-radius:10px;padding:6px 10px;flex:1 1 320px}
-.arena-tr-equipe--a legend{color:#2c73e0;font-weight:900}
-.arena-tr-equipe--b legend{color:#d6336c;font-weight:900}
 .arena-tr-log{max-height:220px;overflow:auto;margin:0;padding:8px 12px 8px 28px;font-size:.75rem;font-family:'IBM Plex Mono',monospace}
 .arena-tr-log li.a{color:#2c73e0}
 .arena-tr-log li.b{color:#d6336c}
 .arena-tr-recuos summary{cursor:pointer;font-weight:800}
 .arena-tr-recuos p{font-size:.75rem;margin:6px 0 0}
 .arena-tr-credito{font-size:.6875rem;color:var(--dl-text);margin:0}
-@media (min-width:1100px){
-  .arena-tr-corpo{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
-  .arena-tr-palco{grid-column:1}
-  .arena-tr-opcoes{grid-column:2;grid-row:span 2;align-content:flex-start}
-  .arena-tr-log{grid-column:1}
-}

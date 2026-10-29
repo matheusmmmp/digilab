@@ -193,7 +193,7 @@ function barra(ctx: CanvasRenderingContext2D, L: Luta, u: Lutador, x: number, y:
   ctx.fillRect(x + 1, y + 1, Math.max(0, (w - 2) * p), 5);
   ctx.fillStyle = COR.tinta; ctx.font = "8px 'IBM Plex Mono', monospace";
   ctx.textAlign = u.lado === "a" ? "left" : "right";
-  ctx.fillText(`${u.n}  ${u.hp}/${u.st.hp}  ·  ${vivos(L, u.lado).length}/3 de pé`, u.lado === "a" ? x : x + w, y + 17);
+  ctx.fillText(`${u.n}  ${u.hp}/${u.st.hp}  ·  ${vivos(L, u.lado).length}/${L.eq[u.lado].length} de pé`, u.lado === "a" ? x : x + w, y + 17);
   const pr = Math.max(0, Math.min(1, 1 - u.recSk / (u.st.hcd * 1000))), pronta = u.recSk <= 0;
   ctx.fillStyle = "rgba(0,0,0,0.35)"; ctx.fillRect(x, y + 21, w * 0.6, 4);
   ctx.fillStyle = u.lado === "a" ? COR.azul : COR.vermelho; ctx.fillRect(x + (u.lado === "a" ? 0 : w * 0.4), y + 21, w * 0.6 * pr, 4);

@@ -6,3 +6,4 @@ export * from "./rng.ts";
 export { CENAS, IDS_CENA, iniciarCena, type DefCena } from "./cenas.ts";
 export { aplicarEntrada, ativo, criarLuta, outro, passo, statsDoMembro, trocar, vivos } from "./sim.ts";
 export * from "./medicao.ts";
+export * from "./rival.ts";

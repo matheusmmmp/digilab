@@ -1731,28 +1731,33 @@ test("arena em tempo real: com a chave desligada, o Lutar é o de hoje e nada da
   expect(erros).toEqual([]);
 });
 
-test("arena em tempo real: ligada, CPU × CPU até o fim, e a mesma semente refaz a mesma luta", async ({ page }) => {
+test("arena em tempo real: o pet do jogador luta sozinho, pela IA, contra um rival do estágio; a mesma semente refaz a luta", async ({ page }) => {
   test.setTimeout(240_000);
   await semear(page, SAVES.v3);
   await servirArenaSintetica(page);
   const erros = vigiarErros(page);
+  /* o relogio falso adianta a luta (o laco e por requestAnimationFrame, em passos fixos de 16 ms) */
+  await page.clock.install();
   await page.goto(APP + "?arena_tr=1#/lutar/arena");
   await page.getByRole("link", { name: "Arena em tempo real" }).click();
   await expect(page).toHaveURL(/#\/lutar\/tempo-real$/);
-  await expect(page.getByTestId("arena-tr")).toBeVisible();
-  await expect(page.getByTestId("recuos-arena-tr")).toContainText("Regras de recuo");
-  await page.getByLabel("Modo").selectOption("cpu");
-  await page.getByLabel("Velocidade").selectOption("4");
+  /* o lado azul e o pet do save (Kabuterimon), sozinho; o rival e do mesmo estagio (Champion: so o Delta nos dados sinteticos) */
+  await expect(page.getByTestId("arena-tr-pet")).toContainText("Kabuterimon");
+  await expect(page.getByTestId("arena-tr-confronto")).toContainText("Rival: Delta");
+  /* sem modo do jogador, sem teclado e sem equipes: so Lutar, Revanche, a arena e o rival */
+  await expect(page.getByText(/WASD|Você \(azul\)|Sortear equipes|CPU × CPU/)).toHaveCount(0);
+  await expect(page.getByTestId("arena-tr").getByRole("combobox")).toHaveCount(2);
   await page.getByLabel("Arena", { exact: true }).selectOption("castelo");
-  await page.getByRole("button", { name: "Recomeçar" }).click();
+  await page.getByRole("button", { name: "Lutar", exact: true }).click();
   const fim = async () => {
-    await page.waitForFunction(() => (window as any).__arenaTr?.fim === true, null, { timeout: 200_000 });
+    for (let k = 0; k < 60 && !(await page.evaluate(() => (window as any).__arenaTr?.fim === true)); k++) await page.clock.runFor(10_000);
     return page.evaluate(() => ({ ...(window as any).__arenaTr }));
   };
+  await page.waitForFunction(() => (window as any).__arenaTr?.cena === "castelo");
   const a = await fim();
-  expect(a.cena).toBe("castelo");
+  expect(a.fim).toBe(true);
+  expect([a.azul, a.vermelho]).toEqual([["Kabuterimon"], ["Delta"]]);
   await expect(page.getByTestId("arena-tr-log")).toContainText(/venceu|Empate/);
-  await expect(page.getByLabel("Placar")).toContainText(/Azul \d · Vermelha \d · Empates \d/);
   await page.getByRole("button", { name: "Revanche (mesma semente)" }).click();
   await page.waitForFunction(s => (window as any).__arenaTr?.relogio < 1000 && (window as any).__arenaTr?.semente === s, a.semente);
   const b = await fim();
@@ -1760,10 +1765,24 @@ test("arena em tempo real: ligada, CPU × CPU até o fim, e a mesma semente refa
   /* sair: volta ao Lutar; nada da arena no registro do pet nem no save */
   await page.getByRole("button", { name: "Voltar" }).click();
   await expect(page).toHaveURL(/#\/lutar\/arena$/);
-  await expect(page.getByRole("tablist", { name: "Abas de Lutar" })).toBeVisible();
-  expect(await page.evaluate(() => (window as any).__digilab.registro())).not.toMatch(/arena_up|tempo-real|Alfa|Delta/);
-  expect(await page.evaluate(([c]) => localStorage.getItem(c), [CHAVE] as const)).not.toMatch(/arena_up|tempo-real|Alfa|Delta/);
+  expect(await page.evaluate(() => (window as any).__digilab.registro())).not.toMatch(/arena_up|tempo-real|Delta/);
+  expect(await page.evaluate(([c]) => localStorage.getItem(c), [CHAVE] as const)).not.toMatch(/arena_up|tempo-real|Delta/);
   expect(erros).toEqual([]);
+});
+
+test("arena em tempo real: pet sem Digimon nos dados da arena mostra o aviso e não luta", async ({ page }) => {
+  await semear(page, SAVES.v3);
+  const semPet = structuredClone(ARENA_SINT);
+  for (const k of ["status", "golpes", "atributos"]) delete semPet[k].Kabuterimon;
+  delete semPet.atlas.d.Kabuterimon;
+  await page.route(/\/Assets\/arena_up\//, r => {
+    const m = /\/dados\/([a-z]+)\.json/.exec(r.request().url());
+    return m ? r.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(semPet[m[1]]) }) : r.fulfill({ status: 200, contentType: "image/png", body: PNG_1PX });
+  });
+  await page.goto(APP + "?arena_tr=1#/lutar/tempo-real");
+  await expect(page.getByTestId("aviso-arena-tr-pet")).toContainText("Kabuterimon não está no atlas da arena");
+  await expect(page.getByRole("button", { name: "Lutar", exact: true })).toHaveCount(0);
+  await expect(page.locator("canvas")).toHaveCount(0);
 });
 
 test("arena em tempo real: ligada e sem os dados, o aviso visível", async ({ page }) => {
