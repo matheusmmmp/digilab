@@ -17,6 +17,8 @@ import { abrirModal, rotaDaTelaCheia } from "./modal.ts";
 import { ehLuta } from "../rotas.ts";
 import { SOM } from "../som.ts";
 import { useLuta } from "../luta.ts";
+import { CENA_EVOLUCAO_UP } from "../evolucaoUp.ts";
+import { CenaEvolucao } from "./CenaEvolucao.tsx";
 import { tamerAtual, useJogo } from "../jogo.ts";
 import { BarraCarater, Seg, blocos } from "./Barras.tsx";
 
@@ -103,13 +105,23 @@ const DECIDIDO: Record<string, string> = { crianca: "o cuidado", adolescente: "o
 function Revelacao({ i, m, fechar }: { i: number; m: Motor; fechar: () => void }) {
   const ref = useRef<HTMLDialogElement>(null), x = m.evolucoes[i], f = x.forma, antes = formaAntes(m, i), cor = corDominante(m.tracos);
   const med = medalhasDaEvolucao(m, x), arq = nomeArquetipo(f), br = BRASAO[m.especie], largo = matchMedia("(min-width: 900px)").matches;
+  /* a cena oficial antes do cartao (CENA_EVOLUCAO_UP, desligada: o cartao de hoje); com movimento reduzido, direto ao cartao */
+  const [cena, setCena] = useState(() => CENA_EVOLUCAO_UP && !matchMedia("(prefers-reduced-motion: reduce)").matches);
+  const [aviso, setAviso] = useState<string | null>(null), tocouCena = useRef(false);
   /* abre no topo (o foco inicial iria para o Continuar, embaixo, e rolaria a tela) */
-  useEffect(() => { const d = ref.current; if (!d) return; abrirModal(d); d.scrollTop = 0; d.querySelector<HTMLElement>(".revel-tit")?.focus(); }, []);
+  useEffect(() => { const d = ref.current; if (!d) return; abrirModal(d); d.scrollTop = 0; if (!cena) d.querySelector<HTMLElement>(".revel-tit")?.focus(); }, [cena]);
   useEffect(() => rotaDaTelaCheia("#/evolucao"), []);
-  /* so apresentacao: o efeito da evolucao (src/som.ts; desligado por padrao); a revelacao daqui e imediata, entao a queda cai no começo */
-  useEffect(() => { void SOM.tocarEvolucao(0); return () => SOM.pararEvolucao(); }, []);
+  /* so apresentacao: o efeito da evolucao (src/som.ts; desligado por padrao); a revelacao daqui e imediata, entao a queda cai no começo.
+     Com a cena, o efeito e a musica sao dela; a musica para quando a revelacao fecha */
+  useEffect(() => {
+    if (!cena) void SOM.tocarEvolucao(0);
+    return () => { SOM.pararEvolucao(); if (tocouCena.current) SOM.pararMusica(); };
+  }, []);
   return (
     <dialog className="revelacao evm dl" ref={ref} aria-labelledby="revel-tit" onClose={fechar}>
+      {cena && <CenaEvolucao antes={chaveSprite(antes)} depois={chaveSprite(f)} sombria={!!SOMBRIA[f.adulta!]}
+        aoFim={(a, tocou) => { tocouCena.current = tocou; if (!tocou) void SOM.tocarEvolucao(0); setCena(false); if (a) setAviso(a); }} />}
+      {aviso && <div className="aviso evm-aviso" role="alert" data-testid="aviso-cena-evolucao">A cena da evolução não tocou: {aviso}. Segue a revelação de sempre.</div>}
       <span className="evm-estilhacos" aria-hidden="true"><i /><i /><i /><i /></span>
       <div className="evm-corpo">
         <div className="evm-palco">

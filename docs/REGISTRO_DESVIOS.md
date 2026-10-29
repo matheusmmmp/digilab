@@ -411,6 +411,8 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-29 — UP-SOM (worker, Claude Code, Sonnet 5.5, worktree `v2-up-som`): o sistema de áudio do jogo web](registro/2026-10.md)
 - [2026-10-29 — UP-ARENA (worker, Claude Code, Opus 5.5, worktree `v2-up-arena`): a etapa 0 e o harness da arena recuperado do transcrito](registro/2026-10.md)
 - [2026-10-29 — DIGIBRAIN-MODULAR-L2-K (worker D, Claude Code, Opus 5.5, worktree `v2-modular-l2-k`): o K da avaliação da L-2 e as medidas em partes](registro/2026-10.md)
+- [2026-10-29 — UP-EVOLUCAO (worker, Claude Code, Opus 5.5, worktree `v2-up-evolucao`): a etapa 0, as cenas em quadros pelo runtime e não pelo `spine_quadros.py`](registro/2026-10.md)
 - [2026-10-29 — UP-ARENA-PET (worker, Claude Code, Opus 5.5, worktree `v2-up-arena`): o pet do jogador luta sozinho na arena em tempo real](registro/2026-10.md)
 - [2026-10-29 — COMBATE-TR (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): a espec da batalha em tempo real e o custo do replay](registro/2026-10.md)
+- [2026-10-29 — UP-EVOLUCAO (worker, Claude Code, Opus 5.5, worktree `v2-up-evolucao`): a tela, a cena oficial na Revelação atrás de `CENA_EVOLUCAO_UP`](registro/2026-10.md)
 - [2026-10-29 — COMBATE-TR R1 (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): o núcleo da luta em tempo real](registro/2026-10.md)

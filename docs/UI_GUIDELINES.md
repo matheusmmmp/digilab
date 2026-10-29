@@ -132,6 +132,9 @@ Respeitar o zoom do navegador: tamanhos em `rem`, sem `maximum-scale`.
 - **Escala inteira, sempre:** 1× listas e retratos, 2× cards, 3× palco e luta, 4× revelação de
   evolução. `image-rendering: pixelated` no CSS e `imageSmoothingEnabled = false` no canvas.
   Nunca redimensionar para caber: escolher a escala menor.
+  **Exceção (Matheus, 2026-10-29, `docs/TAREFA_V2_UP_EVOLUCAO.md`, seção 9):** durante a cena oficial de evolução (chave
+  `CENA_EVOLUCAO_UP`), o pet segue a escala do osso da cena, que não é inteira (≈5× a 6×; de 0 a 4 na Tamers Mega), sempre com vizinho
+  mais próximo, sem suavizar. Só durante a cena: o cartão da Revelação continua a 4×.
 - **Âncora nos pés.** O sprite é alinhado pela base do quadro sobre o anel de plataforma ou a
   sombra elíptica; quadros de alturas diferentes não "pulam".
 - **Direção:** o pet do jogador olha para a direita na luta (espelhar se preciso), o oponente
