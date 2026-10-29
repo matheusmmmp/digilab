@@ -2325,6 +2325,11 @@ CONFIG_CONTRATO_LIGADO = ConfigContrato(sensores=True, controlador=True)
 #     `comer/cheiro` (o cheiro de comida vale como comida, sem a proximidade);
 #   - `intencao_cheiro` (DX-4): a unidade `comer/cheiro` abre intencao (a busca), com os fins "meta", "achou", "sumiu" e "desistiu" (o
 #     `ConfigDigibrainInatos.n_desiste_cheiro`) e a opcao composta do credito (a busca que acha comida e segue no `comer/comida`).
+# A parte (b) da L-2 (docs/ESPEC_LONGE_L2_DIGIBRAIN_MODULAR.md, secoes 2, 3 e 5; LS-1 a LS-7 DECIDIDAS pelo Matheus em 2026-10-29) pede mais
+# uma, desligada por padrao (desligada, as vidas do conserto saem byte a byte: tests/gabaritos/digibrain_conserto_de_hoje.json):
+#   - `intencao_suspensa`: a intencao de comer (a busca pelo cheiro e a ida a uma comida vista) que o reflexo do sono interrompe fica
+#     suspensa, e nao trocada, e volta pelo sorteio na primeira decisao sem o reflexo; os fins "saciou", "sumiu", "expirou", "achou" e
+#     "superada" (`ConfigDigibrainInatos.n_suspensa_max` e `lambda_retomar`).
 CONTROLES_G_APR = ("nenhum", "embaralhado", "constante")
 
 
@@ -2340,9 +2345,11 @@ class ConfigDigibrain:
     g_apr_constante: int = 0                 # PROPOSTO (plano, secao 2): o g_apr do M4-con, na escala S; so com o controle "constante"
     cheiro_inato: bool = False               # DECIDIDO (adendo 3, A3.4 e A3.10, 2026-10-26): a DX-3, desligada por padrao
     intencao_cheiro: bool = False            # DECIDIDO (adendo 3, A3.4 e A3.10, 2026-10-26): a DX-4, desligada por padrao
+    intencao_suspensa: bool = False          # DECIDIDO (LS-1 e LS-2, 2026-10-29): a parte (b) da L-2, desligada por padrao
 
     def __post_init__(self) -> None:
-        for nome in ("ligada", "modula_g_apr", "p2", "m_mem", "persistencia", "p1", "cheiro_inato", "intencao_cheiro"):
+        for nome in ("ligada", "modula_g_apr", "p2", "m_mem", "persistencia", "p1", "cheiro_inato", "intencao_cheiro",
+                     "intencao_suspensa"):
             if type(getattr(self, nome)) is not bool:
                 raise TypeError(f"ConfigDigibrain.{nome} e bool: {getattr(self, nome)!r}")
         if self.controle_g_apr not in CONTROLES_G_APR:
@@ -2455,6 +2462,11 @@ class ConfigDigibrainInatos:
     w0_tipo_cheiro: int = _S // 4             # PROPOSTO, SEM FONTE (DX-3): o peso do tipo `cheiro` no comer, o mesmo da racao (S/8 a S/2)
     n_desiste_cheiro: int = 6                 # PROPOSTO (DX-4, a regra da PE-6): do raio do cheiro (384) ao da visao (96) pelo alcance (60),
                                               # ceil(288 / 60) = 5 decisoes, mais 1 (5 a 8)
+    # a parte (b) da L-2 (docs/ESPEC_LONGE_L2_DIGIBRAIN_MODULAR.md, secao 3.1), so com a subchave `intencao_suspensa`
+    n_suspensa_max: int = 6                   # DECIDIDO (LS-4, 2026-10-29): as decisoes de reflexo que a intencao passa suspensa, somadas na
+                                              # vida dela, antes do "expirou"; o valor do n_desiste_cheiro, sem calibracao (SEM FONTE)
+    lambda_retomar: int = _S // 4             # DECIDIDO (LS-4, 2026-10-29): o "saciou", a urgencia da fome abaixo deste limiar; o valor do
+                                              # lambda_busca do M-MEM, sem calibracao (SEM FONTE)
     # M-MEM
     n_ep: int = 16                            # PROPOSTO, SEM FONTE (PE-16)
     lambda_busca: int = _S // 4               # PROPOSTO, SEM FONTE: a pista, a urgencia da fome acima deste limiar
@@ -2491,15 +2503,19 @@ class ConfigDigibrainInatos:
             if tau < 15:
                 raise ValueError(f"constante de tempo abaixo do passo do cerebro (15 ticks): {tau}")
         if not 0 < self.g_min <= self.g0 <= self.g_max or self.r_norm <= 0 or self.s_v <= 0 or self.n_ep <= 0 or self.n_desiste <= 0 \
-                or self.escala_cuidado <= 0 or self.d_max <= 0 or self.h_max <= 0 or self.n_desiste_cheiro <= 0:
-            raise ValueError("ConfigDigibrainInatos: g_min <= g0 <= g_max; r_norm, s_v, n_ep, n_desiste, escala_cuidado, d_max, h_max e "
-                             "n_desiste_cheiro positivos")
+                or self.escala_cuidado <= 0 or self.d_max <= 0 or self.h_max <= 0 or self.n_desiste_cheiro <= 0 \
+                or self.n_suspensa_max <= 0 or not 0 <= self.lambda_retomar <= self.escala:
+            raise ValueError("ConfigDigibrainInatos: g_min <= g0 <= g_max; r_norm, s_v, n_ep, n_desiste, escala_cuidado, d_max, h_max, "
+                             "n_desiste_cheiro e n_suspensa_max positivos; lambda_retomar em [0, S]")
 
 
 CONFIG_DIGIBRAIN_INATOS = ConfigDigibrainInatos()
-# o status de cada campo (conferido por teste contra os campos da dataclass): tudo PROPOSTO, salvo a escala (PE-12)
+# o status de cada campo (conferido por teste contra os campos da dataclass): tudo PROPOSTO, salvo a escala (PE-12) e os dois da parte (b)
+# da L-2 (LS-4: os valores emprestados, sem calibracao)
 PARAMETROS_DIGIBRAIN_INATOS: dict[str, tuple[str, str]] = {
     f.name: (("DECIDIDO", "PE-12 (2026-10-25): S = 1024, o do A") if f.name == "escala" else
+             ("DECIDIDO", "LS-4 (2026-10-29, docs/ESPEC_LONGE_L2_DIGIBRAIN_MODULAR.md, secao 3.1): o valor de um campo que ja existe, sem "
+                          "calibracao; SEM FONTE") if f.name in ("n_suspensa_max", "lambda_retomar") else
              ("PROPOSTO", "docs/ESPEC_DIGIBRAIN_MODULAR.md, secoes 2 a 7; valor de partida a mao (etapa 1a), SEM FONTE salvo o que o "
                           "comentario do campo cita"))
     for f in fields(ConfigDigibrainInatos)}

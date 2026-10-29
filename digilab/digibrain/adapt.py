@@ -5,7 +5,10 @@ consequencia ao M-AFETO, ao M-PLAST, ao M-ESTADO e ao M-MEM.
 
 **A decisao** (`agir`): M-SENS -> M-AFETO -> M-ESTADO (o contexto) -> M-MEM (a recuperacao, com a subchave) -> M-IMPULSO (as unidades,
 com o incentivo e o habito do M-PLAST) -> M-ARB (a escolha, o u e as sondas) -> M-ESTADO (a intencao escolhida; a opcao trocada vai ao
-P2). A unidade escolhida e o par (comportamento, alvo): o `agir` devolve a acao, e o `escolher_alvo` o alvo dela.
+P2). A unidade escolhida e o par (comportamento, alvo): o `agir` devolve a acao, e o `escolher_alvo` o alvo dela. O reflexo do sono e uma
+conta so (`Arbitragem.reflexo`), feita depois do M-AFETO e passada ao M-ESTADO e ao M-ARB. Com a subchave `intencao_suspensa` (a parte (b)
+da L-2, docs/ESPEC_LONGE_L2_DIGIBRAIN_MODULAR.md, secao 2.3), o M-ESTADO cuida da intencao suspensa antes do contexto
+(`cuidar_suspensa`); as que acabam ali vao ao P2 e ao registro com as do `escolhida`, e o motivo ganha a `suspensa`.
 
 **O alvo** (`escolher_alvo`): o candidato do motor do tipo (e do id) da unidade escolhida; o `u` do motor e ignorado. **A excecao unica**
 (a PE-14 revista): em EXPLORAR, o lugar lembrado do M-MEM e entregue como `Alvo.ponto(x, y)`, fora da lista do motor, que o valida por
@@ -135,13 +138,15 @@ class DigiBrain:
         receptores = m.sens.receptores
         m.plast.montar(receptores)
         afeto = m.afeto.ler(sens)
+        reflexo = m.arb.reflexo(sens)                              # uma conta so, ao M-ESTADO e ao M-ARB (a L-2, secao 2.3)
+        fins_susp = m.estado.cuidar_suspensa(sens, afeto, reflexo) if cd.intencao_suspensa else []
         ctx = m.estado.contexto()
         memoria = m.mem.recuperar(sens, afeto) if cd.m_mem else None
         unidades, z = m.impulso.unidades(sens, afeto, ctx, m.plast, memoria, m.afeto.drives(receptores))
-        esc = m.arb.escolher(unidades, afeto, sens, rng)          # a rng de politica vai so ao M-ARB
+        esc = m.arb.escolher(unidades, afeto, sens, rng, reflexo)  # a rng de politica vai so ao M-ARB
         self._conferir_desligadas(unidades)
         unidade = esc["unidade"]
-        fins = m.estado.escolhida(unidade, z, afeto["g_apr"], k)
+        fins = fins_susp + m.estado.escolhida(unidade, z, afeto["g_apr"], k, reflexo)
         creditos = _creditar(m.plast, fins)
         intencao = intencao_da_unidade(unidade)
         urg = afeto["urgencias"]
@@ -165,6 +170,8 @@ class DigiBrain:
         entregue = [_fim(f) for f in fins if not f.get("registro", True)]
         if entregue:                                  # a busca guardada (DX-4), entregue sem a opcao composta: so com a subchave
             self.motivos[-1]["busca_entregue"] = entregue
+        if cd.intencao_suspensa:                      # a L-2: a suspensa ao fim da decisao (desligada, nenhum campo novo)
+            self.motivos[-1]["suspensa"] = m.estado.suspensa_resumo()
         self._gestos = []
         self._pendencia = {"k": k, "intencao": intencao, "unidade": unidade, "sens": sens, "g_apr": afeto["g_apr"], "pediu": False,
                            "alvo": None, "corpo": None, "transicao": None, "mundo": None}

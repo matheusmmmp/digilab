@@ -22,7 +22,7 @@ CAMPOS_POR_MODULO = {
     "impulso": ("w0", "w0_prox", "w0_nov", "w0_tipo", "w0_tipo_cheiro"),
     "arb": ("epsilon", "lambda_sono"),
     "plast": ("eta_d", "eta_h", "h_max", "c_g", "s_v", "g_max_incentivo"),
-    "estado": ("tau_c", "tau_f_sobe", "tau_f_desce", "w_pers", "n_desiste", "n_desiste_cheiro"),
+    "estado": ("tau_c", "tau_f_sobe", "tau_f_desce", "w_pers", "n_desiste", "n_desiste_cheiro", "n_suspensa_max", "lambda_retomar"),
     "mem": ("n_ep", "lambda_busca", "d_max", "w_mem"),
 }
 
