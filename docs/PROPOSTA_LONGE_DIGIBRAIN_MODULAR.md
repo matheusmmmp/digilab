@@ -2,6 +2,8 @@
 
 Autor: o C (Claude Code, Opus 5.5), a pedido do Gerente (relato do Gerente, 2026-10-29), pela decisão do Matheus de tratar **o longe
 primeiro** e o hábito depois. **Status: PROPOSTA, só papel.** Nenhum código, nenhuma vida, nenhuma semente, nenhuma faixa reservada.
+**As decisões da seção 7 são DECIDIDAS pelo Matheus em 2026-10-29,** e a etapa L0 está registrada na seção 8, antes do replay (o worker
+D).
 
 **As regras deste documento:**
 - **Todo número sai de um artefato no git,** com o caminho ao lado:
@@ -300,7 +302,7 @@ Nada aqui é reservado nem decidido; cada passo volta ao Matheus antes de rodar.
 
 ## 7. O que precisa do Matheus
 
-Todas PROPOSTAS, com a recomendação primeiro.
+Propostas pelo C, com a recomendação primeiro. **O Matheus decidiu as cinco em 2026-10-29** (abaixo da tabela).
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
@@ -309,3 +311,91 @@ Todas PROPOSTAS, com a recomendação primeiro.
 | **PL-3** | a L-4 (a): o longe lido só por episódio, e a taxa por ração do longe declarada sem informação | **sim, já no próximo plano** | não declarar: uma melhora real fica invisível no teto de 0,13 |
 | **PL-4** | a L-4 (b): a célula "longe do jogo", descritiva | **não agora;** só se o Matheus quiser ver o longe do produto | ler a célula mais fácil como pet melhor |
 | **PL-5** | se a L-1 for escolhida: mudar o mundo do motor, com o A11 vivendo no mundo novo nos braços dela | **só com a evidência do M-L1** | sem evidência: o baseline muda de mundo por uma hipótese |
+
+**As decisões do Matheus (2026-10-29), DECIDIDAS:**
+- **PL-1: sim, a etapa L0.** As vidas M0 e M3\* da 66xxx são rejogadas para as medidas M-L1 a M-L6, com a regra de escolha da seção 2. O
+  registro está na seção 8;
+- **PL-2: a opção que a regra da L0 apontar.** Sem a L0, seria a L-2;
+- **PL-3: sim.** No próximo plano, o longe passa a ser lido só por episódio, e a taxa por ração do longe é declarada sem informação;
+- **PL-4: não agora.** A célula "longe do jogo" não entra;
+- **PL-5: o mundo do motor só muda com a evidência do M-L1.** Se a L-1 for a apontada, o M-L1 é a evidência que ela pede.
+
+## 8. O registro da L0 (2026-10-29, worker D, Claude Code, Opus 5.5; antes do replay)
+
+**O que é:** um replay só de leitura, um diagnóstico. **Nenhuma vida nova, nenhuma semente, nenhuma faixa nova e nenhum gate.** O motor, o
+`engine.py`, o corpo, o cérebro A, o cérebro modular e as medidas por vida não mudam.
+
+**As vidas:**
+- **os braços M0 e M3\*,** nas 12 células (4 donos × comedouro, perto e longe), nas 50 unidades da reavaliação (as bases 66101, 66202,
+  66303, 66404 e 66505, com K = 10): **1 200 vidas,** 600 por braço;
+- **os logs:** os que a run da reavaliação gravou do commit `988cf0d` (o #432), em
+  `D:\Trab\digilab\v2-modular-reavaliacao\artifacts_v2_digibrain_prototipo\reavaliacao\vidas\M0\` e `...\M3\`, fora do git. **O script
+  só lê esses arquivos:** nada lá é apagado, movido nem alterado.
+
+**O G1 da L0** (a conferência, antes de qualquer número). Em cada vida, o replay:
+- **lê o log do disco e rejoga a vida** pelas fábricas da run (`fabricas(braco, dono, semente, 14, 16, conserto=True)` e
+  `reproduzir_mundo`), como o `conferir_replay` da run;
+- **refaz as medidas gravadas:** as medidas da vida pelo `medidas(...)` do orquestrador saem iguais às do `medidas.json` da reavaliação
+  (sha256 `73ae8a8a…df01`), campo a campo, menos o `custo`;
+- **confere os sha:** os do orquestrador, do `config.py`, do `engine.py`, do `metrics.py` e dos arquivos do `digilab/digibrain/` são os do
+  `meta.json` da reavaliação.
+- **Se uma vida não se refizer, o script para sem gravar nada,** e a etapa volta ao Gerente.
+
+**Como as medidas saem** (a tabela da seção 2, como está; o que vem abaixo é a forma de medir, escrita antes do replay):
+- **O que o replay lê, sem mudar a vida:**
+  - em cada decisão, o que o pet percebe (a `Observacao` que o cérebro recebe: a posição, os vistos e a direção do cheiro, de 1 a 8, ou 0
+    sem gradiente);
+  - as fontes do cheiro naquele tick, pelo próprio mundo (`fontes_de_cheiro`, a função pura que a percepção usa);
+  - o registro do cérebro (a escolha, o reflexo e os fins de cada decisão);
+  - as rações postas e os consumos do motor.
+- **R** é o raio do cheiro (24 células), e **a visão,** 6 células (`config.py`).
+- **M-L1, a percepção:**
+  - **as decisões dela:** com ao menos uma ração madura a menos de R, nenhuma comida vista (o `comida_vista` do cérebro) e a direção do
+    cheiro diferente de 0. As decisões que cumprem as duas primeiras condições com a direção 0 saem contadas à parte;
+  - **o ângulo:** entre o vetor da direção do cheiro (o `DIR16` do mundo) e o vetor do pet a cada ração madura a menos de R. Sai o ângulo
+    à mais próxima, e se ele passa de 45° em **toda** ração a menos de R;
+  - **ao lado:** quantas rações há a menos de R.
+- **M-L2, a decisão:**
+  - **os eventos:** cada fim `trocou` de uma intenção de comer (`comer/comida`) ou de busca (`comer/cheiro`) no registro do cérebro, na
+    decisão k em que outra unidade é escolhida;
+  - **a unidade que venceu:** a escolha da decisão k, e se ela veio do reflexo do sono (o `reflexo` da decisão);
+  - **"a ração ainda dentro de R":** ao menos uma ração madura a menos de R na decisão k;
+  - **a quebra:** o reflexo do sono, ou uma vencedora cuja ação não é comer, com a ração ainda dentro de R. A troca para outra unidade de
+    comer (a ração vista, por exemplo) conta no denominador e não como quebra.
+- **M-L3, o andado:** em cada episódio de fome (os do `episodios_fome`), na janela dele:
+  - as decisões acordado e as que mudaram a posição do pet;
+  - o andado líquido em direção ao alvo (a ração que fechou o episódio, ou a madura mais próxima na abertura): a distância na abertura
+    menos a do fim, contra o n_min(d0) × passo.
+- **M-L4, a distância:** a distribuição do d0 dentro da faixa do cheiro (de 6 a 24 células), por lugar, dos episódios gravados.
+- **M-L5, a ração que fecha:** em cada episódio fechado, a ração comida. Sai se ela era a mais próxima na abertura, se estava entre as
+  elegíveis da medida por ração (posta com a fome abaixo de 0,5) e a idade dela.
+- **M-L6, as fontes:** o número de rações maduras a menos de R em cada decisão, por lugar.
+- **Os cortes:** por braço, por lugar e por célula. **A regra lê o longe** (as 4 células do longe, 200 vidas por braço).
+
+**A regra de escolha** (copiada da seção 2 como está; **os limiares são PROPOSTOS, SEM FONTE,** e não mudam depois do replay):
+- **a percepção pesa** se, no longe, a direção do cheiro fica a mais de 45° de toda ração em ao menos 25 % das decisões do M-L1;
+- **a decisão pesa** se, no longe, ao menos metade das buscas trocadas (M-L2) é quebrada pelo reflexo do sono ou por outra unidade com a
+  ração ainda dentro de R;
+- **as duas, as duas;** nenhuma das duas, a proposta volta ao Gerente com o M-L3 e o M-L4.
+
+**Como a regra se aplica:**
+- **no braço M3\*,** o da leitura do protótipo; o M0 sai ao lado, descritivo. Se os dois braços discordarem na regra, a leitura diz isso,
+  e a decisão é a do M3\*;
+- **"as buscas trocadas" do M-L2** são só as da busca pelo cheiro (`comer/cheiro`), como a regra diz. As intenções de comer trocadas saem
+  ao lado;
+- **o que a regra aponta:** a percepção → **L-1** (com o PL-5: o M-L1 é a evidência); a decisão → **L-2**; as duas → as duas; nenhuma → a
+  proposta volta ao Gerente com o M-L3 e o M-L4.
+
+**O comando e os artefatos:**
+- `python experiments/longe_l0_digibrain.py --vidas D:/Trab/digilab/v2-modular-reavaliacao/artifacts_v2_digibrain_prototipo/reavaliacao/vidas --processos 4`
+  (até 4 processos, pela máquina; a BIOS segue a FH);
+- **a saída:** `artifacts_v2_digibrain_prototipo/longe_l0/l0.json`, com os sha256 do script, do `medidas.json`, do `meta.json` da
+  reavaliação e dos 1 200 logs (um sha por log), o commit e o G1 de cada vida. Ela vai para o git com `git add -f`;
+- **o tempo estimado:** cerca de 5 s de CPU por vida (a vida mais a captura), 1 200 vidas em 4 processos: cerca de 25 min.
+
+**A leitura** vai numa seção do RESULTADO, rotulada como diagnóstico. Ela diz qual opção a regra aponta e não muda limiar nenhum.
+
+**O resultado da L0** (o diagnóstico, 2026-10-29): na seção 10 de `docs/RESULTADO_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`.
+- **O G1 passou nas 1 200 vidas,** e a regra registrada aponta a **L-2** (a decisão), no M3\* e no M0.
+- **A percepção não pesa pela regra:** 5,8 % das decisões têm a direção fora de toda ração, contra o critério de 25 %.
+- **A decisão pesa:** 99,9 % das buscas trocadas são quebradas, 80 % delas pelo reflexo do sono.

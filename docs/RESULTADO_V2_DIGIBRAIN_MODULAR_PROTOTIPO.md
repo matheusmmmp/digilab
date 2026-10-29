@@ -612,3 +612,125 @@ As mesmas contas do 9.1, nas 600 vidas do A11:
 
 **O que fica para o Matheus:** a leitura deste descritivo, que é só exploratório. As sugestões estão no PR, nas "Questões abertas", e
 nenhuma mecânica mudou.
+
+## 10. A etapa L0 do longe (2026-10-29, worker D, Claude Code, Opus 5.5; diagnóstico)
+
+**Antes dos números:**
+- **é um diagnóstico só de leitura,** a etapa L0 da `docs/PROPOSTA_LONGE_DIGIBRAIN_MODULAR.md`. O registro está na seção 8 dela,
+  commitado em `442ff86` antes do replay e conferido pelo Gerente;
+- **o que não houve:** nenhuma vida nova, nenhuma semente, nenhum gate;
+- **o que não mudou:** o motor, o `engine.py`, o corpo, os cérebros e as medidas por vida;
+- **a 66xxx fica gasta** para qualquer uso confirmatório futuro (o registro "DIGIBRAIN-MODULAR-LONGE-L0");
+- **a regra de escolha** é a da seção 2 da proposta, como está, com os limiares PROPOSTOS e SEM FONTE.
+
+**Como rodou:**
+- **o comando:** `experiments/longe_l0_digibrain.py`, do commit `f5a8a9c`, com a árvore limpa e 4 processos;
+- **as vidas:** 1 200 (o M0 e o M3\*, nas 12 células e nas 50 unidades), em 349 s;
+- **os logs:** os da run da reavaliação (o commit `988cf0d`), só lidos, na worktree `v2-modular-reavaliacao`;
+- **o G1 passou nas 1 200 vidas:**
+  - cada uma, rejogada do log, refez as medidas gravadas no `medidas.json` (sha256 `73ae8a8a…df01`), campo a campo, menos o `custo`;
+  - os 15 arquivos de código têm os sha do `meta.json` da reavaliação;
+- **a saída:** `artifacts_v2_digibrain_prototipo/longe_l0/l0.json` (sha256 `6541fbe8…940e`), com o sha de cada um dos 1 200 logs;
+- **a conferência cruzada:** as buscas trocadas por vida no longe do M3\* (25,7) são as do descritivo da seção 9 (`fins_busca`).
+
+### 10.1 A regra (o longe do M3\*; o M0 ao lado)
+
+| | o critério (PROPOSTO, SEM FONTE) | M3\* | M0 | pesa? |
+|---|---|---|---|---|
+| **a percepção** (M-L1) | a direção do cheiro a mais de 45° de toda ração a menos de R, em ≥ 25 % das decisões | **5,8 %** (de 98 497) | 6,4 % (de 81 492) | **não** |
+| **a decisão** (M-L2) | ≥ metade das buscas trocadas quebradas pelo reflexo do sono, ou por outra unidade com a ração a menos de R | **99,9 %** (5 138 de 5 142) | 100 % (4 372 de 4 372) | **sim** |
+
+**A regra aponta a L-2, a decisão,** no M3\*, e o M0 concorda.
+
+- **A direção 0** (a ração a menos de R, nenhuma comida vista e sem direção do cheiro): 5 005 decisões no longe do M3\*, 4,8 % das que têm
+  a ração a menos de R e nenhuma comida vista; 6,7 % no M0. No comedouro, 0; no perto, 0,1 %. **A fração é pequena:** o cheiro quase
+  sempre tem direção.
+- **Uma ressalva sobre o critério da decisão:** ele passa em todo lugar, e não só no longe. No comedouro, dá 100 % (513 buscas trocadas); no
+  perto, 95,5 % (22).
+  - Quase toda busca trocada é trocada por uma unidade que não come, e quase sempre há ração a menos de R. **O que separa o longe é a
+    contagem:** 25,7 buscas trocadas por vida, contra 2,6 no comedouro e 0,1 no perto.
+  - A ressalva não muda o veredito, que é o da regra registrada.
+
+### 10.2 As medidas (o M3\*, por lugar)
+
+**M-L1, a percepção:**
+
+| | comedouro | perto | longe |
+|---|---|---|---|
+| decisões (a ração a menos de R, nenhuma comida vista, direção ≠ 0) | 34 288 | 12 074 | 98 497 |
+| a direção a mais de 45° de **toda** ração | 0,9 % | 0,5 % | **5,8 %** |
+| a direção a mais de 45° da ração **mais próxima** | 0,9 % | 1,2 % | **35,3 %** |
+| o ângulo à mais próxima, mediana | 13,2° | 13,4° | 26,5° |
+| rações a menos de R, mediana | 2 | 1 | 2 |
+
+- **No longe, o cheiro costuma apontar para alguma ração, mas não para a mais próxima** em um terço das decisões. Isso combina com o campo
+  que é soma de várias fontes (a seção 1.2 da proposta): a direção puxa para um grupo de rações, e não para a mais perto.
+- **Pela regra, não chega a pesar:** fora de toda ração, só 5,8 %.
+
+**M-L2, a decisão (as buscas pelo cheiro trocadas):**
+
+| | comedouro | perto | longe |
+|---|---|---|---|
+| buscas trocadas por vida | 2,6 | 0,1 | **25,7** |
+| quebradas pelo reflexo do sono | 363 (71 %) | 10 | **4 096 (80 %)** |
+| por outra unidade, com a ração a menos de R | 150 | 11 | 1 042 (20 %) |
+| para comer (não é quebra) | 0 | 1 | 3 |
+
+- **As vencedoras no longe:** dormir 4 318 (4 096 pelo reflexo e 222 pelo sorteio); chamar a atenção, 330; emburrar, 9; brincar, 5; comer
+  a comida vista, 3.
+- **As intenções de comer trocadas** (ao lado da regra): 935 no longe, 4,7 por vida; 706 pelo reflexo do sono, e 134 para outra unidade de
+  comer.
+- **O que a medida mostra:** no longe, a busca pelo cheiro é interrompida sobretudo pelo sono. É a parte (b) da L-2, "a intenção que
+  sobrevive ao sono". A histerese da parte (a) atacaria os outros 20 %.
+
+**M-L3, o andado** (os episódios de fome, na janela):
+
+| | comedouro, fechados | comedouro, não fechados | longe, fechados | longe, não fechados |
+|---|---|---|---|---|
+| episódios | 2 703 | 610 | 1 120 | 1 383 |
+| decisões acordado na janela | 54 % | 44 % | 64 % | 52 % |
+| decisões em que o pet andou | 47 % | 31 % | 51 % | 36 % |
+| o andado líquido em direção ao alvo, mediana (em decisões de passo) | 0,95 | 1,03 | 1,02 | **0,15** |
+| o n_min(d0), mediana | 2 | 3 | 3 | **5** |
+| episódios com o andado líquido ≥ n_min | 12 % | 1 % | 10 % | **0,1 %** |
+
+No longe, o episódio que não fecha quase não se aproxima do alvo: 0,15 passo líquido na mediana, para os 5 de que precisaria.
+
+**M-L4, a distância no cheiro** (o d0 de 6 a 24 células):
+
+| a faixa de d0 | comedouro: episódios, taxa | longe: episódios, taxa |
+|---|---|---|
+| de 6 a 12 células | 1 270, 0,81 | 784, **0,52** |
+| de 12 a 18 | 416, 0,56 | 420, 0,32 |
+| de 18 a 24 | 50, 0,22 | 425, 0,29 |
+| a mediana do d0 | 9,9 células | 12,3 células |
+
+**A diferença do 0,74 × 0,41 não é só de distância.** Na mesma faixa de 6 a 12 células, o comedouro fecha 0,81 e o longe, 0,52. O longe
+tem também mais episódios longe dentro da faixa (a mediana de 12,3 células, contra 9,9).
+
+**M-L5, a ração que fecha** (a questão aberta do #433):
+
+| | comedouro | perto | longe |
+|---|---|---|---|
+| episódios fechados | 2 703 | 4 022 | 1 120 |
+| a ração comida era a mais próxima na abertura | 63 % | 70 % | 50 % |
+| ela estava na oferta da abertura | 68 % | 72 % | 63 % |
+| ela era elegível na medida por ração | 87 % | 96 % | 87 % |
+| a idade dela ao fechar, mediana (decisões desde a posta) | 4 | 1 | 8 |
+
+Um terço dos episódios fecha com uma ração que ainda não estava no chão na abertura: o dono põe outra durante a janela.
+
+**M-L6, as fontes do cheiro** (rações maduras a menos de R, por decisão): no longe, a média é 3,65 e a mediana 1. Em 12,9 % das decisões,
+há 10 ou mais. No comedouro, a média é 2,26; no perto, 0,58.
+
+### 10.3 A leitura
+
+- **A regra registrada aponta a L-2,** o compromisso da viagem, no cérebro. Pelo PL-2, essa é a opção. Pelo PL-5, o mundo do motor não
+  muda: o M-L1 não deu a evidência que a L-1 pediria.
+- **O que pesa dentro da L-2:** no longe, 80 % das buscas trocadas são quebradas pelo reflexo do sono, e 20 % por outra unidade. **A parte
+  (b), a intenção que sobrevive ao sono, é a que os dados apontam primeiro.** A histerese da parte (a) fica com os 20 %.
+- **O que fica como ressalva:**
+  - o critério da decisão passa em todo lugar; o que distingue o longe é a contagem (dez vezes a do comedouro);
+  - o cheiro aponta para a mais próxima em só dois terços das decisões do longe. A percepção não pesa pela regra, mas não é perfeita;
+  - a distância não explica toda a diferença: na mesma faixa de 6 a 12 células, o longe fecha 0,52, e o comedouro, 0,81.
+- **O que o diagnóstico não diz:** que a L-2 vai consertar o longe. Isso é a pergunta do próximo plano, por episódio, como o PL-3 decidiu.
