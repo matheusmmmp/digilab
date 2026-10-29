@@ -405,3 +405,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-29 — DIGIBRAIN-MODULAR-LONGE-L2 (worker D, Claude Code, Opus 5.5, worktree `v2-modular-longe-l2`): a parte (b) da L-2, o código e o registro da avaliação](registro/2026-10.md)
 - [2026-10-29 — DIGIBRAIN-MODULAR-L2-FASES (worker D, Claude Code, Opus 5.5, worktree `v2-modular-l2-fases`): o adendo 5 aprovado, a regra do K e as fases da L-2](registro/2026-10.md)
 - [2026-10-29 — UP-ATLAS (worker, Claude Code, Sonnet 5.5, worktree `v2-up-atlas`): o atlas de clipes do Digimon UP atrás da chave `CLIPES_UP`](registro/2026-10.md)
+- [2026-10-29 — DIGIBRAIN-MODULAR-L2-CREDITO (worker D, Claude Code, Opus 5.5, worktree `v2-modular-l2-credito`): o piloto da L-2 caiu na conferência do crédito, não na máquina](registro/2026-10.md)
