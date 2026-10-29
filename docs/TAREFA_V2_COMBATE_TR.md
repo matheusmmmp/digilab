@@ -132,3 +132,36 @@ luta ao corpo químico além do que o combate já faz hoje.
 3. O custo do replay está medido no Node e no Chrome, com o script e a saída em disco, e a recomendação é coerente com o número.
 4. As decisões abertas vêm com a recomendação e o custo de errar.
 5. Nenhum código de jogo mudou.
+
+## 10. R0: o resultado (worker, Claude Code, Opus 5.5, 2026-10-29)
+
+A especificação está em `docs/ESPEC_COMBATE_TR.md`, toda PROPOSTA. Nenhum código de jogo mudou.
+
+- **A luta continua sendo do DigiLab, com outro relógio.** O turno vira um tempo de ação T = 2 s (o ciclo de ataque padrão do protótipo).
+  - Cada ação ocupa o lutador por T, e os dois lados agem sem se esperar.
+  - As 3 distâncias viram faixas de distância real: perto até 62 px, médio até 150 px.
+  - O limite é de 80 s, e a morte súbita começa aos 50 s.
+  - O Guts, as técnicas e as passivas mantêm os números de hoje, convertidos por T.
+- **O controlador** é o `decidirV2` de hoje, com as condições reescritas para o tempo real. Ele decide quando o lutador fica livre, num
+  ritmo de 16 passos (256 ms), e dá uma decisão por ação, com o ε uma vez por decisão. O rival usa o mesmo controlador.
+- **O aprendizado** recebe o saldo de dano por ação, no lugar do saldo por turno. Tudo o que o resultado alimenta continua igual (a tabela
+  da seção 3 da espec).
+- **O log** guarda o mesmo `"l"`, e o replay refaz a luta. Só o ε sorteia, numa RNG de política por lado, e fica reservado um fluxo de
+  combate vazio.
+  - **Risco novo:** a aritmética entre navegadores. A proposta é usar no núcleo só + − × ÷ e `sqrt` (D-7).
+- **O custo**, medido sobre a simulação de hoje (`web/app/scripts/medir_replay_tr.ts`, a saída em
+  `web/app/scripts/medicoes/replay_tr.json`):
+  - a luta de 100 s custa 4,66 ms no Node e 3,08 ms no Chrome, cerca de 50 vezes a luta por turnos;
+  - 500 lutas custam 2,3 s e 1,5 s, e 1 000 lutas, 4,7 s e 3,1 s;
+  - o Node e o Chrome deram as mesmas lutas;
+  - **a recomendação é refazer sempre, sem cache** (D-2).
+- **A simulação mora num núcleo novo, em `motor/combate_tr/`,** sem os dados do UP. Assim, o replay não depende da pasta `Assets/`. A
+  `arena/` sai na R3.
+- **O descarte:**
+  - a v13 entra na R2, com o aviso na tela e a opção de baixar o arquivo do pet;
+  - os ramos das versões antigas saem na R2, e o combate por turnos sai na R3;
+  - a paridade do cérebro A, do corpo e do mundo fica, e o Python fica congelado.
+- **As decisões abertas são nove, de D-1 a D-9**, cada uma com a recomendação e o custo de errar (a seção 8 da espec). A principal é a D-1:
+  o tempo das ações vem do DigiLab, e não do UP.
+
+O desvio e as interpretações estão em `docs/registro/2026-10.md`. A R1 espera a resposta do Matheus.
