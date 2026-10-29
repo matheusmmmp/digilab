@@ -18,7 +18,7 @@ export interface ResultadoLuta {
 }
 
 export function configCpu(cena: IdCena, a: string[], b: string[], o: { forca?: number; nivelA?: number; nivelB?: number; dific?: Dificuldade } = {}): ConfigLuta {
-  const lado = (eq: string[], nivel: number) => ({ equipe: eq as [string, string, string], fonte: "jogo" as const, nivel, generico: { ...STATS_PADRAO } });
+  const lado = (eq: string[], nivel: number) => ({ equipe: eq, fonte: "jogo" as const, nivel, generico: { ...STATS_PADRAO } });
   return { cena, dific: o.dific ?? OPCOES_PADRAO.dific, forca: o.forca ?? OPCOES_PADRAO.forca, ritmo: OPCOES_PADRAO.ritmo, pvel: OPCOES_PADRAO.pvel,
     jogador: false, a: lado(a, o.nivelA ?? 1), b: lado(b, o.nivelB ?? 1) };
 }

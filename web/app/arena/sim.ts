@@ -46,7 +46,10 @@ function ligarAlvos(L: Luta): void { const a = ativo(L, "a"), b = ativo(L, "b");
 
 /** uma luta nova: monta as equipes (a e depois b), poe os primeiros em campo e confere a colisao inicial */
 export function criarLuta(cfg: ConfigLuta, dados: DadosArena, r: Sorteios): Luta {
-  for (const l of ["a", "b"] as const) for (const n of cfg[l].equipe) if (!dados.atlas.d[n]) throw new Error(`arena: ${n} nao esta no atlas`);
+  for (const l of ["a", "b"] as const) {
+    if (cfg[l].equipe.length < 1 || cfg[l].equipe.length > 3) throw new Error(`arena: a equipe ${l} tem ${cfg[l].equipe.length} Digimon (de 1 a 3)`);
+    for (const n of cfg[l].equipe) if (!dados.atlas.d[n]) throw new Error(`arena: ${n} nao esta no atlas`);
+  }
   const L: Luta = {
     cfg, dados, r, cena: iniciarCena(cfg.cena), eq: { a: [], b: [] }, ativo: { a: 0, b: 0 }, trocaCd: { a: 0, b: 0 },
     projeteis: [], relogio: 0, fim: false, vencedor: null,

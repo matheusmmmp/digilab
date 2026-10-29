@@ -1,5 +1,5 @@
 {
- "aviso": "dados SINTETICOS para teste (nenhum dado da Bandai): a forma dos JSON de Assets/arena_up/dados",
+ "aviso": "dados SINTETICOS para teste (nenhum dado da Bandai): a forma dos JSON de Assets/arena_up/dados; Kabuterimon e o pet do save v3 do e2e (so o nome e real)",
  "status": {
   "Alfa": {
    "tipo": "PartnerDigiMon",
@@ -57,6 +57,25 @@
     "Attack": 6,
     "Defense": 11
    }
+  },
+  "Kabuterimon": {
+   "tipo": "PartnerDigiMon",
+   "estagio": "Champion",
+   "chave": 4,
+   "base": {
+    "HP": 6200,
+    "Attack": 150,
+    "Defense": 220,
+    "CriticalRate": 5.0,
+    "EvadeRate": 3.0,
+    "StunRate": 2.0,
+    "MoveSpeed": 10.0
+   },
+   "nivel": {
+    "HP": 360,
+    "Attack": 6,
+    "Defense": 11
+   }
   }
  },
  "golpes": {
@@ -97,13 +116,30 @@
     },
     "hits": []
    }
+  },
+  "Kabuterimon": {
+   "anim": "Attack_1",
+   "t": 0.5,
+   "proj": {
+    "prefab": "Fx_Beta_Proj",
+    "vel": 28.0,
+    "tipo": "Guide"
+   },
+   "hits": [
+    {
+     "prefab": "Fx_Alfa_Hit",
+     "atraso": 0.0
+    }
+   ],
+   "skill": null
   }
  },
  "atributos": {
   "Alfa": "Vaccine",
   "Beta": "Virus",
   "Gama": "Data",
-  "Delta": "Free"
+  "Delta": "Free",
+  "Kabuterimon": "Vaccine"
  },
  "atlas": {
   "tam": 32,
@@ -522,6 +558,143 @@
     ]
    },
    "Delta": {
+    "w": 70,
+    "h": 60,
+    "sw": 560,
+    "sh": 180,
+    "f": [
+     [
+      0,
+      0,
+      100
+     ],
+     [
+      70,
+      0,
+      100
+     ],
+     [
+      140,
+      0,
+      100
+     ],
+     [
+      210,
+      0,
+      100
+     ],
+     [
+      280,
+      0,
+      100
+     ],
+     [
+      350,
+      0,
+      100
+     ],
+     [
+      420,
+      0,
+      120
+     ],
+     [
+      490,
+      0,
+      120
+     ],
+     [
+      0,
+      60,
+      120
+     ],
+     [
+      70,
+      60,
+      133
+     ],
+     [
+      140,
+      60,
+      133
+     ],
+     [
+      210,
+      60,
+      133
+     ],
+     [
+      280,
+      60,
+      133
+     ],
+     [
+      350,
+      60,
+      67
+     ],
+     [
+      420,
+      60,
+      67
+     ],
+     [
+      490,
+      60,
+      67
+     ],
+     [
+      0,
+      120,
+      67
+     ],
+     [
+      70,
+      120,
+      100
+     ],
+     [
+      140,
+      120,
+      100
+     ]
+    ],
+    "t": [
+     [
+      "Attack_1",
+      0,
+      5
+     ],
+     [
+      "Die",
+      6,
+      8
+     ],
+     [
+      "Idle",
+      9,
+      12
+     ],
+     [
+      "Run",
+      13,
+      16
+     ],
+     [
+      "Stun",
+      17,
+      18
+     ]
+    ],
+    "l": [
+     "personagem"
+    ],
+    "th": [
+     0,
+     0
+    ]
+   },
+   "Kabuterimon": {
     "w": 70,
     "h": 60,
     "sw": 560,
