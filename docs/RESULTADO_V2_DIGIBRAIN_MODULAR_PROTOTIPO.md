@@ -734,3 +734,75 @@ há 10 ou mais. No comedouro, a média é 2,26; no perto, 0,58.
   - o cheiro aponta para a mais próxima em só dois terços das decisões do longe. A percepção não pesa pela regra, mas não é perfeita;
   - a distância não explica toda a diferença: na mesma faixa de 6 a 12 células, o longe fecha 0,52, e o comedouro, 0,81.
 - **O que o diagnóstico não diz:** que a L-2 vai consertar o longe. Isso é a pergunta do próximo plano, por episódio, como o PL-3 decidiu.
+
+## 11. O piloto da L-2 (2026-10-29, worker D, Claude Code, Opus 5.5; adendo 5, A5.8)
+
+**Antes dos números:**
+- **o piloto só fixa o K** (A5.8). Nenhum critério é lido, e nenhum número de efeito entra nesta leitura. O `resultado.json` traz as
+  médias dos braços e o bloco do mecanismo, que esta seção não lê;
+- **a regra e os limiares** são os da A5.8, escritos antes do piloto, PROPOSTOS e SEM FONTE. Nada aqui os muda.
+
+**Como rodou:**
+- **o comando:** `experiments/run_v2_digibrain_l2.py`, do commit `0d11e02` (a `main` com o conserto do #439), com a árvore limpa
+  (`git_limpo` = true no `meta.json`) e 4 processos;
+- **as vidas:** as bases 67101 e 67202, com K = 5 (10 unidades), os 4 braços nas 12 células, 14 dias: **480 vidas,** em 293 s de parede,
+  das 14h22 às 14h27 de 2026-10-29;
+- **as conferências:** toda vida foi rejogada do disco bit a bit (o G1), com o T-CENARIO-1, o G-MECANISMO e o crédito conferidos em cada
+  uma;
+- **os artefatos,** em `artifacts_v2_digibrain_prototipo/l2/piloto/`:
+  - o `meta.json` (sha256 `f75e52af…41cb`);
+  - o `medidas.json` (sha256 `922c22f2…f6ad`);
+  - o `resultado.json` (sha256 `0480de0f…1931`);
+  - as 480 vidas ficam fora do git.
+- **O piloto que caiu antes** (o registro "DIGIBRAIN-MODULAR-L2-CREDITO") foi movido, inteiro, para `piloto_caido_1/`, ao lado:
+  - o `meta.json` dele tem o mesmo sha256 de antes de mover (`26f43a8b…bb9c`), e os 477 logs são os mesmos;
+  - **o determinismo:** as 477 vidas que existem nas duas pastas têm o mesmo sha256 de log, e as 3 que só existem no piloto novo são as
+    que não tinham rodado (`artifacts_v2_digibrain_prototipo/l2/piloto_caido_1_conferencia.json`).
+
+**As 10 comparações do C-L2-3,** o par primário (M3\*+S − M3\*), as 10 unidades:
+
+| a comparação | margem | σ(M3\*) | σ(M3\*+S) | rho | σ_d | poder com K = 12 | 21 | 30 | 51 | 102 | 201 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| episódio, comedouro | −0,03 | 0,0595 | 0,0593 | 0,956 | 0,0177 | 1,000 | 1,000 | 1,000 | 1,000 | 1,000 | 1,000 |
+| episódio, perto | −0,03 | 0,0192 | 0,0161 | 0,856 | 0,0099 | 1,000 | 1,000 | 1,000 | 1,000 | 1,000 | 1,000 |
+| ração, comedouro | −0,03 | 0,0445 | 0,0355 | 0,554 | 0,0386 | 0,688 | 0,930 | 0,986 | 1,000 | 1,000 | 1,000 |
+| ração, perto | −0,03 | 0,0298 | 0,0282 | 0,991 | 0,0042 | 1,000 | 1,000 | 1,000 | 1,000 | 1,000 | 1,000 |
+| exaustão, comedouro | +0,02 | 0,0265 | 0,0312 | 0,950 | 0,0103 | 1,000 | 1,000 | 1,000 | 1,000 | 1,000 | 1,000 |
+| exaustão, perto | +0,02 | 0,0273 | 0,0277 | 0,995 | 0,0027 | 1,000 | 1,000 | 1,000 | 1,000 | 1,000 | 1,000 |
+| **exaustão, longe** | +0,02 | 0,0252 | 0,0524 | **0,297** | 0,0510 | 0,200 | 0,387 | 0,541 | 0,786 | 0,976 | 1,000 |
+| privação, comedouro | +0,02 | 0,0589 | 0,0587 | 0,965 | 0,0157 | 0,987 | 1,000 | 1,000 | 1,000 | 1,000 | 1,000 |
+| privação, perto | +0,02 | 0,0602 | 0,0609 | 1,000 | 0,0019 | 1,000 | 1,000 | 1,000 | 1,000 | 1,000 | 1,000 |
+| **privação, longe** | +0,02 | 0,0756 | 0,1076 | **0,140** | **0,1226** | 0,051 | 0,090 | 0,125 | 0,200 | 0,369 | **0,634** |
+
+**A conjunção** (o produto dos 10 poderes): 0,0069 com K = 12; 0,0325 com 21; 0,0666 com 30; 0,1569 com 51; 0,3598 com 102; **0,6337 com
+201.**
+
+**O K da regra: nenhum.** Nenhum K da grade chega a 0,8, e **o K volta ao Matheus** (A5.8). A A5.9 não foi escrita, e a avaliação não roda.
+
+**A leitura** (só da dispersão, sem número de efeito):
+- **no comedouro e no perto,** as duas vidas de cada par andam juntas (rho de 0,55 a 1,0), e as 8 comparações deles têm o poder de 0,93 ou
+  mais já com K = 21 (a mais baixa é a ração no comedouro);
+- **no longe,** a suspensão separa as duas vidas do par: o rho cai a 0,30 na exaustão e a 0,14 na privação. A diferença pareada fica tão
+  dispersa quanto a de duas vidas independentes;
+- **a privação no longe domina:** com a margem +0,02 e o σ_d de 0,1226, ela sozinha deixa a conjunção abaixo de 0,8 em toda a grade.
+
+**O custo, para o Matheus** (`artifacts_v2_digibrain_prototipo/l2/custo_k.json`, sha256 `2ac49090…c7be`; 48 vidas por unidade e o tempo de
+parede do piloto, 0,61 s por vida com 4 processos):
+
+| K (unidades) | vidas | parede com 4 processos | a conjunção |
+|---|---|---|---|
+| 51 | 2 448 | 0,41 h | 0,157 |
+| 102 | 4 896 | 0,83 h | 0,360 |
+| 201 | 9 648 | 1,63 h | 0,634 |
+| **297** (fora da grade, só informação) | **14 256** | **2,42 h** | 0,801 |
+
+O K = 297 é o menor múltiplo de 3 com a conjunção a 0,8, pela mesma conta e com os σ_d do piloto. Ele está fora da grade da A5.8 e não
+é o K da regra: fica só como o custo do que a regra pede. A faixa 67xxx tem as bases 67303, 67404 e 67505 para a avaliação. Com 297
+unidades, seriam 99 por base.
+
+**O que fica para o Matheus:**
+- **o K:** a regra não dá um K na grade, e o K volta a ele com o custo (A5.8). As saídas possíveis:
+  - um K maior que a grade, com o custo da tabela;
+  - a margem da privação no longe revista, o que reabre a LS-7;
+  - rodar com um K da grade sabendo que o C-L2-3 tem o poder da tabela;
+- **nada roda** antes da decisão dele.

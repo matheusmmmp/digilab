@@ -1,0 +1,18 @@
+{
+  "comuns_com_o_mesmo_sha": 477,
+  "logs_caido_sha256_do_conjunto": "edf744ec4db3ab697121f62cbd2e44f235c05fe438aa7c7543e822a026733580",
+  "meta_caido_sha256": "26f43a8b3e9d80888fff7138c3ebf35d0b35286d28bcc9a845c1e2dba415bb9c",
+  "meta_novo_sha256": "f75e52af2af5687ec30abdc9a2c76ee1ca3ba0b9d11496fa7a6b60299a2e41cb",
+  "rotulo": "o determinismo entre o piloto da L-2 caido e o rodado depois do conserto; so leitura dos logs",
+  "script": {
+    "arquivo": "experiments/conferir_piloto_caido_l2.py",
+    "sha256": "8e71942dd63e711445248a225b8eff7e31087ab7ec167f43fb8d00b4f76ebb5f"
+  },
+  "so_no_novo": [
+    "M0+S/incoerente_comedouro_5389789043081588068.jsonl",
+    "M0+S/incoerente_longe_5389789043081588068.jsonl",
+    "M0+S/incoerente_perto_5389789043081588068.jsonl"
+  ],
+  "vidas_caido": 477,
+  "vidas_novo": 480
+}
