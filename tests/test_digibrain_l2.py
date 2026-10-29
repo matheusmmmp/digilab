@@ -299,3 +299,29 @@ def test_t_l2_desligada_a_vida_nao_tem_campo_novo():
     c = orq.cerebro_de(reg)
     assert not any("suspensa" in m or "retomou" in m for m in c.motivos) and "suspensa" not in c.estado_interno()["modulos"]["estado"]
     assert not any("n_susp" in f for m in c.motivos for f in m["fins"])
+
+
+# ------------------------------------------------------------------ o registro da avaliacao (o adendo 5), antes de qualquer vida
+def test_o_adendo_5_esta_no_plano_proposto_e_a_trava_o_recusa():
+    plano = (RAIZ / "docs" / "PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md").read_text(encoding="utf-8")
+    orq.exigir_adendo_aprovado(plano, 4)                                             # a trava da reavaliacao segue valendo
+    with pytest.raises(RuntimeError, match="nao esta APROVADO"):
+        orq.exigir_adendo_aprovado(plano, 5)
+    texto = plano[plano.index("## Adendo 5:"):]
+    for c in ("C-L2-1", "C-L2-2", "C-L2-3", "C-L2-4", "67101", r"M3\*+S", "M0+S"):
+        assert c in texto, c
+
+
+def test_a_faixa_da_l2_esta_reservada_e_nao_colide():
+    import bancada_v2 as bv
+    faixas = {(a, b): f for a, b, f in bv.FAIXAS_RESERVADAS}
+    assert (67101, 67505) in faixas and "adendo 5" in faixas[(67101, 67505)]
+    for a, b in faixas:
+        if (a, b) != (67101, 67505):
+            assert b < 67101 or a > 67505, (a, b)
+
+
+def test_o_poder_da_l2_se_refaz_igual():
+    import bancada_v2 as bv
+    import poder_l2_digibrain as pw
+    assert pw.SAIDA.read_text(encoding="utf-8") == bv._dump(pw.calcular(json.loads(pw.ENTRADA.read_text(encoding="utf-8"))))

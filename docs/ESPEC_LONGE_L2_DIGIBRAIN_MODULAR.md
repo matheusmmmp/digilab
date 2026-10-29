@@ -6,6 +6,7 @@ pelo PL-2. Só papel: nenhum código, nenhuma vida, nenhuma semente, nenhuma fai
 **Quem e quando:** o C (Claude Code, Opus 5.5), em 2026-10-29, a pedido do Gerente (relato do Gerente de 2026-10-29).
 
 **O status:** PROPOSTA. Todo valor novo é PROPOSTO, e SEM FONTE salvo onde a linha diz. **Nada roda antes de o Matheus revisar esta espec.**
+**As decisões da seção 9 (LS-1 a LS-7) são DECIDIDAS pelo Matheus em 2026-10-29,** como recomendadas.
 
 **Os rótulos:** [DADO] é número de artefato no git; [CÓDIGO] é leitura do código da `main` (`983930d`); [HIPÓTESE] é o que falta medir.
 
@@ -308,7 +309,8 @@ primeira vida, e repete estes critérios sem mudá-los.
 
 ## 9. O que precisa do Matheus
 
-Propostas pelo C, com a recomendação primeiro.
+Propostas pelo C, com a recomendação primeiro. **O Matheus decidiu as sete em 2026-10-29, como recomendadas** (abaixo da
+tabela).
 
 | # | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|
@@ -319,6 +321,18 @@ Propostas pelo C, com a recomendação primeiro.
 | **LS-5** | o F não sobe nos fins "expirou", "saciou", "achou" e "superada" | **sim** | com o F subindo, cada cochilo empurra o pet a explorar ao acordar; sem ele, o corpo que interrompe não conta como fracasso, e o F do longe fica menor que hoje |
 | **LS-6** | o par M0 e M0+S, só descritivo | **sim** | sem ele, uma mudança no M3\*+S pode vir da suspensão ou do aprendizado que ela muda; com ele, o custo das vidas dobra |
 | **LS-7** | os critérios C-L2-1 a C-L2-4 e as margens | **como estão** | margens largas deixam passar uma piora no comedouro; estreitas pedem mais unidades |
+
+**As decisões do Matheus (2026-10-29), DECIDIDAS como recomendadas:**
+- **LS-1:** a parte (b) primeiro, sozinha; a (a) só pela regra da seção 4;
+- **LS-2:** suspendem a busca pelo cheiro e a ida a uma comida vista;
+- **LS-3:** a retomada pelo sorteio, com a persistência, e não forçada;
+- **LS-4:** `n_suspensa_max` = 6 e `lambda_retomar` = S/4, os valores emprestados, sem calibração;
+- **LS-5:** o F não sobe nos fins "expirou", "saciou", "achou" e "superada";
+- **LS-6:** o par M0 e M0+S, só descritivo;
+- **LS-7:** os critérios C-L2-1 a C-L2-4 e as margens, como estão.
+
+**O que já foi feito** (o worker D, no PR da L-2): o gabarito do conserto, o código atrás da chave com os testes T-L2-1 a T-L2-9 e o
+adendo 5 ao plano, com a faixa 67101 a 67505 e o poder. Nenhuma vida rodou.
 
 **Depois da revisão, na ordem:** o gabarito do conserto (um commit), o código atrás da chave com os testes T-L2-1 a T-L2-9 (um PR), o
 adendo ao plano com o poder (um PR, antes de qualquer vida), a faixa pedida ao coordenador, a avaliação uma vez e o relato.
