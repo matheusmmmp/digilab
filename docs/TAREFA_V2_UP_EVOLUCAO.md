@@ -1,6 +1,6 @@
 # TAREFA V2 — UP-EVOLUCAO: a cena oficial de digievolução na Revelação (2026-10-29)
 
-Coordenador: sessão de coordenação da integração UP (Claude Code). Worker: Claude Code (Opus 5.5). Worktree e branch: `v2-up-evolucao`. Status: A TELA EM ANDAMENTO (a etapa 0 na seção 10, decidida na seção 9; liberada em 2026-10-29)
+Coordenador: sessão de coordenação da integração UP (Claude Code). Worker: Claude Code (Opus 5.5). Worktree e branch: `v2-up-evolucao`. Status: A TELA ENTREGUE, à espera do Matheus (a etapa 0 na seção 10, decidida na seção 9; a tela na seção 11; liberada em 2026-10-29)
 (D3 e D4 decididas; a UP-ATLAS na `main`, #441).
 
 Categoria: implementacao. Origem: Matheus, 2026-10-29: `D:\Trab\digilab\remaster\LEVANTAMENTO_INTEGRACAO.md`, seção 5, e o protótipo em
@@ -231,4 +231,17 @@ voltou a `false`; Chrome headless, servidor local; saída em `evolucao_up/verifi
 Matheus: trocar a chave para `true` em `web/app/src/evolucaoUp.ts`, rodar `npm run build` e abrir pelo túnel do
 `servidor/servidor_local.py --remoto` uma evolução (ou o "Ver a revelação de novo" de Crescer · Evolução). Anotar quanto tempo leva o
 "carregando a cena", se a cena anda sem soluço e se o cartão chega no fim; depois voltar a chave para `false`.
+
+**Os testes, com a chave desligada** (logs em `D:\Trab\digilab\Assets\evolucao_up\verificacao_chave_desligada\`):
+- `npm run tipos` limpo; `npm test` → 653 passados (58 arquivos), com `web/app/test/evolucaoUp.test.ts` (9 novos);
+  `python -m pytest tests/test_servidor_remoto.py -q` → 15 passados; `python tools/conferir_saude.py` passa.
+- `npm run e2e` → 97 passados e 1 falha: o "Forçar" do treino, por tempo (o relógio do app anda 10 min/s e a fadiga cai antes do clique,
+  com 3 workers em paralelo). Sozinho, o mesmo teste passou 3 de 3 no branch e 3 de 3 na `main` pura (`e7e6c3c`).
+- **As capturas da chave desligada:**
+  - a referência foi gravada com o build da `main` atual (`e7e6c3c`) numa worktree temporária. A primeira referência, de antes do código,
+    ficou velha quando a `main` andou;
+  - o branch e a própria `main` foram comparados com ela, com 1 worker. Os dois falham nas mesmas 3 capturas: Diário · Cenários em
+    390 px e Crescer · Evolução v6 em 390 e 1280 px. Elas mudam entre duas rodadas da própria `main`, então não são deste PR;
+  - no branch, outras 3 deram diferença na primeira tentativa e passaram na segunda;
+  - **o momento da evolução (`evolucao-momento`), a tela que este PR toca, sai igual em 390 e 1280 px.**
 
