@@ -1,7 +1,8 @@
 # ESPEC — COMBATE-TR: a batalha em tempo real como o combate do jogo (R0, 2026-10-29)
 
-Tarefa: `docs/TAREFA_V2_COMBATE_TR.md` (etapa R0). Worker: Claude Code, Opus 5.5, worktree `v2-combate-tr`. Status: **PROPOSTO** inteiro,
-até a resposta do Matheus. Nenhum código de jogo mudou. A única peça nova é a medida do custo (item 4), com o script e a saída em disco.
+Tarefa: `docs/TAREFA_V2_COMBATE_TR.md` (etapa R0). Worker: Claude Code, Opus 5.5, worktree `v2-combate-tr`. Status: as decisões D-1 a D-9
+(seção 8) foram **DECIDIDAS** pelo Matheus em 2026-10-29, como recomendadas; os números seguem PROPOSTOS, menos os da D-5. Na R0, nenhum código de jogo mudou; a única peça nova foi a
+medida do custo (item 4), com o script e a saída em disco.
 
 Leia junto: a seção 3 da tarefa (o levantamento), `web/app/motor/combate.ts` (o combate por turnos V2.1), `web/app/arena/sim.ts` (a
 simulação do #446) e `docs/historico/claude/combate.md`.
@@ -348,9 +349,13 @@ das vidas (item 4).
 **O Lab e o Melhor de 10:** N lutas sem animação custam N × ~3–5 ms. O Lab de hoje roda até centenas de lutas; acima de ~200, a tela roda
 em blocos, para não travar o quadro (R3).
 
-## 8. As decisões abertas para o Matheus
+## 8. As decisões do Matheus
 
-| | decisão | recomendação | custo de errar |
+**DECIDIDAS (Matheus, 2026-10-29, no chat da coordenação):** as nove recomendações abaixo foram aceitas como estão. Os números da
+D-5 (T, o limite e a morte súbita) passam a DECIDIDOS como o ponto de partida da R1; os outros números da espec seguem PROPOSTOS até a rodada de equilíbrio.
+
+
+| | decisão | recomendação (DECIDIDA) | custo de errar |
 |---|---|---|---|
 | **D-1** | O tempo das ações vem do DigiLab (T = 2 s para todos, e o clipe do UP esticado para caber), ou do UP (cada Digimon com a duração e o instante do golpe dele)? | **DigiLab.** Do UP fica só a fração do instante dentro do clipe (E5: "o instante do golpe"), aplicada à duração do DigiLab | Com o tempo do UP, a forma vira um atributo escondido: duas formas com os mesmos stats lutam diferente por causa do sprite. Além disso, o replay passa a depender dos JSON do UP, que estão fora do git: sem a pasta `Assets/`, o pet não abre. Com o tempo do DigiLab, o golpe fica um pouco mais lento ou mais rápido que o clipe original |
 | **D-2** | O replay refaz sempre, ou guarda o resultado? | **Refaz sempre** (item 4), com o teste de custo na R2 e a ordem de recuos | Sem cache, uma vida enorme demora para abrir (1 000 lutas: ~3–5 s no desktop, mais no celular). Com cache, aparece um segundo lugar de verdade, e um cache velho mostraria um pet errado sem erro |
