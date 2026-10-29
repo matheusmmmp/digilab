@@ -1,0 +1,15 @@
+{
+  "descricao": "O piloto da L-2 (adendo 5, APROVADO pelo Matheus em 2026-10-29; A5.2 e A5.8): os 4 bracos (M3*, M3*+S, M0, M0+S) nas 12 celulas, bases 67101 e 67202, K = 5 por base (10 unidades), 14 dias. So mede o sigma, o rho e o sigma_d das 10 comparacoes do C-L2-3 para a regra do K; nenhum criterio e lido. Roda uma vez, da main limpa, com ate 4 processos, depois de o Gerente conferir o orquestrador.",
+  "plano": "docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md",
+  "fase": "l2_piloto",
+  "unidades": {
+    "bases": [
+      67101,
+      67202
+    ],
+    "k": 5,
+    "prefixo": "digibrain_prototipo"
+  },
+  "dias": 14,
+  "orcamento_por_dia": 16
+}

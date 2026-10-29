@@ -113,6 +113,9 @@ SUBCHAVES_CONSERTO = {**{b: {**s, "cheiro_inato": True, "intencao_cheiro": True}
                       "M3-sem-inato": {"intencao_cheiro": True}, "M3-sem-intencao": {"cheiro_inato": True}, "M3-420": {}}
 BRACOS_MODULAR_CONSERTO = tuple(SUBCHAVES_CONSERTO)
 BRACOS_CONSERTO = BRACOS_MODULAR_CONSERTO + ("A11",)
+# a L-2 (o adendo 5, A5.1; as fases em experiments/run_v2_digibrain_l2.py): o M3* e o M0 do conserto com a intencao suspensa
+SUBCHAVES_L2 = {"M3+S": {**SUBCHAVES_CONSERTO["M3"], "intencao_suspensa": True},
+                "M0+S": {**SUBCHAVES_CONSERTO["M0"], "intencao_suspensa": True}}
 BRACOS_DA_FASE.update({"calibracao_conserto": ("M3",), "piloto_conserto": BRACOS_CONSERTO, "reavaliacao": BRACOS_CONSERTO})
 G_MVP_EP = {"w_decisoes": 8, "fome_elegivel": 0.5, "taxa_vida": 0.5, "limiar": 0.8}         # A3.3: os numeros da PPM-4, por episodio
 G_ELEGIVEL_EP = {"frac_vidas": 0.8, "episodios": 3}                                          # A3.3: a premissa G-ELEGIVEL-EP
@@ -274,8 +277,9 @@ def bancada(dias: int, orcamento_por_dia: int) -> bv.Bancada:
 
 
 def config_do_braco(braco: str, g_apr_con: int | None = None, conserto: bool = False) -> ConfigDigibrain:
-    """a ConfigDigibrain do braco: a do prototipo (SUBCHAVES) ou, nas fases do conserto, a do adendo 3 (SUBCHAVES_CONSERTO)"""
-    tabela = SUBCHAVES_CONSERTO if conserto else SUBCHAVES
+    """a ConfigDigibrain do braco: a do prototipo (SUBCHAVES) ou, nas fases do conserto, a do adendo 3 (SUBCHAVES_CONSERTO), com os dois
+    bracos da L-2 (SUBCHAVES_L2, o adendo 5)"""
+    tabela = {**SUBCHAVES_CONSERTO, **SUBCHAVES_L2} if conserto else SUBCHAVES
     if braco not in tabela:
         raise ValueError(f"braco do modular {braco!r}: so {tuple(tabela)}")
     extra = {"g_apr_constante": g_apr_con} if braco == "M4-con" else {}
@@ -386,8 +390,8 @@ def conferir_mecanismo(braco: str, registro: Registro, serie_e: tuple | None) ->
         for termo, ligada in (("incentivo", cd.p1), ("habito", cd.p2), ("memoria", cd.m_mem), ("persistencia", cd.persistencia)):
             if not ligada and any(u["termos"][termo] for u in m["unidades"]):
                 raise RuntimeError(f"{braco}: o termo {termo!r} com a subchave desligada (decisao {m['k']})")
-    if braco == "M0" and not (c.m.plast.desfecho_zero() and c.m.plast.habito_zero() and not c.m.mem.episodios):
-        raise RuntimeError("M0: o desfecho, o habito ou a memoria sairam de 0")
+    if braco in ("M0", "M0+S") and not (c.m.plast.desfecho_zero() and c.m.plast.habito_zero() and not c.m.mem.episodios):
+        raise RuntimeError(f"{braco}: o desfecho, o habito ou a memoria sairam de 0")
     if braco == "M4-emb":
         if [m["afeto"]["e_usada"] for m in c.motivos] != list(serie_e[:len(c.motivos)]) or len(serie_e) != len(c.motivos):
             raise RuntimeError("M4-emb: a serie E usada nao e a do doador, decisao a decisao, inteira")
@@ -416,26 +420,38 @@ def conferir_credito(braco: str, c) -> None:
             if guardadas.pop(f["inicio"], None) != f:
                 raise RuntimeError(f"{braco}: a busca entregue na decisao {m['k']} nao e a guardada no achou")
             entregues.append((f, None))
-    I = c.m.estado.I
-    for g in guardadas.values():               # so a composta ainda aberta no fim da vida
-        if I is None or not I.get("composta") or I["inicio"] != g["inicio"]:
+    abertas = [x for x in (c.m.estado.I, getattr(c.m.estado, "suspensa", None)) if x is not None]
+    for g in guardadas.values():               # so a composta ainda aberta (em curso ou suspensa, a L-2) no fim da vida
+        if not any(x.get("composta") and x["inicio"] == g["inicio"] for x in abertas):
             raise RuntimeError(f"{braco}: a busca guardada na decisao {g['inicio']} nunca foi entregue")
     coberta = set()
     for f, g in entregues:
         k0, n = f["inicio"], f["n"]
-        r = 0
-        for k in range(k0, k0 + n):
-            if k >= len(ms) or rn[k] is None:
+        # a L-2: a intencao que ja foi suspensa (o `n_susp` no fim) pula as decisoes do cochilo em que ficou suspensa (o reflexo, com a
+        # `suspensa` dela no motivo); sem o `n_susp`, as decisoes dela sao seguidas, como hoje
+        suspensa = "n_susp" in f or (g is not None and "n_susp" in g)
+        r, ks, k = 0, 0, k0
+        while ks < n:
+            if k >= len(ms):
+                raise RuntimeError(f"{braco}: a opcao da decisao {k0} entregue sem a decisao {k}")
+            busca = g is not None and ks < g["n"]
+            esperada = ["comer", "cheiro", None] if busca else f["chave"]
+            if ms[k]["escolha"] != esperada:
+                cochilo = ms[k].get("suspensa")
+                if not (suspensa and ms[k]["reflexo"] and cochilo is not None and cochilo["chave"] == esperada):
+                    raise RuntimeError(f"{braco}: a decisao {k} nao e da unidade da opcao {f['chave']}")
+                k += 1
+                continue
+            if rn[k] is None:
                 raise RuntimeError(f"{braco}: a opcao da decisao {k0} entregue sem a consequencia da decisao {k}")
             if k in coberta:
                 raise RuntimeError(f"{braco}: a decisao {k} em duas opcoes entregues")
             coberta.add(k)
-            busca = g is not None and k < k0 + g["n"]
-            if ms[k]["escolha"] != (["comer", "cheiro", None] if busca else f["chave"]):
-                raise RuntimeError(f"{braco}: a decisao {k} nao e da unidade da opcao {f['chave']}")
             r = max(-S, min(S, r + rn[k]))
-            if g is not None and k == k0 + g["n"] - 1 and r != g["r"]:
+            ks += 1
+            if g is not None and ks == g["n"] and r != g["r"]:
                 raise RuntimeError(f"{braco}: o r da busca guardada na decisao {k0} nao e a soma das decisoes dela")
+            k += 1
         if r != f["r"]:
             raise RuntimeError(f"{braco}: o r da opcao da decisao {k0} ({f['r']}) nao e a soma das decisoes dela ({r})")
     if c.m.estado.guardada is not None:

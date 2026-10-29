@@ -1,0 +1,15 @@
+{
+  "descricao": "Fumaca da avaliacao da L-2: as sementes dos testes, 2 dias; so confere que o orquestrador roda.",
+  "plano": "docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md",
+  "fase": "l2_avaliacao",
+  "unidades": {
+    "bases": [
+      101,
+      202
+    ],
+    "k": 1,
+    "prefixo": "digibrain_prototipo"
+  },
+  "dias": 2,
+  "orcamento_por_dia": 16
+}

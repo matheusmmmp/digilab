@@ -1946,10 +1946,12 @@ resultado. Se e como revisá-las é uma questão aberta do Matheus (A4.9).
 - **a única exceção:** as sementes dos testes, sozinhas (101 a 505), dão o modo `fumaca`. A fumaça exige `--saida` e não lê os adendos
   nem o K da reavaliação. É o encanamento dos testes, nunca resultado.
 
-## Adendo 5: a avaliação da L-2, a intenção suspensa no cochilo (2026-10-29, worker D, Claude Code, Opus 5.5)
+## Adendo 5: a avaliação da L-2, a intenção suspensa no cochilo (2026-10-29, worker D, Claude Code, Opus 5.5; APROVADO pelo Matheus em 2026-10-29)
 
-**Status: PROPOSTO.** Registrado antes de qualquer vida. Nenhuma vida da faixa roda sem a conferência do Gerente e a autorização do
-Matheus. Quando rodar, no máximo 4 processos (a máquina).
+**Status: APROVADO pelo Matheus em 2026-10-29,** com o piloto: a faixa 67101 a 67505; o piloto de 10 unidades em 67101 e 67202, com
+K = 5, só para medir o rho; e a regra do K escrita antes do piloto (A5.8). Um K acima de 100 volta ao Matheus com o custo, e as margens
+ficam como a LS-7 decidiu. Registrado antes de qualquer vida. O piloto roda depois de o Gerente conferir o orquestrador, e a avaliação
+depois do K fixado (A5.9). No máximo 4 processos (a máquina), da `main` limpa, uma vez.
 
 **De onde vem:** a seção 7 da `docs/ESPEC_LONGE_L2_DIGIBRAIN_MODULAR.md` (o #436). O Matheus aprovou as decisões LS-1 a LS-7 como
 recomendadas em 2026-10-29. Este adendo repete o desenho e os critérios da seção 7 **sem mudá-los**, e acrescenta só o que a espec deixou
@@ -2076,3 +2078,49 @@ com 4 processos. A avaliação tem 48 × K vidas: com K = 50, 2 400, cerca de 35
   Isso vai num commit próprio, com testes nas sementes dos testes, antes do piloto, para o Gerente conferir.
 - **A autorização do Matheus** para o piloto e, depois do K, para a avaliação, uma vez.
 - **Os testes de mecanismo,** de vidas, os gabaritos (o do modular e o do conserto) e a suíte, antes de cada run.
+
+### A5.8 A regra do K, por extenso (2026-10-29, worker D; escrita antes do piloto)
+
+A regra da A5.6, sem mudá-la, na forma que o orquestrador aplica (`experiments/run_v2_digibrain_l2.py`). Os números são PROPOSTOS, SEM
+FONTE, e não mudam depois do piloto.
+
+**O piloto** (a fase `l2_piloto`):
+- as bases 67101 e 67202, com K = 5 por base: 10 unidades;
+- os quatro braços (M3\*, M3\*+S, M0 e M0+S) nas 12 células, 14 dias: 480 vidas;
+- ele só serve para esta regra. Nenhum critério é lido nele, e os números dele não são evidência;
+- ele recusa as sementes da avaliação (67303 a 67505) e as de qualquer outra fase.
+
+**As 10 comparações do C-L2-3,** do par primário (M3\*+S − M3\*):
+- a taxa por episódio e a por ração, no comedouro e no perto (4 comparações), com a margem −0,03;
+- a exaustão e a privação, nos três lugares (6 comparações), com a margem +0,02.
+
+**A conta, comparação por comparação:**
+1. **O valor da unidade:** a média das 4 vidas do lugar (uma por dono), em cada braço, como na A5.4.
+2. **Do piloto:**
+   - o desvio entre as unidades em cada braço, σ(M3\*) e σ(M3\*+S);
+   - o rho, a correlação de Pearson entre os valores das 10 unidades nos dois braços;
+   - o desvio da diferença pareada, σ_d = raiz(σ(M3\*)² + σ(M3\*+S)² − 2 · rho · σ(M3\*) · σ(M3\*+S)). É o desvio das 10 diferenças pareadas,
+     e o orquestrador confere que as duas contas dão o mesmo.
+   - Se um dos σ é 0, o rho fica sem valor, e vale o σ_d das diferenças.
+3. **O poder,** com o efeito verdadeiro 0 (não piorar): 1 − Φ(t(K − 1; 0,975) − (|margem| / σ_d) · raiz(K)). É a função `poder` de
+   `experiments/poder_l2_digibrain.py`, a aproximação normal do t não central. Com σ_d = 0, o poder é 1.
+4. **A conjunção:** o produto dos 10 poderes (as comparações tratadas como independentes; uma aproximação, como na A5.6).
+
+**O K:**
+- **a grade,** em unidades: 12, 21, 30, 51, 102 e 201 (a da A5.6, arredondada para cima ao múltiplo de 3, as três bases da avaliação);
+- **o K é o menor da grade com a conjunção ≥ 0,8.** Por base, K / 3: 4, 7, 10, 17, 34 ou 67;
+- **se o K é 102 ou 201, ou se nenhum K da grade chega a 0,8,** o K volta ao Matheus com o custo em vidas (48 por unidade) e em tempo,
+  antes de rodar. A avaliação não roda;
+- **as margens não mudam** (a LS-7).
+
+**O que o piloto grava** (`artifacts_v2_digibrain_prototipo/l2/piloto/`): o `meta.json`, o `medidas.json` e o `resultado.json`. Este
+último traz, por comparação, o σ dos dois braços, o rho, o σ_d e o poder em cada K da grade; e traz a conjunção e o K da regra (ou "volta
+ao Matheus").
+
+**A5.9, o K fixado:** depois do piloto, o K da regra entra no plano numa subseção "### A5.9 O K da avaliação", num commit próprio, antes da
+avaliação. A fase `l2_avaliacao` recusa rodar:
+- sem o `resultado.json` do piloto;
+- sem a A5.9;
+- com a A5.9 diferente do K do piloto;
+- com o K da config diferente do da A5.9;
+- ou com o piloto dizendo "volta ao Matheus", a não ser que a A5.9 traga o K aprovado por ele.

@@ -302,11 +302,14 @@ def test_t_l2_desligada_a_vida_nao_tem_campo_novo():
 
 
 # ------------------------------------------------------------------ o registro da avaliacao (o adendo 5), antes de qualquer vida
-def test_o_adendo_5_esta_no_plano_proposto_e_a_trava_o_recusa():
+def test_o_adendo_5_esta_no_plano_aprovado_e_a_trava_o_aceita():
+    """o adendo 5 foi registrado PROPOSTO (o #437) e APROVADO pelo Matheus em 2026-10-29 (o PR das fases da L-2)"""
     plano = (RAIZ / "docs" / "PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md").read_text(encoding="utf-8")
     orq.exigir_adendo_aprovado(plano, 4)                                             # a trava da reavaliacao segue valendo
+    orq.exigir_adendo_aprovado(plano, 5)
     with pytest.raises(RuntimeError, match="nao esta APROVADO"):
-        orq.exigir_adendo_aprovado(plano, 5)
+        orq.exigir_adendo_aprovado(plano.replace("**Status: APROVADO pelo Matheus em 2026-10-29,** com o piloto",
+                                                 "**Status: PROPOSTO,** com o piloto"), 5)
     texto = plano[plano.index("## Adendo 5:"):]
     for c in ("C-L2-1", "C-L2-2", "C-L2-3", "C-L2-4", "67101", r"M3\*+S", "M0+S"):
         assert c in texto, c
