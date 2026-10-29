@@ -3,6 +3,7 @@
    Assets\gerar_arena_up.py. Mesmo caminho relativo do atlas: a pagina em /v1/web/dist/ pede ../../../Assets/arena_up/. Se nao carregar:
    aviso visivel. A arena nao toca no motor do pet, no log nem no save. */
 import { conferirDados, type DadosArena, type Recuos } from "../arena/index.ts";
+import { DIGIMON_DA_FORMA, chaveSprite, nomeForma, type Forma } from "../motor/index.ts";
 
 /** Chave da arena em tempo real (D1, Matheus, 2026-10-29), DESLIGADA: desligada, o jogo e o de hoje (nenhuma rota, botao ou pedido novo).
     ?arena_tr=1 liga so naquela aba (conferir e e2e), como o ?clipes_up=1 */
@@ -49,4 +50,34 @@ export function imagemArena(rel: string): Promise<HTMLImageElement | null> {
     imagens.set(rel, p);
   }
   return p;
+}
+
+/* ---------- o pet na arena (correcao do Matheus, 2026-10-29: o pet do jogador luta sozinho, pela IA) ---------- */
+/** nomes do catalogo do DigiLab que o atlas da arena escreve de outro jeito (alem de espaco e caixa) */
+const APELIDO_ATLAS: Record<string, string> = { Ankylomon: "Ankiromon" };
+const norma = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+
+export type PetNaArena =
+  | { ok: true; nome: string; tela: string; estagio: string }
+  | { ok: false; motivo: string };
+
+/** o Digimon do catalogo do DigiLab (DIGIMON_DA_FORMA) no atlas da arena (sem caixa, espaco nem sublinhado; mais o APELIDO_ATLAS), com o
+    estagio do status do jogo; sem atlas ou sem status proprio, o motivo */
+export function digimonNaArena(catalogo: string, dados: DadosArena): { ok: true; nome: string; estagio: string } | { ok: false; motivo: string } {
+  const procurado = norma(APELIDO_ATLAS[catalogo] ?? catalogo);
+  const nome = Object.keys(dados.atlas.d).find(n => norma(n) === procurado);
+  if (!nome) return { ok: false, motivo: `${catalogo} não está no atlas da arena` };
+  const st = dados.status[nome];
+  if (!st || !st.estagio) return { ok: false, motivo: `${catalogo} não tem status próprio no jogo (status.json)` };
+  return { ok: true, nome, estagio: st.estagio };
+}
+
+/** o pet na arena: a forma -> chaveSprite -> DIGIMON_DA_FORMA -> digimonNaArena. Sem pet que possa lutar, o motivo vai para o aviso
+    (nada de Digimon aleatorio) */
+export function petNaArena(forma: Forma | null, dados: DadosArena): PetNaArena {
+  if (!forma) return { ok: false, motivo: "o pet ainda é um Digi-Egg" };
+  const chave = chaveSprite(forma), d = DIGIMON_DA_FORMA[chave];
+  if (!d) return { ok: false, motivo: `a forma ${chave} não tem Digimon no catálogo` };
+  const r = digimonNaArena(d[0], dados);
+  return r.ok ? { ...r, tela: nomeForma(forma) } : r;
 }
