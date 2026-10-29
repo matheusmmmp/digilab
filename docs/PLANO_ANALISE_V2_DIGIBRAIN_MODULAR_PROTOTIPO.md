@@ -1908,12 +1908,14 @@ resultado. Se e como revisá-las é uma questão aberta do Matheus (A4.9).
   - `digilab/metrics.py`, com a A4.7: `abf142c4f8f1eca2f81922614a20cea994894b417e56fe9902873a9efb56bf98`;
   - o `resultado.json` do piloto do conserto, de onde saem o K e o `g_apr` do M4-con:
     `7824b337242435db264c26b50edfbc281fcc1a32b8a1eb55918ee4070834c294`;
-- **o comando** (8 processos, como no piloto e em A4.5):
-  `python experiments/run_v2_digibrain_prototipo.py --config experiments/configs/v2_digibrain_prototipo/reavaliacao.json --processos 8`;
+- **o comando** (4 processos; trocado de 8 em 2026-10-28, pela decisão do Matheus sobre a máquina, no registro
+  "DIGIBRAIN-MODULAR-REAVALIACAO-PROCESSOS"; o número de processos não muda nenhuma vida nem o resultado):
+  `python experiments/run_v2_digibrain_prototipo.py --config experiments/configs/v2_digibrain_prototipo/reavaliacao.json --processos 4`;
 - **o tempo estimado:**
   - pelo custo do piloto, 15 273 s de CPU (A4.5);
-  - o piloto rodou as 864 vidas dele em 313 s de parede, com 8 processos. Na mesma proporção, as 7 200 levam cerca de 45 min;
-  - com a análise, entre 45 e 60 min;
+  - o piloto rodou as 864 vidas dele em 313 s de parede, com 8 processos. Na mesma proporção, as 7 200 levariam cerca de 45 min com
+    8; com 4 processos, cerca do dobro;
+  - com a análise, cerca de 1 h 30 min;
 - **os artefatos** (`artifacts_v2_digibrain_prototipo/reavaliacao/`):
   - **`meta.json`:** a config, os sha256, o commit, a árvore limpa, as 50 unidades, os braços, os inatos, o `adendo_4` (o K e o `g_apr`),
     o sha do `resultado.json` do piloto, o `g_apr_m4_con` e o tempo;
