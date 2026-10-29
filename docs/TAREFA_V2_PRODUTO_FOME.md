@@ -61,13 +61,13 @@ Nenhuma run. A máquina rodava a avaliação da L-2 até ~20h10, com 4 processos
 
 ## 8. Precisa do Matheus
 
-- **O limiar do chamado de fome:** 0,45, o mesmo do `fome_moderada` do instinto (PROPOSTO, seção 9).
-  - **Recomendação:** manter. É o único valor em que o chamado e o comer do pet andam juntos.
-  - **Custo de errar:** com um limiar mais alto, volta o descompasso de hoje: chamado aberto, ração vista, pet que não come.
-  - **Consequência:** o bebê quase não pede comida, porque a fome dele cai de 0,80 a ~0,65 nos 180 min sem cuidado. A fração de cuidado
-    da evolução passa a pesar só a higiene e o carinho, a menos que o dono brinque muito (o brincar gasta fome).
-- **Os chamados de higiene e de carinho:** têm o mesmo descompasso (seção 9).
+- **O limiar do chamado de fome: DECIDIDO, 0,45** (Matheus, 2026-10-29, pelo Gerente).
+  - O Matheus decidiu ciente de que o bebê quase não chama mais por fome.
+  - O intervalo de 30 min e a janela de 15 min seguem como hoje.
+  - O efeito medido está na seção 9.
+- **Os chamados de higiene e de carinho:** têm o mesmo descompasso (seção 9). Ficam como estão, só no relato.
   - **Recomendação:** uma tarefa própria, com o mesmo desenho do de fome.
+  - **Por que importa:** com a chave, um dono que nunca alimenta, mas atende higiene e carinho, cria um bebê sereno (seção 9).
 
 ## 9. Resumo da entrega (worker A, 2026-10-29)
 
@@ -79,7 +79,7 @@ Nenhuma run. A máquina rodava a avaliação da L-2 até ~20h10, com 4 processos
     cruzamento e o pet de exemplo.
   - Os saves de antes não têm o evento e seguem com as duas desligadas. A vida deles não muda.
   - A pesquisa e os gabaritos nunca gravam o evento.
-- **(a) o chamado de fome pela fome do corpo** (`Motor._chamadoFome`; o limiar é `CHAMADO_FOME_CORPO.limiar` = 0,45, PROPOSTO):
+- **(a) o chamado de fome pela fome do corpo** (`Motor._chamadoFome`; o limiar é `CHAMADO_FOME_CORPO.limiar` = 0,45, DECIDIDO pelo Matheus em 2026-10-29):
   - **abre** no bebê quando a fome fica abaixo do limiar, no máximo um a cada 30 min (o intervalo de hoje). Assim, um chamado perdido não
     reabre a cada janela;
   - **fecha como atendido** quando o dono alimenta (como hoje) ou quando a fome volta ao limiar. Nos v12, ela só sobe comendo a ração
@@ -101,4 +101,29 @@ Nenhuma run. A máquina rodava a avaliação da L-2 até ~20h10, com 4 processos
   - Um bebê de 30 min (fome 0,775): sem a chave, a tela mostra "Chamado: fome"; com a chave, nenhum chamado.
 - **O mesmo descompasso, só relatado:** o chamado de higiene abre pelo relógio com a higiene entre 0,92 e 0,96 e a sujeira 0. O de carinho
   abre com o humor entre 0,67 e 0,99. São as sementes 101, 202 e 303, nos 180 min do bebê sem cuidado.
+- **O efeito no bebê** (pedido do Gerente;
+  `web/app/test/efeito_chamado_fome.json`, de `web/app/test/medir_chamado_fome.ts`):
+  - **as vidas:** as sementes 101, 202 e 303, nos dois ritmos, com seis donos de roteiro (SEM FONTE). Os números saem iguais nas três
+    sementes;
+  - **a fração de cuidado** é a dos chamados do bebê atendidos na janela; com 0,8 ou mais, a criança é a serena, e abaixo, a arisca
+    (`CAT.limiarCuidado`). O `test/produto_fome.test.ts` confere que o arquivo está em dia e que o efeito é este:
+
+| ritmo | dono | chamados de fome, hoje → com a chave | fração de cuidado (ramo), hoje → com a chave |
+|---|---|---|---|
+| rápido (180 min) | nada | 5 → 0 | 0 (arisco) → 0 (arisco) |
+| rápido | atende tudo na hora, ou 10 min depois | 5 → 0 | 1 (sereno) → 1 (sereno) |
+| rápido | brinca na 1ª hora e atende tudo | 5 → 0 | 1 (sereno) → 1 (sereno) |
+| rápido | só alimenta | 5 → 0 | 0,5 (arisco) → 0 (arisco) |
+| rápido | atende tudo, menos a fome | 5 → 0 | 0,5 (arisco) → **1 (sereno)** |
+| clássico (360 min) | nada | 11 → 0 | 0 (arisco) → 0 (arisco) |
+| clássico | atende tudo na hora, ou 10 min depois | 11 → 0 | 1 (sereno) → 1 (sereno) |
+| clássico | brinca na 1ª hora e atende tudo | 11 → 4 | 1 (sereno) → 1 (sereno) |
+| clássico | só alimenta | 11 → 0 | 0,478 (arisco) → 0 (arisco) |
+| clássico | atende tudo, menos a fome | 11 → 0 | 0,522 (arisco) → **1 (sereno)** |
+
+  - **no rápido,** a chave nunca abre o chamado de fome, nem com o dono brincando;
+  - **no clássico,** só abre com o dono brincando muito na primeira hora (4 chamados, todos com a fome abaixo de 0,45);
+  - **a fração de cuidado** passa a depender só da higiene e do carinho. Quem atende tudo fica igual. Quem só alimenta cai a 0. Quem nunca
+    alimenta, mas atende higiene e carinho, sobe a 1 e cria um bebê sereno;
+  - **sem chamado, o bebê sem comida não morre no estágio:** a fome chega a ~0,65 no rápido e a ~0,50 no clássico.
 - **Interpretações e achados** em `docs/registro/2026-10.md` (PRODUTO-FOME).

@@ -325,8 +325,9 @@ export const DUR_CLASSICA = [360, 1440, 2160];
 export const CHAMADO_BEBE: Record<Chamado, number> = { fome: 30, higiene: 60, carinho: 45 };
 /** a chave `chamadoPelaFome` (pets v12 do jogo, EventoProduto): o chamado de fome do bebe abre quando a fome do corpo fica abaixo do
     limiar, e nao pelo relogio. O limiar e o fome_moderada do instinto (lobos.ts, agirInstinto: o pet so come abaixo dele), para o chamado
-    e o comer do pet andarem juntos. Um por intervalo de CHAMADO_BEBE.fome no maximo (um perdido nao reabre a cada janela). PROPOSTO
-    (worker A, 2026-10-29) */
+    e o comer do pet andarem juntos. Um por intervalo de CHAMADO_BEBE.fome no maximo (um perdido nao reabre a cada janela), com a janela
+    de CAT.janelaChamado, os dois como hoje. O limiar e DECIDIDO (Matheus, 2026-10-29, ciente de que o bebe quase nao chama mais por
+    fome; o efeito em test/efeito_chamado_fome.json) */
 export const CHAMADO_FOME_CORPO = { limiar: .45 };
 export const ACAO_CHAMADO: Record<Chamado, readonly AcaoDono[]> = { fome: ["alimentar"], higiene: ["limpar"], carinho: ["acariciar", "brincar"] };
 export const FORMAS_AD: readonly FormaAdultaNormal[] = ["duelista", "furioso", "espelho", "muralha", "sentinela", "emboscador", "vigia", "tita"];

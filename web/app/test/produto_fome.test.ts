@@ -11,7 +11,9 @@ import { describe, expect, test } from "vitest";
 import { CHAMADO_BEBE, CHAMADO_FOME_CORPO, C, TICK_INICIAL } from "../motor/constantes.ts";
 import { Motor } from "../motor/motor.ts";
 import type { ChavesProduto, EventoRegistro } from "../motor/tipos.ts";
+import { readFileSync } from "node:fs";
 import { ligarProduto } from "../src/produto.ts";
+import { textoEfeito } from "./medir_chamado_fome.ts";
 
 const LIM = CHAMADO_FOME_CORPO.limiar;
 const SO_A = { chamadoPelaFome: true, decisaoNaComida: false }, SO_B = { chamadoPelaFome: false, decisaoNaComida: true };
@@ -110,6 +112,35 @@ describe("(a) o chamado de fome do bebe pela fome do corpo", () => {
     expect(fechou).not.toBeNull();
     expect(fechou!.fome).toBeGreaterThanOrEqual(LIM);
     expect(r.mundo!.consumos.length).toBeGreaterThan(0);
+  });
+});
+
+describe("o efeito no bebe (test/efeito_chamado_fome.json, de test/medir_chamado_fome.ts)", () => {
+  test("o arquivo esta em dia, e o efeito e o relatado: os chamados de fome que abrem e a fracao de cuidado conforme o dono", () => {
+    const texto = textoEfeito();
+    expect(readFileSync(new URL("./efeito_chamado_fome.json", import.meta.url), "utf8")).toBe(texto);
+    type Linha = { ritmo: string; dono: string; chave: boolean; chamados_abertos: Record<string, number>; cuidado: number; ramo: string;
+      fome_ao_abrir: number[] };
+    const vidas = (JSON.parse(texto) as { vidas: Linha[] }).vidas;
+    const de = (ritmo: string, dono: string, chave: boolean) => vidas.filter(v => v.ritmo === ritmo && v.dono === dono && v.chave === chave);
+    for (const ritmo of ["rapida", "classica"]) {
+      /* hoje, o relogio abre 5 (rapido) ou 11 (classico) de fome, todos com a fome acima do limiar */
+      for (const v of de(ritmo, "nada", false)) {
+        expect(v.chamados_abertos.fome).toBe(ritmo === "rapida" ? 5 : 11);
+        expect(Math.min(...v.fome_ao_abrir)).toBeGreaterThan(LIM);
+      }
+      /* com a chave, so abre com a fome abaixo do limiar: nenhum sem o brincar do dono */
+      for (const d of ["nada", "atende", "atende_10min", "so_alimenta", "nao_alimenta"])
+        for (const v of de(ritmo, d, true)) expect(v.chamados_abertos.fome).toBe(0);
+      /* quem so alimenta perde o cuidado; quem nunca alimenta (e atende o resto) vira sereno */
+      for (const v of de(ritmo, "so_alimenta", true)) expect([v.cuidado, v.ramo]).toEqual([0, "arisco"]);
+      for (const v of de(ritmo, "nao_alimenta", true)) expect([v.cuidado, v.ramo]).toEqual([1, "sereno"]);
+      for (const v of de(ritmo, "nao_alimenta", false)) expect(v.ramo).toBe("arisco");
+    }
+    for (const v of vidas.filter(v => v.chave)) expect(v.fome_ao_abrir.every(f => f < LIM)).toBe(true);
+    /* so o classico com brincadeira chega a abrir o de fome com a chave */
+    for (const v of de("classica", "brinca_atende", true)) expect(v.chamados_abertos.fome).toBeGreaterThan(0);
+    for (const v of de("rapida", "brinca_atende", true)) expect(v.chamados_abertos.fome).toBe(0);
   });
 });
 
