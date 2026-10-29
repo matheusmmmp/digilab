@@ -48,6 +48,10 @@ export interface OpcoesLacoMundo {
    *  (`politica.escolherAlvo`, o `escolher_alvo` do Python), e o Mundo valida o que vier (os candidatos e, so no explorar, o `ponto`
    *  inteiro dentro do mapa; T-PONTO-4). Desligada (o v12 e o A), o alvo e o padrao do motor, como hoje */
   digibrain?: boolean;
+  /** a chave do produto `decisaoNaComida` (o `ConfigDecisaoNaComida.ligada` do Python), desligada: com ela, a comida que o dono deixa no
+   *  chao faz o pet decidir ja no proximo passo do laco, em vez de esperar o fim do intervalo. O cerebro e a politica nao mudam: so o
+   *  momento da decisao (a seguinte volta a contar o intervalo dali) */
+  decidirNaComida?: boolean;
 }
 
 /** as acoes do dono no laco com o mundo: as do v11 sem o alimentar (ele vira o deixar_comida) */
@@ -61,6 +65,8 @@ export class MotorCorpoMundo extends MotorCorpo {
   private readonly regra: () => string | null;
   private readonly paridade: boolean;
   private readonly digibrain: boolean;
+  /** a chave `decisaoNaComida` (OpcoesLacoMundo); o Motor do jogo a liga pelo evento das chaves do produto, no comeco do registro */
+  decidirNaComida: boolean;
 
   constructor(politica: PoliticaCorpo, semente: number, cc: ConfigCorpo = CCO_CORPO_V11, estado: EstadoVida = estadoNascimentoPy(),
               opcoes: OpcoesLacoMundo = {}) {
@@ -70,6 +76,7 @@ export class MotorCorpoMundo extends MotorCorpo {
     this.regra = opcoes.regra ?? (() => null);
     this.paridade = opcoes.paridade ?? false;
     this.digibrain = opcoes.digibrain ?? false;
+    this.decidirNaComida = opcoes.decidirNaComida ?? false;
   }
 
   // ------------------------------------------------------------ o dono
@@ -96,6 +103,7 @@ export class MotorCorpoMundo extends MotorCorpo {
     this.mundo.deixarComida(tick, tipo, x, y);
     this.estado = { ...this.estado, ultimoCuidado: tick, totalCuidados: this.estado.totalCuidados + 1 };
     this.politica.receberAcaoDono("alimentar", tick);
+    if (this.decidirNaComida) this.proximaDecisao = Math.min(this.proximaDecisao, tick);
   }
 
   override aplicarEvento(e: EventoCorpo): void {

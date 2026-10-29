@@ -115,6 +115,7 @@ from .config import CONFIG_BANHEIRO, CONFIG_PQP_MUNDO, ConfigBanheiro, ConfigDon
 from .config import CONFIG_PALADAR, ConfigPaladar
 from .config import CONFIG_FRUTA_AO_LADO, ConfigFrutaAoLado
 from .config import CONFIG_CONTRATO, ConfigContrato
+from .config import CONFIG_DECISAO_NA_COMIDA, ConfigDecisaoNaComida
 from . import contrato as ct
 from .config import ConfigOlfato, ConfigOuvido, ConfigSentidos
 from .corpo import leitura_orgao
@@ -997,7 +998,7 @@ class MotorMundo(MotorFrutas):
     def __init__(self, *a, cfg_mundo: ConfigMundo | None = None, efeito_frutas: dict | None = None, mundo: "Mundo | None" = None,
                  entrada_mundo: int = 0, cfg_banheiro: ConfigBanheiro | None = None, cfg_pqp: ConfigPetQuePensaMundo | None = None,
                  cfg_paladar: ConfigPaladar | None = None, cfg_fruta_ao_lado: ConfigFrutaAoLado | None = None,
-                 cfg_contrato: ConfigContrato | None = None, **kw) -> None:
+                 cfg_contrato: ConfigContrato | None = None, cfg_decisao_comida: ConfigDecisaoNaComida | None = None, **kw) -> None:
         super().__init__(*a, **kw)
         self.cct = cfg_contrato or CONFIG_CONTRATO
         if not isinstance(self.cct, ConfigContrato):
@@ -1011,6 +1012,9 @@ class MotorMundo(MotorFrutas):
         self.cfal = cfg_fruta_ao_lado or CONFIG_FRUTA_AO_LADO
         if not isinstance(self.cfal, ConfigFrutaAoLado):
             raise TypeError(f"cfg_fruta_ao_lado e uma ConfigFrutaAoLado: {self.cfal!r}")
+        self.cdc = cfg_decisao_comida or CONFIG_DECISAO_NA_COMIDA
+        if not isinstance(self.cdc, ConfigDecisaoNaComida):
+            raise TypeError(f"cfg_decisao_comida e uma ConfigDecisaoNaComida: {self.cdc!r}")
         if not self.cmf.ligada:
             if efeito_frutas is not None or mundo is not None or entrada_mundo:
                 raise ValueError("efeito_frutas, mundo e entrada_mundo so existem com o mundo ligado")
@@ -1024,6 +1028,8 @@ class MotorMundo(MotorFrutas):
                 raise ValueError("a fruta ao lado (ConfigFrutaAoLado) exige o mundo fisico (ConfigMundo.ligada)")
             if self.cct.ligada:
                 raise ValueError("o contrato da P4 (ConfigContrato) exige o mundo fisico (ConfigMundo.ligada)")
+            if self.cdc.ligada:
+                raise ValueError("a decisao na comida (ConfigDecisaoNaComida) exige o mundo fisico (ConfigMundo.ligada)")
             return                                     # desligado: o MotorFrutas byte a byte (nem embrulho, nem Mundo)
         if self.cf.ligada or self.cb.ligada:
             raise ValueError("o mundo substitui o cenario do N4 e da A1: ConfigFrutas e ConfigBola desligadas com ConfigMundo.ligada")
@@ -1785,6 +1791,8 @@ class MotorMundo(MotorFrutas):
         self.deixadas.append({"tick": self._tm(tick), "id": c["id"], "tipo": tipo, "x": x, "y": y, "pet": self.pet})
         # contato, como o alimentar de hoje: zera o tempo sem cuidado, soma um cuidado, vinculo e politica recebem `alimentar`
         self._contato(AcaoUsuario.ALIMENTAR, tick)
+        if self.cdc.ligada:                         # a decisao na comida: o pet decide ja no proximo passo (so o momento da decisao)
+            self._proxima_decisao = min(self._proxima_decisao, tick)
 
     def _aplicar_deixar_fruta(self, tipo: str, x: int, y: int) -> None:
         """A fruta ao lado: a racao de referencia e a ultima racao deixada pelo dono neste tick (sem ela, falha alto: a fruta vai logo

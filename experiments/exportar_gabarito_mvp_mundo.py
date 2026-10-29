@@ -84,6 +84,11 @@ def vida(nome: str, cerebro: str, dono: str, lugar: str, semente: int, cm=CM) ->
     fm = (lambda p, cfg, s: MotorMundoCorpoGravado(p, cfg, s, obediencia_desligada=True, cfg_mundo=cm, cfg_corpo=cc))  # noqa: E731
     d = DonoComLugar(criar_dono(dono), lugar, semente, dono, cm)
     m = simular_vida_mundo(dono, d, politica, semente, DIAS, 16 * DIAS, fm, rotulo_dono=dono).motor
+    return retrato(m, nome, cerebro, dono, lugar, semente)
+
+
+def retrato(m, nome: str, cerebro: str, dono: str, lugar: str, semente: int) -> dict:
+    """o que o gabarito guarda de uma vida pronta (tambem o da decisao na comida, experiments/exportar_gabarito_decisao_na_comida.py)"""
     resumo = m.resumo_mundo_fisico()
     del resumo["rngs"]
     proximos = {}
