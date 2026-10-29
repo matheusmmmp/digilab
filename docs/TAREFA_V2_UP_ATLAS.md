@@ -90,3 +90,35 @@ quadros); trocar o mapa forma → Digimon; a forma sombria (continua o véu roxo
   músicas e a arte das arenas) seguem a mesma regra dos sprites: `docs/UI_GUIDELINES.md`, seção 5.1, com a procedência registrada, fora do
   git, com o crédito, e o e2e sem eles.
 - **A pilha não muda** (Matheus, 2026-10-29): seção 3.
+
+## 10. O que foi feito (2026-10-29, worker Claude Code, Sonnet 5.5)
+
+- **Gerador** `Assets/gerar_atlas_up_clipes.py` (fora do git) → `Assets/digilab_atlas_up_clipes.png/.json`: 76 sprites (as 60 formas, os NPCs, os
+  bots e o `guia` com export), 76 Digimon, 57 formas com `Evol`, 3.380 quadros únicos de 3.858. Sai com erro se forma, NPC ou bot não
+  tiver export ou `Idle` (exceções listadas: `bot_oraculo` e `guia`, que seguem no atlas atual). PNG de 2048×13777 (22 MB).
+- **`atlas.ts`:** `CLIPES_UP = false`; `quadroDoClipe` (pela soma das durações), `quadroAgora(a, nome, parado, clipe, t0)`,
+  `desenharSprite(..., { clipe })`, `juntarClipes`. Desligada, o app não pede o atlas de clipes e desenha como antes. Ligada, atlas de clipes
+  ausente ou inválido vira `erro` e o aviso "Atlas de sprites não carregou." (e2e novo, sem assets). `vite.config.ts` e `ROTAS_REMOTAS`
+  ganharam só as duas entradas novas.
+- **Testes:** `test/atlas_clipes.test.ts` com `test/atlas_clipes_sintetico.json` (sem PNG da Bandai).
+- **Critérios:** (1) o gerador cumpre; (2) 42 capturas antes/depois iguais com a chave desligada, `lutar-medalhas` em 1280 só na segunda
+  tentativa (registro); (3) teste de unidade, e o palco de 390 px do Pet e a Revelação não cortam o sprite com `?clipes_up=1`; (4) e2e novo; (5) nota
+  na `UI_GUIDELINES.md`; (6) a tabela abaixo.
+- **Limites vistos com a chave ligada** (ver o registro): as caixas chegam a 298×210, o pet do palco do Pet sai menor (a escala é pela
+  altura da caixa) e as silhuetas da árvore de evolução saem pequenas na caixa. Não há capturas da luta: não existe captura estática dela.
+
+### Proposta: onde entram `Run`, `Attack_1`, `Stun` e `Die` (sem código)
+
+| clipe | onde | como | custo |
+|---|---|---|---|
+| `Run` (loop) | o pet andando na cena do Pet (`cena3d.ts`, `PalcoPet.tsx`), quando ele vai ao comedouro ou ao brinquedo | trocar `Idle` por `Run` enquanto a posição muda; espelhar pelo sentido | baixo; só apresentação |
+| `Run` | a luta (`PalcoLuta.tsx`), na aproximação | entre o `q` de início e o primeiro golpe | médio: pede tempo de cena que a luta não tem |
+| `Attack_1` (uma vez) | a luta, no golpe de cada lutador | tocar no tick do ataque do log; voltar ao `Idle` | médio: ligar ao evento do log sem mudá-lo |
+| `Attack_1` | o brincar e o treino no Pet | uma vez ao acertar o treino | baixo |
+| `Stun` (uma vez) | a luta, quando o lutador leva dano | no evento de dano | médio, igual ao ataque |
+| `Die` (uma vez, segura o último) | a luta, no KO; o `ModalResultado` da derrota | tocar e parar no último quadro | baixo |
+| `Die` | a morte de um pet no Pet, se a mecânica existir | — | não recomendo agora: depende de mecânica |
+
+**Recomendação:** `Run` na cena do Pet e `Die` na derrota primeiro (só apresentação, sem tocar no log); `Attack_1` e `Stun` na luta junto
+com a UP-ARENA. **O custo de errar é baixo** (volta com a chave). Decisões do Matheus: onde ligar cada clipe e quando ligar `CLIPES_UP` por
+padrão (recomendo o `Idle`, depois de ver as capturas com a chave ligada).

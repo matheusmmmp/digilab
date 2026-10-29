@@ -1,7 +1,7 @@
 /// <reference types="vitest/config" />
 /* Vite + React (TAREFA_FRONT_TS, Etapa 3; React no lugar do Preact desde TAREFA_V2_FRONT_REACT). O build sai em web/dist/ (nao versionado) com caminhos relativos,
    para o servidor_local.py servir em /v1/web/dist/. O atlas do Digimon UP fica FORA do repositorio
-   (D:/Trab/digilab/Assets): a pagina pede ../../../Assets/digilab_atlas_up.json, que no servidor local cai em
+   (D:/Trab/digilab/Assets): a pagina pede ../../../Assets/digilab_atlas_up.json (e, com a chave CLIPES_UP, digilab_atlas_up_clipes.json), que no servidor local cai em
    /Assets/ e no modo dev e servido por este config (so os arquivos do atlas e da decoracao listada em decoracao_nomes.json, nada mais). */
 import { createReadStream, existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -14,6 +14,7 @@ const ASSETS = fileURLToPath(new URL("../../../Assets/", import.meta.url));
 const DECORACAO: string[] = JSON.parse(readFileSync(new URL("./decoracao_nomes.json", import.meta.url), "utf8")).pecas;
 const ATLAS: Record<string, string> = {
   "/Assets/digilab_atlas_up.json": "application/json", "/Assets/digilab_atlas_up.png": "image/png",
+  "/Assets/digilab_atlas_up_clipes.json": "application/json", "/Assets/digilab_atlas_up_clipes.png": "image/png",
   "/Assets/digilab_decoracao_up.json": "application/json",
   ...Object.fromEntries(DECORACAO.map(n => [`/Assets/decoracao_up/${n}.png`, "image/png"])),
 };

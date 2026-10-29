@@ -1,0 +1,14 @@
+{
+  "versao": 1,
+  "fonte": "sintetico, para o teste de unidade (sem PNG da Bandai)",
+  "atlas": "sintetico.png",
+  "sprites": {
+    "forma_a": {
+      "digimon": "Sintetico", "caixa": [20, 10],
+      "clipes": {
+        "Idle": { "quadros": [[0, 0, 4, 4, 1, 6], [5, 0, 4, 4, 1, 6], [10, 0, 0, 0, 0, 0]], "ms": [100, 50, 200], "loop": true },
+        "Die": { "quadros": [[0, 5, 4, 4, 2, 6], [5, 5, 4, 4, 2, 6]], "ms": [300, 100], "loop": false }
+      }
+    }
+  }
+}
