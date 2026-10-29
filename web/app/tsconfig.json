@@ -17,5 +17,5 @@
     "noEmit": true,
     "skipLibCheck": true
   },
-  "include": ["motor/**/*.ts"]
+  "include": ["motor/**/*.ts", "arena/**/*.ts"]
 }

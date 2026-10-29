@@ -1,8 +1,8 @@
 # TAREFA V2 — UP-ARENA: a arena em tempo real no jogo web (2026-10-29)
 
 Coordenador: sessão de coordenação da integração UP (Claude Code). Worker: Claude Code, Opus 5.5. Worktree e branch: `v2-up-arena`.
-Status: ETAPA 0 ENTREGUE, esperando o Matheus (seção 10); o porte não começou (D1, D2, D3 e D5 decididas; a UP-ATLAS e a UP-SOM
-na `main`, #441 e #440).
+Status: PORTE ENTREGUE, esperando a revisão e o merge do Matheus (etapa 0 na seção 10, porte na seção 11; D1–D5 e P1–P4 decididas;
+a UP-ATLAS e a UP-SOM na `main`, #441 e #440).
 
 Categoria: implementacao. Origem: Matheus, 2026-10-29: `D:\Trab\digilab\remaster\LEVANTAMENTO_INTEGRACAO.md`, seção 4,
 `D:\Trab\digilab\remaster\arena_equilibrio.md` e o protótipo `remaster/fonte/site/arena.html` (publicado em
@@ -92,6 +92,13 @@ D1, D2 e D5 antes de começar (com a recomendação do coordenador). Depois da e
   determinística, com semente. O item 5 da seção 3 vale só no ramo "só web".
 - **D5 DECIDIDA (idem):** os números do EQ e das arenas ficam PROPOSTOS como estão até o Matheus jogar; sem rodada de calibração.
 - **A pilha não muda** (Matheus, 2026-10-29): seção 3.
+- **P1 a P4 DECIDIDAS (Matheus, 2026-10-29, no chat da coordenação, "aceitou as recomendações P1 a P4 da etapa 0"):**
+  - **P1:** o porte é validado primeiro pela paridade com o protótipo, com a RNG de sequência única só em teste; só depois os fluxos
+    se separam;
+  - **P2:** o elenco são os 280 Digimon do atlas da arena;
+  - **P3:** o harness recuperado vai para `D:\Trab\digilab\remaster\fonte\scripts_arena\harness_equilibrio.js`, fora do git (copiado
+    em 2026-10-29, com as saídas em `harness_equilibrio_resultados.txt`);
+  - **P4:** o recuo da `Skill_1` para a `Attack_1` fica, agora explícito e com aviso.
 
 ## 10. Etapa 0: o resultado (worker, Claude Code, Opus 5.5, 2026-10-29)
 
@@ -226,3 +233,80 @@ arena (`sons_arena.json`) fica para depois: a seção 6 não o pede, e a arena p
   worktree, por isso não copiei. Recomendo que sim: hoje ele existe só na pasta de notas e no transcrito.
 - **P4. A `Skill_1` sem tag no atlas (22 Digimon):** manter a regra do protótipo (anima e conta o tempo do `Attack_1`), agora explícita e
   avisada uma vez, ou tratar como erro? Recomendo manter, porque é o que a medição mediu, e a paridade do passo A depende disso.
+
+## 11. O porte: o resultado (worker, Claude Code, Opus 5.5, 2026-10-29)
+
+Feito pelos itens 1 a 4 da seção 3, com o desenho da seção 10.4 e as decisões P1 a P4. O item 5 não se aplica (D2: só web).
+
+### 11.1 O que entrou
+
+- **A simulação, sem DOM** (`web/app/arena/`), com o `tsconfig.json` incluindo `arena/**/*.ts`:
+  - `sim.ts` é o porte do `arena.html`, na mesma ordem de contas e de sorteios;
+  - `cenas.ts` traz as 8 arenas, só a geometria e as regras;
+  - `nucleo.ts` traz geometria, obstáculos e dano do ambiente;
+  - `dados.ts` traz a conferência dos JSON, que falha alto, e os recuos explícitos;
+  - `rng.ts` traz os fluxos `ia`, `combate`, `cena` e `visual`, cada um um mulberry32 semeado por `derivarSemente("arena", semente, fluxo)`.
+    A sequência única fica só para teste e medição.
+  - `medicao.ts` é o harness recuperado, sem DOM;
+  - `constantes.ts` traz todos os números, PROPOSTOS, com a fonte.
+- **O passo é fixo, de 16 ms.** A entrada do jogador é evento, e a saída são eventos com tipo. Nada toca no motor do pet, no log nem no save.
+- **A tela:** `src/telas/lutar/arena_tr/` (`TelaArenaTempoReal.tsx`, `desenho.ts`, `log.ts`), mais `src/arenaTempoReal.ts` (a chave e os
+  dados) e `src/estilo/arena_tr.css`.
+  - Funciona atrás da chave desligada `ARENA_TEMPO_REAL`, com `?arena_tr=1` ligando só naquela aba, como o `?clipes_up=1`.
+  - A rota é `#/lutar/tempo-real`, em tela cheia. Com a chave ligada, um botão "Arena em tempo real" aparece no destino Lutar.
+  - Os modos são jogador × CPU e CPU × CPU, com a "Revanche (mesma semente)".
+  - Avisos visíveis: dados que não carregaram, arte que não carregou e, numa caixa recolhida, os recuos da P4.
+  - O `App.tsx` ganha 15 linhas, todas sob `arenaTrLigada()`. `TelaArena.tsx`, `TelaLuta.tsx`, `PalcoLuta.tsx` e `combate_v2` não mudam.
+  - A arena vai muda: o som não entrou, porque a seção 6 não o pede.
+- **Os dados ficam fora do git.** `D:\Trab\digilab\Assets\gerar_arena_up.py` gera `Assets\arena_up\` a partir de `remaster/`: 512
+  arquivos, 73 MB, com `dados/manifesto.json` guardando o sha256 de cada um. São servidos pelo `vite.config.ts` e pelo
+  `servidor_local.py`, no modo remoto só por nome simples (`tests/test_servidor_remoto.py`).
+- **Os testes:**
+  - `web/app/test/arena.test.ts` cobre o determinismo por semente nas 8 arenas, os fluxos independentes, a entrada do jogador refeita, a
+    conferência que falha alto, os recuos, o status e a paridade nos dados reais (pulada se `Assets/arena_up` faltar);
+  - `web/app/test/arena_sem_dom.test.mjs` confere a arena sem DOM, sem `Math.random` e sem importar nada de fora;
+  - os dados sintéticos versionados ficam em `web/app/test/arena_sintetico.json`;
+  - há 3 e2e em `e2e/jogo.spec.ts`: a chave desligada, a luta inteira com a revanche igual, e o aviso sem dados.
+- **A medição:** `web/app/scripts/medir_arena.ts`, no Node 24, sem dependência nova. Ela grava `web/app/scripts/medicoes/arena_unico.json`
+  e `arena_fluxos.json`; o gabarito do passo A é `web/app/scripts/arena_gabarito_prototipo.json`.
+
+### 11.2 Passo A: a paridade com o protótipo
+
+Com a sequência única, o porte em Node dá **exatamente** o que o harness deu no Chrome (`node scripts/medir_arena.ts --modo unico`, 17 s,
+"tudo igual ao gabarito"):
+- as 8 arenas na semente 7 (duração, p90, sem fim, ambiente, azul, quedas do ringue, tiros bloqueados, runas);
+- o campo nas sementes 42, 99 e 123;
+- o rodízio por estágio nas sementes 7–8 (à distância, corpo a corpo, desvio, faixa, tempo médio, sem fim);
+- os estágios (73, 66, 82, 84, 95%) e os níveis (56, 40, 15%).
+
+O Node e o Chrome não divergiram em nenhuma luta dessas rodadas.
+
+### 11.3 Passo B: os fluxos do jogo, comparados em distribuição (sem calibrar, D5)
+
+`node scripts/medir_arena.ts --modo fluxos` (`arena_fluxos.json`):
+
+| medida | sequência única (o documento e o passo A) | porte com fluxos |
+|---|---|---|
+| arenas, semente 7: duração | 90–103 s | 92–103 s |
+| arenas, semente 7: sem fim | 0 | 0 |
+| arenas, semente 7: ambiente (Coliseu, Caverna, Ringue) | 4,5–8,1% | 5,8–8,7% |
+| arenas, semente 7: quedas do ringue por luta | 2,8 | 2,4 |
+| arenas, semente 42: duração; ambiente; quedas | — | 90–108 s; 4,8–8,0%; 1,9 |
+| azul vence, por arena, sementes 7 e 42 | 6–13 de 20 | 6–11 de 20 |
+| estágios: Champion>Rookie, Ultimate>Champion, Mega>Ultimate, Ultimate>Rookie, Mega>Rookie | 73, 66, 82, 84, 95% | 73, 71, 71, 88, 97% |
+| níveis: Champion nv1 contra Rookie nv2, nv3, nv5 | 56, 40, 15% | 58, 40, 17% |
+| rodízio: à distância / corpo a corpo, de Bebê II a Mega | 48/54, 52/47, 45/59, 50/51, 48/54% | 50/50, 49/51, 45/58, 52/47, 46/59% |
+| rodízio: faixa de vitória | 34–68% | 30–79% (Mega 31–79%) |
+| rodízio: desvio | 0,061–0,095 | 0,072–0,116 |
+
+As arenas continuam dentro das metas do documento. No rodízio, a faixa e o desvio são maiores com os fluxos: a meta de "todos entre ~35%
+e ~65%" não é atingida em nenhum estágio. Não medi se isso é ruído de amostra (4 lutas por par) ou efeito de separar os fluxos.
+Registrado como está, sem ajuste (D5).
+
+### 11.4 As entregas conferidas
+
+- `npm test`: 638 passados (56 arquivos).
+- `npm run tipos`: limpo.
+- `npm run e2e`: ver o relato do PR.
+- `pytest tests/test_servidor_remoto.py`: 14 passados.
+- O `package.json` e o `package-lock.json` não mudaram.

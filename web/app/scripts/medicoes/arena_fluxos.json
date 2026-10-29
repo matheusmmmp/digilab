@@ -1,0 +1,688 @@
+{
+ "modo": "fluxos",
+ "gerado_por": "web/app/scripts/medir_arena.ts",
+ "node": "v24.19.0",
+ "dados": {
+  "status.json": "56aaf84b434505c581806476e10270792833794a908278c6516cb074576056e0",
+  "golpes.json": "5553b0d8afd08c852d1ba30e1a12f608000b1d88aa39109459246db9841e9a98",
+  "atributos.json": "25e8e4bce8c2fca54dd156f5a4ad2f6789ee0d9687ffd5dcf7c03d6d8f1c5236",
+  "atlas.json": "ae439b7d3907c5461f9e998834376b4e38f3678f3ded4cf29e3e65701bafc46f"
+ },
+ "recuos": {
+  "tag": 22,
+  "semGolpe": 10,
+  "semStatus": 39
+ },
+ "arenas_semente_7": {
+  "campo": {
+   "lutas": 20,
+   "dur": 101,
+   "p90": 110,
+   "timeouts": 0,
+   "ambPct": 0,
+   "azul": "9/20",
+   "ringue": 0,
+   "bloq": 0,
+   "pilar": 0,
+   "runa": 0,
+   "caiuAmb": 0,
+   "errou": 6.3
+  },
+  "coliseu": {
+   "lutas": 20,
+   "dur": 92,
+   "p90": 102,
+   "timeouts": 0,
+   "ambPct": 6.8,
+   "azul": "10/20",
+   "ringue": 0,
+   "bloq": 0,
+   "pilar": 0,
+   "runa": 0,
+   "caiuAmb": 0.4,
+   "errou": 5.5
+  },
+  "floresta": {
+   "lutas": 20,
+   "dur": 103,
+   "p90": 122,
+   "timeouts": 0,
+   "ambPct": 0,
+   "azul": "10/20",
+   "ringue": 0,
+   "bloq": 5.8,
+   "pilar": 0,
+   "runa": 0,
+   "caiuAmb": 0,
+   "errou": 5.6
+  },
+  "praia": {
+   "lutas": 20,
+   "dur": 102,
+   "p90": 112,
+   "timeouts": 0,
+   "ambPct": 0,
+   "azul": "11/20",
+   "ringue": 0,
+   "bloq": 5.1,
+   "pilar": 0,
+   "runa": 0,
+   "caiuAmb": 0,
+   "errou": 2
+  },
+  "deserto": {
+   "lutas": 20,
+   "dur": 103,
+   "p90": 120,
+   "timeouts": 0,
+   "ambPct": 0,
+   "azul": "9/20",
+   "ringue": 0,
+   "bloq": 0,
+   "pilar": 0,
+   "runa": 0,
+   "caiuAmb": 0,
+   "errou": 9.8
+  },
+  "castelo": {
+   "lutas": 20,
+   "dur": 98,
+   "p90": 107,
+   "timeouts": 0,
+   "ambPct": 0,
+   "azul": "11/20",
+   "ringue": 0,
+   "bloq": 0,
+   "pilar": 4.3,
+   "runa": 3.5,
+   "caiuAmb": 0,
+   "errou": 4.3
+  },
+  "caverna": {
+   "lutas": 20,
+   "dur": 92,
+   "p90": 110,
+   "timeouts": 0,
+   "ambPct": 8.7,
+   "azul": "7/20",
+   "ringue": 0,
+   "bloq": 0,
+   "pilar": 0,
+   "runa": 0,
+   "caiuAmb": 0.5,
+   "errou": 5.5
+  },
+  "ringue": {
+   "lutas": 20,
+   "dur": 92,
+   "p90": 102,
+   "timeouts": 0,
+   "ambPct": 5.8,
+   "azul": "8/20",
+   "ringue": 2.4,
+   "bloq": 0,
+   "pilar": 0,
+   "runa": 0,
+   "caiuAmb": 0.4,
+   "errou": 2.8
+  }
+ },
+ "arenas_semente_42": {
+  "campo": {
+   "lutas": 20,
+   "dur": 99,
+   "p90": 119,
+   "timeouts": 0,
+   "ambPct": 0,
+   "azul": "9/20",
+   "ringue": 0,
+   "bloq": 0,
+   "pilar": 0,
+   "runa": 0,
+   "caiuAmb": 0,
+   "errou": 5.4
+  },
+  "coliseu": {
+   "lutas": 20,
+   "dur": 90,
+   "p90": 102,
+   "timeouts": 0,
+   "ambPct": 6.6,
+   "azul": "6/20",
+   "ringue": 0,
+   "bloq": 0,
+   "pilar": 0,
+   "runa": 0,
+   "caiuAmb": 0.3,
+   "errou": 4
+  },
+  "floresta": {
+   "lutas": 20,
+   "dur": 105,
+   "p90": 127,
+   "timeouts": 0,
+   "ambPct": 0,
+   "azul": "8/20",
+   "ringue": 0,
+   "bloq": 7,
+   "pilar": 0,
+   "runa": 0,
+   "caiuAmb": 0,
+   "errou": 5.2
+  },
+  "praia": {
+   "lutas": 20,
+   "dur": 108,
+   "p90": 124,
+   "timeouts": 0,
+   "ambPct": 0,
+   "azul": "7/20",
+   "ringue": 0,
+   "bloq": 9.3,
+   "pilar": 0,
+   "runa": 0,
+   "caiuAmb": 0,
+   "errou": 4.4
+  },
+  "deserto": {
+   "lutas": 20,
+   "dur": 106,
+   "p90": 130,
+   "timeouts": 0,
+   "ambPct": 0,
+   "azul": "11/20",
+   "ringue": 0,
+   "bloq": 0,
+   "pilar": 0,
+   "runa": 0,
+   "caiuAmb": 0,
+   "errou": 11.9
+  },
+  "castelo": {
+   "lutas": 20,
+   "dur": 96,
+   "p90": 116,
+   "timeouts": 0,
+   "ambPct": 0,
+   "azul": "10/20",
+   "ringue": 0,
+   "bloq": 0,
+   "pilar": 4.3,
+   "runa": 3.6,
+   "caiuAmb": 0,
+   "errou": 4.3
+  },
+  "caverna": {
+   "lutas": 20,
+   "dur": 92,
+   "p90": 105,
+   "timeouts": 0,
+   "ambPct": 8,
+   "azul": "9/20",
+   "ringue": 0,
+   "bloq": 0,
+   "pilar": 0,
+   "runa": 0,
+   "caiuAmb": 0.3,
+   "errou": 5.6
+  },
+  "ringue": {
+   "lutas": 20,
+   "dur": 93,
+   "p90": 104,
+   "timeouts": 0,
+   "ambPct": 4.8,
+   "azul": "6/20",
+   "ringue": 1.9,
+   "bloq": 0,
+   "pilar": 0,
+   "runa": 0,
+   "caiuAmb": 0.3,
+   "errou": 2.5
+  }
+ },
+ "campo_por_semente": {
+  "42": {
+   "azul": "9/20",
+   "dur": 99
+  },
+  "99": {
+   "azul": "7/20",
+   "dur": 97
+  },
+  "123": {
+   "azul": "11/20",
+   "dur": 93
+  }
+ },
+ "rodizio_sementes_7_8": {
+  "InTraining2": {
+   "lutas": 364,
+   "tempoMedio": 103,
+   "semFim": 6,
+   "dist": "0.50",
+   "corpo": "0.50",
+   "desvio": "0.091",
+   "faixa": "0.32–0.70",
+   "tabela": [
+    {
+     "n": "Koromon",
+     "wr": 0.7,
+     "proj": true
+    },
+    {
+     "n": "Minomon",
+     "wr": 0.6,
+     "proj": true
+    },
+    {
+     "n": "Poromon",
+     "wr": 0.59,
+     "proj": true
+    },
+    {
+     "n": "Viximon",
+     "wr": 0.56,
+     "proj": false
+    },
+    {
+     "n": "Gigimon",
+     "wr": 0.54,
+     "proj": false
+    },
+    {
+     "n": "Bukamon",
+     "wr": 0.51,
+     "proj": true
+    },
+    {
+     "n": "Motimon",
+     "wr": 0.48,
+     "proj": true
+    },
+    {
+     "n": "Upamon",
+     "wr": 0.48,
+     "proj": false
+    },
+    {
+     "n": "Yokomon",
+     "wr": 0.47,
+     "proj": true
+    },
+    {
+     "n": "Nyaromon",
+     "wr": 0.46,
+     "proj": false
+    },
+    {
+     "n": "Tokomon",
+     "wr": 0.46,
+     "proj": false
+    },
+    {
+     "n": "Tanemon",
+     "wr": 0.44,
+     "proj": true
+    },
+    {
+     "n": "Tsunomon",
+     "wr": 0.39,
+     "proj": true
+    },
+    {
+     "n": "Gummymon",
+     "wr": 0.32,
+     "proj": true
+    }
+   ]
+  },
+  "Rookie": {
+   "lutas": 420,
+   "tempoMedio": 105,
+   "semFim": 2,
+   "dist": "0.49",
+   "corpo": "0.51",
+   "desvio": "0.115",
+   "faixa": "0.30–0.66",
+   "tabela": [
+    {
+     "n": "Salamon",
+     "wr": 0.66,
+     "proj": true
+    },
+    {
+     "n": "Gomamon",
+     "wr": 0.63,
+     "proj": true
+    },
+    {
+     "n": "Veemon",
+     "wr": 0.63,
+     "proj": false
+    },
+    {
+     "n": "Wormmon",
+     "wr": 0.59,
+     "proj": true
+    },
+    {
+     "n": "Renamon",
+     "wr": 0.57,
+     "proj": true
+    },
+    {
+     "n": "Gabumon",
+     "wr": 0.55,
+     "proj": false
+    },
+    {
+     "n": "Terriermon",
+     "wr": 0.55,
+     "proj": true
+    },
+    {
+     "n": "Agumon",
+     "wr": 0.54,
+     "proj": true
+    },
+    {
+     "n": "Palmon",
+     "wr": 0.54,
+     "proj": false
+    },
+    {
+     "n": "Tentomon",
+     "wr": 0.46,
+     "proj": false
+    },
+    {
+     "n": "Guilmon",
+     "wr": 0.41,
+     "proj": true
+    },
+    {
+     "n": "Armadillomon",
+     "wr": 0.39,
+     "proj": false
+    },
+    {
+     "n": "Hawkmon",
+     "wr": 0.36,
+     "proj": true
+    },
+    {
+     "n": "Patamon",
+     "wr": 0.31,
+     "proj": true
+    },
+    {
+     "n": "Biyomon",
+     "wr": 0.3,
+     "proj": true
+    }
+   ]
+  },
+  "Champion": {
+   "lutas": 364,
+   "tempoMedio": 107,
+   "semFim": 7,
+   "dist": "0.45",
+   "corpo": "0.58",
+   "desvio": "0.098",
+   "faixa": "0.37–0.67",
+   "tabela": [
+    {
+     "n": "Stingmon",
+     "wr": 0.67,
+     "proj": false
+    },
+    {
+     "n": "Gargomon",
+     "wr": 0.65,
+     "proj": false
+    },
+    {
+     "n": "Growlmon",
+     "wr": 0.62,
+     "proj": true
+    },
+    {
+     "n": "Angemon",
+     "wr": 0.56,
+     "proj": false
+    },
+    {
+     "n": "Garurumon",
+     "wr": 0.56,
+     "proj": false
+    },
+    {
+     "n": "ExVeemon",
+     "wr": 0.52,
+     "proj": true
+    },
+    {
+     "n": "Kabuterimon",
+     "wr": 0.51,
+     "proj": true
+    },
+    {
+     "n": "Gatomon",
+     "wr": 0.48,
+     "proj": false
+    },
+    {
+     "n": "Aquilamon",
+     "wr": 0.43,
+     "proj": true
+    },
+    {
+     "n": "Greymon",
+     "wr": 0.43,
+     "proj": true
+    },
+    {
+     "n": "Birdramon",
+     "wr": 0.41,
+     "proj": true
+    },
+    {
+     "n": "Togemon",
+     "wr": 0.4,
+     "proj": true
+    },
+    {
+     "n": "Kyubimon",
+     "wr": 0.38,
+     "proj": true
+    },
+    {
+     "n": "Ikkakumon",
+     "wr": 0.37,
+     "proj": true
+    }
+   ]
+  },
+  "Ultimate": {
+   "lutas": 364,
+   "tempoMedio": 110,
+   "semFim": 5,
+   "dist": "0.52",
+   "corpo": "0.47",
+   "desvio": "0.072",
+   "faixa": "0.32–0.61",
+   "tabela": [
+    {
+     "n": "Lillymon",
+     "wr": 0.61,
+     "proj": true
+    },
+    {
+     "n": "MetalGreymon",
+     "wr": 0.57,
+     "proj": true
+    },
+    {
+     "n": "Paildramon",
+     "wr": 0.56,
+     "proj": false
+    },
+    {
+     "n": "Garudamon",
+     "wr": 0.55,
+     "proj": true
+    },
+    {
+     "n": "MegaKabuterimon",
+     "wr": 0.55,
+     "proj": true
+    },
+    {
+     "n": "Angewomon",
+     "wr": 0.54,
+     "proj": true
+    },
+    {
+     "n": "Zudomon",
+     "wr": 0.54,
+     "proj": true
+    },
+    {
+     "n": "Rapidmon",
+     "wr": 0.5,
+     "proj": true
+    },
+    {
+     "n": "WereGarurumon",
+     "wr": 0.48,
+     "proj": false
+    },
+    {
+     "n": "Silphymon",
+     "wr": 0.47,
+     "proj": true
+    },
+    {
+     "n": "Dinobeemon",
+     "wr": 0.44,
+     "proj": false
+    },
+    {
+     "n": "MagnaAngemon",
+     "wr": 0.44,
+     "proj": false
+    },
+    {
+     "n": "Shakkoumon",
+     "wr": 0.44,
+     "proj": false
+    },
+    {
+     "n": "Taomon",
+     "wr": 0.32,
+     "proj": true
+    }
+   ]
+  },
+  "Mega": {
+   "lutas": 420,
+   "tempoMedio": 112,
+   "semFim": 11,
+   "dist": "0.46",
+   "corpo": "0.59",
+   "desvio": "0.116",
+   "faixa": "0.31–0.79",
+   "tabela": [
+    {
+     "n": "HerculesKabuterimon",
+     "wr": 0.79,
+     "proj": false
+    },
+    {
+     "n": "Rosemon",
+     "wr": 0.63,
+     "proj": false
+    },
+    {
+     "n": "MetalGarurumon",
+     "wr": 0.59,
+     "proj": false
+    },
+    {
+     "n": "WarGreymon",
+     "wr": 0.59,
+     "proj": true
+    },
+    {
+     "n": "Sakuyamon",
+     "wr": 0.54,
+     "proj": true
+    },
+    {
+     "n": "MegaGargomon",
+     "wr": 0.53,
+     "proj": true
+    },
+    {
+     "n": "Imperialdramon_FighterMode",
+     "wr": 0.48,
+     "proj": false
+    },
+    {
+     "n": "Phoenixmon",
+     "wr": 0.48,
+     "proj": true
+    },
+    {
+     "n": "SlashAngemon",
+     "wr": 0.47,
+     "proj": true
+    },
+    {
+     "n": "Gallantmon",
+     "wr": 0.46,
+     "proj": false
+    },
+    {
+     "n": "Imperialdramon_DragonMode",
+     "wr": 0.46,
+     "proj": true
+    },
+    {
+     "n": "Magnadramon",
+     "wr": 0.46,
+     "proj": true
+    },
+    {
+     "n": "Seraphimon",
+     "wr": 0.39,
+     "proj": true
+    },
+    {
+     "n": "Vikemon",
+     "wr": 0.33,
+     "proj": true
+    },
+    {
+     "n": "Valkyrimon",
+     "wr": 0.31,
+     "proj": true
+    }
+   ]
+  }
+ },
+ "estagios": {
+  "Champion>Rookie": 73,
+  "Ultimate>Champion": 71,
+  "Mega>Ultimate": 71,
+  "Ultimate>Rookie": 88,
+  "Mega>Rookie": 97
+ },
+ "niveis_champion_nv1_contra_rookie": {
+  "2": 58,
+  "3": 40,
+  "5": 17
+ },
+ "segundos": 16
+}
