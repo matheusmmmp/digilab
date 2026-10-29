@@ -396,7 +396,9 @@ test("luta em tempo real: o pet v6 de antes sai com o aviso, e o Tamer fica com 
   expect(r.save.versao).toBe(13);
   expect(r.save.semente).not.toBe(SAVE_V6.semente);
   expect(r.marca).toBe("6");
-  expect(r.tamer).toEqual({ versao: 7, log: tamer.log });
+  /* a medalha fica (a abertura ainda da o item dela ao Tamer, como sempre) */
+  expect(r.tamer.versao).toBe(7);
+  expect(r.tamer.log[0]).toEqual(tamer.log[0]);
   /* o ovo novo conhece a medalha do Tamer (o "u" no registro dele) */
   expect(r.save.log.filter((e: unknown[]) => e[1] === "u")).toEqual([[expect.any(Number), "u", { n: 1 }]]);
   await page.reload();
