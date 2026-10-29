@@ -1946,10 +1946,12 @@ resultado. Se e como revisá-las é uma questão aberta do Matheus (A4.9).
 - **a única exceção:** as sementes dos testes, sozinhas (101 a 505), dão o modo `fumaca`. A fumaça exige `--saida` e não lê os adendos
   nem o K da reavaliação. É o encanamento dos testes, nunca resultado.
 
-## Adendo 5: a avaliação da L-2, a intenção suspensa no cochilo (2026-10-29, worker D, Claude Code, Opus 5.5)
+## Adendo 5: a avaliação da L-2, a intenção suspensa no cochilo (2026-10-29, worker D, Claude Code, Opus 5.5; APROVADO pelo Matheus em 2026-10-29)
 
-**Status: PROPOSTO.** Registrado antes de qualquer vida. Nenhuma vida da faixa roda sem a conferência do Gerente e a autorização do
-Matheus. Quando rodar, no máximo 4 processos (a máquina).
+**Status: APROVADO pelo Matheus em 2026-10-29,** com o piloto: a faixa 67101 a 67505; o piloto de 10 unidades em 67101 e 67202, com
+K = 5, só para medir o rho; e a regra do K escrita antes do piloto (A5.8). Um K acima de 100 volta ao Matheus com o custo, e as margens
+ficam como a LS-7 decidiu. Registrado antes de qualquer vida. O piloto roda depois de o Gerente conferir o orquestrador, e a avaliação
+depois do K fixado (A5.9). No máximo 4 processos (a máquina), da `main` limpa, uma vez.
 
 **De onde vem:** a seção 7 da `docs/ESPEC_LONGE_L2_DIGIBRAIN_MODULAR.md` (o #436). O Matheus aprovou as decisões LS-1 a LS-7 como
 recomendadas em 2026-10-29. Este adendo repete o desenho e os critérios da seção 7 **sem mudá-los**, e acrescenta só o que a espec deixou
