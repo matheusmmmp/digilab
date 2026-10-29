@@ -1,6 +1,6 @@
 /* Bots (espelho de combate_v2/bots.py e combate_v2/v21/bots.py), sementes de gambits por estagio e
    campanha contra os NPCs (espelho de ConfigCampanha / campanha.py). */
-import { CV, CV21E, FORMAS_AD, LINHA_DA_FORMA, TECNICAS, type Tecnica } from "./constantes.ts";
+import { CV, CV21E, CV21E_TR, FORMAS_AD, LINHA_DA_FORMA, TECNICAS, type Tecnica } from "./constantes.ts";
 import { Cd, Rg, validarLista, type Estilo, type ListaGambits, type RegrasLuta } from "./combate.ts";
 import { NOME_ARQ } from "./nomes.ts";
 import type { Especie, Estagio, Forma, FormaAdultaNormal, Linha, Ramo, TracoCombate } from "./tipos.ts";
@@ -112,7 +112,7 @@ export const BOTS_V21E: Partial<Record<FormaAdultaNormal, ListaGambits>> = Objec
 export const gambitsAdulto = (forma: FormaAdultaNormal, R: RegrasLuta): ListaGambits => {
   const g = gambitsV21D(forma, R);
   if (!temV21E(R)) return g;
-  return R === CV21E ? BOTS_V21E[forma] ?? g : editarV21E(forma, g, R);
+  return R === CV21E || R === CV21E_TR ? BOTS_V21E[forma] ?? g : editarV21E(forma, g, R);
 };
 export const ADOL_V21: Record<Linha, ListaGambits> = {
   brigao: { regras: [Rg(PREP, "esquivar"), Rg(D1, "investida"), Rg(D2, "avancar"), Rg([D0, GA_(40)], "preparar_pesado"), Rg(D0, "golpe_rapido")], final: "defender" },

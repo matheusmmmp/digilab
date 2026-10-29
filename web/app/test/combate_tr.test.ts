@@ -1,23 +1,27 @@
-// A luta em tempo real (docs/ESPEC_COMBATE_TR.md; COMBATE-TR, etapa R1): a chave, o determinismo por semente no Node, as RNG de politica
+// A luta em tempo real (docs/ESPEC_COMBATE_TR.md; COMBATE-TR, etapas R1 e R2): as regras que escolhem o combate, o determinismo por semente no Node, as RNG de politica
 // separadas, as mecanicas do DigiLab em tempo (o parry, a interrupcao do preparo, a esquiva, o Guts, o limite, a carta de Cura, a escala)
 // e o saldo das acoes que o aprendizado vai ler (R2).
-import { afterEach, beforeEach, describe, expect, test } from "vitest";
+import { describe, expect, test } from "vitest";
 import {
-  CTR_TR, CV, CV21, CV21E, Cd, FORMAS_AD, Rg, T_TR, criarLutaTR, estiloBot, jogarTR, ligarCombateTR, lutadorBot, passoTR, perfilNeutro,
-  sementePoliticaTR, type Lutador, type ResultadoLutaTR,
+  CTR_TR, CV, CV21, CV21E, CV21E_TR, Cd, FORMAS_AD, Rg, T_TR, criarLutaTR, estiloBot, jogarLuta, jogarTR, lutadorBot, passoTR, perfilNeutro,
+  regrasDaVersao, sementePoliticaTR, type Lutador, type ResultadoLutaTR,
 } from "../motor/index.ts";
 
 const lista = (regras: ReturnType<typeof Rg>[], final = "defender", eps = 0): Lutador =>
   ({ nome: "teste", estilo: { nome: "teste", gambits: { regras, final }, eps }, cond: perfilNeutro() });
 const resumo = (r: ResultadoLutaTR) => ({ pontosA: r.pontosA, fim: r.fim, passos: r.passos, hp: r.E.L.map(l => l.hp), acoes: r.acoes });
 
-beforeEach(() => ligarCombateTR(true));
-afterEach(() => ligarCombateTR(false));
-
-describe("a chave", () => {
-  test("desligada, a luta em tempo real falha alto", () => {
-    ligarCombateTR(false);
-    expect(() => jogarTR(lutadorBot("duelista", CV21E), lutadorBot("tita", CV21E), 1)).toThrow(/COMBATE_TR/);
+describe("as regras escolhem o combate (a versao do pet e a chave)", () => {
+  test("os pets v13 lutam em tempo real; os v12 e anteriores, por turnos", () => {
+    expect(regrasDaVersao(13)).toBe(CV21E_TR); expect(regrasDaVersao(12)).toBe(CV21E);
+    const A = lutadorBot("duelista", CV21E_TR), B = lutadorBot("tita", CV21E_TR);
+    const tr = jogarLuta(A, B, 1, CV21E_TR), turnos = jogarLuta(lutadorBot("duelista", CV21E), lutadorBot("tita", CV21E), 1, CV21E);
+    expect(tr.tr).toBeDefined(); expect(tr.turnos).toEqual([]); expect(tr.pontosA).toBe(tr.tr!.pontosA);
+    expect(tr.E.L.map(l => l.hp)).toEqual(tr.tr!.E.L.map(l => l.hp));
+    expect(turnos.tr).toBeUndefined(); expect(turnos.turnos.length).toBeGreaterThan(0);
+  });
+  test("as listas dos bots nos v13 sao as da V21E", () => {
+    for (const f of FORMAS_AD) expect(lutadorBot(f, CV21E_TR).estilo.gambits).toEqual(lutadorBot(f, CV21E).estilo.gambits);
   });
 });
 

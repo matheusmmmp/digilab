@@ -206,7 +206,7 @@ function DetalheDesk({ irTreinar }: { irTreinar: () => void }) {
         <span className="campd-ilha-cab"><h2 id="campd-ilha-tit">Nesta ilha</h2><span>{vencidos} de {L.rivais.length} vencidos</span></span>
         <div className="res-nums">
           <div className="res-num"><span className="dl-num">{tent}</span><span>tentativas</span></div>
-          <div className="res-num"><span className="dl-num">{melhor === null ? "—" : `T${melhor}`}</span><span>melhor turno</span></div>
+          <div className="res-num"><span className="dl-num">{melhor === null ? "—" : m.regras?.tempoReal ? `${melhor} s` : `T${melhor}`}</span><span>{m.regras?.tempoReal ? "luta mais curta" : "melhor turno"}</span></div>
           <div className="res-num"><span className="dl-num">{novas}</span><span>regras novas</span></div>
         </div>
         <CartaoArena m={m} Li={Li} />

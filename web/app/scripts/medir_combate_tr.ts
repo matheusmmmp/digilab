@@ -8,10 +8,9 @@ import { writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import os from "node:os";
 import {
-  CTR_TR, CV21E, FORMAS_AD, PASSO_TR_MS, jogarTR, jogarV2, ligarCombateTR, lutadorBot, type Lutador,
+  CTR_TR, CV21E, FORMAS_AD, PASSO_TR_MS, jogarTR, jogarV2, lutadorBot, type Lutador,
 } from "../motor/index.ts";
 
-ligarCombateTR(true);
 const SEMENTES = [101, 202, 303, 404, 505];
 const CLASSICOS = ["aleatorio", "agressivo", "tartaruga", "atirador", "contragolpe", "adaptativo"];
 const pares: [string, Lutador, Lutador][] = [];

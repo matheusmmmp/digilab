@@ -2,7 +2,7 @@
    copiar o registro, filtros por tipo com etiqueta colorida, e o ovo novo numa area de risco separada, com
    confirmacao. A contagem diz o que e evento do registro e o que e linha reconstruida (revisao, item 3). */
 import { useEffect, useRef, useState } from "react";
-import { Motor, NOME_PET, NOME_V2, TPD, type ItemHistorico } from "../../../motor/index.ts";
+import { Motor, NOME_PET, NOME_V2, TPD, type ItemHistorico, duracaoLuta } from "../../../motor/index.ts";
 import { lerLog, type RegistroFala } from "../../falaLivre.ts";
 import { TEXTO_GATILHO } from "../../voz.ts";
 import { useJogo } from "../../jogo.ts";
@@ -61,7 +61,7 @@ function ReplayLuta({ idx, fechar }: { idx: number; fechar: () => void }) {
   return (
     <section className="dl-card reg-replay" aria-labelledby="rep-tit">
       <h2 id="rep-tit" ref={tit} tabIndex={-1}>Replay da luta</h2>
-      <p><b>{A.nomeTela} × {B.nomeTela}</b> · <span className="dl-lcd">D{diaDe(ev[0])} {hhmm(ev[0])}</span> · {txt} em {res.turnos.length} turnos ({res.fim === "ko" ? "nocaute" : "limite de turnos"}).</p>
+      <p><b>{A.nomeTela} × {B.nomeTela}</b> · <span className="dl-lcd">D{diaDe(ev[0])} {hhmm(ev[0])}</span> · {txt} em {duracaoLuta(res)} ({res.fim === "ko" ? "nocaute" : res.tr ? "limite de tempo" : "limite de turnos"}).</p>
       <p className="dl-apoio">Refeita do registro (evento {idx + 1} de {m.log.length}): o pet reconstruído até a luta, o mesmo rival e a mesma semente.</p>
       <ol className="reg-replay-turnos">
         {res.turnos.map(tr => <li key={tr.t}><span className="dl-lcd">T{tr.t}</span><span>{fraseTurno(tr, A, B, null)}</span></li>)}

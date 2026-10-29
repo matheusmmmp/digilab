@@ -264,6 +264,12 @@ export class GambitsPet {
     if (!(novidade > 0 && novidade <= 1)) throw new Error("novidade fora de (0, 1]: " + novidade);
     this.nLutas++;
     const soma: Record<string, number> = {}, cont: Record<string, number> = {};
+    /* a luta em tempo real (pets v13): a acao do pet faz o papel do turno, com o saldo dela ja sobre a vida do comeco (combate_tr) */
+    if (res.tr) for (const a of res.tr.acoes) {
+      if (a.lado !== 0 || typeof a.motivo !== "number" || a.motivo >= usadas.length) continue;
+      const k = usadas[a.motivo];
+      soma[k] = (soma[k] || 0) + a.saldo; cont[k] = (cont[k] || 0) + 1;
+    }
     for (const tr of res.turnos) {
       if (typeof tr.ma !== "number" || tr.ma >= usadas.length) continue;
       const k = usadas[tr.ma], saldo = (tr.dano[1] - tr.dano[0]) / res.E0.L[0].hpMax;

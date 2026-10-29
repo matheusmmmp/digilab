@@ -149,7 +149,7 @@ describe("Fábrica: o registro do Tamer", () => {
     /* o replay so pelo registro do Tamer (texto gravado), com a chave da escala desligada: as mesmas lutas */
     const a = { dados: {} as Record<string, string>, getItem(k: string) { return this.dados[k] ?? null; }, setItem(k: string, v: string) { this.dados[k] = v; } };
     gravarTamer(a, t);
-    expect(JSON.parse(a.dados[CHAVE_TAMER]).versao).toBe(6);
+    expect(JSON.parse(a.dados[CHAVE_TAMER]).versao).toBe(7);
     ligarEscala(false);
     const r = lerTamer(a);
     expect(r.fabrica.map(x => x.lutas.map(l => [l.s, l.venceu, l.res.turnos.length, l.vidaFim, l.trocou]))).toEqual(t.fabrica.map(x => x.lutas.map(l => [l.s, l.venceu, l.res.turnos.length, l.vidaFim, l.trocou])));
@@ -321,7 +321,7 @@ describe("Salão: a tentativa (um pet por estágio) e o recorde no Tamer", () =>
   test("o registro do Tamer lê as versões 1 a 5; evento desconhecido falha", () => {
     const a = { dados: {} as Record<string, string>, getItem(k: string) { return this.dados[k] ?? null; }, setItem(k: string, v: string) { this.dados[k] = v; } };
     for (const v of [1, 2, 3, 4, 5]) { a.dados[CHAVE_TAMER] = JSON.stringify({ versao: v, log: tamer().log }); expect(lerTamer(a).titulo).not.toBeNull(); }
-    a.dados[CHAVE_TAMER] = JSON.stringify({ versao: 7, log: [] });
+    a.dados[CHAVE_TAMER] = JSON.stringify({ versao: 8, log: [] });
     expect(() => lerTamer(a)).toThrow(/versão/);
     expect(hashSemente("fronteira", "salao", 1, 1)).toBe(sementeSalao(1, 1));
   });

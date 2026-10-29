@@ -21,7 +21,8 @@
    treino tipico >= 0,80, sem forma travada. PROPOSTOS. O fator fica aqui quando o lider e um NPC que ja existia (Gazimon 1,3,
    Guardromon 1,6, Myotismon 0,9 na serie, Piedmon 1,6; fora da arena e nos pets v1-v5, os de sempre); os lideres novos tem o
    fator no proprio NPC (bots.CAMPANHA_V6: Youkomon 1,5, MarinBullmon 1,5). */
-import { comCarta, jogarV2, type Desafiado, type EfeitoCarta, type Lutador, type RegrasLuta, type ResultadoLuta } from "./combate.ts";
+import { jogarLuta, curouA } from "./combate_tr/adaptador.ts";
+import { comCarta, type Desafiado, type EfeitoCarta, type Lutador, type RegrasLuta, type ResultadoLuta } from "./combate.ts";
 import type { Tecnica } from "./constantes.ts";
 import { hashSemente } from "./rng.ts";
 
@@ -118,9 +119,9 @@ export function jogarSequencia(A: Lutador, rivalDe: (k: number) => Lutador, max:
   const Ac = comCarta(A, carta), serie: ResultadoLuta[] = [];
   let ini: { hp: number; guts: number } | null = null, cura = carta?.cura ?? null;
   for (let k = 0; k < max; k++) {
-    const res = jogarV2(Ac, rivalDe(k), sementeDaSerie(semente, k), R, ini, desafiado, cura ? [cura, null] : null);
+    const res = jogarLuta(Ac, rivalDe(k), sementeDaSerie(semente, k), R, ini, desafiado, cura ? [cura, null] : null);
     serie.push(res);
-    if (cura && res.turnos.some(t => t.cura)) cura = null;
+    if (cura && curouA(res)) cura = null;
     if (res.pontosA !== 1) break;
     const fim = res.E.L[0];
     ini = { hp: curaEntre > 0 ? Math.min(fim.hpMax, fim.hp + curaEntre * fim.hpMax) : fim.hp, guts: fim.guts };

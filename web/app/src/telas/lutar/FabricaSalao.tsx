@@ -5,7 +5,7 @@
    Tudo sai do registro do Tamer (as tentativas) e dos pets; as lutas nao sao animadas aqui: o resultado aparece no proprio card. */
 import { useMemo, useState } from "react";
 import { ALUGUEIS_FABRICA, DO_ESP, ESTAGIOS_SALAO, FABRICA, LUTAS_SERIE_FABRICA, NOME_ARQ, NOME_ESP, NOME_EST, SALAO, alugueisFabrica, chaveSprite, formaRivalSalao,
-  nomeForma, sementeFabrica, type Estagio, type Forma, type TentativaFabrica } from "../../../motor/index.ts";
+  nomeForma, sementeFabrica, type Estagio, type Forma, type TentativaFabrica, duracaoLuta } from "../../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
 import { useJogo } from "../../jogo.ts";
 import { alugarFabrica, candidatosSalao, estagiosQueFaltam, lutarFabrica, tentarSalao, trocarFabrica, type CandidatoSalao, type OrigemPet } from "../../fronteira.ts";
@@ -32,7 +32,7 @@ function LutasFabrica({ t }: { t: TentativaFabrica }) {
       {[...t.lutas].reverse().slice(0, 6).map(l => (
         <li key={l.k} className={l.venceu ? "vit" : "der"}>
           <span className="dl-lcd">S{Math.floor(l.k / LUTAS_SERIE_FABRICA) + 1}·L{l.k % LUTAS_SERIE_FABRICA + 1}</span>
-          <span>{nomeForma(l.alugado)} × {nomeForma(l.rival)} ({arq(l.rival)}): <b>{l.venceu ? "venceu" : "perdeu"}</b> em {l.res.turnos.length} turnos, com {pct(l.vidaFim)} da vida no fim{l.trocou ? "; trocou por ele" : ""}.</span>
+          <span>{nomeForma(l.alugado)} × {nomeForma(l.rival)} ({arq(l.rival)}): <b>{l.venceu ? "venceu" : "perdeu"}</b> em {duracaoLuta(l.res)}, com {pct(l.vidaFim)} da vida no fim{l.trocou ? "; trocou por ele" : ""}.</span>
         </li>
       ))}
     </ol>
@@ -67,7 +67,7 @@ export function CartaoFabrica({ t, lutando }: { t: Tamer; lutando: boolean }) {
               <small>{p.naSerie === 1 ? "inteiro: a série começa com a vida cheia" : `${pct(atual.vidaAgora)} da vida: sem cura dentro da série`}</small></span>
           </span>
         </div>
-        {u && <p className="fb-ultima" role="status">Luta {u.k + 1}: venceu {nomeForma(u.rival)} ({arq(u.rival)}) em {u.res.turnos.length} turnos.</p>}
+        {u && <p className="fb-ultima" role="status">Luta {u.k + 1}: venceu {nomeForma(u.rival)} ({arq(u.rival)}) em {duracaoLuta(u.res)}.</p>}
         {troca && u && <div className="fb-troca">
           <span>Trocar o alugado pelo rival derrotado? {nomeForma(u.rival)} {atual!.regra.trocaInteira ? "entra com a vida cheia." : "entra com a mesma parte da vida: a troca não cura."}</span>
           <button type="button" className="dl-btn dl-btn--sec fb-trocar" disabled={lutando} onClick={() => agir(trocarFabrica)}>Trocar por {nomeForma(u.rival)} ({arq(u.rival)})</button>

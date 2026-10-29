@@ -34,9 +34,14 @@
    A Fabrica dos v9 (rodada de equilibrio geral, fase 3; motor/fabrica.ts): registro versao 6 (le 1 a 5). O evento "fabrica" ganha o campo
    `v`, a versao das regras da tentativa (VERSOES_FABRICA): sem ele, a Fabrica de antes (V21D, fator 1, a troca nao cura), e as tentativas
    ja gravadas se refazem iguais; as tentativas novas gravam `v: 9` (VERSAO_FABRICA_ATUAL: V21E, o fator dos rivais dos v9, a troca com a
-   vida cheia). Versao desconhecida falha alto. */
+   vida cheia). Versao desconhecida falha alto.
+
+   A Fabrica em tempo real (COMBATE-TR, etapa R2; D-4, decisao do Matheus de 2026-10-29): registro versao 7. As tentativas novas gravam
+   `v: 13` (VERSAO_FABRICA_TR: a luta em tempo real dos pets v13), e o registro 7 so aceita essas. As tentativas antigas (v ausente ou 9)
+   saem do registro no descarte unico 6 (descartarPetsAntigos), com aviso na tela; o recorde da Fabrica recomeca. O resto do Tamer (as
+   medalhas, os itens, o titulo, os recordes das instalacoes, o Salao) fica. Os registros 1 a 6 ainda se leem (com a Fabrica de antes). */
 import {
-  ARENA_POR_ID, CARTA_DA_REVANCHE, CIT, ESTAGIOS_SALAO, INSTALACOES, LUTAS_SERIE_FABRICA, TentativaFabrica, VERSAO_FABRICA, VERSAO_FABRICA_ATUAL, VERSOES_FABRICA, sementeFabrica, sementeSalao, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHAS, MEDALHAS_LIGA, MEDALHA_POR_ID, Motor, NPC, PetMorto, VERSAO_INSTALACOES,
+  ARENA_POR_ID, CARTA_DA_REVANCHE, CIT, ESTAGIOS_SALAO, INSTALACOES, LUTAS_SERIE_FABRICA, TentativaFabrica, VERSAO_FABRICA, VERSAO_FABRICA_ATUAL, VERSAO_FABRICA_TR, VERSOES_FABRICA, sementeFabrica, sementeSalao, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHAS, MEDALHAS_LIGA, MEDALHA_POR_ID, Motor, NPC, PetMorto, VERSAO_INSTALACOES,
   VERSAO_LIGA, cartaDe, ehInstalacao, itemDe, medalhaDoLider, nomeForma, type Estagio, type IdInstalacao, type Medalha,
 } from "../motor/index.ts";
 import { CHAVE, type Armazenamento } from "./save.ts";
@@ -44,11 +49,19 @@ import { CHAVE, type Armazenamento } from "./save.ts";
 export const CHAVE_TAMER = CHAVE + "-tamer";
 /** aviso pendente de que os pets antigos foram descartados (sai quando o jogador le) */
 export const CHAVE_AVISO_V6 = CHAVE + "-aviso-v6";
+/** aviso pendente do descarte 6 (a luta em tempo real, pets v13): JSON {pets, fabrica}, quantos pets e quantas tentativas da Fabrica sairam
+    (sai quando o jogador le) */
+export const CHAVE_AVISO_TR = CHAVE + "-aviso-tr";
+/** os saves dos pets que o descarte 6 tirou, como estavam ({semente, log, versao}[]): o aviso oferece baixar o arquivo deles. Fica ate o
+    jogador baixar ou dispensar */
+export const CHAVE_DESCARTADOS = CHAVE + "-descartados";
 /** versao do registro do Tamer: 1 = medalhas (parte 1); 2 = medalhas e itens (parte 3); 3 = e o titulo da Liga (parte 4a); 4 = e os
     recordes das instalacoes da Fronteira (parte 4b); 5 = e a Fabrica e o Salao (parte 4c); 6 = e a versao das regras de cada tentativa da
-    Fabrica (campo `v`, equilibrio geral fase 3). Grava a 6; le as seis */
-export const VERSAO_TAMER = 6;
-const VERSOES_TAMER = [1, 2, 3, 4, 5, 6];
+    Fabrica (campo `v`, equilibrio geral fase 3); 7 = so a Fabrica em tempo real (v: 13; COMBATE-TR, D-4). Grava a 7; le as sete */
+export const VERSAO_TAMER = 7;
+const VERSOES_TAMER = [1, 2, 3, 4, 5, 6, 7];
+/** os eventos da Fabrica no registro do Tamer */
+const EVENTOS_FABRICA = ["fabrica", "fabrica_luta", "fabrica_troca"];
 
 /** uma medalha ganha: qual, o contador (1 = a primeira), a hora de parede, o pet que venceu (semente, forma e tick dele) */
 export interface MedalhaGanha { id: string; n: number; quando: number; pet: number; forma: string; tick: number }
@@ -323,7 +336,20 @@ export function lerTamer(armaz: Armazenamento): Tamer {
   try { d = JSON.parse(bruto); } catch (err) { throw new Error("o registro do Tamer não é JSON: " + (err instanceof Error ? err.message : String(err))); }
   const s = d as { versao?: unknown; log?: unknown };
   if (!VERSOES_TAMER.includes(s.versao as number) || !Array.isArray(s.log)) throw new Error("o registro do Tamer não tem versão " + VERSOES_TAMER.join(" ou ") + " e eventos");
+  /* o registro 7 so tem a Fabrica em tempo real: uma tentativa antiga nele e registro corrompido */
+  if (s.versao === 7) for (const ev of s.log as EventoTamer[])
+    if (Array.isArray(ev) && ev[0] === "fabrica" && (ev[1] as InicioFabrica).v !== VERSAO_FABRICA_TR)
+      throw new Error(`o registro 7 do Tamer tem a tentativa ${(ev[1] as InicioFabrica).n} da Fábrica com as regras de antes (v ${JSON.stringify((ev[1] as InicioFabrica).v)})`);
   return Tamer.reproduzir(s.log as EventoTamer[]);
+}
+/** o registro do Tamer sem a Fabrica de antes (descarte 6): tira as tentativas que nao sao da luta em tempo real. Devolve o registro novo e
+    quantas tentativas sairam */
+export function semFabricaAntiga(log: readonly EventoTamer[]): { log: EventoTamer[]; tentativas: number } {
+  const antigas = new Set<number>();
+  for (const ev of log) if (ev[0] === "fabrica" && (ev[1] as InicioFabrica).v !== VERSAO_FABRICA_TR) antigas.add((ev[1] as InicioFabrica).n);
+  if (antigas.size && log.some(ev => ev[0] === "fabrica" && (ev[1] as InicioFabrica).v === VERSAO_FABRICA_TR))
+    throw new Error("o registro do Tamer mistura a Fábrica de antes com a em tempo real");
+  return { log: log.filter(ev => !(EVENTOS_FABRICA.includes(ev[0]) && antigas.has((ev[1] as { n: number }).n))), tentativas: antigas.size };
 }
 export const textoTamer = (t: Tamer): string => JSON.stringify({ versao: VERSAO_TAMER, log: t.log });
 export function gravarTamer(armaz: Armazenamento, t: Tamer): void { armaz.setItem(CHAVE_TAMER, textoTamer(t)); }
@@ -404,12 +430,14 @@ export function sincronizarPet(t: Tamer, m: Motor): boolean {
     comportamento no replay e saem tambem); 3 = arenas com lideres (2026-09-30, DESIGN_MEDALHAS_ARENAS parte 2: as lutas
     de arena mudam no replay dos v6 de antes, e saem de novo); 4 = escala dos pets v6 (2026-09-30, CESC_V6: as lutas da
     campanha e das arenas mudam no replay dos v6 de antes, e eles saem de novo); 5 = limite de turnos do desafiado (2026-09-30: as
-    lutas dos v6 que chegam ao limite mudam de resultado no replay, e eles saem de novo). Sem a chave: 1 se o registro do Tamer existe (o
-    descarte das medalhas rodou antes do marcador existir), senao 0 */
+    lutas dos v6 que chegam ao limite mudam de resultado no replay, e eles saem de novo); 6 = a luta em tempo real (2026-10-29, COMBATE-TR,
+    E2 e D-4: os pets v1-v12 lutavam por turnos e saem; o Tamer fica, sem a Fabrica de antes, e os saves descartados ficam guardados para
+    o aviso oferecer o arquivo). Sem a chave: 1 se o registro do Tamer existe (o descarte das medalhas rodou antes do marcador existir),
+    senao 0 */
 export const CHAVE_DESCARTE = CHAVE + "-descarte";
-export const VERSAO_DESCARTE = 5;
+export const VERSAO_DESCARTE = 6;
 /** cada descarte apaga os pets ate esta versao (inclusive) */
-const DESCARTA_ATE: Record<number, number> = { 1: 5, 2: 6, 3: 6, 4: 6, 5: 6 };
+const DESCARTA_ATE: Record<number, number> = { 1: 5, 2: 6, 3: 6, 4: 6, 5: 6, 6: 12 };
 
 /** decisoes do Matheus: os pets de antes da trava das medalhas (v1-v5, 2026-09-29) e os v6 de antes do combate V21D
     (2026-09-30) sao descartados, o ativo e os guardados, e o jogo comeca num ovo novo v6 com o Tamer sem medalhas. Roda uma
@@ -427,24 +455,36 @@ export function descartarPetsAntigos(armaz: Armazenamento & { removeItem(k: stri
     try { const d = JSON.parse(txt) as { versao?: number } | null; return !!d && (d.versao ?? 1) <= ate; } catch { return false; }
   };
   let descartados = 0;
+  const saves: unknown[] = [];
   const ativo = armaz.getItem(CHAVE);
-  if (antigo(ativo)) { armaz.removeItem(CHAVE); descartados++; }
+  if (antigo(ativo)) { saves.push(JSON.parse(ativo!)); armaz.removeItem(CHAVE); descartados++; }
   const bg = armaz.getItem(chaveGuardados);
   if (bg !== null) {
     let g: unknown = null;
     try { g = JSON.parse(bg); } catch { /* guardados ilegiveis: ficam para o erro de sempre */ }
     if (Array.isArray(g)) {
       const ficam = g.filter(x => !antigo(JSON.stringify(x)));
+      saves.push(...g.filter(x => antigo(JSON.stringify(x))));
       descartados += g.length - ficam.length;
       if (ficam.length !== g.length) armaz.setItem(chaveGuardados, JSON.stringify(ficam));
     }
   }
   /* sem a chave dos guardados, a escada de exemplo (pets v3) seria semeada logo depois: fica vazia de proposito */
   if (descartados && armaz.getItem(chaveGuardados) === null) armaz.setItem(chaveGuardados, "[]");
-  /* o aviso de sempre diz "um ovo novo e nenhuma medalha": com pet descartado o Tamer recomeca vazio */
-  if (descartados || !tinhaTamer) gravarTamer(armaz, new Tamer());
+  /* o descarte 6 (D-4): o Tamer fica, sem a Fabrica de antes; os saves descartados ficam para o arquivo; o aviso conta os dois */
+  let fabrica = 0;
+  if (tinhaTamer) {
+    const r = semFabricaAntiga(lerTamer(armaz).log);
+    fabrica = r.tentativas;
+    gravarTamer(armaz, Tamer.reproduzir(r.log));
+  } else gravarTamer(armaz, new Tamer());
+  if (saves.length) {
+    let ja: unknown[] = [];
+    try { const x = JSON.parse(armaz.getItem(CHAVE_DESCARTADOS) ?? "[]"); if (Array.isArray(x)) ja = x; } catch { /* ilegivel: recomeca */ }
+    armaz.setItem(CHAVE_DESCARTADOS, JSON.stringify([...ja, ...saves]));
+  }
   armaz.setItem(CHAVE_DESCARTE, String(VERSAO_DESCARTE));
-  if (descartados) armaz.setItem(CHAVE_AVISO_V6, String(descartados));
+  if (descartados || fabrica) armaz.setItem(CHAVE_AVISO_TR, JSON.stringify({ pets: descartados, fabrica }));
   return descartados;
 }
 

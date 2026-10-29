@@ -206,3 +206,42 @@ espec).
   - Nada foi calibrado.
 
 As interpretações do worker estão em `docs/registro/2026-10.md`. A R2 (o `Motor.lutar`, a v13, o descarte com aviso) espera o Matheus.
+
+## 12. R2a: o resultado (worker, Claude Code, Opus 5.5, 2026-10-29)
+
+**A R2 foi dividida em duas** (proposta do worker, aceita pelo coordenador em 2026-10-29):
+- **A R2a** é este PR: a versão nova, o combate, o descarte e a Fábrica.
+- **A R2b** vem depois do merge da R2a: o **D-9**, que tira os ramos das versões v1–v12 do motor, os testes e os gabaritos que só servem a
+  elas e reescreve em v13 os saves semeados do e2e.
+- **O código das versões antigas continua vivo por mais um PR.** Os testes dele seguem verdes, e só o caminho do jogador deixa de abrir
+  esses pets.
+
+O que a R2a fez:
+- **A v13 (E3):**
+  - `VERSAO_PET = 13`, com as regras `CV21E_TR`: as da V21E com `tempoReal`.
+  - O `combate_tr/adaptador.ts` (`jogarLuta`) escolhe o combate pelas regras e devolve o `ResultadoLuta` de hoje, com a luta em tempo real
+    em `tr`. Ficou vazio: o `turnos`. Ficaram: a vida e o Guts do começo e do fim em `E0` e `E`.
+  - As séries (a Cidadela e a Liga), o Salão, as instalações e a Fábrica jogam por ele.
+  - A chave `COMBATE_TR` da R1 saiu: a versão do pet é a chave.
+- **O que o resultado alimenta:**
+  - o `GambitsPet.aprender` lê o saldo de cada ação do pet, no lugar do saldo do turno, com a mesma conta (a média por regra, o bônus do
+    resultado, o passo, a troca da pior);
+  - os contadores, a lesão, a confiança, a `vida5`, a história, a campanha, a Liga, o Salão, as instalações e a evolução não mudaram:
+    leem o `pontosA`, como antes;
+  - `test/combate_tr_motor.test.ts` confere cada um.
+- **O replay** refaz igual, sem cache (D-2). O teste de custo: 1 000 lutas refeitas cabem em 10 s no Node (o teto, PROPOSTO e SEM FONTE).
+  Uma vida v13 sem luta é a vida v12, bit a bit.
+- **O descarte (E2), o descarte único 6 (`src/tamer.ts`):**
+  - na primeira abertura, os pets v1–v12 (o ativo e os guardados) saem;
+  - os saves deles ficam guardados, e o aviso (`AvisoCombateTR`) oferece o arquivo, "Baixar o arquivo dos pets antigos", e pede o brasão do
+    ovo novo;
+  - o arquivo de um pet antigo não importa, e o motivo diz a versão;
+  - a escada de exemplo de Meus pets passou a ser v13, com as 5 medalhas no registro de cada pet de exemplo.
+- **A Fábrica (D-4):**
+  - o registro do Tamer vai à versão 7, e as tentativas novas gravam `v: 13`;
+  - o descarte 6 tira as tentativas de antes, com o aviso, e o recorde da Fábrica recomeça;
+  - as medalhas, os itens, o título e os recordes das instalações ficam.
+- **As telas por turnos:** numa luta da v13, o palco vai direto ao fim, com o aviso "Luta em tempo real (N s). O desenho dela chega numa
+  próxima versão". O Resultado, a Arena, a Campanha, a Fronteira, a Fábrica e o Salão, o Diário e o Lab mostram a duração em segundos. O
+  desenho da luta é da R3.
+- **O E3 no `docs/ARQUITETURA_DIGIBRAIN_MODULAR.md`:** a reserva da v13 passa para a próxima versão livre.

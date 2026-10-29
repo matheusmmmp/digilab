@@ -8,8 +8,7 @@
 import { useEffect, useMemo } from "react";
 import {
   INSTALACOES, LIGA, MEDALHAS_LIGA, NOME_ARQ, NOME_ESP, NOME_V2, NPC, RIVAL_LIGA, LUGARES_V6, MEDALHA_POR_ID, chaveSprite, formaLiga, nomeMegaLiga,
-  type Instalacao, type Motor,
-} from "../../../motor/index.ts";
+  type Instalacao, type Motor, duracaoLuta } from "../../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
 import { SeloMedalha } from "../../componentes/Medalha.tsx";
 import { tamerAtual, useJogo } from "../../jogo.ts";
@@ -20,12 +19,12 @@ import { diaDe } from "../pet/TelaPet.tsx";
 import { CartaoFabrica, CartaoSalao } from "./FabricaSalao.tsx";
 
 /** a ultima tentativa da Liga no registro do pet (null: nenhuma): as lutas jogadas (o pet no fim de cada uma) e o indice do evento */
-function ultimaTentativa(m: Motor): { idx: number; lutas: { venceu: boolean; vida: number; turnos: number }[] } | null {
+function ultimaTentativa(m: Motor): { idx: number; lutas: { venceu: boolean; vida: number; turnos: number; dur: string }[] } | null {
   let idx = -1;
   for (let i = m.log.length - 1; i >= 0; i--) { const ev = m.log[i]; if (ev[1] === "l" && ev[2].r === RIVAL_LIGA) { idx = i; break; } }
   if (idx < 0) return null;
   const L = reconstruirLuta(m, idx);
-  return { idx, lutas: L.serie.map(r => ({ venceu: r.pontosA === 1, vida: Math.max(0, r.E.L[0].hp) / r.E.L[0].hpMax, turnos: r.turnos.length })) };
+  return { idx, lutas: L.serie.map(r => ({ venceu: r.pontosA === 1, vida: Math.max(0, r.E.L[0].hp) / r.E.L[0].hpMax, turnos: r.turnos.length, dur: duracaoLuta(r) })) };
 }
 const pct = (x: number): string => `${Math.round(x * 100)}%`;
 const vitorias = (n: number): string => `${n} vitória${n === 1 ? "" : "s"}`;
@@ -108,7 +107,7 @@ export function TelaFronteira() {
                 <b className="fr-nome">Luta {i + 1}: {lider.nome} <span>· {LUGARES_V6[md.lugar].nome}</span></b>
                 <span className="fr-mega-txt">luta com <b>{nomeMegaLiga(i)}</b> (Mega)</span>
                 <span className="fr-tags"><span className="dl-tag fr-tag-arq">{NOME_ARQ[x.adulta]}</span><span className="dl-tag fr-tag-esp">{NOME_ESP[x.esp]}</span></span>
-                {st && <span className={`fr-st fr-st--${st}`}>{r ? `${r.venceu ? "venceu" : "perdeu"} em ${r.turnos} turnos · ${pct(r.vida)} da vida no fim` : "não chegou a lutar"}</span>}
+                {st && <span className={`fr-st fr-st--${st}`}>{r ? `${r.venceu ? "venceu" : "perdeu"} em ${r.dur} · ${pct(r.vida)} da vida no fim` : "não chegou a lutar"}</span>}
               </span>
             </li>
           );

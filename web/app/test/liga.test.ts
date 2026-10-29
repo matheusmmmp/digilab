@@ -189,7 +189,7 @@ describe("registro e replay", () => {
 });
 
 describe("o titulo no Tamer e a conclusao da jornada", () => {
-  test("vencer a Liga grava 'campeao' no Tamer (pet e forma), uma vez por pet; o registro reproduz (grava a versao 6, a da fase 3)", () => {
+  test("vencer a Liga grava 'campeao' no Tamer (pet e forma), uma vez por pet; o registro reproduz (grava a versao 7, a da luta em tempo real)", () => {
     const m = mega(), t = tamer6();
     expect(conferirCampeao(t, m)).toBeNull();                                     /* ainda nao venceu */
     for (let k = 0; ; k++) {
@@ -204,7 +204,7 @@ describe("o titulo no Tamer e a conclusao da jornada", () => {
     const a = armaz(); gravarTamer(a, t);
     const r = lerTamer(a);
     expect(r.campeoes).toEqual(t.campeoes);
-    expect(JSON.parse(Object.values(a.dados)[0]).versao).toBe(6);
+    expect(JSON.parse(Object.values(a.dados)[0]).versao).toBe(7);
     /* sem as 6 medalhas, o titulo nao entra (nem no replay) */
     expect(conferirCampeao(new Tamer(), m)).toBeNull();
     const ev: EventoTamer = ["campeao", { n: 1, quando: 1, pet: 1, forma: "WarGreymon", tick: 1 }];

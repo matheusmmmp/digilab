@@ -5,8 +5,10 @@
 
    Primeiro acesso a esta versao: os guardados comecam com uma escada de exemplo, do mais fraco ao mais forte
    (In-Training ate Ultimate treinado), gerada com os donos simulados dos Cenarios e sessoes de treino dentro das
-   regras (intervalo, fadiga, tudo no registro de cada pet). */
-import { CAT, CD, CTR, Motor, TPD, criarDono, criarRng, hashSemente, type EventoRegistro, type Exercicio, type TipoDono, type VisaoDono } from "../motor/index.ts";
+   regras (intervalo, fadiga, tudo no registro de cada pet). Desde a luta em tempo real (COMBATE-TR, etapa R2; E2) a escada e de pets da
+   versao de hoje (v13): o dono simulado so usa as acoes do dono dos v11 em diante (sem elogio, bronca, petisco e banheiro), e cada pet
+   conhece as 5 medalhas das evolucoes (o evento "u" no comeco do registro dele), para a escada chegar ao Ultimate como antes. */
+import { ACOES_DONO_JOGO_V11, CAT, CD, CMD, CTR, Motor, TPD, criarDono, criarRng, hashSemente, type EventoRegistro, type Exercicio, type TipoDono, type VisaoDono } from "../motor/index.ts";
 import { jogoAtual, trocarMotor } from "./jogo.ts";
 import { LUTA, previa } from "./luta.ts";
 import { CHAVE, textoSave } from "./save.ts";
@@ -72,15 +74,16 @@ const EXERCICIOS: readonly Exercicio[] = ["levantar_pedra", "corrida", "alvo", "
 
 /** o pet de uma receita: dono simulado (mesmo laco dos Cenarios) + treino em rodizio quando o motor deixa */
 export function petDaReceita(r: Receita): Motor {
-  /* v3 de proposito: exemplos estaveis (na v4 o dono simulado nao trata lesao nem responde as janelas) */
-  const m = new Motor(r.semente, 3), dono = criarDono(r.dono), rng = criarRng(hashSemente("dono", r.semente, r.dono));
+  /* a versao de hoje; as medalhas que as evolucoes pedem (sem elas o Rookie nao passa a Champion) */
+  const m = new Motor(r.semente), dono = criarDono(r.dono), rng = criarRng(hashSemente("dono", r.semente, r.dono));
+  m.liberar(CMD.mega);
   const passos = Math.round(r.dias * TPD / CD.passo), orc = Math.round(r.porDia * r.dias);
   let gasto = 0, sessoes = 0, ex = 0;
   for (let p = 0; p < passos; p++) {
     m.avancar(CD.passo);
     const rest = orc - gasto, min = Math.max(0, rest - (passos - p - 1) * CD.maxPasso), max = Math.min(rest, CD.maxPasso);
     const v: VisaoDono = { e: m.e, acao: m.acao, passo: p, passos, orc, gasto, min, max, atrasado: gasto < orc * (p + 1) / passos, chamados: m.chamadosAbertos() };
-    for (const a of dono.decidir(v, rng)) { m.observar(a); gasto++; }
+    for (const a of dono.decidir(v, rng)) if (ACOES_DONO_JOGO_V11.includes(a)) { m.observar(a); gasto++; }
     if (m.estagioAtual === "adolescente" && m.sparring < CAT.sparring) m.lutar("aleatorio", hashSemente("sparring", r.semente, p));
     /* treino: sem forcar (para abaixo do limite), respeitando o intervalo e a meta do dia */
     const dia = Math.floor(m.e.tick / TPD);

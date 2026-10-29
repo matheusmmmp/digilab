@@ -9,7 +9,7 @@ import { readFileSync } from "node:fs";
 import { ADOL_V21, BOTS_V21, BOTS_V21D, BOTS_V21E, REGRA_CONTRA_GOLPE_NA_PELE, REGRA_DEFENDE_DO_GOLPE, gambitNPC, gambitsAdulto } from "../motor/bots.ts";
 import { caraterCanonico, perfilDe } from "../motor/catalogo.ts";
 import { decidirV2, estadoV2, fimV2, intencaoV2, jogarV2, regrasDaVersao, resolverV2, type ListaGambits, type Lutador, type RegrasLuta } from "../motor/combate.ts";
-import { CAT, CV21D, CV21E, FORMAS_AD, LINHA_DA_FORMA, SOMBRIA, VERSAO_PET } from "../motor/constantes.ts";
+import { CAT, CV21D, CV21E, CV21E_TR, FORMAS_AD, LINHA_DA_FORMA, SOMBRIA, VERSAO_PET } from "../motor/constantes.ts";
 import { GambitsPet, REPERTORIO, candidatasV21E, chaveRegra, lutadorBot, lutadorPet, regraDe, sementeDe } from "../motor/gambits_pet.ts";
 import { Motor } from "../motor/motor.ts";
 import { criarRng } from "../motor/rng.ts";
@@ -108,8 +108,10 @@ describe("combate V21E: so nos pets v9", () => {
     for (const v of [1, 2, 3, 4, 5]) { expect(regrasDaVersao(v)).toBeNull(); expect(new Motor(123, v).regras).toBeNull(); }
     for (const v of [6, 7, 8]) { expect(regrasDaVersao(v)).toBe(CV21D); expect(new Motor(123, v).regras).toBe(CV21D); }
     expect(regrasDaVersao(9)).toBe(CV21E);
-    expect(new Motor(123).versao).toBe(12);                       /* o v10 (vinculo B), o v11 (o cerebro A) e o v12 (o mundo) herdam a V21E */
+    expect(new Motor(123).versao).toBe(13);                       /* o v10 (vinculo B), o v11 (o cerebro A) e o v12 (o mundo) herdam a V21E */
     for (const v of [10, 11, 12]) { expect(regrasDaVersao(v)).toBe(CV21E); expect(new Motor(123, v).regras).toBe(CV21E); }
+    /* o v13 joga as listas e as regras da V21E em tempo real (COMBATE-TR, etapa R2) */
+    expect(new Motor(123, 13).regras).toBe(CV21E_TR); expect(CV21E_TR).toMatchObject({ ...CV21E, versaoPet: 13, tempoReal: true });
   });
 
   test("bots: as quatro formas da V21E com a lista nova so contra pet v9; o resto igual a V21D", () => {

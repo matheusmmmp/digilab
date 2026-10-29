@@ -2,7 +2,7 @@
    {semente, log, versao}. Importar = replay do registro (tem que abrir); pet novo vai para a espera. Mesma semente com
    outro registro = conflito: o dono escolhe qual fica, e o outro vai para a espera (ninguem e apagado). */
 import { useEffect, useState } from "react";
-import { Motor, type EventoRegistro } from "../motor/index.ts";
+import { Motor, VERSAO_PET, type EventoRegistro } from "../motor/index.ts";
 import { jogoAtual, trocarMotor } from "./jogo.ts";
 import { CHAVE_GUARDADOS, abrirGuardado, lerGuardados, type Guardado } from "./pets.ts";
 import { textoSave } from "./save.ts";
@@ -35,13 +35,15 @@ export function exportarArquivo(m: Motor): void {
 }
 
 export interface Lido { g: Guardado; m: Motor; arquivo: string }
-/** le e confere o arquivo: JSON {semente, log, versao} que o replay abre; falha alto com o motivo */
+/** le e confere o arquivo: JSON {semente, log, versao} que o replay abre, da versao de hoje (a dos ovos novos); falha alto com o motivo */
 export function lerArquivo(texto: string, arquivo: string): Lido {
   let d: unknown;
   try { d = JSON.parse(texto); } catch { throw new Error("o arquivo não é um registro do Digilab (JSON inválido)"); }
   const s = d as { semente?: unknown; log?: unknown; versao?: unknown };
   if (!Number.isInteger(s.semente) || !Array.isArray(s.log)) throw new Error("o arquivo não tem semente e registro");
   const g: Guardado = { semente: s.semente as number, log: s.log as EventoRegistro[], versao: (s.versao ?? 1) as number };
+  /* o descarte 6 (COMBATE-TR, E2): os pets de antes da luta em tempo real nao abrem mais, nem pelo arquivo */
+  if (g.versao < VERSAO_PET) throw new Error(`este pet é da versão ${g.versao} do jogo, com o combate por turnos, e não abre mais nesta versão (a ${VERSAO_PET}, com a luta em tempo real)`);
   let m: Motor;
   try { m = Motor.reproduzir(g.semente, g.log, g.versao); } catch (err) { throw new Error("o replay do registro não confere: " + (err instanceof Error ? err.message : String(err))); }
   return { g, m, arquivo };
