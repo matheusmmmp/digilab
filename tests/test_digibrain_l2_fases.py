@@ -82,6 +82,8 @@ def _piloto(tmp_path, k, monkeypatch, a59: str | None):
     (pasta / "resultado.json").write_text(json.dumps({"regra_do_k": {"k": k}}), encoding="utf-8")
     monkeypatch.setitem(l2.SAIDA, "l2_piloto", str(pasta))
     plano = l2._plano()
+    if "### A5.9" in plano:                    # o plano de hoje ja tem a A5.9 (o K = 450): os cenarios a trocam pela deles
+        plano = plano[:plano.index("### A5.9")]
     texto = plano if a59 is None else plano + "\n### A5.9 O K da avaliacao\n\n" + a59 + "\n"
     monkeypatch.setattr(l2, "_plano", lambda: texto)
 

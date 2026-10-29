@@ -75,6 +75,8 @@ def k_da_avaliacao() -> int:
     plano = _plano()
     if "### A5.9" not in plano:
         raise RuntimeError("a avaliacao da L-2 precisa do K fixado no plano (A5.9): commit antes")
+    if plano.count("\n### A5.9") != 1:
+        raise RuntimeError("a A5.9 esta no plano mais de uma vez")
     secao = plano[plano.index("### A5.9"):]
     secao = secao[:secao.index("\n## ")] if "\n## " in secao else secao
     ks = [int(m.group(1)) for x in secao.splitlines() for m in [PADRAO_K.match(x)] if m]
