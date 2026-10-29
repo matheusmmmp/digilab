@@ -1,6 +1,6 @@
 # TAREFA V2 — UP-EVOLUCAO: a cena oficial de digievolução na Revelação (2026-10-29)
 
-Coordenador: sessão de coordenação da integração UP (Claude Code). Worker: a definir. Worktree e branch: `v2-up-evolucao`. Status: ABERTA (liberada pelo Matheus em 2026-10-29)
+Coordenador: sessão de coordenação da integração UP (Claude Code). Worker: Claude Code (Opus 5.5). Worktree e branch: `v2-up-evolucao`. Status: ETAPA 0 ENTREGUE, à espera do Matheus (seção 10; liberada em 2026-10-29)
 (D3 e D4 decididas; a UP-ATLAS na `main`, #441).
 
 Categoria: implementacao. Origem: Matheus, 2026-10-29: `D:\Trab\digilab\remaster\LEVANTAMENTO_INTEGRACAO.md`, seção 5, e o protótipo em
@@ -88,3 +88,74 @@ evolução (`TelaEvolucao.tsx`) além do "rever" que já abre a Revelação; o s
 - **D4 DECIDIDA (Matheus, 2026-10-29, "siga as recomendações"):** as linhas oficiais do UP ficam só como referência visual (escolher a
   cena e a música); as regras de evolução do DigiLab não mudam.
 - **A pilha não muda** (Matheus, 2026-10-29): seção 3.
+
+## 10. Relato da etapa 0 (2026-10-29, worker UP-EVOLUCAO, Claude Code, Opus 5.5, worktree `v2-up-evolucao`)
+
+Sem código de tela. Tudo o que a etapa produziu está fora do git, em `D:\Trab\digilab\Assets\evolucao_up\etapa0\` (procedência:
+UI_GUIDELINES 5.1, D3). Os números abaixo saem de `analise/resumo.json`, `analise/por_quadro.json`, `analise/trechos.json`,
+`analise/trechos_peso.txt`, `analise/peso_total_q80.txt`, `analise/bancada_desktop.json` e `analise/runtime_spine.txt`, nessa pasta; as
+ferramentas que os produzem estão em `ferramentas/`.
+
+**O `spine_quadros.py` não serve para as cenas.** Ele foi feito para os Digimon (pixel art em `region`, vizinho mais próximo, ignora
+rotação abaixo de 1° e escala a menos de 10%, sem mistura). As cenas têm malhas (`mesh`, até 120 por cena), recorte (`clipping`),
+restrições de caminho e de transformação, mistura aditiva (de 23 a 279 slots por esqueleto), tinta de duas cores e textura com filtro
+linear. Rodado só no fundo da Tamers: 268 quadros numa caixa de 3844×2710, 357 cels por quadro, 75.316 PNGs, 409 MB, e o recorte
+ignorado (`spine_quadros_tamers_back/`). Como formato de entrega, não serve.
+
+**A conversão que serve: os quadros rasterizados pelo próprio runtime, fora do jogo.** Uma página de captura
+(`ferramentas/captura.html`, com o `spine-webgl` 4.2.120 do CDN, como o protótipo) repete a sequência e o encaixe do protótipo a passo
+fixo de 1/30 s e grava, por quadro, três camadas: o fundo (`back`, opaco), a frente só com os slots normais (RGBA, por fosqueamento
+preto/branco) e a frente só com os aditivos (sobre preto, para somar com o `lighter` do canvas 2D). O Digimon fica fora das camadas: no
+jogo ele é o sprite do app, entre o fundo e a frente, na posição do osso `AAA_Digimon`, que a captura grava por quadro (`meta.json`).
+Cada cena tem a Summon (12,33 s; 15,03 s na Adventure) e a revelação, o Flash e 5 s do Loop da Adventure (10 s). Resolução 650×500
+(metade da câmera de 1300×1000 do protótipo), 30 quadros/s, WebP com perda.
+
+| cena | quadros | peso q80 (MB) | peso q60 (MB) | fundo no q80 (MB) | PSNR q80 mediana / mín. (dB) | quadros com erro de ordem* |
+|---|---|---|---|---|---|---|
+| adventure | 752 | 12,05 | 9,62 | 7,42 | 40,23 / 27,91 | 1/151 |
+| zero2 | 671 | 9,34 | 7,18 | 6,55 | 39,78 / 27,02 | 9/135 |
+| tamers | 671 | 10,94 | 8,25 | 8,06 | 39,59 / 27,30 | 22/135 |
+| tamers_mega | 671 | 9,42 | 6,96 | 8,04 | 40,43 / 33,78 | 1/135 |
+| jogress | 671 | 7,32 | 5,61 | 5,62 | 41,14 / 35,40 | 0/135 |
+| dramon | 671 | 8,36 | 6,56 | 5,93 | 41,14 / 27,77 | 9/135 |
+
+\* quadros amostrados (1 em 5) com mais de 1% dos pixels a mais de 32 níveis do runtime, com as camadas sem perda.
+
+- **Peso:** de 7,3 a 12,1 MB por cena no q80. O trecho da revelação sai byte a byte igual nas cinco cenas que passam para a Adventure
+  (e quase igual na própria Adventure): guardado uma vez, as seis cenas somam 35,7 MB no q80. Uma evolução baixa só a cena dela. O fundo
+  é de 62% a 85% do peso.
+- **Fidelidade:** a galeria `analise/galeria_lado_a_lado.png` põe o protótipo e os quadros q80 lado a lado, um quadro por cena antes e
+  outro na revelação, e não há diferença visível; as capturas `analise/lado_*_q80_*.png` trazem também a diferença ×4. Duas perdas:
+  - **a ordem da frente.** Ela alterna normal e aditivo de 5 a 11 vezes na ordem de desenho, e com três camadas o aditivo de baixo sai
+    por cima do normal (o casulo de dados da Tamers aos 8–12 s, os rastros da Zero2 e da Dramon aos 0–3 s; `analise/pior_dramon_0035.png`).
+    **Separar a frente por trecho da ordem de desenho resolve:** nos recortes recapturados, PSNR mínimo de 61,7 dB e nenhum pixel a mais
+    de 32 níveis, com a frente de 0% a 21% mais pesada e até 4 camadas de frente não vazias por quadro;
+  - **a compressão:** o q80 fica em ~40 dB de mediana, e o q60 em ~38–40 dB.
+  - Duas camadas só (o fundo e a frente inteira somada) não servem: o clarão branco do Flash cobre até 100% dos pixels errados.
+- **Carregar e tocar (desktop, não o celular):** a bancada do `analise/tocador.html` decodifica e compõe a cena inteira, 4 quadros em
+  voo, e sustentou de 64 a 160 quadros/s (30 pedidos), com 2–7 ms de decodificação por imagem na mediana e o primeiro lote em 7–15 ms
+  (servidor local, com as análises rodando ao mesmo tempo). O protótipo, com o runtime, carregou a cena e os dois Digimon em 93–834 ms
+  no mesmo desktop. **O celular de referência dos Gates A e B não foi medido:** o worker não tem um (como na M3). Roteiro para o Matheus:
+  na pasta `analise`, rodar `python -m http.server 8767 --bind 0.0.0.0`, abrir `http://<ip do PC>:8767/tocador.html` no celular, tocar
+  cada cena a 30 quadros/s e 3 camadas e anotar `carga_primeiro_quadro_ms`, `desenhados` e `atrasados` (atrasado = quadro que não ficou
+  pronto a tempo). Com a rede, a cena pede ~0,5 MB/s enquanto toca (10,9 MB em 22,4 s na Tamers); por isso o app deve baixar a cena antes.
+- **O Digimon na cena não fica em escala inteira.** O osso escala o pet: de 1,2 a 1,39 sobre o 4,2 do protótipo (≈5,0× a 5,8×) em cinco
+  cenas, e de 0 a 4 na Tamers Mega (o pet cresce do nada). A regra da seção 5 do UI_GUIDELINES pede escala inteira, 4× na revelação.
+- **A alternativa do runtime (não instalada):** `@esotericsoftware/spine-webgl` 4.2.120, 221.638 bytes minificado (67.009 com gzip),
+  depende do `spine-core` 4.2.120; as cenas ficam em 6 MB (os seis `back`/`front`/atlas/PNG). A licença é a Spine Runtimes License: integrar
+  o runtime pede licença do editor Spine (a seção 2 da licença do editor, ou "cada usuário do produto obtém a própria licença do editor"),
+  e a redistribuição leva o aviso. A fidelidade é a do protótipo (é a referência).
+- **Uma nota de licença também nos quadros:** a ferramenta de captura usa o mesmo runtime, fora do jogo, como o protótipo já usa. Se
+  isso entra na licença da Spine, não sei (SEM FONTE); o jogo não levaria o runtime.
+
+**Recomendação do worker:** os quadros servem. Com a frente por trecho, a fidelidade é a do runtime (fora a compressão), a pilha não
+muda e o desktop sobra. O custo é o peso: cerca de 10 MB por evolução e ~36 MB no servidor, e o celular ainda sem medida. **Decisões
+pedidas ao Matheus** (todas PROPOSTAS; o custo de errar é refazer a conversão, que roda sozinha em cerca de 1 h de captura para as seis cenas):
+1. **Os quadros servem?** Recomendação: sim, com a frente por trecho. Errar aqui custa retrabalho da tela (a escolha da cena serve aos dois).
+2. **Formato:** 650×500, 30 quadros/s, WebP q80 (PROPOSTOS, SEM FONTE). O q60 tira de 20% a 25% do peso com 1,3 a 1,5 dB a menos; 15 quadros/s tiram
+   metade, mas os efeitos ficam aos saltos.
+3. **O Digimon segue o osso fora da escala inteira** (vizinho mais próximo, sem suavizar) durante a cena, ou arredonda para a escala
+   inteira mais próxima e perde o crescimento contínuo da Tamers Mega. Recomendação: seguir o osso só durante a cena, como desvio
+   registrado da seção 5; o cartão da Revelação continua a 4×.
+4. **A medida no celular de referência** (roteiro acima), antes da etapa de tela, ou junto com o e2e dela.
+
