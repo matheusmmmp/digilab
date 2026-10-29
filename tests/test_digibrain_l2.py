@@ -268,6 +268,8 @@ def test_t_l2_8_a_vida_com_a_subchave_e_determinista_e_a_rng_e_so_a_do_m_arb(com
     motor, reg, (fp, fm) = orq.viver("M3", "atencioso", "longe", 101, 4, orq.ORCAMENTO_POR_DIA, conserto=True)
     c = orq.cerebro_de(reg)
     assert c.m.estado.suspensas > 0 and c.m.estado.retomadas > 0 and all("suspensa" in m for m in c.motivos)
+    assert sum(m["retomou"] for m in c.motivos) == c.m.estado.retomadas                 # o registro das S-4 e S-6
+    assert any("n_susp" in f for m in c.motivos for f in m["fins"])                     # o das S-1 e S-2
     r = orq.reproduzir_mundo(LogDeEventos.de_jsonl(motor.log.para_jsonl()), fp, semente=101, fabrica_motor=fm)
     assert r.log.para_jsonl() == motor.log.para_jsonl()
     assert json.dumps(r.politica.estado_interno(), sort_keys=True) == json.dumps(c.estado_interno(), sort_keys=True)
@@ -295,4 +297,5 @@ def test_t_l2_9_o_reflexo_extraido_e_a_conta_de_hoje(monkeypatch):
 def test_t_l2_desligada_a_vida_nao_tem_campo_novo():
     _motor, reg, _ = orq.viver("M3", "atencioso", "longe", 101, 2, orq.ORCAMENTO_POR_DIA, conserto=True)
     c = orq.cerebro_de(reg)
-    assert not any("suspensa" in m for m in c.motivos) and "suspensa" not in c.estado_interno()["modulos"]["estado"]
+    assert not any("suspensa" in m or "retomou" in m for m in c.motivos) and "suspensa" not in c.estado_interno()["modulos"]["estado"]
+    assert not any("n_susp" in f for m in c.motivos for f in m["fins"])

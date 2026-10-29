@@ -139,6 +139,7 @@ class DigiBrain:
         m.plast.montar(receptores)
         afeto = m.afeto.ler(sens)
         reflexo = m.arb.reflexo(sens)                              # uma conta so, ao M-ESTADO e ao M-ARB (a L-2, secao 2.3)
+        retomadas = m.estado.retomadas
         fins_susp = m.estado.cuidar_suspensa(sens, afeto, reflexo) if cd.intencao_suspensa else []
         ctx = m.estado.contexto()
         memoria = m.mem.recuperar(sens, afeto) if cd.m_mem else None
@@ -170,8 +171,9 @@ class DigiBrain:
         entregue = [_fim(f) for f in fins if not f.get("registro", True)]
         if entregue:                                  # a busca guardada (DX-4), entregue sem a opcao composta: so com a subchave
             self.motivos[-1]["busca_entregue"] = entregue
-        if cd.intencao_suspensa:                      # a L-2: a suspensa ao fim da decisao (desligada, nenhum campo novo)
+        if cd.intencao_suspensa:                      # a L-2: a suspensa ao fim da decisao e a retomada (desligada, nenhum campo novo)
             self.motivos[-1]["suspensa"] = m.estado.suspensa_resumo()
+            self.motivos[-1]["retomou"] = m.estado.retomadas > retomadas
         self._gestos = []
         self._pendencia = {"k": k, "intencao": intencao, "unidade": unidade, "sens": sens, "g_apr": afeto["g_apr"], "pediu": False,
                            "alvo": None, "corpo": None, "transicao": None, "mundo": None}
@@ -330,4 +332,6 @@ def _fim(f: dict) -> dict:
     out = {"chave": chave_json(f["chave"]), "inicio": f["inicio"], "n": f["n"], "motivo": f["motivo"], "meta": f["meta"], "r": f["r"]}
     if f.get("composta"):
         out["composta"] = True
+    if "n_susp" in f:                                 # a L-2: a intencao que ja foi suspensa (so com a subchave), para as S-1 e S-2
+        out["n_susp"] = f["n_susp"]
     return out
