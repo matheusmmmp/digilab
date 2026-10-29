@@ -1,7 +1,7 @@
 /* Entrada do app. Tema: o do sistema; ?tema=claro|escuro sobrepoe (conferencia e screenshots; nao grava nada). */
 import { createRoot } from "react-dom/client";
 import { App } from "./App.tsx";
-import { carregarAtlas } from "./atlas.ts";
+import { ATLAS_URL, CLIPES_UP, carregarAtlas } from "./atlas.ts";
 import { carregarDecoracao } from "./decoracao.ts";
 import { iniciarFalaLLM } from "./fala.ts";
 import { iniciarFalaLivre } from "./falaLivre.ts";
@@ -41,7 +41,8 @@ ligarEscala(new URLSearchParams(location.search).get("escala") !== "0");
    App; roda uma vez por versao do descarte (tamer.CHAVE_DESCARTE). Antes de abrir o save */
 try { descartarPetsAntigos(localStorage, CHAVE_GUARDADOS); } catch (err) { console.error("descarte dos pets antigos falhou", err); }
 iniciarJogo(localStorage);
-carregarAtlas();
+/* ?clipes_up=1 liga os clipes do UP so naquela aba (conferir/capturar); o padrao e a constante CLIPES_UP, desligada */
+carregarAtlas(ATLAS_URL, CLIPES_UP || new URLSearchParams(location.search).get("clipes_up") === "1");
 carregarDecoracao();
 ouvirOutrasAbas();
 iniciarTempo();

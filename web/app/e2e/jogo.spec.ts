@@ -1647,3 +1647,12 @@ test("mundo: o ovo novo choca na cena 3D", async ({ page }) => {
   await expect(page.locator(".mundo-info")).toBeVisible();
   expect(erros).toEqual([]);
 });
+
+/* TAREFA_V2_UP_ATLAS: com a chave dos clipes ligada (?clipes_up=1) e o atlas de clipes ausente, o aviso do atlas aparece; nao cai calado no atlas atual */
+test("clipes do UP: ligados e sem o atlas de clipes, o aviso de atlas que não carregou", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await semear(page, SAVES.v3);
+  await page.route(/\/Assets\/digilab_atlas_up_clipes/, r => r.abort());
+  await page.goto(APP + "?clipes_up=1#/pet/estado");
+  await expect(page.getByText("Atlas de sprites não carregou.")).toBeVisible();
+});

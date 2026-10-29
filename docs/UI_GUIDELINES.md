@@ -137,7 +137,8 @@ Respeitar o zoom do navegador: tamanhos em `rem`, sem `maximum-scale`.
 - **Direção:** o pet do jogador olha para a direita na luta (espelhar se preciso), o oponente
   para a esquerda. Fora da luta, sem espelhar.
 - **Animação:** idle a 120 ms por quadro (grupo `A` dos quadros extraídos, salvo quando o mapa de
-  sprites disser outro). Ataque e dano só na luta. Com `prefers-reduced-motion`, mostrar o
+  sprites disser outro). Com a chave `CLIPES_UP` ligada (desligada por padrão; `web/app/src/atlas.ts`), vale a duração
+  de cada quadro do clipe oficial do Digimon UP (`Idle`, `Run`, `Attack_1`, `Stun`, `Die`, `Evol`), e não os 120 ms fixos. Ataque e dano só na luta. Com `prefers-reduced-motion`, mostrar o
   primeiro quadro parado.
 - **Forma sombria:** mesmo espaço da forma base, com a marca roxa (contorno ou filtro de paleta
   aprovado no mapa de sprites) e a etiqueta "sombria". Nunca só a cor.

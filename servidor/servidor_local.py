@@ -83,6 +83,7 @@ def _nomes_decoracao() -> list[str]:
 # modo remoto: so estas rotas (o resto da pasta servida nao sai do computador)
 ROTAS_REMOTAS = (f"{PREFIXO}/web/digilab_sprites.html", f"{PREFIXO}/web/digilab.html", "/Assets/digilab_atlas.png",
                  "/Assets/digilab_atlas_up.png", "/Assets/digilab_atlas_up.json",
+                 "/Assets/digilab_atlas_up_clipes.png", "/Assets/digilab_atlas_up_clipes.json",
                  "/api/fala", "/api/fala/status",
                  # decoracao do Digimon UP (Assets/gerar_decoracao_up.py): o JSON e so os PNGs listados no repositorio
                  "/Assets/digilab_decoracao_up.json",
