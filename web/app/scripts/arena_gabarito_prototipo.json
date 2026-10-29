@@ -1,0 +1,23 @@
+{
+  "fonte": "o harness recuperado (remaster/fonte/scripts_arena/harness_equilibrio.js) no arena.html sha256 f3be11602ac37424cbe80184a1f198a43a46fa2a33c55334caf043040a91fbeb, no Chrome do painel do Claude Code, 2026-10-29 (etapa 0 da UP-ARENA, docs/TAREFA_V2_UP_ARENA.md, secao 10.1); o rodizio, os estagios e os niveis sao iguais a saida do transcrito de origem (linhas 3301 e 3339)",
+  "arenas_semente_7": {
+    "campo": { "dur": 96, "p90": 107, "timeouts": 0, "ambPct": 0, "azul": "6/20", "ringue": 0, "bloq": 0, "runa": 0 },
+    "coliseu": { "dur": 90, "p90": 102, "timeouts": 0, "ambPct": 4.5, "azul": "12/20", "ringue": 0, "bloq": 0, "runa": 0 },
+    "floresta": { "dur": 102, "p90": 114, "timeouts": 0, "ambPct": 0, "azul": "11/20", "ringue": 0, "bloq": 5.9, "runa": 0 },
+    "praia": { "dur": 102, "p90": 126, "timeouts": 0, "ambPct": 0, "azul": "9/20", "ringue": 0, "bloq": 5, "runa": 0 },
+    "deserto": { "dur": 103, "p90": 121, "timeouts": 0, "ambPct": 0, "azul": "9/20", "ringue": 0, "bloq": 0, "runa": 0 },
+    "castelo": { "dur": 96, "p90": 112, "timeouts": 0, "ambPct": 0, "azul": "9/20", "ringue": 0, "bloq": 0, "runa": 3 },
+    "caverna": { "dur": 95, "p90": 107, "timeouts": 0, "ambPct": 8.1, "azul": "8/20", "ringue": 0, "bloq": 0, "runa": 0 },
+    "ringue": { "dur": 92, "p90": 107, "timeouts": 0, "ambPct": 7, "azul": "13/20", "ringue": 2.8, "bloq": 0, "runa": 0 }
+  },
+  "campo_por_semente": { "42": { "azul": "11/20", "dur": 92 }, "99": { "azul": "8/20", "dur": 96 }, "123": { "azul": "11/20", "dur": 99 } },
+  "rodizio_sementes_7_8": {
+    "InTraining2": { "dist": "0.48", "corpo": "0.54", "desvio": "0.070", "faixa": "0.36–0.62", "tempoMedio": 102, "semFim": 4 },
+    "Rookie": { "dist": "0.52", "corpo": "0.47", "desvio": "0.095", "faixa": "0.39–0.68", "tempoMedio": 105, "semFim": 3 },
+    "Champion": { "dist": "0.45", "corpo": "0.59", "desvio": "0.091", "faixa": "0.36–0.65", "tempoMedio": 107, "semFim": 4 },
+    "Ultimate": { "dist": "0.50", "corpo": "0.51", "desvio": "0.061", "faixa": "0.38–0.58", "tempoMedio": 110, "semFim": 3 },
+    "Mega": { "dist": "0.48", "corpo": "0.54", "desvio": "0.064", "faixa": "0.34–0.61", "tempoMedio": 112, "semFim": 6 }
+  },
+  "estagios": { "Champion>Rookie": 73, "Ultimate>Champion": 66, "Mega>Ultimate": 82, "Ultimate>Rookie": 84, "Mega>Rookie": 95 },
+  "niveis_champion_nv1_contra_rookie": { "2": 56, "3": 40, "5": 15 }
+}

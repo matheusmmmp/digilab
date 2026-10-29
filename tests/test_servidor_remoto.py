@@ -78,6 +78,17 @@ def test_remoto_serve_so_o_mapa_e_os_mp3_de_sons():
         assert not rota_permitida(fora), fora
 
 
+def test_remoto_serve_so_os_arquivos_da_arena_em_tempo_real():
+    for ok in ("/Assets/arena_up/dados/golpes.json", "/Assets/arena_up/sprites/Hi-Commandramon.png", "/Assets/arena_up/sprites/Imperialdramon_DragonMode.png",
+               "/Assets/arena_up/efeitos/_comum.png", "/Assets/arena_up/mapas/coliseu_piso.jpg", "/Assets/arena_up/mapas/fogo.png?v=1"):
+        assert rota_permitida(ok), ok
+    for fora in ("/Assets/arena_up/", "/Assets/arena_up/dados/", "/Assets/arena_up/dados/../../catalogo_sprites_up.json",
+                 "/Assets/arena_up/sprites/%2e%2e/x.png", "/Assets/arena_up/sprites/a/b.png", "/Assets/arena_up/sprites/x.jpg",
+                 "/Assets/arena_up/dados/manifesto.JSON", "/Assets/arena_up/mapas/..%5cx.png", "/Assets/arena_up/gerar_arena_up.py",
+                 "/Assets/arena_up/dados/x.json/..", "/Assets/gerar_arena_up.py"):
+        assert not rota_permitida(fora), fora
+
+
 def test_remoto_serve_so_a_decoracao_listada():
     nomes = json.loads((Path(__file__).resolve().parents[1] / "web" / "app" / "decoracao_nomes.json").read_text(encoding="utf-8"))["pecas"]
     assert "campina_gazimon" in nomes and "Common_Icon_Setting" in nomes

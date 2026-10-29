@@ -30,6 +30,8 @@ import { AvisoPetsDescartados } from "./componentes/Medalha.tsx";
 import { CHAVE_AVISO_V6 } from "./tamer.ts";
 import { TelaConversar } from "./telas/conversar/TelaConversar.tsx";
 import { TelaLuta } from "./telas/lutar/TelaLuta.tsx";
+import { TelaArenaTempoReal } from "./telas/lutar/arena_tr/TelaArenaTempoReal.tsx";
+import { ENDERECO_ARENA_TR, arenaTrLigada, ehArenaTr } from "./arenaTempoReal.ts";
 import { LUTA, REPLAY, previa, pularAnimacao, type Modo } from "./luta.ts";
 import { TelaPet } from "./telas/pet/TelaPet.tsx";
 import { MeusPets } from "./telas/pet/MeusPets.tsx";
@@ -103,10 +105,13 @@ export function App() {
   /* luta em tela cheia (#/lutar/luta); o Voltar do navegador durante a animacao vira pedido de Desistir */
   const [emLuta, setEmLuta] = useState(() => ehLuta(location.hash)), emLutaRef = useRef(emLuta), [pedidoDesistir, setPedidoDesistir] = useState(false);
   emLutaRef.current = emLuta;
+  /* arena em tempo real (#/lutar/tempo-real), so com a chave ARENA_TEMPO_REAL ligada (ou ?arena_tr=1): desligada, nada disto age */
+  const [arenaTr, setArenaTr] = useState(() => arenaTrLigada() && ehArenaTr(location.hash));
   const [ultima, setUltima] = useState<Partial<Record<Destino, Aba>>>(() => ({ [rota.destino]: rota.aba }));
 
   /* endereco e aba lembrada acompanham a rota; voltar/avancar do navegador muda a rota */
   useEffect(() => {
+    if (arenaTr) { document.title = "Arena em tempo real · Digilab Pet"; return; }
     if (emLuta) { document.title = "Luta · Digilab Pet"; return; }
     if (boasVindas) return;                      /* primeira vez aberta: o endereco e #/inicio */
     const alvo = config ? enderecoDaConfig(config) : enderecoDaRota(rota);
@@ -114,9 +119,10 @@ export function App() {
     gravarAbaLembrada(armaz(), rota);
     document.body.dataset.destino = rota.destino;
     document.title = `${config ? "Configurações" : NOME_DESTINO[rota.destino]} · Digilab Pet`;
-  }, [rota, config, emLuta, boasVindas]);
+  }, [rota, config, emLuta, boasVindas, arenaTr]);
   useEffect(() => {
     const aoMudar = () => {
+      if (arenaTrLigada()) { const tr = ehArenaTr(location.hash); setArenaTr(tr); if (tr) return; }
       if (ehLuta(location.hash)) { setEmLuta(true); return; }
       if (emLutaRef.current) {
         /* saiu da luta pelo Voltar: com a animacao rodando, fica na luta e pergunta; ja no resultado, conta como Continuar */
@@ -163,6 +169,11 @@ export function App() {
   /* desktop (>= 1100 px): topo da casca com titulo, abas e o mini-card do pet */
   const topo = <TopoDesktop titulo={config ? "Configurações" : NOME_DESTINO[rota.destino]} abas={config ? [] : abas} aba={rota.aba} irAba={a => ir({ destino: rota.destino, aba: a })}
     abrirMeusPets={() => setMeusPets(true)} voltar={!config && rota.destino === "conversar" ? () => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); } : undefined} />;
+  if (arenaTr) return (
+    <div className="app app--tela-cheia">
+      <TelaArenaTempoReal sair={() => { history.replaceState(null, "", "#/lutar/arena"); setArenaTr(false); ir({ destino: "lutar", aba: "arena" }); scrollTo(0, 0); }} />
+    </div>
+  );
   if (emLuta) return (
     <div className="app app--tela-cheia">
       <TelaLuta sair={sairDaLuta} verReplay={verReplay} sairReplay={sairReplay} pedidoDesistir={pedidoDesistir} fecharPedido={() => setPedidoDesistir(false)} />
@@ -221,6 +232,9 @@ export function App() {
               <button type="button" role="tab" key={a} className="tab" aria-selected={a === rota.aba} onClick={() => ir({ destino: rota.destino, aba: a })}>{NOME_ABA[a]}</button>
             ))}
           </div>
+        )}
+        {rota.destino === "lutar" && arenaTrLigada() && (
+          <div className="arena-tr-entrada"><a className="dl-btn dl-btn--sec" href={ENDERECO_ARENA_TR}>Arena em tempo real</a></div>
         )}
         <div role={abas.length > 1 ? "tabpanel" : undefined}>
           {rota.aba === "treinar" ? <TelaTreinar /> : rota.aba === "aprend" ? <TelaAprend /> : rota.aba === "evolucao" ? <TelaEvolucao /> : rota.aba === "itens" ? <TelaItens />

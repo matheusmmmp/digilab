@@ -1700,3 +1700,76 @@ test("clipes do UP: ligados e sem o atlas de clipes, o aviso de atlas que não c
   await page.goto(APP + "?clipes_up=1#/pet/estado");
   await expect(page.getByText("Atlas de sprites não carregou.")).toBeVisible();
 });
+
+/* UP-ARENA (docs/TAREFA_V2_UP_ARENA.md): a arena em tempo real atras da chave ARENA_TEMPO_REAL, desligada. Desligada, o Lutar e o de hoje
+   (nem botao, nem rota, nem pedido de dados); ligada so na aba por ?arena_tr=1, com os dados SINTETICOS versionados de test/ servidos no
+   lugar de Assets/arena_up (nada da Bandai no teste). */
+const ARENA_SINT = JSON.parse(readFileSync(new URL("../test/arena_sintetico.json", import.meta.url), "utf8"));
+const PNG_1PX = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==", "base64");
+async function servirArenaSintetica(page: Page): Promise<void> {
+  await page.route(/\/Assets\/arena_up\//, r => {
+    const m = /\/dados\/([a-z]+)\.json/.exec(r.request().url());
+    if (m) return r.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(ARENA_SINT[m[1]]) });
+    return r.fulfill({ status: 200, contentType: "image/png", body: PNG_1PX });
+  });
+}
+
+test("arena em tempo real: com a chave desligada, o Lutar é o de hoje e nada da arena é pedido", async ({ page }) => {
+  await semear(page, SAVES.v3);
+  const erros = vigiarErros(page), pedidos: string[] = [];
+  page.on("request", r => { if (/arena_up/.test(r.url())) pedidos.push(r.url()); });
+  await page.goto(APP + "#/lutar/arena");
+  await expect(page.getByRole("tab", { name: "Arena" })).toBeVisible();
+  await expect(page.getByRole("tablist", { name: "Abas de Lutar" }).getByRole("tab")).toHaveCount(4);
+  await expect(page.locator(".arena-tr-entrada")).toHaveCount(0);
+  /* a rota da arena nao existe: aberta do zero, o app cai numa rota de sempre e reescreve o endereco */
+  await page.goto("about:blank");
+  await page.goto(APP + "#/lutar/tempo-real");
+  await expect(page).not.toHaveURL(/tempo-real/);
+  await expect(page.getByTestId("arena-tr")).toHaveCount(0);
+  expect(pedidos).toEqual([]);
+  expect(erros).toEqual([]);
+});
+
+test("arena em tempo real: ligada, CPU × CPU até o fim, e a mesma semente refaz a mesma luta", async ({ page }) => {
+  test.setTimeout(240_000);
+  await semear(page, SAVES.v3);
+  await servirArenaSintetica(page);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "?arena_tr=1#/lutar/arena");
+  await page.getByRole("link", { name: "Arena em tempo real" }).click();
+  await expect(page).toHaveURL(/#\/lutar\/tempo-real$/);
+  await expect(page.getByTestId("arena-tr")).toBeVisible();
+  await expect(page.getByTestId("recuos-arena-tr")).toContainText("Regras de recuo");
+  await page.getByLabel("Modo").selectOption("cpu");
+  await page.getByLabel("Velocidade").selectOption("4");
+  await page.getByLabel("Arena", { exact: true }).selectOption("castelo");
+  await page.getByRole("button", { name: "Recomeçar" }).click();
+  const fim = async () => {
+    await page.waitForFunction(() => (window as any).__arenaTr?.fim === true, null, { timeout: 200_000 });
+    return page.evaluate(() => ({ ...(window as any).__arenaTr }));
+  };
+  const a = await fim();
+  expect(a.cena).toBe("castelo");
+  await expect(page.getByTestId("arena-tr-log")).toContainText(/venceu|Empate/);
+  await expect(page.getByLabel("Placar")).toContainText(/Azul \d · Vermelha \d · Empates \d/);
+  await page.getByRole("button", { name: "Revanche (mesma semente)" }).click();
+  await page.waitForFunction(s => (window as any).__arenaTr?.relogio < 1000 && (window as any).__arenaTr?.semente === s, a.semente);
+  const b = await fim();
+  expect(b).toEqual(a);
+  /* sair: volta ao Lutar; nada da arena no registro do pet nem no save */
+  await page.getByRole("button", { name: "Voltar" }).click();
+  await expect(page).toHaveURL(/#\/lutar\/arena$/);
+  await expect(page.getByRole("tablist", { name: "Abas de Lutar" })).toBeVisible();
+  expect(await page.evaluate(() => (window as any).__digilab.registro())).not.toMatch(/arena_up|tempo-real|Alfa|Delta/);
+  expect(await page.evaluate(([c]) => localStorage.getItem(c), [CHAVE] as const)).not.toMatch(/arena_up|tempo-real|Alfa|Delta/);
+  expect(erros).toEqual([]);
+});
+
+test("arena em tempo real: ligada e sem os dados, o aviso visível", async ({ page }) => {
+  await semear(page, SAVES.v3);
+  await page.route(/\/Assets\/arena_up\//, r => r.fulfill({ status: 404, body: "ausente" }));
+  await page.goto(APP + "?arena_tr=1#/lutar/tempo-real");
+  await expect(page.getByTestId("aviso-arena-tr")).toBeVisible();
+  await expect(page.getByTestId("aviso-arena-tr")).toContainText("gerar_arena_up.py");
+});
