@@ -21,13 +21,14 @@ const ABAS: [string, string, string][] = [
 ];
 
 /** semeia o save por uma pagina da mesma origem que nao e o app (o app gravaria o pet dele ao fechar). O registro do Tamer
-    (vazio, ou o dado) e o marcador do descarte (versao 5) vao junto: com eles o app entende que o descarte unico ja rodou
-    e nao descarta os saves antigos (v1-v3, e o v6) que estes testes jogam */
+    (vazio, ou o dado) e o marcador do descarte (versao 6, a da luta em tempo real) vao junto: com eles o app entende que o descarte unico
+    ja rodou e nao descarta os saves antigos (v1-v12) que estes testes jogam. So nos testes: no jogo, o descarte 6 tira todos eles
+    (COMBATE-TR, etapa R2). Os testes que jogam a tela com um pet de antes ainda valem enquanto o motor abre as versoes antigas */
 async function semear(page: Page, save: object | null, tema?: string, tamer: object = { versao: 1, log: [] }): Promise<void> {
   await page.goto("/Assets/digilab_atlas_up.json");
   await page.evaluate(([chave, s, t, tm]) => {
     localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", tm);
-    localStorage.setItem(chave + "-descarte", "5");
+    localStorage.setItem(chave + "-descarte", "6");
     /* dicas do Bit desligadas e sem os pets guardados de exemplo: os testes de fluxo nao dependem deles */
     localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
     if (s) localStorage.setItem(chave, s);
@@ -336,7 +337,9 @@ test("medalhas: vencer o líder dá a medalha e libera a evolução", async ({ p
   expect(erros).toEqual([]);
 });
 
-test("medalhas: a primeira abertura descarta os pets antigos, avisa e pede o brasão do ovo novo", async ({ page }) => {
+/* o descarte 6 (COMBATE-TR, etapa R2; E2 e D-4): a luta virou tempo real nos pets v13; os pets de antes (v1-v12) saem com o aviso, que
+   oferece o arquivo deles e pede o brasao do ovo novo; o Tamer fica (as medalhas), sem a Fabrica de antes */
+test("luta em tempo real: a primeira abertura descarta os pets de antes, avisa, oferece o arquivo e pede o brasão do ovo novo", async ({ page }) => {
   await page.goto("/Assets/digilab_atlas_up.json");
   await page.evaluate(([c, s]) => {
     localStorage.clear(); localStorage.setItem(c + "-boas-vindas", "1"); localStorage.setItem(c + "-dicas-ligadas", "0");
@@ -344,52 +347,61 @@ test("medalhas: a primeira abertura descarta os pets antigos, avisa e pede o bra
   }, [CHAVE, JSON.stringify(SAVES.v3)] as const);
   const erros = vigiarErros(page);
   await page.goto(APP + "#/pet/estado");
-  const aviso = page.locator("dialog.med-aviso[open]");
+  const aviso = page.locator("dialog.aviso-tr[open]");
+  await expect(aviso).toContainText("A luta agora é em tempo real");
   await expect(aviso).toContainText("os 2 pets que você tinha (o ativo e os guardados) foram descartados");
   await page.keyboard.press("Escape");                             /* o aviso so sai pelo botao */
   await expect(aviso).toBeVisible();
+  /* o arquivo dos pets de antes: os dois saves, como estavam */
+  const [baixado] = await Promise.all([page.waitForEvent("download"), aviso.getByRole("button", { name: "Baixar o arquivo dos pets antigos" }).click()]);
+  expect(baixado.suggestedFilename()).toBe("pets-antigos-combate-por-turnos.json");
   await aviso.getByRole("button", { name: "Escolher o brasão do ovo novo" }).click();
   const br = page.locator("dialog.brasao-tela[open]");
   await expect(br.locator("#br-tit")).toHaveText("Escolha seu brasão");
   await expect(br.getByRole("button", { name: "Voltar" })).toHaveCount(0);
   await br.locator(".br-card").first().click();
   await expect(page.locator("dialog.brasao-tela[open]")).toHaveCount(0);
-  const r = await page.evaluate(c => ({ save: JSON.parse(localStorage.getItem(c)!), g: localStorage.getItem(c + "-guardados"), aviso: localStorage.getItem(c + "-aviso-v6"),
-    tamer: JSON.parse(localStorage.getItem(c + "-tamer")!) }), CHAVE);
-  expect(r.save.versao).toBe(12);                    /* o ovo novo nasce na versao atual (v12: o cerebro A, o corpo e o mundo) */
+  const r = await page.evaluate(c => ({ save: JSON.parse(localStorage.getItem(c)!), g: localStorage.getItem(c + "-guardados"), aviso: localStorage.getItem(c + "-aviso-tr"),
+    tamer: JSON.parse(localStorage.getItem(c + "-tamer")!), marca: localStorage.getItem(c + "-descarte"), antigos: JSON.parse(localStorage.getItem(c + "-descartados")!) }), CHAVE);
+  expect(r.save.versao).toBe(13);                    /* o ovo novo nasce na versao atual (v13: a luta em tempo real) */
   expect(r.g).toBe("[]");
   expect(r.aviso).toBeNull();
-  expect(r.tamer).toEqual({ versao: 6, log: [] });
+  expect(r.marca).toBe("6");
+  expect(r.antigos).toHaveLength(2);
+  expect(r.tamer).toEqual({ versao: 7, log: [] });
   await page.reload();
   await expect(page.locator(".pet-tela")).toBeVisible();
-  await expect(page.locator("dialog.med-aviso")).toHaveCount(0);
+  await expect(page.locator("dialog.aviso-tr")).toHaveCount(0);
   expect(erros).toEqual([]);
 });
 
-test("combate V21D e arenas: o pet v6 de antes sai com o mesmo aviso, e o Tamer recomeça sem medalhas", async ({ page }) => {
+test("luta em tempo real: o pet v6 de antes sai com o aviso, e o Tamer fica com as medalhas (D-4)", async ({ page }) => {
   const tamer = { versao: 1, log: [["medalha", { id: "campina", n: 1, quando: 1, pet: SAVE_V6.semente, forma: "Armadillomon", tick: 900 }]] };
   await page.goto("/Assets/digilab_atlas_up.json");
   await page.evaluate(([c, s, tm]) => {
-    /* o descarte das medalhas ja rodou (Tamer gravado, sem o marcador novo): so falta o do V21D */
+    /* os descartes de antes ja rodaram (marcador 5): so falta o da luta em tempo real */
     localStorage.clear(); localStorage.setItem(c + "-boas-vindas", "1"); localStorage.setItem(c + "-dicas-ligadas", "0");
-    localStorage.setItem(c, s); localStorage.setItem(c + "-guardados", "[]"); localStorage.setItem(c + "-tamer", tm);
+    localStorage.setItem(c, s); localStorage.setItem(c + "-guardados", "[]"); localStorage.setItem(c + "-tamer", tm); localStorage.setItem(c + "-descarte", "5");
   }, [CHAVE, JSON.stringify(SAVE_V6), JSON.stringify(tamer)] as const);
   const erros = vigiarErros(page);
   await page.goto(APP + "#/pet/estado");
-  const aviso = page.locator("dialog.med-aviso[open]");
+  const aviso = page.locator("dialog.aviso-tr[open]");
   await expect(aviso).toContainText("o pet que você tinha foi descartado");
+  await expect(aviso).toContainText("As suas medalhas, os itens, o título e os recordes ficam");
   await aviso.getByRole("button", { name: "Escolher o brasão do ovo novo" }).click();
   await page.locator("dialog.brasao-tela[open] .br-card").first().click();
   await expect(page.locator("dialog.brasao-tela[open]")).toHaveCount(0);
   const r = await page.evaluate(c => ({ save: JSON.parse(localStorage.getItem(c)!), marca: localStorage.getItem(c + "-descarte"),
     tamer: JSON.parse(localStorage.getItem(c + "-tamer")!) }), CHAVE);
-  expect(r.save.versao).toBe(12);                    /* o ovo novo nasce na versao atual (v12) */
+  expect(r.save.versao).toBe(13);
   expect(r.save.semente).not.toBe(SAVE_V6.semente);
-  expect(r.marca).toBe("5");
-  expect(r.tamer).toEqual({ versao: 6, log: [] });
+  expect(r.marca).toBe("6");
+  expect(r.tamer).toEqual({ versao: 7, log: tamer.log });
+  /* o ovo novo conhece a medalha do Tamer (o "u" no registro dele) */
+  expect(r.save.log.filter((e: unknown[]) => e[1] === "u")).toEqual([[expect.any(Number), "u", { n: 1 }]]);
   await page.reload();
   await expect(page.locator(".pet-tela")).toBeVisible();
-  await expect(page.locator("dialog.med-aviso")).toHaveCount(0);
+  await expect(page.locator("dialog.aviso-tr")).toHaveCount(0);
   expect(erros).toEqual([]);
 });
 
@@ -739,7 +751,7 @@ test("fronteira: com as 6 medalhas a ilha abre; a Liga tem 6 lutas sem cura, dá
   expect(lutas[lutas.length - 1][2]).toEqual({ r: "liga", s: expect.any(Number) });
   /* o titulo no Tamer, com o pet e a forma */
   const t = await lerTamer(page);
-  expect(t.versao).toBe(6);
+  expect(t.versao).toBe(7);
   const c = t.log.filter((e: [string]) => e[0] === "campeao");
   expect(c).toHaveLength(1);
   expect(c[0][1]).toMatchObject({ n: 1, pet: SAVE_LIGA.semente, forma: "Valkyrimon" });
@@ -875,7 +887,7 @@ test("fronteira: com o título, a Torre de Batalha dá 7 vitórias seguidas sem 
   const lutas = reg.log.filter((e: unknown[]) => e[1] === "l");
   expect(lutas[lutas.length - 1][2]).toEqual({ r: "torre_batalha", s: expect.any(Number) });
   let t = await lerTamer(page);
-  expect(t.versao).toBe(6);
+  expect(t.versao).toBe(7);
   expect(t.log.filter((e: [string]) => e[0] === "recorde")).toEqual([["recorde", expect.objectContaining({ inst: "torre_batalha", valor: 7, pet: SAVE_LIGA.semente, forma: "Valkyrimon" })]]);
   await expect(page).toHaveURL(/#\/lutar\/fronteira$/);
   await expect(torre.locator(".fr-inst-rec .dl-num")).toHaveText("7");
@@ -977,20 +989,18 @@ test("fronteira: a Fábrica aluga 1 de 3 Megas, luta, oferece a troca depois da 
   await expect(fab.locator(".fb-alugado")).toContainText("Imperialdramon Fighter Mode");
   await expect(fab.locator(".fb-status")).toContainText("série 1, luta 2 de 3");
   await fab.locator(".fb-lutar").click();
-  await expect(fab.locator(".fb-ultima")).toContainText("Luta 2: venceu SlashAngemon (Espelho)");
-  await expect(fab.locator(".fb-status")).toContainText("série 1, luta 3 de 3");
-  await fab.locator(".fb-lutar").click();
-  /* perdeu, acabou: o resumo e "Tentar de novo" */
+  /* a luta em tempo real (COMBATE-TR, etapa R2): a luta 2, contra o SlashAngemon (Espelho), chega ao limite e fica com o rival, o desafiado.
+     Perdeu, acabou: o resumo e "Tentar de novo" */
   await expect(fab.locator(".fb-ultima")).toContainText("Última tentativa: 0 séries vencidas; perdeu para");
-  await expect(fab.locator(".fb-ultima")).toContainText("na série 1, luta 3");
+  await expect(fab.locator(".fb-ultima")).toContainText("na série 1, luta 2");
   await expect(fab.locator(".fr-inst-tentar")).toHaveText("Tentar de novo");
-  await expect(fab.locator(".fb-lutas li")).toHaveCount(3);
-  /* so no registro do Tamer (versao 6, a tentativa com as regras dos v9): o comeco, as tres lutas e a troca; nenhuma luta no registro do pet */
+  await expect(fab.locator(".fb-lutas li")).toHaveCount(2);
+  /* so no registro do Tamer (versao 7, a tentativa com as regras dos v13): o comeco, as duas lutas e a troca; nenhuma luta no registro do pet */
   const t = await lerTamer(page);
-  expect(t.versao).toBe(6);
-  expect(t.log.find((e: [string]) => e[0] === "fabrica")[1].v).toBe(9);
+  expect(t.versao).toBe(7);
+  expect(t.log.find((e: [string]) => e[0] === "fabrica")[1].v).toBe(13);
   expect(t.log.filter((e: [string]) => e[0].startsWith("fabrica")).map((e: [string, { n: number; k?: number; alugado?: number }]) => [e[0], e[1].n, e[1].k ?? e[1].alugado]))
-    .toEqual([["fabrica", 1, 0], ["fabrica_luta", 1, 0], ["fabrica_troca", 1, 0], ["fabrica_luta", 1, 1], ["fabrica_luta", 1, 2]]);
+    .toEqual([["fabrica", 1, 0], ["fabrica_luta", 1, 0], ["fabrica_troca", 1, 0], ["fabrica_luta", 1, 1]]);
   expect(await numLog(page, "l")).toBe(l0);
   /* a proxima tentativa oferece outros alugados (a semente da tentativa 2) */
   await fab.locator(".fr-inst-tentar").click();
@@ -1713,6 +1723,30 @@ async function servirArenaSintetica(page: Page): Promise<void> {
     return r.fulfill({ status: 200, contentType: "image/png", body: PNG_1PX });
   });
 }
+
+/* a luta em tempo real dos pets v13 (COMBATE-TR, etapa R2): o desenho dela e da R3; ate la, o palco por turnos nao anima nada e vai direto ao
+   fim, com o aviso, e o Resultado mostra a duracao em segundos. Nenhum erro, nenhuma tela quebrada calada. O save: um Rookie v13 que conhece
+   a medalha da Campina (o "u") e passou do In-Training (180 min) */
+const SAVE_V13 = { semente: 101, versao: 13, log: [[480, "u", { n: 1 }], [480, "t", 210]] };
+const TAMER_V13 = { versao: 7, log: [["medalha", { id: "campina", n: 1, quando: 1, pet: 101, forma: "Agumon", tick: 480 }]] };
+test("luta em tempo real (pets v13): a Arena luta, o palco vai ao fim com o aviso e o Resultado mostra a duração", async ({ page }) => {
+  await semear(page, SAVE_V13, undefined, TAMER_V13);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/lutar/arena");
+  const l0 = await numLog(page, "l");
+  await page.locator(".lutar-grande").click();
+  await expect(page).toHaveURL(/#\/lutar\/luta$/);
+  expect(await numLog(page, "l")).toBe(l0 + 1);
+  await expect(page.locator(".luta-turno")).toContainText("Luta em tempo real");
+  const res = page.locator("dialog.modal-res[open]");
+  await expect(res).toBeVisible({ timeout: 60_000 });
+  await expect(res.locator(".res-sub")).toContainText(/\d+ s$/);
+  await expect(res).not.toContainText("0 turnos");
+  await page.locator(".res-continuar").click();
+  await expect(page).toHaveURL(/#\/lutar\/arena$/);
+  await expect(page.locator(".arena-ult")).toContainText(/· \d+ s/);
+  expect(erros).toEqual([]);
+});
 
 test("arena em tempo real: com a chave desligada, o Lutar é o de hoje e nada da arena é pedido", async ({ page }) => {
   await semear(page, SAVES.v3);

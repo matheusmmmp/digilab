@@ -6,7 +6,7 @@
      que esta, o que o ativo receberia (o "u" das medalhas e o "f" da Fronteira, tamer.sincronizarPet) e a luta; ele continua guardado. A
      tentativa e jogada antes em copias (o resultado do motor e deterministico) e so entao gravada: nos registros dos pets, na ordem, e
      por fim no Tamer. Se a gravacao der outro resultado que a copia, falha alto. */
-import { ESTAGIOS_SALAO, Motor, NOME_EST, RIVAL_SALAO, VERSAO_SALAO, formaRivalSalao, nomeForma, type Estagio, type Forma, type ResultadoLuta } from "../motor/index.ts";
+import { ESTAGIOS_SALAO, Motor, NOME_EST, RIVAL_SALAO, VERSAO_SALAO, formaRivalSalao, nomeForma, type Estagio, type Forma, type ResultadoLuta, tamanhoLuta } from "../motor/index.ts";
 import { jogoAtual, mudarMotor, mudarTamer, tamerAtual } from "./jogo.ts";
 import { abrirGuardado, atualizarGuardado, lerGuardados } from "./pets.ts";
 import { sincronizarPet, type LutaSalao, type Tamer, type TentativaSalao } from "./tamer.ts";
@@ -89,5 +89,5 @@ export function tentarSalao(escolha: readonly OrigemPet[]): ResultadoSalao {
   }
   /* 3. a tentativa no registro do Tamer (o recorde sai dela) */
   const tentativa = mudarTamer(tm => tm.registrarSalao(plano.map(p => p.luta)));
-  return { tentativa, lutas: plano.map(p => ({ est: p.luta.est, nome: p.c.nome, rival: formaRivalSalao(p.luta.s, p.luta.est), venceu: p.luta.venceu, turnos: p.res.turnos.length })) };
+  return { tentativa, lutas: plano.map(p => ({ est: p.luta.est, nome: p.c.nome, rival: formaRivalSalao(p.luta.s, p.luta.est), venceu: p.luta.venceu, turnos: tamanhoLuta(p.res) })) };
 }

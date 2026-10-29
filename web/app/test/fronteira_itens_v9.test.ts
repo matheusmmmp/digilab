@@ -6,7 +6,7 @@ import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import {
   ALUGUEIS_FABRICA, CESC_V6, CIT, CIT_V9, CTR, CV21D, CV21E, DUR_EVO, ESTAGIOS_SALAO, FATOR_INSTALACAO, FATOR_LIGA, FATOR_LIGA_V9,
   FATOR_RIVAL_FABRICA_V9, FATOR_SALAO, FATOR_SALAO_V9, LIGA, LUGARES_V6, MEDALHAS, Motor, STATS, TentativaFabrica, VERSAO_FABRICA,
-  VERSAO_FABRICA_V9, CURA_LIGA_V9, bonusChipsStat, chaveRegra, chipDe, curaLiga, fatorLiga, fatorSalao, gambitsAdulto, hashSemente,
+  VERSAO_FABRICA_TR, VERSAO_FABRICA_V9, CURA_LIGA_V9, bonusChipsStat, chaveRegra, chipDe, curaLiga, fatorLiga, fatorSalao, gambitsAdulto, hashSemente,
   itensValem, jogarLiga, jogarSequencia, jogarSerie, listaComChips, lutadorLiga, lutadoresLiga, lutadorPet, regraFabrica, rivalInstalacao,
   rivalSalao, sementeFabrica, type Stats,
 } from "../motor/index.ts";
@@ -108,7 +108,7 @@ describe("a Fabrica dos v9: as regras vao na tentativa", () => {
     x6.trocar();
     expect(x6.vidaAgora).toBeCloseTo(vida, 9);
   });
-  test("o Tamer grava v: 9 nas tentativas novas; a antiga (sem v) se refaz com as regras de antes; v desconhecida falha", () => {
+  test("o Tamer grava v: 13 nas tentativas novas (a luta em tempo real); a antiga (sem v) se refaz com as regras de antes; v desconhecida falha", () => {
     const t = campeao(), base = t.log.slice();
     const antiga: EventoTamer[] = [...base, ["fabrica", { n: 1, s: sementeFabrica(1), alugado: 1, quando: 3 }]];
     const t1 = Tamer.reproduzir(antiga);
@@ -116,12 +116,13 @@ describe("a Fabrica dos v9: as regras vao na tentativa", () => {
     const ref = new TentativaFabrica(1, 1);
     while (t1.fabricaAtual) { const p = t1.fabricaAtual.proxima()!; t1.lutarFabrica(4); expect(p.s).toBe(ref.proxima()!.s); ref.lutar(p.s); }
     expect(t1.fabrica[0].lutas.map(l => [l.venceu, l.vidaFim])).toEqual(ref.lutas.map(l => [l.venceu, l.vidaFim]));
-    /* a seguinte e nova: grava a versao dos v9, e o registro inteiro se refaz igual */
+    /* a seguinte e nova: grava a versao dos v13 (COMBATE-TR, D-4), e o registro inteiro se refaz igual */
     t1.alugarFabrica(0, 5);
     const ev = t1.log[t1.log.length - 1] as ["fabrica", { v?: number }];
     expect(ev[0]).toBe("fabrica");
-    expect(ev[1].v).toBe(VERSAO_FABRICA_V9);
-    expect(t1.fabrica[1].regra.versao).toBe(VERSAO_FABRICA_V9);
+    expect(ev[1].v).toBe(VERSAO_FABRICA_TR);
+    expect(t1.fabrica[1].regra.versao).toBe(VERSAO_FABRICA_TR);
+    expect(t1.fabrica[1].regra.R?.tempoReal).toBe(true);
     while (t1.fabricaAtual) t1.lutarFabrica(6);
     const r = Tamer.reproduzir(t1.log);
     expect(r.fabrica.map(x => [x.regra.versao, x.lutas.map(l => [l.s, l.venceu, l.vidaFim])])).toEqual(t1.fabrica.map(x => [x.regra.versao, x.lutas.map(l => [l.s, l.venceu, l.vidaFim])]));

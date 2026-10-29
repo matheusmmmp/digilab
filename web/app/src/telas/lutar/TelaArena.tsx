@@ -1,7 +1,7 @@
 /* Arena (desenhos ArenaEscolha, ArenaAoVivo, EnsinarRegras; porte do HTML): escolha do rival em cards com sprite
    e uma linha de estilo, lutas de treino do Champion, Lutar grande e Melhor de 10, o palco e as regras de combate. */
 import { useEffect, useMemo, useState } from "react";
-import { NOME_ARQ, NOME_BOT, NOME_DONO, NOME_V2, chaveSprite, lutadorBot, lutadorPet, nomeEstagio, nomeForma, vidaExibida } from "../../../motor/index.ts";
+import { NOME_ARQ, NOME_BOT, NOME_DONO, NOME_V2, chaveSprite, lutadorBot, lutadorPet, nomeEstagio, nomeForma, vidaExibida, duracaoLuta } from "../../../motor/index.ts";
 import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { Seg } from "../../componentes/Barras.tsx";
 import { useJogo } from "../../jogo.ts";
@@ -57,7 +57,7 @@ function UltimaLuta({ verReplay }: { verReplay: (idx: number) => void }) {
   return (
     <div className="dl-card arena-ult">
       <span className={`arena-ult-tag arena-ult-tag--${r === 1 ? "vit" : r === 0 ? "der" : "emp"}`}>{tag}</span>
-      <b>Última luta: {luta.B.nomeTela} · {luta.res.turnos.length} turnos</b>
+      <b>Última luta: {luta.B.nomeTela} · {duracaoLuta(luta.res)}</b>
       <button type="button" className="arena-ult-ver" onClick={() => verReplay(idx)}>ver no Diário</button>
     </div>
   );

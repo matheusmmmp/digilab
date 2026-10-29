@@ -5,7 +5,7 @@
    aberto, numeros) -> o que decidiu a luta -> regra nova ou "nenhuma regra nova" -> progresso. Elogiar/Repreender
    uma acao da luta nao existe no motor e fica de fora (docs/PENDENCIAS_PRANCHAS.md). */
 import { useEffect, useRef, useState } from "react";
-import { CAT, MEDALHAS, NOME_V2, NPC, cartaDe, chaveRegra, fatorExibicao, itemDe, regraDe, rotuloRegra, type ResultadoLuta, type Turno } from "../../../motor/index.ts";
+import { CAT, MEDALHAS, NOME_V2, NPC, cartaDe, chaveRegra, fatorExibicao, itemDe, regraDe, rotuloRegra, type ResultadoLuta, type Turno, duracaoLuta } from "../../../motor/index.ts";
 import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { abrirModal } from "../../componentes/modal.ts";
 import { Peca } from "../../componentes/Imagens.tsx";
@@ -93,7 +93,7 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
   const tag = liga ? "Fronteira · Liga dos Líderes" : inst ? `Fronteira · ${inst.nome}` : npc ? `Campanha · ${LUGARES[Li].nome}` : "Arena · fim da luta";
   const titulo = liga ? (venceuLiga ? "Campeão!" : perdeu ? "Derrota" : "Empate") : inst ? (r.recorde ? "Recorde!" : "Fim da sequência")
     : lugarNovo ? "Ilha vencida!" : venceu ? "Vitória!" : perdeu ? "Derrota" : "Empate";
-  const n = res.turnos.length;
+  const n = res.turnos.length, dur = duracaoLuta(res);
   /* lutas seguidas (Cidadela e Liga): o resultado e o da serie; "n turnos" e o da ultima luta */
   const serie = r.nLutas > 1 ? r.serie : null;
   const sub = inst
@@ -102,10 +102,12 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
     ? (venceuLiga ? `${p.A.nomeTela} venceu os ${r.nLutas} líderes seguidos` : `A Liga parou na luta ${r.serie.length} de ${r.nLutas}, contra ${liga[r.serie.length - 1].nomeTela}`)
     : serie
     ? (venceu ? `${p.A.nomeTela} venceu as ${r.nLutas} lutas seguidas` : `A série parou na luta ${serie.length} de ${r.nLutas}`)
-    : venceu ? `${p.A.nomeTela} venceu ${p.B.nomeTela} · ${n} turnos` : perdeu ? `${p.B.nomeTela} venceu no turno ${n}` : `Empate no limite · ${n} turnos`;
+    : venceu ? `${p.A.nomeTela} venceu ${p.B.nomeTela} · ${dur}` : perdeu ? (res.tr ? `${p.B.nomeTela} venceu · ${dur}` : `${p.B.nomeTela} venceu no turno ${n}`) : `Empate no limite · ${dur}`;
   /* dano na escala de quem recebeu (com a escala de stats, a campanha mostra os números grandes) */
-  const danoDado = res.turnos.reduce((s, tr) => s + tr.dano[1], 0) * fatorExibicao(p.B.cond, m.versao),
-    danoLevado = res.turnos.reduce((s, tr) => s + tr.dano[0], 0) * fatorExibicao(p.A.cond, m.versao);
+  /* na luta em tempo real (pets v13) o dano e a vida que cada um perdeu (a cura da carta volta a somar no do pet) */
+  const curaA = res.tr?.curou[0] ? Math.max(0, res.E.L[0].hp - res.E0.L[0].hp) : 0;
+  const danoDado = (res.tr ? res.E0.L[1].hp - res.E.L[1].hp : res.turnos.reduce((s, tr) => s + tr.dano[1], 0)) * fatorExibicao(p.B.cond, m.versao),
+    danoLevado = (res.tr ? res.E0.L[0].hp - res.E.L[0].hp + curaA : res.turnos.reduce((s, tr) => s + tr.dano[0], 0)) * fatorExibicao(p.A.cond, m.versao);
   const vencidos = LUGARES.filter((_, i) => m.lugarVencido(i)).length;
   const recordeTamer = inst ? tamerAtual().recorde(inst.id) : null;
   const nums: [string, string][] = inst
@@ -189,7 +191,7 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
               const x = serie[i], fimVida = x ? Math.max(0, x.E.L[0].hp) / x.E.L[0].hpMax : 0;
               return <li key={i} className={!x ? "res-serie-nao" : x.pontosA === 1 ? "res-serie-vit" : "res-serie-der"}>
                 <span className="res-t">Luta {i + 1}</span>
-                <span>{rivaisLista ? <><b>{rivaisLista[i].nomeTela}</b> ({rivaisLista[i].estiloTela}): </> : null}{!x ? "não chegou a lutar" : `${x.pontosA === 1 ? "venceu" : x.pontosA === 0 ? "perdeu" : "empatou"} em ${x.turnos.length} turnos · terminou com ${Math.round(fimVida * 100)}% da vida`}</span>
+                <span>{rivaisLista ? <><b>{rivaisLista[i].nomeTela}</b> ({rivaisLista[i].estiloTela}): </> : null}{!x ? "não chegou a lutar" : `${x.pontosA === 1 ? "venceu" : x.pontosA === 0 ? "perdeu" : "empatou"} em ${duracaoLuta(x)} · terminou com ${Math.round(fimVida * 100)}% da vida`}</span>
               </li>;
             })}</ol>
           </section>}

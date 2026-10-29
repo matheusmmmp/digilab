@@ -6,10 +6,6 @@
      convertido pelo T_TR; SEM FONTE onde nao ha. Nenhum foi calibrado: o equilibrio fica para a rodada do fim. */
 import { CV } from "../constantes.ts";
 
-/** a chave da luta em tempo real: desligada, nenhuma luta do jogo passa por aqui (o Motor.lutar so a liga na R2) */
-export const COMBATE_TR = { ligada: false };
-export function ligarCombateTR(v: boolean): void { COMBATE_TR.ligada = v; }
-
 /** o passo fixo (ms). PROPOSTO, o da arena (arena/constantes.ts, PASSO_MS) */
 export const PASSO_TR_MS = 16;
 /** o tempo de turno T_TR em passos: 125 x 16 ms = 2 s. DECIDIDO (D-5); fonte: o ciclo de ataque padrao do prototipo (STATS_PADRAO.cad,

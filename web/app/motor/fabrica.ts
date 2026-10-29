@@ -23,7 +23,8 @@
    em test/conferir_fabrica_salao.mjs --calibrar (sementes de calibracao), artifacts_equilibrio_geral/fase3/fabrica_calibracao.json. */
 import { copiarGambits, gambitsAdulto } from "./bots.ts";
 import { caraterCanonico, perfilDe } from "./catalogo.ts";
-import { desafiadoDaVersao, jogarV2, regrasDaVersao, type Lutador, type RegrasLuta, type ResultadoLuta } from "./combate.ts";
+import { jogarLuta } from "./combate_tr/adaptador.ts";
+import { desafiadoDaVersao, regrasDaVersao, type Lutador, type RegrasLuta, type ResultadoLuta } from "./combate.ts";
 import { CV, ESPECIES, FORMAS_AD, LINHA_DA_FORMA } from "./constantes.ts";
 import { VERSAO_LIGA } from "./liga.ts";
 import { nomeForma } from "./nomes.ts";
@@ -46,14 +47,19 @@ export const FATOR_FABRICA = 1;
     com a vida cheia. PROPOSTOS; calibrados nas sementes de calibracao (ver o cabecalho) */
 export const VERSAO_FABRICA_V9 = 9;
 export const FATOR_RIVAL_FABRICA_V9 = 0.6;
+/** a Fabrica da luta em tempo real (COMBATE-TR, etapa R2; D-4): as regras dos pets v13 (CV21E_TR), com o fator e a troca dos v9 (sem
+    recalibrar: o equilibrio fica para a rodada do fim). As tentativas antigas (v ausente ou 9) saem do registro do Tamer com aviso
+    (src/tamer.ts, registro versao 7) */
+export const VERSAO_FABRICA_TR = 13;
 /** as versoes das regras da Fabrica que o registro conhece; as tentativas novas usam a ultima */
-export const VERSOES_FABRICA: readonly number[] = [VERSAO_FABRICA, VERSAO_FABRICA_V9];
-export const VERSAO_FABRICA_ATUAL = VERSAO_FABRICA_V9;
+export const VERSOES_FABRICA: readonly number[] = [VERSAO_FABRICA, VERSAO_FABRICA_V9, VERSAO_FABRICA_TR];
+export const VERSAO_FABRICA_ATUAL = VERSAO_FABRICA_TR;
 /** as regras da Fabrica numa versao: as regras da luta, o fator dos rivais e se a troca entra inteira */
 export interface RegraFabrica { versao: number; R: RegrasLuta; fatorRival: number; trocaInteira: boolean }
 export function regraFabrica(versao: number, fatorRival?: number): RegraFabrica {
   if (versao === VERSAO_FABRICA) return { versao, R: REGRAS_FABRICA, fatorRival: fatorRival ?? FATOR_FABRICA, trocaInteira: false };
   if (versao === VERSAO_FABRICA_V9) return { versao, R: regrasDaVersao(VERSAO_FABRICA_V9), fatorRival: fatorRival ?? FATOR_RIVAL_FABRICA_V9, trocaInteira: true };
+  if (versao === VERSAO_FABRICA_TR) return { versao, R: regrasDaVersao(VERSAO_FABRICA_TR), fatorRival: fatorRival ?? FATOR_RIVAL_FABRICA_V9, trocaInteira: true };
   throw new Error("versão das regras da Fábrica desconhecida: " + JSON.stringify(versao));
 }
 
@@ -153,7 +159,7 @@ export class TentativaFabrica {
     const p = this.proxima();
     if (!p) throw new Error(`a tentativa ${this.n} da Fábrica já acabou`);
     if (s !== p.s) throw new Error(`a luta ${p.k + 1} da tentativa ${this.n} da Fábrica tem a semente ${p.s}, não ${s}`);
-    const { A, B, ini } = this.lutadores(), res = jogarV2(A, B, s, this.regra.R, ini, desafiadoDaVersao(this.regra.versao));
+    const { A, B, ini } = this.lutadores(), res = jogarLuta(A, B, s, this.regra.R, ini, desafiadoDaVersao(this.regra.versao));
     const fim = res.E.L[0], venceu = res.pontosA === 1;
     const luta: LutaFabrica = { k: p.k, s, alugado: this.alugado, rival: p.rival, res, venceu, vidaFim: Math.max(0, fim.hp) / fim.hpMax, trocou: false };
     this.lutas.push(luta);

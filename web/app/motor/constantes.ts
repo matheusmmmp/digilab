@@ -48,8 +48,11 @@ export const CDJ = { limiarNecessidade: .3, limiarVontade: .1, limiarTom: .2, kC
    (motor/motor_corpo_mundo.ts); o dono deixa a racao num lugar (o evento "dc"; MV-3, MV-5) e o pet percebe, anda ate ela e come por
    iniciativa propria, com o mesmo efeito no corpo do alimentar de hoje e sem digestao (MV-9); o botao Alimentar poe a racao no
    comedouro (reserva temporaria); o carinho e o tapa ficam fora do mundo, como no v11 (MV-7); o cerebro e o A do v11, com o alvo
-   padrao do motor e sem as chaves do mundo (MV-2) */
-export const VERSAO_PET = 12;
+   padrao do motor e sem as chaves do mundo (MV-2);
+   13 = o v12 com a luta em tempo real (docs/TAREFA_V2_COMBATE_TR.md, etapa R2; docs/ESPEC_COMBATE_TR.md): toda luta do pet (Motor.lutar,
+   a Liga, o Salao, as instalacoes, a Fabrica do Tamer) passa pelo nucleo motor/combate_tr/ (as regras CV21E_TR); o resto e o v12. Os
+   saves das versoes anteriores nao abrem como pet novo: o app mostra o aviso do descarte (E2, decisao do Matheus de 2026-10-29) */
+export const VERSAO_PET = 13;
 /* medalhas do Tamer que cada evolucao pede nos pets v6 (decisao do Matheus, 2026-09-29: 1, 3 e 5; so no jogo), pela
    chave do estagio de destino: Rookie -> Champion (adolescente), Champion -> Ultimate (adulto), Ultimate -> Mega (mega).
    In-Training -> Rookie nao pede medalha. A tabela das medalhas fica em medalhas.ts */
@@ -213,6 +216,9 @@ export const CV21E = {
   preparoSobPeleOculto: true, muralhaListaEspelho: true, vigiaBateEmQuemRecua: true, vigiaRecuaDoPreparoSobPele: true,
   duelistaDefendeDoGolpe: true, titaDefendeDoGolpe: true, espelhoSemCarregar: true, muralhaSemCarregar: true, muralhaContraGolpeNaPele: true,
 } as const;
+/* a luta em tempo real (pets v13; docs/ESPEC_COMBATE_TR.md): as regras e as listas da V21E, jogadas pelo nucleo motor/combate_tr/ em vez do
+   combate por turnos (combate_tr/adaptador.ts, jogarLuta, escolhe pelo tempoReal) */
+export const CV21E_TR = { ...CV21E, versaoPet: 13, tempoReal: true } as const;
 
 /* catalogo (docs/catalogo_pets.json, docs/arvore_evolucao.json): 4 especies ativas */
 export const STATS: readonly Stat[] = ["vigor", "folego", "recuperacao", "forca", "mira", "guarda"];

@@ -1,7 +1,8 @@
 /* Combate V2.1 (espelho de digilab/combate_v2/ e combate_v2/v21/, regras corrigidas V2C/V21C). Resolucao
    deterministica, sem rng; so as decisoes (epsilon) usam rng. Cada lutador tem um PERFIL (catalogo.ts) e,
    conforme o estagio, a tecnica da linha (adolescente) e a passiva da forma (adulto). */
-import { CSO, CV, CV21, CV21D, CV21E, TECNICAS } from "./constantes.ts";
+import { CSO, CV, CV21, CV21D, CV21E, CV21E_TR, TECNICAS } from "./constantes.ts";
+import type { ResultadoLutaTR } from "./combate_tr/luta.ts";
 import type { Perfil } from "./catalogo.ts";
 import { criarRng, hashSemente, type Rng } from "./rng.ts";
 import type { Estagio } from "./tipos.ts";
@@ -23,10 +24,12 @@ export interface RegrasV21 {
   /* V21E (so no CV21E) */
   readonly duelistaDefendeDoGolpe?: boolean; readonly titaDefendeDoGolpe?: boolean; readonly espelhoSemCarregar?: boolean;
   readonly muralhaSemCarregar?: boolean; readonly muralhaContraGolpeNaPele?: boolean;
+  /** pets v13 (CV21E_TR): a luta e jogada em tempo real (combate_tr/adaptador.ts, jogarLuta) */
+  readonly tempoReal?: boolean;
 }
 export type RegrasLuta = RegrasV21 | null;
 export const regrasDaVersao = (versao: number): RegrasLuta =>
-  versao >= CV21E.versaoPet ? CV21E : versao >= CV21D.versaoPet ? CV21D : null;
+  versao >= CV21E_TR.versaoPet ? CV21E_TR : versao >= CV21E.versaoPet ? CV21E : versao >= CV21D.versaoPet ? CV21D : null;
 
 export interface Lado {
   p: Perfil; hp: number; hpMax: number; guts: number; gutsMax: number; regen: number; prep: boolean; hist: string[];
@@ -295,7 +298,9 @@ export interface Turno {
   /** carta de Cura (itens.ts): a vida que o lado curou no fim deste turno (so aparece no turno da cura) */
   cura?: number[];
 }
-export interface ResultadoLuta { E0: EstadoLuta; turnos: Turno[]; pontosA: number; fim: "ko" | "limite"; E: EstadoLuta }
+/** `tr`: a luta foi em tempo real (pets v13; combate_tr/adaptador.ts): `turnos` vem vazio, e E0 e E trazem so a vida e o guts do comeco e
+    do fim; o resto (as acoes, o saldo de cada uma, a duracao) esta em `tr` */
+export interface ResultadoLuta { E0: EstadoLuta; turnos: Turno[]; pontosA: number; fim: "ko" | "limite"; E: EstadoLuta; tr?: ResultadoLutaTR }
 
 /** efeito de uma carta na luta (itens.ts; pets v6): `guts` a mais no comeco, `foco` = sem exploracao (epsilon 0), e a `cura`: na
     primeira vez que a vida cai abaixo de `abaixo` da maxima (e o lado nao caiu), cura `fracao` da vida maxima, uma vez */

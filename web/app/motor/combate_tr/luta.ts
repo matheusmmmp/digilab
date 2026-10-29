@@ -5,14 +5,14 @@
    - So o epsilon sorteia, numa RNG de politica por lado (derivarSemente("combate_tr", semente, "politica", lado)); o fluxo "combate" fica
      reservado, sem sorteio (espec item 4).
    - So + - x / e Math.min/max (D-7): o mesmo log da a mesma luta em todo motor de JavaScript (test/combate_tr_sem_dom.test.mjs confere).
-   - Atras da chave COMBATE_TR, desligada: o Motor.lutar so passa por aqui na R2. */
+   - A versao do pet e a chave (R2): so as lutas dos pets v13 (as regras CV21E_TR) passam por aqui, pelo adaptador.ts (jogarLuta). */
 import type { CuraLuta, Desafiado, Lutador, RegrasLuta } from "../combate.ts";
 import { custoV2 } from "../combate.ts";
 import type { Perfil } from "../catalogo.ts";
 import { CSO, CV, CV21 } from "../constantes.ts";
 import { derivarSemente } from "../mundo.ts";
 import { criarRng, type Rng } from "../rng.ts";
-import { COMBATE_TR, CTR_TR, T_TR } from "./constantes_tr.ts";
+import { CTR_TR, T_TR } from "./constantes_tr.ts";
 import { decidirTR, faixaTR, intencaoTR, marcaAtivaTR, peleAtivaTR } from "./controlador.ts";
 
 /** a acao em curso: ocupa os passos [inicio, fim); o golpe cai em inicio + instante */
@@ -57,6 +57,8 @@ export interface ResultadoLutaTR {
   /** a vida maxima e o Guts do comeco de cada lado */
   E0: { hpMax: number[]; hp: number[]; guts: number[] };
   acoes: AcaoRegistro[]; pontosA: number; fim: "ko" | "limite"; passos: number; E: EstadoTR;
+  /** a carta de Cura de cada lado curou nesta luta */
+  curou: boolean[];
   /** so com a opcao eventos (a tela e os testes) */
   eventos: EventoTR[] | null;
 }
@@ -103,10 +105,10 @@ interface Dano { para: number; valor: number; causa: number | null; cac: boolean
 /** a luta em andamento: o estado, as duas RNG de politica, o registro das acoes e o dos eventos */
 export interface LutaTR {
   S: EstadoTR; A: Lutador; B: Lutador; rng: Rng[]; R: RegrasLuta; acoes: AcaoRegistro[]; eventos: EventoTR[] | null; hpMax0: number[];
+  curou: boolean[];
 }
 
 export function criarLutaTR(A: Lutador, B: Lutador, semente: number, o: OpcoesTR = {}): LutaTR {
-  if (!COMBATE_TR.ligada) throw new Error("a luta em tempo real está atrás da chave COMBATE_TR, desligada");
   const ea = A.cond.escala, eb = B.cond.escala;
   if ((ea === undefined) !== (eb === undefined)) throw new Error("escala ligada em um lado só");
   const S = estadoTR(A.cond, B.cond);
@@ -117,7 +119,7 @@ export function criarLutaTR(A: Lutador, B: Lutador, semente: number, o: OpcoesTR
   if (o.curas) { S.L[0].cura = o.curas[0] ?? null; S.L[1].cura = o.curas[1] ?? null; }
   return {
     S, A, B, rng: [criarRng(sementePoliticaTR(semente, 0)), criarRng(sementePoliticaTR(semente, 1))], R: o.R ?? null, acoes: [],
-    eventos: o.eventos ? [] : null, hpMax0: [S.L[0].hpMax, S.L[1].hpMax],
+    eventos: o.eventos ? [] : null, hpMax0: [S.L[0].hpMax, S.L[1].hpMax], curou: [false, false],
   };
 }
 
@@ -249,7 +251,7 @@ export function passoTR(Lt: LutaTR, desafiado: Desafiado = null): [number, "ko" 
     const s = S.L[l], c = s.cura;
     if (!c || s.hp <= 0 || s.hp >= c.abaixo * s.hpMax) continue;
     const ganho = Math.min(s.hpMax - s.hp, c.fracao * s.hpMax);
-    s.hp += ganho; s.cura = null;
+    s.hp += ganho; s.cura = null; Lt.curou[l] = true;
     Lt.eventos?.push({ t, tipo: "cura", lado: l, valor: ganho });
   }
   /* o fim das acoes: o Guts da defesa e do carregar, a marca, o preparo pronto */
@@ -311,5 +313,5 @@ export function jogarTR(A: Lutador, B: Lutador, semente: number, o: OpcoesTR = {
   const E0 = { hpMax: [S.L[0].hpMax, S.L[1].hpMax], hp: [S.L[0].hp, S.L[1].hp], guts: [S.L[0].guts, S.L[1].guts] };
   let fim: ReturnType<typeof passoTR> = null;
   while (!(fim = passoTR(Lt, o.desafiado ?? null)));
-  return { E0, acoes: Lt.acoes, pontosA: fim[0], fim: fim[1], passos: S.passo, E: S, eventos: Lt.eventos };
+  return { E0, acoes: Lt.acoes, pontosA: fim[0], fim: fim[1], passos: S.passo, E: S, curou: Lt.curou, eventos: Lt.eventos };
 }

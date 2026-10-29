@@ -39,7 +39,7 @@ describe("save", () => {
   });
   test("save que nao abre falha alto (nao vira pet de exemplo em silencio)", () => {
     for (const bruto of ["{", JSON.stringify({ semente: 1.5, log: [] }), JSON.stringify({ semente: 1, log: [[480, "x", 1]] }),
-      JSON.stringify({ semente: 1, log: [[999, "t", 1]] }), JSON.stringify({ semente: 1, log: [], versao: 13 })]) {
+      JSON.stringify({ semente: 1, log: [[999, "t", 1]] }), JSON.stringify({ semente: 1, log: [], versao: 14 })]) {
       const l = lerSave(armaz({ [CHAVE]: bruto }));
       expect(l.tipo, bruto).toBe("erro");
       if (l.tipo === "erro") expect(l.bruto).toBe(bruto);

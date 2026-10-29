@@ -4,9 +4,9 @@
 import { useEffect, useState } from "react";
 import {
   BOTS_V21, BOT_TRACO, CAT, LIGA, NOME_ARQ, NOME_BOT, NOME_ESP, NOME_EST, NPC, RIVAL_LIGA, RIVAL_SALAO, cartaDe, formaRivalSalao, chaveSprite, corDominante, estadoV2, formaLiga, formaRival,
-  formaRivalInstalacao, hashSemente, instalacaoDe, jogarV2, lutadorBot, lutadorPet, medalhaDoLider, motivoCombate, nomeForma, type Arena, type Estagio,
+  formaRivalInstalacao, hashSemente, instalacaoDe, lutadorBot, lutadorPet, medalhaDoLider, motivoCombate, nomeForma, type Arena, type Estagio,
   type EstadoLuta, type FormaAdultaNormal, type IdInstalacao, type Instalacao, type Lutador, Motor, type MotivoCombate, type ResultadoLuta, type TracoCombate,
-  type Turno,
+  type Turno, duracaoLuta, jogarLuta, tamanhoLuta,
 } from "../motor/index.ts";
 import { gradeDe } from "./grades.ts";
 import { jogoAtual, mudarMotor, mudarTamer, tamerAtual } from "./jogo.ts";
@@ -14,6 +14,9 @@ import { ehLuta } from "./rotas.ts";
 import { conferirRevanche, type Campeao, type ItemGanho, type MedalhaGanha, type Recorde } from "./tamer.ts";
 import { falaRevanche } from "./falaLivre.ts";
 import { SOM } from "./som.ts";
+
+/** "limite de turnos" (por turnos) ou "limite de tempo" (pets v13, em tempo real) */
+const limiteDe = (res: ResultadoLuta): string => res.tr ? "limite de tempo" : "limite de turnos";
 
 /* bots classicos: Digimon do mapa da Etapa 0 (so rotulo) */
 import { DIGIMON_BOT } from "./nomesRivais.ts";
@@ -189,7 +192,7 @@ export function lutarAnimado(npc: string | null, nomeAcaoV2: Record<string, stri
     if (carta && t0.cartas(carta) < 1) throw new Error(`o Tamer não tem mais a ${cartaDe(carta).nome}`);
     if (cenario) {   /* pet de cenario nao e reconstruivel do registro: luta sem ensinar */
       const A0 = lutadorPet(m, "Seu pet"), B0 = lutadorPet(LUTA.rivalFixo!.rival, "Rival do cenário");
-      const res0 = jogarV2(A0, B0, hashSemente("cenario", m.semente, m.log.length), m.regras);
+      const res0 = jogarLuta(A0, B0, hashSemente("cenario", m.semente, m.log.length), m.regras);
       r = { res: res0, A: A0, B: B0, serie: [res0], arena: null };
     } else {
       mudarMotor(mm => { r = mm.lutar(rival, hashSemente("luta", mm.semente, mm.log.length), carta); idxLog = mm.log.length - 1; ativasDepois = mm.gp ? [...mm.gp.ativas] : null; });
@@ -217,7 +220,7 @@ export function lutarAnimado(npc: string | null, nomeAcaoV2: Record<string, stri
       const primeiraDoLugar = !lugarJaVencido && res.pontosA === 1;
       const txt = res.pontosA === 1 ? "Seu pet venceu" : res.pontosA === 0 ? "O rival venceu" : "Empate";
       p.texto = (nLutas > 1 ? (res.pontosA === 1 ? `Seu pet venceu as ${nLutas} lutas seguidas. ` : `A série parou na luta ${serie.length} de ${nLutas}. `) : "")
-        + `${txt} em ${res.turnos.length} turnos (${res.fim === "ko" ? "nocaute" : !cenario && m.desafiado === 1 ? "limite de turnos: a luta fica com quem foi desafiado" : "limite de turnos: vence quem tem mais vida"}).`
+        + `${txt} em ${duracaoLuta(res)} (${res.fim === "ko" ? "nocaute" : !cenario && m.desafiado === 1 ? `${limiteDe(res)}: a luta fica com quem foi desafiado` : `${limiteDe(res)}: vence quem tem mais vida`}).`
         + (primeiraDoLugar && Li < m.lugares.length - 1 ? ` ${m.lugares[Li + 1].nome} liberada!` : "")
         + (primeiraDoLugar && Li === m.lugares.length - 1 ? " Campanha concluída!" : "")
         + (cenario ? " (Contra pet de cenário o seu não aprende.)" : "");
@@ -248,7 +251,7 @@ export function lutarLiga(nomeAcaoV2: Record<string, string>): void {
   animar(serie, n, A, lideres, modo, nomeAcaoV2, null, p => {
     const txt = res.pontosA === 1 ? "Seu pet venceu" : res.pontosA === 0 ? `${lideres[serie.length - 1].nomeTela} venceu` : "Empate";
     p.texto = (r!.venceu ? `Seu pet venceu os ${n} líderes seguidos: campeão da Liga. ` : `A Liga parou na luta ${serie.length} de ${n}. `)
-      + `${txt} em ${res.turnos.length} turnos (${res.fim === "ko" ? "nocaute" : "limite de turnos: a luta fica com quem foi desafiado, o líder"}).`;
+      + `${txt} em ${duracaoLuta(res)} (${res.fim === "ko" ? "nocaute" : `${limiteDe(res)}: a luta fica com quem foi desafiado, o líder`}).`;
     p.resultado = { res, npc: null, notasAntes, cenario: false, ativasAntes, ativasDepois, lugarJaVencido: true, sparringAntes, sparringContou: false, idxLog, medalha: null,
       serie, nLutas: n, arena: null, carta: null, itens: [], lideres, titulo, instalacao: null, rivais: null, recorde: null };
   });
@@ -277,7 +280,7 @@ export function lutarInstalacao(id: IdInstalacao, nomeAcaoV2: Record<string, str
   animar(serie, serie.length, A, rivais, modo, nomeAcaoV2, null, p => {
     const txt = res.pontosA === 1 ? "Seu pet venceu" : res.pontosA === 0 ? `${rivais[serie.length - 1].nomeTela} venceu` : "Empate";
     p.texto = `${inst.nome}: ${v} vitória${v === 1 ? "" : "s"} seguida${v === 1 ? "" : "s"}. `
-      + `${txt} em ${res.turnos.length} turnos (${res.fim === "ko" ? "nocaute" : "limite de turnos: a luta fica com quem foi desafiado, o rival"}).`
+      + `${txt} em ${duracaoLuta(res)} (${res.fim === "ko" ? "nocaute" : `${limiteDe(res)}: a luta fica com quem foi desafiado, o rival`}).`
       + (recorde ? ` Recorde novo do Tamer: ${recorde.valor}.` : "");
     p.resultado = { res, npc: null, notasAntes, cenario: false, ativasAntes, ativasDepois, lugarJaVencido: true, sparringAntes, sparringContou: false, idxLog, medalha: null,
       serie, nLutas: serie.length, arena: null, carta: null, itens: [], lideres: null, titulo: null, instalacao: inst, rivais, recorde };
@@ -328,6 +331,13 @@ function animar(serie: ResultadoLuta[], nLutas: number, A: LutadorTela, Bs: Luta
   const passo = () => {
     const p = LUTA.palco!, res = serie[j];
     if (i >= res.turnos.length) {
+      /* a luta em tempo real (pets v13) ainda nao tem desenho (COMBATE-TR, etapa R3): o palco vai direto ao estado do fim dela, com o
+         aviso, sem turno nenhum para animar */
+      if (res.tr && p.E !== res.E) {
+        Object.assign(p, { E: res.E, tr: null, turno: null, callout: "", intencao: null, regra: null,
+          texto: `Luta em tempo real (${duracaoLuta(res)}). O desenho dela chega numa próxima versão; por enquanto, o resultado.` });
+        avisarLuta(); agendar(2); return;
+      }
       /* a proxima luta da serie: o palco recomeca com a vida que sobrou (uma pausa maior entre elas) */
       if (j < serie.length - 1) { j++; i = 0; abrir(); avisarLuta(); agendar(3); return; }
       fim(p); LUTA.lutando = false; avisarLuta(); return;
@@ -377,12 +387,12 @@ export function melhorDe10(): string {
   if (LUTA.rivalFixo) {
     const m = jogoAtual().motor, B = lutadorPet(LUTA.rivalFixo.rival, "Rival do cenário");
     for (let k = 0; k < 10; k++) {
-      const r = jogarV2(lutadorPet(m, "Seu pet"), B, hashSemente("cenario-m10", m.semente, m.log.length, k), m.regras);
+      const r = jogarLuta(lutadorPet(m, "Seu pet"), B, hashSemente("cenario-m10", m.semente, m.log.length, k), m.regras);
       if (r.pontosA === 1) v++; else if (r.pontosA === 0) d++; else e++;
       lim += r.fim === "limite" ? 1 : 0;
     }
     previa("arena");
-    const txt = `10 lutas: ${v} vitórias, ${d} derrotas, ${e} empates (${((v + e / 2) * 10).toFixed(0)}% dos pontos). ${lim} acabaram no limite de turnos. Contra pet de cenário o seu não aprende.`;
+    const txt = `10 lutas: ${v} vitórias, ${d} derrotas, ${e} empates (${((v + e / 2) * 10).toFixed(0)}% dos pontos). ${lim} acabaram no limite${m.regras?.tempoReal ? " de tempo" : " de turnos"}. Contra pet de cenário o seu não aprende.`;
     if (LUTA.palco) LUTA.palco.texto = txt;
     avisarLuta();
     return txt;
@@ -397,7 +407,7 @@ export function melhorDe10(): string {
     trocas = m.gp ? m.gp.mudancas.length - antes : 0;
   });
   previa("arena");
-  const txt = `10 lutas: ${v} vitórias, ${d} derrotas, ${e} empates (${((v + e / 2) * 10).toFixed(0)}% dos pontos). ${lim} acabaram no limite de turnos. O pet fez ${trocas} troca${trocas === 1 ? "" : "s"} de regra.`;
+  const txt = `10 lutas: ${v} vitórias, ${d} derrotas, ${e} empates (${((v + e / 2) * 10).toFixed(0)}% dos pontos). ${lim} acabaram no limite${jogoAtual().motor.regras?.tempoReal ? " de tempo" : " de turnos"}. O pet fez ${trocas} troca${trocas === 1 ? "" : "s"} de regra.`;
   if (LUTA.palco) LUTA.palco.texto = txt;
   avisarLuta();
   return txt;
@@ -413,7 +423,7 @@ export function reverLuta(idx: number, nomeAcaoV2: Record<string, string>): void
   animar(L.serie, L.nLutas, L.A, L.lideres ?? L.rivais ?? L.B, L.lideres || L.instalacao || L.rival === RIVAL_SALAO ? "fronteira" : L.npc ? "campanha" : "arena", nomeAcaoV2, L.arena, p => {
     const txt = L.res.pontosA === 1 ? `${L.A.nomeTela} venceu` : L.res.pontosA === 0 ? `${L.B.nomeTela} venceu` : "Empate";
     const v = L.serie.filter(x => x.pontosA === 1).length;
-    p.texto = `Fim do replay: ${L.instalacao ? `${L.instalacao.nome}, ${v} vitória${v === 1 ? "" : "s"} seguida${v === 1 ? "" : "s"}; ` : L.nLutas > 1 ? `luta ${L.serie.length} de ${L.nLutas}, ` : ""}${txt} em ${L.res.turnos.length} turnos.`;
+    p.texto = `Fim do replay: ${L.instalacao ? `${L.instalacao.nome}, ${v} vitória${v === 1 ? "" : "s"} seguida${v === 1 ? "" : "s"}; ` : L.nLutas > 1 ? `luta ${L.serie.length} de ${L.nLutas}, ` : ""}${txt} em ${duracaoLuta(L.res)}.`;
     p.fimReplay = true;
   }, L.instalacao);
 }
@@ -466,7 +476,7 @@ export function lutasDoRegistro(m: Motor): LutaDoRegistro[] {
     /* a luta como o motor a jogou (nas seguidas da Cidadela, a serie: turnos somados, o resultado da ultima) */
     const serie = m0.montarLuta(r, s).serie, res = serie[serie.length - 1], antes = m0.gp ? [...m0.gp.ativas] : [];
     m0.aplicarEvento(ev);
-    lutas.push({ idx, rival: r, turnos: serie.reduce((n, x) => n + x.turnos.length, 0), pontosA: res.pontosA,
+    lutas.push({ idx, rival: r, turnos: serie.reduce((n, x) => n + tamanhoLuta(x), 0), pontosA: res.pontosA,
       regrasNovas: m0.gp ? m0.gp.ativas.filter(k => !antes.includes(k)).length : 0 });
   });
   cacheLutas = { semente: m.semente, n, lutas };
