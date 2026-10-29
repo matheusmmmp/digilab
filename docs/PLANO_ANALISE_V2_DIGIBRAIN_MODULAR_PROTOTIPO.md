@@ -2124,3 +2124,26 @@ avaliação. A fase `l2_avaliacao` recusa rodar:
 - com a A5.9 diferente do K do piloto;
 - com o K da config diferente do da A5.9;
 - ou com o piloto dizendo "volta ao Matheus", a não ser que a A5.9 traga o K aprovado por ele.
+
+### A5.9 O K da avaliação (2026-10-29; o Matheus, com o worker D)
+
+**K fixado: 450 unidades** (150 por base, nas bases 67303, 67404 e 67505), aprovado pelo Matheus em 2026-10-29.
+
+**O porquê:**
+- **o piloto** (a seção 11 do RESULTADO) não dá um K na grade da A5.8. A conjunção do C-L2-3 chega a 0,634 com K = 201, e o K volta ao
+  Matheus;
+- **o K = 450 está fora da grade.** Com os σ_d do piloto, a conjunção é **0,93**. O menor múltiplo de 3 com 0,8 seria o 297 (0,80);
+- **a folga:** o σ_d da privação no longe, que domina a conjunção, vem de 10 unidades. Com ele 20 % maior, a conjunção cai a 0,82 com
+  K = 450, e a 0,65 com K = 297. O Matheus escolheu o 450 por essa folga;
+- **as margens ficam como a LS-7 decidiu** (−0,03 nas taxas, +0,02 no corpo).
+
+**O custo:** 21 600 vidas (48 por unidade). Pelo tempo de parede do piloto (0,61 s por vida com 4 processos), são cerca de 3,7 h.
+- **As vidas** (cerca de 1,6 GB) ficam fora do git, como na reavaliação.
+- **O `medidas.json`** inteiro teria cerca de 203 MB, acima do limite do GitHub. A avaliação o grava em 12 partes (por braço e lugar),
+  com o sha256 de cada parte num índice (`medidas_indice.json`).
+
+**A fonte dos números:** `experiments/k_fixado_l2_digibrain.py`, gravado em `artifacts_v2_digibrain_prototipo/l2/k_fixado.json`. Ele só lê
+o piloto e refaz a conjunção da grade, conferida contra a do `resultado.json` dele.
+
+**A trava:** a fase `l2_avaliacao` só aceita este K porque esta subseção diz "aprovado pelo Matheus". Sem isso, um K fora da regra é
+recusado.

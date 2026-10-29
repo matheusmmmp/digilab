@@ -82,6 +82,8 @@ def _piloto(tmp_path, k, monkeypatch, a59: str | None):
     (pasta / "resultado.json").write_text(json.dumps({"regra_do_k": {"k": k}}), encoding="utf-8")
     monkeypatch.setitem(l2.SAIDA, "l2_piloto", str(pasta))
     plano = l2._plano()
+    if "### A5.9" in plano:                    # o plano de hoje ja tem a A5.9 (o K = 450): os cenarios a trocam pela deles
+        plano = plano[:plano.index("### A5.9")]
     texto = plano if a59 is None else plano + "\n### A5.9 O K da avaliacao\n\n" + a59 + "\n"
     monkeypatch.setattr(l2, "_plano", lambda: texto)
 
@@ -215,7 +217,10 @@ def test_a_fumaca_de_ponta_a_ponta(tmp_path, nome):
     with pytest.raises(ValueError, match="4 processos"):
         l2.rodar(_cfg(nome), tmp_path / "x", 5)
     r = l2.rodar(_cfg(nome), tmp_path / "saida", 1)
-    assert {p.name for p in (tmp_path / "saida").iterdir()} >= {"meta.json", "medidas.json", "resultado.json", "vidas"}
+    nomes = {p.name for p in (tmp_path / "saida").iterdir()}
+    partes = {l2._arquivo_da_parte(b, lu) for b in l2.BRACOS for lu in orq.LUGARES}
+    assert nomes >= {"meta.json", l2.INDICE, "resultado.json", "vidas"} | partes and "medidas.json" not in nomes
+    assert len(l2.ler_medidas(tmp_path / "saida")) == len(r["registros"])
     regs = r["registros"]
     assert len(regs) == 2 * len(l2.BRACOS) * len(orq.CELULAS) and r["meta"]["modo"] == "fumaca"
     for x in regs:
@@ -227,3 +232,31 @@ def test_a_fumaca_de_ponta_a_ponta(tmp_path, nome):
     assert ("regra_do_k" in res) == (nome == "fumaca_l2_piloto") and ("criterios" in res) == (nome == "fumaca_l2_avaliacao")
     with pytest.raises(FileExistsError):
         l2.rodar(_cfg(nome), tmp_path / "saida", 1)
+
+
+# ------------------------------------------------------------------ as medidas em partes (a A5.9)
+def _registros_de_partes(n: int = 2) -> list[dict]:
+    return [{"vida": f"{b}|{d}|{lu}|{s}", "braco": b, "dono": d, "lugar": lu, "semente": s, "x": [1] * 10}
+            for b in l2.BRACOS for d in orq.DONOS for lu in orq.LUGARES for s in range(n)]
+
+
+def test_as_medidas_em_partes_se_leem_iguais_e_o_sha_e_conferido(tmp_path):
+    regs = _registros_de_partes()
+    l2.gravar_medidas(tmp_path, regs)
+    indice = json.loads((tmp_path / l2.INDICE).read_text(encoding="utf-8"))
+    assert len(indice["partes"]) == len(l2.BRACOS) * len(orq.LUGARES) and indice["vidas"] == len(regs)
+    assert l2.ler_medidas(tmp_path) == {r["vida"]: r for r in sorted(regs, key=lambda r: r["vida"])}
+    parte = tmp_path / indice["partes"]["M3+S|longe"]["arquivo"]
+    parte.write_text(parte.read_text(encoding="utf-8").replace("1", "2"), encoding="utf-8")
+    with pytest.raises(RuntimeError, match="sha256"):
+        l2.ler_medidas(tmp_path)
+
+
+def test_uma_parte_acima_do_limite_falha_alto(tmp_path, monkeypatch):
+    monkeypatch.setattr(l2, "LIMITE_PARTE_BYTES", 100)
+    with pytest.raises(RuntimeError, match="acima do limite"):
+        l2.gravar_medidas(tmp_path, _registros_de_partes())
+
+
+def test_o_piloto_de_antes_da_a5_9_se_le_pelo_medidas_inteiro():
+    assert len(l2.ler_medidas(RAIZ / l2.SAIDA["l2_piloto"])) == 480
