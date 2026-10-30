@@ -2207,6 +2207,12 @@ distância da ração na abertura, quanto da queda do longe vem da distância e 
 - **O `longe_fixo`** (a tarefa, seção 3.1; a etapa 1): **3 lugares por vida** (a LR-1), sorteados uma vez na construção do dono, cada um a
   20 a 30 células **do comedouro** (a LR-2), em direções distintas entre as 16; a cada `alimentar`, a ração cai num dos três, por sorteio
   uniforme. A rng é própria (`derivar_semente("dono-lugar-fixo", semente, rotulo_dono)`), e os outros estilos não consomem sorteio novo.
+- **A ressalva da geometria** (descritiva, achada na etapa 1, o #503; nenhuma medida nova e nenhuma regra muda): o comedouro fica em
+  (10, 15), num mapa de 64 × 30 células. A 20 células dele cabem só 5 das 16 direções (o leste ± 45°), e a 30 células cabem 3; então os
+  3 pontos fixos ficam todos a leste, a cerca de 7,8 células um do outro no mínimo e 17,9 na média (sementes 1 a 2 000). O `longe`
+  sorteado ancora no pet, usa as 16 direções e corta o ponto na borda. **Por isso o contraste `longe_fixo` × `longe` mistura a
+  regularidade com o lado do mapa e com a âncora.** A leitura por faixa de d₀ (A6.8, item 1) ajuda a separar a distância, mas não o
+  lado. O primário (M3\* − M2 dentro do `longe_fixo`) não compara os dois estilos e não sofre com isso.
 - **Os braços** (a LR-4), os de `SUBCHAVES_CONSERTO` (`experiments/run_v2_digibrain_prototipo.py`), **todos com a `intencao_suspensa`
   desligada:**
 
