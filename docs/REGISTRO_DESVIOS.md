@@ -437,3 +437,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-30 — COMBATE-TR, o plano da segunda rodada de equilíbrio (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`)](registro/2026-10.md)
 - [2026-10-30 — COMBATE-TR, segunda rodada (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): as decisões DR2-1 a DR2-6](registro/2026-10.md)
 - [2026-10-30 — COMBATE-TR, segunda rodada, R2-0 e R2-1 (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): o ponto de partida e as formas](registro/2026-10.md)
+- [2026-10-30 — TEMA DOS MENUS, T1 (worker, Claude Code, Opus 5.5, worktree `v2-tema-t1`): contraste do Holográfico](registro/2026-10.md)
