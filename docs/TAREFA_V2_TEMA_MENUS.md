@@ -219,3 +219,19 @@ T3 depende de T1 e T2. Arquivos de uma missão por vez: `tokens.css`, `main.tsx`
   da tela Pet). Atrás do painel lateral não há habitat (a casca encolhe o habitat), então o vidro ali desfoca o fundo escuro.
 - **Conferência:** o portão `e2e_capturas` ganhou `DIGILAB_CAPTURAS_PELE` (padrão `xcom`, o das referências da M7; `vidro` grava com
   `_vidro` no nome). Com `?pele=xcom`, as 21 telas batem pixel a pixel com as referências da M7.
+
+## Resultado da T2 (2026-10-30, worker Claude Code, Opus 5.5, worktree `recursing-dirac-023802`)
+
+- **`web/app/src/telas/config/EscolhaPele.tsx`:** a seção "Pele dos menus", que o `TelaConfig.tsx` põe no alto de Aparência, acima de
+  "Tema do habitat". Dois cartões no molde de `.mc-opcao--tema`: `role="radiogroup"` com `aria-labelledby`, cada cartão `role="radio"` +
+  `aria-checked`; setas, Home e End movem e escolhem (`indiceAbaPorTecla` das abas hx), e só o escolhido entra na ordem de Tab. O clique e as
+  setas chamam `escolherPele()`: o `data-pele` muda na hora e a escolha fica gravada. Na tela, só "Holográfico" e "Militar" (TM2).
+- **Ordem dos cartões:** o Holográfico primeiro, por ser o padrão (TM1). O texto de apoio diz que a pele vale nos menus e o tema no habitat.
+- **Resumo de Aparência** no menu de Ajustes: `pele <nome> · tema <tema>` (`resumoAparencia`).
+- **Prévia em CSS** (`.mc-pele-prev` em `menus_config.css`): um painel em miniatura com a faixa do título, o item escolhido e o botão
+  principal, nas cores fixas de cada pele (§3.1), para mostrar a outra pele mesmo com esta ligada. Sem imagem.
+- **Testes:** `test/escolha_pele.test.ts` (o radiogroup, o `tabindex`, os nomes sem XCOM, o resumo, a prévia só em CSS, a ordem das
+  seções) e o e2e "pele dos menus" em `e2e/jogo.spec.ts`, em 1920×950: o padrão Holográfico, a seção acima do Tema, os alvos ≥ 44 px, a troca
+  pelo clique e pelas setas sem recarregar, a escolha gravada e mantida ao recarregar, o resumo. Parte do e2e de troca de pele previsto na
+  T3 já entra aqui; o `?pele=` sem gravar continua conferido pelo teste de unidade da T1.
+- **Fora:** o radiogroup do tema do habitat continua sem setas, como estava; `tokens.css` e `pet_dock.css` não mudaram.
