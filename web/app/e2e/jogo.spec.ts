@@ -303,8 +303,8 @@ test("monitor 1920x950: o pet fica visível com o painel aberto", async ({ page 
     return { cx, cy, noHabitat: !!alvo?.closest(".habitat"), larg: h.width, alt: h.height, direita: h.right, rolagem: document.documentElement.scrollWidth };
   });
   await page.goto(APP + "#/pet/estado");
-  await page.getByRole("button", { name: "Estado atual", exact: true }).click();
-  await expect(page.locator(".pet-painel")).toBeVisible();
+  /* o HUD (TAREFA_V3_LAYOUT_HUD): no desktop o Estado fica aberto na pilha da direita, sem clicar */
+  await expect(page.locator(".pet-hud [data-painel-pet='estado'] .necessidades4")).toBeVisible();
   let c = await centro();
   expect(c.noHabitat, "tela Pet: nada cobre o pet").toBe(true);
   expect(c.alt, "o habitat tem a altura toda (dock flutuante)").toBe(950);
@@ -1283,16 +1283,38 @@ for (const [largura, altura] of [[360, 800], [390, 844], [1280, 800]]) {
     await expect(page.locator("#acoes-mais")).toHaveCount(0);
     /* sem fundo de hexagonos no cenario e sem retrato redondo no cabecalho do Pet */
     expect(await page.locator(".pet-cena .dl-hexcard, .pet-retrato").count()).toBe(0);
-    /* os paineis: um aberto por vez, pelos botoes da borda direita; o balao da fala abre o porque */
-    await page.getByRole("button", { name: "Estado atual", exact: true }).click();
-    await expect(page.locator("#pet-painel .necessidades4")).toBeVisible();
-    await page.getByRole("button", { name: "Evolução", exact: true }).click();
-    await expect(page.locator("#pet-painel")).toHaveCount(1);
-    await expect(page.locator("#pet-painel")).toContainText("até virar");
-    await page.getByRole("button", { name: "Últimas ações", exact: true }).click();
-    await expect(page.locator("#pet-painel .mod-registro li").first()).toBeVisible();
-    await page.keyboard.press("Escape");
-    await expect(page.locator("#pet-painel")).toHaveCount(0);
+    /* os paineis (HUD, TAREFA_V3_LAYOUT_HUD): a partir de 900 px empilhados a direita, o Estado aberto e os outros recolhiveis, cada um
+       com o seu botao; no celular, um aberto por vez, pelos botoes da borda direita. O balao da fala abre o porque */
+    if (largura >= 900) {
+      const pilha = page.locator(".pet-hud");
+      await expect(pilha.locator("[data-painel-pet='estado'] .necessidades4")).toBeVisible();
+      await expect(pilha.locator("[data-painel-pet='estado'] .hx-medidor__txt").first()).toHaveText(/^\d+%$/);     /* o valor do motor em % */
+      const evo = page.getByRole("button", { name: "Evolução", exact: true });
+      await expect(evo).toHaveAttribute("aria-expanded", "false");
+      await expect(pilha.locator("[data-painel-pet='evolucao']")).toContainText("próxima forma em");                /* o resumo fechado */
+      await evo.click();
+      await expect(pilha.locator("[data-painel-pet='evolucao']")).toContainText("até virar");
+      await page.getByRole("button", { name: "Últimas ações", exact: true }).click();
+      await expect(pilha.locator("[data-painel-pet='acoes'] .mod-registro li").first()).toBeVisible();
+      await expect(pilha.locator("[data-painel-pet='estado'] .necessidades4")).toBeVisible();                     /* os tres abertos juntos */
+      await page.getByRole("button", { name: "Estado atual", exact: true }).click();
+      await expect(pilha.locator(".necessidades4")).toHaveCount(0);
+      await expect(page.locator("#pet-painel")).toHaveCount(0);
+      /* a escolha fica no navegador: recarregar mantem Evolucao aberta e Estado recolhido */
+      await page.reload();
+      await expect(page.getByRole("button", { name: "Evolução", exact: true })).toHaveAttribute("aria-expanded", "true");
+      await expect(page.getByRole("button", { name: "Estado atual", exact: true })).toHaveAttribute("aria-expanded", "false");
+    } else {
+      await page.getByRole("button", { name: "Estado atual", exact: true }).click();
+      await expect(page.locator("#pet-painel .necessidades4")).toBeVisible();
+      await page.getByRole("button", { name: "Evolução", exact: true }).click();
+      await expect(page.locator("#pet-painel")).toHaveCount(1);
+      await expect(page.locator("#pet-painel")).toContainText("até virar");
+      await page.getByRole("button", { name: "Últimas ações", exact: true }).click();
+      await expect(page.locator("#pet-painel .mod-registro li").first()).toBeVisible();
+      await page.keyboard.press("Escape");
+      await expect(page.locator("#pet-painel")).toHaveCount(0);
+    }
     await page.locator(".cena-fala").click();
     await expect(page.locator("#pet-painel .det-fala .fala-status")).toBeVisible();
     await page.getByRole("button", { name: "Fechar Por que ele disse isso" }).click();
@@ -1483,15 +1505,20 @@ const naTela = (page: Page, x: number, y: number) => page.evaluate(([a, b]) => (
 const ultimoDc = async (page: Page) => JSON.parse(await page.evaluate(() => (window as any).__digilab.registro())).log.filter((e: unknown[]) => e[1] === "dc").at(-1);
 /** o "Por racao" fica no menu Mais do dock (M3 do layout habitat) */
 const abrirMais = async (page: Page) => { if (!await page.locator("#acoes-mais").count()) await page.locator(".acoes-pet .acao-mais").click(); };
-/** a info do mundo fica no painel Estado (fora da cena): abre o painel, confere e fecha */
+/** a info do mundo fica no Estado, em "Detalhes" (fora da cena): no desktop na pilha da direita (o Estado aberto), no celular no painel
+    da borda; abre, confere e fecha */
 async function infoMundoNoEstado(page: Page, texto: string | null): Promise<void> {
+  const pilha = await page.locator(".pet-hud").count() > 0;
   const bt = page.getByRole("button", { name: "Estado atual", exact: true });
-  await bt.click();
-  const info = page.locator(".pet-painel .mundo-info");
+  if (!pilha || await bt.getAttribute("aria-expanded") === "false") await bt.click();
+  const raiz = page.locator(pilha ? ".pet-hud [data-painel-pet='estado']" : ".pet-painel"), det = raiz.getByRole("button", { name: "Detalhes" });
+  if (await det.getAttribute("aria-expanded") === "false") await det.click();
+  const info = raiz.locator(".mundo-info");
   if (texto === null) await expect(info).toBeVisible(); else await expect(info).toContainText(texto);
   await expect(page.locator(".pet-balcao .mundo-info")).toHaveCount(0);
-  await bt.click();
-  await expect(page.locator(".pet-painel")).toHaveCount(0);
+  await det.click();
+  await expect(info).toHaveCount(0);
+  if (!pilha) { await bt.click(); await expect(page.locator(".pet-painel")).toHaveCount(0); }
 }
 /** arrasta "Por racao" ate o ponto do cliente, com o mouse (o gesto) */
 async function arrastarRacao(page: Page, alvo: [number, number]): Promise<void> {

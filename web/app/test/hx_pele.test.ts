@@ -166,4 +166,10 @@ describe("MedidorHx", () => {
     expect(renderToStaticMarkup(h(MedidorHx, { valor: -4, max: 100, rotulo: "x" }))).toContain('aria-valuenow="0"');
     expect(() => renderToStaticMarkup(h(MedidorHx, { valor: 1, max: 0, rotulo: "x" }))).toThrow();
   });
+  it("em porcento o texto e N% (o HUD da tela Pet) e o max tem de ser 100", () => {
+    const s = renderToStaticMarkup(h(MedidorHx, { valor: 42, max: 100, rotulo: "comida", porcento: true }));
+    expect(s).toContain('aria-valuetext="42%"');
+    expect(s).toContain(">42%<");
+    expect(() => renderToStaticMarkup(h(MedidorHx, { valor: 2, max: 5, rotulo: "x", porcento: true }))).toThrow();
+  });
 });

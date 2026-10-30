@@ -20,6 +20,10 @@ body:has(.app--habitat){ overflow:hidden }
   .avisos{ position:fixed; z-index:45; left:calc(var(--casca-trilho) + 12px); bottom:12px; width:min(400px,calc(50vw - 560px)); min-width:300px; display:flex; flex-direction:column; gap:6px; pointer-events:none }
   .avisos > .aviso{ position:static; pointer-events:auto; border:1px solid var(--dl-erro); border-radius:0; padding:6px 10px; font-size:13px; line-height:1.3 }
 }
+/* HUD (docs/TAREFA_V3_LAYOUT_HUD.md): os avisos sao caixas escuras translucidas, com a borda na cor do problema (perigo) */
+.avisos > .aviso{ background:var(--hud-fundo-2, rgba(6,11,18,.9)); color:#FFB3B3; box-shadow:none; border-radius:0; border:1px solid var(--hx-perigo); border-left-width:3px;
+  font:600 14px/1.3 var(--hx-f); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px) }
+.avisos > .aviso p{ color:var(--hx-texto-2); font-weight:500 }
 
 /* ---------- habitat */
 .habitat{ position:fixed; z-index:0; top:0; left:var(--casca-trilho); right:0; bottom:var(--hab-baixo, 0px) }
@@ -37,51 +41,60 @@ body:has(.app--habitat){ overflow:hidden }
 .pet-balcao{ position:relative; flex:1; min-height:0 }
 .pet-balcao .cena-fala{ top:calc(var(--casca-topo) + 40px) }
 
-/* ---------- topo flutuante */
+/* ---------- topo flutuante: a plaquinha do pet, a marca e o relogio; caixas escuras chanfradas (o fundo e o chanfro em pet_hud.css) */
 .topo-hab{ position:fixed; z-index:20; top:0; left:var(--casca-trilho); right:0; height:var(--casca-topo); display:flex; align-items:center; gap:10px; padding:0 12px; pointer-events:none }
 .topo-hab > *{ pointer-events:auto }
-.topo-pet{ display:flex; align-items:center; gap:8px; min-width:0; padding:4px 14px 4px 4px; border-radius:999px; background:var(--dl-navy); color:#FFFFFF; box-shadow:0 2px 8px rgba(15,42,102,.35) }
-.topo-retrato{ width:48px; height:48px; flex:none; display:flex; align-items:center; justify-content:center; padding:0; overflow:hidden; border-radius:50%;
-  background:var(--dl-surface); border:3px solid var(--dl-border); cursor:pointer; box-sizing:border-box }
+.topo-pet{ display:flex; align-items:center; gap:10px; min-width:0; padding:4px 16px 4px 4px }
+.topo-retrato{ width:44px; height:44px; flex:none; display:flex; align-items:center; justify-content:center; padding:0; overflow:hidden; border-radius:0;
+  background:rgba(150,195,200,.12); border:1px solid var(--hx-borda); cursor:pointer; box-sizing:border-box }
 .topo-retrato img{ max-width:none; image-rendering:pixelated }
-.topo-retrato:focus-visible, .topo-bt:focus-visible{ outline:3px solid var(--hx-foco); outline-offset:2px }
+.topo-retrato:focus-visible, .topo-bt:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:2px }
 .topo-pet-txt{ display:flex; flex-direction:column; min-width:0; line-height:1.2 }
-.topo-pet-nome b{ display:block; max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:15px; font-weight:900 }
-.topo-pet-sub{ display:flex; align-items:center; gap:5px; font-size:12px; font-weight:700; white-space:nowrap }
+.topo-pet-nome b{ display:block; max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font:700 17px/1.15 var(--hx-f); letter-spacing:.02em; color:var(--hx-texto) }
+.topo-pet-sub{ display:flex; align-items:center; gap:5px; font:500 13px/1.2 var(--hx-f); color:var(--hx-texto-2); white-space:nowrap }
 .topo-pet-sub .dl-tag{ padding:0; border:0; background:none; box-shadow:none; font:inherit; letter-spacing:0; text-transform:none; color:inherit }
-.topo-logo{ margin:0 auto; font-size:20px; color:#FFFFFF }
-.topo-relogio{ margin-left:auto; display:flex; align-items:center; gap:8px; padding:4px 14px; border-radius:999px; background:var(--dl-navy); color:#FFFFFF; box-shadow:0 2px 8px rgba(15,42,102,.35) }
+.topo-logo{ margin:0 auto; display:flex; align-items:center; gap:8px; padding:6px 14px; font:700 22px/1 var(--hx-f); letter-spacing:.14em; color:#FFFFFF;
+  background:linear-gradient(90deg, transparent, rgba(6,11,18,.72) 18%, rgba(6,11,18,.72) 82%, transparent) }
+.topo-logo-marca{ width:26px; height:18px; flex:none; background:repeating-linear-gradient(-60deg, #FFFFFF 0 4px, transparent 4px 8px);
+  clip-path:polygon(30% 0, 100% 0, 70% 100%, 0 100%); filter:drop-shadow(0 1px 1px rgba(6,11,18,.8)) }
+.topo-relogio{ margin-left:auto; display:flex; align-items:center; gap:10px; padding:4px 14px; min-height:48px }
 .topo-logo ~ .topo-relogio{ margin-left:0 }
-.topo-sol{ width:24px; height:24px; flex:none }
-.topo-hora-txt{ display:flex; flex-direction:column; line-height:1.15 }
-.topo-dia{ font-size:12px; font-weight:700 }
-.topo-hora{ font-size:16px; font-weight:900; font-variant-numeric:tabular-nums }
-.topo-relogio .pet-salvo{ color:#FFFFFF }
-.topo-relogio .pet-salvo.erro{ color:#FFD3DB }
+.topo-sol{ width:24px; height:24px; flex:none; color:var(--hx-alerta) }
+.topo-hora-txt{ display:flex; flex-direction:column; line-height:1.1 }
+.topo-dia{ font:500 12px/1.1 var(--hx-f); color:var(--hx-sec); text-transform:capitalize }
+.topo-hora{ font:700 18px/1.1 var(--hx-f-num); font-variant-numeric:tabular-nums; color:var(--hx-texto) }
+.topo-relogio .pet-salvo{ display:flex; align-items:center; gap:4px; padding-left:10px; border-left:1px solid var(--hx-borda); color:var(--hx-sec); font:500 12px/1 var(--hx-f) }
+.topo-relogio .pet-salvo svg{ width:20px; height:20px; color:var(--hx-texto-2) }
+.topo-relogio .pet-salvo.erro, .topo-relogio .pet-salvo.erro svg{ color:var(--hx-perigo) }
 .topo-bts{ display:flex; gap:6px }
 .topo-bt{ width:44px; height:44px; display:flex; align-items:center; justify-content:center; padding:0; border:1px solid var(--hx-borda-topo); background:var(--hx-miolo); color:var(--hx-texto); cursor:pointer }
 .topo-bt svg{ width:22px; height:22px }
 @media (min-width:900px){ .topo-bts{ display:none } }
 @media (max-width:719px){ .topo-logo{ display:none } .topo-relogio{ margin-left:auto } .topo-pet-sub{ display:none } .topo-pet-nome b{ max-width:96px } }
-@media (max-width:479px){ .topo-sol, .topo-dia{ display:none } .topo-relogio{ flex-direction:column; align-items:flex-start; gap:0; padding:3px 12px } }
+@media (max-width:479px){ .topo-sol, .topo-dia, .topo-relogio .pet-salvo{ display:none } .topo-relogio{ padding:3px 12px; min-height:44px } .topo-pet{ padding-right:12px } }
 
-/* ---------- navegacao: trilho (>= 900 px) e barra (< 900 px), pele hx-* */
-.hx-nav{ position:fixed; z-index:30; display:flex; background:var(--hx-chao); font-family:var(--hx-f); border:0 solid var(--hx-borda-topo) }
-.hx-nav__bt{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; min-width:44px; min-height:44px; padding:4px 2px; border:0; background:none;
-  color:var(--hx-texto-2); font:600 12px/1.1 var(--hx-f); letter-spacing:.08em; text-transform:uppercase; cursor:pointer }
+/* ---------- navegacao: trilho estreito (>= 900 px) e barra (< 900 px), pele hx-*: fundo escuro, linhas finas, o destino aberto em ciano */
+.hx-nav{ position:fixed; z-index:30; display:flex; background:var(--hx-chao); font-family:var(--hx-f); border:0 solid var(--hx-borda) }
+.hx-nav__bt{ position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; min-width:44px; min-height:44px; padding:4px 2px; border:0; background:none;
+  color:var(--hx-texto-2); font:600 11px/1.1 var(--hx-f); letter-spacing:.03em; text-transform:uppercase; cursor:pointer }
 .hx-nav__bt:hover{ background:var(--hx-miolo-2); color:var(--hx-texto) }
 .hx-nav__bt[aria-current="page"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink) }
 .hx-nav__bt:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:-4px }
-.hx-nav__ic{ width:24px; height:24px; flex:none }
+.hx-nav__ic{ width:20px; height:20px; flex:none }
 .nav-pe{ display:none }
 @media (max-width:899px){
-  .hx-nav{ left:0; right:0; bottom:0; height:var(--casca-barra); padding-bottom:env(safe-area-inset-bottom, 0px); border-top-width:2px }
+  .hx-nav{ left:0; right:0; bottom:0; height:var(--casca-barra); padding-bottom:env(safe-area-inset-bottom, 0px); border-top-width:1px }
   .hx-nav > .hx-nav__bt{ flex:1 1 0 }
+  .hx-nav__bt[aria-current="page"]{ clip-path:polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)) }
 }
 @media (min-width:900px){
-  .hx-nav{ top:0; bottom:0; left:0; width:var(--casca-trilho); flex-direction:column; padding:var(--casca-topo) 0 8px; border-right-width:1px }
-  .hx-nav .hx-nav__bt{ width:100%; min-height:64px }
-  .nav-pe{ display:flex; flex-direction:column; margin-top:auto }
+  .hx-nav{ top:0; bottom:0; left:0; width:var(--casca-trilho); flex-direction:column; gap:2px; padding:calc(var(--casca-topo) + 8px) 6px 10px; border-right-width:1px }
+  /* detalhes tecnicos: a risca diagonal no alto e a linha tracejada fina ao longo da borda */
+  .hx-nav::before{ content:""; position:absolute; top:calc(var(--casca-topo) - 6px); left:10px; right:10px; height:6px; background:var(--hud-risca) }
+  .hx-nav::after{ content:""; position:absolute; top:calc(var(--casca-topo) + 8px); bottom:10px; right:3px; width:1px;
+    background:repeating-linear-gradient(180deg, var(--hx-borda) 0 3px, transparent 3px 7px); pointer-events:none }
+  .hx-nav .hx-nav__bt{ width:100%; min-height:58px; padding:4px 0; letter-spacing:.02em; clip-path:polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)) }
+  .nav-pe{ display:flex; flex-direction:column; gap:2px; margin-top:auto; padding-top:10px; border-top:1px solid var(--hx-borda) }
 }
 
 /* ---------- painel dos destinos (PainelTela) */
