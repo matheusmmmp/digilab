@@ -10,7 +10,7 @@ import {
 } from "../../luta.ts";
 import { EditorRegras, RegrasCompactas } from "./EditorRegras.tsx";
 import { useDesktop } from "../../desktop.ts";
-import { Cena } from "./PalcoLuta.tsx";
+import { Cena } from "./palcoTR/PalcoTR.tsx";
 import { ENDERECO_LUTA } from "../../rotas.ts";
 import { EscolhaCarta } from "../../componentes/EscolhaCarta.tsx";
 
@@ -91,7 +91,7 @@ export function TelaArena({ voltarPet, verReplay }: { voltarPet: () => void; ver
       <EscolhaCarta rival={luta.rival} />
       <div className="arena-acoes">
         <button type="button" className="dl-btn dl-btn--sec" disabled={luta.lutando} onClick={melhorDe10}>Melhor de 10</button>
-        <button type="button" className="dl-btn lutar-grande" disabled={luta.lutando} onClick={() => { lutarAnimado(null, NOME_V2); if (LUTA.lutando) location.hash = ENDERECO_LUTA; }}>Lutar</button>
+        <button type="button" className="dl-btn lutar-grande" disabled={luta.lutando} onClick={() => { lutarAnimado(null); if (LUTA.lutando) location.hash = ENDERECO_LUTA; }}>Lutar</button>
         {sp && <span className="desk-so arena-treino"><span><span>lutas de treino</span><b className="dl-lcd">{Math.min(m.sparring, 10)} de 10</b></span>
           <Seg n={Math.min(m.sparring, 10)} m={10} cls="dl-seg--acao" /></span>}
       </div>

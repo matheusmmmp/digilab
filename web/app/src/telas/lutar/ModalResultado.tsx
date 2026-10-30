@@ -1,62 +1,63 @@
 /* Resultado da luta (pranchas ResVitoria, ResDerrota, ResCampanha e ResDesktop; regras em ResNota e na secao 7 das
    DIRETRIZES_REPLICAR): modal sem x que abre sozinho no fim da luta, sobre a tela cheia congelada no ultimo turno.
    Continuar (ou Esc) volta para a aba de origem; Ver replay abre a luta no Diario. Blocos em ordem fixa, cada um so
-   com dado do motor (bloco sem dado fica de fora): faixa (resultado, quem venceu, turnos) -> o que mudou (lugar
-   aberto, numeros) -> o que decidiu a luta -> regra nova ou "nenhuma regra nova" -> progresso. Elogiar/Repreender
+   com dado do motor (bloco sem dado fica de fora): faixa (resultado, quem venceu, segundos) -> o que mudou (lugar
+   aberto, numeros) -> por que (as regras que dispararam na luta em tempo real e o saldo delas) -> regra nova ou "nenhuma regra nova" ->
+   progresso. Elogiar/Repreender
    uma acao da luta nao existe no motor e fica de fora (docs/PENDENCIAS_PRANCHAS.md). */
 import { useEffect, useRef, useState } from "react";
-import { CAT, MEDALHAS, NOME_V2, NPC, cartaDe, chaveRegra, fatorExibicao, itemDe, regraDe, rotuloRegra, type ResultadoLuta, type Turno, duracaoLuta, tamanhoLuta } from "../../../motor/index.ts";
+import { CAT, MEDALHAS, NPC, PASSO_TR_MS, cartaDe, chaveRegra, fatorExibicao, itemDe, regraDe, rotuloRegra, type ResultadoLuta, duracaoLuta, tamanhoLuta } from "../../../motor/index.ts";
 import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { abrirModal } from "../../componentes/modal.ts";
 import { Peca } from "../../componentes/Imagens.tsx";
 import { jogoAtual, mudarMotor, tamerAtual, useJogo } from "../../jogo.ts";
 import { tentativas, type LutadorTela, type Palco } from "../../luta.ts";
 import { mapaDe } from "./TelaCampanha.tsx";
+import { textoRegra } from "./palcoTR/PalcoTR.tsx";
 import { SeloMedalha } from "../../componentes/Medalha.tsx";
 import { pedirDica } from "../../dicas.ts";
 
 const inteiro = (x: number): string => Math.round(x).toLocaleString("pt-BR");
 
-/** uma linha de "o que decidiu": o que cada lado fez no turno, o dano que causou e o que falhou */
-export function fraseTurno(tr: Turno, A: LutadorTela, B: LutadorTela, travadas: Record<string, number> | null): string {
-  const lados = ([0, 1] as const).map(i => {
-    /* dano causado por este lado = recebido pelo outro, na escala de quem recebe */
-    const L = i ? B : A, acao = i ? tr.b : tr.a, dano = tr.dano[1 - i] * fatorExibicao((i ? A : B).cond, jogoAtual().motor.versao);
-    let s = `${L.nomeTela}: ${NOME_V2[acao] ?? acao}`;
-    if (dano > 0) s += ` −${inteiro(dano)}`;
-    if (tr.errou[i]) s += " (o pesado errou)";
-    if (tr.interr[i]) s += " (pesado interrompido)";
-    /* regra travada pelo dono que decidiu a acao do pet */
-    const mot = i ? tr.mb : tr.ma, g = L.estilo.gambits;
-    if (!i && travadas && typeof mot === "number" && g && mot < g.regras.length && chaveRegra(g.regras[mot]) in travadas) s += " · regra travada por você";
-    return s;
-  });
-  return lados.join("; ") + ".";
+/** uma linha do "por que": o que levou o pet a agir (a regra, a exploracao, o pesado preparado), quantas vezes e o saldo de dano dessas
+    acoes (o causado menos o recebido enquanto cada uma durou, em fracao da vida maxima do comeco; motor/combate_tr, AcaoRegistro) */
+export interface LinhaPorque { rotulo: string; vezes: number; saldo: number; travada: boolean }
+/** o "por que" da luta em tempo real: as acoes do pet agrupadas pelo motivo, as de maior saldo (a favor ou contra) primeiro; ate `max` */
+export function porqueTR(res: ResultadoLuta, A: LutadorTela, travadas: Record<string, number> | null, max = 5): LinhaPorque[] {
+  if (!res.tr) throw new Error("luta sem o tempo real: o porquê só existe nas lutas dos pets v13");
+  const g = A.estilo.gambits, por = new Map<string, LinhaPorque>();
+  for (const x of res.tr.acoes) {
+    if (x.lado !== 0) continue;
+    const rotulo = textoRegra({ motivo: x.motivo, nome: x.nome }, A), l = por.get(rotulo);
+    if (l) { l.vezes++; l.saldo += x.saldo; continue; }
+    const travada = !!travadas && typeof x.motivo === "number" && !!g && x.motivo < g.regras.length && chaveRegra(g.regras[x.motivo]) in travadas;
+    por.set(rotulo, { rotulo, vezes: 1, saldo: x.saldo, travada });
+  }
+  return [...por.values()].sort((a, b) => Math.abs(b.saldo) - Math.abs(a.saldo) || b.vezes - a.vezes).slice(0, max);
 }
-/** os momentos que decidiram: ate dois turnos marcantes antes do ultimo, o ultimo e como acabou */
-/** `desafiado`: o limite de turnos e do rival (lutas do motor dos pets v6: o pet sempre desafia); sem ele, da fracao de vida */
-export function momentosDecisivos(res: ResultadoLuta, A: LutadorTela, B: LutadorTela, travadas: Record<string, number> | null, desafiado = false): { t: string; txt: string; tom: "" | "bom" | "ruim" }[] {
-  const n = res.turnos.length; if (!n) return [];
-  const marcante = (tr: Turno) => tr.dano[0] > 0 || tr.dano[1] > 0 || tr.errou[0] || tr.errou[1] || tr.interr[0] || tr.interr[1]
-    || [tr.a, tr.b].some(x => x === "preparar_pesado" || x === "fintar");
-  /* turnos seguidos com a mesma frase viram um intervalo (T19–21) */
-  const ult = res.turnos[n - 1], linhas: { t: string; txt: string; tom: "" | "bom" | "ruim" }[] = [];
-  let ini = -1, fim = -1, txt = "";
-  const fecha = () => { if (txt) linhas.push({ t: ini === fim ? `T${ini}` : `T${ini}–${fim}`, txt, tom: "" }); };
-  for (const tr of [...res.turnos.slice(0, -1).filter(marcante).slice(-4), ult]) {
-    const f = fraseTurno(tr, A, B, travadas);
-    if (f === txt && tr.t === fim + 1) { fim = tr.t; continue; }
-    fecha(); ini = fim = tr.t; txt = f;
-  }
-  fecha();
-  linhas.splice(0, Math.max(0, linhas.length - 3));
-  const hpA = res.E.L[0].hp, hpB = res.E.L[1].hp;
-  if (res.fim === "ko") {
-    const caiu = [hpA <= 0 && A.nomeTela, hpB <= 0 && B.nomeTela].filter(Boolean).join(" e ");
-    return [...linhas, { t: `T${ult.t}`, txt: `${caiu} caiu.`, tom: res.pontosA === 1 ? "bom" : res.pontosA === 0 ? "ruim" : "" }];
-  }
-  if (desafiado) return [...linhas, { t: `T${ult.t}`, txt: `Limite de turnos sem nocaute: a luta fica com quem foi desafiado (${B.nomeTela}).`, tom: res.pontosA === 1 ? "bom" : res.pontosA === 0 ? "ruim" : "" }];
-  return [...linhas, { t: `T${ult.t}`, txt: `Limite de turnos: vence quem tem mais vida (${inteiro(Math.max(0, hpA) * fatorExibicao(A.cond, jogoAtual().motor.versao))} × ${inteiro(Math.max(0, hpB) * fatorExibicao(B.cond, jogoAtual().motor.versao))}).`, tom: res.pontosA === 1 ? "bom" : res.pontosA === 0 ? "ruim" : "" }];
+/** o saldo em pontos da vida maxima, com o sinal ("+12%", "−3%") */
+export const saldoTexto = (x: number): string => { const v = Math.round(x * 100); return v === 0 ? "0%" : (v > 0 ? "+" : "−") + Math.abs(v) + "%"; };
+/** como a luta acabou, numa linha */
+export function comoAcabou(res: ResultadoLuta, A: LutadorTela, B: LutadorTela, desafiado = false): string {
+  const hpA = res.E.L[0].hp, hpB = res.E.L[1].hp, s = res.tr ? Math.round(res.tr.passos * PASSO_TR_MS / 1000) : 0;
+  if (res.fim === "ko") return `${[hpA <= 0 && A.nomeTela, hpB <= 0 && B.nomeTela].filter(Boolean).join(" e ")} caiu aos ${s} s.`;
+  if (desafiado) return `Limite de tempo sem nocaute: a luta fica com quem foi desafiado (${B.nomeTela}).`;
+  return `Limite de tempo: vence quem tem mais vida (${inteiro(Math.max(0, hpA) * fatorExibicao(A.cond, jogoAtual().motor.versao))} × ${inteiro(Math.max(0, hpB) * fatorExibicao(B.cond, jogoAtual().motor.versao))}).`;
+}
+/** o bloco do "por que" (o Resultado e o replay do Diario) */
+export function PorqueLuta({ res, A, B, travadas, desafiado }: { res: ResultadoLuta; A: LutadorTela; B: LutadorTela; travadas: Record<string, number> | null; desafiado: boolean }) {
+  const linhas = porqueTR(res, A, travadas);
+  return (
+    <section className="res-decidiu" aria-labelledby="res-dec-tit">
+      <h3 id="res-dec-tit">Por quê</h3>
+      <ol>
+        {linhas.map(l => <li key={l.rotulo}><span className={`res-t${l.saldo > .005 ? " res-t--bom" : l.saldo < -.005 ? " res-t--ruim" : ""}`}>{saldoTexto(l.saldo)}</span>
+          <span>{l.rotulo} · {l.vezes}×{l.travada ? " · regra travada por você" : ""}</span></li>)}
+        <li><span className={`res-t${res.pontosA === 1 ? " res-t--bom" : res.pontosA === 0 ? " res-t--ruim" : ""}`}>fim</span><span>{comoAcabou(res, A, B, desafiado)}</span></li>
+      </ol>
+      <p className="dl-apoio res-porque-nota">O saldo de cada regra: o dano que o pet causou menos o que levou enquanto agia por ela, em % da vida.</p>
+    </section>
+  );
 }
 
 function Numeros({ itens }: { itens: [string, string][] }) {
@@ -82,7 +83,6 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
     catch (err) { setMsgRegra(err instanceof Error ? err.message : String(err)); }
   };
   const gp = m.gp, estadoNova = nova && gp ? (gp.vetos.includes(nova.k) ? "vetada" : nova.k in gp.travas ? "travada" : gp.ativas.includes(nova.k) ? "livre" : "fora") : null;
-  const momentos = momentosDecisivos(res, p.A, p.B, gp ? gp.travas : null, !r.cenario && m.desafiado === 1);
   /* tutorial (Bit): a primeira derrota na campanha e a primeira regra nova */
   useEffect(() => { if (npc && perdeu) pedirDica("derrota_campanha"); if (nova) pedirDica("regra_nova"); }, []);
 
@@ -93,9 +93,9 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
   const tag = liga ? "Fronteira · Liga dos Líderes" : inst ? `Fronteira · ${inst.nome}` : npc ? `Campanha · ${LUGARES[Li].nome}` : "Arena · fim da luta";
   const titulo = liga ? (venceuLiga ? "Campeão!" : perdeu ? "Derrota" : "Empate") : inst ? (r.recorde ? "Recorde!" : "Fim da sequência")
     : lugarNovo ? "Ilha vencida!" : venceu ? "Vitória!" : perdeu ? "Derrota" : "Empate";
-  const n = res.turnos.length, dur = duracaoLuta(res);
-  /* a duracao: os turnos, ou os segundos da luta em tempo real (pets v13) */
-  const durNum: [string, string] = res.tr ? [String(tamanhoLuta(res)), "segundos"] : [String(n), "turnos"];
+  const dur = duracaoLuta(res);
+  if (!res.tr) throw new Error("luta sem o tempo real: o Resultado só mostra as lutas dos pets v13");
+  const durNum: [string, string] = [String(tamanhoLuta(res)), "segundos"];
   /* lutas seguidas (Cidadela e Liga): o resultado e o da serie; "n turnos" e o da ultima luta */
   const serie = r.nLutas > 1 ? r.serie : null;
   const sub = inst
@@ -104,12 +104,12 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
     ? (venceuLiga ? `${p.A.nomeTela} venceu os ${r.nLutas} líderes seguidos` : `A Liga parou na luta ${r.serie.length} de ${r.nLutas}, contra ${liga[r.serie.length - 1].nomeTela}`)
     : serie
     ? (venceu ? `${p.A.nomeTela} venceu as ${r.nLutas} lutas seguidas` : `A série parou na luta ${serie.length} de ${r.nLutas}`)
-    : venceu ? `${p.A.nomeTela} venceu ${p.B.nomeTela} · ${dur}` : perdeu ? (res.tr ? `${p.B.nomeTela} venceu · ${dur}` : `${p.B.nomeTela} venceu no turno ${n}`) : `Empate no limite · ${dur}`;
+    : venceu ? `${p.A.nomeTela} venceu ${p.B.nomeTela} · ${dur}` : perdeu ? `${p.B.nomeTela} venceu · ${dur}` : `Empate no limite · ${dur}`;
   /* dano na escala de quem recebeu (com a escala de stats, a campanha mostra os números grandes) */
-  /* na luta em tempo real (pets v13) o dano e a vida que cada um perdeu (a cura da carta volta a somar no do pet) */
-  const curaA = res.tr?.curou[0] ? Math.max(0, res.E.L[0].hp - res.E0.L[0].hp) : 0;
-  const danoDado = (res.tr ? res.E0.L[1].hp - res.E.L[1].hp : res.turnos.reduce((s, tr) => s + tr.dano[1], 0)) * fatorExibicao(p.B.cond, m.versao),
-    danoLevado = (res.tr ? res.E0.L[0].hp - res.E.L[0].hp + curaA : res.turnos.reduce((s, tr) => s + tr.dano[0], 0)) * fatorExibicao(p.A.cond, m.versao);
+  /* o dano e a vida que cada um perdeu (a cura da carta volta a somar no do pet) */
+  const curaA = res.tr.curou[0] ? Math.max(0, res.E.L[0].hp - res.E0.L[0].hp) : 0;
+  const danoDado = (res.E0.L[1].hp - res.E.L[1].hp) * fatorExibicao(p.B.cond, m.versao),
+    danoLevado = (res.E0.L[0].hp - res.E.L[0].hp + curaA) * fatorExibicao(p.A.cond, m.versao);
   const vencidos = LUGARES.filter((_, i) => m.lugarVencido(i)).length;
   const recordeTamer = inst ? tamerAtual().recorde(inst.id) : null;
   const nums: [string, string][] = inst
@@ -176,7 +176,7 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
               <span className="res-ilha-txt"><span className="res-selo">{x.origem === "medalha" ? "item novo" : "carta da revanche"}</span><b>{it.nome}</b>
                 <span>{it.efeito} {it.tipo === "carta" ? "Escolha antes de uma luta." : "Equipe em Crescer · Itens."}</span></span>
             </div>); })}
-          {r.carta && <p className="res-carta" role="note">Carta usada: <b>{cartaDe(r.carta).nome}</b>. {cartaDe(r.carta).efeito}{res.turnos.some(tr => tr.cura?.[0]) ? " Ela curou o pet nesta luta." : ""}</p>}
+          {r.carta && <p className="res-carta" role="note">Carta usada: <b>{cartaDe(r.carta).nome}</b>. {cartaDe(r.carta).efeito}{res.tr.curou[0] ? " Ela curou o pet nesta luta." : ""}</p>}
           {r.titulo && <div className="res-titulo" role="status">
             <SeloMedalha n={0} ouro ganha tam={40} />
             <span className="res-ilha-txt"><span className="res-selo">medalha de ouro</span><b>Campeão da Liga dos Líderes</b>
@@ -200,10 +200,7 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
           {inst?.regra === "sozinho" && <p className="res-arena-nota" role="note">Palácio: {p.A.nomeTela} lutou sem as suas travas, vetos e chips de regra, com as regras que ele mesmo escolheu.</p>}
           {r.arena?.regra === "vinculo" && <p className="res-arena-nota" role="note">Arena do Lago: {p.A.nomeTela} lutou sem as suas travas e vetos, com as regras que ele mesmo escolheu.</p>}
           <div className="res-nums-corpo"><Numeros itens={nums} /></div>
-          {momentos.length > 0 && <section className="res-decidiu" aria-labelledby="res-dec-tit">
-            <h3 id="res-dec-tit">O que decidiu a luta</h3>
-            <ol>{momentos.map((l, i) => <li key={i}><span className={`res-t${l.tom ? " res-t--" + l.tom : ""}`}>{l.t}</span><span>{l.txt}</span></li>)}</ol>
-          </section>}
+          <PorqueLuta res={res} A={p.A} B={p.B} travadas={gp ? gp.travas : null} desafiado={!r.cenario && m.desafiado === 1} />
           {r.cenario
             ? <div className="res-semregra"><span className="dl-num" aria-hidden="true">?</span><span>Contra pet de cenário o seu não aprende.</span></div>
             : nova

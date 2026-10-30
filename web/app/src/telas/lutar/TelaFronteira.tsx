@@ -32,7 +32,7 @@ const vitorias = (n: number): string => `${n} vitória${n === 1 ? "" : "s"}`;
 /** uma instalacao da Fronteira: a regra em uma frase, o recorde do Tamer, o que este pet fez nela e "Tentar". Antes do titulo, trancada */
 function CartaoInstalacao({ x, m, t, lutando }: { x: Instalacao; m: Motor; t: Tamer; lutando: boolean }) {
   const erro = m.porqueNaoInstalacao(x.id), rec = t.recorde(x.id), c = m.instalacoes[x.id];
-  const tentar = () => { lutarInstalacao(x.id, NOME_V2); if (LUTA.lutando) location.hash = ENDERECO_LUTA; };
+  const tentar = () => { lutarInstalacao(x.id); if (LUTA.lutando) location.hash = ENDERECO_LUTA; };
   return (
     <li className={`dl-card fr-inst-card${t.titulo ? "" : " fr-inst-card--fechada"}`} aria-labelledby={`fr-inst-${x.id}`}>
       <span className="fr-inst-cab">
@@ -57,7 +57,7 @@ export function TelaFronteira() {
   const ult = useMemo(() => (nLiga ? ultimaTentativa(m) : null), [nLiga, m.semente]);
   const img = (k: string, cls: string) => { if (a.tipo !== "ok") return null; const i = imagemAtlas(a, k); return <img className={`dl-pix ${cls}`} src={i.url} width={i.w} height={i.h} alt="" />; };
   const titulo = t.titulo, meu = t.tituloDe(m.semente), parou = ult ? ult.lutas.length : 0, venceuUlt = !!ult && ult.lutas.length === LIGA.length && ult.lutas[LIGA.length - 1].venceu;
-  const desafiar = () => { lutarLiga(NOME_V2); if (LUTA.lutando) location.hash = ENDERECO_LUTA; };
+  const desafiar = () => { lutarLiga(); if (LUTA.lutando) location.hash = ENDERECO_LUTA; };
   return (
     <div className="tela dl desk fr-tela">
       <div className="desk-col fr-lado">

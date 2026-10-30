@@ -146,6 +146,7 @@
 .luta-intencao-balao{position:absolute;right:24px;top:118px;display:flex;align-items:center;gap:4px;background:#FFFFFF;border:3px solid var(--dl-rival);border-radius:12px;padding:3px 10px 3px 4px;
   box-shadow:0 3px 0 #4A0F22;font-weight:900;font-size:14px;color:var(--dl-rival)}
 .luta-arena .luta-callout{position:absolute;left:50%;top:184px;transform:translateX(-50%) rotate(-6deg);font-size:34px;pointer-events:none;white-space:nowrap}
+.luta-arena .luta-aviso-asset{position:absolute;left:8px;right:8px;bottom:8px;margin:0;padding:6px 10px;border-radius:8px;background:var(--dl-perigo,#B4232F);color:#FFFFFF;font-size:12px;font-weight:700;z-index:2}
 .palco-luta-baixo{display:grid;gap:10px;padding:12px 14px 0}
 .luta-intencao{display:flex;align-items:center;gap:10px;background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 2px var(--dl-highlight-press),0 3px 0 2px #B88600;padding:8px 10px;font-size:13px;line-height:18px;font-weight:700;color:#13244D}
 .luta-exclam{flex:none;display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--dl-highlight);color:#3B2A00;font-weight:900}
@@ -321,7 +322,7 @@ dialog.modal-res::backdrop,dialog.modal-conf::backdrop,dialog.folha::backdrop{ba
 .res-decidiu li{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:18px;font-weight:700}
 .res-t{font-family:var(--dl-f-lcd);font-size:14px;min-width:32px;white-space:nowrap;flex:none;color:var(--dl-plate)}
 .res-t--bom{color:#1F7A3A}.res-t--ruim{color:#B0213F}
-.res--vit .res-decidiu{display:none}
+.res-porque-nota{margin:0;font-size:12px}
 .res-regra{border-radius:12px;border:2px dashed var(--dl-learned);box-shadow:0 0 0 2px var(--dl-navy-deep),0 0 14px rgba(111,227,255,.5);padding:10px 12px;color:var(--dl-learned-ink);display:flex;flex-direction:column;gap:6px}
 .res-regra-topo{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:11px;font-weight:900;color:var(--dl-learned)}
 .res-regra-pos{background:var(--dl-learned);color:#0B2A5E;border-radius:4px;font-size:10px;padding:0 6px;white-space:nowrap}
@@ -358,7 +359,7 @@ dialog.modal-res::backdrop,dialog.modal-conf::backdrop,dialog.folha::backdrop{ba
   .res-nums-faixa{display:block;position:relative;padding:0 22px 20px}
   .res-nums-corpo{display:none}
   .res-corpo{padding:18px 20px;gap:12px}
-  .res--vit .res-decidiu{display:flex}
+  
 }
 /* replay de uma luta no Diario (Ver replay do Resultado) */
 .reg-replay{display:grid;gap:8px}

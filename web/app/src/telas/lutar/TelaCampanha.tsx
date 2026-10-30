@@ -160,7 +160,7 @@ function Detalhe() {
       </section>
       <EscolhaCarta rival={sel} />
       <button type="button" className={`dl-btn camp-lutar${vit ? " dl-btn--sec" : ""}`} disabled={!aberto || luta.lutando || !podeLutar}
-        onClick={() => { LUTA.campSel = sel; lutarAnimado(sel, NOME_V2); if (LUTA.lutando) location.hash = ENDERECO_LUTA; }}>
+        onClick={() => { LUTA.campSel = sel; lutarAnimado(sel); if (LUTA.lutando) location.hash = ENDERECO_LUTA; }}>
         {rotuloDesafio(m, sel, vit)}</button>
     </>
   );
@@ -215,7 +215,7 @@ function DetalheDesk({ irTreinar }: { irTreinar: () => void }) {
       <div className="campd-bts">
         <button type="button" className="dl-btn dl-btn--sec" onClick={irTreinar}>Treinar antes</button>
         <button type="button" className="dl-btn camp-lutar" disabled={!aberto || luta.lutando || !podeLutar}
-          onClick={() => { LUTA.campSel = sel; lutarAnimado(sel, NOME_V2); if (LUTA.lutando) location.hash = ENDERECO_LUTA; }}>
+          onClick={() => { LUTA.campSel = sel; lutarAnimado(sel); if (LUTA.lutando) location.hash = ENDERECO_LUTA; }}>
           {rotuloDesafio(m, sel, vit)}</button>
       </div>
     </>

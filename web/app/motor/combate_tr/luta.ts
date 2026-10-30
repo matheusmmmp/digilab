@@ -61,6 +61,9 @@ export interface ResultadoLutaTR {
   curou: boolean[];
   /** so com a opcao eventos (a tela e os testes) */
   eventos: EventoTR[] | null;
+  /** a entrada da luta: com ela a tela refaz a luta passo a passo para desenhar (criarLutaTR), e o fim tem de ser este. Nao entra em
+      assinatura nem registro */
+  entrada: { A: Lutador; B: Lutador; semente: number; o: OpcoesTR };
 }
 export interface OpcoesTR {
   R?: RegrasLuta;
@@ -313,5 +316,6 @@ export function jogarTR(A: Lutador, B: Lutador, semente: number, o: OpcoesTR = {
   const E0 = { hpMax: [S.L[0].hpMax, S.L[1].hpMax], hp: [S.L[0].hp, S.L[1].hp], guts: [S.L[0].guts, S.L[1].guts] };
   let fim: ReturnType<typeof passoTR> = null;
   while (!(fim = passoTR(Lt, o.desafiado ?? null)));
-  return { E0, acoes: Lt.acoes, pontosA: fim[0], fim: fim[1], passos: S.passo, E: S, curou: Lt.curou, eventos: Lt.eventos };
+  return { E0, acoes: Lt.acoes, pontosA: fim[0], fim: fim[1], passos: S.passo, E: S, curou: Lt.curou, eventos: Lt.eventos,
+    entrada: { A, B, semente, o: { R: o.R ?? null, ini: o.ini ?? null, desafiado: o.desafiado ?? null, curas: o.curas ?? null } } };
 }
