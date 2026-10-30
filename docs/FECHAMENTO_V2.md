@@ -1,7 +1,7 @@
 # FECHAMENTO DA V2: o estado de cada tarefa, marco e frente (2026-10-30)
 
-**PROPOSTO** pelo Gerente da transição V2 → V3 (`docs/TAREFA_V2_TRANSICAO_V3.md`), sobre a `main` em `b3643bb` (PR #475). O fechamento vale
-quando o Matheus aprovar as V3-D1 a V3-D8 (`docs/PLANO_V3.md`, seção 7).
+Escrito pelo Gerente da transição V2 → V3 (`docs/TAREFA_V2_TRANSICAO_V3.md`), sobre a `main` em `b3643bb` (PR #475). As V3-D1 a
+V3-D8 foram DECIDIDAS pelo Matheus em 2026-10-30, todas pela recomendação (`docs/PLANO_V3.md`, seção 7). As marcas valem com elas.
 
 **Regras desta tabela:**
 - cada linha diz o resultado em uma linha e o documento ou o PR de onde ele vem. Nenhum número entra sem essa origem;

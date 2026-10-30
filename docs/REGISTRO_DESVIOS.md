@@ -436,3 +436,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-30 — LONGE-REGULAR, etapa 0 (Claude Code, Opus 5.5, worktree `v2-longe-regular`): a tarefa do longe com lugares fixos](registro/2026-10.md)
 - [2026-10-30 — COMBATE-TR, o plano da segunda rodada de equilíbrio (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`)](registro/2026-10.md)
 - [2026-10-30 — TRANSICAO-V3, o G0 (Gerente da transição, Claude Code, Opus 5.5, worktree `v2-transicao-v3`): o fechamento da V2 e o plano da V3](registro/2026-10.md)
+- [2026-10-30 — TRANSICAO-V3, as V3-D1 a V3-D8 (Gerente da transição, Claude Code, Opus 5.5, worktree `v2-transicao-v3`): decididas pela recomendação](registro/2026-10.md)

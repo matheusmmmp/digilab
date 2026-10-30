@@ -13,7 +13,7 @@ Em que estado cada tarefa, marco e frente da V2 fica quando a V2 fecha, e qual �
 ## 2. Depende de
 
 - A `main` em `b3643bb` (PR #475).
-- As decisões V3-D1 a V3-D8 (seção 8). Até o Matheus responder, os dois documentos novos ficam PROPOSTOS.
+- As decisões V3-D1 a V3-D8 (seção 8). DECIDIDAS pelo Matheus em 2026-10-30, todas pela recomendação ("Aprovo todas").
 
 ## 3. Mudança mínima
 

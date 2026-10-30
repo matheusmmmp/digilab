@@ -1,7 +1,7 @@
 # PLANO DA V3: cérebro pelas referências, layout novo e batalha em tempo real (2026-10-30)
 
-**PROPOSTO** pelo Gerente da transição V2 → V3 (`docs/TAREFA_V2_TRANSICAO_V3.md`), sobre a `main` em `b3643bb`. A definição da V3 em três
-trilhas é do Matheus (2026-10-30). As missões, a ordem e as decisões V3-D1 a V3-D8 (seção 7) esperam o Matheus. O estado em que a V2
+**As V3-D1 a V3-D8 DECIDIDAS pelo Matheus em 2026-10-30, todas pela recomendação** ("Aprovo todas", no chat do Gerente). Escrito pelo Gerente da transição V2 → V3 (`docs/TAREFA_V2_TRANSICAO_V3.md`), sobre a `main` em `b3643bb`. A definição da V3 em três
+trilhas é do Matheus (2026-10-30). A ordem das missões é a da V3-D6; cada missão nasce com a tarefa e as decisões próprias. O estado em que a V2
 fecha está em `docs/FECHAMENTO_V2.md`.
 
 **A direção de 2026-10-24 continua:** o produto jogável vem primeiro; o DigiBrain é modular; o cérebro A é a linha de base, o controle e
@@ -115,7 +115,7 @@ reconhece um `docs/PLANO_ANALISE_V2_*.md`. O modelo de tarefa (`docs/modelos/TAR
 `tools/gerar_estado_atual.py` também só olham o prefixo `V2`. **Uma tarefa `TAREFA_V3_*` reprova no CI** até essas expressões aceitarem
 `V[23]`. Por isso este PR usa `docs/TAREFA_V2_TRANSICAO_V3.md`.
 
-## 7. As decisões V3-D1 a V3-D8 (todas PROPOSTAS, com a recomendação primeiro)
+## 7. As decisões V3-D1 a V3-D8 (DECIDIDAS em 2026-10-30, todas pela recomendação)
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
