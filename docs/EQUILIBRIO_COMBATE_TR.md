@@ -475,3 +475,41 @@ rodada ficam em `LISTAS_V14_R1`, e o candidato reproduz a `grade3/r2c_b_formas.j
 - **A alavanca que falta é de estrutura,** não de lista: o alcance ou o tempo do disparo contra quem avança, ou a pele dura do tita.
   Fica para a conferência e para o Matheus.
 
+## Rodada 2, fase R2-2 — o aprendizado próprio do tempo real (P-3)
+
+Worker: Claude Code, Opus 5.5, worktree `v2-combate-tr`, 2026-10-30.
+- **O que rodou:** só as sementes de calibração da rodada 2 (`72101…72505`), em no máximo 4 processos.
+- **Os artefatos:** os resumos em `web/app/scripts/medicoes/equilibrio_tr/r2_2/` (`grade1/` a `grade3/resumo.json`,
+  `depois_resumo_metas.txt`). Os JSON completos de cada ponto e da medida de todas as metas estão em `r2_2/completo.tar.gz`.
+- **Antes, uma decisão do Matheus** (2026-10-30, depois da R2-1): a alavanca de estrutura das formas de longe e do tita fica para depois
+  da conferência. O plano registra.
+
+**A alavanca (DR2-5):** um bloco próprio do candidato, `APRENDIZADO_V14` (`combate_tr/constantes_tr.ts`), que o `GambitsPet` usa por
+`aprendizadoTR`. O `GA` comum, conferido contra o Python, não muda, e os pets v13 também não (o bloco fica `null` neles). São quatro
+números:
+- `alfa`: no lugar do `GA.alfa`;
+- `prior`: um peso fixo da posição na lista de partida, somado à nota só na ordem. Ele não decai como a nota-base;
+- `bonus`: o peso do resultado na nota;
+- `limiar`: o limiar da troca de regra.
+
+**A grade** (`grade_aprendizado_r2.py`): a nota, registrada antes de rodar, é a soma da distância do P-3 do Champion e do Ultimate até
+[0,55; 0,70]. O ponto com o P-4 abaixo de 0,8 não conta.
+- **Rodada 1** (`alfa` × `prior`, 15 pontos): o efeito é pequeno. Um aprendizado mais lento só aproxima a aprendida da semente (P-3 perto
+  de 0,5).
+- **Rodada 2** (mais o `bonus` e o `limiar`, 24 pontos): o que mexe é o limiar da troca. Com ele em 0, o Champion chega a 0,556.
+- **Rodada 3** (o limiar de 0 a 0,1, com o `alfa` 0,2 ou 0,3, 16 pontos): a melhor tem `alfa` 0,2, `prior` 0,1, `bonus` 0,1 e
+  `limiar` 0,05, com nota 0,032.
+
+**O resultado** (o candidato com o bloco; `depois_resumo_metas.txt` contra a R2-1):
+
+| # | R2-1 | R2-2 | passa? |
+|---|---|---|---|
+| P-3 | Champion 0,533; Ultimate 0,453 | Champion 0,678; Ultimate 0,518 | **não fechou** (o Ultimate) |
+| P-4 | Champion 0,865; Ultimate 0,95 | 0,8775; 0,9713 | sim |
+| as outras | — | iguais às da R2-1 (o bloco só age no pet que aprende) | as protegidas passam |
+
+**Por que o Ultimate não fecha:** com o limiar de hoje, o pet quase não troca de regra, e a lista só se reordena. Trocar mais cedo
+melhora a lista do Champion, mas no Ultimate a lista de 8 regras perde pouco e ganha pouco com a troca: 0,518 com o limiar 0,05 e com o
+0,1. Com os números desta alavanca, não há como chegar lá. O que faltaria é uma regra de troca melhor (a candidata escolhida pelo
+resultado, não sorteada), o que é mudança de estrutura.
+
