@@ -312,6 +312,13 @@ tentei.
 8. **Competição entre pets treinados por donos diferentes como diferencial.** Sims (1994b) já usa
    competição direta como pressão seletiva e o NERO já põe agentes treinados por pessoas a competir.
    A parte nova possível é a atribuição causal do resultado ao treino, que ninguém mediu.
+9. **"Juntar corpo com homeostase, aprendizado em vida e memória episódica num agente é novo."**
+   Acrescentada pela C0 da V3 em 2026-10-30. Sem suporte como novidade: a combinação já está em
+   Creatures (Grand e Cliff), Gadanho e Hallam (2001), na linha de Ho, Dautenhahn e Nehaniv
+   (2003–2008) e em Goertzel et al. (2008), verificados em `v3c0_referencias_verificadas.csv`; a
+   triagem de 2026-10-30 também a acha em Zamin e no Rity (SEM FONTE). O que pode se sustentar é o
+   método: teste causal com braço de controle, num pet persistente, com replay determinístico, e
+   mesmo isso sem alegar que ninguém o fez (`V3C0_SINTESE_TRIAGEM_2026-10-30.md`).
 
 ### Método e limites
 
