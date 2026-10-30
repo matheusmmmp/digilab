@@ -68,7 +68,7 @@ export const RELOGIO_V13: RelogioTR = {
     - empurrao 6 -> 0: o empurrao do golpe corpo a corpo afastava o atacante para fora do contato, e as listas defensivas nao voltavam;
     - medio 150 -> 120: a faixa media mais curta faz as listas sairem do longe mais cedo e reagirem ao preparo do rival (T-5);
     - recuo .8 -> .6 e arrancada 420 -> 500 px/s: quem recua o tempo todo (a sentinela) e alcancado;
-    - disparo fica 1: na grade de 1,5 a 8 (depois da fase 3, pela decisao do Matheus de 2026-10-30; scripts/medicoes/equilibrio_tr/
-      disparo/), todo valor acima de 1 reprova o T-1 da fase 1 (a luta media abaixo de 40 s: disparo/relogio/), e o ajuste volta atras
-      (plano, secao 5). O melhor das formas (6) fica para o Matheus decidir (docs/EQUILIBRIO_COMBATE_TR.md, o passo do disparo) */
-export const RELOGIO_V14: RelogioTR = { ...RELOGIO_V13, empurrao: 0, medio: 120, recuo: .6, arrancada: 500 * PASSO_TR_MS / 1000 };
+    - disparo 1 -> 6: o melhor das formas na grade de 1,5 a 8 (depois da fase 3, DE-8; scripts/medicoes/equilibrio_tr/disparo/; a
+      conferencia em disparo/conferencia_d6/). Todo valor acima de 1 reprova o T-1 da fase 1 (a luta media cai para perto de 35 s), e o
+      Matheus decidiu ligar o 6 mesmo assim (DE-9, 2026-10-30): o T-1 fica reprovado e registrado como esta */
+export const RELOGIO_V14: RelogioTR = { ...RELOGIO_V13, empurrao: 0, medio: 120, recuo: .6, arrancada: 500 * PASSO_TR_MS / 1000, disparo: 6 };
