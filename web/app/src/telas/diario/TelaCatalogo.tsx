@@ -11,7 +11,6 @@ import { dec } from "../../componentes/Barras.tsx";
 import { Deco } from "../../componentes/Deco.tsx";
 import { BRASAO } from "../../decoracao.ts";
 import { useJogo } from "../../jogo.ts";
-import { useDesktop } from "../../desktop.ts";
 import { Folha } from "../../componentes/Folha.tsx";
 import { idNo, requisito } from "../crescer/TelaEvolucao.tsx";
 
@@ -55,12 +54,12 @@ function Detalhe({ f, meu }: { f: Forma; meu: boolean }) {
   );
 }
 export function TelaCatalogo() {
-  const { motor: m } = useJogo(), [esp, setEsp] = useState<Especie>(m.especie), [sel, setSel] = useState(-1), [folha, setFolha] = useState(false), desk = useDesktop();
+  const { motor: m } = useJogo(), [esp, setEsp] = useState<Especie>(m.especie), [sel, setSel] = useState(-1), [folha, setFolha] = useState(false);
   const formas = formasDoBrasao(esp), meu = idNo(m.forma);
   const vistos = new Set([idNo({ esp: m.especie, est: "bebe" }), ...m.evolucoes.map(x => idNo(x.forma)), meu]);
   const i = sel >= 0 && sel < formas.length ? sel : Math.max(0, formas.findIndex(f => idNo(f) === meu));
   return (
-    <div className="tela dl desk cat-tela">
+    <div className="tela dl cat-tela">
       <div className="cat-brasoes" role="group" aria-label="Brasão">
         {ESPECIES.map(e => <button type="button" key={e} className="chip" aria-pressed={e === esp} onClick={() => { setEsp(e); setSel(-1); }}><Deco nome={BRASAO[e].peca} className="cat-chip-brasao" />{NOME_ESP[e]}</button>)}
         <span className="cat-vistas">{formas.filter(f => vistos.has(idNo(f))).length} de {formas.length} vistas</span>
@@ -68,9 +67,8 @@ export function TelaCatalogo() {
       <div className="cat-grade" role="listbox" aria-label="Formas do brasão">
         {formas.map((f, j) => <Tile key={idNo(f)} f={f} sel={j === i} meu={idNo(f) === meu} visto={vistos.has(idNo(f))} escolher={() => { setSel(j); setFolha(true); }} />)}
       </div>
-      {/* ficha: coluna da direita no desktop; folha no celular (secao 7) */}
-      {desk ? <Detalhe f={formas[i]} meu={idNo(formas[i]) === meu} />
-        : folha && <Folha titulo={`Ficha: ${rotulo(formas[i])}`} fechar={() => setFolha(false)}><Detalhe f={formas[i]} meu={idNo(formas[i]) === meu} /></Folha>}
+      {/* ficha: folha sobre o painel (secao 7) */}
+      {folha && <Folha titulo={`Ficha: ${rotulo(formas[i])}`} fechar={() => setFolha(false)}><Detalhe f={formas[i]} meu={idNo(formas[i]) === meu} /></Folha>}
       <details className="dl-apoio"><summary>Como funciona</summary>
         <p>Vista = forma por onde este pet passou. Cada brasão percorre a mesma árvore, a do cânone (1 In-Training, 2 Rookies, 4 Champions, 4 Ultimates e 4 Megas): cada Champion vira o Ultimate da linha em um de dois arquétipos (a passiva muda), e o Ultimate vira o Mega da linha (só pets novos; o arquétipo continua). Stats pela fórmula do catálogo (brasão + ramo + linha + forma; todo modificador soma zero, com renormalização nos extremos), aqui sem caráter e sem temperamento; vida e guts já com o multiplicador do nível. Os números ainda estão em teste.</p></details>
       <section className="bloco"><h2>Técnicas (Champion)</h2><div className="decisoes">

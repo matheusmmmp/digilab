@@ -9,9 +9,6 @@
   --painel-larg:min(760px,64vw); --quadro-larg:min(740px,58vw);
 }
 @media (min-width:900px){ :root{ --casca-barra:0px; --casca-trilho:76px } }
-/* a partir de 1100 px as telas usam os layouts desktop de duas colunas (pensados para ~960 px de conteudo): o painel fica com essa largura
-   e o habitat com o resto (230 px a 1280); o redesenho das telas para um painel mais estreito e da M4/M5 */
-@media (min-width:1100px){ :root{ --painel-larg:min(1000px, calc(100vw - 76px - 230px)) } }
 body:has(.app--habitat){ overflow:hidden }
 
 .app--habitat{ display:block; min-height:100dvh; padding:0; position:relative }
@@ -91,8 +88,8 @@ body:has(.app--habitat){ overflow:hidden }
 
 /* ---------- painel dos destinos (PainelTela) */
 .painel-tela__hx{ flex:1; min-width:0; min-height:0; width:100% }
-.painel-tela__hx .hx-painel__corpo{ padding:0 }
-.painel-tela__folha{ min-height:100%; background:var(--dl-bg); color:var(--dl-text); padding-bottom:16px }
+.painel-tela__hx .hx-painel__corpo{ padding:0; overflow-x:hidden }
+.painel-tela__folha{ min-height:100%; color:var(--hx-texto); padding-bottom:16px }
 .painel-tela__acoes{ display:flex; justify-content:flex-end; padding:12px 14px 0 }
 .painel-tela--lado{ position:fixed; z-index:10; top:calc(var(--casca-topo) + 4px); right:12px; bottom:12px; width:calc(var(--painel-larg) - 12px); display:flex; outline:none }
 .painel-tela--modal{ position:fixed; inset:calc(var(--casca-topo) + 8px) 0 calc(var(--casca-barra) + 12px); margin:auto; width:min(94vw,560px); height:fit-content;
