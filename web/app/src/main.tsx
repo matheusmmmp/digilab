@@ -28,6 +28,8 @@ import "./estilo/desktop.css";
 import "./estilo/digibrain.css";
 import "./estilo/pet_home.css";
 import "./estilo/mundo.css";
+import "./estilo/hud.css";
+import "./estilo/casca.css";
 import "./estilo/tailwind.css";
 
 iniciarTema();

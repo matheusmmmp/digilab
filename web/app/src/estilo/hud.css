@@ -1,0 +1,106 @@
+/* Pele XCOM dos menus (TAREFA_V2_LAYOUT_HABITAT, M1). CSS puro, sem Tailwind: a pele e feita de gradientes, mascaras e bordas
+   de 1 px que nao cabem em utilidades, e o @source do tailwind.css lista so pastas fechadas. Tudo sob .hx-* e tokens --hx-*
+   (tokens.css, sempre escuros). Alvos de 44 px, foco visivel, nada so no hover. */
+.hx-painel, .hx-abas, .hx-linha, .hx-btn, .hx-quad, .hx-continuar, .hx-chip, .hx-medidor, .hx-rotulo{
+  font-family:var(--hx-f); color:var(--hx-texto); box-sizing:border-box;
+}
+.hx-painel *{ box-sizing:border-box }
+
+/* painel */
+.hx-painel{
+  background:linear-gradient(180deg,var(--hx-miolo-2),var(--hx-miolo)); border:1px solid var(--hx-borda);
+  border-top:2px solid var(--hx-borda-topo); display:flex; flex-direction:column; min-width:0; min-height:0;
+}
+.hx-painel__cab{ display:flex; flex-wrap:wrap; align-items:stretch; gap:8px; min-height:44px; position:relative; border-bottom:1px solid var(--hx-borda) }
+.hx-painel__cab::before{ content:""; position:absolute; inset:0 0 auto 0; height:6px; background:var(--hx-hachura); pointer-events:none }
+.hx-painel__titulo{
+  margin:0; padding:10px 12px; flex:0 0 auto; align-self:center; font:700 18px/1.1 var(--hx-f);
+  letter-spacing:.08em; text-transform:uppercase; color:var(--hx-texto); overflow-wrap:break-word;
+}
+.hx-painel__cab > .hx-abas{ flex:1 1 240px; align-self:flex-end; flex-wrap:wrap }
+.hx-painel__cab > .hx-quad{ position:absolute; top:0; right:0 }
+.hx-painel__cab:has(> .hx-quad) > .hx-painel__titulo{ padding-right:56px }
+.hx-painel__corpo{ padding:12px; overflow:auto; min-height:0; flex:1 }
+
+/* botao quadrado (o "x" e o voltar) e botoes */
+.hx-btn, .hx-continuar, .hx-quad{
+  min-height:44px; min-width:44px; cursor:pointer; font:600 16px/1 var(--hx-f); letter-spacing:.06em; text-transform:uppercase;
+}
+.hx-btn, .hx-quad{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:0 14px;
+  background:var(--hx-miolo); color:var(--hx-texto); border:1px solid var(--hx-borda-topo); border-radius:0;
+}
+.hx-quad{ padding:0; width:44px; font-size:22px; line-height:1; border-width:0 0 1px 1px; background:transparent }
+.hx-btn:hover, .hx-quad:hover{ background:var(--hx-miolo-2); border-color:var(--hx-texto-2) }
+.hx-btn:active, .hx-quad:active{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink) }
+.hx-btn--perigo{ color:var(--hx-perigo); border-color:var(--hx-perigo) }
+.hx-btn:disabled, .hx-continuar:disabled{ opacity:.5; cursor:not-allowed }
+
+/* botao principal "CONTINUAR": fundo escuro, borda verde, hachura verde de 6 px no topo */
+.hx-continuar{
+  position:relative; display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:6px 22px 0;
+  background:var(--hx-btn-bg); color:var(--hx-btn-ink); border:1px solid var(--hx-btn-borda); border-radius:0; font-weight:700; font-size:18px;
+}
+.hx-continuar::before{ content:""; position:absolute; inset:0 0 auto 0; height:6px; background:var(--hx-hachura-verde); pointer-events:none }
+.hx-continuar:hover{ background:rgba(22,46,34,.96) }
+.hx-continuar:active{ background:var(--hx-btn-borda); color:var(--hx-escolhido-ink) }
+
+/* abas no cabecalho: a escolhida em ciano palido com texto escuro */
+.hx-abas{ display:flex; flex-wrap:wrap; gap:2px; padding:0 6px; position:relative }
+.hx-aba{
+  min-height:44px; min-width:44px; padding:0 14px; background:transparent; color:var(--hx-texto-2); border:0;
+  border-bottom:2px solid transparent; font:600 15px/1 var(--hx-f); letter-spacing:.08em; text-transform:uppercase; cursor:pointer;
+}
+.hx-aba:hover{ color:var(--hx-texto); border-bottom-color:var(--hx-borda-topo) }
+.hx-aba[aria-selected="true"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-bottom-color:var(--hx-escolhido); font-weight:700 }
+
+/* linha de lista em caixa de borda fina */
+.hx-linha{
+  display:flex; align-items:center; gap:10px; min-height:44px; padding:8px 12px; background:var(--hx-miolo);
+  border:1px solid var(--hx-borda); color:var(--hx-texto); font:500 16px/1.25 var(--hx-f); width:100%; text-align:left; border-radius:0;
+}
+button.hx-linha{ cursor:pointer }
+button.hx-linha:hover{ border-color:var(--hx-borda-topo); background:var(--hx-miolo-2) }
+.hx-linha[aria-pressed="true"], .hx-linha[aria-current="true"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido) }
+.hx-linha__sec{ margin-left:auto; color:var(--hx-sec); font-size:14px }
+.hx-linha[aria-pressed="true"] .hx-linha__sec, .hx-linha[aria-current="true"] .hx-linha__sec{ color:var(--hx-escolhido-ink) }
+
+/* chip: o tom vem tambem da forma (cheio, tracejado, duplo), nao so da cor (UI_GUIDELINES §3 e §13) */
+.hx-chip{
+  display:inline-flex; align-items:center; min-height:24px; padding:2px 8px; border:1px solid var(--hx-borda-topo); background:var(--hx-miolo);
+  color:var(--hx-texto); font:600 12px/1.2 var(--hx-f); letter-spacing:.08em; text-transform:uppercase; border-radius:0;
+}
+.hx-chip--rotulo{ color:var(--hx-rotulo); border-color:var(--hx-rotulo) }
+.hx-chip--aprendido{ color:var(--hx-aprendido); border:1px dashed var(--hx-aprendido) }
+.hx-chip--necessidade{ background:var(--hx-necessidade); color:var(--hx-escolhido-ink); border-color:var(--hx-necessidade) }
+.hx-chip--ok{ color:var(--hx-ok); border-color:var(--hx-ok) }
+.hx-chip--alerta{ color:var(--hx-alerta); border:3px double var(--hx-alerta) }
+.hx-chip--perigo{ color:var(--hx-perigo); border:2px solid var(--hx-perigo) }
+
+/* medidor segmentado */
+.hx-medidor{ display:flex; align-items:center; gap:8px; min-height:24px }
+.hx-medidor__rot{ color:var(--hx-sec); font:600 12px/1 var(--hx-f); letter-spacing:.08em; text-transform:uppercase; white-space:nowrap }
+.hx-medidor__trilho{ flex:1; height:12px; min-width:48px; background:var(--hx-medidor-trilho); border:1px solid var(--hx-borda) }
+.hx-medidor__barra{
+  height:100%; background:var(--hx-medidor); -webkit-mask-image:var(--hx-mascara); mask-image:var(--hx-mascara);
+}
+.hx-medidor--ok .hx-medidor__barra{ background:var(--hx-ok) }
+.hx-medidor--alerta .hx-medidor__barra{ background:var(--hx-alerta) }
+.hx-medidor--perigo .hx-medidor__barra{ background:var(--hx-perigo) }
+.hx-medidor__txt{ color:var(--hx-texto-2); font:600 13px/1 var(--hx-f); font-variant-numeric:tabular-nums; white-space:nowrap }
+
+/* texto utilitario dentro da pele */
+.hx-rotulo{ color:var(--hx-rotulo); font:600 12px/1.2 var(--hx-f); letter-spacing:.1em; text-transform:uppercase }
+.hx-sec{ color:var(--hx-sec) }
+
+/* foco visivel em tudo */
+.hx-btn:focus-visible, .hx-quad:focus-visible, .hx-continuar:focus-visible, .hx-aba:focus-visible, .hx-linha:focus-visible{
+  outline:2px solid var(--hx-foco); outline-offset:-3px;
+}
+.hx-btn:focus-visible, .hx-continuar:focus-visible, .hx-linha:focus-visible{ outline-offset:2px }
+
+/* movimento so quando o usuario nao pediu menos */
+@media (prefers-reduced-motion: no-preference){
+  .hx-btn, .hx-quad, .hx-continuar, .hx-aba, .hx-linha{ transition:background-color .12s, color .12s, border-color .12s }
+  .hx-medidor__barra{ transition:width .25s }
+}

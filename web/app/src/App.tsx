@@ -1,18 +1,16 @@
 /* Esqueleto do app (TAREFA_FRONT_TS, Etapa 3): cabecalho do pet, painel do destino com sub-abas, barra dos
    4 destinos e rodape. A rota vem do endereco (#/destino/aba) ou da aba lembrada, como no HTML. */
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useAtlas } from "./atlas.ts";
 import { useDecoracao } from "./decoracao.ts";
 import { Nav } from "./componentes/Nav.tsx";
 import { BoasVindas } from "./componentes/BoasVindas.tsx";
 import { RevelacaoEvolucao } from "./componentes/Revelacao.tsx";
-import { nomeForma } from "../motor/index.ts";
 import { useJogo } from "./jogo.ts";
 import {
   DESTINOS, NOME_ABA, NOME_DESTINO, ROTA_INICIAL, ENDERECO_LUTA, configDoEndereco, ehLuta, enderecoDaConfig, enderecoDaRota, gravarAbaLembrada, lerAbaLembrada,
   rotaDoEndereco, type Aba, type Destino, type ParteConfig, type Rota,
 } from "./rotas.ts";
-import { Deco } from "./componentes/Deco.tsx";
 import { TelaConfig } from "./telas/config/TelaConfig.tsx";
 import { TelaCatalogo } from "./telas/diario/TelaCatalogo.tsx";
 import { TelaCenarios } from "./telas/diario/TelaCenarios.tsx";
@@ -34,10 +32,12 @@ import { TelaLuta } from "./telas/lutar/TelaLuta.tsx";
 import { LUTA, REPLAY, previa, pularAnimacao, type Modo } from "./luta.ts";
 import { TelaPet } from "./telas/pet/TelaPet.tsx";
 import { MeusPets } from "./telas/pet/MeusPets.tsx";
-import { TopoDesktop } from "./componentes/Topo.tsx";
+import { TopoHabitat } from "./componentes/Topo.tsx";
+import { Habitat } from "./componentes/Habitat.tsx";
+import { PainelLado, PainelModal, type DadosPainel } from "./componentes/PainelTela.tsx";
 import { DicaBit } from "./componentes/Bit.tsx";
 import { AcoesMeusPets, MeusPetsDesktop } from "./telas/pet/MeusPetsDesktop.tsx";
-import { useDesktop } from "./desktop.ts";
+import { useDesktop, usePainelLado } from "./desktop.ts";
 import { ComoJogar, Conclusao, EscolherBrasao } from "./componentes/Jornada.tsx";
 import { ImportarPet } from "./componentes/Importar.tsx";
 import { fecharImportar, useImportar } from "./importar.ts";
@@ -90,7 +90,7 @@ export function App() {
   const [descartados, setDescartados] = useState(() => { try { return Number(localStorage.getItem(CHAVE_AVISO_V6) ?? 0); } catch { return 0; } });
   /* o descarte 6 (a luta em tempo real, pets v13): o aviso fica ate o jogador ler */
   const [avisoTR, setAvisoTR] = useState(avisoTRPendente);
-  const [conclusao, setConclusao] = useState(false), desk = useDesktop(), [comoJogar, setComoJogar] = useState(false), importando = useImportar(), her = useHeranca();
+  const [conclusao, setConclusao] = useState(false), desk = useDesktop(), lado = usePainelLado(), [comoJogar, setComoJogar] = useState(false), importando = useImportar(), her = useHeranca();
   /* a jornada acabou (pets v6: a Liga dos Lideres; v1-v5: o chefe da campanha): a mensagem de conclusao, uma vez por pet, fora da luta
      e sem outra tela cheia */
   useEffect(() => {
@@ -156,17 +156,41 @@ export function App() {
   };
   /* replay de uma luta do registro no Diario (card da ultima luta na Arena) */
   const abrirReplay = (idx: number) => { REPLAY.pedido = idx; ir({ destino: "diario", aba: "registro" }); scrollTo(0, 0); };
-  /* desktop (>= 1100 px): topo da casca com titulo, abas e o mini-card do pet */
-  const topo = <TopoDesktop titulo={config ? "Configurações" : NOME_DESTINO[rota.destino]} abas={config ? [] : abas} aba={rota.aba} irAba={a => ir({ destino: rota.destino, aba: a })}
-    abrirMeusPets={() => setMeusPets(true)} voltar={!config && rota.destino === "conversar" ? () => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); } : undefined} />;
+  /* o painel dos destinos que nao sao o Pet (PainelTela): Crescer, Lutar, Diario, Conversar, Ajustes e, no desktop, as paginas de
+     Importar, Nova geracao e Meus pets. O "x" volta para #/pet/estado. */
+  const irPet = () => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); };
+  const fecharPainel = () => {
+    irPet();
+    setTimeout(() => document.querySelector<HTMLElement>('.dl-nav .hx-nav__bt[aria-current="page"]')?.focus(), 60);
+  };
+  const corpoDestino = (): ReactNode => rota.aba === "treinar" ? <TelaTreinar /> : rota.aba === "aprend" ? <TelaAprend /> : rota.aba === "evolucao" ? <TelaEvolucao /> : rota.aba === "itens" ? <TelaItens />
+    : rota.aba === "arena" ? <TelaArena voltarPet={irPet} verReplay={abrirReplay} />
+    : rota.aba === "campanha" ? <TelaCampanha voltarPet={irPet} irTreinar={() => { ir({ destino: "crescer", aba: "treinar" }); scrollTo(0, 0); }} />
+    : rota.aba === "medalhas" ? <TelaMedalhas />
+    : rota.aba === "fronteira" ? <TelaFronteira />
+    : rota.aba === "registro" ? <TelaRegistro irPet={irPet} />
+    : rota.aba === "catalogo" ? <TelaCatalogo /> : rota.aba === "geracoes" ? <TelaGeracoes /> : rota.aba === "chat" ? <TelaConversar voltar={irPet} /> : <TelaCenarios />;
+  const idBase = "painel-aba";
+  let painel: { d: DadosPainel; corpo: ReactNode } | null = null;
+  if (importando && desk) painel = { d: { titulo: "Importar pet", fechar: fecharImportar, idBase }, corpo: <ImportarPet pagina fechar={fecharImportar} /> };
+  else if (her && desk) painel = { d: { titulo: "Nova geração", fechar: fecharHeranca, idBase }, corpo: <Heranca pagina pai2={her.pai2} fim={irPet} /> };
+  else if (meusPets && desk) painel = { d: { titulo: "Meus pets", fechar: () => setMeusPets(false), idBase }, corpo: <><div className="painel-tela__acoes"><AcoesMeusPets /></div><MeusPetsDesktop fechar={() => setMeusPets(false)} /></> };
+  else if (config) painel = { d: { titulo: "Ajustes", fechar: fecharPainel, idBase }, corpo: <TelaConfig parte={config} abrir={abrirConfig} fechar={() => { setConfig(null); scrollTo(0, 0); }} irPet={irPet} /> };
+  else if (rota.destino !== "pet") painel = {
+    d: { titulo: NOME_DESTINO[rota.destino], abas: abas.map(a => ({ id: a, rotulo: NOME_ABA[a] })), aba: rota.aba, irAba: id => ir({ destino: rota.destino, aba: id as Aba }), fechar: fecharPainel, idBase },
+    corpo: corpoDestino(),
+  };
   if (emLuta) return (
     <div className="app app--tela-cheia">
       <TelaLuta sair={sairDaLuta} verReplay={verReplay} sairReplay={sairReplay} pedidoDesistir={pedidoDesistir} fecharPedido={() => setPedidoDesistir(false)} />
     </div>
   );
+  const nav = <Nav atual={config ? null : rota.destino} ir={irDestino} configAberta={!!config} abrirConfig={() => abrirConfig("principal")} />;
+  /* abaixo de 900 px o painel e um modal e a barra de destinos vai para dentro dele (o resto da pagina fica inerte) */
+  const navNoModal = !!painel && !lado;
 
   return (
-    <div className="app">
+    <div className={"app app--habitat " + (painel ? "app--painel" : "app--pet")}>
       <AvisoSom />
       {jogo.erroSave && (
         <div className="aviso" role="alert">
@@ -188,48 +212,12 @@ export function App() {
         </div>
       )}
       <DicaBit />
-      {/* a moldura do desktop (docs/TAREFA_V2_MOLDURA_DESKTOP.md): o painel de cantos cortados em volta do conteudo de toda tela; no
-          celular e ate 1099 px o envoltorio some (display:contents) */}
-      <div className="moldura">
-      {importando && desk ? <><TopoDesktop titulo="Importar pet" abas={[]} aba={null} irAba={() => {}} abrirMeusPets={() => { fecharImportar(); setMeusPets(true); }}
-          voltar={fecharImportar} /><ImportarPet pagina fechar={fecharImportar} /></>
-      : her && desk ? <><TopoDesktop titulo="Nova geração" abas={[]} aba={null} irAba={() => {}} abrirMeusPets={() => { fecharHeranca(); setMeusPets(true); }}
-          voltar={fecharHeranca} /><Heranca pagina pai2={her.pai2} fim={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} /></>
-      : meusPets && desk ? <><TopoDesktop titulo="Meus pets" abas={[]} aba={null} irAba={() => {}} abrirMeusPets={() => {}} voltar={() => setMeusPets(false)}
-          acoes={<AcoesMeusPets />} /><MeusPetsDesktop fechar={() => setMeusPets(false)} /></>
-      : config ? <>{topo}<TelaConfig parte={config} abrir={abrirConfig} fechar={() => { setConfig(null); scrollTo(0, 0); }} irPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} /></>
-      : rota.destino === "pet" ? <>{topo}<TelaPet abrirMeusPets={() => setMeusPets(true)} irConversar={() => irDestino("conversar")} abrirConfig={() => abrirConfig("principal")} irRegistro={() => ir({ destino: "diario", aba: "registro" })} irEvolucao={() => { ir({ destino: "crescer", aba: "evolucao" }); scrollTo(0, 0); }} /></>
-      : rota.destino === "conversar" ? <>{topo}<TelaConversar voltar={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} /></> : (<>{topo}
-      <section className="painel" aria-labelledby="tela-titulo">
-        <div className="tela-cab dl-faixa">
-          <Deco nome="TopDeco_Earth2_0" className="cab-globo" />
-          <h1 className="dl-num" id="tela-titulo">{NOME_DESTINO[rota.destino]}</h1>
-          <span className="tela-cab-pet">{jogo.nascendo > 0 ? "Digi-Egg" : nomeForma(jogo.motor.forma)}</span>
-          {rota.destino === "diario" && (
-            <button type="button" className="cab-engrenagem" aria-label="Configurações" onClick={() => abrirConfig("principal")}>
-              <Deco nome="Common_Icon_Setting" /><span className="cab-engrenagem-reserva" aria-hidden="true">⚙</span>
-            </button>
-          )}
-        </div>
-        {abas.length > 1 && (
-          <div className="tabs" role="tablist" aria-label={`Abas de ${NOME_DESTINO[rota.destino]}`}>
-            {abas.map(a => (
-              <button type="button" role="tab" key={a} className="tab" aria-selected={a === rota.aba} onClick={() => ir({ destino: rota.destino, aba: a })}>{NOME_ABA[a]}</button>
-            ))}
-          </div>
-        )}
-        <div role={abas.length > 1 ? "tabpanel" : undefined}>
-          {rota.aba === "treinar" ? <TelaTreinar /> : rota.aba === "aprend" ? <TelaAprend /> : rota.aba === "evolucao" ? <TelaEvolucao /> : rota.aba === "itens" ? <TelaItens />
-            : rota.aba === "arena" ? <TelaArena voltarPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} verReplay={abrirReplay} />
-            : rota.aba === "campanha" ? <TelaCampanha voltarPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} irTreinar={() => { ir({ destino: "crescer", aba: "treinar" }); scrollTo(0, 0); }} />
-            : rota.aba === "medalhas" ? <TelaMedalhas />
-            : rota.aba === "fronteira" ? <TelaFronteira />
-            : rota.aba === "registro" ? <TelaRegistro irPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} />
-            : rota.aba === "catalogo" ? <TelaCatalogo /> : rota.aba === "geracoes" ? <TelaGeracoes /> : <TelaCenarios />}
-        </div>
-      </section></>)}
-      </div>
-      <Nav atual={config ? null : rota.destino} ir={irDestino} configAberta={!!config} abrirConfig={() => abrirConfig("principal")} />
+      {/* o habitat (a cena do Pet) e a camada de fundo de toda rota: fica montado, nao sobe nem desce ao trocar de destino */}
+      <Habitat escurecer={!!painel} />
+      <TopoHabitat abrirMeusPets={() => setMeusPets(true)} irConversar={() => irDestino("conversar")} abrirConfig={() => abrirConfig("principal")} />
+      {!painel && <TelaPet irRegistro={() => ir({ destino: "diario", aba: "registro" })} irEvolucao={() => { ir({ destino: "crescer", aba: "evolucao" }); scrollTo(0, 0); }} />}
+      {painel && (lado ? <PainelLado d={painel.d}>{painel.corpo}</PainelLado> : <PainelModal d={painel.d} nav={navNoModal ? nav : null}>{painel.corpo}</PainelModal>)}
+      {!navNoModal && nav}
       <RevelacaoEvolucao continuar={() => { ir({ destino: "crescer", aba: "evolucao" }); scrollTo(0, 0); }} />
       {meusPets && !desk && <MeusPets fechar={() => setMeusPets(false)} irRegistro={() => { setMeusPets(false); ir({ destino: "diario", aba: "registro" }); }} />}
       {boasVindas && <BoasVindas fechar={() => { setBoasVindas(false); ir({ destino: "pet", aba: "estado" }); if (semPetNoInicio) setComoJogar(true); }} />}
@@ -237,7 +225,7 @@ export function App() {
       {escolhendoBrasao && !boasVindas && !descartados && !avisoTR && <EscolherBrasao podeVoltar={!aindaSemPet} />}
       {descartados > 0 && !boasVindas && <AvisoPetsDescartados n={descartados} fechar={() => setDescartados(0)} />}
       {avisoTR && !boasVindas && !descartados && <AvisoCombateTR aviso={avisoTR} fechar={() => setAvisoTR(null)} />}
-      {her && !desk && <Heranca pai2={her.pai2} fim={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} />}
+      {her && !desk && <Heranca pai2={her.pai2} fim={irPet} />}
       {importando && !desk && <ImportarPet fechar={fecharImportar} />}
       {conclusao && <Conclusao m={jogo.motor} fechar={() => setConclusao(false)} />}
     </div>

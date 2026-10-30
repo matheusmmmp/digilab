@@ -292,19 +292,26 @@ Barra inferior marinho com 4 destinos: **Pet, Crescer, Lutar, Diário**. Ícone 
 
 ## 8. Layout
 
-- **Tela Pet (ordem fixa; decisão do Matheus de 2026-10-19, `docs/TAREFA_V2_TELA_PET.md`):**
-  - a ordem é cabeçalho → cenário (o pet no quarto 2.5D, com a emoção e o balão) → necessidade
-    prioritária (o chamado aberto, se houver) → três ações em destaque e "Mais" → navegação;
-  - o cenário fica com a maior área;
-  - as necessidades, o desejo, a confiança e o porquê da fala ficam a um toque, num painel sob
-    demanda: folha no celular, coluna recolhível no desktop;
-  - o resto (traços, memórias, temperamento × caráter, vínculo, obediência) continua em Crescer.
-- Largura útil no celular: 100% menos 14 px de cada lado. Conteúdo rola; cabeçalho e navegação
-  ficam fixos. Respeitar `env(safe-area-inset-*)`.
-- **Desktop:** coluna central de até 480 px para as telas de pet; telas de dados (Crescer,
-  Diário) podem abrir em duas colunas até 1100 px. Nunca esticar sprite para ocupar espaço.
-- Grades: 2 colunas para pares (desejo, recompensa), 3 para exercícios, 4 para necessidades e
-  slots. Sempre com `gap`, nunca com margem solta.
+Decisão do Matheus de 2026-10-30 (`docs/TAREFA_V2_LAYOUT_HABITAT.md`; substitui a ordem fixa da tela Pet de 2026-10-19 e a
+moldura DIGILAB). Referência: pranchas D do canvas privado, descritas na tarefa.
+
+- **Habitat em tela cheia, em todas as larguras.** A cena (3D ou reserva) fica sempre montada como camada de fundo; nada
+  cobre o pet na tela Pet. Nunca esticar sprite para ocupar espaço.
+- **Ações:** dock flutuante no rodapé do habitat. Desktop: Alimentar, Brincar, Limpar, Carinho, Tapa, Tratar, Mais;
+  celular: 4 + Mais. "Mais" abre um menu pequeno com o que a versão do pet tiver (Petisco, Banheiro, Pôr ração).
+- **Informação secundária:** painéis pequenos recolhíveis sobre o habitat (Estado atual, Evolução, Últimas ações), um
+  aberto por vez; no celular, três botões quadrados na borda direita abrem um painel compacto. O resto (traços, memórias,
+  temperamento × caráter, vínculo, obediência) continua em Crescer.
+- **Sobre a cena:** o chamado do pet (Atender), o balão de fala (toque abre o porquê) e o DigiBrain.
+- **Navegação:** desktop = trilho estreito de ícones à esquerda (Pet, Crescer, Lutar, Diário, Conversar, Ajustes);
+  celular = barra embaixo (Pet, Crescer, Lutar, Diário), com Conversar e Ajustes no cabeçalho.
+- **Telas secundárias abrem sobre o habitat:** a partir de 900 px, painel grande à direita, habitat escurecido e o pet
+  visível à esquerda; abaixo de 900 px, modal centralizado sobre o habitat escurecido. O "×" volta ao habitat; as abas da
+  tela ficam no cabeçalho do painel.
+- **Pele XCOM só nos menus** (painéis, trilho, dock, chamado, modais, telas que abrem sozinhas): sempre escura, tokens
+  `--hx-*` e componentes `hx-*`, fonte Saira Condensed. O habitat, o retrato, o relógio e o balão seguem os tokens `--dl-*`
+  e o tema claro/escuro. A semântica de cor do §3 vale também dentro da pele.
+- Respeitar `env(safe-area-inset-*)`. Grades com `gap`, nunca com margem solta.
 
 ---
 

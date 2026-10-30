@@ -8,7 +8,7 @@ body{background-color:var(--dl-bg);background-image:var(--dl-img-hex);background
 button{font:inherit}
 .dl-pix{image-rendering:pixelated;image-rendering:crisp-edges}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.app{display:flex;flex-direction:column;min-height:100dvh;min-width:0;padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+.app{display:flex;flex-direction:column;min-height:100dvh;min-width:0}
 .app > .boas-vindas{margin:12px 14px 0}
 /* faixa de estado (secao 7: offline, erro de save, asset que nao carregou): tira colada no topo, sem cobrir a tela */
 .app > .aviso{position:sticky;top:0;z-index:15;margin:0;border-radius:0;box-shadow:none;border-bottom:3px solid var(--dl-erro);background:#FFF1F4;padding:8px 14px;font-size:13px}
@@ -66,24 +66,6 @@ button{font:inherit}
 @media (prefers-color-scheme: dark){ :root:not([data-tema="claro"]) .tab:not([aria-selected="true"]){background:var(--dl-surface);color:var(--dl-text);border-color:var(--dl-border)} }
 .tela{padding:12px 14px 0;display:grid;gap:12px;min-width:0}
 
-/* navegacao em 4 destinos (UI_GUIDELINES 7.12): barra inferior no celular, coluna a esquerda a partir de 900 px */
-.dl-nav{position:fixed;left:0;right:0;bottom:0;z-index:20;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);
-  background:var(--dl-navy);border-top:3px solid #FFFFFF;box-shadow:0 -2px 0 var(--dl-border);padding:8px 8px calc(12px + env(safe-area-inset-bottom))}
-.dl-nav button{font:inherit;font-family:var(--dl-f-texto);font-weight:800;font-size:12px;line-height:1.3;color:var(--dl-nav-ink);background:none;border:0;
-  min-width:0;padding:0;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer}
-.dl-nav .circ img{max-width:none}
-.dl-nav .circ{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--dl-nav-circ);border:3px solid var(--dl-nav-circ-edge);transition:background-color 80ms}
-.dl-nav svg{width:22px;height:22px;stroke:#FFFFFF;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
-.dl-nav button[aria-current="page"]{color:#FFFFFF;font-weight:900}
-.dl-nav button[aria-current="page"] .circ{background:#2C73E0;border-color:var(--dl-learned);box-shadow:0 0 10px var(--dl-learned)}
-.dl-nav button:focus-visible{outline:none}
-.dl-nav button:focus-visible .circ{box-shadow:0 0 0 3px var(--dl-highlight)}
-@media (min-width:900px){
-  .dl-nav{top:0;right:auto;width:96px;box-sizing:border-box;grid-auto-flow:row;grid-auto-rows:min-content;align-content:start;gap:14px;padding:20px 0;border-top:0;border-right:3px solid #FFFFFF;box-shadow:2px 0 0 var(--dl-border)}
-  .app{padding-left:96px;padding-bottom:40px}
-}
-@media (prefers-reduced-motion: reduce){ .dl-nav .circ{transition:none} }
-
 /* tela provisoria do esqueleto: o que o motor tem para esta aba (Etapa 4 troca pela tela desenhada) */
 .kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,120px),1fr));gap:10px;margin:0}
 .kv div{background:var(--dl-surface-2);box-shadow:inset 0 0 0 2px var(--dl-hex);border-radius:10px;padding:10px 12px;min-width:0}
@@ -94,33 +76,10 @@ button{font:inherit}
 
 footer{font-size:.75rem;color:var(--dl-text-2);display:grid;gap:4px;margin:16px 14px 0}
 footer a{color:var(--dl-action);font-weight:900;display:inline-flex;align-items:center;min-height:44px}
-.dl-nav .nav-ovo{image-rendering:auto;max-width:none}
 .tela-cab-pet{margin-left:auto;background:var(--dl-navy);color:#FFFFFF;border-radius:8px;padding:3px 10px;font-weight:900;font-size:13px;max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
 .dl-deco{image-rendering:auto;max-width:none}
 .tela-cab-ic{filter:drop-shadow(2px 0 0 #173A8A) drop-shadow(-2px 0 0 #173A8A) drop-shadow(0 2px 0 #173A8A) drop-shadow(0 -2px 0 #173A8A)}
-/* casca (DIRETRIZES_REPLICAR secao 6; pranchas PetTela e *Desktop). Celular: barra de baixo so com os 4 destinos.
-   A partir de 900 px: coluna de 96 px com o ovo e DIGILAB, os 4 destinos (circulos de 50) e, no pe, Conversar e Ajustes
-   (quadrados de 46, raio 12). A partir de 1100 px: topo de 76 px com titulo, abas em pilula e o mini-card do pet. */
-.nav-marca,.nav-pe{display:none}
-.topo-desk{display:none}
-@media (min-width:900px){
-  .dl-nav{display:flex;flex-direction:column;align-items:center;gap:14px;width:96px;padding:14px 0 16px}
-  .app{padding-left:96px}
-  .dl-nav .circ{width:50px;height:50px}
-  .dl-nav button{gap:4px}
-  .nav-marca{display:flex;flex-direction:column;align-items:center;gap:2px;padding-bottom:6px;border-bottom:2px solid var(--dl-plate);width:70px}
-  .nav-marca img{image-rendering:pixelated;max-width:none}
-  .nav-marca b{font-size:12px}
-  .nav-pe{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:10px}
-  .dl-nav .nav-quad{font-size:11px;gap:3px}
-  .nav-quad .quad{width:46px;height:46px;border-radius:12px;background:var(--dl-navy-deep);border:2px solid var(--dl-plate-hi);display:flex;align-items:center;justify-content:center;box-sizing:border-box}
-  .nav-quad .quad svg{width:24px;height:24px;stroke:none}
-  .nav-quad[aria-current="page"] .quad{background:#2C73E0;border-color:var(--dl-learned);box-shadow:0 0 10px var(--dl-learned)}
-  .dl-nav .nav-quad:focus-visible .quad{box-shadow:0 0 0 3px var(--dl-highlight)}
-}
-/* a partir de 1100 px o topo e a barra lateral sao os da casca limpa (estilo/desktop.css) */
-
 /* desktop (secao 6): conteudo com padding 20/24 em colunas que vao ate o fundo da janela (o ultimo card de cada coluna
    cresce); abaixo de 1100 px as colunas somem (display:contents) e a ordem do celular fica a mesma */
 .desk-col{display:contents}

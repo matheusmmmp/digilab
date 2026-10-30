@@ -1,21 +1,10 @@
-/* Escala do desktop (pedido do Matheus, 2026-09-28): as pranchas *Desktop tem 1280 px de largura; numa tela maior o app
-   aumenta tudo (zoom no <html>) ate o layout caber nos mesmos 1280 px, no maximo 150% (1920 px de janela). Abaixo de
-   1100 px (celular e barra lateral) fica em 100%. So apresentacao: nada do jogo muda. */
-const LARGURA_PRANCHA = 1280, ZOOM_MAX = 1.5, DESDE = 1100;
-let zoom = 1;
+/* Escala do desktop. Ate a M1 do layout habitat o app dava zoom no <html> (de 1100 px a 1.5x) para as pranchas *Desktop de 1280 px
+   caberem numa janela maior. Com o habitat em tela cheia (docs/TAREFA_V2_LAYOUT_HABITAT.md, M2) nao ha mais prancha de largura fixa:
+   o habitat ocupa a janela inteira e o painel tem largura propria (min(.., vw)). O zoom saiu; o gancho fica, sempre 1, porque os
+   canvas (palco do Pet, luta) multiplicam o backing store por ele. */
+export const zoomAtual = (): number => 1;
 
-/** zoom atual do <html> (os canvas usam para desenhar nitidos: pixels do aparelho = CSS x zoom x devicePixelRatio) */
-export const zoomAtual = (): number => zoom;
-
-function aplicar(): void {
-  const w = innerWidth;
-  zoom = w >= DESDE ? Math.min(ZOOM_MAX, Math.max(1, w / LARGURA_PRANCHA)) : 1;
-  zoom = Math.round(zoom * 100) / 100;
-  document.documentElement.style.zoom = zoom === 1 ? "" : String(zoom);
-  /* as telas do desktop medem a altura da janela (colunas ate o fundo): com zoom, 100dvh vale zoom x a janela */
-  document.documentElement.style.setProperty("--zoom", String(zoom));
-}
 export function iniciarEscala(): void {
-  aplicar();
-  addEventListener("resize", aplicar);
+  document.documentElement.style.zoom = "";
+  document.documentElement.style.setProperty("--zoom", "1");
 }
