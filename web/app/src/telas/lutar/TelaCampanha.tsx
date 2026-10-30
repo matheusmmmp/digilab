@@ -1,5 +1,5 @@
 /* Exploracao (a aba que era a Campanha; docs/TAREFA_V2_EXPLORACAO.md): o mapa 3D de ilhas (MapaExploracao.tsx) com o cartao de cada
-   lugar; no celular o cartao abre a folha do lugar, no desktop o lugar fica na coluna da direita. Sem WebGL, fica a tela de antes
+   lugar; o cartao abre a folha do lugar. Sem WebGL, fica a tela de antes
    (desenho CampMapa; porte do HTML): uma ilha do UP por lugar, nuvem nos trancados, marcador com o NPC em 1x, caminho entre os lugares,
    o pet no proximo desafio; cartao do lugar com os rivais, a licao, os stats e o historico de tentativas (contado do registro). */
 import { useEffect, useState } from "react";
@@ -14,7 +14,6 @@ import { tamerAtual, useJogo } from "../../jogo.ts";
 import { SeloMedalha } from "../../componentes/Medalha.tsx";
 import { LUTA, campAtual, escolherDesafio, escolherLugar, lutarAnimado, lutasDoRegistro, previa, tentativas, useLuta } from "../../luta.ts";
 import { ENDERECO_LUTA } from "../../rotas.ts";
-import { useDesktop } from "../../desktop.ts";
 import { EscolhaCarta } from "../../componentes/EscolhaCarta.tsx";
 import { Folha } from "../../componentes/Folha.tsx";
 import { temWebGL } from "../../webgl.ts";
@@ -170,85 +169,33 @@ function rotuloDesafio(m: Motor, k: string, vit: number): string {
   const n = m.arenaDe(k)?.lutas ?? 1, nome = NPC[k]!.nome, extra = n > 1 ? ` (${n} lutas seguidas)` : "";
   return (vit ? `Lutar de novo com ${nome}` : `Desafiar ${nome}`) + extra;
 }
-/** desktop (CampDesktop): faixa do lugar, os rivais em cards (sprite, nome, estilo, licao), "Nesta ilha" com o que o
-    registro conta e os botoes Treinar antes e Desafiar */
-function DetalheDesk({ irTreinar }: { irTreinar: () => void }) {
-  const { motor: m } = useJogo(), luta = useLuta(), sel = campAtual(m), Li = m.lugarDe(sel), LUGARES = m.lugares, L = LUGARES[Li], aberto = m.desafioAberto(L.rivais[0]);
-  const prox = LUGARES[Li + 1], c = NPC[sel]!, vit = m.campanha[sel], podeLutar = m.forma.est !== "bebe";
-  useDecoracao();
-  const faixa = fundoDeco(FAIXA_LUGAR[L.nome] ?? FUNDO_NPC[sel]);
-  const regra = !aberto ? `trancado: vença alguém em ${LUGARES[Li - 1].nome} antes` : prox ? `vencer ${L.rivais.length > 1 ? "qualquer um" : c.nome} abre ${prox.nome}` : "último lugar da campanha";
-  const a = useAtlas(), img = (k: string) => { if (a.tipo !== "ok") return null; const i = imagemAtlas(a, k); return <img className="dl-pix" src={i.url} width={i.w} height={i.h} alt="" />; };
-  const tent = L.rivais.reduce((n, k) => n + tentativas(m, k), 0), vencidos = L.rivais.filter(k => m.campanha[k] > 0).length;
-  /* melhor turno (vitoria mais curta) e regras novas: as lutas deste lugar refeitas do registro */
-  const doLugar = lutasDoRegistro(m).filter(x => L.rivais.includes(x.rival)), vitDoLugar = doLugar.filter(x => x.pontosA === 1);
-  const melhor = vitDoLugar.length ? Math.min(...vitDoLugar.map(x => x.turnos)) : null, novas = doLugar.reduce((n, x) => n + x.regrasNovas, 0);
-  return (
-    <>
-      <div className="campd-faixa" style={faixa ? { backgroundImage: faixa } : undefined}>
-        <b className="dl-num">{L.nome}</b><span>sugerido: {L.sugerido} · {regra}</span>
-      </div>
-      <div className="campd-rivais" role="radiogroup" aria-label="Rivais do lugar">
-        {L.rivais.map(k => {
-          const n = NPC[k]!, moldura = molduraArena(m.campanha[k]);
-          return (
-            <button type="button" key={k} className="campd-rival" role="radio" aria-checked={k === sel} disabled={luta.lutando} onClick={() => { if (k !== sel) escolherDesafio(k); }}>
-              {urlDeco(moldura) ? <RetratoRival sprite={n.sprite ?? n.k} moldura={moldura} lado={52} />
-                : <span className="camp-rival-spr">{img(n.sprite ?? n.k)}</span>}
-              <span className="campd-rival-txt"><span><b>{n.nome}</b><MarcaLider m={m} k={k} /><span className="campd-estilo">{nomeEstiloNPC(n.estilo)}</span></span><span>{n.licao}</span></span>
-            </button>
-          );
-        })}
-      </div>
-      <section className="campd-ilha" aria-labelledby="campd-ilha-tit">
-        <span className="campd-ilha-cab"><h2 id="campd-ilha-tit">Nesta ilha</h2><span>{vencidos} de {L.rivais.length} vencidos</span></span>
-        <div className="res-nums">
-          <div className="res-num"><span className="dl-num">{tent}</span><span>tentativas</span></div>
-          <div className="res-num"><span className="dl-num">{melhor === null ? "—" : m.regras?.tempoReal ? `${melhor} s` : `T${melhor}`}</span><span>{m.regras?.tempoReal ? "luta mais curta" : "melhor turno"}</span></div>
-          <div className="res-num"><span className="dl-num">{novas}</span><span>regras novas</span></div>
-        </div>
-        <CartaoArena m={m} Li={Li} />
-        {!podeLutar && <p className="dl-apoio">O In-Training ainda não luta na campanha.</p>}
-        <p className="dl-apoio">Perder também ensina: a regra que ele tirar da luta aparece em Arena · Regras.</p>
-      </section>
-      <EscolhaCarta rival={sel} />
-      <div className="campd-bts">
-        <button type="button" className="dl-btn dl-btn--sec" onClick={irTreinar}>Treinar antes</button>
-        <button type="button" className="dl-btn camp-lutar" disabled={!aberto || luta.lutando || !podeLutar}
-          onClick={() => { LUTA.campSel = sel; lutarAnimado(sel); if (LUTA.lutando) location.hash = ENDERECO_LUTA; }}>
-          {rotuloDesafio(m, sel, vit)}</button>
-      </div>
-    </>
-  );
-}
-
 /** como funciona a campanha (no celular, embaixo do mapa) */
 function ComoFunciona({ m }: { m: Motor }) {
   return <details className="dl-apoio"><summary>Como funciona</summary><p>Seis lugares pelo mapa, em sequência: o próximo só abre depois de vencer um rival do anterior. Na Torre há três rivais com estilos diferentes. No alto fica a Montanha Espiral, com os Mestres das Trevas: ela é pensada para o Mega. Cada lugar é uma arena com um líder e uma regra própria: a Torre pune o golpe impulsivo, o líder da Floresta muda de padrão no meio da luta, a Cidadela pede três vitórias seguidas sem cura e no Lago o pet luta sozinho, sem as suas travas e vetos. Acima de tudo fica a Fronteira: com as seis medalhas, a Liga dos Líderes. Todo pet bem treinado vence qualquer um deles; sem treino, a luta vira sorte. O líder de cada lugar dá uma medalha ao Tamer na primeira vitória; as medalhas liberam as evoluções (Lutar · Medalhas). Os NPCs têm stats iguais em todos os atributos (somando de 72 a 110; um pet sem treino tem 60), lutam com um estilo fixo e são imprevisíveis; o primeiro tem o tamanho de um Rookie. <b>Treine o pet no estágio sugerido</b> para vencer com segurança (na campanha o treino vale inteiro, stats absolutos). As lutas entram no registro e ensinam as regras de combate do seu pet.</p></details>;
 }
 /** sem WebGL (ou se a vista 3D falhar): a tela de antes, com o mapa 2D e o cartao do lugar */
 function CampanhaReserva({ irTreinar }: { irTreinar: () => void }) {
-  const desk = useDesktop(), { motor: m } = useJogo();
+  const { motor: m } = useJogo();
   useLuta();
   return (
-    <div className="tela dl desk camp-tela">
+    <div className="tela dl camp-tela">
       <div className="camp-principal"><Mapa /></div>
-      <div className="camp-lado">{desk ? <DetalheDesk irTreinar={irTreinar} /> : <Detalhe />}
-      {!desk && <ComoFunciona m={m} />}
+      <div className="camp-lado"><Detalhe />
+      <ComoFunciona m={m} />
       </div>
     </div>
   );
 }
-/** a Exploracao: o mapa 3D; no celular o cartao abre a folha do lugar, no desktop o lugar fica na coluna da direita */
+/** a Exploracao: o mapa 3D; o cartao abre a folha do lugar */
 function TelaExploracao({ irTreinar, aoFalhar }: { irTreinar: () => void; aoFalhar: () => void }) {
-  const desk = useDesktop(), { motor: m } = useJogo(), [folha, setFolha] = useState(false);
+  const { motor: m } = useJogo(), [folha, setFolha] = useState(false);
   useLuta();
   const L = m.lugares[m.lugarDe(campAtual(m))];
   return (
-    <div className="tela dl desk camp-tela camp-tela--expl">
-      <div className="camp-principal"><MapaExploracao desk={desk} aoFalhar={aoFalhar} abrir={i => { escolherLugar(i); if (!desk) setFolha(true); }} /></div>
-      {desk ? <div className="camp-lado"><DetalheDesk irTreinar={irTreinar} /></div> : <ComoFunciona m={m} />}
-      {!desk && folha && <Folha titulo={L.nome} fechar={() => setFolha(false)}><Detalhe /></Folha>}
+    <div className="tela dl camp-tela camp-tela--expl">
+      <div className="camp-principal"><MapaExploracao desk={false} aoFalhar={aoFalhar} abrir={i => { escolherLugar(i); setFolha(true); }} /></div>
+      <ComoFunciona m={m} />
+      {folha && <Folha titulo={L.nome} fechar={() => setFolha(false)}><Detalhe /></Folha>}
     </div>
   );
 }

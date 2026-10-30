@@ -1,7 +1,6 @@
 /* Aprendizado (pranchas DiarioLembrancas e o jeito): o cerebro deste pet, as lembrancas (4 recentes + 2 duradouras) e o jeito
    (temperamento, desejo, vinculo, confianca e tracos de combate). Valores exatos recolhidos; tudo vem do motor. As secoes do Bandit dos
    pets v1-v10 (Agora, Instinto x aprendido, Decisoes, desejo e obediencia) sairam com o descarte 6 (COMBATE-TR, etapa R2b; D-9). */
-import { useDesktop } from "../../desktop.ts";
 import {
   BASE_CARATER, CAT, CDJ, CME, COMBATE, EIXOS_TEMP, EMOCAO_TXT, FATORES_ESPACOS, NOME_COMB,
   afinidades, expressarDesejo, expressarEmocao, expressarTemperamento, type Lembranca, type MemoriaEspacos, type Motor,
@@ -105,10 +104,9 @@ function Jeito() {
 /** o cerebro e o A (os lobos), nao o Bandit: as secoes do Bandit (Agora, Instinto x aprendido e Decisoes) eram dos pets v1-v10, que sairam
     com o descarte 6 (COMBATE-TR, etapa R2b). Ficam as lembrancas (a memoria por espacos) e o jeito */
 export function TelaAprend() {
-  const desk = useDesktop();
   return (
-    <div className={desk ? "tela dl desk aprend-desk" : "tela dl"}>
-      <div className={desk ? "desk-col aprend-col" : ""}>
+    <div className="tela dl">
+      <div>
         <section className="dl-card bloco">
           <h2>O cérebro deste pet</h2>
           <p className="dl-apoio">Ele decide pelo instinto e aprende sozinho com o que as próprias ações fazem no corpo dele: comer quando tem
@@ -117,7 +115,7 @@ export function TelaAprend() {
         </section>
         <Lembrancas />
       </div>
-      <div className={desk ? "desk-col aprend-col" : ""}><Jeito /></div>
+      <div><Jeito /></div>
     </div>
   );
 }
