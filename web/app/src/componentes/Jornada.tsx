@@ -12,6 +12,9 @@ import { SeloMedalha } from "./Medalha.tsx";
 import { abrirModal } from "./modal.ts";
 import { Deco } from "./Deco.tsx";
 import { Peca } from "./Imagens.tsx";
+import { BotaoContinuar, BotaoHx } from "./hx/index.ts";
+import { CabAberta } from "./CabAberta.tsx";
+import "../estilo/abertas.css";
 import { diaDe } from "../telas/pet/TelaPet.tsx";
 
 const d = (k: string): string => DIGIMON_DA_FORMA[k]?.[0] ?? "?";
@@ -25,7 +28,8 @@ export function EscolherBrasao({ podeVoltar }: { podeVoltar: boolean }) {
     try { chocarDoBrasao(esp, guardarAtivoNoProximoOvo(), ritmo); } catch (err) { setMsg(err instanceof Error ? err.message : String(err)); }
   };
   return (
-    <dialog className="brasao-tela dl" ref={ref} aria-labelledby="br-tit" onCancel={e => { if (!podeVoltar) e.preventDefault(); }} onClose={fecharEscolhaBrasao}>
+    <dialog className="brasao-tela ab-hx dl" ref={ref} aria-labelledby="br-tit" onCancel={e => { if (!podeVoltar) e.preventDefault(); }} onClose={fecharEscolhaBrasao}>
+      <CabAberta titulo="Novo ovo" />
       <div className="br-cab">
         <h1 className="bv-tit br-tit" id="br-tit">Escolha seu brasão</h1>
         <p className="bv-slogan">O brasão decide a família do seu Digimon. O resto, você decide cuidando.</p>
@@ -54,7 +58,7 @@ export function EscolherBrasao({ podeVoltar }: { podeVoltar: boolean }) {
       </ul>
       <div className="br-pe">
         {msg && <p className="dl-apoio">{msg}</p>}
-        {podeVoltar && <button type="button" className="dl-btn dl-btn--sec" onClick={() => ref.current?.close()}>Voltar</button>}
+        {podeVoltar && <BotaoHx onClick={() => ref.current?.close()}>Voltar</BotaoHx>}
       </div>
     </dialog>
   );
@@ -70,7 +74,8 @@ export function Conclusao({ m, fechar }: { m: Motor; fechar: () => void }) {
   const b = BRASAO[m.especie];
   const lutas = m.log.filter(e => e[1] === "l").length, titulo = tamerAtual().tituloDe(m.semente);
   return (
-    <dialog className="brasao-tela conclusao-tela dl" ref={ref} aria-labelledby="cc-tit" onClose={fechar}>
+    <dialog className="brasao-tela conclusao-tela ab-hx dl" ref={ref} aria-labelledby="cc-tit" onClose={fechar}>
+      <CabAberta titulo="Jornada concluída" />
       <div className="bv-centro">
         <div className="bv-palco" aria-hidden="true">
           <span className="bv-luz" /><span className="bv-anel" />
@@ -87,8 +92,8 @@ export function Conclusao({ m, fechar }: { m: Motor; fechar: () => void }) {
         </p>
         <ul className="cc-marcos">{marcos(m).map(x => <li key={x.rotulo} className={x.feito ? "feito" : ""}>{x.feito ? "✓" : "·"} {x.rotulo}</li>)}</ul>
         <div className="bv-pe">
-          <button type="button" className="dl-btn dl-btn--destaque bv-comecar" onClick={() => ref.current?.close()}>Continuar com {nomeForma(m.forma)}</button>
-          <button type="button" className="dl-btn dl-btn--sec" onClick={() => { ref.current?.close(); novoOvoGuardandoAtivo(); }}>Chocar um ovo novo (ele fica guardado)</button>
+          <BotaoContinuar className="bv-comecar" onClick={() => ref.current?.close()}>Continuar com {nomeForma(m.forma)}</BotaoContinuar>
+          <BotaoHx onClick={() => { ref.current?.close(); novoOvoGuardandoAtivo(); }}>Chocar um ovo novo (ele fica guardado)</BotaoHx>
         </div>
       </div>
     </dialog>
@@ -112,8 +117,9 @@ export function ComoJogar({ fechar }: { fechar: () => void }) {
   const p = PAGINAS[i], ultima = i === PAGINAS.length - 1;
   const img = (k: string, alvo: number) => a.tipo === "ok" ? imagemAtlas(a, k, Math.max(1, Math.min(3, Math.floor(alvo / dimSprite(a.dados, k)[1])))) : null;
   return (
-    <dialog className="como-tela dl" ref={ref} aria-labelledby="cj-tit" onClose={fechar}>
-      <div className="cj-topo"><button type="button" className="cj-pular" onClick={() => ref.current?.close()}>Pular</button></div>
+    <dialog className="como-tela ab-hx dl" ref={ref} aria-labelledby="cj-tit" onClose={fechar}>
+      <CabAberta titulo="Como jogar" />
+      <div className="cj-topo"><BotaoHx className="cj-pular" onClick={() => ref.current?.close()}>Pular</BotaoHx></div>
       <div className="cj-corpo">
         <div className={`cj-cartao dl-hexcard${p.sprites.length > 1 ? " cj-cartao--linha" : ""}`}>
           {p.faixa && <span className="dl-num cj-faixa">{p.faixa}</span>}
@@ -130,7 +136,7 @@ export function ComoJogar({ fechar }: { fechar: () => void }) {
         <span className="cj-pontos" aria-label={`página ${i + 1} de ${PAGINAS.length}`}>{PAGINAS.map((_, j) => <i key={j} className={j === i ? "on" : ""} />)}</span>
       </div>
       <div className="cj-pe">
-        <button type="button" className="dl-btn dl-btn--largo" onClick={() => ultima ? ref.current?.close() : setI(i + 1)}>{ultima ? "Chocar meu ovo" : "Próximo"}</button>
+        <BotaoContinuar onClick={() => ultima ? ref.current?.close() : setI(i + 1)}>{ultima ? "Chocar meu ovo" : "Próximo"}</BotaoContinuar>
       </div>
     </dialog>
   );

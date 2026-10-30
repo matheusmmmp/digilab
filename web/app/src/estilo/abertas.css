@@ -1,0 +1,197 @@
+/* Telas que abrem sozinhas na pele XCOM (TAREFA_V2_LAYOUT_HABITAT, M6): Boas-vindas, Como jogar, Escolha seu brasao, Jornada
+   concluida, avisos, Revelacao (a CenaEvolucao fica como esta), Dica do Professor Agumon, Luta em tela cheia, confirmacoes e
+   Resultado. CSS puro sobre os tokens --hx-* (sempre escuros). A classe .ab-hx redefine, so dentro dela, os tokens --dl-* de
+   superficie e texto para os valores escuros; assim o conteudo antigo (listas, numeros, series) herda a pele sem reescrever cada regra.
+   As telas cobrem o habitat com um veu escuro; o habitat, o retrato e o relogio nao mudam. Alvos de 44 px, foco visivel. */
+.ab-hx{
+  --dl-bg:var(--hx-chao); --dl-hex:rgba(118,170,175,.22); --dl-surface:var(--hx-miolo); --dl-surface-2:var(--hx-miolo-2);
+  --dl-border:var(--hx-borda); --dl-border-shadow:var(--hx-borda); --dl-navy:var(--hx-borda-topo); --dl-navy-deep:var(--hx-chao);
+  --dl-text:var(--hx-texto); --dl-text-2:var(--hx-texto-2); --dl-apoio:var(--hx-sec); --dl-plate:var(--hx-rotulo);
+  --dl-action:var(--hx-btn-borda); --dl-ok:var(--hx-ok); --dl-erro:var(--hx-perigo);
+  --dl-sec-bg:var(--hx-miolo); --dl-sec-ink:var(--hx-texto); --dl-sec-edge:var(--hx-borda-topo);
+  font-family:var(--hx-f); color:var(--hx-texto);
+}
+
+/* ---- telas cheias: veu escuro sobre o habitat, painel central com a faixa hachurada ---- */
+dialog.ab-hx.boas-vindas-tela, dialog.ab-hx.brasao-tela, dialog.ab-hx.como-tela{
+  background:rgba(11,17,24,.9); background-image:none; color:var(--hx-texto); align-items:center; gap:14px;
+}
+dialog.ab-hx.boas-vindas-tela[open], dialog.ab-hx.brasao-tela[open], dialog.ab-hx.como-tela[open]{ justify-content:flex-start; overflow:auto }
+dialog.ab-hx::backdrop{ background:rgba(11,17,24,.72) }
+.ab-hx .ab-cab{
+  width:min(100%,880px); flex:none; margin:12px auto 0; border:1px solid var(--hx-borda); border-top:2px solid var(--hx-borda-topo);
+  background:var(--hx-miolo); box-sizing:border-box; min-height:44px; align-items:center;
+}
+.ab-hx .ab-cab .hx-painel__titulo{ position:relative; font-size:16px; letter-spacing:.14em }
+.ab-hx .bv-centro, .ab-hx .bv-texto, .ab-hx .br-cab, .ab-hx .cj-corpo{ width:min(100%,880px); box-sizing:border-box }
+.ab-hx .bv-centro{ flex:0 0 auto; padding:16px 24px 0 }
+.ab-hx .bv-luz{ background:rgba(127,227,255,.1); box-shadow:0 0 0 14px rgba(127,227,255,.05),0 0 0 30px rgba(127,227,255,.03) }
+.ab-hx .bv-brilho{ background:var(--hx-rotulo) }
+.ab-hx .bv-texto{ display:flex; flex-direction:column; align-items:center; gap:12px; padding:8px 16px }
+.ab-hx .bv-tit, .ab-hx .cj-tit{
+  color:var(--hx-texto); font-family:var(--hx-f); font-style:normal; font-weight:700; font-size:40px; letter-spacing:.14em; text-transform:uppercase; text-shadow:none; text-align:center;
+}
+.ab-hx .br-tit{ font-size:30px }
+.ab-hx .cc-tit{ font-size:34px }
+.ab-hx .bv-slogan{
+  background:var(--hx-miolo); color:var(--hx-texto-2); border:1px solid var(--hx-borda); border-radius:0; font-weight:500; font-size:17px; padding:8px 14px;
+}
+.ab-hx .cc-texto{ color:var(--hx-texto-2); font-weight:500; font-size:16px; line-height:22px }
+.ab-hx .cc-marcos{ background:var(--hx-miolo); border:1px solid var(--hx-borda); border-radius:0; font-weight:600; font-size:15px; color:var(--hx-texto) }
+.ab-hx .cc-ouro{ color:var(--hx-texto); font-weight:600; font-size:16px }
+.ab-hx .bv-pe{ padding:0 16px 24px; max-width:480px }
+.ab-hx .bv-pe span{ color:var(--hx-sec); font-weight:500; font-size:14px }
+.ab-hx .bv-pe .hx-continuar, .ab-hx .bv-pe .hx-btn, .ab-hx .cj-pe .hx-continuar{ width:100%; min-height:48px }
+.ab-hx .bv-itens{ list-style:none; margin:0; padding:0; display:grid; gap:8px; width:min(100%,440px) }
+.ab-hx .bv-itens li{ display:flex; align-items:center; gap:12px; padding:8px 12px; background:var(--hx-miolo); border:1px solid var(--hx-borda); color:var(--hx-texto) }
+.ab-hx .bv-itens li span{ display:grid; gap:2px }
+.ab-hx .bv-itens li small{ color:var(--hx-sec); font-size:14px }
+
+/* Boas-vindas no desktop: duas colunas (ovo e texto) sob a faixa de titulo */
+@media (min-width:1100px){
+  dialog.ab-hx.boas-vindas-tela[open]{ grid-template-rows:auto minmax(0,1fr); align-content:stretch; padding:0 120px 24px; row-gap:0 }
+  .boas-vindas-tela.ab-hx .ab-cab{ grid-column:1/-1; width:100%; margin-top:16px }
+  .boas-vindas-tela.ab-hx .bv-centro, .boas-vindas-tela.ab-hx .bv-texto{ width:auto; align-self:center }
+  .boas-vindas-tela.ab-hx .bv-texto{ align-items:flex-start; max-width:480px }
+  .boas-vindas-tela.ab-hx .bv-tit{ text-align:left; font-size:64px }
+  .boas-vindas-tela.ab-hx .bv-pe{ flex-direction:row; padding:6px 0 0; max-width:none }
+  .boas-vindas-tela.ab-hx .bv-pe .hx-continuar{ width:auto; min-width:220px }
+  .boas-vindas-tela.ab-hx .bv-itens{ width:100% }
+}
+
+/* brasoes: caixas de borda fina; a escolhida em ciano palido */
+.ab-hx .br-ritmo-op{ border-radius:0; background:var(--hx-miolo); color:var(--hx-texto); border:1px solid var(--hx-borda); min-height:48px }
+.ab-hx .br-ritmo-op.sel{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido); box-shadow:none }
+.ab-hx .br-ritmo-op:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:2px }
+.ab-hx .br-card{ border-radius:0; background:var(--hx-miolo); color:var(--hx-texto); box-shadow:none; border:1px solid var(--hx-borda); border-top:2px solid var(--hx-borda-topo) }
+.ab-hx .br-card:hover{ background:var(--hx-miolo-2); border-color:var(--hx-borda-topo) }
+.ab-hx .br-card:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:2px }
+.ab-hx .br-nome{ font-weight:700; letter-spacing:.06em; text-transform:uppercase }
+.ab-hx .br-linha{ color:var(--hx-texto-2); font-weight:500; font-size:14px }
+.ab-hx .br-pe{ padding-bottom:16px }
+
+/* como jogar */
+.ab-hx .cj-topo{ width:min(100%,880px); box-sizing:border-box; padding:0; justify-content:flex-end }
+.ab-hx .cj-pular{ min-height:44px; text-decoration:none; font-weight:600 }
+.ab-hx .cj-cartao{ background:var(--hx-miolo); border:1px solid var(--hx-borda); border-top:2px solid var(--hx-borda-topo); border-radius:0; box-shadow:none }
+.ab-hx .cj-anel{ background:rgba(127,227,255,.12) }
+.ab-hx .cj-chip{ background:var(--hx-miolo-2); border:1px solid var(--hx-borda-topo); border-radius:0; color:var(--hx-texto) }
+.ab-hx .cj-faixa{ color:var(--hx-rotulo); letter-spacing:.12em }
+.ab-hx .cj-txt{ color:var(--hx-texto-2); font-weight:500; font-size:17px; line-height:23px }
+.ab-hx .cj-pontos i{ background:var(--hx-borda); border-radius:0 }
+.ab-hx .cj-pontos i.on{ background:var(--hx-escolhido) }
+.ab-hx .cj-pe .hx-continuar{ width:min(360px,100%) }
+.ab-hx .dl-tag{ border-radius:0 }
+
+/* avisos (medalhas, combate em tempo real) */
+dialog.ab-hx.conclusao-tela[open]{ justify-content:flex-start }
+
+/* ---- Dica do Professor Agumon: caixa escura no canto, Entendi no estilo Continuar ---- */
+.dica-bit.ab-hx{ background:var(--hx-miolo); color:var(--hx-texto); border:1px solid var(--hx-borda); border-top:2px solid var(--hx-borda-topo); border-radius:0; box-shadow:0 6px 18px rgba(0,0,0,.45) }
+.dica-bit.ab-hx p{ font-size:15px; line-height:20px; font-weight:500; color:var(--hx-texto-2) }
+.dica-bit.ab-hx p b{ color:var(--hx-rotulo); letter-spacing:.06em; text-transform:uppercase; font-weight:700 }
+.dica-bit.ab-hx .dica-ok{ min-height:44px; padding:6px 16px 0; font-size:16px }
+
+/* ---- Revelacao: a CenaEvolucao e o palco azul ficam; os detalhes e o botao seguem a pele ---- */
+.evm.ab-hx .evm-bloco{ background:var(--hx-miolo); border:1px solid var(--hx-borda); border-top:2px solid var(--hx-borda-topo); border-radius:0; box-shadow:none; color:var(--hx-texto) }
+.evm.ab-hx .evm-bloco p, .evm.ab-hx .evm-bloco small{ color:var(--hx-texto-2) }
+.evm.ab-hx .revel-porque-cab span{ border-radius:0; background:var(--hx-miolo-2); color:var(--hx-texto-2) }
+.evm.ab-hx .evm-continuar{ width:100%; min-height:48px }
+
+/* ---- confirmacoes da luta (Desistir, Fim do replay) ---- */
+dialog.modal-conf.ab-hx{
+  background:linear-gradient(180deg,var(--hx-miolo-2),var(--hx-miolo)); color:var(--hx-texto); border:1px solid var(--hx-borda); border-top:2px solid var(--hx-borda-topo);
+  border-radius:0; box-shadow:0 10px 30px rgba(0,0,0,.55); padding:0; gap:0; font-family:var(--hx-f);
+}
+dialog.modal-conf.ab-hx h2{ margin:0; padding:14px 14px 10px; position:relative; font:700 18px/1.1 var(--hx-f); letter-spacing:.08em; text-transform:uppercase; border-bottom:1px solid var(--hx-borda) }
+dialog.modal-conf.ab-hx h2::before{ content:""; position:absolute; inset:0 0 auto 0; height:6px; background:var(--hx-hachura); pointer-events:none }
+dialog.modal-conf.ab-hx p{ padding:12px 14px; font-weight:500; font-size:16px; line-height:22px; color:var(--hx-texto-2) }
+dialog.modal-conf.ab-hx .modal-bts{ padding:0 14px 14px }
+
+/* ---- Luta em tela cheia (#/lutar/luta): HUD de vida/guts, tempo, regra em uso e controles na pele ---- */
+.luta-tela.ab-hx{ background:var(--hx-chao); color:var(--hx-texto) }
+.luta-tela.ab-hx .luta-topo{ background:var(--hx-miolo); border-bottom:1px solid var(--hx-borda); border-top:2px solid var(--hx-borda-topo); flex-wrap:nowrap; align-items:center; position:relative }
+.luta-tela.ab-hx .luta-topo::before{ content:""; position:absolute; inset:0 0 auto 0; height:6px; background:var(--hx-hachura); pointer-events:none }
+.luta-tela.ab-hx .luta-topo h1{ font:700 20px/1.1 var(--hx-f); letter-spacing:.1em; text-transform:uppercase; color:var(--hx-texto); font-style:normal; -webkit-text-stroke:0; text-shadow:none; position:relative }
+.luta-tela.ab-hx .luta-topo-sub{ color:var(--hx-texto-2); font:500 14px/1.2 var(--hx-f); opacity:1; position:relative }
+.luta-tela.ab-hx .luta-desistir{ position:relative }
+.luta-tela.ab-hx .luta-arena{ border-color:var(--hx-borda-topo); border-radius:0; box-shadow:none; background:#05080C }
+.luta-tela.ab-hx .hud-lado{ background:rgba(10,19,22,.9); color:var(--hx-texto); border-radius:0; box-shadow:none; border:1px solid var(--hx-borda); border-top:2px solid var(--hx-borda-topo); padding:4px 6px }
+.luta-tela.ab-hx .hud-lado--rival{ border-color:var(--hx-perigo) }
+.luta-tela.ab-hx .hud-ret, .luta-tela.ab-hx .hud-lado--rival .hud-ret{ background:var(--hx-miolo-2); border-radius:0; width:40px; height:40px }
+.luta-tela.ab-hx .hud-nome{ font:700 14px/1.1 var(--hx-f); letter-spacing:.06em; text-transform:uppercase }
+.luta-tela.ab-hx .hud-vida, .luta-tela.ab-hx .hud-guts{ border-radius:0; background:var(--hx-medidor-trilho); border:1px solid var(--hx-borda) }
+.luta-tela.ab-hx .hud-vida{ height:12px }
+.luta-tela.ab-hx .hud-guts{ height:8px }
+.luta-tela.ab-hx .hud-vida i, .luta-tela.ab-hx .hud-guts i{ border-radius:0; -webkit-mask-image:var(--hx-mascara); mask-image:var(--hx-mascara) }
+.luta-tela.ab-hx .hud-vida i{ background:var(--hx-ok) }
+.luta-tela.ab-hx .hud-guts i{ background:var(--hx-alerta) }
+.luta-tela.ab-hx .hud-lado--rival .hud-vida i{ background:var(--hx-perigo) }
+.luta-tela.ab-hx .luta-arena .turno-hex{ background:var(--hx-miolo); border:2px solid var(--hx-borda-topo); clip-path:none; width:64px; height:48px }
+.luta-tela.ab-hx .luta-arena .turno-hex small{ color:var(--hx-rotulo); font:600 11px/1 var(--hx-f); letter-spacing:.1em }
+.luta-tela.ab-hx .luta-arena .turno-hex .dl-num{ font:700 22px/22px var(--hx-f); color:var(--hx-texto); font-style:normal; font-variant-numeric:tabular-nums }
+.luta-tela.ab-hx .luta-dist{ background:var(--hx-miolo); color:var(--hx-texto-2); border:1px solid var(--hx-borda); border-radius:0; font:600 12px/1.2 var(--hx-f); letter-spacing:.08em; text-transform:uppercase }
+.luta-tela.ab-hx .luta-arena-aviso{ background:var(--hx-miolo); color:var(--hx-texto-2); border:1px solid var(--hx-borda); border-radius:0; box-shadow:none; font-weight:500; font-size:15px; margin:8px 14px 0 }
+.luta-tela.ab-hx .luta-arena-aviso b{ color:var(--hx-texto) }
+.luta-tela.ab-hx .luta-card{ background:var(--hx-miolo); border:1px solid var(--hx-borda); border-top:2px solid var(--hx-borda-topo); border-radius:0; box-shadow:none; color:var(--hx-texto) }
+.luta-tela.ab-hx .luta-card h2{ font:700 16px/1.1 var(--hx-f); letter-spacing:.1em; text-transform:uppercase; color:var(--hx-rotulo) }
+.luta-tela.ab-hx .luta-regra-card{ background:var(--hx-miolo-2); border:1px dashed var(--hx-aprendido); border-radius:0; box-shadow:none; color:var(--hx-texto) }
+.luta-tela.ab-hx .luta-regra-cab{ background:none; color:var(--hx-aprendido); font:600 12px/1.2 var(--hx-f); letter-spacing:.1em; padding:0 }
+.luta-tela.ab-hx .luta-regra-txt{ font:600 17px/22px var(--hx-f); color:var(--hx-texto) }
+.luta-tela.ab-hx .dl-apoio{ color:var(--hx-sec); font-weight:500; font-size:15px }
+.luta-tela.ab-hx .luta-controles .luta-ctl{ background:var(--hx-miolo); border:1px solid var(--hx-borda-topo); border-radius:0; width:44px; height:44px; color:var(--hx-texto); font:700 16px/1 var(--hx-f) }
+.luta-tela.ab-hx .luta-ctl svg{ fill:var(--hx-texto) }
+.luta-tela.ab-hx .luta-ctl[aria-pressed="true"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink) }
+.luta-tela.ab-hx .luta-ctl[aria-pressed="true"] svg{ fill:var(--hx-escolhido-ink) }
+.luta-tela.ab-hx .luta-previa-rot{ background:var(--hx-miolo); border-radius:0; border:1px solid var(--hx-borda); color:var(--hx-texto-2) }
+.luta-tela.ab-hx .luta-vazia{ color:var(--hx-texto-2) }
+
+/* ---- Resultado da luta ---- */
+dialog.res.ab-hx{
+  background:linear-gradient(180deg,var(--hx-miolo-2),var(--hx-miolo)); color:var(--hx-texto); border:1px solid var(--hx-borda); border-top:2px solid var(--hx-borda-topo);
+  border-radius:0; box-shadow:0 14px 40px rgba(0,0,0,.6); font-family:var(--hx-f);
+}
+.res.ab-hx .res-faixa{ border-bottom:1px solid var(--hx-borda); color:var(--hx-texto); background-image:none; background-color:var(--hx-chao) }
+.res.ab-hx .res-faixa::before{ inset:0 0 auto 0; height:6px; background-image:var(--hx-hachura); background-size:auto; opacity:1 }
+.res.ab-hx .res-faixa--vit{ background-color:#0E1E16; background-image:none; color:var(--hx-btn-ink) }
+.res.ab-hx .res-faixa--vit::before{ background-image:var(--hx-hachura-verde) }
+.res.ab-hx .res-faixa--der{ background-color:#1E1214; background-image:none; color:var(--hx-texto) }
+.res.ab-hx .res-tag{ background:var(--hx-miolo); color:var(--hx-rotulo); border:1px solid var(--hx-rotulo); border-radius:0; font:600 12px/1.2 var(--hx-f); letter-spacing:.1em; padding:1px 8px; top:16px }
+.res.ab-hx .res-tit{ font:700 40px/44px var(--hx-f); letter-spacing:.1em; font-style:normal; -webkit-text-stroke:0; text-shadow:none; top:40px }
+.res.ab-hx .res-sub{ font:500 15px/19px var(--hx-f); color:var(--hx-texto-2); top:90px }
+.res.ab-hx .res-num{ background:var(--hx-miolo); border:1px solid var(--hx-borda); border-radius:0 }
+.res.ab-hx .res-num .dl-num{ font:700 24px/28px var(--hx-f); font-style:normal; color:var(--hx-texto); font-variant-numeric:tabular-nums }
+.res.ab-hx .res-num > span:last-child{ font:600 12px/1.2 var(--hx-f); letter-spacing:.08em; text-transform:uppercase; color:var(--hx-sec) }
+.res.ab-hx .res-ilha, .res.ab-hx .res-medalha, .res.ab-hx .res-titulo, .res.ab-hx .res-item, .res.ab-hx .res-serie, .res.ab-hx .res-decidiu, .res.ab-hx .res-semregra{
+  background:var(--hx-miolo); border:1px solid var(--hx-borda); border-top:2px solid var(--hx-borda-topo); border-radius:0; box-shadow:none; color:var(--hx-texto);
+}
+.res.ab-hx .res-semregra{ border-style:dashed }
+.res.ab-hx .res-ilha-txt > span:last-child, .res.ab-hx .res-carta, .res.ab-hx .res-arena-nota{ color:var(--hx-texto-2); font-weight:500; font-size:14px }
+.res.ab-hx .res-selo{ background:none; color:var(--hx-ok); border:1px solid var(--hx-ok); border-radius:0; font:600 12px/1.3 var(--hx-f); letter-spacing:.08em }
+.res.ab-hx .res-decidiu h3, .res.ab-hx .res-serie h3{ font:700 16px/1.1 var(--hx-f); letter-spacing:.1em; text-transform:uppercase; color:var(--hx-rotulo); margin:0 }
+.res.ab-hx .res-decidiu li, .res.ab-hx .res-serie li{ font-weight:500; font-size:15px; line-height:20px }
+.res.ab-hx .res-t{ color:var(--hx-rotulo); font-family:var(--hx-f); font-weight:700 }
+.res.ab-hx .res-t--bom{ color:var(--hx-ok) }
+.res.ab-hx .res-t--ruim{ color:#FF9A9A }
+.res.ab-hx .res-regra{ background:var(--hx-miolo-2); border:1px dashed var(--hx-aprendido); border-radius:0; box-shadow:none; color:var(--hx-texto) }
+.res.ab-hx .res-regra-topo{ color:var(--hx-aprendido); font:600 12px/1.2 var(--hx-f); letter-spacing:.1em }
+.res.ab-hx .res-regra-pos{ background:none; color:var(--hx-aprendido); border:1px solid var(--hx-aprendido); border-radius:0 }
+.res.ab-hx .res-regra-txt{ font:600 17px/22px var(--hx-f) }
+.res.ab-hx .res-regra-msg{ color:var(--hx-texto-2) }
+.res.ab-hx .regra-travar, .res.ab-hx .regra-vetar{ min-height:44px; padding:0 14px; background:var(--hx-miolo); color:var(--hx-texto); border:1px solid var(--hx-borda-topo); border-radius:0; font:600 15px/1 var(--hx-f); letter-spacing:.06em; text-transform:uppercase; display:inline-flex; align-items:center; gap:6px; cursor:pointer }
+.res.ab-hx .regra-vetar{ color:var(--hx-perigo); border-color:var(--hx-perigo) }
+.res.ab-hx .res-prog-rot b{ color:var(--hx-ok) }
+.res.ab-hx .res-prog-barra i{ border-radius:0; background:var(--hx-medidor-trilho) }
+.res.ab-hx .res-prog-barra i.on{ background:var(--hx-ok) }
+.res.ab-hx .res-rodape{ border-top:1px solid var(--hx-borda) }
+.res.ab-hx .res-rodape .hx-continuar{ flex:1 }
+
+/* foco visivel dentro das telas abertas */
+.ab-hx button:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:2px }
+.ab-hx .hx-continuar{ min-height:48px }
+
+@media (prefers-reduced-motion:reduce){ .ab-hx *{ animation:none!important; transition:none!important } }
+@media (max-width:480px){
+  .ab-hx .bv-tit, .ab-hx .cj-tit{ font-size:32px }
+  .res.ab-hx .res-tit{ font-size:32px }
+}

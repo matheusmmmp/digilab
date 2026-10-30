@@ -6,6 +6,9 @@ import { OVO } from "../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../atlas.ts";
 import { useJogo } from "../jogo.ts";
 import { Peca } from "./Imagens.tsx";
+import { BotaoContinuar } from "./hx/index.ts";
+import { CabAberta } from "./CabAberta.tsx";
+import "../estilo/abertas.css";
 
 const ITENS: [string, string, string][] = [["emoji_carne", "Cuide", "ele chama; atender logo conta"], ["emoji_joinha", "Ensine", "elogie ou repreenda o que ele acabou de fazer"],
   ["emoji_feliz", "Veja crescer", "o cuidado e o que ele aprende decidem a forma"]];
@@ -17,7 +20,8 @@ export function BoasVindas({ fechar }: { fechar: () => void }) {
   useEffect(() => rotaDaTelaCheia("#/inicio"), []);
   const ovo = a.tipo === "ok" ? imagemAtlas(a, OVO[m.especie]) : null;
   return (
-    <dialog className="boas-vindas-tela dl" ref={ref} aria-labelledby="bv-tit" onClose={fechar}>
+    <dialog className="boas-vindas-tela ab-hx dl" ref={ref} aria-labelledby="bv-tit" onClose={fechar}>
+      <CabAberta titulo="Boas-vindas" />
       <div className="bv-centro">
         <div className="bv-palco" aria-hidden="true">
           <span className="bv-luz" /><span className="bv-anel" />
@@ -33,7 +37,7 @@ export function BoasVindas({ fechar }: { fechar: () => void }) {
           {ITENS.map(([ic, t, d]) => <li key={t}><Peca nome={ic} escala={2} /><span><b>{t}</b><small>{d}</small></span></li>)}
         </ul>
         <div className="bv-pe">
-          <button type="button" className="dl-btn dl-btn--destaque bv-comecar" onClick={() => ref.current?.close()}>Começar</button>
+          <BotaoContinuar className="bv-comecar" onClick={() => ref.current?.close()}>Começar</BotaoContinuar>
           <span>o progresso fica neste navegador</span>
         </div>
       </div>

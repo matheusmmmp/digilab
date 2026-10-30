@@ -5,6 +5,9 @@ import { useEffect, useRef } from "react";
 import { abrirEscolhaBrasao } from "../jornada.ts";
 import { CHAVE_AVISO_V6 } from "../tamer.ts";
 import { abrirModal } from "./modal.ts";
+import { BotaoContinuar } from "./hx/index.ts";
+import { CabAberta } from "./CabAberta.tsx";
+import "../estilo/abertas.css";
 
 /** selo da medalha n: ganha = cheio (azul de acao, numero branco); nao ganha = apagado e tracejado. O sentido vai
     tambem pela forma (cheio x tracejado) e pelo texto ao lado; o selo em si e decorativo */
@@ -31,7 +34,8 @@ export function AvisoPetsDescartados({ n, fechar }: { n: number; fechar: () => v
     fechar(); abrirEscolhaBrasao();
   };
   return (
-    <dialog className="brasao-tela conclusao-tela dl med-aviso" ref={ref} aria-labelledby="mav-tit" onCancel={e => e.preventDefault()} onClose={sair}>
+    <dialog className="brasao-tela conclusao-tela ab-hx dl med-aviso" ref={ref} aria-labelledby="mav-tit" onCancel={e => e.preventDefault()} onClose={sair}>
+      <CabAberta titulo="Medalhas" />
       <div className="bv-centro">
         <div className="bv-palco med-aviso-palco" aria-hidden="true"><span className="bv-luz" /><span className="bv-anel" />
           <span className="med-aviso-selos">{[1, 2, 3].map(i => <SeloMedalha key={i} n={i} ganha={false} tam={44} />)}</span></div>
@@ -45,7 +49,7 @@ export function AvisoPetsDescartados({ n, fechar }: { n: number; fechar: () => v
           com 1 o Rookie vira Champion, com 3 o Champion vira Ultimate e com 5 o Ultimate vira Mega.
         </p>
         <div className="bv-pe">
-          <button type="button" className="dl-btn dl-btn--destaque bv-comecar" onClick={() => ref.current?.close()}>Escolher o brasão do ovo novo</button>
+          <BotaoContinuar className="bv-comecar" onClick={() => ref.current?.close()}>Escolher o brasão do ovo novo</BotaoContinuar>
         </div>
       </div>
     </dialog>
