@@ -434,3 +434,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-30 — COMBATE-TR calibração, fase 4 (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): a progressão, o fim de jogo e os itens, com a DE-9 e a DE-10](registro/2026-10.md)
 - [2026-10-30 — COMBATE-TR conferência única (fase 5; worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): o candidato v14 nas sementes de conferência](registro/2026-10.md)
 - [2026-10-30 — COMBATE-TR, o plano da segunda rodada de equilíbrio (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`)](registro/2026-10.md)
+- [2026-10-30 — COMBATE-TR, segunda rodada (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): as decisões DR2-1 a DR2-6](registro/2026-10.md)

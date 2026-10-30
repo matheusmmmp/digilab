@@ -1,6 +1,7 @@
 # Plano da segunda rodada de equilíbrio do combate em tempo real (em cima do candidato v14)
 
-Worker: Claude Code, Opus 5.5, worktree `v2-combate-tr`, branch `v2-combate-tr-rodada2`, 2026-10-30. **PROPOSTO.** Nenhuma luta roda
+Worker: Claude Code, Opus 5.5, worktree `v2-combate-tr`, branch `v2-combate-tr-rodada2`, 2026-10-30. **Aprovado pelo Matheus em 2026-10-30** (no chat da coordenação: as recomendações DR2-1 a DR2-6, seção 5).
+Os números novos da rodada seguem PROPOSTOS. Nenhuma luta roda
 antes de o Matheus aprovar este plano e de as faixas novas entrarem na `FAIXAS_RESERVADAS` num commit próprio.
 
 **Por quê:** a conferência única da primeira rodada (`docs/EQUILIBRIO_COMBATE_TR.md`, fase 5; os artefatos em
@@ -46,8 +47,8 @@ os líderes e a Liga em cima das formas, e as cartas por último.
 | **R2-5, a conferência única** | todas as metas, uma vez, nas sementes de conferência novas | todas | nenhuma: nada se ajusta olhando para ela |
 
 **Fica fora:**
-- **o I-5** (o chip antes das regras com a mesma condição), até o Matheus decidir a DR2-1. Se ele aprovar, entra como fase R2-4b, depois
-  das cartas e antes da conferência;
+- **o I-5** entra pela DR2-1 (DECIDIDA) como fase R2-4b, depois das cartas e antes da conferência: o chip antes da primeira regra com a
+  mesma condição, só no candidato v14;
 - **ligar a v14 no jogo** (a DE-1), que é o passo seguinte, com o ok do Matheus;
 - tudo o que a seção 6 do plano da primeira rodada deixa fora.
 
@@ -92,16 +93,16 @@ para a reprodução da primeira rodada.
 - **A conferência única (R2-5)** roda uma vez, no fim, nas sementes `74101…74505`. Nenhum número muda por causa dela; o que reprovar é
   relatado, e o Matheus decide.
 
-## 5. As decisões abertas (para o Matheus; cada uma com a recomendação e o custo de errar)
+## 5. As decisões (DECIDIDAS pelo Matheus em 2026-10-30, todas pela recomendação; o custo de errar fica registrado)
 
 | # | a pergunta | a recomendação | o custo de errar |
 |---|---|---|---|
-| **DR2-1** (I-5; reverte a DE-3) | o chip de regra entra antes da primeira regra da lista com a mesma condição, em vez de no fim? | **sim, só no candidato v14**. Hoje o chip quase nunca dispara (de 0 a 0,0975 das lutas na conferência), porque entra no fim e a primeira regra que vale decide. O I-3 (o item não desequilibra a forma) e o I-1 vigiam o efeito. Entra como fase R2-4b | com a mudança, todo pet com chip luta diferente, e um chip forte pode passar o I-3; a regra encoberta deixa de decidir. Sem ela, os chips de regra seguem quase cosméticos, e o I-5 fica reprovado |
-| **DR2-2** (as sementes) | reservar `72101…72505` para a calibração e `74101…74505` para a conferência? | **sim**: as duas estão livres, e a conferência da primeira rodada já foi usada | uma faixa errada (já usada por outra frente) mistura resultados; a conferência repetida deixa de ser uma validação |
-| **DR2-3** (a ordem das fases) | as formas antes do aprendizado e dos líderes? | **sim**: as listas das formas mudam o que o pet aprende e contra quem os líderes são medidos | na ordem inversa, os líderes e o aprendizado seriam calibrados em cima de formas que ainda vão mudar, e a regra "volta atrás" reprovaria o trabalho anterior |
-| **DR2-4** (o efeito da Foco) | a Foco hoje zera a exploração (`eps` 0), o que muda pouco (de 0,013 a 0,014 contra o líder). Que efeito com número ela ganha no candidato? | **uma fração do ritmo das decisões do pet na luta** (decide mais rápido; o número calibrado na R2-4), mantendo o `eps` 0. É o efeito mais próximo de "o pet não se distrai" no tempo real | um efeito de ritmo forte demais quebra o P-1 com itens (o I-2) e o T-1; um número fraco não fecha o I-4. A outra opção (o guts ou a cura) repete as outras duas cartas |
-| **DR2-5** (o aprendizado próprio do tempo real) | a regra nova do aprendizado (a R2-2) entra como um bloco próprio do candidato, sem mexer no `GA`? | **sim**: o `GA` é conferido contra o Python (`constantes.test.mjs`), e o tempo real não existe no Python | mais um conjunto de números do tempo real sem a pesquisa por trás; se o P-3 só fecha mexendo na base comum, ele fica reprovado nesta rodada |
-| **DR2-6** (o T-2) | o T-2 (o pior par no limite: 0,52 na conferência) entra como meta a fechar na R2-1, ou fica como a T-1, uma exceção da DE-9? | **entra na R2-1**: o pior par é um espelho (o vigia contra o vigia) que as listas das formas podem resolver | se ficar como exceção, a luta sem fim do espelho do vigia continua; se entrar e não fechar, é só mais uma meta relatada |
+| **DR2-1** (DECIDIDA, 2026-10-30, pela recomendação; I-5; reverte a DE-3) | o chip de regra entra antes da primeira regra da lista com a mesma condição, em vez de no fim? | **sim, só no candidato v14**. Hoje o chip quase nunca dispara (de 0 a 0,0975 das lutas na conferência), porque entra no fim e a primeira regra que vale decide. O I-3 (o item não desequilibra a forma) e o I-1 vigiam o efeito. Entra como fase R2-4b | com a mudança, todo pet com chip luta diferente, e um chip forte pode passar o I-3; a regra encoberta deixa de decidir. Sem ela, os chips de regra seguem quase cosméticos, e o I-5 fica reprovado |
+| **DR2-2** (DECIDIDA, 2026-10-30, pela recomendação; as sementes) | reservar `72101…72505` para a calibração e `74101…74505` para a conferência? | **sim**: as duas estão livres, e a conferência da primeira rodada já foi usada | uma faixa errada (já usada por outra frente) mistura resultados; a conferência repetida deixa de ser uma validação |
+| **DR2-3** (DECIDIDA, 2026-10-30, pela recomendação; a ordem das fases) | as formas antes do aprendizado e dos líderes? | **sim**: as listas das formas mudam o que o pet aprende e contra quem os líderes são medidos | na ordem inversa, os líderes e o aprendizado seriam calibrados em cima de formas que ainda vão mudar, e a regra "volta atrás" reprovaria o trabalho anterior |
+| **DR2-4** (DECIDIDA, 2026-10-30, pela recomendação; o efeito da Foco) | a Foco hoje zera a exploração (`eps` 0), o que muda pouco (de 0,013 a 0,014 contra o líder). Que efeito com número ela ganha no candidato? | **uma fração do ritmo das decisões do pet na luta** (decide mais rápido; o número calibrado na R2-4), mantendo o `eps` 0. É o efeito mais próximo de "o pet não se distrai" no tempo real | um efeito de ritmo forte demais quebra o P-1 com itens (o I-2) e o T-1; um número fraco não fecha o I-4. A outra opção (o guts ou a cura) repete as outras duas cartas |
+| **DR2-5** (DECIDIDA, 2026-10-30, pela recomendação; o aprendizado próprio do tempo real) | a regra nova do aprendizado (a R2-2) entra como um bloco próprio do candidato, sem mexer no `GA`? | **sim**: o `GA` é conferido contra o Python (`constantes.test.mjs`), e o tempo real não existe no Python | mais um conjunto de números do tempo real sem a pesquisa por trás; se o P-3 só fecha mexendo na base comum, ele fica reprovado nesta rodada |
+| **DR2-6** (DECIDIDA, 2026-10-30, pela recomendação; o T-2) | o T-2 (o pior par no limite: 0,52 na conferência) entra como meta a fechar na R2-1, ou fica como a T-1, uma exceção da DE-9? | **entra na R2-1**: o pior par é um espelho (o vigia contra o vigia) que as listas das formas podem resolver | se ficar como exceção, a luta sem fim do espelho do vigia continua; se entrar e não fechar, é só mais uma meta relatada |
 
 ## 6. A entrega de cada fase
 
