@@ -183,7 +183,10 @@ function Sobre() {
       {/* a procedencia dos assets (docs/UI_GUIDELINES.md, secao 5.1; a MV-6, decisao definitiva do Matheus de 2026-10-24) */}
       <section className="mc-bloco"><h3 className="mc-bloco__tit">Créditos e procedência</h3>
         <p>Os sprites, os ícones e os fundos são do Digimon UP (Bandai), com o crédito, e o uso neste projeto foi autorizado pelo Matheus. O atlas
-          fica fora do repositório; sem ele, o jogo usa os sprites de reserva, de arte própria.</p></section>
+          fica fora do repositório; sem ele, o jogo usa os sprites de reserva, de arte própria.</p>
+        {/* os kits 3D da ilha (docs/TAREFA_V3_HABITAT_ILHA_3D.md, H1 e H-1): CC0, com as licencas em public/kits3d/ */}
+        <p className="mc-credito-kits">As árvores, as plantas e as pedras da ilha são dos kits 3D de Quaternius (Stylized Nature MegaKit) e de Kay
+          Lousberg (KayKit Forest Nature Pack), em domínio público (CC0).</p></section>
     </>
   );
 }
