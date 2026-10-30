@@ -152,3 +152,64 @@ Os arquivos são `fase2/antes_calibracao.json` (as listas de hoje, com o relógi
 - **T-2 por par**, que a fase 1 deixou para as listas, também não fechou: nenhuma variante mexeu nos pares defensivos sem piorar as
   formas.
 - **A conferência não rodou:** ela roda uma vez, na fase 5.
+
+## Fase 3 — o estágio, o treino e o aprendizado (P-1…P-4)
+
+Worker: Claude Code, Opus 5.5, worktree `v2-combate-tr`, 2026-10-30.
+
+### 3.1 O que mudou no código (nenhuma luta do jogo muda)
+
+- **Nenhum número novo.** P-1 e P-2 passam com a escala de hoje (`CESC_V9`). P-3 e P-4 não têm alavanca nesta fase (seção 3.4), então
+  a fase não rodou grade nem gravou candidato.
+- **`GambitsPet.semear` aceita a lista de partida.** O padrão é a semente de hoje, então os pets v13 não mudam.
+- **`regraDe` conhece as regras das `LISTAS_V14`,** como já conhecia as da V21E. Nenhum pet de hoje as tem na semente nem nas candidatas.
+  O teste `test/listas_v14.test.ts` confere as duas mudanças.
+- **A bancada:** `web/app/scripts/equilibrio_tr/fase3_estagio.ts`, em cima do `RELOGIO_V14` e das `LISTAS_V14`.
+  - O pet típico é a forma de referência do estágio (Rookie: os 2 ramos; Champion: as 4 linhas; Ultimate e Mega: as 8 formas, o Mega
+    com as listas do Ultimate), com o caráter canônico e o treino uniforme do treino típico (`CIT.tipico`) ou nenhum. O treino é
+    absoluto e a luta é na escala, como na campanha.
+  - O pet da bancada não é uma vida: não tem dono nem cuidado, e o epsilon é o do bot (`CV.eps`), sem a disciplina e a experiência.
+  - **P-1** (o método da M-B1 da rodada geral): o de baixo com o treino típico contra o de cima sem treino. São as 4 espécies de cada
+    lado, 10 sementes por confronto e os dois lados, e o limite fica com o de cima (o desafiado).
+  - **P-2:** no mesmo estágio, a mesma forma e a mesma espécie, o típico contra o sem treino. São 100 sementes por forma, os dois lados,
+    e no limite a luta fica com a fração de vida.
+  - **P-3 e P-4:**
+    - o pet típico do Champion e do Ultimate semeia a lista, luta `CAT.sparring` (10) lutas contra o rival sugerido do estágio e aprende
+      com cada uma (`GambitsPet.aprender`);
+    - o rival sugerido é o primeiro rival do primeiro lugar do estágio: o Tortomon na Torre de pedra (um desafiante) e o Myotismon na
+      Cidadela (o líder, com a regra da arena: 3 lutas, e cada luta da série conta);
+    - **P-4** é a fração dos pets com a taxa ≥ 0,8 nessas lutas;
+    - **P-3** é a lista aprendida contra a de partida, com o mesmo perfil.
+  - O custo é de perto de 25 s nas três partes.
+
+### 3.2 As metas (calibração; `fase3/antes/p1.json`, `p2.json`, `p34.json`)
+
+| # | meta | medido (o mesmo antes e depois: nenhum número mudou) | passa? |
+|---|---|---|---|
+| P-1 | o de baixo vence o de cima ≤ 0,10 (pontos); dois estágios acima, nenhuma vitória | Rookie × Champion 0,000; Champion × Ultimate 0,070; Ultimate × Mega 0,030; Rookie × Ultimate e Champion × Mega, 0 vitórias | sim |
+| P-2 | o típico vence o sem treino ≥ 0,80 no mesmo estágio | a pior forma de cada estágio: Rookie 1,00; Champion 0,995 (colosso); Ultimate 1,00; Mega 1,00 | sim |
+| P-3 | a lista aprendida vence a de partida entre 0,55 e 0,70 | Champion 0,49 (caçador 0,16, brigão 0,70); Ultimate 0,30 (duelista 0,02, muralha 0,025, espelho 0,05, furioso 0,87) | **não fechou** |
+| P-4 | ≥ 80% dos pets do estágio chegam a 0,8 nas 10 lutas | Champion 0,76 (guardião 0,57, colosso 0,59); Ultimate 0,755 (sentinela 0,00, emboscador 0,04; as outras 6, 1,00) | **não fechou** |
+
+As metas das fases 1 e 2 não mudam: a bancada delas reproduz os artefatos gravados.
+
+### 3.3 O diagnóstico do P-3 (`fase3/diagnostico_ordem_duelista.json`)
+
+- **O pet quase não troca regras** nas 10 lutas (0 trocas no duelista; no máximo 0,8 por pet, na sentinela; `trocas_por_pet` em
+  `p34.json`). O que muda é a ordem: a lista é reordenada pela nota de cada regra.
+- **A regra genérica sobe para o topo.** No duelista, "de perto → golpe rápido" é a última regra da semente: a de reserva, quando nenhuma
+  específica vale. Contra o Myotismon, ela dispara muito e ganha nota alta (0,17). Por isso vai para o primeiro lugar e encobre as
+  regras específicas de perto (o preparo, a defesa contra o golpe frequente). Com essa lista, o duelista perde da própria semente 98
+  vezes em 100.
+- **A alavanca é o aprendizado:** a nota, o passo, o limiar de troca (`GA`) e a ordem pela nota. Os números de `GA` são conferidos
+  contra o Python (`constantes.test.mjs`) e ficam fora das alavancas desta rodada (plano, seção 4). Um número ou uma regra própria do
+  tempo real para o aprendizado pede uma decisão do Matheus.
+
+### 3.4 O que não fechou e o que fica
+
+- **P-3** não fechou, e esta fase não tem alavanca para ele (seção 3.3). Fica como questão aberta, sem número.
+- **P-4** não fechou. Pela DE-4 (DECIDIDA), o 0,8 fica, e quem se ajusta são os rivais (os fatores), na fase 4. A fase 4 começa com:
+  - **Champion:** o Tortomon contra o guardião e o colosso (0,57 e 0,59);
+  - **Ultimate:** a sentinela e o emboscador contra o Myotismon (0,00 e 0,04). Essa parte depende da resposta do Matheus sobre as formas
+    de longe (fase 2, seção 2.5); fator nenhum de um rival fecha o P-4 sem mexer no resto se as formas de longe não mudarem.
+- **A conferência não rodou:** ela roda uma vez, na fase 5.
