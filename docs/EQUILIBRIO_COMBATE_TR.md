@@ -468,8 +468,8 @@ rodada ficam em `LISTAS_V14_R1`, e o candidato reproduz a `grade3/r2c_b_formas.j
 | as protegidas | passam | passam (T-3, T-4, T-5, F-3, P-1, P-2, P-4, G-2, G-4, G-5, G-6, I-2) | sim |
 
 **Por que as formas não fecham:**
-- **As de longe** (a sentinela e o emboscador) perdem das de perto que fecham a distância (o furioso, o vigia e o tita): contra o furioso,
-  a sentinela recua 214 vezes e dispara 9 em 30 lutas.
+- **As de longe** (a sentinela e o emboscador) perdem das de perto que fecham a distância (o furioso, o vigia e o tita). Na matriz da
+  R2-0 (`r2_0/formas.json`), a sentinela vence o furioso 0,01, o vigia 0,01 e o tita 0,04. Elas recuam de perto e quase não disparam.
 - **Disparar mais** (antes de marcar, ou de perto) desmonta o resto: em `r2b_*` e `r2c_c`, F-1 sobe a 0,68 e F-3 reprova.
 - **O tita** (0,69) vence quase todos. Tirar dele a pele dura ou o pesado o derruba demais e piora o F-1.
 - **A alavanca que falta é de estrutura,** não de lista: o alcance ou o tempo do disparo contra quem avança, ou a pele dura do tita.
