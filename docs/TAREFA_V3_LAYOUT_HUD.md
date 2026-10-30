@@ -65,7 +65,7 @@ Decididas em 2026-10-30, todas pela recomendação:
 | HUD-3 | valores das necessidades | % do motor | mais fino que os 5 blocos de antes |
 | HUD-4 | a faixa "nome · comida baixa · Detalhes" | cartão no alto ao centro, sem o nome | no celular disputa o topo (vai logo abaixo) |
 
-Falta: aprovar as capturas (1280 e 1920, 390; claro e escuro).
+Capturas aprovadas pelo Matheus em 2026-10-30 (16 imagens em `D:\Trab\digilab\capturas_hud_aprovar\`, fora do git); com elas, o `web/app/CLAUDE.md` passa a dizer que a plaquinha e o relógio estão no sistema dos menus.
 
 ## Entregue (2026-10-30)
 
