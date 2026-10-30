@@ -25,8 +25,6 @@ import { ROTULO_DONO, agir } from "../../acoes.ts";
 import { useJogo } from "../../jogo.ts";
 import { abrirEscolhaBrasao } from "../../jornada.ts";
 import { useTempo } from "../../tempo.ts";
-import { PalcoPet } from "./PalcoPet.tsx";
-import { CenaPet } from "./CenarioPet.tsx";
 import { BarraRacao, FaixaRacao, InfoMundo } from "./PorRacao.tsx";
 import { useDesktop } from "../../desktop.ts";
 import { Folha } from "../../componentes/Folha.tsx";
@@ -44,33 +42,6 @@ export function Retrato({ m, ovo }: { m: Motor; ovo: boolean }) {
   const { url, w, h } = imagemAtlas(a, ovo ? OVO[m.especie] : chaveSprite(m.forma));
   return <img className="dl-pix" src={url} width={w} height={h} alt="" />;
 }
-/** cabecalho do celular: o nome e o brasao (tocar abre Meus pets), o nivel e o dia, o relogio e, a direita, Conversar e Configuracoes
-    (44 px). Sem retrato redondo: o pet aparece no cenario. No desktop o topo da casca faz esse papel e este cabecalho some. */
-function CabecalhoPet({ abrirMeusPets, irConversar, abrirConfig }: { abrirMeusPets: () => void; irConversar: () => void; abrirConfig: () => void }) {
-  const { motor: m, nascendo, erroSave } = useJogo(), ovo = nascendo > 0, e = m.e;
-  return (
-    <header className="pet-cab">
-      <button type="button" className="pet-cab-nome" aria-haspopup="dialog" aria-label="Meus pets: trocar parceiro" onClick={abrirMeusPets}>
-        <span className="pet-cab-placa"><span className="dl-placa">{ovo ? "Digi-Egg " + DO_ESP[m.especie] : nomeForma(m.forma)}</span>
-          <Deco nome={BRASAO[m.especie].peca} largura={30} altura={20} alt={`brasão ${NOME_ESP[m.especie]}`} className="pet-cab-brasao" /></span>
-        <span className="pet-cab-sub"><span className="dl-tag dl-tag--estagio">{ovo ? NOME_EST.ovo : nomeEstagio(m.forma)}</span>dia {diaDe(e.tick)}</span>
-      </button>
-      <span className="pet-relogio">
-        <span className="dl-num pet-hora" aria-label={`${hhmm(e.tick)}, dia ${diaDe(e.tick)}`}>{hhmm(e.tick)}</span>
-        <span className={`pet-salvo${erroSave ? " erro" : ""}`}><i aria-hidden="true" />{erroSave ? "não salva" : "salvo"}</span>
-      </span>
-      <span className="pet-cab-bts">
-        <button type="button" className="pet-cab-bt pet-cab-bt--conversar" aria-label="Conversar" onClick={irConversar}>{ICONE_CONVERSAR}</button>
-        <button type="button" className="pet-cab-bt pet-cab-bt--config" aria-label="Configurações" onClick={abrirConfig}>
-          <Deco nome="Common_Icon_Setting" largura={24} altura={24} reserva={<span aria-hidden="true">⚙</span>} /></button>
-      </span>
-    </header>
-  );
-}
-
-/** balao de conversa das pranchas (PetTela, PetTelaDesktop) */
-export const ICONE_CONVERSAR = <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 5h16v10H10l-4 4v-4H4z" fill="#FFFFFF" stroke="#FFFFFF" strokeWidth="1.5" strokeLinejoin="round" /><path d="M8 9h8M8 12h5" stroke="#173A8A" strokeWidth="2" strokeLinecap="round" /></svg>;
-
 /* ------------------------------------------------ fala: balao por estagio (guia, secao 9), causa e detalhe */
 const EMOTE_KAOMOJI: Record<string, string> = { "(^_^)": "emoji_feliz", "(*^_^*)": "emoji_coracao", "(o.o)?": "emoji_surpreso" };
 const EMOTE_FATOR: Record<string, string> = { fome: "emoji_carne", necessidade_fome: "emoji_carne", elogio: "emoji_joinha", elogios: "emoji_joinha", carinho: "emoji_coracao" };
@@ -427,18 +398,7 @@ function TelaPetDesktop({ irRegistro, irEvolucao }: { irRegistro: () => void; ir
   const d = m.desejoAtual(m.observacaoAgora(), m.e.tick);
   const render = (id: string): ReactNode | null => {
     switch (id) {
-      case "cenario": return (
-        <Modulo icone={House} titulo="Habitat">
-          <section className={"pet-cena" + (m.morte ? " pet-cena--morto" : "")} aria-label="O pet no quarto">
-            <CenaPet noite={eNoite(m.e.tick % TPD)} mundo={!!m.mundo} />
-            {nascendo > 0 && <Deco nome="Digivice_Circle_01" className="ovo-anel gira" />}
-            <PalcoPet />
-            {nascendo === 0 && !m.morte && <BalaoFala v={fala} abrir={() => abrir.current?.("fala")} />}
-            <BalaoCausa />
-            {m.mundo && <InfoMundo />}
-            {m.mundo && nascendo === 0 && !m.morte && <FaixaRacao />}
-          </section>
-        </Modulo>);
+      case "cenario": return null;      /* o habitat e a camada de fundo da casca (Habitat.tsx) */
       case "acoes": return (
         <Modulo icone={Gamepad2} titulo="Ações">
           <div className="pet-doca"><Prioridade abrirDetalhes={() => abrir.current?.("estado")} />{m.mundo && nascendo === 0 && !m.morte && <BarraRacao />}{!m.morte && <AcoesPet />}</div>
@@ -468,25 +428,39 @@ function TelaPetDesktop({ irRegistro, irEvolucao }: { irRegistro: () => void; ir
   };
   return (
     <section className="pet-tela pet-home pet-home--quadro dl" aria-label="Tela do pet">
-      <Quadro chave={CHAVE_QUADRO} padrao={PADRAO_QUADRO} render={render} cresce={CRESCE} abrirRef={abrir} />
+      <div className="pet-balcao">
+        {nascendo === 0 && !m.morte && <BalaoFala v={fala} abrir={() => abrir.current?.("fala")} />}
+        <BalaoCausa />
+        {m.mundo && <InfoMundo />}
+        {m.mundo && nascendo === 0 && !m.morte && <FaixaRacao />}
+      </div>
+      <div className="pet-quadro"><Quadro chave={CHAVE_QUADRO} padrao={PADRAO_QUADRO} render={render} cresce={CRESCE} abrirRef={abrir} /></div>
     </section>
   );
 }
 
 /* ------------------------------------------------ a tela */
-export function TelaPet({ abrirMeusPets, irConversar, abrirConfig, irRegistro, irEvolucao }: { abrirMeusPets: () => void; irConversar: () => void; abrirConfig: () => void; irRegistro: () => void; irEvolucao: () => void }) {
+/** a doca ocupa o pe da tela: o habitat (camada de fundo) deixa esse espaco livre para o pet nao ficar coberto */
+function useReservaDoHabitat(ref: { current: HTMLElement | null }, ativo: boolean): void {
+  useEffect(() => {
+    const el = ref.current; if (!ativo || !el) return;
+    const raiz = document.documentElement.style;
+    const medir = () => raiz.setProperty("--hab-baixo", `calc(${Math.ceil(el.getBoundingClientRect().height) + 10}px + var(--casca-barra))`);
+    medir();
+    const ro = new ResizeObserver(medir); ro.observe(el);
+    return () => { ro.disconnect(); raiz.removeProperty("--hab-baixo"); };
+  }, [ref, ativo]);
+}
+export function TelaPet({ irRegistro, irEvolucao }: { irRegistro: () => void; irEvolucao: () => void }) {
   const { motor: m, nascendo } = useJogo(), desk = useDesktop();
-  const fala = useFala(), [detalhes, setDetalhes] = useState<Secao | null>(null);
+  const fala = useFala(), [detalhes, setDetalhes] = useState<Secao | null>(null), doca = useRef<HTMLDivElement>(null);
+  useReservaDoHabitat(doca, !desk);
   if (desk) return <TelaPetDesktop irRegistro={irRegistro} irEvolucao={irEvolucao} />;
   return (
     <section className="pet-tela pet-home dl" aria-label="Tela do pet">
-      <CabecalhoPet abrirMeusPets={abrirMeusPets} irConversar={irConversar} abrirConfig={abrirConfig} />
       <div className="pet-home-corpo">
         <div className="pet-home-principal">
-          <section className={"pet-cena" + (m.morte ? " pet-cena--morto" : "")} aria-label="O pet no quarto">
-            <CenaPet noite={eNoite(m.e.tick % TPD)} mundo={!!m.mundo} />
-            {nascendo > 0 && <Deco nome="Digivice_Circle_01" className="ovo-anel gira" />}
-            <PalcoPet />
+          <div className="pet-balcao">
             <div className="cena-topo">
               <Emocao />
               <span className="cena-topo-dir">{nascendo === 0 && <BotaoDigiBrain />}</span>
@@ -495,8 +469,8 @@ export function TelaPet({ abrirMeusPets, irConversar, abrirConfig, irRegistro, i
             <BalaoCausa />
             {m.mundo && <InfoMundo />}
             {m.mundo && nascendo === 0 && !m.morte && <FaixaRacao />}
-          </section>
-          <div className="pet-doca">
+          </div>
+          <div className="pet-doca" ref={doca}>
             <Prioridade abrirDetalhes={() => setDetalhes("estado")} />
             {m.mundo && nascendo === 0 && !m.morte && <BarraRacao />}
             {!m.morte && <AcoesPet />}

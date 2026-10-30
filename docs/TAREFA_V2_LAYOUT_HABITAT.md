@@ -148,3 +148,11 @@ Dependências: M1 antes de tudo; M2 depende de M1; M3–M6 dependem de M2. Arqui
 - Os menus usam só os componentes `hx-*`; o habitat, o retrato, o relógio e o balão mantêm o visual atual nos dois temas.
 - Nenhum item da seção 4 aparece sem dado do motor.
 - Rotas e hash iguais; replay e paridade intactos; `tipos`, `test`, `e2e` e o portão de capturas regenerado passando.
+
+## M2 · Casca "habitat em tela cheia" (2026-10-30, worker M2)
+
+- **Feito:** `Habitat.tsx` (cena e palco do Pet como camada de fundo, montada em todas as rotas menos `#/lutar/luta`), `Nav.tsx` (trilho >= 900 px, barra < 900 px, pele `hx-*`), `Topo.tsx` (`TopoHabitat`: retrato, logo, relogio, salvo; Conversar e Ajustes < 900 px), `PainelTela.tsx` (painel a direita >= 900 px; `<dialog>` modal com a barra de destinos dentro < 900 px; "x" e Esc voltam a `#/pet/estado`), `estilo/casca.css`. Saiu a `.moldura`, o topo e a barra lateral claros.
+- **`escala.ts`:** o zoom do `<html>` saiu (`zoomAtual()` = 1). Sem prancha de 1280 px fixa, o habitat ocupa a janela.
+- **Largura do painel:** >= 1100 px, `min(1000px, 100vw - 306px)`, porque as telas de Crescer/Lutar/Diario ainda usam os layouts desktop de duas colunas (a Exploracao nao cabe em 760 px). Reduzir isso e da M4/M5.
+- **Tela Pet:** o conteudo de hoje sobre o habitat; no desktop o Quadro ocupa uma coluna de ~740 px a direita e o modulo "cenario" sai do `render` (o id fica no arranjo salvo). Recolher a coluna lateral nao aumenta mais o habitat: fica para a M3.
+- **e2e:** seletores ajustados (Conversar no topo, coluna principal do Quadro sem "cenario", sem a checagem de largura do habitat ao recolher a coluna).

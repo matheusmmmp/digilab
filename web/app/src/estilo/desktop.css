@@ -1,101 +1,11 @@
-/* Casca do desktop (docs/TAREFA_V2_MOLDURA_DESKTOP.md, prancha TelasLayoutDesktop; antes, TAREFA_V2_UI_DESKTOP): so a partir de 1100 px;
-   o celular e a faixa de 900-1099 px seguem nos estilos de antes. Cores so pelos tokens --ui-* (estilo/tokens.css). O zoom do desktop
-   (src/escala.ts) continua: o layout e pensado em ~1280 x 720 px de CSS e cresce junto com a janela.
-   Regioes: a barra lateral escura (230 px, do topo ao fundo, com o logo no alto), o topo (84 px, a direita dela: as abas da tela, o
-   relogio e o pet) e o conteudo de cada tela dentro do painel de cantos cortados (.moldura), sobre o fundo com a grade de 48 px e os
-   estilhacos. O miolo de cada tela e o de antes. */
-.moldura{display:contents}
+/* Tela do Pet no desktop (a partir de 1100 px; docs/TAREFA_V2_LAYOUT_HABITAT.md, M2). A moldura, o topo e a barra lateral claros sairam:
+   a casca (habitat em tela cheia, trilho, topo flutuante e painel) esta em estilo/casca.css. Aqui ficam so os estilos do conteudo da
+   tela Pet (barra das acoes, coluna da direita, atividades recentes), com os tokens --ui-*. O miolo de cada tela e o de antes. */
 @media (min-width:1100px){
-  :root{--ui-moldura-v:54px}       /* o que a moldura ocupa na vertical: 4 em cima, 22 embaixo e 14 + 14 de respiro dentro */
-  body{background:var(--ui-bg)}
-  .app{position:relative;padding:var(--ui-topo) 0 0 var(--ui-lateral);color:var(--ui-text);background-color:var(--ui-bg);
-    background-image:linear-gradient(to right,color-mix(in srgb,var(--ui-border) 45%,transparent) 1px,transparent 1px),
-      linear-gradient(to bottom,color-mix(in srgb,var(--ui-border) 45%,transparent) 1px,transparent 1px);background-size:48px 48px;background-attachment:fixed}
-  /* os estilhacos azuis do fundo (decoracao): no alto e no pe, a direita */
-  .app::before,.app::after{content:"";position:fixed;z-index:0;pointer-events:none;background:var(--ui-primary)}
-  .app::before{top:-6px;right:24%;width:150px;height:22px;transform:skewX(-45deg)}
-  .app::after{bottom:0;right:10%;width:210px;height:30px;transform:skewX(-45deg)}
-
-  /* ---------- o painel de cantos cortados em volta do conteudo */
-  .moldura{display:block;position:relative;z-index:1;margin:4px 22px 22px 18px;padding:14px;box-sizing:border-box;
-    min-height:calc(100dvh / var(--zoom, 1) - var(--ui-topo) - 26px)}
-  .moldura::before,.moldura::after{content:"";position:absolute;z-index:-1;pointer-events:none}
-  .moldura::before{inset:0;background:var(--ui-border);clip-path:polygon(22px 0,100% 0,100% calc(100% - 26px),calc(100% - 26px) 100%,0 100%,0 22px)}
-  .moldura::after{inset:1px;clip-path:polygon(21.6px 0,100% 0,100% calc(100% - 25.6px),calc(100% - 25.6px) 100%,0 100%,0 21.6px);
-    background:linear-gradient(var(--ui-primary),var(--ui-primary)) right 6px bottom 6px / 46px 5px no-repeat,color-mix(in srgb,var(--ui-surface) 55%,var(--ui-bg))}
-
-  /* ---------- topo: as abas da tela, os botoes, o relogio e o pet */
-  .topo-desk{position:fixed;top:0;left:var(--ui-lateral);right:0;z-index:21;display:flex;align-items:center;gap:22px;height:var(--ui-topo);box-sizing:border-box;
-    padding:0 26px 0 30px;background:var(--ui-bg)}
-  .topo-esq{display:flex;align-items:stretch;gap:24px;align-self:stretch;min-width:0}
-  .topo-abas{display:flex;gap:28px}
-  .topo-aba,.topo-tit{position:relative;display:flex;align-items:center;min-height:44px;margin:0;padding:0 2px;border:0;background:none;font:inherit;
-    font-family:var(--dl-f-texto);font-size:13px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--ui-text-2);cursor:pointer;white-space:nowrap}
-  .topo-tit{cursor:default}
-  .topo-aba:hover{color:var(--ui-text)}
-  .topo-aba[aria-selected="true"],.topo-tit{color:var(--ui-text);font-weight:900}
-  .topo-aba[aria-selected="true"]::after,.topo-tit::after{content:"";position:absolute;left:-6px;right:-6px;bottom:18px;height:3px;border-radius:2px;background:var(--ui-primary)}
-  .topo-aba:focus-visible{outline:none;box-shadow:var(--ui-foco);border-radius:6px}
-  .topo-voltar{display:inline-flex;align-items:center;gap:6px;align-self:center;min-height:44px;padding:0 8px;border:0;border-radius:var(--ui-raio-p);background:none;
-    color:var(--ui-primary-forte);font:inherit;font-weight:800;font-size:14px;cursor:pointer}
-  .topo-voltar:hover{background:var(--ui-primary-soft)}
-  .topo-voltar:focus-visible{outline:none;box-shadow:var(--ui-foco)}
-  .topo-acoes{display:flex;align-items:center;gap:8px}
-  .topo-relogio{margin-left:auto;display:flex;align-items:center;gap:10px}
-  .topo-sol{width:30px;height:30px;flex:none;color:var(--ui-primary)}
-  .topo-hora-txt{display:flex;flex-direction:column;line-height:1.25}
-  .topo-dia{font-size:13px;font-weight:700;color:var(--ui-text-2)}
-  .topo-hora{font-size:16px;font-weight:900;font-variant-numeric:tabular-nums;color:var(--ui-text)}
-  .topo-relogio .pet-salvo{font-size:11px;font-weight:800;color:var(--ui-text-2)}
-  .topo-sep{width:1px;height:42px;flex:none;background:var(--ui-border)}
-  .topo-pet{display:flex;align-items:center;gap:12px;color:var(--ui-text)}
-  .topo-retrato{width:54px;height:54px;flex:none;border-radius:50%;background:var(--ui-primary-soft);border:3px solid var(--ui-primary);overflow:hidden;
-    display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer;box-sizing:border-box}
-  .topo-retrato img{max-width:none;image-rendering:pixelated}
-  .topo-retrato:hover{border-color:var(--ui-primary-hover)}
-  .topo-retrato:focus-visible{outline:none;box-shadow:var(--ui-foco)}
-  .topo-pet-txt{display:flex;flex-direction:column;gap:2px;min-width:0}
-  .topo-pet-nome b{display:block;font-weight:900;font-size:17px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .topo-pet-sub{display:flex;align-items:center;gap:5px;font-size:12.5px;font-weight:700;color:var(--ui-text-2);white-space:nowrap}
-  .topo-pet-sub .dl-tag{padding:0;border:0;border-radius:0;background:none;box-shadow:none;font:inherit;letter-spacing:0;text-transform:none;color:inherit}
-
-  /* ---------- barra lateral: escura, do topo ao fundo, com o canto de baixo cortado */
-  .dl-nav{top:0;bottom:0;width:var(--ui-lateral);align-items:stretch;gap:6px;padding:0 14px 84px 0;border-right:0;box-shadow:none;
-    background-color:var(--ui-navy);background-image:linear-gradient(to right,rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,.06) 1px,transparent 1px);
-    background-size:24px 24px;clip-path:polygon(0 0,100% 0,100% calc(100% - 70px),calc(100% - 70px) 100%,0 100%)}
-  .dl-nav::before,.dl-nav::after{content:"";position:absolute;pointer-events:none;background:var(--ui-primary)}
-  .dl-nav::before{right:0;top:250px;width:9px;height:140px;clip-path:polygon(0 14px,100% 0,100% 100%,0 calc(100% - 14px))}
-  .dl-nav::after{left:0;bottom:250px;width:90px;height:11px;transform:skewX(-45deg);transform-origin:left}
-  .dl-nav .nav-marca{display:none}
-  .nav-logo{display:flex;align-items:flex-start;gap:8px;height:178px;margin-right:-14px;padding:20px 22px 0;box-sizing:border-box;flex:none;
-    background:var(--ui-bg);clip-path:polygon(0 0,100% 0,100% 100%,0 72%)}
-  .nav-logo-barras{display:flex;gap:4px;margin-top:4px}
-  .nav-logo-barras i{display:block;width:12px;height:46px;transform:skewX(-30deg);background:var(--ui-navy)}
-  .nav-logo-barras i:last-child{width:8px;height:30px;background:var(--ui-primary)}
-  .nav-logo-txt{display:flex;flex-direction:column}
-  .nav-logo-txt b{font-family:"Pixelify Sans",var(--dl-f-num);font-weight:700;font-size:30px;line-height:1;color:var(--ui-text)}
-  .nav-logo-txt small{margin-top:8px;font-size:8.5px;font-weight:700;letter-spacing:.2em;line-height:1.3;text-transform:uppercase;color:var(--ui-text-2)}
-  .dl-nav > button{position:relative;flex-direction:row;justify-content:flex-start;gap:14px;min-height:48px;padding:10px 0 10px 24px;border-radius:0 8px 8px 0;
-    font-size:16px;font-weight:700;color:var(--ui-navy-ink);text-align:left;transition:background-color 80ms}
-  .dl-nav > button:first-of-type{margin-top:-6px}
-  .dl-nav > button:hover{background:var(--ui-navy-2);color:#FFFFFF}
-  .dl-nav .circ,.nav-quad .quad{display:none}
-  .nav-ic{width:26px;height:26px;flex:none;stroke-width:1.8}
-  .dl-nav > button[aria-current="page"]{background:linear-gradient(90deg,var(--ui-primary-forte),var(--ui-primary));color:#FFFFFF;font-weight:800;
-    clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,0 100%)}
-  .dl-nav > button:focus-visible,.dl-nav .nav-quad:focus-visible{outline:none;box-shadow:inset 0 0 0 3px #FFFFFF}
-  .nav-pe{margin-top:auto;align-items:stretch;gap:10px;padding:0 0 0 18px;border-top:0}
-  .dl-nav .nav-quad{flex-direction:row;justify-content:flex-start;gap:12px;min-height:48px;padding:11px 14px;border:1px solid var(--ui-navy-2);border-radius:12px;
-    background:color-mix(in srgb,var(--ui-navy-2) 85%,transparent);color:var(--ui-navy-ink);font-size:14px;font-weight:700}
-  .dl-nav .nav-quad:hover{background:var(--ui-navy-2);color:#FFFFFF}
-  .dl-nav .nav-quad[aria-current="page"]{background:var(--ui-primary-forte);border-color:var(--ui-primary-forte);color:#FFFFFF}
-  .dl-nav .nav-quad .nav-ic{width:22px;height:22px}
-  .nav-seta{margin-left:auto;width:16px;height:16px;flex:none}
-
   /* ---------- os cabecalhos de celular de cada tela somem (o topo faz o papel deles) */
   .painel > .tela-cab,.painel > .tabs,.pet-cab{display:none}
   .app .conv-cab{display:none}
-  .tela.desk{min-height:calc(100dvh / var(--zoom, 1) - var(--ui-topo) - var(--ui-moldura-v))}
+  .tela.desk{min-height:0}
 
   /* ---------- tela do Pet: habitat, barra das acoes e a coluna da direita */
   .pet-tela{color:var(--ui-text)}
