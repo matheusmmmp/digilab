@@ -117,17 +117,7 @@ details.zona-risco[open]{padding-bottom:12px}
 .cat-chip-brasao{width:26px;height:auto;aspect-ratio:295/194;margin-right:4px;vertical-align:-4px}
 .cat-brasoes .chip{display:inline-flex;align-items:center}
 /* Configuracoes no desktop (CfgDesktop): a lista das partes a esquerda e a parte aberta num card a direita */
-@media (min-width:1100px){
-  .cfg-desk{grid-template-columns:260px minmax(0,1fr)}
-  .cfg-desk .tela{padding:0;gap:10px}
-  .cfg-desk-lista .cfg-secao{display:none}
-  .cfg-desk-lista .cfg-linha[aria-current="page"]{box-shadow:0 0 0 3px var(--dl-navy),0 4px 0 3px var(--dl-navy-deep);background:#E8F0FB}
-  .cfg-desk-lista .cfg-seta{display:none}
-  .cfg-desk-lista > :last-child{flex-grow:0}
-  .cfg-desk-parte{background:var(--dl-surface);border-radius:16px;box-shadow:0 0 0 2px var(--dl-border),0 4px 0 2px var(--dl-border-shadow);padding:16px 18px}
-  .cfg-desk-parte > :last-child{flex-grow:0}
-  .tela .cfg-desk-tit{margin:0;font-size:17px;font-weight:900}
-}/* linhas do registro sao botoes: tocar mostra o detalhe (folha no celular, painel da direita no desktop) */
+/* linhas do registro sao botoes: tocar mostra o detalhe (folha no celular, painel da direita no desktop) */
 button.reg-linha{font:inherit;font-size:13px;font-weight:700;color:var(--dl-text);background:none;border:0;border-bottom:1px solid var(--dl-hex);width:100%;text-align:left;cursor:pointer;min-height:44px}
 button.reg-linha:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:-3px}
 button.reg-linha[aria-pressed="true"]{background:#FFF6CC;box-shadow:inset 0 0 0 2px #FFD23F;border-radius:6px}

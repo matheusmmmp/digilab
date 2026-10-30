@@ -1,0 +1,183 @@
+{
+ "gerado_por": "web/app/scripts/equilibrio_tr/fase4_progressao.ts",
+ "data": "2026-10-30",
+ "commit": "a25ec021",
+ "node": "v24.19.0",
+ "faixa": "calibracao2",
+ "bases": [
+  72101,
+  72202,
+  72303,
+  72404,
+  72505
+ ],
+ "sementes_por_base": 20,
+ "relogio": {
+  "ritmo": 16,
+  "atordoaInterrupcao": 31,
+  "andar": 1.12,
+  "recuo": 0.6,
+  "arrancada": 8,
+  "projetil": 4.8,
+  "perto": 62,
+  "medio": 120,
+  "contato": 44,
+  "empurrao": 0,
+  "disparo": 6
+ },
+ "listas": "v14",
+ "reserva_no_fim": true,
+ "fatores": {
+  "lider": {
+   "campina": 1.3,
+   "torre": 1.8,
+   "floresta": 1.5,
+   "cidadela": 0.9,
+   "lago": 1.5,
+   "espiral": 1.4
+  },
+  "npc": {
+   "npc_tier2_sentinela": 1.4,
+   "npc_tier2_porteiro": 1.1,
+   "npc_v5_puppetmon": 1.8,
+   "npc_v5_machinedramon": 2.3
+  },
+  "liga": {
+   "campina": 0.2,
+   "torre": 0.8,
+   "floresta": 0.1,
+   "cidadela": 1,
+   "lago": 1.7,
+   "espiral": 0.9
+  },
+  "instalacao": 1,
+  "fabrica": 0.6,
+  "salao": {
+   "crianca": 1.2,
+   "adolescente": 1.6,
+   "adulto": 1.05,
+   "mega": 1.05
+  }
+ },
+ "cartas": {},
+ "parte": "i4",
+ "metas": {
+  "I-4": {
+   "cartas": {
+    "carta_folego": {
+     "arenas": {
+      "campina": {
+       "sem": 0.825,
+       "com": 0.87,
+       "efeito": 0.045
+      },
+      "torre": {
+       "sem": 0.935,
+       "com": 0.93,
+       "efeito": -0.005
+      },
+      "floresta": {
+       "sem": 0.5325,
+       "com": 0.64,
+       "efeito": 0.1075
+      },
+      "cidadela": {
+       "sem": 0.7588,
+       "com": 0.7475,
+       "efeito": -0.0113
+      },
+      "lago": {
+       "sem": 0.8738,
+       "com": 0.87,
+       "efeito": -0.0037
+      },
+      "espiral": {
+       "sem": 0.84,
+       "com": 0.835,
+       "efeito": -0.005
+      }
+     },
+     "efeito_medio": 0.0212,
+     "menor_efeito": -0.0113,
+     "passa": false
+    },
+    "carta_cura": {
+     "arenas": {
+      "campina": {
+       "sem": 0.825,
+       "com": 0.97,
+       "efeito": 0.145
+      },
+      "torre": {
+       "sem": 0.935,
+       "com": 0.9775,
+       "efeito": 0.0425
+      },
+      "floresta": {
+       "sem": 0.5325,
+       "com": 0.6225,
+       "efeito": 0.09
+      },
+      "cidadela": {
+       "sem": 0.7588,
+       "com": 0.7888,
+       "efeito": 0.03
+      },
+      "lago": {
+       "sem": 0.8738,
+       "com": 0.8788,
+       "efeito": 0.005
+      },
+      "espiral": {
+       "sem": 0.84,
+       "com": 0.8488,
+       "efeito": 0.0088
+      }
+     },
+     "efeito_medio": 0.0535,
+     "menor_efeito": 0.005,
+     "passa": true
+    },
+    "carta_foco": {
+     "arenas": {
+      "campina": {
+       "sem": 0.825,
+       "com": 0.87,
+       "efeito": 0.045
+      },
+      "torre": {
+       "sem": 0.935,
+       "com": 0.955,
+       "efeito": 0.02
+      },
+      "floresta": {
+       "sem": 0.5325,
+       "com": 0.54,
+       "efeito": 0.0075
+      },
+      "cidadela": {
+       "sem": 0.7588,
+       "com": 0.7588,
+       "efeito": 0
+      },
+      "lago": {
+       "sem": 0.8738,
+       "com": 0.8725,
+       "efeito": -0.0012
+      },
+      "espiral": {
+       "sem": 0.84,
+       "com": 0.8338,
+       "efeito": -0.0062
+      }
+     },
+     "efeito_medio": 0.0109,
+     "menor_efeito": -0.0062,
+     "passa": false
+    }
+   },
+   "passa": false
+  }
+ },
+ "custo_s": 22.4116
+}
