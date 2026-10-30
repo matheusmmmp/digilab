@@ -16,14 +16,15 @@
    --escala '{"vida":{"adolescente":700},"beta":.05}': a escala candidata, por cima da CESC_V9; --parte p1|p2|p34: so uma parte; --disparo X: o multiplicador
    do disparo do tempo real (RelogioTR.disparo); --sem-reserva: sem a DE-10 (a reserva do fim da lista entra na reordenacao pela nota, como
    nos pets v13). Com a DE-10 (o padrao), a reserva fica fixa no fim (GambitsPet.reservaNoFim); --fator-rival '{"npc_tier2_sentinela":1.2}': o
-   fator do rival sugerido do P-4 (o do NPC ou o da arena dele) por cima do de hoje (a alavanca da DE-4, fase 4).
+   fator do rival sugerido do P-4 (o do NPC ou o da arena dele) por cima do candidato (FATORES_V14, a alavanca da DE-4, fase 4);
+   --fatores-hoje: o fator de hoje do rival.
    uso (em web/app): npx tsx scripts/equilibrio_tr/fase3_estagio.ts --faixa calibracao [--escala JSON] [--parte p1] --saida <arquivo.json> */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { execSync } from "node:child_process";
 import {
   ADOL_V21, CAT, CESC_V9, CIT, CLE, CRIANCA_V21, CV, CV21E_TR, ESPECIES, FORMAS_AD, GambitsPet, LINHAS, LINHA_DA_FORMA, LISTAS_V14, LUGARES_V6,
-  RELOGIO_V14, STATS, arenaDaLuta, caraterCanonico, copiarGambits, gambitsAdulto, hashSemente, jogarSerie, jogarTR, lutadorBot, perfilDe,
+  ARENAS, FATORES_V14, RELOGIO_V14, STATS, arenaDaLuta, caraterCanonico, copiarGambits, gambitsAdulto, hashSemente, jogarSerie, jogarTR, lutadorBot, perfilDe,
   type Estagio, type Forma, type ListaGambits, type Lutador, type RegrasLuta,
 } from "../../motor/index.ts";
 import { ligarEscala } from "../../motor/catalogo.ts";
@@ -129,7 +130,9 @@ if (!parte || parte === "p34") {
   for (const est of ["adolescente", "adulto"] as Estagio[]) {
     const rival = rivalDe(est), arena = arenaDaLuta(rival, VERSAO), B0 = lutadorBot(rival, R, arena), lutasSerie = arena?.lutas ?? 1;
     /* o rival na escala candidata: a vida do estagio dele troca na mesma proporcao (o fator fica) */
-    const fHoje = arena?.fator ?? CESC_V9.fatorNpc[rival], fRival = FATOR_RIVAL[rival] ?? fHoje;
+    const fHoje = arena?.fator ?? CESC_V9.fatorNpc[rival];
+    const fV14 = arena ? FATORES_V14.lider[ARENAS.find(a => a.lider === rival)!.id] : FATORES_V14.npc[rival];
+    const fRival = FATOR_RIVAL[rival] ?? (process.argv.includes("--fatores-hoje") ? fHoje : fV14);
     if (fHoje === undefined) throw new Error("rival sem fator: " + rival);
     const B: Lutador = { ...B0, cond: { ...B0.cond, escala: B0.cond.escala! * ESC.vida[B0.cond.est] / CESC_V9.vida[B0.cond.est] / fHoje * fRival } };
     const formasP3: Record<string, number> = {}, formasP4: Record<string, number> = {}, taxas: number[] = [], trocas: Record<string, number> = {};

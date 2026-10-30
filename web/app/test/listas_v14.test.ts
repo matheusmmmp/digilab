@@ -4,6 +4,7 @@
    partida). */
 import { describe, expect, test } from "vitest";
 import {
+  CESC_V9, FATOR_INSTALACAO, FATOR_LIDER_V9, FATOR_LIGA_V9, FATOR_RIVAL_FABRICA_V9, FATOR_SALAO_V9, FATORES_V14,
   BOTS_V21, CRIANCA_V21, ADOL_V21, CV21, CV21E_TR, GambitsPet, chaveRegra, regraDe, FORMAS_AD, LINHA_DA_FORMA, LISTAS_V14, RIVAL_ESPECIE, SOMBRIA, gambitsAdulto, lutadorBot,
   permitida, sementeDe, type Forma, type FormaAdultaNormal,
 } from "../motor/index.ts";
@@ -60,5 +61,13 @@ describe("as listas candidatas da v14 (fase 2)", () => {
         expect(gp.listaSozinho()[fixa ? gp.ativas.length - 1 : 0], k).toBe(res);
       }
     }
+  });
+  test("os fatores candidatos (fase 4) tem as chaves das tabelas de hoje, e as de hoje ficam (os pets v13)", () => {
+    expect(Object.keys(FATORES_V14.lider).sort()).toEqual(Object.keys(FATOR_LIDER_V9).sort());
+    expect(Object.keys(FATORES_V14.npc).sort()).toEqual(Object.keys(CESC_V9.fatorNpc).sort());
+    expect(Object.keys(FATORES_V14.liga).sort()).toEqual(Object.keys(FATOR_LIGA_V9).sort());
+    expect(Object.keys(FATORES_V14.salao).sort()).toEqual(Object.keys(FATOR_SALAO_V9).sort());
+    expect([FATOR_LIDER_V9.torre, CESC_V9.fatorNpc.npc_tier2_sentinela, FATOR_LIGA_V9.campina, FATOR_SALAO_V9.adolescente, FATOR_INSTALACAO, FATOR_RIVAL_FABRICA_V9])
+      .toEqual([1.5, 1.53, .4, 1, 1, .6]);
   });
 });

@@ -72,3 +72,20 @@ export const RELOGIO_V13: RelogioTR = {
       conferencia em disparo/conferencia_d6/). Todo valor acima de 1 reprova o T-1 da fase 1 (a luta media cai para perto de 35 s), e o
       Matheus decidiu ligar o 6 mesmo assim (DE-9, 2026-10-30): o T-1 fica reprovado e registrado como esta */
 export const RELOGIO_V14: RelogioTR = { ...RELOGIO_V13, empurrao: 0, medio: 120, recuo: .6, arrancada: 500 * PASSO_TR_MS / 1000, disparo: 6 };
+
+/** os fatores candidatos dos pets v14, da fase 4 da rodada de equilibrio (docs/EQUILIBRIO_COMBATE_TR.md, fase 4). PROPOSTOS, calibrados so
+    nas sementes de calibracao (68101 a 68505): web/app/scripts/medicoes/equilibrio_tr/fase4/. As tabelas inteiras, com as mesmas chaves
+    das de hoje (FATOR_LIDER_V9, CESC_V9.fatorNpc, FATOR_LIGA_V9, FATOR_INSTALACAO, FATOR_RIVAL_FABRICA_V9, FATOR_SALAO_V9; o teste
+    listas_v14 confere); o que nao esta abaixo e o de hoje. Ainda nao e de nenhuma versao de pet (DE-1): so a bancada os usa
+    - lider da Torre 1,5 -> 1,8: o pet sem treino vencia 0,08 (G-1 pede <= 0,05);
+    - Tortomon (npc_tier2_sentinela) 1,53 -> 1,4: o desafiante do Champion e o rival sugerido do P-4 (DE-4); com 1,4 fecham G-2 e P-4;
+    - Liga, Campina 0,4 -> 0,2 e Torre 0,3 -> 0,8: as formas de longe caiam no furioso da Campina e o duelista passava de 0,85 (G-3);
+    - Salao, Rookie 1,15 -> 1,2 e Champion 1 -> 1,6: o pet tipico vencia mais de 0,95 (G-6) */
+export const FATORES_V14 = {
+  lider: { campina: 1.3, torre: 1.8, floresta: 1.5, cidadela: .9, lago: 1.5, espiral: 1.4 } as Readonly<Record<string, number>>,
+  npc: { npc_tier2_sentinela: 1.4, npc_tier2_porteiro: 1.1, npc_v5_puppetmon: 1.8, npc_v5_machinedramon: 2.3 } as Readonly<Record<string, number>>,
+  liga: { campina: .2, torre: .8, floresta: .1, cidadela: 1, lago: 1.7, espiral: .9 } as Readonly<Record<string, number>>,
+  instalacao: 1,
+  fabrica: .6,
+  salao: { crianca: 1.2, adolescente: 1.6, adulto: 1.05, mega: 1.05 } as Readonly<Record<string, number>>,
+} as const;
