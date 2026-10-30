@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mapa AC</title>
+  <style>
+    html, body { margin: 0; height: 100%; overflow: hidden; background: #cfeefc; font: 14px/1.3 system-ui, sans-serif; color: #3b3326; }
+    #tela { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+    .hud { position: fixed; pointer-events: none; }
+    #relogio { left: 24px; bottom: 22px; color: #fff; text-shadow: 0 2px 6px rgba(40, 60, 90, 0.45); }
+    #hora { font-size: 46px; font-weight: 700; letter-spacing: 1px; border-bottom: 3px solid #fff; padding-bottom: 2px; }
+    #dia { display: inline-block; margin-top: 6px; background: #fff; color: #5b5240; border-radius: 999px; padding: 2px 12px; font-weight: 700; }
+    #mini { right: 18px; bottom: 18px; border: 5px solid #fff8e6; border-radius: 10px; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+      width: 168px; image-rendering: pixelated; }
+    #painel { position: fixed; left: 12px; top: 12px; background: rgba(255, 250, 236, 0.92); border-radius: 14px; padding: 10px 12px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15); display: grid; gap: 6px; max-width: min(340px, calc(100vw - 48px)); }
+    #painel label { display: flex; gap: 8px; align-items: center; }
+    #painel select { max-width: 220px; }
+    #painel small { color: #7a6f5a; }
+    #estado:empty { display: none; }
+    @media (max-width: 600px) { #hora { font-size: 32px; } #mini { width: 112px; } #painel { font-size: 12px; } }
+  </style>
+</head>
+<body>
+  <canvas id="tela" role="img" aria-label="Uma ilha 3D no estilo Animal Crossing com o Digimon em papel"></canvas>
+  <div id="painel">
+    <strong>Mapa AC · POC</strong>
+    <label>Digimon <select id="sprite"><option>carregando</option></select></label>
+    <label>Dobra <input id="curva" type="range" min="0" max="30" step="1"></label>
+    <label><input id="lado" type="checkbox"> o desenho olha para a esquerda</label>
+    <small>WASD/setas para andar, Shift corre; no celular, arraste.</small>
+    <small id="fps"></small>
+    <small id="estado">carregando</small>
+  </div>
+  <div id="relogio" class="hud"><div id="hora"></div><span id="dia"></span></div>
+  <canvas id="mini" class="hud"></canvas>
+  <script type="module" src="./mapa_ac/pagina.ts"></script>
+</body>
+</html>
