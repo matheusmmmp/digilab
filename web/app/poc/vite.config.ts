@@ -19,10 +19,12 @@ const ATLAS: Record<string, string> = {
   "/Assets/digilab_atlas_up_clipes.json": "application/json",
   "/Assets/digilab_atlas_up_clipes.png": "image/png",
 };
-/* os kits 3D CC0 do mapa_ac (Kenney Nature Kit, Quaternius Stylized Nature MegaKit Standard, KayKit Forest Nature Pack FREE), baixados em
-   Assets/kits3d/ e fora do repositório: só modelos e texturas, sem ".." no caminho */
-const KITS_ROTA = /^\/Assets\/kits3d\/(?!.*\.\.)[A-Za-z0-9_ ./()-]+\.(gltf|glb|bin|png)$/;
-const TIPO_KIT: Record<string, string> = { gltf: "model/gltf+json", glb: "model/gltf-binary", bin: "application/octet-stream", png: "image/png" };
+/* os kits 3D do mapa_ac (Kenney Nature Kit, Quaternius Stylized Nature MegaKit Standard, KayKit Forest Nature Pack FREE, CC0) e do campo
+   lateral (RPG Tiny Fantasy Forest PBR, da Dungeon Mason, Unity Asset Store EULA: não se redistribui), baixados em Assets/kits3d/ e fora
+   do repositório: só modelos e texturas, sem ".." no caminho */
+const KITS_ROTA = /^\/Assets\/kits3d\/(?!.*\.\.)[A-Za-z0-9_ ./()-]+\.(gltf|glb|bin|png|fbx)$/;
+const TIPO_KIT: Record<string, string> = { gltf: "model/gltf+json", glb: "model/gltf-binary", bin: "application/octet-stream", png: "image/png",
+  fbx: "application/octet-stream" };
 
 function atlasDev(): Plugin {
   return {

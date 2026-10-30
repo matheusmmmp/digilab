@@ -6,6 +6,7 @@
      - um bloco flutuante que pula quando o personagem bate nele por baixo.
    Todos os números são do desenho: PROPOSTO, SEM FONTE. */
 import * as THREE from "three";
+import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { CURVA, GEO_SOMBRA, KEN, type Modelo, QUA, type Variante, carregarVariante, ceu, materialSombra, toon } from "../mapa_ac/cena.ts";
 import { Heroi } from "../mapa_ac/heroi.ts";
@@ -159,10 +160,50 @@ cena.add(bloco, sombraBloco);
 let blocoUsado = false, blocoBate = 0;
 
 /* ---------- os modelos dos kits ---------- */
+/* o kit da cena: "tff" (RPG Tiny Fantasy Forest, Dungeon Mason, fora do repositório) ou "quaternius" (os CC0 do mapa_ac), pelo ?kit= */
+const KIT_CENA = new URLSearchParams(location.search).get("kit") === "quaternius" ? "quaternius" : "tff";
+const TFF = "./Assets/kits3d/tiny_fantasy_forest/x/Assets/RPG Tiny Fantasy Forest PBR/";
+const MESH = TFF + "Mesh/";
+/* o kit inteiro pinta com uma paleta só (o "Base Map": quadrados de cor em que cada face cai), lida sem filtro */
+const TEX_TFF = (() => {
+  const t = new THREE.TextureLoader().load(TFF + "Texture/Base Map.png");
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.magFilter = THREE.NearestFilter;
+  t.minFilter = THREE.NearestFilter;
+  t.generateMipmaps = false;
+  return t;
+})();
+
+/* um FBX do kit, normalizado como o carregarVariante do mapa_ac: o pé no chão, centrado em x e z, na altura pedida */
+async function carregarFbx(loader: FBXLoader, url: string, altura: number, vento: number): Promise<Variante> {
+  const raiz = await loader.loadAsync(url);
+  /* o FBXLoader põe -90° em x na raiz (a conversão do z para cima), mas as malhas do kit já vêm com o y para cima: tira a rotação */
+  raiz.rotation.set(0, 0, 0);
+  raiz.updateMatrixWorld(true);
+  const caixa = new THREE.Box3().setFromObject(raiz);
+  const tam = caixa.getSize(new THREE.Vector3()), centro = caixa.getCenter(new THREE.Vector3());
+  if (!(tam.y > 0)) throw new Error(`modelo sem altura: ${url}`);
+  const s = altura / tam.y;
+  const norm = new THREE.Matrix4().makeScale(s, s, s).multiply(new THREE.Matrix4().makeTranslation(-centro.x, -caixa.min.y, -centro.z));
+  const pecas: Variante["pecas"] = [];
+  raiz.traverse(o => {
+    const mesh = o as THREE.Mesh;
+    if (!mesh.isMesh || /^LOD[1-9]/.test(mesh.name)) return;   // cada FBX traz LOD0 e LOD1 juntos; fica o LOD0
+    pecas.push({ geo: mesh.geometry, mat: toon({ map: TEX_TFF }, vento), local: norm.clone().multiply(mesh.matrixWorld) });
+  });
+  if (!pecas.length) throw new Error(`FBX sem malha: ${url}`);
+  return { pecas };
+}
+
 type Peca = { url: string; altura: number; vento: number; tinta?: number };
-async function instanciar(loader: GLTFLoader, p: Peca, lugares: { x: number; z: number; s: number; giro: number }[]): Promise<THREE.Object3D[]> {
+/* os FBX citam um "Albedo.png" que não vem no pacote; a cor é a do Base Map, aplicada depois, então o pedido vai para ele */
+const GERENTE_FBX = new THREE.LoadingManager();
+GERENTE_FBX.setURLModifier(u => u.endsWith("/Albedo.png") ? TFF + "Texture/Base Map.png" : u);
+const LOADERS = { gltf: new GLTFLoader(), fbx: new FBXLoader(GERENTE_FBX) };
+async function instanciar(p: Peca, lugares: { x: number; z: number; s: number; giro: number }[]): Promise<THREE.Object3D[]> {
   const modelo: Modelo = { arquivos: [p.url], altura: p.altura, vento: p.vento, sombra: 0 };
-  const v: Variante = await carregarVariante(loader, p.url, modelo);
+  const v: Variante = p.url.toLowerCase().endsWith(".fbx") ? await carregarFbx(LOADERS.fbx, p.url, p.altura, p.vento)
+    : await carregarVariante(LOADERS.gltf, p.url, modelo);
   const saida: THREE.Object3D[] = [];
   for (const peca of v.pecas) {
     if (p.tinta !== undefined) (peca.mat as THREE.MeshToonMaterial).color.multiply(new THREE.Color(p.tinta));
@@ -180,10 +221,32 @@ function espalhar(semente: number, n: number, z0: number, z1: number, s0: number
   return Array.from({ length: n }, () => ({ x: -LARGURA_CENA / 2 + r() * LARGURA_CENA, z: z0 + r() * (z1 - z0), s: s0 + r() * (s1 - s0), giro: r() * Math.PI * 2 }));
 }
 
+type Pedido = [Peca, ReturnType<typeof espalhar>, number];   // a peça, onde ela fica e o raio da sombra (0 = sem sombra)
+
+/* o campo com o RPG Tiny Fantasy Forest: a mesma composição, com as árvores, montanhas, pedras, capim e flores do kit */
+const PEDIDOS_TFF: Pedido[] = [
+  [{ url: MESH + "TreePlants/Tree02.fbx", altura: 6, vento: 0.003 }, [{ x: -5.5, z: -5, s: 1, giro: 0.4 }], 2],
+  [{ url: MESH + "TreePlants/Tree02.fbx", altura: 5, vento: 0.003 }, [{ x: 14, z: -6, s: 1, giro: 1 }, { x: -19, z: -7, s: 1.1, giro: 2 }], 1.8],
+  [{ url: MESH + "TreePlants/Tree02.fbx", altura: 4.5, vento: 0.003 }, espalhar(21, 18, -14, -9, 0.7, 1.3), 0],
+  [{ url: MESH + "Mountains/RockMountain01.fbx", altura: 6, vento: 0 }, [{ x: -26, z: -42, s: 1, giro: 0 }, { x: 30, z: -44, s: 1.2, giro: 2 }], 0],
+  [{ url: MESH + "Mountains/RockMountain03.fbx", altura: 5, vento: 0 }, [{ x: 6, z: -40, s: 1, giro: 1 }], 0],
+  [{ url: MESH + "BuildingUtilityDeco/TreeStump01.fbx", altura: 0.6, vento: 0 }, [{ x: 8, z: -2.4, s: 1, giro: 0.5 }, { x: -15, z: -3, s: 0.8, giro: 2 }], 0.5],
+  [{ url: MESH + "BuildingUtilityDeco/Gate01.fbx", altura: 2.6, vento: 0 }, [{ x: 18, z: -2.6, s: 1, giro: 0 }], 0],
+  [{ url: MESH + "Rock/Rock01.fbx", altura: 0.8, vento: 0 }, [{ x: 10, z: -2.2, s: 1, giro: 0 }, { x: -24, z: -2.5, s: 1.2, giro: 1 }], 0.5],
+  [{ url: MESH + "Rock/Rock04.fbx", altura: 0.6, vento: 0 }, [{ x: -9, z: 2.3, s: 1, giro: 2 }, { x: 22, z: 2.2, s: 0.9, giro: 0 }], 0.4],
+  [{ url: MESH + "Rock/Cobble01.fbx", altura: 0.12, vento: 0 }, espalhar(51, 30, -1.1, 1.3, 0.7, 1.3), 0],
+  [{ url: MESH + "Rock/Cobble03.fbx", altura: 0.12, vento: 0 }, espalhar(52, 30, -1.1, 1.3, 0.7, 1.3), 0],
+  [{ url: MESH + "TreePlants/Flower01.fbx", altura: 0.3, vento: 0.06 }, espalhar(33, 35, -5, -1.8, 0.8, 1.3), 0],
+  [{ url: MESH + "TreePlants/Grass01.fbx", altura: 0.25, vento: 0.08 }, espalhar(35, 110, -8, -1.4, 0.8, 1.4), 0],
+  /* o capim alto na frente */
+  [{ url: MESH + "TreePlants/Grass01.fbx", altura: 0.6, vento: 0.08 }, espalhar(41, 120, 1.7, 2.9, 0.8, 1.3), 0],
+  [{ url: MESH + "TreePlants/Grass01.fbx", altura: 0.55, vento: 0.08, tinta: 0xffe27a }, espalhar(42, 60, 1.8, 2.9, 0.8, 1.3), 0],
+];
+
 async function povoar(): Promise<string[]> {
-  const loader = new GLTFLoader(), faltas: string[] = [];
+  const faltas: string[] = [];
   const sombras: { x: number; z: number; r: number }[] = [];
-  const pedidos: [Peca, ReturnType<typeof espalhar>, number][] = [
+  const pedidos: Pedido[] = KIT_CENA === "tff" ? PEDIDOS_TFF : [
     /* a árvore grande atrás do caminho, e as do meio */
     [{ url: QUA + "CommonTree_3.gltf", altura: 6.5, vento: 0.003 }, [{ x: -4.5, z: -4.2, s: 1, giro: 0.4 }], 2.2],
     [{ url: QUA + "CommonTree_1.gltf", altura: 5, vento: 0.003 }, [{ x: 14, z: -6, s: 1, giro: 1 }, { x: -19, z: -7, s: 1.1, giro: 2 }], 1.8],
@@ -205,7 +268,7 @@ async function povoar(): Promise<string[]> {
   ];
   await Promise.all(pedidos.map(async ([p, lugares, raioSombra]) => {
     try {
-      cena.add(...await instanciar(loader, p, lugares));
+      cena.add(...await instanciar(p, lugares));
       if (raioSombra > 0) for (const l of lugares) sombras.push({ x: l.x, z: l.z, r: raioSombra * l.s });
     } catch (e) { faltas.push(`${p.url}: ${(e as Error).message}`); }
   }));
@@ -235,6 +298,9 @@ const selSprite = document.getElementById("sprite") as HTMLSelectElement;
   heroi.usarSprite(fonte, selSprite.value);
   selSprite.addEventListener("change", () => heroi.usarSprite(fonte, selSprite.value));
 })();
+const selKit = document.getElementById("kit") as HTMLSelectElement;
+selKit.value = KIT_CENA;
+selKit.addEventListener("change", () => { location.search = selKit.value === "tff" ? "" : `?kit=${selKit.value}`; });
 (window as unknown as { lateral: object }).lateral = { heroi, cena, camera, ir: (x: number) => { px = x; } };
 
 /* ---------- a entrada: teclado e toque ---------- */
