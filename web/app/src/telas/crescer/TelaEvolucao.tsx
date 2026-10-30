@@ -17,7 +17,6 @@ import { Numeros, rotuloRel } from "../../componentes/Barras.tsx";
 import { Deco } from "../../componentes/Deco.tsx";
 import { SeloMedalha } from "../../componentes/Medalha.tsx";
 import { PetGrande, Porque, reverEvolucao } from "../../componentes/Revelacao.tsx";
-import { useDesktop } from "../../desktop.ts";
 import { BRASAO } from "../../decoracao.ts";
 import { tamerAtual, useJogo } from "../../jogo.ts";
 import { medalhasQueFaltam, textoFalta } from "../../tamer.ts";
@@ -211,16 +210,16 @@ export function TelaEvolucao() {
     return m.sparring < CAT.sparring ? `${CAT.sparring - m.sparring} lutas` : faltaTaxa ? `vitórias ${Math.round((taxa ?? 0) * 100)}% de ${Math.round(CLE.limiarTaxa * 100)}%`
       : faltaMed ? med() : "";
   };
-  const alvo = p ? nomeEstagio(p.prox) : "", cor = corDominante(m.tracos), arq = nomeArquetipo(f), br = BRASAO[m.especie], desk = useDesktop();
+  const alvo = p ? nomeEstagio(p.prox) : "", cor = corDominante(m.tracos), arq = nomeArquetipo(f), br = BRASAO[m.especie];
   return (
-    <div className="tela dl desk evo-tela evt">
+    <div className="tela dl evo-tela evt">
       <div className="evo-principal">
         {/* a forma atual em destaque: o pet na plataforma de luz, como no momento da evolucao */}
         <section className="evt-heroi" aria-label="Forma atual">
           <span className="evm-estilhacos" aria-hidden="true"><i /><i /><i /><i /></span>
           <div className="evt-heroi-palco">
             <span className="evm-plataforma evt-plataforma" aria-hidden="true"><i /><i /><i /></span>
-            <span className="evt-heroi-pet"><PetGrande f={f} alvo={desk ? [210, 170] : [150, 130]} cor={cor} sombria={m.sombria} /></span>
+            <span className="evt-heroi-pet"><PetGrande f={f} alvo={[150, 130]} cor={cor} sombria={m.sombria} /></span>
           </div>
           <div className="evt-heroi-txt">
             <span className="evt-rot">forma atual</span>

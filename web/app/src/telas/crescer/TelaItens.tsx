@@ -60,8 +60,8 @@ export function TelaItens() {
   };
   const nChips = chips.filter(x => t.temChip(x.id)).length, nCartas = cartas.reduce((s, x) => s + t.cartas(x.id), 0);
   return (
-    <div className="tela dl desk itens-tela">
-      <div className="desk-col itens-lado">
+    <div className="tela dl itens-tela">
+      <div className="itens-col">
         <section className="dl-card itens-resumo" aria-labelledby="itens-tit">
           <h2 id="itens-tit">Itens do Tamer</h2>
           <p className="itens-conta"><span><span className="dl-num">{nChips}</span> chip{nChips === 1 ? "" : "s"}</span><span><span className="dl-num">{nCartas}</span> carta{nCartas === 1 ? "" : "s"}</span></p>
@@ -81,7 +81,7 @@ export function TelaItens() {
 
         </section>
       </div>
-      <div className="desk-col itens-col">
+      <div className="itens-col">
         <section className="bloco" aria-labelledby="itens-chips-tit">
           <h2 id="itens-chips-tit">Chips</h2>
           <ul className="itens-lista">{chips.map(it => <CardChip key={it.id} it={it} m={m} t={t} agir={agir} />)}</ul>

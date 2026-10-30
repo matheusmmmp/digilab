@@ -11,7 +11,6 @@ import {
 } from "../../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
 import { PetGrande } from "../../componentes/Revelacao.tsx";
-import { useDesktop } from "../../desktop.ts";
 import { Seg, blocos, dec } from "../../componentes/Barras.tsx";
 import { Grade } from "../../componentes/Imagens.tsx";
 import { AMPULHETA } from "../../grades.ts";
@@ -41,7 +40,7 @@ function ultimoExercicio(log: readonly (readonly unknown[])[]): { tick: number; 
 /** a sala de treino: parede clara com janela e chao em CSS (o fundo do UP so com o atlas local), o pet grande e nitido na plataforma de
     luz, o estado do treino e o balao "pausa?" quando o motor pede pausa */
 function Sala() {
-  const { motor: m, nascendo } = useJogo(), a = useAtlas(), t = m.treino, bebe = m.estagioAtual === "bebe", pode = t.podeTocar(m.e.tick), desk = useDesktop();
+  const { motor: m, nascendo } = useJogo(), a = useAtlas(), t = m.treino, bebe = m.estagioAtual === "bebe", pode = t.podeTocar(m.e.tick);
   const fundo = a.tipo === "ok" ? imagemAtlas(a, "fundo_treino").url : null;
   const estado = bebe ? "o In-Training ainda não treina" : t.pedePausa ? "pediu pausa" : !pode ? `descansando: próximo em ${CTR.intervalo - (m.e.tick - t.ultimo!)} min`
     : "pronto para treinar";
@@ -49,7 +48,7 @@ function Sala() {
     <section className={`trn-sala${fundo ? " trn-sala--up" : ""}`} aria-label="Sala de treino" style={fundo ? { backgroundImage: `url(${fundo})` } : undefined}>
       {!fundo && <span className="trn-janela" aria-hidden="true"><i /><i /></span>}
       <span className="evm-plataforma trn-plataforma" aria-hidden="true"><i /><i /><i /></span>
-      {nascendo === 0 && <span className="trn-pet"><PetGrande f={m.forma} alvo={desk ? [240, 200] : [180, 150]} cor={corDominante(m.tracos)} sombria={m.sombria} maxEscala={4} /></span>}
+      {nascendo === 0 && <span className="trn-pet"><PetGrande f={m.forma} alvo={[180, 150]} cor={corDominante(m.tracos)} sombria={m.sombria} maxEscala={4} /></span>}
       <span className={`trn-estado${t.pedePausa ? " trn-estado--pausa" : ""}`}>{estado}</span>
       {t.pedePausa && <span className="dl-balao trn-balao"><Grade grade={AMPULHETA} escala={2} cores={CORES_AMPULHETA} alt="" /> pausa?</span>}
     </section>
@@ -176,13 +175,13 @@ export function TelaTreinar({ lutando = false }: { lutando?: boolean }) {
   };
   const apt = APTIDAO[m.especie], fortes = STATS.filter(k => apt[k] > 1).sort((x, y) => apt[y] - apt[x]);
   return (
-    <div className="tela dl desk treino-tela trn">
-      <div className="desk-col treino-col-esq">
+    <div className="tela dl treino-tela trn">
+      <div className="treino-col-esq">
         <Sala />
         <StatFoco />
         <Vida />
       </div>
-      <div className="desk-col treino-col-dir">
+      <div className="treino-col-dir">
         <section className="dl-card treino-medidores trn-medidores" aria-labelledby="trn-med-tit">
           <h2 className="trn-tit" id="trn-med-tit">Cansaço</h2>
           <Medidor titulo="Fadiga" valor={t.fadiga} n={blocos(t.fadiga / 100, 10)} cls={t.pedePausa ? "dl-seg--necessidade" : ""} marcas={[[CTR.limiarPausa, "pede pausa"], [CTR.limiteForcar, "só forçar"]]} />
@@ -212,7 +211,7 @@ export function TelaTreinar({ lutando = false }: { lutando?: boolean }) {
         </section>
         <section className="trn-ultimo">
           <UltimoTreino />
-          <span className="desk-so treino-ult-bts">
+          <span className="treino-ult-bts">
             <button type="button" className="dl-btn dl-btn--sec treino-forcar" disabled={!t.forcaria || bebe || !pode || lutando || nascendo > 0}
               title={t.forcaria ? "rende mais e gera sobrecarga" : `abre com fadiga ${CTR.limiteForcar}`} onClick={() => setEscolher(true)}>
               <span className="treino-forcar-faixa" aria-hidden="true" />Forçar treino</button>
