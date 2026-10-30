@@ -2,6 +2,7 @@
    e salvo: abrir e reprocessar o registro (Motor.reproduzir). Um save de hoje abre igual no app novo.
    Chaves: CHAVE (o save), CHAVE-aba ("destino/aba"), CHAVE-fala-llm, CHAVE-anterior, CHAVE-boas-vindas. */
 import { Motor, type EventoRegistro } from "../motor/index.ts";
+import { ligarProduto } from "./produto.ts";
 
 export const CHAVE = "digilab-web-v21-sprites";
 export const CHAVE_ABA = CHAVE + "-aba";
@@ -42,7 +43,7 @@ export function textoSave(m: Motor): string {
 /** primeiro acesso: o mesmo pet de exemplo do HTML (meio dia de vida e alguns cuidados), na versao dos ovos novos. Os pets v11 em diante
     nao tem elogio: o roteiro troca os dois elogios do HTML por carinho (os mesmos tempos e o mesmo numero de cuidados) */
 export function petExemplo(): Motor {
-  const m = new Motor(20260924), elogio = "acariciar";
+  const m = ligarProduto(new Motor(20260924)), elogio = "acariciar";
   const roteiro: [number, "alimentar" | "brincar" | "limpar" | "acariciar"][] =
     [[45, "alimentar"], [60, "brincar"], [30, elogio], [120, "limpar"], [90, "acariciar"], [60, "alimentar"], [45, elogio]];
   for (const [t, a] of roteiro) { m.avancar(t); m.observar(a); }

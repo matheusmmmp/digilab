@@ -53,9 +53,13 @@ def test_relacao_e_evolucao_em_opiniao_vao_ao_juiz(trecho):
 
 def test_gatilhos_da_voz_sustentam_o_que_dizem():
     from digilab_fala_livre.verificador import RAIZES_GATILHO_VOZ, acao_do_gatilho
-    fonte = (RAIZ / "web" / "app" / "src" / "voz.ts").read_text(encoding="utf-8")
-    textos = set(re.findall(r'\w+: "([^"]+)"', fonte[fonte.index("TEXTO_GATILHO"):fonte.index("};", fonte.index("TEXTO_GATILHO"))]))
-    assert set(RAIZES_GATILHO_VOZ) <= textos
+    # o voz.ts (TEXTO_GATILHO) saiu com o descarte 6 (COMBATE-TR R2b): os gatilhos que o jogo ainda manda saem de falaLivre.ts
+    # (gatilhoFalaLivre). As raizes dos gatilhos da voz que nao vem mais do jogo ficam: experiments/avaliar_voz.py ainda verifica
+    # artifacts_voz/ com este verificador
+    fonte = (RAIZ / "web" / "app" / "src" / "falaLivre.ts").read_text(encoding="utf-8")
+    ini = fonte.index("export function gatilhoFalaLivre")
+    textos = set(re.findall(r'"([^"]+)"', fonte[ini:fonte.index("\n}\n", ini)]))
+    assert "acabei de lutar" in textos and "acabei de lutar" in RAIZES_GATILHO_VOZ
     g1 = [{"id": "G1", "tipo": "evento agora", "texto": "o dono voltou depois de um tempo sumido"}]
     assert acao_do_gatilho("Você voltou", g1) == "G1" and acao_do_gatilho("Ontem lutei muito", g1) is None
     rev = [{"id": "G1", "tipo": "evento agora", "texto": "vou lutar de novo contra quem me venceu"}]

@@ -16,6 +16,8 @@ import { mapaDe } from "./TelaCampanha.tsx";
 import { textoRegra } from "./palcoTR/PalcoTR.tsx";
 import { SeloMedalha } from "../../componentes/Medalha.tsx";
 import { pedirDica } from "../../dicas.ts";
+import { BotaoContinuar, BotaoHx } from "../../componentes/hx/index.ts";
+import "../../estilo/abertas.css";
 
 const inteiro = (x: number): string => Math.round(x).toLocaleString("pt-BR");
 
@@ -90,7 +92,7 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
   const liga = r.lideres, venceuLiga = !!liga && r.serie.length === r.nLutas && venceu;
   /* uma instalacao da Fronteira (pets v6): a sequencia de vitorias ate a primeira que nao foi; o recorde do Tamer, se bateu */
   const inst = r.instalacao, vitInst = inst ? r.serie.filter(x => x.pontosA === 1).length : 0, rivaisLista = liga ?? r.rivais;
-  const tag = liga ? "Fronteira · Liga dos Líderes" : inst ? `Fronteira · ${inst.nome}` : npc ? `Campanha · ${LUGARES[Li].nome}` : "Arena · fim da luta";
+  const tag = r.tag ?? (liga ? "Fronteira · Liga dos Líderes" : inst ? `Fronteira · ${inst.nome}` : npc ? `Campanha · ${LUGARES[Li].nome}` : "Arena · fim da luta");
   const titulo = liga ? (venceuLiga ? "Campeão!" : perdeu ? "Derrota" : "Empate") : inst ? (r.recorde ? "Recorde!" : "Fim da sequência")
     : lugarNovo ? "Ilha vencida!" : venceu ? "Vitória!" : perdeu ? "Derrota" : "Empate";
   const dur = duracaoLuta(res);
@@ -143,7 +145,7 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
   const md = r.medalha, mdNum = md ? MEDALHAS.findIndex(x => x.id === md.id) + 1 : 0, mdInfo = md ? MEDALHAS[mdNum - 1] : null;
 
   return (
-    <dialog className={`modal-res res dl ${venceu ? "res--vit" : empate ? "res--emp" : "res--der"}`} ref={ref} aria-labelledby="res-tit"
+    <dialog className={`modal-res res ab-hx dl ${venceu ? "res--vit" : empate ? "res--emp" : "res--der"}`} ref={ref} aria-labelledby="res-tit"
       onClose={() => (replay.current && r.idxLog !== null ? verReplay(r.idxLog) : continuar())}>
       <div className={`res-faixa ${venceu ? "res-faixa--vit" : "res-faixa--der"}`}>
         <span className="res-tag">{tag}</span>
@@ -188,7 +190,7 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
               <span>{r.recorde.valor} vitória{r.recorde.valor === 1 ? "" : "s"} seguida{r.recorde.valor === 1 ? "" : "s"}: o recorde agora é seu, Tamer, com {r.recorde.forma}.</span></span>
           </div>}
           {serie && <section className="res-serie" aria-labelledby="res-serie-tit">
-            <h3 id="res-serie-tit">{liga ? `Liga dos Líderes · ${r.nLutas} lutas seguidas, sem cura` : inst ? `${inst.nome} · ${r.nLutas} lutas seguidas, sem cura` : `Resistência · ${r.nLutas} lutas seguidas, sem cura`}</h3>
+            <h3 id="res-serie-tit">{r.tituloSerie ? r.tituloSerie : liga ? `Liga dos Líderes · ${r.nLutas} lutas seguidas, sem cura` : inst ? `${inst.nome} · ${r.nLutas} lutas seguidas, sem cura` : `Resistência · ${r.nLutas} lutas seguidas, sem cura`}</h3>
             <ol>{Array.from({ length: r.nLutas }, (_, i) => {
               const x = serie[i], fimVida = x ? Math.max(0, x.E.L[0].hp) / x.E.L[0].hpMax : 0;
               return <li key={i} className={!x ? "res-serie-nao" : x.pontosA === 1 ? "res-serie-vit" : "res-serie-der"}>
@@ -208,8 +210,8 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
                   <span className="res-regra-topo"><span>REGRA NOVA · aprendida lutando</span><span className="res-regra-pos">{nova.pos} de {nova.de}</span></span>
                   <span className="res-regra-txt">{rotuloRegra(regraDe(nova.k)).replace(/^se/, "Se")}</span>
                   {estadoNova === "livre" && !msgRegra && <span className="res-regra-bts">
-                    <button type="button" className="regra-travar" onClick={() => intervir("travar")}><Peca nome="icone_cadeado" />Travar</button>
-                    <button type="button" className="regra-vetar" onClick={() => intervir("vetar")}>Vetar</button></span>}
+                    <button type="button" className="regra-travar hx-btn" onClick={() => intervir("travar")}><Peca nome="icone_cadeado" />Travar</button>
+                    <button type="button" className="regra-vetar hx-btn" onClick={() => intervir("vetar")}>Vetar</button></span>}
                   {msgRegra && <span className="res-regra-msg" role="status">{msgRegra}</span>}
                 </section>
               : r.ativasAntes && <div className="res-semregra"><span className="dl-num" aria-hidden="true">?</span><span>Nenhuma regra nova desta vez.</span></div>}
@@ -220,8 +222,8 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
           </div>}
         </div>
         <div className="res-rodape">
-          {r.idxLog !== null && <button type="button" className="dl-btn dl-btn--sec res-replay" onClick={() => { replay.current = true; ref.current?.close(); }}>Ver replay</button>}
-          <button type="button" className="dl-btn res-continuar" data-autofocus onClick={() => ref.current?.close()}>{proximo !== null ? "Ver o mapa" : "Continuar"}</button>
+          {r.idxLog !== null && <BotaoHx className="res-replay" onClick={() => { replay.current = true; ref.current?.close(); }}>Ver replay</BotaoHx>}
+          <BotaoContinuar className="res-continuar" data-autofocus onClick={() => ref.current?.close()}>{proximo !== null ? "Ver o mapa" : "Continuar"}</BotaoContinuar>
         </div>
       </div>
     </dialog>

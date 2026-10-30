@@ -4,6 +4,7 @@
    muda em outra aba, esta relê o save em vez de gravar por cima. */
 import { useEffect, useState } from "react";
 import { Motor, PetMorto } from "../motor/index.ts";
+import { ligarProduto } from "./produto.ts";
 import { CHAVE, gravarSave, lerSave, petExemplo, textoSave, type Armazenamento } from "./save.ts";
 import { CHAVE_TAMER, Tamer, conferirCampeao, conferirItensDasMedalhas, conferirMedalhas, conferirRecordes, gravarTamer, lerTamer, sincronizarPet, type MedalhaGanha } from "./tamer.ts";
 
@@ -109,7 +110,7 @@ export function trocarMotor(m: Motor, origem: Origem, nascendo = 0): void {
 /** um ovo novo: semente do relogio (como o HTML) e 16 quadros chocando */
 export function novoPet(): void {
   const s = (Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0;
-  trocarMotor(new Motor(s), "novo", 16);
+  trocarMotor(ligarProduto(new Motor(s)), "novo", 16);
 }
 /** um quadro a menos do ovo chocando (chamado pelo palco a cada desenho) */
 export function passarQuadroOvo(): void {

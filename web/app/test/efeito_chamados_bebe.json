@@ -1,0 +1,2108 @@
+{
+ "descricao": "o efeito dos chamados do bebe pelo corpo no pet do jogo (v13): os chamados abertos no bebe e a fracao de cuidado da evolucao para a crianca, sem o evento \"p\" (hoje), com as duas chaves de 2026-10-29 (fome) e com as tres (corpo), nos ritmos rapido (180 min) e classico (360 min)",
+ "limiares": {
+  "fome": 0.7,
+  "higiene": 0.9,
+  "carinho": 0.8
+ },
+ "sementes": [
+  101,
+  202,
+  303
+ ],
+ "donos": [
+  "nada",
+  "atende",
+  "atende_10min",
+  "brinca_atende",
+  "so_alimenta",
+  "nao_alimenta"
+ ],
+ "vidas": [
+  {
+   "ritmo": "rapida",
+   "dono": "nada",
+   "chaves": "hoje",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 5,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675
+   ],
+   "cuidado": 0,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "nada",
+   "chaves": "hoje",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 5,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675
+   ],
+   "cuidado": 0,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "nada",
+   "chaves": "hoje",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 5,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675
+   ],
+   "cuidado": 0,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "nada",
+   "chaves": "fome",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 0,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "nada",
+   "chaves": "fome",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 0,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "nada",
+   "chaves": "fome",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 0,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "nada",
+   "chaves": "corpo",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 2,
+    "higiene": 1,
+    "carinho": 1
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674
+   ],
+   "cuidado": 0,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "nada",
+   "chaves": "corpo",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 2,
+    "higiene": 1,
+    "carinho": 2
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674
+   ],
+   "cuidado": 0,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "nada",
+   "chaves": "corpo",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 2,
+    "higiene": 1,
+    "carinho": 2
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674
+   ],
+   "cuidado": 0,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "atende",
+   "chaves": "hoje",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 5,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "atende",
+   "chaves": "hoje",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 5,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "atende",
+   "chaves": "hoje",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 5,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "atende",
+   "chaves": "fome",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "atende",
+   "chaves": "fome",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "atende",
+   "chaves": "fome",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "atende",
+   "chaves": "corpo",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 2,
+    "higiene": 1,
+    "carinho": 1
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "atende",
+   "chaves": "corpo",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 2,
+    "higiene": 1,
+    "carinho": 2
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "atende",
+   "chaves": "corpo",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 2,
+    "higiene": 1,
+    "carinho": 1
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "atende_10min",
+   "chaves": "hoje",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 5,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "atende_10min",
+   "chaves": "hoje",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 5,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "atende_10min",
+   "chaves": "hoje",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 5,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "atende_10min",
+   "chaves": "fome",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "atende_10min",
+   "chaves": "fome",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "atende_10min",
+   "chaves": "fome",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "atende_10min",
+   "chaves": "corpo",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 2,
+    "higiene": 1,
+    "carinho": 1
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "atende_10min",
+   "chaves": "corpo",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 2,
+    "higiene": 1,
+    "carinho": 2
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "atende_10min",
+   "chaves": "corpo",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 2,
+    "higiene": 1,
+    "carinho": 1
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "brinca_atende",
+   "chaves": "hoje",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 5,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [
+    0.725,
+    0.65,
+    0.575,
+    0.55,
+    0.525
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "brinca_atende",
+   "chaves": "hoje",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 5,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [
+    0.725,
+    0.65,
+    0.575,
+    0.55,
+    0.525
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "brinca_atende",
+   "chaves": "hoje",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 5,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [
+    0.725,
+    0.65,
+    0.575,
+    0.55,
+    0.525
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "brinca_atende",
+   "chaves": "fome",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "brinca_atende",
+   "chaves": "fome",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "brinca_atende",
+   "chaves": "fome",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "brinca_atende",
+   "chaves": "corpo",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 5,
+    "higiene": 1,
+    "carinho": 0
+   },
+   "fome_ao_abrir": [
+    0.666,
+    0.591,
+    0.566,
+    0.541,
+    0.516
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "brinca_atende",
+   "chaves": "corpo",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 5,
+    "higiene": 1,
+    "carinho": 1
+   },
+   "fome_ao_abrir": [
+    0.666,
+    0.591,
+    0.566,
+    0.541,
+    0.516
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "brinca_atende",
+   "chaves": "corpo",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 5,
+    "higiene": 1,
+    "carinho": 1
+   },
+   "fome_ao_abrir": [
+    0.666,
+    0.591,
+    0.566,
+    0.541,
+    0.516
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "so_alimenta",
+   "chaves": "hoje",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 5,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675
+   ],
+   "cuidado": 0.5,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "so_alimenta",
+   "chaves": "hoje",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 5,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675
+   ],
+   "cuidado": 0.5,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "so_alimenta",
+   "chaves": "hoje",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 5,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675
+   ],
+   "cuidado": 0.5,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "so_alimenta",
+   "chaves": "fome",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 0,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "so_alimenta",
+   "chaves": "fome",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 0,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "so_alimenta",
+   "chaves": "fome",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 0,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "so_alimenta",
+   "chaves": "corpo",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 2,
+    "higiene": 1,
+    "carinho": 1
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674
+   ],
+   "cuidado": 0.5,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "so_alimenta",
+   "chaves": "corpo",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 2,
+    "higiene": 1,
+    "carinho": 2
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674
+   ],
+   "cuidado": 0.4,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "so_alimenta",
+   "chaves": "corpo",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 2,
+    "higiene": 1,
+    "carinho": 2
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674
+   ],
+   "cuidado": 0.4,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "nao_alimenta",
+   "chaves": "hoje",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 5,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675
+   ],
+   "cuidado": 0.5,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "nao_alimenta",
+   "chaves": "hoje",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 5,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675
+   ],
+   "cuidado": 0.5,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "nao_alimenta",
+   "chaves": "hoje",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 5,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675
+   ],
+   "cuidado": 0.5,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "nao_alimenta",
+   "chaves": "fome",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "nao_alimenta",
+   "chaves": "fome",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "nao_alimenta",
+   "chaves": "fome",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 2,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "nao_alimenta",
+   "chaves": "corpo",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 2,
+    "higiene": 1,
+    "carinho": 1
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674
+   ],
+   "cuidado": 0.5,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "nao_alimenta",
+   "chaves": "corpo",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 2,
+    "higiene": 1,
+    "carinho": 2
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674
+   ],
+   "cuidado": 0.6,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "rapida",
+   "dono": "nao_alimenta",
+   "chaves": "corpo",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 2,
+    "higiene": 1,
+    "carinho": 1
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674
+   ],
+   "cuidado": 0.5,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "nada",
+   "chaves": "hoje",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 11,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675,
+    0.65,
+    0.625,
+    0.6,
+    0.575,
+    0.55,
+    0.525
+   ],
+   "cuidado": 0,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "nada",
+   "chaves": "hoje",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 11,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675,
+    0.65,
+    0.625,
+    0.6,
+    0.575,
+    0.55,
+    0.525
+   ],
+   "cuidado": 0,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "nada",
+   "chaves": "hoje",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 11,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675,
+    0.65,
+    0.625,
+    0.6,
+    0.575,
+    0.55,
+    0.525
+   ],
+   "cuidado": 0,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "nada",
+   "chaves": "fome",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 0,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "nada",
+   "chaves": "fome",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 0,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "nada",
+   "chaves": "fome",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 0,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "nada",
+   "chaves": "corpo",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 8,
+    "higiene": 4,
+    "carinho": 1
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674,
+    0.649,
+    0.624,
+    0.599,
+    0.574,
+    0.549,
+    0.524
+   ],
+   "cuidado": 0,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "nada",
+   "chaves": "corpo",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 8,
+    "higiene": 4,
+    "carinho": 2
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674,
+    0.649,
+    0.624,
+    0.599,
+    0.574,
+    0.549,
+    0.524
+   ],
+   "cuidado": 0,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "nada",
+   "chaves": "corpo",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 8,
+    "higiene": 4,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674,
+    0.649,
+    0.624,
+    0.599,
+    0.574,
+    0.549,
+    0.524
+   ],
+   "cuidado": 0,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "atende",
+   "chaves": "hoje",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 11,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675,
+    0.65,
+    0.625,
+    0.6,
+    0.575,
+    0.55,
+    0.525
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "atende",
+   "chaves": "hoje",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 11,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675,
+    0.65,
+    0.625,
+    0.6,
+    0.575,
+    0.55,
+    0.525
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "atende",
+   "chaves": "hoje",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 11,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675,
+    0.65,
+    0.625,
+    0.6,
+    0.575,
+    0.55,
+    0.525
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "atende",
+   "chaves": "fome",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "atende",
+   "chaves": "fome",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "atende",
+   "chaves": "fome",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "atende",
+   "chaves": "corpo",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 8,
+    "higiene": 2,
+    "carinho": 1
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674,
+    0.649,
+    0.624,
+    0.599,
+    0.574,
+    0.549,
+    0.524
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "atende",
+   "chaves": "corpo",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 8,
+    "higiene": 2,
+    "carinho": 2
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674,
+    0.649,
+    0.624,
+    0.599,
+    0.574,
+    0.549,
+    0.524
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "atende",
+   "chaves": "corpo",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 8,
+    "higiene": 2,
+    "carinho": 1
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674,
+    0.649,
+    0.624,
+    0.599,
+    0.574,
+    0.549,
+    0.524
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "atende_10min",
+   "chaves": "hoje",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 11,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675,
+    0.65,
+    0.625,
+    0.6,
+    0.575,
+    0.55,
+    0.525
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "atende_10min",
+   "chaves": "hoje",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 11,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675,
+    0.65,
+    0.625,
+    0.6,
+    0.575,
+    0.55,
+    0.525
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "atende_10min",
+   "chaves": "hoje",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 11,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675,
+    0.65,
+    0.625,
+    0.6,
+    0.575,
+    0.55,
+    0.525
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "atende_10min",
+   "chaves": "fome",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "atende_10min",
+   "chaves": "fome",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "atende_10min",
+   "chaves": "fome",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "atende_10min",
+   "chaves": "corpo",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 8,
+    "higiene": 2,
+    "carinho": 1
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674,
+    0.649,
+    0.624,
+    0.599,
+    0.574,
+    0.549,
+    0.524
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "atende_10min",
+   "chaves": "corpo",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 8,
+    "higiene": 2,
+    "carinho": 2
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674,
+    0.649,
+    0.624,
+    0.599,
+    0.574,
+    0.549,
+    0.524
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "atende_10min",
+   "chaves": "corpo",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 8,
+    "higiene": 2,
+    "carinho": 1
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674,
+    0.649,
+    0.624,
+    0.599,
+    0.574,
+    0.549,
+    0.524
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "brinca_atende",
+   "chaves": "hoje",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 11,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [
+    0.725,
+    0.65,
+    0.575,
+    0.55,
+    0.525,
+    0.5,
+    0.475,
+    0.45,
+    0.425,
+    0.4,
+    0.375
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "brinca_atende",
+   "chaves": "hoje",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 11,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [
+    0.725,
+    0.65,
+    0.575,
+    0.55,
+    0.525,
+    0.5,
+    0.475,
+    0.45,
+    0.425,
+    0.4,
+    0.375
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "brinca_atende",
+   "chaves": "hoje",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 11,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [
+    0.725,
+    0.65,
+    0.575,
+    0.55,
+    0.525,
+    0.5,
+    0.475,
+    0.45,
+    0.425,
+    0.4,
+    0.375
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "brinca_atende",
+   "chaves": "fome",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 4,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [
+    0.449,
+    0.424,
+    0.399,
+    0.374
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "brinca_atende",
+   "chaves": "fome",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 4,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [
+    0.449,
+    0.424,
+    0.399,
+    0.374
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "brinca_atende",
+   "chaves": "fome",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 4,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [
+    0.449,
+    0.424,
+    0.399,
+    0.374
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "brinca_atende",
+   "chaves": "corpo",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 11,
+    "higiene": 2,
+    "carinho": 0
+   },
+   "fome_ao_abrir": [
+    0.666,
+    0.591,
+    0.566,
+    0.541,
+    0.516,
+    0.491,
+    0.466,
+    0.441,
+    0.416,
+    0.391,
+    0.366
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "brinca_atende",
+   "chaves": "corpo",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 11,
+    "higiene": 2,
+    "carinho": 2
+   },
+   "fome_ao_abrir": [
+    0.666,
+    0.591,
+    0.566,
+    0.541,
+    0.516,
+    0.491,
+    0.466,
+    0.441,
+    0.416,
+    0.391,
+    0.366
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "brinca_atende",
+   "chaves": "corpo",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 11,
+    "higiene": 2,
+    "carinho": 1
+   },
+   "fome_ao_abrir": [
+    0.666,
+    0.591,
+    0.566,
+    0.541,
+    0.516,
+    0.491,
+    0.466,
+    0.441,
+    0.416,
+    0.391,
+    0.366
+   ],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "so_alimenta",
+   "chaves": "hoje",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 11,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675,
+    0.65,
+    0.625,
+    0.6,
+    0.575,
+    0.55,
+    0.525
+   ],
+   "cuidado": 0.4782608695652174,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "so_alimenta",
+   "chaves": "hoje",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 11,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675,
+    0.65,
+    0.625,
+    0.6,
+    0.575,
+    0.55,
+    0.525
+   ],
+   "cuidado": 0.4782608695652174,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "so_alimenta",
+   "chaves": "hoje",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 11,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675,
+    0.65,
+    0.625,
+    0.6,
+    0.575,
+    0.55,
+    0.525
+   ],
+   "cuidado": 0.4782608695652174,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "so_alimenta",
+   "chaves": "fome",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 0,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "so_alimenta",
+   "chaves": "fome",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 0,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "so_alimenta",
+   "chaves": "fome",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 0,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "so_alimenta",
+   "chaves": "corpo",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 8,
+    "higiene": 4,
+    "carinho": 1
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674,
+    0.649,
+    0.624,
+    0.599,
+    0.574,
+    0.549,
+    0.524
+   ],
+   "cuidado": 0.6153846153846154,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "so_alimenta",
+   "chaves": "corpo",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 8,
+    "higiene": 4,
+    "carinho": 2
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674,
+    0.649,
+    0.624,
+    0.599,
+    0.574,
+    0.549,
+    0.524
+   ],
+   "cuidado": 0.5714285714285714,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "so_alimenta",
+   "chaves": "corpo",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 8,
+    "higiene": 4,
+    "carinho": 3
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674,
+    0.649,
+    0.624,
+    0.599,
+    0.574,
+    0.549,
+    0.524
+   ],
+   "cuidado": 0.5333333333333333,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "nao_alimenta",
+   "chaves": "hoje",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 11,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675,
+    0.65,
+    0.625,
+    0.6,
+    0.575,
+    0.55,
+    0.525
+   ],
+   "cuidado": 0.5217391304347826,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "nao_alimenta",
+   "chaves": "hoje",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 11,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675,
+    0.65,
+    0.625,
+    0.6,
+    0.575,
+    0.55,
+    0.525
+   ],
+   "cuidado": 0.5217391304347826,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "nao_alimenta",
+   "chaves": "hoje",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 11,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [
+    0.775,
+    0.75,
+    0.725,
+    0.7,
+    0.675,
+    0.65,
+    0.625,
+    0.6,
+    0.575,
+    0.55,
+    0.525
+   ],
+   "cuidado": 0.5217391304347826,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "nao_alimenta",
+   "chaves": "fome",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "nao_alimenta",
+   "chaves": "fome",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "nao_alimenta",
+   "chaves": "fome",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 0,
+    "higiene": 5,
+    "carinho": 7
+   },
+   "fome_ao_abrir": [],
+   "cuidado": 1,
+   "ramo": "sereno"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "nao_alimenta",
+   "chaves": "corpo",
+   "semente": 101,
+   "chamados_abertos": {
+    "fome": 8,
+    "higiene": 2,
+    "carinho": 1
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674,
+    0.649,
+    0.624,
+    0.599,
+    0.574,
+    0.549,
+    0.524
+   ],
+   "cuidado": 0.2727272727272727,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "nao_alimenta",
+   "chaves": "corpo",
+   "semente": 202,
+   "chamados_abertos": {
+    "fome": 8,
+    "higiene": 2,
+    "carinho": 2
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674,
+    0.649,
+    0.624,
+    0.599,
+    0.574,
+    0.549,
+    0.524
+   ],
+   "cuidado": 0.3333333333333333,
+   "ramo": "arisco"
+  },
+  {
+   "ritmo": "classica",
+   "dono": "nao_alimenta",
+   "chaves": "corpo",
+   "semente": 303,
+   "chamados_abertos": {
+    "fome": 8,
+    "higiene": 2,
+    "carinho": 1
+   },
+   "fome_ao_abrir": [
+    0.699,
+    0.674,
+    0.649,
+    0.624,
+    0.599,
+    0.574,
+    0.549,
+    0.524
+   ],
+   "cuidado": 0.2727272727272727,
+   "ramo": "arisco"
+  }
+ ]
+}

@@ -6,7 +6,7 @@
    usar). Lutas, travas e vetos entram no registro: o replay reconstroi o aprendizado. */
 import { CCF, CED, CESC, CLE, CSO, CV, CV21, CV21E_TR, GA, SOMBRIA, TECNICAS, baseDe } from "./constantes.ts";
 import {
-  ADOL_V21, BOTS_V2, BOTS_V21, BOTS_V21D, BOTS_V21E, CRIANCA_V21, GAMBITS_SOMBRIA, NOME_BOT, NPC, REGRA_BATE_EM_QUEM_RECUA, REGRA_CONTRA_GOLPE_NA_PELE,
+  ADOL_V21, BOTS_V2, BOTS_V21, BOTS_V21D, BOTS_V21E, CRIANCA_V21, GAMBITS_SOMBRIA, LISTAS_V14, NOME_BOT, NPC, REGRA_BATE_EM_QUEM_RECUA, REGRA_CONTRA_GOLPE_NA_PELE,
   REGRA_DEFENDE_DO_GOLPE, REGRA_RECUA_DO_PREPARO_SOB_PELE, copiarGambits,
   estiloBot, formaRival, gambitNPC, gambitsAdulto,
 } from "./bots.ts";
@@ -16,6 +16,7 @@ import { ESCALA, caraterCanonico, escalaDaVersao, escalaDe, perfilDe, perfilNPC,
 import { CONDICOES_ESTAGIO, DIST, type Cond, type Estilo, type ListaGambits, type Lutador, type Regra, type RegrasLuta, type ResultadoLuta } from "./combate.ts";
 import { NOME_V2, nomeFormaLegado } from "./nomes.ts";
 import { criarRng, hashSemente } from "./rng.ts";
+import { PASSO_TR_MS, T_TR } from "./combate_tr/constantes_tr.ts";
 import { condicaoDe, type TreinoPet } from "./treino.ts";
 import { ITENS } from "./itens.ts";
 import type { Carater, Forma, FormaAdultaNormal, OpGambit, Stats } from "./tipos.ts";
@@ -45,12 +46,14 @@ export function sementeDe(f: Forma, R: RegrasLuta = CV21E_TR): ListaGambits {
    do reequilibrio, so na semente dos pets v6), das listas V21E (as regras novas do equilibrio geral, so na semente dos pets v9) ou de
    um chip de regra (itens.ts; pets v6). O repertorio nao muda: as candidatas e o replay dos pets v1-v8 ficam iguais. Nos pets v6 o
    vigia recebe as duas regras novas tambem como candidatas de troca (candidatasDoVigia), e nos pets v9 o duelista, o tita e a muralha
-   as da V21E (candidatasV21E); as regras dos chips nunca viram candidatas (so entram pelo chip). */
+   as da V21E (candidatasV21E); as regras dos chips nunca viram candidatas (so entram pelo chip). As das listas candidatas da rodada de
+   equilibrio do tempo real (bots.LISTAS_V14, ainda de nenhuma versao) tambem tem chave aqui: nenhum pet de hoje as tem na semente nem nas
+   candidatas, entao so a bancada as usa. */
 let REGRAS_SEMENTE: Map<string, Regra> | null = null;
 export function regraDe(k: string): Regra {
   const r = REPERTORIO.get(k);
   if (r) return r;
-  REGRAS_SEMENTE ??= new Map([...Object.values(GAMBITS_SOMBRIA), ...Object.values(BOTS_V21D) as ListaGambits[], ...Object.values(BOTS_V21E) as ListaGambits[],
+  REGRAS_SEMENTE ??= new Map([...Object.values(GAMBITS_SOMBRIA), ...Object.values(BOTS_V21D) as ListaGambits[], ...Object.values(BOTS_V21E) as ListaGambits[], ...Object.values(LISTAS_V14),
     { regras: ITENS.flatMap(x => x.tipo === "chip_regra" ? [x.regra] : []), final: "defender" }]
     .flatMap(g => g.regras.map(x => [chaveRegra(x), x] as [string, Regra])));
   if (!REGRAS_SEMENTE.has(k)) throw new Error("regra fora do repertório: " + k);
@@ -69,7 +72,8 @@ export function rotuloCond(c: Cond): string {
     case "oponente_guts_abaixo": return `guts do oponente < ${p[0]}`;
     case "oponente_repete": return `oponente repetiu ${NOME_V2[p[0] as string]} ${p[1]}x`;
     case "oponente_frequente": return `oponente insiste em ${NOME_V2[p[0] as string]}`;
-    case "turno_execucao": return `luta no turno ${p[0]} ou mais`;
+    /* o turno t e o relogio t x T_TR (combate_tr/controlador.ts): 2 s por turno */
+    case "turno_execucao": return `luta com ${Number(p[0]) * T_TR * PASSO_TR_MS / 1000} s ou mais`;
     case "oponente_vai_preparar": return "vi o pesado vindo";
   }
   return c.n;
@@ -91,6 +95,13 @@ export function candidatasV21E(f: Forma | null, R: RegrasLuta | null): string[] 
   return novas.map(chaveRegra).filter(k => !REPERTORIO.has(k));
 }
 export const rotuloRegra = (r: Regra): string => `se ${r.se.map(rotuloCond).join(" e ")} → ${NOME_V2[r.entao]}`;
+/** a regra da lista que cobre o chip de regra `chip` (o chip entra no fim da lista de luta): a primeira cujas condicoes sao todas condicoes
+    do chip, ou a propria regra do chip ja na lista. Sempre que o chip valeria, ela vale antes, e a primeira regra valida decide: o chip
+    nunca decide. null = o chip pode decidir. So o aviso na tela (DE-3, decidida pelo Matheus em 2026-10-30): a lista e as lutas nao mudam */
+export function regraQueCobre(lista: readonly Regra[], chip: Regra): Regra | null {
+  const k = chaveRegra(chip), conds = new Set(chip.se.map(c => JSON.stringify([c.n, c.p])));
+  return lista.find(r => chaveRegra(r) === k || r.se.every(c => conds.has(JSON.stringify([c.n, c.p])))) ?? null;
+}
 
 export interface MudancaGambit { luta: number; texto: string; dono?: boolean }
 
@@ -117,13 +128,20 @@ export class GambitsPet {
       com que o pet luta (comChips), sem tirar nenhuma, e o pet nao a reordena nem a troca. O motor liga ao criar (sai da versao; nao entra
       na assinatura) */
   chipsNoFim = false;
+  /** candidato v14 (DE-10, decidida pelo Matheus em 2026-10-30; docs/PLANO_EQUILIBRIO_COMBATE_TR.md): a regra de reserva (a ultima da lista
+      de partida) fica fixa no fim e nao entra na reordenacao pela nota. Desligado nos pets v13 (a lista e as lutas de hoje); so a bancada
+      liga. Nao entra na assinatura */
+  reservaNoFim = false;
+  /** a chave da regra de reserva da ultima semeadura (so com reservaNoFim) */
+  reserva: string | null = null;
   /** regras das lutas do pet (a da ultima semeadura): CV21E_TR nos pets v13; null antes da primeira semeadura. Nao entra na assinatura: sai
       da versao */
   regras: RegrasLuta | null = null;
   /** evolucao: a semente da forma nova entra com nota-base pela posicao; o que ja foi aprendido fica; a
-      lista cabe na capacidade do estagio */
-  semear(forma: Forma, nome: string = nomeFormaLegado(forma), R: RegrasLuta = CV21E_TR): void {
-    const base = sementeDe(forma, R), cap = CV21.maxRegras[baseDe(forma.est)];
+      lista cabe na capacidade do estagio. `base`: a lista de partida (a semente da forma; a bancada da rodada de equilibrio passa as
+      candidatas, bots.LISTAS_V14) */
+  semear(forma: Forma, nome: string = nomeFormaLegado(forma), R: RegrasLuta = CV21E_TR, base: ListaGambits = sementeDe(forma, R)): void {
+    const cap = CV21.maxRegras[baseDe(forma.est)];
     this.forma = { ...forma }; this.linha = nome; this.final = base.final; this.regras = R;
     const novas: string[] = [];
     base.regras.forEach((r, i) => {
@@ -136,6 +154,8 @@ export class GambitsPet {
        elas ficam fora da lista (comChips) */
     if (!this.chipsNoFim) for (const k of [...this.chipsRegra].reverse()) if (permitida(regraDe(k), forma)) { const i = novas.indexOf(k); if (i >= 0) novas.splice(i, 1); novas.unshift(k); }
     this.ativas = novas.slice(0, cap);
+    const ultima = base.regras.length ? chaveRegra(base.regras[base.regras.length - 1]) : null;
+    this.reserva = this.reservaNoFim && ultima !== null && this.ativas.includes(ultima) ? ultima : null;
     for (const k of Object.keys(this.travas)) if (!this.ativas.includes(k)) delete this.travas[k];
     this.mudancas.push({ luta: this.nLutas, texto: `evoluiu para ${this.linha}: a forma semeou a lista (até ${cap} regras)` });
     this.ordenar(); this.versao++;
@@ -148,7 +168,9 @@ export class GambitsPet {
   }
   ordenar(): void {
     const n = this.ativas.length, fixas: Record<number, string> = {}, livres: string[] = [];
-    for (const k of this.ativas) if (!(k in this.travas)) livres.push(k);
+    /* DE-10: a reserva (sem trava) sai da ordenacao e volta no fim */
+    const reserva = this.reserva !== null && this.ativas.includes(this.reserva) && !(this.reserva in this.travas) ? this.reserva : null;
+    for (const k of this.ativas) if (!(k in this.travas) && k !== reserva) livres.push(k);
     for (const [k, i] of Object.entries(this.travas).sort((a, b) => a[1] - b[1])) {
       if (!this.ativas.includes(k)) continue;
       let j = Math.min(i, n - 1);
@@ -159,6 +181,7 @@ export class GambitsPet {
     const saida: (string | undefined)[] = [];
     for (let i = 0; i < n; i++) saida.push(i in fixas ? fixas[i] : livres.shift());
     this.ativas = saida.filter(Boolean) as string[];
+    if (reserva !== null) this.ativas.push(reserva);
   }
   /** candidatas de troca: regras que o pet ainda nao usa, nao vetadas e permitidas na forma. O repertorio, na ordem dele; nos
       pets v6 com a forma do vigia, mais as duas regras novas do vigia V21D (no fim, para a ordem das outras nao mudar) */
@@ -173,7 +196,13 @@ export class GambitsPet {
   listaSozinho(): string[] {
     const cap = CV21.maxRegras[baseDe(this.forma!.est)];
     const ks = [...this.ativas, ...this.vetos.filter(k => k in this.notas && !this.ativas.includes(k) && permitida(regraDe(k), this.forma!))];
-    return ks.map((k, i) => ({ k, i })).sort((a, b) => (this.notas[b.k] - this.notas[a.k]) || (a.i - b.i)).slice(0, cap).map(x => x.k);
+    return this.porNota(ks, cap);
+  }
+  /** a lista sem o dono (Lago e Palacio): pela nota, cortada na capacidade. DE-10: a reserva fica fora da nota e entra no fim */
+  private porNota(ks: string[], cap: number): string[] {
+    const r = this.reserva !== null && ks.includes(this.reserva) ? this.reserva : null, sem = r === null ? ks : ks.filter(k => k !== r);
+    const out = sem.map((k, i) => ({ k, i })).sort((a, b) => (this.notas[b.k] - this.notas[a.k]) || (a.i - b.i)).slice(0, r === null ? cap : cap - 1).map(x => x.k);
+    return r === null ? out : [...out, r];
   }
   /** Palacio da Fronteira (instalacoes.ts): a lista que o pet faria sozinho, sem o dono e sem os chips. A do Lago (listaSozinho: sem
       as travas, com as vetadas de volta) menos as regras que so estao no pet por um chip de regra. A regra de chip que ja estava na lista
@@ -184,14 +213,17 @@ export class GambitsPet {
     const cap = CV21.maxRegras[baseDe(this.forma!.est)];
     const ks = [...this.ativas, ...this.vetos.filter(k => k in this.notas && !this.ativas.includes(k) && permitida(regraDe(k), this.forma!))]
       .filter(k => !soDoChip.includes(k));
-    return ks.map((k, i) => ({ k, i })).sort((a, b) => (this.notas[b.k] - this.notas[a.k]) || (a.i - b.i)).slice(0, cap).map(x => x.k);
+    return this.porNota(ks, cap);
   }
   /* ---------------------------------------------------------------- chips de regra (pets v6; itens.ts) */
   /** pets v9: a lista `base` com as regras dos chips equipados no fim (as que ja estao nela ficam onde estao; so as que a forma permite).
       Nos v6-v8 (chipsNoFim falso) os chips ja estao na lista: `base` como esta */
   comChips(base: readonly string[]): string[] {
     if (!this.chipsNoFim || !this.forma) return base.slice();
-    return [...base, ...this.chipsRegra.filter(k => !base.includes(k) && permitida(regraDe(k), this.forma!))];
+    const chips = this.chipsRegra.filter(k => !base.includes(k) && permitida(regraDe(k), this.forma!));
+    /* DE-10: com a reserva no fim da lista, os chips entram antes dela (a reserva continua a ultima) */
+    const r = this.reserva !== null && base[base.length - 1] === this.reserva ? this.reserva : null;
+    return r === null ? [...base, ...chips] : [...base.slice(0, -1), ...chips, r];
   }
   /** por que a regra do chip nao pode entrar agora (null: pode). A regra entra no topo; com a lista cheia sai a regra livre (nao
       travada e nao de chip) de nota mais baixa */

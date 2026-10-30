@@ -67,7 +67,7 @@ export function TelaFronteira() {
           <ul className="fr-regras" aria-label="Regras da Liga">
             <li><b>Sem cura</b> entre as lutas: a vida e o guts passam de uma para a outra.</li>
             <li>Os <b>chips</b> equipados valem; as <b>cartas</b> não valem.</li>
-            <li>No limite de turnos, a luta fica com o <b>líder</b>.</li>
+            <li>No limite de tempo, a luta fica com o <b>líder</b>.</li>
             <li>Perder uma luta encerra a tentativa. Tentar de novo não custa nada.</li>
           </ul>
           {erroTamer && <p className="med-erro" role="alert">O registro do Tamer não abriu, e o app não vai gravar por cima dele: {erroTamer}</p>}

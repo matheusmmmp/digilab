@@ -1,10 +1,9 @@
-/* Tela Pet (docs/TAREFA_V2_TELA_PET.md, a Home da referencia de 2026-10-19): o pet no cenario 2.5D com a maior area da tela; embaixo,
-   so a necessidade prioritaria e tres acoes (as outras a um toque); o resto (necessidades, desejo, confianca, o porque da fala, as
-   atividades recentes e o DigiBrain) num painel sob demanda: folha no celular, coluna recolhivel no desktop.
-   Tudo derivado do motor na hora de desenhar; so mudarMotor() altera o pet. */
+/* Tela Pet sobre o habitat (docs/TAREFA_V2_LAYOUT_HABITAT.md, M3): a cena e a camada de fundo da casca (Habitat.tsx); aqui ficam so os
+   controles flutuantes: o dock de acoes no rodape, o chamado do pet, o balao de fala e, na borda direita, os botoes dos paineis pequenos
+   (Estado, Evolucao, Ultimas acoes, DigiBrain; um aberto por vez). Tudo derivado do motor na hora de desenhar; so mudarMotor() altera o pet. */
 import type { ReactNode } from "react";
-import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Ban, Brain, ChevronRight, Ellipsis, Gamepad2, Hand, House, Layers, MessageSquareText, PawPrint, Sparkles, Syringe } from "lucide-react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { Activity, ArrowRight, Ban, Brain, ChevronRight, Ellipsis, Hand, History, PawPrint, TrendingUp, type LucideIcon } from "lucide-react";
 import {
   ACAO_CHAMADO, ALVOS_DESEJO, CAT, DO_ESP, NOME_ESP, EMOCAO_TXT, FATORES_TXT, NOME_CHAMADO, NOME_EST, NOME_PET, OVO, TICK_INICIAL, TPD,
   chaveSprite, eNoite, expressarConfianca, nomeEstagio, nomeForma, nomeRivalConfianca, observacao, type AcaoDono, type Chamado, type MotivoVida, type Motor,
@@ -13,6 +12,7 @@ import { imagemAtlas, useAtlas } from "../../atlas.ts";
 import { Deco } from "../../componentes/Deco.tsx";
 import { BRASAO } from "../../decoracao.ts";
 import { Seg, blocos } from "../../componentes/Barras.tsx";
+import { MedidorHx, PainelHx } from "../../componentes/hx/index.ts";
 import { Grade, Peca } from "../../componentes/Imagens.tsx";
 import {
   detalheMotivo, falaDe, falaLLM, motivoParaApi, refsDoMotivo, rotuloLLM, useFalaLLM,
@@ -25,11 +25,9 @@ import { ROTULO_DONO, agir } from "../../acoes.ts";
 import { useJogo } from "../../jogo.ts";
 import { abrirEscolhaBrasao } from "../../jornada.ts";
 import { useTempo } from "../../tempo.ts";
-import { BarraRacao, FaixaRacao, InfoMundo } from "./PorRacao.tsx";
-import { useDesktop } from "../../desktop.ts";
-import { Folha } from "../../componentes/Folha.tsx";
-import { BotaoDigiBrain, ConteudoDigiBrain, SeloDigiBrain } from "../../componentes/DigiBrain.tsx";
-import { Modulo, Quadro, type Arranjo } from "../../componentes/Quadro.tsx";
+import { BarraRacao, FaixaRacao, InfoMundo, MensagemRacao } from "./PorRacao.tsx";
+import "../../estilo/pet_dock.css";
+import { ConteudoDigiBrain, SeloDigiBrain } from "../../componentes/DigiBrain.tsx";
 import { duracao, previsaoEvo } from "../crescer/TelaEvolucao.tsx";
 
 export const hhmm = (t: number): string => { const m = t % TPD; return String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0"); };
@@ -192,19 +190,9 @@ function Necessidades() {
   const { motor: m } = useJogo(), e = m.e, saude = Math.round(e.saude * 100);
   return (
     <div className="necessidades4">
-      <h2 className="desk-so nec-tit">Estado atual</h2>
-      {NEC_PET.map(([k, rot]) => (
-        <div className="nec" key={k}>
-          <span className="nec-rot">{rot}</span>
-          <Seg n={blocos(e[k], 5)} m={5} cls={e[k] < .5 ? "dl-seg--necessidade" : "dl-seg--acao"} />
-        </div>
-      ))}
-      <div className="dl-vida nec-saude">
-        <div className="dl-vida-topo"><span>Saúde</span><span className="dl-lcd">{saude}%{e.saude < .3 ? " · crítica" : ""}</span></div>
-        <div className="dl-vida-trilho" role="img" aria-label={`saúde ${saude} de 100`}>
-          <i style={{ width: `${e.saude * 100}%`, ...(e.saude < .3 ? { background: "var(--dl-need)" } : {}) }} />
-        </div>
-      </div>
+      {NEC_PET.map(([k, rot]) => <MedidorHx key={k} rotulo={rot} valor={blocos(e[k], 5)} max={5} tom={e[k] < .5 ? "alerta" : "neutro"} />)}
+      <MedidorHx rotulo="saúde" valor={saude} max={100} tom={e.saude < .3 ? "perigo" : "ok"} />
+      {e.saude < .3 && <span className="nec-critica">saúde crítica</span>}
     </div>
   );
 }
@@ -216,7 +204,7 @@ function Morte() {
     <div className="dl-card chamado chamado--morte" role="alert">
       <span className="chamado-txt"><b>{nomeForma(m.forma)} se foi</b>
         <span className="dl-apoio">{m.morte.causa === "lesoes" ? "se machucou demais nas lutas" : "a lesão ficou sem tratamento por tempo demais"}. O Diário guarda a vida inteira.</span></span>
-      <button type="button" className="dl-btn dl-btn--destaque" onClick={abrirEscolhaBrasao}>Chocar um ovo novo</button>
+      <button type="button" className="hx-continuar" onClick={abrirEscolhaBrasao}>Chocar um ovo novo</button>
     </div>
   );
 }
@@ -226,7 +214,7 @@ function Chamados({ agir }: { agir: (a: AcaoDono) => void }) {
     <div className="dl-card chamado">
       <span className="chamado-ic"><Peca nome="emoji_exclam" escala={2} reserva="!" /></span>
       <span className="chamado-txt"><b>Chamando você</b><span className="dl-apoio">um carinho atende o pedido</span></span>
-      <button type="button" className="dl-btn" onClick={() => agir("acariciar")}>Atender</button>
+      <button type="button" className="hx-continuar" onClick={() => agir("acariciar")}>Atender</button>
     </div>
   );
   /* chamado aberto (so o In-Training chama): barra da janela, nunca cronometro */
@@ -237,7 +225,7 @@ function Chamados({ agir }: { agir: (a: AcaoDono) => void }) {
         <span className="chamado-ic">{c === "fome" ? <Deco nome="Growth_Guide_Icon_06" largura={36} altura={34} reserva={<Peca nome="emoji_carne" escala={2} />} />
           : EMOTE_CHAMADO[c] ? <Peca nome={EMOTE_CHAMADO[c]!} escala={2} reserva="!" /> : "!"}</span>
         <span className="chamado-txt"><span className="chamado-tit"><b>Chamado: {NOME_CHAMADO[c]}</b><span className="dl-apoio">janela aberta</span></span><Seg n={blocos(resta / CAT.janelaChamado, 10)} m={10} /></span>
-        <button type="button" className="dl-btn" onClick={() => agir(ACAO_CHAMADO[c][0])}>Atender</button>
+        <button type="button" className="hx-continuar" onClick={() => agir(ACAO_CHAMADO[c][0])}>Atender</button>
       </div>
     );
   })}</>;
@@ -296,15 +284,12 @@ function Prioridade({ abrirDetalhes }: { abrirDetalhes: () => void }) {
   );
 }
 
-/* ------------------------------------------------ acoes do dono (o clique passa por src/acoes.ts, como o comando do chat) */
-const ACOES: [AcaoDono, string][] = [["alimentar", "sec"], ["limpar", "sec"], ["brincar", "sec"], ["acariciar", "sec"], ["elogiar", "destaque"], ["repreender", "sec"]];
-/* pets v4 (educacao-v1): petisco, banheiro e tratar lesao */
-const ACOES_V4: [AcaoDono, string][] = [["petisco", "sec"], ["levar_ao_banheiro", "sec"], ["tratar_lesao", "sec"]];
-/* pets v11: sem elogio, bronca, petisco e banheiro; o carinho e o tapa sao gestos no corpo (ACOES_DONO_JOGO_V11) */
-const ACOES_V11: [AcaoDono, string][] = [["alimentar", "sec"], ["limpar", "sec"], ["brincar", "sec"], ["acariciar", "destaque"], ["tapa", "sec"],
-  ["tratar_lesao", "sec"]];
-/** as tres em destaque: a que atende a necessidade prioritaria (se houver) e, depois, alimentar, brincar e carinho */
-const DESTAQUE_PADRAO: AcaoDono[] = ["alimentar", "brincar", "acariciar"];
+
+/* ------------------------------------------------ o dock de acoes (o clique passa por src/acoes.ts, como o comando do chat) */
+/* pets v11 em diante: sem elogio, bronca, petisco e banheiro (ACOES_DONO_JOGO_V11); o carinho e o tapa sao gestos no corpo. O dock mostra
+   as seis na ordem abaixo; no celular, as quatro primeiras e as outras em "Mais", com o Por racao (so pets v12, com mundo). */
+const ORDEM_DOCK: AcaoDono[] = ["alimentar", "brincar", "limpar", "acariciar", "tapa", "tratar_lesao"];
+const ICONE_QUEM = { dono: Hand, pet: PawPrint, recusa: Ban } as const;
 
 /* icone de cada acao do dono: prato do guia, gota, nota, coracao, joinha e exclamacao */
 const GOTA = <svg className="ic-gota" viewBox="0 0 8 8" width="24" height="24" aria-hidden="true"><path fill="#2C73E0" d="M3 0h2v2h1v1h1v3h-1v1h-4v-1h-1v-3h1v-1h1z" /><path fill="#BFE3FF" d="M2 3h1v2h-1z" /></svg>;
@@ -314,57 +299,63 @@ function IconeAcao({ a }: { a: AcaoDono }) {
   if (a === "limpar") return GOTA;
   if (a === "levar_ao_banheiro") return GOTA;
   if (a === "tratar_lesao") return CRUZ;
-  const em = ({ brincar: "emoji_nota", acariciar: "emoji_coracao", elogiar: "emoji_joinha", repreender: "emoji_exclam", petisco: "emoji_estrela" } as Partial<Record<AcaoDono, string>>)[a];
+  const em = ({ brincar: "emoji_nota", acariciar: "emoji_coracao", elogiar: "emoji_joinha", repreender: "emoji_exclam", petisco: "emoji_estrela", tapa: "emoji_exclam" } as Partial<Record<AcaoDono, string>>)[a];
   return em ? <Peca nome={em} escala={2} /> : null;
 }
-function AcoesPet() {
-  const { motor: m, nascendo } = useJogo(), [mais, setMais] = useState(false);
-  /* ao abrir, as acoes extras entram na tela (no celular ficam abaixo da dobra) */
-  useEffect(() => { if (mais) document.getElementById("acoes-mais")?.scrollIntoView({ block: "nearest" }); }, [mais]);
-  const todas = ACOES_V11.map(([a]) => a);
+
+/** a partir de 900 px (a mesma largura em que a casca vira trilho) o dock mostra as seis acoes; abaixo, quatro e o Mais */
+const CONSULTA_LARGO = "(min-width: 900px)";
+const eLargo = (): boolean => typeof matchMedia === "function" && matchMedia(CONSULTA_LARGO).matches;
+function useLargo(): boolean {
+  return useSyncExternalStore(o => {
+    if (typeof matchMedia !== "function") return () => {};
+    const mq = matchMedia(CONSULTA_LARGO); mq.addEventListener("change", o);
+    return () => mq.removeEventListener("change", o);
+  }, eLargo, () => true);
+}
+
+function DockPet() {
+  const { motor: m, nascendo } = useJogo(), largo = useLargo(), [mais, setMais] = useState(false);
+  const botaoMais = useRef<HTMLButtonElement>(null), menu = useRef<HTMLDivElement>(null);
   const sugerida = resumoAgora(m, nascendo).acao;
-  const destaque = [...new Set([...(sugerida ? [sugerida] : []), ...DESTAQUE_PADRAO])].filter(a => todas.includes(a)).slice(0, 3);
-  const resto = todas.filter(a => !destaque.includes(a));
+  const fixas = largo ? ORDEM_DOCK : ORDEM_DOCK.slice(0, 4), extras = ORDEM_DOCK.filter(a => !fixas.includes(a));
+  const comRacao = !!m.mundo && nascendo === 0, temMais = extras.length > 0 || comRacao;
+  const fechar = (voltarFoco: boolean) => { setMais(false); if (voltarFoco) botaoMais.current?.focus(); };
+  useEffect(() => {
+    if (!mais) return;
+    menu.current?.querySelector<HTMLElement>("button")?.focus();
+    const tecla = (e: KeyboardEvent) => { if (e.key === "Escape") { e.stopPropagation(); fechar(true); } };
+    const fora = (e: PointerEvent) => { const n = e.target as Node; if (!menu.current?.contains(n) && !botaoMais.current?.contains(n)) setMais(false); };
+    document.addEventListener("keydown", tecla); document.addEventListener("pointerdown", fora);
+    return () => { document.removeEventListener("keydown", tecla); document.removeEventListener("pointerdown", fora); };
+  }, [mais]);
+  useEffect(() => { if (!temMais) setMais(false); }, [temMais]);
   /* v12: o Alimentar e a reserva temporaria do MVP (poe a racao no comedouro); a interacao planejada e por a racao no lugar (BarraRacao) */
   const reserva = (a: AcaoDono) => !!m.mundo && a === "alimentar";
-  const botao = (a: AcaoDono, cls: string) => <button type="button" key={a} className={`dl-btn ${cls}`} onClick={() => agir(a)}
+  const botao = (a: AcaoDono, cls: string) => <button type="button" key={a} className={`hx-btn dock-bt ${cls}`} onClick={() => { agir(a); setMais(false); }}
     aria-label={reserva(a) ? `${ROTULO_DONO[a]} (reserva: põe a ração no comedouro)` : undefined} title={reserva(a) ? "Reserva temporária: põe a ração no comedouro" : undefined}>
     <IconeAcao a={a} /><span>{ROTULO_DONO[a]}</span>{reserva(a) && <small className="acao-reserva">reserva</small>}</button>;
   return (
-    <div className="acoes-pet" role="group" aria-label="Cuidar e ensinar">
-      {destaque.map((a, i) => botao(a, i === 0 && sugerida === a ? "acao-destaque acao-destaque--sugerida" : "dl-btn--sec acao-destaque"))}
-      <button type="button" className="dl-btn dl-btn--sec acao-mais" aria-expanded={mais} aria-controls="acoes-mais" onClick={() => setMais(!mais)}><Ellipsis size={24} aria-hidden="true" /><span>Mais</span></button>
-      {mais && <div className="acoes-mais" id="acoes-mais">{resto.map(a => botao(a, "dl-btn--sec acao-extra"))}</div>}
+    <div className="acoes-pet dock" role="group" aria-label="Cuidar e ensinar">
+      {fixas.map(a => botao(a, "acao-destaque" + (sugerida === a ? " acao-destaque--sugerida" : "")))}
+      {temMais && <button type="button" ref={botaoMais} className="hx-btn dock-bt acao-mais" aria-expanded={mais} aria-controls="acoes-mais" aria-haspopup="true"
+        onClick={() => setMais(!mais)}><Ellipsis size={24} aria-hidden="true" /><span>Mais</span></button>}
+      {mais && <div className="acoes-mais dock-mais" id="acoes-mais" ref={menu} role="group" aria-label="Mais ações">
+        {extras.map(a => botao(a, "acao-extra"))}
+        {comRacao && <BarraRacao aoUsar={() => fechar(false)} />}
+      </div>}
     </div>
   );
 }
 
-/* ------------------------------------------------ o painel de detalhes do celular (sob demanda, numa folha) */
-type Secao = "estado" | "fala" | "digibrain";
-function PainelDetalhes({ v, foco }: { v: VistaFala; foco: Secao }) {
-  const secoes: [Secao, ReactNode][] = [
-    ["fala", <DetalheFala key="fala" v={v} />],
-    ["estado", <div key="estado" className="det-estado"><Necessidades /><div className="dl-par"><Desejo /></div><EstadoConfianca /></div>],
-  ];
-  secoes.sort(([a], [b]) => (b === foco ? 1 : 0) - (a === foco ? 1 : 0));
-  return <div className="pet-detalhes-conteudo">{secoes.map(([, n]) => n)}</div>;
-}
-
-/* ------------------------------------------------ o desktop: o quadro modular (docs/TAREFA_V2_PET_QUADRO.md) */
-/* a coluna principal com o habitat e as acoes; a lateral com os modulos que o motor sustenta. O arranjo e preferencia de quem joga
-   (localStorage), fora do save */
-const CHAVE_QUADRO = "digilab-web-v21-sprites-quadro-pet";
-const PADRAO_QUADRO: Arranjo = {
-  principal: ["cenario", "acoes"], lado: ["estado", "desejo", "evolucao", "registro", "digibrain", "fala"], recolhidos: ["fala"], ladoRecolhido: false,
-};
-const CRESCE = ["cenario", "registro"] as const;
-const ICONE_QUEM = { dono: Hand, pet: PawPrint, recusa: Ban } as const;
+/* ------------------------------------------------ os paineis recolhiveis sobre o habitat (um aberto por vez) */
+type Painel = "estado" | "evolucao" | "acoes" | "digibrain" | "fala";
 
 /** a proxima evolucao, so com o que o motor tem (previsaoEvo, o mesmo da tela Evolucao): a forma atual, o nivel que vem e, se o motor ja
     decidiu (o Mega), a forma seguinte; sem proxima evolucao, nada */
 function ProximaEvolucao({ irEvolucao }: { irEvolucao: () => void }) {
   const { motor: m } = useJogo(), a = useAtlas(), p = previsaoEvo(m);
-  if (!p) return null;
+  if (!p) return <p className="mod-vazio">sem próxima evolução</p>;
   const img = (nome: string) => { if (a.tipo !== "ok") return null; const i = imagemAtlas(a, nome); return <img className="dl-pix evo-mod-spr" src={i.url} width={i.w * 2} height={i.h * 2} alt="" />; };
   const decidida = p.prox.est === "mega";
   return (
@@ -375,108 +366,90 @@ function ProximaEvolucao({ irEvolucao }: { irEvolucao: () => void }) {
         <span className="evo-mod-forma">{decidida ? img(chaveSprite(p.prox)) : <b className="evo-mod-q" aria-hidden="true">?</b>}<small>{decidida ? nomeForma(p.prox) : nomeEstagio(p.prox)}</small></span>
       </div>
       <p className="evo-mod-txt">{p.falta > 0 ? <>até virar {nomeEstagio(p.prox)}: <b>{duracao(p.falta)}</b></> : <>o tempo do estágio já passou; o que falta está na árvore</>}</p>
-      <button type="button" className="mod-link" onClick={irEvolucao}>Ver a árvore de evolução</button>
+      <button type="button" className="hx-btn mod-link" onClick={irEvolucao}>Ver a árvore de evolução</button>
     </div>
   );
 }
 /** as ultimas linhas do registro (o que voce fez, o que ele fez e as recusas) */
-function UltimasAcoes() {
+function UltimasAcoes({ irRegistro }: { irRegistro: () => void }) {
   const { motor: m } = useJogo();
   const itens = m.historico.filter(h => h.quem === "dono" || h.quem === "pet" || h.quem === "recusa").slice(-8).reverse();
   const texto = (h: (typeof itens)[number]) => h.quem === "pet" ? NOME_PET[h.a as keyof typeof NOME_PET] ?? h.a : h.a;
-  if (!itens.length) return <p className="mod-vazio">nada no registro ainda</p>;
   return (
-    <ol className="mod-registro">{itens.map((h, i) => {
-      const I = ICONE_QUEM[h.quem as keyof typeof ICONE_QUEM];
-      return <li key={i} data-quem={h.quem}><time>{hhmm(h.t)}</time><span className="mod-registro-ic"><I size={18} aria-hidden="true" /></span>
-        <span>{h.quem === "dono" ? "você: " : h.quem === "recusa" ? "recusou: " : ""}{texto(h)}</span></li>;
-    })}</ol>
-  );
-}
-function TelaPetDesktop({ irRegistro, irEvolucao }: { irRegistro: () => void; irEvolucao: () => void }) {
-  const { motor: m, nascendo } = useJogo(), fala = useFala(), abrir = useRef<((id: string) => void) | null>(null);
-  const d = m.desejoAtual(m.observacaoAgora(), m.e.tick);
-  const render = (id: string): ReactNode | null => {
-    switch (id) {
-      case "cenario": return null;      /* o habitat e a camada de fundo da casca (Habitat.tsx) */
-      case "acoes": return (
-        <Modulo icone={Gamepad2} titulo="Ações">
-          <div className="pet-doca"><Prioridade abrirDetalhes={() => abrir.current?.("estado")} />{m.mundo && nascendo === 0 && !m.morte && <BarraRacao />}{!m.morte && <AcoesPet />}</div>
-        </Modulo>);
-      case "estado": return (
-        <Modulo icone={Syringe} titulo="Estado atual" aside={<Emocao />}>
-          <div className="det-estado"><Necessidades /><EstadoConfianca /></div>
-        </Modulo>);
-      case "desejo": return (
-        <Modulo icone={Sparkles} titulo="Desejo">
-          {d && !m.morte ? <div className="dl-par"><Desejo /></div> : <p className="mod-vazio">nenhum desejo agora</p>}
-        </Modulo>);
-      case "evolucao": return previsaoEvo(m) && !m.morte && nascendo === 0 ? (
-        <Modulo icone={Layers} titulo="Próxima evolução"><ProximaEvolucao irEvolucao={irEvolucao} /></Modulo>) : null;
-      case "registro": return (
-        <Modulo icone={Layers} titulo="Últimas ações" aside={<button type="button" className="mod-link" onClick={irRegistro}>Ver tudo</button>}>
-          <UltimasAcoes />
-        </Modulo>);
-      case "digibrain": return nascendo === 0 ? (
-        <Modulo icone={Brain} titulo="DigiBrain" aside={<SeloDigiBrain replay={false} />}>
-          <div className="digibrain digibrain--modulo"><ConteudoDigiBrain /></div>
-        </Modulo>) : null;
-      case "fala": return nascendo === 0 && !m.morte ? (
-        <Modulo icone={MessageSquareText} titulo="Por que ele disse isso"><DetalheFala v={fala} semTitulo /></Modulo>) : null;
-      default: throw new Error("módulo desconhecido no quadro do Pet: " + id);
-    }
-  };
-  return (
-    <section className="pet-tela pet-home pet-home--quadro dl" aria-label="Tela do pet">
-      <div className="pet-balcao">
-        {nascendo === 0 && !m.morte && <BalaoFala v={fala} abrir={() => abrir.current?.("fala")} />}
-        <BalaoCausa />
-        {m.mundo && <InfoMundo />}
-        {m.mundo && nascendo === 0 && !m.morte && <FaixaRacao />}
-      </div>
-      <div className="pet-quadro"><Quadro chave={CHAVE_QUADRO} padrao={PADRAO_QUADRO} render={render} cresce={CRESCE} abrirRef={abrir} /></div>
-    </section>
+    <>
+      {itens.length ? <ol className="mod-registro">{itens.map((h, i) => {
+        const I = ICONE_QUEM[h.quem as keyof typeof ICONE_QUEM];
+        return <li key={i} data-quem={h.quem}><time>{hhmm(h.t)}</time><span className="mod-registro-ic"><I size={18} aria-hidden="true" /></span>
+          <span>{h.quem === "dono" ? "você: " : h.quem === "recusa" ? "recusou: " : ""}{texto(h)}</span></li>;
+      })}</ol> : <p className="mod-vazio">nada no registro ainda</p>}
+      <button type="button" className="hx-btn mod-link" onClick={irRegistro}>Ver tudo no Diário</button>
+    </>
   );
 }
 
+const TITULO_PAINEL: Record<Painel, string> = { estado: "Estado atual", evolucao: "Evolução", acoes: "Últimas ações", digibrain: "DigiBrain", fala: "Por que ele disse isso" };
+const BOTOES_LADO: [Exclude<Painel, "fala">, LucideIcon][] = [["estado", Activity], ["evolucao", TrendingUp], ["acoes", History], ["digibrain", Brain]];
+
+function ConteudoPainel({ id, v, irRegistro, irEvolucao }: { id: Painel; v: VistaFala; irRegistro: () => void; irEvolucao: () => void }) {
+  switch (id) {
+    case "estado": return <div className="det-estado"><Necessidades /><Desejo /><EstadoConfianca /></div>;
+    case "evolucao": return <ProximaEvolucao irEvolucao={irEvolucao} />;
+    case "acoes": return <UltimasAcoes irRegistro={irRegistro} />;
+    /* o DigiBrain e o porque da fala mantem o visual claro de hoje (.dl) dentro do painel escuro; a pele deles fica para o polimento */
+    case "digibrain": return <div className="pet-painel__folha dl digibrain"><div className="db-folha-selo"><SeloDigiBrain replay={false} /></div><ConteudoDigiBrain /></div>;
+    case "fala": return <div className="pet-painel__folha dl"><DetalheFala v={v} semTitulo /></div>;
+  }
+}
+
 /* ------------------------------------------------ a tela */
-/** a doca ocupa o pe da tela: o habitat (camada de fundo) deixa esse espaco livre para o pet nao ficar coberto */
-function useReservaDoHabitat(ref: { current: HTMLElement | null }, ativo: boolean): void {
+/** o dock ocupa o pe da tela: o habitat (camada de fundo) deixa esse espaco livre para o pet nao ficar coberto */
+function useReservaDoHabitat(ref: { current: HTMLElement | null }): void {
   useEffect(() => {
-    const el = ref.current; if (!ativo || !el) return;
+    const el = ref.current; if (!el) return;
     const raiz = document.documentElement.style;
-    const medir = () => raiz.setProperty("--hab-baixo", `calc(${Math.ceil(el.getBoundingClientRect().height) + 10}px + var(--casca-barra))`);
+    const medir = () => raiz.setProperty("--hab-baixo", `calc(${Math.ceil(el.getBoundingClientRect().height) + 24}px + var(--casca-barra))`);
     medir();
     const ro = new ResizeObserver(medir); ro.observe(el);
     return () => { ro.disconnect(); raiz.removeProperty("--hab-baixo"); };
-  }, [ref, ativo]);
+  }, [ref]);
 }
 export function TelaPet({ irRegistro, irEvolucao }: { irRegistro: () => void; irEvolucao: () => void }) {
-  const { motor: m, nascendo } = useJogo(), desk = useDesktop();
-  const fala = useFala(), [detalhes, setDetalhes] = useState<Secao | null>(null), doca = useRef<HTMLDivElement>(null);
-  useReservaDoHabitat(doca, !desk);
-  if (desk) return <TelaPetDesktop irRegistro={irRegistro} irEvolucao={irEvolucao} />;
+  const { motor: m, nascendo } = useJogo(), fala = useFala(), [aberto, setAberto] = useState<Painel | null>(null);
+  const painel = useRef<HTMLDivElement>(null), gatilho = useRef<HTMLElement | null>(null), dock = useRef<HTMLDivElement>(null);
+  useReservaDoHabitat(dock);
+  const vivo = nascendo === 0 && !m.morte, temEvo = vivo && !!previsaoEvo(m);
+  /* o painel que deixou de fazer sentido (o ovo chocando, o pet que morreu) fecha sozinho */
+  const valido = (p: Painel | null): p is Painel => p !== null && (p === "estado" || (nascendo === 0 && (p !== "evolucao" || temEvo)));
+  const atual = valido(aberto) ? aberto : null;
+  const abrir = (p: Painel) => { gatilho.current = document.activeElement as HTMLElement | null; setAberto(aberto === p ? null : p); };
+  const fechar = () => { setAberto(null); const g = gatilho.current; gatilho.current = null; setTimeout(() => { if (g?.isConnected) g.focus(); }, 0); };
+  useEffect(() => { if (atual) painel.current?.focus(); }, [atual]);
+  const botoesLado = BOTOES_LADO.filter(([id]) => id === "estado" || (id === "digibrain" ? nascendo === 0 : id === "evolucao" ? temEvo : vivo));
   return (
     <section className="pet-tela pet-home dl" aria-label="Tela do pet">
-      <div className="pet-home-corpo">
-        <div className="pet-home-principal">
-          <div className="pet-balcao">
-            <div className="cena-topo">
-              <Emocao />
-              <span className="cena-topo-dir">{nascendo === 0 && <BotaoDigiBrain />}</span>
-            </div>
-            {nascendo === 0 && !m.morte && <BalaoFala v={fala} abrir={() => setDetalhes("fala")} />}
-            <BalaoCausa />
-            {m.mundo && <InfoMundo />}
-            {m.mundo && nascendo === 0 && !m.morte && <FaixaRacao />}
-          </div>
-          <div className="pet-doca" ref={doca}>
-            <Prioridade abrirDetalhes={() => setDetalhes("estado")} />
-            {m.mundo && nascendo === 0 && !m.morte && <BarraRacao />}
-            {!m.morte && <AcoesPet />}
-          </div>
+      <div className="pet-balcao">
+        <div className="cena-topo"><Emocao /></div>
+        {vivo && <BalaoFala v={fala} abrir={() => abrir("fala")} />}
+        <BalaoCausa />
+        {m.mundo && <div className="mundo-linhas"><InfoMundo /><MensagemRacao /></div>}
+        {m.mundo && vivo && <FaixaRacao />}
+      </div>
+      <nav className="pet-lado" aria-label="Painéis do pet">
+        {botoesLado.map(([id, I]) => (
+          <button type="button" key={id} className="hx-btn pet-lado__bt" aria-pressed={atual === id} aria-controls="pet-painel" aria-label={TITULO_PAINEL[id]} title={TITULO_PAINEL[id]}
+            onClick={() => abrir(id)}><I size={22} aria-hidden="true" /></button>
+        ))}
+      </nav>
+      {atual && (
+        <div className="pet-painel" id="pet-painel" ref={painel} tabIndex={-1} onKeyDown={e => { if (e.key === "Escape") { e.stopPropagation(); fechar(); } }}>
+          <PainelHx titulo={TITULO_PAINEL[atual]} onFechar={fechar} rotuloFechar={`Fechar ${TITULO_PAINEL[atual]}`} className="pet-painel__hx">
+            <ConteudoPainel id={atual} v={fala} irRegistro={irRegistro} irEvolucao={irEvolucao} />
+          </PainelHx>
         </div>
-        {detalhes && <Folha titulo="Como ele está" fechar={() => setDetalhes(null)}><PainelDetalhes v={fala} foco={detalhes} /></Folha>}
+      )}
+      <div className="pet-dock" ref={dock}>
+        <Prioridade abrirDetalhes={() => abrir("estado")} />
+        {!m.morte && <DockPet />}
       </div>
     </section>
   );

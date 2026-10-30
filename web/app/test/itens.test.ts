@@ -5,7 +5,7 @@
 import { describe, expect, test } from "vitest";
 import {
   CARTA_DA_REVANCHE, CAT, CIT, CIT_V9, CTR, CV, CV21E_TR, DUR_EVO, ITENS, ITEM_DA_MEDALHA, MEDALHAS, Motor, STATS, TECNICAS, bonusChipsStat, cartaDe, chaveRegra,
-  chipDe, chipServe, comCarta, hashSemente, itemDe, jogarArena, jogarLuta, jogarTR, lutadorBot, lutadorPet, vagasDeChip, type Estagio, type EventoRegistro,
+  chipDe, chipServe, comCarta, hashSemente, itemDe, jogarArena, jogarLuta, jogarTR, lutadorBot, lutadorPet, regraDe, regraQueCobre, vagasDeChip, type Estagio, type EventoRegistro,
   type Stats,
 } from "../motor/index.ts";
 import { CHAVE, textoSave, type Armazenamento } from "../src/save.ts";
@@ -147,6 +147,34 @@ describe("chip de regra: uma regra nova na lista do pet", () => {
     expect(lista()).toEqual(gp.ativas);
     expect(gp.ativas).toHaveLength(5);
   });
+  test("na luta em tempo real a regra do chip dispara: alguma acao do pet tem o motivo dela (COMBATE-TR, etapa R4)", () => {
+    /* o Perseguidor num Ultimate contra o atirador: uma regra que a lista do pet nao tem (o Recuo e o Oportunista repetem a condicao de uma
+       regra que o pet ja tem, e a primeira regra valida decide: ficam cobertos) */
+    const m = petV13(74, "adulto", 3);
+    m.equipar("chip_perseguidor");
+    comItensValendo(m);
+    let disparou = 0;
+    for (let k = 0; k < 10; k++) {
+      const res = m.lutar("atirador", hashSemente("chip-tr", 74, k)).res;
+      cuidar(m);
+      /* a lista muda de uma luta para outra (o pet aprende): o chip e sempre a ultima regra da lista com que ele lutou */
+      const regras = res.tr.entrada.A.estilo.gambits!.regras.map(chaveRegra), iChip = regras.length - 1;
+      expect(regras[iChip]).toBe(PERSEGUIDOR);
+      expect(regras.indexOf(PERSEGUIDOR)).toBe(iChip);
+      disparou += res.tr.acoes.filter(x => x.lado === 0 && x.motivo === iChip).length;
+    }
+    expect(disparou).toBeGreaterThan(0);
+  });
+  test("o chip coberto (DE-3): uma regra ativa com so condicoes do chip, ou a mesma regra, cobre o chip; o aviso nao muda a lista", () => {
+    const regra = (id: string) => (chipDe(id) as { regra: Parameters<typeof chaveRegra>[0] }).regra;
+    const m = petV13(72, "adolescente", 1), ativas = m.gp!.ativas.map(regraDe);
+    /* o pet 72 tem "rival preparando -> contra-golpe" e a propria regra do Oportunista: os dois chips ficam cobertos */
+    expect(chaveRegra(regraQueCobre(ativas, regra("chip_recuo"))!)).toBe(ativas.map(chaveRegra).find(k => k.includes("oponente_preparando")));
+    expect(regraQueCobre(ativas, regra("chip_oportunista"))).not.toBeNull();
+    /* o Perseguidor ("rival insiste em atirar") nao repete nenhuma condicao do pet */
+    expect(regraQueCobre(ativas, regra("chip_perseguidor"))).toBeNull();
+    expect(regraQueCobre([], regra("chip_recuo"))).toBeNull();
+  });
   test("vagas, estagio e duplicado: o motor recusa com o porque", () => {
     const m = petV13(73, "adolescente", 1);
     expect(m.porqueNaoEquipa("chip_perseguidor")).toMatch(/pede um Ultimate/);
@@ -177,6 +205,11 @@ describe("cartas: o efeito de uma luta so", () => {
     expect(jogarLuta(f, lutadorBot("tartaruga"), 1, CV21E_TR).E0.L[0].guts).toBe(f.cond.guts0);
     expect(o.estilo.eps).toBe(0);
     expect(comCarta(L, null)).toBe(L);
+    /* na luta em tempo real (R4): com o Foco o pet nunca explora; sem ele, explora em alguma das lutas */
+    const exploracoes = (A: typeof L) => Array.from({ length: 20 }, (_, s) => jogarLuta(A, lutadorBot("tartaruga"), s, CV21E_TR).tr.acoes
+      .filter(x => x.lado === 0 && x.motivo === "exploracao").length).reduce((a, b) => a + b, 0);
+    expect(exploracoes(o)).toBe(0);
+    expect(exploracoes(L)).toBeGreaterThan(0);
   });
   test("Cura: na primeira vez abaixo de 30% cura 20% da vida maxima, uma vez so; caido nao cura", () => {
     const c = cartaDe("carta_cura").carta.cura!;

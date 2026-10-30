@@ -3,14 +3,12 @@
    memoria do pet. A tela so escolhe o texto e formata. Nos pets v1 a v10 nao aparece (PW-7). Nada aqui anima para fingir atividade, e
    nenhum rotulo diz "pensando" ou "sentindo". Desde 2026-10-19 o desenho do cerebro e o mapa dos pesos (MapaPesos.tsx), que acende a
    cada decisao; o icone estatico ficou so no botao do celular. */
-import { useState } from "react";
 import { EMOCAO_TXT, NOME_PET, type AcaoPet, type LoboBarra, type RegraLobos } from "../../motor/index.ts";
 import { useJogo } from "../jogo.ts";
 import { lutaSeguraTempo } from "../luta.ts";
 import { estadoSelo } from "../seloDigiBrain.ts";
 import { useTempo } from "../tempo.ts";
 import { hhmm } from "../telas/pet/TelaPet.tsx";
-import { Folha } from "./Folha.tsx";
 import { LegendaMapa, MapaPesos } from "./MapaPesos.tsx";
 
 /** a regra do instinto que disparou, em texto do jogo */
@@ -128,26 +126,4 @@ export function ConteudoDigiBrain() {
       </section>
     </div>
   );
-}
-
-/** desktop: o card do painel, na coluna entre o habitat e a coluna de sempre (prancha DigiBrainDesktop) */
-export function CardDigiBrain({ replay = false }: { replay?: boolean }) {
-  return (
-    <section className="dl-card digibrain" aria-labelledby="db-tit">
-      <div className="db-cab"><h2 id="db-tit">DigiBrain</h2><SeloDigiBrain replay={replay} /></div>
-      <div className="db-rola"><ConteudoDigiBrain /></div>
-    </section>
-  );
-}
-
-/** celular: o botao no canto do palco abre o painel numa folha (prancha DigiBrain390) */
-export function BotaoDigiBrain({ replay = false }: { replay?: boolean }) {
-  const [aberto, setAberto] = useState(false);
-  return <>
-    <button type="button" className="db-botao" aria-haspopup="dialog" onClick={() => setAberto(true)}><IconeCerebro largura={18} />DigiBrain</button>
-    {aberto && <Folha titulo="DigiBrain" fechar={() => setAberto(false)}>
-      <div className="db-folha-selo"><SeloDigiBrain replay={replay} /></div>
-      <ConteudoDigiBrain />
-    </Folha>}
-  </>;
 }

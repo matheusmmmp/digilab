@@ -74,8 +74,7 @@ for (const [versao, save] of Object.entries(SAVES)) {
     /* cuidar */
     await page.locator(".dl-nav").getByRole("button", { name: "Pet", exact: true }).click();
     const d0 = await numLog(page, "d");
-    /* a tela Pet da Home (TAREFA_V2_TELA_PET): tres acoes em destaque e as outras em Mais */
-    await page.locator(".acoes-pet .acao-mais").click();
+    /* a tela Pet no habitat (M3): o dock tem as seis acoes no desktop (o Mais so tem o Por racao dos pets com mundo) */
     /* o Alimentar dos pets v12 em diante poe a racao no comedouro (o evento "dc"); os pets v13 nao tem elogio */
     const dc0 = await numLog(page, "dc");
     for (const a of ["Alimentar", "Limpar", "Brincar", "Carinho"]) await page.locator(".acoes-pet button", { hasText: a }).click();
@@ -195,9 +194,9 @@ test("vários pets: só o ativo corre o tempo", async ({ page }) => {
   expect(depois.a).not.toBe(antes.a);              /* o ativo andou (o registro junta avanços de tempo seguidos) */
   await page.locator(".topo-retrato").click();
   /* desktop (MpListaDesktop): pagina com um espaco por pet (o ativo + 6 guardados) e o painel do escolhido */
-  await expect(page.locator(".mpl-slot:not(.mpl-livre)")).toHaveCount(7);
-  await page.locator(".mpl-slot").nth(1).click();
-  await page.locator(".mpl-detalhe").getByRole("button", { name: "Tornar ativo" }).click();
+  await expect(page.locator(".mc-slot:not(.mc-slot--livre)")).toHaveCount(7);
+  await page.locator(".mc-slot").nth(1).click();
+  await page.locator(".mc-detalhe").getByRole("button", { name: "Tornar ativo" }).click();
   await expect(page.locator(".topo-pet .dl-tag--estagio")).toHaveText(/In-Training/i);
   const g = JSON.parse(await page.evaluate(c => localStorage.getItem(c + "-guardados")!, CHAVE));
   expect(g).toHaveLength(6);                       /* o Champion de antes foi para o lugar dele */
@@ -278,7 +277,7 @@ for (const largura of [390, 899, 900, 1099, 1100, 1280]) {
     await semear(page, SAVES.champion);
     const lateral = largura >= 900, desktop = largura >= 1100;
     /* a Exploracao: o mapa 3D e, no desktop, o lugar na coluna da direita (no celular o lugar abre na folha: o cartao fica no mapa) */
-    for (const [rota, esq, dir] of [["crescer/evolucao", ".evo-arv", ".evo-hist"], ["lutar/campanha", ".mapa-expl", ".expl-cartao"], ["conversar/chat", ".conv-lista", ".conv-status"]]) {
+    for (const [rota, esq, dir] of [["crescer/evolucao", ".evo-arv", ".evo-hist"], ["lutar/campanha", ".mapa-expl", ".expl-cartao"]]) {
       await page.goto(APP + "#/" + rota);
       await page.waitForTimeout(500);
       const r = await page.evaluate(([e, d]) => {
@@ -974,6 +973,16 @@ async function semearSalao(page: Page, tamer: object = TAMER_CAMPEAO): Promise<v
 }
 const lerGuardadosE2e = (page: Page) => page.evaluate(c => JSON.parse(localStorage.getItem(c + "-guardados") ?? "[]"), CHAVE);
 
+/** a luta da Fabrica ou do Salao vai ao palco da luta em tempo real (COMBATE-TR, etapa R4): o palco abre com o texto dela, o relogio anda,
+    e o Desistir (que so pula a animacao: a luta ja esta gravada) volta para a Fronteira */
+async function verNoPalcoEVoltar(page: Page, texto: RegExp | string): Promise<void> {
+  await expect(page).toHaveURL(/#\/lutar\/luta$/);
+  await expect(page.locator(".luta-turno")).toContainText(texto);
+  await expect(page.getByTestId("luta-relogio")).toHaveText(/^0:0[1-9]$/, { timeout: 15_000 });
+  await page.locator(".luta-desistir").click();
+  await page.locator("dialog.modal-conf[open]").getByRole("button", { name: "Desistir" }).click();
+  await expect(page).toHaveURL(/#\/lutar\/fronteira$/);
+}
 test("fronteira: a Fábrica aluga 1 de 3 Megas, luta, oferece a troca depois da vitória e grava tudo só no Tamer", async ({ page }) => {
   await semear(page, SAVE_LIGA, undefined, TAMER_CAMPEAO);
   const erros = vigiarErros(page);
@@ -995,6 +1004,7 @@ test("fronteira: a Fábrica aluga 1 de 3 Megas, luta, oferece a troca depois da 
   await expect(fab.locator(".fb-status")).toContainText("Tentativa 1 · série 1, luta 1 de 3 · 0 séries vencidas");
   await expect(fab.locator(".fb-alugado")).toContainText("Sakuyamon");
   await fab.locator(".fb-lutar").click();
+  await verNoPalcoEVoltar(page, "Fábrica · série 1, luta 1 de 3: Sakuyamon (alugado)");
   await expect(fab.locator(".fb-ultima")).toContainText("Luta 1: venceu Imperialdramon Fighter Mode (Duelista)");
   /* a oferta de troca depois da vitoria; trocando, o alugado passa a ser o rival derrotado, que entra com a vida cheia (as regras dos v9,
      fase 3 do equilibrio geral: a tentativa nova grava a versao das regras no registro do Tamer) */
@@ -1004,6 +1014,7 @@ test("fronteira: a Fábrica aluga 1 de 3 Megas, luta, oferece a troca depois da 
   await expect(fab.locator(".fb-alugado")).toContainText("Imperialdramon Fighter Mode");
   await expect(fab.locator(".fb-status")).toContainText("série 1, luta 2 de 3");
   await fab.locator(".fb-lutar").click();
+  await verNoPalcoEVoltar(page, "Fábrica · série 1, luta 2 de 3");
   /* a luta em tempo real (COMBATE-TR, etapa R2): a luta 2, contra o SlashAngemon (Espelho), chega ao limite e fica com o rival, o desafiado.
      Perdeu, acabou: o resumo e "Tentar de novo" */
   await expect(fab.locator(".fb-ultima")).toContainText("Última tentativa: 0 séries vencidas; perdeu para");
@@ -1043,7 +1054,8 @@ test("fronteira: o Salão, com um pet de cada nível (o ativo e os guardados), g
   await expect(sl.locator(".med-espera")).toHaveCount(0);
   const l0 = await numLog(page, "l"), g0 = (await lerGuardadosE2e(page)).map((g: { log: unknown[] }) => g.log.length);
   await sl.locator(".fr-inst-tentar:not([disabled])").click();
-  await expect(sl.locator("p[role=status]", { hasText: "Venceu os 4 níveis!" })).toBeVisible();
+  /* a tentativa vai ao palco, um pet de cada nivel (COMBATE-TR, etapa R4) */
+  await verNoPalcoEVoltar(page, "Salão · nível Rookie: Patamon");
   await expect(sl.locator(".fr-inst-rec .dl-num")).toHaveText("4");
   await expect(sl.locator(".sl-ultima li.vit")).toHaveCount(4);
   /* a luta de cada pet no registro dele: o ativo (uma luta a mais) e os guardados (o "f" e a luta), que continuam guardados */
@@ -1108,6 +1120,7 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 
     /* uma luta da Fabrica: o alugado com a vida e a oferta de troca */
     await page.locator(".fb-aluguel").first().click();
     await page.locator(".fb-lutar").click();
+    await verNoPalcoEVoltar(page, "Fábrica · série 1, luta 1 de 3");
     await expect(page.locator(".fb-troca")).toBeVisible();
     const r2 = await page.evaluate(() => ({ larg: document.documentElement.scrollWidth, janela: innerWidth }));
     expect(r2.larg).toBeLessThanOrEqual(r2.janela);
@@ -1129,24 +1142,12 @@ for (const largura of [390, 1280]) {
     const erros = vigiarErros(page);
     await page.goto(APP + "#/pet/estado");
     await expect(page.locator(".pet-tela")).toBeVisible();
-    const desktop = largura >= 1100;
-    if (desktop) {
-      await expect(page.locator(".db-botao")).toHaveCount(0);
-      const card = page.locator("#mod-digibrain .digibrain");                         /* o modulo DigiBrain do quadro, aberto */
-      await expect(card).toBeVisible();
-      const r = await page.evaluate(() => {
-        const cena = document.querySelector(".pet-cena")!.getBoundingClientRect(), db = document.querySelector(".digibrain")!.getBoundingClientRect();
-        return { aDireita: db.left >= cena.right - 1, larg: document.documentElement.scrollWidth, janela: innerWidth };
-      });
-      expect(r.aDireita, "o painel na coluna lateral do quadro, a direita do cenario").toBe(true);
-      expect(r.larg).toBeLessThanOrEqual(r.janela);
-    } else {
-      await expect(page.locator(".digibrain")).toBeHidden();
-      await expect(page.locator(".topo-bt[aria-label=\"Conversar\"]")).toBeVisible();          /* o Conversar fica no topo flutuante (< 900 px) */
-      await page.locator(".db-botao").click();
-      await expect(page.locator("dialog.folha[open]")).toHaveAttribute("aria-label", "DigiBrain");
-    }
-    const raiz = desktop ? page.locator("#mod-digibrain") : page.locator("dialog.folha[open]");
+    await expect(page.locator(".digibrain")).toBeHidden();
+    if (largura < 900) await expect(page.locator(".topo-bt[aria-label=\"Conversar\"]")).toBeVisible();          /* o Conversar fica no topo flutuante (< 900 px) */
+    await page.getByRole("button", { name: "DigiBrain", exact: true }).click();       /* o botao quadrado da borda direita abre o painel */
+    const raiz = page.locator("#pet-painel");
+    await expect(raiz.locator(".digibrain")).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await expect(raiz.locator(".db-selo")).toHaveText("ao vivo");                    /* o tempo do jogo andando */
     /* o painel le o motor: uma decisao, as barras dos lobos (o piso so quando entra na conta) e uma escolhida */
     const db = await page.evaluate(() => (window as any).__digilab.digibrain());
@@ -1160,10 +1161,8 @@ for (const largura of [390, 1280]) {
     /* nada promete mais do que uma soma de pesos */
     expect(await raiz.innerText()).not.toMatch(/pensando|sentindo/i);
     await page.screenshot({ path: test.info().outputPath(`digibrain-${largura}.png`) });     /* a captura do gate da etapa 5 */
-    if (!desktop) {
-      await page.locator("dialog.folha[open] .folha-x").click();
-      await expect(page.locator("dialog.folha[open]")).toHaveCount(0);
-    }
+    await page.getByRole("button", { name: "Fechar DigiBrain" }).click();
+    await expect(page.locator("#pet-painel")).toHaveCount(0);
     expect(erros).toEqual([]);
   });
 }
@@ -1176,9 +1175,8 @@ for (const largura of [390, 1280]) {
     const erros = vigiarErros(page);
     await page.goto(APP + "#/pet/estado");
     await expect(page.locator(".pet-tela")).toBeVisible();
-    const desktop = largura >= 1100;
-    if (!desktop) await page.locator(".db-botao").click();
-    const raiz = desktop ? page.locator(".digibrain") : page.locator("dialog.folha[open]");
+    await page.getByRole("button", { name: "DigiBrain", exact: true }).click();
+    const raiz = page.locator("#pet-painel");
     const mapa = raiz.locator("svg.mp");
     await expect(mapa).toBeVisible();
     await expect(raiz.locator(".db-cab .db-icone, .db-folha-selo .db-icone")).toHaveCount(0);      /* o icone estatico saiu do painel */
@@ -1237,34 +1235,38 @@ for (const [largura, altura] of [[360, 800], [390, 844], [1280, 800]]) {
     const desktop = largura >= 1100;
     const g = await page.evaluate(() => {
       const r = (s: string) => document.querySelector(s)!.getBoundingClientRect();
-      const cena = r(".pet-cena"), doca = r(".pet-doca"), cv = document.querySelector<HTMLCanvasElement>(".pet-cena canvas")!;
+      const cena = r(".pet-cena"), doca = r(".pet-dock"), cv = document.querySelector<HTMLCanvasElement>(".pet-cena canvas")!;
       return { cena: cena.width * cena.height, doca: doca.width * doca.height, pix: getComputedStyle(cv).imageRendering, larg: document.documentElement.scrollWidth, janela: innerWidth };
     });
     /* o pet com o mundo (v12 em diante; o v13 de hoje): no desktop a doca tem tambem a barra da racao, e o cenario continua a maior area,
        mas nao o dobro dela (achado da R2b, COMBATE-TR: no celular, o dobro como antes) */
-    expect(g.cena, "o cenario e a maior area").toBeGreaterThan(g.doca * (desktop ? 1 : 2));
+    expect(g.cena, "o cenario e a maior area").toBeGreaterThan(g.doca * 2);
     expect(g.pix).toBe("pixelated");
     expect(g.larg).toBeLessThanOrEqual(g.janela);
-    await expect(page.locator(".acoes-pet .acao-destaque")).toHaveCount(3);
+    /* o dock: seis acoes no desktop; no celular quatro e o Mais, com o Tapa, o Tratar e o Por racao (so pets com mundo) */
+    await expect(page.locator(".acoes-pet .acao-destaque")).toHaveCount(largura >= 900 ? 6 : 4);
     await expect(page.locator(".acoes-pet .acao-extra")).toHaveCount(0);
     await page.locator(".acoes-pet .acao-mais").click();
-    await expect(page.locator(".acoes-pet .acao-extra")).toHaveCount(3);           /* v11: seis acoes, tres em destaque */
+    await expect(page.locator(".acoes-pet .acao-extra")).toHaveCount(largura >= 900 ? 0 : 2);
+    await expect(page.locator(".acoes-pet .racao-bt")).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(page.locator("#acoes-mais")).toHaveCount(0);
     /* sem fundo de hexagonos no cenario e sem retrato redondo no cabecalho do Pet */
     expect(await page.locator(".pet-cena .dl-hexcard, .pet-retrato").count()).toBe(0);
-    /* os detalhes: o balao da fala abre o porque */
+    /* os paineis: um aberto por vez, pelos botoes da borda direita; o balao da fala abre o porque */
+    await page.getByRole("button", { name: "Estado atual", exact: true }).click();
+    await expect(page.locator("#pet-painel .necessidades4")).toBeVisible();
+    await page.getByRole("button", { name: "Evolução", exact: true }).click();
+    await expect(page.locator("#pet-painel")).toHaveCount(1);
+    await expect(page.locator("#pet-painel")).toContainText("até virar");
+    await page.getByRole("button", { name: "Últimas ações", exact: true }).click();
+    await expect(page.locator("#pet-painel .mod-registro li").first()).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(page.locator("#pet-painel")).toHaveCount(0);
     await page.locator(".cena-fala").click();
-    if (desktop) {
-      /* no desktop o porque e um modulo do quadro, recolhido no comeco: o balao o abre */
-      await expect(page.locator("#mod-fala .mod-corpo")).toBeVisible();
-      await expect(page.locator("#mod-fala .det-fala .fala-status")).toBeVisible();
-      await page.getByRole("button", { name: "Recolher Por que ele disse isso" }).click();
-      await expect(page.locator("#mod-fala .mod-corpo")).toHaveCount(0);
-    } else {
-      await expect(page.locator("dialog.folha[open]")).toHaveAttribute("aria-label", "Como ele está");
-      await expect(page.locator("dialog.folha[open] .necessidades4")).toBeVisible();
-      await page.locator("dialog.folha[open] .folha-x").click();
-      await expect(page.locator("dialog.folha[open]")).toHaveCount(0);
-    }
+    await expect(page.locator("#pet-painel .det-fala .fala-status")).toBeVisible();
+    await page.getByRole("button", { name: "Fechar Por que ele disse isso" }).click();
+    await expect(page.locator("#pet-painel")).toHaveCount(0);
     expect(erros).toEqual([]);
   });
 }
@@ -1298,62 +1300,6 @@ test("Pet (Home): a cena 3D com WebGL e o cenário de reserva sem ele", async ({
   await expect(p2.locator(".pet-cena .cena3d")).toHaveCount(0);
   expect(erros2).toEqual([]);
   await ctx.close();
-});
-
-/* o quadro modular da tela Pet no desktop (docs/TAREFA_V2_PET_QUADRO.md): os modulos que o motor sustenta, arrastaveis entre as duas
-   colunas, com o menu (mover pelo teclado), o recolher de cada modulo e da coluna lateral; o arranjo fica no localStorage (preferencia
-   de quem joga, fora do save) e volta depois de recarregar. No celular nao ha quadro */
-test("Pet (quadro): arrastar, mover pelo menu, recolher e o arranjo salvo", async ({ page }) => {
-  await page.setViewportSize({ width: 1280, height: 800 });
-  await semear(page, SAVE_V11);
-  const erros = vigiarErros(page);
-  await page.goto(APP + "#/pet/estado");
-  const col = (c: string) => page.evaluate(sel => [...document.querySelectorAll(sel + " > .quadro-vaga")].map(e => e.getAttribute("data-modulo")), `.quadro-col--${c}`);
-  await expect(page.locator(".quadro")).toBeVisible();
-  expect(await col("principal")).toEqual(["acoes"]);          /* o habitat (modulo "cenario") virou a camada de fundo da casca (M2) */
-  /* a lateral: os modulos do motor (a proxima evolucao so com a proxima forma; o DigiBrain no v11) */
-  expect(await col("lado")).toEqual(["estado", "desejo", "evolucao", "registro", "digibrain", "fala"]);
-  await expect(page.locator("#mod-estado .palco-emocao")).toBeVisible();          /* a emocao registrada a direita do titulo */
-  await expect(page.locator("#mod-evolucao")).toContainText("até virar");
-  await expect(page.locator("#mod-evolucao")).not.toContainText(/n[ií]vel|xp/i);
-  /* o "Ver tudo" do registro leva ao Diario */
-  await page.locator("#mod-registro").getByRole("button", { name: "Ver tudo" }).click();
-  await expect(page).toHaveURL(/#\/diario\/registro$/);
-  await page.locator(".dl-nav").getByRole("button", { name: "Pet", exact: true }).click();
-  /* arrastar as Ultimas acoes para a coluna principal, acima das Acoes */
-  await page.locator("#mod-registro .mod-cab").dragTo(page.locator('.quadro-col--principal [data-modulo="acoes"]'), { targetPosition: { x: 40, y: 8 } });
-  expect(await col("principal")).toEqual(["registro", "acoes"]);
-  /* o menu: mover as Acoes para a coluna lateral (o arrastar pelo teclado) */
-  await page.getByRole("button", { name: "Opções do quadro Ações" }).click();
-  await page.getByRole("menuitem", { name: "Mover para a coluna lateral" }).click();
-  expect(await col("principal")).toEqual(["registro"]);
-  expect((await col("lado")).at(-1)).toBe("acoes");
-  /* recolher o Estado atual: o corpo some */
-  await page.getByRole("button", { name: "Recolher Estado atual" }).click();
-  await expect(page.locator("#mod-estado .mod-corpo")).toHaveCount(0);
-  /* recolher a coluna lateral: o habitat ganha a largura */
-  await page.getByRole("button", { name: "Recolher a coluna lateral" }).click();
-  await expect(page.locator(".quadro-col--recolhida")).toBeVisible();
-  /* o habitat ganhar a largura da coluna recolhida fica para a M3 (o quadro some e o dock novo entra); na M2 a largura e fixa */
-  /* o arranjo volta depois de recarregar (localStorage), e o save do pet nao muda */
-  const save = await page.evaluate(c => localStorage.getItem(c), CHAVE);
-  await page.reload();
-  await expect(page.locator(".quadro-col--recolhida")).toBeVisible();
-  await page.getByRole("button", { name: "Mostrar a coluna lateral" }).click();
-  expect(await col("principal")).toEqual(["registro"]);
-  await expect(page.locator("#mod-estado .mod-corpo")).toHaveCount(0);
-  /* o arranjo fica numa chave propria; o save do pet so tem o registro (semente, versao e log), nada do quadro */
-  const arranjo = JSON.parse(await page.evaluate(c => localStorage.getItem(c + "-quadro-pet"), CHAVE) ?? "null");
-  expect(arranjo.principal).toEqual(["cenario", "registro"]);
-  expect(Object.keys(JSON.parse(save ?? "{}")).sort()).toEqual(["log", "semente", "versao"]);
-  expect(erros).toEqual([]);
-});
-test("Pet (quadro): no celular não há quadro", async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  await semear(page, SAVE_V11);
-  await page.goto(APP + "#/pet/estado");
-  await expect(page.locator(".pet-cena")).toBeVisible();
-  await expect(page.locator(".quadro, .mod-cab")).toHaveCount(0);
 });
 
 /* o momento da evolucao e a aba Crescer · Evolucao (docs/TAREFA_V2_EVOLUCAO.md). save_evolucao.json (e2e/gerar_save_evolucao.mjs): um pet
@@ -1505,8 +1451,11 @@ const lerMundo = (page: Page) => page.evaluate(() => (window as any).__digilab.m
 const lerCena = (page: Page) => page.evaluate(() => (window as any).__digilab.cena() as { pet: [number, number]; modo3d: boolean } | null);
 const naTela = (page: Page, x: number, y: number) => page.evaluate(([a, b]) => (window as any).__digilab.cenaPara(a, b) as [number, number], [x, y] as const);
 const ultimoDc = async (page: Page) => JSON.parse(await page.evaluate(() => (window as any).__digilab.registro())).log.filter((e: unknown[]) => e[1] === "dc").at(-1);
+/** o "Por racao" fica no menu Mais do dock (M3 do layout habitat) */
+const abrirMais = async (page: Page) => { if (!await page.locator("#acoes-mais").count()) await page.locator(".acoes-pet .acao-mais").click(); };
 /** arrasta "Por racao" ate o ponto do cliente, com o mouse (o gesto) */
 async function arrastarRacao(page: Page, alvo: [number, number]): Promise<void> {
+  await abrirMais(page);
   const b = (await page.locator(".racao-bt").boundingBox())!;
   await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2);
   await page.mouse.down();
@@ -1573,9 +1522,12 @@ test("mundo: o caminho acessível, pelo toque no chão e por um lugar nomeado pe
   await expect.poll(() => lerCena(page)).not.toBeNull();
   const bt = page.getByRole("button", { name: /^Pôr ração/ });
   /* o toque: tocar no botao abre a faixa; tocar no chao poe ali */
+  await abrirMais(page);
   await bt.click();
   await expect(page.locator(".racao-faixa")).toContainText("Toque no chão para pôr a ração");
+  await abrirMais(page);
   await expect(bt).toHaveAttribute("aria-pressed", "true");
+  await page.locator(".acoes-pet .acao-mais").click();                 /* o menu aberto cobre parte do chao: fecha antes de tocar nele */
   const m0 = await lerMundo(page), [cx, cy] = await naTela(page, m0.lugares.perto[0] + 32, m0.lugares.perto[1]);
   await page.mouse.click(cx, cy);
   await expect(page.locator(".racao-faixa")).toHaveCount(0);
@@ -1583,6 +1535,7 @@ test("mundo: o caminho acessível, pelo toque no chão e por um lugar nomeado pe
   expect(Math.abs(dc1[2].x - (m0.lugares.perto[0] + 32)) + Math.abs(dc1[2].y - m0.lugares.perto[1])).toBeLessThanOrEqual(2);
   /* Esc fecha sem por nada */
   const n1 = JSON.parse(await page.evaluate(() => (window as any).__digilab.registro())).log.filter((e: unknown[]) => e[1] === "dc").length;
+  await abrirMais(page);
   await bt.focus();
   await page.keyboard.press("Enter");
   await expect(page.locator(".racao-faixa")).toBeVisible();
@@ -1590,6 +1543,7 @@ test("mundo: o caminho acessível, pelo toque no chão e por um lugar nomeado pe
   await expect(page.locator(".racao-faixa")).toHaveCount(0);
   expect(JSON.parse(await page.evaluate(() => (window as any).__digilab.registro())).log.filter((e: unknown[]) => e[1] === "dc").length).toBe(n1);
   /* o teclado: Enter abre, o foco vai ao Comedouro; Tab ao "Perto do pet" e Enter poe exatamente no lugar nomeado */
+  await abrirMais(page);
   await bt.focus();
   await page.keyboard.press("Enter");
   await expect(page.getByRole("button", { name: "Comedouro", exact: true })).toBeFocused();
@@ -1616,6 +1570,7 @@ test("mundo: soltar fora do chão não põe nada; recarregar refaz a vida com a 
   expect((await reg()).filter(e => e[1] === "dc").length).toBe(n0);
   await expect(page.locator(".racao-dica")).toContainText("fora do mapa nada é posto");
   /* pelo teclado, e recarregar: o evento dc fica no registro, e a vida refeita tem a racao no mesmo lugar */
+  await abrirMais(page);
   await page.getByRole("button", { name: /^Pôr ração/ }).click();
   await page.getByRole("button", { name: "Longe", exact: true }).click();
   const antes = await reg(), dc = antes.filter(e => e[1] === "dc").at(-1)!, i = antes.lastIndexOf(dc);

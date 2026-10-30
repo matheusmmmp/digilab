@@ -53,7 +53,7 @@ const IconeRacao = ({ tam = 26 }: { tam?: number }) => (
 );
 
 /** a barra da racao, acima das acoes: o botao que se arrasta ou se toca, e a mensagem do ultimo lugar */
-export function BarraRacao() {
+export function BarraRacao({ aoUsar }: { aoUsar?: () => void } = {}) {
   const est = useRacao(), inicio = useRef<{ x: number; y: number; id: number } | null>(null);
   const baixo = (e: ReactPointerEvent<HTMLButtonElement>) => {
     if (e.button !== 0) return;
@@ -70,22 +70,28 @@ export function BarraRacao() {
     const i = inicio.current;
     inicio.current = null;
     if (!i || i.id !== e.pointerId) return;
-    if (est.arrasto) { mudar(() => { ESTADO.arrasto = null; }); porRacaoNaTela(e.clientX, e.clientY); return; }
+    if (est.arrasto) { mudar(() => { ESTADO.arrasto = null; }); porRacaoNaTela(e.clientX, e.clientY); aoUsar?.(); return; }
     mudar(() => { ESTADO.escolhendo = !ESTADO.escolhendo; ESTADO.mensagem = ""; });
+    aoUsar?.();
   };
   const cancelar = () => { inicio.current = null; mudar(() => { ESTADO.arrasto = null; }); };
   return (
     <div className="racao-barra">
-      <button type="button" className={`dl-btn dl-btn--sec racao-bt${est.escolhendo ? " racao-bt--ativo" : ""}`} aria-pressed={est.escolhendo}
+      <button type="button" className={`hx-btn dock-bt racao-bt${est.escolhendo ? " racao-bt--ativo" : ""}`} aria-pressed={est.escolhendo}
         aria-label="Pôr ração: arraste até o chão da cena, ou toque e escolha o lugar"
         onPointerDown={baixo} onPointerMove={move} onPointerUp={cima} onPointerCancel={cancelar}
         onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); mudar(() => { ESTADO.escolhendo = !ESTADO.escolhendo; ESTADO.mensagem = ""; }); } }}>
         <IconeRacao /><span>Pôr ração</span>
       </button>
-      <span className="racao-dica" aria-live="polite">{est.mensagem || "Arraste até o chão, ou toque e escolha o lugar. Alimentar é a reserva: põe no comedouro."}</span>
       {est.arrasto && <span className="racao-fantasma" style={{ left: est.arrasto.x, top: est.arrasto.y }} aria-hidden="true"><IconeRacao tam={34} /></span>}
     </div>
   );
+}
+
+/** a mensagem do ultimo lugar (ou a dica), no canto da cena, ao lado da info do mundo */
+export function MensagemRacao() {
+  const est = useRacao();
+  return <span className="racao-dica" aria-live="polite">{est.mensagem || "Arraste até o chão, ou toque e escolha o lugar. Alimentar é a reserva: põe no comedouro."}</span>;
 }
 
 /** por cima da cena, enquanto se escolhe o lugar: a faixa com os lugares nomeados e o toque no chao */
@@ -108,10 +114,10 @@ export function FaixaRacao() {
         <b>Toque no chão para pôr a ração</b>
         <div className="racao-lugares">
           {(Object.keys(lugares) as Lugar[]).map((l, i) => (
-            <button type="button" key={l} ref={i === 0 ? primeiro : undefined} className="dl-btn dl-btn--sec racao-lugar" data-lugar={l}
+            <button type="button" key={l} ref={i === 0 ? primeiro : undefined} className="hx-btn racao-lugar" data-lugar={l}
               onClick={() => porRacaoEm(...lugares[l])}>{NOME_LUGAR[l]}</button>
           ))}
-          <button type="button" className="dl-btn dl-btn--sec racao-lugar" onClick={() => mudar(() => { ESTADO.escolhendo = false; })}>Cancelar</button>
+          <button type="button" className="hx-btn racao-lugar" onClick={() => mudar(() => { ESTADO.escolhendo = false; })}>Cancelar</button>
         </div>
       </div>
     </>

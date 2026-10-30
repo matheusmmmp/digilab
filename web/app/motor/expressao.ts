@@ -60,7 +60,7 @@ export const FATORES_TXT: Record<string, TextoPorEstagio> = {
   oponente_guts_abaixo: F("você estava sem guts", "porque você estava sem guts (abaixo de {p0})"),
   oponente_repete: F("você repetiu", "porque você repetiu '{p0}' {p1} vezes"),
   oponente_frequente: F("você insiste", "porque você insiste em '{p0}'"),
-  turno_execucao: F("luta longa", "porque já era uma luta longa (turno {p0} ou mais)"),
+  turno_execucao: F("luta longa", "porque já era uma luta longa (a partir do turno {p0} de 2 s)"),
   oponente_vai_preparar: F("vi o pesado vindo", "porque vi o pesado vindo antes de você preparar"),
   executando_pesado: F("hora do pesado", "porque era a hora do pesado"),
   /* memoria por espacos */

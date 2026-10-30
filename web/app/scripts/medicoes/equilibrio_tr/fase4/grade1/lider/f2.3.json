@@ -1,0 +1,284 @@
+{
+ "gerado_por": "web/app/scripts/equilibrio_tr/fase4_progressao.ts",
+ "data": "2026-10-30",
+ "commit": "cd14efcd",
+ "node": "v24.19.0",
+ "faixa": "calibracao",
+ "bases": [
+  68101,
+  68202,
+  68303,
+  68404,
+  68505
+ ],
+ "sementes_por_base": 20,
+ "relogio": {
+  "ritmo": 16,
+  "atordoaInterrupcao": 31,
+  "andar": 1.12,
+  "recuo": 0.6,
+  "arrancada": 8,
+  "projetil": 4.8,
+  "perto": 62,
+  "medio": 120,
+  "contato": 44,
+  "empurrao": 0,
+  "disparo": 6
+ },
+ "listas": "v14",
+ "reserva_no_fim": true,
+ "fatores": {
+  "lider": {
+   "campina": 2.3,
+   "torre": 2.3,
+   "floresta": 2.3,
+   "cidadela": 2.3,
+   "lago": 2.3,
+   "espiral": 2.3
+  },
+  "npc": {
+   "npc_tier2_sentinela": 1.53,
+   "npc_tier2_porteiro": 1.1,
+   "npc_v5_puppetmon": 1.8,
+   "npc_v5_machinedramon": 2.3
+  },
+  "liga": {
+   "campina": 0.4,
+   "torre": 0.3,
+   "floresta": 0.1,
+   "cidadela": 1,
+   "lago": 1.7,
+   "espiral": 0.9
+  },
+  "instalacao": 1,
+  "fabrica": 0.6,
+  "salao": {
+   "crianca": 1.15,
+   "adolescente": 1,
+   "adulto": 1.05,
+   "mega": 1.05
+  }
+ },
+ "parte": "g1",
+ "metas": {
+  "G-1": {
+   "arenas": {
+    "campina": {
+     "lider": "npc_tier1_brutamontes",
+     "estagio": "crianca",
+     "fator": 2.3,
+     "sem": 0,
+     "com": 0,
+     "pior": 0,
+     "pior_forma": "sereno",
+     "passa": false,
+     "formas": {
+      "sereno": {
+       "sem": 0,
+       "com": 0
+      },
+      "arisco": {
+       "sem": 0,
+       "com": 0
+      }
+     }
+    },
+    "torre": {
+     "lider": "npc_tier2_carcereiro",
+     "estagio": "adolescente",
+     "fator": 2.3,
+     "sem": 0.0025,
+     "com": 0.285,
+     "pior": 0.12,
+     "pior_forma": "brigao",
+     "passa": false,
+     "formas": {
+      "brigao": {
+       "sem": 0,
+       "com": 0.12
+      },
+      "guardiao": {
+       "sem": 0,
+       "com": 0.12
+      },
+      "cacador": {
+       "sem": 0.01,
+       "com": 0.65
+      },
+      "colosso": {
+       "sem": 0,
+       "com": 0.25
+      }
+     }
+    },
+    "floresta": {
+     "lider": "npc_v6_youkomon",
+     "estagio": "adolescente",
+     "fator": 2.3,
+     "sem": 0,
+     "com": 0.0625,
+     "pior": 0,
+     "pior_forma": "guardiao",
+     "passa": false,
+     "formas": {
+      "brigao": {
+       "sem": 0,
+       "com": 0.05
+      },
+      "guardiao": {
+       "sem": 0,
+       "com": 0
+      },
+      "cacador": {
+       "sem": 0,
+       "com": 0.18
+      },
+      "colosso": {
+       "sem": 0,
+       "com": 0.02
+      }
+     }
+    },
+    "cidadela": {
+     "lider": "npc_v5_myotismon",
+     "estagio": "adulto",
+     "fator": 2.3,
+     "sem": 0,
+     "com": 0.01,
+     "pior": 0,
+     "pior_forma": "duelista",
+     "passa": false,
+     "formas": {
+      "duelista": {
+       "sem": 0,
+       "com": 0
+      },
+      "furioso": {
+       "sem": 0,
+       "com": 0
+      },
+      "espelho": {
+       "sem": 0,
+       "com": 0
+      },
+      "muralha": {
+       "sem": 0,
+       "com": 0
+      },
+      "sentinela": {
+       "sem": 0,
+       "com": 0.01
+      },
+      "emboscador": {
+       "sem": 0,
+       "com": 0.07
+      },
+      "vigia": {
+       "sem": 0,
+       "com": 0
+      },
+      "tita": {
+       "sem": 0,
+       "com": 0
+      }
+     }
+    },
+    "lago": {
+     "lider": "npc_v6_marinbullmon",
+     "estagio": "adulto",
+     "fator": 2.3,
+     "sem": 0.0075,
+     "com": 0.7,
+     "pior": 0.13,
+     "pior_forma": "sentinela",
+     "passa": false,
+     "formas": {
+      "duelista": {
+       "sem": 0,
+       "com": 0.79
+      },
+      "furioso": {
+       "sem": 0,
+       "com": 0.77
+      },
+      "espelho": {
+       "sem": 0,
+       "com": 0.91
+      },
+      "muralha": {
+       "sem": 0,
+       "com": 0.91
+      },
+      "sentinela": {
+       "sem": 0,
+       "com": 0.13
+      },
+      "emboscador": {
+       "sem": 0.06,
+       "com": 0.32
+      },
+      "vigia": {
+       "sem": 0,
+       "com": 0.89
+      },
+      "tita": {
+       "sem": 0,
+       "com": 0.88
+      }
+     }
+    },
+    "espiral": {
+     "lider": "npc_v5_piedmon",
+     "estagio": "mega",
+     "fator": 2.3,
+     "sem": 0.0113,
+     "com": 0.6725,
+     "pior": 0.21,
+     "pior_forma": "duelista",
+     "passa": false,
+     "formas": {
+      "duelista": {
+       "sem": 0,
+       "com": 0.21
+      },
+      "furioso": {
+       "sem": 0,
+       "com": 0.85
+      },
+      "espelho": {
+       "sem": 0,
+       "com": 0.99
+      },
+      "muralha": {
+       "sem": 0,
+       "com": 0.98
+      },
+      "sentinela": {
+       "sem": 0,
+       "com": 0.21
+      },
+      "emboscador": {
+       "sem": 0.09,
+       "com": 0.44
+      },
+      "vigia": {
+       "sem": 0,
+       "com": 0.79
+      },
+      "tita": {
+       "sem": 0,
+       "com": 0.91
+      }
+     }
+    }
+   },
+   "passa": false
+  },
+  "I-1": {
+   "itens_valem_sem_treino": false,
+   "pior_lider_sem_treino": 0.0113,
+   "passa": true
+  }
+ },
+ "custo_s": 4.1497
+}

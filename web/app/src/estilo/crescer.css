@@ -242,4 +242,5 @@
 .item-regra{font-size:12px;line-height:17px;font-weight:800;color:var(--dl-text);background:var(--dl-surface-2);border-radius:8px;padding:4px 8px;box-shadow:inset 0 0 0 2px var(--dl-border)}
 .item-soma{font-size:12px;font-weight:800;color:var(--dl-text)}
 .item-onde,.item-porque{font-size:12px;font-weight:700;color:var(--dl-text-2)}
+.item-coberto{font-size:12px;font-weight:700;color:var(--dl-text);background:var(--dl-surface-2);border-radius:8px;padding:4px 8px}
 .item-bt{justify-self:start}

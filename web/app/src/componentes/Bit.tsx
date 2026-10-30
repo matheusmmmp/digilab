@@ -3,6 +3,8 @@
    volta o robozinho desenhado em pixels aqui mesmo. A faixa da dica fica acima da barra, uma frase por vez. */
 import { useEffect, useRef } from "react";
 import { desenharSprite, dimSprite, escalaSprite, quadroAgora, useAtlas } from "../atlas.ts";
+import { BotaoContinuar } from "./hx/index.ts";
+import "../estilo/abertas.css";
 import { dispensarDica, DICAS, NOME_MENTOR, useDicaAtual } from "../dicas.ts";
 
 /* 12 x 12: . vazio, n contorno, b corpo, c visor, o olho, a antena, y luz, w chave */
@@ -54,10 +56,10 @@ export function DicaBit() {
   const id = useDicaAtual();
   if (!id) return null;
   return (
-    <aside className="dica-bit" role="status" aria-live="polite">
+    <aside className="dica-bit ab-hx" role="status" aria-live="polite">
       <RetratoGuia />
       <p><b>{NOME_MENTOR}:</b> {DICAS[id]}</p>
-      <button type="button" className="dl-btn dl-btn--sec dica-ok" onClick={() => dispensarDica(id)}>Entendi</button>
+      <BotaoContinuar className="dica-ok" onClick={() => dispensarDica(id)}>Entendi</BotaoContinuar>
     </aside>
   );
 }

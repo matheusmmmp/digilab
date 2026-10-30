@@ -9,6 +9,7 @@ import { AvisoSom } from "../../../componentes/AvisoSom.tsx";
 import { LUTA, alternarPausa, alternarRapido, useLuta, type HudLado, type LutadorTela, type Palco, type RegraTR } from "../../../luta.ts";
 import { arquivosCena, falhasMapa, ouvirMapas } from "./cenasTR.ts";
 import { desenharLutaTR } from "./desenhoTR.ts";
+import "../../../estilo/abertas.css";
 
 /** um lado do HUD (prancha UpLuta): retrato, nome, vida e guts */
 function Lado({ L, s, rot, rival }: { L: LutadorTela; s: HudLado; rot: string; rival?: boolean }) {

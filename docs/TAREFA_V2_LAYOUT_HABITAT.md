@@ -22,6 +22,9 @@ Gerente: sessão "Gerente do layout habitat" (2026-10-30). Merge só do Matheus.
 | D4 | Quadro modular | **sai** (`Quadro.tsx` e o arranjo em localStorage), na M3 |
 | D5 | portão de capturas (`e2e_capturas`) | fica fora de M2–M6 (vai quebrar e não bloqueia o PR); o Matheus aprova o visual e as referências são regeneradas **na M7** |
 | D6 | ordem | M0 → M1 → M2 → M3–M6 em paralelo (sem arquivos em comum) → M7 |
+| D7 | pele por CSS ou por componentes `hx-*` (M4/M6, 2026-10-30) | **CSS** sobre as classes `dl-*` dentro do painel e das telas abertas (`.ab-hx`); reescrever as telas em componentes `hx-*` fica como M4b, só se o visual derivar |
+| D8 | DigiBrain e "Por que ele disse isso" (M3) | ganham a pele na **M7** |
+| D9 | painel aberto no celular (M3, 300 px) | **fica** como está: aberto por quem joga, fecha com um toque |
 
 ## 3. Regras do layout
 
@@ -122,6 +125,9 @@ Um PR por missão, cada uma numa worktree `D:\Trab\digilab\v2-layout-<frente>` a
 - **M6 · Telas que abrem sozinhas e luta** (regra 8).
 - **M7 · Fechamento:** e2e com os seletores novos, capturas regeneradas depois da aprovação do Matheus, conferência
   360/390/1280, claro/escuro (o tema claro vale fora dos menus), checklist §13/§14.
+  Também na M7 (2026-10-30): pele do DigiBrain e do "Por que ele disse isso" (D8); dock flutuante, não faixa de largura
+  inteira; faixa de título das Boas-vindas junto do conteúdo; o `.aviso` fixo da M2 não cobre botões nem o cabeçalho do
+  painel; remover o CSS morto listado nos PRs #467–#470 e `.pet-quadro`/`--quadro-larg` do `casca.css`.
 
 Dependências: M1 antes de tudo; M2 depende de M1; M3–M6 dependem de M2. Arquivos de uma missão por vez: `App.tsx`,
 `tokens.css`, `pet.css`, `Nav.tsx`.
@@ -145,7 +151,7 @@ Dependências: M1 antes de tudo; M2 depende de M1; M3–M6 dependem de M2. Arqui
 - Em 360, 390 e 1280 px a tela Pet mostra o habitat inteiro, sem nada cobrindo o pet; dock, painéis recolhíveis, chamado,
   balão e DigiBrain sobre a cena.
 - Toda tela secundária abre sobre o habitat (painel à direita ≥ 900 px; modal centralizado abaixo) e o "×" volta ao habitat.
-- Os menus usam só os componentes `hx-*`; o habitat, o retrato, o relógio e o balão mantêm o visual atual nos dois temas.
+- Os menus usam a pele `hx-*` (componentes ou CSS sobre `dl-*`, D7); o habitat, o retrato, o relógio e o balão mantêm o visual atual nos dois temas.
 - Nenhum item da seção 4 aparece sem dado do motor.
 - Rotas e hash iguais; replay e paridade intactos; `tipos`, `test`, `e2e` e o portão de capturas regenerado passando.
 

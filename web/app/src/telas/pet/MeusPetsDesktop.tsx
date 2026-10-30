@@ -1,12 +1,14 @@
-/* Meus pets no desktop (prancha MpListaDesktop): pagina inteira dentro da casca. Grade de espacos (o ativo, os
-   guardados em espera, um espaco livre para o ovo novo) e, a direita, o pet escolhido: como ele ficou congelado,
-   estagio, vinculo, brasao, dias de vida e as acoes (Exportar, Tornar ativo, Cruzar, Apagar). O celular segue com
-   Meus pets (MpAtual). Tudo sai do motor de cada pet (replay do registro guardado). */
+/* Meus pets no painel do desktop (layout habitat, M5), na pele XCOM e numa coluna de ate 760 px: a grade de espacos (o ativo, os
+   guardados em espera, um espaco livre para o ovo novo) e, embaixo, o pet escolhido: como ele ficou congelado, estagio, vinculo,
+   brasao, dias de vida e as acoes (Exportar, Tornar ativo, Cruzar, Apagar). O celular segue com MeusPets (caixa centralizada).
+   Tudo sai do motor de cada pet (replay do registro guardado). */
 import { useMemo, useState } from "react";
+import "../../estilo/menus_config.css";
 import { NOME_ESP, NOME_EST, OVO, chaveSprite, nomeEstagio, nomeForma, type Motor } from "../../../motor/index.ts";
 import { imagemAtlas, dimSprite, useAtlas } from "../../atlas.ts";
-import { Seg, blocos } from "../../componentes/Barras.tsx";
+import { blocos } from "../../componentes/Barras.tsx";
 import { Deco } from "../../componentes/Deco.tsx";
+import { BotaoContinuar, BotaoHx, ChipHx, MedidorHx } from "../../componentes/hx/index.ts";
 import { BRASAO } from "../../decoracao.ts";
 import { useJogo } from "../../jogo.ts";
 import { novoOvoGuardandoAtivo } from "../../jornada.ts";
@@ -18,10 +20,10 @@ import { diaDe, hhmm } from "./TelaPet.tsx";
 type Sel = "ativo" | number;
 const vinculoTxt = (m: Motor): string | null => m.vinc.valor >= .66 ? "vínculo alto" : m.vinc.valor >= .33 ? "vínculo médio" : "vínculo baixo";
 
-/** o botao "Novo ovo" do topo (o ativo vai para a espera: ninguem e apagado sem pedir) */
+/** os botoes do topo do painel: Importar e Novo ovo (o ativo vai para a espera: ninguem e apagado sem pedir) */
 export const AcoesMeusPets = () => <>
-  <button type="button" className="dl-btn dl-btn--sec mpl-novo" onClick={abrirImportar}>Importar</button>
-  <button type="button" className="dl-btn mpl-novo" onClick={novoOvoGuardandoAtivo}>Novo ovo</button></>;
+  <BotaoHx className="mpl-novo" onClick={abrirImportar}>Importar</BotaoHx>
+  <BotaoContinuar className="mpl-novo" onClick={novoOvoGuardandoAtivo}>Novo ovo</BotaoContinuar></>;
 
 export function MeusPetsDesktop({ fechar }: { fechar: () => void }) {
   const { motor: ativo, nascendo } = useJogo(), a = useAtlas();
@@ -43,55 +45,55 @@ export function MeusPetsDesktop({ fechar }: { fechar: () => void }) {
     const k = ovo ? OVO[x.especie] : chaveSprite(x.forma);
     return imagemAtlas(a, k, Math.max(1, Math.min(3, Math.floor(alvo / dimSprite(a.dados, k)[1]))));
   };
+  const chipEstado = (ativoX: boolean) => <ChipHx tom={ativoX ? "ok" : "neutro"}>{ativoX ? "ATIVO" : "EM ESPERA"}</ChipHx>;
   return (
-    <section className="mpl dl" aria-label="Meus pets">
-      <div className="mpl-lista">
-        <div className="mpl-cab"><h2>{lista.length} {lista.length === 1 ? "pet" : "pets"}</h2><small>um ativo; os outros ficam congelados até voltar</small></div>
-        {guardados === null && <p className="dl-apoio erro">Os pets guardados não abriram.</p>}
-        <div className="mpl-grade">
-          {lista.map(x => {
-            const s = img(x.m, x.ovo, 110), ativoX = x.k === "ativo";
-            return (
-              <button type="button" key={String(x.k)} className={`mpl-slot${sel === x.k ? " sel" : ""}`} aria-pressed={sel === x.k} onClick={() => escolher(x.k)}>
-                <span className={`mpl-palco${ativoX ? "" : " congelado dl-malha"}`}>{s && <img className="dl-pix" src={s.url} width={s.w} height={s.h} alt="" />}</span>
-                <span className="mpl-nome"><b>{nome(x)}</b><span className={`dl-tag ${ativoX ? "dl-tag--ativo" : "mpl-tag-espera"}`}>{ativoX ? "ATIVO" : "EM ESPERA"}</span></span>
-                <span className="mpl-sub"><span>{x.ovo ? "ainda não chocou" : nomeEstagio(x.m.forma)}</span><span className="dl-lcd">D{diaDe(x.m.e.tick)}</span></span>
-              </button>
-            );
-          })}
-          <button type="button" className="mpl-slot mpl-livre" onClick={novoOvoGuardandoAtivo}><span aria-hidden="true">+</span>espaço livre<small>novo ovo</small></button>
-        </div>
+    <section className="mc mc-pets" aria-label="Meus pets">
+      <p className="mc-apoio">{lista.length} {lista.length === 1 ? "pet" : "pets"} · um ativo; os outros ficam congelados até voltar</p>
+      {guardados === null && <p className="mc-erro">Os pets guardados não abriram.</p>}
+      <div className="mc-grade">
+        {lista.map(x => {
+          const s = img(x.m, x.ovo, 110), ativoX = x.k === "ativo";
+          return (
+            <button type="button" key={String(x.k)} className="mc-slot" aria-pressed={sel === x.k} onClick={() => escolher(x.k)}>
+              <span className={`mc-palco${ativoX ? "" : " mc-palco--congelado"}`}>{s && <img className="dl-pix" src={s.url} width={s.w} height={s.h} alt="" />}</span>
+              <b>{nome(x)}</b>
+              {chipEstado(ativoX)}
+              <span className="mc-subl"><span>{x.ovo ? "ainda não chocou" : nomeEstagio(x.m.forma)}</span><span className="mc-num">D{diaDe(x.m.e.tick)}</span></span>
+            </button>
+          );
+        })}
+        <button type="button" className="mc-slot mc-slot--livre" onClick={novoOvoGuardandoAtivo}><span aria-hidden="true">+</span>espaço livre<small>novo ovo</small></button>
       </div>
-      <aside className="mpl-detalhe" aria-labelledby="mpl-det-tit">
-        <div className="mpl-det-cab"><h2 id="mpl-det-tit">{nome(atual)}</h2><span className={`dl-tag ${eAtivo ? "dl-tag--ativo" : "mpl-tag-espera"}`}>{eAtivo ? "ATIVO" : "EM ESPERA"}</span></div>
-        <div className={`mpl-det-palco${eAtivo ? "" : " congelado dl-malha"}`}>
-          {!eAtivo && <span className="mpl-desde">em espera desde D{diaDe(m.e.tick)} {hhmm(m.e.tick)}</span>}
+      <aside className="mc-detalhe" aria-labelledby="mpl-det-tit">
+        <div className="mc-detalhe__cab"><h2 id="mpl-det-tit">{nome(atual)}</h2>{chipEstado(eAtivo)}</div>
+        <div className={`mc-palco mc-palco--ativo${eAtivo ? "" : " mc-palco--congelado"}`}>
+          {!eAtivo && <span className="mc-desde">em espera desde D{diaDe(m.e.tick)} {hhmm(m.e.tick)}</span>}
           {(() => { const s = img(m, atual.ovo, 170); return s && <img className="dl-pix" src={s.url} width={s.w} height={s.h} alt={nome(atual)} />; })()}
         </div>
-        <div className="mpl-det-cab2"><b>{eAtivo ? "Como ele está" : "Como ele ficou"}</b><small>{eAtivo ? "agora" : "congelado assim"}</small></div>
-        <div className="mpl-barras">
+        <h3 className="mc-sec">{eAtivo ? "Como ele está agora" : "Como ele ficou, congelado assim"}</h3>
+        <div className="mc-barras">
           {([["fome", m.e.fome], ["energia", m.e.energia], ["higiene", m.e.higiene]] as [string, number][]).map(([r, v]) => (
-            <div className="mpl-barra" key={r}><span>{r}</span><Seg n={blocos(v, 5)} m={5} cls={v < .5 ? "dl-seg--necessidade" : "dl-seg--acao"} /></div>
+            <MedidorHx key={r} rotulo={r} valor={blocos(v, 5)} max={5} tom={v < .5 ? "alerta" : "neutro"} />
           ))}
         </div>
-        <div className="mpl-tags">
-          <span className="dl-tag dl-tag--estagio">{atual.ovo ? NOME_EST.ovo : nomeEstagio(m.forma)}</span>
-          {vinculoTxt(m) && <span className="mpl-tag-vinculo">{vinculoTxt(m)}</span>}
+        <div className="mc-tags">
+          <ChipHx tom="rotulo">{atual.ovo ? NOME_EST.ovo : nomeEstagio(m.forma)}</ChipHx>
+          {vinculoTxt(m) && <span>{vinculoTxt(m)}</span>}
           <Deco nome={BRASAO[m.especie].peca} largura={30} altura={20} alt={NOME_ESP[m.especie]} />
           <span>{diaDe(m.e.tick)} {diaDe(m.e.tick) === 1 ? "dia" : "dias"} de vida</span>
-          {m.morte && <span className="mpl-tag-morto">se foi</span>}
+          {m.morte && <ChipHx tom="perigo">se foi</ChipHx>}
         </div>
-        <div className="mpl-bts">
-          <button type="button" className="dl-btn dl-btn--sec" onClick={exportar}>Exportar</button>
-          {eAtivo ? <button type="button" className="dl-btn" onClick={fechar}>Voltar ao pet</button>
-            : <button type="button" className="dl-btn" onClick={() => agir(() => ativarGuardado(atual.k as number), fechar)}>Tornar ativo</button>}
+        <div className="mc-linha">
+          <BotaoHx onClick={exportar}>Exportar</BotaoHx>
+          {eAtivo ? <BotaoContinuar onClick={fechar}>Voltar ao pet</BotaoContinuar>
+            : <BotaoContinuar onClick={() => agir(() => ativarGuardado(atual.k as number), fechar)}>Tornar ativo</BotaoContinuar>}
         </div>
-        {podeCruzar && <button type="button" className="dl-btn dl-btn--sec mpl-cruzar" onClick={() => abrirHeranca(atual.k as number)}
-          title="o filho herda o temperamento dos dois e o brasão de um deles">Nova geração com {nomeForma(ativo.forma)}</button>}
+        {podeCruzar && <BotaoHx className="mc-largo" onClick={() => abrirHeranca(atual.k as number)}
+          title="o filho herda o temperamento dos dois e o brasão de um deles">Nova geração com {nomeForma(ativo.forma)}</BotaoHx>}
         {!eAtivo && (apagar
-          ? <button type="button" className="dl-btn dl-btn--perigo mpl-apagar" onClick={() => agir(() => apagarGuardado(atual.k as number), () => { setSel("ativo"); setApagar(false); })}>Confirmar: apagar {nome(atual)}</button>
-          : <button type="button" className="mpl-apagar mpl-apagar--pedir" onClick={() => setApagar(true)}>Apagar este pet</button>)}
-        {msg && <p className="dl-apoio" aria-live="polite">{msg}</p>}
+          ? <BotaoHx tom="perigo" onClick={() => agir(() => apagarGuardado(atual.k as number), () => { setSel("ativo"); setApagar(false); })}>Confirmar: apagar {nome(atual)}</BotaoHx>
+          : <BotaoHx tom="perigo" onClick={() => setApagar(true)}>Apagar este pet</BotaoHx>)}
+        {msg && <p className="mc-apoio" aria-live="polite">{msg}</p>}
       </aside>
     </section>
   );
