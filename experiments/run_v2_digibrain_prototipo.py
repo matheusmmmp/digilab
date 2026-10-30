@@ -78,7 +78,7 @@ from digilab.metrics import (ACOES_R_POSSIVEL, JANELA_8_14, MODULOS_SONDA, MOTIV
                              janela_dias, janela_w, media_absoluta, pesos_no_teto, privacao_nas_decisoes, repeticao_apos_alivio,
                              t_medias_de_grupo, visitas_vazias, visitas_vazias_v1)
 from digilab.motor_corpo import com_corpo  # noqa: E402
-from digilab.mundo import ESTILOS_LUGAR, DonoComLugar, MotorMundo, reproduzir_mundo  # noqa: E402
+from digilab.mundo import ESTILOS_LUGAR_V2, DonoComLugar, MotorMundo, reproduzir_mundo  # noqa: E402
 from digilab.protocol import derivar_semente  # noqa: E402
 from digilab.temperamento import NEUTRO  # noqa: E402
 
@@ -97,7 +97,7 @@ SAIDA = {"calibracao": "artifacts_v2_digibrain_prototipo/calibracao", "piloto": 
 FASES_CONSERTO = ("calibracao_conserto", "piloto_conserto", "reavaliacao")
 FASES_CALIBRACAO = ("calibracao", "calibracao_conserto")
 DONOS = ("atencioso", "relapso", "aleatorio", "incoerente")         # secao 3: as celulas, dono x lugar
-LUGARES = ESTILOS_LUGAR                                              # comedouro, perto, longe
+LUGARES = ESTILOS_LUGAR_V2                                            # comedouro, perto, longe
 CELULAS = tuple((d, lugar) for d in DONOS for lugar in LUGARES)
 DIAS, ORCAMENTO_POR_DIA = 14, 16                                     # secao 3
 LIMIAR_PRIVACAO, LIMIAR_EXAUSTAO = 0.15, 0.25                        # secao 4 (o plano do corpo; o sono_exaustao)
