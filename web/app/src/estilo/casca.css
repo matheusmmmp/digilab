@@ -35,9 +35,7 @@ body:has(.app--habitat){ overflow:hidden }
 .app--pet .pet-home-corpo, .app--pet .pet-home-principal{ flex:1; min-height:0; padding-top:0 }
 .app--pet .pet-home-corpo{ padding-bottom:10px }
 .pet-balcao{ position:relative; flex:1; min-height:0 }
-.pet-balcao .cena-topo{ top:calc(var(--casca-topo) + 4px) }
 .pet-balcao .cena-fala{ top:calc(var(--casca-topo) + 40px) }
-.pet-balcao .balao-causa{ left:auto; right:9%; top:auto; bottom:30%; z-index:3 }
 
 /* ---------- topo flutuante */
 .topo-hab{ position:fixed; z-index:20; top:0; left:var(--casca-trilho); right:0; height:var(--casca-topo); display:flex; align-items:center; gap:10px; padding:0 12px; pointer-events:none }

@@ -9,14 +9,16 @@
 @media (min-width:900px){ .app--habitat.app--pet .habitat{ bottom:0 } }
 .app--pet .pet-tela{ pointer-events:none }
 .app--pet .pet-tela .pet-balcao{ position:absolute; inset:0; right:0; pointer-events:none }
-.app--pet .pet-balcao > *, .app--pet .pet-balcao .cena-topo > *{ pointer-events:auto }
-.app--pet .pet-balcao .cena-topo{ pointer-events:none }
+.app--pet .pet-balcao > *{ pointer-events:auto }
 
-/* ---------- informacao do mundo (v12): canto superior esquerdo, abaixo do topo */
-.app--pet .mundo-linhas{ position:absolute; left:10px; top:calc(var(--casca-topo) + 52px); z-index:3; display:flex; flex-direction:column; align-items:flex-start; gap:4px;
-  max-width:min(62%,440px); pointer-events:none }
-.app--pet .mundo-linhas .mundo-info{ position:static }
-.app--pet .racao-dica{ padding:3px 10px; border-radius:10px; background:rgba(255,255,255,.9); color:var(--dl-text) }
+/* ---------- a racao (v12): o aviso efemero de onde ela caiu, sobre o dock (fora do fluxo: nao muda a altura medida do dock); a dica na faixa */
+.pet-dock .racao-dica{ position:absolute; left:0; right:0; bottom:calc(100% + 8px); width:max-content; max-width:100%; margin:0 auto; padding:6px 12px;
+  background:var(--hx-miolo); color:var(--hx-texto); border:1px solid var(--hx-borda); border-top:2px solid var(--hx-borda-topo); font:500 15px/1.3 var(--hx-f);
+  pointer-events:none }
+.pet-dock .racao-dica:empty{ padding:0; border:0; background:none }
+@media (prefers-reduced-motion:no-preference){ .pet-dock .racao-dica:not(:empty){ animation:racao-aviso .2s ease-out } }
+@keyframes racao-aviso{ from{ opacity:0; translate:0 6px } }
+.app--pet .racao-faixa-dica{ margin:0; color:var(--hx-sec); font:500 14px/1.3 var(--hx-f) }
 .app--pet .racao-faixa{ top:calc(var(--casca-topo) + 8px); left:10px; right:10px; max-width:560px; background:var(--hx-miolo); color:var(--hx-texto);
   border:1px solid var(--hx-borda); border-top:2px solid var(--hx-borda-topo); border-radius:0; box-shadow:none; font-family:var(--hx-f) }
 .app--pet .racao-faixa b{ font-size:16px; letter-spacing:.06em; text-transform:uppercase }
@@ -95,6 +97,10 @@
 
 /* conteudo dos paineis */
 .pet-painel .det-estado{ display:flex; flex-direction:column; gap:12px }
+/* a emocao e o mundo (v12), as linhas do topo do painel Estado */
+.est-linha{ display:flex; flex-wrap:wrap; align-items:center; gap:4px 8px; margin:0; font:500 15px/1.3 var(--hx-f); color:var(--hx-texto) }
+.est-linha img{ width:22px; height:22px }
+.est-rot{ min-width:64px; color:var(--hx-sec); font-size:12px; font-weight:600; letter-spacing:.08em; text-transform:uppercase }
 .pet-painel .necessidades4{ display:flex; flex-direction:column; gap:8px; margin:0 }
 .pet-painel .hx-medidor__rot{ min-width:64px }
 .pet-painel .hx-medidor__txt{ color:var(--hx-sec); font:600 12px/1 var(--hx-f); min-width:3.2em; text-align:right }

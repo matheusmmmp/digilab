@@ -1483,6 +1483,16 @@ const naTela = (page: Page, x: number, y: number) => page.evaluate(([a, b]) => (
 const ultimoDc = async (page: Page) => JSON.parse(await page.evaluate(() => (window as any).__digilab.registro())).log.filter((e: unknown[]) => e[1] === "dc").at(-1);
 /** o "Por racao" fica no menu Mais do dock (M3 do layout habitat) */
 const abrirMais = async (page: Page) => { if (!await page.locator("#acoes-mais").count()) await page.locator(".acoes-pet .acao-mais").click(); };
+/** a info do mundo fica no painel Estado (fora da cena): abre o painel, confere e fecha */
+async function infoMundoNoEstado(page: Page, texto: string | null): Promise<void> {
+  const bt = page.getByRole("button", { name: "Estado atual", exact: true });
+  await bt.click();
+  const info = page.locator(".pet-painel .mundo-info");
+  if (texto === null) await expect(info).toBeVisible(); else await expect(info).toContainText(texto);
+  await expect(page.locator(".pet-balcao .mundo-info")).toHaveCount(0);
+  await bt.click();
+  await expect(page.locator(".pet-painel")).toHaveCount(0);
+}
 /** arrasta "Por racao" ate o ponto do cliente, com o mouse (o gesto) */
 async function arrastarRacao(page: Page, alvo: [number, number]): Promise<void> {
   await abrirMais(page);
@@ -1525,7 +1535,7 @@ for (const [nome, largura, semWebGL] of [["a cena 3D", 390, false], ["a reserva 
     await expect(page.locator(semWebGL ? ".pet-cena .cena3d" : ".pet-cena .cena-mundo")).toHaveCount(0);
     await expect.poll(() => lerCena(page)).not.toBeNull();
     await cenaSegueMotor(page);
-    await expect(page.locator(".mundo-info")).toContainText("rações no chão");
+    await infoMundoNoEstado(page, "rações no chão");
     /* o gesto: soltar 2 celulas a leste do pet (o "perto"), no ponto da tela que a vista da */
     const m0 = await lerMundo(page), alvo = m0.lugares.perto, ids0 = m0.comidas.map(c => c.id);
     await arrastarRacao(page, await naTela(page, alvo[0], alvo[1]));
@@ -1599,6 +1609,9 @@ test("mundo: soltar fora do chão não põe nada; recarregar refaz a vida com a 
   await arrastarRacao(page, [caixa.x + caixa.width / 2, caixa.y + caixa.height + 120]);
   expect((await reg()).filter(e => e[1] === "dc").length).toBe(n0);
   await expect(page.locator(".racao-dica")).toContainText("fora do mapa nada é posto");
+  /* o aviso some sozinho; a regiao aria-live fica montada */
+  await expect(page.locator(".racao-dica")).toBeEmpty({ timeout: 10_000 });
+  await expect(page.locator(".racao-dica")).toHaveAttribute("aria-live", "polite");
   /* pelo teclado, e recarregar: o evento dc fica no registro, e a vida refeita tem a racao no mesmo lugar */
   await abrirMais(page);
   await page.getByRole("button", { name: /^Pôr ração/ }).click();
@@ -1619,7 +1632,12 @@ test("mundo: o Alimentar dos v12 é a reserva temporária, descrita assim, e põ
   await page.goto(APP + "#/pet/estado");
   const al = page.getByRole("button", { name: "Alimentar (reserva: põe a ração no comedouro)" });
   await expect(al).toHaveAttribute("title", "Reserva temporária: põe a ração no comedouro");
-  await expect(page.locator(".racao-dica")).toContainText("Alimentar é a reserva: põe no comedouro.");
+  /* a dica fica na faixa do Pôr ração (fora da cena) */
+  await abrirMais(page);
+  await page.getByRole("button", { name: /^Pôr ração/ }).click();
+  await expect(page.locator(".racao-faixa")).toContainText("Alimentar é a reserva: põe no comedouro.");
+  await page.locator(".racao-faixa").getByRole("button", { name: "Cancelar", exact: true }).click();
+  await expect(page.locator(".racao-faixa")).toHaveCount(0);
   await al.click();
   const dc = await ultimoDc(page), m = await lerMundo(page);
   expect([dc[2].x, dc[2].y]).toEqual(m.comedouro);
@@ -1642,7 +1660,7 @@ test("mundo: o ovo novo choca na cena 3D", async ({ page }) => {
   const lcd = page.locator(".pet-cena canvas.lcd");
   await expect(lcd).toHaveAttribute("aria-label", "Tela do pet: ovo");
   await expect(lcd).not.toHaveAttribute("aria-label", "Tela do pet: ovo", { timeout: 20_000 });
-  await expect(page.locator(".mundo-info")).toBeVisible();
+  await infoMundoNoEstado(page, null);
   expect(erros).toEqual([]);
 });
 
