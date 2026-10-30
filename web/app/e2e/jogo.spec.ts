@@ -968,6 +968,16 @@ async function semearSalao(page: Page, tamer: object = TAMER_CAMPEAO): Promise<v
 }
 const lerGuardadosE2e = (page: Page) => page.evaluate(c => JSON.parse(localStorage.getItem(c + "-guardados") ?? "[]"), CHAVE);
 
+/** a luta da Fabrica ou do Salao vai ao palco da luta em tempo real (COMBATE-TR, etapa R4): o palco abre com o texto dela, o relogio anda,
+    e o Desistir (que so pula a animacao: a luta ja esta gravada) volta para a Fronteira */
+async function verNoPalcoEVoltar(page: Page, texto: RegExp | string): Promise<void> {
+  await expect(page).toHaveURL(/#\/lutar\/luta$/);
+  await expect(page.locator(".luta-turno")).toContainText(texto);
+  await expect(page.getByTestId("luta-relogio")).toHaveText(/^0:0[1-9]$/, { timeout: 15_000 });
+  await page.locator(".luta-desistir").click();
+  await page.locator("dialog.modal-conf .dl-btn--perigo").click();
+  await expect(page).toHaveURL(/#\/lutar\/fronteira$/);
+}
 test("fronteira: a Fábrica aluga 1 de 3 Megas, luta, oferece a troca depois da vitória e grava tudo só no Tamer", async ({ page }) => {
   await semear(page, SAVE_LIGA, undefined, TAMER_CAMPEAO);
   const erros = vigiarErros(page);
@@ -989,6 +999,7 @@ test("fronteira: a Fábrica aluga 1 de 3 Megas, luta, oferece a troca depois da 
   await expect(fab.locator(".fb-status")).toContainText("Tentativa 1 · série 1, luta 1 de 3 · 0 séries vencidas");
   await expect(fab.locator(".fb-alugado")).toContainText("Sakuyamon");
   await fab.locator(".fb-lutar").click();
+  await verNoPalcoEVoltar(page, "Fábrica · série 1, luta 1 de 3: Sakuyamon (alugado)");
   await expect(fab.locator(".fb-ultima")).toContainText("Luta 1: venceu Imperialdramon Fighter Mode (Duelista)");
   /* a oferta de troca depois da vitoria; trocando, o alugado passa a ser o rival derrotado, que entra com a vida cheia (as regras dos v9,
      fase 3 do equilibrio geral: a tentativa nova grava a versao das regras no registro do Tamer) */
@@ -998,6 +1009,7 @@ test("fronteira: a Fábrica aluga 1 de 3 Megas, luta, oferece a troca depois da 
   await expect(fab.locator(".fb-alugado")).toContainText("Imperialdramon Fighter Mode");
   await expect(fab.locator(".fb-status")).toContainText("série 1, luta 2 de 3");
   await fab.locator(".fb-lutar").click();
+  await verNoPalcoEVoltar(page, "Fábrica · série 1, luta 2 de 3");
   /* a luta em tempo real (COMBATE-TR, etapa R2): a luta 2, contra o SlashAngemon (Espelho), chega ao limite e fica com o rival, o desafiado.
      Perdeu, acabou: o resumo e "Tentar de novo" */
   await expect(fab.locator(".fb-ultima")).toContainText("Última tentativa: 0 séries vencidas; perdeu para");
@@ -1037,7 +1049,8 @@ test("fronteira: o Salão, com um pet de cada nível (o ativo e os guardados), g
   await expect(sl.locator(".med-espera")).toHaveCount(0);
   const l0 = await numLog(page, "l"), g0 = (await lerGuardadosE2e(page)).map((g: { log: unknown[] }) => g.log.length);
   await sl.locator(".fr-inst-tentar:not([disabled])").click();
-  await expect(sl.locator("p[role=status]", { hasText: "Venceu os 4 níveis!" })).toBeVisible();
+  /* a tentativa vai ao palco, um pet de cada nivel (COMBATE-TR, etapa R4) */
+  await verNoPalcoEVoltar(page, "Salão · nível Rookie: Patamon");
   await expect(sl.locator(".fr-inst-rec .dl-num")).toHaveText("4");
   await expect(sl.locator(".sl-ultima li.vit")).toHaveCount(4);
   /* a luta de cada pet no registro dele: o ativo (uma luta a mais) e os guardados (o "f" e a luta), que continuam guardados */
@@ -1102,6 +1115,7 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 
     /* uma luta da Fabrica: o alugado com a vida e a oferta de troca */
     await page.locator(".fb-aluguel").first().click();
     await page.locator(".fb-lutar").click();
+    await verNoPalcoEVoltar(page, "Fábrica · série 1, luta 1 de 3");
     await expect(page.locator(".fb-troca")).toBeVisible();
     const r2 = await page.evaluate(() => ({ larg: document.documentElement.scrollWidth, janela: innerWidth }));
     expect(r2.larg).toBeLessThanOrEqual(r2.janela);

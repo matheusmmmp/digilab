@@ -16,6 +16,7 @@ import { ESCALA, caraterCanonico, escalaDaVersao, escalaDe, perfilDe, perfilNPC,
 import { CONDICOES_ESTAGIO, DIST, type Cond, type Estilo, type ListaGambits, type Lutador, type Regra, type RegrasLuta, type ResultadoLuta } from "./combate.ts";
 import { NOME_V2, nomeFormaLegado } from "./nomes.ts";
 import { criarRng, hashSemente } from "./rng.ts";
+import { PASSO_TR_MS, T_TR } from "./combate_tr/constantes_tr.ts";
 import { condicaoDe, type TreinoPet } from "./treino.ts";
 import { ITENS } from "./itens.ts";
 import type { Carater, Forma, FormaAdultaNormal, OpGambit, Stats } from "./tipos.ts";
@@ -69,7 +70,8 @@ export function rotuloCond(c: Cond): string {
     case "oponente_guts_abaixo": return `guts do oponente < ${p[0]}`;
     case "oponente_repete": return `oponente repetiu ${NOME_V2[p[0] as string]} ${p[1]}x`;
     case "oponente_frequente": return `oponente insiste em ${NOME_V2[p[0] as string]}`;
-    case "turno_execucao": return `luta no turno ${p[0]} ou mais`;
+    /* o turno t e o relogio t x T_TR (combate_tr/controlador.ts): 2 s por turno */
+    case "turno_execucao": return `luta com ${Number(p[0]) * T_TR * PASSO_TR_MS / 1000} s ou mais`;
     case "oponente_vai_preparar": return "vi o pesado vindo";
   }
   return c.n;

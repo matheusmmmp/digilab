@@ -147,6 +147,24 @@ describe("chip de regra: uma regra nova na lista do pet", () => {
     expect(lista()).toEqual(gp.ativas);
     expect(gp.ativas).toHaveLength(5);
   });
+  test("na luta em tempo real a regra do chip dispara: alguma acao do pet tem o motivo dela (COMBATE-TR, etapa R4)", () => {
+    /* o Perseguidor num Ultimate contra o atirador: uma regra que a lista do pet nao tem (o Recuo e o Oportunista repetem a condicao de uma
+       regra que o pet ja tem, e a primeira regra valida decide: ficam cobertos) */
+    const m = petV13(74, "adulto", 3);
+    m.equipar("chip_perseguidor");
+    comItensValendo(m);
+    let disparou = 0;
+    for (let k = 0; k < 10; k++) {
+      const res = m.lutar("atirador", hashSemente("chip-tr", 74, k)).res;
+      cuidar(m);
+      /* a lista muda de uma luta para outra (o pet aprende): o chip e sempre a ultima regra da lista com que ele lutou */
+      const regras = res.tr.entrada.A.estilo.gambits!.regras.map(chaveRegra), iChip = regras.length - 1;
+      expect(regras[iChip]).toBe(PERSEGUIDOR);
+      expect(regras.indexOf(PERSEGUIDOR)).toBe(iChip);
+      disparou += res.tr.acoes.filter(x => x.lado === 0 && x.motivo === iChip).length;
+    }
+    expect(disparou).toBeGreaterThan(0);
+  });
   test("vagas, estagio e duplicado: o motor recusa com o porque", () => {
     const m = petV13(73, "adolescente", 1);
     expect(m.porqueNaoEquipa("chip_perseguidor")).toMatch(/pede um Ultimate/);
@@ -177,6 +195,11 @@ describe("cartas: o efeito de uma luta so", () => {
     expect(jogarLuta(f, lutadorBot("tartaruga"), 1, CV21E_TR).E0.L[0].guts).toBe(f.cond.guts0);
     expect(o.estilo.eps).toBe(0);
     expect(comCarta(L, null)).toBe(L);
+    /* na luta em tempo real (R4): com o Foco o pet nunca explora; sem ele, explora em alguma das lutas */
+    const exploracoes = (A: typeof L) => Array.from({ length: 20 }, (_, s) => jogarLuta(A, lutadorBot("tartaruga"), s, CV21E_TR).tr.acoes
+      .filter(x => x.lado === 0 && x.motivo === "exploracao").length).reduce((a, b) => a + b, 0);
+    expect(exploracoes(o)).toBe(0);
+    expect(exploracoes(L)).toBeGreaterThan(0);
   });
   test("Cura: na primeira vez abaixo de 30% cura 20% da vida maxima, uma vez so; caido nao cura", () => {
     const c = cartaDe("carta_cura").carta.cura!;

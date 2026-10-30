@@ -56,7 +56,7 @@ export const ARENAS: readonly Arena[] = [
   { id: "torre", lugar: 1, lider: "npc_tier2_carcereiro", regra: "paciencia", titulo: "Paciência", tecnica: "contra_golpe", lista: "torre", fator: 1.6,
     frase: "O líder devolve golpe forte: preparar o pesado de perto ou insistir no golpe rápido volta contra você. Quem só atira de longe, ele vai buscar." },
   { id: "floresta", lugar: 2, lider: "npc_v6_youkomon", regra: "leitura", titulo: "Leitura",
-    frase: "O líder muda de padrão no turno 10: de longe e disparando, depois colado e golpeando. Vence quem lê o rival." },
+    frase: "O líder muda de padrão aos 20 segundos: de longe e disparando, depois colado e golpeando. Vence quem lê o rival." },
   { id: "cidadela", lugar: 3, lider: "npc_v5_myotismon", regra: "resistencia", titulo: "Resistência", lutas: 3, fator: .9,
     frase: "Três lutas seguidas, sem cura: a vida e o guts passam de uma para a outra. A medalha só vem com as três." },
   { id: "lago", lugar: 4, lider: "npc_v6_marinbullmon", regra: "vinculo", titulo: "Vínculo",

@@ -8,9 +8,11 @@ import { ALUGUEIS_FABRICA, DO_ESP, ESTAGIOS_SALAO, FABRICA, LUTAS_SERIE_FABRICA,
   nomeForma, sementeFabrica, type Estagio, type Forma, type TentativaFabrica, duracaoLuta } from "../../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
 import { useJogo } from "../../jogo.ts";
-import { alugarFabrica, candidatosSalao, estagiosQueFaltam, lutarFabrica, tentarSalao, trocarFabrica, type CandidatoSalao, type OrigemPet } from "../../fronteira.ts";
+import { alugarFabrica, candidatosSalao, estagiosQueFaltam, lutarFabrica, mostrarSalao, tentarSalao, trocarFabrica, type CandidatoSalao, type OrigemPet } from "../../fronteira.ts";
 import { CHAVE_GUARDADOS } from "../../pets.ts";
 import type { Tamer } from "../../tamer.ts";
+import { LUTA } from "../../luta.ts";
+import { ENDERECO_LUTA } from "../../rotas.ts";
 
 const pct = (x: number): string => `${Math.round(x * 100)}%`;
 const series = (n: number): string => `${n} série${n === 1 ? "" : "s"}`;
@@ -72,7 +74,7 @@ export function CartaoFabrica({ t, lutando }: { t: Tamer; lutando: boolean }) {
           <span>Trocar o alugado pelo rival derrotado? {nomeForma(u.rival)} {atual!.regra.trocaInteira ? "entra com a vida cheia." : "entra com a mesma parte da vida: a troca não cura."}</span>
           <button type="button" className="dl-btn dl-btn--sec fb-trocar" disabled={lutando} onClick={() => agir(trocarFabrica)}>Trocar por {nomeForma(u.rival)} ({arq(u.rival)})</button>
         </div>}
-        <button type="button" className="dl-btn fr-inst-tentar fb-lutar" disabled={lutando} onClick={() => agir(lutarFabrica)}>Lutar: série {p.serie}, luta {p.naSerie} de {LUTAS_SERIE_FABRICA}</button>
+        <button type="button" className="dl-btn fr-inst-tentar fb-lutar" disabled={lutando} onClick={() => { agir(lutarFabrica); if (LUTA.lutando) location.hash = ENDERECO_LUTA; }}>Lutar: série {p.serie}, luta {p.naSerie} de {LUTAS_SERIE_FABRICA}</button>
       </> : escolhendo && aberta ? <>
         <p className="fb-status">Tentativa {n}: escolha 1 dos {ALUGUEIS_FABRICA} alugados.</p>
         <ul className="fb-alugueis" aria-label="Os alugados desta tentativa">
@@ -115,6 +117,8 @@ export function CartaoSalao({ t, lutando }: { t: Tamer; lutando: boolean }) {
       const esc = ESTAGIOS_SALAO.map(e => { const c = escolhido(e); if (!c) throw new Error(`falta um pet ${nivel(e)}`); return c.origem; });
       const r = tentarSalao(esc), v = r.lutas.filter(x => x.venceu).length;
       setMsg(`${v === ESTAGIOS_SALAO.length ? "Venceu os 4 níveis!" : `Venceu ${v} de ${ESTAGIOS_SALAO.length} níveis seguidos.`}`);
+      mostrarSalao(r);
+      if (LUTA.lutando) location.hash = ENDERECO_LUTA;
     } catch (err) { setMsg(erroDe(err)); }
   };
   return (

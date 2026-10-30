@@ -258,7 +258,7 @@ export const NOME_BOT: Record<string, string> = {
   contragolpe: "contragolpe", adaptativo: "adaptativo", oraculo: "oráculo", ...Object.fromEntries(FORMAS_AD.map(f => [f, NOME_ARQ[f]])),
   ...Object.fromEntries([...CAMPANHA, ...CAMPANHA_V5, ...CAMPANHA_V6].map(c => [c.k, c.nome])),
 };
-const NOME_LISTA_ARENA: Record<string, string> = { floresta: "atirador que vira brigão no turno 10", torre: "espelho com contra-golpe que vai buscar quem atira" };
+const NOME_LISTA_ARENA: Record<string, string> = { floresta: "atirador que vira brigão aos 20 segundos", torre: "espelho com contra-golpe que vai buscar quem atira" };
 export const nomeEstiloNPC = (e: string): string => {
   const [fam, nome] = e.split(":");
   return fam === "v21" ? `${NOME_ARQ[nome].toLowerCase()} sem técnica` : fam === "crianca" ? `Rookie ${nome}` : fam === "arena" ? NOME_LISTA_ARENA[nome] : NOME_BOT[nome];
