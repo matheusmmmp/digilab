@@ -4,7 +4,7 @@
    partida). */
 import { describe, expect, test } from "vitest";
 import {
-  APRENDIZADO_V14, CESC_V9, RELOGIO_V14, comCarta, jogarTR, FATOR_INSTALACAO, FATOR_LIDER_V9, FATOR_LIGA_V9, FATOR_RIVAL_FABRICA_V9, FATOR_SALAO_V9, FATORES_V14,
+  APRENDIZADO_V14, CHIP_ANTES_V14, chipDe, posicaoDoChipV14, CESC_V9, RELOGIO_V14, comCarta, jogarTR, FATOR_INSTALACAO, FATOR_LIDER_V9, FATOR_LIGA_V9, FATOR_RIVAL_FABRICA_V9, FATOR_SALAO_V9, FATORES_V14,
   BOTS_V21, CRIANCA_V21, ADOL_V21, CV21, CV21E_TR, GambitsPet, chaveRegra, regraDe, FORMAS_AD, LINHA_DA_FORMA, LISTAS_V14, RIVAL_ESPECIE, SOMBRIA, gambitsAdulto, lutadorBot,
   permitida, sementeDe, type Forma, type FormaAdultaNormal,
 } from "../motor/index.ts";
@@ -93,5 +93,20 @@ describe("as listas candidatas da v14 (fase 2)", () => {
     const n = (L: typeof A) => jogarTR(L, B, 7, { R }).acoes.filter(a => a.lado === 0).length;
     expect(n(comCarta(A, { foco: true, ritmo: 4 }))).toBeGreaterThan(n(comCarta(A, { foco: true })));
     expect(comCarta(A, { foco: true }).cond.ritmoCarta).toBeUndefined();
+  });
+  test("DR2-1: com chipAntes o chip entra antes da regra que o cobre; sem cobertura, ou sem a chave, fica onde fica hoje", () => {
+    expect(CHIP_ANTES_V14).toBe(true);
+    const recuo = (chipDe("chip_recuo") as { regra: Parameters<typeof chaveRegra>[0] }).regra, k = chaveRegra(recuo);
+    const f = formaDe("muralha"), g = LISTAS_V14.muralha;
+    /* a muralha tem "rival preparando -> contra-golpe", a primeira regra: o Recuo fica coberto por ela */
+    expect(posicaoDoChipV14(g.regras, recuo)).toBe(0);
+    for (const antes of [true, false]) {
+      const gp = new GambitsPet();
+      gp.chipsNoFim = true; gp.chipAntes = antes; gp.semear(f, "muralha", CV21E_TR, g); gp.chipsRegra = [k];
+      const lista = gp.comChips(gp.ativas);
+      expect(lista.indexOf(k)).toBe(antes ? 0 : lista.length - 1);
+    }
+    const perseguidor = (chipDe("chip_perseguidor") as { regra: Parameters<typeof chaveRegra>[0] }).regra;
+    expect(posicaoDoChipV14(LISTAS_V14.sentinela.regras, perseguidor)).toBeNull();
   });
 });
