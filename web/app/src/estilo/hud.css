@@ -14,8 +14,8 @@
 .hx-painel__cab{ display:flex; flex-wrap:wrap; align-items:stretch; gap:8px; min-height:44px; position:relative; border-bottom:1px solid var(--hx-borda) }
 .hx-painel__cab::before{ content:""; position:absolute; inset:0 0 auto 0; height:6px; background:var(--hx-hachura); pointer-events:none }
 .hx-painel__titulo{
-  margin:0; padding:10px 12px; flex:0 0 auto; align-self:center; font:700 18px/1.1 var(--hx-f);
-  letter-spacing:.08em; text-transform:uppercase; color:var(--hx-texto); overflow-wrap:break-word;
+  margin:0; padding:10px 12px; flex:0 0 auto; align-self:center; font:700 var(--hx-titulo-tam)/1.1 var(--hx-f);
+  letter-spacing:var(--hx-titulo-esp); text-transform:uppercase; color:var(--hx-texto); overflow-wrap:break-word;
 }
 .hx-painel__cab > .hx-abas{ flex:1 1 240px; align-self:flex-end; flex-wrap:wrap }
 .hx-painel__cab > .hx-quad{ position:absolute; top:0; right:0 }
@@ -42,7 +42,7 @@
   background:var(--hx-btn-bg); color:var(--hx-btn-ink); border:1px solid var(--hx-btn-borda); border-radius:0; font-weight:700; font-size:18px;
 }
 .hx-continuar::before{ content:""; position:absolute; inset:0 0 auto 0; height:6px; background:var(--hx-hachura-verde); pointer-events:none }
-.hx-continuar:hover{ background:rgba(22,46,34,.96) }
+.hx-continuar:hover{ background:var(--hx-btn-bg-hover) }
 .hx-continuar:active{ background:var(--hx-btn-borda); color:var(--hx-escolhido-ink) }
 
 /* abas no cabecalho: a escolhida em ciano palido com texto escuro */
@@ -52,7 +52,7 @@
   border-bottom:2px solid transparent; font:600 15px/1 var(--hx-f); letter-spacing:.08em; text-transform:uppercase; cursor:pointer;
 }
 .hx-aba:hover{ color:var(--hx-texto); border-bottom-color:var(--hx-borda-topo) }
-.hx-aba[aria-selected="true"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-bottom-color:var(--hx-escolhido); font-weight:700 }
+.hx-aba[aria-selected="true"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-bottom-color:var(--hx-escolhido-borda); font-weight:700 }
 
 /* linha de lista em caixa de borda fina */
 .hx-linha{
@@ -61,7 +61,7 @@
 }
 button.hx-linha{ cursor:pointer }
 button.hx-linha:hover{ border-color:var(--hx-borda-topo); background:var(--hx-miolo-2) }
-.hx-linha[aria-pressed="true"], .hx-linha[aria-current="true"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido) }
+.hx-linha[aria-pressed="true"], .hx-linha[aria-current="true"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido-borda) }
 .hx-linha__sec{ margin-left:auto; color:var(--hx-sec); font-size:14px }
 .hx-linha[aria-pressed="true"] .hx-linha__sec, .hx-linha[aria-current="true"] .hx-linha__sec{ color:var(--hx-escolhido-ink) }
 
@@ -79,18 +79,18 @@ button.hx-linha:hover{ border-color:var(--hx-borda-topo); background:var(--hx-mi
 
 /* medidor segmentado */
 .hx-medidor{ display:flex; align-items:center; gap:8px; min-height:24px }
-.hx-medidor__rot{ color:var(--hx-sec); font:600 12px/1 var(--hx-f); letter-spacing:.08em; text-transform:uppercase; white-space:nowrap }
-.hx-medidor__trilho{ flex:1; height:12px; min-width:48px; background:var(--hx-medidor-trilho); border:1px solid var(--hx-borda) }
+.hx-medidor__rot{ color:var(--hx-sec); font:600 var(--hx-rotulo-tam)/1 var(--hx-f); letter-spacing:.08em; text-transform:uppercase; white-space:nowrap }
+.hx-medidor__trilho{ flex:1; height:var(--hx-medidor-alt); min-width:48px; background:var(--hx-medidor-trilho); border:1px solid var(--hx-borda) }
 .hx-medidor__barra{
   height:100%; background:var(--hx-medidor); -webkit-mask-image:var(--hx-mascara); mask-image:var(--hx-mascara);
 }
 .hx-medidor--ok .hx-medidor__barra{ background:var(--hx-ok) }
 .hx-medidor--alerta .hx-medidor__barra{ background:var(--hx-alerta) }
 .hx-medidor--perigo .hx-medidor__barra{ background:var(--hx-perigo) }
-.hx-medidor__txt{ color:var(--hx-texto-2); font:600 13px/1 var(--hx-f); font-variant-numeric:tabular-nums; white-space:nowrap }
+.hx-medidor__txt{ color:var(--hx-num); font:600 13px/1 var(--hx-f-num); font-variant-numeric:tabular-nums; white-space:nowrap }
 
 /* texto utilitario dentro da pele */
-.hx-rotulo{ color:var(--hx-rotulo); font:600 12px/1.2 var(--hx-f); letter-spacing:.1em; text-transform:uppercase }
+.hx-rotulo{ color:var(--hx-rotulo); font:600 var(--hx-rotulo-tam)/1.2 var(--hx-f); letter-spacing:.1em; text-transform:uppercase }
 .hx-sec{ color:var(--hx-sec) }
 
 /* foco visivel em tudo */

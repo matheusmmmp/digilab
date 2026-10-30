@@ -32,7 +32,7 @@
   padding:4px 2px; font-size:14px; letter-spacing:.04em }
 .dock .dock-bt span{ max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
 .dock .dock-bt img, .dock .dock-bt svg{ width:24px; height:24px; flex:none; object-fit:contain; image-rendering:pixelated }
-.pet-dock .dock .acao-destaque--sugerida, .pet-dock .dock .acao-destaque--sugerida:hover{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido) }
+.pet-dock .dock .acao-destaque--sugerida, .pet-dock .dock .acao-destaque--sugerida:hover{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido-borda) }
 .dock .acao-reserva{ display:block; font-size:10px; font-weight:600; opacity:.85 }
 .dock .acao-mais svg{ image-rendering:auto }
 .dock-mais{ position:absolute; right:6px; bottom:calc(100% + 8px); z-index:2; display:flex; flex-direction:column; gap:4px; min-width:220px; padding:6px;
@@ -69,12 +69,12 @@
 /* ---------- os botoes quadrados da borda direita e o painel aberto */
 .pet-lado{ position:absolute; z-index:6; right:10px; top:calc(var(--casca-topo) + 8px); display:flex; flex-direction:column; gap:8px; pointer-events:none }
 .pet-lado__bt{ width:44px; height:44px; padding:0; display:flex; align-items:center; justify-content:center; pointer-events:auto }
-.pet-lado .pet-lado__bt[aria-pressed="true"], .pet-lado .pet-lado__bt[aria-pressed="true"]:hover{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido) }
+.pet-lado .pet-lado__bt[aria-pressed="true"], .pet-lado .pet-lado__bt[aria-pressed="true"]:hover{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido-borda) }
 .pet-painel{ position:absolute; z-index:7; top:calc(var(--casca-topo) + 8px); right:64px; width:min(300px,calc(100% - 78px)); display:flex; pointer-events:auto;
   max-height:calc(100% - var(--casca-topo) - 190px) }
 .pet-painel:focus{ outline:none }
 .pet-painel:focus-visible{ outline:3px solid var(--hx-foco); outline-offset:2px }
-.pet-painel .pet-painel__hx{ width:100%; max-height:100%; background:linear-gradient(180deg,var(--hx-miolo-2),rgba(10,19,22,.96)) }
+.pet-painel .pet-painel__hx{ width:100%; max-height:100%; background:linear-gradient(180deg,var(--hx-miolo-2),var(--hx-painel-fim)) }
 .pet-painel .hx-painel__titulo{ font-size:16px }
 /* D8: o conteudo do DigiBrain e do "Por que ele disse isso" herda a pele escura (tokens --dl-* remapeados em painel-hx.css) */
 .pet-painel__folha{ color:var(--hx-texto); border-radius:0; padding:10px 12px 12px; max-height:100%; overflow:auto }

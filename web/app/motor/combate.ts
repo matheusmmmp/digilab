@@ -109,10 +109,17 @@ export interface ResultadoLuta { E0: EstadoLuta; pontosA: number; fim: "ko" | "l
 /** efeito de uma carta na luta (itens.ts; pets v6): `guts` a mais no comeco, `foco` = sem exploracao (epsilon 0), e a `cura`: na
     primeira vez que a vida cai abaixo de `abaixo` da maxima (e o lado nao caiu), cura `fracao` da vida maxima, uma vez */
 export interface CuraLuta { abaixo: number; fracao: number }
-export interface EfeitoCarta { guts?: number; foco?: boolean; cura?: CuraLuta }
-/** a carta no lutador: o guts a mais entra no guts do comeco (ate o maximo) e o foco zera a exploracao. A cura e da luta (combate_tr/luta.ts, jogarTR) */
+/** candidato v14 (DR2-4; so as cartas candidatas da bancada os usam, os pets v13 nunca): `gutsTeto`, o teto do guts do comeco em vezes o
+    maximo (o Folego passa do maximo e o guts fica acima ate ser gasto; ausente = 1, o maximo); `ritmo`, o intervalo das decisoes do pet na
+    luta em tempo real, em passos (a Foco decide mais rapido; ausente = o do relogio) */
+export interface EfeitoCarta { guts?: number; foco?: boolean; cura?: CuraLuta; gutsTeto?: number; ritmo?: number }
+/** a carta no lutador: o guts a mais entra no guts do comeco (ate o maximo, ou ate gutsTeto x o maximo) e o foco zera a exploracao; o
+    ritmo vai para o perfil (ritmoCarta). A cura e da luta (combate_tr/luta.ts, jogarTR) */
 export function comCarta(L: Lutador, ef: EfeitoCarta | null): Lutador {
   if (!ef) return L;
-  const cond = ef.guts ? { ...L.cond, guts0: Math.min(L.cond.gutsMax, L.cond.guts0 + ef.guts) } : L.cond;
+  if (ef.gutsTeto !== undefined && !(ef.gutsTeto >= 1)) throw new Error("gutsTeto da carta precisa ser >= 1: " + ef.gutsTeto);
+  if (ef.ritmo !== undefined && !(Number.isInteger(ef.ritmo) && ef.ritmo >= 1)) throw new Error("ritmo da carta precisa ser um inteiro >= 1: " + ef.ritmo);
+  let cond = ef.guts ? { ...L.cond, guts0: Math.min(L.cond.gutsMax * (ef.gutsTeto ?? 1), L.cond.guts0 + ef.guts) } : L.cond;
+  if (ef.ritmo !== undefined) cond = { ...cond, ritmoCarta: ef.ritmo };
   return { ...L, cond, estilo: ef.foco ? { ...L.estilo, eps: 0 } : L.estilo };
 }

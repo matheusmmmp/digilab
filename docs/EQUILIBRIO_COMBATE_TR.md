@@ -558,3 +558,149 @@ As três rodadas:
 - **é a mesma questão das formas de longe da R2-1,** que o Matheus mandou para depois da conferência (a alavanca de estrutura). O I-1, que
   é o sem treino do Lago, vai junto.
 
+## Rodada 2, fase R2-4 — as cartas (I-4)
+
+Worker: Claude Code, Opus 5.5, worktree `v2-combate-tr`, 2026-10-30.
+- **O que rodou:** só as sementes de calibração da rodada 2 (`72101…72505`), em no máximo 4 processos, em 2 rodadas de grade.
+- **Os artefatos:** os resumos em `web/app/scripts/medicoes/equilibrio_tr/r2_4/` (`grade1/` e `grade2/resumo.json`,
+  `depois_resumo_metas.txt`). Os JSON completos estão em `r2_4/completo.tar.gz`.
+- **Antes, uma decisão do Matheus** (2026-10-30, depois da R2-3): o G-1 e o I-1 da Cidadela, do Lago e da Espiral vão para depois da
+  conferência. O plano registra.
+
+**A alavanca (DR2-4):** as cartas candidatas, `CARTAS_V14` em `combate_tr/constantes_tr.ts`, por cima do efeito de hoje. Para isso, a carta
+ganhou dois efeitos novos:
+- **`gutsTeto`:** o teto do guts do começo, em vezes o máximo (para o Fôlego). O guts acima do máximo fica até ser gasto. As quatro somas do
+  guts na luta (`combate_tr/luta.ts`) passam a `max(guts, min(máximo, guts + x))`, que dá o mesmo número até o máximo;
+- **`ritmo`:** o intervalo das decisões do pet na luta, em passos (para a Foco). Cada lado decide no múltiplo do ritmo dele, e sem a carta
+  é o do relógio.
+
+Nos pets v13 nenhuma carta usa esses efeitos. As vidas v13 conferem iguais, e as 15 medidas do candidato saem iguais às da R2-3 campo a
+campo.
+
+**A grade** (`grade_cartas_r2.py`): a escolha é a regra do plano. Uma carta só muda se algum valor levar o efeito médio contra o líder do
+nível a 0,03 ou mais.
+- **Rodada 1:**
+  - **o Fôlego** com o guts de 20 a 60 e o teto de 1 a 1,5: o efeito fica entre 0,005 e 0,007 em todos. O guts do começo não decide a luta;
+  - **a Foco** com o ritmo de 14 a 8 passos (o do relógio é 16): de 0,0075 a 0,028, sem ordem. A diferença de um ritmo para o outro é do
+    tamanho do ruído.
+- **Rodada 2** (a Foco com 15, 13, 6 e 4): de 0,009 a 0,027.
+- **Onde a carta pesa:** o efeito aparece na Campina e na Floresta, até 0,09. Na Cidadela, no Lago e na Espiral fica perto de zero, e é
+  ali que a média cai.
+
+**O resultado:** nenhum valor fecha o I-4 para a Foco nem para o Fôlego, e as duas cartas ficam como estão (`CARTAS_V14` vazio).
+
+| carta | hoje | o melhor da grade | passa? |
+|---|---|---|---|
+| Fôlego | 0,0067 | 0,0071 (guts 60, teto 1,5) | **não fechou** |
+| Cura | 0,0523 | — | sim |
+| Foco | 0,0138 | 0,0277 (ritmo 14) | **não fechou** |
+
+## Rodada 2, fase R2-4b — o chip antes da regra que o cobre (I-5; DR2-1)
+
+Worker: Claude Code, Opus 5.5, worktree `v2-combate-tr`, 2026-10-30.
+- **O que rodou:** só as sementes de calibração da rodada 2 (`72101…72505`), em no máximo 4 processos. Foi uma medida só, porque a
+  mudança não tem número para calibrar.
+- **Os artefatos:** `web/app/scripts/medicoes/equilibrio_tr/r2_4b/depois_resumo_metas.txt`; os JSON completos estão em
+  `r2_4b/completo.tar.gz`.
+- **Antes, uma decisão do Matheus** (2026-10-30, depois da R2-4): o I-4 da Foco e do Fôlego fica para depois da conferência. O plano
+  registra.
+
+**A mudança (DR2-1, que reverte a DE-3 só no candidato):**
+- **O chip de regra entra logo antes da primeira regra da lista que o cobre.** "Cobre" é o `regraQueCobre` da DE-3: a mesma regra, ou uma
+  regra só com condições do chip.
+- **Onde nenhuma regra o cobre,** ele fica onde fica hoje: no fim, antes da reserva (DE-10).
+- **Onde fica:** `gambits_pet.posicaoDoChipV14`, com a chave `GambitsPet.chipAntes` e `CHIP_ANTES_V14`. A bancada usa
+  `--chip-no-fim` para refazer o antes.
+- **Nos pets v13 nada muda:** as vidas v13 conferem iguais.
+- **O I-5 passa a medir também os pets em que o chip estava coberto.** Com a DR2-1, o chip passa na frente da regra que o cobria.
+
+**O resultado** (contra a R2-4; só o I-2, o I-3 e o I-5 mudam, e as outras 12 medidas saem iguais):
+
+| chip | R2-4 | R2-4b | os confrontos |
+|---|---|---|---|
+| Recuo | 0,0975 | 0,259 | o guardião × o colosso 0,99, o furioso × o tita 0,52; as de longe e o vigia × o tita, 0 |
+| Oportunista | 0 | 0,25 | o guardião × a Torre 0,88 (era coberto); o colosso, 0 |
+| Perseguidor | 0,0125 | 0,354 | o espelho e a muralha × as de longe, de 0,66 a 0,74 (eram cobertos); o vigia e o tita, 0,01 a 0,02 |
+| Aparo | 0,005 | 0,005 | nenhum pet tem regra que o cubra, e ele segue no fim |
+
+| # | R2-4 | R2-4b | passa? |
+|---|---|---|---|
+| I-5 | de 0 a 0,0975 | de 0,005 a 0,354 | **não fechou** |
+| I-2 | passa | passa | sim |
+| I-3 | 0,7254 | 0,7254 (a tita, sem item) | **não fechou** |
+| as protegidas | passam | passam | sim |
+
+**Por que o I-5 não fecha:** a DR2-1 resolve o chip coberto, que agora dispara em quase toda luta. O chip que nenhuma regra cobre (o Aparo,
+e o Perseguidor no vigia e no tita) continua no fim, e a primeira regra que vale decide antes dele. Fechar o I-5 pediria pôr esse chip na
+frente também, o que é mais do que a DR2-1 decidiu.
+
+## Rodada 2, fase R2-5 — a conferência única
+
+Worker: Claude Code, Opus 5.5, worktree `v2-combate-tr`, 2026-10-30.
+- **O candidato v14 inteiro:**
+  - o `RELOGIO_V14`, com o disparo a 6×;
+  - as `LISTAS_V14` da R2-1;
+  - a reserva fixa (DE-10);
+  - o `APRENDIZADO_V14` da R2-2;
+  - as `LISTAS_LIDER_V14` e os `FATORES_V14` da R2-3;
+  - as `CARTAS_V14` (vazias) da R2-4;
+  - o chip antes da regra que o cobre, da R2-4b.
+- **As sementes de conferência da rodada 2:** `74101…74505`.
+- **Uma vez,** com as bancadas e as opções da calibração (`medir_tudo.py --faixa conferencia2`) e no máximo 4 processos. Nenhum número
+  mudou por causa dela.
+- **A v14 não foi ligada no jogo.**
+- **Os artefatos:** o resumo meta a meta, calibração × conferência, está em
+  `web/app/scripts/medicoes/equilibrio_tr/r2_5/calibracao_x_conferencia.txt`. Os JSON completos estão em `r2_5/completo.tar.gz`, e a
+  calibração ao lado é a da R2-4b (`r2_4b/completo.tar.gz`).
+- **Antes, uma decisão do Matheus** (2026-10-30, depois da R2-4b): o chip que nenhuma regra cobre (todo chip no topo) fica para depois da
+  conferência. O plano registra.
+
+| # | calibração (R2-4b) | conferência | passa na conferência? |
+|---|---|---|---|
+| T-1 | 33,9 s / 31,9 s | 34,0 s / 32,2 s | **não** (a exceção da DE-9) |
+| T-2 | no limite 0,012; o pior par 0,145 | 0,013; 0,175 | **não** |
+| T-3 | p90 59,7 s | 60,3 s | sim |
+| T-4 | 0,484 | 0,509 | sim |
+| T-5 | 0,715 | 0,707 | sim |
+| F-1 | 4 fora (espelho, muralha, emboscador, tita) | 3 fora (espelho 0,373, muralha 0,638, tita 0,677) | **não** |
+| F-2 | 0,32 | 0,304 | **não** |
+| F-3 | passa | passa | sim |
+| F-4 | o caçador do Champion 0,664 | 0,694; o Rookie 0,548 | **não** (o caçador) |
+| F-5 | Champion 0,53; Ultimate 0,247 | 0,559; 0,261 | **não** |
+| F-6 | o espelho 0,119; a sentinela 0,139 | 0,12; 0,13; o tita 0,105 | **não** |
+| F-7 | o bastião 0,688 | 0,658 | **não** (o bastião) |
+| P-1 | passa | passa | sim |
+| P-2 | passa | passa | sim |
+| P-3 | Champion 0,678; Ultimate 0,518 | 0,647; 0,493 | **não** (o Ultimate) |
+| P-4 | Champion 0,8775; Ultimate 0,9713 | 0,85; 0,9513 | sim |
+| G-1 | fora: a Cidadela, o Lago e a Espiral | fora: a Cidadela (pior 0,19), o Lago (sem 0,06; pior 0,38) e a Espiral (sem 0,0625) | **não** |
+| G-2 | os 4 passam | os 4 passam | sim |
+| G-3 | de 0,43 a 0,72 | de 0,51 a 0,71 | sim |
+| G-4 | 1,00 e 0,76 | 1,00 e 0,73 | sim |
+| G-5 | 0,32 | 0,37 | sim |
+| G-6 | de 0,845 a 0,91 | de 0,8525 a 0,95 (o Rookie no limite) | sim |
+| I-1 | 0,0713 | 0,0625 | **não** |
+| I-2 | passa | passa | sim |
+| I-3 | 0,7254 | 0,7332 | **não** |
+| I-4 | a Foco 0,014; o Fôlego 0,007 | 0,022; 0,018 | **não** |
+| I-5 | de 0,005 a 0,354 | de 0,0075 a 0,3875 | **não** |
+
+**O que diz a conferência:**
+- **Ela repete a calibração meta a meta:** passam as mesmas 13 (T-3, T-4, T-5, F-3, P-1, P-2, P-4, G-2, G-3, G-4, G-5, G-6 e I-2) e
+  falham as mesmas 14.
+- **Contra a conferência da primeira rodada** (`fase5/`, 12 passavam), o G-3 passa a fechar, e nenhuma das que passavam cai.
+- **Nenhuma meta que reprovou na calibração passa aqui.** O G-6 do Rookie fica em 0,95, no limite da faixa.
+
+### O que fica para depois da conferência (as decisões do Matheus de 2026-10-30; cada item com a recomendação e o custo de errar)
+
+| item | as metas | a recomendação | o custo de errar |
+|---|---|---|---|
+| **a alavanca de estrutura das formas de longe e do tita** (o alcance ou o tempo do disparo contra quem avança; a pele dura do tita) | F-1, F-2, F-5, F-6, T-2, I-3 | um número próprio do tempo real para o disparo contra quem fecha a distância e outro para a pele dura do tita, numa rodada só das formas | as listas não chegam lá (R2-1); um número forte demais no disparo faz voltar o problema da primeira rodada, a luta curta (T-1) |
+| **a troca escolhida pelo resultado no aprendizado** | P-3 (o Ultimate) | a troca de regra escolhe a candidata pela nota das lutas que ela teria decidido, em vez de sortear | sem ela, o aprendizado do Ultimate fica perto de 0,5; com ela, a troca deixa de explorar, e o pet pode fixar uma lista ruim cedo |
+| **a Cidadela, o Lago e a Espiral** | G-1, I-1 | tratar junto com a alavanca de estrutura: a pior forma é a sentinela contra quem persegue | sem ela, as formas de longe travam nesses três líderes; mexer só no líder ajuda também o pet sem treino (R2-3) |
+| **o I-4 das cartas** (a Foco e o Fôlego) | I-4 | medir a carta só contra os líderes em que ela pode decidir, ou dar à carta um efeito na luta toda | sem mudar, a Foco e o Fôlego seguem quase decorativas; medir só onde decide muda a meta, então é decisão do Matheus |
+| **o chip no topo** (o chip que nenhuma regra cobre) | I-5 | pôr todo chip de regra no topo da lista, só no candidato | com o chip no topo, ele decide sempre que vale, e um chip forte pode passar o I-3; sem mudar, o Aparo e o Perseguidor no vigia e no tita seguem sem disparar |
+
+**O próximo passo** é decidir se a v14 é ligada no jogo com as 13 metas que passam (DE-1; a B2 do `docs/PLANO_V3.md`) ou se espera a rodada
+dos itens acima. A decisão é do Matheus.
+

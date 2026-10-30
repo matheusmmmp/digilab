@@ -52,6 +52,12 @@ os líderes e a Liga em cima das formas, e as cartas por último.
   rodada;
 - **a troca de regra que escolhe a candidata pelo resultado** (em vez de sortear; o P-3 do Ultimate): decidida pelo Matheus em
   2026-10-30, depois da R2-2, pela recomendação do worker. Vai para depois da conferência, junto com a alavanca de estrutura;
+- **o G-1 e o I-1 da Cidadela, do Lago e da Espiral** (a sentinela contra quem persegue): decidido pelo Matheus em 2026-10-30, depois
+  da R2-3, pela recomendação do worker. Vão para depois da conferência, junto com a alavanca de estrutura;
+- **o I-4 da Foco e do Fôlego** (medir só contra os líderes em que a carta decide, ou dar à carta um efeito na luta toda): decidido pelo
+  Matheus em 2026-10-30, depois da R2-4, pela recomendação do worker. Vai para depois da conferência;
+- **o chip de regra que nenhuma regra cobre** (pôr todo chip de regra no topo da lista): decidido pelo Matheus em 2026-10-30, depois da
+  R2-4b, pela recomendação do worker. Vai para depois da conferência;
 - **o I-5** entra pela DR2-1 (DECIDIDA) como fase R2-4b, depois das cartas e antes da conferência: o chip antes da primeira regra com a
   mesma condição, só no candidato v14;
 - **ligar a v14 no jogo** (a DE-1), que é o passo seguinte, com o ok do Matheus;
