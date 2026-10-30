@@ -1,0 +1,27 @@
+T-1 NAO 33.858 s / 31.904 s | NAO 33.981 s / 32.16 s
+T-2 NAO limite 0.012; pior par 0.145 | NAO limite 0.013; pior par 0.175
+T-3 sim p90 59.712 s | sim p90 60.32 s
+T-4 sim 0.484 | sim 0.509
+T-5 sim 0.715 | sim 0.707
+F-1 NAO fora: espelho 0.374, muralha 0.638, emboscador 0.392, tita 0.694 | NAO fora: espelho 0.373, muralha 0.638, tita 0.677
+F-2 NAO 0.32 | NAO 0.304
+F-3 sim  | sim 
+F-4 NAO {"brigao": 0.408, "guardiao": 0.448, "cacador": 0.664, "colosso": 0.481}; rookie 0.493 | NAO {"brigao": 0.407, "guardiao": 0.433, "cacador": 0.694, "colosso": 0.467}; rookie 0.548
+F-5 NAO champion 0.53; ultimate 0.247 | NAO champion 0.559; ultimate 0.261
+F-6 NAO espelho 0.119, sentinela 0.139 | NAO espelho 0.12, sentinela 0.13, tita 0.105
+F-7 NAO {"devastador": 0.64, "bastiao_rachado": 0.688, "predador": 0.593, "colosso_partido": 0.594} | NAO {"devastador": 0.618, "bastiao_rachado": 0.658, "predador": 0.583, "colosso_partido": 0.587}
+P-1 sim  | sim 
+P-2 sim  | sim 
+P-3 NAO champion 0.6781; ultimate 0.5181 | NAO champion 0.6469; ultimate 0.4928
+P-4 sim champion 0.8775; ultimate 0.9713 | sim champion 0.85; ultimate 0.9513
+G-1 NAO fora: cidadela (sem 0.0113, com 0.7588, pior 0.29 sentinela), lago (sem 0.0713, com 0.8738, pior 0.44 sentinela), espiral (sem 0.0438, com 0.84, pior 0.43 sentinela) | NAO fora: cidadela (sem 0.005, com 0.7375, pior 0.19 sentinela), lago (sem 0.06, com 0.865, pior 0.38 sentinela), espiral (sem 0.0625, com 0.8588, pior 0.59 sentinela)
+I-1 NAO 0.0713 | NAO 0.0625
+G-2 sim fora:  | sim fora: 
+G-3 sim 0.43 a 0.72; fora [] | sim 0.51 a 0.71; fora []
+G-4 sim 1 e 0.76 | sim 1 e 0.73
+G-5 sim 0.32 | sim 0.37
+G-6 sim crianca 0.91, adolescente 0.845, adulto 0.8925, mega 0.8825 | sim crianca 0.95, adolescente 0.8525, adulto 0.9125, mega 0.9038
+I-2 sim  | sim 
+I-3 NAO 0.7254 | NAO 0.7332
+I-4 NAO carta_folego 0.0067, carta_cura 0.0523, carta_foco 0.0138 | NAO carta_folego 0.0177, carta_cura 0.0575, carta_foco 0.0217
+I-5 NAO chip_recuo 0.2592, chip_oportunista 0.25, chip_perseguidor 0.3537, chip_aparo 0.005 | NAO chip_recuo 0.2767, chip_oportunista 0.225, chip_perseguidor 0.3875, chip_aparo 0.0075

@@ -22,18 +22,18 @@
    uso (em web/app): npx tsx scripts/equilibrio_tr/fase4_progressao.ts --faixa calibracao --parte g1|g2|g3|g4|g5|g6|i2|i3|i4|i5
      [--fatores '{"lider":{"torre":1.2},"npc":{"npc_tier2_sentinela":1.3},"liga":{"lago":1.2},"instalacao":1,"fabrica":.6,"salao":{"mega":1}}']
      [--cartas '{"carta_folego":{"guts":40}}'] --saida <arquivo.json>
-   --cartas: o efeito candidato de uma carta por cima do de hoje (o valor da carta, a alavanca do I-4; so a bancada)
+   --cartas: o efeito candidato de uma carta por cima do candidato (CARTAS_V14) e do de hoje (o valor da carta, a alavanca do I-4; so a bancada)
    --variante-lider <nome>: as listas candidatas de lideres (variantes_lideres_r2.ts, a alavanca da R2-3) por cima das listas do candidato */
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { execSync } from "node:child_process";
 import {
   ADOL_V21, ARENAS, CESC_V9, CIT, CRIANCA_V21, CTR, CURA_LIGA_V9, CV, CV21E_TR, ESPECIES, ESTAGIOS_SALAO, FATOR_INSTALACAO, FATOR_LIDER_V9,
-  FATOR_LIGA_V9, FATOR_RIVAL_FABRICA_V9, FATOR_SALAO_V9, FATORES_V14, FORMAS_AD, LISTAS_LIDER_V14, ITENS, LIGA, LINHAS, LINHA_DA_FORMA, LISTAS_V14, LUGARES_V6, NPC, RELOGIO_V14,
+  FATOR_LIGA_V9, FATOR_RIVAL_FABRICA_V9, FATOR_SALAO_V9, CARTAS_V14, CHIP_ANTES_V14, FATORES_V14, FORMAS_AD, LISTAS_LIDER_V14, ITENS, LIGA, LINHAS, LINHA_DA_FORMA, LISTAS_V14, LUGARES_V6, NPC, RELOGIO_V14,
   STATS, alugueisFabrica, arenaDaLuta, capacidadeLista, caraterCanonico, cartaDe, chaveRegra, chipServe, copiarGambits, formaRivalFabrica,
   formaRivalInstalacao, formaRivalSalao, gambitsAdulto, hashSemente, itensValem, jogarArena, jogarSerie, jogarTR, listaComChips, lutadorBot,
-  lutadorLiga, perfilDe, pontosComChips, regraQueCobre, rivalInstalacao, rivalSalao,
-  type Chip, type Estagio, type Forma, type FormaAdultaNormal, type ListaGambits, type Lutador, type RegrasLuta,
+  lutadorLiga, perfilDe, pontosComChips, posicaoDoChipV14, regraQueCobre, rivalInstalacao, rivalSalao,
+  type Chip, type Estagio, type Forma, type FormaAdultaNormal, type ListaGambits, type Lutador, type Regra, type RegrasLuta,
 } from "../../motor/index.ts";
 import { ligarEscala } from "../../motor/catalogo.ts";
 import { VARIANTES_LIDER } from "./variantes_lideres_r2.ts";
@@ -61,6 +61,8 @@ for (const k of ["lider", "npc", "liga", "salao"] as const) for (const x of Obje
 const FAT: Fatores = { lider: { ...BASE.lider, ...fArg.lider }, npc: { ...BASE.npc, ...fArg.npc }, liga: { ...BASE.liga, ...fArg.liga },
   instalacao: fArg.instalacao ?? BASE.instalacao, fabrica: fArg.fabrica ?? BASE.fabrica, salao: { ...BASE.salao, ...fArg.salao } };
 
+/* DR2-1: o chip antes da regra que o cobre (o candidato); --chip-no-fim: no fim, como na R2-4 */
+const CHIP_ANTES = CHIP_ANTES_V14 && !process.argv.includes("--chip-no-fim");
 /* as listas dos lideres: as do candidato (LISTAS_LIDER_V14) e a variante por cima */
 const varLider = arg("variante-lider");
 if (varLider !== null && !VARIANTES_LIDER[varLider]) throw new Error("variante de lider desconhecida: " + varLider);
@@ -68,7 +70,7 @@ const LISTA_LIDER: Record<string, ListaGambits> = { ...LISTAS_LIDER_V14, ...(var
 /* o efeito das cartas: o de hoje (itens.ts) ou o de --cartas por cima */
 const CARTAS_ARG = JSON.parse(arg("cartas") ?? "{}") as Record<string, Record<string, unknown>>;
 for (const k of Object.keys(CARTAS_ARG)) cartaDe(k);
-const efeitoCarta = (id: string) => ({ ...cartaDe(id).carta, ...CARTAS_ARG[id] });
+const efeitoCarta = (id: string) => ({ ...cartaDe(id).carta, ...CARTAS_V14[id], ...CARTAS_ARG[id] });
 const SEMENTES_POR_BASE = 20;
 const bases = [0, 1, 2, 3, 4].map(i => FAIXAS[faixa] + 101 * i);
 const sementes = bases.flatMap(b => Array.from({ length: SEMENTES_POR_BASE }, (_, k) => hashSemente("equilibrio-tr", b, k)));
@@ -95,7 +97,14 @@ function comChipsDeRegra(g: ListaGambits, chips: readonly string[], est: Estagio
   const reserva = g.regras[g.regras.length - 1], todas = new Set(g.regras.map(chaveRegra));
   const novos = chips.filter(id => { const c = ITENS.find(x => x.id === id) as Chip; return c.tipo === "chip_regra" && !todas.has(chaveRegra(c.regra)); });
   const sem = listaComChips({ regras: g.regras.slice(0, -1), final: g.final }, novos, capacidadeLista(est), VERSAO);
-  return { regras: [...sem.regras, reserva], final: g.final };
+  let regras = [...sem.regras, reserva];
+  /* DR2-1 (o candidato; --chip-no-fim desliga): cada chip sobe para antes da primeira regra que o cobre */
+  if (CHIP_ANTES) for (const id of novos) {
+    const c = (ITENS.find(x => x.id === id) as Chip & { regra: Regra }).regra, outras = regras.filter(r => chaveRegra(r) !== chaveRegra(c));
+    const i = posicaoDoChipV14(outras, c);
+    if (i !== null) regras = [...outras.slice(0, i), c, ...outras.slice(i)];
+  }
+  return { regras, final: g.final };
 }
 /** o pet: `nivel` = o treino uniforme; os chips pelo motor (itens.ts), com a trava do treino minimo (sem `trava`: o efeito do item em si) */
 function pet(ref: Ref, esp: Forma["esp"], nivel: number, chips: readonly string[] = [], trava = true, escala = true): Lutador {
@@ -118,7 +127,7 @@ ligarEscala(parte !== "i3");
 const out: Record<string, unknown> = {
   gerado_por: "web/app/scripts/equilibrio_tr/fase4_progressao.ts", data: new Date().toISOString().slice(0, 10),
   commit: execSync("git rev-parse --short HEAD").toString().trim(), node: process.version,
-  faixa, bases, sementes_por_base: SEMENTES_POR_BASE, relogio: R.relogio, listas: "v14", reserva_no_fim: true, fatores: FAT, cartas: CARTAS_ARG, variante_lider: varLider, listas_lider: Object.keys(LISTA_LIDER), parte, metas: {},
+  faixa, bases, sementes_por_base: SEMENTES_POR_BASE, relogio: R.relogio, listas: "v14", reserva_no_fim: true, chip_antes: CHIP_ANTES, fatores: FAT, cartas: CARTAS_ARG, variante_lider: varLider, listas_lider: Object.keys(LISTA_LIDER), parte, metas: {},
 };
 const metas = out.metas as Record<string, unknown>;
 
@@ -335,7 +344,8 @@ if (parte === "i5") {
     for (const ref of alvo.pets) {
       const est = ref.forma("brasa").est;
       if (!chipServe(c, est)) continue;
-      if (regraQueCobre(ref.lista.regras, c.regra)) { cobertos.push(ref.id); continue; }
+      /* coberto pela lista (DE-3): com a DR2-1 o chip passa na frente da regra que o cobre e e medido; sem ela, fica de fora */
+      if (regraQueCobre(ref.lista.regras, c.regra)) { cobertos.push(ref.id); if (!CHIP_ANTES) continue; }
       const rivais: [string, (k: number) => Lutador][] = alvo.lideres ? alvo.lideres.map(a => [a, () => lider(a).B])
         : alvo.rivais(est).map(rv => [rv.id, (k: number) => pet(rv, ESPECIES[k % ESPECIES.length], TIPICO[est])]);
       for (const [nome, B] of rivais) {

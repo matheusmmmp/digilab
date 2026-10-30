@@ -103,6 +103,13 @@ export function regraQueCobre(lista: readonly Regra[], chip: Regra): Regra | nul
   return lista.find(r => chaveRegra(r) === k || r.se.every(c => conds.has(JSON.stringify([c.n, c.p])))) ?? null;
 }
 
+/** candidato v14 (DR2-1, decidida pelo Matheus em 2026-10-30; reverte a DE-3 so nele): o chip de regra entra logo antes da primeira regra
+    da lista que o cobre (regraQueCobre). A posicao dessa regra, ou null quando nenhuma o cobre (o chip fica onde fica hoje) */
+export function posicaoDoChipV14(lista: readonly Regra[], chip: Regra): number | null {
+  const i = lista.findIndex(r => regraQueCobre([r], chip) !== null);
+  return i < 0 ? null : i;
+}
+
 export interface MudancaGambit { luta: number; texto: string; dono?: boolean }
 
 export class GambitsPet {
@@ -139,6 +146,9 @@ export class GambitsPet {
       para a regra i da semeadura; nao decai como a nota-base); `bonus` e `limiar` (opcionais) no lugar do GA.bonusResultado e do
       GA.limiarTroca. null nos pets v13 (o GA de sempre); so a bancada liga. Nao entra na assinatura */
   aprendizadoTR: { readonly alfa: number; readonly prior: number; readonly bonus?: number; readonly limiar?: number } | null = null;
+  /** candidato v14 (DR2-1): o chip de regra entra antes da regra que o cobre (posicaoDoChipV14). Desligado nos pets v13; so a bancada
+      liga. Nao entra na assinatura */
+  chipAntes = false;
   /** a posicao de cada regra na lista de partida da ultima semeadura (so com aprendizadoTR) */
   posSemente: Record<string, number> = {};
   /** regras das lutas do pet (a da ultima semeadura): CV21E_TR nos pets v13; null antes da primeira semeadura. Nao entra na assinatura: sai
@@ -237,7 +247,13 @@ export class GambitsPet {
     const chips = this.chipsRegra.filter(k => !base.includes(k) && permitida(regraDe(k), this.forma!));
     /* DE-10: com a reserva no fim da lista, os chips entram antes dela (a reserva continua a ultima) */
     const r = this.reserva !== null && base[base.length - 1] === this.reserva ? this.reserva : null;
-    return r === null ? [...base, ...chips] : [...base.slice(0, -1), ...chips, r];
+    let lista = r === null ? [...base, ...chips] : [...base.slice(0, -1), ...chips, r];
+    /* DR2-1 (candidato v14): cada chip sobe para antes da primeira regra que o cobre */
+    if (this.chipAntes) for (const k of chips) {
+      const sem = lista.filter(x => x !== k), i = posicaoDoChipV14(sem.map(regraDe), regraDe(k));
+      if (i !== null) lista = [...sem.slice(0, i), k, ...sem.slice(i)];
+    }
+    return lista;
   }
   /** por que a regra do chip nao pode entrar agora (null: pode). A regra entra no topo; com a lista cheia sai a regra livre (nao
       travada e nao de chip) de nota mais baixa */
