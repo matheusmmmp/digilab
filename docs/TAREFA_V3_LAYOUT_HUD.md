@@ -98,4 +98,4 @@ Pedido do Matheus (pela sessão que coordena): três pontos, sem redesenhar a p�
 - **Balão da fala (pedido do Matheus, depois das capturas):** sai do branco com borda azul-marinho (`--dl-*`) e entra no padrão do HUD:
   caixa escura translúcida chanfrada, contorno e traço ciano, texto claro e "toque para ver o porquê" no secundário. A fala fria ou
   sombria troca o ciano pelo lilás. O toque continua abrindo o porquê.
-- Capturas em `D:\Trab\digilab\capturas_hud_aprovar_r2\` (16, fora do git), aguardando a aprovação.
+- Capturas em `D:\Trab\digilab\capturas_hud_aprovar_r2\` (16, fora do git), aprovadas pelo Matheus em 2026-10-30.
