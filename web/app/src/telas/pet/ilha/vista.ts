@@ -11,11 +11,12 @@ import * as THREE from "three";
 import { TPD, eNoite, type Mundo } from "../../../../motor/index.ts";
 import { jogoAtual } from "../../../jogo.ts";
 import { CENA } from "../cenaEstado.ts";
-import { Seguidor, dentroDoMapa, ninhoDe } from "../vistaMundo.ts";
-import { AFASTAR_MAX, CAMERA_DESLOC, CAMERA_OLHAR, DOBRA_K, FOV_GRAUS, LARGURA_MIN, LONGE, NEVOA, PERTO, RAZAO_MAX, TEXEL_ALVO } from "./constantes.ts";
-import { CURVA, montarCena, objetos, toon, type CenaIlha } from "./cena.ts";
+import { Seguidor, dentroDoMapa } from "../vistaMundo.ts";
+import { AFASTAR_MAX, CAMERA_DESLOC, CAMERA_OLHAR, DOBRA_K, FOV_GRAUS, FPS_MIN, LARGURA_MIN, LONGE, NEVOA, PERTO, QUEDA_MS, RAZAO_MAX, TEXEL_ALVO } from "./constantes.ts";
+import { CURVA, montarCena, objetos, type CenaIlha, type Objetos } from "./cena.ts";
 import { paraMundoCel, paraTelaNdc, type CameraLida, type Dobra } from "./curva.ts";
 import { ilhaDe, type Ilha } from "./grade.ts";
+import { Itens } from "./itens.ts";
 import { Papel, type Ret } from "./papel.ts";
 
 const movimentoReduzido = (): boolean => matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -29,8 +30,10 @@ class VistaIlha {
   private readonly raio = new THREE.Raycaster();
   private readonly lida: CameraLida;
   private readonly papel = new Papel();
-  private readonly comidas = new Map<number, THREE.Mesh>();
-  private readonly bola: THREE.Mesh;
+  private readonly itens: Itens;
+  private objetos: Objetos | null = null;
+  /** a qualidade caiu (regra 10): sem vento, metade da grama e pixelRatio 1 */
+  private baixa = false;
   private ppu = 1;              // pixels do canvas por unidade do mundo na distancia do pet
   private pxPorTexel = 1;       // pixels do canvas por texel do sprite (inteiro, regra 8)
   private larguraCss = 1;
@@ -59,20 +62,18 @@ class VistaIlha {
         return { o: [o.x, o.y, o.z], d: [d.x, d.y, d.z] };
       },
     };
-    /* o ninho e o comedouro do layout; a bola e a racao entram e saem a cada quadro */
-    const [nx, ny] = ninhoDe(mu.cm), sub = mu.cm.sub;
-    const ninho = new THREE.Mesh(new THREE.CircleGeometry(1.2, 24).rotateX(-Math.PI / 2), toon({ color: 0xb98a55 }));
-    ninho.position.set(nx / sub, 0.02, ny / sub);
-    const comedouro = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.35, 0.75), toon({ color: 0xeef4fc }));
-    comedouro.position.set(mu.comedouro[0] / sub, 0.18, mu.comedouro[1] / sub);
-    this.bola = new THREE.Mesh(new THREE.SphereGeometry(0.38, 16, 12), toon({ color: 0x378add }));
-    this.cenaIlha.cena.add(ninho, comedouro, this.bola, this.papel.raiz);
+    /* o ninho, o comedouro, a racao, a fruta e a bola (itens.ts) e o pet em papel */
+    this.itens = new Itens(mu);
+    this.cenaIlha.cena.add(this.itens.raiz, this.papel.raiz);
+    CURVA.uVento.value = 1;
   }
 
   /** os kits (public/kits3d) entram depois do terreno */
   async carregarObjetos(): Promise<void> {
     const o = await objetos(this.ilha, document.baseURI);
+    this.objetos = o;
     this.cenaIlha.cena.add(o.grupo);
+    if (this.baixa) this.menosGrama();
   }
 
   /** a dobra de agora: centrada no z desenhado do pet */
@@ -81,7 +82,7 @@ class VistaIlha {
   /** ajusta o canvas a caixa (px de CSS): a resolucao, a proporcao e o afastamento da camera em retrato */
   ajustar(larguraCss: number, alturaCss: number): void {
     this.larguraCss = Math.max(1, larguraCss); this.alturaCss = Math.max(1, alturaCss);
-    this.renderer.setPixelRatio(Math.min(RAZAO_MAX, devicePixelRatio || 1));
+    this.renderer.setPixelRatio(this.baixa ? 1 : Math.min(RAZAO_MAX, devicePixelRatio || 1));
     this.renderer.setSize(this.larguraCss, this.alturaCss, false);
     this.canvas.style.width = `${this.larguraCss}px`; this.canvas.style.height = `${this.alturaCss}px`;
     this.camera.aspect = this.larguraCss / this.alturaCss;
@@ -132,11 +133,11 @@ class VistaIlha {
     CURVA.uTempo.value = movimentoReduzido() ? 0 : agora / 1000;
     const noite = eNoite(m.e.tick % TPD);
     if (noite !== this.noite) { this.noite = noite; this.cenaIlha.aplicarNoite(noite); }
-    this.sincronizar(mu, m.e.tick);
+    this.itens.sincronizar(mu, m.e.tick, noite);
     const ret = this.papel.atualizar({
       agora, dt: Math.min(0.05, dtMs / 1000), quadro, cel: this.petCel, motor: mu.pet, camera: this.camera,
       ppu: this.ppu, pxPorTexel: this.pxPorTexel, canvas: [this.renderer.domElement.width, this.renderer.domElement.height],
-      razao: this.renderer.getPixelRatio(), reduzido: movimentoReduzido(),
+      razao: this.renderer.getPixelRatio(), reduzido: movimentoReduzido(), noite,
     });
     this.renderer.render(this.cenaIlha.cena, this.camera);
     return ret;
@@ -144,27 +145,16 @@ class VistaIlha {
 
   dispose(): void { this.papel.dispose(); this.renderer.dispose(); }
 
-  /** a racao e a bola onde o motor diz: entra a racao nova, sai a comida, muda de cor a podre */
-  private sincronizar(mu: Mundo, tick: number): void {
-    const vistas = new Set<number>(), sub = mu.cm.sub;
-    for (const c of mu.comidas.values()) {
-      const sit = mu.situacao(c, tick);
-      if (sit === null) continue;
-      vistas.add(c.id);
-      let g = this.comidas.get(c.id);
-      if (!g) {
-        g = new THREE.Mesh(new THREE.SphereGeometry(0.3, 12, 8).scale(1, 0.55, 1), toon({ color: 0x9b6a3c }));
-        g.position.set(c.x / sub, 0.12, c.y / sub);
-        this.cenaIlha.cena.add(g);
-        this.comidas.set(c.id, g);
-      }
-      (g.material as THREE.MeshToonMaterial).color.setHex(sit === "podre" ? 0x6b6b3a : 0x9b6a3c);
-    }
-    for (const [id, g] of this.comidas) if (!vistas.has(id)) { this.cenaIlha.cena.remove(g); this.comidas.delete(id); }
-    const [bx, by] = mu.bolaEm(tick);
-    this.bola.position.set(bx / sub, 0.38, by / sub);
+  /** a queda de qualidade (regra 10, PROPOSTO): sem vento, metade da grama e pixelRatio 1; so uma vez */
+  baixarQualidade(): void {
+    if (this.baixa) return;
+    this.baixa = true;
+    CURVA.uVento.value = 0;
+    this.menosGrama();
+    console.info("ilha: a média ficou abaixo de", FPS_MIN, "fps; a qualidade caiu (sem vento, menos grama, pixelRatio 1)");
   }
-
+  get qualidadeBaixa(): boolean { return this.baixa; }
+  private menosGrama(): void { for (const g of this.objetos?.grama ?? []) g.count = Math.floor(g.count / 2); }
 }
 
 const mediana = (v: number[]): number => { const s = [...v].sort((a, b) => a - b); return s.length ? s[Math.floor(s.length / 2)] : 0; };
@@ -180,10 +170,18 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
   vista.carregarObjetos().catch(err => { if (!vivo) return; console.error("ilha: os modelos dos kits não carregaram; fica a reserva do mundo:", err); aoPerder(); });
   /* medir (a M3): os intervalos entre quadros do navegador */
   let medida: number[] | null = null, ultimoQuadro = performance.now();
+  /* a queda de qualidade: a media de quadros em janelas de QUEDA_MS (a pagina escondida nao conta: o navegador para o laco) */
+  let janela = { inicio: performance.now(), quadros: 0 };
   const laco = (agora: number) => {
     if (!vivo) return;
     if (medida) medida.push(agora - ultimoQuadro);
+    if (agora - ultimoQuadro > 500) janela = { inicio: agora, quadros: 0 };
     ultimoQuadro = agora;
+    janela.quadros++;
+    if (agora - janela.inicio >= QUEDA_MS) {
+      if (!vista.qualidadeBaixa && (janela.quadros * 1000) / (agora - janela.inicio) < FPS_MIN) { vista.baixarQualidade(); ajustar(); }
+      janela = { inicio: agora, quadros: 0 };
+    }
     CENA.ret = vista.desenhar(agora, quadro++);
     pedido = requestAnimationFrame(laco);
   };
@@ -205,7 +203,7 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
         tela_css: [innerWidth, innerHeight], canvas_px: [canvas.width, canvas.height],
         duracao_s: +(total / 1000).toFixed(3), quadros: deltas.length, fps_media: +((deltas.length * 1000) / total).toFixed(2),
         quadro_mediana_ms: +mediana(deltas).toFixed(2), quadro_p95_ms: +p95(deltas).toFixed(2),
-        draw_calls: vista.renderer.info.render.calls,
+        draw_calls: vista.renderer.info.render.calls, qualidade_baixa: vista.qualidadeBaixa,
       });
     }, 10_000);
   });
