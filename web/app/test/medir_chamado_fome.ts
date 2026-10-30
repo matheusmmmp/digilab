@@ -15,17 +15,18 @@ import { writeFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 import { ACAO_CHAMADO, CHAMADO_FOME_CORPO, TICK_INICIAL } from "../motor/constantes.ts";
 import { Motor } from "../motor/motor.ts";
-import type { Chamado } from "../motor/tipos.ts";
+import type { Chamado, ChavesProduto } from "../motor/tipos.ts";
 
-const SEMENTES = [101, 202, 303];
-const DONOS = ["nada", "atende", "atende_10min", "brinca_atende", "so_alimenta", "nao_alimenta"] as const;
-type NomeDono = typeof DONOS[number];
+export const SEMENTES = [101, 202, 303];
+export const DONOS = ["nada", "atende", "atende_10min", "brinca_atende", "so_alimenta", "nao_alimenta"] as const;
+export type NomeDono = typeof DONOS[number];
 const SAIDA = new URL("./efeito_chamado_fome.json", import.meta.url);
 
-function vida(semente: number, ritmo: "rapida" | "classica", chave: boolean, dono: NomeDono) {
+/** a vida do bebe com as chaves (null: sem o evento "p"); tambem a do test/medir_chamados_bebe.ts */
+export function vida(semente: number, ritmo: "rapida" | "classica", chaves: ChavesProduto | null, dono: NomeDono) {
   const m = new Motor(semente);
   if (ritmo === "classica") m.configurar("classica");
-  if (chave) m.ligarProduto({ chamadoPelaFome: true, decisaoNaComida: true });
+  if (chaves) m.ligarProduto(chaves);
   const abriu: Record<Chamado, number> = { fome: 0, higiene: 0, carinho: 0 };
   const visto: Partial<Record<Chamado, number>> = {}, fomeAoAbrir: number[] = [];
   const atrasados: [number, Chamado][] = [];
@@ -55,7 +56,7 @@ function vida(semente: number, ritmo: "rapida" | "classica", chave: boolean, don
 export function medirEfeito() {
   const vidas = [];
   for (const ritmo of ["rapida", "classica"] as const) for (const dono of DONOS) for (const chave of [false, true]) for (const s of SEMENTES)
-    vidas.push({ ritmo, dono, chave, semente: s, ...vida(s, ritmo, chave, dono) });
+    vidas.push({ ritmo, dono, chave, semente: s, ...vida(s, ritmo, chave ? { chamadoPelaFome: true, decisaoNaComida: true } : null, dono) });
   return {
     descricao: "o efeito do chamado de fome pela fome do corpo no bebe do pet do jogo (v13): os chamados abertos no bebe e a fracao de cuidado da "
       + "evolucao para a crianca, com e sem as chaves do produto (o evento \"p\"), nos ritmos rapido (180 min) e classico (360 min)",

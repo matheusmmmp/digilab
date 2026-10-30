@@ -430,3 +430,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-30 — COMBATE-TR calibração, fase 3 (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): o estágio, o treino e o aprendizado](registro/2026-10.md)
 - [2026-10-30 — COMBATE-TR calibração, o passo do disparo (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): a DE-8](registro/2026-10.md)
 - [2026-10-30 — COMBATE-TR calibração, o disparo a 6× (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): a DE-9](registro/2026-10.md)
+- [2026-10-30 — PRODUTO-CUIDADO (worker A, Claude Code, Opus 5.5, worktree `v2-produto-cuidado`): os chamados do bebê pelo corpo, com os limiares do bebê](registro/2026-10.md)

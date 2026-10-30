@@ -6,7 +6,7 @@
    valor fixo porque entram na assinatura (a educacao, a mentira e a obediencia, sempre zeradas; a memoria por espacos do Bandit): a
    assinatura das vidas v13 nao muda (test/vidas_v13.test.ts). */
 import {
-  ACAO_CHAMADO, ACOES_DONO_JOGO_V11, ACOES_PET, CAT, CDJ, CHAMADO_BEBE, CHAMADO_FOME_CORPO, CHE, CLE, CMG, EIXOS_TEMP, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
+  ACAO_CHAMADO, ACOES_DONO_JOGO_V11, ACOES_PET, CAT, CDJ, CHAMADO_BEBE, CHAMADO_BEBE_CORPO, CHAMADO_FOME_CORPO, CHE, CLE, CMG, EIXOS_TEMP, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
   TICK_INICIAL, VERSAO_PET,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
@@ -150,9 +150,10 @@ export class Motor {
   sombria = false;
   chamados: Chamados = { abertos: {}, atendidos: 0, total: 0 };
   /** as chaves do produto (EventoProduto, no comeco do registro dos ovos novos); sem o evento, as duas desligadas */
-  produto: ChavesProduto = { chamadoPelaFome: false, decisaoNaComida: false };
-  /** com o chamadoPelaFome: o tick em que o ultimo chamado de fome abriu (derivado do registro; fora da assinatura) */
-  private ultimoChamadoFome: number | null = null;
+  produto: Required<ChavesProduto> = { chamadoPelaFome: false, decisaoNaComida: false, chamadosPeloCorpo: false };
+  /** com o chamadoPelaFome ou o chamadosPeloCorpo: o tick em que o ultimo chamado de cada tipo abriu (derivado do registro; fora da
+      assinatura) */
+  private ultimoChamado: Partial<Record<Chamado, number>> = {};
   private produtoLido = false;
   sparring = 0;
   motivos: MotivoVida[] = [];
@@ -314,17 +315,20 @@ export class Motor {
   /** as chaves do produto, uma vez, no comeco do registro (antes de qualquer decisao, acao do dono ou avanco; depois do ritmo e
       da origem, se houver). O jogo liga nos ovos novos (src/produto.ts); a pesquisa e os gabaritos nunca chamam */
   ligarProduto(ch: ChavesProduto): void {
-    const v = { chamadoPelaFome: ch.chamadoPelaFome, decisaoNaComida: ch.decisaoNaComida };
+    const v: ChavesProduto = { chamadoPelaFome: ch.chamadoPelaFome, decisaoNaComida: ch.decisaoNaComida,
+      ...(ch.chamadosPeloCorpo === undefined ? {} : { chamadosPeloCorpo: ch.chamadosPeloCorpo }) };
     this._produto(v);
     this.log.push([this.e.tick, "p", v]);
   }
   private _produto(ch: unknown): void {
-    if (!ch || typeof ch !== "object" || Object.keys(ch).sort().join() !== "chamadoPelaFome,decisaoNaComida"
-        || !Object.values(ch).every(x => typeof x === "boolean"))
+    /* as duas chaves de 2026-10-29, ou as tres desde 2026-10-30 */
+    const nomes = ch && typeof ch === "object" ? Object.keys(ch).sort().join() : "";
+    if ((nomes !== "chamadoPelaFome,decisaoNaComida" && nomes !== "chamadoPelaFome,chamadosPeloCorpo,decisaoNaComida")
+        || !Object.values(ch as object).every(x => typeof x === "boolean"))
       throw new Error(`chaves do produto inválidas: ${JSON.stringify(ch)}`);
     if (this.produtoLido || this.nDecisoes || this.nDono || this.e.tick !== TICK_INICIAL)
       throw new Error("as chaves do produto vão uma vez, no começo do registro");
-    this.produto = { ...(ch as ChavesProduto) }; this.produtoLido = true;
+    this.produto = { chamadosPeloCorpo: false, ...(ch as ChavesProduto) }; this.produtoLido = true;
     (this.v11!.laco as MotorCorpoMundo).decidirNaComida = this.produto.decisaoNaComida;
   }
   registrarOrigem(o: Origem): void {
@@ -821,27 +825,35 @@ export class Motor {
       min, higiene a cada 60, carinho a cada 45); conta como atendido se o dono fizer a acao certa dentro da
       janela de 15 min. Chamado novo do mesmo tipo com um aberto: o aberto conta como perdido. */
   private _chamados(): void {
-    const tk = this.e.tick, t = tk - TICK_INICIAL, ab = this.chamados.abertos, pelaFome = this.produto.chamadoPelaFome;
+    const tk = this.e.tick, t = tk - TICK_INICIAL, ab = this.chamados.abertos;
+    const corpo = this.produto.chamadosPeloCorpo, pelaFome = this.produto.chamadoPelaFome && !corpo;
     for (const tipo of Object.keys(ab) as Chamado[]) if (tk - ab[tipo]! > CAT.janelaChamado) { this.chamados.total++; delete ab[tipo]; }
+    if (corpo) {
+      /* a chave chamadosPeloCorpo: os tres pelo corpo, com os limiares do bebe (o da fome no lugar do CHAMADO_FOME_CORPO) */
+      const e = this.e, valor: Record<Chamado, number> = { fome: e.fome, higiene: e.higiene, carinho: e.humor };
+      for (const tipo of Object.keys(CHAMADO_BEBE) as Chamado[]) this._chamadoCorpo(tipo, valor[tipo], CHAMADO_BEBE_CORPO[tipo], tk, t);
+      return;
+    }
     for (const [tipo, iv] of Object.entries(CHAMADO_BEBE) as [Chamado, number][]) if (t > 0 && t < this.dur.bebe && t % iv === 0) {
       if (pelaFome && tipo === "fome") continue;
       if (tipo in ab) this.chamados.total++;
       ab[tipo] = tk;
     }
-    if (pelaFome) this._chamadoFome(tk, t);
+    if (pelaFome) this._chamadoCorpo("fome", this.e.fome, CHAMADO_FOME_CORPO.limiar, tk, t);
   }
-  /** a chave chamadoPelaFome: o chamado de fome abre quando a fome do corpo fica abaixo do limiar (CHAMADO_FOME_CORPO), no maximo um a
-      cada CHAMADO_BEBE.fome ticks. Fecha como atendido com o alimentar do dono (o _atender, como hoje) ou quando a fome volta ao limiar (no
-      pet com o mundo, ela so sobe comendo a racao que o dono deixou); como perdido, quando a janela passa (como hoje) */
-  private _chamadoFome(tk: number, t: number): void {
-    const ab = this.chamados.abertos, lim = CHAMADO_FOME_CORPO.limiar;
-    if ("fome" in ab) {
-      if (this.e.fome >= lim) { this.chamados.atendidos++; this.chamados.total++; delete ab.fome; }
+  /** um chamado pelo corpo (as chaves chamadoPelaFome e chamadosPeloCorpo): abre quando o valor do corpo fica abaixo do limiar, no maximo
+      um a cada CHAMADO_BEBE[tipo] ticks. Fecha como atendido com a acao do dono (o _atender, como hoje); o de fome, tambem quando a fome
+      volta ao limiar (no pet com o mundo, ela so sobe comendo a racao que o dono deixou). Fecha como perdido quando a janela passa (como
+      hoje). A higiene nao sobe sozinha; o humor sobe, e o chamado de carinho fica aberto ate o dono atender ou a janela passar */
+  private _chamadoCorpo(tipo: Chamado, valor: number, lim: number, tk: number, t: number): void {
+    const ab = this.chamados.abertos, ultimo = this.ultimoChamado[tipo];
+    if (tipo in ab) {
+      if (tipo === "fome" && valor >= lim) { this.chamados.atendidos++; this.chamados.total++; delete ab[tipo]; }
       return;
     }
-    if (t > 0 && t < this.dur.bebe && this.e.fome < lim && (this.ultimoChamadoFome === null || tk - this.ultimoChamadoFome >= CHAMADO_BEBE.fome)) {
-      ab.fome = tk;
-      this.ultimoChamadoFome = tk;
+    if (t > 0 && t < this.dur.bebe && valor < lim && (ultimo === undefined || tk - ultimo >= CHAMADO_BEBE[tipo])) {
+      ab[tipo] = tk;
+      this.ultimoChamado[tipo] = tk;
     }
   }
   private _atender(a: AcaoDono): void {
