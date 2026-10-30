@@ -59,8 +59,8 @@ export function TelaFronteira() {
   const titulo = t.titulo, meu = t.tituloDe(m.semente), parou = ult ? ult.lutas.length : 0, venceuUlt = !!ult && ult.lutas.length === LIGA.length && ult.lutas[LIGA.length - 1].venceu;
   const desafiar = () => { lutarLiga(); if (LUTA.lutando) location.hash = ENDERECO_LUTA; };
   return (
-    <div className="tela dl desk fr-tela">
-      <div className="desk-col fr-lado">
+    <div className="tela dl fr-tela">
+      <div className="fr-lado">
         <section className="dl-card fr-cab" aria-labelledby="fr-tit">
           <h2 id="fr-tit">Liga dos Líderes</h2>
           <p>Os {LIGA.length} líderes das arenas, um depois do outro, cada um com um Mega de outro arquétipo. Vencer os {LIGA.length} faz de você o <b>Campeão</b>.</p>

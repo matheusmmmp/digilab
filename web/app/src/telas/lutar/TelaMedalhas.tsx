@@ -23,8 +23,8 @@ export function TelaMedalhas() {
   const espera = m.esperandoMedalha();
   const img = (k: string) => { if (a.tipo !== "ok") return null; const n = NPC[k]!, i = imagemAtlas(a, n.sprite ?? n.k); return <img className="dl-pix" src={i.url} width={i.w} height={i.h} alt="" />; };
   return (
-    <div className="tela dl desk med-tela">
-      <div className="desk-col med-lado">
+    <div className="tela dl med-tela">
+      <div className="med-lado">
         <section className="dl-card med-resumo" aria-labelledby="med-tit">
           <h2 id="med-tit">Medalhas do Tamer</h2>
           <p className="med-conta"><span className="dl-num">{t.n}</span><span>de {MEDALHAS.length}</span></p>

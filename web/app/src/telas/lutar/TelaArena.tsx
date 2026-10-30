@@ -9,7 +9,6 @@ import {
   LUTA, RIVAIS_ADULTOS, RIVAIS_CLASSICOS, escolherRival, exibirBot, lutarAnimado, melhorDe10, previa, reconstruirLuta, sparringTexto, useLuta,
 } from "../../luta.ts";
 import { EditorRegras, RegrasCompactas } from "./EditorRegras.tsx";
-import { useDesktop } from "../../desktop.ts";
 import { Cena } from "./palcoTR/PalcoTR.tsx";
 import { ENDERECO_LUTA } from "../../rotas.ts";
 import { EscolhaCarta } from "../../componentes/EscolhaCarta.tsx";
@@ -33,7 +32,7 @@ function CardPet() {
   const nRegras = m.gp ? m.gp.ativas.length : 0;
   const extra = [pa.tecnica && `técnica ${NOME_V2[pa.tecnica]}`, pa.passiva && `passiva ${NOME_ARQ[pa.passiva]}`].filter(Boolean).join(" · ");
   return (
-    <div className="dl-card arena-pet desk-nao">
+    <div className="dl-card arena-pet">
       <div className="arena-pet-cab">
         <span className="arena-pet-spr">{img && <img className="dl-pix" src={img.url} width={img.w} height={img.h} alt="" />}</span>
         <span className="arena-pet-txt"><b>{nomeForma(m.forma)}</b>
@@ -70,39 +69,34 @@ export function TelaArena({ voltarPet, verReplay }: { voltarPet: () => void; ver
   const A = lutadorPet(m, "Seu pet"), B = lutadorBot(luta.rival, m.regras), pa = A.cond, sp = sparringTexto(m);
   const extra = [pa.tecnica && `técnica ${NOME_V2[pa.tecnica]}`, pa.passiva && `passiva ${NOME_ARQ[pa.passiva]}`].filter(Boolean).join(", ");
   /* formas adultas: duas a mostra (e a escolhida), o resto num toque, como na prancha */
-  /* desktop (ArenaDesktop): tres bots e tres adultas (mais o escolhido), o resto num toque */
-  const desk = useDesktop();
-  const bots = todos || !desk ? RIVAIS_CLASSICOS : RIVAIS_CLASSICOS.filter((k, i) => i < 3 || k === luta.rival);
-  const adultos = todos ? RIVAIS_ADULTOS : RIVAIS_ADULTOS.filter((k, i) => i < (desk ? 3 : 2) || k === luta.rival);
+  const bots = RIVAIS_CLASSICOS;
+  const adultos = todos ? RIVAIS_ADULTOS : RIVAIS_ADULTOS.filter((k, i) => i < 2 || k === luta.rival);
   const escondidos = RIVAIS_ADULTOS.length - adultos.length + RIVAIS_CLASSICOS.length - bots.length;
   return (
-    <div className="tela dl desk arena-tela">
+    <div className="tela dl arena-tela">
       <CardPet />
-      <div className="desk-col arena-col-rivais">
+      <div className="arena-col-rivais">
       <div className="rivais" role="radiogroup" aria-label="Rival">
-        <h2 className="desk-so arena-col-tit">Rival</h2>
         <h2 className="rivais-tit">Bots de treino</h2><div className="rivais-grade">{bots.map(k => <CardRival key={k} k={k} />)}</div>
         <h2 className="rivais-tit">Formas adultas</h2><div className="rivais-grade">{adultos.map(k => <CardRival key={k} k={k} adulto />)}</div>
-        {escondidos > 0 && <button type="button" className="rivais-mais" onClick={() => setTodos(true)}>+ {escondidos} {desk ? "rivais" : "formas adultas"}</button>}
+        {escondidos > 0 && <button type="button" className="rivais-mais" onClick={() => setTodos(true)}>+ {escondidos} formas adultas</button>}
       </div>
       </div>
-      <div className="desk-col arena-col-meio">
+      <div className="arena-col-meio">
       {luta.rivalFixo && <p className="dl-apoio">Rival do cenário: pet de dono {NOME_DONO[luta.rivalFixo.tipo]}, {luta.rivalFixo.dias} dia(s), lutando com o estilo da linha dele. Troque o rival nos cards para voltar aos bots.</p>}
       <EscolhaCarta rival={luta.rival} />
       <div className="arena-acoes">
         <button type="button" className="dl-btn dl-btn--sec" disabled={luta.lutando} onClick={melhorDe10}>Melhor de 10</button>
         <button type="button" className="dl-btn lutar-grande" disabled={luta.lutando} onClick={() => { lutarAnimado(null); if (LUTA.lutando) location.hash = ENDERECO_LUTA; }}>Lutar</button>
-        {sp && <span className="desk-so arena-treino"><span><span>lutas de treino</span><b className="dl-lcd">{Math.min(m.sparring, 10)} de 10</b></span>
+        {sp && <span className="arena-treino"><span><span>lutas de treino</span><b className="dl-lcd">{Math.min(m.sparring, 10)} de 10</b></span>
           <Seg n={Math.min(m.sparring, 10)} m={10} cls="dl-seg--acao" /></span>}
       </div>
-      <p className="dl-apoio desk-nao">{`Seu pet: ${nomeForma(m.forma)}, vida ${Math.round(vidaExibida(pa, m.forma.est, m.treino.total, m.versao)).toLocaleString("pt-BR")}, guts ${pa.guts0.toFixed(0)}/${pa.gutsMax.toFixed(0)}${extra ? ", " + extra : ""}; regras de combate semeadas por ${NOME_BOT[A.estilo.base!] || A.estilo.base} · rival: ${luta.rivalFixo ? nomeForma(luta.rivalFixo.rival.forma) + " (cenário)" : B.estilo.oraculo ? "oráculo (referência fora das regras de combate)" : exibirBot(luta.rival).nomeTela}.`}</p>
-      {/* desktop: previa parada da arena com o rival escolhido (a luta abre em tela cheia) */}
-      {luta.palco && !luta.lutando && <div className="arena-previa"><Cena p={luta.palco} /></div>}
-      {luta.palco?.texto && !luta.lutando && <p className="dl-card arena-ultima desk-nao">{luta.palco.texto}</p>}
-      <span className="desk-so arena-ult-caixa"><UltimaLuta verReplay={verReplay} /></span>
+      <p className="dl-apoio">{`Seu pet: ${nomeForma(m.forma)}, vida ${Math.round(vidaExibida(pa, m.forma.est, m.treino.total, m.versao)).toLocaleString("pt-BR")}, guts ${pa.guts0.toFixed(0)}/${pa.gutsMax.toFixed(0)}${extra ? ", " + extra : ""}; regras de combate semeadas por ${NOME_BOT[A.estilo.base!] || A.estilo.base} · rival: ${luta.rivalFixo ? nomeForma(luta.rivalFixo.rival.forma) + " (cenário)" : B.estilo.oraculo ? "oráculo (referência fora das regras de combate)" : exibirBot(luta.rival).nomeTela}.`}</p>
+      {luta.palco?.texto && !luta.lutando && <p className="dl-card arena-ultima">{luta.palco.texto}</p>}
+      <span className="arena-ult-caixa"><UltimaLuta verReplay={verReplay} /></span>
       </div>
-      <div className="desk-col arena-col-regras">
-      {desk ? <RegrasCompactas /> : <section className="bloco"><h2>Regras de combate do seu pet</h2><EditorRegras /></section>}
+      <div className="arena-col-regras">
+      <section className="bloco"><h2>Regras de combate do seu pet</h2><EditorRegras /></section>
       <details className="dl-apoio"><summary>Como funciona</summary>
         <p>Lute contra um rival. Seu pet decide por <b>regras de combate</b> que ele mesmo aprende lutando; você pode travar ou vetar regras. Distância, guts e golpe pesado anunciado um turno antes, com os <b>stats da forma</b>, a <b>técnica da linha</b> (Champion) e a <b>passiva</b> (Ultimate e Mega). A lista de regras (condição → ação) cresce a cada nível: Rookie 3, Champion 5, Ultimate e Mega 8. A campanha contra os NPCs fica na aba <b>Exploração</b>.</p></details>
       <details className="dl-apoio"><summary>Regras da luta</summary>

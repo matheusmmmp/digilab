@@ -211,19 +211,7 @@
 
 .luta-leitura-tit{display:none}
 /* desktop (BatDesktop, CampDesktop): arena a esquerda e a leitura da luta a direita; mapa quadrado e o lugar ao lado */
-@media (min-width:1100px){
-  .palco-luta{grid-template-columns:minmax(0,1fr) 380px;align-items:start;margin:0 -14px}
-  .luta-arena{height:600px;border-bottom:0;border-right:4px solid #FFFFFF;box-shadow:2px 0 0 var(--dl-border)}
-  .palco-luta-baixo{padding:18px 18px 0}
-  .tela .luta-leitura-tit{display:block;font-family:var(--dl-f-texto);font-size:20px;font-weight:900;margin:0}
-  .camp-tela{grid-template-columns:minmax(0,570px) minmax(300px,1fr);align-items:start;gap:20px}
-  .camp-principal,.camp-lado{display:grid;gap:12px;min-width:0}
-  .camp-tela .palco-luta{grid-column:1/-1}
-  .tela .camp-principal .mapa-ilhas{margin:0;height:570px;border-radius:16px;box-shadow:0 0 0 3px var(--dl-navy),0 0 0 6px #FFFFFF}
-  .tela .camp-det{margin:0}
-}
-@media (max-width:1099px){ .camp-principal,.camp-lado{display:contents} }
-
+ .camp-principal,.camp-lado{display:contents} 
 /* retratos pequenos (rivais da campanha e da arena, resultado, HUD, card do pet): o Digimon inteiro dentro do quadro,
    apoiado embaixo, como nas pranchas (CampMapa, ArenaEscolha, UpLuta); o sprite continua pixelado */
 .camp-rival-spr img,.rival-spr img,.hud-ret img,.arena-pet-spr img,.retrato-rival-spr img{
@@ -256,13 +244,6 @@ body.tela-cheia{overflow:hidden}
 .luta-ctl[aria-pressed="true"]{background:var(--dl-highlight)}
 .luta-ctl:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
 .luta-previa-rot{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);background:rgba(15,42,102,.85);color:#FFFFFF;border-radius:10px;padding:3px 12px;font-size:12px;font-weight:800;white-space:nowrap}
-@media (min-width:1100px){
-  .luta-topo{padding:12px 24px;min-height:66px}
-  .luta-topo h1{font-size:30px}
-  .luta-tela .palco-luta{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:14px;padding:14px 20px 20px;align-items:stretch;min-height:0}
-  .luta-tela .luta-arena{height:auto;min-height:420px;border:3px solid var(--dl-navy);border-radius:16px;box-shadow:0 0 0 3px #FFFFFF}
-  .luta-tela .palco-luta-baixo{padding:0;display:flex;flex-direction:column;gap:12px;min-height:0}
-}
 
 /* modais (secao 7): fundo escurecido, cartao forte, um por vez */
 dialog.modal-res::backdrop,dialog.modal-conf::backdrop,dialog.folha::backdrop{background:rgba(9,20,52,.62)}
@@ -280,7 +261,6 @@ dialog.modal-res::backdrop,dialog.modal-conf::backdrop,dialog.folha::backdrop{ba
 .arena-ultima{margin:0;font-size:13px;font-weight:700}
 .fala-revanche{margin:0;font-size:14px;font-weight:800;border-color:var(--dl-highlight)}
 .fala-revanche .dl-apoio{font-size:12px;font-weight:700}
-@media (min-width:1100px){ .arena-previa{display:block} }
 .luta-card{align-content:start}
 
 /* Resultado da luta (pranchas ResVitoria, ResDerrota, ResCampanha, ResDesktop; ResNota): modal sem x. Celular: a 12 px
@@ -340,27 +320,6 @@ dialog.modal-res::backdrop,dialog.modal-conf::backdrop,dialog.folha::backdrop{ba
 .res-rodape{flex:none;display:flex;gap:10px;padding:12px 14px 14px;border-top:2px solid var(--dl-bg)}
 .res-replay{flex:1;min-height:48px}
 .res-continuar{flex:1.4;min-height:52px;font-size:16px}
-@media (min-width:1100px){
-  .res{inset:0;margin:auto;width:860px;height:600px;max-height:calc(100dvh - 40px);border-radius:20px;box-shadow:0 0 0 3px var(--dl-navy),0 8px 0 3px var(--dl-navy-deep)}
-  .res[open]{display:grid;grid-template-columns:390px minmax(0,1fr)}
-  .res-faixa{height:auto;border-bottom:0;border-right:3px solid var(--dl-navy);display:flex;flex-direction:column}
-  .res-faixa::before{background-size:170px auto}
-  .res-tag,.res-tit,.res-sub{position:relative;left:auto;top:auto}
-  .res-tag{align-self:flex-start;margin:18px 0 0 22px;font-size:12px;padding:2px 10px}
-  .res-tit,.res--vit .res-tit{margin:6px 0 0 22px;font-size:56px;line-height:60px}
-  .res-tit.res-tit--longo{font-size:42px}
-  .res-sub{margin:2px 0 0 24px;max-width:none;font-size:15px}
-  .res-palco{position:relative;inset:auto;flex:1;min-height:0}
-  .res-palco img{width:calc(var(--w) * var(--kd) * 1px);height:calc(var(--h) * var(--kd) * 1px)}
-  .res-venc{left:75px;right:auto;bottom:40px;transform:none}
-  .res-caido{left:262px;right:auto;bottom:40px;max-height:110px}
-  .res-palco--empate .res-lado2{left:auto;right:30px;bottom:40px;transform:scaleX(-1)}
-  .res-anel{left:50px;right:auto;bottom:20px;width:212px;height:60px}
-  .res-nums-faixa{display:block;position:relative;padding:0 22px 20px}
-  .res-nums-corpo{display:none}
-  .res-corpo{padding:18px 20px;gap:12px}
-  
-}
 /* replay de uma luta no Diario (Ver replay do Resultado) */
 .reg-replay{display:grid;gap:8px}
 .reg-replay h2{margin:0;font-size:18px;font-weight:900}
@@ -380,26 +339,6 @@ dialog.modal-res::backdrop,dialog.modal-conf::backdrop,dialog.folha::backdrop{ba
 .arena-ult-tag--emp{background:var(--dl-bg);color:var(--dl-text-2);border-color:var(--dl-border)}
 .arena-ult-ver{margin-left:auto;background:none;border:0;font:inherit;font-size:12px;font-weight:900;color:var(--dl-plate);text-decoration:underline;cursor:pointer;min-height:44px}
 .arena-ult-ver:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
-@media (min-width:1100px){
-  .arena-tela{grid-template-columns:262px minmax(0,1fr) 300px}
-  .arena-col-rivais,.arena-col-regras{background:var(--dl-surface);border-radius:16px;box-shadow:0 0 0 2px var(--dl-border),0 4px 0 2px var(--dl-border-shadow);padding:16px}
-  .arena-col-rivais .rivais{gap:8px;align-content:start}
-  .tela .arena-col-tit{margin:0;font-size:17px;font-weight:900}
-  .arena-col-rivais .rivais-grade{grid-template-columns:1fr}
-  .arena-col-rivais .rivais-tit{font-size:11px;text-transform:uppercase;color:var(--dl-text-2)}
-  .arena-col-meio .arena-previa{order:-1}
-  .arena-previa .luta-arena{height:445px}
-  .arena-acoes{display:grid;grid-template-columns:200px 140px minmax(0,1fr);align-items:center;gap:12px}
-  .arena-acoes .lutar-grande{order:-1;min-height:52px}
-  .arena-treino{display:grid;gap:6px}
-  .arena-treino > span{display:flex;justify-content:space-between;font-size:12px;font-weight:800}
-  .arena-treino .dl-seg{padding:0}
-  .arena-ult-caixa{display:flex;flex-direction:column}
-  .arena-ult-caixa .arena-ult{flex:1}
-  .arena-col-regras .bloco{align-content:start}
-  .arena-col-regras > :last-child{flex-grow:0}
-  .arena-col-regras > .rc{flex-grow:1}
-}
 /* regras compactas (ArenaDesktop) */
 .rc{display:flex;flex-direction:column;gap:10px;min-height:0}
 .tela .rc-tit{display:flex;justify-content:space-between;align-items:baseline;margin:0;font-size:17px;font-weight:900}
@@ -418,12 +357,6 @@ dialog.modal-res::backdrop,dialog.modal-conf::backdrop,dialog.folha::backdrop{ba
 .rc-liberar{min-height:40px}
 .rc-pe{margin:0}
 /* Campanha no desktop (CampDesktop): mapa a esquerda; faixa do lugar, rivais, "Nesta ilha" e os botoes a direita */
-@media (min-width:1100px){
-  .camp-tela{grid-template-columns:minmax(0,455px) minmax(0,1fr);align-items:stretch}
-  .camp-principal,.camp-lado{display:flex;flex-direction:column;gap:12px;min-width:0}
-  .tela .camp-principal .mapa-ilhas{height:auto;flex:1;aspect-ratio:auto;min-height:455px}
-  .camp-lado > .campd-ilha{flex-grow:1}
-}
 .campd-faixa{position:relative;border-radius:14px;overflow:hidden;background:var(--dl-navy) center/cover no-repeat;box-shadow:0 0 0 2px var(--dl-navy),0 4px 0 2px var(--dl-navy-deep);padding:14px 16px;display:grid;gap:4px;color:#FFFFFF}
 .campd-faixa::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(15,42,102,.92) 0 45%,rgba(15,42,102,.25))}
 .campd-faixa > *{position:relative}
@@ -483,10 +416,6 @@ dialog.modal-res::backdrop,dialog.modal-conf::backdrop,dialog.folha::backdrop{ba
 .med-lider{flex:none;display:flex;flex-direction:column;align-items:center;gap:2px}
 .med-lider img{display:block;width:46px;height:46px;object-fit:contain;object-position:bottom;border-radius:10px;background:var(--dl-rival-bg);box-shadow:inset 0 0 0 2px var(--dl-rival);image-rendering:pixelated}
 .med-lider small{font-size:10px;font-weight:900;text-transform:uppercase;color:var(--dl-text-2)}
-@media (min-width:1100px){
-  .med-tela.desk{display:grid;grid-template-columns:minmax(260px,340px) minmax(0,1fr);align-items:start}
-  .med-lista{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
-}
 
 /* campanha: o lider do lugar e a frase da medalha */
 .camp-lider{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:900;letter-spacing:.02em;color:var(--dl-text)}
@@ -497,9 +426,6 @@ dialog.modal-res::backdrop,dialog.modal-conf::backdrop,dialog.folha::backdrop{ba
 /* arenas com lideres (pets v6, medalhas parte 2): o mapa de seis ilhas, o cartao da arena, a serie da Cidadela e o aviso
    do Lago */
 .tela .mapa-ilhas.mapa-ilhas--v6{height:864px}
-@media (min-width:1100px){
-  .tela .camp-principal .mapa-ilhas.mapa-ilhas--v6{flex:none;height:auto;min-height:0;aspect-ratio:390/864}
-}
 .camp-arena{display:flex;align-items:flex-start;gap:10px;margin:0;border-radius:12px;padding:8px 10px;background:var(--dl-surface-2);box-shadow:inset 0 0 0 2px var(--dl-navy)}
 .camp-arena.ganha{box-shadow:inset 0 0 0 3px var(--dl-action)}
 .camp-arena-txt{display:grid;gap:3px;min-width:0}
@@ -595,11 +521,6 @@ dialog.modal-res::backdrop,dialog.modal-conf::backdrop,dialog.folha::backdrop{ba
 .med-recordes .dl-num{flex:none;min-width:32px;text-align:center;font-size:24px;line-height:1}
 .med-recordes li > span{display:grid;gap:2px}
 .med-recordes b{font-size:14px;font-weight:900;color:var(--dl-text)}
-@media (min-width:1100px){
-  .fr-tela.desk{display:grid;grid-template-columns:minmax(280px,360px) minmax(0,1fr);align-items:start}
-  .fr-lista{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
-  .fr-lado > .fr-lutar{flex-grow:0}
-}
 .med-ouro{display:flex;align-items:center;gap:12px;border-radius:12px;padding:8px 12px;background:var(--dl-surface-2);box-shadow:inset 0 0 0 2px var(--dl-border)}
 .med-ouro.ganha{box-shadow:inset 0 0 0 3px var(--dl-highlight)}
 .med-ouro > span{display:grid;gap:2px;font-size:12px;font-weight:700;color:var(--dl-text-2)}
@@ -680,11 +601,3 @@ dialog.modal-res::backdrop,dialog.modal-conf::backdrop,dialog.folha::backdrop{ba
 /* o lugar na folha do celular: o titulo da folha ja diz o nome */
 .folha .camp-det{margin:0;padding:0;box-shadow:none}
 .folha .camp-det-cab b{display:none}
-@media (min-width:1100px){
-  /* a coluna do lugar de 300 a 370 px: em 1100 px o mapa ainda tem as tres colunas de ilhas */
-  .camp-tela--expl{grid-template-columns:minmax(0,1fr) clamp(300px,29vw,370px);height:calc(100dvh / var(--zoom, 1) - var(--ui-topo) - var(--ui-moldura-v));min-height:560px}
-  .camp-tela--expl .camp-principal{min-height:0}
-  .mapa-expl--desk{flex:1;min-height:0;margin:0;overflow-x:hidden;overflow-y:auto;scrollbar-width:none;border-radius:16px;box-shadow:0 0 0 1px var(--ui-border)}
-  .camp-tela--expl .camp-lado{min-height:0;overflow-y:auto;padding:2px}
-  .camp-tela--expl .camp-lado > *{flex-shrink:0}
-}
