@@ -433,3 +433,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-30 — PRODUTO-CUIDADO (worker A, Claude Code, Opus 5.5, worktree `v2-produto-cuidado`): os chamados do bebê pelo corpo, com os limiares do bebê](registro/2026-10.md)
 - [2026-10-30 — COMBATE-TR calibração, fase 4 (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): a progressão, o fim de jogo e os itens, com a DE-9 e a DE-10](registro/2026-10.md)
 - [2026-10-30 — COMBATE-TR conferência única (fase 5; worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): o candidato v14 nas sementes de conferência](registro/2026-10.md)
+- [2026-10-30 — LONGE-REGULAR, etapa 0 (Claude Code, Opus 5.5, worktree `v2-longe-regular`): a tarefa do longe com lugares fixos](registro/2026-10.md)
+- [2026-10-30 — COMBATE-TR, o plano da segunda rodada de equilíbrio (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`)](registro/2026-10.md)
