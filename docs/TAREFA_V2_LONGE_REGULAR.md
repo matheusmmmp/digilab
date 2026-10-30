@@ -178,3 +178,28 @@ Todas PROPOSTAS, com a recomendação primeiro.
 | **LR-5** | a faixa de sementes | **71101…71505,** se o coordenador confirmar que está livre (não está na `FAIXAS_RESERVADAS` de 2026-10-30) | reusar a 66xxx ou a 67xxx: a validação deixa de ser única |
 | **LR-6** | a ordem | **antes da frente do hábito,** ou junto com o plano dela | o hábito depois, sem isto: a leitura do P2 fica no cenário confundido, que a proposta do longe quis evitar |
 | **LR-7** | onde fica o plano | **um adendo 6 ao plano do protótipo,** que já tem os braços, as medidas e a unidade | um plano novo: repete a seção de medidas e pode divergir dela |
+
+## Resultado da etapa 1 (código; 2026-10-30, worker Claude Code, Sonnet 5.5, worktree `v3-longe-regular-codigo`)
+
+Só código e testes; nenhuma vida de pesquisa. Quatro commits, nesta ordem:
+
+1. **A faixa 71101…71505** em `FAIXAS_RESERVADAS` (`experiments/bancada/faixas.py`), com a fonte (LR-5, PR #495). Conferida livre antes:
+   nenhuma faixa nem config a usava.
+2. **O gabarito dos estilos `comedouro`, `perto` e `longe`**, gravado antes da mudança: `tests/gabarito_lugar_estilos.py` gera
+   `tests/gabaritos/lugar_estilos_antes.json` (36 vidas: instinto e lobos × 3 estilos × 2 donos × 3 sementes, com o log, o estado, as
+   rngs, o estado da política e os lugares das rações), e `tests/test_gabarito_lugar_estilos.py` confere byte a byte.
+3. **O estilo `longe_fixo`** (`digilab/mundo.py`, `digilab/config.py`):
+   - `ConfigMundo.n_pontos_longe_fixo = 3` (LR-1; PROPOSTO, SEM FONTE; validado entre 1 e 16);
+   - o `DonoComLugar` sorteia na construção os pontos fixos com a rng própria `derivar_semente("dono-lugar-fixo", semente, rotulo_dono)`, e
+     cada `alimentar` sorteia um ponto uniformemente na mesma rng; os outros estilos não criam nem consomem essa rng;
+   - `ESTILOS_LUGAR` ganhou o `longe_fixo`; `ESTILOS_LUGAR_V2` guarda os três de antes para as runs que os iteram (o protótipo e a análise
+     dos empates do cheiro); a bancada aceita o estilo pela validação que já existia (`ESTILOS_LUGAR`);
+   - `tests/test_longe_fixo.py` (33 testes): pontos iguais no replay e numa construção nova; toda ração cai num ponto; os pontos ficam a 20 a
+     30 células do comedouro, em direções distintas; o sorteio por ração é uniforme; o replay é bit a bit (o G1), inclusive pela bancada.
+4. **Os documentos:** esta seção e o desvio em `docs/registro/2026-10.md`.
+
+**O achado que muda a leitura (desvio 1 do registro):** o comedouro está na célula (10, 15) do mapa de 64 × 30. Sem corte do mapa, só
+**5 das 16 direções** têm um ponto a 20 células (os índices 14, 15, 0, 1 e 2, o leste) e **3** a 30 células (15, 0 e 1). Os 3 pontos
+saem dessas, então ficam todos a leste do comedouro; o `longe` sorteado usa as 16 (cortadas). O adendo 6 precisa dizer isso.
+
+Os testes e a contagem da suíte inteira estão no corpo do PR.
