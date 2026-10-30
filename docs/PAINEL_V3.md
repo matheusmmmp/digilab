@@ -1,6 +1,6 @@
 # PAINEL V3: onde a V3 está, em uma página
 
-**Atualizado em 2026-10-30** (`main` `6857452`, depois do #478), pelo Gerente da transição V2 → V3. O plano é o `docs/PLANO_V3.md`; o
+**Atualizado em 2026-10-30** (`main` `a4fd6d2`, depois do #485), pelo Gerente da V3. O plano é o `docs/PLANO_V3.md`; o
 fechamento da V2, o `docs/FECHAMENTO_V2.md` (tag `v2-final`).
 
 - Quem atualiza: o coordenador de cada trilha, uma linha por PR mergeado.
@@ -19,27 +19,25 @@ fechamento da V2, o `docs/FECHAMENTO_V2.md` (tag `v2-final`).
 | missão | o que é | estado | onde |
 |---|---|---|---|
 | infra · o prefixo V3 | o CI e as ferramentas aceitam `TAREFA_V3_*` e `PLANO_ANALISE_V3_*` | **na `main`** (#478) | `docs/TAREFA_V2_INFRA_PREFIXO_V3.md` |
-| congelamento · V3-D5 | o cabeçalho "V2, congelado" e a última linha do `PAINEL_V2.md` | PR aberto (#483) | `docs/PLANO_V3.md`, seção 7 |
-| **C0** literatura | as fontes da triagem verificadas, a síntese e a alegação proibida nova | PR aberto (#482) | `docs/TAREFA_V3_LITERATURA.md` (no PR) |
-| **C1** longe regular | o longe com lugares fixos; LR-1 a LR-7 abertas | só papel, espera a C0 e as LR | `docs/TAREFA_V2_LONGE_REGULAR.md` |
+| congelamento · V3-D5 | o cabeçalho "V2, congelado" e a última linha do `PAINEL_V2.md` | **na `main`** (#483) | `docs/PLANO_V3.md`, seção 7 |
+| **C0** literatura | as fontes da triagem verificadas, a síntese e a alegação proibida nova | **na `main`** (#482) | `docs/TAREFA_V3_LITERATURA.md` |
+| **C1** longe regular | o longe com lugares fixos; LR-1 a LR-7 e C1-E1/E2 DECIDIDAS (2026-10-30, pela recomendação; as entradas na `main`, #485) | etapa 1 (código) e etapa 2 (adendo 6) despachadas; a run (etapa 3) depois das duas na `main` | `docs/TAREFA_V2_LONGE_REGULAR.md` |
 | **C2** o hábito com crédito na intenção | o braço de crédito na intenção contra o passo | sem tarefa; depois da C1 | `docs/PLANO_V3.md`, seção 2 |
 | **C3** redecidir por evento | espec no formato da L-2, subchave desligada | sem tarefa; depois da C1 | idem |
-| **C4** memória autobiográfica | ME-1 a ME-7 abertas, com três entradas da literatura | só papel, espera a C0 e as ME | `docs/TAREFA_V2_MEMORIA_AUTOBIOGRAFICA.md` |
+| **C4** memória autobiográfica | ME-1 a ME-7 DECIDIDAS (2026-10-30, pela recomendação), com as entradas da C0 e as C4-E1 a C4-E3 | só papel; a espec depois, sem pressa (`digilab/digibrain/` com a C2 e a C3) | `docs/TAREFA_V2_MEMORIA_AUTOBIOGRAFICA.md`, seção 8 |
 | **C5** viabilidade do corpo | as medidas do corpo fora da faixa, do replay | entra no adendo 6 da C1 | `docs/PLANO_V3.md`, seção 2 |
 | **L1** M7 do layout | o fechamento do layout habitat | **na `main`** (#477) | `docs/TAREFA_V2_LAYOUT_HABITAT.md` |
-| **L2** tema dos menus T1–T3 | a pele Vidro como padrão, a escolha em Ajustes, as capturas nas duas peles | liberada (a L1 entrou); sem worker | `docs/TAREFA_V2_TEMA_MENUS.md`, seção 5 |
+| **L2** tema dos menus T1–T3 | a pele Vidro como padrão, a escolha em Ajustes, as capturas nas duas peles | T1 em PR (#486); T2 e T3 depois da L4 | `docs/TAREFA_V2_TEMA_MENUS.md`, seção 5 |
 | **L3** o primeiro módulo do modular no jogo | o lugar lembrado do M-MEM, proposto, com paridade | depois da C1 e da C2 | `docs/TAREFA_V2_DIGIBRAIN_MODULAR_PRODUTO.md` |
-| **L4** habitat como ilha 3D (proposta nova) | a cena do modo mundo (v12) como ilha 3D, com o pet em papel; só vista | o POC no PR #480 (aberto); a tarefa escrita fora do repositório, com H-1, H-2, H-4 e H-6 decididas pelo Matheus em 2026-10-30; entra no repositório pela missão H0 | `D:\Trab\digilab\TAREFA_V3_HABITAT_ILHA_3D.md` (fora do git até a H0) |
-| **B1** rodada 2 do equilíbrio | as fases do `PLANO_EQUILIBRIO_COMBATE_TR_R2.md` | R2-0 e R2-1 **na `main`** (#479); R2-2 em PR (#481) | `docs/EQUILIBRIO_COMBATE_TR.md` |
+| **L4** habitat como ilha 3D | a cena do modo mundo (v12) como ilha 3D, com o pet em papel; só vista | H0 a H5 em PRs empilhados (#488 a #494; a H1b liga o `CLIPES_UP`); ordem DECIDIDA (2026-10-30): depois da T1, antes da T2 e da T3; faltam as capturas aprovadas e a M3 | `docs/TAREFA_V3_HABITAT_ILHA_3D.md` (no #488) |
+| **B1** rodada 2 do equilíbrio | as fases do `PLANO_EQUILIBRIO_COMBATE_TR_R2.md` | R2-0 a R2-3 **na `main`** (#479, #481, #487); R2-4 na sessão dela | `docs/EQUILIBRIO_COMBATE_TR.md` |
 | **B2** ligar a v14 | trocar fatores, relógio e listas do jogo | depois da conferência da B1 e do sim do Matheus | `docs/PLANO_V3.md`, seção 4 |
 | **B3** a luta no layout novo | o HUD e o palco na pele dos menus | depois da L2 | idem |
 
 ## 2. Decisões abertas do Matheus
 
-- **LR-1 a LR-7** (a C1): `docs/TAREFA_V2_LONGE_REGULAR.md`, seção 8.
-- **ME-1 a ME-7** (a C4), com as três entradas novas da literatura e as C4-E1 a C4-E3 (a visita vazia como episódio negativo): `docs/PLANO_V3.md`, seções 2 e 2.3.
-- **As C1-E1 e C1-E2** (a previsão por nível de regularidade no adendo 6; a L-3 depois da C1): `docs/PLANO_V3.md`, seção 2.3.
-- **A L4 no plano:** a ordem dela entre a L2 e a L3, e a H1b (ligar o `CLIPES_UP` muda o jogo fora do habitat).
+- **A L4:** aprovar as capturas da ilha (390 e 1280; claro, escuro e noite) e medir a M3 com `?medir3d=1` no desktop e num celular.
+- **Os merges, na ordem:** a T1 (#486); depois a L4, do #488 ao #494.
 - **B2:** ligar a v14 só depois da conferência da rodada 2.
 
 ## 3. Riscos

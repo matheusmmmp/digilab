@@ -1,7 +1,8 @@
 # TAREFA V2 — LONGE_REGULAR: o longe com lugares fixos, para separar a distância da falta de regularidade (2026-10-30)
 
-Coordenador: Gerente (Claude Code). Worker: a definir. Worktree e branch: `v2-longe-regular`. Status: **ABERTA, só papel.** Nenhum
-código e nenhuma vida. As decisões LR-1 a LR-7 (seção 8) estão abertas.
+Coordenador: Gerente (Claude Code). Worker: a definir. Worktree e branch: `v3-longe-regular-<etapa>` (V3-D2; a C1 da V3). Status: **ABERTA; as LR-1 a LR-7
+DECIDIDAS pelo Matheus em 2026-10-30, todas pela recomendação** ("segue as recomendações", no chat do Gerente da V3), com as C1-E1 e
+C1-E2 do `docs/PLANO_V3.md`, seção 2.3. Nenhum código e nenhuma vida ainda.
 
 Categoria: experimento (com uma etapa de código no dono da pesquisa). Origem: Matheus, 2026-10-30: a recomendação R1 da análise que
 cruzou a triagem de literatura com o estado do projeto (o arquivo `triagem_texto_completo/ANALISE_LACUNAS_E_ROADMAP.md`, fora do
@@ -44,16 +45,18 @@ Da `docs/PROPOSTA_LONGE_DIGIBRAIN_MODULAR.md`, seção 1.1 (o M3\*, a reavaliaç
 
 ### 1.2 O que a literatura sugere
 
-São pistas, não fontes: as referências abaixo foram **lidas na triagem de 2026-10-30, mas ainda não estão na lista verificada** do
-projeto. Antes de qualquer citação, elas passam pela verificação Crossref da skill `literatura-digilab`. Até lá, valem como SEM FONTE.
+**Verificadas na C0** (`docs/referencias/v3c0_referencias_verificadas.csv`, #482), com as ressalvas de cada linha. Servem como
+direção, não como tamanho de efeito.
 
-- **Ho, Dautenhahn e Nehaniv (CEC 2005; AISB 2006; a tese de 2005, Univ. de Hertfordshire):** agentes com glicose, umidade, energia e
-  temperatura num mundo com estações.
+- **Ho, Dautenhahn e Nehaniv:** CEC 2005 (`10.1109/cec.2005.1554734`); a tese de Ho, 2005, Univ. de Hertfordshire
+  (`10.18745/th.14271`); AISB 2006 (UHRA eprint 12716, sem DOI); Connection Science 2008 (`10.1080/09540090801889469`). Agentes com
+  glicose, umidade, energia e temperatura num mundo com estações.
   - A memória que refaz o caminho exato falha quando os recursos mudam de lugar.
   - A memória de eventos com regras do ambiente estende a vida.
   - A memória só supera o agente reativo quando guarda também os eventos negativos.
   - São 10 execuções por condição, sem teste de hipótese.
-- **Giannakakis et al. (ALIFE 2023):** a plasticidade que a evolução escolhe só compensa quando o ambiente muda numa faixa
+- **Giannakakis, Khajehabdollahi e Levina (ALIFE 2023, `10.1162/isal_a_00606`; a extensão em Artificial Life 2024,
+  `10.1162/artl_a_00458`):** a plasticidade que a evolução escolhe só compensa quando o ambiente muda numa faixa
   intermediária; sem estrutura, aprender não paga.
 
 ### 1.3 O que cada resultado diria (escrito antes; a forma final vai no plano)
@@ -165,9 +168,11 @@ projeto. Antes de qualquer citação, elas passam pela verificação Crossref da
 - Cada número do resultado sai de um artefato em disco com sha256.
 - A faixa de sementes está na `FAIXAS_RESERVADAS` antes da run.
 
-## 8. Precisa do Matheus
+## 8. Decisões do Matheus
 
-Todas PROPOSTAS, com a recomendação primeiro.
+**Todas DECIDIDAS em 2026-10-30, pela recomendação** ("segue as recomendações"). O `n_pontos_longe_fixo` = 3 continua
+SEM FONTE no `config.py`; a faixa 71101…71505 foi conferida livre (nem em `FAIXAS_RESERVADAS` nem em `FAIXAS_QUEIMADAS`, em nenhum
+branch) e entra na tabela num commit próprio, na etapa 1.
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|

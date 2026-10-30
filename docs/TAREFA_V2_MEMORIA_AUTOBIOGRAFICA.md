@@ -1,7 +1,7 @@
 # TAREFA V2 — MEMORIA_AUTOBIOGRAFICA: a memória autobiográfica consolidada, com influência causal nas decisões e nas facetas (2026-10-24)
 
-Coordenador: Gerente (Claude Code). Worker: a definir. Worktree e branch: `v2-memoria-<etapa>`. Status: **ABERTA, só papel.** Nenhum
-código. As decisões ME-1 a ME-7 (seção 8) estão abertas.
+Coordenador: Gerente (Claude Code). Worker: a definir. Worktree e branch: `v3-memoria-<etapa>` (V3-D2; a C4 da V3). Status: **ABERTA, só papel; as ME-1 a ME-7
+DECIDIDAS pelo Matheus em 2026-10-30, pela recomendação, com as entradas da C0 e as C4-E1 a C4-E3** (seção 8). Nenhum código.
 
 Categoria: implementacao (com a validação causal como experimento). Origem: Matheus, 2026-10-24, o PROMPT MESTRE (seção 4): a memória
 é uma capacidade central do DigiBrain modular, e não só texto que o pet conta.
@@ -99,9 +99,21 @@ desenho (os controles de recência e embaralhado), não a meta.
 - Desligada, a vida é a de hoje.
 - O teste de fidelidade falha quando a fala alega o que não está registrado.
 
-## 8. Precisa do Matheus
+## 8. Decisões do Matheus
 
-Todas PROPOSTAS, com a recomendação primeiro.
+**Todas DECIDIDAS em 2026-10-30, pela recomendação** ("segue as recomendações", no chat do Gerente da V3), **com as entradas da
+literatura** (a C0, `docs/referencias/v3c0_referencias_verificadas.csv`; `docs/PLANO_V3.md`, seções 2 e 2.3). Os limiares, as
+capacidades e os passos continuam números PROPOSTOS, fixados na especificação.
+
+**As entradas que valem junto da tabela abaixo:**
+- **na ME-1:** a significância do episódio é a variação do corpo que o evento causou (a tese de Ho, `10.18745/th.14271`); e a visita
+  vazia ao lugar lembrado vira episódio negativo (a C4-E1);
+- **na ME-2:** a recuperação roda a cada decisão (o PEPE, Francis, Mehta e Ram 2009, `10.4018/978-1-60566-354-8.ch020`; já cabe na M2);
+- **na ME-3:** guardar o mais significativo de cada categoria;
+- **na validação (seção 4):** o braço "REL sem episódios negativos", que mede também a visita vazia (a C4-E2); se a C4-E1 e a L-3
+  forem adiante, o plano diz qual é o braço e qual é o controle (a C4-E3).
+
+Ho et al. usam de 10 a 50 execuções por condição, sem teste de hipótese: é direção, não tamanho de efeito.
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
