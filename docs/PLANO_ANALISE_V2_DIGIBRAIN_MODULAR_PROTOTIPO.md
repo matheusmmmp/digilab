@@ -2226,7 +2226,7 @@ distância da ração na abertura, quanto da queda do longe vem da distância e 
 - **A faixa: 71101…71505** (a LR-5), conferida livre em 2026-10-30 (nem em `FAIXAS_RESERVADAS` nem em `FAIXAS_QUEIMADAS`, em nenhum
   branch; a tarefa, seção 8). Ela entra em `experiments/bancada/faixas.py` num commit próprio na etapa 1, com a fonte (esta tarefa).
 - **As bases:** 71101, 71202, 71303, 71404 e 71505.
-- **O K: 30 por base, 150 unidades** (PROPOSTO; A6.5 e A6.12, AD6-1). São **3 600 vidas.**
+- **O K: 30 por base, 150 unidades** (DECIDIDO; A6.5 e A6.12, AD6-1). São **3 600 vidas.**
 - **A derivação** (a regra E3; `bancada_v2.unidades_derivadas(bases, 30, prefixo="digibrain_prototipo")`, o prefixo da reavaliação e da
   L-2; AD6-5). A unidade k da base b, com k = 0 a 29, tem:
   - a semente `derivar_semente("digibrain_prototipo", b, k)`;
@@ -2285,7 +2285,7 @@ distância da ração na abertura, quanto da queda do longe vem da distância e 
 | 300 | 60 | 7 200 | 0,016 | 0,805 |
 | 450 | 90 | 10 800 | 0,013 | 0,797 |
 
-**A proposta: K = 150 (30 por base) e a margem δ = 0,022** (AD6-1).
+**O decidido: K = 150 (30 por base) e a margem δ = 0,022** (AD6-1, DECIDIDA em 2026-10-30).
 - **O tamanho:** cerca de 1/6 do efeito da memória no comedouro (+0,137 por episódio) e menor que a distância do sorteado a 0 na
   reavaliação (0,031). Então a run separa um efeito pequeno da memória de nenhum efeito, e separa o sorteado da 66xxx do "≈ 0".
 - **O custo** é pequeno em qualquer linha da tabela (A6.9). O K não sai do orçamento; sai do tamanho de efeito que vale ler.
@@ -2299,7 +2299,7 @@ distância da ração na abertura, quanto da queda do longe vem da distância e 
 
 ### A6.6 O "≈ 0" e a classificação de cada contraste
 
-**A regra, escrita antes e a mesma para todo contraste M3\* − M2 deste adendo** (PROPOSTA; AD6-2), na ordem:
+**A regra, escrita antes e a mesma para todo contraste M3\* − M2 deste adendo** (DECIDIDA; AD6-2), na ordem:
 1. **"≈ 0":** o IC95 do t inteiro dentro de (−δ, +δ), com δ = 0,022. Se ele também exclui o 0, o relato diz "≈ 0 pela margem, com o sinal
    (o efeito menor que a margem)";
 2. **"> 0":** o limite inferior acima de 0 e o IC fora de (−δ, +δ);
@@ -2330,7 +2330,7 @@ d0, a taxa por episódio do `longe_fixo` fica "≈" a do longe sorteado** (a dif
 (−δ, +δ)) **em todos os braços,** a distância domina e a regularidade não importa para o pet de hoje. A leitura principal dela é a do
 **M0** (A6.8, item 1, por quê).
 
-**Os casos que a seção 1.3 não cobre** (o complemento, PROPOSTO, escrito antes; nenhum dá tarefa à L-3, pela C1-E2):
+**Os casos que a seção 1.3 não cobre** (o complemento, aprovado com o adendo, escrito antes; nenhum dá tarefa à L-3, pela C1-E2):
 
 | `longe_fixo` | longe sorteado | a leitura | a C1-E2 |
 |---|---|---|---|
@@ -2387,17 +2387,17 @@ na visão até 6 células, só no cheiro de 6 a 24, além do cheiro acima de 24)
   taxa sobre todos os episódios). Os subgrupos saem só por braço, como leitura;
 - **o contraste descritivo:** M3\* − M2 e M2 − M0 nas trocas por vida, por estilo.
 
-**4. As medidas da C5** (a viabilidade do corpo; a missão C5 do `docs/PLANO_V3.md`), **do replay**, sem vida nova. As definições são
-PROPOSTAS, SEM FONTE (AD6-4):
+**4. As medidas da C5** (a viabilidade do corpo; a missão C5 do `docs/PLANO_V3.md`), **do replay**, sem vida nova. As definições estão
+DECIDIDAS (AD6-4) e são SEM FONTE:
 - **a fração do tempo com alguma variável do corpo fora da faixa:** em cada tick do replay, os cinco estados do corpo (fome, higiene,
   energia, humor e saúde: os drives dos cinco químicos de `QUIMICOS`, `digilab/corpo.py:108-109`, o estado (C − q)/C); uma variável
   fica fora da faixa com o estado abaixo de **0,15**, o mesmo limiar da privação (`limiar_privacao`). Sai a fração dos ticks com ao menos
   uma fora, na vida inteira e nos dias 8 a 14. Difere da `privacao` de hoje (as decisões, e só fome, higiene e energia), que sai ao lado
   como está;
 - **a menor necessidade:** em cada tick, o menor dos cinco estados. Saem, por vida, a média nos ticks e o mínimo, nas mesmas janelas;
-- **quem calcula:** o código da C5, em `digilab/metrics.py` (as métricas existem uma vez só), com teste. Se ele estiver na `main` antes
-  da run, o orquestrador as calcula no replay de cada vida; se não, elas saem depois, rejogando as vidas gravadas, sem vida nova. Uma
-  definição diferente da C5 entra por adendo antes da run;
+- **quem calcula:** o código da C5, em `digilab/metrics.py` (as métricas existem uma vez só), com teste. **Ele entra junto do
+  orquestrador, antes da run** (o Gerente da V3, 2026-10-30; A6.12), e o orquestrador as calcula no replay de cada vida. Uma definição
+  diferente entra por adendo antes da run;
 - **o contraste descritivo:** M3\* − M2 e M3\* − M0 por estilo.
 
 **5. Os outros descritivos:**
@@ -2431,7 +2431,8 @@ PROPOSTAS, SEM FONTE (AD6-4):
   - as células de A6.2, as bases e o K de A6.3, 14 dias, orçamento de 16;
   - **a trava:** exige este adendo com a marca "APROVADO pelo Matheus" no cabeçalho (a `exigir_adendo_aprovado` de A4.7) e recusa, com
     `SementeSemPlano`, outra base, outro K, outros dias ou sementes fora da faixa; não grava por cima de uma pasta que já existe;
-  - as medidas de A6.4 e A6.8 e a análise de A6.4 a A6.7, gravadas no `resultado.json` com a classe de cada contraste;
+  - as medidas de A6.4 e A6.8 (com o código das medidas da C5 em `digilab/metrics.py`, com teste) e a análise de A6.4 a A6.7,
+    gravadas no `resultado.json` com a classe de cada contraste;
   - o replay bit a bit de cada vida (o G1) e a conferência da LP-2 (A6.8, item 3).
 - **Antes da run:** os testes de mecanismo e de vidas, os gabaritos (o G2) e a suíte. **Qualquer quebra do G1, do G2 ou do G-MECANISMO
   para tudo.**
@@ -2457,15 +2458,16 @@ Só as VERIFICADAS na C0 (`docs/referencias/v3c0_referencias_verificadas.csv`, #
 ### A6.12 As decisões do Matheus
 
 **Todas DECIDIDAS em 2026-10-30, pela recomendação** ("Não precisa, siga com suas recomendações anteriores", no chat do Gerente da
-V3, depois da tabela das AD6-1 a AD6-5). A tabela fica como foi proposta.
+V3, depois da tabela das AD6-1 a AD6-5; e "Aprovo e siga com as recomendacoes", na sessão do worker). A coluna "recomendação" é o
+que vale.
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
-| **AD6-1** | o K e a margem | **K = 150 (30 por base), a margem δ = 0,022,** o menor efeito com poder 0,8 pelo σ da reavaliação com a folga (A6.5). 3 600 vidas, de 37 min a 1 h | K = 100 (δ 0,027, 2 400 vidas): a margem passa perto da distância do sorteado a 0 na 66xxx (0,031), e o "≈ 0" fica mais frouxo; K = 300 (δ 0,016, 7 200 vidas): um efeito sem interesse prático lê como "> 0" ou "< 0", e o "≈ 0" fica mais difícil de mostrar, pelo dobro do tempo |
-| **AD6-2** | o "≈ 0" | **o IC95 inteiro dentro de (−δ, +δ), com a margem do primário, e a ordem de classes de A6.6** | o "≈ 0" como "o IC contém 0": com o IC largo, tudo vira "≈ 0" (ausência de evidência lida como evidência de ausência); uma margem própria para o sorteado: um número a mais, escolhido sabendo o −0,031 |
-| **AD6-3** | o sorteado já < 0 na 66xxx | **manter a C1-E1 e a C1-E2 como decididas, sem afrouxar:** com "> 0" no fixo e "< 0" no sorteado, a L-3 fica fora, e a leitura vai ao Matheus (A6.7, complemento). A simulação diz que, se a 66xxx se repetir, o sorteado sai "< 0" (1,000 com K = 150) | mudar a C1-E2 agora para aceitar o "< 0": é decidir com o dado da 66xxx na mão; manter: se o dano da memória no sorteado for justamente o que a L-3 conserta, ela espera uma decisão nova depois do resultado (reversível) |
-| **AD6-4** | as medidas da C5 | **as definições de A6.8, item 4:** os cinco estados, o limiar 0,15 da privação, por tick, na vida e nos dias 8 a 14; a menor necessidade pela média e pelo mínimo | só as três variáveis da privação: o humor e a saúde ficam de fora da viabilidade; outro limiar: um número novo sem fonte, quando já há um no corpo |
-| **AD6-5** | o prefixo das unidades | **o do protótipo, `digibrain_prototipo`,** como na reavaliação e na L-2; a faixa nova já dá sementes novas | um prefixo novo: mais uma entrada em `PREFIXOS_UNIDADES` e no teste de colisão, sem ganho |
+| **AD6-1** (DECIDIDA) | o K e a margem | **K = 150 (30 por base), a margem δ = 0,022,** o menor efeito com poder 0,8 pelo σ da reavaliação com a folga (A6.5). 3 600 vidas, de 37 min a 1 h | K = 100 (δ 0,027, 2 400 vidas): a margem passa perto da distância do sorteado a 0 na 66xxx (0,031), e o "≈ 0" fica mais frouxo; K = 300 (δ 0,016, 7 200 vidas): um efeito sem interesse prático lê como "> 0" ou "< 0", e o "≈ 0" fica mais difícil de mostrar, pelo dobro do tempo |
+| **AD6-2** (DECIDIDA) | o "≈ 0" | **o IC95 inteiro dentro de (−δ, +δ), com a margem do primário, e a ordem de classes de A6.6** | o "≈ 0" como "o IC contém 0": com o IC largo, tudo vira "≈ 0" (ausência de evidência lida como evidência de ausência); uma margem própria para o sorteado: um número a mais, escolhido sabendo o −0,031 |
+| **AD6-3** (DECIDIDA) | o sorteado já < 0 na 66xxx | **manter a C1-E1 e a C1-E2 como decididas, sem afrouxar:** com "> 0" no fixo e "< 0" no sorteado, a L-3 fica fora, e a leitura vai ao Matheus (A6.7, complemento). A simulação diz que, se a 66xxx se repetir, o sorteado sai "< 0" (1,000 com K = 150) | mudar a C1-E2 agora para aceitar o "< 0": é decidir com o dado da 66xxx na mão; manter: se o dano da memória no sorteado for justamente o que a L-3 conserta, ela espera uma decisão nova depois do resultado (reversível) |
+| **AD6-4** (DECIDIDA) | as medidas da C5 | **as definições de A6.8, item 4:** os cinco estados, o limiar 0,15 da privação, por tick, na vida e nos dias 8 a 14; a menor necessidade pela média e pelo mínimo | só as três variáveis da privação: o humor e a saúde ficam de fora da viabilidade; outro limiar: um número novo sem fonte, quando já há um no corpo |
+| **AD6-5** (DECIDIDA) | o prefixo das unidades | **o do protótipo, `digibrain_prototipo`,** como na reavaliação e na L-2; a faixa nova já dá sementes novas | um prefixo novo: mais uma entrada em `PREFIXOS_UNIDADES` e no teste de colisão, sem ganho |
 
 **Um achado de leitura, sem decisão:** a C1-E1 cita o comedouro como "+0,136" pelo G-ABLA-MEM. Essa medida é **por ração** (o contraste
 do G-ABLA-MEM, A4.10, item 3, é a taxa da `cadeia`). Por episódio, nas mesmas vidas, a diferença é +0,137 [0,114; 0,160] [poder]. Os dois
