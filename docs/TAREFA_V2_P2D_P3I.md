@@ -1,5 +1,8 @@
 # TAREFA V2 — P2D-P3I: os braços que separam momento e interpretação (2026-10-06)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: chat "Principais jogos Digimon com diálogo". Rodada 12 do `docs/ROADMAP_V2.md`. Fonte: adendo 3, seção 3.3, de
 `docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md`, e `docs/PREDICOES_V2.md`.
 

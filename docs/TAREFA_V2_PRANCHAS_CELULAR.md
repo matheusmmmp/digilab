@@ -1,5 +1,8 @@
 # TAREFA V2 — PRANCHAS_CELULAR (2026-10-19)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: Gerente (coordenação da V2). Worker: Claude Code, sessão "Digilab interface design". Worktree e branch: `v2-pranchas-celular`. Status: ABERTA.
 
 Categoria: documentacao. Origem: Matheus, 2026-10-19, pela coordenação (Gerente): um worker de design desenha as pranchas do celular no modelo novo da imagem referencia_mobile_2026-10-19.

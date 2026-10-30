@@ -1,5 +1,8 @@
 # Plano de análise — V2/V3: a competição entre as regras urgentes (V3-3/V3-4)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Data: 2026-10-21. Status: **DECIDIDO** (as decisões PC-1 a PC-6, seção 12, DECIDIDAS pelo Matheus em 2026-10-21, pela recomendação). Tarefa: `docs/TAREFA_V2_V3_COMPETICAO.md`
 (as CR-1 a CR-7 DECIDIDAS em 2026-10-21; a etapa 0, #383; o código, etapas 1 e 2). Commitado antes de qualquer vida nas faixas 58101…58505
 e 59101…59505.

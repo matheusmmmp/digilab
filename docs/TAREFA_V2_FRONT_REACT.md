@@ -1,5 +1,8 @@
 # TAREFA V2 — FRONT-REACT (2026-10-19)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: Gerente. Worker: A. Worktree e branch: `v2-front-react` (etapa 1), `v2-front-tailwind` (etapa 2). Status: etapa 1 mergeada (#368);
 ENTREGUE a etapa 2 (PR, espera o merge); etapa 3 depois.
 

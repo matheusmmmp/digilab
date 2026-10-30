@@ -1,5 +1,8 @@
 # Plano de análise — V2: o banheiro, o carinho e o limpador (W-PLANO-BANHEIRO)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Status (2026-10-07): **PROPOSTO**, registrado **antes de qualquer run**. **PB-1 a PB-5 DECIDIDAS pelo Matheus em 2026-10-07, todas pela
 recomendação** (seção 12). Tarefa: `docs/TAREFA_V2_BANHEIRO.md` (#219), com BN-1 a BN-6
 DECIDIDAS. É a etapa 0 da tarefa.

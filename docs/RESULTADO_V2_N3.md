@@ -1,5 +1,8 @@
 # Resultado — V2, N3: a consequência da própria ação como sinal, braço P1 (validação, 2026-10-04)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Plano: `docs/PLANO_ANALISE_V2_N3.md` (registrado antes de qualquer run). Tarefa: `docs/TAREFA_V2_N3_CONSEQUENCIA.md`. Validação **única**
 nas sementes 9101…9505, no ganho escolhido pela calibração (4; a calibração **não fechou**: `artifacts_v2_n3/calibracao/escolha.json`).
 **Nada foi reajustado olhando a validação.** Pela decisão do Matheus de 2026-10-01, a falha é registrada e não para a V2. Números de

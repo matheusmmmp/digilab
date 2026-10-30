@@ -1,5 +1,8 @@
 # TAREFA V2 — INFRA_MULTIAGENTE (2026-10-18)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador e worker: esta sessão do Claude Code. Worktree e branch: `v2-infra-multiagente`. Status: ENTREGUE (PR aberto, sem merge).
 
 Categoria: implementacao. Origem: Matheus, 2026-10-18: plano "Infraestrutura de colaboração multiagente — ChatGPT Work + Claude Code",

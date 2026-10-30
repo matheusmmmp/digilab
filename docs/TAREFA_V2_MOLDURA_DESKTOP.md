@@ -1,5 +1,8 @@
 # TAREFA V2 — MOLDURA-DESKTOP (2026-10-20)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: Gerente. Worker: A. Worktree e branch: `v2-moldura-desktop`. Status: ENTREGUE (PR, espera o ok visual e o merge).
 
 Categoria: implementacao. Origem: Matheus, 2026-10-20, a recomendação aprovada depois da tela Pet (#373). Trocar a casca comum do desktop

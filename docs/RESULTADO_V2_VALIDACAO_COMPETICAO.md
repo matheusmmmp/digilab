@@ -1,5 +1,8 @@
 # Resultado — V2/V3: a validação da competição entre as regras urgentes (V3-3/V3-4)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Data: 2026-10-22. Plano: `docs/PLANO_ANALISE_V2_V3_COMPETICAO.md` (PC-1 a PC-6 DECIDIDAS em 2026-10-21), seções 8 e 9 e adendo 1.
 Tarefa: `docs/TAREFA_V2_V3_COMPETICAO.md`. Piloto: `docs/RESULTADO_V2_PILOTO_COMPETICAO.md`.
 

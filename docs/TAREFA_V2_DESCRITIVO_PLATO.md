@@ -1,5 +1,8 @@
 # TAREFA V2 — DESCRITIVO-PLATO: o aprendiz apaga a preferência ou aprende qual fruta faz mal? (2026-10-07)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: chat "Principais jogos Digimon com diálogo". Worker: chat D. Worktree e branch: `v2-descritivo-plato`. Status: ABERTA.
 
 **Origem:** decisão V-3 de `docs/LEITURA_V2_VALIDACAO_UNICA.md` (pergunta Q-1), aprovada pelo Matheus em 2026-10-07. A escolha do cérebro

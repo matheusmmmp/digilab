@@ -1,5 +1,8 @@
 # Resultado — V2: a validação do mundo com o alvo aprendido
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Data: 2026-10-13. Plano: `docs/PLANO_ANALISE_V2_MUNDO_ALVO.md`, seções 8 e 9, com o desvio D1 (antes do piloto) e o adendo 1 (o K, o
 poder, o G-USO do piloto e o custo, commitado antes da validação). PMA-1 a PMA-9 pela recomendação, autorizadas pelo Matheus em 2026-10-13.
 Uma run, sem nada ajustado depois.

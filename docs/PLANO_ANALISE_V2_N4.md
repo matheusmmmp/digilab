@@ -1,5 +1,8 @@
 # Plano de análise — V2, N4: frutas no mundo, sem aprendizado de política
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Status: **registrado antes de qualquer run** (2026-10-04). Nada foi rodado para escrever este plano. Tarefa `docs/TAREFA_V2_N4_FRUTAS.md`;
 definições `docs/DEFINICOES_FRUTAS_V2.md` (F1–F11 decididas em 2026-10-01, todas como recomendadas; F4 = gene próprio); decisões da bola
 B1 e B2 (`docs/V2_RODADA_3.md`). Todo número abaixo é PROPOSTO, sem fonte, salvo quando aponta um artefato ou um símbolo de `digilab/config.py`.

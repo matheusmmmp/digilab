@@ -1,5 +1,8 @@
 # TAREFA V2 — V3_CREDITO_CANAL: o crédito do "querer" por canal até o alvo (2026-10-19)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: Gerente (Claude Code). Worker do desenho: Claude Code (worker B). Worktree e branch: `v2-v3-credito-canal`. Status: PARADA na G0-PODE-MUDAR
 (as CC-1 a CC-6 DECIDIDAS em 2026-10-21 pela recomendação; a etapa 0 entregue no mesmo dia, #376; a G0-PODE-MUDAR não passou e o Matheus decidiu PARAR a V3-9 aqui e seguir para a V3-3/V3-4, 2026-10-21).
 

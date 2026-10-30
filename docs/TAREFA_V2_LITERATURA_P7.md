@@ -1,5 +1,8 @@
 # TAREFA V2 — LITERATURA-P7: a segunda passada antes da leitura (2026-10-06)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: chat "Principais jogos Digimon com diálogo". Worker: chat C. Worktree e branch: `v2-literatura-p7`. Status: ABERTA. Decisão P-7
 de `docs/PREDICOES_V2.md` e adendo 3, seção 3.4. **Só papel: nenhuma run, nenhum código.**
 

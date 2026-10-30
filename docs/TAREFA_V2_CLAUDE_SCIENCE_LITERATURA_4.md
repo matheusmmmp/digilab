@@ -1,5 +1,8 @@
 # TAREFA: quarta passada de literatura da V2 — ler os PDFs que ficaram sem leitura (Claude Science)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Este é o prompt para colar numa sessão do Claude Science. Ele cumpre as decisões D-1 e D-2 de `docs/DEFINICOES_CORPO_V2.md`
 (2026-10-07). **É só leitura:** nada de busca nova, código ou simulação.
 

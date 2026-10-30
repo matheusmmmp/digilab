@@ -1,5 +1,8 @@
 # TAREFA V2 — BANCADA-LIGA-N6-N7 (2026-10-05)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: chat "Principais jogos Digimon com diálogo". Worker: chat D. Worktree e branch: `v2-bancada-liga-n6-n7`. Status: ABERTA.
 Fecha a etapa C3 do `docs/ROADMAP_V2.md`: o cérebro (PR #167) e o mundo do pedido (PR #166) já estão na `main`.
 

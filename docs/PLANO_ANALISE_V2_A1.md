@@ -1,5 +1,8 @@
 # Plano de análise — V2, A1: a bola como primeiro objeto do mundo com consequência
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Status: **registrado antes de qualquer run** (2026-10-01). Nada foi rodado para escrever este plano. Tarefa
 `docs/TAREFA_V2_A1_BOLA_IMPL.md`; desenho aprovado `docs/V2_A1_BOLA_DESENHO.md` (PR #113, opção A); nó N2 de
 `docs/ARQUITETURA_V2_VALIDACAO.md`; definições D4 e D6 de `docs/DEFINICOES_V2.md`. Todo número abaixo é PROPOSTO, sem fonte, salvo quando

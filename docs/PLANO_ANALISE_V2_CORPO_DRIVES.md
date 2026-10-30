@@ -1,5 +1,8 @@
 # Plano de análise — V2: o P1 com o corpo e os drives novos
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Status (2026-10-07): **PROPOSTO**, registrado **antes de qualquer run**. **PCD-1 a PCD-7 DECIDIDAS pelo Matheus em 2026-10-07, todas
 pela recomendação** (seção 12). Tarefa: `docs/TAREFA_V2_CORPO_DRIVES.md` (#209), com as CD-1 a
 CD-10 DECIDIDAS (#210). É o plano que a seção 13 da tarefa pede.

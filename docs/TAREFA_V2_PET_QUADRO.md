@@ -1,5 +1,8 @@
 # TAREFA V2 — PET-QUADRO (2026-10-20)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: Gerente. Worker: A. Worktree e branch: `v2-pet-quadro`, a partir da `main` com o #374. Status: ENTREGUE (PR, espera o ok visual e o merge).
 
 Categoria: implementacao. Origem: Matheus, 2026-10-20, pelo Gerente. Na tela Pet do desktop, a coluna da direita vira o quadro modular

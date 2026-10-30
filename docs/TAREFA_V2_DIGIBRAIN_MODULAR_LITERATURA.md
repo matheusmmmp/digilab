@@ -1,5 +1,8 @@
 # TAREFA V2 — DIGIBRAIN-MODULAR-LITERATURA: as fontes do substrato neural (a PE-1) (2026-10-25)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: o Gerente. Worker: o C (Claude Code, Opus 5.5). Worktree e branch: `v2-modular-literatura`, de `origin/main` (`79ce52e`,
 depois do merge do #406 e do #407). Categoria: `literatura`. **Só papel: nenhum código, nenhuma run, nenhuma semente, nenhum plano de
 análise.** Roda em paralelo à etapa 0 do protótipo (com o D); as duas não dependem uma da outra.
