@@ -134,6 +134,13 @@ export class GambitsPet {
   reservaNoFim = false;
   /** a chave da regra de reserva da ultima semeadura (so com reservaNoFim) */
   reserva: string | null = null;
+  /** candidato v14 (DR2-5, decidida pelo Matheus em 2026-10-30; docs/PLANO_EQUILIBRIO_COMBATE_TR_R2.md, R2-2): o aprendizado proprio do tempo
+      real. `alfa` no lugar do GA.alfa; `prior`: o peso fixo da posicao na lista de partida, somado a nota so na ordem (prior x (1 - i/cap)
+      para a regra i da semeadura; nao decai como a nota-base); `bonus` e `limiar` (opcionais) no lugar do GA.bonusResultado e do
+      GA.limiarTroca. null nos pets v13 (o GA de sempre); so a bancada liga. Nao entra na assinatura */
+  aprendizadoTR: { readonly alfa: number; readonly prior: number; readonly bonus?: number; readonly limiar?: number } | null = null;
+  /** a posicao de cada regra na lista de partida da ultima semeadura (so com aprendizadoTR) */
+  posSemente: Record<string, number> = {};
   /** regras das lutas do pet (a da ultima semeadura): CV21E_TR nos pets v13; null antes da primeira semeadura. Nao entra na assinatura: sai
       da versao */
   regras: RegrasLuta | null = null;
@@ -155,6 +162,7 @@ export class GambitsPet {
     if (!this.chipsNoFim) for (const k of [...this.chipsRegra].reverse()) if (permitida(regraDe(k), forma)) { const i = novas.indexOf(k); if (i >= 0) novas.splice(i, 1); novas.unshift(k); }
     this.ativas = novas.slice(0, cap);
     const ultima = base.regras.length ? chaveRegra(base.regras[base.regras.length - 1]) : null;
+    this.posSemente = this.aprendizadoTR ? Object.fromEntries(base.regras.map((r, i) => [chaveRegra(r), i])) : {};
     this.reserva = this.reservaNoFim && ultima !== null && this.ativas.includes(ultima) ? ultima : null;
     for (const k of Object.keys(this.travas)) if (!this.ativas.includes(k)) delete this.travas[k];
     this.mudancas.push({ luta: this.nLutas, texto: `evoluiu para ${this.linha}: a forma semeou a lista (até ${cap} regras)` });
@@ -177,7 +185,7 @@ export class GambitsPet {
       while (j in fixas) j = (j + 1) % n;          /* duas travas na mesma posicao: a segunda vai para a proxima livre */
       fixas[j] = k;
     }
-    livres.sort((a, b) => (this.notas[b] - this.notas[a]) || (this.ativas.indexOf(a) - this.ativas.indexOf(b)));
+    livres.sort((a, b) => (this.chaveOrdem(b) - this.chaveOrdem(a)) || (this.ativas.indexOf(a) - this.ativas.indexOf(b)));
     const saida: (string | undefined)[] = [];
     for (let i = 0; i < n; i++) saida.push(i in fixas ? fixas[i] : livres.shift());
     this.ativas = saida.filter(Boolean) as string[];
@@ -198,10 +206,16 @@ export class GambitsPet {
     const ks = [...this.ativas, ...this.vetos.filter(k => k in this.notas && !this.ativas.includes(k) && permitida(regraDe(k), this.forma!))];
     return this.porNota(ks, cap);
   }
+  /** a chave da ordem: a nota; com o aprendizado do tempo real (DR2-5), mais o peso fixo da posicao na lista de partida */
+  private chaveOrdem(k: string): number {
+    const a = this.aprendizadoTR, i = this.posSemente[k];
+    if (!a || i === undefined) return this.notas[k];
+    return this.notas[k] + a.prior * (1 - i / CV21.maxRegras[baseDe(this.forma!.est)]);
+  }
   /** a lista sem o dono (Lago e Palacio): pela nota, cortada na capacidade. DE-10: a reserva fica fora da nota e entra no fim */
   private porNota(ks: string[], cap: number): string[] {
     const r = this.reserva !== null && ks.includes(this.reserva) ? this.reserva : null, sem = r === null ? ks : ks.filter(k => k !== r);
-    const out = sem.map((k, i) => ({ k, i })).sort((a, b) => (this.notas[b.k] - this.notas[a.k]) || (a.i - b.i)).slice(0, r === null ? cap : cap - 1).map(x => x.k);
+    const out = sem.map((k, i) => ({ k, i })).sort((a, b) => (this.chaveOrdem(b.k) - this.chaveOrdem(a.k)) || (a.i - b.i)).slice(0, r === null ? cap : cap - 1).map(x => x.k);
     return r === null ? out : [...out, r];
   }
   /** Palacio da Fronteira (instalacoes.ts): a lista que o pet faria sozinho, sem o dono e sem os chips. A do Lago (listaSozinho: sem
@@ -302,7 +316,7 @@ export class GambitsPet {
       const k = usadas[a.motivo];
       soma[k] = (soma[k] || 0) + a.saldo; cont[k] = (cont[k] || 0) + 1;
     }
-    const bonus = GA.bonusResultado * (res.pontosA - .5), alfa = GA.alfa * novidade;
+    const bonus = (this.aprendizadoTR?.bonus ?? GA.bonusResultado) * (res.pontosA - .5), alfa = (this.aprendizadoTR?.alfa ?? GA.alfa) * novidade;
     for (const k of Object.keys(cont)) {
       this.notas[k] += alfa * (soma[k] / cont[k] + bonus - this.notas[k]);
       this.disparos[k] = (this.disparos[k] || 0) + cont[k];
@@ -311,7 +325,7 @@ export class GambitsPet {
     const livres = this.ativas.filter(k => !(k in this.travas) && !this.chipsRegra.includes(k));
     const pior = livres.sort((a, b) => this.notas[a] - this.notas[b])[0];
     const candidatas = this.candidatas();
-    if (pior && this.notas[pior] < GA.limiarTroca && candidatas.length) {
+    if (pior && this.notas[pior] < (this.aprendizadoTR?.limiar ?? GA.limiarTroca) && candidatas.length) {
       const nova = candidatas[criarRng(hashSemente("propor", semente)).int(candidatas.length)];
       this.ativas[this.ativas.indexOf(pior)] = nova;
       if (!(nova in this.notas)) this.notas[nova] = 0;

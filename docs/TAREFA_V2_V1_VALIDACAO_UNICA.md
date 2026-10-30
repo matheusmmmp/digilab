@@ -1,5 +1,8 @@
 # TAREFA V2 — V1-VALIDACAO-UNICA (2026-10-06)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: chat "Principais jogos Digimon com diálogo". Worker: chat B. Worktree e branch: `v2-v1-validacao`. Status: ABERTA.
 Etapa V1 do `docs/ROADMAP_V2.md`.
 - Planos: `docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md`, com o adendo 1 (ablações) e o adendo 2 (opção A: N = 30, K = 6 por base, Δ do

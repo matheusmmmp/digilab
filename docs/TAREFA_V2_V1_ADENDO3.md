@@ -1,5 +1,8 @@
 # TAREFA V2 — V1-ADENDO3: o orquestrador da validação com o adendo 3 (2026-10-06)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: chat "Principais jogos Digimon com diálogo". Worker: chat B. Worktree e branch: `v2-v1-adendo3`. Status: ABERTA. Continua
 `docs/TAREFA_V2_V1_VALIDACAO_UNICA.md`, cuja config e orquestrador entraram no #183, sem rodar.
 

@@ -1,5 +1,8 @@
 # Plano de análise — V2, N3: a consequência da própria ação como sinal (braço P1)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Status: **registrado antes de qualquer run** (2026-10-04). Nada foi rodado para escrever este plano. Os números citados vêm de artefatos em
 disco, cada um com o arquivo; o que não tem fonte é PROPOSTO. Tarefa: `docs/TAREFA_V2_N3_CONSEQUENCIA.md`; nó N3 de `docs/ROADMAP_V2.md`;
 braço P1 de `docs/PLANO_V2_PESQUISA.md`, seção 2. Pela decisão do Matheus de 2026-10-01, uma falha é registrada e não para a V2.

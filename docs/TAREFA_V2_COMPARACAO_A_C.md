@@ -1,5 +1,8 @@
 # TAREFA V2 — COMPARACAO-A-C: piloto, adendo de tamanho e validação da comparação dos cérebros (2026-10-06)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: chat "Principais jogos Digimon com diálogo". Worker: chat D. Worktree e branch: `v2-comparacao-a-c`. Status: ABERTA.
 Etapa K3/V2 do `docs/ROADMAP_V2.md`. Plano: `docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md`, decisões C-1 a C-10 e adendo 1.
 

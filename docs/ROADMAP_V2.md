@@ -1,5 +1,8 @@
 # ROADMAP — Digilab V2 até a fase de experimentos completa (revisão 3)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Status: **PROPOSTO** (coordenador, 2026-10-01; **revisão 3 em 2026-10-05**, estratégia "montar tudo, calibrar junto, validar uma vez", aprovada pelo Matheus). A revisão 1 deste arquivo ordenava o plano da V2 em torno de uma pergunta
 sobre o dono. Ela foi trocada por três decisões e propostas do Matheus, todas de 2026-10-01:
 - a **pergunta maior**;

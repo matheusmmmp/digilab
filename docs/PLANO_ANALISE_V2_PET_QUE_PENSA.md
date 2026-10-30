@@ -1,5 +1,8 @@
 # Plano de análise — V2: o pet que pensa (J5), o planejador de um alvo passa nos dois testes da DS-1?
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Status (2026-10-13): **PROPOSTO**, registrado **antes de qualquer run**. É a etapa 5 de `docs/TAREFA_V2_PET_QUE_PENSA.md`. O desenho é
 `docs/futuro/pet_que_pensa.md`, com **PQ-1 a PQ-7 DECIDIDAS** (2026-10-13). **PP-1 a PP-9 DECIDIDAS pelo Matheus
 em 2026-10-13, todas pela recomendação** (seção 12).

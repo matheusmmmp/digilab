@@ -1,5 +1,8 @@
 # Plano de análise — o experimento maior (plasticidade por fonte × condição do mundo)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Status: **registrado antes de qualquer dado** (2026-10-04). Tarefa `docs/TAREFA_V2_PLANO_EXPERIMENTO_MAIOR.md`; etapa R6.1 do
 `docs/ROADMAP_V2.md`. **Só papel:** nenhuma run, nenhum código. A run só acontece depois de N3 (P1), N4 (frutas), N5 (P2, P2e) e da
 bancada de mundos estarem na `main`, e depois do adendo da seção 7.3. Todo número citado aponta o artefato; os que não têm artefato estão

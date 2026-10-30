@@ -1,5 +1,8 @@
 # Plano de análise — vínculo B (previsibilidade + desejo) em vidas novas
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Status: **registrado antes de qualquer run** (2026-10-01). Nada foi rodado para escrever este plano. Tarefa
 `docs/TAREFA_V2_F0_VINCULO_NOVO.md`; decisão do Matheus (2026-10-01): **alternativa B** de `docs/V2_VINCULO_PROPOSTA.md`.
 Os números citados vêm de artefatos em disco, cada um com o arquivo; valores sem fonte estão marcados PROPOSTO.

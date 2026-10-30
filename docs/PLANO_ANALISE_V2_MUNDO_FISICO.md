@@ -1,5 +1,8 @@
 # Plano de análise — V2: o P1 no mundo físico mínimo
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Status (2026-10-07): **PROPOSTO**, registrado **antes de qualquer run**. **PMF-1 a PMF-7 DECIDIDAS pelo Matheus em 2026-10-07, todas
 pela recomendação** (seção 13). Tarefa: `docs/TAREFA_V2_MUNDO_FISICO.md`. Nenhum número deste plano
 saiu de run no mundo físico; os que vêm de antes citam o artefato.

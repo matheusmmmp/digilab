@@ -1,5 +1,8 @@
 # TAREFA V2 — UI-DESKTOP (2026-10-18)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: Matheus (pedido direto). Worker: chat "Digilab interface design". Worktree e branch: `v2-ui-desktop`. Status: ENTREGUE (PR desta etapa).
 
 ## 1. Pergunta

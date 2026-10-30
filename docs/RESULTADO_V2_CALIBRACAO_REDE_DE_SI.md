@@ -1,5 +1,8 @@
 # Resultado — V2: a calibração da rede de si e o piloto (Digicorpo, etapa 2 do ego)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Data: 2026-10-14. Plano: `docs/PLANO_ANALISE_V2_REDE_DE_SI.md`, seções 5 e 6, e o adendo 1 com os números desta run. Autorizada pelo
 Matheus em 2026-10-13.
 

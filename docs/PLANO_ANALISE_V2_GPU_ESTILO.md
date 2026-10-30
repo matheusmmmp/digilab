@@ -1,5 +1,8 @@
 # Plano de análise — GPU-ESTILO: o estilo da espécie com o corpus em português (V2, fase 0)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Status: **registrado antes da run** (2026-10-01). Tarefa `docs/TAREFA_V2_GPU_ESTILO.md`; depende do PR #107 (corpus reescrito em
 português) na `main`. Fila da GPU: posição 1 (único Ollama nesta rodada). Valores sem fonte estão marcados PROPOSTO.
 

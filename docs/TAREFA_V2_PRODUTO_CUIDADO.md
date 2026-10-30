@@ -1,5 +1,8 @@
 # TAREFA V2 — PRODUTO-CUIDADO (2026-10-30)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: Gerente (Claude Code). Worker: A (Claude Code, Opus 5.5). Worktree e branch: `v2-produto-cuidado`. Status: ENTREGUE.
 
 Categoria: implementacao. Origem: o seguimento do PR #450 (`docs/TAREFA_V2_PRODUTO_FOME.md`), pedido pelo Gerente e autorizado pelo

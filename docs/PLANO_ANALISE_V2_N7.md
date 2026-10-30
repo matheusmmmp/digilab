@@ -1,5 +1,8 @@
 # Plano de análise — N7: arbitragem entre duas prioridades (a necessidade do pet × o pedido do dono)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Status: **registrado antes de qualquer dado** (2026-10-05). Tarefa `docs/TAREFA_V2_N7_PLANO.md`; nó N7 do `docs/ROADMAP_V2.md` (R6.3);
 hipótese H-ACT-03 de `docs/research/digibrain/mechanisms/action_selection.md`; peça "duas prioridades" da seção 5 de `docs/DEFINICOES_V2.md`
 (D7). **Só papel:** nenhuma run, nenhum código. Todo número citado aponta o artefato ou a config; os números de desenho sem fonte estão

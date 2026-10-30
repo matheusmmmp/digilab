@@ -1,5 +1,8 @@
 # Plano de análise — N5: o dono informa, o mundo valida ou refuta (braços P2 e P2e)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Status: **registrado antes de qualquer dado** (2026-10-04). Tarefa `docs/TAREFA_V2_N5_PLANO.md`; nó N5 do `docs/ROADMAP_V2.md`; definição D-A
 de `docs/ARQUITETURA_V2_VALIDACAO.md`; predições 3 e 4 de `docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md`. **Só papel:** nenhuma run, nenhum
 código. Todo número citado aponta o artefato; os números de desenho sem fonte estão marcados PROPOSTO; o resto é decisão do Matheus (seção 12).

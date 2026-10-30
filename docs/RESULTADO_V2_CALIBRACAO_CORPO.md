@@ -1,5 +1,8 @@
 # Resultado — V2: a calibração do corpo (2026-10-12/13)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Plano: `docs/PLANO_ANALISE_V2_CORPO_DRIVES.md`, seções 6 e 7, adendos 1 a 3 e o adendo 4 (os números congelados). Autorizada pelo Matheus
 em 2026-10-12. Sementes de calibração 33101…33505 (K = 4, prefixo `corpo`, 20 unidades). **A validação (34101…34505) não rodou: precisa
 de outro sim.** Interpretações em `docs/REGISTRO_DESVIOS.md`.

@@ -1,5 +1,8 @@
 # TAREFA V2 — O PET QUE PENSA (J5): o modelo do desfecho, o mapa da comida e o planejador de um alvo (2026-10-13)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 **Equipe:** coordenador: Gerente. Workers:
 - **B:** os modelos, o planejador e o cérebro;
 - **A:** o mundo (a troca de tipo, a fruta na mão, os candidatos de árvore);

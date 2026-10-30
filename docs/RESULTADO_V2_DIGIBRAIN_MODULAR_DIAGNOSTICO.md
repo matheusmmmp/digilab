@@ -1,5 +1,8 @@
 # Resultado — V2: o diagnóstico do DigiBrain modular depois da avaliação única (2026-10-26)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Proposta: `docs/PROPOSTA_DIAGNOSTICO_DIGIBRAIN_MODULAR.md`, seção 3, aprovada pelo Matheus em 2026-10-26 ("Aprovo a proposta, com replay
 no piloto"). Executor: worker D (Claude Code, Opus 5.5), worktree `v2-modular-diagnostico`.
 

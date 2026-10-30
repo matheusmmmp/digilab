@@ -1,5 +1,8 @@
 # TAREFA V2 — K2-CALIBRACAO-CONJUNTA (2026-10-05)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: chat "Principais jogos Digimon com diálogo". Worker: chat B. Worktree e branch: `v2-k2-calibracao-conjunta`. Status: ABERTA.
 Etapa K2 do `docs/ROADMAP_V2.md`; plano `docs/PLANO_CALIBRACAO_CONJUNTA_V2.md` (K-1 a K-11 decididas). Sementes **14101…14505, K = 4**,
 só de calibração; as de validação (15101…15505) não se tocam.

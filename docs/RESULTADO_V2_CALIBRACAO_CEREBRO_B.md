@@ -1,5 +1,8 @@
 # Resultado — calibração do cérebro B (comparação dos DigiBrains)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Tarefa `docs/TAREFA_V2_CALIBRACAO_CEREBROS_B_C.md` (rodada 11); plano `docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md`, adendo 1.1 (grades e
 regras conferidas pelo coordenador). Run única em 2026-10-06, commit `d9b28a1` (orquestrador `experiments/run_v2_calibracao_cerebro_b.py`,
 cérebro `digilab/policies/cerebro_b.py`; os sha256 de ambos e do plano estão no `meta.json`). Sementes de calibração 28101…28505, K = 4
