@@ -73,8 +73,8 @@ export class Heroi {
   private t0 = 0;
   private lado = 1;                    // 1 = olhando para a direita na tela; -1 = para a esquerda
   private escalaX = 1;
-  /** se o desenho original olha para a esquerda (o atlas do UP olha); a virada usa isso */
-  private olhaEsquerda = true;
+  /** se o desenho original olha para a esquerda; o atlas do UP olha para a direita; a virada usa isso */
+  private olhaEsquerda = false;
   nome = "reserva";
 
   constructor() {
@@ -141,7 +141,7 @@ export class Heroi {
       return { texturas: ok.map(([q]) => textura(quadroComBorda(fonte.img, q, s.caixa, pe))), ms: ok.map(([, m]) => m) };
     };
     this.anims = { Idle: anim(s.clipes.Idle), Run: anim(s.clipes.Run) };
-    this.olhaEsquerda = true;
+    this.olhaEsquerda = false;
     this.ajustarPlano(s.caixa[0] + 2 * BORDA, pe + 2 * BORDA);
     this.nome = `${s.digimon} (${nome})`;
   }
