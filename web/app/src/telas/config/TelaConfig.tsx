@@ -20,7 +20,9 @@ import { AvisoSom } from "../../componentes/AvisoSom.tsx";
 import { SOM, useSom } from "../../som.ts";
 import { dicasLigadas, ligarDicas } from "../../dicas.ts";
 import { textoSave } from "../../save.ts";
-import { NOME_TEMA, escolherTema, useTema, type Tema } from "../../tema.ts";
+import { usePele } from "../../pele.ts";
+import { escolherTema, useTema, type Tema } from "../../tema.ts";
+import { EscolhaPele, resumoAparencia } from "./EscolhaPele.tsx";
 import { VELOCIDADES, escolherVelocidade, pularUmaHora, useTempo } from "../../tempo.ts";
 
 const TITULO: Record<ParteConfig, string> = { principal: "Ajustes", aparencia: "Aparência", dados: "Registro e replay", fala: "Fala do pet", sobre: "Sobre" };
@@ -37,12 +39,12 @@ function Linha({ ic, titulo, resumo, tag, abrir }: { ic: ReactNode; titulo: stri
   );
 }
 function Principal({ abrir }: { abrir: (p: ParteConfig) => void }) {
-  const { motor: m } = useJogo(), tema = useTema(), fl = useFalaLivre(), { velocidade } = useTempo();
+  const { motor: m } = useJogo(), tema = useTema(), pele = usePele(), fl = useFalaLivre(), { velocidade } = useTempo();
   useFalaLLM();
   return (
     <>
       <h3 className="mc-sec">Jogo</h3>
-      <div className="mc-menu"><Linha ic={<Deco nome={ICONE.pets} />} titulo="Aparência" resumo={`tema ${tema === "sistema" ? "do sistema" : NOME_TEMA[tema].toLowerCase()}`} abrir={() => abrir("aparencia")} /></div>
+      <div className="mc-menu"><Linha ic={<Deco nome={ICONE.pets} />} titulo="Aparência" resumo={resumoAparencia(pele, tema)} abrir={() => abrir("aparencia")} /></div>
       <h3 className="mc-sec">Fala</h3>
       <div className="mc-menu"><Linha ic={<Peca nome="emoji_feliz" escala={2} />} titulo="Fala do pet" resumo={`modo ${NOME_MODO[fl.modo]} · ${rotuloLLM().texto}`} abrir={() => abrir("fala")} /></div>
       <h3 className="mc-sec">Dados</h3>
@@ -75,6 +77,7 @@ function Aparencia() {
   const tema = useTema(), opcoes: [Tema, string][] = [["claro", "Claro"], ["escuro", "Escuro"], ["sistema", "Sistema"]], [dicas, setDicas] = useState(dicasLigadas);
   return (
     <>
+      <EscolhaPele />
       <h3 className="mc-sec" id="cfg-tema">Tema do habitat</h3>
       <div className="mc-opcoes mc-opcoes--3" role="radiogroup" aria-labelledby="cfg-tema">
         {opcoes.map(([t, rot]) => (
