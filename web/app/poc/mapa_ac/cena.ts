@@ -278,10 +278,10 @@ export const GEO_SOMBRA = new THREE.PlaneGeometry(1, 1).rotateX(-Math.PI / 2);
 /* ---------- os modelos dos kits ---------- */
 const KIT = "./Assets/kits3d/";
 const KAY = KIT + "kaykit_forest/x/KayKit_Forest_Nature_Pack_1.0_FREE/Assets/gltf/";
-const QUA = KIT + "quaternius_nature/x/glTF/";
-const KEN = KIT + "kenney_nature/x/Models/GLTF format/";
+export const QUA = KIT + "quaternius_nature/x/glTF/";
+export const KEN = KIT + "kenney_nature/x/Models/GLTF format/";
 /** cada modelo do mapa: as variantes (arquivos), a altura alvo em células, se balança ao vento e o raio da sombra (0 = sem sombra) */
-interface Modelo { arquivos: string[]; altura: number; vento: number; sombra: number }
+export interface Modelo { arquivos: string[]; altura: number; vento: number; sombra: number }
 const MODELOS: Record<string, Modelo> = {
   arvore_redonda: { arquivos: ["CommonTree_1", "CommonTree_2", "CommonTree_3", "CommonTree_4", "CommonTree_5"].map(n => QUA + n + ".gltf"), altura: 4.2, vento: 0.004, sombra: 1.5 },
   pinheiro: { arquivos: ["Pine_1", "Pine_2", "Pine_3", "Pine_5"].map(n => QUA + n + ".gltf"), altura: 5.0, vento: 0.003, sombra: 1.3 },
@@ -294,9 +294,9 @@ const MODELOS: Record<string, Modelo> = {
   grama: { arquivos: ["Grass_Common_Short", "Grass_Wispy_Short", "Grass_Common_Tall"].map(n => QUA + n + ".gltf"), altura: 0.35, vento: 0.08, sombra: 0 },
 };
 
-interface Variante { pecas: { geo: THREE.BufferGeometry; mat: THREE.Material; local: THREE.Matrix4 }[] }
+export interface Variante { pecas: { geo: THREE.BufferGeometry; mat: THREE.Material; local: THREE.Matrix4 }[] }
 
-async function carregarVariante(loader: GLTFLoader, url: string, modelo: Modelo): Promise<Variante> {
+export async function carregarVariante(loader: GLTFLoader, url: string, modelo: Modelo): Promise<Variante> {
   const gltf = await loader.loadAsync(url);
   const raiz = gltf.scene;
   raiz.updateMatrixWorld(true);
@@ -371,7 +371,7 @@ export async function objetos(mapa: Mapa, aoProgresso: (feito: number, total: nu
 
 /* ---------- o céu ---------- */
 export const COR_HORIZONTE = 0xcfeefc;
-function ceu(): THREE.Texture {
+export function ceu(): THREE.Texture {
   const c = document.createElement("canvas");
   c.width = 4; c.height = 256;
   const g = c.getContext("2d")!, gr = g.createLinearGradient(0, 0, 0, 256);
@@ -386,7 +386,7 @@ function ceu(): THREE.Texture {
 }
 
 /* as nuvens: planos brancos e fofos bem longe, que não dobram (ficam no céu) */
-function nuvens(): THREE.Group {
+export function nuvens(): THREE.Group {
   const c = document.createElement("canvas");
   c.width = 256; c.height = 128;
   const g = c.getContext("2d")!;
