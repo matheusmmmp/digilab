@@ -1,6 +1,6 @@
 /* O painel DigiBrain dos pets v11 (componentes/DigiBrain.tsx; pranchas DigiBrainDesktop e DigiBrain390). No celular: o botao no canto do
    palco e o conteudo numa folha (tokens --dl-*). No desktop (>= 1100 px): uma coluna de 296 px entre o habitat e a coluna de sempre (320 px,
-   como nos outros pets); a coluna rola sozinha (tokens --ui-* da casca, estilo/desktop.css). Nada anima. */
+   como nos outros pets); a coluna rola sozinha (tokens --ui-* da casca). Nada anima. */
 
 /* ---------- o conteudo (os dois tamanhos) */
 .db-conteudo{display:flex;flex-direction:column;gap:14px;font-size:13px}
@@ -78,19 +78,11 @@
 .mp-leg{display:flex;flex-wrap:wrap;gap:2px 10px;list-style:none;margin:6px 0 0;padding:0;font-size:11px;font-weight:700;color:var(--dl-text-2)}
 .mp-leg i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:4px;background:var(--c)}
 .mp-nota{margin:4px 0 0;font-size:11px;font-weight:700;color:var(--dl-text-2)}
-/* ---------- celular: o botao no canto do palco (na faixa do titulo) e a folha */
-.db-botao{position:absolute;right:6px;top:2px;z-index:3;display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:0 12px;border-radius:999px;
-  background:var(--dl-learned-bg);color:var(--dl-learned-ink);font:inherit;font-weight:900;font-size:12px;border:2px solid #FFFFFF;box-shadow:0 0 0 2px var(--dl-navy);cursor:pointer}
-.db-botao:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
 .db-folha-selo{display:flex;align-items:center;gap:10px}
 .folha .db-trilho{background:var(--dl-surface)}      /* a folha tem o fundo --dl-bg, que some com o trilho de sempre */
 
 /* ---------- desktop: a coluna do painel */
 @media (min-width:1100px){
-  .pet-tela .dl-card.digibrain{flex:1;display:flex;flex-direction:column;min-height:0;padding:0;overflow:hidden}
-  .db-cab{display:flex;align-items:center;gap:10px;padding:14px 16px 10px;border-bottom:1px solid var(--ui-border)}
-  .db-cab h2{flex:1;margin:0;font-size:15px;font-weight:900;color:var(--ui-text)}
-  .db-rola{flex:1;min-height:0;overflow:auto;padding:12px 16px 14px}
   .digibrain .db-conteudo{font-size:12px;gap:12px}
   .digibrain .db-sec,.digibrain .db-selo,.digibrain .db-agora small,.digibrain .db-vazio,.digibrain .db-ultimas .dl-lcd{color:var(--ui-text-2)}
   .digibrain .db-agora{background:var(--ui-surface-2);box-shadow:none;border:1px solid var(--ui-border);border-radius:10px}

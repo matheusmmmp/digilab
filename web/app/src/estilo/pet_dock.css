@@ -5,6 +5,8 @@
 
 /* ---------- a camada */
 .app--habitat.app--pet .habitat{ right:0 }
+/* desktop: o habitat ocupa a altura toda e o dock flutua sobre o chao; so no celular ele reserva o pe da tela */
+@media (min-width:900px){ .app--habitat.app--pet .habitat{ bottom:0 } }
 .app--pet .pet-tela{ pointer-events:none }
 .app--pet .pet-tela .pet-balcao{ position:absolute; inset:0; right:0; pointer-events:none }
 .app--pet .pet-balcao > *, .app--pet .pet-balcao .cena-topo > *{ pointer-events:auto }
@@ -21,7 +23,7 @@
 .app--pet .racao-lugar{ min-height:44px; padding:0 14px; font-size:15px }
 
 /* ---------- o dock e o que fica sobre ele */
-.pet-dock{ position:absolute; z-index:6; left:50%; bottom:12px; translate:-50% 0; width:min(780px,calc(100% - 24px)); display:flex; flex-direction:column; gap:8px; pointer-events:none }
+.pet-dock{ position:absolute; z-index:6; left:50%; bottom:12px; translate:-50% 0; width:min(660px,calc(100% - 24px)); display:flex; flex-direction:column; gap:8px; pointer-events:none }
 .pet-dock > *{ pointer-events:auto }
 .pet-dock .dock{ position:relative; display:flex; grid-template-columns:none; gap:4px; padding:10px 6px 6px; background:linear-gradient(180deg,var(--hx-miolo-2),var(--hx-miolo)); border:1px solid var(--hx-borda);
   border-top:2px solid var(--hx-borda-topo) }
@@ -74,7 +76,21 @@
 .pet-painel:focus-visible{ outline:3px solid var(--hx-foco); outline-offset:2px }
 .pet-painel .pet-painel__hx{ width:100%; max-height:100%; background:linear-gradient(180deg,var(--hx-miolo-2),rgba(10,19,22,.96)) }
 .pet-painel .hx-painel__titulo{ font-size:16px }
-.pet-painel__folha{ background:var(--dl-bg); color:var(--dl-text); border-radius:8px; padding:10px }
+/* D8: o conteudo do DigiBrain e do "Por que ele disse isso" herda a pele escura (tokens --dl-* remapeados em painel-hx.css) */
+.pet-painel__folha{ color:var(--hx-texto); border-radius:0; padding:10px 12px 12px; max-height:100%; overflow:auto }
+.pet-painel__folha .db-trilho{ background:var(--hx-medidor-trilho) }
+.pet-painel__folha .db-emo{ background:#2A1F3A; color:#E3CCFF }
+.pet-painel__folha .db-agora{ border-radius:0; box-shadow:none; border:1px solid var(--hx-borda); background:var(--hx-miolo-2) }
+.pet-painel__folha .db-chips li{ border-radius:0; box-shadow:none; border:1px solid var(--hx-borda); background:var(--hx-miolo-2) }
+.pet-painel__folha .db-favor{ color:var(--hx-ok) }
+.pet-painel__folha .db-contra{ color:#FF8E9E }
+.pet-painel__folha .db-sec, .pet-painel__folha .mp-reg text{ font-family:var(--hx-f); letter-spacing:.08em; color:var(--hx-rotulo) }
+.pet-painel__folha .mp-reg text{ fill:var(--hx-rotulo) }
+.pet-painel__folha .mp-no text{ fill:var(--hx-texto-2) }
+.pet-painel__folha .fala-det{ font:500 16px/1.35 var(--hx-f); color:var(--hx-texto) }
+.pet-painel__folha .fala-status{ border:1px solid var(--hx-borda); border-radius:0; color:var(--hx-texto-2) }
+.pet-painel__folha .dl-apoio{ color:var(--hx-sec); display:block; margin-top:4px }
+.pet-painel__folha .pet-status{ color:var(--hx-rotulo) }
 @media (min-width:900px){ .pet-painel{ width:360px; max-height:calc(100% - var(--casca-topo) - 150px) } }
 
 /* conteudo dos paineis */

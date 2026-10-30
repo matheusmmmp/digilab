@@ -49,8 +49,8 @@ dialog.ab-hx::backdrop{ background:rgba(11,17,24,.72) }
 
 /* Boas-vindas no desktop: duas colunas (ovo e texto) sob a faixa de titulo */
 @media (min-width:1100px){
-  dialog.ab-hx.boas-vindas-tela[open]{ grid-template-rows:auto minmax(0,1fr); align-content:stretch; padding:0 120px 24px; row-gap:0 }
-  .boas-vindas-tela.ab-hx .ab-cab{ grid-column:1/-1; width:100%; margin-top:16px }
+  dialog.ab-hx.boas-vindas-tela[open]{ grid-template-rows:auto auto; align-content:center; justify-content:center; grid-template-columns:auto auto; column-gap:56px; padding:24px; row-gap:0 }
+  .boas-vindas-tela.ab-hx .ab-cab{ grid-column:1/-1; width:100%; margin:0 0 24px }
   .boas-vindas-tela.ab-hx .bv-centro, .boas-vindas-tela.ab-hx .bv-texto{ width:auto; align-self:center }
   .boas-vindas-tela.ab-hx .bv-texto{ align-items:flex-start; max-width:480px }
   .boas-vindas-tela.ab-hx .bv-tit{ text-align:left; font-size:64px }
@@ -160,7 +160,7 @@ dialog.res.ab-hx{
 .res.ab-hx .res-tit{ font:700 40px/44px var(--hx-f); letter-spacing:.1em; font-style:normal; -webkit-text-stroke:0; text-shadow:none; top:40px }
 .res.ab-hx .res-sub{ font:500 15px/19px var(--hx-f); color:var(--hx-texto-2); top:90px }
 .res.ab-hx .res-num{ background:var(--hx-miolo); border:1px solid var(--hx-borda); border-radius:0 }
-.res.ab-hx .res-num .dl-num{ font:700 24px/28px var(--hx-f); font-style:normal; color:var(--hx-texto); font-variant-numeric:tabular-nums }
+.res.ab-hx .res-num .dl-num{ font:700 24px/28px var(--hx-f); font-style:normal; color:var(--hx-texto); text-shadow:none; -webkit-text-stroke:0; font-variant-numeric:tabular-nums }
 .res.ab-hx .res-num > span:last-child{ font:600 12px/1.2 var(--hx-f); letter-spacing:.08em; text-transform:uppercase; color:var(--hx-sec) }
 .res.ab-hx .res-ilha, .res.ab-hx .res-medalha, .res.ab-hx .res-titulo, .res.ab-hx .res-item, .res.ab-hx .res-serie, .res.ab-hx .res-decidiu, .res.ab-hx .res-semregra{
   background:var(--hx-miolo); border:1px solid var(--hx-borda); border-top:2px solid var(--hx-borda-topo); border-radius:0; box-shadow:none; color:var(--hx-texto);
@@ -195,3 +195,6 @@ dialog.res.ab-hx{
   .ab-hx .bv-tit, .ab-hx .cj-tit{ font-size:32px }
   .res.ab-hx .res-tit{ font-size:32px }
 }
+
+/* Luta em tela cheia no monitor (D10): o palco ocupa mais da altura, a regra em uso fica logo abaixo */
+@media (min-width:1100px){ .luta-tela.ab-hx .luta-arena{ height:clamp(420px,66dvh,760px) } }

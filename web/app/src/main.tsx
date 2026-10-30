@@ -24,7 +24,6 @@ import "./estilo/treino.css";
 import "./estilo/lutar.css";
 import "./estilo/diario.css";
 import "./estilo/decoracao.css";
-import "./estilo/desktop.css";
 import "./estilo/digibrain.css";
 import "./estilo/pet_home.css";
 import "./estilo/mundo.css";

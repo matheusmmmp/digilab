@@ -82,16 +82,14 @@ footer a{color:var(--dl-action);font-weight:900;display:inline-flex;align-items:
 .tela-cab-ic{filter:drop-shadow(2px 0 0 #173A8A) drop-shadow(-2px 0 0 #173A8A) drop-shadow(0 2px 0 #173A8A) drop-shadow(0 -2px 0 #173A8A)}
 /* desktop (secao 6): conteudo com padding 20/24 em colunas que vao ate o fundo da janela (o ultimo card de cada coluna
    cresce); abaixo de 1100 px as colunas somem (display:contents) e a ordem do celular fica a mesma */
-.desk-col{display:contents}
-.desk-so{display:none}
+
 @media (min-width:1100px){
   .tela.desk{padding:20px 24px;gap:18px;align-items:stretch;box-sizing:border-box;min-height:calc(100dvh / var(--zoom, 1) - 76px)}
-  .desk-col{display:flex;flex-direction:column;gap:14px;min-width:0}
-  .desk-col > :last-child{flex-grow:1}
-  .desk-card{background:var(--dl-surface);border-radius:16px;box-shadow:0 0 0 2px var(--dl-border),0 4px 0 2px var(--dl-border-shadow);padding:16px}
-  .desk-so{display:revert}
+  
+  
+  
+  
 }
-@media (min-width:1100px){ .desk-nao{display:none!important} }
 
 /* dica do Bit (tutorial contextual): acima da barra no celular, no canto no desktop; uma frase por vez */
 .dica-bit{position:relative;margin:10px 14px 0;z-index:5;display:flex;align-items:center;gap:10px;background:var(--dl-surface);color:var(--dl-text);border-radius:14px;box-shadow:0 0 0 3px var(--dl-navy),0 5px 0 3px var(--dl-navy-deep);padding:10px 12px}
@@ -99,8 +97,5 @@ footer a{color:var(--dl-action);font-weight:900;display:inline-flex;align-items:
 .dica-bit .bit{flex:none;image-rendering:pixelated}
 .dica-ok{flex:none;min-height:44px;padding:0 14px}
 @media (min-width:900px){ .dica-bit{position:fixed;margin:0;z-index:25;right:24px;bottom:24px;max-width:420px} }
-.cfg-interruptor{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--dl-surface);border-radius:12px;box-shadow:0 0 0 2px var(--dl-border);padding:10px 12px;min-height:44px}
-.cfg-interruptor span{display:grid;gap:2px}
-.cfg-interruptor small{font-size:12px;font-weight:700;color:var(--dl-text-2)}
-.cfg-interruptor input{width:44px;height:26px;accent-color:var(--dl-action)}
+
 body:has(dialog[open]) .dica-bit{display:none}
