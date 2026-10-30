@@ -806,3 +806,145 @@ unidades, seriam 99 por base.
   - a margem da privação no longe revista, o que reabre a LS-7;
   - rodar com um K da grade sabendo que o C-L2-3 tem o poder da tabela;
 - **nada roda** antes da decisão dele.
+
+## 12. A avaliação da L-2 (2026-10-29, worker D, Claude Code, Opus 5.5; adendo 5, A5.4, A5.5 e A5.9)
+
+**Antes dos números:**
+- **os critérios e as margens** são os da A5.4, copiados da espec (seção 7.3), **PROPOSTOS e SEM FONTE.** A LS-7 os aprovou sem mudá-los,
+  e nada aqui os ajusta. Cada um é lido como está registrado, pelo `criterios` do orquestrador do #438;
+- **a leitura não afirma** que a L-2 conserta o longe, que o modular supera o A (o A11 não está na avaliação) nem que algum cérebro está
+  pronto (a espec, seção 8);
+- **o par M0 × M0+S é só descritivo** (a LS-6), sem critério;
+- **as S-1 a S-6** são leituras, sem critério próprio; a S-1 e a S-2 entram no C-L2-4, e a S-5 no C-L2-3.
+
+**Como rodou:**
+- **o comando:** `experiments/run_v2_digibrain_l2.py --config experiments/configs/v2_digibrain_prototipo/l2_avaliacao.json --processos 4`,
+  do commit `0a27d97` (a `main`), com a árvore limpa (`git_limpo` = true no `meta.json`), uma vez;
+- **as vidas:** as bases 67303, 67404 e 67505, com K = 150 por base (450 unidades, a A5.9), os 4 braços nas 12 células, 14 dias:
+  **21 600 vidas,** das 16h26 às 21h43 de 2026-10-29 (19 036 s; 19 019 s de parede para as vidas). Nenhum processo caiu;
+- **o tempo:** 0,88 s de parede por vida, acima dos 0,61 s do piloto; a run durou cerca de 5 h 17 min, e não as 3,7 h estimadas;
+- **as conferências:** toda vida foi rejogada do disco bit a bit (o G1), com o T-CENARIO-1, o G-MECANISMO e o crédito conferidos em cada
+  uma;
+- **os artefatos,** em `artifacts_v2_digibrain_prototipo/l2/avaliacao/`:
+  - o `meta.json` (sha256 `97bd5bcb…b83c`);
+  - as 12 partes das medidas, uma por braço e lugar (1 800 vidas e de 16,0 a 17,6 MB cada), com o `medidas_indice.json` (sha256
+    `cd276329…761b`, o mesmo do `meta.json`), que guarda o sha256, as vidas e o tamanho de cada parte;
+  - o `resultado.json` (sha256 `6c41fda4…7a15`), que a run calculou das partes relidas;
+  - as 21 600 vidas ficam fora do git;
+- **a leitura:** `experiments/leitura_l2_digibrain.py` relê as 12 partes pelo índice, confere que o `resultado.json` se refaz igual e
+  soma as S-1 a S-6 por braço e lugar em `artifacts_v2_digibrain_prototipo/l2/avaliacao_leitura.json` (sha256 `59c1d911…c72a`).
+
+### 12.1 Os critérios (o par primário, M3\*+S − M3\*, 450 unidades)
+
+| # | a medida | M3\* | M3\*+S | a diferença [IC95] | a regra | lido como registrado |
+|---|---|---|---|---|---|---|
+| **C-L2-1** | buscas trocadas + expiradas por vida, no longe | 25,69 | 18,43 | −7,26 [−7,61; −6,91] | M3\*+S ≤ 12,85 (a metade) e o limite superior < 0 | **não passa:** o IC fica abaixo de 0, mas a queda é de 28 %, e não à metade |
+| **C-L2-2** | a taxa por episódio no longe | 0,4264 | 0,4367 | +0,0103 [+0,0032; +0,0174] | o limite inferior > 0 | **passa** |
+| **C-L2-3** | as 10 comparações (abaixo) | | | | todas | **passa** |
+| **C-L2-4** | as suspensões em "expirou" (S-1) | | 34 de 42 868 (0,08 %) | | ≤ 25 % | sim |
+| | meta ou achou: as buscas suspensas contra as nunca suspensas (S-2) | | 0,155 contra 0,840 | | as suspensas ≥ 0,740 | não; **o C-L2-4 não passa** |
+
+**As 10 comparações do C-L2-3:**
+
+| a comparação | margem | M3\* | M3\*+S | a diferença [IC95] | passa |
+|---|---|---|---|---|---|
+| episódio, comedouro | −0,03 | 0,8160 | 0,8188 | +0,0028 [−0,0022; +0,0079] | sim |
+| episódio, perto | −0,03 | 0,9561 | 0,9560 | −0,0001 [−0,0008; +0,0006] | sim |
+| ração, comedouro | −0,03 | 0,4209 | 0,4222 | +0,0013 [−0,0027; +0,0053] | sim |
+| ração, perto | −0,03 | 0,6893 | 0,6897 | +0,0004 [−0,0008; +0,0016] | sim |
+| exaustão, comedouro | +0,02 | 0,1750 | 0,1755 | +0,0005 [−0,0008; +0,0019] | sim |
+| exaustão, perto | +0,02 | 0,1564 | 0,1561 | −0,0003 [−0,0007; +0,0001] | sim |
+| exaustão, longe | +0,02 | 0,3235 | 0,3165 | −0,0071 [−0,0109; −0,0033] | sim |
+| privação, comedouro | +0,02 | 0,1547 | 0,1546 | −0,0001 [−0,0025; +0,0023] | sim |
+| privação, perto | +0,02 | 0,1421 | 0,1422 | +0,0001 [−0,0002; +0,0003] | sim |
+| privação, longe | +0,02 | 0,5563 | 0,5403 | −0,0160 [−0,0249; −0,0072] | sim |
+
+**Como se leem juntos** (A5.4, como está):
+- **a suspensão não segue para o jogo:** pede o C-L2-1, o C-L2-3 e o C-L2-4, e o C-L2-1 e o C-L2-4 não passam
+  (`segue_para_o_jogo` = false);
+- **o C-L2-2 passa** (`o_longe_melhorou` = true): a taxa por episódio no longe subiu 0,0103, com o IC acima de 0. A A5.4 não diz o que
+  fazer com o C-L2-2 passando e o C-L2-1 e o C-L2-4 falhando; a leitura volta ao Matheus (12.6).
+
+**A regra da parte (a)** (A5.5, como está): pede o C-L2-1 e o C-L2-3, as trocas por outra unidade com ração a menos de R no longe acima
+do dobro das do comedouro, e o C-L2-2 sem melhora. As trocas são 18,39 por vida no longe e 1,84 no comedouro (acima do dobro), mas o
+C-L2-1 não passa e o C-L2-2 passa: **a (a) não volta ao Matheus pela regra** (`volta_ao_matheus` = false).
+
+**Ao lado, sem critério:** a taxa por ração no longe, 0,0802 no M3\* e 0,0819 no M3\*+S, +0,0017 [−0,0008; +0,0042] (o teto de cerca de
+0,13 declarado na espec).
+
+### 12.2 O mecanismo (por vida, 1 800 vidas por braço e lugar)
+
+| | M3\* longe | M3\*+S longe | M3\* comedouro | M3\*+S comedouro | M3\* perto | M3\*+S perto |
+|---|---|---|---|---|---|---|
+| buscas trocadas pelo reflexo | 20,55 | 0 | 1,90 | 0 | 0,07 | 0 |
+| buscas trocadas por outra unidade, com ração a menos de R | 5,13 | 18,39 | 0,61 | 1,84 | 0,04 | 0,06 |
+| buscas expiradas | 0 | 0,018 | 0 | 0,001 | 0 | 0 |
+| o C-L2-1 | 25,69 | 18,43 | 2,51 | 1,84 | 0,11 | 0,06 |
+| intenções suspensas que acabaram | 0 | 19,85 | 0 | 3,59 | 0 | 0,38 |
+| retomadas | 0 | 24,01 | 0 | 3,73 | 0 | 0,20 |
+
+**Os fins das buscas no longe,** somados nas 1 800 vidas: no M3\*, 81 435 buscas (achou 32 643, trocou 46 243, sumiu 2 528, desistiu
+21); no M3\*+S, 70 779 (achou 34 268, trocou 33 138, sumiu 3 034, saciou 256, desistiu 51, expirou 32).
+
+**Quem venceu a busca trocada no longe:** no M3\*, o dormir em 38 859 das 46 243 (o reflexo e o sorteio juntos); no M3\*+S, o chamar a
+atenção em 9 432, o explorar um ponto em 7 067, o dormir pelo sorteio em 6 911, o explorar vagando em 4 686 e o explorar pelo cheiro em
+4 632 das 33 138.
+
+### 12.3 As S-1 a S-6 no M3\*+S (só leitura)
+
+| | longe | comedouro | perto |
+|---|---|---|---|
+| **S-1:** suspensões que acabaram | 35 724 | 6 456 | 688 |
+| S-1: o `n_susp` médio (decisões de reflexo somadas) | 1,49 | 1,29 | 1,19 |
+| S-1: a fração em "expirou" | 0,0009 | 0,0003 | 0 |
+| **S-2:** meta ou achou, as buscas suspensas | 0,139 (29 654) | 0,300 (3 190) | 0,235 (115) |
+| S-2: meta ou achou, as buscas nunca suspensas | 0,733 (41 125) | 0,948 (21 851) | 0,995 (13 360) |
+| **S-3:** o andado líquido médio da retomada até o fim, em passos | 0,150 | 0,085 | 0,020 |
+| S-3: a fração com o andado ≤ 0 | 0,821 | 0,918 | 0,980 |
+| **S-4:** retomadas com um reflexo nas 2 decisões seguintes | 0,865 | 0,804 | 0,724 |
+| **S-5:** a exaustão por vida (no M3\*) | 0,316 (0,324) | 0,176 (0,175) | 0,156 (0,156) |
+| S-5: a privação por vida (no M3\*) | 0,540 (0,556) | 0,155 (0,155) | 0,142 (0,142) |
+| **S-6:** retomadas em que a persistência decidiu | 0,238 | 0,261 | 0,159 |
+
+- **A S-2 do orquestrador conta só as buscas** (`comer/cheiro`); a S-1 conta as suspensões de toda intenção, a busca e a ida.
+- **As buscas nunca suspensas do M3\*+S não são as buscas do M3\*:** são as que nenhum reflexo interrompeu. No longe, a fração de meta ou
+  achou de todas as buscas do M3\* é 0,401.
+
+### 12.4 O par descritivo, M0+S − M0 (sem critério; a LS-6)
+
+| a medida | M0 | M0+S | a diferença [IC95] |
+|---|---|---|---|
+| o C-L2-1, no longe | 21,91 | 15,35 | −6,57 [−6,88; −6,25] |
+| episódio, longe | 0,4636 | 0,4726 | +0,0090 [+0,0028; +0,0152] |
+| episódio, comedouro | 0,7079 | 0,7191 | +0,0112 [+0,0048; +0,0175] |
+| episódio, perto | 0,9071 | 0,9075 | +0,0004 [−0,0013; +0,0021] |
+| ração, comedouro | 0,2473 | 0,2515 | +0,0043 [+0,0003; +0,0083] |
+| ração, perto | 0,5313 | 0,5314 | +0,0001 [−0,0017; +0,0019] |
+| exaustão, comedouro | 0,1785 | 0,1752 | −0,0033 [−0,0054; −0,0011] |
+| exaustão, perto | 0,1483 | 0,1482 | −0,0001 [−0,0007; +0,0006] |
+| exaustão, longe | 0,2759 | 0,2731 | −0,0027 [−0,0056; +0,0001] |
+| privação, comedouro | 0,2047 | 0,1919 | −0,0128 [−0,0203; −0,0053] |
+| privação, perto | 0,1254 | 0,1257 | +0,0002 [−0,0003; +0,0007] |
+| privação, longe | 0,5768 | 0,5685 | −0,0083 [−0,0156; −0,0010] |
+
+No M0+S, as S seguem a mesma forma do M3\*+S: no longe, a S-2 dá 0,192 contra 0,757 e a S-4 dá 0,835 (`avaliacao_leitura.json`).
+
+### 12.5 A leitura (descritiva, pós hoc; nenhum critério novo)
+
+- **O reflexo saiu das trocas da busca,** de 20,55 por vida a 0 no longe, como a forma de medir da A5.3 previa. **As trocas por outra
+  unidade subiram,** de 5,13 a 18,39, e o C-L2-1 caiu 28 %, e não à metade.
+- **A busca retomada volta a ser interrompida:** em 86 % das retomadas do longe, outro reflexo vem nas 2 decisões seguintes (S-4); o
+  andado líquido até o fim fica em 0,15 passo, e em 82 % delas é ≤ 0 (S-3). As buscas suspensas acabam em meta ou achou em 14 %, contra
+  73 % das nunca suspensas (S-2), e quase nenhuma expira (S-1). Pela LS-3, a retomada passa pelo sorteio, e as vencedoras da troca no
+  M3\*+S são o chamar a atenção, o explorar e o dormir pelo sorteio.
+- **O C-L2-2 e o C-L2-3 passam:** a taxa por episódio no longe sobe 0,0103, e nenhuma das 10 comparações piora além da margem; a exaustão
+  e a privação no longe descem um pouco.
+- **Esta leitura não diz** por que a busca retomada perde no sorteio, nem quanto do +0,0103 vem da suspensão e quanto do aprendizado que
+  ela muda. O par M0 × M0+S, sem o aprendizado do M3\*, mostra uma diferença da mesma ordem, só descritiva.
+
+### 12.6 O que fica para o Matheus
+
+- **A suspensão não segue para o jogo** pela regra da A5.4 (o C-L2-1 e o C-L2-4 não passam).
+- **A parte (a) não volta pela regra da A5.5.** A A5.4 não prevê o caso do C-L2-2 passando com o C-L2-1 e o C-L2-4 falhando: o próximo
+  passo da L-2 (parar, uma espec nova, ou outra coisa) é dele.
+- **Os limiares** seguem PROPOSTOS, SEM FONTE; nada aqui os muda.
