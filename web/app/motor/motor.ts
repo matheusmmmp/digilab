@@ -7,9 +7,10 @@
    assinatura das vidas v13 nao muda (test/vidas_v13.test.ts). */
 import {
   ACAO_CHAMADO, ACOES_DONO_JOGO_V11, ACOES_PET, CAT, CDJ, CHAMADO_BEBE, CHAMADO_BEBE_CORPO, CHAMADO_FOME_CORPO, CHE, CLE, CMG, EIXOS_TEMP, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
-  TICK_INICIAL, VERSAO_PET,
+  TICK_INICIAL, VERSAO_PET, VERSAO_V14, VERSOES_PET,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
+import { APRENDIZADO_V14, CHIP_ANTES_V14 } from "./combate_tr/constantes_tr.ts";
 import { NOME_BOT, NPC, campanhaDe, lugaresDe, type Lugar } from "./bots.ts";
 import { MEDALHAS, medalhasPara } from "./medalhas.ts";
 import { arenaDaLuta, jogarSequencia, jogarSerie, sementeDaSerie, type Arena } from "./arenas.ts";
@@ -212,8 +213,8 @@ export class Motor {
   v11: { braco: BracoConsequencia; laco: MotorCorpo } | null = null;
 
   constructor(semente: number, versao: number = VERSAO_PET) {
-    /* so a versao de hoje: os pets de antes (v1-v12, com o combate por turnos) foram descartados (o descarte 6, src/tamer.ts) */
-    if (versao !== VERSAO_PET) throw new Error(`versão de pet desconhecida: ${versao} (só a ${VERSAO_PET} abre; os pets de antes, com o combate por turnos, foram descartados)`);
+    /* so a v13 e a v14 (CV14-1): os pets de antes (v1-v12, com o combate por turnos) foram descartados (o descarte 6, src/tamer.ts) */
+    if (!VERSOES_PET.includes(versao)) throw new Error(`versão de pet desconhecida: ${versao} (só a ${VERSOES_PET.join(" e a ")} abrem; os pets de antes, com o combate por turnos, foram descartados)`);
     this.semente = semente; this.versao = versao as VersaoPet;
     /* temperamento do ovo: rng propria, nao mexe nas outras */
     this.temp = temperamentoDe(semente);
@@ -906,7 +907,11 @@ export class Motor {
     this.chamados = { abertos: {}, atendidos: 0, total: 0 }; this.sparring = 0;   /* contadores zeram */
     this.lutas = lutasZeradas();
     /* os chips de regra vao para o fim da lista (os itens dos v9) */
-    if (!this.gp) { this.gp = new GambitsPet(); this.gp.chipsNoFim = true; }
+    if (!this.gp) {
+      this.gp = new GambitsPet(); this.gp.chipsNoFim = true;
+      /* pets v14 (B2): o candidato da rodada de equilibrio, como a bancada o mediu (DE-10, DR2-1, DR2-5) */
+      if (this.versao >= VERSAO_V14) { this.gp.reservaNoFim = true; this.gp.aprendizadoTR = APRENDIZADO_V14; this.gp.chipAntes = CHIP_ANTES_V14; }
+    }
     this.gp.semear(this.forma, nomeForma(this.forma), this.regras);
   }
   /* ---------------------------------------------------------------- Mega (pets v5; docs/DESIGN_EVOLUCAO_CANONICA.md) */

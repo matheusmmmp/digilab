@@ -25,6 +25,7 @@ import { jogarLuta, curouA } from "./combate_tr/adaptador.ts";
 import { comCarta, type Desafiado, type EfeitoCarta, type Lutador, type RegrasLuta, type ResultadoLuta } from "./combate.ts";
 import type { Tecnica } from "./constantes.ts";
 import { hashSemente } from "./rng.ts";
+import { FATORES_V14 } from "./combate_tr/constantes_tr.ts";
 
 export type RegraArena = "nenhuma" | "paciencia" | "leitura" | "resistencia" | "vinculo" | "chefe";
 export interface Arena {
@@ -82,9 +83,16 @@ export const ARENAS_V9: readonly Arena[] = ARENAS.map(a => {
   return { ...a, fator };
 });
 if (Object.keys(FATOR_LIDER_V9).length !== ARENAS.length) throw new Error("FATOR_LIDER_V9 com arena a mais");
-/** a arena de que o NPC e lider (null: ele e desafiante); `versao` >= 9: a arena com o fator dos pets v9 */
+/** as arenas como valem nas lutas dos pets v14: as mesmas, com o fator do lider do candidato (FATORES_V14.lider; DE-1) */
+export const ARENAS_V14: readonly Arena[] = ARENAS.map(a => {
+  const fator = FATORES_V14.lider[a.id];
+  if (fator === undefined) throw new Error("arena sem fator dos pets v14: " + a.id);
+  return { ...a, fator };
+});
+if (Object.keys(FATORES_V14.lider).length !== ARENAS.length) throw new Error("FATORES_V14.lider com arena a mais");
+/** a arena de que o NPC e lider (null: ele e desafiante); `versao` >= 9: a arena com o fator dos pets v9; >= 14, o do candidato v14 */
 export const arenaDoLider = (k: string, versao = VERSAO_ARENAS): Arena | null =>
-  (versao >= VERSAO_ARENAS_V9 ? ARENAS_V9 : ARENAS).find(a => a.lider === k) ?? null;
+  (versao >= 14 ? ARENAS_V14 : versao >= VERSAO_ARENAS_V9 ? ARENAS_V9 : ARENAS).find(a => a.lider === k) ?? null;
 /** a arena cuja regra vale nesta luta: so pets v6 em diante contra o lider (nos v9, com o fator dos v9) */
 export const arenaDaLuta = (rival: string, versao: number): Arena | null => versao >= VERSAO_ARENAS ? arenaDoLider(rival, versao) : null;
 /** semente da luta k (0 = a primeira) de uma serie: a primeira e a semente do evento; as outras saem dela */

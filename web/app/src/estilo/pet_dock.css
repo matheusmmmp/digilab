@@ -9,31 +9,39 @@
 @media (min-width:900px){ .app--habitat.app--pet .habitat{ bottom:0 } }
 .app--pet .pet-tela{ pointer-events:none }
 .app--pet .pet-tela .pet-balcao{ position:absolute; inset:0; right:0; pointer-events:none }
-.app--pet .pet-balcao > *, .app--pet .pet-balcao .cena-topo > *{ pointer-events:auto }
-.app--pet .pet-balcao .cena-topo{ pointer-events:none }
+.app--pet .pet-balcao > *{ pointer-events:auto }
 
-/* ---------- informacao do mundo (v12): canto superior esquerdo, abaixo do topo */
-.app--pet .mundo-linhas{ position:absolute; left:10px; top:calc(var(--casca-topo) + 52px); z-index:3; display:flex; flex-direction:column; align-items:flex-start; gap:4px;
-  max-width:min(62%,440px); pointer-events:none }
-.app--pet .mundo-linhas .mundo-info{ position:static }
-.app--pet .racao-dica{ padding:3px 10px; border-radius:10px; background:rgba(255,255,255,.9); color:var(--dl-text) }
+/* ---------- a racao (v12): o aviso efemero de onde ela caiu, sobre o dock (fora do fluxo: nao muda a altura medida do dock); a dica na faixa */
+.pet-dock .racao-dica{ position:absolute; left:0; right:0; bottom:calc(100% + 8px); width:max-content; max-width:100%; margin:0 auto; padding:6px 12px;
+  background:var(--hx-miolo); color:var(--hx-texto); border:1px solid var(--hx-borda); border-top:2px solid var(--hx-borda-topo); font:500 15px/1.3 var(--hx-f);
+  pointer-events:none }
+.pet-dock .racao-dica:empty{ padding:0; border:0; background:none }
+@media (prefers-reduced-motion:no-preference){ .pet-dock .racao-dica:not(:empty){ animation:racao-aviso .2s ease-out } }
+@keyframes racao-aviso{ from{ opacity:0; translate:0 6px } }
+.app--pet .racao-faixa-dica{ margin:0; color:var(--hx-sec); font:500 14px/1.3 var(--hx-f) }
 .app--pet .racao-faixa{ top:calc(var(--casca-topo) + 8px); left:10px; right:10px; max-width:560px; background:var(--hx-miolo); color:var(--hx-texto);
   border:1px solid var(--hx-borda); border-top:2px solid var(--hx-borda-topo); border-radius:0; box-shadow:none; font-family:var(--hx-f) }
 .app--pet .racao-faixa b{ font-size:16px; letter-spacing:.06em; text-transform:uppercase }
 .app--pet .racao-lugar{ min-height:44px; padding:0 14px; font-size:15px }
 
 /* ---------- o dock e o que fica sobre ele */
+/* HUD (docs/TAREFA_V3_LAYOUT_HUD.md): a barra baixa e leve, cada acao um botao compacto e chanfrado (icone e rotulo curto); no desktop a
+   barra tem a largura dos botoes, no celular ocupa a largura toda */
 .pet-dock{ position:absolute; z-index:6; left:50%; bottom:12px; translate:-50% 0; width:min(660px,calc(100% - 24px)); display:flex; flex-direction:column; gap:8px; pointer-events:none }
+@media (min-width:900px){ .pet-dock{ width:max-content; max-width:calc(100% - 2 * var(--hud-larg, 288px) - 48px) } }
 .pet-dock > *{ pointer-events:auto }
-.pet-dock .dock{ position:relative; display:flex; grid-template-columns:none; gap:4px; padding:10px 6px 6px; background:linear-gradient(180deg,var(--hx-miolo-2),var(--hx-miolo)); border:1px solid var(--hx-borda);
-  border-top:2px solid var(--hx-borda-topo) }
-.pet-dock .dock::before{ content:""; position:absolute; inset:0 0 auto 0; height:4px; background:var(--hx-hachura); pointer-events:none }
-.dock .dock-bt, .dock-mais .dock-bt{ flex:1 1 0; min-width:0; min-height:56px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
-  padding:4px 2px; font-size:14px; letter-spacing:.04em }
+.pet-dock .dock{ position:relative; display:flex; grid-template-columns:none; gap:4px; padding:4px; background:var(--hud-fundo-2, rgba(6,11,18,.9)); border:1px solid var(--hx-borda);
+  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px) }
+.pet-dock .dock::before{ content:""; position:absolute; inset:-1px auto auto 12px; width:64px; height:2px; background:var(--hx-rotulo); pointer-events:none }
+.dock .dock-bt, .dock-mais .dock-bt{ flex:1 1 0; min-width:0; min-height:52px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
+  padding:4px 2px; font-size:13px; letter-spacing:.02em; text-transform:none }
+.pet-dock .dock .dock-bt{ border-color:var(--hx-borda); background:rgba(73,213,226,.06); clip-path:polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px)) }
+.pet-dock .dock .dock-bt:hover{ background:rgba(73,213,226,.14) }
+.pet-dock .dock .dock-bt:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:-4px }
 .dock .dock-bt span{ max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
-.dock .dock-bt img, .dock .dock-bt svg{ width:24px; height:24px; flex:none; object-fit:contain; image-rendering:pixelated }
+.dock .dock-bt img, .dock .dock-bt svg{ width:22px; height:22px; flex:none; object-fit:contain; image-rendering:pixelated }
 .pet-dock .dock .acao-destaque--sugerida, .pet-dock .dock .acao-destaque--sugerida:hover{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido-borda) }
-.dock .acao-reserva{ display:block; font-size:10px; font-weight:600; opacity:.85 }
+.dock .acao-reserva{ display:block; font-size:10px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; opacity:.85; line-height:1 }
 .dock .acao-mais svg{ image-rendering:auto }
 .dock-mais{ position:absolute; right:6px; bottom:calc(100% + 8px); z-index:2; display:flex; flex-direction:column; gap:4px; min-width:220px; padding:6px;
   background:linear-gradient(180deg,var(--hx-miolo-2),var(--hx-miolo)); border:1px solid var(--hx-borda); border-top:2px solid var(--hx-borda-topo) }
@@ -95,6 +103,10 @@
 
 /* conteudo dos paineis */
 .pet-painel .det-estado{ display:flex; flex-direction:column; gap:12px }
+/* a emocao e o mundo (v12), as linhas do topo do painel Estado */
+.est-linha{ display:flex; flex-wrap:wrap; align-items:center; gap:4px 8px; margin:0; font:500 15px/1.3 var(--hx-f); color:var(--hx-texto) }
+.est-linha img{ width:22px; height:22px }
+.est-rot{ min-width:64px; color:var(--hx-sec); font-size:12px; font-weight:600; letter-spacing:.08em; text-transform:uppercase }
 .pet-painel .necessidades4{ display:flex; flex-direction:column; gap:8px; margin:0 }
 .pet-painel .hx-medidor__rot{ min-width:64px }
 .pet-painel .hx-medidor__txt{ color:var(--hx-sec); font:600 12px/1 var(--hx-f); min-width:3.2em; text-align:right }
@@ -116,7 +128,7 @@
 .mod-registro li[data-quem="recusa"] .mod-registro-ic{ color:var(--hx-perigo) }
 
 @media (min-width:900px){
-  .dock .dock-bt{ font-size:15px }
+  .pet-dock .dock .dock-bt{ flex:0 0 72px; font-size:14px }
 }
 @media (max-width:899px){
   .app--pet .pet-balcao .cena-fala{ top:calc(var(--casca-topo) + 130px) }

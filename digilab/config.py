@@ -1796,6 +1796,12 @@ class ConfigMundo:
             raise ValueError(f"mult_queda precisa ser positivo: {self.mult_queda}")
 
 
+# O estilo `longe_fixo` do DonoComLugar (C1, docs/TAREFA_V2_LONGE_REGULAR.md, secao 3.1): quantos lugares fixos por vida, sorteados uma vez,
+# a `longe_min_celulas`...`longe_max_celulas` do comedouro (LR-2), em direcoes distintas das 16. PROPOSTO, SEM FONTE; LR-1 DECIDIDA pelo
+# Matheus em 2026-10-30 (PR #495): 3, uma regularidade parcial (1 ponto seria um "comedouro longe"). Fica fora do ConfigMundo de proposito:
+# um campo novo no asdict(ConfigMundo) mudaria os gabaritos do web mesmo com o estilo desligado.
+N_PONTOS_LONGE_FIXO = 3
+
 CONFIG_MUNDO = ConfigMundo()
 CONFIG_MUNDO_LIGADA = ConfigMundo(ligada=True)
 

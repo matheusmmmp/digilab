@@ -20,8 +20,9 @@ Vale junto com o `CLAUDE.md` da raiz. O que o jogo já tem, seção a seção, e
   - o habitat ocupa a tela inteira em todas as larguras; as outras telas abrem sobre ele (painel à direita a partir de 900 px,
     modal centralizado abaixo); a referência são as pranchas D descritas na tarefa, não as `*Desktop` de `docs/estilo_up/pranchas/`;
   - o botão **Conversar** fica no cabeçalho no celular e no trilho de ícones no desktop;
-  - menus com a pele XCOM (tokens `--hx-*`, componentes `hx-*`, sempre escura); habitat, retrato, relógio e balão com
-    `--dl-*`/`dl-*` e o tema claro/escuro.
+  - menus com a pele XCOM (tokens `--hx-*`, componentes `hx-*`, sempre escura); habitat com `--dl-*`/`dl-*` e o tema claro/escuro;
+    desde o HUD (`docs/TAREFA_V3_LAYOUT_HUD.md`, 2026-10-30) a plaquinha do pet, o relógio do topo e o balão da fala também ficam no
+    sistema dos menus, e Estado, Evolução e Últimas ações ficam empilhados à direita a partir de 900 px.
 - **Semear um save em teste:** por uma página da mesma origem que não seja o app, senão o app grava o pet dele por cima ao fechar.
 
 ## Comandos

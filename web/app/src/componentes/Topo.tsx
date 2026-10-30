@@ -1,7 +1,8 @@
 /* Topo flutuante da casca (docs/TAREFA_V2_LAYOUT_HABITAT.md, M2), por cima do habitat em toda rota menos a luta em tela cheia: o retrato
    do pet (abre Meus pets), o logo, o relogio do jogo com o aviso de salvo e, so abaixo de 900 px, Conversar e Ajustes. O retrato, o
-   relogio e o visual deles seguem nos tokens --dl-* (tema claro); a pele hx-* e so dos menus. */
-import { MessageCircle, Moon, Settings, Sun } from "lucide-react";
+   relogio e o visual deles seguiam nos tokens --dl-*; desde o HUD (docs/TAREFA_V3_LAYOUT_HUD.md) a plaquinha e o relogio sao caixas
+   escuras chanfradas (estilo/pet_hud.css), no mesmo sistema dos menus. */
+import { Cloud, CloudOff, MessageCircle, Moon, Settings, Sun } from "lucide-react";
 import { DO_ESP, NOME_ESP, NOME_EST, TPD, eNoite, nomeEstagio, nomeForma } from "../../motor/index.ts";
 import { BRASAO } from "../decoracao.ts";
 import { useJogo } from "../jogo.ts";
@@ -20,11 +21,11 @@ export function TopoHabitat({ abrirMeusPets, irConversar, abrirConfig }: { abrir
             <span aria-hidden="true">·</span><Deco nome={BRASAO[m.especie].peca} largura={20} altura={13} alt="" />{NOME_ESP[m.especie]}</span>
         </span>
       </div>
-      <b className="topo-logo dl-num" aria-hidden="true">DIGILAB</b>
+      <b className="topo-logo" aria-hidden="true"><span className="topo-logo-marca" />DIGILAB</b>
       <span className="topo-relogio" role="group" aria-label={`${hhmm(e.tick)}, dia ${diaDe(e.tick)}`}>
         {noite ? <Moon className="topo-sol" aria-hidden="true" /> : <Sun className="topo-sol" aria-hidden="true" />}
         <span className="topo-hora-txt"><span className="topo-dia">dia {diaDe(e.tick)}</span><span className="topo-hora">{hhmm(e.tick)}</span></span>
-        <span className={`pet-salvo${erroSave ? " erro" : ""}`}><i aria-hidden="true" />{erroSave ? "não salva" : "salvo"}</span>
+        <span className={`pet-salvo${erroSave ? " erro" : ""}`}>{erroSave ? <CloudOff aria-hidden="true" /> : <Cloud aria-hidden="true" />}{erroSave ? "não salva" : "salvo"}</span>
       </span>
       <span className="topo-bts">
         <button type="button" className="topo-bt" aria-label="Conversar" onClick={irConversar}><MessageCircle aria-hidden="true" /></button>

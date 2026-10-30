@@ -2,7 +2,7 @@
    perfil de cada lutador. O combate por turnos (jogarV2, resolverV2) saiu na COMBATE-TR R3: toda luta do v13 e em tempo real
    (combate_tr/). Cada lutador tem um PERFIL (catalogo.ts) e, conforme o estagio, a tecnica da linha (adolescente) e a passiva da
    forma (adulto). */
-import { CV, CV21, CV21E_TR, TECNICAS } from "./constantes.ts";
+import { CV, CV21, CV21E_TR, CV21E_TR14, TECNICAS, VERSOES_PET } from "./constantes.ts";
 import type { ResultadoLutaTR } from "./combate_tr/luta.ts";
 import type { RelogioTR } from "./combate_tr/constantes_tr.ts";
 import type { Perfil } from "./catalogo.ts";
@@ -28,11 +28,14 @@ export interface RegrasV21 {
   readonly relogio?: RelogioTR;
 }
 export type RegrasLuta = RegrasV21;
-/** as regras das lutas de uma versao de pet: so a v13 (CV21E_TR); as outras falham alto */
+/** as regras das lutas de uma versao de pet: a v13 (CV21E_TR) e a v14 (CV21E_TR14, o candidato da rodada de equilibrio); as outras falham alto */
 export const regrasDaVersao = (versao: number): RegrasLuta => {
-  if (versao !== CV21E_TR.versaoPet) throw new Error(`regras de luta da versão ${versao} não existem mais (só a ${CV21E_TR.versaoPet})`);
+  if (versao === CV21E_TR14.versaoPet) return CV21E_TR14;
+  if (versao !== CV21E_TR.versaoPet) throw new Error(`regras de luta da versão ${versao} não existem mais (só a ${VERSOES_PET.join(" e a ")})`);
   return CV21E_TR;
 };
+/** as regras são as do candidato v14 (a rodada de equilibrio do tempo real; DE-1) */
+export const ehV14 = (R: RegrasLuta): boolean => R.versaoPet >= CV21E_TR14.versaoPet;
 
 export interface Lado {
   p: Perfil; hp: number; hpMax: number; guts: number; gutsMax: number; regen: number; prep: boolean; hist: string[];
@@ -57,7 +60,7 @@ export type Desafiado = 0 | 1 | null;
 export const VERSAO_LIMITE_DESAFIADO = 6;
 /** o desafiado nas lutas do motor (o pet e o lado A): o rival (lado B); so a v13 existe, as outras falham alto */
 export const desafiadoDaVersao = (versao: number): Desafiado => {
-  if (versao !== CV21E_TR.versaoPet) throw new Error(`desafiado da versão ${versao} não existe mais (só a ${CV21E_TR.versaoPet})`);
+  if (!VERSOES_PET.includes(versao)) throw new Error(`desafiado da versão ${versao} não existe mais (só a ${VERSOES_PET.join(" e a ")})`);
   return 1;
 };
 

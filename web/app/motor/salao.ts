@@ -13,7 +13,8 @@
    estagio do pet na hora (formaRivalSalao). A tentativa inteira (os pets, as sementes, quem venceu) e o recorde vao para o registro do Tamer
    (src/tamer.ts, evento "salao"). A entrada pede o titulo, que o pet conhece pelo evento "f" (Motor.abrirFronteira), como na Torre de
    Batalha e no Palacio. */
-import { ADOL_V21, CRIANCA_V21, copiarGambits, gambitsAdulto } from "./bots.ts";
+import { ADOL_V21, CRIANCA_V21, copiarGambits, gambitsAdulto, listaDaForma } from "./bots.ts";
+import { FATORES_V14 } from "./combate_tr/constantes_tr.ts";
 import { ESCALA, caraterCanonico, perfilDe } from "./catalogo.ts";
 import type { Lutador, RegrasLuta } from "./combate.ts";
 import { CV, ESPECIES, FORMAS_AD, LINHAS, LINHA_DA_FORMA, VERSAO_PET } from "./constantes.ts";
@@ -43,7 +44,7 @@ export const VERSAO_SALAO_V9 = 9;
 export const FATOR_SALAO_V9: Readonly<Record<string, number>> = { crianca: 1.15, adolescente: 1, adulto: 1.05, mega: 1.05 };
 if (ESTAGIOS_SALAO.some(e => FATOR_SALAO_V9[e] === undefined)) throw new Error("FATOR_SALAO_V9 sem um nível do Salão");
 /** o fator do rival do nivel `est` nas lutas destas regras: FATOR_SALAO_V9 nas dos pets v9, FATOR_SALAO nas outras */
-export const fatorSalao = (est: Estagio, R: RegrasLuta): number => R.versaoPet >= VERSAO_SALAO_V9 ? FATOR_SALAO_V9[est] : FATOR_SALAO;
+export const fatorSalao = (est: Estagio, R: RegrasLuta): number => R.versaoPet >= 14 ? FATORES_V14.salao[est] : R.versaoPet >= VERSAO_SALAO_V9 ? FATOR_SALAO_V9[est] : FATOR_SALAO;
 const RAMOS: readonly Ramo[] = ["sereno", "arisco"];
 const primeiraForma = (l: Linha): FormaAdultaNormal => FORMAS_AD.find(f => LINHA_DA_FORMA[f] === l)!;
 
@@ -66,7 +67,8 @@ export function formaRivalSalao(s: number, est: Estagio): Forma {
 export function rivalSalao(s: number, est: Estagio, R: RegrasLuta, fator: number = fatorSalao(est, R)): Lutador {
   const f = formaRivalSalao(s, est);
   const car = f.est === "crianca" ? null : caraterCanonico(f.adulta ? f.adulta as FormaAdultaNormal : primeiraForma(f.linha!));
-  const g = f.est === "crianca" ? CRIANCA_V21[f.ramo!] : f.est === "adolescente" ? ADOL_V21[f.linha!] : gambitsAdulto(f.adulta as FormaAdultaNormal, R);
+  const hoje = f.est === "crianca" ? CRIANCA_V21[f.ramo!] : f.est === "adolescente" ? ADOL_V21[f.linha!] : gambitsAdulto(f.adulta as FormaAdultaNormal, R);
+  const g = listaDaForma(f.adulta ?? f.linha ?? f.ramo!, R, hoje);
   const p = perfilDe(f, car, 1, null, true, VERSAO_PET);
   const cond = ESCALA.ligada ? { ...p, escala: p.escala! * fator } : p;
   return { nome: "Rival " + nomeForma(f), estilo: { nome: `salao:${est}`, gambits: copiarGambits(g), eps: CV.eps }, cond };

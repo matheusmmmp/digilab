@@ -2,7 +2,7 @@
    {semente, log, versao}. Importar = replay do registro (tem que abrir); pet novo vai para a espera. Mesma semente com
    outro registro = conflito: o dono escolhe qual fica, e o outro vai para a espera (ninguem e apagado). */
 import { useEffect, useState } from "react";
-import { Motor, VERSAO_PET, type EventoRegistro } from "../motor/index.ts";
+import { Motor, VERSOES_PET, type EventoRegistro } from "../motor/index.ts";
 import { jogoAtual, trocarMotor } from "./jogo.ts";
 import { CHAVE_GUARDADOS, abrirGuardado, lerGuardados, type Guardado } from "./pets.ts";
 import { textoSave } from "./save.ts";
@@ -43,7 +43,7 @@ export function lerArquivo(texto: string, arquivo: string): Lido {
   if (!Number.isInteger(s.semente) || !Array.isArray(s.log)) throw new Error("o arquivo não tem semente e registro");
   const g: Guardado = { semente: s.semente as number, log: s.log as EventoRegistro[], versao: (s.versao ?? 1) as number };
   /* o descarte 6 (COMBATE-TR, E2): os pets de antes da luta em tempo real nao abrem mais, nem pelo arquivo */
-  if (g.versao < VERSAO_PET) throw new Error(`este pet é da versão ${g.versao} do jogo, com o combate por turnos, e não abre mais nesta versão (a ${VERSAO_PET}, com a luta em tempo real)`);
+  if (!VERSOES_PET.includes(g.versao)) throw new Error(`este pet é da versão ${g.versao} do jogo${g.versao < Math.min(...VERSOES_PET) ? ", com o combate por turnos," : ""} e não abre nesta versão (só a ${VERSOES_PET.join(" e a ")}, com a luta em tempo real)`);
   let m: Motor;
   try { m = Motor.reproduzir(g.semente, g.log, g.versao); } catch (err) { throw new Error("o replay do registro não confere: " + (err instanceof Error ? err.message : String(err))); }
   return { g, m, arquivo };

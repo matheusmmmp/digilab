@@ -52,7 +52,7 @@ const IconeRacao = ({ tam = 26 }: { tam?: number }) => (
   <svg viewBox="0 0 24 24" width={tam} height={tam} aria-hidden="true"><ellipse cx="12" cy="15" rx="9" ry="5" fill="#9B6A3C" /><ellipse cx="12" cy="12" rx="6" ry="3" fill="#C08A55" /></svg>
 );
 
-/** a barra da racao, acima das acoes: o botao que se arrasta ou se toca, e a mensagem do ultimo lugar */
+/** a barra da racao, no menu Mais: o botao que se arrasta ou se toca */
 export function BarraRacao({ aoUsar }: { aoUsar?: () => void } = {}) {
   const est = useRacao(), inicio = useRef<{ x: number; y: number; id: number } | null>(null);
   const baixo = (e: ReactPointerEvent<HTMLButtonElement>) => {
@@ -88,10 +88,18 @@ export function BarraRacao({ aoUsar }: { aoUsar?: () => void } = {}) {
   );
 }
 
-/** a mensagem do ultimo lugar (ou a dica), no canto da cena, ao lado da info do mundo */
-export function MensagemRacao() {
-  const est = useRacao();
-  return <span className="racao-dica" aria-live="polite">{est.mensagem || "Arraste até o chão, ou toque e escolha o lugar. Alimentar é a reserva: põe no comedouro."}</span>;
+/** quanto tempo o aviso de onde a racao caiu fica sobre o dock */
+const AVISO_MS = 5000;
+const DICA = "Arraste até o chão, ou toque e escolha o lugar. Alimentar é a reserva: põe no comedouro.";
+/** o aviso efemero do ultimo lugar, sobre o dock: some depois de AVISO_MS; a regiao aria-live fica sempre montada (o leitor de tela anuncia) */
+export function AvisoRacao() {
+  const est = useRacao(), msg = est.mensagem;
+  useEffect(() => {
+    if (!msg) return;
+    const t = setTimeout(() => { if (ESTADO.mensagem === msg) mudar(() => { ESTADO.mensagem = ""; }); }, AVISO_MS);
+    return () => clearTimeout(t);
+  }, [msg, versao]);
+  return <p className="racao-dica" role="status" aria-live="polite">{msg}</p>;
 }
 
 /** por cima da cena, enquanto se escolhe o lugar: a faixa com os lugares nomeados e o toque no chao */
@@ -112,6 +120,7 @@ export function FaixaRacao() {
       <span className="racao-toque" aria-hidden="true" onPointerUp={e => porRacaoNaTela(e.clientX, e.clientY)} />
       <div className="racao-faixa" role="group" aria-label="Pôr a ração">
         <b>Toque no chão para pôr a ração</b>
+        <p className="racao-faixa-dica">{DICA}</p>
         <div className="racao-lugares">
           {(Object.keys(lugares) as Lugar[]).map((l, i) => (
             <button type="button" key={l} ref={i === 0 ? primeiro : undefined} className="hx-btn racao-lugar" data-lugar={l}
@@ -124,10 +133,10 @@ export function FaixaRacao() {
   );
 }
 
-/** o que o motor diz do mundo, no canto da cena: a regiao do pet e quanta racao ha no chao */
+/** o que o motor diz do mundo, no painel Estado: a regiao do pet e quanta racao ha no chao */
 export function InfoMundo() {
   const { motor: m } = useJogo(), mu = m.mundo;
   if (!mu) return null;
   const n = [...mu.comidas.values()].filter(c => mu.situacao(c, m.e.tick) !== null).length;
-  return <span className="mundo-info">{naRegiao(mu.cm, mu.pet[0])} · {n === 0 ? "nenhuma ração no chão" : n === 1 ? "1 ração no chão" : `${n} rações no chão`}</span>;
+  return <p className="est-linha mundo-info"><span className="est-rot">mundo</span>{naRegiao(mu.cm, mu.pet[0])} · {n === 0 ? "nenhuma ração no chão" : n === 1 ? "1 ração no chão" : `${n} rações no chão`}</p>;
 }

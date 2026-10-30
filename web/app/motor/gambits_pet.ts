@@ -16,7 +16,7 @@ import { ESCALA, caraterCanonico, escalaDaVersao, escalaDe, perfilDe, perfilNPC,
 import { CONDICOES_ESTAGIO, DIST, type Cond, type Estilo, type ListaGambits, type Lutador, type Regra, type RegrasLuta, type ResultadoLuta } from "./combate.ts";
 import { NOME_V2, nomeFormaLegado } from "./nomes.ts";
 import { criarRng, hashSemente } from "./rng.ts";
-import { PASSO_TR_MS, T_TR } from "./combate_tr/constantes_tr.ts";
+import { FATORES_V14, LISTAS_LIDER_V14, PASSO_TR_MS, T_TR } from "./combate_tr/constantes_tr.ts";
 import { condicaoDe, type TreinoPet } from "./treino.ts";
 import { ITENS } from "./itens.ts";
 import type { Carater, Forma, FormaAdultaNormal, OpGambit, Stats } from "./tipos.ts";
@@ -38,6 +38,9 @@ export function permitida(r: Regra, f: Forma): boolean {
 /** semente da forma; R = CV21D (pets v6-v8): a muralha e o vigia adultos semeiam as listas variantes; R = CV21E (pets v9): tambem o
     duelista, o tita, o espelho e a muralha (bots.gambitsAdulto) */
 export function sementeDe(f: Forma, R: RegrasLuta = CV21E_TR): ListaGambits {
+  /* pets v14: a lista candidata da forma (bots.LISTAS_V14), quando ela tem; as sombrias (adulta fora da tabela) seguem com a de sempre */
+  const v14 = R.versaoPet >= 14 ? LISTAS_V14[f.est === "crianca" ? f.ramo! : f.est === "adolescente" ? f.linha! : f.adulta!] : undefined;
+  if (v14) return v14;
   return f.est === "crianca" ? CRIANCA_V21[f.ramo!] : f.est === "adolescente" ? ADOL_V21[f.linha!]
     : (BOTS_V21[f.adulta as FormaAdultaNormal] && gambitsAdulto(f.adulta as FormaAdultaNormal, R)) || GAMBITS_SOMBRIA[f.adulta!] || BOTS_V21[SOMBRIA[f.adulta!]!.base];
 }
@@ -47,8 +50,7 @@ export function sementeDe(f: Forma, R: RegrasLuta = CV21E_TR): ListaGambits {
    um chip de regra (itens.ts; pets v6). O repertorio nao muda: as candidatas e o replay dos pets v1-v8 ficam iguais. Nos pets v6 o
    vigia recebe as duas regras novas tambem como candidatas de troca (candidatasDoVigia), e nos pets v9 o duelista, o tita e a muralha
    as da V21E (candidatasV21E); as regras dos chips nunca viram candidatas (so entram pelo chip). As das listas candidatas da rodada de
-   equilibrio do tempo real (bots.LISTAS_V14, ainda de nenhuma versao) tambem tem chave aqui: nenhum pet de hoje as tem na semente nem nas
-   candidatas, entao so a bancada as usa. */
+   equilibrio do tempo real (bots.LISTAS_V14, da v14) tambem tem chave aqui: so os pets v14 (e a bancada) as tem na semente. */
 let REGRAS_SEMENTE: Map<string, Regra> | null = null;
 export function regraDe(k: string): Regra {
   const r = REPERTORIO.get(k);
@@ -136,7 +138,7 @@ export class GambitsPet {
       na assinatura) */
   chipsNoFim = false;
   /** candidato v14 (DE-10, decidida pelo Matheus em 2026-10-30; docs/PLANO_EQUILIBRIO_COMBATE_TR.md): a regra de reserva (a ultima da lista
-      de partida) fica fixa no fim e nao entra na reordenacao pela nota. Desligado nos pets v13 (a lista e as lutas de hoje); so a bancada
+      de partida) fica fixa no fim e nao entra na reordenacao pela nota. Desligado nos pets v13 (a lista e as lutas de hoje); o Motor liga nos v14 (B2) e a bancada
       liga. Nao entra na assinatura */
   reservaNoFim = false;
   /** a chave da regra de reserva da ultima semeadura (so com reservaNoFim) */
@@ -144,9 +146,9 @@ export class GambitsPet {
   /** candidato v14 (DR2-5, decidida pelo Matheus em 2026-10-30; docs/PLANO_EQUILIBRIO_COMBATE_TR_R2.md, R2-2): o aprendizado proprio do tempo
       real. `alfa` no lugar do GA.alfa; `prior`: o peso fixo da posicao na lista de partida, somado a nota so na ordem (prior x (1 - i/cap)
       para a regra i da semeadura; nao decai como a nota-base); `bonus` e `limiar` (opcionais) no lugar do GA.bonusResultado e do
-      GA.limiarTroca. null nos pets v13 (o GA de sempre); so a bancada liga. Nao entra na assinatura */
+      GA.limiarTroca. null nos pets v13 (o GA de sempre); o Motor liga nos v14 (B2) e a bancada tambem. Nao entra na assinatura */
   aprendizadoTR: { readonly alfa: number; readonly prior: number; readonly bonus?: number; readonly limiar?: number } | null = null;
-  /** candidato v14 (DR2-1): o chip de regra entra antes da regra que o cobre (posicaoDoChipV14). Desligado nos pets v13; so a bancada
+  /** candidato v14 (DR2-1): o chip de regra entra antes da regra que o cobre (posicaoDoChipV14). Desligado nos pets v13; o Motor liga nos v14 (B2) e a bancada
       liga. Nao entra na assinatura */
   chipAntes = false;
   /** a posicao de cada regra na lista de partida da ultima semeadura (so com aprendizadoTR) */
@@ -415,14 +417,20 @@ export function lutadorBot(nome: string, R: RegrasLuta = CV21E_TR, arena: Arena 
   if (n) {
     if (arena && arena.lider !== nome) throw new Error(`${n.nome} não é o líder da arena ${arena.id}`);
     const tec = arena?.tecnica ?? null, base = estiloBot(nome, R);
-    const estilo = arena?.lista ? { ...base, gambits: copiarGambits(gambitNPC("arena:" + arena.lista)) }
+    let estilo = arena?.lista ? { ...base, gambits: copiarGambits(gambitNPC("arena:" + arena.lista)) }
       : tec ? { ...base, gambits: copiarGambits(gambitNPC(n.estilo, R, tec)) } : base;
+    /* pets v14: o lider da arena luta com a lista candidata dele (LISTAS_LIDER_V14, pela id da arena), quando tem */
+    if (R.versaoPet >= 14 && arena && LISTAS_LIDER_V14[arena.id]) estilo = { ...estilo, gambits: copiarGambits(LISTAS_LIDER_V14[arena.id]) };
     /* campanha na escala: E = vida do estagio sugerido (ou do Mega, na Montanha Espiral) x fator; epsilon da escala. Nas lutas
        do pet (as regras da luta dizem a versao) a escala e a CESC_V9 e o desafiante tem o fator dela */
     if (ESCALA.ligada) {
       const versao = R.versaoPet, fator = arena?.fator ?? escalaDaVersao(versao).fatorNpc[nome] ?? n.fator ?? CESC.fatorNpc[nome];
       if (fator === undefined) throw new Error(`${n.nome} sem fator de escala`);
-      return { nome: "Rival " + n.nome, estilo: { ...estilo, eps: CESC.epsNpc }, cond: perfilNPC(n.total, n.estagio || "adulto", escalaDe(n.est, 0, versao) * fator, tec) };
+      const L: Lutador = { nome: "Rival " + n.nome, estilo: { ...estilo, eps: CESC.epsNpc }, cond: perfilNPC(n.total, n.estagio || "adulto", escalaDe(n.est, 0, versao) * fator, tec) };
+      /* pets v14: o desafiante com fator proprio (FATORES_V14.npc) troca o fator de hoje pelo do candidato, na mesma conta da bancada
+         (a escala / o de hoje * o novo) */
+      const f14 = R.versaoPet >= 14 && !arena ? FATORES_V14.npc[nome] : undefined;
+      return f14 === undefined ? L : { ...L, cond: { ...L.cond, escala: L.cond.escala! / fator * f14 } };
     }
     return { nome: "Rival " + n.nome, estilo, cond: perfilNPC(n.total, n.estagio || "adulto", undefined, tec) };
   }
