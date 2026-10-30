@@ -418,3 +418,60 @@ Worker: Claude Code, Opus 5.5, worktree `v2-combate-tr`, 2026-10-30.
 | **G-3, o vigia a 0,94 na conferência** | olhar o fator da Espiral na Liga (o último líder) junto com o G-1 da Espiral | o vigia ganha a Liga fácil demais; o resto das formas fica na faixa |
 | **F-1, F-2 e F-4 a F-7, e T-2** | uma rodada das formas por cima do candidato (as listas), como a fase 2, depois das outras | as formas de longe e a tita seguem fora da faixa |
 
+## Rodada 2, fases R2-0 e R2-1 — o ponto de partida e as formas
+
+Worker: Claude Code, Opus 5.5, worktree `v2-combate-tr`, 2026-10-30. O plano é `docs/PLANO_EQUILIBRIO_COMBATE_TR_R2.md` (DR2-1 a DR2-6
+DECIDIDAS).
+- **As sementes de calibração da rodada 2:** `72101…72505` (`--faixa calibracao2`), reservadas num commit próprio antes da primeira luta.
+- **No máximo 4 processos.**
+- **A medida de todas as metas:** `web/app/scripts/equilibrio_tr/medir_tudo.py`, as mesmas bancadas e opções da conferência única, e
+  `resumo_metas.py`.
+
+### R2-0, o ponto de partida (`r2_0/`)
+
+O candidato v14 da primeira rodada, sem mudar nada:
+- **as metas já fechadas,** que a regra "volta atrás" protege nesta rodada: T-3, T-4, T-5, F-3, P-1, P-2, P-4, G-2, G-4, G-5, G-6 e I-2;
+- **as que não passam:** as mesmas da conferência única.
+
+### R2-1, as formas (`r2_1/`)
+
+- **A alavanca:** as listas das formas (`LISTAS_V14`). A base do combate não muda.
+- **A grade:** `grade_formas_r2.py`, com as variantes em `variantes_fase2.ts` (`VARIANTES_R2`, `_R2_2` e `_R2_3`), por cima das listas da
+  primeira rodada (`LISTAS_V14_R1`).
+- **A nota, registrada antes de rodar:** a soma da distância de F-1, F-2, F-4 a F-7 e T-2 até a faixa de cada uma. Um F-3 que reprova
+  soma 1.
+
+**As três rodadas:**
+- **Rodada 1** (13 variantes, uma mudança cada; `grade1/`): só a pele dura do vigia com Guts 60 ajuda de verdade (a nota vai de 1,515 a
+  0,951, e o pior par do T-2 de 0,53 a 0,14). Outras quatro ajudam pouco, e enfraquecer o tita piora.
+- **Rodada 2** (8 combinações; `grade2/`): a melhor é a soma das mudanças pequenas (`r2b_b`, 0,911). As de longe dispararem antes de
+  marcar quebra tudo (F-1 0,68; F-3 reprova).
+- **Rodada 3** (6 combinações em cima da `r2b_b`; `grade3/`): a melhor é a `r2c_b` (0,744), com o predador disparando antes de marcar e o
+  espelho batendo com menos Guts.
+
+**A escolhida, `r2c_b`,** entrou nas `LISTAS_V14` (PROPOSTA; o comentário em `motor/bots.ts` lista cada mudança). As listas da primeira
+rodada ficam em `LISTAS_V14_R1`, e o candidato reproduz a `grade3/r2c_b_formas.json` campo a campo.
+
+**As metas com as listas novas** (`r2_1/depois/`, contra `r2_0/`):
+
+| # | R2-0 | R2-1 | passa? |
+|---|---|---|---|
+| T-2 | no limite 0,028; o pior par 0,53 (o espelho do vigia) | 0,012; 0,145 (o duelista × a sentinela) | **não fechou** |
+| F-1 | 5 fora (duelista 0,398, espelho 0,362, muralha 0,644, emboscador 0,373, tita 0,704) | 4 fora (espelho 0,374, muralha 0,638, emboscador 0,392, tita 0,694) | **não fechou** |
+| F-2 | 0,342 | 0,32 | **não fechou** |
+| F-4 | o caçador do Champion 0,668; o Rookie 0,645 | o caçador 0,664; o Rookie 0,493 | **não fechou** (o caçador) |
+| F-5 | Champion 0,535; Ultimate 0,179 | 0,53; 0,247 | **não fechou** (o Ultimate) |
+| F-6 | o espelho 0,118 | o espelho 0,119; a sentinela 0,139 | **não fechou** |
+| F-7 | o bastião 0,681; o predador 0,205 | o bastião 0,688; o predador 0,593 | **não fechou** (o bastião) |
+| I-3 | 0,738 | 0,725 | **não fechou** (a tita, como no F-1) |
+| G-3 | o vigia 0,88 | de 0,43 a 0,72 | **sim** (fechou junto) |
+| as protegidas | passam | passam (T-3, T-4, T-5, F-3, P-1, P-2, P-4, G-2, G-4, G-5, G-6, I-2) | sim |
+
+**Por que as formas não fecham:**
+- **As de longe** (a sentinela e o emboscador) perdem das de perto que fecham a distância (o furioso, o vigia e o tita). Na matriz da
+  R2-0 (`r2_0/formas.json`), a sentinela vence o furioso 0,01, o vigia 0,01 e o tita 0,04. Elas recuam de perto e quase não disparam.
+- **Disparar mais** (antes de marcar, ou de perto) desmonta o resto: em `r2b_*` e `r2c_c`, F-1 sobe a 0,68 e F-3 reprova.
+- **O tita** (0,69) vence quase todos. Tirar dele a pele dura ou o pesado o derruba demais e piora o F-1.
+- **A alavanca que falta é de estrutura,** não de lista: o alcance ou o tempo do disparo contra quem avança, ou a pele dura do tita.
+  Fica para a conferência e para o Matheus.
+

@@ -82,15 +82,10 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .meus-pets{border:0;padding:0;background:transparent;max-width:min(420px,calc(100vw - 28px));width:100%}
 .meus-pets::backdrop{background:rgba(11,22,54,.55)}
 .meus-pets .dl-card{display:grid;gap:12px}
-.meus-pets .slot{display:flex;align-items:center;gap:12px;padding:8px;border-radius:10px;background:var(--dl-surface-2);position:relative}
-.meus-pets .slot::before,.meus-pets .slot::after{content:"";position:absolute;width:12px;height:12px;border:3px solid var(--dl-highlight)}
-.meus-pets .slot::before{left:-2px;top:-2px;border-right:0;border-bottom:0;border-radius:4px 0 0 0}
-.meus-pets .slot::after{right:-2px;bottom:-2px;border-left:0;border-top:0;border-radius:0 0 4px 0}
 .acoes-mp{display:flex;flex-wrap:wrap;gap:10px}
-.mp-slots{display:grid;grid-template-columns:minmax(0,1fr) 96px;gap:10px;align-items:stretch}
+
 .slot-novo{font:inherit;font-weight:900;font-size:.75rem;color:var(--dl-text-2);background:transparent;border:2px dashed var(--dl-border);border-radius:10px;cursor:pointer;display:grid;justify-items:center;align-content:center;gap:4px;min-height:76px}
 .slot-novo:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:1px}
-
 
 /* tela Pet (pranchas PetTela, 390 px, e PetTelaDesktop, 1280 x 720; substituem a UpPet) */
 .pet-tela{display:flex;flex-direction:column;width:100%;max-width:480px;margin-inline:auto;color:var(--dl-text)}
@@ -106,7 +101,7 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .pet-salvo{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:#2F7A3E}
 .pet-salvo i{width:8px;height:8px;border-radius:50%;background:var(--dl-ok)}
 .pet-salvo.erro{color:var(--dl-erro)}
-.pet-salvo.erro i{background:var(--dl-erro)}   /* desktop: a coluna da direita (estilo/desktop.css) */
+.pet-salvo.erro i{background:var(--dl-erro)}   /* desktop: a coluna da direita */
 
 .palco-emocao{position:absolute;left:10px;top:46px;z-index:2;display:flex;align-items:center;gap:6px;background:#FFFFFF;border:2px solid var(--dl-border);
   border-radius:20px;padding:3px 10px 3px 4px;font-size:12px;font-weight:800;color:var(--dl-plate)}
@@ -166,75 +161,18 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .fala-troca input{width:24px;height:24px;margin:0;accent-color:var(--dl-action)}
 
 /* Conversar (pranchas UpConversar, ConvChat, ConvEstados): tela cheia, conversa em baloes e barra de escrever */
-.conv-tela{display:flex;flex-direction:column;width:100%;max-width:560px;margin-inline:auto;min-height:calc(100dvh - 96px)}
-.conv-cab{display:flex;align-items:center;gap:10px;padding:12px 14px}
+
 .conv-voltar{width:44px;height:44px;flex:none;border-radius:12px;background:#FFFFFF;border:3px solid var(--dl-navy);display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer}
 .conv-voltar svg path{fill:none;stroke:var(--dl-navy);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
 .conv-voltar:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
-.conv-cab-txt{display:flex;flex-direction:column;gap:2px;min-width:0}
-.conv-cab-txt h1{margin:0;font-size:24px;line-height:26px}
-.conv-cab-txt span{font-size:11px;font-weight:800;color:#FFFFFF;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.conv-status{display:flex;align-items:center;gap:8px;margin:10px 14px 0;background:var(--dl-surface);border:2px solid var(--dl-border);border-radius:10px;padding:6px 10px;font-size:12px;font-weight:800}
-.conv-status-dir{margin-left:auto;color:var(--dl-text-2);font-weight:700;text-align:right}
-.conv-modos{display:flex;gap:6px;margin:10px 14px 0;flex-wrap:wrap}
+
 .dl-chip{flex:1 0 auto;min-height:44px;padding:0 12px;border-radius:22px;border:2px solid var(--dl-navy);background:#FFFFFF;color:var(--dl-navy);font:inherit;font-weight:900;font-size:12px;cursor:pointer}
 .dl-chip[aria-pressed="true"]{background:var(--dl-navy);color:#FFFFFF}
 .dl-chip:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
-.conv-lista{flex:1;display:flex;flex-direction:column;gap:12px;padding:14px 14px 10px}
-.conv-troca{display:flex;flex-direction:column;gap:12px}
-.conv-vazio{margin:0}
-.conv-linha{display:flex;align-items:flex-end;gap:8px}
-.conv-av{width:40px;height:40px;flex:none;border-radius:50%;background:#FFFFFF;border:3px solid var(--dl-action);overflow:hidden;display:flex;align-items:flex-start;justify-content:center}
-.conv-av img{max-width:none}
-.conv-pilha{max-width:270px;display:flex;flex-direction:column;gap:6px;min-width:0}
-.conv-balao{max-width:250px;padding:8px 12px;font-size:15px;line-height:1.35;overflow-wrap:anywhere}
-.conv-balao--pet{background:#FFFFFF;color:#13244D;border:3px solid var(--dl-navy);border-radius:14px 14px 14px 4px;box-shadow:0 3px 0 var(--dl-navy-deep);font-weight:800}
-.conv-balao--eu{align-self:flex-end;background:#2C73E0;color:#FFFFFF;border-radius:14px 14px 4px 14px;box-shadow:0 3px 0 #1B54B4;font-weight:700}
-.conv-balao--sembase{background:var(--dl-none-bg);color:var(--dl-none-ink);border:3px dashed var(--dl-none-edge);box-shadow:none;text-decoration:line-through}
-.conv-nota{display:flex;align-items:center;gap:6px;background:var(--dl-surface);border:2px solid var(--dl-none-edge);border-radius:8px;padding:5px 8px;font-size:12px;font-weight:800;color:var(--dl-text-2)}
-.conv-nota-q{font-family:var(--dl-f-num);font-style:italic;font-weight:900;color:var(--dl-none-ink)}
+
 /* comando pelo chat: a marca do que foi feito no historico */
-.conv-nota--feito{border-color:var(--dl-navy);color:var(--dl-navy)}
-.conv-nota--feito .conv-nota-q{color:var(--dl-navy);font-style:normal}
-.conv-pensando{color:var(--dl-text-2)}
-.conv-atalhos{display:flex;gap:8px;padding:0 14px 8px;flex-wrap:wrap}
-.conv-atalho{min-height:44px;padding:0 12px;border-radius:22px;background:#FFFFFF;color:var(--dl-navy);border:2px solid var(--dl-navy);display:flex;align-items:center;gap:6px;font:inherit;font-weight:900;font-size:13px;cursor:pointer}
-.conv-atalho img{width:20px;height:20px}
-.conv-atalho--destaque{background:var(--dl-highlight);color:var(--dl-highlight-ink)}
-.conv-atalho:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
-.conv-atalho:disabled{background:var(--dl-disabled);color:var(--dl-disabled-ink);border-color:var(--dl-disabled-ink);cursor:not-allowed}
-.conv-escrever{position:sticky;bottom:calc(83px + env(safe-area-inset-bottom));display:flex;gap:8px;align-items:center;background:var(--dl-navy);border-top:3px solid #FFFFFF;padding:10px 12px 16px;margin:0}
-.conv-escrever input{flex:1;min-width:0;min-height:46px;border-radius:12px;border:3px solid #FFFFFF;background:#FFFFFF;padding:0 12px;font:inherit;font-size:15px;font-weight:700;color:#13244D}
-.conv-escrever input:disabled{background:var(--dl-disabled);color:var(--dl-disabled-ink)}
-.conv-escrever button{width:50px;height:46px;flex:none;border-radius:12px;background:#2C73E0;border:3px solid #FFFFFF;box-shadow:inset 0 -4px 0 #1B54B4;display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer}
-.conv-escrever button svg path{fill:none;stroke:#FFFFFF;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
-.conv-escrever button:disabled{background:var(--dl-disabled);box-shadow:none;cursor:not-allowed}
-.conv-escrever :focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
-.conv-rodape{margin:0 14px 8px}
-@media (min-width:900px){ .conv-escrever{bottom:0} }
 
 /* Conversar no desktop (ConvDesktop): a conversa num painel a esquerda, status, modo e atalhos a direita */
-@media (min-width:1100px){
-  .conv-tela{max-width:none;margin:0;display:grid;grid-template-columns:minmax(0,760px) minmax(280px,380px);column-gap:20px;align-content:start}
-  .conv-cab{grid-column:1/-1}
-  .conv-status{grid-column:2;grid-row:2;margin:14px 14px 0 0}
-  .conv-modos{grid-column:2;grid-row:3;margin:10px 14px 0 0;align-self:start}
-  .conv-atalhos{grid-column:2;grid-row:4;padding:10px 14px 0 0;align-self:start}
-  .conv-lista{grid-column:1;grid-row:2 / span 4;margin:14px 0 0 14px;min-height:420px;background:rgba(255,255,255,.35);border-radius:16px 16px 0 0;box-shadow:0 0 0 2px var(--dl-border)}
-  .conv-rodape{grid-column:1;grid-row:6;margin:0 0 0 14px;padding:8px 14px;background:rgba(255,255,255,.35);text-align:center}
-  .conv-escrever{grid-column:1;grid-row:7;margin:0 0 0 14px;border-radius:0 0 16px 16px;position:static}
-}
-
-.conv-fatos{display:none}
-@media (min-width:1100px){
-  .conv-fatos{display:grid;gap:10px;grid-column:2;grid-row:5 / span 3;margin:12px 14px 0 0;align-self:start}
-  .conv-fatos-cab{display:grid;gap:4px;border-radius:12px;border:2px dashed var(--dl-learned);box-shadow:0 0 0 2px var(--dl-navy-deep);padding:10px 12px;font-size:12px;font-weight:700}
-  .conv-fatos-cab b{font-size:11px;color:var(--dl-learned);letter-spacing:.03em}
-  .conv-fatos-lista{background:var(--dl-surface);border-radius:12px;box-shadow:0 0 0 2px var(--dl-border),0 3px 0 2px var(--dl-border-shadow);padding:10px 12px;display:grid;gap:8px}
-  .conv-fatos-lista h3{margin:0 0 2px;font-size:11px;font-weight:900;color:var(--dl-text-2);text-transform:uppercase;letter-spacing:.03em}
-  .conv-fatos-lista p{margin:0;font-size:13px;font-weight:700}
-}
-.conv-fatos-cab{color:var(--dl-learned-ink)}
 
 /* Tempo (teste) em Configuracoes > Registro e replay */
 .tempo-pet{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
@@ -242,22 +180,20 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .tempo-pet .dl-btn[aria-pressed="true"]{background:var(--dl-navy);color:#FFFFFF;border-color:var(--dl-navy)}
 .balao-causa .causa-ic img{width:auto;height:24px;image-rendering:auto}
 /* Meus pets (MpAtual): tela cheia por cima do app, cabecalho com voltar, palco do pet ativo e os botoes */
-.mp-tela{position:fixed;inset:0;width:100%;max-width:none;height:100%;max-height:none;margin:0;padding:0;border:0;background-color:var(--dl-bg);
-  background-image:var(--dl-img-hex);background-size:var(--dl-hex-tam);color:var(--dl-text);overflow:auto}
-.mp-tela[open]{display:flex;flex-direction:column}
-.mp-cab{display:flex;align-items:center;gap:10px;padding:12px 14px}
-.mp-cab h2{margin:0;font-size:26px;line-height:1.1}
+
+
+
 .mp-corpo{display:flex;flex-direction:column;gap:12px;padding:12px 14px 24px;width:100%;max-width:560px;margin-inline:auto}
-.mp-palco{position:relative;height:270px;border-radius:16px;box-shadow:0 0 0 3px #FFFFFF,0 0 0 5px var(--dl-border),0 4px 0 5px var(--dl-border-shadow);overflow:hidden}
-.mp-ativo{position:absolute;right:12px;top:12px;z-index:1}
-.mp-anel{position:absolute;left:50%;top:180px;width:212px;height:60px;margin-left:-106px;background:var(--dl-img-anel) center/100% 100% no-repeat}
-.mp-spr{position:absolute;left:50%;bottom:62px;transform:translateX(-50%);max-width:none}
-.mp-placa{position:absolute;left:0;right:0;bottom:14px;display:flex;align-items:center;justify-content:center;gap:6px}
-.mp-aviso{margin:0;font-size:13px;font-weight:700;color:var(--dl-text-2)}
-.mp-anterior{display:flex;align-items:center;gap:10px;background:var(--dl-surface);border-radius:12px;box-shadow:0 0 0 2px var(--dl-border);padding:8px 12px}
-.mp-anterior > span{display:grid;gap:2px}
-.mp-anterior b{font-size:14px}
-.mp-anterior > span > span{font-size:12px;font-weight:700;color:var(--dl-text-2)}
+
+
+
+
+
+
+
+
+
+
 
 .dl-brilho-pet{filter:drop-shadow(0 0 2px #FFFFFF) drop-shadow(0 0 10px #9FE8FF)}
 .dl-gira{animation:dl-gira 18s linear infinite}
@@ -281,9 +217,6 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .bv-pe{display:flex;flex-direction:column;gap:8px;padding:0 24px 28px;width:100%;max-width:440px;margin-inline:auto}
 .bv-pe span{text-align:center;font-size:12px;font-weight:800}
 .bv-comecar{min-height:54px;font-size:16px;box-shadow:0 0 0 3px var(--dl-navy),inset 0 -5px 0 var(--dl-highlight-press)}
-
-.conv-av img{width:100%;height:100%;max-width:100%;object-fit:contain;object-position:center bottom;image-rendering:pixelated}
-.conv-av{padding:3px;box-sizing:border-box}
 
 /* cabecalho do Pet no celular (prancha PetTela): Conversar e Configuracoes, 44 px, a direita do relogio; a partir de
    900 px os dois ficam no pe da barra lateral */
@@ -315,21 +248,11 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
   .app .pet-cab{display:none}
 }
 /* Conversar no desktop: a tela ocupa a janela abaixo do topo; a conversa rola dentro e a barra de escrever fica no pe */
-@media (min-width:1100px){
-  .conv-tela{height:calc(100dvh / var(--zoom, 1) - var(--ui-topo) - var(--ui-moldura-v));min-height:0;box-sizing:border-box;padding:20px 24px;grid-template-rows:0 auto auto auto minmax(0,1fr) auto auto;row-gap:0}
-  .conv-lista{margin:0;min-height:0;overflow:auto;background:var(--dl-surface)}
-  .conv-rodape{margin:0;background:var(--dl-surface)}
-  .conv-escrever{margin:0}
-  .conv-status{margin:0}
-  .conv-modos{margin:10px 0 0}
-  .conv-atalhos{padding:10px 0 0}
-  .conv-fatos{margin:12px 0 0;overflow:auto;max-height:100%;min-height:0;align-self:stretch}
-}
 
 /* Meus pets no desktop (MpDesktop): modal de 560 px no centro, com x */
-.mp-desk{max-width:none;width:560px;margin:auto;padding:18px 20px 20px;border-radius:18px;background:var(--dl-surface);color:var(--dl-text);box-shadow:0 0 0 3px var(--dl-navy),0 6px 0 3px var(--dl-navy-deep)}
-.mp-desk[open]{display:flex;flex-direction:column;gap:14px}
-.mp-desk::backdrop{background:rgba(9,20,52,.62)}
+
+
+
 .mpd-cab{display:flex;align-items:center;justify-content:space-between}
 .mpd-cab h2{margin:0;font-size:28px}
 .mpd-x{width:44px;height:44px;border-radius:12px;background:#FFFFFF;border:3px solid var(--dl-navy);color:var(--dl-navy);font-size:22px;font-weight:900;cursor:pointer;line-height:1}
@@ -368,20 +291,20 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 }
 
 /* varios pets: os guardados (tempo parado) com Ativar */
-.mp-guardados{display:flex;flex-direction:column;gap:8px}
-.mp-guardados h3{margin:0;font-size:15px;font-weight:900;display:flex;justify-content:space-between;align-items:baseline}
-.mp-guardados h3 small{font-size:11px;font-weight:700;color:var(--dl-text-2)}
-.mp-guardados ul{list-style:none;margin:0;padding:0;display:grid;gap:8px;max-height:46dvh;overflow:auto}
-.mp-guardado{display:flex;align-items:center;gap:10px;background:var(--dl-surface);border-radius:12px;box-shadow:0 0 0 2px var(--dl-border);padding:6px 10px 6px 6px}
-.mp-g-ret{width:52px;height:52px}
-.mp-g-txt{flex:1;min-width:0;display:grid;gap:2px}
-.mp-g-txt b{font-size:14px;font-weight:900;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.mp-g-txt > span{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--dl-text-2)}
-.mp-g-num{font-family:var(--dl-f-lcd)}
-.mp-g-ativar{flex:none;min-height:44px;padding:0 14px}
-.mp-g-bts{display:grid;gap:6px;flex:none}
-.mp-g-cruzar{min-height:44px;padding:0 14px}
-.mp-desk .mp-guardados ul{max-height:280px}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* jornada (src/componentes/Jornada.tsx): escolha do brasao e conclusao, no fundo listrado das boas-vindas */
 .brasao-tela{position:fixed;inset:0;width:100%;max-width:none;height:100%;max-height:none;margin:0;padding:0;border:0;color:#FFFFFF;overflow:auto;
@@ -414,45 +337,10 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .topo-acoes + .topo-pet{margin-left:0}
 .mpl-novo{min-height:44px;padding:0 18px}
 .mpl{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:20px;padding:20px 24px;align-items:start;color:var(--dl-text)}
-.mpl-cab{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:12px}
-.mpl-cab h2{margin:0;font-size:18px;font-weight:900}
-.mpl-cab small{font-size:12px;font-weight:700;color:var(--dl-apoio,#3A5288)}
-.mpl-grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
-.mpl-slot{display:flex;flex-direction:column;gap:6px;padding:8px 8px 12px;border:0;border-radius:14px;background:var(--dl-surface);cursor:pointer;text-align:left;font:inherit;color:inherit;
-  box-shadow:0 0 0 2px #9FC2EF,0 4px 0 2px #C7D8F5}
-.mpl-slot.sel{box-shadow:0 0 0 3px var(--dl-highlight,#FFD23F),0 4px 0 3px #E0A800}
-.mpl-slot:focus-visible{outline:3px solid var(--dl-highlight,#FFD23F);outline-offset:3px}
-.mpl-palco{height:128px;border-radius:10px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:10px;overflow:hidden;
-  background:#EEF4FC radial-gradient(ellipse 45% 12% at 50% 88%,#BFE3FF 60%,transparent 62%)}
-.mpl-palco img,.mpl-det-palco img{image-rendering:pixelated}
+
 /* em espera (congelado): malha azul-clara e o sprite desbotado em azul, como na prancha */
-.mpl-palco.congelado,.mpl-det-palco.congelado{background-color:#E1ECFA;background-image:linear-gradient(rgba(122,164,226,.35) 1px,transparent 1px),
-  linear-gradient(90deg,rgba(122,164,226,.35) 1px,transparent 1px);background-size:6px 6px}
+
 .congelado img{filter:grayscale(1) sepia(.35) hue-rotate(180deg) saturate(1.6) opacity(.6)}
-.mpl-nome{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 4px}
-.mpl-nome b{font-size:15px;font-weight:900;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.mpl-sub{display:flex;justify-content:space-between;padding:0 4px;font-size:12px;font-weight:700}
-.mpl-tag-espera{background:#2C73E0;color:#FFFFFF}
-.mpl-livre{align-items:center;justify-content:center;min-height:186px;background:transparent;box-shadow:none;border:2px dashed #7FA6E0;color:var(--dl-navy);font-weight:900;font-size:14px;gap:4px}
-.mpl-livre span{font-size:28px;line-height:1}
-.mpl-livre small{font-size:11px;font-weight:700}
-.mpl-detalhe{position:sticky;top:12px;display:flex;flex-direction:column;gap:12px;background:var(--dl-surface);border-radius:16px;padding:16px;
-  box-shadow:0 0 0 2px #9FC2EF,0 4px 0 2px #C7D8F5}
-.mpl-det-cab,.mpl-det-cab2{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.mpl-det-cab h2{margin:0;font-size:18px;font-weight:900}
-.mpl-det-cab2 b{font-size:14px}.mpl-det-cab2 small{font-size:11px;font-weight:700}
-.mpl-det-palco{position:relative;height:200px;border-radius:12px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:16px;overflow:hidden;
-  background:#EEF4FC radial-gradient(ellipse 40% 10% at 50% 88%,#BFE3FF 60%,transparent 62%)}
-.mpl-desde{position:absolute;left:10px;top:10px;background:#FFFFFF;border:2px solid var(--dl-navy);border-radius:8px;padding:2px 8px;font-size:11px;font-weight:900}
-.mpl-barras{display:grid;gap:8px}
-.mpl-barra{display:grid;grid-template-columns:70px 1fr;align-items:center;font-size:13px;font-weight:800}
-.mpl-tags{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:12px;font-weight:800}
-.mpl-tag-vinculo{background:#E8F0FB;border-radius:6px;padding:2px 8px}
-.mpl-tag-morto{background:#B0216F;color:#FFFFFF;border-radius:6px;padding:2px 8px}
-.mpl-bts{display:grid;grid-template-columns:1fr 1.4fr;gap:10px}
-.mpl-bts .dl-btn,.mpl-cruzar{min-height:48px}
-.mpl-apagar{min-height:44px;border-radius:12px;font:inherit;font-weight:900;font-size:13px;cursor:pointer}
-.mpl-apagar--pedir{background:#FFFFFF;color:#B0216F;border:2px dashed #E0448C}
 
 /* ritmo do ovo novo (Rapido x Classico), acima dos brasoes */
 .br-ritmo{display:grid;grid-template-columns:repeat(2,minmax(0,200px));gap:10px;justify-content:center;width:100%}
@@ -487,29 +375,10 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .importar-tela[open]{display:flex;flex-direction:column}
 .imp-cab{display:flex;align-items:center;gap:12px;padding:12px 16px}
 .imp-cab h2{margin:0;font-size:24px}
-.imp-corpo{display:grid;gap:16px;padding:16px;align-items:start}
-@media (min-width:1100px){ .imp-corpo{grid-template-columns:340px minmax(0,1fr);padding:20px 24px} .imp-cab{padding:14px 24px} }
-.imp-col{display:flex;flex-direction:column;gap:14px}
-.imp-arquivo,.imp-lado{background:var(--dl-surface);border-radius:14px;box-shadow:0 0 0 2px #9FC2EF,0 4px 0 2px #C7D8F5;padding:14px;display:flex;flex-direction:column;gap:10px}
-.imp-arquivo h3,.imp-lado h3{margin:0;font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.5px}
-.imp-input{position:absolute;width:1px;height:1px;opacity:0}
-.imp-input:focus-visible + label{outline:3px solid var(--dl-highlight,#FFD23F);outline-offset:2px}
-.imp-ok{margin:0;display:flex;flex-direction:column;gap:2px;font-size:13px;font-weight:700;color:#1F7A3A}
-.imp-ok b{color:var(--dl-text);font-family:var(--dl-f-num)}
+
+@media (min-width:1100px){  .imp-cab{padding:14px 24px} }
+
 .imp-erro{margin:0;color:#B0216F;font-weight:800;font-size:13px}
-.imp-aviso{background:#FFF4CC;border:2px solid #E0A800;border-radius:14px;padding:12px 14px}
-.imp-aviso p{margin:6px 0 0;font-size:13px;font-weight:700}
-.imp-bts{display:grid;gap:10px}
-.imp-lados{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-.imp-lado.sel{box-shadow:0 0 0 3px var(--dl-highlight,#FFD23F),0 4px 0 3px #E0A800}
-.imp-palco{height:130px;border-radius:10px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px}
-.imp-palco img{image-rendering:pixelated}
-.imp-nome{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:14px}
-.imp-nome .dl-lcd{margin-left:auto;font-size:11px}
-.imp-hist{list-style:none;margin:0;padding:0;display:grid;gap:4px;font-size:12px;font-weight:700}
-.imp-hist li{display:grid;grid-template-columns:86px 1fr;gap:6px;border-bottom:1px solid #E8F0FB;padding-bottom:4px}
-.imp-lado small{font-size:11px;font-weight:700;color:#3A5288}
-.importar-pagina .imp-corpo{padding:20px 24px}
 
 /* nova geracao (HerEscolher/HerPrevia/HerConfirmar/HerOvo; HerDesktop) e Diario · Geracoes (HerGeracoes) */
 .heranca-tela{position:fixed;inset:0;width:100%;max-width:none;height:100%;max-height:none;margin:0;padding:0;border:0;color:var(--dl-text);background:var(--dl-bg,#E8F0FB) var(--dl-img-hex,none)}

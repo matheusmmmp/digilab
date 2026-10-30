@@ -37,10 +37,11 @@ import {
 import { ligarEscala } from "../../motor/catalogo.ts";
 
 const arg = (k: string): string | null => { const i = process.argv.indexOf("--" + k); return i < 0 ? null : process.argv[i + 1] ?? null; };
-const FAIXAS: Record<string, number> = { calibracao: 68101, conferencia: 70101 };
+/* as faixas reservadas (experiments/bancada/faixas.py): a primeira rodada e a segunda (calibracao2, conferencia2; DR2-2) */
+const FAIXAS: Record<string, number> = { calibracao: 68101, conferencia: 70101, calibracao2: 72101, conferencia2: 74101 };
 const PARTES = ["g1", "g2", "g3", "g4", "g5", "g6", "i2", "i3", "i4", "i5"];
 const faixa = arg("faixa"), saida = arg("saida"), parte = arg("parte");
-if (!faixa || !(faixa in FAIXAS)) throw new Error("--faixa calibracao | conferencia");
+if (!faixa || !(faixa in FAIXAS)) throw new Error("--faixa calibracao | conferencia | calibracao2 | conferencia2");
 if (!saida) throw new Error("--saida <arquivo.json>");
 if (!parte || !PARTES.includes(parte)) throw new Error("--parte " + PARTES.join(" | "));
 const R: RegrasLuta = { ...CV21E_TR, relogio: RELOGIO_V14 }, VERSAO = R.versaoPet;
