@@ -49,6 +49,9 @@ def celula(s: str) -> str:
 
 def gerar(raiz: Path) -> str:
     docs = raiz / "docs"
+    tarefas = sorted([*docs.glob("TAREFA_V2_*.md"), *docs.glob("TAREFA_V3_*.md")])
+    planos = sorted([*docs.glob("PLANO_ANALISE_V2_*.md"), *docs.glob("PLANO_ANALISE_V3_*.md")])
+    v3 = any(p.name.startswith(("TAREFA_V3_", "PLANO_ANALISE_V3_")) for p in [*tarefas, *planos])
     resultados = {p.name: p.read_text(encoding="utf-8") for p in sorted(docs.glob("RESULTADO_V2_*.md"))}
 
     def citam(nome_arquivo: str) -> str:
@@ -68,7 +71,7 @@ def gerar(raiz: Path) -> str:
         "- **Onde cada tipo de informação mora** (implementado, decidido, hipótese, proposta, resultado, problema, próximo passo):",
         "  [INDICE.md](INDICE.md).",
         "",
-        "## 1. Tarefas (`docs/TAREFA_V2_*.md`)",
+        "## 1. Tarefas (`docs/TAREFA_V2_*.md`" + (" e `docs/TAREFA_V3_*.md`" if v3 else "") + ")",
         "",
         "O status é o da linha `Status:` do arquivo, como está escrito. Muitas tarefas ficaram ABERTA depois da entrega; a última coluna",
         "lista os `RESULTADO_V2_*.md` que citam a tarefa pelo nome do arquivo.",
@@ -76,20 +79,20 @@ def gerar(raiz: Path) -> str:
         "| tarefa | título | status declarado | resultados que a citam |",
         "|---|---|---|---|",
     ]
-    for p in sorted(docs.glob("TAREFA_V2_*.md")):
+    for p in tarefas:
         texto = p.read_text(encoding="utf-8")
         l.append(f"| [{p.stem}]({p.name}) | {celula(titulo(texto))} | {celula(status_declarado(texto))} | {citam(p.name)} |")
 
     l += [
         "",
-        "## 2. Planos de análise (`docs/PLANO_ANALISE_V2_*.md`)",
+        "## 2. Planos de análise (`docs/PLANO_ANALISE_V2_*.md`" + (" e `docs/PLANO_ANALISE_V3_*.md`" if v3 else "") + ")",
         "",
         "\"nenhum\" quer dizer só que nenhum `RESULTADO_V2_*.md` cita o plano: o resultado pode estar num adendo do próprio plano.",
         "",
         "| plano | título | resultados que o citam |",
         "|---|---|---|",
     ]
-    for p in sorted(docs.glob("PLANO_ANALISE_V2_*.md")):
+    for p in planos:
         l.append(f"| [{p.stem}]({p.name}) | {celula(titulo(p.read_text(encoding='utf-8')))} | {citam(p.name)} |")
 
     indice = (docs / "REGISTRO_DESVIOS.md").read_text(encoding="utf-8")

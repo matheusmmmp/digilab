@@ -435,3 +435,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-30 — COMBATE-TR conferência única (fase 5; worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): o candidato v14 nas sementes de conferência](registro/2026-10.md)
 - [2026-10-30 — LONGE-REGULAR, etapa 0 (Claude Code, Opus 5.5, worktree `v2-longe-regular`): a tarefa do longe com lugares fixos](registro/2026-10.md)
 - [2026-10-30 — COMBATE-TR, o plano da segunda rodada de equilíbrio (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`)](registro/2026-10.md)
+- [2026-10-30 — INFRA-PREFIXO-V3 (worker, Claude Code, Sonnet 5.5, worktree `v3-infra-prefixo`): o CI e as ferramentas passam a aceitar o prefixo V3](registro/2026-10.md)
