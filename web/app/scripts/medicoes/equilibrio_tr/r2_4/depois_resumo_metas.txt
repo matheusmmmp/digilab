@@ -1,0 +1,27 @@
+T-1 NAO 33.858 s / 31.904 s
+T-2 NAO limite 0.012; pior par 0.145
+T-3 sim p90 59.712 s
+T-4 sim 0.484
+T-5 sim 0.715
+F-1 NAO fora: espelho 0.374, muralha 0.638, emboscador 0.392, tita 0.694
+F-2 NAO 0.32
+F-3 sim 
+F-4 NAO {"brigao": 0.408, "guardiao": 0.448, "cacador": 0.664, "colosso": 0.481}; rookie 0.493
+F-5 NAO champion 0.53; ultimate 0.247
+F-6 NAO espelho 0.119, sentinela 0.139
+F-7 NAO {"devastador": 0.64, "bastiao_rachado": 0.688, "predador": 0.593, "colosso_partido": 0.594}
+P-1 sim 
+P-2 sim 
+P-3 NAO champion 0.6781; ultimate 0.5181
+P-4 sim champion 0.8775; ultimate 0.9713
+G-1 NAO fora: cidadela (sem 0.0113, com 0.7588, pior 0.29 sentinela), lago (sem 0.0713, com 0.8738, pior 0.44 sentinela), espiral (sem 0.0438, com 0.84, pior 0.43 sentinela)
+I-1 NAO 0.0713
+G-2 sim fora: 
+G-3 sim 0.43 a 0.72; fora []
+G-4 sim 1 e 0.76
+G-5 sim 0.32
+G-6 sim crianca 0.91, adolescente 0.845, adulto 0.8925, mega 0.8825
+I-2 sim 
+I-3 NAO 0.7254
+I-4 NAO carta_folego 0.0067, carta_cura 0.0523, carta_foco 0.0138
+I-5 NAO chip_recuo 0.0975, chip_oportunista 0, chip_perseguidor 0.0125, chip_aparo 0.005
