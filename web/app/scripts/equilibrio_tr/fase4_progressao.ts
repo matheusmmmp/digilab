@@ -22,19 +22,21 @@
    uso (em web/app): npx tsx scripts/equilibrio_tr/fase4_progressao.ts --faixa calibracao --parte g1|g2|g3|g4|g5|g6|i2|i3|i4|i5
      [--fatores '{"lider":{"torre":1.2},"npc":{"npc_tier2_sentinela":1.3},"liga":{"lago":1.2},"instalacao":1,"fabrica":.6,"salao":{"mega":1}}']
      [--cartas '{"carta_folego":{"guts":40}}'] --saida <arquivo.json>
-   --cartas: o efeito candidato de uma carta por cima do de hoje (o valor da carta, a alavanca do I-4; so a bancada) */
+   --cartas: o efeito candidato de uma carta por cima do de hoje (o valor da carta, a alavanca do I-4; so a bancada)
+   --variante-lider <nome>: as listas candidatas de lideres (variantes_lideres_r2.ts, a alavanca da R2-3) por cima das listas do candidato */
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { execSync } from "node:child_process";
 import {
   ADOL_V21, ARENAS, CESC_V9, CIT, CRIANCA_V21, CTR, CURA_LIGA_V9, CV, CV21E_TR, ESPECIES, ESTAGIOS_SALAO, FATOR_INSTALACAO, FATOR_LIDER_V9,
-  FATOR_LIGA_V9, FATOR_RIVAL_FABRICA_V9, FATOR_SALAO_V9, FATORES_V14, FORMAS_AD, ITENS, LIGA, LINHAS, LINHA_DA_FORMA, LISTAS_V14, LUGARES_V6, NPC, RELOGIO_V14,
+  FATOR_LIGA_V9, FATOR_RIVAL_FABRICA_V9, FATOR_SALAO_V9, FATORES_V14, FORMAS_AD, LISTAS_LIDER_V14, ITENS, LIGA, LINHAS, LINHA_DA_FORMA, LISTAS_V14, LUGARES_V6, NPC, RELOGIO_V14,
   STATS, alugueisFabrica, arenaDaLuta, capacidadeLista, caraterCanonico, cartaDe, chaveRegra, chipServe, copiarGambits, formaRivalFabrica,
   formaRivalInstalacao, formaRivalSalao, gambitsAdulto, hashSemente, itensValem, jogarArena, jogarSerie, jogarTR, listaComChips, lutadorBot,
   lutadorLiga, perfilDe, pontosComChips, regraQueCobre, rivalInstalacao, rivalSalao,
   type Chip, type Estagio, type Forma, type FormaAdultaNormal, type ListaGambits, type Lutador, type RegrasLuta,
 } from "../../motor/index.ts";
 import { ligarEscala } from "../../motor/catalogo.ts";
+import { VARIANTES_LIDER } from "./variantes_lideres_r2.ts";
 
 const arg = (k: string): string | null => { const i = process.argv.indexOf("--" + k); return i < 0 ? null : process.argv[i + 1] ?? null; };
 /* as faixas reservadas (experiments/bancada/faixas.py): a primeira rodada e a segunda (calibracao2, conferencia2; DR2-2) */
@@ -59,6 +61,10 @@ for (const k of ["lider", "npc", "liga", "salao"] as const) for (const x of Obje
 const FAT: Fatores = { lider: { ...BASE.lider, ...fArg.lider }, npc: { ...BASE.npc, ...fArg.npc }, liga: { ...BASE.liga, ...fArg.liga },
   instalacao: fArg.instalacao ?? BASE.instalacao, fabrica: fArg.fabrica ?? BASE.fabrica, salao: { ...BASE.salao, ...fArg.salao } };
 
+/* as listas dos lideres: as do candidato (LISTAS_LIDER_V14) e a variante por cima */
+const varLider = arg("variante-lider");
+if (varLider !== null && !VARIANTES_LIDER[varLider]) throw new Error("variante de lider desconhecida: " + varLider);
+const LISTA_LIDER: Record<string, ListaGambits> = { ...LISTAS_LIDER_V14, ...(varLider ? VARIANTES_LIDER[varLider]() : {}) };
 /* o efeito das cartas: o de hoje (itens.ts) ou o de --cartas por cima */
 const CARTAS_ARG = JSON.parse(arg("cartas") ?? "{}") as Record<string, Record<string, unknown>>;
 for (const k of Object.keys(CARTAS_ARG)) cartaDe(k);
@@ -112,14 +118,15 @@ ligarEscala(parte !== "i3");
 const out: Record<string, unknown> = {
   gerado_por: "web/app/scripts/equilibrio_tr/fase4_progressao.ts", data: new Date().toISOString().slice(0, 10),
   commit: execSync("git rev-parse --short HEAD").toString().trim(), node: process.version,
-  faixa, bases, sementes_por_base: SEMENTES_POR_BASE, relogio: R.relogio, listas: "v14", reserva_no_fim: true, fatores: FAT, cartas: CARTAS_ARG, parte, metas: {},
+  faixa, bases, sementes_por_base: SEMENTES_POR_BASE, relogio: R.relogio, listas: "v14", reserva_no_fim: true, fatores: FAT, cartas: CARTAS_ARG, variante_lider: varLider, listas_lider: Object.keys(LISTA_LIDER), parte, metas: {},
 };
 const metas = out.metas as Record<string, unknown>;
 
 /* ------------------------------------------------ G-1: os lideres (e o I-1) */
 function lider(id: string, fator = FAT.lider[id]): { B: Lutador; lutas: number; est: Estagio } {
   const a0 = ARENAS.find(a => a.id === id)!, a = { ...arenaDaLuta(a0.lider, VERSAO)!, fator };
-  return { B: lutadorBot(a0.lider, R, a), lutas: a.lutas ?? 1, est: LUGARES_V6[a0.lugar].est };
+  const B = lutadorBot(a0.lider, R, a), g = LISTA_LIDER[id];
+  return { B: g ? { ...B, estilo: { ...B.estilo, gambits: copiarGambits(g) } } : B, lutas: a.lutas ?? 1, est: LUGARES_V6[a0.lugar].est };
 }
 /** a taxa de series vencidas inteiras do pet (lado A, o lider desafiado) */
 function taxaLider(ref: Ref, nivel: number, id: string, chips: readonly string[] = [], carta: string | null = null, fator?: number): number {

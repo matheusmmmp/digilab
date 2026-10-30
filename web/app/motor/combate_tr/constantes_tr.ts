@@ -5,6 +5,7 @@
    - PROPOSTO, com a fonte: "PROTOTIPO" = o prototipo da arena (a pasta web/app/arena/, que saiu na R3 pela D-3; esta no commit efb2ded; sem medicao); "turnos x T_TR" = o numero por turnos de hoje
      convertido pelo T_TR; SEM FONTE onde nao ha. Nenhum foi calibrado: o equilibrio fica para a rodada do fim. */
 import { CV } from "../constantes.ts";
+import { Cd, Rg, validarLista, type ListaGambits } from "../combate.ts";
 
 /** o passo fixo (ms). PROPOSTO, o da arena (o prototipo, arena/constantes.ts, PASSO_MS) */
 export const PASSO_TR_MS = 16;
@@ -80,9 +81,10 @@ export const RELOGIO_V14: RelogioTR = { ...RELOGIO_V13, empurrao: 0, medio: 120,
     - lider da Torre 1,5 -> 1,8: o pet sem treino vencia 0,08 (G-1 pede <= 0,05);
     - Tortomon (npc_tier2_sentinela) 1,53 -> 1,4: o desafiante do Champion e o rival sugerido do P-4 (DE-4); com 1,4 fecham G-2 e P-4;
     - Liga, Campina 0,4 -> 0,2 e Torre 0,3 -> 0,8: as formas de longe caiam no furioso da Campina e o duelista passava de 0,85 (G-3);
-    - Salao, Rookie 1,15 -> 1,2 e Champion 1 -> 1,6: o pet tipico vencia mais de 0,95 (G-6) */
+    - Salao, Rookie 1,15 -> 1,2 e Champion 1 -> 1,6: o pet tipico vencia mais de 0,95 (G-6);
+    - rodada 2 (R2-3): o lider da Floresta 1,5 -> 1,4, com a lista candidata dele (LISTAS_LIDER_V14) */
 export const FATORES_V14 = {
-  lider: { campina: 1.3, torre: 1.8, floresta: 1.5, cidadela: .9, lago: 1.5, espiral: 1.4 } as Readonly<Record<string, number>>,
+  lider: { campina: 1.3, torre: 1.8, floresta: 1.4, cidadela: .9, lago: 1.5, espiral: 1.4 } as Readonly<Record<string, number>>,
   npc: { npc_tier2_sentinela: 1.4, npc_tier2_porteiro: 1.1, npc_v5_puppetmon: 1.8, npc_v5_machinedramon: 2.3 } as Readonly<Record<string, number>>,
   liga: { campina: .2, torre: .8, floresta: .1, cidadela: 1, lago: 1.7, espiral: .9 } as Readonly<Record<string, number>>,
   instalacao: 1,
@@ -98,3 +100,14 @@ export const FATORES_V14 = {
     - alfa 0,2 e bonus 0,1, os do GA */
 export const APRENDIZADO_V14: { readonly alfa: number; readonly prior: number; readonly bonus?: number; readonly limiar?: number } | null =
   { alfa: .2, prior: .1, bonus: .1, limiar: .05 };
+
+/** as listas candidatas dos lideres das arenas do candidato v14 (DR2-3; docs/PLANO_EQUILIBRIO_COMBATE_TR_R2.md, R2-3), pela id da arena, por
+    cima das de hoje (as do motor). Ainda nao e de nenhuma versao de pet: so a bancada as usa. PROPOSTAS, so nas sementes de calibracao
+    da rodada 2 (72101 a 72505; web/app/scripts/medicoes/equilibrio_tr/r2_3/, a variante l1_flo_fica com o fator 1,4):
+    - a Floresta fica de perto (sem o recuo): o guardiao, que devolve o golpe, deixa de perder a luta inteira (o fator vai a 1,4,
+      FATORES_V14). A Cidadela, o Lago e a Espiral ficam com as de hoje: nenhuma variante fechou o G-1 (ver o relatorio) */
+const T10 = Cd("turno_execucao", 10), D0_ = Cd("distancia_eh", 0), D1_ = Cd("distancia_eh", 1), D2_ = Cd("distancia_eh", 2), GA20 = Cd("guts_proprio_acima", 20);
+export const LISTAS_LIDER_V14: Readonly<Record<string, ListaGambits>> = {
+  floresta: validarLista({ regras: [Rg([T10, D2_], "avancar"), Rg([T10, D1_], "avancar"), Rg([T10, GA20], "golpe_rapido"),
+    Rg([Cd("oponente_preparando"), D0_], "esquivar"), Rg(GA20, "disparo")], final: "carregar" }),
+};
