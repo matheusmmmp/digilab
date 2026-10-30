@@ -56,7 +56,7 @@ export default defineConfig({
     /* a página e a raiz que leva a ela (o endereço "Network" do Vite é a raiz; o celular da M3 entra por ele) */
     rollupOptions: { input: [fileURLToPath(new URL("./mundo3d.html", import.meta.url)), fileURLToPath(new URL("./index.html", import.meta.url)),
       fileURLToPath(new URL("./mapa_ac.html", import.meta.url)),
-      fileURLToPath(new URL("./lateral.html", import.meta.url))] },
+      fileURLToPath(new URL("./lateral.html", import.meta.url)), fileURLToPath(new URL("./floresta.html", import.meta.url))] },
   },
   preview: { port: 8800, strictPort: true },
 });

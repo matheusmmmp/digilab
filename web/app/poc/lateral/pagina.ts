@@ -39,46 +39,84 @@ sol.position.set(-0.5, 1, 0.8);
 cena.add(sol);
 
 /* ---------- texturas desenhadas no canvas ---------- */
-/* desenhadas em poucos pixels e lidas sem filtro (nearest): o pixel art aplicado no 3D */
+/* desenhadas em alta resolução e lidas com filtro (linear + anisotrópico): o chão em alta definição */
 function canvasTex(w: number, h: number, desenhar: (g: CanvasRenderingContext2D) => void, repetir = false): THREE.CanvasTexture {
   const c = document.createElement("canvas");
   c.width = w; c.height = h;
   desenhar(c.getContext("2d")!);
   const t = new THREE.CanvasTexture(c);
   t.colorSpace = THREE.SRGBColorSpace;
-  t.magFilter = THREE.NearestFilter;
-  t.minFilter = THREE.NearestMipmapNearestFilter;
+  t.anisotropy = 8;
   if (repetir) t.wrapS = t.wrapT = THREE.RepeatWrapping;
   return t;
 }
 
-/* a grama do chão: um ladrilho de 16 x 16 com folhas em dois tons */
-const TEX_GRAMA = canvasTex(16, 16, g => {
+/* um traço que dá a volta na borda do ladrilho (desenhado de novo deslocado), para o ladrilho repetir sem emenda */
+function emTodaVolta(w: number, h: number, x: number, y: number, f: (x: number, y: number) => void): void {
+  for (const dx of [-w, 0, w]) for (const dy of [-h, 0, h]) f(x + dx, y + dy);
+}
+
+/* a grama do chão: um ladrilho de 256 x 256 com manchas suaves e folhinhas em dois tons */
+const TEX_GRAMA = canvasTex(256, 256, g => {
   const r = rng(7);
-  g.fillStyle = "#74c455"; g.fillRect(0, 0, 16, 16);
-  for (let i = 0; i < 22; i++) { g.fillStyle = r() < 0.5 ? "#5fae46" : "#8fd66a"; g.fillRect(Math.floor(r() * 16), Math.floor(r() * 16), 1, 1 + Math.floor(r() * 2)); }
+  g.fillStyle = "#74c455"; g.fillRect(0, 0, 256, 256);
+  for (let i = 0; i < 14; i++) {
+    const x = r() * 256, y = r() * 256, raio = 30 + r() * 50, cor = r() < 0.5 ? "rgba(95,174,70,0.35)" : "rgba(143,214,106,0.35)";
+    emTodaVolta(256, 256, x, y, (a, b) => { const gr = g.createRadialGradient(a, b, 0, a, b, raio); gr.addColorStop(0, cor); gr.addColorStop(1, "rgba(0,0,0,0)"); g.fillStyle = gr; g.fillRect(a - raio, b - raio, raio * 2, raio * 2); });
+  }
+  g.lineCap = "round";
+  for (let i = 0; i < 260; i++) {
+    const x = r() * 256, y = r() * 256, alt = 4 + r() * 7, inc = (r() - 0.5) * 4;
+    g.strokeStyle = r() < 0.5 ? "#5aa843" : "#93d96e"; g.lineWidth = 1.4;
+    emTodaVolta(256, 256, x, y, (a, b) => { g.beginPath(); g.moveTo(a, b); g.lineTo(a + inc, b - alt); g.stroke(); });
+  }
 }, true);
 
-/* a face do penhasco: faixas de estrato em tons de terra, com a grama pendendo no alto */
-const TEX_PENHASCO = canvasTex(32, 32, g => {
+/* a face do penhasco: faixas de estrato onduladas em tons de terra, rachaduras e a grama pendendo no alto (512 x 512 por 3 de largura) */
+const TEX_PENHASCO = canvasTex(512, 512, g => {
   const r = rng(3);
   const faixas = ["#c9a46a", "#b58b55", "#d4b27a", "#a77d4b", "#bf9660"];
-  let y = 2;
-  for (let i = 0; y < 32; i++) { const h = 3 + Math.floor(r() * 4); g.fillStyle = faixas[i % faixas.length]; g.fillRect(0, y, 32, h); y += h; }
-  g.fillStyle = "#8a6238";
-  for (let i = 0; i < 14; i++) g.fillRect(Math.floor(r() * 32), 6 + Math.floor(r() * 26), 2 + Math.floor(r() * 3), 1);
-  g.fillStyle = "#5fb84a"; g.fillRect(0, 0, 32, 2);
-  for (let x = 0; x < 32; x += 2) g.fillRect(x, 2, 2, Math.floor(r() * 3));
+  const fase = r() * 6;
+  let y = 30;
+  for (let i = 0; y < 512; i++) {
+    const h = 40 + r() * 50, amp = 3 + r() * 5;
+    g.fillStyle = faixas[i % faixas.length];
+    g.beginPath(); g.moveTo(0, y + Math.sin(fase + i) * amp);
+    for (let x = 0; x <= 512; x += 8) g.lineTo(x, y + Math.sin(fase + i + (x / 512) * Math.PI * 2) * amp);
+    g.lineTo(512, 512); g.lineTo(0, 512); g.fill();
+    y += h;
+  }
+  g.strokeStyle = "rgba(110,75,40,0.45)"; g.lineWidth = 2.5; g.lineCap = "round";
+  for (let i = 0; i < 30; i++) {
+    const x = r() * 512, yy = 60 + r() * 440, c = 14 + r() * 30;
+    emTodaVolta(512, 0, x, yy, (a, b) => { g.beginPath(); g.moveTo(a, b); g.quadraticCurveTo(a + c / 2, b + 3 - r() * 6, a + c, b + 1); g.stroke(); });
+  }
+  /* a grama que pende do alto, em gotas arredondadas */
+  g.fillStyle = "#5fb84a";
+  g.fillRect(0, 0, 512, 26);
+  for (let x = 0; x < 512; x += 16) {
+    const alt = 10 + r() * 22;
+    emTodaVolta(512, 0, x + 8, 26, (a, b) => { g.beginPath(); g.ellipse(a, b, 10, alt, 0, 0, Math.PI); g.fill(); });
+  }
+  g.fillStyle = "rgba(255,255,255,0.18)"; g.fillRect(0, 0, 512, 6);
 }, true);
 
-/* o caminho de terra clara, com a borda irregular */
-const TEX_CAMINHO = canvasTex(32, 16, g => {
+/* o caminho de terra clara, com a borda ondulada e pedrinhas (512 x 128 por 3,4 de largura) */
+const TEX_CAMINHO = canvasTex(512, 128, g => {
   const r = rng(5);
-  for (let x = 0; x < 32; x++) { const a = 1 + Math.floor(r() * 2), b = 14 - Math.floor(r() * 2); g.fillStyle = "#ead293"; g.fillRect(x, a, 1, b - a); }
-  g.fillStyle = "#d3b571";
-  for (let i = 0; i < 18; i++) g.fillRect(Math.floor(r() * 32), 3 + Math.floor(r() * 10), 1, 1);
-  g.fillStyle = "#fbeab4";
-  for (let i = 0; i < 10; i++) g.fillRect(Math.floor(r() * 32), 3 + Math.floor(r() * 10), 1, 1);
+  const borda = (base: number, amp: number) => Array.from({ length: 33 }, (_, k) => base + (k === 0 || k === 32 ? 0 : (r() - 0.5) * amp));
+  const cima = borda(14, 10), baixo = borda(114, 10);
+  g.fillStyle = "#ead293";
+  g.beginPath(); g.moveTo(0, cima[0]);
+  for (let k = 1; k <= 32; k++) g.quadraticCurveTo((k - 0.5) * 16, (cima[k - 1] + cima[k]) / 2, k * 16, cima[k]);
+  g.lineTo(512, baixo[32]);
+  for (let k = 31; k >= 0; k--) g.quadraticCurveTo((k + 0.5) * 16, (baixo[k + 1] + baixo[k]) / 2, k * 16, baixo[k]);
+  g.fill();
+  for (let i = 0; i < 70; i++) {
+    const x = r() * 512, y = 26 + r() * 76, raio = 1.5 + r() * 3.5;
+    g.fillStyle = r() < 0.6 ? "rgba(196,165,100,0.75)" : "rgba(255,244,205,0.8)";
+    emTodaVolta(512, 0, x, y, (a, b) => { g.beginPath(); g.ellipse(a, b, raio * 1.4, raio, 0, 0, Math.PI * 2); g.fill(); });
+  }
 }, true);
 
 /* o bloco "?" e o bloco já usado */
