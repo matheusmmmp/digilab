@@ -58,7 +58,6 @@
 .cena-topo > *{pointer-events:auto}
 .cena-topo .palco-emocao{position:static;min-height:32px}
 .cena-topo-dir{margin-left:auto;display:flex;gap:8px}
-.cena-topo .db-botao{position:static;min-height:44px}
 .cena-fala{position:absolute;z-index:3;right:6%;top:40%;max-width:min(52%,320px);min-height:44px;flex-direction:column;align-items:center;
   text-align:center;cursor:pointer}
 .cena-fala small{font-size:11px;font-weight:700;color:var(--dl-text-2)}

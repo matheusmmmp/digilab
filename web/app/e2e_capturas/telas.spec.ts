@@ -29,11 +29,11 @@ const SAVE_TR_FORCAR = JSON.parse(readFileSync(new URL("../e2e/save_treino_forca
 /* o mundo no jogo (docs/TAREFA_V2_MVP_MUNDO_PRODUTO.md, etapa 2): o Gomamon v12 do e2e do mundo, com a racao no comedouro */
 const SAVE_MUNDO = JSON.parse(readFileSync(new URL("../e2e/save_mundo.json", import.meta.url), "utf8"));
 const TELAS: [string, string, object, object?][] = [
-  ["pet-estado", "#/pet/estado", SAVES.v3], ["crescer-treinar", "#/crescer/treinar", SAVES.v3], ["crescer-aprend", "#/crescer/aprend", SAVES.v3],
-  ["crescer-evolucao", "#/crescer/evolucao", SAVES.v3], ["crescer-itens", "#/crescer/itens", SAVES.v3], ["lutar-arena", "#/lutar/arena", SAVES.v3],
-  ["lutar-campanha", "#/lutar/campanha", SAVES.v3], ["lutar-fronteira", "#/lutar/fronteira", SAVES.v3], ["lutar-medalhas", "#/lutar/medalhas", SAVES.v3],
-  ["diario-registro", "#/diario/registro", SAVES.v3], ["diario-catalogo", "#/diario/catalogo", SAVES.v3], ["diario-cenarios", "#/diario/cenarios", SAVES.v3],
-  ["conversar", "#/conversar/chat", SAVES.v3], ["config", "#/config", SAVES.v3], ["pet-v11", "#/pet/estado", SAVE_V11],
+  ["pet-estado", "#/pet/estado", SAVES.champion], ["crescer-treinar", "#/crescer/treinar", SAVES.champion], ["crescer-aprend", "#/crescer/aprend", SAVES.champion],
+  ["crescer-evolucao", "#/crescer/evolucao", SAVES.champion], ["crescer-itens", "#/crescer/itens", SAVES.champion], ["lutar-arena", "#/lutar/arena", SAVES.champion],
+  ["lutar-campanha", "#/lutar/campanha", SAVES.champion], ["lutar-fronteira", "#/lutar/fronteira", SAVES.champion], ["lutar-medalhas", "#/lutar/medalhas", SAVES.champion],
+  ["diario-registro", "#/diario/registro", SAVES.champion], ["diario-catalogo", "#/diario/catalogo", SAVES.champion], ["diario-cenarios", "#/diario/cenarios", SAVES.champion],
+  ["conversar", "#/conversar/chat", SAVES.champion], ["config", "#/config", SAVES.champion], ["pet-v11", "#/pet/estado", SAVE_V11],
   ["lutar-exploracao-v6", "#/lutar/campanha", SAVE_ARENAS, TAMER_3],
   ["evolucao-momento", "#/crescer/evolucao", SAVE_EVO, TAMER_1], ["crescer-evolucao-v6", "#/crescer/evolucao", SAVE_ARENAS, TAMER_3],
   ["treino-pausa", "#/crescer/treinar", SAVE_TR_PAUSA], ["treino-forcar", "#/crescer/treinar", SAVE_TR_FORCAR],
@@ -50,9 +50,10 @@ async function semear(page: Page, save: object, tamer: object = { versao: 1, log
   }, [CHAVE, JSON.stringify(save), JSON.stringify(tamer)] as const);
 }
 
-/* as larguras: 390 e 1280; DIGILAB_CAPTURAS_LARGURAS="360" (por exemplo) troca a lista, com a altura do celular abaixo de 1100 px */
-const LARGURAS = (process.env.DIGILAB_CAPTURAS_LARGURAS ?? "390,1280").split(",").map(Number);
-for (const [largura, altura] of LARGURAS.map(l => [l, l >= 1100 ? 800 : l === 390 ? 844 : 800])) {
+/* a largura: so o monitor do Matheus, 1920 x 950 (D10, docs/TAREFA_V2_LAYOUT_HABITAT.md); DIGILAB_CAPTURAS_LARGURAS="390,1280" (por exemplo) troca a lista,
+   com a altura do celular abaixo de 1100 px e 800 px entre 1100 e 1899 */
+const LARGURAS = (process.env.DIGILAB_CAPTURAS_LARGURAS ?? "1920").split(",").map(Number);
+for (const [largura, altura] of LARGURAS.map(l => [l, l >= 1900 ? 950 : l >= 1100 ? 800 : l === 390 ? 844 : 800])) {
   for (const [nome, rota, save, tamer] of TELAS) {
     test(`${nome} em ${largura} px`, async ({ page }) => {
       await page.setViewportSize({ width: largura, height: altura });

@@ -30,9 +30,10 @@ import {
 import { ligarEscala } from "../../motor/catalogo.ts";
 
 const arg = (k: string): string | null => { const i = process.argv.indexOf("--" + k); return i < 0 ? null : process.argv[i + 1] ?? null; };
-const FAIXAS: Record<string, number> = { calibracao: 68101, conferencia: 70101 };
+/* as faixas reservadas (experiments/bancada/faixas.py): a primeira rodada e a segunda (calibracao2, conferencia2; DR2-2) */
+const FAIXAS: Record<string, number> = { calibracao: 68101, conferencia: 70101, calibracao2: 72101, conferencia2: 74101 };
 const faixa = arg("faixa"), saida = arg("saida"), parte = arg("parte");
-if (!faixa || !(faixa in FAIXAS)) throw new Error("--faixa calibracao | conferencia");
+if (!faixa || !(faixa in FAIXAS)) throw new Error("--faixa calibracao | conferencia | calibracao2 | conferencia2");
 if (!saida) throw new Error("--saida <arquivo.json>");
 if (parte !== null && !["p1", "p2", "p34"].includes(parte)) throw new Error("--parte p1 | p2 | p34");
 /* --disparo X: o multiplicador do disparo do tempo real por cima do RELOGIO_V14 */

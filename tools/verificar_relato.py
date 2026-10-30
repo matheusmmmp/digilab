@@ -48,7 +48,7 @@ CAMINHO_TESTE = re.compile(r"\btests/[\w/-]+\.py\b")
 # Os testes do jogo web: qualquer *.test.* ou *.spec.* sob web/app/, fora do node_modules: o Vitest em test/, o Playwright em e2e/, e as
 # pastas separadas das POCs, como e2e_poc/ e poc/ (achados do worker A, #355 e #358). O CI não roda esses.
 CAMINHO_TESTE_WEB = re.compile(r"\bweb/app/(?!node_modules/)(?:[\w.-]+/)*[\w.-]+?\.(?:test|spec)\.(?:ts|tsx|js)\b")
-CAMINHO_PLANO = re.compile(r"\bdocs/PLANO_ANALISE_V2_[\w-]+\.md\b")
+CAMINHO_PLANO = re.compile(r"\bdocs/PLANO_ANALISE_V[23]_[\w-]+\.md\b")
 LINK_MD = re.compile(r"\[[^\]]*\]\(([^)\s]+)\)")
 SUCESSO = re.compile(r"\b(testes?|su[ií]te|ci|pytest)\b[^\n]{0,60}?\b(passa|passam|passaram|passou|passed|verde|ok)\b", re.I)
 DOCUMENTO = re.compile(r"(^docs/|\.md$|^\.github/pull_request_template\.md$)")
@@ -174,11 +174,11 @@ def verificar(corpo_bruto: str, mudados: list[str], raiz: Path) -> list[Item]:
         return itens
 
     tarefa = campo(corpo, "Tarefa") or ""
-    m = re.search(r"docs/TAREFA_V2_[\w-]+\.md", tarefa)
+    m = re.search(r"docs/TAREFA_V[23]_[\w-]+\.md", tarefa)
     if m:
         itens.append(Item("a tarefa existe", "VERIFICADA", (raiz / m.group(0)).exists(), m.group(0)))
     else:
-        itens.append(Item("a tarefa existe", "VERIFICADA", False, "o campo Tarefa não cita docs/TAREFA_V2_*.md"))
+        itens.append(Item("a tarefa existe", "VERIFICADA", False, "o campo Tarefa não cita docs/TAREFA_V2_*.md nem docs/TAREFA_V3_*.md"))
 
     # 2. A frase de sucesso é sempre só declarada.
     for frase in SUCESSO.finditer(corpo):

@@ -274,3 +274,32 @@ def test_tabela_separa_declarada_de_verificada(tmp_path):
     raiz = raiz_minima(tmp_path)
     saida = vr.tabela(vr.verificar(corpo("documentacao"), [], raiz))
     assert "| DECLARADA |" in saida and "| VERIFICADA |" in saida and "não é prova" in saida
+
+
+def test_tarefa_v3_existente_passa_e_inexistente_reprova(tmp_path):
+    raiz = raiz_minima(tmp_path)
+    (raiz / "docs" / "TAREFA_V3_X.md").write_text("# TAREFA V3 — X\n", encoding="utf-8")
+    assert falhas(vr.verificar(corpo("documentacao", tarefa="`docs/TAREFA_V3_X.md`"), [], raiz)) == []
+    c = corpo("documentacao", tarefa="`docs/TAREFA_V3_NAO_HA.md`")
+    assert [i.regra for i in falhas(vr.verificar(c, [], raiz))] == ["a tarefa existe"]
+
+
+def test_tarefa_sem_prefixo_reconhecido_cita_os_dois_na_mensagem(tmp_path):
+    raiz = raiz_minima(tmp_path)
+    itens = falhas(vr.verificar(corpo("documentacao", tarefa="`docs/TAREFA_V4_X.md`"), [], raiz))
+    assert "TAREFA_V2_*.md" in itens[0].detalhe and "TAREFA_V3_*.md" in itens[0].detalhe
+
+
+def test_experimento_aceita_plano_v3(tmp_path):
+    raiz = raiz_minima(tmp_path)
+    _git(raiz, "init", "-q")
+    artefato = raiz / "artifacts_v2_x" / "metrics.json"
+    artefato.parent.mkdir()
+    for arq in (raiz / "docs" / "PLANO_ANALISE_V3_X.md", artefato):  # o plano V3 entra antes do artefato
+        arq.write_text("{}\n", encoding="utf-8")
+        _git(raiz, "add", "-A")
+        _git(raiz, "commit", "-q", "-m", arq.name)
+    exp = EXP.replace("PLANO_ANALISE_V2_X", "PLANO_ANALISE_V3_X")
+    itens = vr.verificar(corpo("experimento", exp), ["artifacts_v2_x/metrics.json"], raiz)
+    assert falhas(itens) == []
+    assert any(i.regra == "plano de análise citado" and "PLANO_ANALISE_V3_X" in i.detalhe for i in itens)

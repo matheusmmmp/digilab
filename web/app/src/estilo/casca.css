@@ -1,18 +1,25 @@
 /* Casca "habitat em tela cheia" (docs/TAREFA_V2_LAYOUT_HABITAT.md, M2). Camadas, de baixo para cima:
    1. o habitat (a cena do Pet) ocupa a janela e fica montado em toda rota; um veu o escurece quando ha painel aberto;
-   2. a tela Pet (balcao dos baloes, doca de acoes; no desktop, o quadro a direita) ou o painel do destino (PainelTela);
+   2. a tela Pet (balcao dos baloes, doca de acoes) ou o painel do destino (PainelTela);
    3. o topo flutuante (retrato, logo, relogio e salvo; tokens --dl-*) e a navegacao (trilho a partir de 900 px, barra abaixo; pele hx-*).
    Variaveis: --casca-barra (altura da barra de baixo, 0 com o trilho), --casca-trilho (largura do trilho), --hab-baixo (o que a doca
-   da tela Pet tira do habitat, escrito por TelaPet), --painel-larg e --quadro-larg (o que o painel e o quadro tiram da direita). */
+   da tela Pet tira do habitat, escrito por TelaPet) e --painel-larg (o que o painel tira da direita). */
 :root{
   --casca-topo:64px; --casca-barra:calc(64px + env(safe-area-inset-bottom, 0px)); --casca-trilho:0px;
-  --painel-larg:min(760px,64vw); --quadro-larg:min(740px,58vw);
+  --painel-larg:min(760px,64vw);
 }
 @media (min-width:900px){ :root{ --casca-barra:0px; --casca-trilho:76px } }
+/* monitor de 1920 px (D10): o painel com o pet ainda visivel ao lado, 840 px de largura */
+@media (min-width:1600px){ :root{ --painel-larg:852px } }
 body:has(.app--habitat){ overflow:hidden }
 
 .app--habitat{ display:block; min-height:100dvh; padding:0; position:relative }
-.app--habitat > .aviso{ position:fixed; z-index:45; top:var(--casca-topo); left:var(--casca-trilho); right:0 }
+/* avisos: no celular, faixa sob o topo; a partir de 900 px, cartoes pequenos no canto inferior esquerdo (fora do dock, dos botoes da borda direita e do painel) */
+.avisos > .aviso{ position:fixed; z-index:45; top:var(--casca-topo); left:var(--casca-trilho); right:0 }
+@media (min-width:900px){
+  .avisos{ position:fixed; z-index:45; left:calc(var(--casca-trilho) + 12px); bottom:12px; width:min(400px,calc(50vw - 560px)); min-width:300px; display:flex; flex-direction:column; gap:6px; pointer-events:none }
+  .avisos > .aviso{ position:static; pointer-events:auto; border:1px solid var(--dl-erro); border-radius:0; padding:6px 10px; font-size:13px; line-height:1.3 }
+}
 
 /* ---------- habitat */
 .habitat{ position:fixed; z-index:0; top:0; left:var(--casca-trilho); right:0; bottom:var(--hab-baixo, 0px) }
@@ -31,13 +38,6 @@ body:has(.app--habitat){ overflow:hidden }
 .pet-balcao .cena-topo{ top:calc(var(--casca-topo) + 4px) }
 .pet-balcao .cena-fala{ top:calc(var(--casca-topo) + 40px) }
 .pet-balcao .balao-causa{ left:auto; right:9%; top:auto; bottom:30%; z-index:3 }
-@media (min-width:1100px){
-  .app--pet .pet-tela{ display:block }
-  .app--pet .habitat{ right:var(--quadro-larg) }
-  .app--pet .pet-balcao{ position:absolute; top:0; left:0; right:var(--quadro-larg); bottom:0 }
-  .pet-quadro{ position:absolute; top:calc(var(--casca-topo) + 8px); right:12px; bottom:12px; width:calc(var(--quadro-larg) - 12px); overflow:hidden }
-  .pet-quadro .quadro{ height:100%; min-height:0 }
-}
 
 /* ---------- topo flutuante */
 .topo-hab{ position:fixed; z-index:20; top:0; left:var(--casca-trilho); right:0; height:var(--casca-topo); display:flex; align-items:center; gap:10px; padding:0 12px; pointer-events:none }

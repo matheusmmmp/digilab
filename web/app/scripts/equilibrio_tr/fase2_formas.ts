@@ -11,7 +11,7 @@
    - F-7 cada sombria (o epsilon minimo dela) contra as 8 formas adultas normais.
    No limite, a luta fica com a fracao de vida (sem desafiado): sao lutas de forca, e os lados trocam.
    As sementes: as da fase 1 (a faixa reservada, 5 bases x 20, hashSemente("equilibrio-tr", base, k)); 200 lutas por celula.
-   --listas v14: as listas candidatas da rodada (LISTAS_V14, bots.ts); --variante <nome>: uma variante da grade (VARIANTES, abaixo),
+   --listas v14: as listas candidatas da rodada (LISTAS_V14, LISTAS_V14_R1, bots.ts); --variante <nome>: uma variante da grade (VARIANTES, abaixo),
    aplicada por cima.
    --disparo X: o multiplicador do disparo do tempo real (RelogioTR.disparo) por cima do relogio.
    uso (em web/app): npx tsx scripts/equilibrio_tr/fase2_formas.ts --faixa calibracao [--listas v14] [--variante <nome>] [--disparo X] --saida <arquivo.json> */
@@ -26,9 +26,10 @@ import {
 import { VARIANTES } from "./variantes_fase2.ts";
 
 const arg = (k: string): string | null => { const i = process.argv.indexOf("--" + k); return i < 0 ? null : process.argv[i + 1] ?? null; };
-const FAIXAS: Record<string, number> = { calibracao: 68101, conferencia: 70101 };
+/* as faixas reservadas (experiments/bancada/faixas.py): a primeira rodada e a segunda (calibracao2, conferencia2; DR2-2) */
+const FAIXAS: Record<string, number> = { calibracao: 68101, conferencia: 70101, calibracao2: 72101, conferencia2: 74101 };
 const faixa = arg("faixa"), saida = arg("saida"), variante = arg("variante");
-if (!faixa || !(faixa in FAIXAS)) throw new Error("--faixa calibracao | conferencia");
+if (!faixa || !(faixa in FAIXAS)) throw new Error("--faixa calibracao | conferencia | calibracao2 | conferencia2");
 if (!saida) throw new Error("--saida <arquivo.json>");
 if (variante !== null && !VARIANTES[variante]) throw new Error("variante desconhecida: " + variante);
 /* --relogio v13: so para o diagnostico (o relogio dos pets v13); a fase 2 mede em cima do candidato da fase 1 */
@@ -38,7 +39,7 @@ const disparo = arg("disparo") === null ? {} : { disparo: Number(arg("disparo"))
 if ("disparo" in disparo && !(disparo.disparo > 0)) throw new Error("--disparo precisa ser um numero > 0");
 const R: RegrasLuta = { ...CV21E_TR, relogio: { ...(arg("relogio") === "v13" ? RELOGIO_V13 : RELOGIO_V14), ...JSON.parse(arg("relogio-diag") ?? "{}"), ...disparo } };
 /* as listas da rodada: a semente de hoje, as candidatas (--listas v14) e a variante por cima */
-const LISTAS: Record<string, ListaGambits> = { ...(arg("listas") === "v14" ? LISTAS_V14 : {}), ...(variante ? VARIANTES[variante]() : {}) };
+const LISTAS: Record<string, ListaGambits> = { ...(arg("listas") === "v14" ? LISTAS_V14 : arg("listas") === "v14r1" ? LISTAS_V14_R1 : {}), ...(variante ? VARIANTES[variante]() : {}) };
 const SEMENTES_POR_BASE = 20;
 const bases = [0, 1, 2, 3, 4].map(i => FAIXAS[faixa] + 101 * i);
 const sementes = bases.flatMap(b => Array.from({ length: SEMENTES_POR_BASE }, (_, k) => hashSemente("equilibrio-tr", b, k)));

@@ -157,8 +157,9 @@ Object.values(GAMBITS_ARENA).forEach(validarLista);
 /* as listas candidatas da rodada de equilibrio do tempo real (docs/EQUILIBRIO_COMBATE_TR.md, fase 2; PROPOSTO): a chave e a forma
    adulta, a sombria, a linha do adolescente ou o ramo da crianca. Ainda nao pertencem a nenhuma versao de pet: so a bancada
    (scripts/equilibrio_tr/) as usa, e a v14 (DE-1) liga todas no fim da rodada. Calibradas so nas sementes de calibracao (68101 a 68505),
-   em cima do RELOGIO_V14: a variante r3a da grade (web/app/scripts/medicoes/equilibrio_tr/fase2/grade3/r3a.json) */
-export const LISTAS_V14: Readonly<Record<string, ListaGambits>> = {
+   em cima do RELOGIO_V14: a variante r3a da grade (web/app/scripts/medicoes/equilibrio_tr/fase2/grade3/r3a.json). Estas sao as da
+   primeira rodada (LISTAS_V14_R1, a base das variantes da segunda); as candidatas de hoje, LISTAS_V14, levam as da segunda por cima */
+export const LISTAS_V14_R1: Readonly<Record<string, ListaGambits>> = {
   /* as formas de longe: contra o preparo de perto, o golpe rapido interrompe (a esquiva no tempo real cai antes do pesado); o cacador
      do Champion, de perto, bate em vez de recuar; o emboscador marca e dispara desde o comeco (sem esperar 10 s) */
   cacador: { regras: [Rg([PREP, D0], "esquivar"), Rg(D0, "golpe_rapido"), Rg(GA_(40), "marcar"), Rg(GA_(20), "disparo"), Rg(D1, "recuar")], final: "carregar" },
@@ -177,7 +178,31 @@ export const LISTAS_V14: Readonly<Record<string, ListaGambits>> = {
     final: "carregar" },
   bastiao_rachado: { regras: [Rg([D0, GA_(40)], "contra_golpe"), Rg(GB_(40), "carregar"), Rg(Cd("sempre"), "avancar")], final: "defender" },
 };
-Object.values(LISTAS_V14).forEach(validarLista);
+Object.values(LISTAS_V14_R1).forEach(validarLista);
+/* a segunda rodada, fase R2-1 (docs/PLANO_EQUILIBRIO_COMBATE_TR_R2.md; PROPOSTO): a variante r2c_b da grade, so nas sementes de calibracao
+   da segunda rodada (72101 a 72505; web/app/scripts/medicoes/equilibrio_tr/r2_1/grade3/r2c_b_formas.json). Por cima das da primeira:
+   - o vigia so poe a pele dura de perto com Guts 60 (era 40): o espelho do vigia travava no limite (T-2);
+   - o duelista so faz a investida do medio com Guts 40; o espelho bate de perto com Guts 40 (era 60);
+   - a muralha sem o contra-golpe na investida frequente; o cacador do Champion sem o recuo do medio;
+   - o sereno do Rookie so bate com Guts 40 (era 20);
+   - o predador dispara do longe antes de marcar; o bastiao rachado devolve o golpe com Guts 60 (era 40) */
+const R2_1: Readonly<Record<string, ListaGambits>> = {
+  vigia: { regras: [Rg([Cd("oponente_vai_preparar"), FQ("pele_dura")], "recuar"), Rg([Cd("oponente_vai_preparar"), D0], "golpe_rapido"), Rg([D0, GA_(60)], "pele_dura"),
+    Rg([D0, FQ("esquivar")], "golpe_rapido"), Rg([D0, FQ("recuar")], "golpe_rapido"), Rg([D0, GA_(20)], "preparar_pesado"), Rg(D1, "avancar"), Rg(D2, "avancar")], final: "defender" },
+  duelista: { regras: [Rg(PREP, "esquivar"), Rg([D0, FQ("golpe_rapido")], "defender"), Rg([D1, GA_(40)], "investida"), Rg(D2, "avancar"),
+    Rg([D0, Cd("oponente_repete", "defender", 2)], "preparar_pesado"), Rg([D0, FQ("esquivar")], "preparar_pesado"), Rg([D0, GA_(40)], "preparar_pesado"), Rg(D0, "golpe_rapido")],
+    final: "defender" },
+  espelho: { regras: [Rg(PREP, "contra_golpe"), Rg(FQ("disparo"), "contra_golpe"), Rg(FQ("golpe_rapido"), "contra_golpe"), Rg(FQ("investida"), "contra_golpe"),
+    Rg([D0, Cd("oponente_repete", "defender", 2)], "preparar_pesado"), Rg([D0, GA_(40)], "golpe_rapido"), Rg(D2, "avancar")], final: "defender" },
+  muralha: { regras: [Rg(PREP, "contra_golpe"), REGRA_CONTRA_GOLPE_NA_PELE, Rg(FQ("disparo"), "contra_golpe"), Rg([FQ("golpe_rapido"), GA_(40)], "contra_golpe"),
+    Rg([D0, Cd("oponente_repete", "defender", 2)], "preparar_pesado"), Rg([D0, GA_(60)], "golpe_rapido"), Rg(D2, "avancar")], final: "defender" },
+  cacador: { regras: [Rg([PREP, D0], "esquivar"), Rg(D0, "golpe_rapido"), Rg(GA_(40), "marcar"), Rg(GA_(20), "disparo")], final: "carregar" },
+  sereno: { regras: [Rg(D2, "avancar"), Rg(D1, "avancar"), Rg([D0, GA_(40)], "golpe_rapido")], final: "defender" },
+  predador: { regras: [Rg([D2, GA_(20)], "disparo"), Rg([D1, GA_(20)], "disparo"), Rg([D2, GA_(40)], "marcar"), Rg(D2, "avancar"), Rg(D0, "golpe_rapido")], final: "carregar" },
+  bastiao_rachado: { regras: [Rg([D0, GA_(60)], "contra_golpe"), Rg(GB_(40), "carregar"), Rg(Cd("sempre"), "avancar")], final: "defender" },
+};
+Object.values(R2_1).forEach(validarLista);
+export const LISTAS_V14: Readonly<Record<string, ListaGambits>> = { ...LISTAS_V14_R1, ...R2_1 };
 
 /* lugares do mapa; vencer QUALQUER rival de um lugar abre o proximo (a Torre tem 3 rivais para nenhuma
    linha ficar travada; experiments/calibrar_progressao.py) */

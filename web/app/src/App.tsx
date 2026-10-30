@@ -191,6 +191,7 @@ export function App() {
 
   return (
     <div className={"app app--habitat " + (painel ? "app--painel" : "app--pet")}>
+      <div className="avisos">
       <AvisoSom />
       {jogo.erroSave && (
         <div className="aviso" role="alert">
@@ -211,6 +212,7 @@ export function App() {
             Rode <code>python gerar_decoracao_up.py</code> em D:\Trab\digilab\Assets.</p>
         </div>
       )}
+      </div>
       <DicaBit />
       {/* o habitat (a cena do Pet) e a camada de fundo de toda rota: fica montado, nao sobe nem desce ao trocar de destino */}
       <Habitat escurecer={!!painel} />
