@@ -226,7 +226,8 @@ v14, calibrado nesta rodada. A base (o disparo e o pesado de `CV` e do perfil) n
 - **`RelogioTR.disparo`** (`web/app/motor/combate_tr/constantes_tr.ts`) multiplica o dano do disparo na luta em tempo real
   (`combate_tr/luta.ts`). Na v13 vale 1, e as vidas v13 conferem iguais.
 - **As bancadas das fases 2 e 3 ganharam `--disparo X`;** a da fase 1 já aceitava `--relogio '{"disparo":X}'`.
-- **O candidato fica em 1** (seção abaixo): o `RELOGIO_V14` não muda.
+- **O candidato liga o 6×** (`RELOGIO_V14.disparo = 6`, PROPOSTO), pela DE-9 (seção abaixo). Nenhuma luta do jogo muda: a v14 só liga
+  no fim da rodada (DE-1).
 
 ### A grade (só as sementes de calibração; no máximo 4 processos em paralelo; `disparo/grade1/` a `grade3/`)
 
@@ -265,3 +266,12 @@ v14, calibrado nesta rodada. A base (o disparo e o pesado de `CV` e do perfil) n
   Champion, P-3 no Champion e P-4 no Ultimate, e quase fecha F-6 e F-7. O custo é a luta mais curta: as séries ficam mais rápidas, e as
   regras aprendidas têm menos tempo para pesar (o custo que a DE-7 registrou). Se a DE-7 ficar, o disparo fica em 1, e a fase 4 começa
   com as formas de longe fracas. A decisão é dele, e nenhum número muda até lá.
+
+### A decisão (DE-9)
+
+- **O Matheus seguiu a recomendação** (2026-10-30; o plano a registra como DE-9): o `RELOGIO_V14` liga o disparo a **6×**, PROPOSTO.
+- **O T-1 fica reprovado e registrado como está** (34,8 s / 32,9 s; `disparo/conferencia_d6/relogio_calibracao.json`). A faixa da DE-7
+  não muda, e a regra da seção 5 do plano não se aplica a este número, por decisão dele.
+- **As metas do candidato passam a ser as da coluna "com 6×"** da tabela acima, medidas com o mesmo relógio (`disparo/conferencia_d6/`,
+  o commit `24bf93a`, o mesmo código de hoje com `--disparo 6`). A fase 4 parte deste candidato.
+- **As bancadas** agora leem o 6× do `RELOGIO_V14`; os artefatos das fases 1 a 3 com disparo 1 se reproduzem com `--disparo 1`.
