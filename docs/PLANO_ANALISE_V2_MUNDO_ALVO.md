@@ -1,5 +1,8 @@
 # Plano de análise — V2: o mundo físico com o alvo aprendido (aprender para onde ir ajuda a procurar?)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Status (2026-10-13): **PROPOSTO**, registrado **antes de qualquer run**. **PMA-1 a PMA-9 DECIDIDAS pelo Matheus em 2026-10-13, todas
 pela recomendação** (seção 13). Este plano segue o resultado negativo da validação do mundo físico (`docs/RESULTADO_V2_VALIDACAO_MUNDO.md`,
 #285) e herda dele o mundo, as medidas e as regras, salvo onde diz o contrário.

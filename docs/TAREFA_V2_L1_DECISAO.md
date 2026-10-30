@@ -1,5 +1,8 @@
 # TAREFA V2 — L1-DECISAO (2026-10-01)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: chat "Principais jogos Digimon com diálogo" (coordenação da V2). Worker: o mesmo da L0 (chat B). Worktree e branch: `v2-l1-decisao`.
 Status: ABERTA (começa só com o PR #108, L0, na `main`).
 

@@ -1,5 +1,8 @@
 # Plano de análise — N6: memória de episódios no mundo das frutas (quatro marcos)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Status: **registrado antes de qualquer dado** (2026-10-04). Tarefa `docs/TAREFA_V2_N6_PLANO.md`; nó N6 do `docs/ROADMAP_V2.md` (R6.2) e
 de `docs/ARQUITETURA_V2_VALIDACAO.md` (seção 5); hipóteses H-MEM-001 e H-MEM-02 de `docs/research/digibrain/mechanisms/episodic_memory.md`.
 **Só papel:** nenhuma run, nenhum código. Todo número citado aponta o artefato; os números de desenho sem fonte estão marcados PROPOSTO; o

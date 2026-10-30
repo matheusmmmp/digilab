@@ -1,5 +1,8 @@
 # Resultado — V2: a validação do pet que pensa (J5)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Data: 2026-10-18. Plano: `docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md`, seções 6 e 7, com o desenho do adendo 5 (a fruta ao lado da ração) e os
 números congelados do adendo 6. Autorizada pelo Matheus em 2026-10-18. **Rodou uma vez.**
 

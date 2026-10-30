@@ -12,7 +12,8 @@ evolutivo com IA, inspirado em Tamagotchi e Digimon.
 - **A pesquisa** fica no Python e serve ao produto e aos mecanismos do DigiBrain: um pet com corpo químico, objetos, outro pet e um
   dono.
 - **O jogo** fica em `web/app/` e roda hoje o A v11. O modular entra por módulos, cada um com paridade.
-- **Onde a V2 está agora:** `docs/PAINEL_V2.md`, uma página.
+- **Onde a V3 está agora:** `docs/PAINEL_V3.md`, uma página. O plano é o `docs/PLANO_V3.md` (as trilhas C cérebro, L layout e B
+  batalha). A V2 está congelada na tag `v2-final`, com o estado de cada tarefa em `docs/FECHAMENTO_V2.md`.
 
 ## Regras não negociáveis
 
@@ -36,7 +37,8 @@ evolutivo com IA, inspirado em Tamagotchi e Digimon.
 
 ## Pesquisa: o método
 
-- **Nenhuma run sem plano de análise registrado antes** (`docs/PLANO_ANALISE_V2_*.md`, commitado antes da primeira vida).
+- **Nenhuma run sem plano de análise registrado antes** (`docs/PLANO_ANALISE_V3_*.md`, ou um adendo ao
+  `PLANO_ANALISE_V2_*` de uma frente herdada, commitado antes da primeira vida).
 - **Sementes:**
   - os testes usam 101…505 e as sementes pequenas dos próprios testes;
   - toda run de pesquisa usa uma faixa reservada em `experiments/bancada/faixas.py` (`FAIXAS_RESERVADAS`, reexportada pelo
@@ -44,7 +46,9 @@ evolutivo com IA, inspirado em Tamagotchi e Digimon.
   - uma faixa nova é pedida ao coordenador e entra na tabela antes da run;
   - as faixas em `FAIXAS_QUEIMADAS` não voltam.
 - **Calibração e validação:** a calibração usa só as sementes dela. A validação roda **uma vez**, e nada se ajusta olhando para ela.
-  Gate que falha não para a V2: o resultado negativo é registrado como está.
+  Gate que falha não para a V3: o resultado negativo é registrado como está.
+- **A máquina (V3-D8):** no máximo 4 processos por run e uma run de pesquisa por vez (as medições do combate contam), até o teste
+  da BIOS FP.
 - **Referências:** só as verificadas (a skill `literatura-digilab`). Onde não há, escrever SEM FONTE. Nunca alegar novidade.
 - **Números novos são PROPOSTOS** até o Matheus decidir. Toda decisão levada a ele vai com a recomendação e o custo de errar.
 - **Decisões que valem:**
@@ -55,14 +59,19 @@ evolutivo com IA, inspirado em Tamagotchi e Digimon.
 
 ## Trabalho em paralelo
 
-- **A pasta `D:\Trab\digilab\v2`** é só a referência da `main`: ninguém troca o branch dela.
-- **Cada frente trabalha numa worktree própria,** `D:\Trab\digilab\v2-<frente>`, no branch `v2-<frente>`, criada de `origin/main`.
-- **A tarefa de cada frente** fica em `docs/TAREFA_V2_<FRENTE>.md`; o modelo está em `docs/modelos/TAREFA_V2_MODELO.md`.
+**"V3" nos documentos antigos não é a fase nova:** a V3-9, a V3-3/4, o `digibrain_v3` e o `TAREFA_V2_V3` são da V2; o
+`PLANO_ANALISE_V3.md` é da v1. O glossário completo está no `docs/PLANO_V3.md`, seção 8.
+
+- **A pasta `D:\Trab\digilab\v3`** é só a referência da `main`: ninguém troca o branch dela. A `D:\Trab\digilab\v2` fica congelada
+  como referência da V2.
+- **Cada frente trabalha numa worktree própria,** `D:\Trab\digilab\v3-<frente>`, no branch `v3-<frente>`, criada de `origin/main`.
+- **A tarefa de cada frente** fica em `docs/TAREFA_V3_<FRENTE>.md`; o modelo está em `docs/modelos/TAREFA_V3_MODELO.md`
+  (`python tools/nova_tarefa.py <FRENTE> --fase V3 ...`). As frentes herdadas da V2 continuam no `TAREFA_V2_*` delas.
 - **Um PR por tarefa ou etapa,** com o relato no corpo do PR. O worker entrega e para. **O merge é só do Matheus.**
 - **O desvio** (interpretação, número escolhido, achado) vai numa seção própria no fim de `docs/registro/AAAA-MM.md` (o mês da data),
   com data, nome e worker, e com uma linha no fim do índice `docs/REGISTRO_DESVIOS.md`.
-- **O resumo da etapa não vai no CLAUDE.md.** Vai no corpo do PR e numa seção no fim do documento da frente: o `RESULTADO_V2_*.md` da
-  run, ou o `TAREFA_V2_*.md` da etapa de código. O coordenador põe uma linha no `docs/PAINEL_V2.md`. Este arquivo só muda com o ok do
+- **O resumo da etapa não vai no CLAUDE.md.** Vai no corpo do PR e numa seção no fim do documento da frente: o `RESULTADO_V3_*.md` da
+  run, ou o `TAREFA_V3_*.md` da etapa de código (o `_V2_` numa frente herdada). O coordenador põe uma linha no `docs/PAINEL_V3.md`. Este arquivo só muda com o ok do
   Matheus.
 - **Nunca usar `git stash` sem nome:** o stash é compartilhado entre as worktrees.
 
@@ -99,9 +108,11 @@ evolutivo com IA, inspirado em Tamagotchi e Digimon.
 
 | o quê | onde |
 |---|---|
-| estado da V2 em uma página (marcos, runs, decisões abertas, riscos) | `docs/PAINEL_V2.md` |
-| marcos J1–J10 e o plano da V2 | `docs/ROADMAP_V2.md` (seção 8), `docs/PLANO_V2_PESQUISA.md` |
-| tarefa, plano e resultado de cada frente | `docs/TAREFA_V2_*.md`, `docs/PLANO_ANALISE_V2_*.md`, `docs/RESULTADO_V2_*.md` |
+| estado da V3 em uma página (trilhas, missões, decisões abertas, riscos) | `docs/PAINEL_V3.md` |
+| o plano da V3, as decisões V3-D1 a V3-D8 e o glossário V2 × V3 | `docs/PLANO_V3.md` |
+| o fechamento da V2 (a marca de cada tarefa e marco) | `docs/FECHAMENTO_V2.md`; a V2 congelada na tag `v2-final` |
+| marcos J1–J10 e o plano da V2 (congelados) | `docs/ROADMAP_V2.md` (seção 8), `docs/PLANO_V2_PESQUISA.md` |
+| tarefa, plano e resultado de cada frente | `docs/TAREFA_V3_*.md`, `docs/PLANO_ANALISE_V3_*.md`, `docs/RESULTADO_V3_*.md`; os `_V2_` da V2 e das frentes herdadas |
 | desvios e interpretações | o índice `docs/REGISTRO_DESVIOS.md`; as seções em `docs/registro/AAAA-MM.md` |
 | ideias e desenhos ainda sem tarefa | `docs/futuro/` |
 | mapa do repositório arquivo a arquivo e todos os comandos | `docs/MAPA_REPOSITORIO.md` |

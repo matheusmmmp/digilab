@@ -1,5 +1,8 @@
 # Resultado — V2: a validação do mundo físico
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Data: 2026-10-13. Plano: `docs/PLANO_ANALISE_V2_MUNDO_FISICO.md`, seções 7 e 8 e adendo 1 (A1.2, A1.3, A1.5, A1.8), com os números
 congelados na A1.9. Autorizada pelo Matheus em 2026-10-12. Uma run, sem nada ajustado depois.
 

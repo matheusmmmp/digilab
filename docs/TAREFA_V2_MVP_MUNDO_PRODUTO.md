@@ -1,5 +1,8 @@
 # TAREFA V2 — MVP_MUNDO_PRODUTO: o mundo físico no jogo, com a comida posta pelo jogador (2026-10-24)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: Gerente (Claude Code). Worker: a definir (o A, dono da web, é o candidato natural). Worktree e branch: `v2-mvp-mundo-<etapa>`.
 Status: **MVP na `main`** (2026-10-24): a etapa 0 (#401), a etapa 1 (#403, o pet v12 com o mundo e o G-PAR) e a etapa 2 (#404, a tela,
 o gesto e o caminho acessível). As MV-1 a MV-10 DECIDIDAS (seção 8). **Ressalva de produto registrada no fim da seção 9:** a cadeia

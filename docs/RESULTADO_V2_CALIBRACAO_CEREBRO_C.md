@@ -1,5 +1,8 @@
 # Resultado — V2, calibração do cérebro C (Fly-like) (2026-10-06)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Tarefa `docs/TAREFA_V2_CALIBRACAO_CEREBROS_B_C.md` (rodada 11). Grades e regras do **adendo 1, seção 1.2**, de
 `docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md`, conferido pelo coordenador. Uma run, nesta worktree, depois do commit do orquestrador e da
 config (`30892e2`).

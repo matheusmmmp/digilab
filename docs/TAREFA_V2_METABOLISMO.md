@@ -1,5 +1,8 @@
 # TAREFA V2 — METABOLISMO ENERGÉTICO: conversão, reserva e mobilização no corpo (2026-10-08)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: Gerente. Workers: **B** (o corpo e o grafo, depois do Digicorpo), **D** (o regime na bancada), **A** (o porte para a web,
 depois) e **C** (o adendo do plano do corpo). Worktree e branch de cada etapa: `v2-metabolismo-<etapa>`. Status: **ABERTA.** **ME-1 a ME-7
 DECIDIDAS pelo Matheus em 2026-10-11, todas pela recomendação** (seção 9).

@@ -1,5 +1,8 @@
 # Tarefa — V2: o corpo mínimo e os drives de tédio, curiosidade e solidão (W-TAREFA-CORPO, rodada 16)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Status (2026-10-07): **PROPOSTO**. Só papel. Esta tarefa não autoriza run de pesquisa: o efeito dos drives novos é medido por um plano
 próprio, `docs/PLANO_ANALISE_V2_CORPO_DRIVES.md`, commitado antes de qualquer run (seção 13).
 

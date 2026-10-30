@@ -1,5 +1,8 @@
 # TAREFA V2 — EVOLUCAO (2026-10-21)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: Gerente. Worker: A. Worktree e branch: `v2-evolucao`, a partir da `main` (30500c3). Status: ENTREGUE (PR, espera o ok visual e o merge).
 
 Categoria: implementacao. Origem: Matheus, 2026-10-21, pelo Gerente. A referência é a quinta tela de

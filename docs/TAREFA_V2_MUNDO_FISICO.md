@@ -1,5 +1,8 @@
 # Tarefa — V2: o mundo físico mínimo (W-TAREFA-MUNDO, rodada 16)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Status (2026-10-07): **PROPOSTO**. **MF-1 a MF-4 DECIDIDAS pelo Matheus em 2026-10-07, todas pela recomendação** (seção 11). Só papel. Esta tarefa não autoriza run; o plano de análise é `docs/PLANO_ANALISE_V2_MUNDO_FISICO.md`,
 commitado junto, antes de qualquer run.
 

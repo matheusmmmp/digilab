@@ -72,6 +72,14 @@ em texto de dissertação ou artigo, ler o artigo.
    Wisdom, 2002, pp. 567-578. Existência e paginação confirmadas em três listas de referências
    revisadas por pares; texto não consultado. É a fonte técnica de primeira mão sobre o aprendizado
    em Black & White e a lacuna mais relevante da revisão.
+9. **Nunca afirmar que juntar corpo com homeostase, aprendizado em vida e memória episódica num
+   agente é novo** (C0 da V3, 2026-10-30). A combinação já foi publicada em Creatures (Grand e Cliff
+   `10.1023/A:1010042522104`), Gadanho e Hallam `10.1177/105971230200900102`, Ho, Dautenhahn e
+   Nehaniv (`10.1109/cec.2005.1554734`, `10.1080/09540090801889469`, a tese `10.18745/th.14271`) e
+   Goertzel et al. 2008 (sem DOI); a triagem também a acha em Zamin e no Rity, ainda SEM FONTE. O que
+   se pode dizer, sem alegar novidade, é o que o projeto faz: teste causal com braço de controle, num
+   pet persistente, com replay determinístico. Tabela: `v3c0_referencias_verificadas.csv`; síntese:
+   `V3C0_SINTESE_TRIAGEM_2026-10-30.md`.
 
 ## A lacuna central (o que de fato não existe)
 
@@ -124,7 +132,7 @@ Esses três são a referência externa para interpretar o gate de σ²_genoma do
 
 ## Afirmações do projeto sem suporte na literatura
 
-Oito, detalhadas na seção "Afirmações sem suporte" do `revisao_alife_linhagem.md`. As de maior custo:
+Nove, detalhadas na seção "Afirmações sem suporte" do `revisao_alife_linhagem.md` (a nona, da C0 da V3, é a regra 9 acima). As de maior custo:
 novidade de "ensinado, não roteirizado" (regra 3); novidade de herdar o prior (regra 2); apego entre
 gerações de pet virtual (zero evidência revisada por pares localizada); "Artificial Life como lente
 teórica acrescentando poder explicativo" (Bedau `10.1016/j.tics.2003.09.012` sustenta o vocabulário,

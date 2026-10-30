@@ -1,5 +1,8 @@
 # Plano de análise — V2: a rede de si em observação (etapa 2 do ego)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Status (2026-10-08): **PROPOSTO**, registrado **antes de qualquer run**. É a etapa 4 de `docs/TAREFA_V2_REDE_DE_SI.md`. As decisões da
 tarefa (RS-1 a RS-7) foram **DECIDIDAS pelo Matheus em 2026-10-08, todas pela recomendação**. As deste plano (PRS-1 a PRS-5,
 seção 12) foram **DECIDIDAS em 2026-10-11, todas pela recomendação**.

@@ -1,5 +1,8 @@
 # TAREFA V2 — FASES_POSTERIORES: multiplayer, social, genética ampla e comunicação avançada (2026-10-24)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: Gerente (Claude Code). Status: **ABERTA, só papel; não começa antes do MVP.** É uma tarefa-guarda-chuva: registra o que fica
 para depois e por quê, para que nada disso bloqueie o primeiro produto jogável. Cada item vira tarefa própria quando chegar a vez.
 

@@ -1,5 +1,8 @@
 # TAREFA V2 — CHATGPT_CLAUDE_POC (2026-10-18)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: ChatGPT Work. Worker: ChatGPT Work (documentação). Worktree e branch: `v2-chatgpt-claude-poc`. Status: ENTREGUE (PR aberto, sem merge; execução Claude Code pendente).
 
 Categoria: documentacao. Origem: ChatGPT Work, 2026-10-18: pedido do Matheus para criar uma POC de fluxo rastreável entre ideia em Issue, tarefa V2, worker Claude Code e revisão via PR (Issue #336).

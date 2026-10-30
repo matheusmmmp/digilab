@@ -1,5 +1,8 @@
 # TAREFA V2 — WORLD_POC_02 (2026-10-19)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: Gerente. Worker: A. Worktree e branch: `v2-world-poc-02`. Status: ENTREGUE (E0 a E3; a E4, o Android mais simples, fica para quando houver o aparelho). **O Gate B foi APROVADO pelo Matheus em 2026-10-19**, com a ressalva de que foi com o cérebro de teste e só em TS (CP-7). O mundo 3D fica PAUSADO até o Gate C (a P4 espera o J5).
 
 Categoria: implementacao. Origem: Matheus, 2026-10-19: o Gate B do mundo 3D (organismo corporificado, ainda com o cérebro de teste), depois do Gate A aprovado em 2026-10-19.

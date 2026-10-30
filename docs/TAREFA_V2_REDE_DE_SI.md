@@ -1,5 +1,8 @@
 # TAREFA V2 — DIGICORPO (a rede de si): o automodelo em observação (etapa 2 do ego) (2026-10-08)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 **Nome (2026-10-08):** a rede de si se chama **Digicorpo** (`docs/DEFINICOES_CORPO_V2.md`, seção 8). O código, o arquivo desta tarefa e
 o prefixo das sementes continuam `rede_de_si`. As decisões já registradas (E-6, RS-7) ficam com a redação delas.
 

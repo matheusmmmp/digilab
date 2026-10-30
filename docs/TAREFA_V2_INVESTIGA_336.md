@@ -1,5 +1,8 @@
 # TAREFA V2 — INVESTIGA_336 (2026-10-19)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: a sessão da INFRA-MULTIAGENTE. Worker: uma sessão nova do Claude Code, sem histórico. Worktree e branch: `v2-investiga-336`. Status: ABERTA.
 
 Categoria: arquitetura. Origem: ChatGPT Work, 2026-10-19: Issue #336 (POC do fluxo rastreável), aberta pelo Work; o Matheus pediu para enviar para investigação, sem implementar.

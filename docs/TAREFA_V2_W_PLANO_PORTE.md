@@ -1,5 +1,8 @@
 # TAREFA V2 — W-PLANO-PORTE: o plano do porte do cérebro A para a web, pets v11 (2026-10-07)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: chat "Principais jogos Digimon com diálogo". Worker: chat A. Worktree e branch: `v2-w-plano-porte`. Status: ABERTA. **Só
 papel: nenhum código.** Etapa W do `docs/ROADMAP_V2.md`.
 

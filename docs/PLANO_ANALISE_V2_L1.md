@@ -1,5 +1,8 @@
 # Plano de análise — V2, L1: o lobo de decisão aprende com o feedback como vantagem
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Status: **registrado antes de qualquer run** (2026-10-01; revisão 2 no mesmo dia, antes da calibração válida: ver seção 8). Nada foi
 rodado para escrever este plano. Os números citados vêm de artefatos em disco, e cada um aponta o arquivo; os valores sem fonte estão
 marcados PROPOSTO. Os gates G3–G6 são os do `docs/PLANO_V2_PESQUISA.md` (fase 1) com as definições D1–D4 de `docs/DEFINICOES_V2.md`

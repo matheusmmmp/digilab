@@ -1,5 +1,8 @@
 # Resultado — V2, A1: a bola sem aprendizado (validação única, 2026-10-01)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Plano `docs/PLANO_ANALISE_V2_A1.md` (commitado antes de qualquer run); desenho `docs/V2_A1_BOLA_DESENHO.md` (opção A, #113); calibração no
 PR #127 (`artifacts_v2_a1/calibracao/`). Validação: sementes **7101…7505, uma vez**, no ponto da calibração (duração 120 min, ganho 0,15,
 `w_bola` 6; `experiments/configs/v2_a1/validacao.json`). Números de `artifacts_v2_a1/validacao/` (`resultado.json`, `pet.json`,

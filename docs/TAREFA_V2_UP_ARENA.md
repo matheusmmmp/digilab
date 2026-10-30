@@ -1,5 +1,8 @@
 # TAREFA V2 — UP-ARENA: a arena em tempo real no jogo web (2026-10-29)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: sessão de coordenação da integração UP (Claude Code). Worker: Claude Code, Opus 5.5. Worktree e branch: `v2-up-arena`.
 Status: CORREÇÃO DO PET ENTREGUE, esperando a revisão e o merge do Matheus (etapa 0 na seção 10, porte na seção 11, no #446; a
 correção "é o pet que luta" na seção 12, branch `v2-up-arena-pet`; D1–D5 e P1–P4 decididas).

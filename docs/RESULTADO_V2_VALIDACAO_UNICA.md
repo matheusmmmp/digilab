@@ -1,5 +1,8 @@
 # Resultado — validação única do experimento maior da V2
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Plano `docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md`, adendos 1 a 4. Tarefas `docs/TAREFA_V2_V1_VALIDACAO_UNICA.md`, `docs/TAREFA_V2_V1_ADENDO3.md` e
 `docs/TAREFA_V2_V1_LIGAR.md`. Sinal verde do coordenador, autorizado pelo Matheus, depois do #191 e do #192.
 

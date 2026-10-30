@@ -1,5 +1,8 @@
 # Resultado — calibração conjunta do cérebro A (K2)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Tarefa `docs/TAREFA_V2_K2_CALIBRACAO_CONJUNTA.md`; plano `docs/PLANO_CALIBRACAO_CONJUNTA_V2.md` (K-1 a K-11). Run única em 2026-10-06,
 commit `5f288d6` (montagem completa da BANCADA-MONTAGEM, #178), sementes de calibração 14101…14505 com K = 4 (20 unidades), 14 dias,
 dono atencioso, ponto T3. Tempo: 4 h 12 min (a suíte inteira rodou ao mesmo tempo na máquina). Todo número abaixo vem de

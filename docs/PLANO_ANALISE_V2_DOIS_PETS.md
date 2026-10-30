@@ -1,5 +1,8 @@
 # Plano de análise — V2: dois pets, o degrau 1 (o B aprende o que só o A viveu?)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Status (2026-10-08): **PROPOSTO**, registrado **antes de qualquer run**. **PDP-1 a PDP-6 DECIDIDAS pelo Matheus em 2026-10-08, todas pela
 recomendação** (seção 12). É a etapa 6 de `docs/TAREFA_V2_DOIS_PETS.md`. O desenho é
 `docs/futuro/dois_pets.md`, com DP-1 a DP-12 decididas.

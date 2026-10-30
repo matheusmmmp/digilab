@@ -1,0 +1,508 @@
+{
+ "10.1177/105971230200900102": {
+  "doi": "10.1177/105971230200900102",
+  "title": "Robot Learning Driven by Emotions",
+  "type": "journal-article",
+  "year": 2001,
+  "issued": [
+   2001,
+   3
+  ],
+  "cont": "Adaptive Behavior",
+  "pub": "SAGE Publications",
+  "au": [
+   "Gadanho",
+   "Hallam"
+  ],
+  "volume": "9",
+  "issue": "1",
+  "page": "42-64",
+  "upd": [],
+  "updated_by": [],
+  "relation": {},
+  "abs": "The adaptive value of emotions in nature indicates that they might also be useful in artificial creatures. Experiments were carried out to investigate this hypothesis in a simulated learning robot. For this purpose, a non-symbolic emotion model was developed that takes the form of a recurrent artificial neural network where emotions both depend on and influence the perception of the state of the world. This emotion model was integrated in a reinforcement-learning architecture with three different roles: influencing perception, providing reinforcement value, and determining when to reevaluate decisions. Experiments to test and compare this emotion-dependent architecture with a more conventional architecture were done in the context of a solitary learning robot performing a survival task. This research led to the conclusion that artificial emotions are a useful construct to have in the domain of behavior-based autonomous agents with multiple goals and faced with an unstructured environment, because they provide a unifying way to tackle different issues of control, analogous to natural systems' emotions.",
+  "status": 200,
+  "consultado": "2026-10-30",
+  "trilha": "C2, C3"
+ },
+ "10.1007/978-3-540-39396-2_30": {
+  "doi": "10.1007/978-3-540-39396-2_30",
+  "title": "Comparing Different Control Architectures for Autobiographic Agents in Static Virtual Environments",
+  "type": "book-chapter",
+  "year": 2003,
+  "issued": [
+   2003
+  ],
+  "cont": "Lecture Notes in Computer Science",
+  "pub": "Springer Berlin Heidelberg",
+  "au": [
+   "Ho",
+   "Dautenhahn",
+   "Nehaniv"
+  ],
+  "volume": null,
+  "issue": null,
+  "page": "182-191",
+  "upd": [],
+  "updated_by": [],
+  "relation": {},
+  "abs": "",
+  "status": 200,
+  "consultado": "2026-10-30",
+  "trilha": "C4"
+ },
+ "10.1109/cec.2005.1554734": {
+  "doi": "10.1109/cec.2005.1554734",
+  "title": "Autobiographic Agents in Dynamic Virtual Environments - Performance Comparison for Different Memory Control Architectures",
+  "type": "proceedings-article",
+  "year": null,
+  "issued": [
+   null
+  ],
+  "cont": "2005 IEEE Congress on Evolutionary Computation",
+  "pub": "IEEE",
+  "au": [
+   "Wan Ching Ho",
+   "Dautenhahn",
+   "Nehaniv"
+  ],
+  "volume": "1",
+  "issue": null,
+  "page": "573-580",
+  "upd": [],
+  "updated_by": [],
+  "relation": {},
+  "abs": "",
+  "status": 200,
+  "consultado": "2026-10-30",
+  "trilha": "C1, C4"
+ },
+ "10.1080/09540090801889469": {
+  "doi": "10.1080/09540090801889469",
+  "title": "Computational memory architectures for autobiographic agents interacting in a complex virtual environment: a working model",
+  "type": "journal-article",
+  "year": 2008,
+  "issued": [
+   2008,
+   2,
+   18
+  ],
+  "cont": "Connection Science",
+  "pub": "Informa UK Limited",
+  "au": [
+   "Ho",
+   "Dautenhahn",
+   "Nehaniv"
+  ],
+  "volume": "20",
+  "issue": "1",
+  "page": "21-65",
+  "upd": [],
+  "updated_by": [],
+  "relation": {},
+  "abs": "",
+  "status": 200,
+  "consultado": "2026-10-30",
+  "trilha": "C1, C4"
+ },
+ "10.3390/mti2040067": {
+  "doi": "10.3390/mti2040067",
+  "title": "Modelling Adaptation through Social Allostasis: Modulating the Effects of Social Touch with Oxytocin in Embodied Agents",
+  "type": "journal-article",
+  "year": 2018,
+  "issued": [
+   2018,
+   10,
+   3
+  ],
+  "cont": "Multimodal Technologies and Interaction",
+  "pub": "MDPI AG",
+  "au": [
+   "Khan",
+   "Cañamero"
+  ],
+  "volume": "2",
+  "issue": "4",
+  "page": "67",
+  "upd": [],
+  "updated_by": [],
+  "relation": {},
+  "abs": "Social allostasis is a mechanism of adaptation that permits individuals to dynamically adapt their physiology to changing physical and social conditions. Oxytocin (OT) is widely considered to be one of the hormones that drives and adapts social behaviours. While its precise effects remain unclear, two areas where OT may promote adaptation are by affecting social salience, and affecting internal responses of performing social behaviours. Working towards a model of dynamic adaptation through social allostasis in simulated embodied agents, and extending our previous work studying OT-inspired modulation of social salience, we present a model and experiments that investigate the effects and adaptive value of allostatic processes based on hormonal (OT) modulation of affective elements of a social behaviour. In particular, we investigate and test the effects and adaptive value of modulating the degree of satisfaction of tactile contact in a social motivation context in a small simulated agent society across different environmental challenges (related to availability of food) and effects of OT modulation of social salience as a motivational incentive. Our results show that the effects of t",
+  "status": 200,
+  "consultado": "2026-10-30",
+  "trilha": "C5, J10"
+ },
+ "10.1016/j.neunet.2024.106379": {
+  "doi": "10.1016/j.neunet.2024.106379",
+  "title": "Emergence of integrated behaviors through direct optimization for homeostasis",
+  "type": "journal-article",
+  "year": 2024,
+  "issued": [
+   2024,
+   9
+  ],
+  "cont": "Neural Networks",
+  "pub": "Elsevier BV",
+  "au": [
+   "Yoshida",
+   "Daikoku",
+   "Nagai",
+   "Kuniyoshi"
+  ],
+  "volume": "177",
+  "issue": null,
+  "page": "106379",
+  "upd": [],
+  "updated_by": [],
+  "relation": {},
+  "abs": "",
+  "status": 200,
+  "consultado": "2026-10-30",
+  "trilha": "C5"
+ },
+ "10.1007/978-3-319-63703-7_3": {
+  "doi": "10.1007/978-3-319-63703-7_3",
+  "title": "Generic Animats",
+  "type": "book-chapter",
+  "year": 2017,
+  "issued": [
+   2017
+  ],
+  "cont": "Lecture Notes in Computer Science",
+  "pub": "Springer International Publishing",
+  "au": [
+   "Strannegård",
+   "Svangård",
+   "Bach",
+   "Steunebrink"
+  ],
+  "volume": null,
+  "issue": null,
+  "page": "23-32",
+  "upd": [],
+  "updated_by": [],
+  "relation": {},
+  "abs": "",
+  "status": 200,
+  "consultado": "2026-10-30",
+  "trilha": "C5"
+ },
+ "10.2478/jagi-2018-0002": {
+  "doi": "10.2478/jagi-2018-0002",
+  "title": "Learning and decision-making in artificial animals",
+  "type": "journal-article",
+  "year": 2018,
+  "issued": [
+   2018,
+   7,
+   1
+  ],
+  "cont": "Journal of Artificial General Intelligence",
+  "pub": "Walter de Gruyter GmbH",
+  "au": [
+   "Strannegård",
+   "Svangård",
+   "Lindström",
+   "Bach",
+   "Steunebrink"
+  ],
+  "volume": "9",
+  "issue": "1",
+  "page": "55-82",
+  "upd": [],
+  "updated_by": [],
+  "relation": {},
+  "abs": "Abstract\n                  A computational model for artificial animals (animats) interacting with real or artificial ecosystems is presented. All animats use the same mechanisms for learning and decisionmaking. Each animat has its own set of needs and its own memory structure that undergoes continuous development and constitutes the basis for decision-making. The decision-making mechanism aims at keeping the needs of the animat as satisfied as possible for as long as possible. Reward and punishment are defined in terms of changes to the level of need satisfaction. The learning mechanisms are driven by prediction error relating to reward and punishment and are of two kinds: multi-objective local Q-learning and structural learning that alter the architecture of the memory structures by adding and removing nodes. The animat model has the following key properties: (1) autonomy: it operates in a fully automatic fashion, without any need for interaction with human engineers. In particular, it does not depend on human engineers to provide goals, tasks, or seed knowledge. Still, it can operate either with or without human interaction; (2) generality: it uses the same learning and decision",
+  "status": 200,
+  "consultado": "2026-10-30",
+  "trilha": "C5"
+ },
+ "10.1162/isal_a_00606": {
+  "doi": "10.1162/isal_a_00606",
+  "title": "Environmental variability and network structure determine the optimal plasticity mechanisms in embodied agents",
+  "type": "proceedings-article",
+  "year": 2023,
+  "issued": [
+   2023
+  ],
+  "cont": "The 2023 Conference on Artificial Life",
+  "pub": "MIT Press",
+  "au": [
+   "Giannakakis",
+   "Khajehabdollahi",
+   "Levina"
+  ],
+  "volume": null,
+  "issue": null,
+  "page": null,
+  "upd": [],
+  "updated_by": [],
+  "relation": {},
+  "abs": "",
+  "status": 200,
+  "consultado": "2026-10-30",
+  "trilha": "C1"
+ },
+ "10.1162/artl_a_00458": {
+  "doi": "10.1162/artl_a_00458",
+  "title": "Network Bottlenecks and Task Structure Control the Evolution of Interpretable Learning Rules in a Foraging Agent",
+  "type": "journal-article",
+  "year": 2024,
+  "issued": [
+   2024,
+   10,
+   31
+  ],
+  "cont": "Artificial Life",
+  "pub": "MIT Press",
+  "au": [
+   "Giannakakis",
+   "Khajehabdollahi",
+   "Levina"
+  ],
+  "volume": null,
+  "issue": null,
+  "page": "1-18",
+  "upd": [],
+  "updated_by": [],
+  "relation": {},
+  "abs": "Abstract\n               Developing reliable mechanisms for continuous local learning is a central challenge faced by biological and artificial systems. Yet, how the environmental factors and structural constraints on the learning network influence the optimal plasticity mechanisms remains obscure even for simple settings. To elucidate these dependencies, we study meta-learning via evolutionary optimization of simple reward-modulated plasticity rules in embodied agents solving a foraging task. We show that unconstrained meta-learning leads to the emergence of diverse plasticity rules. However, regularization and bottlenecks in the model help reduce this variability, resulting in interpretable rules. Our findings indicate that the meta-learning of plasticity rules is very sensitive to various parameters, with this sensitivity possibly reflected in the learning rules found in biological networks. When included in models, these dependencies can be used to discover potential objective functions and details of biological learning via comparisons with experimental observations.",
+  "status": 200,
+  "consultado": "2026-10-30",
+  "trilha": "C1"
+ },
+ "10.4018/978-1-60566-354-8.ch020": {
+  "doi": "10.4018/978-1-60566-354-8.ch020",
+  "title": "Emotional Memory and Adaptive Personalities",
+  "type": "book-chapter",
+  "year": 2009,
+  "issued": [
+   2009
+  ],
+  "cont": "Handbook of Research on Synthetic Emotions and Sociable Robotics",
+  "pub": "IGI Global",
+  "au": [
+   "Francis Jr.",
+   "Mehta",
+   "Ram"
+  ],
+  "volume": null,
+  "issue": null,
+  "page": "391-412",
+  "upd": [],
+  "updated_by": [],
+  "relation": {},
+  "abs": "Believable agents designed for long-term interaction with human users need to adapt to them in a way which appears emotionally plausible while maintaining a consistent personality. For short-term interactions in restricted environments, scripting and state machine techniques can create agents with emotion and personality, but these methods are labor intensive, hard to extend, and brittle in new environments. Fortunately, research in memory, emotion and personality in humans and animals points to a solution to this problem. Emotions focus an animal’s attention on things it needs to care about, and strong emotions trigger enhanced formation of memory, enabling the animal to adapt its emotional response to the objects and situations in its environment. In humans this process becomes reflective: emotional stress or frustration can trigger re-evaluating past behavior with respect to personal standards, which in turn can lead to setting new strategies or goals. To aid the authoring of adaptive agents, we present an artificial intelligence model inspired by these psychological results in which an emotion model triggers case-based emotional preference learning and behavioral adaptation gui",
+  "status": 200,
+  "consultado": "2026-10-30",
+  "trilha": "C4"
+ },
+ "10.4018/978-1-60960-818-7.ch5.7": {
+  "doi": "10.4018/978-1-60960-818-7.ch5.7",
+  "status": 404,
+  "trilha": "C4"
+ },
+ "10.1145/566570.566597": {
+  "doi": "10.1145/566570.566597",
+  "title": "Integrated learning for interactive synthetic characters",
+  "type": "proceedings-article",
+  "year": 2002,
+  "issued": [
+   2002,
+   7
+  ],
+  "cont": "Proceedings of the 29th annual conference on Computer graphics and interactive techniques",
+  "pub": "ACM",
+  "au": [
+   "Blumberg",
+   "Downie",
+   "Ivanov",
+   "Berlin",
+   "Johnson",
+   "Tomlinson"
+  ],
+  "volume": null,
+  "issue": null,
+  "page": "417-426",
+  "upd": [],
+  "updated_by": [],
+  "relation": {},
+  "abs": "",
+  "status": 200,
+  "consultado": "2026-10-30",
+  "trilha": "C2, produto"
+ },
+ "10.1145/566654.566597": {
+  "doi": "10.1145/566654.566597",
+  "title": "Integrated learning for interactive synthetic characters",
+  "type": "journal-article",
+  "year": 2002,
+  "issued": [
+   2002,
+   7
+  ],
+  "cont": "ACM Transactions on Graphics",
+  "pub": "Association for Computing Machinery (ACM)",
+  "au": [
+   "Blumberg",
+   "Downie",
+   "Ivanov",
+   "Berlin",
+   "Johnson",
+   "Tomlinson"
+  ],
+  "volume": "21",
+  "issue": "3",
+  "page": "417-426",
+  "upd": [],
+  "updated_by": [],
+  "relation": {},
+  "abs": "The ability to learn is a potentially compelling and important quality for interactive synthetic characters. To that end, we describe a practical approach to real-time learning for synthetic characters. Our implementation is grounded in the techniques of reinforcement learning and informed by insights from animal training. It simplifies the learning task for characters by (a) enabling them to take advantage of predictable regularities in their world, (b) allowing them to make maximal use of any supervisory signals, and (c) making them easy to train by humans.We built an autonomous animated dog that can be trained with a technique used to train real dogs called \"clicker training\". Capabilities demonstrated include being trained to recognize and use acoustic patterns as cues for actions, as well as to synthesize new actions from novel paths through its motion space.A key contribution of this paper is to demonstrate that by addressing the three problems of state, action, and state-action space discovery at the same time, the solution for each becomes easier. Finally, we articulate heuristics and design principles that make learning practical for synthetic characters.",
+  "status": 200,
+  "consultado": "2026-10-30",
+  "trilha": "C2, produto"
+ },
+ "10.1145/336595.337537": {
+  "doi": "10.1145/336595.337537",
+  "title": "Motivation driven learning for interactive synthetic characters",
+  "type": "proceedings-article",
+  "year": 2000,
+  "issued": [
+   2000,
+   6
+  ],
+  "cont": "Proceedings of the fourth international conference on Autonomous agents",
+  "pub": "ACM",
+  "au": [
+   "Yoon",
+   "Blumberg",
+   "Schneider"
+  ],
+  "volume": null,
+  "issue": null,
+  "page": "365-372",
+  "upd": [],
+  "updated_by": [],
+  "relation": {},
+  "abs": "",
+  "status": 200,
+  "consultado": "2026-10-30",
+  "trilha": "C2, produto"
+ },
+ "10.1145/3561975.3562941": {
+  "doi": "10.1145/3561975.3562941",
+  "title": "Toward Believable Acting for Autonomous Animated Characters",
+  "type": "proceedings-article",
+  "year": 2022,
+  "issued": [
+   2022,
+   11,
+   3
+  ],
+  "cont": "Proceedings of the 15th ACM SIGGRAPH Conference on Motion, Interaction and Games",
+  "pub": "ACM",
+  "au": [
+   "Curtis",
+   "Adalgeirsson",
+   "Ciurdar",
+   "McDermott",
+   "Velásquez",
+   "Knox",
+   "Martinez",
+   "Gaztelumendi",
+   "Goussies",
+   "Liu",
+   "Nandy"
+  ],
+  "volume": null,
+  "issue": null,
+  "page": "1-15",
+  "upd": [],
+  "updated_by": [],
+  "relation": {},
+  "abs": "",
+  "status": 200,
+  "consultado": "2026-10-30",
+  "trilha": "produto"
+ },
+ "10.3390/electronics14183711": {
+  "doi": "10.3390/electronics14183711",
+  "title": "A Robot Companion with Adaptive Object Preferences and Emotional Responses Enhances Naturalness in Human–Robot Interaction",
+  "type": "journal-article",
+  "year": 2025,
+  "issued": [
+   2025,
+   9,
+   19
+  ],
+  "cont": "Electronics",
+  "pub": "MDPI AG",
+  "au": [
+   "Maroto-Gómez",
+   "Álvarez-Arias",
+   "Rodríguez-Huelves",
+   "Segura-Bencomo",
+   "Malfaz"
+  ],
+  "volume": "14",
+  "issue": "18",
+  "page": "3711",
+  "upd": [],
+  "updated_by": [],
+  "relation": {},
+  "abs": "Autonomous robot companions must engage users to create long-lasting bonds that promote their better and frequent use. Previous studies in the area revealed that a personalised human–robot interaction facilitates such connections, leading people to use robots more frequently, improving how they perceive the robot. This paper presents a biologically inspired system based on reinforcement learning to endow care-dependent robot companions with adaptive preferences for objects and dynamic emotional responses that depend on the interaction context. The system generates and adapts the robot’s preferences towards objects based on user actions, simulated internal needs, and other factors such as the kind of object. We integrate the system into Mini, which is a robot companion that simulates behaviour inspired by the famous Tamagotchi toy to promote human–robot bonding. Mini encourages users to care for it by providing objects that restore its hunger, thirst, and boredom, reacting to the actions taken by users. We conducted a within-subjects user study where participants interacted with two robots: with preferences towards objects and emotional responses, and without them. The results indic",
+  "status": 200,
+  "consultado": "2026-10-30",
+  "trilha": "J5, produto"
+ },
+ "10.1002/aisy.202200288": {
+  "doi": "10.1002/aisy.202200288",
+  "title": "Modeling Neuroendocrine Autonomic Responses in Embodied Autonomous Robots",
+  "type": "journal-article",
+  "year": 2023,
+  "issued": [
+   2022,
+   12,
+   23
+  ],
+  "cont": "Advanced Intelligent Systems",
+  "pub": "Wiley",
+  "au": [
+   "Maroto-Gómez",
+   "Castro‐González",
+   "Malfaz",
+   "Fernández-Rodicio",
+   "Salichs"
+  ],
+  "volume": "5",
+  "issue": "2",
+  "page": null,
+  "upd": [],
+  "updated_by": [],
+  "relation": {},
+  "abs": "The nervous system is controlled by a collection of neurons that transmit electric signals through the organism. These signals respond to internal and external stimuli and regulate many involuntary physiological functions. The autonomic nervous system regulates involuntary behaviors, such as heart rate, breathing, or pupil size through the action of neuroendocrine substances that modulate the biological processes. These physiological processes allow to express the internal state while interacting with others. This manuscript presents an artificial neuroendocrine model for regulating and expressing the involuntary physiological functions emulated in the Mini social robot. This model employs the robot's perception and simulated biological clock to generate neuroendocrine responses using simulated neuroendocrine substances to control the robot's autonomic processes of heart rate, pupil size, breathing rate, blinking rate, and locomotor activity. The primary contribution of this work is to provide biological modeling to replicate the evolution and effects of neuroendocrine substances on the regulation of autonomic processes and demonstrate how to express them in social robots using the",
+  "status": 200,
+  "consultado": "2026-10-30",
+  "trilha": "J10"
+ },
+ "10.18745/th.14271": {
+  "doi": "10.18745/th.14271",
+  "registro": "DataCite (api.datacite.org/dois), 2026-10-30",
+  "title": "Computational memory architectures for autobiographic and narrative virtual agents",
+  "type": "doctoralThesis",
+  "year": 2005,
+  "pub": "University of Hertfordshire",
+  "au": [
+   "Ho"
+  ],
+  "url": "http://uhra.herts.ac.uk/handle/2299/14271",
+  "status": 200,
+  "trilha": "C1, C4, J7"
+ },
+ "_sem_doi": {
+  "UHRA eprint 13256": "Repositório da Univ. de Hertfordshire e OpenAlex (W2283859551), 2026-10-30: Sharing memories: an experimental investigation with multiple autonomous autobiographic agents; Ho, Dautenhahn, Nehaniv, te Boekhorst; 2004; 8th Conf on Intelligent Autonomous Systems (IAS-8), IOS Press, pp. 361-370; refereed FALSE no repositório; resumo no repositório",
+  "UHRA eprint 12716": "Repositório da Univ. de Hertfordshire, OpenAlex (W1833950827) e Semantic Scholar, 2026-10-30: A study of episodic memory-based learning and narrative structure for autobiographic agents; Ho, Dautenhahn, Nehaniv; 2006; Procs of AISB 2006 Convention 3, pp. 26-29; refereed FALSE no repositório; sem resumo",
+  "OpenAlex W113856056": "OpenAlex e Semantic Scholar (DBLP conf/agi/GoertzelPGLSSHL08), 2026-10-30: An Integrative Methodology for Teaching Embodied Non-Linguistic Agents, Applied to Virtual Animals in Second Life; Goertzel, Pennachin, Geissweiller, Looks, Senna, Silva, Heljakka, Lopes; 2008; Artificial General Intelligence (AGI-08); pp. 161-175; busca no Crossref sem DOI para o capítulo",
+  "OpenAlex W1539331521": "OpenAlex e Semantic Scholar (DBLP conf/aaai/YoonBBS00), 2026-10-30: Interactive Training for Synthetic Characters; Yoon, Burke, Blumberg, Schneider; 2000; AAAI/IAAI 2000; pp. 249-254; PDF em aaai.org/Papers/AAAI/2000/AAAI00-038.pdf"
+ }
+}

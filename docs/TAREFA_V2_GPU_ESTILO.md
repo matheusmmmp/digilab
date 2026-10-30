@@ -1,5 +1,8 @@
 # TAREFA V2 — GPU-ESTILO (2026-10-01)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: chat "Principais jogos Digimon com diálogo" (coordenação da V2). Worker: o mesmo da F0-CORPUS (chat D). Worktree e branch: `v2-gpu-estilo`.
 Status: ABERTA (começa só com o PR #107, corpus em português, na `main`). **Fila da GPU: posição 1** (única frente com Ollama nesta rodada).
 
