@@ -13,7 +13,8 @@
    As sementes: as da fase 1 (a faixa reservada, 5 bases x 20, hashSemente("equilibrio-tr", base, k)); 200 lutas por celula.
    --listas v14: as listas candidatas da rodada (LISTAS_V14, bots.ts); --variante <nome>: uma variante da grade (VARIANTES, abaixo),
    aplicada por cima.
-   uso (em web/app): npx tsx scripts/equilibrio_tr/fase2_formas.ts --faixa calibracao [--listas v14] [--variante <nome>] --saida <arquivo.json> */
+   --disparo X: o multiplicador do disparo do tempo real (RelogioTR.disparo) por cima do relogio.
+   uso (em web/app): npx tsx scripts/equilibrio_tr/fase2_formas.ts --faixa calibracao [--listas v14] [--variante <nome>] [--disparo X] --saida <arquivo.json> */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { execSync } from "node:child_process";
@@ -32,7 +33,10 @@ if (!saida) throw new Error("--saida <arquivo.json>");
 if (variante !== null && !VARIANTES[variante]) throw new Error("variante desconhecida: " + variante);
 /* --relogio v13: so para o diagnostico (o relogio dos pets v13); a fase 2 mede em cima do candidato da fase 1 */
 /* --relogio-diag '{"recuo":1}': so diagnostico, por cima do candidato (nao e alavanca da fase 2) */
-const R: RegrasLuta = { ...CV21E_TR, relogio: { ...(arg("relogio") === "v13" ? RELOGIO_V13 : RELOGIO_V14), ...JSON.parse(arg("relogio-diag") ?? "{}") } };
+/* --disparo X: o multiplicador do disparo do tempo real (a grade do passo do disparo, depois da fase 3) */
+const disparo = arg("disparo") === null ? {} : { disparo: Number(arg("disparo")) };
+if ("disparo" in disparo && !(disparo.disparo > 0)) throw new Error("--disparo precisa ser um numero > 0");
+const R: RegrasLuta = { ...CV21E_TR, relogio: { ...(arg("relogio") === "v13" ? RELOGIO_V13 : RELOGIO_V14), ...JSON.parse(arg("relogio-diag") ?? "{}"), ...disparo } };
 /* as listas da rodada: a semente de hoje, as candidatas (--listas v14) e a variante por cima */
 const LISTAS: Record<string, ListaGambits> = { ...(arg("listas") === "v14" ? LISTAS_V14 : {}), ...(variante ? VARIANTES[variante]() : {}) };
 const SEMENTES_POR_BASE = 20;

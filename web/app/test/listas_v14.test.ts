@@ -1,9 +1,10 @@
 /* As listas candidatas da rodada de equilibrio do tempo real (fase 2; bots.LISTAS_V14, PROPOSTO): cada uma e uma lista que a forma pode
    ter (as condicoes do estagio, so a tecnica da propria linha, o numero de regras do estagio), as sombrias nao leem o oponente, e
-   nenhuma luta dos pets v13 muda (a lista dos bots de hoje e a mesma). */
+   nenhuma luta dos pets v13 muda (a lista dos bots de hoje e a mesma); a fase 3 semeia o pet com elas (GambitsPet.semear com a lista de
+   partida). */
 import { describe, expect, test } from "vitest";
 import {
-  BOTS_V21, CRIANCA_V21, ADOL_V21, CV21, CV21E_TR, FORMAS_AD, LINHA_DA_FORMA, LISTAS_V14, RIVAL_ESPECIE, SOMBRIA, gambitsAdulto, lutadorBot,
+  BOTS_V21, CRIANCA_V21, ADOL_V21, CV21, CV21E_TR, GambitsPet, chaveRegra, regraDe, FORMAS_AD, LINHA_DA_FORMA, LISTAS_V14, RIVAL_ESPECIE, SOMBRIA, gambitsAdulto, lutadorBot,
   permitida, sementeDe, type Forma, type FormaAdultaNormal,
 } from "../motor/index.ts";
 
@@ -33,5 +34,16 @@ describe("as listas candidatas da v14 (fase 2)", () => {
   test("os pets v13 e os bots de hoje ficam com as listas de hoje", () => {
     for (const f of FORMAS_AD) expect(lutadorBot(f, CV21E_TR).estilo.gambits).toEqual(gambitsAdulto(f, CV21E_TR));
     for (const k of Object.keys(LISTAS_V14)) expect(sementeDe(formaDe(k), CV21E_TR)).not.toEqual(LISTAS_V14[k]);
+  });
+  test("o pet pode semear a lista candidata (a bancada da fase 3), e as regras novas tem chave", () => {
+    for (const [k, g] of Object.entries(LISTAS_V14)) {
+      for (const r of g.regras) expect(regraDe(chaveRegra(r))).toEqual(r);
+      const gp = new GambitsPet(), f = formaDe(k);
+      gp.semear(f, k, CV21E_TR, g);
+      expect(gp.estilo().gambits).toEqual({ regras: g.regras.slice(0, CV21.maxRegras[f.est as keyof typeof CV21.maxRegras]), final: g.final });
+      const hoje = new GambitsPet();
+      hoje.semear(f, k, CV21E_TR);
+      expect(hoje.estilo().gambits).toEqual(sementeDe(f, CV21E_TR));
+    }
   });
 });

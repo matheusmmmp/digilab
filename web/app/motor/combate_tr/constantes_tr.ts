@@ -48,15 +48,18 @@ export const CTR_TR = {
 
 /** os numeros do relogio e do espaco que a rodada de equilibrio pode mudar (docs/PLANO_EQUILIBRIO_COMBATE_TR.md, secao 4). Eles viajam nas
     regras da luta (RegrasV21.relogio) e no estado dela (EstadoTR.C): cada versao de pet tem os seus, e a v13 tem os de CTR_TR. O limite, a
-    morte subita (D-5), o instante do golpe (D-1) e a geometria do chao nao entram: ficam em CTR_TR */
+    morte subita (D-5), o instante do golpe (D-1) e a geometria do chao nao entram: ficam em CTR_TR. `disparo`: o multiplicador do dano
+    do disparo so no tempo real (a base, CV.dano.disparo e o perfil, nao muda; decisao do Matheus de 2026-10-30, DECIDIDA pela
+    recomendacao do coordenador: um numero proprio do tempo real, calibrado na rodada) */
 export interface RelogioTR {
   readonly ritmo: number; readonly atordoaInterrupcao: number; readonly andar: number; readonly recuo: number; readonly arrancada: number;
   readonly projetil: number; readonly perto: number; readonly medio: number; readonly contato: number; readonly empurrao: number;
+  readonly disparo: number;
 }
-/** o relogio dos pets v13 (os numeros de CTR_TR, sem calibracao) */
+/** o relogio dos pets v13 (os numeros de CTR_TR, sem calibracao; o disparo sem multiplicador, 1) */
 export const RELOGIO_V13: RelogioTR = {
   ritmo: CTR_TR.ritmo, atordoaInterrupcao: CTR_TR.atordoaInterrupcao, andar: CTR_TR.andar, recuo: CTR_TR.recuo, arrancada: CTR_TR.arrancada,
-  projetil: CTR_TR.projetil, perto: CTR_TR.perto, medio: CTR_TR.medio, contato: CTR_TR.contato, empurrao: CTR_TR.empurrao,
+  projetil: CTR_TR.projetil, perto: CTR_TR.perto, medio: CTR_TR.medio, contato: CTR_TR.contato, empurrao: CTR_TR.empurrao, disparo: 1,
 };
 /** o relogio candidato dos pets v14, da fase 1 da rodada de equilibrio (docs/PLANO_EQUILIBRIO_COMBATE_TR.md; docs/EQUILIBRIO_COMBATE_TR.md,
     fase 1). PROPOSTOS, calibrados so nas sementes de calibracao (68101 a 68505): web/app/scripts/medicoes/equilibrio_tr/fase1/grade3/
@@ -64,5 +67,8 @@ export const RELOGIO_V13: RelogioTR = {
     (DE-1), e ate la so a bancada (scripts/equilibrio_tr/) o usa
     - empurrao 6 -> 0: o empurrao do golpe corpo a corpo afastava o atacante para fora do contato, e as listas defensivas nao voltavam;
     - medio 150 -> 120: a faixa media mais curta faz as listas sairem do longe mais cedo e reagirem ao preparo do rival (T-5);
-    - recuo .8 -> .6 e arrancada 420 -> 500 px/s: quem recua o tempo todo (a sentinela) e alcancado */
-export const RELOGIO_V14: RelogioTR = { ...RELOGIO_V13, empurrao: 0, medio: 120, recuo: .6, arrancada: 500 * PASSO_TR_MS / 1000 };
+    - recuo .8 -> .6 e arrancada 420 -> 500 px/s: quem recua o tempo todo (a sentinela) e alcancado;
+    - disparo 1 -> 6: o melhor das formas na grade de 1,5 a 8 (depois da fase 3, DE-8; scripts/medicoes/equilibrio_tr/disparo/; a
+      conferencia em disparo/conferencia_d6/). Todo valor acima de 1 reprova o T-1 da fase 1 (a luta media cai para perto de 35 s), e o
+      Matheus decidiu ligar o 6 mesmo assim (DE-9, 2026-10-30): o T-1 fica reprovado e registrado como esta */
+export const RELOGIO_V14: RelogioTR = { ...RELOGIO_V13, empurrao: 0, medio: 120, recuo: .6, arrancada: 500 * PASSO_TR_MS / 1000, disparo: 6 };

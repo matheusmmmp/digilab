@@ -1,0 +1,89 @@
+{
+ "gerado_por": "web/app/scripts/equilibrio_tr/diagnostico_ordem_f3.ts",
+ "commit": "93d0a63e",
+ "forma": "duelista",
+ "rival": "npc_v5_myotismon",
+ "resultados": [
+  1,
+  1,
+  1,
+  1,
+  1,
+  0,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1
+ ],
+ "trocas": 0,
+ "antes": [
+  {
+   "nota": 0.05,
+   "regra": "se oponente preparando pesado → esquivar"
+  },
+  {
+   "nota": 0.044,
+   "regra": "se distância é perto e oponente insiste em golpe rápido → defender"
+  },
+  {
+   "nota": 0.038,
+   "regra": "se distância é medio → investida"
+  },
+  {
+   "nota": 0.031,
+   "regra": "se distância é longe → avançar"
+  },
+  {
+   "nota": 0.025,
+   "regra": "se distância é perto e oponente repetiu defender 2x → preparar pesado"
+  },
+  {
+   "nota": 0.019,
+   "regra": "se distância é perto e oponente insiste em esquivar → preparar pesado"
+  },
+  {
+   "nota": 0.013,
+   "regra": "se distância é perto e meu guts ≥ 40 → preparar pesado"
+  },
+  {
+   "nota": 0.006,
+   "regra": "se distância é perto → golpe rápido"
+  }
+ ],
+ "depois": [
+  {
+   "nota": 0.174,
+   "regra": "se distância é perto → golpe rápido"
+  },
+  {
+   "nota": 0.133,
+   "regra": "se distância é medio → investida"
+  },
+  {
+   "nota": 0.068,
+   "regra": "se distância é perto e oponente insiste em golpe rápido → defender"
+  },
+  {
+   "nota": 0.042,
+   "regra": "se distância é longe → avançar"
+  },
+  {
+   "nota": 0.031,
+   "regra": "se oponente preparando pesado → esquivar"
+  },
+  {
+   "nota": 0.025,
+   "regra": "se distância é perto e oponente repetiu defender 2x → preparar pesado"
+  },
+  {
+   "nota": 0.019,
+   "regra": "se distância é perto e oponente insiste em esquivar → preparar pesado"
+  },
+  {
+   "nota": 0.001,
+   "regra": "se distância é perto e meu guts ≥ 40 → preparar pesado"
+  }
+ ]
+}

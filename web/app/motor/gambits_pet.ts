@@ -6,7 +6,7 @@
    usar). Lutas, travas e vetos entram no registro: o replay reconstroi o aprendizado. */
 import { CCF, CED, CESC, CLE, CSO, CV, CV21, CV21E_TR, GA, SOMBRIA, TECNICAS, baseDe } from "./constantes.ts";
 import {
-  ADOL_V21, BOTS_V2, BOTS_V21, BOTS_V21D, BOTS_V21E, CRIANCA_V21, GAMBITS_SOMBRIA, NOME_BOT, NPC, REGRA_BATE_EM_QUEM_RECUA, REGRA_CONTRA_GOLPE_NA_PELE,
+  ADOL_V21, BOTS_V2, BOTS_V21, BOTS_V21D, BOTS_V21E, CRIANCA_V21, GAMBITS_SOMBRIA, LISTAS_V14, NOME_BOT, NPC, REGRA_BATE_EM_QUEM_RECUA, REGRA_CONTRA_GOLPE_NA_PELE,
   REGRA_DEFENDE_DO_GOLPE, REGRA_RECUA_DO_PREPARO_SOB_PELE, copiarGambits,
   estiloBot, formaRival, gambitNPC, gambitsAdulto,
 } from "./bots.ts";
@@ -46,12 +46,14 @@ export function sementeDe(f: Forma, R: RegrasLuta = CV21E_TR): ListaGambits {
    do reequilibrio, so na semente dos pets v6), das listas V21E (as regras novas do equilibrio geral, so na semente dos pets v9) ou de
    um chip de regra (itens.ts; pets v6). O repertorio nao muda: as candidatas e o replay dos pets v1-v8 ficam iguais. Nos pets v6 o
    vigia recebe as duas regras novas tambem como candidatas de troca (candidatasDoVigia), e nos pets v9 o duelista, o tita e a muralha
-   as da V21E (candidatasV21E); as regras dos chips nunca viram candidatas (so entram pelo chip). */
+   as da V21E (candidatasV21E); as regras dos chips nunca viram candidatas (so entram pelo chip). As das listas candidatas da rodada de
+   equilibrio do tempo real (bots.LISTAS_V14, ainda de nenhuma versao) tambem tem chave aqui: nenhum pet de hoje as tem na semente nem nas
+   candidatas, entao so a bancada as usa. */
 let REGRAS_SEMENTE: Map<string, Regra> | null = null;
 export function regraDe(k: string): Regra {
   const r = REPERTORIO.get(k);
   if (r) return r;
-  REGRAS_SEMENTE ??= new Map([...Object.values(GAMBITS_SOMBRIA), ...Object.values(BOTS_V21D) as ListaGambits[], ...Object.values(BOTS_V21E) as ListaGambits[],
+  REGRAS_SEMENTE ??= new Map([...Object.values(GAMBITS_SOMBRIA), ...Object.values(BOTS_V21D) as ListaGambits[], ...Object.values(BOTS_V21E) as ListaGambits[], ...Object.values(LISTAS_V14),
     { regras: ITENS.flatMap(x => x.tipo === "chip_regra" ? [x.regra] : []), final: "defender" }]
     .flatMap(g => g.regras.map(x => [chaveRegra(x), x] as [string, Regra])));
   if (!REGRAS_SEMENTE.has(k)) throw new Error("regra fora do repertório: " + k);
@@ -130,9 +132,10 @@ export class GambitsPet {
       da versao */
   regras: RegrasLuta | null = null;
   /** evolucao: a semente da forma nova entra com nota-base pela posicao; o que ja foi aprendido fica; a
-      lista cabe na capacidade do estagio */
-  semear(forma: Forma, nome: string = nomeFormaLegado(forma), R: RegrasLuta = CV21E_TR): void {
-    const base = sementeDe(forma, R), cap = CV21.maxRegras[baseDe(forma.est)];
+      lista cabe na capacidade do estagio. `base`: a lista de partida (a semente da forma; a bancada da rodada de equilibrio passa as
+      candidatas, bots.LISTAS_V14) */
+  semear(forma: Forma, nome: string = nomeFormaLegado(forma), R: RegrasLuta = CV21E_TR, base: ListaGambits = sementeDe(forma, R)): void {
+    const cap = CV21.maxRegras[baseDe(forma.est)];
     this.forma = { ...forma }; this.linha = nome; this.final = base.final; this.regras = R;
     const novas: string[] = [];
     base.regras.forEach((r, i) => {

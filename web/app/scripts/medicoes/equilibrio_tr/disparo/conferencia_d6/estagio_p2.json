@@ -1,0 +1,98 @@
+{
+ "gerado_por": "web/app/scripts/equilibrio_tr/fase3_estagio.ts",
+ "data": "2026-10-30",
+ "commit": "24bf93a1",
+ "node": "v24.19.0",
+ "faixa": "calibracao",
+ "bases": [
+  68101,
+  68202,
+  68303,
+  68404,
+  68505
+ ],
+ "sementes_por_base": 20,
+ "relogio": {
+  "ritmo": 16,
+  "atordoaInterrupcao": 31,
+  "andar": 1.12,
+  "recuo": 0.6,
+  "arrancada": 8,
+  "projetil": 4.8,
+  "perto": 62,
+  "medio": 120,
+  "contato": 44,
+  "empurrao": 0,
+  "disparo": 6
+ },
+ "listas": "v14",
+ "escala": {
+  "vida": {
+   "bebe": 50,
+   "crianca": 200,
+   "adolescente": 700,
+   "adulto": 2500,
+   "mega": 23000
+  },
+  "beta": 0.045
+ },
+ "parte": "p2",
+ "metas": {
+  "P-2": {
+   "por_estagio": {
+    "crianca": {
+     "media": 1,
+     "pior": "sereno",
+     "pior_taxa": 1,
+     "formas": {
+      "sereno": 1,
+      "arisco": 1
+     }
+    },
+    "adolescente": {
+     "media": 0.9975,
+     "pior": "cacador",
+     "pior_taxa": 0.995,
+     "formas": {
+      "brigao": 1,
+      "guardiao": 1,
+      "cacador": 0.995,
+      "colosso": 0.995
+     }
+    },
+    "adulto": {
+     "media": 0.9991,
+     "pior": "emboscador",
+     "pior_taxa": 0.9925,
+     "formas": {
+      "duelista": 1,
+      "furioso": 1,
+      "espelho": 1,
+      "muralha": 1,
+      "sentinela": 1,
+      "emboscador": 0.9925,
+      "vigia": 1,
+      "tita": 1
+     }
+    },
+    "mega": {
+     "media": 0.9994,
+     "pior": "emboscador",
+     "pior_taxa": 0.995,
+     "formas": {
+      "duelista": 1,
+      "furioso": 1,
+      "espelho": 1,
+      "muralha": 1,
+      "sentinela": 1,
+      "emboscador": 0.995,
+      "vigia": 1,
+      "tita": 1
+     }
+    }
+   },
+   "passa": true
+  }
+ },
+ "custo_s": 1.3827
+}

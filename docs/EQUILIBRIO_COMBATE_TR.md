@@ -152,3 +152,126 @@ Os arquivos são `fase2/antes_calibracao.json` (as listas de hoje, com o relógi
 - **T-2 por par**, que a fase 1 deixou para as listas, também não fechou: nenhuma variante mexeu nos pares defensivos sem piorar as
   formas.
 - **A conferência não rodou:** ela roda uma vez, na fase 5.
+
+## Fase 3 — o estágio, o treino e o aprendizado (P-1…P-4)
+
+Worker: Claude Code, Opus 5.5, worktree `v2-combate-tr`, 2026-10-30.
+
+### 3.1 O que mudou no código (nenhuma luta do jogo muda)
+
+- **Nenhum número novo.** P-1 e P-2 passam com a escala de hoje (`CESC_V9`). P-3 e P-4 não têm alavanca nesta fase (seção 3.4), então
+  a fase não rodou grade nem gravou candidato.
+- **`GambitsPet.semear` aceita a lista de partida.** O padrão é a semente de hoje, então os pets v13 não mudam.
+- **`regraDe` conhece as regras das `LISTAS_V14`,** como já conhecia as da V21E. Nenhum pet de hoje as tem na semente nem nas candidatas.
+  O teste `test/listas_v14.test.ts` confere as duas mudanças.
+- **A bancada:** `web/app/scripts/equilibrio_tr/fase3_estagio.ts`, em cima do `RELOGIO_V14` e das `LISTAS_V14`.
+  - O pet típico é a forma de referência do estágio (Rookie: os 2 ramos; Champion: as 4 linhas; Ultimate e Mega: as 8 formas, o Mega
+    com as listas do Ultimate), com o caráter canônico e o treino uniforme do treino típico (`CIT.tipico`) ou nenhum. O treino é
+    absoluto e a luta é na escala, como na campanha.
+  - O pet da bancada não é uma vida: não tem dono nem cuidado, e o epsilon é o do bot (`CV.eps`), sem a disciplina e a experiência.
+  - **P-1** (o método da M-B1 da rodada geral): o de baixo com o treino típico contra o de cima sem treino. São as 4 espécies de cada
+    lado, 10 sementes por confronto e os dois lados, e o limite fica com o de cima (o desafiado).
+  - **P-2:** no mesmo estágio, a mesma forma e a mesma espécie, o típico contra o sem treino. São 100 sementes por forma, os dois lados,
+    e no limite a luta fica com a fração de vida.
+  - **P-3 e P-4:**
+    - o pet típico do Champion e do Ultimate semeia a lista, luta `CAT.sparring` (10) lutas contra o rival sugerido do estágio e aprende
+      com cada uma (`GambitsPet.aprender`);
+    - o rival sugerido é o primeiro rival do primeiro lugar do estágio: o Tortomon na Torre de pedra (um desafiante) e o Myotismon na
+      Cidadela (o líder, com a regra da arena: 3 lutas, e cada luta da série conta);
+    - **P-4** é a fração dos pets com a taxa ≥ 0,8 nessas lutas;
+    - **P-3** é a lista aprendida contra a de partida, com o mesmo perfil.
+  - O custo é de perto de 25 s nas três partes.
+
+### 3.2 As metas (calibração; `fase3/antes/p1.json`, `p2.json`, `p34.json`)
+
+| # | meta | medido (o mesmo antes e depois: nenhum número mudou) | passa? |
+|---|---|---|---|
+| P-1 | o de baixo vence o de cima ≤ 0,10 (pontos); dois estágios acima, nenhuma vitória | Rookie × Champion 0,000; Champion × Ultimate 0,070; Ultimate × Mega 0,030; Rookie × Ultimate e Champion × Mega, 0 vitórias | sim |
+| P-2 | o típico vence o sem treino ≥ 0,80 no mesmo estágio | a pior forma de cada estágio: Rookie 1,00; Champion 0,995 (colosso); Ultimate 1,00; Mega 1,00 | sim |
+| P-3 | a lista aprendida vence a de partida entre 0,55 e 0,70 | Champion 0,49 (caçador 0,16, brigão 0,70); Ultimate 0,30 (duelista 0,02, muralha 0,025, espelho 0,05, furioso 0,87) | **não fechou** |
+| P-4 | ≥ 80% dos pets do estágio chegam a 0,8 nas 10 lutas | Champion 0,76 (guardião 0,57, colosso 0,59); Ultimate 0,755 (sentinela 0,00, emboscador 0,04; as outras 6, 1,00) | **não fechou** |
+
+As metas das fases 1 e 2 não mudam: a bancada delas reproduz os artefatos gravados.
+
+### 3.3 O diagnóstico do P-3 (`fase3/diagnostico_ordem_duelista.json`)
+
+- **O pet quase não troca regras** nas 10 lutas (0 trocas no duelista; no máximo 0,8 por pet, na sentinela; `trocas_por_pet` em
+  `p34.json`). O que muda é a ordem: a lista é reordenada pela nota de cada regra.
+- **A regra genérica sobe para o topo.** No duelista, "de perto → golpe rápido" é a última regra da semente: a de reserva, quando nenhuma
+  específica vale. Contra o Myotismon, ela dispara muito e ganha nota alta (0,17). Por isso vai para o primeiro lugar e encobre as
+  regras específicas de perto (o preparo, a defesa contra o golpe frequente). Com essa lista, o duelista perde da própria semente 98
+  vezes em 100.
+- **A alavanca é o aprendizado:** a nota, o passo, o limiar de troca (`GA`) e a ordem pela nota. Os números de `GA` são conferidos
+  contra o Python (`constantes.test.mjs`) e ficam fora das alavancas desta rodada (plano, seção 4). Um número ou uma regra própria do
+  tempo real para o aprendizado pede uma decisão do Matheus.
+
+### 3.4 O que não fechou e o que fica
+
+- **P-3** não fechou, e esta fase não tem alavanca para ele (seção 3.3). Fica como questão aberta, sem número.
+- **P-4** não fechou. Pela DE-4 (DECIDIDA), o 0,8 fica, e quem se ajusta são os rivais (os fatores), na fase 4. A fase 4 começa com:
+  - **Champion:** o Tortomon contra o guardião e o colosso (0,57 e 0,59);
+  - **Ultimate:** a sentinela e o emboscador contra o Myotismon (0,00 e 0,04). Essa parte dependia da resposta do Matheus sobre as formas
+    de longe (fase 2, seção 2.5). Ele decidiu pelo multiplicador do disparo (DE-8), e o passo do disparo, abaixo, mostra que o 6× fecha
+    essa parte, mas reprova o T-1.
+- **A conferência não rodou:** ela roda uma vez, na fase 5.
+
+## O passo do disparo (depois da fase 3; DE-8)
+
+Worker: Claude Code, Opus 5.5, worktree `v2-combate-tr`, 2026-10-30. A decisão do Matheus (2026-10-30, DECIDIDA pela recomendação do
+coordenador; o plano a registra como DE-8): **um número próprio do tempo real para o disparo**, um multiplicador do dano dele no candidato
+v14, calibrado nesta rodada. A base (o disparo e o pesado de `CV` e do perfil) não muda.
+
+### O que mudou no código
+
+- **`RelogioTR.disparo`** (`web/app/motor/combate_tr/constantes_tr.ts`) multiplica o dano do disparo na luta em tempo real
+  (`combate_tr/luta.ts`). Na v13 vale 1, e as vidas v13 conferem iguais.
+- **As bancadas das fases 2 e 3 ganharam `--disparo X`;** a da fase 1 já aceitava `--relogio '{"disparo":X}'`.
+- **O candidato liga o 6×** (`RELOGIO_V14.disparo = 6`, PROPOSTO), pela DE-9 (seção abaixo). Nenhuma luta do jogo muda: a v14 só liga
+  no fim da rodada (DE-1).
+
+### A grade (só as sementes de calibração; no máximo 4 processos em paralelo; `disparo/grade1/` a `grade3/`)
+
+- Cada rodada mede as metas das formas (F-1 a F-7) com as `LISTAS_V14`, para valores de 1,5 a 8 (rodada 1: 1,5 a 3; rodada 2: 4 a 8;
+  rodada 3: 4,5 a 7).
+- A melhor nota das formas é **6×** (`grade2/d6.json`). A nota é a soma da distância de cada meta F à faixa dela.
+- O Ultimate de longe × de perto não chega à faixa com nenhum valor: fica em 0,25 com 8×. O caçador do Champion passa de 0,60 acima de
+  3×.
+
+### A conferência das outras metas
+
+- **Todo valor acima de 1 reprova o T-1 da fase 1** (`disparo/relogio/`). A luta média cai para 39,4 s com 1,5×, 36,0 s com 3× e 34,8 s
+  com 6×, abaixo dos 40 s da DE-7. Com menos lutas no limite, a média encurta.
+- **Pela regra do plano** (seção 5: "um ajuste que reprova uma meta já fechada de uma fase anterior volta atrás"), **o candidato fica em
+  1**. F-1 e F-5 ficam como na fase 2.
+- **O que o 6× mudaria,** medido em todas as metas (`disparo/conferencia_d6/`). É uma decisão para o Matheus, porque troca o T-1 pelo
+  resto:
+
+| meta | com o candidato (disparo 1) | com 6× | |
+|---|---|---|---|
+| T-1 | 41,9 s / 38,0 s | 34,8 s / 32,9 s | **reprova** (fechada na fase 1) |
+| T-2 | total 0,050; pior par 0,56 | total 0,021; pior par 0,40 | melhora; não fecha |
+| T-3, T-4, T-5 | passam | passam (62,0 s; 0,512; 0,697) | iguais |
+| F-1 | 5 fora | 4 fora: espelho 0,35, emboscador 0,39, muralha 0,63, tita 0,69 | melhora; não fecha |
+| F-2 | 0,50 | 0,34 | melhora; não fecha |
+| F-3 | passa | passa | igual |
+| F-4 | Champion de 0,49 a 0,51; Rookie 0,605 | o caçador 0,68; Rookie 0,605 | piora no Champion |
+| F-5 | Champion 0,345; Ultimate 0,116 | Champion 0,533; Ultimate 0,198 | o Champion fecha; o Ultimate, não |
+| F-6 | espelho 0,19; sentinela 0,118 | espelho 0,111 | melhora; não fecha |
+| F-7 | 3 fora (devastador 0,68; bastião 0,67; predador 0,23) | só o predador fora (0,21) | melhora; não fecha |
+| P-1, P-2 | passam | passam | iguais |
+| P-3 | Champion 0,49; Ultimate 0,30 | Champion 0,573; Ultimate 0,39 | o Champion fecha |
+| P-4 | Champion 0,76; Ultimate 0,755 | Champion 0,75; Ultimate 1,00 | o Ultimate fecha |
+
+- **A recomendação, com o custo de errar:** se o Matheus aceitar uma luta média perto de 35 s (abaixo da DE-7), o 6× fecha F-5 no
+  Champion, P-3 no Champion e P-4 no Ultimate, e quase fecha F-6 e F-7. O custo é a luta mais curta: as séries ficam mais rápidas, e as
+  regras aprendidas têm menos tempo para pesar (o custo que a DE-7 registrou). Se a DE-7 ficar, o disparo fica em 1, e a fase 4 começa
+  com as formas de longe fracas. A decisão é dele, e nenhum número muda até lá.
+
+### A decisão (DE-9)
+
+- **O Matheus seguiu a recomendação** (2026-10-30; o plano a registra como DE-9): o `RELOGIO_V14` liga o disparo a **6×**, PROPOSTO.
+- **O T-1 fica reprovado e registrado como está** (34,8 s / 32,9 s; `disparo/conferencia_d6/relogio_calibracao.json`). A faixa da DE-7
+  não muda, e a regra da seção 5 do plano não se aplica a este número, por decisão dele.
+- **As metas do candidato passam a ser as da coluna "com 6×"** da tabela acima, medidas com o mesmo relógio (`disparo/conferencia_d6/`,
+  o commit `24bf93a`, o mesmo código de hoje com `--disparo 6`). A fase 4 parte deste candidato.
+- **As bancadas** agora leem o 6× do `RELOGIO_V14`; os artefatos das fases 1 a 3 com disparo 1 se reproduzem com `--disparo 1`.
