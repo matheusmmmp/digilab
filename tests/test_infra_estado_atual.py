@@ -47,3 +47,18 @@ def test_conferir(tmp_path):
 def test_o_repositorio_gera_sem_erro():
     texto = ge.gerar(RAIZ)
     assert "TAREFA_V2_SAUDE" in texto
+
+
+def test_lista_tambem_os_arquivos_v3(tmp_path):
+    raiz = fontes(tmp_path)
+    d = raiz / "docs"
+    (d / "TAREFA_V3_Z.md").write_text("# TAREFA V3 — Z\n\nStatus: ABERTA.\n", encoding="utf-8")
+    (d / "PLANO_ANALISE_V3_Z.md").write_text("# Plano Z\n", encoding="utf-8")
+    texto = ge.gerar(raiz)
+    assert "| [TAREFA_V3_Z](TAREFA_V3_Z.md) | TAREFA V3 — Z | ABERTA | nenhum |" in texto
+    assert "| [PLANO_ANALISE_V3_Z](PLANO_ANALISE_V3_Z.md) | Plano Z | nenhum |" in texto
+
+
+def test_sem_arquivo_v3_os_titulos_ficam_como_eram(tmp_path):
+    texto = ge.gerar(fontes(tmp_path))
+    assert "## 1. Tarefas (`docs/TAREFA_V2_*.md`)" + "\n" in texto and "V3" not in texto
