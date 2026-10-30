@@ -49,7 +49,7 @@ síntese entra pela C0). **Até a C0, nenhuma fonte nova da triagem é citada:**
 combinação em Creatures, Gadanho e Hallam, Ho et al., Goertzel et al., Zamin e Rity. O que se pode dizer, sem alegar novidade, é o que o
 projeto faz: teste causal com braço de controle, num pet persistente, com replay determinístico.
 
-### 2.3 As entradas da C1 e da C4 (2026-10-30, depois do G0; PROPOSTAS)
+### 2.3 As entradas da C1 e da C4 (2026-10-30, depois do G0; DECIDIDAS pelo Matheus em 2026-10-30, pela recomendação, com as LR e as ME)
 
 **A leitura que as junta:** o longe sorteado não é um cenário a consertar; é o extremo de "nada a aprender". Das 6 939 visitas ao lugar
 lembrado, 6 932 saem vazias (`docs/TAREFA_V2_LONGE_REGULAR.md`, seção 1.1). A pergunta da trilha C passa a ser: **o cérebro aprende
