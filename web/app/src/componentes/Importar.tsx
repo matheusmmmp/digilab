@@ -1,11 +1,13 @@
-/* Importar pet (pranchas MpImportar e MpImportarDesktop): escolhe o arquivo .digilab, confere o replay e, se o pet ja
-   existe aqui com outro registro, mostra os dois lado a lado ("Neste aparelho" x "No arquivo") para o dono escolher.
-   O que nao fica vai para a espera: nada e apagado. */
+/* Importar pet na pele XCOM (layout habitat, M5): escolhe o arquivo .digilab, confere o replay e, se o pet ja existe aqui com
+   outro registro, mostra os dois lado a lado ("Neste aparelho" x "No arquivo") para o dono escolher. O que nao fica vai para a
+   espera: nada e apagado. No desktop e uma pagina dentro do PainelTela; no celular, uma caixa centralizada. */
 import { useEffect, useRef, useState } from "react";
+import "../estilo/menus_config.css";
 import { NOME_PET, chaveSprite, nomeEstagio, nomeForma, type Motor } from "../../motor/index.ts";
 import { dimSprite, imagemAtlas, useAtlas } from "../atlas.ts";
 import { ficarComArquivo, importarSemConflito, lerArquivo, localizar, petAqui, type Lido } from "../importar.ts";
 import { diaDe, hhmm } from "../telas/pet/TelaPet.tsx";
+import { BotaoContinuar, BotaoHx, ChipHx, PainelHx } from "./hx/index.ts";
 import { abrirModal } from "./modal.ts";
 
 function Lado({ titulo, m, sel }: { titulo: string; m: Motor; sel?: boolean }) {
@@ -14,18 +16,18 @@ function Lado({ titulo, m, sel }: { titulo: string; m: Motor; sel?: boolean }) {
   const ult = m.historico.slice(-4).reverse();
   const texto = (h: (typeof ult)[number]) => h.quem === "pet" ? NOME_PET[h.a as keyof typeof NOME_PET] ?? h.a : h.a;
   return (
-    <section className={`imp-lado${sel ? " sel" : ""}`}>
+    <section className={`mc-lado${sel ? " mc-lado--sel" : ""}`}>
       <h3>{titulo}</h3>
-      <div className="imp-palco dl-hexcard">{s && <img className="dl-pix" src={s.url} width={s.w} height={s.h} alt="" />}</div>
-      <div className="imp-nome"><b>{nomeForma(m.forma)}</b><span className="dl-tag dl-tag--estagio">{nomeEstagio(m.forma)}</span>
-        <span className="dl-lcd">última: D{diaDe(m.e.tick)} {hhmm(m.e.tick)}</span></div>
-      <ol className="imp-hist">{ult.map((h, i) => <li key={i}><span className="dl-lcd">D{diaDe(h.t)} {hhmm(h.t)}</span><span>{texto(h)}</span></li>)}</ol>
-      <small>{m.log.length} eventos no registro</small>
+      <div className="mc-palco">{s && <img className="dl-pix" src={s.url} width={s.w} height={s.h} alt="" />}</div>
+      <div className="mc-tags"><b>{nomeForma(m.forma)}</b><ChipHx tom="rotulo">{nomeEstagio(m.forma)}</ChipHx>
+        <span className="mc-apoio mc-num">última: D{diaDe(m.e.tick)} {hhmm(m.e.tick)}</span></div>
+      <ol className="mc-hist">{ult.map((h, i) => <li key={i}><span className="mc-apoio mc-num">D{diaDe(h.t)} {hhmm(h.t)}</span><span>{texto(h)}</span></li>)}</ol>
+      <small className="mc-apoio">{m.log.length} eventos no registro</small>
     </section>
   );
 }
 
-/** pagina: no desktop a tela fica dentro da casca (MpImportarDesktop), com o topo da casca; no celular, tela cheia */
+/** pagina: no desktop a tela fica dentro do painel; no celular, uma caixa centralizada */
 export function ImportarPet({ fechar, pagina = false }: { fechar: () => void; pagina?: boolean }) {
   const ref = useRef<HTMLDialogElement>(null), arq = useRef<HTMLInputElement>(null);
   const [lido, setLido] = useState<Lido | null>(null), [conflito, setConflito] = useState<Motor | null>(null), [msg, setMsg] = useState(""), [erro, setErro] = useState("");
@@ -43,35 +45,28 @@ export function ImportarPet({ fechar, pagina = false }: { fechar: () => void; pa
   };
   const ficar = () => { try { ficarComArquivo(lido!); sair(); } catch (err) { setErro(err instanceof Error ? err.message : String(err)); } };
   const corpo = (
-      <div className="imp-corpo">
-        <div className="imp-col">
-          <section className="imp-arquivo">
-            <h3>Arquivo</h3>
-            <input ref={arq} type="file" accept=".digilab,.json,application/json" className="imp-input" id="imp-arq" onChange={e => escolher((e.currentTarget as HTMLInputElement).files?.[0])} />
-            <label htmlFor="imp-arq" className="dl-btn dl-btn--sec">{lido ? "Escolher outro arquivo" : "Escolher arquivo .digilab"}</label>
-            {lido && !erro && <p className="imp-ok"><b>{lido.arquivo}</b><span>✓ replay confere · registro válido</span></p>}
-            {erro && <p className="imp-erro" role="alert">{erro}</p>}
-            {msg && <p className="imp-ok" aria-live="polite">{msg}</p>}
-          </section>
-          {conflito && <section className="imp-aviso"><b>Este pet já existe aqui, com outro registro</b>
-            <p>Mesma semente, histórias diferentes. Escolha qual fica. A outra não é apagada: vai para a espera.</p></section>}
-          <div className="imp-bts">
-            {conflito && <button type="button" className="dl-btn dl-btn--largo" onClick={ficar}>Ficar com o arquivo</button>}
-            <button type="button" className="dl-btn dl-btn--sec dl-btn--largo" onClick={sair}>{conflito ? "Cancelar" : msg ? "Pronto" : "Voltar"}</button>
-          </div>
-        </div>
-        {conflito && lido && <div className="imp-lados"><Lado titulo="Neste aparelho" m={conflito} /><Lado titulo="No arquivo" m={lido.m} sel /></div>}
+    <div className={`mc-imp${pagina ? "" : " mc"}`}>
+      <section className="mc-bloco">
+        <h3 className="mc-bloco__tit">Arquivo</h3>
+        <input ref={arq} type="file" accept=".digilab,.json,application/json" className="mc-input-arq" id="imp-arq" onChange={e => escolher((e.currentTarget as HTMLInputElement).files?.[0])} />
+        <label htmlFor="imp-arq" className="hx-btn mc-largo">{lido ? "Escolher outro arquivo" : "Escolher arquivo .digilab"}</label>
+        {lido && !erro && <p className="mc-ok"><b>{lido.arquivo}</b> · ✓ replay confere · registro válido</p>}
+        {erro && <p className="mc-erro" role="alert">{erro}</p>}
+        {msg && <p className="mc-ok" aria-live="polite">{msg}</p>}
+      </section>
+      {conflito && <section className="mc-bloco"><h3 className="mc-bloco__tit">Este pet já existe aqui, com outro registro</h3>
+        <p>Mesma semente, histórias diferentes. Escolha qual fica. A outra não é apagada: vai para a espera.</p></section>}
+      {conflito && lido && <div className="mc-imp__lados"><Lado titulo="Neste aparelho" m={conflito} /><Lado titulo="No arquivo" m={lido.m} sel /></div>}
+      <div className="mc-linha">
+        {conflito && <BotaoContinuar onClick={ficar}>Ficar com o arquivo</BotaoContinuar>}
+        <BotaoHx onClick={sair}>{conflito ? "Cancelar" : msg ? "Pronto" : "Voltar"}</BotaoHx>
       </div>
+    </div>
   );
-  if (pagina) return <section className="importar-pagina dl" aria-label="Importar pet">{corpo}</section>;
+  if (pagina) return <section aria-label="Importar pet" className="mc mc-imp-pagina">{corpo}</section>;
   return (
-    <dialog className="importar-tela dl" ref={ref} aria-labelledby="imp-tit" onClose={fechar}>
-      <div className="imp-cab dl-faixa">
-        <button type="button" className="conv-voltar" aria-label="Voltar" onClick={sair}>
-          <svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true"><path d="M10 3 5 8l5 5" /></svg></button>
-        <h2 className="dl-num" id="imp-tit">Importar pet</h2>
-      </div>
-      {corpo}
+    <dialog className="importar-tela mc-dialogo" ref={ref} aria-label="Importar pet" onClose={fechar}>
+      <PainelHx titulo="Importar pet" onFechar={sair} rotuloFechar="Fechar Importar pet">{corpo}</PainelHx>
     </dialog>
   );
 }

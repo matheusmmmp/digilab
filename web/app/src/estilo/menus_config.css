@@ -1,0 +1,162 @@
+/* Conversar, Ajustes, Meus pets e Importar na pele XCOM (TAREFA_V2_LAYOUT_HABITAT, M5). So usa os tokens --hx-* e as classes hx-* da M1;
+   o que faltou la (opcao de escolha, bloco, balao, interruptor, caixa de dialogo) mora aqui, sob .mc-*. A coluna cabe em 760 px
+   (painel do desktop) e no modal centralizado do celular. A folha do painel (.painel-tela__folha) escurece quando o filho direto e .mc. */
+.painel-tela__folha:has(> .mc), .painel-tela__folha:has(> .painel-tela__acoes + .mc){ background:var(--hx-miolo); color:var(--hx-texto) }
+.painel-tela__acoes:has(+ .mc){ background:var(--hx-miolo) }
+
+.mc{ font-family:var(--hx-f); color:var(--hx-texto); background:var(--hx-miolo); display:grid; gap:12px; padding:12px; max-width:760px; margin-inline:auto;
+  box-sizing:border-box; min-width:0; font-size:16px; line-height:1.3 }
+.mc{ color-scheme:dark }
+.mc *{ box-sizing:border-box }
+.mc p{ margin:0 }
+.mc h2, .mc h3{ margin:0 }
+.mc-sec{ margin:4px 0 0; font:600 12px/1.2 var(--hx-f); letter-spacing:.1em; text-transform:uppercase; color:var(--hx-rotulo) }
+.mc-apoio{ color:var(--hx-sec); font-size:14px }
+.mc-erro{ color:var(--hx-perigo); font-weight:600 }
+.mc-ok{ color:var(--hx-ok); font-weight:600 }
+.mc-linha{ display:flex; flex-wrap:wrap; gap:8px; align-items:center }
+.mc-largo{ width:100% }
+.mc-num{ font-variant-numeric:tabular-nums }
+
+/* bloco em caixa de borda fina */
+.mc-bloco{ display:grid; gap:8px; padding:12px; background:var(--hx-miolo-2); border:1px solid var(--hx-borda) }
+.mc-bloco__tit{ display:flex; align-items:center; gap:8px; font:700 16px/1.2 var(--hx-f); letter-spacing:.08em; text-transform:uppercase; color:var(--hx-texto) }
+.mc-bloco__tit .dl-deco, .mc-bloco__tit img{ width:28px; height:28px; object-fit:contain }
+.mc-numeros{ display:flex; gap:16px; flex-wrap:wrap }
+.mc-numeros span{ display:grid; font-size:13px; color:var(--hx-sec) }
+.mc-numeros b{ font-size:22px; color:var(--hx-texto); font-variant-numeric:tabular-nums }
+.mc-risco{ display:grid; gap:8px; padding:12px; border:1px solid var(--hx-perigo) }
+
+/* botoes de escolha (modo, tema): a escolhida em ciano palido com texto escuro */
+.mc .hx-btn[aria-pressed="true"], .mc .hx-btn[aria-checked="true"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido) }
+.mc-opcoes{ display:grid; gap:8px }
+.mc-opcoes--3{ grid-template-columns:repeat(3,minmax(0,1fr)) }
+.mc-opcao{ display:grid; gap:2px; justify-items:start; text-align:left; min-height:56px; padding:10px 12px; background:var(--hx-miolo); color:var(--hx-texto);
+  border:1px solid var(--hx-borda); border-radius:0; font:500 16px/1.25 var(--hx-f); cursor:pointer }
+.mc-opcao b{ font-weight:700; letter-spacing:.06em; text-transform:uppercase; display:flex; align-items:center; gap:8px }
+.mc-opcao small{ color:var(--hx-sec); font-size:14px }
+.mc-opcao:hover{ border-color:var(--hx-borda-topo); background:var(--hx-miolo-2) }
+.mc-opcao[aria-checked="true"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido) }
+.mc-opcao[aria-checked="true"] small{ color:var(--hx-escolhido-ink) }
+.mc-opcao:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:2px }
+.mc-opcao--tema{ justify-items:center; text-align:center }
+.mc-tema-prev{ width:100%; max-width:88px; height:44px; display:grid; grid-template-columns:1fr 1fr; border:1px solid var(--hx-borda-topo) }
+.mc-tema-prev i:first-child{ background:#2C73E0 }
+.mc-opcao--claro .mc-tema-prev i:last-child{ background:#E8F0FB }
+.mc-opcao--escuro .mc-tema-prev i:last-child{ background:#0B1636 }
+.mc-opcao--sistema .mc-tema-prev i:last-child{ background:linear-gradient(90deg,#E8F0FB 50%,#0B1636 50%) }
+
+/* interruptor: a linha inteira e o alvo */
+.mc-interruptor{ display:flex; align-items:center; justify-content:space-between; gap:12px; min-height:56px; padding:8px 12px; background:var(--hx-miolo);
+  border:1px solid var(--hx-borda); cursor:pointer }
+.mc-interruptor > span{ display:grid; min-width:0 }
+.mc-interruptor b{ font-weight:700; letter-spacing:.06em; text-transform:uppercase }
+.mc-interruptor small{ color:var(--hx-sec); font-size:14px }
+.mc-interruptor input[type="checkbox"]{ width:44px; height:44px; flex:none; accent-color:var(--hx-btn-borda); cursor:pointer }
+.mc-interruptor input[type="range"]{ width:min(40%,200px); min-height:44px; accent-color:var(--hx-btn-borda) }
+.mc-interruptor:focus-within{ outline:2px solid var(--hx-foco); outline-offset:2px }
+.mc .hx-linha{ text-align:left }
+
+/* linha do menu de Ajustes: icone, titulo, resumo e seta */
+.mc-menu{ display:grid; gap:6px }
+.mc-menu .hx-linha{ min-height:60px }
+.mc-menu__ic{ width:44px; height:44px; flex:none; display:grid; place-items:center; background:var(--hx-miolo-2); border:1px solid var(--hx-borda) }
+.mc-menu__ic .dl-deco{ max-width:34px; max-height:34px; width:auto; height:auto }
+.mc-menu__ic img.dl-pix{ max-width:36px; height:auto }
+.mc-menu__txt{ display:grid; min-width:0; flex:1 }
+.mc-menu__txt b{ font-weight:700; letter-spacing:.06em; text-transform:uppercase; display:flex; align-items:center; gap:8px }
+.mc-menu__txt small{ color:var(--hx-sec); font-size:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
+.mc-voltar{ justify-self:start }
+.mc-ponto{ width:10px; height:10px; border-radius:50%; background:var(--hx-sec); flex:none; display:inline-block }
+.mc-ponto[data-estado="ok"]{ background:var(--hx-ok) }
+.mc-ponto[data-estado="pronto"]{ background:var(--hx-aprendido) }
+.mc-status{ display:flex; align-items:center; gap:8px; flex-wrap:wrap }
+.mc-sobre-topo{ display:grid; justify-items:center; gap:6px; padding:12px 0 }
+.mc-sobre-nome{ font:700 36px/1 var(--hx-f); letter-spacing:.2em }
+.mc-sobre-topo .dl-deco{ width:96px; height:96px; object-fit:contain }
+.mc-lcd{ display:inline-block; padding:2px 8px; border:1px solid var(--hx-borda-topo); color:var(--hx-rotulo); font:600 13px/1.3 var(--hx-f); letter-spacing:.08em; text-transform:uppercase }
+
+/* aviso de som (e qualquer aviso curto da pele) */
+.aviso.mc-aviso{ padding:10px 12px; background:var(--hx-miolo); color:var(--hx-texto); border:1px solid var(--hx-alerta); border-left-width:4px; border-radius:0; box-shadow:none; font:600 15px/1.3 var(--hx-f) }
+
+
+/* Conversar */
+.mc-conv__lista{ display:flex; flex-direction:column; gap:12px; padding:10px; min-height:180px; max-height:min(46vh,420px); overflow:auto; border:1px solid var(--hx-borda); background:var(--hx-chao) }
+.mc-troca{ display:flex; flex-direction:column; gap:10px }
+.mc-conv__linha{ display:flex; align-items:flex-end; gap:8px }
+.mc-av{ width:44px; height:44px; flex:none; display:grid; place-items:center; background:var(--hx-miolo-2); border:1px solid var(--hx-borda-topo); overflow:hidden }
+.mc-av img{ max-width:none }
+.mc-pilha{ display:grid; gap:4px; min-width:0 }
+.mc-balao{ max-width:min(86%,560px); padding:8px 12px; border:1px solid var(--hx-borda-topo); background:var(--hx-miolo-2); color:var(--hx-texto); overflow-wrap:anywhere }
+.mc-balao--eu{ align-self:flex-end; background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido) }
+.mc-balao--sembase{ text-decoration:line-through; text-decoration-color:var(--hx-alerta); border-style:dashed }
+.mc-nota{ display:flex; gap:6px; align-items:baseline; font-size:14px; color:var(--hx-sec) }
+.mc-nota b{ color:var(--hx-alerta) }
+.mc-nota--feito b{ color:var(--hx-ok) }
+.mc-conv__atalhos{ display:flex; flex-wrap:wrap; gap:8px }
+.mc-conv__escrever{ display:flex; gap:8px }
+.mc-conv__escrever input{ flex:1; min-width:0; min-height:44px; padding:0 12px; background:var(--hx-chao); color:var(--hx-texto); border:1px solid var(--hx-borda-topo); border-radius:0; font:500 16px var(--hx-f) }
+.mc-conv__escrever input::placeholder{ color:var(--hx-sec) }
+.mc-conv__escrever input:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:2px }
+.mc-fatos{ border:1px solid var(--hx-borda); background:var(--hx-miolo-2) }
+.mc-fatos > summary{ min-height:44px; display:flex; align-items:center; padding:0 12px; cursor:pointer; font:700 14px/1.2 var(--hx-f); letter-spacing:.08em; text-transform:uppercase; color:var(--hx-rotulo) }
+.mc-fatos > summary:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:-3px }
+.mc-fatos__corpo{ display:grid; gap:8px; padding:4px 12px 12px; font-size:15px }
+.mc-fatos__corpo h3{ font:600 12px/1.2 var(--hx-f); letter-spacing:.1em; text-transform:uppercase; color:var(--hx-sec) }
+
+/* Meus pets */
+.mc-grade{ display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:8px }
+.mc-slot{ display:grid; gap:4px; justify-items:center; padding:8px; min-height:44px; background:var(--hx-miolo); color:var(--hx-texto); border:1px solid var(--hx-borda); border-radius:0; font:500 15px/1.2 var(--hx-f); cursor:pointer; text-align:center }
+.mc-slot:hover{ border-color:var(--hx-borda-topo); background:var(--hx-miolo-2) }
+.mc-slot[aria-pressed="true"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido) }
+.mc-slot:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:2px }
+.mc-slot b{ font-weight:700; letter-spacing:.06em; text-transform:uppercase }
+.mc-slot--livre{ border-style:dashed; align-content:center; color:var(--hx-sec) }
+.mc-slot--livre > span:first-child{ font-size:28px; line-height:1 }
+.mc-palco{ width:100%; min-height:96px; display:grid; place-items:center; background:var(--hx-chao); border:1px solid var(--hx-borda) }
+.mc-palco--ativo{ min-height:150px }
+.mc-palco--congelado, .mc-slot .mc-palco--congelado{ background-image:var(--hx-hachura); filter:saturate(.6) }
+.mc-palco img{ max-width:100% }
+.mc-subl{ display:flex; gap:8px; align-items:center; justify-content:center; flex-wrap:wrap; font-size:14px }
+.mc-detalhe{ display:grid; gap:10px; padding:12px; border:1px solid var(--hx-borda); background:var(--hx-miolo-2) }
+.mc-detalhe__cab{ display:flex; align-items:center; gap:10px; flex-wrap:wrap }
+.mc-detalhe__cab h2{ font:700 20px/1.1 var(--hx-f); letter-spacing:.08em; text-transform:uppercase }
+.mc-desde{ color:var(--hx-sec); font-size:13px }
+.mc-barras{ display:grid; gap:6px }
+.mc-tags{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; font-size:15px }
+.mc-guardado{ display:flex; gap:10px; align-items:center; padding:8px; border:1px solid var(--hx-borda); background:var(--hx-miolo-2) }
+.mc-guardado .mc-palco{ width:72px; min-height:72px; flex:none }
+.mc-guardado__txt{ display:grid; gap:2px; flex:1; min-width:0 }
+.mc-guardado__bts{ display:grid; gap:6px }
+.mc-lista{ display:grid; gap:6px; list-style:none; margin:0; padding:0 }
+.mc-anterior{ display:flex; gap:10px; align-items:center; padding:8px; border:1px dashed var(--hx-borda-topo) }
+.mc-anterior span span{ display:block; color:var(--hx-sec); font-size:14px }
+
+/* caixa de dialogo centralizada (Meus pets e Importar no celular): o PainelHx faz a moldura */
+.mc-dialogo{ color-scheme:dark; border:0; padding:0; margin:auto; background:none; color:var(--hx-texto); width:min(94vw,560px); max-height:calc(100dvh - 24px); overflow:visible }
+.mc-dialogo[open]{ display:flex }
+.mc-dialogo::backdrop{ background:rgba(4,8,12,.6) }
+.mc-dialogo > .hx-painel{ width:100%; max-height:calc(100dvh - 24px) }
+.mc-dialogo .mc{ padding:0; background:none; max-width:none }
+
+/* Importar */
+.mc-imp{ display:grid; gap:12px }
+.mc-imp__lados{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:8px }
+.mc-lado{ display:grid; gap:8px; padding:10px; border:1px solid var(--hx-borda); background:var(--hx-miolo-2) }
+.mc-lado--sel{ border-color:var(--hx-btn-borda) }
+.mc-lado h3{ font:600 12px/1.2 var(--hx-f); letter-spacing:.1em; text-transform:uppercase; color:var(--hx-rotulo) }
+.mc-hist{ margin:0; padding:0; list-style:none; display:grid; gap:2px; font-size:14px }
+.mc-hist li{ display:flex; gap:8px }
+.mc-input-arq{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); opacity:0 }
+.mc-input-arq:focus-visible + label{ outline:2px solid var(--hx-foco); outline-offset:2px }
+
+@media (max-width:480px){
+  .mc-opcoes--3{ grid-template-columns:1fr }
+  .mc-guardado{ flex-wrap:wrap }
+}
+@media (prefers-reduced-motion: no-preference){
+  .mc-opcao, .mc-slot, .mc-interruptor{ transition:background-color .12s, border-color .12s }
+}
+.mc-guardados{ display:grid; gap:8px }
+.mc-imp{ font-family:var(--hx-f); color:var(--hx-texto) }
+.mc-imp p{ margin:0 }
