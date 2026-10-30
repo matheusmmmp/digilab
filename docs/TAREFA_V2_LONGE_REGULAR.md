@@ -189,7 +189,8 @@ Só código e testes; nenhuma vida de pesquisa. Quatro commits, nesta ordem:
    `tests/gabaritos/lugar_estilos_antes.json` (36 vidas: instinto e lobos × 3 estilos × 2 donos × 3 sementes, com o log, o estado, as
    rngs, o estado da política e os lugares das rações), e `tests/test_gabarito_lugar_estilos.py` confere byte a byte.
 3. **O estilo `longe_fixo`** (`digilab/mundo.py`, `digilab/config.py`):
-   - `ConfigMundo.n_pontos_longe_fixo = 3` (LR-1; PROPOSTO, SEM FONTE; validado entre 1 e 16);
+   - `N_PONTOS_LONGE_FIXO = 3` em `digilab/config.py` (LR-1; PROPOSTO, SEM FONTE), parâmetro `n_pontos` do `DonoComLugar` (validado entre
+     1 e 16). Fica **fora do `ConfigMundo`**: um campo novo no `asdict` quebrava 4 gabaritos do web mesmo com o estilo desligado;
    - o `DonoComLugar` sorteia na construção os pontos fixos com a rng própria `derivar_semente("dono-lugar-fixo", semente, rotulo_dono)`, e
      cada `alimentar` sorteia um ponto uniformemente na mesma rng; os outros estilos não criam nem consomem essa rng;
    - `ESTILOS_LUGAR` ganhou o `longe_fixo`; `ESTILOS_LUGAR_V2` guarda os três de antes para as runs que os iteram (o protótipo e a análise
@@ -200,6 +201,8 @@ Só código e testes; nenhuma vida de pesquisa. Quatro commits, nesta ordem:
 
 **O achado que muda a leitura (desvio 1 do registro):** o comedouro está na célula (10, 15) do mapa de 64 × 30. Sem corte do mapa, só
 **5 das 16 direções** têm um ponto a 20 células (os índices 14, 15, 0, 1 e 2, o leste) e **3** a 30 células (15, 0 e 1). Os 3 pontos
-saem dessas, então ficam todos a leste do comedouro; o `longe` sorteado usa as 16 (cortadas). O adendo 6 precisa dizer isso.
+saem dessas, então ficam todos a leste do comedouro; a distância mínima entre dois pontos é de cerca de 7,8 células (média de 17,9 em 2 000
+sementes). O `longe` sorteado ancora no pet, usa as 16 direções e corta o ponto na borda. O adendo 6 precisa dizer isso; a LR-2 fica como
+decidida e o ponto vai ao Matheus.
 
 Os testes e a contagem da suíte inteira estão no corpo do PR.

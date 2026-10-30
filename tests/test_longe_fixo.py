@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import math
 import sys
-from dataclasses import replace
 from pathlib import Path
 
 import pytest
@@ -15,7 +14,7 @@ sys.path.insert(0, str(RAIZ))
 sys.path.insert(0, str(RAIZ / "experiments"))
 
 import bancada_v2 as bv  # noqa: E402
-from digilab.config import CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, ConfigMundo  # noqa: E402
+from digilab.config import CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, N_PONTOS_LONGE_FIXO, ConfigMundo  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
 from digilab.events import LogDeEventos  # noqa: E402
 from digilab.mundo import (ESTILOS_LUGAR, ESTILOS_LUGAR_V2, DonoComLugar, centro_da_celula, distancia,  # noqa: E402
@@ -26,8 +25,8 @@ SEMENTES = (101, 202, 303, 404, 505)
 DONOS = ("atencioso", "relapso", "aleatorio", "incoerente")
 
 
-def _dono(semente=101, rotulo="atencioso", cm=None):
-    return DonoComLugar(criar_dono("atencioso"), "longe_fixo", semente, rotulo, cm)
+def _dono(semente=101, rotulo="atencioso", cm=None, **kw):
+    return DonoComLugar(criar_dono("atencioso"), "longe_fixo", semente, rotulo, cm, **kw)
 
 
 def _vida(semente, rotulo="atencioso", dias=3):
@@ -38,25 +37,25 @@ def _vida(semente, rotulo="atencioso", dias=3):
 
 def test_o_estilo_esta_nos_estilos_e_as_runs_de_antes_iteram_os_tres():
     assert ESTILOS_LUGAR == ESTILOS_LUGAR_V2 + ("longe_fixo",) and ESTILOS_LUGAR_V2 == ("comedouro", "perto", "longe")
-    assert ConfigMundo().n_pontos_longe_fixo == 3
-    with pytest.raises(ValueError):
-        ConfigMundo(n_pontos_longe_fixo=0)
-    with pytest.raises(ValueError):
-        ConfigMundo(n_pontos_longe_fixo=17)
+    assert N_PONTOS_LONGE_FIXO == 3 and _dono().n_pontos == 3
+    assert not hasattr(ConfigMundo(), "n_pontos_longe_fixo")           # fora do asdict(ConfigMundo): os gabaritos do web nao mudam
+    for n in (0, 17):
+        with pytest.raises(ValueError):
+            DonoComLugar(criar_dono("atencioso"), "longe_fixo", 101, "atencioso", n_pontos=n)
 
 
 @pytest.mark.parametrize("semente", SEMENTES)
 def test_os_pontos_ficam_na_faixa_e_em_direcoes_distintas(semente):
     d = _dono(semente)
     cx, cy = centro_da_celula(CM.layout.comedouro, CM)
-    assert len(d.pontos_fixos) == CM.n_pontos_longe_fixo == len(set(d.pontos_fixos))
+    assert len(d.pontos_fixos) == N_PONTOS_LONGE_FIXO == len(set(d.pontos_fixos))
     lo, hi = CM.longe_min_celulas * CM.sub, CM.longe_max_celulas * CM.sub
     for x, y in d.pontos_fixos:
         assert 0 <= x < CM.celulas_x * CM.sub and 0 <= y < CM.celulas_y * CM.sub
         assert lo - 1 <= distancia(x - cx, y - cy) <= hi + 1
     # direcoes distintas: cada ponto tem uma das 16 (o angulo mais proximo; o DIR16 gira no sentido do y que cresce para baixo)
     dirs = {round(-math.degrees(math.atan2(y - cy, x - cx)) / 22.5) % 16 for x, y in d.pontos_fixos}
-    assert len(dirs) == CM.n_pontos_longe_fixo
+    assert len(dirs) == N_PONTOS_LONGE_FIXO
 
 
 def test_os_pontos_variam_com_a_semente_e_com_o_dono_e_nao_com_o_braco():
@@ -103,9 +102,9 @@ def test_o_replay_e_bit_a_bit_e_os_pontos_sao_os_mesmos(semente):
 
 def test_n_pontos_configuravel_e_falha_alto_sem_direcoes():
     for n in (1, 5):
-        assert len(_dono(101, cm=replace(CM, n_pontos_longe_fixo=n)).pontos_fixos) == n
+        assert len(_dono(101, n_pontos=n).pontos_fixos) == n
     with pytest.raises(ValueError, match="direcoes cabem"):
-        _dono(101, cm=replace(CM, n_pontos_longe_fixo=16))
+        _dono(101, n_pontos=16)
 
 
 def test_a_bancada_aceita_o_estilo_novo():

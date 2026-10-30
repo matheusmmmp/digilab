@@ -110,7 +110,7 @@ from dataclasses import dataclass, replace
 from typing import Callable
 
 from .ambiente import PoliticaInstintoBola
-from .config import CONFIG_BOLA, CONFIG_DONOS, CONFIG_MUNDO, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, TICKS_POR_DIA, Config, ConfigMundo
+from .config import CONFIG_BOLA, CONFIG_DONOS, CONFIG_MUNDO, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, N_PONTOS_LONGE_FIXO, TICKS_POR_DIA, Config, ConfigMundo
 from .config import CONFIG_BANHEIRO, CONFIG_PQP_MUNDO, ConfigBanheiro, ConfigDonos, ConfigPetQuePensaMundo
 from .config import CONFIG_PALADAR, ConfigPaladar
 from .config import CONFIG_FRUTA_AO_LADO, ConfigFrutaAoLado
@@ -1953,13 +1953,17 @@ class DonoComLugar:
     `derivar_semente("dono-lugar", semente, rotulo_dono)`, sem o braco: P0 e P1 sorteiam os mesmos desvios. Um sorteio fixo por
     `alimentar` em cada estilo (perto e longe: direcao e distancia; comedouro: nenhum)."""
 
-    def __init__(self, base, estilo: str, semente: int, rotulo_dono: str, cfg_mundo: ConfigMundo | None = None) -> None:
+    def __init__(self, base, estilo: str, semente: int, rotulo_dono: str, cfg_mundo: ConfigMundo | None = None,
+                 n_pontos: int = N_PONTOS_LONGE_FIXO) -> None:
         if estilo not in ESTILOS_LUGAR:
             raise ValueError(f"estilo de lugar desconhecido: {estilo!r} (opcoes: {ESTILOS_LUGAR})")
         self.base = base
         self.estilo = estilo
         self.nome = getattr(base, "nome", rotulo_dono)
         self.cmf = cfg_mundo or CONFIG_MUNDO_LIGADA
+        if not 1 <= n_pontos <= 16:
+            raise ValueError(f"n_pontos precisa estar entre 1 e 16 (as direcoes): {n_pontos}")
+        self.n_pontos = n_pontos                           # so conta no estilo `longe_fixo`
         self._rng = random.Random(derivar_semente("dono-lugar", semente, rotulo_dono))
         self.lugares: list[dict] = []
         self.pontos_fixos: tuple[tuple[int, int], ...] = ()
@@ -1969,7 +1973,7 @@ class DonoComLugar:
             self.pontos_fixos = self._sortear_pontos_fixos()
 
     def _sortear_pontos_fixos(self) -> tuple[tuple[int, int], ...]:
-        """Os `n_pontos_longe_fixo` lugares da vida (C1, secao 3.1): cada um a `longe_min_celulas`...`longe_max_celulas` do comedouro (LR-2),
+        """Os `n_pontos` lugares da vida (C1, secao 3.1): cada um a `longe_min_celulas`...`longe_max_celulas` do comedouro (LR-2),
         em direcoes distintas das 16. O corte do mapa nao pode encurtar a distancia: so valem as direcoes e distancias cujo ponto cai
         dentro do mapa sem corte (a distancia fica na faixa, a menos do arredondamento de 1 subunidade); sem direcoes bastantes, falha alto."""
         cm = self.cmf
@@ -1981,11 +1985,11 @@ class DonoComLugar:
             return distancia(x - cx, y - cy) >= r - 1
 
         viaveis = [d for d in range(16) if inteiro(d, rmin)]
-        if len(viaveis) < cm.n_pontos_longe_fixo:
+        if len(viaveis) < self.n_pontos:
             raise ValueError(f"longe_fixo: so {len(viaveis)} direcoes cabem no mapa a {cm.longe_min_celulas} celulas do comedouro, "
-                             f"e o n_pontos_longe_fixo pede {cm.n_pontos_longe_fixo}")
+                             f"e o n_pontos pede {self.n_pontos}")
         pontos = []
-        for direcao in self._rng_fixo.sample(viaveis, cm.n_pontos_longe_fixo):
+        for direcao in self._rng_fixo.sample(viaveis, self.n_pontos):
             for _ in range(1000):
                 r = self._rng_fixo.randint(rmin, rmax)
                 if inteiro(direcao, r):
