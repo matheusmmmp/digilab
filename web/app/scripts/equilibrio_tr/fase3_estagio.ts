@@ -14,14 +14,17 @@
    As sementes: a faixa reservada (68101 a 68505 na calibracao), as 5 bases x 20 (hashSemente("equilibrio-tr", base, k)). P-1: 10 sementes
    por confronto de formas e especies, os dois lados; P-2, P-3 e P-4: 100 por forma.
    --escala '{"vida":{"adolescente":700},"beta":.05}': a escala candidata, por cima da CESC_V9; --parte p1|p2|p34: so uma parte; --disparo X: o multiplicador
-   do disparo do tempo real (RelogioTR.disparo).
+   do disparo do tempo real (RelogioTR.disparo); --sem-reserva: sem a DE-10 (a reserva do fim da lista entra na reordenacao pela nota, como
+   nos pets v13). Com a DE-10 (o padrao), a reserva fica fixa no fim (GambitsPet.reservaNoFim); --fator-rival '{"npc_tier2_sentinela":1.2}': o
+   fator do rival sugerido do P-4 (o do NPC ou o da arena dele) por cima do candidato (FATORES_V14, a alavanca da DE-4, fase 4);
+   --fatores-hoje: o fator de hoje do rival.
    uso (em web/app): npx tsx scripts/equilibrio_tr/fase3_estagio.ts --faixa calibracao [--escala JSON] [--parte p1] --saida <arquivo.json> */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { execSync } from "node:child_process";
 import {
   ADOL_V21, CAT, CESC_V9, CIT, CLE, CRIANCA_V21, CV, CV21E_TR, ESPECIES, FORMAS_AD, GambitsPet, LINHAS, LINHA_DA_FORMA, LISTAS_V14, LUGARES_V6,
-  RELOGIO_V14, STATS, arenaDaLuta, caraterCanonico, copiarGambits, gambitsAdulto, hashSemente, jogarSerie, jogarTR, lutadorBot, perfilDe,
+  ARENAS, FATORES_V14, RELOGIO_V14, STATS, arenaDaLuta, caraterCanonico, copiarGambits, gambitsAdulto, hashSemente, jogarSerie, jogarTR, lutadorBot, perfilDe,
   type Estagio, type Forma, type ListaGambits, type Lutador, type RegrasLuta,
 } from "../../motor/index.ts";
 import { ligarEscala } from "../../motor/catalogo.ts";
@@ -36,6 +39,9 @@ if (parte !== null && !["p1", "p2", "p34"].includes(parte)) throw new Error("--p
 const disparo = arg("disparo") === null ? {} : { disparo: Number(arg("disparo")) };
 if ("disparo" in disparo && !(disparo.disparo > 0)) throw new Error("--disparo precisa ser um numero > 0");
 const R: RegrasLuta = { ...CV21E_TR, relogio: { ...RELOGIO_V14, ...disparo } }, VERSAO = R.versaoPet;
+/* DE-10: a reserva fixa no fim da lista do pet que aprende (o candidato v14); --sem-reserva desliga */
+const RESERVA_NO_FIM = !process.argv.includes("--sem-reserva");
+const FATOR_RIVAL = JSON.parse(arg("fator-rival") ?? "{}") as Record<string, number>;
 ligarEscala(true);
 /* a escala: a dos pets v13 (CESC_V9) ou a candidata por cima */
 const escArg = JSON.parse(arg("escala") ?? "{}") as { vida?: Partial<Record<Estagio, number>>; beta?: number };
@@ -71,7 +77,7 @@ const t0 = performance.now();
 const out: Record<string, unknown> = {
   gerado_por: "web/app/scripts/equilibrio_tr/fase3_estagio.ts", data: new Date().toISOString().slice(0, 10),
   commit: execSync("git rev-parse --short HEAD").toString().trim(), node: process.version,
-  faixa, bases, sementes_por_base: SEMENTES_POR_BASE, relogio: R.relogio, listas: "v14", escala: ESC, parte, metas: {},
+  faixa, bases, sementes_por_base: SEMENTES_POR_BASE, relogio: R.relogio, listas: "v14", reserva_no_fim: RESERVA_NO_FIM, escala: ESC, parte, metas: {},
 };
 const metas = out.metas as Record<string, unknown>;
 
@@ -124,13 +130,17 @@ if (!parte || parte === "p34") {
   for (const est of ["adolescente", "adulto"] as Estagio[]) {
     const rival = rivalDe(est), arena = arenaDaLuta(rival, VERSAO), B0 = lutadorBot(rival, R, arena), lutasSerie = arena?.lutas ?? 1;
     /* o rival na escala candidata: a vida do estagio dele troca na mesma proporcao (o fator fica) */
-    const B: Lutador = { ...B0, cond: { ...B0.cond, escala: B0.cond.escala! * ESC.vida[B0.cond.est] / CESC_V9.vida[B0.cond.est] } };
+    const fHoje = arena?.fator ?? CESC_V9.fatorNpc[rival];
+    const fV14 = arena ? FATORES_V14.lider[ARENAS.find(a => a.lider === rival)!.id] : FATORES_V14.npc[rival];
+    const fRival = FATOR_RIVAL[rival] ?? (process.argv.includes("--fatores-hoje") ? fHoje : fV14);
+    if (fHoje === undefined) throw new Error("rival sem fator: " + rival);
+    const B: Lutador = { ...B0, cond: { ...B0.cond, escala: B0.cond.escala! * ESC.vida[B0.cond.est] / CESC_V9.vida[B0.cond.est] / fHoje * fRival } };
     const formasP3: Record<string, number> = {}, formasP4: Record<string, number> = {}, taxas: number[] = [], trocas: Record<string, number> = {};
     for (const ref of formasDe(est)) {
       let p = 0, n = 0, qual = 0;
       sementes.forEach((s, k) => {
         const esp = ESPECIES[k % ESPECIES.length], gp = new GambitsPet();
-        gp.chipsNoFim = true; gp.semear(ref.forma(esp), ref.id, R, ref.lista);
+        gp.chipsNoFim = true; gp.reservaNoFim = RESERVA_NO_FIM; gp.semear(ref.forma(esp), ref.id, R, ref.lista);
         const cond = perfil(ref, esp, TIPICO[est]);
         let lutas = 0, vit = 0, ev = 0;
         while (lutas < CAT.sparring) {
@@ -156,7 +166,7 @@ if (!parte || parte === "p34") {
     const nome = est === "adolescente" ? "champion" : "ultimate";
     p3[nome] = { media: r4(media(Object.values(formasP3))), formas: formasP3,
       trocas_por_pet: Object.fromEntries(Object.entries(trocas).map(([k, v]) => [k, r4(v)])) };
-    p4[nome] = { rival, lutas_por_serie: lutasSerie, qualificados: r4(media(Object.values(formasP4))), taxa_media: r4(media(taxas)), formas: formasP4 };
+    p4[nome] = { rival, fator: fRival, lutas_por_serie: lutasSerie, qualificados: r4(media(Object.values(formasP4))), taxa_media: r4(media(taxas)), formas: formasP4 };
   }
   metas["P-3"] = { ...p3, passa: Object.values(p3).every(x => (x as { media: number }).media >= .55 && (x as { media: number }).media <= .7) };
   metas["P-4"] = { ...p4, passa: Object.values(p4).every(x => (x as { qualificados: number }).qualificados >= .8) };
