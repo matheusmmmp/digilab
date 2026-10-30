@@ -41,8 +41,8 @@
    saem do registro no descarte unico 6 (descartarPetsAntigos), com aviso na tela; o recorde da Fabrica recomeca. O resto do Tamer (as
    medalhas, os itens, o titulo, os recordes das instalacoes, o Salao) fica. Os registros 1 a 6 ainda se leem (com a Fabrica de antes). */
 import {
-  ARENA_POR_ID, CARTA_DA_REVANCHE, CIT, ESTAGIOS_SALAO, INSTALACOES, LUTAS_SERIE_FABRICA, TentativaFabrica, VERSAO_FABRICA, VERSAO_FABRICA_ATUAL, VERSAO_FABRICA_TR, VERSOES_FABRICA, sementeFabrica, sementeSalao, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHAS, MEDALHAS_LIGA, MEDALHA_POR_ID, Motor, NPC, PetMorto, VERSAO_INSTALACOES,
-  VERSAO_LIGA, cartaDe, ehInstalacao, itemDe, medalhaDoLider, nomeForma, type Estagio, type IdInstalacao, type Medalha,
+  ARENA_POR_ID, CARTA_DA_REVANCHE, CIT, ESTAGIOS_SALAO, INSTALACOES, LUTAS_SERIE_FABRICA, TentativaFabrica, VERSAO_FABRICA, VERSAO_FABRICA_ATUAL, VERSAO_FABRICA_TR, VERSOES_FABRICA, sementeFabrica, sementeSalao, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHAS, MEDALHAS_LIGA, MEDALHA_POR_ID, Motor, NPC, PetMorto,
+  cartaDe, ehInstalacao, itemDe, medalhaDoLider, nomeForma, type Estagio, type IdInstalacao, type Medalha,
 } from "../motor/index.ts";
 import { CHAVE, type Armazenamento } from "./save.ts";
 
@@ -355,17 +355,15 @@ export const textoTamer = (t: Tamer): string => JSON.stringify({ versao: VERSAO_
 export function gravarTamer(armaz: Armazenamento, t: Tamer): void { armaz.setItem(CHAVE_TAMER, textoTamer(t)); }
 
 /** medalhas que o pet acabou de ganhar para o Tamer: a primeira vitoria dele contra um lider cuja medalha o Tamer
-    ainda nao tem. So pets v6 (os v1-v5 nao tem Tamer). Devolve as medalhas novas (ja aplicadas ao Tamer) */
+    ainda nao tem. Devolve as medalhas novas (ja aplicadas ao Tamer) */
 export function conferirMedalhas(t: Tamer, m: Motor, quando: number = Date.now()): MedalhaGanha[] {
-  if (m.versao < 6) return [];
   const novas: MedalhaGanha[] = [];
   for (const md of MEDALHAS) if (!t.tem(md.id) && (m.campanha[md.lider] ?? 0) > 0) novas.push(t.ganhar(md.id, m, quando));
   return novas;
 }
 /** itens das medalhas: o Tamer que tem a medalha e ainda nao tem o item dela ganha agora (na mesma hora da medalha; um Tamer de antes
-    desta parte recebe na abertura). So com pet v6. Devolve os itens novos (ja aplicados) */
+    desta parte recebe na abertura). Devolve os itens novos (ja aplicados) */
 export function conferirItensDasMedalhas(t: Tamer, m: Motor, quando: number = Date.now()): ItemGanho[] {
-  if (m.versao < 6) return [];
   const novos: ItemGanho[] = [];
   for (const g of t.medalhas) {
     const md = MEDALHA_POR_ID[g.id];
@@ -377,7 +375,7 @@ export function conferirItensDasMedalhas(t: Tamer, m: Motor, quando: number = Da
     desta luta (a primeira vitoria da a medalha e o item, nao carta) */
 export function porqueSemCarta(t: Tamer, m: Motor, lider: string, medalhaAntes: boolean): string | null {
   const md = medalhaDoLider(lider);
-  if (m.versao < 6 || !md) return "só o líder de uma arena dá carta, e só a pets v6";
+  if (!md) return "só o líder de uma arena dá carta";
   if (!medalhaAntes) return "a primeira vitória dá a medalha e o item, não carta";
   const est = LUGARES_V6[md.lugar].est;
   if (m.estagioAtual !== est) return `a carta da revanche vem com um pet do nível da arena (${NIVEL_TAMER[est] ?? est})`;
@@ -396,15 +394,15 @@ export function conferirRevanche(t: Tamer, m: Motor, lider: string, venceu: bool
   return t.ganharItem(CARTA_DA_REVANCHE[md.id], "revanche", lider, m, quando);
 }
 /** o titulo que o pet acabou de dar ao Tamer: a primeira vez que ele venceu a Liga dos Lideres (o motor conta os titulos do pet pelo
-    evento de luta da Liga). So pets v6 e com as 6 medalhas no Tamer. Devolve o titulo novo (ja aplicado) ou null */
+    evento de luta da Liga). So com as 6 medalhas no Tamer. Devolve o titulo novo (ja aplicado) ou null */
 export function conferirCampeao(t: Tamer, m: Motor, quando: number = Date.now()): Campeao | null {
-  if (m.versao < VERSAO_LIGA || m.liga.titulos < 1 || t.n < MEDALHAS_LIGA || t.tituloDe(m.semente)) return null;
+  if (m.liga.titulos < 1 || t.n < MEDALHAS_LIGA || t.tituloDe(m.semente)) return null;
   return t.ganharTitulo(m, quando);
 }
 /** os recordes que o pet acabou de dar ao Tamer: a maior sequencia dele numa instalacao da Fronteira, quando passa a do Tamer (o motor
-    conta as sequencias do pet pelo evento de luta da instalacao). So pets v6 e depois do titulo. Devolve os recordes novos (ja aplicados) */
+    conta as sequencias do pet pelo evento de luta da instalacao). So depois do titulo. Devolve os recordes novos (ja aplicados) */
 export function conferirRecordes(t: Tamer, m: Motor, quando: number = Date.now()): Recorde[] {
-  if (m.versao < VERSAO_INSTALACOES || !t.titulo) return [];
+  if (!t.titulo) return [];
   const novos: Recorde[] = [];
   for (const x of INSTALACOES) {
     const v = m.instalacoes[x.id].recorde;
@@ -413,9 +411,9 @@ export function conferirRecordes(t: Tamer, m: Motor, quando: number = Date.now()
   return novos;
 }
 /** o pet passa a conhecer as medalhas do Tamer (evento "u" no registro dele) e, com as 6 e o titulo do Tamer, a Fronteira aberta (evento
-    "f": as instalacoes). Pet v1-v5 ou morto: nada. Devolve true se o registro do pet mudou */
+    "f": as instalacoes). Pet morto: nada. Devolve true se o registro do pet mudou */
 export function sincronizarPet(t: Tamer, m: Motor): boolean {
-  if (m.versao < 6 || m.morte) return false;
+  if (m.morte) return false;
   let mudou = false;
   try {
     if (m.medalhas < t.n) { m.liberar(t.n); mudou = true; }

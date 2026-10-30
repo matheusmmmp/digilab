@@ -20,7 +20,7 @@ function libera(n: number): string {
 
 export function TelaMedalhas() {
   const { motor: m, erroTamer } = useJogo(), t = tamerAtual(), a = useAtlas();
-  const espera = m.esperandoMedalha(), v6 = m.versao >= 6;
+  const espera = m.esperandoMedalha();
   const img = (k: string) => { if (a.tipo !== "ok") return null; const n = NPC[k]!, i = imagemAtlas(a, n.sprite ?? n.k); return <img className="dl-pix" src={i.url} width={i.w} height={i.h} alt="" />; };
   return (
     <div className="tela dl desk med-tela">
@@ -59,8 +59,7 @@ export function TelaMedalhas() {
               </li>))}
           </ul>
           {erroTamer && <p className="med-erro" role="alert">O registro do Tamer não abriu, e o app não vai gravar por cima dele: {erroTamer}</p>}
-          {!v6 ? <p className="dl-apoio">{nomeForma(m.forma)} é de uma versão antiga: não ganha medalhas e não precisa delas para evoluir.</p>
-            : espera ? <p className="med-espera" role="status"><b>{nomeForma(m.forma)} está pronto para evoluir</b> e espera o Tamer: {textoFalta(t, espera.precisa)}</p>
+          {espera ? <p className="med-espera" role="status"><b>{nomeForma(m.forma)} está pronto para evoluir</b> e espera o Tamer: {textoFalta(t, espera.precisa)}</p>
             : null}
         </section>
       </div>

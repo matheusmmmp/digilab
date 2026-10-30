@@ -5,7 +5,7 @@
    aberto, numeros) -> o que decidiu a luta -> regra nova ou "nenhuma regra nova" -> progresso. Elogiar/Repreender
    uma acao da luta nao existe no motor e fica de fora (docs/PENDENCIAS_PRANCHAS.md). */
 import { useEffect, useRef, useState } from "react";
-import { CAT, MEDALHAS, NOME_V2, NPC, cartaDe, chaveRegra, fatorExibicao, itemDe, regraDe, rotuloRegra, type ResultadoLuta, type Turno, duracaoLuta } from "../../../motor/index.ts";
+import { CAT, MEDALHAS, NOME_V2, NPC, cartaDe, chaveRegra, fatorExibicao, itemDe, regraDe, rotuloRegra, type ResultadoLuta, type Turno, duracaoLuta, tamanhoLuta } from "../../../motor/index.ts";
 import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { abrirModal } from "../../componentes/modal.ts";
 import { Peca } from "../../componentes/Imagens.tsx";
@@ -94,6 +94,8 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
   const titulo = liga ? (venceuLiga ? "Campeão!" : perdeu ? "Derrota" : "Empate") : inst ? (r.recorde ? "Recorde!" : "Fim da sequência")
     : lugarNovo ? "Ilha vencida!" : venceu ? "Vitória!" : perdeu ? "Derrota" : "Empate";
   const n = res.turnos.length, dur = duracaoLuta(res);
+  /* a duracao: os turnos, ou os segundos da luta em tempo real (pets v13) */
+  const durNum: [string, string] = res.tr ? [String(tamanhoLuta(res)), "segundos"] : [String(n), "turnos"];
   /* lutas seguidas (Cidadela e Liga): o resultado e o da serie; "n turnos" e o da ultima luta */
   const serie = r.nLutas > 1 ? r.serie : null;
   const sub = inst
@@ -113,10 +115,10 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
   const nums: [string, string][] = inst
     ? [[String(vitInst), "vitórias seguidas"], [String(m.instalacoes[inst.id].tentativas), "tentativas"], [String(recordeTamer?.valor ?? 0), "recorde"]]
     : liga
-    ? [[String(n), "turnos"], [String(m.liga.tentativas), "tentativas"], [`${r.serie.filter(x => x.pontosA === 1).length} de ${r.nLutas}`, "lutas vencidas"]]
+    ? [durNum, [String(m.liga.tentativas), "tentativas"], [`${r.serie.filter(x => x.pontosA === 1).length} de ${r.nLutas}`, "lutas vencidas"]]
     : npc
-    ? [[String(n), "turnos"], [String(tentativas(m, r.npc!)), "tentativas"], [`${vencidos} de ${LUGARES.length}`, "ilhas"]]
-    : [[String(n), "turnos"], [inteiro(danoDado), "dano dado"], [inteiro(danoLevado), "dano levado"]];
+    ? [durNum, [String(tentativas(m, r.npc!)), "tentativas"], [`${vencidos} de ${LUGARES.length}`, "ilhas"]]
+    : [durNum, [inteiro(danoDado), "dano dado"], [inteiro(danoLevado), "dano levado"]];
 
   /* sprites: o vencedor grande, o perdedor apagado e menor; no empate os dois de pe */
   const spr = (L: LutadorTela, alvoM: number, alvoD: number) => {

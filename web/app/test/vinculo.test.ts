@@ -81,29 +81,11 @@ describe("vinculo B (pets v10) e paridade com o Python", () => {
     for (let t = 0; t < TPD; t++) expect(situacaoDe(obs(.9, .9, .9, t))[2]).toBe(t >= 1320 || t < 420 ? "1" : "0");
   });
 
-  test("os v10, os v11, os v12 e os v13 (os ovos novos) tem o vinculo B; um pet v9 segue com o de hoje", () => {
+  test("os ovos novos (v13) tem o vinculo B; a variante A (pets v1-v9) so existe no Vinculo, pela paridade com o Python", () => {
     expect(VERSAO_PET).toBe(13); expect(CVB.versaoPet).toBe(10);
-    for (const v of [10, 11, 12, 13]) { expect(new Motor(1, v).vinc.porSituacao).toBe(true); expect(new Motor(1, v).vinc.assinatura().length).toBe(8); }
-    expect(new Motor(1, 9).vinc.porSituacao).toBe(false);
-    expect(new Motor(1, 9).vinc.assinatura().length).toBe(7);
+    expect(new Motor(1).vinc.porSituacao).toBe(true); expect(new Motor(1).vinc.assinatura().length).toBe(8);
+    expect(() => new Motor(1, 9)).toThrow(/versão/);
     expect(() => new Motor(1, 14)).toThrow();
   });
 
-  test("uma vida v10 com o dono aleatorio da web: nenhum pedido, chaves de coerencia por situacao, replay igual", () => {
-    const m = new Motor(2001, 10), dono = criarDono("aleatorio"), r = criarRng(hashSemente("dono", 2001, "aleatorio"));
-    const passos = Math.round(2 * TPD / CD.passo), orc = 32;
-    let gasto = 0;
-    for (let p = 0; p < passos; p++) {
-      m.avancar(CD.passo);
-      const rest = orc - gasto, min = Math.max(0, rest - (passos - p - 1) * CD.maxPasso), max = Math.min(rest, CD.maxPasso);
-      const v = { e: m.e, acao: m.acao, passo: p, passos, orc, gasto, min, max, atrasado: gasto < orc * (p + 1) / passos, chamados: m.chamadosAbertos() };
-      for (const a of dono.decidir(v, r)) { m.observar(a); gasto++; }
-      expect(m.vinc.pedidos).toEqual([]);
-    }
-    expect(Object.keys(m.vinc.feedbacks).length).toBeGreaterThan(0);
-    expect(Object.keys(m.vinc.feedbacks).every(k => /\|[01]{3}$/.test(k))).toBe(true);
-    const r2 = Motor.reproduzir(m.semente, m.log, m.versao);
-    expect(r2.assinatura()).toBe(m.assinatura());
-    expect(r2.vinc.valor).toBe(m.vinc.valor);
-  });
 });

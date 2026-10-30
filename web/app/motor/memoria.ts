@@ -3,7 +3,7 @@
    - MemoriaEspacos: pets v2+ (espelho de digilab/memoria_espacos.py; adendo DF, Parte 1): 4 espacos de
      curto prazo e 2 de longo, uma memoria por categoria, a mais forte vence; depois de 12 h a memoria
      tenta o longo prazo; a cada 4 h ACORDADO tudo e relembrado. Sem rng. */
-import { CEM, CM, CME, FATORES_ESPACOS, TEMP_NEUTRO, TICK_INICIAL, type CategoriaMemoria } from "./constantes.ts";
+import { CEM, CME, FATORES_ESPACOS, TEMP_NEUTRO, TICK_INICIAL, type CategoriaMemoria } from "./constantes.ts";
 import type { AcaoDono, EixoTemperamento, Temperamento } from "./tipos.ts";
 
 type Necessidade = "fome" | "higiene";
@@ -39,41 +39,6 @@ export interface MemoriaPolitica {
   refs(tick: number): Record<string, number | null>;
   assinatura(): unknown[];
   avancar?(tick: number, dormindo?: boolean): void;
-}
-
-export class Memoria implements MemoriaPolitica {
-  tauBronca: number;
-  nDono = 0;
-  pend: Record<Necessidade, number[]> = { fome: [], higiene: [] };
-  lat: Record<Necessidade, number> = { fome: 0, higiene: 0 };
-  refLat: Record<Necessidade, number | null> = { fome: null, higiene: null };
-  fb: Record<"repreensoes" | "elogios", [number, number]> = { repreensoes: [0, 0], elogios: [0, 0] };
-  refFb: Record<"repreensoes" | "elogios", number | null> = { repreensoes: null, elogios: null };
-  constructor(fatorTauBronca = 1) {
-    this.tauBronca = CM.tau * fatorTauBronca;
-  }
-  pedido(v: number[], tick: number): void {
-    const [fome, hig] = v; const [nec, val]: [Necessidade, number] = fome <= hig ? ["fome", fome] : ["higiene", hig];
-    if (val < CM.limiarPedido) this.pend[nec].push(tick);
-  }
-  expirar(tick: number): void {
-    for (const nec of ["fome", "higiene"] as const) {
-      const vivos = this.pend[nec].filter(t => tick - t <= CM.janela);
-      if (vivos.length < this.pend[nec].length) { this.lat[nec] = 1; this.refLat[nec] = null; }
-      this.pend[nec] = vivos;
-    }
-  }
-  acaoDono(a: AcaoDono, tick: number): void {
-    this.nDono++; this.expirar(tick);
-    const nec = a === "alimentar" ? "fome" : a === "limpar" ? "higiene" : null;
-    if (nec && this.pend[nec].length) { this.lat[nec] = Math.min(1, (tick - this.pend[nec][0]) / CM.janela); this.refLat[nec] = this.nDono; this.pend[nec] = []; }
-    const k = a === "repreender" ? "repreensoes" : a === "elogiar" ? "elogios" : null;
-    if (k) { this.fb[k] = [this.decaido(k, tick) + 1, tick]; this.refFb[k] = this.nDono; }
-  }
-  decaido(k: "repreensoes" | "elogios", tick: number): number { const [v, t0] = this.fb[k]; return v ? v * Math.exp(-(tick - t0) / (k === "repreensoes" ? this.tauBronca : CM.tau)) : 0; }
-  feat(tick: number): number[] { return [this.lat.fome, this.lat.higiene, Math.min(1, this.decaido("repreensoes", tick) / CM.escala), Math.min(1, this.decaido("elogios", tick) / CM.escala)]; }
-  refs(): Record<string, number | null> { return { latencia_fome: this.refLat.fome, latencia_higiene: this.refLat.higiene, repreensoes: this.refFb.repreensoes, elogios: this.refFb.elogios }; }
-  assinatura(): unknown[] { return [this.nDono, this.pend, this.lat, this.refLat, this.fb, this.refFb]; }
 }
 
 export interface Lembranca { cat: CategoriaMemoria; int: number; criada: number; relembrada: number; ref: number | null; emocao: string }

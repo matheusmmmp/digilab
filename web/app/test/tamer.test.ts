@@ -1,5 +1,5 @@
 /* Registro do Tamer (src/tamer.ts; docs/DESIGN_MEDALHAS_ARENAS.md, secao 5): event sourcing proprio na chave
-   CHAVE-tamer; medalha na primeira vitoria contra o lider (so pets v6); o pet ativo recebe o "u"; o descarte unico
+   CHAVE-tamer; medalha na primeira vitoria contra o lider; o pet ativo recebe o "u"; o descarte unico
    (o 6, da luta em tempo real) tira os pets v1-v12 e a Fabrica de antes. E o ciclo no estado do app (src/jogo.ts): vencer o lider grava a medalha e libera a evolucao. */
 import { describe, expect, test } from "vitest";
 import { DUR_EVO, MEDALHAS, Motor, hashSemente } from "../motor/index.ts";
@@ -27,7 +27,7 @@ function vencer(m: Motor, k: string): number {
 
 describe("registro do Tamer", () => {
   test("ganhar, gravar e reproduzir: o mesmo estado", () => {
-    const t = new Tamer(), m = new Motor(5, 6), a = armaz();
+    const t = new Tamer(), m = new Motor(5), a = armaz();
     t.ganhar("campina", m, 1000); t.ganhar("floresta", m, 2000);
     gravarTamer(a, t);
     const r = lerTamer(a);
@@ -46,8 +46,8 @@ describe("registro do Tamer", () => {
     expect(() => lerTamer(armaz({ [CHAVE_TAMER]: "{" }))).toThrow(/JSON/);
     expect(() => lerTamer(armaz({ [CHAVE_TAMER]: JSON.stringify({ versao: 9, log: [] }) }))).toThrow(/versão/);
   });
-  test("medalha so na primeira vitoria contra o lider, uma vez por Tamer, e so com pet v6", () => {
-    const t = new Tamer(), m = new Motor(11, 6);
+  test("medalha so na primeira vitoria contra o lider, uma vez por Tamer", () => {
+    const t = new Tamer(), m = new Motor(11);
     m.avancar(DUR_EVO.bebe + 30);
     vencer(m, GAZIMON);
     const novas = conferirMedalhas(t, m, 5);
@@ -55,20 +55,15 @@ describe("registro do Tamer", () => {
     expect(novas[0]).toMatchObject({ n: 1, pet: 11, tick: m.e.tick, quando: 5 });
     vencer(m, GAZIMON);
     expect(conferirMedalhas(t, m)).toEqual([]);                  /* revanche: nada novo */
-    const v5 = new Motor(12, 5); v5.avancar(DUR_EVO.bebe + 30); vencer(v5, GAZIMON);
-    expect(conferirMedalhas(new Tamer(), v5)).toEqual([]);
     expect(textoFalta(t, 3)).toBe("Faltam 2 medalhas: Medalha da Torre de pedra (vença o Guardromon na Torre de pedra) e Medalha da Floresta (vença o Youkomon na Floresta).");
     expect(textoFalta(new Tamer(), 1)).toBe("Falta a Medalha da Campina: vença o Gazimon na Campina.");
   });
-  test("sincronizar: o pet v6 recebe o u; v5 e pet em dia nao mudam", () => {
-    const t = new Tamer(), m = new Motor(13, 6);
+  test("sincronizar: o pet atras do Tamer recebe o u; pet em dia nao muda", () => {
+    const t = new Tamer(), m = new Motor(13);
     t.ganhar("campina", m); t.ganhar("torre", m);
     expect(sincronizarPet(t, m)).toBe(true);
     expect(m.log).toEqual([[m.e.tick, "u", { n: 2 }]]);
     expect(sincronizarPet(t, m)).toBe(false);
-    const v5 = new Motor(14, 5);
-    expect(sincronizarPet(t, v5)).toBe(false);
-    expect(v5.log).toEqual([]);
   });
 });
 
@@ -92,7 +87,7 @@ describe("descarte unico dos pets antigos (o 6: a luta em tempo real, pets v13; 
     expect(a.dados[CHAVE]).toBe(v(12));
   });
   test("depois do descarte 5 (o limite): os v6-v12 saem; o v13 fica; o Tamer fica com as medalhas", () => {
-    const t = new Tamer(); t.ganhar("campina", new Motor(9, 6), 1);
+    const t = new Tamer(); t.ganhar("campina", new Motor(9), 1);
     const a = armaz({ [CHAVE]: v(13), [GUARDADOS]: JSON.stringify([{ semente: 7, log: [], versao: 6 }, { semente: 8, log: [], versao: 11 }]), [CHAVE_DESCARTE]: "5" });
     gravarTamer(a, t);
     expect(descartarPetsAntigos(a, GUARDADOS)).toBe(2);
@@ -121,7 +116,7 @@ describe("descarte unico dos pets antigos (o 6: a luta em tempo real, pets v13; 
     expect(semFabricaAntiga(log).tentativas).toBe(1);
   });
   test("Tamer sem pet para descartar: fica como esta, sem aviso; marcador invalido falha alto", () => {
-    const t = new Tamer(); t.ganhar("campina", new Motor(9, 6), 1);
+    const t = new Tamer(); t.ganhar("campina", new Motor(9), 1);
     const a = armaz(); gravarTamer(a, t);
     expect(descartarPetsAntigos(a, GUARDADOS)).toBe(0);
     expect(lerTamer(a).n).toBe(1);
@@ -142,7 +137,7 @@ describe("descarte unico dos pets antigos (o 6: a luta em tempo real, pets v13; 
 
 describe("o ciclo no app", () => {
   test("vencer o lider grava a medalha, o u entra no registro do pet e o Rookie pronto evolui", () => {
-    const m = new Motor(21, 6);
+    const m = new Motor(21);
     m.avancar(FIM_ROOKIE + 60);
     expect(m.estagioAtual).toBe("crianca");
     const a = armaz({ [CHAVE]: textoSave(m), [CHAVE_TAMER]: JSON.stringify({ versao: 1, log: [] }) });
@@ -158,12 +153,12 @@ describe("o ciclo no app", () => {
     expect(Motor.reproduzir(s.semente, s.log, s.versao).assinatura()).toBe(j.motor.assinatura());
   });
   test("pet guardado pronto evolui quando volta a ser o ativo; na abertura o ativo tambem recebe o u", () => {
-    const pronto = new Motor(22, 6);
+    const pronto = new Motor(22);
     pronto.avancar(FIM_ROOKIE + 60);
-    const t = new Tamer(); t.ganhar(MEDALHAS[0].id, new Motor(1, 6));
+    const t = new Tamer(); t.ganhar(MEDALHAS[0].id, new Motor(1));
     const a = armaz({ [CHAVE_TAMER]: JSON.stringify({ versao: 1, log: t.log }) });
     iniciarJogo(a);
-    trocarMotor(Motor.reproduzir(22, pronto.log, 6), "save");
+    trocarMotor(Motor.reproduzir(22, pronto.log, 13), "save");
     expect(jogoAtual().motor.estagioAtual).toBe("adolescente");
     expect(jogoAtual().evolucoesAoTrocar).toBe(1);
     /* abertura: o save de um pet atras do Tamer recebe o u e e regravado */
@@ -173,7 +168,7 @@ describe("o ciclo no app", () => {
     expect(JSON.parse(b.dados[CHAVE]).log.at(-1)[1]).toBe("u");
   });
   test("registro do Tamer que nao abre: erro visivel, sem medalha e sem gravar por cima", () => {
-    const m = new Motor(23, 6); m.avancar(DUR_EVO.bebe + 30);
+    const m = new Motor(23); m.avancar(DUR_EVO.bebe + 30);
     const a = armaz({ [CHAVE]: textoSave(m), [CHAVE_TAMER]: "{" });
     iniciarJogo(a);
     expect(jogoAtual().erroTamer).toMatch(/JSON/);

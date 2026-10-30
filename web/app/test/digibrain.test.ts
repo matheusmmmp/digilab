@@ -121,7 +121,6 @@ describe("o mapa dos pesos, contra o Python", () => {
 
 describe("o painel no Motor", () => {
   test("so nos v11 (PW-7); antes da primeira decisao, so o que aprendeu (nada, no recem-nascido)", () => {
-    expect(new Motor(4242, 10).digibrain()).toBeNull();
     const m = new Motor(4242);
     expect(m.versao).toBe(13);                                      /* os v12 (o v11 com o mundo) e os v13 (a luta em tempo real) tambem */
     const p = m.digibrain()!;

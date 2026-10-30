@@ -2,9 +2,7 @@
    copiar o registro, filtros por tipo com etiqueta colorida, e o ovo novo numa area de risco separada, com
    confirmacao. A contagem diz o que e evento do registro e o que e linha reconstruida (revisao, item 3). */
 import { useEffect, useRef, useState } from "react";
-import { Motor, NOME_PET, NOME_V2, TPD, type ItemHistorico, duracaoLuta } from "../../../motor/index.ts";
-import { lerLog, type RegistroFala } from "../../falaLivre.ts";
-import { TEXTO_GATILHO } from "../../voz.ts";
+import { Motor, NOME_PET, NOME_V2, type ItemHistorico, duracaoLuta } from "../../../motor/index.ts";
 import { useJogo } from "../../jogo.ts";
 import { abrirEscolhaBrasao } from "../../jornada.ts";
 import { textoSave } from "../../save.ts";
@@ -15,35 +13,17 @@ import { useDesktop } from "../../desktop.ts";
 import { Folha } from "../../componentes/Folha.tsx";
 import { fraseTurno } from "../lutar/ModalResultado.tsx";
 
-type Filtro = "todos" | "voce" | "pet" | "luta" | "recusa" | "treino" | "falas";
+type Filtro = "todos" | "voce" | "pet" | "luta" | "recusa" | "treino";
 /* tipo de cada linha do historico: [filtro, etiqueta, cor da etiqueta] (prancha DiarioRegistro) */
 const TIPO_REG: Record<string, [Exclude<Filtro, "todos">, string, string]> = {
   dono: ["voce", "você", "voce"], gambit: ["voce", "regras", "regras"], pet: ["pet", "pet", "pet"], recusa: ["recusa", "recusa", "recusa"],
   luta: ["luta", "luta", "luta"], treino: ["treino", "treino", "treino"],
   /* pets v6: o pet passou a saber das medalhas do Tamer (evento "u") */
   tamer: ["luta", "medalha", "luta"],
+  /* a lesao da luta, a carta usada nela e o chip equipado: sem tipo aqui, o filtro de lutas quebrava a tela inteira */
+  lesao: ["luta", "lesão", "luta"], carta: ["luta", "carta", "luta"], item: ["voce", "item", "regras"],
 };
-const FILTROS: [Filtro, string][] = [["todos", "tudo"], ["voce", "você"], ["pet", "pet"], ["luta", "lutas"], ["recusa", "recusas"], ["treino", "treino"],
-  ["falas", "falas"]];
-/** pets v7: as falas da voz propria (log de apresentacao). A mentira ganha o selo "ele mentiu" depois de 1 dia de jogo,
-    com a verdade ao lado; antes disso o dono so tem o que viu (DESIGN_VOZ_PROPRIA, secao 9) */
-function FalasDoPet({ agora }: { agora: number }) {
-  let falas: RegistroFala[] = [];
-  try { falas = lerLog().filter(r => r.voz && r.situacao === "espontanea").reverse().slice(0, 80); } catch { /* log ilegivel: nada */ }
-  if (!falas.length) return <div className="dl-apoio">ele ainda não falou por conta própria</div>;
-  return <>{falas.map((r, i) => {
-    const v = r.voz!, revelada = !!v.janela?.falso && agora - r.t >= TPD;
-    return (
-      <div className="reg-linha reg-linha--fala" key={i}>
-        <span className="dl-lcd">D{diaDe(r.t)} {hhmm(r.t)}</span><span className="reg-tag reg-pet">fala</span>
-        <span>“{r.fala}”{v.gatilho && <small className="dl-apoio"> · {TEXTO_GATILHO[v.gatilho] ?? v.gatilho}</small>}
-          {revelada && <><span className="reg-tag reg-recusa" title="Passou um dia: dá para saber">ele mentiu</span>
-            {v.verdade && <small className="dl-apoio"> a verdade: {v.verdade}</small>}</>}
-          {v.invencoes.length > 0 && <small className="dl-apoio" title={v.invencoes.join(" · ")}> · inventou {v.invencoes.length}</small>}</span>
-      </div>
-    );
-  })}</>;
-}
+const FILTROS: [Filtro, string][] = [["todos", "tudo"], ["voce", "você"], ["pet", "pet"], ["luta", "lutas"], ["recusa", "recusas"], ["treino", "treino"]];
 const textoLinha = (h: ItemHistorico): string => h.quem === "gambit" ? `regras de combate: ${h.a}` : h.quem === "pet" ? NOME_PET[h.a as keyof typeof NOME_PET] : h.a;
 
 /** Ver replay (modal Resultado): a luta do evento idx refeita do registro, turno a turno. So leitura. */
@@ -78,7 +58,7 @@ export function TelaRegistro({ irPet }: { irPet: () => void }) {
   const { motor: m } = useJogo(), [replay, setReplay] = useState(() => { const x = REPLAY.pedido; REPLAY.pedido = null; return x; }),
     [filtro, setFiltro] = useState<Filtro>(replay !== null ? "luta" : "todos"), [msg, setMsg] = useState<{ txt: string; erro?: boolean } | null>(null), [confirmar, setConfirmar] = useState(false), [evSel, setEvSel] = useState<number | null>(null), desk = useDesktop();
   const nh = m.historico.length;
-  const vis = filtro === "falas" ? [] : m.historico.slice(-80).reverse().filter(h => filtro === "todos" || TIPO_REG[h.quem][0] === filtro);
+  const vis = m.historico.slice(-80).reverse().filter(h => filtro === "todos" || TIPO_REG[h.quem][0] === filtro);
   /* detalhe: o evento tocado; sem toque, no desktop, o mais novo */
   const ev = evSel !== null ? vis[evSel] : desk ? vis[0] : undefined;
   const detalhe = ev && <>
@@ -120,7 +100,7 @@ export function TelaRegistro({ irPet }: { irPet: () => void }) {
       </div>
       <div className="log" aria-live="polite">
         <h2 className="desk-so reg-h reg-log-tit"><span>Registro</span><small>dia {diaDe(m.e.tick)} · o mais novo em cima</small></h2>
-        {filtro === "falas" ? <FalasDoPet agora={m.e.tick} /> : vis.length ? vis.map((h, i) => {
+        {vis.length ? vis.map((h, i) => {
           const [, rot, cor] = TIPO_REG[h.quem];
           return <button type="button" className={`reg-linha${h.quem === "recusa" ? " reg-linha--recusa" : ""}`} key={i} aria-pressed={desk ? evSel === i : undefined}
             onClick={() => setEvSel(i)}><span className="dl-lcd">D{diaDe(h.t)} {hhmm(h.t)}</span><span className={`reg-tag reg-${cor}`}>{rot}</span><span>{textoLinha(h)}</span></button>;

@@ -8,9 +8,9 @@ import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { ADOL_V21, BOTS_V21, BOTS_V21D, REGRA_BATE_EM_QUEM_RECUA, REGRA_RECUA_DO_PREPARO_SOB_PELE, gambitsAdulto } from "../motor/bots.ts";
 import { caraterCanonico, perfilDe } from "../motor/catalogo.ts";
-import { decidirV2, estadoV2, fimV2, intencaoV2, jogarV2, regrasDaVersao, resolverV2, valeCond, type ListaGambits, type Lutador, type RegrasLuta } from "../motor/combate.ts";
-import { CAT, CV21D, FORMAS_AD, LINHA_DA_FORMA, SOMBRIA, VERSAO_PET } from "../motor/constantes.ts";
-import { GambitsPet, REPERTORIO, chaveRegra, lutadorBot, lutadorPet, regraDe, sementeDe } from "../motor/gambits_pet.ts";
+import { decidirV2, estadoV2, fimV2, intencaoV2, regrasDaVersao, resolverV2, valeCond, type ListaGambits, type Lutador, type RegrasLuta } from "../motor/combate.ts";
+import { CAT, CV21D, CV21E_TR, FORMAS_AD, LINHA_DA_FORMA, SOMBRIA, VERSAO_PET } from "../motor/constantes.ts";
+import { GambitsPet, REPERTORIO, chaveRegra, lutadorBot, regraDe, sementeDe } from "../motor/gambits_pet.ts";
 import { Motor } from "../motor/motor.ts";
 import { criarRng } from "../motor/rng.ts";
 import type { Forma, FormaAdultaNormal, Linha } from "../motor/tipos.ts";
@@ -108,10 +108,9 @@ describe("combate V21D: paridade com o Python", () => {
 });
 
 describe("combate V21D: so nos pets v6", () => {
-  test("regras por versao: v1-v5 na V21C, v6 na V21D", () => {
-    for (const v of [1, 2, 3, 4, 5]) { expect(regrasDaVersao(v)).toBeNull(); expect(new Motor(123, v).regras).toBeNull(); }
+  test("regras por versao: a V21D e a do v6 (funcao); o pet v13 joga a V21E em tempo real", () => {
     expect(regrasDaVersao(6)).toBe(CV21D);
-    expect(new Motor(123, 6).regras).toBe(CV21D);
+    expect(new Motor(123).regras).toBe(CV21E_TR);
   });
 
   test("preparo sob pele: oculto so com a V21D", () => {
@@ -154,29 +153,6 @@ describe("combate V21D: so nos pets v6", () => {
     for (const r of [REGRA_BATE_EM_QUEM_RECUA, REGRA_RECUA_DO_PREPARO_SOB_PELE]) {
       expect(REPERTORIO.has(chaveRegra(r))).toBe(false);           /* o repertorio (candidatas) nao muda */
       expect(regraDe(chaveRegra(r))).toEqual(r);
-    }
-  });
-
-  test("a luta do motor: o pet v6 joga com a V21D, o v5 com a V21C", () => {
-    const viver = (versao: number) => {
-      const m = new Motor(4242, versao);
-      for (let k = 0; k < 40 && m.estagioAtual !== "adolescente"; k++) {
-        m.avancar(60); m.observar("alimentar"); m.observar("limpar");
-        if (versao >= 6 && m.esperandoMedalha()) m.liberar(1);
-      }
-      return m;
-    };
-    for (const v of [5, 6]) {
-      const m = viver(v), R = regrasDaVersao(v);
-      expect(m.estagioAtual).toBe("adolescente");
-      for (const [k, rival] of ["vigia", "muralha", "tita", "espelho"].entries()) {
-        const A = lutadorPet(m, "Seu pet"), B = lutadorBot(rival, R), esperado = jogarV2(A, B, 77 + k, R);
-        const res = m.lutar(rival, 77 + k).res;
-        expect(res.turnos.map(t => [t.a, t.ma, t.b, t.mb]), `v${v} x ${rival}`).toEqual(esperado.turnos.map(t => [t.a, t.ma, t.b, t.mb]));
-        expect(res.pontosA).toBe(esperado.pontosA);
-      }
-      /* o replay do registro refaz as mesmas lutas (event sourcing) */
-      expect(Motor.reproduzir(m.semente, m.log, m.versao).assinatura()).toBe(m.assinatura());
     }
   });
 });

@@ -1,4 +1,4 @@
-/* O pet v11 no Motor (docs/TAREFA_V2_W_PORTE_CEREBRO_A.md, etapa 4 parte 3b): um ovo novo e v11 e joga alguns dias com um dono de roteiro
+/* O pet v11 no Motor (docs/TAREFA_V2_W_PORTE_CEREBRO_A.md, etapa 4 parte 3b), hoje no v13 (o v11 com o mundo e a luta em tempo real): um ovo novo joga alguns dias com um dono de roteiro
    fixo, com cuidado, carinho, tapa, treino, medalha e lutas. Confere:
      - o cerebro A decide e aprende pelo corpo (o laco do corpo por tick), e o estado do pet e o do laco;
      - a vontade do cerebro A chega ao desejo e ao vinculo B;
@@ -10,6 +10,7 @@ import { describe, expect, test } from "vitest";
 import { TPD, VERSAO_PET } from "../motor/constantes.ts";
 import { caraterPrevisto, caraterV11, linhaDoCarater } from "../motor/carater.ts";
 import { Motor } from "../motor/motor.ts";
+import type { EventoRegistro } from "../motor/tipos.ts";
 import type { AcaoDono } from "../motor/tipos.ts";
 
 /** um dono de roteiro: a cada meia hora cuida do que esta baixo, faz carinho de vez em quando e da um tapa a cada quatro horas; treina e
@@ -37,18 +38,19 @@ function viverDias(m: Motor, dias: number): AcaoDono[] {
 describe("o pet v11 no Motor", () => {
   test("o pet v11: o cerebro A e o laco do corpo, sem educacao, mentira nem obediencia (os ovos novos sao v13: o v12 com a luta em tempo real)", () => {
     expect(VERSAO_PET).toBe(13);
-    const m = new Motor(4242, 11);
-    expect(m.versao).toBe(11);
+    const m = new Motor(4242);
+    expect(m.versao).toBe(13);
     expect(m.cerebro).not.toBeNull();
     expect(m.e).toBe(m.v11!.laco.estado);
-    expect([m.temEducacao, m.temVozPropria, m.disciplina, m.honestidade(), m.chanceMentira()]).toEqual([false, false, 0, 1, 0]);
+    expect(m.disciplina).toBe(0);
     for (const a of ["elogiar", "repreender", "petisco", "levar_ao_banheiro"] as AcaoDono[]) expect(() => m.observar(a)).toThrow(/v11/);
-    expect(() => m.falar("acordou")).toThrow(/v11/);
+    /* a fala com mentira (o evento "fl" dos pets v7-v10) nao existe mais: no registro, e evento desconhecido */
+    expect(() => Motor.reproduzir(1, [[480, "fl", "acordou"] as unknown as EventoRegistro])).toThrow(/desconhecido/);
     expect(m.log).toEqual([]);
   });
 
   test("alguns dias: decide pelo cerebro, aprende com o corpo, tem vontade, evolui pelo carater do v11, e o replay da a mesma vida", () => {
-    const m = new Motor(4242, 11), feitas = viverDias(m, 4);
+    const m = new Motor(4242), feitas = viverDias(m, 4);
     expect(m.e).toBe(m.v11!.laco.estado);
     /* o cerebro decidiu cada decisao do pet e aprendeu: pesos fora do prior, carinhos e tapas creditados */
     const c = m.cerebro!;
@@ -63,7 +65,7 @@ describe("o pet v11 no Motor", () => {
     expect(m.vinc.pedidos).toEqual([]);
     expect(m.vinc.situacao).toMatch(/^[01]{3}$/);
     /* sem educacao, sem obediencia */
-    expect([m.janelaAberta(), m.edu.disciplina, m.obed.recusas]).toEqual([null, 0, 0]);
+    expect([m.edu.janela, m.edu.disciplina, m.obed.recusas]).toEqual([null, 0, 0]);
     /* evoluiu ate o Champion, com a linha do carater do v11 */
     const ev = m.evolucoes.find(x => x.estagio === "adolescente")!;
     expect(ev).toBeDefined();
@@ -78,7 +80,7 @@ describe("o pet v11 no Motor", () => {
   });
 
   test("o carater da evolucao e o do cerebro no tick da evolucao", () => {
-    const m = new Motor(777, 11);
+    const m = new Motor(777);
     let carEsperado = null;
     for (let p = 0; p < 5000 && !m.evolucoes.some(x => x.estagio === "adolescente"); p++) {
       if (m.estagioAtual === "crianca" && m.medalhas === 0) m.liberar(1);
@@ -95,7 +97,7 @@ describe("o pet v11 no Motor", () => {
   });
 
   test("o tratar so cura: nao e contato e nao passa pelo corpo", () => {
-    const m = new Motor(99, 11);
+    const m = new Motor(99);
     m.avancar(30);
     m.lesionadoDesde = m.e.tick;
     const antes = { ...m.e }, corpo = JSON.stringify(m.v11!.laco.corpo.paraDict());
@@ -105,10 +107,4 @@ describe("o pet v11 no Motor", () => {
     expect(JSON.stringify(m.v11!.laco.corpo.paraDict())).toBe(corpo);
   });
 
-  test("os pets v10 seguem iguais: com o Bandit, a educacao e o elogio", () => {
-    const m = new Motor(4242, 10);
-    expect([m.v11, m.cerebro, m.temEducacao, m.temVozPropria]).toEqual([null, null, true, true]);
-    m.avancar(60); m.observar("elogiar"); m.observar("petisco");
-    expect(() => m.observar("tapa")).toThrow();
-  });
 });

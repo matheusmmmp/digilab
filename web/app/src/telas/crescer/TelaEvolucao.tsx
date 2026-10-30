@@ -65,17 +65,17 @@ const virgula = (x: number): string => (Math.round(x * 100) / 100).toString().re
 const linhaDe = (g: Forma): string => g.linha ?? SOMBRIA[g.adulta!]?.linha ?? LINHA_DA_FORMA[g.adulta as FormaAdultaNormal];
 export const idNo = (g: Forma): string => g.est === "mega" ? `${g.esp}_mega_${linhaDe(g)}` : g.est === "adulto" ? `${g.esp}_adulto_${g.adulta}` : chaveSprite(g);
 /** pets v6: as medalhas do Tamer que a evolucao para a forma pede (texto do no) */
-const medReq = (g: Forma, v6: boolean): string => {
-  const n = v6 ? (CMD as Record<string, number>)[g.est] ?? 0 : 0;
+const medReq = (g: Forma): string => {
+  const n = (CMD as Record<string, number>)[g.est] ?? 0;
   return n ? ` · ${n} medalha${n === 1 ? "" : "s"} do Tamer` : "";
 };
-export function requisito(g: Forma, v6 = false): string {
+export function requisito(g: Forma): string {
   if (g.est === "bebe") return "sai do ovo";
   if (g.est === "crianca") return g.ramo === "sereno" ? `cuidado ≥ ${CAT.limiarCuidado * 100}% dos chamados no In-Training` : `cuidado < ${CAT.limiarCuidado * 100}% dos chamados no In-Training`;
-  if (g.est === "adolescente") { const a = CAT.adolescente[g.linha!]; return `caráter dominante ${a.eixo} ao fim do Rookie${medReq(g, v6)} · técnica ${NOME_V2[a.tecnica]}: ${DESC_TECNICA[a.tecnica]}`; }
-  if (g.est === "mega") return `Mega: o mesmo arquétipo do Ultimate, mais forte · ${duracao(CMG.durRapida)} como Ultimate (o dobro no ritmo clássico), ${CAT.sparring} lutas com ${CLE.limiarTaxa * 100}% ou mais de vitórias e vínculo ${virgula(CMG.vinculo)} ou mais${medReq(g, v6)} (a sombria não chega)`;
+  if (g.est === "adolescente") { const a = CAT.adolescente[g.linha!]; return `caráter dominante ${a.eixo} ao fim do Rookie${medReq(g)} · técnica ${NOME_V2[a.tecnica]}: ${DESC_TECNICA[a.tecnica]}`; }
+  if (g.est === "mega") return `Mega: o mesmo arquétipo do Ultimate, mais forte · ${duracao(CMG.durRapida)} como Ultimate (o dobro no ritmo clássico), ${CAT.sparring} lutas com ${CLE.limiarTaxa * 100}% ou mais de vitórias e vínculo ${virgula(CMG.vinculo)} ou mais${medReq(g)} (a sombria não chega)`;
   const a = CAT.adulto[g.linha!], s = a.formas[g.adulta as FormaAdultaNormal]!.sinal;
-  return `${NOME_ARQ[g.adulta!]}: ${a.comp} ${s > 0 ? "acima" : "abaixo"} do pet comum e ${CAT.sparring} lutas de treino${medReq(g, v6)} · passiva: ${DESC_PASSIVA[g.adulta!]}`;
+  return `${NOME_ARQ[g.adulta!]}: ${a.comp} ${s > 0 ? "acima" : "abaixo"} do pet comum e ${CAT.sparring} lutas de treino${medReq(g)} · passiva: ${DESC_PASSIVA[g.adulta!]}`;
 }
 
 type EstadoNo = "agora" | "percorrido" | "possivel" | "fechado";
@@ -84,11 +84,11 @@ const SUB_RAMO: Record<string, string> = { sereno: `cuidado ≥ ${CAT.limiarCuid
 
 /** no da arvore (prancha EvoArvore): o card inteiro e o botao; molduras por estado (percorrido, agora, possivel,
     fechado, sombria); o sprite em 1x, cortado no card quando e maior; forma ainda nao decidida = silhueta sem nome */
-function No({ g, estado, provavel, sombriaNo, sombriaAgora, sub, escolher, v6 }: { g: Forma; estado: EstadoNo; provavel: boolean; sombriaNo: boolean; sombriaAgora: boolean; sub: string; escolher: (det: string) => void; v6: boolean }) {
+function No({ g, estado, provavel, sombriaNo, sombriaAgora, sub, escolher, v6 }: { g: Forma; estado: EstadoNo; provavel: boolean; sombriaNo: boolean; sombriaAgora: boolean; sub: string; escolher: (det: string) => void; v6?: boolean }) {
   const a = useAtlas(), spr = chaveSprite(g), id = idNo(g), revelado = estado === "agora" || estado === "percorrido";
   const img = a.tipo === "ok" ? (revelado ? imagemAtlas(a, spr, 1, { sombria: sombriaNo }) : silhuetaAtlas(a, spr)) : null;
   const cls = ["evo-no", `evo-no--${g.est}`, estado, provavel ? "provavel" : "", sombriaNo ? "sombria" : "", estado === "agora" && sombriaAgora ? "sombria-agora" : ""].filter(Boolean).join(" ");
-  const det = (revelado ? nomeForma(g) : "Forma ainda não decidida") + ": " + (sombriaNo ? "forma sombria da linha (sobrecarga alta na virada para Ultimate)" : requisito(g, v6));
+  const det = (revelado ? nomeForma(g) : "Forma ainda não decidida") + ": " + (sombriaNo ? "forma sombria da linha (sobrecarga alta na virada para Ultimate)" : requisito(g));
   return (
     <button type="button" className={cls} data-id={id + (sombriaNo ? "_s" : "")} aria-label={(revelado ? nomeForma(g) : "forma ainda não decidida") + ", " + (sombriaNo ? "sombria, " : "") + estado} onClick={() => escolher(det)}>
       {estado === "percorrido" && <span className="evo-ok" aria-hidden="true"><svg viewBox="0 0 12 12" width="10" height="10"><path d="M2 6.5 5 9l5-6" /></svg></span>}
@@ -102,7 +102,7 @@ function No({ g, estado, provavel, sombriaNo, sombriaAgora, sub, escolher, v6 }:
 
 function Arvore({ m, p }: { m: Motor; p: ReturnType<typeof previsaoEvo> }) {
   const [det, setDet] = useState<string | null>(null), arv = useRef<HTMLDivElement>(null), [linhas, setLinhas] = useState<{ w: number; h: number; d: [string, string][] }>({ w: 0, h: 0, d: [] });
-  const f = m.forma, esp = m.especie, idDe = idNo, evs = m.evolucoes, v5 = m.versao >= 5;
+  const f = m.forma, esp = m.especie, idDe = idNo, evs = m.evolucoes;
   const bebe: Forma = { esp, est: "bebe" };
   const cri: Forma[] = (["sereno", "arisco"] as const).map(r => ({ esp, est: "crianca", ramo: r }));
   const ado: Forma[] = LINHAS.map(l => ({ esp, est: "adolescente", ramo: "sereno", linha: l }));
@@ -111,11 +111,11 @@ function Arvore({ m, p }: { m: Motor; p: ReturnType<typeof previsaoEvo> }) {
   const megaDe = (l: string): Forma => ({ ...aduDe(l)[0], est: "mega" });
   const caminho = new Set([idDe(bebe), ...evs.map(x => idDe(x.forma))]);
   const atualId = idDe(f), provId = p ? idDe(p.prox) : null;
-  const adu = LINHAS.flatMap(aduDe), meg = v5 ? LINHAS.map(megaDe) : [];
-  /* o que ainda da para alcancar a partir da forma atual (o Mega: so pets v5, e nunca a sombria) */
+  const adu = LINHAS.flatMap(aduDe), meg = LINHAS.map(megaDe);
+  /* o que ainda da para alcancar a partir da forma atual (o Mega: nunca a sombria) */
   const alcance = new Set(f.est === "bebe" ? [...cri, ...ado, ...adu, ...meg].map(idDe) : f.est === "crianca" ? [...ado, ...adu, ...meg].map(idDe)
     : f.est === "adolescente" ? [...adu, ...meg].filter(x => x.linha === f.linha).map(idDe)
-    : f.est === "adulto" && v5 && !m.sombria ? [idDe(megaDe(f.linha!))] : []);
+    : f.est === "adulto" && !m.sombria ? [idDe(megaDe(f.linha!))] : []);
   const estado = (id: string): EstadoNo => id === atualId ? "agora" : caminho.has(id) ? "percorrido" : alcance.has(id) ? "possivel" : "fechado";
   const tipo = (a: string, b: string): Aresta[2] => caminho.has(a) && (caminho.has(b) || b === atualId) ? "percorrido" : a === atualId && b === provId ? "provavel"
     : estado(b) === "fechado" || estado(a) === "fechado" ? "fechado" : "possivel";
@@ -125,7 +125,7 @@ function Arvore({ m, p }: { m: Motor; p: ReturnType<typeof previsaoEvo> }) {
     ...cri.map(c => [idDe(bebe), idDe(c), tipo(idDe(bebe), idDe(c)), "elbow"] as Aresta),
     ...criDe.flatMap(c => ado.map(x => [idDe(c), idDe(x), tipo(idDe(c), idDe(x)), "elbow"] as Aresta)),
     ...ado.flatMap(x => aduDe(x.linha!).map((y, k) => [idDe(x) + "#" + k, idDe(y), tipo(idDe(x), idDe(y)), "reta"] as Aresta)),
-    ...(v5 ? ado.flatMap(x => aduDe(x.linha!).map((y, k) => [idDe(y) + "#" + k, idDe(megaDe(x.linha!)), tipo(idDe(y), idDe(megaDe(x.linha!))), "reta"] as Aresta)) : []),
+    ...ado.flatMap(x => aduDe(x.linha!).map((y, k) => [idDe(y) + "#" + k, idDe(megaDe(x.linha!)), tipo(idDe(y), idDe(megaDe(x.linha!))), "reta"] as Aresta)),
     ...ado.map(x => [idDe(x), idDe(somDe(x.linha!)) + "_s", "sombria", "chave"] as Aresta),
   ];
   const chave = arestas.map(x => x.join(">")).join("|");
@@ -161,7 +161,7 @@ function Arvore({ m, p }: { m: Motor; p: ReturnType<typeof previsaoEvo> }) {
   }, [chave]);
   const no = (g: Forma, sub: string, sombriaNo = false) => (
     <No key={idDe(g) + (sombriaNo ? "_s" : "")} g={g} estado={sombriaNo ? (m.sombria && idDe(g) === atualId ? "agora" : "fechado") : estado(idDe(g))}
-      provavel={!sombriaNo && idDe(g) === provId} sombriaNo={sombriaNo} sombriaAgora={m.sombria} sub={sub} escolher={setDet} v6={m.versao >= 6} />
+      provavel={!sombriaNo && idDe(g) === provId} sombriaNo={sombriaNo} sombriaAgora={m.sombria} sub={sub} escolher={setDet} />
   );
   return <>
     <div className="evo-arv" ref={arv} role="group" aria-label="Árvore de evolução">
@@ -175,7 +175,7 @@ function Arvore({ m, p }: { m: Motor; p: ReturnType<typeof previsaoEvo> }) {
           <div className="evo-coluna" key={x.linha}>
             {no(x, CAT.adolescente[x.linha!].eixo)}
             {aduDe(x.linha!).map(y => no(y, NOME_ARQ[y.adulta!]))}
-            {v5 && no(megaDe(x.linha!), "Mega")}
+            {no(megaDe(x.linha!), "Mega")}
             {no(somDe(x.linha!), "sombria", true)}
           </div>
         ))}
@@ -197,7 +197,7 @@ export function TelaEvolucao() {
   const espera = !!p && p.falta <= 0 && (f.est === "adolescente" || f.est === "adulto" || (f.est === "crianca" && faltaMed)), ult = evs[evs.length - 1];
   const rMega = f.est === "adulto" ? m.requisitosMega() : null;
   /* pets v4: alem das 10 lutas, a taxa de vitoria do adolescente precisa chegar a 80% */
-  const taxa = m.taxaVitoria(), faltaTaxa = m.versao >= 4 && m.sparring >= CAT.sparring && (taxa ?? 0) < CLE.limiarTaxa;
+  const taxa = m.taxaVitoria(), faltaTaxa = m.sparring >= CAT.sparring && (taxa ?? 0) < CLE.limiarTaxa;
   const det = (x: typeof evs[number]) => x.estagio === "mega" ? `vínculo ${virgula(x.vinculo!)}; ${x.sparring} lutas no Ultimate`
     : x.estagio === "crianca" ? `cuidado ${(x.cuidado! * 100).toFixed(0)}%`
     : x.estagio === "adolescente" ? `caráter: ${fmtCar(x.carater!)}` : `${NOME_ARQ[x.adulta!]}; caráter: ${fmtCar(x.carater!)}; ${x.sparring} lutas de treino`;
@@ -247,9 +247,9 @@ export function TelaEvolucao() {
           )}
           {faltaMed && <p className={`evo-medalha${prontoMed ? " pronto" : ""}`} role="status">{prontoMed ? <b>Pronto para evoluir. </b> : null}{textoFalta(t, rMed!.precisa)}</p>}
           <Numeros itens={[
-            ...(m.versao >= 4 ? [["experiência de combate: cada vitória o deixa mais preciso na luta",
-              `${m.vitoriasVida} ${m.vitoriasVida === 1 ? "vitória" : "vitórias"}${m.vitoriasVida * CLE.expPorVitoria >= CLE.expMax ? " (máximo)" : ""}`] as [string, string]] : []),
-            ...(m.versao >= 4 && (f.est === "adolescente" || rMega) ? [["vitórias nas lutas deste estágio (precisa de 80% para evoluir)",
+            ...[["experiência de combate: cada vitória o deixa mais preciso na luta",
+              `${m.vitoriasVida} ${m.vitoriasVida === 1 ? "vitória" : "vitórias"}${m.vitoriasVida * CLE.expPorVitoria >= CLE.expMax ? " (máximo)" : ""}`] as [string, string]],
+            ...((f.est === "adolescente" || rMega) ? [["vitórias nas lutas deste estágio (precisa de 80% para evoluir)",
               m.lutas.lutas ? `${m.lutas.vitorias} de ${m.lutas.lutas}` : "nenhuma luta"] as [string, string]] : []),
             /* a forma futura ainda nao foi decidida pelo motor: mostra so o porque, sem o nome */
             [p ? `se evoluísse agora: ${p.porque}` : `passiva: ${DESC_PASSIVA[f.adulta!]}`, p ? (p.prox.est === "mega" ? nomeForma(p.prox) : "?") : NOME_ARQ[f.adulta!]],
@@ -271,7 +271,7 @@ export function TelaEvolucao() {
           <p className="evo-selo"><Deco nome={br.peca} className="evo-selo-img" /><span>brasão <b>{br.nome}</b>: as formas da árvore são as deste brasão.</span></p>
           <p style={{ margin: 0 }}>Cada evolução é decidida pelo que o pet viveu: cuidado, caráter e lutas de treino.</p>
           <details className="dl-apoio"><summary>Como funciona</summary>
-            <p>Uma moeda por transição (os contadores zeram a cada evolução). <b>In-Training → Rookie</b> ({m.dur.bebe / 60} h): o <b>cuidado</b> decide o ramo; o In-Training chama em horário fixo (fome a cada 30 min, higiene a cada 60, carinho a cada 45) e atender pelo menos 80% dos chamados em até 15 min dá Sereno, menos dá Arisco. <b>Rookie → Champion</b> ({m.dur.crianca / 60} h): o <b>caráter dominante</b> decide a linha e a técnica. <b>Champion → Ultimate</b> ({m.dur.adolescente / 60} h e 10 lutas de treino na arena): o <b>eixo complementar</b> da linha decide o arquétipo e a passiva (as duas formas da linha são o mesmo Ultimate).{m.versao >= 5 ? <> <b>Ultimate → Mega</b> ({m.dur.adulto / 60} h, {CAT.sparring} lutas com {CLE.limiarTaxa * 100}% ou mais de vitórias e vínculo {virgula(CMG.vinculo)} ou mais): o mesmo arquétipo, mais forte. A forma sombria não chega ao Mega.</> : " Pets de versões antigas param no Ultimate."}{m.versao >= 6 ? <> Além disso, cada evolução depois do Rookie pede <b>medalhas do Tamer</b>: {CMD.adolescente} para virar Champion, {CMD.adulto} para Ultimate e {CMD.mega} para Mega. Se o pet cumpre o resto e falta medalha, ele espera pronto e evolui assim que você ganhar a medalha.</> : ""} Caráter: quanto os traços do pet estão acima de um pet comum em cada eixo.</p>
+            <p>Uma moeda por transição (os contadores zeram a cada evolução). <b>In-Training → Rookie</b> ({m.dur.bebe / 60} h): o <b>cuidado</b> decide o ramo; o In-Training chama em horário fixo (fome a cada 30 min, higiene a cada 60, carinho a cada 45) e atender pelo menos 80% dos chamados em até 15 min dá Sereno, menos dá Arisco. <b>Rookie → Champion</b> ({m.dur.crianca / 60} h): o <b>caráter dominante</b> decide a linha e a técnica. <b>Champion → Ultimate</b> ({m.dur.adolescente / 60} h e 10 lutas de treino na arena): o <b>eixo complementar</b> da linha decide o arquétipo e a passiva (as duas formas da linha são o mesmo Ultimate).<> <b>Ultimate → Mega</b> ({m.dur.adulto / 60} h, {CAT.sparring} lutas com {CLE.limiarTaxa * 100}% ou mais de vitórias e vínculo {virgula(CMG.vinculo)} ou mais): o mesmo arquétipo, mais forte. A forma sombria não chega ao Mega.</><> Além disso, cada evolução depois do Rookie pede <b>medalhas do Tamer</b>: {CMD.adolescente} para virar Champion, {CMD.adulto} para Ultimate e {CMD.mega} para Mega. Se o pet cumpre o resto e falta medalha, ele espera pronto e evolui assim que você ganhar a medalha.</> Caráter: quanto os traços do pet estão acima de um pet comum em cada eixo.</p>
           </details>
         </section>
       </div>

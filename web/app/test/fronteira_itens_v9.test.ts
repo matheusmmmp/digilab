@@ -19,7 +19,7 @@ afterAll(() => ligarEscala(escalaAntes));
 const zeros = (): Stats => Object.fromEntries(STATS.map(k => [k, 0])) as Stats;
 /** um Tamer campeao, com as 6 medalhas */
 function campeao(): Tamer {
-  const t = new Tamer(), m = new Motor(1, 6);
+  const t = new Tamer(), m = new Motor(1);
   for (const md of MEDALHAS) t.ganhar(md.id, m, 1);
   t.ganharTitulo(m, 2);
   return t;
@@ -35,12 +35,9 @@ describe("a Liga dos v9: fator por lider, sem cura; os v6-v8 como antes", () => 
     });
     expect(curaLiga(CV21D)).toBe(0);
     expect(curaLiga(CV21E)).toBe(CURA_LIGA_V9);
-    /* pelo motor do pet: o v8 luta contra os lideres de antes, o v9 com os fatores dos v9 */
-    const l8 = new Motor(3, 8).lutadores("liga").lideres!, l9 = new Motor(3, 9).lutadores("liga").lideres!;
-    LIGA.forEach((x, i) => {
-      expect(l8[i].cond.escala).toBe(CESC_V6.vida.mega);
-      expect(l9[i].cond.escala).toBeCloseTo(CESC_V6.vida.mega * FATOR_LIGA_V9[x.arena], 9);
-    });
+    /* pelo motor do pet: o v13 luta contra os lideres com os fatores dos v9 */
+    const l13 = new Motor(3).lutadores("liga").lideres!;
+    LIGA.forEach((x, i) => expect(l13[i].cond.escala).toBeCloseTo(CESC_V6.vida.mega * FATOR_LIGA_V9[x.arena], 9));
   });
   test("jogarLiga sem cura e a serie de sempre; com cura o pet comeca a luta seguinte com a vida do fim mais a cura", () => {
     const A = lutadorLiga(5, CV21D, 3);   /* um Mega forte no lado A: vence algumas lutas seguidas */
@@ -153,7 +150,7 @@ describe("os itens dos v9", () => {
     expect(v9.final).toBe(g.final);
   });
   test("no pet v9: o chip de regra fica fora da lista e entra no fim da lista de luta so com o treino minimo; o de stat idem", { timeout: 60000 }, () => {
-    const m = new Motor(9101, 9);
+    const m = new Motor(9101);
     m.liberar(6);
     m.avancar(DUR_EVO.bebe + 15);
     expect(m.estagioAtual).toBe("crianca");
@@ -191,26 +188,13 @@ describe("os itens dos v9", () => {
     const npc = LUGARES_V6[0].rivais[0];
     expect(m.lutadores(npc).usadas).toEqual([...m.gp!.ativas, k]);
     /* o replay refaz o pet igual */
-    expect(Motor.reproduzir(m.semente, m.log, 9).assinatura()).toBe(m.assinatura());
+    expect(Motor.reproduzir(m.semente, m.log).assinatura()).toBe(m.assinatura());
     /* a carta: nao na arena contra bots; contra NPC, com o treino minimo */
     expect(m.porqueSemCartaV9("aleatorio")).toMatch(/campanha/);
     expect(() => m.lutar("aleatorio", 1, "carta_folego")).toThrow(/campanha/);
     expect(m.porqueSemCartaV9(npc)).toBeNull();
     /* o replay falha com a carta antes de uma luta contra bot */
     const log = [...m.log, [m.e.tick, "k", { id: "carta_folego" }], [m.e.tick, "l", { r: "aleatorio", s: 1 }]] as typeof m.log;
-    expect(() => Motor.reproduzir(m.semente, log, 9)).toThrow(/campanha/);
-  });
-  test("nos v8 nada muda: o chip de regra entra no topo da lista, sem trava de treino", { timeout: 60000 }, () => {
-    const m = new Motor(9101, 8);
-    m.liberar(6);
-    m.avancar(DUR_EVO.bebe + 15);
-    for (let j = 0; j < 200 && m.estagioAtual === "crianca"; j++) m.avancar(30);
-    expect(m.estagioAtual).toBe("adolescente");
-    expect(m.itensValem).toBe(true);
-    expect(m.porqueSemCartaV9("aleatorio")).toBeNull();
-    m.equipar("chip_recuo");
-    const k = chaveRegra((chipDe("chip_recuo") as { regra: Parameters<typeof chaveRegra>[0] }).regra);
-    expect(m.gp!.ativas[0]).toBe(k);
-    expect(m.gp!.chipsNoFim).toBe(false);
+    expect(() => Motor.reproduzir(m.semente, log)).toThrow(/campanha/);
   });
 });

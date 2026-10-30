@@ -11,7 +11,7 @@ import { fileURLToPath } from "node:url";
 import * as M from "../motor/index.ts";
 
 const { CMU_MVP, VERSAO_PET, Motor, deslocar } = M;
-if (VERSAO_PET !== 12) throw new Error("o save do mundo e de pets v12; a versao de hoje e " + VERSAO_PET);
+if (VERSAO_PET !== 13) throw new Error("o save do mundo e de pets v13 (o v12 com a luta em tempo real); a versao de hoje e " + VERSAO_PET);
 const PASSO_DONO = 120, ESPERA = 240, OFFSETS = [0, 10, 20, 30, 40, 50, 60];
 
 /** o lugar "perto do pet" da tela: 2 celulas (perto_max_celulas) para leste (a direcao 0), dentro do mapa */

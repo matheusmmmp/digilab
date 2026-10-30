@@ -16,7 +16,7 @@ import { abrirHeranca, podeSerPai } from "../../heranca.ts";
 import { diaDe, hhmm } from "./TelaPet.tsx";
 
 type Sel = "ativo" | number;
-const vinculoTxt = (m: Motor): string | null => m.versao < 2 ? null : m.vinc.valor >= .66 ? "vínculo alto" : m.vinc.valor >= .33 ? "vínculo médio" : "vínculo baixo";
+const vinculoTxt = (m: Motor): string | null => m.vinc.valor >= .66 ? "vínculo alto" : m.vinc.valor >= .33 ? "vínculo médio" : "vínculo baixo";
 
 /** o botao "Novo ovo" do topo (o ativo vai para a espera: ninguem e apagado sem pedir) */
 export const AcoesMeusPets = () => <>
@@ -81,7 +81,6 @@ export function MeusPetsDesktop({ fechar }: { fechar: () => void }) {
           <span>{diaDe(m.e.tick)} {diaDe(m.e.tick) === 1 ? "dia" : "dias"} de vida</span>
           {m.morte && <span className="mpl-tag-morto">se foi</span>}
         </div>
-        {!atual.ovo && m.versao < 5 && <p className="dl-apoio" style={{ margin: 0 }}>Pet de uma versão antiga: evolui até o Ultimate (o Mega é dos ovos novos).</p>}
         <div className="mpl-bts">
           <button type="button" className="dl-btn dl-btn--sec" onClick={exportar}>Exportar</button>
           {eAtivo ? <button type="button" className="dl-btn" onClick={fechar}>Voltar ao pet</button>

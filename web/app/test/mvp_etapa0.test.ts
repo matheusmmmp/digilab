@@ -94,22 +94,6 @@ describe("G2 do MVP (etapa 0): o lado TS de hoje", () => {
     for (const p of PINADOS) expect(shaArquivo(p), p).toBe(G.arquivos[p]);
   });
 
-  for (const v of G.vidas) {
-    test(`v11 @${v.semente} (${v.dono}, ${v.dias} dias): o replay do log, ponto a ponto, a assinatura e o cerebro no fim`, () => {
-      const { m, pts } = pontos(v.semente, v.versao, v.log);
-      expect(pts.length).toBe(v.pontos.length);
-      pts.forEach((p, i) => expect(p, `ponto no evento ${v.pontos[i].evento}`).toEqual(v.pontos[i]));
-      expect(sha(m.assinatura())).toBe(v.assinatura);
-      expect(sha(JSON.stringify(m.cerebro!.estadoInterno()))).toBe(v.cerebro);
-      /* e pelo caminho publico */
-      expect(sha(Motor.reproduzir(v.semente, v.log, v.versao).assinatura())).toBe(v.assinatura);
-    });
-  }
-
-  test("o mesmo roteiro, jogado de novo hoje, da o mesmo log (o dono e o motor deterministas)", () => {
-    const [semente, dias, dono] = VIDAS[0];
-    const m = new Motor(semente, 11);
-    viverDias(m, dias, dono);
-    expect(JSON.parse(JSON.stringify(m.log))).toEqual(G.vidas[0].log);
-  });
+  /* as vidas v11 do gabarito nao se refazem mais: os pets v11 sairam com o descarte 6 (COMBATE-TR, etapa R2b; D-9). Fica o pino dos
+     gabaritos do Python, que guarda a paridade do cerebro A, do corpo e do mundo */
 });

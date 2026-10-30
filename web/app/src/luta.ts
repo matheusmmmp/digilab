@@ -12,7 +12,6 @@ import { gradeDe } from "./grades.ts";
 import { jogoAtual, mudarMotor, mudarTamer, tamerAtual } from "./jogo.ts";
 import { ehLuta } from "./rotas.ts";
 import { conferirRevanche, type Campeao, type ItemGanho, type MedalhaGanha, type Recorde } from "./tamer.ts";
-import { falaRevanche } from "./falaLivre.ts";
 import { SOM } from "./som.ts";
 
 /** "limite de turnos" (por turnos) ou "limite de tempo" (pets v13, em tempo real) */
@@ -157,7 +156,6 @@ export function previa(modo: Modo, manterTexto = false): void {
     texto: textoAntes ?? (modo === "arena" ? "Escolha um rival e aperte Lutar." : `Seu pet × ${B.nomeTela}: escolha um lugar no mapa e aperte Desafiar.`) };
   avisarLuta();
   /* pets v7: diante do rival que o venceu (e ainda nao foi vencido), ele fala antes da luta */
-  if (LUTA.replay === null && (npc || !LUTA.rivalFixo)) falaRevanche(m, npc ?? LUTA.rival);
 }
 export function escolherRival(k: string): void { if (LUTA.lutando) return; LUTA.rival = k; LUTA.rivalFixo = null; previa("arena"); }
 /** o pet B do cenario como lutador de tela */
@@ -187,7 +185,7 @@ export function lutarAnimado(npc: string | null, nomeAcaoV2: Record<string, stri
   const cenario = !npc && !!LUTA.rivalFixo, t0 = tamerAtual(), medalhasAntes = t0.n, itensAntes = t0.itens.length, rival = npc || LUTA.rival;
   /* pets v6: a carta escolhida (a luta contra pet de cenario nao entra no registro: sem carta) e se a medalha do lider ja era do
      Tamer (a vitoria entao e revanche, e pode dar a carta dele) */
-  const carta = !cenario && m.versao >= 6 ? LUTA.carta : null, mdLider = medalhaDoLider(rival), medalhaAntes = !!mdLider && t0.tem(mdLider.id);
+  const carta = !cenario ? LUTA.carta : null, mdLider = medalhaDoLider(rival), medalhaAntes = !!mdLider && t0.tem(mdLider.id);
   try {
     if (carta && t0.cartas(carta) < 1) throw new Error(`o Tamer não tem mais a ${cartaDe(carta).nome}`);
     if (cenario) {   /* pet de cenario nao e reconstruivel do registro: luta sem ensinar */
@@ -204,7 +202,7 @@ export function lutarAnimado(npc: string | null, nomeAcaoV2: Record<string, stri
     avisarLuta(); return;
   }
   /* a carta saiu do inventario; a revanche vencida pode dar a carta do lider */
-  if (!cenario && m.versao >= 6) {
+  if (!cenario) {
     try {
       mudarTamer(t => {
         if (carta) t.usarCarta(carta, m);

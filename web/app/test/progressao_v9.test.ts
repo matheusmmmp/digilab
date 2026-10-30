@@ -50,11 +50,10 @@ describe("progressao dos pets v9: escala e fatores separados por versao", () => 
       expect(lutadorBot(k, CV21D).cond.escala).toBe(V6_VIDA[est] * V6_FATOR_NPC[k as keyof typeof V6_FATOR_NPC]);
       expect(lutadorBot(k, CV21E).cond.escala).toBe(CESC_V9.vida[est] * CESC_V9.fatorNpc[k]);
     }
-    /* pelo motor do pet: o v8 luta com o fator dos v6, o v9 com o dos v9 */
+    /* pelo motor do pet: o v13 luta com o fator dos v9 */
     for (const k of DESAFIANTES) {
       const est = NPC[k]!.est;
-      expect(new Motor(3, 8).lutadores(k).B.cond.escala).toBe(V6_VIDA[est] * V6_FATOR_NPC[k as keyof typeof V6_FATOR_NPC]);
-      expect(new Motor(3, 9).lutadores(k).B.cond.escala).toBe(CESC_V9.vida[est] * CESC_V9.fatorNpc[k]);
+      expect(new Motor(3).lutadores(k).B.cond.escala).toBe(CESC_V9.vida[est] * CESC_V9.fatorNpc[k]);
     }
   });
 
@@ -70,8 +69,7 @@ describe("progressao dos pets v9: escala e fatores separados por versao", () => 
       /* so o fator muda: a regra, a lista, a tecnica e as lutas sao as mesmas */
       expect({ ...a9, fator: undefined }).toEqual({ ...a, fator: undefined });
       const est = LUGARES_V6[a.lugar].est;
-      expect(new Motor(3, 8).lutadores(a.lider).B.cond.escala).toBeCloseTo(V6_VIDA[est] * V6_FATOR_LIDER[a.id], 9);
-      expect(new Motor(3, 9).lutadores(a.lider).B.cond.escala).toBeCloseTo(CESC_V9.vida[est] * FATOR_LIDER_V9[a.id], 9);
+      expect(new Motor(3).lutadores(a.lider).B.cond.escala).toBeCloseTo(CESC_V9.vida[est] * FATOR_LIDER_V9[a.id], 9);
     });
   });
 

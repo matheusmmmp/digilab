@@ -245,3 +245,43 @@ O que a R2a fez:
   próxima versão". O Resultado, a Arena, a Campanha, a Fronteira, a Fábrica e o Salão, o Diário e o Lab mostram a duração em segundos. O
   desenho da luta é da R3.
 - **O E3 no `docs/ARQUITETURA_DIGIBRAIN_MODULAR.md`:** a reserva da v13 passa para a próxima versão livre.
+
+## 13. R2b: o resultado (worker, Claude Code, Opus 5.5, 2026-10-29)
+
+O D-9 tirou do jogo as versões de pet v1–v12. Só a v13 abre: o `Motor` falha alto com qualquer outra versão, e o descarte 6 (R2a) já
+tira esses pets do navegador.
+
+- **Antes de tirar nada, o gabarito das vidas v13 foi gravado num commit próprio** (`8363826`):
+  - `scripts/gerar_gabarito_vidas_v13.ts` gera `test/gabaritos/v13_vidas_ts.json`, e `test/vidas_v13.test.ts` o confere;
+  - são 5 vidas, com o sha256 da assinatura a cada evento, e elas cobrem `c`, `o`, `t`, `d`, `u`, `dc`, `l`, `tr`, `i`, `g` e `k`;
+  - o gabarito passou igual depois de cada corte.
+  - Por outro caminho: as 4 vidas v12 sem luta do `test/gabaritos/v12_jogo_ts.json` se refazem no v13, bit a bit.
+- **O motor** (`motor/motor.ts`, de 1 306 para 993 linhas):
+  - saem a educação (as janelas, as travessuras, o petisco e o banheiro), a voz com mentira (o evento `"fl"` vira evento desconhecido),
+    a obediência, o laço do corpo sem mundo (v11), o caminho de decisão do Bandit (v1–v10), o caráter pelos traços e pela política e
+    todos os `versao >= N`;
+  - ficam, com o valor fixo e só na assinatura, os campos que a assinatura das vidas v13 tem: `edu`, `men` e `obed` zerados, e a memória
+    por espaços do Bandit, que o v13 ainda usa para a emoção e a fala.
+- **Os módulos:**
+  - saem `motor/mentira.ts` e `motor/historia.ts`, que só a voz própria usava;
+  - em `motor/carater.ts` saem o caráter pelo Bandit e pelos traços;
+  - em `motor/memoria.ts` sai a memória curta dos v1;
+  - em `motor/vinculo.ts` sai a obediência;
+  - em `motor/motivo.ts` sai o motivo do Bandit.
+  - A variante A do `Vinculo` fica, pela paridade com o Python.
+- **O app:**
+  - saem `src/voz.ts`, `src/componentes/FalaRevanche.tsx`, a janela da educação e da fala do Pet, a disciplina, o atalho de elogio e de
+    bronca da conversa, a preferência "o pet comenta coisas da internet" e o filtro "falas" do Diário;
+  - saem também as seções do Bandit do Aprendizado (Agora, Instinto × aprendido, Decisões, desejo e obediência), o fim da jornada no chefe
+    da campanha e os avisos e textos de "pet de versão antiga";
+  - todos os `m.versao` das telas.
+- **Os testes:**
+  - saem `test/educacao_v4.test.ts`, `test/paridade_ts.test.mjs`, `test/voz.test.ts` e `test/voz_app.test.ts`;
+  - os outros testes de mecânica foram portados para a v13, e a lista do que saiu ou mudou está no relato do PR;
+  - o Vitest vai de 670 testes em 60 arquivos para 599 em 58.
+- **O e2e:** os saves semeados (`e2e/saves.json`, `save_medalhas`, `save_arenas`, `save_liga`, `save_salao`, `save_evolucao`, os do
+  treino, `save_mundo`) foram regerados em v13 pelos geradores de `e2e/gerar_save*.mjs`.
+- **Ficam para a R3:** o combate por turnos (`motor/combate.ts`), as variantes de regra V21C e V21D, as listas e as escalas de cada versão
+  de combate (`CESC`, `CESC_V6`) e a Fábrica v6 e v9.
+  - Eles só são alcançados pelos testes de paridade do combate com o Python e pelas funções de módulo que recebem a versão das regras.
+  - A espec já punha o combate por turnos na R3.

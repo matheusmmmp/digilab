@@ -46,8 +46,7 @@ export function validarComando(m: Motor, nascendo: number, c: unknown): AcaoDono
   const a = noCatalogo(c);
   if (!a) return null;
   if (!podeAgir(m, nascendo)) return null;
-  if (ACOES_EDUCACAO.includes(a) && m.versao < 4) return null;
-  if (m.versao >= 11 && !ACOES_DONO_JOGO_V11.includes(a)) return null;          /* pets v11: sem elogio, bronca, petisco e banheiro */
+  if (!ACOES_DONO_JOGO_V11.includes(a)) return null;          /* sem elogio, bronca, petisco e banheiro (os do dono dos v11 em diante) */
   if (a === "tratar_lesao" && m.lesionadoDesde === null) return null;
   return a;
 }

@@ -1,8 +1,8 @@
-/* Evolucao canonica (docs/DESIGN_EVOLUCAO_CANONICA.md): Champion -> Ultimate -> Mega nos pets v5; os pets v1-v4 seguem
-   iguais no motor (os gabaritos de paridade conferem) e mudam so no rotulo da tela. */
+/* Evolucao canonica (docs/DESIGN_EVOLUCAO_CANONICA.md): Champion -> Ultimate -> Mega no pet v13 (o unico que ficou no motor;
+   as medalhas liberam as evolucoes, entao os helpers dao as 5 de uma vez). */
 import { afterEach, describe, expect, test } from "vitest";
-import { CAT, CD, CMG, CSO, CTR, DUR_EVO, ESPECIES, LINHAS, TICK_INICIAL, TPD, VERSAO_PET } from "../motor/constantes.ts";
-import { CAMPANHA, CAMPANHA_V5, LUGARES, LUGARES_V5, NPC } from "../motor/bots.ts";
+import { ACOES_DONO_JOGO_V11, CAT, CD, CMD, CMG, CSO, CTR, DUR_EVO, ESPECIES, LINHAS, TICK_INICIAL, TPD, VERSAO_PET } from "../motor/constantes.ts";
+import { CAMPANHA_V6, LUGARES_V6, NPC } from "../motor/bots.ts";
 import { ESCALA, ligarEscala, perfilDe } from "../motor/catalogo.ts";
 import { criarDono, type VisaoDono } from "../motor/donos.ts";
 import { lutadorBot } from "../motor/gambits_pet.ts";
@@ -17,11 +17,12 @@ const escalaAntes = ESCALA.ligada;
 afterEach(() => ligarEscala(escalaAntes));
 
 /** adulto (Ultimate) sem passar pelo dono: o sparring e as vitorias do estagio postos a mao (so para testar a regra) */
-function ultimate(s: number, versao = 5, sobrecarga = 0): Motor {
-  const m = new Motor(s, versao);
+function ultimate(s: number, sobrecarga = 0): Motor {
+  const m = new Motor(s);
+  m.liberar(CMD.mega);
   m.avancar(INI_ADOL - TICK_INICIAL + 15);
   m.sparring = CAT.sparring;
-  if (versao >= 4) m.lutas = { lutas: 10, vitorias: 10, derrotas: 0, empates: 0, lesoes: 0, tratadas: 0 };
+  m.lutas = { lutas: 10, vitorias: 10, derrotas: 0, empates: 0, lesoes: 0, tratadas: 0 };
   m.treino.sobrecarga = sobrecarga;
   m.avancar(DUR_EVO.adolescente);
   expect(m.estagioAtual).toBe("adulto");
@@ -29,14 +30,15 @@ function ultimate(s: number, versao = 5, sobrecarga = 0): Motor {
 }
 /** uma vida de verdade com o dono simulado (cuida da lesao e luta na arena ate qualificar), para o replay */
 function vida(tipo: "aleatorio" | "atencioso", semente: number, dias: number): Motor {
-  const m = new Motor(semente, 5), dono = criarDono(tipo), r = criarRng(hashSemente("dono", semente, tipo));
+  const m = new Motor(semente), dono = criarDono(tipo), r = criarRng(hashSemente("dono", semente, tipo));
   const passos = Math.round(dias * TPD / CD.passo), orc = Math.round(16 * dias);
   let gasto = 0;
+  m.liberar(CMD.mega);
   for (let p = 0; p < passos; p++) {
     m.avancar(CD.passo);
     const rest = orc - gasto, min = Math.max(0, rest - (passos - p - 1) * CD.maxPasso), max = Math.min(rest, CD.maxPasso);
     const v: VisaoDono = { e: m.e, acao: m.acao, passo: p, passos, orc, gasto, min, max, atrasado: gasto < orc * (p + 1) / passos, chamados: m.chamadosAbertos() };
-    const acoes = dono.decidir(v, r);
+    const acoes = dono.decidir(v, r).filter(a => ACOES_DONO_JOGO_V11.includes(a));
     if (m.lesionadoDesde !== null && acoes.length) acoes[0] = "tratar_lesao";
     for (const a of acoes) { m.observar(a); gasto++; }
     if ((m.estagioAtual === "adolescente" && m.sparring < CAT.sparring) || (m.estagioAtual === "adulto" && m.lutas.lutas < 12))
@@ -66,16 +68,15 @@ describe("nomes e sprites no canone", () => {
   });
 });
 
-describe("Ultimate -> Mega (pets v5)", () => {
-  /* desde as medalhas do Tamer (docs/DESIGN_MEDALHAS_ARENAS.md) os ovos novos sao v6: v5 + a trava; os v5 seguem aqui */
+describe("Ultimate -> Mega (pet v13)", () => {
   test("ovos novos sao v13 (v5 + medalhas + confianca + combate equilibrado + vinculo B + o cerebro A e o corpo + o mundo fisico + a luta em tempo real)", () => { expect(VERSAO_PET).toBe(13); expect(new Motor(1).versao).toBe(13); });
 
   test("com tempo, lutas, vitorias e vinculo vira Mega: estagio novo, com a forma adulta do Ultimate", () => {
     const m = ultimate(3101), adulta = m.forma.adulta;
     expect(m.requisitosMega()!.tempo).toBe(false);
     m.lutas = { lutas: 10, vitorias: 9, derrotas: 1, empates: 0, lesoes: 0, tratadas: 0 };
-    /* sem o dono o vinculo cai com o tempo: posto a mao no fim do tempo do Ultimate */
-    m.avancar(CMG.durRapida - 2); m.vinc.valor = .8; m.avancar(3);
+    /* no vinculo B (v13) o vinculo parado nao cai com o tempo (nasce em 0,5, acima do limiar): posto a mao, para o registro da evolucao */
+    m.vinc.valor = .8; m.avancar(m.requisitosMega()!.falta - 2); expect(m.estagioAtual).toBe("adulto"); m.avancar(3);
     expect(m.estagioAtual).toBe("mega");
     expect(m.forma.est).toBe("mega");
     expect(m.forma.adulta).toBe(adulta);
@@ -102,19 +103,11 @@ describe("Ultimate -> Mega (pets v5)", () => {
   });
 
   test("a sombria nunca vira Mega, nem com vinculo acima do limiar", () => {
-    const m = ultimate(3404, 5, CSO.sombrio + 10);
+    const m = ultimate(3404, CSO.sombrio + 10);
     expect(m.sombria).toBe(true);
     m.lutas = { lutas: 10, vitorias: 10, derrotas: 0, empates: 0, lesoes: 0, tratadas: 0 };
     m.avancar(CMG.durRapida - 2); m.vinc.valor = Math.min(.95, m.vinc.teto); m.avancar(3);
     expect(m.vinc.valor).toBeGreaterThanOrEqual(CMG.vinculo);
-    expect(m.estagioAtual).toBe("adulto");
-    expect(m.requisitosMega()).toBeNull();
-  });
-
-  test("pets v4 param no Ultimate", () => {
-    const m = ultimate(3505, 4);
-    m.vinc.valor = .9;
-    m.avancar(CMG.durRapida * 2);
     expect(m.estagioAtual).toBe("adulto");
     expect(m.requisitosMega()).toBeNull();
   });
@@ -156,24 +149,19 @@ describe("Ultimate -> Mega (pets v5)", () => {
   });
 });
 
-describe("campanha v5", () => {
-  test("pets v1-v4 seguem na campanha de sempre; v5 tem a Montanha Espiral", () => {
-    expect(Object.keys(new Motor(1, 4).campanha)).toEqual(CAMPANHA.map(c => c.k));
-    expect(Object.keys(new Motor(1, 5).campanha)).toEqual(CAMPANHA_V5.map(c => c.k));
-    expect(new Motor(1, 4).lugares).toBe(LUGARES);
-    expect(new Motor(1, 5).lugares).toBe(LUGARES_V5);
-    expect(LUGARES_V5.map(L => L.nome)).toEqual(["Campina", "Torre de pedra", "Cidadela", "Montanha Espiral"]);
-    expect(LUGARES_V5[3].rivais.map(k => NPC[k]!.nome)).toEqual(["Puppetmon", "Machinedramon", "Piedmon"]);
-    expect(LUGARES_V5[2].rivais.map(k => NPC[k]!.nome)).toEqual(["Myotismon"]);
-    /* Campina e Torre sao os mesmos NPCs (mesmas chaves, mesmo lugar) */
-    for (const k of [...LUGARES[0].rivais, ...LUGARES[1].rivais]) expect(LUGARES_V5[NPC[k]!.lug].rivais).toContain(k);
+describe("campanha do pet v13", () => {
+  test("o pet v13 tem a campanha de seis lugares, com a Montanha Espiral", () => {
+    const m = new Motor(1);
+    expect(Object.keys(m.campanha)).toEqual(CAMPANHA_V6.map(c => c.k));
+    expect(m.lugares).toBe(LUGARES_V6);
+    expect(LUGARES_V6.map(L => L.nome)).toEqual(["Campina", "Torre de pedra", "Floresta", "Cidadela", "Lago", "Montanha Espiral"]);
+    expect(LUGARES_V6[5].rivais.map(k => NPC[k]!.nome)).toEqual(["Puppetmon", "Machinedramon", "Piedmon"]);
+    expect(LUGARES_V6[3].rivais.map(k => NPC[k]!.nome)).toEqual(["Myotismon"]);
   });
 
-  test("um pet nao luta contra NPC da campanha de outra versao", () => {
-    const v4 = new Motor(7, 4); v4.avancar(DUR_EVO.bebe + 30);
-    expect(() => v4.lutar("npc_v5_piedmon", 1)).toThrow(/não está na campanha/);
-    const v5 = new Motor(7, 5); v5.avancar(DUR_EVO.bebe + 30);
-    expect(() => v5.lutar("npc_tier3_soberano", 1)).toThrow(/não está na campanha/);
+  test("um pet nao luta contra NPC fora da campanha dele", () => {
+    const m = new Motor(7); m.avancar(DUR_EVO.bebe + 30);
+    expect(() => m.lutar("npc_tier3_soberano", 1)).toThrow(/não está na campanha/);
   });
 
   test("na escala, os NPCs da Espiral tem E pela vida do Mega; o Myotismon e o Piedmon de sempre", () => {
