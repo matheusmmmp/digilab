@@ -27,9 +27,9 @@ fechamento da V2, o `docs/FECHAMENTO_V2.md` (tag `v2-final`).
 | **C4** memória autobiográfica | ME-1 a ME-7 DECIDIDAS (2026-10-30, pela recomendação), com as entradas da C0 e as C4-E1 a C4-E3 | só papel; a espec depois, sem pressa (`digilab/digibrain/` com a C2 e a C3) | `docs/TAREFA_V2_MEMORIA_AUTOBIOGRAFICA.md`, seção 8 |
 | **C5** viabilidade do corpo | as medidas do corpo fora da faixa, do replay | definidas no adendo 6 (AD6-4); o código entra com o orquestrador da etapa 3 da C1 | `docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`, adendo 6 |
 | **L1** M7 do layout | o fechamento do layout habitat | **na `main`** (#477) | `docs/TAREFA_V2_LAYOUT_HABITAT.md` |
-| **L2** tema dos menus T1–T3 | a pele Vidro como padrão, a escolha em Ajustes, as capturas nas duas peles | T1 **na `main`** (#486), T2 **na `main`** (#499); a T3 depois da L4 | `docs/TAREFA_V2_TEMA_MENUS.md`, seção 5 |
+| **L2** tema dos menus T1–T3 | a pele Vidro como padrão, a escolha em Ajustes, as capturas nas duas peles | T1 **na `main`** (#486), T2 **na `main`** (#499); a T3 liberada (a L4 entrou) | `docs/TAREFA_V2_TEMA_MENUS.md`, seção 5 |
 | **L3** o primeiro módulo do modular no jogo | o lugar lembrado do M-MEM, proposto, com paridade | depois da C1 e da C2 | `docs/TAREFA_V2_DIGIBRAIN_MODULAR_PRODUTO.md` |
-| **L4** habitat como ilha 3D | a cena do modo mundo (v12) como ilha 3D, com o pet em papel; só vista | H0 a H5 em PRs empilhados (#488 a #494; a H1b liga o `CLIPES_UP`); ordem DECIDIDA (2026-10-30): depois da T1, antes da T2 e da T3; faltam as capturas aprovadas e a M3 | `docs/TAREFA_V3_HABITAT_ILHA_3D.md` (no #488) |
+| **L4** habitat como ilha 3D | a cena do modo mundo (v12) como ilha 3D, com o pet em papel; só vista | H0 a H5 **na `main`** (#488 a #494; a H1b liga o `CLIPES_UP`); faltam as capturas aprovadas e a M3 | `docs/TAREFA_V3_HABITAT_ILHA_3D.md` |
 | **B1** rodada 2 do equilíbrio | as fases do `PLANO_EQUILIBRIO_COMBATE_TR_R2.md` | **na `main`**, com a conferência única (R2-5, #502): 13 metas passam, 14 falham | `docs/EQUILIBRIO_COMBATE_TR.md` |
 | **B2** ligar a v14 | o pet v14 com o candidato da conferência; a v13 viva (CV14-1) | **na `main`** (#504); o Matheus decidiu ligar já (2026-10-30), contra a recomendação de esperar a rodada 3 | `docs/TAREFA_V3_COMBATE_V14.md` |
 | **B3** a luta no layout novo | o HUD e o palco na pele dos menus | depois da L2 | idem |
@@ -38,7 +38,7 @@ fechamento da V2, o `docs/FECHAMENTO_V2.md` (tag `v2-final`).
 ## 2. Decisões abertas do Matheus
 
 - **A L4:** aprovar as capturas da ilha (390 e 1280; claro, escuro e noite) e medir a M3 com `?medir3d=1` no desktop e num celular.
-- **Os merges, na ordem:** a L4, do #488 ao #494; depois a T3.
+- **A T3** do tema dos menus: a L4 entrou, a T3 está liberada.
 - **A CV14-1:** a v13 continua viva (pela recomendação, até o Matheus dizer outra coisa); um pet v13 enfrenta a Fábrica v14, que é da conta.
 
 ## 3. Riscos
