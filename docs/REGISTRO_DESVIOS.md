@@ -422,3 +422,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-30 — COMBATE-TR R4 (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): os modos especiais e as cartas no tempo real](registro/2026-10.md)
 - [2026-10-30 — COMBATE-TR equilíbrio (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): o plano da rodada de equilíbrio do tempo real](registro/2026-10.md)
 - [2026-10-30 — COMBATE-TR calibração, fase 1 (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): o relógio](registro/2026-10.md)
+- [2026-10-29 — DIGIBRAIN-MODULAR-L2-AVALIACAO (worker D, Claude Code, Opus 5.5, worktree `v2-modular-l2-avaliacao`): a avaliação da L-2, uma vez, e os critérios lidos como registrados](registro/2026-10.md)
