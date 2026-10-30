@@ -1,0 +1,110 @@
+/* M1 do layout habitat: a pele XCOM (tokens --hx-*, hud.css e componentes hx). Sem DOM (vitest em node): renderToStaticMarkup
+   e leitura do CSS. Os tokens sao conferidos em contraste 4,5:1 (texto) e 3:1 (bordas) pelo proprio teste. */
+import { createElement as h } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import { readFileSync } from "node:fs";
+import { describe, expect, it } from "vitest";
+import { AbasHx, BotaoContinuar, BotaoHx, ChipHx, LinhaHx, MedidorHx, PainelHx, indiceAbaPorTecla } from "../src/componentes/hx/index.ts";
+
+const tokens = readFileSync(new URL("../src/estilo/tokens.css", import.meta.url), "utf8");
+const hud = readFileSync(new URL("../src/estilo/hud.css", import.meta.url), "utf8");
+const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
+
+const lum = (hex: string) => {
+  const c = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255).map((x) => (x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4));
+  return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+};
+const contraste = (a: string, b: string) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
+const token = (nome: string) => { const m = tokens.match(new RegExp(`--${nome}:(#[0-9A-Fa-f]{6})`)); if (!m) throw new Error(`token ${nome}`); return m[1]; };
+
+describe("tokens --hx-*", () => {
+  it("valem em qualquer tema: ficam so no :root, sem variante por tema", () => {
+    const bloco = tokens.slice(tokens.indexOf("Pele XCOM dos menus"));
+    expect(bloco).not.toContain("data-tema");
+    expect(bloco).not.toContain("prefers-color-scheme");
+  });
+  it("todo texto passa 4,5:1 contra o pior fundo dos menus, e as bordas 3:1", () => {
+    const fundos = [token("hx-chao"), token("hx-miolo"), token("hx-miolo-2"), "#0E1E16"];
+    for (const t of ["hx-texto", "hx-texto-2", "hx-sec", "hx-rotulo", "hx-btn-ink", "hx-alerta", "hx-perigo", "hx-ok", "hx-necessidade", "hx-aprendido"]) {
+      for (const f of fundos) expect(contraste(token(t), f), `${t} sobre ${f}`).toBeGreaterThanOrEqual(4.5);
+    }
+    expect(contraste(token("hx-escolhido-ink"), token("hx-escolhido"))).toBeGreaterThanOrEqual(4.5);
+    expect(contraste(token("hx-escolhido-ink"), token("hx-necessidade"))).toBeGreaterThanOrEqual(4.5);
+    for (const f of fundos) expect(contraste(token("hx-borda-topo"), f)).toBeGreaterThanOrEqual(3);
+    expect(contraste(token("hx-btn-borda"), "#0E1E16")).toBeGreaterThanOrEqual(3);
+  });
+});
+
+describe("hud.css e fonte", () => {
+  it("respeita prefers-reduced-motion (transicao so em no-preference) e define foco", () => {
+    expect(hud).toMatch(/@media \(prefers-reduced-motion: no-preference\)\{[^@]*transition/);
+    expect(hud.split("@media")[0]).not.toContain("transition");
+    expect(hud).toContain(":focus-visible");
+  });
+  it("Saira Condensed 400-700 carregada no index.html e usada so via --hx-f", () => {
+    expect(html).toContain("family=Saira+Condensed:wght@400;500;600;700");
+    expect(tokens).toContain('--hx-f:"Saira Condensed"');
+    expect(hud).not.toContain("Saira");
+  });
+});
+
+describe("PainelHx", () => {
+  it("titulo em <h2> ligado a <section>, sem × quando nao ha onFechar", () => {
+    const s = renderToStaticMarkup(h(PainelHx, { titulo: "Estado atual" }, "conteudo"));
+    expect(s).toMatch(/<section class="hx-painel" aria-labelledby="([^"]+)"><header class="hx-painel__cab"><h2 id="\1" class="hx-painel__titulo">Estado atual<\/h2><\/header>/);
+    expect(s).not.toContain("hx-quad");
+  });
+  it("com onFechar tem o botao quadrado com nome acessivel", () => {
+    const s = renderToStaticMarkup(h(PainelHx, { titulo: "Crescer", onFechar: () => {} }));
+    expect(s).toContain('<button type="button" class="hx-quad" aria-label="Fechar"><span aria-hidden="true">×</span></button>');
+  });
+});
+
+describe("AbasHx", () => {
+  const abas = [{ id: "a", rotulo: "Treinar" }, { id: "b", rotulo: "Evolução" }, { id: "c", rotulo: "Itens" }];
+  it("tablist com a aba escolhida selecionada e a unica na ordem de Tab", () => {
+    const s = renderToStaticMarkup(h(AbasHx, { abas, ativa: "b", onMudar: () => {}, rotulo: "Crescer" }));
+    expect(s).toContain('role="tablist" aria-label="Crescer"');
+    expect(s.match(/role="tab"/g)).toHaveLength(3);
+    expect(s).toMatch(/id="hx-aba-b"[^>]*aria-selected="true" tabindex="0"/);
+    expect(s.match(/tabindex="-1"/g)).toHaveLength(2);
+  });
+  it("teclado: setas circulares, Home e End; outra tecla nao navega", () => {
+    expect(indiceAbaPorTecla("ArrowRight", 2, 3)).toBe(0);
+    expect(indiceAbaPorTecla("ArrowLeft", 0, 3)).toBe(2);
+    expect(indiceAbaPorTecla("Home", 2, 3)).toBe(0);
+    expect(indiceAbaPorTecla("End", 0, 3)).toBe(2);
+    expect(indiceAbaPorTecla("a", 0, 3)).toBeNull();
+    expect(indiceAbaPorTecla("ArrowRight", 0, 0)).toBeNull();
+  });
+});
+
+describe("LinhaHx, botoes e chip", () => {
+  it("LinhaHx: <div> sem clique, <button aria-pressed> com clique", () => {
+    expect(renderToStaticMarkup(h(LinhaHx, { secundario: "3" }, "Fruta"))).toBe('<div class="hx-linha">Fruta<span class="hx-linha__sec">3</span></div>');
+    const b = renderToStaticMarkup(h(LinhaHx, { onClick: () => {}, escolhida: true }, "Fruta"));
+    expect(b).toBe('<button type="button" class="hx-linha" aria-pressed="true">Fruta</button>');
+  });
+  it("BotaoHx e BotaoContinuar sao <button type=button>; o principal diz Continuar por padrao", () => {
+    expect(renderToStaticMarkup(h(BotaoHx, { tom: "perigo" }, "Desistir"))).toBe('<button type="button" class="hx-btn hx-btn--perigo">Desistir</button>');
+    expect(renderToStaticMarkup(h(BotaoContinuar))).toBe('<button type="button" class="hx-continuar">Continuar</button>');
+  });
+  it("ChipHx: o tom vira classe, o neutro nao", () => {
+    expect(renderToStaticMarkup(h(ChipHx, { tom: "aprendido" }, "Aprendido"))).toBe('<span class="hx-chip hx-chip--aprendido">Aprendido</span>');
+    expect(renderToStaticMarkup(h(ChipHx, null, "x"))).toBe('<span class="hx-chip">x</span>');
+  });
+});
+
+describe("MedidorHx", () => {
+  it("role=meter com valor, limites e texto equivalente; a largura segue a razao", () => {
+    const s = renderToStaticMarkup(h(MedidorHx, { valor: 30, max: 120, rotulo: "Fome", tom: "alerta" }));
+    expect(s).toContain('role="meter" aria-label="Fome" aria-valuemin="0" aria-valuemax="120" aria-valuenow="30" aria-valuetext="30 de 120"');
+    expect(s).toContain("hx-medidor--alerta");
+    expect(s).toContain("width:25%");
+  });
+  it("valor fora da faixa e preso nos limites; max invalido levanta erro", () => {
+    expect(renderToStaticMarkup(h(MedidorHx, { valor: 500, max: 100, rotulo: "x" }))).toContain('aria-valuenow="100"');
+    expect(renderToStaticMarkup(h(MedidorHx, { valor: -4, max: 100, rotulo: "x" }))).toContain('aria-valuenow="0"');
+    expect(() => renderToStaticMarkup(h(MedidorHx, { valor: 1, max: 0, rotulo: "x" }))).toThrow();
+  });
+});

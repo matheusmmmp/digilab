@@ -93,3 +93,23 @@
 :root[data-fundos="up"]{--dl-img-hex:var(--dl-img-hex-claro);--dl-hex-tam:180px auto;--dl-hex-tam-card:140px auto}
 :root[data-fundos="up"][data-tema="escuro"]{--dl-img-hex:var(--dl-img-hex-escuro)}
 @media (prefers-color-scheme: dark){ :root[data-fundos="up"]:not([data-tema="claro"]){--dl-img-hex:var(--dl-img-hex-escuro)} }
+
+/* Pele XCOM dos menus (docs/TAREFA_V2_LAYOUT_HABITAT.md §3.1, M1). SEMPRE escura: so em :root, sem variante por tema nem
+   por esquema de cor do sistema; so os componentes hx-* (estilo/hud.css) leem estes tokens. O habitat, o retrato, o relogio e o balao
+   seguem nos --dl-*. Contraste (WCAG) de cada texto contra o pior fundo (miolo #16191E; botao #0E1E16): texto 13,3; texto-2 11,4;
+   secundario 6,9; rotulo 11,8; escolhido 13,9; botao 12,3; alerta 9,4; perigo 5,0. Bordas e linha de topo: >= 3:1. */
+:root{
+  --hx-chao:#0B1118; --hx-miolo:#0A1316; --hx-miolo-2:#16191E;
+  --hx-borda:rgba(118,170,175,.38); --hx-borda-topo:#5E7C80;
+  --hx-texto:#D6E5E6; --hx-texto-2:#BFD6D8; --hx-sec:#8EA9AB; --hx-rotulo:#7FE3FF;
+  --hx-escolhido:#BFE5E7; --hx-escolhido-ink:#0A1316;
+  --hx-hachura:repeating-linear-gradient(-60deg, rgba(150,195,200,.38) 0 4px, transparent 4px 9px);
+  --hx-hachura-verde:repeating-linear-gradient(-60deg, rgba(108,197,138,.55) 0 4px, transparent 4px 9px);
+  --hx-btn-bg:rgba(14,30,22,.92); --hx-btn-ink:#A6E8BC; --hx-btn-borda:#6CC58A;
+  --hx-medidor:#9FD5D9; --hx-medidor-trilho:rgba(118,170,175,.2);
+  --hx-mascara:repeating-linear-gradient(90deg,#000 0 7px,transparent 7px 9px);
+  /* semantica do UI_GUIDELINES §3 na pele escura: destaque (amarelo), perigo, ok (verde), necessidade (rosa), aprendido (ciano) */
+  --hx-alerta:#FFB020; --hx-perigo:#D46A6A; --hx-ok:#4BE07E; --hx-necessidade:#FF7FC0; --hx-aprendido:#6FE3FF;
+  --hx-foco:#7FE3FF;
+  --hx-f:"Saira Condensed", "Rajdhani", system-ui, sans-serif;
+}
