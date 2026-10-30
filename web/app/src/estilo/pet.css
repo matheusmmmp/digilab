@@ -103,14 +103,9 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .pet-salvo.erro{color:var(--dl-erro)}
 .pet-salvo.erro i{background:var(--dl-erro)}   /* desktop: a coluna da direita */
 
-.palco-emocao{position:absolute;left:10px;top:46px;z-index:2;display:flex;align-items:center;gap:6px;background:#FFFFFF;border:2px solid var(--dl-border);
-  border-radius:20px;padding:3px 10px 3px 4px;font-size:12px;font-weight:800;color:var(--dl-plate)}
-.palco-emocao img{width:22px;height:22px}
-.balao-causa{position:absolute;left:59.6%;top:54px;z-index:2;display:flex;align-items:center;gap:4px;background:#FFFFFF;border:3px solid var(--dl-navy);border-radius:12px;
-  padding:4px 8px;box-shadow:0 3px 0 var(--dl-navy-deep);color:var(--dl-navy);font-weight:900}
-.balao-causa::after{content:"";position:absolute;left:3px;bottom:-17px;width:10px;height:10px;border-radius:50%;background:#FFFFFF;border:3px solid var(--dl-navy)}
-.balao-causa .causa-ic{display:flex}
-.balao-causa .causa-ic img{height:auto}
+/* a causa em icones, no "Por que ele disse isso" */
+.causa-icones{display:inline-flex;align-items:center;gap:4px;font-weight:900}
+.causa-icones .causa-ic{display:flex}
 .balao-q{font-family:var(--dl-f-num);font-style:italic;font-size:18px;padding:0 4px}
 .fala-det{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:0}
 .pet-status{color:var(--dl-text-2);font-size:14px}
@@ -152,7 +147,6 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 @media (min-width:1100px){
   .pet-tela{max-width:none;margin:0}
   .pet-cab{padding:12px 24px 10px}
-  .balao-causa{left:61%;top:156px}
   .necessidades4{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 .balao-txt{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;line-clamp:4;overflow:hidden}
@@ -178,7 +172,7 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .tempo-pet{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .tempo-pet .dl-btn{min-height:44px;padding:4px 10px;font-size:13px}
 .tempo-pet .dl-btn[aria-pressed="true"]{background:var(--dl-navy);color:#FFFFFF;border-color:var(--dl-navy)}
-.balao-causa .causa-ic img{width:auto;height:24px;image-rendering:auto}
+.causa-icones .causa-ic img{width:auto;height:24px;image-rendering:auto}
 /* Meus pets (MpAtual): tela cheia por cima do app, cabecalho com voltar, palco do pet ativo e os botoes */
 
 
