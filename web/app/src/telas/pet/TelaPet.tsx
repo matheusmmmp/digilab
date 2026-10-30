@@ -25,7 +25,7 @@ import { ROTULO_DONO, agir } from "../../acoes.ts";
 import { useJogo } from "../../jogo.ts";
 import { abrirEscolhaBrasao } from "../../jornada.ts";
 import { useTempo } from "../../tempo.ts";
-import { BarraRacao, FaixaRacao, InfoMundo, MensagemRacao } from "./PorRacao.tsx";
+import { AvisoRacao, BarraRacao, FaixaRacao, InfoMundo } from "./PorRacao.tsx";
 import "../../estilo/pet_dock.css";
 import { ConteudoDigiBrain, SeloDigiBrain } from "../../componentes/DigiBrain.tsx";
 import { duracao, previsaoEvo } from "../crescer/TelaEvolucao.tsx";
@@ -99,18 +99,18 @@ function useFala(): VistaFala {
   }
   return v;
 }
-/** balao sobre o pet (PetTela, em (223, 54) com o rabinho): a causa da ultima decisao em icones; sem causa, "?" */
+/** a causa da ultima decisao em icones, no "Por que ele disse isso" (fora da cena: sobre ela so o chamado, o balao e o DigiBrain); sem causa, "?" */
 const ICONE_CAUSA: Record<string, "carne" | "tempo" | "joinha" | "coracao" | "exclam"> = {
   fome: "carne", necessidade_fome: "carne", latencia_fome: "tempo", latencia_higiene: "tempo", tempo_sem_cuidado: "tempo", demora: "tempo",
   elogio: "joinha", elogios: "joinha", carinho: "coracao", bronca: "exclam", repreensoes: "exclam",
 };
-function BalaoCausa() {
+function CausaIcones() {
   const { motor: m } = useJogo(), mot = m.motivo;
   if (!mot || mot.origem !== "vida") return null;
   const ic = mot.exploracao ? [] : [...new Set(mot.fatores.map(f => ICONE_CAUSA[f]).filter(Boolean))].slice(0, 3);
   const txt = mot.exploracao || !mot.fatores.length ? "sem causa registrada" : mot.fatores.map(f => FATORES_TXT[f]?.marcador ?? f).join(" + ");
   return (
-    <span className="balao-palco balao-causa" role="img" aria-label={`causa: ${txt}`} title={txt}>
+    <span className="causa-icones" role="img" aria-label={`causa: ${txt}`} title={txt}>
       {ic.length ? ic.flatMap((x, i) => [i > 0 ? <b key={"m" + i}>+</b> : null, <span key={"p" + i} className="causa-ic">{x === "tempo" ? <Peca nome="icone_tempo" /> : <Peca nome={"emoji_" + x} escala={2} />}</span>])
         : <b className="balao-q">?</b>}
     </span>
@@ -131,7 +131,7 @@ function DetalheFala({ v, semTitulo = false }: { v: VistaFala; semTitulo?: boole
     <section className="det-sec det-fala" aria-labelledby="det-fala-tit">
       {!semTitulo && <h3 id="det-fala-tit">Por que ele disse isso</h3>}
       <div className="fala-det">
-        <span className="pet-status dl-lcd">{NOME_PET[m.acao]}{freado ? " · tempo em 1x até atender" : ""}</span>{v.causa}
+        <span className="pet-status dl-lcd">{NOME_PET[m.acao]}{freado ? " · tempo em 1x até atender" : ""}</span><CausaIcones />{v.causa}
         <span className="dl-apoio">{v.texto && <>“{v.texto}” · </>}{v.detalhe}</span></div>
       <span className="fala-status" title={`${r.texto} · ${r.titulo}`}><span className="fala-ponto" data-estado={fl.modo === "template" ? "off" : r.estado} aria-hidden="true" />{MODO_CURTO[fl.modo]}</span>
     </section>
@@ -171,14 +171,14 @@ function EstadoConfianca() {
   );
 }
 
-/* emocao (prancha UpPet): a ultima emocao registrada na memoria do pet (so pets v2+; v1 nao tem emocao) */
+/* emocao (prancha UpPet): a ultima emocao registrada na memoria do pet (so pets v2+; v1 nao tem emocao), no painel Estado */
 const EMOTE_EMOCAO: Record<string, string> = { alegria: "emoji_feliz", euforia: "emoji_feliz", orgulho: "emoji_feliz", ternura: "emoji_coracao" };
 function Emocao() {
   const { motor: m } = useJogo();
   const em = (m.pol.mem as unknown as { emocoes: { nome: string }[] }).emocoes;
   const ult = em[em.length - 1];
   if (!ult) return null;
-  return <span className="palco-emocao">{EMOTE_EMOCAO[ult.nome] && <Peca nome={EMOTE_EMOCAO[ult.nome]} />}{EMOCAO_TXT[ult.nome][0]}</span>;
+  return <p className="est-linha est-emocao"><span className="est-rot">emoção</span>{EMOTE_EMOCAO[ult.nome] && <Peca nome={EMOTE_EMOCAO[ult.nome]} />}{EMOCAO_TXT[ult.nome][0]}</p>;
 }
 
 /* ------------------------------------------------ necessidades, chamado e desejo */
@@ -392,7 +392,7 @@ const BOTOES_LADO: [Exclude<Painel, "fala">, LucideIcon][] = [["estado", Activit
 
 function ConteudoPainel({ id, v, irRegistro, irEvolucao }: { id: Painel; v: VistaFala; irRegistro: () => void; irEvolucao: () => void }) {
   switch (id) {
-    case "estado": return <div className="det-estado"><Necessidades /><Desejo /><EstadoConfianca /></div>;
+    case "estado": return <div className="det-estado"><Emocao /><InfoMundo /><Necessidades /><Desejo /><EstadoConfianca /></div>;
     case "evolucao": return <ProximaEvolucao irEvolucao={irEvolucao} />;
     case "acoes": return <UltimasAcoes irRegistro={irRegistro} />;
     /* o DigiBrain e o porque da fala mantem o visual claro de hoje (.dl) dentro do painel escuro; a pele deles fica para o polimento */
@@ -428,10 +428,7 @@ export function TelaPet({ irRegistro, irEvolucao }: { irRegistro: () => void; ir
   return (
     <section className="pet-tela pet-home dl" aria-label="Tela do pet">
       <div className="pet-balcao">
-        <div className="cena-topo"><Emocao /></div>
         {vivo && <BalaoFala v={fala} abrir={() => abrir("fala")} />}
-        <BalaoCausa />
-        {m.mundo && <div className="mundo-linhas"><InfoMundo /><MensagemRacao /></div>}
         {m.mundo && vivo && <FaixaRacao />}
       </div>
       <nav className="pet-lado" aria-label="Painéis do pet">
@@ -448,6 +445,7 @@ export function TelaPet({ irRegistro, irEvolucao }: { irRegistro: () => void; ir
         </div>
       )}
       <div className="pet-dock" ref={dock}>
+        {m.mundo && <AvisoRacao />}
         <Prioridade abrirDetalhes={() => abrir("estado")} />
         {!m.morte && <DockPet />}
       </div>
