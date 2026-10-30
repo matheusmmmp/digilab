@@ -19,7 +19,7 @@ describe("limite da luta: vence quem foi desafiado (pet v13)", () => {
     expect(() => desafiadoDaVersao(12)).toThrow(/não existe mais/);
   });
   test("luta de pet v13 que chega ao limite (80 s) e derrota do pet", () => {
-    const m = new Motor(31);
+    const m = new Motor(31, 13);
     m.avancar(60);                                               /* bebe: luta ao acaso e chega ao limite com a tartaruga */
     const { A, B } = m.lutadores("tartaruga"), R = m.regras;
     expect(R).toBe(CV21E_TR);
@@ -37,7 +37,7 @@ describe("limite da luta: vence quem foi desafiado (pet v13)", () => {
     expect(achou).toBe(true);
   });
   test("na serie da Cidadela, a luta que chega ao limite quebra a serie", () => {
-    const m = new Motor(31);
+    const m = new Motor(31, 13);
     m.avancar(60);
     const { A, B } = m.lutadores("tartaruga");
     for (let k = 0; k < 400; k++) {

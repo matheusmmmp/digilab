@@ -18,7 +18,7 @@ const FIM_ROOKIE = DUR_EVO.bebe + DUR_EVO.crianca;
 /** vida com o dono simulado: cuida, trata lesao, luta na Campina no Rookie, faz as lutas de treino e treina.
     `medalhas(m, p)`: quando o Tamer "ganha" medalhas nesta vida (so v6) */
 function vida(tipo: "atencioso" | "aleatorio", semente: number, dias: number, medalhas?: (m: Motor, p: number) => void): Motor {
-  const m = new Motor(semente), dono = criarDono(tipo), r = criarRng(hashSemente("dono", semente, tipo));
+  const m = new Motor(semente, 13), dono = criarDono(tipo), r = criarRng(hashSemente("dono", semente, tipo));
   const passos = Math.round(dias * TPD / CD.passo), orc = Math.round(16 * dias);
   let gasto = 0;
   for (let p = 0; p < passos; p++) {
@@ -38,7 +38,7 @@ function vida(tipo: "atencioso" | "aleatorio", semente: number, dias: number, me
 }
 
 describe("a versao dos ovos novos", () => {
-  test("ovos novos sao v13 (v6 + confianca + combate equilibrado + vinculo B + o cerebro A e o corpo + o mundo fisico + a luta em tempo real)", () => { expect(VERSAO_PET).toBe(13); expect(new Motor(1).versao).toBe(13); });
+  test("ovos novos sao v13 (v6 + confianca + combate equilibrado + vinculo B + o cerebro A e o corpo + o mundo fisico + a luta em tempo real)", () => { expect(VERSAO_PET).toBe(14); expect(new Motor(1).versao).toBe(14); });
 });
 
 describe("a trava (pet v13)", () => {
@@ -51,7 +51,7 @@ describe("a trava (pet v13)", () => {
     expect(r.alvo).toBe("adolescente"); expect(r.tempo).toBe(true); expect(r.pronto).toBe(false);
   });
   test("Rookie -> Champion: espera a 1a medalha e evolui no tick do evento u", () => {
-    const m = new Motor(77);
+    const m = new Motor(77, 13);
     m.avancar(FIM_ROOKIE + 120);
     expect(m.estagioAtual).toBe("crianca");
     const t = m.e.tick;
@@ -63,14 +63,14 @@ describe("a trava (pet v13)", () => {
     expect(m.esperandoMedalha()).toBeNull();
   });
   test("medalha antes da hora: o Rookie evolui no tempo de sempre", () => {
-    const m = new Motor(78);
+    const m = new Motor(78, 13);
     m.avancar(30); m.liberar(1);
     m.avancar(FIM_ROOKIE + 30);
     expect(m.estagioAtual).toBe("adolescente");
     expect(m.evolucoes[m.evolucoes.length - 1].tick).toBe(TICK_INICIAL + FIM_ROOKIE);   /* no tempo de sempre, sem esperar */
   });
   test("Champion -> Ultimate: pede 3 medalhas; com 1 e 2 espera", () => {
-    const m = new Motor(79);
+    const m = new Motor(79, 13);
     m.liberar(1);
     m.avancar(FIM_ROOKIE + 15);
     expect(m.estagioAtual).toBe("adolescente");
@@ -86,7 +86,7 @@ describe("a trava (pet v13)", () => {
     expect(m.evolucoes[m.evolucoes.length - 1].tick).toBe(m.e.tick);
   });
   test("o Champion dura o tempo inteiro mesmo quando o Rookie esperou a medalha (tempo desde a evolucao anterior)", () => {
-    const m = new Motor(80);
+    const m = new Motor(80, 13);
     m.avancar(FIM_ROOKIE + 600);
     expect(m.estagioAtual).toBe("crianca");
     m.liberar(1);
@@ -103,7 +103,7 @@ describe("a trava (pet v13)", () => {
     expect(m.estagioAtual).toBe("adulto");
   });
   test("Ultimate -> Mega: pede 5 medalhas; requisitosMega mostra tem e precisa", () => {
-    const m = new Motor(80);
+    const m = new Motor(80, 13);
     m.liberar(3);
     m.avancar(FIM_ROOKIE + 15);
     m.sparring = CAT.sparring;
@@ -125,7 +125,7 @@ describe("a trava (pet v13)", () => {
     expect(m.requisitosEvolucao()).toBeNull();
   });
   test("liberacao invalida falha alto", () => {
-    const m = new Motor(81);
+    const m = new Motor(81, 13);
     m.liberar(2);
     expect(() => m.liberar(2)).toThrow(/liberação inválida/);
     expect(() => m.liberar(1)).toThrow(/liberação inválida/);
@@ -158,7 +158,7 @@ describe("replay com o evento u", () => {
     expect(outra).not.toBe(m.assinatura());
   });
   test("a assinatura dos v6 inclui as medalhas (um u no In-Training ja muda)", () => {
-    const a = new Motor(90), b = new Motor(90);
+    const a = new Motor(90, 13), b = new Motor(90, 13);
     a.avancar(30); b.avancar(30); b.liberar(1);
     a.avancar(30); b.avancar(30);
     expect(a.estagioAtual).toBe(b.estagioAtual);
@@ -172,7 +172,7 @@ describe("replay com o evento u", () => {
     expect(m.medalhas).toBe(1);
   });
   test("o filho da heranca nasce na versao atual (v7) e recebe as medalhas depois da origem", () => {
-    const p = new Motor(91), q = new Motor(92);
+    const p = new Motor(91, 13), q = new Motor(92, 13);
     for (const x of [p, q]) {
       x.liberar(3); x.avancar(FIM_ROOKIE + 15); x.sparring = CAT.sparring;
       x.lutas = { lutas: 10, vitorias: 10, derrotas: 0, empates: 0, lesoes: 0, tratadas: 0 }; x.avancar(DUR_EVO.adolescente);

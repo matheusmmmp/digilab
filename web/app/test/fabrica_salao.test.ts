@@ -29,7 +29,7 @@ const EX = ["levantar_pedra", "corrida", "alvo", "esquiva", "meditar", "resisten
 /** a vida (a de e2e/gerar_save_salao.mjs, no pet v13): dono atencioso so com as acoes do jogo, treino em rodizio, lutas de treino do Champion e
     do Ultimate, ate o pet chegar ao estagio pedido e treinar nele `horas` de jogo (no Mega, ate o teto de treino); null se nao chegou */
 function petAte(semente: number, alvo: string, horas = 8, dias = 8): Motor | null {
-  const m = new Motor(semente), dono = criarDono("atencioso"), rng = criarRng(hashSemente("dono", semente, "atencioso"));
+  const m = new Motor(semente, 13), dono = criarDono("atencioso"), rng = criarRng(hashSemente("dono", semente, "atencioso"));
   m.liberar(MEDALHAS_LIGA);
   const passos = Math.round(dias * TPD / CD.passo), orc = Math.round(CD.porDia * dias);
   let gasto = 0, ex = 0, k = 0, chegou: number | null = null;
@@ -80,14 +80,14 @@ function PETS(): { liga: Salvo; guardados: Salvo[] } {
 const abrir = (x: Salvo): Motor => Motor.reproduzir(x.semente, x.log, x.versao);
 /** um Tamer com as 6 medalhas e, com `titulo`, campeao da Liga */
 function tamer(titulo = true): Tamer {
-  const t = new Tamer(), m = new Motor(1);
+  const t = new Tamer(), m = new Motor(1, 13);
   for (const md of MEDALHAS) t.ganhar(md.id, m, 1);
   if (titulo) t.ganharTitulo(m, 2);
   return t;
 }
 /** um Rookie v13 de reserva, sem treino, que conhece as 6 medalhas */
 function rookieReserva(semente = 7007): Motor {
-  const m = new Motor(semente);
+  const m = new Motor(semente, 13);
   m.liberar(6);
   while (m.estagioAtual === "bebe") m.avancar(30);
   return m;
@@ -258,7 +258,7 @@ describe("Salão: a luta no registro do pet", () => {
     expect(() => m.lutar(RIVAL_SALAO, m.sementeSalao() + 1)).toThrow(/sai do registro/);
     expect(() => m.lutar(RIVAL_SALAO, m.sementeSalao(), "carta_folego")).toThrow(/cartas não valem/);
     expect(m.log).toHaveLength(n + 1);                                              /* so o "f" */
-    const bebe = new Motor(42); bebe.liberar(6); bebe.abrirFronteira();
+    const bebe = new Motor(42, 13); bebe.liberar(6); bebe.abrirFronteira();
     expect(bebe.porqueNaoSalao()).toMatch(/In-Training/);
   });
   test("uma luta contra o rival do estágio: um evento 'l' {r: 'salao', s}, conta no pet, e o replay do registro dá o mesmo pet", () => {

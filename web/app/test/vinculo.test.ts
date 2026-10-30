@@ -82,10 +82,10 @@ describe("vinculo B (pets v10) e paridade com o Python", () => {
   });
 
   test("os ovos novos (v13) tem o vinculo B; a variante A (pets v1-v9) so existe no Vinculo, pela paridade com o Python", () => {
-    expect(VERSAO_PET).toBe(13); expect(CVB.versaoPet).toBe(10);
+    expect(VERSAO_PET).toBe(14); expect(CVB.versaoPet).toBe(10);
     expect(new Motor(1).vinc.porSituacao).toBe(true); expect(new Motor(1).vinc.assinatura().length).toBe(8);
     expect(() => new Motor(1, 9)).toThrow(/versão/);
-    expect(() => new Motor(1, 14)).toThrow();
+    expect(() => new Motor(1, 15)).toThrow();
   });
 
 });

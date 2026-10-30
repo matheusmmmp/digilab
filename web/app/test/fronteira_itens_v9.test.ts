@@ -7,7 +7,7 @@ import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import {
   ALUGUEIS_FABRICA, CESC_V9, CIT, CIT_V9, CTR, CV21E, CV21E_TR, DUR_EVO, ESTAGIOS_SALAO, FATOR_INSTALACAO, FATOR_LIGA, FATOR_LIGA_V9,
   FATOR_RIVAL_FABRICA_V9, FATOR_SALAO, FATOR_SALAO_V9, LIGA, LUGARES_V6, MEDALHAS, Motor, STATS, TentativaFabrica,
-  VERSAO_FABRICA_TR, CURA_LIGA_V9, bonusChipsStat, chaveRegra, chipDe, curaLiga, fatorLiga, fatorSalao, gambitsAdulto, hashSemente,
+  VERSAO_FABRICA_TR, VERSAO_FABRICA_ATUAL, CURA_LIGA_V9, bonusChipsStat, chaveRegra, chipDe, curaLiga, fatorLiga, fatorSalao, gambitsAdulto, hashSemente,
   itensValem, jogarLiga, jogarSequencia, jogarSerie, listaComChips, lutadorLiga, lutadoresLiga, lutadorPet, regraFabrica, rivalInstalacao,
   rivalSalao, sementeFabrica, type Stats,
 } from "../motor/index.ts";
@@ -20,7 +20,7 @@ afterAll(() => ligarEscala(escalaAntes));
 const zeros = (): Stats => Object.fromEntries(STATS.map(k => [k, 0])) as Stats;
 /** um Tamer campeao, com as 6 medalhas */
 function campeao(): Tamer {
-  const t = new Tamer(), m = new Motor(1);
+  const t = new Tamer(), m = new Motor(1, 13);
   for (const md of MEDALHAS) t.ganhar(md.id, m, 1);
   t.ganharTitulo(m, 2);
   return t;
@@ -36,7 +36,7 @@ describe("a Liga dos v9: fator por lider, sem cura", () => {
     });
     expect(curaLiga(CV21E_TR)).toBe(CURA_LIGA_V9);
     /* pelo motor do pet: o v13 luta contra os lideres com os fatores dos v9 */
-    const l13 = new Motor(3).lutadores("liga").lideres!;
+    const l13 = new Motor(3, 13).lutadores("liga").lideres!;
     LIGA.forEach((x, i) => expect(l13[i].cond.escala).toBeCloseTo(CESC_V9.vida.mega * FATOR_LIGA_V9[x.arena], 9));
   });
   test("jogarLiga sem cura e a serie de sempre; com cura o pet comeca a luta seguinte com a vida do fim mais a cura", () => {
@@ -78,7 +78,7 @@ describe("a Fabrica: as regras vao na tentativa", () => {
     for (const v of [6, 7, 9]) expect(() => regraFabrica(v)).toThrow(/desconhecida/);
   });
   test("na tentativa o rival tem o fator dos v9 e o alugado nao", () => {
-    const x = new TentativaFabrica(3, 0), { A, B } = x.lutadores();
+    const x = new TentativaFabrica(3, 0, VERSAO_FABRICA_TR), { A, B } = x.lutadores();
     expect(x.regra.versao).toBe(VERSAO_FABRICA_TR);
     expect(A.cond.escala).toBe(CESC_V9.vida.mega);
     expect(B.cond.escala).toBeCloseTo(CESC_V9.vida.mega * FATOR_RIVAL_FABRICA_V9, 9);
@@ -106,8 +106,8 @@ describe("a Fabrica: as regras vao na tentativa", () => {
     t1.alugarFabrica(1, 3);
     const ev = t1.log[t1.log.length - 1] as ["fabrica", { v?: number }];
     expect(ev[0]).toBe("fabrica");
-    expect(ev[1].v).toBe(VERSAO_FABRICA_TR);
-    expect(t1.fabrica[0].regra.versao).toBe(VERSAO_FABRICA_TR);
+    expect(ev[1].v).toBe(VERSAO_FABRICA_ATUAL);
+    expect(t1.fabrica[0].regra.versao).toBe(VERSAO_FABRICA_ATUAL);
     expect(t1.fabrica[0].regra.R?.tempoReal).toBe(true);
     const ref = new TentativaFabrica(1, 1);
     while (t1.fabricaAtual) { const p = t1.fabricaAtual.proxima()!; t1.lutarFabrica(4); expect(p.s).toBe(ref.proxima()!.s); ref.lutar(p.s); }
@@ -141,7 +141,7 @@ describe("os itens dos v9", () => {
     expect(v9.final).toBe(g.final);
   });
   test("no pet v9: o chip de regra fica fora da lista e entra no fim da lista de luta so com o treino minimo; o de stat idem", { timeout: 60000 }, () => {
-    const m = new Motor(9101);
+    const m = new Motor(9101, 13);
     m.liberar(6);
     m.avancar(DUR_EVO.bebe + 15);
     expect(m.estagioAtual).toBe("crianca");
@@ -179,13 +179,13 @@ describe("os itens dos v9", () => {
     const npc = LUGARES_V6[0].rivais[0];
     expect(m.lutadores(npc).usadas).toEqual([...m.gp!.ativas, k]);
     /* o replay refaz o pet igual */
-    expect(Motor.reproduzir(m.semente, m.log).assinatura()).toBe(m.assinatura());
+    expect(Motor.reproduzir(m.semente, m.log, 13).assinatura()).toBe(m.assinatura());
     /* a carta: nao na arena contra bots; contra NPC, com o treino minimo */
     expect(m.porqueSemCartaV9("aleatorio")).toMatch(/campanha/);
     expect(() => m.lutar("aleatorio", 1, "carta_folego")).toThrow(/campanha/);
     expect(m.porqueSemCartaV9(npc)).toBeNull();
     /* o replay falha com a carta antes de uma luta contra bot */
     const log = [...m.log, [m.e.tick, "k", { id: "carta_folego" }], [m.e.tick, "l", { r: "aleatorio", s: 1 }]] as typeof m.log;
-    expect(() => Motor.reproduzir(m.semente, log)).toThrow(/campanha/);
+    expect(() => Motor.reproduzir(m.semente, log, 13)).toThrow(/campanha/);
   });
 });

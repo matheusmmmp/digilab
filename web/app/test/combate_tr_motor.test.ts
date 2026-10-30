@@ -10,7 +10,7 @@ import {
 
 /** um Rookie v13 que ja pode lutar (a medalha da evolucao conhecida, o In-Training passado) */
 function rookie(semente: number): Motor {
-  const m = new Motor(semente);
+  const m = new Motor(semente, 13);
   m.liberar(1);
   m.avancar(DUR_EVO.bebe + 30);
   expect(m.estagioAtual).toBe("crianca");
@@ -20,7 +20,7 @@ const luta = (m: Motor, rival = "aleatorio") => m.lutar(rival, hashSemente("test
 
 describe("os pets v13 lutam em tempo real", () => {
   test("o ovo novo e v13, com as regras CV21E_TR; o Motor.lutar devolve a luta em tempo real", () => {
-    expect(VERSAO_PET).toBe(13);
+    expect(VERSAO_PET).toBe(14);
     const m = rookie(101);
     expect(m.versao).toBe(13); expect(m.regras).toBe(CV21E_TR);
     const r = luta(m);
@@ -62,7 +62,7 @@ describe("os pets v13 lutam em tempo real", () => {
       expect(m.historico.slice(hist).some(h => h.quem === "luta" && h.a.includes(NOME_BOT.aleatorio))).toBe(true);
     }
     expect(m.lutas).toMatchObject({ lutas: v + d + e, vitorias: v, derrotas: d, empates: e, lesoes: les });
-    expect(m.conf!.assinatura()).not.toEqual(new Motor(303).conf!.assinatura());
+    expect(m.conf!.assinatura()).not.toEqual(new Motor(303, 13).conf!.assinatura());
   });
 
   test("o replay refaz a vida com lutas igual, bit a bit, sem cache (D-2)", () => {

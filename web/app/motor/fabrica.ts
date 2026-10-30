@@ -21,7 +21,8 @@
    em test/conferir_fabrica_salao.mjs --calibrar (sementes de calibracao), artifacts_equilibrio_geral/fase3/fabrica_calibracao.json.
    As Fabricas de antes (v6, sem o campo `v`; e v9) sairam com o combate por turnos (COMBATE-TR R3): so ha a v13, e o registro do Tamer
    descarta as tentativas antigas (src/tamer.ts, registro versao 7). */
-import { copiarGambits, gambitsAdulto } from "./bots.ts";
+import { copiarGambits, gambitsAdulto, listaDaForma } from "./bots.ts";
+import { FATORES_V14 } from "./combate_tr/constantes_tr.ts";
 import { caraterCanonico, perfilDe } from "./catalogo.ts";
 import { jogarLuta } from "./combate_tr/adaptador.ts";
 import { desafiadoDaVersao, regrasDaVersao, type Lutador, type RegrasLuta, type ResultadoLuta } from "./combate.ts";
@@ -46,13 +47,17 @@ export const FATOR_RIVAL_FABRICA_V9 = 0.6;
     recalibrar: o equilibrio fica para a rodada do fim). As tentativas antigas (v ausente ou 9) saem do registro do Tamer com aviso
     (src/tamer.ts, registro versao 7) */
 export const VERSAO_FABRICA_TR = 13;
-/** as versoes das regras da Fabrica que o registro conhece (so a v13) */
-export const VERSOES_FABRICA: readonly number[] = [VERSAO_FABRICA_TR];
-export const VERSAO_FABRICA_ATUAL = VERSAO_FABRICA_TR;
+/** a Fabrica do candidato v14 (B2; DE-1): as regras CV21E_TR14, o fator dos rivais e as listas candidatas. As tentativas v13 do registro do
+    Tamer seguem refazendo-se iguais (CV14-1); as novas gravam esta */
+export const VERSAO_FABRICA_V14 = 14;
+/** as versoes das regras da Fabrica que o registro conhece (a v13 e a v14) */
+export const VERSOES_FABRICA: readonly number[] = [VERSAO_FABRICA_TR, VERSAO_FABRICA_V14];
+export const VERSAO_FABRICA_ATUAL = VERSAO_FABRICA_V14;
 /** as regras da Fabrica: as regras da luta, o fator dos rivais e se a troca entra inteira */
 export interface RegraFabrica { versao: number; R: RegrasLuta; fatorRival: number; trocaInteira: boolean }
 export function regraFabrica(versao: number, fatorRival?: number): RegraFabrica {
   if (versao === VERSAO_FABRICA_TR) return { versao, R: regrasDaVersao(VERSAO_FABRICA_TR), fatorRival: fatorRival ?? FATOR_RIVAL_FABRICA_V9, trocaInteira: true };
+  if (versao === VERSAO_FABRICA_V14) return { versao, R: regrasDaVersao(VERSAO_FABRICA_V14), fatorRival: fatorRival ?? FATORES_V14.fabrica, trocaInteira: true };
   throw new Error("versão das regras da Fábrica desconhecida: " + JSON.stringify(versao));
 }
 
@@ -88,7 +93,7 @@ export function megaFabrica(f: Forma, nome: string, fator: number = FATOR_FABRIC
   const adulta = f.adulta as FormaAdultaNormal;
   if (f.est !== "mega" || !FORMAS_AD.includes(adulta)) throw new Error("a Fábrica só tem Megas das 8 formas adultas: " + JSON.stringify(f));
   const p = perfilDe(f, caraterCanonico(adulta), 1, null, true, R.versaoPet, true);
-  return { nome, estilo: { nome: `fabrica:${adulta}`, gambits: copiarGambits(gambitsAdulto(adulta, R)), eps: CV.eps }, cond: { ...p, escala: p.escala! * fator } };
+  return { nome, estilo: { nome: `fabrica:${adulta}`, gambits: copiarGambits(listaDaForma(adulta, R, gambitsAdulto(adulta, R))), eps: CV.eps }, cond: { ...p, escala: p.escala! * fator } };
 }
 
 /** uma luta jogada da tentativa: o indice (0 = a primeira), a semente, o alugado e o rival, o resultado e a vida do alugado no fim (fracao) */

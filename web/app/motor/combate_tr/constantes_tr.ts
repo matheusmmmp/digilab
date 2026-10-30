@@ -64,8 +64,8 @@ export const RELOGIO_V13: RelogioTR = {
 };
 /** o relogio candidato dos pets v14, da fase 1 da rodada de equilibrio (docs/PLANO_EQUILIBRIO_COMBATE_TR.md; docs/EQUILIBRIO_COMBATE_TR.md,
     fase 1). PROPOSTOS, calibrados so nas sementes de calibracao (68101 a 68505): web/app/scripts/medicoes/equilibrio_tr/fase1/grade3/
-    r06arr8.json. O resto e o da v13. Ainda nao e de nenhuma versao de pet: a v14 so liga no fim da rodada, com os numeros de todas as fases
-    (DE-1), e ate la so a bancada (scripts/equilibrio_tr/) o usa
+    r06arr8.json. O resto e o da v13. E da v14 (B2, 2026-10-30; DE-1): os pets v14 lutam com ele (combate_tr/luta.ts, relogioDe), e a bancada
+    (scripts/equilibrio_tr/) o mede
     - empurrao 6 -> 0: o empurrao do golpe corpo a corpo afastava o atacante para fora do contato, e as listas defensivas nao voltavam;
     - medio 150 -> 120: a faixa media mais curta faz as listas sairem do longe mais cedo e reagirem ao preparo do rival (T-5);
     - recuo .8 -> .6 e arrancada 420 -> 500 px/s: quem recua o tempo todo (a sentinela) e alcancado;
@@ -77,7 +77,7 @@ export const RELOGIO_V14: RelogioTR = { ...RELOGIO_V13, empurrao: 0, medio: 120,
 /** os fatores candidatos dos pets v14, da fase 4 da rodada de equilibrio (docs/EQUILIBRIO_COMBATE_TR.md, fase 4). PROPOSTOS, calibrados so
     nas sementes de calibracao (68101 a 68505): web/app/scripts/medicoes/equilibrio_tr/fase4/. As tabelas inteiras, com as mesmas chaves
     das de hoje (FATOR_LIDER_V9, CESC_V9.fatorNpc, FATOR_LIGA_V9, FATOR_INSTALACAO, FATOR_RIVAL_FABRICA_V9, FATOR_SALAO_V9; o teste
-    listas_v14 confere); o que nao esta abaixo e o de hoje. Ainda nao e de nenhuma versao de pet (DE-1): so a bancada os usa
+    listas_v14 confere); o que nao esta abaixo e o de hoje. Sao os da v14 (B2; DE-1): os pets v14 os usam (arenas, liga, instalacoes, salao, fabrica, gambits_pet.lutadorBot), e a bancada os mede
     - lider da Torre 1,5 -> 1,8: o pet sem treino vencia 0,08 (G-1 pede <= 0,05);
     - Tortomon (npc_tier2_sentinela) 1,53 -> 1,4: o desafiante do Champion e o rival sugerido do P-4 (DE-4); com 1,4 fecham G-2 e P-4;
     - Liga, Campina 0,4 -> 0,2 e Torre 0,3 -> 0,8: as formas de longe caiam no furioso da Campina e o duelista passava de 0,85 (G-3);
@@ -93,7 +93,7 @@ export const FATORES_V14 = {
 } as const;
 
 /** o aprendizado proprio do tempo real do candidato v14 (DR2-5; docs/PLANO_EQUILIBRIO_COMBATE_TR_R2.md, R2-2): GambitsPet.aprendizadoTR.
-    null = o GA de sempre (a ordem so pela nota). Ainda nao e de nenhuma versao de pet: so a bancada o usa. PROPOSTOS, calibrados so nas
+    null = o GA de sempre (a ordem so pela nota). E o da v14 (B2): o Motor liga no GambitsPet dos pets v14, e a bancada o mede. PROPOSTOS, calibrados so nas
     sementes de calibracao da rodada 2 (72101 a 72505; web/app/scripts/medicoes/equilibrio_tr/r2_2/, a grade 3):
     - limiar da troca -0,02 -> 0,05: o pet troca a pior regra mais cedo (com o limiar de hoje quase nao troca, e a lista so se reordena);
     - prior 0,1: a posicao na lista de partida pesa na ordem (a reserva e as especificas nao afundam so pela nota);
@@ -102,7 +102,7 @@ export const APRENDIZADO_V14: { readonly alfa: number; readonly prior: number; r
   { alfa: .2, prior: .1, bonus: .1, limiar: .05 };
 
 /** as listas candidatas dos lideres das arenas do candidato v14 (DR2-3; docs/PLANO_EQUILIBRIO_COMBATE_TR_R2.md, R2-3), pela id da arena, por
-    cima das de hoje (as do motor). Ainda nao e de nenhuma versao de pet: so a bancada as usa. PROPOSTAS, so nas sementes de calibracao
+    cima das de hoje (as do motor). Sao as da v14 (B2): gambits_pet.lutadorBot as poe nos lideres dos pets v14, e a bancada as mede. PROPOSTAS, so nas sementes de calibracao
     da rodada 2 (72101 a 72505; web/app/scripts/medicoes/equilibrio_tr/r2_3/, a variante l1_flo_fica com o fator 1,4):
     - a Floresta fica de perto (sem o recuo): o guardiao, que devolve o golpe, deixa de perder a luta inteira (o fator vai a 1,4,
       FATORES_V14). A Cidadela, o Lago e a Espiral ficam com as de hoje: nenhuma variante fechou o G-1 (ver o relatorio) */
@@ -113,9 +113,9 @@ export const LISTAS_LIDER_V14: Readonly<Record<string, ListaGambits>> = {
 };
 
 /** as cartas candidatas do candidato v14 (DR2-4; docs/PLANO_EQUILIBRIO_COMBATE_TR_R2.md, R2-4): o efeito por cima do de hoje (itens.ts), pela
-    id da carta. Vazio = as de hoje. Ainda nao e de nenhuma versao de pet: so a bancada as usa */
+    id da carta. Vazio = as de hoje. E o da v14 (B2): vazio, as cartas de hoje; so a bancada poe outro */
 export const CARTAS_V14: Readonly<Record<string, import("../combate.ts").EfeitoCarta>> = {};
 
 /** o chip de regra do candidato v14 entra antes da regra da lista que o cobre (DR2-1; docs/PLANO_EQUILIBRIO_COMBATE_TR_R2.md, R2-4b;
-    GambitsPet.chipAntes, gambits_pet.posicaoDoChipV14). Ainda nao e de nenhuma versao de pet: so a bancada o usa */
+    GambitsPet.chipAntes, gambits_pet.posicaoDoChipV14). E o da v14 (B2): o Motor liga no GambitsPet dos pets v14, e a bancada o mede */
 export const CHIP_ANTES_V14 = true;

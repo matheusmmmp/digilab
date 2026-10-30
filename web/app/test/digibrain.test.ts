@@ -121,7 +121,7 @@ describe("o mapa dos pesos, contra o Python", () => {
 
 describe("o painel no Motor", () => {
   test("so nos v11 (PW-7); antes da primeira decisao, so o que aprendeu (nada, no recem-nascido)", () => {
-    const m = new Motor(4242);
+    const m = new Motor(4242, 13);
     expect(m.versao).toBe(13);                                      /* os v12 (o v11 com o mundo) e os v13 (a luta em tempo real) tambem */
     const p = m.digibrain()!;
     expect(p.decisao).toBeNull();
@@ -131,7 +131,7 @@ describe("o painel no Motor", () => {
   });
 
   test("le a ultima decisao do cerebro e o desvio de agora, sem mudar a vida", () => {
-    const a = new Motor(4242), b = new Motor(4242);
+    const a = new Motor(4242, 13), b = new Motor(4242, 13);
     for (let h = 0; h < 30; h++) {
       a.avancar(60); b.avancar(60);
       if (h % 4 === 0) { a.observar("acariciar"); b.observar("acariciar"); }
