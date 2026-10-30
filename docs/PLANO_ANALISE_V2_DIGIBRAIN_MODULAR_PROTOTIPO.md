@@ -2147,3 +2147,334 @@ o piloto e refaz a conjunção da grade, conferida contra a do `resultado.json` 
 
 **A trava:** a fase `l2_avaliacao` só aceita este K porque esta subseção diz "aprovado pelo Matheus". Sem isso, um K fora da regra é
 recusado.
+
+## Adendo 6: o longe regular, a C1 da V3 (2026-10-30, worker da C1, etapa 2, Claude Code, Opus 5.5; APROVADO pelo Matheus em 2026-10-30)
+
+**Status: APROVADO pelo Matheus em 2026-10-30,** com as AD6-1 a AD6-5 pela recomendação ("siga com suas recomendações
+anteriores", no chat do Gerente da V3; A6.12). As LR-1 a LR-7 da `docs/TAREFA_V2_LONGE_REGULAR.md` (seção 8) e as entradas C1-E1 e C1-E2 do `docs/PLANO_V3.md`
+(seção 2.3) estão DECIDIDAS pelo Matheus em 2026-10-30, pela recomendação. **O K, a margem, a definição do "≈ 0" e as medidas da C5
+foram DECIDIDOS na mesma data** (A6.12); os números seguem SEM FONTE. **Nenhuma vida da faixa 71101…71505 rodou nem roda antes de
+três coisas:** o código da etapa 1 na `main` (o estilo `longe_fixo`, o gabarito dos três estilos byte a byte e a faixa na
+`FAIXAS_RESERVADAS`); o orquestrador da A6.10; e este cabeçalho com a marca de aprovação do Matheus (já posta). **O código das medidas da C5** (`digilab/metrics.py`) entra junto
+do orquestrador, antes da run (o Gerente da V3, 2026-10-30).
+
+**De onde vem:** a tarefa da C1 (`docs/TAREFA_V2_LONGE_REGULAR.md`, seções 1, 4 e 8), as entradas C1-E1 e C1-E2 e a lição LP-2 do #455
+(`docs/PROPOSTA_L2_PROXIMO_PASSO_DIGIBRAIN_MODULAR.md`, seções 1 e 2). Este adendo reusa, sem mudar, o cenário (seção 3), o episódio de
+fome e a W(d) (A3.2 e A3.3), a unidade (base, semente) e o IC95 do t sobre as unidades (A4.4.6), e a ressalva do g1 (A4.4.6).
+
+**A fonte dos números novos:** o `experiments/adendo6_poder_longe_regular.py`, que só lê o `medidas.json` da reavaliação (66101 a 66505,
+as 7 200 vidas; sha256 `73ae8a8a…df01`, o registrado na seção 8 do RESULTADO, conferido pelo script antes da conta). Ele grava
+`artifacts_v2_digibrain_prototipo/longe_regular/adendo6_poder.json` (sha256 `1e4a2b4c…86ac`) e, rodado duas vezes, sai igual, byte a
+byte. **Nenhuma vida, nenhum replay e nenhuma semente nova.** Abaixo, **[poder]** é esse artefato.
+
+**O que este adendo não afirma:** que o longe fica consertado, que o modular supera o A, ou que algum cérebro está pronto. Os contrastes
+são entre braços do próprio modular e medem um módulo, a memória, num cenário. **Nenhuma alegação de novidade** (a regra 9; e a alegação
+proibida da seção 2.2 do `docs/PLANO_V3.md`).
+
+### A6.0 O que não muda
+
+- **O motor, o corpo, o mundo, o cheiro, o `engine.py`, o A e o cérebro modular.** A `intencao_suspensa` fica desligada em todos os
+  braços (a LP-3). O único código novo da C1 é o da etapa 1 (o estilo `longe_fixo`) e o orquestrador (A6.10).
+- **Os valores:** os inatos do #428 (`eta_h` S/256, `w_pers` 4S, `tau_c` 15, o cheiro S/4 e 6), que seguem PROPOSTOS. **Nenhuma
+  calibração e nenhum piloto:** nada se calibra aqui, e a variância vem da reavaliação (A6.5).
+- **As faixas gastas** (64xxx, 66xxx, 67xxx) não entram em nada, salvo a leitura dos artefatos que já estão no git.
+- **Os resultados anteriores:** nada aqui muda o #420, a reavaliação (#432) nem a L-2 (#454).
+
+### A6.1 A pergunta e as previsões, escritas antes (a C1-E1)
+
+**A pergunta** (a tarefa, seção 1): no longe, o M-MEM ajuda quando a ração volta sempre aos mesmos poucos lugares? E, separando pela
+distância da ração na abertura, quanto da queda do longe vem da distância e quanto da direção sorteada a cada ração?
+
+**A previsão do sinal de M3\* − M2 por episódio, por nível de regularidade** (a C1-E1, como decidida):
+
+| nível de regularidade | o lugar da ração | a previsão | o papel aqui | o dado que já existe |
+|---|---|---|---|---|
+| **um lugar** | o comedouro | **> 0** | **não roda de novo**; já medido | o G-ABLA-MEM da reavaliação, **+0,136** [0,115; 0,156] (**por ração**, a medida do G-ABLA-MEM); pela taxa por episódio, nas mesmas vidas, +0,137 [0,114; 0,160] [poder] |
+| **poucos lugares** (3, a LR-1) | o `longe_fixo` | **> 0** | **o contraste primário** (A6.4) | nenhum: o estilo é novo |
+| **nenhum** (a direção sorteada a cada ração) | o longe | **≈ 0** | descritivo (A6.6), sem afrouxar | **−0,031 [−0,051; −0,012]** na reavaliação, por episódio [poder] (A6.6 e A6.12, AD6-3) |
+
+- **A direção vem da literatura verificada, não o tamanho** (A6.11): quando aprender não paga, a taxa de aprendizado que a evolução
+  escolhe vai a zero (Giannakakis et al. 2023), e a mesma modulação ajuda num mundo e atrapalha noutro (Khan e Cañamero 2018).
+- **A previsão do sorteado não se afrouxa até passar.** O "≈ 0" é definido em A6.6, antes de qualquer vida, com a margem do primário; se
+  o resultado sair < 0, ele é registrado como < 0.
+
+### A6.2 O desenho
+
+- **O cenário:** o da reavaliação (seção 3; A4.10, item 2), sem mudança: o `CONFIG_MUNDO_MVP`, o corpo do v11 (o ponto do adendo 4), o
+  contrato da P4 desligado, o pet sozinho, os quatro donos sem ensino, **14 dias, orçamento de 16 por dia,** morte desligada.
+- **As células:** os 4 donos (atencioso, relapso, aleatório, incoerente) × **2 lugares: o `longe_fixo` e o `longe`.** **O comedouro e o
+  perto não rodam** (a tarefa, seção 4): já têm dado e não respondem à pergunta. São **8 células por unidade.**
+- **O `longe_fixo`** (a tarefa, seção 3.1; a etapa 1): **3 lugares por vida** (a LR-1), sorteados uma vez na construção do dono, cada um a
+  20 a 30 células **do comedouro** (a LR-2), em direções distintas entre as 16; a cada `alimentar`, a ração cai num dos três, por sorteio
+  uniforme. A rng é própria (`derivar_semente("dono-lugar-fixo", semente, rotulo_dono)`), e os outros estilos não consomem sorteio novo.
+- **A ressalva da geometria** (descritiva, achada na etapa 1, o #503; nenhuma medida nova e nenhuma regra muda): o comedouro fica em
+  (10, 15), num mapa de 64 × 30 células. A 20 células dele cabem só 5 das 16 direções (o leste ± 45°), e a 30 células cabem 3; então os
+  3 pontos fixos ficam todos a leste, a cerca de 7,8 células um do outro no mínimo e 17,9 na média (sementes 1 a 2 000). O `longe`
+  sorteado ancora no pet, usa as 16 direções e corta o ponto na borda. **Por isso o contraste `longe_fixo` × `longe` mistura a
+  regularidade com o lado do mapa e com a âncora.** A leitura por faixa de d₀ (A6.8, item 1) ajuda a separar a distância, mas não o
+  lado. O primário (M3\* − M2 dentro do `longe_fixo`) não compara os dois estilos e não sofre com isso.
+- **Os braços** (a LR-4), os de `SUBCHAVES_CONSERTO` (`experiments/run_v2_digibrain_prototipo.py`), **todos com a `intencao_suspensa`
+  desligada:**
+
+| braço | o que é | o papel |
+|---|---|---|
+| **M0** | sem P1, sem P2 e sem M-MEM, com o `cheiro_inato` e a `intencao_cheiro` | o inato: não aprende nada; a leitura limpa do d0 (A6.8) |
+| **M2** | sem M-MEM, com as duas subchaves do cheiro | o controle do primário: a ablação da memória |
+| **M3\*** (o "M3") | completo, com as duas subchaves do cheiro | o braço principal |
+
+- **As vidas:** 3 braços × 8 células = **24 vidas por unidade.**
+- **O pareamento:** por unidade e célula. Os três braços vivem a mesma semente, o mesmo genoma, o mesmo dono e o mesmo lugar; só o cérebro
+  muda. A rng do dono e a dos lugares fixos não dependem do braço (a regra das rngs separadas).
+- **O A11, o M1, o M3-sp, o M4 e as variantes do cheiro não entram** (a LR-4).
+
+### A6.3 As sementes e a faixa
+
+- **A faixa: 71101…71505** (a LR-5), conferida livre em 2026-10-30 (nem em `FAIXAS_RESERVADAS` nem em `FAIXAS_QUEIMADAS`, em nenhum
+  branch; a tarefa, seção 8). Ela entra em `experiments/bancada/faixas.py` num commit próprio na etapa 1, com a fonte (esta tarefa).
+- **As bases:** 71101, 71202, 71303, 71404 e 71505.
+- **O K: 30 por base, 150 unidades** (DECIDIDO; A6.5 e A6.12, AD6-1). São **3 600 vidas.**
+- **A derivação** (a regra E3; `bancada_v2.unidades_derivadas(bases, 30, prefixo="digibrain_prototipo")`, o prefixo da reavaliação e da
+  L-2; AD6-5). A unidade k da base b, com k = 0 a 29, tem:
+  - a semente `derivar_semente("digibrain_prototipo", b, k)`;
+  - o genoma `derivar_semente("digibrain_prototipo-genoma", b, k)`.
+  A função falha alto com colisão, e o `meta.json` grava as 150 unidades.
+- **A run roda uma vez,** com todas as bases. Não há calibração nem piloto; nenhuma base fica de fora para outra fase.
+- **As sementes dos testes** (101…505) servem só à fumaça do orquestrador.
+
+### A6.4 O contraste primário (a LR-3)
+
+- **A medida:** a taxa de fechamento **por episódio** de fome (o G-MVP-EP; A3.3, com a W(d₀) de A3.2), como manda a PL-3. A taxa por
+  ração do longe não informa e sai só como descritivo.
+- **O contraste:** **M3\* − M2, só nas 4 células do `longe_fixo`.**
+- **A unidade:** a (base, semente). Em cada unidade, a diferença célula a célula (M3\* menos M2, no mesmo dono), com a média das 4 células.
+  Cada unidade dá um valor. É a forma do G-ABLA-MEM da reavaliação (A4.10, item 3).
+- **O teste:** **o IC95 pelo t sobre as 150 unidades** (média ± t₀,₉₇₅;₁₄₉ × dp/√150; o `metrics.ic_t`, A4.4.6). **Passa se o limite
+  inferior fica acima de 0** (a previsão > 0). É o mesmo que o p unilateral do t ≤ 0,025.
+- **Um contraste só, sem Holm:** o primário é único. Todo o resto é descritivo (A6.6 a A6.8) e não muda a leitura dele.
+- **O que sai ao lado:** a estimativa, o IC95, o p unilateral, o g1 das 150 diferenças, o IC percentil do bootstrap (rotulado como na
+  A4.10) e a "margem efetiva": o menor efeito com poder 0,8 pelo dp observado (a fórmula de A6.5).
+- **As premissas** (a seção 5.3, com o IC pelo t, A4.4.6):
+  - **G-PESA da memória:** no M3\*, nas 4 células do `longe_fixo`, a fração das decisões com `memoria_decidiu`, por unidade; o limite
+    inferior do IC95 > 0,01. Se falha, o primário é **inconclusivo por premissa** (a memória não pesa), qualquer que seja o IC. Na
+    reavaliação, no longe sorteado, ela foi 0,187 [0,181; 0,194] [poder];
+  - **G-ELEGIVEL-EP:** ao menos 80 % das vidas do M3\* no `longe_fixo` com 3 episódios ou mais. Se falha, o primário é **inconclusivo por
+    premissa** (os donos quase não deram ração com o pet com fome).
+- **A ressalva do g1** (A4.4.6, como está): com g1 ≤ −0,5, o contraste sai com a frase de lá, e um "passa" nele não é lido como
+  confirmação. A ressalva não muda o IC nem a decisão gravada. O limiar −0,5 segue PROPOSTO (A4.9).
+
+### A6.5 A margem, pelo poder
+
+**A conta** ([poder]; a da A5.6, sem mudança de método):
+1. **A dispersão.** O `longe_fixo` ainda não existe. A dispersão de M3\* − M2 por episódio, na unidade de A6.4, é lida nos dois lugares
+   que existem, nas 50 unidades da reavaliação:
+
+   | lugar | média | IC95 (t) | dp entre as unidades | g1 |
+   |---|---|---|---|---|
+   | o longe sorteado (a mesma distância e os mesmos donos) | −0,0313 | [−0,0507; −0,0119] | 0,0683 | 0,15 |
+   | o comedouro (o lugar fixo) | +0,1370 | [+0,1141; +0,1599] | 0,0805 | 0,52 |
+
+2. **O σ de planejamento:** o maior dos dois, com a folga de 20 % da A5.9 (o σ de 50 unidades também é estimado): **σ = 0,0805 × 1,2 =
+   0,0966.**
+3. **O poder** do critério de A6.4 com o efeito verdadeiro δ: **1 − Φ(t₀,₉₇₅;K−1 − (δ / σ) · √K)**, a aproximação normal do t não
+   central (a função `poder` de `experiments/poder_l2_digibrain.py`, a mesma conta).
+4. **A margem δ(K)** é o menor efeito com poder 0,8: **o menor efeito de interesse que a run detecta.** Abaixo dela, um efeito verdadeiro
+   fica fora do alcance da run, e é por isso que ela também define o "≈ 0" (A6.6).
+5. **A conferência por simulação:** as 50 diferenças por unidade do longe, centradas, na escala de σ, deslocadas para δ(K) e sorteadas com
+   reposição em K unidades, com o IC95 do t exato; 2 000 réplicas, semente 4242.
+
+| K (unidades) | por base | vidas | a margem δ(K) | o poder simulado em δ(K) |
+|---|---|---|---|---|
+| 50 | 10 | 1 200 | 0,039 | 0,808 |
+| 100 | 20 | 2 400 | 0,027 | 0,817 |
+| **150** | **30** | **3 600** | **0,022** | **0,812** |
+| 200 | 40 | 4 800 | 0,019 | 0,811 |
+| 300 | 60 | 7 200 | 0,016 | 0,805 |
+| 450 | 90 | 10 800 | 0,013 | 0,797 |
+
+**O decidido: K = 150 (30 por base) e a margem δ = 0,022** (AD6-1, DECIDIDA em 2026-10-30).
+- **O tamanho:** cerca de 1/6 do efeito da memória no comedouro (+0,137 por episódio) e menor que a distância do sorteado a 0 na
+  reavaliação (0,031). Então a run separa um efeito pequeno da memória de nenhum efeito, e separa o sorteado da 66xxx do "≈ 0".
+- **O custo** é pequeno em qualquer linha da tabela (A6.9). O K não sai do orçamento; sai do tamanho de efeito que vale ler.
+- **O que a margem não é:** um limiar do primário. O primário passa com o limite inferior acima de 0 (A6.4). A margem é o efeito que a
+  run detecta com 0,8, e a régua do "≈ 0".
+- **As ressalvas:**
+  - o σ do `longe_fixo` não é conhecido; o de planejamento usa o maior dos dois lugares mais a folga. Se o observado for maior, o poder
+    cai; a "margem efetiva" sai no relato (A6.4), e o critério não muda;
+  - a aproximação normal é um pouco otimista com poucas unidades; a simulação dá o mesmo a ±0,02 em todas as linhas;
+  - os 50 valores da reavaliação são de outro lugar e de uma faixa gasta: servem só para o tamanho, nunca como evidência da C1.
+
+### A6.6 O "≈ 0" e a classificação de cada contraste
+
+**A regra, escrita antes e a mesma para todo contraste M3\* − M2 deste adendo** (DECIDIDA; AD6-2), na ordem:
+1. **"≈ 0":** o IC95 do t inteiro dentro de (−δ, +δ), com δ = 0,022. Se ele também exclui o 0, o relato diz "≈ 0 pela margem, com o sinal
+   (o efeito menor que a margem)";
+2. **"> 0":** o limite inferior acima de 0 e o IC fora de (−δ, +δ);
+3. **"< 0":** o limite superior abaixo de 0 e o IC fora de (−δ, +δ);
+4. **"indeterminado":** qualquer outro caso (o IC cruza o 0 e passa da margem).
+
+- **No `longe_fixo`, o primário manda** (A6.4): "> 0" para a C1-E2 é o primário passar. A classe da regra acima sai ao lado, como
+  descrição do tamanho.
+- **No longe sorteado,** a classe é a da regra acima. **Ela é descritiva** (não é teste) e é o que a C1-E2 lê.
+- **O que a reavaliação já mostra no sorteado** [poder]: −0,031 [−0,051; −0,012], com a margem de 0,022 a classe seria **"< 0"**. A
+  simulação (A6.5, item 5, com o σ do próprio longe e K = 150):
+  - com o efeito verdadeiro 0, o IC cai dentro da margem em 0,951 das réplicas;
+  - com o efeito verdadeiro igual ao observado na reavaliação, cai dentro da margem em 0,000 e inteiro abaixo de 0 em 1,000.
+  **Escrito antes:** se a C1 der "< 0" no sorteado, o resultado reproduz a 66xxx, e a previsão "≈ 0" da C1-E1 é registrada como **não
+  confirmada.** Nem a margem nem a regra mudam para o sorteado caber no "≈ 0" (AD6-3).
+
+### A6.7 A regra de leitura (a seção 1.3 da tarefa e a C1-E2)
+
+**As linhas da seção 1.3 da tarefa, como estão** (a primeira coluna com as classes de A6.4 e A6.6):
+
+| `longe_fixo` (o primário) | longe sorteado | a leitura (a tarefa, seção 1.3) | a C1-E2 (a L-3) |
+|---|---|---|---|
+| **> 0** | **≈ 0** | a falha do longe é do cenário: não há o que lembrar. O hábito passa a ser lido também no longe com lugares fixos | **a L-3 ganha tarefa** (a candidata volta) |
+| ≈ 0 | ≈ 0 | a memória não ajuda à distância nem com regularidade. A causa fica na viagem e na decisão (as trocas de meta) ou na percepção (o cheiro, a L-1) | fica fora |
+
+**A terceira linha da seção 1.3** (a distância domina) é lida à parte, pelas taxas por faixa de d0 (A6.8, item 1): **se, em cada faixa de
+d0, a taxa por episódio do `longe_fixo` fica "≈" a do longe sorteado** (a diferença pareada por unidade, com o IC95 do t inteiro dentro de
+(−δ, +δ)) **em todos os braços,** a distância domina e a regularidade não importa para o pet de hoje. A leitura principal dela é a do
+**M0** (A6.8, item 1, por quê).
+
+**Os casos que a seção 1.3 não cobre** (o complemento, aprovado com o adendo, escrito antes; nenhum dá tarefa à L-3, pela C1-E2):
+
+| `longe_fixo` | longe sorteado | a leitura | a C1-E2 |
+|---|---|---|---|
+| > 0 | < 0 | a memória ajuda com regularidade e atrapalha sem ela; o sorteado repete a 66xxx. A previsão "≈ 0" do sorteado não se confirma | fica fora; a leitura vai ao Matheus (AD6-3) |
+| > 0 | > 0 | a memória ajuda até sem regularidade, contra a previsão e contra a 66xxx | fica fora |
+| ≈ 0, < 0 ou não passa | < 0 | a memória não ajuda com regularidade e atrapalha sem ela | fica fora |
+| < 0 (o IC inteiro abaixo de 0) | qualquer | a memória atrapalha mesmo com lugares fixos: contra a previsão | fica fora |
+| indeterminado (em qualquer dos dois) | — | registrado como indeterminado; nada se decide com ele | fica fora |
+| inconclusivo por premissa (A6.4) | — | a memória não pesou, ou os donos não deram ração com fome: diagnosticar antes de ler | fica fora |
+
+- **A C1-E2, como decidida:** a L-3 só ganha tarefa com o primário "> 0" e o sorteado "≈ 0". Com outro resultado, ela continua fora,
+  e fica fora da C1 em si (a tarefa, seção 6).
+- **Gate que falha não para a V3.** O resultado negativo é registrado como está. **A run não se repete,** e uma faixa nova só vem com um
+  adendo novo.
+
+### A6.8 O descritivo (sem gate)
+
+Todos com o IC95 do t sobre as unidades, por estilo e braço, salvo onde dito. **Nenhum muda a leitura de A6.7.**
+
+**1. As taxas por faixa de d₀** (a distância da ração mais próxima na abertura do episódio; os cortes da reavaliação, `orq.geometria()`:
+na visão até 6 células, só no cheiro de 6 a 24, além do cheiro acima de 24):
+- **por estilo × braço × faixa:** o n de episódios, os fechados e a taxa (somas sobre as vidas), como no descritivo da reavaliação;
+- **a diferença `longe_fixo` − longe por faixa, em cada braço:** por unidade, a taxa da faixa nas somas das 4 vidas de cada estilo; as
+  unidades sem episódio na faixa num dos estilos ficam fora daquela faixa, e o número delas sai contado;
+- **a ressalva da LP-2, escrita antes:** a faixa de d₀ não é sorteada pelo mundo. Ela depende de onde o pet está na abertura, e isso
+  depende do cérebro: no M3\*, a memória pode deixar o pet perto dos lugares fixos. **Por isso a faixa de d₀ não serve de contraste entre
+  braços,** e a comparação entre estilos dentro da faixa é **lida primeiro no M0**, que não aprende nada (d̂ = 0, H = 0, memória vazia);
+  no M2 e no M3\* ela sai com a ressalva;
+- **o que já existe** (a reavaliação, o longe sorteado, somas das 200 vidas de cada braço [poder]):
+
+  | faixa de d₀ | M0: n, taxa | M2: n, taxa | M3\*: n, taxa |
+  |---|---|---|---|
+  | na visão | 797, 0,816 | 445, 0,906 | 433, 0,841 |
+  | só no cheiro | 1 763, 0,414 | 1 791, 0,439 | 1 629, 0,408 |
+  | além do cheiro | 459, 0,150 | 530, 0,200 | 441, 0,209 |
+
+  O `longe_fixo` mede os lugares a partir do comedouro, e o sorteado, a partir do pet na posta (`mundo.py`); então as distribuições de
+  d₀ dos dois estilos podem diferir, e a taxa por faixa sai com o n de cada uma.
+
+**2. As visitas ao lugar lembrado que acham a ração** (só no M3\*, o único braço com o M-MEM):
+- por vida e por estilo: as visitas (`visitas_lugar_lembrado`), as vazias pela regra corrigida (a DX-1, A3.1, o disco de R_lugar = 76
+  subunidades) com a v1 ao lado, e a fração que acha;
+- **a referência:** no longe sorteado da reavaliação, das 6 939 visitas, 6 932 saíram vazias (a tarefa, seção 1.1);
+- **sem contraste:** as visitas são um grupo que o próprio mecanismo cria (a LP-2). A comparação entre os estilos é descritiva.
+
+**3. As trocas de meta, pela lição LP-2:**
+- **por vida:** os fins das intenções (`meta`, `trocou`, `achou`, `sumiu`, `expirou`), e as trocas das buscas de comer (`comer/cheiro` e a
+  ida a uma comida vista) e da ida ao lugar lembrado (`explorar/ponto`), com o motivo: o reflexo do sono, o dormir pelo sorteio, ou outra
+  unidade (a vencedora), como na medida da L-2 (A5.3);
+- **a retomada de uma busca não conta como troca.** Com a `intencao_suspensa` desligada, nenhuma intenção é suspensa nem retomada: o
+  orquestrador confere isso em cada vida e falha alto se aparecer um `retomou` ou um `n_susp`;
+- **um grupo que o próprio mecanismo cria não serve de contraste:** as buscas cortadas pelo reflexo contra as não cortadas, as visitas ao
+  lugar lembrado, os episódios em que a memória decidiu. **Os contrastes entre braços só usam medidas da vida inteira** (por vida, ou a
+  taxa sobre todos os episódios). Os subgrupos saem só por braço, como leitura;
+- **o contraste descritivo:** M3\* − M2 e M2 − M0 nas trocas por vida, por estilo.
+
+**4. As medidas da C5** (a viabilidade do corpo; a missão C5 do `docs/PLANO_V3.md`), **do replay**, sem vida nova. As definições estão
+DECIDIDAS (AD6-4) e são SEM FONTE:
+- **a fração do tempo com alguma variável do corpo fora da faixa:** em cada tick do replay, os cinco estados do corpo (fome, higiene,
+  energia, humor e saúde: os drives dos cinco químicos de `QUIMICOS`, `digilab/corpo.py:108-109`, o estado (C − q)/C); uma variável
+  fica fora da faixa com o estado abaixo de **0,15**, o mesmo limiar da privação (`limiar_privacao`). Sai a fração dos ticks com ao menos
+  uma fora, na vida inteira e nos dias 8 a 14. Difere da `privacao` de hoje (as decisões, e só fome, higiene e energia), que sai ao lado
+  como está;
+- **a menor necessidade:** em cada tick, o menor dos cinco estados. Saem, por vida, a média nos ticks e o mínimo, nas mesmas janelas;
+- **quem calcula:** o código da C5, em `digilab/metrics.py` (as métricas existem uma vez só), com teste. **Ele entra junto do
+  orquestrador, antes da run** (o Gerente da V3, 2026-10-30; A6.12), e o orquestrador as calcula no replay de cada vida. Uma definição
+  diferente entra por adendo antes da run;
+- **o contraste descritivo:** M3\* − M2 e M3\* − M0 por estilo.
+
+**5. Os outros descritivos:**
+- **o "≈ 0" do sorteado** (A6.6), M3\* − M2 por episódio, e a classe;
+- **as taxas por episódio por braço e estilo,** e os contrastes M3\* − M0 e M2 − M0;
+- **o efeito da regularidade em cada braço:** `longe_fixo` − longe, pareado por unidade;
+- **a taxa por ração** (com a W fixa e com a W(d)), por braço e estilo (a PL-3: no longe ela não informa);
+- **a G-PESA de cada módulo** no M3\* e no M2, por estilo; **os episódios por vida;** a exaustão e a privação;
+- **por dono, só descritivo.**
+
+### A6.9 O tamanho da run e a máquina
+
+- **150 unidades × 24 vidas = 3 600 vidas,** 14 dias cada.
+- **No máximo 4 processos e uma run de pesquisa por vez** (a V3-D8; as medições do combate contam). O número de processos não muda
+  nenhuma vida nem o resultado.
+- **A estimativa das horas** [poder, `custo_por_lugar`; o RESULTADO, seções 8 e 11]:
+  - **CPU:** 3,24 s por vida no longe da reavaliação (os braços M0, M2 e M3\*), cerca de **3,2 h de CPU;**
+  - **parede, com 4 processos:** de 0,61 s por vida (o piloto da L-2, A5.9) a 0,98 s (a reavaliação: 7 060 s para 7 200 vidas), logo
+    **de 37 min a 1 h,** com o replay bit a bit; com a análise, **até 1 h 15 min;**
+  - é estimativa: o `longe_fixo` pode custar um pouco diferente, e o tempo real vai ao RESULTADO.
+- **O tamanho em disco:** pelo da reavaliação (7,5 kB por vida), o `medidas.json` fica em cerca de 27 MB, no git; as vidas, cerca de
+  260 MB, fora dele.
+
+### A6.10 O que falta antes da primeira vida, e os critérios de parada
+
+- **A etapa 1 na `main`:** o gabarito dos três estilos num commit próprio, o `longe_fixo`, os testes (os pontos no replay, a ração sempre
+  num dos pontos, a faixa de distância, os três estilos byte a byte) e a linha 71101…71505 em `FAIXAS_RESERVADAS`.
+- **O orquestrador** (`experiments/run_v2_longe_regular.py`, PROPOSTO na tarefa), num commit próprio, com a fumaça nas sementes dos
+  testes:
+  - os braços M0, M2 e M3\* de `SUBCHAVES_CONSERTO`, sem a `intencao_suspensa`;
+  - as células de A6.2, as bases e o K de A6.3, 14 dias, orçamento de 16;
+  - **a trava:** exige este adendo com a marca "APROVADO pelo Matheus" no cabeçalho (a `exigir_adendo_aprovado` de A4.7) e recusa, com
+    `SementeSemPlano`, outra base, outro K, outros dias ou sementes fora da faixa; não grava por cima de uma pasta que já existe;
+  - as medidas de A6.4 e A6.8 (com o código das medidas da C5 em `digilab/metrics.py`, com teste) e a análise de A6.4 a A6.7,
+    gravadas no `resultado.json` com a classe de cada contraste;
+  - o replay bit a bit de cada vida (o G1) e a conferência da LP-2 (A6.8, item 3).
+- **Antes da run:** os testes de mecanismo e de vidas, os gabaritos (o G2) e a suíte. **Qualquer quebra do G1, do G2 ou do G-MECANISMO
+  para tudo.**
+- **O registro da run,** num commit empurrado antes da primeira vida: o commit, a config com o sha256, as bases, o K, os braços e os sha
+  do orquestrador, do `config.py`, do `engine.py`, do `metrics.py` e deste plano.
+- **Os artefatos:** `artifacts_v2_digibrain_prototipo/longe_regular/` (o `meta.json`, o `medidas.json` e o `resultado.json`, com
+  `git add -f`). **O RESULTADO:** uma seção nova no `docs/RESULTADO_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md` (a tarefa, seção 5).
+- **A run roda uma vez.** O resultado é registrado como está, e nada se ajusta olhando para ele.
+
+### A6.11 As referências
+
+Só as VERIFICADAS na C0 (`docs/referencias/v3c0_referencias_verificadas.csv`, #482). Todas dão **direção, não tamanho de efeito.**
+- **Giannakakis, Khajehabdollahi e Levina (ALIFE 2023), `10.1162/isal_a_00606`:** a evolução escolhe quanto aprender em vida conforme
+  o ambiente; com a recompensa ruidosa e os ambientes parecidos, a taxa de aprendizado escolhida vai a zero. É a leitura da C1-E1 (o
+  `docs/PLANO_V3.md`, seção 2.3). Lido pela versão do arXiv na triagem, sem repetições nem estatística formal no agente móvel (a
+  ressalva da linha do CSV).
+- **Khan e Cañamero (2018), `10.3390/mti2040067`:** o valor adaptativo de uma modulação depende do contexto; ela ajuda num mundo e
+  atrapalha noutro. Ao lado da C1-E1.
+- **Nenhuma outra fonte é citada.** As de Ho et al. (verificadas na C0) entram na C4, não aqui.
+- **Todo número deste adendo é SEM FONTE externa:** os 3 lugares, a margem, o K, a folga de 20 %, o limiar de 0,15 da C5 e o −0,5 do g1.
+  Os números de contexto saem dos artefatos citados.
+
+### A6.12 As decisões do Matheus
+
+**Todas DECIDIDAS em 2026-10-30, pela recomendação** ("Não precisa, siga com suas recomendações anteriores", no chat do Gerente da
+V3, depois da tabela das AD6-1 a AD6-5; e "Aprovo e siga com as recomendacoes", na sessão do worker). A coluna "recomendação" é o
+que vale.
+
+| # | decisão | recomendação | custo de errar |
+|---|---|---|---|
+| **AD6-1** (DECIDIDA) | o K e a margem | **K = 150 (30 por base), a margem δ = 0,022,** o menor efeito com poder 0,8 pelo σ da reavaliação com a folga (A6.5). 3 600 vidas, de 37 min a 1 h | K = 100 (δ 0,027, 2 400 vidas): a margem passa perto da distância do sorteado a 0 na 66xxx (0,031), e o "≈ 0" fica mais frouxo; K = 300 (δ 0,016, 7 200 vidas): um efeito sem interesse prático lê como "> 0" ou "< 0", e o "≈ 0" fica mais difícil de mostrar, pelo dobro do tempo |
+| **AD6-2** (DECIDIDA) | o "≈ 0" | **o IC95 inteiro dentro de (−δ, +δ), com a margem do primário, e a ordem de classes de A6.6** | o "≈ 0" como "o IC contém 0": com o IC largo, tudo vira "≈ 0" (ausência de evidência lida como evidência de ausência); uma margem própria para o sorteado: um número a mais, escolhido sabendo o −0,031 |
+| **AD6-3** (DECIDIDA) | o sorteado já < 0 na 66xxx | **manter a C1-E1 e a C1-E2 como decididas, sem afrouxar:** com "> 0" no fixo e "< 0" no sorteado, a L-3 fica fora, e a leitura vai ao Matheus (A6.7, complemento). A simulação diz que, se a 66xxx se repetir, o sorteado sai "< 0" (1,000 com K = 150) | mudar a C1-E2 agora para aceitar o "< 0": é decidir com o dado da 66xxx na mão; manter: se o dano da memória no sorteado for justamente o que a L-3 conserta, ela espera uma decisão nova depois do resultado (reversível) |
+| **AD6-4** (DECIDIDA) | as medidas da C5 | **as definições de A6.8, item 4:** os cinco estados, o limiar 0,15 da privação, por tick, na vida e nos dias 8 a 14; a menor necessidade pela média e pelo mínimo | só as três variáveis da privação: o humor e a saúde ficam de fora da viabilidade; outro limiar: um número novo sem fonte, quando já há um no corpo |
+| **AD6-5** (DECIDIDA) | o prefixo das unidades | **o do protótipo, `digibrain_prototipo`,** como na reavaliação e na L-2; a faixa nova já dá sementes novas | um prefixo novo: mais uma entrada em `PREFIXOS_UNIDADES` e no teste de colisão, sem ganho |
+
+**Um achado de leitura, sem decisão:** a C1-E1 cita o comedouro como "+0,136" pelo G-ABLA-MEM. Essa medida é **por ração** (o contraste
+do G-ABLA-MEM, A4.10, item 3, é a taxa da `cadeia`). Por episódio, nas mesmas vidas, a diferença é +0,137 [0,114; 0,160] [poder]. Os dois
+são > 0, e a previsão do comedouro não muda.
