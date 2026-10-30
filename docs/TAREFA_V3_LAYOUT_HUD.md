@@ -81,3 +81,18 @@ Capturas aprovadas pelo Matheus em 2026-10-30 (16 imagens em `D:\Trab\digilab\ca
 - **Avisos fixos:** caixas escuras com a borda de perigo.
 - **Desvio:** o retrato e o relógio deixam os tokens `--dl-*` e o tema claro/escuro (regra 7 e D3 da `TAREFA_V2_LAYOUT_HABITAT`) e passam
   ao sistema dos menus, como pede a prancha. O balão continua no `--dl-*`.
+
+## Segunda rodada (2026-10-30)
+
+Pedido do Matheus (pela sessão que coordena): três pontos, sem redesenhar a página.
+
+- **Trilho:** deixa de ocupar a altura toda. Vira um bloco compacto de 76 px, flutuando 12 px da esquerda, logo abaixo da plaquinha e com
+  a altura dos quatro destinos. Conversar e Ajustes ficam num segundo bloco logo abaixo. Os dois têm cantos chanfrados e a risca
+  diagonal. Com isso `--casca-trilho` vale 0 também no desktop: o habitat, a tela Pet e o topo começam na borda esquerda, e o trilho
+  flutua sobre a cena. A faixa do "Pôr ração" desvia do trilho.
+- **Plaquinha do pet:** fica no canto superior esquerdo, a 12 px do topo e da esquerda, sem o recuo da largura do trilho.
+- **Paleta (HUD-5, decisão do Matheus, pela recomendação):** carvão `#10191B`, contorno `#29474B`, ciano `#49D5E2` e ativo `#B9EFF0`.
+  Ela vale no trilho, no topo e em toda a tela Pet, nas duas peles; as telas abertas (Crescer, Lutar…) seguem a pele escolhida. O custo
+  de errar: na pele Holográfica, a tela Pet fica turquesa e as outras azuis. Os três painéis ganham o mesmo traço ciano no topo
+  esquerdo e o marcador no canto inferior direito.
+- Capturas em `D:\Trab\digilab\capturas_hud_aprovar_r2\` (16, fora do git), aguardando a aprovação.

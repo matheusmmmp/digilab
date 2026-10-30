@@ -1,13 +1,28 @@
 /* HUD da tela Pet (docs/TAREFA_V3_LAYOUT_HUD.md): caixas escuras translucidas com cantos chanfrados, contorno fino e riscas diagonais,
    no mesmo sistema do trilho, do topo e da barra de acoes. Cores pelos tokens --hx-* (as duas peles, sempre escuras); o chanfro e as
    diagonais da borda sao desenhados no fundo, porque o clip-path corta a borda. Nada aqui toca a cena, o pet nem o balao.
-   Contraste: o fundo e no minimo 86 % opaco (rgba(6,11,18,.86) sobre branco puro -> #282C31, o pior caso no tema claro); contra ele o
-   texto (#D6E5E6) da 10,4:1, o secundario do Militar (#8EA9AB) 4,9:1 e o do vidro (#A3B2C3) 6,1:1. */
+   Paleta (segunda rodada, decisao do Matheus de 2026-10-30): carvao quase preto, contorno azul-petroleo e acentos ciano/turquesa da
+   prancha, no trilho, no topo e na tela Pet, nas duas peles (as telas abertas seguem a pele escolhida). Os tokens --hx-* sao redefinidos
+   nesses tres lugares, e tudo dentro deles (paineis, chamado, barra, menu Mais, painel do DigiBrain) herda.
+   Contraste, pior caso (o fundo de cima, rgba(16,25,27,.92), sobre branco puro -> #232B2D, no tema claro): texto #DDEBEC 11,6:1;
+   texto-2 #C2D8DA 9,4:1; secundario #8FB3B6 6,2:1; ciano #49D5E2 8,0:1; alerta #FFB020 8,5:1; perigo #F09A9A 6,5:1. O escolhido
+   #B9EFF0 leva texto #0A1416 (15,6:1). O contorno #29474B e decorativo; as bordas que marcam estado (escolhido, chamado) sao ciano. */
 :root{
-  --hud-fundo-1:rgba(18,28,38,.88); --hud-fundo-2:rgba(6,11,18,.9);
+  --hud-fundo-1:rgba(16,25,27,.92); --hud-fundo-2:rgba(10,16,18,.94);
   --hud-ch:10px; --hud-ch-p:6px;
-  --hud-risca:repeating-linear-gradient(-60deg, rgba(150,195,200,.5) 0 2px, transparent 2px 6px);
+  --hud-risca:repeating-linear-gradient(-60deg, rgba(73,213,226,.55) 0 2px, transparent 2px 6px);
   --hud-larg:288px;
+}
+.hx-nav, .topo-hab, .app--pet .pet-tela{
+  --hx-chao:#0A1012; --hx-miolo:#10191B; --hx-miolo-2:#162326; --hx-painel-fim:#10191B;
+  --hx-borda:#29474B; --hx-borda-topo:#3A6A70; --hx-borda-int:rgba(73,213,226,.14);
+  --hx-texto:#DDEBEC; --hx-texto-2:#C2D8DA; --hx-sec:#8FB3B6; --hx-rotulo:#49D5E2; --hx-num:#49D5E2;
+  --hx-escolhido:#B9EFF0; --hx-escolhido-ink:#0A1416; --hx-escolhido-borda:#B9EFF0; --hx-escolhido-brilho:none;
+  --hx-medidor:#49D5E2; --hx-medidor-trilho:rgba(73,213,226,.14); --hx-luz:#49D5E2; --hx-foco:#49D5E2;
+  --hx-btn-bg:rgba(73,213,226,.12); --hx-btn-bg-hover:rgba(73,213,226,.22); --hx-btn-ink:#B9EFF0; --hx-btn-borda:#49D5E2;
+  --hx-hachura:repeating-linear-gradient(-60deg, rgba(73,213,226,.45) 0 4px, transparent 4px 9px);
+  --hx-hachura-verde:repeating-linear-gradient(-60deg, rgba(73,213,226,.45) 0 4px, transparent 4px 9px);
+  --hx-perigo:#F09A9A;
 }
 /* a caixa chanfrada: canto superior direito e inferior esquerdo, como a prancha */
 /* (:root[data-pele] .pet-tela na frente: vence as regras da pele Vidro para .pet-prioridade e .pet-pedido .chamado) */
@@ -25,12 +40,14 @@
 .pet-etiqueta-db{ --ch:var(--hud-ch-p) }
 /* a risca diagonal fina dos titulos */
 .hud-risca{ flex:1 1 auto; min-width:24px; max-width:72px; height:8px; background:var(--hud-risca) }
-@media (prefers-reduced-transparency:reduce){ :root{ --hud-fundo-1:#121C26; --hud-fundo-2:#060B12 } }
+@media (prefers-reduced-transparency:reduce){ :root{ --hud-fundo-1:#10191B; --hud-fundo-2:#0A1012 } }
 
 /* ---------- os paineis empilhados a direita (>= 900 px) */
 .pet-hud{ position:absolute; z-index:6; top:calc(var(--casca-topo) + 8px); right:12px; width:var(--hud-larg); max-height:calc(100% - var(--casca-topo) - 88px);
   display:flex; flex-direction:column; gap:8px; overflow:hidden auto; pointer-events:auto; scrollbar-width:thin }
-.hud-painel{ flex:none; display:flex; flex-direction:column; min-height:0 }
+.hud-painel{ position:relative; flex:none; display:flex; flex-direction:column; min-height:0 }
+.hud-painel::before{ content:""; position:absolute; left:12px; top:0; width:56px; height:2px; background:var(--hx-rotulo); pointer-events:none }
+.hud-painel::after{ content:""; position:absolute; right:5px; bottom:5px; width:4px; height:4px; background:var(--hx-rotulo); pointer-events:none }
 .hud-painel__cab{ margin:0; font:inherit }
 .hud-painel__bt{ display:flex; align-items:center; gap:10px; width:100%; min-height:48px; padding:6px 12px; border:0; background:none; color:var(--hx-texto);
   font:inherit; text-align:left; cursor:pointer }
