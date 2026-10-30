@@ -18,6 +18,7 @@ import { textoEfeito } from "./medir_chamado_fome.ts";
 const LIM = CHAMADO_FOME_CORPO.limiar;
 const SO_A = { chamadoPelaFome: true, decisaoNaComida: false }, SO_B = { chamadoPelaFome: false, decisaoNaComida: true };
 const AMBAS = { chamadoPelaFome: true, decisaoNaComida: true };
+const JOGO = { ...AMBAS, chamadosPeloCorpo: true }, DESLIGADAS = { chamadoPelaFome: false, decisaoNaComida: false, chamadosPeloCorpo: false };
 
 function pet(semente: number, chaves: ChavesProduto | null, classica = false): Motor {
   const m = new Motor(semente);
@@ -217,16 +218,16 @@ describe("(b) a decisao do pet logo depois da racao no chao", () => {
 describe("as chaves no registro: o evento \"p\"", () => {
   test("o jogo grava as chaves no comeco do registro dos ovos novos, e o replay as le de la", () => {
     const m = ligarProduto(new Motor(101));
-    expect(m.log).toEqual([[TICK_INICIAL, "p", AMBAS]]);
-    expect(m.produto).toEqual(AMBAS);
+    expect(m.log).toEqual([[TICK_INICIAL, "p", JOGO]]);
+    expect(m.produto).toEqual(JOGO);
     brincarCedo(m, 6, 120, (t) => { if (t === 77) racaoPerto(m, 32); });
     const r = Motor.reproduzir(101, m.log);
-    expect(r.produto).toEqual(AMBAS);
+    expect(r.produto).toEqual(JOGO);
     expect(r.assinatura()).toBe(m.assinatura());
     expect(JSON.stringify(r.chamados)).toBe(JSON.stringify(m.chamados));
     /* sem o evento (um save de antes), as duas desligadas e outra vida */
     const semP = Motor.reproduzir(101, m.log.slice(1).map(ev => [ev[0], ev[1], ev[2]] as EventoRegistro));
-    expect(semP.produto).toEqual({ chamadoPelaFome: false, decisaoNaComida: false });
+    expect(semP.produto).toEqual(DESLIGADAS);
     expect(semP.assinatura()).not.toBe(m.assinatura());
     /* o ritmo antes das chaves (o brasao), e a origem do filho antes delas */
     const cl = new Motor(202); cl.configurar("classica"); ligarProduto(cl);
@@ -248,6 +249,6 @@ describe("as chaves no registro: o evento \"p\"", () => {
     /* o "p" depois de outro evento que nao seja o ritmo ou a origem */
     expect(() => Motor.reproduzir(1, [[t, "t", 1], [t + 1, "p", AMBAS]])).toThrow(/começo/);
     /* sem o evento, as duas desligadas */
-    expect(new Motor(1).produto).toEqual({ chamadoPelaFome: false, decisaoNaComida: false });
+    expect(new Motor(1).produto).toEqual(DESLIGADAS);
   });
 });

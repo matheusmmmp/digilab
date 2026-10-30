@@ -55,9 +55,9 @@ describe("jogo", () => {
     novoPet();
     const j = jogoAtual();
     expect(j.nascendo).toBe(16);
-    const log = [[TICK_INICIAL, "p", { chamadoPelaFome: true, decisaoNaComida: true }]];
+    const log = [[TICK_INICIAL, "p", { chamadoPelaFome: true, decisaoNaComida: true, chamadosPeloCorpo: true }]];
     expect(j.motor.log).toEqual(log);
-    expect(j.motor.produto).toEqual({ chamadoPelaFome: true, decisaoNaComida: true });
+    expect(j.motor.produto).toEqual({ chamadoPelaFome: true, decisaoNaComida: true, chamadosPeloCorpo: true });
     expect(JSON.parse(a.dados[CHAVE])).toEqual({ semente: j.motor.semente, log, versao: VERSAO_PET });
   });
 });
