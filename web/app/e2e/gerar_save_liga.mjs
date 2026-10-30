@@ -1,4 +1,4 @@
-// Save do teste ponta a ponta da Liga dos Lideres (Fronteira, medalhas parte 4a, docs/DESIGN_FRONTEIRA.md): um pet v6 Mega, treinado
+// Save do teste ponta a ponta da Liga dos Lideres (Fronteira, medalhas parte 4a, docs/DESIGN_FRONTEIRA.md): um pet v13 Mega, treinado
 // ate o teto, que conhece as 6 medalhas do Tamer (o registro comeca com o "u" das 6, como um pet novo de um Tamer que ja as tem). A vida
 // e de verdade (o dono atencioso dos Cenarios, treino em rodizio em cada estagio, lutas de treino contra o aleatorio, lesao tratada),
 // entao o app a reproduz. O registro termina num avanco de tempo: o relogio do app so estica esse avanco e o tamanho do registro (que
@@ -19,7 +19,7 @@ function treinarSePuder(m, ex) {
 }
 /** a vida: dono atencioso (orcamento de 16 acoes por dia), treino sempre que der e as lutas de treino do Champion e do Ultimate */
 function megaTreinado(semente, dias = 5) {
-  const m = new Motor(semente, 6), dono = criarDono("atencioso"), rng = criarRng(hashSemente("dono", semente, "atencioso"));
+  const m = new Motor(semente), dono = criarDono("atencioso"), rng = criarRng(hashSemente("dono", semente, "atencioso"));
   m.liberar(M.MEDALHAS_LIGA);
   const passos = Math.round(dias * TPD / CD.passo), orc = Math.round(CD.porDia * dias);
   let gasto = 0, ex = 0, k = 0;
@@ -30,7 +30,7 @@ function megaTreinado(semente, dias = 5) {
     const v = { e: m.e, acao: m.acao, passo: p, passos, orc, gasto, min, max, atrasado: gasto < orc * (p + 1) / passos, chamados: m.chamadosAbertos() };
     const acoes = dono.decidir(v, rng);
     if (m.lesionadoDesde !== null) acoes.unshift("tratar_lesao");
-    for (const a of acoes) { m.observar(a); gasto++; }
+    for (const a of acoes) if (M.ACOES_DONO_JOGO_V11.includes(a)) { m.observar(a); gasto++; }
     ex = treinarSePuder(m, ex);
     if ((m.estagioAtual === "adolescente" && m.sparring < CAT.sparring) || (m.estagioAtual === "adulto" && m.lutas.lutas < 12)) {
       m.lutar("aleatorio", hashSemente("sparring", semente, k++));
@@ -44,7 +44,7 @@ function megaTreinado(semente, dias = 5) {
   return m;
 }
 function venceSempre(m) {
-  const x = Motor.reproduzir(m.semente, m.log, 6);
+  const x = Motor.reproduzir(m.semente, m.log);
   if (x.assinatura() !== m.assinatura()) throw new Error("o replay do save nao bate");
   for (let o = 0; o <= 300; o += 5) {
     if (o) x.avancar(5);

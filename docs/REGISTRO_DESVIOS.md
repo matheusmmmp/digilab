@@ -417,3 +417,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-29 — UP-EVOLUCAO (worker, Claude Code, Opus 5.5, worktree `v2-up-evolucao`): a tela, a cena oficial na Revelação atrás de `CENA_EVOLUCAO_UP`](registro/2026-10.md)
 - [2026-10-29 — COMBATE-TR R1 (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): o núcleo da luta em tempo real](registro/2026-10.md)
 - [2026-10-29 — COMBATE-TR R2a (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): a v13 com a luta em tempo real, o descarte 6 e o Tamer 7](registro/2026-10.md)
+- [2026-10-29 — COMBATE-TR R2b (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): o D-9, só a v13](registro/2026-10.md)

@@ -1,12 +1,13 @@
-/* A Liga dos Lideres na Fronteira (docs/DESIGN_FRONTEIRA.md, secoes 2 e 4; medalhas parte 4a; so no jogo, so pets v6): a tabela dos 6
-   lideres e dos Megas deles, a entrada com as 6 medalhas, a sequencia sem cura, a proibicao de carta, o limite de turnos do desafiado (o
-   lider), o replay com as lutas da Liga, o titulo no registro do Tamer, a conclusao da jornada e os pets v1-v5 de fora. O pet de verdade
-   e o do teste ponta a ponta (e2e/save_liga.json, e2e/gerar_save_liga.mjs): um Mega v6 treinado ate o teto, que conhece as 6 medalhas. */
-import { readFileSync } from "node:fs";
+/* A Liga dos Lideres na Fronteira (docs/DESIGN_FRONTEIRA.md, secoes 2 e 4; medalhas parte 4a; so no jogo, so o pet v13): a tabela dos 6
+   lideres e dos Megas deles, a entrada com as 6 medalhas, a sequencia sem cura (CURA_LIGA_V9 = 0), a proibicao de carta,
+   o limite de turnos do desafiado (o lider), o replay com as lutas da Liga, o titulo no registro do Tamer e a conclusao da jornada. As
+   lutas do pet v13 sao em tempo real (res.tr; res.turnos vem vazio). O pet de verdade e um Mega v13 feito aqui (megaTreinado: o dono
+   atencioso, so com as acoes do jogo, treino em rodizio ate o teto, as 6 medalhas), porque o e2e/save_liga.json e de um pet v6. */
 import { afterEach, beforeEach, describe, expect, test } from "vitest";
 import {
-  CESC_V6, CIT, CV21D, ESPECIES, FATOR_LIGA, FATOR_LIGA_DESENHO, LIGA, MEDALHAS, MEDALHAS_LIGA, NOME_ARQ, NPC, RIVAL_LIGA, formaLiga, hashSemente,
-  jogarArena, jogarSerie, jogarV2, lutadorLiga, lutadoresLiga, nomeForma, nomeMegaLiga, sementeDaSerie, type EventoRegistro,
+  ACOES_DONO_JOGO_V11, CAT, CD, CESC_V6, CIT, CMG, CTR, CV21D, ESPECIES, FATOR_LIGA, FATOR_LIGA_DESENHO, LIGA, MEDALHAS, MEDALHAS_LIGA, NOME_ARQ, NPC,
+  RIVAL_LIGA, TPD, criarDono, criarRng, curaLiga, formaLiga, hashSemente, jogarArena, jogarLuta, jogarLiga, jogarSerie, jogarV2, lutadorLiga, lutadoresLiga, nomeForma,
+  nomeMegaLiga, sementeDaSerie, type EventoRegistro,
 } from "../motor/index.ts";
 import { ESCALA, ligarEscala } from "../motor/catalogo.ts";
 import { Motor } from "../motor/motor.ts";
@@ -19,16 +20,53 @@ import { R as R_REF, formasDe, lutador } from "./itens_ref.mjs";
 const escalaAntes = ESCALA.ligada;
 beforeEach(() => ligarEscala(true));
 afterEach(() => ligarEscala(escalaAntes));
-const SAVE: { semente: number; log: EventoRegistro[]; versao: number } = JSON.parse(readFileSync(new URL("../e2e/save_liga.json", import.meta.url), "utf8"));
-/** o Mega do save, reproduzido do registro */
-const mega = (): Motor => Motor.reproduzir(SAVE.semente, SAVE.log, SAVE.versao);
+const EX = ["levantar_pedra", "corrida", "alvo", "esquiva", "meditar", "resistencia"] as const;
+/** a vida (a de e2e/gerar_save_liga.mjs, no pet v13): dono atencioso so com as acoes do jogo, treino em rodizio, lutas de treino do Champion e do
+    Ultimate, ate o Mega chegar ao teto de treino; o registro termina num avanco de tempo */
+function megaTreinado(semente: number, dias = 8): Motor | null {
+  const m = new Motor(semente), dono = criarDono("atencioso"), rng = criarRng(hashSemente("dono", semente, "atencioso"));
+  m.liberar(MEDALHAS_LIGA);
+  const passos = Math.round(dias * TPD / CD.passo), orc = Math.round(CD.porDia * dias);
+  let gasto = 0, ex = 0, k = 0;
+  for (let p = 0; p < passos; p++) {
+    m.avancar(CD.passo);
+    if (m.morte) return null;
+    const rest = orc - gasto, min = Math.max(0, rest - (passos - p - 1) * CD.maxPasso), max = Math.min(rest, CD.maxPasso);
+    const v = { e: m.e, acao: m.acao, passo: p, passos, orc, gasto, min, max, atrasado: gasto < orc * (p + 1) / passos, chamados: m.chamadosAbertos() };
+    const acoes = dono.decidir(v, rng).filter(a => ACOES_DONO_JOGO_V11.includes(a));
+    if (m.lesionadoDesde !== null) acoes.unshift("tratar_lesao");
+    for (const a of acoes) { m.observar(a); gasto++; }
+    if (m.estagioAtual !== "bebe" && m.treino.podeTocar(m.e.tick) && m.treino.fadiga + CTR.fadigaSessao < CTR.limiarPausa) { try { m.treinar(EX[ex++ % EX.length]); } catch { /* o motor recusou: tenta no proximo passo */ } }
+    if ((m.estagioAtual === "adolescente" && m.sparring < CAT.sparring) || (m.estagioAtual === "adulto" && m.lutas.lutas < 12)) {
+      m.lutar("aleatorio", hashSemente("sparring", semente, k++));
+      if (m.lesionadoDesde !== null) m.observar("tratar_lesao");
+    }
+    if (m.estagioAtual === "mega" && m.treino.total >= CMG.tetoVida) break;
+  }
+  if (m.estagioAtual !== "mega" || m.morte) return null;
+  if (m.lesionadoDesde !== null) m.observar("tratar_lesao");
+  m.avancar(CD.passo);
+  return m;
+}
+/** o Mega do teste: a primeira semente (a partir de 9100) que chega a Mega treinado; feito uma vez e reproduzido do registro a cada teste */
+let _mega: { semente: number; log: EventoRegistro[] } | null = null;
+function SAVE(): { semente: number; log: EventoRegistro[]; versao: number } {
+  if (!_mega) {
+    ligarEscala(true);
+    for (let s = 9100; s < 9140 && !_mega; s++) { const m = megaTreinado(s); if (m) _mega = { semente: m.semente, log: m.log }; }
+    if (!_mega) throw new Error("nenhuma semente deu um Mega v13 treinado");
+  }
+  return { ..._mega, versao: 13 };
+}
+/** o Mega, reproduzido do registro */
+const mega = (): Motor => { const x = SAVE(); return Motor.reproduzir(x.semente, x.log, x.versao); };
 /** a semente da tentativa pelo botao do app */
 const sementeDoBotao = (m: Motor): number => hashSemente("luta", m.semente, m.log.length);
 const PIEDMON = "npc_v5_piedmon";
 const armaz = () => { const dados: Record<string, string> = {}; return { dados, getItem: (k: string) => (k in dados ? dados[k] : null), setItem(k: string, v: string) { dados[k] = v; } }; };
 /** um Tamer com as 6 medalhas */
 function tamer6(): Tamer {
-  const t = new Tamer(), m = new Motor(1, 6);
+  const t = new Tamer(), m = new Motor(1);
   for (const md of MEDALHAS) t.ganhar(md.id, m, 1);
   return t;
 }
@@ -78,19 +116,17 @@ describe("a Liga e completavel (conferencia, sem calibracao)", () => {
 });
 
 describe("a entrada e as regras da Liga (Motor)", () => {
-  test("so pets v6 com as 6 medalhas; o In-Training nao luta", () => {
-    const v5 = new Motor(40, 5); v5.avancar(300);
-    expect(() => v5.lutar(RIVAL_LIGA, 1)).toThrow(/só de pets v6/);
-    const m = new Motor(41, 6);
+  test("so com as 6 medalhas; o In-Training nao luta", () => {
+    const m = new Motor(41);
     m.liberar(5); m.avancar(300);
     expect(m.porqueNaoLiga()).toMatch(/6 medalhas/);
     expect(() => m.lutar(RIVAL_LIGA, 1)).toThrow(/6 medalhas/);
-    const bebe = new Motor(42, 6); bebe.liberar(6);
+    const bebe = new Motor(42); bebe.liberar(6);
     expect(() => bebe.lutar(RIVAL_LIGA, 1)).toThrow(/In-Training/);
     expect(bebe.log.filter(e => e[1] === "l")).toHaveLength(0);
     expect(mega().porqueNaoLiga()).toBeNull();
   });
-  test("seis lutas seguidas sem cura: o pet leva a vida e o guts; cada lider comeca inteiro; para na primeira derrota", () => {
+  test("seis lutas seguidas sem cura (CURA_LIGA_V9 = 0): o pet leva a vida e o guts; cada lider comeca inteiro; para na primeira derrota", () => {
     const m = mega();
     let viuDerrota = false, viuTitulo = false;
     for (let k = 0; k < 60 && !(viuDerrota && viuTitulo); k++) {
@@ -101,13 +137,18 @@ describe("a entrada e as regras da Liga (Motor)", () => {
         expect(res.E0.L[1].hp).toBe(res.E0.L[1].hpMax);                            /* o lider comeca inteiro */
         if (j) {
           const antes = serie[j - 1].E.L[0];
-          expect(res.E0.L[0].hp).toBe(antes.hp);                                   /* sem cura */
+          expect(curaLiga(m.regras)).toBe(0);                                         /* a cura dos v9 vale 0: sem cura */
+          expect(res.E0.L[0].hp).toBeCloseTo(Math.min(antes.hpMax, antes.hp + curaLiga(m.regras) * antes.hpMax), 9);
           expect(res.E0.L[0].guts).toBe(Math.min(antes.guts, res.E0.L[0].gutsMax));
           expect(serie[j - 1].pontosA).toBe(1);                                    /* so segue depois de vencer */
         } else expect(res.E0.L[0].hp).toBe(res.E0.L[0].hpMax);
-        /* a mesma luta que jogarV2 daria, com a semente derivada e o comeco da anterior */
-        const ini = j ? { hp: serie[j - 1].E.L[0].hp, guts: serie[j - 1].E.L[0].guts } : null;
-        expect(res.turnos.map(t => [t.a, t.b])).toEqual(jogarV2(L.A, L.lideres![j], sementeDaSerie(s, j), m.regras, ini, 1).turnos.map(t => [t.a, t.b]));
+        /* a mesma luta que jogarLuta (em tempo real) daria, com a semente derivada e o comeco da anterior (com a cura) */
+        const f = j ? serie[j - 1].E.L[0] : null, ini = f ? { hp: Math.min(f.hpMax, f.hp + curaLiga(m.regras) * f.hpMax), guts: f.guts } : null;
+        const livre = jogarLuta(L.A, L.lideres![j], sementeDaSerie(s, j), m.regras, ini, 1);
+        expect(res.turnos).toEqual([]);                                            /* em tempo real nao ha turnos */
+        expect(res.tr!.acoes).toEqual(livre.tr!.acoes);
+        expect(res.tr!.passos).toBe(livre.tr!.passos);
+        expect(res.pontosA).toBe(livre.pontosA);
       });
       if (serie[serie.length - 1].pontosA !== 1) viuDerrota = true;
       if (serie.length === LIGA.length && serie[LIGA.length - 1].pontosA === 1) viuTitulo = true;
@@ -119,15 +160,15 @@ describe("a entrada e as regras da Liga (Motor)", () => {
     const m = mega(), n = m.log.length;
     expect(() => m.lutar(RIVAL_LIGA, 7, "carta_folego")).toThrow(/cartas não valem/);
     expect(m.log).toHaveLength(n);                                                 /* nada entrou no registro */
-    const t = m.e.tick, log: EventoRegistro[] = [...SAVE.log, [t, "k", { id: "carta_folego" }], [t, "l", { r: RIVAL_LIGA, s: 7 }]];
-    expect(() => Motor.reproduzir(SAVE.semente, log, 6)).toThrow(/cartas não valem/);
+    const t = m.e.tick, log: EventoRegistro[] = [...SAVE().log, [t, "k", { id: "carta_folego" }], [t, "l", { r: RIVAL_LIGA, s: 7 }]];
+    expect(() => Motor.reproduzir(SAVE().semente, log, 13)).toThrow(/cartas não valem/);
   });
   test("o limite de turnos e do desafiado (o lider): a luta que chega ao limite e do lider e quebra a Liga, mesmo com o pet na frente", () => {
     /* o motor joga a Liga com o desafiado = o lider (lado B) */
     const m = mega();
     for (let k = 0; k < 10; k++) {
       const s = hashSemente("motor-liga", k), L = m.montarLuta(RIVAL_LIGA, s);
-      expect(L.serie).toEqual(jogarSerie(L.A, L.lideres!, s, m.regras, 1, null));
+      expect(L.serie).toEqual(jogarLiga(L.A, s, m.regras, 1, L.lideres!));
     }
     /* com um Mega de referencia (vigia, treino tipico), a Liga pela regra do limite x pela fracao de vida */
     const vigia = formasDe("mega").find((f: [string]) => f[0] === "vigia"), Ls = lutadoresLiga(R_REF);
@@ -175,13 +216,9 @@ describe("registro e replay", () => {
   });
   test("luta da Liga no registro sem as 6 medalhas falha alto no replay", () => {
     const t0 = 700, log: EventoRegistro[] = [[480, "u", { n: 5 }], [480, "t", t0 - 480], [t0, "l", { r: RIVAL_LIGA, s: 3 }]];
-    expect(() => Motor.reproduzir(99, log, 6)).toThrow(/Liga no registro sem poder/);
+    expect(() => Motor.reproduzir(99, log, 13)).toThrow(/Liga no registro sem poder/);
   });
-  test("pets v1-v5: a Liga nao existe (e a regra da serie da Cidadela nao mudou com a generalizacao)", () => {
-    for (const v of [1, 2, 3, 4, 5]) {
-      const m = new Motor(50 + v, v); m.avancar(300);
-      expect(() => m.lutar(RIVAL_LIGA, 1)).toThrow(/só de pets v6/);
-    }
+  test("a regra da serie da Cidadela nao mudou com a generalizacao", () => {
     /* jogarArena = jogarSerie com o mesmo rival n vezes */
     const A = lutadorLiga(0, CV21D), B = lutadorLiga(5, CV21D);
     expect(jogarArena(A, B, 77, CV21D, 3, 1)).toEqual(jogarSerie(A, [B, B, B], 77, CV21D, 1));
@@ -214,7 +251,7 @@ describe("o titulo no Tamer e a conclusao da jornada", () => {
     expect(() => Tamer.reproduzir([...seis, ["campeao", { ...ev[1], n: 2 }]])).toThrow(/fora de ordem/);
     expect(Tamer.reproduzir([...seis, ev]).titulo).toMatchObject({ pet: 1, forma: "WarGreymon" });
   });
-  test("a jornada dos pets v6 termina na Liga, nao no Piedmon; os marcos tem a Liga", () => {
+  test("a jornada do pet v13 termina na Liga, nao no Piedmon; os marcos tem a Liga", () => {
     const m = mega();
     const x = marcos(m);
     expect(x).toHaveLength(12);
@@ -224,11 +261,5 @@ describe("o titulo no Tamer e a conclusao da jornada", () => {
     m.liga.titulos = 1;
     expect(concluiuJornada(m)).toBe(true);
     expect(marcos(m)[11].feito).toBe(true);
-    /* pets v5: continua o Piedmon */
-    const v5 = new Motor(60, 5);
-    expect(concluiuJornada(v5)).toBe(false);
-    v5.campanha[PIEDMON] = 1;
-    expect(concluiuJornada(v5)).toBe(true);
-    expect(marcos(v5).some(y => y.rotulo.includes("Liga"))).toBe(false);
   });
 });

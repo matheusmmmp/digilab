@@ -1,4 +1,4 @@
-// Save do teste ponta a ponta das medalhas (docs/DESIGN_MEDALHAS_ARENAS.md): um pet v6 no Rookie, treinado, com o tempo
+// Save do teste ponta a ponta das medalhas (docs/DESIGN_MEDALHAS_ARENAS.md): um pet v13 no Rookie, treinado, com o tempo
 // do Rookie ja cumprido (pronto para evoluir, esperando a 1a medalha). O registro termina num avanco de tempo, entao o
 // relogio do app so estica esse avanco e o tamanho do registro (que entra na semente da luta) nao muda. Conferido aqui:
 // a proxima luta contra o Gazimon (a do botao Desafiar, semente hashSemente("luta", semente, tamanho do registro)) e
@@ -15,14 +15,14 @@ const EX = ["levantar_pedra", "corrida", "alvo", "esquiva", "meditar", "resisten
 
 /** dono atencioso (Cenarios) + treino em rodizio no Rookie, sem forcar, ate o fim do Rookie + 30 min */
 function rookiePronto(semente) {
-  const m = new Motor(semente, 6), dono = criarDono("atencioso"), rng = criarRng(hashSemente("dono", semente, "atencioso"));
+  const m = new Motor(semente), dono = criarDono("atencioso"), rng = criarRng(hashSemente("dono", semente, "atencioso"));
   const dias = (FIM_ROOKIE + 30) / TPD, passos = Math.round(dias * TPD / CD.passo), orc = Math.round(16 * dias);
   let gasto = 0, ex = 0;
   for (let p = 0; p < passos; p++) {
     m.avancar(CD.passo);
     const rest = orc - gasto, min = Math.max(0, rest - (passos - p - 1) * CD.maxPasso), max = Math.min(rest, CD.maxPasso);
     const v = { e: m.e, acao: m.acao, passo: p, passos, orc, gasto, min, max, atrasado: gasto < orc * (p + 1) / passos, chamados: m.chamadosAbertos() };
-    for (const a of dono.decidir(v, rng)) { m.observar(a); gasto++; }
+    for (const a of dono.decidir(v, rng)) if (M.ACOES_DONO_JOGO_V11.includes(a)) { m.observar(a); gasto++; }
     if (m.estagioAtual === "crianca" && m.treino.podeTocar(m.e.tick) && m.treino.fadiga + CTR.fadigaSessao < CTR.limiarPausa) {
       try { m.treinar(EX[ex++ % EX.length]); } catch { /* dormindo: tenta depois */ }
     }
@@ -32,7 +32,7 @@ function rookiePronto(semente) {
 }
 function venceSempre(m) {
   for (let o = 0; o <= 300; o += 5) {
-    const x = Motor.reproduzir(m.semente, m.log, 6);
+    const x = Motor.reproduzir(m.semente, m.log);
     if (o) x.avancar(o);
     if (x.log.length !== m.log.length) throw new Error("o avanco nao juntou com o ultimo");
     if (x.lutar(GAZIMON, hashSemente("luta", x.semente, x.log.length)).res.pontosA !== 1) return false;

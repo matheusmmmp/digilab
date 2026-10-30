@@ -20,6 +20,8 @@ const TIPO_REG: Record<string, [Exclude<Filtro, "todos">, string, string]> = {
   luta: ["luta", "luta", "luta"], treino: ["treino", "treino", "treino"],
   /* pets v6: o pet passou a saber das medalhas do Tamer (evento "u") */
   tamer: ["luta", "medalha", "luta"],
+  /* a lesao da luta, a carta usada nela e o chip equipado: sem tipo aqui, o filtro de lutas quebrava a tela inteira */
+  lesao: ["luta", "lesão", "luta"], carta: ["luta", "carta", "luta"], item: ["voce", "item", "regras"],
 };
 const FILTROS: [Filtro, string][] = [["todos", "tudo"], ["voce", "você"], ["pet", "pet"], ["luta", "lutas"], ["recusa", "recusas"], ["treino", "treino"]];
 const textoLinha = (h: ItemHistorico): string => h.quem === "gambit" ? `regras de combate: ${h.a}` : h.quem === "pet" ? NOME_PET[h.a as keyof typeof NOME_PET] : h.a;

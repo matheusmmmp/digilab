@@ -1,10 +1,11 @@
-/* As instalacoes da Fronteira (docs/DESIGN_FRONTEIRA.md, secoes 3 e 4; medalhas parte 4b; so no jogo, so pets v6): a Torre de Batalha e o
+/* As instalacoes da Fronteira (docs/DESIGN_FRONTEIRA.md, secoes 3 e 4; medalhas parte 4b; so no jogo, so o pet v13): a Torre de Batalha e o
    Palacio. O sorteio reproduzivel dos rivais (da semente da tentativa, que sai do registro do pet), a sequencia sem cura, o fim na
-   derrota, o Palacio sem travas, vetos e chips de regra, a entrada depois do titulo (evento "f"), o recorde no registro do Tamer, o replay e
-   os pets v1-v5 de fora. O pet de verdade e o Mega do teste da Liga (e2e/save_liga.json), que conhece as 6 medalhas. */
-import { readFileSync } from "node:fs";
+   derrota, o Palacio sem travas, vetos e chips de regra, a entrada depois do titulo (evento "f"), o recorde no registro do Tamer e o replay.
+   As lutas do pet v13 sao em tempo real (res.tr; res.turnos vem vazio). O pet de verdade e um Mega v13 feito aqui (megaTreinado, o mesmo
+   do teste da Liga: o e2e/save_liga.json e de um pet v6), que conhece as 6 medalhas. */
 import { afterEach, beforeEach, describe, expect, test } from "vitest";
 import {
+  ACOES_DONO_JOGO_V11, CAT, CD, CMG, CTR, MEDALHAS_LIGA, TPD, criarDono, criarRng, jogarLuta, nomeForma,
   CESC_V6, CV21D, ESPECIES, FATOR_INSTALACAO, FATOR_LIGA, FORMAS_AD, INSTALACOES, LUTAS_MAX_INSTALACAO, MEDALHAS, chaveRegra, chipDe, ehInstalacao,
   formaRivalInstalacao, gambitsAdulto, hashSemente, instalacaoDe, jogarSequencia, jogarSerie, jogarV2, lutadorLiga, lutadorPet, regraDe, rivalInstalacao,
   sementeDaSerie, sementeTentativa, type EventoRegistro, type IdInstalacao,
@@ -16,11 +17,48 @@ import { Tamer, conferirRecordes, gravarTamer, lerTamer, sincronizarPet, type Ev
 const escalaAntes = ESCALA.ligada;
 beforeEach(() => ligarEscala(true));
 afterEach(() => ligarEscala(escalaAntes));
-const SAVE: { semente: number; log: EventoRegistro[]; versao: number } = JSON.parse(readFileSync(new URL("../e2e/save_liga.json", import.meta.url), "utf8"));
+const EX = ["levantar_pedra", "corrida", "alvo", "esquiva", "meditar", "resistencia"] as const;
+/** a vida (a de e2e/gerar_save_liga.mjs, no pet v13): dono atencioso so com as acoes do jogo, treino em rodizio, lutas de treino do Champion e do
+    Ultimate, ate o Mega chegar ao teto de treino; o registro termina num avanco de tempo */
+function megaTreinado(semente: number, dias = 8): Motor | null {
+  const m = new Motor(semente), dono = criarDono("atencioso"), rng = criarRng(hashSemente("dono", semente, "atencioso"));
+  m.liberar(MEDALHAS_LIGA);
+  const passos = Math.round(dias * TPD / CD.passo), orc = Math.round(CD.porDia * dias);
+  let gasto = 0, ex = 0, k = 0;
+  for (let p = 0; p < passos; p++) {
+    m.avancar(CD.passo);
+    if (m.morte) return null;
+    const rest = orc - gasto, min = Math.max(0, rest - (passos - p - 1) * CD.maxPasso), max = Math.min(rest, CD.maxPasso);
+    const v = { e: m.e, acao: m.acao, passo: p, passos, orc, gasto, min, max, atrasado: gasto < orc * (p + 1) / passos, chamados: m.chamadosAbertos() };
+    const acoes = dono.decidir(v, rng).filter(a => ACOES_DONO_JOGO_V11.includes(a));
+    if (m.lesionadoDesde !== null) acoes.unshift("tratar_lesao");
+    for (const a of acoes) { m.observar(a); gasto++; }
+    if (m.estagioAtual !== "bebe" && m.treino.podeTocar(m.e.tick) && m.treino.fadiga + CTR.fadigaSessao < CTR.limiarPausa) { try { m.treinar(EX[ex++ % EX.length]); } catch { /* o motor recusou: tenta no proximo passo */ } }
+    if ((m.estagioAtual === "adolescente" && m.sparring < CAT.sparring) || (m.estagioAtual === "adulto" && m.lutas.lutas < 12)) {
+      m.lutar("aleatorio", hashSemente("sparring", semente, k++));
+      if (m.lesionadoDesde !== null) m.observar("tratar_lesao");
+    }
+    if (m.estagioAtual === "mega" && m.treino.total >= CMG.tetoVida) break;
+  }
+  if (m.estagioAtual !== "mega" || m.morte) return null;
+  if (m.lesionadoDesde !== null) m.observar("tratar_lesao");
+  m.avancar(CD.passo);
+  return m;
+}
+/** o Mega do teste: a primeira semente (a partir de 9100) que chega a Mega treinado; feito uma vez e reproduzido do registro a cada teste */
+let _mega: { semente: number; log: EventoRegistro[] } | null = null;
+function SAVE(): { semente: number; log: EventoRegistro[]; versao: number } {
+  if (!_mega) {
+    ligarEscala(true);
+    for (let s = 9100; s < 9140 && !_mega; s++) { const m = megaTreinado(s); if (m) _mega = { semente: m.semente, log: m.log }; }
+    if (!_mega) throw new Error("nenhuma semente deu um Mega v13 treinado");
+  }
+  return { ..._mega, versao: 13 };
+}
 const TORRE: IdInstalacao = "torre_batalha", PALACIO: IdInstalacao = "palacio";
 /** o Mega do save (conhece as 6 medalhas), reproduzido do registro; `aberta`: com a Fronteira aberta (evento "f") */
 function mega(aberta = true): Motor {
-  const m = Motor.reproduzir(SAVE.semente, SAVE.log, SAVE.versao);
+  const x = SAVE(), m = Motor.reproduzir(x.semente, x.log, x.versao);
   if (aberta) m.abrirFronteira();
   return m;
 }
@@ -33,7 +71,7 @@ function tentar(m: Motor, inst: IdInstalacao) {
 const armaz = () => { const dados: Record<string, string> = {}; return { dados, getItem: (k: string) => (k in dados ? dados[k] : null), setItem(k: string, v: string) { dados[k] = v; } }; };
 /** um Tamer com as 6 medalhas e, com `titulo`, campeao da Liga */
 function tamer(titulo: boolean): Tamer {
-  const t = new Tamer(), m = new Motor(1, 6);
+  const t = new Tamer(), m = new Motor(1);
   for (const md of MEDALHAS) t.ganhar(md.id, m, 1);
   if (titulo) t.ganharTitulo(m, 2);
   return t;
@@ -75,7 +113,7 @@ describe("as instalacoes e o sorteio dos rivais", () => {
 });
 
 describe("a entrada (depois do titulo, evento 'f')", () => {
-  test("sem o titulo do Tamer as instalacoes ficam fechadas; com ele, o pet v6 que conhece as 6 medalhas entra", () => {
+  test("sem o titulo do Tamer as instalacoes ficam fechadas; com ele, o pet que conhece as 6 medalhas entra", () => {
     const m = mega(false);
     for (const x of INSTALACOES) {
       expect(m.porqueNaoInstalacao(x.id)).toMatch(/depois do título/);
@@ -87,9 +125,9 @@ describe("a entrada (depois do titulo, evento 'f')", () => {
     for (const x of INSTALACOES) expect(m.porqueNaoInstalacao(x.id)).toBeNull();
     expect(() => m.abrirFronteira()).toThrow(/já está aberta/);
     /* a Fronteira so abre com as 6 medalhas conhecidas; o In-Training nao luta */
-    const cinco = new Motor(41, 6); cinco.liberar(5);
+    const cinco = new Motor(41); cinco.liberar(5);
     expect(() => cinco.abrirFronteira()).toThrow(/6 medalhas/);
-    const bebe = new Motor(42, 6); bebe.liberar(6); bebe.abrirFronteira();
+    const bebe = new Motor(42); bebe.liberar(6); bebe.abrirFronteira();
     expect(bebe.porqueNaoInstalacao(TORRE)).toMatch(/In-Training/);
   });
   test("o app grava o 'f' quando o Tamer tem o titulo (sincronizarPet), uma vez; sem o titulo, nao", () => {
@@ -128,8 +166,11 @@ describe("a sequencia", () => {
           expect(serie[j - 1].pontosA).toBe(1);                                    /* so segue depois de vencer */
         } else expect(res.E0.L[0].hp).toBe(res.E0.L[0].hpMax);
         const ini = j ? { hp: serie[j - 1].E.L[0].hp, guts: serie[j - 1].E.L[0].guts } : null;
-        const livre = jogarV2(L.A, L.rivais![j], sementeDaSerie(s, j), m.regras, ini, 1);
-        expect(res.turnos).toEqual(livre.turnos);                                    /* limite de turnos: o desafiado e o rival (lado B) */
+        const livre = jogarLuta(L.A, L.rivais![j], sementeDaSerie(s, j), m.regras, ini, 1);
+        expect(res.turnos).toEqual([]);                                              /* em tempo real nao ha turnos */
+        expect(res.tr!.acoes).toEqual(livre.tr!.acoes);                              /* a mesma luta; o limite e do desafiado, o rival (lado B) */
+        expect(res.tr!.passos).toBe(livre.tr!.passos);
+        expect(res.pontosA).toBe(livre.pontosA);
         if (res.fim === "limite") expect(res.pontosA).toBe(0);
       });
       /* perdeu (ou empatou), acabou: a ultima nao e vitoria (o teto fica longe) */
@@ -181,7 +222,8 @@ describe("o Palacio: o pet decide sozinho", () => {
     const livres = gp.ativas.filter(k => k !== kChip);
     const vetada = livres[0], travada = livres[livres.length - 1];
     m.intervirGambit("vetar", vetada); m.intervirGambit("travar", travada);
-    expect(gp.ativas).toContain(kChip);
+    expect(gp.chipsRegra).toContain(kChip);                                         /* no v13 o chip de regra fica fora da lista (ativas) */
+    expect(gp.ativas).not.toContain(kChip);
     expect(gp.ativas).not.toContain(vetada);
     const lista = gp.listaPalacio();
     expect(lista).not.toContain(kChip);                                             /* o chip de regra nao vale */
@@ -192,7 +234,8 @@ describe("o Palacio: o pet decide sozinho", () => {
     const P = m.lutadores(PALACIO), T = m.lutadores(TORRE);
     expect(P.usadas).toEqual(lista);
     expect(P.A.estilo.gambits!.regras).toEqual(lista.map(regraDe));
-    expect(T.usadas).toEqual(gp.ativas);
+    expect(T.usadas).toEqual(gp.comChips(gp.ativas));                               /* a lista do dono, com a regra do chip no fim */
+    expect(T.usadas[T.usadas.length - 1]).toBe(kChip);
     expect(T.usadas).toContain(kChip);
     expect(P.A.cond).toEqual(T.A.cond);
     expect(P.A.cond).toEqual(lutadorPet(m, "x", true).cond);
@@ -204,13 +247,13 @@ describe("o Palacio: o pet decide sozinho", () => {
   test("sem chip de regra, a lista do Palacio e a do Lago (listaSozinho); a regra de chip que o pet ja tinha fica", () => {
     const m = mega(), gp = m.gp!;
     expect(gp.listaPalacio()).toEqual(gp.listaSozinho());
-    /* um chip cuja regra ja estava na lista: a regra e do pet, fica no Palacio */
+    /* um chip cuja regra ja estava na lista: no v13 ela continua nas ativas (o chip so a poe no fim da lista de luta, sem repetir) */
     const ja = ["chip_recuo", "chip_oportunista", "chip_perseguidor", "chip_aparo"].find(id => gp.ativas.includes(chaveRegra((chipDe(id) as { regra: Parameters<typeof chaveRegra>[0] }).regra)));
     if (ja) {
       const k = chaveRegra((chipDe(ja) as { regra: Parameters<typeof chaveRegra>[0] }).regra);
       m.equipar(ja);
-      expect(gp.chipsJaAtivos).toContain(k);
-      expect(gp.listaPalacio()).toContain(k);
+      expect(gp.ativas).toContain(k);
+      expect(gp.comChips(gp.ativas).filter(x => x === k)).toHaveLength(1);
     }
   });
 });
@@ -224,7 +267,7 @@ describe("o recorde no registro do Tamer", () => {
     expect(conferirRecordes(tamer(false), m)).toEqual([]);                          /* sem titulo, nada */
     const t = tamer(true), v = m.instalacoes[TORRE].recorde;
     const novos = conferirRecordes(t, m, 77);
-    expect(novos).toEqual([{ inst: TORRE, valor: v, quando: 77, pet: m.semente, forma: "Valkyrimon", tick: m.e.tick }]);
+    expect(novos).toEqual([{ inst: TORRE, valor: v, quando: 77, pet: m.semente, forma: nomeForma(m.forma), tick: m.e.tick }]);
     expect(t.recorde(TORRE)?.valor).toBe(v);
     expect(t.recorde(PALACIO)).toBeNull();
     expect(conferirRecordes(t, m)).toEqual([]);                                     /* igual nao e recorde */
@@ -264,24 +307,14 @@ describe("registro e replay", () => {
     for (const e of m.log.filter(x => x[1] === "l" && ehInstalacao(x[2].r))) expect(Object.keys(e[2]).sort()).toEqual(["r", "s"]);
   });
   test("luta de instalacao sem o 'f', com outra semente ou com carta antes, e 'f' malformado falham alto no replay", () => {
-    const base = mega(false), t = base.e.tick, s1 = sementeTentativa(SAVE.semente, TORRE, 1), log = SAVE.log;
-    expect(() => Motor.reproduzir(SAVE.semente, [...log, [t, "l", { r: TORRE, s: s1 }]], 6)).toThrow(/sem poder: .*depois do título/);
+    const base = mega(false), t = base.e.tick, s1 = sementeTentativa(SAVE().semente, TORRE, 1), log = SAVE().log;
+    expect(() => Motor.reproduzir(SAVE().semente, [...log, [t, "l", { r: TORRE, s: s1 }]], 13)).toThrow(/sem poder: .*depois do título/);
     const f: EventoRegistro = [t, "f", { campeao: true }];
-    expect(() => Motor.reproduzir(SAVE.semente, [...log, f, [t, "l", { r: TORRE, s: s1 + 1 }]], 6)).toThrow(/semente/);
-    expect(() => Motor.reproduzir(SAVE.semente, [...log, f, [t, "k", { id: "carta_foco" }], [t, "l", { r: PALACIO, s: sementeTentativa(SAVE.semente, PALACIO, 1) }]], 6)).toThrow(/cartas não valem/);
-    expect(() => Motor.reproduzir(SAVE.semente, [...log, [t, "f", { campeao: false }] as unknown as EventoRegistro], 6)).toThrow(/Fronteira inválido/);
-    expect(() => Motor.reproduzir(SAVE.semente, [...log, f, f], 6)).toThrow(/já está aberta/);
-    expect(() => Motor.reproduzir(SAVE.semente, [...log, [t, "x", {}] as unknown as EventoRegistro], 6)).toThrow(/desconhecido/);
-    expect(Motor.reproduzir(SAVE.semente, [...log, f, [t, "l", { r: TORRE, s: s1 }]], 6).instalacoes[TORRE].tentativas).toBe(1);
-  });
-  test("pets v1-v5: as instalacoes e o 'f' nao existem", () => {
-    for (const v of [1, 2, 3, 4, 5]) {
-      const m = new Motor(50 + v, v); m.avancar(300);
-      expect(() => m.abrirFronteira()).toThrow(/só de pets v6/);
-      expect(() => m.lutar(TORRE, sementeTentativa(m.semente, TORRE, 1))).toThrow(/só de pets v6/);
-      expect(m.porqueNaoInstalacao(PALACIO)).toMatch(/só de pets v6/);
-      expect(() => Motor.reproduzir(50 + v, [[m.e.tick - 300, "f", { campeao: true }]], v)).toThrow(/só de pets v6/);
-      expect(m.assinatura()).not.toMatch(/"fronteira"/);
-    }
+    expect(() => Motor.reproduzir(SAVE().semente, [...log, f, [t, "l", { r: TORRE, s: s1 + 1 }]], 13)).toThrow(/semente/);
+    expect(() => Motor.reproduzir(SAVE().semente, [...log, f, [t, "k", { id: "carta_foco" }], [t, "l", { r: PALACIO, s: sementeTentativa(SAVE().semente, PALACIO, 1) }]], 13)).toThrow(/cartas não valem/);
+    expect(() => Motor.reproduzir(SAVE().semente, [...log, [t, "f", { campeao: false }] as unknown as EventoRegistro], 13)).toThrow(/Fronteira inválido/);
+    expect(() => Motor.reproduzir(SAVE().semente, [...log, f, f], 13)).toThrow(/já está aberta/);
+    expect(() => Motor.reproduzir(SAVE().semente, [...log, [t, "x", {}] as unknown as EventoRegistro], 13)).toThrow(/desconhecido/);
+    expect(Motor.reproduzir(SAVE().semente, [...log, f, [t, "l", { r: TORRE, s: s1 }]], 13).instalacoes[TORRE].tentativas).toBe(1);
   });
 });
