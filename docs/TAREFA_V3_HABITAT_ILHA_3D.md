@@ -303,3 +303,26 @@ Um PR por missão, cada uma na worktree `D:\Trab\digilab\v3-habitat-ilha-<missã
 - **Câmera e ciclo:** câmera giratória, zoom do jogador e ciclo dia/noite contínuo.
 - **Outras artes e efeitos:** som novo, casa do jogador (H-5) e vizinhos e NPCs na ilha.
 - **O POC `poc/mapa_ac`:** continua como referência e não muda.
+
+## 10. Resultado (2026-10-30, Gerente e worker na mesma sessão, Claude Code, Opus 5.5)
+
+Um branch por missão na worktree `v3-habitat-ilha`, cada um a partir do anterior: `v3-habitat-ilha-h0`, `-h1`, `-h1b`, `-h2`, `-h3`,
+`-h4` e `-h5`. Nenhum foi enviado ao GitHub ainda; os PRs esperam o ok do Matheus. Os desvios e os números escolhidos estão em
+`docs/registro/2026-10.md` (HABITAT-ILHA, H0 a H5).
+
+| critério (seção 7) | estado |
+|---|---|
+| a ilha em 360, 390 e 1280 px, com o pet em papel seguido pela câmera e nada cobrindo o pet | feito; capturas 390 e 1280 (claro, escuro e noite) fora do git, em `D:\Trab\digilab\capturas_ilha_h5\`, para a aprovação |
+| painel aberto (≥ 900 px): o pet visível à esquerda | feito: o habitat encolhe à direita e a câmera segue o pet no que sobra |
+| o lado, o Run ao andar, o olho fechado (reserva) ao dormir, o ovo, a forma sombria | feito no `ilha/papel.ts`; o andar e a virada não foram vistos na tela (o pet do save estava parado) |
+| ração, fruta, bola, ninho e comedouro onde o motor diz; soltar a ração cai no ponto | feito; e2e novo em 390 e 1280, com 1 célula de folga |
+| nada alto dentro da área andável, salvo as árvores do motor | teste de unidade (`test/ilha_grade.test.ts`) |
+| `paraMundo(paraTela(p)) == p` com até 1 subunidade | teste de unidade (`test/ilha_curva.test.ts`), até o horizonte da dobra |
+| sem WebGL, a `MundoReserva`; os v1 a v11, a sala | os e2e de antes passam |
+| M3 ≥ 55 fps (1280, desktop) e ≥ 30 fps (390, celular) | **não medida**: o navegador do app limita a 30 Hz. Falta o Matheus medir com `?medir3d=1` |
+| movimento reduzido: nada balança nem ondula | feito (o tempo do shader parado, sem pulinho e sem virada animada); não conferido na tela |
+| `npm run tipos`, `npm test`, `npm run e2e` | passam: 617 testes de unidade e 99 e2e (os 97 de antes e os 2 novos) |
+| `e2e_capturas` regenerado | **não**: só depois da aprovação das capturas (H1b e H5) |
+| o crédito dos kits em Ajustes › Sobre, as licenças ao lado, ≤ 8 MB | feito; 6,67 MB |
+| o bundle inicial sem o three | conferido no build: o three fica em `three.module-*.js`, carregado só pelo `cena3d` |
+| o `CLIPES_UP` ligado sem quebrar replay, paridade nem e2e | feito na H1b (97 e2e e 606 testes de unidade passaram nela) |
