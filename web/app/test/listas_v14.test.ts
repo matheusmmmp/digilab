@@ -4,7 +4,7 @@
    partida). */
 import { describe, expect, test } from "vitest";
 import {
-  APRENDIZADO_V14, CESC_V9, FATOR_INSTALACAO, FATOR_LIDER_V9, FATOR_LIGA_V9, FATOR_RIVAL_FABRICA_V9, FATOR_SALAO_V9, FATORES_V14,
+  APRENDIZADO_V14, CESC_V9, RELOGIO_V14, comCarta, jogarTR, FATOR_INSTALACAO, FATOR_LIDER_V9, FATOR_LIGA_V9, FATOR_RIVAL_FABRICA_V9, FATOR_SALAO_V9, FATORES_V14,
   BOTS_V21, CRIANCA_V21, ADOL_V21, CV21, CV21E_TR, GambitsPet, chaveRegra, regraDe, FORMAS_AD, LINHA_DA_FORMA, LISTAS_V14, RIVAL_ESPECIE, SOMBRIA, gambitsAdulto, lutadorBot,
   permitida, sementeDe, type Forma, type FormaAdultaNormal,
 } from "../motor/index.ts";
@@ -83,5 +83,15 @@ describe("as listas candidatas da v14 (fase 2)", () => {
     const hoje = new GambitsPet();
     hoje.chipsNoFim = true; hoje.semear(f, "sentinela", CV21E_TR, g); hoje.notas[ultima] += .5; hoje.ordenar();
     expect(hoje.ativas[0]).toBe(ultima);
+  });
+  test("DR2-4: a carta candidata pode passar o guts do maximo (gutsTeto) e dar ao pet um ritmo proprio; sem elas, a carta de hoje", () => {
+    const R = { ...CV21E_TR, relogio: RELOGIO_V14 }, A = lutadorBot("duelista", R), B = lutadorBot("tita", R);
+    const max = A.cond.gutsMax, folego = comCarta(A, { guts: 2 * max, gutsTeto: 1.5 });
+    expect(folego.cond.guts0).toBe(1.5 * max);
+    expect(comCarta(A, { guts: 2 * max }).cond.guts0).toBe(max);
+    expect(() => comCarta(A, { ritmo: 1.5 })).toThrow(/inteiro/);
+    const n = (L: typeof A) => jogarTR(L, B, 7, { R }).acoes.filter(a => a.lado === 0).length;
+    expect(n(comCarta(A, { foco: true, ritmo: 4 }))).toBeGreaterThan(n(comCarta(A, { foco: true })));
+    expect(comCarta(A, { foco: true }).cond.ritmoCarta).toBeUndefined();
   });
 });
