@@ -74,3 +74,15 @@ Não há run de pesquisa. A conferência já rodou uma vez (R2-5); nada se mede 
 |---|---|---|
 | **B2** | ligar a v14 agora ou esperar a rodada 3 | **DECIDIDA, 2026-10-30: ligar já** ("Ligar a v14 já", no chat do Gerente da V3). A recomendação era esperar; o custo aceito é que as formas de longe e o tita fiquem fracos no jogo e que três líderes sigam desequilibrados (as 14 metas que falham na R2-5) |
 | **CV14-1** | os pets v13 que já existem | **a recomendação, que vale até o Matheus dizer outra coisa: a v13 continua viva, com o ramo por versão no motor;** só os ovos novos nascem v14, e nenhum save é apagado. Custo de errar: o ramo por versão volta ao motor (o D-9 o tinha tirado); descartar a v13 apagaria pets do jogador, o que só vale com aviso na tela e decisão explícita |
+
+## 9. Resultado (2026-10-30, worker Sonnet 5.5)
+
+- **Feito:** `VERSAO_PET` = 14 e as regras `CV21E_TR14`. O ovo novo nasce v14; a v13 abre e joga como antes (CV14-1); a v12 ou mais antiga segue
+  recusada. O pet v14 usa o candidato inteiro, sem número novo: `RELOGIO_V14` (pela versão, `relogioDe`), `FATORES_V14` (líderes, desafiantes,
+  Liga, instalações, Salão, Fábrica), `LISTAS_V14` (pets e rivais de forma canônica), `LISTAS_LIDER_V14`, `APRENDIZADO_V14`, a reserva fixa no
+  fim, o chip antes da regra que o cobre e as `CARTAS_V14` vazias. A Fábrica ganha as regras v14 (`v: 14`); as tentativas `v: 13` se refazem iguais.
+- **Os testes:** `test/pet_v14.test.ts` confere que a luta v14 do jogo dá o mesmo resultado que a bancada da conferência (mesma semente, mesmo
+  par) nos líderes, desafiantes, Liga, instalações, Salão e Fábrica, e que o replay do pet v14 é bit a bit. Os testes de vidas v13 passaram a
+  pedir o 13 explicitamente (`new Motor(x, 13)`); nenhum gabarito foi regravado.
+- **Fora do escopo, intocado:** o Python, `App.tsx`, `tokens.css`, `pet.css`, `Nav.tsx`, as telas da luta e as capturas (a regeneração fica com a T3).
+- **Contagens:** no corpo do PR.

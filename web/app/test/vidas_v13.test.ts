@@ -18,7 +18,7 @@ describe("as vidas v13 de hoje se refazem iguais", () => {
     for (const t of ["c", "o", "t", "d", "u", "dc", "l", "tr", "i", "g", "k"]) expect(tipos.has(t as EventoRegistro[1]), t).toBe(true);
   });
   for (const v of GAB.vidas) test(`${v.nome}: a assinatura a cada evento`, () => {
-    const m = new Motor(v.semente);
+    const m = new Motor(v.semente, 13);
     v.log.forEach((ev, i) => {
       m.aplicarEvento(ev);
       expect(sha(m.assinatura()), `${v.nome}, evento ${i}: ${JSON.stringify(ev)}`).toBe(v.assinaturas[i]);

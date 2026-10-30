@@ -12,7 +12,7 @@ import type { Perfil } from "../catalogo.ts";
 import { CSO, CV, CV21 } from "../constantes.ts";
 import { derivarSemente } from "../mundo.ts";
 import { criarRng, type Rng } from "../rng.ts";
-import { CTR_TR, RELOGIO_V13, T_TR, type RelogioTR } from "./constantes_tr.ts";
+import { CTR_TR, RELOGIO_V13, RELOGIO_V14, T_TR, type RelogioTR } from "./constantes_tr.ts";
 import { decidirTR, faixaTR, intencaoTR, marcaAtivaTR, peleAtivaTR } from "./controlador.ts";
 
 /** a acao em curso: ocupa os passos [inicio, fim); o golpe cai em inicio + instante */
@@ -83,6 +83,8 @@ const CORPO_A_CORPO = ["golpe_rapido", "pesado", "investida", "fintar"];
 export const sementePoliticaTR = (semente: number, lado: number): number => Number(derivarSemente("combate_tr", semente, "politica", lado) & 0xffffffffn);
 const LIMITE_ESQ = CTR_TR.centro - CTR_TR.meiaLargura, LIMITE_DIR = CTR_TR.centro + CTR_TR.meiaLargura;
 
+/** o relogio da luta: o das regras, ou o da versao delas (a v14, RELOGIO_V14; antes, RELOGIO_V13) */
+export const relogioDe = (R: RegrasLuta | null | undefined): RelogioTR => R?.relogio ?? (R && R.versaoPet >= 14 ? RELOGIO_V14 : RELOGIO_V13);
 export function estadoTR(pa: Perfil, pb: Perfil, C: RelogioTR = RELOGIO_V13): EstadoTR {
   const L = (p: Perfil, x: number): LadoTR => ({
     p, hp: p.hpMax, hpMax: p.hpMax, guts: p.guts0, gutsMax: p.gutsMax, regen: p.regen, x, ritmo: p.ritmoCarta ?? C.ritmo, acao: null, ultima: -1, prep: false,
@@ -117,7 +119,7 @@ export interface LutaTR {
 export function criarLutaTR(A: Lutador, B: Lutador, semente: number, o: OpcoesTR = {}): LutaTR {
   const ea = A.cond.escala, eb = B.cond.escala;
   if ((ea === undefined) !== (eb === undefined)) throw new Error("escala ligada em um lado só");
-  const S = estadoTR(A.cond, B.cond, o.R?.relogio ?? RELOGIO_V13);
+  const S = estadoTR(A.cond, B.cond, relogioDe(o.R));
   if (o.ini) {
     if (!(o.ini.hp > 0 && o.ini.hp <= S.L[0].hpMax) || !(o.ini.guts >= 0)) throw new Error(`começo da luta inválido: vida ${o.ini.hp}, guts ${o.ini.guts}`);
     S.L[0].hp = o.ini.hp; S.L[0].guts = Math.min(o.ini.guts, S.L[0].gutsMax);

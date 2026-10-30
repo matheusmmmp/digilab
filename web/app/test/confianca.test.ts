@@ -83,14 +83,14 @@ describe("pet v13 com confianca", () => {
   const INI_ADOL = TICK_INICIAL + DUR_EVO.bebe + DUR_EVO.crianca;
   /** vive ate o Champion cuidando o basico, depois luta contra os rivais pedidos (30 min entre lutas) */
   function viverELutar(rivais: string[]): Motor {
-    const m = new Motor(515);
+    const m = new Motor(515, 13);
     while (m.e.tick < INI_ADOL + 30) { m.avancar(15); if (m.e.fome < .5) m.observar("alimentar"); if (m.e.higiene < .5) m.observar("limpar"); }
     rivais.forEach((r, k) => { m.lutar(r, 7000 + k); m.avancar(30); });
     return m;
   }
 
   test("v13: conf existe, e recalculada no replay e entra na assinatura", () => {
-    expect(new Motor(1).conf).not.toBeNull();   /* os ovos novos herdam a confianca */
+    expect(new Motor(1, 13).conf).not.toBeNull();   /* os ovos novos herdam a confianca */
     const m = viverELutar(["aleatorio", "aleatorio", "agressivo", "aleatorio"]);
     expect(m.conf!.historico.length).toBe(4);
     const h = m.conf!.historico;
@@ -132,7 +132,7 @@ describe("pet v13 com confianca", () => {
 
   /** um Rookie que conhece as 6 medalhas (a Liga e, com o titulo, a Fronteira valem do Rookie em diante) */
   function rookie(semente = 8008): Motor {
-    const m = new Motor(semente);
+    const m = new Motor(semente, 13);
     m.liberar(6);
     while (m.estagioAtual === "bebe") m.avancar(30);
     return m;

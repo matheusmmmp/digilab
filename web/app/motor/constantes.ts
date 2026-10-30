@@ -51,8 +51,14 @@ export const CDJ = { limiarNecessidade: .3, limiarVontade: .1, limiarTom: .2, kC
    padrao do motor e sem as chaves do mundo (MV-2);
    13 = o v12 com a luta em tempo real (docs/TAREFA_V2_COMBATE_TR.md, etapa R2; docs/ESPEC_COMBATE_TR.md): toda luta do pet (Motor.lutar,
    a Liga, o Salao, as instalacoes, a Fabrica do Tamer) passa pelo nucleo motor/combate_tr/ (as regras CV21E_TR); o resto e o v12. Os
-   saves das versoes anteriores nao abrem como pet novo: o app mostra o aviso do descarte (E2, decisao do Matheus de 2026-10-29) */
-export const VERSAO_PET = 13;
+   saves das versoes anteriores nao abrem como pet novo: o app mostra o aviso do descarte (E2, decisao do Matheus de 2026-10-29);
+   14 = o v13 com o candidato da rodada de equilibrio do tempo real (docs/TAREFA_V3_COMBATE_V14.md, B2; docs/EQUILIBRIO_COMBATE_TR.md, R2-5;
+   DE-1): o relogio, os fatores, as listas das formas e dos lideres, o aprendizado proprio, a reserva fixa no fim e o chip antes da regra
+   que o cobre, exatamente como a conferencia unica mediu (as regras CV21E_TR14). Os pets v13 seguem vivos, com o combate de antes
+   (decisao CV14-1, recomendacao do Gerente da V3 que vale ate o Matheus dizer outra coisa); so os ovos novos nascem v14 */
+export const VERSAO_PET = 14;
+/** as versoes de pet que abrem: a v13 (o tempo real de antes da rodada de equilibrio) e a v14 (CV14-1) */
+export const VERSOES_PET: readonly number[] = [13, 14];
 /* medalhas do Tamer que cada evolucao pede nos pets v6 (decisao do Matheus, 2026-09-29: 1, 3 e 5; so no jogo), pela
    chave do estagio de destino: Rookie -> Champion (adolescente), Champion -> Ultimate (adulto), Ultimate -> Mega (mega).
    In-Training -> Rookie nao pede medalha. A tabela das medalhas fica em medalhas.ts */
@@ -213,6 +219,11 @@ export const CV21E = {
 /* a luta em tempo real (pets v13; docs/ESPEC_COMBATE_TR.md): as regras e as listas da V21E, jogadas pelo nucleo motor/combate_tr/ em vez do
    combate por turnos (combate_tr/adaptador.ts, jogarLuta, escolhe pelo tempoReal) */
 export const CV21E_TR = { ...CV21E, versaoPet: 13, tempoReal: true } as const;
+/** as regras dos pets v14: as da v13 com o candidato da rodada de equilibrio (o relogio RELOGIO_V14, combate_tr/constantes_tr.ts, vem pela
+    versao: combate_tr/luta.ts, relogioDe; os fatores, as listas e o resto, pelo R.versaoPet >= VERSAO_V14 em cada modulo) */
+export const CV21E_TR14 = { ...CV21E_TR, versaoPet: 14 } as const;
+/** a versao de pet do candidato da rodada de equilibrio do tempo real (DE-1) */
+export const VERSAO_V14 = 14;
 
 /* catalogo (docs/catalogo_pets.json, docs/arvore_evolucao.json): 4 especies ativas */
 export const STATS: readonly Stat[] = ["vigor", "folego", "recuperacao", "forca", "mira", "guarda"];

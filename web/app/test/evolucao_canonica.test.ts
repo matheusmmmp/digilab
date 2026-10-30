@@ -18,7 +18,7 @@ afterEach(() => ligarEscala(escalaAntes));
 
 /** adulto (Ultimate) sem passar pelo dono: o sparring e as vitorias do estagio postos a mao (so para testar a regra) */
 function ultimate(s: number, sobrecarga = 0): Motor {
-  const m = new Motor(s);
+  const m = new Motor(s, 13);
   m.liberar(CMD.mega);
   m.avancar(INI_ADOL - TICK_INICIAL + 15);
   m.sparring = CAT.sparring;
@@ -30,7 +30,7 @@ function ultimate(s: number, sobrecarga = 0): Motor {
 }
 /** uma vida de verdade com o dono simulado (cuida da lesao e luta na arena ate qualificar), para o replay */
 function vida(tipo: "aleatorio" | "atencioso", semente: number, dias: number): Motor {
-  const m = new Motor(semente), dono = criarDono(tipo), r = criarRng(hashSemente("dono", semente, tipo));
+  const m = new Motor(semente, 13), dono = criarDono(tipo), r = criarRng(hashSemente("dono", semente, tipo));
   const passos = Math.round(dias * TPD / CD.passo), orc = Math.round(16 * dias);
   let gasto = 0;
   m.liberar(CMD.mega);
@@ -69,7 +69,7 @@ describe("nomes e sprites no canone", () => {
 });
 
 describe("Ultimate -> Mega (pet v13)", () => {
-  test("ovos novos sao v13 (v5 + medalhas + confianca + combate equilibrado + vinculo B + o cerebro A e o corpo + o mundo fisico + a luta em tempo real)", () => { expect(VERSAO_PET).toBe(13); expect(new Motor(1).versao).toBe(13); });
+  test("ovos novos sao v13 (v5 + medalhas + confianca + combate equilibrado + vinculo B + o cerebro A e o corpo + o mundo fisico + a luta em tempo real)", () => { expect(VERSAO_PET).toBe(14); expect(new Motor(1).versao).toBe(14); });
 
   test("com tempo, lutas, vitorias e vinculo vira Mega: estagio novo, com a forma adulta do Ultimate", () => {
     const m = ultimate(3101), adulta = m.forma.adulta;
@@ -151,7 +151,7 @@ describe("Ultimate -> Mega (pet v13)", () => {
 
 describe("campanha do pet v13", () => {
   test("o pet v13 tem a campanha de seis lugares, com a Montanha Espiral", () => {
-    const m = new Motor(1);
+    const m = new Motor(1, 13);
     expect(Object.keys(m.campanha)).toEqual(CAMPANHA_V6.map(c => c.k));
     expect(m.lugares).toBe(LUGARES_V6);
     expect(LUGARES_V6.map(L => L.nome)).toEqual(["Campina", "Torre de pedra", "Floresta", "Cidadela", "Lago", "Montanha Espiral"]);
@@ -160,7 +160,7 @@ describe("campanha do pet v13", () => {
   });
 
   test("um pet nao luta contra NPC fora da campanha dele", () => {
-    const m = new Motor(7); m.avancar(DUR_EVO.bebe + 30);
+    const m = new Motor(7, 13); m.avancar(DUR_EVO.bebe + 30);
     expect(() => m.lutar("npc_tier3_soberano", 1)).toThrow(/não está na campanha/);
   });
 

@@ -396,7 +396,7 @@ test("luta em tempo real: a primeira abertura descarta os pets de antes, avisa, 
   await expect(page.locator("dialog.brasao-tela[open]")).toHaveCount(0);
   const r = await page.evaluate(c => ({ save: JSON.parse(localStorage.getItem(c)!), g: localStorage.getItem(c + "-guardados"), aviso: localStorage.getItem(c + "-aviso-tr"),
     tamer: JSON.parse(localStorage.getItem(c + "-tamer")!), marca: localStorage.getItem(c + "-descarte"), antigos: JSON.parse(localStorage.getItem(c + "-descartados")!) }), CHAVE);
-  expect(r.save.versao).toBe(13);                    /* o ovo novo nasce na versao atual (v13: a luta em tempo real) */
+  expect(r.save.versao).toBe(14);                    /* o ovo novo nasce na versao atual (v14: a luta em tempo real com o candidato da rodada de equilibrio) */
   expect(r.g).toBe("[]");
   expect(r.aviso).toBeNull();
   expect(r.marca).toBe("6");
@@ -426,7 +426,7 @@ test("luta em tempo real: o pet v6 de antes sai com o aviso, e o Tamer fica com 
   await expect(page.locator("dialog.brasao-tela[open]")).toHaveCount(0);
   const r = await page.evaluate(c => ({ save: JSON.parse(localStorage.getItem(c)!), marca: localStorage.getItem(c + "-descarte"),
     tamer: JSON.parse(localStorage.getItem(c + "-tamer")!) }), CHAVE);
-  expect(r.save.versao).toBe(13);
+  expect(r.save.versao).toBe(14);
   expect(r.save.semente).not.toBe(SAVE_ANTIGO_V6.semente);
   expect(r.marca).toBe("6");
   /* a medalha fica (a abertura ainda da o item dela ao Tamer, como sempre) */
@@ -1045,24 +1045,18 @@ test("fronteira: a Fábrica aluga 1 de 3 Megas, luta, oferece a troca depois da 
   await expect(fab.locator(".fb-status")).toContainText("série 1, luta 2 de 3");
   await fab.locator(".fb-lutar").click();
   await verNoPalcoEVoltar(page, "Fábrica · série 1, luta 2 de 3");
-  /* a luta em tempo real (COMBATE-TR, etapa R2): a luta 2, contra o SlashAngemon (Espelho), chega ao limite e fica com o rival, o desafiado.
-     Perdeu, acabou: o resumo e "Tentar de novo" */
-  await expect(fab.locator(".fb-ultima")).toContainText("Última tentativa: 0 séries vencidas; perdeu para");
-  await expect(fab.locator(".fb-ultima")).toContainText("na série 1, luta 2");
-  await expect(fab.locator(".fr-inst-tentar")).toHaveText("Tentar de novo");
+  /* a luta em tempo real com o candidato v14 (B2): a luta 2, contra o SlashAngemon (Espelho), agora e vencida (com as regras v13 chegava ao
+     limite e ficava com o rival). A tentativa segue em andamento: a oferta de troca, e nada de "Tentar de novo" */
+  await expect(fab.locator(".fb-ultima")).toContainText("Luta 2: venceu SlashAngemon (Espelho)");
+  await expect(fab.locator(".fb-troca")).toContainText("entra com a vida cheia");
   await expect(fab.locator(".fb-lutas li")).toHaveCount(2);
-  /* so no registro do Tamer (versao 7, a tentativa com as regras dos v13): o comeco, as duas lutas e a troca; nenhuma luta no registro do pet */
+  /* so no registro do Tamer (versao 7, a tentativa com as regras dos v14): o comeco e as duas lutas e a troca; nenhuma luta no registro do pet */
   const t = await lerTamer(page);
   expect(t.versao).toBe(7);
-  expect(t.log.find((e: [string]) => e[0] === "fabrica")[1].v).toBe(13);
+  expect(t.log.find((e: [string]) => e[0] === "fabrica")[1].v).toBe(14);
   expect(t.log.filter((e: [string]) => e[0].startsWith("fabrica")).map((e: [string, { n: number; k?: number; alugado?: number }]) => [e[0], e[1].n, e[1].k ?? e[1].alugado]))
     .toEqual([["fabrica", 1, 0], ["fabrica_luta", 1, 0], ["fabrica_troca", 1, 0], ["fabrica_luta", 1, 1]]);
   expect(await numLog(page, "l")).toBe(l0);
-  /* a proxima tentativa oferece outros alugados (a semente da tentativa 2) */
-  await fab.locator(".fr-inst-tentar").click();
-  await expect(fab.locator(".fb-aluguel")).toHaveCount(3);
-  await expect(fab.locator(".fb-status")).toContainText("Tentativa 2");
-  await fab.locator(".fb-voltar").click();
   await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
   await expect(page.locator(".med-recordes li", { hasText: "Fábrica" })).toContainText("Nenhum ainda");
   expect(erros).toEqual([]);
