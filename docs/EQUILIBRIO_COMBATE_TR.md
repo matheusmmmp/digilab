@@ -355,3 +355,66 @@ de 2026-10-30 (no chat da coordenação; o plano as registra):
   primeira. Mudar a ordem é o que a DE-3 recusou, então é uma decisão do Matheus.
 - **A conferência única** (a fase 5) roda nas sementes de conferência, depois desta fase.
 
+## Fase 5 — a conferência única
+
+Worker: Claude Code, Opus 5.5, worktree `v2-combate-tr`, 2026-10-30.
+- **O candidato v14 inteiro:**
+  - o `RELOGIO_V14`, com o disparo a 6× (DE-9);
+  - as `LISTAS_V14`;
+  - a reserva fixa no fim (DE-10);
+  - os `FATORES_V14`.
+- **As sementes de conferência:** `70101…70505` (5 bases × 20).
+- **Uma vez**, com no máximo 4 processos e as mesmas bancadas e opções das fases 1 a 4. Nenhum número mudou por causa dela.
+- **Os artefatos:** `web/app/scripts/medicoes/equilibrio_tr/fase5/`. A calibração ao lado é `fase4/depois/`.
+- **A v14 não foi ligada no jogo.** Ligá-la é o passo seguinte, com o ok do Matheus.
+
+| # | calibração | conferência | passa na conferência? |
+|---|---|---|---|
+| T-1 | média 34,8 s; mediana 32,9 s | 34,8 s; 32,9 s | **não** (a exceção da DE-9) |
+| T-2 | no limite 0,021; o pior par 0,40 | 0,024; 0,52 | **não** |
+| T-3 | a Cidadela, p90 62,0 s | 60,5 s | sim |
+| T-4 | 0,512 | 0,504 | sim |
+| T-5 | 0,697 | 0,693 | sim |
+| F-1 | 4 fora (espelho, muralha, emboscador, tita) | 5 fora (com o furioso 0,601; tita 0,701) | **não** |
+| F-2 | 0,342 | 0,36 | **não** |
+| F-3 | passa | passa | sim |
+| F-4 | o caçador do Champion 0,679 | 0,671 | **não** |
+| F-5 | Champion 0,533; Ultimate 0,198 | 0,523; 0,192 | **não** (o Ultimate) |
+| F-6 | o espelho 0,111 | 0,111 | **não** |
+| F-7 | o predador 0,208 | 0,218 | **não** |
+| P-1 | vizinhos ≤ 0,055; dois estágios, 0 vitórias | ≤ 0,058; 0 | sim |
+| P-2 | a pior forma ≥ 0,9925 | ≥ 0,985 | sim |
+| P-3 | Champion 0,485; Ultimate 0,458 | 0,529; 0,448 | **não** |
+| P-4 | Champion 0,875; Ultimate 0,94 | 0,865; 0,9525 | sim |
+| G-1 | passam a Campina e a Torre | passam a Campina e a Torre; fora a Floresta (com 0,52; o guardião 0,03), a Cidadela (com 0,77; a sentinela 0,23), o Lago (sem 0,078) e a Espiral (a sentinela 0,43) | **não** |
+| G-2 | os 4 passam | os 4 passam | sim |
+| G-3 | de 0,36 a 0,85 | de 0,45 a 0,94 (o vigia fora) | **não** |
+| G-4 | 1,00 e 0,81 | 1,00 e 0,67 | sim |
+| G-5 | 0,40 | 0,40 | sim |
+| G-6 | de 0,8175 a 0,8975 | de 0,83 a 0,925 | sim |
+| I-1 | 0,069 | 0,0775 (o Lago) | **não** |
+| I-2 | passa | passa | sim |
+| I-3 | a tita 0,745 | 0,7675 | **não** |
+| I-4 | a Foco 0,013 | a Foco 0,014, o Fôlego 0,029 | **não** |
+| I-5 | de 0,005 a 0,11 | de 0 a 0,0975 | **não** |
+
+**O que mudou da calibração para a conferência:**
+- **Três metas pioram:**
+  - **G-3:** o vigia vai de 0,85, no limite da faixa, a 0,94;
+  - **F-1:** o furioso sai por 0,001 (0,601);
+  - **I-4:** o Fôlego cai de 0,032 para 0,029.
+- **Nenhuma meta que reprovou na calibração passa aqui.**
+- **Todas as outras** repetem o resultado da calibração.
+
+### O que fica para uma rodada própria (as questões abertas; nenhuma se resolve nesta rodada)
+
+| questão | recomendação | o custo de errar |
+|---|---|---|
+| **G-1 e I-1, os líderes da Floresta, da Cidadela, do Lago e da Espiral:** a pior forma (o guardião ou a sentinela) não chega a 0,5, e o fator não basta | uma rodada nas listas dos líderes (`GAMBITS_ARENA`), com as mesmas metas, mexendo só no líder que reprova | sem ela, a sentinela e o emboscador seguem travados nesses líderes; uma lista nova muda as lutas de quem já ganhou a medalha (só na v14, que ainda não está no jogo) |
+| **I-5, o chip de regra quase nunca dispara:** ele entra no fim, e a primeira regra que vale decide | decidir se o chip entra antes das regras com a mesma condição (o que a DE-3 recusou) ou se os chips trocam de regra; medir só na v14 | sem mudar, os chips de regra são quase só cosméticos; mudando, todo pet com chip luta diferente |
+| **P-3 com a DE-10:** a lista aprendida não chega a 0,55 (Champion 0,53, Ultimate 0,45), e o espelho e a muralha aprendidos perdem da semente | olhar a nota-base da semeadura (`GA.base` e a ordem pela nota) numa regra própria do tempo real, como foi feito com o disparo | o `GA` é conferido contra o Python: mudar o comum mexe na paridade; um número próprio do tempo real é mais um número sem a pesquisa por trás |
+| **I-3, a tita acima de 0,60 sem item** (é o F-1) | tratar junto com o F-1: a lista ou a passiva da tita | os itens não são a causa; mexer neles não fecha |
+| **I-4, a carta de Foco** (0,014) e o Fôlego no limite (0,029) | dar à Foco um efeito com número (por exemplo, menos distração em vez de nenhuma) e conferir o Fôlego junto | a Foco segue uma carta que não muda a luta |
+| **G-3, o vigia a 0,94 na conferência** | olhar o fator da Espiral na Liga (o último líder) junto com o G-1 da Espiral | o vigia ganha a Liga fácil demais; o resto das formas fica na faixa |
+| **F-1, F-2 e F-4 a F-7, e T-2** | uma rodada das formas por cima do candidato (as listas), como a fase 2, depois das outras | as formas de longe e a tita seguem fora da faixa |
+

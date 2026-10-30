@@ -1,0 +1,118 @@
+{
+ "gerado_por": "web/app/scripts/equilibrio_tr/fase3_estagio.ts",
+ "data": "2026-10-30",
+ "commit": "19668ab9",
+ "node": "v24.19.0",
+ "faixa": "conferencia",
+ "bases": [
+  70101,
+  70202,
+  70303,
+  70404,
+  70505
+ ],
+ "sementes_por_base": 20,
+ "relogio": {
+  "ritmo": 16,
+  "atordoaInterrupcao": 31,
+  "andar": 1.12,
+  "recuo": 0.6,
+  "arrancada": 8,
+  "projetil": 4.8,
+  "perto": 62,
+  "medio": 120,
+  "contato": 44,
+  "empurrao": 0,
+  "disparo": 6
+ },
+ "listas": "v14",
+ "reserva_no_fim": true,
+ "escala": {
+  "vida": {
+   "bebe": 50,
+   "crianca": 200,
+   "adolescente": 700,
+   "adulto": 2500,
+   "mega": 23000
+  },
+  "beta": 0.045
+ },
+ "parte": "p34",
+ "metas": {
+  "P-3": {
+   "champion": {
+    "media": 0.5287,
+    "formas": {
+     "brigao": 0.525,
+     "guardiao": 0.625,
+     "cacador": 0.41,
+     "colosso": 0.555
+    },
+    "trocas_por_pet": {
+     "brigao": 0.26,
+     "guardiao": 0.56,
+     "cacador": 0.02,
+     "colosso": 0.34
+    }
+   },
+   "ultimate": {
+    "media": 0.4475,
+    "formas": {
+     "duelista": 0.51,
+     "furioso": 0.8725,
+     "espelho": 0.06,
+     "muralha": 0.015,
+     "sentinela": 0.5775,
+     "emboscador": 0.49,
+     "vigia": 0.5175,
+     "tita": 0.5375
+    },
+    "trocas_por_pet": {
+     "duelista": 0.15,
+     "furioso": 0,
+     "espelho": 0.01,
+     "muralha": 0.01,
+     "sentinela": 0.11,
+     "emboscador": 0.08,
+     "vigia": 0.01,
+     "tita": 0.01
+    }
+   },
+   "passa": false
+  },
+  "P-4": {
+   "champion": {
+    "rival": "npc_tier2_sentinela",
+    "fator": 1.4,
+    "lutas_por_serie": 1,
+    "qualificados": 0.865,
+    "taxa_media": 0.8882,
+    "formas": {
+     "brigao": 0.65,
+     "guardiao": 0.95,
+     "cacador": 1,
+     "colosso": 0.86
+    }
+   },
+   "ultimate": {
+    "rival": "npc_v5_myotismon",
+    "fator": 0.9,
+    "lutas_por_serie": 3,
+    "qualificados": 0.9525,
+    "taxa_media": 0.9515,
+    "formas": {
+     "duelista": 0.62,
+     "furioso": 1,
+     "espelho": 1,
+     "muralha": 1,
+     "sentinela": 1,
+     "emboscador": 1,
+     "vigia": 1,
+     "tita": 1
+    }
+   },
+   "passa": true
+  }
+ },
+ "custo_s": 38.006
+}
