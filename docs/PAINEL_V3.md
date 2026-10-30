@@ -29,7 +29,7 @@ fechamento da V2, o `docs/FECHAMENTO_V2.md` (tag `v2-final`).
 | **L1** M7 do layout | o fechamento do layout habitat | **na `main`** (#477) | `docs/TAREFA_V2_LAYOUT_HABITAT.md` |
 | **L2** tema dos menus T1–T3 | a pele Vidro como padrão, a escolha em Ajustes, as capturas nas duas peles | liberada (a L1 entrou); sem worker | `docs/TAREFA_V2_TEMA_MENUS.md`, seção 5 |
 | **L3** o primeiro módulo do modular no jogo | o lugar lembrado do M-MEM, proposto, com paridade | depois da C1 e da C2 | `docs/TAREFA_V2_DIGIBRAIN_MODULAR_PRODUTO.md` |
-| **L4** habitat como ilha 3D (proposta nova) | a cena do modo mundo (v12) como ilha 3D, com o pet em papel; só vista | o POC no PR #480 (aberto); a tarefa escrita fora do repositório, com H-1, H-2, H-4 e H-6 decididas pelo Matheus em 2026-10-30; entra no repositório pela missão H0 | `D:\Trab\digilab\TAREFA_V3_HABITAT_ILHA_3D.md` (fora do git até a H0) |
+| **L4** habitat como ilha 3D (proposta nova) | a cena do modo mundo (v12) como ilha 3D, com o pet em papel; só vista | H0 a H5 feitas em 2026-10-30, em PRs empilhados (worktree `v3-habitat-ilha`), com o `CLIPES_UP` ligado na H1b (H-4); faltam a aprovação das capturas e a M3 | `docs/TAREFA_V3_HABITAT_ILHA_3D.md` (no PR da H0), seção 10 |
 | **B1** rodada 2 do equilíbrio | as fases do `PLANO_EQUILIBRIO_COMBATE_TR_R2.md` | R2-0 e R2-1 **na `main`** (#479); R2-2 em PR (#481) | `docs/EQUILIBRIO_COMBATE_TR.md` |
 | **B2** ligar a v14 | trocar fatores, relógio e listas do jogo | depois da conferência da B1 e do sim do Matheus | `docs/PLANO_V3.md`, seção 4 |
 | **B3** a luta no layout novo | o HUD e o palco na pele dos menus | depois da L2 | idem |
@@ -38,7 +38,8 @@ fechamento da V2, o `docs/FECHAMENTO_V2.md` (tag `v2-final`).
 
 - **LR-1 a LR-7** (a C1): `docs/TAREFA_V2_LONGE_REGULAR.md`, seção 8.
 - **ME-1 a ME-7** (a C4), com as três entradas novas da literatura: `docs/PLANO_V3.md`, seção 2.
-- **A L4 no plano:** a ordem dela entre a L2 e a L3, e a H1b (ligar o `CLIPES_UP` muda o jogo fora do habitat).
+- **A L4:** aprovar as capturas da ilha (390 e 1280, claro, escuro e noite) e medir a M3 com `?medir3d=1` no Chrome do desktop e num
+  celular; a ordem dela entre a L2 e a L3.
 - **B2:** ligar a v14 só depois da conferência da rodada 2.
 
 ## 3. Riscos
