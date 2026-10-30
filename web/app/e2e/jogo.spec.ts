@@ -35,6 +35,11 @@ async function semear(page: Page, save: object | null, tema?: string, tamer: obj
     if (t) localStorage.setItem(chave + "-tema", t);
   }, [CHAVE, save ? JSON.stringify(save) : null, tema ?? null, JSON.stringify(tamer)] as const);
 }
+/** a Exploracao no painel (no maximo 760 px) e a do celular: o detalhe do lugar (.camp-arena, .camp-lutar) abre na folha ao tocar no cartao do lugar escolhido (layout habitat, M4) */
+async function lugarAberto(page: Page): Promise<void> {
+  await expect(page.locator(".expl-cartao.sel").first()).toBeVisible();
+  if (await page.locator("dialog.folha[open] .camp-arena").count() === 0) await page.locator(".expl-cartao.sel").first().click();
+}
 /** erros de console e de pagina (falhar alto: qualquer um reprova) */
 function vigiarErros(page: Page): string[] {
   const erros: string[] = [];
@@ -130,6 +135,7 @@ for (const [versao, save] of Object.entries(SAVES)) {
     await page.goBack();
     await expect(page).toHaveURL(/#\/lutar\/arena$/);
     await page.getByRole("tab", { name: "Exploração" }).click();
+    await lugarAberto(page);
     await page.locator(".camp-lutar:not([disabled])").click();
     await expect(res).toBeVisible({ timeout: 90_000 });
     await page.locator(".res-continuar").click();
@@ -272,7 +278,7 @@ for (const largura of [390, 899, 900, 1099, 1100, 1280]) {
     await semear(page, SAVES.champion);
     const lateral = largura >= 900, desktop = largura >= 1100;
     /* a Exploracao: o mapa 3D e, no desktop, o lugar na coluna da direita (no celular o lugar abre na folha: o cartao fica no mapa) */
-    for (const [rota, esq, dir] of [["crescer/evolucao", ".evo-arv", ".evo-hist"], ["lutar/campanha", ".mapa-expl", desktop ? ".camp-lutar" : ".expl-cartao"], ["conversar/chat", ".conv-lista", ".conv-status"]]) {
+    for (const [rota, esq, dir] of [["crescer/evolucao", ".evo-arv", ".evo-hist"], ["lutar/campanha", ".mapa-expl", ".expl-cartao"], ["conversar/chat", ".conv-lista", ".conv-status"]]) {
       await page.goto(APP + "#/" + rota);
       await page.waitForTimeout(500);
       const r = await page.evaluate(([e, d]) => {
@@ -280,7 +286,8 @@ for (const largura of [390, 899, 900, 1099, 1100, 1280]) {
         return { navLateral: nav.height > nav.width, aoLado: b.left >= a.right - 1, larg: document.documentElement.scrollWidth, janela: innerWidth };
       }, [esq, dir] as const);
       expect(r.navLateral, `${rota}: barra lateral`).toBe(lateral);
-      expect(r.aoLado, `${rota}: painel ao lado do conteúdo`).toBe(desktop);
+      /* as telas do painel (Crescer, Lutar) ficam numa coluna so (M4); a Conversar e da M5 */
+      expect(r.aoLado, `${rota}: painel ao lado do conteúdo`).toBe(rota.startsWith("conversar") && desktop);
       expect(r.larg, `${rota}: rolagem lateral`).toBeLessThanOrEqual(r.janela);
     }
   });
@@ -298,6 +305,7 @@ test("medalhas: vencer o líder dá a medalha e libera a evolução", async ({ p
   await page.goto(APP + "#/crescer/evolucao");
   await expect(page.locator(".evo-medalha")).toContainText("Pronto para evoluir. Falta a Medalha da Campina: vença o Gazimon na Campina.");
   await page.goto(APP + "#/lutar/campanha");
+  await lugarAberto(page);
   await expect(page.locator(".camp-arena")).toContainText("líder: Gazimon");
   await expect(page.locator(".camp-arena")).toContainText("Vencer Gazimon dá a Medalha da Campina.");
   await expect(page.locator(".camp-lider").first()).toContainText("LÍDER");
@@ -427,7 +435,7 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 
     }, largura >= 1100);
     expect(r.larg, "rolagem lateral").toBeLessThanOrEqual(r.janela);
     expect(r.pequenos, "alvos menores que 44 px").toEqual([]);
-    expect(r.aoLado, "desktop: a lista ao lado do resumo").toBe(largura >= 1100);
+    expect(r.aoLado, "uma coluna só no painel (M4)").toBe(false);
     await expect(page.locator(".med-regras li.ok")).toHaveCount(1);
     expect(erros).toEqual([]);
   });
@@ -447,6 +455,7 @@ test("arenas: a Cidadela pede três lutas seguidas sem cura e dá a medalha; no 
   const erros = vigiarErros(page);
   await page.goto(APP + "#/lutar/campanha");
   await expect(page.locator(".expl-cartao")).toHaveCount(7);
+  await lugarAberto(page);
   const cartao = page.locator(".camp-arena");
   await expect(cartao).toContainText("Arena · Resistência");
   await expect(cartao).toContainText("líder: Myotismon");
@@ -475,6 +484,7 @@ test("arenas: a Cidadela pede três lutas seguidas sem cura e dá a medalha; no 
   expect(reg.log.filter((e: unknown[]) => e[1] === "u").map((e: [number, string, { n: number }]) => e[2].n)).toEqual([3, 4]);
   /* o Lago abriu: a regra do vinculo aparece no cartao e na luta */
   await page.goto(APP + "#/lutar/campanha");
+  await lugarAberto(page);
   await expect(page.locator(".camp-arena")).toContainText("Arena · Vínculo");
   await page.locator(".camp-lutar:not([disabled])").click();
   await expect(page.locator(".luta-arena-aviso")).toContainText("Arena do Lago: aqui as suas travas e vetos não valem");
@@ -530,26 +540,20 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 
     expect(r.fora, "cartões fora do mapa").toBe(0);
     expect(r.pequenos, "alvos menores que 44 px").toEqual([]);
     expect(r.canvas[0] * r.canvas[1], "a vista 3D desenhou").toBeGreaterThan(0);
-    if (largura < 1100) {
-      expect(r.alt / r.largMapa, "no celular o mapa é mais alto que largo e a página rola").toBeGreaterThan(2);
-      /* o cartao do lugar abre a folha com o detalhe (a arena, o Desafiar) */
-      await expect(page.locator(".camp-arena")).toHaveCount(0);
-      await page.locator(".expl-cartao").nth(3).click();
-      const folha = page.locator("dialog.folha[open]");
-      await expect(folha).toHaveAttribute("aria-label", "Cidadela");
-      await expect(folha.locator(".camp-arena")).toContainText("líder: Myotismon");
-      await expect(folha.locator(".camp-lutar")).toContainText("Desafiar Myotismon (3 lutas seguidas)");
-      await folha.locator(".folha-x").click();
-      await expect(page.locator("dialog.folha[open]")).toHaveCount(0);
-      /* um lugar trancado tambem abre: o detalhe diz o que falta */
-      await page.locator(".expl-cartao").nth(4).click();
-      await expect(page.locator("dialog.folha[open] .camp-det-txt")).toContainText("Trancado: vença alguém em Cidadela antes.");
-    } else {
-      await expect(page.locator(".camp-lado .camp-arena")).toContainText("líder: Myotismon");
-      await page.locator(".expl-cartao").nth(1).click();
-      await expect(page.locator(".camp-lado .campd-faixa")).toContainText("Torre de pedra");
-      await expect(page.locator(".expl-cartao").nth(1)).toHaveClass(/\bsel\b/);
-    }
+    /* o painel tem no maximo 760 px: o mapa e o do celular (alto, a pagina rola) e o cartao abre a folha (layout habitat, M4) */
+    expect(r.alt / r.largMapa, "no celular o mapa é mais alto que largo e a página rola").toBeGreaterThan(2);
+    /* o cartao do lugar abre a folha com o detalhe (a arena, o Desafiar) */
+    await expect(page.locator(".camp-arena")).toHaveCount(0);
+    await page.locator(".expl-cartao").nth(3).click();
+    const folha = page.locator("dialog.folha[open]");
+    await expect(folha).toHaveAttribute("aria-label", "Cidadela");
+    await expect(folha.locator(".camp-arena")).toContainText("líder: Myotismon");
+    await expect(folha.locator(".camp-lutar")).toContainText("Desafiar Myotismon (3 lutas seguidas)");
+    await folha.locator(".folha-x").click();
+    await expect(page.locator("dialog.folha[open]")).toHaveCount(0);
+    /* um lugar trancado tambem abre: o detalhe diz o que falta */
+    await page.locator(".expl-cartao").nth(4).click();
+    await expect(page.locator("dialog.folha[open] .camp-det-txt")).toContainText("Trancado: vença alguém em Cidadela antes.");
     expect(erros).toEqual([]);
   });
 }
@@ -588,6 +592,7 @@ test("itens: o líder dá o chip com a medalha, o chip se equipa e vale na luta"
   await semear(page, SAVE_V6);
   const erros = vigiarErros(page);
   await page.goto(APP + "#/lutar/campanha");
+  await lugarAberto(page);
   await page.locator(".camp-lutar:not([disabled])").click();
   const res = page.locator("dialog.modal-res[open]");
   await expect(res).toBeVisible({ timeout: 90_000 });
@@ -652,6 +657,7 @@ test("itens: a carta se escolhe antes da luta, entra no registro do pet e sai do
   const erros = vigiarErros(page);
   await treinarUmaVez(page);
   await page.goto(APP + "#/lutar/campanha");
+  await lugarAberto(page);
   const escolha = page.locator(".carta-escolha select");
   await expect(escolha).toBeVisible();
   await escolha.selectOption("carta_folego");
@@ -698,12 +704,12 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 
     }, largura >= 1100);
     expect(r.larg, "rolagem lateral").toBeLessThanOrEqual(r.janela);
     expect(r.pequenos, "alvos menores que 44 px").toEqual([]);
-    expect(r.aoLado, "desktop: os itens ao lado do resumo").toBe(largura >= 1100);
+    expect(r.aoLado, "uma coluna só no painel (M4)").toBe(false);
     /* a escolha da carta na campanha, no mesmo tamanho */
     await treinarUmaVez(page);
     await irPara(page, "Lutar", "Exploração", "lutar/campanha");
     /* no celular a escolha da carta fica na folha do lugar */
-    if (largura < 1100) await page.locator(".expl-cartao.sel").click();
+    await page.locator(".expl-cartao.sel").click();
     await expect(page.locator(".carta-escolha select")).toBeVisible();
     const c = await page.evaluate(() => ({ larg: document.documentElement.scrollWidth, janela: innerWidth, alt: document.querySelector(".carta-escolha select")!.getBoundingClientRect().height }));
     expect(c.larg).toBeLessThanOrEqual(c.janela);
@@ -822,7 +828,7 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 
     }, largura >= 1100);
     expect(r.larg, "rolagem lateral").toBeLessThanOrEqual(r.janela);
     expect(r.pequenos, "alvos menores que 44 px").toEqual([]);
-    expect(r.aoLado, "desktop: os lideres ao lado das regras").toBe(largura >= 1100);
+    expect(r.aoLado, "uma coluna só no painel (M4)").toBe(false);
     /* a medalha de ouro apagada em Medalhas, no mesmo tamanho */
     await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
     await expect(page.locator(".med-ouro")).toBeVisible();
@@ -943,7 +949,7 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 
     }, largura >= 1100);
     expect(r.larg, "rolagem lateral").toBeLessThanOrEqual(r.janela);
     expect(r.pequenos, "alvos menores que 44 px").toEqual([]);
-    expect(r.aoLado, "desktop: as instalações na coluna da Liga, ao lado dos líderes").toBe(largura >= 1100);
+    expect(r.aoLado, "uma coluna só no painel (M4)").toBe(false);
     await page.screenshot({ path: `test-results/fronteira-instalacoes-${largura}-${tema}.png`, fullPage: true });
     await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
     await expect(page.locator(".med-recordes li.ganha")).toHaveCount(1);
@@ -1449,15 +1455,10 @@ for (const largura of [390, 1280]) {
     expect(/\b(Nv|Lv|XP)\b/.test(texto), "nem nível nem XP").toBe(false);
     const r = await page.evaluate(() => Object.fromEntries([".trn-sala", ".trn-foco", ".trn-medidores", ".trn-exercicios", ".trn-vida", ".trn-ultimo"]
       .map(c => { const b = document.querySelector(c)!.getBoundingClientRect(); return [c, [b.left, b.top]]; })));
-    if (largura < 1100) {
-      /* celular: uma coluna, nesta ordem */
-      const tops = [".trn-sala", ".trn-foco", ".trn-medidores", ".trn-exercicios", ".trn-vida", ".trn-ultimo"].map(c => r[c][1]);
-      expect(tops).toEqual([...tops].sort((a, b) => a - b));
-    } else {
-      /* desktop: a sala, o stat em foco e o treinado na vida a esquerda; o cansaco e os exercicios a direita */
-      expect(r[".trn-medidores"][0]).toBeGreaterThan(r[".trn-sala"][0] + 200);
-      expect(r[".trn-exercicios"][0]).toBeGreaterThan(r[".trn-vida"][0] + 200);
-    }
+    /* uma coluna, nesta ordem, no painel de 760 px e no modal do celular (layout habitat, M4) */
+    const tops = [".trn-sala", ".trn-foco", ".trn-medidores", ".trn-exercicios", ".trn-vida", ".trn-ultimo"].map(c => r[c][1]);
+    expect(tops).toEqual([...tops].sort((a, b) => a - b));
+    expect(new Set([".trn-medidores", ".trn-exercicios"].map(c => Math.round(r[c][0]))).size, "mesma coluna").toBe(1);
     expect(erros).toEqual([]);
   });
 }
@@ -1757,6 +1758,7 @@ test("luta em tempo real: o mapa do cenário que falta mostra o aviso visível, 
   await semear(page, SAVE_V13, undefined, TAMER_V13);
   await page.route(/\/Assets\/arena_up\/mapas\//, r => r.abort());
   await page.goto(APP + "#/lutar/campanha");
+  await lugarAberto(page);
   await page.locator(".camp-lutar:not([disabled])").first().click();
   await expect(page).toHaveURL(/#\/lutar\/luta$/);
   await expect(page.locator(".luta-aviso-asset")).toContainText("O mapa do cenário não carregou");
@@ -1772,6 +1774,7 @@ for (const [largura, altura] of [[390, 844], [1280, 800]] as const) for (const t
     await page.goto(APP + "#/lutar/campanha");
     /* no celular o lugar abre numa folha: toca a Campina primeiro */
     if (largura < 768) await page.getByRole("button", { name: /^1\. Campina/ }).click();
+    await lugarAberto(page);
     await page.locator(".camp-lutar:not([disabled]):visible").first().click();
     await expect(page.getByTestId("luta-relogio")).toHaveText(/^0:0[3-9]$/, { timeout: 15_000 });
     await page.getByRole("button", { name: "Pausar a animação" }).click();
@@ -1789,6 +1792,7 @@ test("luta em tempo real: com os clipes do UP, a luta inteira desenha sem erro",
   await semear(page, SAVE_V13, undefined, TAMER_V13);
   const erros = vigiarErros(page);
   await page.goto(APP + "?clipes_up=1#/lutar/campanha");
+  await lugarAberto(page);
   await page.locator(".camp-lutar:not([disabled]):visible").first().click();
   await expect(page.getByTestId("luta-relogio")).toHaveText(/^0:0[2-9]$/, { timeout: 60_000 });
   await page.getByRole("button", { name: "Pausar a animação" }).click();

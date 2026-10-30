@@ -2,10 +2,11 @@
    - a partir de 900 px, painel grande a direita (PainelHx, com as abas do destino no cabecalho) e o pet visivel a esquerda;
    - abaixo de 900 px, modal centralizado (<dialog> com showModal: foco preso e, ao fechar, de volta a quem abriu), com a barra de
      destinos dentro dele (`nav`), porque o resto da pagina fica inerte enquanto o modal esta aberto.
-   O "x" (e o Esc) chamam `fechar`, que volta para o Pet. O conteudo entra como cada tela o desenha hoje, numa folha clara (.dl). */
+   O "x" (e o Esc) chamam `fechar`, que volta para o Pet. O conteudo entra como cada tela o desenha hoje, numa folha escura de uma coluna (estilo/painel-hx.css, M4); o painel tem no maximo 760 px. */
 import { useEffect, useRef, type ReactNode } from "react";
 import { AbasHx, PainelHx, type AbaHx } from "./hx/index.ts";
 import { abrirModal } from "./modal.ts";
+import "../estilo/painel-hx.css";
 
 export interface DadosPainel {
   titulo: string; abas?: readonly AbaHx[]; aba?: string; irAba?: (id: string) => void; fechar: () => void; idBase: string;

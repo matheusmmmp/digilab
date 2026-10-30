@@ -1,0 +1,83 @@
+/* Pele XCOM do conteudo das telas dentro do PainelTela (Crescer, Lutar e Diario; docs/TAREFA_V2_LAYOUT_HABITAT.md, M4).
+   O conteudo das telas continua escrito com as classes dl-* de antes; aqui, dentro do painel, os tokens --dl-* sao remapeados para os
+   tons escuros --hx-* e as formas viram caixas de borda fina (sem cantos redondos nem sombra grossa), uma coluna so, fonte condensada.
+   O habitat, o retrato, o relogio e o balao nao passam por aqui. */
+.painel-tela .painel-tela__folha{
+  --dl-bg:var(--hx-miolo); --dl-hex:#16191E; --dl-surface:#111B1E; --dl-surface-2:#16191E;
+  --dl-border:#4F6B6F; --dl-border-shadow:#2A3C3F; --dl-navy:#3D5A5E; --dl-navy-deep:#16282B;
+  --dl-action:#6CC58A; --dl-action-press:#4FA86D; --dl-action-ink:#06140C; --dl-action-lite:#8FDDA7;
+  --dl-text:var(--hx-texto); --dl-text-2:var(--hx-texto-2); --dl-muted:var(--hx-sec);
+  --dl-need:#FF7FC0; --dl-need-hi:#FF9ACE; --dl-ok:#4BE07E; --dl-ok-ink:#06140C; --dl-ok-edge:#2E8F52;
+  --dl-learned:#6FE3FF; --dl-learned-bg:#10353F; --dl-learned-ink:#D8F7FF; --dl-learned-sub:#BDEFFF;
+  --dl-disabled:#1D2A2C; --dl-disabled-ink:#8EA9AB; --dl-rim:#111B1E; --dl-plate:#2A4448; --dl-plate-hi:#5E7C80;
+  --dl-sec-bg:#0F181B; --dl-sec-ink:var(--hx-texto); --dl-sec-edge:#5E7C80; --dl-sec-press:#1C2A2D; --dl-sec-shadow:#0A1316;
+  --dl-none-ink:#BFD6D8; --dl-none-edge:#5E7C80; --dl-none-bg:#0F181B;
+  --dl-erro:#FF8E84; --dl-rival:#FFB3C2; --dl-rival-bg:#2A1519; --dl-dano:#FF8E9E; --dl-palco-tit:rgba(10,19,22,.75);
+  --dl-f-texto:var(--hx-f); --ui-border:#4F6B6F; --ui-text:var(--hx-texto); --ui-text-2:var(--hx-texto-2); --ui-surface:#111B1E; --ui-surface-2:#16191E;
+  --ui-primary:var(--hx-medidor); --ui-primary-hover:#B7E3E6; --ui-primary-ink:#0A1316; --ui-primary-soft:#16282B; --ui-primary-forte:#7FE3FF; --ui-primary-forte-hover:#A8EEFF;
+  --ui-navy:#0A1316; --ui-navy-2:#16191E; --ui-navy-ink:#BFD6D8; --ui-bg:var(--hx-miolo); --ui-success:#4BE07E; --ui-warning:var(--hx-alerta); --ui-danger:#E58A8A;
+  --ui-bar-track:rgba(118,170,175,.22); --ui-sombra:none; --ui-raio:0; --ui-raio-p:0; --ui-foco:0 0 0 2px #7FE3FF;
+  font-family:var(--hx-f); color:var(--hx-texto); background:var(--hx-miolo); padding:12px 0 16px; font-size:1.0625rem;
+}
+.painel-tela .painel-tela__folha :where(button,input,select,textarea,summary){ font-family:inherit }
+.painel-tela .painel-tela__folha .tela{ padding:0 12px; gap:12px; min-height:0; align-items:stretch }
+.painel-tela .painel-tela__folha .tela > *{ min-width:0 }
+.painel-tela .painel-tela__folha h2{ font-family:var(--hx-f); font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--hx-rotulo); font-size:15px; margin:0 0 6px }
+.painel-tela .painel-tela__folha .evt-heroi h2, .painel-tela .painel-tela__folha .evt-nome{ color:inherit }
+
+/* caixas de borda fina no lugar dos cards redondos */
+.painel-tela .painel-tela__folha :where(.dl-card,.item-card,.evo-medalha,.itens-vagas,.evt-painel,.reg-linha,.treino-ex,.fr-titulo,.rivais-mais){
+  border-radius:0; box-shadow:none; border:1px solid var(--hx-borda); background:var(--hx-miolo-2); color:var(--hx-texto);
+}
+.painel-tela .painel-tela__folha .bloco:not(.dl-card){ background:none; border:0; padding:0; box-shadow:none }
+.painel-tela .painel-tela__folha .item-card.item-eq{ border-color:var(--hx-btn-borda) }
+.painel-tela .painel-tela__folha .item-card.item-falta{ background:var(--hx-miolo) }
+.painel-tela .painel-tela__folha .dl-tag{ border-radius:0; border:1px solid var(--hx-borda-topo); background:var(--hx-miolo); color:var(--hx-texto); letter-spacing:.08em; font-size:12px; padding:1px 8px }
+.painel-tela .painel-tela__folha .dl-tag--ativo{ border-color:var(--hx-btn-borda); color:var(--hx-btn-ink) }
+.painel-tela .painel-tela__folha .item-tag--chip_stat{ background:var(--dl-ok); color:var(--dl-ok-ink) }
+.painel-tela .painel-tela__folha .item-tag--carta{ background:var(--dl-highlight); color:var(--dl-highlight-ink) }
+
+/* botoes: o principal no estilo CONTINUAR (fundo escuro, borda verde, hachura no topo); o secundario, escuro de borda cinza-petroleo */
+.painel-tela .painel-tela__folha .dl-btn{
+  position:relative; border-radius:0; min-height:44px; box-shadow:none; transform:none; border:1px solid var(--hx-btn-borda);
+  background:var(--hx-btn-bg); color:var(--hx-btn-ink); font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding-top:8px;
+}
+.painel-tela .painel-tela__folha .dl-btn:not(.dl-btn--sec):not(.dl-btn--perigo):not(.dl-btn--forcar):not(:disabled)::before{
+  content:""; position:absolute; inset:0 0 auto 0; height:5px; background:var(--hx-hachura-verde); pointer-events:none;
+}
+.painel-tela .painel-tela__folha .dl-btn:hover:not(:disabled){ background:rgba(22,46,34,.96) }
+.painel-tela .painel-tela__folha .dl-btn:active:not(:disabled){ background:var(--hx-btn-borda); color:var(--hx-escolhido-ink); box-shadow:none; transform:none }
+.painel-tela .painel-tela__folha .dl-btn--sec{ background:var(--hx-miolo); color:var(--hx-texto); border-color:var(--hx-borda-topo) }
+.painel-tela .painel-tela__folha .dl-btn--sec:hover:not(:disabled){ background:var(--hx-miolo-2); border-color:var(--hx-texto-2) }
+.painel-tela .painel-tela__folha .dl-btn--perigo, .painel-tela .painel-tela__folha .dl-btn--forcar{ background:var(--hx-miolo); color:var(--hx-perigo); border-color:var(--hx-perigo) }
+.painel-tela .painel-tela__folha .dl-btn:disabled{ background:var(--dl-disabled); color:var(--dl-disabled-ink); border-color:#3A4C4F; opacity:1 }
+.painel-tela .painel-tela__folha .dl-btn:focus-visible, .painel-tela .painel-tela__folha :where(.chip,.treino-ex,.reg-linha,.expl-cartao,summary):focus-visible{
+  outline:2px solid var(--hx-foco); outline-offset:2px; box-shadow:none;
+}
+
+/* chips de filtro e o escolhido em ciano palido */
+.painel-tela .painel-tela__folha .chip{ border-radius:0; min-height:44px; min-width:48px; background:var(--hx-miolo); color:var(--hx-texto); border:1px solid var(--hx-borda-topo); box-shadow:none; font-weight:600; letter-spacing:.06em; text-transform:uppercase }
+.painel-tela .painel-tela__folha .chip[aria-pressed="true"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido) }
+.painel-tela .painel-tela__folha .reg-linha[aria-pressed="true"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink) }
+
+/* texto de apoio, resumos e links */
+.painel-tela .painel-tela__folha .dl-apoio{ color:var(--hx-texto-2) }
+.painel-tela .painel-tela__folha summary{ min-height:44px; display:flex; align-items:center; cursor:pointer; color:var(--hx-rotulo); font-weight:600; letter-spacing:.06em; text-transform:uppercase }
+.painel-tela .painel-tela__folha details{ border:1px solid var(--hx-borda); background:var(--hx-miolo); padding:0 12px }
+.painel-tela .painel-tela__folha details[open]{ padding-bottom:10px }
+.painel-tela .painel-tela__folha a{ color:var(--hx-rotulo) }
+
+/* folhas e modais que abrem de dentro das telas ficam na mesma pele */
+.painel-tela .painel-tela__folha :where(dialog.folha,dialog.modal-conf,.folha--info){
+  background:var(--hx-miolo); color:var(--hx-texto); border:1px solid var(--hx-borda-topo); border-top:2px solid var(--hx-borda-topo); border-radius:0;
+}
+.painel-tela .painel-tela__folha .folha-x{ border-radius:0; background:var(--hx-miolo); border:1px solid var(--hx-borda-topo); color:var(--hx-texto) }
+dialog.folha::backdrop, dialog.modal-conf::backdrop{ background:rgba(4,8,12,.6) }
+
+/* uma coluna so, do painel de 760 px ao modal do celular */
+.painel-tela .painel-tela__folha :where(.arena-tela,.treino-tela,.camp-tela,.itens-tela,.med-tela,.fr-tela,.cat-tela,.reg-tela,.evo-tela){ display:grid; grid-template-columns:minmax(0,1fr) }
+.painel-tela .painel-tela__folha :where(.arena-col-rivais,.arena-col-meio,.arena-col-regras,.treino-col-esq,.treino-col-dir,.itens-col,.med-lado,.fr-lado,.camp-lado){ display:contents }
+
+/* texto de leitura do motor (relogio LCD) e o cartao de destaque da Evolucao na pele escura */
+.painel-tela .painel-tela__folha .dl-lcd:not(.evt-heroi *){ color:var(--hx-texto-2) }
+.painel-tela .painel-tela__folha .evt-heroi{ border-radius:0; box-shadow:none; border:1px solid var(--hx-borda-topo); background-color:var(--hx-miolo-2); background-image:radial-gradient(ellipse at 25% 40%,#1E3C40 0%,#0A1316 80%); background-size:100% 100%; color:var(--hx-texto) }
