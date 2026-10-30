@@ -64,7 +64,7 @@ export const ITENS: readonly Item[] = [
   { id: "carta_cura", nome: "Carta de Cura", tipo: "carta", carta: { cura: { abaixo: CIT.curaAbaixo, fracao: CIT.curaFracao } },
     efeito: `Na primeira vez que a vida cai abaixo de ${CIT.curaAbaixo * 100}%, cura ${CIT.curaFracao * 100}% da vida máxima.` },
   { id: "carta_foco", nome: "Carta de Foco", tipo: "carta", carta: { foco: true },
-    efeito: "O pet não se distrai: segue as próprias regras em todos os turnos." },
+    efeito: "O pet não se distrai: segue as próprias regras a luta inteira." },
 ];
 export const ITEM_POR_ID: Readonly<Record<string, Item>> = Object.fromEntries(ITENS.map(x => [x.id, x]));
 /** o item que a medalha da (a primeira vitoria contra o lider da arena), pelo id da medalha (medalhas.ts) */

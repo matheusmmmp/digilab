@@ -90,7 +90,7 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
   const liga = r.lideres, venceuLiga = !!liga && r.serie.length === r.nLutas && venceu;
   /* uma instalacao da Fronteira (pets v6): a sequencia de vitorias ate a primeira que nao foi; o recorde do Tamer, se bateu */
   const inst = r.instalacao, vitInst = inst ? r.serie.filter(x => x.pontosA === 1).length : 0, rivaisLista = liga ?? r.rivais;
-  const tag = liga ? "Fronteira · Liga dos Líderes" : inst ? `Fronteira · ${inst.nome}` : npc ? `Campanha · ${LUGARES[Li].nome}` : "Arena · fim da luta";
+  const tag = r.tag ?? (liga ? "Fronteira · Liga dos Líderes" : inst ? `Fronteira · ${inst.nome}` : npc ? `Campanha · ${LUGARES[Li].nome}` : "Arena · fim da luta");
   const titulo = liga ? (venceuLiga ? "Campeão!" : perdeu ? "Derrota" : "Empate") : inst ? (r.recorde ? "Recorde!" : "Fim da sequência")
     : lugarNovo ? "Ilha vencida!" : venceu ? "Vitória!" : perdeu ? "Derrota" : "Empate";
   const dur = duracaoLuta(res);
@@ -188,7 +188,7 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
               <span>{r.recorde.valor} vitória{r.recorde.valor === 1 ? "" : "s"} seguida{r.recorde.valor === 1 ? "" : "s"}: o recorde agora é seu, Tamer, com {r.recorde.forma}.</span></span>
           </div>}
           {serie && <section className="res-serie" aria-labelledby="res-serie-tit">
-            <h3 id="res-serie-tit">{liga ? `Liga dos Líderes · ${r.nLutas} lutas seguidas, sem cura` : inst ? `${inst.nome} · ${r.nLutas} lutas seguidas, sem cura` : `Resistência · ${r.nLutas} lutas seguidas, sem cura`}</h3>
+            <h3 id="res-serie-tit">{r.tituloSerie ? r.tituloSerie : liga ? `Liga dos Líderes · ${r.nLutas} lutas seguidas, sem cura` : inst ? `${inst.nome} · ${r.nLutas} lutas seguidas, sem cura` : `Resistência · ${r.nLutas} lutas seguidas, sem cura`}</h3>
             <ol>{Array.from({ length: r.nLutas }, (_, i) => {
               const x = serie[i], fimVida = x ? Math.max(0, x.E.L[0].hp) / x.E.L[0].hpMax : 0;
               return <li key={i} className={!x ? "res-serie-nao" : x.pontosA === 1 ? "res-serie-vit" : "res-serie-der"}>
