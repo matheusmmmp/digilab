@@ -1,0 +1,817 @@
+{
+  "fontes": {
+    "medidas_indice.json": "cd276329871222ed2ca63d1e6b90f0cacae547001340cfb90e62899c8fe2761b",
+    "meta.json": "97bd5bcbeac9ff128494ddab62af14b1bf6d3a386fb382b211fde86aa062b83c",
+    "resultado.json": "6c41fda4774274545c432dd049f7cbe0f1d29cb806d109711a5d51535ec57a15"
+  },
+  "ic": "metrics.ic_t sobre as unidades (base, semente), cada uma a media das 4 celulas do lugar",
+  "por_par_e_lugar": {
+    "M0xM0+S|comedouro": {
+      "medidas": {
+        "acoes/brincar": {
+          "M0": 12.019444444444444,
+          "M0+S": 12.028333333333334,
+          "dif": 0.008888888888888889,
+          "ic_inferior": -0.1592364100072332,
+          "ic_superior": 0.177014187785011,
+          "unidades": 450
+        },
+        "acoes/chamar_atencao": {
+          "M0": 173.89833333333334,
+          "M0+S": 172.38,
+          "dif": -1.5183333333333333,
+          "ic_inferior": -2.9035779895969416,
+          "ic_superior": -0.13308867706972505,
+          "unidades": 450
+        },
+        "acoes/comer": {
+          "M0": 64.61055555555555,
+          "M0+S": 65.14722222222223,
+          "dif": 0.5366666666666666,
+          "ic_inferior": 0.1635802904010205,
+          "ic_superior": 0.9097530429323127,
+          "unidades": 450
+        },
+        "acoes/dormir": {
+          "M0": 643.6505555555556,
+          "M0+S": 644.1727777777778,
+          "dif": 0.5222222222222223,
+          "ic_inferior": -0.07600263517060324,
+          "ic_superior": 1.1204470796150479,
+          "unidades": 450
+        },
+        "acoes/emburrar": {
+          "M0": 16.618333333333332,
+          "M0+S": 15.430555555555555,
+          "dif": -1.1877777777777778,
+          "ic_inferior": -1.8574583722462727,
+          "ic_superior": -0.5180971833092828,
+          "unidades": 450
+        },
+        "acoes/explorar": {
+          "M0": 424.15833333333336,
+          "M0+S": 425.80555555555554,
+          "dif": 1.6472222222222221,
+          "ic_inferior": 0.22927962624734266,
+          "ic_superior": 3.0651648181971014,
+          "unidades": 450
+        },
+        "acoes/ocioso": {
+          "M0": 9.044444444444444,
+          "M0+S": 9.035555555555556,
+          "dif": -0.008888888888888889,
+          "ic_inferior": -0.028424163770920774,
+          "ic_superior": 0.010646385993142994,
+          "unidades": 450
+        },
+        "buscas": {
+          "M0": 19.380555555555556,
+          "M0+S": 18.126666666666665,
+          "dif": -1.2538888888888888,
+          "ic_inferior": -1.5303035100848565,
+          "ic_superior": -0.9774742676929211,
+          "unidades": 450
+        },
+        "buscas_meta_ou_achou": {
+          "M0": 14.936666666666667,
+          "M0+S": 15.17388888888889,
+          "dif": 0.23722222222222222,
+          "ic_inferior": -0.00729803534277218,
+          "ic_superior": 0.4817424797872166,
+          "unidades": 450
+        },
+        "reflexos": {
+          "M0": 206.75722222222223,
+          "M0+S": 204.525,
+          "dif": -2.232222222222222,
+          "ic_inferior": -3.778758482896859,
+          "ic_superior": -0.6856859615475854,
+          "unidades": 450
+        },
+        "trocas_busca/dormir_sorteado": {
+          "M0": 0.20277777777777778,
+          "M0+S": 0.8061111111111111,
+          "dif": 0.6033333333333334,
+          "ic_inferior": 0.5550774567161381,
+          "ic_superior": 0.6515892099505287,
+          "unidades": 450
+        },
+        "trocas_busca/outra_unidade": {
+          "M0": 0.9188888888888889,
+          "M0+S": 2.952777777777778,
+          "dif": 2.033888888888889,
+          "ic_inferior": 1.9351725606274253,
+          "ic_superior": 2.1326052171503527,
+          "unidades": 450
+        },
+        "trocas_busca/reflexo": {
+          "M0": 3.525,
+          "M0+S": 0.0,
+          "dif": -3.525,
+          "ic_inferior": -3.6477722928201675,
+          "ic_superior": -3.4022277071798324,
+          "unidades": 450
+        }
+      },
+      "sem_suspensao_nao_cortadas": {
+        "buscas": 34885,
+        "cortadas_pelo_reflexo": 6345,
+        "frac_meta_ou_achou_nao_cortadas": 0.9420462508759636,
+        "nao_cortadas": 28540
+      },
+      "trocas_busca_por_vencedora_por_vida": {
+        "M0": {
+          "chamar_atencao/None": 0.3522222222222222,
+          "dormir/None": 3.727777777777778,
+          "emburrar/None": 0.0033333333333333335,
+          "explorar/cheiro": 0.18222222222222223,
+          "explorar/vagar": 0.17833333333333334
+        },
+        "M0+S": {
+          "brincar/None": 0.0005555555555555556,
+          "chamar_atencao/None": 1.0766666666666667,
+          "dormir/None": 0.8061111111111111,
+          "emburrar/None": 0.006111111111111111,
+          "explorar/cheiro": 0.5322222222222223,
+          "explorar/vagar": 0.5311111111111111
+        }
+      }
+    },
+    "M0xM0+S|longe": {
+      "medidas": {
+        "acoes/brincar": {
+          "M0": 15.360555555555555,
+          "M0+S": 15.38888888888889,
+          "dif": 0.028333333333333332,
+          "ic_inferior": -0.19156138562623656,
+          "ic_superior": 0.2482280522929032,
+          "unidades": 450
+        },
+        "acoes/chamar_atencao": {
+          "M0": 281.06444444444446,
+          "M0+S": 280.9977777777778,
+          "dif": -0.06666666666666667,
+          "ic_inferior": -1.1415686333726673,
+          "ic_superior": 1.008235300039334,
+          "unidades": 450
+        },
+        "acoes/comer": {
+          "M0": 82.64833333333333,
+          "M0+S": 85.37333333333333,
+          "dif": 2.725,
+          "ic_inferior": 2.179715860352756,
+          "ic_superior": 3.270284139647244,
+          "unidades": 450
+        },
+        "acoes/dormir": {
+          "M0": 615.7211111111111,
+          "M0+S": 614.9211111111111,
+          "dif": -0.8,
+          "ic_inferior": -1.2809045872970954,
+          "ic_superior": -0.31909541270290454,
+          "unidades": 450
+        },
+        "acoes/emburrar": {
+          "M0": 45.55777777777778,
+          "M0+S": 45.18666666666667,
+          "dif": -0.3711111111111111,
+          "ic_inferior": -1.0959309758577824,
+          "ic_superior": 0.35370875363556015,
+          "unidades": 450
+        },
+        "acoes/explorar": {
+          "M0": 295.6972222222222,
+          "M0+S": 294.1455555555556,
+          "dif": -1.5516666666666667,
+          "ic_inferior": -2.926047179701596,
+          "ic_superior": -0.1772861536317376,
+          "unidades": 450
+        },
+        "acoes/ocioso": {
+          "M0": 7.950555555555556,
+          "M0+S": 7.986666666666666,
+          "dif": 0.03611111111111111,
+          "ic_inferior": -0.037792483103369384,
+          "ic_superior": 0.1100147053255916,
+          "unidades": 450
+        },
+        "buscas": {
+          "M0": 45.89333333333333,
+          "M0+S": 40.519444444444446,
+          "dif": -5.373888888888889,
+          "ic_inferior": -5.816180767440114,
+          "ic_superior": -4.931597010337663,
+          "unidades": 450
+        },
+        "buscas_meta_ou_achou": {
+          "M0": 22.214444444444446,
+          "M0+S": 23.175555555555555,
+          "dif": 0.9611111111111111,
+          "ic_inferior": 0.6500779481463091,
+          "ic_superior": 1.272144274075913,
+          "unidades": 450
+        },
+        "reflexos": {
+          "M0": 281.2655555555556,
+          "M0+S": 279.40777777777777,
+          "dif": -1.8577777777777778,
+          "ic_inferior": -4.1694378889602675,
+          "ic_superior": 0.4538823334047124,
+          "unidades": 450
+        },
+        "trocas_busca/dormir_sorteado": {
+          "M0": 1.295,
+          "M0+S": 4.072222222222222,
+          "dif": 2.777222222222222,
+          "ic_inferior": 2.671082232846843,
+          "ic_superior": 2.883362211597601,
+          "unidades": 450
+        },
+        "trocas_busca/outra_unidade": {
+          "M0": 5.302222222222222,
+          "M0+S": 15.328888888888889,
+          "dif": 10.026666666666667,
+          "ic_inferior": 9.790697132053605,
+          "ic_superior": 10.26263620127973,
+          "unidades": 450
+        },
+        "trocas_busca/reflexo": {
+          "M0": 16.611666666666668,
+          "M0+S": 0.0,
+          "dif": -16.611666666666668,
+          "ic_inferior": -16.873900286875198,
+          "ic_superior": -16.349433046458138,
+          "unidades": 450
+        }
+      },
+      "sem_suspensao_nao_cortadas": {
+        "buscas": 82608,
+        "cortadas_pelo_reflexo": 29901,
+        "frac_meta_ou_achou_nao_cortadas": 0.75864685905098,
+        "nao_cortadas": 52707
+      },
+      "trocas_busca_por_vencedora_por_vida": {
+        "M0": {
+          "brincar/None": 0.009444444444444445,
+          "brincar/bola": 0.013333333333333334,
+          "chamar_atencao/None": 2.1572222222222224,
+          "comer/comida": 0.008888888888888889,
+          "dormir/None": 17.906666666666666,
+          "emburrar/None": 0.051111111111111114,
+          "explorar/cheiro": 0.8955555555555555,
+          "explorar/vagar": 0.8716666666666667
+        },
+        "M0+S": {
+          "brincar/None": 0.012777777777777779,
+          "brincar/bola": 0.026111111111111113,
+          "chamar_atencao/None": 6.0,
+          "comer/comida": 0.01,
+          "dormir/None": 4.072222222222222,
+          "emburrar/None": 0.20666666666666667,
+          "explorar/cheiro": 2.4494444444444445,
+          "explorar/vagar": 2.5516666666666667
+        }
+      }
+    },
+    "M0xM0+S|perto": {
+      "medidas": {
+        "acoes/brincar": {
+          "M0": 9.419444444444444,
+          "M0+S": 9.442777777777778,
+          "dif": 0.023333333333333334,
+          "ic_inferior": -0.033651861570189276,
+          "ic_superior": 0.08031852823685595,
+          "unidades": 450
+        },
+        "acoes/chamar_atencao": {
+          "M0": 168.53333333333333,
+          "M0+S": 168.8527777777778,
+          "dif": 0.3194444444444444,
+          "ic_inferior": -0.07815349269630084,
+          "ic_superior": 0.7170423815851896,
+          "unidades": 450
+        },
+        "acoes/comer": {
+          "M0": 49.03666666666667,
+          "M0+S": 49.10333333333333,
+          "dif": 0.06666666666666667,
+          "ic_inferior": -0.055674267649978154,
+          "ic_superior": 0.18900760098331149,
+          "unidades": 450
+        },
+        "acoes/dormir": {
+          "M0": 653.7061111111111,
+          "M0+S": 653.5377777777778,
+          "dif": -0.16833333333333333,
+          "ic_inferior": -0.322666976127318,
+          "ic_superior": -0.013999690539348686,
+          "unidades": 450
+        },
+        "acoes/emburrar": {
+          "M0": 8.762222222222222,
+          "M0+S": 8.904444444444444,
+          "dif": 0.14222222222222222,
+          "ic_inferior": 0.04098664417720539,
+          "ic_superior": 0.24345780026723907,
+          "unidades": 450
+        },
+        "acoes/explorar": {
+          "M0": 445.7961111111111,
+          "M0+S": 445.4138888888889,
+          "dif": -0.38222222222222224,
+          "ic_inferior": -0.6968016517832234,
+          "ic_superior": -0.06764279266122103,
+          "unidades": 450
+        },
+        "acoes/ocioso": {
+          "M0": 8.74611111111111,
+          "M0+S": 8.745,
+          "dif": -0.0011111111111111111,
+          "ic_inferior": -0.007483666238029701,
+          "ic_superior": 0.005261444015807478,
+          "unidades": 450
+        },
+        "buscas": {
+          "M0": 8.863333333333333,
+          "M0+S": 8.856666666666667,
+          "dif": -0.006666666666666667,
+          "ic_inferior": -0.1147143696967442,
+          "ic_superior": 0.10138103636341086,
+          "unidades": 450
+        },
+        "buscas_meta_ou_achou": {
+          "M0": 8.713888888888889,
+          "M0+S": 8.756666666666666,
+          "dif": 0.042777777777777776,
+          "ic_inferior": -0.06424863200971828,
+          "ic_superior": 0.14980418756527383,
+          "unidades": 450
+        },
+        "reflexos": {
+          "M0": 180.625,
+          "M0+S": 180.4127777777778,
+          "dif": -0.21222222222222223,
+          "ic_inferior": -0.6964069695857672,
+          "ic_superior": 0.2719625251413228,
+          "unidades": 450
+        },
+        "trocas_busca/dormir_sorteado": {
+          "M0": 0.01,
+          "M0+S": 0.02388888888888889,
+          "dif": 0.013888888888888888,
+          "ic_inferior": 0.007185583547872085,
+          "ic_superior": 0.020592194229905693,
+          "unidades": 450
+        },
+        "trocas_busca/outra_unidade": {
+          "M0": 0.03777777777777778,
+          "M0+S": 0.09944444444444445,
+          "dif": 0.06166666666666667,
+          "ic_inferior": 0.04637912872858752,
+          "ic_superior": 0.07695420460474581,
+          "unidades": 450
+        },
+        "trocas_busca/reflexo": {
+          "M0": 0.1111111111111111,
+          "M0+S": 0.0,
+          "dif": -0.1111111111111111,
+          "ic_inferior": -0.12937189779950908,
+          "ic_superior": -0.09285032442271314,
+          "unidades": 450
+        }
+      },
+      "sem_suspensao_nao_cortadas": {
+        "buscas": 15954,
+        "cortadas_pelo_reflexo": 200,
+        "frac_meta_ou_achou_nao_cortadas": 0.9956201599593754,
+        "nao_cortadas": 15754
+      },
+      "trocas_busca_por_vencedora_por_vida": {
+        "M0": {
+          "chamar_atencao/None": 0.01611111111111111,
+          "dormir/None": 0.12111111111111111,
+          "explorar/cheiro": 0.008333333333333333,
+          "explorar/vagar": 0.0033333333333333335
+        },
+        "M0+S": {
+          "brincar/None": 0.0005555555555555556,
+          "chamar_atencao/None": 0.03777777777777778,
+          "dormir/None": 0.02388888888888889,
+          "emburrar/None": 0.0016666666666666668,
+          "explorar/cheiro": 0.02,
+          "explorar/vagar": 0.015555555555555555
+        }
+      }
+    },
+    "M3xM3+S|comedouro": {
+      "medidas": {
+        "acoes/brincar": {
+          "M3": 17.725,
+          "M3+S": 17.79388888888889,
+          "dif": 0.06888888888888889,
+          "ic_inferior": -0.1300175078426226,
+          "ic_superior": 0.26779528562040034,
+          "unidades": 450
+        },
+        "acoes/chamar_atencao": {
+          "M3": 173.61944444444444,
+          "M3+S": 173.71833333333333,
+          "dif": 0.09888888888888889,
+          "ic_inferior": -0.6070810381437655,
+          "ic_superior": 0.8048588159215433,
+          "unidades": 450
+        },
+        "acoes/comer": {
+          "M3": 71.84555555555555,
+          "M3+S": 71.92277777777778,
+          "dif": 0.07722222222222222,
+          "ic_inferior": -0.2290440123480578,
+          "ic_superior": 0.3834884567925022,
+          "unidades": 450
+        },
+        "acoes/dormir": {
+          "M3": 633.0494444444445,
+          "M3+S": 633.1033333333334,
+          "dif": 0.05388888888888889,
+          "ic_inferior": -0.28269617868706387,
+          "ic_superior": 0.3904739564648416,
+          "unidades": 450
+        },
+        "acoes/emburrar": {
+          "M3": 8.550555555555556,
+          "M3+S": 8.41,
+          "dif": -0.14055555555555554,
+          "ic_inferior": -0.38664631827381285,
+          "ic_superior": 0.10553520716270176,
+          "unidades": 450
+        },
+        "acoes/explorar": {
+          "M3": 429.9555555555556,
+          "M3+S": 429.7961111111111,
+          "dif": -0.15944444444444444,
+          "ic_inferior": -0.8237099740110629,
+          "ic_superior": 0.5048210851221739,
+          "unidades": 450
+        },
+        "acoes/ocioso": {
+          "M3": 9.254444444444445,
+          "M3+S": 9.255555555555556,
+          "dif": 0.0011111111111111111,
+          "ic_inferior": -0.01763011585919392,
+          "ic_superior": 0.019852338081416142,
+          "unidades": 450
+        },
+        "buscas": {
+          "M3": 14.477777777777778,
+          "M3+S": 13.911666666666667,
+          "dif": -0.5661111111111111,
+          "ic_inferior": -0.7794601722041119,
+          "ic_superior": -0.3527620500181104,
+          "unidades": 450
+        },
+        "buscas_meta_ou_achou": {
+          "M3": 11.966666666666667,
+          "M3+S": 12.039444444444445,
+          "dif": 0.07277777777777777,
+          "ic_inferior": -0.12102694055745897,
+          "ic_superior": 0.26658249611301454,
+          "unidades": 450
+        },
+        "reflexos": {
+          "M3": 206.7838888888889,
+          "M3+S": 207.08777777777777,
+          "dif": 0.3038888888888889,
+          "ic_inferior": -0.7084430802561272,
+          "ic_superior": 1.316220858033905,
+          "unidades": 450
+        },
+        "trocas_busca/dormir_sorteado": {
+          "M3": 0.15388888888888888,
+          "M3+S": 0.48388888888888887,
+          "dif": 0.33,
+          "ic_inferior": 0.2926779666501938,
+          "ic_superior": 0.36732203334980623,
+          "unidades": 450
+        },
+        "trocas_busca/outra_unidade": {
+          "M3": 0.6116666666666667,
+          "M3+S": 1.835,
+          "dif": 1.2233333333333334,
+          "ic_inferior": 1.1468458007318691,
+          "ic_superior": 1.2998208659347976,
+          "unidades": 450
+        },
+        "trocas_busca/reflexo": {
+          "M3": 1.8994444444444445,
+          "M3+S": 0.0,
+          "dif": -1.8994444444444445,
+          "ic_inferior": -1.9845055347728684,
+          "ic_superior": -1.8143833541160206,
+          "unidades": 450
+        }
+      },
+      "sem_suspensao_nao_cortadas": {
+        "buscas": 26060,
+        "cortadas_pelo_reflexo": 3419,
+        "frac_meta_ou_achou_nao_cortadas": 0.9513714058566318,
+        "nao_cortadas": 22641
+      },
+      "trocas_busca_por_vencedora_por_vida": {
+        "M3": {
+          "brincar/None": 0.002777777777777778,
+          "chamar_atencao/None": 0.15944444444444444,
+          "dormir/None": 2.0533333333333332,
+          "emburrar/None": 0.0011111111111111111,
+          "explorar/cheiro": 0.11333333333333333,
+          "explorar/ponto": 0.085,
+          "explorar/vagar": 0.0961111111111111
+        },
+        "M3+S": {
+          "brincar/None": 0.002777777777777778,
+          "chamar_atencao/None": 0.52,
+          "dormir/None": 0.48388888888888887,
+          "emburrar/None": 0.0016666666666666668,
+          "explorar/cheiro": 0.3038888888888889,
+          "explorar/ponto": 0.2361111111111111,
+          "explorar/vagar": 0.2866666666666667
+        }
+      }
+    },
+    "M3xM3+S|longe": {
+      "medidas": {
+        "acoes/brincar": {
+          "M3": 24.284444444444443,
+          "M3+S": 24.650555555555556,
+          "dif": 0.3661111111111111,
+          "ic_inferior": -0.00925089206158175,
+          "ic_superior": 0.741473114283804,
+          "unidades": 450
+        },
+        "acoes/chamar_atencao": {
+          "M3": 219.885,
+          "M3+S": 221.39666666666668,
+          "dif": 1.5116666666666667,
+          "ic_inferior": 0.39855286722658345,
+          "ic_superior": 2.62478046610675,
+          "unidades": 450
+        },
+        "acoes/comer": {
+          "M3": 85.74833333333333,
+          "M3+S": 87.91777777777777,
+          "dif": 2.1694444444444443,
+          "ic_inferior": 1.590907496915435,
+          "ic_superior": 2.7479813919734535,
+          "unidades": 450
+        },
+        "acoes/dormir": {
+          "M3": 631.7522222222223,
+          "M3+S": 629.7622222222222,
+          "dif": -1.99,
+          "ic_inferior": -2.713034957502173,
+          "ic_superior": -1.266965042497827,
+          "unidades": 450
+        },
+        "acoes/emburrar": {
+          "M3": 24.149444444444445,
+          "M3+S": 23.36277777777778,
+          "dif": -0.7866666666666666,
+          "ic_inferior": -1.3328131744440255,
+          "ic_superior": -0.24052015888930778,
+          "unidades": 450
+        },
+        "acoes/explorar": {
+          "M3": 350.24888888888887,
+          "M3+S": 348.93555555555554,
+          "dif": -1.3133333333333332,
+          "ic_inferior": -2.296006085433609,
+          "ic_superior": -0.3306605812330575,
+          "unidades": 450
+        },
+        "acoes/ocioso": {
+          "M3": 7.931666666666667,
+          "M3+S": 7.974444444444444,
+          "dif": 0.042777777777777776,
+          "ic_inferior": -0.036100803079135727,
+          "ic_superior": 0.12165635863469128,
+          "unidades": 450
+        },
+        "buscas": {
+          "M3": 45.24166666666667,
+          "M3+S": 39.321666666666665,
+          "dif": -5.92,
+          "ic_inferior": -6.360179143922345,
+          "ic_superior": -5.479820856077655,
+          "unidades": 450
+        },
+        "buscas_meta_ou_achou": {
+          "M3": 18.135,
+          "M3+S": 19.037777777777777,
+          "dif": 0.9027777777777778,
+          "ic_inferior": 0.6270164595056598,
+          "ic_superior": 1.1785390960498958,
+          "unidades": 450
+        },
+        "reflexos": {
+          "M3": 335.65055555555557,
+          "M3+S": 329.6177777777778,
+          "dif": -6.032777777777778,
+          "ic_inferior": -8.98084733615194,
+          "ic_superior": -3.084708219403615,
+          "unidades": 450
+        },
+        "trocas_busca/dormir_sorteado": {
+          "M3": 1.0372222222222223,
+          "M3+S": 3.8394444444444447,
+          "dif": 2.8022222222222224,
+          "ic_inferior": 2.7079657343359274,
+          "ic_superior": 2.8964787101085174,
+          "unidades": 450
+        },
+        "trocas_busca/outra_unidade": {
+          "M3": 5.139444444444444,
+          "M3+S": 18.41,
+          "dif": 13.270555555555555,
+          "ic_inferior": 13.030323327487043,
+          "ic_superior": 13.510787783624068,
+          "unidades": 450
+        },
+        "trocas_busca/reflexo": {
+          "M3": 20.551111111111112,
+          "M3+S": 0.0,
+          "dif": -20.551111111111112,
+          "ic_inferior": -20.843714257661926,
+          "ic_superior": -20.258507964560298,
+          "unidades": 450
+        }
+      },
+      "sem_suspensao_nao_cortadas": {
+        "buscas": 81435,
+        "cortadas_pelo_reflexo": 36992,
+        "frac_meta_ou_achou_nao_cortadas": 0.7344913709695565,
+        "nao_cortadas": 44443
+      },
+      "trocas_busca_por_vencedora_por_vida": {
+        "M3": {
+          "brincar/None": 0.029444444444444443,
+          "brincar/bola": 0.010555555555555556,
+          "chamar_atencao/None": 1.5366666666666666,
+          "comer/comida": 0.014444444444444444,
+          "dormir/None": 21.588333333333335,
+          "emburrar/None": 0.04111111111111111,
+          "explorar/cheiro": 0.7116666666666667,
+          "explorar/ponto": 1.068888888888889,
+          "explorar/vagar": 0.6894444444444444
+        },
+        "M3+S": {
+          "brincar/None": 0.04388888888888889,
+          "brincar/bola": 0.018333333333333333,
+          "chamar_atencao/None": 5.24,
+          "comer/comida": 0.02277777777777778,
+          "dormir/None": 3.8394444444444447,
+          "emburrar/None": 0.14277777777777778,
+          "explorar/cheiro": 2.5733333333333333,
+          "explorar/ponto": 3.926111111111111,
+          "explorar/vagar": 2.6033333333333335
+        }
+      }
+    },
+    "M3xM3+S|perto": {
+      "medidas": {
+        "acoes/brincar": {
+          "M3": 14.688888888888888,
+          "M3+S": 14.704444444444444,
+          "dif": 0.015555555555555555,
+          "ic_inferior": -0.051309278383822154,
+          "ic_superior": 0.08242038949493327,
+          "unidades": 450
+        },
+        "acoes/chamar_atencao": {
+          "M3": 199.21277777777777,
+          "M3+S": 199.25722222222223,
+          "dif": 0.044444444444444446,
+          "ic_inferior": -0.252428184330783,
+          "ic_superior": 0.3413170732196719,
+          "unidades": 450
+        },
+        "acoes/comer": {
+          "M3": 53.24944444444444,
+          "M3+S": 53.245,
+          "dif": -0.0044444444444444444,
+          "ic_inferior": -0.08989552135830536,
+          "ic_superior": 0.08100663246941647,
+          "unidades": 450
+        },
+        "acoes/dormir": {
+          "M3": 636.5405555555556,
+          "M3+S": 636.5072222222223,
+          "dif": -0.03333333333333333,
+          "ic_inferior": -0.14836631954595308,
+          "ic_superior": 0.08169965287928643,
+          "unidades": 450
+        },
+        "acoes/emburrar": {
+          "M3": 6.115555555555556,
+          "M3+S": 6.1066666666666665,
+          "dif": -0.008888888888888889,
+          "ic_inferior": -0.052437906675261,
+          "ic_superior": 0.03466012889748322,
+          "unidades": 450
+        },
+        "acoes/explorar": {
+          "M3": 425.4488888888889,
+          "M3+S": 425.43333333333334,
+          "dif": -0.015555555555555555,
+          "ic_inferior": -0.23569201684417382,
+          "ic_superior": 0.20458090573306273,
+          "unidades": 450
+        },
+        "acoes/ocioso": {
+          "M3": 8.74388888888889,
+          "M3+S": 8.74611111111111,
+          "dif": 0.0022222222222222222,
+          "ic_inferior": -0.004147832719498357,
+          "ic_superior": 0.008592277163942803,
+          "unidades": 450
+        },
+        "buscas": {
+          "M3": 7.500555555555556,
+          "M3+S": 7.486111111111111,
+          "dif": -0.014444444444444444,
+          "ic_inferior": -0.08453891482662469,
+          "ic_superior": 0.05565002593773581,
+          "unidades": 450
+        },
+        "buscas_meta_ou_achou": {
+          "M3": 7.3933333333333335,
+          "M3+S": 7.403333333333333,
+          "dif": 0.01,
+          "ic_inferior": -0.05875896179953439,
+          "ic_superior": 0.07875896179953439,
+          "unidades": 450
+        },
+        "reflexos": {
+          "M3": 194.6938888888889,
+          "M3+S": 194.36111111111111,
+          "dif": -0.3327777777777778,
+          "ic_inferior": -0.6450081213489478,
+          "ic_superior": -0.020547434206607706,
+          "unidades": 450
+        },
+        "trocas_busca/dormir_sorteado": {
+          "M3": 0.009444444444444445,
+          "M3+S": 0.02,
+          "dif": 0.010555555555555556,
+          "ic_inferior": 0.005178820179804063,
+          "ic_superior": 0.015932290931307047,
+          "unidades": 450
+        },
+        "trocas_busca/outra_unidade": {
+          "M3": 0.03722222222222222,
+          "M3+S": 0.06055555555555556,
+          "dif": 0.023333333333333334,
+          "ic_inferior": 0.011865400755904736,
+          "ic_superior": 0.034801265910761936,
+          "unidades": 450
+        },
+        "trocas_busca/reflexo": {
+          "M3": 0.06888888888888889,
+          "M3+S": 0.0,
+          "dif": -0.06888888888888889,
+          "ic_inferior": -0.0844939745312373,
+          "ic_superior": -0.05328380324654047,
+          "unidades": 450
+        }
+      },
+      "sem_suspensao_nao_cortadas": {
+        "buscas": 13501,
+        "cortadas_pelo_reflexo": 124,
+        "frac_meta_ou_achou_nao_cortadas": 0.9948418928010765,
+        "nao_cortadas": 13377
+      },
+      "trocas_busca_por_vencedora_por_vida": {
+        "M3": {
+          "chamar_atencao/None": 0.012222222222222223,
+          "comer/comida": 0.0011111111111111111,
+          "dormir/None": 0.07833333333333334,
+          "explorar/cheiro": 0.0077777777777777776,
+          "explorar/ponto": 0.0033333333333333335,
+          "explorar/vagar": 0.0033333333333333335
+        },
+        "M3+S": {
+          "chamar_atencao/None": 0.014444444444444444,
+          "comer/comida": 0.0011111111111111111,
+          "dormir/None": 0.02,
+          "explorar/cheiro": 0.011666666666666667,
+          "explorar/ponto": 0.008888888888888889,
+          "explorar/vagar": 0.0044444444444444444
+        }
+      }
+    }
+  },
+  "rotulo": "a leitura para o proximo passo do longe: as partes da avaliacao da L-2 relidas, pareadas por unidade; descritiva, pos hoc, sem criterio",
+  "script": {
+    "arquivo": "experiments/leitura_l2_proximo_passo.py",
+    "sha256": "762c6963b4a870072fb6184637f144baf90581c24257b0145f176f2561dea1a8"
+  },
+  "vidas": 21600
+}
