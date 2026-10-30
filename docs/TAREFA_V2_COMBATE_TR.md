@@ -319,3 +319,23 @@ tira esses pets do navegador.
   - o e2e vai de 96 para 98 (saem os 4 da arena do UP e entram 6 da luta em tempo real);
   - o motor vai de 8 852 para 8 568 linhas.
 - **`CLIPES_UP`:** a proposta de onde ligar está no relato e no registro. Fica desligada, porque a decisão é do Matheus.
+
+## 15. R4: o resultado (worker, Claude Code, Opus 5.5, 2026-10-30)
+
+- **Os modos especiais no palco da luta em tempo real**, sem nenhum controle durante a luta:
+  - **a Liga** (os 6 Megas em sequência), **a Torre de Batalha** e **o Palácio** (até a primeira derrota) já passavam pelo palco desde a R3.
+    Nesta etapa, os textos da tela passam a falar de tempo, e não de turno ("No limite de tempo, a luta fica com o líder");
+  - **a Fábrica:** cada luta dos Megas alugados vai ao palco depois de gravada no registro do Tamer (v7). O Resultado tem a etiqueta
+    "Fronteira · Fábrica" (`lutarFabrica`, em `web/app/src/fronteira.ts`);
+  - **o Salão:** as lutas da tentativa, um pet de cada nível, vão ao palco uma depois da outra, cada uma com o pet dela. O Resultado lista
+    as lutas (`mostrarSalao`). O `animar` de `src/luta.ts` passou a aceitar um pet por luta (`mostrarLutas`).
+- **As cartas e os chips no tempo real:**
+  - **o Fôlego** dá o Guts a mais no começo da luta;
+  - **o Foco** tira a exploração: o teste confere que não há nenhuma ação "exploracao" do pet em 20 lutas, contra exploração sem a carta;
+  - **a Cura** cura uma vez por luta ou por série;
+  - **os chips de regra** entram no fim da lista e disparam: o teste usa o Perseguidor num Ultimate contra o atirador;
+  - **a carta em jogo** aparece num aviso no palco.
+- **As regras dos líderes por lugar:** a proposta está no registro. Todas ficam, e a Leitura passa a dizer "aos 20 segundos" (o turno 10
+  vezes `T_TR`).
+- **Achado:** um chip de regra com a mesma condição de uma regra que o pet já tem fica coberto, porque a primeira regra que vale decide.
+  Isso acontece com o Recuo e o Oportunista nos pets dos testes. A proposta está no registro.
