@@ -45,7 +45,7 @@
 .painel-tela .painel-tela__folha .dl-btn:not(.dl-btn--sec):not(.dl-btn--perigo):not(.dl-btn--forcar):not(:disabled)::before{
   content:""; position:absolute; inset:0 0 auto 0; height:5px; background:var(--hx-hachura-verde); pointer-events:none;
 }
-.painel-tela .painel-tela__folha .dl-btn:hover:not(:disabled){ background:rgba(22,46,34,.96) }
+.painel-tela .painel-tela__folha .dl-btn:hover:not(:disabled){ background:var(--hx-btn-bg-hover) }
 .painel-tela .painel-tela__folha .dl-btn:active:not(:disabled){ background:var(--hx-btn-borda); color:var(--hx-escolhido-ink); box-shadow:none; transform:none }
 .painel-tela .painel-tela__folha .dl-btn--sec{ background:var(--hx-miolo); color:var(--hx-texto); border-color:var(--hx-borda-topo) }
 .painel-tela .painel-tela__folha .dl-btn--sec:hover:not(:disabled){ background:var(--hx-miolo-2); border-color:var(--hx-texto-2) }
@@ -57,7 +57,7 @@
 
 /* chips de filtro e o escolhido em ciano palido */
 .painel-tela .painel-tela__folha .chip{ border-radius:0; min-height:44px; min-width:48px; background:var(--hx-miolo); color:var(--hx-texto); border:1px solid var(--hx-borda-topo); box-shadow:none; font-weight:600; letter-spacing:.06em; text-transform:uppercase }
-.painel-tela .painel-tela__folha .chip[aria-pressed="true"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido) }
+.painel-tela .painel-tela__folha .chip[aria-pressed="true"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido-borda) }
 .painel-tela .painel-tela__folha .reg-linha[aria-pressed="true"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink) }
 
 /* texto de apoio, resumos e links */
