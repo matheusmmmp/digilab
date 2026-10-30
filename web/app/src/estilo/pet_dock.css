@@ -25,17 +25,23 @@
 .app--pet .racao-lugar{ min-height:44px; padding:0 14px; font-size:15px }
 
 /* ---------- o dock e o que fica sobre ele */
+/* HUD (docs/TAREFA_V3_LAYOUT_HUD.md): a barra baixa e leve, cada acao um botao compacto e chanfrado (icone e rotulo curto); no desktop a
+   barra tem a largura dos botoes, no celular ocupa a largura toda */
 .pet-dock{ position:absolute; z-index:6; left:50%; bottom:12px; translate:-50% 0; width:min(660px,calc(100% - 24px)); display:flex; flex-direction:column; gap:8px; pointer-events:none }
+@media (min-width:900px){ .pet-dock{ width:max-content; max-width:calc(100% - 2 * var(--hud-larg, 288px) - 48px) } }
 .pet-dock > *{ pointer-events:auto }
-.pet-dock .dock{ position:relative; display:flex; grid-template-columns:none; gap:4px; padding:10px 6px 6px; background:linear-gradient(180deg,var(--hx-miolo-2),var(--hx-miolo)); border:1px solid var(--hx-borda);
-  border-top:2px solid var(--hx-borda-topo) }
-.pet-dock .dock::before{ content:""; position:absolute; inset:0 0 auto 0; height:4px; background:var(--hx-hachura); pointer-events:none }
-.dock .dock-bt, .dock-mais .dock-bt{ flex:1 1 0; min-width:0; min-height:56px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
-  padding:4px 2px; font-size:14px; letter-spacing:.04em }
+.pet-dock .dock{ position:relative; display:flex; grid-template-columns:none; gap:4px; padding:4px; background:var(--hud-fundo-2, rgba(6,11,18,.9)); border:1px solid var(--hx-borda);
+  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px) }
+.pet-dock .dock::before{ content:""; position:absolute; inset:-1px auto auto 12px; width:64px; height:2px; background:var(--hx-rotulo); pointer-events:none }
+.dock .dock-bt, .dock-mais .dock-bt{ flex:1 1 0; min-width:0; min-height:52px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
+  padding:4px 2px; font-size:13px; letter-spacing:.02em; text-transform:none }
+.pet-dock .dock .dock-bt{ border-color:var(--hx-borda); background:rgba(73,213,226,.06); clip-path:polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px)) }
+.pet-dock .dock .dock-bt:hover{ background:rgba(73,213,226,.14) }
+.pet-dock .dock .dock-bt:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:-4px }
 .dock .dock-bt span{ max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
-.dock .dock-bt img, .dock .dock-bt svg{ width:24px; height:24px; flex:none; object-fit:contain; image-rendering:pixelated }
+.dock .dock-bt img, .dock .dock-bt svg{ width:22px; height:22px; flex:none; object-fit:contain; image-rendering:pixelated }
 .pet-dock .dock .acao-destaque--sugerida, .pet-dock .dock .acao-destaque--sugerida:hover{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido-borda) }
-.dock .acao-reserva{ display:block; font-size:10px; font-weight:600; opacity:.85 }
+.dock .acao-reserva{ display:block; font-size:10px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; opacity:.85; line-height:1 }
 .dock .acao-mais svg{ image-rendering:auto }
 .dock-mais{ position:absolute; right:6px; bottom:calc(100% + 8px); z-index:2; display:flex; flex-direction:column; gap:4px; min-width:220px; padding:6px;
   background:linear-gradient(180deg,var(--hx-miolo-2),var(--hx-miolo)); border:1px solid var(--hx-borda); border-top:2px solid var(--hx-borda-topo) }
@@ -122,7 +128,7 @@
 .mod-registro li[data-quem="recusa"] .mod-registro-ic{ color:var(--hx-perigo) }
 
 @media (min-width:900px){
-  .dock .dock-bt{ font-size:15px }
+  .pet-dock .dock .dock-bt{ flex:0 0 72px; font-size:14px }
 }
 @media (max-width:899px){
   .app--pet .pet-balcao .cena-fala{ top:calc(var(--casca-topo) + 130px) }

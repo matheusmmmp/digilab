@@ -1,0 +1,155 @@
+/* HUD da tela Pet (docs/TAREFA_V3_LAYOUT_HUD.md): caixas escuras translucidas com cantos chanfrados, contorno fino e riscas diagonais,
+   no mesmo sistema do trilho, do topo e da barra de acoes. Cores pelos tokens --hx-* (as duas peles, sempre escuras); o chanfro e as
+   diagonais da borda sao desenhados no fundo, porque o clip-path corta a borda. Nada aqui toca a cena, o pet nem o balao.
+   Paleta (segunda rodada, decisao do Matheus de 2026-10-30): carvao quase preto, contorno azul-petroleo e acentos ciano/turquesa da
+   prancha, no trilho, no topo e na tela Pet, nas duas peles (as telas abertas seguem a pele escolhida). Os tokens --hx-* sao redefinidos
+   nesses tres lugares, e tudo dentro deles (paineis, chamado, barra, menu Mais, painel do DigiBrain) herda.
+   Contraste, pior caso (o fundo de cima, rgba(16,25,27,.92), sobre branco puro -> #232B2D, no tema claro): texto #DDEBEC 11,6:1;
+   texto-2 #C2D8DA 9,4:1; secundario #8FB3B6 6,2:1; ciano #49D5E2 8,0:1; alerta #FFB020 8,5:1; perigo #F09A9A 6,5:1. O escolhido
+   #B9EFF0 leva texto #0A1416 (15,6:1). O contorno #29474B e decorativo; as bordas que marcam estado (escolhido, chamado) sao ciano. */
+:root{
+  --hud-fundo-1:rgba(16,25,27,.92); --hud-fundo-2:rgba(10,16,18,.94);
+  --hud-ch:10px; --hud-ch-p:6px;
+  --hud-risca:repeating-linear-gradient(-60deg, rgba(73,213,226,.55) 0 2px, transparent 2px 6px);
+  --hud-larg:288px;
+}
+.hx-nav, .topo-hab, .app--pet .pet-tela{
+  --hx-chao:#0A1012; --hx-miolo:#10191B; --hx-miolo-2:#162326; --hx-painel-fim:#10191B;
+  --hx-borda:#29474B; --hx-borda-topo:#3A6A70; --hx-borda-int:rgba(73,213,226,.14);
+  --hx-texto:#DDEBEC; --hx-texto-2:#C2D8DA; --hx-sec:#8FB3B6; --hx-rotulo:#49D5E2; --hx-num:#49D5E2;
+  --hx-escolhido:#B9EFF0; --hx-escolhido-ink:#0A1416; --hx-escolhido-borda:#B9EFF0; --hx-escolhido-brilho:none;
+  --hx-medidor:#49D5E2; --hx-medidor-trilho:rgba(73,213,226,.14); --hx-luz:#49D5E2; --hx-foco:#49D5E2;
+  --hx-btn-bg:rgba(73,213,226,.12); --hx-btn-bg-hover:rgba(73,213,226,.22); --hx-btn-ink:#B9EFF0; --hx-btn-borda:#49D5E2;
+  --hx-hachura:repeating-linear-gradient(-60deg, rgba(73,213,226,.45) 0 4px, transparent 4px 9px);
+  --hx-hachura-verde:repeating-linear-gradient(-60deg, rgba(73,213,226,.45) 0 4px, transparent 4px 9px);
+  --hx-perigo:#F09A9A;
+}
+/* a caixa chanfrada: canto superior direito e inferior esquerdo, como a prancha */
+/* (:root[data-pele] .pet-tela na frente: vence as regras da pele Vidro para .pet-prioridade e .pet-pedido .chamado) */
+.hud-caixa, .pet-hud .hud-painel, .pet-etiqueta-db, .topo-pet, .topo-relogio,
+:root[data-pele] .pet-tela .pet-alerta :is(.pet-prioridade, .chamado.dl-card){
+  --ch:var(--hud-ch);
+  border:1px solid var(--hx-borda); border-radius:0; box-shadow:none; color:var(--hx-texto); font-family:var(--hx-f);
+  background:
+    linear-gradient(45deg, transparent calc(50% - 1px), var(--hx-borda) calc(50% - 1px) 50%, transparent 50%) right top / var(--ch) var(--ch) no-repeat border-box,
+    linear-gradient(45deg, transparent 50%, var(--hx-borda) 50% calc(50% + 1px), transparent calc(50% + 1px)) left bottom / var(--ch) var(--ch) no-repeat border-box,
+    linear-gradient(180deg, var(--hud-fundo-1), var(--hud-fundo-2)) border-box;
+  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+  clip-path:polygon(0 0, calc(100% - var(--ch)) 0, 100% var(--ch), 100% 100%, var(--ch) 100%, 0 calc(100% - var(--ch)));
+}
+.pet-etiqueta-db{ --ch:var(--hud-ch-p) }
+/* a risca diagonal fina dos titulos */
+.hud-risca{ flex:1 1 auto; min-width:24px; max-width:72px; height:8px; background:var(--hud-risca) }
+@media (prefers-reduced-transparency:reduce){ :root{ --hud-fundo-1:#10191B; --hud-fundo-2:#0A1012 } }
+
+/* ---------- os paineis empilhados a direita (>= 900 px) */
+.pet-hud{ position:absolute; z-index:6; top:calc(var(--casca-topo) + 8px); right:12px; width:var(--hud-larg); max-height:calc(100% - var(--casca-topo) - 88px);
+  display:flex; flex-direction:column; gap:8px; overflow:hidden auto; pointer-events:auto; scrollbar-width:thin }
+.hud-painel{ position:relative; flex:none; display:flex; flex-direction:column; min-height:0 }
+.hud-painel::before{ content:""; position:absolute; left:12px; top:0; width:56px; height:2px; background:var(--hx-rotulo); pointer-events:none }
+.hud-painel::after{ content:""; position:absolute; right:5px; bottom:5px; width:4px; height:4px; background:var(--hx-rotulo); pointer-events:none }
+.hud-painel__cab{ margin:0; font:inherit }
+.hud-painel__bt{ display:flex; align-items:center; gap:10px; width:100%; min-height:48px; padding:6px 12px; border:0; background:none; color:var(--hx-texto);
+  font:inherit; text-align:left; cursor:pointer }
+.hud-painel__bt:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:-4px }
+.hud-painel__ic{ width:20px; height:20px; flex:none; color:var(--hx-rotulo) }
+.hud-painel__txt{ display:flex; flex-direction:column; gap:1px; min-width:0; flex:0 1 auto }
+.hud-painel__tit{ font:700 15px/1.1 var(--hx-f); letter-spacing:.08em; text-transform:uppercase; white-space:nowrap }
+.hud-painel__resumo{ color:var(--hx-sec); font:500 13px/1.2 var(--hx-f); white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+.hud-painel__bt .hud-risca{ margin-left:auto }
+.hud-painel__seta{ width:18px; height:18px; flex:none; color:var(--hx-sec); transform:rotate(180deg) }
+.hud-painel[data-aberto="false"] .hud-painel__seta{ transform:none }
+.hud-painel__corpo{ padding:2px 12px 12px; border-top:1px solid var(--hx-borda); padding-top:10px; overflow:auto; min-height:0 }
+.hud-painel[data-aberto="true"] .hud-painel__bt{ min-height:44px }
+
+/* conteudo: necessidades em linhas curtas (icone, rotulo, barra, %) */
+.det-estado{ display:flex; flex-direction:column; gap:8px }
+.app--pet :is(.pet-hud, .pet-painel) .necessidades4{ display:flex; flex-direction:column; gap:6px; margin:0 }
+.nec-linha{ display:flex; align-items:center; gap:8px; min-width:0 }
+.nec-ic{ width:16px; height:16px; flex:none; color:var(--hx-rotulo) }
+.nec-linha .hx-medidor{ flex:1; min-width:0; min-height:20px }
+.nec-linha .hx-medidor__rot{ min-width:64px; font-size:12px; color:var(--hx-texto-2) }
+.nec-linha .hx-medidor__trilho{ min-width:40px }
+.nec-linha .hx-medidor__txt{ min-width:3em; text-align:right; font:700 13px/1 var(--hx-f-num); color:var(--hx-num) }
+.hud-detalhes{ align-self:flex-start; display:inline-flex; align-items:center; gap:2px; min-height:44px; margin:-4px 0 -8px; padding:0 4px; border:0; background:none;
+  color:var(--hx-rotulo); font:600 13px/1 var(--hx-f); letter-spacing:.06em; cursor:pointer }
+.hud-detalhes[aria-expanded="true"] svg{ transform:rotate(90deg) }
+.hud-detalhes:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:-2px }
+.det-estado-mais{ display:flex; flex-direction:column; gap:10px; padding-top:8px; border-top:1px solid var(--hx-borda) }
+.det-estado-mais:empty{ display:none }
+.pet-hud .mod-registro li{ min-height:36px; font-size:14px }
+.pet-hud .mod-link{ margin-top:8px; min-height:44px; padding:0 12px; font-size:13px }
+.pet-hud .evo-mod{ border:0; padding:0; background:none }
+.pet-hud .evo-mod-spr{ max-width:80px }
+
+/* ---------- o chamado e o resumo: um cartao no alto ao centro, fora do pet */
+.pet-alerta{ position:absolute; z-index:6; top:calc(var(--casca-topo) + 14px); left:50%; translate:-50% 0; width:min(340px,calc(100% - 24px)); pointer-events:none }
+.pet-alerta > *{ pointer-events:auto }
+.pet-alerta .pet-pedido{ display:flex; flex-direction:column; gap:6px }
+.pet-alerta .chamado.dl-card{ display:grid; grid-template-columns:auto 1fr; align-items:center; gap:6px 10px; padding:10px 12px; min-height:0 }
+.pet-alerta .chamado-ic{ width:28px; height:28px; display:flex; align-items:center; justify-content:center; border:0; background:none; color:var(--hx-alerta); font:700 20px/1 var(--hx-f) }
+.pet-alerta .chamado-ic img{ max-width:24px; max-height:24px; object-fit:contain }
+.pet-alerta .chamado-txt{ display:flex; flex-direction:column; gap:2px; min-width:0 }
+.pet-alerta .chamado-tit{ display:flex; flex-direction:column; gap:2px }
+.pet-alerta .chamado b{ font:700 15px/1.1 var(--hx-f); letter-spacing:.08em; text-transform:uppercase; color:var(--hx-texto) }
+.pet-alerta .chamado .dl-apoio{ font:500 13px/1.2 var(--hx-f); color:var(--hx-sec) }
+.pet-alerta .chamado .hx-continuar{ grid-column:1 / -1; min-height:44px; padding:0 16px; font-size:15px }
+.pet-alerta .chamado .dl-seg{ margin-top:4px }
+.pet-alerta .chamado .dl-seg i{ background:var(--hx-medidor-trilho) }
+.pet-alerta .chamado .dl-seg i.on{ background:var(--hx-medidor) }
+.pet-alerta .chamado--morte .chamado-txt{ grid-column:1 / -1 }
+.pet-alerta .pet-prioridade{ display:flex; align-items:center; gap:10px; width:100%; min-height:48px; padding:4px 12px; font:inherit; text-align:left; cursor:pointer }
+.pet-alerta .pet-prioridade:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:-4px }
+.pet-alerta .pet-prioridade-ic{ width:28px; height:28px; flex:none; display:flex; align-items:center; justify-content:center; border:0; background:none }
+.pet-alerta .pet-prioridade-ic img{ max-width:24px; max-height:24px; object-fit:contain }
+.pet-alerta .pet-prioridade-txt{ flex:1; min-width:0 }
+.pet-alerta .pet-prioridade-txt b{ display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font:700 15px/1.2 var(--hx-f); letter-spacing:.06em; text-transform:uppercase; color:var(--hx-texto) }
+.pet-alerta .pet-prioridade-ver{ display:flex; align-items:center; gap:2px; flex:none; color:var(--hx-rotulo); font:600 13px/1 var(--hx-f); letter-spacing:.06em; text-transform:uppercase }
+/* o cartao do pedido aberto ganha o contorno ciano e o risco no topo */
+:root[data-pele] .pet-tela .pet-alerta .chamado.dl-card:not(.chamado--morte){ --hx-borda:var(--hx-rotulo) }
+.pet-alerta .chamado.dl-card::before{ content:""; position:absolute; left:12px; top:0; width:64px; height:2px; background:var(--hx-rotulo) }
+.pet-alerta .chamado.dl-card{ position:relative }
+
+/* ---------- a etiqueta do DigiBrain sobre a cena (>= 900 px), no canto inferior direito */
+.pet-etiqueta-db{ position:absolute; z-index:6; right:12px; bottom:16px; display:inline-flex; align-items:center; gap:8px; min-height:44px; padding:0 16px;
+  font:700 14px/1 var(--hx-f); letter-spacing:.06em; cursor:pointer; pointer-events:auto }
+.pet-etiqueta-db svg{ color:var(--hx-rotulo) }
+.pet-etiqueta-db[aria-pressed="true"]{ border-color:var(--hx-rotulo) }
+.pet-etiqueta-db:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:-4px }
+
+/* ---------- o painel flutuante do DigiBrain e do porque: no desktop, no lugar da pilha (nao cobre o pet) */
+@media (min-width:900px){
+  .app--pet .pet-painel{ right:12px; width:360px; max-height:calc(100% - var(--casca-topo) - 88px) }
+  .app--pet .pet-balcao .cena-fala{ right:calc(var(--hud-larg) + 36px); top:calc(var(--casca-topo) + 170px) }
+}
+/* monitor largo: um pouco mais de folga para a pilha */
+@media (min-width:1600px){ :root{ --hud-larg:300px } }
+
+/* celular: o cartao sob o topo, sem passar por baixo dos botoes da borda direita */
+@media (max-width:899px){
+  .pet-alerta{ top:calc(var(--casca-topo) + 6px); left:10px; translate:none; width:auto; right:64px; max-width:360px }
+}
+
+/* o botao da borda escolhido (pele Holografica): o escolhido e um azul translucido, que sobre o habitat claro some com o icone; a base escura
+   fica por baixo dele */
+:root[data-pele="vidro"] .app--pet .pet-tela .pet-lado .pet-lado__bt[aria-pressed="true"]{ background-color:#060B12 }
+/* o balao da fala no padrao do HUD (pedido do Matheus, 2026-10-30): caixa escura translucida chanfrada, contorno e traco ciano, texto
+   claro; a fala fria/sombria (pets v7) troca o ciano pelo lilas. O toque continua abrindo o porque */
+.app--pet .pet-balcao .cena-fala.dl-balao{
+  --ch:var(--hud-ch-p); --balao-cor:var(--hx-rotulo);
+  gap:2px; min-height:44px; padding:6px 14px 7px; border:1px solid var(--balao-cor); border-radius:0; box-shadow:none;
+  color:var(--hx-texto); font:600 15px/1.25 var(--hx-f);
+  background:
+    linear-gradient(45deg, transparent calc(50% - 1px), var(--balao-cor) calc(50% - 1px) 50%, transparent 50%) right top / var(--ch) var(--ch) no-repeat border-box,
+    linear-gradient(45deg, transparent 50%, var(--balao-cor) 50% calc(50% + 1px), transparent calc(50% + 1px)) left bottom / var(--ch) var(--ch) no-repeat border-box,
+    linear-gradient(180deg, var(--hud-fundo-1), var(--hud-fundo-2)) border-box;
+  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+  clip-path:polygon(0 0, calc(100% - var(--ch)) 0, 100% var(--ch), 100% 100%, var(--ch) 100%, 0 calc(100% - var(--ch)));
+}
+.app--pet .pet-balcao .cena-fala.dl-balao::before{ content:""; position:absolute; left:10px; top:0; width:36px; height:2px; background:var(--balao-cor); pointer-events:none }
+.app--pet .pet-balcao .cena-fala.dl-balao--sombria{ --balao-cor:#C9A8FF }
+.app--pet .pet-balcao .cena-fala .balao-txt{ font-size:15px }
+.app--pet .pet-balcao .cena-fala small{ color:var(--hx-sec); font:500 12px/1.2 var(--hx-f); letter-spacing:.02em }
+.app--pet .pet-balcao .cena-fala .dl-balao-tag{ color:var(--hx-sec); border-color:var(--hx-borda); border-radius:0 }
+.app--pet .pet-balcao .cena-fala:hover{ --balao-cor:var(--hx-escolhido) }
+.app--pet .pet-balcao .cena-fala:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:-5px }
