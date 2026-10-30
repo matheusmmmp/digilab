@@ -1,0 +1,115 @@
+{
+ "gerado_por": "web/app/scripts/equilibrio_tr/fase3_estagio.ts",
+ "data": "2026-10-30",
+ "commit": "19668ab9",
+ "node": "v24.19.0",
+ "faixa": "conferencia",
+ "bases": [
+  70101,
+  70202,
+  70303,
+  70404,
+  70505
+ ],
+ "sementes_por_base": 20,
+ "relogio": {
+  "ritmo": 16,
+  "atordoaInterrupcao": 31,
+  "andar": 1.12,
+  "recuo": 0.6,
+  "arrancada": 8,
+  "projetil": 4.8,
+  "perto": 62,
+  "medio": 120,
+  "contato": 44,
+  "empurrao": 0,
+  "disparo": 6
+ },
+ "listas": "v14",
+ "reserva_no_fim": true,
+ "escala": {
+  "vida": {
+   "bebe": 50,
+   "crianca": 200,
+   "adolescente": 700,
+   "adulto": 2500,
+   "mega": 23000
+  },
+  "beta": 0.045
+ },
+ "parte": "p1",
+ "metas": {
+  "P-1": {
+   "vizinhos": {
+    "rookie_champion": {
+     "pontos": 0,
+     "vitorias": 0,
+     "lutas": 2560,
+     "razao_E": 0.3886,
+     "vitorias_por_par": {}
+    },
+    "champion_ultimate": {
+     "pontos": 0.0577,
+     "vitorias": 0.057,
+     "lutas": 10240,
+     "razao_E": 0.5572,
+     "vitorias_por_par": {
+      "brigao x sentinela": 254,
+      "brigao x emboscador": 237,
+      "brigao x vigia": 1,
+      "brigao x tita": 7,
+      "guardiao x sentinela": 16,
+      "guardiao x emboscador": 16,
+      "cacador x duelista": 11,
+      "cacador x furioso": 6,
+      "cacador x espelho": 3,
+      "cacador x muralha": 3,
+      "cacador x sentinela": 1,
+      "cacador x emboscador": 3,
+      "cacador x vigia": 5,
+      "cacador x tita": 4,
+      "colosso x emboscador": 13,
+      "colosso x tita": 4
+     }
+    },
+    "ultimate_mega": {
+     "pontos": 0.0349,
+     "vitorias": 0.0344,
+     "lutas": 20480,
+     "razao_E": 0.2848,
+     "vitorias_por_par": {
+      "duelista x sentinela": 1,
+      "duelista x emboscador": 104,
+      "furioso x sentinela": 142,
+      "furioso x emboscador": 189,
+      "sentinela x muralha": 71,
+      "emboscador x duelista": 10,
+      "emboscador x muralha": 115,
+      "vigia x sentinela": 14,
+      "vigia x emboscador": 33,
+      "tita x sentinela": 8,
+      "tita x emboscador": 18
+     }
+    }
+   },
+   "dois_estagios": {
+    "rookie_ultimate": {
+     "pontos": 0,
+     "vitorias": 0,
+     "lutas": 5120,
+     "razao_E": 0.1088,
+     "vitorias_por_par": {}
+    },
+    "champion_mega": {
+     "pontos": 0,
+     "vitorias": 0,
+     "lutas": 10240,
+     "razao_E": 0.0606,
+     "vitorias_por_par": {}
+    }
+   },
+   "passa": true
+  }
+ },
+ "custo_s": 97.649
+}
