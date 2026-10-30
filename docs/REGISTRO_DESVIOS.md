@@ -418,3 +418,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-29 — COMBATE-TR R1 (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): o núcleo da luta em tempo real](registro/2026-10.md)
 - [2026-10-29 — COMBATE-TR R2a (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): a v13 com a luta em tempo real, o descarte 6 e o Tamer 7](registro/2026-10.md)
 - [2026-10-29 — COMBATE-TR R2b (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): o D-9, só a v13](registro/2026-10.md)
+- [2026-10-29 — COMBATE-TR R3 (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): o palco da luta em tempo real](registro/2026-10.md)

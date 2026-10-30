@@ -24,6 +24,8 @@ function Lado({ L, s, rot, rival }: { L: LutadorTela; s: HudLado; rot: string; r
     </div>
   );
 }
+/** o intervalo do desenho com o palco parado (ms; o do palco por turnos de antes) */
+const QUADRO_PARADO = 120;
 const relogio = (s: number): string => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 /** o palco desenhado (tela cheia da luta e previa parada da Arena); pausar e x2 so quando ha luta animada */
 export function Cena({ p, controles = false }: { p: Palco; controles?: boolean }) {
@@ -32,14 +34,18 @@ export function Cena({ p, controles = false }: { p: Palco; controles?: boolean }
   useEffect(() => ouvirMapas(redesenhar), []);
   useEffect(() => {
     const cv = ref.current; if (!cv) return;
-    /* um quadro por frame do navegador: a luta anda no relogio do luta.ts; aqui so se desenha o estado de agora */
-    let id = 0;
-    const desenhar = () => {
-      const pp = LUTA.palco ?? p, at = atlasAtual();
-      desenharLutaTR(cv, { cena: pp.cena, A: pp.A, B: pp.B, sim: pp.sim, visual: pp.visual, koEm: pp.koEm }, at.tipo === "ok" ? at : null);
+    /* um quadro por frame do navegador durante a luta (ela anda no relogio do luta.ts; aqui so se desenha o estado de agora); parado (a
+       previa, o fim), so o Idle a cada QUADRO_PARADO ms, como o palco de antes */
+    let id = 0, ult = -Infinity;
+    const desenhar = (agora: number) => {
+      if (LUTA.lutando || agora - ult >= QUADRO_PARADO) {
+        ult = agora;
+        const pp = LUTA.palco ?? p, at = atlasAtual();
+        desenharLutaTR(cv, { cena: pp.cena, A: pp.A, B: pp.B, sim: pp.sim, visual: pp.visual, koEm: pp.koEm }, at.tipo === "ok" ? at : null);
+      }
       id = requestAnimationFrame(desenhar);
     };
-    desenhar();
+    desenhar(performance.now());
     return () => cancelAnimationFrame(id);
   }, [p, a.tipo]);
   const fimTempo = Math.round(CTR_TR.limite * PASSO_TR_MS / 1000);
