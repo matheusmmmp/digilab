@@ -49,7 +49,38 @@ síntese entra pela C0). **Até a C0, nenhuma fonte nova da triagem é citada:**
 combinação em Creatures, Gadanho e Hallam, Ho et al., Goertzel et al., Zamin e Rity. O que se pode dizer, sem alegar novidade, é o que o
 projeto faz: teste causal com braço de controle, num pet persistente, com replay determinístico.
 
-### 2.3 O backlog da trilha C (R7, sem pressa)
+### 2.3 As entradas da C1 e da C4 (2026-10-30, depois do G0; PROPOSTAS)
+
+**A leitura que as junta:** o longe sorteado não é um cenário a consertar; é o extremo de "nada a aprender". Das 6 939 visitas ao lugar
+lembrado, 6 932 saem vazias (`docs/TAREFA_V2_LONGE_REGULAR.md`, seção 1.1). A pergunta da trilha C passa a ser: **o cérebro aprende
+quando há o que aprender e não piora quando não há?** Mudar o cenário até o pet passar, ou afrouxar o sorteado, fica fora.
+
+**Para a C1 (entram no adendo 6, antes da run):**
+- **C1-E1, a previsão por nível de regularidade.** O adendo 6 escreve antes, para cada nível, o sinal esperado de M3\* − M2 por
+  episódio:
+  - **o comedouro** (um lugar): > 0, já medido (o G-ABLA-MEM, +0,136; o comedouro não roda de novo);
+  - **o `longe_fixo`** (poucos lugares): > 0, o contraste primário da LR-3;
+  - **o longe sorteado:** ≈ 0, descritivo.
+  É a leitura de Giannakakis et al. 2023 (`10.1162/isal_a_00606`: a plasticidade que a evolução escolhe vai a zero quando aprender não
+  paga) e de Khan e Cañamero 2018 (`10.3390/mti2040067`: o mesmo modulador ajuda num mundo e atrapalha noutro). Os dois só dão a
+  direção: o Giannakakis 2023 não tem estatística formal no agente móvel.
+- **C1-E2, a L-3 volta como candidata depois da C1.** A L-3 (o lugar lembrado pela consistência,
+  `docs/PROPOSTA_LONGE_DIGIBRAIN_MODULAR.md`) só ganha tarefa se a C1 der M3\* − M2 > 0 no `longe_fixo` e ≈ 0 no sorteado. Com outro
+  resultado, ela continua fora. Ela fica fora da C1 em si, como a tarefa já diz (seção 6).
+
+**Para a C4 (vão ao Matheus junto das ME-1 a ME-7):**
+- **C4-E1, a visita vazia ao lugar lembrado vira episódio negativo** (uma proposta nova na ME-1). Na tese de Ho (`10.18745/th.14271`),
+  a memória só supera o agente reativo quando guarda também os eventos negativos, e a significância de um evento é a variação das
+  variáveis internas que ele causou. Aplicado ao longe: a viagem até um lugar vazio custa corpo e não traz comida, e hoje o M-MEM não
+  guarda isso. Guardando, o pet poderia aprender sozinho que não adianta voltar ali. Ho et al. usam de 10 a 50 execuções por condição,
+  sem teste de hipótese: é direção, não tamanho de efeito.
+- **C4-E2, o elo com a validação.** O braço "REL sem episódios negativos" (já proposto na seção 2, a C4) passa a medir também a visita
+  vazia. Se a C4-E1 entrar, ele é o controle dela.
+- **C4-E3, o elo com a L-3.** A C4-E1 e a L-3 atacam a mesma coisa por dois caminhos: um episódio negativo por visita, ou um peso
+  pela consistência. Se as duas forem adiante, o plano tem de dizer qual é o braço e qual é o controle, para não somar dois mecanismos
+  sem separar o efeito de cada um.
+
+### 2.4 O backlog da trilha C (R7, sem pressa)
 
 - **J7:** prever no plano a perspectiva dos episódios trocados entre pets (o problema do deslocamento, em Ho).
 - **Hormônios:** o desenho de Khan e Cañamero, com três níveis de dificuldade, quando os hormônios entrarem (o J10).
