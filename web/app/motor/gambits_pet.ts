@@ -93,6 +93,13 @@ export function candidatasV21E(f: Forma | null, R: RegrasLuta | null): string[] 
   return novas.map(chaveRegra).filter(k => !REPERTORIO.has(k));
 }
 export const rotuloRegra = (r: Regra): string => `se ${r.se.map(rotuloCond).join(" e ")} → ${NOME_V2[r.entao]}`;
+/** a regra da lista que cobre o chip de regra `chip` (o chip entra no fim da lista de luta): a primeira cujas condicoes sao todas condicoes
+    do chip, ou a propria regra do chip ja na lista. Sempre que o chip valeria, ela vale antes, e a primeira regra valida decide: o chip
+    nunca decide. null = o chip pode decidir. So o aviso na tela (DE-3, decidida pelo Matheus em 2026-10-30): a lista e as lutas nao mudam */
+export function regraQueCobre(lista: readonly Regra[], chip: Regra): Regra | null {
+  const k = chaveRegra(chip), conds = new Set(chip.se.map(c => JSON.stringify([c.n, c.p])));
+  return lista.find(r => chaveRegra(r) === k || r.se.every(c => conds.has(JSON.stringify([c.n, c.p])))) ?? null;
+}
 
 export interface MudancaGambit { luta: number; texto: string; dono?: boolean }
 

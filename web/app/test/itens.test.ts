@@ -5,7 +5,7 @@
 import { describe, expect, test } from "vitest";
 import {
   CARTA_DA_REVANCHE, CAT, CIT, CIT_V9, CTR, CV, CV21E_TR, DUR_EVO, ITENS, ITEM_DA_MEDALHA, MEDALHAS, Motor, STATS, TECNICAS, bonusChipsStat, cartaDe, chaveRegra,
-  chipDe, chipServe, comCarta, hashSemente, itemDe, jogarArena, jogarLuta, jogarTR, lutadorBot, lutadorPet, vagasDeChip, type Estagio, type EventoRegistro,
+  chipDe, chipServe, comCarta, hashSemente, itemDe, jogarArena, jogarLuta, jogarTR, lutadorBot, lutadorPet, regraDe, regraQueCobre, vagasDeChip, type Estagio, type EventoRegistro,
   type Stats,
 } from "../motor/index.ts";
 import { CHAVE, textoSave, type Armazenamento } from "../src/save.ts";
@@ -164,6 +164,16 @@ describe("chip de regra: uma regra nova na lista do pet", () => {
       disparou += res.tr.acoes.filter(x => x.lado === 0 && x.motivo === iChip).length;
     }
     expect(disparou).toBeGreaterThan(0);
+  });
+  test("o chip coberto (DE-3): uma regra ativa com so condicoes do chip, ou a mesma regra, cobre o chip; o aviso nao muda a lista", () => {
+    const regra = (id: string) => (chipDe(id) as { regra: Parameters<typeof chaveRegra>[0] }).regra;
+    const m = petV13(72, "adolescente", 1), ativas = m.gp!.ativas.map(regraDe);
+    /* o pet 72 tem "rival preparando -> contra-golpe" e a propria regra do Oportunista: os dois chips ficam cobertos */
+    expect(chaveRegra(regraQueCobre(ativas, regra("chip_recuo"))!)).toBe(ativas.map(chaveRegra).find(k => k.includes("oponente_preparando")));
+    expect(regraQueCobre(ativas, regra("chip_oportunista"))).not.toBeNull();
+    /* o Perseguidor ("rival insiste em atirar") nao repete nenhuma condicao do pet */
+    expect(regraQueCobre(ativas, regra("chip_perseguidor"))).toBeNull();
+    expect(regraQueCobre([], regra("chip_recuo"))).toBeNull();
   });
   test("vagas, estagio e duplicado: o motor recusa com o porque", () => {
     const m = petV13(73, "adolescente", 1);

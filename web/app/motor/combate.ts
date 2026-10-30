@@ -4,6 +4,7 @@
    forma (adulto). */
 import { CV, CV21, CV21E_TR, TECNICAS } from "./constantes.ts";
 import type { ResultadoLutaTR } from "./combate_tr/luta.ts";
+import type { RelogioTR } from "./combate_tr/constantes_tr.ts";
 import type { Perfil } from "./catalogo.ts";
 import type { Estagio } from "./tipos.ts";
 
@@ -23,6 +24,8 @@ export interface RegrasV21 {
   readonly muralhaSemCarregar?: boolean; readonly muralhaContraGolpeNaPele?: boolean;
   /** pets v13 (CV21E_TR): a luta e jogada em tempo real (combate_tr/adaptador.ts, jogarLuta) */
   readonly tempoReal?: boolean;
+  /** os numeros do relogio da luta em tempo real desta versao (combate_tr/constantes_tr.ts); sem eles, os dos pets v13 */
+  readonly relogio?: RelogioTR;
 }
 export type RegrasLuta = RegrasV21;
 /** as regras das lutas de uma versao de pet: so a v13 (CV21E_TR); as outras falham alto */

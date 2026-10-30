@@ -12,7 +12,7 @@ import type { Perfil } from "../catalogo.ts";
 import { CSO, CV, CV21 } from "../constantes.ts";
 import { derivarSemente } from "../mundo.ts";
 import { criarRng, type Rng } from "../rng.ts";
-import { CTR_TR, T_TR } from "./constantes_tr.ts";
+import { CTR_TR, RELOGIO_V13, T_TR, type RelogioTR } from "./constantes_tr.ts";
 import { decidirTR, faixaTR, intencaoTR, marcaAtivaTR, peleAtivaTR } from "./controlador.ts";
 
 /** a acao em curso: ocupa os passos [inicio, fim); o golpe cai em inicio + instante */
@@ -42,7 +42,8 @@ export interface LadoTR {
   cura: CuraLuta | null;
 }
 interface ProjetilTR { de: number; x: number; marcado: boolean; emboscada: boolean; causa: number }
-export interface EstadoTR { passo: number; L: LadoTR[]; projeteis: ProjetilTR[] }
+/** C: os numeros do relogio desta luta (os das regras dela; RelogioTR) */
+export interface EstadoTR { passo: number; L: LadoTR[]; projeteis: ProjetilTR[]; C: RelogioTR }
 
 /** uma acao do registro da luta: quem, o que, por que e o saldo de dano dela ((causado - recebido) / vida maxima do comeco) */
 export interface AcaoRegistro { lado: number; nome: string; motivo: number | string; inicio: number; saldo: number }
@@ -80,12 +81,12 @@ const CORPO_A_CORPO = ["golpe_rapido", "pesado", "investida", "fintar"];
 export const sementePoliticaTR = (semente: number, lado: number): number => Number(derivarSemente("combate_tr", semente, "politica", lado) & 0xffffffffn);
 const LIMITE_ESQ = CTR_TR.centro - CTR_TR.meiaLargura, LIMITE_DIR = CTR_TR.centro + CTR_TR.meiaLargura;
 
-export function estadoTR(pa: Perfil, pb: Perfil): EstadoTR {
+export function estadoTR(pa: Perfil, pb: Perfil, C: RelogioTR = RELOGIO_V13): EstadoTR {
   const L = (p: Perfil, x: number): LadoTR => ({
     p, hp: p.hpMax, hpMax: p.hpMax, guts: p.guts0, gutsMax: p.gutsMax, regen: p.regen, x, acao: null, ultima: -1, prep: false,
     prepPele: false, atordoadoAte: 0, marcaAte: 0, peleAte: 0, sentinelaPronta: 0, disparou: false, hist: [], cura: null,
   });
-  return { passo: 0, L: [L(pa, CTR_TR.centro - CTR_TR.entrada), L(pb, CTR_TR.centro + CTR_TR.entrada)], projeteis: [] };
+  return { passo: 0, L: [L(pa, CTR_TR.centro - CTR_TR.entrada), L(pb, CTR_TR.centro + CTR_TR.entrada)], projeteis: [], C };
 }
 const livre = (S: EstadoTR, l: LadoTR): boolean => l.acao === null && S.passo >= l.atordoadoAte;
 /** +1: o rival esta a direita (o lado A); -1: a esquerda (o lado B). Os corpos nao se cruzam */
@@ -114,7 +115,7 @@ export interface LutaTR {
 export function criarLutaTR(A: Lutador, B: Lutador, semente: number, o: OpcoesTR = {}): LutaTR {
   const ea = A.cond.escala, eb = B.cond.escala;
   if ((ea === undefined) !== (eb === undefined)) throw new Error("escala ligada em um lado só");
-  const S = estadoTR(A.cond, B.cond);
+  const S = estadoTR(A.cond, B.cond, o.R?.relogio ?? RELOGIO_V13);
   if (o.ini) {
     if (!(o.ini.hp > 0 && o.ini.hp <= S.L[0].hpMax) || !(o.ini.guts >= 0)) throw new Error(`começo da luta inválido: vida ${o.ini.hp}, guts ${o.ini.guts}`);
     S.L[0].hp = o.ini.hp; S.L[0].guts = Math.min(o.ini.guts, S.L[0].gutsMax);
@@ -182,7 +183,7 @@ function golpe(Lt: LutaTR, atk: number, a: string, danos: Dano[], causa: number,
   if (dev) danos.push({ para: atk, valor: dev * (peleAtivaTR(S, eu) ? CV21.multPele : 1), causa: causaAlvo, cac: true });
   /* o golpe rapido, a investida e a finta interrompem o preparo do pesado (menos sob pele dura) */
   if ((a === "golpe_rapido" || a === "investida" || a === "fintar") && r === "preparar_pesado" && !peleAlvo) {
-    al.acao = null; al.prep = false; al.atordoadoAte = S.passo + CTR_TR.atordoaInterrupcao;
+    al.acao = null; al.prep = false; al.atordoadoAte = S.passo + S.C.atordoaInterrupcao;
     Lt.eventos?.push({ t: S.passo, tipo: "interrompe", lado: alvo });
   }
   return parry;
@@ -195,7 +196,7 @@ export function passoTR(Lt: LutaTR, desafiado: Desafiado = null): [number, "ko" 
   /* o Guts volta a cada passo: regen por T_TR */
   for (const l of S.L) l.guts = Math.min(l.gutsMax, l.guts + l.regen * (l.p.passiva === "colosso_partido" ? CSO.multRegenColosso : 1) / T_TR);
   /* as decisoes: o lado livre decide no passo multiplo do ritmo; o vigia ve a intencao do rival antes de qualquer um decidir */
-  if (t % CTR_TR.ritmo === 0) {
+  if (t % S.C.ritmo === 0) {
     const decide = [0, 1].map(l => livre(S, S.L[l]));
     const ctx = [0, 1].map(l => decide[l] && S.L[l].p.passiva === "vigia" ? { intencao: intencaoTR(est[1 - l], S, 1 - l, R) } : null);
     const dec = [0, 1].map(l => decide[l] ? decidirTR(est[l], S, l, Lt.rng[l], ctx[l], R) : null);
@@ -215,21 +216,21 @@ export function passoTR(Lt: LutaTR, desafiado: Desafiado = null): [number, "ko" 
   for (const l of [0, 1]) {
     const eu = S.L[l], a = eu.acao;
     if (!a) continue;
-    if (a.nome === "avancar" && !travado[l]) dx[l] = rumo(l) * CTR_TR.andar;
-    else if (a.nome === "investida" && !a.feito && !travado[l]) dx[l] = rumo(l) * CTR_TR.arrancada;
-    else if (a.nome === "recuar") dx[l] = -rumo(l) * CTR_TR.andar * (a.sentinela ? 1 : CTR_TR.recuo);
+    if (a.nome === "avancar" && !travado[l]) dx[l] = rumo(l) * S.C.andar;
+    else if (a.nome === "investida" && !a.feito && !travado[l]) dx[l] = rumo(l) * S.C.arrancada;
+    else if (a.nome === "recuar") dx[l] = -rumo(l) * S.C.andar * (a.sentinela ? 1 : S.C.recuo);
   }
   for (const l of [0, 1]) S.L[l].x += dx[l];
   acomodar(S);
   const d = S.L[1].x - S.L[0].x;
   /* o avanco termina ao chegar ao contato */
-  for (const l of [0, 1]) { const a = S.L[l].acao; if (a?.nome === "avancar" && d <= CTR_TR.contato) a.fim = t + 1; }
+  for (const l of [0, 1]) { const a = S.L[l].acao; if (a?.nome === "avancar" && d <= S.C.contato) a.fim = t + 1; }
   /* os golpes do passo: os dois lados contra o estado do comeco do passo, o dano junto no fim (como no turno de hoje) */
   const danos: Dano[] = [];
   for (const l of [0, 1]) {
     const eu = S.L[l], a = eu.acao;
     if (!a || a.feito) continue;
-    if (a.nome === "investida" && d <= CTR_TR.contato) {
+    if (a.nome === "investida" && d <= S.C.contato) {
       a.feito = true;
       if (golpe(Lt, l, "investida", danos, a.idx)) eu.x = a.x0;   /* aparada: volta de onde saiu */
     } else if (t === a.inicio + CTR_TR.instante && ["golpe_rapido", "fintar", "pesado", "disparo"].includes(a.nome)) {
@@ -244,7 +245,7 @@ export function passoTR(Lt: LutaTR, desafiado: Desafiado = null): [number, "ko" 
   /* os projeteis em linha reta: acertam ao chegar ao corpo do alvo */
   for (const pr of S.projeteis) {
     const alvo = S.L[1 - pr.de];
-    pr.x += rumo(pr.de) * CTR_TR.projetil;
+    pr.x += rumo(pr.de) * S.C.projetil;
     if (rumo(pr.de) * (alvo.x - pr.x) <= CTR_TR.raio) { golpe(Lt, pr.de, "disparo", danos, pr.causa, pr.marcado, pr.emboscada); pr.de = -1; }
   }
   S.projeteis = S.projeteis.filter(pr => pr.de >= 0);
@@ -305,7 +306,7 @@ function aplicarDanos(Lt: LutaTR, danos: Dano[]): void {
     const s = S.L[l];
     s.hp -= total[l];
     Lt.eventos?.push({ t: S.passo, tipo: "dano", lado: l, valor: total[l], resta: s.hp });
-    if (cac[l]) { s.marcaAte = 0; s.x -= rumo(l) * CTR_TR.empurrao; }
+    if (cac[l]) { s.marcaAte = 0; s.x -= rumo(l) * S.C.empurrao; }
   }
   acomodar(S);
 }
