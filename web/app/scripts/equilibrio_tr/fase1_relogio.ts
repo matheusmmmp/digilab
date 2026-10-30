@@ -21,9 +21,10 @@ import {
 } from "../../motor/index.ts";
 
 const arg = (k: string): string | null => { const i = process.argv.indexOf("--" + k); return i < 0 ? null : process.argv[i + 1] ?? null; };
-const FAIXAS: Record<string, number> = { calibracao: 68101, conferencia: 70101 };
+/* as faixas reservadas (experiments/bancada/faixas.py): a primeira rodada e a segunda (calibracao2, conferencia2; DR2-2) */
+const FAIXAS: Record<string, number> = { calibracao: 68101, conferencia: 70101, calibracao2: 72101, conferencia2: 74101 };
 const faixa = arg("faixa"), saida = arg("saida");
-if (!faixa || !(faixa in FAIXAS)) throw new Error("--faixa calibracao | conferencia");
+if (!faixa || !(faixa in FAIXAS)) throw new Error("--faixa calibracao | conferencia | calibracao2 | conferencia2");
 if (!saida) throw new Error("--saida <arquivo.json>");
 /* --base v14: o relogio candidato da fase 1 (RELOGIO_V14); sem ele, o dos pets v13 */
 const relogio: RelogioTR = { ...(arg("base") === "v14" ? RELOGIO_V14 : RELOGIO_V13), ...JSON.parse(arg("relogio") ?? "{}") };
