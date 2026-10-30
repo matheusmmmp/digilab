@@ -1,0 +1,109 @@
+/* Tela Pet sobre o habitat (docs/TAREFA_V2_LAYOUT_HABITAT.md, M3): dock de acoes no rodape, paineis pequenos (Estado, Evolucao, Ultimas
+   acoes, DigiBrain, o porque da fala) abertos pelos botoes da borda direita, chamado do pet e balao sobre a cena. O habitat ocupa a
+   tela inteira (a casca da M2); a camada da tela nao pega o mouse, so os seus controles. Pele --hx-* nos menus; o balao, a emocao e o
+   que fica na cena mantem o visual --dl-*. Seletores com .app--pet para vencer as regras antigas de pet.css e pet_home.css. */
+
+/* ---------- a camada */
+.app--habitat.app--pet .habitat{ right:0 }
+.app--pet .pet-tela{ pointer-events:none }
+.app--pet .pet-tela .pet-balcao{ position:absolute; inset:0; right:0; pointer-events:none }
+.app--pet .pet-balcao > *, .app--pet .pet-balcao .cena-topo > *{ pointer-events:auto }
+.app--pet .pet-balcao .cena-topo{ pointer-events:none }
+
+/* ---------- informacao do mundo (v12): canto superior esquerdo, abaixo do topo */
+.app--pet .mundo-linhas{ position:absolute; left:10px; top:calc(var(--casca-topo) + 52px); z-index:3; display:flex; flex-direction:column; align-items:flex-start; gap:4px;
+  max-width:min(62%,440px); pointer-events:none }
+.app--pet .mundo-linhas .mundo-info{ position:static }
+.app--pet .racao-dica{ padding:3px 10px; border-radius:10px; background:rgba(255,255,255,.9); color:var(--dl-text) }
+.app--pet .racao-faixa{ top:calc(var(--casca-topo) + 8px); left:10px; right:10px; max-width:560px; background:var(--hx-miolo); color:var(--hx-texto);
+  border:1px solid var(--hx-borda); border-top:2px solid var(--hx-borda-topo); border-radius:0; box-shadow:none; font-family:var(--hx-f) }
+.app--pet .racao-faixa b{ font-size:16px; letter-spacing:.06em; text-transform:uppercase }
+.app--pet .racao-lugar{ min-height:44px; padding:0 14px; font-size:15px }
+
+/* ---------- o dock e o que fica sobre ele */
+.pet-dock{ position:absolute; z-index:6; left:50%; bottom:12px; translate:-50% 0; width:min(780px,calc(100% - 24px)); display:flex; flex-direction:column; gap:8px; pointer-events:none }
+.pet-dock > *{ pointer-events:auto }
+.pet-dock .dock{ position:relative; display:flex; grid-template-columns:none; gap:4px; padding:10px 6px 6px; background:linear-gradient(180deg,var(--hx-miolo-2),var(--hx-miolo)); border:1px solid var(--hx-borda);
+  border-top:2px solid var(--hx-borda-topo) }
+.pet-dock .dock::before{ content:""; position:absolute; inset:0 0 auto 0; height:4px; background:var(--hx-hachura); pointer-events:none }
+.dock .dock-bt, .dock-mais .dock-bt{ flex:1 1 0; min-width:0; min-height:56px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
+  padding:4px 2px; font-size:14px; letter-spacing:.04em }
+.dock .dock-bt span{ max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
+.dock .dock-bt img, .dock .dock-bt svg{ width:24px; height:24px; flex:none; object-fit:contain; image-rendering:pixelated }
+.pet-dock .dock .acao-destaque--sugerida, .pet-dock .dock .acao-destaque--sugerida:hover{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido) }
+.dock .acao-reserva{ display:block; font-size:10px; font-weight:600; opacity:.85 }
+.dock .acao-mais svg{ image-rendering:auto }
+.dock-mais{ position:absolute; right:6px; bottom:calc(100% + 8px); z-index:2; display:flex; flex-direction:column; gap:4px; min-width:220px; padding:6px;
+  background:linear-gradient(180deg,var(--hx-miolo-2),var(--hx-miolo)); border:1px solid var(--hx-borda); border-top:2px solid var(--hx-borda-topo) }
+.dock-mais .dock-bt, .dock-mais .racao-barra{ flex:none }
+.dock-mais .dock-bt{ flex-direction:row; justify-content:flex-start; gap:10px; padding:0 12px; min-height:48px; width:100% }
+.dock-mais .racao-barra{ display:block }
+.dock-mais .racao-bt{ box-shadow:none }
+.dock-mais .racao-bt--ativo{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink) }
+
+/* ---------- a necessidade prioritaria e o chamado (menus: pele hx) */
+.pet-prioridade, .pet-pedido .chamado.dl-card, .pet-dock .chamado--morte{ border:1px solid var(--hx-borda); border-top:2px solid var(--hx-borda-topo); border-radius:0; box-shadow:none;
+  background:linear-gradient(180deg,var(--hx-miolo-2),var(--hx-miolo)); color:var(--hx-texto); font-family:var(--hx-f) }
+.pet-prioridade:hover{ border-color:var(--hx-borda-topo) }
+.pet-prioridade:focus-visible{ outline:3px solid var(--hx-foco); outline-offset:2px; box-shadow:none }
+.pet-prioridade{ display:flex; align-items:center; gap:12px; width:100%; min-height:56px; padding:8px 12px; font:inherit; text-align:left; cursor:pointer }
+.pet-prioridade-ic{ width:40px; height:40px; flex:none; display:flex; align-items:center; justify-content:center; font-weight:700 }
+.pet-prioridade-txt{ flex:1; min-width:0; display:flex; flex-direction:column; gap:2px }
+.pet-prioridade-txt b{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
+.pet-prioridade-ver{ display:flex; align-items:center; gap:2px; flex:none }
+.pet-prioridade-ic, .pet-dock .chamado-ic{ border-radius:0; background:var(--hx-miolo-2); border:1px solid var(--hx-borda); box-shadow:none }
+.pet-prioridade-txt b{ font-weight:700; font-size:17px; letter-spacing:.04em; text-transform:uppercase; color:var(--hx-texto) }
+.pet-prioridade-txt span, .pet-dock .chamado .dl-apoio{ font-size:14px; font-weight:500; color:var(--hx-sec) }
+.pet-prioridade-ver{ font-size:14px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--hx-rotulo) }
+.pet-dock .chamado b{ color:var(--hx-texto); font-weight:700; letter-spacing:.04em; text-transform:uppercase; font-size:16px }
+.pet-dock .chamado .hx-continuar{ flex:none; padding:0 20px }
+.pet-dock .chamado .dl-seg i{ background:var(--hx-medidor-trilho) }
+.pet-dock .chamado .dl-seg i.on{ background:var(--hx-medidor) }
+.pet-pedido{ display:flex; flex-direction:column; gap:8px }
+
+/* a fala nao passa por baixo dos botoes da borda direita */
+.app--pet .pet-balcao .cena-fala{ right:64px; max-width:min(52%,320px) }
+
+/* ---------- os botoes quadrados da borda direita e o painel aberto */
+.pet-lado{ position:absolute; z-index:6; right:10px; top:calc(var(--casca-topo) + 8px); display:flex; flex-direction:column; gap:8px; pointer-events:none }
+.pet-lado__bt{ width:44px; height:44px; padding:0; display:flex; align-items:center; justify-content:center; pointer-events:auto }
+.pet-lado .pet-lado__bt[aria-pressed="true"], .pet-lado .pet-lado__bt[aria-pressed="true"]:hover{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido) }
+.pet-painel{ position:absolute; z-index:7; top:calc(var(--casca-topo) + 8px); right:64px; width:min(300px,calc(100% - 78px)); display:flex; pointer-events:auto;
+  max-height:calc(100% - var(--casca-topo) - 190px) }
+.pet-painel:focus{ outline:none }
+.pet-painel:focus-visible{ outline:3px solid var(--hx-foco); outline-offset:2px }
+.pet-painel .pet-painel__hx{ width:100%; max-height:100%; background:linear-gradient(180deg,var(--hx-miolo-2),rgba(10,19,22,.96)) }
+.pet-painel .hx-painel__titulo{ font-size:16px }
+.pet-painel__folha{ background:var(--dl-bg); color:var(--dl-text); border-radius:8px; padding:10px }
+@media (min-width:900px){ .pet-painel{ width:360px; max-height:calc(100% - var(--casca-topo) - 150px) } }
+
+/* conteudo dos paineis */
+.pet-painel .det-estado{ display:flex; flex-direction:column; gap:12px }
+.pet-painel .necessidades4{ display:flex; flex-direction:column; gap:8px; margin:0 }
+.pet-painel .hx-medidor__rot{ min-width:64px }
+.pet-painel .hx-medidor__txt{ color:var(--hx-sec); font:600 12px/1 var(--hx-f); min-width:3.2em; text-align:right }
+.nec-critica{ color:var(--hx-perigo); font:600 13px/1.2 var(--hx-f); letter-spacing:.08em; text-transform:uppercase }
+.pet-painel .mod-vazio{ margin:0 0 8px; color:var(--hx-sec); font:500 15px/1.3 var(--hx-f) }
+.pet-painel .mod-link{ align-self:flex-start; margin-top:10px; padding:0 14px; font-size:14px }
+.evo-mod{ display:flex; flex-direction:column; gap:8px; padding:10px 12px; border:1px solid var(--hx-borda); background:var(--hx-miolo) }
+.evo-mod-formas{ display:flex; align-items:center; justify-content:space-between; gap:8px }
+.evo-mod-forma{ display:flex; flex-direction:column; align-items:center; gap:4px; min-width:0 }
+.evo-mod-forma small{ font:600 13px/1.2 var(--hx-f); letter-spacing:.06em; text-transform:uppercase; color:var(--hx-texto-2) }
+.evo-mod-spr{ image-rendering:pixelated; max-width:120px; height:auto }
+.evo-mod-q{ display:flex; align-items:center; justify-content:center; width:72px; height:72px; border:1px dashed var(--hx-borda-topo); font:700 30px/1 var(--hx-f); color:var(--hx-sec) }
+.evo-mod-seta{ color:var(--hx-rotulo); flex:none }
+.evo-mod-txt{ margin:0; font:500 16px/1.3 var(--hx-f); color:var(--hx-texto) }
+.mod-registro{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:4px }
+.mod-registro li{ display:flex; align-items:center; gap:10px; min-height:40px; padding:4px 8px; border:1px solid var(--hx-borda); background:var(--hx-miolo); font:500 15px/1.25 var(--hx-f); color:var(--hx-texto) }
+.mod-registro time{ width:42px; flex:none; color:var(--hx-sec); font-variant-numeric:tabular-nums }
+.mod-registro-ic{ display:flex; align-items:center; justify-content:center; width:28px; height:28px; flex:none; border:1px solid var(--hx-borda); color:var(--hx-rotulo) }
+.mod-registro li[data-quem="recusa"] .mod-registro-ic{ color:var(--hx-perigo) }
+
+@media (min-width:900px){
+  .dock .dock-bt{ font-size:15px }
+}
+@media (max-width:899px){
+  .app--pet .pet-balcao .cena-fala{ top:calc(var(--casca-topo) + 130px) }
+  .dock{ gap:3px; padding-inline:4px }
+  .dock .dock-bt{ font-size:13px; letter-spacing:.02em }
+}
