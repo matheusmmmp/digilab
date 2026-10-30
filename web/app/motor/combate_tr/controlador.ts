@@ -4,13 +4,13 @@
 import { ACOES_V2, custoV2, type Cond, type Contexto, type Estilo, type RegrasLuta } from "../combate.ts";
 import { CV, TECNICAS } from "../constantes.ts";
 import type { Rng } from "../rng.ts";
-import { CTR_TR, T_TR } from "./constantes_tr.ts";
+import { T_TR } from "./constantes_tr.ts";
 import type { EstadoTR, LadoTR } from "./luta.ts";
 
 /** a faixa da distancia agora: 0 = perto, 1 = medio, 2 = longe (espec 1.2) */
 export function faixaTR(S: EstadoTR): number {
   const d = S.L[1].x - S.L[0].x;
-  return d <= CTR_TR.perto ? 0 : d <= CTR_TR.medio ? 1 : 2;
+  return d <= S.C.perto ? 0 : d <= S.C.medio ? 1 : 2;
 }
 export const peleAtivaTR = (S: EstadoTR, l: LadoTR): boolean => S.passo < l.peleAte;
 export const marcaAtivaTR = (S: EstadoTR, l: LadoTR): boolean => S.passo < l.marcaAte;

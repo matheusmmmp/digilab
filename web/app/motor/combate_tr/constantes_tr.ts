@@ -45,3 +45,16 @@ export const CTR_TR = {
       a 65 px do centro (130 px entre os dois: o medio de hoje, estadoV2; SEM FONTE para o valor exato). PROPOSTO */
   centro: 240, meiaLargura: 190, entrada: 65,
 } as const;
+
+/** os numeros do relogio e do espaco que a rodada de equilibrio pode mudar (docs/PLANO_EQUILIBRIO_COMBATE_TR.md, secao 4). Eles viajam nas
+    regras da luta (RegrasV21.relogio) e no estado dela (EstadoTR.C): cada versao de pet tem os seus, e a v13 tem os de CTR_TR. O limite, a
+    morte subita (D-5), o instante do golpe (D-1) e a geometria do chao nao entram: ficam em CTR_TR */
+export interface RelogioTR {
+  readonly ritmo: number; readonly atordoaInterrupcao: number; readonly andar: number; readonly recuo: number; readonly arrancada: number;
+  readonly projetil: number; readonly perto: number; readonly medio: number; readonly contato: number; readonly empurrao: number;
+}
+/** o relogio dos pets v13 (os numeros de CTR_TR, sem calibracao) */
+export const RELOGIO_V13: RelogioTR = {
+  ritmo: CTR_TR.ritmo, atordoaInterrupcao: CTR_TR.atordoaInterrupcao, andar: CTR_TR.andar, recuo: CTR_TR.recuo, arrancada: CTR_TR.arrancada,
+  projetil: CTR_TR.projetil, perto: CTR_TR.perto, medio: CTR_TR.medio, contato: CTR_TR.contato, empurrao: CTR_TR.empurrao,
+};
