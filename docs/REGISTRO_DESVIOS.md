@@ -439,3 +439,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-30 — TRANSICAO-V3, as V3-D1 a V3-D8 (Gerente da transição, Claude Code, Opus 5.5, worktree `v2-transicao-v3`): decididas pela recomendação](registro/2026-10.md)
 - [2026-10-30 — COMBATE-TR, segunda rodada (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): as decisões DR2-1 a DR2-6](registro/2026-10.md)
 - [2026-10-30 — COMBATE-TR, segunda rodada, R2-0 e R2-1 (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): o ponto de partida e as formas](registro/2026-10.md)
+- [2026-10-30 — INFRA-PREFIXO-V3 (worker, Claude Code, Sonnet 5.5, worktree `v3-infra-prefixo`): o CI e as ferramentas passam a aceitar o prefixo V3](registro/2026-10.md)
