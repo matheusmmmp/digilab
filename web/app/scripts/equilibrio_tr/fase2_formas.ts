@@ -11,7 +11,7 @@
    - F-7 cada sombria (o epsilon minimo dela) contra as 8 formas adultas normais.
    No limite, a luta fica com a fracao de vida (sem desafiado): sao lutas de forca, e os lados trocam.
    As sementes: as da fase 1 (a faixa reservada, 5 bases x 20, hashSemente("equilibrio-tr", base, k)); 200 lutas por celula.
-   --listas v14: as listas candidatas da rodada (LISTAS_V14, bots.ts); --variante <nome>: uma variante da grade (VARIANTES, abaixo),
+   --listas v14: as listas candidatas da rodada (LISTAS_V14, LISTAS_V14_R1, bots.ts); --variante <nome>: uma variante da grade (VARIANTES, abaixo),
    aplicada por cima.
    --disparo X: o multiplicador do disparo do tempo real (RelogioTR.disparo) por cima do relogio.
    uso (em web/app): npx tsx scripts/equilibrio_tr/fase2_formas.ts --faixa calibracao [--listas v14] [--variante <nome>] [--disparo X] --saida <arquivo.json> */
@@ -39,7 +39,7 @@ const disparo = arg("disparo") === null ? {} : { disparo: Number(arg("disparo"))
 if ("disparo" in disparo && !(disparo.disparo > 0)) throw new Error("--disparo precisa ser um numero > 0");
 const R: RegrasLuta = { ...CV21E_TR, relogio: { ...(arg("relogio") === "v13" ? RELOGIO_V13 : RELOGIO_V14), ...JSON.parse(arg("relogio-diag") ?? "{}"), ...disparo } };
 /* as listas da rodada: a semente de hoje, as candidatas (--listas v14) e a variante por cima */
-const LISTAS: Record<string, ListaGambits> = { ...(arg("listas") === "v14" ? LISTAS_V14 : {}), ...(variante ? VARIANTES[variante]() : {}) };
+const LISTAS: Record<string, ListaGambits> = { ...(arg("listas") === "v14" ? LISTAS_V14 : arg("listas") === "v14r1" ? LISTAS_V14_R1 : {}), ...(variante ? VARIANTES[variante]() : {}) };
 const SEMENTES_POR_BASE = 20;
 const bases = [0, 1, 2, 3, 4].map(i => FAIXAS[faixa] + 101 * i);
 const sementes = bases.flatMap(b => Array.from({ length: SEMENTES_POR_BASE }, (_, k) => hashSemente("equilibrio-tr", b, k)));
