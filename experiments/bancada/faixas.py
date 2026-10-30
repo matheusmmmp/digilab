@@ -107,6 +107,8 @@ FAIXAS_RESERVADAS = (
                    "DE-6, decidida pelo Matheus em 2026-10-30)"),
     (70101, 70505, "equilibrio do combate em tempo real (jogo web): a conferencia, a validacao unica (docs/PLANO_EQUILIBRIO_COMBATE_TR.md, "
                    "secao 3; DE-6, decidida pelo Matheus em 2026-10-30; roda uma vez, nao volta)"),
+    (71101, 71505, "longe com lugares fixos (C1, etapa 3: a run unica; TAREFA_V2_LONGE_REGULAR, LR-5, decidida pelo Matheus em 2026-10-30; "
+                   "PR #495)"),
     (72101, 72505, "equilibrio do combate em tempo real (jogo web), segunda rodada: a calibracao (docs/PLANO_EQUILIBRIO_COMBATE_TR_R2.md, "
                    "secao 3; DR2-2, decidida pelo Matheus em 2026-10-30)"),
     (74101, 74505, "equilibrio do combate em tempo real (jogo web), segunda rodada: a conferencia, a validacao unica "

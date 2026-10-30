@@ -299,8 +299,9 @@ moldura DIGILAB). Referência: pranchas D do canvas privado, descritas na tarefa
   cobre o pet na tela Pet. Nunca esticar sprite para ocupar espaço.
 - **Ações:** dock flutuante no rodapé do habitat. Desktop: Alimentar, Brincar, Limpar, Carinho, Tapa, Tratar, Mais;
   celular: 4 + Mais. "Mais" abre um menu pequeno com o que a versão do pet tiver (Petisco, Banheiro, Pôr ração).
-- **Informação secundária:** painéis pequenos recolhíveis sobre o habitat (Estado atual, Evolução, Últimas ações), um
-  aberto por vez; no celular, três botões quadrados na borda direita abrem um painel compacto. O resto (traços, memórias,
+- **Informação secundária:** painéis pequenos recolhíveis sobre o habitat (Estado atual, Evolução, Últimas ações). Desde o
+  HUD (2026-10-30, `docs/TAREFA_V3_LAYOUT_HUD.md`, HUD-2): a partir de 900 px, empilhados à direita, cada um recolhível, o
+  Estado aberto por padrão; no celular, botões quadrados na borda direita abrem um painel compacto, um por vez. O resto (traços, memórias,
   temperamento × caráter, vínculo, obediência) continua em Crescer.
 - **Sobre a cena:** o chamado do pet (Atender), o balão de fala (toque abre o porquê) e o DigiBrain.
 - **Navegação:** desktop = trilho estreito de ícones à esquerda (Pet, Crescer, Lutar, Diário, Conversar, Ajustes);

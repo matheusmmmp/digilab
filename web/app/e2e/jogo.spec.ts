@@ -303,8 +303,8 @@ test("monitor 1920x950: o pet fica visível com o painel aberto", async ({ page 
     return { cx, cy, noHabitat: !!alvo?.closest(".habitat"), larg: h.width, alt: h.height, direita: h.right, rolagem: document.documentElement.scrollWidth };
   });
   await page.goto(APP + "#/pet/estado");
-  await page.getByRole("button", { name: "Estado atual", exact: true }).click();
-  await expect(page.locator(".pet-painel")).toBeVisible();
+  /* o HUD (TAREFA_V3_LAYOUT_HUD): no desktop o Estado fica aberto na pilha da direita, sem clicar */
+  await expect(page.locator(".pet-hud [data-painel-pet='estado'] .necessidades4")).toBeVisible();
   let c = await centro();
   expect(c.noHabitat, "tela Pet: nada cobre o pet").toBe(true);
   expect(c.alt, "o habitat tem a altura toda (dock flutuante)").toBe(950);
@@ -396,7 +396,7 @@ test("luta em tempo real: a primeira abertura descarta os pets de antes, avisa, 
   await expect(page.locator("dialog.brasao-tela[open]")).toHaveCount(0);
   const r = await page.evaluate(c => ({ save: JSON.parse(localStorage.getItem(c)!), g: localStorage.getItem(c + "-guardados"), aviso: localStorage.getItem(c + "-aviso-tr"),
     tamer: JSON.parse(localStorage.getItem(c + "-tamer")!), marca: localStorage.getItem(c + "-descarte"), antigos: JSON.parse(localStorage.getItem(c + "-descartados")!) }), CHAVE);
-  expect(r.save.versao).toBe(13);                    /* o ovo novo nasce na versao atual (v13: a luta em tempo real) */
+  expect(r.save.versao).toBe(14);                    /* o ovo novo nasce na versao atual (v14: a luta em tempo real com o candidato da rodada de equilibrio) */
   expect(r.g).toBe("[]");
   expect(r.aviso).toBeNull();
   expect(r.marca).toBe("6");
@@ -426,7 +426,7 @@ test("luta em tempo real: o pet v6 de antes sai com o aviso, e o Tamer fica com 
   await expect(page.locator("dialog.brasao-tela[open]")).toHaveCount(0);
   const r = await page.evaluate(c => ({ save: JSON.parse(localStorage.getItem(c)!), marca: localStorage.getItem(c + "-descarte"),
     tamer: JSON.parse(localStorage.getItem(c + "-tamer")!) }), CHAVE);
-  expect(r.save.versao).toBe(13);
+  expect(r.save.versao).toBe(14);
   expect(r.save.semente).not.toBe(SAVE_ANTIGO_V6.semente);
   expect(r.marca).toBe("6");
   /* a medalha fica (a abertura ainda da o item dela ao Tamer, como sempre) */
@@ -1045,24 +1045,18 @@ test("fronteira: a Fábrica aluga 1 de 3 Megas, luta, oferece a troca depois da 
   await expect(fab.locator(".fb-status")).toContainText("série 1, luta 2 de 3");
   await fab.locator(".fb-lutar").click();
   await verNoPalcoEVoltar(page, "Fábrica · série 1, luta 2 de 3");
-  /* a luta em tempo real (COMBATE-TR, etapa R2): a luta 2, contra o SlashAngemon (Espelho), chega ao limite e fica com o rival, o desafiado.
-     Perdeu, acabou: o resumo e "Tentar de novo" */
-  await expect(fab.locator(".fb-ultima")).toContainText("Última tentativa: 0 séries vencidas; perdeu para");
-  await expect(fab.locator(".fb-ultima")).toContainText("na série 1, luta 2");
-  await expect(fab.locator(".fr-inst-tentar")).toHaveText("Tentar de novo");
+  /* a luta em tempo real com o candidato v14 (B2): a luta 2, contra o SlashAngemon (Espelho), agora e vencida (com as regras v13 chegava ao
+     limite e ficava com o rival). A tentativa segue em andamento: a oferta de troca, e nada de "Tentar de novo" */
+  await expect(fab.locator(".fb-ultima")).toContainText("Luta 2: venceu SlashAngemon (Espelho)");
+  await expect(fab.locator(".fb-troca")).toContainText("entra com a vida cheia");
   await expect(fab.locator(".fb-lutas li")).toHaveCount(2);
-  /* so no registro do Tamer (versao 7, a tentativa com as regras dos v13): o comeco, as duas lutas e a troca; nenhuma luta no registro do pet */
+  /* so no registro do Tamer (versao 7, a tentativa com as regras dos v14): o comeco e as duas lutas e a troca; nenhuma luta no registro do pet */
   const t = await lerTamer(page);
   expect(t.versao).toBe(7);
-  expect(t.log.find((e: [string]) => e[0] === "fabrica")[1].v).toBe(13);
+  expect(t.log.find((e: [string]) => e[0] === "fabrica")[1].v).toBe(14);
   expect(t.log.filter((e: [string]) => e[0].startsWith("fabrica")).map((e: [string, { n: number; k?: number; alugado?: number }]) => [e[0], e[1].n, e[1].k ?? e[1].alugado]))
     .toEqual([["fabrica", 1, 0], ["fabrica_luta", 1, 0], ["fabrica_troca", 1, 0], ["fabrica_luta", 1, 1]]);
   expect(await numLog(page, "l")).toBe(l0);
-  /* a proxima tentativa oferece outros alugados (a semente da tentativa 2) */
-  await fab.locator(".fr-inst-tentar").click();
-  await expect(fab.locator(".fb-aluguel")).toHaveCount(3);
-  await expect(fab.locator(".fb-status")).toContainText("Tentativa 2");
-  await fab.locator(".fb-voltar").click();
   await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
   await expect(page.locator(".med-recordes li", { hasText: "Fábrica" })).toContainText("Nenhum ainda");
   expect(erros).toEqual([]);
@@ -1283,16 +1277,38 @@ for (const [largura, altura] of [[360, 800], [390, 844], [1280, 800]]) {
     await expect(page.locator("#acoes-mais")).toHaveCount(0);
     /* sem fundo de hexagonos no cenario e sem retrato redondo no cabecalho do Pet */
     expect(await page.locator(".pet-cena .dl-hexcard, .pet-retrato").count()).toBe(0);
-    /* os paineis: um aberto por vez, pelos botoes da borda direita; o balao da fala abre o porque */
-    await page.getByRole("button", { name: "Estado atual", exact: true }).click();
-    await expect(page.locator("#pet-painel .necessidades4")).toBeVisible();
-    await page.getByRole("button", { name: "Evolução", exact: true }).click();
-    await expect(page.locator("#pet-painel")).toHaveCount(1);
-    await expect(page.locator("#pet-painel")).toContainText("até virar");
-    await page.getByRole("button", { name: "Últimas ações", exact: true }).click();
-    await expect(page.locator("#pet-painel .mod-registro li").first()).toBeVisible();
-    await page.keyboard.press("Escape");
-    await expect(page.locator("#pet-painel")).toHaveCount(0);
+    /* os paineis (HUD, TAREFA_V3_LAYOUT_HUD): a partir de 900 px empilhados a direita, o Estado aberto e os outros recolhiveis, cada um
+       com o seu botao; no celular, um aberto por vez, pelos botoes da borda direita. O balao da fala abre o porque */
+    if (largura >= 900) {
+      const pilha = page.locator(".pet-hud");
+      await expect(pilha.locator("[data-painel-pet='estado'] .necessidades4")).toBeVisible();
+      await expect(pilha.locator("[data-painel-pet='estado'] .hx-medidor__txt").first()).toHaveText(/^\d+%$/);     /* o valor do motor em % */
+      const evo = page.getByRole("button", { name: "Evolução", exact: true });
+      await expect(evo).toHaveAttribute("aria-expanded", "false");
+      await expect(pilha.locator("[data-painel-pet='evolucao']")).toContainText("próxima forma em");                /* o resumo fechado */
+      await evo.click();
+      await expect(pilha.locator("[data-painel-pet='evolucao']")).toContainText("até virar");
+      await page.getByRole("button", { name: "Últimas ações", exact: true }).click();
+      await expect(pilha.locator("[data-painel-pet='acoes'] .mod-registro li").first()).toBeVisible();
+      await expect(pilha.locator("[data-painel-pet='estado'] .necessidades4")).toBeVisible();                     /* os tres abertos juntos */
+      await page.getByRole("button", { name: "Estado atual", exact: true }).click();
+      await expect(pilha.locator(".necessidades4")).toHaveCount(0);
+      await expect(page.locator("#pet-painel")).toHaveCount(0);
+      /* a escolha fica no navegador: recarregar mantem Evolucao aberta e Estado recolhido */
+      await page.reload();
+      await expect(page.getByRole("button", { name: "Evolução", exact: true })).toHaveAttribute("aria-expanded", "true");
+      await expect(page.getByRole("button", { name: "Estado atual", exact: true })).toHaveAttribute("aria-expanded", "false");
+    } else {
+      await page.getByRole("button", { name: "Estado atual", exact: true }).click();
+      await expect(page.locator("#pet-painel .necessidades4")).toBeVisible();
+      await page.getByRole("button", { name: "Evolução", exact: true }).click();
+      await expect(page.locator("#pet-painel")).toHaveCount(1);
+      await expect(page.locator("#pet-painel")).toContainText("até virar");
+      await page.getByRole("button", { name: "Últimas ações", exact: true }).click();
+      await expect(page.locator("#pet-painel .mod-registro li").first()).toBeVisible();
+      await page.keyboard.press("Escape");
+      await expect(page.locator("#pet-painel")).toHaveCount(0);
+    }
     await page.locator(".cena-fala").click();
     await expect(page.locator("#pet-painel .det-fala .fala-status")).toBeVisible();
     await page.getByRole("button", { name: "Fechar Por que ele disse isso" }).click();
@@ -1483,6 +1499,21 @@ const naTela = (page: Page, x: number, y: number) => page.evaluate(([a, b]) => (
 const ultimoDc = async (page: Page) => JSON.parse(await page.evaluate(() => (window as any).__digilab.registro())).log.filter((e: unknown[]) => e[1] === "dc").at(-1);
 /** o "Por racao" fica no menu Mais do dock (M3 do layout habitat) */
 const abrirMais = async (page: Page) => { if (!await page.locator("#acoes-mais").count()) await page.locator(".acoes-pet .acao-mais").click(); };
+/** a info do mundo fica no Estado, em "Detalhes" (fora da cena): no desktop na pilha da direita (o Estado aberto), no celular no painel
+    da borda; abre, confere e fecha */
+async function infoMundoNoEstado(page: Page, texto: string | null): Promise<void> {
+  const pilha = await page.locator(".pet-hud").count() > 0;
+  const bt = page.getByRole("button", { name: "Estado atual", exact: true });
+  if (!pilha || await bt.getAttribute("aria-expanded") === "false") await bt.click();
+  const raiz = page.locator(pilha ? ".pet-hud [data-painel-pet='estado']" : ".pet-painel"), det = raiz.getByRole("button", { name: "Detalhes" });
+  if (await det.getAttribute("aria-expanded") === "false") await det.click();
+  const info = raiz.locator(".mundo-info");
+  if (texto === null) await expect(info).toBeVisible(); else await expect(info).toContainText(texto);
+  await expect(page.locator(".pet-balcao .mundo-info")).toHaveCount(0);
+  await det.click();
+  await expect(info).toHaveCount(0);
+  if (!pilha) { await bt.click(); await expect(page.locator(".pet-painel")).toHaveCount(0); }
+}
 /** arrasta "Por racao" ate o ponto do cliente, com o mouse (o gesto) */
 async function arrastarRacao(page: Page, alvo: [number, number]): Promise<void> {
   await abrirMais(page);
@@ -1525,7 +1556,7 @@ for (const [nome, largura, semWebGL] of [["a cena 3D", 390, false], ["a reserva 
     await expect(page.locator(semWebGL ? ".pet-cena .cena3d" : ".pet-cena .cena-mundo")).toHaveCount(0);
     await expect.poll(() => lerCena(page)).not.toBeNull();
     await cenaSegueMotor(page);
-    await expect(page.locator(".mundo-info")).toContainText("rações no chão");
+    await infoMundoNoEstado(page, "rações no chão");
     /* o gesto: soltar 2 celulas a leste do pet (o "perto"), no ponto da tela que a vista da */
     const m0 = await lerMundo(page), alvo = m0.lugares.perto, ids0 = m0.comidas.map(c => c.id);
     await arrastarRacao(page, await naTela(page, alvo[0], alvo[1]));
@@ -1628,6 +1659,9 @@ test("mundo: soltar fora do chão não põe nada; recarregar refaz a vida com a 
   await arrastarRacao(page, [caixa.x + caixa.width / 2, caixa.y + caixa.height + 120]);
   expect((await reg()).filter(e => e[1] === "dc").length).toBe(n0);
   await expect(page.locator(".racao-dica")).toContainText("fora do mapa nada é posto");
+  /* o aviso some sozinho; a regiao aria-live fica montada */
+  await expect(page.locator(".racao-dica")).toBeEmpty({ timeout: 10_000 });
+  await expect(page.locator(".racao-dica")).toHaveAttribute("aria-live", "polite");
   /* pelo teclado, e recarregar: o evento dc fica no registro, e a vida refeita tem a racao no mesmo lugar */
   await abrirMais(page);
   await page.getByRole("button", { name: /^Pôr ração/ }).click();
@@ -1648,7 +1682,12 @@ test("mundo: o Alimentar dos v12 é a reserva temporária, descrita assim, e põ
   await page.goto(APP + "#/pet/estado");
   const al = page.getByRole("button", { name: "Alimentar (reserva: põe a ração no comedouro)" });
   await expect(al).toHaveAttribute("title", "Reserva temporária: põe a ração no comedouro");
-  await expect(page.locator(".racao-dica")).toContainText("Alimentar é a reserva: põe no comedouro.");
+  /* a dica fica na faixa do Pôr ração (fora da cena) */
+  await abrirMais(page);
+  await page.getByRole("button", { name: /^Pôr ração/ }).click();
+  await expect(page.locator(".racao-faixa")).toContainText("Alimentar é a reserva: põe no comedouro.");
+  await page.locator(".racao-faixa").getByRole("button", { name: "Cancelar", exact: true }).click();
+  await expect(page.locator(".racao-faixa")).toHaveCount(0);
   await al.click();
   const dc = await ultimoDc(page), m = await lerMundo(page);
   expect([dc[2].x, dc[2].y]).toEqual(m.comedouro);
@@ -1671,7 +1710,7 @@ test("mundo: o ovo novo choca na cena 3D", async ({ page }) => {
   const lcd = page.locator(".pet-cena canvas.lcd");
   await expect(lcd).toHaveAttribute("aria-label", "Tela do pet: ovo");
   await expect(lcd).not.toHaveAttribute("aria-label", "Tela do pet: ovo", { timeout: 20_000 });
-  await expect(page.locator(".mundo-info")).toBeVisible();
+  await infoMundoNoEstado(page, null);
   expect(erros).toEqual([]);
 });
 
@@ -1815,5 +1854,50 @@ test("luta em tempo real: com os clipes do UP, a luta inteira desenha sem erro",
   await page.getByRole("button", { name: "Velocidade dobrada" }).click();
   await expect(page.locator("dialog.modal-res[open]")).toBeVisible({ timeout: 120_000 });
   await page.screenshot({ path: "test-results/luta-tr-resultado-1280.png" });
+  expect(erros).toEqual([]);
+});
+
+/* T2 do tema dos menus (docs/TAREFA_V2_TEMA_MENUS.md §5): a pele em Ajustes > Aparencia. Padrao Holografico; os cartoes trocam o
+   data-pele na hora (sem recarregar), pelo clique e pelas setas; a escolha fica gravada e sobrevive ao recarregar; "XCOM" nao aparece */
+test("pele dos menus: Ajustes › Aparência troca na hora e a escolha sobrevive ao recarregar", async ({ page }) => {
+  await page.setViewportSize({ width: 1920, height: 950 });
+  await semear(page, SAVES.champion);
+  const erros = vigiarErros(page);
+  const pele = () => page.evaluate(() => document.documentElement.dataset.pele);
+  const gravada = () => page.evaluate(c => localStorage.getItem(c + "-pele"), CHAVE);
+  await page.goto(APP + "#/config");
+  await expect(page.locator(".mc-cfg")).toContainText("pele Holográfico · tema");
+  await page.locator(".mc-cfg .hx-linha", { hasText: "Aparência" }).click();
+  const grupo = page.getByRole("radiogroup", { name: "Pele dos menus" });
+  const militar = grupo.getByRole("radio", { name: "Militar" }), holo = grupo.getByRole("radio", { name: "Holográfico" });
+  await expect(holo).toHaveAttribute("aria-checked", "true");
+  expect(await pele()).toBe("vidro");
+  /* a secao vem acima do Tema do habitat; alvos de toque >= 44 px */
+  const [g, t] = [await grupo.boundingBox(), await page.getByRole("radiogroup", { name: "Tema do habitat" }).boundingBox()];
+  expect(g!.y).toBeLessThan(t!.y);
+  for (const c of [militar, holo]) expect((await c.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  await expect(page.locator("body")).not.toContainText(/xcom/i);
+  await page.screenshot({ path: "test-results/pele-aparencia-vidro.png" });
+
+  await militar.click();
+  expect(await pele()).toBe("xcom");
+  await page.screenshot({ path: "test-results/pele-aparencia-militar.png" });
+  await expect(militar).toHaveAttribute("aria-checked", "true");
+  expect(await gravada()).toBe("xcom");
+  /* pelas setas: a seta volta ao Holografico e leva o foco junto */
+  await page.keyboard.press("ArrowLeft");
+  await expect(holo).toHaveAttribute("aria-checked", "true");
+  await expect(holo).toBeFocused();
+  expect(await pele()).toBe("vidro");
+  await page.keyboard.press("End");
+  await expect(militar).toBeFocused();
+  expect(await pele()).toBe("xcom");
+
+  await page.reload();
+  expect(await pele()).toBe("xcom");
+  await expect(page.getByRole("radiogroup", { name: "Pele dos menus" }).getByRole("radio", { name: "Militar" })).toHaveAttribute("aria-checked", "true");
+  await page.goto(APP + "#/config");
+  await expect(page.locator(".mc-cfg")).toContainText("pele Militar · tema");
+  await page.screenshot({ path: "test-results/pele-ajustes-militar.png" });
   expect(erros).toEqual([]);
 });

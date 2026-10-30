@@ -12,7 +12,7 @@ import type { Perfil } from "../catalogo.ts";
 import { CSO, CV, CV21 } from "../constantes.ts";
 import { derivarSemente } from "../mundo.ts";
 import { criarRng, type Rng } from "../rng.ts";
-import { CTR_TR, RELOGIO_V13, T_TR, type RelogioTR } from "./constantes_tr.ts";
+import { CTR_TR, RELOGIO_V13, RELOGIO_V14, T_TR, type RelogioTR } from "./constantes_tr.ts";
 import { decidirTR, faixaTR, intencaoTR, marcaAtivaTR, peleAtivaTR } from "./controlador.ts";
 
 /** a acao em curso: ocupa os passos [inicio, fim); o golpe cai em inicio + instante */
@@ -29,6 +29,8 @@ export interface AcaoTR {
 }
 export interface LadoTR {
   p: Perfil; hp: number; hpMax: number; guts: number; gutsMax: number; regen: number; x: number;
+  /** o intervalo das decisoes deste lado, em passos: o do relogio, ou o da carta (Perfil.ritmoCarta, candidato v14) */
+  ritmo: number;
   acao: AcaoTR | null;
   /** o indice da ultima acao comecada (o dano recebido entre duas acoes conta para ela); -1 antes da primeira */
   ultima: number;
@@ -81,9 +83,11 @@ const CORPO_A_CORPO = ["golpe_rapido", "pesado", "investida", "fintar"];
 export const sementePoliticaTR = (semente: number, lado: number): number => Number(derivarSemente("combate_tr", semente, "politica", lado) & 0xffffffffn);
 const LIMITE_ESQ = CTR_TR.centro - CTR_TR.meiaLargura, LIMITE_DIR = CTR_TR.centro + CTR_TR.meiaLargura;
 
+/** o relogio da luta: o das regras, ou o da versao delas (a v14, RELOGIO_V14; antes, RELOGIO_V13) */
+export const relogioDe = (R: RegrasLuta | null | undefined): RelogioTR => R?.relogio ?? (R && R.versaoPet >= 14 ? RELOGIO_V14 : RELOGIO_V13);
 export function estadoTR(pa: Perfil, pb: Perfil, C: RelogioTR = RELOGIO_V13): EstadoTR {
   const L = (p: Perfil, x: number): LadoTR => ({
-    p, hp: p.hpMax, hpMax: p.hpMax, guts: p.guts0, gutsMax: p.gutsMax, regen: p.regen, x, acao: null, ultima: -1, prep: false,
+    p, hp: p.hpMax, hpMax: p.hpMax, guts: p.guts0, gutsMax: p.gutsMax, regen: p.regen, x, ritmo: p.ritmoCarta ?? C.ritmo, acao: null, ultima: -1, prep: false,
     prepPele: false, atordoadoAte: 0, marcaAte: 0, peleAte: 0, sentinelaPronta: 0, disparou: false, hist: [], cura: null,
   });
   return { passo: 0, L: [L(pa, CTR_TR.centro - CTR_TR.entrada), L(pb, CTR_TR.centro + CTR_TR.entrada)], projeteis: [], C };
@@ -115,7 +119,7 @@ export interface LutaTR {
 export function criarLutaTR(A: Lutador, B: Lutador, semente: number, o: OpcoesTR = {}): LutaTR {
   const ea = A.cond.escala, eb = B.cond.escala;
   if ((ea === undefined) !== (eb === undefined)) throw new Error("escala ligada em um lado só");
-  const S = estadoTR(A.cond, B.cond, o.R?.relogio ?? RELOGIO_V13);
+  const S = estadoTR(A.cond, B.cond, relogioDe(o.R));
   if (o.ini) {
     if (!(o.ini.hp > 0 && o.ini.hp <= S.L[0].hpMax) || !(o.ini.guts >= 0)) throw new Error(`começo da luta inválido: vida ${o.ini.hp}, guts ${o.ini.guts}`);
     S.L[0].hp = o.ini.hp; S.L[0].guts = Math.min(o.ini.guts, S.L[0].gutsMax);
@@ -163,7 +167,7 @@ function golpe(Lt: LutaTR, atk: number, a: string, danos: Dano[], causa: number,
   if (r === "esquivar") {
     if (a === "pesado" || a === "disparo") {
       rec = 0;
-      if (a === "pesado" && pa.passiva === "duelista") { rec = CV21.duelista; eu.guts = Math.min(eu.gutsMax, eu.guts + CV.custo.preparar_pesado); }
+      if (a === "pesado" && pa.passiva === "duelista") { rec = CV21.duelista; eu.guts = Math.max(eu.guts, Math.min(eu.gutsMax, eu.guts + CV.custo.preparar_pesado)); }
     }
   } else if (r === "defender" || r === "contra_golpe") {
     /* o disparo marcado ignora a reducao da postura; o contra-golpe ainda devolve */
@@ -194,10 +198,13 @@ function golpe(Lt: LutaTR, atk: number, a: string, danos: Dano[], causa: number,
 export function passoTR(Lt: LutaTR, desafiado: Desafiado = null): [number, "ko" | "limite"] | null {
   const S = Lt.S, t = S.passo, R = Lt.R, est = [Lt.A.estilo, Lt.B.estilo];
   /* o Guts volta a cada passo: regen por T_TR */
-  for (const l of S.L) l.guts = Math.min(l.gutsMax, l.guts + l.regen * (l.p.passiva === "colosso_partido" ? CSO.multRegenColosso : 1) / T_TR);
-  /* as decisoes: o lado livre decide no passo multiplo do ritmo; o vigia ve a intencao do rival antes de qualquer um decidir */
-  if (t % S.C.ritmo === 0) {
-    const decide = [0, 1].map(l => livre(S, S.L[l]));
+  /* (o guts acima do maximo, so da carta de Folego candidata, fica ate ser gasto: com o guts ate o maximo, a conta e a de sempre) */
+  for (const l of S.L) l.guts = Math.max(l.guts, Math.min(l.gutsMax, l.guts + l.regen * (l.p.passiva === "colosso_partido" ? CSO.multRegenColosso : 1) / T_TR));
+  /* as decisoes: o lado livre decide no passo multiplo do ritmo dele (o do relogio; o da carta de Foco candidata); o vigia ve a intencao
+     do rival antes de qualquer um decidir */
+  const naVez = [t % S.L[0].ritmo === 0, t % S.L[1].ritmo === 0];
+  if (naVez[0] || naVez[1]) {
+    const decide = [0, 1].map(l => naVez[l] && livre(S, S.L[l]));
     const ctx = [0, 1].map(l => decide[l] && S.L[l].p.passiva === "vigia" ? { intencao: intencaoTR(est[1 - l], S, 1 - l, R) } : null);
     const dec = [0, 1].map(l => decide[l] ? decidirTR(est[l], S, l, Lt.rng[l], ctx[l], R) : null);
     for (const l of [0, 1]) if (dec[l]) iniciar(Lt, l, dec[l]![0], dec[l]![1]);
@@ -262,8 +269,8 @@ export function passoTR(Lt: LutaTR, desafiado: Desafiado = null): [number, "ko" 
   for (const l of [0, 1]) {
     const eu = S.L[l], a = eu.acao, p = eu.p;
     if (!a || t + 1 < a.fim) continue;
-    if (a.nome === "defender" && p.passiva !== "bastiao_rachado") eu.guts = Math.min(eu.gutsMax, eu.guts + CV.gutsDef + (p.passiva === "muralha" ? CV21.muralha : 0));
-    if (a.nome === "carregar") eu.guts = Math.min(eu.gutsMax, eu.guts + CV.gutsCarregar);
+    if (a.nome === "defender" && p.passiva !== "bastiao_rachado") eu.guts = Math.max(eu.guts, Math.min(eu.gutsMax, eu.guts + CV.gutsDef + (p.passiva === "muralha" ? CV21.muralha : 0)));
+    if (a.nome === "carregar") eu.guts = Math.max(eu.guts, Math.min(eu.gutsMax, eu.guts + CV.gutsCarregar));
     if (a.nome === "marcar") eu.marcaAte = t + 1 + CV21.turnosMarca * T_TR;
     if (a.nome === "preparar_pesado") eu.prep = true;
     eu.acao = null;

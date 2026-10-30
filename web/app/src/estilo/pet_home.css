@@ -54,14 +54,9 @@
 .pet-cena > .lcd{position:absolute;left:0;top:0;z-index:2;display:block;image-rendering:pixelated}
 .pet-cena > .ovo-anel{z-index:1;top:auto;bottom:-8%;translate:-50% 0}
 .pet-cena--morto .cena-sala{filter:grayscale(1) brightness(.92)}
-.cena-topo{position:absolute;left:10px;right:10px;top:10px;z-index:3;display:flex;align-items:flex-start;gap:8px;pointer-events:none}
-.cena-topo > *{pointer-events:auto}
-.cena-topo .palco-emocao{position:static;min-height:32px}
-.cena-topo-dir{margin-left:auto;display:flex;gap:8px}
 .cena-fala{position:absolute;z-index:3;right:6%;top:40%;max-width:min(52%,320px);min-height:44px;flex-direction:column;align-items:center;
   text-align:center;cursor:pointer}
 .cena-fala small{font-size:11px;font-weight:700;color:var(--dl-text-2)}
-.pet-cena .balao-causa{left:auto;right:9%;top:auto;bottom:34%;z-index:3}
 
 /* o porque da fala e o estado, nos paineis */
 .det-sec{display:flex;flex-direction:column;gap:8px}

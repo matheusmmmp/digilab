@@ -35,6 +35,65 @@ describe("tokens --hx-*", () => {
   });
 });
 
+/* T1 do tema dos menus: a pele Holografica (docs/TAREFA_V2_TEMA_MENUS.md §3 e §6). O vidro e translucido; o contraste e medido no pior caso,
+   com branco puro atras do vidro (o habitat claro mais claro; o desfoque so tira a media) e o reflexo de 6 % de branco por cima. */
+const vidroCss = readFileSync(new URL("../src/estilo/pele-vidro.css", import.meta.url), "utf8");
+const main = readFileSync(new URL("../src/main.tsx", import.meta.url), "utf8");
+const blocoVidro = (() => { const i = tokens.indexOf(':root[data-pele="vidro"]{'); if (i < 0) throw new Error("sem o bloco do vidro"); return tokens.slice(i, tokens.indexOf("}", i)); })();
+const tokenVidro = (nome: string) => { const m = blocoVidro.match(new RegExp(`--${nome}:([^;]+);`)); return m ? m[1].trim() : token(nome); };
+type Rgb = [number, number, number];
+const rgb = (v: string): [Rgb, number] => {
+  const h = v.match(/^#([0-9A-Fa-f]{6})$/); if (h) return [[1, 3, 5].map((i) => parseInt(v.slice(i, i + 2), 16)) as Rgb, 1];
+  const m = v.match(/^rgba\((\d+),(\d+),(\d+),([\d.]+)\)$/); if (!m) throw new Error(`cor ${v}`);
+  return [[+m[1], +m[2], +m[3]], +m[4]];
+};
+const sobre = (cor: string, fundo: Rgb): Rgb => { const [c, a] = rgb(cor); return c.map((x, i) => x * a + fundo[i] * (1 - a)) as Rgb; };
+const hex = (c: Rgb) => "#" + c.map((x) => Math.round(x).toString(16).padStart(2, "0")).join("");
+
+describe("pele Holografica (vidro)", () => {
+  const branco: Rgb = [255, 255, 255];
+  const pior = sobre("rgba(255,255,255,.06)", sobre(tokenVidro("hx-miolo-2"), branco));
+  it("todo texto passa 4,5:1 sobre o vidro com o habitat mais claro atras; bordas e foco 3:1", () => {
+    for (const t of ["hx-texto", "hx-texto-2", "hx-sec", "hx-rotulo", "hx-num", "hx-alerta", "hx-perigo", "hx-ok", "hx-aprendido", "hx-foco"]) {
+      expect(contraste(tokenVidro(t).replace(/^var\(--hx-texto\)$/, token("hx-texto")), hex(pior)), t).toBeGreaterThanOrEqual(4.5);
+    }
+    const escolhido = sobre("rgba(58,168,255,.28)", pior), botao = sobre(tokenVidro("hx-btn-bg"), pior);
+    expect(contraste(token("hx-texto"), hex(escolhido))).toBeGreaterThanOrEqual(4.5);
+    expect(contraste(token("hx-texto"), hex(botao))).toBeGreaterThanOrEqual(4.5);
+    expect(contraste(hex(sobre(tokenVidro("hx-borda"), pior)), hex(pior))).toBeGreaterThanOrEqual(3);
+    expect(contraste(tokenVidro("hx-escolhido-borda"), hex(pior))).toBeGreaterThanOrEqual(3);
+    expect(contraste("#0A1316", token("hx-necessidade"))).toBeGreaterThanOrEqual(4.5);
+    expect(vidroCss).toContain(".hx-chip--necessidade{ color:#0A1316 }");
+  });
+  it("sem variante por tema; transparencia reduzida deixa o vidro opaco, sem desfoque", () => {
+    expect(blocoVidro).not.toContain("data-tema");
+    const reduz = tokens.slice(tokens.indexOf("@media (prefers-reduced-transparency: reduce)"));
+    expect(reduz).toMatch(/--hx-vidro:none/);
+    expect(reduz).toMatch(/--hx-reflexo:none/);
+    for (const t of ["hx-chao", "hx-miolo", "hx-miolo-2", "hx-btn-bg"]) expect(reduz).toMatch(new RegExp(`--${t}:#[0-9A-Fa-f]{6};`));
+  });
+  it("o Militar ganha os tokens novos com valor neutro (nada muda)", () => {
+    for (const [t, v] of [["hx-vidro", "none"], ["hx-reflexo", "none"], ["hx-sombra", "none"], ["hx-chanfro", "0px"], ["hx-luz", "transparent"],
+      ["hx-escolhido-borda", "#BFE5E7"], ["hx-titulo-tam", "18px"], ["hx-medidor-alt", "12px"]]) expect(tokens).toContain(`--${t}:${v};`);
+  });
+  it("pele-vidro.css: toda regra sob :root[data-pele=\"vidro\"], sem animacao, importada por ultimo; Barlow e Rajdhani no index.html", () => {
+    const semComentario = vidroCss.replace(/\/\*[\s\S]*?\*\//g, "");
+    const seletores = [...semComentario.matchAll(/(?:^|[}{])\s*([^{}@]+?)\s*\{/g)].map((m) => m[1]);
+    expect(seletores.length).toBeGreaterThan(20);
+    /* as virgulas de fora dos parenteses (as de dentro de :is() e :has() nao separam regras) */
+    const partes = (sel: string) => { const r: string[] = []; let d = 0, ini = 0;
+      [...sel].forEach((c, i) => { if (c === "(") d++; else if (c === ")") d--; else if (c === "," && d === 0) { r.push(sel.slice(ini, i)); ini = i + 1; } });
+      return [...r, sel.slice(ini)]; };
+    for (const sel of seletores) for (const parte of partes(sel)) expect(parte.trim(), sel).toMatch(/^:root\[data-pele="vidro"\]/);
+    expect(semComentario).not.toMatch(/animation|transition/);
+    const imports = [...main.matchAll(/^import "\.\/estilo\/([^"]+)";/gm)].map((m) => m[1]);
+    expect(imports.at(-1)).toBe("pele-vidro.css");
+    expect(main).toMatch(/iniciarTema\(\);\niniciarPele\(\);/);
+    expect(html).toContain("family=Barlow:wght@400;600;700");
+    expect(html).toContain("family=Rajdhani:wght@700");
+  });
+});
+
 describe("hud.css e fonte", () => {
   it("respeita prefers-reduced-motion (transicao so em no-preference) e define foco", () => {
     expect(hud).toMatch(/@media \(prefers-reduced-motion: no-preference\)\{[^@]*transition/);
@@ -106,5 +165,11 @@ describe("MedidorHx", () => {
     expect(renderToStaticMarkup(h(MedidorHx, { valor: 500, max: 100, rotulo: "x" }))).toContain('aria-valuenow="100"');
     expect(renderToStaticMarkup(h(MedidorHx, { valor: -4, max: 100, rotulo: "x" }))).toContain('aria-valuenow="0"');
     expect(() => renderToStaticMarkup(h(MedidorHx, { valor: 1, max: 0, rotulo: "x" }))).toThrow();
+  });
+  it("em porcento o texto e N% (o HUD da tela Pet) e o max tem de ser 100", () => {
+    const s = renderToStaticMarkup(h(MedidorHx, { valor: 42, max: 100, rotulo: "comida", porcento: true }));
+    expect(s).toContain('aria-valuetext="42%"');
+    expect(s).toContain(">42%<");
+    expect(() => renderToStaticMarkup(h(MedidorHx, { valor: 2, max: 5, rotulo: "x", porcento: true }))).toThrow();
   });
 });

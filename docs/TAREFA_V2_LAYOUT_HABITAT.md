@@ -179,3 +179,18 @@ Dependências: M1 antes de tudo; M2 depende de M1; M3–M6 dependem de M2. Arqui
 - **CSS morto removido:** `.pet-quadro`/`--quadro-larg`, `.desk-*`, `.cfg-*` e `.cfg-desk*`, `.conv-*` (exceto `.conv-voltar`,
   usado por Nova geração), `.mpl-*`, `.imp-*` sem uso, `.mp-tela`, `.mp-*` de Meus pets, `.rc-*`, `.meus-pets .slot`,
   `.db-botao`, `.db-cab`, `.db-rola`, `estilo/desktop.css` e `RegrasCompactas`.
+
+## L · Os balões soltos sobre a cena (2026-10-30, worker `v3-layout-baloes`, trilha L da V3)
+
+Proposta aprovada pelo Matheus em 2026-10-30, antes do código. Sobre a cena ficam só o chamado, o balão de fala e o DigiBrain (regra 4).
+
+- **Emoção** (`Emocao`, o chip "incômodo" sob o retrato): no painel Estado, primeira linha ("emoção"), como a tabela da M3 já previa.
+- **Causa** (`BalaoCausa`, os ícones ao lado do pet): sai da cena; os mesmos ícones (`CausaIcones`) vão para o "Por que ele disse isso".
+- **Mundo** (`InfoMundo`, "na casa · nenhuma ração no chão", v12): no painel Estado, linha "mundo".
+- **Ração** (`MensagemRacao`): a dica ("Arraste até o chão…, Alimentar é a reserva") vai para dentro da faixa do "Pôr ração"; o
+  resultado ("Ração posta na casa.", "fora do mapa") vira `AvisoRacao`, um aviso de pele `hx` sobre o dock que some em 5 s, com a
+  região `aria-live="polite"` sempre montada. Some o fundo branco fixo da `.racao-dica`, que apagava o texto no tema escuro.
+- O gesto, o caminho acessível (MV-4) e o Alimentar reserva não mudam. O CSS morto (`.palco-emocao`, `.balao-causa`, `.cena-topo`,
+  `.mundo-linhas`, o `.mundo-info` e a `.racao-dica` de `mundo.css`) saiu.
+- **e2e:** a `.mundo-info` é lida com o painel Estado aberto (e conferida fora da cena); o teste de soltar fora do chão confere também
+  que o aviso some e a região `aria-live` fica; a dica da reserva é conferida na faixa.

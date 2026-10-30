@@ -49,7 +49,7 @@ const cuidar = (m: Motor): void => { if (m.lesionadoDesde !== null) m.observar("
 const NPC1 = (m: Motor): string => m.lugares[0].rivais[0];
 /** pet v13 no estagio pedido, sem treino, com `medalhas` conhecidas desde o comeco */
 function petV13(semente: number, est: Estagio, medalhas: number): Motor {
-  const m = new Motor(semente);
+  const m = new Motor(semente, 13);
   if (medalhas) m.liberar(medalhas);
   const esperar = (alvo: Estagio): void => { for (let j = 0; j < 400 && m.estagioAtual !== alvo; j++) m.avancar(30); };
   esperar("crianca");
@@ -183,7 +183,7 @@ describe("chip de regra: uma regra nova na lista do pet", () => {
     expect(() => m.equipar("chip_recuo")).toThrow(/já está equipado/);
     expect(() => m.equipar("chip_forca")).toThrow(/vaga/);
     expect(() => m.desequipar("chip_forca")).toThrow(/não está equipado/);
-    expect(() => new Motor(1).equipar("chip_forca")).toThrow(/sem vaga|pede/);    /* bebe e sem medalha */
+    expect(() => new Motor(1, 13).equipar("chip_forca")).toThrow(/sem vaga|pede/);    /* bebe e sem medalha */
   });
   test("a regra do chip atravessa a evolucao (Champion -> Ultimate)", () => {
     const m = petV13(74, "adulto", 3);
@@ -253,10 +253,10 @@ describe("cartas: o efeito de uma luta so", () => {
     expect(m.cartasUsadas).toEqual(["carta_foco"]);
     /* a luta em tempo real: o resultado fica em tr (turnos vazio) e o registro refaz o pet igual */
     expect(r.res.tr).toBeDefined();
-    expect(Motor.reproduzir(m.semente, m.log).assinatura()).toBe(m.assinatura());
+    expect(Motor.reproduzir(m.semente, m.log, 13).assinatura()).toBe(m.assinatura());
     /* antes da luta do registro: sem carta armada; refazer a luta do registro (Diario): a mesma, com a carta */
-    expect(Motor.reproduzir(m.semente, m.log.slice(0, -2)).montarLuta(npc, 777).carta).toBeNull();
-    const reco = Motor.reproduzir(m.semente, m.log.slice(0, -1)).montarLuta(npc, 777);
+    expect(Motor.reproduzir(m.semente, m.log.slice(0, -2), 13).montarLuta(npc, 777).carta).toBeNull();
+    const reco = Motor.reproduzir(m.semente, m.log.slice(0, -1), 13).montarLuta(npc, 777);
     expect(reco.carta).toBe("carta_foco");
     expect(reco.serie[0].tr).toEqual(r.res.tr);
     expect(() => m.lutar(npc, 1, "chip_forca")).toThrow(/não é carta/);
@@ -270,14 +270,14 @@ describe("registro do pet e replay com itens", () => {
     cuidar(m); m.lutar(NPC1(m), 11, "carta_cura"); cuidar(m); m.avancar(15);
     m.desequipar("chip_recuo"); m.equipar("chip_forca");
     m.lutar(NPC1(m), 12, "carta_folego"); cuidar(m); m.lutar("tartaruga", 13); cuidar(m); m.avancar(45);
-    const r = Motor.reproduzir(m.semente, m.log);
+    const r = Motor.reproduzir(m.semente, m.log, 13);
     expect(r.assinatura()).toBe(m.assinatura());
     expect(r.chips).toEqual(["chip_forca"]);
     expect(r.cartasUsadas).toEqual(["carta_cura", "carta_folego"]);
   });
   test("carta sem a luta logo depois, item invalido e evento desconhecido falham alto no replay", () => {
     const m = comItensValendo(petV13(78, "crianca", 1)), t = m.e.tick, base = m.log;
-    const com = (evs: EventoRegistro[]) => () => Motor.reproduzir(m.semente, [...base, ...evs]);
+    const com = (evs: EventoRegistro[]) => () => Motor.reproduzir(m.semente, [...base, ...evs], 13);
     expect(com([[t, "k", { id: "carta_cura" }], [t, "t", 10]])).toThrow(/não é luta/);
     expect(com([[t, "k", { id: "carta_cura" }], [t, "k", { id: "carta_foco" }]])).toThrow(/não é luta/);
     expect(com([[t, "i", { op: "equipar", id: "chip_nada" }]])).toThrow(/desconhecido/);
@@ -288,7 +288,7 @@ describe("registro do pet e replay com itens", () => {
     expect(com([[t, "k", { id: "carta_cura" }], [t, "l", { r: NPC1(m), s: 1 }]])).not.toThrow();
   });
   test("sem item a assinatura dos v13 nao muda (nenhum campo novo); com item, muda", () => {
-    const a = petV13(79, "adolescente", 1), b = Motor.reproduzir(a.semente, a.log);
+    const a = petV13(79, "adolescente", 1), b = Motor.reproduzir(a.semente, a.log, 13);
     const campos = JSON.parse(a.assinatura()).length;
     b.equipar("chip_recuo");
     expect(JSON.parse(b.assinatura()).length).toBe(campos + 1);
@@ -300,7 +300,7 @@ describe("registro do pet e replay com itens", () => {
 describe("inventario no registro do Tamer", () => {
   const gaz = MEDALHAS[0].lider;
   test("a medalha da o item dela (uma vez); o Tamer de antes recebe o item das medalhas que ja tinha", () => {
-    const t = new Tamer(), m = new Motor(90);
+    const t = new Tamer(), m = new Motor(90, 13);
     expect(conferirItensDasMedalhas(t, m, 1)).toEqual([]);
     t.ganhar("campina", m, 1); t.ganhar("torre", m, 2);
     const novos = conferirItensDasMedalhas(t, m, 3);
@@ -330,7 +330,7 @@ describe("inventario no registro do Tamer", () => {
     expect(Tamer.reproduzir(t.log).itens).toEqual(t.itens);
   });
   test("o replay confere tudo: item antes da medalha, item errado, repetido, espera e carta sem estoque falham alto", () => {
-    const m = new Motor(94), med: EventoTamer = ["medalha", { id: "campina", n: 1, quando: 1, pet: 94, forma: "x", tick: 500 }];
+    const m = new Motor(94, 13), med: EventoTamer = ["medalha", { id: "campina", n: 1, quando: 1, pet: 94, forma: "x", tick: 500 }];
     const it = (id: string, n: number, origem: "medalha" | "revanche", tick = 600): EventoTamer =>
       ["item", { id, n, quando: 2, origem, lider: gaz, pet: 94, forma: "x", est: "crianca", tick }];
     expect(() => Tamer.reproduzir([it("chip_forca", 1, "medalha")])).toThrow(/antes da Medalha/);
@@ -346,7 +346,7 @@ describe("inventario no registro do Tamer", () => {
     expect(() => t.usarCarta("carta_folego", m, 6)).toThrow(/sem estar no inventário/);
   });
   test("o registro grava a versao 7 (as regras de cada tentativa da Fabrica, fase 3) e le da 1 (so medalhas) a 5 (a Fabrica e o Salao)", () => {
-    const t = new Tamer(), m = new Motor(95), a = armaz();
+    const t = new Tamer(), m = new Motor(95, 13), a = armaz();
     t.ganhar("campina", m, 1);
     gravarTamer(a, t);
     expect(JSON.parse(a.dados[CHAVE_TAMER]).versao).toBe(7);

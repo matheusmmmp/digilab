@@ -41,7 +41,7 @@
    saem do registro no descarte unico 6 (descartarPetsAntigos), com aviso na tela; o recorde da Fabrica recomeca. O resto do Tamer (as
    medalhas, os itens, o titulo, os recordes das instalacoes, o Salao) fica. Os registros 1 a 6 ainda se leem (com a Fabrica de antes). */
 import {
-  ARENA_POR_ID, CARTA_DA_REVANCHE, CIT, ESTAGIOS_SALAO, INSTALACOES, LUTAS_SERIE_FABRICA, TentativaFabrica, VERSAO_FABRICA_ATUAL, VERSAO_FABRICA_TR, VERSOES_FABRICA, sementeFabrica, sementeSalao, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHAS, MEDALHAS_LIGA, MEDALHA_POR_ID, Motor, NPC, PetMorto,
+  ARENA_POR_ID, CARTA_DA_REVANCHE, CIT, ESTAGIOS_SALAO, INSTALACOES, LUTAS_SERIE_FABRICA, TentativaFabrica, VERSAO_FABRICA_ATUAL, VERSOES_FABRICA, sementeFabrica, sementeSalao, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHAS, MEDALHAS_LIGA, MEDALHA_POR_ID, Motor, NPC, PetMorto,
   cartaDe, ehInstalacao, itemDe, medalhaDoLider, nomeForma, type Estagio, type IdInstalacao, type Medalha,
 } from "../motor/index.ts";
 import { CHAVE, type Armazenamento } from "./save.ts";
@@ -57,7 +57,7 @@ export const CHAVE_AVISO_TR = CHAVE + "-aviso-tr";
 export const CHAVE_DESCARTADOS = CHAVE + "-descartados";
 /** versao do registro do Tamer: 1 = medalhas (parte 1); 2 = medalhas e itens (parte 3); 3 = e o titulo da Liga (parte 4a); 4 = e os
     recordes das instalacoes da Fronteira (parte 4b); 5 = e a Fabrica e o Salao (parte 4c); 6 = e a versao das regras de cada tentativa da
-    Fabrica (campo `v`, equilibrio geral fase 3); 7 = so a Fabrica em tempo real (v: 13; COMBATE-TR, D-4). Grava a 7; le as sete */
+    Fabrica (campo `v`, equilibrio geral fase 3); 7 = so a Fabrica em tempo real (v: 13; COMBATE-TR, D-4). Grava a 7; le as sete. A Fabrica da B2 (v: 14, o candidato da rodada de equilibrio) cabe no mesmo registro 7: as tentativas v: 13 seguem iguais */
 export const VERSAO_TAMER = 7;
 const VERSOES_TAMER = [1, 2, 3, 4, 5, 6, 7];
 /** os eventos da Fabrica no registro do Tamer */
@@ -345,7 +345,7 @@ function lerLogTamer(armaz: Armazenamento): { versao: number; log: EventoTamer[]
   if (!VERSOES_TAMER.includes(s.versao as number) || !Array.isArray(s.log)) throw new Error("o registro do Tamer não tem versão " + VERSOES_TAMER.join(" ou ") + " e eventos");
   /* o registro 7 so tem a Fabrica em tempo real: uma tentativa antiga nele e registro corrompido */
   if (s.versao === 7) for (const ev of s.log as EventoTamer[])
-    if (Array.isArray(ev) && ev[0] === "fabrica" && (ev[1] as InicioFabrica).v !== VERSAO_FABRICA_TR)
+    if (Array.isArray(ev) && ev[0] === "fabrica" && !VERSOES_FABRICA.includes((ev[1] as InicioFabrica).v as number))
       throw new Error(`o registro 7 do Tamer tem a tentativa ${(ev[1] as InicioFabrica).n} da Fábrica com as regras de antes (v ${JSON.stringify((ev[1] as InicioFabrica).v)})`);
   return { versao: s.versao as number, log: s.log as EventoTamer[] };
 }
@@ -353,8 +353,8 @@ function lerLogTamer(armaz: Armazenamento): { versao: number; log: EventoTamer[]
     quantas tentativas sairam */
 export function semFabricaAntiga(log: readonly EventoTamer[]): { log: EventoTamer[]; tentativas: number } {
   const antigas = new Set<number>();
-  for (const ev of log) if (ev[0] === "fabrica" && (ev[1] as InicioFabrica).v !== VERSAO_FABRICA_TR) antigas.add((ev[1] as InicioFabrica).n);
-  if (antigas.size && log.some(ev => ev[0] === "fabrica" && (ev[1] as InicioFabrica).v === VERSAO_FABRICA_TR))
+  for (const ev of log) if (ev[0] === "fabrica" && !VERSOES_FABRICA.includes((ev[1] as InicioFabrica).v as number)) antigas.add((ev[1] as InicioFabrica).n);
+  if (antigas.size && log.some(ev => ev[0] === "fabrica" && VERSOES_FABRICA.includes((ev[1] as InicioFabrica).v as number)))
     throw new Error("o registro do Tamer mistura a Fábrica de antes com a em tempo real");
   return { log: log.filter(ev => !(EVENTOS_FABRICA.includes(ev[0]) && antigas.has((ev[1] as { n: number }).n))), tentativas: antigas.size };
 }

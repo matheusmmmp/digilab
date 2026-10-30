@@ -290,4 +290,4 @@ def test_rodar_a_fumaca_do_mundo(tmp_path):
     assert meta["mundo_sha256"] and meta["config"]["lugares"] == ["comedouro", "perto", "longe"]
     medidas = json.loads((tmp_path / "medidas.json").read_text(encoding="utf-8"))
     assert all(m["mundo_fisico"]["d_fe"]["n"] > 0 for m in medidas.values())
-    assert {m["lugar"] for m in medidas.values()} == set(ESTILOS_LUGAR)
+    assert {m["lugar"] for m in medidas.values()} == set(meta["config"]["lugares"])

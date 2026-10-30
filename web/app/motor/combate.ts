@@ -2,7 +2,7 @@
    perfil de cada lutador. O combate por turnos (jogarV2, resolverV2) saiu na COMBATE-TR R3: toda luta do v13 e em tempo real
    (combate_tr/). Cada lutador tem um PERFIL (catalogo.ts) e, conforme o estagio, a tecnica da linha (adolescente) e a passiva da
    forma (adulto). */
-import { CV, CV21, CV21E_TR, TECNICAS } from "./constantes.ts";
+import { CV, CV21, CV21E_TR, CV21E_TR14, TECNICAS, VERSOES_PET } from "./constantes.ts";
 import type { ResultadoLutaTR } from "./combate_tr/luta.ts";
 import type { RelogioTR } from "./combate_tr/constantes_tr.ts";
 import type { Perfil } from "./catalogo.ts";
@@ -28,11 +28,14 @@ export interface RegrasV21 {
   readonly relogio?: RelogioTR;
 }
 export type RegrasLuta = RegrasV21;
-/** as regras das lutas de uma versao de pet: so a v13 (CV21E_TR); as outras falham alto */
+/** as regras das lutas de uma versao de pet: a v13 (CV21E_TR) e a v14 (CV21E_TR14, o candidato da rodada de equilibrio); as outras falham alto */
 export const regrasDaVersao = (versao: number): RegrasLuta => {
-  if (versao !== CV21E_TR.versaoPet) throw new Error(`regras de luta da versão ${versao} não existem mais (só a ${CV21E_TR.versaoPet})`);
+  if (versao === CV21E_TR14.versaoPet) return CV21E_TR14;
+  if (versao !== CV21E_TR.versaoPet) throw new Error(`regras de luta da versão ${versao} não existem mais (só a ${VERSOES_PET.join(" e a ")})`);
   return CV21E_TR;
 };
+/** as regras são as do candidato v14 (a rodada de equilibrio do tempo real; DE-1) */
+export const ehV14 = (R: RegrasLuta): boolean => R.versaoPet >= CV21E_TR14.versaoPet;
 
 export interface Lado {
   p: Perfil; hp: number; hpMax: number; guts: number; gutsMax: number; regen: number; prep: boolean; hist: string[];
@@ -57,7 +60,7 @@ export type Desafiado = 0 | 1 | null;
 export const VERSAO_LIMITE_DESAFIADO = 6;
 /** o desafiado nas lutas do motor (o pet e o lado A): o rival (lado B); so a v13 existe, as outras falham alto */
 export const desafiadoDaVersao = (versao: number): Desafiado => {
-  if (versao !== CV21E_TR.versaoPet) throw new Error(`desafiado da versão ${versao} não existe mais (só a ${CV21E_TR.versaoPet})`);
+  if (!VERSOES_PET.includes(versao)) throw new Error(`desafiado da versão ${versao} não existe mais (só a ${VERSOES_PET.join(" e a ")})`);
   return 1;
 };
 
@@ -109,10 +112,17 @@ export interface ResultadoLuta { E0: EstadoLuta; pontosA: number; fim: "ko" | "l
 /** efeito de uma carta na luta (itens.ts; pets v6): `guts` a mais no comeco, `foco` = sem exploracao (epsilon 0), e a `cura`: na
     primeira vez que a vida cai abaixo de `abaixo` da maxima (e o lado nao caiu), cura `fracao` da vida maxima, uma vez */
 export interface CuraLuta { abaixo: number; fracao: number }
-export interface EfeitoCarta { guts?: number; foco?: boolean; cura?: CuraLuta }
-/** a carta no lutador: o guts a mais entra no guts do comeco (ate o maximo) e o foco zera a exploracao. A cura e da luta (combate_tr/luta.ts, jogarTR) */
+/** candidato v14 (DR2-4; so as cartas candidatas da bancada os usam, os pets v13 nunca): `gutsTeto`, o teto do guts do comeco em vezes o
+    maximo (o Folego passa do maximo e o guts fica acima ate ser gasto; ausente = 1, o maximo); `ritmo`, o intervalo das decisoes do pet na
+    luta em tempo real, em passos (a Foco decide mais rapido; ausente = o do relogio) */
+export interface EfeitoCarta { guts?: number; foco?: boolean; cura?: CuraLuta; gutsTeto?: number; ritmo?: number }
+/** a carta no lutador: o guts a mais entra no guts do comeco (ate o maximo, ou ate gutsTeto x o maximo) e o foco zera a exploracao; o
+    ritmo vai para o perfil (ritmoCarta). A cura e da luta (combate_tr/luta.ts, jogarTR) */
 export function comCarta(L: Lutador, ef: EfeitoCarta | null): Lutador {
   if (!ef) return L;
-  const cond = ef.guts ? { ...L.cond, guts0: Math.min(L.cond.gutsMax, L.cond.guts0 + ef.guts) } : L.cond;
+  if (ef.gutsTeto !== undefined && !(ef.gutsTeto >= 1)) throw new Error("gutsTeto da carta precisa ser >= 1: " + ef.gutsTeto);
+  if (ef.ritmo !== undefined && !(Number.isInteger(ef.ritmo) && ef.ritmo >= 1)) throw new Error("ritmo da carta precisa ser um inteiro >= 1: " + ef.ritmo);
+  let cond = ef.guts ? { ...L.cond, guts0: Math.min(L.cond.gutsMax * (ef.gutsTeto ?? 1), L.cond.guts0 + ef.guts) } : L.cond;
+  if (ef.ritmo !== undefined) cond = { ...cond, ritmoCarta: ef.ritmo };
   return { ...L, cond, estilo: ef.foco ? { ...L.estilo, eps: 0 } : L.estilo };
 }

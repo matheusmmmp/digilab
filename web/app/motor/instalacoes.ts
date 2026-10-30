@@ -16,7 +16,8 @@
    Tamer, que o pet conhece pelo evento "f" (Motor.abrirFronteira; o motor nunca le o Tamer). O recorde vai para o registro do Tamer
    (src/tamer.ts, evento "recorde"). Nenhuma instalacao da item, treino ou stat: o pet sai delas como entrou, fora o que toda luta ja faz
    (aprender regras de combate, contar lutas e vitorias, lesao na derrota). */
-import { copiarGambits, gambitsAdulto } from "./bots.ts";
+import { copiarGambits, gambitsAdulto, listaDaForma } from "./bots.ts";
+import { FATORES_V14 } from "./combate_tr/constantes_tr.ts";
 import { ESCALA, caraterCanonico, perfilDe } from "./catalogo.ts";
 import { CV, ESPECIES, FORMAS_AD, LINHA_DA_FORMA, VERSAO_PET } from "./constantes.ts";
 import type { Lutador, RegrasLuta } from "./combate.ts";
@@ -74,9 +75,9 @@ export function formaRivalInstalacao(s: number, k: number): Forma {
 /** o lutador do rival da luta k: o Mega com a tecnica da linha, a passiva da forma, o carater canonico e a lista canonica dele sob as
     regras da luta; epsilon dos bots canonicos. Com a escala ligada (o app): E = vida do Mega na escala dos pets x
     fator, sem treino (como os Megas da Liga) */
-export function rivalInstalacao(s: number, k: number, R: RegrasLuta, fator: number = FATOR_INSTALACAO): Lutador {
+export function rivalInstalacao(s: number, k: number, R: RegrasLuta, fator: number = R.versaoPet >= 14 ? FATORES_V14.instalacao : FATOR_INSTALACAO): Lutador {
   const f = formaRivalInstalacao(s, k), adulta = f.adulta as (typeof FORMAS_AD)[number];
   const p = perfilDe(f, caraterCanonico(adulta), 1, null, true, VERSAO_PET);
   const cond = ESCALA.ligada ? { ...p, escala: p.escala! * fator } : p;
-  return { nome: "Rival " + nomeForma(f), estilo: { nome: `fronteira:${adulta}`, gambits: copiarGambits(gambitsAdulto(adulta, R)), eps: CV.eps }, cond };
+  return { nome: "Rival " + nomeForma(f), estilo: { nome: `fronteira:${adulta}`, gambits: copiarGambits(listaDaForma(adulta, R, gambitsAdulto(adulta, R))), eps: CV.eps }, cond };
 }

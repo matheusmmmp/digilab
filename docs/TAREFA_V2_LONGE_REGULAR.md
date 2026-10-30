@@ -1,7 +1,8 @@
 # TAREFA V2 — LONGE_REGULAR: o longe com lugares fixos, para separar a distância da falta de regularidade (2026-10-30)
 
-Coordenador: Gerente (Claude Code). Worker: a definir. Worktree e branch: `v2-longe-regular`. Status: **ABERTA, só papel.** Nenhum
-código e nenhuma vida. As decisões LR-1 a LR-7 (seção 8) estão abertas.
+Coordenador: Gerente (Claude Code). Worker: a definir. Worktree e branch: `v3-longe-regular-<etapa>` (V3-D2; a C1 da V3). Status: **ABERTA; as LR-1 a LR-7
+DECIDIDAS pelo Matheus em 2026-10-30, todas pela recomendação** ("segue as recomendações", no chat do Gerente da V3), com as C1-E1 e
+C1-E2 do `docs/PLANO_V3.md`, seção 2.3. Nenhum código e nenhuma vida ainda.
 
 Categoria: experimento (com uma etapa de código no dono da pesquisa). Origem: Matheus, 2026-10-30: a recomendação R1 da análise que
 cruzou a triagem de literatura com o estado do projeto (o arquivo `triagem_texto_completo/ANALISE_LACUNAS_E_ROADMAP.md`, fora do
@@ -44,16 +45,18 @@ Da `docs/PROPOSTA_LONGE_DIGIBRAIN_MODULAR.md`, seção 1.1 (o M3\*, a reavaliaç
 
 ### 1.2 O que a literatura sugere
 
-São pistas, não fontes: as referências abaixo foram **lidas na triagem de 2026-10-30, mas ainda não estão na lista verificada** do
-projeto. Antes de qualquer citação, elas passam pela verificação Crossref da skill `literatura-digilab`. Até lá, valem como SEM FONTE.
+**Verificadas na C0** (`docs/referencias/v3c0_referencias_verificadas.csv`, #482), com as ressalvas de cada linha. Servem como
+direção, não como tamanho de efeito.
 
-- **Ho, Dautenhahn e Nehaniv (CEC 2005; AISB 2006; a tese de 2005, Univ. de Hertfordshire):** agentes com glicose, umidade, energia e
-  temperatura num mundo com estações.
+- **Ho, Dautenhahn e Nehaniv:** CEC 2005 (`10.1109/cec.2005.1554734`); a tese de Ho, 2005, Univ. de Hertfordshire
+  (`10.18745/th.14271`); AISB 2006 (UHRA eprint 12716, sem DOI); Connection Science 2008 (`10.1080/09540090801889469`). Agentes com
+  glicose, umidade, energia e temperatura num mundo com estações.
   - A memória que refaz o caminho exato falha quando os recursos mudam de lugar.
   - A memória de eventos com regras do ambiente estende a vida.
   - A memória só supera o agente reativo quando guarda também os eventos negativos.
   - São 10 execuções por condição, sem teste de hipótese.
-- **Giannakakis et al. (ALIFE 2023):** a plasticidade que a evolução escolhe só compensa quando o ambiente muda numa faixa
+- **Giannakakis, Khajehabdollahi e Levina (ALIFE 2023, `10.1162/isal_a_00606`; a extensão em Artificial Life 2024,
+  `10.1162/artl_a_00458`):** a plasticidade que a evolução escolhe só compensa quando o ambiente muda numa faixa
   intermediária; sem estrutura, aprender não paga.
 
 ### 1.3 O que cada resultado diria (escrito antes; a forma final vai no plano)
@@ -165,9 +168,11 @@ projeto. Antes de qualquer citação, elas passam pela verificação Crossref da
 - Cada número do resultado sai de um artefato em disco com sha256.
 - A faixa de sementes está na `FAIXAS_RESERVADAS` antes da run.
 
-## 8. Precisa do Matheus
+## 8. Decisões do Matheus
 
-Todas PROPOSTAS, com a recomendação primeiro.
+**Todas DECIDIDAS em 2026-10-30, pela recomendação** ("segue as recomendações"). O `n_pontos_longe_fixo` = 3 continua
+SEM FONTE no `config.py`; a faixa 71101…71505 foi conferida livre (nem em `FAIXAS_RESERVADAS` nem em `FAIXAS_QUEIMADAS`, em nenhum
+branch) e entra na tabela num commit próprio, na etapa 1.
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
@@ -178,3 +183,31 @@ Todas PROPOSTAS, com a recomendação primeiro.
 | **LR-5** | a faixa de sementes | **71101…71505,** se o coordenador confirmar que está livre (não está na `FAIXAS_RESERVADAS` de 2026-10-30) | reusar a 66xxx ou a 67xxx: a validação deixa de ser única |
 | **LR-6** | a ordem | **antes da frente do hábito,** ou junto com o plano dela | o hábito depois, sem isto: a leitura do P2 fica no cenário confundido, que a proposta do longe quis evitar |
 | **LR-7** | onde fica o plano | **um adendo 6 ao plano do protótipo,** que já tem os braços, as medidas e a unidade | um plano novo: repete a seção de medidas e pode divergir dela |
+
+## Resultado da etapa 1 (código; 2026-10-30, worker Claude Code, Sonnet 5.5, worktree `v3-longe-regular-codigo`)
+
+Só código e testes; nenhuma vida de pesquisa. Quatro commits, nesta ordem:
+
+1. **A faixa 71101…71505** em `FAIXAS_RESERVADAS` (`experiments/bancada/faixas.py`), com a fonte (LR-5, PR #495). Conferida livre antes:
+   nenhuma faixa nem config a usava.
+2. **O gabarito dos estilos `comedouro`, `perto` e `longe`**, gravado antes da mudança: `tests/gabarito_lugar_estilos.py` gera
+   `tests/gabaritos/lugar_estilos_antes.json` (36 vidas: instinto e lobos × 3 estilos × 2 donos × 3 sementes, com o log, o estado, as
+   rngs, o estado da política e os lugares das rações), e `tests/test_gabarito_lugar_estilos.py` confere byte a byte.
+3. **O estilo `longe_fixo`** (`digilab/mundo.py`, `digilab/config.py`):
+   - `N_PONTOS_LONGE_FIXO = 3` em `digilab/config.py` (LR-1; PROPOSTO, SEM FONTE), parâmetro `n_pontos` do `DonoComLugar` (validado entre
+     1 e 16). Fica **fora do `ConfigMundo`**: um campo novo no `asdict` quebrava 4 gabaritos do web mesmo com o estilo desligado;
+   - o `DonoComLugar` sorteia na construção os pontos fixos com a rng própria `derivar_semente("dono-lugar-fixo", semente, rotulo_dono)`, e
+     cada `alimentar` sorteia um ponto uniformemente na mesma rng; os outros estilos não criam nem consomem essa rng;
+   - `ESTILOS_LUGAR` ganhou o `longe_fixo`; `ESTILOS_LUGAR_V2` guarda os três de antes para as runs que os iteram (o protótipo e a análise
+     dos empates do cheiro); a bancada aceita o estilo pela validação que já existia (`ESTILOS_LUGAR`);
+   - `tests/test_longe_fixo.py` (33 testes): pontos iguais no replay e numa construção nova; toda ração cai num ponto; os pontos ficam a 20 a
+     30 células do comedouro, em direções distintas; o sorteio por ração é uniforme; o replay é bit a bit (o G1), inclusive pela bancada.
+4. **Os documentos:** esta seção e o desvio em `docs/registro/2026-10.md`.
+
+**O achado que muda a leitura (desvio 1 do registro):** o comedouro está na célula (10, 15) do mapa de 64 × 30. Sem corte do mapa, só
+**5 das 16 direções** têm um ponto a 20 células (os índices 14, 15, 0, 1 e 2, o leste) e **3** a 30 células (15, 0 e 1). Os 3 pontos
+saem dessas, então ficam todos a leste do comedouro; a distância mínima entre dois pontos é de cerca de 7,8 células (média de 17,9 em 2 000
+sementes). O `longe` sorteado ancora no pet, usa as 16 direções e corta o ponto na borda. O adendo 6 precisa dizer isso; a LR-2 fica como
+decidida e o ponto vai ao Matheus.
+
+Os testes e a contagem da suíte inteira estão no corpo do PR.

@@ -1,6 +1,6 @@
 /* Bots (espelho de combate_v2/bots.py e combate_v2/v21/bots.py), sementes de gambits por estagio e
    campanha contra os NPCs (espelho de ConfigCampanha / campanha.py). */
-import { CV, CV21E, CV21E_TR, FORMAS_AD, LINHA_DA_FORMA, TECNICAS, type Tecnica } from "./constantes.ts";
+import { CV, CV21E, CV21E_TR, CV21E_TR14, FORMAS_AD, LINHA_DA_FORMA, TECNICAS, type Tecnica } from "./constantes.ts";
 import { Cd, Rg, validarLista, type Estilo, type ListaGambits, type RegrasLuta } from "./combate.ts";
 import { NOME_ARQ } from "./nomes.ts";
 import type { Especie, Estagio, Forma, FormaAdultaNormal, Linha, Ramo, TracoCombate } from "./tipos.ts";
@@ -112,7 +112,7 @@ export const BOTS_V21E: Partial<Record<FormaAdultaNormal, ListaGambits>> = Objec
 export const gambitsAdulto = (forma: FormaAdultaNormal, R: RegrasLuta): ListaGambits => {
   const g = gambitsV21D(forma, R);
   if (!temV21E(R)) return g;
-  return R === CV21E || R === CV21E_TR ? BOTS_V21E[forma] ?? g : editarV21E(forma, g, R);
+  return R === CV21E || R === CV21E_TR || R === CV21E_TR14 ? BOTS_V21E[forma] ?? g : editarV21E(forma, g, R);
 };
 export const ADOL_V21: Record<Linha, ListaGambits> = {
   brigao: { regras: [Rg(PREP, "esquivar"), Rg(D1, "investida"), Rg(D2, "avancar"), Rg([D0, GA_(40)], "preparar_pesado"), Rg(D0, "golpe_rapido")], final: "defender" },
@@ -155,8 +155,8 @@ export const GAMBITS_ARENA: Record<string, ListaGambits> = {
 };
 Object.values(GAMBITS_ARENA).forEach(validarLista);
 /* as listas candidatas da rodada de equilibrio do tempo real (docs/EQUILIBRIO_COMBATE_TR.md, fase 2; PROPOSTO): a chave e a forma
-   adulta, a sombria, a linha do adolescente ou o ramo da crianca. Ainda nao pertencem a nenhuma versao de pet: so a bancada
-   (scripts/equilibrio_tr/) as usa, e a v14 (DE-1) liga todas no fim da rodada. Calibradas so nas sementes de calibracao (68101 a 68505),
+   adulta, a sombria, a linha do adolescente ou o ramo da crianca. Sao as da v14 (B2, 2026-10-30; DE-1): os pets v14 e os rivais de
+   forma canonica delas lutam com elas (listaDaForma), e a bancada (scripts/equilibrio_tr/) as mede. Calibradas so nas sementes de calibracao (68101 a 68505),
    em cima do RELOGIO_V14: a variante r3a da grade (web/app/scripts/medicoes/equilibrio_tr/fase2/grade3/r3a.json). Estas sao as da
    primeira rodada (LISTAS_V14_R1, a base das variantes da segunda); as candidatas de hoje, LISTAS_V14, levam as da segunda por cima */
 export const LISTAS_V14_R1: Readonly<Record<string, ListaGambits>> = {
@@ -203,6 +203,10 @@ const R2_1: Readonly<Record<string, ListaGambits>> = {
 };
 Object.values(R2_1).forEach(validarLista);
 export const LISTAS_V14: Readonly<Record<string, ListaGambits>> = { ...LISTAS_V14_R1, ...R2_1 };
+/** a lista da forma `id` (adulta, linha ou ramo) nas lutas destas regras: nos pets v14, a candidata (LISTAS_V14) quando a forma tem; senao
+    `hoje` (a lista dos pets v13). So os rivais de forma canonica e os pets; os desafiantes da campanha e os lideres ficam com as deles */
+export const listaDaForma = (id: string, R: RegrasLuta, hoje: ListaGambits): ListaGambits =>
+  R.versaoPet >= 14 && LISTAS_V14[id] ? LISTAS_V14[id] : hoje;
 
 /* lugares do mapa; vencer QUALQUER rival de um lugar abre o proximo (a Torre tem 3 rivais para nenhuma
    linha ficar travada; experiments/calibrar_progressao.py) */

@@ -42,7 +42,7 @@ function treinarNoEstagio(m: Motor): void {
 /** um Ultimate v13 de registro legitimo (liberacoes, tempo, treino ate o teto de cada estagio e lutas de treino contra o
     aleatorio). Treinado: com a escala dos pets o pet sem treino quase nunca vence um lider (meta <= 0,05) */
 function ultimateV13(semente: number, treinados: readonly string[] = ["crianca", "adolescente", "adulto"]): Motor {
-  const m = new Motor(semente);
+  const m = new Motor(semente, 13);
   m.liberar(3);
   const esperarEvoluir = (): void => { const est = m.estagioAtual; for (let j = 0; j < 200 && m.estagioAtual === est; j++) m.avancar(30); };
   const treinar = (): void => { if (treinados.includes(m.estagioAtual)) treinarNoEstagio(m); };
@@ -87,7 +87,7 @@ describe("a tabela das medalhas e das arenas (pet v13)", () => {
     for (const c of CAMPANHA_V5) expect(v6).toContain(c.k);
     expect(LUGARES_V6[1].rivais.map(k => NPC[k]!.nome)).toEqual(["Tortomon", "Guardromon", "Devidramon"]);
     expect(LUGARES_V6[5].rivais.map(k => NPC[k]!.nome)).toEqual(["Puppetmon", "Machinedramon", "Piedmon"]);
-    const m = new Motor(1);
+    const m = new Motor(1, 13);
     expect(Object.keys(m.campanha)).toEqual(v6);
     expect(m.lugares).toBe(LUGARES_V6);
     expect(m.lugarDe(MYOTISMON)).toBe(3);
@@ -105,14 +105,14 @@ describe("as regras das arenas", () => {
     /* a arena e a do pet v6 em diante; so o fator do lider e calibrado por versao */
     for (const a of ARENAS) expect(arenaDaLuta(a.lider, 13)).toEqual({ ...a, fator: arenaDaLuta(a.lider, 13)!.fator });
     expect(arenaDaLuta("npc_tier2_sentinela", 13)).toBeNull();
-    const m = new Motor(3);
+    const m = new Motor(3, 13);
     expect(m.regras).toBe(CV21E_TR);
     expect(m.arenaDe(GUARDROMON)).toEqual(arenaDaLuta(GUARDROMON, 13));
     expect(m.arenaDe(GUARDROMON)!.id).toBe("torre");
   });
   test("Torre de pedra (paciencia): o lider tem o contra-golpe e as regras dele, e devolve o golpe forte", () => {
     ligarEscala(true);
-    const m = new Motor(5), B = m.lutadores(GUARDROMON).B, R = m.regras;
+    const m = new Motor(5, 13), B = m.lutadores(GUARDROMON).B, R = m.regras;
     expect(B.cond.tecnica).toBe("contra_golpe");
     expect(B.estilo.gambits!.regras.filter(r => r.entao === "contra_golpe").length).toBeGreaterThan(0);
     /* escala dos pets v6: a lista propria da Torre; contra quem atira com frequencia ele vai buscar (nao contra-golpeia) */
@@ -129,7 +129,7 @@ describe("as regras das arenas", () => {
   });
   test("Floresta (leitura): o lider muda de padrao no turno 10 (as regras de turno so disparam dali em diante)", () => {
     ligarEscala(true);
-    const m = new Motor(6), B = m.lutadores(YOUKOMON).B, R = m.regras, g = B.estilo.gambits!;
+    const m = new Motor(6, 13), B = m.lutadores(YOUKOMON).B, R = m.regras, g = B.estilo.gambits!;
     expect(g.regras.map(chaveRegra)).toEqual(GAMBITS_ARENA.floresta.regras.map(chaveRegra));
     const deTurno = g.regras.map(r => r.se.some(c => c.n === "turno_execucao" && c.p[0] === 10));
     const A = { nome: "alvo", estilo: { nome: "a", gambits: { regras: [], final: "defender" }, eps: .3 }, cond: perfilNPC(90, "adulto", 600) };

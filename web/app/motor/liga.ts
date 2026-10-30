@@ -18,7 +18,8 @@
    O titulo (vencer as 6) vai para o registro do Tamer (src/tamer.ts, evento "campeao"); o motor do pet nao le o Tamer: a entrada
    confere as medalhas que o pet conhece (evento "u"). */
 import { ARENA_POR_ID, jogarSerie } from "./arenas.ts";
-import { copiarGambits, gambitsAdulto } from "./bots.ts";
+import { copiarGambits, gambitsAdulto, listaDaForma } from "./bots.ts";
+import { FATORES_V14 } from "./combate_tr/constantes_tr.ts";
 import { ESCALA, caraterCanonico, perfilDe } from "./catalogo.ts";
 import { CV, LINHA_DA_FORMA, VERSAO_PET } from "./constantes.ts";
 import type { Desafiado, Lutador, RegrasLuta, ResultadoLuta } from "./combate.ts";
@@ -85,7 +86,7 @@ const ehV9 = (R: RegrasLuta): boolean => R.versaoPet >= VERSAO_LIGA_V9;
 export const fatorLiga = (i: number, R: RegrasLuta): number => {
   const x = LIGA[i];
   if (!x) throw new Error("lider da Liga desconhecido: " + i);
-  return ehV9(R) ? FATOR_LIGA_V9[x.arena] : FATOR_LIGA;
+  return R.versaoPet >= 14 ? FATORES_V14.liga[x.arena] : ehV9(R) ? FATOR_LIGA_V9[x.arena] : FATOR_LIGA;
 };
 /** a cura entre as lutas da Liga nestas regras: CURA_LIGA_V9 nos pets v9; 0 (sem cura) nos v6-v8 */
 export const curaLiga = (R: RegrasLuta): number => ehV9(R) ? CURA_LIGA_V9 : 0;
@@ -105,7 +106,7 @@ export function lutadorLiga(i: number, R: RegrasLuta, fator: number = fatorLiga(
   const f = formaLiga(i), x = LIGA[i];
   const p = perfilDe(f, caraterCanonico(x.adulta), 1, null, true, VERSAO_PET);
   const cond = ESCALA.ligada ? { ...p, escala: p.escala! * fator } : p;
-  return { nome: "Rival " + nomeForma(f), estilo: { nome: `liga:${x.arena}`, gambits: copiarGambits(gambitsAdulto(x.adulta, R)), eps: CV.eps }, cond };
+  return { nome: "Rival " + nomeForma(f), estilo: { nome: `liga:${x.arena}`, gambits: copiarGambits(listaDaForma(x.adulta, R, gambitsAdulto(x.adulta, R))), eps: CV.eps }, cond };
 }
 /** os 6 lutadores da Liga, na ordem. `fator`: um so para os 6 (a conferencia) ou um por lider; sem ele, o das regras (fatorLiga) */
 export const lutadoresLiga = (R: RegrasLuta, fator?: number | readonly number[]): Lutador[] =>

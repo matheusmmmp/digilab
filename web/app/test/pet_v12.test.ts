@@ -31,8 +31,8 @@ function viverV12(m: Motor, dias: number, perto: boolean): void {
 
 describe("o pet v12 no Motor", () => {
   test("o v12 (e o v13, o ovo novo: o v12 com a luta em tempo real): o laco com o mundo, o corpo com a curiosidade e o cerebro A do v11", () => {
-    expect(VERSAO_PET).toBe(13);
-    const m = new Motor(4242);
+    expect(VERSAO_PET).toBe(14);
+    const m = new Motor(4242, 13);
     expect(m.versao).toBe(13);
     expect(m.v11!.laco).toBeInstanceOf(MotorCorpoMundo);
     expect(m.mundo).not.toBeNull();
@@ -45,7 +45,7 @@ describe("o pet v12 no Motor", () => {
   });
 
   test("o botao Alimentar poe a racao no comedouro (o evento \"dc\"), e a fome nao sobe na hora: so quando o pet come", () => {
-    const m = new Motor(101);
+    const m = new Motor(101, 13);
     m.avancar(30);
     const fome = m.e.fome, [x, y] = m.mundo!.comedouro;
     m.observar("alimentar");
@@ -58,7 +58,7 @@ describe("o pet v12 no Motor", () => {
 
   for (const [semente, perto] of [[101, true], [202, false], [303, true]] as const) {
     test(`v12 @${semente} (${perto ? "a racao perto do pet" : "o botao Alimentar"}): o pet ve, anda, come, a fome cai, e o G1 bit a bit`, () => {
-      const m = new Motor(semente);
+      const m = new Motor(semente, 13);
       viverV12(m, 4, perto);
       const mu = m.mundo!;
       /* o laco: a racao do dono vista, andada e comida por iniciativa do pet, e o corpo com o efeito do alimentar */
@@ -70,7 +70,7 @@ describe("o pet v12 no Motor", () => {
       expect(mu.quedas).toEqual([]);
       expect(mu.consumos.every((c) => c.tipo === "racao" && c.origem === "dono")).toBe(true);
       /* G1: o replay do registro, evento a evento, e pelo caminho publico e pelo save (o JSON do registro) */
-      const r = new Motor(semente);
+      const r = new Motor(semente, 13);
       for (const ev of m.log) r.aplicarEvento(ev);
       expect(r.assinatura()).toBe(m.assinatura());
       const log = JSON.parse(JSON.stringify(m.log)) as EventoRegistro[];
@@ -80,17 +80,17 @@ describe("o pet v12 no Motor", () => {
   }
 
   test("G1: o replay incremental passa pelos mesmos estados (a assinatura com o mundo depois de cada evento)", () => {
-    const m = new Motor(404), passos: string[] = [];
+    const m = new Motor(404, 13), passos: string[] = [];
     viverV12(m, 2, true);
-    const r = new Motor(404);
+    const r = new Motor(404, 13);
     for (const ev of m.log) { r.aplicarEvento(ev); passos.push(r.assinatura()); }
-    const s = new Motor(404);
+    const s = new Motor(404, 13);
     m.log.forEach((ev, i) => { s.aplicarEvento(ev); expect(s.assinatura(), `evento ${i}`).toBe(passos[i]); });
     expect(passos[passos.length - 1]).toBe(m.assinatura());
   });
 
   test("G-EVENTO: o deixar_comida invalido falha alto antes do registro", () => {
-    const m = new Motor(505);
+    const m = new Motor(505, 13);
     m.avancar(30);
     const n = m.log.length, antes = m.assinatura();
     expect(() => m.deixarComida("a", 100, 100)).toThrow(/MV-3/);
@@ -117,7 +117,7 @@ describe("o pet v12 no Motor", () => {
   });
 
   test("MV-7: o carinho e o tapa ficam fora do mundo (sem posicao do dono): o mundo nao muda, so o corpo e o cerebro", () => {
-    const m = new Motor(606);
+    const m = new Motor(606, 13);
     m.avancar(60);
     const mundo = JSON.stringify(m.mundo!.resumo());
     m.observar("acariciar");
