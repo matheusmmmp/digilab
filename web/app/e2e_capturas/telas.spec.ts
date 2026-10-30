@@ -53,6 +53,11 @@ async function semear(page: Page, save: object, tamer: object = { versao: 1, log
 /* a largura: so o monitor do Matheus, 1920 x 950 (D10, docs/TAREFA_V2_LAYOUT_HABITAT.md); DIGILAB_CAPTURAS_LARGURAS="390,1280" (por exemplo) troca a lista,
    com a altura do celular abaixo de 1100 px e 800 px entre 1100 e 1899 */
 const LARGURAS = (process.env.DIGILAB_CAPTURAS_LARGURAS ?? "1920").split(",").map(Number);
+/* a pele dos menus (docs/TAREFA_V2_TEMA_MENUS.md): ?pele= no endereco, sem gravar; o padrao do portao e o Militar, o das referencias
+   de antes da pele Holografica; DIGILAB_CAPTURAS_PELE=vidro captura o Holografico, com "vidro" no nome do arquivo */
+const PELE = process.env.DIGILAB_CAPTURAS_PELE ?? "xcom";
+if (PELE !== "xcom" && PELE !== "vidro") throw new Error(`DIGILAB_CAPTURAS_PELE invalida: ${PELE}`);
+const SUFIXO_PELE = PELE === "xcom" ? "" : `_${PELE}`;
 for (const [largura, altura] of LARGURAS.map(l => [l, l >= 1900 ? 950 : l >= 1100 ? 800 : l === 390 ? 844 : 800])) {
   for (const [nome, rota, save, tamer] of TELAS) {
     test(`${nome} em ${largura} px`, async ({ page }) => {
@@ -70,7 +75,7 @@ for (const [largura, altura] of LARGURAS.map(l => [l, l >= 1900 ? 950 : l >= 110
          pagina variavam 2 pixels na borda dele */
       if (SO_JANELA.has(nome)) await page.emulateMedia({ reducedMotion: "reduce" });
       if (reserva) await page.route(/\/Assets\/(digilab_atlas_up|digilab_decoracao_up|decoracao_up\/)/, r => r.abort());
-      await page.goto(APP + rota);
+      await page.goto(`${APP}?pele=${PELE}${rota}`);
       if (reserva) await page.addStyleTag({ content: ".app > .aviso{display:none}" });
       await page.evaluate(() => document.fonts.ready);
       /* a tela Pet: a cena 3D chega por import dinamico (tempo real, fora do relogio falso); so depois dela o relogio anda, senao o
@@ -88,7 +93,7 @@ for (const [largura, altura] of LARGURAS.map(l => [l, l >= 1900 ? 950 : l >= 110
       /* refaz o layout e a pintura da página inteira, com as fontes e as imagens já prontas: sem isso o texto de um select
          ou um ícone pequeno às vezes fica como foi pintado antes de a fonte ou a imagem chegarem */
       await page.evaluate(() => { const h = document.documentElement; h.style.display = "none"; void h.offsetHeight; h.style.display = ""; void h.offsetHeight; });
-      await expect(page).toHaveScreenshot(`${nome}_${largura}.png`, { fullPage: !SO_JANELA.has(nome), animations: "disabled", caret: "hide", threshold: 0, maxDiffPixels: 0 });
+      await expect(page).toHaveScreenshot(`${nome}${SUFIXO_PELE}_${largura}.png`, { fullPage: !SO_JANELA.has(nome), animations: "disabled", caret: "hide", threshold: 0, maxDiffPixels: 0 });
       expect(erros).toEqual([]);
     });
   }

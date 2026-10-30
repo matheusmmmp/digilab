@@ -61,7 +61,7 @@ dialog.ab-hx::backdrop{ background:rgba(11,17,24,.72) }
 
 /* brasoes: caixas de borda fina; a escolhida em ciano palido */
 .ab-hx .br-ritmo-op{ border-radius:0; background:var(--hx-miolo); color:var(--hx-texto); border:1px solid var(--hx-borda); min-height:48px }
-.ab-hx .br-ritmo-op.sel{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido); box-shadow:none }
+.ab-hx .br-ritmo-op.sel{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido-borda); box-shadow:none }
 .ab-hx .br-ritmo-op:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:2px }
 .ab-hx .br-card{ border-radius:0; background:var(--hx-miolo); color:var(--hx-texto); box-shadow:none; border:1px solid var(--hx-borda); border-top:2px solid var(--hx-borda-topo) }
 .ab-hx .br-card:hover{ background:var(--hx-miolo-2); border-color:var(--hx-borda-topo) }

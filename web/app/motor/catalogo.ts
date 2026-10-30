@@ -6,6 +6,9 @@ import type { Carater, Estagio, Forma, FormaAdultaNormal, Stats } from "./tipos.
 export interface Perfil {
   est: Estagio; tecnica: Tecnica | null; passiva: string | null; stats: Stats;
   hpMax: number; guts0: number; gutsMax: number; regen: number; mPerto: number; mDisparo: number; mGuarda: number;
+  /** candidato v14 (DR2-4; a carta de Foco): o intervalo das decisoes deste lado na luta em tempo real, em passos, no lugar do do relogio;
+      ausente = o do relogio (os pets v13). So a carta o poe (combate.comCarta) */
+  ritmoCarta?: number;
   /** escala E (so no combate da campanha com a escala ligada); ausente = combate de sempre */
   escala?: number;
 }

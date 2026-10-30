@@ -1,4 +1,5 @@
-/* Entrada do app. Tema: o do sistema; ?tema=claro|escuro sobrepoe (conferencia e screenshots; nao grava nada). */
+/* Entrada do app. Tema: o do sistema; ?tema=claro|escuro sobrepoe (conferencia e screenshots; nao grava nada). Pele dos menus: a
+   escolhida ou a Holografica; ?pele=xcom|vidro sobrepoe do mesmo jeito (pele.ts). */
 import { createRoot } from "react-dom/client";
 import { App } from "./App.tsx";
 import { ATLAS_URL, CLIPES_UP, carregarAtlas } from "./atlas.ts";
@@ -8,6 +9,7 @@ import { iniciarFalaLivre } from "./falaLivre.ts";
 import { gravarPendente, iniciarJogo, jogoAtual, ouvirOutrasAbas } from "./jogo.ts";
 import { textoSave } from "./save.ts";
 import { iniciarEscala } from "./escala.ts";
+import { iniciarPele } from "./pele.ts";
 import { iniciarTema } from "./tema.ts";
 import { iniciarTempo } from "./tempo.ts";
 import { CHAVE_GUARDADOS, semearGuardados } from "./pets.ts";
@@ -30,8 +32,11 @@ import "./estilo/mundo.css";
 import "./estilo/hud.css";
 import "./estilo/casca.css";
 import "./estilo/tailwind.css";
+/* a pele Holografica por ultimo: os seletores dela levam :root[data-pele="vidro"] e vencem tambem os CSS importados pelas telas */
+import "./estilo/pele-vidro.css";
 
 iniciarTema();
+iniciarPele();
 iniciarEscala();
 /* escala de stats (ConfigEscala, TAREFA_PLANILHA_PROGRESSAO Parte C) ligada no jogo; ?escala=0 desliga so para a
    conferencia de paridade com o HTML antigo (e2e), que nao tem a escala */
