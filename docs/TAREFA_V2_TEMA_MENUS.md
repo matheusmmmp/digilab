@@ -1,6 +1,6 @@
 # Tarefa V2 — tema dos menus: peles Militar e Holográfico
 
-Gerente: sessão "Gerente do layout habitat" (2026-10-30). Merge só do Matheus. Base: `origin/main` 19668ab9.
+Gerente: sessão "Gerente do tema dos menus" (2026-10-30). Merge só do Matheus. Base: `origin/main` 19668ab9.
 Lido sobre a pilha do layout ainda sem merge: M1 `v2-layout-xcom` (#460), M2 `v2-layout-casca` (#464), M3 `v2-layout-pet`
 (#469), M4 `v2-layout-telas` (#470), M5 `v2-layout-config` (#467), M6 `v2-layout-auto` (#468). M3–M6 saem todas da M2, em
 paralelo; os nomes de arquivo e de classe abaixo são os desses branches e podem mudar até o merge (a T1 confere de novo).
