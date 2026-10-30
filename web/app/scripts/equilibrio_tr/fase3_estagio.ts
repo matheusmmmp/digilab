@@ -13,7 +13,8 @@
    O pet da bancada nao e uma vida: sem dono, sem cuidado, sem a disciplina e a experiencia no epsilon (o epsilon do bot, CV.eps).
    As sementes: a faixa reservada (68101 a 68505 na calibracao), as 5 bases x 20 (hashSemente("equilibrio-tr", base, k)). P-1: 10 sementes
    por confronto de formas e especies, os dois lados; P-2, P-3 e P-4: 100 por forma.
-   --escala '{"vida":{"adolescente":700},"beta":.05}': a escala candidata, por cima da CESC_V9; --parte p1|p2|p34: so uma parte.
+   --escala '{"vida":{"adolescente":700},"beta":.05}': a escala candidata, por cima da CESC_V9; --parte p1|p2|p34: so uma parte; --disparo X: o multiplicador
+   do disparo do tempo real (RelogioTR.disparo).
    uso (em web/app): npx tsx scripts/equilibrio_tr/fase3_estagio.ts --faixa calibracao [--escala JSON] [--parte p1] --saida <arquivo.json> */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
@@ -31,7 +32,10 @@ const faixa = arg("faixa"), saida = arg("saida"), parte = arg("parte");
 if (!faixa || !(faixa in FAIXAS)) throw new Error("--faixa calibracao | conferencia");
 if (!saida) throw new Error("--saida <arquivo.json>");
 if (parte !== null && !["p1", "p2", "p34"].includes(parte)) throw new Error("--parte p1 | p2 | p34");
-const R: RegrasLuta = { ...CV21E_TR, relogio: RELOGIO_V14 }, VERSAO = R.versaoPet;
+/* --disparo X: o multiplicador do disparo do tempo real por cima do RELOGIO_V14 */
+const disparo = arg("disparo") === null ? {} : { disparo: Number(arg("disparo")) };
+if ("disparo" in disparo && !(disparo.disparo > 0)) throw new Error("--disparo precisa ser um numero > 0");
+const R: RegrasLuta = { ...CV21E_TR, relogio: { ...RELOGIO_V14, ...disparo } }, VERSAO = R.versaoPet;
 ligarEscala(true);
 /* a escala: a dos pets v13 (CESC_V9) ou a candidata por cima */
 const escArg = JSON.parse(arg("escala") ?? "{}") as { vida?: Partial<Record<Estagio, number>>; beta?: number };
