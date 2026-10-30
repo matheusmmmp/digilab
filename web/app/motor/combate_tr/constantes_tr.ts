@@ -48,15 +48,18 @@ export const CTR_TR = {
 
 /** os numeros do relogio e do espaco que a rodada de equilibrio pode mudar (docs/PLANO_EQUILIBRIO_COMBATE_TR.md, secao 4). Eles viajam nas
     regras da luta (RegrasV21.relogio) e no estado dela (EstadoTR.C): cada versao de pet tem os seus, e a v13 tem os de CTR_TR. O limite, a
-    morte subita (D-5), o instante do golpe (D-1) e a geometria do chao nao entram: ficam em CTR_TR */
+    morte subita (D-5), o instante do golpe (D-1) e a geometria do chao nao entram: ficam em CTR_TR. `disparo`: o multiplicador do dano
+    do disparo so no tempo real (a base, CV.dano.disparo e o perfil, nao muda; decisao do Matheus de 2026-10-30, DECIDIDA pela
+    recomendacao do coordenador: um numero proprio do tempo real, calibrado na rodada) */
 export interface RelogioTR {
   readonly ritmo: number; readonly atordoaInterrupcao: number; readonly andar: number; readonly recuo: number; readonly arrancada: number;
   readonly projetil: number; readonly perto: number; readonly medio: number; readonly contato: number; readonly empurrao: number;
+  readonly disparo: number;
 }
-/** o relogio dos pets v13 (os numeros de CTR_TR, sem calibracao) */
+/** o relogio dos pets v13 (os numeros de CTR_TR, sem calibracao; o disparo sem multiplicador, 1) */
 export const RELOGIO_V13: RelogioTR = {
   ritmo: CTR_TR.ritmo, atordoaInterrupcao: CTR_TR.atordoaInterrupcao, andar: CTR_TR.andar, recuo: CTR_TR.recuo, arrancada: CTR_TR.arrancada,
-  projetil: CTR_TR.projetil, perto: CTR_TR.perto, medio: CTR_TR.medio, contato: CTR_TR.contato, empurrao: CTR_TR.empurrao,
+  projetil: CTR_TR.projetil, perto: CTR_TR.perto, medio: CTR_TR.medio, contato: CTR_TR.contato, empurrao: CTR_TR.empurrao, disparo: 1,
 };
 /** o relogio candidato dos pets v14, da fase 1 da rodada de equilibrio (docs/PLANO_EQUILIBRIO_COMBATE_TR.md; docs/EQUILIBRIO_COMBATE_TR.md,
     fase 1). PROPOSTOS, calibrados so nas sementes de calibracao (68101 a 68505): web/app/scripts/medicoes/equilibrio_tr/fase1/grade3/

@@ -149,7 +149,7 @@ function golpe(Lt: LutaTR, atk: number, a: string, danos: Dano[], causa: number,
   else if (a === "investida") bruto = CV21.danoInvestida * pa.mPerto;
   else if (a === "pesado") { bruto = CV.dano.pesado * pa.mPerto; if (pa.passiva === "tita") bruto *= CV21.multTita; }
   else if (a === "disparo") {
-    bruto = CV.dano.disparo * pa.mDisparo;
+    bruto = CV.dano.disparo * pa.mDisparo * S.C.disparo;
     if (marcado) bruto *= CV21.multMarca;
     if (emboscada) bruto *= CV21.multEmb;
     if (pa.passiva === "predador") bruto *= CSO.multPred;
