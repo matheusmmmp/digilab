@@ -9,12 +9,14 @@
    As sementes: a faixa reservada (experiments/bancada/faixas.py) da calibracao (68101 a 68505) ou da conferencia (70101 a 70505), as 5
    bases X101, X202, ..., X505, e 20 sementes por base (hashSemente("equilibrio-tr", base, k)): 100 sementes x os dois lados = 200 lutas
    por par (plano, secao 3).
-   uso (em web/app): npx tsx scripts/equilibrio_tr/fase1_relogio.ts --faixa calibracao [--base v14] [--relogio '{"ritmo":12}'] --saida <arquivo.json> */
+   --listas v14: as listas candidatas da fase 2 (LISTAS_V14, bots.ts) nas formas que as tem; a fase 2 confere com isto que as metas do
+   relogio continuam.
+   uso (em web/app): npx tsx scripts/equilibrio_tr/fase1_relogio.ts --faixa calibracao [--base v14] [--listas v14] [--relogio '{"ritmo":12}'] --saida <arquivo.json> */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { execSync } from "node:child_process";
 import {
-  ARENA_POR_ID, CTR_TR, CV21E_TR, FORMAS_AD, PASSO_TR_MS, RELOGIO_V13, RELOGIO_V14, criarLutaTR, hashSemente, jogarArena, lutadorBot, passoTR,
+  ARENA_POR_ID, CTR_TR, CV21E_TR, FORMAS_AD, LISTAS_V14, PASSO_TR_MS, copiarGambits, RELOGIO_V13, RELOGIO_V14, criarLutaTR, hashSemente, jogarArena, lutadorBot, passoTR,
   type Lutador, type RegrasLuta, type RelogioTR,
 } from "../../motor/index.ts";
 
@@ -27,6 +29,9 @@ if (!saida) throw new Error("--saida <arquivo.json>");
 const relogio: RelogioTR = { ...(arg("base") === "v14" ? RELOGIO_V14 : RELOGIO_V13), ...JSON.parse(arg("relogio") ?? "{}") };
 for (const k of Object.keys(relogio)) if (!(k in RELOGIO_V13)) throw new Error("numero do relogio desconhecido: " + k);
 const R: RegrasLuta = { ...CV21E_TR, relogio };
+const listas = arg("listas") === "v14" ? LISTAS_V14 : {};
+/** o bot canonico da forma, com a lista candidata se houver */
+const bot = (f: string): Lutador => { const L = lutadorBot(f, R); return listas[f] ? { ...L, estilo: { ...L.estilo, gambits: copiarGambits(listas[f]) } } : L; };
 const SEMENTES_POR_BASE = 20;
 const bases = [0, 1, 2, 3, 4].map(i => FAIXAS[faixa] + 101 * i);
 const sementes = bases.flatMap(b => Array.from({ length: SEMENTES_POR_BASE }, (_, k) => hashSemente("equilibrio-tr", b, k)));
@@ -71,7 +76,7 @@ const todas: number[] = [];
 let noLimite = 0, total = 0, livres = 0, reacoes = 0, preparosTot = 0, comChance = 0, livresComRegra = 0, reacoesComRegra = 0;
 const espelho: { forma: string; vitorias_a: number; derrotas_a: number; empates: number }[] = [];
 for (let i = 0; i < FORMAS_AD.length; i++) for (let j = i; j < FORMAS_AD.length; j++) {
-  const fa = FORMAS_AD[i], fb = FORMAS_AD[j], A = lutadorBot(fa, R), B = lutadorBot(fb, R);
+  const fa = FORMAS_AD[i], fb = FORMAS_AD[j], A = bot(fa), B = bot(fb);
   const durs: number[] = [];
   let lim = 0, vA = 0, n = 0, eV = 0, eD = 0, eE = 0;
   for (const s of sementes) for (const lados of [[A, B], [B, A]] as const) {
@@ -92,14 +97,14 @@ for (let i = 0; i < FORMAS_AD.length; i++) for (let j = i; j < FORMAS_AD.length;
 /* T-3: a Cidadela, cada forma como o pet contra o lider (3 lutas sem cura; o limite fica com o desafiado, o lider) */
 const cid = ARENA_POR_ID.cidadela, lider = lutadorBot(cid.lider, R, cid), series: number[] = [];
 for (const f of FORMAS_AD) for (const s of sementes) {
-  const serie = jogarArena(lutadorBot(f, R), lider, s, R, cid.lutas ?? 1, 1);
+  const serie = jogarArena(bot(f), lider, s, R, cid.lutas ?? 1, 1);
   series.push(serie.reduce((a, x) => a + seg(x.tr.passos), 0));
 }
 const decididasEsp = espelho.reduce((a, e) => a + e.vitorias_a + e.derrotas_a, 0), vEsp = espelho.reduce((a, e) => a + e.vitorias_a, 0);
 const out = {
   gerado_por: "web/app/scripts/equilibrio_tr/fase1_relogio.ts", data: new Date().toISOString().slice(0, 10),
   commit: execSync("git rev-parse --short HEAD").toString().trim(), node: process.version,
-  faixa, bases, sementes_por_base: SEMENTES_POR_BASE, relogio, lutas: total,
+  faixa, bases, sementes_por_base: SEMENTES_POR_BASE, relogio, listas: arg("listas") ?? "v13", lutas: total,
   metas: {
     "T-1": { duracao_media_s: r3(media(todas)), duracao_mediana_s: r3(quantil(todas, .5)), p90_s: r3(quantil(todas, .9)),
       passa: media(todas) >= 40 && media(todas) <= 60 && quantil(todas, .5) >= 35 && quantil(todas, .5) <= 55 },

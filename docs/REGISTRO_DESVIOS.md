@@ -426,3 +426,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-29 — DIGIBRAIN-MODULAR-L2-AVALIACAO (worker D, Claude Code, Opus 5.5, worktree `v2-modular-l2-avaliacao`): a avaliação da L-2, uma vez, e os critérios lidos como registrados](registro/2026-10.md)
 - [2026-10-29 — DIGIBRAIN-MODULAR-LONGE-L2-PROXIMO (Claude Code, Opus 5.5, worktree `v2-modular-l2-proximo`): a leitura da avaliação da L-2 e o próximo passo do longe](registro/2026-10.md)
 - [2026-10-30 — PRODUTO-FOME na v13 (worker A, Claude Code, Opus 5.5, worktree `v2-produto-fome`): as chaves do produto passam dos ovos v12 aos v13](registro/2026-10.md)
+- [2026-10-30 — COMBATE-TR calibração, fase 2 (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): as formas](registro/2026-10.md)
