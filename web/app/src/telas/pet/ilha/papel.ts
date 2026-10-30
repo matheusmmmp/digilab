@@ -10,7 +10,8 @@
        sprite sem Run usa o Idle com o pulinho;
      - o ovo ao nascer (balanca de lado), a forma sombria, o quadro parado ao dormir (na grade de reserva, o olho fechado);
      - a silhueta clara atras das arvores: onde uma arvore esconde o papel, ela aparece;
-     - com movimento reduzido, sem pulinho e sem virada animada (a troca de lado e instantanea).
+     - com movimento reduzido, sem pulinho e sem virada animada (a troca de lado e instantanea);
+     - a noite, o papel fica no tom NOITE_PAPEL (o papel nao recebe luz: e o tom da cena noturna).
    Sem o atlas (os e2e e as capturas; ou carregando), a grade de reserva do jogo (fontePet.ts). So desenho: PROPOSTO, SEM FONTE. */
 import * as THREE from "three";
 import { OVO, chaveSprite } from "../../../../motor/index.ts";
@@ -31,6 +32,8 @@ export interface Passo {
   /** pixels do canvas por unidade do mundo na distancia do pet, pixels do canvas por texel (inteiro), o tamanho do canvas e px por px de CSS */
   ppu: number; pxPorTexel: number; canvas: [number, number]; razao: number;
   reduzido: boolean;
+  /** a noite do motor: o papel escurece um pouco, como o resto da cena */
+  noite: boolean;
 }
 
 interface Folha { tex: THREE.CanvasTexture; w: number; h: number }
@@ -73,6 +76,8 @@ function caixaOpaca(c: HTMLCanvasElement): Corte | null {
 }
 /** o corte inteiro de um canvas (a grade de reserva: ela nao tem sombra nem folga) */
 const corteInteiro = (c: HTMLCanvasElement): Corte => ({ x0: 0, x1: c.width - 1, pe: c.height });
+/** o tom do papel a noite (multiplica a textura) */
+const NOITE_PAPEL = 0xaab6dd;
 const textura = (c: HTMLCanvasElement) => {
   const t = new THREE.CanvasTexture(c);
   t.magFilter = t.minFilter = THREE.NearestFilter;
@@ -173,6 +178,7 @@ export class Papel {
       this.papel.material.map = this.silhueta.material.map = folha.tex;
       this.papel.material.needsUpdate = this.silhueta.material.needsUpdate = true;
     }
+    this.papel.material.color.setHex(p.noite ? NOITE_PAPEL : 0xffffff);
     /* o lado: a posicao desenhada anda em x na tela (a camera nao gira: x do mundo e x da tela) */
     if (this.xAntes !== null) {
       const dx = p.cel[0] - this.xAntes;
