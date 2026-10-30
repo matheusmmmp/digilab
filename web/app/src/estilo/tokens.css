@@ -112,4 +112,53 @@
   --hx-alerta:#FFB020; --hx-perigo:#D46A6A; --hx-ok:#4BE07E; --hx-necessidade:#FF7FC0; --hx-aprendido:#6FE3FF;
   --hx-foco:#7FE3FF;
   --hx-f:"Saira Condensed", "Rajdhani", system-ui, sans-serif;
+  /* tokens da T1 do tema dos menus (docs/TAREFA_V2_TEMA_MENUS.md §3.2): no Militar valem "nada muda" */
+  --hx-f-num:var(--hx-f); --hx-num:var(--hx-texto-2);
+  --hx-escolhido-borda:#BFE5E7; --hx-escolhido-brilho:none;
+  --hx-btn-bg-hover:rgba(22,46,34,.96); --hx-painel-fim:rgba(10,19,22,.96);
+  --hx-borda-int:transparent; --hx-vidro:none; --hx-reflexo:none; --hx-sombra:none;
+  --hx-chanfro:0px; --hx-chanfro-p:0px; --hx-luz:transparent;
+  --hx-titulo-tam:18px; --hx-titulo-esp:.08em; --hx-rotulo-tam:12px;
+  --hx-medidor-alt:12px; --hx-medidor-brilho:none;
+}
+
+/* Pele Holografica (vidro sci-fi; docs/TAREFA_V2_TEMA_MENUS.md §3.2), o padrao (TM1, pele.ts poe data-pele no <html>). Tambem SEMPRE
+   escura e sem variante por tema. O que nao cabe em token (chanfros, reflexo, contorno interno, trecho de luz, marcador, barra acesa
+   no trilho, barras com brilho) mora em estilo/pele-vidro.css. Valores "(proposta)" da tarefa conferidos aqui.
+   Contraste (WCAG) medido com o vidro sobre a parte MAIS CLARA do habitat (tema claro; pior caso: branco puro atras do vidro, o
+   desfoque so tira a media): inicio do gradiente rgba(24,36,50,.92) sobre branco -> #2A3642; com os 6 % de branco do reflexo no
+   canto -> #37424E (o pior fundo); fim rgba(6,11,18,.92) -> #1A1F25. Contra o pior fundo: texto 7,9; texto-2 6,8; sec/rotulo 4,8;
+   numeros 6,0; escolhido (azul .28 por cima, #385E7F) texto 5,3; botao (#385671) texto 5,9; alerta 5,6; perigo 4,8; ok 6,0;
+   aprendido 6,9; foco 6,0. Bordas: externa (alfa .62 por cima, #83909D) 3,2; azul #3AA8FF 4,0. Com a transparencia reduzida o vidro
+   fica opaco (#18242F e #060B12) e o contraste so sobe (texto 12,2, sec 7,3, borda 4,2). Desvios da referencia, todos para passar AA
+   sobre o claro (conferidos em test/hx_pele.test.ts): opacidade do inicio do gradiente .84 -> .92; contorno externo .5 -> .62;
+   rotulo/secundario #8A9BAD -> #A3B2C3; perigo #D46A6A -> #F09A9A. */
+:root[data-pele="vidro"]{
+  --hx-chao:rgba(6,11,18,.92); --hx-miolo:rgba(6,11,18,.92); --hx-miolo-2:rgba(24,36,50,.92);
+  --hx-borda:rgba(178,192,206,.62); --hx-borda-topo:rgba(178,192,206,.62);
+  --hx-texto:#D6E5E6; --hx-texto-2:#BFD6D8; --hx-sec:#A3B2C3; --hx-rotulo:#A3B2C3;
+  --hx-escolhido:linear-gradient(180deg, rgba(58,168,255,.28), rgba(58,168,255,.1)); --hx-escolhido-ink:var(--hx-texto);
+  --hx-hachura:none; --hx-hachura-verde:none;
+  --hx-btn-bg:rgba(58,168,255,.2); --hx-btn-ink:var(--hx-texto); --hx-btn-borda:#3AA8FF;
+  --hx-medidor:#5FD4FF; --hx-medidor-trilho:rgba(150,172,194,.2);
+  --hx-perigo:#F09A9A;
+  --hx-foco:#5FD4FF;
+  --hx-f:"Barlow", system-ui, sans-serif;
+  --hx-f-num:"Rajdhani", system-ui, sans-serif; --hx-num:#5FD4FF;
+  --hx-escolhido-borda:#3AA8FF; --hx-escolhido-brilho:inset 0 0 10px rgba(58,168,255,.35);
+  --hx-btn-bg-hover:rgba(58,168,255,.32); --hx-painel-fim:var(--hx-miolo);
+  --hx-borda-int:rgba(150,172,194,.2); --hx-vidro:blur(10px);
+  --hx-reflexo:linear-gradient(155deg, rgba(255,255,255,.06), rgba(255,255,255,.015) 34%, transparent 35%);
+  --hx-sombra:0 8px 18px rgba(0,0,0,.4);
+  --hx-chanfro:12px; --hx-chanfro-p:8px; --hx-luz:#3AA8FF;
+  --hx-titulo-tam:13px; --hx-titulo-esp:2px; --hx-rotulo-tam:11px;
+  --hx-medidor-alt:5px; --hx-medidor-brilho:0 0 6px currentColor;
+}
+/* transparencia reduzida: o vidro fica opaco (sem desfoque, superficie sem alfa) */
+@media (prefers-reduced-transparency: reduce){
+  :root[data-pele="vidro"]{
+    --hx-chao:#060B12; --hx-miolo:#060B12; --hx-miolo-2:#18242F; --hx-vidro:none; --hx-reflexo:none;
+    --hx-btn-bg:#13324D; --hx-btn-bg-hover:#1A4266;
+    --hx-escolhido:linear-gradient(180deg, #153A5C, #0B2033);
+  }
 }

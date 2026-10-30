@@ -21,7 +21,7 @@ paralelo; os nomes de arquivo e de classe abaixo são os desses branches e podem
 | TM2 | nomes na tela | **"Militar"** (id `xcom`) e **"Holográfico"** (id `vidro`). A palavra "XCOM" não aparece na tela (fica só em id, classe e comentário) |
 | TM3 | onde a pele vale | **só nos menus** (painéis, trilho/barra, dock, chamado, modais, telas que abrem sozinhas), **sempre escura**. Claro/escuro continua no habitat, balão, retrato e relógio. Pele e tema são **eixos independentes**: as 2 × 3 combinações valem |
 | TM4 | onde se escolhe | **Ajustes › Aparência**, dois cartões de prévia no molde de `.cfg-tema` (depois da M5: `.mc-opcao--tema` + `.mc-tema-prev` em `menus_config.css`) |
-| TM5 | capturas | **completas nas duas peles**, em 360, 390 e 1280 px |
+| TM5 | capturas | **completas nas duas peles, em 1920×950** (D10 do Matheus, 2026-10-30: só o desktop, o monitor dele a 100 %; celular e outras larguras ficam sem polimento, só não podem quebrar o e2e). Antes da D10: 360, 390 e 1280 px |
 | TM6 | ordem com o layout | a **M7** do layout roda antes, normal (só na pele Militar); a **T3** do tema captura de novo depois, nas duas |
 
 ## 3. Valores das duas peles
@@ -128,6 +128,11 @@ e as cores literais **não mudam com `data-pele`**; a T1 precisa cobrir cada um 
 | `estilo/decoracao.css` | `.cfg-tema*` (molde antigo; depois da M5 parece sem uso) | nada; a M7 decide se é CSS morto |
 | DigiBrain, "Por que ele disse isso" | ganham a pele Militar na M7 (D8) | a T1 confere o que a M7 entregou |
 
+**Refeita pela T1 sobre a `main` d5599452 (depois da M7):** os mesmos sete arquivos leem `--hx-*`; a M7 não acrescentou literal
+de pele (o DigiBrain e o "Por que ele disse isso" leem os `--dl-*` remapeados do `painel-hx.css`, cobertos no mesmo bloco do vidro;
+`.db-emo` roxo e `.db-contra` rosa são cor de estado e ficam). O resultado da busca e o que a T1 fez com cada literal estão na seção
+"Resultado da T1", no fim.
+
 A lista vale sobre os branches de hoje; antes de começar, a T1 refaz a busca por literais (`#…`, `rgba(`) em todo arquivo
 que lê `--hx-*` ou `.ab-hx`/`.painel-tela__folha`/`.mc` depois dos merges e da M7.
 
@@ -163,7 +168,7 @@ Um PR por missão, cada uma numa worktree `D:\Trab\digilab\v2-tema-<missão>` a 
   tema. O texto de apoio explica que a pele vale nos menus e o tema no habitat.
 - **T3 · Conferência e capturas.** Todas as telas (Pet com dock e painéis, Crescer, Lutar, Diário, Conversar, Ajustes,
   Meus pets, telas que abrem sozinhas, luta em tela cheia e resultado, DigiBrain, "Por que ele disse isso") nas duas peles
-  × claro/escuro, em 360, 390 e 1280 px; correções; e2e de troca de pele (Ajustes › Aparência → `data-pele` muda, a escolha
+  × claro/escuro, em 1920×950 (D10); correções; e2e de troca de pele (Ajustes › Aparência → `data-pele` muda, a escolha
   sobrevive ao recarregar, `?pele=` não grava); `e2e_capturas` nas duas peles (TM5), regeneradas **depois da aprovação do
   Matheus**.
 
@@ -185,3 +190,32 @@ T3 depende de T1 e T2. Arquivos de uma missão por vez: `tokens.css`, `main.tsx`
 - Sprites, atlas, pranchas e páginas de referência **nunca no git**; e2e e capturas com o sprite de reserva.
 - Nenhuma mudança no motor; replay e paridade intactos; save sem campo novo; `npm run tipos`, `npm test`, `npm run e2e` e o
   portão de capturas (regenerado nas duas peles) passando.
+
+## Resultado da T1 (2026-10-30, worker Claude Code, Opus 5.5, worktree `v2-tema-t1`)
+
+- **`web/app/src/pele.ts`** no molde do `tema.ts`: `Pele = "xcom" | "vidro"`, padrão `vidro`, chave `CHAVE + "-pele"`, `data-pele`
+  sempre no `<html>`, `?pele=` sobrepõe sem gravar (valor inválido cai no gravado e depois no padrão), `escolherPele()`, `usePele()`,
+  `peleAtual()`, `NOME_PELE`. Fora do save, do registro e do replay. `iniciarPele()` no `main.tsx` logo depois de `iniciarTema()`.
+  Teste: `test/pele.test.ts`.
+- **Tokens:** o Militar continua em `:root` como estava e ganha os tokens novos da §3.2 com valor neutro, mais dois para literais que
+  viraram token (`--hx-btn-bg-hover`, `--hx-painel-fim`). O Holográfico fica em `:root[data-pele="vidro"]`, com a tabela de contraste
+  no comentário do `tokens.css` e conferida em `test/hx_pele.test.ts`. As bordas do escolhido passam a ler `--hx-escolhido-borda`
+  (no vidro o `--hx-escolhido` é gradiente e não serve de cor).
+- **`estilo/pele-vidro.css`**, importado por último no `main.tsx`, toda regra sob `:root[data-pele="vidro"]` (vence também os CSS
+  importados pelas telas): vidro com chanfro, contorno externo e interno, reflexo, trecho de luz e marcador; o escolhido com
+  gradiente, borda azul, brilho por dentro e chanfro de 8 px; barra acesa de 3 px no trilho; botão principal azul; medidores de 5 px
+  segmentados com brilho na cor de cada necessidade; números em Rajdhani; os literais da §3.3 remapeados.
+- **Literais da §3.3 na main de hoje:** `painel-hx.css` (os `--dl-*`/`--ui-*` da folha, o `#3A4C4F` do desabilitado, o fundo radial da
+  Evolução) → bloco do vidro; `rgba(22,46,34,.96)` (hover do botão principal, `hud.css` e `painel-hx.css`) → `--hx-btn-bg-hover`;
+  `pet_dock.css` `rgba(10,19,22,.96)` → `--hx-painel-fim`, `rgba(255,255,255,.9)` é a dica da ração sobre a cena (fica);
+  `abertas.css` `--dl-hex` e os brilhos ciano da Boas-vindas/Como jogar → azul do vidro, os véus escuros e o palco da luta ficam
+  iguais, `#0E1E16`/`#1E1214` (faixa de vitória/derrota) ficam; `casca.css` e `menus_config.css` sem literal de pele (topo do
+  habitat, prévia do tema e véus ficam).
+- **Contraste:** medido no pior caso, branco puro atrás do vidro (o tema claro mais claro; o desfoque só tira a média), com o reflexo
+  por cima. Para passar AA, quatro valores saem da referência (desvio registrado em `docs/registro/2026-10.md`): opacidade do início
+  do gradiente .84 → .92; contorno externo .5 → .62; rótulo/secundário `#8A9BAD` → `#A3B2C3`; perigo `#D46A6A` → `#F09A9A`. Dos
+  "(proposta)": `--hx-escolhido-brilho` vai por dentro (`inset`), porque o chanfro corta a sombra de fora.
+- **Limites conhecidos:** o chanfro (`clip-path`) corta a sombra do painel; ela vai no invólucro onde há um (painel lateral, painéis
+  da tela Pet). Atrás do painel lateral não há habitat (a casca encolhe o habitat), então o vidro ali desfoca o fundo escuro.
+- **Conferência:** o portão `e2e_capturas` ganhou `DIGILAB_CAPTURAS_PELE` (padrão `xcom`, o das referências da M7; `vidro` grava com
+  `_vidro` no nome). Com `?pele=xcom`, as 21 telas batem pixel a pixel com as referências da M7.
