@@ -20,6 +20,8 @@ import { useLuta } from "../luta.ts";
 import { CENA_EVOLUCAO_UP } from "../evolucaoUp.ts";
 import { CenaEvolucao } from "./CenaEvolucao.tsx";
 import { tamerAtual, useJogo } from "../jogo.ts";
+import { BotaoContinuar } from "./hx/index.ts";
+import "../estilo/abertas.css";
 import { BarraCarater, Seg, blocos } from "./Barras.tsx";
 
 export function Porque({ x }: { x: Evolucao }) {
@@ -118,7 +120,7 @@ function Revelacao({ i, m, fechar }: { i: number; m: Motor; fechar: () => void }
     return () => { SOM.pararEvolucao(); if (tocouCena.current) SOM.pararMusica(); };
   }, []);
   return (
-    <dialog className="revelacao evm dl" ref={ref} aria-labelledby="revel-tit" onClose={fechar}>
+    <dialog className="revelacao evm ab-hx dl" ref={ref} aria-labelledby="revel-tit" onClose={fechar}>
       {cena && <CenaEvolucao antes={chaveSprite(antes)} depois={chaveSprite(f)} sombria={!!SOMBRIA[f.adulta!]}
         aoFim={(a, tocou) => { tocouCena.current = tocou; if (!tocou) void SOM.tocarEvolucao(0); setCena(false); if (a) setAviso(a); }} />}
       {aviso && <div className="aviso evm-aviso" role="alert" data-testid="aviso-cena-evolucao">A cena da evolução não tocou: {aviso}. Segue a revelação de sempre.</div>}
@@ -158,7 +160,7 @@ function Revelacao({ i, m, fechar }: { i: number; m: Motor; fechar: () => void }
               <p>Esta evolução pediu {med.pediu === 1 ? "1 medalha" : `${med.pediu} medalhas`} do Tamer.{med.liberou ? <> Foi liberada pela <b>{med.liberou}</b>.</> : null}</p>
             </section>
           )}
-          <button type="button" className="dl-btn evm-continuar revel-ok" onClick={() => ref.current?.close()}>Continuar</button>
+          <BotaoContinuar className="evm-continuar revel-ok" onClick={() => ref.current?.close()}>Continuar</BotaoContinuar>
         </div>
       </div>
     </dialog>
