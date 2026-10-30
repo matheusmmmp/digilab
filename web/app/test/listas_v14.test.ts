@@ -46,4 +46,19 @@ describe("as listas candidatas da v14 (fase 2)", () => {
       expect(hoje.estilo().gambits).toEqual(sementeDe(f, CV21E_TR));
     }
   });
+  test("DE-10: com reservaNoFim, a reserva (a ultima da lista de partida) fica no fim mesmo com a maior nota; sem ela, sobe", () => {
+    for (const [k, g] of Object.entries(LISTAS_V14)) {
+      const f = formaDe(k), cap = CV21.maxRegras[f.est as keyof typeof CV21.maxRegras];
+      if (g.regras.length < 2 || g.regras.length > cap) continue;
+      const res = chaveRegra(g.regras[g.regras.length - 1]);
+      for (const fixa of [true, false]) {
+        const gp = new GambitsPet();
+        gp.chipsNoFim = true; gp.reservaNoFim = fixa; gp.semear(f, k, CV21E_TR, g);
+        expect(gp.reserva, k).toBe(fixa ? res : null);
+        gp.notas[res] = 1e9; gp.ordenar();
+        expect(gp.ativas[fixa ? gp.ativas.length - 1 : 0], k).toBe(res);
+        expect(gp.listaSozinho()[fixa ? gp.ativas.length - 1 : 0], k).toBe(res);
+      }
+    }
+  });
 });

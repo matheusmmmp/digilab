@@ -128,6 +128,12 @@ export class GambitsPet {
       com que o pet luta (comChips), sem tirar nenhuma, e o pet nao a reordena nem a troca. O motor liga ao criar (sai da versao; nao entra
       na assinatura) */
   chipsNoFim = false;
+  /** candidato v14 (DE-10, decidida pelo Matheus em 2026-10-30; docs/PLANO_EQUILIBRIO_COMBATE_TR.md): a regra de reserva (a ultima da lista
+      de partida) fica fixa no fim e nao entra na reordenacao pela nota. Desligado nos pets v13 (a lista e as lutas de hoje); so a bancada
+      liga. Nao entra na assinatura */
+  reservaNoFim = false;
+  /** a chave da regra de reserva da ultima semeadura (so com reservaNoFim) */
+  reserva: string | null = null;
   /** regras das lutas do pet (a da ultima semeadura): CV21E_TR nos pets v13; null antes da primeira semeadura. Nao entra na assinatura: sai
       da versao */
   regras: RegrasLuta | null = null;
@@ -148,6 +154,8 @@ export class GambitsPet {
        elas ficam fora da lista (comChips) */
     if (!this.chipsNoFim) for (const k of [...this.chipsRegra].reverse()) if (permitida(regraDe(k), forma)) { const i = novas.indexOf(k); if (i >= 0) novas.splice(i, 1); novas.unshift(k); }
     this.ativas = novas.slice(0, cap);
+    const ultima = base.regras.length ? chaveRegra(base.regras[base.regras.length - 1]) : null;
+    this.reserva = this.reservaNoFim && ultima !== null && this.ativas.includes(ultima) ? ultima : null;
     for (const k of Object.keys(this.travas)) if (!this.ativas.includes(k)) delete this.travas[k];
     this.mudancas.push({ luta: this.nLutas, texto: `evoluiu para ${this.linha}: a forma semeou a lista (até ${cap} regras)` });
     this.ordenar(); this.versao++;
@@ -160,7 +168,9 @@ export class GambitsPet {
   }
   ordenar(): void {
     const n = this.ativas.length, fixas: Record<number, string> = {}, livres: string[] = [];
-    for (const k of this.ativas) if (!(k in this.travas)) livres.push(k);
+    /* DE-10: a reserva (sem trava) sai da ordenacao e volta no fim */
+    const reserva = this.reserva !== null && this.ativas.includes(this.reserva) && !(this.reserva in this.travas) ? this.reserva : null;
+    for (const k of this.ativas) if (!(k in this.travas) && k !== reserva) livres.push(k);
     for (const [k, i] of Object.entries(this.travas).sort((a, b) => a[1] - b[1])) {
       if (!this.ativas.includes(k)) continue;
       let j = Math.min(i, n - 1);
@@ -171,6 +181,7 @@ export class GambitsPet {
     const saida: (string | undefined)[] = [];
     for (let i = 0; i < n; i++) saida.push(i in fixas ? fixas[i] : livres.shift());
     this.ativas = saida.filter(Boolean) as string[];
+    if (reserva !== null) this.ativas.push(reserva);
   }
   /** candidatas de troca: regras que o pet ainda nao usa, nao vetadas e permitidas na forma. O repertorio, na ordem dele; nos
       pets v6 com a forma do vigia, mais as duas regras novas do vigia V21D (no fim, para a ordem das outras nao mudar) */
@@ -185,7 +196,13 @@ export class GambitsPet {
   listaSozinho(): string[] {
     const cap = CV21.maxRegras[baseDe(this.forma!.est)];
     const ks = [...this.ativas, ...this.vetos.filter(k => k in this.notas && !this.ativas.includes(k) && permitida(regraDe(k), this.forma!))];
-    return ks.map((k, i) => ({ k, i })).sort((a, b) => (this.notas[b.k] - this.notas[a.k]) || (a.i - b.i)).slice(0, cap).map(x => x.k);
+    return this.porNota(ks, cap);
+  }
+  /** a lista sem o dono (Lago e Palacio): pela nota, cortada na capacidade. DE-10: a reserva fica fora da nota e entra no fim */
+  private porNota(ks: string[], cap: number): string[] {
+    const r = this.reserva !== null && ks.includes(this.reserva) ? this.reserva : null, sem = r === null ? ks : ks.filter(k => k !== r);
+    const out = sem.map((k, i) => ({ k, i })).sort((a, b) => (this.notas[b.k] - this.notas[a.k]) || (a.i - b.i)).slice(0, r === null ? cap : cap - 1).map(x => x.k);
+    return r === null ? out : [...out, r];
   }
   /** Palacio da Fronteira (instalacoes.ts): a lista que o pet faria sozinho, sem o dono e sem os chips. A do Lago (listaSozinho: sem
       as travas, com as vetadas de volta) menos as regras que so estao no pet por um chip de regra. A regra de chip que ja estava na lista
@@ -196,14 +213,17 @@ export class GambitsPet {
     const cap = CV21.maxRegras[baseDe(this.forma!.est)];
     const ks = [...this.ativas, ...this.vetos.filter(k => k in this.notas && !this.ativas.includes(k) && permitida(regraDe(k), this.forma!))]
       .filter(k => !soDoChip.includes(k));
-    return ks.map((k, i) => ({ k, i })).sort((a, b) => (this.notas[b.k] - this.notas[a.k]) || (a.i - b.i)).slice(0, cap).map(x => x.k);
+    return this.porNota(ks, cap);
   }
   /* ---------------------------------------------------------------- chips de regra (pets v6; itens.ts) */
   /** pets v9: a lista `base` com as regras dos chips equipados no fim (as que ja estao nela ficam onde estao; so as que a forma permite).
       Nos v6-v8 (chipsNoFim falso) os chips ja estao na lista: `base` como esta */
   comChips(base: readonly string[]): string[] {
     if (!this.chipsNoFim || !this.forma) return base.slice();
-    return [...base, ...this.chipsRegra.filter(k => !base.includes(k) && permitida(regraDe(k), this.forma!))];
+    const chips = this.chipsRegra.filter(k => !base.includes(k) && permitida(regraDe(k), this.forma!));
+    /* DE-10: com a reserva no fim da lista, os chips entram antes dela (a reserva continua a ultima) */
+    const r = this.reserva !== null && base[base.length - 1] === this.reserva ? this.reserva : null;
+    return r === null ? [...base, ...chips] : [...base.slice(0, -1), ...chips, r];
   }
   /** por que a regra do chip nao pode entrar agora (null: pode). A regra entra no topo; com a lista cheia sai a regra livre (nao
       travada e nao de chip) de nota mais baixa */

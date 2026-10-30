@@ -14,7 +14,8 @@
    As sementes: a faixa reservada (68101 a 68505 na calibracao), as 5 bases x 20 (hashSemente("equilibrio-tr", base, k)). P-1: 10 sementes
    por confronto de formas e especies, os dois lados; P-2, P-3 e P-4: 100 por forma.
    --escala '{"vida":{"adolescente":700},"beta":.05}': a escala candidata, por cima da CESC_V9; --parte p1|p2|p34: so uma parte; --disparo X: o multiplicador
-   do disparo do tempo real (RelogioTR.disparo).
+   do disparo do tempo real (RelogioTR.disparo); --sem-reserva: sem a DE-10 (a reserva do fim da lista entra na reordenacao pela nota, como
+   nos pets v13). Com a DE-10 (o padrao), a reserva fica fixa no fim (GambitsPet.reservaNoFim).
    uso (em web/app): npx tsx scripts/equilibrio_tr/fase3_estagio.ts --faixa calibracao [--escala JSON] [--parte p1] --saida <arquivo.json> */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
@@ -36,6 +37,8 @@ if (parte !== null && !["p1", "p2", "p34"].includes(parte)) throw new Error("--p
 const disparo = arg("disparo") === null ? {} : { disparo: Number(arg("disparo")) };
 if ("disparo" in disparo && !(disparo.disparo > 0)) throw new Error("--disparo precisa ser um numero > 0");
 const R: RegrasLuta = { ...CV21E_TR, relogio: { ...RELOGIO_V14, ...disparo } }, VERSAO = R.versaoPet;
+/* DE-10: a reserva fixa no fim da lista do pet que aprende (o candidato v14); --sem-reserva desliga */
+const RESERVA_NO_FIM = !process.argv.includes("--sem-reserva");
 ligarEscala(true);
 /* a escala: a dos pets v13 (CESC_V9) ou a candidata por cima */
 const escArg = JSON.parse(arg("escala") ?? "{}") as { vida?: Partial<Record<Estagio, number>>; beta?: number };
@@ -71,7 +74,7 @@ const t0 = performance.now();
 const out: Record<string, unknown> = {
   gerado_por: "web/app/scripts/equilibrio_tr/fase3_estagio.ts", data: new Date().toISOString().slice(0, 10),
   commit: execSync("git rev-parse --short HEAD").toString().trim(), node: process.version,
-  faixa, bases, sementes_por_base: SEMENTES_POR_BASE, relogio: R.relogio, listas: "v14", escala: ESC, parte, metas: {},
+  faixa, bases, sementes_por_base: SEMENTES_POR_BASE, relogio: R.relogio, listas: "v14", reserva_no_fim: RESERVA_NO_FIM, escala: ESC, parte, metas: {},
 };
 const metas = out.metas as Record<string, unknown>;
 
@@ -130,7 +133,7 @@ if (!parte || parte === "p34") {
       let p = 0, n = 0, qual = 0;
       sementes.forEach((s, k) => {
         const esp = ESPECIES[k % ESPECIES.length], gp = new GambitsPet();
-        gp.chipsNoFim = true; gp.semear(ref.forma(esp), ref.id, R, ref.lista);
+        gp.chipsNoFim = true; gp.reservaNoFim = RESERVA_NO_FIM; gp.semear(ref.forma(esp), ref.id, R, ref.lista);
         const cond = perfil(ref, esp, TIPICO[est]);
         let lutas = 0, vit = 0, ev = 0;
         while (lutas < CAT.sparring) {
