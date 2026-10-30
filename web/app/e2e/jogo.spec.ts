@@ -1543,6 +1543,35 @@ for (const [nome, largura, semWebGL] of [["a cena 3D", 390, false], ["a reserva 
     await ctx.close();
   });
 }
+/* a ilha 3D (docs/TAREFA_V3_HABITAT_ILHA_3D.md, H5): o ponto da tela, longe do pet e na diagonal, passa pela dobra do mundo curvo e
+   cai no motor dentro de 1 celula (16 subunidades) do ponto do mapa que a vista desenhou ali */
+for (const largura of [390, 1280] as const) {
+  test(`ilha: soltar a ração num ponto da tela cai no ponto do mapa, com 1 célula de folga (${largura} px)`, async ({ browser }) => {
+    const ctx = await browser.newContext({ baseURL: test.info().project.use.baseURL, viewport: { width: largura, height: largura >= 1100 ? 800 : 844 } });
+    const page = await ctx.newPage();
+    await semear(page, SAVE_MUNDO);
+    const erros = vigiarErros(page);
+    await page.goto(APP + "#/pet/estado");
+    await expect(page.locator(".pet-cena .cena3d canvas")).toBeVisible();
+    await expect.poll(() => lerCena(page)).not.toBeNull();
+    expect((await lerCena(page))!.modo3d).toBe(true);
+    await cenaSegueMotor(page);
+    /* 3 celulas a leste e 3 ao norte do pet (o ponto ainda esta na tela nas duas larguras), preso no mapa */
+    const m0 = await lerMundo(page), sub = 16;
+    const alvo: [number, number] = [Math.min(63 * sub, m0.pet[0] + 3 * sub), Math.max(sub, m0.pet[1] - 3 * sub)];
+    const ponto = await naTela(page, alvo[0], alvo[1]);
+    const caixa = (await page.locator(".pet-cena .cena3d canvas").boundingBox())!;
+    expect(ponto[0]).toBeGreaterThan(caixa.x); expect(ponto[0]).toBeLessThan(caixa.x + caixa.width);
+    expect(ponto[1]).toBeGreaterThan(caixa.y); expect(ponto[1]).toBeLessThan(caixa.y + caixa.height);
+    await arrastarRacao(page, ponto);
+    const dc = await ultimoDc(page);
+    expect(dc[2].tipo).toBe("racao");
+    expect(Math.abs(dc[2].x - alvo[0]), "x do ponto solto").toBeLessThanOrEqual(sub);
+    expect(Math.abs(dc[2].y - alvo[1]), "y do ponto solto").toBeLessThanOrEqual(sub);
+    expect(erros).toEqual([]);
+    await ctx.close();
+  });
+}
 test("mundo: o caminho acessível, pelo toque no chão e por um lugar nomeado pelo teclado; Esc fecha sem pôr nada", async ({ page }) => {
   test.setTimeout(180_000);
   await page.setViewportSize({ width: 390, height: 844 });

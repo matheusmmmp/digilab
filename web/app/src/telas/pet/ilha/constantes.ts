@@ -23,6 +23,8 @@ export const ANDANDO_MS = 450, LADO_MIN = 0.004;
 
 /** o tamanho maximo do pixel do canvas por pixel de CSS (o celular de densidade 3 desenha em 2) */
 export const RAZAO_MAX = 2;
+/** coberta por um painel ou modal (o veu), a ilha desenha no maximo um quadro a cada COBERTO_MS */
+export const COBERTO_MS = 100;
 /** a queda de qualidade (regra 10): abaixo de FPS_MIN de media por QUEDA_MS, sem vento, metade da grama e pixelRatio 1 */
 export const FPS_MIN = 30, QUEDA_MS = 3000;
 

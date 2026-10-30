@@ -12,7 +12,7 @@ import { TPD, eNoite, type Mundo } from "../../../../motor/index.ts";
 import { jogoAtual } from "../../../jogo.ts";
 import { CENA } from "../cenaEstado.ts";
 import { Seguidor, dentroDoMapa } from "../vistaMundo.ts";
-import { AFASTAR_MAX, CAMERA_DESLOC, CAMERA_OLHAR, DOBRA_K, FOV_GRAUS, FPS_MIN, LARGURA_MIN, LONGE, NEVOA, PERTO, QUEDA_MS, RAZAO_MAX, TEXEL_ALVO } from "./constantes.ts";
+import { AFASTAR_MAX, COBERTO_MS, CAMERA_DESLOC, CAMERA_OLHAR, DOBRA_K, FOV_GRAUS, FPS_MIN, LARGURA_MIN, LONGE, NEVOA, PERTO, QUEDA_MS, RAZAO_MAX, TEXEL_ALVO } from "./constantes.ts";
 import { CURVA, montarCena, objetos, type CenaIlha, type Objetos } from "./cena.ts";
 import { paraMundoCel, paraTelaNdc, type CameraLida, type Dobra } from "./curva.ts";
 import { ilhaDe, type Ilha } from "./grade.ts";
@@ -106,6 +106,8 @@ class VistaIlha {
   paraMundo(cx: number, cy: number): [number, number] | null {
     const r = this.canvas.getBoundingClientRect();
     if (!(r.width > 0 && r.height > 0)) return null;
+    /* fora da cena nada e chao: o raio de um ponto abaixo do canvas ainda tocaria a ilha perto da camera */
+    if (cx < r.left || cx > r.right || cy < r.top || cy > r.bottom) return null;
     const p = paraMundoCel(this.lida, this.dobra, ((cx - r.left) / r.width) * 2 - 1, 1 - ((cy - r.top) / r.height) * 2);
     if (!p) return null;
     const sub = this.mu.cm.sub, x = Math.round(p[0] * sub), y = Math.round(p[1] * sub);
@@ -174,6 +176,13 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
   let janela = { inicio: performance.now(), quadros: 0 };
   const laco = (agora: number) => {
     if (!vivo) return;
+    /* coberta pelo veu: um quadro a cada COBERTO_MS, sem contar para a queda de qualidade */
+    if (CENA.coberto && !medida) {
+      if (agora - ultimoQuadro >= COBERTO_MS) { ultimoQuadro = agora; CENA.ret = vista.desenhar(agora, quadro++); }
+      janela = { inicio: agora, quadros: 0 };
+      pedido = requestAnimationFrame(laco);
+      return;
+    }
     if (medida) medida.push(agora - ultimoQuadro);
     if (agora - ultimoQuadro > 500) janela = { inicio: agora, quadros: 0 };
     ultimoQuadro = agora;
