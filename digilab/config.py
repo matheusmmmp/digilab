@@ -2522,3 +2522,20 @@ PARAMETROS_DIGIBRAIN_INATOS: dict[str, tuple[str, str]] = {
 # a versao do pet do cerebro modular (DM-5, DECIDIDA em 2026-10-25): a v13, so com a ConfigDigibrain ligada. Os saves v1 a v12, as
 # assinaturas e os gabaritos nao mudam; no jogo (web/app/), a v13 entra na etapa 1b
 VERSAO_PET_DIGIBRAIN = 13
+
+
+# A decisao na comida (docs/TAREFA_V2_PRODUTO_FOME.md; a chave do produto `decisaoNaComida` do jogo web, motor/motor_corpo_mundo.ts):
+# ligada, a comida que o dono deixa no chao (deixar_comida) faz o pet decidir ja no proximo passo do laco, em vez de esperar o fim do
+# intervalo de decisao. O cerebro e a politica nao mudam: so o momento da decisao, e a seguinte volta a contar o intervalo dali. O jogo
+# web a liga nos ovos novos; a pesquisa e os gabaritos ficam com ela desligada. PROPOSTO (worker A, 2026-10-29), SEM FONTE.
+@dataclass(frozen=True)
+class ConfigDecisaoNaComida:
+    ligada: bool = False                     # PROPOSTO: a chave
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigDecisaoNaComida.ligada e bool: {self.ligada!r}")
+
+
+CONFIG_DECISAO_NA_COMIDA = ConfigDecisaoNaComida()
+CONFIG_DECISAO_NA_COMIDA_LIGADA = ConfigDecisaoNaComida(ligada=True)

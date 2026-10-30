@@ -411,6 +411,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-29 — UP-SOM (worker, Claude Code, Sonnet 5.5, worktree `v2-up-som`): o sistema de áudio do jogo web](registro/2026-10.md)
 - [2026-10-29 — UP-ARENA (worker, Claude Code, Opus 5.5, worktree `v2-up-arena`): a etapa 0 e o harness da arena recuperado do transcrito](registro/2026-10.md)
 - [2026-10-29 — DIGIBRAIN-MODULAR-L2-K (worker D, Claude Code, Opus 5.5, worktree `v2-modular-l2-k`): o K da avaliação da L-2 e as medidas em partes](registro/2026-10.md)
+- [2026-10-29 — PRODUTO-FOME (worker A, Claude Code, Opus 5.5, worktree `v2-produto-fome`): o chamado de fome pela fome do corpo e a decisão na comida](registro/2026-10.md)
 - [2026-10-29 — UP-EVOLUCAO (worker, Claude Code, Opus 5.5, worktree `v2-up-evolucao`): a etapa 0, as cenas em quadros pelo runtime e não pelo `spine_quadros.py`](registro/2026-10.md)
 - [2026-10-29 — UP-ARENA-PET (worker, Claude Code, Opus 5.5, worktree `v2-up-arena`): o pet do jogador luta sozinho na arena em tempo real](registro/2026-10.md)
 - [2026-10-29 — COMBATE-TR (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): a espec da batalha em tempo real e o custo do replay](registro/2026-10.md)
@@ -424,4 +425,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-30 — COMBATE-TR calibração, fase 1 (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): o relógio](registro/2026-10.md)
 - [2026-10-29 — DIGIBRAIN-MODULAR-L2-AVALIACAO (worker D, Claude Code, Opus 5.5, worktree `v2-modular-l2-avaliacao`): a avaliação da L-2, uma vez, e os critérios lidos como registrados](registro/2026-10.md)
 - [2026-10-29 — DIGIBRAIN-MODULAR-LONGE-L2-PROXIMO (Claude Code, Opus 5.5, worktree `v2-modular-l2-proximo`): a leitura da avaliação da L-2 e o próximo passo do longe](registro/2026-10.md)
+- [2026-10-30 — PRODUTO-FOME na v13 (worker A, Claude Code, Opus 5.5, worktree `v2-produto-fome`): as chaves do produto passam dos ovos v12 aos v13](registro/2026-10.md)
 - [2026-10-30 — COMBATE-TR calibração, fase 2 (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): as formas](registro/2026-10.md)

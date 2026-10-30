@@ -71,8 +71,13 @@ export type EventoCarta = [tick: number, tipo: "k", carta: { id: string }];
 export type EventoFronteira = [tick: number, tipo: "f", fronteira: { campeao: true }];
 /** pets v12 (o mundo fisico, MV-1): o dono deixa a comida num ponto do mapa (subunidades inteiras do Mundo). So a racao no MVP (MV-3) */
 export type EventoComida = [tick: number, tipo: "dc", comida: { tipo: "racao"; x: number; y: number }];
+/** pets v12, as chaves do produto (docs/TAREFA_V2_PRODUTO_FOME.md): o chamado de fome do bebe pela fome do corpo, e nao pelo relogio,
+    e a decisao do pet logo depois de o dono por comida no chao. So no comeco do registro, uma vez; o jogo grava nos ovos novos. Sem ele
+    (os saves de antes, a pesquisa e os gabaritos), as duas ficam desligadas e a vida e a de hoje */
+export interface ChavesProduto { chamadoPelaFome: boolean; decisaoNaComida: boolean }
+export type EventoProduto = [tick: number, tipo: "p", chaves: ChavesProduto];
 export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem | EventoConfig | EventoLiberacao
-  | EventoItem | EventoCarta | EventoFronteira | EventoFala | EventoComida;
+  | EventoItem | EventoCarta | EventoFronteira | EventoFala | EventoComida | EventoProduto;
 
 export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13;
 

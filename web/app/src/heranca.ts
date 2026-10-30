@@ -5,6 +5,7 @@
 import { useEffect, useState } from "react";
 import { CHE, EIXOS_TEMP, Motor, hashSemente, type EixoTemperamento, type Especie, type EventoRegistro } from "../motor/index.ts";
 import { jogoAtual, trocarMotor } from "./jogo.ts";
+import { ligarProduto } from "./produto.ts";
 import { CHAVE_GUARDADOS, abrirGuardado, lerGuardados } from "./pets.ts";
 import { CHAVE, textoSave } from "./save.ts";
 
@@ -57,7 +58,7 @@ export function cruzar(i: number): Motor {
   const outro = abrirGuardado(par);
   if (!podeSerPai(ativo) || !podeSerPai(outro)) throw new Error("os dois pais precisam ser adultos e vivos");
   const s = (Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0;
-  const filho = Motor.cruzar(ativo, outro, s, hashSemente("heranca", s), "dono", [geracao(ativo), geracao(outro)]);
+  const filho = ligarProduto(Motor.cruzar(ativo, outro, s, hashSemente("heranca", s), "dono", [geracao(ativo), geracao(outro)]));
   const ap = lerAposentados();
   ap.push({ ...JSON.parse(textoSave(ativo)), ger: geracao(ativo), filho: s, quando: Date.now() });
   localStorage.setItem(CHAVE_GERACOES, JSON.stringify(ap));
