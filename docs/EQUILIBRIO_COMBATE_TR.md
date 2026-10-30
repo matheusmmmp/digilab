@@ -558,3 +558,40 @@ As três rodadas:
 - **é a mesma questão das formas de longe da R2-1,** que o Matheus mandou para depois da conferência (a alavanca de estrutura). O I-1, que
   é o sem treino do Lago, vai junto.
 
+## Rodada 2, fase R2-4 — as cartas (I-4)
+
+Worker: Claude Code, Opus 5.5, worktree `v2-combate-tr`, 2026-10-30.
+- **O que rodou:** só as sementes de calibração da rodada 2 (`72101…72505`), em no máximo 4 processos, em 2 rodadas de grade.
+- **Os artefatos:** os resumos em `web/app/scripts/medicoes/equilibrio_tr/r2_4/` (`grade1/` e `grade2/resumo.json`,
+  `depois_resumo_metas.txt`). Os JSON completos estão em `r2_4/completo.tar.gz`.
+- **Antes, uma decisão do Matheus** (2026-10-30, depois da R2-3): o G-1 e o I-1 da Cidadela, do Lago e da Espiral vão para depois da
+  conferência. O plano registra.
+
+**A alavanca (DR2-4):** as cartas candidatas, `CARTAS_V14` em `combate_tr/constantes_tr.ts`, por cima do efeito de hoje. Para isso, a carta
+ganhou dois efeitos novos:
+- **`gutsTeto`:** o teto do guts do começo, em vezes o máximo (para o Fôlego). O guts acima do máximo fica até ser gasto. As quatro somas do
+  guts na luta (`combate_tr/luta.ts`) passam a `max(guts, min(máximo, guts + x))`, que dá o mesmo número até o máximo;
+- **`ritmo`:** o intervalo das decisões do pet na luta, em passos (para a Foco). Cada lado decide no múltiplo do ritmo dele, e sem a carta
+  é o do relógio.
+
+Nos pets v13 nenhuma carta usa esses efeitos. As vidas v13 conferem iguais, e as 15 medidas do candidato saem iguais às da R2-3 campo a
+campo.
+
+**A grade** (`grade_cartas_r2.py`): a escolha é a regra do plano. Uma carta só muda se algum valor levar o efeito médio contra o líder do
+nível a 0,03 ou mais.
+- **Rodada 1:**
+  - **o Fôlego** com o guts de 20 a 60 e o teto de 1 a 1,5: o efeito fica entre 0,005 e 0,007 em todos. O guts do começo não decide a luta;
+  - **a Foco** com o ritmo de 14 a 8 passos (o do relógio é 16): de 0,0075 a 0,028, sem ordem. A diferença de um ritmo para o outro é do
+    tamanho do ruído.
+- **Rodada 2** (a Foco com 15, 13, 6 e 4): de 0,009 a 0,027.
+- **Onde a carta pesa:** o efeito aparece na Campina e na Floresta, até 0,09. Na Cidadela, no Lago e na Espiral fica perto de zero, e é
+  ali que a média cai.
+
+**O resultado:** nenhum valor fecha o I-4 para a Foco nem para o Fôlego, e as duas cartas ficam como estão (`CARTAS_V14` vazio).
+
+| carta | hoje | o melhor da grade | passa? |
+|---|---|---|---|
+| Fôlego | 0,0067 | 0,0071 (guts 60, teto 1,5) | **não fechou** |
+| Cura | 0,0523 | — | sim |
+| Foco | 0,0138 | 0,0277 (ritmo 14) | **não fechou** |
+

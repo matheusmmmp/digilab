@@ -445,4 +445,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-30 — COMBATE-TR, segunda rodada, R2-3 (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): os líderes e a Liga](registro/2026-10.md)
 - [2026-10-30 — PLANO-V3, as entradas da C1 e da C4 (Gerente da V3, Claude Code, Opus 5.5, worktree `v3-plano-entradas`): a regularidade graduada e a visita vazia como episódio negativo](registro/2026-10.md)
 - [2026-10-30 — TEMA DOS MENUS, T1 (worker, Claude Code, Opus 5.5, worktree `v2-tema-t1`): contraste do Holográfico](registro/2026-10.md)
+- [2026-10-30 — COMBATE-TR, segunda rodada, R2-4 (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): as cartas](registro/2026-10.md)
 - [2026-10-30 — LONGE-REGULAR, a C1, etapa 2 (worker, Claude Code, Opus 5.5, worktree `v3-longe-regular-plano`): o adendo 6, o plano de análise](registro/2026-10.md)
