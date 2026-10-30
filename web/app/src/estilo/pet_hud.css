@@ -133,7 +133,23 @@
 /* o botao da borda escolhido (pele Holografica): o escolhido e um azul translucido, que sobre o habitat claro some com o icone; a base escura
    fica por baixo dele */
 :root[data-pele="vidro"] .app--pet .pet-tela .pet-lado .pet-lado__bt[aria-pressed="true"]{ background-color:#060B12 }
-/* o "toque para ver o porque" do balao branco: cor fixa escura (no tema escuro o --dl-text-2 e claro e sumia no branco) */
-.app--pet .cena-fala.dl-balao:not(.dl-balao--sombria) small{ color:#3A5288 }
-.app--pet .cena-fala{ padding:4px 10px; min-height:44px }
-.app--pet .cena-fala .balao-txt{ font-size:14px }
+/* o balao da fala no padrao do HUD (pedido do Matheus, 2026-10-30): caixa escura translucida chanfrada, contorno e traco ciano, texto
+   claro; a fala fria/sombria (pets v7) troca o ciano pelo lilas. O toque continua abrindo o porque */
+.app--pet .pet-balcao .cena-fala.dl-balao{
+  --ch:var(--hud-ch-p); --balao-cor:var(--hx-rotulo);
+  gap:2px; min-height:44px; padding:6px 14px 7px; border:1px solid var(--balao-cor); border-radius:0; box-shadow:none;
+  color:var(--hx-texto); font:600 15px/1.25 var(--hx-f);
+  background:
+    linear-gradient(45deg, transparent calc(50% - 1px), var(--balao-cor) calc(50% - 1px) 50%, transparent 50%) right top / var(--ch) var(--ch) no-repeat border-box,
+    linear-gradient(45deg, transparent 50%, var(--balao-cor) 50% calc(50% + 1px), transparent calc(50% + 1px)) left bottom / var(--ch) var(--ch) no-repeat border-box,
+    linear-gradient(180deg, var(--hud-fundo-1), var(--hud-fundo-2)) border-box;
+  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+  clip-path:polygon(0 0, calc(100% - var(--ch)) 0, 100% var(--ch), 100% 100%, var(--ch) 100%, 0 calc(100% - var(--ch)));
+}
+.app--pet .pet-balcao .cena-fala.dl-balao::before{ content:""; position:absolute; left:10px; top:0; width:36px; height:2px; background:var(--balao-cor); pointer-events:none }
+.app--pet .pet-balcao .cena-fala.dl-balao--sombria{ --balao-cor:#C9A8FF }
+.app--pet .pet-balcao .cena-fala .balao-txt{ font-size:15px }
+.app--pet .pet-balcao .cena-fala small{ color:var(--hx-sec); font:500 12px/1.2 var(--hx-f); letter-spacing:.02em }
+.app--pet .pet-balcao .cena-fala .dl-balao-tag{ color:var(--hx-sec); border-color:var(--hx-borda); border-radius:0 }
+.app--pet .pet-balcao .cena-fala:hover{ --balao-cor:var(--hx-escolhido) }
+.app--pet .pet-balcao .cena-fala:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:-5px }

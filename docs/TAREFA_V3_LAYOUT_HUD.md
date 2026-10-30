@@ -95,4 +95,7 @@ Pedido do Matheus (pela sessão que coordena): três pontos, sem redesenhar a p�
   Ela vale no trilho, no topo e em toda a tela Pet, nas duas peles; as telas abertas (Crescer, Lutar…) seguem a pele escolhida. O custo
   de errar: na pele Holográfica, a tela Pet fica turquesa e as outras azuis. Os três painéis ganham o mesmo traço ciano no topo
   esquerdo e o marcador no canto inferior direito.
+- **Balão da fala (pedido do Matheus, depois das capturas):** sai do branco com borda azul-marinho (`--dl-*`) e entra no padrão do HUD:
+  caixa escura translúcida chanfrada, contorno e traço ciano, texto claro e "toque para ver o porquê" no secundário. A fala fria ou
+  sombria troca o ciano pelo lilás. O toque continua abrindo o porquê.
 - Capturas em `D:\Trab\digilab\capturas_hud_aprovar_r2\` (16, fora do git), aguardando a aprovação.
