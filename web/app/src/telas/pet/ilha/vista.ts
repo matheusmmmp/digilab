@@ -11,15 +11,14 @@ import * as THREE from "three";
 import { TPD, eNoite, type Mundo } from "../../../../motor/index.ts";
 import { jogoAtual } from "../../../jogo.ts";
 import { CENA } from "../cenaEstado.ts";
-import { fonteDoPet } from "../fontePet.ts";
 import { Seguidor, dentroDoMapa, ninhoDe } from "../vistaMundo.ts";
 import { AFASTAR_MAX, CAMERA_DESLOC, CAMERA_OLHAR, DOBRA_K, FOV_GRAUS, LARGURA_MIN, LONGE, NEVOA, PERTO, RAZAO_MAX, TEXEL_ALVO } from "./constantes.ts";
 import { CURVA, montarCena, objetos, toon, type CenaIlha } from "./cena.ts";
 import { paraMundoCel, paraTelaNdc, type CameraLida, type Dobra } from "./curva.ts";
 import { ilhaDe, type Ilha } from "./grade.ts";
+import { Papel, type Ret } from "./papel.ts";
 
 const movimentoReduzido = (): boolean => matchMedia("(prefers-reduced-motion: reduce)").matches;
-type Ret = { x: number; y: number; w: number; h: number };
 
 class VistaIlha {
   readonly renderer: THREE.WebGLRenderer;
@@ -29,11 +28,11 @@ class VistaIlha {
   private readonly seguidor = new Seguidor();
   private readonly raio = new THREE.Raycaster();
   private readonly lida: CameraLida;
-  private readonly sprite: THREE.Sprite;
+  private readonly papel = new Papel();
   private readonly comidas = new Map<number, THREE.Mesh>();
   private readonly bola: THREE.Mesh;
-  private chave = "";
-  private texels: [number, number] = [1, 1];
+  private ppu = 1;              // pixels do canvas por unidade do mundo na distancia do pet
+  private pxPorTexel = 1;       // pixels do canvas por texel do sprite (inteiro, regra 8)
   private larguraCss = 1;
   private alturaCss = 1;
   private afast = 1;
@@ -67,9 +66,7 @@ class VistaIlha {
     const comedouro = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.35, 0.75), toon({ color: 0xeef4fc }));
     comedouro.position.set(mu.comedouro[0] / sub, 0.18, mu.comedouro[1] / sub);
     this.bola = new THREE.Mesh(new THREE.SphereGeometry(0.38, 16, 12), toon({ color: 0x378add }));
-    this.sprite = new THREE.Sprite(new THREE.SpriteMaterial({ alphaTest: 0.5, transparent: false }));
-    this.sprite.center.set(0.5, 0);
-    this.cenaIlha.cena.add(ninho, comedouro, this.bola, this.sprite);
+    this.cenaIlha.cena.add(ninho, comedouro, this.bola, this.papel.raiz);
   }
 
   /** os kits (public/kits3d) entram depois do terreno */
@@ -94,7 +91,9 @@ class VistaIlha {
     const nevoa = this.cenaIlha.cena.fog as THREE.Fog;
     nevoa.near = NEVOA[0] * this.afast; nevoa.far = NEVOA[1] * this.afast;
     this.camera.updateProjectionMatrix();
-    this.chave = "";
+    /* o pet em papel: na distancia do foco, um texel do sprite vale um numero inteiro de pixels do canvas (regra 8) */
+    this.ppu = this.renderer.domElement.height / 2 / (this.profundidadeDoPet(this.afast) * Math.tan(THREE.MathUtils.degToRad(FOV_GRAUS / 2)));
+    this.pxPorTexel = Math.max(1, Math.round(TEXEL_ALVO * this.ppu));
   }
   /** a distancia do pet ao plano da camera (ao longo do eixo dela), com o afastamento `a` */
   private profundidadeDoPet(a: number): number {
@@ -122,7 +121,7 @@ class VistaIlha {
   /** um quadro: o pet onde o motor diz (interpolado), a camera atras dele, a racao e a bola, o dia ou a noite; devolve o retangulo do pet */
   desenhar(agora: number, quadro: number): Ret {
     const { motor: m } = jogoAtual(), mu = m.mundo ?? this.mu, cm = mu.cm, sub = cm.sub;
-    const pos = this.seguidor.seguir(mu.pet, agora - this.ultimo, cm);
+    const dtMs = agora - this.ultimo, pos = this.seguidor.seguir(mu.pet, dtMs, cm);
     this.ultimo = agora;
     this.petCel = [pos[0] / sub, pos[1] / sub];
     const [px, pz] = this.petCel, a = this.afast;
@@ -134,10 +133,16 @@ class VistaIlha {
     const noite = eNoite(m.e.tick % TPD);
     if (noite !== this.noite) { this.noite = noite; this.cenaIlha.aplicarNoite(noite); }
     this.sincronizar(mu, m.e.tick);
-    const ret = this.desenharPet(quadro, px, pz);
+    const ret = this.papel.atualizar({
+      agora, dt: Math.min(0.05, dtMs / 1000), quadro, cel: this.petCel, motor: mu.pet, camera: this.camera,
+      ppu: this.ppu, pxPorTexel: this.pxPorTexel, canvas: [this.renderer.domElement.width, this.renderer.domElement.height],
+      razao: this.renderer.getPixelRatio(), reduzido: movimentoReduzido(),
+    });
     this.renderer.render(this.cenaIlha.cena, this.camera);
     return ret;
   }
+
+  dispose(): void { this.papel.dispose(); this.renderer.dispose(); }
 
   /** a racao e a bola onde o motor diz: entra a racao nova, sai a comida, muda de cor a podre */
   private sincronizar(mu: Mundo, tick: number): void {
@@ -160,25 +165,6 @@ class VistaIlha {
     this.bola.position.set(bx / sub, 0.38, by / sub);
   }
 
-  /** o pet como sprite em pe no chao (o papel entra na H3) */
-  private desenharPet(quadro: number, px: number, pz: number): Ret {
-    const f = fonteDoPet(quadro), mat = this.sprite.material;
-    if (f.chave !== this.chave) {
-      mat.map?.dispose();
-      const t = new THREE.CanvasTexture(f.canvas);
-      t.magFilter = THREE.NearestFilter; t.minFilter = THREE.NearestFilter; t.generateMipmaps = false; t.colorSpace = THREE.SRGBColorSpace;
-      mat.map = t; mat.needsUpdate = true;
-      this.texels = [f.canvas.width, f.canvas.height];
-      this.chave = f.chave;
-    }
-    const w = this.texels[0] * TEXEL_ALVO, h = this.texels[1] * TEXEL_ALVO;
-    this.sprite.position.set(px, 0, pz);
-    this.sprite.scale.set(w, h, 1);
-    /* o retangulo na tela: os cantos do sprite projetados */
-    const base = this.paraTela(px * this.mu.cm.sub, pz * this.mu.cm.sub), topo = new THREE.Vector3(px, h, pz).project(this.camera);
-    const r = this.canvas.getBoundingClientRect(), yTopo = r.top + ((1 - topo.y) / 2) * r.height, alt = base[1] - yTopo, larg = alt * (w / h);
-    return { x: base[0] - r.left - larg / 2, y: yTopo - r.top, w: larg, h: alt };
-  }
 }
 
 const mediana = (v: number[]): number => { const s = [...v].sort((a, b) => a - b); return s.length ? s[Math.floor(s.length / 2)] : 0; };
@@ -233,6 +219,6 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
     vivo = false;
     cancelAnimationFrame(pedido); obs.disconnect(); canvas.removeEventListener("webglcontextlost", perdeu);
     CENA.modo3d = false; CENA.ret = null; CENA.medir = null; CENA.mundo = null;
-    vista.renderer.dispose();
+    vista.dispose();
   };
 }
