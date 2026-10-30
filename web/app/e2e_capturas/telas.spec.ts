@@ -76,7 +76,8 @@ for (const [largura, altura] of LARGURAS.map(l => [l, l >= 1900 ? 950 : l >= 110
       if (SO_JANELA.has(nome)) await page.emulateMedia({ reducedMotion: "reduce" });
       if (reserva) await page.route(/\/Assets\/(digilab_atlas_up|digilab_decoracao_up|decoracao_up\/)/, r => r.abort());
       await page.goto(`${APP}?pele=${PELE}${rota}`);
-      if (reserva) await page.addStyleTag({ content: ".app > .aviso{display:none}" });
+      /* os avisos ficam em .avisos desde a M7 do layout (docs/TAREFA_V2_LAYOUT_HABITAT.md) */
+      if (reserva) await page.addStyleTag({ content: ".app > .aviso, .avisos > .aviso{display:none}" });
       await page.evaluate(() => document.fonts.ready);
       /* a tela Pet: a cena 3D chega por import dinamico (tempo real, fora do relogio falso); so depois dela o relogio anda, senao o
          numero de quadros desenhados antes da captura varia */

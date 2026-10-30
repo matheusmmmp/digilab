@@ -243,12 +243,13 @@ test("tempo: o relógio para durante a animação da luta e com o Resultado aber
   expect(erros).toEqual([]);
 });
 
-test("foco visível pelo teclado", async ({ page }) => {
+/* nas duas peles dos menus (docs/TAREFA_V2_TEMA_MENUS.md, T3) */
+for (const pele of ["vidro", "xcom"]) test(`foco visível pelo teclado (pele ${pele})`, async ({ page }) => {
   /* sem as transicoes do dl-btn: o teste compara o estilo com e sem foco logo depois de trocar, e uma transicao no meio (a maquina
      ocupada com a cena 3D nos outros workers) dava um falso "sem foco" */
   await page.emulateMedia({ reducedMotion: "reduce" });
   await semear(page, SAVES.champion);
-  await page.goto(APP + "#/pet/estado");
+  await page.goto(APP + `?pele=${pele}#/pet/estado`);
   await expect(page.locator(".pet-tela")).toBeVisible();
   const semFoco: string[] = [];
   let focados = 0;
@@ -1899,5 +1900,13 @@ test("pele dos menus: Ajustes › Aparência troca na hora e a escolha sobrevive
   await page.goto(APP + "#/config");
   await expect(page.locator(".mc-cfg")).toContainText("pele Militar · tema");
   await page.screenshot({ path: "test-results/pele-ajustes-militar.png" });
+  /* ?pele= no endereco sobrepoe sem gravar (T3): vale so nesta abertura */
+  await page.goto(APP + "?pele=vidro#/config");
+  await expect(page.locator(".mc-cfg")).toContainText("pele Holográfico · tema");
+  expect(await pele()).toBe("vidro");
+  expect(await gravada()).toBe("xcom");
+  await page.goto(APP + "#/config");
+  await expect(page.locator(".mc-cfg")).toContainText("pele Militar · tema");
+  expect(await pele()).toBe("xcom");
   expect(erros).toEqual([]);
 });

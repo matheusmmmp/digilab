@@ -455,3 +455,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-30 — C1 LONGE REGULAR, etapa 1 (worker, Claude Code, Sonnet 5.5, worktree `v3-longe-regular-codigo`): o estilo `longe_fixo` e só 5 das 16 direções cabem no mapa](registro/2026-10.md)
 - [2026-10-30 — GERENTE-V3, as LR, as ME e a ordem da L4 decididas (Gerente da V3, Claude Code, Opus 5.5, worktree `v3-decisoes-c1-c4`): todas pela recomendação](registro/2026-10.md)
 - [2026-10-30 — HABITAT-ILHA, H0 a H5 (Gerente e worker, Claude Code, Opus 5.5, worktree `v3-habitat-ilha`): a ilha 3D no modo mundo](registro/2026-10.md)
+- [2026-10-30 — TEMA-MENUS, T3 (worker, Claude Code, Opus 5.5, worktree `agitated-rubin-b2128e`): a conferência das duas peles](registro/2026-10.md)

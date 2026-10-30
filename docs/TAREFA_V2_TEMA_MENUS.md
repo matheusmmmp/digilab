@@ -235,3 +235,46 @@ T3 depende de T1 e T2. Arquivos de uma missão por vez: `tokens.css`, `main.tsx`
   pelo clique e pelas setas sem recarregar, a escolha gravada e mantida ao recarregar, o resumo. Parte do e2e de troca de pele previsto na
   T3 já entra aqui; o `?pele=` sem gravar continua conferido pelo teste de unidade da T1.
 - **Fora:** o radiogroup do tema do habitat continua sem setas, como estava; `tokens.css` e `pet_dock.css` não mudaram.
+
+## Resultado da T3 (2026-10-30, worker Claude Code, Opus 5.5, worktree `agitated-rubin-b2128e`)
+
+Conferência das duas peles e capturas para a aprovação do Matheus. **Os valores PROPOSTOS da T1 continuam PROPOSTOS até ele aprovar
+as capturas;** as referências do `e2e_capturas` só são regeneradas depois disso (TM5).
+
+- **Capturas, fora do git, em `D:\Trab\digilab\capturas_tema_t3\`** (sprite de reserva; o `LEIA.txt` da pasta lista o que é cada uma):
+  - `portao\`: as 21 telas do portão nas duas peles, em 1920×950 (D10), 1280 e 390 px, no tema claro: 126 PNG (`<tela>-<largura>.png`
+    é o Militar; `<tela>-vidro-<largura>.png`, o Holográfico). Gravadas com `DIGILAB_CAPTURAS_PELE=vidro|xcom`,
+    `DIGILAB_CAPTURAS_RESERVA=1` e `DIGILAB_CAPTURAS_LARGURAS=1920,1280,390`;
+  - `conferencia\`: as telas que o portão não alcança, nas duas peles × claro/escuro, em 1920×950: a tela Pet com a pilha da HUD, os
+    três painéis abertos, o DigiBrain, o "Por que ele disse isso", o menu Mais do dock, Meus pets, Ajustes › Aparência, as
+    Boas-vindas, o Como jogar, a luta em tela cheia e o Resultado (44 PNG), e o anel de foco sobre o cartão escolhido e sobre o outro (8
+    PNG). Gravadas por `e2e_capturas/conferencia_pele.spec.ts` com `DIGILAB_CONFERENCIA_PELE=<pasta>`; sem a variável, o spec fica de
+    fora do portão.
+- **Contraste AA, medido no render** (o mesmo spec: o texto fica transparente, a página é fotografada e, no retângulo de cada texto, o
+  percentil 10 do fundo dá a razão WCAG; o pior pixel vai ao lado, em `contraste_*.json`). Tema claro, 24 telas (as 18 rotas do portão
+  e das Ajustes, a pilha da HUD aberta, o DigiBrain, o porquê, Meus pets, Boas-vindas e Como jogar), só texto visível inteiro:
+  - **Holográfico:** 1170 textos, mediana 11,9:1. Abaixo de AA: os nós trancados da árvore de evolução (`.evo-sub`, 9 px, 2,10:1) e
+    três textos do laboratório de Cenários (`.lab-nota` 2,97; a legenda do pet B 3,31; "FERRAMENTA DE PESQUISA" 3,56). **Todos falham
+    igual no Militar** (1,98; 2,95; 3,21; 3,41): vêm de cores do jogo, não da pele. Ficam como estão (fora do escopo).
+  - **A etiqueta "você" do Registro** (o `#FFFFFF` literal do `diario.css` sobre `--dl-action`) dava 2,55:1 no Holográfico; com o texto
+    escuro `--dl-action-ink` passou a 7,5:1 (correção de pele, desvio no registro). No Militar ela segue em 2,1:1, como antes.
+  - Os textos sobre o habitat de dia (pet v11 às 15:10): o pior no DigiBrain 5,74, no porquê e na pilha 7,5, em Meus pets 6,83.
+  - Duas linhas do Registro aparecem como 1,0 e 4,03 no JSON: são a última linha da lista, cortada pela rolagem interna (a foto do fundo
+    em `conferencia\fundos\` mostra só a borda da etiqueta); não é texto legível.
+  - **Militar sem regressão:** 1097 textos, as mesmas falhas de antes, nenhuma nova.
+- **`prefers-reduced-transparency: reduce`** (emulado pelo CDP): o painel lateral vai de `backdrop-filter: blur(10px)` a `none`, e a
+  superfície de `#182432eb`/`#060b12eb` a `#18242f`/`#060b12` (sem alfa). O contraste fica igual ou sobe (as mesmas 12 medidas abaixo
+  de AA, sem nova).
+- **Foco visível:** 80 toques de Tab por pele (Treinar, Aparência, Pet), nenhum controle sem indicação. No Holográfico o anel é 2 px
+  `#5FD4FF` recuado 5 px por dentro da borda 1 px `#3AA8FF` do escolhido (uma segunda linha, não a mesma); no Militar, 2 px `#7FE3FF`
+  em volta do escolhido de fundo `#BFE5E7`. O trilho, o topo e a HUD usam `#49D5E2` nas duas peles (paleta da HUD). O interruptor nativo
+  de Aparência mantém o anel padrão do Chrome, nas duas.
+- **Padrão, nome e troca:** sem nada gravado a pele é a Holográfica; "XCOM" não aparece em nenhum dos 2267 textos medidos; a troca vale na
+  hora e sobrevive ao recarregar, e `?pele=` sobrepõe sem gravar: o e2e "pele dos menus" ganhou esse caso, e o "foco visível pelo
+  teclado" roda agora nas duas peles.
+- **Tela Pet:** o trilho, o topo, a pilha, o dock e o balão usam a paleta turquesa da HUD nas duas peles (decisão do Matheus de
+  2026-10-30, `pet_hud.css`); ali a pele só muda a fonte, as barras de 5 px e os números. As telas abertas seguem a pele escolhida.
+- **Portão de capturas:** com `DIGILAB_CAPTURAS_RESERVA=1` o portão escondia `.app > .aviso`, que saiu na M7; os avisos de "não
+  carregou" entravam nas capturas. Agora esconde também `.avisos > .aviso`.
+- **Achados fora do escopo (para depois):** no desktop, o painel do DigiBrain cobre a ponta do balão da fala ("toque para ver o por…");
+  "lutas de treino0 de 10" sem espaço na Arena, nas duas peles; abrir `#/config` pelo endereço com Meus pets aberto deixa Meus pets na tela.

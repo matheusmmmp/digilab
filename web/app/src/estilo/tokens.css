@@ -132,7 +132,10 @@
    aprendido 6,9; foco 6,0. Bordas: externa (alfa .62 por cima, #83909D) 3,2; azul #3AA8FF 4,0. Com a transparencia reduzida o vidro
    fica opaco (#18242F e #060B12) e o contraste so sobe (texto 12,2, sec 7,3, borda 4,2). Desvios da referencia, todos para passar AA
    sobre o claro (conferidos em test/hx_pele.test.ts): opacidade do inicio do gradiente .84 -> .92; contorno externo .5 -> .62;
-   rotulo/secundario #8A9BAD -> #A3B2C3; perigo #D46A6A -> #F09A9A. */
+   rotulo/secundario #8A9BAD -> #A3B2C3; perigo #D46A6A -> #F09A9A.
+   Conferido no render na T3 (e2e_capturas/conferencia_pele.spec.ts: o fundo de verdade, com o texto apagado, em 24 telas a 1920 x 950,
+   tema claro): 1170 textos, mediana 11,9:1; abaixo de AA so o que ja falhava igual no Militar (os nos trancados da arvore de evolucao,
+   2,1; a nota, a legenda e o titulo do laboratorio de Cenarios, 3,0 a 3,6); a etiqueta "voce" do Registro passou a 7,5 (pele-vidro.css). */
 :root[data-pele="vidro"]{
   --hx-chao:rgba(6,11,18,.92); --hx-miolo:rgba(6,11,18,.92); --hx-miolo-2:rgba(24,36,50,.92);
   --hx-borda:rgba(178,192,206,.62); --hx-borda-topo:rgba(178,192,206,.62);
