@@ -156,8 +156,27 @@ export const GAMBITS_ARENA: Record<string, ListaGambits> = {
 Object.values(GAMBITS_ARENA).forEach(validarLista);
 /* as listas candidatas da rodada de equilibrio do tempo real (docs/EQUILIBRIO_COMBATE_TR.md, fase 2; PROPOSTO): a chave e a forma
    adulta, a sombria, a linha do adolescente ou o ramo da crianca. Ainda nao pertencem a nenhuma versao de pet: so a bancada
-   (scripts/equilibrio_tr/) as usa, e a v14 (DE-1) liga todas no fim da rodada. */
-export const LISTAS_V14: Readonly<Record<string, ListaGambits>> = {};
+   (scripts/equilibrio_tr/) as usa, e a v14 (DE-1) liga todas no fim da rodada. Calibradas so nas sementes de calibracao (68101 a 68505),
+   em cima do RELOGIO_V14: a variante r3a da grade (web/app/scripts/medicoes/equilibrio_tr/fase2/grade3/r3a.json) */
+export const LISTAS_V14: Readonly<Record<string, ListaGambits>> = {
+  /* as formas de longe: contra o preparo de perto, o golpe rapido interrompe (a esquiva no tempo real cai antes do pesado); o cacador
+     do Champion, de perto, bate em vez de recuar; o emboscador marca e dispara desde o comeco (sem esperar 10 s) */
+  cacador: { regras: [Rg([PREP, D0], "esquivar"), Rg(D0, "golpe_rapido"), Rg(GA_(40), "marcar"), Rg(GA_(20), "disparo"), Rg(D1, "recuar")], final: "carregar" },
+  sentinela: { regras: [Rg([PREP, D0], "golpe_rapido"), Rg(D0, "recuar"), Rg(Cd("oponente_repete", "avancar", 2), "recuar"), Rg(FQ("investida"), "recuar"),
+    Rg(GA_(40), "marcar"), Rg(GA_(20), "disparo"), Rg(D1, "recuar"), Rg(GB_(20), "carregar")], final: "carregar" },
+  emboscador: { regras: [Rg([PREP, D0], "golpe_rapido"), Rg(D0, "recuar"), Rg(GA_(40), "marcar"), Rg(GA_(20), "disparo"),
+    Rg([D1, FQ("avancar")], "recuar"), Rg(D1, "recuar"), Rg(GB_(60), "carregar"), Rg(GA_(60), "marcar")], final: "carregar" },
+  /* a muralha so devolve o golpe rapido frequente com Guts para isso */
+  muralha: { regras: [Rg(PREP, "contra_golpe"), REGRA_CONTRA_GOLPE_NA_PELE, Rg(FQ("disparo"), "contra_golpe"), Rg([FQ("golpe_rapido"), GA_(40)], "contra_golpe"),
+    Rg(FQ("investida"), "contra_golpe"), Rg([D0, Cd("oponente_repete", "defender", 2)], "preparar_pesado"), Rg([D0, GA_(60)], "golpe_rapido"), Rg(D2, "avancar")],
+    final: "defender" },
+  /* o sereno do Rookie avanca de qualquer distancia, como o arisco, e fica com a regra final de defender */
+  sereno: { regras: [Rg(D2, "avancar"), Rg(D1, "avancar"), Rg([D0, GA_(20)], "golpe_rapido")], final: "defender" },
+  /* as sombrias (sem ler o oponente): o predador marca de longe e dispara; o bastiao rachado devolve o golpe de perto */
+  predador: { regras: [Rg([D2, GA_(40)], "marcar"), Rg([D1, GA_(20)], "disparo"), Rg([D2, GA_(20)], "disparo"), Rg(D2, "avancar"), Rg(D0, "golpe_rapido")],
+    final: "carregar" },
+  bastiao_rachado: { regras: [Rg([D0, GA_(40)], "contra_golpe"), Rg(GB_(40), "carregar"), Rg(Cd("sempre"), "avancar")], final: "defender" },
+};
 Object.values(LISTAS_V14).forEach(validarLista);
 
 /* lugares do mapa; vencer QUALQUER rival de um lugar abre o proximo (a Torre tem 3 rivais para nenhuma
