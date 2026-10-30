@@ -2148,13 +2148,15 @@ o piloto e refaz a conjunção da grade, conferida contra a do `resultado.json` 
 **A trava:** a fase `l2_avaliacao` só aceita este K porque esta subseção diz "aprovado pelo Matheus". Sem isso, um K fora da regra é
 recusado.
 
-## Adendo 6: o longe regular, a C1 da V3 (2026-10-30, worker da C1, etapa 2, Claude Code, Opus 5.5; PROPOSTO)
+## Adendo 6: o longe regular, a C1 da V3 (2026-10-30, worker da C1, etapa 2, Claude Code, Opus 5.5; APROVADO pelo Matheus em 2026-10-30)
 
-**Status: PROPOSTO.** As LR-1 a LR-7 da `docs/TAREFA_V2_LONGE_REGULAR.md` (seção 8) e as entradas C1-E1 e C1-E2 do `docs/PLANO_V3.md`
+**Status: APROVADO pelo Matheus em 2026-10-30,** com as AD6-1 a AD6-5 pela recomendação ("siga com suas recomendações
+anteriores", no chat do Gerente da V3; A6.12). As LR-1 a LR-7 da `docs/TAREFA_V2_LONGE_REGULAR.md` (seção 8) e as entradas C1-E1 e C1-E2 do `docs/PLANO_V3.md`
 (seção 2.3) estão DECIDIDAS pelo Matheus em 2026-10-30, pela recomendação. **O K, a margem, a definição do "≈ 0" e as medidas da C5
-são PROPOSTOS** e estão em A6.12, com a recomendação e o custo de errar. **Nenhuma vida da faixa 71101…71505 rodou nem roda antes de
+foram DECIDIDOS na mesma data** (A6.12); os números seguem SEM FONTE. **Nenhuma vida da faixa 71101…71505 rodou nem roda antes de
 três coisas:** o código da etapa 1 na `main` (o estilo `longe_fixo`, o gabarito dos três estilos byte a byte e a faixa na
-`FAIXAS_RESERVADAS`); o orquestrador da A6.10; e este cabeçalho com a marca de aprovação do Matheus.
+`FAIXAS_RESERVADAS`); o orquestrador da A6.10; e este cabeçalho com a marca de aprovação do Matheus (já posta). **O código das medidas da C5** (`digilab/metrics.py`) entra junto
+do orquestrador, antes da run (o Gerente da V3, 2026-10-30).
 
 **De onde vem:** a tarefa da C1 (`docs/TAREFA_V2_LONGE_REGULAR.md`, seções 1, 4 e 8), as entradas C1-E1 e C1-E2 e a lição LP-2 do #455
 (`docs/PROPOSTA_L2_PROXIMO_PASSO_DIGIBRAIN_MODULAR.md`, seções 1 e 2). Este adendo reusa, sem mudar, o cenário (seção 3), o episódio de
@@ -2452,9 +2454,10 @@ Só as VERIFICADAS na C0 (`docs/referencias/v3c0_referencias_verificadas.csv`, #
 - **Todo número deste adendo é SEM FONTE externa:** os 3 lugares, a margem, o K, a folga de 20 %, o limiar de 0,15 da C5 e o −0,5 do g1.
   Os números de contexto saem dos artefatos citados.
 
-### A6.12 Para o Matheus
+### A6.12 As decisões do Matheus
 
-Todas PROPOSTAS, com a recomendação primeiro. **Sem decisão, a run não roda** (a trava de A6.10).
+**Todas DECIDIDAS em 2026-10-30, pela recomendação** ("Não precisa, siga com suas recomendações anteriores", no chat do Gerente da
+V3, depois da tabela das AD6-1 a AD6-5). A tabela fica como foi proposta.
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
