@@ -292,6 +292,36 @@ for (const largura of [390, 899, 900, 1099, 1100, 1280]) {
   });
 }
 
+/* o monitor do Matheus (D10, docs/TAREFA_V2_LAYOUT_HABITAT.md): 1920 x 950 (janela util do Chrome a 100 %). O pet fica visivel no centro do
+   habitat: na tela Pet, com o painel de Estado aberto e com o dock em baixo; nas outras telas, com o painel grande a direita */
+test("monitor 1920x950: o pet fica visível com o painel aberto", async ({ page }) => {
+  await page.setViewportSize({ width: 1920, height: 950 });
+  await semear(page, SAVES.champion);
+  const centro = () => page.evaluate(() => {
+    const h = document.querySelector(".habitat")!.getBoundingClientRect(), cx = (h.left + h.right) / 2, cy = (h.top + h.bottom) / 2;
+    const alvo = document.elementFromPoint(cx, cy);
+    return { cx, cy, noHabitat: !!alvo?.closest(".habitat"), larg: h.width, alt: h.height, direita: h.right, rolagem: document.documentElement.scrollWidth };
+  });
+  await page.goto(APP + "#/pet/estado");
+  await page.getByRole("button", { name: "Estado atual", exact: true }).click();
+  await expect(page.locator(".pet-painel")).toBeVisible();
+  let c = await centro();
+  expect(c.noHabitat, "tela Pet: nada cobre o pet").toBe(true);
+  expect(c.alt, "o habitat tem a altura toda (dock flutuante)").toBe(950);
+  const dock = await page.locator(".pet-dock .dock").boundingBox();
+  expect(dock!.width, "o dock é uma barra flutuante, não a faixa inteira").toBeLessThan(900);
+  for (const rota of ["crescer/treinar", "lutar/arena", "lutar/campanha", "diario/registro", "conversar/chat", "config"]) {
+    await page.goto(APP + "#/" + rota);
+    await expect(page.locator(".painel-tela--lado")).toBeVisible();
+    c = await centro();
+    const painel = (await page.locator(".painel-tela--lado").boundingBox())!;
+    expect(c.noHabitat, `${rota}: o centro do habitat não está coberto`).toBe(true);
+    expect(c.larg, `${rota}: habitat com largura para o pet`).toBeGreaterThanOrEqual(900);
+    expect(painel.x, `${rota}: o painel fica à direita do habitat`).toBeGreaterThanOrEqual(c.direita - 1);
+    expect(c.rolagem, `${rota}: sem rolagem lateral`).toBeLessThanOrEqual(1920);
+  }
+});
+
 /* ---------------------------------------------------------------- medalhas do Tamer (docs/DESIGN_MEDALHAS_ARENAS.md)
    save_medalhas.json (e2e/gerar_save_medalhas.mjs): pet v6 no Rookie, treinado, pronto para evoluir e esperando a 1a
    medalha; a luta do Desafiar contra o Gazimon e vitoria em qualquer hora das proximas 5 h de jogo */
