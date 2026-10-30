@@ -1,12 +1,12 @@
 /* A Liga dos Lideres na Fronteira (docs/DESIGN_FRONTEIRA.md, secoes 2 e 4; medalhas parte 4a; so no jogo, so o pet v13): a tabela dos 6
    lideres e dos Megas deles, a entrada com as 6 medalhas, a sequencia sem cura (CURA_LIGA_V9 = 0), a proibicao de carta,
    o limite de turnos do desafiado (o lider), o replay com as lutas da Liga, o titulo no registro do Tamer e a conclusao da jornada. As
-   lutas do pet v13 sao em tempo real (res.tr; res.turnos vem vazio). O pet de verdade e um Mega v13 feito aqui (megaTreinado: o dono
+   lutas do pet v13 sao em tempo real (res.tr). O pet de verdade e um Mega v13 feito aqui (megaTreinado: o dono
    atencioso, so com as acoes do jogo, treino em rodizio ate o teto, as 6 medalhas), porque o e2e/save_liga.json e de um pet v6. */
 import { afterEach, beforeEach, describe, expect, test } from "vitest";
 import {
-  ACOES_DONO_JOGO_V11, CAT, CD, CESC_V6, CIT, CMG, CTR, CV21D, ESPECIES, FATOR_LIGA, FATOR_LIGA_DESENHO, LIGA, MEDALHAS, MEDALHAS_LIGA, NOME_ARQ, NPC,
-  RIVAL_LIGA, TPD, criarDono, criarRng, curaLiga, formaLiga, hashSemente, jogarArena, jogarLuta, jogarLiga, jogarSerie, jogarV2, lutadorLiga, lutadoresLiga, nomeForma,
+  ACOES_DONO_JOGO_V11, CAT, CD, CESC_V9, REGRA_CONTRA_GOLPE_NA_PELE, chaveRegra, CIT, CMG, CTR, CV21E_TR, ESPECIES, FORMAS_AD, LINHA_DA_FORMA, STATS, CV, caraterCanonico, copiarGambits, gambitsAdulto, perfilDe, FATOR_LIGA, FATOR_LIGA_DESENHO, LIGA, MEDALHAS, MEDALHAS_LIGA, NOME_ARQ, NPC,
+  RIVAL_LIGA, TPD, criarDono, criarRng, curaLiga, formaLiga, hashSemente, jogarArena, jogarLuta, jogarLiga, jogarSerie, lutadorLiga, lutadoresLiga, nomeForma,
   nomeMegaLiga, sementeDaSerie, type EventoRegistro,
 } from "../motor/index.ts";
 import { ESCALA, ligarEscala } from "../motor/catalogo.ts";
@@ -14,7 +14,16 @@ import { Motor } from "../motor/motor.ts";
 import { Tamer, conferirCampeao, lerTamer, gravarTamer, type EventoTamer } from "../src/tamer.ts";
 import { concluiuJornada, marcos } from "../src/jornada.ts";
 // @ts-expect-error: modulo .mjs sem tipos (os pets de referencia da parte 2)
-import { R as R_REF, formasDe, lutador } from "./itens_ref.mjs";
+/** as regras de referencia e o Mega de referencia (o treino uniforme x a lista canonica da forma), como a medicao de antes montava */
+const R_REF = CV21E_TR;
+function formasDe(_est: "mega"): [string, (e: string) => unknown, unknown, ReturnType<typeof gambitsAdulto>][] {
+  return FORMAS_AD.map(f => [f, (e: string) => ({ esp: e, est: "mega", ramo: "sereno", linha: LINHA_DA_FORMA[f], adulta: f }), caraterCanonico(f), gambitsAdulto(f, R_REF)]);
+}
+function lutador([nome, forma, car, g]: [string, (e: string) => unknown, unknown, ReturnType<typeof gambitsAdulto>], esp: string, nivel: number, _chips: unknown[], escala: boolean) {
+  const f = forma(esp) as Parameters<typeof perfilDe>[0], tr = Object.fromEntries(STATS.map(k => [k, nivel / STATS.length])) as Parameters<typeof perfilDe>[3];
+  const cond = escala ? perfilDe(f, car as Parameters<typeof perfilDe>[1], 1, tr, true) : perfilDe(f, car as Parameters<typeof perfilDe>[1], 1, tr);
+  return { nome: `${nome}+${nivel}@${esp}`, estilo: { nome, gambits: copiarGambits(g), eps: CV.eps }, cond };
+}
 
 /* as lutas da Liga como no app: com a escala ligada */
 const escalaAntes = ESCALA.ligada;
@@ -81,17 +90,18 @@ describe("a tabela da Liga", () => {
     expect(new Set(LIGA.map(x => x.esp))).toEqual(new Set(ESPECIES));
     expect(MEDALHAS_LIGA).toBe(MEDALHAS.length);
   });
-  test("cada lider luta com o Mega: tecnica da linha, passiva da forma, lista canonica V21D; E = vida do Mega na escala v6 x fator", () => {
+  test("cada lider luta com o Mega: tecnica da linha, passiva da forma, lista canonica das regras da luta; E = vida do Mega na escala x fator", () => {
     for (let i = 0; i < LIGA.length; i++) {
-      const L = lutadorLiga(i, CV21D), f = formaLiga(i);
+      const L = lutadorLiga(i, CV21E_TR, FATOR_LIGA), f = formaLiga(i);
       expect(L.cond.est).toBe("mega");
       expect(L.cond.passiva).toBe(LIGA[i].adulta);
       expect(L.cond.tecnica).not.toBeNull();
-      expect(L.cond.escala).toBeCloseTo(CESC_V6.vida.mega * FATOR_LIGA, 6);
+      expect(L.cond.escala).toBeCloseTo(CESC_V9.vida.mega * FATOR_LIGA, 6);
       expect(f.est).toBe("mega");
     }
-    /* a muralha (Rosemon) luta com a lista do espelho nas regras V21D */
-    expect(lutadorLiga(4, CV21D).estilo.gambits).toEqual(lutadorLiga(1, CV21D).estilo.gambits);
+    /* a muralha (Rosemon) luta com a lista do espelho nas regras da luta */
+    const mur = lutadorLiga(4, CV21E_TR, FATOR_LIGA).estilo.gambits!, esp = lutadorLiga(1, CV21E_TR, FATOR_LIGA).estilo.gambits!;
+    expect(mur.regras.map(chaveRegra).filter(k => k !== chaveRegra(REGRA_CONTRA_GOLPE_NA_PELE))).toEqual(esp.regras.map(chaveRegra));   /* mais o contra-golpe na pele (V21E) */
     /* o fator: sem fator (1); o do desenho (o do Piedmon na Espiral) fica so para a conferencia */
     expect(FATOR_LIGA).toBe(1);
     expect(FATOR_LIGA_DESENHO).toBe(1.6);
@@ -145,7 +155,6 @@ describe("a entrada e as regras da Liga (Motor)", () => {
         /* a mesma luta que jogarLuta (em tempo real) daria, com a semente derivada e o comeco da anterior (com a cura) */
         const f = j ? serie[j - 1].E.L[0] : null, ini = f ? { hp: Math.min(f.hpMax, f.hp + curaLiga(m.regras) * f.hpMax), guts: f.guts } : null;
         const livre = jogarLuta(L.A, L.lideres![j], sementeDaSerie(s, j), m.regras, ini, 1);
-        expect(res.turnos).toEqual([]);                                            /* em tempo real nao ha turnos */
         expect(res.tr!.acoes).toEqual(livre.tr!.acoes);
         expect(res.tr!.passos).toBe(livre.tr!.passos);
         expect(res.pontosA).toBe(livre.pontosA);
@@ -171,17 +180,17 @@ describe("a entrada e as regras da Liga (Motor)", () => {
       expect(L.serie).toEqual(jogarLiga(L.A, s, m.regras, 1, L.lideres!));
     }
     /* com um Mega de referencia (vigia, treino tipico), a Liga pela regra do limite x pela fracao de vida */
-    const vigia = formasDe("mega").find((f: [string]) => f[0] === "vigia"), Ls = lutadoresLiga(R_REF);
+    const Ls = lutadoresLiga(R_REF, FATOR_LIGA);
     let achou = false;
-    for (const e of ESPECIES) for (let k = 0; k < 40 && !achou; k++) {
-      const A = lutador(vigia, e, CIT.tipico.mega, [], true), s = hashSemente("limite-liga", e, k), serie = jogarSerie(A, Ls, s, R_REF, 1, null);
+    for (const fo of formasDe("mega")) for (const e of ESPECIES) for (let k = 0; k < 40 && !achou; k++) {
+      const A = lutador(fo, e, CIT.tipico.mega, [], true), s = hashSemente("limite-liga", e, k), serie = jogarSerie(A, Ls, s, R_REF, 1, null);
       serie.forEach((res, j) => {
         if (res.fim !== "limite") return;
         expect(res.pontosA).toBe(0);                                               /* no limite, sempre do lider */
         expect(j).toBe(serie.length - 1);                                          /* e a Liga para ali */
         const ini = j ? { hp: serie[j - 1].E.L[0].hp, guts: serie[j - 1].E.L[0].guts } : null;
-        const livre = jogarV2(A, Ls[j], sementeDaSerie(s, j), R_REF, ini, null);
-        expect(livre.turnos).toEqual(res.turnos);                                  /* a regra so muda quem fica com a luta */
+        const livre = jogarLuta(A, Ls[j], sementeDaSerie(s, j), R_REF, ini, null);
+        expect(livre.tr.acoes).toEqual(res.tr.acoes);                              /* a regra so muda quem fica com a luta */
         if (livre.pontosA === 1) achou = true;                                     /* pela fracao de vida o pet teria vencido */
       });
     }
@@ -220,8 +229,8 @@ describe("registro e replay", () => {
   });
   test("a regra da serie da Cidadela nao mudou com a generalizacao", () => {
     /* jogarArena = jogarSerie com o mesmo rival n vezes */
-    const A = lutadorLiga(0, CV21D), B = lutadorLiga(5, CV21D);
-    expect(jogarArena(A, B, 77, CV21D, 3, 1)).toEqual(jogarSerie(A, [B, B, B], 77, CV21D, 1));
+    const A = lutadorLiga(0, CV21E_TR), B = lutadorLiga(5, CV21E_TR);
+    expect(jogarArena(A, B, 77, CV21E_TR, 3, 1)).toEqual(jogarSerie(A, [B, B, B], 77, CV21E_TR, 1));
   });
 });
 

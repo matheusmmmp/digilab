@@ -1,11 +1,11 @@
 /* Arenas com lideres (docs/DESIGN_MEDALHAS_ARENAS.md, secao 3; medalhas parte 2; pets v6, so no jogo): a tabela nova das
    medalhas e das arenas, cada regra (Torre: contra-golpe; Floresta: muda de padrao no turno 10; Cidadela: tres lutas
    seguidas sem cura; Lago: sem travas nem vetos), o replay de uma vida com lutas de arena. Pet v13 (o unico que ficou): as arenas sao as dos v9 e as lutas de arena jogam em tempo
-   real; as regras de turno (Torre, Floresta) seguem testadas nas funcoes por turnos. */
+   real; as regras de turno (Torre, Floresta) sao lidas nas acoes da luta em tempo real (o turno t vira o relogio t x T_TR). */
 import { afterEach, beforeAll, describe, expect, test } from "vitest";
 import {
   ARENAS, ARENA_POR_ID, CAMPANHA_V5, CAMPANHA_V6, CAT, CTR, CV21E_TR, DUR_EVO, GAMBITS_ARENA, LUGARES_V6, MEDALHAS, NPC,
-  arenaDaLuta, chaveRegra, gambitNPC, hashSemente, jogarArena, jogarLuta, jogarV2, lutadorBot, perfilNPC, sementeDaSerie,
+  T_TR, arenaDaLuta, chaveRegra, gambitNPC, hashSemente, jogarArena, jogarLuta, lutadorBot, perfilNPC, sementeDaSerie,
 } from "../motor/index.ts";
 import { ESCALA, ligarEscala } from "../motor/catalogo.ts";
 import { Motor } from "../motor/motor.ts";
@@ -124,8 +124,7 @@ describe("as regras das arenas", () => {
     const brig = { nome: "brigao", estilo: { nome: "b", gambits: { regras: [{ se: [{ n: "distancia_eh", p: [1] }], entao: "avancar" },
       { se: [{ n: "distancia_eh", p: [0] }], entao: "preparar_pesado" }], final: "carregar" }, eps: 0 }, cond: perfilNPC(90, "adulto", 600) };
     let devolveu = 0;
-    for (let s = 0; s < 20; s++) for (const tr of jogarV2(brig, B, s, R).turnos)
-      if (tr.b === "contra_golpe" && (tr.a === "pesado" || tr.a === "golpe_rapido") && tr.dano[0] > 0) devolveu++;
+    for (let s = 0; s < 20; s++) for (const a of jogarLuta(brig, B, s, R).tr.acoes) if (a.lado === 1 && a.nome === "contra_golpe") devolveu++;
     expect(devolveu).toBeGreaterThan(0);
   });
   test("Floresta (leitura): o lider muda de padrao no turno 10 (as regras de turno so disparam dali em diante)", () => {
@@ -135,10 +134,10 @@ describe("as regras das arenas", () => {
     const deTurno = g.regras.map(r => r.se.some(c => c.n === "turno_execucao" && c.p[0] === 10));
     const A = { nome: "alvo", estilo: { nome: "a", gambits: { regras: [], final: "defender" }, eps: .3 }, cond: perfilNPC(90, "adulto", 600) };
     const antes = new Set<string>(), depois = new Set<string>();
-    for (let s = 0; s < 30; s++) for (const tr of jogarV2(A, B, s, R).turnos) {
-      if (typeof tr.mb !== "number" || tr.mb >= g.regras.length) continue;
-      if (deTurno[tr.mb]) { expect(tr.antes.turno).toBeGreaterThanOrEqual(10); depois.add(tr.b); }
-      else if (tr.antes.turno < 10) antes.add(tr.b);
+    for (let s = 0; s < 30; s++) for (const a of jogarLuta(A, B, s, R).tr.acoes) {
+      if (a.lado !== 1 || typeof a.motivo !== "number" || a.motivo >= g.regras.length) continue;
+      if (deTurno[a.motivo]) { expect(a.inicio).toBeGreaterThanOrEqual(10 * T_TR); depois.add(a.nome); }
+      else if (a.inicio < 10 * T_TR) antes.add(a.nome);
     }
     expect([...antes].sort()).toEqual(expect.arrayContaining(["disparo", "recuar"]));
     expect([...depois]).toEqual(expect.arrayContaining(["avancar", "golpe_rapido"]));
@@ -204,7 +203,7 @@ describe("as regras das arenas", () => {
     /* a luta do Lago ensina pelas regras com que ele lutou */
     abrirAte(m, 4);
     const notas = { ...m.gp!.notas }, r = lutar(m, MARINBULLMON, hashSemente("lago", 1));
-    const disparou = new Set(r.res.turnos.filter(tr => typeof tr.ma === "number" && tr.ma < r.usadas!.length).map(tr => r.usadas![tr.ma as number]));
+    const disparou = new Set(r.res.tr.acoes.filter(a => a.lado === 0 && typeof a.motivo === "number" && a.motivo < r.usadas!.length).map(a => r.usadas![a.motivo as number]));
     for (const k of disparou) expect(m.gp!.notas[k]).not.toBe(notas[k]);
   });
 });

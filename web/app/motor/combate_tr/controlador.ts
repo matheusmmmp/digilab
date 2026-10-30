@@ -40,7 +40,7 @@ export function legalTR(S: EstadoTR, lado: number, a: string): boolean {
 export const legaisTR = (S: EstadoTR, lado: number): string[] => ACOES_V2.filter(a => legalTR(S, lado, a));
 
 /** a condicao vale agora (o catalogo de hoje, CATALOGO_V2, reescrito para o tempo real; espec item 2) */
-export function valeCondTR(c: Cond, S: EstadoTR, lado: number, ctx: Contexto | null, R: RegrasLuta): boolean {
+export function valeCondTR(c: Cond, S: EstadoTR, lado: number, ctx: Contexto | null, R: RegrasLuta | null): boolean {
   const eu = S.L[lado], op = S.L[1 - lado], p = c.p;
   switch (c.n) {
     case "sempre": return true;
@@ -67,7 +67,7 @@ function semOraculo(estilo: Estilo): void {
   if (!estilo.gambits) throw new Error(`o estilo ${estilo.nome} não tem lista de regras`);
 }
 /** o que a lista do lado escolheria agora, sem exploracao e sem rng (o que o vigia ve) */
-export function intencaoTR(estilo: Estilo, S: EstadoTR, lado: number, R: RegrasLuta): string | null {
+export function intencaoTR(estilo: Estilo, S: EstadoTR, lado: number, R: RegrasLuta | null): string | null {
   semOraculo(estilo);
   if (S.L[lado].prep) return null;
   const g = estilo.gambits!;
@@ -75,7 +75,7 @@ export function intencaoTR(estilo: Estilo, S: EstadoTR, lado: number, R: RegrasL
   return legalTR(S, lado, g.final) ? g.final : "carregar";
 }
 /** a decisao do lado livre: [acao, motivo] (o indice da regra, "exploracao" ou "pesado_automatico"), como o decidirV2 */
-export function decidirTR(estilo: Estilo, S: EstadoTR, lado: number, rng: Rng, ctx: Contexto | null, R: RegrasLuta): [string, number | string] {
+export function decidirTR(estilo: Estilo, S: EstadoTR, lado: number, rng: Rng, ctx: Contexto | null, R: RegrasLuta | null): [string, number | string] {
   semOraculo(estilo);
   const g = estilo.gambits!;
   if (S.L[lado].prep) {

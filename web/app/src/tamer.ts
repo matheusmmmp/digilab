@@ -41,7 +41,7 @@
    saem do registro no descarte unico 6 (descartarPetsAntigos), com aviso na tela; o recorde da Fabrica recomeca. O resto do Tamer (as
    medalhas, os itens, o titulo, os recordes das instalacoes, o Salao) fica. Os registros 1 a 6 ainda se leem (com a Fabrica de antes). */
 import {
-  ARENA_POR_ID, CARTA_DA_REVANCHE, CIT, ESTAGIOS_SALAO, INSTALACOES, LUTAS_SERIE_FABRICA, TentativaFabrica, VERSAO_FABRICA, VERSAO_FABRICA_ATUAL, VERSAO_FABRICA_TR, VERSOES_FABRICA, sementeFabrica, sementeSalao, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHAS, MEDALHAS_LIGA, MEDALHA_POR_ID, Motor, NPC, PetMorto,
+  ARENA_POR_ID, CARTA_DA_REVANCHE, CIT, ESTAGIOS_SALAO, INSTALACOES, LUTAS_SERIE_FABRICA, TentativaFabrica, VERSAO_FABRICA_ATUAL, VERSAO_FABRICA_TR, VERSOES_FABRICA, sementeFabrica, sementeSalao, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHAS, MEDALHAS_LIGA, MEDALHA_POR_ID, Motor, NPC, PetMorto,
   cartaDe, ehInstalacao, itemDe, medalhaDoLider, nomeForma, type Estagio, type IdInstalacao, type Medalha,
 } from "../motor/index.ts";
 import { CHAVE, type Armazenamento } from "./save.ts";
@@ -77,7 +77,7 @@ export interface Campeao { n: number; quando: number; pet: number; forma: string
     tick dele) */
 export interface Recorde { inst: IdInstalacao; valor: number; quando: number; pet: number; forma: string; tick: number }
 /** Fabrica: o comeco da tentativa n (1 = a primeira), a semente dela (sementeFabrica(n)), o alugado escolhido (0 a 2) e a versao das regras
-    (registro versao 6; sem ela, a Fabrica de antes, VERSAO_FABRICA) */
+    (registro versao 6; sem ela, a Fabrica de antes, que saiu com o combate por turnos: o registro nao a refaz, so o descarte a tira) */
 export interface InicioFabrica { n: number; s: number; alugado: number; quando: number; v?: number }
 /** Fabrica: a luta k (0 = a primeira) da tentativa n, com a semente dela (sementeLutaFabrica) */
 export interface EventoLutaFabrica { n: number; k: number; s: number; quando: number }
@@ -230,7 +230,8 @@ export class Tamer {
     if (atual) throw new Error(`tentativa ${x.n} da Fábrica com a ${atual.n} ainda em andamento no registro do Tamer`);
     if (x.s !== sementeFabrica(x.n)) throw new Error(`a tentativa ${x.n} da Fábrica tem a semente ${sementeFabrica(x.n)}, não ${x.s}, no registro do Tamer`);
     if (x.v !== undefined && !VERSOES_FABRICA.includes(x.v)) throw new Error(`a tentativa ${x.n} da Fábrica com as regras da versão ${JSON.stringify(x.v)}, desconhecida, no registro do Tamer`);
-    this.fabrica.push(new TentativaFabrica(x.n, x.alugado, x.v ?? VERSAO_FABRICA));
+    if (x.v === undefined) throw new Error(`a tentativa ${x.n} da Fábrica é de antes do combate em tempo real (sem a versão das regras) e não se refaz mais; o descarte a tira do registro do Tamer`);
+    this.fabrica.push(new TentativaFabrica(x.n, x.alugado, x.v));
     this.quandoFabrica.push([]);
   }
   private _fabricaEmAndamento(n: number, o: string): TentativaFabrica {
@@ -330,8 +331,14 @@ export class Tamer {
 
 /** le o registro do Tamer (sem a chave: um Tamer novo, sem medalhas). Registro que nao reproduz falha alto */
 export function lerTamer(armaz: Armazenamento): Tamer {
+  const l = lerLogTamer(armaz);
+  return l ? Tamer.reproduzir(l.log) : new Tamer();
+}
+/** o registro do Tamer como esta, sem refazer os eventos (null: sem a chave); a versao e o formato conferem. O descarte usa este para
+    tirar a Fabrica de antes (que nao se refaz mais) antes de reproduzir */
+function lerLogTamer(armaz: Armazenamento): { versao: number; log: EventoTamer[] } | null {
   const bruto = armaz.getItem(CHAVE_TAMER);
-  if (bruto === null) return new Tamer();
+  if (bruto === null) return null;
   let d: unknown;
   try { d = JSON.parse(bruto); } catch (err) { throw new Error("o registro do Tamer não é JSON: " + (err instanceof Error ? err.message : String(err))); }
   const s = d as { versao?: unknown; log?: unknown };
@@ -340,7 +347,7 @@ export function lerTamer(armaz: Armazenamento): Tamer {
   if (s.versao === 7) for (const ev of s.log as EventoTamer[])
     if (Array.isArray(ev) && ev[0] === "fabrica" && (ev[1] as InicioFabrica).v !== VERSAO_FABRICA_TR)
       throw new Error(`o registro 7 do Tamer tem a tentativa ${(ev[1] as InicioFabrica).n} da Fábrica com as regras de antes (v ${JSON.stringify((ev[1] as InicioFabrica).v)})`);
-  return Tamer.reproduzir(s.log as EventoTamer[]);
+  return { versao: s.versao as number, log: s.log as EventoTamer[] };
 }
 /** o registro do Tamer sem a Fabrica de antes (descarte 6): tira as tentativas que nao sao da luta em tempo real. Devolve o registro novo e
     quantas tentativas sairam */
@@ -472,7 +479,7 @@ export function descartarPetsAntigos(armaz: Armazenamento & { removeItem(k: stri
   /* o descarte 6 (D-4): o Tamer fica, sem a Fabrica de antes; os saves descartados ficam para o arquivo; o aviso conta os dois */
   let fabrica = 0;
   if (tinhaTamer) {
-    const r = semFabricaAntiga(lerTamer(armaz).log);
+    const r = semFabricaAntiga(lerLogTamer(armaz)!.log);
     fabrica = r.tentativas;
     gravarTamer(armaz, Tamer.reproduzir(r.log));
   } else gravarTamer(armaz, new Tamer());

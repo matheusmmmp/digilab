@@ -76,7 +76,7 @@ export const BOTS_V21D: Partial<Record<FormaAdultaNormal, ListaGambits>> = {
   vigia: vigiaV21D(),
 };
 const gambitsV21D = (forma: FormaAdultaNormal, R: RegrasLuta): ListaGambits =>
-  (R && ((forma === "muralha" && R.muralhaListaEspelho) || (forma === "vigia" && R.vigiaBateEmQuemRecua && R.vigiaRecuaDoPreparoSobPele))
+  (((forma === "muralha" && R.muralhaListaEspelho) || (forma === "vigia" && R.vigiaBateEmQuemRecua && R.vigiaRecuaDoPreparoSobPele))
     ? BOTS_V21D[forma] : undefined) ?? BOTS_V21[forma];
 /* V21E (pets v9; espelho de bots._lista_v21e, chaves da ConfigCombateV21E): edicoes sobre a lista que a forma teria na V21D.
    - duelista e tita (duelistaDefendeDoGolpe, titaDefendeDoGolpe): "de perto, contra quem usa golpe rapido com frequencia, defender"
@@ -85,7 +85,7 @@ const gambitsV21D = (forma: FormaAdultaNormal, R: RegrasLuta): ListaGambits =>
    - muralha (muralhaContraGolpeNaPele): "o oponente usa pele dura com frequencia -> contra-golpe" em segundo */
 export const REGRA_DEFENDE_DO_GOLPE = Rg([D0, FQ("golpe_rapido")], "defender");
 export const REGRA_CONTRA_GOLPE_NA_PELE = Rg(FQ("pele_dura"), "contra_golpe");
-function editarV21E(forma: FormaAdultaNormal, g: ListaGambits, R: NonNullable<RegrasLuta>): ListaGambits {
+function editarV21E(forma: FormaAdultaNormal, g: ListaGambits, R: RegrasLuta): ListaGambits {
   const regras = [...g.regras], tira = (r: typeof regras[number]) => {
     const i = regras.findIndex(x => chaveRg(x) === chaveRg(r));
     if (i < 0) throw new Error(`regra da lista de ${forma} nao encontrada: ${chaveRg(r)}`);
@@ -102,13 +102,13 @@ function editarV21E(forma: FormaAdultaNormal, g: ListaGambits, R: NonNullable<Re
     throw new Error("as chaves da muralha na V21E pedem a lista do espelho (muralhaListaEspelho)");
   return regras.length === g.regras.length && regras.every((r, i) => r === g.regras[i]) ? g : { regras, final: g.final };
 }
-const temV21E = (R: RegrasLuta): R is NonNullable<RegrasLuta> => !!R && !!(R.duelistaDefendeDoGolpe || R.titaDefendeDoGolpe
+const temV21E = (R: RegrasLuta): boolean => !!(R.duelistaDefendeDoGolpe || R.titaDefendeDoGolpe
   || R.espelhoSemCarregar || R.muralhaSemCarregar || R.muralhaContraGolpeNaPele);
 /** as listas da V21E (pets v9) que mudam: duelista, tita, espelho e muralha */
 export const BOTS_V21E: Partial<Record<FormaAdultaNormal, ListaGambits>> = Object.fromEntries(
   (["duelista", "tita", "espelho", "muralha"] as const).map(f => [f, editarV21E(f, gambitsV21D(f, CV21E), CV21E)]));
-/** lista canonica da forma adulta sob as regras da luta: nas lutas V21D (pets v6-v8), a muralha e o vigia usam a variante; nas
-    lutas V21E (pets v9), tambem o duelista, o tita, o espelho e a muralha com as edicoes da V21E */
+/** lista canonica da forma adulta sob as regras da luta: a muralha e o vigia usam a variante da V21D e o duelista, o tita, o espelho
+    e a muralha, as edicoes da V21E (as regras dos pets v13, CV21E_TR) */
 export const gambitsAdulto = (forma: FormaAdultaNormal, R: RegrasLuta): ListaGambits => {
   const g = gambitsV21D(forma, R);
   if (!temV21E(R)) return g;
@@ -230,11 +230,10 @@ LUGARES_V6.forEach((L, i) => { L.rivais = CAMPANHA_V6.filter(c => c.lug === i).m
 /** campanha e lugares da versao do pet */
 export const campanhaDe = (versao: number): DesafioCampanha[] => versao >= 6 ? CAMPANHA_V6 : versao >= 5 ? CAMPANHA_V5 : CAMPANHA;
 export const lugaresDe = (versao: number): Lugar[] => versao >= 6 ? LUGARES_V6 : versao >= 5 ? LUGARES_V5 : LUGARES;
-/** v21: gambits canonicos da forma sem as regras de tecnica e da passiva do vigia (o NPC nao tem); nas lutas V21D (pets
-    v6) a lista da forma e a variante (gambitsAdulto); v2c: bots redesenhados da V2C (os BOTS_V2 da web); arena: as listas
+/** v21: gambits canonicos da forma sem as regras de tecnica e da passiva do vigia (o NPC nao tem); a lista da forma e a das regras da luta (gambitsAdulto); v2c: bots redesenhados da V2C (os BOTS_V2 da web); arena: as listas
     proprias dos lideres (GAMBITS_ARENA). `tecnica`: o lider de arena que tem tecnica (Torre de pedra: contra-golpe) fica com
     as regras dela */
-export function gambitNPC(estilo: string, R: RegrasLuta = null, tecnica: Tecnica | null = null): ListaGambits {
+export function gambitNPC(estilo: string, R: RegrasLuta = CV21E_TR, tecnica: Tecnica | null = null): ListaGambits {
   const [fam, nome] = estilo.split(":");
   if (fam === "v21") {
     const g = gambitsAdulto(nome as FormaAdultaNormal, R);
@@ -269,7 +268,7 @@ export const RIVAL_ESPECIE: Record<FormaAdultaNormal, Especie> = { duelista: "br
 export const formaRival = (nome: FormaAdultaNormal): Forma => ({ esp: RIVAL_ESPECIE[nome], est: "adulto", ramo: "sereno", linha: LINHA_DA_FORMA[nome], adulta: nome });
 export const BOT_TRACO: Record<string, TracoCombate> = { aleatorio: "golpe", agressivo: "golpe", tartaruga: "bloqueio", atirador: "finta", contragolpe: "agarrao", adaptativo: "carga", oraculo: "carga" };
 export const copiarGambits = (g: ListaGambits): ListaGambits => JSON.parse(JSON.stringify(g));
-/** estilo do bot sob as regras da luta (R = CV21D nas lutas de pets v6: a muralha e o vigia com as listas variantes) */
-export const estiloBot = (nome: string, R: RegrasLuta = null): Estilo => nome === "oraculo" ? { nome, oraculo: true, eps: CV.eps }
+/** estilo do bot sob as regras da luta (a muralha e o vigia com as listas variantes) */
+export const estiloBot = (nome: string, R: RegrasLuta = CV21E_TR): Estilo => nome === "oraculo" ? { nome, oraculo: true, eps: CV.eps }
   : NPC[nome] ? { nome, gambits: copiarGambits(gambitNPC(NPC[nome]!.estilo, R)), eps: NPC[nome]!.eps ?? CV.eps }
   : { nome, gambits: copiarGambits(BOTS_V2[nome] || gambitsAdulto(nome as FormaAdultaNormal, R)), eps: nome === "aleatorio" ? 1 : CV.eps };

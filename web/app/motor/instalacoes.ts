@@ -18,7 +18,7 @@
    (aprender regras de combate, contar lutas e vitorias, lesao na derrota). */
 import { copiarGambits, gambitsAdulto } from "./bots.ts";
 import { ESCALA, caraterCanonico, perfilDe } from "./catalogo.ts";
-import { CV, ESPECIES, FORMAS_AD, LINHA_DA_FORMA } from "./constantes.ts";
+import { CV, ESPECIES, FORMAS_AD, LINHA_DA_FORMA, VERSAO_PET } from "./constantes.ts";
 import type { Lutador, RegrasLuta } from "./combate.ts";
 import { VERSAO_LIGA } from "./liga.ts";
 import { nomeForma } from "./nomes.ts";
@@ -72,11 +72,11 @@ export function formaRivalInstalacao(s: number, k: number): Forma {
   return { esp, est: "mega", ramo: "sereno", linha: LINHA_DA_FORMA[adulta], adulta };
 }
 /** o lutador do rival da luta k: o Mega com a tecnica da linha, a passiva da forma, o carater canonico e a lista canonica dele sob as
-    regras da luta (V21D nos pets v6); epsilon dos bots canonicos. Com a escala ligada (o app): E = vida do Mega na escala dos pets v6 x
+    regras da luta; epsilon dos bots canonicos. Com a escala ligada (o app): E = vida do Mega na escala dos pets x
     fator, sem treino (como os Megas da Liga) */
 export function rivalInstalacao(s: number, k: number, R: RegrasLuta, fator: number = FATOR_INSTALACAO): Lutador {
   const f = formaRivalInstalacao(s, k), adulta = f.adulta as (typeof FORMAS_AD)[number];
-  const p = perfilDe(f, caraterCanonico(adulta), 1, null, true, VERSAO_INSTALACOES);
+  const p = perfilDe(f, caraterCanonico(adulta), 1, null, true, VERSAO_PET);
   const cond = ESCALA.ligada ? { ...p, escala: p.escala! * fator } : p;
   return { nome: "Rival " + nomeForma(f), estilo: { nome: `fronteira:${adulta}`, gambits: copiarGambits(gambitsAdulto(adulta, R)), eps: CV.eps }, cond };
 }

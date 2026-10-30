@@ -66,7 +66,7 @@ export interface ResultadoLutaTR {
   entrada: { A: Lutador; B: Lutador; semente: number; o: OpcoesTR };
 }
 export interface OpcoesTR {
-  R?: RegrasLuta;
+  R?: RegrasLuta | null;
   /** o lado A comeca com esta vida e este Guts (as lutas seguidas sem cura); null = os dois inteiros */
   ini?: { hp: number; guts: number } | null;
   desafiado?: Desafiado;
@@ -91,7 +91,7 @@ const livre = (S: EstadoTR, l: LadoTR): boolean => l.acao === null && S.passo >=
 /** +1: o rival esta a direita (o lado A); -1: a esquerda (o lado B). Os corpos nao se cruzam */
 const rumo = (lado: number): number => (lado === 0 ? 1 : -1);
 
-/** o fim da luta: o fimV2 de hoje, com o limite por tempo */
+/** o fim da luta: KO ou o limite por tempo (o desafiado fica com a luta; sem ele, a fracao de vida) */
 export function fimTR(S: EstadoTR, desafiado: Desafiado = null): [number, "ko" | "limite"] | null {
   const [a, b] = S.L, koA = a.hp <= 0, koB = b.hp <= 0;
   if (koA || koB) return [koA && koB ? .5 : koA ? 0 : 1, "ko"];
@@ -107,7 +107,7 @@ interface Dano { para: number; valor: number; causa: number | null; cac: boolean
 
 /** a luta em andamento: o estado, as duas RNG de politica, o registro das acoes e o dos eventos */
 export interface LutaTR {
-  S: EstadoTR; A: Lutador; B: Lutador; rng: Rng[]; R: RegrasLuta; acoes: AcaoRegistro[]; eventos: EventoTR[] | null; hpMax0: number[];
+  S: EstadoTR; A: Lutador; B: Lutador; rng: Rng[]; R: RegrasLuta | null; acoes: AcaoRegistro[]; eventos: EventoTR[] | null; hpMax0: number[];
   curou: boolean[];
 }
 
@@ -310,7 +310,7 @@ function aplicarDanos(Lt: LutaTR, danos: Dano[]): void {
   acomodar(S);
 }
 
-/** a luta inteira, do comeco ao fim (o jogarV2 do tempo real) */
+/** a luta inteira, do comeco ao fim (o equivalente em tempo real do antigo jogarV2) */
 export function jogarTR(A: Lutador, B: Lutador, semente: number, o: OpcoesTR = {}): ResultadoLutaTR {
   const Lt = criarLutaTR(A, B, semente, o), S = Lt.S;
   const E0 = { hpMax: [S.L[0].hpMax, S.L[1].hpMax], hp: [S.L[0].hp, S.L[1].hp], guts: [S.L[0].guts, S.L[1].guts] };

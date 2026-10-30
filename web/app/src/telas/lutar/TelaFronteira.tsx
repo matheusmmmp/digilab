@@ -19,12 +19,12 @@ import { diaDe } from "../pet/TelaPet.tsx";
 import { CartaoFabrica, CartaoSalao } from "./FabricaSalao.tsx";
 
 /** a ultima tentativa da Liga no registro do pet (null: nenhuma): as lutas jogadas (o pet no fim de cada uma) e o indice do evento */
-function ultimaTentativa(m: Motor): { idx: number; lutas: { venceu: boolean; vida: number; turnos: number; dur: string }[] } | null {
+function ultimaTentativa(m: Motor): { idx: number; lutas: { venceu: boolean; vida: number; dur: string }[] } | null {
   let idx = -1;
   for (let i = m.log.length - 1; i >= 0; i--) { const ev = m.log[i]; if (ev[1] === "l" && ev[2].r === RIVAL_LIGA) { idx = i; break; } }
   if (idx < 0) return null;
   const L = reconstruirLuta(m, idx);
-  return { idx, lutas: L.serie.map(r => ({ venceu: r.pontosA === 1, vida: Math.max(0, r.E.L[0].hp) / r.E.L[0].hpMax, turnos: r.turnos.length, dur: duracaoLuta(r) })) };
+  return { idx, lutas: L.serie.map(r => ({ venceu: r.pontosA === 1, vida: Math.max(0, r.E.L[0].hp) / r.E.L[0].hpMax, dur: duracaoLuta(r) })) };
 }
 const pct = (x: number): string => `${Math.round(x * 100)}%`;
 const vitorias = (n: number): string => `${n} vitória${n === 1 ? "" : "s"}`;

@@ -1,13 +1,13 @@
 /* As instalacoes da Fronteira (docs/DESIGN_FRONTEIRA.md, secoes 3 e 4; medalhas parte 4b; so no jogo, so o pet v13): a Torre de Batalha e o
    Palacio. O sorteio reproduzivel dos rivais (da semente da tentativa, que sai do registro do pet), a sequencia sem cura, o fim na
    derrota, o Palacio sem travas, vetos e chips de regra, a entrada depois do titulo (evento "f"), o recorde no registro do Tamer e o replay.
-   As lutas do pet v13 sao em tempo real (res.tr; res.turnos vem vazio). O pet de verdade e um Mega v13 feito aqui (megaTreinado, o mesmo
+   As lutas do pet v13 sao em tempo real (res.tr). O pet de verdade e um Mega v13 feito aqui (megaTreinado, o mesmo
    do teste da Liga: o e2e/save_liga.json e de um pet v6), que conhece as 6 medalhas. */
 import { afterEach, beforeEach, describe, expect, test } from "vitest";
 import {
   ACOES_DONO_JOGO_V11, CAT, CD, CMG, CTR, MEDALHAS_LIGA, TPD, criarDono, criarRng, jogarLuta, nomeForma,
-  CESC_V6, CV21D, ESPECIES, FATOR_INSTALACAO, FATOR_LIGA, FORMAS_AD, INSTALACOES, LUTAS_MAX_INSTALACAO, MEDALHAS, chaveRegra, chipDe, ehInstalacao,
-  formaRivalInstalacao, gambitsAdulto, hashSemente, instalacaoDe, jogarSequencia, jogarSerie, jogarV2, lutadorLiga, lutadorPet, regraDe, rivalInstalacao,
+  CESC_V9, CV21E_TR, ESPECIES, FATOR_INSTALACAO, FATOR_LIGA, FORMAS_AD, INSTALACOES, LUTAS_MAX_INSTALACAO, MEDALHAS, chaveRegra, chipDe, ehInstalacao,
+  formaRivalInstalacao, gambitsAdulto, hashSemente, instalacaoDe, jogarSequencia, jogarSerie, lutadorLiga, lutadorPet, regraDe, rivalInstalacao,
   sementeDaSerie, sementeTentativa, type EventoRegistro, type IdInstalacao,
 } from "../motor/index.ts";
 import { ESCALA, ligarEscala } from "../motor/catalogo.ts";
@@ -100,14 +100,14 @@ describe("as instalacoes e o sorteio dos rivais", () => {
     expect([...formas].sort()).toEqual([...FORMAS_AD].sort());
     expect([...esps].sort()).toEqual([...ESPECIES].sort());
   });
-  test("o rival e o Mega canonico: tecnica da linha, passiva da forma, lista canonica V21D, E = vida do Mega na escala v6 x fator", () => {
+  test("o rival e o Mega canonico: tecnica da linha, passiva da forma, lista canonica das regras da luta, E = vida do Mega na escala x fator", () => {
     for (let k = 0; k < 20; k++) {
-      const s = hashSemente("rival", k), f = formaRivalInstalacao(s, 0), L = rivalInstalacao(s, 0, CV21D);
+      const s = hashSemente("rival", k), f = formaRivalInstalacao(s, 0), L = rivalInstalacao(s, 0, CV21E_TR);
       expect(L.cond.est).toBe("mega");
       expect(L.cond.passiva).toBe(f.adulta);
       expect(L.cond.tecnica).not.toBeNull();
-      expect(L.cond.escala).toBeCloseTo(CESC_V6.vida.mega * FATOR_INSTALACAO, 6);
-      expect(L.estilo.gambits).toEqual(gambitsAdulto(f.adulta as (typeof FORMAS_AD)[number], CV21D));
+      expect(L.cond.escala).toBeCloseTo(CESC_V9.vida.mega * FATOR_INSTALACAO, 6);
+      expect(L.estilo.gambits).toEqual(gambitsAdulto(f.adulta as (typeof FORMAS_AD)[number], CV21E_TR));
     }
   });
 });
@@ -167,7 +167,6 @@ describe("a sequencia", () => {
         } else expect(res.E0.L[0].hp).toBe(res.E0.L[0].hpMax);
         const ini = j ? { hp: serie[j - 1].E.L[0].hp, guts: serie[j - 1].E.L[0].guts } : null;
         const livre = jogarLuta(L.A, L.rivais![j], sementeDaSerie(s, j), m.regras, ini, 1);
-        expect(res.turnos).toEqual([]);                                              /* em tempo real nao ha turnos */
         expect(res.tr!.acoes).toEqual(livre.tr!.acoes);                              /* a mesma luta; o limite e do desafiado, o rival (lado B) */
         expect(res.tr!.passos).toBe(livre.tr!.passos);
         expect(res.pontosA).toBe(livre.pontosA);
@@ -193,9 +192,9 @@ describe("a sequencia", () => {
     expect(m.historico.some(h => /^na Torre de Batalha, contra .+ \(luta 1\): (venceu|perdeu|empatou)$/.test(h.a))).toBe(true);
   });
   test("jogarSerie e jogarSequencia com os rivais de uma lista: as mesmas lutas (a Liga e a Cidadela nao mudam)", () => {
-    const A = lutadorLiga(0, CV21D), Bs = [1, 2, 3].map(i => lutadorLiga(i, CV21D));
-    expect(jogarSerie(A, Bs, 55, CV21D, 1)).toEqual(jogarSequencia(A, k => Bs[k], Bs.length, 55, CV21D, 1));
-    expect(() => jogarSequencia(A, () => Bs[0], 0, 55, CV21D, 1)).toThrow(/sem luta/);
+    const A = lutadorLiga(0, CV21E_TR), Bs = [1, 2, 3].map(i => lutadorLiga(i, CV21E_TR));
+    expect(jogarSerie(A, Bs, 55, CV21E_TR, 1)).toEqual(jogarSequencia(A, k => Bs[k], Bs.length, 55, CV21E_TR, 1));
+    expect(() => jogarSequencia(A, () => Bs[0], 0, 55, CV21E_TR, 1)).toThrow(/sem luta/);
   });
   test("nada da Fronteira deixa o pet mais forte: treino, chips, cartas e stats de luta iguais depois das tentativas", () => {
     const m = mega(), antes = { tr: JSON.stringify(m.treino.assinatura()), chips: [...m.chips], pontos: m.pontosDeLuta(), cartas: [...m.cartasUsadas], carta: m.carta };

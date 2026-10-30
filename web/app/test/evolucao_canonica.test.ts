@@ -1,7 +1,7 @@
 /* Evolucao canonica (docs/DESIGN_EVOLUCAO_CANONICA.md): Champion -> Ultimate -> Mega no pet v13 (o unico que ficou no motor;
    as medalhas liberam as evolucoes, entao os helpers dao as 5 de uma vez). */
 import { afterEach, describe, expect, test } from "vitest";
-import { ACOES_DONO_JOGO_V11, CAT, CD, CMD, CMG, CSO, CTR, DUR_EVO, ESPECIES, LINHAS, TICK_INICIAL, TPD, VERSAO_PET } from "../motor/constantes.ts";
+import { ACOES_DONO_JOGO_V11, CAT, CD, CESC_V9, CMD, CMG, CSO, CTR, DUR_EVO, ESPECIES, LINHAS, TICK_INICIAL, TPD, VERSAO_PET } from "../motor/constantes.ts";
 import { CAMPANHA_V6, LUGARES_V6, NPC } from "../motor/bots.ts";
 import { ESCALA, ligarEscala, perfilDe } from "../motor/catalogo.ts";
 import { criarDono, type VisaoDono } from "../motor/donos.ts";
@@ -167,7 +167,7 @@ describe("campanha do pet v13", () => {
   test("na escala, os NPCs da Espiral tem E pela vida do Mega; o Myotismon e o Piedmon de sempre", () => {
     ligarEscala(true);
     const piedmon5 = lutadorBot("npc_v5_piedmon"), myot = lutadorBot("npc_v5_myotismon"), sob = lutadorBot("npc_tier3_soberano");
-    expect(piedmon5.cond.escala).toBeCloseTo(CMG.vida * NPC.npc_v5_piedmon!.fator!, 9);
+    expect(piedmon5.cond.escala).toBeCloseTo(CESC_V9.vida.mega * NPC.npc_v5_piedmon!.fator!, 9);   /* a escala do v13 (CESC_V9) */
     expect(piedmon5.cond.est).toBe("mega");
     expect(myot.cond).toEqual(sob.cond);
     expect([myot.estilo.gambits, myot.estilo.eps]).toEqual([sob.estilo.gambits, sob.estilo.eps]);

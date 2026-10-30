@@ -24,7 +24,7 @@ describe("os pets v13 lutam em tempo real", () => {
     const m = rookie(101);
     expect(m.versao).toBe(13); expect(m.regras).toBe(CV21E_TR);
     const r = luta(m);
-    expect(r.res.tr).toBeDefined(); expect(r.res.turnos).toEqual([]);
+    expect(r.res.tr).toBeDefined();
     expect(r.res.tr!.passos).toBeGreaterThan(0);
     expect(r.res.pontosA).toBe(r.res.tr!.pontosA);
     /* o evento no registro e o "l" de sempre: so o rival e a semente */

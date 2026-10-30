@@ -16,7 +16,7 @@
      mesmo faria (GambitsPet.listaSozinho);
    - Montanha Espiral (Mega), Piedmon: o chefe da campanha, sem regra a mais.
 
-   Fatores dos lideres: calibrados no motor web com as regras e a escala dos pets v6 (CESC_V6; test/calibrar_arenas.mjs,
+   Fatores dos lideres: calibrados no motor web com as regras e a escala dos pets v6 (hoje a vida e o beta da CESC_V9, os mesmos; test/calibrar_arenas.mjs,
    artifacts_campanha/arenas/). Metas (decisao do Matheus, 2026-09-30: o treino tem que decidir): sem treino <= 0,05 e com o
    treino tipico >= 0,80, sem forma travada. PROPOSTOS. O fator fica aqui quando o lider e um NPC que ja existia (Gazimon 1,3,
    Guardromon 1,6, Myotismon 0,9 na serie, Piedmon 1,6; fora da arena e nos pets v1-v5, os de sempre); os lideres novos tem o
@@ -91,7 +91,7 @@ export const arenaDaLuta = (rival: string, versao: number): Arena | null => vers
 export const sementeDaSerie = (semente: number, k: number): number => k ? hashSemente("serie-arena", semente, k) : semente;
 /** a luta (ou as lutas seguidas) de arena: `lutas` lutas, parando na primeira que nao for vitoria; da segunda em diante o
     pet (lado A) comeca com a vida e o guts do fim da anterior, e o lider (B) volta inteiro. Deterministico. `desafiado`: o do
-    limite de turnos (combate.fimV2); nos pets v6 o rival, e uma luta da serie que chega ao limite e derrota e quebra a serie */
+    limite de tempo (combate_tr/luta.ts, fimTR); o rival, e uma luta da serie que chega ao limite e derrota e quebra a serie */
 export function jogarArena(A: Lutador, B: Lutador, semente: number, R: RegrasLuta, lutas = 1, desafiado: Desafiado = null,
   carta: EfeitoCarta | null = null): ResultadoLuta[] {
   if (!Number.isInteger(lutas) || lutas < 1) throw new Error("lutas da arena inválidas: " + lutas);

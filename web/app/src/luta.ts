@@ -18,7 +18,7 @@ import { conferirRevanche, type Campeao, type ItemGanho, type MedalhaGanha, type
 import { SOM } from "./som.ts";
 
 /** "limite de turnos" (por turnos) ou "limite de tempo" (pets v13, em tempo real) */
-const limiteDe = (res: ResultadoLuta): string => res.tr ? "limite de tempo" : "limite de turnos";
+const limiteDe = (_res: ResultadoLuta): string => "limite de tempo";
 
 /* bots classicos: Digimon do mapa da Etapa 0 (so rotulo) */
 import { DIGIMON_BOT } from "./nomesRivais.ts";

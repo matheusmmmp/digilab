@@ -1783,3 +1783,21 @@ for (const [largura, altura] of [[390, 844], [1280, 800]] as const) for (const t
     expect(erros).toEqual([]);
   });
 }
+/* com os clipes do UP ligados na aba (?clipes_up=1): o palco troca o clipe pela acao (Run, Attack_1, Stun, Die), e nenhum clipe falta (um
+   clipe que falta lanca o erro no quadro, e a vigia reprova). A captura vai para test-results/ */
+test("luta em tempo real: com os clipes do UP, a luta inteira desenha sem erro", async ({ page }) => {
+  test.setTimeout(240_000);
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await semear(page, SAVE_V13, undefined, TAMER_V13);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "?clipes_up=1#/lutar/campanha");
+  await page.locator(".camp-lutar:not([disabled]):visible").first().click();
+  await expect(page.getByTestId("luta-relogio")).toHaveText(/^0:0[2-9]$/, { timeout: 60_000 });
+  await page.getByRole("button", { name: "Pausar a animação" }).click();
+  await page.screenshot({ path: "test-results/luta-tr-clipes-1280.png" });
+  await page.getByRole("button", { name: "Continuar a animação" }).click();
+  await page.getByRole("button", { name: "Velocidade dobrada" }).click();
+  await expect(page.locator("dialog.modal-res[open]")).toBeVisible({ timeout: 120_000 });
+  await page.screenshot({ path: "test-results/luta-tr-resultado-1280.png" });
+  expect(erros).toEqual([]);
+});

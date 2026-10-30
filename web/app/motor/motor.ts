@@ -327,9 +327,9 @@ export class Motor {
   /* ---------------------------------------------------------------- campanha e lutas */
   /** lugares da campanha desta versao (pets v5: a Montanha Espiral, com o Piedmon) */
   get lugares(): Lugar[] { return lugaresDe(this.versao); }
-  /** regras das lutas deste pet: V21D nos pets v6 (docs/VALIDACAO_V21D.md), V21C nos v1-v5 */
+  /** regras das lutas deste pet: CV21E_TR (a luta em tempo real dos pets v13) */
   get regras(): RegrasLuta { return regrasDaVersao(this.versao); }
-  /** quem fica com a luta no limite de turnos: nos pets v6 o rival (o pet sempre desafia); nos v1-v5, ninguem (a fracao de vida) */
+  /** quem fica com a luta no limite de tempo: o rival (o pet sempre desafia) */
   get desafiado(): Desafiado { return desafiadoDaVersao(this.versao); }
   lugarVencido(L: number): boolean { return this.lugares[L].rivais.some(r => this.campanha[r] > 0); }
   /** indice do lugar do NPC na campanha deste pet (na v6 o Myotismon e a Montanha Espiral mudam de indice) */
