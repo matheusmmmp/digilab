@@ -210,6 +210,58 @@ As metas das fases 1 e 2 não mudam: a bancada delas reproduz os artefatos grava
 - **P-3** não fechou, e esta fase não tem alavanca para ele (seção 3.3). Fica como questão aberta, sem número.
 - **P-4** não fechou. Pela DE-4 (DECIDIDA), o 0,8 fica, e quem se ajusta são os rivais (os fatores), na fase 4. A fase 4 começa com:
   - **Champion:** o Tortomon contra o guardião e o colosso (0,57 e 0,59);
-  - **Ultimate:** a sentinela e o emboscador contra o Myotismon (0,00 e 0,04). Essa parte depende da resposta do Matheus sobre as formas
-    de longe (fase 2, seção 2.5); fator nenhum de um rival fecha o P-4 sem mexer no resto se as formas de longe não mudarem.
+  - **Ultimate:** a sentinela e o emboscador contra o Myotismon (0,00 e 0,04). Essa parte dependia da resposta do Matheus sobre as formas
+    de longe (fase 2, seção 2.5). Ele decidiu pelo multiplicador do disparo (DE-8), e o passo do disparo, abaixo, mostra que o 6× fecha
+    essa parte, mas reprova o T-1.
 - **A conferência não rodou:** ela roda uma vez, na fase 5.
+
+## O passo do disparo (depois da fase 3; DE-8)
+
+Worker: Claude Code, Opus 5.5, worktree `v2-combate-tr`, 2026-10-30. A decisão do Matheus (2026-10-30, DECIDIDA pela recomendação do
+coordenador; o plano a registra como DE-8): **um número próprio do tempo real para o disparo**, um multiplicador do dano dele no candidato
+v14, calibrado nesta rodada. A base (o disparo e o pesado de `CV` e do perfil) não muda.
+
+### O que mudou no código
+
+- **`RelogioTR.disparo`** (`web/app/motor/combate_tr/constantes_tr.ts`) multiplica o dano do disparo na luta em tempo real
+  (`combate_tr/luta.ts`). Na v13 vale 1, e as vidas v13 conferem iguais.
+- **As bancadas das fases 2 e 3 ganharam `--disparo X`;** a da fase 1 já aceitava `--relogio '{"disparo":X}'`.
+- **O candidato fica em 1** (seção abaixo): o `RELOGIO_V14` não muda.
+
+### A grade (só as sementes de calibração; no máximo 4 processos em paralelo; `disparo/grade1/` a `grade3/`)
+
+- Cada rodada mede as metas das formas (F-1 a F-7) com as `LISTAS_V14`, para valores de 1,5 a 8 (rodada 1: 1,5 a 3; rodada 2: 4 a 8;
+  rodada 3: 4,5 a 7).
+- A melhor nota das formas é **6×** (`grade2/d6.json`). A nota é a soma da distância de cada meta F à faixa dela.
+- O Ultimate de longe × de perto não chega à faixa com nenhum valor: fica em 0,25 com 8×. O caçador do Champion passa de 0,60 acima de
+  3×.
+
+### A conferência das outras metas
+
+- **Todo valor acima de 1 reprova o T-1 da fase 1** (`disparo/relogio/`). A luta média cai para 39,4 s com 1,5×, 36,0 s com 3× e 34,8 s
+  com 6×, abaixo dos 40 s da DE-7. Com menos lutas no limite, a média encurta.
+- **Pela regra do plano** (seção 5: "um ajuste que reprova uma meta já fechada de uma fase anterior volta atrás"), **o candidato fica em
+  1**. F-1 e F-5 ficam como na fase 2.
+- **O que o 6× mudaria,** medido em todas as metas (`disparo/conferencia_d6/`). É uma decisão para o Matheus, porque troca o T-1 pelo
+  resto:
+
+| meta | com o candidato (disparo 1) | com 6× | |
+|---|---|---|---|
+| T-1 | 41,9 s / 38,0 s | 34,8 s / 32,9 s | **reprova** (fechada na fase 1) |
+| T-2 | total 0,050; pior par 0,56 | total 0,021; pior par 0,40 | melhora; não fecha |
+| T-3, T-4, T-5 | passam | passam (62,0 s; 0,512; 0,697) | iguais |
+| F-1 | 5 fora | 4 fora: espelho 0,35, emboscador 0,39, muralha 0,63, tita 0,69 | melhora; não fecha |
+| F-2 | 0,50 | 0,34 | melhora; não fecha |
+| F-3 | passa | passa | igual |
+| F-4 | Champion de 0,49 a 0,51; Rookie 0,605 | o caçador 0,68; Rookie 0,605 | piora no Champion |
+| F-5 | Champion 0,345; Ultimate 0,116 | Champion 0,533; Ultimate 0,198 | o Champion fecha; o Ultimate, não |
+| F-6 | espelho 0,19; sentinela 0,118 | espelho 0,111 | melhora; não fecha |
+| F-7 | 3 fora (devastador 0,68; bastião 0,67; predador 0,23) | só o predador fora (0,21) | melhora; não fecha |
+| P-1, P-2 | passam | passam | iguais |
+| P-3 | Champion 0,49; Ultimate 0,30 | Champion 0,573; Ultimate 0,39 | o Champion fecha |
+| P-4 | Champion 0,76; Ultimate 0,755 | Champion 0,75; Ultimate 1,00 | o Ultimate fecha |
+
+- **A recomendação, com o custo de errar:** se o Matheus aceitar uma luta média perto de 35 s (abaixo da DE-7), o 6× fecha F-5 no
+  Champion, P-3 no Champion e P-4 no Ultimate, e quase fecha F-6 e F-7. O custo é a luta mais curta: as séries ficam mais rápidas, e as
+  regras aprendidas têm menos tempo para pesar (o custo que a DE-7 registrou). Se a DE-7 ficar, o disparo fica em 1, e a fase 4 começa
+  com as formas de longe fracas. A decisão é dele, e nenhum número muda até lá.

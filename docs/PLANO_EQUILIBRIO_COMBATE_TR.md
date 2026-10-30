@@ -208,6 +208,7 @@ dela, e o custo de errar fica registrado.
 | **DE-5** (DECIDIDA) | a meta de estágio: a de hoje (vizinho ≤ 0,10) ou a da arena do UP (o de cima vence ~0,70, dois acima ~0,85)? | **a de hoje** (P-1): "Champion nunca vence Mega" está decidido, e a progressão do DigiLab foi calibrada nela | com a do UP, um pet de baixo bem treinado vence às vezes, e a campanha e as medalhas mudam de ritmo |
 | **DE-6** (DECIDIDA) | as faixas de sementes `68101…68505` (calibração) e `70101…70505` (conferência) | **reservar** as duas na `FAIXAS_RESERVADAS` num commit próprio, depois da aprovação | sem reservar, outra frente pode usar a mesma faixa, e a validação deixa de ser única |
 | **DE-7** (DECIDIDA) | a duração alvo da luta (T-1: média de 40 a 60 s) | **manter**: ela cerca a medida de hoje e fica antes da morte súbita | uma luta mais longa pesa nas séries (Cidadela, Liga, Salão); uma mais curta reduz o efeito das regras aprendidas |
+| **DE-8** (DECIDIDA, 2026-10-30, depois da fase 2) | as formas de longe (F-1, F-5): mudar a base do combate ou criar um número próprio do tempo real para o disparo? | **um multiplicador do disparo só no tempo real** (`RelogioTR.disparo`), PROPOSTO, no candidato v14 e calibrado nesta rodada; a base (o disparo e o pesado de `CV` e do perfil) não muda. Decisão do Matheus pela recomendação do coordenador | um número a mais no tempo real que o Python não tem. Mudar a base mexeria na paridade com o Python e nas vidas de todas as versões |
 
 ## 8. A entrega
 
