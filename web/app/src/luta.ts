@@ -94,6 +94,8 @@ export interface Palco {
   /** uma instalacao da Fronteira (pets v6, modo fronteira): qual, a luta que esta no palco (1 = a primeira: vale a vitoria k) e a vida
       com que o pet comecou esta luta (fracao da maxima); null fora dela */
   sequencia?: { inst: Instalacao; k: number; vida: number } | null;
+  /** a carta do Tamer que vale nesta luta (o id; itens.ts), para o aviso na tela; null: nenhuma */
+  carta?: string | null;
   /** o aviso das lutas seguidas que nao sao da Cidadela nem da Liga (a Fabrica, o Salao: mostrarLutas); null: o de sempre */
   avisoSerie?: string | null;
 }
@@ -245,7 +247,7 @@ export function lutarAnimado(npc: string | null): void {
       if (primeiraDoLugar) LUTA.campSel = null;   /* venceu o lugar pela 1a vez: o mapa vai ao proximo */
       p.resultado = { res, npc, notasAntes, cenario, ativasAntes, ativasDepois, lugarJaVencido, sparringAntes, sparringContou: adolescente && !cenario, idxLog, medalha,
         serie, nLutas, arena, carta, itens, lideres: null, titulo: null, instalacao: null, rivais: null, recorde: null };
-  });
+  }, null, { carta });
 }
 /** a Liga dos Lideres (pets v6; motor/liga.ts): a tentativa inteira entra no registro como uma luta (Motor.lutar com o rival da Liga,
     sem carta) e as 6 lutas sao animadas uma depois da outra, cada uma contra o Mega do lider dela. O titulo (as 6 vencidas) vira o
@@ -327,7 +329,7 @@ const PAUSA_FIM = 900, PAUSA_SERIE = 1500;
     e x2 so mudam a velocidade de mostrar; no fim chama fim(palco) e para. nLutas: quantas lutas a serie tem (as jogadas podem ser
     menos: ela para na primeira que nao for vitoria) */
 function animar(serie: ResultadoLuta[], nLutas: number, As: LutadorTela | LutadorTela[], Bs: LutadorTela | LutadorTela[], modo: Modo, cena: IdCenaTR, arena: Arena | null,
-  fim: (p: Palco) => void, inst: Instalacao | null = null, opc: { textoDe?: (k: number) => string; avisoSerie?: string } = {}): void {
+  fim: (p: Palco) => void, inst: Instalacao | null = null, opc: { textoDe?: (k: number) => string; avisoSerie?: string; carta?: string | null } = {}): void {
   if (!serie.length) throw new Error("série de lutas vazia para animar");
   for (const r of serie) if (!r.tr) throw new Error("luta sem o tempo real: o palco só desenha as lutas dos pets v13");
   LUTA.lutando = true;
@@ -340,7 +342,7 @@ function animar(serie: ResultadoLuta[], nLutas: number, As: LutadorTela | Lutado
   const abrir = () => {
     const k = j + 1, en = serie[j].tr!.entrada, A = petDe(j), B = rivalDe(j);
     sim = criarLutaTR(en.A, en.B, en.semente, { ...en.o, eventos: true }); lidos = 0; acabou = false;
-    const base = { modo, A, B, cena, hud: hudDe(sim.S), sim, visual: visualNovoTR(), koEm: [null, null], segundos: 0, morteSubita: false, regra: null, resultado: null, arena };
+    const base = { modo, A, B, cena, hud: hudDe(sim.S), sim, visual: visualNovoTR(), koEm: [null, null], segundos: 0, morteSubita: false, regra: null, resultado: null, arena, carta: opc.carta ?? null };
     if (inst) {
       const L0 = sim.S.L[0], vida = Math.max(0, L0.hp) / L0.hpMax;
       LUTA.palco = { ...base, callout: `LUTA ${k}`, serie: null, liga: false, sequencia: { inst, k, vida },
