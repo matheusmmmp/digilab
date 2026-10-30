@@ -420,3 +420,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-29 — COMBATE-TR R2b (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): o D-9, só a v13](registro/2026-10.md)
 - [2026-10-29 — COMBATE-TR R3 (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): o palco da luta em tempo real](registro/2026-10.md)
 - [2026-10-30 — COMBATE-TR R4 (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): os modos especiais e as cartas no tempo real](registro/2026-10.md)
+- [2026-10-30 — COMBATE-TR equilíbrio (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): o plano da rodada de equilíbrio do tempo real](registro/2026-10.md)
