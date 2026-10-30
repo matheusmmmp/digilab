@@ -9,7 +9,6 @@ import { textoSave } from "../../save.ts";
 import { diaDe, hhmm } from "../pet/TelaPet.tsx";
 import { LUTA, REPLAY, reconstruirLuta, reverLuta } from "../../luta.ts";
 import { ENDERECO_LUTA } from "../../rotas.ts";
-import { useDesktop } from "../../desktop.ts";
 import { Folha } from "../../componentes/Folha.tsx";
 import { PorqueLuta } from "../lutar/ModalResultado.tsx";
 
@@ -54,11 +53,11 @@ function ReplayLuta({ idx, fechar }: { idx: number; fechar: () => void }) {
 
 export function TelaRegistro({ irPet }: { irPet: () => void }) {
   const { motor: m } = useJogo(), [replay, setReplay] = useState(() => { const x = REPLAY.pedido; REPLAY.pedido = null; return x; }),
-    [filtro, setFiltro] = useState<Filtro>(replay !== null ? "luta" : "todos"), [msg, setMsg] = useState<{ txt: string; erro?: boolean } | null>(null), [confirmar, setConfirmar] = useState(false), [evSel, setEvSel] = useState<number | null>(null), desk = useDesktop();
+    [filtro, setFiltro] = useState<Filtro>(replay !== null ? "luta" : "todos"), [msg, setMsg] = useState<{ txt: string; erro?: boolean } | null>(null), [confirmar, setConfirmar] = useState(false), [evSel, setEvSel] = useState<number | null>(null);
   const nh = m.historico.length;
   const vis = m.historico.slice(-80).reverse().filter(h => filtro === "todos" || TIPO_REG[h.quem][0] === filtro);
-  /* detalhe: o evento tocado; sem toque, no desktop, o mais novo */
-  const ev = evSel !== null ? vis[evSel] : desk ? vis[0] : undefined;
+  /* detalhe: o evento tocado */
+  const ev = evSel !== null ? vis[evSel] : undefined;
   const detalhe = ev && <>
     <span className="dl-lcd">D{diaDe(ev.t)} {hhmm(ev.t)}</span>
     <b>{textoLinha(ev)}</b>
@@ -80,11 +79,10 @@ export function TelaRegistro({ irPet }: { irPet: () => void }) {
     catch { console.log(txt); setMsg({ txt: "Não foi possível copiar automaticamente. O registro está no console do navegador." }); }
   };
   return (
-    <div className={`tela dl desk reg-tela${replay !== null ? " reg-tela--replay" : ""}`}>
+    <div className={`tela dl reg-tela${replay !== null ? " reg-tela--replay" : ""}`}>
       {replay !== null && <ReplayLuta idx={replay} fechar={() => setReplay(null)} />}
       <section className="dl-card reg-cab">
-        <h2 className="desk-so reg-h">Replay</h2>
-        <p>O estado do pet nunca é salvo. Só este registro, e a vida é reconstruída a partir dele.</p>
+                <p>O estado do pet nunca é salvo. Só este registro, e a vida é reconstruída a partir dele.</p>
         <p className="reg-semente"><b>semente</b> <span className="dl-lcd">{m.semente}</span> · <span className="dl-lcd">{m.log.length}</span> <b>eventos</b></p>
         <div className="reg-bts">
           <button type="button" className="dl-btn" onClick={verificar}>Verificar replay</button>
@@ -93,19 +91,16 @@ export function TelaRegistro({ irPet }: { irPet: () => void }) {
         {msg && <p className={`reg-msg${msg.erro ? " erro" : ""}`} aria-live="polite"><i aria-hidden="true">{msg.erro ? "!" : "✓"}</i>{msg.txt}</p>}
       </section>
       <div className="reg-filtros" role="group" aria-label="Filtrar o registro">
-        <h2 className="desk-so reg-h">Mostrar</h2>
         {FILTROS.map(([f, rot]) => <button type="button" key={f} className="chip" aria-pressed={filtro === f} onClick={() => { setFiltro(f); setEvSel(null); }}>{rot}</button>)}
       </div>
       <div className="log" aria-live="polite">
-        <h2 className="desk-so reg-h reg-log-tit"><span>Registro</span><small>dia {diaDe(m.e.tick)} · o mais novo em cima</small></h2>
         {vis.length ? vis.map((h, i) => {
           const [, rot, cor] = TIPO_REG[h.quem];
-          return <button type="button" className={`reg-linha${h.quem === "recusa" ? " reg-linha--recusa" : ""}`} key={i} aria-pressed={desk ? evSel === i : undefined}
+          return <button type="button" className={`reg-linha${h.quem === "recusa" ? " reg-linha--recusa" : ""}`} key={i}
             onClick={() => setEvSel(i)}><span className="dl-lcd">D{diaDe(h.t)} {hhmm(h.t)}</span><span className={`reg-tag reg-${cor}`}>{rot}</span><span>{textoLinha(h)}</span></button>;
         }) : <div className="dl-apoio">nada deste tipo nas últimas 80 linhas</div>}
       </div>
-      {desk ? (ev && <section className="dl-card reg-det" aria-label="Evento escolhido">{detalhe}</section>)
-        : evSel !== null && ev && <Folha titulo="Evento do registro" fechar={() => setEvSel(null)}><div className="reg-det reg-det--folha">{detalhe}</div></Folha>}
+      {evSel !== null && ev && <Folha titulo="Evento do registro" fechar={() => setEvSel(null)}><div className="reg-det reg-det--folha">{detalhe}</div></Folha>}
       <p className="dl-apoio">Linhas reconstruídas do registro: {nh > 80 ? `as últimas 80 de ${nh}` : `${nh}`}.</p>
       <details className="zona-risco">
         <summary>Novo ovo (apaga este pet)</summary>
