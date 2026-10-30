@@ -5,7 +5,7 @@
    o treino minimo do nivel, a carta so vale na Campanha, o chip de regra vai para o fim da lista e o de stat vale metade: a tela diz isso. */
 import { useState } from "react";
 import {
-  CARTA_DA_REVANCHE, CIT, CIT_V9, ITENS, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHA_POR_ID, NOME_STAT, NPC, STATS, estagioMinimo, nomeForma, rotuloRegra,
+  CARTA_DA_REVANCHE, CIT, CIT_V9, ITENS, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHA_POR_ID, NOME_STAT, NPC, STATS, estagioMinimo, nomeForma, regraDe, regraQueCobre, rotuloRegra,
   type Item, type Motor, type Stat,
 } from "../../../motor/index.ts";
 import { mudarMotor, tamerAtual, useJogo } from "../../jogo.ts";
@@ -33,11 +33,14 @@ function somaAgora(m: Motor): Partial<Record<Stat, number>> {
 function CardChip({ it, m, t, agir }: { it: Item & { tipo: "chip_stat" | "chip_regra" }; m: Motor; t: Tamer; agir: (op: "equipar" | "desequipar", id: string) => void }) {
   const tem = t.temChip(it.id), eq = m.chips.includes(it.id), md = MEDALHA_POR_ID[Object.entries(ITEM_DA_MEDALHA).find(([, c]) => c === it.id)![0]];
   const porque = tem && !eq ? m.porqueNaoEquipa(it.id) : null, soma = eq && it.tipo === "chip_stat" ? somaAgora(m) : null;
+  /* DE-3: o chip de regra coberto por uma regra ativa do pet (que vem antes dele na lista de luta) so ganha o aviso */
+  const cobre = it.tipo === "chip_regra" && m.gp ? regraQueCobre(m.gp.ativas.map(regraDe), it.regra) : null;
   return (
     <li className={`item-card${tem ? "" : " item-falta"}${eq ? " item-eq" : ""}`}>
       <span className="item-cab"><b className="item-nome">{it.nome}</b><span className={`dl-tag item-tag item-tag--${it.tipo}`}>{TIPO[it.tipo]}</span>{eq && <span className="dl-tag dl-tag--ativo">equipado</span>}</span>
       <span className="item-efeito">{it.efeito}</span>
       {it.tipo === "chip_regra" && <span className="item-regra">{rotuloRegra(it.regra).replace(/^se/, "Se")} · pede um {NIVEL[estagioMinimo(it)]}</span>}
+      {cobre && <span className="item-coberto" role="note" data-testid="chip-coberto">Este chip fica coberto: a regra “{rotuloRegra(cobre)}” do pet vale sempre que ele valeria e vem antes, então o chip quase nunca decide.</span>}
       {soma && <span className="item-soma">{Object.keys(soma).length ? "Agora soma " + Object.entries(soma).map(([k, v]) => `+${dec1(v as number)} de ${NOME_STAT[k as Stat].toLowerCase()}`).join(", ") + "."
         : "Agora não soma nada: o treino deste estágio já está no teto (ou o pet ainda não treinou nele)."}</span>}
       {!tem ? <span className="item-onde">Ainda não é seu: {comoGanhar(md)}.</span>
