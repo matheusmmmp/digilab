@@ -211,3 +211,32 @@ sementes). O `longe` sorteado ancora no pet, usa as 16 direções e corta o pont
 decidida e o ponto vai ao Matheus.
 
 Os testes e a contagem da suíte inteira estão no corpo do PR.
+
+## Resultado da etapa 3a (código; 2026-10-30, worker Claude Code, Sonnet 5.5, worktree `v3-longe-regular-orquestrador`)
+
+**O que entrou** (nenhuma vida da faixa 71101…71505 rodou; nada no web nem no `digilab/engine.py`):
+1. **As medidas da C5** em `digilab/metrics.py` (`viabilidade_do_corpo`, AD6-4): por tick, os cinco estados do corpo, "fora da faixa" abaixo
+   de 0,15 (o `limiar_privacao` que já está no `config.py`: nenhum número novo), a fração dos ticks com ao menos uma variável fora e a
+   menor necessidade (média e mínimo), na vida e nos dias 8 a 14. `tests/test_viabilidade_do_corpo.py` (5 testes, vidas pequenas à mão).
+2. **O orquestrador** `experiments/run_v2_longe_regular.py` (commit próprio), com `experiments/configs/v2_longe_regular/` (`longe_regular.json`
+   e `fumaca.json`):
+   - as 8 células (4 donos × `longe_fixo` e `longe`), os braços M0, M2 e M3\* com a `intencao_suspensa` desligada, K = 150 (30 por base) nas
+     bases 71101, 71202, 71303, 71404 e 71505, o prefixo `digibrain_prototipo`, 14 dias, orçamento 16: 3 600 vidas;
+   - a trava: o adendo 6 APROVADO no cabeçalho, a faixa em `FAIXAS_RESERVADAS`, no máximo 4 processos, `SementeSemPlano` para outra base
+     ou sementes fora da faixa e dos testes, falha alto para outro K, outros dias, outro orçamento, outro prefixo ou outro plano, e nada
+     por cima de uma pasta que já existe;
+   - por vida: o G1, o T-CENARIO-1, o G-MECANISMO, o crédito por opção, a conferência da LP-2 (nenhum `retomou` nem `n_susp`) e as
+     medidas do conserto, da C5 e das trocas de meta;
+   - o `resultado.json`: o primário (A6.4), as premissas, a classe de A6.6 e a leitura de A6.7, e o descritivo de A6.8 (faixas de d₀,
+     visitas, trocas, C5 e os outros); o `meta.json` com o sha256 de cada artefato.
+   - `tests/test_longe_regular.py` (39 testes): o desenho, a trava, a classe, a leitura, o motor que grava o corpo (a vida não muda),
+     as trocas de meta e a fumaça de ponta a ponta.
+3. **Os desvios** (5, sem número novo) em `docs/registro/2026-10.md`: em especial o 1, o "por tick do replay" lido como o estado no começo de
+   cada tick, medido na vida e conferido pelo G1.
+
+**A fumaça e o tempo estimado da run** (sementes dos testes 101 e 202, K = 2 por base, 14 dias, 96 vidas, 4 processos):
+- 55 s de parede para as vidas (0,58 s por vida) e 2,22 s de CPU por vida (`longe_fixo` 2,20 e `longe` 2,24);
+- **a run (3 600 vidas, 4 processos): cerca de 35 min de parede e 2,2 h de CPU**, dentro da estimativa de A6.9 (de 37 min a 1 h),
+  um pouco abaixo; a análise sobre 3 600 vidas não foi medida em escala (a da fumaça leva segundos). O tempo real vai ao RESULTADO.
+
+Os testes e a contagem da suíte inteira estão no corpo do PR.

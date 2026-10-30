@@ -454,3 +454,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-30 — LONGE-REGULAR, a C1, etapa 2 (worker, Claude Code, Opus 5.5, worktree `v3-longe-regular-plano`): o adendo 6, o plano de análise](registro/2026-10.md)
 - [2026-10-30 — C1 LONGE REGULAR, etapa 1 (worker, Claude Code, Sonnet 5.5, worktree `v3-longe-regular-codigo`): o estilo `longe_fixo` e só 5 das 16 direções cabem no mapa](registro/2026-10.md)
 - [2026-10-30 — GERENTE-V3, as LR, as ME e a ordem da L4 decididas (Gerente da V3, Claude Code, Opus 5.5, worktree `v3-decisoes-c1-c4`): todas pela recomendação](registro/2026-10.md)
+- [2026-10-30 — C1 LONGE REGULAR, etapa 3a (worker, Claude Code, Sonnet 5.5, worktree `v3-longe-regular-orquestrador`): o orquestrador da run e as medidas da C5](registro/2026-10.md)
