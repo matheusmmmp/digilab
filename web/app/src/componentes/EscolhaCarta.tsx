@@ -8,7 +8,7 @@ import { LUTA, avisarLuta, useLuta } from "../luta.ts";
 
 export function EscolhaCarta({ rival }: { rival: string | null }) {
   const { motor: m } = useJogo(), luta = useLuta(), t = tamerAtual();
-  if (m.versao < CIT.versaoPet || luta.rivalFixo) return null;
+  if (luta.rivalFixo) return null;
   const tem = ITENS.filter(x => x.tipo === "carta" && t.cartas(x.id) > 0);
   if (LUTA.carta && t.cartas(LUTA.carta) < 1) LUTA.carta = null;
   if (!tem.length) return null;

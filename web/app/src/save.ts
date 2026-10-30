@@ -40,11 +40,11 @@ export function textoSave(m: Motor): string {
   return JSON.stringify({ semente: m.semente, log: m.log, versao: m.versao });
 }
 
-/** primeiro acesso: o mesmo pet de exemplo do HTML (meio dia de vida e alguns cuidados), na versao dos ovos novos. Nos pets v11 nao ha
-    elogio: o roteiro troca os dois elogios do HTML por carinho (os mesmos tempos e o mesmo numero de cuidados) */
+/** primeiro acesso: o mesmo pet de exemplo do HTML (meio dia de vida e alguns cuidados), na versao dos ovos novos. Os pets v11 em diante
+    nao tem elogio: o roteiro troca os dois elogios do HTML por carinho (os mesmos tempos e o mesmo numero de cuidados) */
 export function petExemplo(): Motor {
-  const m = ligarProduto(new Motor(20260924)), elogio = m.versao >= 11 ? "acariciar" : "elogiar";
-  const roteiro: [number, "alimentar" | "brincar" | "elogiar" | "limpar" | "acariciar"][] =
+  const m = ligarProduto(new Motor(20260924)), elogio = "acariciar";
+  const roteiro: [number, "alimentar" | "brincar" | "limpar" | "acariciar"][] =
     [[45, "alimentar"], [60, "brincar"], [30, elogio], [120, "limpar"], [90, "acariciar"], [60, "alimentar"], [45, elogio]];
   for (const [t, a] of roteiro) { m.avancar(t); m.observar(a); }
   m.avancar(30);

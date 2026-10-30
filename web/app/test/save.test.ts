@@ -1,5 +1,6 @@
 // Save e rotas do app (TAREFA_FRONT_TS, Etapa 3): mesma chave e mesmo formato do digilab_sprites.html; um save
-// de hoje abre igual (pets v1, v2 e v3, e o save antigo sem versao = v1); save que nao abre falha alto.
+// de hoje abre igual (as vidas v13 do gabarito); o save de antes (v1-v12, e o sem versao = v1) e o que nao abre falham alto.
+import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
 import { Motor, VERSAO_PET } from "../motor/index.ts";
@@ -8,30 +9,32 @@ import { enderecoDaRota, gravarAbaLembrada, lerAbaLembrada, rotaDoEndereco } fro
 
 const armaz = (dados: Record<string, string> = {}): Armazenamento & { dados: Record<string, string> } =>
   ({ dados, getItem: k => (k in dados ? dados[k] : null), setItem(k, v) { dados[k] = v; } });
-const vida = (arq: string) => JSON.parse(readFileSync(new URL(`./gabaritos/${arq}`, import.meta.url), "utf8")).vidas[0];
+const VIDAS_V13 = JSON.parse(readFileSync(new URL("./gabaritos/v13_vidas_ts.json", import.meta.url), "utf8")).vidas as
+  { nome: string; semente: number; log: unknown[]; assinaturas: string[] }[];
+const sha = (x: string): string => createHash("sha256").update(x).digest("hex");
 
 describe("save", () => {
   test("a chave e a do HTML", () => {
     expect(CHAVE).toBe("digilab-web-v21-sprites");
     expect(CHAVE_ABA).toBe("digilab-web-v21-sprites-aba");
   });
-  for (const arq of ["vidas_v1_atencioso.json", "vidas_v2_exigente.json", "vidas_v3_relapso.json"]) {
-    test(`abre um save de hoje igual: ${arq}`, () => {
-      const v = vida(arq), a = armaz({ [CHAVE]: JSON.stringify({ semente: v.semente, log: v.log, versao: v.versao }) });
+  for (const v of VIDAS_V13.slice(0, 3)) {
+    test(`abre um save de hoje igual: ${v.nome}`, () => {
+      const a = armaz({ [CHAVE]: JSON.stringify({ semente: v.semente, log: v.log, versao: 13 }) });
       const l = lerSave(a);
       if (l.tipo !== "ok") throw new Error("nao abriu: " + JSON.stringify(l));
-      expect(l.motor.assinatura()).toBe(v.assinaturaFinal);
-      expect(l.motor.versao).toBe(v.versao);
+      expect(sha(l.motor.assinatura())).toBe(v.assinaturas[v.assinaturas.length - 1]);
+      expect(l.motor.versao).toBe(13);
       /* gravar de volta da o mesmo texto (mesma ordem de campos) */
       gravarSave(a, l.motor);
-      expect(JSON.parse(a.dados[CHAVE])).toEqual({ semente: v.semente, log: v.log, versao: v.versao });
+      expect(JSON.parse(a.dados[CHAVE])).toEqual({ semente: v.semente, log: v.log, versao: 13 });
     });
   }
-  test("save sem versao e pet v1 (de antes do porte)", () => {
-    const v = vida("vidas_v1_relapso.json"), l = lerSave(armaz({ [CHAVE]: JSON.stringify({ semente: v.semente, log: v.log }) }));
-    if (l.tipo !== "ok") throw new Error("nao abriu");
-    expect(l.motor.versao).toBe(1);
-    expect(l.motor.assinatura()).toBe(v.assinaturaFinal);
+  test("o save de antes da luta em tempo real (v1-v12, e o sem versao = v1) nao abre: erro, nunca um pet de exemplo em silencio", () => {
+    for (const s of [{ semente: 1, log: [] }, { semente: 1, log: [], versao: 6 }, { semente: 1, log: [], versao: 12 }]) {
+      const bruto = JSON.stringify(s), l = lerSave(armaz({ [CHAVE]: bruto }));
+      expect(l.tipo, bruto).toBe("erro");
+    }
   });
   test("sem save: vazio; save null: vazio", () => {
     expect(lerSave(armaz()).tipo).toBe("vazio");
@@ -39,7 +42,7 @@ describe("save", () => {
   });
   test("save que nao abre falha alto (nao vira pet de exemplo em silencio)", () => {
     for (const bruto of ["{", JSON.stringify({ semente: 1.5, log: [] }), JSON.stringify({ semente: 1, log: [[480, "x", 1]] }),
-      JSON.stringify({ semente: 1, log: [[999, "t", 1]] }), JSON.stringify({ semente: 1, log: [], versao: 13 })]) {
+      JSON.stringify({ semente: 1, log: [[999, "t", 1]] }), JSON.stringify({ semente: 1, log: [], versao: 14 })]) {
       const l = lerSave(armaz({ [CHAVE]: bruto }));
       expect(l.tipo, bruto).toBe("erro");
       if (l.tipo === "erro") expect(l.bruto).toBe(bruto);

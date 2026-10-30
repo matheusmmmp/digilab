@@ -27,11 +27,10 @@ import { TelaMedalhas } from "./telas/lutar/TelaMedalhas.tsx";
 import { TelaFronteira } from "./telas/lutar/TelaFronteira.tsx";
 import { AvisoSom } from "./componentes/AvisoSom.tsx";
 import { AvisoPetsDescartados } from "./componentes/Medalha.tsx";
+import { AvisoCombateTR, avisoTRPendente } from "./componentes/AvisoCombateTR.tsx";
 import { CHAVE_AVISO_V6 } from "./tamer.ts";
 import { TelaConversar } from "./telas/conversar/TelaConversar.tsx";
 import { TelaLuta } from "./telas/lutar/TelaLuta.tsx";
-import { TelaArenaTempoReal } from "./telas/lutar/arena_tr/TelaArenaTempoReal.tsx";
-import { ENDERECO_ARENA_TR, arenaTrLigada, ehArenaTr } from "./arenaTempoReal.ts";
 import { LUTA, REPLAY, previa, pularAnimacao, type Modo } from "./luta.ts";
 import { TelaPet } from "./telas/pet/TelaPet.tsx";
 import { MeusPets } from "./telas/pet/MeusPets.tsx";
@@ -73,20 +72,13 @@ export function App() {
     const est = mDica.estagioAtual, ids: IdDica[] = [];
     if (nascDica > 0 || (est === "bebe" && mDica.evolucoes.length === 0)) ids.push("ovo");
     if (est === "bebe" && mDica.chamadosAbertos().length) ids.push("chamado");
-    if (est === "crianca") ids.push("rookie", mDica.versao >= 11 ? "ensinar_v11" : "ensinar");
+    if (est === "crianca") ids.push("rookie", "ensinar_v11");
     if (est === "adolescente") ids.push("champion", "lutas_treino");
-    if (est === "adulto") ids.push(mDica.versao >= 5 && !mDica.sombria ? "ultimate" : "adulto");
+    if (est === "adulto") ids.push(!mDica.sombria ? "ultimate" : "adulto");
     if (est === "mega") ids.push("adulto");
     if (nascDica === 0 && !mDica.morte && mDica.e.saude < .3) ids.push("saude");
-    if (mDica.versao >= 4) {
-      /* as janelas so nos pets com a educacao (v4 a v10); a lesao e as vitorias tambem nos v11 */
-      const j = mDica.temEducacao ? mDica.janelaAberta() : null;
-      if (j?.tipo === "chamado") ids.push("manha");
-      if (j?.tipo === "aviso") ids.push("banheiro");
-      if (j?.tipo === "fala") ids.push("fala");
-      if (mDica.lesionadoDesde !== null) ids.push("lesao");
-      if (est === "adolescente") ids.push("vitorias");
-    }
+    if (mDica.lesionadoDesde !== null) ids.push("lesao");
+    if (est === "adolescente") ids.push("vitorias");
     dicasDoMomento(ids);
   });
   const [boasVindas, setBoasVindas] = useState(() => primeiraVisita() || location.hash === "#/inicio"), [meusPets, setMeusPets] = useState(false);
@@ -96,22 +88,21 @@ export function App() {
   const [sementeExemplo] = useState(() => jogo.motor.semente), aindaSemPet = semPetNoInicio && jogo.motor.semente === sementeExemplo;
   /* primeira abertura com as medalhas: os pets antigos sairam (main.tsx); o aviso fica ate o jogador ler */
   const [descartados, setDescartados] = useState(() => { try { return Number(localStorage.getItem(CHAVE_AVISO_V6) ?? 0); } catch { return 0; } });
+  /* o descarte 6 (a luta em tempo real, pets v13): o aviso fica ate o jogador ler */
+  const [avisoTR, setAvisoTR] = useState(avisoTRPendente);
   const [conclusao, setConclusao] = useState(false), desk = useDesktop(), [comoJogar, setComoJogar] = useState(false), importando = useImportar(), her = useHeranca();
   /* a jornada acabou (pets v6: a Liga dos Lideres; v1-v5: o chefe da campanha): a mensagem de conclusao, uma vez por pet, fora da luta
      e sem outra tela cheia */
   useEffect(() => {
-    if (!conclusao && !emLuta && !boasVindas && !comoJogar && !escolhendoBrasao && !descartados && concluiuJornada(jogo.motor) && !conclusaoVista(jogo.motor)) setConclusao(true);
+    if (!conclusao && !emLuta && !boasVindas && !comoJogar && !escolhendoBrasao && !descartados && !avisoTR && concluiuJornada(jogo.motor) && !conclusaoVista(jogo.motor)) setConclusao(true);
   });
   /* luta em tela cheia (#/lutar/luta); o Voltar do navegador durante a animacao vira pedido de Desistir */
   const [emLuta, setEmLuta] = useState(() => ehLuta(location.hash)), emLutaRef = useRef(emLuta), [pedidoDesistir, setPedidoDesistir] = useState(false);
   emLutaRef.current = emLuta;
-  /* arena em tempo real (#/lutar/tempo-real), so com a chave ARENA_TEMPO_REAL ligada (ou ?arena_tr=1): desligada, nada disto age */
-  const [arenaTr, setArenaTr] = useState(() => arenaTrLigada() && ehArenaTr(location.hash));
   const [ultima, setUltima] = useState<Partial<Record<Destino, Aba>>>(() => ({ [rota.destino]: rota.aba }));
 
   /* endereco e aba lembrada acompanham a rota; voltar/avancar do navegador muda a rota */
   useEffect(() => {
-    if (arenaTr) { document.title = "Arena em tempo real · Digilab Pet"; return; }
     if (emLuta) { document.title = "Luta · Digilab Pet"; return; }
     if (boasVindas) return;                      /* primeira vez aberta: o endereco e #/inicio */
     const alvo = config ? enderecoDaConfig(config) : enderecoDaRota(rota);
@@ -119,10 +110,9 @@ export function App() {
     gravarAbaLembrada(armaz(), rota);
     document.body.dataset.destino = rota.destino;
     document.title = `${config ? "Configurações" : NOME_DESTINO[rota.destino]} · Digilab Pet`;
-  }, [rota, config, emLuta, boasVindas, arenaTr]);
+  }, [rota, config, emLuta, boasVindas]);
   useEffect(() => {
     const aoMudar = () => {
-      if (arenaTrLigada()) { const tr = ehArenaTr(location.hash); setArenaTr(tr); if (tr) return; }
       if (ehLuta(location.hash)) { setEmLuta(true); return; }
       if (emLutaRef.current) {
         /* saiu da luta pelo Voltar: com a animacao rodando, fica na luta e pergunta; ja no resultado, conta como Continuar */
@@ -169,11 +159,6 @@ export function App() {
   /* desktop (>= 1100 px): topo da casca com titulo, abas e o mini-card do pet */
   const topo = <TopoDesktop titulo={config ? "Configurações" : NOME_DESTINO[rota.destino]} abas={config ? [] : abas} aba={rota.aba} irAba={a => ir({ destino: rota.destino, aba: a })}
     abrirMeusPets={() => setMeusPets(true)} voltar={!config && rota.destino === "conversar" ? () => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); } : undefined} />;
-  if (arenaTr) return (
-    <div className="app app--tela-cheia">
-      <TelaArenaTempoReal sair={() => { history.replaceState(null, "", "#/lutar/arena"); setArenaTr(false); ir({ destino: "lutar", aba: "arena" }); scrollTo(0, 0); }} />
-    </div>
-  );
   if (emLuta) return (
     <div className="app app--tela-cheia">
       <TelaLuta sair={sairDaLuta} verReplay={verReplay} sairReplay={sairReplay} pedidoDesistir={pedidoDesistir} fecharPedido={() => setPedidoDesistir(false)} />
@@ -233,9 +218,6 @@ export function App() {
             ))}
           </div>
         )}
-        {rota.destino === "lutar" && arenaTrLigada() && (
-          <div className="arena-tr-entrada"><a className="dl-btn dl-btn--sec" href={ENDERECO_ARENA_TR}>Arena em tempo real</a></div>
-        )}
         <div role={abas.length > 1 ? "tabpanel" : undefined}>
           {rota.aba === "treinar" ? <TelaTreinar /> : rota.aba === "aprend" ? <TelaAprend /> : rota.aba === "evolucao" ? <TelaEvolucao /> : rota.aba === "itens" ? <TelaItens />
             : rota.aba === "arena" ? <TelaArena voltarPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} verReplay={abrirReplay} />
@@ -252,8 +234,9 @@ export function App() {
       {meusPets && !desk && <MeusPets fechar={() => setMeusPets(false)} irRegistro={() => { setMeusPets(false); ir({ destino: "diario", aba: "registro" }); }} />}
       {boasVindas && <BoasVindas fechar={() => { setBoasVindas(false); ir({ destino: "pet", aba: "estado" }); if (semPetNoInicio) setComoJogar(true); }} />}
       {comoJogar && <ComoJogar fechar={() => { setComoJogar(false); abrirEscolhaBrasao(); }} />}
-      {escolhendoBrasao && !boasVindas && !descartados && <EscolherBrasao podeVoltar={!aindaSemPet} />}
+      {escolhendoBrasao && !boasVindas && !descartados && !avisoTR && <EscolherBrasao podeVoltar={!aindaSemPet} />}
       {descartados > 0 && !boasVindas && <AvisoPetsDescartados n={descartados} fechar={() => setDescartados(0)} />}
+      {avisoTR && !boasVindas && !descartados && <AvisoCombateTR aviso={avisoTR} fechar={() => setAvisoTR(null)} />}
       {her && !desk && <Heranca pai2={her.pai2} fim={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} />}
       {importando && !desk && <ImportarPet fechar={fecharImportar} />}
       {conclusao && <Conclusao m={jogo.motor} fechar={() => setConclusao(false)} />}

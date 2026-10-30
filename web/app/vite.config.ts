@@ -21,11 +21,13 @@ const ATLAS: Record<string, string> = {
 
 /* sons do Digimon UP (Assets/gerar_sons_up.py, src/som.ts): o mapa.json e so os MP3 dentro de Assets/sons/ (nome simples, nada de caminho) */
 const SOM_ROTA = /^\/Assets\/sons\/(mapa\.json|[A-Za-z0-9_]+\.mp3)$/;
-/* arena em tempo real (Assets/gerar_arena_up.py, src/arenaTempoReal.ts): os JSON de dados/ e os PNG/JPG de sprites/, efeitos/ e mapas/ (nome simples) */
-const ARENA_ROTA = /^\/Assets\/arena_up\/(dados\/[a-z]+\.json|(sprites|efeitos)\/[A-Za-z0-9_-]+\.png|mapas\/[a-z0-9_]+\.(png|jpg))$/;
-const TIPO_ARENA: Record<string, string> = { json: "application/json", png: "image/png", jpg: "image/jpeg" };
+/* os cenarios da luta em tempo real (Assets/gerar_arena_up.py, src/telas/lutar/palcoTR/cenasTR.ts): so os PNG/JPG de mapas/ (nome simples) */
+const ARENA_ROTA = /^\/Assets\/arena_up\/mapas\/[a-z0-9_]+\.(png|jpg)$/;
+const TIPO_ARENA: Record<string, string> = { png: "image/png", jpg: "image/jpeg" };
+/* cena de evolucao (Assets/gerar_evolucao_up.py, src/evolucaoUp.ts): o mapa.json e os pacotes de nome simples de pacotes/ */
+const EVOLUCAO_ROTA = /^\/Assets\/evolucao_up\/(mapa\.json|pacotes\/[a-z0-9_]+\.bin)$/;
 
-/** dev: serve so o atlas, a decoracao listada, os sons e a arena em tempo real (nada mais da pasta Assets) */
+/** dev: serve so o atlas, a decoracao listada, os sons, os cenarios da luta e a cena de evolucao (nada mais da pasta Assets) */
 function atlasDev(): Plugin {
   return {
     name: "digilab-atlas-dev",
@@ -33,7 +35,8 @@ function atlasDev(): Plugin {
       server.middlewares.use((req, res, next) => {
         const caminho = (req.url || "").split("?")[0];
         const tipo = ATLAS[caminho] ?? (SOM_ROTA.test(caminho) ? (caminho.endsWith(".json") ? "application/json" : "audio/mpeg")
-          : ARENA_ROTA.test(caminho) ? TIPO_ARENA[caminho.split(".").pop()!] : undefined);
+          : ARENA_ROTA.test(caminho) ? TIPO_ARENA[caminho.split(".").pop()!]
+          : EVOLUCAO_ROTA.test(caminho) ? (caminho.endsWith(".json") ? "application/json" : "application/octet-stream") : undefined);
         if (!tipo) return next();
         const arq = ASSETS + caminho.slice("/Assets/".length);
         if (!existsSync(arq)) { res.statusCode = 404; res.end("asset nao encontrado: " + arq); return; }

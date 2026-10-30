@@ -4,7 +4,7 @@
 
      node --experimental-strip-types test/medir_chamado_fome.ts     # grava test/efeito_chamado_fome.json
 
-   Os donos sao roteiros simples (SEM FONTE; o dono sintetico de motor/donos.ts usa o elogio e a bronca, que o v12 nao tem):
+   Os donos sao roteiros simples (SEM FONTE; o dono sintetico de motor/donos.ts usa o elogio e a bronca, que o v11 em diante nao tem):
      nada            nao faz nada;
      atende          atende todo chamado no tick em que ele abre (a fome com o alimentar, a racao no comedouro);
      atende_10min    atende todo chamado 10 min depois de abrir (ainda dentro da janela de 15);
@@ -23,7 +23,7 @@ type NomeDono = typeof DONOS[number];
 const SAIDA = new URL("./efeito_chamado_fome.json", import.meta.url);
 
 function vida(semente: number, ritmo: "rapida" | "classica", chave: boolean, dono: NomeDono) {
-  const m = new Motor(semente, 12);
+  const m = new Motor(semente);
   if (ritmo === "classica") m.configurar("classica");
   if (chave) m.ligarProduto({ chamadoPelaFome: true, decisaoNaComida: true });
   const abriu: Record<Chamado, number> = { fome: 0, higiene: 0, carinho: 0 };
@@ -57,7 +57,7 @@ export function medirEfeito() {
   for (const ritmo of ["rapida", "classica"] as const) for (const dono of DONOS) for (const chave of [false, true]) for (const s of SEMENTES)
     vidas.push({ ritmo, dono, chave, semente: s, ...vida(s, ritmo, chave, dono) });
   return {
-    descricao: "o efeito do chamado de fome pela fome do corpo no bebe do pet v12: os chamados abertos no bebe e a fracao de cuidado da "
+    descricao: "o efeito do chamado de fome pela fome do corpo no bebe do pet do jogo (v13): os chamados abertos no bebe e a fracao de cuidado da "
       + "evolucao para a crianca, com e sem as chaves do produto (o evento \"p\"), nos ritmos rapido (180 min) e classico (360 min)",
     limiar: CHAMADO_FOME_CORPO.limiar, sementes: SEMENTES, donos: DONOS, vidas,
   };

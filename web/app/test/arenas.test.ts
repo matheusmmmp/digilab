@@ -1,10 +1,11 @@
 /* Arenas com lideres (docs/DESIGN_MEDALHAS_ARENAS.md, secao 3; medalhas parte 2; pets v6, so no jogo): a tabela nova das
    medalhas e das arenas, cada regra (Torre: contra-golpe; Floresta: muda de padrao no turno 10; Cidadela: tres lutas
-   seguidas sem cura; Lago: sem travas nem vetos), o replay de uma vida com lutas de arena e os pets v1-v5 intactos. */
+   seguidas sem cura; Lago: sem travas nem vetos), o replay de uma vida com lutas de arena. Pet v13 (o unico que ficou): as arenas sao as dos v9 e as lutas de arena jogam em tempo
+   real; as regras de turno (Torre, Floresta) sao lidas nas acoes da luta em tempo real (o turno t vira o relogio t x T_TR). */
 import { afterEach, beforeAll, describe, expect, test } from "vitest";
 import {
-  ARENAS, ARENA_POR_ID, CAMPANHA_V5, CAMPANHA_V6, CAT, CTR, DUR_EVO, GAMBITS_ARENA, LUGARES_V5, LUGARES_V6, MEDALHAS, NPC,
-  arenaDaLuta, campanhaDe, chaveRegra, gambitNPC, hashSemente, jogarArena, jogarV2, lugaresDe, lutadorBot, perfilNPC, sementeDaSerie,
+  ARENAS, ARENA_POR_ID, CAMPANHA_V5, CAMPANHA_V6, CAT, CTR, CV21E_TR, DUR_EVO, GAMBITS_ARENA, LUGARES_V6, MEDALHAS, NPC,
+  T_TR, arenaDaLuta, chaveRegra, gambitNPC, hashSemente, jogarArena, jogarLuta, lutadorBot, perfilNPC, sementeDaSerie,
 } from "../motor/index.ts";
 import { ESCALA, ligarEscala } from "../motor/catalogo.ts";
 import { Motor } from "../motor/motor.ts";
@@ -38,10 +39,10 @@ function treinarNoEstagio(m: Motor): void {
   }
   if (m.estagioAtual !== est) throw new Error("o pet de teste evoluiu no meio do treino");
 }
-/** um Ultimate v6 de registro legitimo (liberacoes, tempo, treino ate o teto de cada estagio e lutas de treino contra o
-    aleatorio). Treinado: com a escala dos pets v6 o pet sem treino quase nunca vence um lider (meta <= 0,05) */
-function ultimateV6(semente: number, treinados: readonly string[] = ["crianca", "adolescente", "adulto"]): Motor {
-  const m = new Motor(semente, 6);
+/** um Ultimate v13 de registro legitimo (liberacoes, tempo, treino ate o teto de cada estagio e lutas de treino contra o
+    aleatorio). Treinado: com a escala dos pets o pet sem treino quase nunca vence um lider (meta <= 0,05) */
+function ultimateV13(semente: number, treinados: readonly string[] = ["crianca", "adolescente", "adulto"]): Motor {
+  const m = new Motor(semente);
   m.liberar(3);
   const esperarEvoluir = (): void => { const est = m.estagioAtual; for (let j = 0; j < 200 && m.estagioAtual === est; j++) m.avancar(30); };
   const treinar = (): void => { if (treinados.includes(m.estagioAtual)) treinarNoEstagio(m); };
@@ -66,7 +67,7 @@ function abrirAte(m: Motor, L: number): void {
   }
 }
 
-describe("a tabela das medalhas e das arenas (pets v6)", () => {
+describe("a tabela das medalhas e das arenas (pet v13)", () => {
   test("seis arenas na ordem do nivel; a 3a medalha vem do lider da Floresta e a 5a do lider do Lago", () => {
     expect(LUGARES_V6.map(L => L.nome)).toEqual(["Campina", "Torre de pedra", "Floresta", "Cidadela", "Lago", "Montanha Espiral"]);
     expect(LUGARES_V6.map(L => L.sugerido)).toEqual(["Rookie", "Champion", "Champion", "Ultimate", "Ultimate", "Mega"]);
@@ -86,11 +87,10 @@ describe("a tabela das medalhas e das arenas (pets v6)", () => {
     for (const c of CAMPANHA_V5) expect(v6).toContain(c.k);
     expect(LUGARES_V6[1].rivais.map(k => NPC[k]!.nome)).toEqual(["Tortomon", "Guardromon", "Devidramon"]);
     expect(LUGARES_V6[5].rivais.map(k => NPC[k]!.nome)).toEqual(["Puppetmon", "Machinedramon", "Piedmon"]);
-    const m = new Motor(1, 6);
+    const m = new Motor(1);
     expect(Object.keys(m.campanha)).toEqual(v6);
     expect(m.lugares).toBe(LUGARES_V6);
-    expect([m.lugarDe(MYOTISMON), new Motor(1, 5).lugarDe(MYOTISMON)]).toEqual([3, 2]);
-    expect(() => new Motor(1, 5).lugarDe(YOUKOMON)).toThrow(/não está na campanha/);
+    expect(m.lugarDe(MYOTISMON)).toBe(3);
   });
   test("os lideres novos estao no atlas do jogo (sprites do Digimon UP) e nao sao formas de pet", () => {
     /* a chave do NPC e a do atlas (catalogo_sprites_up.json, fora do repo): aqui so o que o motor garante */
@@ -101,19 +101,18 @@ describe("a tabela das medalhas e das arenas (pets v6)", () => {
 
 describe("as regras das arenas", () => {
   beforeAll(() => ligarEscala(true));
-  test("so pets v6 contra o lider: v1-v5 e os desafiantes lutam como antes", () => {
-    for (const a of ARENAS) {
-      expect(arenaDaLuta(a.lider, 6)).toBe(a);
-      for (const v of [1, 4, 5]) expect(arenaDaLuta(a.lider, v)).toBeNull();
-    }
-    expect(arenaDaLuta("npc_tier2_sentinela", 6)).toBeNull();
-    const v5 = new Motor(3, 5);
-    expect(v5.arenaDe(GUARDROMON)).toBeNull();
-    expect(JSON.stringify(v5.lutadores(GUARDROMON).B)).toBe(JSON.stringify(lutadorBot(GUARDROMON, null)));
+  test("o pet v13 tem a arena contra o lider; os desafiantes lutam sem arena", () => {
+    /* a arena e a do pet v6 em diante; so o fator do lider e calibrado por versao */
+    for (const a of ARENAS) expect(arenaDaLuta(a.lider, 13)).toEqual({ ...a, fator: arenaDaLuta(a.lider, 13)!.fator });
+    expect(arenaDaLuta("npc_tier2_sentinela", 13)).toBeNull();
+    const m = new Motor(3);
+    expect(m.regras).toBe(CV21E_TR);
+    expect(m.arenaDe(GUARDROMON)).toEqual(arenaDaLuta(GUARDROMON, 13));
+    expect(m.arenaDe(GUARDROMON)!.id).toBe("torre");
   });
   test("Torre de pedra (paciencia): o lider tem o contra-golpe e as regras dele, e devolve o golpe forte", () => {
     ligarEscala(true);
-    const m = new Motor(5, 6), B = m.lutadores(GUARDROMON).B, R = m.regras;
+    const m = new Motor(5), B = m.lutadores(GUARDROMON).B, R = m.regras;
     expect(B.cond.tecnica).toBe("contra_golpe");
     expect(B.estilo.gambits!.regras.filter(r => r.entao === "contra_golpe").length).toBeGreaterThan(0);
     /* escala dos pets v6: a lista propria da Torre; contra quem atira com frequencia ele vai buscar (nao contra-golpeia) */
@@ -125,21 +124,20 @@ describe("as regras das arenas", () => {
     const brig = { nome: "brigao", estilo: { nome: "b", gambits: { regras: [{ se: [{ n: "distancia_eh", p: [1] }], entao: "avancar" },
       { se: [{ n: "distancia_eh", p: [0] }], entao: "preparar_pesado" }], final: "carregar" }, eps: 0 }, cond: perfilNPC(90, "adulto", 600) };
     let devolveu = 0;
-    for (let s = 0; s < 20; s++) for (const tr of jogarV2(brig, B, s, R).turnos)
-      if (tr.b === "contra_golpe" && (tr.a === "pesado" || tr.a === "golpe_rapido") && tr.dano[0] > 0) devolveu++;
+    for (let s = 0; s < 20; s++) for (const a of jogarLuta(brig, B, s, R).tr.acoes) if (a.lado === 1 && a.nome === "contra_golpe") devolveu++;
     expect(devolveu).toBeGreaterThan(0);
   });
   test("Floresta (leitura): o lider muda de padrao no turno 10 (as regras de turno so disparam dali em diante)", () => {
     ligarEscala(true);
-    const m = new Motor(6, 6), B = m.lutadores(YOUKOMON).B, R = m.regras, g = B.estilo.gambits!;
+    const m = new Motor(6), B = m.lutadores(YOUKOMON).B, R = m.regras, g = B.estilo.gambits!;
     expect(g.regras.map(chaveRegra)).toEqual(GAMBITS_ARENA.floresta.regras.map(chaveRegra));
     const deTurno = g.regras.map(r => r.se.some(c => c.n === "turno_execucao" && c.p[0] === 10));
     const A = { nome: "alvo", estilo: { nome: "a", gambits: { regras: [], final: "defender" }, eps: .3 }, cond: perfilNPC(90, "adulto", 600) };
     const antes = new Set<string>(), depois = new Set<string>();
-    for (let s = 0; s < 30; s++) for (const tr of jogarV2(A, B, s, R).turnos) {
-      if (typeof tr.mb !== "number" || tr.mb >= g.regras.length) continue;
-      if (deTurno[tr.mb]) { expect(tr.antes.turno).toBeGreaterThanOrEqual(10); depois.add(tr.b); }
-      else if (tr.antes.turno < 10) antes.add(tr.b);
+    for (let s = 0; s < 30; s++) for (const a of jogarLuta(A, B, s, R).tr.acoes) {
+      if (a.lado !== 1 || typeof a.motivo !== "number" || a.motivo >= g.regras.length) continue;
+      if (deTurno[a.motivo]) { expect(a.inicio).toBeGreaterThanOrEqual(10 * T_TR); depois.add(a.nome); }
+      else if (a.inicio < 10 * T_TR) antes.add(a.nome);
     }
     expect([...antes].sort()).toEqual(expect.arrayContaining(["disparo", "recuar"]));
     expect([...depois]).toEqual(expect.arrayContaining(["avancar", "golpe_rapido"]));
@@ -147,8 +145,8 @@ describe("as regras das arenas", () => {
   });
   test("Cidadela (resistencia): tres lutas seguidas sem cura; para na primeira que nao for vitoria", () => {
     ligarEscala(true);
-    const m = ultimateV6(101), { A, B, arena } = m.lutadores(MYOTISMON);
-    expect(arena).toBe(ARENA_POR_ID.cidadela);
+    const m = ultimateV13(101), { A, B, arena } = m.lutadores(MYOTISMON);
+    expect(arena).toEqual(ARENA_POR_ID.cidadela);
     expect(arena!.lutas).toBe(3);
     for (let s = 0; s < 40; s++) {
       const serie = jogarArena(A, B, s, m.regras, 3);
@@ -159,15 +157,15 @@ describe("as regras das arenas", () => {
         if (k) {
           expect(res.E0.L[0].hp).toBe(serie[k - 1].E.L[0].hp);                       /* a vida passa */
           expect(res.E0.L[0].guts).toBe(Math.min(serie[k - 1].E.L[0].guts, A.cond.gutsMax));   /* e o guts */
-          expect(res).toEqual(jogarV2(A, B, sementeDaSerie(s, k), m.regras, { hp: serie[k - 1].E.L[0].hp, guts: serie[k - 1].E.L[0].guts }));
-        } else expect(res).toEqual(jogarV2(A, B, s, m.regras));
+          expect(res).toEqual(jogarLuta(A, B, sementeDaSerie(s, k), m.regras, { hp: serie[k - 1].E.L[0].hp, guts: serie[k - 1].E.L[0].guts }));
+        } else expect(res).toEqual(jogarLuta(A, B, s, m.regras));
       });
     }
   });
   test("Cidadela: a medalha e a vitoria no lugar so vem com as tres vitorias", () => {
     ligarEscala(true);
     /* treinado so no Rookie: forte o bastante para vencer as tres, fraco o bastante para perder no meio */
-    const m = ultimateV6(101, ["crianca"]), t = new Tamer();
+    const m = ultimateV13(101, ["crianca"]), t = new Tamer();
     abrirAte(m, 3);
     for (const md of conferirMedalhas(t, m)) expect(["campina", "torre", "floresta"]).toContain(md.id);
     /* perde no meio: nada conta, mas as lutas jogadas contam (e ensinam) */
@@ -189,7 +187,7 @@ describe("as regras das arenas", () => {
   });
   test("Lago (vinculo): as travas e os vetos do dono nao valem; sem eles, a lista e a de sempre", () => {
     ligarEscala(true);
-    const m = ultimateV6(202), gp = m.gp!;
+    const m = ultimateV13(404), gp = m.gp!;
     expect(m.lutadores(MARINBULLMON).usadas).toEqual(gp.ativas);   /* sem intervencao: a mesma lista */
     const terceira = gp.ativas[2], ultima = gp.ativas[gp.ativas.length - 1];
     m.intervirGambit("vetar", terceira);
@@ -205,15 +203,15 @@ describe("as regras das arenas", () => {
     /* a luta do Lago ensina pelas regras com que ele lutou */
     abrirAte(m, 4);
     const notas = { ...m.gp!.notas }, r = lutar(m, MARINBULLMON, hashSemente("lago", 1));
-    const disparou = new Set(r.res.turnos.filter(tr => typeof tr.ma === "number" && tr.ma < r.usadas!.length).map(tr => r.usadas![tr.ma as number]));
+    const disparou = new Set(r.res.tr.acoes.filter(a => a.lado === 0 && typeof a.motivo === "number" && a.motivo < r.usadas!.length).map(a => r.usadas![a.motivo as number]));
     for (const k of disparou) expect(m.gp!.notas[k]).not.toBe(notas[k]);
   });
 });
 
 describe("replay com as lutas de arena", () => {
-  test("uma vida v6 com Torre, Floresta, Cidadela (serie) e Lago (com trava e veto): o replay da a mesma assinatura", () => {
+  test("uma vida v13 com Torre, Floresta, Cidadela (serie) e Lago (com trava e veto): o replay da a mesma assinatura", () => {
     ligarEscala(true);
-    const m = ultimateV6(101);
+    const m = ultimateV13(101);
     abrirAte(m, 3);
     lutar(m, GUARDROMON, hashSemente("rev", 1));
     lutar(m, YOUKOMON, hashSemente("rev", 2));
@@ -227,32 +225,8 @@ describe("replay com as lutas de arena", () => {
     for (const k of [GUARDROMON, YOUKOMON, MYOTISMON, MARINBULLMON]) expect(eventos).toContain(k);
     /* o evento de luta continua so com rival e semente */
     for (const e of m.log.filter(x => x[1] === "l")) expect(Object.keys(e[2] as object).sort()).toEqual(["r", "s"]);
-    const r = Motor.reproduzir(m.semente, m.log, 6);
+    const r = Motor.reproduzir(m.semente, m.log, 13);
     expect(r.assinatura()).toBe(m.assinatura());
     expect(r.campanha).toEqual(m.campanha);
-  });
-});
-
-describe("pets v1-v5 intactos", () => {
-  test("campanhas, lugares e lutas contra os NPCs de antes nao mudam", () => {
-    ligarEscala(true);
-    expect(campanhaDe(5)).toBe(CAMPANHA_V5); expect(lugaresDe(5)).toBe(LUGARES_V5);
-    expect(LUGARES_V5.map(L => L.nome)).toEqual(["Campina", "Torre de pedra", "Cidadela", "Montanha Espiral"]);
-    for (const v of [1, 2, 3, 4, 5]) {
-      const m = new Motor(7, v);
-      expect(Object.keys(m.campanha)).toEqual(campanhaDe(v).map(c => c.k));
-      for (const k of Object.keys(m.campanha)) {
-        expect(m.arenaDe(k)).toBeNull();
-        const L = m.montarLuta(k, 99);
-        expect(L.serie).toHaveLength(1);
-        expect(L.serie[0]).toEqual(jogarV2(L.A, lutadorBot(k, m.regras), 99, m.regras));
-      }
-    }
-  });
-  test("o evento de luta dos v5 contra o Myotismon continua sendo uma luta so", () => {
-    const m = new Motor(8, 5);
-    m.avancar(DUR_EVO.bebe + 30);
-    m.aplicarEvento([m.e.tick, "l", { r: MYOTISMON, s: 5 }]);
-    expect(m.lutas.lutas).toBe(1);
   });
 });

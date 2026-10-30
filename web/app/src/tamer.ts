@@ -34,21 +34,34 @@
    A Fabrica dos v9 (rodada de equilibrio geral, fase 3; motor/fabrica.ts): registro versao 6 (le 1 a 5). O evento "fabrica" ganha o campo
    `v`, a versao das regras da tentativa (VERSOES_FABRICA): sem ele, a Fabrica de antes (V21D, fator 1, a troca nao cura), e as tentativas
    ja gravadas se refazem iguais; as tentativas novas gravam `v: 9` (VERSAO_FABRICA_ATUAL: V21E, o fator dos rivais dos v9, a troca com a
-   vida cheia). Versao desconhecida falha alto. */
+   vida cheia). Versao desconhecida falha alto.
+
+   A Fabrica em tempo real (COMBATE-TR, etapa R2; D-4, decisao do Matheus de 2026-10-29): registro versao 7. As tentativas novas gravam
+   `v: 13` (VERSAO_FABRICA_TR: a luta em tempo real dos pets v13), e o registro 7 so aceita essas. As tentativas antigas (v ausente ou 9)
+   saem do registro no descarte unico 6 (descartarPetsAntigos), com aviso na tela; o recorde da Fabrica recomeca. O resto do Tamer (as
+   medalhas, os itens, o titulo, os recordes das instalacoes, o Salao) fica. Os registros 1 a 6 ainda se leem (com a Fabrica de antes). */
 import {
-  ARENA_POR_ID, CARTA_DA_REVANCHE, CIT, ESTAGIOS_SALAO, INSTALACOES, LUTAS_SERIE_FABRICA, TentativaFabrica, VERSAO_FABRICA, VERSAO_FABRICA_ATUAL, VERSOES_FABRICA, sementeFabrica, sementeSalao, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHAS, MEDALHAS_LIGA, MEDALHA_POR_ID, Motor, NPC, PetMorto, VERSAO_INSTALACOES,
-  VERSAO_LIGA, cartaDe, ehInstalacao, itemDe, medalhaDoLider, nomeForma, type Estagio, type IdInstalacao, type Medalha,
+  ARENA_POR_ID, CARTA_DA_REVANCHE, CIT, ESTAGIOS_SALAO, INSTALACOES, LUTAS_SERIE_FABRICA, TentativaFabrica, VERSAO_FABRICA_ATUAL, VERSAO_FABRICA_TR, VERSOES_FABRICA, sementeFabrica, sementeSalao, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHAS, MEDALHAS_LIGA, MEDALHA_POR_ID, Motor, NPC, PetMorto,
+  cartaDe, ehInstalacao, itemDe, medalhaDoLider, nomeForma, type Estagio, type IdInstalacao, type Medalha,
 } from "../motor/index.ts";
 import { CHAVE, type Armazenamento } from "./save.ts";
 
 export const CHAVE_TAMER = CHAVE + "-tamer";
 /** aviso pendente de que os pets antigos foram descartados (sai quando o jogador le) */
 export const CHAVE_AVISO_V6 = CHAVE + "-aviso-v6";
+/** aviso pendente do descarte 6 (a luta em tempo real, pets v13): JSON {pets, fabrica}, quantos pets e quantas tentativas da Fabrica sairam
+    (sai quando o jogador le) */
+export const CHAVE_AVISO_TR = CHAVE + "-aviso-tr";
+/** os saves dos pets que o descarte 6 tirou, como estavam ({semente, log, versao}[]): o aviso oferece baixar o arquivo deles. Fica ate o
+    jogador baixar ou dispensar */
+export const CHAVE_DESCARTADOS = CHAVE + "-descartados";
 /** versao do registro do Tamer: 1 = medalhas (parte 1); 2 = medalhas e itens (parte 3); 3 = e o titulo da Liga (parte 4a); 4 = e os
     recordes das instalacoes da Fronteira (parte 4b); 5 = e a Fabrica e o Salao (parte 4c); 6 = e a versao das regras de cada tentativa da
-    Fabrica (campo `v`, equilibrio geral fase 3). Grava a 6; le as seis */
-export const VERSAO_TAMER = 6;
-const VERSOES_TAMER = [1, 2, 3, 4, 5, 6];
+    Fabrica (campo `v`, equilibrio geral fase 3); 7 = so a Fabrica em tempo real (v: 13; COMBATE-TR, D-4). Grava a 7; le as sete */
+export const VERSAO_TAMER = 7;
+const VERSOES_TAMER = [1, 2, 3, 4, 5, 6, 7];
+/** os eventos da Fabrica no registro do Tamer */
+const EVENTOS_FABRICA = ["fabrica", "fabrica_luta", "fabrica_troca"];
 
 /** uma medalha ganha: qual, o contador (1 = a primeira), a hora de parede, o pet que venceu (semente, forma e tick dele) */
 export interface MedalhaGanha { id: string; n: number; quando: number; pet: number; forma: string; tick: number }
@@ -64,7 +77,7 @@ export interface Campeao { n: number; quando: number; pet: number; forma: string
     tick dele) */
 export interface Recorde { inst: IdInstalacao; valor: number; quando: number; pet: number; forma: string; tick: number }
 /** Fabrica: o comeco da tentativa n (1 = a primeira), a semente dela (sementeFabrica(n)), o alugado escolhido (0 a 2) e a versao das regras
-    (registro versao 6; sem ela, a Fabrica de antes, VERSAO_FABRICA) */
+    (registro versao 6; sem ela, a Fabrica de antes, que saiu com o combate por turnos: o registro nao a refaz, so o descarte a tira) */
 export interface InicioFabrica { n: number; s: number; alugado: number; quando: number; v?: number }
 /** Fabrica: a luta k (0 = a primeira) da tentativa n, com a semente dela (sementeLutaFabrica) */
 export interface EventoLutaFabrica { n: number; k: number; s: number; quando: number }
@@ -217,7 +230,8 @@ export class Tamer {
     if (atual) throw new Error(`tentativa ${x.n} da Fábrica com a ${atual.n} ainda em andamento no registro do Tamer`);
     if (x.s !== sementeFabrica(x.n)) throw new Error(`a tentativa ${x.n} da Fábrica tem a semente ${sementeFabrica(x.n)}, não ${x.s}, no registro do Tamer`);
     if (x.v !== undefined && !VERSOES_FABRICA.includes(x.v)) throw new Error(`a tentativa ${x.n} da Fábrica com as regras da versão ${JSON.stringify(x.v)}, desconhecida, no registro do Tamer`);
-    this.fabrica.push(new TentativaFabrica(x.n, x.alugado, x.v ?? VERSAO_FABRICA));
+    if (x.v === undefined) throw new Error(`a tentativa ${x.n} da Fábrica é de antes do combate em tempo real (sem a versão das regras) e não se refaz mais; o descarte a tira do registro do Tamer`);
+    this.fabrica.push(new TentativaFabrica(x.n, x.alugado, x.v));
     this.quandoFabrica.push([]);
   }
   private _fabricaEmAndamento(n: number, o: string): TentativaFabrica {
@@ -317,29 +331,46 @@ export class Tamer {
 
 /** le o registro do Tamer (sem a chave: um Tamer novo, sem medalhas). Registro que nao reproduz falha alto */
 export function lerTamer(armaz: Armazenamento): Tamer {
+  const l = lerLogTamer(armaz);
+  return l ? Tamer.reproduzir(l.log) : new Tamer();
+}
+/** o registro do Tamer como esta, sem refazer os eventos (null: sem a chave); a versao e o formato conferem. O descarte usa este para
+    tirar a Fabrica de antes (que nao se refaz mais) antes de reproduzir */
+function lerLogTamer(armaz: Armazenamento): { versao: number; log: EventoTamer[] } | null {
   const bruto = armaz.getItem(CHAVE_TAMER);
-  if (bruto === null) return new Tamer();
+  if (bruto === null) return null;
   let d: unknown;
   try { d = JSON.parse(bruto); } catch (err) { throw new Error("o registro do Tamer não é JSON: " + (err instanceof Error ? err.message : String(err))); }
   const s = d as { versao?: unknown; log?: unknown };
   if (!VERSOES_TAMER.includes(s.versao as number) || !Array.isArray(s.log)) throw new Error("o registro do Tamer não tem versão " + VERSOES_TAMER.join(" ou ") + " e eventos");
-  return Tamer.reproduzir(s.log as EventoTamer[]);
+  /* o registro 7 so tem a Fabrica em tempo real: uma tentativa antiga nele e registro corrompido */
+  if (s.versao === 7) for (const ev of s.log as EventoTamer[])
+    if (Array.isArray(ev) && ev[0] === "fabrica" && (ev[1] as InicioFabrica).v !== VERSAO_FABRICA_TR)
+      throw new Error(`o registro 7 do Tamer tem a tentativa ${(ev[1] as InicioFabrica).n} da Fábrica com as regras de antes (v ${JSON.stringify((ev[1] as InicioFabrica).v)})`);
+  return { versao: s.versao as number, log: s.log as EventoTamer[] };
+}
+/** o registro do Tamer sem a Fabrica de antes (descarte 6): tira as tentativas que nao sao da luta em tempo real. Devolve o registro novo e
+    quantas tentativas sairam */
+export function semFabricaAntiga(log: readonly EventoTamer[]): { log: EventoTamer[]; tentativas: number } {
+  const antigas = new Set<number>();
+  for (const ev of log) if (ev[0] === "fabrica" && (ev[1] as InicioFabrica).v !== VERSAO_FABRICA_TR) antigas.add((ev[1] as InicioFabrica).n);
+  if (antigas.size && log.some(ev => ev[0] === "fabrica" && (ev[1] as InicioFabrica).v === VERSAO_FABRICA_TR))
+    throw new Error("o registro do Tamer mistura a Fábrica de antes com a em tempo real");
+  return { log: log.filter(ev => !(EVENTOS_FABRICA.includes(ev[0]) && antigas.has((ev[1] as { n: number }).n))), tentativas: antigas.size };
 }
 export const textoTamer = (t: Tamer): string => JSON.stringify({ versao: VERSAO_TAMER, log: t.log });
 export function gravarTamer(armaz: Armazenamento, t: Tamer): void { armaz.setItem(CHAVE_TAMER, textoTamer(t)); }
 
 /** medalhas que o pet acabou de ganhar para o Tamer: a primeira vitoria dele contra um lider cuja medalha o Tamer
-    ainda nao tem. So pets v6 (os v1-v5 nao tem Tamer). Devolve as medalhas novas (ja aplicadas ao Tamer) */
+    ainda nao tem. Devolve as medalhas novas (ja aplicadas ao Tamer) */
 export function conferirMedalhas(t: Tamer, m: Motor, quando: number = Date.now()): MedalhaGanha[] {
-  if (m.versao < 6) return [];
   const novas: MedalhaGanha[] = [];
   for (const md of MEDALHAS) if (!t.tem(md.id) && (m.campanha[md.lider] ?? 0) > 0) novas.push(t.ganhar(md.id, m, quando));
   return novas;
 }
 /** itens das medalhas: o Tamer que tem a medalha e ainda nao tem o item dela ganha agora (na mesma hora da medalha; um Tamer de antes
-    desta parte recebe na abertura). So com pet v6. Devolve os itens novos (ja aplicados) */
+    desta parte recebe na abertura). Devolve os itens novos (ja aplicados) */
 export function conferirItensDasMedalhas(t: Tamer, m: Motor, quando: number = Date.now()): ItemGanho[] {
-  if (m.versao < 6) return [];
   const novos: ItemGanho[] = [];
   for (const g of t.medalhas) {
     const md = MEDALHA_POR_ID[g.id];
@@ -351,7 +382,7 @@ export function conferirItensDasMedalhas(t: Tamer, m: Motor, quando: number = Da
     desta luta (a primeira vitoria da a medalha e o item, nao carta) */
 export function porqueSemCarta(t: Tamer, m: Motor, lider: string, medalhaAntes: boolean): string | null {
   const md = medalhaDoLider(lider);
-  if (m.versao < 6 || !md) return "só o líder de uma arena dá carta, e só a pets v6";
+  if (!md) return "só o líder de uma arena dá carta";
   if (!medalhaAntes) return "a primeira vitória dá a medalha e o item, não carta";
   const est = LUGARES_V6[md.lugar].est;
   if (m.estagioAtual !== est) return `a carta da revanche vem com um pet do nível da arena (${NIVEL_TAMER[est] ?? est})`;
@@ -370,15 +401,15 @@ export function conferirRevanche(t: Tamer, m: Motor, lider: string, venceu: bool
   return t.ganharItem(CARTA_DA_REVANCHE[md.id], "revanche", lider, m, quando);
 }
 /** o titulo que o pet acabou de dar ao Tamer: a primeira vez que ele venceu a Liga dos Lideres (o motor conta os titulos do pet pelo
-    evento de luta da Liga). So pets v6 e com as 6 medalhas no Tamer. Devolve o titulo novo (ja aplicado) ou null */
+    evento de luta da Liga). So com as 6 medalhas no Tamer. Devolve o titulo novo (ja aplicado) ou null */
 export function conferirCampeao(t: Tamer, m: Motor, quando: number = Date.now()): Campeao | null {
-  if (m.versao < VERSAO_LIGA || m.liga.titulos < 1 || t.n < MEDALHAS_LIGA || t.tituloDe(m.semente)) return null;
+  if (m.liga.titulos < 1 || t.n < MEDALHAS_LIGA || t.tituloDe(m.semente)) return null;
   return t.ganharTitulo(m, quando);
 }
 /** os recordes que o pet acabou de dar ao Tamer: a maior sequencia dele numa instalacao da Fronteira, quando passa a do Tamer (o motor
-    conta as sequencias do pet pelo evento de luta da instalacao). So pets v6 e depois do titulo. Devolve os recordes novos (ja aplicados) */
+    conta as sequencias do pet pelo evento de luta da instalacao). So depois do titulo. Devolve os recordes novos (ja aplicados) */
 export function conferirRecordes(t: Tamer, m: Motor, quando: number = Date.now()): Recorde[] {
-  if (m.versao < VERSAO_INSTALACOES || !t.titulo) return [];
+  if (!t.titulo) return [];
   const novos: Recorde[] = [];
   for (const x of INSTALACOES) {
     const v = m.instalacoes[x.id].recorde;
@@ -387,9 +418,9 @@ export function conferirRecordes(t: Tamer, m: Motor, quando: number = Date.now()
   return novos;
 }
 /** o pet passa a conhecer as medalhas do Tamer (evento "u" no registro dele) e, com as 6 e o titulo do Tamer, a Fronteira aberta (evento
-    "f": as instalacoes). Pet v1-v5 ou morto: nada. Devolve true se o registro do pet mudou */
+    "f": as instalacoes). Pet morto: nada. Devolve true se o registro do pet mudou */
 export function sincronizarPet(t: Tamer, m: Motor): boolean {
-  if (m.versao < 6 || m.morte) return false;
+  if (m.morte) return false;
   let mudou = false;
   try {
     if (m.medalhas < t.n) { m.liberar(t.n); mudou = true; }
@@ -404,12 +435,14 @@ export function sincronizarPet(t: Tamer, m: Motor): boolean {
     comportamento no replay e saem tambem); 3 = arenas com lideres (2026-09-30, DESIGN_MEDALHAS_ARENAS parte 2: as lutas
     de arena mudam no replay dos v6 de antes, e saem de novo); 4 = escala dos pets v6 (2026-09-30, CESC_V6: as lutas da
     campanha e das arenas mudam no replay dos v6 de antes, e eles saem de novo); 5 = limite de turnos do desafiado (2026-09-30: as
-    lutas dos v6 que chegam ao limite mudam de resultado no replay, e eles saem de novo). Sem a chave: 1 se o registro do Tamer existe (o
-    descarte das medalhas rodou antes do marcador existir), senao 0 */
+    lutas dos v6 que chegam ao limite mudam de resultado no replay, e eles saem de novo); 6 = a luta em tempo real (2026-10-29, COMBATE-TR,
+    E2 e D-4: os pets v1-v12 lutavam por turnos e saem; o Tamer fica, sem a Fabrica de antes, e os saves descartados ficam guardados para
+    o aviso oferecer o arquivo). Sem a chave: 1 se o registro do Tamer existe (o descarte das medalhas rodou antes do marcador existir),
+    senao 0 */
 export const CHAVE_DESCARTE = CHAVE + "-descarte";
-export const VERSAO_DESCARTE = 5;
+export const VERSAO_DESCARTE = 6;
 /** cada descarte apaga os pets ate esta versao (inclusive) */
-const DESCARTA_ATE: Record<number, number> = { 1: 5, 2: 6, 3: 6, 4: 6, 5: 6 };
+const DESCARTA_ATE: Record<number, number> = { 1: 5, 2: 6, 3: 6, 4: 6, 5: 6, 6: 12 };
 
 /** decisoes do Matheus: os pets de antes da trava das medalhas (v1-v5, 2026-09-29) e os v6 de antes do combate V21D
     (2026-09-30) sao descartados, o ativo e os guardados, e o jogo comeca num ovo novo v6 com o Tamer sem medalhas. Roda uma
@@ -427,24 +460,36 @@ export function descartarPetsAntigos(armaz: Armazenamento & { removeItem(k: stri
     try { const d = JSON.parse(txt) as { versao?: number } | null; return !!d && (d.versao ?? 1) <= ate; } catch { return false; }
   };
   let descartados = 0;
+  const saves: unknown[] = [];
   const ativo = armaz.getItem(CHAVE);
-  if (antigo(ativo)) { armaz.removeItem(CHAVE); descartados++; }
+  if (antigo(ativo)) { saves.push(JSON.parse(ativo!)); armaz.removeItem(CHAVE); descartados++; }
   const bg = armaz.getItem(chaveGuardados);
   if (bg !== null) {
     let g: unknown = null;
     try { g = JSON.parse(bg); } catch { /* guardados ilegiveis: ficam para o erro de sempre */ }
     if (Array.isArray(g)) {
       const ficam = g.filter(x => !antigo(JSON.stringify(x)));
+      saves.push(...g.filter(x => antigo(JSON.stringify(x))));
       descartados += g.length - ficam.length;
       if (ficam.length !== g.length) armaz.setItem(chaveGuardados, JSON.stringify(ficam));
     }
   }
   /* sem a chave dos guardados, a escada de exemplo (pets v3) seria semeada logo depois: fica vazia de proposito */
   if (descartados && armaz.getItem(chaveGuardados) === null) armaz.setItem(chaveGuardados, "[]");
-  /* o aviso de sempre diz "um ovo novo e nenhuma medalha": com pet descartado o Tamer recomeca vazio */
-  if (descartados || !tinhaTamer) gravarTamer(armaz, new Tamer());
+  /* o descarte 6 (D-4): o Tamer fica, sem a Fabrica de antes; os saves descartados ficam para o arquivo; o aviso conta os dois */
+  let fabrica = 0;
+  if (tinhaTamer) {
+    const r = semFabricaAntiga(lerLogTamer(armaz)!.log);
+    fabrica = r.tentativas;
+    gravarTamer(armaz, Tamer.reproduzir(r.log));
+  } else gravarTamer(armaz, new Tamer());
+  if (saves.length) {
+    let ja: unknown[] = [];
+    try { const x = JSON.parse(armaz.getItem(CHAVE_DESCARTADOS) ?? "[]"); if (Array.isArray(x)) ja = x; } catch { /* ilegivel: recomeca */ }
+    armaz.setItem(CHAVE_DESCARTADOS, JSON.stringify([...ja, ...saves]));
+  }
   armaz.setItem(CHAVE_DESCARTE, String(VERSAO_DESCARTE));
-  if (descartados) armaz.setItem(CHAVE_AVISO_V6, String(descartados));
+  if (descartados || fabrica) armaz.setItem(CHAVE_AVISO_TR, JSON.stringify({ pets: descartados, fabrica }));
   return descartados;
 }
 

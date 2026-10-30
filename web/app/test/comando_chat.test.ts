@@ -52,11 +52,8 @@ describe("validacao do comando no app", () => {
     expect(ac.validarComando(m, 16, "alimentar")).toBeNull();                       /* nascendo */
     const morto = new Motor(7); morto.morte = { tick: 1, causa: "lesoes" };
     expect(ac.validarComando(morto, 0, "alimentar")).toBeNull();
-    const v3 = new Motor(7, 3);
-    expect(ac.validarComando(v3, 0, "petisco")).toBeNull();
-    expect(ac.validarComando(v3, 0, "brincar")).toBe("brincar");
-    expect(ac.validarComando(new Motor(7, 10), 0, "petisco")).toBe("petisco");
-    /* pets v11 (os ovos novos): sem elogio, bronca, petisco e banheiro */
+    expect(ac.validarComando(m, 0, "brincar")).toBe("brincar");
+    /* os pets v13 (os ovos novos, como os v11): sem elogio, bronca, petisco e banheiro */
     for (const fora of ["petisco", "elogiar", "repreender", "levar_ao_banheiro"]) expect(ac.validarComando(m, 0, fora)).toBeNull();
     expect(ac.validarComando(m, 0, "tratar_lesao")).toBeNull();                     /* sem lesao */
     const lesionado = new Motor(7); lesionado.lesionadoDesde = 5;

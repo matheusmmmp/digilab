@@ -1,6 +1,6 @@
-/* As chaves do produto do pet v12 (docs/TAREFA_V2_PRODUTO_FOME.md): o chamado de fome do bebe pela fome do corpo (a), e a decisao do pet
+/* As chaves do produto do pet do jogo, o v13 (docs/TAREFA_V2_PRODUTO_FOME.md): o chamado de fome do bebe pela fome do corpo (a), e a decisao do pet
    logo depois de o dono por a racao no chao (b). Ligadas no jogo (src/produto.ts, o evento "p" no comeco do registro dos ovos novos) e
-   desligadas na pesquisa: sem o evento, a vida e a de hoje (os gabaritos v12_jogo_ts, mvp_produto_python e mvp_mundo_python conferem).
+   desligadas na pesquisa: sem o evento, a vida e a de hoje (os gabaritos v13_vidas_ts, v12_jogo_ts, mvp_produto_python e mvp_mundo_python conferem).
      - (a) o caso do Gerente (2026-10-29): a racao vista a 4 celulas, a fome em 0,675 e o chamado "fome" aberto pelo relogio. Com a chave,
        o chamado so abre quando a fome do corpo pede (abaixo de CHAMADO_FOME_CORPO.limiar, o fome_moderada do instinto), e fecha quando
        o dono alimenta, quando o pet come e a fome volta ao limiar, ou quando a janela passa;
@@ -20,7 +20,7 @@ const SO_A = { chamadoPelaFome: true, decisaoNaComida: false }, SO_B = { chamado
 const AMBAS = { chamadoPelaFome: true, decisaoNaComida: true };
 
 function pet(semente: number, chaves: ChavesProduto | null, classica = false): Motor {
-  const m = new Motor(semente, 12);
+  const m = new Motor(semente);
   if (classica) m.configurar("classica");
   if (chaves) m.ligarProduto(chaves);
   return m;
@@ -216,39 +216,38 @@ describe("(b) a decisao do pet logo depois da racao no chao", () => {
 
 describe("as chaves no registro: o evento \"p\"", () => {
   test("o jogo grava as chaves no comeco do registro dos ovos novos, e o replay as le de la", () => {
-    const m = ligarProduto(new Motor(101, 12));
+    const m = ligarProduto(new Motor(101));
     expect(m.log).toEqual([[TICK_INICIAL, "p", AMBAS]]);
     expect(m.produto).toEqual(AMBAS);
     brincarCedo(m, 6, 120, (t) => { if (t === 77) racaoPerto(m, 32); });
-    const r = Motor.reproduzir(101, m.log, 12);
+    const r = Motor.reproduzir(101, m.log);
     expect(r.produto).toEqual(AMBAS);
     expect(r.assinatura()).toBe(m.assinatura());
     expect(JSON.stringify(r.chamados)).toBe(JSON.stringify(m.chamados));
     /* sem o evento (um save de antes), as duas desligadas e outra vida */
-    const semP = Motor.reproduzir(101, m.log.slice(1).map(ev => [ev[0], ev[1], ev[2]] as EventoRegistro), 12);
+    const semP = Motor.reproduzir(101, m.log.slice(1).map(ev => [ev[0], ev[1], ev[2]] as EventoRegistro));
     expect(semP.produto).toEqual({ chamadoPelaFome: false, decisaoNaComida: false });
     expect(semP.assinatura()).not.toBe(m.assinatura());
     /* o ritmo antes das chaves (o brasao), e a origem do filho antes delas */
-    const cl = new Motor(202, 12); cl.configurar("classica"); ligarProduto(cl);
+    const cl = new Motor(202); cl.configurar("classica"); ligarProduto(cl);
     expect(cl.log.map(ev => ev[1])).toEqual(["c", "p"]);
   });
 
-  test("o evento invalido falha alto: fora do comeco, duas vezes, num pet anterior ao v12, malformado", () => {
+  test("o evento invalido falha alto: fora do comeco, duas vezes, malformado", () => {
     const t = TICK_INICIAL;
-    expect(() => new Motor(1, 11).ligarProduto(AMBAS)).toThrow(/v12/);
-    const duas = new Motor(1, 12); duas.ligarProduto(AMBAS);
+    const duas = new Motor(1); duas.ligarProduto(AMBAS);
     expect(() => duas.ligarProduto(SO_A)).toThrow(/uma vez/);
-    const tarde = new Motor(1, 12); tarde.avancar(1);
+    const tarde = new Motor(1); tarde.avancar(1);
     expect(() => tarde.ligarProduto(AMBAS)).toThrow(/começo/);
-    const dono = new Motor(1, 12); dono.observar("acariciar");
+    const dono = new Motor(1); dono.observar("acariciar");
     expect(() => dono.ligarProduto(AMBAS)).toThrow(/começo/);
     for (const ruim of [null, {}, { chamadoPelaFome: true }, { chamadoPelaFome: 1, decisaoNaComida: true },
       { chamadoPelaFome: true, decisaoNaComida: true, outra: true }])
-      expect(() => Motor.reproduzir(1, [[t, "p", ruim]] as unknown as EventoRegistro[], 12), JSON.stringify(ruim)).toThrow(/inválidas/);
-    expect(() => Motor.reproduzir(1, [[t, "p", AMBAS], [t, "p", AMBAS]], 12)).toThrow(/uma vez/);
+      expect(() => Motor.reproduzir(1, [[t, "p", ruim]] as unknown as EventoRegistro[]), JSON.stringify(ruim)).toThrow(/inválidas/);
+    expect(() => Motor.reproduzir(1, [[t, "p", AMBAS], [t, "p", AMBAS]])).toThrow(/uma vez/);
     /* o "p" depois de outro evento que nao seja o ritmo ou a origem */
-    expect(() => Motor.reproduzir(1, [[t, "t", 1], [t + 1, "p", AMBAS]], 12)).toThrow(/começo/);
-    /* a chave no laco so com o mundo do v12 */
-    expect(new Motor(1, 11).produto).toEqual({ chamadoPelaFome: false, decisaoNaComida: false });
+    expect(() => Motor.reproduzir(1, [[t, "t", 1], [t + 1, "p", AMBAS]])).toThrow(/começo/);
+    /* sem o evento, as duas desligadas */
+    expect(new Motor(1).produto).toEqual({ chamadoPelaFome: false, decisaoNaComida: false });
   });
 });

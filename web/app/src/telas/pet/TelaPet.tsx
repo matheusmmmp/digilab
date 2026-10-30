@@ -6,7 +6,7 @@ import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Ban, Brain, ChevronRight, Ellipsis, Gamepad2, Hand, House, Layers, MessageSquareText, PawPrint, Sparkles, Syringe } from "lucide-react";
 import {
-  ACAO_CHAMADO, ALVOS_DESEJO, CAT, CED, CLE, CMEN, DO_ESP, NOME_ESP, EMOCAO_TXT, FATORES_TXT, NOME_CHAMADO, NOME_EST, NOME_PET, OVO, TICK_INICIAL, TPD,
+  ACAO_CHAMADO, ALVOS_DESEJO, CAT, DO_ESP, NOME_ESP, EMOCAO_TXT, FATORES_TXT, NOME_CHAMADO, NOME_EST, NOME_PET, OVO, TICK_INICIAL, TPD,
   chaveSprite, eNoite, expressarConfianca, nomeEstagio, nomeForma, nomeRivalConfianca, observacao, type AcaoDono, type Chamado, type MotivoVida, type Motor,
 } from "../../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
@@ -18,7 +18,7 @@ import {
   detalheMotivo, falaDe, falaLLM, motivoParaApi, refsDoMotivo, rotuloLLM, useFalaLLM,
 } from "../../fala.ts";
 import {
-  detalheFalaLivre, falaVozRecente, gatilhoFalaLivre, iconeVerif, tituloFalaLivre, useFalaLivre,
+  detalheFalaLivre, gatilhoFalaLivre, iconeVerif, tituloFalaLivre, useFalaLivre,
 } from "../../falaLivre.ts";
 import { AMPULHETA } from "../../grades.ts";
 import { ROTULO_DONO, agir } from "../../acoes.ts";
@@ -114,9 +114,9 @@ function useFala(): VistaFala {
   useEffect(() => { setLivre(gatilhoFalaLivre(m)); }, [revisao, fl.modo]);
   const mot = m.motivo, est = m.estagioAtual;
   const v: VistaFala = { classe: "dl-balao", balao: "…", texto: "", titulo: "Toque para ver o porquê", causa: null, detalhe: "" };
-  const ult = m.temVozPropria ? falaVozRecente(m) : fl.modo === "livre" ? fl.ultimo : null;
+  const ult = fl.modo === "livre" ? fl.ultimo : null;
   if (livre && ult) {
-    v.balao = v.texto = "✧ " + ult.fala + iconeVerif(ult.verificacao, ult);
+    v.balao = v.texto = "✧ " + ult.fala + iconeVerif(ult.verificacao);
     v.detalhe = detalheFalaLivre(ult); v.titulo = tituloFalaLivre(ult);
   } else if (mot) {
     const refs = refsDoMotivo(m, mot), resp = falaLLM(motivoParaApi(mot, refs), est, mot.humor), usarLLM = !!resp && resp.fonte === "llm";
@@ -184,7 +184,7 @@ export function lutasDaCausa(m: Motor, lutas: readonly number[], estado: string)
 }
 function EstadoConfianca() {
   const { motor: m, nascendo } = useJogo(), [aberto, setAberto] = useState(false);
-  if (m.versao < 8 || nascendo > 0 || m.morte) return null;
+  if (nascendo > 0 || m.morte) return null;
   const e = m.estadoConfianca();
   if (!e || e.estado === "neutro") return null;
   const txt = expressarConfianca(e.estado, m.estagioAtual)!, causa = lutasDaCausa(m, e.lutas, e.estado);
@@ -206,7 +206,6 @@ function EstadoConfianca() {
 const EMOTE_EMOCAO: Record<string, string> = { alegria: "emoji_feliz", euforia: "emoji_feliz", orgulho: "emoji_feliz", ternura: "emoji_coracao" };
 function Emocao() {
   const { motor: m } = useJogo();
-  if (m.versao < 2) return null;
   const em = (m.pol.mem as unknown as { emocoes: { nome: string }[] }).emocoes;
   const ult = em[em.length - 1];
   if (!ult) return null;
@@ -235,66 +234,8 @@ function Necessidades() {
           <i style={{ width: `${e.saude * 100}%`, ...(e.saude < .3 ? { background: "var(--dl-need)" } : {}) }} />
         </div>
       </div>
-      {m.temEducacao && <div className="nec nec-disciplina">
-        <span className="nec-rot">Disciplina</span>
-        <Seg n={blocos(m.disciplina / CED.disciplinaMax, 4)} m={4} cls="dl-seg--acao" />
-      </div>}
     </div>
   );
-}
-/** pets v4: a janela aberta (chamado ou aviso) e a lesao. O dono ve o pedido, nunca se e manha: confere a
-    necessidade e decide (atender ou dar bronca). */
-function JanelaV4({ agir }: { agir: (a: AcaoDono) => void }) {
-  const { motor: m } = useJogo(), j = m.janelaAberta(), tick = m.e.tick;
-  const lesao = m.lesionadoDesde !== null ? CLE.horasMorte * 60 - (tick - m.lesionadoDesde) : null;
-  return <>
-    {lesao !== null && (
-      <div className="dl-card chamado chamado--lesao">
-        <span className="chamado-ic"><Peca nome="emoji_exclam" escala={2} reserva="!" /></span>
-        <span className="chamado-txt"><span className="chamado-tit"><b>Machucado na luta</b><span className="dl-apoio">trate em até {Math.floor(lesao / 60)} h {lesao % 60} min</span></span>
-          <Seg n={blocos(lesao / (CLE.horasMorte * 60), 10)} m={10} /></span>
-        <button type="button" className="dl-btn" onClick={() => agir("tratar_lesao")}>Tratar</button>
-      </div>
-    )}
-    {j && (() => {
-      const resta = Math.max(0, j.prazo - tick);
-      const barra = <Seg n={blocos(resta / CED.janela, 10)} m={10} />;
-      if (j.tipo === "fala") {
-        /* pets v7: ele falou (voz propria). O dono nunca sabe se foi mentira: acredita, premia ou desconfia */
-        const f = falaVozRecente(m), barraFala = <Seg n={blocos(resta / CMEN.janela, 10)} m={10} />;
-        return (
-          <div className="dl-card chamado chamado--fala">
-            <span className="chamado-ic"><Peca nome="emoji_exclam" escala={2} reserva="!" /></span>
-            <span className="chamado-txt"><span className="chamado-tit"><b>{f ? `“${f.fala}”` : "Ele disse uma coisa"}</b>
-              <span className="dl-apoio">{m.sombria ? "é sombrio: não confie em tudo que ele diz" : "acredita? confira o que você sabe dele"}</span></span>{barraFala}</span>
-            <span className="chamado-botoes">
-              <button type="button" className="dl-btn" onClick={() => agir("elogiar")}>Acreditar</button>
-              <button type="button" className="dl-btn" onClick={() => agir("petisco")}>Petisco</button>
-              <button type="button" className="dl-btn" onClick={() => agir("repreender")}>É mentira!</button>
-            </span>
-          </div>
-        );
-      }
-      if (j.tipo === "aviso") return (
-        <div className="dl-card chamado">
-          <span className="chamado-ic"><Peca nome="emoji_surpreso" escala={2} reserva="!" /></span>
-          <span className="chamado-txt"><span className="chamado-tit"><b>Vai fazer sujeira!</b><span className="dl-apoio">leve ao banheiro</span></span>{barra}</span>
-          <button type="button" className="dl-btn" onClick={() => agir("levar_ao_banheiro")}>Banheiro</button>
-        </div>
-      );
-      const c = j.pedido as Chamado;
-      return (
-        <div className="dl-card chamado">
-          <span className="chamado-ic">{EMOTE_CHAMADO[c] ? <Peca nome={EMOTE_CHAMADO[c]!} escala={2} reserva="!" /> : "!"}</span>
-          <span className="chamado-txt"><span className="chamado-tit"><b>Chamando: {NOME_CHAMADO[c]}</b><span className="dl-apoio">precisa mesmo? confira a barra</span></span>{barra}</span>
-          <span className="chamado-botoes">
-            <button type="button" className="dl-btn" onClick={() => agir(ACAO_CHAMADO[c][0])}>Atender</button>
-            <button type="button" className="dl-btn" onClick={() => agir("repreender")}>É manha</button>
-          </span>
-        </div>
-      );
-    })()}
-  </>;
 }
 /** pets v4: morreu (lesão demais ou sem tratar). O registro fica; so um ovo novo continua o jogo */
 function Morte() {
@@ -310,7 +251,6 @@ function Morte() {
 }
 function Chamados({ agir }: { agir: (a: AcaoDono) => void }) {
   const { motor: m } = useJogo(), ab = m.chamadosAbertos(), tick = m.e.tick;
-  if (m.temEducacao && m.estagioAtual !== "bebe") return <JanelaV4 agir={agir} />;
   if (!ab.length && m.acao === "chamar_atencao") return (
     <div className="dl-card chamado">
       <span className="chamado-ic"><Peca nome="emoji_exclam" escala={2} reserva="!" /></span>
@@ -366,9 +306,8 @@ function resumoAgora(m: Motor, nascendo: number): Resumo {
   if (d) return { texto: (d.tipo === "necessidade" ? "precisa " : "quer ") + ALVOS_DESEJO[d.alvo][1], emote: EMOTE_DESEJO[d.alvo] ?? null, acao: ACAO_DESEJO[d.alvo] ?? null };
   return { texto: "agora: " + NOME_PET[m.acao], emote: null, acao: null };
 }
-/** ha um pedido aberto que pede resposta agora (chamado, janela da educacao ou lesao)? */
+/** ha um pedido aberto que pede resposta agora (o chamado do In-Training, ou ele chamando)? */
 function temPedido(m: Motor): boolean {
-  if (m.temEducacao && m.estagioAtual !== "bebe") return m.lesionadoDesde !== null || !!m.janelaAberta();
   return m.chamadosAbertos().length > 0 || m.acao === "chamar_atencao";
 }
 /** a necessidade prioritaria: a morte, um pedido aberto (o card de sempre, com o Atender) ou o resumo, que abre os detalhes */
@@ -411,7 +350,7 @@ function AcoesPet() {
   const { motor: m, nascendo } = useJogo(), [mais, setMais] = useState(false);
   /* ao abrir, as acoes extras entram na tela (no celular ficam abaixo da dobra) */
   useEffect(() => { if (mais) document.getElementById("acoes-mais")?.scrollIntoView({ block: "nearest" }); }, [mais]);
-  const todas = (m.versao >= 11 ? ACOES_V11 : m.versao >= 4 ? [...ACOES, ...ACOES_V4] : ACOES).map(([a]) => a);
+  const todas = ACOES_V11.map(([a]) => a);
   const sugerida = resumoAgora(m, nascendo).acao;
   const destaque = [...new Set([...(sugerida ? [sugerida] : []), ...DESTAQUE_PADRAO])].filter(a => todas.includes(a)).slice(0, 3);
   const resto = todas.filter(a => !destaque.includes(a));
@@ -518,7 +457,7 @@ function TelaPetDesktop({ irRegistro, irEvolucao }: { irRegistro: () => void; ir
         <Modulo icone={Layers} titulo="Últimas ações" aside={<button type="button" className="mod-link" onClick={irRegistro}>Ver tudo</button>}>
           <UltimasAcoes />
         </Modulo>);
-      case "digibrain": return m.versao >= 11 && nascendo === 0 ? (
+      case "digibrain": return nascendo === 0 ? (
         <Modulo icone={Brain} titulo="DigiBrain" aside={<SeloDigiBrain replay={false} />}>
           <div className="digibrain digibrain--modulo"><ConteudoDigiBrain /></div>
         </Modulo>) : null;
@@ -550,7 +489,7 @@ export function TelaPet({ abrirMeusPets, irConversar, abrirConfig, irRegistro, i
             <PalcoPet />
             <div className="cena-topo">
               <Emocao />
-              <span className="cena-topo-dir">{nascendo === 0 && m.versao >= 11 && <BotaoDigiBrain />}</span>
+              <span className="cena-topo-dir">{nascendo === 0 && <BotaoDigiBrain />}</span>
             </div>
             {nascendo === 0 && !m.morte && <BalaoFala v={fala} abrir={() => setDetalhes("fala")} />}
             <BalaoCausa />

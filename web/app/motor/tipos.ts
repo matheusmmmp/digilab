@@ -79,7 +79,7 @@ export type EventoProduto = [tick: number, tipo: "p", chaves: ChavesProduto];
 export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem | EventoConfig | EventoLiberacao
   | EventoItem | EventoCarta | EventoFronteira | EventoFala | EventoComida | EventoProduto;
 
-export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13;
 
 /** estado de vida (camada 1) */
 export interface EstadoVida {

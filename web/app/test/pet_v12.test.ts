@@ -30,10 +30,10 @@ function viverV12(m: Motor, dias: number, perto: boolean): void {
 }
 
 describe("o pet v12 no Motor", () => {
-  test("o ovo novo e v12: o laco com o mundo, o corpo com a curiosidade e o cerebro A do v11", () => {
-    expect(VERSAO_PET).toBe(12);
+  test("o v12 (e o v13, o ovo novo: o v12 com a luta em tempo real): o laco com o mundo, o corpo com a curiosidade e o cerebro A do v11", () => {
+    expect(VERSAO_PET).toBe(13);
     const m = new Motor(4242);
-    expect(m.versao).toBe(12);
+    expect(m.versao).toBe(13);
     expect(m.v11!.laco).toBeInstanceOf(MotorCorpoMundo);
     expect(m.mundo).not.toBeNull();
     expect(m.cerebro).not.toBeNull();
@@ -41,8 +41,6 @@ describe("o pet v12 no Motor", () => {
     /* o mundo do produto (a opcao 1 do Matheus, 2026-10-24): sem arvores, so a racao do jogador */
     expect(m.mundo!.cm).toBe(CMU_MVP);
     expect(m.mundo!.arvores).toEqual([]);
-    expect(new Motor(4242, 11).mundo).toBeNull();
-    expect("curiosidade" in new Motor(4242, 11).observacaoAgora().corpo!).toBe(false);
     for (const a of ["elogiar", "repreender", "petisco", "levar_ao_banheiro"] as AcaoDono[]) expect(() => m.observar(a)).toThrow(/v11/);
   });
 
@@ -72,21 +70,21 @@ describe("o pet v12 no Motor", () => {
       expect(mu.quedas).toEqual([]);
       expect(mu.consumos.every((c) => c.tipo === "racao" && c.origem === "dono")).toBe(true);
       /* G1: o replay do registro, evento a evento, e pelo caminho publico e pelo save (o JSON do registro) */
-      const r = new Motor(semente, 12);
+      const r = new Motor(semente);
       for (const ev of m.log) r.aplicarEvento(ev);
       expect(r.assinatura()).toBe(m.assinatura());
       const log = JSON.parse(JSON.stringify(m.log)) as EventoRegistro[];
-      expect(Motor.reproduzir(semente, log, 12).assinatura()).toBe(m.assinatura());
-      expect(JSON.stringify(Motor.reproduzir(semente, log, 12).mundo!.resumo())).toBe(JSON.stringify(mu.resumo()));
+      expect(Motor.reproduzir(semente, log).assinatura()).toBe(m.assinatura());
+      expect(JSON.stringify(Motor.reproduzir(semente, log).mundo!.resumo())).toBe(JSON.stringify(mu.resumo()));
     });
   }
 
   test("G1: o replay incremental passa pelos mesmos estados (a assinatura com o mundo depois de cada evento)", () => {
     const m = new Motor(404), passos: string[] = [];
     viverV12(m, 2, true);
-    const r = new Motor(404, 12);
+    const r = new Motor(404);
     for (const ev of m.log) { r.aplicarEvento(ev); passos.push(r.assinatura()); }
-    const s = new Motor(404, 12);
+    const s = new Motor(404);
     m.log.forEach((ev, i) => { s.aplicarEvento(ev); expect(s.assinatura(), `evento ${i}`).toBe(passos[i]); });
     expect(passos[passos.length - 1]).toBe(m.assinatura());
   });
@@ -104,7 +102,6 @@ describe("o pet v12 no Motor", () => {
     expect(() => m.deixarComida("racao", Number.NaN, 100)).toThrow(/nao inteira/);
     expect(m.log.length).toBe(n);
     expect(m.assinatura()).toBe(antes);
-    expect(() => new Motor(505, 11).deixarComida("racao", 100, 100)).toThrow(/v12/);
   });
 
   test("G-EVENTO: o \"dc\" malformado ou fora do v12 no registro falha alto, e o evento desconhecido tambem", () => {
@@ -113,10 +110,10 @@ describe("o pet v12 no Motor", () => {
       [t, "dc", { tipo: "a", x: 100, y: 100 }], [t, "dc", { tipo: "racao", x: 100 }], [t, "dc", { tipo: "racao", x: 100, y: 100, z: 1 }],
       [t, "dc", { tipo: "racao", x: "100", y: 100 }], [t, "dc", { tipo: "racao", x: 2000, y: 100 }], [t, "dc", null], [t, "dc", "racao|1|2"],
     ];
-    for (const ev of ruins) expect(() => Motor.reproduzir(1, [ev as EventoRegistro], 12), JSON.stringify(ev)).toThrow();
-    expect(() => Motor.reproduzir(1, [[t, "dc", { tipo: "racao", x: 100, y: 100 }]], 11)).toThrow(/v12/);
-    expect(() => Motor.reproduzir(1, [[t, "zz", 1] as unknown as EventoRegistro], 12)).toThrow(/desconhecido/);
-    expect(Motor.reproduzir(1, [[t, "dc", { tipo: "racao", x: 100, y: 100 }]], 12).mundo!.comidas.size).toBe(1);
+    for (const ev of ruins) expect(() => Motor.reproduzir(1, [ev as EventoRegistro]), JSON.stringify(ev)).toThrow();
+    expect(() => Motor.reproduzir(1, [[t, "dc", { tipo: "racao", x: 100, y: 100 }]], 11)).toThrow(/versão/);   /* o v11 nao abre mais */
+    expect(() => Motor.reproduzir(1, [[t, "zz", 1] as unknown as EventoRegistro])).toThrow(/desconhecido/);
+    expect(Motor.reproduzir(1, [[t, "dc", { tipo: "racao", x: 100, y: 100 }]]).mundo!.comidas.size).toBe(1);
   });
 
   test("MV-7: o carinho e o tapa ficam fora do mundo (sem posicao do dono): o mundo nao muda, so o corpo e o cerebro", () => {

@@ -21,13 +21,14 @@ const ABAS: [string, string, string][] = [
 ];
 
 /** semeia o save por uma pagina da mesma origem que nao e o app (o app gravaria o pet dele ao fechar). O registro do Tamer
-    (vazio, ou o dado) e o marcador do descarte (versao 5) vao junto: com eles o app entende que o descarte unico ja rodou
-    e nao descarta os saves antigos (v1-v3, e o v6) que estes testes jogam */
+    (vazio, ou o dado) e o marcador do descarte (versao 6, a da luta em tempo real) vao junto: com eles o app entende que o descarte unico
+    ja rodou e nao descarta os saves antigos (v1-v12) que estes testes jogam. So nos testes: no jogo, o descarte 6 tira todos eles
+    (COMBATE-TR, etapa R2). Os testes que jogam a tela com um pet de antes ainda valem enquanto o motor abre as versoes antigas */
 async function semear(page: Page, save: object | null, tema?: string, tamer: object = { versao: 1, log: [] }): Promise<void> {
   await page.goto("/Assets/digilab_atlas_up.json");
   await page.evaluate(([chave, s, t, tm]) => {
     localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", tm);
-    localStorage.setItem(chave + "-descarte", "5");
+    localStorage.setItem(chave + "-descarte", "6");
     /* dicas do Bit desligadas e sem os pets guardados de exemplo: os testes de fluxo nao dependem deles */
     localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
     if (s) localStorage.setItem(chave, s);
@@ -50,11 +51,10 @@ function vigiarErros(page: Page): string[] {
 const numLog = (page: Page, tipo: string) => page.evaluate(([t]) => JSON.parse((window as any).__digilab.registro()).log.filter((e: unknown[]) => e[1] === t).length, [tipo] as const);
 
 for (const [versao, save] of Object.entries(SAVES)) {
-  test(`jogo completo com save ${versao}: assinatura igual à do HTML`, async ({ page, context }) => {
+  test(`jogo completo com save ${versao}: o fluxo inteiro, e o replay do app igual`, async ({ page }) => {
     await semear(page, save);            /* a pagina de semear e um JSON: o favicon dela da 404, fora do app */
     const erros = vigiarErros(page);
-    /* ?escala=0: a assinatura se compara com o HTML antigo, que nao tem a escala de stats (a campanha muda com ela) */
-    await page.goto(APP + "?escala=0#/pet/estado");
+    await page.goto(APP + "#/pet/estado");
     await expect(page.locator(".pet-tela")).toBeVisible();
     /* o nivel do pet: no topo do desktop (o viewport padrao e de desktop; a tela Pet do desktop nao tem o cabecalho do celular) */
     await expect(page.locator(".topo-pet .dl-tag--estagio")).toHaveText(/Champion/i);
@@ -71,8 +71,10 @@ for (const [versao, save] of Object.entries(SAVES)) {
     const d0 = await numLog(page, "d");
     /* a tela Pet da Home (TAREFA_V2_TELA_PET): tres acoes em destaque e as outras em Mais */
     await page.locator(".acoes-pet .acao-mais").click();
-    for (const a of ["Alimentar", "Limpar", "Brincar", "Carinho", "Elogiar"]) await page.locator(".acoes-pet button", { hasText: a }).click();
-    expect(await numLog(page, "d")).toBe(d0 + 5);
+    /* o Alimentar dos pets v12 em diante poe a racao no comedouro (o evento "dc"); os pets v13 nao tem elogio */
+    const dc0 = await numLog(page, "dc");
+    for (const a of ["Alimentar", "Limpar", "Brincar", "Carinho"]) await page.locator(".acoes-pet button", { hasText: a }).click();
+    expect(await numLog(page, "d") + await numLog(page, "dc")).toBe(d0 + dc0 + 4);
 
     /* treinar ate o FORCAR (fadiga 60) e forcar (com a confirmacao) */
     await page.locator(".dl-nav button", { hasText: "Crescer" }).click();
@@ -110,11 +112,12 @@ for (const [versao, save] of Object.entries(SAVES)) {
     /* Ver replay: a mesma luta refeita do registro no Diario; o Voltar leva de volta a Arena */
     await page.locator(".lutar-grande").click();
     await expect(res).toBeVisible({ timeout: 90_000 });
-    const turnos = await page.locator(".res-num", { hasText: "turnos" }).first().locator(".dl-num").textContent();
+    /* a luta em tempo real (pets v13): a duracao em segundos; o replay do Diario nao tem turnos para listar (o desenho e da R3) */
+    const segundos = await page.locator(".res-num", { hasText: "segundos" }).first().locator(".dl-num").textContent();
     await page.locator(".res-replay").click();
     await expect(page).toHaveURL(/#\/diario\/registro$/);
-    await expect(page.locator(".reg-replay")).toContainText(`em ${turnos} turnos`);
-    await expect(page.locator(".reg-replay-turnos li")).toHaveCount(Number(turnos));
+    await expect(page.locator(".reg-replay")).toContainText(`em ${segundos} s`);
+    await expect(page.locator(".reg-replay-turnos li")).toHaveCount(0);
     /* rever a luta no palco: animada em tela cheia, no fim volta ao Diario, e nada entra no registro */
     const lAntes = await numLog(page, "l");
     await page.getByRole("button", { name: "Ver a luta no palco" }).click();
@@ -133,25 +136,16 @@ for (const [versao, save] of Object.entries(SAVES)) {
     await expect(page).toHaveURL(/#\/lutar\/campanha$/);
     expect(await numLog(page, "l")).toBe(l0 + 3);
 
-    /* pausa o tempo (Ajustes no pe da barra > Registro e replay) e confere a assinatura com o HTML rodando o mesmo registro */
+    /* pausa o tempo (Ajustes no pe da barra > Registro e replay) e confere o replay pelo app: o motor do HTML antigo so conhecia os pets
+       v1-v3, que nao abrem mais (o descarte 6, COMBATE-TR, etapa R2b) */
     await page.locator(".dl-nav .nav-quad", { hasText: "Ajustes" }).click();
     await page.getByRole("button", { name: /^Registro e replay/ }).click();
     await page.getByRole("button", { name: "Pausa" }).click();
     await page.waitForTimeout(300);
-    const { assinatura, registro } = await page.evaluate(() => ({ assinatura: (window as any).__digilab.assinatura(), registro: (window as any).__digilab.registro() }));
-    const html = await context.newPage();
-    const errosHtml = vigiarErros(html);
-    await html.goto(HTML);
-    /* o Motor do HTML e uma classe no topo de um script classico: nao fica em window, so no escopo global */
-    await html.waitForFunction(() => { try { return typeof eval("Motor") === "function"; } catch { return false; } });
-    const doHtml = await html.evaluate(r => { const d = JSON.parse(r); return eval("Motor").reproduzir(d.semente, d.log, d.versao ?? 1).assinatura(); }, registro);
-    expect(doHtml, "assinatura do HTML para o mesmo registro").toBe(assinatura);
-    /* controle negativo: um evento a menos no registro da outra assinatura */
-    const semUltimo = await html.evaluate(r => { const d = JSON.parse(r); return eval("Motor").reproduzir(d.semente, d.log.slice(0, -1), d.versao ?? 1).assinatura(); }, registro);
-    expect(semUltimo).not.toBe(assinatura);
-    expect(JSON.parse(registro).versao).toBe(save.versao ?? 1);
+    await page.getByRole("button", { name: "Verificar replay" }).click();
+    await expect(page.getByText(/^Replay idêntico:/)).toBeVisible();
+    expect(JSON.parse(await page.evaluate(() => (window as any).__digilab.registro())).versao).toBe(13);
     expect(erros, "erros no console do app").toEqual([]);
-    expect(errosHtml.filter(e => !/fala-livre|favicon/.test(e)), "erros no console do HTML").toEqual([]);
   });
 }
 
@@ -159,7 +153,7 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390])
   test(`guia, secao 14: ${largura} px, tema ${tema === "light" ? "claro" : "escuro"}`, async ({ page }) => {
     await page.setViewportSize({ width: largura, height: 800 });
     await page.emulateMedia({ colorScheme: tema });
-    await semear(page, SAVES.v3);
+    await semear(page, SAVES.champion);
     const erros = vigiarErros(page);
     for (const [, , rota] of ABAS) {
       await page.goto(APP + "#/" + rota);
@@ -182,7 +176,7 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390])
 /* varios pets, um ativo (pedido do Matheus): a escada de exemplo e criada no primeiro acesso, os guardados ficam parados
    no tempo (o registro deles nao muda enquanto o ativo corre) e Ativar troca o pet */
 test("vários pets: só o ativo corre o tempo", async ({ page }) => {
-  await semear(page, SAVES.v3);
+  await semear(page, SAVES.champion);
   await page.evaluate(c => localStorage.removeItem(c + "-guardados"), CHAVE);
   await page.goto(APP + "#/pet/estado");
   await page.waitForFunction(c => localStorage.getItem(c + "-guardados") !== null, CHAVE, { timeout: 60_000 });
@@ -207,7 +201,7 @@ test("vários pets: só o ativo corre o tempo", async ({ page }) => {
    fechado o Resultado, volta a andar. Na velocidade alta (1 h por segundo) 1,5 s parado seriam 90 min de jogo */
 test("tempo: o relógio para durante a animação da luta e com o Resultado aberto, e volta a andar depois", async ({ page }) => {
   test.setTimeout(120_000);
-  await semear(page, SAVES.v3);
+  await semear(page, SAVES.champion);
   const erros = vigiarErros(page);
   const tick = (): Promise<number> => page.evaluate(() => (window as any).__digilab.tick());
   await page.goto(APP + "#/pet/estado");
@@ -248,7 +242,7 @@ test("foco visível pelo teclado", async ({ page }) => {
   /* sem as transicoes do dl-btn: o teste compara o estilo com e sem foco logo depois de trocar, e uma transicao no meio (a maquina
      ocupada com a cena 3D nos outros workers) dava um falso "sem foco" */
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await semear(page, SAVES.v2);
+  await semear(page, SAVES.champion);
   await page.goto(APP + "#/pet/estado");
   await expect(page.locator(".pet-tela")).toBeVisible();
   const semFoco: string[] = [];
@@ -275,7 +269,7 @@ test("foco visível pelo teclado", async ({ page }) => {
 for (const largura of [390, 899, 900, 1099, 1100, 1280]) {
   test(`layout em ${largura} px`, async ({ page }) => {
     await page.setViewportSize({ width: largura, height: 800 });
-    await semear(page, SAVES.v3);
+    await semear(page, SAVES.champion);
     const lateral = largura >= 900, desktop = largura >= 1100;
     /* a Exploracao: o mapa 3D e, no desktop, o lugar na coluna da direita (no celular o lugar abre na folha: o cartao fica no mapa) */
     for (const [rota, esq, dir] of [["crescer/evolucao", ".evo-arv", ".evo-hist"], ["lutar/campanha", ".mapa-expl", desktop ? ".camp-lutar" : ".expl-cartao"], ["conversar/chat", ".conv-lista", ".conv-status"]]) {
@@ -323,7 +317,7 @@ test("medalhas: vencer o líder dá a medalha e libera a evolução", async ({ p
   const t = await lerTamer(page);
   expect(t.log.map((e: [string, { id: string }]) => e[1].id)).toEqual(["campina", "chip_forca"]);   /* a medalha e o item dela */
   const reg = JSON.parse(await page.evaluate(() => (window as any).__digilab.registro()));
-  expect(reg.versao).toBe(6);
+  expect(reg.versao).toBe(13);
   expect(reg.log.filter((e: unknown[]) => e[1] === "u")).toEqual([[expect.any(Number), "u", { n: 1 }]]);
   await page.goto(APP + "#/lutar/medalhas");
   await expect(page.locator(".med-conta .dl-num")).toHaveText("1");
@@ -336,60 +330,76 @@ test("medalhas: vencer o líder dá a medalha e libera a evolução", async ({ p
   expect(erros).toEqual([]);
 });
 
-test("medalhas: a primeira abertura descarta os pets antigos, avisa e pede o brasão do ovo novo", async ({ page }) => {
+/* o descarte 6 (COMBATE-TR, etapa R2; E2 e D-4): a luta virou tempo real nos pets v13; os pets de antes (v1-v12) saem com o aviso, que
+   oferece o arquivo deles e pede o brasao do ovo novo; o Tamer fica (as medalhas), sem a Fabrica de antes */
+/* saves de antes da luta em tempo real (o comeco de uma vida v3 e de uma v6): so o descarte 6 os le, e os tira */
+const SAVE_ANTIGO_V3 = { semente: 910303, versao: 3, log: [[480, "t", 300], [780, "d", "alimentar"], [780, "t", 120]] };
+const SAVE_ANTIGO_V6 = { semente: 6100, versao: 6, log: [[480, "t", 300], [780, "d", "elogiar"], [780, "t", 120]] };
+test("luta em tempo real: a primeira abertura descarta os pets de antes, avisa, oferece o arquivo e pede o brasão do ovo novo", async ({ page }) => {
   await page.goto("/Assets/digilab_atlas_up.json");
   await page.evaluate(([c, s]) => {
     localStorage.clear(); localStorage.setItem(c + "-boas-vindas", "1"); localStorage.setItem(c + "-dicas-ligadas", "0");
     localStorage.setItem(c, s); localStorage.setItem(c + "-guardados", JSON.stringify([JSON.parse(s)]));
-  }, [CHAVE, JSON.stringify(SAVES.v3)] as const);
+  }, [CHAVE, JSON.stringify(SAVE_ANTIGO_V3)] as const);
   const erros = vigiarErros(page);
   await page.goto(APP + "#/pet/estado");
-  const aviso = page.locator("dialog.med-aviso[open]");
+  const aviso = page.locator("dialog.aviso-tr[open]");
+  await expect(aviso).toContainText("A luta agora é em tempo real");
   await expect(aviso).toContainText("os 2 pets que você tinha (o ativo e os guardados) foram descartados");
   await page.keyboard.press("Escape");                             /* o aviso so sai pelo botao */
   await expect(aviso).toBeVisible();
+  /* o arquivo dos pets de antes: os dois saves, como estavam */
+  const [baixado] = await Promise.all([page.waitForEvent("download"), aviso.getByRole("button", { name: "Baixar o arquivo dos pets antigos" }).click()]);
+  expect(baixado.suggestedFilename()).toBe("pets-antigos-combate-por-turnos.json");
   await aviso.getByRole("button", { name: "Escolher o brasão do ovo novo" }).click();
   const br = page.locator("dialog.brasao-tela[open]");
   await expect(br.locator("#br-tit")).toHaveText("Escolha seu brasão");
   await expect(br.getByRole("button", { name: "Voltar" })).toHaveCount(0);
   await br.locator(".br-card").first().click();
   await expect(page.locator("dialog.brasao-tela[open]")).toHaveCount(0);
-  const r = await page.evaluate(c => ({ save: JSON.parse(localStorage.getItem(c)!), g: localStorage.getItem(c + "-guardados"), aviso: localStorage.getItem(c + "-aviso-v6"),
-    tamer: JSON.parse(localStorage.getItem(c + "-tamer")!) }), CHAVE);
-  expect(r.save.versao).toBe(12);                    /* o ovo novo nasce na versao atual (v12: o cerebro A, o corpo e o mundo) */
+  const r = await page.evaluate(c => ({ save: JSON.parse(localStorage.getItem(c)!), g: localStorage.getItem(c + "-guardados"), aviso: localStorage.getItem(c + "-aviso-tr"),
+    tamer: JSON.parse(localStorage.getItem(c + "-tamer")!), marca: localStorage.getItem(c + "-descarte"), antigos: JSON.parse(localStorage.getItem(c + "-descartados")!) }), CHAVE);
+  expect(r.save.versao).toBe(13);                    /* o ovo novo nasce na versao atual (v13: a luta em tempo real) */
   expect(r.g).toBe("[]");
   expect(r.aviso).toBeNull();
-  expect(r.tamer).toEqual({ versao: 6, log: [] });
+  expect(r.marca).toBe("6");
+  expect(r.antigos).toHaveLength(2);
+  expect(r.tamer).toEqual({ versao: 7, log: [] });
   await page.reload();
   await expect(page.locator(".pet-tela")).toBeVisible();
-  await expect(page.locator("dialog.med-aviso")).toHaveCount(0);
+  await expect(page.locator("dialog.aviso-tr")).toHaveCount(0);
   expect(erros).toEqual([]);
 });
 
-test("combate V21D e arenas: o pet v6 de antes sai com o mesmo aviso, e o Tamer recomeça sem medalhas", async ({ page }) => {
-  const tamer = { versao: 1, log: [["medalha", { id: "campina", n: 1, quando: 1, pet: SAVE_V6.semente, forma: "Armadillomon", tick: 900 }]] };
+test("luta em tempo real: o pet v6 de antes sai com o aviso, e o Tamer fica com as medalhas (D-4)", async ({ page }) => {
+  const tamer = { versao: 1, log: [["medalha", { id: "campina", n: 1, quando: 1, pet: SAVE_ANTIGO_V6.semente, forma: "Armadillomon", tick: 900 }]] };
   await page.goto("/Assets/digilab_atlas_up.json");
   await page.evaluate(([c, s, tm]) => {
-    /* o descarte das medalhas ja rodou (Tamer gravado, sem o marcador novo): so falta o do V21D */
+    /* os descartes de antes ja rodaram (marcador 5): so falta o da luta em tempo real */
     localStorage.clear(); localStorage.setItem(c + "-boas-vindas", "1"); localStorage.setItem(c + "-dicas-ligadas", "0");
-    localStorage.setItem(c, s); localStorage.setItem(c + "-guardados", "[]"); localStorage.setItem(c + "-tamer", tm);
-  }, [CHAVE, JSON.stringify(SAVE_V6), JSON.stringify(tamer)] as const);
+    localStorage.setItem(c, s); localStorage.setItem(c + "-guardados", "[]"); localStorage.setItem(c + "-tamer", tm); localStorage.setItem(c + "-descarte", "5");
+  }, [CHAVE, JSON.stringify(SAVE_ANTIGO_V6), JSON.stringify(tamer)] as const);
   const erros = vigiarErros(page);
   await page.goto(APP + "#/pet/estado");
-  const aviso = page.locator("dialog.med-aviso[open]");
+  const aviso = page.locator("dialog.aviso-tr[open]");
   await expect(aviso).toContainText("o pet que você tinha foi descartado");
+  await expect(aviso).toContainText("As suas medalhas, os itens, o título e os recordes ficam");
   await aviso.getByRole("button", { name: "Escolher o brasão do ovo novo" }).click();
   await page.locator("dialog.brasao-tela[open] .br-card").first().click();
   await expect(page.locator("dialog.brasao-tela[open]")).toHaveCount(0);
   const r = await page.evaluate(c => ({ save: JSON.parse(localStorage.getItem(c)!), marca: localStorage.getItem(c + "-descarte"),
     tamer: JSON.parse(localStorage.getItem(c + "-tamer")!) }), CHAVE);
-  expect(r.save.versao).toBe(12);                    /* o ovo novo nasce na versao atual (v12) */
-  expect(r.save.semente).not.toBe(SAVE_V6.semente);
-  expect(r.marca).toBe("5");
-  expect(r.tamer).toEqual({ versao: 6, log: [] });
+  expect(r.save.versao).toBe(13);
+  expect(r.save.semente).not.toBe(SAVE_ANTIGO_V6.semente);
+  expect(r.marca).toBe("6");
+  /* a medalha fica (a abertura ainda da o item dela ao Tamer, como sempre) */
+  expect(r.tamer.versao).toBe(7);
+  expect(r.tamer.log[0]).toEqual(tamer.log[0]);
+  /* o ovo novo conhece a medalha do Tamer (o "u" no registro dele) */
+  expect(r.save.log.filter((e: unknown[]) => e[1] === "u")).toEqual([[expect.any(Number), "u", { n: 1 }]]);
   await page.reload();
   await expect(page.locator(".pet-tela")).toBeVisible();
-  await expect(page.locator("dialog.med-aviso")).toHaveCount(0);
+  await expect(page.locator("dialog.aviso-tr")).toHaveCount(0);
   expect(erros).toEqual([]);
 });
 
@@ -599,7 +609,8 @@ test("itens: o líder dá o chip com a medalha, o chip se equipa e vale na luta"
   const i0 = await numLog(page, "i");
   await chip.getByRole("button", { name: "Equipar" }).click();
   await expect(chip).toHaveClass(/item-eq/);
-  await expect(chip).toContainText("Agora soma +1 de vigor, +1 de força");
+  /* o Rookie do save ja esta no teto de treino do estagio: o chip de stat dos pets v13 so ocupa o espaco que falta (as regras dos v9) */
+  await expect(chip).toContainText("Agora não soma nada");
   await expect(page.locator(".itens-vagas")).toContainText("1 de 1 vaga");
   expect(await numLog(page, "i")).toBe(i0 + 1);
   /* sem vaga: o outro chip do Tamer (se houvesse) nao entraria; lutar com o chip na arena */
@@ -620,6 +631,14 @@ test("itens: o líder dá o chip com a medalha, o chip se equipa e vale na luta"
   expect(erros).toEqual([]);
 });
 
+/** os itens dos pets v13 (as regras dos v9) pedem o treino minimo do nivel: o Champion do save (10 pontos, o teto do Rookie) treina uma
+    vez em Crescer · Treinar para a carta e os chips valerem */
+async function treinarUmaVez(page: Page): Promise<void> {
+  await page.goto(APP + "#/crescer/treinar");
+  const tr0 = await numLog(page, "tr");
+  await page.locator("button.treino-ex:not(.forcar):not([disabled])").first().click();
+  await expect.poll(() => numLog(page, "tr")).toBe(tr0 + 1);
+}
 /* Tamer com a medalha da Campina, o item dela e uma Carta de Folego da revanche (um Rookie de antes a ganhou) */
 const TAMER_ITENS = { versao: 2, log: [
   ["medalha", { id: "campina", n: 1, quando: 1, pet: SAVE_V6.semente, forma: "Armadillomon", tick: 900 }],
@@ -631,6 +650,7 @@ test("itens: a carta se escolhe antes da luta, entra no registro do pet e sai do
   test.setTimeout(180_000);
   await semear(page, SAVE_V6, undefined, TAMER_ITENS);
   const erros = vigiarErros(page);
+  await treinarUmaVez(page);
   await page.goto(APP + "#/lutar/campanha");
   const escolha = page.locator(".carta-escolha select");
   await expect(escolha).toBeVisible();
@@ -680,6 +700,7 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 
     expect(r.pequenos, "alvos menores que 44 px").toEqual([]);
     expect(r.aoLado, "desktop: os itens ao lado do resumo").toBe(largura >= 1100);
     /* a escolha da carta na campanha, no mesmo tamanho */
+    await treinarUmaVez(page);
     await irPara(page, "Lutar", "Exploração", "lutar/campanha");
     /* no celular a escolha da carta fica na folha do lugar */
     if (largura < 1100) await page.locator(".expl-cartao.sel").click();
@@ -739,10 +760,10 @@ test("fronteira: com as 6 medalhas a ilha abre; a Liga tem 6 lutas sem cura, dá
   expect(lutas[lutas.length - 1][2]).toEqual({ r: "liga", s: expect.any(Number) });
   /* o titulo no Tamer, com o pet e a forma */
   const t = await lerTamer(page);
-  expect(t.versao).toBe(6);
+  expect(t.versao).toBe(7);
   const c = t.log.filter((e: [string]) => e[0] === "campeao");
   expect(c).toHaveLength(1);
-  expect(c[0][1]).toMatchObject({ n: 1, pet: SAVE_LIGA.semente, forma: "Valkyrimon" });
+  expect(c[0][1]).toMatchObject({ n: 1, pet: SAVE_LIGA.semente, forma: "Magnadramon" });
   /* a conclusao da jornada vem da Liga */
   const cc = page.locator("dialog.conclusao-tela[open]");
   await expect(cc).toBeVisible();
@@ -757,7 +778,7 @@ test("fronteira: com as 6 medalhas a ilha abre; a Liga tem 6 lutas sem cura, dá
   await expect(page.locator(".fr-ultima")).toContainText("venceu os 6");
   await expect(page.locator(".fr-card--vit")).toHaveCount(6);
   await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
-  await expect(page.locator(".med-ouro.ganha")).toContainText("Campeão da Liga dos Líderes com Valkyrimon");
+  await expect(page.locator(".med-ouro.ganha")).toContainText("Campeão da Liga dos Líderes com Magnadramon");
   /* recarregar: a conclusao nao volta */
   await page.reload();
   await expect(page.locator(".med-tela")).toBeVisible();
@@ -875,8 +896,8 @@ test("fronteira: com o título, a Torre de Batalha dá 7 vitórias seguidas sem 
   const lutas = reg.log.filter((e: unknown[]) => e[1] === "l");
   expect(lutas[lutas.length - 1][2]).toEqual({ r: "torre_batalha", s: expect.any(Number) });
   let t = await lerTamer(page);
-  expect(t.versao).toBe(6);
-  expect(t.log.filter((e: [string]) => e[0] === "recorde")).toEqual([["recorde", expect.objectContaining({ inst: "torre_batalha", valor: 7, pet: SAVE_LIGA.semente, forma: "Valkyrimon" })]]);
+  expect(t.versao).toBe(7);
+  expect(t.log.filter((e: [string]) => e[0] === "recorde")).toEqual([["recorde", expect.objectContaining({ inst: "torre_batalha", valor: 7, pet: SAVE_LIGA.semente, forma: "Magnadramon" })]]);
   await expect(page).toHaveURL(/#\/lutar\/fronteira$/);
   await expect(torre.locator(".fr-inst-rec .dl-num")).toHaveText("7");
   await expect(torre).toContainText("Este pet: 1 tentativa, melhor 7, última 7");
@@ -894,7 +915,7 @@ test("fronteira: com o título, a Torre de Batalha dá 7 vitórias seguidas sem 
   /* os recordes na tela de Medalhas */
   await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
   await expect(page.locator(".med-recordes li.ganha")).toHaveCount(2);
-  await expect(page.locator(".med-recordes li", { hasText: "Torre de Batalha" })).toContainText("7 vitórias seguidas, com Valkyrimon");
+  await expect(page.locator(".med-recordes li", { hasText: "Torre de Batalha" })).toContainText("7 vitórias seguidas, com Magnadramon");
   await expect(page.locator(".med-recordes li", { hasText: "Palácio" })).toContainText("9 vitórias seguidas");
   expect(erros).toEqual([]);
 });
@@ -947,6 +968,16 @@ async function semearSalao(page: Page, tamer: object = TAMER_CAMPEAO): Promise<v
 }
 const lerGuardadosE2e = (page: Page) => page.evaluate(c => JSON.parse(localStorage.getItem(c + "-guardados") ?? "[]"), CHAVE);
 
+/** a luta da Fabrica ou do Salao vai ao palco da luta em tempo real (COMBATE-TR, etapa R4): o palco abre com o texto dela, o relogio anda,
+    e o Desistir (que so pula a animacao: a luta ja esta gravada) volta para a Fronteira */
+async function verNoPalcoEVoltar(page: Page, texto: RegExp | string): Promise<void> {
+  await expect(page).toHaveURL(/#\/lutar\/luta$/);
+  await expect(page.locator(".luta-turno")).toContainText(texto);
+  await expect(page.getByTestId("luta-relogio")).toHaveText(/^0:0[1-9]$/, { timeout: 15_000 });
+  await page.locator(".luta-desistir").click();
+  await page.locator("dialog.modal-conf .dl-btn--perigo").click();
+  await expect(page).toHaveURL(/#\/lutar\/fronteira$/);
+}
 test("fronteira: a Fábrica aluga 1 de 3 Megas, luta, oferece a troca depois da vitória e grava tudo só no Tamer", async ({ page }) => {
   await semear(page, SAVE_LIGA, undefined, TAMER_CAMPEAO);
   const erros = vigiarErros(page);
@@ -968,6 +999,7 @@ test("fronteira: a Fábrica aluga 1 de 3 Megas, luta, oferece a troca depois da 
   await expect(fab.locator(".fb-status")).toContainText("Tentativa 1 · série 1, luta 1 de 3 · 0 séries vencidas");
   await expect(fab.locator(".fb-alugado")).toContainText("Sakuyamon");
   await fab.locator(".fb-lutar").click();
+  await verNoPalcoEVoltar(page, "Fábrica · série 1, luta 1 de 3: Sakuyamon (alugado)");
   await expect(fab.locator(".fb-ultima")).toContainText("Luta 1: venceu Imperialdramon Fighter Mode (Duelista)");
   /* a oferta de troca depois da vitoria; trocando, o alugado passa a ser o rival derrotado, que entra com a vida cheia (as regras dos v9,
      fase 3 do equilibrio geral: a tentativa nova grava a versao das regras no registro do Tamer) */
@@ -977,20 +1009,19 @@ test("fronteira: a Fábrica aluga 1 de 3 Megas, luta, oferece a troca depois da 
   await expect(fab.locator(".fb-alugado")).toContainText("Imperialdramon Fighter Mode");
   await expect(fab.locator(".fb-status")).toContainText("série 1, luta 2 de 3");
   await fab.locator(".fb-lutar").click();
-  await expect(fab.locator(".fb-ultima")).toContainText("Luta 2: venceu SlashAngemon (Espelho)");
-  await expect(fab.locator(".fb-status")).toContainText("série 1, luta 3 de 3");
-  await fab.locator(".fb-lutar").click();
-  /* perdeu, acabou: o resumo e "Tentar de novo" */
+  await verNoPalcoEVoltar(page, "Fábrica · série 1, luta 2 de 3");
+  /* a luta em tempo real (COMBATE-TR, etapa R2): a luta 2, contra o SlashAngemon (Espelho), chega ao limite e fica com o rival, o desafiado.
+     Perdeu, acabou: o resumo e "Tentar de novo" */
   await expect(fab.locator(".fb-ultima")).toContainText("Última tentativa: 0 séries vencidas; perdeu para");
-  await expect(fab.locator(".fb-ultima")).toContainText("na série 1, luta 3");
+  await expect(fab.locator(".fb-ultima")).toContainText("na série 1, luta 2");
   await expect(fab.locator(".fr-inst-tentar")).toHaveText("Tentar de novo");
-  await expect(fab.locator(".fb-lutas li")).toHaveCount(3);
-  /* so no registro do Tamer (versao 6, a tentativa com as regras dos v9): o comeco, as tres lutas e a troca; nenhuma luta no registro do pet */
+  await expect(fab.locator(".fb-lutas li")).toHaveCount(2);
+  /* so no registro do Tamer (versao 7, a tentativa com as regras dos v13): o comeco, as duas lutas e a troca; nenhuma luta no registro do pet */
   const t = await lerTamer(page);
-  expect(t.versao).toBe(6);
-  expect(t.log.find((e: [string]) => e[0] === "fabrica")[1].v).toBe(9);
+  expect(t.versao).toBe(7);
+  expect(t.log.find((e: [string]) => e[0] === "fabrica")[1].v).toBe(13);
   expect(t.log.filter((e: [string]) => e[0].startsWith("fabrica")).map((e: [string, { n: number; k?: number; alugado?: number }]) => [e[0], e[1].n, e[1].k ?? e[1].alugado]))
-    .toEqual([["fabrica", 1, 0], ["fabrica_luta", 1, 0], ["fabrica_troca", 1, 0], ["fabrica_luta", 1, 1], ["fabrica_luta", 1, 2]]);
+    .toEqual([["fabrica", 1, 0], ["fabrica_luta", 1, 0], ["fabrica_troca", 1, 0], ["fabrica_luta", 1, 1]]);
   expect(await numLog(page, "l")).toBe(l0);
   /* a proxima tentativa oferece outros alugados (a semente da tentativa 2) */
   await fab.locator(".fr-inst-tentar").click();
@@ -1013,12 +1044,13 @@ test("fronteira: o Salão, com um pet de cada nível (o ativo e os guardados), g
   await expect(sl.locator(".sl-niveis li").nth(0)).toContainText("Rookie");
   await expect(sels.nth(0).locator("option:checked")).toHaveText("Patamon (guardado)");
   await expect(sels.nth(1).locator("option:checked")).toHaveText("Growlmon (guardado)");
-  await expect(sels.nth(2).locator("option:checked")).toHaveText("MegaSeadramon (guardado)");
-  await expect(sels.nth(3).locator("option:checked")).toHaveText("Valkyrimon (ativo)");
+  await expect(sels.nth(2).locator("option:checked")).toHaveText("Zudomon (guardado)");
+  await expect(sels.nth(3).locator("option:checked")).toHaveText("Magnadramon (ativo)");
   await expect(sl.locator(".med-espera")).toHaveCount(0);
   const l0 = await numLog(page, "l"), g0 = (await lerGuardadosE2e(page)).map((g: { log: unknown[] }) => g.log.length);
   await sl.locator(".fr-inst-tentar:not([disabled])").click();
-  await expect(sl.locator("p[role=status]", { hasText: "Venceu os 4 níveis!" })).toBeVisible();
+  /* a tentativa vai ao palco, um pet de cada nivel (COMBATE-TR, etapa R4) */
+  await verNoPalcoEVoltar(page, "Salão · nível Rookie: Patamon");
   await expect(sl.locator(".fr-inst-rec .dl-num")).toHaveText("4");
   await expect(sl.locator(".sl-ultima li.vit")).toHaveCount(4);
   /* a luta de cada pet no registro dele: o ativo (uma luta a mais) e os guardados (o "f" e a luta), que continuam guardados */
@@ -1034,7 +1066,7 @@ test("fronteira: o Salão, com um pet de cada nível (o ativo e os guardados), g
   const ev = t.log.filter((e: [string]) => e[0] === "salao");
   expect(ev).toHaveLength(1);
   expect(ev[0][1].lutas.map((l: { est: string; forma: string; venceu: boolean }) => [l.est, l.forma, l.venceu]))
-    .toEqual([["crianca", "Patamon", true], ["adolescente", "Growlmon", true], ["adulto", "MegaSeadramon", true], ["mega", "Valkyrimon", true]]);
+    .toEqual([["crianca", "Patamon", true], ["adolescente", "Growlmon", true], ["adulto", "Zudomon", true], ["mega", "Magnadramon", true]]);
   await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
   await expect(page.locator(".med-recordes li", { hasText: "Salão" })).toContainText("4 de 4 níveis seguidos, na tentativa 1.");
   expect(erros).toEqual([]);
@@ -1083,6 +1115,7 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 
     /* uma luta da Fabrica: o alugado com a vida e a oferta de troca */
     await page.locator(".fb-aluguel").first().click();
     await page.locator(".fb-lutar").click();
+    await verNoPalcoEVoltar(page, "Fábrica · série 1, luta 1 de 3");
     await expect(page.locator(".fb-troca")).toBeVisible();
     const r2 = await page.evaluate(() => ({ larg: document.documentElement.scrollWidth, janela: innerWidth }));
     expect(r2.larg).toBeLessThanOrEqual(r2.janela);
@@ -1095,8 +1128,8 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 
    pranchas DigiBrainDesktop e DigiBrain390): so nos pets v11 (PW-7). Sob demanda (TAREFA_V2_TELA_PET): no desktop, o botao do cenario
    abre a coluna de detalhes, a direita do cenario, com o painel; em 390 px, uma folha aberta pelo botao do cenario, com o Conversar no
    cabecalho do Pet. Os numeros sao os do motor (Motor.digibrain) */
-const SAVE_V11 = { semente: 4242, versao: 11, log: [[480, "t", 120], [600, "d", "acariciar"], [600, "t", 120], [720, "d", "tapa"], [720, "t", 120],
-  [840, "d", "alimentar"], [840, "t", 60]] };
+const SAVE_V11 = { semente: 4242, versao: 13, log: [[480, "t", 120], [600, "d", "acariciar"], [600, "t", 120], [720, "d", "tapa"], [720, "t", 120],
+  [840, "dc", { tipo: "racao", x: 168, y: 248 }], [840, "t", 60]] };
 for (const largura of [390, 1280]) {
   test(`DigiBrain: o painel do pet v11 em ${largura} px`, async ({ page }) => {
     await page.setViewportSize({ width: largura, height: 800 });
@@ -1199,15 +1232,6 @@ for (const largura of [390, 1280]) {
     expect(erros).toEqual([]);
   });
 }
-test("DigiBrain: os pets v1 a v10 não têm o painel (PW-7)", async ({ page }) => {
-  for (const largura of [390, 1280]) {
-    await page.setViewportSize({ width: largura, height: 800 });
-    await semear(page, SAVES.v3);
-    await page.goto(APP + "#/pet/estado");
-    await expect(page.locator(".pet-tela")).toBeVisible();
-    await expect(page.locator(".digibrain, .db-botao")).toHaveCount(0);
-  }
-});
 
 /* ---------------------------------------------------------------- a tela Pet como a Home da referencia (docs/TAREFA_V2_TELA_PET.md): o cenario
    com a maior area, tres acoes em destaque (as outras em Mais) e os detalhes sob demanda (folha no celular, coluna no desktop) */
@@ -1224,7 +1248,9 @@ for (const [largura, altura] of [[360, 800], [390, 844], [1280, 800]]) {
       const cena = r(".pet-cena"), doca = r(".pet-doca"), cv = document.querySelector<HTMLCanvasElement>(".pet-cena canvas")!;
       return { cena: cena.width * cena.height, doca: doca.width * doca.height, pix: getComputedStyle(cv).imageRendering, larg: document.documentElement.scrollWidth, janela: innerWidth };
     });
-    expect(g.cena, "o cenario e a maior area").toBeGreaterThan(g.doca * 2);
+    /* o pet com o mundo (v12 em diante; o v13 de hoje): no desktop a doca tem tambem a barra da racao, e o cenario continua a maior area,
+       mas nao o dobro dela (achado da R2b, COMBATE-TR: no celular, o dobro como antes) */
+    expect(g.cena, "o cenario e a maior area").toBeGreaterThan(g.doca * (desktop ? 1 : 2));
     expect(g.pix).toBe("pixelated");
     expect(g.larg).toBeLessThanOrEqual(g.janela);
     await expect(page.locator(".acoes-pet .acao-destaque")).toHaveCount(3);
@@ -1274,8 +1300,9 @@ test("Pet (Home): a cena 3D com WebGL e o cenário de reserva sem ele", async ({
   await semear(p2, SAVE_V11);
   const erros2 = vigiarErros(p2);
   await p2.goto(APP + "#/pet/estado");
-  await expect(p2.locator(".pet-cena .cena-sala")).toBeVisible();
-  await expect(p2.locator(".pet-cena .cena-sala")).toHaveAttribute("aria-hidden", "true");
+  /* o pet com o mundo (o v13 de hoje): a reserva e a do mundo (MundoReserva.tsx), nao o cenario em CSS dos pets sem mundo */
+  await expect(p2.locator(".pet-cena .cena-mundo")).toBeVisible();
+  await expect(p2.locator(".pet-cena .cena-mundo")).toHaveAttribute("aria-hidden", "true");
   await expect(p2.locator(".pet-cena .cena3d")).toHaveCount(0);
   expect(erros2).toEqual([]);
   await ctx.close();
@@ -1354,11 +1381,11 @@ for (const largura of [390, 1280]) {
     await expect(rev).toBeVisible();
     await expect(rev.locator(".revel-tit")).toHaveText("EVOLUÇÃO!");
     await expect(rev.locator(".revel-de")).toHaveText("Rookie → Champion");
-    await expect(rev.locator(".evm-nome")).toHaveText("Greymon");
+    await expect(rev.locator(".evm-nome")).toHaveText("Growlmon");
     await expect(rev.locator(".evm-estagio")).toHaveText("Champion");
     await expect(rev.locator(".evm-brasao")).toContainText("brasão Coragem");
     await expect(rev.locator(".evm-depara")).toContainText("Agumon");
-    await expect(rev.locator(".evm-depara")).toContainText("Greymon");
+    await expect(rev.locator(".evm-depara")).toContainText("Growlmon");
     await expect(rev.locator(".revel-porque")).toContainText("decidido pelo caráter");
     /* a medalha veio antes (o "u" do comeco): pediu 1, sem dizer qual liberou */
     await expect(rev.locator(".evm-medalhas")).toHaveText(/Esta evolução pediu 1 medalha do Tamer\.$/);
@@ -1375,11 +1402,11 @@ for (const largura of [390, 1280]) {
     await expect(page).toHaveURL(/#\/crescer\/evolucao$/);
     await expect(page.locator("dialog.revelacao[open]")).toHaveCount(0);
     /* a aba: a forma atual em destaque, a proxima evolucao com as medalhas, a arvore, o porque e o historico */
-    await expect(page.locator(".evt-heroi .evt-nome")).toHaveText("Greymon");
+    await expect(page.locator(".evt-heroi .evt-nome")).toHaveText("Growlmon");
     await expect(page.locator(".evt-heroi .evt-prazo")).toContainText("até virar Ultimate");
     await expect(page.locator(".evt-prox .evt-selos")).toContainText("1 de 3 medalhas do Tamer");
     await expect(page.locator(".evo-arv")).toBeVisible();
-    await expect(page.locator(".evt-porque")).toContainText("Por que Greymon?");
+    await expect(page.locator(".evt-porque")).toContainText("Por que Growlmon?");
     await expect(page.locator(".evo-hist li")).toHaveCount(3);
     expect(JAPONES.test(await page.locator(".evo-tela").textContent() ?? "")).toBe(false);
     /* o historico reabre o momento de qualquer evolucao */
@@ -1634,10 +1661,11 @@ test("mundo: o ovo novo choca na cena 3D", async ({ page }) => {
   await page.evaluate(([c, s]) => {
     localStorage.clear(); localStorage.setItem(c + "-boas-vindas", "1"); localStorage.setItem(c + "-dicas-ligadas", "0");
     localStorage.setItem(c, s); localStorage.setItem(c + "-guardados", "[]");
-  }, [CHAVE, JSON.stringify(SAVES.v3)] as const);
+  }, [CHAVE, JSON.stringify(SAVE_ANTIGO_V3)] as const);
   const erros = vigiarErros(page);
   await page.goto(APP + "#/pet/estado");
-  await page.locator("dialog.med-aviso[open]").getByRole("button", { name: "Escolher o brasão do ovo novo" }).click();
+  /* o pet de antes sai com o descarte 6 (a luta em tempo real), e o aviso leva ao brasao do ovo novo */
+  await page.locator("dialog.aviso-tr[open]").getByRole("button", { name: "Escolher o brasão do ovo novo" }).click();
   await page.locator("dialog.brasao-tela[open] .br-card").first().click();
   await expect(page.locator(".pet-cena .cena3d")).toBeVisible();
   await expect.poll(() => page.evaluate(() => document.querySelector<HTMLCanvasElement>(".cena3d canvas")?.width ?? 0)).toBeGreaterThan(0);
@@ -1652,7 +1680,7 @@ test("mundo: o ovo novo choca na cena 3D", async ({ page }) => {
    recarregar e nao entra no save exportado; ligado com os arquivos ausentes, o aviso aparece e o jogo segue. */
 test("som: desligado por padrão não pede áudio nem em uma luta; ligar é lembrado e fica fora do save", async ({ page }) => {
   test.setTimeout(180_000);
-  await semear(page, SAVES.v3);
+  await semear(page, SAVES.champion);
   const erros = vigiarErros(page), pedidos: string[] = [];
   page.on("request", r => { if (/\/Assets\/sons\/|\.mp3(\?|$)/.test(r.url())) pedidos.push(r.url()); });
   await page.goto(APP + "#/pet/estado");
@@ -1681,7 +1709,7 @@ test("som: desligado por padrão não pede áudio nem em uma luta; ligar é lemb
 });
 
 test("som: ligado com os arquivos ausentes mostra o aviso e a tela segue", async ({ page }) => {
-  await semear(page, SAVES.v3);
+  await semear(page, SAVES.champion);
   await page.route(/\/Assets\/sons\//, r => r.fulfill({ status: 404, body: "ausente" }));
   await page.goto(APP + "#/pet/estado");
   await page.locator(".dl-nav .nav-quad", { hasText: "Ajustes" }).click();
@@ -1695,81 +1723,95 @@ test("som: ligado com os arquivos ausentes mostra o aviso e a tela segue", async
 /* TAREFA_V2_UP_ATLAS: com a chave dos clipes ligada (?clipes_up=1) e o atlas de clipes ausente, o aviso do atlas aparece; nao cai calado no atlas atual */
 test("clipes do UP: ligados e sem o atlas de clipes, o aviso de atlas que não carregou", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await semear(page, SAVES.v3);
+  await semear(page, SAVES.champion);
   await page.route(/\/Assets\/digilab_atlas_up_clipes/, r => r.abort());
   await page.goto(APP + "?clipes_up=1#/pet/estado");
   await expect(page.getByText("Atlas de sprites não carregou.")).toBeVisible();
 });
 
-/* UP-ARENA (docs/TAREFA_V2_UP_ARENA.md): a arena em tempo real atras da chave ARENA_TEMPO_REAL, desligada. Desligada, o Lutar e o de hoje
-   (nem botao, nem rota, nem pedido de dados); ligada so na aba por ?arena_tr=1, com os dados SINTETICOS versionados de test/ servidos no
-   lugar de Assets/arena_up (nada da Bandai no teste). */
-const ARENA_SINT = JSON.parse(readFileSync(new URL("../test/arena_sintetico.json", import.meta.url), "utf8"));
-const PNG_1PX = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==", "base64");
-async function servirArenaSintetica(page: Page): Promise<void> {
-  await page.route(/\/Assets\/arena_up\//, r => {
-    const m = /\/dados\/([a-z]+)\.json/.exec(r.request().url());
-    if (m) return r.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(ARENA_SINT[m[1]]) });
-    return r.fulfill({ status: 200, contentType: "image/png", body: PNG_1PX });
+/* a luta em tempo real dos pets v13 (COMBATE-TR, etapa R3): o palco refaz a luta passo a passo, com o cenario do lugar, o relogio e a regra em
+   uso, sem nenhum controle sobre a luta (so pausar e x2); no fim, o Resultado com o porque (as regras e o saldo delas). Nenhum erro, nenhuma
+   tela quebrada calada. O save: um Rookie v13 que conhece a medalha da Campina (o "u") e passou do In-Training (180 min) */
+const SAVE_V13 = { semente: 101, versao: 13, log: [[480, "u", { n: 1 }], [480, "t", 210]] };
+const TAMER_V13 = { versao: 7, log: [["medalha", { id: "campina", n: 1, quando: 1, pet: 101, forma: "Agumon", tick: 480 }]] };
+test("luta em tempo real (pets v13): o palco desenha a luta, o relógio anda, a regra em uso aparece e o Resultado diz o porquê", async ({ page }) => {
+  await semear(page, SAVE_V13, undefined, TAMER_V13);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/lutar/arena");
+  const l0 = await numLog(page, "l");
+  await page.locator(".lutar-grande").click();
+  await expect(page).toHaveURL(/#\/lutar\/luta$/);
+  expect(await numLog(page, "l")).toBe(l0 + 1);
+  const palco = page.locator(".luta-arena--tr");
+  await expect(palco).toHaveAttribute("data-cena", "ringue");
+  await expect(page.getByTestId("luta-relogio")).toHaveText(/^0:0[1-9]$/, { timeout: 10_000 });
+  await expect(page.getByTestId("luta-regra")).not.toBeEmpty();
+  /* nenhum controle sobre a luta: so pausar, x2 e desistir (que so pula a animacao) */
+  await expect(page.locator(".luta-tela button:not(.luta-ctl):not(.luta-desistir)")).toHaveCount(0);
+  await expect(page.locator(".regra-travar, .regra-vetar")).toHaveCount(0);
+  /* pausado, o relogio para */
+  await page.getByRole("button", { name: "Pausar a animação" }).click();
+  const parado = await page.getByTestId("luta-relogio").textContent();
+  await page.waitForTimeout(600);
+  await expect(page.getByTestId("luta-relogio")).toHaveText(parado!);
+  await page.getByRole("button", { name: "Continuar a animação" }).click();
+  await page.getByRole("button", { name: "Velocidade dobrada" }).click();
+  const res = page.locator("dialog.modal-res[open]");
+  await expect(res).toBeVisible({ timeout: 90_000 });
+  await expect(res.locator(".res-sub")).toContainText(/\d+ s$/);
+  const porque = res.locator(".res-decidiu");
+  await expect(porque.locator("h3")).toHaveText("Por quê");
+  await expect(porque.locator("li").last()).toContainText(/caiu aos \d+ s|Limite de tempo/);
+  expect(await porque.locator("li").count()).toBeGreaterThan(1);
+  await expect(porque.locator("li .res-t").first()).toHaveText(/^[+−]?\d+%$/);
+  await page.locator(".res-continuar").click();
+  await expect(page).toHaveURL(/#\/lutar\/arena$/);
+  await expect(page.locator(".arena-ult")).toContainText(/· \d+ s/);
+  expect(erros).toEqual([]);
+});
+test("luta em tempo real: o mapa do cenário que falta mostra o aviso visível, e a luta segue no chão liso", async ({ page }) => {
+  await semear(page, SAVE_V13, undefined, TAMER_V13);
+  await page.route(/\/Assets\/arena_up\/mapas\//, r => r.abort());
+  await page.goto(APP + "#/lutar/campanha");
+  await page.locator(".camp-lutar:not([disabled])").first().click();
+  await expect(page).toHaveURL(/#\/lutar\/luta$/);
+  await expect(page.locator(".luta-aviso-asset")).toContainText("O mapa do cenário não carregou");
+  await expect(page.getByTestId("luta-relogio")).toHaveText(/^0:0[1-9]$/, { timeout: 10_000 });
+});
+/* as capturas do palco (R3): 390 px e desktop, claro e escuro, com a luta pausada nos primeiros segundos (test-results/, fora do repositorio) */
+for (const [largura, altura] of [[390, 844], [1280, 800]] as const) for (const tema of ["light", "dark"] as const) {
+  test(`luta em tempo real: a captura do palco em ${largura} px, tema ${tema === "light" ? "claro" : "escuro"}`, async ({ page }) => {
+    await page.setViewportSize({ width: largura, height: altura });
+    await page.emulateMedia({ colorScheme: tema });
+    await semear(page, SAVE_V13, undefined, TAMER_V13);
+    const erros = vigiarErros(page);
+    await page.goto(APP + "#/lutar/campanha");
+    /* no celular o lugar abre numa folha: toca a Campina primeiro */
+    if (largura < 768) await page.getByRole("button", { name: /^1\. Campina/ }).click();
+    await page.locator(".camp-lutar:not([disabled]):visible").first().click();
+    await expect(page.getByTestId("luta-relogio")).toHaveText(/^0:0[3-9]$/, { timeout: 15_000 });
+    await page.getByRole("button", { name: "Pausar a animação" }).click();
+    /* sem rolagem horizontal */
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.screenshot({ path: `test-results/luta-tr-${largura}-${tema}.png`, fullPage: true });
+    expect(erros).toEqual([]);
   });
 }
-
-test("arena em tempo real: com a chave desligada, o Lutar é o de hoje e nada da arena é pedido", async ({ page }) => {
-  await semear(page, SAVES.v3);
-  const erros = vigiarErros(page), pedidos: string[] = [];
-  page.on("request", r => { if (/arena_up/.test(r.url())) pedidos.push(r.url()); });
-  await page.goto(APP + "#/lutar/arena");
-  await expect(page.getByRole("tab", { name: "Arena" })).toBeVisible();
-  await expect(page.getByRole("tablist", { name: "Abas de Lutar" }).getByRole("tab")).toHaveCount(4);
-  await expect(page.locator(".arena-tr-entrada")).toHaveCount(0);
-  /* a rota da arena nao existe: aberta do zero, o app cai numa rota de sempre e reescreve o endereco */
-  await page.goto("about:blank");
-  await page.goto(APP + "#/lutar/tempo-real");
-  await expect(page).not.toHaveURL(/tempo-real/);
-  await expect(page.getByTestId("arena-tr")).toHaveCount(0);
-  expect(pedidos).toEqual([]);
-  expect(erros).toEqual([]);
-});
-
-test("arena em tempo real: ligada, CPU × CPU até o fim, e a mesma semente refaz a mesma luta", async ({ page }) => {
+/* com os clipes do UP ligados na aba (?clipes_up=1): o palco troca o clipe pela acao (Run, Attack_1, Stun, Die), e nenhum clipe falta (um
+   clipe que falta lanca o erro no quadro, e a vigia reprova). A captura vai para test-results/ */
+test("luta em tempo real: com os clipes do UP, a luta inteira desenha sem erro", async ({ page }) => {
   test.setTimeout(240_000);
-  await semear(page, SAVES.v3);
-  await servirArenaSintetica(page);
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await semear(page, SAVE_V13, undefined, TAMER_V13);
   const erros = vigiarErros(page);
-  await page.goto(APP + "?arena_tr=1#/lutar/arena");
-  await page.getByRole("link", { name: "Arena em tempo real" }).click();
-  await expect(page).toHaveURL(/#\/lutar\/tempo-real$/);
-  await expect(page.getByTestId("arena-tr")).toBeVisible();
-  await expect(page.getByTestId("recuos-arena-tr")).toContainText("Regras de recuo");
-  await page.getByLabel("Modo").selectOption("cpu");
-  await page.getByLabel("Velocidade").selectOption("4");
-  await page.getByLabel("Arena", { exact: true }).selectOption("castelo");
-  await page.getByRole("button", { name: "Recomeçar" }).click();
-  const fim = async () => {
-    await page.waitForFunction(() => (window as any).__arenaTr?.fim === true, null, { timeout: 200_000 });
-    return page.evaluate(() => ({ ...(window as any).__arenaTr }));
-  };
-  const a = await fim();
-  expect(a.cena).toBe("castelo");
-  await expect(page.getByTestId("arena-tr-log")).toContainText(/venceu|Empate/);
-  await expect(page.getByLabel("Placar")).toContainText(/Azul \d · Vermelha \d · Empates \d/);
-  await page.getByRole("button", { name: "Revanche (mesma semente)" }).click();
-  await page.waitForFunction(s => (window as any).__arenaTr?.relogio < 1000 && (window as any).__arenaTr?.semente === s, a.semente);
-  const b = await fim();
-  expect(b).toEqual(a);
-  /* sair: volta ao Lutar; nada da arena no registro do pet nem no save */
-  await page.getByRole("button", { name: "Voltar" }).click();
-  await expect(page).toHaveURL(/#\/lutar\/arena$/);
-  await expect(page.getByRole("tablist", { name: "Abas de Lutar" })).toBeVisible();
-  expect(await page.evaluate(() => (window as any).__digilab.registro())).not.toMatch(/arena_up|tempo-real|Alfa|Delta/);
-  expect(await page.evaluate(([c]) => localStorage.getItem(c), [CHAVE] as const)).not.toMatch(/arena_up|tempo-real|Alfa|Delta/);
+  await page.goto(APP + "?clipes_up=1#/lutar/campanha");
+  await page.locator(".camp-lutar:not([disabled]):visible").first().click();
+  await expect(page.getByTestId("luta-relogio")).toHaveText(/^0:0[2-9]$/, { timeout: 60_000 });
+  await page.getByRole("button", { name: "Pausar a animação" }).click();
+  await page.screenshot({ path: "test-results/luta-tr-clipes-1280.png" });
+  await page.getByRole("button", { name: "Continuar a animação" }).click();
+  await page.getByRole("button", { name: "Velocidade dobrada" }).click();
+  await expect(page.locator("dialog.modal-res[open]")).toBeVisible({ timeout: 120_000 });
+  await page.screenshot({ path: "test-results/luta-tr-resultado-1280.png" });
   expect(erros).toEqual([]);
-});
-
-test("arena em tempo real: ligada e sem os dados, o aviso visível", async ({ page }) => {
-  await semear(page, SAVES.v3);
-  await page.route(/\/Assets\/arena_up\//, r => r.fulfill({ status: 404, body: "ausente" }));
-  await page.goto(APP + "?arena_tr=1#/lutar/tempo-real");
-  await expect(page.getByTestId("aviso-arena-tr")).toBeVisible();
-  await expect(page.getByTestId("aviso-arena-tr")).toContainText("gerar_arena_up.py");
 });

@@ -5,7 +5,7 @@
    o treino minimo do nivel, a carta so vale na Campanha, o chip de regra vai para o fim da lista e o de stat vale metade: a tela diz isso. */
 import { useState } from "react";
 import {
-  CARTA_DA_REVANCHE, CIT, CIT_V9, ITENS, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHA_POR_ID, NOME_STAT, NPC, STATS, estagioMinimo, nomeForma, rotuloRegra,
+  CARTA_DA_REVANCHE, CIT, CIT_V9, ITENS, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHA_POR_ID, NOME_STAT, NPC, STATS, estagioMinimo, nomeForma, regraDe, regraQueCobre, rotuloRegra,
   type Item, type Motor, type Stat,
 } from "../../../motor/index.ts";
 import { mudarMotor, tamerAtual, useJogo } from "../../jogo.ts";
@@ -32,16 +32,18 @@ function somaAgora(m: Motor): Partial<Record<Stat, number>> {
 
 function CardChip({ it, m, t, agir }: { it: Item & { tipo: "chip_stat" | "chip_regra" }; m: Motor; t: Tamer; agir: (op: "equipar" | "desequipar", id: string) => void }) {
   const tem = t.temChip(it.id), eq = m.chips.includes(it.id), md = MEDALHA_POR_ID[Object.entries(ITEM_DA_MEDALHA).find(([, c]) => c === it.id)![0]];
-  const porque = tem && !eq && m.versao >= CIT.versaoPet ? m.porqueNaoEquipa(it.id) : null, soma = eq && it.tipo === "chip_stat" ? somaAgora(m) : null;
+  const porque = tem && !eq ? m.porqueNaoEquipa(it.id) : null, soma = eq && it.tipo === "chip_stat" ? somaAgora(m) : null;
+  /* DE-3: o chip de regra coberto por uma regra ativa do pet (que vem antes dele na lista de luta) so ganha o aviso */
+  const cobre = it.tipo === "chip_regra" && m.gp ? regraQueCobre(m.gp.ativas.map(regraDe), it.regra) : null;
   return (
     <li className={`item-card${tem ? "" : " item-falta"}${eq ? " item-eq" : ""}`}>
       <span className="item-cab"><b className="item-nome">{it.nome}</b><span className={`dl-tag item-tag item-tag--${it.tipo}`}>{TIPO[it.tipo]}</span>{eq && <span className="dl-tag dl-tag--ativo">equipado</span>}</span>
       <span className="item-efeito">{it.efeito}</span>
       {it.tipo === "chip_regra" && <span className="item-regra">{rotuloRegra(it.regra).replace(/^se/, "Se")} · pede um {NIVEL[estagioMinimo(it)]}</span>}
+      {cobre && <span className="item-coberto" role="note" data-testid="chip-coberto">Este chip fica coberto: a regra “{rotuloRegra(cobre)}” do pet vale sempre que ele valeria e vem antes, então o chip quase nunca decide.</span>}
       {soma && <span className="item-soma">{Object.keys(soma).length ? "Agora soma " + Object.entries(soma).map(([k, v]) => `+${dec1(v as number)} de ${NOME_STAT[k as Stat].toLowerCase()}`).join(", ") + "."
         : "Agora não soma nada: o treino deste estágio já está no teto (ou o pet ainda não treinou nele)."}</span>}
       {!tem ? <span className="item-onde">Ainda não é seu: {comoGanhar(md)}.</span>
-        : m.versao < CIT.versaoPet ? null
         : eq ? <button type="button" className="dl-btn dl-btn--sec item-bt" onClick={() => agir("desequipar", it.id)}>Desequipar</button>
         : <><button type="button" className="dl-btn item-bt" disabled={!!porque} onClick={() => agir("equipar", it.id)}>Equipar</button>
           {porque && <span className="item-porque">{porque.replace(/^./, c => c.toUpperCase())}.</span>}</>}
@@ -51,7 +53,7 @@ function CardChip({ it, m, t, agir }: { it: Item & { tipo: "chip_stat" | "chip_r
 
 export function TelaItens() {
   const { motor: m, erroTamer } = useJogo(), t = tamerAtual(), [msg, setMsg] = useState("");
-  const v6 = m.versao >= CIT.versaoPet, v9 = m.versao >= CIT_V9.versaoPet, semEfeito = v9 ? m.porqueItensNaoValem() : null, chips = ITENS.filter((x): x is Item & { tipo: "chip_stat" | "chip_regra" } => x.tipo !== "carta"), cartas = ITENS.filter(x => x.tipo === "carta");
+  const semEfeito = m.porqueItensNaoValem(), chips = ITENS.filter((x): x is Item & { tipo: "chip_stat" | "chip_regra" } => x.tipo !== "carta"), cartas = ITENS.filter(x => x.tipo === "carta");
   const agir = (op: "equipar" | "desequipar", id: string) => {
     try {
       if (op === "equipar" && !t.temChip(id)) throw new Error("o Tamer não tem este chip");
@@ -68,25 +70,18 @@ export function TelaItens() {
           <p className="itens-conta"><span><span className="dl-num">{nChips}</span> chip{nChips === 1 ? "" : "s"}</span><span><span className="dl-num">{nCartas}</span> carta{nCartas === 1 ? "" : "s"}</span></p>
           <p>Os itens são seus, como as medalhas: o líder de cada arena dá um item na primeira vitória, e a revanche vencida dá uma carta.
             O chip não se gasta; a carta vale uma luta só.</p>
-          {!v6 ? <p className="dl-apoio">{nomeForma(m.forma)} é de uma versão antiga: não usa itens.</p>
-            : <p className="itens-vagas" role="status"><b>{nomeForma(m.forma)}: {m.chips.length} de {m.vagasChip} vaga{m.vagasChip === 1 ? "" : "s"} de chip</b>
+          {<p className="itens-vagas" role="status"><b>{nomeForma(m.forma)}: {m.chips.length} de {m.vagasChip} vaga{m.vagasChip === 1 ? "" : "s"} de chip</b>
               <span>1 vaga com 1 medalha, 2 com 3 e 3 com 5 (o Tamer tem {t.n}).</span></p>}
           {semEfeito && <p className="dl-apoio itens-sem-efeito" role="status">Agora os itens não fazem efeito: {semEfeito}.</p>}
           {erroTamer && <p className="med-erro" role="alert">O registro do Tamer não abriu, e o app não vai gravar por cima dele: {erroTamer}</p>}
           {msg && <p className="dl-apoio erro" role="alert">{msg}</p>}
-          {v9 ? <details className="dl-apoio"><summary>Como funciona</summary>
+          <details className="dl-apoio"><summary>Como funciona</summary>
             <p><b>Os itens pedem treino:</b> com menos da metade do treino típico do nível, os chips não fazem efeito e a carta não pode ser usada.
               <b>Chip de stat:</b> +1 ponto de treino, só no espaço que ainda falta no teto do estágio e da vida (1/4 do treino típico no máximo).
               <b>Chip de regra:</b> a regra entra no fim da lista de combate, depois das regras do pet e sem tirar nenhuma: completa a forma, não
               passa na frente dela. <b>Carta:</b> só na Exploração (desafiantes e líderes), escolhida antes da luta; uma por luta. A carta da revanche
               vem com um pet do nível da arena, no máximo uma por líder a cada 24 h do relógio do pet.</p></details>
-          : <details className="dl-apoio"><summary>Como funciona</summary>
-            <p><b>Chip de stat:</b> +2 pontos de treino, mas só no espaço que ainda falta no teto do estágio e da vida, e todos os chips de stat
-              juntos valem no máximo 1/4 do treino típico do estágio: o chip adianta o treino, não passa do teto. <b>Chip de regra:</b> uma regra
-              nova entra no topo da lista de combate do pet (sai a de nota mais baixa se a lista estiver cheia); o pet não a troca enquanto o chip
-              estiver equipado, e você pode travá-la, não vetá-la. <b>Carta:</b> escolha antes de uma luta na Exploração ou na Arena; uma por luta.
-              A carta da revanche vem com um pet do nível da arena, no máximo uma por líder a cada 24 h do relógio do pet. Os números dos itens
-              ainda são provisórios.</p></details>}
+
         </section>
       </div>
       <div className="desk-col itens-col">

@@ -127,3 +127,14 @@ Nenhuma run. A máquina rodava a avaliação da L-2 até ~20h10, com 4 processos
     alimenta, mas atende higiene e carinho, sobe a 1 e cria um bebê sereno;
   - **sem chamado, o bebê sem comida não morre no estágio:** a fome chega a ~0,65 no rápido e a ~0,50 no clássico.
 - **Interpretações e achados** em `docs/registro/2026-10.md` (PRODUTO-FOME).
+
+## 10. A passagem à v13 (worker A, 2026-10-30)
+
+- **Por quê:** antes do merge, a `main` (53fd005) recebeu o COMBATE-TR. Os ovos novos são v13, e os v12 não abrem mais (o descarte 6;
+  D-9, Matheus, 2026-10-29). A seção 9 fala dos ovos v12: na `main`, leia v13.
+- **As chaves:** valem para os ovos v13 novos, com o evento `"p"` só no começo do registro deles. Os saves v13 de antes não têm o evento
+  e não mudam; nenhum pet que já existe passa a ter a regra.
+- **O conflito:** o `"fl"` (a fala dos v7–v10) saiu da `main` e não volta. A conferência `versao < 12` saiu do `Motor._produto`: só a
+  v13 abre.
+- **O efeito no bebê:** refeito na v13, as 72 vidas saem iguais (a tabela da seção 9 vale).
+- **O desvio:** em `docs/registro/2026-10.md` (PRODUTO-FOME na v13).

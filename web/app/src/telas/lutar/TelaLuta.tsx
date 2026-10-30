@@ -6,9 +6,9 @@ import { useEffect, useRef, useState } from "react";
 import { abrirModal } from "../../componentes/modal.ts";
 import { useJogo } from "../../jogo.ts";
 import { LUTA, previa, pularAnimacao, reverLuta, sparringTexto, useLuta, type Modo, type Palco } from "../../luta.ts";
-import { NOME_V2 } from "../../../motor/index.ts";
+import { NOME_V2, cartaDe } from "../../../motor/index.ts";
 import { ModalResultado } from "./ModalResultado.tsx";
-import { PalcoLuta } from "./PalcoLuta.tsx";
+import { PalcoTR } from "./palcoTR/PalcoTR.tsx";
 
 function ConfirmarDesistir({ ficar, desistir }: { ficar: () => void; desistir: () => void }) {
   const ref = useRef<HTMLDialogElement>(null), saiu = useRef(false);
@@ -71,12 +71,14 @@ export function TelaLuta({ sair, verReplay, sairReplay, pedidoDesistir, fecharPe
         <b>{p.sequencia.inst.nome} · vitória {p.sequencia.k}</b>: {p.B.nomeTela} ({p.B.estiloTela}). {p.sequencia.k - 1} vitória{p.sequencia.k === 2 ? "" : "s"} seguida{p.sequencia.k === 2 ? "" : "s"} até aqui;
         {p.sequencia.k > 1 ? ` sem cura, seu pet começou esta luta com ${Math.round(p.sequencia.vida * 100)}% da vida.` : " sem cura entre as lutas; as cartas não valem."}
         {p.sequencia.inst.regra === "sozinho" ? " No Palácio as suas travas, vetos e chips de regra não valem: o pet decide sozinho." : ""}</p>}
-      {p.serie && (p.liga
+      {p.carta && <p className="luta-arena-aviso luta-carta" role="note" data-testid="luta-carta"><b>{cartaDe(p.carta).nome}</b> em jogo: {cartaDe(p.carta).efeito}</p>}
+      {p.serie && p.avisoSerie && <p className="luta-arena-aviso luta-serie" role="status">{p.avisoSerie}</p>}
+      {p.serie && !p.avisoSerie && (p.liga
         ? <p className="luta-arena-aviso luta-serie luta-liga" role="status"><b>Liga dos Líderes · luta {p.serie.k} de {p.serie.n}</b>: {p.B.nomeTela}, o Mega de {p.B.estiloTela?.replace(/^.* de /, "")}. Sem cura entre as lutas; as cartas não valem.</p>
         : <p className="luta-arena-aviso luta-serie" role="status"><b>Luta {p.serie.k} de {p.serie.n}</b> · Cidadela: sem cura entre as lutas; a medalha só vem com as {p.serie.n} vitórias.</p>)}
       {p.arena?.regra === "vinculo" && <p className="luta-arena-aviso" role="note"><b>Arena do Lago:</b> aqui as suas travas e vetos não valem. {p.A.nomeTela} decide sozinho, com as regras que ele aprendeu.</p>}
-      <PalcoLuta />
-      {rep !== null && p.fimReplay && !luta.lutando && <FimReplay p={p} deNovo={() => reverLuta(rep, NOME_V2)} voltar={() => sairReplay(rep)} />}
+      <PalcoTR />
+      {rep !== null && p.fimReplay && !luta.lutando && <FimReplay p={p} deNovo={() => reverLuta(rep)} voltar={() => sairReplay(rep)} />}
       {rep === null && p.resultado && !luta.lutando && <ModalResultado p={p} continuar={voltar} verReplay={idx => { previa(modo); verReplay(modo, idx); }} />}
       {desistindo && luta.lutando && <ConfirmarDesistir ficar={() => setDesistindo(false)} desistir={() => { setDesistindo(false); pularAnimacao(); voltar(); }} />}
     </section>

@@ -15,7 +15,6 @@ import { SeloMedalha } from "../../componentes/Medalha.tsx";
 import { LUTA, campAtual, escolherDesafio, escolherLugar, lutarAnimado, lutasDoRegistro, previa, tentativas, useLuta } from "../../luta.ts";
 import { ENDERECO_LUTA } from "../../rotas.ts";
 import { useDesktop } from "../../desktop.ts";
-import { FalaRevanche } from "../../componentes/FalaRevanche.tsx";
 import { EscolhaCarta } from "../../componentes/EscolhaCarta.tsx";
 import { Folha } from "../../componentes/Folha.tsx";
 import { temWebGL } from "../../webgl.ts";
@@ -53,14 +52,14 @@ const NIVEL: Record<string, string> = { crianca: "Rookie", adolescente: "Champio
 /** pets v6: o lider do lugar (docs/DESIGN_MEDALHAS_ARENAS.md) aparece marcado, com o selo da medalha dele (cheio se o Tamer
     ja tem). Os pets v1-v5 nao ganham medalha: sem marca */
 function MarcaLider({ m, k }: { m: Motor; k: string }) {
-  const md = m.versao >= 6 ? medalhaDoLider(k) : null;
+  const md = medalhaDoLider(k);
   if (!md) return null;
   return <span className="camp-lider"><SeloMedalha n={MEDALHAS.indexOf(md) + 1} ganha={tamerAtual().tem(md.id)} tam={16} />LÍDER</span>;
 }
 /** pets v6: o cartao da arena do lugar (docs/DESIGN_MEDALHAS_ARENAS.md, secao 3): o lider, a regra em uma frase e a medalha
     (cheia se o Tamer ja tem). Os pets v1-v5 nao tem arenas: nada */
 export function CartaoArena({ m, Li }: { m: Motor; Li: number }) {
-  const ar = m.versao >= 6 ? ARENAS.find(a => a.lugar === Li) ?? null : null;
+  const ar = ARENAS.find(a => a.lugar === Li) ?? null;
   if (!ar) return null;
   const md = MEDALHA_POR_ID[ar.id], g = tamerAtual().ganha(md.id), lider = NPC[ar.lider]!;
   return (
@@ -81,7 +80,7 @@ function Mapa() {
   const LUGARES = m.lugares, { ilhas: ILHAS, H } = mapaDe(m), vencidos = LUGARES.filter((_, i) => m.lugarVencido(i)).length, url = (n: string) => imagemAtlas(a, n).url;
   const py = (y: number) => `${y / H * 100}%`, Lsel = m.lugarDe(sel);
   /* pets v6: a Fronteira no alto, aberta com as 6 medalhas (as que o pet conhece); tocar leva a Lutar · Fronteira */
-  const fronteira = m.versao >= VERSAO_LIGA && LUGARES.length === ILHA_V6.length, frAberta = fronteira && m.medalhas >= MEDALHAS_LIGA, F = ILHA_FRONTEIRA;
+  const fronteira = LUGARES.length === ILHA_V6.length, frAberta = fronteira && m.medalhas >= MEDALHAS_LIGA, F = ILHA_FRONTEIRA;
   const aqui = fronteira && vencidos >= LUGARES.length && frAberta ? F : ILHAS[Math.min(vencidos, LUGARES.length - 1)], pet = imagemAtlas(a, chaveSprite(m.forma));
   return (
     <div className={`mapa-ilhas${LUGARES.length === ILHA_V6.length ? " mapa-ilhas--v6" : ""}`} role="group" aria-label="Mapa da campanha">
@@ -159,10 +158,9 @@ function Detalhe() {
         <p className="licao">{c.licao}</p>
         <CartaoArena m={m} Li={Li} />
       </section>
-      <FalaRevanche />
       <EscolhaCarta rival={sel} />
       <button type="button" className={`dl-btn camp-lutar${vit ? " dl-btn--sec" : ""}`} disabled={!aberto || luta.lutando || !podeLutar}
-        onClick={() => { LUTA.campSel = sel; lutarAnimado(sel, NOME_V2); if (LUTA.lutando) location.hash = ENDERECO_LUTA; }}>
+        onClick={() => { LUTA.campSel = sel; lutarAnimado(sel); if (LUTA.lutando) location.hash = ENDERECO_LUTA; }}>
         {rotuloDesafio(m, sel, vit)}</button>
     </>
   );
@@ -206,19 +204,18 @@ function DetalheDesk({ irTreinar }: { irTreinar: () => void }) {
         <span className="campd-ilha-cab"><h2 id="campd-ilha-tit">Nesta ilha</h2><span>{vencidos} de {L.rivais.length} vencidos</span></span>
         <div className="res-nums">
           <div className="res-num"><span className="dl-num">{tent}</span><span>tentativas</span></div>
-          <div className="res-num"><span className="dl-num">{melhor === null ? "—" : `T${melhor}`}</span><span>melhor turno</span></div>
+          <div className="res-num"><span className="dl-num">{melhor === null ? "—" : m.regras?.tempoReal ? `${melhor} s` : `T${melhor}`}</span><span>{m.regras?.tempoReal ? "luta mais curta" : "melhor turno"}</span></div>
           <div className="res-num"><span className="dl-num">{novas}</span><span>regras novas</span></div>
         </div>
         <CartaoArena m={m} Li={Li} />
         {!podeLutar && <p className="dl-apoio">O In-Training ainda não luta na campanha.</p>}
         <p className="dl-apoio">Perder também ensina: a regra que ele tirar da luta aparece em Arena · Regras.</p>
       </section>
-      <FalaRevanche />
       <EscolhaCarta rival={sel} />
       <div className="campd-bts">
         <button type="button" className="dl-btn dl-btn--sec" onClick={irTreinar}>Treinar antes</button>
         <button type="button" className="dl-btn camp-lutar" disabled={!aberto || luta.lutando || !podeLutar}
-          onClick={() => { LUTA.campSel = sel; lutarAnimado(sel, NOME_V2); if (LUTA.lutando) location.hash = ENDERECO_LUTA; }}>
+          onClick={() => { LUTA.campSel = sel; lutarAnimado(sel); if (LUTA.lutando) location.hash = ENDERECO_LUTA; }}>
           {rotuloDesafio(m, sel, vit)}</button>
       </div>
     </>
@@ -227,8 +224,7 @@ function DetalheDesk({ irTreinar }: { irTreinar: () => void }) {
 
 /** como funciona a campanha (no celular, embaixo do mapa) */
 function ComoFunciona({ m }: { m: Motor }) {
-  const v5 = m.lugares.length === ILHA_V5.length, v6 = m.lugares.length === ILHA_V6.length;
-  return <details className="dl-apoio"><summary>Como funciona</summary><p>{v6 ? "Seis" : v5 ? "Quatro" : "Três"} lugares pelo mapa, em sequência: o próximo só abre depois de vencer um rival do anterior. Na Torre há três rivais com estilos diferentes.{v5 || v6 ? " No alto fica a Montanha Espiral, com os Mestres das Trevas: ela é pensada para o Mega." : ""}{v6 ? " Cada lugar é uma arena com um líder e uma regra própria: a Torre pune o golpe impulsivo, o líder da Floresta muda de padrão no meio da luta, a Cidadela pede três vitórias seguidas sem cura e no Lago o pet luta sozinho, sem as suas travas e vetos. Acima de tudo fica a Fronteira: com as seis medalhas, a Liga dos Líderes." : ""} Todo pet bem treinado vence qualquer um deles; sem treino, a luta vira sorte. {m.versao >= 6 ? " O líder de cada lugar dá uma medalha ao Tamer na primeira vitória; as medalhas liberam as evoluções (Lutar · Medalhas)." : ""} Os NPCs têm stats iguais em todos os atributos (somando de 72 a 110; um pet sem treino tem 60), lutam com um estilo fixo e são imprevisíveis; o primeiro tem o tamanho de um Rookie. <b>Treine o pet no estágio sugerido</b> para vencer com segurança (na campanha o treino vale inteiro, stats absolutos). As lutas entram no registro e ensinam as regras de combate do seu pet.</p></details>;
+  return <details className="dl-apoio"><summary>Como funciona</summary><p>Seis lugares pelo mapa, em sequência: o próximo só abre depois de vencer um rival do anterior. Na Torre há três rivais com estilos diferentes. No alto fica a Montanha Espiral, com os Mestres das Trevas: ela é pensada para o Mega. Cada lugar é uma arena com um líder e uma regra própria: a Torre pune o golpe impulsivo, o líder da Floresta muda de padrão no meio da luta, a Cidadela pede três vitórias seguidas sem cura e no Lago o pet luta sozinho, sem as suas travas e vetos. Acima de tudo fica a Fronteira: com as seis medalhas, a Liga dos Líderes. Todo pet bem treinado vence qualquer um deles; sem treino, a luta vira sorte. O líder de cada lugar dá uma medalha ao Tamer na primeira vitória; as medalhas liberam as evoluções (Lutar · Medalhas). Os NPCs têm stats iguais em todos os atributos (somando de 72 a 110; um pet sem treino tem 60), lutam com um estilo fixo e são imprevisíveis; o primeiro tem o tamanho de um Rookie. <b>Treine o pet no estágio sugerido</b> para vencer com segurança (na campanha o treino vale inteiro, stats absolutos). As lutas entram no registro e ensinam as regras de combate do seu pet.</p></details>;
 }
 /** sem WebGL (ou se a vista 3D falhar): a tela de antes, com o mapa 2D e o cartao do lugar */
 function CampanhaReserva({ irTreinar }: { irTreinar: () => void }) {

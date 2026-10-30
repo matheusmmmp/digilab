@@ -1,11 +1,12 @@
-/* Vinculo (espelho de digilab/vinculo.py) e obediencia (espelho de obediencia.py).
+/* Vinculo (espelho de digilab/vinculo.py). A obediencia dos pets v2-v10 (espelho de obediencia.py) saiu com o descarte 6 (COMBATE-TR,
+   etapa R2b; D-9).
    Vinculo: media movel em [0, 1] de atendimento (pedido atendido rapido), coerencia (mesmo sinal de
    feedback para a mesma acao) e vontades respeitadas. Guarda o ordinal da acao do dono que por ultimo o
    derrubou. Obediencia: so acoes de cuidado; feedback sempre chega.
    Variante B (pets v10, `porSituacao`; espelho de ConfigVinculoSituacao ligada; docs/PLANO_ANALISE_V2_VINCULO.md): o pedido nao
    abre (o atendimento sai) e a coerencia agrupa o historico por (acao do pet, situacao do pet), com a situacao lida da observacao
    com que o pet decidiu a acao atual. Desejo, ajustes, pausa e teto iguais. Paridade com o Python: test/vinculo.test.ts. */
-import { CME, COB, CVB, CVI, TPD } from "./constantes.ts";
+import { CME, CVB, CVI, TPD } from "./constantes.ts";
 import { eNoite } from "./estado.ts";
 import type { AcaoDono, AcaoPet, Desejo, Observacao } from "./tipos.ts";
 
@@ -72,20 +73,4 @@ export class Vinculo {
     const base = [this.valor, this.pedidos, this.feedbacks, this.vontades, this.n, this.ultRefBaixa, this.teto];
     return this.porSituacao ? [...base, this.situacao] : base;    /* v1-v9: a assinatura de sempre */
   }
-}
-
-const ATENDE_NECESSIDADE: Partial<Record<string, string>> = { alimentar: "fome", limpar: "higiene", brincar: "humor", acariciar: "humor" };
-/** conflito entre o pedido do dono e a necessidade mais urgente do pet: [intensidade, necessidade] */
-export function conflitoDono(v: number[], a: string): [number, string | null] {
-  const urg = ([["fome", 0], ["higiene", 1], ["energia", 2], ["humor", 3]] as const).map(([n, i]) => [v[i], n] as const).filter(([x]) => x < COB.limiarConflito)
-    .sort((x, y) => x[0] - y[0] || (x[1] < y[1] ? -1 : 1));
-  if (!urg.length || ATENDE_NECESSIDADE[a] === urg[0][1]) return [0, null];
-  return [(COB.limiarConflito - urg[0][0]) / COB.limiarConflito, urg[0][1]];
-}
-/** p = logistica(b0 + b_v vinculo - b_t teimosia - b_c conflito) e a contribuicao de cada termo */
-export function termosObediencia(vinculo: number, teimosia: number, conf: number, nec: string | null): [number, Record<string, number>] {
-  const z = COB.b0 + COB.bVinculo * vinculo - COB.bTeimosia * teimosia - COB.bConflito * conf;
-  const contrib: Record<string, number> = { vinculo_baixo: COB.bVinculo * (vinculo - CVI.inicial), teimosia: -COB.bTeimosia * teimosia };
-  if (nec) contrib["necessidade_" + nec] = -COB.bConflito * conf;
-  return [1 / (1 + Math.exp(-z)), contrib];
 }

@@ -132,8 +132,6 @@ export function ConteudoDigiBrain() {
 
 /** desktop: o card do painel, na coluna entre o habitat e a coluna de sempre (prancha DigiBrainDesktop) */
 export function CardDigiBrain({ replay = false }: { replay?: boolean }) {
-  const { motor: m } = useJogo();
-  if (m.versao < 11) return null;
   return (
     <section className="dl-card digibrain" aria-labelledby="db-tit">
       <div className="db-cab"><h2 id="db-tit">DigiBrain</h2><SeloDigiBrain replay={replay} /></div>
@@ -144,8 +142,7 @@ export function CardDigiBrain({ replay = false }: { replay?: boolean }) {
 
 /** celular: o botao no canto do palco abre o painel numa folha (prancha DigiBrain390) */
 export function BotaoDigiBrain({ replay = false }: { replay?: boolean }) {
-  const { motor: m } = useJogo(), [aberto, setAberto] = useState(false);
-  if (m.versao < 11) return null;
+  const [aberto, setAberto] = useState(false);
   return <>
     <button type="button" className="db-botao" aria-haspopup="dialog" onClick={() => setAberto(true)}><IconeCerebro largura={18} />DigiBrain</button>
     {aberto && <Folha titulo="DigiBrain" fechar={() => setAberto(false)}>

@@ -4,7 +4,7 @@
    do porte, nao resultado de pesquisa: uma semente, outro RNG, sem IC. */
 import { useState } from "react";
 import {
-  ACOES_PET, ACOES_V2_OBS, CA, NOME_BOT, NOME_COMB, NOME_DONO, NOME_V2, afinidades, corDominante, hashSemente, jogarV2, lutadorPet,
+  ACOES_PET, ACOES_V2_OBS, CA, NOME_BOT, NOME_COMB, NOME_DONO, NOME_V2, afinidades, corDominante, hashSemente, jogarLuta, lutadorPet, tamanhoLuta,
   nomeForma, observacao, treinarPet, type Motor, type Observacao, type TipoDono,
 } from "../../../motor/index.ts";
 import { comSinal, dec } from "../../componentes/Barras.tsx";
@@ -91,17 +91,19 @@ export function TelaCenarios() {
     const m = jogoAtual().motor, A = lutadorPet(m, "Pet A"), B = lutadorPet(fixo.rival, "Pet B");
     const contA: Record<string, number> = {}, contB: Record<string, number> = {};
     for (const c of ACOES_V2_OBS) { contA[c] = 0; contB[c] = 0; }
-    let v = 0, d = 0, e = 0, turnos = 0, lim = 0;
+    /* acoes: as acoes de cada lado (pets v13, em tempo real); dur: segundos */
+    let v = 0, d = 0, e = 0, dur = 0, acoesA = 0, acoesB = 0, lim = 0;
     for (let k = 0; k < n; k++) {
-      const r = jogarV2(A, B, hashSemente("lab", m.semente, m.log.length, k), m.regras);
+      const r = jogarLuta(A, B, hashSemente("lab", m.semente, m.log.length, k), m.regras);
       if (r.pontosA === 1) v++; else if (r.pontosA === 0) d++; else e++;
-      turnos += r.turnos.length; lim += r.fim === "limite" ? 1 : 0;
-      for (const t of r.turnos) { contA[t.a]++; contB[t.b]++; }
+      dur += tamanhoLuta(r); lim += r.fim === "limite" ? 1 : 0;
+      for (const x of r.tr.acoes) { if (x.lado === 0) { contA[x.nome]++; acoesA++; } else { contB[x.nome]++; acoesB++; } }
     }
+    const tempoReal = !!m.regras?.tempoReal;
     lutasTxt = {
-      resumo: `${n} lutas: A ${v} vitórias, B ${d}, ${e} empates. A fez ${((v + e / 2) / n * 100).toFixed(0)}% dos pontos. Média de ${(turnos / n).toFixed(1).replace(".", ",")} turnos; ${lim} no limite.`,
+      resumo: `${n} lutas: A ${v} vitórias, B ${d}, ${e} empates. A fez ${((v + e / 2) / n * 100).toFixed(0)}% dos pontos. Média de ${(dur / n).toFixed(1).replace(".", ",")} ${tempoReal ? "s" : "turnos"}; ${lim} no limite.`,
       nota: `A luta com as regras de combate aprendidas dele (semente: ${NOME_BOT[A.estilo.base!] || A.estilo.base}); B com os dele (semente: ${NOME_BOT[B.estilo.base!] || B.estilo.base}). Estas lutas não ensinam nenhum dos dois.`,
-      linhas: ACOES_V2_OBS.map(c => [NOME_V2[c], pct(contA[c] / turnos), pct(contB[c] / turnos)]),
+      linhas: ACOES_V2_OBS.map(c => [NOME_V2[c], pct(contA[c] / acoesA), pct(contB[c] / acoesB)]),
     };
     setRev(x => x + 1);
   };

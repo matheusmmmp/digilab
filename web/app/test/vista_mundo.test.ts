@@ -35,8 +35,8 @@ describe("a vista do mundo", () => {
     const borda = lugaresNomeados({ pet: [W - 1, H - 1], comedouro, cm });
     for (const p of Object.values(borda)) expect(dentroDoMapa(cm, p[0], p[1])).toBe(true);
   });
-  test("num pet v12 de verdade os tres lugares sao aceitos pelo motor e entram no registro como o evento dc", () => {
-    const m = new Motor(6503, 12);
+  test("num pet de verdade (v13) os tres lugares sao aceitos pelo motor e entram no registro como o evento dc", () => {
+    const m = new Motor(6503);
     m.avancar(120);
     const lugares = lugaresNomeados(m.mundo!);
     for (const [x, y] of Object.values(lugares)) m.deixarComida("racao", x, y);

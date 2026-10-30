@@ -16,12 +16,13 @@
      mesmo faria (GambitsPet.listaSozinho);
    - Montanha Espiral (Mega), Piedmon: o chefe da campanha, sem regra a mais.
 
-   Fatores dos lideres: calibrados no motor web com as regras e a escala dos pets v6 (CESC_V6; test/calibrar_arenas.mjs,
+   Fatores dos lideres: calibrados no motor web com as regras e a escala dos pets v6 (hoje a vida e o beta da CESC_V9, os mesmos; test/calibrar_arenas.mjs,
    artifacts_campanha/arenas/). Metas (decisao do Matheus, 2026-09-30: o treino tem que decidir): sem treino <= 0,05 e com o
    treino tipico >= 0,80, sem forma travada. PROPOSTOS. O fator fica aqui quando o lider e um NPC que ja existia (Gazimon 1,3,
    Guardromon 1,6, Myotismon 0,9 na serie, Piedmon 1,6; fora da arena e nos pets v1-v5, os de sempre); os lideres novos tem o
    fator no proprio NPC (bots.CAMPANHA_V6: Youkomon 1,5, MarinBullmon 1,5). */
-import { comCarta, jogarV2, type Desafiado, type EfeitoCarta, type Lutador, type RegrasLuta, type ResultadoLuta } from "./combate.ts";
+import { jogarLuta, curouA } from "./combate_tr/adaptador.ts";
+import { comCarta, type Desafiado, type EfeitoCarta, type Lutador, type RegrasLuta, type ResultadoLuta } from "./combate.ts";
 import type { Tecnica } from "./constantes.ts";
 import { hashSemente } from "./rng.ts";
 
@@ -55,7 +56,7 @@ export const ARENAS: readonly Arena[] = [
   { id: "torre", lugar: 1, lider: "npc_tier2_carcereiro", regra: "paciencia", titulo: "Paciência", tecnica: "contra_golpe", lista: "torre", fator: 1.6,
     frase: "O líder devolve golpe forte: preparar o pesado de perto ou insistir no golpe rápido volta contra você. Quem só atira de longe, ele vai buscar." },
   { id: "floresta", lugar: 2, lider: "npc_v6_youkomon", regra: "leitura", titulo: "Leitura",
-    frase: "O líder muda de padrão no turno 10: de longe e disparando, depois colado e golpeando. Vence quem lê o rival." },
+    frase: "O líder muda de padrão aos 20 segundos: de longe e disparando, depois colado e golpeando. Vence quem lê o rival." },
   { id: "cidadela", lugar: 3, lider: "npc_v5_myotismon", regra: "resistencia", titulo: "Resistência", lutas: 3, fator: .9,
     frase: "Três lutas seguidas, sem cura: a vida e o guts passam de uma para a outra. A medalha só vem com as três." },
   { id: "lago", lugar: 4, lider: "npc_v6_marinbullmon", regra: "vinculo", titulo: "Vínculo",
@@ -90,7 +91,7 @@ export const arenaDaLuta = (rival: string, versao: number): Arena | null => vers
 export const sementeDaSerie = (semente: number, k: number): number => k ? hashSemente("serie-arena", semente, k) : semente;
 /** a luta (ou as lutas seguidas) de arena: `lutas` lutas, parando na primeira que nao for vitoria; da segunda em diante o
     pet (lado A) comeca com a vida e o guts do fim da anterior, e o lider (B) volta inteiro. Deterministico. `desafiado`: o do
-    limite de turnos (combate.fimV2); nos pets v6 o rival, e uma luta da serie que chega ao limite e derrota e quebra a serie */
+    limite de tempo (combate_tr/luta.ts, fimTR); o rival, e uma luta da serie que chega ao limite e derrota e quebra a serie */
 export function jogarArena(A: Lutador, B: Lutador, semente: number, R: RegrasLuta, lutas = 1, desafiado: Desafiado = null,
   carta: EfeitoCarta | null = null): ResultadoLuta[] {
   if (!Number.isInteger(lutas) || lutas < 1) throw new Error("lutas da arena inválidas: " + lutas);
@@ -118,9 +119,9 @@ export function jogarSequencia(A: Lutador, rivalDe: (k: number) => Lutador, max:
   const Ac = comCarta(A, carta), serie: ResultadoLuta[] = [];
   let ini: { hp: number; guts: number } | null = null, cura = carta?.cura ?? null;
   for (let k = 0; k < max; k++) {
-    const res = jogarV2(Ac, rivalDe(k), sementeDaSerie(semente, k), R, ini, desafiado, cura ? [cura, null] : null);
+    const res = jogarLuta(Ac, rivalDe(k), sementeDaSerie(semente, k), R, ini, desafiado, cura ? [cura, null] : null);
     serie.push(res);
-    if (cura && res.turnos.some(t => t.cura)) cura = null;
+    if (cura && curouA(res)) cura = null;
     if (res.pontosA !== 1) break;
     const fim = res.E.L[0];
     ini = { hp: curaEntre > 0 ? Math.min(fim.hpMax, fim.hp + curaEntre * fim.hpMax) : fim.hp, guts: fim.guts };

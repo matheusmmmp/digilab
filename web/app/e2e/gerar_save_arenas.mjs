@@ -1,4 +1,4 @@
-// Save do teste ponta a ponta das arenas (medalhas parte 2, docs/DESIGN_MEDALHAS_ARENAS.md secao 3): um pet v6 Ultimate,
+// Save do teste ponta a ponta das arenas (medalhas parte 2, docs/DESIGN_MEDALHAS_ARENAS.md secao 3): um pet v13 Ultimate,
 // treinado, que ja venceu a Campina, a Torre de pedra e a Floresta (o Tamer do teste tem as 3 medalhas; o registro do pet ja
 // tem o "u" das 3). O registro termina num avanco de tempo, entao o relogio do app so estica esse avanco e o tamanho do
 // registro (que entra na semente da luta) nao muda. Conferido aqui, com a escala ligada como no app: a luta do botao
@@ -26,7 +26,7 @@ function treinarSePuder(m, ex) {
   try { m.treinar(EX[ex % EX.length]); return ex + 1; } catch { return ex; }
 }
 function ultimateTreinado(semente) {
-  const m = new Motor(semente, 6);
+  const m = new Motor(semente);
   m.liberar(3);
   let ex = 0, k = 0;
   const fimChampion = DUR_EVO.bebe + DUR_EVO.crianca + DUR_EVO.adolescente + 60;
@@ -56,7 +56,7 @@ function abrirCidadela(m) {
 }
 function venceSempre(m) {
   for (let o = 0; o <= 300; o += 5) {
-    const x = Motor.reproduzir(m.semente, m.log, 6);
+    const x = Motor.reproduzir(m.semente, m.log);
     if (o) x.avancar(o);
     if (x.log.length !== m.log.length) throw new Error("o avanco nao juntou com o ultimo");
     const r = x.lutar(MYOTISMON, hashSemente("luta", x.semente, x.log.length));

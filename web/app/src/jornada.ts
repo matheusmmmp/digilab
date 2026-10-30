@@ -5,17 +5,14 @@
    vista fica numa chave propria (sementes dos pets que ja viram a mensagem; a da Liga, noutra, para o pet v6 que viu a do Piedmon
    antes desta parte ver a nova). */
 import { useEffect, useState } from "react";
-import { ESPECIES, Motor, VERSAO_LIGA, campanhaDe, hashSemente, type Especie, type Ritmo } from "../motor/index.ts";
+import { ESPECIES, Motor, hashSemente, type Especie, type Ritmo } from "../motor/index.ts";
 import { jogoAtual, trocarMotor } from "./jogo.ts";
 import { ligarProduto } from "./produto.ts";
 import { CHAVE, textoSave } from "./save.ts";
 import { CHAVE_GUARDADOS, lerGuardados } from "./pets.ts";
 
-export const CHAVE_CONCLUSAO = CHAVE + "-conclusao";
-/** pets v6: a conclusao vista vem da Liga dos Lideres (chave propria) */
+/** a conclusao vista vem da Liga dos Lideres (chave propria; a "-conclusao" dos pets v1-v5, o chefe da campanha, saiu com eles) */
 export const CHAVE_CONCLUSAO_LIGA = CHAVE + "-conclusao-liga";
-/** o chefe da campanha do pet: o ultimo desafio da ultima ilha (o Piedmon; a chave muda com a versao) */
-export const chefeDe = (m: Motor): string => { const c = campanhaDe(m.versao); return c[c.length - 1].k; };
 
 /* ------------------------------------------------ escolha do brasao (tela cheia) */
 let escolhendo = false;
@@ -59,19 +56,16 @@ export const guardarAtivoNoProximoOvo = (): boolean => guardarNoProximoOvo;
 export function novoOvoGuardandoAtivo(): void { guardarNoProximoOvo = true; abrirEscolhaBrasao(); }
 
 /* ------------------------------------------------ conclusao */
-/** a jornada termina na Liga dos Lideres (pets v6) ou no chefe da campanha (v1-v5) */
-export const terminaNaLiga = (m: Motor): boolean => m.versao >= VERSAO_LIGA;
-const chaveConclusao = (m: Motor): string => terminaNaLiga(m) ? CHAVE_CONCLUSAO_LIGA : CHAVE_CONCLUSAO;
+/** a jornada termina na Liga dos Lideres (o chefe da campanha era o fim dos pets v1-v5, que nao abrem mais) */
+const chaveConclusao = (_m: Motor): string => CHAVE_CONCLUSAO_LIGA;
 const vistas = (chave: string): number[] => { try { return JSON.parse(localStorage.getItem(chave) || "[]") as number[]; } catch { return []; } };
 export const conclusaoVista = (m: Motor): boolean => vistas(chaveConclusao(m)).includes(m.semente);
 export function marcarConclusao(m: Motor): void {
   const k = chaveConclusao(m);
   try { localStorage.setItem(k, JSON.stringify([...new Set([...vistas(k), m.semente])])); } catch { /* preferencia de tela */ }
 }
-/** venceu o chefe da campanha (o Piedmon) */
-export const venceuOChefe = (m: Motor): boolean => (m.campanha[chefeDe(m)] ?? 0) > 0;
-/** a jornada acabou: nos pets v6, venceu a Liga dos Lideres (o titulo); nos v1-v5, o chefe da campanha */
-export const concluiuJornada = (m: Motor): boolean => terminaNaLiga(m) ? m.liga.titulos > 0 : venceuOChefe(m);
+/** a jornada acabou: venceu a Liga dos Lideres (o titulo) */
+export const concluiuJornada = (m: Motor): boolean => m.liga.titulos > 0;
 
 /** os marcos da jornada, na ordem, com o que o motor diz de cada um */
 export function marcos(m: Motor): { rotulo: string; feito: boolean }[] {
@@ -81,8 +75,8 @@ export function marcos(m: Motor): { rotulo: string; feito: boolean }[] {
     { rotulo: "Virou Rookie", feito: ev("crianca") },
     { rotulo: "Virou Champion", feito: ev("adolescente") },
     { rotulo: "Virou Ultimate", feito: ev("adulto") },
-    ...(m.versao >= 5 ? [{ rotulo: "Virou Mega", feito: ev("mega") }] : []),
+    { rotulo: "Virou Mega", feito: ev("mega") },
     ...m.lugares.map((L, i) => ({ rotulo: `Venceu ${L.nome}`, feito: m.lugarVencido(i) })),
-    ...(terminaNaLiga(m) ? [{ rotulo: "Venceu a Liga dos Líderes", feito: m.liga.titulos > 0 }] : []),
+    { rotulo: "Venceu a Liga dos Líderes", feito: m.liga.titulos > 0 },
   ];
 }

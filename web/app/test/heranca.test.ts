@@ -3,10 +3,13 @@ import { expect, test } from "vitest";
 import { CAT, CHE, DUR_EVO, Motor, TICK_INICIAL } from "../motor/index.ts";
 import { geracao, previa } from "../src/heranca.ts";
 
+/** um adulto v13: as medalhas das evolucoes, e o Champion com as lutas de treino e as vitorias que a passagem pede (postas a mao) */
 const adulto = (s: number) => {
-  const m = new Motor(s, 3);
+  const m = new Motor(s);
+  m.liberar(5);
   m.avancar(DUR_EVO.bebe + DUR_EVO.crianca + 15);
-  m.sparring = CAT.sparring;
+  expect(m.estagioAtual).toBe("adolescente");
+  m.sparring = CAT.sparring; m.lutas = { ...m.lutas, lutas: CAT.sparring, vitorias: CAT.sparring };
   m.avancar(DUR_EVO.adolescente);
   expect(m.estagioAtual).toBe("adulto");
   return m;

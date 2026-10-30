@@ -2667,10 +2667,6 @@
    "nota": "lugar da campanha v5 onde o lider da medalha fica hoje (pets v6, so no jogo; fonte provisoria na parte 1)"
   },
   {
-   "web": "CV21D.versaoPet",
-   "nota": "versao de pet a partir da qual a luta usa a V21D (pets v6, so no jogo; docs/VALIDACAO_V21D.md): no Python a variante e escolhida pelo config, nao por versao de pet"
-  },
-  {
    "web": "CV21E.versaoPet",
    "nota": "versao de pet a partir da qual a luta usa a V21E (pets v9, so no jogo; docs/EQUILIBRIO_GERAL.md, fase 1): no Python a variante e escolhida pelo config, nao por versao de pet"
   },
@@ -2919,50 +2915,6 @@
    "nota": "vida de combate do perfil neutro (hpBase + 10 x hpVigor), so para exibir a vida e o dano na escala; derivada, sem par no Python"
   },
   {
-   "web": "CESC_V6.versaoPet",
-   "nota": "versao de pet a partir da qual vale a escala propria (a das medalhas e arenas); escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
-  },
-  {
-   "web": "CESC_V6.vida.bebe",
-   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
-  },
-  {
-   "web": "CESC_V6.vida.crianca",
-   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
-  },
-  {
-   "web": "CESC_V6.vida.adolescente",
-   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
-  },
-  {
-   "web": "CESC_V6.vida.adulto",
-   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
-  },
-  {
-   "web": "CESC_V6.vida.mega",
-   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
-  },
-  {
-   "web": "CESC_V6.beta",
-   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
-  },
-  {
-   "web": "CESC_V6.fatorNpc.npc_tier2_sentinela",
-   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
-  },
-  {
-   "web": "CESC_V6.fatorNpc.npc_tier2_porteiro",
-   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
-  },
-  {
-   "web": "CESC_V6.fatorNpc.npc_v5_puppetmon",
-   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
-  },
-  {
-   "web": "CESC_V6.fatorNpc.npc_v5_machinedramon",
-   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
-  },
-  {
    "web": "CIT.versaoPet",
    "nota": "itens do Tamer (medalhas parte 3, pets v6): so no jogo, sem par no Python (docs/DESIGN_MEDALHAS_ARENAS.md secao 13); PROPOSTO e sem equilibrio"
   },
@@ -3141,36 +3093,6 @@
   {
    "web": "FATOR_RIVAL_FABRICA_V9",
    "nota": "fator dos rivais da Fabrica nas tentativas com as regras dos v9 (so no jogo; motor/fabrica.ts), calibrado em test/conferir_fabrica_salao.mjs --calibrar (meta M-C2, o maior com folga >= 0,05, artifacts_equilibrio_geral/fase3/fabrica_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
-  }
- ],
- "chaves_v21d": [
-  {
-   "web": "CV21D.preparoSobPeleOculto",
-   "py": "ConfigCombateV21D.preparo_sob_pele_oculto",
-   "arquivo": "experiments/configs/v21d/validacao.json",
-   "chave": "regras_v21.preparo_sob_pele_oculto",
-   "nota": "candidato A: o preparo feito sob pele_dura nao aparece em oponente_preparando"
-  },
-  {
-   "web": "CV21D.muralhaListaEspelho",
-   "py": "ConfigCombateV21D.muralha_lista_espelho",
-   "arquivo": "experiments/configs/v21d/validacao.json",
-   "chave": "regras_v21.muralha_lista_espelho",
-   "nota": "candidato C: a muralha luta com a lista do espelho (BOTS_V21D.muralha)"
-  },
-  {
-   "web": "CV21D.vigiaBateEmQuemRecua",
-   "py": "ConfigCombateV21D.vigia_bate_em_quem_recua",
-   "arquivo": "experiments/configs/v21d/validacao.json",
-   "chave": "regras_v21.vigia_bate_em_quem_recua",
-   "nota": "E2 no vigia: golpe rapido de perto contra quem recua (BOTS_V21D.vigia)"
-  },
-  {
-   "web": "CV21D.vigiaRecuaDoPreparoSobPele",
-   "py": "ConfigCombateV21D.vigia_recua_do_preparo_sob_pele",
-   "arquivo": "experiments/configs/v21d/validacao.json",
-   "chave": "regras_v21.vigia_recua_do_preparo_sob_pele",
-   "nota": "V: o vigia recua do preparo de quem usa pele (BOTS_V21D.vigia)"
   }
  ],
  "chaves_v21e": [

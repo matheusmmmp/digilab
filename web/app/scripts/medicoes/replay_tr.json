@@ -1,0 +1,255 @@
+{
+ "gerado_por": "web/app/scripts/medir_replay_tr.ts",
+ "data": "2026-10-29",
+ "maquina": {
+  "cpu": "Intel(R) Core(TM) i7-14700KF",
+  "nucleos": 20,
+  "plataforma": "win32 10.0.26300"
+ },
+ "dados": {
+  "status.json": "56aaf84b434505c581806476e10270792833794a908278c6516cb074576056e0",
+  "golpes.json": "5553b0d8afd08c852d1ba30e1a12f608000b1d88aa39109459246db9841e9a98",
+  "atributos.json": "25e8e4bce8c2fca54dd156f5a4ad2f6789ee0d9687ffd5dcf7c03d6d8f1c5236",
+  "atlas.json": "ae439b7d3907c5461f9e998834376b4e38f3678f3ded4cf29e3e65701bafc46f"
+ },
+ "ritmo_controlador_passos": 16,
+ "node": {
+  "versao": "v24.19.0",
+  "opcoes": {
+   "lutas1x1": 200,
+   "lutas3x3": 40,
+   "lutasTurnos": 2000,
+   "chamadasControlador": 200000,
+   "repeticoes": 5,
+   "semente": 20261029
+  },
+  "parceiros": 29,
+  "luta1x1": {
+   "lutas": 200,
+   "passosMedio": 1853,
+   "passosP90": 2208,
+   "segundosJogoMedio": 29.6,
+   "segundosJogoP90": 35.3,
+   "semFim": 0,
+   "msPorLuta": 1.185,
+   "usPorPasso": 0.64,
+   "msPorLutaRepeticoes": [
+    1.381,
+    1.106,
+    1.193,
+    1.185,
+    1.09
+   ],
+   "impressao": "cd6f8e89"
+  },
+  "luta3x3": {
+   "lutas": 40,
+   "passosMedio": 6038,
+   "passosP90": 6822,
+   "segundosJogoMedio": 96.6,
+   "segundosJogoP90": 109.2,
+   "semFim": 0,
+   "msPorLuta": 4.023,
+   "usPorPasso": 0.666,
+   "msPorLutaRepeticoes": [
+    3.451,
+    5.027,
+    4.023,
+    3.978,
+    4.445
+   ],
+   "impressao": "8bd938b6"
+  },
+  "controlador": {
+   "chamadas": 200000,
+   "usPorChamada": 0.6345
+  },
+  "turnos": {
+   "lutas": 2000,
+   "turnosMedio": 24.3,
+   "msPorLuta": 0.0864
+  },
+  "vida": {
+   "luta_100s_6250_passos": {
+    "passosPorLuta": 6250,
+    "msPorLuta": 4.66,
+    "segundos": {
+     "10": 0.05,
+     "50": 0.23,
+     "100": 0.47,
+     "200": 0.93,
+     "500": 2.33,
+     "1000": 4.66
+    },
+    "turnosSegundos": {
+     "10": 0.001,
+     "50": 0.004,
+     "100": 0.009,
+     "200": 0.017,
+     "500": 0.043,
+     "1000": 0.086
+    }
+   },
+   "luta_1x1_natural": {
+    "passosPorLuta": 1853,
+    "msPorLuta": 1.38,
+    "segundos": {
+     "10": 0.01,
+     "50": 0.07,
+     "100": 0.14,
+     "200": 0.28,
+     "500": 0.69,
+     "1000": 1.38
+    },
+    "turnosSegundos": {
+     "10": 0.001,
+     "50": 0.004,
+     "100": 0.009,
+     "200": 0.017,
+     "500": 0.043,
+     "1000": 0.086
+    }
+   },
+   "luta_300s_limite": {
+    "passosPorLuta": 18750,
+    "msPorLuta": 13.97,
+    "segundos": {
+     "10": 0.14,
+     "50": 0.7,
+     "100": 1.4,
+     "200": 2.79,
+     "500": 6.99,
+     "1000": 13.97
+    },
+    "turnosSegundos": {
+     "10": 0.001,
+     "50": 0.004,
+     "100": 0.009,
+     "200": 0.017,
+     "500": 0.043,
+     "1000": 0.086
+    }
+   }
+  }
+ },
+ "chrome": {
+  "versao": "156.0.8078.49",
+  "opcoes": {
+   "lutas1x1": 200,
+   "lutas3x3": 40,
+   "lutasTurnos": 2000,
+   "chamadasControlador": 200000,
+   "repeticoes": 5,
+   "semente": 20261029
+  },
+  "parceiros": 29,
+  "luta1x1": {
+   "lutas": 200,
+   "passosMedio": 1853,
+   "passosP90": 2208,
+   "segundosJogoMedio": 29.6,
+   "segundosJogoP90": 35.3,
+   "semFim": 0,
+   "msPorLuta": 0.881,
+   "usPorPasso": 0.475,
+   "msPorLutaRepeticoes": [
+    1.101,
+    1.041,
+    0.881,
+    0.809,
+    0.851
+   ],
+   "impressao": "cd6f8e89"
+  },
+  "luta3x3": {
+   "lutas": 40,
+   "passosMedio": 6038,
+   "passosP90": 6822,
+   "segundosJogoMedio": 96.6,
+   "segundosJogoP90": 109.2,
+   "semFim": 0,
+   "msPorLuta": 2.717,
+   "usPorPasso": 0.45,
+   "msPorLutaRepeticoes": [
+    2.68,
+    3.09,
+    2.717,
+    2.7,
+    2.745
+   ],
+   "impressao": "8bd938b6"
+  },
+  "controlador": {
+   "chamadas": 200000,
+   "usPorChamada": 0.3465
+  },
+  "turnos": {
+   "lutas": 2000,
+   "turnosMedio": 24.3,
+   "msPorLuta": 0.0676
+  },
+  "vida": {
+   "luta_100s_6250_passos": {
+    "passosPorLuta": 6250,
+    "msPorLuta": 3.08,
+    "segundos": {
+     "10": 0.03,
+     "50": 0.15,
+     "100": 0.31,
+     "200": 0.62,
+     "500": 1.54,
+     "1000": 3.08
+    },
+    "turnosSegundos": {
+     "10": 0.001,
+     "50": 0.003,
+     "100": 0.007,
+     "200": 0.014,
+     "500": 0.034,
+     "1000": 0.068
+    }
+   },
+   "luta_1x1_natural": {
+    "passosPorLuta": 1853,
+    "msPorLuta": 0.91,
+    "segundos": {
+     "10": 0.01,
+     "50": 0.05,
+     "100": 0.09,
+     "200": 0.18,
+     "500": 0.46,
+     "1000": 0.91
+    },
+    "turnosSegundos": {
+     "10": 0.001,
+     "50": 0.003,
+     "100": 0.007,
+     "200": 0.014,
+     "500": 0.034,
+     "1000": 0.068
+    }
+   },
+   "luta_300s_limite": {
+    "passosPorLuta": 18750,
+    "msPorLuta": 9.25,
+    "segundos": {
+     "10": 0.09,
+     "50": 0.46,
+     "100": 0.92,
+     "200": 1.85,
+     "500": 4.62,
+     "1000": 9.25
+    },
+    "turnosSegundos": {
+     "10": 0.001,
+     "50": 0.003,
+     "100": 0.007,
+     "200": 0.014,
+     "500": 0.034,
+     "1000": 0.068
+    }
+   }
+  }
+ },
+ "node_e_chrome_iguais": true
+}

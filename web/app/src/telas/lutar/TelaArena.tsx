@@ -1,7 +1,7 @@
 /* Arena (desenhos ArenaEscolha, ArenaAoVivo, EnsinarRegras; porte do HTML): escolha do rival em cards com sprite
    e uma linha de estilo, lutas de treino do Champion, Lutar grande e Melhor de 10, o palco e as regras de combate. */
 import { useEffect, useMemo, useState } from "react";
-import { NOME_ARQ, NOME_BOT, NOME_DONO, NOME_V2, chaveSprite, lutadorBot, lutadorPet, nomeEstagio, nomeForma, vidaExibida } from "../../../motor/index.ts";
+import { NOME_ARQ, NOME_BOT, NOME_DONO, NOME_V2, chaveSprite, lutadorBot, lutadorPet, nomeEstagio, nomeForma, vidaExibida, duracaoLuta } from "../../../motor/index.ts";
 import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { Seg } from "../../componentes/Barras.tsx";
 import { useJogo } from "../../jogo.ts";
@@ -10,9 +10,8 @@ import {
 } from "../../luta.ts";
 import { EditorRegras, RegrasCompactas } from "./EditorRegras.tsx";
 import { useDesktop } from "../../desktop.ts";
-import { Cena } from "./PalcoLuta.tsx";
+import { Cena } from "./palcoTR/PalcoTR.tsx";
 import { ENDERECO_LUTA } from "../../rotas.ts";
-import { FalaRevanche } from "../../componentes/FalaRevanche.tsx";
 import { EscolhaCarta } from "../../componentes/EscolhaCarta.tsx";
 
 function CardRival({ k, adulto = false }: { k: string; adulto?: boolean }) {
@@ -57,7 +56,7 @@ function UltimaLuta({ verReplay }: { verReplay: (idx: number) => void }) {
   return (
     <div className="dl-card arena-ult">
       <span className={`arena-ult-tag arena-ult-tag--${r === 1 ? "vit" : r === 0 ? "der" : "emp"}`}>{tag}</span>
-      <b>Última luta: {luta.B.nomeTela} · {luta.res.turnos.length} turnos</b>
+      <b>Última luta: {luta.B.nomeTela} · {duracaoLuta(luta.res)}</b>
       <button type="button" className="arena-ult-ver" onClick={() => verReplay(idx)}>ver no Diário</button>
     </div>
   );
@@ -89,11 +88,10 @@ export function TelaArena({ voltarPet, verReplay }: { voltarPet: () => void; ver
       </div>
       <div className="desk-col arena-col-meio">
       {luta.rivalFixo && <p className="dl-apoio">Rival do cenário: pet de dono {NOME_DONO[luta.rivalFixo.tipo]}, {luta.rivalFixo.dias} dia(s), lutando com o estilo da linha dele. Troque o rival nos cards para voltar aos bots.</p>}
-      <FalaRevanche />
       <EscolhaCarta rival={luta.rival} />
       <div className="arena-acoes">
         <button type="button" className="dl-btn dl-btn--sec" disabled={luta.lutando} onClick={melhorDe10}>Melhor de 10</button>
-        <button type="button" className="dl-btn lutar-grande" disabled={luta.lutando} onClick={() => { lutarAnimado(null, NOME_V2); if (LUTA.lutando) location.hash = ENDERECO_LUTA; }}>Lutar</button>
+        <button type="button" className="dl-btn lutar-grande" disabled={luta.lutando} onClick={() => { lutarAnimado(null); if (LUTA.lutando) location.hash = ENDERECO_LUTA; }}>Lutar</button>
         {sp && <span className="desk-so arena-treino"><span><span>lutas de treino</span><b className="dl-lcd">{Math.min(m.sparring, 10)} de 10</b></span>
           <Seg n={Math.min(m.sparring, 10)} m={10} cls="dl-seg--acao" /></span>}
       </div>
