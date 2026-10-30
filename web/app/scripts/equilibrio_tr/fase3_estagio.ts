@@ -17,14 +17,15 @@
    do disparo do tempo real (RelogioTR.disparo); --sem-reserva: sem a DE-10 (a reserva do fim da lista entra na reordenacao pela nota, como
    nos pets v13). Com a DE-10 (o padrao), a reserva fica fixa no fim (GambitsPet.reservaNoFim); --fator-rival '{"npc_tier2_sentinela":1.2}': o
    fator do rival sugerido do P-4 (o do NPC ou o da arena dele) por cima do candidato (FATORES_V14, a alavanca da DE-4, fase 4);
-   --fatores-hoje: o fator de hoje do rival.
+   --fatores-hoje: o fator de hoje do rival; --aprendizado '{"alfa":.1,"prior":.05}': o aprendizado proprio do tempo real (DR2-5) por cima do
+   candidato (APRENDIZADO_V14; "null" desliga).
    uso (em web/app): npx tsx scripts/equilibrio_tr/fase3_estagio.ts --faixa calibracao [--escala JSON] [--parte p1] --saida <arquivo.json> */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { execSync } from "node:child_process";
 import {
   ADOL_V21, CAT, CESC_V9, CIT, CLE, CRIANCA_V21, CV, CV21E_TR, ESPECIES, FORMAS_AD, GambitsPet, LINHAS, LINHA_DA_FORMA, LISTAS_V14, LUGARES_V6,
-  ARENAS, FATORES_V14, RELOGIO_V14, STATS, arenaDaLuta, caraterCanonico, copiarGambits, gambitsAdulto, hashSemente, jogarSerie, jogarTR, lutadorBot, perfilDe,
+  APRENDIZADO_V14, ARENAS, FATORES_V14, RELOGIO_V14, STATS, arenaDaLuta, caraterCanonico, copiarGambits, gambitsAdulto, hashSemente, jogarSerie, jogarTR, lutadorBot, perfilDe,
   type Estagio, type Forma, type ListaGambits, type Lutador, type RegrasLuta,
 } from "../../motor/index.ts";
 import { ligarEscala } from "../../motor/catalogo.ts";
@@ -43,6 +44,8 @@ const R: RegrasLuta = { ...CV21E_TR, relogio: { ...RELOGIO_V14, ...disparo } }, 
 /* DE-10: a reserva fixa no fim da lista do pet que aprende (o candidato v14); --sem-reserva desliga */
 const RESERVA_NO_FIM = !process.argv.includes("--sem-reserva");
 const FATOR_RIVAL = JSON.parse(arg("fator-rival") ?? "{}") as Record<string, number>;
+const APRENDIZADO = (arg("aprendizado") === null ? APRENDIZADO_V14 : JSON.parse(arg("aprendizado")!)) as { alfa: number; prior: number; bonus?: number; limiar?: number } | null;
+if (APRENDIZADO && !(APRENDIZADO.alfa > 0 && APRENDIZADO.prior >= 0)) throw new Error("--aprendizado: alfa > 0 e prior >= 0");
 ligarEscala(true);
 /* a escala: a dos pets v13 (CESC_V9) ou a candidata por cima */
 const escArg = JSON.parse(arg("escala") ?? "{}") as { vida?: Partial<Record<Estagio, number>>; beta?: number };
@@ -78,7 +81,7 @@ const t0 = performance.now();
 const out: Record<string, unknown> = {
   gerado_por: "web/app/scripts/equilibrio_tr/fase3_estagio.ts", data: new Date().toISOString().slice(0, 10),
   commit: execSync("git rev-parse --short HEAD").toString().trim(), node: process.version,
-  faixa, bases, sementes_por_base: SEMENTES_POR_BASE, relogio: R.relogio, listas: "v14", reserva_no_fim: RESERVA_NO_FIM, escala: ESC, parte, metas: {},
+  faixa, bases, sementes_por_base: SEMENTES_POR_BASE, relogio: R.relogio, listas: "v14", reserva_no_fim: RESERVA_NO_FIM, aprendizado: APRENDIZADO, escala: ESC, parte, metas: {},
 };
 const metas = out.metas as Record<string, unknown>;
 
@@ -141,7 +144,7 @@ if (!parte || parte === "p34") {
       let p = 0, n = 0, qual = 0;
       sementes.forEach((s, k) => {
         const esp = ESPECIES[k % ESPECIES.length], gp = new GambitsPet();
-        gp.chipsNoFim = true; gp.reservaNoFim = RESERVA_NO_FIM; gp.semear(ref.forma(esp), ref.id, R, ref.lista);
+        gp.chipsNoFim = true; gp.reservaNoFim = RESERVA_NO_FIM; gp.aprendizadoTR = APRENDIZADO; gp.semear(ref.forma(esp), ref.id, R, ref.lista);
         const cond = perfil(ref, esp, TIPICO[est]);
         let lutas = 0, vit = 0, ev = 0;
         while (lutas < CAT.sparring) {

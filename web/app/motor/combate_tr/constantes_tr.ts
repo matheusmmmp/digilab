@@ -89,3 +89,12 @@ export const FATORES_V14 = {
   fabrica: .6,
   salao: { crianca: 1.2, adolescente: 1.6, adulto: 1.05, mega: 1.05 } as Readonly<Record<string, number>>,
 } as const;
+
+/** o aprendizado proprio do tempo real do candidato v14 (DR2-5; docs/PLANO_EQUILIBRIO_COMBATE_TR_R2.md, R2-2): GambitsPet.aprendizadoTR.
+    null = o GA de sempre (a ordem so pela nota). Ainda nao e de nenhuma versao de pet: so a bancada o usa. PROPOSTOS, calibrados so nas
+    sementes de calibracao da rodada 2 (72101 a 72505; web/app/scripts/medicoes/equilibrio_tr/r2_2/, a grade 3):
+    - limiar da troca -0,02 -> 0,05: o pet troca a pior regra mais cedo (com o limiar de hoje quase nao troca, e a lista so se reordena);
+    - prior 0,1: a posicao na lista de partida pesa na ordem (a reserva e as especificas nao afundam so pela nota);
+    - alfa 0,2 e bonus 0,1, os do GA */
+export const APRENDIZADO_V14: { readonly alfa: number; readonly prior: number; readonly bonus?: number; readonly limiar?: number } | null =
+  { alfa: .2, prior: .1, bonus: .1, limiar: .05 };
