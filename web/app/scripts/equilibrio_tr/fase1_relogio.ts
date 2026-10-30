@@ -9,27 +9,32 @@
    As sementes: a faixa reservada (experiments/bancada/faixas.py) da calibracao (68101 a 68505) ou da conferencia (70101 a 70505), as 5
    bases X101, X202, ..., X505, e 20 sementes por base (hashSemente("equilibrio-tr", base, k)): 100 sementes x os dois lados = 200 lutas
    por par (plano, secao 3).
-   --listas v14: as listas candidatas da fase 2 (LISTAS_V14, bots.ts) nas formas que as tem; a fase 2 confere com isto que as metas do
+   --listas v14: as listas candidatas da fase 2 (LISTAS_V14, LISTAS_V14_R1, bots.ts) nas formas que as tem; a fase 2 confere com isto que as metas do
    relogio continuam.
-   uso (em web/app): npx tsx scripts/equilibrio_tr/fase1_relogio.ts --faixa calibracao [--base v14] [--listas v14] [--relogio '{"ritmo":12}'] --saida <arquivo.json> */
+   --variante <nome>: uma variante das listas por cima (variantes_fase2.ts, as mesmas da bancada das formas; a rodada 2 confere o T-2 com ela).
+   uso (em web/app): npx tsx scripts/equilibrio_tr/fase1_relogio.ts --faixa calibracao [--base v14] [--listas v14] [--variante <nome>] [--relogio '{"ritmo":12}'] --saida <arquivo.json> */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { execSync } from "node:child_process";
 import {
   ARENA_POR_ID, CTR_TR, CV21E_TR, FORMAS_AD, LISTAS_V14, PASSO_TR_MS, copiarGambits, RELOGIO_V13, RELOGIO_V14, criarLutaTR, hashSemente, jogarArena, lutadorBot, passoTR,
-  type Lutador, type RegrasLuta, type RelogioTR,
+  type ListaGambits, type Lutador, type RegrasLuta, type RelogioTR,
 } from "../../motor/index.ts";
+import { VARIANTES } from "./variantes_fase2.ts";
 
 const arg = (k: string): string | null => { const i = process.argv.indexOf("--" + k); return i < 0 ? null : process.argv[i + 1] ?? null; };
-const FAIXAS: Record<string, number> = { calibracao: 68101, conferencia: 70101 };
+/* as faixas reservadas (experiments/bancada/faixas.py): a primeira rodada e a segunda (calibracao2, conferencia2; DR2-2) */
+const FAIXAS: Record<string, number> = { calibracao: 68101, conferencia: 70101, calibracao2: 72101, conferencia2: 74101 };
 const faixa = arg("faixa"), saida = arg("saida");
-if (!faixa || !(faixa in FAIXAS)) throw new Error("--faixa calibracao | conferencia");
+if (!faixa || !(faixa in FAIXAS)) throw new Error("--faixa calibracao | conferencia | calibracao2 | conferencia2");
 if (!saida) throw new Error("--saida <arquivo.json>");
 /* --base v14: o relogio candidato da fase 1 (RELOGIO_V14); sem ele, o dos pets v13 */
 const relogio: RelogioTR = { ...(arg("base") === "v14" ? RELOGIO_V14 : RELOGIO_V13), ...JSON.parse(arg("relogio") ?? "{}") };
 for (const k of Object.keys(relogio)) if (!(k in RELOGIO_V13)) throw new Error("numero do relogio desconhecido: " + k);
 const R: RegrasLuta = { ...CV21E_TR, relogio };
-const listas = arg("listas") === "v14" ? LISTAS_V14 : {};
+const variante = arg("variante");
+if (variante !== null && !VARIANTES[variante]) throw new Error("variante desconhecida: " + variante);
+const listas: Record<string, ListaGambits> = { ...(arg("listas") === "v14" ? LISTAS_V14 : arg("listas") === "v14r1" ? LISTAS_V14_R1 : {}), ...(variante ? VARIANTES[variante]() : {}) };
 /** o bot canonico da forma, com a lista candidata se houver */
 const bot = (f: string): Lutador => { const L = lutadorBot(f, R); return listas[f] ? { ...L, estilo: { ...L.estilo, gambits: copiarGambits(listas[f]) } } : L; };
 const SEMENTES_POR_BASE = 20;
@@ -104,7 +109,7 @@ const decididasEsp = espelho.reduce((a, e) => a + e.vitorias_a + e.derrotas_a, 0
 const out = {
   gerado_por: "web/app/scripts/equilibrio_tr/fase1_relogio.ts", data: new Date().toISOString().slice(0, 10),
   commit: execSync("git rev-parse --short HEAD").toString().trim(), node: process.version,
-  faixa, bases, sementes_por_base: SEMENTES_POR_BASE, relogio, listas: arg("listas") ?? "v13", lutas: total,
+  faixa, bases, sementes_por_base: SEMENTES_POR_BASE, relogio, listas: arg("listas") ?? "v13", variante, lutas: total,
   metas: {
     "T-1": { duracao_media_s: r3(media(todas)), duracao_mediana_s: r3(quantil(todas, .5)), p90_s: r3(quantil(todas, .9)),
       passa: media(todas) >= 40 && media(todas) <= 60 && quantil(todas, .5) >= 35 && quantil(todas, .5) <= 55 },

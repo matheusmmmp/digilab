@@ -107,6 +107,10 @@ FAIXAS_RESERVADAS = (
                    "DE-6, decidida pelo Matheus em 2026-10-30)"),
     (70101, 70505, "equilibrio do combate em tempo real (jogo web): a conferencia, a validacao unica (docs/PLANO_EQUILIBRIO_COMBATE_TR.md, "
                    "secao 3; DE-6, decidida pelo Matheus em 2026-10-30; roda uma vez, nao volta)"),
+    (72101, 72505, "equilibrio do combate em tempo real (jogo web), segunda rodada: a calibracao (docs/PLANO_EQUILIBRIO_COMBATE_TR_R2.md, "
+                   "secao 3; DR2-2, decidida pelo Matheus em 2026-10-30)"),
+    (74101, 74505, "equilibrio do combate em tempo real (jogo web), segunda rodada: a conferencia, a validacao unica "
+                   "(docs/PLANO_EQUILIBRIO_COMBATE_TR_R2.md, secao 3; DR2-2, decidida pelo Matheus em 2026-10-30; roda uma vez, nao volta)"),
     (50001, 50020, "analise de poder, piloto"), (60001, 60160, "confirmatoria"), (69001, 69001, "M1, gate G1"),
     (80001, 82004, "linhagem E1 (piloto, genomas e ambientes)"),
     (20260900, 20261800, "fala, voz, comando e bootstraps (sementes de 2026-09/10 e semente + i)"),
