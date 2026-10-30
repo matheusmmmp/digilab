@@ -5,9 +5,11 @@ import { useEffect, useState } from "react";
 import { zoomAtual } from "./escala.ts";
 
 export const ATLAS_URL = "../../../Assets/digilab_atlas_up.json";
-/** Chave dos clipes oficiais do UP (TAREFA_V2_UP_ATLAS), DESLIGADA: desligada, o app carrega so o atlas acima e desenha igual a antes. Ligada, carrega
-    tambem o atlas de clipes (Assets\gerar_atlas_up_clipes.py) e o Idle de cada sprite toca com a duracao real de cada quadro. E do app, nao do motor. */
-export const CLIPES_UP = false;
+/** Chave dos clipes oficiais do UP (TAREFA_V2_UP_ATLAS), LIGADA desde 2026-10-30 (decisao H-4 do Matheus, docs/TAREFA_V3_HABITAT_ILHA_3D.md,
+    H1b): o app carrega tambem o atlas de clipes (Assets\gerar_atlas_up_clipes.py), o Idle de cada sprite toca com a duracao real de cada quadro e
+    as vistas que andam usam o Run. Sem o atlas de clipes, o aviso de atlas que nao carregou (nunca cai calado no atlas atual). Desligada, o app
+    carrega so o atlas acima e desenha como antes. E do app, nao do motor: o log, o replay e a paridade nao mudam. */
+export const CLIPES_UP = true;
 export const ATLAS_CLIPES_URL = "../../../Assets/digilab_atlas_up_clipes.json";
 
 /** [x, y, largura, altura, deslocamento x, deslocamento y] de cada quadro dentro da caixa do sprite */

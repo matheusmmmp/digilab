@@ -47,7 +47,7 @@ ligarEscala(new URLSearchParams(location.search).get("escala") !== "0");
    App; roda uma vez por versao do descarte (tamer.CHAVE_DESCARTE). Antes de abrir o save */
 try { descartarPetsAntigos(localStorage, CHAVE_GUARDADOS); } catch (err) { console.error("descarte dos pets antigos falhou", err); }
 iniciarJogo(localStorage);
-/* ?clipes_up=1 liga os clipes do UP so naquela aba (conferir/capturar); o padrao e a constante CLIPES_UP, desligada */
+/* a constante CLIPES_UP (ligada desde a H1b da ilha) liga os clipes do UP; ?clipes_up=1 tambem os liga naquela aba, como antes */
 carregarAtlas(ATLAS_URL, CLIPES_UP || new URLSearchParams(location.search).get("clipes_up") === "1");
 carregarDecoracao();
 ouvirOutrasAbas();
