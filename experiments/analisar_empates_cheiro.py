@@ -255,7 +255,7 @@ def parte_vidas(cm: ConfigMundo = CONFIG_MUNDO_LIGADA, sementes: tuple = SEMENTE
     decisoes tem cheiro sem direcao e nada visto (o caso da leitura "para onde ir" da fome urgente, instinto_mundo.para_onde_comer)."""
     from digilab.donos import criar_dono
     from digilab.instinto_mundo import PoliticaInstintoMundo, comida_boa_vista
-    from digilab.mundo import DonoComLugar, ESTILOS_LUGAR, fabricas_mundo, simular_vida_mundo
+    from digilab.mundo import DonoComLugar, ESTILOS_LUGAR_V2, fabricas_mundo, simular_vida_mundo
 
     class Espiao(PoliticaInstintoMundo):
         def __init__(self, cfg=None) -> None:
@@ -286,7 +286,7 @@ def parte_vidas(cm: ConfigMundo = CONFIG_MUNDO_LIGADA, sementes: tuple = SEMENTE
 
     total: dict = {}
     for dono in ("atencioso", "relapso", "aleatorio", "incoerente"):
-        for estilo in ESTILOS_LUGAR:
+        for estilo in ESTILOS_LUGAR_V2:
             for semente in sementes:
                 pol = Espiao(CONFIG_PADRAO)
                 _, fm = fabricas_mundo(cm)
@@ -295,7 +295,7 @@ def parte_vidas(cm: ConfigMundo = CONFIG_MUNDO_LIGADA, sementes: tuple = SEMENTE
                                    16 * dias, fabrica, rotulo_dono=dono)
                 for k, v in pol.c.items():
                     total[k] = total.get(k, 0) + v
-    return {"sementes": list(sementes), "dias": dias, "orcamento_por_dia": 16, "vidas": 4 * len(ESTILOS_LUGAR) * len(sementes),
+    return {"sementes": list(sementes), "dias": dias, "orcamento_por_dia": 16, "vidas": 4 * len(ESTILOS_LUGAR_V2) * len(sementes),
             **total}
 
 

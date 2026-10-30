@@ -1784,6 +1784,10 @@ class ConfigMundo:
     perto_max_celulas: int = 2
     longe_min_celulas: int = 20
     longe_max_celulas: int = 30
+    # o estilo `longe_fixo` (C1, docs/TAREFA_V2_LONGE_REGULAR.md, secao 3.1): quantos lugares fixos por vida, sorteados uma vez, a
+    # `longe_min_celulas`...`longe_max_celulas` do comedouro (LR-2), em direcoes distintas das 16. PROPOSTO, SEM FONTE; LR-1 DECIDIDA pelo
+    # Matheus em 2026-10-30 (PR #495): 3, uma regularidade parcial (1 ponto seria um "comedouro longe")
+    n_pontos_longe_fixo: int = 3
     # o que o motor registra para as medidas do plano (adendo 1, A1.8): a mancha de uma arvore
     raio_mancha_celulas: int = 3
 
@@ -1794,6 +1798,8 @@ class ConfigMundo:
             raise ValueError("velocidade e atrito precisam ser positivos")
         if self.mult_queda <= 0.0:
             raise ValueError(f"mult_queda precisa ser positivo: {self.mult_queda}")
+        if not 1 <= self.n_pontos_longe_fixo <= 16:
+            raise ValueError(f"n_pontos_longe_fixo precisa estar entre 1 e 16 (as direcoes): {self.n_pontos_longe_fixo}")
 
 
 CONFIG_MUNDO = ConfigMundo()
