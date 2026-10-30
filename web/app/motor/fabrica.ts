@@ -1,13 +1,13 @@
 /* A Fabrica da Fronteira de Batalha (docs/DESIGN_FRONTEIRA.md, secoes 3 e 4; medalhas parte 4c; so no jogo). Depois do titulo da Liga, o
-   jogador NAO usa o proprio pet: a cada tentativa, 3 Digimon alugados (Megas, formas e especies sorteadas, lista canonica V21D, sem treino
+   jogador NAO usa o proprio pet: a cada tentativa, 3 Digimon alugados (Megas, formas e especies sorteadas, lista canonica das regras da luta, sem treino
    e sem itens); ele escolhe 1 e luta series de 3 lutas contra Megas sorteados:
    - sem cura dentro da serie: o alugado leva a vida e o guts de uma luta para a outra; cada rival comeca inteiro; a serie seguinte comeca
      com o alugado inteiro de novo;
    - ao vencer uma luta, o jogador pode trocar o alugado pelo rival derrotado. O novo alugado entra com a mesma fracao da vida e o mesmo
      guts (ate o maximo dele) com que o anterior terminou a luta: a troca nao cura;
-   - o limite de turnos e do desafiado, o rival (como em toda luta dos pets v6); perdeu (ou empatou), a tentativa acabou;
+   - o limite da luta e do desafiado, o rival (como em toda luta dos pets); perdeu (ou empatou), a tentativa acabou;
    - a serie vencida conta, e a tentativa segue serie apos serie ate perder. Recorde: a maior sequencia de series vencidas.
-   A forca: todos sao o Mega na escala dos pets v6, sem treino, vezes FATOR_FABRICA = 1 (o da Liga e das outras instalacoes). SEM calibracao
+   A forca: todos sao o Mega na escala dos pets, sem treino, vezes FATOR_FABRICA = 1 (o da Liga e das outras instalacoes). SEM calibracao
    (decisao do Matheus); test/conferir_fabrica_salao.mjs so confere que e jogavel.
 
    Registro e replay: nenhum pet do jogador luta, entao as lutas vao SO para o registro do Tamer (src/tamer.ts: "fabrica", "fabrica_luta",
@@ -15,25 +15,21 @@
    sementeFabrica); os alugueis, os rivais e as sementes das lutas saem dela, e o replay confere cada uma. A escala vale sempre aqui
    (perfilDe com comEscala), independente da chave do app: o replay do Tamer nao pode depender dela. Nada daqui toca pet nenhum.
 
-   A Fabrica dos v9 (rodada de equilibrio geral, fase 3; docs/EQUILIBRIO_GERAL.md, meta M-C2): as regras da tentativa vao no proprio evento
-   de comeco dela no registro do Tamer (campo `v`, registro versao 6): sem o campo, a tentativa e da Fabrica de antes (VERSAO_FABRICA = 6:
-   V21D, fator 1, a troca nao cura) e se refaz igual; as tentativas novas gravam `v: 9` (VERSAO_FABRICA_V9): combate V21E (as listas V21E
-   nos alugados e nos rivais), os rivais com FATOR_RIVAL_FABRICA_V9 (os alugados seguem com 1) e a troca entrando com a vida cheia (o
+   As regras da Fabrica (rodada de equilibrio geral, fase 3; docs/EQUILIBRIO_GERAL.md, meta M-C2): combate V21E (as listas V21E nos
+   alugados e nos rivais), os rivais com FATOR_RIVAL_FABRICA_V9 (os alugados seguem com 1) e a troca entrando com a vida cheia (o
    rival derrotado entra inteiro: vida e guts do comeco). A cura entre as series nao muda (a serie seguinte ja comeca inteira). Calibrado
-   em test/conferir_fabrica_salao.mjs --calibrar (sementes de calibracao), artifacts_equilibrio_geral/fase3/fabrica_calibracao.json. */
+   em test/conferir_fabrica_salao.mjs --calibrar (sementes de calibracao), artifacts_equilibrio_geral/fase3/fabrica_calibracao.json.
+   As Fabricas de antes (v6, sem o campo `v`; e v9) sairam com o combate por turnos (COMBATE-TR R3): so ha a v13, e o registro do Tamer
+   descarta as tentativas antigas (src/tamer.ts, registro versao 7). */
 import { copiarGambits, gambitsAdulto } from "./bots.ts";
 import { caraterCanonico, perfilDe } from "./catalogo.ts";
 import { jogarLuta } from "./combate_tr/adaptador.ts";
 import { desafiadoDaVersao, regrasDaVersao, type Lutador, type RegrasLuta, type ResultadoLuta } from "./combate.ts";
 import { CV, ESPECIES, FORMAS_AD, LINHA_DA_FORMA } from "./constantes.ts";
-import { VERSAO_LIGA } from "./liga.ts";
 import { nomeForma } from "./nomes.ts";
 import { criarRng, hashSemente } from "./rng.ts";
 import type { Forma, FormaAdultaNormal } from "./tipos.ts";
 
-/** as regras e a escala das lutas da Fabrica: as dos pets v6 (V21D, CESC_V6, limite do desafiado) */
-export const VERSAO_FABRICA = VERSAO_LIGA;
-export const REGRAS_FABRICA: RegrasLuta = regrasDaVersao(VERSAO_FABRICA);
 export const FABRICA = {
   id: "fabrica" as const, nome: "Fábrica",
   frase: "Você não usa o seu pet: aluga 1 de 3 Megas sorteados e luta séries de 3 lutas sem cura. Ao vencer, pode trocar o alugado pelo rival derrotado, que entra com a vida cheia.",
@@ -43,22 +39,19 @@ export const ALUGUEIS_FABRICA = 3;
 export const LUTAS_SERIE_FABRICA = 3;
 /** o fator de rival (e dos alugados): 1, o da Liga (sem calibracao) */
 export const FATOR_FABRICA = 1;
-/** a Fabrica dos v9: a versao das regras gravada nas tentativas novas, o fator dos rivais (os alugados seguem com FATOR_FABRICA) e a troca
-    com a vida cheia. PROPOSTOS; calibrados nas sementes de calibracao (ver o cabecalho) */
-export const VERSAO_FABRICA_V9 = 9;
+/** o fator dos rivais da Fabrica (os alugados seguem com FATOR_FABRICA) e a troca com a vida cheia. PROPOSTOS; calibrados nas sementes de
+    calibracao (ver o cabecalho) */
 export const FATOR_RIVAL_FABRICA_V9 = 0.6;
 /** a Fabrica da luta em tempo real (COMBATE-TR, etapa R2; D-4): as regras dos pets v13 (CV21E_TR), com o fator e a troca dos v9 (sem
     recalibrar: o equilibrio fica para a rodada do fim). As tentativas antigas (v ausente ou 9) saem do registro do Tamer com aviso
     (src/tamer.ts, registro versao 7) */
 export const VERSAO_FABRICA_TR = 13;
-/** as versoes das regras da Fabrica que o registro conhece; as tentativas novas usam a ultima */
-export const VERSOES_FABRICA: readonly number[] = [VERSAO_FABRICA, VERSAO_FABRICA_V9, VERSAO_FABRICA_TR];
+/** as versoes das regras da Fabrica que o registro conhece (so a v13) */
+export const VERSOES_FABRICA: readonly number[] = [VERSAO_FABRICA_TR];
 export const VERSAO_FABRICA_ATUAL = VERSAO_FABRICA_TR;
-/** as regras da Fabrica numa versao: as regras da luta, o fator dos rivais e se a troca entra inteira */
+/** as regras da Fabrica: as regras da luta, o fator dos rivais e se a troca entra inteira */
 export interface RegraFabrica { versao: number; R: RegrasLuta; fatorRival: number; trocaInteira: boolean }
 export function regraFabrica(versao: number, fatorRival?: number): RegraFabrica {
-  if (versao === VERSAO_FABRICA) return { versao, R: REGRAS_FABRICA, fatorRival: fatorRival ?? FATOR_FABRICA, trocaInteira: false };
-  if (versao === VERSAO_FABRICA_V9) return { versao, R: regrasDaVersao(VERSAO_FABRICA_V9), fatorRival: fatorRival ?? FATOR_RIVAL_FABRICA_V9, trocaInteira: true };
   if (versao === VERSAO_FABRICA_TR) return { versao, R: regrasDaVersao(VERSAO_FABRICA_TR), fatorRival: fatorRival ?? FATOR_RIVAL_FABRICA_V9, trocaInteira: true };
   throw new Error("versão das regras da Fábrica desconhecida: " + JSON.stringify(versao));
 }
@@ -89,13 +82,12 @@ export function formaRivalFabrica(s: number, k: number): Forma {
   const r = criarRng(hashSemente("fabrica-rival", s, k)), adulta = FORMAS_AD[r.int(FORMAS_AD.length)];
   return mega(adulta, ESPECIES[r.int(ESPECIES.length)]);
 }
-/** o lutador de um Mega da Fabrica (alugado ou rival): tecnica da linha, passiva da forma, carater canonico, lista canonica V21D, epsilon dos
-    bots canonicos; E = vida do Mega na escala x fator, sem treino e sem item (a escala da versao das regras R: CESC_V6 ou CESC_V9, a mesma
-    vida do Mega). A escala vale sempre (comEscala) */
-export function megaFabrica(f: Forma, nome: string, fator: number = FATOR_FABRICA, R: RegrasLuta = REGRAS_FABRICA): Lutador {
+/** o lutador de um Mega da Fabrica (alugado ou rival): tecnica da linha, passiva da forma, carater canonico, lista canonica das regras da luta, epsilon dos
+    bots canonicos; E = vida do Mega na escala x fator, sem treino e sem item (a escala da versao das regras R: CESC_V9). A escala vale sempre (comEscala) */
+export function megaFabrica(f: Forma, nome: string, fator: number = FATOR_FABRICA, R: RegrasLuta = regrasDaVersao(VERSAO_FABRICA_TR)): Lutador {
   const adulta = f.adulta as FormaAdultaNormal;
   if (f.est !== "mega" || !FORMAS_AD.includes(adulta)) throw new Error("a Fábrica só tem Megas das 8 formas adultas: " + JSON.stringify(f));
-  const p = perfilDe(f, caraterCanonico(adulta), 1, null, true, R?.versaoPet ?? VERSAO_FABRICA, true);
+  const p = perfilDe(f, caraterCanonico(adulta), 1, null, true, R.versaoPet, true);
   return { nome, estilo: { nome: `fabrica:${adulta}`, gambits: copiarGambits(gambitsAdulto(adulta, R)), eps: CV.eps }, cond: { ...p, escala: p.escala! * fator } };
 }
 
@@ -109,8 +101,8 @@ export interface LutaFabrica {
 export interface ProximaLutaFabrica { k: number; s: number; serie: number; naSerie: number; rival: Forma }
 
 /** uma tentativa da Fabrica, refeita das decisoes do jogador (a escolha, as lutas e as trocas) e das sementes. Deterministica: o registro do
-    Tamer guarda so as decisoes e as sementes (e, desde a fase 3, a versao das regras), e o replay joga as lutas de novo por aqui.
-    `versao`: as regras da tentativa (regraFabrica; sem ela, as de antes). `semente` e `fatorRival`: so as conferencias (test/) usam outros
+    Tamer guarda so as decisoes e as sementes (e a versao das regras), e o replay joga as lutas de novo por aqui.
+    `versao`: as regras da tentativa (regraFabrica; sem ela, as de hoje). `semente` e `fatorRival`: so as conferencias (test/) usam outros
     (a semente do jogo sai de n; o fator, da versao) */
 export class TentativaFabrica {
   readonly n: number;
@@ -125,7 +117,7 @@ export class TentativaFabrica {
   acabou = false;
   /** a vida e o guts com que o alugado comeca a proxima luta, dentro da serie; null = inteiro (comeco de serie) */
   private ini: { hp: number; guts: number } | null = null;
-  constructor(n: number, escolha: number, versao: number = VERSAO_FABRICA, semente: number = sementeFabrica(n), fatorRival?: number) {
+  constructor(n: number, escolha: number, versao: number = VERSAO_FABRICA_ATUAL, semente: number = sementeFabrica(n), fatorRival?: number) {
     this.regra = regraFabrica(versao, fatorRival);
     this.n = n; this.s = semente; this.alugueis = alugueisFabrica(this.s);
     if (!Number.isInteger(escolha) || escolha < 0 || escolha >= ALUGUEIS_FABRICA) throw new Error("escolha de alugado inválida na Fábrica: " + JSON.stringify(escolha));
@@ -174,17 +166,12 @@ export class TentativaFabrica {
     if (u.trocou) return "já trocou depois desta vitória";
     return null;
   }
-  /** troca o alugado pelo rival derrotado na ultima luta: ele entra com a mesma fracao da vida e o mesmo guts (ate o maximo dele); nas
-      regras dos v9, inteiro (a vida e o guts do comeco) */
+  /** troca o alugado pelo rival derrotado na ultima luta: ele entra inteiro (a vida e o guts do comeco) */
   trocar(): void {
     const erro = this.porqueNaoTroca();
     if (erro) throw new Error(`troca na Fábrica recusada: ${erro}`);
-    const u = this.lutas[this.lutas.length - 1], novo = this.mega(u.rival, "Alugado");
-    if (this.regra.trocaInteira) this.ini = null;
-    else if (this.ini) {
-      const velho = this.mega(this.alugado, "Alugado");
-      this.ini = { hp: this.ini.hp / velho.cond.hpMax * novo.cond.hpMax, guts: Math.min(this.ini.guts, novo.cond.gutsMax) };
-    }
+    const u = this.lutas[this.lutas.length - 1];
+    this.ini = null;
     this.alugado = u.rival; u.trocou = true;
   }
 }

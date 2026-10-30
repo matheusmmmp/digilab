@@ -1715,30 +1715,12 @@ test("clipes do UP: ligados e sem o atlas de clipes, o aviso de atlas que não c
   await expect(page.getByText("Atlas de sprites não carregou.")).toBeVisible();
 });
 
-/* UP-ARENA (docs/TAREFA_V2_UP_ARENA.md): a arena em tempo real atras da chave ARENA_TEMPO_REAL, desligada. Desligada, o Lutar e o de hoje
-   (nem botao, nem rota, nem pedido de dados); ligada so na aba por ?arena_tr=1, com os dados SINTETICOS versionados de test/ servidos no
-   lugar de Assets/arena_up (nada da Bandai no teste). */
-const ARENA_SINT = JSON.parse(readFileSync(new URL("../test/arena_sintetico.json", import.meta.url), "utf8"));
-const PNG_1PX = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==", "base64");
-/** o Champion do save de fluxo (e2e/saves.json, v13) e o Growlmon: nos dados sinteticos da arena ele toma o lugar do Kabuterimon (o pet
-    do save v3 de antes), e o rival do estagio continua o Delta */
-const PET_ARENA = "Growlmon";
-for (const k of ["status", "golpes", "atributos"]) { ARENA_SINT[k][PET_ARENA] = ARENA_SINT[k].Kabuterimon; delete ARENA_SINT[k].Kabuterimon; }
-ARENA_SINT.atlas.d[PET_ARENA] = ARENA_SINT.atlas.d.Kabuterimon; delete ARENA_SINT.atlas.d.Kabuterimon;
-async function servirArenaSintetica(page: Page): Promise<void> {
-  await page.route(/\/Assets\/arena_up\//, r => {
-    const m = /\/dados\/([a-z]+)\.json/.exec(r.request().url());
-    if (m) return r.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(ARENA_SINT[m[1]]) });
-    return r.fulfill({ status: 200, contentType: "image/png", body: PNG_1PX });
-  });
-}
-
-/* a luta em tempo real dos pets v13 (COMBATE-TR, etapa R2): o desenho dela e da R3; ate la, o palco por turnos nao anima nada e vai direto ao
-   fim, com o aviso, e o Resultado mostra a duracao em segundos. Nenhum erro, nenhuma tela quebrada calada. O save: um Rookie v13 que conhece
-   a medalha da Campina (o "u") e passou do In-Training (180 min) */
+/* a luta em tempo real dos pets v13 (COMBATE-TR, etapa R3): o palco refaz a luta passo a passo, com o cenario do lugar, o relogio e a regra em
+   uso, sem nenhum controle sobre a luta (so pausar e x2); no fim, o Resultado com o porque (as regras e o saldo delas). Nenhum erro, nenhuma
+   tela quebrada calada. O save: um Rookie v13 que conhece a medalha da Campina (o "u") e passou do In-Training (180 min) */
 const SAVE_V13 = { semente: 101, versao: 13, log: [[480, "u", { n: 1 }], [480, "t", 210]] };
 const TAMER_V13 = { versao: 7, log: [["medalha", { id: "campina", n: 1, quando: 1, pet: 101, forma: "Agumon", tick: 480 }]] };
-test("luta em tempo real (pets v13): a Arena luta, o palco vai ao fim com o aviso e o Resultado mostra a duração", async ({ page }) => {
+test("luta em tempo real (pets v13): o palco desenha a luta, o relógio anda, a regra em uso aparece e o Resultado diz o porquê", async ({ page }) => {
   await semear(page, SAVE_V13, undefined, TAMER_V13);
   const erros = vigiarErros(page);
   await page.goto(APP + "#/lutar/arena");
@@ -1746,101 +1728,76 @@ test("luta em tempo real (pets v13): a Arena luta, o palco vai ao fim com o avis
   await page.locator(".lutar-grande").click();
   await expect(page).toHaveURL(/#\/lutar\/luta$/);
   expect(await numLog(page, "l")).toBe(l0 + 1);
-  await expect(page.locator(".luta-turno")).toContainText("Luta em tempo real");
+  const palco = page.locator(".luta-arena--tr");
+  await expect(palco).toHaveAttribute("data-cena", "ringue");
+  await expect(page.getByTestId("luta-relogio")).toHaveText(/^0:0[1-9]$/, { timeout: 10_000 });
+  await expect(page.getByTestId("luta-regra")).not.toBeEmpty();
+  /* nenhum controle sobre a luta: so pausar, x2 e desistir (que so pula a animacao) */
+  await expect(page.locator(".luta-tela button:not(.luta-ctl):not(.luta-desistir)")).toHaveCount(0);
+  await expect(page.locator(".regra-travar, .regra-vetar")).toHaveCount(0);
+  /* pausado, o relogio para */
+  await page.getByRole("button", { name: "Pausar a animação" }).click();
+  const parado = await page.getByTestId("luta-relogio").textContent();
+  await page.waitForTimeout(600);
+  await expect(page.getByTestId("luta-relogio")).toHaveText(parado!);
+  await page.getByRole("button", { name: "Continuar a animação" }).click();
+  await page.getByRole("button", { name: "Velocidade dobrada" }).click();
   const res = page.locator("dialog.modal-res[open]");
-  await expect(res).toBeVisible({ timeout: 60_000 });
+  await expect(res).toBeVisible({ timeout: 90_000 });
   await expect(res.locator(".res-sub")).toContainText(/\d+ s$/);
-  await expect(res).not.toContainText("0 turnos");
+  const porque = res.locator(".res-decidiu");
+  await expect(porque.locator("h3")).toHaveText("Por quê");
+  await expect(porque.locator("li").last()).toContainText(/caiu aos \d+ s|Limite de tempo/);
+  expect(await porque.locator("li").count()).toBeGreaterThan(1);
+  await expect(porque.locator("li .res-t").first()).toHaveText(/^[+−]?\d+%$/);
   await page.locator(".res-continuar").click();
   await expect(page).toHaveURL(/#\/lutar\/arena$/);
   await expect(page.locator(".arena-ult")).toContainText(/· \d+ s/);
   expect(erros).toEqual([]);
 });
-
-test("arena em tempo real: com a chave desligada, o Lutar é o de hoje e nada da arena é pedido", async ({ page }) => {
-  await semear(page, SAVES.champion);
-  const erros = vigiarErros(page), pedidos: string[] = [];
-  page.on("request", r => { if (/arena_up/.test(r.url())) pedidos.push(r.url()); });
-  await page.goto(APP + "#/lutar/arena");
-  await expect(page.getByRole("tab", { name: "Arena" })).toBeVisible();
-  await expect(page.getByRole("tablist", { name: "Abas de Lutar" }).getByRole("tab")).toHaveCount(4);
-  await expect(page.locator(".arena-tr-entrada")).toHaveCount(0);
-  /* a rota da arena nao existe: aberta do zero, o app cai numa rota de sempre e reescreve o endereco */
-  await page.goto("about:blank");
-  await page.goto(APP + "#/lutar/tempo-real");
-  await expect(page).not.toHaveURL(/tempo-real/);
-  await expect(page.getByTestId("arena-tr")).toHaveCount(0);
-  expect(pedidos).toEqual([]);
-  expect(erros).toEqual([]);
+test("luta em tempo real: o mapa do cenário que falta mostra o aviso visível, e a luta segue no chão liso", async ({ page }) => {
+  await semear(page, SAVE_V13, undefined, TAMER_V13);
+  await page.route(/\/Assets\/arena_up\/mapas\//, r => r.abort());
+  await page.goto(APP + "#/lutar/campanha");
+  await page.locator(".camp-lutar:not([disabled])").first().click();
+  await expect(page).toHaveURL(/#\/lutar\/luta$/);
+  await expect(page.locator(".luta-aviso-asset")).toContainText("O mapa do cenário não carregou");
+  await expect(page.getByTestId("luta-relogio")).toHaveText(/^0:0[1-9]$/, { timeout: 10_000 });
 });
-
-test("arena em tempo real: o pet do jogador luta sozinho, pela IA, contra um rival do estágio; a mesma semente refaz a luta", async ({ page }) => {
-  test.setTimeout(240_000);
-  await semear(page, SAVES.champion);
-  await servirArenaSintetica(page);
-  const erros = vigiarErros(page);
-  /* o relogio falso adianta a luta (o laco e por requestAnimationFrame, em passos fixos de 16 ms) */
-  await page.clock.install();
-  await page.goto(APP + "?arena_tr=1#/lutar/arena");
-  await page.getByRole("link", { name: "Arena em tempo real" }).click();
-  await expect(page).toHaveURL(/#\/lutar\/tempo-real$/);
-  /* o lado azul e o pet do save (Growlmon); antes da luta, so a arena, o rival e Lutar (a luta nao comeca sozinha) */
-  await expect(page.getByTestId("arena-tr-pet")).toContainText(PET_ARENA);
-  await expect(page.getByText(/WASD|Você \(azul\)|Sortear equipes|CPU × CPU/)).toHaveCount(0);
-  const arena = page.getByTestId("arena-tr");
-  await expect(arena.getByRole("combobox")).toHaveCount(2);
-  expect(await page.evaluate(() => (window as any).__arenaTr)).toBeUndefined();
-  await page.getByLabel("Arena", { exact: true }).selectOption("castelo");
-  await page.getByRole("button", { name: "Lutar", exact: true }).click();
-  /* durante a luta nao ha controle nenhum: so o Voltar do cabecalho; o rival e do mesmo estagio (so o Delta nos dados sinteticos) */
-  await expect(page.getByTestId("arena-tr-lutando")).toBeVisible();
-  await expect(page.getByTestId("arena-tr-confronto")).toContainText("Rival: Delta");
-  await expect(arena.getByRole("combobox")).toHaveCount(0);
-  await expect(arena.getByRole("button")).toHaveText(["Voltar"]);
-  const fim = async () => {
-    for (let k = 0; k < 60 && !(await page.evaluate(() => (window as any).__arenaTr?.fim === true)); k++) await page.clock.runFor(10_000);
-    return page.evaluate(() => ({ ...(window as any).__arenaTr }));
-  };
-  await page.waitForFunction(() => (window as any).__arenaTr?.cena === "castelo");
-  const a = await fim();
-  expect(a.fim).toBe(true);
-  expect([a.azul, a.vermelho]).toEqual([[PET_ARENA], ["Delta"]]);
-  await expect(page.getByTestId("arena-tr-log")).toContainText(/venceu|Empate/);
-  /* depois da luta: o resultado, Revanche e Nova luta */
-  await expect(page.getByTestId("arena-tr-resultado")).toContainText(/Growlmon (venceu|perdeu)|Empate/);
-  await expect(page.getByRole("button", { name: "Nova luta" })).toBeVisible();
-  await page.getByRole("button", { name: "Revanche (mesma semente)" }).click();
-  await expect(arena.getByRole("button")).toHaveText(["Voltar"]);
-  await page.waitForFunction(s => (window as any).__arenaTr?.relogio < 1000 && (window as any).__arenaTr?.semente === s, a.semente);
-  const b = await fim();
-  expect(b).toEqual(a);
-  /* sair: volta ao Lutar; nada da arena no registro do pet nem no save */
-  await page.getByRole("button", { name: "Voltar" }).click();
-  await expect(page).toHaveURL(/#\/lutar\/arena$/);
-  expect(await page.evaluate(() => (window as any).__digilab.registro())).not.toMatch(/arena_up|tempo-real|Delta/);
-  expect(await page.evaluate(([c]) => localStorage.getItem(c), [CHAVE] as const)).not.toMatch(/arena_up|tempo-real|Delta/);
-  expect(erros).toEqual([]);
-});
-
-test("arena em tempo real: pet sem Digimon nos dados da arena mostra o aviso e não luta", async ({ page }) => {
-  await semear(page, SAVES.champion);
-  const semPet = structuredClone(ARENA_SINT);
-  for (const k of ["status", "golpes", "atributos"]) delete semPet[k][PET_ARENA];
-  delete semPet.atlas.d[PET_ARENA];
-  await page.route(/\/Assets\/arena_up\//, r => {
-    const m = /\/dados\/([a-z]+)\.json/.exec(r.request().url());
-    return m ? r.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(semPet[m[1]]) }) : r.fulfill({ status: 200, contentType: "image/png", body: PNG_1PX });
+/* as capturas do palco (R3): 390 px e desktop, claro e escuro, com a luta pausada nos primeiros segundos (test-results/, fora do repositorio) */
+for (const [largura, altura] of [[390, 844], [1280, 800]] as const) for (const tema of ["light", "dark"] as const) {
+  test(`luta em tempo real: a captura do palco em ${largura} px, tema ${tema === "light" ? "claro" : "escuro"}`, async ({ page }) => {
+    await page.setViewportSize({ width: largura, height: altura });
+    await page.emulateMedia({ colorScheme: tema });
+    await semear(page, SAVE_V13, undefined, TAMER_V13);
+    const erros = vigiarErros(page);
+    await page.goto(APP + "#/lutar/campanha");
+    /* no celular o lugar abre numa folha: toca a Campina primeiro */
+    if (largura < 768) await page.getByRole("button", { name: /^1\. Campina/ }).click();
+    await page.locator(".camp-lutar:not([disabled]):visible").first().click();
+    await expect(page.getByTestId("luta-relogio")).toHaveText(/^0:0[3-9]$/, { timeout: 15_000 });
+    await page.getByRole("button", { name: "Pausar a animação" }).click();
+    /* sem rolagem horizontal */
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.screenshot({ path: `test-results/luta-tr-${largura}-${tema}.png`, fullPage: true });
+    expect(erros).toEqual([]);
   });
-  await page.goto(APP + "?arena_tr=1#/lutar/tempo-real");
-  await expect(page.getByTestId("aviso-arena-tr-pet")).toContainText(`${PET_ARENA} não está no atlas da arena`);
-  await expect(page.getByRole("button", { name: "Lutar", exact: true })).toHaveCount(0);
-  await expect(page.locator("canvas")).toHaveCount(0);
-});
-
-test("arena em tempo real: ligada e sem os dados, o aviso visível", async ({ page }) => {
-  await semear(page, SAVES.champion);
-  await page.route(/\/Assets\/arena_up\//, r => r.fulfill({ status: 404, body: "ausente" }));
-  await page.goto(APP + "?arena_tr=1#/lutar/tempo-real");
-  await expect(page.getByTestId("aviso-arena-tr")).toBeVisible();
-  await expect(page.getByTestId("aviso-arena-tr")).toContainText("gerar_arena_up.py");
+}
+/* com os clipes do UP ligados na aba (?clipes_up=1): o palco troca o clipe pela acao (Run, Attack_1, Stun, Die), e nenhum clipe falta (um
+   clipe que falta lanca o erro no quadro, e a vigia reprova). A captura vai para test-results/ */
+test("luta em tempo real: com os clipes do UP, a luta inteira desenha sem erro", async ({ page }) => {
+  test.setTimeout(240_000);
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await semear(page, SAVE_V13, undefined, TAMER_V13);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "?clipes_up=1#/lutar/campanha");
+  await page.locator(".camp-lutar:not([disabled]):visible").first().click();
+  await expect(page.getByTestId("luta-relogio")).toHaveText(/^0:0[2-9]$/, { timeout: 60_000 });
+  await page.getByRole("button", { name: "Pausar a animação" }).click();
+  await page.screenshot({ path: "test-results/luta-tr-clipes-1280.png" });
+  await page.getByRole("button", { name: "Continuar a animação" }).click();
+  await page.getByRole("button", { name: "Velocidade dobrada" }).click();
+  await expect(page.locator("dialog.modal-res[open]")).toBeVisible({ timeout: 120_000 });
+  await page.screenshot({ path: "test-results/luta-tr-resultado-1280.png" });
+  expect(erros).toEqual([]);
 });

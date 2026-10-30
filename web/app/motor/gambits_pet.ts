@@ -4,7 +4,7 @@
    se reordena pela nota; uma regra ativa com nota ruim e trocada por uma candidata do repertorio (regras de
    todos os estilos, catalogo fechado). O DONO so pode travar (regra fica na posicao) ou vetar (pet nao pode
    usar). Lutas, travas e vetos entram no registro: o replay reconstroi o aprendizado. */
-import { CCF, CED, CESC, CLE, CSO, CV, CV21, GA, SOMBRIA, TECNICAS, baseDe } from "./constantes.ts";
+import { CCF, CED, CESC, CLE, CSO, CV, CV21, CV21E_TR, GA, SOMBRIA, TECNICAS, baseDe } from "./constantes.ts";
 import {
   ADOL_V21, BOTS_V2, BOTS_V21, BOTS_V21D, BOTS_V21E, CRIANCA_V21, GAMBITS_SOMBRIA, NOME_BOT, NPC, REGRA_BATE_EM_QUEM_RECUA, REGRA_CONTRA_GOLPE_NA_PELE,
   REGRA_DEFENDE_DO_GOLPE, REGRA_RECUA_DO_PREPARO_SOB_PELE, copiarGambits,
@@ -36,7 +36,7 @@ export function permitida(r: Regra, f: Forma): boolean {
 }
 /** semente da forma; R = CV21D (pets v6-v8): a muralha e o vigia adultos semeiam as listas variantes; R = CV21E (pets v9): tambem o
     duelista, o tita, o espelho e a muralha (bots.gambitsAdulto) */
-export function sementeDe(f: Forma, R: RegrasLuta = null): ListaGambits {
+export function sementeDe(f: Forma, R: RegrasLuta = CV21E_TR): ListaGambits {
   return f.est === "crianca" ? CRIANCA_V21[f.ramo!] : f.est === "adolescente" ? ADOL_V21[f.linha!]
     : (BOTS_V21[f.adulta as FormaAdultaNormal] && gambitsAdulto(f.adulta as FormaAdultaNormal, R)) || GAMBITS_SOMBRIA[f.adulta!] || BOTS_V21[SOMBRIA[f.adulta!]!.base];
 }
@@ -77,14 +77,14 @@ export function rotuloCond(c: Cond): string {
 /** as duas regras novas do vigia V21D (bots.BOTS_V21D.vigia): nos pets v6 (regras V21D) elas voltam como candidatas de
     troca para a forma do vigia (Ultimate ou Mega). Sem isso, a primeira troca que as tirasse da lista as tiraria para sempre,
     porque o repertorio de candidatas nao as tem. So o vigia: nas outras formas as candidatas (e o replay) nao mudam */
-export function candidatasDoVigia(f: Forma | null, R: RegrasLuta): string[] {
-  if (!f || f.adulta !== "vigia" || !R?.vigiaBateEmQuemRecua || !R.vigiaRecuaDoPreparoSobPele) return [];
+export function candidatasDoVigia(f: Forma | null, R: RegrasLuta | null): string[] {
+  if (!f || !R || f.adulta !== "vigia" || !R.vigiaBateEmQuemRecua || !R.vigiaRecuaDoPreparoSobPele) return [];
   return [REGRA_BATE_EM_QUEM_RECUA, REGRA_RECUA_DO_PREPARO_SOB_PELE].map(chaveRegra).filter(k => !REPERTORIO.has(k));
 }
 /** as regras novas da V21E (bots.gambitsAdulto): nos pets v9 elas voltam como candidatas de troca para a forma que as tem na semente
     (o duelista e o tita, "defender do golpe rapido repetido"; a muralha, "contra-golpe em quem usa pele dura"), pelo mesmo motivo
     do vigia (candidatasDoVigia). Nas outras formas e nos pets v1-v8 as candidatas (e o replay) nao mudam */
-export function candidatasV21E(f: Forma | null, R: RegrasLuta): string[] {
+export function candidatasV21E(f: Forma | null, R: RegrasLuta | null): string[] {
   if (!f || !R) return [];
   const novas = (f.adulta === "duelista" && R.duelistaDefendeDoGolpe) || (f.adulta === "tita" && R.titaDefendeDoGolpe) ? [REGRA_DEFENDE_DO_GOLPE]
     : f.adulta === "muralha" && R.muralhaContraGolpeNaPele ? [REGRA_CONTRA_GOLPE_NA_PELE] : [];
@@ -117,12 +117,12 @@ export class GambitsPet {
       com que o pet luta (comChips), sem tirar nenhuma, e o pet nao a reordena nem a troca. O motor liga ao criar (sai da versao; nao entra
       na assinatura) */
   chipsNoFim = false;
-  /** regras das lutas do pet (a da ultima semeadura): CV21E nos pets v9, CV21D nos v6-v8, null nos v1-v5. Nao entra na assinatura: sai
+  /** regras das lutas do pet (a da ultima semeadura): CV21E_TR nos pets v13; null antes da primeira semeadura. Nao entra na assinatura: sai
       da versao */
-  regras: RegrasLuta = null;
+  regras: RegrasLuta | null = null;
   /** evolucao: a semente da forma nova entra com nota-base pela posicao; o que ja foi aprendido fica; a
       lista cabe na capacidade do estagio */
-  semear(forma: Forma, nome: string = nomeFormaLegado(forma), R: RegrasLuta = null): void {
+  semear(forma: Forma, nome: string = nomeFormaLegado(forma), R: RegrasLuta = CV21E_TR): void {
     const base = sementeDe(forma, R), cap = CV21.maxRegras[baseDe(forma.est)];
     this.forma = { ...forma }; this.linha = nome; this.final = base.final; this.regras = R;
     const novas: string[] = [];
@@ -264,16 +264,11 @@ export class GambitsPet {
     if (!(novidade > 0 && novidade <= 1)) throw new Error("novidade fora de (0, 1]: " + novidade);
     this.nLutas++;
     const soma: Record<string, number> = {}, cont: Record<string, number> = {};
-    /* a luta em tempo real (pets v13): a acao do pet faz o papel do turno, com o saldo dela ja sobre a vida do comeco (combate_tr) */
-    if (res.tr) for (const a of res.tr.acoes) {
+    /* a luta em tempo real (pets v13): cada acao do pet conta, com o saldo dela ja sobre a vida do comeco (combate_tr) */
+    for (const a of res.tr.acoes) {
       if (a.lado !== 0 || typeof a.motivo !== "number" || a.motivo >= usadas.length) continue;
       const k = usadas[a.motivo];
       soma[k] = (soma[k] || 0) + a.saldo; cont[k] = (cont[k] || 0) + 1;
-    }
-    for (const tr of res.turnos) {
-      if (typeof tr.ma !== "number" || tr.ma >= usadas.length) continue;
-      const k = usadas[tr.ma], saldo = (tr.dano[1] - tr.dano[0]) / res.E0.L[0].hpMax;
-      soma[k] = (soma[k] || 0) + saldo; cont[k] = (cont[k] || 0) + 1;
     }
     const bonus = GA.bonusResultado * (res.pontosA - .5), alfa = GA.alfa * novidade;
     for (const k of Object.keys(cont)) {
@@ -351,9 +346,9 @@ export function lutadorPet(m: PetLutador, rotulo: string, absoluto = false): Lut
   };
 }
 /** lutador de um bot: NPC da campanha, forma adulta canonica da V2.1 ou bot classico (stats neutros); R = regras da
-    luta (CV21D contra um pet v6: a muralha e o vigia com as listas variantes); arena = o NPC e o lider e a luta e de arena
+    luta (a muralha e o vigia com as listas variantes); arena = o NPC e o lider e a luta e de arena
     (pets v6, arenas.arenaDaLuta): o fator calibrado do lider e, na Torre de pedra, o contra-golpe */
-export function lutadorBot(nome: string, R: RegrasLuta = null, arena: Arena | null = null): Lutador {
+export function lutadorBot(nome: string, R: RegrasLuta = CV21E_TR, arena: Arena | null = null): Lutador {
   const n = NPC[nome];
   if (n) {
     if (arena && arena.lider !== nome) throw new Error(`${n.nome} não é o líder da arena ${arena.id}`);
@@ -361,9 +356,9 @@ export function lutadorBot(nome: string, R: RegrasLuta = null, arena: Arena | nu
     const estilo = arena?.lista ? { ...base, gambits: copiarGambits(gambitNPC("arena:" + arena.lista)) }
       : tec ? { ...base, gambits: copiarGambits(gambitNPC(n.estilo, R, tec)) } : base;
     /* campanha na escala: E = vida do estagio sugerido (ou do Mega, na Montanha Espiral) x fator; epsilon da escala. Nas lutas
-       dos pets v6 (as regras da luta dizem a versao) a escala e a CESC_V6 e o desafiante tem o fator dela; nas dos pets v9, a CESC_V9 */
+       do pet (as regras da luta dizem a versao) a escala e a CESC_V9 e o desafiante tem o fator dela */
     if (ESCALA.ligada) {
-      const versao = R?.versaoPet ?? 0, fator = arena?.fator ?? escalaDaVersao(versao)?.fatorNpc[nome] ?? n.fator ?? CESC.fatorNpc[nome];
+      const versao = R.versaoPet, fator = arena?.fator ?? escalaDaVersao(versao).fatorNpc[nome] ?? n.fator ?? CESC.fatorNpc[nome];
       if (fator === undefined) throw new Error(`${n.nome} sem fator de escala`);
       return { nome: "Rival " + n.nome, estilo: { ...estilo, eps: CESC.epsNpc }, cond: perfilNPC(n.total, n.estagio || "adulto", escalaDe(n.est, 0, versao) * fator, tec) };
     }

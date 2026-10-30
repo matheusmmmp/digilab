@@ -91,14 +91,13 @@ export function TelaCenarios() {
     const m = jogoAtual().motor, A = lutadorPet(m, "Pet A"), B = lutadorPet(fixo.rival, "Pet B");
     const contA: Record<string, number> = {}, contB: Record<string, number> = {};
     for (const c of ACOES_V2_OBS) { contA[c] = 0; contB[c] = 0; }
-    /* acoes: os turnos (por turnos) ou as acoes de cada lado (pets v13, em tempo real); dur: turnos ou segundos */
+    /* acoes: as acoes de cada lado (pets v13, em tempo real); dur: segundos */
     let v = 0, d = 0, e = 0, dur = 0, acoesA = 0, acoesB = 0, lim = 0;
     for (let k = 0; k < n; k++) {
       const r = jogarLuta(A, B, hashSemente("lab", m.semente, m.log.length, k), m.regras);
       if (r.pontosA === 1) v++; else if (r.pontosA === 0) d++; else e++;
       dur += tamanhoLuta(r); lim += r.fim === "limite" ? 1 : 0;
-      for (const t of r.turnos) { contA[t.a]++; contB[t.b]++; acoesA++; acoesB++; }
-      if (r.tr) for (const x of r.tr.acoes) { if (x.lado === 0) { contA[x.nome]++; acoesA++; } else { contB[x.nome]++; acoesB++; } }
+      for (const x of r.tr.acoes) { if (x.lado === 0) { contA[x.nome]++; acoesA++; } else { contB[x.nome]++; acoesB++; } }
     }
     const tempoReal = !!m.regras?.tempoReal;
     lutasTxt = {

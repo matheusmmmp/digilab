@@ -2,11 +2,11 @@
    as passivas) vem de constantes.ts (CV, CV21, CSO) e nao se repetem aqui; aqui ficam so os do relogio e do espaco. Todo tempo e um
    numero inteiro de passos de 16 ms. Status e fonte de cada um:
    - DECIDIDO (D-5, Matheus, 2026-10-29): o tempo de turno T_TR, o limite e a morte subita;
-   - PROPOSTO, com a fonte: "PROTOTIPO" = arena/constantes.ts (o arena.html, sem medicao); "turnos x T_TR" = o numero por turnos de hoje
+   - PROPOSTO, com a fonte: "PROTOTIPO" = o prototipo da arena (a pasta web/app/arena/, que saiu na R3 pela D-3; esta no commit efb2ded; sem medicao); "turnos x T_TR" = o numero por turnos de hoje
      convertido pelo T_TR; SEM FONTE onde nao ha. Nenhum foi calibrado: o equilibrio fica para a rodada do fim. */
 import { CV } from "../constantes.ts";
 
-/** o passo fixo (ms). PROPOSTO, o da arena (arena/constantes.ts, PASSO_MS) */
+/** o passo fixo (ms). PROPOSTO, o da arena (o prototipo, arena/constantes.ts, PASSO_MS) */
 export const PASSO_TR_MS = 16;
 /** o tempo de turno T_TR em passos: 125 x 16 ms = 2 s. DECIDIDO (D-5); fonte: o ciclo de ataque padrao do prototipo (STATS_PADRAO.cad,
     2 000 ms) igualado a 1 turno */
@@ -21,7 +21,7 @@ export const CTR_TR = {
       CPU "normal" do prototipo (DIFIC.normal.reacao = 260 ms) */
   ritmo: 16,
   /** o instante do golpe dentro da acao (25 passos = 400 ms), igual para todos (D-1). PROPOSTO; fonte: o golpe generico do prototipo
-      (arena/dados.ts, GOLPE_GENERICO.t = 0,4 s). A tela estica o clipe do UP para o quadro do golpe cair aqui */
+      (o prototipo, arena/dados.ts, GOLPE_GENERICO.t = 0,4 s). A tela estica o clipe do UP para o quadro do golpe cair aqui */
   instante: 25,
   /** o atordoamento de quem tem o preparo interrompido (31 passos ~ 500 ms). PROPOSTO, SEM FONTE */
   atordoaInterrupcao: 31,

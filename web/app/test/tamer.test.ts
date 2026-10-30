@@ -104,7 +104,7 @@ describe("descarte unico dos pets antigos (o 6: a luta em tempo real, pets v13; 
     t.alugarFabrica(0, 20);
     const log = t.log.map(ev => ev[0] === "fabrica" ? ["fabrica", { ...(ev[1] as object), v: 9 }] : ev) as EventoTamer[];
     const a = armaz({ [CHAVE_TAMER]: JSON.stringify({ versao: 6, log }) });
-    expect(Tamer.reproduzir(log).fabrica.length).toBe(1);
+    expect(() => Tamer.reproduzir(log)).toThrow(/versão 9/);                 /* a Fabrica de antes nao se refaz mais */
     expect(descartarPetsAntigos(a, GUARDADOS)).toBe(0);
     expect(avisoTR(a)).toEqual({ pets: 0, fabrica: 1 });
     const r = lerTamer(a);

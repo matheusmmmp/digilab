@@ -9,7 +9,7 @@
 import { afterEach, beforeEach, describe, expect, test } from "vitest";
 import {
   ACOES_DONO_JOGO_V11, CAT, CD, CMG, CTR, MEDALHAS_LIGA, TPD, criarDono, criarRng, fatorSalao, tamanhoLuta,
-  ADOL_V21, ALUGUEIS_FABRICA, CESC_V6, CRIANCA_V21, CV21D, ESPECIES, ESTAGIOS_SALAO, FATOR_FABRICA, FATOR_INSTALACAO, FATOR_SALAO, FORMAS_AD, LINHAS,
+  ADOL_V21, ALUGUEIS_FABRICA, CESC_V9, CRIANCA_V21, CV21E_TR, ESPECIES, ESTAGIOS_SALAO, FATOR_FABRICA, FATOR_INSTALACAO, FATOR_SALAO, FORMAS_AD, LINHAS,
   LUTAS_SERIE_FABRICA, MEDALHAS, RIVAL_SALAO, TentativaFabrica, alugueisFabrica, formaRivalFabrica, formaRivalSalao, gambitsAdulto, hashSemente, megaFabrica,
   rivalSalao, sementeFabrica, sementeLutaFabrica, sementeSalao, type EventoRegistro,
 } from "../motor/index.ts";
@@ -119,14 +119,14 @@ describe("Fábrica: o sorteio", () => {
     expect([...rivais].sort()).toEqual([...FORMAS_AD].sort());
     expect([...esps].sort()).toEqual([...ESPECIES].sort());
   });
-  test("o alugado e o rival: Mega canônico, lista V21D, sem treino, E = vida do Mega na escala v6 × 1, mesmo com a chave da escala desligada", () => {
+  test("o alugado e o rival: Mega canônico, lista das regras da luta, sem treino, E = vida do Mega na escala × 1, mesmo com a chave da escala desligada", () => {
     expect(FATOR_FABRICA).toBe(FATOR_INSTALACAO);
     const f = alugueisFabrica(sementeFabrica(3))[0], L = megaFabrica(f, "x");
     ligarEscala(false);
     expect(megaFabrica(f, "x")).toEqual(L);
-    expect(L.cond.escala).toBeCloseTo(CESC_V6.vida.mega, 6);
+    expect(L.cond.escala).toBeCloseTo(CESC_V9.vida.mega, 6);
     expect(L.cond.passiva).toBe(f.adulta);
-    expect(L.estilo.gambits).toEqual(gambitsAdulto(f.adulta as (typeof FORMAS_AD)[number], CV21D));
+    expect(L.estilo.gambits).toEqual(gambitsAdulto(f.adulta as (typeof FORMAS_AD)[number], CV21E_TR));
     expect(() => megaFabrica({ ...f, est: "adulto" }, "x")).toThrow(/só tem Megas/);
   });
 });
@@ -161,7 +161,7 @@ describe("Fábrica: a série, a troca e o fim", () => {
     expect(() => x.lutar(1)).toThrow(/já acabou/);
     expect(() => x.trocar()).toThrow(/acabou/);
   });
-  test("a troca: depois da vitória o alugado vira o rival derrotado, com a mesma fração da vida (a troca não cura), uma vez", () => {
+  test("a troca: depois da vitória o alugado vira o rival derrotado, que entra com a vida cheia, uma vez", () => {
     const { n, escolha } = tentativaQueVence(), x = new TentativaFabrica(n, escolha);
     const l = x.lutar(x.proxima()!.s), vida = x.vidaAgora;
     expect(l.venceu).toBe(true);
@@ -170,12 +170,12 @@ describe("Fábrica: a série, a troca e o fim", () => {
     x.trocar();
     expect(x.alugado).toEqual(l.rival);
     expect(l.trocou).toBe(true);
-    expect(x.vidaAgora).toBeCloseTo(vida, 12);
+    expect(x.vidaAgora).toBe(1);                                    /* v13: a troca entra inteira */
     expect(() => x.trocar()).toThrow(/já trocou/);
-    /* a proxima luta e com o novo alugado, na vida que sobrou */
+    /* a proxima luta e com o novo alugado, inteiro */
     const { A, ini } = x.lutadores();
     expect(A.cond.passiva).toBe(l.rival.adulta);
-    expect(ini!.hp / A.cond.hpMax).toBeCloseTo(vida, 12);
+    expect(ini).toBeNull();
   });
 });
 
@@ -211,12 +211,12 @@ describe("Fábrica: o registro do Tamer", () => {
   test("falha alto: antes do título, fora de ordem, com outra semente, troca sem vitória, outra tentativa com uma em andamento", () => {
     const ev = (x: EventoTamer[]) => () => Tamer.reproduzir(x);
     const base = tamer().log, s1 = sementeFabrica(1);
-    expect(ev([...tamer(false).log, ["fabrica", { n: 1, s: s1, alugado: 0, quando: 1 }]])).toThrow(/antes do título/);
-    expect(ev([...base, ["fabrica", { n: 2, s: sementeFabrica(2), alugado: 0, quando: 1 }]])).toThrow(/fora de ordem/);
-    expect(ev([...base, ["fabrica", { n: 1, s: s1 + 1, alugado: 0, quando: 1 }]])).toThrow(/semente/);
-    expect(ev([...base, ["fabrica", { n: 1, s: s1, alugado: 3, quando: 1 }]])).toThrow(/escolha/);
-    const ini: EventoTamer[] = [...base, ["fabrica", { n: 1, s: s1, alugado: 0, quando: 1 }]];
-    expect(ev([...ini, ["fabrica", { n: 2, s: sementeFabrica(2), alugado: 0, quando: 1 }]])).toThrow(/em andamento/);
+    expect(ev([...tamer(false).log, ["fabrica", { n: 1, s: s1, alugado: 0, quando: 1, v: 13 }]])).toThrow(/antes do título/);
+    expect(ev([...base, ["fabrica", { n: 2, s: sementeFabrica(2), alugado: 0, quando: 1, v: 13 }]])).toThrow(/fora de ordem/);
+    expect(ev([...base, ["fabrica", { n: 1, s: s1 + 1, alugado: 0, quando: 1, v: 13 }]])).toThrow(/semente/);
+    expect(ev([...base, ["fabrica", { n: 1, s: s1, alugado: 3, quando: 1, v: 13 }]])).toThrow(/escolha/);
+    const ini: EventoTamer[] = [...base, ["fabrica", { n: 1, s: s1, alugado: 0, quando: 1, v: 13 }]];
+    expect(ev([...ini, ["fabrica", { n: 2, s: sementeFabrica(2), alugado: 0, quando: 1, v: 13 }]])).toThrow(/em andamento/);
     expect(ev([...ini, ["fabrica_luta", { n: 1, k: 1, s: sementeLutaFabrica(s1, 1), quando: 1 }]])).toThrow(/fora de ordem/);
     expect(ev([...ini, ["fabrica_luta", { n: 1, k: 0, s: 7, quando: 1 }]])).toThrow(/semente/);
     expect(ev([...ini, ["fabrica_troca", { n: 1, k: 0, quando: 1 }]])).toThrow(/Fábrica/);
@@ -226,14 +226,14 @@ describe("Fábrica: o registro do Tamer", () => {
 });
 
 describe("Salão: os rivais", () => {
-  test("o rival é o bot canônico do estágio, sorteado da semente; E = vida do estágio na escala v6 × 1", () => {
+  test("o rival é o bot canônico do estágio, sorteado da semente; E = vida do estágio na escala × 1", () => {
     const tipos: Record<string, Set<string>> = { crianca: new Set(), adolescente: new Set(), adulto: new Set(), mega: new Set() }, esps = new Set<string>();
     for (let n = 1; n <= 80; n++) for (const est of ESTAGIOS_SALAO) {
-      const s = sementeSalao(77, n), f = formaRivalSalao(s, est), L = rivalSalao(s, est, CV21D);
+      const s = sementeSalao(77, n), f = formaRivalSalao(s, est), L = rivalSalao(s, est, CV21E_TR, FATOR_SALAO);
       expect(formaRivalSalao(s, est)).toEqual(f);
       expect(f.est).toBe(est);
-      expect(L.cond.escala).toBeCloseTo(CESC_V6.vida[est] * FATOR_SALAO, 6);
-      expect(L.estilo.gambits).toEqual(est === "crianca" ? CRIANCA_V21[f.ramo!] : est === "adolescente" ? ADOL_V21[f.linha!] : gambitsAdulto(f.adulta as (typeof FORMAS_AD)[number], CV21D));
+      expect(L.cond.escala).toBeCloseTo(CESC_V9.vida[est] * FATOR_SALAO, 6);
+      expect(L.estilo.gambits).toEqual(est === "crianca" ? CRIANCA_V21[f.ramo!] : est === "adolescente" ? ADOL_V21[f.linha!] : gambitsAdulto(f.adulta as (typeof FORMAS_AD)[number], CV21E_TR));
       tipos[est].add(f.adulta ?? f.linha ?? f.ramo!); esps.add(f.esp);
     }
     expect([...tipos.crianca].sort()).toEqual(["arisco", "sereno"]);
@@ -268,7 +268,7 @@ describe("Salão: a luta no registro do pet", () => {
       m.abrirFronteira();
       const s = m.sementeSalao(), est = m.estagioAtual, L = m.lutadores(RIVAL_SALAO, s);
       expect(L.B.cond.passiva).toBe(formaRivalSalao(s, est).adulta ?? null);
-      expect(L.B.cond.escala).toBeCloseTo(CESC_V6.vida[est] * fatorSalao(est, m.regras), 6);   /* no v13, o fator por nivel dos v9 */
+      expect(L.B.cond.escala).toBeCloseTo(CESC_V9.vida[est] * fatorSalao(est, m.regras), 6);   /* no v13, o fator por nivel dos v9 */
       const r = m.lutar(RIVAL_SALAO, s);
       expect(r.serie).toHaveLength(1);
       expect(m.log[m.log.length - 1]).toEqual([m.e.tick, "l", { r: RIVAL_SALAO, s }]);

@@ -12,13 +12,14 @@ const lista = (regras: ReturnType<typeof Rg>[], final = "defender", eps = 0): Lu
 const resumo = (r: ResultadoLutaTR) => ({ pontosA: r.pontosA, fim: r.fim, passos: r.passos, hp: r.E.L.map(l => l.hp), acoes: r.acoes });
 
 describe("as regras escolhem o combate (a versao do pet e a chave)", () => {
-  test("os pets v13 lutam em tempo real; os v12 e anteriores, por turnos", () => {
-    expect(regrasDaVersao(13)).toBe(CV21E_TR); expect(regrasDaVersao(12)).toBe(CV21E);
+  test("os pets v13 lutam em tempo real; as outras versoes falham alto", () => {
+    expect(regrasDaVersao(13)).toBe(CV21E_TR); expect(() => regrasDaVersao(12)).toThrow(/não existem mais/);
     const A = lutadorBot("duelista", CV21E_TR), B = lutadorBot("tita", CV21E_TR);
-    const tr = jogarLuta(A, B, 1, CV21E_TR), turnos = jogarLuta(lutadorBot("duelista", CV21E), lutadorBot("tita", CV21E), 1, CV21E);
-    expect(tr.tr).toBeDefined(); expect(tr.turnos).toEqual([]); expect(tr.pontosA).toBe(tr.tr!.pontosA);
+    const tr = jogarLuta(A, B, 1, CV21E_TR);
+    expect(tr.tr).toBeDefined(); expect(tr.pontosA).toBe(tr.tr!.pontosA);
     expect(tr.E.L.map(l => l.hp)).toEqual(tr.tr!.E.L.map(l => l.hp));
-    expect(turnos.tr).toBeUndefined(); expect(turnos.turnos.length).toBeGreaterThan(0);
+    /* sem as regras do tempo real (CV21E, sem tempoReal) nao ha luta por turnos: falha alto */
+    expect(() => jogarLuta(A, B, 1, CV21E)).toThrow(/tempo real/);
   });
   test("as listas dos bots nos v13 sao as da V21E", () => {
     for (const f of FORMAS_AD) expect(lutadorBot(f, CV21E_TR).estilo.gambits).toEqual(lutadorBot(f, CV21E).estilo.gambits);

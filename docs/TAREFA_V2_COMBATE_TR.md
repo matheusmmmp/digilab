@@ -285,3 +285,37 @@ tira esses pets do navegador.
   de combate (`CESC`, `CESC_V6`) e a Fábrica v6 e v9.
   - Eles só são alcançados pelos testes de paridade do combate com o Python e pelas funções de módulo que recebem a versão das regras.
   - A espec já punha o combate por turnos na R3.
+
+## 14. R3: o resultado (worker, Claude Code, Opus 5.5, 2026-10-29)
+
+- **O palco novo** (`web/app/src/telas/lutar/palcoTR/`: `PalcoTR.tsx`, `desenhoTR.ts`, `cenasTR.ts`) substitui o `PalcoLuta` em todo lugar
+  de batalha: Arena, Campanha e Exploração, os líderes, o Cenário pet e, com a mesma tela, Liga, Torre, Palácio e Salão. O replay do
+  Diário também usa o palco novo.
+  - **Como o palco funciona:** ele refaz a luta passo a passo a partir da entrada que o motor guardou no resultado (`res.tr.entrada`,
+    com `criarLutaTR` e `passoTR`). No fim confere o passo e os pontos com os do motor e falha alto se forem diferentes.
+  - **O que aparece na tela:**
+    - o mapa do UP do lugar como cenário (E7, sem as regras de ambiente);
+    - os sprites em escala inteira;
+    - o clipe da ação, com `CLIPES_UP` ligado (`Run`, `Attack_1`, `Stun`, `Die`);
+    - a vida, o Guts, o relógio e a morte súbita;
+    - os números de dano;
+    - a regra em uso, só para leitura.
+  - **Os controles:** nenhum controle sobre a luta (saem o travar e o vetar do palco). Ficam a pausa, o ×2 e o Desistir, que só pula a
+    animação.
+  - **O som** toca por `src/som.ts`, quando ele está ligado.
+  - **Os avisos:** a falta do mapa ou do atlas aparece num aviso visível.
+- **O resultado e o "por quê":** o `ModalResultado` e o replay do Diário mostram as regras que dispararam (de `res.tr.acoes`), quantas
+  vezes cada uma disparou e o saldo delas em % da vida, e como a luta acabou.
+- **O que saiu:**
+  - **as telas:** o `PalcoLuta`, a pasta `arena/` e a tela separada da arena do UP (`arena_tr/`, `arenaTempoReal.ts`, `arena_tr.css`, a
+    rota `#/lutar/tempo-real`), pela D-3;
+  - **o combate por turnos** (`jogarV2`, `resolverV2` e o resto), com as variantes V21C e V21D, a `CESC_V6` (a vida e o beta, iguais,
+    seguem na `CESC_V9`) e a Fábrica v6 e v9;
+  - **os testes:** as paridades por turnos, os scripts de calibração que usavam `jogarV2` e os scripts de medição da R0, que dependiam
+    da `arena/`. As saídas `scripts/medicoes/combate_tr.json` e `replay_tr.json` ficam; os scripts estão no commit `efb2ded`.
+  - A lista completa, com as contagens, está no relato do PR.
+- **Os números:**
+  - o Vitest vai de 599 testes em 58 arquivos para 559 em 52;
+  - o e2e vai de 96 para 98 (saem os 4 da arena do UP e entram 6 da luta em tempo real);
+  - o motor vai de 8 852 para 8 568 linhas.
+- **`CLIPES_UP`:** a proposta de onde ligar está no relato e no registro. Fica desligada, porque a decisão é do Matheus.

@@ -4,8 +4,8 @@
    usada) (os pets de antes saem do Motor na COMBATE-TR R2b). */
 import { describe, expect, test } from "vitest";
 import {
-  CARTA_DA_REVANCHE, CAT, CIT, CIT_V9, CTR, CV, DUR_EVO, ITENS, ITEM_DA_MEDALHA, MEDALHAS, Motor, STATS, TECNICAS, bonusChipsStat, cartaDe, chaveRegra,
-  chipDe, chipServe, comCarta, hashSemente, itemDe, jogarArena, jogarV2, lutadorBot, lutadorPet, vagasDeChip, type Estagio, type EventoRegistro,
+  CARTA_DA_REVANCHE, CAT, CIT, CIT_V9, CTR, CV, CV21E_TR, DUR_EVO, ITENS, ITEM_DA_MEDALHA, MEDALHAS, Motor, STATS, TECNICAS, bonusChipsStat, cartaDe, chaveRegra,
+  chipDe, chipServe, comCarta, hashSemente, itemDe, jogarArena, jogarLuta, jogarTR, lutadorBot, lutadorPet, vagasDeChip, type Estagio, type EventoRegistro,
   type Stats,
 } from "../motor/index.ts";
 import { CHAVE, textoSave, type Armazenamento } from "../src/save.ts";
@@ -174,7 +174,7 @@ describe("cartas: o efeito de uma luta so", () => {
   test("Folego: +20 de guts no comeco (ate o maximo); Foco: sem exploracao", () => {
     const L = lutadorBot("agressivo"), f = comCarta(L, cartaDe("carta_folego").carta), o = comCarta(L, cartaDe("carta_foco").carta);
     expect(f.cond.guts0).toBe(Math.min(L.cond.gutsMax, L.cond.guts0 + CIT.gutsFolego));
-    expect(jogarV2(f, lutadorBot("tartaruga"), 1).E0.L[0].guts).toBe(f.cond.guts0);
+    expect(jogarLuta(f, lutadorBot("tartaruga"), 1, CV21E_TR).E0.L[0].guts).toBe(f.cond.guts0);
     expect(o.estilo.eps).toBe(0);
     expect(comCarta(L, null)).toBe(L);
   });
@@ -182,26 +182,29 @@ describe("cartas: o efeito de uma luta so", () => {
     const c = cartaDe("carta_cura").carta.cura!;
     let viu = 0;
     for (let s = 0; s < 60; s++) {
-      const r = jogarV2(lutadorBot("aleatorio"), lutadorBot("agressivo"), s, null, null, null, [c, null]);
-      const curas = r.turnos.filter(t => t.cura);
+      const r = jogarTR(lutadorBot("aleatorio"), lutadorBot("agressivo"), s, { R: CV21E_TR, curas: [c, null], eventos: true });
+      const ev = r.eventos!, curas = ev.filter(e => e.tipo === "cura");
       expect(curas.length).toBeLessThanOrEqual(1);
+      expect(r.curou).toEqual([curas.length === 1, false]);
       if (!curas.length) continue;
       viu++;
-      const t = curas[0], hpMax = t.depois.L[0].hpMax, ganho = t.cura![0];
-      expect(t.cura![1]).toBe(0);
-      expect(ganho).toBeCloseTo(Math.min(c.fracao * hpMax, hpMax - (t.depois.L[0].hp - ganho)), 9);
-      expect(t.depois.L[0].hp - ganho).toBeLessThan(c.abaixo * hpMax);
-      expect(t.depois.L[0].hp - ganho).toBeGreaterThan(0);
+      const i = ev.indexOf(curas[0]), ganho = (curas[0] as { valor: number }).valor, hpMax = r.E0.hpMax[0];
+      /* a vida logo antes da cura: o resto do ultimo dano que o lado A levou */
+      const antes = (ev.slice(0, i).filter(e => e.tipo === "dano" && e.lado === 0).pop() as { resta: number }).resta;
+      expect((curas[0] as { lado: number }).lado).toBe(0);
+      expect(ganho).toBeCloseTo(Math.min(c.fracao * hpMax, hpMax - antes), 9);
+      expect(antes).toBeLessThan(c.abaixo * hpMax);
+      expect(antes).toBeGreaterThan(0);
     }
     expect(viu).toBeGreaterThan(5);
     /* sem carta, a luta de sempre */
-    expect(jogarV2(lutadorBot("aleatorio"), lutadorBot("agressivo"), 3).turnos.some(t => t.cura)).toBe(false);
+    expect(jogarLuta(lutadorBot("aleatorio"), lutadorBot("agressivo"), 3, CV21E_TR).tr.curou).toEqual([false, false]);
   });
   test("na serie (Cidadela) a cura vale uma vez para as tres lutas", () => {
     const A = { ...lutadorBot("furioso"), cond: { ...lutadorBot("furioso").cond } }, B = lutadorBot("aleatorio");
     for (let s = 0; s < 30; s++) {
-      const serie = jogarArena(A, B, s, null, 3, null, cartaDe("carta_cura").carta);
-      expect(serie.reduce((n, r) => n + r.turnos.filter(t => t.cura).length, 0)).toBeLessThanOrEqual(1);
+      const serie = jogarArena(A, B, s, CV21E_TR, 3, null, cartaDe("carta_cura").carta);
+      expect(serie.reduce((n, r) => n + (r.tr.curou[0] ? 1 : 0), 0)).toBeLessThanOrEqual(1);
     }
   });
   test("no pet: a carta entra no registro logo antes da luta, vale nela e sai (so contra NPC e com o treino minimo)", () => {
@@ -331,7 +334,7 @@ describe("inventario no registro do Tamer", () => {
 
 test("controle: a luta sem carta e sem chip e a de sempre (mesma luta com e sem os parametros novos)", () => {
   const A = lutadorBot("furioso"), B = lutadorBot("espelho");
-  for (const s of [1, 2, 3]) expect(JSON.stringify(jogarV2(A, B, s, null, null, null, null))).toBe(JSON.stringify(jogarV2(A, B, s)));
-  for (const s of [4, 5]) expect(JSON.stringify(jogarArena(A, B, s, null, 3, null, null))).toBe(JSON.stringify(jogarArena(A, B, s, null, 3)));
+  for (const s of [1, 2, 3]) expect(JSON.stringify(jogarLuta(A, B, s, CV21E_TR, null, null, null))).toBe(JSON.stringify(jogarLuta(A, B, s, CV21E_TR)));
+  for (const s of [4, 5]) expect(JSON.stringify(jogarArena(A, B, s, CV21E_TR, 3, null, null))).toBe(JSON.stringify(jogarArena(A, B, s, CV21E_TR, 3)));
   expect(CV.eps).toBeGreaterThan(0);
 });

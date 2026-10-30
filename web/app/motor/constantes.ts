@@ -200,17 +200,11 @@ export const CV21 = {
   duelista: 4, limFurioso: .5, multFurioso: 1.25, espelho: 1, muralha: 3, recargaSent: 4, multEmb: 2, multTita: 1.3,
   maxRegras: { bebe: 0, crianca: 3, adolescente: 5, adulto: 8 } as Record<EstagioBase, number>, turnos: [5, 10, 20],
 };
-/* V21D: reequilibrio dos arquetipos, variante a_c_e2v_v (docs/EQUILIBRIO_RODADA2.md, validada em docs/VALIDACAO_V21D.md;
-   chaves da ConfigCombateV21D, experiments/configs/v21d/validacao.json). So nas lutas de pets v6 (versaoPet em diante):
-   os v1-v5 lutam com a V21C. As outras chaves da V21D (D2, E1, E2 no tita) ficam desligadas e nao existem na web */
-export const CV21D = {
-  versaoPet: 6,
-  preparoSobPeleOculto: true, muralhaListaEspelho: true, vigiaBateEmQuemRecua: true, vigiaRecuaDoPreparoSobPele: true,
-} as const;
 /* V21E: rodada de equilibrio geral, fase 1 (docs/EQUILIBRIO_GERAL.md; chaves da ConfigCombateV21E,
    experiments/configs/v21e/calibracao.json). So nas lutas de pets v9 (versaoPet em diante): as quatro chaves da V21D e as cinco
-   da V21E, todas listas das formas (bots.gambitsAdulto); a base (custo do golpe rapido, parry, C3) nao muda. Os v6-v8 seguem na
-   V21D e os v1-v5 na V21C */
+   da V21E, todas listas das formas (bots.gambitsAdulto); a base (custo do golpe rapido, parry, C3) nao muda. As quatro chaves da
+   V21D (reequilibrio dos arquetipos, docs/VALIDACAO_V21D.md, variante a_c_e2v_v) estao aqui: o combate por turnos e a V21D
+   como regras separadas sairam (COMBATE-TR R3), e o v13 usa estas */
 export const CV21E = {
   versaoPet: 9,
   preparoSobPeleOculto: true, muralhaListaEspelho: true, vigiaBateEmQuemRecua: true, vigiaRecuaDoPreparoSobPele: true,
@@ -267,31 +261,18 @@ export const CESC = {
   epsNpc: .2,
   vidaNeutra: 100,       /* hpBase + 10 x hpVigor: vida exibida = E x vida propria / vida neutra */
 };
-/* escala dos pets v6 (so no jogo; decisao do Matheus, 2026-09-30: "o treino tem que decidir" e "o estagio tem que pesar").
-   Mesma formula da CESC (E = vida do estagio x (1 + beta x pontos); o dano da campanha vale x E_A/E_B), com a vida de cada
-   estagio (o Mega inclusive) e o peso do ponto de treino proprios. Vale so nas lutas de escala dos pets v6 (campanha e arenas:
-   o pet, pela versao dele, e o NPC, pelas regras da luta); CESC, os pets v1-v5 e o Python da pesquisa nao mudam. fatorNpc:
-   os desafiantes da campanha v6 (os NPCs que nao sao lideres) recalibrados na escala nova; os lideres tem o fator em
-   arenas.ts. Numeros PROPOSTOS, calibrados em test/calibrar_escala_v6.mjs e test/calibrar_arenas.mjs
-   (artifacts_campanha/escala_v6/, artifacts_campanha/arenas/). */
-export const CESC_V6 = {
-  versaoPet: 6,
-  vida: { bebe: 50, crianca: 200, adolescente: 700, adulto: 2500, mega: 23000 } as Record<Estagio, number>,
-  beta: .045,
-  /* Tortomon: nenhum fator fecha as metas (o de maior folga; a excecao da Sentinela de sempre, agora na escala v6). Com a regra
-     do limite do desafiado (2026-09-30) o Tortomon e o Machinedramon sairam das metas na validacao e foram recalibrados (1,6 -> 1,5
-     e 2,7 -> 2,2); Devidramon e Puppetmon seguiram nas metas e ficaram */
-  fatorNpc: { npc_tier2_sentinela: 1.5, npc_tier2_porteiro: 1.1, npc_v5_puppetmon: 2.5, npc_v5_machinedramon: 2.2 } as Record<string, number>,
-};
-/* escala dos pets v9 (rodada de equilibrio geral, fase 2; docs/EQUILIBRIO_GERAL.md, metas M-B1 e M-B3): a mesma formula e o mesmo
-   uso da CESC_V6, so nas lutas de escala dos pets v9 (o pet pela versao, o NPC pelas regras V21E da luta). A CESC_V6 (pets v6-v8) nao
-   muda. vida e beta: os da CESC_V6 (com as regras V21E as metas de estagio passam sem mudar a escala: test/calibrar_escala_v6.mjs
-   --conferir, artifacts_equilibrio_geral/fase2/escala_conferencia.json); os rivais da Fronteira (Liga, instalacoes, Salao) seguem na
-   vida da CESC_V6, a mesma. fatorNpc: os desafiantes da campanha recalibrados nas regras V21E, pelo metodo de sempre (o fator de
-   maior folga; test/calibrar_desafiantes_v6.mjs, desafiantes_calibracao.json): Devidramon 1,1 (igual), Puppetmon 2,5 -> 1,8,
-   Machinedramon 2,2 -> 2,3; o Tortomon, que nao fechava com a grade de 0,1, fecha com 1,53 (grade de 0,01 entre 1,4 e 1,7,
-   desafiantes_calibracao_npc_tier2_sentinela_grade.json; passa de 1,51 a 1,54). Os lideres tem o fator dos pets v9 em arenas.ts
-   (FATOR_LIDER_V9). So sementes de calibracao; PROPOSTOS */
+/* escala dos pets (so no jogo; antes da escala dos pets v6, decisao do Matheus, 2026-09-30: "o treino tem que decidir" e "o estagio
+   tem que pesar"; a dos v9, rodada de equilibrio geral, fase 2, docs/EQUILIBRIO_GERAL.md, metas M-B1 e M-B3, e a que o v13 usa).
+   Mesma formula da CESC (E = vida do estagio x (1 + beta x pontos); o dano da campanha vale x E_A/E_B), com a vida de cada estagio
+   (o Mega inclusive) e o peso do ponto de treino proprios; vale nas lutas de escala (campanha, arenas, Fronteira: o pet pela versao, o
+   NPC pelas regras V21E da luta). vida e beta: os da escala dos pets v6 (que saiu com o combate por turnos, COMBATE-TR R3; os numeros
+   nao mudam: com as regras V21E as metas de estagio passam sem mudar a escala, test/calibrar_escala_v6.mjs --conferir,
+   artifacts_equilibrio_geral/fase2/escala_conferencia.json; os rivais da Fronteira (Liga, instalacoes, Salao, Fabrica) usam esta mesma
+   vida). Numeros PROPOSTOS, calibrados em artifacts_campanha/escala_v6/ e artifacts_campanha/arenas/. fatorNpc: os desafiantes da
+   campanha recalibrados nas regras V21E, pelo metodo de sempre (o fator de maior folga; test/calibrar_desafiantes_v6.mjs,
+   desafiantes_calibracao.json): Devidramon 1,1 (igual), Puppetmon 2,5 -> 1,8, Machinedramon 2,2 -> 2,3; o Tortomon, que nao fechava
+   com a grade de 0,1, fecha com 1,53 (grade de 0,01 entre 1,4 e 1,7, desafiantes_calibracao_npc_tier2_sentinela_grade.json; passa de
+   1,51 a 1,54). Os lideres tem o fator dos pets v9 em arenas.ts (FATOR_LIDER_V9). So sementes de calibracao; PROPOSTOS */
 export const CESC_V9 = {
   versaoPet: 9,
   vida: { bebe: 50, crianca: 200, adolescente: 700, adulto: 2500, mega: 23000 } as Record<Estagio, number>,

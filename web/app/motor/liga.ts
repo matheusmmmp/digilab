@@ -1,12 +1,12 @@
 /* A Liga dos Lideres na Fronteira de Batalha (docs/DESIGN_FRONTEIRA.md, secoes 2 e 4; medalhas parte 4a; so no jogo e so nos pets v6).
    O final do jogo: com as 6 medalhas, o pet enfrenta os 6 lideres das arenas em sequencia, na ordem das arenas (Campina -> Espiral),
-   cada um lutando com um Mega do jogo, de um arquetipo diferente, com a lista canonica dele (V21D). Regras da Liga:
+   cada um lutando com um Mega do jogo, de um arquetipo diferente, com a lista canonica dele sob as regras da luta. Regras da Liga:
    - sem cura entre as lutas: a vida e o guts do pet passam de uma luta para a outra (como na serie da Cidadela, arenas.jogarSerie);
      o lider de cada luta comeca inteiro;
    - os chips equipados valem (estao no pet: treino e lista); as cartas NAO valem (o motor recusa carta antes da luta da Liga);
    - o limite de turnos e do desafiado, o lider (combate.desafiadoDaVersao: nos pets v6 o rival);
    - perder uma luta encerra a tentativa; tentar de novo nao custa nada.
-   A forca dos rivais: estagio Mega na escala dos pets v6 (CESC_V6), sem treino, vezes FATOR_LIGA. SEM calibracao (decisao do Matheus:
+   A forca dos rivais: estagio Mega na escala dos pets (CESC_V9: a vida e o beta que eram os da escala dos v6), sem treino, vezes FATOR_LIGA. SEM calibracao (decisao do Matheus:
    sem rodada de equilibrio nesta parte). O desenho pedia o fator do Piedmon na arena da Espiral (1,6); com ele cada luta sozinha e
    vencivel pela forma certa, mas a Liga inteira (sem cura) nao: nenhuma forma, em nenhuma especie, venceu as 6 na conferencia
    (test/conferir_liga.mjs, artifacts_campanha/liga/conferencia.json). O jogo tem de ser completavel, entao a Liga ficou SEM fator
@@ -20,7 +20,7 @@
 import { ARENA_POR_ID, jogarSerie } from "./arenas.ts";
 import { copiarGambits, gambitsAdulto } from "./bots.ts";
 import { ESCALA, caraterCanonico, perfilDe } from "./catalogo.ts";
-import { CV, LINHA_DA_FORMA } from "./constantes.ts";
+import { CV, LINHA_DA_FORMA, VERSAO_PET } from "./constantes.ts";
 import type { Desafiado, Lutador, RegrasLuta, ResultadoLuta } from "./combate.ts";
 import { MEDALHAS } from "./medalhas.ts";
 import { nomeForma } from "./nomes.ts";
@@ -80,7 +80,7 @@ export const VERSAO_LIGA_V9 = 9;
 export const FATOR_LIGA_V9: Readonly<Record<string, number>> = { campina: .4, torre: .3, floresta: .1, cidadela: 1, lago: 1.7, espiral: .9 };
 export const CURA_LIGA_V9 = 0;
 if (LIGA.some(x => FATOR_LIGA_V9[x.arena] === undefined) || Object.keys(FATOR_LIGA_V9).length !== LIGA.length) throw new Error("FATOR_LIGA_V9 sem um lider por arena");
-const ehV9 = (R: RegrasLuta): boolean => (R?.versaoPet ?? 0) >= VERSAO_LIGA_V9;
+const ehV9 = (R: RegrasLuta): boolean => R.versaoPet >= VERSAO_LIGA_V9;
 /** o fator do lider i nas lutas destas regras: o da Liga dos v9 (R dos pets v9) ou FATOR_LIGA */
 export const fatorLiga = (i: number, R: RegrasLuta): number => {
   const x = LIGA[i];
@@ -99,11 +99,11 @@ export function formaLiga(i: number): Forma {
 /** o nome do Mega do lider i na tela (o Digimon da cadeia) */
 export const nomeMegaLiga = (i: number): string => nomeForma(formaLiga(i));
 /** o lutador do lider i: o Mega com a tecnica da linha, a passiva da forma, o carater canonico e a lista canonica dele sob as regras
-    da luta (V21D nos pets v6: a muralha com a lista do espelho); epsilon dos bots canonicos. Com a escala ligada (o app): E = vida do
-    Mega na escala dos pets v6 x fator (fatorLiga: FATOR_LIGA nos v6-v8, FATOR_LIGA_V9 nos v9; outro so na conferencia), sem treino */
+    da luta (a muralha com a lista do espelho); epsilon dos bots canonicos. Com a escala ligada (o app): E = vida do
+    Mega na escala dos pets x fator (fatorLiga: FATOR_LIGA nos v6-v8, FATOR_LIGA_V9 nos v9; outro so na conferencia), sem treino */
 export function lutadorLiga(i: number, R: RegrasLuta, fator: number = fatorLiga(i, R)): Lutador {
   const f = formaLiga(i), x = LIGA[i];
-  const p = perfilDe(f, caraterCanonico(x.adulta), 1, null, true, VERSAO_LIGA);
+  const p = perfilDe(f, caraterCanonico(x.adulta), 1, null, true, VERSAO_PET);
   const cond = ESCALA.ligada ? { ...p, escala: p.escala! * fator } : p;
   return { nome: "Rival " + nomeForma(f), estilo: { nome: `liga:${x.arena}`, gambits: copiarGambits(gambitsAdulto(x.adulta, R)), eps: CV.eps }, cond };
 }
