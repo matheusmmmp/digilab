@@ -16,10 +16,12 @@ Vale junto com o `CLAUDE.md` da raiz. O que o jogo já tem, seção a seção, e
   - uma constante nova do Python é conferida por `constantes.test.mjs`.
 - **Na tela, os nomes são os do Digimon:** as formas, os NPCs, os níveis (In-Training, Rookie, Champion, Ultimate, Mega) e os brasões
   das espécies (brasa Coragem, cirro Amizade, ferrugem Conhecimento, limo Sinceridade). Os ids internos, o log e o save não mudam.
-- **Layout:**
-  - em tela larga, seguir as pranchas `*Desktop` de `docs/estilo_up/pranchas/`; em tela estreita, as de 390 px;
-  - o botão **Conversar** fica no cabeçalho do Pet no celular e no pé da barra lateral no desktop;
-  - tokens `--dl-*` e componentes `dl-*` (`docs/UI_GUIDELINES.md`).
+- **Layout (2026-10-30, `docs/TAREFA_V2_LAYOUT_HABITAT.md` e `docs/UI_GUIDELINES.md` §8):**
+  - o habitat ocupa a tela inteira em todas as larguras; as outras telas abrem sobre ele (painel à direita a partir de 900 px,
+    modal centralizado abaixo); a referência são as pranchas D descritas na tarefa, não as `*Desktop` de `docs/estilo_up/pranchas/`;
+  - o botão **Conversar** fica no cabeçalho no celular e no trilho de ícones no desktop;
+  - menus com a pele XCOM (tokens `--hx-*`, componentes `hx-*`, sempre escura); habitat, retrato, relógio e balão com
+    `--dl-*`/`dl-*` e o tema claro/escuro.
 - **Semear um save em teste:** por uma página da mesma origem que não seja o app, senão o app grava o pet dele por cima ao fechar.
 
 ## Comandos
