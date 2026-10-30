@@ -1,0 +1,121 @@
+{
+ "gerado_por": "web/app/scripts/equilibrio_tr/fase4_progressao.ts",
+ "data": "2026-10-30",
+ "commit": "cd14efcd",
+ "node": "v24.19.0",
+ "faixa": "calibracao",
+ "bases": [
+  68101,
+  68202,
+  68303,
+  68404,
+  68505
+ ],
+ "sementes_por_base": 20,
+ "relogio": {
+  "ritmo": 16,
+  "atordoaInterrupcao": 31,
+  "andar": 1.12,
+  "recuo": 0.6,
+  "arrancada": 8,
+  "projetil": 4.8,
+  "perto": 62,
+  "medio": 120,
+  "contato": 44,
+  "empurrao": 0,
+  "disparo": 6
+ },
+ "listas": "v14",
+ "reserva_no_fim": true,
+ "fatores": {
+  "lider": {
+   "campina": 1.3,
+   "torre": 1.5,
+   "floresta": 1.5,
+   "cidadela": 0.9,
+   "lago": 1.5,
+   "espiral": 1.4
+  },
+  "npc": {
+   "npc_tier2_sentinela": 1.53,
+   "npc_tier2_porteiro": 1.1,
+   "npc_v5_puppetmon": 1.8,
+   "npc_v5_machinedramon": 2.3
+  },
+  "liga": {
+   "campina": 0.4,
+   "torre": 0.3,
+   "floresta": 0.1,
+   "cidadela": 1,
+   "lago": 1.7,
+   "espiral": 0.9
+  },
+  "instalacao": 1,
+  "fabrica": 0.6,
+  "salao": {
+   "crianca": 3.6,
+   "adolescente": 3.6,
+   "adulto": 3.6,
+   "mega": 3.6
+  }
+ },
+ "parte": "g6",
+ "metas": {
+  "G-6": {
+   "niveis": {
+    "crianca": {
+     "fator": 3.6,
+     "taxa": 0,
+     "formas": {
+      "sereno": 0,
+      "arisco": 0
+     },
+     "passa": false
+    },
+    "adolescente": {
+     "fator": 3.6,
+     "taxa": 0.01,
+     "formas": {
+      "brigao": 0,
+      "guardiao": 0,
+      "cacador": 0.04,
+      "colosso": 0
+     },
+     "passa": false
+    },
+    "adulto": {
+     "fator": 3.6,
+     "taxa": 0.1788,
+     "formas": {
+      "duelista": 0.12,
+      "furioso": 0.3,
+      "espelho": 0,
+      "muralha": 0,
+      "sentinela": 0.19,
+      "emboscador": 0.26,
+      "vigia": 0.29,
+      "tita": 0.27
+     },
+     "passa": false
+    },
+    "mega": {
+     "fator": 3.6,
+     "taxa": 0.225,
+     "formas": {
+      "duelista": 0.18,
+      "furioso": 0.29,
+      "espelho": 0.07,
+      "muralha": 0.06,
+      "sentinela": 0.26,
+      "emboscador": 0.28,
+      "vigia": 0.36,
+      "tita": 0.3
+     },
+     "passa": false
+    }
+   },
+   "passa": false
+  }
+ },
+ "custo_s": 1.7343
+}
