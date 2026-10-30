@@ -270,8 +270,88 @@ v14, calibrado nesta rodada. A base (o disparo e o pesado de `CV` e do perfil) n
 ### A decisão (DE-9)
 
 - **O Matheus seguiu a recomendação** (2026-10-30; o plano a registra como DE-9): o `RELOGIO_V14` liga o disparo a **6×**, PROPOSTO.
-- **O T-1 fica reprovado e registrado como está** (34,8 s / 32,9 s; `disparo/conferencia_d6/relogio_calibracao.json`). A faixa da DE-7
-  não muda, e a regra da seção 5 do plano não se aplica a este número, por decisão dele.
+- **O T-1 fica reprovado e registrado como está** (34,8 s / 32,9 s; `disparo/conferencia_d6/relogio_calibracao.json`). É uma **exceção
+  à DE-7**, aceita pelo Matheus no chat da coordenação: a faixa de 40 a 60 s continua a meta do T-1, e a regra da seção 5 do plano não se
+  aplica a este número.
 - **As metas do candidato passam a ser as da coluna "com 6×"** da tabela acima, medidas com o mesmo relógio (`disparo/conferencia_d6/`,
   o commit `24bf93a`, o mesmo código de hoje com `--disparo 6`). A fase 4 parte deste candidato.
 - **As bancadas** agora leem o 6× do `RELOGIO_V14`; os artefatos das fases 1 a 3 com disparo 1 se reproduzem com `--disparo 1`.
+
+## Fase 4 — a progressão, o fim de jogo e os itens (G-1 a G-6, I-1 a I-5; o P-4 pelos rivais)
+
+Worker: Claude Code, Opus 5.5, worktree `v2-combate-tr`, 2026-10-30. Em cima do candidato das fases 1 a 3, com as duas decisões do Matheus
+de 2026-10-30 (no chat da coordenação; o plano as registra):
+- **a DE-9:** o disparo a 6× no `RELOGIO_V14`, com a exceção à DE-7;
+- **a DE-10:** a regra de reserva (a última da lista de partida) fica fixa no fim e não entra na reordenação pela nota
+  (`GambitsPet.reservaNoFim`), só no candidato v14. Também na lista sem o dono (o Lago e o Palácio), e os chips de regra entram antes dela.
+  Os pets v13 não mudam: o gabarito das vidas v13 confere igual.
+
+### A bancada
+
+- **`web/app/scripts/equilibrio_tr/fase4_progressao.ts`**, uma parte por meta (g1 a g6, i2 a i5; o I-1 sai do g1).
+  - **Os pets:** o pet típico de cada forma do estágio, nas 4 espécies, com a lista candidata da forma e a escala da campanha (`CESC_V9`).
+  - **Os rivais de forma canônica** (os Megas da Liga, das instalações e da Fábrica, os rivais do Salão) lutam com a lista candidata da
+    forma deles. Os líderes e os desafiantes lutam com a lista de hoje.
+  - **O limite** fica com o desafiado (o líder, o NPC ou o rival).
+- **As sementes:** 100 por confronto (5 bases × 20), só as de calibração.
+- **O P-4** segue na bancada da fase 3, com o fator do rival sugerido (`--fator-rival`).
+- **Os fatores candidatos** são `FATORES_V14` (`combate_tr/constantes_tr.ts`, PROPOSTOS). As tabelas de hoje não mudam, e o teste
+  `listas_v14` confere.
+
+### Os ajustes (só as sementes de calibração; no máximo 3 rodadas e 4 processos)
+
+- **Rodada 1, os líderes, os desafiantes e o Salão** (`fase4/grade1/`): cada alavanca de 0,5 a 4,0, de 0,1 em 0,1.
+  - **A regra de escolha:** um fator só muda quando a meta dele não passa hoje e algum valor a faz passar; entre os que passam, o de maior
+    folga. Onde nada passa, o fator fica.
+  - **O que mudou:**
+    - a Torre, 1,5 → 1,8;
+    - o Tortomon, 1,53 → 1,4: é também o rival do P-4 do Champion, então a DE-4 entra aqui. A grade do P-4 está em `fase4/grade1/p4/`;
+    - o Salão do Rookie, 1,15 → 1,2;
+    - o Salão do Champion, 1 → 1,6.
+- **Rodadas 1 e 2, a Liga** (`fase4/liga/`, `busca_liga_f4.py`): busca por coordenadas, líder a líder, de 0,1 a 2,5.
+  - **A ordem, registrada antes de rodar:** mais formas na faixa; depois a menor falta até a faixa; depois a menor mudança.
+  - **O resultado:** a Campina vai de 0,4 a 0,2 e a Torre de 0,3 a 0,8. A segunda passada não muda nada.
+- **Rodada 1, a carta de Fôlego** (`fase4/grade1/cartas/`), de 20 a 80 de guts: o efeito satura em 0,025 com os fatores de hoje. Ela
+  fica em 20.
+
+### As metas do candidato (calibração; `fase4/depois/`; o antes com os fatores de hoje está em `fase4/antes/`)
+
+| # | meta | antes (fatores de hoje) | depois (`FATORES_V14`) | passa? |
+|---|---|---|---|---|
+| G-1 | os líderes: sem treino ≤ 0,05; com o típico ≥ 0,80; a pior forma ≥ 0,50 | passa só a Campina | passam a Campina e a Torre (sem 0,04; com 0,885). Ficam fora a Floresta (com 0,535; o guardião 0,06), a Cidadela (com 0,74; a sentinela 0,20), o Lago (a sentinela 0,35) e a Espiral (sem 0,069; a sentinela 0,48) | **não fechou** |
+| G-2 | os desafiantes: sem ≤ 0,30; com ≥ 0,80; a pior ≥ 0,50 | o Tortomon com 0,74 | os 4 passam (o Tortomon: sem 0,28, com 0,88) | sim |
+| G-3 | a Liga: toda forma com título entre 0,25 e 0,85 | a sentinela 0,11, o emboscador 0,06, o duelista 0,96, o vigia 0,88 | de 0,36 (emboscador) a 0,85 (vigia) | sim |
+| G-4 | a Torre e o Palácio: a melhor forma vence a 1ª luta ≥ 0,70, a pior ≥ 0,40 | 1,00 e 0,81 | 1,00 e 0,81 | sim |
+| G-5 | a Fábrica: uma série com o melhor alugado em ≥ 0,25 | 0,40 | 0,40 | sim |
+| G-6 | o Salão: cada nível entre 0,70 e 0,95 | o Rookie 0,965, o Champion 0,98 | 0,895; 0,8175; 0,8775; 0,8975 | sim |
+| I-1 | sem treino, com os melhores itens, cada líder ≤ 0,05 | 0,0825 (a Torre) | 0,069 (a Espiral) | **não fechou** |
+| I-2 | P-1 com os melhores itens | passa (Champion × Ultimate 0,055) | passa | sim |
+| I-3 | com o melhor item, a força de cada forma ≤ 0,60 | a tita 0,745, o furioso 0,624 | igual (os fatores não entram na matriz) | **não fechou** |
+| I-4 | cada carta muda a taxa contra o líder do nível em ≥ 0,03 | o Fôlego 0,023, a Foco 0,008 | o Fôlego 0,032, a Cura 0,064, a Foco 0,013 | **não fechou** (a Foco) |
+| I-5 | cada chip de regra dispara em ≥ 1 de 2 lutas, sem estar coberto | de 0,005 a 0,11 | igual | **não fechou** |
+| P-4 | ≥ 80% dos pets chegam a 0,8 | Champion 0,64 (com a DE-10); Ultimate 0,94 | Champion 0,875; Ultimate 0,94 | sim |
+
+**A reconferência das metas T, F e P** com a DE-9, a DE-10 e os fatores (`fase4/depois/`):
+- **T e F saem iguais aos de `disparo/conferencia_d6/`**: os bots não aprendem e não têm fator. Ficam:
+  - **T-1 reprovado** (34,8 s / 32,9 s; a exceção da DE-9), T-2 não fecha (o pior par 0,40), e T-3, T-4 e T-5 passam;
+  - **F-1 não fecha** (fora: espelho, muralha, emboscador e tita), nem F-2 (0,34), F-4 (o caçador do Champion 0,68), F-5, F-6 e F-7;
+  - F-3 passa.
+- **P-1 e P-2 passam** (P-1 sai igual).
+- **P-3 não fecha:** Champion 0,485 e Ultimate 0,458.
+  - **Com a DE-10 sozinha** (`fase4/conferencia_de10/`), o Ultimate sobe de 0,39 para 0,458. O Champion cai de 0,573 para 0,515, e a
+    0,485 com o Tortomon a 1,4.
+  - **Na lista aprendida do espelho e da muralha**, a lista quase não muda (nenhuma troca), e a aprendida perde da semente (0,065 e 0,04).
+    A causa é a ordem nova pela nota, que tira da frente as regras que ganhavam. Não há alavanca de número para isso nesta fase.
+- **P-4 passa.**
+
+### O que não fechou e por quê
+
+- **G-1 (4 líderes) e I-1:** o fator não chega lá. Ele sobe e desce o líder para todas as formas juntas, e o que falta é a forma de longe
+  (a sentinela) ou o guardião contra o líder. Descer o fator até a pior forma chegar a 0,5 leva o pet sem treino acima de 0,05. A
+  alavanca seria a lista do líder (`GAMBITS_ARENA`), que fica fora das 3 rodadas desta fase.
+- **I-3:** a tita já passa de 0,60 sem item (0,74; é o F-1). Os itens somam até 0,03.
+- **I-4:** a Foco não tem número para ajustar (o pet não se distrai), e o efeito dela é 0,013.
+- **I-5:** o chip de regra entra no fim da lista (antes da reserva, pela DE-10), e a primeira regra que vale decide. Ele quase nunca é a
+  primeira. Mudar a ordem é o que a DE-3 recusou, então é uma decisão do Matheus.
+- **A conferência única** (a fase 5) roda nas sementes de conferência, depois desta fase.
+
