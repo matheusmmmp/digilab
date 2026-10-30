@@ -8,18 +8,14 @@
    comida e sem a oclusao; o pet fica parado no meio da sala (so balanca quando brinca ou explora). Nada aqui decide o jogo: so desenha o
    que o motor ja diz (a forma, o que ele faz, o ovo). Este modulo e o unico do app que importa o three, e entra por import dinamico.
 
-   Nos pets v12 (o mundo fisico; docs/TAREFA_V2_MVP_MUNDO_PRODUTO.md, etapa 2), o MODO MUNDO: no lugar da sala, o chao do mapa do motor
-   (as regioes do layout, o ninho e o comedouro), a racao e a bola nas posicoes do Motor.mundo, e o pet na dele, interpolado
-   (vistaMundo.ts). A camera mostra uma janela de 16 x 12 celulas em volta do pet (o mesmo enquadramento da sala) e o segue; a camera e a
-   interpolacao ficam fora do log, e a vista so le o motor. A tela passa do ponteiro ao mapa por CENA.mundo (o soltar da racao). Sem o
-   mundo (os pets v1-v11), a sala de sempre, igual. */
+   Nos pets v12 (o mundo fisico), o MODO MUNDO e a ilha 3D no estilo Animal Crossing (docs/TAREFA_V3_HABITAT_ILHA_3D.md, H2):
+   iniciarCena3D a monta (ilha/vista.ts) no lugar da sala, com o mesmo contrato CENA. Sem o mundo (os pets v1-v11), a sala de sempre,
+   igual (H-2). */
 import * as THREE from "three";
-import { OVO, chaveSprite, corDominante, type Mundo } from "../../../motor/index.ts";
-import { atlasAtual, desenharSprite, dimSprite, quadroAgora } from "../../atlas.ts";
-import { S, gradeDe, paleta } from "../../grades.ts";
 import { jogoAtual } from "../../jogo.ts";
 import { CENA } from "./cenaEstado.ts";
-import { Seguidor, dentroDoMapa, janelaEm, ninhoDe } from "./vistaMundo.ts";
+import { fonteDoPet } from "./fontePet.ts";
+import { iniciarIlha } from "./ilha/vista.ts";
 
 /* a sala do arranjo V (poc/mundo3d/config.ts e mundo.ts): 16 x 12 celulas de 16 subunidades, paredes de 8, dois obstaculos */
 const SUB = 16, LARGURA = 16 * SUB, ALTURA = 12 * SUB, ESPESSURA = 8;
@@ -35,12 +31,6 @@ const PET: [number, number] = [LARGURA / 2, ALTURA * 0.68], R_PLATAFORMA = 34, R
 const COR_FUNDO = 0xeef4fc, COR_CHAO = 0xd6e3f4, COR_SOMBRA = 0xa9c1e2, COR_PLATAFORMA = 0x8fbcef, COR_JANELA = 0x9fd0ff, COR_CAIXILHO = 0xffffff;
 const CORES_PAREDE = [0xffffff, 0xeef4fc, 0xc9d9ef], CORES_ALTO = [0xffffff, 0x8fb2e0, 0x7ca2d6], CORES_BAIXO = [0xf0f6ff, 0xa9c4e8, 0x95b5e0];
 
-/* o modo mundo: as cores do chao por regiao do layout (a casa com o chao da sala), o ninho, o comedouro, a racao (madura e podre) e a bola.
-   So vista; os tamanhos sao do desenho, em subunidades */
-const COR_REGIAO: Readonly<Record<string, number>> = { casa: COR_CHAO, jardim: 0xcfe7c2, campo: 0xe3f0d2, mata: 0xb9d9a4 };
-const COR_NINHO = 0xc9d6ec, COR_COMEDOURO = [0xffffff, 0x8fa4c8, 0x7f96bd], COR_RACAO = 0x9b6a3c, COR_RACAO_TOPO = 0xc08a55, COR_PODRE = 0x6b6b3a;
-const COR_BOLA = 0x378add, R_BOLA = 6;
-
 interface Solido { x0: number; y0: number; x1: number; y1: number; tipo: "parede" | "alto" | "baixo" }
 const SOLIDOS: Solido[] = [
   { x0: -ESPESSURA, y0: -ESPESSURA, x1: LARGURA + ESPESSURA, y1: 0, tipo: "parede" },
@@ -50,28 +40,6 @@ const SOLIDOS: Solido[] = [
   { x0: 5 * SUB, y0: 3 * SUB, x1: 7 * SUB, y1: 7 * SUB, tipo: "alto" },
   { x0: 10 * SUB, y0: 6 * SUB, x1: 12 * SUB, y1: 8 * SUB, tipo: "baixo" },
 ];
-
-/** a textura do pet de agora: o quadro do atlas (local) ou a grade de reserva; a chave diz quando trocar */
-function fonteDoPet(quadro: number): { chave: string; canvas: HTMLCanvasElement } {
-  const { motor: m, nascendo } = jogoAtual(), a = atlasAtual(), c = document.createElement("canvas"), g = c.getContext("2d");
-  if (!g) throw new Error("canvas 2d indisponível");
-  if (a.tipo === "ok") {
-    const nome = nascendo > 0 ? OVO[m.especie] : chaveSprite(m.forma), [w, h] = dimSprite(a.dados, nome);
-    const iq = nascendo > 0 ? 0 : quadroAgora(a, nome, m.acao === "dormir");
-    /* o quadro do atlas na caixa fixa do idle, em 1x, com 1 px de folga para o contorno da forma sombria */
-    c.width = w + 2; c.height = h + 2;
-    desenharSprite(g, a, nome, 1, 1, 1, iq, { sombria: m.sombria });
-    return { chave: `${nome}:${iq}:${m.sombria ? 1 : 0}`, canvas: c };
-  }
-  const grade = nascendo > 0 ? S.ovo : S[gradeDe(m.estagioAtual)], pal = paleta(corDominante(m.tracos));
-  const fechado = m.acao === "dormir" || quadro % 17 === 0;
-  c.width = Math.max(...grade.map(l => l.length)); c.height = grade.length;
-  grade.forEach((l, y) => [...l].forEach((ch, x) => {
-    if (ch === ".") return;
-    g.fillStyle = pal[fechado && ch === "w" ? "b" : ch] || "#FF00FF"; g.fillRect(x, y, 1, 1);
-  }));
-  return { chave: `reserva:${nascendo > 0 ? "ovo" : m.estagioAtual}:${fechado ? 1 : 0}`, canvas: c };
-}
 
 class VistaPet {
   readonly renderer: THREE.WebGLRenderer;
@@ -84,8 +52,6 @@ class VistaPet {
   private readonly sprite: THREE.Sprite;
   private readonly sombra: THREE.Mesh;
   private readonly janela: THREE.Group | null = null;
-  /* o modo mundo (pets v12): a racao e a bola que estao no chao, e a posicao desenhada do pet */
-  private readonly mundo: { comidas: Map<number, THREE.Group>; bola: THREE.Mesh; seguidor: Seguidor; ultimo: number } | null = null;
   readonly raio = new THREE.Raycaster();
   private chave = "";
   private texels: [number, number] = [1, 1];
@@ -97,7 +63,7 @@ class VistaPet {
 
   readonly canvas: HTMLCanvasElement;
 
-  constructor(canvas: HTMLCanvasElement, mundo: Mundo | null) {
+  constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
     THREE.ColorManagement.enabled = false;
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false });
@@ -110,8 +76,7 @@ class VistaPet {
     this.camera.up.copy(this.cima);
     this.camera.lookAt(this.alvo);
 
-    if (mundo) this.mundo = this.montarMundo(mundo);
-    else {
+    {
       const chao = new THREE.Mesh(new THREE.PlaneGeometry(LARGURA, ALTURA), new THREE.MeshBasicMaterial({ color: COR_CHAO }));
       chao.rotation.x = -Math.PI / 2; chao.position.set(LARGURA / 2, 0, ALTURA / 2);
       this.cena.add(chao);
@@ -135,7 +100,7 @@ class VistaPet {
       this.janela = janela;
     }
     /* a plataforma e a sombra no chao, sob o pet */
-    if (!mundo) {
+    {
       const plataforma = new THREE.Mesh(new THREE.RingGeometry(R_PLATAFORMA - 7, R_PLATAFORMA, 40), new THREE.MeshBasicMaterial({ color: COR_PLATAFORMA }));
       plataforma.rotation.x = -Math.PI / 2; plataforma.position.set(PET[0], 0.15, PET[1]);
       this.cena.add(plataforma);
@@ -148,77 +113,6 @@ class VistaPet {
     this.sprite.renderOrder = 10;
     this.cena.add(this.sprite);
   }
-
-  /** o modo mundo: o chao do mapa inteiro (uma faixa por regiao do layout), a borda baixa, o ninho e o comedouro; a racao e a bola entram
-      e saem a cada quadro (sincronizarMundo) */
-  private montarMundo(mu: Mundo): NonNullable<VistaPet["mundo"]> {
-    const cm = mu.cm, W = cm.celulas_x * cm.sub, H = cm.celulas_y * cm.sub, caixa = (w: number, h: number, d: number, cores: readonly number[]) =>
-      new THREE.Mesh(new THREE.BoxGeometry(w, h, d), [cores[2], cores[2], cores[0], cores[2], cores[1], cores[2]].map(color => new THREE.MeshBasicMaterial({ color })));
-    for (const [nome, c0, c1] of cm.layout.regioes) {
-      const cor = COR_REGIAO[nome];
-      if (cor === undefined) throw new Error("regiao do mapa sem cor na cena: " + nome);
-      const w = (c1 - c0 + 1) * cm.sub, chao = new THREE.Mesh(new THREE.PlaneGeometry(w, H), new THREE.MeshBasicMaterial({ color: cor }));
-      chao.rotation.x = -Math.PI / 2; chao.position.set(c0 * cm.sub + w / 2, 0, H / 2);
-      this.cena.add(chao);
-    }
-    for (const [x0, y0, x1, y1] of [[-ESPESSURA, -ESPESSURA, W + ESPESSURA, 0], [-ESPESSURA, H, W + ESPESSURA, H + ESPESSURA], [-ESPESSURA, 0, 0, H], [W, 0, W + ESPESSURA, H]]) {
-      const b = caixa(x1 - x0, ALTURA_FRENTE, y1 - y0, CORES_PAREDE);
-      b.position.set((x0 + x1) / 2, ALTURA_FRENTE / 2, (y0 + y1) / 2);
-      this.cena.add(b);
-    }
-    const [nx, ny] = ninhoDe(cm), ninho = new THREE.Mesh(new THREE.CircleGeometry(20, 24), new THREE.MeshBasicMaterial({ color: COR_NINHO }));
-    ninho.rotation.x = -Math.PI / 2; ninho.position.set(nx, 0.1, ny);
-    this.cena.add(ninho);
-    const comedouro = caixa(18, 6, 12, COR_COMEDOURO);
-    comedouro.position.set(mu.comedouro[0], 3, mu.comedouro[1]);
-    this.cena.add(comedouro);
-    const bola = new THREE.Mesh(new THREE.SphereGeometry(R_BOLA, 16, 12), new THREE.MeshBasicMaterial({ color: COR_BOLA }));
-    this.cena.add(bola);
-    return { comidas: new Map(), bola, seguidor: new Seguidor(), ultimo: performance.now() };
-  }
-  /** a racao e a bola onde o motor diz: entra a racao nova, sai a comida, muda de cor a podre */
-  private sincronizarMundo(mu: Mundo, tick: number): void {
-    const v = this.mundo!, vistas = new Set<number>();
-    for (const c of mu.comidas.values()) {
-      const sit = mu.situacao(c, tick);
-      if (sit === null) continue;
-      vistas.add(c.id);
-      let g = v.comidas.get(c.id);
-      if (!g) {
-        g = new THREE.Group();
-        const base = new THREE.Mesh(new THREE.BoxGeometry(10, 4, 10), new THREE.MeshBasicMaterial({ color: COR_RACAO }));
-        base.position.y = 2;
-        const topo = new THREE.Mesh(new THREE.BoxGeometry(6, 3, 6), new THREE.MeshBasicMaterial({ color: COR_RACAO_TOPO }));
-        topo.position.y = 5.5;
-        g.add(base, topo);
-        g.position.set(c.x, 0, c.y);
-        this.cena.add(g);
-        v.comidas.set(c.id, g);
-      }
-      const cor = sit === "podre" ? COR_PODRE : COR_RACAO;
-      ((g.children[0] as THREE.Mesh).material as THREE.MeshBasicMaterial).color.setHex(cor);
-    }
-    for (const [id, g] of v.comidas) if (!vistas.has(id)) { this.cena.remove(g); v.comidas.delete(id); }
-    const [bx, by] = mu.bolaEm(tick);
-    v.bola.position.set(bx, R_BOLA, by);
-  }
-  /** o modo mundo: o ponto do cliente (px) no chao, em subunidades inteiras do mapa (null fora do mapa ou fora do chao) */
-  paraMundo(cx: number, cy: number, mu: Mundo): [number, number] | null {
-    const r = this.canvas.getBoundingClientRect();
-    if (!(r.width > 0 && r.height > 0)) return null;
-    this.raio.setFromCamera(new THREE.Vector2(((cx - r.left) / r.width) * 2 - 1, 1 - ((cy - r.top) / r.height) * 2), this.camera);
-    const p = this.raio.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0, 1, 0), 0), new THREE.Vector3());
-    if (!p) return null;
-    const x = Math.round(p.x), y = Math.round(p.z);
-    return dentroDoMapa(mu.cm, x, y) ? [x, y] : null;
-  }
-  /** o modo mundo: o ponto do mapa (subunidades) no cliente (px) */
-  paraTela(x: number, y: number): [number, number] {
-    const r = this.canvas.getBoundingClientRect(), v = new THREE.Vector3(x, 0, y).project(this.camera);
-    return [r.left + ((v.x + 1) / 2) * r.width, r.top + ((1 - v.y) / 2) * r.height];
-  }
-  /** o modo mundo: onde o pet esta desenhado (subunidades) */
-  get petDesenhado(): [number, number] | null { return this.mundo?.seguidor.pos ?? null; }
 
   /** ajusta o canvas a caixa (px de CSS): a sala ate um pouco mais larga que a tela (as paredes dos lados cortam), o chao em ate 68% (retrato) ou 78% (paisagem) da
    *  altura e encostado embaixo, a parede do fundo no resto; o pet na maior escala inteira que cabe em 42% da altura e 60% da largura */
@@ -260,32 +154,18 @@ class VistaPet {
       t.magFilter = THREE.NearestFilter; t.minFilter = THREE.NearestFilter; t.generateMipmaps = false; t.colorSpace = THREE.NoColorSpace;
       mat.map = t; mat.needsUpdate = true;
       this.texels = [f.canvas.width, f.canvas.height];
-      /* na sala, o pet em ate 42% da altura e 60% da largura; no mapa (o modo mundo), em ate 20% e 30%, para caber a racao e o comedouro em
-         volta dele (a janela tem 16 celulas de largura) */
-      const [fa, fl] = this.mundo ? [0.2, 0.3] : [0.42, 0.6];
+      /* na sala, o pet em ate 42% da altura e 60% da largura */
+      const [fa, fl] = [0.42, 0.6];
       this.pxPorTexel = Math.max(1, Math.min(12, Math.floor(Math.min(this.alturaPx * fa / this.texels[1], this.larguraPx * fl / this.texels[0]))));
       this.chave = f.chave;
     }
     const P = this.P, w = this.texels[0] * this.pxPorTexel, h = this.texels[1] * this.pxPorTexel;
-    /* o modo mundo: o pet onde o motor diz (interpolado), a camera na janela em volta dele, a racao e a bola no chao. Na sala, so balanca:
-       o lugar do pet e fixo (a cena nao tem fisica que decida nada) */
-    let lugar: readonly [number, number] = PET;
-    const mu = m.mundo;
-    if (this.mundo && mu) {
-      const agora = performance.now();
-      lugar = this.mundo.seguidor.seguir(mu.pet, agora - this.mundo.ultimo, mu.cm);
-      this.mundo.ultimo = agora;
-      const jan = janelaEm(mu.cm, lugar);
-      this.alvo.set(jan.x0 + jan.w / 2, 0, jan.y0 + jan.h / 2);
-      this.camera.position.copy(this.alvo).addScaledVector(this.frente, -1500);
-      this.camera.lookAt(this.alvo);
-      this.camera.updateMatrixWorld();
-      this.sincronizarMundo(mu, m.e.tick);
-    }
+    /* na sala, so balanca: o lugar do pet e fixo (a cena nao tem fisica que decida nada) */
+    const lugar: readonly [number, number] = PET;
     let px = lugar[0];
     if (nascendo > 0) px += nascendo % 2 ? 1 : -1;
-    else if (!this.mundo && m.acao === "explorar") px += Math.sin(quadro / 3) * 28;
-    else if (!this.mundo && m.acao === "brincar") px += Math.sin(quadro / 2) * 10;
+    else if (m.acao === "explorar") px += Math.sin(quadro / 3) * 28;
+    else if (m.acao === "brincar") px += Math.sin(quadro / 2) * 10;
     const ancora = new THREE.Vector3(px, 0, lugar[1]), rel = ancora.clone().sub(this.alvo);
     const sx = rel.dot(this.direita) * P, sy = rel.dot(this.cima) * P - this.desloc * P, prof = rel.dot(this.frente);
     const esquerda = Math.round(sx - w / 2), base = Math.round(sy);
@@ -307,7 +187,10 @@ const p95 = (v: number[]): number => { const s = [...v].sort((a, b) => a - b); r
 
 /** liga a cena num canvas; devolve a funcao que desliga. Falha alto (a tela cai no cenario de reserva) se o WebGL nao subir */
 export function iniciarCena3D(canvas: HTMLCanvasElement, aoPerder: () => void): () => void {
-  const mundo = jogoAtual().motor.mundo, vista = new VistaPet(canvas, mundo), caixa = canvas.parentElement;
+  /* os pets v12: a ilha (ilha/vista.ts), com o mesmo contrato CENA */
+  const mundo = jogoAtual().motor.mundo;
+  if (mundo) return iniciarIlha(canvas, mundo, aoPerder);
+  const vista = new VistaPet(canvas), caixa = canvas.parentElement;
   if (!caixa) throw new Error("cena 3D sem caixa");
   const razao = () => (devicePixelRatio || 1);
   const perdeu = (ev: Event) => { ev.preventDefault(); aoPerder(); };
@@ -343,12 +226,6 @@ export function iniciarCena3D(canvas: HTMLCanvasElement, aoPerder: () => void): 
     requestAnimationFrame(laco);
   });
   CENA.modo3d = true;
-  /* o modo mundo: a tela passa do ponteiro ao mapa e do mapa a tela pela vista (o soltar da racao, os testes da cena) */
-  if (mundo) CENA.mundo = {
-    paraMundo: (cx, cy) => { const mu = jogoAtual().motor.mundo; return mu ? vista.paraMundo(cx, cy, mu) : null; },
-    paraTela: (x, y) => vista.paraTela(x, y),
-    get pet() { const p = vista.petDesenhado; if (!p) throw new Error("a cena do mundo ainda nao desenhou o pet"); return p; },
-  };
   return () => {
     clearInterval(t); obs.disconnect(); canvas.removeEventListener("webglcontextlost", perdeu);
     CENA.modo3d = false; CENA.ret = null; CENA.medir = null; CENA.mundo = null;
