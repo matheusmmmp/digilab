@@ -595,3 +595,42 @@ nível a 0,03 ou mais.
 | Cura | 0,0523 | — | sim |
 | Foco | 0,0138 | 0,0277 (ritmo 14) | **não fechou** |
 
+## Rodada 2, fase R2-4b — o chip antes da regra que o cobre (I-5; DR2-1)
+
+Worker: Claude Code, Opus 5.5, worktree `v2-combate-tr`, 2026-10-30.
+- **O que rodou:** só as sementes de calibração da rodada 2 (`72101…72505`), em no máximo 4 processos. Foi uma medida só, porque a
+  mudança não tem número para calibrar.
+- **Os artefatos:** `web/app/scripts/medicoes/equilibrio_tr/r2_4b/depois_resumo_metas.txt`; os JSON completos estão em
+  `r2_4b/completo.tar.gz`.
+- **Antes, uma decisão do Matheus** (2026-10-30, depois da R2-4): o I-4 da Foco e do Fôlego fica para depois da conferência. O plano
+  registra.
+
+**A mudança (DR2-1, que reverte a DE-3 só no candidato):**
+- **O chip de regra entra logo antes da primeira regra da lista que o cobre.** "Cobre" é o `regraQueCobre` da DE-3: a mesma regra, ou uma
+  regra só com condições do chip.
+- **Onde nenhuma regra o cobre,** ele fica onde fica hoje: no fim, antes da reserva (DE-10).
+- **Onde fica:** `gambits_pet.posicaoDoChipV14`, com a chave `GambitsPet.chipAntes` e `CHIP_ANTES_V14`. A bancada usa
+  `--chip-no-fim` para refazer o antes.
+- **Nos pets v13 nada muda:** as vidas v13 conferem iguais.
+- **O I-5 passa a medir também os pets em que o chip estava coberto.** Com a DR2-1, o chip passa na frente da regra que o cobria.
+
+**O resultado** (contra a R2-4; só o I-2, o I-3 e o I-5 mudam, e as outras 12 medidas saem iguais):
+
+| chip | R2-4 | R2-4b | os confrontos |
+|---|---|---|---|
+| Recuo | 0,0975 | 0,259 | o guardião × o colosso 0,99, o furioso × o tita 0,52; as de longe e o vigia × o tita, 0 |
+| Oportunista | 0 | 0,25 | o guardião × a Torre 0,88 (era coberto); o colosso, 0 |
+| Perseguidor | 0,0125 | 0,354 | o espelho e a muralha × as de longe, de 0,66 a 0,74 (eram cobertos); o vigia e o tita, 0,01 a 0,02 |
+| Aparo | 0,005 | 0,005 | nenhum pet tem regra que o cubra, e ele segue no fim |
+
+| # | R2-4 | R2-4b | passa? |
+|---|---|---|---|
+| I-5 | de 0 a 0,0975 | de 0,005 a 0,354 | **não fechou** |
+| I-2 | passa | passa | sim |
+| I-3 | 0,7254 | 0,7254 (a tita, sem item) | **não fechou** |
+| as protegidas | passam | passam | sim |
+
+**Por que o I-5 não fecha:** a DR2-1 resolve o chip coberto, que agora dispara em quase toda luta. O chip que nenhuma regra cobre (o Aparo,
+e o Perseguidor no vigia e no tita) continua no fim, e a primeira regra que vale decide antes dele. Fechar o I-5 pediria pôr esse chip na
+frente também, o que é mais do que a DR2-1 decidiu.
+

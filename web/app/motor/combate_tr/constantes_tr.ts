@@ -115,3 +115,7 @@ export const LISTAS_LIDER_V14: Readonly<Record<string, ListaGambits>> = {
 /** as cartas candidatas do candidato v14 (DR2-4; docs/PLANO_EQUILIBRIO_COMBATE_TR_R2.md, R2-4): o efeito por cima do de hoje (itens.ts), pela
     id da carta. Vazio = as de hoje. Ainda nao e de nenhuma versao de pet: so a bancada as usa */
 export const CARTAS_V14: Readonly<Record<string, import("../combate.ts").EfeitoCarta>> = {};
+
+/** o chip de regra do candidato v14 entra antes da regra da lista que o cobre (DR2-1; docs/PLANO_EQUILIBRIO_COMBATE_TR_R2.md, R2-4b;
+    GambitsPet.chipAntes, gambits_pet.posicaoDoChipV14). Ainda nao e de nenhuma versao de pet: so a bancada o usa */
+export const CHIP_ANTES_V14 = true;
