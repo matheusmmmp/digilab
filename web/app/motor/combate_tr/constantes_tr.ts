@@ -111,3 +111,7 @@ export const LISTAS_LIDER_V14: Readonly<Record<string, ListaGambits>> = {
   floresta: validarLista({ regras: [Rg([T10, D2_], "avancar"), Rg([T10, D1_], "avancar"), Rg([T10, GA20], "golpe_rapido"),
     Rg([Cd("oponente_preparando"), D0_], "esquivar"), Rg(GA20, "disparo")], final: "carregar" }),
 };
+
+/** as cartas candidatas do candidato v14 (DR2-4; docs/PLANO_EQUILIBRIO_COMBATE_TR_R2.md, R2-4): o efeito por cima do de hoje (itens.ts), pela
+    id da carta. Vazio = as de hoje. Ainda nao e de nenhuma versao de pet: so a bancada as usa */
+export const CARTAS_V14: Readonly<Record<string, import("../combate.ts").EfeitoCarta>> = {};

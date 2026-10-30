@@ -22,14 +22,14 @@
    uso (em web/app): npx tsx scripts/equilibrio_tr/fase4_progressao.ts --faixa calibracao --parte g1|g2|g3|g4|g5|g6|i2|i3|i4|i5
      [--fatores '{"lider":{"torre":1.2},"npc":{"npc_tier2_sentinela":1.3},"liga":{"lago":1.2},"instalacao":1,"fabrica":.6,"salao":{"mega":1}}']
      [--cartas '{"carta_folego":{"guts":40}}'] --saida <arquivo.json>
-   --cartas: o efeito candidato de uma carta por cima do de hoje (o valor da carta, a alavanca do I-4; so a bancada)
+   --cartas: o efeito candidato de uma carta por cima do candidato (CARTAS_V14) e do de hoje (o valor da carta, a alavanca do I-4; so a bancada)
    --variante-lider <nome>: as listas candidatas de lideres (variantes_lideres_r2.ts, a alavanca da R2-3) por cima das listas do candidato */
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { execSync } from "node:child_process";
 import {
   ADOL_V21, ARENAS, CESC_V9, CIT, CRIANCA_V21, CTR, CURA_LIGA_V9, CV, CV21E_TR, ESPECIES, ESTAGIOS_SALAO, FATOR_INSTALACAO, FATOR_LIDER_V9,
-  FATOR_LIGA_V9, FATOR_RIVAL_FABRICA_V9, FATOR_SALAO_V9, FATORES_V14, FORMAS_AD, LISTAS_LIDER_V14, ITENS, LIGA, LINHAS, LINHA_DA_FORMA, LISTAS_V14, LUGARES_V6, NPC, RELOGIO_V14,
+  FATOR_LIGA_V9, FATOR_RIVAL_FABRICA_V9, FATOR_SALAO_V9, CARTAS_V14, FATORES_V14, FORMAS_AD, LISTAS_LIDER_V14, ITENS, LIGA, LINHAS, LINHA_DA_FORMA, LISTAS_V14, LUGARES_V6, NPC, RELOGIO_V14,
   STATS, alugueisFabrica, arenaDaLuta, capacidadeLista, caraterCanonico, cartaDe, chaveRegra, chipServe, copiarGambits, formaRivalFabrica,
   formaRivalInstalacao, formaRivalSalao, gambitsAdulto, hashSemente, itensValem, jogarArena, jogarSerie, jogarTR, listaComChips, lutadorBot,
   lutadorLiga, perfilDe, pontosComChips, regraQueCobre, rivalInstalacao, rivalSalao,
@@ -68,7 +68,7 @@ const LISTA_LIDER: Record<string, ListaGambits> = { ...LISTAS_LIDER_V14, ...(var
 /* o efeito das cartas: o de hoje (itens.ts) ou o de --cartas por cima */
 const CARTAS_ARG = JSON.parse(arg("cartas") ?? "{}") as Record<string, Record<string, unknown>>;
 for (const k of Object.keys(CARTAS_ARG)) cartaDe(k);
-const efeitoCarta = (id: string) => ({ ...cartaDe(id).carta, ...CARTAS_ARG[id] });
+const efeitoCarta = (id: string) => ({ ...cartaDe(id).carta, ...CARTAS_V14[id], ...CARTAS_ARG[id] });
 const SEMENTES_POR_BASE = 20;
 const bases = [0, 1, 2, 3, 4].map(i => FAIXAS[faixa] + 101 * i);
 const sementes = bases.flatMap(b => Array.from({ length: SEMENTES_POR_BASE }, (_, k) => hashSemente("equilibrio-tr", b, k)));
