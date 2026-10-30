@@ -1,7 +1,8 @@
 # Plano — rodada de equilíbrio do combate em tempo real
 
 Status: **registrado antes da rodada; nenhum número foi ajustado.** Pedido do Matheus, 2026-10-30 (coordenação): "abrir o plano da
-rodada de equilíbrio do combate em tempo real". A calibração só roda depois que o Matheus aprovar este plano e decidir os itens da seção 7.
+rodada de equilíbrio do combate em tempo real". As decisões da seção 7 foram DECIDIDAS pelo Matheus em 2026-10-30, pela recomendação
+("após isso segue as recomendações"). A calibração roda depois do merge deste plano.
 Todo número aqui é PROPOSTO, com a fonte ao lado ou SEM FONTE. Só as metas da seção 2 contam como "equilibrado".
 
 **A base do método.** As duas rodadas anteriores:
@@ -124,8 +125,10 @@ Ultimate 36, Mega 40; `web/app/motor/constantes.ts`).
   (`experiments/bancada/faixas.py`);
 - **elas entram na `FAIXAS_RESERVADAS`** com a fonte ("equilíbrio do combate em tempo real: calibração" e "…: conferência"), num commit
   próprio, depois da aprovação do plano e antes da primeira luta. Neste PR elas **não** entram, porque a faixa nova é pedida ao
-  coordenador e só se reserva com o plano aprovado;
+  coordenador e só se reserva com o plano aprovado (DE-6, DECIDIDA: reservar);
 - as sementes 101…505 seguem só nos testes.
+
+**O paralelismo:** no máximo 4 processos ao mesmo tempo. A máquina fica instável sob carga (coordenação, 2026-10-30).
 
 **Os scripts e os artefatos:**
 - os scripts ficam em `web/app/scripts/equilibrio_tr/`, um por fase, rodados com `npx tsx`;
@@ -191,17 +194,20 @@ Em qualquer fase:
 - **os dados do Digimon UP** (os status, os golpes e os atributos do jogo): D-1, o resultado não depende deles;
 - **o DigiBrain modular e o cérebro A**, que não lutam.
 
-## 7. As decisões abertas (o Matheus resolve antes de rodar)
+## 7. As decisões (DECIDIDAS pelo Matheus em 2026-10-30, pela recomendação)
 
-| # | a decisão | a recomendação | o custo de errar |
+Nas palavras do Matheus, pela coordenação (2026-10-30): "após isso segue as recomendações". Cada decisão abaixo vale como a recomendação
+dela, e o custo de errar fica registrado.
+
+| # | a decisão | a recomendação (DECIDIDA pelo Matheus em 2026-10-30) | o custo de errar |
 |---|---|---|---|
-| **DE-1** | os números novos entram numa versão nova de pet (v14) ou mudam a v13? | **v14**, como a v9 foi "o combate equilibrado". Com o descarte com aviso, se ele quiser tirar a v13, ou com a v13 viva e o ramo por versão | v14 traz de volta um ramo por versão no motor, que o D-9 acabou de tirar. Mudar a v13 quebra a regra "uma versão por mecânica" e muda as vidas já jogadas (o gabarito v13 seria regravado) |
-| **DE-2** | a Cidadela fica com 3 lutas seguidas sem cura ou passa a 2? | **3**, até a fase 4 medir T-3 e G-1. Passar a 2 só se T-3 reprovar | com 3, a série pode passar de 4 min de tela; com 2, a Resistência perde peso e a medalha fica mais fácil (G-1 muda) |
-| **DE-3** | o chip coberto por uma regra do pet: avisar na tela de equipar ou mudar a ordem da lista? | **avisar**: a lista não muda, e o jogador escolhe outro chip | o aviso não muda nenhuma luta. Mudar a ordem (o chip antes da primeira regra com a mesma condição) muda as lutas de todo pet com chip e entra na DE-1 |
-| **DE-4** | se P-4 reprovar (a taxa de 0,8 não é alcançável com o treino típico): baixar o `CLE.limiarTaxa` ou ajustar os rivais do sparring? | **ajustar os rivais** (os fatores, na fase 4) e manter o 0,8, que é o critério da evolução desde a v4 | baixar o limiar muda a evolução de todo pet e o significado de "qualificado". Ajustar os rivais pode empurrar G-1 e G-2 |
-| **DE-5** | a meta de estágio: a de hoje (vizinho ≤ 0,10) ou a da arena do UP (o de cima vence ~0,70, dois acima ~0,85)? | **a de hoje** (P-1): "Champion nunca vence Mega" está decidido, e a progressão do DigiLab foi calibrada nela | com a do UP, um pet de baixo bem treinado vence às vezes, e a campanha e as medalhas mudam de ritmo |
-| **DE-6** | as faixas de sementes `68101…68505` (calibração) e `70101…70505` (conferência) | **reservar** as duas na `FAIXAS_RESERVADAS` num commit próprio, depois da aprovação | sem reservar, outra frente pode usar a mesma faixa, e a validação deixa de ser única |
-| **DE-7** | a duração alvo da luta (T-1: média de 40 a 60 s) | **manter**: ela cerca a medida de hoje e fica antes da morte súbita | uma luta mais longa pesa nas séries (Cidadela, Liga, Salão); uma mais curta reduz o efeito das regras aprendidas |
+| **DE-1** (DECIDIDA) | os números novos entram numa versão nova de pet (v14) ou mudam a v13? | **v14**, como a v9 foi "o combate equilibrado". Com o descarte com aviso, se ele quiser tirar a v13, ou com a v13 viva e o ramo por versão | v14 traz de volta um ramo por versão no motor, que o D-9 acabou de tirar. Mudar a v13 quebra a regra "uma versão por mecânica" e muda as vidas já jogadas (o gabarito v13 seria regravado) |
+| **DE-2** (DECIDIDA) | a Cidadela fica com 3 lutas seguidas sem cura ou passa a 2? | **3**, até a fase 4 medir T-3 e G-1. Passar a 2 só se T-3 reprovar | com 3, a série pode passar de 4 min de tela; com 2, a Resistência perde peso e a medalha fica mais fácil (G-1 muda) |
+| **DE-3** (DECIDIDA) | o chip coberto por uma regra do pet: avisar na tela de equipar ou mudar a ordem da lista? | **avisar**: a lista não muda, e o jogador escolhe outro chip | o aviso não muda nenhuma luta. Mudar a ordem (o chip antes da primeira regra com a mesma condição) muda as lutas de todo pet com chip e entra na DE-1 |
+| **DE-4** (DECIDIDA) | se P-4 reprovar (a taxa de 0,8 não é alcançável com o treino típico): baixar o `CLE.limiarTaxa` ou ajustar os rivais do sparring? | **ajustar os rivais** (os fatores, na fase 4) e manter o 0,8, que é o critério da evolução desde a v4 | baixar o limiar muda a evolução de todo pet e o significado de "qualificado". Ajustar os rivais pode empurrar G-1 e G-2 |
+| **DE-5** (DECIDIDA) | a meta de estágio: a de hoje (vizinho ≤ 0,10) ou a da arena do UP (o de cima vence ~0,70, dois acima ~0,85)? | **a de hoje** (P-1): "Champion nunca vence Mega" está decidido, e a progressão do DigiLab foi calibrada nela | com a do UP, um pet de baixo bem treinado vence às vezes, e a campanha e as medalhas mudam de ritmo |
+| **DE-6** (DECIDIDA) | as faixas de sementes `68101…68505` (calibração) e `70101…70505` (conferência) | **reservar** as duas na `FAIXAS_RESERVADAS` num commit próprio, depois da aprovação | sem reservar, outra frente pode usar a mesma faixa, e a validação deixa de ser única |
+| **DE-7** (DECIDIDA) | a duração alvo da luta (T-1: média de 40 a 60 s) | **manter**: ela cerca a medida de hoje e fica antes da morte súbita | uma luta mais longa pesa nas séries (Cidadela, Liga, Salão); uma mais curta reduz o efeito das regras aprendidas |
 
 ## 8. A entrega
 
