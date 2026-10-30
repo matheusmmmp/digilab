@@ -316,6 +316,13 @@ export const CHAMADO_BEBE: Record<Chamado, number> = { fome: 30, higiene: 60, ca
     de CAT.janelaChamado, os dois como hoje. O limiar e DECIDIDO (Matheus, 2026-10-29, ciente de que o bebe quase nao chama mais por
     fome; o efeito em test/efeito_chamado_fome.json) */
 export const CHAMADO_FOME_CORPO = { limiar: .45 };
+/** a chave `chamadosPeloCorpo` (EventoProduto; docs/TAREFA_V2_PRODUTO_CUIDADO.md, a opcao (C) do Matheus de 2026-10-30): os tres chamados
+    do bebe abrem pelo corpo, quando a variavel fica abaixo do limiar do bebe (a fome, a higiene e o humor, este no chamado de carinho), e
+    nao pelo relogio. Os limiares sao relativos a faixa do corpo do bebe, que sem cuidado vai de 0,80 a 0,50-0,65 na fome, de 1 a
+    0,76-0,88 na higiene, e fica entre 0,68 e 0,99 no humor: a chave nao muda o corpo. No bebe, o 0,7 da fome toma o lugar do 0,45 de
+    CHAMADO_FOME_CORPO. Um por intervalo de CHAMADO_BEBE no maximo, com a janela de CAT.janelaChamado, os dois como hoje. PROPOSTO,
+    SEM FONTE */
+export const CHAMADO_BEBE_CORPO: Record<Chamado, number> = { fome: .7, higiene: .9, carinho: .8 };
 export const ACAO_CHAMADO: Record<Chamado, readonly AcaoDono[]> = { fome: ["alimentar"], higiene: ["limpar"], carinho: ["acariciar", "brincar"] };
 export const FORMAS_AD: readonly FormaAdultaNormal[] = ["duelista", "furioso", "espelho", "muralha", "sentinela", "emboscador", "vigia", "tita"];
 export const LINHA_DA_FORMA = Object.fromEntries(LINHAS.flatMap(l => Object.keys(CAT.adulto[l].formas).map(f => [f, l]))) as Record<FormaAdultaNormal, Linha>;

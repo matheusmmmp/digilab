@@ -73,8 +73,10 @@ export type EventoFronteira = [tick: number, tipo: "f", fronteira: { campeao: tr
 export type EventoComida = [tick: number, tipo: "dc", comida: { tipo: "racao"; x: number; y: number }];
 /** pets v12, as chaves do produto (docs/TAREFA_V2_PRODUTO_FOME.md): o chamado de fome do bebe pela fome do corpo, e nao pelo relogio,
     e a decisao do pet logo depois de o dono por comida no chao. So no comeco do registro, uma vez; o jogo grava nos ovos novos. Sem ele
-    (os saves de antes, a pesquisa e os gabaritos), as duas ficam desligadas e a vida e a de hoje */
-export interface ChavesProduto { chamadoPelaFome: boolean; decisaoNaComida: boolean }
+    (os saves de antes, a pesquisa e os gabaritos), as duas ficam desligadas e a vida e a de hoje.
+    A terceira, chamadosPeloCorpo (docs/TAREFA_V2_PRODUTO_CUIDADO.md), os tres chamados do bebe pelo corpo, com os limiares do bebe: vem
+    nos ovos novos desde 2026-10-30; o evento sem ela (os ovos de antes dela) a deixa desligada */
+export interface ChavesProduto { chamadoPelaFome: boolean; decisaoNaComida: boolean; chamadosPeloCorpo?: boolean }
 export type EventoProduto = [tick: number, tipo: "p", chaves: ChavesProduto];
 export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem | EventoConfig | EventoLiberacao
   | EventoItem | EventoCarta | EventoFronteira | EventoFala | EventoComida | EventoProduto;
