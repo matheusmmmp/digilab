@@ -9,12 +9,12 @@
    As sementes: a faixa reservada (experiments/bancada/faixas.py) da calibracao (68101 a 68505) ou da conferencia (70101 a 70505), as 5
    bases X101, X202, ..., X505, e 20 sementes por base (hashSemente("equilibrio-tr", base, k)): 100 sementes x os dois lados = 200 lutas
    por par (plano, secao 3).
-   uso (em web/app): npx tsx scripts/equilibrio_tr/fase1_relogio.ts --faixa calibracao [--relogio '{"ritmo":12}'] --saida <arquivo.json> */
+   uso (em web/app): npx tsx scripts/equilibrio_tr/fase1_relogio.ts --faixa calibracao [--base v14] [--relogio '{"ritmo":12}'] --saida <arquivo.json> */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { execSync } from "node:child_process";
 import {
-  ARENA_POR_ID, CTR_TR, CV21E_TR, FORMAS_AD, PASSO_TR_MS, RELOGIO_V13, criarLutaTR, hashSemente, jogarArena, lutadorBot, passoTR,
+  ARENA_POR_ID, CTR_TR, CV21E_TR, FORMAS_AD, PASSO_TR_MS, RELOGIO_V13, RELOGIO_V14, criarLutaTR, hashSemente, jogarArena, lutadorBot, passoTR,
   type Lutador, type RegrasLuta, type RelogioTR,
 } from "../../motor/index.ts";
 
@@ -23,7 +23,8 @@ const FAIXAS: Record<string, number> = { calibracao: 68101, conferencia: 70101 }
 const faixa = arg("faixa"), saida = arg("saida");
 if (!faixa || !(faixa in FAIXAS)) throw new Error("--faixa calibracao | conferencia");
 if (!saida) throw new Error("--saida <arquivo.json>");
-const relogio: RelogioTR = { ...RELOGIO_V13, ...JSON.parse(arg("relogio") ?? "{}") };
+/* --base v14: o relogio candidato da fase 1 (RELOGIO_V14); sem ele, o dos pets v13 */
+const relogio: RelogioTR = { ...(arg("base") === "v14" ? RELOGIO_V14 : RELOGIO_V13), ...JSON.parse(arg("relogio") ?? "{}") };
 for (const k of Object.keys(relogio)) if (!(k in RELOGIO_V13)) throw new Error("numero do relogio desconhecido: " + k);
 const R: RegrasLuta = { ...CV21E_TR, relogio };
 const SEMENTES_POR_BASE = 20;

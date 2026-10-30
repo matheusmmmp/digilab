@@ -58,3 +58,11 @@ export const RELOGIO_V13: RelogioTR = {
   ritmo: CTR_TR.ritmo, atordoaInterrupcao: CTR_TR.atordoaInterrupcao, andar: CTR_TR.andar, recuo: CTR_TR.recuo, arrancada: CTR_TR.arrancada,
   projetil: CTR_TR.projetil, perto: CTR_TR.perto, medio: CTR_TR.medio, contato: CTR_TR.contato, empurrao: CTR_TR.empurrao,
 };
+/** o relogio candidato dos pets v14, da fase 1 da rodada de equilibrio (docs/PLANO_EQUILIBRIO_COMBATE_TR.md; docs/EQUILIBRIO_COMBATE_TR.md,
+    fase 1). PROPOSTOS, calibrados so nas sementes de calibracao (68101 a 68505): web/app/scripts/medicoes/equilibrio_tr/fase1/grade3/
+    r06arr8.json. O resto e o da v13. Ainda nao e de nenhuma versao de pet: a v14 so liga no fim da rodada, com os numeros de todas as fases
+    (DE-1), e ate la so a bancada (scripts/equilibrio_tr/) o usa
+    - empurrao 6 -> 0: o empurrao do golpe corpo a corpo afastava o atacante para fora do contato, e as listas defensivas nao voltavam;
+    - medio 150 -> 120: a faixa media mais curta faz as listas sairem do longe mais cedo e reagirem ao preparo do rival (T-5);
+    - recuo .8 -> .6 e arrancada 420 -> 500 px/s: quem recua o tempo todo (a sentinela) e alcancado */
+export const RELOGIO_V14: RelogioTR = { ...RELOGIO_V13, empurrao: 0, medio: 120, recuo: .6, arrancada: 500 * PASSO_TR_MS / 1000 };
