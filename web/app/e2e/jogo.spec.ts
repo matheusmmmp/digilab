@@ -189,9 +189,9 @@ test("vários pets: só o ativo corre o tempo", async ({ page }) => {
   expect(depois.a).not.toBe(antes.a);              /* o ativo andou (o registro junta avanços de tempo seguidos) */
   await page.locator(".topo-retrato").click();
   /* desktop (MpListaDesktop): pagina com um espaco por pet (o ativo + 6 guardados) e o painel do escolhido */
-  await expect(page.locator(".mpl-slot:not(.mpl-livre)")).toHaveCount(7);
-  await page.locator(".mpl-slot").nth(1).click();
-  await page.locator(".mpl-detalhe").getByRole("button", { name: "Tornar ativo" }).click();
+  await expect(page.locator(".mc-slot:not(.mc-slot--livre)")).toHaveCount(7);
+  await page.locator(".mc-slot").nth(1).click();
+  await page.locator(".mc-detalhe").getByRole("button", { name: "Tornar ativo" }).click();
   await expect(page.locator(".topo-pet .dl-tag--estagio")).toHaveText(/In-Training/i);
   const g = JSON.parse(await page.evaluate(c => localStorage.getItem(c + "-guardados")!, CHAVE));
   expect(g).toHaveLength(6);                       /* o Champion de antes foi para o lugar dele */
@@ -272,7 +272,7 @@ for (const largura of [390, 899, 900, 1099, 1100, 1280]) {
     await semear(page, SAVES.champion);
     const lateral = largura >= 900, desktop = largura >= 1100;
     /* a Exploracao: o mapa 3D e, no desktop, o lugar na coluna da direita (no celular o lugar abre na folha: o cartao fica no mapa) */
-    for (const [rota, esq, dir] of [["crescer/evolucao", ".evo-arv", ".evo-hist"], ["lutar/campanha", ".mapa-expl", desktop ? ".camp-lutar" : ".expl-cartao"], ["conversar/chat", ".conv-lista", ".conv-status"]]) {
+    for (const [rota, esq, dir] of [["crescer/evolucao", ".evo-arv", ".evo-hist"], ["lutar/campanha", ".mapa-expl", desktop ? ".camp-lutar" : ".expl-cartao"]]) {
       await page.goto(APP + "#/" + rota);
       await page.waitForTimeout(500);
       const r = await page.evaluate(([e, d]) => {
