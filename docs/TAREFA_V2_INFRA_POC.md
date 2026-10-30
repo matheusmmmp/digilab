@@ -1,5 +1,8 @@
 # TAREFA V2 — INFRA_POC (2026-10-18)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: a sessão da INFRA-MULTIAGENTE (#326). Worker: uma sessão nova do Claude Code, sem histórico. Worktree e branch: `v2-infra-poc`. Status: ABERTA.
 
 Categoria: documentacao. Origem: Claude Code, 2026-10-18: prova de conceito da infra multiagente: um worker sem histórico executa uma tarefa pequena a partir só do handoff.

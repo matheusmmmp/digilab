@@ -1,5 +1,8 @@
 # Tarefa — V2: o banheiro, a necessidade no lugar certo e o limpador (W-TAREFA-BANHEIRO)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Status: **BN-1 a BN-6 DECIDIDAS pelo Matheus em 2026-10-07, todas pela recomendação** (seção 10). **BN-7 DECIDIDA em 2026-10-11**
 (o alvo `banheiro` continua até chegar; seção 4). **BN-8 DECIDIDA em 2026-10-11** (o banheiro perto de onde o pet passa o dia;
 seção 3). Os números seguem PROPOSTOS. Escrito

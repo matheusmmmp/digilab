@@ -1,5 +1,8 @@
 # Plano de análise — V2: a transferência da rejeição da escolha para o item único (DS-3)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Status (2026-10-07): **PROPOSTO**, registrado **antes de qualquer run**. **TR-1 a TR-4 DECIDIDAS pelo Matheus em 2026-10-07, todas pela
 recomendação** (seção 9). Decisão DS-3 do Matheus (2026-10-07,
 `docs/DEFINICOES_V2_SEIS_PERGUNTAS.md`, seção 3): rodar o teste de transferência **antes** de qualquer mudança no aprendiz para o

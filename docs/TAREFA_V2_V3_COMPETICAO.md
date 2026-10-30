@@ -1,5 +1,8 @@
 # TAREFA V2 — V3_COMPETICAO: a competição entre as regras urgentes (V3-3 e V3-4) (2026-10-21)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: Gerente (Claude Code). Worker do desenho: Claude Code (worker B). Worktree e branch: `v2-v3-competicao`. Status: A VALIDAÇÃO RODOU
 (seção 14; 2026-10-22): todos os gates passam, "a disputa ajuda, e o aprendido usa a abertura"; o piloto (seção 13); o código atrás da chave (seção 11).
 

@@ -1,5 +1,8 @@
 # Resultado — V2, L1: o lobo de decisão aprende com o feedback como vantagem (validação, 2026-10-01)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Plano: `docs/PLANO_ANALISE_V2_L1.md` (rev. 2, registrado antes da calibração válida). Tarefa: `docs/TAREFA_V2_L1_DECISAO.md`.
 Validação **única** nas sementes 4101…4505, no ponto escolhido pela calibração (passo 512, teto 1024; a calibração **não fechou**:
 `artifacts_v2_l1/calibracao/escolha.json`), liberada pela decisão do Matheus de 2026-10-01 (PR #120: falhar não para a V2).

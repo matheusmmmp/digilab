@@ -1,5 +1,8 @@
 # TAREFA V2 — DOIS PETS: dois pets de verdade no mesmo mundo (2026-10-07)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: Gerente. Workers: A (motor e web), B (cérebro e corpo), D (bancada) e C (plano). Worktree e branch de cada etapa:
 `v2-dois-pets-<etapa>`. Status: **ABERTA.**
 

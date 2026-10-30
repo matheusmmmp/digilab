@@ -1,5 +1,8 @@
 # TAREFA V2 — TREINO (2026-10-22)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: Gerente. Worker: A. Worktree e branch: `v2-treino`, a partir da `main` (d873327), com a `main` mesclada em 61336e7. Status: ENTREGUE (PR, espera o ok visual e o merge).
 
 Categoria: implementacao. Origem: Matheus, 2026-10-22 (o "sim" à proposta do mapeamento enviado ao Gerente no mesmo dia). A referência é a

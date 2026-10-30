@@ -1,5 +1,8 @@
 # Resultado — V2, N4: frutas no mundo, sem aprendizado de política (validação única, 2026-10-04)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Plano `docs/PLANO_ANALISE_V2_N4.md` (commitado antes de qualquer run); definições `docs/DEFINICOES_FRUTAS_V2.md` (F1–F11); calibração no
 PR #132 (`artifacts_v2_n4/calibracao/`, que **não fechou**). Validação: sementes **11101…11505, uma vez**, no ponto da calibração
 (`w_fruta` 6, `k_saciedade` 1,0, duração 120; `experiments/configs/v2_n4/validacao.json`). Números de `artifacts_v2_n4/validacao/`

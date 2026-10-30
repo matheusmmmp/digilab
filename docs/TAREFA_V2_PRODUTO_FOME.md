@@ -1,5 +1,8 @@
 # TAREFA V2 — PRODUTO-FOME (2026-10-29)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: Gerente (Claude Code). Worker: A (Claude Code, Opus 5.5). Worktree e branch: `v2-produto-fome`. Status: ENTREGUE.
 
 Categoria: implementacao. Origem: Matheus, 2026-10-29: o Gerente reproduziu no jogo web (a `main` em 0a27d97, o pet v12 com o mundo) a

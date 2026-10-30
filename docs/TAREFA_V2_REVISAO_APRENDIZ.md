@@ -1,5 +1,8 @@
 # TAREFA V2 — REVISAO-APRENDIZ (2026-10-04, para a rodada 6)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: chat "Principais jogos Digimon com diálogo". Worker: chat B (é dono de `lobos.py`). Worktree e branch:
 `v2-revisao-aprendiz`. Status: **ABERTA na rodada 6**, depois do N5-CEREBRO (`docs/TAREFA_V2_N5_CEREBRO.md`) e da BANCADA-N5 (os lobos vendo o
 mundo na bancada); **antes** da calibração do N5 e do experimento maior.

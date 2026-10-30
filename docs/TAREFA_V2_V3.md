@@ -1,5 +1,8 @@
 # TAREFA V2 — V3 (2026-10-19)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: ChatGPT Work. Worker: Claude Code. Worktree e branch: `v2-v3`. Status: ABERTA.
 
 Categoria: arquitetura. Origem: Matheus, 2026-10-19: investigar como ampliar as oportunidades de decisão do pet à luz do diagnóstico do PR #332 e preparar uma proposta segura para o DigiBrain V3.

@@ -1,5 +1,8 @@
 # TAREFA V2 — ROTEAMENTO_MODELOS (2026-10-18)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Coordenador: ChatGPT Work. Worker: ChatGPT Work (documentação pelo conector GitHub). Worktree e branch: `v2-roteamento-modelos`.
 Status: ENTREGUE (alteração documental entregue por PR; merge do Matheus).
 

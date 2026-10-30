@@ -1,5 +1,8 @@
 # Plano de análise — revisão do aprendiz: teto, janela de crédito ou exposição?
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Status: **registrado antes de qualquer run** (2026-10-04). Tarefa `docs/TAREFA_V2_REVISAO_APRENDIZ.md` (rodada 6, chat B), linha R6.0
 do `docs/ROADMAP_V2.md`. **Só sementes de calibração, 18101…18505** (faixa própria, `docs/V2_RODADA_5.md`). É um **diagnóstico para
 escolher o ponto da calibração do N5 e do experimento maior**, não uma validação: não há gate, não há validação depois, e nenhum número

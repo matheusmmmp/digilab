@@ -1,5 +1,8 @@
 # TAREFA — Segunda revisão de literatura para a V2 (Claude Science)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Este é o prompt para colar numa sessão do Claude Science. A sessão não tem acesso ao repositório, que é privado, então o contexto vai
 abaixo. **Só literatura:** sem código, sem simulação e sem números do projeto.
 

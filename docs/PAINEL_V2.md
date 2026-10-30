@@ -1,6 +1,20 @@
 # PAINEL V2: onde a pesquisa está, em uma página
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 **Atualizado em 2026-10-24** (`main` `644309c`), pelo PROMPT MESTRE. Nesta atualização entram a direção nova (a seção 0), a competição (#393, #396), o estado do porte W, o Gate I e a P4. O resto é o da atualização anterior.
+
+## A última atualização (2026-10-30, o congelamento)
+
+| o quê | estado | onde |
+|---|---|---|
+| a V2 | **congelada** na tag `v2-final` (o merge do G0, #476); toda tarefa, marco e frente tem uma marca: 100 ENCERRADAS, 13 HERDADAS, 21 ADIADAS, 1 ARQUIVADA | `docs/FECHAMENTO_V2.md` |
+| a V3 | três trilhas (C cérebro, L layout, B batalha); V3-D1 a V3-D8 DECIDIDAS pelo Matheus em 2026-10-30 | `docs/PLANO_V3.md` |
+| entrou depois da base do fechamento (`b3643bb`) | a M7 do layout, que fecha o layout habitat (#477, a L1 da V3); a rodada 2 do combate, R2-0 e R2-1 (#479, a B1); o prefixo V3 no CI (#478) | os PRs |
+| a L-2 do longe e o modular | a L-2 fechou negativa (#454, #455); a reavaliação (#432) segue como a última estimativa do modular; o próximo passo é a C1 (o longe com lugares fixos) | `docs/PLANO_V3.md`, seção 2 |
+
+Daqui em diante, o estado vive no painel da V3, e este arquivo não muda mais.
 
 ## 0. A direção e o produto (2026-10-24)
 

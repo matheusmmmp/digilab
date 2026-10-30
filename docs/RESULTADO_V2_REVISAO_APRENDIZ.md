@@ -1,5 +1,8 @@
 # Resultado — revisão do aprendiz: teto, janela de crédito ou exposição? (2026-10-04)
 
+> **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
+> plano da V3, em `docs/PLANO_V3.md`.
+
 Plano `docs/PLANO_ANALISE_V2_REVISAO_APRENDIZ.md` (commit `29e1233`, antes de qualquer run). Tarefa `docs/TAREFA_V2_REVISAO_APRENDIZ.md`.
 **Diagnóstico, só sementes de calibração** (bases 18101…18505, K = 4: 20 unidades), sem gate e sem validação. Uma run, 1 h 50 min, 10
 pontos × 120 vidas, todas rejogadas do disco bit a bit. Números de `artifacts_v2_revisao/calibracao/` (`<ponto>/resultado.json`,
