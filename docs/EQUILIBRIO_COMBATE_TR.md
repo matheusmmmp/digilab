@@ -513,3 +513,48 @@ melhora a lista do Champion, mas no Ultimate a lista de 8 regras perde pouco e g
 0,1. Com os números desta alavanca, não há como chegar lá. O que faltaria é uma regra de troca melhor (a candidata escolhida pelo
 resultado, não sorteada), o que é mudança de estrutura.
 
+## Rodada 2, fase R2-3 — os líderes e a Liga (G-1, I-1, G-3)
+
+Worker: Claude Code, Opus 5.5, worktree `v2-combate-tr`, 2026-10-30.
+- **O que rodou:** só as sementes de calibração da rodada 2 (`72101…72505`), em no máximo 4 processos.
+- **Os artefatos:** os resumos em `web/app/scripts/medicoes/equilibrio_tr/r2_3/` (`grade1/` a `grade3/resumo.json`,
+  `depois_resumo_metas.txt`). Os JSON completos estão em `r2_3/completo.tar.gz`.
+- **Antes, uma decisão do Matheus** (2026-10-30, depois da R2-2): a troca de regra pelo resultado (o P-3 do Ultimate) fica para depois da
+  conferência, junto com a alavanca de estrutura. O plano registra.
+
+**A alavanca:**
+- **as listas dos líderes que reprovam:** `LISTAS_LIDER_V14` em `combate_tr/constantes_tr.ts`, que a bancada usa por cima da lista do
+  motor;
+- **o fator da arena de cada um:** `FATORES_V14`.
+
+O G-3 já passava desde a R2-1 (a Liga são formas, não líderes) e ficou como meta protegida.
+
+**A grade** (`grade_lideres_r2.py`; as variantes em `variantes_lideres_r2.ts`):
+- **cada variante** com o fator da arena dela, de 0,6 a 3,0;
+- **a escolha, a da fase 4:** entre os pontos que passam o G-1 da arena, o de maior folga.
+
+As três rodadas:
+- **Rodada 1** (8 variantes, uma mudança cada):
+  - **a Floresta fecha** com a variante que fica de perto (sem o recuo), no fator 1,4: sem treino 0,0075, com o típico 0,8575, a pior
+    forma 0,71 (o colosso);
+  - **nas outras,** as variantes que ajudam a de longe (carregar contra quem recua, não perseguir do médio) ajudam também o pet sem treino.
+    O sem treino passa de 0,05, e a pior forma vira o duelista.
+- **Rodada 2** (lutas mais longas: defender contra quem dispara, sem a finta, o Lago sem perseguir quem dispara) e **rodada 3** (quem
+  persegue só bate de perto): quase nada muda. As regras trocadas quase nunca decidem, porque as de avançar vêm antes.
+
+**O resultado** (o candidato com a lista e o fator da Floresta; `depois_resumo_metas.txt` contra a R2-2):
+
+| # | R2-2 | R2-3 | passa? |
+|---|---|---|---|
+| G-1 | fora: a Floresta (pior 0,05), a Cidadela (pior 0,29), o Lago (sem 0,071; pior 0,44) e a Espiral (pior 0,43) | a Floresta passa; ficam fora a Cidadela, o Lago e a Espiral, iguais | **não fechou** |
+| I-1 | 0,0713 (o Lago) | 0,0713 | **não fechou** |
+| G-3 | de 0,43 a 0,72 | igual | sim |
+| I-4 | o Fôlego 0,021; a Cura 0,054; a Foco 0,011 | o Fôlego 0,007; 0,052; 0,014 | **não fechou** (o Fôlego cai com a Floresta nova) |
+| as protegidas | passam | passam | sim |
+
+**Por que a Cidadela, o Lago e a Espiral não fecham:**
+- **a pior forma é a sentinela,** que recua e quase não dispara contra quem persegue. Tudo o que a ajuda treinada a ajuda também sem
+  treino, e o G-1 pede as duas pontas ao mesmo tempo (sem treino ≤ 0,05 e a pior forma treinada ≥ 0,50);
+- **é a mesma questão das formas de longe da R2-1,** que o Matheus mandou para depois da conferência (a alavanca de estrutura). O I-1, que
+  é o sem treino do Lago, vai junto.
+

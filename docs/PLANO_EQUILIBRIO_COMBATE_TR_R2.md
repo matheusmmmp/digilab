@@ -50,6 +50,8 @@ os líderes e a Liga em cima das formas, e as cartas por último.
 - **a alavanca de estrutura das formas de longe e do tita** (o alcance ou o tempo do disparo contra quem avança, a pele dura do tita):
   decidida pelo Matheus em 2026-10-30, depois da R2-1, pela recomendação do worker. Vai para depois da conferência e não entra nesta
   rodada;
+- **a troca de regra que escolhe a candidata pelo resultado** (em vez de sortear; o P-3 do Ultimate): decidida pelo Matheus em
+  2026-10-30, depois da R2-2, pela recomendação do worker. Vai para depois da conferência, junto com a alavanca de estrutura;
 - **o I-5** entra pela DR2-1 (DECIDIDA) como fase R2-4b, depois das cartas e antes da conferência: o chip antes da primeira regra com a
   mesma condição, só no candidato v14;
 - **ligar a v14 no jogo** (a DE-1), que é o passo seguinte, com o ok do Matheus;
