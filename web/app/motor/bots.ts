@@ -154,6 +154,11 @@ export const GAMBITS_ARENA: Record<string, ListaGambits> = {
     final: "defender" },
 };
 Object.values(GAMBITS_ARENA).forEach(validarLista);
+/* as listas candidatas da rodada de equilibrio do tempo real (docs/EQUILIBRIO_COMBATE_TR.md, fase 2; PROPOSTO): a chave e a forma
+   adulta, a sombria, a linha do adolescente ou o ramo da crianca. Ainda nao pertencem a nenhuma versao de pet: so a bancada
+   (scripts/equilibrio_tr/) as usa, e a v14 (DE-1) liga todas no fim da rodada. */
+export const LISTAS_V14: Readonly<Record<string, ListaGambits>> = {};
+Object.values(LISTAS_V14).forEach(validarLista);
 
 /* lugares do mapa; vencer QUALQUER rival de um lugar abre o proximo (a Torre tem 3 rivais para nenhuma
    linha ficar travada; experiments/calibrar_progressao.py) */
