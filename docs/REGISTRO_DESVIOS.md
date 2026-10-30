@@ -443,3 +443,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-30 — COMBATE-TR, segunda rodada, R2-2 (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): o aprendizado próprio do tempo real](registro/2026-10.md)
 - [2026-10-30 — LITERATURA, a C0 da V3 (worker, Claude Code, Opus 5.5, worktree `v3-literatura-c0`): a verificação das fontes da triagem e a alegação proibida nova](registro/2026-10.md)
 - [2026-10-30 — COMBATE-TR, segunda rodada, R2-3 (worker, Claude Code, Opus 5.5, worktree `v2-combate-tr`): os líderes e a Liga](registro/2026-10.md)
+- [2026-10-30 — PLANO-V3, as entradas da C1 e da C4 (Gerente da V3, Claude Code, Opus 5.5, worktree `v3-plano-entradas`): a regularidade graduada e a visita vazia como episódio negativo](registro/2026-10.md)

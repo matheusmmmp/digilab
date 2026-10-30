@@ -37,7 +37,8 @@ fechamento da V2, o `docs/FECHAMENTO_V2.md` (tag `v2-final`).
 ## 2. Decisões abertas do Matheus
 
 - **LR-1 a LR-7** (a C1): `docs/TAREFA_V2_LONGE_REGULAR.md`, seção 8.
-- **ME-1 a ME-7** (a C4), com as três entradas novas da literatura: `docs/PLANO_V3.md`, seção 2.
+- **ME-1 a ME-7** (a C4), com as três entradas novas da literatura e as C4-E1 a C4-E3 (a visita vazia como episódio negativo): `docs/PLANO_V3.md`, seções 2 e 2.3.
+- **As C1-E1 e C1-E2** (a previsão por nível de regularidade no adendo 6; a L-3 depois da C1): `docs/PLANO_V3.md`, seção 2.3.
 - **A L4 no plano:** a ordem dela entre a L2 e a L3, e a H1b (ligar o `CLIPES_UP` muda o jogo fora do habitat).
 - **B2:** ligar a v14 só depois da conferência da rodada 2.
 
