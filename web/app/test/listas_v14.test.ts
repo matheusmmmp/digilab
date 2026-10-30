@@ -4,7 +4,7 @@
    partida). */
 import { describe, expect, test } from "vitest";
 import {
-  CESC_V9, FATOR_INSTALACAO, FATOR_LIDER_V9, FATOR_LIGA_V9, FATOR_RIVAL_FABRICA_V9, FATOR_SALAO_V9, FATORES_V14,
+  APRENDIZADO_V14, CESC_V9, FATOR_INSTALACAO, FATOR_LIDER_V9, FATOR_LIGA_V9, FATOR_RIVAL_FABRICA_V9, FATOR_SALAO_V9, FATORES_V14,
   BOTS_V21, CRIANCA_V21, ADOL_V21, CV21, CV21E_TR, GambitsPet, chaveRegra, regraDe, FORMAS_AD, LINHA_DA_FORMA, LISTAS_V14, RIVAL_ESPECIE, SOMBRIA, gambitsAdulto, lutadorBot,
   permitida, sementeDe, type Forma, type FormaAdultaNormal,
 } from "../motor/index.ts";
@@ -69,5 +69,19 @@ describe("as listas candidatas da v14 (fase 2)", () => {
     expect(Object.keys(FATORES_V14.salao).sort()).toEqual(Object.keys(FATOR_SALAO_V9).sort());
     expect([FATOR_LIDER_V9.torre, CESC_V9.fatorNpc.npc_tier2_sentinela, FATOR_LIGA_V9.campina, FATOR_SALAO_V9.adolescente, FATOR_INSTALACAO, FATOR_RIVAL_FABRICA_V9])
       .toEqual([1.5, 1.53, .4, 1, 1, .6]);
+  });
+  test("DR2-5: o aprendizado proprio do tempo real so muda a ordem com o prior, e sem ele (null) a ordem e so pela nota", () => {
+    expect(APRENDIZADO_V14).not.toBeNull();
+    const f = formaDe("sentinela"), g = LISTAS_V14.sentinela, ultima = chaveRegra(g.regras[g.regras.length - 2]);
+    for (const prior of [0, 1]) {
+      const gp = new GambitsPet();
+      gp.chipsNoFim = true; gp.aprendizadoTR = { alfa: .2, prior }; gp.semear(f, "sentinela", CV21E_TR, g);
+      /* a penultima sobe pela nota: so o prior grande a segura no lugar */
+      gp.notas[ultima] += .5; gp.ordenar();
+      expect(gp.ativas.indexOf(ultima) === 0, String(prior)).toBe(prior === 0);
+    }
+    const hoje = new GambitsPet();
+    hoje.chipsNoFim = true; hoje.semear(f, "sentinela", CV21E_TR, g); hoje.notas[ultima] += .5; hoje.ordenar();
+    expect(hoje.ativas[0]).toBe(ultima);
   });
 });
