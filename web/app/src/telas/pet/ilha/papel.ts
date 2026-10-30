@@ -35,14 +35,17 @@ export interface Passo {
 
 interface Folha { tex: THREE.CanvasTexture; w: number; h: number }
 
-/** a borda branca do papel em volta do que e opaco; o que nao e opaco (a sombra do export) sai; corta as linhas abaixo de `pe` */
-function recortar(c: HTMLCanvasElement, pe: number): HTMLCanvasElement {
-  const B = BORDA_PAPEL, w = c.width + 2 * B, h = Math.min(c.height, pe) + 2 * B;
+/** o corte do sprite: as colunas x0 a x1 (inclusive) e as linhas acima de `pe`, onde ha pixel opaco em algum quadro */
+interface Corte { x0: number; x1: number; pe: number }
+/** a borda branca do papel em volta do que e opaco; o que nao e opaco (a sombra do export) sai; corta fora do `corte`, entao o centro
+    do papel e o centro do que se ve do Digimon (a sombra cai embaixo dele, e a virada de lado nao o faz pular) */
+function recortar(c: HTMLCanvasElement, corte: Corte): HTMLCanvasElement {
+  const B = BORDA_PAPEL, cw = corte.x1 - corte.x0 + 1, ch = Math.min(c.height, corte.pe), w = cw + 2 * B, h = ch + 2 * B;
   const s = document.createElement("canvas");
   s.width = w; s.height = h;
   const g = s.getContext("2d");
   if (!g) throw new Error("canvas 2d indisponível");
-  g.drawImage(c, 0, 0, c.width, Math.min(c.height, pe), B, B, c.width, Math.min(c.height, pe));
+  g.drawImage(c, corte.x0, 0, cw, ch, B, B, cw, ch);
   const d = g.getImageData(0, 0, w, h), px = d.data;
   for (let k = 3; k < px.length; k += 4) if (px[k] < 230) px[k] = 0;
   const opaco = (x: number, y: number) => x >= 0 && y >= 0 && x < w && y < h && px[(y * w + x) * 4 + 3] > 0;
@@ -55,14 +58,21 @@ function recortar(c: HTMLCanvasElement, pe: number): HTMLCanvasElement {
   g.putImageData(d, 0, 0);
   return s;
 }
-/** a ultima linha com pixel opaco (alfa >= 230) de um canvas, mais 1 */
-function linhaOpacaFinal(c: HTMLCanvasElement): number {
+/** a caixa do que e opaco (alfa >= 230) num canvas: as colunas x0 a x1 e a ultima linha mais 1; null se nada e opaco */
+function caixaOpaca(c: HTMLCanvasElement): Corte | null {
   const g = c.getContext("2d", { willReadFrequently: true });
   if (!g) throw new Error("canvas 2d indisponível");
   const px = g.getImageData(0, 0, c.width, c.height).data;
-  for (let y = c.height - 1; y >= 0; y--) for (let x = 0; x < c.width; x++) if (px[(y * c.width + x) * 4 + 3] >= 230) return y + 1;
-  return c.height;
+  let x0 = c.width, x1 = -1, pe = 0;
+  for (let y = 0; y < c.height; y++) for (let x = 0; x < c.width; x++) if (px[(y * c.width + x) * 4 + 3] >= 230) {
+    if (x < x0) x0 = x;
+    if (x > x1) x1 = x;
+    pe = y + 1;
+  }
+  return x1 < 0 ? null : { x0, x1, pe };
 }
+/** o corte inteiro de um canvas (a grade de reserva: ela nao tem sombra nem folga) */
+const corteInteiro = (c: HTMLCanvasElement): Corte => ({ x0: 0, x1: c.width - 1, pe: c.height });
 const textura = (c: HTMLCanvasElement) => {
   const t = new THREE.CanvasTexture(c);
   t.magFilter = t.minFilter = THREE.NearestFilter;
@@ -87,7 +97,7 @@ export class Papel {
   private readonly silhueta: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial>;
   private readonly sombra: THREE.Mesh;
   private readonly folhas = new Map<string, Folha>();
-  private readonly pes = new Map<string, number>();
+  private readonly cortes = new Map<string, Corte>();
   private dono = "";                    // as folhas sao de um sprite so: trocou a forma, saem todas
   private clipe: Clipe = "Idle";
   private t0 = 0;
@@ -117,27 +127,32 @@ export class Papel {
     const { motor: m, nascendo } = jogoAtual(), a = atlasAtual();
     if (a.tipo !== "ok") {
       const f = fonteDoPet(quadro);
-      return { folha: this.folha(`reserva|${f.chave}`, () => recortar(f.canvas, f.canvas.height)), ovo: nascendo > 0 };
+      return { folha: this.folha(`reserva|${f.chave}`, () => recortar(f.canvas, corteInteiro(f.canvas))), ovo: nascendo > 0 };
     }
     const ovo = nascendo > 0, nome = ovo ? OVO[m.especie] : chaveSprite(m.forma), s = a.dados.sprites[chaveUp(a.dados, nome)];
     const clipe: Clipe = !ovo && andando && s?.clipes?.Run ? "Run" : "Idle";
     if (clipe !== this.clipe) { this.clipe = clipe; this.t0 = agora; }
     const iq = ovo ? 0 : quadroAgora(a, nome, m.acao === "dormir", clipe, this.t0), sombria = !ovo && m.sombria;
-    const pe = this.pe(a, nome, sombria);
-    return { folha: this.folha(`${nome}|${clipe}|${iq}|${sombria ? 1 : 0}`, () => recortar(quadroAtlas(a, nome, iq, sombria, clipe), pe)), ovo };
+    const corte = this.corte(a, nome, sombria);
+    return { folha: this.folha(`${nome}|${clipe}|${iq}|${sombria ? 1 : 0}`, () => recortar(quadroAtlas(a, nome, iq, sombria, clipe), corte)), ovo };
   }
-  /** o pe do sprite: a linha opaca mais baixa nos quadros do Idle e do Run (abaixo dela, so a sombra do export, que sai) */
-  private pe(a: AtlasOk, nome: string, sombria: boolean): number {
-    const ch = `${nome}|${sombria ? 1 : 0}`, pronto = this.pes.get(ch);
-    if (pronto !== undefined) return pronto;
+  /** o corte do sprite: a caixa do que e opaco em todos os quadros do Idle e do Run (abaixo do pe, so a sombra do export, que sai; dos
+      lados, a folga da caixa do atlas, que deixaria o Digimon fora do centro do papel). Um corte so por sprite: o papel nao pula entre quadros */
+  private corte(a: AtlasOk, nome: string, sombria: boolean): Corte {
+    const ch = `${nome}|${sombria ? 1 : 0}`, pronto = this.cortes.get(ch);
+    if (pronto) return pronto;
     const s = a.dados.sprites[chaveUp(a.dados, nome)], clipes: Clipe[] = s?.clipes?.Run ? ["Idle", "Run"] : ["Idle"];
-    let pe = 0;
+    let corte: Corte | null = null;
     for (const c of clipes) {
       const n = s ? (s.clipes?.[c]?.quadros.length ?? s.quadros.length) : 1;
-      for (let i = 0; i < n; i++) pe = Math.max(pe, linhaOpacaFinal(quadroAtlas(a, nome, i, sombria, c)));
+      for (let i = 0; i < n; i++) {
+        const q = quadroAtlas(a, nome, i, sombria, c), k = caixaOpaca(q);
+        if (k) corte = corte ? { x0: Math.min(corte.x0, k.x0), x1: Math.max(corte.x1, k.x1), pe: Math.max(corte.pe, k.pe) } : k;
+      }
     }
-    this.pes.set(ch, pe);
-    return pe;
+    const final = corte ?? corteInteiro(quadroAtlas(a, nome, 0, sombria, "Idle"));
+    this.cortes.set(ch, final);
+    return final;
   }
   private folha(chave: string, fazer: () => HTMLCanvasElement): Folha {
     const dono = chave.split("|")[0];
@@ -181,7 +196,7 @@ export class Papel {
     this.papel.scale.set((Math.abs(this.escalaX) < 0.06 ? 0.06 * Math.sign(this.escalaX || 1) : this.escalaX) * wpx / p.ppu, hpx / p.ppu, 1);
     this.raiz.position.set(p.cel[0], 0, p.cel[1]);
     const larg = wpx / p.ppu;
-    this.sombra.scale.set(larg * 0.75, 1, larg * 0.4);
+    this.sombra.scale.set(larg * 0.85, 1, larg * 0.42);
     this.sombra.position.set(0, 0.03, 0);
     return { x: esquerda / p.razao, y: (base - hpx) / p.razao, w: wpx / p.razao, h: hpx / p.razao };
   }
