@@ -8,7 +8,7 @@ import { useJogo } from "../../jogo.ts";
 import {
   LUTA, RIVAIS_ADULTOS, RIVAIS_CLASSICOS, escolherRival, exibirBot, lutarAnimado, melhorDe10, previa, reconstruirLuta, sparringTexto, useLuta,
 } from "../../luta.ts";
-import { EditorRegras, RegrasCompactas } from "./EditorRegras.tsx";
+import { EditorRegras } from "./EditorRegras.tsx";
 import { Cena } from "./palcoTR/PalcoTR.tsx";
 import { ENDERECO_LUTA } from "../../rotas.ts";
 import { EscolhaCarta } from "../../componentes/EscolhaCarta.tsx";

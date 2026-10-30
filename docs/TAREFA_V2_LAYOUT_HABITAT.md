@@ -25,6 +25,7 @@ Gerente: sessão "Gerente do layout habitat" (2026-10-30). Merge só do Matheus.
 | D7 | pele por CSS ou por componentes `hx-*` (M4/M6, 2026-10-30) | **CSS** sobre as classes `dl-*` dentro do painel e das telas abertas (`.ab-hx`); reescrever as telas em componentes `hx-*` fica como M4b, só se o visual derivar |
 | D8 | DigiBrain e "Por que ele disse isso" (M3) | ganham a pele na **M7** |
 | D9 | painel aberto no celular (M3, 300 px) | **fica** como está: aberto por quem joga, fecha com um toque |
+| D10 | alvo do polimento (2026-10-30) | **só o desktop, no monitor do Matheus: 1920×1080 a 100 %** (janela útil do Chrome ~1920×950). Celular e outras larguras não recebem polimento agora; só não podem quebrar o e2e. O painel das telas fica em 840 px a partir de 1600 px de largura (760 px abaixo) |
 
 ## 3. Regras do layout
 
@@ -123,8 +124,9 @@ Um PR por missão, cada uma numa worktree `D:\Trab\digilab\v2-layout-<frente>` a
 - **M4 · Crescer, Lutar, Diário** dentro do `PainelTela` com a pele (pode virar M4a/b/c).
 - **M5 · Conversar, Ajustes e Meus pets** no painel; o crédito dos sprites continua em Ajustes › Sobre.
 - **M6 · Telas que abrem sozinhas e luta** (regra 8).
-- **M7 · Fechamento:** e2e com os seletores novos, capturas regeneradas depois da aprovação do Matheus, conferência
-  360/390/1280, claro/escuro (o tema claro vale fora dos menus), checklist §13/§14.
+- **M7 · Fechamento (só desktop 1920×950, D10):** e2e com os seletores novos e um caso de viewport 1920×950, capturas
+  1920×950 regeneradas depois da aprovação do Matheus, claro/escuro (o tema claro vale fora dos menus), checklist §13/§14.
+  A conferência em 360/390/1280 fica fora (só não pode quebrar o e2e).
   Também na M7 (2026-10-30): pele do DigiBrain e do "Por que ele disse isso" (D8); dock flutuante, não faixa de largura
   inteira; faixa de título das Boas-vindas junto do conteúdo; o `.aviso` fixo da M2 não cobre botões nem o cabeçalho do
   painel; remover o CSS morto listado nos PRs #467–#470 e `.pet-quadro`/`--quadro-larg` do `casca.css`.
@@ -148,9 +150,10 @@ Dependências: M1 antes de tudo; M2 depende de M1; M3–M6 dependem de M2. Arqui
 
 ## 8. Critérios de aceite (no fim da M7)
 
-- Em 360, 390 e 1280 px a tela Pet mostra o habitat inteiro, sem nada cobrindo o pet; dock, painéis recolhíveis, chamado,
-  balão e DigiBrain sobre a cena.
-- Toda tela secundária abre sobre o habitat (painel à direita ≥ 900 px; modal centralizado abaixo) e o "×" volta ao habitat.
+- A 1920×950 a tela Pet mostra o habitat inteiro, sem nada cobrindo o pet; dock flutuante, painéis recolhíveis, chamado,
+  balão e DigiBrain sobre a cena (D10: celular e outras larguras ficam sem polimento, sem quebrar o e2e).
+- Toda tela secundária abre sobre o habitat (painel à direita ≥ 900 px; modal centralizado abaixo) e o "×" volta ao habitat;
+  a 1920×950 o pet continua visível ao lado do painel.
 - Os menus usam a pele `hx-*` (componentes ou CSS sobre `dl-*`, D7); o habitat, o retrato, o relógio e o balão mantêm o visual atual nos dois temas.
 - Nenhum item da seção 4 aparece sem dado do motor.
 - Rotas e hash iguais; replay e paridade intactos; `tipos`, `test`, `e2e` e o portão de capturas regenerado passando.
@@ -162,3 +165,17 @@ Dependências: M1 antes de tudo; M2 depende de M1; M3–M6 dependem de M2. Arqui
 - **Largura do painel:** >= 1100 px, `min(1000px, 100vw - 306px)`, porque as telas de Crescer/Lutar/Diario ainda usam os layouts desktop de duas colunas (a Exploracao nao cabe em 760 px). Reduzir isso e da M4/M5.
 - **Tela Pet:** o conteudo de hoje sobre o habitat; no desktop o Quadro ocupa uma coluna de ~740 px a direita e o modulo "cenario" sai do `render` (o id fica no arranjo salvo). Recolher a coluna lateral nao aumenta mais o habitat: fica para a M3.
 - **e2e:** seletores ajustados (Conversar no topo, coluna principal do Quadro sem "cenario", sem a checagem de largura do habitat ao recolher a coluna).
+
+## M7 · Fechamento (2026-10-30, worker M7)
+
+- **Tela Pet a 1920×950:** o habitat tem a altura toda (a reserva do dock só vale abaixo de 900 px) e o dock é uma barra
+  flutuante de até 660 px, centrada. O DigiBrain e o "Por que ele disse isso" ganham a pele escura (tokens `--dl-*`
+  remapeados também em `.pet-painel__folha`, D8).
+- **Painel das telas:** 840 px a partir de 1600 px (o pet fica com ~1000 px de habitat); 760 px abaixo disso.
+- **Avisos fixos** (`.avisos`): a partir de 900 px viram cartões pequenos no canto inferior esquerdo, fora do dock, dos botões
+  da borda direita e do cabeçalho do painel; abaixo de 900 px seguem como faixa sob o topo.
+- **Telas que abrem sozinhas:** a faixa de título das Boas-vindas fica na largura do conteúdo, centrada com ele; o número do
+  Resultado perdeu o contorno claro.
+- **CSS morto removido:** `.pet-quadro`/`--quadro-larg`, `.desk-*`, `.cfg-*` e `.cfg-desk*`, `.conv-*` (exceto `.conv-voltar`,
+  usado por Nova geração), `.mpl-*`, `.imp-*` sem uso, `.mp-tela`, `.mp-*` de Meus pets, `.rc-*`, `.meus-pets .slot`,
+  `.db-botao`, `.db-cab`, `.db-rola`, `estilo/desktop.css` e `RegrasCompactas`.

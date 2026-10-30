@@ -2,7 +2,7 @@
    O conteudo das telas continua escrito com as classes dl-* de antes; aqui, dentro do painel, os tokens --dl-* sao remapeados para os
    tons escuros --hx-* e as formas viram caixas de borda fina (sem cantos redondos nem sombra grossa), uma coluna so, fonte condensada.
    O habitat, o retrato, o relogio e o balao nao passam por aqui. */
-.painel-tela .painel-tela__folha{
+.painel-tela .painel-tela__folha, .pet-painel .pet-painel__folha{
   --dl-bg:var(--hx-miolo); --dl-hex:#16191E; --dl-surface:#111B1E; --dl-surface-2:#16191E;
   --dl-border:#4F6B6F; --dl-border-shadow:#2A3C3F; --dl-navy:#3D5A5E; --dl-navy-deep:#16282B;
   --dl-action:#6CC58A; --dl-action-press:#4FA86D; --dl-action-ink:#06140C; --dl-action-lite:#8FDDA7;

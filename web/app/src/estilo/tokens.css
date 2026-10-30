@@ -59,7 +59,7 @@
   --dl-hex-img:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='48'%3E%3Cpath d='M14 0L28 8V24L14 32L0 24V8ZM14 32V48' fill='none' stroke='%231B3163' stroke-width='1.5'/%3E%3C/svg%3E");
 }
 
-/* Desktop limpo (TAREFA_V2_UI_DESKTOP, 2026-10-18): tokens da casca e da tela do Pet a partir de 1100 px (estilo/desktop.css).
+/* Desktop limpo (TAREFA_V2_UI_DESKTOP, 2026-10-18): tokens da casca e da tela do Pet a partir de 1100 px.
    Valores do prompt do Matheus (aproximados da referencia, nao extraidos dela). O celular continua nos --dl-*. */
 :root{
   --ui-primary:#128CFF; --ui-primary-hover:#0876E0; --ui-primary-ink:#FFFFFF; --ui-primary-soft:#E6F2FF;
