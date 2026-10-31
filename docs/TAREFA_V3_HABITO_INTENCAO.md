@@ -295,3 +295,17 @@ etapa 3. Os números novos seguem PROPOSTOS e SEM FONTE. A direção da HI-3 vem
 - **A fonte:** só Gadanho e Hallam (2001), da C0, pela tese; o resto SEM FONTE.
 - **Nenhum código, nenhuma faixa e nenhuma vida.**
 - **O registro:** a interpretação do "crédito no passo" em `docs/registro/2026-10.md`.
+
+## Resultado da etapa 2 (código; 2026-10-31, worker Claude Code, Sonnet 5.5, worktree `v3-habito-intencao-codigo`)
+
+**A espec curta da corrida (HI-3), como o código a fixou:**
+- **A corrida** (`EstadoDinamico._corrida`, `digilab/digibrain/estado.py`): as decisões seguidas do mesmo `chave[0]`. Cada decisão estende
+  a corrida (`n`, o `g_apr` da última) ou, se muda o comportamento, fecha a corrida e abre a seguinte, na mesma `escolhida`.
+- **Guarda:** o z da 1.ª decisão (a elegibilidade), o `r` somado e cortado em [−S, S] a cada consequência, o `n` e o `g_apr` da última.
+- **A entrega:** uma vez ao `Plasticidade.creditar` (inalterado), pelo `DigiBrain.agir`, na decisão da troca; o registro da decisão ganha
+  `corridas`. Nenhuma opção vai ao P2 (o `_creditar`). Fins, C, F e persistência são os de sem a subchave (T-CORRIDA-2).
+- **O reflexo do sono** é uma decisão de `dormir` e fecha a corrida; **o fim da vida** não entrega a corrida aberta (registro, 2026-10-31).
+- **A subchave** `credito_corrida` (`ConfigDigibrain`): PROPOSTA, SEM FONTE como valor; desligada por padrão; erro com a `intencao_suspensa`.
+- **O gabarito** `tests/gabaritos/habito_intencao_de_hoje.json` (commit `db7ae4f3`, antes da mudança) e o teste `tests/test_gabarito_habito_intencao.py`.
+- **Os testes** `tests/test_credito_corrida.py`: a subchave, T-CORRIDA-1 a 3, G1 nas cinco sementes, G2-SEPARADO, o `conferir_credito`
+  estendido, G-MECANISMO. Nada de faixa, adendo 7, orquestrador da run ou vida de pesquisa; `engine.py` e a web não mudam.

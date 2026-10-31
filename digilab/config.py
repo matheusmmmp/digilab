@@ -2336,6 +2336,12 @@ CONFIG_CONTRATO_LIGADO = ConfigContrato(sensores=True, controlador=True)
 #   - `intencao_suspensa`: a intencao de comer (a busca pelo cheiro e a ida a uma comida vista) que o reflexo do sono interrompe fica
 #     suspensa, e nao trocada, e volta pelo sorteio na primeira decisao sem o reflexo; os fins "saciou", "sumiu", "expirou", "achou" e
 #     "superada" (`ConfigDigibrainInatos.n_suspensa_max` e `lambda_retomar`).
+# A C2 (docs/TAREFA_V3_HABITO_INTENCAO.md, secoes 3.1 e 8; HI-1 a HI-8 DECIDIDAS em 2026-10-31) pede mais uma, desligada por padrao
+# (desligada, as vidas saem byte a byte: tests/gabaritos/habito_intencao_de_hoje.json):
+#   - `credito_corrida`: PROPOSTO, SEM FONTE como valor; a direcao vem de Gadanho e Hallam (2001), pela tese de 1999 ("a recompensa
+#     emocional falha por acao primitiva e funciona por comportamento"). O P2 deixa de ser creditado por opcao e passa a ser creditado
+#     na corrida do comportamento: as decisoes seguidas do mesmo comportamento (chave[0]), uma vez so, quando ela acaba. Nao se combina
+#     com a `intencao_suspensa` (a D-C1-2).
 CONTROLES_G_APR = ("nenhum", "embaralhado", "constante")
 
 
@@ -2352,12 +2358,15 @@ class ConfigDigibrain:
     cheiro_inato: bool = False               # DECIDIDO (adendo 3, A3.4 e A3.10, 2026-10-26): a DX-3, desligada por padrao
     intencao_cheiro: bool = False            # DECIDIDO (adendo 3, A3.4 e A3.10, 2026-10-26): a DX-4, desligada por padrao
     intencao_suspensa: bool = False          # DECIDIDO (LS-1 e LS-2, 2026-10-29): a parte (b) da L-2, desligada por padrao
+    credito_corrida: bool = False            # PROPOSTO, SEM FONTE como valor (C2, HI-3; direcao: Gadanho e Hallam 2001): o P2 na corrida
 
     def __post_init__(self) -> None:
         for nome in ("ligada", "modula_g_apr", "p2", "m_mem", "persistencia", "p1", "cheiro_inato", "intencao_cheiro",
-                     "intencao_suspensa"):
+                     "intencao_suspensa", "credito_corrida"):
             if type(getattr(self, nome)) is not bool:
                 raise TypeError(f"ConfigDigibrain.{nome} e bool: {getattr(self, nome)!r}")
+        if self.credito_corrida and self.intencao_suspensa:
+            raise ValueError("credito_corrida nao se combina com a intencao_suspensa (docs/TAREFA_V3_HABITO_INTENCAO.md, D-C1-2)")
         if self.controle_g_apr not in CONTROLES_G_APR:
             raise ValueError(f"ConfigDigibrain.controle_g_apr: so {CONTROLES_G_APR}, nao {self.controle_g_apr!r}")
         if type(self.g_apr_constante) is not int:

@@ -459,6 +459,37 @@ def conferir_credito(braco: str, c) -> None:
             raise RuntimeError(f"{braco}: o r da opcao da decisao {k0} ({f['r']}) nao e a soma das decisoes dela ({r})")
     if c.m.estado.guardada is not None:
         raise RuntimeError(f"{braco}: a busca guardada passou da decisao seguinte")
+    if c.cd.credito_corrida:
+        conferir_credito_corrida(braco, c)
+
+
+def conferir_credito_corrida(braco: str, c) -> None:
+    """O credito por corrida do comportamento (C2; docs/TAREFA_V3_HABITO_INTENCAO.md, 3.1 e 3.2), em toda vida com a `credito_corrida`,
+    pelo registro do cerebro: cada corrida entregue ao P2 cobre `n` decisoes seguidas do mesmo comportamento, a seguinte e de outro; o r
+    dela e a soma (cortada em [-S, S], decisao a decisao) dos r_n delas; toda decisao ate a corrida aberta esta em exatamente uma corrida
+    entregue; o P2 recebeu uma entrega por corrida e nenhuma por opcao; a aberta no fim da vida nao foi entregue. Falha alto."""
+    S, ms = c.S, c.motivos
+    entregues = [x for m in ms for x in m["corridas"]]
+    k = 0
+    for x in entregues:
+        if x["inicio"] != k:
+            raise RuntimeError(f"{braco}: a corrida da decisao {x['inicio']} nao segue a anterior (esperava a {k})")
+        r = 0
+        for j in range(k, k + x["n"]):
+            if j >= len(ms) or ms[j]["escolha"][0] != x["b"] or ms[j]["consequencia"] is None:
+                raise RuntimeError(f"{braco}: a decisao {j} nao e da corrida de {x['b']} da decisao {x['inicio']}")
+            r = max(-S, min(S, r + ms[j]["consequencia"]["r_n"]))
+        if r != x["r"]:
+            raise RuntimeError(f"{braco}: o r da corrida da decisao {x['inicio']} ({x['r']}) nao e a soma das decisoes dela ({r})")
+        k += x["n"]
+        if k >= len(ms) or ms[k]["escolha"][0] == x["b"]:
+            raise RuntimeError(f"{braco}: a corrida da decisao {x['inicio']} nao acabou numa troca de comportamento")
+    aberta = c.m.estado.corrida
+    if aberta is not None and (aberta["inicio"] != k or aberta["inicio"] + aberta["n"] != len(ms)):
+        raise RuntimeError(f"{braco}: a corrida aberta no fim ({aberta['inicio']}, n={aberta['n']}) nao fecha as decisoes seguidas")
+    esperados = len(entregues) if c.cd.p2 else 0                 # sem o P2 (o M1) nada vai a ele
+    if c.m.plast.creditos != esperados:
+        raise RuntimeError(f"{braco}: o P2 recebeu {c.m.plast.creditos} creditos, nao os {esperados} das corridas")
 
 
 def conferir_cenario(motor, registro: Registro) -> None:
