@@ -40,8 +40,7 @@ import bancada_v2 as bv  # noqa: E402
 import run_v2_digibrain_prototipo as orq  # noqa: E402
 import run_v2_longe_regular as lr  # noqa: E402
 from bancada.faixas import FAIXAS_RESERVADAS  # noqa: E402
-from digilab.config import CONFIG_DIGIBRAIN_INATOS, CONFIG_PADRAO, TICKS_POR_DIA  # noqa: E402
-from digilab.digibrain.estado import EstadoDinamico  # noqa: E402
+from digilab.config import CONFIG_PADRAO, TICKS_POR_DIA  # noqa: E402
 from digilab.metrics import JANELA_8_14, ic_t, janela_dias, repeticao_apos_alivio  # noqa: E402
 
 PLANO = orq.PLANO
@@ -115,8 +114,8 @@ def modo_da_config(cfg: dict) -> str:
 # ================================================================== a vida
 def fins_conhecidos(braco: str) -> frozenset:
     """os fins que a `estado.py` pode dar com a config do braco: as chaves de `EstadoDinamico.fins` (a contagem que o proprio estado
-    mantem; com a `intencao_cheiro`, o "achou"; com a `intencao_suspensa`, os da L-2). A lista nao e escrita a mao (a licao do #507)."""
-    return frozenset(EstadoDinamico(CONFIG_PADRAO, orq.config_do_braco(braco, conserto=True), CONFIG_DIGIBRAIN_INATOS).fins)
+    mantem; com a `intencao_cheiro`, o "achou"; com a `intencao_suspensa`, os da L-2). A lista nao e escrita a mao (a licao do #507); quem monta o estado e o `orq.fins_do_estado`."""
+    return orq.fins_do_estado(braco)
 
 
 def conferir_fins(braco: str, registro) -> dict:

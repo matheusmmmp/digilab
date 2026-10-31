@@ -70,6 +70,7 @@ from bancada.regras_mundo import simular_vida_fisico  # noqa: E402
 from digilab.config import (CONFIG_DIGIBRAIN_INATOS, CONFIG_DIGIBRAIN_LIGADA, CONFIG_MUNDO_MVP, CONFIG_PADRAO,  # noqa: E402
                             TICKS_POR_DIA, ConfigDigibrain, ConfigDigibrainInatos)
 from digilab.digibrain import DigiBrain  # noqa: E402
+from digilab.digibrain.estado import EstadoDinamico  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
 from digilab.events import LogDeEventos  # noqa: E402
 from digilab.metrics import (ACOES_R_POSSIVEL, JANELA_8_14, MODULOS_SONDA, MOTIVOS_EPISODIO, assimetria_g1, cadeia_comida_corpo,  # noqa: E402
@@ -289,6 +290,12 @@ def config_do_braco(braco: str, g_apr_con: int | None = None, conserto: bool = F
     if braco == "M4-con" and (type(g_apr_con) is not int or g_apr_con <= 0):
         raise ValueError(f"o M4-con precisa do g_apr fixo (inteiro > 0): {g_apr_con!r}")
     return replace(CONFIG_DIGIBRAIN_LIGADA, **tabela[braco], **extra)
+
+
+def fins_do_estado(braco: str) -> frozenset:
+    """os fins que a `estado.py` pode dar com a config do braco (das fases do conserto): as chaves de `EstadoDinamico.fins`, a contagem
+    que o proprio estado mantem. Fica aqui porque so este orquestrador monta o pacote do DigiBrain (o G2 e o T.3)."""
+    return frozenset(EstadoDinamico(CONFIG_PADRAO, config_do_braco(braco, conserto=True), CONFIG_DIGIBRAIN_INATOS).fins)
 
 
 class Registro:
