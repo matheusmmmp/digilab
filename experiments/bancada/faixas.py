@@ -113,6 +113,9 @@ FAIXAS_RESERVADAS = (
                    "secao 3; DR2-2, decidida pelo Matheus em 2026-10-30)"),
     (74101, 74505, "equilibrio do combate em tempo real (jogo web), segunda rodada: a conferencia, a validacao unica "
                    "(docs/PLANO_EQUILIBRIO_COMBATE_TR_R2.md, secao 3; DR2-2, decidida pelo Matheus em 2026-10-30; roda uma vez, nao volta)"),
+    (75101, 75505, "o habito com o credito na corrida do comportamento (C2, etapa 4: a run unica; TAREFA_V3_HABITO_INTENCAO, HI-6, "
+                   "decidida pelo Matheus em 2026-10-31; conferida livre pelo Gerente da V3; PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO, "
+                   "adendo 7)"),
     (50001, 50020, "analise de poder, piloto"), (60001, 60160, "confirmatoria"), (69001, 69001, "M1, gate G1"),
     (80001, 82004, "linhagem E1 (piloto, genomas e ambientes)"),
     (20260900, 20261800, "fala, voz, comando e bootstraps (sementes de 2026-09/10 e semente + i)"),
