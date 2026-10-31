@@ -1867,10 +1867,10 @@ test("pele dos menus: Ajustes › Aparência troca na hora e a escolha sobrevive
   const pele = () => page.evaluate(() => document.documentElement.dataset.pele);
   const gravada = () => page.evaluate(c => localStorage.getItem(c + "-pele"), CHAVE);
   await page.goto(APP + "#/config");
-  await expect(page.locator(".mc-cfg")).toContainText("pele Holográfico · tema");
+  await expect(page.locator(".mc-cfg")).toContainText("pele Sci-fi · tema");
   await page.locator(".mc-cfg .hx-linha", { hasText: "Aparência" }).click();
   const grupo = page.getByRole("radiogroup", { name: "Pele dos menus" });
-  const militar = grupo.getByRole("radio", { name: "Militar" }), holo = grupo.getByRole("radio", { name: "Holográfico" });
+  const militar = grupo.getByRole("radio", { name: "Militar" }), holo = grupo.getByRole("radio", { name: "Sci-fi" });
   await expect(holo).toHaveAttribute("aria-checked", "true");
   expect(await pele()).toBe("vidro");
   /* a secao vem acima do Tema do habitat; alvos de toque >= 44 px */
@@ -1902,7 +1902,7 @@ test("pele dos menus: Ajustes › Aparência troca na hora e a escolha sobrevive
   await page.screenshot({ path: "test-results/pele-ajustes-militar.png" });
   /* ?pele= no endereco sobrepoe sem gravar (T3): vale so nesta abertura */
   await page.goto(APP + "?pele=vidro#/config");
-  await expect(page.locator(".mc-cfg")).toContainText("pele Holográfico · tema");
+  await expect(page.locator(".mc-cfg")).toContainText("pele Sci-fi · tema");
   expect(await pele()).toBe("vidro");
   expect(await gravada()).toBe("xcom");
   await page.goto(APP + "#/config");

@@ -1,29 +1,10 @@
-/* HUD da tela Pet (docs/TAREFA_V3_LAYOUT_HUD.md): caixas escuras translucidas com cantos chanfrados, contorno fino e riscas diagonais,
-   no mesmo sistema do trilho, do topo e da barra de acoes. Cores pelos tokens --hx-* (as duas peles, sempre escuras); o chanfro e as
-   diagonais da borda sao desenhados no fundo, porque o clip-path corta a borda. Nada aqui toca a cena, o pet nem o balao.
-   Paleta (segunda rodada, decisao do Matheus de 2026-10-30): carvao quase preto, contorno azul-petroleo e acentos ciano/turquesa da
-   prancha, no trilho, no topo e na tela Pet, nas duas peles (as telas abertas seguem a pele escolhida). Os tokens --hx-* sao redefinidos
-   nesses tres lugares, e tudo dentro deles (paineis, chamado, barra, menu Mais, painel do DigiBrain) herda.
-   Contraste, pior caso (o fundo de cima, rgba(16,25,27,.92), sobre branco puro -> #232B2D, no tema claro): texto #DDEBEC 11,6:1;
-   texto-2 #C2D8DA 9,4:1; secundario #8FB3B6 6,2:1; ciano #49D5E2 8,0:1; alerta #FFB020 8,5:1; perigo #F09A9A 6,5:1. O escolhido
-   #B9EFF0 leva texto #0A1416 (15,6:1). O contorno #29474B e decorativo; as bordas que marcam estado (escolhido, chamado) sao ciano. */
-:root{
-  --hud-fundo-1:rgba(16,25,27,.92); --hud-fundo-2:rgba(10,16,18,.94);
-  --hud-ch:10px; --hud-ch-p:6px;
-  --hud-risca:repeating-linear-gradient(-60deg, rgba(73,213,226,.55) 0 2px, transparent 2px 6px);
-  --hud-larg:288px;
-}
-.hx-nav, .topo-hab, .app--pet .pet-tela{
-  --hx-chao:#0A1012; --hx-miolo:#10191B; --hx-miolo-2:#162326; --hx-painel-fim:#10191B;
-  --hx-borda:#29474B; --hx-borda-topo:#3A6A70; --hx-borda-int:rgba(73,213,226,.14);
-  --hx-texto:#DDEBEC; --hx-texto-2:#C2D8DA; --hx-sec:#8FB3B6; --hx-rotulo:#49D5E2; --hx-num:#49D5E2;
-  --hx-escolhido:#B9EFF0; --hx-escolhido-ink:#0A1416; --hx-escolhido-borda:#B9EFF0; --hx-escolhido-brilho:none;
-  --hx-medidor:#49D5E2; --hx-medidor-trilho:rgba(73,213,226,.14); --hx-luz:#49D5E2; --hx-foco:#49D5E2;
-  --hx-btn-bg:rgba(73,213,226,.12); --hx-btn-bg-hover:rgba(73,213,226,.22); --hx-btn-ink:#B9EFF0; --hx-btn-borda:#49D5E2;
-  --hx-hachura:repeating-linear-gradient(-60deg, rgba(73,213,226,.45) 0 4px, transparent 4px 9px);
-  --hx-hachura-verde:repeating-linear-gradient(-60deg, rgba(73,213,226,.45) 0 4px, transparent 4px 9px);
-  --hx-perigo:#F09A9A;
-}
+/* HUD da tela Pet (docs/TAREFA_V3_LAYOUT_HUD.md): caixas com cantos chanfrados, contorno fino e riscas nos titulos, no mesmo sistema do trilho,
+   do topo e da barra de acoes. Nada aqui toca a cena, o pet nem o balao (so o fundo do balao segue a caixa da HUD).
+   Pele (refeita em 2026-10-31, docs/registro/2026-10.md): a HUD segue a pele escolhida, como as telas abertas. A paleta turquesa unica das
+   duas peles (decisao de 2026-10-30) saiu: os tokens --hx-* e --hud-* de cada pele ficam em tokens.css (fundo, desfoque, chanfro, brilho,
+   risca) e o que nao cabe em token em pele-xcom.css (paineis foscos retos, cantos em L) e pele-vidro.css (vidro, luz, brilho). */
+/* a largura da pilha */
+:root{ --hud-larg:288px }
 /* a caixa chanfrada: canto superior direito e inferior esquerdo, como a prancha */
 /* (:root[data-pele] .pet-tela na frente: vence as regras da pele Vidro para .pet-prioridade e .pet-pedido .chamado) */
 .hud-caixa, .pet-hud .hud-painel, .pet-etiqueta-db, .topo-pet, .topo-relogio,
@@ -34,13 +15,12 @@
     linear-gradient(45deg, transparent calc(50% - 1px), var(--hx-borda) calc(50% - 1px) 50%, transparent 50%) right top / var(--ch) var(--ch) no-repeat border-box,
     linear-gradient(45deg, transparent 50%, var(--hx-borda) 50% calc(50% + 1px), transparent calc(50% + 1px)) left bottom / var(--ch) var(--ch) no-repeat border-box,
     linear-gradient(180deg, var(--hud-fundo-1), var(--hud-fundo-2)) border-box;
-  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+  box-shadow:var(--hud-brilho); -webkit-backdrop-filter:var(--hud-desfoque); backdrop-filter:var(--hud-desfoque);
   clip-path:polygon(0 0, calc(100% - var(--ch)) 0, 100% var(--ch), 100% 100%, var(--ch) 100%, 0 calc(100% - var(--ch)));
 }
 .pet-etiqueta-db{ --ch:var(--hud-ch-p) }
 /* a risca diagonal fina dos titulos */
 .hud-risca{ flex:1 1 auto; min-width:24px; max-width:72px; height:8px; background:var(--hud-risca) }
-@media (prefers-reduced-transparency:reduce){ :root{ --hud-fundo-1:#10191B; --hud-fundo-2:#0A1012 } }
 
 /* ---------- os paineis empilhados a direita (>= 900 px) */
 .pet-hud{ position:absolute; z-index:6; top:calc(var(--casca-topo) + 8px); right:12px; width:var(--hud-larg); max-height:calc(100% - var(--casca-topo) - 88px);
@@ -132,7 +112,7 @@
 
 /* o botao da borda escolhido (pele Holografica): o escolhido e um azul translucido, que sobre o habitat claro some com o icone; a base escura
    fica por baixo dele */
-:root[data-pele="vidro"] .app--pet .pet-tela .pet-lado .pet-lado__bt[aria-pressed="true"]{ background-color:#060B12 }
+:root[data-pele="vidro"] .app--pet .pet-tela .pet-lado .pet-lado__bt[aria-pressed="true"]{ background-color:#0A1A33 }
 /* o balao da fala no padrao do HUD (pedido do Matheus, 2026-10-30): caixa escura translucida chanfrada, contorno e traco ciano, texto
    claro; a fala fria/sombria (pets v7) troca o ciano pelo lilas. O toque continua abrindo o porque */
 .app--pet .pet-balcao .cena-fala.dl-balao{
@@ -143,7 +123,7 @@
     linear-gradient(45deg, transparent calc(50% - 1px), var(--balao-cor) calc(50% - 1px) 50%, transparent 50%) right top / var(--ch) var(--ch) no-repeat border-box,
     linear-gradient(45deg, transparent 50%, var(--balao-cor) 50% calc(50% + 1px), transparent calc(50% + 1px)) left bottom / var(--ch) var(--ch) no-repeat border-box,
     linear-gradient(180deg, var(--hud-fundo-1), var(--hud-fundo-2)) border-box;
-  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:var(--hud-desfoque); backdrop-filter:var(--hud-desfoque);
   clip-path:polygon(0 0, calc(100% - var(--ch)) 0, 100% var(--ch), 100% 100%, var(--ch) 100%, 0 calc(100% - var(--ch)));
 }
 .app--pet .pet-balcao .cena-fala.dl-balao::before{ content:""; position:absolute; left:10px; top:0; width:36px; height:2px; background:var(--balao-cor); pointer-events:none }
@@ -151,5 +131,6 @@
 .app--pet .pet-balcao .cena-fala .balao-txt{ font-size:15px }
 .app--pet .pet-balcao .cena-fala small{ color:var(--hx-sec); font:500 12px/1.2 var(--hx-f); letter-spacing:.02em }
 .app--pet .pet-balcao .cena-fala .dl-balao-tag{ color:var(--hx-sec); border-color:var(--hx-borda); border-radius:0 }
-.app--pet .pet-balcao .cena-fala:hover{ --balao-cor:var(--hx-escolhido) }
+/* a borda do escolhido (o --hx-escolhido do vidro e um gradiente e anularia o fundo do balao) */
+.app--pet .pet-balcao .cena-fala:hover{ --balao-cor:var(--hx-escolhido-borda) }
 .app--pet .pet-balcao .cena-fala:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:-5px }

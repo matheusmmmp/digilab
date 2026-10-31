@@ -32,7 +32,7 @@ export function EscolhaPele() {
           </button>
         ))}
       </div>
-      <p className="mc-apoio">A pele vale nos menus: painéis, barra, dock e janelas. O tema, logo abaixo, vale no habitat.</p>
+      <p className="mc-apoio">A pele vale nos menus e na tela do pet: painéis, barra, dock e janelas. O tema, logo abaixo, vale no habitat.</p>
     </>
   );
 }
