@@ -101,7 +101,7 @@
    em token (cantos em L, linha de topo da HUD, botoes retos) mora em estilo/pele-xcom.css. O habitat, o pet e o relogio seguem nos --dl-*.
    Contraste (WCAG) contra o pior fundo, a caixa da HUD rgba(30,33,36,.97) sobre branco puro (#25282B; conferido em test/hx_pele.test.ts):
    texto 11,9; texto-2 9,5; secundario 6,0; rotulo 8,1; numeros 11,9; botao 10,6; alerta 8,1; perigo 5,2; foco 13,1; o escolhido (texto
-   #12150D sobre #C5CFB0) 11,4. Linha de topo #6E7872 3,3. Valores PROPOSTOS ate a aprovacao das capturas novas. */
+   #12150D sobre #C5CFB0) 11,4. Linha de topo #6E7872 3,3. Valores DECIDIDOS: aprovacao do Matheus, 2026-10-31 (PR #514). */
 :root{
   --hx-chao:#101214; --hx-miolo:#131518; --hx-miolo-2:#1C1F22;
   --hx-borda:#3E4442; --hx-borda-topo:#6E7872;
@@ -143,7 +143,7 @@
    (#FFBE45, um tom acima do #FFB020 do Militar) 4,9; perigo 4,7; ok 4,7; aprendido 5,4; foco 8,1. Bordas: externa (alfa .72) 3,1; ciano
    #5FD4FF 4,7. Sobre o ceu e a noite o fundo e mais escuro e tudo sobe; o render e conferido em
    e2e_capturas/conferencia_pele.spec.ts. Com a transparencia reduzida o vidro fica opaco (#0C1E3A e #050E1E) e o contraste so sobe.
-   Valores PROPOSTOS ate a aprovacao das capturas novas (os DECIDIDOS da T3 foram refeitos: docs/registro/2026-10.md). */
+   Valores DECIDIDOS: aprovacao do Matheus, 2026-10-31 (PR #514; substituem os da T3: docs/registro/2026-10.md). */
 :root[data-pele="vidro"]{
   --hx-chao:rgba(6,18,38,.82); --hx-miolo:rgba(5,14,30,.86); --hx-miolo-2:rgba(10,26,52,.78);
   --hx-borda:rgba(110,200,255,.72); --hx-borda-topo:rgba(110,200,255,.72);

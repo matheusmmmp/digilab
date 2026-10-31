@@ -14,7 +14,7 @@
 }
 :root[data-pele="xcom"] :is(.hud-caixa, .pet-hud .hud-painel, .pet-etiqueta-db, .topo-pet, .topo-relogio),
 :root[data-pele="xcom"] body .pet-tela .pet-alerta :is(.pet-prioridade, .chamado.dl-card),
-:root[data-pele="xcom"] body .hx-nav::before, :root[data-pele="xcom"] body .nav-pe::before{
+:root[data-pele="xcom"] body .hx-nav::before{
   border-top:2px solid var(--hx-borda-topo);
   background:var(--xcom-cantos), linear-gradient(180deg, var(--hud-fundo-1), var(--hud-fundo-2)) border-box;
   clip-path:none;

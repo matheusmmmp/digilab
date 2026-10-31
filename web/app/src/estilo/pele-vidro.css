@@ -168,7 +168,7 @@
    brilho por dentro; o trecho de luz e o marcador acesos */
 :root[data-pele="vidro"] :is(.hud-caixa, .pet-hud .hud-painel, .pet-etiqueta-db, .topo-pet, .topo-relogio),
 :root[data-pele="vidro"] body .pet-tela .pet-alerta :is(.pet-prioridade, .chamado.dl-card),
-:root[data-pele="vidro"] body .hx-nav::before, :root[data-pele="vidro"] body .nav-pe::before{
+:root[data-pele="vidro"] body .hx-nav::before{
   background:
     linear-gradient(45deg, transparent calc(50% - 1px), var(--hx-borda) calc(50% - 1px) 50%, transparent 50%) right top / var(--ch) var(--ch) no-repeat border-box,
     linear-gradient(45deg, transparent 50%, var(--hx-borda) 50% calc(50% + 1px), transparent calc(50% + 1px)) left bottom / var(--ch) var(--ch) no-repeat border-box,

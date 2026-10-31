@@ -58,8 +58,9 @@ e deixa o Militar em `:root` (a pele sem atributo é a Militar; o padrão Vidro 
 
 "(proposta)" marca valor que a referência não fixa; a T1 propõe e confere o contraste, e o Matheus aprova nas capturas da T3.
 
-**Refeitos em 2026-10-31 (voltam a PROPOSTOS):** a tabela abaixo é a da T1/T3; os valores de hoje, das duas peles, estão em
-`web/app/src/estilo/tokens.css` e na seção "Resultado da refeitura das peles", no fim. Ficam PROPOSTOS até a aprovação das capturas novas.
+**Refeitos em 2026-10-31 e DECIDIDOS:** a tabela abaixo é a da T1/T3; os valores de hoje, das duas peles, estão em
+`web/app/src/estilo/tokens.css` e na seção "Resultado da refeitura das peles", no fim. São DECIDIDOS. Fonte: aprovação do Matheus,
+2026-10-31 (PR #514, "Aprovado com um ajuste": o trilho com os seis destinos juntos).
 
 **DECIDIDOS (2026-10-31, antes da refeitura).** Fonte: o Matheus aprovou as capturas da T3 (PR #505, "Continue com o recomendado"). Valem como DECIDIDOS
 todos os "(proposta)" das duas tabelas abaixo, com os quatro ajustes de contraste da T1 (início do gradiente .92, contorno externo .62,
@@ -320,3 +321,8 @@ dados e interações; o cenário 3D, o pet e o motor não mudam.
   (`lado_*.png`, Militar à esquerda), e as telas extras da T3 nas duas peles × claro/escuro em 1920 × 950. O teste novo "ilha nas duas peles"
   do `conferencia_pele.spec.ts` grava a ilha e o Crescer.
 - **Portão `e2e_capturas`:** as referências são as da T3; elas só são regeneradas depois da aprovação do Matheus (TM5).
+- **Aprovação (2026-10-31):** o Matheus aprovou as capturas com um ajuste: "junte os botoes da barra lateral esquerda, pois conversa e
+  ajuste estao separados". No desktop (≥ 900 px) o pé do trilho (Conversar e Ajustes) entra no mesmo bloco dos quatro destinos, sem o vão,
+  na mesma ordem (`.nav-pe{ display:contents }` em `casca.css`; o DOM não muda). Abaixo de 900 px não há trilho: Conversar e Ajustes já
+  ficam no cabeçalho, e nada muda. Os valores das duas peles viram DECIDIDOS (fonte: aprovação do Matheus, 2026-10-31) e as referências do
+  portão são regeneradas nas duas peles. Capturas novas em `D:\Trab\digilab\capturas_tema_peles\r4\`.
