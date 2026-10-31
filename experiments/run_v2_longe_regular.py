@@ -65,7 +65,7 @@ G_ELEGIVEL_EP = orq.G_ELEGIVEL_EP                                               
 LIMIAR_G1, RESSALVA_G1 = orq.LIMIAR_G1, orq.RESSALVA_G1                               # A6.4: o g1 como em A4.4.6
 LIMIAR_CORPO = CONFIG_PADRAO.limiar_privacao                                          # AD6-4: o 0,15 da privacao
 TIPOS_DE_META = {("comer", "cheiro"): "busca", ("comer", "comida"): "ida", ("explorar", "ponto"): "lugar_lembrado"}   # A6.8, item 3
-MOTIVOS_FIM = ("meta", "trocou", "achou", "sumiu", "expirou")                         # A6.8, item 3
+MOTIVOS_FIM = ("meta", "trocou", "achou", "sumiu", "expirou", "desistiu")              # A6.8, item 3 e A6.14 (o "desistiu" da busca, DX-4)
 FAIXAS_D0 = ("na_visao", "no_cheiro", "alem_do_cheiro")                               # A6.8, item 1
 JANELAS_CORPO = ("vida", "dias_8_14")
 

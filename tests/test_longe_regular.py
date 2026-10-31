@@ -191,6 +191,14 @@ def test_as_trocas_de_meta_contam_o_motivo():
     assert r["fins"]["busca"]["achou"] == 1 and r["trocas_total"] == 3                  # o "brincar" nao e meta de comer/explorar
 
 
+def test_o_fim_desistiu_da_busca_e_contado_a_parte_e_nao_e_troca():
+    ms = [_m([{"chave": ["comer", "cheiro", None], "motivo": "desistiu"}]),
+          _m([{"chave": ["comer", "comida", 3], "motivo": "desistiu"}, {"chave": ["comer", "cheiro", None], "motivo": "desistiu"}])]
+    r = lr.trocas_de_meta(_registro_falso(ms))
+    assert r["fins"]["busca"]["desistiu"] == 2 and r["fins"]["ida"]["desistiu"] == 1
+    assert r["trocas_total"] == 0 and r["trocas"]["busca"] == {"reflexo": 0, "dormir_sorteio": 0, "outra_unidade": 0, "por_vencedora": {}}
+
+
 def test_uma_retomada_ou_um_n_susp_falham_alto_com_a_intencao_suspensa_desligada():
     with pytest.raises(RuntimeError, match="retomada"):
         lr.trocas_de_meta(_registro_falso([_m(retomou=True)]))
