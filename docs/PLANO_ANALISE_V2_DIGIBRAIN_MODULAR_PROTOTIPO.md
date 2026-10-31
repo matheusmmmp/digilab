@@ -2478,3 +2478,33 @@ que vale.
 **Um achado de leitura, sem decisão:** a C1-E1 cita o comedouro como "+0,136" pelo G-ABLA-MEM. Essa medida é **por ração** (o contraste
 do G-ABLA-MEM, A4.10, item 3, é a taxa da `cadeia`). Por episódio, nas mesmas vidas, a diferença é +0,137 [0,114; 0,160] [poder]. Os dois
 são > 0, e a previsão do comedouro não muda.
+
+### A6.13 A run (71101 a 71505): o registro, antes da primeira vida (2026-10-31, worker da C1, etapa 3b, Claude Code, Opus 5.5)
+
+**O que é:** o registro de A6.10, num commit empurrado antes da primeira vida. **Nenhuma vida da faixa roda neste registro,** e nada
+de A6.0 a A6.12 muda. A run roda uma vez; o resultado é registrado como está.
+
+- **O commit de onde sai:** a `main` em `3382a20` (o #506), mais este registro, na worktree `v3-longe-regular-run`, com a árvore limpa.
+- **A config:** `experiments/configs/v2_longe_regular/longe_regular.json`, sha256 `9996cf83…20c9`.
+- **As bases e o K:** 71101, 71202, 71303, 71404 e 71505, K = 30 por base, o prefixo `digibrain_prototipo` (A6.3): **150 unidades.**
+  - a primeira (71101, k = 0): a semente 5528572961170204068 e o genoma 5416156557738058945;
+  - a última (71505, k = 29): a semente 7921421832378134492 e o genoma 15552462759529445061.
+- **Os braços e as células:** M0, M2 e M3\* de `SUBCHAVES_CONSERTO`, com a `intencao_suspensa` desligada; os 4 donos × `longe_fixo` e
+  `longe`; 14 dias, orçamento de 16: **3 600 vidas** (A6.2).
+- **Os sha256** (antes deste registro):
+  - o orquestrador `experiments/run_v2_longe_regular.py`: `cf7915dc…1960`;
+  - o protótipo `experiments/run_v2_digibrain_prototipo.py`: `db691207…0c9`;
+  - `digilab/config.py`: `e7393205…1331`; `digilab/engine.py`: `48ba51ce…3630` (o congelado); `digilab/metrics.py`: `8c6a6794…a425`;
+    `digilab/mundo.py`: `78120bdf…83bb`;
+  - este plano, antes desta seção: `9385331b…70b9e5`. O `meta.json` grava o sha do plano com esta seção.
+- **A pasta de saída:** `artifacts_v2_digibrain_prototipo/longe_regular/run/`, **um nível abaixo do que diz A6.10.** A pasta
+  `longe_regular/` já existe (tem o `adendo6_poder.json` do #497, citado acima com o caminho), e o orquestrador não grava numa pasta que
+  já existe. Pelo Gerente da V3 (2026-10-31), a run usa a opção `--saida`, que o orquestrador já tem e que passa pelas mesmas travas (o
+  adendo APROVADO, a faixa, as bases, o K, os dias, os ≤ 4 processos). Nada é sobrescrito e a análise não muda (o desvio no registro).
+- **O comando** (da raiz da worktree, depois da suíte, sem sobrepor; V3-D8):
+
+      python experiments/run_v2_longe_regular.py --config experiments/configs/v2_longe_regular/longe_regular.json --saida artifacts_v2_digibrain_prototipo/longe_regular/run --processos 4
+
+- **Nenhuma vida da faixa em disco:** em 2026-10-31 nenhuma worktree em `D:\Trab\digilab` tem a pasta `longe_regular/run/` nem um log de
+  vida com a semente da primeira unidade no nome; as pastas `longe_regular/` só têm o `adendo6_poder.json`.
+- **O tempo estimado:** cerca de 35 min de parede (a fumaça da etapa 3a) a 1 h (A6.9).
