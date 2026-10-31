@@ -460,3 +460,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-31 — C1 LONGE REGULAR, etapa 3b (worker, Claude Code, Opus 5.5, worktree `v3-longe-regular-run`): a run da 71xxx e a leitura](registro/2026-10.md)
 - [2026-10-31 — C1 LONGE REGULAR, etapa 3c (worker, Claude Code, Sonnet 5.5, worktree `v3-longe-regular-conserto`): o `desistiu` entra nos fins do orquestrador](registro/2026-10.md)
 - [2026-10-31 — HABITAT-ILHA, o portão de capturas estável (worker, Claude Code, Opus 5.5, worktree `cool-panini-6f93b7`): as duas telas da Exploração](registro/2026-10.md)
+- [2026-10-31 — C1 LONGE REGULAR, etapa 3b, a repetição (worker, Claude Code, Opus 5.5, worktree `v3-longe-regular-run2`): a run de novo e a leitura](registro/2026-10.md)

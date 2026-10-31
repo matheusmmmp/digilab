@@ -1,0 +1,93 @@
+{
+ "modo": "longe_regular",
+ "vidas": 3600,
+ "primario": {
+  "contraste": "M3* - M2, taxa de fechamento por episodio, nas 4 celulas do longe_fixo",
+  "passa": true,
+  "n": 150,
+  "n_grupos": 5,
+  "media": 0.04894141360773422,
+  "teste": "t sobre as unidades (A4.4.6)",
+  "p_unilateral": 1.3573055820166553e-11,
+  "ic95": {
+   "ic_inferior": 0.03551525122124272,
+   "ic_superior": 0.06236757599422572,
+   "nivel": 0.95
+  },
+  "t": 7.203017171974759,
+  "gl": 149,
+  "motivo": null,
+  "g1": 0.11476613171844921,
+  "ressalva_assimetria": null,
+  "bootstrap": {
+   "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)",
+   "p_unilateral": 0.0,
+   "ic95": {
+    "ic_inferior": 0.03990119062979699,
+    "ic_superior": 0.058099657321066096,
+    "nivel": 0.95
+   },
+   "ic90": {
+    "ic_inferior": 0.04047163670215674,
+    "ic_superior": 0.05759676355486693,
+    "nivel": 0.9
+   },
+   "motivo": null
+  },
+  "classe": {
+   "classe": "> 0",
+   "sinal": null,
+   "motivo": null
+  },
+  "margem": 0.022,
+  "margem_efetiva": 0.019144617848961386
+ },
+ "premissas": {
+  "G-PESA-memoria": {
+   "n": 150,
+   "media": 0.12188988095238094,
+   "dp": 0.03457513880548834,
+   "ic95": {
+    "ic_inferior": 0.1163115003854593,
+    "ic_superior": 0.12746826151930257
+   },
+   "classe": {
+    "classe": "> 0",
+    "sinal": null,
+    "motivo": null
+   },
+   "motivo": null,
+   "passa": true,
+   "limiar": 0.01
+  },
+  "G-ELEGIVEL-EP": {
+   "frac_vidas": 0.9416666666666667,
+   "vidas": 600,
+   "limiar": 0.8,
+   "passa": true
+  },
+  "conclusivo": true
+ },
+ "sorteado": {
+  "n": 150,
+  "media": -0.010635751790150092,
+  "dp": 0.0805010203075695,
+  "ic95": {
+   "ic_inferior": -0.023623850835173363,
+   "ic_superior": 0.0023523472548731775
+  },
+  "classe": {
+   "classe": "indeterminado",
+   "sinal": null,
+   "motivo": null
+  },
+  "motivo": null
+ },
+ "leitura": {
+  "longe_fixo": "> 0",
+  "longe": "indeterminado",
+  "linha": "registrado como indeterminado; nada se decide com ele",
+  "l3_ganha_tarefa": false,
+  "ressalva_primario": null
+ }
+}
