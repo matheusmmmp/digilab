@@ -1,0 +1,15 @@
+{
+  "descricao": "Fumaca da run da C2 (o habito com o credito na corrida): as sementes dos testes, 2 dias; so confere que o orquestrador roda. Nenhuma semente da faixa 75101...75505.",
+  "plano": "docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md",
+  "fase": "habito_intencao",
+  "unidades": {
+    "bases": [
+      101,
+      202
+    ],
+    "k": 1,
+    "prefixo": "digibrain_prototipo"
+  },
+  "dias": 2,
+  "orcamento_por_dia": 16
+}

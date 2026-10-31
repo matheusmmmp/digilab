@@ -1,0 +1,18 @@
+{
+  "descricao": "A run da C2 da V3, o habito com o credito na corrida do comportamento (adendo 7, PROPOSTO; A7.2 e A7.3): os bracos M1, M2 e M2c (sem o M-MEM, intencao_suspensa desligada) nas 12 celulas (4 donos x longe_fixo, comedouro e longe), bases 75101, 75202, 75303, 75404 e 75505, K = 30 por base PROPOSTO (150 unidades), 14 dias. 5 400 vidas, uma vez, da main limpa, com ate 4 processos. O orquestrador recusa a run ate o adendo 7 estar APROVADO pelo Matheus.",
+  "plano": "docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md",
+  "fase": "habito_intencao",
+  "unidades": {
+    "bases": [
+      75101,
+      75202,
+      75303,
+      75404,
+      75505
+    ],
+    "k": 30,
+    "prefixo": "digibrain_prototipo"
+  },
+  "dias": 14,
+  "orcamento_por_dia": 16
+}
