@@ -2518,3 +2518,28 @@ troca**: as trocas, o primário, as medidas da C5 e a regra de leitura (A6.1 a A
 fins que uma intenção pode ter no `estado.py` são `meta`, `trocou`, `sumiu`, `desistiu` e `achou`; o `expirou` (e o `saciou` e o
 `superada`, da L-2) só vêm com a suspensa ligada, e a conferência segue falhando alto para qualquer outro. Nenhuma vida da faixa
 71101…71505 rodou neste conserto.
+
+### A6.15 A run nova (71101 a 71505), depois do conserto: o registro, antes da primeira vida (2026-10-31, worker da C1, etapa 3b, Claude Code, Opus 5.5)
+
+**O que é:** o registro de A6.10 para a run nova, decidida pelo Matheus (a D-3b-1 e a D-3b-2 do #507, pelo Gerente da V3), num commit
+empurrado antes da primeira vida. **Nada de A6.0 a A6.14 muda.** Não é uma segunda validação: a run de A6.13 caiu sem gravar
+`medidas.json` nem `resultado.json`, e nenhum número da faixa foi lido. A run roda uma vez; o resultado é registrado como está.
+
+- **O commit de onde sai:** a `main` em `b0978b2` (o #507 e o #508), mais este registro, na worktree `v3-longe-regular-run2`, com a
+  árvore limpa.
+- **O mesmo de A6.13:** a config (sha256 `9996cf83…20c9`), as 5 bases, o K = 30, o prefixo e as 150 unidades (as mesmas sementes e
+  genomas), os 3 braços, as 8 células, os 14 dias, as 3 600 vidas, a pasta de saída `artifacts_v2_digibrain_prototipo/longe_regular/run/`
+  (que não existe) e o comando:
+
+      python experiments/run_v2_longe_regular.py --config experiments/configs/v2_longe_regular/longe_regular.json --saida artifacts_v2_digibrain_prototipo/longe_regular/run --processos 4
+
+- **Os sha256** (antes deste registro):
+  - o orquestrador `experiments/run_v2_longe_regular.py`: `59b90341…7473` (mudou no #508, o `desistiu` de A6.14);
+  - o protótipo `experiments/run_v2_digibrain_prototipo.py`: `db691207…0c9`; `digilab/config.py`: `e7393205…1331`;
+    `digilab/engine.py`: `48ba51ce…3630` (o congelado); `digilab/metrics.py`: `8c6a6794…a425`; `digilab/mundo.py`: `78120bdf…83bb`
+    (todos iguais aos de A6.13);
+  - este plano, antes desta seção: `5752d72b…5580`.
+- **A conferência com a run caída:** depois da run, as 3 268 vidas de `caido_1/vidas/` (na worktree `v3-longe-regular-run`, fora do git)
+  devem ter o mesmo sha256 de log na run nova (o determinismo; a vida não mudou no #508). Se alguma diferir, o worker para e avisa.
+- **Nenhuma vida da faixa em disco fora da `caido_1/`:** em 2026-10-31 nenhuma worktree em `D:\Trab\digilab` tem a pasta
+  `longe_regular/run/`.
