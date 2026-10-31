@@ -5,7 +5,7 @@ para a C5, o G1, o T-CENARIO-1, o G-MECANISMO e o credito em toda vida, por opca
 
 O desenho (A7.2 e A7.3): as celulas 4 donos x 3 lugares (`longe_fixo`, comedouro e longe), os bracos M1, M2 e M2c (o M2 com a
 `credito_corrida`; SUBCHAVES_C2 do orquestrador do prototipo), todos sem o M-MEM e com a `intencao_suspensa` desligada, as bases 75101,
-75202, 75303, 75404 e 75505, o prefixo `digibrain_prototipo`, K PROPOSTO (A7.6). A run roda uma vez, sem calibracao nem piloto.
+75202, 75303, 75404 e 75505, o prefixo `digibrain_prototipo`, K DECIDIDO (A7.6, AD7-1). A run roda uma vez, sem calibracao nem piloto.
 
 A analise (A7.4 a A7.8), no `resultado.json`: o primario P-A (M2c - M2 no indice "ganhou, fica" de hoje, nas 8 celulas do `longe_fixo`
 e do comedouro, o IC95 pelo t sobre as unidades), as premissas (P-CORRIDA e G-PESA do habito), as secundarias S1 (M2c - M1) e S2
@@ -48,7 +48,7 @@ PREFIXO = orq.PREFIXO                                                           
 FASE = "habito_intencao"
 ADENDO = 7
 BASES = (75101, 75202, 75303, 75404, 75505)                                           # A7.3 (HI-6)
-K_POR_BASE = 30                                                                       # A7.6, PROPOSTO (AD7-1): 150 unidades
+K_POR_BASE = 30                                                                       # A7.6, DECIDIDO (AD7-1): 150 unidades
 FAIXA = (75101, 75505)
 SAIDA = "artifacts_v2_digibrain_prototipo/habito_intencao/run"                        # A7.10: a pasta-mae ja tem o adendo7_poder.json
 DIAS, ORCAMENTO_POR_DIA = orq.DIAS, orq.ORCAMENTO_POR_DIA                             # A7.2
@@ -60,7 +60,7 @@ BRACOS = ("M1", "M2", "M2c")                                                    
 CELULAS = tuple((d, lu) for d in DONOS for lu in LUGARES)
 CELULAS_PRIMARIO = tuple((d, lu) for d in DONOS for lu in PRIMARIOS)
 CHAVES_CONFIG = lr.CHAVES_CONFIG
-MARGEM = 0.011                                                                        # A7.6, PROPOSTA (AD7-1), SEM FONTE: o "~ 0"
+MARGEM = 0.011                                                                        # A7.6, DECIDIDA (AD7-1), SEM FONTE: o "~ 0"
 P_CORRIDA_LIMIAR = 1.1                                                                # A7.5 (a P-CORRIDA da tarefa, 4.3), SEM FONTE
 G_PESA_LIMIAR = orq.G_PESA["limiar"]                                                  # 0,01 (A7.5)
 LIMIAR_G1, RESSALVA_G1 = orq.LIMIAR_G1, orq.RESSALVA_G1                               # A7.4: o g1 como em A4.4.6

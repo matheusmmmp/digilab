@@ -1,5 +1,5 @@
 """O orquestrador da C2 (experiments/run_v2_habito_intencao.py; o adendo 7 do plano, A7.2 a A7.10): a config e a trava (o adendo 7
-APROVADO, que hoje esta PROPOSTO e recusa a run; a faixa 75101...75505; as bases, o K, os dias; no maximo 4 processos; nada por cima de
+APROVADO (sem ele, a run e recusada); a faixa 75101...75505; as bases, o K, os dias; no maximo 4 processos; nada por cima de
 uma pasta existente), os bracos, os fins conhecidos lidos da `estado.py` (a licao do #507), as corridas, a classe, a leitura de A7.7, o
 artefato do poder e a fumaca de ponta a ponta. Vidas so com as sementes dos testes (101...505): nenhuma da faixa 75xxx roda aqui."""
 from __future__ import annotations
@@ -26,19 +26,11 @@ from bancada.faixas import na_faixa_reservada  # noqa: E402
 from digilab.digibrain import estado as mod_estado  # noqa: E402
 
 CONFIGS = RAIZ / "experiments" / "configs" / "v2_habito_intencao"
-MARCA_PROPOSTO = "**Status: PROPOSTO.** Só o Matheus o aprova"
+MARCA_APROVADO = "**Status: APROVADO pelo Matheus em 2026-10-31,** com as AD7-1 a AD7-5"
 
 
 def _cfg(nome: str = "habito_intencao") -> dict:
     return json.loads((CONFIGS / f"{nome}.json").read_text(encoding="utf-8"))
-
-
-@pytest.fixture
-def aprovado(monkeypatch):
-    """o plano com o adendo 7 marcado como APROVADO, so neste teste (o arquivo nao muda)"""
-    plano = hi._plano()
-    assert MARCA_PROPOSTO in plano
-    monkeypatch.setattr(hi, "_plano", lambda: plano.replace(MARCA_PROPOSTO, "**Status: APROVADO pelo Matheus em 2099-01-01.** Teste"))
 
 
 # ------------------------------------------------------------------ o que o adendo fixa
@@ -72,28 +64,32 @@ def test_a_faixa_esta_reservada():
 
 
 # ------------------------------------------------------------------ a config e a trava
-def test_a_run_e_recusada_enquanto_o_adendo_7_esta_proposto():
-    assert MARCA_PROPOSTO in hi._plano()
+def test_a_trava_exige_o_adendo_7_aprovado(monkeypatch):
+    """o plano real tem o adendo 7 APROVADO; com o cabecalho trocado por PROPOSTO (so neste teste), a run e recusada"""
+    plano = hi._plano()
+    assert MARCA_APROVADO in plano
+    monkeypatch.setattr(hi, "_plano", lambda: plano.replace(MARCA_APROVADO, "**Status: PROPOSTO.** Só o Matheus o aprova"))
     with pytest.raises(RuntimeError, match="nao esta APROVADO"):
         hi.modo_da_config(_cfg())
     assert hi.modo_da_config(_cfg("fumaca")) == "fumaca"                # a fumaca nao precisa do adendo
 
 
-def test_com_o_adendo_aprovado_a_config_segue_o_adendo(aprovado):
+def test_com_o_adendo_aprovado_a_config_segue_o_adendo():
+    assert MARCA_APROVADO in hi._plano()
     assert hi.modo_da_config(_cfg()) == "habito_intencao"
 
 
 @pytest.mark.parametrize("bases", [[75101, 75202, 75303, 75404], [75101, 75202, 75303, 75404, 75506], [75505, 75404, 75303, 75202, 75101],
                                    [71101, 71202, 71303, 71404, 71505], [66101, 66202, 66303, 66404, 66505], [101, 75101],
                                    [101, 75202, 75303, 75404, 75505]])
-def test_recusa_outra_base_e_sementes_fora_da_faixa(aprovado, bases):
+def test_recusa_outra_base_e_sementes_fora_da_faixa(bases):
     c = _cfg()
     c["unidades"]["bases"] = bases
     with pytest.raises(bv.SementeSemPlano):
         hi.modo_da_config(c)
 
 
-def test_recusa_outro_k_outros_dias_outro_orcamento_e_outro_plano(aprovado):
+def test_recusa_outro_k_outros_dias_outro_orcamento_e_outro_plano():
     for chave, valor in (("k", 29), ("k", 10), ("dias", 13), ("dias", 15), ("orcamento_por_dia", 15), ("plano", "outro.md")):
         c = _cfg()
         if chave == "k":
@@ -119,7 +115,7 @@ def test_recusa_chave_a_mais_fase_errada_e_fumaca_com_dias_demais():
         hi.modo_da_config(c)
 
 
-def test_a_trava_exige_a_faixa_reservada(aprovado, monkeypatch):
+def test_a_trava_exige_a_faixa_reservada(monkeypatch):
     monkeypatch.setattr(hi, "FAIXAS_RESERVADAS", tuple(f for f in hi.FAIXAS_RESERVADAS if f[0] != 75101))
     with pytest.raises(bv.SementeSemPlano, match="FAIXAS_RESERVADAS"):
         hi.modo_da_config(_cfg())
