@@ -82,7 +82,7 @@ for (const [largura, altura] of LARGURAS.map(l => [l, l >= 1900 ? 950 : l >= 110
       /* a tela Pet: a cena 3D chega por import dinamico (tempo real, fora do relogio falso); so depois dela o relogio anda, senao o
          numero de quadros desenhados antes da captura varia */
       await page.waitForFunction(() => !document.querySelector(".pet-cena") || !!document.querySelector(".pet-cena .cena-sala")
-        || (document.querySelector<HTMLCanvasElement>(".pet-cena .cena3d canvas")?.width ?? 0) > 0);
+        || !!document.querySelector(".pet-cena .cena3d[data-pronto]"));
       /* a Exploracao: o mapa 3D tambem chega por import dinamico; espera ele desenhar (ou a tela cair no mapa 2D) */
       await page.waitForFunction(() => !document.querySelector(".camp-tela--expl") || !!document.querySelector(".mapa-expl[data-pronto]"));
       await page.clock.runFor(1000);

@@ -47,7 +47,7 @@ async function abrir(page: Page, pele: string, tema: string, rota: string): Prom
   await page.addStyleTag({ content: ".app > .aviso, .avisos > .aviso{display:none}" });
   await page.evaluate(() => document.fonts.ready);
   await page.waitForFunction(() => !document.querySelector(".pet-cena") || !!document.querySelector(".pet-cena .cena-sala")
-    || (document.querySelector<HTMLCanvasElement>(".pet-cena .cena3d canvas")?.width ?? 0) > 0);
+    || !!document.querySelector(".pet-cena .cena3d[data-pronto]"));
   await page.waitForFunction(() => !document.querySelector(".camp-tela--expl") || !!document.querySelector(".mapa-expl[data-pronto]"));
   /* com o relogio parado (as medidas), ele anda 1 s depois de abrir, como no portao: a cena desenha e o jogo nao muda entre a coleta dos
      textos e a foto do fundo */

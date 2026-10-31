@@ -146,6 +146,8 @@ class VistaPet {
 
   /** desenha um quadro: troca a textura se o pet mudou e devolve o retangulo do sprite em px de CSS (para os extras do PalcoPet) */
   desenhar(quadro: number, razao: number): { x: number; y: number; w: number; h: number } {
+    /* o ColorManagement e global e a ilha o liga: repor o desta vista antes das cores e do desenho */
+    THREE.ColorManagement.enabled = false;
     const { motor: m, nascendo } = jogoAtual(), f = fonteDoPet(quadro);
     if (f.chave !== this.chave) {
       const mat = this.sprite.material as THREE.SpriteMaterial;

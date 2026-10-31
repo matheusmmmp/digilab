@@ -70,6 +70,7 @@ class VistaIlha {
 
   /** os kits (public/kits3d) entram depois do terreno */
   async carregarObjetos(): Promise<void> {
+    THREE.ColorManagement.enabled = true;
     const o = await objetos(this.ilha, document.baseURI);
     this.objetos = o;
     this.cenaIlha.cena.add(o.grupo);
@@ -123,6 +124,9 @@ class VistaIlha {
 
   /** um quadro: o pet onde o motor diz (interpolado), a camera atras dele, a racao e a bola, o dia ou a noite; devolve o retangulo do pet */
   desenhar(agora: number, quadro: number): Ret {
+    /* o ColorManagement do three e um global que as outras vistas (a sala e o mapa da Exploracao) desligam: sem repor aqui, a cor da nevoa
+       e das luzes dependia de qual import dinamico subia por ultimo */
+    THREE.ColorManagement.enabled = true;
     const { motor: m } = jogoAtual(), mu = m.mundo ?? this.mu, cm = mu.cm, sub = cm.sub;
     const dtMs = agora - this.ultimo, pos = this.seguidor.seguir(mu.pet, dtMs, cm);
     this.ultimo = agora;
@@ -164,6 +168,8 @@ const p95 = (v: number[]): number => { const s = [...v].sort((a, b) => a - b); r
 
 /** liga a ilha num canvas; devolve a funcao que desliga. Falha alto (a tela cai na reserva) se o WebGL nao subir ou um modelo faltar */
 export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: () => void): () => void {
+  /* antes da vista: os campos dela (o papel) ja criam cores */
+  THREE.ColorManagement.enabled = true;
   const vista = new VistaIlha(canvas, mundo), caixa = canvas.parentElement;
   if (!caixa) throw new Error("cena 3D sem caixa");
   const perdeu = (ev: Event) => { ev.preventDefault(); aoPerder(); };

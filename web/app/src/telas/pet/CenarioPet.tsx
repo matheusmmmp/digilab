@@ -94,7 +94,8 @@ export function CenaPet({ noite, mundo = false }: { noite: boolean; mundo?: bool
     import("./cena3d.ts")
       .then(m => {
         if (!vivo || !ref.current) return;
-        try { parar = m.iniciarCena3D(ref.current, () => setReserva(true)); }
+        /* data-pronto: a cena ja subiu e desenhou (o portao de capturas espera por ele antes de andar o relogio falso) */
+        try { parar = m.iniciarCena3D(ref.current, () => setReserva(true)); ref.current.parentElement?.setAttribute("data-pronto", "1"); }
         catch (err) { console.warn("cena 3D do Pet não subiu; fica o cenário de reserva:", err); setReserva(true); }
       })
       .catch(err => { console.warn("cena 3D do Pet não carregou; fica o cenário de reserva:", err); if (vivo) setReserva(true); });
