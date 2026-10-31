@@ -141,6 +141,8 @@
   --ui-primary-hover:#8FDCFF; --ui-primary-ink:#06101A; --ui-primary-soft:#14283A; --ui-primary-forte:#5FD4FF; --ui-primary-forte-hover:#9BE6FF;
   --ui-navy:#060B12; --ui-navy-2:#15202B; --ui-danger:var(--hx-perigo); --ui-bar-track:rgba(150,172,194,.2); --ui-foco:0 0 0 2px #5FD4FF;
 }
+/* a etiqueta "voce" do Registro: o branco literal de diario.css sobre o azul do vidro dava 2,55:1; o texto escuro da 7,5:1 (T3) */
+:root[data-pele="vidro"] :is(.painel-tela .painel-tela__folha, .pet-painel .pet-painel__folha) .reg-voce{ color:var(--dl-action-ink) }
 :root[data-pele="vidro"] .painel-tela .painel-tela__folha .evt-heroi{ background-image:radial-gradient(ellipse at 25% 40%, #1C3550 0%, #060B12 80%) }
 
 /* ---------- telas que abrem sozinhas (abertas.css, M6): os literais ciano do Militar viram o azul do vidro; o veu escuro fica igual */
