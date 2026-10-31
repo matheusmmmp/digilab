@@ -458,3 +458,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-30 — HABITAT-ILHA, H0 a H5 (Gerente e worker, Claude Code, Opus 5.5, worktree `v3-habitat-ilha`): a ilha 3D no modo mundo](registro/2026-10.md)
 - [2026-10-30 — TEMA-MENUS, T3 (worker, Claude Code, Opus 5.5, worktree `agitated-rubin-b2128e`): a conferência das duas peles](registro/2026-10.md)
 - [2026-10-31 — C1 LONGE REGULAR, etapa 3b (worker, Claude Code, Opus 5.5, worktree `v3-longe-regular-run`): a run da 71xxx e a leitura](registro/2026-10.md)
+- [2026-10-31 — C1 LONGE REGULAR, etapa 3c (worker, Claude Code, Sonnet 5.5, worktree `v3-longe-regular-conserto`): o `desistiu` entra nos fins do orquestrador](registro/2026-10.md)
