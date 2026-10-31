@@ -240,3 +240,11 @@ Os testes e a contagem da suíte inteira estão no corpo do PR.
   um pouco abaixo; a análise sobre 3 600 vidas não foi medida em escala (a da fumaça leva segundos). O tempo real vai ao RESULTADO.
 
 Os testes e a contagem da suíte inteira estão no corpo do PR.
+
+## Etapa 3b: a run caiu (2026-10-31, worker Claude Code, Opus 5.5, worktree `v3-longe-regular-run`)
+
+**Nenhum resultado.** A run começou uma vez, do registro de A6.13 (`b2b7076`, a árvore limpa, 4 processos, a saída em
+`longe_regular/run/` pelo `--saida`, o desvio 1), e caiu depois de cerca de 46 min. A medida das trocas de meta (A6.8, item 3) não conhece
+o fim `desistiu` da busca pelo cheiro e falhou alto. Ficaram 3 268 das 3 600 vidas no disco, sem `medidas.json` nem `resultado.json`.
+A pasta foi movida para `artifacts_v2_digibrain_prototipo/longe_regular/caido_1/`, e a run não rodou de novo (o desvio 2 do registro de
+2026-10-31). O conserto e a nova run vão ao Gerente pelo PR.

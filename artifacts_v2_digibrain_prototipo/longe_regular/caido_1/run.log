@@ -1,0 +1,38 @@
+concurrent.futures.process._RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "C:\Users\mathe\AppData\Local\Programs\Python\Python313\Lib\concurrent\futures\process.py", line 253, in _process_worker
+    r = call_item.fn(*call_item.args, **call_item.kwargs)
+  File "D:\Trab\digilab\v3-longe-regular-run\experiments\run_v2_longe_regular.py", line 215, in tarefa
+    return [_vida(cfg, b, dono, estilo, unidade, pasta) for b in BRACOS for dono, estilo in CELULAS]
+            ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Trab\digilab\v3-longe-regular-run\experiments\run_v2_longe_regular.py", line 210, in _vida
+    "corpo": medidas_do_corpo(motor, registro, cfg["dias"]), "metas": trocas_de_meta(registro),
+                                                                      ~~~~~~~~~~~~~~^^^^^^^^^^
+  File "D:\Trab\digilab\v3-longe-regular-run\experiments\run_v2_longe_regular.py", line 182, in trocas_de_meta
+    raise RuntimeError(f"decisao {k}: o fim {f['motivo']!r} de uma intencao nao e dos conhecidos {MOTIVOS_FIM}")
+RuntimeError: decisao 30: o fim 'desistiu' de uma intencao nao e dos conhecidos ('meta', 'trocou', 'achou', 'sumiu', 'expirou')
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Trab\digilab\v3-longe-regular-run\experiments\run_v2_longe_regular.py", line 500, in <module>
+    main()
+    ~~~~^^
+  File "D:\Trab\digilab\v3-longe-regular-run\experiments\run_v2_longe_regular.py", line 494, in main
+    r = rodar(cfg, saida, a.processos, caminho)["resultado"]
+        ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Trab\digilab\v3-longe-regular-run\experiments\run_v2_longe_regular.py", line 464, in rodar
+    registros = [r for s in rc._executar([(tarefa, (cfg, u, str(pasta))) for u in unidades], processos) for r in s]
+                            ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Trab\digilab\v3-longe-regular-run\experiments\run_v2_calibracao_mundo.py", line 261, in _executar
+    return [fu.result() for fu in futuros]
+            ~~~~~~~~~^^
+  File "C:\Users\mathe\AppData\Local\Programs\Python\Python313\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\mathe\AppData\Local\Programs\Python\Python313\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+RuntimeError: decisao 30: o fim 'desistiu' de uma intencao nao e dos conhecidos ('meta', 'trocou', 'achou', 'sumiu', 'expirou')
+exit 1
