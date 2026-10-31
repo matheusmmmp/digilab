@@ -258,3 +258,11 @@ A pasta foi movida para `artifacts_v2_digibrain_prototipo/longe_regular/caido_1/
 - **O sorteado:** −0,0106 [−0,0236; +0,0024], **"indeterminado"**; a previsão "≈ 0" da C1-E1 fica não confirmada.
 - **A leitura (A6.7):** a linha do "indeterminado", e nada se decide com ela; **a L-3 fica fora** (C1-E2). A distância não domina.
 - **O detalhe:** a seção 13 do `docs/RESULTADO_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`; os desvios em `docs/registro/2026-10.md`.
+
+## Decisões depois da C1 (2026-10-31, o Matheus, pela recomendação do #510: "Sim, mescle e siga")
+
+- **D-C1-1, DECIDIDA:** a L-3 fica fora, como manda a C1-E2 (o sorteado saiu "indeterminado"); nenhum ajuste da margem nem run nova.
+- **D-C1-2, DECIDIDA:** a próxima do cérebro é a C2 (o hábito com crédito na intenção), em separado; a C3 depois, também em separado;
+  nenhuma combinação sem hipótese e plano próprios.
+- **D-C1-3, DECIDIDA:** de onde vem o ganho do M3\* no `longe_fixo` fica como questão aberta no RESULTADO, sem run agora; um descritivo
+  com plano próprio antes da L3.
