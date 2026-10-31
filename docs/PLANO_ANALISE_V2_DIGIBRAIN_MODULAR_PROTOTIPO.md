@@ -2478,3 +2478,13 @@ que vale.
 **Um achado de leitura, sem decisão:** a C1-E1 cita o comedouro como "+0,136" pelo G-ABLA-MEM. Essa medida é **por ração** (o contraste
 do G-ABLA-MEM, A4.10, item 3, é a taxa da `cadeia`). Por episódio, nas mesmas vidas, a diferença é +0,137 [0,114; 0,160] [poder]. Os dois
 são > 0, e a previsão do comedouro não muda.
+
+### A6.14 A lista de A6.8, item 3, ganha o `desistiu` (conserto do orquestrador, 2026-10-31)
+
+A run da etapa 3b (PR #507) caiu depois de 46 min: o `MOTIVOS_FIM` do `experiments/run_v2_longe_regular.py` não conhecia o fim `desistiu`
+da busca pelo cheiro (DX-4, `digilab/digibrain/estado.py`), e a conferência dos fins levantou `RuntimeError`. **A lista de fins de
+A6.8, item 3, passa a ser `meta`, `trocou`, `achou`, `sumiu`, `expirou` e `desistiu`.** O `desistiu` é contado à parte nos fins e **não é
+troca**: as trocas, o primário, as medidas da C5 e a regra de leitura (A6.1 a A6.13) não mudam. Com a `intencao_suspensa` desligada, os
+fins que uma intenção pode ter no `estado.py` são `meta`, `trocou`, `sumiu`, `desistiu` e `achou`; o `expirou` (e o `saciou` e o
+`superada`, da L-2) só vêm com a suspensa ligada, e a conferência segue falhando alto para qualquer outro. Nenhuma vida da faixa
+71101…71505 rodou neste conserto.
