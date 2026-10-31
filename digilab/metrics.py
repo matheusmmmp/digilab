@@ -2397,3 +2397,28 @@ def episodios_de_fome(decisoes: Sequence[tuple[int, float, int | None, frozenset
                          for nome, es in (("ate_corte", [e for e in episodios if e["d0"] <= corte_d0]),
                                           ("alem_do_corte", [e for e in episodios if e["d0"] > corte_d0]))}
     return out
+
+
+# --- a viabilidade do corpo, a C5 da V3 (docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md, A6.8 item 4; AD6-4, DECIDIDA; SEM FONTE)
+def viabilidade_do_corpo(ticks: Sequence[tuple[int, float, float, float, float, float]], janela: tuple[int, int],
+                         limiar: float) -> dict:
+    """A viabilidade do corpo por tick (a C5; A6.8, item 4). `ticks` = (tick, fome, higiene, energia, humor, saude) de cada tick do
+    replay, os cinco estados do corpo (o drive de cada quimico de `QUIMICOS`, (C - q)/C, na escala 0-1). Uma variavel fica fora da faixa
+    com o estado abaixo de `limiar` (o limiar da privacao, `Config.limiar_privacao`: nenhum numero novo). Na `janela` [inicio, fim) em
+    ticks: a fracao dos ticks com ao menos uma variavel fora, e a menor necessidade (o menor dos cinco estados em cada tick), em media nos
+    ticks e no minimo. Difere da `privacao_nas_decisoes` (so as decisoes, e so fome, higiene e energia). Falha alto sem tick na janela."""
+    ini, fim = _checar_janela(janela)
+    soma_menor, menor, fora, n = 0.0, None, 0, 0
+    for t, *estados in ticks:
+        if not ini <= t < fim:
+            continue
+        if len(estados) != 5:
+            raise ValueError(f"tick {t}: {len(estados)} estados do corpo, sao 5 (fome, higiene, energia, humor, saude)")
+        m = min(_escala01(nome, v) for nome, v in zip(("fome", "higiene", "energia", "humor", "saude"), estados))
+        soma_menor += m
+        menor = m if menor is None else min(menor, m)
+        fora += m < limiar
+        n += 1
+    if not n:
+        raise ValueError("viabilidade do corpo sem tick na janela")
+    return {"n_ticks": n, "fracao_fora": fora / n, "menor_media": soma_menor / n, "menor_minimo": menor}

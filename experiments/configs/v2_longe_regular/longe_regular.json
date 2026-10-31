@@ -1,0 +1,18 @@
+{
+  "descricao": "A run da C1 da V3, o longe regular (adendo 6, APROVADO pelo Matheus em 2026-10-30; A6.2 e A6.3): os bracos M0, M2 e M3* (intencao_suspensa desligada) nas 8 celulas (4 donos x longe_fixo e longe), bases 71101, 71202, 71303, 71404 e 71505, K = 30 por base (150 unidades), 14 dias. 3 600 vidas, uma vez, da main limpa, com ate 4 processos.",
+  "plano": "docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md",
+  "fase": "longe_regular",
+  "unidades": {
+    "bases": [
+      71101,
+      71202,
+      71303,
+      71404,
+      71505
+    ],
+    "k": 30,
+    "prefixo": "digibrain_prototipo"
+  },
+  "dias": 14,
+  "orcamento_por_dia": 16
+}
