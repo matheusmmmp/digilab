@@ -134,6 +134,8 @@ class VistaMapa {
   }
 
   desenhar(c: CenaMapa, razao: number): void {
+    /* o ColorManagement e global e a ilha do habitat o liga: repor o desta vista antes das cores e do desenho */
+    THREE.ColorManagement.enabled = false;
     if (!(c.larg > 0 && c.alt > 0 && c.tam > 0)) throw new Error(`mapa sem tamanho: ${c.larg} x ${c.alt}, ilha ${c.tam}`);
     this.renderer.setPixelRatio(Math.min(2, Math.max(1, razao)));
     this.renderer.setSize(c.larg, c.alt, false);

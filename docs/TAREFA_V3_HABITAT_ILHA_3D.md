@@ -326,3 +326,16 @@ Um branch por missão na worktree `v3-habitat-ilha`, cada um a partir do anterio
 | o crédito dos kits em Ajustes › Sobre, as licenças ao lado, ≤ 8 MB | feito; 6,67 MB |
 | o bundle inicial sem o three | conferido no build: o three fica em `three.module-*.js`, carregado só pelo `cena3d` |
 | o `CLIPES_UP` ligado sem quebrar replay, paridade nem e2e | feito na H1b (97 e2e e 606 testes de unidade passaram nela) |
+
+## 11. O portão de capturas estável nas duas telas da Exploração (2026-10-31, worker, Claude Code, Opus 5.5)
+
+Desde a ilha, as duas telas da Exploração (`lutar-campanha`, `lutar-exploracao-v6`) variavam no portão `e2e_capturas/telas.spec.ts`
+nas duas peles (registrado na T3, `docs/TAREFA_V2_TEMA_MENUS.md`). As três fontes e o que mudou estão no registro
+(`docs/registro/2026-10.md`, "HABITAT-ILHA, o portão de capturas estável"):
+
+- a espera do portão: `data-pronto` na caixa da cena 3D depois de `iniciarCena3D` (`CenarioPet.tsx`), e o portão e a
+  `conferencia_pele.spec.ts` esperam por ele (antes, `canvas.width > 0`, que um canvas novo já cumpre com 300 px);
+- o `THREE.ColorManagement.enabled` global: a ilha, a sala e o mapa da Exploração repõem cada um o seu antes de criar cores e de desenhar;
+- a GPU de hardware: as duas telas da Exploração rodam no SwiftShader (projeto `software` do `playwright.capturas.config.ts`).
+
+Referências regeneradas: as 4 dessas duas telas nas duas peles. As outras 38 não mudaram.

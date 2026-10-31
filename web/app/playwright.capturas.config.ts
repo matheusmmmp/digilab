@@ -3,6 +3,7 @@
 import { defineConfig } from "@playwright/test";
 import base from "./playwright.config.ts";
 
+const SOFTWARE = /lutar-campanha |lutar-exploracao-v6 /;
 const PASTA = process.env.DIGILAB_CAPTURAS ?? "../../artifacts_v2_front_react/capturas";
 export default defineConfig({
   ...base,
@@ -13,4 +14,11 @@ export default defineConfig({
   workers: 3,
   snapshotPathTemplate: `${PASTA}/{arg}{ext}`,
   use: { ...base.use, colorScheme: "light", deviceScaleFactor: 1 },
+  /* as duas telas da Exploracao no rasterizador por software do Chrome (SwiftShader): atras do painel fica a ilha 3D do habitat
+     (docs/TAREFA_V3_HABITAT_ILHA_3D.md), e na GPU o mesmo quadro, com as mesmas entradas, sai com alguns pixels diferentes de um
+     desenho para outro (o ninho a noite); no SwiftShader sai igual. As outras telas seguem na GPU, como as referencias delas */
+  projects: [
+    { name: "gpu", grepInvert: SOFTWARE },
+    { name: "software", grep: SOFTWARE, use: { launchOptions: { args: ["--use-angle=swiftshader", "--enable-unsafe-swiftshader"] } } },
+  ],
 });
