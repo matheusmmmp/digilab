@@ -456,3 +456,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-30 — GERENTE-V3, as LR, as ME e a ordem da L4 decididas (Gerente da V3, Claude Code, Opus 5.5, worktree `v3-decisoes-c1-c4`): todas pela recomendação](registro/2026-10.md)
 - [2026-10-30 — C1 LONGE REGULAR, etapa 3a (worker, Claude Code, Sonnet 5.5, worktree `v3-longe-regular-orquestrador`): o orquestrador da run e as medidas da C5](registro/2026-10.md)
 - [2026-10-30 — HABITAT-ILHA, H0 a H5 (Gerente e worker, Claude Code, Opus 5.5, worktree `v3-habitat-ilha`): a ilha 3D no modo mundo](registro/2026-10.md)
+- [2026-10-31 — C1 LONGE REGULAR, etapa 3b (worker, Claude Code, Opus 5.5, worktree `v3-longe-regular-run`): a run da 71xxx e a leitura](registro/2026-10.md)
