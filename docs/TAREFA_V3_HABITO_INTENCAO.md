@@ -309,3 +309,19 @@ etapa 3. Os números novos seguem PROPOSTOS e SEM FONTE. A direção da HI-3 vem
 - **O gabarito** `tests/gabaritos/habito_intencao_de_hoje.json` (commit `db7ae4f3`, antes da mudança) e o teste `tests/test_gabarito_habito_intencao.py`.
 - **Os testes** `tests/test_credito_corrida.py`: a subchave, T-CORRIDA-1 a 3, G1 nas cinco sementes, G2-SEPARADO, o `conferir_credito`
   estendido, G-MECANISMO. Nada de faixa, adendo 7, orquestrador da run ou vida de pesquisa; `engine.py` e a web não mudam.
+
+## Resultado da etapa 3 (plano e orquestrador; 2026-10-31, worker Claude Code, Opus 5.5, worktree `v3-habito-intencao-plano`)
+
+- **A faixa** 75101…75505 em `FAIXAS_RESERVADAS` (`experiments/bancada/faixas.py`), num commit próprio, conferida livre de novo na `main`
+  e em todos os branches remotos.
+- **O adendo 7** ao `docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`, **Status: PROPOSTO:** os braços M1, M2 e M2c, as 12 células,
+  o P-A, a S1 e a S2, as premissas P-CORRIDA e G-PESA do hábito, a tabela de 1.4 como regra de leitura, o descritivo e as AD7-1 a AD7-5.
+- **O poder** (`experiments/adendo7_poder_habito_intencao.py`, só os `medidas.json` da reavaliação e da C1;
+  `artifacts_v2_digibrain_prototipo/habito_intencao/adendo7_poder.json`): o σ de planejamento 0,0484; **K = 150 e a margem 0,011
+  PROPOSTOS** (5 400 vidas, cerca de 1 h 40 min com 4 processos).
+- **O orquestrador** `experiments/run_v2_habito_intencao.py`, com as configs em `experiments/configs/v2_habito_intencao/` e os testes em
+  `tests/test_habito_intencao.py`: a trava recusa a run enquanto o adendo 7 estiver PROPOSTO; os fins conhecidos saem do `EstadoDinamico`
+  com a config de cada braço, e a contagem do registro é conferida com a do estado em toda vida. O M2c entrou como `SUBCHAVES_C2` ao lado
+  do `SUBCHAVES_CONSERTO`.
+- **A varredura dos fins** (as sementes dos testes, os 3 braços, as 12 células, 14 dias, 180 vidas): nenhum fim desconhecido.
+- **Nenhuma vida da faixa 75xxx.** O `engine.py` e a web não mudam. O registro está em `docs/registro/2026-10.md`.
