@@ -66,12 +66,15 @@ def reproduzir(log: list[dict]) -> tuple[Fisiologia, list[tuple[int, int, int, i
 
 
 def entradas_sinteticas(semente: int, n_refeicoes: int = 6) -> list[dict]:
-    """Refeicoes e intervalos sinteticos, numa rng propria (`poc-entradas`), separada da do genoma e da da heranca."""
+    """Refeicoes e intervalos sinteticos, numa rng propria (`poc-entradas`), separada da do genoma e da da heranca.
+
+    As faixas (refeicao de 300 a 1500, intervalo de 20 a 60 ticks; exemplo, SEM FONTE) deixam o cenario principal equilibrado: a
+    energia fica longe do teto e nada e descartado. O excesso tem teste proprio, com uma refeicao grande de proposito."""
     rng = random.Random(derivar_semente("poc-entradas", semente))
     eventos: list[dict] = []
     for _ in range(n_refeicoes):
-        eventos.append({"t": "comer", "q": rng.randint(500, 4000)})
-        eventos.append({"t": "tick", "n": rng.randint(10, 40)})
+        eventos.append({"t": "comer", "q": rng.randint(300, 1500)})
+        eventos.append({"t": "tick", "n": rng.randint(20, 60)})
     return eventos
 
 

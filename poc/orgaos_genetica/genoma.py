@@ -3,7 +3,7 @@
 Regras (as do desenho em `docs/futuro/ecossistema_genetico.md`, so como guia; nada aqui as implementa no projeto):
 - codificacao direta (EG-3): um gene e um inteiro, com faixa declarada; fora da faixa falha alto;
 - recombinacao por gene (EG-4): a media dos pais mais uma mutacao pequena, numa rng propria derivada da semente do cruzamento;
-- o aprendido nunca entra (EG-5): o genoma so tem os genes abaixo, e o cruzamento so aceita `Genoma`.
+- o aprendido nunca entra (EG-5): o genoma so tem os genes abaixo, e o cruzamento, mesmo entre pais que ja viveram, so le o genoma.
 
 Todos os numeros sao exemplos da POC, SEM FONTE.
 """
@@ -97,11 +97,22 @@ class Cruzamento:
     mutacoes: tuple[tuple[str, int], ...]   # (gene, delta) de cada mutacao sorteada, para o relato
 
 
-def cruzar(pai: Genoma, mae: Genoma, semente: int, mutacao_por_mil: int = MUTACAO_POR_MIL) -> Cruzamento:
+def genoma_de(progenitor: object) -> Genoma:
+    """So a parte genetica de um progenitor: o proprio `Genoma`, ou o atributo `genoma` de um pet que ja viveu (a `Fisiologia`).
+    Nada mais e lido: memoria, quimicos, hormonios e contas ficam com o pai. Qualquer outra coisa falha alto."""
+    if isinstance(progenitor, Genoma):
+        return progenitor
+    g = getattr(progenitor, "genoma", None)
+    if not isinstance(g, Genoma):
+        raise TypeError(f"progenitor sem genoma: {type(progenitor).__name__}")
+    return g
+
+
+def cruzar(pai: object, mae: object, semente: int, mutacao_por_mil: int = MUTACAO_POR_MIL) -> Cruzamento:
     """O filho: por gene, a media inteira dos pais (empate arredonda para o par, sem float) mais, com chance `mutacao_por_mil`, um
-    passo de mutacao para cima ou para baixo, cortado na faixa. So recebe genomas: nada do que os pais viveram entra."""
-    if not isinstance(pai, Genoma) or not isinstance(mae, Genoma):
-        raise TypeError("cruzar so aceita Genoma; estado aprendido ou fisiologico nao se herda")
+    passo de mutacao para cima ou para baixo, cortado na faixa. Os pais podem ja ter vivido; so o genoma deles e lido
+    (`genoma_de`), entao nada do que viveram entra no filho."""
+    pai, mae = genoma_de(pai), genoma_de(mae)
     if not 0 <= mutacao_por_mil <= 1000:
         raise ValueError(f"mutacao_por_mil fora de [0, 1000]: {mutacao_por_mil}")
     rng = random.Random(derivar_semente("poc-heranca", semente, pai.sha256(), mae.sha256()))

@@ -10,13 +10,26 @@ os números e relações fisiológicas aqui são **exemplos da POC, SEM FONTE**,
 | `genoma.py` | 6 genes inteiros com faixa; `sortear`, `cruzar` (média por gene + mutação pequena) e o sha256 do genoma |
 | `fisiologia.py` | o órgão digestivo (estômago → energia e fome) e o hormônio `saciedade`, em inteiros |
 | `replay.py` | o log (origem, comer, tick), o replay com sha256 da trajetória, as entradas sintéticas e uma demonstração |
-| `verificar_poc.py` | 18 verificações pequenas, fora da suíte principal |
+| `verificar_poc.py` | 20 verificações pequenas, fora da suíte principal |
 
 ```bash
 python -m pytest poc/orgaos_genetica/verificar_poc.py -q
 ```
 
-A demonstração (`cd poc` e depois `python -m orgaos_genetica.replay`) cruza dois genomas sorteados e refaz uma vida sintética de 141 ticks.
+A demonstração (`cd poc` e depois `python -m orgaos_genetica.replay`) cruza dois genomas sorteados e refaz uma vida sintética de 294 ticks.
+
+**Ajustes da revisão (2026-10-31):**
+- **Cruzamento entre pais que já viveram:** `cruzar` aceita um `Genoma` ou um pet vivido (a `Fisiologia`), e lê **só** o genoma dele
+  (`genoma_de`). A memória (o dado adquirido de exemplo, `memoria`: refeições lembradas e a maior refeição), os químicos, o hormônio e as
+  contas ficam com o pai. Objeto sem `genoma` falha alto.
+- **Cenário principal equilibrado:** as refeições sintéticas foram de 500–4000 a cada 10–40 ticks para 300–1500 a cada 20–60 ticks. A
+  energia fica entre 4 353 e 5 838 (o teto é 10 000), sem descarte de estômago nem de energia. O excesso tem teste próprio
+  (`test_excesso_descarta_e_conta`): uma refeição maior que o estômago, com os dois descartes contados.
+- **A fome satura (achado):** no cenário novo, com os genes do filho da demonstração, a fome chega ao teto no tick 213 de 294. Esses
+  genes fazem a fome subir mais depressa do que as refeições a baixam, e equilibrar fome e energia ao mesmo tempo exigiria mexer nos
+  genes, o que é calibração e fica fora da POC. O corte da fome no teto era silencioso; agora é contado em `fome_acima_do_teto` (3 047 na
+  demonstração), como os descartes.
+- O gabarito do replay foi regravado de propósito (as entradas e as contas mudaram): `bd4165d2…d7a589`.
 
 ## 1. O que a POC demonstra
 
@@ -31,8 +44,9 @@ A demonstração (`cd poc` e depois `python -m orgaos_genetica.replay`) cruza do
 - **Cruzamento com mutação pequena:** média inteira por gene (empate para o par, sem float) e, com chance de 150/1000 por gene, um passo
   de mutação cortado na faixa, numa rng própria derivada da semente do cruzamento e dos sha256 dos pais. Mesma semente → mesmo filho;
   sem mutação → a média exata; cada mutação é registrada e limitada ao passo do gene.
-- **O aprendido não se herda:** o `Genoma` só tem a tupla de genes; `cruzar` recusa qualquer outra coisa (`TypeError` com uma
-  `Fisiologia` vivida); viver não muda o sha256 do genoma.
+- **O aprendido não se herda:** o `Genoma` só tem a tupla de genes. Pais que viveram vidas diferentes (outras refeições, outra memória,
+  outros químicos e outro hormônio), mas que têm os mesmos genomas, dão, com a mesma semente, exatamente o mesmo filho, igual ao
+  cruzamento dos genomas puros. Um corpo novo feito do filho nasce no estado inicial, sem a memória dos pais. Viver não muda o sha256 do genoma.
 - **Replay determinístico:** o log refaz a vida tick a tick; o mesmo log dá a mesma trajetória e o mesmo sha256, também em outro processo
   com outro `PYTHONHASHSEED`, e bate com um gabarito gravado. A origem traz o cruzamento (pais, semente, chance), e o replay o refaz e
   confere o filho. Evento desconhecido, segunda origem, genoma adulterado ou filho trocado levantam erro.
@@ -42,8 +56,9 @@ A demonstração (`cd poc` e depois `python -m orgaos_genetica.replay`) cruza do
 
 - Nada sobre comportamento ou aprendizado: não há cérebro, política, mundo nem dono; as refeições são sintéticas.
 - Nada sobre herdabilidade (h²), variância genética útil, seleção ou evolução; não há população nem gerações.
-- Nenhuma validade biológica, nem calibração: os números foram escolhidos para ter dinâmica visível. Na demonstração a energia **bate no
-  teto** (descarte de 1 938), sinal de que os números não estão equilibrados.
+- Nenhuma validade biológica, nem calibração: os números foram escolhidos para ter dinâmica visível. A primeira versão da demonstração
+  batia no teto de energia (descarte de 1 938); o cenário ajustado não bate, mas a fome ainda satura (ver os ajustes acima).
+- A `memoria` não é aprendizado de verdade: é um dado adquirido de exemplo, só para provar que o cruzamento não o lê.
 - Não testa integração com o `Corpo` real (`digilab/corpo.py`), com o grafo validado do corpo (`corpo_grafo.py`), com o `Grupo` ou com a
   paridade Python × TypeScript.
 - Não toca topologia nem estrutura do cérebro (fora do escopo por regra).
@@ -80,4 +95,4 @@ A demonstração (`cd poc` e depois `python -m orgaos_genetica.replay`) cruza do
   nem experimentos registrados. Nenhum import do pacote `digilab`.
 - Sementes só 1 a 9, locais desta POC, fora de `FAIXAS_RESERVADAS`. Nenhuma vida de pesquisa; a execução inteira leva ~1,5 s.
 - Antes de começar não havia processo Python rodando na máquina (nenhuma run de pesquisa em andamento).
-- Sem push, sem PR, sem merge.
+- Sem push, sem PR, sem merge. Os ajustes da revisão entram num segundo commit local, também só em `poc/orgaos_genetica/`.

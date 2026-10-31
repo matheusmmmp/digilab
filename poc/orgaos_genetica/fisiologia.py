@@ -33,7 +33,10 @@ class Fisiologia:
     saciedade: int = 0
     # as contas, para conferir a conservacao: o que entrou, o que se digeriu e o que se descartou por teto
     contas: dict[str, int] = field(default_factory=lambda: {
-        "ingerido": 0, "digerido": 0, "descarte_estomago": 0, "descarte_energia": 0, "fome_cortada_hormonio": 0, "ticks": 0})
+        "ingerido": 0, "digerido": 0, "descarte_estomago": 0, "descarte_energia": 0, "fome_cortada_hormonio": 0, "fome_acima_do_teto": 0,
+        "ticks": 0})
+    # um dado adquirido de exemplo, no lugar do aprendido de um pet de verdade: o que o pet lembra das refeicoes. Nunca se herda.
+    memoria: dict[str, int] = field(default_factory=lambda: {"refeicoes": 0, "maior_refeicao": 0})
 
     def _conferir(self) -> None:
         for q in QUIMICOS:
@@ -49,6 +52,8 @@ class Fisiologia:
         self.estomago += entra
         self.contas["ingerido"] += quantidade
         self.contas["descarte_estomago"] += quantidade - entra
+        self.memoria["refeicoes"] += 1
+        self.memoria["maior_refeicao"] = max(self.memoria["maior_refeicao"], quantidade)
         self._conferir()
 
     def receptor_saciedade(self) -> int:
@@ -71,6 +76,7 @@ class Fisiologia:
         corte = self.receptor_saciedade()
         ganho_f = g["ganho_fome"] * (1000 - corte) // 1000
         self.contas["fome_cortada_hormonio"] += g["ganho_fome"] - ganho_f
+        self.contas["fome_acima_do_teto"] += max(0, self.fome + ganho_f - ESCALA)
         self.fome = min(ESCALA, self.fome + ganho_f)
         # 4. decaimento do hormonio (pelo menos 1 enquanto houver, para nao ficar preso num resto pequeno)
         if self.saciedade:

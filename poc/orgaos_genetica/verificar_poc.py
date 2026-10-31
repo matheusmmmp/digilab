@@ -67,10 +67,24 @@ def test_sem_comida_energia_cai_e_fome_sobe():
     assert c.saciedade == 0
 
 
-def test_estomago_cheio_descarta_e_conta():
+def test_excesso_descarta_e_conta():
+    # o caso de excesso, separado do cenario principal: uma refeicao maior que o estomago e energia que passa do teto
     c = Fisiologia(padrao())
     c.comer(ESCALA + 700)
     assert c.estomago == ESCALA and c.contas["descarte_estomago"] == 700
+    for _ in range(20):
+        c.tick()
+    assert c.contas["descarte_energia"] > 0
+    assert c.energia <= ESCALA
+    assert c.contas["ingerido"] == c.estomago + c.contas["digerido"] + c.contas["descarte_estomago"]
+
+
+def test_cenario_principal_sem_teto_nem_descarte():
+    _, traj, _ = reproduzir(_log())
+    corpo = reproduzir(_log())[0]
+    assert max(e for _, e, _, _ in traj) < ESCALA
+    assert min(e for _, e, _, _ in traj) > 0
+    assert corpo.contas["descarte_energia"] == 0 and corpo.contas["descarte_estomago"] == 0
 
 
 def test_taxa_digestao_e_gene_muda_o_fenotipo():
@@ -142,12 +156,35 @@ def test_mutacao_e_pequena_e_registrada():
             assert cz.filho[nome] - base[nome] == delta
 
 
-def test_cruzar_recusa_estado_vivido():
-    vivido = Fisiologia(sortear(1))
-    vivido.comer(1000)
-    vivido.tick()
+def _viver(g: Genoma, semente: int) -> Fisiologia:
+    c = Fisiologia(g)
+    for ev in entradas_sinteticas(semente):
+        c.comer(ev["q"]) if ev["t"] == "comer" else [c.tick() for _ in range(ev["n"])]
+    return c
+
+
+def test_pais_que_viveram_diferente_dao_o_mesmo_filho():
+    gp, gm = sortear(1), sortear(2)
+    # mesmos genomas, vidas diferentes: outras refeicoes, outra memoria, outros quimicos e outro hormonio
+    pai_a, mae_a = _viver(gp, 4), _viver(gm, 5)
+    pai_b, mae_b = _viver(gp, 6), _viver(gm, 7)
+    pai_b.memoria["refeicoes"] += 99
+    assert pai_a.memoria != pai_b.memoria and mae_a.memoria != mae_b.memoria
+    assert pai_a.estado() != pai_b.estado() and mae_a.estado() != mae_b.estado()
+    filho_a, filho_b = cruzar(pai_a, mae_a, 5), cruzar(pai_b, mae_b, 5)
+    assert filho_a == filho_b == cruzar(gp, gm, 5)
+    # o filho e so genoma; um corpo novo a partir dele nasce no estado inicial, sem memoria nem hormonio dos pais
+    assert [f.name for f in dataclasses.fields(filho_a.filho)] == ["valores"]
+    novo = Fisiologia(filho_a.filho)
+    assert novo.estado() == (0, ESCALA // 2, ESCALA // 2, 0)
+    assert novo.memoria == {"refeicoes": 0, "maior_refeicao": 0}
+
+
+def test_cruzar_recusa_progenitor_sem_genoma():
     with pytest.raises(TypeError):
-        cruzar(vivido, sortear(2), 5)   # type: ignore[arg-type]
+        cruzar({"memoria": 1}, sortear(2), 5)
+    with pytest.raises(TypeError):
+        cruzar(padrao().como_dict(), sortear(2), 5)
 
 
 def test_a_vida_nao_muda_o_genoma():
@@ -167,8 +204,10 @@ def _log() -> list[dict]:
     return [evento_origem(cz.filho, pai, mae, 3, 150)] + entradas_sinteticas(4)
 
 
-# gabarito gravado na primeira execucao desta POC; muda so se a fisiologia, os genes ou o cruzamento mudarem de proposito
-GABARITO_SHA = "ed4a68bb798ce7b8d5e8f43f6521be229a5a7877c45945e46e49d60a06544d87"
+# gabarito; muda so se a fisiologia, os genes, o cruzamento ou as entradas mudarem de proposito. Regravado em 2026-10-31 com o
+# cenario principal sem teto de energia (refeicoes de 300 a 1500, intervalos de 20 a 60) e a conta `fome_acima_do_teto`; o
+# anterior era ed4a68bb...44d87
+GABARITO_SHA = "bd4165d2be009537f5b5e9fe1c35ba0ec319c18b2d4e8a7714b010f111d7a589"
 
 
 def test_replay_mesmo_log_mesma_trajetoria():
