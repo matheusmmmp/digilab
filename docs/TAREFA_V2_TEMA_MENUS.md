@@ -58,6 +58,11 @@ e deixa o Militar em `:root` (a pele sem atributo é a Militar; o padrão Vidro 
 
 "(proposta)" marca valor que a referência não fixa; a T1 propõe e confere o contraste, e o Matheus aprova nas capturas da T3.
 
+**DECIDIDOS (2026-10-31).** Fonte: o Matheus aprovou as capturas da T3 (PR #505, "Continue com o recomendado"). Valem como DECIDIDOS
+todos os "(proposta)" das duas tabelas abaixo, com os quatro ajustes de contraste da T1 (início do gradiente .92, contorno externo .62,
+rótulo/secundário `#A3B2C3`, perigo `#F09A9A`), o brilho do escolhido por dentro (`inset`) e o texto escuro da etiqueta "você" no
+Holográfico (T3). Os valores de verdade são os de `web/app/src/estilo/tokens.css` e `pele-vidro.css`.
+
 | token | papel | Militar (atual) | Holográfico |
 |---|---|---|---|
 | `--hx-chao` | trilho/barra, fundo da página atrás do painel | `#0B1118` | `rgba(6,11,18,.92)` |
@@ -238,8 +243,8 @@ T3 depende de T1 e T2. Arquivos de uma missão por vez: `tokens.css`, `main.tsx`
 
 ## Resultado da T3 (2026-10-30, worker Claude Code, Opus 5.5, worktree `agitated-rubin-b2128e`)
 
-Conferência das duas peles e capturas para a aprovação do Matheus. **Os valores PROPOSTOS da T1 continuam PROPOSTOS até ele aprovar
-as capturas;** as referências do `e2e_capturas` só são regeneradas depois disso (TM5).
+Conferência das duas peles e capturas para a aprovação do Matheus. **Aprovadas em 2026-10-31:** os valores da §3.2 viraram DECIDIDOS,
+e as referências do `e2e_capturas` foram regeneradas nas duas peles (o fim desta seção).
 
 - **Capturas, fora do git, em `D:\Trab\digilab\capturas_tema_t3\`** (sprite de reserva; o `LEIA.txt` da pasta lista o que é cada uma):
   - `portao\`: as 21 telas do portão nas duas peles, em 1920×950 (D10), 1280 e 390 px, no tema claro: 126 PNG (`<tela>-<largura>.png`
@@ -278,3 +283,10 @@ as capturas;** as referências do `e2e_capturas` só são regeneradas depois dis
   carregou" entravam nas capturas. Agora esconde também `.avisos > .aviso`.
 - **Achados fora do escopo (para depois):** no desktop, o painel do DigiBrain cobre a ponta do balão da fala ("toque para ver o por…");
   "lutas de treino0 de 10" sem espaço na Arena, nas duas peles; abrir `#/config` pelo endereço com Meus pets aberto deixa Meus pets na tela.
+- **Depois da aprovação (2026-10-31):** os valores da §3.2 viraram DECIDIDOS (a nota no alto da §3.2 e no `tokens.css`). As referências
+  do portão foram regeneradas em 1920×950 nas duas peles, com o sprite de reserva (`DIGILAB_CAPTURAS_RESERVA=1`), na pasta padrão
+  do checkout de referência, `D:\Trab\digilab\v3\artifacts_v2_front_react\capturas\`: 42 PNG (21 do Militar, 21 do Holográfico com
+  `-vidro`). Ficam **fora do git**, como sempre (`artifacts_*/` no `.gitignore`; o `playwright.capturas.config.ts` lê de
+  `DIGILAB_CAPTURAS`). Conferido contra elas: 19 de 21 telas batem pixel a pixel nas duas peles em todas as rodadas; **as duas da
+  Exploração (`lutar-campanha`, `lutar-exploracao-v6`) variam nas duas peles** (uma faixa da ilha 3D atrás do mapa, de 4 a 110 mil
+  pixels entre uma tentativa e outra): é do habitat, não da pele, e fica para a frente da ilha.

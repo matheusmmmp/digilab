@@ -124,7 +124,8 @@
 
 /* Pele Holografica (vidro sci-fi; docs/TAREFA_V2_TEMA_MENUS.md §3.2), o padrao (TM1, pele.ts poe data-pele no <html>). Tambem SEMPRE
    escura e sem variante por tema. O que nao cabe em token (chanfros, reflexo, contorno interno, trecho de luz, marcador, barra acesa
-   no trilho, barras com brilho) mora em estilo/pele-vidro.css. Valores "(proposta)" da tarefa conferidos aqui.
+   no trilho, barras com brilho) mora em estilo/pele-vidro.css. Valores "(proposta)" da tarefa conferidos aqui; DECIDIDOS em 2026-10-31
+   (o Matheus aprovou as capturas da T3, PR #505).
    Contraste (WCAG) medido com o vidro sobre a parte MAIS CLARA do habitat (tema claro; pior caso: branco puro atras do vidro, o
    desfoque so tira a media): inicio do gradiente rgba(24,36,50,.92) sobre branco -> #2A3642; com os 6 % de branco do reflexo no
    canto -> #37424E (o pior fundo); fim rgba(6,11,18,.92) -> #1A1F25. Contra o pior fundo: texto 7,9; texto-2 6,8; sec/rotulo 4,8;
