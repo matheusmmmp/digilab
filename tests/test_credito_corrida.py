@@ -217,7 +217,7 @@ def test_g2_separado_ligada_muda_so_a_vida_do_braco_que_a_liga():
 
 def test_g2_separado_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
     donos_da_chave = {"digilab/config.py", "digilab/digibrain/adapt.py", "digilab/digibrain/estado.py",
-                      "experiments/run_v2_digibrain_prototipo.py"}
+                      "experiments/run_v2_digibrain_prototipo.py", "experiments/run_v2_habito_intencao.py"}   # o da run da C2 (adendo 7)
     achados = set()
     for pasta in ("digilab", "experiments", "web", "tools"):
         for f in (RAIZ / pasta).rglob("*"):

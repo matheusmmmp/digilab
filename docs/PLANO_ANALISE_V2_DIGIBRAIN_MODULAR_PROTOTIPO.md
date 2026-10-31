@@ -2561,3 +2561,289 @@ empurrado antes da primeira vida. **Nada de A6.0 a A6.14 muda.** Não é uma seg
   - **a árvore limpa:** o `meta.json` grava o `git_head` e o `git_limpo`; a run sai do commit deste registro, empurrado;
   - **a config e as sementes:** as travas do orquestrador (o adendo APROVADO, a faixa em `FAIXAS_RESERVADAS`, as bases, o K, os dias);
   - **a máquina (V3-D8):** nenhuma outra run de pesquisa nem medição do combate rodando; a suíte e a run não se sobrepõem; 4 processos.
+
+## Adendo 7: o hábito com o crédito na corrida do comportamento, a C2 da V3 (2026-10-31, worker da C2, etapa 3, Claude Code, Opus 5.5)
+
+**Status: APROVADO pelo Matheus em 2026-10-31,** com as AD7-1 a AD7-5 de A7.12 pela recomendação ("Sim, aprove e mescle", no chat do
+Gerente da V3). Antes desta aprovação, o orquestrador `experiments/run_v2_habito_intencao.py` recusa a run (a trava
+`exigir_adendo_aprovado` de A4.7). As HI-1 a HI-8 da `docs/TAREFA_V3_HABITO_INTENCAO.md` (seção 8) estão DECIDIDAS pelo Matheus em
+2026-10-31, pela recomendação; este adendo as escreve como plano e acrescenta só o que elas deixaram para o plano: o K, a margem e as
+definições das premissas e dos descritivos novos, todos PROPOSTOS e SEM FONTE. **Nenhuma vida da faixa 75101…75505 rodou nem roda antes
+de três coisas:** o código da etapa 2 na `main` (a subchave `credito_corrida`, o gabarito e os testes; o #513, já lá); a faixa na
+`FAIXAS_RESERVADAS` e o orquestrador de A7.10 (o PR da etapa 3); e este cabeçalho com a marca de aprovação do Matheus.
+
+**De onde vem:** a tarefa da C2 (seções 1, 3, 4 e 8), a D-C1-2 (a C2 em separado, sem combinar mecanismos) e a lição LP-2 do #455. Este
+adendo reusa, sem mudar, o cenário (seção 3, como na A6.2), o índice "ganhou, fica" (`metrics.repeticao_apos_alivio`, dias 8 a 14; o
+G-ABLA-P2), a DX-5 (A3.5), a unidade (base, semente) e o IC95 do t sobre as unidades (A4.4.6), a ressalva do g1 (A4.4.6), a classe de cada
+contraste (a regra de A6.6, com a margem deste adendo) e as medidas da C5 (A6.8, item 4; AD6-4).
+
+**A fonte dos números novos:** o `experiments/adendo7_poder_habito_intencao.py`, que só lê dois `medidas.json` do git: o da reavaliação
+(66101 a 66505, as 7 200 vidas; sha256 `73ae8a8a…df01`, o registrado na seção 8 do RESULTADO) e o da C1 (71101 a 71505, as 3 600 vidas;
+sha256 `5a4fb207…722d`, o registrado na seção 13), os dois conferidos pelo script antes da conta. Ele grava
+`artifacts_v2_digibrain_prototipo/habito_intencao/adendo7_poder.json` (sha256 `ccb1bd90…0ccbb`) e, rodado duas vezes, sai igual, byte a
+byte. **Nenhuma vida, nenhum replay e nenhuma semente nova.** Abaixo, **[poder]** é esse artefato.
+
+**O que este adendo não afirma:** que o hábito fica consertado, que o modular supera o A, ou que algum cérebro está pronto. Os contrastes
+são entre braços do próprio modular e medem uma regra de crédito do P2, num cenário. **Nenhuma alegação de novidade** (a regra 9; a
+combinação "corpo, aprendizado em vida e hábito" já foi publicada, a C0, conclusão 1).
+
+### A7.0 O que não muda
+
+- **O motor, o corpo, o mundo, o cheiro, o `longe_fixo`, o `engine.py`, o A, a v12 e o jogo web.** No cérebro, a decisão a cada passo (o
+  gatilho é a C3), o M-MEM, o P1, a intenção, a persistência e o F. O único código novo da C2 é o da etapa 2 (a `credito_corrida`, #513) e
+  o orquestrador (A7.10), com o braço M2c ao lado do `SUBCHAVES_CONSERTO`.
+- **Os valores:** os inatos do #428 (`eta_h` S/256, `h_max`, `w_pers` 4S, `tau_c` 15, o cheiro S/4 e 6), PROPOSTOS, iguais nos três braços.
+  **Nenhuma calibração e nenhum piloto** (HI-7): o tamanho do H vai ao descritivo (A7.8, item 4), e a variância vem das vidas já gravadas
+  (A7.6).
+- **As faixas gastas** (64xxx, 66xxx, 67xxx, 71xxx) não entram em nada, salvo a leitura dos artefatos que já estão no git.
+- **Os resultados anteriores:** nada aqui muda o #420, a reavaliação (#432), a L-2 (#454) nem a C1 (#510). A H-P2b (a DX-6) continua não
+  sustentada (a tarefa, 1.3).
+
+### A7.1 A pergunta e as previsões, escritas antes
+
+**A pergunta** (a tarefa, seção 1): o hábito (o P2) sai ao contrário no "ganhou, fica" porque o crédito cai no passo? O dado: o
+G-ABLA-P2 (M2 − M1) deu −0,011, −0,012 e −0,018 [−0,022; −0,013] nas três runs do protótipo; na reavaliação, por lugar, nas mesmas 50
+unidades [poder]: o comedouro −0,0037 [−0,0119; 0,0045], o perto −0,0043 [−0,0104; 0,0018] e o longe −0,0447 [−0,0538; −0,0356]. O
+`longe_fixo` nunca teve o M1; na C1, o M2 − M0 no índice deu −0,0269 [−0,0334; −0,0204] (o M0 também não tem o P1).
+
+**As previsões de sinal (PROPOSTAS na tarefa, 1.4 e 4.3, e escritas aqui antes de qualquer vida):**
+
+| contraste | o que é | a previsão | o papel |
+|---|---|---|---|
+| **P-A: M2c − M2** | a corrida contra o passo, o mesmo P2 | **> 0** | **o primário** (A7.4) |
+| **S1: M2c − M1** | o G-ABLA-P2 refeito com o crédito novo | **> 0** | secundária, sem gate |
+| **S2: M2 − M1** | a réplica do G-ABLA-P2 no cenário novo | **sem previsão de sinal** | secundária, sem gate |
+
+- **A direção do P-A vem de Gadanho e Hallam (2001), pela tese** (A7.11), não o tamanho. A previsão não se afrouxa até passar: se sair
+  "≈ 0" ou "< 0", fica registrado assim.
+- **O S2 sai sem previsão** porque o comedouro deu de +0,008 a −0,004 nas três runs, e o `longe_fixo` nunca foi medido com o M1.
+
+### A7.2 O desenho
+
+- **O cenário:** o da C1 (A6.2), sem mudança: o `CONFIG_MUNDO_MVP`, o corpo do v11, o contrato da P4 desligado, o pet sozinho, os quatro
+  donos sem ensino, **14 dias, orçamento de 16 por dia,** morte desligada.
+- **Os lugares (HI-2):** o `longe_fixo` e o comedouro **no primário** (8 células); o longe sorteado **só no descritivo** (mais 4). São **12
+  células por unidade.** O perto não roda.
+- **Os braços (HI-1),** todos sem o M-MEM, com as duas subchaves do cheiro (as do conserto) e com a `intencao_suspensa` desligada:
+
+| braço | o que é | onde está | o papel |
+|---|---|---|---|
+| **M1** | sem P2 e sem M-MEM (o do conserto) | `SUBCHAVES_CONSERTO["M1"]` | o controle do S1: sem hábito |
+| **M2** | sem M-MEM, o P2 creditado por opção (o de hoje) | `SUBCHAVES_CONSERTO["M2"]` | o controle do primário |
+| **M2c** | o M2 com a `credito_corrida` | `SUBCHAVES_C2["M2c"]`, ao lado, no `run_v2_digibrain_prototipo.py` | o braço novo |
+
+- **As vidas:** 3 braços × 12 células = **36 vidas por unidade.**
+- **O pareamento:** por unidade e célula. Os três braços vivem a mesma semente, o mesmo genoma, o mesmo dono e o mesmo lugar; só a subchave
+  muda. A rng do dono e a dos lugares fixos não dependem do braço (a regra das rngs separadas). **O M1 com a subchave ligada sairia igual
+  ao M1 sem ela** (o crédito vai a nada; o teste G2-SEPARADO do #513): por isso o M1 roda como está.
+- **O M0, o M3\*, o A11 e as variantes do cheiro não entram** (a HI-1).
+
+### A7.3 As sementes e a faixa
+
+- **A faixa: 75101…75505** (a HI-6), conferida livre em 2026-10-31 pelo Gerente da V3 e de novo pelo worker (nem em `FAIXAS_RESERVADAS` nem
+  em `FAIXAS_QUEIMADAS`, na `main` e em todos os branches remotos). Ela entra em `experiments/bancada/faixas.py` num commit próprio, com a
+  fonte (o primeiro commit do PR da etapa 3).
+- **As bases:** 75101, 75202, 75303, 75404 e 75505.
+- **O K: 30 por base, 150 unidades** (PROPOSTO; A7.6 e AD7-1). São **5 400 vidas.**
+- **A derivação:** `bancada_v2.unidades_derivadas(bases, K, prefixo="digibrain_prototipo")`, o prefixo da reavaliação, da L-2 e da C1
+  (como a AD6-5): a semente `derivar_semente("digibrain_prototipo", b, k)` e o genoma `derivar_semente("digibrain_prototipo-genoma", b, k)`.
+  A função falha alto com colisão, e o `meta.json` grava as unidades.
+- **A run roda uma vez,** com todas as bases. Não há calibração nem piloto.
+- **As sementes dos testes** (101…505) servem só à fumaça, à varredura dos fins (A7.10) e aos testes do orquestrador.
+
+### A7.4 O primário P-A e as secundárias (HI-4, HI-5)
+
+- **A medida:** **o índice "ganhou, fica" de hoje** (`repeticao.indice`, o `metrics.repeticao_apos_alivio` sobre as decisões, dias 8 a 14;
+  a medida do G-ABLA-P2, sem mudança; a HI-5). O M2c usa a mesma medida: ela olha o r de cada decisão, não o crédito.
+- **O contraste primário:** **M2c − M2, nas 8 células do `longe_fixo` e do comedouro.**
+- **A unidade:** a (base, semente). Em cada unidade, a diferença célula a célula (no mesmo dono e lugar), com a média das 8 células. **Uma
+  célula com o índice `None` num dos dois braços** (sem pares de um dos lados) **fica fora da média daquela unidade,** e a unidade sem
+  nenhuma célula fica fora (a regra do `por_unidade` do orquestrador do protótipo, como no G-ABLA-P2). As células fora saem contadas (A7.8,
+  item 6). Na C1, o índice saiu `None` em 5 das 600 vidas do M2 no `longe_fixo`; na reavaliação, em nenhuma do comedouro [poder].
+- **O teste:** **o IC95 pelo t sobre as unidades** (o `metrics.ic_t`, A4.4.6). **Passa se o limite inferior fica acima de 0** (a previsão
+  > 0). É o mesmo que o p unilateral do t ≤ 0,025. **Um contraste só, sem Holm** (a HI-4): as secundárias e o resto são descritivos.
+- **O que sai ao lado:** a estimativa, o IC95, o p unilateral, o g1 das diferenças, o IC percentil do bootstrap (rotulado como na A4.10), a
+  classe de A6.6 com a margem de A7.6 e a "margem efetiva" (o menor efeito com poder 0,8 pelo dp observado, a fórmula de A6.5).
+- **A ressalva do g1** (A4.4.6, como está): com g1 ≤ −0,5, o contraste sai com a frase de lá, e um "passa" nele não é lido como
+  confirmação. A ressalva não muda o IC nem a decisão gravada.
+- **As secundárias** (pré-registradas, com o mesmo teste e as mesmas 8 células, sem gate e sem Holm):
+  - **S1: M2c − M1,** previsão > 0. Ela entra na leitura de A7.7 pela classe de A6.6 (AD7-3);
+  - **S2: M2 − M1,** sem previsão de sinal; só descritiva.
+
+### A7.5 As premissas (a tarefa, 4.3; PROPOSTAS, SEM FONTE)
+
+Se uma falha, **o primário é inconclusivo por premissa,** qualquer que seja o IC dele (A7.7, a primeira linha).
+- **P-CORRIDA:** no M2c, nas 8 células, a média das decisões por corrida creditada na vida inteira (as corridas entregues ao P2; a aberta no
+  fim da vida fica fora, como no crédito), uma por vida, com a média das 8 células por unidade; **o limite inferior do IC95 pelo t > 1,1.**
+  Se não passa, a corrida não difere do passo, e o contraste não testa a hipótese. A forma (o limite inferior, como a G-PESA da A6.4) é
+  PROPOSTA (AD7-2). **A janela é a vida inteira** e não os dias 8 a 14: o crédito molda o H a vida toda, e o índice dos dias 8 a 14 lê o H
+  que veio dele;
+- **G-PESA do hábito:** no M2c, nas 8 células, a fração das decisões dos dias 8 a 14 em que o hábito mudou a escolha (`influencia.habito`,
+  a sonda de hoje), por unidade; **o limite inferior do IC95 pelo t > 0,01**, como as G-PESA da A6.4. Se não passa, o hábito do M2c não
+  pesa e o índice não tem como mudar por ele;
+- **O teste de vida da etapa 2** (`test_a_corrida_e_mais_longa_que_o_passo_na_vida`) já mostra corridas acima de 1,1 numa vida de teste;
+  isso não é dado da C2, só mostra que a premissa tem o que medir.
+
+### A7.6 A margem, pelo poder (e o "≈ 0")
+
+**A conta** ([poder]; a da A6.5, sem mudança de método):
+1. **A dispersão.** O M2c não existe, e o `longe_fixo` nunca teve o M1. A dispersão de um contraste do mesmo índice entre dois braços que
+   diferem num módulo é lida onde existe, sempre com a média das 4 células de um lugar por unidade:
+
+   | fonte | lugar | contraste | média | IC95 (t) | dp entre as unidades | g1 | unidades |
+   |---|---|---|---|---|---|---|---|
+   | a reavaliação | comedouro | M2 − M1 (o G-ABLA-P2) | −0,0037 | [−0,0119; 0,0045] | 0,0289 | 0,46 | 50 |
+   | a reavaliação | longe | M2 − M1 | −0,0447 | [−0,0538; −0,0356] | 0,0319 | 0,02 | 50 |
+   | a reavaliação | perto | M2 − M1 | −0,0043 | [−0,0104; 0,0018] | 0,0215 | −0,16 | 50 |
+   | a C1 | `longe_fixo` | M3\* − M2 | +0,0192 | [+0,0145; +0,0239] | 0,0291 | −0,06 | 150 |
+   | a C1 | `longe_fixo` | M2 − M0 | −0,0269 | [−0,0334; −0,0204] | 0,0403 | −2,26 | 150 |
+
+   Nenhum é o contraste da C2: servem só para o tamanho do dp, nunca como evidência dela.
+2. **O σ de planejamento:** o maior dos cinco, com a folga de 20 % da A5.9: **σ = 0,0403 × 1,2 = 0,0484** (AD7-5). O maior é o M2 − M0 da
+   C1, que difere em dois módulos (o P1 e o P2) e tem o g1 de −2,26; **por isso o σ é conservador:** os contrastes de um módulo só ficam
+   em 0,021 a 0,032. Ele é conservador também porque a unidade do P-A é a média de 8 células (com as duas metades independentes, o dp
+   cairia para perto de 1/√2 do de 4 células).
+3. **O poder** do critério de A7.4 com o efeito verdadeiro δ: **1 − Φ(t₀,₉₇₅;K−1 − (δ / σ) · √K)** (a de A6.5).
+4. **A margem δ(K):** o menor efeito com poder 0,8, o menor efeito de interesse que a run detecta, e a régua do "≈ 0".
+5. **A conferência por simulação:** as 50 diferenças do comedouro (o G-ABLA-P2, a célula comum com a C2), centradas, na escala de σ,
+   deslocadas e sorteadas com reposição em K unidades, com o IC95 do t; 2 000 réplicas, semente 4242. Com o efeito verdadeiro 0, a
+   fração com o IC95 inteiro dentro de (−δ, +δ) sai com o σ de planejamento e com o σ observado no comedouro (0,0289).
+
+| K (unidades) | por base | vidas | a margem δ(K) | o poder simulado em δ(K) | efeito 0: "≈ 0" (σ de planejamento) | efeito 0: "≈ 0" (σ do comedouro) |
+|---|---|---|---|---|---|---|
+| 50 | 10 | 1 800 | 0,0195 | 0,830 | 0,610 | 0,994 |
+| 100 | 20 | 3 600 | 0,0137 | 0,809 | 0,608 | 0,992 |
+| **150** | **30** | **5 400** | **0,0111** | **0,811** | **0,613** | **0,996** |
+| 200 | 40 | 7 200 | 0,0096 | 0,822 | 0,611 | 0,994 |
+| 300 | 60 | 10 800 | 0,0078 | 0,812 | 0,605 | 0,996 |
+
+Com o efeito verdadeiro 0 e o σ de planejamento, o IC inteiro acima de 0 (o falso "passa") sai em 0,019 a 0,028 das réplicas, perto do α
+unilateral de 0,025.
+
+**O PROPOSTO: K = 150 (30 por base) e a margem δ = 0,011** (AD7-1).
+- **O tamanho:** a margem fica abaixo da falha que a C2 quer explicar. O G-ABLA-P2 da reavaliação foi −0,018 no total e −0,045 no longe:
+  se a corrida desfizer a falha do total, o P-A precisa ser da ordem de +0,018, e a run o detecta com folga; com K = 50 (δ 0,0195), uma
+  correção do tamanho da falha ficaria na beira do alcance.
+- **É o K da C1** (150 unidades), e a mesma escala de unidades facilita ler as duas lado a lado.
+- **O "≈ 0" com o σ de planejamento sai em cerca de 61 % das réplicas com o efeito 0** (o IC tem de caber inteiro na margem que dá poder
+  0,8; com o σ conservador, isso falha muitas vezes e a classe sai "indeterminado"). **Com o σ observado no comedouro, sai em 99 %.** O
+  número real fica entre os dois, e o relato dá a margem efetiva (A7.4). Nenhum dos dois muda a margem nem a regra.
+- **O que a margem não é:** um limiar do primário. O P-A passa com o limite inferior acima de 0 (A7.4).
+
+**O "≈ 0" e a classe de cada contraste** são os de A6.6, como estão, com δ = 0,011: (1) "≈ 0": o IC95 inteiro dentro de (−δ, +δ), com o
+sinal se ele também exclui o 0; (2) "> 0": o limite inferior acima de 0 e o IC fora de (−δ, +δ); (3) "< 0": o limite superior abaixo de
+0 e o IC fora; (4) "indeterminado": qualquer outro caso.
+
+### A7.7 A regra de leitura (a tabela de 1.4 da tarefa, como está)
+
+**No P-A, o primário manda** (como na A6.6 e na A6.7): a coluna P-A lê "> 0" quando o primário passa (A7.4) e, senão, a classe de A6.6.
+**O S1 entra pela classe de A6.6** (AD7-3). As linhas são lidas na ordem, e vale a primeira que serve:
+
+| ordem | premissas (A7.5) | P-A (M2c − M2) | S1 (M2c − M1) | o que diria | o que se faz |
+|---|---|---|---|---|---|
+| 1 | uma falha | qualquer | — | inconclusivo por premissa: a corrida não ficou mais longa que o passo, ou o hábito não pesou | registrado; nada se decide |
+| 2 | passam | > 0 | > 0 | nestas condições, o crédito no passo explica a falha: com a corrida, o hábito faz o que se previa | a corrida vira candidata a substituir o crédito de hoje; volta ao Matheus. Não vai ao jogo sem a L3 |
+| 3 | passam | > 0 | ≈ 0, < 0 ou indeterminado | o crédito no passo explica parte da falha, mas o hábito ainda não sobe o "ganhou, fica" acima do sem-hábito | registrado; a C3 (o gatilho) fica como o próximo teste, em separado |
+| 4 | passam | ≈ 0 | qualquer | nestas condições, a unidade de crédito não é a causa. Fica a H-P2a: o índice mede a sensibilidade ao resultado, e um hábito é a repetição pouco sensível | volta ao Matheus a medida do P2, não um mecanismo novo |
+| 5 | passam | < 0 | qualquer | a corrida piora o índice | registrado como está; a corrida fica fora |
+| 6 | passam | indeterminado | qualquer | nada se decide | registrado como indeterminado |
+
+- **A tabela da tarefa põe a P-CORRIDA na última linha;** aqui ela vem primeiro, com a G-PESA do hábito ao lado (A7.5), porque sem elas
+  nenhuma outra linha se lê. A ordem não muda o conteúdo de nenhuma linha.
+- **O "> 0" do P-A com a classe "≈ 0 com o sinal +"** (o primário passa, mas o IC cabe inteiro na margem): pela regra da A6.6 e da A6.7, o
+  primário manda, e a linha é a 2 ou a 3; a classe sai ao lado como descrição do tamanho ("um efeito menor que a margem").
+- **O S2** (M2 − M1) e o descritivo de A7.8 **não mudam nenhuma linha.**
+- **Gate que falha não para a V3.** O resultado negativo é registrado como está. **A run não se repete,** e uma faixa nova só vem com um
+  adendo novo.
+
+### A7.8 O descritivo (sem gate)
+
+Todos com o IC95 do t sobre as unidades e a classe de A6.6, salvo onde dito, nos três pares (M2c − M2, M2c − M1, M2 − M1), nas 8 células
+do primário e em cada lugar (o `longe_fixo`, o comedouro e o longe sorteado), e em nível por braço. **Nenhum muda a leitura de A7.7.**
+
+1. **O índice de hoje por lugar e o da DX-5:**
+   - o índice de hoje em cada lugar; **no longe sorteado** é onde o G-ABLA-P2 falhou (−0,045), e o M2c − M2 ali é o descritivo que diz se
+     a corrida desfaz a falha onde ela mora;
+   - o da DX-5 (A3.5; só os pares cuja primeira decisão é de uma ação com r possível), no total e **por ação: o comer e o explorar** (a
+     tarefa, 4.4), da `repeticao_r_possivel` de hoje.
+2. **O índice por corrida** (a HI-5 o põe no descritivo; a definição é PROPOSTA e SEM FONTE, AD7-4): o mesmo
+   `metrics.repeticao_apos_alivio`, sem mudança, aplicado às corridas e não às decisões. Cada corrida fechada da vida dá uma entrada (o tick
+   e o contexto "ganhou, fica" da primeira decisão dela; o comportamento; o r dela, a soma dos r_n cortada em [−S, S]); a janela dos dias 8
+   a 14 vale para a corrida de antes do par. **As corridas são as mesmas nos três braços** (o orquestrador as refaz das decisões, pela
+   definição da `estado.py`); no M2c, ele confere que são, uma a uma, as entregues ao P2. Como duas corridas seguidas nunca são do mesmo
+   comportamento, o par "fica" só existe entre corridas do mesmo contexto separadas por outras (o pareamento por contexto do índice); por
+   isso **este índice não se compara em nível com o de hoje,** só entre braços.
+3. **As corridas** (um grupo que a própria corrida cria; LP-2): por vida, o número, as decisões e a média das decisões por corrida (o nível
+   por braço e os contrastes, por serem da vida inteira); por comportamento, só somadas por braço e lugar, sem contraste.
+4. **O H** (a HI-7: nenhum ajuste, só a leitura): no M2 e no M2c, os créditos do P2 por vida (`plast.creditos`), o H no teto
+   (`pesos_no_teto`, como hoje) e **a norma L1 do H por comportamento no fim da vida, na escala S** (a soma dos |h| da linha dividida por S;
+   PROPOSTA, AD7-4).
+5. **O corpo:** a taxa de fechamento por episódio de fome (a do adendo 6) e as medidas da C5 (as definições da AD6-4, como estão: a fração
+   dos ticks com alguma variável abaixo de 0,15 e a menor necessidade, média e mínimo, na vida e nos dias 8 a 14), com a privação de hoje
+   ao lado. A pergunta (a tarefa, 4.4): o hábito com a corrida ajuda ou atrapalha o pet? (O M2 − M0 da C1 já é negativo por episódio.)
+6. **Os outros:** a G-PESA do hábito por braço e lugar (M2 e M2c); **os fins das intenções somados por braço e lugar** (a conferência de
+   A7.10); as células sem índice por braço e lugar; os episódios por vida; a exaustão; por dono, só a média do índice de hoje.
+
+### A7.9 O tamanho da run e a máquina
+
+- **150 unidades × 36 vidas = 5 400 vidas,** 14 dias cada.
+- **No máximo 4 processos e uma run de pesquisa por vez** (a V3-D8; as medições do combate contam). O número de processos não muda nenhuma
+  vida nem o resultado.
+- **A estimativa das horas** [poder, `custo_por_fonte_e_lugar`; a C1, o `meta.json` da run]:
+  - **CPU:** de 3,1 a 3,4 s por vida nos lugares da C2 (os braços M1 e M2 da reavaliação e o M2 da C1), cerca de **5 h de CPU;**
+  - **parede, com 4 processos:** a C1 levou 3 840 s para 3 600 vidas (1,07 s por vida, com o replay bit a bit), logo **cerca de 1 h 40
+    min;** com a análise, **até 2 h.** É estimativa; o tempo real vai ao RESULTADO.
+- **O tamanho em disco:** pelo da C1 (9 kB por vida no `medidas.json`), cerca de 50 MB no git; as vidas, fora dele ou num `.tar.gz`, como
+  na C1.
+
+### A7.10 O que falta antes da primeira vida, e os critérios de parada
+
+- **A etapa 2 na `main`** (#513, `f41a8f7`): a `credito_corrida`, o gabarito antes da mudança, o G2, o G2-SEPARADO, o G1 e os T-CORRIDA-1
+  a 3.
+- **A faixa** 75101…75505 em `FAIXAS_RESERVADAS`, num commit próprio (o PR da etapa 3).
+- **O orquestrador** (`experiments/run_v2_habito_intencao.py`, o PR da etapa 3), com a fumaça nas sementes dos testes:
+  - os braços M1, M2 e M2c, sem a `intencao_suspensa`; as 12 células de A7.2; as bases e o K de A7.3; 14 dias; orçamento de 16;
+  - **a trava:** exige este adendo com a marca "APROVADO pelo Matheus" no cabeçalho (a `exigir_adendo_aprovado` de A4.7; **hoje ela
+    recusa,** e um teste confere) e recusa, com `SementeSemPlano`, outra base, outro K, outros dias ou sementes fora da faixa; não grava por
+    cima de uma pasta que já existe;
+  - **a pasta de saída:** `artifacts_v2_digibrain_prototipo/habito_intencao/run/` (a pasta-mãe já tem o `adendo7_poder.json`; a lição do
+    A6.13);
+  - **a conferência dos fins (a lição do #507):** o orquestrador não tem a lista escrita à mão. Os fins conhecidos de cada braço são as
+    chaves de `EstadoDinamico.fins` com a config dele (com a `intencao_cheiro` e sem a `intencao_suspensa`: `achou`, `desistiu`, `meta`,
+    `sumiu` e `trocou`). Em cada vida, um fim fora deles, uma contagem do registro diferente da do próprio estado, uma retomada ou um
+    `n_susp` **falham alto.** Um teste lê os literais dos `_acabar` e `_acabar_suspensa` da `estado.py` e confere que cada um está nos
+    conhecidos ou é da L-2 (que fica desligada);
+  - o replay bit a bit (o G1), o T-CENARIO-1, o G-MECANISMO e a conferência do crédito (por opção e, no M2c, por corrida; o
+    `conferir_credito_corrida` do #513) em toda vida; e, no M2c, as corridas do orquestrador iguais às entregues ao P2;
+  - as medidas de A7.4, A7.5 e A7.8, e a análise de A7.4 a A7.7, gravadas no `resultado.json` com a classe de cada contraste e a linha da
+    leitura.
+- **A varredura dos fins, antes da run** (a etapa 3): o orquestrador inteiro com as cinco sementes dos testes (bases 101 a 505, K = 1), os 3
+  braços, as 12 células e 14 dias (180 vidas). O resultado vai no relato do PR; um fim desconhecido teria parado a etapa.
+- **Antes da run:** os testes de mecanismo e de vidas, os gabaritos (o G2) e a suíte. **Qualquer quebra do G1, do G2 ou do G-MECANISMO
+  para tudo.**
+- **O registro da run** (a etapa 4), num commit empurrado antes da primeira vida: o commit, a config com o sha256, as bases, o K, os braços
+  e os sha do orquestrador, do protótipo, do `config.py`, do `engine.py`, do `metrics.py` e deste plano.
+- **Os artefatos:** o `meta.json`, o `medidas.json` e o `resultado.json` (com `git add -f`). **O RESULTADO:** uma seção nova no
+  `docs/RESULTADO_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md` (a HI-8).
+- **A run roda uma vez.** O resultado é registrado como está, e nada se ajusta olhando para ele.
+
+### A7.11 As referências
+
+Só a VERIFICADA na C0 (`docs/referencias/v3c0_referencias_verificadas.csv`), e só para a direção:
+- **Gadanho e Hallam (2001), *Adaptive Behavior* 9(1), `10.1177/105971230200900102`:** um robô simulado numa tarefa de energia, com um
+  modelo de emoção dentro de um aprendizado por reforço; pela tese de 1999 (a versão-irmã, lida na triagem), a recompensa emocional falha
+  por ação primitiva e funciona por comportamento, e o gatilho de reavaliação explica a maior parte do ganho. **Dá a direção do P-A, não o
+  tamanho, e não diz que o efeito aparece sem o gatilho** (a C3): um resultado nulo aqui não contradiz a fonte (a tarefa, 1.2).
+- **Nenhuma outra fonte é citada.**
+- **Todo número deste adendo é SEM FONTE externa:** a corrida como unidade, o K, a margem, a folga de 20 %, o 1,1 da P-CORRIDA, o 0,01 da
+  G-PESA, a norma L1 do H e o −0,5 do g1. Os números de contexto saem dos artefatos citados.
+
+### A7.12 As decisões do Matheus (DECIDIDAS em 2026-10-31, pela recomendação)
+
+| # | decisão | recomendação | custo de errar |
+|---|---|---|---|
+| **AD7-1** (DECIDIDA) | o K e a margem | **K = 150 (30 por base), δ = 0,011,** o menor efeito com poder 0,8 pelo σ conservador (A7.6). 5 400 vidas, cerca de 1 h 40 min com 4 processos | K = 50 (δ 0,0195, 1 800 vidas, ~35 min): uma correção do tamanho da falha do total (0,018) fica na beira do alcance, e um efeito real dessa ordem pode sair "indeterminado"; K = 100 (δ 0,0137, 3 600 vidas, ~1 h): detecta a falha inteira, mas não metade dela; K = 300 (δ 0,0078, 10 800 vidas, ~3 h 20 min): um efeito sem interesse prático lê como "> 0" ou "< 0", e o "≈ 0" fica mais difícil de mostrar |
+| **AD7-2** (DECIDIDA) | a P-CORRIDA e a G-PESA do hábito | **o limite inferior do IC95 pelo t sobre as unidades acima de 1,1 decisão por corrida (vida inteira) e acima de 0,01 (dias 8 a 14), no M2c, nas 8 células** (A7.5), a forma das G-PESA da A6.4 | a média sem IC: uma corrida que mal passa do passo lê como premissa cumprida; um limiar maior que 1,1 (2, por exemplo): um número novo sem fonte, e a premissa pode falhar num mecanismo que mudou o crédito de fato; a janela dos dias 8 a 14 na P-CORRIDA: lê só o fim, quando o H já veio da vida inteira |
+| **AD7-3** (DECIDIDA) | como o S1 entra na leitura | **pela classe de A6.6** (o "> 0" do S1 pede o IC fora da margem); no P-A, o primário manda, como na A6.7 | o S1 pelo "passa" (limite inferior > 0), como o P-A: um S1 positivo menor que a margem leva à linha 2 (a corrida candidata a substituir o crédito), com um efeito que a run não distingue de 0 pela régua dela; pela classe, ele leva à linha 3, que só registra |
+| **AD7-4** (DECIDIDA) | as definições dos descritivos novos | **o índice por corrida** (o `repeticao_apos_alivio` de hoje sobre as corridas, A7.8, item 2) e **a norma L1 do H por comportamento, na escala S** (item 4), os dois sem gate, calculados no orquestrador com as funções de hoje do `metrics.py` | outro índice por opção (uma função nova no `metrics.py`): mais código e um nome novo antes da run, por um descritivo; outra norma (a máxima, a L2): muda só a escala da leitura, e nada se decide com ela |
+| **AD7-5** (DECIDIDA) | o σ de planejamento | **o maior dp de 4 células das cinco fontes, com a folga de 20 % (0,0484), mesmo vindo do M2 − M0 da C1, que difere em dois módulos** | o σ só dos contrastes de um módulo (0,0319 × 1,2 = 0,038): a margem cai para cerca de 0,009 com K = 150, e se o M2c tiver a dispersão do M2 − M0, o poder real fica abaixo de 0,8; o σ conservador custa só o "≈ 0" mais difícil com o efeito 0 (A7.6), não o critério do primário |

@@ -70,6 +70,7 @@ from bancada.regras_mundo import simular_vida_fisico  # noqa: E402
 from digilab.config import (CONFIG_DIGIBRAIN_INATOS, CONFIG_DIGIBRAIN_LIGADA, CONFIG_MUNDO_MVP, CONFIG_PADRAO,  # noqa: E402
                             TICKS_POR_DIA, ConfigDigibrain, ConfigDigibrainInatos)
 from digilab.digibrain import DigiBrain  # noqa: E402
+from digilab.digibrain.estado import EstadoDinamico  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
 from digilab.events import LogDeEventos  # noqa: E402
 from digilab.metrics import (ACOES_R_POSSIVEL, JANELA_8_14, MODULOS_SONDA, MOTIVOS_EPISODIO, assimetria_g1, cadeia_comida_corpo,  # noqa: E402
@@ -116,6 +117,9 @@ BRACOS_CONSERTO = BRACOS_MODULAR_CONSERTO + ("A11",)
 # a L-2 (o adendo 5, A5.1; as fases em experiments/run_v2_digibrain_l2.py): o M3* e o M0 do conserto com a intencao suspensa
 SUBCHAVES_L2 = {"M3+S": {**SUBCHAVES_CONSERTO["M3"], "intencao_suspensa": True},
                 "M0+S": {**SUBCHAVES_CONSERTO["M0"], "intencao_suspensa": True}}
+# a C2 (docs/TAREFA_V3_HABITO_INTENCAO.md, 3.1 e HI-1; o adendo 7; a run em experiments/run_v2_habito_intencao.py): o M2 do conserto com o
+# credito do P2 na corrida do comportamento
+SUBCHAVES_C2 = {"M2c": {**SUBCHAVES_CONSERTO["M2"], "credito_corrida": True}}
 BRACOS_DA_FASE.update({"calibracao_conserto": ("M3",), "piloto_conserto": BRACOS_CONSERTO, "reavaliacao": BRACOS_CONSERTO})
 G_MVP_EP = {"w_decisoes": 8, "fome_elegivel": 0.5, "taxa_vida": 0.5, "limiar": 0.8}         # A3.3: os numeros da PPM-4, por episodio
 G_ELEGIVEL_EP = {"frac_vidas": 0.8, "episodios": 3}                                          # A3.3: a premissa G-ELEGIVEL-EP
@@ -278,14 +282,20 @@ def bancada(dias: int, orcamento_por_dia: int) -> bv.Bancada:
 
 def config_do_braco(braco: str, g_apr_con: int | None = None, conserto: bool = False) -> ConfigDigibrain:
     """a ConfigDigibrain do braco: a do prototipo (SUBCHAVES) ou, nas fases do conserto, a do adendo 3 (SUBCHAVES_CONSERTO), com os dois
-    bracos da L-2 (SUBCHAVES_L2, o adendo 5)"""
-    tabela = {**SUBCHAVES_CONSERTO, **SUBCHAVES_L2} if conserto else SUBCHAVES
+    bracos da L-2 (SUBCHAVES_L2, o adendo 5) e o da C2 (SUBCHAVES_C2, o adendo 7)"""
+    tabela = {**SUBCHAVES_CONSERTO, **SUBCHAVES_L2, **SUBCHAVES_C2} if conserto else SUBCHAVES
     if braco not in tabela:
         raise ValueError(f"braco do modular {braco!r}: so {tuple(tabela)}")
     extra = {"g_apr_constante": g_apr_con} if braco == "M4-con" else {}
     if braco == "M4-con" and (type(g_apr_con) is not int or g_apr_con <= 0):
         raise ValueError(f"o M4-con precisa do g_apr fixo (inteiro > 0): {g_apr_con!r}")
     return replace(CONFIG_DIGIBRAIN_LIGADA, **tabela[braco], **extra)
+
+
+def fins_do_estado(braco: str) -> frozenset:
+    """os fins que a `estado.py` pode dar com a config do braco (das fases do conserto): as chaves de `EstadoDinamico.fins`, a contagem
+    que o proprio estado mantem. Fica aqui porque so este orquestrador monta o pacote do DigiBrain (o G2 e o T.3)."""
+    return frozenset(EstadoDinamico(CONFIG_PADRAO, config_do_braco(braco, conserto=True), CONFIG_DIGIBRAIN_INATOS).fins)
 
 
 class Registro:
