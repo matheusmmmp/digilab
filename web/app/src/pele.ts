@@ -1,4 +1,5 @@
-/* Pele dos menus (docs/TAREFA_V2_TEMA_MENUS.md §4): Militar (id xcom) ou Holografico (id vidro, o padrao, TM1). Vale so nos menus
+/* Pele dos menus (docs/TAREFA_V2_TEMA_MENUS.md §4): Militar (id xcom) ou Sci-fi (id vidro, o padrao, TM1;
+   "Holografico" ate 2026-10-31). Vale so nos menus
    e e sempre escura; o tema claro/escuro (tema.ts) segue no habitat. A escolha e uma preferencia de tela, numa chave propria (a chave
    do save nao muda; fora do registro e do replay); ?pele=xcom|vidro no endereco sobrepoe sem gravar (conferencia e capturas).
    data-pele fica sempre no <html>, para o CSS nao depender de ausencia de atributo. */
@@ -8,7 +9,7 @@ import { CHAVE } from "./save.ts";
 export type Pele = "xcom" | "vidro";
 export const CHAVE_PELE = CHAVE + "-pele";
 export const PELE_PADRAO: Pele = "vidro";
-export const NOME_PELE: Record<Pele, string> = { xcom: "Militar", vidro: "Holográfico" };
+export const NOME_PELE: Record<Pele, string> = { xcom: "Militar", vidro: "Sci-fi" };
 const ehPele = (v: string | null): v is Pele => v === "xcom" || v === "vidro";
 
 let pele: Pele = PELE_PADRAO;

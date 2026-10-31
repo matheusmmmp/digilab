@@ -18,7 +18,7 @@ paralelo; os nomes de arquivo e de classe abaixo são os desses branches e podem
 | # | pergunta | decisão |
 |---|---|---|
 | TM1 | qual pele vem por padrão? | **Vidro** (Holográfico). Quem nunca escolheu vê o Holográfico |
-| TM2 | nomes na tela | **"Militar"** (id `xcom`) e **"Holográfico"** (id `vidro`). A palavra "XCOM" não aparece na tela (fica só em id, classe e comentário) |
+| TM2 | nomes na tela | **"Militar"** (id `xcom`) e **"Holográfico"** (id `vidro`; **"Sci-fi"** desde 2026-10-31, pedido do Matheus na refeitura das peles). A palavra "XCOM" não aparece na tela (fica só em id, classe e comentário) |
 | TM3 | onde a pele vale | **só nos menus** (painéis, trilho/barra, dock, chamado, modais, telas que abrem sozinhas), **sempre escura**. Claro/escuro continua no habitat, balão, retrato e relógio. Pele e tema são **eixos independentes**: as 2 × 3 combinações valem |
 | TM4 | onde se escolhe | **Ajustes › Aparência**, dois cartões de prévia no molde de `.cfg-tema` (depois da M5: `.mc-opcao--tema` + `.mc-tema-prev` em `menus_config.css`) |
 | TM5 | capturas | **completas nas duas peles, em 1920×950** (D10 do Matheus, 2026-10-30: só o desktop, o monitor dele a 100 %; celular e outras larguras ficam sem polimento, só não podem quebrar o e2e). Antes da D10: 360, 390 e 1280 px |
@@ -58,7 +58,10 @@ e deixa o Militar em `:root` (a pele sem atributo é a Militar; o padrão Vidro 
 
 "(proposta)" marca valor que a referência não fixa; a T1 propõe e confere o contraste, e o Matheus aprova nas capturas da T3.
 
-**DECIDIDOS (2026-10-31).** Fonte: o Matheus aprovou as capturas da T3 (PR #505, "Continue com o recomendado"). Valem como DECIDIDOS
+**Refeitos em 2026-10-31 (voltam a PROPOSTOS):** a tabela abaixo é a da T1/T3; os valores de hoje, das duas peles, estão em
+`web/app/src/estilo/tokens.css` e na seção "Resultado da refeitura das peles", no fim. Ficam PROPOSTOS até a aprovação das capturas novas.
+
+**DECIDIDOS (2026-10-31, antes da refeitura).** Fonte: o Matheus aprovou as capturas da T3 (PR #505, "Continue com o recomendado"). Valem como DECIDIDOS
 todos os "(proposta)" das duas tabelas abaixo, com os quatro ajustes de contraste da T1 (início do gradiente .92, contorno externo .62,
 rótulo/secundário `#A3B2C3`, perigo `#F09A9A`), o brilho do escolhido por dentro (`inset`) e o texto escuro da etiqueta "você" no
 Holográfico (T3). Os valores de verdade são os de `web/app/src/estilo/tokens.css` e `pele-vidro.css`.
@@ -290,3 +293,30 @@ e as referências do `e2e_capturas` foram regeneradas nas duas peles (o fim dest
   `DIGILAB_CAPTURAS`). Conferido contra elas: 19 de 21 telas batem pixel a pixel nas duas peles em todas as rodadas; **as duas da
   Exploração (`lutar-campanha`, `lutar-exploracao-v6`) variam nas duas peles** (uma faixa da ilha 3D atrás do mapa, de 4 a 110 mil
   pixels entre uma tentativa e outra): é do habitat, não da pele, e fica para a frente da ilha.
+
+## Resultado da refeitura das peles (2026-10-31, worker Claude Code, Opus 5.5, worktree `v3-tema-peles`)
+
+Pedido do Matheus: as duas peles ficavam praticamente iguais na ilha (cartões pretos opacos, as mesmas bordas e cores). Referência
+visual: as duas páginas privadas originais (HUD Vidro e XCOM), lidas de novo; nada delas entrou no git. Mesmo DOM, mesmas rotas, mesmos
+dados e interações; o cenário 3D, o pet e o motor não mudam.
+
+- **A causa:** a HUD da tela Pet redefinia os `--hx-*` com uma paleta turquesa única nas duas peles (`pet_hud.css`, decisão de 2026-10-30),
+  e o vidro da T1 era quase opaco (.92) para passar AA contra branco puro. Agora a HUD segue a pele (desvio no registro).
+- **Militar (`xcom`):** grafite fosco quase opaco e sem desfoque (painel `#1C1F22`, caixas da HUD `rgba(30,33,36,.97)`), cantos retos, linha de
+  topo `#6E7872` de 2 px, marcadores táticos discretos (cantos em L no tom do rótulo, hachura caixa-cinza nos títulos), escolhido caqui
+  `#C5CFB0` com texto escuro, verde de sinalização só no botão de ação (CONTINUAR e o principal das telas), sem brilho; os literais teal
+  das telas viram grafite (`estilo/pele-xcom.css`, novo).
+- **Sci-fi (`vidro`):** azul-marinho translúcido `rgba(10,26,52,.78)` → `rgba(5,14,30,.86)` com desfoque de 12 px (o cenário passa por trás),
+  borda fina `rgba(110,200,255,.72)`, chanfros, reflexo, contorno interno, brilho suave por dentro, trecho de luz e marcador `#5FD4FF`,
+  escolhido em gradiente azul com borda ciano e brilho; as linhas, teclas e cartões dentro de um painel ganham só um realce azul leve
+  (`--hx-tecla`), sem outro fundo escuro. Nome na tela: **Sci-fi**.
+- **Tokens novos:** `--hx-tecla`, `--hx-tecla-hover`, `--hud-fundo-1`, `--hud-fundo-2`, `--hud-desfoque`, `--hud-ch`, `--hud-ch-p`, `--hud-brilho`,
+  `--hud-risca` (antes literais em `pet_hud.css`, `casca.css` e `pet_dock.css`).
+- **Contraste:** o pior caso do vidro passa a ser a grama da ilha de dia (o pixel mais claro do habitat nas capturas da H5), não branco puro
+  (`test/hx_pele.test.ts`); no render (`conferencia_pele.spec.ts`, tema claro, 24 telas) o Sci-fi tem 1170 textos, mediana 12,5:1, e só as
+  falhas que já existiam no Militar (os nós trancados da árvore, o laboratório de Cenários) mais a linha do Registro cortada pela rolagem;
+  o opaco (`prefers-reduced-transparency`) tem as mesmas, mediana 13,3; o Militar, 1097 textos, mediana 11,1, as mesmas de antes.
+- **Capturas** (fora do git, `D:\Trab\digilab\capturas_tema_peles\r3\`): a ilha e o Crescer › Treinar nas duas peles em 1280 e 390 px
+  (`lado_*.png`, Militar à esquerda), e as telas extras da T3 nas duas peles × claro/escuro em 1920 × 950. O teste novo "ilha nas duas peles"
+  do `conferencia_pele.spec.ts` grava a ilha e o Crescer.
+- **Portão `e2e_capturas`:** as referências são as da T3; elas só são regeneradas depois da aprovação do Matheus (TM5).

@@ -1,0 +1,56 @@
+/* Pele Militar (id xcom) dos menus: docs/TAREFA_V2_TEMA_MENUS.md §3, refeita em 2026-10-31 (docs/registro/2026-10.md). Os tokens --hx-* e
+   --hud-* da pele ficam em tokens.css (:root); aqui mora so o que nao cabe em token: as caixas da HUD retas e foscas, com a linha de topo
+   mais clara e os cantos em L (marcadores taticos discretos), os botoes retos, e os literais teal das telas trocados pelo grafite.
+   Tudo sob :root[data-pele="xcom"]; a estrutura (DOM) dos componentes nao muda. Sem brilho, sem desfoque, sem animacao.
+   Nada aqui toca o habitat, o pet, o retrato nem o relogio. */
+
+/* ---------- caixas da HUD (tela Pet, topo, trilho): retas, quase opacas, linha de topo de 2 px e cantos em L */
+:root[data-pele="xcom"]{
+  --xcom-cantos:
+    linear-gradient(var(--hx-rotulo), var(--hx-rotulo)) left 3px top 3px / 9px 1px no-repeat padding-box,
+    linear-gradient(var(--hx-rotulo), var(--hx-rotulo)) left 3px top 3px / 1px 9px no-repeat padding-box,
+    linear-gradient(var(--hx-rotulo), var(--hx-rotulo)) right 3px bottom 3px / 9px 1px no-repeat padding-box,
+    linear-gradient(var(--hx-rotulo), var(--hx-rotulo)) right 3px bottom 3px / 1px 9px no-repeat padding-box;
+}
+:root[data-pele="xcom"] :is(.hud-caixa, .pet-hud .hud-painel, .pet-etiqueta-db, .topo-pet, .topo-relogio),
+:root[data-pele="xcom"] body .pet-tela .pet-alerta :is(.pet-prioridade, .chamado.dl-card),
+:root[data-pele="xcom"] body .hx-nav::before, :root[data-pele="xcom"] body .nav-pe::before{
+  border-top:2px solid var(--hx-borda-topo);
+  background:var(--xcom-cantos), linear-gradient(180deg, var(--hud-fundo-1), var(--hud-fundo-2)) border-box;
+  clip-path:none;
+}
+/* o trecho de luz e o marcador quadrado sao do vidro; no Militar a linha de topo e os cantos em L fazem esse papel */
+:root[data-pele="xcom"] :is(.hud-painel, .pet-alerta .chamado.dl-card, .pet-dock .dock)::before,
+:root[data-pele="xcom"] .hud-painel::after{ display:none }
+/* o pedido aberto: o contorno no tom do rotulo, sem brilho */
+:root[data-pele="xcom"] .pet-tela .pet-alerta .chamado.dl-card:not(.chamado--morte){ border-top-color:var(--hx-rotulo) }
+/* o titulo dos paineis da HUD: a hachura caixa-cinza mais comprida, como divisao tecnica */
+:root[data-pele="xcom"] .hud-risca{ max-width:96px; height:7px }
+
+/* ---------- botoes retos (o chanfro e do vidro): trilho, dock, borda direita */
+:root[data-pele="xcom"] body .hx-nav .hx-nav__bt, :root[data-pele="xcom"] .pet-dock .dock .dock-bt,
+:root[data-pele="xcom"] .hx-nav__bt[aria-current="page"]{ clip-path:none }
+/* o destino aberto: caqui palido com um traco escuro a esquerda */
+:root[data-pele="xcom"] .hx-nav__bt[aria-current="page"]{ box-shadow:inset 3px 0 0 var(--hx-escolhido-ink) }
+:root[data-pele="xcom"] .pet-dock .dock{ border-top:2px solid var(--hx-borda-topo); background:var(--xcom-cantos), linear-gradient(180deg, var(--hud-fundo-1), var(--hud-fundo-2)) border-box }
+:root[data-pele="xcom"] .pet-dock .dock .dock-bt{ border:1px solid var(--hx-borda) }
+:root[data-pele="xcom"] .pet-dock .dock .dock-bt:hover{ border-color:var(--hx-borda-topo) }
+
+/* ---------- conteudo das telas no painel (painel-hx.css): os --dl-* e --ui-* teal da M4 em grafite; o verde de sinalizacao segue so na acao */
+:root[data-pele="xcom"] :is(.painel-tela .painel-tela__folha, .pet-painel .pet-painel__folha){
+  --dl-hex:#1C1F22; --dl-surface:#16191C; --dl-surface-2:#1C1F22;
+  --dl-border:#545C59; --dl-border-shadow:#2C3130; --dl-navy:#454D4A; --dl-navy-deep:#1E2321;
+  --dl-disabled:#23272A; --dl-disabled-ink:#9DA89F; --dl-rim:#16191C; --dl-plate:#30363A; --dl-plate-hi:#6E7872;
+  --dl-sec-bg:#141619; --dl-sec-edge:#6E7872; --dl-sec-press:#23272A; --dl-sec-shadow:#0E1012;
+  --dl-none-ink:#C9D0C8; --dl-none-edge:#6E7872; --dl-none-bg:#141619; --dl-palco-tit:rgba(19,21,24,.75);
+  --ui-border:#545C59; --ui-surface:#16191C; --ui-surface-2:#1C1F22;
+  --ui-primary-hover:#CBD3C6; --ui-primary-ink:#12150D; --ui-primary-soft:#262B27; --ui-primary-forte:#C5CFB0; --ui-primary-forte-hover:#DCE3CB;
+  --ui-navy:#121417; --ui-navy-2:#1C1F22; --ui-navy-ink:#C9D0C8; --ui-bar-track:rgba(150,160,150,.2); --ui-foco:0 0 0 2px var(--hx-foco);
+}
+:root[data-pele="xcom"] .painel-tela .painel-tela__folha .dl-btn:disabled{ border-color:#3E4442 }
+:root[data-pele="xcom"] .painel-tela .painel-tela__folha .evt-heroi{ background-image:radial-gradient(ellipse at 25% 40%, #2A2F2C 0%, #121417 80%) }
+
+/* ---------- telas que abrem sozinhas (abertas.css): os brilhos ciano viram um realce grafite; o veu escuro fica igual */
+:root[data-pele="xcom"] .ab-hx{ --dl-hex:rgba(150,160,150,.18) }
+:root[data-pele="xcom"] .ab-hx .bv-luz{ background:rgba(201,208,200,.06); box-shadow:0 0 0 14px rgba(201,208,200,.035), 0 0 0 30px rgba(201,208,200,.02) }
+:root[data-pele="xcom"] .ab-hx .cj-anel{ background:rgba(201,208,200,.08) }

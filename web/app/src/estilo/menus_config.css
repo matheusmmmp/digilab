@@ -53,15 +53,15 @@
 .mc-pele-prev i:nth-child(1){ left:6px; top:6px; width:40px; height:4px }
 .mc-pele-prev i:nth-child(2){ left:6px; right:6px; top:15px; height:10px }
 .mc-pele-prev i:nth-child(3){ right:6px; bottom:6px; width:32px; height:8px }
-.mc-opcao--pele-xcom .mc-pele-prev{ background:#0A1316; border:1px solid rgba(118,170,175,.45); border-top-color:#5E7C80 }
-.mc-opcao--pele-xcom .mc-pele-prev i:nth-child(1){ background:repeating-linear-gradient(-60deg, rgba(150,195,200,.7) 0 2px, transparent 2px 4px) }
-.mc-opcao--pele-xcom .mc-pele-prev i:nth-child(2){ background:#BFE5E7 }
+.mc-opcao--pele-xcom .mc-pele-prev{ background:#1C1F22; border:1px solid #3E4442; border-top:2px solid #6E7872 }
+.mc-opcao--pele-xcom .mc-pele-prev i:nth-child(1){ background:repeating-linear-gradient(-60deg, rgba(185,195,164,.75) 0 2px, transparent 2px 4px) }
+.mc-opcao--pele-xcom .mc-pele-prev i:nth-child(2){ background:#C5CFB0 }
 .mc-opcao--pele-xcom .mc-pele-prev i:nth-child(3){ background:rgba(14,30,22,.92); border:1px solid #6CC58A }
-.mc-opcao--pele-vidro .mc-pele-prev{ background:linear-gradient(155deg, rgba(255,255,255,.06), rgba(255,255,255,.015) 34%, transparent 35%), linear-gradient(180deg, rgba(24,36,50,.92), rgba(6,11,18,.92));
-  box-shadow:inset 0 0 0 1px rgba(178,192,206,.62); clip-path:polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)) }
-.mc-opcao--pele-vidro .mc-pele-prev i:nth-child(1){ top:4px; height:2px; background:#3AA8FF; box-shadow:0 0 6px #3AA8FF }
-.mc-opcao--pele-vidro .mc-pele-prev i:nth-child(2){ background:linear-gradient(180deg, rgba(58,168,255,.4), rgba(58,168,255,.15)); border:1px solid #3AA8FF }
-.mc-opcao--pele-vidro .mc-pele-prev i:nth-child(3){ background:rgba(58,168,255,.2); border:1px solid #3AA8FF }
+.mc-opcao--pele-vidro .mc-pele-prev{ background:linear-gradient(155deg, rgba(170,225,255,.10), rgba(170,225,255,.02) 34%, transparent 35%), linear-gradient(180deg, rgba(10,26,52,.78), rgba(5,14,30,.86));
+  box-shadow:inset 0 0 0 1px rgba(110,200,255,.72), inset 0 0 12px rgba(58,168,255,.25); clip-path:polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)) }
+.mc-opcao--pele-vidro .mc-pele-prev i:nth-child(1){ top:4px; height:2px; background:#5FD4FF; box-shadow:0 0 6px #5FD4FF }
+.mc-opcao--pele-vidro .mc-pele-prev i:nth-child(2){ background:linear-gradient(180deg, rgba(58,168,255,.4), rgba(58,168,255,.16)); border:1px solid #5FD4FF; box-shadow:inset 0 0 6px rgba(95,212,255,.45) }
+.mc-opcao--pele-vidro .mc-pele-prev i:nth-child(3){ background:rgba(58,168,255,.26); border:1px solid #5FD4FF }
 
 /* interruptor: a linha inteira e o alvo */
 .mc-interruptor{ display:flex; align-items:center; justify-content:space-between; gap:12px; min-height:56px; padding:8px 12px; background:var(--hx-miolo);

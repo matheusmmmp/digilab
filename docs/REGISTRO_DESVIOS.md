@@ -462,3 +462,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-31 — HABITAT-ILHA, o portão de capturas estável (worker, Claude Code, Opus 5.5, worktree `cool-panini-6f93b7`): as duas telas da Exploração](registro/2026-10.md)
 - [2026-10-31 — C1 LONGE REGULAR, etapa 3b, a repetição (worker, Claude Code, Opus 5.5, worktree `v3-longe-regular-run2`): a run de novo e a leitura](registro/2026-10.md)
 - [2026-10-31 — C2 HÁBITO NA INTENÇÃO, etapa 1 (worker, Claude Code, Opus 5.5, worktree `v3-habito-intencao`): o "crédito no passo" é o crédito de hoje](registro/2026-10.md)
+- [2026-10-31 — TEMA DOS MENUS, as peles refeitas (worker, Claude Code, Opus 5.5, worktree `v3-tema-peles`): Militar e Sci-fi distintas](registro/2026-10.md)
