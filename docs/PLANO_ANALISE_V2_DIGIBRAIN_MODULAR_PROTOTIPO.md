@@ -2543,3 +2543,21 @@ empurrado antes da primeira vida. **Nada de A6.0 a A6.14 muda.** Não é uma seg
   devem ter o mesmo sha256 de log na run nova (o determinismo; a vida não mudou no #508). Se alguma diferir, o worker para e avisa.
 - **Nenhuma vida da faixa em disco fora da `caido_1/`:** em 2026-10-31 nenhuma worktree em `D:\Trab\digilab` tem a pasta
   `longe_regular/run/`.
+- **É a repetição da mesma validação, e não uma rodada nova** (o brief do Matheus, pelo Gerente da V3, 2026-10-31). A run de A6.13
+  (do commit `b2b7076`) caiu pelo `MOTIVOS_FIM` do orquestrador (o desvio 2 da etapa 3b, #507), e o #508 consertou só a lista de fins
+  (A6.14). A repetição usa a mesma config, as mesmas 150 unidades, os mesmos braços, células e dias, e as regras de A6.4 a A6.8 sem
+  mudança. **Nenhum resultado da run interrompida foi analisado:** ela não gravou `medidas.json` nem `resultado.json`, e das vidas dela
+  só se contaram os arquivos.
+- **O que o adendo 6 diz da repetição, conferido no texto:** ele não prevê uma queda do orquestrador. O "a run roda uma vez" (A6.3, A6.10)
+  e o "a run não se repete" (A6.7, depois de um gate que falha) proíbem rodar de novo **depois de ver o resultado**; com nada visto, a
+  repetição é a mesma run única, e nada nela se ajusta. A decisão de repetir é do Matheus (a D-3b-2 do #507, decidida em 2026-10-31,
+  pelo Gerente da V3), e não do adendo; o registro dela é o desvio da etapa 3b.
+- **O `caido_1/` fica intocado** e não entra em nenhum cálculo: só serve para conferir os sha256 dos logs (acima).
+- **Os pré-requisitos de A6.10, conferidos antes da primeira vida:**
+  - **a suíte:** A6.10 diz, como está: "**Antes da run:** os testes de mecanismo e de vidas, os gabaritos (o G2) e a suíte. **Qualquer
+    quebra do G1, do G2 ou do G-MECANISMO para tudo.**" Então a suíte roda inteira antes da run, e o critério de parada é a quebra do G1,
+    do G2 ou do G-MECANISMO. As falhas conhecidas de `tests/test_hooks.py` e `tests/test_hook_h4.py` (os `.claude/hooks/` apagados da
+    `main` pelo `2586b0e`) não são nenhum dos três; qualquer outra falha para a run;
+  - **a árvore limpa:** o `meta.json` grava o `git_head` e o `git_limpo`; a run sai do commit deste registro, empurrado;
+  - **a config e as sementes:** as travas do orquestrador (o adendo APROVADO, a faixa em `FAIXAS_RESERVADAS`, as bases, o K, os dias);
+  - **a máquina (V3-D8):** nenhuma outra run de pesquisa nem medição do combate rodando; a suíte e a run não se sobrepõem; 4 processos.
