@@ -40,6 +40,19 @@ persistencia. No comeco de cada decisao (`cuidar_suspensa`, antes do contexto):
     "superada" (a ida, outra comida boa mais perto que a comida-alvo); sem fim, a retomada: a I* volta a ser a suspensa, com o C, o `n_sp`
     e a distancia de antes, e disputa o sorteio com a persistencia (a retomada nao forca a escolha).
 O F so sobe no "sumiu" (LS-5). Desligada, nada disso existe, e o reflexo troca a intencao como hoje.
+
+**A C2** (docs/TAREFA_V3_HABITO_INTENCAO.md, secoes 3.1 e 8; a subchave `credito_corrida`; a direcao vem de Gadanho e Hallam 2001, pela tese,
+o resto e PROPOSTO e SEM FONTE): o credito ao P2 deixa de ser por opcao e passa a ser pela **corrida do comportamento**, as decisoes seguidas
+cujo comportamento (`chave[0]`) e o mesmo, qualquer que seja o alvo (uma intencao, a busca pelo cheiro e a composta da DX-4 do mesmo
+comportamento ficam na mesma corrida). A corrida guarda:
+  - a elegibilidade: o z da primeira decisao dela;
+  - o r: a soma dos r_n das consequencias dela, cortada em [-S, S] a cada soma (como o `op["r"]` de hoje);
+  - o g_apr: o da ultima decisao dela;
+  - o `n`: as decisoes dela (o P-CORRIDA da tarefa, 4.3).
+Ela e entregue ao P2 uma vez so, na primeira decisao de outro comportamento (`escolhida`, que a deixa em `corridas_fechadas`); a decisao
+dessa troca ja abre a corrida seguinte. As intencoes, o C, o F, os fins e a persistencia seguem como hoje, so deixam de entregar ao P2 cada
+uma por si (o M-ADAPT nao credita as opcoes). O reflexo do sono e uma decisao de `dormir`: fecha a corrida em curso como qualquer troca de
+comportamento. No fim da vida a corrida aberta nao e entregue, como a opcao aberta de hoje (T-CORRIDA-3). Desligada, nada disso existe.
 Sem rng."""
 from __future__ import annotations
 
@@ -76,6 +89,8 @@ class EstadoDinamico:
         self.guardada: dict | None = None   # a busca que acabou em "achou", por uma decisao (DX-4)
         if self.cd.intencao_cheiro:
             self.fins["achou"] = 0
+        self.corrida: dict | None = None    # a corrida do comportamento em curso (C2), so com `credito_corrida`
+        self.corridas_fechadas: list[dict] = []   # as corridas que a ultima `escolhida` fechou, ao P2 (C2)
         self.suspensa: dict | None = None   # a intencao suspensa pelo reflexo do sono (a L-2), so com `intencao_suspensa`
         self.suspensas = 0
         self.retomadas = 0
@@ -149,6 +164,8 @@ class EstadoDinamico:
         `intencao_suspensa` e o reflexo do sono, a I* de um tipo que suspende passa a `suspensa`, e nao acaba (a L-2)."""
         chave = unidade["chave"]
         fins = []
+        if self.cd.credito_corrida:
+            self._corrida(chave[0], z, g_apr, k)
         if self.suspensa is not None and not reflexo:
             raise RuntimeError("M-ESTADO: a suspensa sem o reflexo chegou ao escolhida (o cuidar_suspensa nao rodou)")
         if self.guardada is not None:
@@ -178,6 +195,18 @@ class EstadoDinamico:
             self.opcao = op
         return fins
 
+    def _corrida(self, b: str, z: list, g_apr: int, k: int) -> None:
+        """a decisao k, do comportamento b: estende a corrida em curso ou, se e de outro comportamento, a fecha e abre a seguinte"""
+        self.corridas_fechadas = []
+        c = self.corrida
+        if c is not None and c["b"] == b:
+            c["n"] += 1
+            c["g_apr"] = g_apr
+            return
+        if c is not None:
+            self.corridas_fechadas.append(c)
+        self.corrida = {"b": b, "chave": (b,), "inicio": k, "e": list(z), "r": 0, "n": 1, "g_apr": g_apr}
+
     def consequencia(self, r_n: int, ocorrido: dict | None, depois: dict) -> list[dict]:
         """a consequencia da decisao em curso. `depois` = {"visto": o alvo nos `vistos` depois de andar, "d": a distancia a ele (None sem
         ele), "ha_cheiro"}. Devolve as opcoes que acabaram nela."""
@@ -186,6 +215,8 @@ class EstadoDinamico:
             raise RuntimeError("M-ESTADO: consequencia sem a opcao da decisao")
         self.opcao = None
         op["r"] = clamp(op["r"] + r_n, -self.S, self.S)
+        if self.cd.credito_corrida:
+            self.corrida["r"] = clamp(self.corrida["r"] + r_n, -self.S, self.S)
         if op is not self.I:
             return [{**op, "motivo": "unica", "meta": None}]
         acao, tipo, ident = op["chave"]
@@ -239,6 +270,9 @@ class EstadoDinamico:
             out["guardada"] = None if g is None else {"chave": chave_json(g["chave"]), "inicio": g["inicio"], "n": g["n"], "r": g["r"]}
             if I is not None and I.get("composta"):
                 out["I"]["composta"] = True
+        if self.cd.credito_corrida:                     # so com a C2 (desligada, o estado e o de hoje, byte a byte)
+            c = self.corrida
+            out["corrida"] = None if c is None else {"b": c["b"], "inicio": c["inicio"], "n": c["n"], "r": c["r"]}
         if self.cd.intencao_suspensa:                   # so com a L-2 (desligada, o estado e o de hoje, byte a byte)
             s = self.suspensa
             out["suspensa"] = None if s is None else {"chave": chave_json(s["chave"]), "C": s["C"], "n_sp": s["n_sp"],

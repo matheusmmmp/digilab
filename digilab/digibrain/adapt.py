@@ -148,7 +148,11 @@ class DigiBrain:
         self._conferir_desligadas(unidades)
         unidade = esc["unidade"]
         fins = fins_susp + m.estado.escolhida(unidade, z, afeto["g_apr"], k, reflexo)
-        creditos = _creditar(m.plast, fins)
+        creditos = _creditar(m.plast, fins, cd)
+        if cd.credito_corrida:                        # a C2: a corrida que a troca de comportamento fechou, ao P2 uma vez so
+            fechadas = m.estado.corridas_fechadas
+            corridas = [{"b": c["b"], "inicio": c["inicio"], "n": c["n"], "r": c["r"]} for c in fechadas]
+            creditos += [x for x in (m.plast.creditar(c) for c in fechadas) if x is not None]
         intencao = intencao_da_unidade(unidade)
         urg = afeto["urgencias"]
         self.motivos.append({
@@ -171,6 +175,8 @@ class DigiBrain:
         entregue = [_fim(f) for f in fins if not f.get("registro", True)]
         if entregue:                                  # a busca guardada (DX-4), entregue sem a opcao composta: so com a subchave
             self.motivos[-1]["busca_entregue"] = entregue
+        if cd.credito_corrida:                        # a C2: desligada, nenhum campo novo
+            self.motivos[-1]["corridas"] = corridas
         if cd.intencao_suspensa:                      # a L-2: a suspensa ao fim da decisao e a retomada (desligada, nenhum campo novo)
             self.motivos[-1]["suspensa"] = m.estado.suspensa_resumo()
             self.motivos[-1]["retomou"] = m.estado.retomadas > retomadas
@@ -298,7 +304,7 @@ class DigiBrain:
         fins = m.estado.consequencia(cons["r_n"], ocorrido, {
             "visto": visto, "d": d, "ha_cheiro": pm1.direcao_cheiro != 0,
             "comida_boa_vista": any(classe_do_tipo(v[1]) in COMIDAS_BOAS for v in pm1.vistos)})
-        creditos = _creditar(m.plast, fins)
+        creditos = _creditar(m.plast, fins, self.cd)
         episodio = None
         if self.cd.m_mem:
             base = {"decisao": p["k"], "regiao": pm1.regiao, "delta": dict(zip(recs, [b - a for a, b in zip(l0, l1)])), "r": cons["r"],
@@ -317,8 +323,11 @@ class DigiBrain:
         motivo["fins"] = motivo["fins"] + _registrados(fins)
 
 
-def _creditar(plast: Plasticidade, fins: list[dict]) -> list[dict]:
-    """as opcoes que acabaram ao P2, salvo a busca guardada no "achou" (DX-4: o credito dela segue pela opcao composta)"""
+def _creditar(plast: Plasticidade, fins: list[dict], cd: ConfigDigibrain | None = None) -> list[dict]:
+    """as opcoes que acabaram ao P2, salvo a busca guardada no "achou" (DX-4: o credito dela segue pela opcao composta). Com a
+    `credito_corrida` (C2) nenhuma opcao vai ao P2: o credito e o da corrida do comportamento, entregue pelo `agir`"""
+    if cd is not None and cd.credito_corrida:
+        return []
     return [c for c in (plast.creditar(f) for f in fins if f.get("credito", True)) if c is not None]
 
 
