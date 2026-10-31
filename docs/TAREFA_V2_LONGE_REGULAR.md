@@ -248,3 +248,13 @@ Os testes e a contagem da suíte inteira estão no corpo do PR.
 o fim `desistiu` da busca pelo cheiro e falhou alto. Ficaram 3 268 das 3 600 vidas no disco, sem `medidas.json` nem `resultado.json`.
 A pasta foi movida para `artifacts_v2_digibrain_prototipo/longe_regular/caido_1/`, e a run não rodou de novo (o desvio 2 do registro de
 2026-10-31). O conserto e a nova run vão ao Gerente pelo PR.
+
+## Etapa 3b: a repetição da run e a leitura (2026-10-31, worker Claude Code, Opus 5.5, worktree `v3-longe-regular-run2`)
+
+- **A run:** a repetição da mesma validação (A6.15), do commit `7683c0e`, uma vez, com 4 processos: 3 600 vidas, das 14h18 às 15h22.
+  Toda vida rejogada bit a bit; os 3 268 logs do `caido_1/` iguais aos da run nova. Os artefatos ficam em
+  `artifacts_v2_digibrain_prototipo/longe_regular/run/`.
+- **O primário** (M3\* − M2 por episódio no `longe_fixo`): **+0,0489 [+0,0355; +0,0624], passa, "> 0"**, com as duas premissas.
+- **O sorteado:** −0,0106 [−0,0236; +0,0024], **"indeterminado"**; a previsão "≈ 0" da C1-E1 fica não confirmada.
+- **A leitura (A6.7):** a linha do "indeterminado", e nada se decide com ela; **a L-3 fica fora** (C1-E2). A distância não domina.
+- **O detalhe:** a seção 13 do `docs/RESULTADO_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`; os desvios em `docs/registro/2026-10.md`.

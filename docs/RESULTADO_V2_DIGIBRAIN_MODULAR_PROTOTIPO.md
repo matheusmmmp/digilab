@@ -948,3 +948,153 @@ No M0+S, as S seguem a mesma forma do M3\*+S: no longe, a S-2 dá 0,192 contra 0
 - **A parte (a) não volta pela regra da A5.5.** A A5.4 não prevê o caso do C-L2-2 passando com o C-L2-1 e o C-L2-4 falhando: o próximo
   passo da L-2 (parar, uma espec nova, ou outra coisa) é dele.
 - **Os limiares** seguem PROPOSTOS, SEM FONTE; nada aqui os muda.
+
+## 13. A C1, o longe regular (2026-10-31, worker da C1, etapa 3b, Claude Code, Opus 5.5; adendo 6, A6.4 a A6.8)
+
+**Antes dos números:**
+- **as regras** são as do adendo 6 (APROVADO em 2026-10-30), lidas como estão: o primário de A6.4, a classe de A6.6 com a margem
+  δ = 0,022, a regra de leitura de A6.7 e os descritivos de A6.8. **Todo número é PROPOSTO,** e os limiares (a margem, os 3 lugares, o
+  0,15 da C5, o −0,5 do g1) são SEM FONTE externa (A6.11);
+- **é a repetição da mesma validação** (A6.15): a run de A6.13 caiu pelo orquestrador (#507) sem gravar nenhum resultado, o #508
+  consertou só a lista de fins (A6.14), e a run rodou de novo, uma vez, com a mesma config e as mesmas sementes;
+- **a leitura não afirma** que o modular supera o A (o A11 não está na run), que o protótipo está pronto, nem um tamanho de efeito fora
+  das condições da run (o `nao_demonstra` do `resultado.json`).
+
+**Como rodou:**
+- **o comando** de A6.13 e A6.15, do commit `7683c0e` (o registro de A6.15, empurrado antes da primeira vida), com a árvore limpa
+  (`git_limpo` = true), 4 processos, depois da suíte e sem sobrepor (V3-D8);
+- **as vidas:** as 150 unidades da faixa 71101…71505 × 3 braços × 8 células, 14 dias: **3 600 vidas,** das 14h18 às 15h22 de 2026-10-31
+  (3 842 s). Nenhum processo caiu; o orquestrador saiu com 0;
+- **as conferências da run:** toda vida rejogada do disco bit a bit (o G1, `orq.conferir_replay`), o corpo do replay igual ao que o
+  cérebro viu, a LP-2 (nenhum `retomou` nem `n_susp`) e os fins de intenção (nenhum fora de `MOTIVOS_FIM`), todas falhando alto; a
+  contagem de 3 600 vidas conferida no fim;
+- **a conferência com a run caída** (A6.15): os 3 268 logs de vida de `caido_1/vidas/` têm o mesmo sha256 que os logs de mesmo nome da run
+  nova (3 268 iguais, 0 diferentes, 0 faltando; o `conferencia_caido_1.json`). O `caido_1/` não foi mexido e não entra em nenhum cálculo;
+- **os artefatos,** em `artifacts_v2_digibrain_prototipo/longe_regular/run/`:
+  - o `meta.json` (sha256 `b2cb111a…4770`), com o `git_head` `7683c0e`, o sha256 da config (`9996cf83…20c9`), do orquestrador
+    (`59b90341…7473`), do plano com A6.15 (`449ac0b5…47d0`) e dos módulos;
+  - o `medidas.json` (sha256 `5a4fb207…722d`, 32,7 MB) e o `resultado.json` (sha256 `b1872745…1209`), os mesmos do `meta.json`;
+  - o `run.log` (a saída da run, em LF; sha256 `71eb06b8…9bf8`), o `conferencia_caido_1.json` (sha256 `95eac333…881d`) e o
+    `vidas.tar.gz` com as 3 600 vidas (sha256 `a1fb0010…f7ee`, 18,0 MB).
+
+### 13.1 O primário (A6.4): M3\* − M2 por episódio, nas 4 células do `longe_fixo`, 150 unidades
+
+| a medida | o valor |
+|---|---|
+| a média das diferenças por unidade | **+0,0489** |
+| o IC95 pelo t (gl 149) | **[+0,0355; +0,0624]** |
+| o t e o p unilateral | 7,20; 1,4 × 10⁻¹¹ |
+| o g1 das 150 diferenças | +0,115 (acima de −0,5: sem a ressalva da assimetria) |
+| o IC95 percentil do bootstrap (a convenção da seção 5.2.1, anticonservadora com 5 bases, A4.4) | [+0,0399; +0,0581] |
+| a margem efetiva (o menor efeito com poder 0,8 pelo dp observado) | 0,019 (a planejada: 0,022) |
+| **passa** (o limite inferior acima de 0) | **sim** |
+| **a classe** (A6.6) | **"> 0"** (o IC inteiro acima de 0 e fora de (−0,022; +0,022)) |
+
+**As premissas** (A6.4) passam as duas, e o primário é **conclusivo:**
+- **G-PESA da memória** (no M3\*, nas 4 células do `longe_fixo`, a fração das decisões com `memoria_decidiu`): **0,122 [0,116; 0,127]**,
+  acima de 0,01;
+- **G-ELEGIVEL-EP:** **0,942** das 600 vidas do M3\* no `longe_fixo` com 3 episódios ou mais, acima de 0,80.
+
+### 13.2 A C1-E1: a previsão por nível de regularidade (A6.1)
+
+| nível | o lugar da ração | a previsão | o que saiu (M3\* − M2 por episódio) | a previsão |
+|---|---|---|---|---|
+| um lugar | o comedouro | > 0 | **não rodou de novo:** o registrado na reavaliação, +0,137 [0,114; 0,160] por episódio (A6.1) | confirmada antes |
+| poucos lugares (3) | o `longe_fixo` | > 0 | **+0,0489 [+0,0355; +0,0624], "> 0"** (13.1) | **confirmada** |
+| nenhum | o longe sorteado | ≈ 0 | **−0,0106 [−0,0236; +0,0024], "indeterminado"** | **não confirmada** |
+
+**O sorteado, como está:** o IC cruza o 0 e passa da margem por baixo (o limite inferior, −0,0236, fica 0,0016 abaixo de −0,022). Pela
+regra de A6.6 a classe é **"indeterminado"**: nem o "≈ 0" que a C1-E1 previa, nem o "< 0" da 66xxx (−0,031 [−0,051; −0,012]), que a
+simulação de A6.6 dizia que se repetiria. **A previsão "≈ 0" do sorteado é registrada como não confirmada,** e a margem e a regra não
+mudam (AD6-3). O dp observado entre as unidades é 0,0805.
+
+### 13.3 A regra de leitura (A6.7) e a C1-E2
+
+- **A linha:** `longe_fixo` "> 0" e sorteado "indeterminado". Nenhuma das duas linhas da seção 1.3 da tarefa se aplica (as duas pedem o
+  sorteado "≈ 0"). Pelo complemento de A6.7, a linha é a do **"indeterminado (em qualquer dos dois)": registrado como indeterminado; nada
+  se decide com ele** (a `leitura.linha` do `resultado.json`).
+- **A C1-E2:** a L-3 só ganha tarefa com o primário "> 0" e o sorteado "≈ 0". **A L-3 fica fora** (`l3_ganha_tarefa` = false).
+- **A terceira linha da seção 1.3 (a distância domina): não** (`distancia_domina` = false). No M0, a leitura principal, a diferença
+  `longe_fixo` − longe por faixa de d₀ é "> 0" na visão (+0,027 [+0,005; +0,049]) e só no cheiro (+0,061 [+0,039; +0,084]) e
+  "indeterminado" além do cheiro (+0,005 [−0,028; +0,038]); nenhuma faixa fica "≈". **Com a ressalva da geometria (A6.2):** o
+  `longe_fixo` fica todo a leste do comedouro e ancora no comedouro, e o sorteado ancora no pet e usa as 16 direções; a diferença entre os
+  estilos mistura a regularidade com o lado do mapa e com a âncora, e a faixa de d₀ só separa a distância.
+- **A persistência:** o adendo 6 não registra leitura nem premissa da persistência (a `intencao_suspensa` estava desligada). A G-PESA do
+  módulo da persistência sai só como descritivo (0,005 no M3\* do `longe_fixo`), e nada se lê dela.
+
+### 13.4 Os descritivos (A6.8, sem gate; nenhum muda 13.3)
+
+Todos com o IC95 do t sobre as 150 unidades. **Os contrastes entre braços usam só medidas da vida inteira;** os subgrupos que o próprio
+mecanismo cria saem só por braço (a LP-2).
+
+**1. A taxa por faixa de d₀** (somas sobre as 600 vidas de cada estilo e braço; o n de episódios e a taxa):
+
+| faixa de d₀ | `longe_fixo` M0 | M2 | M3\* | longe M0 | M2 | M3\* |
+|---|---|---|---|---|---|---|
+| na visão | 3 411, 0,844 | 1 677, 0,899 | 1 870, 0,897 | 2 409, 0,814 | 1 315, 0,881 | 1 279, 0,870 |
+| só no cheiro | 4 996, 0,462 | 4 840, 0,512 | 5 078, 0,558 | 5 314, 0,394 | 5 233, 0,423 | 4 803, 0,405 |
+| além do cheiro | 1 207, 0,175 | 1 377, 0,214 | 1 278, 0,250 | 1 389, 0,179 | 1 618, 0,205 | 1 290, 0,215 |
+
+A diferença `longe_fixo` − longe por faixa no M2 e no M3\* (com a ressalva da LP-2): M2 +0,014 [−0,011; +0,039] na visão, +0,079
+[+0,058; +0,101] no cheiro e +0,015 [−0,020; +0,050] além; M3\* +0,026 [−0,002; +0,054], +0,146 [+0,122; +0,170] e +0,044 [+0,005;
++0,083]. Nenhuma unidade ficou fora de uma faixa.
+
+**2. As visitas ao lugar lembrado** (só o M3\*; a regra corrigida da DX-1, com a v1 ao lado):
+
+| estilo | vidas | visitas | vazias (a v1) | a fração que acha |
+|---|---|---|---|---|
+| `longe_fixo` | 600 | 12 704 | 12 704 (12 704) | **0,000** |
+| longe | 600 | 21 954 | 21 942 (21 954) | 0,0005 |
+
+**3. As trocas de meta** (por vida, a LP-2; o `desistiu` à parte, A6.14):
+- **as trocas por vida:** `longe_fixo` M0 16,6, M2 18,3, M3\* 46,1; longe M0 26,5, M2 28,9, M3\* 75,9. M3\* − M2: +27,9 [+26,4; +29,3]
+  no `longe_fixo` e +47,0 [+45,5; +48,6] no longe; M2 − M0: +1,6 [+1,1; +2,1] e +2,4 [+1,7; +3,0];
+- **a ida ao lugar lembrado** (só o M3\*; somas): no `longe_fixo`, 12 704 terminam em `meta` e 17 603 em `trocou` (pelo reflexo 14 023,
+  pelo dormir sorteado 1 026, por outra unidade 2 554); no longe, 21 954 e 27 177 (22 975, 1 072 e 3 130);
+- **as buscas pelo cheiro** (somas de `achou`, `trocou`, `sumiu` e `desistiu`): `longe_fixo` M0 10 347, 7 871, 414, 11; M2 9 465, 8 835,
+  452, 11; M3\* 8 409, 7 970, 322, 11; longe M0 13 463, 13 228, 1 073, 7; M2 12 790, 14 542, 1 075, 7; M3\* 10 917, 15 701, 927, 6.
+  Nenhum `expirou` (a suspensa desligada).
+
+**4. As medidas da C5** (do replay; os cinco estados abaixo de 0,15; DECIDIDAS, AD6-4, SEM FONTE):
+
+| medida | janela | `longe_fixo` M3\* − M2 | `longe_fixo` M3\* − M0 | longe M3\* − M2 | longe M3\* − M0 |
+|---|---|---|---|---|---|
+| a fração do tempo com algum estado fora | a vida | −0,025 [−0,032; −0,018] | −0,052 [−0,061; −0,044] | +0,041 [+0,030; +0,052] | +0,001 [−0,009; +0,011] |
+| | dias 8 a 14 | −0,040 [−0,052; −0,027] | −0,092 [−0,106; −0,078] | +0,054 [+0,037; +0,072] | −0,023 [−0,040; −0,006] |
+| a menor necessidade, média | a vida | +0,011 [+0,008; +0,014] | +0,021 [+0,018; +0,025] | −0,014 [−0,019; −0,010] | +0,001 [−0,003; +0,005] |
+| | dias 8 a 14 | +0,017 [+0,012; +0,022] | +0,037 [+0,032; +0,043] | −0,018 [−0,025; −0,010] | +0,012 [+0,005; +0,019] |
+| a menor necessidade, mínimo | a vida | +0,008 [+0,004; +0,011] | +0,015 [+0,011; +0,019] | 0,000 [0,000; 0,000] | 0,000 [0,000; 0,000] |
+
+Os níveis da fração fora, na vida: `longe_fixo` M0 0,400, M2 0,373, M3\* 0,348; longe M0 0,446, M2 0,406, M3\* 0,447. A privação de hoje
+(as decisões; fome, higiene e energia), ao lado: `longe_fixo` 0,453, 0,406, 0,366; longe 0,580, 0,513, 0,548. No longe, o mínimo da menor
+necessidade fica em 0 (até a quarta casa) nos três braços.
+
+**5. Os outros descritivos:**
+- **a taxa por episódio:** `longe_fixo` M0 0,534, M2 0,510, M3\* 0,559; longe M0 0,466, M2 0,451, M3\* 0,440. M2 − M0: −0,025 [−0,039;
+  −0,011] no `longe_fixo` e −0,015 [−0,030; −0,001] no longe; M3\* − M0: +0,024 [+0,010; +0,039] e −0,026 [−0,039; −0,013];
+- **o efeito da regularidade** (`longe_fixo` − longe, pareado por unidade, com a ressalva da geometria): M0 +0,069 [+0,046; +0,091], M2
+  +0,059 [+0,036; +0,083], M3\* +0,119 [+0,096; +0,141];
+- **a taxa por ração** (a PL-3: no longe ela não informa): M3\* − M2 +0,040 [+0,034; +0,047] no `longe_fixo` e −0,005 [−0,009; 0,000] no
+  longe; com a W(d), +0,037 [+0,030; +0,044] e −0,018 [−0,023; −0,012];
+- **a G-PESA por módulo** (M2 e M3\*, no `longe_fixo` e no longe): a memória 0 e 0,122, 0 e 0,191; o aprendido 0,125 e 0,226, 0,115 e
+  0,255; o hábito 0,120 e 0,116, 0,111 e 0,089; o afeto, o incentivo e a persistência abaixo de 0,015 em todos;
+- **os episódios por vida:** `longe_fixo` M0 16,0, M2 13,2, M3\* 13,7; longe 15,2, 13,6 e 12,3. **A exaustão:** `longe_fixo` 0,225,
+  0,225 e 0,236; longe 0,275, 0,271 e 0,320;
+- **por dono:** só no `resultado.json` (`descritivo.outros.por_dono`), sem leitura.
+
+### 13.5 O que é verificado, o que é resultado e o que é interpretação
+
+- **Verificado por testes e hashes:** a suíte antes da run (43 falhas, todas dos hooks; nenhuma do G1, do G2 ou do G-MECANISMO, A6.10); o
+  replay bit a bit de cada vida; a LP-2 e os fins de intenção em cada vida; as 3 600 vidas; os 3 268 logs iguais aos do `caido_1/`; o
+  `meta.json` com o commit, a árvore limpa e os sha256 de A6.15.
+- **Resultado** (do `resultado.json`, pelas regras do adendo 6): 13.1 a 13.4.
+- **Interpretação** (do worker, não testada, PROPOSTA):
+  - no `longe_fixo` a memória ajuda por episódio, com cerca de um terço do efeito do comedouro (+0,049 contra +0,137), acima da margem.
+    Com a ração em 3 lugares fixos, o M-MEM deixa de atrapalhar e passa a ajudar. Isso vai na direção de Giannakakis et al. (2023) e de
+    Khan e Cañamero (2018), que dão a direção e não o tamanho (A6.11);
+  - **o ganho não vem de achar a ração no lugar lembrado:** das 12 704 visitas no `longe_fixo`, nenhuma achou ração. O caminho do ganho
+    fica em aberto. Uma leitura possível, **não testada e que a LP-2 não deixa virar contraste,** é que a ida ao lugar lembrado deixa o
+    pet perto dos 3 pontos fixos quando a ração cai (no M3\*, a taxa do `longe_fixo` só no cheiro é 0,558, contra 0,512 no M2);
+  - no sorteado, a run não separa um efeito pequeno negativo de nenhum: o IC fica entre −0,024 e +0,002;
+  - **a C1 não mostra que o modular é superior** a nada além do M2 nestas condições: o A11 não rodou. O M3\* também troca de meta muito
+    mais (+28 por vida no `longe_fixo`) e tem mais exaustão no longe.

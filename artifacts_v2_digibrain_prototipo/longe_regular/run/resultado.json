@@ -1,0 +1,3308 @@
+{
+  "descritivo": {
+    "corpo": {
+      "dias_8_14|fracao_fora": {
+        "contrastes": {
+          "longe_fixo|M3 - M0": {
+            "classe": {
+              "classe": "< 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.08810384042451068,
+            "ic95": {
+              "ic_inferior": -0.10635214492122144,
+              "ic_superior": -0.07792265666608014
+            },
+            "media": -0.09213740079365079,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3 - M2": {
+            "classe": {
+              "classe": "< 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.07867194573431104,
+            "ic95": {
+              "ic_inferior": -0.05239107670006482,
+              "ic_superior": -0.0270050873210992
+            },
+            "media": -0.03969808201058201,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3 - M0": {
+            "classe": {
+              "classe": "< 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.1048993508178445,
+            "ic95": {
+              "ic_inferior": -0.03978499495208591,
+              "ic_superior": -0.00593590451881356
+            },
+            "media": -0.022860449735449734,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3 - M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.10860390346793569,
+            "ic95": {
+              "ic_inferior": 0.0364904907753589,
+              "ic_superior": 0.07153497218760406
+            },
+            "media": 0.05401273148148148,
+            "motivo": null,
+            "n": 150
+          }
+        },
+        "niveis": {
+          "longe_fixo|M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.1480626275127698,
+            "ic95": {
+              "ic_inferior": 0.4698493870700659,
+              "ic_superior": 0.5176264727182938
+            },
+            "media": 0.49373792989417986,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.16465054060786097,
+            "ic95": {
+              "ic_inferior": 0.4147337611121796,
+              "ic_superior": 0.46786346111004257
+            },
+            "media": 0.44129861111111107,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.17282246077293942,
+            "ic95": {
+              "ic_inferior": 0.3737172149618073,
+              "ic_superior": 0.42948384323925093
+            },
+            "media": 0.4016005291005291,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.09109641528912187,
+            "ic95": {
+              "ic_inferior": 0.626062848115347,
+              "ic_superior": 0.6554579852179865
+            },
+            "media": 0.6407604166666667,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.10482245780083052,
+            "ic95": {
+              "ic_inferior": 0.5469750962140052,
+              "ic_superior": 0.5807993746854656
+            },
+            "media": 0.5638872354497354,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.09783989622640248,
+            "ic95": {
+              "ic_inferior": 0.6021143997683641,
+              "ic_superior": 0.6336855340940696
+            },
+            "media": 0.6178999669312168,
+            "motivo": null,
+            "n": 150
+          }
+        }
+      },
+      "dias_8_14|menor_media": {
+        "contrastes": {
+          "longe_fixo|M3 - M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.035754852911023635,
+            "ic95": {
+              "ic_inferior": 0.0315777243245044,
+              "ic_superior": 0.0431151574942787
+            },
+            "media": 0.03734644090939155,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3 - M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.03166773390560376,
+            "ic95": {
+              "ic_inferior": 0.011996323575459683,
+              "ic_superior": 0.02221491864235347
+            },
+            "media": 0.017105621108906576,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3 - M0": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": "+"
+            },
+            "dp": 0.04204447061901792,
+            "ic95": {
+              "ic_inferior": 0.005409996787253637,
+              "ic_superior": 0.018976973866773408
+            },
+            "media": 0.012193485327013523,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3 - M2": {
+            "classe": {
+              "classe": "< 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.044409106168217034,
+            "ic95": {
+              "ic_inferior": -0.024644069796680514,
+              "ic_superior": -0.010314068333096057
+            },
+            "media": -0.017479069064888286,
+            "motivo": null,
+            "n": 150
+          }
+        },
+        "niveis": {
+          "longe_fixo|M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.06053231545231661,
+            "ic95": {
+              "ic_inferior": 0.17622141927582752,
+              "ic_superior": 0.19575408371946945
+            },
+            "media": 0.18598775149764848,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.06705875915757928,
+            "ic95": {
+              "ic_inferior": 0.19540925742549795,
+              "ic_superior": 0.21704788517076898
+            },
+            "media": 0.20622857129813346,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.07060931170274017,
+            "ic95": {
+              "ic_inferior": 0.21194202954510077,
+              "ic_superior": 0.23472635526897928
+            },
+            "media": 0.22333419240704003,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.03492284789193326,
+            "ic95": {
+              "ic_inferior": 0.12261422928908218,
+              "ic_superior": 0.13388318974751406
+            },
+            "media": 0.12824870951829812,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.0408449840061227,
+            "ic95": {
+              "ic_inferior": 0.15133130150056784,
+              "ic_superior": 0.164511226319832
+            },
+            "media": 0.15792126391019992,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.03797600038802565,
+            "ic95": {
+              "ic_inferior": 0.13431511654880038,
+              "ic_superior": 0.14656927314182286
+            },
+            "media": 0.14044219484531162,
+            "motivo": null,
+            "n": 150
+          }
+        }
+      },
+      "dias_8_14|menor_minimo": {
+        "contrastes": {
+          "longe_fixo|M3 - M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.0267412685029621,
+            "ic95": {
+              "ic_inferior": 0.014867068263413856,
+              "ic_superior": 0.02349598358843799
+            },
+            "media": 0.019181525925925924,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3 - M2": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": "+"
+            },
+            "dp": 0.024472419152307738,
+            "ic95": {
+              "ic_inferior": 0.006657429937214678,
+              "ic_superior": 0.014554229322044584
+            },
+            "media": 0.01060582962962963,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3 - M0": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.001292786253135566,
+            "ic95": {
+              "ic_inferior": -0.00010302361320052561,
+              "ic_superior": 0.00031413472431163675
+            },
+            "media": 0.00010555555555555557,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3 - M2": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.001292786253135566,
+            "ic95": {
+              "ic_inferior": -0.00010302361320052561,
+              "ic_superior": 0.00031413472431163675
+            },
+            "media": 0.00010555555555555557,
+            "motivo": null,
+            "n": 150
+          }
+        },
+        "niveis": {
+          "longe_fixo|M0": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": "+"
+            },
+            "dp": 0.012292421856820692,
+            "ic95": {
+              "ic_inferior": 0.0020430604490701424,
+              "ic_superior": 0.006009598810189116
+            },
+            "media": 0.004026329629629629,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M2": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": "+"
+            },
+            "dp": 0.020894314687165974,
+            "ic95": {
+              "ic_inferior": 0.009230920471635448,
+              "ic_superior": 0.0159731313802164
+            },
+            "media": 0.012602025925925926,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.027794533969707314,
+            "ic95": {
+              "ic_inferior": 0.01872346319966292,
+              "ic_superior": 0.02769224791144819
+            },
+            "media": 0.023207855555555556,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M0": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.0,
+            "ic95": {
+              "ic_inferior": 0.0,
+              "ic_superior": 0.0
+            },
+            "media": 0.0,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M2": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.0,
+            "ic95": {
+              "ic_inferior": 0.0,
+              "ic_superior": 0.0
+            },
+            "media": 0.0,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.001292786253135566,
+            "ic95": {
+              "ic_inferior": -0.00010302361320052561,
+              "ic_superior": 0.00031413472431163675
+            },
+            "media": 0.00010555555555555557,
+            "motivo": null,
+            "n": 150
+          }
+        }
+      },
+      "limiar": 0.15,
+      "privacao_de_hoje": {
+        "niveis": {
+          "longe_fixo|M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.14666150409557835,
+            "ic95": {
+              "ic_inferior": 0.4288871187240012,
+              "ic_superior": 0.47621208762520517
+            },
+            "media": 0.4525496031746032,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.16152895843859236,
+            "ic95": {
+              "ic_inferior": 0.379715078249141,
+              "ic_superior": 0.43183750111593827
+            },
+            "media": 0.40577628968253965,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.1694837217737543,
+            "ic95": {
+              "ic_inferior": 0.33888055909624865,
+              "ic_superior": 0.39356983772914816
+            },
+            "media": 0.3662251984126984,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.0813036132975103,
+            "ic95": {
+              "ic_inferior": 0.5664508623405807,
+              "ic_superior": 0.5926860424213242
+            },
+            "media": 0.5795684523809524,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.09316716031116709,
+            "ic95": {
+              "ic_inferior": 0.49834879213871913,
+              "ic_superior": 0.5284121205596937
+            },
+            "media": 0.5133804563492064,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.08841570961398854,
+            "ic95": {
+              "ic_inferior": 0.5340385100763674,
+              "ic_superior": 0.5625686327807753
+            },
+            "media": 0.5483035714285713,
+            "motivo": null,
+            "n": 150
+          }
+        }
+      },
+      "status": "DECIDIDA (AD6-4), SEM FONTE",
+      "vida|fracao_fora": {
+        "contrastes": {
+          "longe_fixo|M3 - M0": {
+            "classe": {
+              "classe": "< 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.05378567748826698,
+            "ic95": {
+              "ic_inferior": -0.06103794330068137,
+              "ic_superior": -0.043682294794556716
+            },
+            "media": -0.052360119047619044,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3 - M2": {
+            "classe": {
+              "classe": "< 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.04403503631798849,
+            "ic95": {
+              "ic_inferior": -0.03243012750012587,
+              "ic_superior": -0.018220831494583124
+            },
+            "media": -0.025325479497354496,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3 - M0": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.06058906737406938,
+            "ic95": {
+              "ic_inferior": -0.008813683066742135,
+              "ic_superior": 0.010737294177853247
+            },
+            "media": 0.0009618055555555555,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3 - M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.06658796180169206,
+            "ic95": {
+              "ic_inferior": 0.030333777886071632,
+              "ic_superior": 0.05182048798694424
+            },
+            "media": 0.041077132936507936,
+            "motivo": null,
+            "n": 150
+          }
+        },
+        "niveis": {
+          "longe_fixo|M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.13383194859423567,
+            "ic95": {
+              "ic_inferior": 0.3788265931274538,
+              "ic_superior": 0.4220117005233398
+            },
+            "media": 0.4004191468253968,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.13933907816996402,
+            "ic95": {
+              "ic_inferior": 0.3509034288838369,
+              "ic_superior": 0.39586558566642766
+            },
+            "media": 0.3733845072751323,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.14679035526844908,
+            "ic95": {
+              "ic_inferior": 0.32437575437581945,
+              "ic_superior": 0.37174230117973617
+            },
+            "media": 0.3480590277777778,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.05760425638761791,
+            "ic95": {
+              "ic_inferior": 0.4370878622716644,
+              "ic_superior": 0.4556756959293937
+            },
+            "media": 0.44638177910052906,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.06399909912527166,
+            "ic95": {
+              "ic_inferior": 0.3959407858453377,
+              "ic_superior": 0.4165921175938157
+            },
+            "media": 0.4062664517195767,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.05813430467851516,
+            "ic95": {
+              "ic_inferior": 0.43796414941174505,
+              "ic_superior": 0.45672301990042424
+            },
+            "media": 0.44734358465608465,
+            "motivo": null,
+            "n": 150
+          }
+        }
+      },
+      "vida|menor_media": {
+        "contrastes": {
+          "longe_fixo|M3 - M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.022226566774943175,
+            "ic95": {
+              "ic_inferior": 0.01766150505301021,
+              "ic_superior": 0.02483360919779807
+            },
+            "media": 0.02124755712540414,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3 - M2": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": "+"
+            },
+            "dp": 0.018136197551228854,
+            "ic95": {
+              "ic_inferior": 0.008285545071529203,
+              "ic_superior": 0.014137762327794701
+            },
+            "media": 0.011211653699661952,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3 - M0": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.024891821005554045,
+            "ic95": {
+              "ic_inferior": -0.0033622967572035653,
+              "ic_superior": 0.0046698358889643255
+            },
+            "media": 0.0006537695658803801,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3 - M2": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": "-"
+            },
+            "dp": 0.02732043698500047,
+            "ic95": {
+              "ic_inferior": -0.01864992985371977,
+              "ic_superior": -0.009834127515842141
+            },
+            "media": -0.014242028684780956,
+            "motivo": null,
+            "n": 150
+          }
+        },
+        "niveis": {
+          "longe_fixo|M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.05634384705238749,
+            "ic95": {
+              "ic_inferior": 0.22371142787468945,
+              "ic_superior": 0.24189255063060167
+            },
+            "media": 0.23280198925264556,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.05863905850193755,
+            "ic95": {
+              "ic_inferior": 0.23337702004819993,
+              "ic_superior": 0.2522987653085756
+            },
+            "media": 0.24283789267838776,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.06164422555100815,
+            "ic95": {
+              "ic_inferior": 0.244103817690994,
+              "ic_superior": 0.26399527506510545
+            },
+            "media": 0.2540495463780497,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.022646419862607726,
+            "ic95": {
+              "ic_inferior": 0.21176319268349494,
+              "ic_superior": 0.21907077569466513
+            },
+            "media": 0.21541698418908004,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.02524298570317377,
+            "ic95": {
+              "ic_inferior": 0.2262400589232905,
+              "ic_superior": 0.23438550595619226
+            },
+            "media": 0.23031278243974138,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.0228133624356697,
+            "ic95": {
+              "ic_inferior": 0.21239002760102582,
+              "ic_superior": 0.21975147990889504
+            },
+            "media": 0.21607075375496043,
+            "motivo": null,
+            "n": 150
+          }
+        }
+      },
+      "vida|menor_minimo": {
+        "contrastes": {
+          "longe_fixo|M3 - M0": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": "+"
+            },
+            "dp": 0.02333593540176224,
+            "ic95": {
+              "ic_inferior": 0.011384824468440262,
+              "ic_superior": 0.018914901457485665
+            },
+            "media": 0.015149862962962963,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3 - M2": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": "+"
+            },
+            "dp": 0.021870334554225282,
+            "ic95": {
+              "ic_inferior": 0.004346074571057273,
+              "ic_superior": 0.01140322913264643
+            },
+            "media": 0.007874651851851851,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3 - M0": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.001292786253135566,
+            "ic95": {
+              "ic_inferior": -0.00010302361320052561,
+              "ic_superior": 0.00031413472431163675
+            },
+            "media": 0.00010555555555555557,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3 - M2": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.001292786253135566,
+            "ic95": {
+              "ic_inferior": -0.00010302361320052561,
+              "ic_superior": 0.00031413472431163675
+            },
+            "media": 0.00010555555555555557,
+            "motivo": null,
+            "n": 150
+          }
+        },
+        "niveis": {
+          "longe_fixo|M0": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": "+"
+            },
+            "dp": 0.01131877345439686,
+            "ic95": {
+              "ic_inferior": 0.00190762373564604,
+              "ic_superior": 0.005559983671761366
+            },
+            "media": 0.0037338037037037033,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M2": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": "+"
+            },
+            "dp": 0.019239994994148836,
+            "ic95": {
+              "ic_inferior": 0.007904818623822439,
+              "ic_superior": 0.014113211005807189
+            },
+            "media": 0.011009014814814814,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.022915561166655565,
+            "ic95": {
+              "ic_inferior": 0.015186451687680552,
+              "ic_superior": 0.022580881645652782
+            },
+            "media": 0.018883666666666667,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M0": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.0,
+            "ic95": {
+              "ic_inferior": 0.0,
+              "ic_superior": 0.0
+            },
+            "media": 0.0,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M2": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.0,
+            "ic95": {
+              "ic_inferior": 0.0,
+              "ic_superior": 0.0
+            },
+            "media": 0.0,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.001292786253135566,
+            "ic95": {
+              "ic_inferior": -0.00010302361320052561,
+              "ic_superior": 0.00031413472431163675
+            },
+            "media": 0.00010555555555555557,
+            "motivo": null,
+            "n": 150
+          }
+        }
+      }
+    },
+    "faixas_d0": {
+      "distancia_domina": false,
+      "longe_fixo_menos_longe": {
+        "M0|alem_do_cheiro": {
+          "classe": {
+            "classe": "indeterminado",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.20581226081498477,
+          "ic95": {
+            "ic_inferior": -0.02798236174541357,
+            "ic_superior": 0.03842946801604925
+          },
+          "media": 0.005223553135317837,
+          "motivo": null,
+          "n": 150,
+          "unidades_fora": 0
+        },
+        "M0|na_visao": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.13850597414683477,
+          "ic95": {
+            "ic_inferior": 0.004542677659242815,
+            "ic_superior": 0.04923600710210874
+          },
+          "media": 0.02688934238067578,
+          "motivo": null,
+          "n": 150,
+          "unidades_fora": 0
+        },
+        "M0|no_cheiro": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.14060916509446292,
+          "ic95": {
+            "ic_inferior": 0.0384694200064674,
+            "ic_superior": 0.08384141047087126
+          },
+          "media": 0.06115541523866933,
+          "motivo": null,
+          "n": 150,
+          "unidades_fora": 0
+        },
+        "M2|alem_do_cheiro": {
+          "classe": {
+            "classe": "indeterminado",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.2167203457909518,
+          "ic95": {
+            "ic_inferior": -0.020050780684756856,
+            "ic_superior": 0.04988088739721651
+          },
+          "media": 0.014915053356229824,
+          "motivo": null,
+          "n": 150,
+          "unidades_fora": 0
+        },
+        "M2|na_visao": {
+          "classe": {
+            "classe": "indeterminado",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.15556423982016185,
+          "ic95": {
+            "ic_inferior": -0.011075872492932487,
+            "ic_superior": 0.03912184542240253
+          },
+          "media": 0.014022986464735022,
+          "motivo": null,
+          "n": 150,
+          "unidades_fora": 0
+        },
+        "M2|no_cheiro": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.13384627861408177,
+          "ic95": {
+            "ic_inferior": 0.057609739270028576,
+            "ic_superior": 0.10079947069965647
+          },
+          "media": 0.07920460498484252,
+          "motivo": null,
+          "n": 150,
+          "unidades_fora": 0
+        },
+        "M3|alem_do_cheiro": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.24216308542886553,
+          "ic95": {
+            "ic_inferior": 0.005103454230629079,
+            "ic_superior": 0.08324502626491025
+          },
+          "media": 0.04417424024776966,
+          "motivo": null,
+          "n": 150,
+          "unidades_fora": 0
+        },
+        "M3|na_visao": {
+          "classe": {
+            "classe": "indeterminado",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.17288080387180707,
+          "ic95": {
+            "ic_inferior": -0.0017975924495923397,
+            "ic_superior": 0.053987862072383166
+          },
+          "media": 0.02609513481139541,
+          "motivo": null,
+          "n": 150,
+          "unidades_fora": 0
+        },
+        "M3|no_cheiro": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.14659770220545182,
+          "ic95": {
+            "ic_inferior": 0.12227467895877249,
+            "ic_superior": 0.16957906016394336
+          },
+          "media": 0.14592686956135792,
+          "motivo": null,
+          "n": 150,
+          "unidades_fora": 0
+        }
+      },
+      "por_estilo_braco_faixa": {
+        "longe_fixo|M0": {
+          "alem_do_cheiro": {
+            "fechados": 211,
+            "n": 1207,
+            "taxa": 0.1748135874067937
+          },
+          "na_visao": {
+            "fechados": 2878,
+            "n": 3411,
+            "taxa": 0.8437408384637937
+          },
+          "no_cheiro": {
+            "fechados": 2310,
+            "n": 4996,
+            "taxa": 0.4623698959167334
+          }
+        },
+        "longe_fixo|M2": {
+          "alem_do_cheiro": {
+            "fechados": 294,
+            "n": 1377,
+            "taxa": 0.21350762527233116
+          },
+          "na_visao": {
+            "fechados": 1508,
+            "n": 1677,
+            "taxa": 0.8992248062015504
+          },
+          "no_cheiro": {
+            "fechados": 2480,
+            "n": 4840,
+            "taxa": 0.512396694214876
+          }
+        },
+        "longe_fixo|M3": {
+          "alem_do_cheiro": {
+            "fechados": 320,
+            "n": 1278,
+            "taxa": 0.25039123630672927
+          },
+          "na_visao": {
+            "fechados": 1678,
+            "n": 1870,
+            "taxa": 0.8973262032085562
+          },
+          "no_cheiro": {
+            "fechados": 2836,
+            "n": 5078,
+            "taxa": 0.558487593540764
+          }
+        },
+        "longe|M0": {
+          "alem_do_cheiro": {
+            "fechados": 249,
+            "n": 1389,
+            "taxa": 0.17926565874730022
+          },
+          "na_visao": {
+            "fechados": 1962,
+            "n": 2409,
+            "taxa": 0.8144458281444583
+          },
+          "no_cheiro": {
+            "fechados": 2094,
+            "n": 5314,
+            "taxa": 0.39405344373353407
+          }
+        },
+        "longe|M2": {
+          "alem_do_cheiro": {
+            "fechados": 331,
+            "n": 1618,
+            "taxa": 0.20457354758961682
+          },
+          "na_visao": {
+            "fechados": 1158,
+            "n": 1315,
+            "taxa": 0.8806083650190114
+          },
+          "no_cheiro": {
+            "fechados": 2214,
+            "n": 5233,
+            "taxa": 0.42308427288362316
+          }
+        },
+        "longe|M3": {
+          "alem_do_cheiro": {
+            "fechados": 277,
+            "n": 1290,
+            "taxa": 0.21472868217054264
+          },
+          "na_visao": {
+            "fechados": 1113,
+            "n": 1279,
+            "taxa": 0.8702111024237685
+          },
+          "no_cheiro": {
+            "fechados": 1946,
+            "n": 4803,
+            "taxa": 0.40516343951696854
+          }
+        }
+      },
+      "ressalva": "a faixa de d0 depende do cerebro (LP-2): a leitura entre estilos e primeiro a do M0; M2 e M3* saem com a ressalva"
+    },
+    "outros": {
+      "episodio": {
+        "contrastes": {
+          "longe_fixo|M2 - M0": {
+            "classe": {
+              "classe": "< 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.08526310320276793,
+            "ic95": {
+              "ic_inferior": -0.038467723006967616,
+              "ic_superior": -0.010954888385678692
+            },
+            "media": -0.024711305696323155,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3 - M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.09114349089953701,
+            "ic95": {
+              "ic_inferior": 0.00952494414343019,
+              "ic_superior": 0.03893527167939193
+            },
+            "media": 0.024230107911411062,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3 - M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.08321616328771547,
+            "ic95": {
+              "ic_inferior": 0.03551525122124272,
+              "ic_superior": 0.06236757599422572
+            },
+            "media": 0.04894141360773422,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M2 - M0": {
+            "classe": {
+              "classe": "< 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.08759262769595104,
+            "ic95": {
+              "ic_inferior": -0.029503533310749043,
+              "ic_superior": -0.0012390039971526007
+            },
+            "media": -0.015371268653950821,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3 - M0": {
+            "classe": {
+              "classe": "< 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.08206908037654115,
+            "ic95": {
+              "ic_inferior": -0.03924811155564132,
+              "ic_superior": -0.012765929332560516
+            },
+            "media": -0.026007020444100918,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3 - M2": {
+            "classe": {
+              "classe": "indeterminado",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.0805010203075695,
+            "ic95": {
+              "ic_inferior": -0.023623850835173363,
+              "ic_superior": 0.0023523472548731775
+            },
+            "media": -0.010635751790150092,
+            "motivo": null,
+            "n": 150
+          }
+        },
+        "niveis": {
+          "longe_fixo|M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.106471616173661,
+            "ic95": {
+              "ic_inferior": 0.5171568547223212,
+              "ic_superior": 0.5515132862573183
+            },
+            "media": 0.5343350704898198,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.1265453242979102,
+            "ic95": {
+              "ic_inferior": 0.48920684089133704,
+              "ic_superior": 0.5300406886956561
+            },
+            "media": 0.5096237647934966,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.12470199753500147,
+            "ic95": {
+              "ic_inferior": 0.5384456583142966,
+              "ic_superior": 0.5786846984881652
+            },
+            "media": 0.5585651784012309,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.07301108806918191,
+            "ic95": {
+              "ic_inferior": 0.45409372189431463,
+              "ic_superior": 0.47765305666061664
+            },
+            "media": 0.46587338927746563,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.06935931865158872,
+            "ic95": {
+              "ic_inferior": 0.43931163264087425,
+              "ic_superior": 0.46169260860615546
+            },
+            "media": 0.45050212062351486,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.06753200460382568,
+            "ic95": {
+              "ic_inferior": 0.42897070116167213,
+              "ic_superior": 0.4507620365050573
+            },
+            "media": 0.4398663688333647,
+            "motivo": null,
+            "n": 150
+          }
+        }
+      },
+      "episodios_por_vida": {
+        "longe_fixo|M0": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 3.167757377214179,
+          "ic95": {
+            "ic_inferior": 15.51224482279439,
+            "ic_superior": 16.534421843872277
+          },
+          "media": 16.023333333333333,
+          "motivo": null,
+          "n": 150
+        },
+        "longe_fixo|M2": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 2.4375671848711424,
+          "ic95": {
+            "ic_inferior": 12.763387626164517,
+            "ic_superior": 13.549945707168815
+          },
+          "media": 13.156666666666666,
+          "motivo": null,
+          "n": 150
+        },
+        "longe_fixo|M3": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 2.653046874467318,
+          "ic95": {
+            "ic_inferior": 13.281955293920284,
+            "ic_superior": 14.138044706079718
+          },
+          "media": 13.71,
+          "motivo": null,
+          "n": 150
+        },
+        "longe|M0": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 1.8155708576505318,
+          "ic95": {
+            "ic_inferior": 14.893741011410027,
+            "ic_superior": 15.479592321923308
+          },
+          "media": 15.186666666666667,
+          "motivo": null,
+          "n": 150
+        },
+        "longe|M2": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 1.598678145243919,
+          "ic95": {
+            "ic_inferior": 13.352067988552069,
+            "ic_superior": 13.86793201144793
+          },
+          "media": 13.61,
+          "motivo": null,
+          "n": 150
+        },
+        "longe|M3": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 1.3534032007179704,
+          "ic95": {
+            "ic_inferior": 12.068307511073161,
+            "ic_superior": 12.505025822260173
+          },
+          "media": 12.286666666666667,
+          "motivo": null,
+          "n": 150
+        }
+      },
+      "exaustao": {
+        "longe_fixo|M0": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.05427081542827152,
+          "ic95": {
+            "ic_inferior": 0.21645719685421322,
+            "ic_superior": 0.23396939044737414
+          },
+          "media": 0.22521329365079368,
+          "motivo": null,
+          "n": 150
+        },
+        "longe_fixo|M2": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.06112866762069522,
+          "ic95": {
+            "ic_inferior": 0.21481999152458492,
+            "ic_superior": 0.23454508784049438
+          },
+          "media": 0.22468253968253965,
+          "motivo": null,
+          "n": 150
+        },
+        "longe_fixo|M3": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.068235820583779,
+          "ic95": {
+            "ic_inferior": 0.22522589714242508,
+            "ic_superior": 0.247244340952813
+          },
+          "media": 0.23623511904761904,
+          "motivo": null,
+          "n": 150
+        },
+        "longe|M0": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.03141238715132398,
+          "ic95": {
+            "ic_inferior": 0.26980293206228584,
+            "ic_superior": 0.2799391314297776
+          },
+          "media": 0.2748710317460317,
+          "motivo": null,
+          "n": 150
+        },
+        "longe|M2": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.035893703423867794,
+          "ic95": {
+            "ic_inferior": 0.26506205576541686,
+            "ic_superior": 0.27664429344093233
+          },
+          "media": 0.2708531746031746,
+          "motivo": null,
+          "n": 150
+        },
+        "longe|M3": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.03732443101686265,
+          "ic95": {
+            "ic_inferior": 0.31413429642731255,
+            "ic_superior": 0.3261782035726874
+          },
+          "media": 0.32015625,
+          "motivo": null,
+          "n": 150
+        }
+      },
+      "g_pesa_por_modulo": {
+        "afeto": {
+          "longe_fixo|M2": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": "+"
+            },
+            "dp": 0.006458052120335477,
+            "ic95": {
+              "ic_inferior": 0.011175314606996379,
+              "ic_superior": 0.01325920920252743
+            },
+            "media": 0.012217261904761904,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": "+"
+            },
+            "dp": 0.006653125754262755,
+            "ic95": {
+              "ic_inferior": 0.012192948413629463,
+              "ic_superior": 0.014339789681608633
+            },
+            "media": 0.013266369047619048,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M2": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": "+"
+            },
+            "dp": 0.0036050233693223467,
+            "ic95": {
+              "ic_inferior": 0.007158938041156013,
+              "ic_superior": 0.00832221275249478
+            },
+            "media": 0.007740575396825397,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": "+"
+            },
+            "dp": 0.003244408146687267,
+            "ic95": {
+              "ic_inferior": 0.006812854116776722,
+              "ic_superior": 0.007859764930842325
+            },
+            "media": 0.007336309523809524,
+            "motivo": null,
+            "n": 150
+          }
+        },
+        "aprendido": {
+          "longe_fixo|M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.02899354910979087,
+            "ic95": {
+              "ic_inferior": 0.1203543996452724,
+              "ic_superior": 0.1297100844817117
+            },
+            "media": 0.12503224206349206,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.028137136605081842,
+            "ic95": {
+              "ic_inferior": 0.22126390328928713,
+              "ic_superior": 0.23034323956785574
+            },
+            "media": 0.22580357142857144,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.01920190092147616,
+            "ic95": {
+              "ic_inferior": 0.11198379517527626,
+              "ic_superior": 0.11817989530091419
+            },
+            "media": 0.11508184523809523,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.013713330011881218,
+            "ic95": {
+              "ic_inferior": 0.25225176607477184,
+              "ic_superior": 0.25667680535379955
+            },
+            "media": 0.2544642857142857,
+            "motivo": null,
+            "n": 150
+          }
+        },
+        "habito": {
+          "longe_fixo|M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.028083786627509457,
+            "ic95": {
+              "ic_inferior": 0.11584592351577974,
+              "ic_superior": 0.12490804473818853
+            },
+            "media": 0.12037698412698414,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.028887913882727784,
+            "ic95": {
+              "ic_inferior": 0.11117997466338317,
+              "ic_superior": 0.12050157295566447
+            },
+            "media": 0.11584077380952382,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.018508180697049088,
+            "ic95": {
+              "ic_inferior": 0.10830851817054855,
+              "ic_superior": 0.11428076754373713
+            },
+            "media": 0.11129464285714284,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.016917261824770935,
+            "ic95": {
+              "ic_inferior": 0.08648434512008293,
+              "ic_superior": 0.09194323424499642
+            },
+            "media": 0.08921378968253968,
+            "motivo": null,
+            "n": 150
+          }
+        },
+        "incentivo": {
+          "longe_fixo|M2": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": "+"
+            },
+            "dp": 0.005210628104131933,
+            "ic95": {
+              "ic_inferior": 0.013006039281854686,
+              "ic_superior": 0.014687413099097692
+            },
+            "media": 0.013846726190476189,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": "+"
+            },
+            "dp": 0.005114989695968261,
+            "ic95": {
+              "ic_inferior": 0.012986747436949327,
+              "ic_superior": 0.014637260499558609
+            },
+            "media": 0.013812003968253968,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M2": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": "+"
+            },
+            "dp": 0.0028131582954103052,
+            "ic95": {
+              "ic_inferior": 0.008194436281184436,
+              "ic_superior": 0.009102190702942548
+            },
+            "media": 0.008648313492063492,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": "+"
+            },
+            "dp": 0.002602471855249872,
+            "ic95": {
+              "ic_inferior": 0.00795065082228401,
+              "ic_superior": 0.008790420606287418
+            },
+            "media": 0.008370535714285714,
+            "motivo": null,
+            "n": 150
+          }
+        },
+        "memoria": {
+          "longe_fixo|M2": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.0,
+            "ic95": {
+              "ic_inferior": 0.0,
+              "ic_superior": 0.0
+            },
+            "media": 0.0,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.03457513880548834,
+            "ic95": {
+              "ic_inferior": 0.1163115003854593,
+              "ic_superior": 0.12746826151930257
+            },
+            "media": 0.12188988095238094,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M2": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.0,
+            "ic95": {
+              "ic_inferior": 0.0,
+              "ic_superior": 0.0
+            },
+            "media": 0.0,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.023195409029441998,
+            "ic95": {
+              "ic_inferior": 0.1875869992222221,
+              "ic_superior": 0.19507173093650804
+            },
+            "media": 0.19132936507936507,
+            "motivo": null,
+            "n": 150
+          }
+        },
+        "persistencia": {
+          "longe_fixo|M2": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": "+"
+            },
+            "dp": 0.001158324817480801,
+            "ic95": {
+              "ic_inferior": 0.0024396030421261093,
+              "ic_superior": 0.0028133731483500806
+            },
+            "media": 0.002626488095238095,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": "+"
+            },
+            "dp": 0.0018391104825436625,
+            "ic95": {
+              "ic_inferior": 0.004862006601553435,
+              "ic_superior": 0.0054554537159068805
+            },
+            "media": 0.005158730158730158,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M2": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": "+"
+            },
+            "dp": 0.0014611966666187059,
+            "ic95": {
+              "ic_inferior": 0.0035316104714572046,
+              "ic_superior": 0.004003111750765017
+            },
+            "media": 0.0037673611111111107,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": "+"
+            },
+            "dp": 0.0018812616747842814,
+            "ic95": {
+              "ic_inferior": 0.0057083804976364345,
+              "ic_superior": 0.006315429026173087
+            },
+            "media": 0.006011904761904761,
+            "motivo": null,
+            "n": 150
+          }
+        }
+      },
+      "por_dono": {
+        "aleatorio|longe_fixo|M0": 0.4398893103208005,
+        "aleatorio|longe_fixo|M2": 0.4208569214010391,
+        "aleatorio|longe_fixo|M3": 0.46221830666180513,
+        "aleatorio|longe|M0": 0.33958211521307496,
+        "aleatorio|longe|M2": 0.3596400121493001,
+        "aleatorio|longe|M3": 0.3151597005505674,
+        "atencioso|longe_fixo|M0": 0.618128221443035,
+        "atencioso|longe_fixo|M2": 0.575959927098472,
+        "atencioso|longe_fixo|M3": 0.6441394088081395,
+        "atencioso|longe|M0": 0.5817621728976218,
+        "atencioso|longe|M2": 0.5416855613426821,
+        "atencioso|longe|M3": 0.576548103771014,
+        "incoerente|longe_fixo|M0": 0.6486450295888982,
+        "incoerente|longe_fixo|M2": 0.6147672229731054,
+        "incoerente|longe_fixo|M3": 0.6917094263665471,
+        "incoerente|longe|M0": 0.5766087378393879,
+        "incoerente|longe|M2": 0.5398385945839507,
+        "incoerente|longe|M3": 0.5430803604433636,
+        "relapso|longe_fixo|M0": 0.43067772060654536,
+        "relapso|longe_fixo|M2": 0.42691098770137,
+        "relapso|longe_fixo|M3": 0.43619357176843154,
+        "relapso|longe|M0": 0.3655405311597778,
+        "relapso|longe|M2": 0.3608443144181265,
+        "relapso|longe|M3": 0.32467731056851395
+      },
+      "privacao": {
+        "longe_fixo|M0": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.14666150409557835,
+          "ic95": {
+            "ic_inferior": 0.4288871187240012,
+            "ic_superior": 0.47621208762520517
+          },
+          "media": 0.4525496031746032,
+          "motivo": null,
+          "n": 150
+        },
+        "longe_fixo|M2": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.16152895843859236,
+          "ic95": {
+            "ic_inferior": 0.379715078249141,
+            "ic_superior": 0.43183750111593827
+          },
+          "media": 0.40577628968253965,
+          "motivo": null,
+          "n": 150
+        },
+        "longe_fixo|M3": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.1694837217737543,
+          "ic95": {
+            "ic_inferior": 0.33888055909624865,
+            "ic_superior": 0.39356983772914816
+          },
+          "media": 0.3662251984126984,
+          "motivo": null,
+          "n": 150
+        },
+        "longe|M0": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.0813036132975103,
+          "ic95": {
+            "ic_inferior": 0.5664508623405807,
+            "ic_superior": 0.5926860424213242
+          },
+          "media": 0.5795684523809524,
+          "motivo": null,
+          "n": 150
+        },
+        "longe|M2": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.09316716031116709,
+          "ic95": {
+            "ic_inferior": 0.49834879213871913,
+            "ic_superior": 0.5284121205596937
+          },
+          "media": 0.5133804563492064,
+          "motivo": null,
+          "n": 150
+        },
+        "longe|M3": {
+          "classe": {
+            "classe": "> 0",
+            "motivo": null,
+            "sinal": null
+          },
+          "dp": 0.08841570961398854,
+          "ic95": {
+            "ic_inferior": 0.5340385100763674,
+            "ic_superior": 0.5625686327807753
+          },
+          "media": 0.5483035714285713,
+          "motivo": null,
+          "n": 150
+        }
+      },
+      "racao": {
+        "contrastes": {
+          "longe_fixo|M2 - M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.036389807279136474,
+            "ic95": {
+              "ic_inferior": 0.011636064528413115,
+              "ic_superior": 0.02337838579005535
+            },
+            "media": 0.01750722515923423,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3 - M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.04060955405460174,
+            "ic95": {
+              "ic_inferior": 0.05127283119078592,
+              "ic_superior": 0.0643767870964429
+            },
+            "media": 0.05782480914361441,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3 - M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.03882313982941543,
+            "ic95": {
+              "ic_inferior": 0.03405382753239119,
+              "ic_superior": 0.04658134043636917
+            },
+            "media": 0.04031758398438018,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M2 - M0": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": "+"
+            },
+            "dp": 0.023630354496154114,
+            "ic95": {
+              "ic_inferior": 0.003970968117187985,
+              "ic_superior": 0.011596048730885537
+            },
+            "media": 0.007783508424036761,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3 - M0": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.027650306003272646,
+            "ic95": {
+              "ic_inferior": -0.0012655414819751493,
+              "ic_superior": 0.007656703518736676
+            },
+            "media": 0.0031955810183807633,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3 - M2": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.028784624158112625,
+            "ic95": {
+              "ic_inferior": -0.00923206170495981,
+              "ic_superior": 5.620689364781509e-05
+            },
+            "media": -0.004587927405655998,
+            "motivo": null,
+            "n": 150
+          }
+        },
+        "niveis": {
+          "longe_fixo|M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.03766535066422458,
+            "ic95": {
+              "ic_inferior": 0.10943231812080605,
+              "ic_superior": 0.12158623376369838
+            },
+            "media": 0.11550927594225222,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.03991170398480692,
+            "ic95": {
+              "ic_inferior": 0.12657711483743955,
+              "ic_superior": 0.13945588736553333
+            },
+            "media": 0.13301650110148644,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.044482307440671075,
+            "ic95": {
+              "ic_inferior": 0.1661572740021904,
+              "ic_superior": 0.18051089616954288
+            },
+            "media": 0.17333408508586665,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.023080982670594375,
+            "ic95": {
+              "ic_inferior": 0.07247663573731185,
+              "ic_superior": 0.07992444417096366
+            },
+            "media": 0.07620053995413775,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.024493502765750144,
+            "ic95": {
+              "ic_inferior": 0.08003224703869259,
+              "ic_superior": 0.08793584971765643
+            },
+            "media": 0.08398404837817451,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.022942992130155153,
+            "ic95": {
+              "ic_inferior": 0.07569448025992714,
+              "ic_superior": 0.0830977616851099
+            },
+            "media": 0.07939612097251852,
+            "motivo": null,
+            "n": 150
+          }
+        }
+      },
+      "racao_w": {
+        "contrastes": {
+          "longe_fixo|M2 - M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.037861045804196816,
+            "ic95": {
+              "ic_inferior": 0.020557682655238687,
+              "ic_superior": 0.03277474551914458
+            },
+            "media": 0.026666214087191636,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3 - M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.04325130115829071,
+            "ic95": {
+              "ic_inferior": 0.056998693775218635,
+              "ic_superior": 0.07095509286491286
+            },
+            "media": 0.06397689332006574,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3 - M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.04362189287142049,
+            "ic95": {
+              "ic_inferior": 0.030272688124429372,
+              "ic_superior": 0.044348670341318855
+            },
+            "media": 0.037310679232874115,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M2 - M0": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": "+"
+            },
+            "dp": 0.03046582918502331,
+            "ic95": {
+              "ic_inferior": 0.01123628875321209,
+              "ic_superior": 0.021067051280991785
+            },
+            "media": 0.016151670017101938,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3 - M0": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.03353070983616941,
+            "ic95": {
+              "ic_inferior": -0.006784471714933466,
+              "ic_superior": 0.0040352714072826945
+            },
+            "media": -0.001374600153825386,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3 - M2": {
+            "classe": {
+              "classe": "< 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.03272145639194166,
+            "ic95": {
+              "ic_inferior": -0.022805576133661642,
+              "ic_superior": -0.012246964208193007
+            },
+            "media": -0.017526270170927324,
+            "motivo": null,
+            "n": 150
+          }
+        },
+        "niveis": {
+          "longe_fixo|M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.04334632261650316,
+            "ic95": {
+              "ic_inferior": 0.14430947908332942,
+              "ic_superior": 0.15829653984925957
+            },
+            "media": 0.1513030094662945,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.046162908720392734,
+            "ic95": {
+              "ic_inferior": 0.17052126291427852,
+              "ic_superior": 0.18541718419269373
+            },
+            "media": 0.17796922355348613,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.05070824623751826,
+            "ic95": {
+              "ic_inferior": 0.20709859375430084,
+              "ic_superior": 0.22346121181841966
+            },
+            "media": 0.21527990278636025,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.02935508671125277,
+            "ic95": {
+              "ic_inferior": 0.10501170043935304,
+              "ic_superior": 0.1144840468077418
+            },
+            "media": 0.10974787362354742,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.02814838616031389,
+            "ic95": {
+              "ic_inferior": 0.12135806048912036,
+              "ic_superior": 0.1304410267921783
+            },
+            "media": 0.12589954364064934,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.0280266520002179,
+            "ic95": {
+              "ic_inferior": 0.10385143100501226,
+              "ic_superior": 0.11289511593443177
+            },
+            "media": 0.10837327346972202,
+            "motivo": null,
+            "n": 150
+          }
+        }
+      },
+      "regularidade_fixo_menos_sorteado": {
+        "por_braco": {
+          "M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.13755722194575454,
+            "ic95": {
+              "ic_inferior": 0.046268088930372625,
+              "ic_superior": 0.09065527349433558
+            },
+            "media": 0.0684616812123541,
+            "motivo": null,
+            "n": 150
+          },
+          "M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.14546740621990062,
+            "ic95": {
+              "ic_inferior": 0.03565181642633207,
+              "ic_superior": 0.08259147191363148
+            },
+            "media": 0.05912164416998177,
+            "motivo": null,
+            "n": 150
+          },
+          "M3": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.13971839970765784,
+            "ic95": {
+              "ic_inferior": 0.09615653113609103,
+              "ic_superior": 0.14124108799964114
+            },
+            "media": 0.11869880956786609,
+            "motivo": null,
+            "n": 150
+          }
+        },
+        "unidades_sem_par": {
+          "M0": 0,
+          "M2": 0,
+          "M3": 0
+        }
+      },
+      "sorteado_M3_menos_M2": {
+        "classe": {
+          "classe": "indeterminado",
+          "motivo": null,
+          "sinal": null
+        },
+        "dp": 0.0805010203075695,
+        "ic95": {
+          "ic_inferior": -0.023623850835173363,
+          "ic_superior": 0.0023523472548731775
+        },
+        "media": -0.010635751790150092,
+        "motivo": null,
+        "n": 150
+      }
+    },
+    "trocas": {
+      "motivos_somados": {
+        "longe_fixo|M0": {
+          "busca": {
+            "dormir_sorteio": 506,
+            "fins": {
+              "achou": 10347,
+              "desistiu": 11,
+              "expirou": 0,
+              "meta": 0,
+              "sumiu": 414,
+              "trocou": 7871
+            },
+            "outra_unidade": 1467,
+            "reflexo": 5898
+          },
+          "ida": {
+            "dormir_sorteio": 138,
+            "fins": {
+              "achou": 0,
+              "desistiu": 0,
+              "expirou": 0,
+              "meta": 17928,
+              "sumiu": 0,
+              "trocou": 2107
+            },
+            "outra_unidade": 465,
+            "reflexo": 1504
+          },
+          "lugar_lembrado": {
+            "dormir_sorteio": 0,
+            "fins": {
+              "achou": 0,
+              "desistiu": 0,
+              "expirou": 0,
+              "meta": 0,
+              "sumiu": 0,
+              "trocou": 0
+            },
+            "outra_unidade": 0,
+            "reflexo": 0
+          }
+        },
+        "longe_fixo|M2": {
+          "busca": {
+            "dormir_sorteio": 590,
+            "fins": {
+              "achou": 9465,
+              "desistiu": 11,
+              "expirou": 0,
+              "meta": 0,
+              "sumiu": 452,
+              "trocou": 8835
+            },
+            "outra_unidade": 1600,
+            "reflexo": 6645
+          },
+          "ida": {
+            "dormir_sorteio": 156,
+            "fins": {
+              "achou": 0,
+              "desistiu": 0,
+              "expirou": 0,
+              "meta": 22292,
+              "sumiu": 0,
+              "trocou": 2115
+            },
+            "outra_unidade": 486,
+            "reflexo": 1473
+          },
+          "lugar_lembrado": {
+            "dormir_sorteio": 0,
+            "fins": {
+              "achou": 0,
+              "desistiu": 0,
+              "expirou": 0,
+              "meta": 0,
+              "sumiu": 0,
+              "trocou": 0
+            },
+            "outra_unidade": 0,
+            "reflexo": 0
+          }
+        },
+        "longe_fixo|M3": {
+          "busca": {
+            "dormir_sorteio": 461,
+            "fins": {
+              "achou": 8409,
+              "desistiu": 11,
+              "expirou": 0,
+              "meta": 0,
+              "sumiu": 322,
+              "trocou": 7970
+            },
+            "outra_unidade": 1446,
+            "reflexo": 6063
+          },
+          "ida": {
+            "dormir_sorteio": 177,
+            "fins": {
+              "achou": 0,
+              "desistiu": 0,
+              "expirou": 0,
+              "meta": 23144,
+              "sumiu": 0,
+              "trocou": 2110
+            },
+            "outra_unidade": 447,
+            "reflexo": 1486
+          },
+          "lugar_lembrado": {
+            "dormir_sorteio": 1026,
+            "fins": {
+              "achou": 0,
+              "desistiu": 0,
+              "expirou": 0,
+              "meta": 12704,
+              "sumiu": 0,
+              "trocou": 17603
+            },
+            "outra_unidade": 2554,
+            "reflexo": 14023
+          }
+        },
+        "longe|M0": {
+          "busca": {
+            "dormir_sorteio": 785,
+            "fins": {
+              "achou": 13463,
+              "desistiu": 7,
+              "expirou": 0,
+              "meta": 0,
+              "sumiu": 1073,
+              "trocou": 13228
+            },
+            "outra_unidade": 2386,
+            "reflexo": 10057
+          },
+          "ida": {
+            "dormir_sorteio": 152,
+            "fins": {
+              "achou": 0,
+              "desistiu": 0,
+              "expirou": 0,
+              "meta": 15035,
+              "sumiu": 0,
+              "trocou": 2665
+            },
+            "outra_unidade": 497,
+            "reflexo": 2016
+          },
+          "lugar_lembrado": {
+            "dormir_sorteio": 0,
+            "fins": {
+              "achou": 0,
+              "desistiu": 0,
+              "expirou": 0,
+              "meta": 0,
+              "sumiu": 0,
+              "trocou": 0
+            },
+            "outra_unidade": 0,
+            "reflexo": 0
+          }
+        },
+        "longe|M2": {
+          "busca": {
+            "dormir_sorteio": 902,
+            "fins": {
+              "achou": 12790,
+              "desistiu": 7,
+              "expirou": 0,
+              "meta": 0,
+              "sumiu": 1075,
+              "trocou": 14542
+            },
+            "outra_unidade": 2752,
+            "reflexo": 10888
+          },
+          "ida": {
+            "dormir_sorteio": 220,
+            "fins": {
+              "achou": 0,
+              "desistiu": 0,
+              "expirou": 0,
+              "meta": 18743,
+              "sumiu": 0,
+              "trocou": 2781
+            },
+            "outra_unidade": 509,
+            "reflexo": 2052
+          },
+          "lugar_lembrado": {
+            "dormir_sorteio": 0,
+            "fins": {
+              "achou": 0,
+              "desistiu": 0,
+              "expirou": 0,
+              "meta": 0,
+              "sumiu": 0,
+              "trocou": 0
+            },
+            "outra_unidade": 0,
+            "reflexo": 0
+          }
+        },
+        "longe|M3": {
+          "busca": {
+            "dormir_sorteio": 616,
+            "fins": {
+              "achou": 10917,
+              "desistiu": 6,
+              "expirou": 0,
+              "meta": 0,
+              "sumiu": 927,
+              "trocou": 15701
+            },
+            "outra_unidade": 2464,
+            "reflexo": 12621
+          },
+          "ida": {
+            "dormir_sorteio": 202,
+            "fins": {
+              "achou": 0,
+              "desistiu": 0,
+              "expirou": 0,
+              "meta": 17926,
+              "sumiu": 0,
+              "trocou": 2655
+            },
+            "outra_unidade": 420,
+            "reflexo": 2033
+          },
+          "lugar_lembrado": {
+            "dormir_sorteio": 1072,
+            "fins": {
+              "achou": 0,
+              "desistiu": 0,
+              "expirou": 0,
+              "meta": 21954,
+              "sumiu": 0,
+              "trocou": 27177
+            },
+            "outra_unidade": 3130,
+            "reflexo": 22975
+          }
+        }
+      },
+      "por_tipo": {
+        "busca": {
+          "longe_fixo|M2 - M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 2.8541660747235627,
+            "ic95": {
+              "ic_inferior": 1.1461732278528334,
+              "ic_superior": 2.0671601054805
+            },
+            "media": 1.6066666666666667,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3 - M2": {
+            "classe": {
+              "classe": "< 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 3.031630880266172,
+            "ic95": {
+              "ic_inferior": -1.9307924192398385,
+              "ic_superior": -0.9525409140934948
+            },
+            "media": -1.4416666666666667,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M2 - M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 3.735113629530346,
+            "ic95": {
+              "ic_inferior": 1.58737377763155,
+              "ic_superior": 2.79262622236845
+            },
+            "media": 2.19,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3 - M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 4.0773659770692605,
+            "ic95": {
+              "ic_inferior": 1.2738211766262868,
+              "ic_superior": 2.5895121567070465
+            },
+            "media": 1.9316666666666666,
+            "motivo": null,
+            "n": 150
+          }
+        },
+        "ida": {
+          "longe_fixo|M2 - M0": {
+            "classe": {
+              "classe": "indeterminado",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 1.2215853197842155,
+            "ic95": {
+              "ic_inferior": -0.18375821985052027,
+              "ic_superior": 0.21042488651718694
+            },
+            "media": 0.013333333333333334,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3 - M2": {
+            "classe": {
+              "classe": "indeterminado",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 1.0580534340718482,
+            "ic95": {
+              "ic_inferior": -0.17904052119440436,
+              "ic_superior": 0.1623738545277377
+            },
+            "media": -0.008333333333333333,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M2 - M0": {
+            "classe": {
+              "classe": "indeterminado",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 1.430183574205917,
+            "ic95": {
+              "ic_inferior": -0.037413629169515766,
+              "ic_superior": 0.42408029583618245
+            },
+            "media": 0.19333333333333333,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3 - M2": {
+            "classe": {
+              "classe": "indeterminado",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 1.4749246369098856,
+            "ic95": {
+              "ic_inferior": -0.4479655213677993,
+              "ic_superior": 0.027965521367799312
+            },
+            "media": -0.21,
+            "motivo": null,
+            "n": 150
+          }
+        },
+        "lugar_lembrado": {
+          "longe_fixo|M2 - M0": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.0,
+            "ic95": {
+              "ic_inferior": 0.0,
+              "ic_superior": 0.0
+            },
+            "media": 0.0,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3 - M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 8.00241871294365,
+            "ic95": {
+              "ic_inferior": 28.047216693490117,
+              "ic_superior": 30.629449973176552
+            },
+            "media": 29.338333333333335,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M2 - M0": {
+            "classe": {
+              "classe": "≈ 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 0.0,
+            "ic95": {
+              "ic_inferior": 0.0,
+              "ic_superior": 0.0
+            },
+            "media": 0.0,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3 - M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 7.585534073564501,
+            "ic95": {
+              "ic_inferior": 44.07114386152581,
+              "ic_superior": 46.51885613847419
+            },
+            "media": 45.295,
+            "motivo": null,
+            "n": 150
+          }
+        }
+      },
+      "total": {
+        "contrastes": {
+          "longe_fixo|M2 - M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 2.992400890129583,
+            "ic95": {
+              "ic_inferior": 1.1372036454329972,
+              "ic_superior": 2.102796354567003
+            },
+            "media": 1.62,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3 - M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 8.961445039924053,
+            "ic95": {
+              "ic_inferior": 26.44248661834304,
+              "ic_superior": 29.334180048323624
+            },
+            "media": 27.888333333333332,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M2 - M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 3.969754217311356,
+            "ic95": {
+              "ic_inferior": 1.7428500107388423,
+              "ic_superior": 3.023816655927824
+            },
+            "media": 2.3833333333333333,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3 - M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 9.70057887061674,
+            "ic95": {
+              "ic_inferior": 45.45156750787025,
+              "ic_superior": 48.58176582546308
+            },
+            "media": 47.016666666666666,
+            "motivo": null,
+            "n": 150
+          }
+        },
+        "niveis": {
+          "longe_fixo|M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 3.2782996083560834,
+            "ic95": {
+              "ic_inferior": 16.101076517416683,
+              "ic_superior": 17.158923482583315
+            },
+            "media": 16.63,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 3.5525772854545354,
+            "ic95": {
+              "ic_inferior": 17.676824337476816,
+              "ic_superior": 18.823175662523184
+            },
+            "media": 18.25,
+            "motivo": null,
+            "n": 150
+          },
+          "longe_fixo|M3": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 9.069295897480831,
+            "ic95": {
+              "ic_inferior": 44.67508587466693,
+              "ic_superior": 47.601580791999744
+            },
+            "media": 46.138333333333335,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M0": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 3.192553293594091,
+            "ic95": {
+              "ic_inferior": 25.973244229800365,
+              "ic_superior": 27.003422436866302
+            },
+            "media": 26.488333333333333,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M2": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 3.4949312129776158,
+            "ic95": {
+              "ic_inferior": 28.307791667613664,
+              "ic_superior": 29.43554166571967
+            },
+            "media": 28.871666666666666,
+            "motivo": null,
+            "n": 150
+          },
+          "longe|M3": {
+            "classe": {
+              "classe": "> 0",
+              "motivo": null,
+              "sinal": null
+            },
+            "dp": 9.47123589000487,
+            "ic95": {
+              "ic_inferior": 74.36023655458237,
+              "ic_superior": 77.4164301120843
+            },
+            "media": 75.88833333333334,
+            "motivo": null,
+            "n": 150
+          }
+        }
+      }
+    },
+    "visitas": {
+      "longe": {
+        "frac_acha": 0.0005465974309920743,
+        "frac_acha_v1": 0.0,
+        "vazias": 21942,
+        "vazias_v1": 21954,
+        "vidas": 600,
+        "visitas": 21954
+      },
+      "longe_fixo": {
+        "frac_acha": 0.0,
+        "frac_acha_v1": 0.0,
+        "vazias": 12704,
+        "vazias_v1": 12704,
+        "vidas": 600,
+        "visitas": 12704
+      }
+    }
+  },
+  "fase": "longe_regular",
+  "leitura": {
+    "l3_ganha_tarefa": false,
+    "linha": "registrado como indeterminado; nada se decide com ele",
+    "longe": "indeterminado",
+    "longe_fixo": "> 0",
+    "ressalva_primario": null
+  },
+  "modo": "longe_regular",
+  "nao_demonstra": [
+    "que o modular supera o A",
+    "prontidao do prototipo",
+    "tamanho de efeito fora das condicoes da run"
+  ],
+  "plano": "docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md",
+  "premissas": {
+    "G-ELEGIVEL-EP": {
+      "frac_vidas": 0.9416666666666667,
+      "limiar": 0.8,
+      "passa": true,
+      "vidas": 600
+    },
+    "G-PESA-memoria": {
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "dp": 0.03457513880548834,
+      "ic95": {
+        "ic_inferior": 0.1163115003854593,
+        "ic_superior": 0.12746826151930257
+      },
+      "limiar": 0.01,
+      "media": 0.12188988095238094,
+      "motivo": null,
+      "n": 150,
+      "passa": true
+    },
+    "conclusivo": true
+  },
+  "primario": {
+    "bootstrap": {
+      "ic90": {
+        "ic_inferior": 0.04047163670215674,
+        "ic_superior": 0.05759676355486693,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": 0.03990119062979699,
+        "ic_superior": 0.058099657321066096,
+        "nivel": 0.95
+      },
+      "motivo": null,
+      "p_unilateral": 0.0,
+      "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+    },
+    "classe": {
+      "classe": "> 0",
+      "motivo": null,
+      "sinal": null
+    },
+    "contraste": "M3* - M2, taxa de fechamento por episodio, nas 4 celulas do longe_fixo",
+    "g1": 0.11476613171844921,
+    "gl": 149,
+    "ic95": {
+      "ic_inferior": 0.03551525122124272,
+      "ic_superior": 0.06236757599422572,
+      "nivel": 0.95
+    },
+    "margem": 0.022,
+    "margem_efetiva": 0.019144617848961386,
+    "media": 0.04894141360773422,
+    "motivo": null,
+    "n": 150,
+    "n_grupos": 5,
+    "p_unilateral": 1.3573055820166553e-11,
+    "passa": true,
+    "ressalva_assimetria": null,
+    "t": 7.203017171974759,
+    "teste": "t sobre as unidades (A4.4.6)"
+  },
+  "sorteado": {
+    "classe": {
+      "classe": "indeterminado",
+      "motivo": null,
+      "sinal": null
+    },
+    "dp": 0.0805010203075695,
+    "ic95": {
+      "ic_inferior": -0.023623850835173363,
+      "ic_superior": 0.0023523472548731775
+    },
+    "media": -0.010635751790150092,
+    "motivo": null,
+    "n": 150
+  },
+  "unidades": 150,
+  "vidas": 3600
+}
