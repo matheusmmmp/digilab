@@ -154,3 +154,30 @@ Ho et al. usam de 10 a 50 execuções por condição, sem teste de hipótese: é
 - **O próximo:** a M2 e a M3 juntas (a lembrança, o lugar pela soma e a consolidação), num PR próprio.
 - **Decidido pelo Matheus em 2026-11-01 (#530, pela recomendação):** o afeto lido pela variação, não pelo nível (a espec, 3.3); a M2 e a
   M3 juntas no próximo PR, já com essa troca.
+
+## 11. O afeto pela subida e o registro reconciliado (2026-11-01, worker, Claude Code, Opus 5.5, worktree `v3-memoria-afeto`)
+
+- **A correção:** o #530 implementou o afeto pelo nível (a maior leitura de dor, susto ou estresse depois ≥ `theta_afeto`). Este PR o
+  troca pela subida na decisão (corpo_depois − corpo_antes, só os aumentos) ≥ `theta_sig`, como a espec 3.3 registra; nenhum número novo,
+  atrás da mesma chave desligada. O `theta_afeto` fica no `config.py` sem uso; mantê-lo ou removê-lo vai ao Matheus.
+- **O estado de cada MA e de cada valor da seção 8:**
+
+| ponto | o que decide | o estado | a evidência |
+|---|---|---|---|
+| **MA-1** | σ da visita vazia = min(0, r da ida) | **aprovada e implementada** | M1: `c6c6e51` (#530, `episodio_autobio`), teste `test_t_me_1_a_visita_vazia_*` |
+| **MA-2** | o valor do lugar pela soma dos σ | **aprovada, ainda não implementada** | entra na M2 (4.2); hoje o lugar segue a `episodios` e a recência |
+| **MA-3** | "REL sem negativos" grava σ < 0 como 0 | **aprovada, ainda não implementada** | entra com o `controle_mem` (7.2), que nenhum PR criou; a espec não o prende a uma etapa, e ele só tem efeito quando a lembrança e o lugar leem o σ (M2) |
+| **MA-4** | o empate da lembrança por ordem fixa | **aprovada, ainda não implementada** | entra na M2 (4.1) |
+| **MA-5** | três facetas nomeadas | **aprovada, ainda não implementada** | entra na M5 (6.2) |
+| **MA-6** | a subchave `facetas_mem` | **aprovada, ainda não implementada** | entra na M5 (6.2, 7.3) |
+| **MA-7** | recusar a C4 com a C2 ou a C3 e sem as subchaves do cheiro | **aprovada e implementada** | M0: `c6c6e51` (#530, `ConfigDigibrain`), teste `test_a_subchave_recusa_as_combinacoes_da_ma_7` |
+| **MA-8** | a M6 nos dois lados, com paridade | **aprovada, ainda não implementada** | entra na M6 (7.1) |
+| **o afeto pela subida** (3.3) | a subida de dor, susto ou estresse ≥ `theta_sig`, não o nível ≥ `theta_afeto` | **aprovada e implementada** | decidida no #530 (`da8d017`); o #530 implementou o nível (`c6c6e51`); este PR (`v3-memoria-afeto`) troca pela subida |
+| `theta_sig`, `n_rec` | S/8 = 128, 16 | **aprovados e implementados** | M1: `c6c6e51` (#530), `ConfigDigibrainInatos` |
+| `theta_afeto` | S/2 = 512 | **aprovado; o campo existe sem uso** | criado no `c6c6e51` (#530); deixa de ser lido neste PR; manter ou remover vai ao Matheus |
+| `w_lugar`, `w_vista`, `w_corpo`, `sim_min` | 2, 1, 1, 3S/4 | **aprovados, ainda não implementados** | entram na M2 (4.1) |
+| `n_dur`, `n_cen`, `janela_rec`, `theta_dur`, `n_rep_central` | 32, 8, 96, S/4, 2 | **aprovados, ainda não implementados** | entram na M3 (4.3) |
+| `w_lem` | S/2 | **aprovado, ainda não implementado** | entra na M4 (6.1) |
+| `eta_faceta`, o teto das facetas | S/64, S/4 | **aprovados, ainda não implementados** | entram na M5 (6.2) |
+
+**Pendente:** nenhuma das MA nem dos valores (todas aprovadas em 2026-11-01). Só a decisão nova sobre o campo `theta_afeto`, sem uso.
