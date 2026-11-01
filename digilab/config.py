@@ -2522,7 +2522,8 @@ class ConfigDigibrainInatos:
     # a C4, M0 e M1 (docs/ESPEC_MEMORIA_AUTOBIOGRAFICA_DIGIBRAIN_MODULAR.md, secoes 3 e 8), so com a subchave `memoria_autobio`
     theta_sig: int = _S // 8                  # DECIDIDO (2026-11-01), SEM FONTE: o |sigma| que faz um evento virar episodio; a metade do lambda_busca
     theta_afeto: int = _S // 2                # DECIDIDO (2026-11-01), SEM FONTE: a leitura de dor, susto ou estresse depois que faz um evento
-                                              # virar episodio; o meio da escala
+                                              # virar episodio; o meio da escala. SEM USO desde a decisao de 2026-11-01 (#530): o afeto e
+                                              # lido pela subida >= theta_sig (a espec 3.3); manter ou remover vai ao Matheus
     n_rec: int = 16                           # DECIDIDO (2026-11-01), SEM FONTE: a capacidade da recente; o n_ep de hoje
 
     def __post_init__(self) -> None:

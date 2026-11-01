@@ -8,8 +8,8 @@ e sequencias sinteticas.
     `digibrain` le a chave;
   - G1: o replay de cada vida com ela ligada, nas cinco sementes;
   - T-ME-0: o episodio sai igual no replay; o M-MEM so recebe o que o cerebro recebeu (pela AST); nenhum campo de fora da Observacao;
-  - T-ME-1: um evento forte vira episodio e um neutro nao; o mesmo log codifica os mesmos episodios; a visita vazia com sigma = min(0, r
-    da ida);
+  - T-ME-1: um evento forte vira episodio e um neutro nao; o afeto pela subida de dor, susto ou estresse >= `theta_sig`, nao pelo nivel
+    (o Matheus, 2026-11-01, no #530); o mesmo log codifica os mesmos episodios; a visita vazia com sigma = min(0, r da ida);
   - a rng; G-MECANISMO, G-INT, G-SEM-DIRECAO e G-RECEPTOR com ela ligada."""
 from __future__ import annotations
 
@@ -66,8 +66,8 @@ def unidade(chave: tuple, objeto=None) -> dict:
     return {"chave": chave, "acao": chave[0], "tipo": chave[1], "objeto": objeto, "d": None}
 
 
-def episodio(r_n=0, depois=None, unid=None, comeu=None, chegou=False, r_ida=None, objetos=(), gestos=()):
-    return M.episodio_autobio(sens(objetos), PM1, RECEPTORES_DIGIBRAIN, leituras(), depois or leituras(), {"V": 5, "E": 9},
+def episodio(r_n=0, depois=None, unid=None, comeu=None, chegou=False, r_ida=None, objetos=(), gestos=(), antes=None):
+    return M.episodio_autobio(sens(objetos), PM1, RECEPTORES_DIGIBRAIN, antes or leituras(), depois or leituras(), {"V": 5, "E": 9},
                               {"r": 2 * r_n, "r_n": r_n, "V": 6, "E": 10}, list(gestos), unid or unidade(("ocioso", None, None)),
                               {"comeu": comeu, "chegou": chegou, "r_ida": r_ida}, 4, 75, P)
 
@@ -155,14 +155,31 @@ def test_t_me_0_nenhum_campo_do_estado_privado_nas_vidas():
 # ------------------------------------------------------------------ T-ME-1: a codificacao
 def test_t_me_1_um_evento_forte_vira_episodio_e_um_neutro_nao():
     assert episodio(r_n=P.theta_sig - 1) is None and episodio(r_n=-(P.theta_sig - 1)) is None
-    assert episodio(r_n=0, depois=leituras(estresse=P.theta_afeto - 1, dor=10, fome=S)) is None   # a fome nao e afetiva
+    assert episodio(r_n=0, depois=leituras(estresse=P.theta_sig - 1, dor=10, fome=S)) is None     # a fome nao e afetiva
     forte = episodio(r_n=P.theta_sig)
     assert forte["origem"] == "evento" and forte["sigma"] == P.theta_sig and forte["categoria"] == ["ocioso", "sem_alvo", 1]
     ruim = episodio(r_n=-P.theta_sig, unid=unidade(("brincar", "bola", 3), BOLA), objetos=[BOLA])
     assert ruim["classe"] == "bola" and ruim["categoria"] == ["brincar", "bola", -1]
     for r in ("dor", "susto", "estresse"):
-        susto = episodio(r_n=0, depois=leituras(**{r: P.theta_afeto}))
+        susto = episodio(r_n=0, depois=leituras(**{r: P.theta_sig}))
         assert susto["origem"] == "evento" and susto["sigma"] == 0 and susto["categoria"] == ["ocioso", "sem_alvo", 0]
+
+
+@pytest.mark.parametrize("r", M.AFETIVOS)
+def test_t_me_1_o_afeto_e_a_subida_na_decisao_e_nao_o_nivel(r):
+    """a espec 3.3 (o Matheus, 2026-11-01, no #530): a maior subida de dor, susto ou estresse (depois - antes, so os aumentos) >=
+    theta_sig; o theta_afeto nao e lido"""
+    base = 300
+    assert episodio(antes=leituras(**{r: base}), depois=leituras(**{r: base + P.theta_sig - 1})) is None   # abaixo do limiar
+    no_limiar = episodio(antes=leituras(**{r: base}), depois=leituras(**{r: base + P.theta_sig}))
+    assert no_limiar["origem"] == "evento" and no_limiar["delta"][r] == P.theta_sig
+    assert episodio(antes=leituras(**{r: S}), depois=leituras(**{r: S})) is None                        # alto e parado
+    assert episodio(antes=leituras(**{r: S}), depois=leituras(**{r: S - P.theta_sig})) is None          # a queda nao conta
+    # uma queda noutro afetivo nao apaga a subida deste; o nivel acima do theta_afeto sem subir nao conta
+    outro = next(o for o in M.AFETIVOS if o != r)
+    assert episodio(antes=leituras(**{r: 0, outro: S}), depois=leituras(**{r: P.theta_sig, outro: 0}))["origem"] == "evento"
+    assert episodio(antes=leituras(**{r: P.theta_afeto}), depois=leituras(**{r: P.theta_afeto + 1})) is None
+    assert episodio(antes=leituras(fome=0), depois=leituras(fome=S)) is None                            # a fome nao e afetiva
 
 
 def test_t_me_1_o_consumo_vira_episodio_sempre_com_a_classe_comida():
@@ -264,8 +281,8 @@ def test_t_me_1_a_visita_vazia_na_vida_tem_o_custo_da_ida(monkeypatch):
     assert len([e for e in todos if e["origem"] == "consumo"]) == len(consumos)
     for e in todos:
         if e["origem"] == "evento":
-            afetivo = max(e["corpo_depois"][r] for r in M.AFETIVOS)
-            assert abs(e["sigma"]) >= P.theta_sig or afetivo >= P.theta_afeto
+            subida = max(e["delta"][r] for r in M.AFETIVOS)
+            assert abs(e["sigma"]) >= P.theta_sig or subida >= P.theta_sig
 
 
 def test_g2_separado_ligada_muda_so_a_vida_do_braco_que_a_liga():

@@ -26,7 +26,9 @@ Sem rng. A interface que a memoria consolidada herda (secao 9): `codificar`, `re
   - **a significancia** sigma (3.2): o r_n da consequencia; na visita vazia, min(0, r da ida), com o r da ida o `r` da opcao do `ponto`
     que acabou nela (o acumulado do M-ESTADO), nunca positivo (C4-E1, MA-1);
   - **quando vira episodio** (3.3, ME-1), nesta ordem, sem rng: o consumo; a visita ao lugar lembrado sem comer; |sigma| >= `theta_sig`
-    ou a maior leitura de dor, susto ou estresse depois >= `theta_afeto` (a origem "evento"). O resto nao vira episodio;
+    ou a maior subida de dor, susto ou estresse na decisao (corpo_depois - corpo_antes, so os aumentos) >= `theta_sig` (a origem
+    "evento"). O resto nao vira episodio. O afeto e lido pela variacao, nao pelo nivel (o Matheus, 2026-11-01, no #530): o `theta_afeto`
+    nao e lido;
   - **a categoria** (3.4): [comportamento, classe, sinal de sigma], com a classe a comida no consumo, "nao_havia" na visita e, no
     evento, a classe do objeto da unidade ou "sem_alvo";
   - **onde fica:** na `recente`, uma lista propria, com capacidade `n_rec`; cheia, sai o de menor |sigma| (o peso da 4.3 com rep = rec =
@@ -47,7 +49,7 @@ ORIGENS = ("consumo", "visita")
 # a C4 (secao 3.4): as classes e as origens do episodio completo
 CLASSES_AUTOBIO = CLASSES_EPISODIO + ("bola", "sem_alvo")
 ORIGENS_AUTOBIO = ("consumo", "visita", "evento")
-AFETIVOS = ("dor", "susto", "estresse")             # os receptores do limiar `theta_afeto` (3.3)
+AFETIVOS = ("dor", "susto", "estresse")             # os receptores cuja subida conta para o `theta_sig` (3.3)
 
 
 def _sinal(v: int) -> int:
@@ -68,8 +70,8 @@ def episodio_autobio(sens: dict, pm1, recs: tuple, l0: list, l1: list, afeto_ant
             raise ValueError(f"M-MEM: a visita sem o r da ida: {desfecho!r}")
         origem, classe, sigma, ponto = "visita", "nao_havia", min(0, desfecho["r_ida"]), tuple(ident)
     else:
-        afetivo = max((corpo_depois[r] for r in AFETIVOS if r in corpo_depois), default=0)
-        if abs(cons["r_n"]) < p.theta_sig and afetivo < p.theta_afeto:
+        subida = max((corpo_depois[r] - corpo_antes[r] for r in AFETIVOS if r in corpo_depois), default=0)   # a queda nao conta
+        if abs(cons["r_n"]) < p.theta_sig and subida < p.theta_sig:
             return None
         origem, classe, sigma, ponto = "evento", "sem_alvo", cons["r_n"], (pm1.x, pm1.y)
     o = unidade["objeto"]                             # o item do `sens` da decisao (a comida, a bola) ou None
