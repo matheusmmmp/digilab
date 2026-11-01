@@ -85,7 +85,7 @@ const SUB_RAMO: Record<string, string> = { sereno: `cuidado ≥ ${CAT.limiarCuid
     fechado, sombria); o sprite em 1x, cortado no card quando e maior; forma ainda nao decidida = silhueta sem nome */
 function No({ g, estado, provavel, sombriaNo, sombriaAgora, sub, escolher, v6 }: { g: Forma; estado: EstadoNo; provavel: boolean; sombriaNo: boolean; sombriaAgora: boolean; sub: string; escolher: (det: string) => void; v6?: boolean }) {
   const a = useAtlas(), spr = chaveSprite(g), id = idNo(g), revelado = estado === "agora" || estado === "percorrido";
-  const img = a.tipo === "ok" ? (revelado ? imagemAtlas(a, spr, 1, { sombria: sombriaNo }) : silhuetaAtlas(a, spr)) : null;
+  const img = a.tipo === "ok" ? (revelado ? imagemAtlas(a, spr, 1, { sombria: sombriaNo, recortar: true }) : silhuetaAtlas(a, spr, { recortar: true })) : null;
   const cls = ["evo-no", `evo-no--${g.est}`, estado, provavel ? "provavel" : "", sombriaNo ? "sombria" : "", estado === "agora" && sombriaAgora ? "sombria-agora" : ""].filter(Boolean).join(" ");
   const det = (revelado ? nomeForma(g) : "Forma ainda não decidida") + ": " + (sombriaNo ? "forma sombria da linha (sobrecarga alta na virada para Ultimate)" : requisito(g));
   return (
@@ -247,7 +247,8 @@ export function TelaEvolucao() {
           {faltaMed && <p className={`evo-medalha${prontoMed ? " pronto" : ""}`} role="status">{prontoMed ? <b>Pronto para evoluir. </b> : null}{textoFalta(t, rMed!.precisa)}</p>}
           <Numeros itens={[
             ...[["experiência de combate: cada vitória o deixa mais preciso na luta",
-              `${m.vitoriasVida} ${m.vitoriasVida === 1 ? "vitória" : "vitórias"}${m.vitoriasVida * CLE.expPorVitoria >= CLE.expMax ? " (máximo)" : ""}`] as [string, string]],
+              /* desde o v13 cada vitoria vale a novidade dela (motor.ts), entao o total e fracionario */
+              `${virgula(m.vitoriasVida)} ${m.vitoriasVida === 1 ? "vitória" : "vitórias"}${m.vitoriasVida * CLE.expPorVitoria >= CLE.expMax ? " (máximo)" : ""}`] as [string, string]],
             ...((f.est === "adolescente" || rMega) ? [["vitórias nas lutas deste estágio (precisa de 80% para evoluir)",
               m.lutas.lutas ? `${m.lutas.vitorias} de ${m.lutas.lutas}` : "nenhuma luta"] as [string, string]] : []),
             /* a forma futura ainda nao foi decidida pelo motor: mostra so o porque, sem o nome */

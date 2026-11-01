@@ -1,0 +1,15 @@
+{
+  "descricao": "Fumaca da run da C3 (a escolha refeita so por evento): as sementes dos testes, 2 dias; so confere que o orquestrador roda. Nenhuma semente da faixa 76101...76505.",
+  "plano": "docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md",
+  "fase": "redecidir_evento",
+  "unidades": {
+    "bases": [
+      101,
+      202
+    ],
+    "k": 1,
+    "prefixo": "digibrain_prototipo"
+  },
+  "dias": 2,
+  "orcamento_por_dia": 16
+}
