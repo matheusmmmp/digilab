@@ -191,11 +191,11 @@ as premissas e os descritivos leem.
 
 ## 9. O que esta espec leu além das RD (para o Matheus)
 
-As RD-1 a RD-9 não fixam estes quatro pontos; o código segue a recomendação de cada um. Todos SEM FONTE.
+As RD-1 a RD-9 não fixam estes quatro pontos; o código segue a recomendação de cada um. **As RE-1 a RE-4 foram DECIDIDAS pelo Matheus em 2026-11-01, pela recomendação.** Todos SEM FONTE.
 
 | # | a leitura | a recomendação | o custo de errar |
 |---|---|---|---|
-| **RE-1** | a decisão logo depois do reflexo sorteia (o E-REFLEXO vale na decisão do reflexo e na seguinte) | **sim:** o dormir do reflexo não é uma escolha a segurar, e a tarefa (1.3) diz que ao acordar o sorteio roda como hoje | a alternativa (segurar a escolha de antes do reflexo ao acordar) é a retomada forçada que a L-2 recusou (LS-3) e mistura a C3 com a `intencao_suspensa` |
-| **RE-2** | o candidato com peso 0 conta como fora da lista (E-FIM) | **sim:** no M-ARB a unidade a 0 não concorre; segurá-la faria o pet escolher o que o sorteio de hoje nunca escolheria | sem isso, uma unidade sem ativação (a fome que passou sem mudar de quarto) ficaria até o teto |
-| **RE-3** | o E-FIM não conta o fim `unica` das opções de uma decisão | **sim:** toda opção de uma decisão acaba na própria consequência; contar esse fim tornaria impossível segurar o explorar, o chamar e o dormir, contra a RD-2 | contando, o braço só seguraria as intenções, a alternativa (b) da RD-2, que o Matheus recusou |
-| **RE-4** | a subchave recusa, além da `credito_corrida` e da `intencao_suspensa`, a falta das duas subchaves do cheiro | **sim:** os braços previstos (RD-1) são o M3\* e o M2 do conserto; outra combinação não tem plano | recusar demais só pede tirar a linha quando houver um braço novo com plano; aceitar demais deixa rodar um braço sem pergunta |
+| **RE-1** | a decisão logo depois do reflexo sorteia (o E-REFLEXO vale na decisão do reflexo e na seguinte)(DECIDIDA) | **sim:** o dormir do reflexo não é uma escolha a segurar, e a tarefa (1.3) diz que ao acordar o sorteio roda como hoje | a alternativa (segurar a escolha de antes do reflexo ao acordar) é a retomada forçada que a L-2 recusou (LS-3) e mistura a C3 com a `intencao_suspensa` |
+| **RE-2** | o candidato com peso 0 conta como fora da lista (E-FIM)(DECIDIDA) | **sim:** no M-ARB a unidade a 0 não concorre; segurá-la faria o pet escolher o que o sorteio de hoje nunca escolheria | sem isso, uma unidade sem ativação (a fome que passou sem mudar de quarto) ficaria até o teto |
+| **RE-3** | o E-FIM não conta o fim `unica` das opções de uma decisão(DECIDIDA) | **sim:** toda opção de uma decisão acaba na própria consequência; contar esse fim tornaria impossível segurar o explorar, o chamar e o dormir, contra a RD-2 | contando, o braço só seguraria as intenções, a alternativa (b) da RD-2, que o Matheus recusou |
+| **RE-4** | a subchave recusa, além da `credito_corrida` e da `intencao_suspensa`, a falta das duas subchaves do cheiro(DECIDIDA) | **sim:** os braços previstos (RD-1) são o M3\* e o M2 do conserto; outra combinação não tem plano | recusar demais só pede tirar a linha quando houver um braço novo com plano; aceitar demais deixa rodar um braço sem pergunta |
