@@ -328,3 +328,16 @@ A espec no formato da L-2 (`docs/ESPEC_REDECIDIR_EVENTO_DIGIBRAIN_MODULAR.md`, P
 - **A faixa 76101…76505 decidida (RD-7),** ainda não reservada: o Gerente a põe na `FAIXAS_RESERVADAS` num commit próprio, na etapa 3.
 - **Nenhum código, nenhuma faixa e nenhuma vida.**
 - **O registro:** as duas interpretações em `docs/registro/2026-10.md`.
+
+## Resultado da etapa 2 (espec e código; 2026-10-31, worker Claude Code, Opus 5.5, worktree `v3-redecidir-evento-espec`)
+
+- **A espec:** `docs/ESPEC_REDECIDIR_EVENTO_DIGIBRAIN_MODULAR.md`, no formato da L-2, com as leituras RE-1 a RE-4 (o que as RD não fixam)
+  para o Matheus, com a recomendação e o custo de errar.
+- **O gabarito antes,** num commit próprio: o M3\* no `longe_fixo` e no comedouro, os quatro donos, as sementes 101 a 505
+  (`tests/gabaritos/redecidir_evento_de_hoje.json`); o M2 nas mesmas células já estava no gabarito do #513.
+- **O código:** `ConfigDigibrain.redecidir_evento` (PROPOSTA, desligada; ValueError com a `credito_corrida`, a `intencao_suspensa` ou sem as
+  duas subchaves do cheiro), `ConfigDigibrainInatos.n_seg_max` = 6, os eventos e o registro no M-ESTADO, o `segurar` no M-ARB, a ordem no
+  M-ADAPT; no orquestrador, só o `conferir_redecidir` e a contagem `trocas_por_decisao`. O `engine.py` e a web não mudam.
+- **Os testes:** `tests/test_redecidir_evento.py` (T-RD-1 a T-RD-4, G1, G2-SEPARADO, as conferências e o G-MECANISMO ligado) e
+  `tests/test_gabarito_redecidir_evento.py` (o byte a byte desligado).
+- **Nenhuma vida de pesquisa, nenhuma faixa, nenhum adendo.**

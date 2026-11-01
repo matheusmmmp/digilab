@@ -11,7 +11,10 @@
   sem_incentivo, sem_habito, sem_memoria, sem_persistencia; sem_afeto (o g_exp neutro, e0); so_inato (sem os quatro termos aprendidos e de
   estado). O modulo decidiu se a escolha muda. Sem a memoria (sem_memoria e so_inato), a unidade do lugar lembrado sai inteira: ela so
   existe porque o M-MEM recuperou o lugar (PROPOSTO). Sem u (um candidato so na decisao), uma sonda com dois candidatos ou mais fica com o de
-  maior peso (o primeiro no empate), PROPOSTO; no reflexo, nenhuma sonda decide."""
+  maior peso (o primeiro no empate), PROPOSTO; no reflexo, nenhuma sonda decide.
+**A escolha segurada** (a C3, docs/ESPEC_REDECIDIR_EVENTO_DIGIBRAIN_MODULAR.md, secao 2; so com a subchave `redecidir_evento`): sem evento,
+o M-ADAPT passa o candidato (`segurar`, a chave da escolha anterior); com ele na lista e peso positivo, o M-ARB o escolhe sem sorteio e sem
+chamar a rng, e, como no reflexo, nenhuma sonda decide. Fora da lista ou com peso 0 (RE-2), o sorteio de hoje, e o registro marca `fora`."""
 from __future__ import annotations
 
 from ..config import CONFIG_DIGIBRAIN_INATOS, ConfigDigibrainInatos
@@ -73,12 +76,19 @@ class Arbitragem:
             raise RuntimeError("M-ARB: o reflexo do sono le a energia, e ela nao esta na percepcao do corpo")
         return energia < self.p.lambda_sono
 
-    def escolher(self, unidades: list[dict], afeto: dict, sens: dict, rng, reflexo: bool | None = None) -> dict:
+    def escolher(self, unidades: list[dict], afeto: dict, sens: dict, rng, reflexo: bool | None = None,
+                 segurar: tuple | None = None) -> dict:
         p = self.p
         if reflexo is None:
             reflexo = self.reflexo(sens)
         w = self.pesos([x["a"] for x in unidades], afeto["g_exp"])
-        if reflexo:
+        if reflexo and segurar is not None:
+            raise RuntimeError("M-ARB: a escolha segurada com o reflexo do sono (o reflexo e evento)")
+        segura = None if segurar is None else next((j for j, x in enumerate(unidades) if x["chave"] == segurar and w[j] > 0), None)
+        if segura is not None:
+            i = segura
+            u = None
+        elif reflexo:
             i = next(j for j, x in enumerate(unidades) if x["acao"] == "dormir")
             u = None
             self.reflexos += 1
@@ -92,7 +102,7 @@ class Arbitragem:
             i = self._escolher(unidades, w, u)
         sondas: dict = {}
         for nome, tirar in SONDAS.items():
-            if reflexo:
+            if reflexo or segura is not None:
                 sondas[nome] = chave_json(unidades[i]["chave"])
                 sondas[DECIDIU[nome]] = False
                 continue
@@ -103,7 +113,7 @@ class Arbitragem:
             sondas[nome] = chave_json(unidades[j]["chave"])
             sondas[DECIDIU[nome]] = j != i
         return {"indice": i, "unidade": unidades[i], "u": u, "reflexo": reflexo, "nada_a_fazer": not reflexo and all(x == 0 for x in w),
-                "pesos": w, "sondas": sondas}
+                "pesos": w, "sondas": sondas, "segurada": segura is not None, "fora": segurar is not None and segura is None}
 
     def estado_interno(self) -> dict:
         return {"sorteios": self.sorteios, "reflexos": self.reflexos, "nada_a_fazer": self.nada_a_fazer}

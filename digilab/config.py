@@ -2342,6 +2342,13 @@ CONFIG_CONTRATO_LIGADO = ConfigContrato(sensores=True, controlador=True)
 #     emocional falha por acao primitiva e funciona por comportamento"). O P2 deixa de ser creditado por opcao e passa a ser creditado
 #     na corrida do comportamento: as decisoes seguidas do mesmo comportamento (chave[0]), uma vez so, quando ela acaba. Nao se combina
 #     com a `intencao_suspensa` (a D-C1-2).
+# A C3 (docs/TAREFA_V3_REDECIDIR_EVENTO.md, secoes 3.1 e 8; RD-1 a RD-9 DECIDIDAS em 2026-10-31; a espec em
+# docs/ESPEC_REDECIDIR_EVENTO_DIGIBRAIN_MODULAR.md) pede mais uma, desligada por padrao (desligada, as vidas saem byte a byte:
+# tests/gabaritos/redecidir_evento_de_hoje.json e habito_intencao_de_hoje.json):
+#   - `redecidir_evento`: PROPOSTO, SEM FONTE como valor; a direcao vem de Gadanho e Hallam (2001), pela tese de 1999 (o gatilho de
+#     reavaliacao). A unidade escolhida na decisao anterior fica, sem sorteio, enquanto nao houver um evento (o reflexo do sono, uma
+#     urgencia que muda de quarto de S, o mundo, o fim da opcao, o teto `ConfigDigibrainInatos.n_seg_max`). Nao se combina com a
+#     `credito_corrida` nem com a `intencao_suspensa` (a D-C2-4) e so existe com as duas subchaves do cheiro (os bracos M3* e M2 do conserto).
 CONTROLES_G_APR = ("nenhum", "embaralhado", "constante")
 
 
@@ -2359,14 +2366,21 @@ class ConfigDigibrain:
     intencao_cheiro: bool = False            # DECIDIDO (adendo 3, A3.4 e A3.10, 2026-10-26): a DX-4, desligada por padrao
     intencao_suspensa: bool = False          # DECIDIDO (LS-1 e LS-2, 2026-10-29): a parte (b) da L-2, desligada por padrao
     credito_corrida: bool = False            # PROPOSTO, SEM FONTE como valor (C2, HI-3; direcao: Gadanho e Hallam 2001): o P2 na corrida
+    redecidir_evento: bool = False           # PROPOSTO, SEM FONTE como valor (C3, RD-2 e RD-3; direcao: Gadanho e Hallam 2001): segurar a escolha
 
     def __post_init__(self) -> None:
         for nome in ("ligada", "modula_g_apr", "p2", "m_mem", "persistencia", "p1", "cheiro_inato", "intencao_cheiro",
-                     "intencao_suspensa", "credito_corrida"):
+                     "intencao_suspensa", "credito_corrida", "redecidir_evento"):
             if type(getattr(self, nome)) is not bool:
                 raise TypeError(f"ConfigDigibrain.{nome} e bool: {getattr(self, nome)!r}")
         if self.credito_corrida and self.intencao_suspensa:
             raise ValueError("credito_corrida nao se combina com a intencao_suspensa (docs/TAREFA_V3_HABITO_INTENCAO.md, D-C1-2)")
+        if self.redecidir_evento and (self.credito_corrida or self.intencao_suspensa):
+            raise ValueError("redecidir_evento nao se combina com a credito_corrida nem com a intencao_suspensa "
+                             "(docs/TAREFA_V3_REDECIDIR_EVENTO.md, D-C2-4 e secao 3.1)")
+        if self.redecidir_evento and not (self.cheiro_inato and self.intencao_cheiro):
+            raise ValueError("redecidir_evento so com as duas subchaves do cheiro (cheiro_inato e intencao_cheiro): os bracos M3* e M2 do "
+                             "conserto (docs/ESPEC_REDECIDIR_EVENTO_DIGIBRAIN_MODULAR.md, RE-4)")
         if self.controle_g_apr not in CONTROLES_G_APR:
             raise ValueError(f"ConfigDigibrain.controle_g_apr: so {CONTROLES_G_APR}, nao {self.controle_g_apr!r}")
         if type(self.g_apr_constante) is not int:
@@ -2482,6 +2496,9 @@ class ConfigDigibrainInatos:
                                               # vida dela, antes do "expirou"; o valor do n_desiste_cheiro, sem calibracao (SEM FONTE)
     lambda_retomar: int = _S // 4             # DECIDIDO (LS-4, 2026-10-29): o "saciou", a urgencia da fome abaixo deste limiar; o valor do
                                               # lambda_busca do M-MEM, sem calibracao (SEM FONTE)
+    # a C3 (docs/ESPEC_REDECIDIR_EVENTO_DIGIBRAIN_MODULAR.md, secao 3), so com a subchave `redecidir_evento`
+    n_seg_max: int = 6                        # PROPOSTO, SEM FONTE (RD-4, 2026-10-31): as decisoes seguidas em que a escolha fica segurada
+                                              # antes do E-TETO; o valor do n_desiste_cheiro e do n_suspensa_max, sem calibracao
     # M-MEM
     n_ep: int = 16                            # PROPOSTO, SEM FONTE (PE-16)
     lambda_busca: int = _S // 4               # PROPOSTO, SEM FONTE: a pista, a urgencia da fome acima deste limiar
@@ -2519,9 +2536,9 @@ class ConfigDigibrainInatos:
                 raise ValueError(f"constante de tempo abaixo do passo do cerebro (15 ticks): {tau}")
         if not 0 < self.g_min <= self.g0 <= self.g_max or self.r_norm <= 0 or self.s_v <= 0 or self.n_ep <= 0 or self.n_desiste <= 0 \
                 or self.escala_cuidado <= 0 or self.d_max <= 0 or self.h_max <= 0 or self.n_desiste_cheiro <= 0 \
-                or self.n_suspensa_max <= 0 or not 0 <= self.lambda_retomar <= self.escala:
+                or self.n_suspensa_max <= 0 or not 0 <= self.lambda_retomar <= self.escala or self.n_seg_max <= 0:
             raise ValueError("ConfigDigibrainInatos: g_min <= g0 <= g_max; r_norm, s_v, n_ep, n_desiste, escala_cuidado, d_max, h_max, "
-                             "n_desiste_cheiro e n_suspensa_max positivos; lambda_retomar em [0, S]")
+                             "n_desiste_cheiro, n_suspensa_max e n_seg_max positivos; lambda_retomar em [0, S]")
 
 
 CONFIG_DIGIBRAIN_INATOS = ConfigDigibrainInatos()

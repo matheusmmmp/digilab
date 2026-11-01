@@ -8,7 +8,10 @@ com o incentivo e o habito do M-PLAST) -> M-ARB (a escolha, o u e as sondas) -> 
 P2). A unidade escolhida e o par (comportamento, alvo): o `agir` devolve a acao, e o `escolher_alvo` o alvo dela. O reflexo do sono e uma
 conta so (`Arbitragem.reflexo`), feita depois do M-AFETO e passada ao M-ESTADO e ao M-ARB. Com a subchave `intencao_suspensa` (a parte (b)
 da L-2, docs/ESPEC_LONGE_L2_DIGIBRAIN_MODULAR.md, secao 2.3), o M-ESTADO cuida da intencao suspensa antes do contexto
-(`cuidar_suspensa`); as que acabam ali vao ao P2 e ao registro com as do `escolhida`, e o motivo ganha a `suspensa`.
+(`cuidar_suspensa`); as que acabam ali vao ao P2 e ao registro com as do `escolhida`, e o motivo ganha a `suspensa`. Com a subchave
+`redecidir_evento` (a C3, docs/ESPEC_REDECIDIR_EVENTO_DIGIBRAIN_MODULAR.md, secao 2.3), o M-ESTADO confere os eventos antes do contexto
+(`eventos`, com o gesto do dono desde a decisao anterior), o M-ARB segura o candidato sem sorteio quando nao ha evento, e o motivo ganha
+`segurada` e `evento`.
 
 **O alvo** (`escolher_alvo`): o candidato do motor do tipo (e do id) da unidade escolhida; o `u` do motor e ignorado. **A excecao unica**
 (a PE-14 revista): em EXPLORAR, o lugar lembrado do M-MEM e entregue como `Alvo.ponto(x, y)`, fora da lista do motor, que o valida por
@@ -141,13 +144,17 @@ class DigiBrain:
         reflexo = m.arb.reflexo(sens)                              # uma conta so, ao M-ESTADO e ao M-ARB (a L-2, secao 2.3)
         retomadas = m.estado.retomadas
         fins_susp = m.estado.cuidar_suspensa(sens, afeto, reflexo) if cd.intencao_suspensa else []
+        evento, segurar = m.estado.eventos(sens, afeto, reflexo, bool(self._gestos)) if cd.redecidir_evento else ([], None)
         ctx = m.estado.contexto()
         memoria = m.mem.recuperar(sens, afeto) if cd.m_mem else None
         unidades, z = m.impulso.unidades(sens, afeto, ctx, m.plast, memoria, m.afeto.drives(receptores))
-        esc = m.arb.escolher(unidades, afeto, sens, rng, reflexo)  # a rng de politica vai so ao M-ARB
+        esc = m.arb.escolher(unidades, afeto, sens, rng, reflexo, segurar)  # a rng de politica vai so ao M-ARB
         self._conferir_desligadas(unidades)
         unidade = esc["unidade"]
         fins = fins_susp + m.estado.escolhida(unidade, z, afeto["g_apr"], k, reflexo)
+        if cd.redecidir_evento:                       # a C3: o candidato fora da lista (ou com peso 0) e o E-FIM (RE-2)
+            evento = evento + (["E-FIM"] if esc["fora"] else [])
+            m.estado.registrar_redecisao(unidade["chave"], esc["segurada"], reflexo, evento)
         creditos = _creditar(m.plast, fins, cd)
         if cd.credito_corrida:                        # a C2: a corrida que a troca de comportamento fechou, ao P2 uma vez so
             fechadas = m.estado.corridas_fechadas
@@ -180,6 +187,9 @@ class DigiBrain:
         if cd.intencao_suspensa:                      # a L-2: a suspensa ao fim da decisao e a retomada (desligada, nenhum campo novo)
             self.motivos[-1]["suspensa"] = m.estado.suspensa_resumo()
             self.motivos[-1]["retomou"] = m.estado.retomadas > retomadas
+        if cd.redecidir_evento:                       # a C3: desligada, nenhum campo novo
+            self.motivos[-1]["segurada"] = esc["segurada"]
+            self.motivos[-1]["evento"] = evento
         self._gestos = []
         self._pendencia = {"k": k, "intencao": intencao, "unidade": unidade, "sens": sens, "g_apr": afeto["g_apr"], "pediu": False,
                            "alvo": None, "corpo": None, "transicao": None, "mundo": None}

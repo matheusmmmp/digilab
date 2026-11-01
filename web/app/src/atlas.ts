@@ -181,31 +181,35 @@ export function desenharSprite(ctx: CanvasRenderingContext2D, e: AtlasOk, nome: 
 }
 /** silhueta preta (primeiro quadro) para o que o motor ainda nao decidiu */
 const cacheSilhueta = new Map<string, { url: string; w: number; h: number }>();
-export function silhuetaAtlas(a: AtlasOk, nome: string): { url: string; w: number; h: number } {
-  const pronta = cacheSilhueta.get(nome);
+export function silhuetaAtlas(a: AtlasOk, nome: string, opc: { recortar?: boolean } = {}): { url: string; w: number; h: number } {
+  const ch = nome + (opc.recortar ? "@r" : ""), pronta = cacheSilhueta.get(ch);
   if (pronta) return pronta;
   const [w, h] = dimSprite(a.dados, nome), c = document.createElement("canvas"); c.width = w; c.height = h;
   const g = c.getContext("2d"); if (!g) throw new Error("canvas 2d indisponível");
   desenharSprite(g, a, nome, 0, 0, 1, 0);
   g.globalCompositeOperation = "source-in"; g.fillStyle = "#000000"; g.fillRect(0, 0, w, h);
-  const r = { url: c.toDataURL(), w, h };
-  cacheSilhueta.set(nome, r);
+  const r = opc.recortar ? recorte(c, rectQuadro(a, nome, 0), 1) : { url: c.toDataURL(), w, h };
+  cacheSilhueta.set(ch, r);
   return r;
+}
+/** o retangulo do primeiro quadro do Idle dentro da caixa do sprite (a caixa do clipe e maior que o quadro); com `borda`, 1 px a mais de
+    cada lado (o contorno da sombria); uma peca e inteira */
+function rectQuadro(a: AtlasOk, nome: string, borda: number): [number, number, number, number] {
+  const s = a.dados.sprites[chaveUp(a.dados, nome)];
+  if (!s) { const [w, h] = dimSprite(a.dados, nome); return [0, 0, w, h]; }
+  const q = (s.clipes?.Idle?.quadros ?? s.quadros)[0];
+  if (q[2] === 0) return [0, 0, s.caixa[0], s.caixa[1]];
+  return [q[4] - borda, q[5] - borda, q[2] + 2 * borda, q[3] + 2 * borda];
+}
+/** so o retangulo [x, y, w, h] (em px do sprite) de um canvas desenhado na escala dada */
+function recorte(c: HTMLCanvasElement, [x, y, w, h]: [number, number, number, number], escala: number): { url: string; w: number; h: number } {
+  const r = document.createElement("canvas"); r.width = w * escala; r.height = h * escala;
+  const g = r.getContext("2d"); if (!g) throw new Error("canvas 2d indisponível");
+  g.drawImage(c, x * escala, y * escala, w * escala, h * escala, 0, 0, w * escala, h * escala);
+  return { url: r.toDataURL(), w: w * escala, h: h * escala };
 }
 /** o primeiro quadro recortado so no que ele ocupa (sem a sobra da caixa comum dos clipes), para retratos pequenos; uma peca sai inteira */
-const cacheRecorte = new Map<string, { url: string; w: number; h: number }>();
-export function recorteAtlas(a: AtlasOk, nome: string): { url: string; w: number; h: number } {
-  const pronto = cacheRecorte.get(nome);
-  if (pronto) return pronto;
-  const s = a.dados.sprites[chaveUp(a.dados, nome)];
-  if (!s) return imagemAtlas(a, nome);
-  const q = s.quadros[0], c = document.createElement("canvas"); c.width = q[2]; c.height = q[3];
-  const g = c.getContext("2d"); if (!g) throw new Error("canvas 2d indisponível");
-  desenharSprite(g, a, nome, -q[4], -q[5], 1, 0);
-  const r = { url: c.toDataURL(), w: q[2], h: q[3] };
-  cacheRecorte.set(nome, r);
-  return r;
-}
+export const recorteAtlas = (a: AtlasOk, nome: string): { url: string; w: number; h: number } => imagemAtlas(a, nome, 1, { recortar: true });
 /** estado do atlas fora de componente (o palco desenha num intervalo proprio) */
 export const atlasAtual = (): EstadoAtlas => estado;
 /** escala do sprite em pixels do aparelho: 1x em pixels CSS quando o aparelho tem densidade inteira */
@@ -214,8 +218,20 @@ export const escalaSprite = (): number => Math.max(1, Math.floor((devicePixelRat
 
 /** imagem (data URL) de um sprite ou peca em escala inteira, primeiro quadro; cache por nome e escala */
 const cacheImagem = new Map<string, string>();
-export function imagemAtlas(a: AtlasOk, nome: string, escala = 1, opc: { sombria?: boolean } = {}): { url: string; w: number; h: number } {
+const cacheRecorte = new Map<string, { url: string; w: number; h: number }>();
+/** `recortar`: so o quadro, sem a folga da caixa do clipe (os cartoes pequenos, como os nos da arvore de evolucao) */
+export function imagemAtlas(a: AtlasOk, nome: string, escala = 1, opc: { sombria?: boolean; recortar?: boolean } = {}): { url: string; w: number; h: number } {
   const [w, h] = dimSprite(a.dados, nome), ch = `${nome}@${escala}@${opc.sombria ? 1 : 0}`;
+  if (opc.recortar) {
+    const pronta = cacheRecorte.get(ch);
+    if (pronta) return pronta;
+    const c = document.createElement("canvas"); c.width = w * escala; c.height = h * escala;
+    const g = c.getContext("2d"); if (!g) throw new Error("canvas 2d indisponível");
+    desenharSprite(g, a, nome, 0, 0, escala, 0, { sombria: opc.sombria });
+    const r = recorte(c, rectQuadro(a, nome, opc.sombria ? 1 : 0), escala);
+    cacheRecorte.set(ch, r);
+    return r;
+  }
   if (!cacheImagem.has(ch)) {
     const c = document.createElement("canvas"); c.width = w * escala; c.height = h * escala;
     const g = c.getContext("2d"); if (!g) throw new Error("canvas 2d indisponível");
