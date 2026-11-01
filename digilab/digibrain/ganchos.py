@@ -2,8 +2,8 @@
 
 - **M-GEN:** o registro unico dos parametros inatos, `ParametrosInatos`, por modulo; no prototipo e a constante PROPOSTA
   `CONFIG_DIGIBRAIN_INATOS` (digilab/config.py). O genoma futuro escreve esse registro; o aprendido nunca entra nele (EG-5).
-- **M-PERS:** `faceta(nome)` e `mudar_faceta(nome, passo, episodios)`; no prototipo nao ha faceta, a leitura devolve o neutro (0, nenhuma
-  inclinacao) e a mudanca falha alto (a memoria consolidada e etapa propria; o temperamento inato fica fora do alcance dela, DM-6).
+- **M-PERS:** em `pers.py` (a C4, M5); aqui so o reexport. Sem a subchave `facetas_mem` nao ha faceta, a leitura devolve o neutro (0) e a
+  mudanca falha alto; o temperamento inato fica fora do alcance dela (DM-6).
 - **M-EXPR:** le so o registro da decisao, fora do cerebro, e nao decide nada; a fala e o T-MOTIVO-2 entram com o verificador da fala
   (fora da etapa 1)."""
 from __future__ import annotations
@@ -12,6 +12,7 @@ from dataclasses import fields
 
 from ..config import CONFIG_DIGIBRAIN_INATOS, ConfigDigibrainInatos
 from ._comum import sem_equacao
+from .pers import Personalidade  # noqa: F401  (o M-PERS vive em pers.py; reexportado aqui)
 
 # os campos de cada modulo (o que o genoma futuro escreveria em cada um)
 CAMPOS_POR_MODULO = {
@@ -26,19 +27,8 @@ CAMPOS_POR_MODULO = {
                "n_seg_max"),
     "mem": ("n_ep", "lambda_busca", "d_max", "w_mem", "theta_sig", "n_rec", "n_dur", "n_cen", "janela_rec", "theta_dur", "n_rep_central", "w_lugar",
             "w_vista", "w_corpo", "sim_min", "w_lem"),
+    "pers": ("eta_faceta", "teto_faceta"),
 }
-
-
-class Personalidade:
-    """M-PERS: as facetas; o temperamento inato fica fora do alcance delas (DM-6). No prototipo, nenhuma faceta."""
-
-    NEUTRO = 0
-
-    def faceta(self, nome: str) -> int:
-        return self.NEUTRO
-
-    def mudar_faceta(self, nome: str, passo: int, episodios) -> None:
-        raise sem_equacao("M-PERS", "mudar_faceta")
 
 
 class ParametrosInatos:

@@ -15,6 +15,8 @@
 **A C4, M4** (docs/ESPEC_MEMORIA_AUTOBIOGRAFICA_DIGIBRAIN_MODULAR.md, secao 6.1; `Arbitragem(autobio=True)`): a sonda `sem_memoria` tira
 tambem o termo `lembranca` (e `so_inato`, que tira o aprendido); a sonda nova `sem_lembranca` tira so ele, com `lembranca_decidiu`.
 Mesmo u, nenhuma rng nova. Desligada, as sondas sao as de hoje.
+**A C4, M5** (secao 6.2; `Arbitragem(facetas=True)`, so com a memoria autobiografica): a sonda nova `sem_faceta` tira so o termo `faceta`,
+com `faceta_decidiu`; `so_inato` tira tambem a faceta (e aprendida). Mesmo u, nenhuma rng nova.
 **A escolha segurada** (a C3, docs/ESPEC_REDECIDIR_EVENTO_DIGIBRAIN_MODULAR.md, secao 2; so com a subchave `redecidir_evento`): sem evento,
 o M-ADAPT passa o candidato (`segurar`, a chave da escolha anterior); com ele na lista e peso positivo, o M-ARB o escolhe sem sorteio e sem
 chamar a rng, e, como no reflexo, nenhuma sonda decide. Fora da lista ou com peso 0 (RE-2), o sorteio de hoje, e o registro marca `fora`."""
@@ -46,7 +48,7 @@ def sortear_inteiro(pesos: list[int], u) -> int:
 class Arbitragem:
     """o M-ARB (docstring do modulo)"""
 
-    def __init__(self, inatos: ConfigDigibrainInatos | None = None, autobio: bool = False) -> None:
+    def __init__(self, inatos: ConfigDigibrainInatos | None = None, autobio: bool = False, facetas: bool = False) -> None:
         self.p = inatos or CONFIG_DIGIBRAIN_INATOS
         self.sondas = SONDAS
         self.decidiu = DECIDIU
@@ -54,6 +56,9 @@ class Arbitragem:
             self.sondas = {**{n: t + ("lembranca",) if n in ("sem_memoria", "so_inato") else t for n, t in SONDAS.items()},
                            "sem_lembranca": ("lembranca",)}
             self.decidiu = {**DECIDIU, "sem_lembranca": "lembranca_decidiu"}
+        if facetas:                                   # a C4, M5 (6.2): sem_faceta tira so o termo F; so_inato tira tambem (e aprendido)
+            self.sondas = {**{n: t + ("faceta",) if n == "so_inato" else t for n, t in self.sondas.items()}, "sem_faceta": ("faceta",)}
+            self.decidiu = {**self.decidiu, "sem_faceta": "faceta_decidiu"}
         self.S = self.p.escala
         self.sorteios = 0
         self.reflexos = 0

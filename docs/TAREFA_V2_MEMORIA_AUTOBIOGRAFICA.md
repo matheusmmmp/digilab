@@ -218,3 +218,26 @@ Ho et al. usam de 10 a 50 execuções por condição, sem teste de hipótese: é
   hoje; nas cinco sementes, o replay bit a bit e a coerência do registro.
 - **O que não houve:** nenhuma vida de pesquisa nem faixa (só 101…505); nenhum gabarito regravado; `engine.py` e a web não mudam; a M5 em
   diante e o `controle_mem` ficam de fora.
+
+## 14. M5: as facetas adquiridas (2026-11-01, worker, Claude Code, Sonnet 5.5, worktree `v3-memoria-m5`)
+
+- **A subchave** `ConfigDigibrain.facetas_mem` (desligada por padrão; `ValueError` sem a `memoria_autobio`, MA-6) e o módulo novo
+  `digilab/digibrain/pers.py` (o M-PERS; o `Personalidade` de `ganchos.py` passou para lá e é reexportado). Os dois campos da seção 8,
+  `eta_faceta` (S/64) e `teto_faceta` (S/4), DECIDIDOS, SEM FONTE, no módulo `pers` do `CAMPOS_POR_MODULO`. Nenhum número novo.
+- **As três facetas** (MA-5): `cautela_comida`, `apego_dono` e `ousadia_longe`, inteiros em [−S/4, S/4], 0 no nascimento. Na
+  consolidação diária (`DigiBrain._mudar_facetas`, logo depois do `consolidar`), cada uma anda um passo `eta_faceta` no sentido da soma dos
+  σ da evidência (`Memoria.evidencia_faceta`: os episódios da duradoura e da central; zero se a soma for 0). Cada mudança guarda a
+  faceta, o dia, o passo, o antes e o depois e os ids dos episódios; o motivo ganha `faceta` (os valores e as mudanças, com a `soma`).
+- **O termo F** (`Impulso.unidades`, termo `faceta`, só com a subchave): `−mul(f, S)` no `comer` de classe sem episódio positivo
+  (`Memoria.classes_com_positivo`), `mul(f, S)` no `chamar_atencao`, `mul(f, S)` no `explorar` com alvo fora da vista (o lugar lembrado e o
+  cheiro). A sonda `sem_faceta` (`faceta_decidiu`) tira só o F; `so_inato` tira também. Mesmo u, nenhuma rng nova.
+- **O temperamento inato não muda** (DM-6, ME-7, EG-5): o `pers.py` não importa a config nem o registro de parâmetros inatos (conferido
+  pela AST); recebe o passo e o teto como inteiros. Na vida, o registro inato do fim é igual ao do nascimento, módulo a módulo.
+- **Os testes** (`tests/test_memoria_autobio.py`, T-ME-5): a subchave e a recusa sem a `memoria_autobio`; os campos decididos; `mudar_faceta`
+  desligada falha alto e o estado/motivo desligados sem campo novo; cada mudança aponta os ids; o passo e o teto; a evidência e o sentido de
+  cada faceta; só os consolidados contam e um dia ruim anda um passo; o termo F; a sonda; a AST; nas cinco sementes, o replay bit a bit com
+  as duas chaves, a coerência das mudanças com os episódios consolidados e o temperamento igual; o dono da chave; os testes de mecanismo de hoje
+  com as duas chaves ligadas. Desligada, todos os gabaritos saem byte a byte (nenhum regravado).
+- **O desvio:** `docs/registro/2026-11.md`, a seção da M5 (o sentido da cautela, o alvo "fora da vista", o `cheiro`, a evidência).
+- **O que não houve:** nenhuma vida de pesquisa nem faixa (só 101…505); `engine.py`, o genoma e a web não mudam; a M6 (a fala) e o
+  `controle_mem` ficam de fora.

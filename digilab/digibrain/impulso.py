@@ -96,9 +96,12 @@ class Impulso:
         return out
 
     def unidades(self, sens: dict, afeto: dict, contexto: dict, plast, memoria: dict | None, drives: tuple,
-                 lembranca: tuple | None = None) -> tuple[list[dict], list]:
+                 lembranca: tuple | None = None, facetas: tuple | None = None) -> tuple[list[dict], list]:
         """as unidades da decisao com os termos e a ativacao, e o z. `lembranca` = (o termo da M4, o `casa` do M-MEM) ou None; so com a
-        `memoria_autobio` as unidades ganham o termo `lembranca` (L nas que casam com o episodio lembrado, 0 nas outras)"""
+        `memoria_autobio` as unidades ganham o termo `lembranca` (L nas que casam com o episodio lembrado, 0 nas outras). `facetas` = (os
+        valores das tres facetas, as classes de comida que ja tem episodio positivo); so com a `facetas_mem` as unidades ganham o termo
+        `faceta` (6.2: cautela no `comer` de classe sem episodio positivo, apego no `chamar_atencao`, ousadia no `explorar` com alvo fora
+        da vista: o lugar lembrado e o cheiro)"""
         S, a_max = self.S, self.p.a_max
         z = self.contexto_z(sens, afeto, contexto)
         inato_b = {b: sum(mul(w, zj, S) for w, zj in zip(self.w0[b], z) if w) for b in COMPORTAMENTOS_DIGIBRAIN}
@@ -108,7 +111,7 @@ class Impulso:
         out = []
         for u in self.alvos(sens, memoria):
             b, o = u["acao"], u["objeto"]
-            termos = dict.fromkeys(TERMOS + (("lembranca",) if self.cd.memoria_autobio else ()), 0)
+            termos = dict.fromkeys(TERMOS + (("lembranca",) if self.cd.memoria_autobio else ()) + (("faceta",) if self.cd.facetas_mem else ()), 0)
             termos["inato"] = inato_b[b] + (self.w0_tipo.get(b, {}).get(u["tipo"], 0) if u["tipo"] is not None else 0)
             if o is not None:
                 termos["prox"] = mul(self.w0_prox.get(b, 0), o["prox"], S)
@@ -124,6 +127,14 @@ class Impulso:
             termos["persistencia"] = persist.get(u["chave"], 0)
             if lembranca is not None and lembranca[1](lembranca[0], u):
                 termos["lembranca"] = lembranca[0]["L"]
+            if facetas is not None:
+                f, positivas = facetas
+                if b == "comer" and o is not None and o["classe"] not in positivas:
+                    termos["faceta"] = -mul(f["cautela_comida"], S, S)
+                elif b == "chamar_atencao":
+                    termos["faceta"] = mul(f["apego_dono"], S, S)
+                elif b == "explorar" and u["tipo"] in ("ponto", "cheiro"):
+                    termos["faceta"] = mul(f["ousadia_longe"], S, S)
             soma = sum(termos.values())
             out.append({**u, "termos": termos, "soma": soma, "a": phi(soma, a_max)})
         return out, z

@@ -369,7 +369,22 @@ class Memoria:
         return {("explorar", "ponto", tuple(recuperacao["ponto"])): recuperacao["M"]}
 
     def evidencia_faceta(self, nome: str) -> list:
-        return []
+        """a evidencia de uma faceta (M5, 6.2): [[id, sigma], ...] dos episodios consolidados (a duradoura e a central), por id. Vazia sem a
+        subchave da memoria autobiografica. `cautela_comida`: os de `comer`; `apego_dono`: os com algum gesto do dono; `ousadia_longe`: os
+        de `explorar` (a visita vazia entra aqui)"""
+        if not self.autobio:
+            return []
+        quais = {"cautela_comida": lambda e: e["acao"][0] == "comer", "apego_dono": lambda e: bool(e["dono"]),
+                 "ousadia_longe": lambda e: e["acao"][0] == "explorar"}
+        if nome not in quais:
+            raise KeyError(f"M-MEM: faceta {nome!r}")
+        return [[e["id"], e["sigma"]] for e in sorted(self.duradoura + self.central, key=lambda e: e["id"]) if quais[nome](e)]
+
+    def classes_com_positivo(self) -> set:
+        """as classes de comida que ja tem um episodio de `comer` com sigma positivo, nas tres memorias (o termo da cautela, 6.2)"""
+        if not self.autobio:
+            raise RuntimeError("M-MEM: as classes com episodio positivo so com a subchave da memoria autobiografica")
+        return {e["classe"] for e in self._guardados() if e["acao"][0] == "comer" and e["sigma"] > 0}
 
     def estado_interno(self) -> dict:
         out = {"episodios": [dict(e) for e in self.episodios], "proximo_id": self.proximo_id, "saidas": list(self.saidas),
