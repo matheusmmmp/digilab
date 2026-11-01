@@ -41,11 +41,12 @@ function blocosDoTema(t: TemaIlha): Bloco[] {
       [2, TOPO_ILHA, -1, 1.1, 0.7, 1.1, 0x5fb847],
       ...([[-1, 1, 0xffd84a], [1, -2, 0xffffff], [2, 2, 0xffd84a], [-2, 1, 0xff9fc4], [0, 2, 0xffffff]] as const)
         .map(([x, z, c]): Bloco => [x, TOPO_ILHA, z, 0.35, 0.35, 0.35, c])];
-    case "torre": return [...corpo(0xa7b0bb, 0x8a8f98, 0x6f747c),
-      [-0.5, TOPO_ILHA, -0.5, 2.2, 2.6, 2.2, 0xc4ccd6],
-      ...([[-1.3, -1.3], [0.3, -1.3], [-1.3, 0.3], [0.3, 0.3]] as const).map(([x, z]): Bloco => [x, TOPO_ILHA + 2.6, z, 0.6, 0.6, 0.6, 0xc4ccd6]),
+    /* a pedra e quente (arenito) e o tampo tem musgo: a torre cinza-azulada se confundia com a ilha trancada */
+    case "torre": return [...corpo(0x8fb86a, 0xb59a78, 0x8a7560),
+      [-0.5, TOPO_ILHA, -0.5, 2.2, 2.6, 2.2, 0xd8c4a0],
+      ...([[-1.3, -1.3], [0.3, -1.3], [-1.3, 0.3], [0.3, 0.3]] as const).map(([x, z]): Bloco => [x, TOPO_ILHA + 2.6, z, 0.6, 0.6, 0.6, 0xd8c4a0]),
       [-0.5, TOPO_ILHA, 0.62, 0.7, 1, 0.08, 0x5b4636], [0.62, TOPO_ILHA + 1.5, -0.5, 0.08, 0.6, 0.5, 0x3d4a5c],
-      [2, TOPO_ILHA, 2, 0.9, 0.5, 0.9, 0x9aa2ad]];
+      [2, TOPO_ILHA, 2, 0.9, 0.5, 0.9, 0xa8927a]];
     case "floresta": return [...corpo(0x3e9b4a, 0x7a5232, 0x5f4a3a), ...arvore(-2, -1, 0x2f8a3a, 1.2), ...arvore(1, -2, 0x37964a),
       ...arvore(2, 1, 0x2f8a3a), ...arvore(-1, 2, 0x37964a, 0.8)];
     case "cidadela": return [...corpo(0x5d5876, 0x4a3f55, 0x3e3a48),
