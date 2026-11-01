@@ -7,7 +7,7 @@ faixa pedida, nenhum plano de análise.
 **Quem e quando:** Claude Code, Opus 5.5, em 2026-11-01, na worktree `v3-memoria-espec` (de `origin/main` `687841f`), a pedido do Gerente
 da V3.
 
-**O status:** PROPOSTA. A subchave, os campos e todo número novo são PROPOSTOS e SEM FONTE salvo onde a linha diz. As ME-1 a ME-7 e as
+**O status:** APROVADA pelo Matheus em 2026-11-01, com as MA-1 a MA-8 (seção 11) e os valores da seção 8 pela recomendação. A subchave, os campos e os números seguem SEM FONTE salvo onde a linha diz. As ME-1 a ME-7 e as
 C4-E1 a C4-E3 são DECIDIDAS (o Matheus, 2026-10-30). As leituras que esta espec teve de fazer sobre o que elas não fixam estão na seção 11
 (MA-1 a MA-8), cada uma com a recomendação e o custo de errar; o código, quando vier, segue a decisão do Matheus sobre cada uma.
 
@@ -305,7 +305,7 @@ P2, a persistência, o reflexo e os inatos do #428; o temperamento inato e o gen
 orquestrador. **A web** fica fora até a M6 (a pesquisa de cérebro atrás de chave desligada fica no Python; o modular ainda não está no
 jogo); a M6 é a exceção, pela lacuna no `web/app/src/falaLivre.ts`.
 
-## 8. Os parâmetros (todos PROPOSTOS, SEM FONTE; nenhuma calibração por nó)
+## 8. Os parâmetros (DECIDIDOS pelo Matheus em 2026-11-01, pela recomendação; SEM FONTE; nenhuma calibração por nó)
 
 | campo | valor | o que é | por que este |
 |---|---|---|---|
@@ -355,18 +355,18 @@ se houver, é do plano e com sementes próprias, e a validação roda uma vez (C
 
 ## 11. O que esta espec leu além das ME (para o Matheus)
 
-As ME-1 a ME-7 e as C4-E1 a C4-E3 não fixam estes oito pontos. **Todos PROPOSTOS, SEM FONTE.**
+As ME-1 a ME-7 e as C4-E1 a C4-E3 não fixam estes oito pontos. **Todos DECIDIDOS pelo Matheus em 2026-11-01, pela recomendação; SEM FONTE.**
 
 | # | a leitura | a recomendação | o custo de errar |
 |---|---|---|---|
-| **MA-1** | o tamanho do episódio negativo da visita vazia | **σ = min(0, r da ida):** o custo medido no corpo, a leitura de Ho | um negativo fixo (−S/4, por exemplo): um número sem fonte que não é a variação do corpo; σ igual ao r de uma decisão só: o custo da ida some |
-| **MA-2** | o valor do lugar | **a soma dos σ dos episódios do lugar,** no lugar de "o mais recente manda" | manter a recência: a C4-E1 não muda nenhuma escolha (valor 0 e negativo dão o mesmo "fora"), e a validação mede um nulo por construção |
-| **MA-3** | o que é o braço "REL sem negativos" (C4-E2) | **σ < 0 gravado como 0:** os mesmos episódios, só sem o sinal | não codificar os negativos: muda a capacidade e as repetições junto com o sinal, e o controle mede duas coisas |
-| **MA-4** | o empate da lembrança (a tarefa deixa "ordem fixa ou rng própria") | **ordem fixa:** o maior \|σ\|, depois o mais recente | uma rng própria: mais um fluxo para o G1 e para a separação das rngs, sem pergunta que o peça |
-| **MA-5** | quais facetas (ME-4: "poucas, nomeadas") | **três: `cautela_comida`, `apego_dono` e `ousadia_longe`,** cada uma ligada a episódios que o mundo de hoje produz | muitas: o pet "muda de personalidade" e a rastreabilidade se perde; uma só: a M5 não mostra nada além da comida |
-| **MA-6** | as facetas atrás de subchave própria | **sim, `facetas_mem`:** a validação separa o que a lembrança muda do que a faceta muda | na mesma chave: um efeito da faceta aparece como efeito da recuperação |
-| **MA-7** | a C4 com a C2 ou a C3 | **recusar com erro alto** (a decisão do Matheus de seguir sem combinar) e exigir as subchaves do cheiro (o M3\* do conserto) | aceitar: um braço sem plano roda; recusar demais só pede tirar a linha quando houver um braço novo com plano |
-| **MA-8** | a M6 no jogo | **a M6 corrige as três lacunas nos dois lados,** com paridade, porque a do verificador está também em `web/app/src/falaLivre.ts` | só no Python: o jogo segue aceitando "porque lembrei" sem verdade, e a fala do A v11 continua com a lacuna |
+| **MA-1** | o tamanho do episódio negativo da visita vazia(DECIDIDA) | **σ = min(0, r da ida):** o custo medido no corpo, a leitura de Ho | um negativo fixo (−S/4, por exemplo): um número sem fonte que não é a variação do corpo; σ igual ao r de uma decisão só: o custo da ida some |
+| **MA-2** | o valor do lugar(DECIDIDA) | **a soma dos σ dos episódios do lugar,** no lugar de "o mais recente manda" | manter a recência: a C4-E1 não muda nenhuma escolha (valor 0 e negativo dão o mesmo "fora"), e a validação mede um nulo por construção |
+| **MA-3** | o que é o braço "REL sem negativos" (C4-E2)(DECIDIDA) | **σ < 0 gravado como 0:** os mesmos episódios, só sem o sinal | não codificar os negativos: muda a capacidade e as repetições junto com o sinal, e o controle mede duas coisas |
+| **MA-4** | o empate da lembrança (a tarefa deixa "ordem fixa ou rng própria")(DECIDIDA) | **ordem fixa:** o maior \|σ\|, depois o mais recente | uma rng própria: mais um fluxo para o G1 e para a separação das rngs, sem pergunta que o peça |
+| **MA-5** | quais facetas (ME-4: "poucas, nomeadas")(DECIDIDA) | **três: `cautela_comida`, `apego_dono` e `ousadia_longe`,** cada uma ligada a episódios que o mundo de hoje produz | muitas: o pet "muda de personalidade" e a rastreabilidade se perde; uma só: a M5 não mostra nada além da comida |
+| **MA-6** | as facetas atrás de subchave própria(DECIDIDA) | **sim, `facetas_mem`:** a validação separa o que a lembrança muda do que a faceta muda | na mesma chave: um efeito da faceta aparece como efeito da recuperação |
+| **MA-7** | a C4 com a C2 ou a C3(DECIDIDA) | **recusar com erro alto** (a decisão do Matheus de seguir sem combinar) e exigir as subchaves do cheiro (o M3\* do conserto) | aceitar: um braço sem plano roda; recusar demais só pede tirar a linha quando houver um braço novo com plano |
+| **MA-8** | a M6 no jogo(DECIDIDA) | **a M6 corrige as três lacunas nos dois lados,** com paridade, porque a do verificador está também em `web/app/src/falaLivre.ts` | só no Python: o jogo segue aceitando "porque lembrei" sem verdade, e a fala do A v11 continua com a lacuna |
 
 **A ordem das etapas** (a tarefa, seção 5: um PR por etapa): o gabarito antes; M0 e M1 juntas (o episódio e a codificação, sem efeito
 na escolha); M2 e M3; M4 (a primeira que muda a escolha); M5; M6; e o M7 em cada PR. A validação causal (a seção 4 da tarefa) vem
