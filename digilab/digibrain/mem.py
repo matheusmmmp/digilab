@@ -50,7 +50,13 @@ Sem rng. A interface que a memoria consolidada herda (secao 9): `codificar`, `re
   - **a consolidacao** (M3, `consolidar`): recente -> duradoura -> central, uma vez por dia do pet, na primeira decisao do dia novo; os
     passos e o registro estao em `consolidar`. A repeticao (`rep`) soma ao codificar um episodio de mesma categoria e mesmo lugar; o peso e
     `min(S, mul(|sigma|, S + rep x S/2 + rec x S/4))`.
-Desligada, nada disso existe (o estado interno e o de hoje). Sem rng."""
+Desligada, nada disso existe (o estado interno e o de hoje). Sem rng.
+
+**Os bracos** (`controle_mem`, espec 7.2; so com a `memoria_autobio`; "rel" e o comportamento de hoje, byte a byte): "sem" nao le a
+lembranca nem o lugar (o episodio e codificado e consolidado); "rec" lembra o mais recente das tres memorias, sem olhar o contexto, e o
+lugar e o do consumo bom mais recente; "emb" lembra um episodio sorteado entre os guardados por uma rng propria (`derivar_semente(semente,
+"mem_emb")`, nunca a de politica), e o lugar e o do sorteado, se for consumo bom; "rel_sem_neg" e o "rel" com todo sigma < 0 gravado
+como 0 (MA-3; a categoria, a repeticao e a capacidade seguem o sigma verdadeiro). A rng so existe no "emb"."""
 from __future__ import annotations
 
 from ..config import CONFIG_DIGIBRAIN_INATOS, TICKS_POR_DIA, TIPOS_ALVO_DIGIBRAIN, ConfigDigibrainInatos, ConfigMundo
@@ -115,7 +121,8 @@ def episodio_autobio(sens: dict, pm1, recs: tuple, l0: list, l1: list, afeto_ant
 class Memoria:
     """o M-MEM (docstring do modulo)"""
 
-    def __init__(self, cfg_mundo: ConfigMundo, inatos: ConfigDigibrainInatos | None = None, autobio: bool = False) -> None:
+    def __init__(self, cfg_mundo: ConfigMundo, inatos: ConfigDigibrainInatos | None = None, autobio: bool = False,
+                 controle: str = "rel", rng_emb=None) -> None:
         self.p = inatos or CONFIG_DIGIBRAIN_INATOS
         self.S = self.p.escala
         self.sub = cfg_mundo.sub
@@ -124,6 +131,15 @@ class Memoria:
         self.saidas: list[dict] = []          # os episodios que sairam por capacidade (id, |r|): o registro da PE-16
         self.recuperacoes = 0
         self.autobio = autobio
+        self.controle = controle
+        if controle != "rel" and not autobio:
+            raise ValueError("M-MEM: o controle so com a memoria_autobio")
+        if controle == "emb":                         # a rng propria do braco EMB; nenhum outro braco tem rng
+            if rng_emb is None:
+                raise ValueError("M-MEM: o braco emb pede a rng propria, que o M-ADAPT monta da semente da vida e do rotulo mem_emb")
+            self._rng_emb = rng_emb
+            self.sorteios = 0
+            self._sorteado: dict | None = None
         if autobio:                                   # a C4 (desligada, nenhum campo novo)
             self.recente: list[dict] = []
             self.duradoura: list[dict] = []
@@ -173,6 +189,8 @@ class Memoria:
             raise ValueError(f"M-MEM: episodio {ep!r}")
         if ep["origem"] == "visita" and (ep["sigma"] > 0 or ep["classe"] != "nao_havia"):
             raise ValueError("M-MEM: a visita sem comida tem sigma <= 0 e a classe nao_havia")
+        if self.controle == "rel_sem_neg" and ep["sigma"] < 0:   # MA-3: os mesmos episodios, so sem o sinal
+            ep = {**ep, "sigma": 0}
         lugar = list(self.lugar_de(*ep["ponto"]))
         for e in self._guardados():                   # a repeticao: a mesma categoria no mesmo lugar (4.3)
             if e["categoria"] == ep["categoria"] and e["lugar"] == lugar:
@@ -201,6 +219,8 @@ class Memoria:
         em `rec` do lembrado"""
         if not self.autobio:
             raise RuntimeError("M-MEM: a lembranca so com a memoria_autobio")
+        if self.controle in ("sem", "rec", "emb"):
+            return self._lembrar_controle()
         S, p = self.S, self.p
         x, y = sens["pos"]
         vista = {o["classe"] for o in sens["objetos"]}
@@ -232,6 +252,27 @@ class Memoria:
         self.lembrancas += 1
         return {"recuperado": melhor["id"], "sim": sim, "memoria": melhor["memoria"], "sigma": melhor["sigma"]}
 
+    def _lembrar_controle(self) -> dict:
+        """a lembranca dos bracos "sem", "rec" e "emb" (7.2), sem olhar o contexto (`sim` = 0). "sem" nao lembra nada e nao soma `rec`;
+        "rec" volta o mais recente das tres memorias (a decisao, depois o id); "emb" sorteia um dos guardados na ordem recente, duradoura,
+        central, pela rng propria (sem guardado, nenhum sorteio). O lembrado soma 1 em `rec`, como no "rel" """
+        guardados = self._guardados()
+        if self.controle == "emb":
+            self._sorteado = None
+            if guardados:
+                self._sorteado = guardados[self._rng_emb.randrange(len(guardados))]
+                self.sorteios += 1
+            lembrado = self._sorteado
+        elif self.controle == "rec":
+            lembrado = max(guardados, key=lambda e: (e["decisao"], e["id"]), default=None)
+        else:
+            lembrado = None
+        if lembrado is None:
+            return {"recuperado": None, "sim": 0, "memoria": None, "sigma": 0}
+        lembrado["rec"] += 1
+        self.lembrancas += 1
+        return {"recuperado": lembrado["id"], "sim": 0, "memoria": lembrado["memoria"], "sigma": lembrado["sigma"]}
+
     def termo_lembranca(self, lembranca: dict) -> dict | None:
         """o termo da lembranca (M4, 6.1): L = mul(w_lem, sigma) do episodio lembrado e a quem ele se aplica, ou None sem lembranca. Sem rng
         e sem mudar o estado (nao soma `rec`: quem somou foi o `lembrar`)"""
@@ -257,7 +298,19 @@ class Memoria:
         return unidade["tipo"] != "ponto" or self.lugar_de(*unidade["chave"][2]) == termo["lugar"]
 
     def valores_soma(self) -> dict:
-        """lugar -> (a soma dos sigma, cortada em [-S, S], o episodio mais recente que a compoe): so consumo de comida boa e visita (MA-2)"""
+        """lugar -> (a soma dos sigma, cortada em [-S, S], o episodio mais recente que a compoe): so consumo de comida boa e visita (MA-2).
+        Nos bracos de 7.2: "sem" nao tem lugar; "rec" tem o do consumo bom mais recente; "emb" tem o do sorteado da decisao, se for
+        consumo bom (o valor e o sigma do episodio)"""
+        if self.controle == "sem":
+            return {}
+        if self.controle in ("rec", "emb"):
+            def bom(e: dict) -> bool:
+                return e["origem"] == "consumo" and e["classe"] in COMIDAS_BOAS
+            e = self._sorteado if self.controle == "emb" else max(filter(bom, self._guardados()), key=lambda e: (e["decisao"], e["id"]),
+                                                                  default=None)
+            if e is None or not bom(e):
+                return {}
+            return {tuple(e["lugar"]): (max(-self.S, min(self.S, e["sigma"])), e)}
         soma: dict = {}
         for e in self._guardados():
             if e["origem"] == "visita" or (e["origem"] == "consumo" and e["classe"] in COMIDAS_BOAS):
@@ -395,4 +448,8 @@ class Memoria:
                               "duradoura": [dict(e) for e in self.duradoura], "central": [dict(e) for e in self.central],
                               "consolidacoes": [dict(c) for c in self.consolidacoes], "lembrancas": self.lembrancas,
                               "dia_consolidado": self.dia_consolidado}
+            if self.controle != "rel":                # o "rel" e o de hoje, sem campo novo
+                out["autobio"]["controle"] = {"braco": self.controle}
+                if self.controle == "emb":
+                    out["autobio"]["controle"]["sorteios"] = self.sorteios
         return out
