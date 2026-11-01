@@ -3,7 +3,7 @@
 import { describe, expect, test } from "vitest";
 import { CHAVE, textoSave, type Armazenamento } from "../src/save.ts";
 import { TICK_INICIAL, VERSAO_PET } from "../motor/index.ts";
-import { gravarPendente, iniciarJogo, jogoAtual, mudarMotor, novoPet } from "../src/jogo.ts";
+import { QUADROS_CHOCANDO, balancoOvo, gravarPendente, iniciarJogo, jogoAtual, mudarMotor, novoPet } from "../src/jogo.ts";
 
 const armaz = (dados: Record<string, string> = {}) => {
   let escritas = 0;
@@ -49,15 +49,23 @@ describe("jogo", () => {
     gravarPendente();                               /* nada pendente: nao grava de novo */
     expect(a.escritas()).toBe(n0 + 2);
   });
-  test("ovo novo: troca o pet, grava e choca por 16 quadros; o registro comeca com as chaves do produto (src/produto.ts)", () => {
+  test("ovo novo: troca o pet, grava e choca por QUADROS_CHOCANDO (40) quadros; o registro comeca com as chaves do produto (src/produto.ts)", () => {
     const a = armaz();
     iniciarJogo(a);
     novoPet();
     const j = jogoAtual();
-    expect(j.nascendo).toBe(16);
+    expect(QUADROS_CHOCANDO).toBe(40);
+    expect(j.nascendo).toBe(QUADROS_CHOCANDO);
     const log = [[TICK_INICIAL, "p", { chamadoPelaFome: true, decisaoNaComida: true, chamadosPeloCorpo: true }]];
     expect(j.motor.log).toEqual(log);
     expect(j.motor.produto).toEqual({ chamadoPelaFome: true, decisaoNaComida: true, chamadosPeloCorpo: true });
     expect(JSON.parse(a.dados[CHAVE])).toEqual({ semente: j.motor.semente, log, versao: VERSAO_PET });
+  });
+  test("o ovo fica parado no comeco, treme em pulsos no meio e mais forte no fim; chocado, nao balanca", () => {
+    const b = (n: number) => balancoOvo(n);
+    for (let n = QUADROS_CHOCANDO; n > QUADROS_CHOCANDO - 10; n--) expect(b(n)).toBe(0);
+    expect([...Array(28).keys()].map(i => b(28 - i)).some(x => x !== 0)).toBe(true);
+    expect(Math.abs(b(3))).toBe(2);
+    expect(b(0)).toBe(0);
   });
 });

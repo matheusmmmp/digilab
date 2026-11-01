@@ -8,6 +8,7 @@ import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { S, gradeDe, imagemGrade, paleta } from "../../grades.ts";
 import { useJogo } from "../../jogo.ts";
 import { CENA } from "./cenaEstado.ts";
+import { alturaSono } from "./sono.ts";
 import { Seguidor, dentroDoMapa, janelaEm, ninhoDe, type Janela } from "./vistaMundo.ts";
 
 /** a faixa de ceu no alto da caixa (fracao da altura): so vista */
@@ -44,7 +45,10 @@ export function MundoReserva() {
     const grade = nascendo > 0 ? S.ovo : S[gradeDe(m.estagioAtual)];
     return imagemGrade(grade, Math.max(1, Math.min(8, Math.floor((H * 0.2) / grade.length), Math.floor((W * 0.3) / grade[0].length))), paleta(corDominante(m.tracos)));
   })();
-  const [ppx, ppy] = paraCaixa(g, pos[0], pos[1]), ret = { x: Math.round(ppx - sprite.w / 2), y: Math.round(ppy - sprite.h), w: sprite.w, h: sprite.h };
+  /* dormindo (sono.ts): achatado e respirando a cada passo de 120 ms, num tom apagado, com o pe no chao */
+  const dorme = nascendo === 0 && m.acao === "dormir", alt = dorme ? alturaSono(performance.now(), matchMedia("(prefers-reduced-motion: reduce)").matches) : 1;
+  const estiloSono = { transform: `scale(${1 + (1 - alt) / 2}, ${alt})`, transformOrigin: "50% 100%", filter: "brightness(.85) saturate(.85)" };
+  const [ppx, ppy] = paraCaixa(g, pos[0], pos[1]), ret ={ x: Math.round(ppx - sprite.w / 2), y: Math.round(ppy - sprite.h), w: sprite.w, h: sprite.h };
   useEffect(() => {
     CENA.modoMundo = true;
     return () => { CENA.modoMundo = false; CENA.ret = null; CENA.mundo = null; };
@@ -87,7 +91,7 @@ export function MundoReserva() {
         })}
         {ponto(...mu.bolaEm(m.e.tick), "cena-mundo-bola")}
         <span className="cena-mundo-sombra" style={{ left: ppx, top: ppy }} />
-        <img className="dl-pix cena-mundo-pet" src={sprite.url} width={sprite.w} height={sprite.h} alt="" style={{ left: ret.x, top: ret.y }} />
+        <img className="dl-pix cena-mundo-pet" src={sprite.url} width={sprite.w} height={sprite.h} alt="" style={{ left: ret.x, top: ret.y, ...(dorme ? estiloSono : {}) }} />
       </>}
     </div>
   );

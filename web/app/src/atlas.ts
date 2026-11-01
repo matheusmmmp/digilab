@@ -208,6 +208,8 @@ function recorte(c: HTMLCanvasElement, [x, y, w, h]: [number, number, number, nu
   g.drawImage(c, x * escala, y * escala, w * escala, h * escala, 0, 0, w * escala, h * escala);
   return { url: r.toDataURL(), w: w * escala, h: h * escala };
 }
+/** o primeiro quadro recortado so no que ele ocupa (sem a sobra da caixa comum dos clipes), para retratos pequenos; uma peca sai inteira */
+export const recorteAtlas = (a: AtlasOk, nome: string): { url: string; w: number; h: number } => imagemAtlas(a, nome, 1, { recortar: true });
 /** estado do atlas fora de componente (o palco desenha num intervalo proprio) */
 export const atlasAtual = (): EstadoAtlas => estado;
 /** escala do sprite em pixels do aparelho: 1x em pixels CSS quando o aparelho tem densidade inteira */
