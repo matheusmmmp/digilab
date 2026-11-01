@@ -1,6 +1,6 @@
 # TAREFA V3 — LUTA_LAYOUT: a luta dentro do layout habitat, a B3 (2026-11-01)
 
-Coordenador: Gerente da V3 (Claude Code). Worker: Claude Code, Sonnet 5.5 (a etapa de papel). Worktree e branch: `v3-luta-layout`. Status: EM ANDAMENTO (etapa 1, só papel: tarefa e pranchas; o código espera o ok do Matheus).
+Coordenador: Gerente da V3 (Claude Code). Worker: Claude Code, Sonnet 5.5 (a etapa de papel). Worktree e branch: `v3-luta-layout`. Status: etapa 1 (papel) ENTREGUE e aprovada pelo Matheus em 2026-11-01 (pranchas e B3-1 a B3-5); a etapa 2 (código) está liberada e ainda não começou.
 
 Categoria: implementacao. Origem: Claude Code, 2026-11-01: B3 do `docs/PLANO_V3.md` (seção 4), pedida pelo Gerente da V3 depois da B2 (#504) e da L2, com a regra de o Matheus aprovar as pranchas antes do código.
 
@@ -12,7 +12,7 @@ Sem hipótese de pesquisa: é trilha B (batalha) com a trilha L (layout). **A lu
 
 - A L1 (layout habitat, HUD) e a L2 (as peles Vidro e Militar) na `main`: ambas estão (`f69befa`).
 - A B2 (#504): a luta que a tela mostra é a da v14; a B3 não muda fator, relógio, lista nem regra.
-- O ok do Matheus nas pranchas (`docs/pranchas/b3/`) e nas decisões B3-1 a B3-5 (seção 8), antes de qualquer código.
+- O ok do Matheus nas pranchas (`docs/pranchas/b3/`) e nas decisões B3-1 a B3-5 (seção 8): **dado em 2026-11-01, "Aprovo todas"**.
 
 ## 3. Mudança mínima
 
@@ -107,10 +107,10 @@ Cada uma com a recomendação e o custo de errar. Nenhuma é número de jogo.
 
 | # | decisão | recomendação | custo de errar | estado |
 |---|---|---|---|---|
-| **B3-1** | a navegação durante a luta: **sem trilho nem barra** (hoje é assim, `body.tela-cheia`) ou com o trilho do desktop e a barra do celular visíveis sobre a cena | **sem.** A luta é um momento fechado: Desistir é o único jeito de sair, com confirmação, e o Voltar do navegador já vira esse pedido | com o trilho, sair por outro destino no meio da luta vira um segundo caminho de desistência (precisa de confirmação própria) e mexe em `App.tsx` e `Nav.tsx` (arquivos disputados); no celular a barra tira 64 px do palco | PROPOSTA |
-| **B3-2** | o palco: a cena a **tela inteira** atrás do HUD (as pranchas) ou a moldura de hoje, só trocando a pele | **tela inteira.** É o que o habitat faz na tela Pet e dá o palco que o monitor de 1920×950 pede | o mapa do UP é mais largo que alto e é recortado nas bordas (a "cobrir"); a escala inteira dos sprites no chão novo precisa ser refeita e conferida a 1920×950. Se o recorte feio aparecer, a moldura volta com pouco retrabalho | PROPOSTA |
-| **B3-3** | a regra em uso: cartão à direita no desktop e faixa embaixo no celular (as pranchas), ou sempre embaixo, ou recolhível | **à direita no desktop, faixa no celular, sempre visível** (a regra é o que explica a luta; é o ensino do aprendiz) | à direita o cartão cobre ~300 px da cena em 1280 (como a pilha da tela Pet, HUD-2); no celular a faixa tira ~70 px do palco. Recolhível esconderia justamente a leitura que o jogo quer dar | PROPOSTA |
-| **B3-4** | os controles: dock no rodapé central (as pranchas) ou no cabeçalho, como hoje | **dock no rodapé.** Alinha com o dock da tela Pet e leva Desistir para longe do relógio e do HUD | o polegar no celular chega bem ao rodapé; no desktop o mouse anda mais. Desistir à parte, com a cor de perigo e a confirmação, não é toque acidental | PROPOSTA |
-| **B3-5** | os avisos de contexto (série, Liga, carta, Lago, instalação): um cartão compacto sob o relógio (as pranchas), ou em linhas largas sobre a cena como hoje | **cartão compacto no alto ao centro**, com o mesmo texto de hoje; no celular, uma linha sob o HUD | o texto de série e de Liga é longo (duas frases): em 390 px ele vira duas ou três linhas e cobre o céu da cena; se incomodar, vai para dentro do cartão da regra (troca barata) | PROPOSTA |
+| **B3-1** | a navegação durante a luta: **sem trilho nem barra** (hoje é assim, `body.tela-cheia`) ou com o trilho do desktop e a barra do celular visíveis sobre a cena | **sem.** A luta é um momento fechado: Desistir é o único jeito de sair, com confirmação, e o Voltar do navegador já vira esse pedido | com o trilho, sair por outro destino no meio da luta vira um segundo caminho de desistência (precisa de confirmação própria) e mexe em `App.tsx` e `Nav.tsx` (arquivos disputados); no celular a barra tira 64 px do palco | **DECIDIDA, 2026-11-01: pela recomendação** ("Aprovo todas") |
+| **B3-2** | o palco: a cena a **tela inteira** atrás do HUD (as pranchas) ou a moldura de hoje, só trocando a pele | **tela inteira.** É o que o habitat faz na tela Pet e dá o palco que o monitor de 1920×950 pede | o mapa do UP é mais largo que alto e é recortado nas bordas (a "cobrir"); a escala inteira dos sprites no chão novo precisa ser refeita e conferida a 1920×950. Se o recorte feio aparecer, a moldura volta com pouco retrabalho | **DECIDIDA, 2026-11-01: pela recomendação** ("Aprovo todas") |
+| **B3-3** | a regra em uso: cartão à direita no desktop e faixa embaixo no celular (as pranchas), ou sempre embaixo, ou recolhível | **à direita no desktop, faixa no celular, sempre visível** (a regra é o que explica a luta; é o ensino do aprendiz) | à direita o cartão cobre ~300 px da cena em 1280 (como a pilha da tela Pet, HUD-2); no celular a faixa tira ~70 px do palco. Recolhível esconderia justamente a leitura que o jogo quer dar | **DECIDIDA, 2026-11-01: pela recomendação** ("Aprovo todas") |
+| **B3-4** | os controles: dock no rodapé central (as pranchas) ou no cabeçalho, como hoje | **dock no rodapé.** Alinha com o dock da tela Pet e leva Desistir para longe do relógio e do HUD | o polegar no celular chega bem ao rodapé; no desktop o mouse anda mais. Desistir à parte, com a cor de perigo e a confirmação, não é toque acidental | **DECIDIDA, 2026-11-01: pela recomendação** ("Aprovo todas") |
+| **B3-5** | os avisos de contexto (série, Liga, carta, Lago, instalação): um cartão compacto sob o relógio (as pranchas), ou em linhas largas sobre a cena como hoje | **cartão compacto no alto ao centro**, com o mesmo texto de hoje; no celular, uma linha sob o HUD | o texto de série e de Liga é longo (duas frases): em 390 px ele vira duas ou três linhas e cobre o céu da cena; se incomodar, vai para dentro do cartão da regra (troca barata) | **DECIDIDA, 2026-11-01: pela recomendação** ("Aprovo todas") |
 
 Já decididas e que esta tarefa só aplica: as duas peles e o padrão Vidro (TM1 a TM5), o layout habitat e o HUD (HUD-1 a HUD-4), a v14 (B2, CV14-1), as capturas em 1920×950 (D10).
