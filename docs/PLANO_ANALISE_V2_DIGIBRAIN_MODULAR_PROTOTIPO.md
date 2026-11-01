@@ -3607,10 +3607,10 @@ de A9.0 a A9.12 muda. A run roda uma vez; o resultado é registrado como está.
 
 - **O commit de onde sai:** a `main` em `f4fcf67` (o #540), mais a faixa (`ac1f77d`) e este registro, no branch `v3-memoria-run`, com a
   árvore limpa.
-- **O lugar (desvio de lugar, não de método):** a worktree fica em `C:\Trab\digilab\v3-memoria-run`, não em `D:\Trab\digilab`. Em
-  2026-11-01 o disco D: tinha 1,6 GB livres, menos que o checkout da `main` (1,73 GB); o Gerente da V3 mandou criar a worktree no C:. O
-  repositório é o mesmo (`D:\Trab\digilab\v3\.git`); só a árvore de trabalho e os artefatos da run ficam no C:. Nenhuma vida, semente ou
-  medida depende do disco.
+- **O lugar:** a worktree `D:\Trab\digilab\v3-memoria-run`, a do briefing. Em 2026-11-01 o disco D: tinha 1,6 GB livres, menos que o
+  checkout da `main` (1,73 GB), e a worktree foi criada antes em `C:\Trab\digilab\v3-memoria-run` (pelo Gerente da V3), onde rodaram a
+  faixa, este registro e a suíte; o Matheus liberou o D: (69 GB livres), e a worktree voltou ao D: antes da primeira vida, no mesmo branch
+  e no mesmo commit. Nenhuma vida rodou no C:. Nenhuma vida, semente ou medida depende do disco.
 - **A config:** `experiments/configs/v2_memoria_autobio/memoria_autobio.json`, sha256 `784c35fd…deab`; `modo_da_config` devolve
   `memoria_autobio` (a faixa, as bases, o K, os dias, o orçamento, o plano e a marca de aprovação conferidos por ela).
 - **As bases e o K:** 77101, 77202, 77303, 77404 e 77505, K = 40 por base, o prefixo `digibrain_prototipo` (A9.3): **200 unidades.**
@@ -3646,6 +3646,13 @@ de A9.0 a A9.12 muda. A run roda uma vez; o resultado é registrado como está.
   - **a suíte:** roda inteira (`python -m pytest -q`, em 4 fatias de arquivos em paralelo, sem o xdist, como na C3) do commit deste
     registro, antes da run e sem sobrepor; a contagem vai ao RESULTADO e ao PR. Qualquer falha do G1, do G2, do G-MECANISMO, de replay ou
     de paridade para a run;
-  - **a árvore limpa:** o `meta.json` grava o `git_head` e o `git_limpo`; a run sai do commit deste registro, empurrado;
+  - **a suíte, rodada** (do `3ce715b`, na worktree do C:, das 18h09 às 18h40 de 2026-11-01): **44 falhas, 4 227 passaram, 7 puladas.**
+    As falhas: 29 em `tests/test_hooks.py` e 14 em `tests/test_hook_h4.py` (os `.claude/hooks/` fora da `main`, as conhecidas da C3) e 1 em
+    `tests/test_competicao_etapa0.py` (`test_as_vidas_de_hoje_sao_as_do_gabarito`), um `MemoryError` no `json.dumps` do estado com as
+    quatro fatias juntas, não uma diferença do gabarito: rodado sozinho, o arquivo passa (3 de 3). Nenhuma do G1, do G2, do G-MECANISMO, de
+    replay ou de paridade. O commit seguinte (a volta ao D:) só muda este registro; `tests/test_memoria_autobio_run.py` e
+    `tests/test_faixas_r17.py` rodam de novo nele, antes da run (63 passaram);
+  - **a árvore limpa:** o `meta.json` grava o `git_head` e o `git_limpo`; a run sai do commit da volta ao D: (o último deste registro),
+    empurrado;
   - **a máquina (V3-D8):** nenhuma run de pesquisa nem medição do combate rodando antes da suíte; a suíte e a run não se sobrepõem; 4
     processos.
