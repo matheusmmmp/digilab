@@ -1,6 +1,6 @@
 /* O pet em papel da ilha (docs/TAREFA_V3_HABITAT_ILHA_3D.md, regras 7 e 8, H3): o personagem do POC (poc/mapa_ac/heroi.ts) adaptado ao
    pet do motor e ao atlas do jogo (src/atlas.ts), desenhado como um recorte de papel em pe no mundo 3D, no jeito do Paper Mario:
-     - um plano sempre de frente para a camera (paralelo a imagem dela; a camera nao gira), com o pixel art em filtro nearest e uma borda
+     - um plano sempre de frente para a camera (paralelo a imagem dela, tambem com a camera livre girando), com o pixel art em filtro nearest e uma borda
        branca de 1 texel, o "papel" recortado; a sombra semitransparente do export sai (a sombra e a redonda do chao);
      - o tamanho na tela e um numero inteiro de pixels do canvas por texel (a vista o calcula na distancia do foco, regra 8) e o canto do
        papel cai num pixel inteiro;
@@ -119,7 +119,7 @@ export class Papel {
   private t0 = 0;
   private lado = 1;                     // 1 = olhando para a direita na tela; -1 = para a esquerda
   private escalaX = 1;
-  private xAntes: number | null = null;
+  private celAntes: [number, number] | null = null;
   private motorAntes = "";
   private mudouEm = -1e9;
   private readonly v = new THREE.Vector3();
@@ -192,12 +192,13 @@ export class Papel {
     /* dormindo (sono.ts): o quadro parado achatado, respirando, num tom apagado */
     const dorme = !ovo && jogoAtual().motor.acao === "dormir", alt = dorme ? alturaSono(p.agora, p.reduzido) : 1;
     this.papel.material.color.setHex(p.noite ? NOITE_PAPEL : dorme ? SONO.tom : 0xffffff);
-    /* o lado: a posicao desenhada anda em x na tela (a camera nao gira: x do mundo e x da tela) */
-    if (this.xAntes !== null) {
-      const dx = p.cel[0] - this.xAntes;
+    /* o lado: o passo da posicao desenhada ao longo da direita da camera no chao (com a camera livre ela gira; fixa, e o x do mundo) */
+    if (this.celAntes !== null) {
+      const dir = this.v.set(1, 0, 0).applyQuaternion(p.camera.quaternion), h = Math.hypot(dir.x, dir.z) || 1;
+      const dx = ((p.cel[0] - this.celAntes[0]) * dir.x + (p.cel[1] - this.celAntes[1]) * dir.z) / h;
       if (dx > LADO_MIN) this.lado = 1; else if (dx < -LADO_MIN) this.lado = -1;
     }
-    this.xAntes = p.cel[0];
+    this.celAntes = [p.cel[0], p.cel[1]];
     const passo = VIRAR_POR_S * p.dt;
     this.escalaX = p.reduzido || Math.abs(this.lado - this.escalaX) <= passo ? this.lado : this.escalaX + Math.sign(this.lado - this.escalaX) * passo;
     /* o tamanho em pixels inteiros do canvas; o pulinho em texels inteiros; o ovo balanca um texel de lado */

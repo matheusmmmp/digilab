@@ -1,6 +1,7 @@
 /* A cena da ilha (docs/TAREFA_V3_HABITAT_ILHA_3D.md, H2): o three, so desenho, adaptado da vista do POC poc/mapa_ac/cena.ts (uma copia
    adaptada, e nao um import: o G-FRONTEIRA segura que as telas nao importam o POC). Le a grade (grade.ts) e poe na cena:
-     - o mundo curvo: todo material passa por curvar(), que dobra o mundo para baixo pelo quadrado da distancia em z ao foco (o pet),
+     - o mundo curvo: todo material passa por curvar(), que dobra o mundo para baixo pelo quadrado da distancia ao foco (o pet) ao longo
+       da direcao em que a camera olha (z, sem a camera livre),
        a mesma conta de curva.ts (dobrarY), que a vista usa para passar da tela ao mapa e de volta;
      - o terreno: o tampo de cada celula e as paredes dos degraus, com as faixas de estrato e a borda de grama em cima; a grama com o tom
        da regiao do layout;
@@ -16,9 +17,14 @@ import { ALTURA_NIVEL, FORA, NIVEL_AGUA, rng, type Celula, type Ilha, type Objet
 import { MODELOS, type Modelo, type NomeModelo } from "./modelos.ts";
 
 /* ---------- o mundo curvo ---------- */
-/** os uniforms globais: a dobra, o foco (o z do pet), o tempo (s), o vento (1 = ligado, 0 = a qualidade caiu) e a noite (0 a 1) */
-export const CURVA = { uCurva: { value: DOBRA_K }, uFocoZ: { value: 0 }, uTempo: { value: 0 }, uVento: { value: 1 }, uNoite: { value: 0 } };
-const GLSL_CURVA_PARS = "uniform float uCurva;\nuniform float uFocoZ;\nuniform float uTempo;\nuniform float uVento;\nuniform float uNoite;\n";
+/** os uniforms globais: a dobra, o foco (o pet) e a direcao da dobra no chao (a da camera; z sem a camera livre), o tempo (s), o vento
+    (1 = ligado, 0 = a qualidade caiu) e a noite (0 a 1) */
+export const CURVA = {
+  uCurva: { value: DOBRA_K }, uFocoX: { value: 0 }, uFocoZ: { value: 0 }, uDirX: { value: 0 }, uDirZ: { value: 1 },
+  uTempo: { value: 0 }, uVento: { value: 1 }, uNoite: { value: 0 },
+};
+const GLSL_CURVA_PARS = "uniform float uCurva;\nuniform float uFocoX;\nuniform float uFocoZ;\nuniform float uDirX;\nuniform float uDirZ;\n"
+  + "uniform float uTempo;\nuniform float uVento;\nuniform float uNoite;\n";
 /* o lugar do project_vertex do three, com a dobra entre o modelo e a vista (curva.ts, dobrarY, faz a mesma conta) */
 const GLSL_PROJETAR = `
 vec4 mvPosition = vec4( transformed, 1.0 );
@@ -29,7 +35,7 @@ vec4 mvPosition = vec4( transformed, 1.0 );
   mvPosition = instanceMatrix * mvPosition;
 #endif
 vec4 pMundo = modelMatrix * mvPosition;
-float dzCurva = pMundo.z - uFocoZ;
+float dzCurva = (pMundo.x - uFocoX) * uDirX + (pMundo.z - uFocoZ) * uDirZ;
 pMundo.y -= uCurva * dzCurva * dzCurva;
 mvPosition = viewMatrix * pMundo;
 gl_Position = projectionMatrix * mvPosition;`;
