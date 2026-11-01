@@ -28,9 +28,10 @@ export interface RegrasV21 {
   readonly relogio?: RelogioTR;
 }
 export type RegrasLuta = RegrasV21;
-/** as regras das lutas de uma versao de pet: a v13 (CV21E_TR) e a v14 (CV21E_TR14, o candidato da rodada de equilibrio); as outras falham alto */
+/** as regras das lutas de uma versao de pet: a v13 (CV21E_TR) e a v14 e a v15 (CV21E_TR14, o candidato da rodada de equilibrio; a v15 so
+    muda a bola); as outras falham alto */
 export const regrasDaVersao = (versao: number): RegrasLuta => {
-  if (versao === CV21E_TR14.versaoPet) return CV21E_TR14;
+  if (versao === CV21E_TR14.versaoPet || versao === 15) return CV21E_TR14;
   if (versao !== CV21E_TR.versaoPet) throw new Error(`regras de luta da versão ${versao} não existem mais (só a ${VERSOES_PET.join(" e a ")})`);
   return CV21E_TR;
 };

@@ -20,7 +20,7 @@ const luta = (m: Motor, rival = "aleatorio") => m.lutar(rival, hashSemente("test
 
 describe("os pets v13 lutam em tempo real", () => {
   test("o ovo novo e v13, com as regras CV21E_TR; o Motor.lutar devolve a luta em tempo real", () => {
-    expect(VERSAO_PET).toBe(14);
+    expect(VERSAO_PET).toBe(15);
     const m = rookie(101);
     expect(m.versao).toBe(13); expect(m.regras).toBe(CV21E_TR);
     const r = luta(m);

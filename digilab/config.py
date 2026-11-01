@@ -2571,3 +2571,21 @@ class ConfigDecisaoNaComida:
 
 CONFIG_DECISAO_NA_COMIDA = ConfigDecisaoNaComida()
 CONFIG_DECISAO_NA_COMIDA_LIGADA = ConfigDecisaoNaComida(ligada=True)
+
+
+# A bola no golpe (docs/TAREFA_V3_HABITAT_OBJETOS.md; os pets v15 do jogo web, a chave `bolaNoGolpe` de web/app/motor/mundo.ts): ligada,
+# quando o pet brinca com a bola ela sai na direcao em que ele vinha: de onde ele estava antes do passo ate a bola (das 16 do DIR16, a
+# mais alinhada; direcao_do_golpe), com a distancia sorteada de sempre. O sorteio da direcao fica no fluxo `mundo-bola`, so nao e usado,
+# entao a distancia sai igual. Parado em cima da bola (nao andou), a direcao sorteada. O jogo web a liga nos ovos novos; a pesquisa e os gabaritos ficam com ela desligada.
+# PROPOSTO (2026-11-01, pedido do Matheus), SEM FONTE.
+@dataclass(frozen=True)
+class ConfigBolaNoGolpe:
+    ligada: bool = False                     # PROPOSTO: a chave
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigBolaNoGolpe.ligada e bool: {self.ligada!r}")
+
+
+CONFIG_BOLA_NO_GOLPE = ConfigBolaNoGolpe()
+CONFIG_BOLA_NO_GOLPE_LIGADA = ConfigBolaNoGolpe(ligada=True)

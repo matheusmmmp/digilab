@@ -55,10 +55,15 @@ export const CDJ = { limiarNecessidade: .3, limiarVontade: .1, limiarTom: .2, kC
    14 = o v13 com o candidato da rodada de equilibrio do tempo real (docs/TAREFA_V3_COMBATE_V14.md, B2; docs/EQUILIBRIO_COMBATE_TR.md, R2-5;
    DE-1): o relogio, os fatores, as listas das formas e dos lideres, o aprendizado proprio, a reserva fixa no fim e o chip antes da regra
    que o cobre, exatamente como a conferencia unica mediu (as regras CV21E_TR14). Os pets v13 seguem vivos, com o combate de antes
-   (decisao CV14-1, recomendacao do Gerente da V3 que vale ate o Matheus dizer outra coisa); so os ovos novos nascem v14 */
-export const VERSAO_PET = 14;
-/** as versoes de pet que abrem: a v13 (o tempo real de antes da rodada de equilibrio) e a v14 (CV14-1) */
-export const VERSOES_PET: readonly number[] = [13, 14];
+   (decisao CV14-1, recomendacao do Gerente da V3 que vale ate o Matheus dizer outra coisa); so os ovos novos nascem v14;
+   15 = o v14 com a bola no golpe (docs/TAREFA_V3_HABITAT_OBJETOS.md; a chave bolaNoGolpe do Mundo): quando o pet brinca, a bola sai na
+   direcao em que ele vinha, com a distancia sorteada de sempre. A luta e a do v14 (as regras CV21E_TR14). Os v13 e os v14 seguem vivos,
+   com a bola de antes; so os ovos novos nascem v15 */
+export const VERSAO_PET = 15;
+/** as versoes de pet que abrem: a v13 (o tempo real de antes da rodada de equilibrio), a v14 (CV14-1) e a v15 (a bola no golpe) */
+export const VERSOES_PET: readonly number[] = [13, 14, 15];
+/** a versao de pet da bola no golpe (a chave bolaNoGolpe do Mundo) */
+export const VERSAO_V15 = 15;
 /* medalhas do Tamer que cada evolucao pede nos pets v6 (decisao do Matheus, 2026-09-29: 1, 3 e 5; so no jogo), pela
    chave do estagio de destino: Rookie -> Champion (adolescente), Champion -> Ultimate (adulto), Ultimate -> Mega (mega).
    In-Training -> Rookie nao pede medalha. A tabela das medalhas fica em medalhas.ts */

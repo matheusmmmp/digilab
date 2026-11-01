@@ -69,7 +69,7 @@ describe("nomes e sprites no canone", () => {
 });
 
 describe("Ultimate -> Mega (pet v13)", () => {
-  test("ovos novos sao v13 (v5 + medalhas + confianca + combate equilibrado + vinculo B + o cerebro A e o corpo + o mundo fisico + a luta em tempo real)", () => { expect(VERSAO_PET).toBe(14); expect(new Motor(1).versao).toBe(14); });
+  test("ovos novos sao v13 (v5 + medalhas + confianca + combate equilibrado + vinculo B + o cerebro A e o corpo + o mundo fisico + a luta em tempo real)", () => { expect(VERSAO_PET).toBe(15); expect(new Motor(1).versao).toBe(15); });
 
   test("com tempo, lutas, vitorias e vinculo vira Mega: estagio novo, com a forma adulta do Ultimate", () => {
     const m = ultimate(3101), adulta = m.forma.adulta;

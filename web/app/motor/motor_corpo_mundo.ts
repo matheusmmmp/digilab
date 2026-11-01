@@ -52,6 +52,8 @@ export interface OpcoesLacoMundo {
    *  chao faz o pet decidir ja no proximo passo do laco, em vez de esperar o fim do intervalo. O cerebro e a politica nao mudam: so o
    *  momento da decisao (a seguinte volta a contar o intervalo dali) */
   decidirNaComida?: boolean;
+  /** a chave dos pets v15 (a ConfigBolaNoGolpe do Python), desligada: com ela, a bola sai na direcao em que o pet vinha (Mundo, OpcoesMundo) */
+  bolaNoGolpe?: boolean;
 }
 
 /** as acoes do dono no laco com o mundo: as do v11 sem o alimentar (ele vira o deixar_comida) */
@@ -72,7 +74,7 @@ export class MotorCorpoMundo extends MotorCorpo {
               opcoes: OpcoesLacoMundo = {}) {
     super(politica, semente, cc, estado, true);
     if (!cc.drives_novos) throw new Error("o laco com o mundo e o do regime `corpo` com os drives novos (a novidade e a atividade)");
-    this.mundo = new Mundo({ semente, cfg: opcoes.cfgMundo });
+    this.mundo = new Mundo({ semente, cfg: opcoes.cfgMundo, bolaNoGolpe: opcoes.bolaNoGolpe ?? false });
     this.regra = opcoes.regra ?? (() => null);
     this.paridade = opcoes.paridade ?? false;
     this.digibrain = opcoes.digibrain ?? false;
@@ -104,6 +106,13 @@ export class MotorCorpoMundo extends MotorCorpo {
     this.estado = { ...this.estado, ultimoCuidado: tick, totalCuidados: this.estado.totalCuidados + 1 };
     this.politica.receberAcaoDono("alimentar", tick);
     if (this.decidirNaComida) this.proximaDecisao = Math.min(this.proximaDecisao, tick);
+  }
+
+  /** o deixar_bola sem o log do laco (o Motor do jogo grava o registro dele): a bola parada em (x, y). Como no Python
+   *  (MotorMundo._aplicar_deixar_bola), nao e contato nem cuidado: nao passa pelo estado nem pelo cerebro */
+  bolaDoDono(x: number, y: number): void {
+    this.conferirSincronia("antes de deixar_bola");
+    this.mundo.deixarBola(this.estado.tick, x, y);
   }
 
   override aplicarEvento(e: EventoCorpo): void {

@@ -115,7 +115,7 @@ from .config import CONFIG_BANHEIRO, CONFIG_PQP_MUNDO, ConfigBanheiro, ConfigDon
 from .config import CONFIG_PALADAR, ConfigPaladar
 from .config import CONFIG_FRUTA_AO_LADO, ConfigFrutaAoLado
 from .config import CONFIG_CONTRATO, ConfigContrato
-from .config import CONFIG_DECISAO_NA_COMIDA, ConfigDecisaoNaComida
+from .config import CONFIG_BOLA_NO_GOLPE, CONFIG_DECISAO_NA_COMIDA, ConfigBolaNoGolpe, ConfigDecisaoNaComida
 from . import contrato as ct
 from .config import ConfigOlfato, ConfigOuvido, ConfigSentidos
 from .corpo import leitura_orgao
@@ -185,6 +185,20 @@ def deslocar(x: int, y: int, direcao: int, comprimento: int, cm: ConfigMundo) ->
     """o ponto a `comprimento` subunidades na direcao (0 a 15 do DIR16), cortado para dentro do mapa"""
     cx, cy = DIR16[direcao]
     return no_mapa(x + div_arred(cx * comprimento, ESCALA_DIR), y + div_arred(cy * comprimento, ESCALA_DIR), cm)
+
+
+def direcao_do_golpe(px: int, py: int, bx: int, by: int) -> int | None:
+    """a direcao do golpe na bola (ConfigBolaNoGolpe): das 16, a mais alinhada com o vetor do pet a bola (o maior produto escalar, em
+    inteiros; no empate, a de menor indice). Com o pet em cima da bola nao ha lado: None"""
+    dx, dy = bx - px, by - py
+    if dx == 0 and dy == 0:
+        return None
+    melhor, maior = 0, None
+    for k, (cx, cy) in enumerate(DIR16):
+        p = dx * cx + dy * cy
+        if maior is None or p > maior:
+            melhor, maior = k, p
+    return melhor
 
 
 def passo_ate(x: int, y: int, tx: int, ty: int, alcance: int, cm: ConfigMundo) -> tuple[int, int]:
@@ -939,11 +953,14 @@ class Mundo:
         """a comida sai do chao (alguem a comeu); a que nao esta no chao falha alto (KeyError)"""
         return self.comidas.pop(ident)
 
-    def rolar_bola(self, tick: int) -> dict:
-        """alguem brincou com a bola: ela rola do ponto em que esta, no fluxo `mundo-bola` (vai mais longe no campo)"""
+    def rolar_bola(self, tick: int, de: tuple[int, int] | None = None) -> dict:
+        """alguem brincou com a bola: ela rola do ponto em que esta, no fluxo `mundo-bola` (vai mais longe no campo). Com `de` (a posicao
+        de quem bateu; ConfigBolaNoGolpe), a direcao e a do golpe; o sorteio dela fica no fluxo, e a distancia sai a mesma"""
         cm = self.cmf
         bx, by = self.bola_em(tick)
-        direcao = self.rng_bola.randrange(16)
+        sorteada = self.rng_bola.randrange(16)
+        golpe = None if de is None else direcao_do_golpe(de[0], de[1], bx, by)
+        direcao = sorteada if golpe is None else golpe
         celulas = self.rng_bola.randint(cm.bola_min_celulas, cm.bola_max_celulas)
         if cm.layout.regioes[regiao_de(bx, cm)][0] == "campo":
             celulas *= cm.mult_bola_campo
@@ -998,7 +1015,8 @@ class MotorMundo(MotorFrutas):
     def __init__(self, *a, cfg_mundo: ConfigMundo | None = None, efeito_frutas: dict | None = None, mundo: "Mundo | None" = None,
                  entrada_mundo: int = 0, cfg_banheiro: ConfigBanheiro | None = None, cfg_pqp: ConfigPetQuePensaMundo | None = None,
                  cfg_paladar: ConfigPaladar | None = None, cfg_fruta_ao_lado: ConfigFrutaAoLado | None = None,
-                 cfg_contrato: ConfigContrato | None = None, cfg_decisao_comida: ConfigDecisaoNaComida | None = None, **kw) -> None:
+                 cfg_contrato: ConfigContrato | None = None, cfg_decisao_comida: ConfigDecisaoNaComida | None = None,
+                 cfg_bola_golpe: ConfigBolaNoGolpe | None = None, **kw) -> None:
         super().__init__(*a, **kw)
         self.cct = cfg_contrato or CONFIG_CONTRATO
         if not isinstance(self.cct, ConfigContrato):
@@ -1015,6 +1033,9 @@ class MotorMundo(MotorFrutas):
         self.cdc = cfg_decisao_comida or CONFIG_DECISAO_NA_COMIDA
         if not isinstance(self.cdc, ConfigDecisaoNaComida):
             raise TypeError(f"cfg_decisao_comida e uma ConfigDecisaoNaComida: {self.cdc!r}")
+        self.cbg = cfg_bola_golpe or CONFIG_BOLA_NO_GOLPE
+        if not isinstance(self.cbg, ConfigBolaNoGolpe):
+            raise TypeError(f"cfg_bola_golpe e uma ConfigBolaNoGolpe: {self.cbg!r}")
         if not self.cmf.ligada:
             if efeito_frutas is not None or mundo is not None or entrada_mundo:
                 raise ValueError("efeito_frutas, mundo e entrada_mundo so existem com o mundo ligado")
@@ -1030,6 +1051,8 @@ class MotorMundo(MotorFrutas):
                 raise ValueError("o contrato da P4 (ConfigContrato) exige o mundo fisico (ConfigMundo.ligada)")
             if self.cdc.ligada:
                 raise ValueError("a decisao na comida (ConfigDecisaoNaComida) exige o mundo fisico (ConfigMundo.ligada)")
+            if self.cbg.ligada:
+                raise ValueError("a bola no golpe (ConfigBolaNoGolpe) exige o mundo fisico (ConfigMundo.ligada)")
             return                                     # desligado: o MotorFrutas byte a byte (nem embrulho, nem Mundo)
         if self.cf.ligada or self.cb.ligada:
             raise ValueError("o mundo substitui o cenario do N4 e da A1: ConfigFrutas e ConfigBola desligadas com ConfigMundo.ligada")
@@ -1462,8 +1485,9 @@ class MotorMundo(MotorFrutas):
             raise ValueError("perfil de gosto sem o Paladar (ConfigPaladar.ligada)")
         return dict(self.cpal.perfis[tipo])
 
-    def _rolar_bola(self, tick: int) -> None:
-        self.mundo.rolar_bola(self._tm(tick))
+    def _rolar_bola(self, tick: int, de: tuple[int, int] | None = None) -> None:
+        """`de`: onde o pet estava antes do passo que o levou a bola (ConfigBolaNoGolpe: o golpe sai na direcao em que ele vinha)"""
+        self.mundo.rolar_bola(self._tm(tick), de if self.cbg.ligada else None)
 
     def _consequencia(self, acao: AcaoPet) -> dict | None:
         """Chamado pelo embrulho em `observar`, antes do cerebro: anda, come, brinca, desfaz o +0,05 do comer (MF-2) e registra."""
@@ -1515,7 +1539,7 @@ class MotorMundo(MotorFrutas):
                     comeu = self._comer_mundo(perto[0][2], "achou", tick)
             elif chegou and acao is AcaoPet.BRINCAR and alvo.objeto() == "bola":
                 self._estado = replace(self._estado, humor=min(1.0, self._estado.humor + self.cmf.ganho_humor_bola))
-                self._rolar_bola(tick)
+                self._rolar_bola(tick, (x0, y0))
                 bola = True
                 if self._grupo is not None:
                     self._grupo.emitir_som(self.ident, "bola")

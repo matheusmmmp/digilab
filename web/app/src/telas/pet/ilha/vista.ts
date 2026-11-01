@@ -5,7 +5,10 @@
      se afasta ate caber LARGURA_MIN celulas de lado a lado (constantes.ts);
    - o contrato CENA (cenaEstado.ts) fica igual: ret (o retangulo do pet em px de CSS, para o PalcoPet), medir (a M3), e mundo.paraMundo,
      paraTela e pet, que passam pela mesma dobra do shader (curva.ts, regra 6);
-   - o dia e a noite do motor (eNoite) escurecem o ceu, a nevoa, a luz e a agua.
+   - o dia e a noite do motor (eNoite) escurecem o ceu, a nevoa, a luz e a agua;
+   - a coreografia (docs/TAREFA_V3_HABITAT_OBJETOS.md): pedido um treino (CENA.treino), o pet desenhado vai ao saco de pancada, bate e
+     volta (TREINO_MS); quando o motor rola a bola (uma rolagem nova no Mundo), o pet da um golpe nela. So o desenho: a posicao do motor,
+     o ganho do treino e o log nao mudam.
    Os kits carregam depois do terreno; se um modelo nao carrega, a cena cai na reserva (MundoReserva), com o erro no console. */
 import * as THREE from "three";
 import { TPD, eNoite, type Mundo } from "../../../../motor/index.ts";
@@ -13,7 +16,8 @@ import { habitatAtual, voltarParaIlha, type Habitat } from "../../../habitat.ts"
 import { jogoAtual } from "../../../jogo.ts";
 import { CENA } from "../cenaEstado.ts";
 import { Seguidor, dentroDoMapa } from "../vistaMundo.ts";
-import { AFASTAR_MAX, CAMERAS, COBERTO_MS, KITS_COBERTO_MS, FPS_MIN, LARGURA_MIN, LONGE, NEVOA, PERTO, QUEDA_MS, RAZAO_MAX, TEXEL_ALVO, type CameraHabitat } from "./constantes.ts";
+import { AFASTAR_MAX, BATER_BOLA_MS, CAMERAS, COBERTO_MS, GOLPE_DIST, GOLPE_MS, KITS_COBERTO_MS, FPS_MIN, LARGURA_MIN, LONGE, NEVOA, PERTO, QUEDA_MS,
+  RAZAO_MAX, TEXEL_ALVO, TREINO_MS, type CameraHabitat } from "./constantes.ts";
 import { CURVA, type CenaIlha, type Objetos } from "./cena.ts";
 import { estiloDe, type Estilo } from "./estilos.ts";
 import { paraMundoCel, paraTelaNdc, type CameraLida, type Dobra } from "./curva.ts";
@@ -46,6 +50,13 @@ class VistaIlha {
   private noite: boolean | null = null;
   private ultimo = performance.now();
   private petCel: [number, number] = [0, 0];
+  /** o treino na ilha: o pedido (CENA.treino) que esta tocando, quando comecou, o ponto em que o pet para para bater (ao lado do saco
+      na tela) e o ultimo golpe que balancou o saco */
+  private treino: { pedido: number; desde: number; ponto: [number, number]; golpe: number } | null = null;
+  private treinoVisto: number | null = CENA.treino;
+  /** a batida na bola: quantas rolagens o motor ja tinha (null antes do primeiro quadro: as de antes de abrir a ilha nao contam) */
+  private rolagens: number | null = null;
+  private bateBola: { desde: number; alvo: [number, number] } | null = null;
 
   readonly canvas: HTMLCanvasElement;
   private readonly mu: Mundo;
@@ -157,6 +168,46 @@ class VistaIlha {
   }
   /** onde o pet esta desenhado (subunidades) */
   get petDesenhado(): [number, number] | null { return this.seguidor.pos; }
+  /** onde a bola esta desenhada (subunidades) */
+  get bolaDesenhada(): [number, number] | null { return this.itens.bolaDesenhada; }
+
+  /** a coreografia sobre a posicao do motor (`motorCel`, celulas): o treino no saco e a batida na bola. Devolve onde desenhar o pet, o
+      golpe e se a vista o esta movendo */
+  private coreografia(mu: Mundo, agora: number, motorCel: [number, number], reduzido: boolean)
+      : { cel: [number, number]; golpe: { desde: number; alvo: [number, number] } | null; andando: boolean } {
+    /* a batida na bola: uma rolagem nova; o pet olha para onde a bola vai (parada, para onde ela esta) */
+    const n = mu.rolagens.length, sub = mu.cm.sub;
+    if (this.rolagens !== null && n > this.rolagens) {
+      const r = mu.rolagens[n - 1] as { de: [number, number]; para: [number, number] }, parou = r.para[0] === r.de[0] && r.para[1] === r.de[1];
+      this.bateBola = { desde: agora, alvo: parou ? [r.de[0] / sub, r.de[1] / sub] : [r.para[0] / sub, r.para[1] / sub] };
+    }
+    this.rolagens = n;
+    if (this.bateBola && agora - this.bateBola.desde >= BATER_BOLA_MS) this.bateBola = null;
+    /* o treino: um pedido novo comeca do lugar em que o pet esta; ele para a GOLPE_DIST do saco, ao lado dele na tela (ao longo da
+       direita da camera no chao, que gira com a camera livre), do lado em que o pet ja esta: nem na frente do saco, nem atras */
+    const [sx, sz] = this.itens.sacoEm;
+    if (CENA.treino !== null && CENA.treino !== this.treinoVisto) {
+      this.treinoVisto = CENA.treino;
+      const dir = new THREE.Vector3(1, 0, 0).applyQuaternion(this.camera.quaternion), h = Math.hypot(dir.x, dir.z) || 1;
+      const [rx, rz] = [dir.x / h, dir.z / h], lado = (motorCel[0] - sx) * rx + (motorCel[1] - sz) * rz >= 0 ? 1 : -1;
+      this.treino = { pedido: CENA.treino, desde: agora, ponto: [sx + lado * rx * GOLPE_DIST, sz + lado * rz * GOLPE_DIST], golpe: -1 };
+    }
+    const t = this.treino;
+    if (!t) return { cel: motorCel, golpe: this.bateBola, andando: false };
+    const dt = agora - t.desde, { ida, golpes, volta } = TREINO_MS, ponto = t.ponto;
+    const suave = (f: number) => (reduzido ? 1 : f * f * (3 - 2 * f)), entre = (a: [number, number], b: [number, number], f: number): [number, number] =>
+      [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f];
+    if (dt < ida) return { cel: entre(motorCel, ponto, suave(dt / ida)), golpe: null, andando: !reduzido };
+    if (dt < ida + golpes) {
+      const k = Math.floor((dt - ida) / GOLPE_MS), desde = t.desde + ida + k * GOLPE_MS;
+      /* o saco balanca no meio do golpe, quando o braco chega */
+      if (k !== t.golpe && agora - desde >= GOLPE_MS * 0.3) { t.golpe = k; this.itens.baterNoSaco(agora, ponto); }
+      return { cel: ponto, golpe: { desde, alvo: [sx, sz] }, andando: false };
+    }
+    if (dt < ida + golpes + volta) return { cel: entre(ponto, motorCel, suave((dt - ida - golpes) / volta)), golpe: null, andando: !reduzido };
+    this.treino = null;
+    return { cel: motorCel, golpe: this.bateBola, andando: false };
+  }
 
   /** um quadro: o pet onde o motor diz (interpolado), a camera atras dele, a racao e a bola, o dia ou a noite; devolve o retangulo do pet */
   desenhar(agora: number, quadro: number): Ret {
@@ -167,7 +218,8 @@ class VistaIlha {
     const { motor: m } = jogoAtual(), mu = m.mundo ?? this.mu, cm = mu.cm, sub = cm.sub;
     const dtMs = agora - this.ultimo, pos = this.seguidor.seguir(mu.pet, dtMs, cm);
     this.ultimo = agora;
-    this.petCel = [pos[0] / sub, pos[1] / sub];
+    const reduzido = movimentoReduzido(), cor = this.coreografia(mu, agora, [pos[0] / sub, pos[1] / sub], reduzido);
+    this.petCel = cor.cel;
     this.atualizarOrbita();
     const [px, pz] = this.petCel, a = this.afast;
     const { desloc, olhar } = this.orbitaVista;
@@ -176,14 +228,14 @@ class VistaIlha {
     this.camera.updateMatrixWorld();
     CURVA.uFocoX.value = px; CURVA.uFocoZ.value = pz;
     CURVA.uDirX.value = this.dirDobra[0]; CURVA.uDirZ.value = this.dirDobra[1];
-    CURVA.uTempo.value = movimentoReduzido() ? 0 : agora / 1000;
+    CURVA.uTempo.value = reduzido ? 0 : agora / 1000;
     const noite = eNoite(m.e.tick % TPD);
     if (noite !== this.noite) { this.noite = noite; this.cenaIlha.aplicarNoite(noite); }
-    this.itens.sincronizar(mu, m.e.tick, noite);
+    this.itens.sincronizar(mu, m.e.tick, noite, agora, dtMs, m.lesionadoDesde !== null, reduzido);
     const ret = this.papel.atualizar({
       agora, dt: Math.min(0.05, dtMs / 1000), quadro, cel: this.petCel, motor: mu.pet, camera: this.camera,
       ppu: this.ppu, pxPorTexel: this.pxPorTexel, canvas: [this.renderer.domElement.width, this.renderer.domElement.height],
-      razao: this.renderer.getPixelRatio(), reduzido: movimentoReduzido(), noite,
+      razao: this.renderer.getPixelRatio(), reduzido, noite, golpe: cor.golpe, andandoVista: cor.andando,
     });
     /* o foco do HD-2D: a altura do pet na tela (0 embaixo, 1 em cima) */
     this.renderer.info.reset();
@@ -285,6 +337,7 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
     paraMundo: (cx, cy) => vista.paraMundo(cx, cy),
     paraTela: (x, y) => vista.paraTela(x, y),
     get pet() { const p = vista.petDesenhado; if (!p) throw new Error("a cena do mundo ainda nao desenhou o pet"); return p; },
+    get bola() { return vista.bolaDesenhada ?? undefined; },
   };
   return () => {
     vivo = false;

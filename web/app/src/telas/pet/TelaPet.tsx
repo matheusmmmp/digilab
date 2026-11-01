@@ -31,6 +31,7 @@ import { useJogo } from "../../jogo.ts";
 import { abrirEscolhaBrasao } from "../../jornada.ts";
 import { useTempo } from "../../tempo.ts";
 import { CHAVE } from "../../save.ts";
+import { BarraBola } from "./PorBola.tsx";
 import { AvisoRacao, BarraRacao, FaixaRacao, InfoMundo } from "./PorRacao.tsx";
 import "../../estilo/pet_dock.css";
 import "../../estilo/pet_hud.css";
@@ -361,6 +362,7 @@ function DockPet() {
       {mais && <div className="acoes-mais dock-mais" id="acoes-mais" ref={menu} role="group" aria-label="Mais ações">
         {extras.map(a => botao(a, "acao-extra"))}
         {comRacao && <BarraRacao aoUsar={() => fechar(false)} />}
+        {comRacao && <BarraBola aoUsar={() => fechar(false)} />}
       </div>}
     </div>
   );
