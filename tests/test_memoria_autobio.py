@@ -14,6 +14,7 @@ e sequencias sinteticas.
 from __future__ import annotations
 
 import ast
+import copy
 import inspect
 import json
 import sys
@@ -30,10 +31,12 @@ sys.path.insert(0, str(RAIZ / "tests"))
 
 import run_v2_digibrain_prototipo as orq  # noqa: E402
 import test_digibrain_mecanismo as tm  # noqa: E402
+from test_digibrain_mecanismo import RngContada  # noqa: E402
 
 from digilab.config import (CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, CONFIG_DIGIBRAIN_LIGADA, CONFIG_MUNDO_LIGADA,  # noqa: E402
                             PARAMETROS_DIGIBRAIN_INATOS, RECEPTORES_DIGIBRAIN, TICKS_POR_DIA, ConfigDigibrain, ConfigDigibrainInatos)
 from digilab.digibrain import mem as M  # noqa: E402
+from digilab.digibrain.arb import Arbitragem  # noqa: E402
 from digilab.digibrain.ganchos import CAMPOS_POR_MODULO  # noqa: E402
 
 P = CONFIG_DIGIBRAIN_INATOS
@@ -486,6 +489,119 @@ def test_t_me_3_na_vida_as_memorias_respeitam_as_capacidades_e_o_replay():
         orq.conferir_replay(motor, _viver.fab[1], semente, motor.log.para_jsonl())
 
 
+# ------------------------------------------------------------------ T-ME-4: o termo da lembranca e a sonda contrafactual
+def unid_com(chave, inato, lembranca=0) -> dict:
+    """uma unidade sintetica da lista de agora, com o termo `lembranca`"""
+    termos = {"inato": inato, "prox": 0, "nov": 0, "incentivo": 0, "habito": 0, "memoria": 0, "persistencia": 0, "lembranca": lembranca}
+    soma = sum(termos.values())
+    return {**unidade(chave), "termos": termos, "soma": soma, "a": max(0, min(soma, P.a_max))}
+
+
+def lembrar_de(mem, r_n, objetos=(), **kw):
+    """guarda o episodio e devolve o termo da M4 do que a lembranca traz (ou None)"""
+    guardar(mem, r_n, objetos=objetos, **kw)
+    return mem.termo_lembranca(mem.lembrar(pista(objetos=objetos)))
+
+
+COMER_9 = ("comer", "podre", 9)
+VAGAR = ("explorar", "vagar", None)
+ENERGIA = {"leitura": {"energia": S}}
+
+
+def test_t_me_4_w_lem_e_a_metade_do_w_mem_e_esta_decidido():
+    assert P.w_lem == S // 2 == P.w_mem // 2 and PARAMETROS_DIGIBRAIN_INATOS["w_lem"][0] == "DECIDIDO"
+    assert "w_lem" in CAMPOS_POR_MODULO["mem"]
+
+
+def test_t_me_4_o_termo_e_mul_w_lem_sigma_so_na_unidade_da_mesma_acao():
+    mem = nova()
+    podre = {**COMIDA, "id": 9, "tipo": "podre", "classe": "podre"}
+    termo = lembrar_de(mem, -400, objetos=[podre], unid=unidade(COMER_9, podre), comeu="podre")
+    assert termo["L"] == M.mul(P.w_lem, -400, S) == -200
+    assert mem.casa(termo, unidade(COMER_9, podre))
+    assert mem.casa(termo, unidade(("comer", "podre", 31), {**podre, "id": 31}))      # outro objeto da mesma classe de alvo
+    assert not mem.casa(termo, unidade(("comer", "a", 7), COMIDA)) and not mem.casa(termo, unidade(VAGAR))
+    sem = nova()
+    guardar(sem, 300, objetos=[COMIDA])
+    assert sem.termo_lembranca(sem.lembrar(pista(pos=(900, 900), objetos=[BOLA], noite=S, fome=900))) is None   # sem lembranca, sem termo
+
+
+def test_t_me_4_a_visita_so_chega_ao_mesmo_lugar_e_o_sem_alvo_vale_o_comportamento():
+    mem = nova()
+    termo = lembrar_de(mem, 0, unid=unidade(("explorar", "ponto", (40, 72))), chegou=True, r_ida=-300)
+    assert termo["L"] == M.mul(P.w_lem, -300, S) == -150
+    assert mem.casa(termo, unidade(("explorar", "ponto", (41, 73)))) and not mem.casa(termo, unidade(("explorar", "ponto", (900, 900))))
+    assert not mem.casa(termo, unidade(VAGAR)) and not mem.casa(termo, unidade(("comer", "cheiro", None)))
+    mem = nova()
+    termo = lembrar_de(mem, -300, depois=leituras(dor=900))                          # o evento sem alvo: o comportamento
+    assert termo["so_comportamento"] and mem.casa(termo, unidade(("ocioso", None, None))) and not mem.casa(termo, unidade(VAGAR))
+
+
+def test_t_me_4_a_sonda_mostra_a_troca_quando_a_lembranca_muda_a_escolha():
+    arb = Arbitragem(autobio=True)
+    # o L = -300 tira o comer podre de 500 para 200; com u = 0,5 (T = 700, alvo 350) cai no vagar, e sem o L (500/500, alvo 500) no vagar...
+    us = [unid_com(COMER_9, 500, -300), unid_com(VAGAR, 500)]
+    out = arb.escolher(us, {"g_exp": 0}, ENERGIA, RngContada(0.6))                    # alvo 420: com o L, vagar; sem o L (T = 1000, alvo 600), vagar
+    assert out["unidade"]["acao"] == "explorar" and out["sondas"]["lembranca_decidiu"] is False
+    out = arb.escolher(us, {"g_exp": 0}, ENERGIA, RngContada(0.4))                    # alvo 280: com o L (comer 200), vagar; sem o L, comer
+    assert out["unidade"]["acao"] == "explorar" and out["sondas"]["sem_lembranca"] == list(COMER_9)
+    assert out["sondas"]["lembranca_decidiu"] is True and out["sondas"]["memoria_decidiu"] is True    # sem_memoria tira o L
+    assert out["sondas"]["sem_memoria"] == out["sondas"]["sem_lembranca"] and out["sondas"]["aprendido_decidiu"] is True
+    assert out["sondas"]["incentivo_decidiu"] is False and out["sondas"]["habito_decidiu"] is False
+
+
+def test_t_me_4_a_sonda_nao_mostra_troca_quando_a_lembranca_nao_muda_a_escolha():
+    arb = Arbitragem(autobio=True)
+    us = [unid_com(COMER_9, 900, -100), unid_com(VAGAR, 0)]                           # so o comer concorre
+    out = arb.escolher(us, {"g_exp": 0}, ENERGIA, RngContada())
+    assert out["unidade"]["acao"] == "comer" and out["sondas"]["lembranca_decidiu"] is False
+    assert out["sondas"]["sem_lembranca"] == list(COMER_9) and out["sondas"]["memoria_decidiu"] is False
+    sem_termo = [unid_com(COMER_9, 500), unid_com(VAGAR, 500)]                        # L = 0: a sonda e a decisao
+    for u in (0.1, 0.5, 0.9):
+        out = arb.escolher(sem_termo, {"g_exp": 0}, ENERGIA, RngContada(u))
+        assert out["sondas"]["lembranca_decidiu"] is False and out["sondas"]["sem_lembranca"] == out["sondas"]["sem_memoria"]
+
+
+def test_t_me_4_a_sonda_nao_consome_a_rng_de_politica_nem_muda_o_estado():
+    arb = Arbitragem(autobio=True)
+    us = [unid_com(COMER_9, 500, -300), unid_com(VAGAR, 500)]
+    antes = copy.deepcopy(us)
+    rng = RngContada(0.4)
+    arb.escolher(us, {"g_exp": 0}, ENERGIA, rng)
+    assert rng.n == 1 and us == antes and arb.sorteios == 1                           # so a chamada do sorteio; as unidades intactas
+    rng = RngContada()
+    arb.escolher([unid_com(COMER_9, 500), unid_com(VAGAR, 0)], {"g_exp": 0}, ENERGIA, rng)
+    assert rng.n == 0                                                                 # um candidato so: nenhuma chamada, sonda inclusa
+    reflexo = arb.escolher(us + [unid_com(("dormir", None, None), 0)], {"g_exp": 0}, {"leitura": {"energia": 0}}, RngContada())   # o reflexo: nenhuma sonda decide
+    assert not any(v for k, v in reflexo["sondas"].items() if k.endswith("_decidiu"))
+
+
+def test_t_me_4_desligada_as_sondas_sao_as_de_hoje():
+    assert set(Arbitragem().sondas) == {"sem_incentivo", "sem_habito", "sem_memoria", "sem_persistencia", "sem_afeto", "so_inato"}
+    assert Arbitragem().sondas["sem_memoria"] == ("memoria",)
+    ligada = Arbitragem(autobio=True)
+    assert ligada.sondas["sem_lembranca"] == ("lembranca",) and ligada.sondas["sem_memoria"] == ("memoria", "lembranca")
+    assert "lembranca" in ligada.sondas["so_inato"]
+
+
+@pytest.mark.parametrize("semente", SEMENTES)
+def test_t_me_4_na_vida_o_termo_a_sonda_e_o_replay(semente):
+    motor, reg = _viver(semente)
+    orq.conferir_replay(motor, _viver.fab[1], semente, motor.log.para_jsonl())      # G1: o replay bit a bit com a chave ligada
+    c = orq.cerebro_de(reg)
+    assert all("lembranca" in x["termos"] for m in c.motivos for x in m["unidades"])
+    for m in c.motivos:
+        lem = m["lembranca"]
+        assert "lembranca_decidiu" in m["sondas"] and "sem_lembranca" in m["sondas"]
+        assert (lem["L"] is None) == (lem["recuperado"] is None)
+        assert all(x["chave"] in lem["unidades"] for x in m["unidades"] if x["termos"]["lembranca"] != 0)
+        if not lem["unidades"] or lem["L"] == 0:                                    # sem unidade que a receba ou L = 0, a sonda nao troca
+            assert m["sondas"]["lembranca_decidiu"] is False
+        if m["sondas"]["lembranca_decidiu"]:
+            assert m["sondas"]["sem_lembranca"] != m["escolha"]
+    assert c.m.arb.sorteios <= len(c.motivos)
+
+
 # ------------------------------------------------------------------ as vidas: G1, G2-SEPARADO, T-ME-0 e T-ME-1 no replay
 def _viver(semente: int, lugar: str = "longe_fixo", dono: str = "relapso", ligada: bool = True):
     original = orq.config_do_braco
@@ -558,7 +674,7 @@ def test_g2_separado_ligada_muda_so_a_vida_do_braco_que_a_liga():
 
 
 def test_g2_separado_nada_fora_do_pacote_le_a_chave():
-    donos_da_chave = {"digilab/config.py", "digilab/digibrain/adapt.py", "digilab/digibrain/mem.py"}
+    donos_da_chave = {"digilab/config.py", "digilab/digibrain/adapt.py", "digilab/digibrain/impulso.py", "digilab/digibrain/mem.py"}
     achados = set()
     for pasta in ("digilab", "experiments", "web", "tools", "servidor", "digilab_fala_livre"):
         if not (RAIZ / pasta).exists():

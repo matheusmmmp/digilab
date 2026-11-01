@@ -25,7 +25,7 @@ CAMPOS_POR_MODULO = {
     "estado": ("tau_c", "tau_f_sobe", "tau_f_desce", "w_pers", "n_desiste", "n_desiste_cheiro", "n_suspensa_max", "lambda_retomar",
                "n_seg_max"),
     "mem": ("n_ep", "lambda_busca", "d_max", "w_mem", "theta_sig", "n_rec", "n_dur", "n_cen", "janela_rec", "theta_dur", "n_rep_central", "w_lugar",
-            "w_vista", "w_corpo", "sim_min"),
+            "w_vista", "w_corpo", "sim_min", "w_lem"),
 }
 
 

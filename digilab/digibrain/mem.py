@@ -232,6 +232,30 @@ class Memoria:
         self.lembrancas += 1
         return {"recuperado": melhor["id"], "sim": sim, "memoria": melhor["memoria"], "sigma": melhor["sigma"]}
 
+    def termo_lembranca(self, lembranca: dict) -> dict | None:
+        """o termo da lembranca (M4, 6.1): L = mul(w_lem, sigma) do episodio lembrado e a quem ele se aplica, ou None sem lembranca. Sem rng
+        e sem mudar o estado (nao soma `rec`: quem somou foi o `lembrar`)"""
+        if not self.autobio:
+            raise RuntimeError("M-MEM: o termo da lembranca so com a memoria_autobio")
+        if lembranca["recuperado"] is None:
+            return None
+        e = next(e for e in self._guardados() if e["id"] == lembranca["recuperado"])
+        acao, tipo, _ = e["acao"]
+        alvo = e["objeto"]["classe"] if e["objeto"] is not None else tipo       # a classe de alvo do episodio
+        return {"id": e["id"], "L": mul(self.p.w_lem, e["sigma"], self.S), "acao": acao, "alvo": alvo, "lugar": tuple(e["lugar"]),
+                "so_comportamento": e["classe"] == "sem_alvo"}
+
+    def casa(self, termo: dict, unidade: dict) -> bool:
+        """se a unidade da lista de agora tem a mesma acao do episodio lembrado (6.1): o mesmo comportamento e a mesma classe de alvo (para
+        `ponto`, o mesmo lugar; para `sem_alvo`, o comportamento)"""
+        if unidade["acao"] != termo["acao"]:
+            return False
+        if termo["so_comportamento"]:
+            return True
+        if unidade["tipo"] != termo["alvo"]:
+            return False
+        return unidade["tipo"] != "ponto" or self.lugar_de(*unidade["chave"][2]) == termo["lugar"]
+
     def valores_soma(self) -> dict:
         """lugar -> (a soma dos sigma, cortada em [-S, S], o episodio mais recente que a compoe): so consumo de comida boa e visita (MA-2)"""
         soma: dict = {}

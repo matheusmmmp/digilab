@@ -400,7 +400,7 @@ As ME-1 a ME-7 e as C4-E1 a C4-E3 não fixam estes oito pontos. **Todos DECIDIDO
 | `theta_afeto` | S/2 = 512 | **removido** | decisão do Matheus em 2026-11-01 (#532); saiu do código no PR `v3-memoria-m2m3` |
 | `w_lugar`, `w_vista`, `w_corpo`, `sim_min` | 2, 1, 1, 3S/4 | **aprovados e implementados** | M2: PR `v3-memoria-m2m3`, `ConfigDigibrainInatos` |
 | `n_dur`, `n_cen`, `janela_rec`, `theta_dur`, `n_rep_central` | 32, 8, 96, S/4, 2 | **aprovados e implementados** | M3: PR `v3-memoria-m2m3`, `ConfigDigibrainInatos` |
-| `w_lem` | S/2 | **aprovado, ainda não implementado** | entra na M4 (6.1) |
+| `w_lem` | S/2 | **aprovado e implementado** | M4: PR `v3-memoria-m4`, `ConfigDigibrainInatos` |
 | `eta_faceta`, o teto das facetas | S/64, S/4 | **aprovados, ainda não implementados** | entram na M5 (6.2) |
 
 **Pendente:** nenhuma das MA nem dos valores (todas aprovadas em 2026-11-01). O `theta_afeto` foi removido (2026-11-01).

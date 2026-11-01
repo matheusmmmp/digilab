@@ -474,3 +474,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-01 — C4 MEMÓRIA AUTOBIOGRÁFICA, M0 e M1 (worker, Claude Code, Opus 5.5, worktree `v3-memoria-m0m1`): o episódio fora da escolha, o tick e o limiar do estresse](registro/2026-11.md)
 - [2026-11-01 — C4 MEMÓRIA AUTOBIOGRÁFICA, o afeto pela subida (worker, Claude Code, Opus 5.5, worktree `v3-memoria-afeto`): a troca do nível e o registro reconciliado](registro/2026-11.md)
 - [2026-11-01 — C4 MEMÓRIA AUTOBIOGRÁFICA, M2 e M3 (worker, Claude Code, Sonnet 5.5, worktree `v3-memoria-m2m3`): a faixa do corpo, o log que diverge e os três testes de mecanismo](registro/2026-11.md)
+- [2026-11-01 — C4 MEMÓRIA AUTOBIOGRÁFICA, M4 (worker, Claude Code, Sonnet 5.5, worktree `v3-memoria-m4`): onde fica o registro, a correspondência da unidade e o `so_inato`](registro/2026-11.md)
