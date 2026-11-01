@@ -2534,6 +2534,8 @@ class ConfigDigibrainInatos:
     w_vista: int = 1                          # DECIDIDO, SEM FONTE: o peso do que estava a vista (as classes, o cheiro, a noite)
     w_corpo: int = 1                          # DECIDIDO, SEM FONTE: o peso do corpo (as faixas dos receptores)
     sim_min: int = 3 * _S // 4                # DECIDIDO, SEM FONTE: a semelhanca minima para lembrar; alta, para o contexto novo nao lembrar
+    # a C4, M4 (espec, secoes 6.1 e 8; DECIDIDO em 2026-11-01, SEM FONTE; nenhuma calibracao por no)
+    w_lem: int = _S // 2                      # DECIDIDO, SEM FONTE: L = mul(w_lem, sigma), o termo da lembranca; a metade do w_mem
 
     def __post_init__(self) -> None:
         for f in fields(self):
@@ -2569,11 +2571,12 @@ class ConfigDigibrainInatos:
                 or self.n_suspensa_max <= 0 or not 0 <= self.lambda_retomar <= self.escala or self.n_seg_max <= 0 or self.n_rec <= 0 \
                 or not 0 < self.theta_sig <= self.escala or self.n_dur <= 0 or self.n_cen <= 0 or self.janela_rec <= 0 \
                 or not 0 < self.theta_dur <= self.escala or self.n_rep_central <= 0 or self.w_lugar < 0 or self.w_vista < 0 \
-                or self.w_corpo < 0 or self.w_lugar + self.w_vista + self.w_corpo <= 0 or not 0 < self.sim_min <= self.escala:
+                or self.w_corpo < 0 or self.w_lugar + self.w_vista + self.w_corpo <= 0 or not 0 < self.sim_min <= self.escala \
+                or self.w_lem < 0:
             raise ValueError("ConfigDigibrainInatos: g_min <= g0 <= g_max; r_norm, s_v, n_ep, n_desiste, escala_cuidado, d_max, h_max, "
                              "n_desiste_cheiro, n_suspensa_max, n_seg_max, n_rec, n_dur, n_cen, janela_rec e n_rep_central positivos; "
                              "lambda_retomar em [0, S]; theta_sig, theta_dur e sim_min em (0, S]; os pesos da semelhanca "
-                             "nao negativos, com soma positiva")
+                             "nao negativos, com soma positiva; w_lem nao negativo")
 
 
 CONFIG_DIGIBRAIN_INATOS = ConfigDigibrainInatos()
@@ -2586,7 +2589,7 @@ PARAMETROS_DIGIBRAIN_INATOS: dict[str, tuple[str, str]] = {
              ("DECIDIDO", "2026-11-01 (docs/ESPEC_MEMORIA_AUTOBIOGRAFICA_DIGIBRAIN_MODULAR.md, secao 8): pela recomendacao da espec; "
                           "SEM FONTE") if f.name in (
                  "theta_sig", "n_rec", "n_dur", "n_cen", "janela_rec", "theta_dur", "n_rep_central", "w_lugar", "w_vista", "w_corpo",
-                 "sim_min") else
+                 "sim_min", "w_lem") else
              ("PROPOSTO", "docs/ESPEC_DIGIBRAIN_MODULAR.md, secoes 2 a 7; valor de partida a mao (etapa 1a), SEM FONTE salvo o que o "
                           "comentario do campo cita"))
     for f in fields(ConfigDigibrainInatos)}

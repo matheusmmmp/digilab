@@ -202,3 +202,19 @@ Ho et al. usam de 10 a 50 execuções por condição, sem teste de hipótese: é
   capacidades e o replay). Desligada, todos os gabaritos saem byte a byte; G1 nas cinco sementes.
 - **O desvio:** `docs/registro/2026-11.md`, a seção da M2 e da M3 (as leituras, o log que deixa de ser o mesmo, os três testes de mecanismo).
 - **O próximo:** a M4 (o termo da lembrança na decisão, `lembranca`, as sondas), num PR próprio.
+
+## 13. M4: a lembrança entra na decisão e a sonda contrafactual (2026-11-01, worker, Claude Code, Sonnet 5.5, worktree `v3-memoria-m4`)
+
+- **O termo** (`Memoria.termo_lembranca`, `Memoria.casa`, `Impulso.unidades`): o episódio lembrado soma `L = mul(w_lem, σ)` (`w_lem` = S/2,
+  DECIDIDO, SEM FONTE, `ConfigDigibrainInatos`) como o termo `lembranca` das unidades da lista de agora de mesma ação (mesmo comportamento
+  e mesma classe de alvo; `ponto`: o mesmo lugar; `sem_alvo`: o comportamento). Sem unidade que case, nenhum termo. O L pode ser
+  negativo (a comida que fez mal). O termo só existe nas unidades com a subchave `memoria_autobio`; desligada, as unidades são as de hoje.
+- **A sonda** (`Arbitragem(autobio=True)`): `sem_memoria` e `so_inato` tiram também a `lembranca`; `sem_lembranca` tira só ela; o registro
+  ganha `lembranca_decidiu`. Mesmo u, nenhuma rng nova, nenhuma mudança de estado (testado).
+- **O registro:** `motivo["lembranca"]` (que já guardava o id, o `sim`, a memória e o σ) ganha `L` e `unidades` (as chaves que receberam o
+  termo).
+- **Os testes** (`tests/test_memoria_autobio.py`, T-ME-4): o termo e a regra de correspondência; a sonda mostra a troca quando a
+  lembrança muda a escolha e não mostra quando não muda; a sonda não consome a rng nem muda as unidades; as sondas desligadas são as de
+  hoje; nas cinco sementes, o replay bit a bit e a coerência do registro.
+- **O que não houve:** nenhuma vida de pesquisa nem faixa (só 101…505); nenhum gabarito regravado; `engine.py` e a web não mudam; a M5 em
+  diante e o `controle_mem` ficam de fora.

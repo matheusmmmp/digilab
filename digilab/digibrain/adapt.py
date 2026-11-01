@@ -95,7 +95,7 @@ class Modulos:
 def montar_modulos(cfg: Config, cd: ConfigDigibrain, cm: ConfigMundo, inatos: ConfigDigibrainInatos,
                    serie_e_doadora: tuple | None) -> Modulos:
     return Modulos(sens=Sens(cfg, cm, inatos), afeto=Afeto(cfg, cd, inatos, serie_e_doadora), estado=EstadoDinamico(cfg, cd, inatos),
-                   impulso=Impulso(inatos, cd), mem=Memoria(cm, inatos, cd.memoria_autobio), arb=Arbitragem(inatos), plast=Plasticidade(cd, inatos))
+                   impulso=Impulso(inatos, cd), mem=Memoria(cm, inatos, cd.memoria_autobio), arb=Arbitragem(inatos, cd.memoria_autobio), plast=Plasticidade(cd, inatos))
 
 
 def intencao_da_unidade(unidade: dict) -> Intencao:
@@ -154,8 +154,11 @@ class DigiBrain:
             tick = m.mem.relogio(sens["minuto"])
             consolidacao = m.mem.consolidar(k)
             lembranca = m.mem.lembrar(sens)
+            termo_lem = m.mem.termo_lembranca(lembranca)
         memoria = m.mem.recuperar(sens, afeto) if cd.m_mem else None
-        unidades, z = m.impulso.unidades(sens, afeto, ctx, m.plast, memoria, m.afeto.drives(receptores))
+        unidades, z = m.impulso.unidades(
+            sens, afeto, ctx, m.plast, memoria, m.afeto.drives(receptores),
+            None if not cd.memoria_autobio or termo_lem is None else (termo_lem, m.mem.casa))
         esc = m.arb.escolher(unidades, afeto, sens, rng, reflexo, segurar)  # a rng de politica vai so ao M-ARB
         self._conferir_desligadas(unidades)
         unidade = esc["unidade"]
@@ -191,7 +194,9 @@ class DigiBrain:
         if entregue:                                  # a busca guardada (DX-4), entregue sem a opcao composta: so com a subchave
             self.motivos[-1]["busca_entregue"] = entregue
         if cd.memoria_autobio:                        # a C4, M2 e M3: desligada, nenhum campo novo
-            self.motivos[-1]["lembranca"] = lembranca
+            self.motivos[-1]["lembranca"] = {**lembranca, "L": None if termo_lem is None else termo_lem["L"],
+                                             "unidades": [] if termo_lem is None else
+                                             [chave_json(x["chave"]) for x in unidades if m.mem.casa(termo_lem, x)]}
             self.motivos[-1]["consolidacao"] = consolidacao
         if cd.credito_corrida:                        # a C2: desligada, nenhum campo novo
             self.motivos[-1]["corridas"] = corridas

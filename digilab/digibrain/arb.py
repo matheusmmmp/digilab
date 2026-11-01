@@ -12,6 +12,9 @@
   estado). O modulo decidiu se a escolha muda. Sem a memoria (sem_memoria e so_inato), a unidade do lugar lembrado sai inteira: ela so
   existe porque o M-MEM recuperou o lugar (PROPOSTO). Sem u (um candidato so na decisao), uma sonda com dois candidatos ou mais fica com o de
   maior peso (o primeiro no empate), PROPOSTO; no reflexo, nenhuma sonda decide.
+**A C4, M4** (docs/ESPEC_MEMORIA_AUTOBIOGRAFICA_DIGIBRAIN_MODULAR.md, secao 6.1; `Arbitragem(autobio=True)`): a sonda `sem_memoria` tira
+tambem o termo `lembranca` (e `so_inato`, que tira o aprendido); a sonda nova `sem_lembranca` tira so ele, com `lembranca_decidiu`.
+Mesmo u, nenhuma rng nova. Desligada, as sondas sao as de hoje.
 **A escolha segurada** (a C3, docs/ESPEC_REDECIDIR_EVENTO_DIGIBRAIN_MODULAR.md, secao 2; so com a subchave `redecidir_evento`): sem evento,
 o M-ADAPT passa o candidato (`segurar`, a chave da escolha anterior); com ele na lista e peso positivo, o M-ARB o escolhe sem sorteio e sem
 chamar a rng, e, como no reflexo, nenhuma sonda decide. Fora da lista ou com peso 0 (RE-2), o sorteio de hoje, e o registro marca `fora`."""
@@ -43,8 +46,14 @@ def sortear_inteiro(pesos: list[int], u) -> int:
 class Arbitragem:
     """o M-ARB (docstring do modulo)"""
 
-    def __init__(self, inatos: ConfigDigibrainInatos | None = None) -> None:
+    def __init__(self, inatos: ConfigDigibrainInatos | None = None, autobio: bool = False) -> None:
         self.p = inatos or CONFIG_DIGIBRAIN_INATOS
+        self.sondas = SONDAS
+        self.decidiu = DECIDIU
+        if autobio:                                   # a C4, M4 (6.1): sem_memoria tira tambem a lembranca; sem_lembranca tira so ela
+            self.sondas = {**{n: t + ("lembranca",) if n in ("sem_memoria", "so_inato") else t for n, t in SONDAS.items()},
+                           "sem_lembranca": ("lembranca",)}
+            self.decidiu = {**DECIDIU, "sem_lembranca": "lembranca_decidiu"}
         self.S = self.p.escala
         self.sorteios = 0
         self.reflexos = 0
@@ -101,17 +110,17 @@ class Arbitragem:
                 self.nada_a_fazer += 1
             i = self._escolher(unidades, w, u)
         sondas: dict = {}
-        for nome, tirar in SONDAS.items():
+        for nome, tirar in self.sondas.items():
             if reflexo or segura is not None:
                 sondas[nome] = chave_json(unidades[i]["chave"])
-                sondas[DECIDIU[nome]] = False
+                sondas[self.decidiu[nome]] = False
                 continue
             ativ = [0 if ("memoria" in tirar and x.get("tipo") == "ponto") else phi(x["soma"] - sum(x["termos"][t] for t in tirar), p.a_max)
                     for x in unidades]
             g_exp = p.e0 if nome == "sem_afeto" else afeto["g_exp"]
             j = self._escolher(unidades, self.pesos(ativ, g_exp), u)
             sondas[nome] = chave_json(unidades[j]["chave"])
-            sondas[DECIDIU[nome]] = j != i
+            sondas[self.decidiu[nome]] = j != i
         return {"indice": i, "unidade": unidades[i], "u": u, "reflexo": reflexo, "nada_a_fazer": not reflexo and all(x == 0 for x in w),
                 "pesos": w, "sondas": sondas, "segurada": segura is not None, "fora": segurar is not None and segura is None}
 

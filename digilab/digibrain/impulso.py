@@ -95,8 +95,10 @@ class Impulso:
                 out.append({"chave": chave_unidade(b), "acao": b, "tipo": None, "objeto": None, "d": None})
         return out
 
-    def unidades(self, sens: dict, afeto: dict, contexto: dict, plast, memoria: dict | None, drives: tuple) -> tuple[list[dict], list]:
-        """as unidades da decisao com os termos e a ativacao, e o z"""
+    def unidades(self, sens: dict, afeto: dict, contexto: dict, plast, memoria: dict | None, drives: tuple,
+                 lembranca: tuple | None = None) -> tuple[list[dict], list]:
+        """as unidades da decisao com os termos e a ativacao, e o z. `lembranca` = (o termo da M4, o `casa` do M-MEM) ou None; so com a
+        `memoria_autobio` as unidades ganham o termo `lembranca` (L nas que casam com o episodio lembrado, 0 nas outras)"""
         S, a_max = self.S, self.p.a_max
         z = self.contexto_z(sens, afeto, contexto)
         inato_b = {b: sum(mul(w, zj, S) for w, zj in zip(self.w0[b], z) if w) for b in COMPORTAMENTOS_DIGIBRAIN}
@@ -106,7 +108,7 @@ class Impulso:
         out = []
         for u in self.alvos(sens, memoria):
             b, o = u["acao"], u["objeto"]
-            termos = dict.fromkeys(TERMOS, 0)
+            termos = dict.fromkeys(TERMOS + (("lembranca",) if self.cd.memoria_autobio else ()), 0)
             termos["inato"] = inato_b[b] + (self.w0_tipo.get(b, {}).get(u["tipo"], 0) if u["tipo"] is not None else 0)
             if o is not None:
                 termos["prox"] = mul(self.w0_prox.get(b, 0), o["prox"], S)
@@ -120,6 +122,8 @@ class Impulso:
             if u["tipo"] == "ponto":
                 termos["memoria"] = memoria["M"]
             termos["persistencia"] = persist.get(u["chave"], 0)
+            if lembranca is not None and lembranca[1](lembranca[0], u):
+                termos["lembranca"] = lembranca[0]["L"]
             soma = sum(termos.values())
             out.append({**u, "termos": termos, "soma": soma, "a": phi(soma, a_max)})
         return out, z
