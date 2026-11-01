@@ -8,8 +8,9 @@ import { zoomAtual } from "../../escala.ts";
 import { atlasAtual, desenharSprite, dimSprite, escalaSprite, quadroAgora, type AtlasOk } from "../../atlas.ts";
 import { S, desenharGrade, gradeDe, paleta } from "../../grades.ts";
 import { flashAtual } from "../../flash.ts";
-import { jogoAtual, passarQuadroOvo } from "../../jogo.ts";
+import { balancoOvo, jogoAtual, passarQuadroOvo } from "../../jogo.ts";
 import { CENA } from "./cenaEstado.ts";
+import { alturaSono, desenharZz } from "./sono.ts";
 
 const ICONE_ACAO: Record<string, string> = { dormir: "zz", chamar_atencao: "exclam", emburrar: "raiva", brincar: "nota", explorar: "pergunta", comer: "carne" };
 const EMOTE_ICONE: Record<string, string> = { carne: "emoji_carne", nota: "emoji_nota", exclam: "emoji_exclam", coracao: "emoji_coracao" };
@@ -62,9 +63,10 @@ function desenharPalco(cv: HTMLCanvasElement, cx: CanvasRenderingContext2D, quad
   cx.setTransform(1, 0, 0, 1, 0, 0);
   if (a.tipo === "ok") {
     if (nascendo > 0) {
-      const oscil = nascendo % 2 ? 3 : -3, [ow, oh] = dimSprite(a.dados, OVO[m.especie]), eo = escalaQueCabe(g, ow, oh) * Math.max(1, Math.round(K));
+      const oscil = balancoOvo(nascendo) * 3, [ow, oh] = dimSprite(a.dados, OVO[m.especie]), eo = escalaQueCabe(g, ow, oh) * Math.max(1, Math.round(K));
       desenharSprite(cx, a, OVO[m.especie], (W / 2 + oscil) * K - ow * eo / 2, g.pes * K - oh * eo, eo, 0);
-      passarQuadroOvo(); return;
+      if (!CENA.coberto) passarQuadroOvo();
+      return;
     }
     desenharPetUp(cx, a, g, quadro);
     return;
@@ -73,14 +75,14 @@ function desenharPalco(cv: HTMLCanvasElement, cx: CanvasRenderingContext2D, quad
   const grade = nascendo > 0 ? S.ovo : S[gradeDe(m.estagioAtual)], larg = Math.max(...grade.map(l => l.length)), alt = grade.length;
   const u = escalaQueCabe(g, larg, alt), uk = u * K, acao = m.acao;
   let x = W / 2 - larg * u / 2, y = g.pes - alt * u;
-  if (nascendo > 0) x += nascendo % 2 ? 3 : -3;
+  if (nascendo > 0) x += balancoOvo(nascendo) * 3;
   else if (acao === "explorar") x += Math.round(Math.sin(quadro / 3) * u * 10);
   else if (acao === "brincar") { x += Math.round(Math.sin(quadro / 2) * u * 4); y -= (quadro % 4 < 2) ? u * 2 : 0; }
   else if (acao !== "dormir") y -= (quadro % 4 < 2) ? u : 0;
   cx.setTransform(uk, 0, 0, uk, Math.round(x * K), Math.round(y * K));
   desenharGrade(cx, grade, 0, 0, pal, nascendo > 0 ? {} : { olhosFechados: acao === "dormir" || (quadro % 17 === 0), espelho: acao === "explorar" && Math.cos(quadro / 3) < 0 });
   cx.setTransform(1, 0, 0, 1, 0, 0);
-  if (nascendo > 0) { passarQuadroOvo(); return; }
+  if (nascendo > 0) { if (!CENA.coberto) passarQuadroOvo(); return; }
   desenharIconeGrade(cx, g, x, y, larg * u);
   if (e.saude < .3) marcaSaude(cx, K);
 }
@@ -89,8 +91,9 @@ function desenharPalco(cv: HTMLCanvasElement, cx: CanvasRenderingContext2D, quad
    ela informa: a sujeira dos dois lados dos pes, o icone rapido e a marca de saude critica */
 function desenharExtras3D(cx: CanvasRenderingContext2D, g: Geo): void {
   const { motor: m, nascendo } = jogoAtual();
-  /* o ovo e desenhado pela cena 3D, mas a contagem dos quadros chocando continua daqui (sem ela o ovo nao choca nunca) */
-  if (nascendo > 0) passarQuadroOvo();
+  /* o ovo e desenhado pela cena 3D, mas a contagem dos quadros chocando continua daqui (sem ela o ovo nao choca nunca); com um painel
+     por cima (o veu), o ovo espera: o nascimento e para ser visto */
+  if (nascendo > 0 && !CENA.coberto) passarQuadroOvo();
   const r = CENA.ret; if (!r) return;
   const a = atlasAtual(), pal = paleta(corDominante(m.tracos)), K = g.K;
   const ec = Math.max(2, Math.round(r.h / 40)), pes = r.y + r.h;
@@ -119,7 +122,18 @@ function desenharPetUp(cx: CanvasRenderingContext2D, a: AtlasOk, g: Geo, quadro:
   let x = g.W / 2 - w / 2, y = g.pes - h;
   if (acao === "explorar") x += Math.round(Math.sin(quadro / 3) * w * .6);
   else if (acao === "brincar") { x += Math.round(Math.sin(quadro / 2) * w * .25); y -= (quadro % 4 < 2) ? escCss * 4 : 0; }
-  desenharSprite(cx, a, nome, x * K, y * K, esc, quadroAgora(a, nome, acao === "dormir"), { sombria: m.sombria });
+  if (acao !== "dormir") desenharSprite(cx, a, nome, x * K, y * K, esc, quadroAgora(a, nome), { sombria: m.sombria });
+  else {
+    /* dormindo (sono.ts): o quadro parado num canvas a parte, posto achatado e respirando, mais largo, com o pe no chao e o tom apagado */
+    const alt = alturaSono(performance.now(), matchMedia("(prefers-reduced-motion: reduce)").matches), larg = 1 + (1 - alt) / 2;
+    const tmp = document.createElement("canvas"); tmp.width = rw * esc; tmp.height = rh * esc;
+    const gt = tmp.getContext("2d"); if (!gt) throw new Error("canvas 2d indisponível");
+    desenharSprite(gt, a, nome, 0, 0, esc, 0, { sombria: m.sombria });
+    cx.save(); cx.filter = "brightness(.85) saturate(.85)";
+    cx.drawImage(tmp, Math.round((x + w / 2 - w * larg / 2) * K), Math.round((y + h * (1 - alt)) * K), Math.round(w * larg * K), Math.round(h * alt * K));
+    cx.restore();
+    y += h * (1 - alt);
+  }
   desenharIcone(cx, a, g, x, y, w);
   if (m.e.saude < .3) marcaSaude(cx, K);
 }
@@ -127,7 +141,8 @@ function desenharPetUp(cx: CanvasRenderingContext2D, a: AtlasOk, g: Geo, quadro:
 function desenharIcone(cx: CanvasRenderingContext2D, a: AtlasOk, g: Geo, x: number, y: number, w: number): void {
   const m = jogoAtual().motor, pal = paleta(corDominante(m.tracos)), K = g.K;
   const icone: string | null = flashAtual();
-  if (!icone) return;
+  /* sem acao do dono agora, o pet dormindo solta o "zz" (sono.ts) */
+  if (!icone) { if (m.acao === "dormir") desenharZz(cx, K, x, y, w, performance.now(), matchMedia("(prefers-reduced-motion: reduce)").matches, pal); return; }
   if (EMOTE_ICONE[icone]) {
     const [pw0, ph0] = dimSprite(a.dados, EMOTE_ICONE[icone]), es = escalaSprite() * 2, pw = pw0 * es / K, ph = ph0 * es / K;
     desenharSprite(cx, a, EMOTE_ICONE[icone], Math.min(g.W - pw - 6, x + w - 6) * K, Math.max(TOPO_LIVRE, y - ph - 4) * K, es, 0);

@@ -192,6 +192,20 @@ export function silhuetaAtlas(a: AtlasOk, nome: string): { url: string; w: numbe
   cacheSilhueta.set(nome, r);
   return r;
 }
+/** o primeiro quadro recortado so no que ele ocupa (sem a sobra da caixa comum dos clipes), para retratos pequenos; uma peca sai inteira */
+const cacheRecorte = new Map<string, { url: string; w: number; h: number }>();
+export function recorteAtlas(a: AtlasOk, nome: string): { url: string; w: number; h: number } {
+  const pronto = cacheRecorte.get(nome);
+  if (pronto) return pronto;
+  const s = a.dados.sprites[chaveUp(a.dados, nome)];
+  if (!s) return imagemAtlas(a, nome);
+  const q = s.quadros[0], c = document.createElement("canvas"); c.width = q[2]; c.height = q[3];
+  const g = c.getContext("2d"); if (!g) throw new Error("canvas 2d indisponível");
+  desenharSprite(g, a, nome, -q[4], -q[5], 1, 0);
+  const r = { url: c.toDataURL(), w: q[2], h: q[3] };
+  cacheRecorte.set(nome, r);
+  return r;
+}
 /** estado do atlas fora de componente (o palco desenha num intervalo proprio) */
 export const atlasAtual = (): EstadoAtlas => estado;
 /** escala do sprite em pixels do aparelho: 1x em pixels CSS quando o aparelho tem densidade inteira */

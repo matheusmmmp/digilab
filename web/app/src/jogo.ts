@@ -107,10 +107,20 @@ export function trocarMotor(m: Motor, origem: Origem, nascendo = 0): void {
   gravar();
   avisar();
 }
-/** um ovo novo: semente do relogio (como o HTML) e 16 quadros chocando */
+/** quadros do palco (120 ms cada) com o ovo chocando: ~5 s, para o nascimento ser um momento e nao um corte. PROPOSTO, SEM FONTE */
+export const QUADROS_CHOCANDO = 40;
+/** um ovo novo: semente do relogio (como o HTML) e o ovo chocando */
 export function novoPet(): void {
   const s = (Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0;
-  trocarMotor(ligarProduto(new Motor(s)), "novo", 16);
+  trocarMotor(ligarProduto(new Motor(s)), "novo", QUADROS_CHOCANDO);
+}
+/** o balanco do ovo de lado, em unidades (texel ou px), pelos quadros que faltam: parado no comeco, tremidas curtas no meio, e cada
+    vez mais forte no fim (o ovo nao "anda": so treme no lugar). PROPOSTO, SEM FONTE */
+export function balancoOvo(nascendo: number): number {
+  const feito = QUADROS_CHOCANDO - nascendo, lado = nascendo % 2 ? 1 : -1;
+  if (nascendo <= 0 || feito < 10) return 0;
+  if (nascendo > 12) return feito % 8 < 3 ? lado : 0;
+  return lado * (nascendo <= 4 ? 2 : 1);
 }
 /** um quadro a menos do ovo chocando (chamado pelo palco a cada desenho) */
 export function passarQuadroOvo(): void {
