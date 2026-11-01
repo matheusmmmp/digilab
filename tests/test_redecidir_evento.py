@@ -327,7 +327,8 @@ def test_g2_separado_ligada_muda_so_a_vida_do_braco_que_a_liga():
 def test_g2_separado_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
     donos_da_chave = {"digilab/config.py", "digilab/digibrain/adapt.py", "digilab/digibrain/arb.py", "digilab/digibrain/estado.py",
                       "experiments/run_v2_digibrain_prototipo.py",
-                      "experiments/run_v2_redecidir_evento.py", "experiments/adendo8_poder_redecidir_evento.py"}   # a run e o poder da C3 (adendo 8)
+                      "experiments/run_v2_redecidir_evento.py", "experiments/adendo8_poder_redecidir_evento.py",   # a run e o poder da C3 (adendo 8)
+                      "experiments/adendo9_poder_memoria_autobio.py"}   # o poder da C4 (adendo 9): so le o artefato da run da C3, pelo caminho
     achados = set()
     for pasta in ("digilab", "experiments", "web", "tools", "servidor"):
         if not (RAIZ / pasta).exists():

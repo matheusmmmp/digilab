@@ -123,6 +123,11 @@ SUBCHAVES_C2 = {"M2c": {**SUBCHAVES_CONSERTO["M2"], "credito_corrida": True}}
 # a C3 (docs/TAREFA_V3_REDECIDIR_EVENTO.md, 3.1 e RD-1; o adendo 8; a run em experiments/run_v2_redecidir_evento.py): o M3* e o M2 do
 # conserto com a escolha refeita so por evento
 SUBCHAVES_C3 = {"M3R": {**SUBCHAVES_CONSERTO["M3"], "redecidir_evento": True}, "M2R": {**SUBCHAVES_CONSERTO["M2"], "redecidir_evento": True}}
+# a C4 (docs/TAREFA_V2_MEMORIA_AUTOBIOGRAFICA.md, secao 4; a espec, 7.2; o adendo 9; a run em experiments/run_v2_memoria_autobio.py): o M3*
+# do conserto com a memoria autobiografica, um braco por controle_mem, e o REL com as facetas (o REL+F); a facetas_mem so no REL+F
+SUBCHAVES_C4 = {**{b: {**SUBCHAVES_CONSERTO["M3"], "memoria_autobio": True, "controle_mem": c}
+                   for b, c in (("REL", "rel"), ("SEM", "sem"), ("REC", "rec"), ("EMB", "emb"), ("RELsN", "rel_sem_neg"))},
+                "REL+F": {**SUBCHAVES_CONSERTO["M3"], "memoria_autobio": True, "controle_mem": "rel", "facetas_mem": True}}
 BRACOS_DA_FASE.update({"calibracao_conserto": ("M3",), "piloto_conserto": BRACOS_CONSERTO, "reavaliacao": BRACOS_CONSERTO})
 G_MVP_EP = {"w_decisoes": 8, "fome_elegivel": 0.5, "taxa_vida": 0.5, "limiar": 0.8}         # A3.3: os numeros da PPM-4, por episodio
 G_ELEGIVEL_EP = {"frac_vidas": 0.8, "episodios": 3}                                          # A3.3: a premissa G-ELEGIVEL-EP
@@ -285,8 +290,9 @@ def bancada(dias: int, orcamento_por_dia: int) -> bv.Bancada:
 
 def config_do_braco(braco: str, g_apr_con: int | None = None, conserto: bool = False) -> ConfigDigibrain:
     """a ConfigDigibrain do braco: a do prototipo (SUBCHAVES) ou, nas fases do conserto, a do adendo 3 (SUBCHAVES_CONSERTO), com os dois
-    bracos da L-2 (SUBCHAVES_L2, o adendo 5), o da C2 (SUBCHAVES_C2, o adendo 7) e os da C3 (SUBCHAVES_C3, o adendo 8)"""
-    tabela = {**SUBCHAVES_CONSERTO, **SUBCHAVES_L2, **SUBCHAVES_C2, **SUBCHAVES_C3} if conserto else SUBCHAVES
+    bracos da L-2 (SUBCHAVES_L2, o adendo 5), o da C2 (SUBCHAVES_C2, o adendo 7), os da C3 (SUBCHAVES_C3, o adendo 8) e os da C4
+    (SUBCHAVES_C4, o adendo 9)"""
+    tabela = {**SUBCHAVES_CONSERTO, **SUBCHAVES_L2, **SUBCHAVES_C2, **SUBCHAVES_C3, **SUBCHAVES_C4} if conserto else SUBCHAVES
     if braco not in tabela:
         raise ValueError(f"braco do modular {braco!r}: so {tuple(tabela)}")
     extra = {"g_apr_constante": g_apr_con} if braco == "M4-con" else {}

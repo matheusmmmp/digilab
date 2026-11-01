@@ -3228,3 +3228,374 @@ de A8.0 a A8.12 muda. A run roda uma vez; o resultado é registrado como está.
   - **a árvore limpa:** o `meta.json` grava o `git_head` e o `git_limpo`; a run sai do commit deste registro, empurrado;
   - **a máquina (V3-D8):** nenhum processo Python rodando antes da suíte (nenhuma run de pesquisa nem medição do combate); a suíte e a run
     não se sobrepõem; 4 processos.
+
+## Adendo 9: a validação causal da memória autobiográfica, a C4 da V3 (2026-11-01, worker do plano da C4, Claude Code, Opus 5.5)
+
+**Status: APROVADO pelo Matheus em 2026-11-01,** com as AD9-1 a AD9-10 de A9.12 pela recomendação ("Sim, aprove e mescle", no chat do
+Gerente da V3). Antes desta aprovação, o orquestrador `experiments/run_v2_memoria_autobio.py` recusava a run (a trava
+`exigir_adendo_aprovado` de A4.7, com o número 9). As ME-1 a ME-7 e as C4-E1 a C4-E3 da
+`docs/TAREFA_V2_MEMORIA_AUTOBIOGRAFICA.md` (seção 8), as MA-1 a MA-8 da `docs/ESPEC_MEMORIA_AUTOBIOGRAFICA_DIGIBRAIN_MODULAR.md` (seção 11)
+e as leituras dos #532 a #539 estão DECIDIDAS pelo Matheus (2026-10-30 e 2026-11-01, pela recomendação); este adendo as escreve como plano
+e acrescenta só o que a seção 4 da tarefa deixou para ele: a medida primária, os lugares, o K, a margem, as premissas, a regra do SEM com a
+`facetas_mem` (a questão aberta do #539), a medida da fala e a faixa, todos PROPOSTOS e SEM FONTE (as AD9-1 a AD9-10). **Nenhuma vida da
+faixa proposta 77101…77505 rodou nem roda antes de três coisas:** este cabeçalho com a marca de aprovação do Matheus; a faixa em
+`FAIXAS_RESERVADAS`, num commit próprio depois da aprovação (hoje ela está livre e **não** está na tabela); e o registro da run (A9.10).
+
+**De onde vem:** a tarefa (seções 0, 4 e 8), a espec (seções 4 a 7, a 7.2 e a seção 5, o risco da C4-E1 no `longe_fixo`), o código na
+`main` (`e36f701`: M0 a M6 atrás da `memoria_autobio` e da `facetas_mem`, desligadas; o `controle_mem` dos cinco braços, #539; a fala fiel,
+#536 e #538) e os resultados da C1, da C2 e da C3 (`docs/RESULTADO_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`, seções 13 a 15). Este adendo reusa,
+sem mudar: o cenário (A6.2), a taxa de fechamento por episódio de fome (o G-MVP-EP de A3.3, com a W(d₀) de A3.2, a medida de A6.4), a
+G-ELEGIVEL-EP (A6.4), a G-PESA e o limiar dela (A6.4), a unidade (base, semente) e o IC95 do t sobre as unidades (A4.4.6), a ressalva do g1
+(A4.4.6), o Holm de hoje (`metrics.holm`), a classe de cada contraste (a regra de A6.6, com a margem deste adendo), a fórmula do poder (A6.5,
+com o α do teste como parâmetro) e as medidas da C5 (A6.8, item 4; AD6-4).
+
+**A fonte dos números novos:** o `experiments/adendo9_poder_memoria_autobio.py`, que só lê artefatos do git: o `medidas.json` da C1
+(71101 a 71505, 3 600 vidas; sha256 `5a4fb207…722d`, o registrado na seção 13 do RESULTADO), o da C3 (76101 a 76505, 7 200 vidas; sha256
+`d5b7c974…50bf`, o registrado na seção 15) e os `meta.json` da C1, da C2 e da C3 (`b2cb111a…`, `5ab56d67…`, `b9024ace…`), todos
+conferidos pelo script antes da conta. Ele grava `artifacts_v2_digibrain_prototipo/memoria_autobio/adendo9_poder.json` (sha256
+`8ad28afd…6754`) e, rodado duas vezes, sai igual, byte a byte. **Nenhuma vida, nenhum replay e nenhuma semente nova.** Abaixo, **[poder]**
+é esse artefato. O custo da memória por vida (A9.9) é o único número que não sai dele: sai da varredura com as sementes dos testes (A9.10),
+rotulado.
+
+**O que este adendo não afirma:** que a memória conserta o longe (o risco escrito na espec, seção 5), que o modular supera o A, que o pet
+"lembra" em algum sentido além de "o episódio está no registro e mudou a decisão pela sonda" (a espec, seção 10), ou que algum cérebro
+está pronto. Os contrastes são entre braços do próprio modular e medem a recuperação do M-MEM, num cenário. **Nenhuma alegação de
+novidade** (a regra 9; a espec, 1.3: juntar corpo, aprendizado em vida e memória episódica num agente já foi publicado).
+
+### A9.0 O que não muda
+
+- **O motor, o corpo, o mundo, o cheiro, o `longe_fixo`, o `engine.py`, o A, a v12 e o jogo web.** No cérebro, tudo o que está na
+  `main` (`e36f701`): o P1, o P2 e o crédito por opção, a persistência, o reflexo do sono, o M-MEM com a `memoria_autobio` (M0 a M4), as
+  facetas (M5), a fala (M6) e o `controle_mem` (#539). **Nenhuma mecânica nova:** o único código novo é o do orquestrador: os seis braços
+  em `SUBCHAVES_C4` (ao lado de `SUBCHAVES_C3`, no `run_v2_digibrain_prototipo.py`), a run (A9.10) e o poder.
+- **Os valores:** os inatos do #428 e os da seção 8 da espec (DECIDIDOS em 2026-11-01), iguais nos seis braços. **Nenhuma calibração e
+  nenhum piloto** (a tarefa, seção 4, pedia "as margens saem de um piloto"; aqui a variância vem das vidas já gravadas, como nas C1 a C3,
+  A9.6 e AD9-5).
+- **A C2, a C3 e a L-2 ficam desligadas nos seis braços** (a MA-7: a subchave da C4 levanta erro alto com a `credito_corrida`, a
+  `redecidir_evento` ou a `intencao_suspensa`).
+- **As faixas gastas** (64xxx, 66xxx, 67xxx, 71xxx, 75xxx, 76xxx) não entram em nada, salvo a leitura dos artefatos que já estão no git.
+- **Os resultados anteriores:** nada aqui muda o #420, a reavaliação (#432), a L-2 (#454), a C1 (#510), a C2 (#517) nem a C3 (#527).
+
+### A9.1 A pergunta e as previsões, escritas antes
+
+**A pergunta** (a tarefa, seção 1, no recorte da seção 4): o episódio que o pet lembra **pelo contexto** (o lugar, o que está à vista e o
+corpo, a cada decisão) muda o que ele faz e o desempenho onde a experiência passada importa, mais do que **nenhuma lembrança** (SEM), a
+**mais recente** (REC) ou **uma sorteada** (EMB)? **O dado** [poder]: na C1 e na C3, o M-MEM de hoje (o lugar lembrado, sem a memória
+autobiográfica) pesa em cerca de 12 % das decisões dos dias 8 a 14 do `longe_fixo` (a G-PESA da memória do M3\*: 0,122 na C1, 0,123 na
+C3) e leva o M3\* a +0,049 sobre o M2 no `longe_fixo` (C1). **Todas as visitas ao lugar lembrado são vazias** (no `longe_fixo`, 12 704 de
+12 704 na C1 e 13 363 de 13 363 na C3; no comedouro, 10 154 de 10 154 na C3); é o espaço da C4-E1.
+
+**As previsões de sinal (PROPOSTAS; escritas aqui antes de qualquer vida):**
+
+| contraste | lugar | o que é | a previsão | o papel |
+|---|---|---|---|---|
+| **REL − SEM** | `longe_fixo` | lembrar pelo contexto contra não lembrar (nem a lembrança, nem o lugar) | **> 0** | **o primário** (A9.4), com o Holm |
+| **REL − REC** | `longe_fixo` | o contexto contra a recência | **> 0** | **o primário**, com o Holm |
+| **REL − EMB** | `longe_fixo` | o contexto contra o acaso | **> 0** | **o primário**, com o Holm |
+| **G-COMEDOURO: REL − SEM** | comedouro | o mesmo, perto da ração | **não "< 0"** | a guarda (A9.4) |
+| **E2-FIXO: REL − RELsN** | `longe_fixo` | o episódio negativo (a visita vazia) contra o mesmo sem o sinal (C4-E2) | **sem previsão de sinal** | secundária, sem gate |
+| **E2-SORTEADO: REL − RELsN** | longe sorteado | o mesmo, onde a comida muda de lugar | **> 0** | secundária, sem gate |
+| **FACETAS: REL+F − REL** | `longe_fixo` | as facetas adquiridas por cima da lembrança | **sem previsão de sinal** | secundária, sem gate |
+| **SEM-SORTEADO: REL − SEM** | longe sorteado | lembrar sem a regularidade do lugar | **sem previsão de sinal** | secundária, sem gate |
+
+- **A direção do REL − SEM vem de Ho (2005), pela tese, e do PEPE** (A9.11), não o tamanho. **A direção do REL − REC e do REL − EMB é
+  SEM FONTE:** os controles de recência e embaralhado são o desenho do N6 do A (`docs/RESULTADO_V2_VALIDACAO_UNICA.md`, o G-CAUSAL), o
+  precedente da tarefa, seção 4, não uma fonte. A previsão não se afrouxa até passar: um "≈ 0" ou um "< 0" fica registrado assim.
+- **Um nulo no REL − REC é plausível e fica escrito antes:** no `longe_fixo` os lugares da ração são fixos, e o REC volta o lugar do
+  consumo bom mais recente, que nesse lugar tende a ser um dos mesmos pontos que a soma do REL escolhe. O contraste que separa o contexto
+  da recência pode ser pequeno exatamente onde o lugar importa.
+- **A E2-SORTEADO sai "> 0"** pela direção de Ho (a memória só supera o agente reativo quando guarda também os negativos), onde as visitas
+  vazias são a regra. **A E2-FIXO sai sem previsão** pelo risco escrito antes na espec (seção 5): se a ida ao lugar lembrado ajuda por
+  deixar o pet perto dos pontos fixos quando a ração cai (a interpretação não testada da C1, 13.5), cortar as idas vazias pode **tirar** o
+  ganho. Um nulo ou um negativo ali não é falha do código.
+- **As FACETAS e o SEM-SORTEADO saem sem previsão:** as facetas andam no máximo um passo de S/64 por dia (14 passos, abaixo do teto de S/4) e nenhuma
+  fonte diz o sinal; no sorteado, o lugar lembrado do M3\* não ajudou na C1 (−0,011, "indeterminado").
+
+### A9.2 O desenho
+
+- **O cenário:** o da C1 (A6.2), sem mudança: o `CONFIG_MUNDO_MVP`, o corpo do v11, o contrato da P4 desligado, o pet sozinho, os quatro
+  donos sem ensino, **14 dias, orçamento de 16 por dia,** morte desligada.
+- **Os lugares (AD9-3):** o `longe_fixo` **no primário** (4 células), o comedouro **na guarda** (4) e o longe sorteado **nas secundárias
+  E2-SORTEADO e SEM-SORTEADO e no descritivo** (4). São **12 células por unidade.** O perto não roda.
+- **Os braços (AD9-1, AD9-2),** todos o M3\* do conserto (as duas subchaves do cheiro) com a `memoria_autobio` ligada, sem a C2, a C3 nem a
+  L-2 (a espec, 7.2; o código, #539):
+
+| braço | no código | o `controle_mem` | a `facetas_mem` | o que é | o papel |
+|---|---|---|---|---|---|
+| **REL** | `REL` | `rel` | não | a lembrança pelo contexto (M2), o lugar pela soma (MA-2) | o braço da hipótese |
+| **SEM** | `SEM` | `sem` | não | o episódio é codificado e consolidado, nunca lido; nenhum lugar lembrado | controle do primário e da guarda |
+| **REC** | `REC` | `rec` | não | a lembrança é o mais recente; o lugar, o do consumo bom mais recente | controle do primário |
+| **EMB** | `EMB` | `emb` | não | a lembrança é um sorteado (a rng própria `mem_emb`); o lugar, o do sorteado, se for consumo bom | controle do primário |
+| **RELsN** | `RELsN` | `rel_sem_neg` | não | o REL com todo σ < 0 gravado como 0 (MA-3; a C4-E2) | controle das E2 |
+| **REL+F** | `REL+F` | `rel` | **sim** | o REL com as três facetas (M5) | o braço das FACETAS |
+
+- **A C4-E3 (a L-3):** fica fora, pela D-C1-1. **Nenhum braço da L-3 roda.** Se ela voltar, um adendo novo diz qual é o braço e qual é o
+  controle antes de somar os dois (a espec, seção 5).
+- **As vidas:** 6 braços × 12 células = **72 vidas por unidade.**
+- **O pareamento:** por unidade e célula. Os seis braços vivem a mesma semente, o mesmo genoma, o mesmo dono e o mesmo lugar; só as
+  subchaves mudam. A rng do dono e a dos lugares fixos não dependem do braço (a regra das rngs separadas); o EMB tem a rng própria
+  (`derivar_semente(semente, "mem_emb")`), e a rng de política só vai ao M-ARB (o #539).
+- **O M3\* sem a memória autobiográfica, o M0, o M2, o A11 e as variantes do cheiro não entram** (AD9-1).
+
+### A9.3 As sementes e a faixa
+
+- **A faixa: 77101…77505, PROPOSTA** (AD9-7), conferida livre em 2026-11-01 em `experiments/bancada/faixas.py` (nenhuma faixa reservada
+  nem queimada a cruza; o teste `test_a_faixa_proposta_nao_cruza_outra_reservada_nem_queimada`). **Ela não está em `FAIXAS_RESERVADAS`:**
+  entra lá num commit próprio, com a fonte, só depois da aprovação deste adendo.
+- **As bases:** 77101, 77202, 77303, 77404 e 77505.
+- **O K: 40 por base, 200 unidades** (PROPOSTO; A9.6 e AD9-5). São **14 400 vidas.**
+- **A derivação:** `bancada_v2.unidades_derivadas(bases, K, prefixo="digibrain_prototipo")`, o prefixo da reavaliação, da L-2 e das C1 a
+  C3 (como a AD6-5). A função falha alto com colisão, e o `meta.json` grava as unidades.
+- **A run roda uma vez,** com todas as bases. Não há calibração nem piloto.
+- **As sementes dos testes** (101…505) servem só à fumaça, à varredura dos fins (A9.10) e aos testes do orquestrador.
+
+### A9.4 O primário, a guarda e as secundárias
+
+- **A medida primária (AD9-4):** **a taxa de fechamento por episódio de fome** (`episodios_fome.taxa`, a de A6.4, sem mudança), "o
+  desempenho nos cenários em que a experiência passada importa" da tarefa (seção 4), no cenário em que ela importa: o `longe_fixo`, onde a
+  ração cai em lugares fixos e voltar ao lugar onde a comida esteve é a experiência que conta. **As outras três métricas da tarefa não são
+  o primário:**
+  - **a fração das decisões em que a lembrança mudou a escolha** (pela sonda) é a **premissa P-PESA** (A9.5) e um descritivo (A9.8, item
+    1): ela mede se o mecanismo age, não se o pet fica melhor, e é 0 no SEM por construção (um "REL > SEM" nela seria tautológico);
+  - **as facetas** são a **secundária FACETAS** (o REL+F contra o REL) e um descritivo (A9.8, item 4); que cada mudança aponte os
+    episódios é conferido em toda vida (A9.10), não medido;
+  - **a fidelidade da fala** é um **descritivo** (A9.8, item 5): as vidas não falam (a fala usa LLM, fora do modo determinístico; o
+    `CLAUDE.md`), e a fidelidade do verificador é garantida por teste (T-ME-6, #536 e #538). O que a run mede é o item 2 do #536 ("a
+    conferência por regex com raiz em comum fica, a medir na validação causal"): a conferência sobre alegações sintéticas do registro real.
+  - **"Evitar o que fez mal"** (o T1 do J5, citado na tarefa) não tem cenário aqui: o T-CENARIO-1 só deixa ração no mundo, e um cenário com
+    comida que faz mal seria mecânica nova. Fica fora, escrito.
+- **O primário:** **a família de três contrastes REL − SEM, REL − REC e REL − EMB, só nas 4 células do `longe_fixo`.**
+- **A unidade:** a (base, semente). Em cada unidade, a diferença célula a célula (no mesmo dono), com a média das 4 células. **Uma célula
+  com a taxa `None` num dos dois braços** (uma vida sem episódio) **fica fora da média daquela unidade,** e a unidade sem nenhuma célula
+  fica fora (a regra do `por_unidade` do orquestrador do protótipo). Na C1 e na C3, nenhuma célula do `longe_fixo` nem do comedouro saiu
+  fora [poder].
+- **O teste:** **o t sobre as unidades** (o p unilateral do t pareado, A4.4.6) em cada contraste, e **o Holm sobre os três p, com α =
+  0,025 na família** (unilateral, o mesmo α do primário de um contraste só das C1 a C3; `metrics.holm`, sem mudança). **Cada contraste
+  passa se o Holm o rejeita** (o menor p contra 0,025/3, o seguinte contra 0,025/2, o último contra 0,025, parando no primeiro que não
+  rejeita). O primário não tem um "passa" único: a leitura (A9.7) lê os três.
+- **O que sai ao lado, em cada contraste:** a estimativa, o IC95 do t, o p unilateral, o p ajustado do Holm, o g1 das diferenças, o IC
+  percentil do bootstrap (rotulado como na A4.10), a classe de A6.6 com a margem de A9.6 e a "margem efetiva" (o menor efeito com poder 0,8
+  pelo dp observado, a fórmula de A6.5, com α = 0,025).
+- **A ressalva do g1** (A4.4.6, como está): com g1 ≤ −0,5, o contraste sai com a frase de lá, e um "passa" nele não é lido como
+  confirmação. A ressalva não muda o IC nem a decisão gravada.
+- **A guarda G-COMEDOURO:** REL − SEM, a mesma unidade e o mesmo t nas 4 células do comedouro. **Ela falha só com a classe "< 0" de A6.6**
+  (o limite superior abaixo de 0 e o IC fora de (−δ, +δ); AD9-9). Um "≈ 0 com o sinal −" sai descrito, e um "indeterminado" não é "< 0"
+  (a C3, 15.3, ficou assim).
+- **As secundárias** (pré-registradas, com o mesmo t, sem gate e sem Holm, lidas pela classe de A6.6): **E2-FIXO** (REL − RELsN,
+  `longe_fixo`), **E2-SORTEADO** (REL − RELsN, longe sorteado), **FACETAS** (REL+F − REL, `longe_fixo`) e **SEM-SORTEADO** (REL − SEM,
+  longe sorteado). **Nenhuma muda a linha de A9.7.**
+
+### A9.5 As premissas (PROPOSTAS, SEM FONTE)
+
+Se uma falha, **o primário é inconclusivo por premissa,** qualquer que seja o IC dele (A9.7, a primeira linha). As duas leem o
+`longe_fixo`, o lugar do primário.
+- **P-PESA:** no REL, nas 4 células, **a fração das decisões dos dias 8 a 14 em que a memória mudou a escolha** (a sonda `sem_memoria`,
+  que com a memória autobiográfica tira o lugar e a lembrança; `memoria_decidiu`), uma por vida, com a média das 4 células por unidade;
+  **o limite inferior do IC95 pelo t > 0,01** (o limiar da G-PESA de A6.4, como está; AD9-8). Se não passa, a lembrança e o lugar quase
+  não mudam escolhas, e o contraste não testa a hipótese. **Ela é a métrica da tarefa** "a fração de decisões em que a lembrança mudou a
+  escolha"; ao lado, sem premissa, sai a fração em que **só** a lembrança mudou (`sem_lembranca`, `lembranca_decidiu`).
+- **G-ELEGIVEL-EP** (a de A6.4, como está): ao menos 80 % das vidas **do REL, do SEM, do REC e do EMB** no `longe_fixo` com 3 episódios
+  ou mais. Se falha num deles, os donos quase não deram ração com o pet com fome e o episódio não informa. Entra nos quatro porque o
+  primário compara os quatro e a memória pode mudar quando o pet come (AD9-8).
+- **O que não é premissa:** a fração das decisões com lembrança (a recuperação que acontece) e as visitas ao lugar lembrado. Elas saem no
+  descritivo (A9.8, itens 1 e 2): com a P-PESA, elas separam a recuperação que não acontece da que acontece e não pesa (a tarefa, seção 0,
+  "se o gate falhar").
+- **A varredura da etapa (as sementes dos testes, A9.10)** já mostra que a P-PESA tem o que medir; isso não é dado da C4.
+
+### A9.6 A margem, pelo poder (e o "≈ 0")
+
+**A conta** ([poder]; a da A6.5, com o α do teste como parâmetro):
+1. **A dispersão.** Nenhum braço da C4 existe. A dispersão de um contraste da mesma medida (a taxa por episódio), na unidade de A9.4, é
+   lida onde existe, sempre com a média das 4 células de um lugar e com 150 unidades:
+
+   | fonte | lugar | contraste | média | IC95 (t) | dp entre as unidades | g1 | no σ |
+   |---|---|---|---|---|---|---|---|
+   | a C1 | `longe_fixo` | M3\* − M2 (o M-MEM) | +0,0489 | [+0,0355; +0,0624] | 0,0832 | 0,11 | sim |
+   | a C1 | `longe_fixo` | M2 − M0 (o P1 e o P2) | −0,0247 | [−0,0385; −0,0110] | 0,0853 | −0,53 | sim |
+   | a C1 | `longe_fixo` | M3\* − M0 | +0,0242 | [+0,0095; +0,0389] | 0,0911 | −0,26 | sim |
+   | a C3 | `longe_fixo` | M3\*R − M3\* (uma regra no mesmo cérebro) | +0,0124 | [−0,0060; +0,0308] | **0,1141** | −0,20 | sim |
+   | a C3 | `longe_fixo` | M2R − M2 | −0,0090 | [−0,0263; +0,0082] | 0,1067 | −0,43 | sim |
+   | a C3 | comedouro | M3\*R − M3\* | −0,0134 | [−0,0270; +0,0001] | 0,0840 | 0,10 | não |
+   | a C1 | longe sorteado | M3\* − M2 | −0,0106 | [−0,0236; +0,0024] | 0,0805 | −0,14 | não |
+   | a C3 | longe sorteado | M3\*R − M3\* | +0,0370 | [+0,0224; +0,0516] | 0,0907 | 0,06 | não |
+
+   Nenhum é um contraste da C4: servem só para o tamanho do dp, nunca como evidência dela. As três últimas linhas ficam ao lado (a escala
+   da guarda e das secundárias no sorteado).
+2. **O σ de planejamento:** o maior dos cinco do `longe_fixo`, com a folga de 20 % da A5.9: **σ = 0,1141 × 1,2 = 0,1369** (AD9-6). O
+   maior é o da C3, a dispersão observada mais nova (a C3 já saiu com o dp acima do planejado: a margem efetiva 0,0263 contra 0,025).
+3. **O poder** de um contraste no critério mais duro do Holm (o primeiro passo, α/3 = 0,00833 unilateral) com o efeito verdadeiro δ:
+   **1 − Φ(t₁₋α/₃;K−1 − (δ / σ) · √K)**. Planejar pelo primeiro passo é conservador: com mais de um efeito real, os passos seguintes
+   têm α maior.
+4. **A margem δ(K):** o menor efeito com poder 0,8 nesse critério, o menor efeito de interesse que a run detecta em cada contraste, e a
+   régua do "≈ 0".
+5. **A conferência por simulação:** as 150 diferenças M3\* − M2 do `longe_fixo` da C1 (o contraste do M-MEM, no lugar do primário),
+   centradas, na escala de σ, deslocadas e sorteadas com reposição em K unidades; 2 000 réplicas, semente 4242. Em cada réplica, três
+   conjuntos (um por contraste, com o mesmo efeito): o poder do primeiro passo, **o poder dos três juntos pelo Holm** e, com o efeito
+   verdadeiro 0, a fração com o IC95 inteiro dentro de (−δ, +δ), com o σ de planejamento e com o σ observado do M3\* − M2 (0,0832).
+
+| K (unidades) | por base | vidas | a margem δ(K) | δ de um contraste só (α 0,025) | poder simulado no 1.º passo | os três pelo Holm | efeito 0: "≈ 0" (σ de planejamento) | efeito 0: "≈ 0" (σ observado) |
+|---|---|---|---|---|---|---|---|---|
+| 100 | 20 | 7 200 | 0,0449 | 0,0387 | 0,789 | 0,736 | 0,803 | 0,999 |
+| 150 | 30 | 10 800 | 0,0365 | 0,0315 | 0,813 | 0,736 | 0,790 | 0,999 |
+| **200** | **40** | **14 400** | **0,0315** | **0,0272** | **0,811** | **0,737** | **0,794** | **0,998** |
+| 250 | 50 | 18 000 | 0,0282 | 0,0243 | 0,805 | 0,726 | 0,802 | 1,000 |
+| 300 | 60 | 21 600 | 0,0257 | 0,0222 | 0,788 | 0,728 | 0,798 | 1,000 |
+
+Com o efeito verdadeiro 0 e o σ de planejamento, o primeiro passo dá o falso "passa" em 0,006 a 0,009 das réplicas, perto do α/3 de
+0,0083; os três juntos, em 0,000.
+
+**O PROPOSTO: K = 200 (40 por base) e a margem δ = 0,032** (AD9-5; o 0,0315 do [poder], arredondado a três casas como nas AD7-1 e AD8-1).
+- **O tamanho:** a margem é cerca de dois terços do efeito do M-MEM no mesmo lugar (o M3\* − M2 da C1, +0,049). Se o REL mover o
+  episódio contra o SEM tanto quanto o lugar lembrado moveu contra o M2, a run o detecta; um efeito de metade disso (≈ 0,025), que é o
+  tamanho plausível do REL − REC e do REL − EMB (A9.1), fica perto da beira e pode sair "indeterminado". Isso fica escrito antes.
+- **Os três juntos:** com três efeitos reais iguais à margem, o Holm rejeita os três em cerca de 74 % das réplicas (o poder de cada um é
+  0,8; o dos três, menor). A leitura de A9.7 separa o "REL > SEM" sozinho dos três juntos por isso.
+- **O "≈ 0" com o σ de planejamento sai em cerca de 79 % das réplicas com o efeito 0; com o σ observado do M3\* − M2, em quase todas.** O
+  número real fica entre os dois, e o relato dá a margem efetiva (A9.4). Nenhum dos dois muda a margem nem a regra.
+- **Por que não o K das C1 a C3** (150): com o σ maior (o da C3) e o Holm, o K = 150 dá δ = 0,036, três quartos do efeito do M-MEM, e o
+  REL − REC e o REL − EMB, que se espera menores, sairiam "indeterminado" quase com certeza. O K = 300 (δ 0,026) alcança metade do efeito
+  do M-MEM, mas custa 50 % a mais de máquina (A9.9).
+- **O que a margem não é:** um limiar do primário. Cada contraste passa pelo Holm (A9.4).
+
+**O "≈ 0" e a classe de cada contraste** são os de A6.6, como estão, com δ = 0,032: (1) "≈ 0": o IC95 inteiro dentro de (−δ, +δ), com o
+sinal se ele também exclui o 0; (2) "> 0": o limite inferior acima de 0 e o IC fora de (−δ, +δ); (3) "< 0": o limite superior abaixo de
+0 e o IC fora; (4) "indeterminado": qualquer outro caso.
+
+### A9.7 A regra de leitura (o que se decide em cada resultado)
+
+**Em cada contraste do primário, o Holm manda** (como o primário nas A6.7, A7.7 e A8.7): a coluna lê "> 0" quando o Holm o rejeita
+(A9.4) e, senão, a classe de A6.6. **A guarda lê só "< 0" ou não.** As linhas são lidas na ordem, e vale a primeira que serve:
+
+| ordem | premissas (A9.5) | REL − SEM | REL − REC | REL − EMB | G-COMEDOURO | o que diria | o que se faz |
+|---|---|---|---|---|---|---|---|
+| 1 | uma falha | qualquer | qualquer | qualquer | — | inconclusivo por premissa: a memória não mudou escolhas no REL, ou os donos não deram episódios | registrado; nada se decide |
+| 2 | passam | algum dos três "> 0" | | | "< 0" | a memória ajuda longe da ração e atrapalha perto dela | registrado; volta ao Matheus; a `memoria_autobio` não vira candidata |
+| 3 | passam | > 0 | > 0 | > 0 | não "< 0" | nestas condições, a lembrança pelo contexto melhora o episódio de fome, e não basta lembrar qualquer episódio | a `memoria_autobio` (REL) vira candidata; volta ao Matheus. Não vai ao jogo sem plano próprio |
+| 4 | passam | > 0 | outra | outra (uma das duas não "> 0") | não "< 0" | lembrar ajuda, mas a relevância pelo contexto não se separa da recência ou do acaso ("≈ 0": não importa; outra classe: não se sabe) | registrado; o REL não vira candidato pela relevância; a escolha entre o REL e um controle mais simples volta ao Matheus |
+| 5 | passam | ≈ 0 | qualquer | qualquer | não "< 0" | nestas condições, a memória autobiográfica não move o episódio de fome; o descritivo separa a lembrança que não acontece da que acontece e não pesa | registrado; a `memoria_autobio` fica desligada; nenhuma mudança da memória sem plano próprio |
+| 6 | passam | < 0 | qualquer | qualquer | não "< 0" | a memória autobiográfica piora o pet | registrado como está; a subchave fica desligada |
+| 7 | passam | indeterminado | qualquer | qualquer | não "< 0" | nada se decide | registrado como indeterminado |
+
+- **O REL − SEM é a porta:** sem ele "> 0", a relevância (REL − REC, REL − EMB) não se lê como efeito da memória, mesmo que um deles saia
+  "> 0"; fica ao lado, descrito.
+- **O "> 0" de um contraste com a classe "≈ 0 com o sinal +"** (o Holm rejeita, mas o IC cabe inteiro na margem): o Holm manda, e a classe
+  sai ao lado como descrição do tamanho ("um efeito menor que a margem").
+- **As secundárias** (E2-FIXO, E2-SORTEADO, FACETAS, SEM-SORTEADO) e o descritivo de A9.8 **não mudam nenhuma linha.** A E2 e as FACETAS
+  respondem às perguntas da C4-E2 e da MA-6 em separado, pela classe, sem gate: um "> 0" ou um "< 0" nelas volta ao Matheus como dado para
+  uma decisão própria, não como candidata.
+- **Gate que falha não para a V3.** O resultado negativo é registrado como está. **A run não se repete,** e uma faixa nova só vem com um
+  adendo novo.
+
+### A9.8 O descritivo (sem gate)
+
+Os contrastes, com o IC95 do t sobre as unidades e a classe de A6.6, são sempre do REL contra cada outro braço, em cada lugar; os níveis,
+por braço e lugar. **Nenhum muda a leitura de A9.7.** Os grupos que o próprio mecanismo cria (as decisões com lembrança, os episódios por
+memória, as lembranças negativas) saem só por braço (a lição LP-2).
+1. **A lembrança e a sonda** (a tarefa, seção 0: a recuperação que não acontece contra a que acontece e não pesa): por braço e lugar, a
+   fração das decisões com lembrança, a fração dos dias 8 a 14 em que a memória mudou a escolha (`memoria_decidiu`, a da P-PESA) e em que
+   só a lembrança a mudou (`lembranca_decidiu`), em nível e nos contrastes do REL; as lembranças de σ < 0, somadas.
+2. **Os episódios e as visitas** (a C4-E1): por braço e lugar, somados, os codificados, os guardados no fim por memória (recente,
+   duradoura, central), os de σ < 0 guardados, as consolidações, os esquecidos e os que saíram da recente; as visitas ao lugar lembrado e
+   as vazias, em nível e nos contrastes.
+3. **O corpo:** as medidas da C5 (as definições da AD6-4, como estão: a fração dos ticks com alguma variável abaixo de 0,15 e a menor
+   necessidade, média e mínimo, na vida e nos dias 8 a 14), a exaustão e a privação de hoje, em nível e nos contrastes.
+4. **As facetas (só no REL+F):** o valor de cada faceta no fim, por lugar; as mudanças somadas por faceta; a fração dos dias 8 a 14 em
+   que a faceta mudou a escolha (`faceta_decidiu`). Que cada mudança aponte os episódios é conferido em toda vida (A9.10).
+5. **A conferência da fala** (AD9-10; o item 2 do #536): em toda vida, a conferência da M6 (`memoria_fala.conferir`, a mesma do
+   verificador, sem LLM) sobre alegações sintéticas montadas do registro, decisão a decisão, com os fatos Q e Z que a fala teria
+   naquela decisão:
+   - **verdadeira:** "eu lembrei do <a categoria do lembrado>" (a regra diz: sustentada);
+   - **falsa:** na decisão com lembrança, a categoria de outro episódio guardado, de categoria diferente; na decisão sem lembrança, a do
+     último guardado (a regra diz: recusada);
+   - **causa:** "fiz isso porque lembrei do <o lembrado>", sustentada só se a lembrança decidiu (a regra diz);
+   - **faceta (só no REL+F):** "fiquei mais/menos <faceta>" no sentido registrado (sustentada) e no contrário (recusada).
+   A categoria de cada episódio é lida quando ele entra na recente, por um coletor que só lê (o G1 rejoga a vida sem ele e confere bit a
+   bit); "já codificado" na decisão k é o que os fechamentos anteriores codificaram. Por braço e lugar, somadas: as sustentadas sobre as
+   alegações de cada tipo. **Isso mede a régua da fala, não uma fala:** a fração de falsas sustentadas é o quanto a raiz em comum deixa
+   passar no registro real. A varredura (as sementes dos testes) já mostra que ela não é 0 (das falsas, de 0 a 0,26 sustentadas, por braço e lugar: cerca de 0,19 no `longe_fixo` e 0,21 no sorteado no REL, 0,025
+   no comedouro; as verdadeiras, as causas e as facetas saem como a regra diz); não é dado da C4.
+6. **Os outros:** a taxa por episódio por braço e lugar e os contrastes do REL; a G-PESA de cada módulo de hoje; os episódios de fome por
+   vida; os fins das intenções somados (a conferência de A9.10); por dono, só a média da taxa por episódio.
+
+### A9.9 O tamanho da run e a máquina
+
+- **200 unidades × 72 vidas = 14 400 vidas,** 14 dias cada.
+- **No máximo 4 processos e uma run de pesquisa por vez** (a V3-D8; as medições do combate contam). O número de processos não muda nenhuma
+  vida nem o resultado.
+- **A estimativa das horas** [poder, `parede_4_processos` e `estimativa_parede`]: as três runs de 4 processos dão taxas de parede
+  diferentes por vida: a C1, 1,07 s; a C2, 0,65 s; a C3, 0,60 s. Com 14 400 vidas sem o custo da memória, **de 2 h 25 min (pela C3) a
+  4 h 16 min (pela C1).** **O custo da memória** (fora do [poder]; da varredura com as sementes dos testes, A9.10): o tempo de CPU por vida de 14 dias foi de
+  2,18 s (SEM) a 2,68 s (REL e REL+F), 2,46 s na média dos seis braços, contra 2,38 s do M3\* da C3 [poder, a média dos três lugares]: cerca
+  de 3 % a mais na média (o REL, o RELsN e o REL+F, cerca de 12 %; o coletor das categorias e a conferência da fala incluídos).
+  **A estimativa com ele: de 2 h 29 min (pela C3) a 4 h 24 min (pela C1);** com a
+  análise, até 4 h 45 min. É estimativa; o tempo real vai ao RESULTADO.
+- **O tamanho em disco:** pelo da C3 (73,8 MB para 7 200 vidas no `medidas.json`), cerca de 150 MB no git para 14 400 vidas, mais as
+  medidas da memória; as vidas, fora dele ou num `.tar.gz`, como nas C1 a C3.
+
+### A9.10 O que falta antes da primeira vida, e os critérios de parada
+
+- **O código da C4 na `main`** (`e36f701`): M0 a M6, o `controle_mem` (#539), a fala (#536, #538), os gabaritos e os testes (G1, G2,
+  G2-SEPARADO, T-ME-0 a T-ME-6, T-ME-VISITA).
+- **A aprovação deste adendo** (o cabeçalho com "APROVADO pelo Matheus") e as AD9-1 a AD9-10.
+- **A faixa** 77101…77505 em `FAIXAS_RESERVADAS`, **num commit próprio, depois da aprovação** (pedida ao coordenador; a fonte: este
+  adendo).
+- **O orquestrador** (`experiments/run_v2_memoria_autobio.py`, este PR), com a fumaça nas sementes dos testes:
+  - os seis braços de `SUBCHAVES_C4`, sem a C2, a C3 nem a L-2; as 12 células de A9.2; as bases e o K de A9.3; 14 dias; orçamento de 16;
+  - **a trava:** exige este adendo com a marca "APROVADO pelo Matheus" no cabeçalho (a `exigir_adendo_aprovado(texto, 9)` de A4.7; **hoje
+    ela recusa,** e um teste confere com o cabeçalho trocado nos dois sentidos) e a faixa em `FAIXAS_RESERVADAS` (**hoje ela não está**, e
+    a trava recusa também por isso); recusa, com `SementeSemPlano`, outra base, outro K, outros dias ou sementes fora da faixa; não grava
+    por cima de uma pasta que já existe; mais de 4 processos levantam erro;
+  - **a pasta de saída:** `artifacts_v2_digibrain_prototipo/memoria_autobio/run/` (a pasta-mãe já tem o `adendo9_poder.json`; a lição do
+    A6.13);
+  - **a conferência dos fins (a lição do #507):** os fins conhecidos de cada braço são as chaves de `EstadoDinamico.fins` com a config dele
+    (`achou`, `desistiu`, `meta`, `sumiu` e `trocou`, nos seis); um fim fora deles, uma contagem diferente da do estado, uma retomada ou um
+    `n_susp` **falham alto** (a `conferir_fins` da C2, como está);
+  - **a conferência da memória** (`conferir_memoria`), em toda vida, falhando alto: as subchaves do braço; a lembrança no motivo de toda
+    decisão e a faceta só no REL+F; no SEM, nenhuma lembrança, nenhum lugar lembrado e a memória nunca decidindo; no REC e no EMB, `sim` =
+    0; no REL, no RELsN e no REL+F, `sim` ≥ `sim_min`; no RELsN, nenhum σ < 0 lembrado ou guardado (MA-3); a `lembranca_decidiu` só com a
+    lembrança, o L e a unidade (o lastro do fato Q2); cada mudança de faceta com os ids;
+  - o replay bit a bit (o G1), o T-CENARIO-1, o G-MECANISMO e a conferência do crédito em toda vida;
+  - as medidas de A9.4, A9.5 e A9.8, e a análise de A9.4 a A9.7, gravadas no `resultado.json` com a classe de cada contraste, o Holm e a
+    linha da leitura; o resumo no console em ASCII (o `ensure_ascii` do #518).
+- **A varredura dos fins, antes da run** (esta etapa): o orquestrador inteiro com as cinco sementes dos testes (bases 101 a 505, K = 1), os
+  6 braços, as 12 células e 14 dias (360 vidas). O resultado vai no relato do PR; um fim desconhecido ou uma conferência da memória que
+  falhe teria parado a etapa.
+- **Antes da run:** os testes de mecanismo e de vidas, os gabaritos (o G2) e a suíte. **Qualquer quebra do G1, do G2 ou do G-MECANISMO
+  para tudo.**
+- **O registro da run** (uma seção A9.13 neste adendo), num commit empurrado antes da primeira vida: o commit, a config com o sha256, as
+  bases, o K, a primeira e a última unidade, os braços e os sha do orquestrador, do protótipo, do `config.py`, do `engine.py`, do
+  `metrics.py`, dos módulos da memória e da fala e deste plano; a pasta de saída sem vida da faixa em disco; o comando.
+- **Os artefatos:** o `meta.json`, o `medidas.json` e o `resultado.json` (com `git add -f`). **O RESULTADO:** uma seção nova no
+  `docs/RESULTADO_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`.
+- **A run roda uma vez.** O resultado é registrado como está, e nada se ajusta olhando para ele.
+
+### A9.11 As referências
+
+Só as VERIFICADAS na C0 (`docs/referencias/v3c0_referencias_verificadas.csv`, as linhas da trilha C4), e só para a direção:
+- **Ho (2005),** tese, University of Hertfordshire, `10.18745/th.14271` (lida pela triagem; a versão em periódico, Ho, Dautenhahn e
+  Nehaniv (2008), *Connection Science* 20(1), `10.1080/09540090801889469`, não foi lida e é citada só pelo conteúdo da tese): a
+  significância de um evento é a variação das variáveis internas que ele causou; a memória só supera o agente reativo quando guarda também
+  os eventos negativos. **Dá a direção do REL − SEM e da E2-SORTEADO, não o tamanho;** a linha usa de 10 a 50 execuções por condição, sem
+  teste de hipótese: é direção, não tamanho de efeito; **e não diz que o efeito se repete num pet com 11 receptores.**
+- **Francis, Mehta e Ram (2009),** o PEPE, `10.4018/978-1-60566-354-8.ch020`: episódios emocionais recuperados por semelhança mudaram o
+  comportamento só com um reconhecedor que busca casos o tempo todo (avaliação qualitativa). **Dá a direção da recuperação a cada decisão
+  (ME-2), não a medida de semelhança nem o tamanho.**
+- **Os controles REC e EMB** são o desenho do N6 do A (o precedente interno da tarefa, seção 4), **SEM FONTE** externa.
+- **Nenhuma outra fonte é citada.**
+- **Todo número deste adendo é SEM FONTE externa:** o K, a margem, a folga de 20 %, o α da família e o Holm como escolha, o 0,01 da P-PESA,
+  o 80 % e os 3 episódios da G-ELEGIVEL-EP, o −0,5 do g1 e a faixa. Os números de contexto saem dos artefatos citados.
+
+### A9.12 As decisões do Matheus (DECIDIDAS em 2026-11-01, pela recomendação)
+
+| # | decisão | recomendação | custo de errar |
+|---|---|---|---|
+| **AD9-1** | os braços e o primário(DECIDIDA) | **seis braços (REL, SEM, REC, EMB, RELsN, REL+F), todos o M3\* do conserto com a `memoria_autobio`; o primário é a família REL − SEM, REL − REC, REL − EMB com o Holm (α 0,025 na família); o RELsN e o REL+F só nas secundárias; o M3\* sem a memória autobiográfica fora** (A9.2, A9.4) | sem o Holm (três testes a 0,025): a chance de um falso "> 0" na família sobe a cerca de 7 %; só o REL − SEM: a run não diz se o contexto importa, que é a pergunta da tarefa; com o M3\* sem a memória autobiográfica: +12 vidas por unidade para um contraste que muda tudo de uma vez (o lugar pela soma, a lembrança, a consolidação) e não isola nada |
+| **AD9-2** | o SEM e a `facetas_mem` (a questão do #539)(DECIDIDA) | **a `facetas_mem` desligada nos cinco braços do `controle_mem` e ligada só num sexto braço, o REL+F; as facetas são lidas pelo REL+F − REL** (A9.2) | as facetas ligadas nos cinco, com o SEM mantendo-as (a 7.2 como está): o SEM não lembra, então não soma `rec`, consolida outros episódios e anda as facetas por outra evidência; o REL − SEM mistura a lembrança com a faceta, o que a MA-6 quis separar; o SEM com elas desligadas e os outros ligados: o REL − SEM mede a lembrança e a faceta juntas; sem o REL+F: a M5 não é validada |
+| **AD9-3** | os lugares(DECIDIDA) | **o `longe_fixo` no primário, o comedouro na guarda, o longe sorteado nas E2-SORTEADO e SEM-SORTEADO e no descritivo; 12 células** (A9.2) | só o `longe_fixo`: a C4-E2 fica sem o lugar onde Ho prevê o sinal, e não há guarda perto da ração; com o perto: +24 vidas por unidade para um lugar que nenhuma previsão lê |
+| **AD9-4** | a medida primária e o papel das outras três(DECIDIDA) | **a taxa por episódio no `longe_fixo` é a primária; a fração das decisões em que a lembrança mudou a escolha é a premissa P-PESA; as facetas, a secundária FACETAS; a fala, um descritivo sobre alegações sintéticas** (A9.4) | a fração das decisões como primária: o REL > SEM sai por construção (0 no SEM) e a run não diz se o pet fica melhor; a fala como primária: as vidas não falam, e uma fala por LLM sairia do modo determinístico; as facetas como primária: 14 passos de S/64 numa vida de 14 dias medem pouco |
+| **AD9-5** | o K e a margem(DECIDIDA) | **K = 200 (40 por base), δ = 0,032,** o menor efeito com poder 0,8 no primeiro passo do Holm pelo σ conservador (A9.6). 14 400 vidas, de 2 h 29 min a 4 h 24 min com 4 processos | K = 150 (δ 0,036, 10 800 vidas): o REL − REC e o REL − EMB, que se esperam menores que o efeito do M-MEM, tendem a sair "indeterminado"; K = 300 (δ 0,026, 21 600 vidas): alcança metade do efeito do M-MEM, mas custa 50 % a mais de máquina por uma família em que o nulo do REL − REC é plausível (A9.1); com K = 200, um efeito real de metade do M-MEM (≈ 0,025) fica na beira, e isso fica escrito antes |
+| **AD9-6** | o σ de planejamento(DECIDIDA) | **o maior dp dos cinco contrastes do `longe_fixo` da C1 e da C3, com a folga de 20 % (0,1369)** | só a C1 (0,0911 × 1,2 = 0,1094, o da AD8-3): a margem cai para cerca de 0,025 com K = 200, mas a C3 já mostrou que um contraste de uma regra no mesmo cérebro passa disso (0,114), e o poder real ficaria abaixo de 0,8 |
+| **AD9-7** | a faixa(DECIDIDA) | **77101…77505, as bases 77101, 77202, 77303, 77404 e 77505**, livre em 2026-11-01; entra em `FAIXAS_RESERVADAS` num commit próprio depois da aprovação | outra faixa: nenhum custo além de trocar as bases no orquestrador, na config e no teste; reservar antes da aprovação: uma faixa presa a um plano que pode mudar |
+| **AD9-8** | a forma das premissas(DECIDIDA) | **a P-PESA pelo limite inferior do IC95 > 0,01 (o limiar da G-PESA de A6.4); a G-ELEGIVEL-EP no REL, no SEM, no REC e no EMB** (A9.5) | a média sem IC: um REL em que a memória mal pesa lê como premissa cumprida; a P-PESA pela fração só da lembrança (`lembranca_decidiu`): o lugar pela soma, que é parte do REL, fica fora da premissa; a G-ELEGIVEL-EP só no REL: o primário pode ler uma taxa de poucos episódios num controle |
+| **AD9-9** | a guarda(DECIDIDA) | **REL − SEM no comedouro; falha só com a classe "< 0" de A6.6** (A9.4) | sem guarda: uma memória que atrapalha perto da ração viraria candidata; pelo limite superior < 0 sem a margem: um custo menor que o que a run detecta tira a memória da linha 3 |
+| **AD9-10** | a medida da fala (o item 2 do #536)(DECIDIDA) | **a conferência da M6 sobre alegações sintéticas do registro de toda vida (verdadeira, falsa, causa e faceta), somada por braço e lugar, sem gate** (A9.8, item 5) | não medir: o #536 decidiu "a medir na validação causal", e a fração de falsas que a raiz em comum sustenta segue desconhecida no registro real; uma fala por LLM nas vidas: quebra o determinismo do resultado e mede o modelo, não a régua |
