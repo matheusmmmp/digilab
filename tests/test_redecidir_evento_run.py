@@ -167,7 +167,10 @@ def test_recusa_mais_de_4_processos_e_pasta_existente(tmp_path):
 def test_a_saida_da_run_nao_e_a_pasta_do_poder():
     assert rd.SAIDA == "artifacts_v2_digibrain_prototipo/redecidir_evento/run"
     assert (RAIZ / rd.SAIDA).parent == (RAIZ / "artifacts_v2_digibrain_prototipo" / "redecidir_evento")
-    assert not (RAIZ / rd.SAIDA).exists()                             # nenhuma vida da faixa em disco
+    # a run da C3 (#527) esta na main: a SAIDA e a pasta `run`, separada da pasta-mae do adendo8_poder.json
+    assert (RAIZ / rd.SAIDA).name == "run"
+    assert (RAIZ / rd.SAIDA).parent.name == "redecidir_evento"
+    assert (RAIZ / rd.SAIDA) != (RAIZ / rd.SAIDA).parent
 
 
 # ------------------------------------------------------------------ os fins (a licao do #507)
