@@ -299,3 +299,29 @@ novo, nenhuma vida; o motor, o cérebro A v11 e a decisão do pet não mudam.
 - **Gabarito:** `fala_memoria_python.json` regravado (autorizado no #536): saiu `desligada_nao_confere` (1 caso, que fixava o gate), entraram 6
   casos `a_v11_*`; os outros 13 estão idênticos. Nenhum outro gabarito mudou.
 - **O prompt não mudou** (nem versão): as regras 12–13 seguem só com os fatos Q/Z; a verificação já marca a fala que inventa.
+
+## 18. O plano da validação causal: o adendo 9 (2026-11-01, worker, Claude Code, Opus 5.5, worktree `v3-memoria-plano`; só plano e orquestrador)
+
+A seção 4 desta tarefa como plano, antes de qualquer vida. **Nenhuma vida de pesquisa, nenhuma faixa reservada, nenhuma run;** só as
+sementes dos testes (101…505).
+
+- **O adendo 9, PROPOSTO,** no fim do `docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md` (A9.0 a A9.12): seis braços, todos o M3\* do
+  conserto com a `memoria_autobio` (REL, SEM, REC, EMB, RELsN e REL+F; a `facetas_mem` só no REL+F, a resposta à questão do #539); o
+  `longe_fixo` no primário, o comedouro na guarda, o longe sorteado nas secundárias; **o primário é a família REL − SEM, REL − REC e
+  REL − EMB na taxa de fechamento por episódio, com o Holm (α 0,025 na família)**; a fração das decisões em que a lembrança mudou a escolha
+  é a premissa P-PESA, as facetas são a secundária REL+F − REL, e a fala é um descritivo (a conferência da M6 sobre alegações sintéticas do
+  registro, o item 2 do #536); a C4-E2 (REL − RELsN) no `longe_fixo` (sem previsão, o risco da espec, seção 5) e no sorteado ("> 0", a
+  direção de Ho); a C4-E3 fora (D-C1-1); a tabela de leitura de sete linhas; os critérios de parada.
+- **O poder** (`experiments/adendo9_poder_memoria_autobio.py` → `artifacts_v2_digibrain_prototipo/memoria_autobio/adendo9_poder.json`,
+  só lê os artefatos da C1 e da C3): σ de planejamento 0,1369 (o dp do M3\*R − M3\* da C3 no `longe_fixo`, 0,1141, × 1,2); **K = 200 (40
+  por base), δ = 0,032, 14 400 vidas** (PROPOSTOS, AD9-5), de 2 h 29 min a 4 h 24 min com 4 processos.
+- **A faixa proposta 77101…77505,** livre; **não** está em `FAIXAS_RESERVADAS` (commit próprio depois da aprovação).
+- **O orquestrador** `experiments/run_v2_memoria_autobio.py`, com a trava `exigir_adendo_aprovado(texto, 9)` e a da faixa (hoje recusa
+  pelas duas), a conferência da memória de cada braço em toda vida (`conferir_memoria`), as medidas da lembrança, das facetas e da fala, a
+  análise e a leitura; os braços em `SUBCHAVES_C4` (`run_v2_digibrain_prototipo.py`); as configs em `experiments/configs/v2_memoria_autobio/`.
+- **Os testes:** `tests/test_memoria_autobio_run.py` (a trava nos dois sentidos, a faixa, os braços, o coletor das categorias, a
+  conferência da memória e da fala, o Holm, as premissas, a leitura, o poder, a fumaça, o isolamento). As listas do G2-SEPARADO da
+  `memoria_autobio`, da `facetas_mem` e da `redecidir_evento` ganharam os arquivos novos que citam as chaves.
+- **A varredura** (101…505, K = 1, 14 dias, os 6 braços, 360 vidas, 4 processos, fora do git): nenhum fim desconhecido, nenhuma
+  conferência falhou; os números no PR e no registro de 2026-11.
+- **Vai ao Matheus:** as AD9-1 a AD9-10 (A9.12); depois da aprovação, a faixa num commit próprio, e o registro da run (A9.13).
