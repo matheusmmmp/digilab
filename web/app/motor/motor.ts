@@ -7,7 +7,7 @@
    assinatura das vidas v13 nao muda (test/vidas_v13.test.ts). */
 import {
   ACAO_CHAMADO, ACOES_DONO_JOGO_V11, ACOES_PET, CAT, CDJ, CHAMADO_BEBE, CHAMADO_BEBE_CORPO, CHAMADO_FOME_CORPO, CHE, CLE, CMG, EIXOS_TEMP, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
-  TICK_INICIAL, VERSAO_PET, VERSAO_V14, VERSOES_PET,
+  TICK_INICIAL, VERSAO_PET, VERSAO_V14, VERSAO_V15, VERSOES_PET,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
 import { APRENDIZADO_V14, CHIP_ANTES_V14 } from "./combate_tr/constantes_tr.ts";
@@ -27,7 +27,7 @@ import { CCO_CORPO_V11 } from "./corpo.ts";
 import { desejoLobos, type BracoConsequencia, type CerebroA, type ObservacaoLobos } from "./lobos.ts";
 import { MotorCorpo, estadoNascimentoPy, type PoliticaCorpo } from "./motor_corpo.ts";
 import { MotorCorpoMundo } from "./motor_corpo_mundo.ts";
-import { eventoDeixarComida, lerDeixarComida, type Mundo } from "./mundo.ts";
+import { eventoDeixarBola, eventoDeixarComida, lerDeixarBola, lerDeixarComida, type Mundo } from "./mundo.ts";
 import { bracoV11 } from "./pet_v11.ts";
 import { leituraAprendido, leituraDecisao, mapaDecisao, mapaPesos, type ArestaMapa, type LeituraDecisao, type MapaDecisao } from "./digibrain.ts";
 import { desafiadoDaVersao, regrasDaVersao, type Lutador, type RegrasLuta, type ResultadoLuta, type Desafiado } from "./combate.ts";
@@ -238,7 +238,7 @@ export class Motor {
     /* o laco com o mundo fisico (MV-1), o do produto (CMU_MVP: sem arvores, so a racao do jogador; a opcao 1 do Matheus de 2026-10-24);
        a regra de cada decisao vai ao registro do mundo, como o ultima_regra do Python */
     const laco = new MotorCorpoMundo(politica, semente, CCO_CORPO_V11, estadoNascimentoPy(TICK_INICIAL),
-                                     { regra: () => braco.cerebro.ultimaRegra, cfgMundo: CMU_MVP });
+                                     { regra: () => braco.cerebro.ultimaRegra, cfgMundo: CMU_MVP, bolaNoGolpe: versao >= VERSAO_V15 });
     this.v11 = { braco, laco };
     this.e = laco.estado;
     /* o vinculo B (coerencia por situacao, sem pedido), sem obediencia */
@@ -664,6 +664,20 @@ export class Motor {
     this.log.push([this.e.tick, "dc", { tipo: "racao", x, y }]);
     this._deixarComida(tipo, x, y);
   }
+  /** o dono poe a bola parada em (x, y) do mapa do mundo (subunidades inteiras), em qualquer pet com o mundo: um evento novo, que os logs
+      de antes nao tem. Posicao fora do mapa ou nao inteira falha alto antes do registro. Nao e cuidado nem contato (o deixar_bola do
+      Python): so a bola muda de lugar */
+  deixarBola(x: number, y: number): void {
+    lerDeixarBola(eventoDeixarBola(this.e.tick, x, y));
+    this._conferirMorte(); this._vivo();
+    this.log.push([this.e.tick, "db", { x, y }]);
+    this._deixarBola(x, y);
+  }
+  private _deixarBola(x: number, y: number): void {
+    lerDeixarBola(eventoDeixarBola(this.e.tick, x, y));
+    this._conferirMorte(); this._vivo();
+    (this.v11!.laco as MotorCorpoMundo).bolaDoDono(x, y);
+  }
   private _validarComida(tipo: unknown, x: unknown, y: unknown): void {
     if (tipo !== "racao") throw new Error(`só a ração vai ao chão nos pets v12 (MV-3): ${String(tipo)}`);
     lerDeixarComida(eventoDeixarComida(this.e.tick, tipo, x, y));
@@ -1031,6 +1045,14 @@ export class Motor {
         const { tipo, x, y } = c as Record<string, unknown>;
         this._validarComida(tipo, x, y);
         this._deixarComida(tipo as string, x as number, y as number); break;
+      }
+      case "db": {
+        const b = ev[2] as unknown;
+        if (!b || typeof b !== "object" || Object.keys(b).sort().join() !== "x,y")
+          throw new Error(`evento de bola inválido no registro (tick ${t}): ${JSON.stringify(b)}`);
+        const { x, y } = b as Record<string, unknown>;
+        lerDeixarBola(eventoDeixarBola(t, x, y));
+        this._deixarBola(x as number, y as number); break;
       }
       case "f":
         if (!ev[2] || typeof ev[2] !== "object" || Object.keys(ev[2]).length !== 1 || ev[2].campeao !== true)

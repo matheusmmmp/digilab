@@ -21,11 +21,13 @@ beforeAll(() => { escalaAntes = ESCALA.ligada; ligarEscala(true); });
 afterAll(() => ligarEscala(escalaAntes));
 
 describe("a versao 14", () => {
-  test("os ovos novos nascem v14, e a v13 segue abrindo (CV14-1)", () => {
-    expect(VERSAO_PET).toBe(14);
-    expect(VERSOES_PET).toEqual([13, 14]);
-    expect(new Motor(1).versao).toBe(14);
+  test("os ovos novos nascem v15 (o v14 com a bola no golpe), e a v13 e a v14 seguem abrindo (CV14-1)", () => {
+    expect(VERSAO_PET).toBe(15);
+    expect(VERSOES_PET).toEqual([13, 14, 15]);
+    expect(new Motor(1).versao).toBe(15);
+    expect(new Motor(1, 14).versao).toBe(14);
     expect(new Motor(1, 13).versao).toBe(13);
+    expect(regrasDaVersao(15)).toBe(regrasDaVersao(14));
     expect(() => new Motor(1, 12)).toThrow(/versão de pet desconhecida/);
     expect(regrasDaVersao(13)).toBe(CV21E_TR);
     expect(ehV14(R14)).toBe(true);

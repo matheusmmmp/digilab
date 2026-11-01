@@ -37,7 +37,7 @@ function viverDias(m: Motor, dias: number): AcaoDono[] {
 
 describe("o pet v11 no Motor", () => {
   test("o pet v11: o cerebro A e o laco do corpo, sem educacao, mentira nem obediencia (os ovos novos sao v13: o v12 com a luta em tempo real)", () => {
-    expect(VERSAO_PET).toBe(14);
+    expect(VERSAO_PET).toBe(15);
     const m = new Motor(4242, 13);
     expect(m.versao).toBe(13);
     expect(m.cerebro).not.toBeNull();

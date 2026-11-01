@@ -196,6 +196,16 @@ export const DIR16: readonly (readonly [number, number])[] = [
   [-1024, 0], [-946, 392], [-724, 724], [-392, 946], [0, 1024], [392, 946], [724, 724], [946, 392]];
 export const ID_BOLA = 0;
 
+/** a direcao do golpe na bola (o direcao_do_golpe do Python; pets v15): das 16, a mais alinhada com o vetor de onde o pet vinha ate a bola (o maior produto
+    escalar, em inteiros; no empate, a de menor indice). Com o pet em cima da bola nao ha lado: null */
+export function direcaoDoGolpe(px: number, py: number, bx: number, by: number): number | null {
+  const dx = bx - px, dy = by - py;
+  if (dx === 0 && dy === 0) return null;
+  let melhor = 0, maior = -Infinity;
+  DIR16.forEach(([cx, cy], k) => { const p = dx * cx + dy * cy; if (p > maior) { maior = p; melhor = k; } });
+  return melhor;
+}
+
 export function noMapa(x: number, y: number, cm: ConfigMundo = CMU): [number, number] {
   return [Math.min(cm.celulas_x * cm.sub - 1, Math.max(0, x)), Math.min(cm.celulas_y * cm.sub - 1, Math.max(0, y))];
 }
@@ -327,6 +337,10 @@ export interface OpcoesMundo {
   estado?: { ganhoAlimentar: number; probSujeiraPosRefeicao: number; sujeiraMaxima: number; intervalo: number };
   /** o contrato sensorio-motor da P4 (motor/contrato.ts); desligado por padrao, e o jogo nao o liga */
   contrato?: ConfigContrato;
+  /** a bola sai na direcao do golpe (pets v15; a ConfigBolaNoGolpe do Python), desligada por padrao: a distancia e o sorteio de sempre,
+      a direcao e a em que o pet vinha, de onde ele estava antes do passo ate a bola (direcaoDoGolpe); parado em cima dela, a sorteada. Fora da ConfigMundo de proposito, como o N_PONTOS_LONGE_FIXO do Python: um campo
+      novo nela mudaria os gabaritos */
+  bolaNoGolpe?: boolean;
 }
 
 /** o registro do contrato numa decisao com alvo (o _registro_contrato do Python) */
@@ -351,6 +365,7 @@ export class Mundo {
   readonly rngBola: RandomPy;
   readonly rngSujeira: RandomPy;
   readonly rngAlvo: RandomPy;
+  readonly bolaNoGolpe: boolean;
   pet: [number, number];
   readonly comedouro: [number, number];
   bola: Bola;
@@ -399,7 +414,8 @@ export class Mundo {
     this.rngBola = new RandomPy(derivarSemente("mundo-bola", op.semente));
     this.rngSujeira = new RandomPy(derivarSemente("mundo-sujeira", op.semente));
     this.rngAlvo = new RandomPy(derivarSemente("alvo", op.semente));
-    this.pet = centroDaCelula(cm.layout.ninho, cm);
+    this.bolaNoGolpe = op.bolaNoGolpe ?? false;
+    this.pet =centroDaCelula(cm.layout.ninho, cm);
     this.comedouro = centroDaCelula(cm.layout.comedouro, cm);
     const [bx, by] = centroDaCelula(cm.layout.bola_inicio, cm);
     this.bola = { x0: bx, y0: by, x1: bx, y1: by, t0: 0, d: 0 };
@@ -626,10 +642,13 @@ export class Mundo {
     return [reg, { ...e, fome, humor, sujeira }];
   }
 
-  private rolarBola(tick: number): void {
+  /** `de`: onde o pet estava antes do passo que o levou a bola (com a bolaNoGolpe, o golpe sai na direcao em que ele vinha) */
+  private rolarBola(tick: number, de: readonly [number, number]): void {
     const cm = this.cm;
     const [bx, by] = this.bolaEm(tick);
-    const direcao = this.rngBola.randrange(16);
+    /* o sorteio da direcao fica mesmo com o golpe: o fluxo mundo-bola segue o mesmo, e a distancia sai igual a de sempre */
+    const sorteada = this.rngBola.randrange(16);
+    const direcao = this.bolaNoGolpe ? direcaoDoGolpe(de[0], de[1], bx, by) ?? sorteada : sorteada;
     let celulas = this.rngBola.randint(cm.bola_min_celulas, cm.bola_max_celulas);
     if (cm.layout.regioes[regiaoDe(bx, cm)][0] === "campo") celulas *= cm.mult_bola_campo;
     const [x1, y1] = deslocar(bx, by, direcao, celulas * cm.sub, cm);
@@ -685,7 +704,7 @@ export class Mundo {
         if (alcancaveis.length) [comeu, e] = this.comer(alcancaveis[0][2], "achou", tick, e);
       } else if (chegou && ac === "brincar" && objetoDo(a!) === "bola") {
         e.humor = Math.min(1, e.humor + this.cm.ganho_humor_bola);
-        this.rolarBola(tick);
+        this.rolarBola(tick, [x0, y0]);
         bola = true;
       }
       if (a !== null && !chegou) {

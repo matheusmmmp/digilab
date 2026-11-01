@@ -38,7 +38,7 @@ function vida(tipo: "atencioso" | "aleatorio", semente: number, dias: number, me
 }
 
 describe("a versao dos ovos novos", () => {
-  test("ovos novos sao v13 (v6 + confianca + combate equilibrado + vinculo B + o cerebro A e o corpo + o mundo fisico + a luta em tempo real)", () => { expect(VERSAO_PET).toBe(14); expect(new Motor(1).versao).toBe(14); });
+  test("ovos novos sao v13 (v6 + confianca + combate equilibrado + vinculo B + o cerebro A e o corpo + o mundo fisico + a luta em tempo real)", () => { expect(VERSAO_PET).toBe(15); expect(new Motor(1).versao).toBe(15); });
 });
 
 describe("a trava (pet v13)", () => {
