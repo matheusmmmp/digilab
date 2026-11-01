@@ -11,8 +11,9 @@ export type Tipo = "grama" | "caminho" | "areia" | "agua";
 /** uma célula: o tipo, o nível (0, 1 ou 2; -1 no mar) e as alturas dos cantos [noroeste, nordeste, sudeste, sudoeste] */
 export interface Celula { tipo: Tipo; nivel: number; cantos: [number, number, number, number] }
 
-/** um objeto posto no mapa: o modelo, o centro (em células, contínuo), o giro, a escala e o raio que bloqueia o andar (0 = não bloqueia) */
-export interface Objeto { modelo: string; x: number; z: number; giro: number; escala: number; raio: number }
+/** um objeto posto no mapa: o modelo, o centro (em células, contínuo), o giro, a escala e o raio que bloqueia o andar (0 = não bloqueia);
+    `y` fixa a altura (o lírio na superfície da água), senão vale a do chão */
+export interface Objeto { modelo: string; x: number; z: number; giro: number; escala: number; raio: number; y?: number }
 
 /* um gerador simples com semente (mulberry32): o mapa e os objetos saem sempre iguais */
 export function rng(semente: number): () => number {

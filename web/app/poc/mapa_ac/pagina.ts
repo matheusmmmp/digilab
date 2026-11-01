@@ -6,7 +6,10 @@
      - o painel: o Digimon, a dobra do mundo, o lado do desenho, o pet 3D, os clipes e o golpe. */
 import * as THREE from "three";
 import { CURVA, COR_HORIZONTE, montarCena, objetos } from "./cena.ts";
+import { CENTRO, MapaClareira } from "./clareira.ts";
 import { Heroi } from "./heroi.ts";
+import { Ovo } from "./ovo.ts";
+import { PRESETS, Pos } from "./pos.ts";
 import { Pet3D } from "./pet3d.ts";
 import { Projeteis } from "./projetil.ts";
 import { ALTURA_NIVEL, LARG, Mapa, PROF } from "./mapa.ts";
@@ -23,12 +26,19 @@ const SPRITE_PADRAO = "brasa_crianca_sereno";
 
 const tela = document.getElementById("tela") as HTMLCanvasElement;
 const estado = document.getElementById("estado")!;
-const mapa = new Mapa();
+/* ?mapa=clareira troca a ilha pela clareira da Floresta Nativa (clareira.ts); ?visual= e ?pixel=/?tilt= ligam o pós (pos.ts) */
+const PARAMS = new URLSearchParams(location.search);
+const CLAREIRA = PARAMS.get("mapa") === "clareira";
+const mapa = CLAREIRA ? new MapaClareira() : new Mapa();
 const cena = montarCena(mapa);
 const renderer = new THREE.WebGLRenderer({ canvas: tela, antialias: true });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 renderer.setClearColor(COR_HORIZONTE);
 const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 200);
+renderer.info.autoReset = false;                       // o pós desenha duas vezes por quadro; a contagem soma as duas
+const pos = new Pos(renderer);
+const ovo = CLAREIRA ? new Ovo(CENTRO[0], mapa.altura(CENTRO[0], CENTRO[1]) + 0.1, CENTRO[1]) : null;
+if (ovo) cena.add(ovo.raiz);
 
 const heroi = new Heroi();
 cena.add(heroi.raiz);
@@ -36,7 +46,7 @@ let px = mapa.inicio[0], pz = mapa.inicio[1], py = mapa.altura(px, pz);
 /* para conferir no console: levar o personagem a um ponto (em células) */
 const projeteis = new Projeteis(mapa);
 cena.add(projeteis.raiz);
-(window as unknown as { mapaAC: object }).mapaAC = { heroi, cena, mapa, pet3d: () => pet3d, ORBITA, projeteis, ir: (x: number, z: number) => { px = x; pz = z; py = mapa.altura(x, z); } };
+(window as unknown as { mapaAC: object }).mapaAC = { heroi, cena, mapa, pos: () => pos, pet3d: () => pet3d, ORBITA, projeteis, ir: (x: number, z: number) => { px = x; pz = z; py = mapa.altura(x, z); } };
 const camAlvo = new THREE.Vector3(px, py, pz);
 
 /* ---------- o painel ---------- */
@@ -46,6 +56,28 @@ const lado = document.getElementById("lado") as HTMLInputElement;
 curva.value = String(CURVA.uCurva.value * 1000);
 curva.addEventListener("input", () => { CURVA.uCurva.value = Number(curva.value) / 1000; });
 lado.addEventListener("change", () => { heroi.desenhoOlhaEsquerda = lado.checked; });
+const selMapa = document.getElementById("mapa") as HTMLSelectElement;
+selMapa.value = CLAREIRA ? "clareira" : "";
+selMapa.addEventListener("change", () => {
+  const p = new URLSearchParams(location.search);
+  if (selMapa.value) p.set("mapa", selMapa.value); else p.delete("mapa");
+  location.search = p.toString();
+});
+const selVisual = document.getElementById("visual") as HTMLSelectElement;
+const selPixel = document.getElementById("pixel") as HTMLSelectElement;
+const chkTilt = document.getElementById("tilt") as HTMLInputElement;
+function usarVisual(nome: string): void {
+  pos.ajuste = { ...(PRESETS[nome] ?? PRESETS.neutro) };
+  selVisual.value = nome;
+  selPixel.value = String(pos.ajuste.pixel);
+  chkTilt.checked = pos.ajuste.tilt;
+}
+usarVisual(PARAMS.get("visual") ?? (CLAREIRA ? "gba-hd" : "neutro"));
+if (PARAMS.has("pixel")) { pos.ajuste.pixel = Number(PARAMS.get("pixel")); selPixel.value = String(pos.ajuste.pixel); }
+if (PARAMS.has("tilt")) { pos.ajuste.tilt = PARAMS.get("tilt") === "1"; chkTilt.checked = pos.ajuste.tilt; }
+selVisual.addEventListener("change", () => usarVisual(selVisual.value));
+selPixel.addEventListener("change", () => { pos.ajuste.pixel = Number(selPixel.value); });
+chkTilt.addEventListener("change", () => { pos.ajuste.tilt = chkTilt.checked; });
 
 (async () => {
   const fonte = await Heroi.listar();
@@ -175,7 +207,7 @@ const fundoMini = (() => {
     g.fillRect(x * ESC_MINI, z * ESC_MINI, ESC_MINI, ESC_MINI);
   }
   g.fillStyle = "rgba(40,90,40,0.55)";
-  for (const o of mapa.objetos) if (o.modelo === "arvore_redonda" || o.modelo === "pinheiro") g.fillRect(o.x * ESC_MINI - 1, o.z * ESC_MINI - 1, 3, 3);
+  for (const o of mapa.objetos) if (o.modelo === "arvore_redonda" || o.modelo === "pinheiro" || o.modelo === "arvore_torta") g.fillRect(o.x * ESC_MINI - 1, o.z * ESC_MINI - 1, 3, 3);
   return c;
 })();
 function desenharMini(): void {
@@ -221,6 +253,7 @@ function quadro(agora: number): void {
   heroi.atualizar(px, py, pz, d.x, andando, agora, dt, d.correr);
   pet3d?.atualizar(px, py, pz, d.x, d.z, andando, dt, d.correr);
   projeteis.atualizar(dt);
+  ovo?.atualizar(agora);
   camAlvo.lerp(new THREE.Vector3(px, py, pz), 1 - Math.exp(-dt * 6));
   /* o ponto olhado (acima e à frente, na direção do giro) e a câmera em volta dele */
   const c = Math.cos(ORBITA.giro), s = Math.sin(ORBITA.giro), frente = OLHAR_FRENTE * ORBITA.dist / DIST0;
@@ -231,7 +264,8 @@ function quadro(agora: number): void {
   CURVA.uFocoZ.value = camAlvo.z;
   CURVA.uTempo.value = agora / 1000;
   redimensionar();
-  renderer.render(cena, camera);
+  renderer.info.reset();
+  pos.desenhar(cena, camera);
   desenharMini();
   quadros++;
   if (agora - tFps > 1000) { fps.textContent = `${Math.round((quadros * 1000) / (agora - tFps))} fps · ${renderer.info.render.calls} draw calls`; quadros = 0; tFps = agora; }

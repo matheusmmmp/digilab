@@ -280,8 +280,9 @@ const KIT = "./Assets/kits3d/";
 const KAY = KIT + "kaykit_forest/x/KayKit_Forest_Nature_Pack_1.0_FREE/Assets/gltf/";
 export const QUA = KIT + "quaternius_nature/x/glTF/";
 export const KEN = KIT + "kenney_nature/x/Models/GLTF format/";
-/** cada modelo do mapa: as variantes (arquivos), a altura alvo em células, se balança ao vento e o raio da sombra (0 = sem sombra) */
-export interface Modelo { arquivos: string[]; altura: number; vento: number; sombra: number }
+/** cada modelo do mapa: as variantes (arquivos), a altura alvo em células, se balança ao vento e o raio da sombra (0 = sem sombra);
+    com `largura`, a escala sai da maior medida em planta (para as peças chatas, como a laje e o lírio) e não da altura */
+export interface Modelo { arquivos: string[]; altura: number; vento: number; sombra: number; largura?: number }
 const MODELOS: Record<string, Modelo> = {
   arvore_redonda: { arquivos: ["CommonTree_1", "CommonTree_2", "CommonTree_3", "CommonTree_4", "CommonTree_5"].map(n => QUA + n + ".gltf"), altura: 4.2, vento: 0.004, sombra: 1.5 },
   pinheiro: { arquivos: ["Pine_1", "Pine_2", "Pine_3", "Pine_5"].map(n => QUA + n + ".gltf"), altura: 5.0, vento: 0.003, sombra: 1.3 },
@@ -292,6 +293,16 @@ const MODELOS: Record<string, Modelo> = {
   flor: { arquivos: ["Flower_3_Group", "Flower_4_Group", "Flower_3_Single", "Flower_4_Single"].map(n => QUA + n + ".gltf"), altura: 0.45, vento: 0.06, sombra: 0 },
   trevo: { arquivos: ["Clover_1", "Clover_2"].map(n => QUA + n + ".gltf"), altura: 0.2, vento: 0.05, sombra: 0 },
   grama: { arquivos: ["Grass_Common_Short", "Grass_Wispy_Short", "Grass_Common_Tall"].map(n => QUA + n + ".gltf"), altura: 0.35, vento: 0.08, sombra: 0 },
+  /* os da clareira da Floresta Nativa (clareira.ts) */
+  arvore_torta: { arquivos: ["TwistedTree_1", "TwistedTree_2", "TwistedTree_3", "TwistedTree_4", "TwistedTree_5"].map(n => QUA + n + ".gltf"), altura: 4.0, vento: 0.004, sombra: 1.4 },
+  arvore_morta: { arquivos: ["DeadTree_1", "DeadTree_2", "DeadTree_3"].map(n => QUA + n + ".gltf"), altura: 3.4, vento: 0, sombra: 0.8 },
+  samambaia: { arquivos: ["Fern_1", "Plant_1", "Plant_7"].map(n => QUA + n + ".gltf"), altura: 0.75, vento: 0.05, sombra: 0 },
+  cogumelo: { arquivos: [QUA + "Mushroom_Common.gltf", KEN + "mushroom_redGroup.glb", KEN + "mushroom_tanGroup.glb", KEN + "mushroom_redTall.glb"], altura: 0.4, vento: 0, sombra: 0 },
+  orelha_pau: { arquivos: [QUA + "Mushroom_Laetiporus.gltf"], altura: 0.35, vento: 0, sombra: 0 },
+  lirio: { arquivos: [KEN + "lily_large.glb", KEN + "lily_small.glb"], altura: 0.1, largura: 0.9, vento: 0, sombra: 0 },
+  laje: { arquivos: [QUA + "RockPath_Round_Wide.gltf"], altura: 0.1, largura: 2.6, vento: 0, sombra: 0 },
+  pedrinha: { arquivos: ["Pebble_Round_1", "Pebble_Round_2", "Pebble_Round_3", "Pebble_Round_4"].map(n => QUA + n + ".gltf"), altura: 0.14, vento: 0, sombra: 0 },
+  pedra_grande: { arquivos: ["Rock_Medium_1", "Rock_Medium_2", "Rock_Medium_3"].map(n => QUA + n + ".gltf"), altura: 1.0, vento: 0, sombra: 0.8 },
 };
 
 export interface Variante { pecas: { geo: THREE.BufferGeometry; mat: THREE.Material; local: THREE.Matrix4 }[] }
@@ -303,7 +314,7 @@ export async function carregarVariante(loader: GLTFLoader, url: string, modelo: 
   const caixa = new THREE.Box3().setFromObject(raiz);
   const tam = caixa.getSize(new THREE.Vector3()), centro = caixa.getCenter(new THREE.Vector3());
   if (!(tam.y > 0)) throw new Error(`modelo sem altura: ${url}`);
-  const s = modelo.altura / tam.y;
+  const s = modelo.largura ? modelo.largura / Math.max(tam.x, tam.z) : modelo.altura / tam.y;
   const norm = new THREE.Matrix4().makeScale(s, s, s).multiply(new THREE.Matrix4().makeTranslation(-centro.x, -caixa.min.y, -centro.z));
   const pecas: Variante["pecas"] = [];
   raiz.traverse(o => {
@@ -349,7 +360,7 @@ export async function objetos(mapa: Mapa, aoProgresso: (feito: number, total: nu
     const [id, j] = k.split("|");
     const v = variantes.get(id)![Number(j)]!;
     const lugar = lista.map(o => new THREE.Matrix4().compose(
-      new THREE.Vector3(o.x, mapa.altura(o.x, o.z), o.z),
+      new THREE.Vector3(o.x, o.y ?? mapa.altura(o.x, o.z), o.z),
       new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), o.giro),
       new THREE.Vector3(o.escala, o.escala, o.escala)));
     for (const p of v.pecas) {

@@ -122,8 +122,8 @@ export class Heroi {
       if (!r.ok) return null;
       const atlas = await r.json() as AtlasClipes;
       const img = new Image();
-      img.src = "./Assets/digilab_atlas_up_clipes.png";
-      await img.decode();
+      /* onload e não decode(): numa página em segundo plano o decode() pode não terminar nunca */
+      await new Promise((ok, falha) => { img.onload = ok; img.onerror = falha; img.src = "./Assets/digilab_atlas_up_clipes.png"; });
       return { atlas, img };
     } catch { return null; }
   }
