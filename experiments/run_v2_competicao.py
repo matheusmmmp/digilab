@@ -434,12 +434,12 @@ def main() -> None:
     if cfg["fase"] == "piloto":
         print(json.dumps({"margens": r["margens"], "n": {k: r["n"].get(k) for k in ("k", "n", "poder", "chega_ao_alvo")},
                           "G-ABRE_piloto": {k: r["G-ABRE_piloto"][k] for k in ("media", "ic95", "passa")},
-                          "custo": r["custo"].get("validacao_estimada")}, indent=2, ensure_ascii=False))
+                          "custo": r["custo"].get("validacao_estimada")}, indent=2))
     else:
         print(json.dumps({"G-ABRE": {k: r["G-ABRE"][k] for k in ("media", "ic95", "passa")},
                           "G-R1": {k: r["G-R1"][k] for k in ("media", "ic95", "ic90", "categoria")},
                           "secundarios": {n: {"passa": g["passa"], "p": g["holm"]["p"]} for n, g in r["secundarios"].items()},
-                          "leitura": r["leitura"]}, indent=2, ensure_ascii=False))
+                          "leitura": r["leitura"]}, indent=2))
 
 
 if __name__ == "__main__":

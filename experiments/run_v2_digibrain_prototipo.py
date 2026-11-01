@@ -1565,7 +1565,7 @@ def main() -> None:
     if cfg["fase"] in FASES_CALIBRACAO and a.saida is None:
         saida = saida / f"rodada_{cfg['rodada']}"
     r = rodar(cfg, saida, a.processos, caminho)["resultado"]
-    print(json.dumps({k: v for k, v in r.items() if k not in ("descritivos", "D-1", "D-2")}, indent=1, ensure_ascii=False,
+    print(json.dumps({k: v for k, v in r.items() if k not in ("descritivos", "D-1", "D-2")}, indent=1,
                      default=str)[:4000])
 
 

@@ -635,13 +635,13 @@ def main() -> None:
     r = rodar(cfg, saida, a.processos, caminho)["resultado"]
     if cfg["fase"] == "piloto":
         print(json.dumps({"n": {k: r["n"][k] for k in ("k", "n", "poder", "chega_ao_alvo")}, "G-USO_piloto": r["G-USO_piloto"]["media"],
-                          "custo": r["custo"].get("validacao_estimada")}, indent=2, ensure_ascii=False))
+                          "custo": r["custo"].get("validacao_estimada")}, indent=2))
     else:
         print(json.dumps({"G-MUNDO": {k: r["G-MUNDO"][k] for k in ("media", "ic95", "passa")},
                           "G-USO": {k: r["G-USO"][k] for k in ("media", "ic95", "passa")},
                           "G-ALVO": {k: r["G-ALVO"][k] for k in ("media", "ic95", "ic90", "categoria")},
                           "secundarios": {n: {"passa": g["passa"], "p": g["holm"]["p"]} for n, g in r["secundarios"].items()},
-                          "leitura": r["leitura"]}, indent=2, ensure_ascii=False))
+                          "leitura": r["leitura"]}, indent=2))
 
 
 if __name__ == "__main__":

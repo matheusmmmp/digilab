@@ -130,7 +130,9 @@ def test_recusa_mais_de_4_processos_e_pasta_existente(tmp_path):
 
 def test_a_saida_da_run_nao_e_a_pasta_do_poder():
     assert hi.SAIDA == "artifacts_v2_digibrain_prototipo/habito_intencao/run"
-    assert not (RAIZ / hi.SAIDA).exists()
+    # a run da C2 (#517) ja gravou a pasta; ela nao pode ser a pasta-mae, onde ficam os arquivos do poder
+    assert (RAIZ / hi.SAIDA).name == "run"
+    assert (RAIZ / hi.SAIDA).parent.name == "habito_intencao"
 
 
 # ------------------------------------------------------------------ os fins (a licao do #507)
@@ -267,3 +269,17 @@ def test_a_fumaca_roda_de_ponta_a_ponta(tmp_path):
     assert set(res["descritivo"]) == {"indices", "corridas_e_h", "corpo", "outros"}
     with pytest.raises(FileExistsError):
         hi.rodar(cfg, pasta, 1)
+
+
+def test_resumo_no_console_cp1252_nao_quebra(monkeypatch):
+    """O print do resumo com '≈' num stdout cp1252 (console Windows) nao levanta (D-C2-4-4)."""
+    import io
+    import run_v2_habito_intencao as hi
+    import run_v2_longe_regular as lr
+    r = {"modo": "m", "vidas": 1, "primario": {}, "secundarias": {}, "premissas": {}, "sorteado": {}, "leitura": "≈ 0,5"}
+    for mod in (hi, lr):
+        buf = io.TextIOWrapper(io.BytesIO(), encoding="cp1252", errors="strict")
+        monkeypatch.setattr("sys.stdout", buf)
+        mod._imprimir_resumo(r)
+        buf.flush()
+        assert "2248" in buf.buffer.getvalue().decode("ascii")
