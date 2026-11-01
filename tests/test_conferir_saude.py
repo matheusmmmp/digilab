@@ -108,11 +108,22 @@ import registro_por_mes as rpm  # noqa: E402
 BASE = json.loads((RAIZ / rpm.LOTES).read_text(encoding="utf-8"))["base"]["commit"]
 
 
+MES_ULTIMO = "2026-10"
+
+
 def _registro_minimo(tmp: Path) -> None:
     """O índice, os arquivos do mês, os lotes e a cópia da etapa 0 num diretório à parte."""
     for rel in [rpm.REGISTRO, rpm.LOTES, rpm.COPIA, *[p.relative_to(RAIZ).as_posix() for p in (RAIZ / rpm.PASTA).iterdir()]]:
         (tmp / rel).parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(RAIZ / rel, tmp / rel)
+    # os testes tratam 2026-10 como o último mês: tiram os meses seguintes e as linhas deles no índice,
+    # para não dependerem de qual mês já existe em docs/registro/
+    depois = [a.stem for a in (tmp / rpm.PASTA).glob("*.md") if a.stem > MES_ULTIMO]
+    for m in depois:
+        (tmp / rpm.PASTA / f"{m}.md").unlink()
+    indice = tmp / rpm.REGISTRO
+    linhas = indice.read_text(encoding="utf-8").splitlines(keepends=True)
+    indice.write_text("".join(l for l in linhas if not any(f"registro/{m}.md)" in l for m in depois)), encoding="utf-8", newline="")
 
 
 @pytest.fixture
