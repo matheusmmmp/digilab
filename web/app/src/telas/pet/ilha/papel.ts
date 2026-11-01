@@ -16,7 +16,8 @@
 import * as THREE from "three";
 import { OVO, chaveSprite } from "../../../../motor/index.ts";
 import { atlasAtual, chaveUp, desenharSprite, dimSprite, quadroAgora, type AtlasOk, type Clipe } from "../../../atlas.ts";
-import { jogoAtual } from "../../../jogo.ts";
+import { balancoOvo, jogoAtual } from "../../../jogo.ts";
+import { SONO, alturaSono } from "../sono.ts";
 import { fonteDoPet } from "../fontePet.ts";
 import { ANDANDO_MS, BORDA_PAPEL, LADO_MIN, PULO_MS, PULO_TEXELS, VIRAR_POR_S } from "./constantes.ts";
 import { GEO_SOMBRA, materialSombra } from "./cena.ts";
@@ -86,14 +87,24 @@ const textura = (c: HTMLCanvasElement) => {
   return t;
 };
 
-/** um quadro do atlas em 1x na caixa do sprite (com 1 px de folga para o contorno da forma sombria) */
+/** o ovo do atlas e uma peca pintada de 72x100, mais que o dobro do bebe (~45 px): no papel ele entra pela metade, do tamanho do bebe
+    que vai nascer dele. PROPOSTO, SEM FONTE */
+const OVOS = new Set<string>(Object.values(OVO));
+/** um quadro do atlas em 1x na caixa do sprite (com 1 px de folga para o contorno da forma sombria); o ovo, pela metade */
 function quadroAtlas(a: AtlasOk, nome: string, iq: number, sombria: boolean, clipe: Clipe): HTMLCanvasElement {
   const [w, h] = dimSprite(a.dados, nome), c = document.createElement("canvas");
   c.width = w + 2; c.height = h + 2;
   const g = c.getContext("2d");
   if (!g) throw new Error("canvas 2d indisponível");
   desenharSprite(g, a, nome, 1, 1, 1, iq, { sombria, clipe });
-  return c;
+  if (!OVOS.has(nome)) return c;
+  const m = document.createElement("canvas");
+  m.width = Math.ceil(c.width / 2); m.height = Math.ceil(c.height / 2);
+  const gm = m.getContext("2d");
+  if (!gm) throw new Error("canvas 2d indisponível");
+  gm.imageSmoothingQuality = "high";
+  gm.drawImage(c, 0, 0, m.width, m.height);
+  return m;
 }
 
 export class Papel {
@@ -178,7 +189,9 @@ export class Papel {
       this.papel.material.map = this.silhueta.material.map = folha.tex;
       this.papel.material.needsUpdate = this.silhueta.material.needsUpdate = true;
     }
-    this.papel.material.color.setHex(p.noite ? NOITE_PAPEL : 0xffffff);
+    /* dormindo (sono.ts): o quadro parado achatado, respirando, num tom apagado */
+    const dorme = !ovo && jogoAtual().motor.acao === "dormir", alt = dorme ? alturaSono(p.agora, p.reduzido) : 1;
+    this.papel.material.color.setHex(p.noite ? NOITE_PAPEL : dorme ? SONO.tom : 0xffffff);
     /* o lado: o passo da posicao desenhada ao longo da direita da camera no chao (com a camera livre ela gira; fixa, e o x do mundo) */
     if (this.celAntes !== null) {
       const dir = this.v.set(1, 0, 0).applyQuaternion(p.camera.quaternion), h = Math.hypot(dir.x, dir.z) || 1;
@@ -189,9 +202,9 @@ export class Papel {
     const passo = VIRAR_POR_S * p.dt;
     this.escalaX = p.reduzido || Math.abs(this.lado - this.escalaX) <= passo ? this.lado : this.escalaX + Math.sign(this.lado - this.escalaX) * passo;
     /* o tamanho em pixels inteiros do canvas; o pulinho em texels inteiros; o ovo balanca um texel de lado */
-    const n = p.pxPorTexel, wpx = folha.w * n, hpx = folha.h * n, { nascendo } = jogoAtual();
+    const n = p.pxPorTexel, wpx = Math.round(folha.w * n * (dorme ? 1 + (1 - alt) / 2 : 1)), hpx = Math.round(folha.h * n * alt), { nascendo } = jogoAtual();
     const pulo = andando && !p.reduzido && !ovo ? Math.round(Math.abs(Math.sin(p.agora / PULO_MS)) * PULO_TEXELS) * n : 0;
-    const balanco = ovo ? (nascendo % 2 ? n : -n) : 0;
+    const balanco = ovo && !p.reduzido ? balancoOvo(nascendo) * n : 0;
     /* o pe do papel no chao (o foco: sem dobra), projetado; o canto vai ao pixel inteiro mais perto */
     this.v.set(p.cel[0], 0, p.cel[1]).project(p.camera);
     const [W, H] = p.canvas, ax = ((this.v.x + 1) / 2) * W, ay = ((1 - this.v.y) / 2) * H;

@@ -341,3 +341,21 @@ A espec no formato da L-2 (`docs/ESPEC_REDECIDIR_EVENTO_DIGIBRAIN_MODULAR.md`, P
 - **Os testes:** `tests/test_redecidir_evento.py` (T-RD-1 a T-RD-4, G1, G2-SEPARADO, as conferências e o G-MECANISMO ligado) e
   `tests/test_gabarito_redecidir_evento.py` (o byte a byte desligado).
 - **Nenhuma vida de pesquisa, nenhuma faixa, nenhum adendo.**
+
+## Resultado da etapa 3 (o plano; 2026-11-01, worker Claude Code, Opus 5.5, worktree `v3-redecidir-evento-plano`)
+
+- **A faixa:** 76101…76505 na `FAIXAS_RESERVADAS`, no commit próprio do Gerente (`1a37e58`).
+- **O adendo 8, PROPOSTO** (`docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`, A8.0 a A8.12): os braços, os lugares, o P-R, a guarda,
+  as premissas (P-SEGURA, P-EVENTO e a G-ELEGIVEL-EP de A6.4), as secundárias, a tabela de leitura de 1.5, o descritivo da LP-2, a regra de
+  parada e o registro da run para a etapa 4; as AD8-1 a AD8-5 para o Matheus. A trava recusa a run até a marca de aprovação.
+- **O poder:** `experiments/adendo8_poder_redecidir_evento.py` lê o `medidas.json` da C1 (e o da C2 e os `meta.json`, só ao lado) e grava
+  `artifacts_v2_digibrain_prototipo/redecidir_evento/adendo8_poder.json`: σ de planejamento 0,1094, K = 150 → δ = 0,025 (PROPOSTOS), 7 200
+  vidas, de 1 h 18 min a 2 h 8 min com 4 processos.
+- **O orquestrador:** `experiments/run_v2_redecidir_evento.py`, com as configs em `experiments/configs/v2_redecidir_evento/` (a da run e a
+  fumaça), e os braços `M3R` e `M2R` (`SUBCHAVES_C3`) no orquestrador do protótipo.
+- **Os testes:** `tests/test_redecidir_evento_run.py`.
+- **A varredura dos fins** (A8.10; as sementes 101 a 505, K = 1, os 4 braços, as 12 células, 14 dias: 240 vidas, 337 s com 4 processos,
+  fora do git): nenhum fim desconhecido (só `achou`, `desistiu`, `meta`, `sumiu` e `trocou`), e o replay, o crédito e o `conferir_redecidir`
+  passaram em toda vida. Nos braços R, cerca de 0,34 a 0,39 das decisões sem o reflexo saíram seguradas e cerca de 0,05 das sequências
+  acabaram no teto: as duas premissas têm o que medir; não é dado da C3.
+- **Nenhuma vida da faixa 76xxx.**

@@ -1,0 +1,434 @@
+{
+  "custo_por_fonte_lugar_braco": {
+    "c1|longe_fixo|M2": {
+      "cpu": 2038.03125,
+      "cpu_por_vida": 3.39671875,
+      "parede": 2541.041188300027,
+      "parede_por_vida_1_processo": 4.235068647166711,
+      "vidas": 600
+    },
+    "c1|longe_fixo|M3": {
+      "cpu": 2061.046875,
+      "cpu_por_vida": 3.435078125,
+      "parede": 2559.131152900045,
+      "parede_por_vida_1_processo": 4.265218588166742,
+      "vidas": 600
+    },
+    "c1|longe|M2": {
+      "cpu": 2042.65625,
+      "cpu_por_vida": 3.404427083333333,
+      "parede": 2532.3934056000508,
+      "parede_por_vida_1_processo": 4.220655676000084,
+      "vidas": 600
+    },
+    "c1|longe|M3": {
+      "cpu": 2083.53125,
+      "cpu_por_vida": 3.4725520833333334,
+      "parede": 2588.6817735000004,
+      "parede_por_vida_1_processo": 4.314469622500001,
+      "vidas": 600
+    },
+    "c2|comedouro|M2": {
+      "cpu": 1492.78125,
+      "cpu_por_vida": 2.48796875,
+      "parede": 1547.7398511997017,
+      "parede_por_vida_1_processo": 2.5795664186661695,
+      "vidas": 600
+    },
+    "c2|longe_fixo|M2": {
+      "cpu": 1488.34375,
+      "cpu_por_vida": 2.4805729166666666,
+      "parede": 1549.0140656999429,
+      "parede_por_vida_1_processo": 2.5816901094999047,
+      "vidas": 600
+    },
+    "c2|longe|M2": {
+      "cpu": 1492.28125,
+      "cpu_por_vida": 2.487135416666667,
+      "parede": 1547.8715160002757,
+      "parede_por_vida_1_processo": 2.5797858600004595,
+      "vidas": 600
+    }
+  },
+  "decisoes_por_vida": 1344,
+  "dispersao_episodio": {
+    "c1|longe_fixo|M2 - M0": {
+      "celulas_fora": 0,
+      "dp": 0.08526310320276793,
+      "g1": -0.527709749687289,
+      "ic95_t": [
+        -0.038467723006967616,
+        -0.010954888385678692
+      ],
+      "media": -0.024711305696323155,
+      "no_sigma": true,
+      "unidades": 150
+    },
+    "c1|longe_fixo|M3 - M0": {
+      "celulas_fora": 0,
+      "dp": 0.09114349089953701,
+      "g1": -0.25840049974347185,
+      "ic95_t": [
+        0.00952494414343019,
+        0.03893527167939193
+      ],
+      "media": 0.024230107911411062,
+      "no_sigma": true,
+      "unidades": 150
+    },
+    "c1|longe_fixo|M3 - M2": {
+      "celulas_fora": 0,
+      "dp": 0.08321616328771547,
+      "g1": 0.11476613171844921,
+      "ic95_t": [
+        0.03551525122124272,
+        0.06236757599422572
+      ],
+      "media": 0.04894141360773422,
+      "no_sigma": true,
+      "unidades": 150
+    },
+    "c1|longe|M3 - M2": {
+      "celulas_fora": 0,
+      "dp": 0.0805010203075695,
+      "g1": -0.1400410352661892,
+      "ic95_t": [
+        -0.023623850835173363,
+        0.0023523472548731775
+      ],
+      "media": -0.010635751790150092,
+      "no_sigma": false,
+      "unidades": 150
+    },
+    "c2|comedouro|M2c - M2": {
+      "celulas_fora": 0,
+      "dp": 0.08898331083637485,
+      "g1": 0.1251511011656929,
+      "ic95_t": [
+        -0.006673438648874789,
+        0.02203983852652658
+      ],
+      "media": 0.007683199938825895,
+      "no_sigma": false,
+      "unidades": 150
+    },
+    "c2|longe_fixo|M2c - M2": {
+      "celulas_fora": 0,
+      "dp": 0.0851560755474283,
+      "g1": 0.2944622622990287,
+      "ic95_t": [
+        -0.008085803438554723,
+        0.019392495327591082
+      ],
+      "media": 0.00565334594451818,
+      "no_sigma": false,
+      "unidades": 150
+    }
+  },
+  "estimativa_parede": {
+    "K=100": {
+      "parede_s_pela_c1": 5120.197374399994,
+      "parede_s_pela_c2": 3112.25845893334,
+      "vidas": 4800
+    },
+    "K=150": {
+      "parede_s_pela_c1": 7680.296061599991,
+      "parede_s_pela_c2": 4668.38768840001,
+      "vidas": 7200
+    },
+    "K=200": {
+      "parede_s_pela_c1": 10240.394748799989,
+      "parede_s_pela_c2": 6224.51691786668,
+      "vidas": 9600
+    },
+    "K=300": {
+      "parede_s_pela_c1": 15360.592123199982,
+      "parede_s_pela_c2": 9336.77537680002,
+      "vidas": 14400
+    },
+    "K=50": {
+      "parede_s_pela_c1": 2560.098687199997,
+      "parede_s_pela_c2": 1556.12922946667,
+      "vidas": 2400
+    }
+  },
+  "folga": 1.2,
+  "fonte": {
+    "artifacts_v2_digibrain_prototipo/habito_intencao/run/medidas.json": "93b136d6d94872e7788d354112ee4679e84abcf40e6f42d885387a7bdfb85a33",
+    "artifacts_v2_digibrain_prototipo/habito_intencao/run/meta.json": "5ab56d672a017f9e3198b5c769f3c5f092ea82868223cbcc86c489c4adf071c6",
+    "artifacts_v2_digibrain_prototipo/longe_regular/run/medidas.json": "5a4fb207eaa11750ba40ffc80da1879febd822a5305545356fb091b664a4722d",
+    "artifacts_v2_digibrain_prototipo/longe_regular/run/meta.json": "b2cb111ac42be8ec95d651b8e711db62663787faa1c55d0d0188116b14894770"
+  },
+  "fonte_da_simulacao": "c1|longe_fixo|M3 - M2",
+  "frac_decisoes_sem_reflexo_c1": {
+    "longe_fixo|M2": {
+      "media": 0.8131498015873017,
+      "minimo": 0.6116071428571429,
+      "vidas": 600
+    },
+    "longe_fixo|M3": {
+      "media": 0.8046899801587302,
+      "minimo": 0.6086309523809523,
+      "vidas": 600
+    },
+    "longe|M2": {
+      "media": 0.7902467757936508,
+      "minimo": 0.6703869047619048,
+      "vidas": 600
+    },
+    "longe|M3": {
+      "media": 0.7518452380952381,
+      "minimo": 0.5855654761904762,
+      "vidas": 600
+    }
+  },
+  "nivel_episodio": {
+    "c1|longe_fixo|M0": {
+      "celulas_sem_indice": 0,
+      "dp": 0.106471616173661,
+      "g1": -0.7895861478431375,
+      "ic95_t": [
+        0.5171568547223212,
+        0.5515132862573183
+      ],
+      "media": 0.5343350704898198,
+      "unidades": 150
+    },
+    "c1|longe_fixo|M2": {
+      "celulas_sem_indice": 0,
+      "dp": 0.1265453242979102,
+      "g1": -0.9005256549434153,
+      "ic95_t": [
+        0.48920684089133704,
+        0.5300406886956561
+      ],
+      "media": 0.5096237647934966,
+      "unidades": 150
+    },
+    "c1|longe_fixo|M3": {
+      "celulas_sem_indice": 0,
+      "dp": 0.12470199753500147,
+      "g1": -1.0912480652192686,
+      "ic95_t": [
+        0.5384456583142966,
+        0.5786846984881652
+      ],
+      "media": 0.5585651784012309,
+      "unidades": 150
+    },
+    "c1|longe|M0": {
+      "celulas_sem_indice": 0,
+      "dp": 0.07301108806918191,
+      "g1": -0.10289166273789437,
+      "ic95_t": [
+        0.45409372189431463,
+        0.47765305666061664
+      ],
+      "media": 0.46587338927746563,
+      "unidades": 150
+    },
+    "c1|longe|M2": {
+      "celulas_sem_indice": 0,
+      "dp": 0.06935931865158872,
+      "g1": -0.24307392468341454,
+      "ic95_t": [
+        0.43931163264087425,
+        0.46169260860615546
+      ],
+      "media": 0.45050212062351486,
+      "unidades": 150
+    },
+    "c1|longe|M3": {
+      "celulas_sem_indice": 0,
+      "dp": 0.06753200460382568,
+      "g1": -0.20814895790679822,
+      "ic95_t": [
+        0.42897070116167213,
+        0.4507620365050573
+      ],
+      "media": 0.4398663688333647,
+      "unidades": 150
+    },
+    "c2|comedouro|M2": {
+      "celulas_sem_indice": 0,
+      "dp": 0.07366080278817642,
+      "g1": -0.2235970236844503,
+      "ic95_t": [
+        0.6663913590145294,
+        0.6901603447663485
+      ],
+      "media": 0.6782758518904389,
+      "unidades": 150
+    },
+    "c2|comedouro|M2c": {
+      "celulas_sem_indice": 0,
+      "dp": 0.07758206909833655,
+      "g1": -0.33831939610602807,
+      "ic95_t": [
+        0.6734418987085077,
+        0.698476204950022
+      ],
+      "media": 0.6859590518292649,
+      "unidades": 150
+    },
+    "c2|longe_fixo|M2": {
+      "celulas_sem_indice": 0,
+      "dp": 0.11168422143469747,
+      "g1": -0.8730005192545,
+      "ic95_t": [
+        0.5062569550114192,
+        0.542295398355814
+      ],
+      "media": 0.5242761766836166,
+      "unidades": 150
+    },
+    "c2|longe_fixo|M2c": {
+      "celulas_sem_indice": 0,
+      "dp": 0.1095997228385349,
+      "g1": -0.7311675545605512,
+      "ic95_t": [
+        0.5122466156277605,
+        0.547612429628509
+      ],
+      "media": 0.5299295226281348,
+      "unidades": 150
+    },
+    "c2|longe|M2": {
+      "celulas_sem_indice": 0,
+      "dp": 0.07253560576815762,
+      "g1": 0.24572158407467312,
+      "ic95_t": [
+        0.4372057677081996,
+        0.4606116730845072
+      ],
+      "media": 0.4489087203963534,
+      "unidades": 150
+    },
+    "c2|longe|M2c": {
+      "celulas_sem_indice": 0,
+      "dp": 0.06112574169063534,
+      "g1": -0.17320478991142524,
+      "ic95_t": [
+        0.44180186394586574,
+        0.46152601611797994
+      ],
+      "media": 0.45166394003192284,
+      "unidades": 150
+    }
+  },
+  "parede_4_processos": {
+    "c1": {
+      "processos": 4,
+      "s_por_vida": 1.066707786333332,
+      "vidas": 3600,
+      "vidas_parede_s": 3840.1480307999955
+    },
+    "c2": {
+      "processos": 4,
+      "s_por_vida": 0.6483871789444459,
+      "vidas": 5400,
+      "vidas_parede_s": 3501.290766300008
+    }
+  },
+  "poder_alvo": 0.8,
+  "por_k": {
+    "K=100": {
+      "margem": 0.030906810829516115,
+      "poder_normal_na_margem": 0.8,
+      "poder_simulado_na_margem": 0.819,
+      "verdadeiro_0_ic_acima_de_0": 0.0245,
+      "verdadeiro_0_ic_dentro_da_margem": 0.6035,
+      "verdadeiro_0_sigma_observado_ic_dentro_da_margem": 0.911,
+      "vidas": 4800
+    },
+    "K=150": {
+      "margem": 0.025162044012901695,
+      "poder_normal_na_margem": 0.8,
+      "poder_simulado_na_margem": 0.8,
+      "verdadeiro_0_ic_acima_de_0": 0.0205,
+      "verdadeiro_0_ic_dentro_da_margem": 0.586,
+      "verdadeiro_0_sigma_observado_ic_dentro_da_margem": 0.9115,
+      "vidas": 7200
+    },
+    "K=200": {
+      "margem": 0.02175959620904678,
+      "poder_normal_na_margem": 0.8,
+      "poder_simulado_na_margem": 0.813,
+      "verdadeiro_0_ic_acima_de_0": 0.024,
+      "verdadeiro_0_ic_dentro_da_margem": 0.6035,
+      "verdadeiro_0_sigma_observado_ic_dentro_da_margem": 0.9125,
+      "vidas": 9600
+    },
+    "K=300": {
+      "margem": 0.01774120777571316,
+      "poder_normal_na_margem": 0.8,
+      "poder_simulado_na_margem": 0.7925,
+      "verdadeiro_0_ic_acima_de_0": 0.0285,
+      "verdadeiro_0_ic_dentro_da_margem": 0.606,
+      "verdadeiro_0_sigma_observado_ic_dentro_da_margem": 0.9155,
+      "vidas": 14400
+    },
+    "K=50": {
+      "margem": 0.044101061931975875,
+      "poder_normal_na_margem": 0.8,
+      "poder_simulado_na_margem": 0.8,
+      "verdadeiro_0_ic_acima_de_0": 0.022,
+      "verdadeiro_0_ic_dentro_da_margem": 0.6065,
+      "verdadeiro_0_sigma_observado_ic_dentro_da_margem": 0.9145,
+      "vidas": 2400
+    }
+  },
+  "replicas": 2000,
+  "rotulo": "o poder e a margem do primario da C3 (P-R: M3*R - M3* na taxa de fechamento por episodio, nas 4 celulas do longe_fixo), PROPOSTOS para o adendo 8; aproximacao normal do t nao central, com a conferencia por simulacao; sem gate",
+  "script": {
+    "arquivo": "experiments/adendo8_poder_redecidir_evento.py",
+    "sha256": "c6bc2b4bd1b7a4b4d3a389c6996e5d85c825e7cdadf7a9c7bf45669a28e57144"
+  },
+  "semente": 4242,
+  "sigma_max_longe_fixo_c1": 0.09114349089953701,
+  "sigma_planejamento": 0.1093721890794444,
+  "trocas_de_meta_c1": {
+    "longe_fixo|M2": {
+      "dormir_sorteio": 746,
+      "fora_do_reflexo": 2832,
+      "frac_fora_do_reflexo": 0.2586301369863014,
+      "outra_unidade": 2086,
+      "reflexo": 8118,
+      "trocou": 10950,
+      "trocou_por_vida": 18.25,
+      "vidas": 600
+    },
+    "longe_fixo|M3": {
+      "dormir_sorteio": 1664,
+      "fora_do_reflexo": 6111,
+      "frac_fora_do_reflexo": 0.22074919625763104,
+      "outra_unidade": 4447,
+      "reflexo": 21572,
+      "trocou": 27683,
+      "trocou_por_vida": 46.138333333333335,
+      "vidas": 600
+    },
+    "longe|M2": {
+      "dormir_sorteio": 1122,
+      "fora_do_reflexo": 4383,
+      "frac_fora_do_reflexo": 0.2530162212087976,
+      "outra_unidade": 3261,
+      "reflexo": 12940,
+      "trocou": 17323,
+      "trocou_por_vida": 28.871666666666666,
+      "vidas": 600
+    },
+    "longe|M3": {
+      "dormir_sorteio": 1890,
+      "fora_do_reflexo": 7904,
+      "frac_fora_do_reflexo": 0.17358838644499594,
+      "outra_unidade": 6014,
+      "reflexo": 37629,
+      "trocou": 45533,
+      "trocou_por_vida": 75.88833333333334,
+      "vidas": 600
+    }
+  },
+  "unidade": "a media das 4 celulas do lugar (uma vida por dono) da diferenca a - b na taxa por episodio, por unidade (base, k); as celulas com a taxa None num dos bracos ficam fora, contadas",
+  "vidas_por_unidade_c3": 48
+}

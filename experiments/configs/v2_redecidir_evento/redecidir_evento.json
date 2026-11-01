@@ -1,0 +1,18 @@
+{
+  "descricao": "A run da C3 da V3, a escolha refeita so por evento (adendo 8, PROPOSTO; so roda depois do APROVADO pelo Matheus; A8.2 e A8.3): os bracos M3*, M3*R, M2 e M2R (intencao_suspensa e corrida da C2 desligadas) nas 12 celulas (4 donos x longe_fixo, comedouro e longe), bases 76101, 76202, 76303, 76404 e 76505, K = 30 por base (AD8-1, PROPOSTO) (150 unidades), 14 dias. 7 200 vidas, uma vez, da main limpa, com ate 4 processos.",
+  "plano": "docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md",
+  "fase": "redecidir_evento",
+  "unidades": {
+    "bases": [
+      76101,
+      76202,
+      76303,
+      76404,
+      76505
+    ],
+    "k": 30,
+    "prefixo": "digibrain_prototipo"
+  },
+  "dias": 14,
+  "orcamento_por_dia": 16
+}

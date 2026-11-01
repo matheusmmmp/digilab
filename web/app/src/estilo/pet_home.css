@@ -53,6 +53,8 @@
   box-shadow:0 0 0 1px #D5E4F6,0 12px 26px -16px rgba(23,58,138,.5)}
 .pet-cena > .lcd{position:absolute;left:0;top:0;z-index:2;display:block;image-rendering:pixelated}
 .pet-cena > .ovo-anel{z-index:1;top:auto;bottom:-8%;translate:-50% 0}
+/* o anel fica no pe da tela, onde o ovo esta so na sala 2D; na cena 3D e no mundo o ovo esta em outro lugar, e o anel solto confundia */
+.pet-cena:has(.cena3d, .cena-mundo) > .ovo-anel{display:none}
 .pet-cena--morto .cena-sala{filter:grayscale(1) brightness(.92)}
 .cena-fala{position:absolute;z-index:3;right:6%;top:40%;max-width:min(52%,320px);min-height:44px;flex-direction:column;align-items:center;
   text-align:center;cursor:pointer}
