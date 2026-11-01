@@ -65,3 +65,5 @@
   font-size:11px;font-weight:800;color:var(--dl-text-2);white-space:nowrap}
 .det-fala .fala-ponto{width:8px;height:8px}
 .det-estado{display:flex;flex-direction:column;gap:12px}
+/* a camera livre (ilha/orbita.ts): arrastar e pincar na cena giram e aproximam a camera, em vez de rolar ou ampliar a pagina */
+.habitat-cena > .lcd{touch-action:none}

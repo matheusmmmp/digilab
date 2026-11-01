@@ -20,6 +20,7 @@ import { paraMundoCel, paraTelaNdc, type CameraLida, type Dobra } from "./curva.
 import { ilhaDe, type Ilha } from "./grade.ts";
 import { Itens } from "./itens.ts";
 import { Papel, type Ret } from "./papel.ts";
+import { ORBITA, aplicarOrbita, ligarControles, recentrar } from "../orbita.ts";
 import { PRESETS, Pos } from "./pos.ts";
 
 const movimentoReduzido = (): boolean => matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -92,8 +93,29 @@ class VistaIlha {
     if (this.baixa) this.menosGrama();
   }
 
-  /** a dobra de agora: centrada no z desenhado do pet */
-  private get dobra(): Dobra { return { k: this.estilo.dobra, focoZ: this.petCel[1] }; }
+  /** a dobra de agora: centrada no pet desenhado, ao longo da direcao em que a camera olha no chao */
+  private get dobra(): Dobra { return { k: this.estilo.dobra, focoX: this.petCel[0], focoZ: this.petCel[1], dir: this.dirDobra }; }
+  /** a camera com a orbita (orbita.ts): o deslocamento e o ponto olhado em relacao ao pet; a fixa e a do habitat */
+  private orbitaVista = { desloc: [0, 0, 0] as [number, number, number], olhar: [0, 0, 0] as [number, number, number], elevacao0: 0 };
+  private orbitaVersao = -1;
+  private dirDobra: [number, number] = [0, 1];
+  /** a elevacao da camera do habitat (para o limite da inclinacao) */
+  get elevacao0(): number { return this.orbitaVista.elevacao0; }
+  /** a orbita mudou (ou o controle): o deslocamento, a direcao da dobra, a nevoa e o tamanho do texel na distancia nova */
+  private atualizarOrbita(): void {
+    const livre = habitatAtual().controle === "livre";
+    if (!livre && (ORBITA.giro || ORBITA.inclina || ORBITA.zoom !== 1)) recentrar();
+    if (this.orbitaVersao === ORBITA.versao) return;
+    this.orbitaVersao = ORBITA.versao;
+    this.orbitaVista = aplicarOrbita(this.cam.desloc, this.cam.olhar);
+    const [dx, , dz] = this.orbitaVista.desloc, h = Math.hypot(dx, dz);
+    this.dirDobra = h > 1e-9 ? [-dx / h, -dz / h] : [0, 1];
+    const nevoa = this.cenaIlha.cena.fog as THREE.Fog;
+    nevoa.near = NEVOA[0] * this.afast * ORBITA.zoom; nevoa.far = NEVOA[1] * this.afast * ORBITA.zoom;
+    /* o pet em papel: na distancia do foco, um texel do sprite vale um numero inteiro de pixels do canvas (regra 8) */
+    this.ppu = this.renderer.domElement.height / 2 / (this.profundidadeDoPet(this.afast, this.orbitaVista) * Math.tan(THREE.MathUtils.degToRad(this.cam.fov / 2)));
+    this.pxPorTexel = Math.max(1, Math.round(TEXEL_ALVO * this.ppu));
+  }
 
   /** ajusta o canvas a caixa (px de CSS): a resolucao, a proporcao e o afastamento da camera em retrato */
   ajustar(larguraCss: number, alturaCss: number): void {
@@ -103,19 +125,18 @@ class VistaIlha {
     this.canvas.style.width = `${this.larguraCss}px`; this.canvas.style.height = `${this.alturaCss}px`;
     this.camera.aspect = this.larguraCss / this.alturaCss;
     /* a largura vista na altura do pet, com a camera do POC; em retrato, a camera se afasta ate caber LARGURA_MIN */
-    const fundo = this.profundidadeDoPet(1), larg = 2 * fundo * Math.tan(THREE.MathUtils.degToRad(this.cam.fov / 2)) * this.camera.aspect;
+    /* o afastamento do retrato e o da camera do habitat (sem a orbita: o zoom nao se desfaz aqui) */
+    const fundo = this.profundidadeDoPet(1, this.cam), larg = 2 * fundo * Math.tan(THREE.MathUtils.degToRad(this.cam.fov / 2)) * this.camera.aspect;
     this.afast = Math.min(AFASTAR_MAX, Math.max(1, LARGURA_MIN / larg));
-    const nevoa = this.cenaIlha.cena.fog as THREE.Fog;
-    nevoa.near = NEVOA[0] * this.afast; nevoa.far = NEVOA[1] * this.afast;
     this.camera.updateProjectionMatrix();
-    /* o pet em papel: na distancia do foco, um texel do sprite vale um numero inteiro de pixels do canvas (regra 8) */
-    this.ppu = this.renderer.domElement.height / 2 / (this.profundidadeDoPet(this.afast) * Math.tan(THREE.MathUtils.degToRad(this.cam.fov / 2)));
-    this.pxPorTexel = Math.max(1, Math.round(TEXEL_ALVO * this.ppu));
+    /* a nevoa e o texel dependem tambem da orbita */
+    this.orbitaVersao = -1;
+    this.atualizarOrbita();
   }
-  /** a distancia do pet ao plano da camera (ao longo do eixo dela), com o afastamento `a` */
-  private profundidadeDoPet(a: number): number {
-    const d = new THREE.Vector3(...this.cam.olhar).sub(new THREE.Vector3(...this.cam.desloc)).normalize();
-    return new THREE.Vector3(...this.cam.desloc).multiplyScalar(-a).dot(d);
+  /** a distancia do pet ao plano da camera (ao longo do eixo dela), com o afastamento `a`, para um deslocamento e um ponto olhado */
+  private profundidadeDoPet(a: number, c: { desloc: readonly [number, number, number]; olhar: readonly [number, number, number] }): number {
+    const d = new THREE.Vector3(...c.olhar).sub(new THREE.Vector3(...c.desloc)).normalize();
+    return new THREE.Vector3(...c.desloc).multiplyScalar(-a).dot(d);
   }
 
   /** o modo mundo: o ponto do cliente (px) no chao dobrado, em subunidades inteiras do mapa (null fora do mapa ou fora do chao) */
@@ -147,12 +168,14 @@ class VistaIlha {
     const dtMs = agora - this.ultimo, pos = this.seguidor.seguir(mu.pet, dtMs, cm);
     this.ultimo = agora;
     this.petCel = [pos[0] / sub, pos[1] / sub];
+    this.atualizarOrbita();
     const [px, pz] = this.petCel, a = this.afast;
-    const { desloc, olhar } = this.cam;
+    const { desloc, olhar } = this.orbitaVista;
     this.camera.position.set(px + desloc[0] * a, desloc[1] * a, pz + desloc[2] * a);
     this.camera.lookAt(px + olhar[0] * a, olhar[1] * a, pz + olhar[2] * a);
     this.camera.updateMatrixWorld();
-    CURVA.uFocoZ.value = pz;
+    CURVA.uFocoX.value = px; CURVA.uFocoZ.value = pz;
+    CURVA.uDirX.value = this.dirDobra[0]; CURVA.uDirZ.value = this.dirDobra[1];
     CURVA.uTempo.value = movimentoReduzido() ? 0 : agora / 1000;
     const noite = eNoite(m.e.tick % TPD);
     if (noite !== this.noite) { this.noite = noite; this.cenaIlha.aplicarNoite(noite); }
@@ -193,6 +216,8 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
   if (!caixa) throw new Error("cena 3D sem caixa");
   const perdeu = (ev: Event) => { ev.preventDefault(); aoPerder(); };
   canvas.addEventListener("webglcontextlost", perdeu);
+  /* a camera livre (orbita.ts): a roda, o arrasto e a pinca na cena, com a opcao ligada em Ajustes */
+  const soltarControles = ligarControles(() => habitatAtual().controle === "livre", () => vista.elevacao0);
   let vivo = true, quadro = 0, pedido = 0;
   /* os kits: na hora, ou, se a ilha abriu coberta pelo veu, quando ela ficar a vista (no maximo KITS_COBERTO_MS) */
   let kitsPedidos = false;
@@ -264,6 +289,7 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
   return () => {
     vivo = false;
     cancelAnimationFrame(pedido); obs.disconnect(); if (esperaKits) clearTimeout(esperaKits); canvas.removeEventListener("webglcontextlost", perdeu);
+    soltarControles();
     CENA.modo3d = false; CENA.ret = null; CENA.medir = null; CENA.mundo = null;
     vista.dispose();
   };
