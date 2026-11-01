@@ -8,6 +8,9 @@
        que a posicao desenhada anda em x na tela e, ao trocar, gira em volta do eixo vertical (a escala em x passa por 0, a virada de folha);
      - andando (a posicao do motor mudou nos ultimos ANDANDO_MS), o clipe Run do atlas de clipes (H-4) e um pulinho; parado, o Idle; um
        sprite sem Run usa o Idle com o pulinho;
+     - o golpe (docs/TAREFA_V3_HABITAT_OBJETOS.md): o clipe Attack_1 do atlas, desde `golpe.desde`, olhando para `golpe.lado` (no saco de
+       pancada do treino e na bola); um sprite sem Attack_1 fica no Idle. O corte do golpe guarda o centro e o pe do Idle,
+       entao o Digimon nao pula ao bater;
      - o ovo ao nascer (balanca de lado), a forma sombria, o quadro parado ao dormir (na grade de reserva, o olho fechado);
      - a silhueta clara atras das arvores: onde uma arvore esconde o papel, ela aparece;
      - com movimento reduzido, sem pulinho e sem virada animada (a troca de lado e instantanea);
@@ -34,6 +37,11 @@ export interface Passo {
   reduzido: boolean;
   /** a noite do motor: o papel escurece um pouco, como o resto da cena */
   noite: boolean;
+  /** o golpe de agora (a coreografia do treino e a batida na bola; so vista): desde quando (o mesmo `agora`) e o lado (1 direita, -1
+      esquerda); null fora dele */
+  golpe?: { desde: number; lado: number } | null;
+  /** a vista move o pet desenhado sem o motor (a ida e a volta do treino): conta como andando */
+  andandoVista?: boolean;
 }
 
 interface Folha { tex: THREE.CanvasTexture; w: number; h: number }
@@ -111,6 +119,7 @@ export class Papel {
   private xAntes: number | null = null;
   private motorAntes = "";
   private mudouEm = -1e9;
+  private golpeDesde: number | null = null;
   private readonly v = new THREE.Vector3();
 
   constructor() {
@@ -128,17 +137,19 @@ export class Papel {
   }
 
   /** a folha (textura com a borda) do quadro de agora: do atlas, ou da grade de reserva */
-  private folhaAgora(quadro: number, andando: boolean, agora: number): { folha: Folha; ovo: boolean } {
+  private folhaAgora(quadro: number, andando: boolean, agora: number, golpe: Passo["golpe"]): { folha: Folha; ovo: boolean } {
     const { motor: m, nascendo } = jogoAtual(), a = atlasAtual();
     if (a.tipo !== "ok") {
       const f = fonteDoPet(quadro);
       return { folha: this.folha(`reserva|${f.chave}`, () => recortar(f.canvas, corteInteiro(f.canvas))), ovo: nascendo > 0 };
     }
     const ovo = nascendo > 0, nome = ovo ? OVO[m.especie] : chaveSprite(m.forma), s = a.dados.sprites[chaveUp(a.dados, nome)];
-    const clipe: Clipe = !ovo && andando && s?.clipes?.Run ? "Run" : "Idle";
-    if (clipe !== this.clipe) { this.clipe = clipe; this.t0 = agora; }
-    const iq = ovo ? 0 : quadroAgora(a, nome, m.acao === "dormir", clipe, this.t0), sombria = !ovo && m.sombria;
-    const corte = this.corte(a, nome, sombria);
+    const bate = !ovo && !!golpe && !!s?.clipes?.Attack_1;
+    const clipe: Clipe = bate ? "Attack_1" : !ovo && andando && s?.clipes?.Run ? "Run" : "Idle";
+    if (clipe !== this.clipe || (bate && golpe!.desde !== this.golpeDesde)) { this.clipe = clipe; this.t0 = bate ? golpe!.desde : agora; }
+    this.golpeDesde = bate ? golpe!.desde : null;
+    const iq = ovo ? 0 : quadroAgora(a, nome, m.acao === "dormir" && !bate, clipe, this.t0), sombria = !ovo && m.sombria;
+    const corte = bate ? this.corteGolpe(a, nome, sombria) : this.corte(a, nome, sombria);
     return { folha: this.folha(`${nome}|${clipe}|${iq}|${sombria ? 1 : 0}`, () => recortar(quadroAtlas(a, nome, iq, sombria, clipe), corte)), ovo };
   }
   /** o corte do sprite: a caixa do que e opaco em todos os quadros do Idle e do Run (abaixo do pe, so a sombra do export, que sai; dos
@@ -159,6 +170,23 @@ export class Papel {
     this.cortes.set(ch, final);
     return final;
   }
+  /** o corte do golpe: o do Idle e do Run alargado para caber todos os quadros do Attack_1, com o mesmo centro e o mesmo pe (o papel
+      cresce para os dois lados, e o Digimon fica onde estava) */
+  private corteGolpe(a: AtlasOk, nome: string, sombria: boolean): Corte {
+    const ch = `${nome}|${sombria ? 1 : 0}|golpe`, pronto = this.cortes.get(ch);
+    if (pronto) return pronto;
+    const base = this.corte(a, nome, sombria), s = a.dados.sprites[chaveUp(a.dados, nome)], n = s?.clipes?.Attack_1?.quadros.length ?? 0;
+    let x0 = base.x0, x1 = base.x1, largura = 0;
+    for (let i = 0; i < n; i++) {
+      const q = quadroAtlas(a, nome, i, sombria, "Attack_1"), k = caixaOpaca(q);
+      largura = q.width;
+      if (k) { x0 = Math.min(x0, k.x0); x1 = Math.max(x1, k.x1); }
+    }
+    const c2 = base.x0 + base.x1, meia = Math.max(c2 - 2 * x0, 2 * x1 - c2);       // em meios texels, para o centro nao arredondar
+    const final: Corte = { x0: Math.max(0, Math.floor((c2 - meia) / 2)), x1: Math.min(Math.max(largura, base.x1 + 1) - 1, Math.ceil((c2 + meia) / 2)), pe: base.pe };
+    this.cortes.set(ch, final);
+    return final;
+  }
   private folha(chave: string, fazer: () => HTMLCanvasElement): Folha {
     const dono = chave.split("|")[0];
     if (dono !== this.dono) { for (const f of this.folhas.values()) f.tex.dispose(); this.folhas.clear(); this.dono = dono; }
@@ -172,15 +200,16 @@ export class Papel {
     /* andando: a posicao do motor mudou nos ultimos ANDANDO_MS */
     const chaveMotor = `${p.motor[0]},${p.motor[1]}`;
     if (chaveMotor !== this.motorAntes) { if (this.motorAntes) this.mudouEm = p.agora; this.motorAntes = chaveMotor; }
-    const andando = p.agora - this.mudouEm < ANDANDO_MS;
-    const { folha, ovo } = this.folhaAgora(p.quadro, andando, p.agora);
+    const golpe = p.golpe ?? null, andando = !golpe && (p.andandoVista || p.agora - this.mudouEm < ANDANDO_MS);
+    const { folha, ovo } = this.folhaAgora(p.quadro, andando, p.agora, golpe);
     if (this.papel.material.map !== folha.tex) {
       this.papel.material.map = this.silhueta.material.map = folha.tex;
       this.papel.material.needsUpdate = this.silhueta.material.needsUpdate = true;
     }
     this.papel.material.color.setHex(p.noite ? NOITE_PAPEL : 0xffffff);
     /* o lado: a posicao desenhada anda em x na tela (a camera nao gira: x do mundo e x da tela) */
-    if (this.xAntes !== null) {
+    if (golpe) this.lado = golpe.lado >= 0 ? 1 : -1;
+    else if (this.xAntes !== null) {
       const dx = p.cel[0] - this.xAntes;
       if (dx > LADO_MIN) this.lado = 1; else if (dx < -LADO_MIN) this.lado = -1;
     }
