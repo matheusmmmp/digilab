@@ -471,6 +471,49 @@ def conferir_credito(braco: str, c) -> None:
         raise RuntimeError(f"{braco}: a busca guardada passou da decisao seguinte")
     if c.cd.credito_corrida:
         conferir_credito_corrida(braco, c)
+    if c.cd.redecidir_evento:
+        conferir_redecidir(braco, c)
+
+
+def conferir_redecidir(braco: str, c) -> None:
+    """A escolha segurada (C3; docs/ESPEC_REDECIDIR_EVENTO_DIGIBRAIN_MODULAR.md, secoes 2 a 4 e 6), em toda vida com a `redecidir_evento`,
+    pelo registro do cerebro: toda decisao segurada tem a mesma `chave` da anterior, a anterior nao e o reflexo, nenhum evento e nenhum
+    sorteio (u = None); as seguradas seguidas nao passam de `n_seg_max`; toda outra decisao depois da primeira tem pelo menos um evento; a
+    decisao com o reflexo tem o E-REFLEXO; e as contagens do M-ESTADO batem com o registro. Falha alto."""
+    ms, n_max = c.motivos, c.m.estado.p.n_seg_max
+    seguidas, tetos = 0, 0
+    for i, m in enumerate(ms):
+        if m["segurada"]:
+            antes = ms[i - 1] if i > 0 else None
+            if antes is None or antes["reflexo"] or m["reflexo"] or m["evento"] or m["escolha"] != antes["escolha"] or m["u"] is not None:
+                raise RuntimeError(f"{braco}: a decisao segurada {m['k']} nao e a escolha anterior sem evento e sem sorteio")
+            seguidas += 1
+            if seguidas > n_max:
+                raise RuntimeError(f"{braco}: {seguidas} decisoes seguradas seguidas na decisao {m['k']} (o teto e {n_max})")
+            continue
+        seguidas = 0
+        if i > 0 and not m["evento"]:
+            raise RuntimeError(f"{braco}: a decisao {m['k']} nao foi segurada e nao tem evento")
+        if m["reflexo"] and "E-REFLEXO" not in m["evento"]:
+            raise RuntimeError(f"{braco}: a decisao {m['k']} com o reflexo sem o E-REFLEXO")
+        tetos += "E-TETO" in m["evento"]
+    e = c.m.estado
+    if e.seguradas != sum(m["segurada"] for m in ms) or e.tetos != tetos:
+        raise RuntimeError(f"{braco}: as contagens do M-ESTADO (seguradas, tetos) nao batem com o registro")
+
+
+def trocas_por_decisao(motivos: list[dict]) -> int:
+    """As trocas da LP-2 (docs/TAREFA_V3_REDECIDIR_EVENTO.md, 1.4; a espec da C3, secao 4): uma troca e uma decisao sem o reflexo cuja
+    unidade escolhida difere da ultima unidade escolhida sem o reflexo; a retomada depois do reflexo nao conta. So o T-RD-3 a le nesta
+    etapa; ela entra nas medidas com o orquestrador da run (a etapa 3)."""
+    trocas, ultima = 0, None
+    for m in motivos:
+        if m["reflexo"]:
+            continue
+        if ultima is not None and m["escolha"] != ultima:
+            trocas += 1
+        ultima = m["escolha"]
+    return trocas
 
 
 def conferir_credito_corrida(braco: str, c) -> None:
