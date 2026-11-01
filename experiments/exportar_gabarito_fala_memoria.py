@@ -26,7 +26,13 @@ _ZSOBE = {"id": "Z1", "tipo": mf.TIPO_FACETA, "texto": "cautela comida subiu no 
 
 # (nome, fatos, fala): as tres lacunas da auditoria, uma por uma, e os casos que a fala pode dizer
 CASOS = (
-    ("desligada_nao_confere", [_E1, _M1], "Lembrei do podre e fiquei mais cauteloso, porque lembrei."),
+    # o A v11 (sem a chave da memoria autobiografica; MA-8): o modo simples, so lembranca e causa; a faceta nao se confere
+    ("a_v11_lembranca_com_fato_m", [_E1, _M1], "Lembro da bronca que levei."),
+    ("a_v11_lembranca_sem_fato_m", [_E1, _M1], "Lembrei de comer aquilo podre."),
+    ("a_v11_causa_sem_sonda", [_E1, _M1], "Fiquei esperando porque lembro da bronca."),
+    ("a_v11_causa_sem_memoria_no_registro", [_E1], "Evitei a fruta porque lembrei do podre."),
+    ("a_v11_faceta_nao_confere", [_E1, _M1], "Fiquei mais cauteloso, porque lembrei."),
+    ("a_v11_negacao_nao_alega", [_E1, _M1], "Nao lembro disso."),
     ("lacuna1_lembranca_sem_registro", [_E1, _SEM], "Lembrei de comer aquilo podre."),
     ("lacuna1_lembranca_com_registro", [_E1, _LEM], "Lembrei que comi podre."),
     ("lacuna1_outro_episodio", [_E1, _LEM], "Lembrei de brincar com a bola."),

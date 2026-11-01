@@ -15,6 +15,9 @@ describe("fala com memoria: o TS confere como o Python", () => {
     expect(semFato("lacuna1_lembranca_sem_registro")).toEqual([false]);
     expect(semFato("lacuna2_causa_sem_sonda")).toEqual([false]);
     expect(semFato("lacuna3_faceta_sem_registro")).toEqual([false]);
-    expect(semFato("desligada_nao_confere")).toEqual([]);
+    expect(semFato("a_v11_faceta_nao_confere")).toEqual([false]);
+    expect(semFato("a_v11_causa_sem_sonda")).toEqual([false]);
+    expect(semFato("a_v11_lembranca_com_fato_m")).toEqual([true]);
+    expect(semFato("a_v11_negacao_nao_alega")).toEqual([]);
   });
 });

@@ -5,8 +5,12 @@ A fala so alega memoria, causa por memoria e mudanca de faceta que o REGISTRO su
   - "fiz Y porque lembrei de X"  so com a sonda mostrando que a lembranca mudou Y (fato Q2, `lembranca que decidiu`);
   - "fiquei mais cauteloso"      so com uma mudanca de faceta registrada (fato Z, `mudanca de faceta`), no sentido dela.
 
-O bloco de fatos so ganha esses fatos com a `memoria_autobio` ligada (a chave `memoria_autobio` do estado); sem a chave, nada
-aqui roda e a fala sai como sempre. A conferencia e DETERMINISTICA (sem LLM) e tem o espelho em web/app/src/falaMemoria.ts; o
+O bloco de fatos so ganha esses fatos com a `memoria_autobio` ligada (a chave `memoria_autobio` do estado).
+
+Sem a chave (o A v11 do jogo, MA-8), o registro tem fato de memoria [M] e de historia, mas nenhuma sonda de que a memoria mudou o que
+ele fez (a MemoriaEpisodios do N6 esta fora do jogo): a conferencia vale em MODO SIMPLES, so para lembranca e causa (a faceta nao existe
+la). "lembrei de X" so com um fato [M] (ou de historia) que diga X; "fiz Y porque lembrei de X" e recusada sempre, porque nao ha fato
+Q2 (a sonda) para sustenta-la. A conferencia e DETERMINISTICA (sem LLM) e tem o espelho em web/app/src/falaMemoria.ts; o
 gabarito dos dois e web/app/test/gabaritos/fala_memoria_python.json (experiments/exportar_gabarito_fala_memoria.py).
 """
 
@@ -20,6 +24,8 @@ TIPO_SEM_LEMBRANCA = "sem lembranca autobiografica"   # Q1: a memoria esta ligad
 TIPO_DECIDIU = "lembranca que decidiu"                # Q2: a sonda mostrou que a lembranca mudou a escolha
 TIPO_FACETA = "mudanca de faceta"                     # Z1...: uma mudanca registrada (faceta, sentido, dia, ids)
 TIPOS_MEMORIA = (TIPO_LEMBRANCA, TIPO_SEM_LEMBRANCA, TIPO_DECIDIU, TIPO_FACETA)
+# o modo simples (A v11): o que o registro tem para sustentar "lembrei de X" (fatos.py: memoria e, na voz propria, historia)
+TIPOS_REGISTRO_A = ("memoria", "habito meu", "habito do dono", "gosto", "marco")
 FACETAS = ("cautela_comida", "apego_dono", "ousadia_longe")
 MAX_FACETAS = 3
 
@@ -81,15 +87,22 @@ def alegacoes(fala: str) -> list[dict]:
 
 
 def conferir(fala: str, fatos: list[dict]) -> list[dict]:
-    """cada alegacao com `sustentada` e o `fato` que a sustenta (ou None). So com a memoria ligada; desligada, lista vazia"""
-    if not ligada(fatos):
-        return []
-    por_tipo = {t: [f for f in fatos if f["tipo"] == t] for t in TIPOS_MEMORIA}
+    """cada alegacao com `sustentada` e o `fato` que a sustenta (ou None). Com a memoria ligada, as tres; sem ela (A v11), o modo
+    simples: so lembranca (fato [M] ou de historia) e causa (so o fato Q2, que ali nao existe), nunca faceta"""
+    modo_simples = not ligada(fatos)
+    por_tipo = {t: [f for f in fatos if f["tipo"] == t] for t in TIPOS_MEMORIA + TIPOS_REGISTRO_A}
     res = []
     for a in alegacoes(fala):
         fato = None
+        if modo_simples and a["tipo"] == "faceta":
+            continue
         if a["tipo"] in ("lembranca", "causa"):
-            base = por_tipo[TIPO_DECIDIU if a["tipo"] == "causa" else TIPO_LEMBRANCA]
+            if a["tipo"] == "causa":
+                base = por_tipo[TIPO_DECIDIU]
+            elif modo_simples:
+                base = [f for t in TIPOS_REGISTRO_A for f in por_tipo[t]]
+            else:
+                base = por_tipo[TIPO_LEMBRANCA]
             pal = _raizes(a["trecho"])
             fato = next((f["id"] for f in base if pal & _raizes(f["texto"])), None)
         else:

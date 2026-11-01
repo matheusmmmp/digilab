@@ -264,3 +264,18 @@ A espec, 7.1 (ME-6, MA-8, T-ME-6). Nenhum número novo; nenhuma vida; só as sem
   o verificador com cliente falso; o motivo do N6; o gabarito em dia) e o do web.
 - **O que não houve:** nenhuma vida de pesquisa; `engine.py` e o cérebro do jogo não mudam; o `controle_mem` fica de fora. Os PROPOSTOS
   estão no registro de desvios.
+
+## 16. A lacuna do A v11 na fala (2026-11-01, worker, Claude Code, Sonnet 5.5, worktree `v3-fala-a-v11`)
+
+Fecha o PROPOSTO do gate da M6 (seção 15) e a MA-8 para o jogo: a conferência da memória vale também sem a `memoria_autobio`. Nenhum número
+novo, nenhuma vida; o motor, o cérebro A v11 e a decisão do pet não mudam.
+
+- **A regra (modo simples, `memoria_fala.conferir` sem o fato Q1):** só lembrança e causa. "Lembrei de X" vale só com um fato [M] (ou de
+  história: hábito, gosto, marco) que diga X (raiz em comum, como na M6). "Fiz Y porque lembrei de X" é **sempre recusada**: o A v11 não
+  registra sonda nenhuma (a `MemoriaEpisodios` do N6, com a `sonda_memoria` que o `motivo.py` lê, está fora do jogo; não há fato Q2). A faceta
+  não se confere (o A v11 não tem Z). Com a chave ligada, nada muda em relação à M6.
+- **Onde:** `digilab_fala_livre/memoria_fala.py` (`conferir`), `verificador.py` (a conferência roda sempre; só grava `memoria_autobio` no
+  registro quando há alegação de lembrança ou a memória está ligada) e o espelho `web/app/src/falaMemoria.ts` + `falaLivre.ts` (`comMemoria`).
+- **Gabarito:** `fala_memoria_python.json` regravado (autorizado no #536): saiu `desligada_nao_confere` (1 caso, que fixava o gate), entraram 6
+  casos `a_v11_*`; os outros 13 estão idênticos. Nenhum outro gabarito mudou.
+- **O prompt não mudou** (nem versão): as regras 12–13 seguem só com os fatos Q/Z; a verificação já marca a fala que inventa.

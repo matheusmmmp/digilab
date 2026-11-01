@@ -55,7 +55,10 @@ def test_lacunas_uma_por_uma_no_gabarito():
     assert por_nome["lacuna2_causa_com_sonda"] == [True]
     assert por_nome["lacuna3_faceta_sem_registro"] == [False] and por_nome["lacuna3_faceta_sentido_contrario"] == [False]
     assert por_nome["lacuna3_outra_faceta"] == [False] and por_nome["lacuna3_faceta_com_registro"] == [True]
-    assert por_nome["desligada_nao_confere"] == []
+    # o A v11 (MA-8): lembranca so com o fato [M] que diga o que lembrou; causa por lembranca sempre recusada (nenhuma sonda)
+    assert por_nome["a_v11_lembranca_com_fato_m"] == [True] and por_nome["a_v11_lembranca_sem_fato_m"] == [False]
+    assert por_nome["a_v11_causa_sem_sonda"] == [False] and por_nome["a_v11_causa_sem_memoria_no_registro"] == [False]
+    assert por_nome["a_v11_faceta_nao_confere"] == [False] and por_nome["a_v11_negacao_nao_alega"] == []
 
 
 def test_fatos_da_memoria_so_com_a_chave():
@@ -106,12 +109,25 @@ def test_verificador_faceta_so_com_o_registro():
     assert _verificar(fala, {"lembranca": None, "facetas": [{**FAC, "passo": -1}]}).nao_suportadas == 1     # desceu: o sentido contrario
 
 
-def test_verificador_desligado_sai_como_hoje():
+def _verificar_a_v11(fala, tipo_ext="causa", juiz=True):
+    """o A v11: sem a chave memoria_autobio; o juiz fixo aceita o fato M1 (o velho comportamento)"""
     fatos = [f.para_dict() for f in fatos_de_estado(ESTADO)] + [{"id": "M1", "tipo": "memoria", "texto": "(curto prazo, bronca) x, ha 20 min"}]
-    fala = "Fui comer porque lembrei da bronca."
-    v = verificar(_Falso({"afirmacoes": [{"tipo": "causa", "trecho": fala}]}, {"sustentada": True, "fato": "M1"}), fala, [], fatos,
-                  versao=VERSAO_VERIFICADOR_V5)
-    assert v.nao_suportadas == 0 and v.memoria_autobio is None and "memoria_autobio" not in v.para_dict()
+    ext = {"afirmacoes": [{"tipo": tipo_ext, "trecho": fala}]} if "lembr" in fala else {"afirmacoes": []}
+    return verificar(_Falso(ext, {"sustentada": juiz, "fato": "M1" if juiz else ""}), fala, [], fatos, versao=VERSAO_VERIFICADOR_V5)
+
+
+def test_verificador_a_v11_recusa_causa_por_lembranca_sem_sonda():
+    # MA-8: sem a chave, o juiz aceitava "porque lembrei" apoiado em [M1]; agora nao ha sonda no registro e a causa e recusada
+    v = _verificar_a_v11("Fui comer porque lembrei da bronca.")
+    assert v.nao_suportadas == 1 and v.afirmacoes[0]["regra"] == "memoria_autobio" and v.memoria_autobio["alegacoes"][0]["fato"] is None
+    # a lembranca simples, com o fato [M1] que diz o que lembrou, vale; sem ele, nao
+    assert _verificar_a_v11("Lembro da bronca.", "lembranca").nao_suportadas == 0
+    assert _verificar_a_v11("Lembrei de comer podre.", "lembranca").nao_suportadas == 1
+    # sem alegar lembranca, a verificacao sai como hoje (nenhum campo novo)
+    v = _verificar_a_v11("Estou com fome.")
+    assert v.memoria_autobio is None and "memoria_autobio" not in v.para_dict()
+    # a faceta nao se confere sem a chave
+    assert _verificar_a_v11("Fiquei mais cauteloso.").nao_suportadas == 0
 
 
 # --- a lacuna 3: o motivo do N6
