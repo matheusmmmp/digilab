@@ -464,3 +464,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-31 — C2 HÁBITO NA INTENÇÃO, etapa 1 (worker, Claude Code, Opus 5.5, worktree `v3-habito-intencao`): o "crédito no passo" é o crédito de hoje](registro/2026-10.md)
 - [2026-10-31 — C2 HÁBITO NA INTENÇÃO, etapa 2 (worker, Claude Code, Sonnet 5.5, worktree `v3-habito-intencao-codigo`): a espec curta da corrida e o que ela fixa](registro/2026-10.md)
 - [2026-10-31 — C2 HÁBITO NA INTENÇÃO, etapa 3 (worker, Claude Code, Opus 5.5, worktree `v3-habito-intencao-plano`): o adendo 7, o poder e o orquestrador](registro/2026-10.md)
+- [2026-10-31 — C2 HÁBITO NA INTENÇÃO, etapa 4 (worker, Claude Code, Opus 5.5, worktree `v3-habito-intencao-run`): a run e a leitura](registro/2026-10.md)

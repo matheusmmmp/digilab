@@ -325,3 +325,14 @@ etapa 3. Os números novos seguem PROPOSTOS e SEM FONTE. A direção da HI-3 vem
   do `SUBCHAVES_CONSERTO`.
 - **A varredura dos fins** (as sementes dos testes, os 3 braços, as 12 células, 14 dias, 180 vidas): nenhum fim desconhecido.
 - **Nenhuma vida da faixa 75xxx.** O `engine.py` e a web não mudam. O registro está em `docs/registro/2026-10.md`.
+
+## Resultado da etapa 4 (a run e a leitura; 2026-10-31, worker Claude Code, Opus 5.5, worktree `v3-habito-intencao-run`)
+
+- **O registro** A7.13 no plano (o commit, os sha256, a config, o comando e a suíte), empurrado antes da primeira vida (`4be65a0`).
+- **A run,** uma vez: 5 400 vidas da faixa 75101…75505 (150 unidades × M1, M2 e M2c × 12 células, 14 dias), 4 processos, 58 min. Todas as
+  conferências por vida passaram; o processo saiu com 1 só no `print` final do resumo, depois de gravar e fechar os artefatos (o desvio 1
+  no registro).
+- **A leitura** (`docs/RESULTADO_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`, seção 14): as premissas passam (P-CORRIDA 1,501; G-PESA do hábito
+  0,111); o P-A, M2c − M2, dá +0,0028 [−0,0003; +0,0060], não passa, classe "≈ 0"; o S1, M2c − M1, "< 0". **Linha 4 de A7.7:** nestas
+  condições, a unidade de crédito não é a causa; volta ao Matheus a medida do P2, não um mecanismo novo.
+- **Nada da C3, da C4 nem da L-3.** O `engine.py`, o orquestrador e a web não mudam.
