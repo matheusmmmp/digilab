@@ -181,3 +181,24 @@ Ho et al. usam de 10 a 50 execuções por condição, sem teste de hipótese: é
 | `eta_faceta`, o teto das facetas | S/64, S/4 | **aprovados, ainda não implementados** | entram na M5 (6.2) |
 
 **Pendente:** nenhuma das MA nem dos valores (todas aprovadas em 2026-11-01). Só a decisão nova sobre o campo `theta_afeto`, sem uso.
+
+## 12. M2 e M3: a lembrança, o lugar pela soma e a consolidação (2026-11-01, worker, Claude Code, Sonnet 5.5, worktree `v3-memoria-m2m3`)
+
+- **A M2** (`digilab/digibrain/mem.py`): `Memoria.lembrar` (a lembrança a cada decisão, ME-2: a semelhança inteira ponderada por `w_lugar`,
+  `w_vista`, `w_corpo`, o mínimo `sim_min`, o empate pelo maior |σ| e depois o mais recente, `rec += 1`) e `valores_soma` (o valor do
+  lugar pela soma dos σ do consumo de comida boa e da visita, nas três memórias, cortada em [−S, S]; MA-2), que o `recuperar` usa
+  no lugar do "mais recente manda" quando a subchave está ligada. A lembrança entra no motivo (`lembranca`); **nenhuma decisão a lê ainda**
+  (a M4). O lugar pela soma, esse sim, muda a escolha com a chave ligada: a vida ligada pode divergir da desligada.
+- **A M3** (`Memoria.consolidar`): uma vez por dia do pet (a primeira decisão depois da virada do dia do relógio), recente → duradoura
+  (`rep ≥ 1`, |σ| ≥ `theta_dur` ou `rec ≥ 1`, senão esquecida) → central (um por categoria, `rep ≥ n_rep_central`, até `n_cen`),
+  com a duradoura cheia descartando o de menor peso; o registro de cada consolidação (`consolidacoes`) e o `rep` somado ao codificar.
+  A recente cheia passa a descartar pelo peso (4.3), que com rep = rec = 0 é o |σ| da M1.
+- **O `theta_afeto` saiu** (decisão do Matheus, #532): o campo, a validação, a entrada em `CAMPOS_POR_MODULO["mem"]` e a linha da seção 8.
+  Entraram os nove campos da seção 8 (`n_dur`, `n_cen`, `janela_rec`, `theta_dur`, `n_rep_central`, `w_lugar`, `w_vista`, `w_corpo`,
+  `sim_min`), DECIDIDOS, SEM FONTE, nenhum número novo.
+- **Os testes** (`tests/test_memoria_autobio.py`): T-ME-2 (contexto conhecido recupera o certo, contexto novo não recupera nada, a
+  semelhança, o empate, as três memórias, o lugar pela soma); T-ME-3 (a repetição, o repetido consolida, o esquecido some e fica no
+  registro, a janela, o forte único fora da central, um por categoria e `n_cen`, a substituição, as capacidades, o peso, a vida com as
+  capacidades e o replay). Desligada, todos os gabaritos saem byte a byte; G1 nas cinco sementes.
+- **O desvio:** `docs/registro/2026-11.md`, a seção da M2 e da M3 (as leituras, o log que deixa de ser o mesmo, os três testes de mecanismo).
+- **O próximo:** a M4 (o termo da lembrança na decisão, `lembranca`, as sondas), num PR próprio.

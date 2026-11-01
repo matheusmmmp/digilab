@@ -28,7 +28,7 @@ Sem rng. A interface que a memoria consolidada herda (secao 9): `codificar`, `re
   - **quando vira episodio** (3.3, ME-1), nesta ordem, sem rng: o consumo; a visita ao lugar lembrado sem comer; |sigma| >= `theta_sig`
     ou a maior subida de dor, susto ou estresse na decisao (corpo_depois - corpo_antes, so os aumentos) >= `theta_sig` (a origem
     "evento"). O resto nao vira episodio. O afeto e lido pela variacao, nao pelo nivel (o Matheus, 2026-11-01, no #530): o `theta_afeto`
-    nao e lido;
+    saiu do codigo;
   - **a categoria** (3.4): [comportamento, classe, sinal de sigma], com a classe a comida no consumo, "nao_havia" na visita e, no
     evento, a classe do objeto da unidade ou "sem_alvo";
   - **onde fica:** na `recente`, uma lista propria, com capacidade `n_rec`; cheia, sai o de menor |sigma| (o peso da 4.3 com rep = rec =
@@ -36,6 +36,20 @@ Sem rng. A interface que a memoria consolidada herda (secao 9): `codificar`, `re
     lembrado segue a lista de hoje (`episodios`), e a vida com a subchave sai com o mesmo log da vida sem ela;
   - **o tick** (a referencia ao log): o relogio do pet refeito da hora do dia da Observacao (`relogio`): o dia avanca quando a hora volta,
     tick = dia x TICKS_POR_DIA + a hora em ticks.
+
+**A C4, M2 e M3** (secoes 4 e 8 da mesma espec; mesma subchave):
+  - **a lembranca** (M2, `lembrar`, ME-2): a cada decisao, o episodio das tres memorias de maior semelhanca com a pista, ou nenhum. A pista:
+    a posicao de agora, as classes a vista, o cheiro, a noite e as faixas (quartos de S) dos receptores. `sim` = a media inteira,
+    ponderada por `w_lugar`, `w_vista` e `w_corpo`, de `s_lugar` (a nota pela distancia ao ponto do episodio, a conta de hoje), `s_vista`
+    (Jaccard sobre as classes, o cheiro e a noite; S se as duas sao vazias) e `s_corpo` (os receptores na mesma faixa). Volta o de maior
+    `sim >= sim_min`; o empate: o maior |sigma|, depois o mais recente (a decisao, depois o id). Cada lembranca soma 1 em `rec`. A faixa
+    do episodio e a da leitura guardada em `corpo_antes` (o episodio nao guarda a urgencia), e a da pista e a da leitura da Observacao.
+    Nenhuma decisao le a lembranca ainda (a M4 e etapa posterior);
+  - **o lugar pela soma** (MA-2): com a subchave, o valor do lugar P e a soma, cortada em [-S, S], do sigma dos episodios de consumo de
+    comida boa (racao, a, b, c) e de visita em P, nas tres memorias, no lugar do "mais recente manda"; o ponto e o do mais recente;
+  - **a consolidacao** (M3, `consolidar`): recente -> duradoura -> central, uma vez por dia do pet, na primeira decisao do dia novo; os
+    passos e o registro estao em `consolidar`. A repeticao (`rep`) soma ao codificar um episodio de mesma categoria e mesmo lugar; o peso e
+    `min(S, mul(|sigma|, S + rep x S/2 + rec x S/4))`.
 Desligada, nada disso existe (o estado interno e o de hoje). Sem rng."""
 from __future__ import annotations
 
@@ -44,12 +58,19 @@ from ..modelo_mundo import raiz_inteira
 from ..policies.lobos import div_arred
 from ._comum import chave_json, mul
 
+COMIDAS_BOAS = ("racao", "a", "b", "c")             # as classes de comida boa (igual a `sens.COMIDAS_BOAS`; o mem.py nao importa o M-SENS)
+
 CLASSES_EPISODIO = ("racao", "a", "b", "c", "podre", "nao_havia")
 ORIGENS = ("consumo", "visita")
 # a C4 (secao 3.4): as classes e as origens do episodio completo
 CLASSES_AUTOBIO = CLASSES_EPISODIO + ("bola", "sem_alvo")
 ORIGENS_AUTOBIO = ("consumo", "visita", "evento")
 AFETIVOS = ("dor", "susto", "estresse")             # os receptores cuja subida conta para o `theta_sig` (3.3)
+
+
+def _faixa(v: int, S: int) -> int:
+    """a faixa em quartos de S: quantos limites (S/4, S/2, 3S/4) o valor alcanca"""
+    return (v >= S // 4) + (v >= S // 2) + (v >= 3 * S // 4)
 
 
 def _sinal(v: int) -> int:
@@ -105,6 +126,11 @@ class Memoria:
         self.autobio = autobio
         if autobio:                                   # a C4 (desligada, nenhum campo novo)
             self.recente: list[dict] = []
+            self.duradoura: list[dict] = []
+            self.central: list[dict] = []
+            self.consolidacoes: list[dict] = []       # o registro de cada consolidacao (4.3)
+            self.dia_consolidado = 0
+            self.lembrancas = 0
             self.proximo_id_autobio = 0
             self.saidas_autobio: list[dict] = []      # os que sairam da recente por capacidade (id, sigma)
             self.dia, self.minuto = 0, None
@@ -147,14 +173,76 @@ class Memoria:
             raise ValueError(f"M-MEM: episodio {ep!r}")
         if ep["origem"] == "visita" and (ep["sigma"] > 0 or ep["classe"] != "nao_havia"):
             raise ValueError("M-MEM: a visita sem comida tem sigma <= 0 e a classe nao_havia")
+        lugar = list(self.lugar_de(*ep["ponto"]))
+        for e in self._guardados():                   # a repeticao: a mesma categoria no mesmo lugar (4.3)
+            if e["categoria"] == ep["categoria"] and e["lugar"] == lugar:
+                e["rep"] += 1
         if len(self.recente) >= self.p.n_rec:
-            sai = min(self.recente, key=lambda e: (abs(e["sigma"]), e["decisao"], e["id"]))
+            sai = min(self.recente, key=lambda e: (self.peso(e), e["decisao"], e["id"]))
             self.recente.remove(sai)
             self.saidas_autobio.append({"id": sai["id"], "sigma": sai["sigma"]})
-        novo = {**ep, "id": self.proximo_id_autobio, "lugar": list(self.lugar_de(*ep["ponto"])), "ponto": list(ep["ponto"])}
+        novo = {**ep, "id": self.proximo_id_autobio, "lugar": lugar, "ponto": list(ep["ponto"])}
         self.proximo_id_autobio += 1
         self.recente.append(novo)
         return novo["id"]
+
+    # ------------------------------------------------------------ a C4, M2 e M3 (so com a `memoria_autobio`)
+    def _guardados(self) -> list[dict]:
+        """os episodios das tres memorias, na ordem recente, duradoura, central"""
+        return self.recente + self.duradoura + self.central
+
+    def peso(self, e: dict) -> int:
+        """o peso afetivo do episodio (4.3): min(S, mul(|sigma|, S + rep x S/2 + rec x S/4))"""
+        S = self.S
+        return min(S, mul(abs(e["sigma"]), S + div_arred(e["rep"] * S, 2) + div_arred(e["rec"] * S, 4), S))
+
+    def lembrar(self, sens: dict) -> dict:
+        """a lembranca da decisao (M2, 4.1): {"recuperado" (o id ou None), "sim" (a maior, ou 0 sem episodio), "memoria", "sigma"}; soma 1
+        em `rec` do lembrado"""
+        if not self.autobio:
+            raise RuntimeError("M-MEM: a lembranca so com a memoria_autobio")
+        S, p = self.S, self.p
+        x, y = sens["pos"]
+        vista = {o["classe"] for o in sens["objetos"]}
+        if sens["ha_cheiro"]:
+            vista.add("cheiro")
+        if sens["contexto"]["noite"] > 0:
+            vista.add("noite")
+        faixas = {r: _faixa(v, S) for r, v in sens["leitura"].items()}
+        peso_total = p.w_lugar + p.w_vista + p.w_corpo
+        melhor, chave_melhor = None, None
+        for e in self._guardados():
+            px, py = e["ponto"]
+            dist = raiz_inteira((px - x) * (px - x) + (py - y) * (py - y))
+            s_lugar = S - min(S, div_arred(dist * S, p.d_max))
+            b = set(e["vista"]) | ({"cheiro"} if e["cheiro"] else set()) | ({"noite"} if e["noite"] else set())
+            s_vista = S if not vista and not b else div_arred(len(vista & b) * S, len(vista | b))
+            iguais = sum(1 for r, f in faixas.items() if r in e["corpo_antes"] and _faixa(e["corpo_antes"][r], S) == f)
+            s_corpo = div_arred(iguais * S, len(faixas)) if faixas else S
+            sim = div_arred(p.w_lugar * s_lugar + p.w_vista * s_vista + p.w_corpo * s_corpo, peso_total)
+            chave = (sim, abs(e["sigma"]), e["decisao"], e["id"])
+            if chave_melhor is None or chave > chave_melhor:
+                melhor, chave_melhor = e, chave
+        if melhor is None:
+            return {"recuperado": None, "sim": 0, "memoria": None, "sigma": 0}
+        sim = chave_melhor[0]
+        if sim < p.sim_min:
+            return {"recuperado": None, "sim": sim, "memoria": None, "sigma": 0}
+        melhor["rec"] += 1
+        self.lembrancas += 1
+        return {"recuperado": melhor["id"], "sim": sim, "memoria": melhor["memoria"], "sigma": melhor["sigma"]}
+
+    def valores_soma(self) -> dict:
+        """lugar -> (a soma dos sigma, cortada em [-S, S], o episodio mais recente que a compoe): so consumo de comida boa e visita (MA-2)"""
+        soma: dict = {}
+        for e in self._guardados():
+            if e["origem"] == "visita" or (e["origem"] == "consumo" and e["classe"] in COMIDAS_BOAS):
+                lugar = tuple(e["lugar"])
+                total, rep = soma.get(lugar, (0, None))
+                if rep is None or (e["decisao"], e["id"]) > (rep["decisao"], rep["id"]):
+                    rep = e
+                soma[lugar] = (total + e["sigma"], rep)
+        return {lugar: (max(-self.S, min(self.S, t)), e) for lugar, (t, e) in soma.items()}
 
     def valores(self) -> dict:
         """lugar -> o episodio mais recente nele (a decisao, depois o id)"""
@@ -175,8 +263,11 @@ class Memoria:
             return nada
         x, y = sens["pos"]
         melhor, chave_melhor = None, None
-        for lugar, e in sorted(self.valores().items()):
-            valor = e["r_n"]
+        if self.autobio:                              # a C4 (MA-2): o valor do lugar e a soma dos sigma, nas tres memorias
+            valores = self.valores_soma()
+        else:
+            valores = {lugar: (e["r_n"], e) for lugar, e in self.valores().items()}
+        for lugar, (valor, e) in sorted(valores.items()):
             if valor <= 0:
                 continue
             px, py = e["ponto"]
@@ -186,17 +277,66 @@ class Memoria:
                 continue
             chave = (nota, e["decisao"], e["id"])
             if chave_melhor is None or chave > chave_melhor:
-                melhor, chave_melhor = (lugar, e, nota), chave
+                melhor, chave_melhor = (lugar, e, nota, valor), chave
         if melhor is None:
             return nada
-        lugar, e, nota = melhor
+        lugar, e, nota, valor = melhor
         self.recuperacoes += 1
-        return {"pista": True, "recuperado": e["id"], "lugar": list(lugar), "ponto": tuple(e["ponto"]), "valor": e["r_n"],
-                "nota": nota, "M": mul(p.w_mem, e["r_n"], S)}
+        return {"pista": True, "recuperado": e["id"], "lugar": list(lugar), "ponto": tuple(e["ponto"]), "valor": valor,
+                "nota": nota, "M": mul(p.w_mem, valor, S)}
 
     # ------------------------------------------------------------ a interface da memoria consolidada (secao 9), vazia no prototipo
-    def consolidar(self, decisao: int) -> None:
-        return None
+    def consolidar(self, decisao: int) -> dict | None:
+        """a consolidacao diaria (M3, 4.3): so com a `memoria_autobio`, uma vez por dia do pet, na primeira decisao depois da virada do
+        dia (o dia vem do `relogio`); devolve o registro (tambem guardado em `consolidacoes`) ou None. Sem rng. Ordem:
+          1. recente -> duradoura: o episodio com mais de `janela_rec` decisoes sobe se rep >= 1, |sigma| >= `theta_dur` ou rec >= 1;
+             senao e esquecido (sai, motivo `esquecido`);
+          2. duradoura -> central: em cada categoria, o candidato e o de maior peso com rep >= `n_rep_central`; a central fica com um
+             por categoria (o de maior peso entre o que ja estava e o candidato, no empate o mais antigo), as `n_cen` categorias de
+             maior peso; quem sai da central volta a duradoura;
+          3. a duradoura cheia descarta o de menor peso, no empate o mais antigo, ate caber em `n_dur`."""
+        if not self.autobio or self.dia <= self.dia_consolidado:
+            return None
+        p = self.p
+        self.dia_consolidado = self.dia
+        reg = {"dia": self.dia, "decisao": decisao, "subiram": {"duradoura": [], "central": []}, "esquecidos": [], "voltaram": [],
+               "por_capacidade": {"duradoura": []}}
+        for e in sorted(self.recente, key=lambda e: (e["decisao"], e["id"])):
+            if decisao - e["decisao"] <= p.janela_rec:
+                continue
+            self.recente.remove(e)
+            if e["rep"] >= 1 or abs(e["sigma"]) >= p.theta_dur or e["rec"] >= 1:
+                e["memoria"] = "duradoura"
+                self.duradoura.append(e)
+                reg["subiram"]["duradoura"].append(e["id"])
+            else:
+                reg["esquecidos"].append(e["id"])
+        melhores: dict = {}                           # categoria -> o de maior peso entre a central e os candidatos
+        for e in self.central + [e for e in self.duradoura if e["rep"] >= p.n_rep_central]:
+            c = tuple(e["categoria"])
+            chave = (self.peso(e), -e["decisao"], -e["id"])
+            if c not in melhores or chave > melhores[c][0]:
+                melhores[c] = (chave, e)
+        nova = [e for _, e in sorted(melhores.values(), key=lambda t: t[0], reverse=True)[:p.n_cen]]
+        ids_nova = {e["id"] for e in nova}
+        for e in list(self.central):
+            if e["id"] not in ids_nova:
+                self.central.remove(e)
+                e["memoria"] = "duradoura"
+                self.duradoura.append(e)
+                reg["voltaram"].append(e["id"])
+        for e in nova:
+            if e["memoria"] != "central":
+                self.duradoura.remove(e)
+                e["memoria"] = "central"
+                self.central.append(e)
+                reg["subiram"]["central"].append(e["id"])
+        while len(self.duradoura) > p.n_dur:
+            sai = min(self.duradoura, key=lambda e: (self.peso(e), e["decisao"], e["id"]))
+            self.duradoura.remove(sai)
+            reg["por_capacidade"]["duradoura"].append(sai["id"])
+        self.consolidacoes.append(reg)
+        return reg
 
     def termos_decisao(self, recuperacao: dict | None) -> dict:
         """o termo M de cada unidade: no prototipo, so o do lugar recuperado"""
@@ -212,5 +352,8 @@ class Memoria:
                "recuperacoes": self.recuperacoes}
         if self.autobio:                              # a C4 (desligada, o estado e o de hoje, byte a byte)
             out["autobio"] = {"recente": [dict(e) for e in self.recente], "proximo_id": self.proximo_id_autobio,
-                              "saidas": list(self.saidas_autobio), "relogio": {"dia": self.dia, "minuto": self.minuto}}
+                              "saidas": list(self.saidas_autobio), "relogio": {"dia": self.dia, "minuto": self.minuto},
+                              "duradoura": [dict(e) for e in self.duradoura], "central": [dict(e) for e in self.central],
+                              "consolidacoes": [dict(c) for c in self.consolidacoes], "lembrancas": self.lembrancas,
+                              "dia_consolidado": self.dia_consolidado}
         return out

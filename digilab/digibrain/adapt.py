@@ -13,7 +13,9 @@ da L-2, docs/ESPEC_LONGE_L2_DIGIBRAIN_MODULAR.md, secao 2.3), o M-ESTADO cuida d
 (`eventos`, com o gesto do dono desde a decisao anterior), o M-ARB segura o candidato sem sorteio quando nao ha evento, e o motivo ganha
 `segurada` e `evento`. Com a subchave `memoria_autobio` (a C4, M0 e M1, docs/ESPEC_MEMORIA_AUTOBIOGRAFICA_DIGIBRAIN_MODULAR.md, secao
 3), a decisao guarda o tick do relogio do pet e o afeto de antes, e o fechamento monta o episodio completo e o entrega ao M-MEM
-(`episodio_autobio`, `codificar_autobio`), com o id em `consequencia["autobio"]`; nenhuma decisao o le ainda (a M4 e etapa posterior).
+(`episodio_autobio`, `codificar_autobio`), com o id em `consequencia["autobio"]`; nenhuma decisao o le ainda (a M4 e etapa posterior). Na M2 e na M3, antes do `recuperar` a decisao roda o relogio, a consolidacao do dia
+novo (`consolidar`) e a lembranca (`lembrar`), e o motivo ganha `lembranca` e `consolidacao`; a lembranca ainda nao entra na escolha, e o
+lugar lembrado passa a valer pela soma dos sigma (MA-2).
 
 **O alvo** (`escolher_alvo`): o candidato do motor do tipo (e do id) da unidade escolhida; o `u` do motor e ignorado. **A excecao unica**
 (a PE-14 revista): em EXPLORAR, o lugar lembrado do M-MEM e entregue como `Alvo.ponto(x, y)`, fora da lista do motor, que o valida por
@@ -148,6 +150,10 @@ class DigiBrain:
         fins_susp = m.estado.cuidar_suspensa(sens, afeto, reflexo) if cd.intencao_suspensa else []
         evento, segurar = m.estado.eventos(sens, afeto, reflexo, bool(self._gestos)) if cd.redecidir_evento else ([], None)
         ctx = m.estado.contexto()
+        if cd.memoria_autobio:                        # a C4, M2 e M3: o relogio, a consolidacao do dia novo e a lembranca da decisao
+            tick = m.mem.relogio(sens["minuto"])
+            consolidacao = m.mem.consolidar(k)
+            lembranca = m.mem.lembrar(sens)
         memoria = m.mem.recuperar(sens, afeto) if cd.m_mem else None
         unidades, z = m.impulso.unidades(sens, afeto, ctx, m.plast, memoria, m.afeto.drives(receptores))
         esc = m.arb.escolher(unidades, afeto, sens, rng, reflexo, segurar)  # a rng de politica vai so ao M-ARB
@@ -184,6 +190,9 @@ class DigiBrain:
         entregue = [_fim(f) for f in fins if not f.get("registro", True)]
         if entregue:                                  # a busca guardada (DX-4), entregue sem a opcao composta: so com a subchave
             self.motivos[-1]["busca_entregue"] = entregue
+        if cd.memoria_autobio:                        # a C4, M2 e M3: desligada, nenhum campo novo
+            self.motivos[-1]["lembranca"] = lembranca
+            self.motivos[-1]["consolidacao"] = consolidacao
         if cd.credito_corrida:                        # a C2: desligada, nenhum campo novo
             self.motivos[-1]["corridas"] = corridas
         if cd.intencao_suspensa:                      # a L-2: a suspensa ao fim da decisao e a retomada (desligada, nenhum campo novo)
@@ -195,7 +204,7 @@ class DigiBrain:
         self._pendencia = {"k": k, "intencao": intencao, "unidade": unidade, "sens": sens, "g_apr": afeto["g_apr"], "pediu": False,
                            "alvo": None, "corpo": None, "transicao": None, "mundo": None}
         if cd.memoria_autobio:                        # a C4: o que o episodio completo le no fechamento
-            self._pendencia.update({"tick": m.mem.relogio(sens["minuto"]), "afeto": {"V": afeto["V"], "E": afeto["E"]},
+            self._pendencia.update({"tick": tick, "afeto": {"V": afeto["V"], "E": afeto["E"]},
                                     "gestos": self._gestos})
         self._gestos = []
         self.k += 1

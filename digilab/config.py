@@ -2521,10 +2521,19 @@ class ConfigDigibrainInatos:
     w_mem: int = _S                           # PROPOSTO, SEM FONTE: M = mul(w_mem, valor)
     # a C4, M0 e M1 (docs/ESPEC_MEMORIA_AUTOBIOGRAFICA_DIGIBRAIN_MODULAR.md, secoes 3 e 8), so com a subchave `memoria_autobio`
     theta_sig: int = _S // 8                  # DECIDIDO (2026-11-01), SEM FONTE: o |sigma| que faz um evento virar episodio; a metade do lambda_busca
-    theta_afeto: int = _S // 2                # DECIDIDO (2026-11-01), SEM FONTE: a leitura de dor, susto ou estresse depois que faz um evento
-                                              # virar episodio; o meio da escala. SEM USO desde a decisao de 2026-11-01 (#530): o afeto e
-                                              # lido pela subida >= theta_sig (a espec 3.3); manter ou remover vai ao Matheus
     n_rec: int = 16                           # DECIDIDO (2026-11-01), SEM FONTE: a capacidade da recente; o n_ep de hoje
+    # (o `theta_afeto`, S/2, saiu em 2026-11-01: o afeto passou a ser lido pela subida >= theta_sig e o campo ficou sem uso; o Matheus
+    # decidiu remove-lo, comentario do PR #532)
+    # a C4, M2 e M3 (espec, secoes 4 e 8; DECIDIDOS em 2026-11-01, SEM FONTE; nenhuma calibracao por no)
+    n_dur: int = 32                           # DECIDIDO, SEM FONTE: a capacidade da duradoura; o dobro da recente
+    n_cen: int = 8                            # DECIDIDO, SEM FONTE: a capacidade da central, em categorias (um episodio por categoria)
+    janela_rec: int = 96                      # DECIDIDO, SEM FONTE: as decisoes na recente antes de subir ou ser esquecido; um dia do pet
+    theta_dur: int = _S // 4                  # DECIDIDO, SEM FONTE: o |sigma| que sobe da recente sem repeticao nem recuperacao
+    n_rep_central: int = 2                    # DECIDIDO, SEM FONTE: as repeticoes para a central; o minimo que exclui o episodio unico
+    w_lugar: int = 2                          # DECIDIDO, SEM FONTE: o peso do lugar na semelhanca da lembranca (4.1)
+    w_vista: int = 1                          # DECIDIDO, SEM FONTE: o peso do que estava a vista (as classes, o cheiro, a noite)
+    w_corpo: int = 1                          # DECIDIDO, SEM FONTE: o peso do corpo (as faixas dos receptores)
+    sim_min: int = 3 * _S // 4                # DECIDIDO, SEM FONTE: a semelhanca minima para lembrar; alta, para o contexto novo nao lembrar
 
     def __post_init__(self) -> None:
         for f in fields(self):
@@ -2557,10 +2566,14 @@ class ConfigDigibrainInatos:
                 raise ValueError(f"constante de tempo abaixo do passo do cerebro (15 ticks): {tau}")
         if not 0 < self.g_min <= self.g0 <= self.g_max or self.r_norm <= 0 or self.s_v <= 0 or self.n_ep <= 0 or self.n_desiste <= 0 \
                 or self.escala_cuidado <= 0 or self.d_max <= 0 or self.h_max <= 0 or self.n_desiste_cheiro <= 0 \
-                or self.n_suspensa_max <= 0 or not 0 <= self.lambda_retomar <= self.escala or self.n_seg_max <= 0                 or self.n_rec <= 0 or not 0 < self.theta_sig <= self.escala or not 0 < self.theta_afeto <= self.escala:
+                or self.n_suspensa_max <= 0 or not 0 <= self.lambda_retomar <= self.escala or self.n_seg_max <= 0 or self.n_rec <= 0 \
+                or not 0 < self.theta_sig <= self.escala or self.n_dur <= 0 or self.n_cen <= 0 or self.janela_rec <= 0 \
+                or not 0 < self.theta_dur <= self.escala or self.n_rep_central <= 0 or self.w_lugar < 0 or self.w_vista < 0 \
+                or self.w_corpo < 0 or self.w_lugar + self.w_vista + self.w_corpo <= 0 or not 0 < self.sim_min <= self.escala:
             raise ValueError("ConfigDigibrainInatos: g_min <= g0 <= g_max; r_norm, s_v, n_ep, n_desiste, escala_cuidado, d_max, h_max, "
-                             "n_desiste_cheiro, n_suspensa_max, n_seg_max e n_rec positivos; lambda_retomar em [0, S]; theta_sig e "
-                             "theta_afeto em (0, S]")
+                             "n_desiste_cheiro, n_suspensa_max, n_seg_max, n_rec, n_dur, n_cen, janela_rec e n_rep_central positivos; "
+                             "lambda_retomar em [0, S]; theta_sig, theta_dur e sim_min em (0, S]; os pesos da semelhanca "
+                             "nao negativos, com soma positiva")
 
 
 CONFIG_DIGIBRAIN_INATOS = ConfigDigibrainInatos()
@@ -2571,7 +2584,9 @@ PARAMETROS_DIGIBRAIN_INATOS: dict[str, tuple[str, str]] = {
              ("DECIDIDO", "LS-4 (2026-10-29, docs/ESPEC_LONGE_L2_DIGIBRAIN_MODULAR.md, secao 3.1): o valor de um campo que ja existe, sem "
                           "calibracao; SEM FONTE") if f.name in ("n_suspensa_max", "lambda_retomar") else
              ("DECIDIDO", "2026-11-01 (docs/ESPEC_MEMORIA_AUTOBIOGRAFICA_DIGIBRAIN_MODULAR.md, secao 8): pela recomendacao da espec; "
-                          "SEM FONTE") if f.name in ("theta_sig", "theta_afeto", "n_rec") else
+                          "SEM FONTE") if f.name in (
+                 "theta_sig", "n_rec", "n_dur", "n_cen", "janela_rec", "theta_dur", "n_rep_central", "w_lugar", "w_vista", "w_corpo",
+                 "sim_min") else
              ("PROPOSTO", "docs/ESPEC_DIGIBRAIN_MODULAR.md, secoes 2 a 7; valor de partida a mao (etapa 1a), SEM FONTE salvo o que o "
                           "comentario do campo cita"))
     for f in fields(ConfigDigibrainInatos)}

@@ -164,6 +164,9 @@ de teste da M0 e da M1, o nível do estresse codificava quase todo evento (o reg
 desligada): o `theta_afeto` deixou de ser lido, e o campo fica sem uso até o Matheus decidir mantê-lo ou removê-lo. SEM FONTE além da
 leitura de Ho.
 
+**O `theta_afeto` saiu** (decidido pelo Matheus em 2026-11-01, no comentário do PR #532; implementado no PR `v3-memoria-m2m3`): o campo, a
+validação e a entrada em `CAMPOS_POR_MODULO["mem"]` foram removidos do código, porque nenhuma regra o lê desde a troca pela subida.
+
 Os limiares (seção 8) são PROPOSTOS e SEM FONTE. O teste T-ME-1 confere que um evento forte vira episódio e um neutro não.
 
 ### 3.4 A categoria
@@ -322,7 +325,7 @@ jogo); a M6 é a exceção, pela lacuna no `web/app/src/falaLivre.ts`.
 | campo | valor | o que é | por que este |
 |---|---|---|---|
 | `theta_sig` | S/8 = 128 | o \|σ\| que faz um evento virar episódio (M1) | a metade do `lambda_busca`; nenhuma fonte |
-| `theta_afeto` | S/2 = 512 | a leitura de dor, susto ou estresse que faz um evento virar episódio; **sem uso** desde a troca pela subida (3.3) | o meio da escala |
+| ~~`theta_afeto`~~ | ~~S/2 = 512~~ | **REMOVIDO (2026-11-01, decisão do Matheus no #532):** era a leitura de dor, susto ou estresse que fazia um evento virar episódio; ficou sem uso com a troca pela subida (3.3) e o campo saiu do código | o meio da escala |
 | `n_rec` | 16 | a capacidade da recente | o `n_ep` de hoje |
 | `n_dur` | 32 | a capacidade da duradoura | o dobro da recente |
 | `n_cen` | 8 | a capacidade da central (categorias) | pequena (ME-3) |
@@ -385,22 +388,22 @@ As ME-1 a ME-7 e as C4-E1 a C4-E3 não fixam estes oito pontos. **Todos DECIDIDO
 | ponto | o que decide | o estado | a evidência |
 |---|---|---|---|
 | **MA-1** | σ da visita vazia = min(0, r da ida) | **aprovada e implementada** | M1: `c6c6e51` (#530, `episodio_autobio`), teste `test_t_me_1_a_visita_vazia_*` |
-| **MA-2** | o valor do lugar pela soma dos σ | **aprovada, ainda não implementada** | entra na M2 (4.2); hoje o lugar segue a `episodios` e a recência |
+| **MA-2** | o valor do lugar pela soma dos σ | **aprovada e implementada** | M2: PR `v3-memoria-m2m3` (`Memoria.valores_soma`, `recuperar`), testes `test_t_me_2_o_valor_do_lugar_*` |
 | **MA-3** | "REL sem negativos" grava σ < 0 como 0 | **aprovada, ainda não implementada** | entra com o `controle_mem` (7.2), que nenhum PR criou; a espec não o prende a uma etapa, e ele só tem efeito quando a lembrança e o lugar leem o σ (M2) |
-| **MA-4** | o empate da lembrança por ordem fixa | **aprovada, ainda não implementada** | entra na M2 (4.1) |
+| **MA-4** | o empate da lembrança por ordem fixa | **aprovada e implementada** | M2: PR `v3-memoria-m2m3` (`Memoria.lembrar`), teste `test_t_me_2_o_empate_*` |
 | **MA-5** | três facetas nomeadas | **aprovada, ainda não implementada** | entra na M5 (6.2) |
 | **MA-6** | a subchave `facetas_mem` | **aprovada, ainda não implementada** | entra na M5 (6.2, 7.3) |
 | **MA-7** | recusar a C4 com a C2 ou a C3 e sem as subchaves do cheiro | **aprovada e implementada** | M0: `c6c6e51` (#530, `ConfigDigibrain`), teste `test_a_subchave_recusa_as_combinacoes_da_ma_7` |
 | **MA-8** | a M6 nos dois lados, com paridade | **aprovada, ainda não implementada** | entra na M6 (7.1) |
 | **o afeto pela subida** (3.3) | a subida de dor, susto ou estresse ≥ `theta_sig`, não o nível ≥ `theta_afeto` | **aprovada e implementada** | decidida no #530 (`da8d017`); o #530 implementou o nível (`c6c6e51`); este PR (`v3-memoria-afeto`) troca pela subida |
 | `theta_sig`, `n_rec` | S/8 = 128, 16 | **aprovados e implementados** | M1: `c6c6e51` (#530), `ConfigDigibrainInatos` |
-| `theta_afeto` | S/2 = 512 | **aprovado; o campo existe sem uso** | criado no `c6c6e51` (#530); deixa de ser lido neste PR; manter ou remover vai ao Matheus |
-| `w_lugar`, `w_vista`, `w_corpo`, `sim_min` | 2, 1, 1, 3S/4 | **aprovados, ainda não implementados** | entram na M2 (4.1) |
-| `n_dur`, `n_cen`, `janela_rec`, `theta_dur`, `n_rep_central` | 32, 8, 96, S/4, 2 | **aprovados, ainda não implementados** | entram na M3 (4.3) |
+| `theta_afeto` | S/2 = 512 | **removido** | decisão do Matheus em 2026-11-01 (#532); saiu do código no PR `v3-memoria-m2m3` |
+| `w_lugar`, `w_vista`, `w_corpo`, `sim_min` | 2, 1, 1, 3S/4 | **aprovados e implementados** | M2: PR `v3-memoria-m2m3`, `ConfigDigibrainInatos` |
+| `n_dur`, `n_cen`, `janela_rec`, `theta_dur`, `n_rep_central` | 32, 8, 96, S/4, 2 | **aprovados e implementados** | M3: PR `v3-memoria-m2m3`, `ConfigDigibrainInatos` |
 | `w_lem` | S/2 | **aprovado, ainda não implementado** | entra na M4 (6.1) |
 | `eta_faceta`, o teto das facetas | S/64, S/4 | **aprovados, ainda não implementados** | entram na M5 (6.2) |
 
-**Pendente:** nenhuma das MA nem dos valores (todas aprovadas em 2026-11-01). Só a decisão nova sobre o campo `theta_afeto`, sem uso.
+**Pendente:** nenhuma das MA nem dos valores (todas aprovadas em 2026-11-01). O `theta_afeto` foi removido (2026-11-01).
 
 **A ordem das etapas** (a tarefa, seção 5: um PR por etapa): o gabarito antes; M0 e M1 juntas (o episódio e a codificação, sem efeito
 na escolha); M2 e M3; M4 (a primeira que muda a escolha); M5; M6; e o M7 em cada PR. A validação causal (a seção 4 da tarefa) vem
