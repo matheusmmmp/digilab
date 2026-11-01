@@ -709,3 +709,254 @@ def test_g_int_e_g_receptor_as_intencoes_e_os_receptores_de_hoje_na_vida_ligada(
     fins = c.m.estado.fins
     assert set(fins) == set(orq.fins_do_estado("M3")) and fins["meta"] > 0
     assert all(set(m["afeto"]["urgencias"]) == set(c.m.sens.receptores) for m in c.motivos)
+
+
+# ------------------------------------------------------------------ T-ME-5: as facetas (M5, MA-5 e MA-6)
+from digilab.digibrain import impulso as IMP  # noqa: E402
+from digilab.digibrain import pers as PERS  # noqa: E402
+from digilab.digibrain.adapt import DigiBrain, Modulos  # noqa: E402
+from digilab.digibrain.ganchos import ParametrosInatos, Personalidade  # noqa: E402
+from digilab.digibrain.plast import Plasticidade  # noqa: E402
+
+FACETADA = replace(LIGADA, facetas_mem=True)
+ETA, TETO = P.eta_faceta, P.teto_faceta
+
+
+def _viver_facetada(semente: int, lugar: str):
+    original = orq.config_do_braco
+    orq.config_do_braco = lambda b, g=None, c=False: replace(original(b, g, c), memoria_autobio=True, facetas_mem=True)
+    try:
+        return orq.viver("M3", "relapso", lugar, semente, 3, 16, conserto=True)
+    finally:
+        orq.config_do_braco = original
+
+
+def test_t_me_5_a_subchave_nasce_desligada_e_so_com_a_memoria_autobio():
+    assert CONFIG_DIGIBRAIN.facetas_mem is False and CONFIG_DIGIBRAIN_LIGADA.facetas_mem is False
+    with pytest.raises(TypeError, match="facetas_mem"):
+        replace(LIGADA, facetas_mem=1)
+    with pytest.raises(ValueError, match="facetas_mem"):
+        replace(BASE, facetas_mem=True)                                      # sem a memoria_autobio (MA-6)
+    assert FACETADA.facetas_mem and FACETADA.memoria_autobio
+
+
+def test_t_me_5_o_passo_e_o_teto_sao_os_da_secao_8_decididos():
+    assert (ETA, TETO) == (S // 64, S // 4) == (16, 256) and TETO // ETA == 16        # 16 dias para o teto
+    assert CAMPOS_POR_MODULO["pers"] == ("eta_faceta", "teto_faceta")
+    for c in CAMPOS_POR_MODULO["pers"]:
+        assert PARAMETROS_DIGIBRAIN_INATOS[c][0] == "DECIDIDO" and "SEM FONTE" in PARAMETROS_DIGIBRAIN_INATOS[c][1]
+    assert {f.name for f in fields(ConfigDigibrainInatos)} == {c for cs in CAMPOS_POR_MODULO.values() for c in cs}
+    for kw in ({"eta_faceta": 0}, {"eta_faceta": S // 4 + 1}, {"teto_faceta": S + 1}):
+        with pytest.raises(ValueError, match="eta_faceta"):
+            ConfigDigibrainInatos(**kw)
+
+
+def test_t_me_5_mudar_faceta_com_a_subchave_desligada_falha_alto():
+    desligado = Personalidade()
+    assert desligado.faceta("cautela_comida") == 0 and not desligado.mudancas
+    with pytest.raises(NotImplementedError, match="mudar_faceta"):
+        desligado.mudar_faceta("cautela_comida", ETA, [1], 1)
+    assert Modulos.__dataclass_fields__["pers"].default is None
+    c = orq.cerebro_de(_viver(101, ligada=True)[1])                                  # so a memoria_autobio: sem M-PERS
+    assert c.m.pers is None and not any("faceta" in m for m in c.motivos)
+    assert "pers" not in c.estado_interno()["modulos"]
+    assert not any("faceta" in x["termos"] for m in c.motivos for x in m["unidades"])
+    assert "sem_faceta" not in c.motivos[0]["sondas"]
+
+
+def test_t_me_5_cada_mudanca_aponta_os_ids_e_o_passo_respeita_o_limite():
+    pers = Personalidade(ETA, TETO, True)
+    reg = pers.mudar_faceta("apego_dono", ETA, [3, 5], 2)
+    assert reg == {"faceta": "apego_dono", "dia": 2, "passo": ETA, "antes": 0, "depois": ETA, "episodios": [3, 5]}
+    assert pers.faceta("apego_dono") == ETA and pers.mudancas == [reg]
+    with pytest.raises(ValueError, match="eta_faceta"):
+        pers.mudar_faceta("apego_dono", ETA + 1, [3], 3)                           # acima do passo
+    with pytest.raises(ValueError, match="ids"):
+        pers.mudar_faceta("apego_dono", ETA, [], 3)                                # mudanca sem os episodios
+    with pytest.raises(KeyError):
+        pers.mudar_faceta("coragem", ETA, [3], 3)
+    assert pers.mudar_faceta("apego_dono", 0, [], 3) is None
+    for dia in range(40):                                                           # o teto: nem um dia a mais passa de S/4
+        pers.mudar_faceta("ousadia_longe", ETA, [1], dia)
+    assert pers.faceta("ousadia_longe") == TETO and len([m for m in pers.mudancas if m["faceta"] == "ousadia_longe"]) == 16
+    for dia in range(40):
+        pers.mudar_faceta("cautela_comida", -ETA, [1], dia)
+    assert pers.faceta("cautela_comida") == -TETO
+    assert all(abs(m["passo"]) <= ETA and abs(m["depois"] - m["antes"]) == ETA for m in pers.mudancas)
+
+
+def _ep_comer(r_n):
+    return {**episodio(r_n=r_n, unid=unidade(("comer", "a", 7), COMIDA), comeu="a", objetos=[COMIDA]), "ponto": (40, 72), "decisao": 0}
+
+
+def _ep_dono(r_n):
+    return {**episodio(r_n=r_n, gestos=[["acariciar", 1]], depois=leituras(dor=900)), "ponto": (40, 72), "decisao": 0}
+
+
+def _ep_explorar(r_n):
+    return {**episodio(r_n=r_n, unid=unidade(("explorar", "ponto", (40, 72))), chegou=True, r_ida=r_n), "ponto": (40, 72), "decisao": 0}
+
+
+def _cerebro_com(episodios: list) -> DigiBrain:
+    """um DigiBrain com a subchave e episodios sinteticos ja na duradoura (os ids, pela ordem)"""
+    cerebro = DigiBrain(cfg_digibrain=FACETADA)
+    for ep in episodios:
+        cerebro.m.mem.codificar_autobio(ep)
+    for e in list(cerebro.m.mem.recente):
+        mover(cerebro.m.mem, e, "duradoura")
+    return cerebro
+
+
+def test_t_me_5_a_evidencia_e_a_mudanca_de_cada_faceta():
+    cerebro = _cerebro_com([_ep_comer(300), _ep_comer(200), _ep_dono(-400), _ep_explorar(-300), _ep_comer(-100)])
+    mem = cerebro.m.mem
+    assert mem.evidencia_faceta("cautela_comida") == [[0, 300], [1, 200], [4, -100]]
+    assert mem.evidencia_faceta("apego_dono") == [[2, -400]]
+    assert mem.evidencia_faceta("ousadia_longe") == [[3, -300]]                   # a visita vazia entra na ousadia
+    por = {m["faceta"]: m for m in cerebro._mudar_facetas({"dia": 5})}
+    assert por["cautela_comida"]["episodios"] == [0, 1, 4] and por["cautela_comida"]["soma"] == 400
+    assert por["cautela_comida"]["passo"] == -ETA                                  # PROPOSTO: o bom comer tira cautela (6.2: positiva = mais)
+    assert por["apego_dono"]["passo"] == -ETA and por["apego_dono"]["episodios"] == [2] and por["apego_dono"]["dia"] == 5
+    assert por["ousadia_longe"]["passo"] == -ETA and por["ousadia_longe"]["episodios"] == [3]
+    assert cerebro.m.pers.valores == {"cautela_comida": -ETA, "apego_dono": -ETA, "ousadia_longe": -ETA}
+    ruim = _cerebro_com([_ep_comer(-300)])                                          # comer que fez mal: mais cautela
+    assert ruim._mudar_facetas({"dia": 1})[0]["passo"] == ETA and ruim.m.pers.valores["cautela_comida"] == ETA
+    zero = _cerebro_com([_ep_comer(300), _ep_comer(-300)])                          # soma 0: nenhuma mudanca
+    assert zero._mudar_facetas({"dia": 1}) == [] and zero.m.pers.mudancas == []
+
+
+def test_t_me_5_so_os_episodios_consolidados_contam_e_um_dia_ruim_nao_muda_a_personalidade():
+    cerebro = DigiBrain(cfg_digibrain=FACETADA)
+    mem = cerebro.m.mem
+    for _ in range(P.n_rec):
+        mem.codificar_autobio(_ep_comer(-1000))                                     # na recente: ainda nao e evidencia
+    assert mem.evidencia_faceta("cautela_comida") == [] and cerebro._mudar_facetas({"dia": 1}) == []
+    for e in list(mem.recente):
+        mover(mem, e, "duradoura")
+    out = cerebro._mudar_facetas({"dia": 1})
+    assert len(out) == 1 and cerebro.m.pers.valores["cautela_comida"] == ETA        # dezesseis episodios fortes, um passo so
+    assert ETA * 16 == TETO and ETA < TETO // 8
+
+
+def _termo_faceta(u, valores, positivas) -> int:
+    """o termo `faceta` que o M-IMPULSO poe numa unidade, pela chamada real de `Impulso.unidades` (so a unidade `u` na lista)"""
+    imp = IMP.Impulso(P, FACETADA)
+    imp.alvos = lambda sens_, memoria: [u]
+    imp.contexto_z = lambda *a: [0] * len(IMP.CARACTERISTICAS_DIGIBRAIN)
+    pl = Plasticidade(FACETADA, P)
+    pl.habito = lambda b, z: 0
+    pl.incentivo = lambda *a: 0
+    saida, _ = imp.unidades({"pc": {}}, {}, {"persistencia": {}}, pl, {"M": 0, "recuperado": None}, (), None, (valores, positivas))
+    return saida[0]["termos"]["faceta"]
+
+
+def test_t_me_5_o_termo_f_da_cada_faceta_na_unidade_dela():
+    outra = {**COMIDA, "id": 8, "classe": "b", "tipo": "b"}
+    u = lambda chave, tipo, objeto=None: {"chave": chave, "acao": chave[0], "tipo": tipo, "objeto": objeto, "d": 3}   # noqa: E731
+    valores = {"cautela_comida": 200, "apego_dono": -100, "ousadia_longe": 120}
+    assert _termo_faceta(u(("comer", "comida", 7), "a", COMIDA), valores, {"a"}) == 0     # classe com episodio positivo: sem cautela
+    assert _termo_faceta(u(("comer", "comida", 8), "b", outra), valores, {"a"}) == -M.mul(200, S, S) == -200
+    assert _termo_faceta(u(("chamar_atencao", None, None), None), valores, set()) == -100
+    assert _termo_faceta(u(("explorar", "vagar", None), "vagar"), valores, set()) == 0    # sem alvo fora da vista
+    assert _termo_faceta(u(("explorar", "cheiro", None), "cheiro"), valores, set()) == 120
+    assert _termo_faceta(u(("explorar", "ponto", (40, 72)), "ponto"), valores, set()) == 120
+    assert _termo_faceta(u(("ocioso", None, None), None), valores, set()) == 0
+    assert _termo_faceta(u(("brincar", "bola", 3), "bola", BOLA), valores, set()) == 0
+
+
+def test_t_me_5_a_sonda_sem_faceta_tira_so_o_termo_f_e_nao_gasta_rng():
+    ligada = Arbitragem(autobio=True, facetas=True)
+    assert ligada.sondas["sem_faceta"] == ("faceta",) and ligada.decidiu["sem_faceta"] == "faceta_decidiu"
+    assert "faceta" in ligada.sondas["so_inato"] and "faceta" not in ligada.sondas["sem_memoria"]
+    assert "sem_faceta" not in Arbitragem(autobio=True).sondas and "sem_faceta" not in Arbitragem().sondas
+
+    def com_f(chave, inato, f=0):
+        x = unid_com(chave, inato)
+        x["termos"]["faceta"] = f
+        x["soma"] = sum(x["termos"].values())
+        x["a"] = max(0, min(x["soma"], P.a_max))
+        return x
+    us = [com_f(COMER_9, 500, -300), com_f(VAGAR, 500)]
+    rng = RngContada(0.4)
+    out = ligada.escolher(us, {"g_exp": 0}, ENERGIA, rng)
+    assert out["unidade"]["acao"] == "explorar" and out["sondas"]["sem_faceta"] == list(COMER_9)
+    assert out["sondas"]["faceta_decidiu"] is True and out["sondas"]["lembranca_decidiu"] is False
+    assert out["sondas"]["aprendido_decidiu"] is True and rng.n == 1
+    nulo = ligada.escolher([com_f(COMER_9, 500), com_f(VAGAR, 500)], {"g_exp": 0}, ENERGIA, RngContada(0.4))
+    assert nulo["sondas"]["faceta_decidiu"] is False
+
+
+def test_t_me_5_o_m_pers_nao_toca_o_temperamento_inato_pela_ast():
+    texto = inspect.getsource(PERS)
+    arvore = ast.parse(texto)
+    importados = {n.module for n in ast.walk(arvore) if isinstance(n, ast.ImportFrom)} | {a.name for n in ast.walk(arvore)
+                                                                                         if isinstance(n, ast.Import) for a in n.names}
+    assert importados <= {"__future__", "_comum"}                                   # nem config, nem ganchos, nem genoma, nem random
+    nomes = {n.id for n in ast.walk(arvore) if isinstance(n, ast.Name)} | {n.attr for n in ast.walk(arvore) if isinstance(n, ast.Attribute)}
+    assert not nomes & {"ConfigDigibrainInatos", "ParametrosInatos", "CONFIG_DIGIBRAIN_INATOS", "random", "rng", "inatos"}
+
+
+@pytest.mark.parametrize("semente", SEMENTES)
+def test_t_me_5_na_vida_o_temperamento_fica_igual_e_cada_mudanca_aponta_os_ids(semente):
+    motor, reg, fab = _viver_facetada(semente, "comedouro" if semente % 2 else "longe_fixo")
+    orq.conferir_replay(motor, fab, semente, motor.log.para_jsonl())                  # G1: o replay bit a bit com as duas chaves
+    c = orq.cerebro_de(reg)
+    assert c.inatos == CONFIG_DIGIBRAIN_INATOS and c.m.mem.p == CONFIG_DIGIBRAIN_INATOS      # o registro inato: o do nascimento
+    nascimento, fim = ParametrosInatos(CONFIG_DIGIBRAIN_INATOS), ParametrosInatos(c.inatos)
+    assert all(fim.do_modulo(mod) == nascimento.do_modulo(mod) for mod in CAMPOS_POR_MODULO)
+    subiram: set = set()
+    valores = dict.fromkeys(PERS.FACETAS, 0)
+    todas = []
+    for m in c.motivos:
+        consolidada = m["consolidacao"]
+        if consolidada:
+            subiram |= set(consolidada["subiram"]["duradoura"]) | set(consolidada["subiram"]["central"])
+        for mu in m["faceta"]["mudancas"]:
+            todas.append({k: v for k, v in mu.items() if k != "soma"})
+            assert mu["episodios"] and set(mu["episodios"]) <= subiram                # os ids sao de episodios consolidados
+            assert mu["dia"] == consolidada["dia"] and mu["antes"] == valores[mu["faceta"]]
+            assert abs(mu["passo"]) == ETA and mu["depois"] == mu["antes"] + mu["passo"] and abs(mu["depois"]) <= TETO
+            assert PERS.SENTIDO[mu["faceta"]] * mu["passo"] * mu["soma"] > 0           # o passo anda no sentido da evidencia
+            valores[mu["faceta"]] = mu["depois"]
+        assert m["faceta"]["valores"] == valores
+        f = m["faceta"]["valores"]
+        for x in m["unidades"]:                                                       # o termo F so nas unidades dele
+            esperado = {"chamar_atencao": (f["apego_dono"],), "comer": (0, -f["cautela_comida"]),
+                        "explorar": (0, f["ousadia_longe"])}.get(x["chave"][0], (0,))
+            assert x["termos"]["faceta"] in esperado
+    assert todas == c.m.pers.mudancas and c.m.pers.valores == valores
+    assert all("sem_faceta" in m["sondas"] and "faceta_decidiu" in m["sondas"] for m in c.motivos)
+    assert c.m.arb.sorteios <= len(c.motivos)                                         # nenhuma rng nova
+
+
+def test_t_me_5_a_vida_com_facetas_anda_devagar_e_alguma_muda():
+    achou = 0
+    for semente, lugar in ((202, "comedouro"), (101, "longe_fixo")):
+        c = orq.cerebro_de(_viver_facetada(semente, lugar)[1])
+        achou += len(c.m.pers.mudancas)
+        assert all(abs(v) <= 3 * ETA for v in c.m.pers.valores.values())            # tres dias de pet: no maximo tres passos
+    assert achou > 0
+
+
+def test_g2_separado_nada_fora_do_pacote_le_a_chave_das_facetas():
+    donos_da_chave = {"digilab/config.py", "digilab/digibrain/adapt.py", "digilab/digibrain/impulso.py", "digilab/digibrain/pers.py",
+                    "digilab/digibrain/ganchos.py", "tests/test_memoria_autobio.py"}      # os dois ultimos so citam o nome na docstring
+    achados = set()
+    for pasta in ("digilab", "experiments", "web", "tools", "servidor", "digilab_fala_livre", "tests"):
+        if not (RAIZ / pasta).exists():
+            continue
+        for f in (RAIZ / pasta).rglob("*"):
+            if f.suffix in (".py", ".ts", ".tsx", ".js") and "node_modules" not in f.parts and "facetas_mem" in f.read_text(
+                    encoding="utf-8", errors="ignore"):
+                achados.add(f.relative_to(RAIZ).as_posix())
+    assert achados == donos_da_chave
+
+
+@pytest.mark.parametrize("nome", _DE_HOJE)
+def test_g_mecanismo_os_de_hoje_com_as_facetas_ligadas(nome, monkeypatch):
+    """os testes de mecanismo de hoje com as duas subchaves da C4 ligadas (os tres que montam o lugar pela lista ficam de fora, como acima)"""
+    if nome in SUBSTITUIDOS_PELA_SOMA:
+        pytest.skip("o lugar lembrado pela lista de hoje; com a subchave vale a soma (MA-2), nos T-ME-2")
+    monkeypatch.setattr(tm, "CONFIG_DIGIBRAIN_LIGADA", FACETADA)
+    monkeypatch.setattr(tm, "Memoria", lambda cm, inatos=None: M.Memoria(cm, inatos, autobio=True))
+    getattr(tm, nome)()

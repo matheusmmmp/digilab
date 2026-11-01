@@ -15,7 +15,9 @@ da L-2, docs/ESPEC_LONGE_L2_DIGIBRAIN_MODULAR.md, secao 2.3), o M-ESTADO cuida d
 3), a decisao guarda o tick do relogio do pet e o afeto de antes, e o fechamento monta o episodio completo e o entrega ao M-MEM
 (`episodio_autobio`, `codificar_autobio`), com o id em `consequencia["autobio"]`; nenhuma decisao o le ainda (a M4 e etapa posterior). Na M2 e na M3, antes do `recuperar` a decisao roda o relogio, a consolidacao do dia
 novo (`consolidar`) e a lembranca (`lembrar`), e o motivo ganha `lembranca` e `consolidacao`; a lembranca ainda nao entra na escolha, e o
-lugar lembrado passa a valer pela soma dos sigma (MA-2).
+lugar lembrado passa a valer pela soma dos sigma (MA-2). Com a `facetas_mem` (a C4, M5, secao 6.2), a consolidacao do dia novo faz as tres
+facetas andarem um passo (`_mudar_facetas`, M-PERS), o M-IMPULSO soma o termo `faceta` e o motivo ganha `faceta` (os valores e as mudancas
+com os ids dos episodios).
 
 **O alvo** (`escolher_alvo`): o candidato do motor do tipo (e do id) da unidade escolhida; o `u` do motor e ignorado. **A excecao unica**
 (a PE-14 revista): em EXPLORAR, o lugar lembrado do M-MEM e entregue como `Alvo.ponto(x, y)`, fora da lista do motor, que o valida por
@@ -56,6 +58,7 @@ from .arb import Arbitragem
 from .estado import EstadoDinamico
 from .impulso import Impulso
 from .mem import Memoria, episodio_autobio
+from .pers import FACETAS, SENTIDO, Personalidade
 from .plast import Plasticidade
 from .sens import COMIDAS_BOAS, Sens, classe_do_tipo
 
@@ -86,16 +89,19 @@ class Modulos:
     mem: Memoria
     arb: Arbitragem
     plast: Plasticidade
+    pers: Personalidade | None = None             # o M-PERS (a C4, M5): so com a `facetas_mem`
 
     def itens(self) -> tuple:
-        return (("sens", self.sens), ("afeto", self.afeto), ("estado", self.estado), ("impulso", self.impulso), ("mem", self.mem),
-                ("arb", self.arb), ("plast", self.plast))
+        out = (("sens", self.sens), ("afeto", self.afeto), ("estado", self.estado), ("impulso", self.impulso), ("mem", self.mem),
+               ("arb", self.arb), ("plast", self.plast))
+        return out if self.pers is None else out + (("pers", self.pers),)
 
 
 def montar_modulos(cfg: Config, cd: ConfigDigibrain, cm: ConfigMundo, inatos: ConfigDigibrainInatos,
                    serie_e_doadora: tuple | None) -> Modulos:
     return Modulos(sens=Sens(cfg, cm, inatos), afeto=Afeto(cfg, cd, inatos, serie_e_doadora), estado=EstadoDinamico(cfg, cd, inatos),
-                   impulso=Impulso(inatos, cd), mem=Memoria(cm, inatos, cd.memoria_autobio), arb=Arbitragem(inatos, cd.memoria_autobio), plast=Plasticidade(cd, inatos))
+                   impulso=Impulso(inatos, cd), mem=Memoria(cm, inatos, cd.memoria_autobio), arb=Arbitragem(inatos, cd.memoria_autobio, cd.facetas_mem), plast=Plasticidade(cd, inatos),
+                   pers=Personalidade(inatos.eta_faceta, inatos.teto_faceta, True) if cd.facetas_mem else None)
 
 
 def intencao_da_unidade(unidade: dict) -> Intencao:
@@ -153,12 +159,14 @@ class DigiBrain:
         if cd.memoria_autobio:                        # a C4, M2 e M3: o relogio, a consolidacao do dia novo e a lembranca da decisao
             tick = m.mem.relogio(sens["minuto"])
             consolidacao = m.mem.consolidar(k)
+            mudancas = self._mudar_facetas(consolidacao) if cd.facetas_mem and consolidacao is not None else []
             lembranca = m.mem.lembrar(sens)
             termo_lem = m.mem.termo_lembranca(lembranca)
         memoria = m.mem.recuperar(sens, afeto) if cd.m_mem else None
         unidades, z = m.impulso.unidades(
             sens, afeto, ctx, m.plast, memoria, m.afeto.drives(receptores),
-            None if not cd.memoria_autobio or termo_lem is None else (termo_lem, m.mem.casa))
+            None if not cd.memoria_autobio or termo_lem is None else (termo_lem, m.mem.casa),
+            (dict(m.pers.valores), m.mem.classes_com_positivo()) if cd.facetas_mem else None)
         esc = m.arb.escolher(unidades, afeto, sens, rng, reflexo, segurar)  # a rng de politica vai so ao M-ARB
         self._conferir_desligadas(unidades)
         unidade = esc["unidade"]
@@ -198,6 +206,8 @@ class DigiBrain:
                                              "unidades": [] if termo_lem is None else
                                              [chave_json(x["chave"]) for x in unidades if m.mem.casa(termo_lem, x)]}
             self.motivos[-1]["consolidacao"] = consolidacao
+        if cd.facetas_mem:                            # a C4, M5: desligada, nenhum campo novo
+            self.motivos[-1]["faceta"] = {"valores": dict(m.pers.valores), "mudancas": mudancas}
         if cd.credito_corrida:                        # a C2: desligada, nenhum campo novo
             self.motivos[-1]["corridas"] = corridas
         if cd.intencao_suspensa:                      # a L-2: a suspensa ao fim da decisao e a retomada (desligada, nenhum campo novo)
@@ -214,6 +224,20 @@ class DigiBrain:
         self._gestos = []
         self.k += 1
         return intencao.acao
+
+    def _mudar_facetas(self, consolidacao: dict) -> list[dict]:
+        """a M5 (6.2): na consolidacao diaria, cada faceta anda um passo `eta_faceta` no sentido da soma dos sigma da evidencia (zero se a
+        soma for 0), com os ids dos episodios; devolve as mudancas registradas"""
+        m = self.m
+        out = []
+        for nome in FACETAS:
+            evidencia = m.mem.evidencia_faceta(nome)
+            soma = sum(s for _, s in evidencia)
+            passo = SENTIDO[nome] * ((soma > 0) - (soma < 0)) * self.inatos.eta_faceta
+            reg = m.pers.mudar_faceta(nome, passo, [i for i, _ in evidencia], consolidacao["dia"]) if passo else None
+            if reg is not None:
+                out.append({**reg, "soma": soma})
+        return out
 
     def escolher_alvo(self, acao: AcaoPet, candidatos: list, percepcao, u: int):
         p = self._pendente(acao, "escolher_alvo")
