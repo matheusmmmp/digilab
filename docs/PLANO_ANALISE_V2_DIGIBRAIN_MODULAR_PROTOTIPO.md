@@ -2885,3 +2885,303 @@ de A7.0 a A7.12 muda. A run roda uma vez; o resultado é registrado como está.
     orçamento); a faixa está em `experiments/bancada/faixas.py` (75101, 75505);
   - **a máquina (V3-D8):** nenhum outro processo Python rodando antes da suíte (nenhuma run de pesquisa nem medição do combate); a suíte e
     a run não se sobrepõem; 4 processos.
+
+## Adendo 8: a escolha refeita só por evento, a C3 da V3 (2026-11-01, worker da C3, etapa 3, Claude Code, Opus 5.5)
+
+**Status: PROPOSTO.** Só o Matheus o aprova, trocando esta linha por "Status: APROVADO pelo Matheus em …", em negrito como as dos adendos
+anteriores. Enquanto ela disser PROPOSTO, o orquestrador `experiments/run_v2_redecidir_evento.py` recusa a run (a trava
+`exigir_adendo_aprovado` de A4.7, com o número 8). As RD-1 a RD-9 da `docs/TAREFA_V3_REDECIDIR_EVENTO.md` (seção 8) e as RE-1 a RE-4 da
+`docs/ESPEC_REDECIDIR_EVENTO_DIGIBRAIN_MODULAR.md` (seção 9) estão DECIDIDAS pelo Matheus (2026-10-31 e 2026-11-01, pela recomendação);
+este adendo as escreve como plano e acrescenta só o que elas deixaram para o plano: o K, a margem, a forma das premissas, a leitura das
+sondas nas decisões seguradas e a da guarda, todos PROPOSTOS e SEM FONTE (as AD8-1 a AD8-5 de A8.12). **Nenhuma vida da faixa
+76101…76505 rodou nem roda antes de três coisas:** o código da etapa 2 na `main` (a subchave `redecidir_evento`, o gabarito e os testes; o
+#521, já lá); a faixa na `FAIXAS_RESERVADAS` e o orquestrador de A8.10 (o PR da etapa 3); e este cabeçalho com a marca de aprovação do
+Matheus.
+
+**De onde vem:** a tarefa da C3 (seções 1, 3, 4 e 8), a espec (seções 2 a 4 e 7), a D-C2-4 (a C3 em separado, sem combinar com a C2) e a
+lição LP-2 do #455. Este adendo reusa, sem mudar: o cenário (A6.2), a taxa de fechamento por episódio de fome (o G-MVP-EP de A3.3, com a
+W(d₀) de A3.2, a medida de A6.4), a G-ELEGIVEL-EP (A6.4), a unidade (base, semente) e o IC95 do t sobre as unidades (A4.4.6), a ressalva
+do g1 (A4.4.6), a classe de cada contraste (a regra de A6.6, com a margem deste adendo), a fórmula do poder (A6.5) e as medidas da C5
+(A6.8, item 4; AD6-4).
+
+**A fonte dos números novos:** o `experiments/adendo8_poder_redecidir_evento.py`, que só lê artefatos do git: o `medidas.json` da C1
+(71101 a 71505, as 3 600 vidas; sha256 `5a4fb207…722d`, o registrado na seção 13 do RESULTADO), o da C2 (75101 a 75505, as 5 400 vidas;
+sha256 `93b136d6…5a33`, o registrado na seção 14) e os `meta.json` das duas runs, todos conferidos pelo script antes da conta. Ele grava
+`artifacts_v2_digibrain_prototipo/redecidir_evento/adendo8_poder.json` (sha256 `3c364799…3d60`) e, rodado duas vezes, sai igual, byte a
+byte. **Nenhuma vida, nenhum replay e nenhuma semente nova.** Abaixo, **[poder]** é esse artefato.
+
+**O que este adendo não afirma:** que segurar a escolha conserta o longe (o espaço do mecanismo é cerca de 22 % das quebras, A8.1), que o
+modular supera o A, ou que algum cérebro está pronto. Os contrastes são entre braços do próprio modular e medem uma regra do M-ARB, num
+cenário. **Nenhuma alegação de novidade** (a regra 9; redecidir por evento num agente com corpo já está na fonte de A8.11).
+
+### A8.0 O que não muda
+
+- **O motor, o corpo, o mundo, o cheiro, o `longe_fixo`, o `engine.py`, o A, a v12 e o jogo web.** No cérebro, o P1, o P2 e o crédito por
+  opção (o PE-3), a persistência e o `w_pers`, o reflexo do sono e o `lambda_sono`, o M-MEM e o F. O único código novo da C3 é o da etapa 2
+  (a `redecidir_evento`, #521) e, nesta etapa, os braços `M3R` e `M2R` (`SUBCHAVES_C3`, ao lado do `SUBCHAVES_CONSERTO`, no
+  `run_v2_digibrain_prototipo.py`) e o orquestrador (A8.10).
+- **Os valores:** os inatos do #428 e o `n_seg_max` = 6 (RD-4), PROPOSTOS, iguais nos quatro braços. **Nenhuma calibração e nenhum piloto**
+  (RD-9): a variância vem das vidas já gravadas (A8.6).
+- **A corrida da C2 e a intenção suspensa da L-2 ficam desligadas nos quatro braços** (a D-C2-4 e a LP-3; a subchave da C3 levanta erro
+  alto com qualquer uma das duas).
+- **As faixas gastas** (64xxx, 66xxx, 67xxx, 71xxx, 75xxx) não entram em nada, salvo a leitura dos artefatos que já estão no git.
+- **Os resultados anteriores:** nada aqui muda o #420, a reavaliação (#432), a L-2 (#454), a C1 (#510) nem a C2 (#517).
+
+### A8.1 A pergunta e as previsões, escritas antes
+
+**A pergunta** (a tarefa, seção 1): no longe, o modular quebra as idas e as buscas a cada poucas decisões. Isso acontece, em parte, porque
+o M-ARB refaz o sorteio a cada decisão, mesmo quando nada mudou no corpo nem no mundo? **O dado** [poder, `trocas_de_meta_c1`]: na C1, no
+`longe_fixo`, as intenções do M3\* acabaram em `trocou` 27 683 vezes em 600 vidas (46,1 por vida; o M2, 18,3), somados os três tipos de
+meta: 21 572 pelo reflexo do sono, 1 664 pelo dormir sorteado e 4 447 por outra unidade. **O espaço do mecanismo é a parte que não é o
+reflexo** (o reflexo continua sendo evento, o E-REFLEXO): 6 111 de 27 683, 22 % (no M2, 2 832 de 10 950, 26 %), mais as escolhas de uma
+decisão (o explorar, o chamar) que hoje trocam a cada sorteio. Um nulo é plausível e fica escrito antes.
+
+**As previsões de sinal (PROPOSTAS na tarefa, 1.5 e 4.3, e escritas aqui antes de qualquer vida):**
+
+| contraste | lugar | o que é | a previsão | o papel |
+|---|---|---|---|---|
+| **P-R: M3\*R − M3\*** | `longe_fixo` | a escolha segurada até um evento contra o sorteio a cada decisão, o mesmo cérebro | **> 0** | **o primário** (A8.4) |
+| **G-COMEDOURO: M3\*R − M3\*** | comedouro | o mesmo contraste perto da ração | **não "< 0"** | a guarda (A8.4) |
+| **S1: M2R − M2** | `longe_fixo` | o efeito sem o lugar lembrado | **sem previsão de sinal** | secundária, sem gate |
+| **S2: M3\*R − M3\*** | longe sorteado | o efeito sem a regularidade | **sem previsão de sinal** | secundária, sem gate |
+
+- **A direção do P-R vem de Gadanho e Hallam (2001), pela tese** (A8.11), não o tamanho. A previsão não se afrouxa até passar: se sair
+  "≈ 0" ou "< 0", fica registrado assim.
+- **O S1 e o S2 saem sem previsão:** o M2 não tem o lugar lembrado, e no sorteado a C1 saiu "indeterminado".
+
+### A8.2 O desenho
+
+- **O cenário:** o da C1 (A6.2), sem mudança: o `CONFIG_MUNDO_MVP`, o corpo do v11, o contrato da P4 desligado, o pet sozinho, os quatro
+  donos sem ensino, **14 dias, orçamento de 16 por dia,** morte desligada.
+- **Os lugares (RD-5):** o `longe_fixo` **no primário** (4 células), o comedouro **na guarda** (4) e o longe sorteado **só no S2 e no
+  descritivo** (4). São **12 células por unidade.** O perto não roda.
+- **Os braços (RD-1),** todos com as duas subchaves do cheiro (as do conserto) e sem a corrida da C2 nem a intenção suspensa:
+
+| braço | no código | o que é | onde está | o papel |
+|---|---|---|---|---|
+| **M3\*** | `M3` | o modular inteiro do conserto, o sorteio a cada decisão | `SUBCHAVES_CONSERTO["M3"]` | o controle do primário e da guarda |
+| **M3\*R** | `M3R` | o M3\* com a `redecidir_evento` | `SUBCHAVES_C3["M3R"]`, ao lado, no `run_v2_digibrain_prototipo.py` | o braço novo |
+| **M2** | `M2` | sem o M-MEM, o sorteio a cada decisão | `SUBCHAVES_CONSERTO["M2"]` | o controle do S1 |
+| **M2R** | `M2R` | o M2 com a `redecidir_evento` | `SUBCHAVES_C3["M2R"]` | o braço do S1 |
+
+- **As vidas:** 4 braços × 12 células = **48 vidas por unidade.**
+- **O pareamento:** por unidade e célula. Os quatro braços vivem a mesma semente, o mesmo genoma, o mesmo dono e o mesmo lugar; só as
+  subchaves mudam. A rng do dono e a dos lugares fixos não dependem do braço (a regra das rngs separadas); numa decisão segurada o M-ARB não
+  chama a rng de política (a espec, 2.1; o T-RD-1).
+- **O M0, o M1, o A11, o M2c e as variantes do cheiro não entram** (a RD-1).
+
+### A8.3 As sementes e a faixa
+
+- **A faixa: 76101…76505** (a RD-7), conferida livre em 2026-10-31 e reservada pelo Gerente da V3 em `experiments/bancada/faixas.py`, num
+  commit próprio (`1a37e58`, o primeiro do PR da etapa 3), com a fonte.
+- **As bases:** 76101, 76202, 76303, 76404 e 76505.
+- **O K: 30 por base, 150 unidades** (PROPOSTO; A8.6 e AD8-1). São **7 200 vidas.**
+- **A derivação:** `bancada_v2.unidades_derivadas(bases, K, prefixo="digibrain_prototipo")`, o prefixo da reavaliação, da L-2, da C1 e da
+  C2 (como a AD6-5). A função falha alto com colisão, e o `meta.json` grava as unidades.
+- **A run roda uma vez,** com todas as bases. Não há calibração nem piloto.
+- **As sementes dos testes** (101…505) servem só à fumaça, à varredura dos fins (A8.10) e aos testes do orquestrador.
+
+### A8.4 O primário P-R, a guarda e as secundárias
+
+- **A medida (RD-6):** **a taxa de fechamento por episódio de fome** (`episodios_fome.taxa`, a de A6.4, sem mudança). Ela não depende de
+  como se contam as trocas nem as intenções (a LP-2): o mecanismo muda o que é uma intenção, não o que é um episódio.
+- **O contraste primário:** **M3\*R − M3\*, só nas 4 células do `longe_fixo`.**
+- **A unidade:** a (base, semente). Em cada unidade, a diferença célula a célula (no mesmo dono), com a média das 4 células. **Uma célula
+  com a taxa `None` num dos dois braços** (uma vida sem episódio) **fica fora da média daquela unidade,** e a unidade sem nenhuma célula
+  fica fora (a regra do `por_unidade` do orquestrador do protótipo). Na C1 e na C2, nenhuma célula do `longe_fixo` nem do comedouro saiu
+  fora [poder].
+- **O teste:** **o IC95 pelo t sobre as unidades** (o `metrics.ic_t`, A4.4.6). **Passa se o limite inferior fica acima de 0** (a previsão
+  > 0). É o mesmo que o p unilateral do t ≤ 0,025. **Um contraste só, sem Holm:** a guarda, as secundárias e o resto são lidos pela classe.
+- **O que sai ao lado:** a estimativa, o IC95, o p unilateral, o g1 das diferenças, o IC percentil do bootstrap (rotulado como na A4.10), a
+  classe de A6.6 com a margem de A8.6 e a "margem efetiva" (o menor efeito com poder 0,8 pelo dp observado, a fórmula de A6.5).
+- **A ressalva do g1** (A4.4.6, como está): com g1 ≤ −0,5, o contraste sai com a frase de lá, e um "passa" nele não é lido como
+  confirmação. A ressalva não muda o IC nem a decisão gravada.
+- **A guarda G-COMEDOURO:** o mesmo contraste, a mesma unidade e o mesmo teste nas 4 células do comedouro. **Ela falha só com a classe
+  "< 0" de A6.6** (o limite superior abaixo de 0 e o IC fora de (−δ, +δ); AD8-5). Um "≈ 0 com o sinal −" (o IC inteiro abaixo de 0, mas
+  dentro da margem) não é "< 0": é um custo menor que o que a run detecta, e sai assim descrito.
+- **As secundárias** (pré-registradas, com o mesmo teste, sem gate e sem Holm, lidas pela classe de A6.6):
+  - **S1: M2R − M2 no `longe_fixo`.** Ela entra na leitura de A8.7 só para dizer se o efeito precisa da memória (a linha 2);
+  - **S2: M3\*R − M3\* no longe sorteado.** Só descritiva.
+
+### A8.5 As premissas (a tarefa, 4.3; PROPOSTAS, SEM FONTE)
+
+Se uma falha, **o primário é inconclusivo por premissa,** qualquer que seja o IC dele (A8.7, a primeira linha). As três leem o
+`longe_fixo`, o lugar do primário, e as duas novas usam o registro da espec (seção 4: o `segurada` e o `evento` de cada decisão).
+- **P-SEGURA:** no M3\*R, nas 4 células, **a fração das decisões sem o reflexo que foram seguradas** (as seguradas sobre as sem o reflexo,
+  na vida inteira), uma por vida, com a média das 4 células por unidade; **o limite inferior do IC95 pelo t ≥ 0,10.** Se não passa, quase
+  toda decisão tem evento, o braço não difere do de hoje, e o contraste não testa a hipótese. A forma (o limite do IC, como as G-PESA da
+  A6.4) é PROPOSTA (AD8-2);
+- **P-EVENTO:** no M3\*R, nas 4 células, **a fração das sequências seguradas fechadas que acabaram pelo teto** (uma sequência segurada é
+  uma corrida máxima de decisões seguradas; ela acaba pelo teto quando a decisão seguinte tem o E-TETO na lista, sozinho ou com outros; a
+  sequência aberta no fim da vida fica fora), uma por vida, com a média das 4 células por unidade (a vida sem sequência fechada fica fora);
+  **o limite superior do IC95 pelo t ≤ 0,25** (o limiar do C-L2-4). Se passa disso, o braço testa um relógio, não o evento. Contar o E-TETO
+  junto com outros eventos faz a premissa mais difícil de passar, não mais fácil (AD8-2);
+- **G-ELEGIVEL-EP** (a de A6.4, como está): ao menos 80 % das vidas **do M3\* e do M3\*R** no `longe_fixo` com 3 episódios ou mais. Se
+  falha num dos dois, os donos quase não deram ração com o pet com fome e o episódio não informa. Entra nos dois braços porque o primário
+  compara os dois e o M3\*R pode mudar quando o pet come (AD8-2).
+- **A fumaça da etapa 3** (as sementes dos testes, 2 dias) já mostra que as duas premissas novas têm o que medir; isso não é dado da C3.
+
+### A8.6 A margem, pelo poder (e o "≈ 0")
+
+**A conta** ([poder]; a da A6.5, sem mudança de método):
+1. **A dispersão.** O M3\*R não existe. A dispersão de um contraste da mesma medida (a taxa por episódio), na unidade de A8.4, é lida onde
+   existe, sempre com a média das 4 células de um lugar e com 150 unidades:
+
+   | fonte | lugar | contraste | média | IC95 (t) | dp entre as unidades | g1 | no σ |
+   |---|---|---|---|---|---|---|---|
+   | a C1 | `longe_fixo` | M3\* − M2 (o M-MEM) | +0,0489 | [+0,0355; +0,0624] | 0,0832 | 0,11 | sim |
+   | a C1 | `longe_fixo` | M2 − M0 (o P1 e o P2) | −0,0247 | [−0,0385; −0,0110] | 0,0853 | −0,53 | sim |
+   | a C1 | `longe_fixo` | M3\* − M0 | +0,0242 | [+0,0095; +0,0389] | 0,0911 | −0,26 | sim |
+   | a C1 | longe sorteado | M3\* − M2 | −0,0106 | [−0,0236; +0,0024] | 0,0805 | −0,14 | não |
+   | a C2 | `longe_fixo` | M2c − M2 (uma subchave, o mesmo cérebro) | +0,0057 | [−0,0081; +0,0194] | 0,0852 | 0,29 | não |
+   | a C2 | comedouro | M2c − M2 | +0,0077 | [−0,0067; +0,0220] | 0,0890 | 0,13 | não |
+
+   Nenhum é o contraste da C3: servem só para o tamanho do dp, nunca como evidência dela. As três últimas linhas ficam ao lado: mostram que
+   o dp de um contraste de uma subchave no mesmo cérebro (a C2) e o do comedouro da guarda ficam na mesma escala (0,085 a 0,089).
+2. **O σ de planejamento:** o maior dos três do `longe_fixo` da C1, com a folga de 20 % da A5.9: **σ = 0,0911 × 1,2 = 0,1094** (AD8-3).
+3. **O poder** do critério de A8.4 com o efeito verdadeiro δ: **1 − Φ(t₀,₉₇₅;K−1 − (δ / σ) · √K)** (a de A6.5).
+4. **A margem δ(K):** o menor efeito com poder 0,8, o menor efeito de interesse que a run detecta, e a régua do "≈ 0".
+5. **A conferência por simulação:** as 150 diferenças M3\* − M2 do `longe_fixo` da C1 (o contraste do cérebro do primário, no lugar dele),
+   centradas, na escala de σ, deslocadas e sorteadas com reposição em K unidades, com o IC95 do t; 2 000 réplicas, semente 4242. Com o
+   efeito verdadeiro 0, a fração com o IC95 inteiro dentro de (−δ, +δ) sai com o σ de planejamento e com o σ observado do M3\* − M2 (0,0832).
+
+| K (unidades) | por base | vidas | a margem δ(K) | o poder simulado em δ(K) | efeito 0: "≈ 0" (σ de planejamento) | efeito 0: "≈ 0" (σ observado) |
+|---|---|---|---|---|---|---|
+| 50 | 10 | 2 400 | 0,0441 | 0,800 | 0,607 | 0,915 |
+| 100 | 20 | 4 800 | 0,0309 | 0,819 | 0,604 | 0,911 |
+| **150** | **30** | **7 200** | **0,0252** | **0,800** | **0,586** | **0,912** |
+| 200 | 40 | 9 600 | 0,0218 | 0,813 | 0,604 | 0,913 |
+| 300 | 60 | 14 400 | 0,0177 | 0,793 | 0,606 | 0,916 |
+
+Com o efeito verdadeiro 0 e o σ de planejamento, o IC inteiro acima de 0 (o falso "passa") sai em 0,021 a 0,029 das réplicas, perto do α
+unilateral de 0,025.
+
+**O PROPOSTO: K = 150 (30 por base) e a margem δ = 0,025** (AD8-1; o 0,0252 do [poder], arredondado a três casas como na AD7-1).
+- **O tamanho:** a margem é cerca de metade do efeito da memória no mesmo lugar (o M3\* − M2 da C1, +0,049). Se o gatilho mover o episódio
+  tanto quanto a memória move, a run o detecta com folga; um efeito de um quarto dele (≈ 0,012) fica abaixo do alcance e tende a sair
+  "indeterminado".
+- **É o K da C1 e da C2** (150 unidades): a mesma escala de unidades facilita ler as três lado a lado.
+- **O "≈ 0" com o σ de planejamento sai em cerca de 59 % das réplicas com o efeito 0; com o σ observado do M3\* − M2, em 91 %.** O número
+  real fica entre os dois, e o relato dá a margem efetiva (A8.4). Nenhum dos dois muda a margem nem a regra.
+- **O que a margem não é:** um limiar do primário. O P-R passa com o limite inferior acima de 0 (A8.4).
+
+**O "≈ 0" e a classe de cada contraste** são os de A6.6, como estão, com δ = 0,025: (1) "≈ 0": o IC95 inteiro dentro de (−δ, +δ), com o
+sinal se ele também exclui o 0; (2) "> 0": o limite inferior acima de 0 e o IC fora de (−δ, +δ); (3) "< 0": o limite superior abaixo de
+0 e o IC fora; (4) "indeterminado": qualquer outro caso.
+
+### A8.7 A regra de leitura (a tabela de 1.5 da tarefa, como está)
+
+**No P-R, o primário manda** (como na A6.7 e na A7.7): a coluna P-R lê "> 0" quando o primário passa (A8.4) e, senão, a classe de A6.6.
+**A guarda lê só "< 0" ou não** (A8.4). As linhas são lidas na ordem, e vale a primeira que serve:
+
+| ordem | premissas (A8.5) | P-R (`longe_fixo`) | G-COMEDOURO | o que diria | o que se faz |
+|---|---|---|---|---|---|
+| 1 | uma falha | qualquer | — | inconclusivo por premissa: o mecanismo não segurou, segurou por tempo e não por evento, ou os donos não deram episódios | registrado; nada se decide |
+| 2 | passam | > 0 | não "< 0" | nestas condições, sortear a cada decisão explica parte da falha no longe, sem custo perto da ração. O S1 diz se o efeito precisa da memória ("> 0": não; "≈ 0": passa pelo M-MEM; outra classe: não diz) | o `redecidir_evento` vira candidato; volta ao Matheus. Não vai ao jogo sem a L3 |
+| 3 | passam | > 0 | "< 0" | ajuda longe da ração e atrapalha perto dela | registrado; volta ao Matheus; não vira candidato |
+| 4 | passam | ≈ 0 | qualquer | nestas condições, a decisão a cada passo não é a causa: o que o gatilho alcança (as quebras fora do reflexo) não move o episódio | registrado; a C4 segue como planejada; nenhum mecanismo novo de decisão sem plano próprio |
+| 5 | passam | < 0 | qualquer | segurar a escolha piora o pet | registrado como está; a subchave fica desligada |
+| 6 | passam | indeterminado | qualquer | nada se decide | registrado como indeterminado |
+
+- **A tabela da tarefa põe as premissas na última linha;** aqui elas vêm primeiro, porque sem elas nenhuma outra linha se lê. A ordem não
+  muda o conteúdo de nenhuma linha. A G-ELEGIVEL-EP entra na linha 1 com as duas da tarefa (A8.5).
+- **O "> 0" do P-R com a classe "≈ 0 com o sinal +"** (o primário passa, mas o IC cabe inteiro na margem): o primário manda, e a linha é a
+  2 ou a 3; a classe sai ao lado como descrição do tamanho ("um efeito menor que a margem").
+- **O S2** (o longe sorteado) e o descritivo de A8.8 **não mudam nenhuma linha.**
+- **Gate que falha não para a V3.** O resultado negativo é registrado como está. **A run não se repete,** e uma faixa nova só vem com um
+  adendo novo.
+
+### A8.8 O descritivo (sem gate)
+
+Os contrastes, com o IC95 do t sobre as unidades e a classe de A6.6, são sempre de um braço R contra o seu controle (M3\*R − M3\* e
+M2R − M2), em cada lugar; os níveis, por braço e lugar. **Nenhum muda a leitura de A8.7.** A lição LP-2 (a tarefa, 1.4): **nenhum grupo que
+o mecanismo cria vira contraste** (nem as decisões seguradas contra as sorteadas, nem as intenções que acabaram por evento contra as que
+acabaram em meta, nem as escolhas que bateram no teto); esses grupos saem só por braço.
+1. **As quebras, pela LP-2:**
+   - **as trocas por decisão** (a tarefa, 1.4; a `trocas_por_decisao` da etapa 2): uma decisão sem o reflexo cuja unidade escolhida difere
+     da última escolhida sem o reflexo; a retomada depois do reflexo não conta. Por vida, nos quatro braços, em nível e nos contrastes; o
+     motivo (o dormir pelo sorteio, quando a unidade nova é a do dormir, ou outra unidade) só somado por braço e lugar;
+   - **os fins `trocou` por intenção de hoje** (a A6.8, item 3, da C1, como estão) e os fins de cada intenção por tipo e motivo, **ao lado,
+     rotulados como dependentes do braço:** só nível e somas, sem contraste.
+2. **O mecanismo, só nos braços R e só por braço:** a fração das decisões sem o reflexo seguradas (a da P-SEGURA, também no comedouro e no
+   sorteado), o comprimento médio das sequências seguradas fechadas, a fração delas que acabou no teto (a da P-EVENTO, nos três lugares) e,
+   somados, para cada evento, as decisões sorteadas (depois da primeira) em que ele valeu e aquelas em que valeu sozinho.
+3. **O corpo:** as medidas da C5 (as definições da AD6-4, como estão: a fração dos ticks com alguma variável abaixo de 0,15 e a menor
+   necessidade, média e mínimo, na vida e nos dias 8 a 14), a exaustão e a privação de hoje, em nível e nos contrastes. A pergunta (a
+   tarefa, 4.4): segurar a escolha prende o pet num chamar ou num dormir sem resposta?
+4. **A taxa por episódio por faixa de d₀** (somas por braço, lugar e faixa; sem contraste), com a ressalva da LP-2 da C1: a faixa depende de
+   onde o pet está, e o mecanismo muda isso.
+5. **Os outros:** a taxa por episódio por braço e lugar e os contrastes; **a G-PESA por módulo** (a fração das decisões dos dias 8 a 14 com
+   `<módulo>_decidiu`) **como hoje,** com as decisões seguradas no denominador e o `*_decidiu` falso nelas (a espec, 2.2: numa decisão
+   segurada nenhum módulo decidiu, como no reflexo), e, **nos braços R, a mesma fração só nas decisões sorteadas,** ao lado (AD8-4); os
+   fins das intenções somados por braço e lugar (a conferência de A8.10); os episódios por vida; por dono, só a média da taxa por episódio.
+
+### A8.9 O tamanho da run e a máquina
+
+- **150 unidades × 48 vidas = 7 200 vidas,** 14 dias cada.
+- **No máximo 4 processos e uma run de pesquisa por vez** (a V3-D8; as medições do combate contam). O número de processos não muda nenhuma
+  vida nem o resultado.
+- **A estimativa das horas** [poder, `parede_4_processos` e `estimativa_parede`]: as duas runs de 4 processos dão taxas diferentes: a C1,
+  1,07 s de parede por vida (3 840 s para 3 600 vidas); a C2, 0,65 s (3 501 s para 5 400). Com 7 200 vidas, **de 1 h 18 min (pela C2) a
+  2 h 8 min (pela C1);** com a análise, até 2 h 30 min. É estimativa; o tempo real vai ao RESULTADO. Na C1, o M3\* custou por vida o mesmo
+  que o M2 (3,4 s de CPU), então os braços com o M-MEM não mudam a conta.
+- **O tamanho em disco:** pelo da C2 (49,5 MB para 5 400 vidas no `medidas.json`), cerca de 70 MB no git; as vidas, fora dele ou num
+  `.tar.gz`, como na C1 e na C2.
+
+### A8.10 O que falta antes da primeira vida, e os critérios de parada
+
+- **A etapa 2 na `main`** (#521, `3a8c6d8`): a `redecidir_evento`, o gabarito antes da mudança, o G2, o G2-SEPARADO, o G1, os T-RD-1 a 4 e
+  o `conferir_redecidir`.
+- **A faixa** 76101…76505 em `FAIXAS_RESERVADAS`, num commit próprio (`1a37e58`, o PR da etapa 3).
+- **O orquestrador** (`experiments/run_v2_redecidir_evento.py`, o PR da etapa 3), com a fumaça nas sementes dos testes:
+  - os braços M3\*, M3\*R, M2 e M2R, sem a corrida da C2 e sem a intenção suspensa; as 12 células de A8.2; as bases e o K de A8.3; 14 dias;
+    orçamento de 16; em toda vida, a subchave da C3 ligada exatamente nos braços R (senão, falha alto);
+  - **a trava:** exige este adendo com a marca "APROVADO pelo Matheus" no cabeçalho (a `exigir_adendo_aprovado(texto, 8)` de A4.7; **hoje
+    ela recusa,** e um teste confere com o cabeçalho trocado nos dois sentidos) e recusa, com `SementeSemPlano`, outra base, outro K,
+    outros dias ou sementes fora da faixa; não grava por cima de uma pasta que já existe; mais de 4 processos levantam erro;
+  - **a pasta de saída:** `artifacts_v2_digibrain_prototipo/redecidir_evento/run/` (a pasta-mãe já tem o `adendo8_poder.json`; a lição do
+    A6.13);
+  - **a conferência dos fins (a lição do #507):** o orquestrador não tem a lista escrita à mão. Os fins conhecidos de cada braço são as
+    chaves de `EstadoDinamico.fins` com a config dele (`achou`, `desistiu`, `meta`, `sumiu` e `trocou`, nos quatro). Em cada vida, um fim
+    fora deles, uma contagem do registro diferente da do próprio estado, uma retomada ou um `n_susp` **falham alto** (a `conferir_fins` do
+    orquestrador da C2, como está);
+  - o replay bit a bit (o G1), o T-CENARIO-1, o G-MECANISMO e a conferência do crédito em toda vida; **nos braços R, o
+    `conferir_redecidir`** (a espec, seção 6: toda decisão segurada tem a mesma `chave` da anterior, a anterior não é o reflexo, nenhum
+    evento, nenhum sorteio, no máximo 6 seguidas, toda outra decisão depois da 0 tem um evento, e as contagens do M-ESTADO batem); as
+    trocas por decisão do orquestrador iguais às da `trocas_por_decisao` e as sequências que acabaram no teto iguais às do M-ESTADO;
+  - as medidas de A8.4, A8.5 e A8.8, e a análise de A8.4 a A8.7, gravadas no `resultado.json` com a classe de cada contraste e a linha da
+    leitura; o resumo no console em ASCII (o `ensure_ascii` do #518), para não quebrar num console cp1252.
+- **A varredura dos fins, antes da run** (a etapa 3): o orquestrador inteiro com as cinco sementes dos testes (bases 101 a 505, K = 1), os 4
+  braços, as 12 células e 14 dias (240 vidas). O resultado vai no relato do PR; um fim desconhecido teria parado a etapa.
+- **Antes da run:** os testes de mecanismo e de vidas, os gabaritos (o G2) e a suíte. **Qualquer quebra do G1, do G2 ou do G-MECANISMO
+  para tudo.**
+- **O registro da run** (a etapa 4; uma seção A8.13 neste adendo), num commit empurrado antes da primeira vida: o commit, a config com o
+  sha256, as bases, o K, a primeira e a última unidade, os braços e os sha do orquestrador, do protótipo, do `config.py`, do `engine.py`,
+  do `metrics.py` e deste plano; a pasta de saída sem vida da faixa em disco; o comando.
+- **Os artefatos:** o `meta.json`, o `medidas.json` e o `resultado.json` (com `git add -f`). **O RESULTADO:** uma seção nova no
+  `docs/RESULTADO_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md` (a RD-8).
+- **A run roda uma vez.** O resultado é registrado como está, e nada se ajusta olhando para ele.
+
+### A8.11 As referências
+
+Só a VERIFICADA na C0 (`docs/referencias/v3c0_referencias_verificadas.csv`, a linha que marca as trilhas C2 e C3), e só para a direção:
+- **Gadanho e Hallam (2001), *Adaptive Behavior* 9(1), `10.1177/105971230200900102`:** um robô simulado numa tarefa de energia, com um
+  modelo de emoção em três papéis dentro de um aprendizado por reforço, um deles decidir quando reavaliar a decisão; pela tese de 1999 (a
+  versão-irmã, lida na triagem), o gatilho de reavaliação explica a maior parte do ganho. **Dá a direção do P-R, não o tamanho; não diz que
+  os eventos daqui são os de lá** (lá o gatilho vem do modelo de emoção; aqui, das urgências, do reflexo e do mundo, uma escolha SEM
+  FONTE); **e não diz que o efeito aparece sem o crédito por comportamento,** que a C2 testou sozinha e deu "≈ 0". Um nulo aqui não
+  contradiz a fonte (a tarefa, 1.2).
+- **Nenhuma outra fonte é citada.**
+- **Todo número deste adendo é SEM FONTE externa:** os eventos e as faixas das urgências (RD-3), o teto de 6 (RD-4), o K, a margem, a folga
+  de 20 %, o 0,10 da P-SEGURA, o 0,25 da P-EVENTO, o 80 % e os 3 episódios da G-ELEGIVEL-EP e o −0,5 do g1. Os números de contexto saem
+  dos artefatos citados.
+
+### A8.12 As decisões do Matheus (PROPOSTAS; a aprovação do adendo as decide)
+
+| # | decisão | recomendação | custo de errar |
+|---|---|---|---|
+| **AD8-1** | o K e a margem | **K = 150 (30 por base), δ = 0,025,** o menor efeito com poder 0,8 pelo σ conservador (A8.6). 7 200 vidas, de 1 h 18 min a 2 h 8 min com 4 processos | K = 300 (δ 0,018, 14 400 vidas, de 2 h 36 min a 4 h 16 min): alcança um efeito de cerca de um terço do da memória, mas dobra a máquina por uma hipótese cujo espaço é ~22 % das quebras; K = 100 (δ 0,031, 4 800 vidas): um efeito de metade do da memória fica na beira do alcance e tende a sair "indeterminado"; com K = 150, um efeito real de um quarto do da memória (≈ 0,012) também sai "indeterminado", e isso fica escrito antes |
+| **AD8-2** | a forma das premissas | **a P-SEGURA pelo limite inferior do IC95 ≥ 0,10; a P-EVENTO pelo limite superior ≤ 0,25, com o E-TETO na lista (sozinho ou não) contando como teto; a G-ELEGIVEL-EP no M3\* e no M3\*R** (A8.5) | a média sem IC: um braço que mal segura lê como premissa cumprida; o E-TETO só quando sozinho: uma sequência que bate no teto junto com outro evento conta como evento, e a P-EVENTO passa mais fácil; a G-ELEGIVEL-EP só no M3\* (como na C1): se o M3\*R mudar quando o pet come, o primário pode ler uma taxa de poucos episódios |
+| **AD8-3** | o σ de planejamento | **o maior dp dos três contrastes do `longe_fixo` da C1, com a folga de 20 % (0,1094)**; a C2 só ao lado | o σ só do M3\* − M2 (0,0832 × 1,2 = 0,0999): a margem cai para cerca de 0,023 com K = 150, e se o M3\*R tiver a dispersão do M3\* − M0, o poder real fica abaixo de 0,8; incluir o comedouro da C2 (0,089) não muda nada (é menor que 0,0911) |
+| **AD8-4** | a G-PESA nas decisões seguradas | **como hoje (as seguradas no denominador, com o `*_decidiu` falso) e, ao lado, só nas sorteadas; nenhuma premissa lê a G-PESA** (A8.8, item 5) | só a de hoje: o M3\*R parece ter menos influência de todo módulo só por segurar, e a leitura confunde o mecanismo com um módulo que pesa menos; só a das sorteadas: a G-PESA deixa de ser comparável com a da C1 e da C2; usar a G-PESA da memória como premissa (como na C1): ela cairia no M3\*R pelo próprio mecanismo, e a premissa mediria a subchave, não a memória |
+| **AD8-5** | a guarda | **falha só com a classe "< 0" de A6.6** (o IC inteiro abaixo de 0 e fora da margem); um "≈ 0 com o sinal −" sai descrito | pelo limite superior < 0 (sem a margem): um custo perto da ração menor que o que a run detecta tira o mecanismo da linha 2, por um efeito que a régua da run não separa de 0; sem guarda: um mecanismo que atrapalha perto da ração viraria candidato |
