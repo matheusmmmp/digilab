@@ -1,7 +1,8 @@
 /* Ajustes na pele XCOM (layout habitat, M5; antes CfgPrincipal, CfgAparencia, CfgDados, CfgFala, CfgSobre), dentro do PainelTela
    (o titulo "Ajustes" e o "x" sao do painel). Uma coluna so, de ate 760 px, no desktop e no celular: o menu (principal) e, ao
    escolher uma parte, ela no lugar do menu, com o botao quadrado de voltar. So junta o que o app ja tinha (tema, registro e
-   replay, tempo de teste, fala, som); nada aqui muda o motor, as regras ou o save, a nao ser pelas mesmas acoes de antes
+   replay, tempo de teste, fala, som); tudo o que e visual (a pele, o tema, o mapa, a camera e o visual GBA HD/HD-2D) fica na subarea
+   Visual (2026-11-01, no lugar da Aparencia; #/config/aparencia leva a ela), e as dicas ficam no menu principal; nada aqui muda o motor, as regras ou o save, a nao ser pelas mesmas acoes de antes
    (tempo e ovo novo, via jogo.ts/tempo.ts). Opcoes das pranchas que o app nao tem ficam de fora. Rotas #/config/<parte> iguais. */
 import type { ReactNode } from "react";
 import { useState } from "react";
@@ -20,13 +21,14 @@ import { AvisoSom } from "../../componentes/AvisoSom.tsx";
 import { SOM, useSom } from "../../som.ts";
 import { dicasLigadas, ligarDicas } from "../../dicas.ts";
 import { textoSave } from "../../save.ts";
+import { useHabitat } from "../../habitat.ts";
 import { usePele } from "../../pele.ts";
 import { escolherTema, useTema, type Tema } from "../../tema.ts";
-import { EscolhaHabitat } from "./EscolhaHabitat.tsx";
-import { EscolhaPele, resumoAparencia } from "./EscolhaPele.tsx";
+import { EscolhaHabitat, resumoVisual } from "./EscolhaHabitat.tsx";
+import { EscolhaPele } from "./EscolhaPele.tsx";
 import { VELOCIDADES, escolherVelocidade, pularUmaHora, useTempo } from "../../tempo.ts";
 
-const TITULO: Record<ParteConfig, string> = { principal: "Ajustes", aparencia: "Aparência", dados: "Registro e replay", fala: "Fala do pet", sobre: "Sobre" };
+const TITULO: Record<ParteConfig, string> = { principal: "Ajustes", visual: "Visual", dados: "Registro e replay", fala: "Fala do pet", sobre: "Sobre" };
 const NOME_MODO: Record<ModoFala, string> = { template: "frases prontas", moldura: "moldura", livre: "livre" };
 export const nomeVelocidade = (v: number): string => VELOCIDADES.find(([, x]) => x === v)?.[0] ?? `${v} min/s`;
 
@@ -40,12 +42,17 @@ function Linha({ ic, titulo, resumo, tag, abrir }: { ic: ReactNode; titulo: stri
   );
 }
 function Principal({ abrir }: { abrir: (p: ParteConfig) => void }) {
-  const { motor: m } = useJogo(), tema = useTema(), pele = usePele(), fl = useFalaLivre(), { velocidade } = useTempo();
+  const { motor: m } = useJogo(), tema = useTema(), pele = usePele(), habitat = useHabitat(), fl = useFalaLivre(), { velocidade } = useTempo();
+  const [dicas, setDicas] = useState(dicasLigadas);
   useFalaLLM();
   return (
     <>
       <h3 className="mc-sec">Jogo</h3>
-      <div className="mc-menu"><Linha ic={<Deco nome={ICONE.pets} />} titulo="Aparência" resumo={resumoAparencia(pele, tema)} abrir={() => abrir("aparencia")} /></div>
+      <div className="mc-menu"><Linha ic={<Deco nome={ICONE.pets} />} titulo="Visual" resumo={resumoVisual(pele, tema, habitat, !!m.mundo)} abrir={() => abrir("visual")} /></div>
+      <section className="mc-bloco" aria-label="Dicas">
+        <label className="mc-interruptor"><span><b>Mostrar dicas</b><small>o Professor Agumon explica cada coisa nova, uma vez</small></span>
+          <input type="checkbox" role="switch" checked={dicas} onChange={e => { ligarDicas((e.target as HTMLInputElement).checked); setDicas(dicasLigadas()); }} /></label>
+      </section>
       <h3 className="mc-sec">Fala</h3>
       <div className="mc-menu"><Linha ic={<Peca nome="emoji_feliz" escala={2} />} titulo="Fala do pet" resumo={`modo ${NOME_MODO[fl.modo]} · ${rotuloLLM().texto}`} abrir={() => abrir("fala")} /></div>
       <h3 className="mc-sec">Dados</h3>
@@ -74,8 +81,9 @@ function Som() {
     </section>
   );
 }
-function Aparencia() {
-  const { motor: m } = useJogo(), tema = useTema(), opcoes: [Tema, string][] = [["claro", "Claro"], ["escuro", "Escuro"], ["sistema", "Sistema"]], [dicas, setDicas] = useState(dicasLigadas);
+/** a subarea Visual: os menus (a pele) e o habitat (o tema, o mapa, a camera e o visual) */
+function Visual() {
+  const { motor: m } = useJogo(), tema = useTema(), opcoes: [Tema, string][] = [["claro", "Claro"], ["escuro", "Escuro"], ["sistema", "Sistema"]];
   return (
     <>
       <EscolhaPele />
@@ -89,8 +97,6 @@ function Aparencia() {
       </div>
       <p className="mc-apoio">Sistema segue o claro ou escuro do aparelho. Os menus são sempre escuros; o tema vale para o habitat, o balão, o retrato e o relógio.</p>
       <EscolhaHabitat temMundo={!!m.mundo} />
-      <label className="mc-interruptor"><span><b>Mostrar dicas</b><small>o Professor Agumon explica cada coisa nova, uma vez</small></span>
-        <input type="checkbox" role="switch" checked={dicas} onChange={e => { ligarDicas((e.target as HTMLInputElement).checked); setDicas(dicasLigadas()); }} /></label>
     </>
   );
 }
@@ -204,7 +210,7 @@ export function TelaConfig({ parte, abrir, irPet }: { parte: ParteConfig; abrir:
           <h3 className="mc-bloco__tit" id="tela-titulo">{TITULO[parte]}</h3>
         </div>
       )}
-      {parte === "principal" ? <Principal abrir={abrir} /> : parte === "aparencia" ? <Aparencia /> : parte === "dados" ? <Dados irPet={irPet} />
+      {parte === "principal" ? <Principal abrir={abrir} /> : parte === "visual" ? <Visual /> : parte === "dados" ? <Dados irPet={irPet} />
         : parte === "fala" ? <Fala /> : <Sobre />}
     </section>
   );

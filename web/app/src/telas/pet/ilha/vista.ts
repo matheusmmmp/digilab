@@ -9,7 +9,7 @@
    Os kits carregam depois do terreno; se um modelo nao carrega, a cena cai na reserva (MundoReserva), com o erro no console. */
 import * as THREE from "three";
 import { TPD, eNoite, type Mundo } from "../../../../motor/index.ts";
-import { voltarParaIlha, type Habitat } from "../../../habitat.ts";
+import { habitatAtual, voltarParaIlha, type Habitat } from "../../../habitat.ts";
 import { jogoAtual } from "../../../jogo.ts";
 import { CENA } from "../cenaEstado.ts";
 import { Seguidor, dentroDoMapa } from "../vistaMundo.ts";
@@ -20,6 +20,7 @@ import { paraMundoCel, paraTelaNdc, type CameraLida, type Dobra } from "./curva.
 import { ilhaDe, type Ilha } from "./grade.ts";
 import { Itens } from "./itens.ts";
 import { Papel, type Ret } from "./papel.ts";
+import { PRESETS, Pos } from "./pos.ts";
 
 const movimentoReduzido = (): boolean => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -50,6 +51,8 @@ class VistaIlha {
   /** o estilo do mapa (estilos.ts) e a camera (constantes.ts, CAMERAS) do habitat escolhido */
   readonly estilo: Estilo;
   private readonly cam: CameraHabitat;
+  /** o visual (GBA HD, HD-2D): lido a cada quadro de habitatAtual, sem religar a cena */
+  private readonly pos: Pos;
 
   constructor(canvas: HTMLCanvasElement, mu: Mundo, habitat: Habitat) {
     this.canvas = canvas; this.mu = mu;
@@ -60,6 +63,9 @@ class VistaIlha {
     THREE.ColorManagement.enabled = true;
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
+    /* com o visual, um quadro sao dois desenhos (a cena no alvo e o quadro na tela): a contagem de draw calls da M3 e zerada por quadro */
+    this.renderer.info.autoReset = false;
+    this.pos = new Pos(this.renderer);
     this.ilha = ilhaDe(mu.cm);
     this.cenaIlha = this.estilo.montar(this.ilha);
     const v = new THREE.Vector3();
@@ -156,11 +162,13 @@ class VistaIlha {
       ppu: this.ppu, pxPorTexel: this.pxPorTexel, canvas: [this.renderer.domElement.width, this.renderer.domElement.height],
       razao: this.renderer.getPixelRatio(), reduzido: movimentoReduzido(), noite,
     });
-    this.renderer.render(this.cenaIlha.cena, this.camera);
+    /* o foco do HD-2D: a altura do pet na tela (0 embaixo, 1 em cima) */
+    this.renderer.info.reset();
+    this.pos.desenhar(this.cenaIlha.cena, this.camera, PRESETS[habitatAtual().visual], 1 - (ret.y + ret.h * 0.6) / this.alturaCss);
     return ret;
   }
 
-  dispose(): void { this.papel.dispose(); this.renderer.dispose(); }
+  dispose(): void { this.papel.dispose(); this.pos.dispose(); this.renderer.dispose(); }
 
   /** a queda de qualidade (regra 10, PROPOSTO): sem vento, metade da grama e pixelRatio 1; so uma vez */
   baixarQualidade(): void {
@@ -239,7 +247,7 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
       medida = null;
       const total = deltas.reduce((a, b) => a + b, 0);
       resolve({
-        medida: `M3 (tela Pet, ${vista.estilo.id}, câmera ${habitat.camera})`, data: new Date().toISOString(), userAgent: navigator.userAgent, devicePixelRatio,
+        medida: `M3 (tela Pet, ${vista.estilo.id}, câmera ${habitat.camera}, visual ${habitatAtual().visual})`, data: new Date().toISOString(), userAgent: navigator.userAgent, devicePixelRatio,
         tela_css: [innerWidth, innerHeight], canvas_px: [canvas.width, canvas.height],
         duracao_s: +(total / 1000).toFixed(3), quadros: deltas.length, fps_media: +((deltas.length * 1000) / total).toFixed(2),
         quadro_mediana_ms: +mediana(deltas).toFixed(2), quadro_p95_ms: +p95(deltas).toFixed(2),

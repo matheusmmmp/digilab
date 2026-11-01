@@ -23,7 +23,7 @@ const TAMER_V13 = { versao: 7, log: [["medalha", { id: "campina", n: 1, quando: 
 /* as rotas do portao, para o contraste */
 const ROTAS = ["#/pet/estado", "#/crescer/treinar", "#/crescer/aprend", "#/crescer/evolucao", "#/crescer/itens", "#/lutar/arena", "#/lutar/campanha",
   "#/lutar/fronteira", "#/lutar/medalhas", "#/diario/registro", "#/diario/catalogo", "#/diario/cenarios", "#/conversar/chat", "#/config",
-  "#/config/aparencia", "#/config/dados", "#/config/fala", "#/config/sobre"];
+  "#/config/visual", "#/config/dados", "#/config/fala", "#/config/sobre"];
 
 interface Medida { tela: string; texto: string; ret: number[]; seletor: string; cor: string; tam: number; peso: number; razao: number; piorPixel: number; minimo: number; desabilitado: boolean }
 
@@ -182,7 +182,7 @@ test.describe("conferência da pele dos menus (T3)", () => {
       await page.locator(".topo-retrato").click();
       await page.waitForTimeout(300);
       await foto(page, `meus-pets_${sufixo}_1920`);
-      await abrir(page, pele, tema, "#/config/aparencia");
+      await abrir(page, pele, tema, "#/config/visual");
       await foto(page, `config-aparencia_${sufixo}_1920`);
       /* o foco pelo teclado sobre o escolhido e sobre o outro cartao: o anel tem de se distinguir da borda do escolhido */
       const grupo = page.getByRole("radiogroup", { name: "Pele dos menus" });
@@ -285,7 +285,7 @@ test.describe("conferência da pele dos menus (T3)", () => {
         const c = getComputedStyle(e); return `${s}: backdrop-filter ${c.backdropFilter}`;
       }).concat(["--hx-miolo-2", "--hx-miolo", "--hx-chao"].map(v => `${v}: ${getComputedStyle(document.documentElement).getPropertyValue(v).trim()}`)));
       const focoTreinar = await medirFoco(page, 30);
-      await abrir(page, pele, "claro", "#/config/aparencia");
+      await abrir(page, pele, "claro", "#/config/visual");
       const focoAparencia = await medirFoco(page, 25);
       await semear(page, SAVE_V11);
       await abrir(page, pele, "claro", "#/pet/estado");

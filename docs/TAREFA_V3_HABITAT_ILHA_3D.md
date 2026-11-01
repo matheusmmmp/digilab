@@ -361,5 +361,14 @@ câmera. O motor, a vida, o log e o replay não mudam (o caminho B, o mapa decid
   na escolha gravada (`voltarParaIlha`) e Ajustes avisa.
 - **A tela:** Ajustes › Aparência ganha "Mapa do habitat" e "Câmera do habitat" (`telas/config/EscolhaHabitat.tsx`), desligados para os
   pets sem o mundo (v1–v11, a sala).
-- **Fora:** o pet 3D do DSTS, a bola de fogo e o pós-processamento dos POCs (GBA HD, HD-2D) não entraram; as capturas aprovadas e a M3
-  por mapa também não.
+- **O visual** (2026-11-01, pedido do Matheus): o pós-processo dos POCs (`ilha/pos.ts`, copiado do `poc/mapa_ac/pos.ts`), com os
+  valores do POC:
+  - **Normal:** a cena como ela é;
+  - **GBA HD:** o pixel de 3 px de CSS, a cor clara e saturada e uma vinheta leve (o jeito do Cassette Beasts);
+  - **HD-2D:** o pixel de 2 px, o tilt-shift e a vinheta. A faixa de foco segue a altura do pet na tela, e não fica fixa como no POC.
+  - O visual vale no quadro seguinte, sem religar a cena; `?visual=` sobrepõe. Vale em qualquer mapa e câmera.
+- **Ajustes › Visual** (2026-11-01, pedido do Matheus): a subárea **Aparência vira Visual** e junta tudo o que é visual (a pele dos
+  menus, o tema do habitat, o mapa, a câmera e o visual). "Mostrar dicas" sai dela e vai para o menu principal dos Ajustes.
+  `#/config/aparencia` leva ao Visual.
+- **Fora:** o pet 3D do DSTS e a bola de fogo não entraram; as capturas aprovadas e a M3 por mapa também não. A referência do portão
+  `e2e_capturas` da tela `config` muda (a linha Visual e as dicas) e só se regenera depois da aprovação.
