@@ -3185,3 +3185,46 @@ Só a VERIFICADA na C0 (`docs/referencias/v3c0_referencias_verificadas.csv`, a l
 | **AD8-3** | o σ de planejamento(DECIDIDA) | **o maior dp dos três contrastes do `longe_fixo` da C1, com a folga de 20 % (0,1094)**; a C2 só ao lado | o σ só do M3\* − M2 (0,0832 × 1,2 = 0,0999): a margem cai para cerca de 0,023 com K = 150, e se o M3\*R tiver a dispersão do M3\* − M0, o poder real fica abaixo de 0,8; incluir o comedouro da C2 (0,089) não muda nada (é menor que 0,0911) |
 | **AD8-4** | a G-PESA nas decisões seguradas(DECIDIDA) | **como hoje (as seguradas no denominador, com o `*_decidiu` falso) e, ao lado, só nas sorteadas; nenhuma premissa lê a G-PESA** (A8.8, item 5) | só a de hoje: o M3\*R parece ter menos influência de todo módulo só por segurar, e a leitura confunde o mecanismo com um módulo que pesa menos; só a das sorteadas: a G-PESA deixa de ser comparável com a da C1 e da C2; usar a G-PESA da memória como premissa (como na C1): ela cairia no M3\*R pelo próprio mecanismo, e a premissa mediria a subchave, não a memória |
 | **AD8-5** | a guarda(DECIDIDA) | **falha só com a classe "< 0" de A6.6** (o IC inteiro abaixo de 0 e fora da margem); um "≈ 0 com o sinal −" sai descrito | pelo limite superior < 0 (sem a margem): um custo perto da ração menor que o que a run detecta tira o mecanismo da linha 2, por um efeito que a régua da run não separa de 0; sem guarda: um mecanismo que atrapalha perto da ração viraria candidato |
+
+### A8.13 A run (76101 a 76505): o registro, antes da primeira vida (2026-11-01, worker da C3, etapa 4, Claude Code, Opus 5.5)
+
+**O que é:** o registro de A8.10, num commit empurrado antes da primeira vida. **Nenhuma vida da faixa roda neste registro,** e nada
+de A8.0 a A8.12 muda. A run roda uma vez; o resultado é registrado como está.
+
+- **O commit de onde sai:** a `main` em `d5599d2` (o #526), mais este registro, na worktree `v3-redecidir-evento-run`, com a árvore limpa.
+  A `origin/main` andou para `be9b0d1` (o #522) depois da criação da worktree; ele só muda `web/app/` (13 arquivos do jogo web), nenhum
+  arquivo do Python, e a run não o inclui.
+- **A config:** `experiments/configs/v2_redecidir_evento/redecidir_evento.json`, sha256 `0e5f4706…4b0c`.
+- **As bases e o K:** 76101, 76202, 76303, 76404 e 76505, K = 30 por base, o prefixo `digibrain_prototipo` (A8.3): **150 unidades.**
+  - a primeira (76101, k = 0): a semente 133588941023567736 e o genoma 5379957050224039951;
+  - a última (76505, k = 29): a semente 3586427328760372470 e o genoma 12443393326701462674.
+- **Os braços e as células:** M3 e M2 de `SUBCHAVES_CONSERTO` e M3R e M2R de `SUBCHAVES_C3`, com a `intencao_suspensa` e a corrida da C2
+  desligadas; os 4 donos × `longe_fixo`, comedouro e longe; 14 dias, orçamento de 16: **7 200 vidas** (A8.2).
+- **Os sha256** (antes deste registro):
+  - o orquestrador `experiments/run_v2_redecidir_evento.py`: `52721e58…3d95`;
+  - o protótipo `experiments/run_v2_digibrain_prototipo.py`: `bb81a343…d828a`;
+  - `digilab/config.py`: `0b1cf0cf…22f3`; `digilab/engine.py`: `48ba51ce…3630` (o congelado); `digilab/metrics.py`: `8c6a6794…a425`;
+    `digilab/mundo.py`: `78120bdf…83bb`; `digilab/digibrain/estado.py`: `4081f55c…8cad`;
+  - este plano, antes desta seção: `d91538f1…2652`. O `meta.json` grava o sha do plano com esta seção.
+- **A pasta de saída:** `artifacts_v2_digibrain_prototipo/redecidir_evento/run/`, a de A8.10 e o padrão do orquestrador (o `SAIDA`); ela
+  não existe, e a pasta-mãe só tem o `adendo8_poder.json`. Sem `--saida`.
+- **O comando** (da raiz da worktree, depois da suíte, sem sobrepor; V3-D8):
+
+      python experiments/run_v2_redecidir_evento.py --config experiments/configs/v2_redecidir_evento/redecidir_evento.json --processos 4
+
+- **Nenhuma vida da faixa em disco:** em 2026-11-01 nenhuma worktree em `D:\Trab\digilab` tem a pasta `redecidir_evento/run/`; as pastas
+  `redecidir_evento/` (nas worktrees `v3-habitat-objetos`, `v3-ovo-retrato`, `v3-redecidir-evento-plano` e `v3-redecidir-evento-run`) só
+  têm o `adendo8_poder.json`, e `_vidas_guardadas` só tem a pasta de 2026-10-26.
+- **O tempo estimado:** de 1 h 18 min a 2 h 8 min de parede, até 2 h 30 min com a análise (A8.9).
+- **Os pré-requisitos de A8.10, conferidos antes da primeira vida:**
+  - **o adendo 8 APROVADO** no cabeçalho (2026-11-01), e a trava do orquestrador o aceita: `modo_da_config` da config da run devolve
+    `redecidir_evento` (a faixa, as bases, o K, os dias, o orçamento e o plano conferidos por ela);
+  - **a faixa** 76101…76505 em `experiments/bancada/faixas.py` (`FAIXAS_RESERVADAS`, o `1a37e58`);
+  - **o gabarito** antes da mudança (`tests/gabarito_redecidir_evento.py`, `tests/gabaritos/redecidir_evento_de_hoje.json`) e o teste
+    dele (`tests/test_gabarito_redecidir_evento.py`) na árvore;
+  - **a suíte:** roda inteira (`python -m pytest -q`, 4 processos) do commit deste registro, antes da run e sem sobrepor; a contagem vai ao
+    RESULTADO e ao PR. As falhas conhecidas de `tests/test_hooks.py` e `tests/test_hook_h4.py` (os `.claude/hooks/` apagados da `main`
+    pelo `2586b0e`) não são do G1, do G2, do G-MECANISMO, de replay nem de paridade; qualquer outra falha desses para a run;
+  - **a árvore limpa:** o `meta.json` grava o `git_head` e o `git_limpo`; a run sai do commit deste registro, empurrado;
+  - **a máquina (V3-D8):** nenhum processo Python rodando antes da suíte (nenhuma run de pesquisa nem medição do combate); a suíte e a run
+    não se sobrepõem; 4 processos.
