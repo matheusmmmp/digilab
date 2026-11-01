@@ -40,17 +40,22 @@ export function alegacoes(fala: string): Alegacao[] {
   return out;
 }
 
-/** cada alegacao com `sustentada` e o `fato` que a sustenta; sem a memoria ligada, lista vazia */
+/** o que o registro do A v11 tem para sustentar "lembrei de X" (memoria_fala.py, TIPOS_REGISTRO_A) */
+const TIPOS_REGISTRO_A = ["memoria", "habito meu", "habito do dono", "gosto", "marco"];
+
+/** cada alegacao com `sustentada` e o `fato` que a sustenta. Com a memoria ligada, as tres; sem ela (A v11, MA-8), o modo simples:
+    so lembranca (fato [M] ou de historia) e causa (so o fato Q2, que ali nao existe: a causa por lembranca e recusada), nunca faceta */
 export function conferirFalaMemoria(fala: string, fatos: FatoFala[]): AlegacaoConferida[] {
-  if (!memoriaLigada(fatos)) return [];
-  return alegacoes(fala).map(a => {
+  const simples = !memoriaLigada(fatos);
+  return alegacoes(fala).filter(a => !(simples && a.tipo === "faceta")).map(a => {
     let fato: string | null = null;
     if (a.tipo === "faceta") {
       const chave = norm(a.faceta!).replace(/_/g, " ");
       fato = fatos.find(f => f.tipo === TIPO_FACETA && norm(f.texto).includes(chave) && norm(f.texto).includes(a.sentido!))?.id ?? null;
     } else {
       const pal = raizes(a.trecho);
-      fato = fatos.find(f => f.tipo === (a.tipo === "causa" ? TIPO_DECIDIU : TIPO_LEMBRANCA) && [...raizes(f.texto)].some(r => pal.has(r)))?.id ?? null;
+      const tipos = a.tipo === "causa" ? [TIPO_DECIDIU] : simples ? TIPOS_REGISTRO_A : [TIPO_LEMBRANCA];
+      fato = fatos.find(f => tipos.includes(f.tipo) && [...raizes(f.texto)].some(r => pal.has(r)))?.id ?? null;
     }
     return { ...a, sustentada: fato !== null, fato };
   });

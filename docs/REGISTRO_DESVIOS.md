@@ -478,3 +478,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-01 — C4 MEMÓRIA AUTOBIOGRÁFICA, M5 (worker, Claude Code, Sonnet 5.5, worktree `v3-memoria-m5`): o sentido da cautela e três lacunas da 6.2](registro/2026-11.md)
 - [2026-11-01 — C4 MEMÓRIA AUTOBIOGRÁFICA, M6 (worker, Claude Code, Sonnet 5.5, worktree `v3-memoria-m6`): a conferência determinística, o gate e o motivo do N6](registro/2026-11.md)
 - [2026-11-01 — C4 MEMÓRIA AUTOBIOGRÁFICA, `controle_mem` (worker, Claude Code, Sonnet 5.5, worktree `v3-memoria-controle`): o que a espec deixou aberto em cada braço](registro/2026-11.md)
+- [2026-11-01 — A LACUNA DO A v11 NA FALA (worker, Claude Code, Sonnet 5.5, worktree `v3-fala-a-v11`): o modo simples da conferência](registro/2026-11.md)

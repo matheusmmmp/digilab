@@ -2,7 +2,7 @@
  "versao": 1,
  "casos": [
   {
-   "nome": "desligada_nao_confere",
+   "nome": "a_v11_lembranca_com_fato_m",
    "fatos": [
     {
      "id": "E1",
@@ -15,7 +15,122 @@
      "texto": "(curto prazo, bronca) o dono me repreendeu, ha 20 min"
     }
    ],
-   "fala": "Lembrei do podre e fiquei mais cauteloso, porque lembrei.",
+   "fala": "Lembro da bronca que levei.",
+   "alegacoes": [
+    {
+     "tipo": "lembranca",
+     "trecho": "lembro da bronca que levei",
+     "sustentada": true,
+     "fato": "M1"
+    }
+   ]
+  },
+  {
+   "nome": "a_v11_lembranca_sem_fato_m",
+   "fatos": [
+    {
+     "id": "E1",
+     "tipo": "estado",
+     "texto": "fome alto"
+    },
+    {
+     "id": "M1",
+     "tipo": "memoria",
+     "texto": "(curto prazo, bronca) o dono me repreendeu, ha 20 min"
+    }
+   ],
+   "fala": "Lembrei de comer aquilo podre.",
+   "alegacoes": [
+    {
+     "tipo": "lembranca",
+     "trecho": "lembrei de comer aquilo podre",
+     "sustentada": false,
+     "fato": null
+    }
+   ]
+  },
+  {
+   "nome": "a_v11_causa_sem_sonda",
+   "fatos": [
+    {
+     "id": "E1",
+     "tipo": "estado",
+     "texto": "fome alto"
+    },
+    {
+     "id": "M1",
+     "tipo": "memoria",
+     "texto": "(curto prazo, bronca) o dono me repreendeu, ha 20 min"
+    }
+   ],
+   "fala": "Fiquei esperando porque lembro da bronca.",
+   "alegacoes": [
+    {
+     "tipo": "causa",
+     "trecho": "fiquei esperando porque lembro da bronca",
+     "sustentada": false,
+     "fato": null
+    }
+   ]
+  },
+  {
+   "nome": "a_v11_causa_sem_memoria_no_registro",
+   "fatos": [
+    {
+     "id": "E1",
+     "tipo": "estado",
+     "texto": "fome alto"
+    }
+   ],
+   "fala": "Evitei a fruta porque lembrei do podre.",
+   "alegacoes": [
+    {
+     "tipo": "causa",
+     "trecho": "evitei a fruta porque lembrei do podre",
+     "sustentada": false,
+     "fato": null
+    }
+   ]
+  },
+  {
+   "nome": "a_v11_faceta_nao_confere",
+   "fatos": [
+    {
+     "id": "E1",
+     "tipo": "estado",
+     "texto": "fome alto"
+    },
+    {
+     "id": "M1",
+     "tipo": "memoria",
+     "texto": "(curto prazo, bronca) o dono me repreendeu, ha 20 min"
+    }
+   ],
+   "fala": "Fiquei mais cauteloso, porque lembrei.",
+   "alegacoes": [
+    {
+     "tipo": "causa",
+     "trecho": "fiquei mais cauteloso, porque lembrei",
+     "sustentada": false,
+     "fato": null
+    }
+   ]
+  },
+  {
+   "nome": "a_v11_negacao_nao_alega",
+   "fatos": [
+    {
+     "id": "E1",
+     "tipo": "estado",
+     "texto": "fome alto"
+    },
+    {
+     "id": "M1",
+     "tipo": "memoria",
+     "texto": "(curto prazo, bronca) o dono me repreendeu, ha 20 min"
+    }
+   ],
+   "fala": "Nao lembro disso.",
    "alegacoes": []
   },
   {

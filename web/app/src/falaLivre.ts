@@ -88,13 +88,17 @@ export function estadoDoPet(m: Motor, gatilho?: string | null): Record<string, u
   return s;
 }
 
-/** C4, M6 (MA-8): com a memoria autobiografica ligada (o fato Q1 no bloco), lembranca, causa por memoria e mudanca de faceta so
-    valem com o registro; a conferencia deterministica (falaMemoria.ts, o espelho do Python) toma o lugar do veredito do juiz sobre o que
-    alega lembranca. Sem o fato Q1 (o A v11 do jogo), a verificacao fica como veio do servidor. */
+/** C4, M6 (MA-8): lembranca e causa por memoria so valem com o registro. Com a memoria autobiografica ligada (o fato Q1) valem tambem
+    as mudancas de faceta; sem ela (o A v11 do jogo) vale o modo simples: "lembrei de X" so com um fato [M] que diga X, e "fiz Y porque
+    lembrei de X" recusada (nenhuma sonda no registro). A conferencia deterministica (falaMemoria.ts, o espelho do Python) toma o lugar
+    do veredito do juiz sobre o que alega lembranca. */
 export function comMemoria(v: Verificacao, fala: string, fatos: unknown): Verificacao {
-  if (!Array.isArray(fatos) || !memoriaLigada(fatos as FatoFala[])) return v;
+  if (!Array.isArray(fatos)) return v;
+  const conf = conferirFalaMemoria(fala, fatos as FatoFala[]);
+  const tiradas = (v.afirmacoes || []).filter(a => alegaLembranca(a.trecho));
+  if (!memoriaLigada(fatos as FatoFala[]) && !tiradas.length && !conf.length) return v;
   const afirmacoes = [...(v.afirmacoes || []).filter(a => !alegaLembranca(a.trecho)),
-    ...conferirFalaMemoria(fala, fatos as FatoFala[]).map(a => ({ trecho: a.trecho, sustentada: a.sustentada }))];
+    ...conf.map(a => ({ trecho: a.trecho, sustentada: a.sustentada }))];
   return { ...v, afirmacoes, nao_suportadas: afirmacoes.filter(a => a.sustentada === false).length };
 }
 
