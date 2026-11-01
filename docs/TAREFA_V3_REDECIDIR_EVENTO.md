@@ -359,3 +359,15 @@ A espec no formato da L-2 (`docs/ESPEC_REDECIDIR_EVENTO_DIGIBRAIN_MODULAR.md`, P
   passaram em toda vida. Nos braços R, cerca de 0,34 a 0,39 das decisões sem o reflexo saíram seguradas e cerca de 0,05 das sequências
   acabaram no teto: as duas premissas têm o que medir; não é dado da C3.
 - **Nenhuma vida da faixa 76xxx.**
+
+## Resultado da etapa 4 (a run e a leitura; 2026-11-01, worker Claude Code, Opus 5.5, worktree `v3-redecidir-evento-run`)
+
+- **O registro** A8.13 no plano (o commit, os sha256, a config, o comando e os pré-requisitos), empurrado antes da primeira vida
+  (`d0aff83`).
+- **A run,** uma vez: 7 200 vidas da faixa 76101…76505 (150 unidades × M3\*, M3\*R, M2 e M2R × 12 células, 14 dias), 4 processos,
+  1 h 12 min, saída 0. Todas as conferências por vida passaram (o G1, o T-CENARIO-1, o G-MECANISMO, o `conferir_redecidir`, os fins).
+- **A leitura** (`docs/RESULTADO_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`, seção 15): as premissas passam (P-SEGURA 0,372; P-EVENTO 0,050;
+  G-ELEGIVEL-EP 0,952 e 0,945); o P-R, M3\*R − M3\* no `longe_fixo`, dá +0,0124 [−0,0060; +0,0308], não passa, classe "indeterminado"; a
+  guarda não falha. **Linha 6 de A8.7:** registrado como indeterminado; nada se decide, e a `redecidir_evento` fica desligada.
+- **Nada da C4 nem da L-3, nada combinado com a C2.** O `engine.py`, o código e a web não mudam. O registro está em
+  `docs/registro/2026-11.md`.

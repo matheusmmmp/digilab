@@ -1253,3 +1253,154 @@ três lugares, o M2c − M2 fica "≈ 0".
   - **o "> 0" da DX-5 no M2c − M2** (+0,007, sobretudo no comedouro) é descritivo, menor que a margem (0,011), e não ajusta nada: a linha
     continua a 4;
   - **a C2 não mostra que o modular é superior** a nada: os três braços são do modular, e o A11 não rodou.
+
+## 15. A C3, a escolha refeita só por evento (2026-11-01, worker da C3, etapa 4, Claude Code, Opus 5.5; adendo 8, A8.4 a A8.8)
+
+**Antes dos números:**
+- **as regras** são as do adendo 8 (APROVADO em 2026-11-01), lidas como estão: o primário e a guarda de A8.4, as premissas de A8.5, a
+  classe de A6.6 com a margem δ = 0,025 (A8.6), a regra de leitura de A8.7 e os descritivos de A8.8. **Todo número é PROPOSTO,** e os
+  limiares (a margem, o 0,10 da P-SEGURA, o 0,25 da P-EVENTO, o 80 % da G-ELEGIVEL-EP, o 0,15 da C5, o −0,5 do g1) são SEM FONTE externa
+  (A8.11);
+- **a run rodou uma vez** (A8.13), e nada foi ajustado depois de ver o resultado;
+- **a leitura não afirma** que o modular supera o A, que o protótipo está pronto, um tamanho de efeito fora das condições da run, que o
+  mecanismo é novo, nem nada do efeito combinado com a corrida da C2 (o `nao_demonstra` do `resultado.json`).
+
+**Como rodou:**
+- **o comando** de A8.13, do commit `d0aff83` (o registro, empurrado antes da primeira vida), com a árvore limpa (`git_limpo` = true), 4
+  processos, depois da suíte e sem sobrepor (V3-D8), com `PYTHONIOENCODING=utf-8` no ambiente (só o console; nenhuma vida depende dele);
+- **as vidas:** as 150 unidades da faixa 76101…76505 × 4 braços × 12 células, 14 dias: **7 200 vidas,** das 01h45 às 02h57 de
+  2026-11-01 (4 346 s de parede, 1 h 12 min; a estimativa de A8.9 era de 1 h 18 min a 2 h 8 min). O processo saiu com 0;
+- **as conferências da run,** todas falhando alto, em cada vida: o replay bit a bit do disco (o G1), o T-CENARIO-1, o G-MECANISMO com a
+  conferência do crédito, nos braços R o `conferir_redecidir` (a espec, seção 6), as trocas por decisão iguais às da `trocas_por_decisao`
+  e as sequências no teto iguais às do M-ESTADO, e os fins de intenção (só os conhecidos: `achou`, `desistiu`, `meta`, `sumiu` e `trocou`;
+  nenhum outro apareceu). A contagem foi conferida no fim: 600 vidas por braço e lugar;
+- **a conferência depois da run:** os sha256 do `medidas.json` e do `resultado.json` são os do `meta.json`; a análise refeita do
+  `medidas.json` gravado (`analisar`, sem mudança) sai igual ao `resultado.json`, byte a byte; o `vidas.tar.gz` tem as 7 200 vidas;
+- **os artefatos,** em `artifacts_v2_digibrain_prototipo/redecidir_evento/run/`:
+  - o `meta.json` (sha256 `b9024ace…8d4c`), com o `git_head` `d0aff83`, o sha256 da config (`0e5f4706…4b0c`), do orquestrador
+    (`52721e58…3d95`), do protótipo (`bb81a343…d828a`), do plano com A8.13 (`cd9f13a8…cb88`) e dos módulos;
+  - o `medidas.json` (sha256 `d5b7c974…50bf`, 73,8 MB) e o `resultado.json` (sha256 `41869752…7b5b`), os mesmos do `meta.json`;
+  - o `run.log` (a saída da run, em LF; sha256 `7f0bbfe5…7282`) e o `vidas.tar.gz` com as 7 200 vidas (sha256 `217add77…6ba0`,
+    35,3 MB).
+
+### 15.1 As premissas (A8.5): passam as três
+
+| premissa | a medida | o valor | IC95 (t, 150 unidades) | o limiar | passa |
+|---|---|---|---|---|---|
+| **P-SEGURA** | no M3\*R, `longe_fixo`: a fração das decisões sem o reflexo que foram seguradas | **0,372** | [0,368; 0,376] | limite inferior ≥ 0,10 | **sim** |
+| **P-EVENTO** | no M3\*R, `longe_fixo`: a fração das sequências seguradas fechadas que acabaram no teto | **0,050** | [0,048; 0,053] | limite superior ≤ 0,25 | **sim** |
+| **G-ELEGIVEL-EP** | a fração das vidas do `longe_fixo` com 3 episódios ou mais | M3\* **0,952**; M3\*R **0,945** | — | ≥ 0,80 nos dois | **sim** |
+
+O primário é **conclusivo** (`premissas.conclusivo` = true): o mecanismo segurou cerca de 37 % das decisões sem o reflexo, e só 5 % das
+sequências seguradas acabaram pelo teto.
+
+### 15.2 O primário P-R (A8.4): M3\*R − M3\* na taxa por episódio, nas 4 células do `longe_fixo`, 150 unidades
+
+| a medida | o valor |
+|---|---|
+| a média das diferenças por unidade | **+0,0124** |
+| o IC95 pelo t (gl 149) | **[−0,0060; +0,0308]** |
+| o t e o p unilateral | 1,33; 0,093 |
+| o g1 das 150 diferenças | −0,202 (acima de −0,5: sem a ressalva da assimetria) |
+| o IC95 percentil do bootstrap (a convenção da seção 5.2.1, anticonservadora com 5 bases, A4.4) | [+0,0082; +0,0184] |
+| a margem efetiva (o menor efeito com poder 0,8 pelo dp observado) | 0,0263 (a planejada: 0,025) |
+| **passa** (o limite inferior acima de 0) | **não** |
+| **a classe** (A6.6) | **"indeterminado"** (o IC cruza o 0 e sai da margem por cima: +0,0308 > +0,025) |
+
+A previsão "> 0" de A8.1 **não se confirma.** O p unilateral (0,093) fica acima de 0,025. O IC percentil do bootstrap exclui o 0, mas ele
+é rotulado como anticonservador e não é o teste (A4.4; A8.4); fica registrado ao lado, como está. Nenhuma unidade ficou fora (n = 150).
+
+### 15.3 A guarda G-COMEDOURO e as secundárias (A8.4)
+
+| contraste | a previsão | a média | IC95 (t) | t; g1 | a classe | o papel |
+|---|---|---|---|---|---|---|
+| **G-COMEDOURO: M3\*R − M3\*** (comedouro) | não "< 0" | **−0,0134** | [−0,0270; +0,0001] | −1,96; +0,095 | **"indeterminado"** | a guarda **não falha** (A8.4, AD8-5: só "< 0") |
+| **S1: M2R − M2** (`longe_fixo`) | sem previsão | **−0,0090** | [−0,0263; +0,0082] | −1,04; −0,435 | **"indeterminado"** | secundária, sem gate |
+| **S2: M3\*R − M3\*** (longe sorteado) | sem previsão | **+0,0370** | [+0,0224; +0,0516] | +5,00; +0,060 | **"> 0"** | secundária, só descritiva |
+
+A guarda fica perto do limite: o limite superior (+0,0001) quase toca o 0, e o limite inferior (−0,0270) sai da margem. Ela não é "< 0"
+pela regra escrita, nem "≈ 0 com o sinal −"; é "indeterminado", e assim fica.
+
+### 15.4 A regra de leitura (A8.7)
+
+- **A linha:** premissas passam (a linha 1 não serve); P-R "indeterminado" (o primário não passa; a classe manda). As linhas 2 a 5 pedem
+  "> 0", "≈ 0" ou "< 0" no P-R; vale a **linha 6:** "nada se decide".
+- **O que se faz** (a mesma linha): **registrado como indeterminado** (a `leitura` do `resultado.json`: "registrado como indeterminado;
+  nada se decide"). A `redecidir_evento` **não vira candidata** (só a linha 2 a faz candidata) e fica desligada, como está.
+- **O S2, a guarda e os descritivos (15.5) não mudam a linha** (A8.7). **A run não se repete,** e uma faixa nova só vem com um adendo novo
+  (A8.7).
+
+### 15.5 Os descritivos (A8.8, sem gate; nenhum muda 15.4)
+
+Todos com o IC95 do t sobre as 150 unidades e a classe de A6.6 (δ = 0,025). Os grupos que o próprio mecanismo cria (as decisões
+seguradas, os fins por intenção, as sequências no teto) saem só por braço (a LP-2).
+
+**1. A taxa por episódio por lugar** (os níveis e os dois pares):
+
+| lugar | M3\* | M3\*R | M2 | M2R | M3\*R − M3\* | M2R − M2 |
+|---|---|---|---|---|---|---|
+| comedouro | 0,820 | 0,807 | 0,683 | 0,682 | −0,0134 [−0,0270; +0,0001] indeterminado | −0,0013 [−0,0168; +0,0142] ≈ 0 |
+| `longe_fixo` | 0,560 | 0,572 | 0,519 | 0,510 | +0,0124 [−0,0060; +0,0308] indeterminado | −0,0090 [−0,0263; +0,0082] indeterminado |
+| longe sorteado | 0,420 | 0,457 | 0,458 | 0,471 | +0,0370 [+0,0224; +0,0516] > 0 | +0,0137 [−0,0021; +0,0295] indeterminado |
+
+**2. As quebras, pela LP-2:**
+- **as trocas por decisão** (por vida; nível; o contraste): no `longe_fixo`, M3\* 755,4 e M3\*R 519,4 (−235,9 [−241,6; −230,2], "< 0"),
+  M2 751,0 e M2R 506,2 (−244,9, "< 0"); no comedouro e no longe sorteado, o mesmo sentido (de −201 a −261 por vida, todos "< 0"). O
+  mecanismo corta cerca de um terço das trocas fora do reflexo. O motivo, somado no `longe_fixo`: no M3\*, 128 518 pelo dormir sorteado e
+  324 701 por outra unidade; no M3\*R, 77 988 e 233 672;
+- **os fins `trocou` por intenção de hoje** (dependentes do braço; só nível): no `longe_fixo`, M3\* 45,7 e M3\*R 37,5 por vida; M2 18,0 e
+  M2R 14,8. No longe sorteado, M3\* 76,2 e M3\*R 62,7.
+
+**3. O mecanismo, só nos braços R:**
+
+| lugar | braço | seguradas / sem reflexo | comprimento médio da sequência segurada | sequências no teto |
+|---|---|---|---|---|
+| comedouro | M3\*R; M2R | 0,387; 0,385 | 1,70; 1,70 | 0,048; 0,046 |
+| `longe_fixo` | M3\*R; M2R | 0,372; 0,377 | 1,75; 1,73 | 0,050; 0,046 |
+| longe sorteado | M3\*R; M2R | 0,343; 0,368 | 1,73; 1,73 | 0,046; 0,044 |
+
+Os eventos somados no `longe_fixo` do M3\*R (das 556 142 decisões sorteadas depois da primeira; "valeu" e "valeu sozinho"): o E-RECEPTOR
+470 848 e 174 644; o E-REFLEXO 259 995 e 17 839; o E-MUNDO 149 581 e 43 232; o E-FIM 47 466 e 7 747; o E-TETO 7 383 e 5 832. Os outros
+lugares e o M2R estão em `descritivo.mecanismo.eventos_somados`.
+
+**4. O corpo** (as medidas da C5, AD6-4, SEM FONTE; o limiar 0,15):
+- **a fração do tempo com algum estado abaixo de 0,15,** na vida: o M3\*R − M3\* sai "≈ 0" nos três lugares (`longe_fixo` +0,0074
+  [−0,0098; +0,0246]); o M2R − M2 sai "> 0" no comedouro (+0,016) e no longe sorteado (+0,025), "indeterminado" no `longe_fixo`. Nos dias 8
+  a 14, o mesmo quadro (M2R − M2 "> 0" no comedouro, +0,024, e no longe, +0,033);
+- **a menor necessidade** (média e mínimo, vida e dias 8 a 14): os contrastes saem "≈ 0" nos dois pares e nos três lugares (com o sinal +
+  no comedouro, na média da vida);
+- **a exaustão:** menor nos braços R em todo lugar: M3\*R − M3\* −0,029 [−0,038; −0,021] no `longe_fixo` e −0,042 no longe ("< 0"), −0,013
+  no comedouro ("≈ 0 −"); o M2R − M2 no mesmo sentido;
+- **a privação de hoje:** M3\*R − M3\* "≈ 0" nos três lugares; M2R − M2 "> 0" no longe sorteado (+0,022);
+- **a pergunta da tarefa (4.4):** pelo que o corpo mostra, segurar a escolha não prende o M3\*R num chamar ou num dormir sem resposta; no
+  M2R (sem o lugar lembrado), o tempo em falta sobe um pouco perto da ração e no longe sorteado.
+
+**5. Os outros:**
+- **a taxa por episódio por faixa de d₀:** só no `resultado.json` (`descritivo.faixas_d0`), somada, sem contraste, com a ressalva da LP-2;
+- **a G-PESA por módulo** (AD8-4): como hoje, os módulos pesam menos nos braços R em todo lugar (as decisões seguradas entram com o
+  `*_decidiu` falso); só nas sorteadas, ela volta perto da dos controles. No `longe_fixo`: a memória M3\* 0,123, M3\*R 0,099 (só nas
+  sorteadas 0,133); o aprendido M3\* 0,223, M3\*R 0,162 (0,226); o hábito M3\* 0,112, M3\*R 0,071 (0,102);
+- **os episódios por vida:** mais nos braços R em todo lugar (no `longe_fixo`, M3\* 13,6 e M3\*R 14,8; M2 13,1 e M2R 13,6);
+- **os fins das intenções** (somas por braço e lugar, na ordem `achou`, `desistiu`, `meta`, `sumiu`, `trocou`): `longe_fixo` M3\* 8 224,
+  12, 37 678, 343, 27 547; M3\*R 8 446, 15, 34 045, 270, 22 623; M2 9 536, 12, 23 746, 387, 10 998; M2R 9 276, 16, 22 105, 389, 9 024. Os
+  outros lugares em `descritivo.outros.fins_somados`. Nenhum outro fim;
+- **por dono:** só no `resultado.json` (`descritivo.outros.por_dono`), sem leitura.
+
+### 15.6 O que é verificado, o que é resultado e o que é interpretação
+
+- **Verificado por testes e hashes:** a suíte antes da run (46 falhas: as 43 dos hooks e 3 de `tests/test_conferir_saude.py`, nenhuma do
+  G1, do G2, do G-MECANISMO, de replay ou de paridade; o desvio 1 do registro); o replay bit a bit, o T-CENARIO-1, o G-MECANISMO, o
+  `conferir_redecidir` e os fins de intenção em cada vida; as 7 200 vidas; o `meta.json` com o commit do registro, a árvore limpa e os
+  sha256 de A8.13; o `resultado.json` refeito igual do `medidas.json`.
+- **Resultado** (do `resultado.json`, pelas regras do adendo 8): 15.1 a 15.5.
+- **Interpretação** (do worker, não testada, PROPOSTA):
+  - **o mecanismo fez o que a espec pede:** segurou 37 % das decisões sem o reflexo, cortou cerca de um terço das trocas fora do reflexo e
+    acabou por evento, não por relógio (5 % no teto). O P-R testou a hipótese, e a resposta ficou abaixo do alcance da run: a média
+    (+0,012) é cerca de metade da margem, o tamanho que A8.6 já previa como "indeterminado" ("um efeito real de um quarto do da memória,
+    ≈ 0,012, também sai indeterminado");
+  - **a dispersão observada ficou um pouco acima da planejada:** a margem efetiva é 0,0263 contra 0,025 (o dp das diferenças, cerca de
+    0,114, contra o σ de 0,1094). Isso não muda a classe nem a linha;
+  - **o S2 "> 0" no longe sorteado** (+0,037) e a guarda perto de "< 0" no comedouro (−0,013) apontam para um efeito que depende do lugar:
+    ajuda onde a comida muda de lugar e talvez custe perto da ração. É descritivo, sem previsão escrita antes, e não muda a linha 6;
+    testá-lo exigiria uma pergunta nova com plano e faixa próprios;
+  - **a C3 não mostra que o modular é superior** a nada: os quatro braços são do modular, e o A11 não rodou.
