@@ -1,6 +1,6 @@
 # PAINEL V3: onde a V3 está, em uma página
 
-**Atualizado em 2026-10-31** (`main` `5ecf5d9`, depois do #510), pelo Gerente da V3. O plano é o `docs/PLANO_V3.md`; o
+**Atualizado em 2026-10-31** (`main` `39c87f6`, depois do #517), pelo Gerente da V3. O plano é o `docs/PLANO_V3.md`; o
 fechamento da V2, o `docs/FECHAMENTO_V2.md` (tag `v2-final`).
 
 - Quem atualiza: o coordenador de cada trilha, uma linha por PR mergeado.
@@ -22,8 +22,8 @@ fechamento da V2, o `docs/FECHAMENTO_V2.md` (tag `v2-final`).
 | congelamento · V3-D5 | o cabeçalho "V2, congelado" e a última linha do `PAINEL_V2.md` | **na `main`** (#483) | `docs/PLANO_V3.md`, seção 7 |
 | **C0** literatura | as fontes da triagem verificadas, a síntese e a alegação proibida nova | **na `main`** (#482) | `docs/TAREFA_V3_LITERATURA.md` |
 | **C1** longe regular | o longe com lugares fixos; LR-1 a LR-7 e C1-E1/E2 DECIDIDAS (2026-10-30, pela recomendação) | **rodou uma vez, na `main`** (#510): o primário passa (M3\* − M2 por episódio no `longe_fixo`, IC95 > 0); o sorteado sai "indeterminado", então a L-3 fica fora (C1-E2); a primeira run caiu por um fim desconhecido no orquestrador (#507), consertado no #508, e a repetição deu os mesmos logs. Antes: o `longe_fixo` (#503), o adendo 6 (#497), o orquestrador e a C5 (#506) | `docs/TAREFA_V2_LONGE_REGULAR.md` |
-| **C2** o hábito com crédito na intenção | o braço de crédito na intenção contra o passo | a próxima do cérebro (D-C1-2, 2026-10-31, pela recomendação); a tarefa e a espec primeiro, só papel | `docs/PLANO_V3.md`, seção 2 |
-| **C3** redecidir por evento | espec no formato da L-2, subchave desligada | sem tarefa; depois da C1 | idem |
+| **C2** o hábito com crédito na intenção | o crédito do P2 na corrida do comportamento (M2c) contra o passo; HI-1 a HI-8 DECIDIDAS (2026-10-31, pela recomendação) | **rodou uma vez, na `main`** (#517): as premissas passam; o P-A, M2c − M2, sai "≈ 0" (+0,0028 [−0,0003; +0,0060]), e o S1 "< 0"; linha 4 do adendo 7: a unidade de crédito não é a causa. As D-C2-4-1 a 4, decididas pelo Matheus em 2026-10-31: a C2 registrada como negativa, sem mecanismo novo no P2, a C3 em separado, nenhuma combinação C2+C3. Antes: a tarefa (#512), a corrida atrás de chave (#513), o adendo 7 e o orquestrador (#515) | `docs/TAREFA_V3_HABITO_INTENCAO.md`; `docs/RESULTADO_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`, seção 14 |
+| **C3** redecidir por evento | a escolha só é refeita num evento (receptor, reflexo, mundo, fim, teto), contra o sorteio a cada decisão; M3\*R − M3\* por episódio no `longe_fixo` | **só papel:** a tarefa, etapa 1 (#519); as RD-1 a RD-9 DECIDIDAS pelo Matheus em 2026-10-31, pela recomendação; a faixa 76101…76505 decidida, reservada só na etapa 3; a próxima é a espec e o código atrás de chave (etapa 2) | `docs/TAREFA_V3_REDECIDIR_EVENTO.md` |
 | **C4** memória autobiográfica | ME-1 a ME-7 DECIDIDAS (2026-10-30, pela recomendação), com as entradas da C0 e as C4-E1 a C4-E3 | só papel; a espec depois, sem pressa (`digilab/digibrain/` com a C2 e a C3) | `docs/TAREFA_V2_MEMORIA_AUTOBIOGRAFICA.md`, seção 8 |
 | **C5** viabilidade do corpo | as medidas do corpo fora da faixa, do replay | medidas na `main` (#506) e lidas na C1 (#510), nos termos do AD6-4 | `docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`, adendo 6 |
 | **L1** M7 do layout | o fechamento do layout habitat | **na `main`** (#477) | `docs/TAREFA_V2_LAYOUT_HABITAT.md` |
