@@ -152,6 +152,11 @@ Um evento vira episódio se vale **uma** das três, conferidas nesta ordem, sem 
    `theta_afeto`. É o que traz para a memória o brincar que fez bem, o gesto do dono que mudou o corpo e o susto, e o que deixa fora o
    ocioso neutro.
 
+**Decidido pelo Matheus em 2026-11-01 (#530, pela recomendação), antes da M2 e da M3:** o afeto passa a ser lido pela **variação**
+na decisão (a subida de dor, susto ou estresse, l1 − l0 ≥ `theta_sig`), e não pelo nível depois ≥ `theta_afeto`. O motivo: nas vidas
+de teste da M0 e da M1, o nível do estresse codificava quase todo evento (o registro de 2026-11, a seção da M0 e da M1). A troca entra
+no código no PR da M2 e da M3, atrás da mesma chave desligada; até lá o código segue a regra acima. SEM FONTE além da leitura de Ho.
+
 Os limiares (seção 8) são PROPOSTOS e SEM FONTE. O teste T-ME-1 confere que um evento forte vira episódio e um neutro não.
 
 ### 3.4 A categoria

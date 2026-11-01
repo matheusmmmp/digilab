@@ -24,7 +24,7 @@ CAMPOS_POR_MODULO = {
     "plast": ("eta_d", "eta_h", "h_max", "c_g", "s_v", "g_max_incentivo"),
     "estado": ("tau_c", "tau_f_sobe", "tau_f_desce", "w_pers", "n_desiste", "n_desiste_cheiro", "n_suspensa_max", "lambda_retomar",
                "n_seg_max"),
-    "mem": ("n_ep", "lambda_busca", "d_max", "w_mem"),
+    "mem": ("n_ep", "lambda_busca", "d_max", "w_mem", "theta_sig", "theta_afeto", "n_rec"),
 }
 
 
