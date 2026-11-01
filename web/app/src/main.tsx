@@ -32,7 +32,8 @@ import "./estilo/mundo.css";
 import "./estilo/hud.css";
 import "./estilo/casca.css";
 import "./estilo/tailwind.css";
-/* a pele Holografica por ultimo: os seletores dela levam :root[data-pele="vidro"] e vencem tambem os CSS importados pelas telas */
+/* as peles por ultimo: os seletores levam :root[data-pele="xcom|vidro"] e vencem tambem os CSS importados pelas telas */
+import "./estilo/pele-xcom.css";
 import "./estilo/pele-vidro.css";
 
 iniciarTema();

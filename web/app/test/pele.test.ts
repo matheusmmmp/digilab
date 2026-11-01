@@ -25,7 +25,7 @@ describe("pele.ts", () => {
     expect(m.PELE_PADRAO).toBe("vidro");
     expect(m.peleAtual()).toBe("vidro");
     expect(html.dataset.pele).toBe("vidro");
-    expect(m.NOME_PELE).toEqual({ xcom: "Militar", vidro: "Holográfico" });
+    expect(m.NOME_PELE).toEqual({ xcom: "Militar", vidro: "Sci-fi" });
     expect(Object.values(m.NOME_PELE).join(" ")).not.toMatch(/xcom/i);
   });
   it("chave propria ao lado da do save; a escolha grava e vale ao recarregar", async () => {

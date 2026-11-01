@@ -31,12 +31,12 @@
 @media (min-width:900px){ .pet-dock{ width:max-content; max-width:calc(100% - 2 * var(--hud-larg, 288px) - 48px) } }
 .pet-dock > *{ pointer-events:auto }
 .pet-dock .dock{ position:relative; display:flex; grid-template-columns:none; gap:4px; padding:4px; background:var(--hud-fundo-2, rgba(6,11,18,.9)); border:1px solid var(--hx-borda);
-  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px) }
+  -webkit-backdrop-filter:var(--hud-desfoque); backdrop-filter:var(--hud-desfoque) }
 .pet-dock .dock::before{ content:""; position:absolute; inset:-1px auto auto 12px; width:64px; height:2px; background:var(--hx-rotulo); pointer-events:none }
 .dock .dock-bt, .dock-mais .dock-bt{ flex:1 1 0; min-width:0; min-height:52px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
   padding:4px 2px; font-size:13px; letter-spacing:.02em; text-transform:none }
-.pet-dock .dock .dock-bt{ border-color:var(--hx-borda); background:rgba(73,213,226,.06); clip-path:polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px)) }
-.pet-dock .dock .dock-bt:hover{ background:rgba(73,213,226,.14) }
+.pet-dock .dock .dock-bt{ border-color:var(--hx-borda); background:var(--hx-tecla); clip-path:polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px)) }
+.pet-dock .dock .dock-bt:hover{ background:var(--hx-tecla-hover) }
 .pet-dock .dock .dock-bt:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:-4px }
 .dock .dock-bt span{ max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
 .dock .dock-bt img, .dock .dock-bt svg{ width:22px; height:22px; flex:none; object-fit:contain; image-rendering:pixelated }

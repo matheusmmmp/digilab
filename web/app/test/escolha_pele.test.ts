@@ -27,7 +27,7 @@ describe("EscolhaPele", () => {
     expect(s.match(/role="radio"/g)).toHaveLength(PELES.length);
     expect(s).toMatch(/role="radio" aria-checked="true" tabindex="0" class="[^"]*mc-opcao--pele-vidro"/);
     expect(s).toMatch(/role="radio" aria-checked="false" tabindex="-1" class="[^"]*mc-opcao--pele-xcom"/);
-    expect(s).toContain("<b>Holográfico</b>");
+    expect(s).toContain("<b>Sci-fi</b>");
     expect(s).toContain("<b>Militar</b>");
     expect(s.replace(/class="[^"]*"/g, "")).not.toMatch(/xcom/i);
   });
@@ -38,7 +38,7 @@ describe("EscolhaPele", () => {
     escolherPele("vidro");
   });
   it("o resumo de Aparencia mostra a pele e o tema", () => {
-    expect(resumoAparencia("vidro", "sistema")).toBe("pele Holográfico · tema do sistema");
+    expect(resumoAparencia("vidro", "sistema")).toBe("pele Sci-fi · tema do sistema");
     expect(resumoAparencia("xcom", "escuro")).toBe("pele Militar · tema escuro");
     expect(tela).toContain("resumo={resumoAparencia(pele, tema)}");
   });

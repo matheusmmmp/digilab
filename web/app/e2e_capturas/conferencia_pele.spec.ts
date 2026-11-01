@@ -222,6 +222,22 @@ test.describe("conferência da pele dos menus (T3)", () => {
     });
   }
 
+  /* a tela Pet sobre a ilha nas duas peles, no mesmo estado e no mesmo tamanho (a folha lado a lado da refeitura de 2026-10-31): o pet v11,
+     tema claro, em 1280 x 800 e 390 x 844, mais uma tela aberta (Crescer > Treinar) em cada largura */
+  test("ilha nas duas peles", async ({ page }) => {
+    const erros: string[] = []; page.on("pageerror", e => erros.push(e.message));
+    for (const [w, hh] of [[1280, 800], [390, 844]]) for (const pele of ["xcom", "vidro"]) {
+      await page.setViewportSize({ width: w, height: hh });
+      await semear(page, SAVE_V11);
+      await abrir(page, pele, "claro", "#/pet/estado");
+      await foto(page, `ilha_${pele}_${w}`);
+      await semear(page, SAVES.champion);
+      await abrir(page, pele, "claro", "#/crescer/treinar");
+      await foto(page, `crescer_${pele}_${w}`);
+    }
+    expect(erros).toEqual([]);
+  });
+
   for (const pele of ["vidro", "xcom"]) for (const opaco of [false, true]) {
     if (pele === "xcom" && opaco) continue;
     test(`contraste e foco: ${pele} claro${opaco ? " opaco" : ""}`, async ({ page }) => {

@@ -35,8 +35,9 @@ describe("tokens --hx-*", () => {
   });
 });
 
-/* T1 do tema dos menus: a pele Holografica (docs/TAREFA_V2_TEMA_MENUS.md §3 e §6). O vidro e translucido; o contraste e medido no pior caso,
-   com branco puro atras do vidro (o habitat claro mais claro; o desfoque so tira a media) e o reflexo de 6 % de branco por cima. */
+/* T1 do tema dos menus: a pele Sci-fi (vidro; docs/TAREFA_V2_TEMA_MENUS.md §3 e §6), refeita em 2026-10-31 mais translucida. O contraste e
+   medido no pior caso do habitat (a ilha 3D): a grama de dia, o pixel mais claro das capturas da H5 (o desfoque so tira a media), com o
+   reflexo azul claro de 10 % por cima (o comeco do --hx-reflexo). O render e conferido em e2e_capturas/conferencia_pele.spec.ts. */
 const vidroCss = readFileSync(new URL("../src/estilo/pele-vidro.css", import.meta.url), "utf8");
 const main = readFileSync(new URL("../src/main.tsx", import.meta.url), "utf8");
 const blocoVidro = (() => { const i = tokens.indexOf(':root[data-pele="vidro"]{'); if (i < 0) throw new Error("sem o bloco do vidro"); return tokens.slice(i, tokens.indexOf("}", i)); })();
@@ -50,16 +51,17 @@ const rgb = (v: string): [Rgb, number] => {
 const sobre = (cor: string, fundo: Rgb): Rgb => { const [c, a] = rgb(cor); return c.map((x, i) => x * a + fundo[i] * (1 - a)) as Rgb; };
 const hex = (c: Rgb) => "#" + c.map((x) => Math.round(x).toString(16).padStart(2, "0")).join("");
 
-describe("pele Holografica (vidro)", () => {
-  const branco: Rgb = [255, 255, 255];
-  const pior = sobre("rgba(255,255,255,.06)", sobre(tokenVidro("hx-miolo-2"), branco));
+describe("pele Sci-fi (vidro)", () => {
+  const grama: Rgb = [161, 225, 113];
+  const pior = sobre("rgba(170,225,255,.10)", sobre(tokenVidro("hx-miolo-2"), grama));
   it("todo texto passa 4,5:1 sobre o vidro com o habitat mais claro atras; bordas e foco 3:1", () => {
     for (const t of ["hx-texto", "hx-texto-2", "hx-sec", "hx-rotulo", "hx-num", "hx-alerta", "hx-perigo", "hx-ok", "hx-aprendido", "hx-foco"]) {
       expect(contraste(tokenVidro(t).replace(/^var\(--hx-texto\)$/, token("hx-texto")), hex(pior)), t).toBeGreaterThanOrEqual(4.5);
     }
-    const escolhido = sobre("rgba(58,168,255,.28)", pior), botao = sobre(tokenVidro("hx-btn-bg"), pior);
-    expect(contraste(token("hx-texto"), hex(escolhido))).toBeGreaterThanOrEqual(4.5);
-    expect(contraste(token("hx-texto"), hex(botao))).toBeGreaterThanOrEqual(4.5);
+    const escolhido = sobre("rgba(58,168,255,.40)", pior), botao = sobre(tokenVidro("hx-btn-bg"), pior);
+    expect(tokenVidro("hx-escolhido")).toContain("rgba(58,168,255,.40)");
+    expect(contraste(tokenVidro("hx-escolhido-ink"), hex(escolhido))).toBeGreaterThanOrEqual(4.5);
+    expect(contraste(tokenVidro("hx-btn-ink"), hex(botao))).toBeGreaterThanOrEqual(4.5);
     expect(contraste(hex(sobre(tokenVidro("hx-borda"), pior)), hex(pior))).toBeGreaterThanOrEqual(3);
     expect(contraste(tokenVidro("hx-escolhido-borda"), hex(pior))).toBeGreaterThanOrEqual(3);
     expect(contraste("#0A1316", token("hx-necessidade"))).toBeGreaterThanOrEqual(4.5);
@@ -72,9 +74,20 @@ describe("pele Holografica (vidro)", () => {
     expect(reduz).toMatch(/--hx-reflexo:none/);
     for (const t of ["hx-chao", "hx-miolo", "hx-miolo-2", "hx-btn-bg"]) expect(reduz).toMatch(new RegExp(`--${t}:#[0-9A-Fa-f]{6};`));
   });
-  it("o Militar ganha os tokens novos com valor neutro (nada muda)", () => {
+  it("o Militar e fosco e reto: sem vidro, sem chanfro, sem brilho, a HUD quase opaca", () => {
     for (const [t, v] of [["hx-vidro", "none"], ["hx-reflexo", "none"], ["hx-sombra", "none"], ["hx-chanfro", "0px"], ["hx-luz", "transparent"],
-      ["hx-escolhido-borda", "#BFE5E7"], ["hx-titulo-tam", "18px"], ["hx-medidor-alt", "12px"]]) expect(tokens).toContain(`--${t}:${v};`);
+      ["hx-escolhido-borda", "#C5CFB0"], ["hx-titulo-tam", "18px"], ["hx-medidor-alt", "12px"], ["hud-desfoque", "none"], ["hud-ch", "0px"],
+      ["hud-brilho", "none"], ["hud-fundo-1", "rgba(30,33,36,.97)"]]) expect(tokens).toContain(`--${t}:${v};`);
+    /* o pior fundo da HUD: a caixa de alfa .97 sobre branco puro */
+    const hud = hex(sobre("rgba(30,33,36,.97)", [255, 255, 255]));
+    for (const t of ["hx-texto", "hx-texto-2", "hx-sec", "hx-rotulo", "hx-btn-ink", "hx-alerta", "hx-perigo", "hx-foco"]) {
+      expect(contraste(token(t), hud), t).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+  it("o vidro e translucido de verdade (o cenario passa) e a HUD segue a pele", () => {
+    for (const t of ["hx-miolo-2", "hx-miolo"]) expect(rgb(tokenVidro(t))[1]).toBeLessThanOrEqual(0.86);
+    expect(tokenVidro("hud-fundo-1")).toBe("var(--hx-miolo-2)");
+    expect(tokenVidro("hud-desfoque")).toBe("var(--hx-vidro)");
   });
   it("pele-vidro.css: toda regra sob :root[data-pele=\"vidro\"], sem animacao, importada por ultimo; Barlow e Rajdhani no index.html", () => {
     const semComentario = vidroCss.replace(/\/\*[\s\S]*?\*\//g, "");
