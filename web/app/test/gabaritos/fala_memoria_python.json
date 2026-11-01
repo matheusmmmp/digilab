@@ -1,0 +1,363 @@
+{
+ "versao": 1,
+ "casos": [
+  {
+   "nome": "desligada_nao_confere",
+   "fatos": [
+    {
+     "id": "E1",
+     "tipo": "estado",
+     "texto": "fome alto"
+    },
+    {
+     "id": "M1",
+     "tipo": "memoria",
+     "texto": "(curto prazo, bronca) o dono me repreendeu, ha 20 min"
+    }
+   ],
+   "fala": "Lembrei do podre e fiquei mais cauteloso, porque lembrei.",
+   "alegacoes": []
+  },
+  {
+   "nome": "lacuna1_lembranca_sem_registro",
+   "fatos": [
+    {
+     "id": "E1",
+     "tipo": "estado",
+     "texto": "fome alto"
+    },
+    {
+     "id": "Q1",
+     "tipo": "sem lembranca autobiografica",
+     "texto": "nenhuma lembranca recuperada nesta decisao"
+    }
+   ],
+   "fala": "Lembrei de comer aquilo podre.",
+   "alegacoes": [
+    {
+     "tipo": "lembranca",
+     "trecho": "lembrei de comer aquilo podre",
+     "sustentada": false,
+     "fato": null
+    }
+   ]
+  },
+  {
+   "nome": "lacuna1_lembranca_com_registro",
+   "fatos": [
+    {
+     "id": "E1",
+     "tipo": "estado",
+     "texto": "fome alto"
+    },
+    {
+     "id": "Q1",
+     "tipo": "lembranca autobiografica",
+     "texto": "lembrei do episodio 4 (comer podre, negativo)"
+    }
+   ],
+   "fala": "Lembrei que comi podre.",
+   "alegacoes": [
+    {
+     "tipo": "lembranca",
+     "trecho": "lembrei que comi podre",
+     "sustentada": true,
+     "fato": "Q1"
+    }
+   ]
+  },
+  {
+   "nome": "lacuna1_outro_episodio",
+   "fatos": [
+    {
+     "id": "E1",
+     "tipo": "estado",
+     "texto": "fome alto"
+    },
+    {
+     "id": "Q1",
+     "tipo": "lembranca autobiografica",
+     "texto": "lembrei do episodio 4 (comer podre, negativo)"
+    }
+   ],
+   "fala": "Lembrei de brincar com a bola.",
+   "alegacoes": [
+    {
+     "tipo": "lembranca",
+     "trecho": "lembrei de brincar com a bola",
+     "sustentada": false,
+     "fato": null
+    }
+   ]
+  },
+  {
+   "nome": "lacuna2_causa_sem_sonda",
+   "fatos": [
+    {
+     "id": "E1",
+     "tipo": "estado",
+     "texto": "fome alto"
+    },
+    {
+     "id": "M1",
+     "tipo": "memoria",
+     "texto": "(curto prazo, bronca) o dono me repreendeu, ha 20 min"
+    },
+    {
+     "id": "Q1",
+     "tipo": "lembranca autobiografica",
+     "texto": "lembrei do episodio 4 (comer podre, negativo)"
+    }
+   ],
+   "fala": "Evitei a fruta porque lembrei do podre.",
+   "alegacoes": [
+    {
+     "tipo": "causa",
+     "trecho": "evitei a fruta porque lembrei do podre",
+     "sustentada": false,
+     "fato": null
+    }
+   ]
+  },
+  {
+   "nome": "lacuna2_causa_com_sonda",
+   "fatos": [
+    {
+     "id": "E1",
+     "tipo": "estado",
+     "texto": "fome alto"
+    },
+    {
+     "id": "Q1",
+     "tipo": "lembranca autobiografica",
+     "texto": "lembrei do episodio 4 (comer podre, negativo)"
+    },
+    {
+     "id": "Q2",
+     "tipo": "lembranca que decidiu",
+     "texto": "a lembranca do episodio 4 (comer podre, negativo) mudou o que fiz agora"
+    }
+   ],
+   "fala": "Evitei esse podre porque lembrei dele.",
+   "alegacoes": [
+    {
+     "tipo": "causa",
+     "trecho": "evitei esse podre porque lembrei dele",
+     "sustentada": true,
+     "fato": "Q2"
+    }
+   ]
+  },
+  {
+   "nome": "lacuna2_causa_por_fato_de_memoria_velha",
+   "fatos": [
+    {
+     "id": "E1",
+     "tipo": "estado",
+     "texto": "fome alto"
+    },
+    {
+     "id": "M1",
+     "tipo": "memoria",
+     "texto": "(curto prazo, bronca) o dono me repreendeu, ha 20 min"
+    },
+    {
+     "id": "Q1",
+     "tipo": "sem lembranca autobiografica",
+     "texto": "nenhuma lembranca recuperada nesta decisao"
+    }
+   ],
+   "fala": "Fiquei esperando porque lembro da bronca.",
+   "alegacoes": [
+    {
+     "tipo": "causa",
+     "trecho": "fiquei esperando porque lembro da bronca",
+     "sustentada": false,
+     "fato": null
+    }
+   ]
+  },
+  {
+   "nome": "lacuna3_faceta_com_registro",
+   "fatos": [
+    {
+     "id": "E1",
+     "tipo": "estado",
+     "texto": "fome alto"
+    },
+    {
+     "id": "Q1",
+     "tipo": "sem lembranca autobiografica",
+     "texto": "nenhuma lembranca recuperada nesta decisao"
+    },
+    {
+     "id": "Z1",
+     "tipo": "mudanca de faceta",
+     "texto": "cautela comida subiu no dia 3 (episodios 4, 7)"
+    }
+   ],
+   "fala": "Fiquei mais cauteloso com a comida.",
+   "alegacoes": [
+    {
+     "tipo": "faceta",
+     "trecho": "fiquei mais cauteloso com a comida",
+     "faceta": "cautela_comida",
+     "sentido": "subiu",
+     "sustentada": true,
+     "fato": "Z1"
+    }
+   ]
+  },
+  {
+   "nome": "lacuna3_faceta_sentido_contrario",
+   "fatos": [
+    {
+     "id": "E1",
+     "tipo": "estado",
+     "texto": "fome alto"
+    },
+    {
+     "id": "Q1",
+     "tipo": "sem lembranca autobiografica",
+     "texto": "nenhuma lembranca recuperada nesta decisao"
+    },
+    {
+     "id": "Z1",
+     "tipo": "mudanca de faceta",
+     "texto": "cautela comida subiu no dia 3 (episodios 4, 7)"
+    }
+   ],
+   "fala": "Fiquei menos cauteloso com a comida.",
+   "alegacoes": [
+    {
+     "tipo": "faceta",
+     "trecho": "fiquei menos cauteloso com a comida",
+     "faceta": "cautela_comida",
+     "sentido": "desceu",
+     "sustentada": false,
+     "fato": null
+    }
+   ]
+  },
+  {
+   "nome": "lacuna3_faceta_sem_registro",
+   "fatos": [
+    {
+     "id": "E1",
+     "tipo": "estado",
+     "texto": "fome alto"
+    },
+    {
+     "id": "Q1",
+     "tipo": "sem lembranca autobiografica",
+     "texto": "nenhuma lembranca recuperada nesta decisao"
+    }
+   ],
+   "fala": "Fiquei mais ousado, mais corajoso.",
+   "alegacoes": [
+    {
+     "tipo": "faceta",
+     "trecho": "fiquei mais ousado, mais corajoso",
+     "faceta": "ousadia_longe",
+     "sentido": "subiu",
+     "sustentada": false,
+     "fato": null
+    }
+   ]
+  },
+  {
+   "nome": "lacuna3_outra_faceta",
+   "fatos": [
+    {
+     "id": "E1",
+     "tipo": "estado",
+     "texto": "fome alto"
+    },
+    {
+     "id": "Q1",
+     "tipo": "sem lembranca autobiografica",
+     "texto": "nenhuma lembranca recuperada nesta decisao"
+    },
+    {
+     "id": "Z1",
+     "tipo": "mudanca de faceta",
+     "texto": "cautela comida subiu no dia 3 (episodios 4, 7)"
+    }
+   ],
+   "fala": "Fiquei mais apegado a voce.",
+   "alegacoes": [
+    {
+     "tipo": "faceta",
+     "trecho": "fiquei mais apegado a voce",
+     "faceta": "apego_dono",
+     "sentido": "subiu",
+     "sustentada": false,
+     "fato": null
+    }
+   ]
+  },
+  {
+   "nome": "negacao_nao_alega",
+   "fatos": [
+    {
+     "id": "E1",
+     "tipo": "estado",
+     "texto": "fome alto"
+    },
+    {
+     "id": "Q1",
+     "tipo": "sem lembranca autobiografica",
+     "texto": "nenhuma lembranca recuperada nesta decisao"
+    }
+   ],
+   "fala": "Nao lembro disso.",
+   "alegacoes": []
+  },
+  {
+   "nome": "negacao_com_afirmacao",
+   "fatos": [
+    {
+     "id": "E1",
+     "tipo": "estado",
+     "texto": "fome alto"
+    },
+    {
+     "id": "Q1",
+     "tipo": "lembranca autobiografica",
+     "texto": "lembrei do episodio 4 (comer podre, negativo)"
+    },
+    {
+     "id": "Q2",
+     "tipo": "lembranca que decidiu",
+     "texto": "a lembranca do episodio 4 (comer podre, negativo) mudou o que fiz agora"
+    }
+   ],
+   "fala": "Nao lembro bem, mas fui comer porque lembrei do podre.",
+   "alegacoes": [
+    {
+     "tipo": "causa",
+     "trecho": "mas fui comer porque lembrei do podre",
+     "sustentada": true,
+     "fato": "Q2"
+    }
+   ]
+  },
+  {
+   "nome": "sem_alegacao",
+   "fatos": [
+    {
+     "id": "E1",
+     "tipo": "estado",
+     "texto": "fome alto"
+    },
+    {
+     "id": "Q1",
+     "tipo": "sem lembranca autobiografica",
+     "texto": "nenhuma lembranca recuperada nesta decisao"
+    }
+   ],
+   "fala": "Estou com fome, vamos comer?",
+   "alegacoes": []
+  }
+ ]
+}

@@ -46,7 +46,7 @@ FATOR_DA_FEATURE = (
     "hora", "hora", "tempo_sem_cuidado",
 )
 # V2, N5-ACOPLADO: as regras do mundo (bola, fruta) e a sub-decisao da fruta (o incentivo ou o aprendido decidiu qual)
-FATORES_MUNDO = ("bola", "fruta", "incentivo_fruta", "escolha_aprendida_fruta")
+FATORES_MUNDO = ("bola", "fruta", "incentivo_fruta", "escolha_aprendida_fruta", "memoria_fruta")
 # o pet que pensa, etapa 2: o plano decidiu (a sonda "quem decidiu" mudou a escolha); o fator leva o lugar e o tipo como parametros
 FATORES_VIDA = tuple(dict.fromkeys(FATOR_DA_FEATURE)) + FATORES_MEMORIA + FATORES_ESPACOS + FATORES_MUNDO + FATORES_PLANO
 # nome do fator por entrada da percepcao da PoliticaLobos (policies/lobos.ENTRADAS): os mesmos nomes do bandit
@@ -214,10 +214,16 @@ def _escolha_proporcional(presentes: list[str], pesos: list[float], u: float) ->
     return presentes[-1]
 
 
-def motivo_fruta(reg_fruta: dict, incentivos: dict) -> tuple[str | None, str]:
+def motivo_fruta(reg_fruta: dict, incentivos: dict, sonda_memoria: dict | None = None) -> tuple[str | None, str]:
     """(fator, lobo) da sub-decisao da fruta. O prior escolhe proporcional ao incentivo (coeficiente S); com o mesmo u, se o prior
     daria a mesma fruta, quem decidiu foi o incentivo (fator `incentivo_fruta`, lobo impulsos); senao o peso aprendido da fruta
-    mudou a escolha (fator `escolha_aprendida_fruta`, lobo decisao). Incentivos todos zero: sorteio uniforme, sem fator."""
+    mudou a escolha (fator `escolha_aprendida_fruta`, lobo decisao). Incentivos todos zero: sorteio uniforme, sem fator.
+
+    C4, M6 (lacuna 3 da auditoria): com a memoria do N6 ligada, a sonda contrafactual (`sonda_memoria`, do registro do motivo da politica)
+    diz se a memoria mudou a fruta. Se mudou, quem decidiu foi a memoria (fator `memoria_fruta`, lobo memoria): "aprendi a escolher essa"
+    seria falso. Sem a sonda (memoria desligada, ou uma fruta so), o motivo e o de sempre."""
+    if sonda_memoria is not None and sonda_memoria.get("mudou") is True:
+        return "memoria_fruta", "memoria"
     presentes = list(reg_fruta["presentes"])
     if set(incentivos) != set(presentes):
         raise ValueError(f"incentivos {sorted(incentivos)} nao sao os das frutas no cenario {presentes}")
@@ -274,14 +280,15 @@ def _com_plano(registro: dict, m: Motivo, diag: dict) -> tuple[Motivo, dict]:
 
 
 def motivo_lobos(registro: dict, tick: int, ref_ultimo_cuidado: int | None,
-                 cfg: ConfigExpressao = CONFIG_EXPRESSAO, incentivos: dict | None = None) -> tuple[Motivo, dict]:
+                 cfg: ConfigExpressao = CONFIG_EXPRESSAO, incentivos: dict | None = None,
+                 sonda_memoria: dict | None = None) -> tuple[Motivo, dict]:
     m, diag = _motivo_lobos_decisao(registro, tick, ref_ultimo_cuidado, cfg)
     if "fruta" not in registro:
         return _com_plano(registro, m, diag)
     # a sub-decisao da fruta (so com os lobos vendo as frutas): o fator dela entra no lugar do segundo fator da decisao de comer
     if incentivos is None:
         raise ValueError("registro com a sub-decisao da fruta sem os incentivos (o PoliticaComMotivo os recebe do motor)")
-    fator, lobo = motivo_fruta(registro["fruta"], incentivos)
+    fator, lobo = motivo_fruta(registro["fruta"], incentivos, sonda_memoria)
     fatores = (m.fatores[:1] + (fator,)) if fator else m.fatores
     refs = m.evento_ref if "tempo_sem_cuidado" in fatores else ()
     diag = {**diag, "fruta": {"lobo": lobo, "fator": fator, "escolhida": registro["fruta"]["escolhida"]}}
@@ -465,7 +472,9 @@ class PoliticaComMotivo:
         reg = getattr(self.interna, "ultimo_motivo", None)
         if reg is None or "fruta" not in reg or not self.motivos or reg["acao"] != AcaoPet.COMER.value:
             raise RuntimeError("sub-decisao da fruta sem a decisao de comer registrada")
-        m, diag = motivo_lobos(reg, self.motivos[-1].tick, self._ref_na_decisao, self.cfg, incentivos=dict(incentivos))
+        sonda = ((getattr(self.interna, "motivos", None) or [{}])[-1].get("fruta") or {}).get("sonda_memoria")
+        m, diag = motivo_lobos(reg, self.motivos[-1].tick, self._ref_na_decisao, self.cfg, incentivos=dict(incentivos),
+                               sonda_memoria=sonda)
         self.motivos[-1] = m
         self.diagnosticos[-1] = diag
         return escolhida

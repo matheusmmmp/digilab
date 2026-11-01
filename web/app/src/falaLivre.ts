@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { FATORES_TXT, TICK_INICIAL, TPD, hashSemente, nomeForma, type AcaoDono, type Motor } from "../motor/index.ts";
 import { agir, noCatalogo, validarComando } from "./acoes.ts";
 import { FALA_LLM, ligarFalaLLM } from "./fala.ts";
+import { alegaLembranca, conferirFalaMemoria, memoriaLigada, type FatoFala } from "./falaMemoria.ts";
 import { jogoAtual } from "./jogo.ts";
 import { CHAVE } from "./save.ts";
 
@@ -87,6 +88,16 @@ export function estadoDoPet(m: Motor, gatilho?: string | null): Record<string, u
   return s;
 }
 
+/** C4, M6 (MA-8): com a memoria autobiografica ligada (o fato Q1 no bloco), lembranca, causa por memoria e mudanca de faceta so
+    valem com o registro; a conferencia deterministica (falaMemoria.ts, o espelho do Python) toma o lugar do veredito do juiz sobre o que
+    alega lembranca. Sem o fato Q1 (o A v11 do jogo), a verificacao fica como veio do servidor. */
+export function comMemoria(v: Verificacao, fala: string, fatos: unknown): Verificacao {
+  if (!Array.isArray(fatos) || !memoriaLigada(fatos as FatoFala[])) return v;
+  const afirmacoes = [...(v.afirmacoes || []).filter(a => !alegaLembranca(a.trecho)),
+    ...conferirFalaMemoria(fala, fatos as FatoFala[]).map(a => ({ trecho: a.trecho, sustentada: a.sustentada }))];
+  return { ...v, afirmacoes, nao_suportadas: afirmacoes.filter(a => a.sustentada === false).length };
+}
+
 /* ------------------------------------------------ chamadas (so o servidor local; a pagina nao fala com a LLM) */
 async function post(rota: string, corpo: unknown): Promise<Record<string, unknown>> {
   const r = await fetch(rota, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(corpo) });
@@ -118,7 +129,7 @@ async function falar(situacao: "espontanea" | "conversa", gatilho: string | null
     avisar();
     /* a verificacao vem depois: a fala aparece na hora e o icone chega quando ela terminar */
     if (!reg.erro) post("/api/fala-livre/verificar", { fala: reg.fala, fatos_citados: reg.fatos_citados, fatos: reg.fatos, semente })
-      .then(v => { reg.verificacao = v as Verificacao; anexar(reg); avisar(); })
+      .then(v => { reg.verificacao = comMemoria(v as Verificacao, reg.fala, reg.fatos); anexar(reg); avisar(); })
       .catch((err: Error) => { reg.verificacao = { erro: String(err.message) }; anexar(reg); avisar(); });
     else anexar(reg);
   } catch (err) { FL.erro = err instanceof Error ? err.message : String(err); }

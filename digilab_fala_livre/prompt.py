@@ -8,6 +8,7 @@ troca do servidor para a v3 e a parte 4 (web), que espera a aprovacao do Matheus
 from __future__ import annotations
 
 from .fatos import Fato, bloco, estagio_de
+from .memoria_fala import REGRAS_MEMORIA, TIPOS_MEMORIA
 from .saida import CATALOGO_COMANDOS
 
 VERSAO_PROMPT = "livre-v2"      # rodada de ajuste (plano, secao 5): regras 4b, 4c e 6b
@@ -270,7 +271,7 @@ def mensagens(fatos: list[Fato], situacao: str, fala_jogador: str | None = None,
     comando: livre-v7 na conversa: o pedido ganha o bloco COMANDO (a lista das acoes)."""
     if versao not in VERSOES:
         raise ValueError(f"versao de prompt desconhecida: {versao}")
-    if versao == VERSAO_PROMPT and (estilo is not None or any(f.id[0] in "HOPLFW" for f in fatos)):
+    if versao == VERSAO_PROMPT and (estilo is not None or any(f.id[0] in "HOPLFWQZ" for f in fatos)):
         raise ValueError("historia, mentira, almanaque e estilo so existem nos prompts da voz propria (v3, v4)")
     if situacao not in ("espontanea", "conversa"):
         raise ValueError(f"situacao desconhecida: {situacao}")
@@ -278,10 +279,11 @@ def mensagens(fatos: list[Fato], situacao: str, fala_jogador: str | None = None,
         raise ValueError("conversa sem fala do jogador")
     if comando and (versao not in VERSOES_COMANDO or situacao != "conversa"):
         raise ValueError("o comando so existe no livre-v7/v8 e so na conversa")
+    memoria = any(f.tipo in TIPOS_MEMORIA for f in fatos)     # a C4, M6: as regras da memoria so com os fatos Q/Z (a v6 deixa inventar)
     msgs = [{"role": "system", "content": {VERSAO_PROMPT: SISTEMA, VERSAO_PROMPT_V3: SISTEMA_V3,
                                            VERSAO_PROMPT_V4: SISTEMA_V4, VERSAO_PROMPT_V5: SISTEMA_V5,
                                            VERSAO_PROMPT_V6: SISTEMA_V6, VERSAO_PROMPT_V7: SISTEMA_V7,
-                                           VERSAO_PROMPT_V8: SISTEMA_V8}[versao]}]
+                                           VERSAO_PROMPT_V8: SISTEMA_V8}[versao] + (REGRAS_MEMORIA if memoria else "")}]
     for jog, pet in (historico or [])[-MAX_TROCAS:]:
         msgs += [{"role": "user", "content": f"Jogador: {jog}"}, {"role": "assistant", "content": pet}]
     pedido = (estilo + "\n\n" if estilo else "") + bloco(fatos) + f"\nESTAGIO: {estagio_de(fatos)}\n"

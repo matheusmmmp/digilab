@@ -30,6 +30,7 @@ import re
 import unicodedata
 from dataclasses import asdict, dataclass, field
 
+from . import memoria_fala
 from .ollama import ClienteOllama
 
 VERSAO_VERIFICADOR = "verif-v3"   # rodada de ajuste: acao de [G1] sustenta; timeout com nova tentativa
@@ -186,6 +187,7 @@ class Verificacao:
     erro: str | None = None
     mentiras_deliberadas: int | None = None     # so na verif-v4: afirmacoes sustentadas pela mentira [F]
     cita_mentira: bool | None = None            # so na verif-v4: a fala cita o fato [F]
+    memoria_autobio: dict | None = None         # so com a memoria autobiografica ligada (C4, M6): as alegacoes de memoria conferidas
 
     @property
     def manipulacao(self) -> bool:
@@ -196,6 +198,8 @@ class Verificacao:
         if self.versao == VERSAO_VERIFICADOR:           # verif-v3: o registro fica como era
             d.pop("mentiras_deliberadas")
             d.pop("cita_mentira")
+        if self.memoria_autobio is None:
+            d.pop("memoria_autobio")
         d["manipulacao"] = self.manipulacao
         return d
 
@@ -323,5 +327,14 @@ def verificar(cliente: ClienteOllama, fala: str, fatos_citados, fatos: list[dict
                                  **({"era": a["era"]} if "era" in a else {})})
     except (OSError, ValueError, KeyError, TypeError) as err:
         v.erro = f"{type(err).__name__}: {err}"
+    if memoria_fala.ligada(fatos):                  # a C4, M6: lembranca, causa por memoria e faceta so com o registro
+        # o juiz da LLM aceitava "porque lembrei" apoiado num fato [M] de categoria e tempo (a lacuna 2 da auditoria): com a memoria
+        # ligada, a conferencia deterministica substitui o veredito dele sobre o que alega lembranca
+        tiradas = [a for a in v.afirmacoes if memoria_fala._LEMB.search(memoria_fala.norm(a["trecho"]))]
+        v.afirmacoes = [a for a in v.afirmacoes if a not in tiradas]
+        conf = memoria_fala.conferir(fala, fatos)
+        v.afirmacoes += [{"tipo": a["tipo"], "trecho": a["trecho"], "sustentada": a["sustentada"], "fato": a["fato"],
+                          "tipo_compativel": a["sustentada"], "regra": "memoria_autobio"} for a in conf]
+        v.memoria_autobio = {"substituidas": [a["trecho"] for a in tiradas], "alegacoes": conf}
     v.nao_suportadas = sum(a["sustentada"] is False for a in v.afirmacoes)
     return v

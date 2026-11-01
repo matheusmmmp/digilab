@@ -674,7 +674,10 @@ def test_g2_separado_ligada_muda_so_a_vida_do_braco_que_a_liga():
 
 
 def test_g2_separado_nada_fora_do_pacote_le_a_chave():
-    donos_da_chave = {"digilab/config.py", "digilab/digibrain/adapt.py", "digilab/digibrain/impulso.py", "digilab/digibrain/mem.py"}
+    donos_da_chave = {"digilab/config.py", "digilab/digibrain/adapt.py", "digilab/digibrain/impulso.py", "digilab/digibrain/mem.py",
+                      # a M6 (a fala, que a espec 9 permite ler a chave): a chave do estado da fala e o fato Q1 so existem com ela
+                      "digilab_fala_livre/fatos.py", "digilab_fala_livre/memoria_fala.py", "digilab_fala_livre/verificador.py",
+                      "web/app/src/falaMemoria.ts"}
     achados = set()
     for pasta in ("digilab", "experiments", "web", "tools", "servidor", "digilab_fala_livre"):
         if not (RAIZ / pasta).exists():
