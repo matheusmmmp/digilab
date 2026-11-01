@@ -124,3 +124,15 @@ Ho et al. usam de 10 a 50 execuções por condição, sem teste de hipótese: é
 | **ME-5** | onde a memória entra primeiro | **no protótipo modular, nos cenários do MVP** (o lugar da comida) | no A: volta a validar o A |
 | **ME-6** | a fidelidade da fala | **corrigir as três lacunas da auditoria** na etapa M6, antes de a fala citar a memória nova | deixar: a fala continua podendo dizer "porque lembrei" sem verdade |
 | **ME-7** | o adendo DF | **manter a proteção do temperamento inato;** a influência vai só nas facetas adquiridas (DM-6) | mexer no temperamento: o inato e o adquirido se misturam |
+
+## 9. A espec (2026-11-01, worker, Claude Code, Opus 5.5, worktree `v3-memoria-espec`; só papel)
+
+- **O que saiu:** `docs/ESPEC_MEMORIA_AUTOBIOGRAFICA_DIGIBRAIN_MODULAR.md`, PROPOSTA: as M0 a M7 pelas ME-1 a ME-7 e as C4-E1 a C4-E3,
+  com os rótulos [DADO], [MECANISMO], [HIPÓTESE] e [EXISTE]; a subchave `memoria_autobio` (desligada), a `facetas_mem` e o
+  `controle_mem` dos cinco braços (REL, SEM, REC, EMB e "REL sem negativos"); os parâmetros PROPOSTOS e SEM FONTE (seção 8); os testes
+  planejados (o gabarito antes, G1, G2, a sonda contrafactual e os T-ME-0 a T-ME-6).
+- **A visita vazia:** hoje ela já é episódio com r = 0 e já tira o lugar pela regra "o mais recente manda". A C4-E1 (σ = o custo da ida)
+  só muda uma escolha se o valor do lugar passar a ser a soma dos episódios dele (a MA-2). A D-C1-3 não é respondida; o risco de a C4-E1
+  tirar o ganho da C1 no `longe_fixo` fica escrito antes (seção 5 da espec).
+- **O que vai ao Matheus:** as MA-1 a MA-8 (seção 11 da espec), com a recomendação e o custo de errar, e os números da seção 8.
+- **O que não houve:** código, vida, faixa, plano de análise. O próximo, depois das MA: o gabarito antes e a M0 com a M1, atrás da chave.
