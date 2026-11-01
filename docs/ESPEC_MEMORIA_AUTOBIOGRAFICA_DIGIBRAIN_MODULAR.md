@@ -263,7 +263,9 @@ na primeira decisão depois da virada do dia), sem rng:
 | `ousadia_longe` | os episódios de `explorar` (o cheiro, o vagar, o lugar; a visita vazia entra aqui) | `mul(f, S)` em `explorar` com alvo fora da vista |
 
 - **A mudança** (`mudar_faceta`): na consolidação diária, para cada faceta, o sinal da soma dos σ da evidência; a faceta anda **um passo**
-  `eta_faceta` nesse sinal (zero se a soma for 0), cortada em [−S/4, S/4]. Cada mudança guarda os ids dos episódios da evidência, o passo e
+  `eta_faceta` no sentido natural dela (zero se a soma for 0), cortada em [−S/4, S/4]: `apego_dono` e `ousadia_longe` andam **no sinal** da
+  soma; a `cautela_comida` anda **contra** o sinal (σ somado negativo sobe a cautela, positiva = mais cautela; `pers.SENTIDO`). Esta
+  linha dizia, ao pé da letra, que as três andavam no sinal (comer bem subiria a cautela); o Matheus decidiu o sentido natural no PR #535. Cada mudança guarda os ids dos episódios da evidência, o passo e
   o dia.
 - **O termo F** entra em `TERMOS` (`faceta`) e ganha a sonda `sem_faceta`, com `faceta_decidiu`.
 - **O temperamento inato não muda** (ME-7, DM-6): o M-PERS não tem acesso à `ConfigDigibrainInatos` nem ao genoma; um teste confere que o

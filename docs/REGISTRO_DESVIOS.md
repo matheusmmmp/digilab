@@ -476,3 +476,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-01 — C4 MEMÓRIA AUTOBIOGRÁFICA, M2 e M3 (worker, Claude Code, Sonnet 5.5, worktree `v3-memoria-m2m3`): a faixa do corpo, o log que diverge e os três testes de mecanismo](registro/2026-11.md)
 - [2026-11-01 — C4 MEMÓRIA AUTOBIOGRÁFICA, M4 (worker, Claude Code, Sonnet 5.5, worktree `v3-memoria-m4`): onde fica o registro, a correspondência da unidade e o `so_inato`](registro/2026-11.md)
 - [2026-11-01 — C4 MEMÓRIA AUTOBIOGRÁFICA, M5 (worker, Claude Code, Sonnet 5.5, worktree `v3-memoria-m5`): o sentido da cautela e três lacunas da 6.2](registro/2026-11.md)
+- [2026-11-01 — C4 MEMÓRIA AUTOBIOGRÁFICA, M6 (worker, Claude Code, Sonnet 5.5, worktree `v3-memoria-m6`): a conferência determinística, o gate e o motivo do N6](registro/2026-11.md)

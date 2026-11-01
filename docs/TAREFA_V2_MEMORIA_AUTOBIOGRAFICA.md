@@ -241,3 +241,26 @@ Ho et al. usam de 10 a 50 execuções por condição, sem teste de hipótese: é
 - **O desvio:** `docs/registro/2026-11.md`, a seção da M5 (o sentido da cautela, o alvo "fora da vista", o `cheiro`, a evidência).
 - **O que não houve:** nenhuma vida de pesquisa nem faixa (só 101…505); `engine.py`, o genoma e a web não mudam; a M6 (a fala) e o
   `controle_mem` ficam de fora.
+
+## 15. M6: a fala só alega o que o registro sustenta (2026-11-01, worker, Claude Code, Sonnet 5.5, worktree `v3-memoria-m6`)
+
+A espec, 7.1 (ME-6, MA-8, T-ME-6). Nenhum número novo; nenhuma vida; só as sementes de teste.
+
+- **O registro que a fala lê:** a chave `memoria_autobio` do estado da fala (`{lembranca, facetas}`) vira fatos novos em `fatos_de_estado`:
+  **Q1** `lembranca autobiografica` (ou `sem lembranca autobiografica`, que também marca a memória ligada), **Q2** `lembranca que decidiu` (só
+  com a sonda `lembranca_decidiu` verdadeira) e **Z1…Z3** `mudanca de faceta` (faceta, sentido, dia, ids). Sem a chave, o bloco é o de hoje.
+- **O verificador** (`digilab_fala_livre/memoria_fala.py`, chamado por `verificador.verificar`): só com o Q1 no bloco, uma conferência
+  determinística (sem LLM) acha na fala as alegações de lembrança, causa por memória e faceta e as confere: "lembrei de X" pede o Q1 com
+  o mesmo conteúdo (uma raiz em comum com o episódio); "porque lembrei" pede o Q2; "mais/menos cauteloso, apegado, ousado" pede um Z da
+  faceta, no sentido (subiu = mais). A conferência toma o lugar do veredito do juiz sobre o que alega lembrança (a lacuna 2: o juiz aceitava
+  o fato [M] de categoria e tempo); o resultado entra em `afirmacoes` (`regra: memoria_autobio`), logo em `nao_suportadas` e `invencoes`.
+- **O prompt** `livre-v6` (e as outras versões) ganha o bloco `REGRAS_MEMORIA` ao fim, só com os fatos Q/Z; sem eles, o texto é o de hoje, byte a byte (a lacuna 1).
+- **O motivo do N6** (`digilab/motivo.py`, a lacuna 3): `motivo_fruta` recebe a sonda `sonda_memoria` do registro da política; se a memória mudou a
+  fruta, o fator é `memoria_fruta` ("porque lembrei dessa fruta"), não `escolha_aprendida_fruta`. Sem a sonda, o motivo é o de sempre.
+- **A web** (`web/app/src/falaMemoria.ts`, o espelho; `falaLivre.ts` aplica `comMemoria` depois da verificação do servidor): o A v11 do jogo
+  não manda o Q1, então a fala dele não muda. Paridade: `web/app/test/gabaritos/fala_memoria_python.json`
+  (`experiments/exportar_gabarito_fala_memoria.py`), conferido por `web/app/test/fala_memoria.test.ts`.
+- **Os testes:** `tests/test_fala_memoria.py` (T-ME-6: as três lacunas, uma por uma; os fatos só com a chave; o prompt de hoje byte a byte;
+  o verificador com cliente falso; o motivo do N6; o gabarito em dia) e o do web.
+- **O que não houve:** nenhuma vida de pesquisa; `engine.py` e o cérebro do jogo não mudam; o `controle_mem` fica de fora. Os PROPOSTOS
+  estão no registro de desvios.
