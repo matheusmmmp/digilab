@@ -3599,3 +3599,53 @@ Só as VERIFICADAS na C0 (`docs/referencias/v3c0_referencias_verificadas.csv`, a
 | **AD9-8** | a forma das premissas(DECIDIDA) | **a P-PESA pelo limite inferior do IC95 > 0,01 (o limiar da G-PESA de A6.4); a G-ELEGIVEL-EP no REL, no SEM, no REC e no EMB** (A9.5) | a média sem IC: um REL em que a memória mal pesa lê como premissa cumprida; a P-PESA pela fração só da lembrança (`lembranca_decidiu`): o lugar pela soma, que é parte do REL, fica fora da premissa; a G-ELEGIVEL-EP só no REL: o primário pode ler uma taxa de poucos episódios num controle |
 | **AD9-9** | a guarda(DECIDIDA) | **REL − SEM no comedouro; falha só com a classe "< 0" de A6.6** (A9.4) | sem guarda: uma memória que atrapalha perto da ração viraria candidata; pelo limite superior < 0 sem a margem: um custo menor que o que a run detecta tira a memória da linha 3 |
 | **AD9-10** | a medida da fala (o item 2 do #536)(DECIDIDA) | **a conferência da M6 sobre alegações sintéticas do registro de toda vida (verdadeira, falsa, causa e faceta), somada por braço e lugar, sem gate** (A9.8, item 5) | não medir: o #536 decidiu "a medir na validação causal", e a fração de falsas que a raiz em comum sustenta segue desconhecida no registro real; uma fala por LLM nas vidas: quebra o determinismo do resultado e mede o modelo, não a régua |
+
+### A9.13 A run (77101 a 77505): o registro, antes da primeira vida (2026-11-01, worker da run da C4, Claude Code, Opus 5.5)
+
+**O que é:** o registro de A9.10, num commit empurrado antes da primeira vida. **Nenhuma vida da faixa roda neste registro,** e nada
+de A9.0 a A9.12 muda. A run roda uma vez; o resultado é registrado como está.
+
+- **O commit de onde sai:** a `main` em `f4fcf67` (o #540), mais a faixa (`ac1f77d`) e este registro, no branch `v3-memoria-run`, com a
+  árvore limpa.
+- **O lugar (desvio de lugar, não de método):** a worktree fica em `C:\Trab\digilab\v3-memoria-run`, não em `D:\Trab\digilab`. Em
+  2026-11-01 o disco D: tinha 1,6 GB livres, menos que o checkout da `main` (1,73 GB); o Gerente da V3 mandou criar a worktree no C:. O
+  repositório é o mesmo (`D:\Trab\digilab\v3\.git`); só a árvore de trabalho e os artefatos da run ficam no C:. Nenhuma vida, semente ou
+  medida depende do disco.
+- **A config:** `experiments/configs/v2_memoria_autobio/memoria_autobio.json`, sha256 `784c35fd…deab`; `modo_da_config` devolve
+  `memoria_autobio` (a faixa, as bases, o K, os dias, o orçamento, o plano e a marca de aprovação conferidos por ela).
+- **As bases e o K:** 77101, 77202, 77303, 77404 e 77505, K = 40 por base, o prefixo `digibrain_prototipo` (A9.3): **200 unidades.**
+  - a primeira (77101, k = 0): a semente 11508727199777243643 e o genoma 14000117672338238533;
+  - a última (77505, k = 39): a semente 676349015880546699 e o genoma 5655895031858767930.
+- **Os braços e as células:** REL, SEM, REC, EMB, RELsN e REL+F de `SUBCHAVES_C4` (o M3\* do conserto com a `memoria_autobio`; a
+  `facetas_mem` só no REL+F; a C2, a C3 e a L-2 desligadas); os 4 donos × `longe_fixo`, comedouro e longe; 14 dias, orçamento de 16:
+  **14 400 vidas** (A9.2).
+- **Os sha256** (antes deste registro):
+  - o orquestrador `experiments/run_v2_memoria_autobio.py`: `dcc83a04…0cf0`; o protótipo `experiments/run_v2_digibrain_prototipo.py`:
+    `7780862e…3b28`; `experiments/run_v2_longe_regular.py`: `5583a217…900c`; `experiments/run_v2_habito_intencao.py`: `8a6cc3de…2701`;
+  - `digilab/config.py`: `53bd9a20…8343`; `digilab/engine.py`: `48ba51ce…3630` (o congelado); `digilab/metrics.py`: `8c6a6794…a425`;
+    `digilab/mundo.py`: `78120bdf…83bb`;
+  - a memória: `digilab/digibrain/mem.py` `69b5907c…5b05`, `adapt.py` `87115995…6953`, `impulso.py` `41e867e6…8b47`, `afeto.py`
+    `e890523b…525f`, `estado.py` `4081f55c…8cad`;
+  - a fala: `digilab_fala_livre/memoria_fala.py` `9e288def…d260`, `fatos.py` `dcb71c50…16d3`, `verificador.py` `e7931934…5763`;
+  - este plano, antes desta seção: `60937e9e…f087`. O `meta.json` grava o sha do plano com esta seção e os de todo `digilab/digibrain/`.
+- **A pasta de saída:** `artifacts_v2_digibrain_prototipo/memoria_autobio/run/`, a de A9.10 e o padrão do orquestrador (o `SAIDA`); ela
+  não existe, e a pasta-mãe só tem o `adendo9_poder.json`. Sem `--saida`.
+- **O comando** (da raiz da worktree, depois da suíte, sem sobrepor; V3-D8):
+
+      python experiments/run_v2_memoria_autobio.py --config experiments/configs/v2_memoria_autobio/memoria_autobio.json --processos 4
+
+- **Nenhuma vida da faixa em disco:** em 2026-11-01 nenhuma worktree em `D:\Trab\digilab` nem em `C:\Trab\digilab` tem a pasta
+  `memoria_autobio/run/`; a única outra pasta `memoria_autobio/` (na worktree `v3-memoria-plano`) só tem o `adendo9_poder.json`.
+- **O tempo estimado:** de 2 h 29 min a 4 h 24 min de parede, até 4 h 45 min com a análise (A9.9).
+- **Os pré-requisitos de A9.10, conferidos antes da primeira vida:**
+  - **o adendo 9 APROVADO** no cabeçalho (2026-11-01), e a trava do orquestrador o aceita;
+  - **a faixa** 77101…77505 em `experiments/bancada/faixas.py` (`FAIXAS_RESERVADAS`, o `ac1f77d`); `tests/test_faixas_r17.py` e
+    `tests/test_memoria_autobio_run.py` passam com ela (63 testes);
+  - **o gabarito** (`tests/gabarito_memoria_autobio.py`, `tests/gabaritos/memoria_autobio_de_hoje.json`) e o teste dele
+    (`tests/test_gabarito_memoria_autobio.py`) na árvore;
+  - **a suíte:** roda inteira (`python -m pytest -q`, em 4 fatias de arquivos em paralelo, sem o xdist, como na C3) do commit deste
+    registro, antes da run e sem sobrepor; a contagem vai ao RESULTADO e ao PR. Qualquer falha do G1, do G2, do G-MECANISMO, de replay ou
+    de paridade para a run;
+  - **a árvore limpa:** o `meta.json` grava o `git_head` e o `git_limpo`; a run sai do commit deste registro, empurrado;
+  - **a máquina (V3-D8):** nenhuma run de pesquisa nem medição do combate rodando antes da suíte; a suíte e a run não se sobrepõem; 4
+    processos.
