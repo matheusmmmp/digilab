@@ -6,6 +6,7 @@
    reserva e a do mundo (MundoReserva.tsx): o pet, a racao e a bola nas posicoes do Motor.mundo. */
 import { useEffect, useRef, useState } from "react";
 import { CENA } from "./cenaEstado.ts";
+import { useHabitat } from "../../habitat.ts";
 import { temWebGL } from "../../webgl.ts";
 import { MundoReserva } from "./MundoReserva.tsx";
 
@@ -88,6 +89,8 @@ function MedirCena() {
 export function CenaPet({ noite, mundo = false }: { noite: boolean; mundo?: boolean }) {
   const ref = useRef<HTMLCanvasElement>(null), [reserva, setReserva] = useState(() => !temWebGL());
   const medir = new URLSearchParams(location.search).get("medir3d") === "1";
+  /* o mapa e a camera do habitat (Ajustes > Aparencia): trocar religa a cena com o jogo rodando (so vista; o motor segue) */
+  const { mapa, camera } = useHabitat();
   useEffect(() => {
     if (reserva) return;
     let vivo = true, parar: (() => void) | null = null;
@@ -100,7 +103,7 @@ export function CenaPet({ noite, mundo = false }: { noite: boolean; mundo?: bool
       })
       .catch(err => { console.warn("cena 3D do Pet não carregou; fica o cenário de reserva:", err); if (vivo) setReserva(true); });
     return () => { vivo = false; parar?.(); };
-  }, [reserva, mundo]);
+  }, [reserva, mundo, mapa, camera]);
   if (reserva) return mundo ? <MundoReserva /> : <CenarioPet noite={noite} />;
   return <>
     <div className={"cena3d" + (noite ? " cena3d--noite" : "")} aria-hidden="true"><canvas ref={ref} /></div>

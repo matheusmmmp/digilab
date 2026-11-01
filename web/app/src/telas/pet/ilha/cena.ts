@@ -65,17 +65,22 @@ export const toon = (p: THREE.MeshToonMaterialParameters, vento = 0) => curvar(n
 
 /* ---------- o terreno ---------- */
 /** a grama por regiao do layout (a casa aparada e clara, o campo mais seco, a mata mais escura) e a da moldura */
+export interface PaletaTerreno {
+  grama: Readonly<Record<string, readonly number[]>>; caminho: readonly number[]; areia: readonly number[]; fundo: readonly number[];
+  borda: number; estrato: readonly number[]; estratoAreia: readonly number[]; margem: readonly number[];
+}
 const GRAMA: Readonly<Record<string, readonly number[]>> = {
   casa: [0x9cdb72, 0x98d76e], jardim: [0x8fd16a, 0x8bcd66, 0x92d46d], campo: [0xa9d870, 0xa4d36b, 0xaedb74],
   mata: [0x74b957, 0x70b553, 0x78bd5b], [FORA]: [0x8fd16a, 0x8bcd66, 0x92d46d],
 };
-const COR = {
-  caminho: [0xd9c08c, 0xd5bb87], areia: [0xf3e2b0, 0xf0dead], fundo: [0xc9b07a], borda: 0x6fb84e,
+/** a paleta da ilha (o estilo Animal Crossing); os outros estilos do habitat (estilos.ts) trocam so as cores */
+export const PALETA_ILHA: PaletaTerreno = {
+  grama: GRAMA, caminho: [0xd9c08c, 0xd5bb87], areia: [0xf3e2b0, 0xf0dead], fundo: [0xc9b07a], borda: 0x6fb84e,
   estrato: [0xe9c79a, 0xdcae7c, 0xcf9c6a], estratoAreia: [0xe8d39f, 0xdcc48f], margem: [0xa88a5c, 0x97794e],
-} as const;
+};
 const cor = (hex: number) => new THREE.Color(hex);
 
-class Malha {
+export class Malha {
   readonly pos: number[] = [];
   readonly nor: number[] = [];
   readonly col: number[] = [];
@@ -109,21 +114,22 @@ const CANTO_XZ: readonly (readonly [number, number])[] = [[0, 0], [1, 0], [1, 1]
 const FAIXA = 0.28;                       // a altura de uma faixa de estrato
 const BORDA_GRAMA = 0.14;                 // a grama que desce pela borda do penhasco
 
-function terreno(ilha: Ilha): THREE.Mesh {
+/** o terreno da grade em degraus com faixas de estrato, nas cores da paleta */
+export function terreno(ilha: Ilha, COR: PaletaTerreno = PALETA_ILHA): THREE.Mesh {
   const m = new Malha(), r = rng(5), cima = new THREE.Vector3(0, 1, 0);
   for (let j = 0; j < ilha.prof; j++) for (let i = 0; i < ilha.larg; i++) {
     const x = ilha.x0 + i, z = ilha.z0 + j, c = ilha.cel(x, z)!;
     const p = (k: number, h = c.cantos[k]) => new THREE.Vector3(x + CANTO_XZ[k][0], h, z + CANTO_XZ[k][1]);
-    const paleta = c.tipo === "agua" ? COR.fundo : c.tipo === "grama" ? GRAMA[c.regiao] : COR[c.tipo];
+    const paleta = c.tipo === "agua" ? COR.fundo : c.tipo === "grama" ? COR.grama[c.regiao] : COR[c.tipo];
     if (!paleta) throw new Error("regiao da ilha sem cor de grama: " + c.regiao);
     m.quad(p(0), p(1), p(2), p(3), cor(paleta[Math.floor(r() * paleta.length)]), cima);
-    for (const e of ARESTAS) parede(m, ilha, c, x, z, e);
+    for (const e of ARESTAS) parede(m, ilha, c, x, z, e, COR);
   }
   return new THREE.Mesh(m.geometria(), toon({ vertexColors: true }));
 }
 
 /* a parede de uma aresta: do tampo desta celula ate o do vizinho (ou ate o fundo, na borda da grade), em faixas */
-function parede(m: Malha, ilha: Ilha, c: Celula, x: number, z: number, e: (typeof ARESTAS)[number]): void {
+function parede(m: Malha, ilha: Ilha, c: Celula, x: number, z: number, e: (typeof ARESTAS)[number], COR: PaletaTerreno): void {
   const viz = ilha.cel(x + e.dx, z + e.dz);
   const ta = c.cantos[e.a], tb = c.cantos[e.b];
   const ba = viz ? viz.cantos[e.va] : -1.6, bb = viz ? viz.cantos[e.vb] : -1.6;
@@ -282,9 +288,9 @@ export function materialSombra(): THREE.MeshBasicMaterial {
 export const GEO_SOMBRA = new THREE.PlaneGeometry(1, 1).rotateX(-Math.PI / 2);
 
 /* ---------- os modelos dos kits ---------- */
-interface Variante { pecas: { geo: THREE.BufferGeometry; mat: THREE.Material; local: THREE.Matrix4 }[] }
+export interface Variante { pecas: { geo: THREE.BufferGeometry; mat: THREE.Material; local: THREE.Matrix4 }[] }
 
-async function carregarVariante(loader: GLTFLoader, url: string, modelo: Modelo): Promise<Variante> {
+export async function carregarVariante(loader: GLTFLoader, url: string, modelo: Modelo): Promise<Variante> {
   const gltf = await loader.loadAsync(url);
   const raiz = gltf.scene;
   raiz.updateMatrixWorld(true);
@@ -312,19 +318,25 @@ async function carregarVariante(loader: GLTFLoader, url: string, modelo: Modelo)
 /** os objetos da ilha prontos: o grupo e as malhas da grama (a queda de qualidade tira metade delas) */
 export interface Objetos { grupo: THREE.Group; grama: THREE.InstancedMesh[] }
 
-/** carrega os modelos (public/kits3d) e poe os objetos da grade como instancias; falha alto se um arquivo nao carrega */
-export async function objetos(ilha: Ilha, base: string): Promise<Objetos> {
-  const loader = new GLTFLoader(), usados = new Set(ilha.objetos.map(o => o.modelo));
+/** carrega uma variante de um modelo da grade (o arquivo, o modelo da grade e a linha da tabela MODELOS) */
+export type Carregador = (arquivo: string, id: NomeModelo, modelo: Modelo) => Promise<Variante>;
+
+/** carrega os modelos e poe os objetos da grade como instancias; falha alto se um arquivo nao carrega. Sem `carregar`, os kits CC0 da
+ *  ilha (public/kits3d, MODELOS); os outros estilos do habitat (estilos.ts) dao o carregador e os arquivos deles */
+export async function objetos(ilha: Ilha, base: string, carregar?: Carregador, arquivosDe: (id: NomeModelo) => readonly string[] = id => MODELOS[id].arquivos,
+  girar = true): Promise<Objetos> {
+  const gltf = new GLTFLoader(), usados = new Set(ilha.objetos.map(o => o.modelo));
+  const carregador: Carregador = carregar ?? ((arq, _id, modelo) => carregarVariante(gltf, new URL("kits3d/" + arq, base).href, modelo));
   const variantes = new Map<NomeModelo, Variante[]>();
-  await Promise.all([...usados].flatMap(id => MODELOS[id].arquivos.map(async (arq, i) => {
-    const v = await carregarVariante(loader, new URL("kits3d/" + arq, base).href, MODELOS[id]);
+  await Promise.all([...usados].flatMap(id => arquivosDe(id).map(async (arq, i) => {
+    const v = await carregador(arq, id, MODELOS[id]);
     if (!variantes.has(id)) variantes.set(id, []);
     variantes.get(id)![i] = v;
   })));
   /* agrupa os objetos por (modelo, variante) e monta um InstancedMesh por peca */
   const grupos = new Map<string, Objeto[]>();
   ilha.objetos.forEach((o, i) => {
-    const k = `${o.modelo}|${i % MODELOS[o.modelo].arquivos.length}`;
+    const k = `${o.modelo}|${i % arquivosDe(o.modelo).length}`;
     if (!grupos.has(k)) grupos.set(k, []);
     grupos.get(k)!.push(o);
   });
@@ -333,7 +345,8 @@ export async function objetos(ilha: Ilha, base: string): Promise<Objetos> {
     const [id, j] = k.split("|") as [NomeModelo, string], v = variantes.get(id)![Number(j)];
     const lugar = lista.map(o => new THREE.Matrix4().compose(
       new THREE.Vector3(o.x, ilha.altura(o.x, o.z), o.z),
-      new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), o.giro),
+      /* sem girar: os recortes em pe (o estilo Cassette) ficam virados para a camera */
+      new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), girar ? o.giro : 0),
       new THREE.Vector3(o.escala, o.escala, o.escala)));
     for (const p of v.pecas) {
       const im = new THREE.InstancedMesh(p.geo, p.mat, lista.length);
@@ -356,7 +369,7 @@ export async function objetos(ilha: Ilha, base: string): Promise<Objetos> {
 }
 
 /* ---------- o ceu ---------- */
-function ceu(cores: readonly string[]): THREE.Texture {
+export function ceu(cores: readonly string[]): THREE.Texture {
   const c = document.createElement("canvas");
   c.width = 4; c.height = 256;
   const g = c.getContext("2d");
@@ -393,13 +406,15 @@ function nuvens(ilha: Ilha): THREE.Group {
 
 /** a cena estatica da ilha: o ceu, a nevoa, as luzes, o terreno, a agua e as nuvens (os objetos, o pet e os itens entram depois) */
 export interface CenaIlha { cena: THREE.Scene; aplicarNoite(noite: boolean): void }
-export function montarCena(ilha: Ilha): CenaIlha {
+/** `chao`: o terreno do estilo (o da ilha, se nada vier); `agua`: false tira a agua por celula e o mar (o estilo desenha a dele) */
+export function montarCena(ilha: Ilha, chao: THREE.Object3D = terreno(ilha), opcoes: { agua?: boolean; nuvens?: boolean } = {}): CenaIlha {
   const cena = new THREE.Scene(), fundo = { dia: ceu(DIA.ceu), noite: ceu(NOITE.ceu) };
   cena.fog = new THREE.Fog(DIA.horizonte, 26, 62);
   const hemi = new THREE.HemisphereLight(), sol = new THREE.DirectionalLight();
   sol.position.set(-0.6, 1, 0.75);
-  const ceuNuvens = nuvens(ilha);
-  cena.add(hemi, sol, terreno(ilha), agua(ilha), ceuNuvens);
+  const ceuNuvens = opcoes.nuvens === false ? new THREE.Group() : nuvens(ilha);
+  cena.add(hemi, sol, chao, ceuNuvens);
+  if (opcoes.agua !== false) cena.add(agua(ilha));
   const aplicarNoite = (noite: boolean) => {
     const p = noite ? NOITE : DIA;
     cena.background = noite ? fundo.noite : fundo.dia;

@@ -27,16 +27,23 @@ const TIPO_ARENA: Record<string, string> = { png: "image/png", jpg: "image/jpeg"
 /* cena de evolucao (Assets/gerar_evolucao_up.py, src/evolucaoUp.ts): o mapa.json e os pacotes de nome simples de pacotes/ */
 const EVOLUCAO_ROTA = /^\/Assets\/evolucao_up\/(mapa\.json|pacotes\/[a-z0-9_]+\.bin)$/;
 
-/** dev: serve so o atlas, a decoracao listada, os sons, os cenarios da luta e a cena de evolucao (nada mais da pasta Assets) */
+/* os mapas do habitat que nao se redistribuem (src/habitat.ts, so no dev): o kit Tiny Fantasy Forest (Unity Asset Store EULA) e os assets
+   do Cassette Beasts extraidos pelas ferramentas de D:/Trab/digilab/extrair_cb; so modelos, texturas e o json, sem ".." no caminho */
+const KITS_DEV_ROTA = /^\/Assets\/kits3d\/(tiny_fantasy_forest|cassette_beasts)\/(?!.*\.\.)[A-Za-z0-9_ ./()-]+\.(fbx|png|webp|json)$/;
+const TIPO_KIT: Record<string, string> = { fbx: "application/octet-stream", png: "image/png", webp: "image/webp", json: "application/json" };
+
+/** dev: serve so o atlas, a decoracao listada, os sons, os cenarios da luta, a cena de evolucao e os kits dos mapas do dev (nada mais da pasta Assets) */
 function atlasDev(): Plugin {
   return {
     name: "digilab-atlas-dev",
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
-        const caminho = (req.url || "").split("?")[0];
+        let caminho = (req.url || "").split("?")[0];
+        try { caminho = decodeURIComponent(caminho); } catch { return next(); }
         const tipo = ATLAS[caminho] ?? (SOM_ROTA.test(caminho) ? (caminho.endsWith(".json") ? "application/json" : "audio/mpeg")
           : ARENA_ROTA.test(caminho) ? TIPO_ARENA[caminho.split(".").pop()!]
-          : EVOLUCAO_ROTA.test(caminho) ? (caminho.endsWith(".json") ? "application/json" : "application/octet-stream") : undefined);
+          : EVOLUCAO_ROTA.test(caminho) ? (caminho.endsWith(".json") ? "application/json" : "application/octet-stream")
+          : KITS_DEV_ROTA.test(caminho) ? TIPO_KIT[caminho.split(".").pop()!] : undefined);
         if (!tipo) return next();
         const arq = ASSETS + caminho.slice("/Assets/".length);
         if (!existsSync(arq)) { res.statusCode = 404; res.end("asset nao encontrado: " + arq); return; }

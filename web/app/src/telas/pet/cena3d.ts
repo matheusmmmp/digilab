@@ -10,8 +10,9 @@
 
    Nos pets v12 (o mundo fisico), o MODO MUNDO e a ilha 3D no estilo Animal Crossing (docs/TAREFA_V3_HABITAT_ILHA_3D.md, H2):
    iniciarCena3D a monta (ilha/vista.ts) no lugar da sala, com o mesmo contrato CENA. Sem o mundo (os pets v1-v11), a sala de sempre,
-   igual (H-2). */
+   igual (H-2). O mapa da ilha (ilha, voxel, floresta ou cassette) e a camera saem de src/habitat.ts; trocar religa esta cena (CenaPet). */
 import * as THREE from "three";
+import { habitatAtual } from "../../habitat.ts";
 import { jogoAtual } from "../../jogo.ts";
 import { CENA } from "./cenaEstado.ts";
 import { fonteDoPet } from "./fontePet.ts";
@@ -189,9 +190,9 @@ const p95 = (v: number[]): number => { const s = [...v].sort((a, b) => a - b); r
 
 /** liga a cena num canvas; devolve a funcao que desliga. Falha alto (a tela cai no cenario de reserva) se o WebGL nao subir */
 export function iniciarCena3D(canvas: HTMLCanvasElement, aoPerder: () => void): () => void {
-  /* os pets v12: a ilha (ilha/vista.ts), com o mesmo contrato CENA */
+  /* os pets v12: a ilha (ilha/vista.ts), com o mesmo contrato CENA, no mapa e na camera escolhidos (src/habitat.ts) */
   const mundo = jogoAtual().motor.mundo;
-  if (mundo) return iniciarIlha(canvas, mundo, aoPerder);
+  if (mundo) return iniciarIlha(canvas, mundo, aoPerder, habitatAtual());
   const vista = new VistaPet(canvas), caixa = canvas.parentElement;
   if (!caixa) throw new Error("cena 3D sem caixa");
   const razao = () => (devicePixelRatio || 1);

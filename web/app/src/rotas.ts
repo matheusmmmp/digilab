@@ -44,12 +44,14 @@ export function gravarAbaLembrada(armaz: Armazenamento, r: Rota): void {
 }
 
 /* Configuracoes (desenhos Cfg*): tela fora dos 4 destinos, aberta pela engrenagem do Diario; #/config/<parte> */
-export type ParteConfig = "principal" | "aparencia" | "dados" | "fala" | "sobre";
-const PARTES_CONFIG: readonly ParteConfig[] = ["principal", "aparencia", "dados", "fala", "sobre"];
-/** "#/config" -> principal; "#/config/dados" -> dados; outra coisa -> null */
+export type ParteConfig = "principal" | "visual" | "dados" | "fala" | "sobre";
+const PARTES_CONFIG: readonly ParteConfig[] = ["principal", "visual", "dados", "fala", "sobre"];
+/** "#/config" -> principal; "#/config/dados" -> dados; outra coisa -> null. "#/config/aparencia" (a subarea antiga, ate 2026-11-01)
+ *  leva ao Visual, que a substituiu */
 export function configDoEndereco(hash: string): ParteConfig | null {
   const [c, p] = hash.replace(/^#\/?/, "").split("/");
   if (c !== "config") return null;
+  if (p === "aparencia") return "visual";
   return !p ? "principal" : (PARTES_CONFIG as readonly string[]).includes(p) ? p as ParteConfig : null;
 }
 /* luta em andamento: tela cheia com rota propria (secao 7); a aba de origem vem do palco */

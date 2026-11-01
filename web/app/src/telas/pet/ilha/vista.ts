@@ -9,21 +9,24 @@
    Os kits carregam depois do terreno; se um modelo nao carrega, a cena cai na reserva (MundoReserva), com o erro no console. */
 import * as THREE from "three";
 import { TPD, eNoite, type Mundo } from "../../../../motor/index.ts";
+import { habitatAtual, voltarParaIlha, type Habitat } from "../../../habitat.ts";
 import { jogoAtual } from "../../../jogo.ts";
 import { CENA } from "../cenaEstado.ts";
 import { Seguidor, dentroDoMapa } from "../vistaMundo.ts";
-import { AFASTAR_MAX, COBERTO_MS, KITS_COBERTO_MS, CAMERA_DESLOC, CAMERA_OLHAR, DOBRA_K, FOV_GRAUS, FPS_MIN, LARGURA_MIN, LONGE, NEVOA, PERTO, QUEDA_MS, RAZAO_MAX, TEXEL_ALVO } from "./constantes.ts";
-import { CURVA, montarCena, objetos, type CenaIlha, type Objetos } from "./cena.ts";
+import { AFASTAR_MAX, CAMERAS, COBERTO_MS, KITS_COBERTO_MS, FPS_MIN, LARGURA_MIN, LONGE, NEVOA, PERTO, QUEDA_MS, RAZAO_MAX, TEXEL_ALVO, type CameraHabitat } from "./constantes.ts";
+import { CURVA, type CenaIlha, type Objetos } from "./cena.ts";
+import { estiloDe, type Estilo } from "./estilos.ts";
 import { paraMundoCel, paraTelaNdc, type CameraLida, type Dobra } from "./curva.ts";
 import { ilhaDe, type Ilha } from "./grade.ts";
 import { Itens } from "./itens.ts";
 import { Papel, type Ret } from "./papel.ts";
+import { PRESETS, Pos } from "./pos.ts";
 
 const movimentoReduzido = (): boolean => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 class VistaIlha {
   readonly renderer: THREE.WebGLRenderer;
-  readonly camera = new THREE.PerspectiveCamera(FOV_GRAUS, 1, PERTO, LONGE);
+  readonly camera: THREE.PerspectiveCamera;
   private readonly ilha: Ilha;
   private readonly cenaIlha: CenaIlha;
   private readonly seguidor = new Seguidor();
@@ -45,14 +48,26 @@ class VistaIlha {
 
   readonly canvas: HTMLCanvasElement;
   private readonly mu: Mundo;
+  /** o estilo do mapa (estilos.ts) e a camera (constantes.ts, CAMERAS) do habitat escolhido */
+  readonly estilo: Estilo;
+  private readonly cam: CameraHabitat;
+  /** o visual (GBA HD, HD-2D): lido a cada quadro de habitatAtual, sem religar a cena */
+  private readonly pos: Pos;
 
-  constructor(canvas: HTMLCanvasElement, mu: Mundo) {
+  constructor(canvas: HTMLCanvasElement, mu: Mundo, habitat: Habitat) {
     this.canvas = canvas; this.mu = mu;
+    this.estilo = estiloDe(habitat.mapa, document.baseURI);
+    this.cam = CAMERAS[habitat.camera];
+    this.camera = new THREE.PerspectiveCamera(this.cam.fov, 1, PERTO, LONGE);
+    CURVA.uCurva.value = this.estilo.dobra;
     THREE.ColorManagement.enabled = true;
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
+    /* com o visual, um quadro sao dois desenhos (a cena no alvo e o quadro na tela): a contagem de draw calls da M3 e zerada por quadro */
+    this.renderer.info.autoReset = false;
+    this.pos = new Pos(this.renderer);
     this.ilha = ilhaDe(mu.cm);
-    this.cenaIlha = montarCena(this.ilha);
+    this.cenaIlha = this.estilo.montar(this.ilha);
     const v = new THREE.Vector3();
     this.lida = {
       projetar: (x, y, z) => { v.set(x, y, z).project(this.camera); return [v.x, v.y]; },
@@ -68,17 +83,17 @@ class VistaIlha {
     CURVA.uVento.value = 1;
   }
 
-  /** os kits (public/kits3d) entram depois do terreno */
+  /** os modelos do estilo (na ilha, os kits de public/kits3d) entram depois do terreno */
   async carregarObjetos(): Promise<void> {
     THREE.ColorManagement.enabled = true;
-    const o = await objetos(this.ilha, document.baseURI);
+    const o = await this.estilo.objetos(this.ilha);
     this.objetos = o;
     this.cenaIlha.cena.add(o.grupo);
     if (this.baixa) this.menosGrama();
   }
 
   /** a dobra de agora: centrada no z desenhado do pet */
-  private get dobra(): Dobra { return { k: DOBRA_K, focoZ: this.petCel[1] }; }
+  private get dobra(): Dobra { return { k: this.estilo.dobra, focoZ: this.petCel[1] }; }
 
   /** ajusta o canvas a caixa (px de CSS): a resolucao, a proporcao e o afastamento da camera em retrato */
   ajustar(larguraCss: number, alturaCss: number): void {
@@ -88,19 +103,19 @@ class VistaIlha {
     this.canvas.style.width = `${this.larguraCss}px`; this.canvas.style.height = `${this.alturaCss}px`;
     this.camera.aspect = this.larguraCss / this.alturaCss;
     /* a largura vista na altura do pet, com a camera do POC; em retrato, a camera se afasta ate caber LARGURA_MIN */
-    const fundo = this.profundidadeDoPet(1), larg = 2 * fundo * Math.tan(THREE.MathUtils.degToRad(FOV_GRAUS / 2)) * this.camera.aspect;
+    const fundo = this.profundidadeDoPet(1), larg = 2 * fundo * Math.tan(THREE.MathUtils.degToRad(this.cam.fov / 2)) * this.camera.aspect;
     this.afast = Math.min(AFASTAR_MAX, Math.max(1, LARGURA_MIN / larg));
     const nevoa = this.cenaIlha.cena.fog as THREE.Fog;
     nevoa.near = NEVOA[0] * this.afast; nevoa.far = NEVOA[1] * this.afast;
     this.camera.updateProjectionMatrix();
     /* o pet em papel: na distancia do foco, um texel do sprite vale um numero inteiro de pixels do canvas (regra 8) */
-    this.ppu = this.renderer.domElement.height / 2 / (this.profundidadeDoPet(this.afast) * Math.tan(THREE.MathUtils.degToRad(FOV_GRAUS / 2)));
+    this.ppu = this.renderer.domElement.height / 2 / (this.profundidadeDoPet(this.afast) * Math.tan(THREE.MathUtils.degToRad(this.cam.fov / 2)));
     this.pxPorTexel = Math.max(1, Math.round(TEXEL_ALVO * this.ppu));
   }
   /** a distancia do pet ao plano da camera (ao longo do eixo dela), com o afastamento `a` */
   private profundidadeDoPet(a: number): number {
-    const d = new THREE.Vector3(...CAMERA_OLHAR).sub(new THREE.Vector3(...CAMERA_DESLOC)).normalize();
-    return new THREE.Vector3(...CAMERA_DESLOC).multiplyScalar(-a).dot(d);
+    const d = new THREE.Vector3(...this.cam.olhar).sub(new THREE.Vector3(...this.cam.desloc)).normalize();
+    return new THREE.Vector3(...this.cam.desloc).multiplyScalar(-a).dot(d);
   }
 
   /** o modo mundo: o ponto do cliente (px) no chao dobrado, em subunidades inteiras do mapa (null fora do mapa ou fora do chao) */
@@ -127,13 +142,15 @@ class VistaIlha {
     /* o ColorManagement do three e um global que as outras vistas (a sala e o mapa da Exploracao) desligam: sem repor aqui, a cor da nevoa
        e das luzes dependia de qual import dinamico subia por ultimo */
     THREE.ColorManagement.enabled = true;
+    CURVA.uCurva.value = this.estilo.dobra;
     const { motor: m } = jogoAtual(), mu = m.mundo ?? this.mu, cm = mu.cm, sub = cm.sub;
     const dtMs = agora - this.ultimo, pos = this.seguidor.seguir(mu.pet, dtMs, cm);
     this.ultimo = agora;
     this.petCel = [pos[0] / sub, pos[1] / sub];
     const [px, pz] = this.petCel, a = this.afast;
-    this.camera.position.set(px + CAMERA_DESLOC[0] * a, CAMERA_DESLOC[1] * a, pz + CAMERA_DESLOC[2] * a);
-    this.camera.lookAt(px + CAMERA_OLHAR[0] * a, CAMERA_OLHAR[1] * a, pz + CAMERA_OLHAR[2] * a);
+    const { desloc, olhar } = this.cam;
+    this.camera.position.set(px + desloc[0] * a, desloc[1] * a, pz + desloc[2] * a);
+    this.camera.lookAt(px + olhar[0] * a, olhar[1] * a, pz + olhar[2] * a);
     this.camera.updateMatrixWorld();
     CURVA.uFocoZ.value = pz;
     CURVA.uTempo.value = movimentoReduzido() ? 0 : agora / 1000;
@@ -145,11 +162,13 @@ class VistaIlha {
       ppu: this.ppu, pxPorTexel: this.pxPorTexel, canvas: [this.renderer.domElement.width, this.renderer.domElement.height],
       razao: this.renderer.getPixelRatio(), reduzido: movimentoReduzido(), noite,
     });
-    this.renderer.render(this.cenaIlha.cena, this.camera);
+    /* o foco do HD-2D: a altura do pet na tela (0 embaixo, 1 em cima) */
+    this.renderer.info.reset();
+    this.pos.desenhar(this.cenaIlha.cena, this.camera, PRESETS[habitatAtual().visual], 1 - (ret.y + ret.h * 0.6) / this.alturaCss);
     return ret;
   }
 
-  dispose(): void { this.papel.dispose(); this.renderer.dispose(); }
+  dispose(): void { this.papel.dispose(); this.pos.dispose(); this.renderer.dispose(); }
 
   /** a queda de qualidade (regra 10, PROPOSTO): sem vento, metade da grama e pixelRatio 1; so uma vez */
   baixarQualidade(): void {
@@ -167,10 +186,10 @@ const mediana = (v: number[]): number => { const s = [...v].sort((a, b) => a - b
 const p95 = (v: number[]): number => { const s = [...v].sort((a, b) => a - b); return s.length ? s[Math.min(s.length - 1, Math.floor(s.length * 0.95))] : 0; };
 
 /** liga a ilha num canvas; devolve a funcao que desliga. Falha alto (a tela cai na reserva) se o WebGL nao subir ou um modelo faltar */
-export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: () => void): () => void {
+export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: () => void, habitat: Habitat): () => void {
   /* antes da vista: os campos dela (o papel) ja criam cores */
   THREE.ColorManagement.enabled = true;
-  const vista = new VistaIlha(canvas, mundo), caixa = canvas.parentElement;
+  const vista = new VistaIlha(canvas, mundo, habitat), caixa = canvas.parentElement;
   if (!caixa) throw new Error("cena 3D sem caixa");
   const perdeu = (ev: Event) => { ev.preventDefault(); aoPerder(); };
   canvas.addEventListener("webglcontextlost", perdeu);
@@ -180,7 +199,12 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
   const carregarKits = () => {
     if (kitsPedidos) return;
     kitsPedidos = true;
-    vista.carregarObjetos().catch(err => { if (!vivo) return; console.error("ilha: os modelos dos kits não carregaram; fica a reserva do mundo:", err); aoPerder(); });
+    vista.carregarObjetos().catch(err => {
+      if (!vivo) return;
+      /* um mapa do dev sem os assets nesta maquina: volta para a ilha (a escolha gravada fica); a ilha sem os kits cai na reserva */
+      if (vista.estilo.id !== "ilha") { console.error(`habitat: o mapa ${vista.estilo.id} não carregou; volta para a ilha:`, err); voltarParaIlha(vista.estilo.id); return; }
+      console.error("ilha: os modelos dos kits não carregaram; fica a reserva do mundo:", err); aoPerder();
+    });
   };
   const esperaKits = CENA.coberto ? setTimeout(carregarKits, KITS_COBERTO_MS) : null;
   if (!esperaKits) carregarKits();
@@ -223,7 +247,7 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
       medida = null;
       const total = deltas.reduce((a, b) => a + b, 0);
       resolve({
-        medida: "M3 (tela Pet, ilha)", data: new Date().toISOString(), userAgent: navigator.userAgent, devicePixelRatio,
+        medida: `M3 (tela Pet, ${vista.estilo.id}, câmera ${habitat.camera}, visual ${habitatAtual().visual})`, data: new Date().toISOString(), userAgent: navigator.userAgent, devicePixelRatio,
         tela_css: [innerWidth, innerHeight], canvas_px: [canvas.width, canvas.height],
         duracao_s: +(total / 1000).toFixed(3), quadros: deltas.length, fps_media: +((deltas.length * 1000) / total).toFixed(2),
         quadro_mediana_ms: +mediana(deltas).toFixed(2), quadro_p95_ms: +p95(deltas).toFixed(2),

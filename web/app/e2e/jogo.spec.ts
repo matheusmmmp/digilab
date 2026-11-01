@@ -1860,7 +1860,7 @@ test("luta em tempo real: com os clipes do UP, a luta inteira desenha sem erro",
 
 /* T2 do tema dos menus (docs/TAREFA_V2_TEMA_MENUS.md §5): a pele em Ajustes > Aparencia. Padrao Holografico; os cartoes trocam o
    data-pele na hora (sem recarregar), pelo clique e pelas setas; a escolha fica gravada e sobrevive ao recarregar; "XCOM" nao aparece */
-test("pele dos menus: Ajustes › Aparência troca na hora e a escolha sobrevive ao recarregar", async ({ page }) => {
+test("pele dos menus: Ajustes › Visual troca na hora e a escolha sobrevive ao recarregar", async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 950 });
   await semear(page, SAVES.champion);
   const erros = vigiarErros(page);
@@ -1868,7 +1868,7 @@ test("pele dos menus: Ajustes › Aparência troca na hora e a escolha sobrevive
   const gravada = () => page.evaluate(c => localStorage.getItem(c + "-pele"), CHAVE);
   await page.goto(APP + "#/config");
   await expect(page.locator(".mc-cfg")).toContainText("pele Sci-fi · tema");
-  await page.locator(".mc-cfg .hx-linha", { hasText: "Aparência" }).click();
+  await page.locator(".mc-cfg .hx-linha", { hasText: "Visual" }).click();
   const grupo = page.getByRole("radiogroup", { name: "Pele dos menus" });
   const militar = grupo.getByRole("radio", { name: "Militar" }), holo = grupo.getByRole("radio", { name: "Sci-fi" });
   await expect(holo).toHaveAttribute("aria-checked", "true");

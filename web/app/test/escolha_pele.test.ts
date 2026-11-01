@@ -37,10 +37,10 @@ describe("EscolhaPele", () => {
     expect(renderToStaticMarkup(h(EscolhaPele))).toMatch(/aria-checked="true" tabindex="0" class="[^"]*mc-opcao--pele-xcom"/);
     escolherPele("vidro");
   });
-  it("o resumo de Aparencia mostra a pele e o tema", () => {
+  it("o resumo de Aparencia (a linha Visual dos Ajustes desde 2026-11-01) mostra a pele e o tema", () => {
     expect(resumoAparencia("vidro", "sistema")).toBe("pele Sci-fi · tema do sistema");
     expect(resumoAparencia("xcom", "escuro")).toBe("pele Militar · tema escuro");
-    expect(tela).toContain("resumo={resumoAparencia(pele, tema)}");
+    expect(tela).toContain("resumo={resumoVisual(pele, tema, habitat, !!m.mundo)}");
   });
   it("a previa e so CSS (sem imagem), uma por pele, e a secao vem antes do Tema do habitat", () => {
     for (const p of PELES) expect(css).toContain(`.mc-opcao--pele-${p} .mc-pele-prev{`);
