@@ -11,7 +11,9 @@ da L-2, docs/ESPEC_LONGE_L2_DIGIBRAIN_MODULAR.md, secao 2.3), o M-ESTADO cuida d
 (`cuidar_suspensa`); as que acabam ali vao ao P2 e ao registro com as do `escolhida`, e o motivo ganha a `suspensa`. Com a subchave
 `redecidir_evento` (a C3, docs/ESPEC_REDECIDIR_EVENTO_DIGIBRAIN_MODULAR.md, secao 2.3), o M-ESTADO confere os eventos antes do contexto
 (`eventos`, com o gesto do dono desde a decisao anterior), o M-ARB segura o candidato sem sorteio quando nao ha evento, e o motivo ganha
-`segurada` e `evento`.
+`segurada` e `evento`. Com a subchave `memoria_autobio` (a C4, M0 e M1, docs/ESPEC_MEMORIA_AUTOBIOGRAFICA_DIGIBRAIN_MODULAR.md, secao
+3), a decisao guarda o tick do relogio do pet e o afeto de antes, e o fechamento monta o episodio completo e o entrega ao M-MEM
+(`episodio_autobio`, `codificar_autobio`), com o id em `consequencia["autobio"]`; nenhuma decisao o le ainda (a M4 e etapa posterior).
 
 **O alvo** (`escolher_alvo`): o candidato do motor do tipo (e do id) da unidade escolhida; o `u` do motor e ignorado. **A excecao unica**
 (a PE-14 revista): em EXPLORAR, o lugar lembrado do M-MEM e entregue como `Alvo.ponto(x, y)`, fora da lista do motor, que o valida por
@@ -51,7 +53,7 @@ from .afeto import Afeto
 from .arb import Arbitragem
 from .estado import EstadoDinamico
 from .impulso import Impulso
-from .mem import Memoria
+from .mem import Memoria, episodio_autobio
 from .plast import Plasticidade
 from .sens import COMIDAS_BOAS, Sens, classe_do_tipo
 
@@ -91,7 +93,7 @@ class Modulos:
 def montar_modulos(cfg: Config, cd: ConfigDigibrain, cm: ConfigMundo, inatos: ConfigDigibrainInatos,
                    serie_e_doadora: tuple | None) -> Modulos:
     return Modulos(sens=Sens(cfg, cm, inatos), afeto=Afeto(cfg, cd, inatos, serie_e_doadora), estado=EstadoDinamico(cfg, cd, inatos),
-                   impulso=Impulso(inatos, cd), mem=Memoria(cm, inatos), arb=Arbitragem(inatos), plast=Plasticidade(cd, inatos))
+                   impulso=Impulso(inatos, cd), mem=Memoria(cm, inatos, cd.memoria_autobio), arb=Arbitragem(inatos), plast=Plasticidade(cd, inatos))
 
 
 def intencao_da_unidade(unidade: dict) -> Intencao:
@@ -190,9 +192,12 @@ class DigiBrain:
         if cd.redecidir_evento:                       # a C3: desligada, nenhum campo novo
             self.motivos[-1]["segurada"] = esc["segurada"]
             self.motivos[-1]["evento"] = evento
-        self._gestos = []
         self._pendencia = {"k": k, "intencao": intencao, "unidade": unidade, "sens": sens, "g_apr": afeto["g_apr"], "pediu": False,
                            "alvo": None, "corpo": None, "transicao": None, "mundo": None}
+        if cd.memoria_autobio:                        # a C4: o que o episodio completo le no fechamento
+            self._pendencia.update({"tick": m.mem.relogio(sens["minuto"]), "afeto": {"V": afeto["V"], "E": afeto["E"]},
+                                    "gestos": self._gestos})
+        self._gestos = []
         self.k += 1
         return intencao.acao
 
@@ -272,6 +277,8 @@ class DigiBrain:
             raise RuntimeError("sem o P2, o habito fica em 0")
         if not cd.m_mem and m.mem.episodios:
             raise RuntimeError("sem o M-MEM, a memoria fica vazia")
+        if not cd.memoria_autobio and m.mem.autobio:
+            raise RuntimeError("sem a memoria_autobio, o M-MEM nao tem a recente")
 
     def _fechar(self, p: dict) -> None:
         """a consequencia da decisao anterior aos modulos"""
@@ -324,12 +331,21 @@ class DigiBrain:
             elif chave[1] == "ponto" and ocorrido["chegou"]:
                 episodio = m.mem.codificar({**base, "ponto": chave[2], "classe": "nao_havia", "origem": "visita", "r": 0,
                                                  "r_n": 0})
+        autobio = None
+        if self.cd.memoria_autobio:                   # a C4, M0 e M1: o episodio completo, que nenhuma decisao le ainda
+            ida = next((f["r"] for f in fins if f["chave"] == chave), None) if chave[1] == "ponto" else None
+            desfecho = {"comeu": classe_comida, "chegou": ocorrido is not None and ocorrido["chegou"], "r_ida": ida}
+            ep = episodio_autobio(p["sens"], pm1, recs, l0, l1, p["afeto"], cons, p["gestos"], p["unidade"], desfecho, p["k"],
+                                  p["tick"], self.inatos)
+            autobio = None if ep is None else m.mem.codificar_autobio(ep)
         motivo = self.motivos[p["k"]]
         motivo["consequencia"] = {"r": cons["r"], "r_n": cons["r_n"], "canais": cons["canais"],
                                   "comeu": None if comeu is None else {"id": comeu["id"], "tipo": comeu["tipo"],
                                                                        "situacao": comeu["situacao"], "como": comeu["como"]},
                                   "chegou": None if ocorrido is None else ocorrido["chegou"], "p1": p1, "creditos": creditos,
                                   "episodio": episodio}
+        if self.cd.memoria_autobio:                   # desligada, nenhum campo novo
+            motivo["consequencia"]["autobio"] = autobio
         motivo["fins"] = motivo["fins"] + _registrados(fins)
 
 
