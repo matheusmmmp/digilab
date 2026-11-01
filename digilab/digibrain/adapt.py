@@ -52,6 +52,7 @@ from ..modelo_mundo import raiz_inteira
 from ..mundo import ACOES_COM_ALVO, Alvo
 from ..policies.lobos import leitura_receptor
 from ..policy import Observacao, Transicao
+from ..protocol import derivar_semente
 from ._comum import chave_json
 from .afeto import Afeto
 from .arb import Arbitragem
@@ -98,9 +99,10 @@ class Modulos:
 
 
 def montar_modulos(cfg: Config, cd: ConfigDigibrain, cm: ConfigMundo, inatos: ConfigDigibrainInatos,
-                   serie_e_doadora: tuple | None) -> Modulos:
+                   serie_e_doadora: tuple | None, semente: int | None = None) -> Modulos:
     return Modulos(sens=Sens(cfg, cm, inatos), afeto=Afeto(cfg, cd, inatos, serie_e_doadora), estado=EstadoDinamico(cfg, cd, inatos),
-                   impulso=Impulso(inatos, cd), mem=Memoria(cm, inatos, cd.memoria_autobio), arb=Arbitragem(inatos, cd.memoria_autobio, cd.facetas_mem), plast=Plasticidade(cd, inatos),
+                   impulso=Impulso(inatos, cd), mem=Memoria(cm, inatos, cd.memoria_autobio, cd.controle_mem,
+                                 None if semente is None else random.Random(derivar_semente(semente, "mem_emb"))), arb=Arbitragem(inatos, cd.memoria_autobio, cd.facetas_mem), plast=Plasticidade(cd, inatos),
                    pers=Personalidade(inatos.eta_faceta, inatos.teto_faceta, True) if cd.facetas_mem else None)
 
 
@@ -119,7 +121,8 @@ class DigiBrain:
     versao_pet = VERSAO_PET_DIGIBRAIN
 
     def __init__(self, cfg: Config | None = None, cfg_digibrain: ConfigDigibrain | None = None, cfg_mundo: ConfigMundo | None = None,
-                 inatos: ConfigDigibrainInatos | None = None, serie_e_doadora: tuple | None = None) -> None:
+                 inatos: ConfigDigibrainInatos | None = None, serie_e_doadora: tuple | None = None,
+                 semente: int | None = None) -> None:
         self.cd = cfg_digibrain or CONFIG_DIGIBRAIN
         if not self.cd.ligada:
             raise DigibrainDesligado("o DigiBrain modular so existe com a ConfigDigibrain ligada")
@@ -127,7 +130,7 @@ class DigiBrain:
         self.cm = cfg_mundo or CONFIG_MUNDO_LIGADA      # so a geometria (o raio da visao, a celula): a mesma no layout do MVP
         self.inatos = inatos or CONFIG_DIGIBRAIN_INATOS
         self.S = self.inatos.escala
-        self.m = montar_modulos(self.cfg, self.cd, self.cm, self.inatos, serie_e_doadora)
+        self.m = montar_modulos(self.cfg, self.cd, self.cm, self.inatos, serie_e_doadora, semente)
         self.k = 0
         self.motivos: list[dict] = []
         self._pendencia: dict | None = None
