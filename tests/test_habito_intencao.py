@@ -130,7 +130,9 @@ def test_recusa_mais_de_4_processos_e_pasta_existente(tmp_path):
 
 def test_a_saida_da_run_nao_e_a_pasta_do_poder():
     assert hi.SAIDA == "artifacts_v2_digibrain_prototipo/habito_intencao/run"
-    assert not (RAIZ / hi.SAIDA).exists()
+    # a run da C2 (#517) ja gravou a pasta; ela nao pode ser a pasta-mae, onde ficam os arquivos do poder
+    assert (RAIZ / hi.SAIDA).name == "run"
+    assert (RAIZ / hi.SAIDA).parent.name == "habito_intencao"
 
 
 # ------------------------------------------------------------------ os fins (a licao do #507)
