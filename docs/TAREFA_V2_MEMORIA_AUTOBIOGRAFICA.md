@@ -136,3 +136,19 @@ Ho et al. usam de 10 a 50 execuções por condição, sem teste de hipótese: é
   tirar o ganho da C1 no `longe_fixo` fica escrito antes (seção 5 da espec).
 - **O que vai ao Matheus:** as MA-1 a MA-8 (seção 11 da espec), com a recomendação e o custo de errar, e os números da seção 8.
 - **O que não houve:** código, vida, faixa, plano de análise. O próximo, depois das MA: o gabarito antes e a M0 com a M1, atrás da chave.
+
+## 10. A M0 e a M1 (2026-11-01, worker, Claude Code, Opus 5.5, worktree `v3-memoria-m0m1`; código atrás da chave, sem vida de pesquisa)
+
+- **O gabarito antes,** num commit próprio: `tests/gabaritos/memoria_autobio_de_hoje.json` (o M3* no `longe_fixo`, no longe e no
+  comedouro, os quatro donos, as sementes 101 a 505), com o `tests/test_gabarito_memoria_autobio.py`.
+- **A subchave** `ConfigDigibrain.memoria_autobio` (desligada), com as recusas da MA-7 (sem o `m_mem`, com a C2 ou a C3, sem as
+  subchaves do cheiro), e os campos da seção 8 que a M1 usa: `theta_sig`, `theta_afeto` e `n_rec`, DECIDIDOS, SEM FONTE.
+- **A M0 e a M1** em `digilab/digibrain/mem.py` (`episodio_autobio`, `codificar_autobio`, `relogio`) e `adapt.py` (o fechamento): o
+  episódio da tabela 3.1 da espec, a codificação da 3.3 e a visita vazia com σ = min(0, r da ida). O episódio fica numa lista própria, a
+  `recente`, que nenhuma decisão lê: o lugar lembrado segue a lista de hoje até a M2. Ligada, o log é o da vida desligada.
+- **Os testes** (`tests/test_memoria_autobio.py`): a subchave e as recusas; T-ME-0 (o formato, a AST, nenhum campo de fora); T-ME-1 (o
+  forte e o neutro, o consumo, a visita, a capacidade, o mesmo log e os mesmos episódios); G1 nas cinco sementes; G2-SEPARADO; o tick;
+  G-MECANISMO, G-INT e G-RECEPTOR com a chave ligada. Desligada, todos os gabaritos saem byte a byte.
+- **O desvio:** `docs/registro/2026-11.md`, a seção da M0 e da M1. **Vai ao Matheus:** o limiar afetivo pelo nível do estresse codifica
+  quase tudo num pet estressado (o achado do registro), antes da M2 e da M3.
+- **O próximo:** a M2 e a M3 juntas (a lembrança, o lugar pela soma e a consolidação), num PR próprio.
