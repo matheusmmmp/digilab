@@ -13,7 +13,8 @@
    igual (H-2). O mapa da ilha (ilha, voxel, floresta ou cassette) e a camera saem de src/habitat.ts; trocar religa esta cena (CenaPet). */
 import * as THREE from "three";
 import { habitatAtual } from "../../habitat.ts";
-import { jogoAtual } from "../../jogo.ts";
+import { balancoOvo, jogoAtual } from "../../jogo.ts";
+import { SONO, alturaSono } from "./sono.ts";
 import { CENA } from "./cenaEstado.ts";
 import { fonteDoPet } from "./fontePet.ts";
 import { iniciarIlha } from "./ilha/vista.ts";
@@ -162,11 +163,14 @@ class VistaPet {
       this.pxPorTexel = Math.max(1, Math.min(12, Math.floor(Math.min(this.alturaPx * fa / this.texels[1], this.larguraPx * fl / this.texels[0]))));
       this.chave = f.chave;
     }
-    const P = this.P, w = this.texels[0] * this.pxPorTexel, h = this.texels[1] * this.pxPorTexel;
+    /* dormindo (sono.ts): achatado, respirando e num tom apagado */
+    const dorme = nascendo === 0 && m.acao === "dormir", alt = dorme ? alturaSono(performance.now(), matchMedia("(prefers-reduced-motion: reduce)").matches) : 1;
+    (this.sprite.material as THREE.SpriteMaterial).color.setHex(dorme ? SONO.tom : 0xffffff);
+    const P = this.P, w = Math.round(this.texels[0] * this.pxPorTexel * (dorme ? 1 + (1 - alt) / 2 : 1)), h = Math.round(this.texels[1] * this.pxPorTexel * alt);
     /* na sala, so balanca: o lugar do pet e fixo (a cena nao tem fisica que decida nada) */
     const lugar: readonly [number, number] = PET;
     let px = lugar[0];
-    if (nascendo > 0) px += nascendo % 2 ? 1 : -1;
+    if (nascendo > 0) px += balancoOvo(nascendo);
     else if (m.acao === "explorar") px += Math.sin(quadro / 3) * 28;
     else if (m.acao === "brincar") px += Math.sin(quadro / 2) * 10;
     const ancora = new THREE.Vector3(px, 0, lugar[1]), rel = ancora.clone().sub(this.alvo);

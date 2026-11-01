@@ -13,7 +13,7 @@ import {
   ACAO_CHAMADO, ALVOS_DESEJO, CAT, DO_ESP, NOME_ESP, EMOCAO_TXT, FATORES_TXT, NOME_CHAMADO, NOME_EST, NOME_PET, OVO, TICK_INICIAL, TPD,
   chaveSprite, eNoite, expressarConfianca, nomeEstagio, nomeForma, nomeRivalConfianca, observacao, type AcaoDono, type Chamado, type MotivoVida, type Motor,
 } from "../../../motor/index.ts";
-import { imagemAtlas, useAtlas } from "../../atlas.ts";
+import { imagemAtlas, recorteAtlas, useAtlas } from "../../atlas.ts";
 import { Deco } from "../../componentes/Deco.tsx";
 import { BRASAO } from "../../decoracao.ts";
 import { Seg, blocos } from "../../componentes/Barras.tsx";
@@ -45,7 +45,7 @@ export const diaDe = (t: number): number => Math.floor((t - TICK_INICIAL) / TPD)
 export function Retrato({ m, ovo }: { m: Motor; ovo: boolean }) {
   const a = useAtlas();
   if (a.tipo !== "ok") return null;
-  const { url, w, h } = imagemAtlas(a, ovo ? OVO[m.especie] : chaveSprite(m.forma));
+  const { url, w, h } = recorteAtlas(a, ovo ? OVO[m.especie] : chaveSprite(m.forma));
   return <img className="dl-pix" src={url} width={w} height={h} alt="" />;
 }
 /* ------------------------------------------------ fala: balao por estagio (guia, secao 9), causa e detalhe */
@@ -268,17 +268,24 @@ const LIMIAR_NEC = .5;
 
 interface Resumo { texto: string; emote: string | null; acao: AcaoDono | null }
 /** o resumo de agora, so do motor: o ovo; a necessidade mais baixa (se alguma esta abaixo da metade); o desejo; ou o que ele faz */
+const TEXTO_CHAMADO: Record<Chamado, string> = { fome: "está com fome", higiene: "quer um banho", carinho: "quer carinho" };
 function resumoAgora(m: Motor, nascendo: number): Resumo {
   if (nascendo > 0) return { texto: "o ovo está chocando", emote: null, acao: null };
+  /* chamado aberto que ainda nao aperta: so o resumo (e a acao certa destacada no dock); o cartao com o Atender e o temPedido */
+  const c = m.chamadosAbertos()[0];
+  if (c) return { texto: TEXTO_CHAMADO[c], emote: EMOTE_CHAMADO[c], acao: ACAO_CHAMADO[c][0] };
   const baixa = NEC_PET.map(([k]) => k).filter(k => m.e[k] < LIMIAR_NEC).sort((a, b) => m.e[a] - m.e[b])[0];
   if (baixa) return { texto: ROTULO_BAIXO[baixa], emote: EMOTE_NEC[baixa], acao: ACAO_NEC[baixa] };
   const d = m.desejoAtual(m.observacaoAgora(), m.e.tick);
   if (d) return { texto: (d.tipo === "necessidade" ? "precisa " : "quer ") + ALVOS_DESEJO[d.alvo][1], emote: EMOTE_DESEJO[d.alvo] ?? null, acao: ACAO_DESEJO[d.alvo] ?? null };
   return { texto: "agora: " + NOME_PET[m.acao], emote: null, acao: null };
 }
-/** ha um pedido aberto que pede resposta agora (o chamado do In-Training, ou ele chamando)? */
+/** o cartao grande so quando aperta: um chamado do In-Training no ultimo terco da janela, ou ele mesmo chamando voce. Antes disso o
+    chamado fica no resumo, sem cobrir a cena (o Matheus, 2026-11-01: o pedido na cara so quando for emergencia). PROPOSTO, SEM FONTE */
+const URGENTE_RESTA = CAT.janelaChamado / 3;
 function temPedido(m: Motor): boolean {
-  return m.chamadosAbertos().length > 0 || m.acao === "chamar_atencao";
+  const tick = m.e.tick;
+  return m.chamadosAbertos().some(c => CAT.janelaChamado - (tick - m.chamados.abertos[c]!) <= URGENTE_RESTA) || m.acao === "chamar_atencao";
 }
 /** a necessidade prioritaria, no cartao do alto ao centro: a morte, um pedido aberto (com o Atender) ou o resumo, que abre o Estado.
     Sem o nome do pet (ele esta na plaquinha do topo) */

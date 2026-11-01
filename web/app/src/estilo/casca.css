@@ -48,7 +48,9 @@ body:has(.app--habitat){ overflow:hidden }
 .topo-pet{ display:flex; align-items:center; gap:10px; min-width:0; padding:4px 16px 4px 4px }
 .topo-retrato{ width:44px; height:44px; flex:none; display:flex; align-items:center; justify-content:center; padding:0; overflow:hidden; border-radius:0;
   background:var(--hx-tecla); border:1px solid var(--hx-borda); cursor:pointer; box-sizing:border-box }
-.topo-retrato img{ max-width:none; image-rendering:pixelated }
+/* o Digimon inteiro no quadro: o recorte do primeiro quadro (recorteAtlas), ajustado ao quadro sem cortar */
+.topo-retrato{ padding:3px }
+.topo-retrato img{ width:100%; height:100%; object-fit:contain; image-rendering:pixelated }
 .topo-retrato:focus-visible, .topo-bt:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:2px }
 .topo-pet-txt{ display:flex; flex-direction:column; min-width:0; line-height:1.2 }
 .topo-pet-nome b{ display:block; max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font:700 17px/1.15 var(--hx-f); letter-spacing:.02em; color:var(--hx-texto) }

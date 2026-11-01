@@ -4,7 +4,7 @@
    no comeco do registro) vira o ativo e choca. O outro pai continua onde estava. Nao da para desfazer. */
 import { useEffect, useState } from "react";
 import { CHE, EIXOS_TEMP, Motor, hashSemente, type EixoTemperamento, type Especie, type EventoRegistro } from "../motor/index.ts";
-import { jogoAtual, trocarMotor } from "./jogo.ts";
+import { QUADROS_CHOCANDO, jogoAtual, trocarMotor } from "./jogo.ts";
 import { ligarProduto } from "./produto.ts";
 import { CHAVE_GUARDADOS, abrirGuardado, lerGuardados } from "./pets.ts";
 import { CHAVE, textoSave } from "./save.ts";
@@ -63,6 +63,6 @@ export function cruzar(i: number): Motor {
   ap.push({ ...JSON.parse(textoSave(ativo)), ger: geracao(ativo), filho: s, quando: Date.now() });
   localStorage.setItem(CHAVE_GERACOES, JSON.stringify(ap));
   localStorage.setItem(CHAVE_GUARDADOS, JSON.stringify(g));
-  trocarMotor(filho, "novo", 16);
+  trocarMotor(filho, "novo", QUADROS_CHOCANDO);
   return filho;
 }
