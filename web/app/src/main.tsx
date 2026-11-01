@@ -9,6 +9,7 @@ import { iniciarFalaLivre } from "./falaLivre.ts";
 import { gravarPendente, iniciarJogo, jogoAtual, ouvirOutrasAbas } from "./jogo.ts";
 import { textoSave } from "./save.ts";
 import { iniciarEscala } from "./escala.ts";
+import { iniciarHabitat } from "./habitat.ts";
 import { iniciarPele } from "./pele.ts";
 import { iniciarTema } from "./tema.ts";
 import { iniciarTempo } from "./tempo.ts";
@@ -38,6 +39,7 @@ import "./estilo/pele-vidro.css";
 
 iniciarTema();
 iniciarPele();
+iniciarHabitat();
 iniciarEscala();
 /* escala de stats (ConfigEscala, TAREFA_PLANILHA_PROGRESSAO Parte C) ligada no jogo; ?escala=0 desliga so para a
    conferencia de paridade com o HTML antigo (e2e), que nao tem a escala */

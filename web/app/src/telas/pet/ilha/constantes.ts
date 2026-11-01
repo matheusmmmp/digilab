@@ -9,6 +9,13 @@ export const CAMERA_DESLOC: readonly [number, number, number] = [0, 8.4, 14.5];
 export const CAMERA_OLHAR: readonly [number, number, number] = [0, 0.6, -3.2];
 /** o campo de visao vertical (o POC: 32 graus) e o de longe/perto */
 export const FOV_GRAUS = 32, PERTO = 0.1, LONGE = 200;
+/** as cameras do habitat (src/habitat.ts): atras (a de cima, H-3) e lateral (a do POC do campo lateral, #480: de lado, baixa e com o
+    campo de visao estreito, quase ortografica). desloc e olhar sao em relacao ao pet; fov em graus */
+export interface CameraHabitat { desloc: readonly [number, number, number]; olhar: readonly [number, number, number]; fov: number }
+export const CAMERAS: Readonly<Record<"atras" | "lateral", CameraHabitat>> = {
+  atras: { desloc: CAMERA_DESLOC, olhar: CAMERA_OLHAR, fov: FOV_GRAUS },
+  lateral: { desloc: [0, 3.6, 26], olhar: [0, 0.9, -1], fov: 20 },
+};
 /** em retrato (o celular), a camera se afasta ate mostrar LARGURA_MIN celulas de lado a lado na altura do pet, no maximo AFASTAR_MAX vezes */
 export const LARGURA_MIN = 11, AFASTAR_MAX = 2.4;
 /** a nevoa da cor do horizonte: comeca e termina a estas distancias da camera (o POC: 26 e 62), vezes o afastamento */

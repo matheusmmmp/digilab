@@ -339,3 +339,27 @@ nas duas peles (registrado na T3, `docs/TAREFA_V2_TEMA_MENUS.md`). As três font
 - a GPU de hardware: as duas telas da Exploração rodam no SwiftShader (projeto `software` do `playwright.capturas.config.ts`).
 
 Referências regeneradas: as 4 dessas duas telas nas duas peles. As outras 38 não mudaram.
+
+## 12. Os mapas do habitat: trocar o estilo e a câmera com o jogo rodando (2026-10-31, worker, Claude Code, Opus 5.5)
+
+Pedido do Matheus (2026-10-31): levar ao habitat a lógica dos mapas 3D feitos até agora (a ilha da L4 e os POCs do #480) e escolher o
+mapa em Ajustes › Aparência, junto da pele, para testar vários mapas com o jogo rodando. Ele escolheu o **caminho A**: cada mapa é uma
+vista da **mesma grade do motor** (a área andável, a moldura e os objetos de `grade.ts`); só mudam o terreno, os modelos, a dobra e a
+câmera. O motor, a vida, o log e o replay não mudam (o caminho B, o mapa decidir a colisão, ficou de fora).
+
+- **`src/habitat.ts`:** o mapa e a câmera, preferência de tela no molde do `pele.ts` (chave `-habitat`, fora do save; `?mapa=` e
+  `?camera=` sobrepõem sem gravar). O `CenaPet` religa a cena 3D quando um dos dois muda.
+- **Os estilos** (`ilha/estilos.ts`):
+  - **Ilha:** a da L4, com o mundo curvo;
+  - **Voxel** (`ilha/voxel.ts`): a ilha em cubos, terreno e modelos feitos por código, sem asset; vai no build;
+  - **Floresta** (`ilha/floresta.ts`): o terreno da ilha nas cores do kit e as peças do Tiny Fantasy Forest; **só no dev**;
+  - **Cassette** (`ilha/cassette.ts`): as texturas das planícies e as árvores da Clareira do Cassette Beasts; **só no dev**.
+  - Os três novos são planos, como os POCs.
+- **A câmera:** Atrás (a da H-3) ou Lateral (a do POC do campo lateral: de lado, baixa, FOV 20); `CAMERAS` em `ilha/constantes.ts`.
+- **Os kits que não se redistribuem** (Tiny Fantasy Forest, Cassette Beasts) ficam em `Assets/kits3d/`, fora do git, servidos só pelo
+  dev (`vite.config.ts`, `KITS_DEV_ROTA`). No build os dois mapas não aparecem. Se faltar arquivo, a cena volta para a ilha sem mexer
+  na escolha gravada (`voltarParaIlha`) e Ajustes avisa.
+- **A tela:** Ajustes › Aparência ganha "Mapa do habitat" e "Câmera do habitat" (`telas/config/EscolhaHabitat.tsx`), desligados para os
+  pets sem o mundo (v1–v11, a sala).
+- **Fora:** o pet 3D do DSTS, a bola de fogo e o pós-processamento dos POCs (GBA HD, HD-2D) não entraram; as capturas aprovadas e a M3
+  por mapa também não.

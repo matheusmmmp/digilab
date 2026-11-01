@@ -22,6 +22,7 @@ import { dicasLigadas, ligarDicas } from "../../dicas.ts";
 import { textoSave } from "../../save.ts";
 import { usePele } from "../../pele.ts";
 import { escolherTema, useTema, type Tema } from "../../tema.ts";
+import { EscolhaHabitat } from "./EscolhaHabitat.tsx";
 import { EscolhaPele, resumoAparencia } from "./EscolhaPele.tsx";
 import { VELOCIDADES, escolherVelocidade, pularUmaHora, useTempo } from "../../tempo.ts";
 
@@ -74,7 +75,7 @@ function Som() {
   );
 }
 function Aparencia() {
-  const tema = useTema(), opcoes: [Tema, string][] = [["claro", "Claro"], ["escuro", "Escuro"], ["sistema", "Sistema"]], [dicas, setDicas] = useState(dicasLigadas);
+  const { motor: m } = useJogo(), tema = useTema(), opcoes: [Tema, string][] = [["claro", "Claro"], ["escuro", "Escuro"], ["sistema", "Sistema"]], [dicas, setDicas] = useState(dicasLigadas);
   return (
     <>
       <EscolhaPele />
@@ -87,6 +88,7 @@ function Aparencia() {
         ))}
       </div>
       <p className="mc-apoio">Sistema segue o claro ou escuro do aparelho. Os menus são sempre escuros; o tema vale para o habitat, o balão, o retrato e o relógio.</p>
+      <EscolhaHabitat temMundo={!!m.mundo} />
       <label className="mc-interruptor"><span><b>Mostrar dicas</b><small>o Professor Agumon explica cada coisa nova, uma vez</small></span>
         <input type="checkbox" role="switch" checked={dicas} onChange={e => { ligarDicas((e.target as HTMLInputElement).checked); setDicas(dicasLigadas()); }} /></label>
     </>
