@@ -1,6 +1,6 @@
 /* O pet em papel da ilha (docs/TAREFA_V3_HABITAT_ILHA_3D.md, regras 7 e 8, H3): o personagem do POC (poc/mapa_ac/heroi.ts) adaptado ao
    pet do motor e ao atlas do jogo (src/atlas.ts), desenhado como um recorte de papel em pe no mundo 3D, no jeito do Paper Mario:
-     - um plano sempre de frente para a camera (paralelo a imagem dela; a camera nao gira), com o pixel art em filtro nearest e uma borda
+     - um plano sempre de frente para a camera (paralelo a imagem dela, tambem com a camera livre girando), com o pixel art em filtro nearest e uma borda
        branca de 1 texel, o "papel" recortado; a sombra semitransparente do export sai (a sombra e a redonda do chao);
      - o tamanho na tela e um numero inteiro de pixels do canvas por texel (a vista o calcula na distancia do foco, regra 8) e o canto do
        papel cai num pixel inteiro;
@@ -8,7 +8,7 @@
        que a posicao desenhada anda em x na tela e, ao trocar, gira em volta do eixo vertical (a escala em x passa por 0, a virada de folha);
      - andando (a posicao do motor mudou nos ultimos ANDANDO_MS), o clipe Run do atlas de clipes (H-4) e um pulinho; parado, o Idle; um
        sprite sem Run usa o Idle com o pulinho;
-     - o golpe (docs/TAREFA_V3_HABITAT_OBJETOS.md): o clipe Attack_1 do atlas, desde `golpe.desde`, olhando para `golpe.lado` (no saco de
+     - o golpe (docs/TAREFA_V3_HABITAT_OBJETOS.md): o clipe Attack_1 do atlas, desde `golpe.desde`, olhando para `golpe.alvo` (no saco de
        pancada do treino e na bola); um sprite sem Attack_1 fica no Idle. O corte do golpe guarda o centro e o pe do Idle,
        entao o Digimon nao pula ao bater;
      - o ovo ao nascer (balanca de lado), a forma sombria, o quadro parado ao dormir (na grade de reserva, o olho fechado);
@@ -38,9 +38,9 @@ export interface Passo {
   reduzido: boolean;
   /** a noite do motor: o papel escurece um pouco, como o resto da cena */
   noite: boolean;
-  /** o golpe de agora (a coreografia do treino e a batida na bola; so vista): desde quando (o mesmo `agora`) e o lado (1 direita, -1
-      esquerda); null fora dele */
-  golpe?: { desde: number; lado: number } | null;
+  /** o golpe de agora (a coreografia do treino e a batida na bola; so vista): desde quando (o mesmo `agora`) e o ponto do chao em que o
+      pet bate (celulas; ele olha para la); null fora dele */
+  golpe?: { desde: number; alvo: readonly [number, number] } | null;
   /** a vista move o pet desenhado sem o motor (a ida e a volta do treino): conta como andando */
   andandoVista?: boolean;
 }
@@ -127,7 +127,7 @@ export class Papel {
   private t0 = 0;
   private lado = 1;                     // 1 = olhando para a direita na tela; -1 = para a esquerda
   private escalaX = 1;
-  private xAntes: number | null = null;
+  private celAntes: [number, number] | null = null;
   private motorAntes = "";
   private mudouEm = -1e9;
   private golpeDesde: number | null = null;
@@ -220,13 +220,16 @@ export class Papel {
     /* dormindo (sono.ts): o quadro parado achatado, respirando, num tom apagado */
     const dorme = !ovo && jogoAtual().motor.acao === "dormir", alt = dorme ? alturaSono(p.agora, p.reduzido) : 1;
     this.papel.material.color.setHex(p.noite ? NOITE_PAPEL : dorme ? SONO.tom : 0xffffff);
-    /* o lado: a posicao desenhada anda em x na tela (a camera nao gira: x do mundo e x da tela) */
-    if (golpe) this.lado = golpe.lado >= 0 ? 1 : -1;
-    else if (this.xAntes !== null) {
-      const dx = p.cel[0] - this.xAntes;
+    /* o lado ao longo da direita da camera no chao (com a camera livre ela gira; fixa, e o x do mundo): no golpe, o do ponto em que o pet
+       bate; fora dele, o do passo da posicao desenhada */
+    const dir = this.v.set(1, 0, 0).applyQuaternion(p.camera.quaternion), h = Math.hypot(dir.x, dir.z) || 1;
+    const naDireita = (x: number, z: number) => (x * dir.x + z * dir.z) / h;
+    if (golpe) { const d = naDireita(golpe.alvo[0] - p.cel[0], golpe.alvo[1] - p.cel[1]); if (Math.abs(d) > LADO_MIN) this.lado = d > 0 ? 1 : -1; }
+    else if (this.celAntes !== null) {
+      const dx = naDireita(p.cel[0] - this.celAntes[0], p.cel[1] - this.celAntes[1]);
       if (dx > LADO_MIN) this.lado = 1; else if (dx < -LADO_MIN) this.lado = -1;
     }
-    this.xAntes = p.cel[0];
+    this.celAntes = [p.cel[0], p.cel[1]];
     const passo = VIRAR_POR_S * p.dt;
     this.escalaX = p.reduzido || Math.abs(this.lado - this.escalaX) <= passo ? this.lado : this.escalaX + Math.sign(this.lado - this.escalaX) * passo;
     /* o tamanho em pixels inteiros do canvas; o pulinho em texels inteiros; o ovo balanca um texel de lado */

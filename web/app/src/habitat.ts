@@ -7,6 +7,8 @@
    - Floresta e Cassette: os kits que nao se redistribuem (Tiny Fantasy Forest e o Cassette Beasts do Matheus, em Assets/kits3d/), so no
      modo dev (o vite.config os serve); fora dele nao aparecem, e se faltar arquivo a cena volta para a ilha sem gravar (voltarParaIlha).
    - Camera: atras (a da ilha, H-3) ou lateral (a do POC do campo lateral, #480: de lado e quase ortografica).
+   - Controle da camera: livre (a roda aproxima, Shift + roda gira, arrastar gira e inclina, como nos POCs; telas/pet/orbita.ts) ou fixa (a
+     camera escolhida, sem mexer). Livre e o padrao (o Matheus, 2026-11-01); muda no quadro seguinte, sem religar a cena.
    - Visual: o pos-processo dos POCs do #480 (ilha/pos.ts): normal, GBA HD (pixel grande, cor clara e saturada, a do Cassette Beasts) ou
      HD-2D (pixel medio, tilt-shift em volta do pet e vinheta). Vale no quadro seguinte, sem religar a cena; ?visual= sobrepoe.
    Tudo isso fica em Ajustes > Visual (EscolhaHabitat.tsx). */
@@ -16,10 +18,12 @@ import { CHAVE } from "./save.ts";
 export type Mapa = "ilha" | "voxel" | "floresta" | "cassette";
 export type Camera = "atras" | "lateral";
 export type Visual = "normal" | "gba-hd" | "hd-2d";
+export type Controle = "livre" | "fixa";
 export const CHAVE_HABITAT = CHAVE + "-habitat";
-export const MAPA_PADRAO: Mapa = "ilha", CAMERA_PADRAO: Camera = "atras", VISUAL_PADRAO: Visual = "normal";
+export const MAPA_PADRAO: Mapa = "ilha", CAMERA_PADRAO: Camera = "atras", VISUAL_PADRAO: Visual = "normal", CONTROLE_PADRAO: Controle = "livre";
 export const NOME_MAPA: Record<Mapa, string> = { ilha: "Ilha", voxel: "Voxel", floresta: "Floresta", cassette: "Cassette" };
 export const NOME_CAMERA: Record<Camera, string> = { atras: "Atrás", lateral: "Lateral" };
+export const NOME_CONTROLE: Record<Controle, string> = { livre: "Livre", fixa: "Fixa" };
 export const NOME_VISUAL: Record<Visual, string> = { normal: "Normal", "gba-hd": "GBA HD", "hd-2d": "HD-2D" };
 export const VISUAIS: readonly Visual[] = ["normal", "gba-hd", "hd-2d"];
 /** os mapas com assets fora do repositorio: so no modo dev */
@@ -32,9 +36,10 @@ export function mapasDisponiveis(dev = DEV): Mapa[] { return MAPAS.filter(m => d
 const ehMapa = (v: unknown, dev = DEV): v is Mapa => typeof v === "string" && mapasDisponiveis(dev).includes(v as Mapa);
 const ehCamera = (v: unknown): v is Camera => v === "atras" || v === "lateral";
 const ehVisual = (v: unknown): v is Visual => typeof v === "string" && (VISUAIS as readonly string[]).includes(v);
+const ehControle = (v: unknown): v is Controle => v === "livre" || v === "fixa";
 
-export interface Habitat { mapa: Mapa; camera: Camera; visual: Visual }
-let atual: Habitat = { mapa: MAPA_PADRAO, camera: CAMERA_PADRAO, visual: VISUAL_PADRAO };
+export interface Habitat { mapa: Mapa; camera: Camera; visual: Visual; controle: Controle }
+let atual: Habitat = { mapa: MAPA_PADRAO, camera: CAMERA_PADRAO, visual: VISUAL_PADRAO, controle: CONTROLE_PADRAO };
 /** o mapa que falhou ao carregar nesta pagina: a cena volta para a ilha sem mexer na escolha gravada */
 let caido: Mapa | null = null;
 const ouvintes = new Set<() => void>();
@@ -49,6 +54,7 @@ export function iniciarHabitat(dev = DEV): void {
     mapa: ehMapa(mq, dev) ? mq : ehMapa(salvo.mapa, dev) ? salvo.mapa : MAPA_PADRAO,
     camera: ehCamera(cq) ? cq : ehCamera(salvo.camera) ? salvo.camera : CAMERA_PADRAO,
     visual: ehVisual(vq) ? vq : ehVisual(salvo.visual) ? salvo.visual : VISUAL_PADRAO,
+    controle: ehControle(q.get("controle")) ? q.get("controle") as Controle : ehControle(salvo.controle) ? salvo.controle : CONTROLE_PADRAO,
   };
   caido = null;
 }
@@ -60,6 +66,7 @@ function gravar(): void {
 export function escolherMapa(m: Mapa): void { atual = { ...atual, mapa: m }; caido = null; gravar(); }
 export function escolherCamera(c: Camera): void { atual = { ...atual, camera: c }; gravar(); }
 export function escolherVisual(v: Visual): void { atual = { ...atual, visual: v }; gravar(); }
+export function escolherControle(c: Controle): void { atual = { ...atual, controle: c }; gravar(); }
 /** a escolha gravada (o que a tela de Ajustes mostra) */
 export function habitatEscolhido(): Habitat { return atual; }
 /** o que a cena desenha: a escolha, ou a ilha se o mapa escolhido caiu nesta pagina */

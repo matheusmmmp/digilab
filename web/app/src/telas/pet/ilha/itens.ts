@@ -165,8 +165,8 @@ export class Itens {
   /** a bola estava na mao do dono no quadro anterior: ao cair, ela aparece onde caiu (sem rolar do lugar antigo) */
   private naMaoAntes = false;
   private readonly giro = new THREE.Quaternion();
-  /** o ultimo golpe no saco: quando (ms da vista) e o lado de quem bateu (o saco vai para o outro) */
-  private golpeSaco: { em: number; lado: number } | null = null;
+  /** o ultimo golpe no saco: quando (ms da vista) e o eixo do balanco no chao (o saco vai para longe de quem bateu) */
+  private golpeSaco: { em: number; eixo: THREE.Vector3 } | null = null;
   /** onde fica o saco de pancada (celulas) */
   readonly sacoEm: [number, number];
 
@@ -187,8 +187,12 @@ export class Itens {
   /** onde a bola esta desenhada (subunidades do mapa), para pegar a bola na cena (PorBola.tsx); null antes do primeiro quadro */
   get bolaDesenhada(): [number, number] | null { return this.bolaCel && [this.bolaCel[0] * this.sub, this.bolaCel[1] * this.sub]; }
 
-  /** um golpe no saco, de quem esta do `lado` dele (1: o pet a direita na tela; -1: a esquerda): o saco balanca para o outro lado */
-  baterNoSaco(agora: number, lado: number): void { this.golpeSaco = { em: agora, lado }; }
+  /** um golpe no saco de quem esta em `de` (celulas): o saco balanca para longe dele, no plano vertical que passa pelos dois. O eixo e
+      d x cima (d, a direcao de quem bateu ate o saco): o angulo positivo leva a ponta do saco no sentido de d */
+  baterNoSaco(agora: number, de: readonly [number, number]): void {
+    const dx = this.sacoEm[0] - de[0], dz = this.sacoEm[1] - de[1], d = Math.hypot(dx, dz) || 1;
+    this.golpeSaco = { em: agora, eixo: new THREE.Vector3(-dz / d, 0, dx / d) };
+  }
 
   /** a racao e a fruta entram e saem e a podre muda de cor; a bola vai aonde o motor diz, girando; o saco balanca; o kit so com a lesao;
       a luz do ninho so a noite */
@@ -236,12 +240,11 @@ export class Itens {
     this.bola.g.position.set(this.bolaCel[0], 0, this.bolaCel[1]);
   }
 
-  /** o saco balanca no plano da tela (em volta do eixo z), para longe de quem bateu, e amortece */
+  /** o saco balanca para longe de quem bateu e amortece */
   private balancarSaco(agora: number, reduzido: boolean): void {
     const g = this.golpeSaco, t = g ? agora - g.em : Infinity;
     const { amplitude, tau, periodo } = SACO_BALANCO;
     const a = !g || reduzido || t > 6 * tau ? 0 : amplitude * Math.exp(-t / tau) * Math.sin((2 * Math.PI * t) / periodo);
-    /* a rotacao z positiva leva a ponta do saco para a direita (+x): quem bate da direita (lado 1) o empurra para a esquerda */
-    this.saco.pivo.rotation.z = g ? a * (g.lado >= 0 ? -1 : 1) : 0;
+    if (g) this.saco.pivo.quaternion.setFromAxisAngle(g.eixo, a); else this.saco.pivo.quaternion.identity();
   }
 }

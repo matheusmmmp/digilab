@@ -5,9 +5,10 @@
 import { useRef, type KeyboardEvent } from "react";
 import { indiceAbaPorTecla } from "../../componentes/hx/index.ts";
 import {
-  MAPAS_DEV, NOME_CAMERA, NOME_MAPA, NOME_VISUAL, VISUAIS, escolherCamera, escolherMapa, escolherVisual, habitatEscolhido, mapaCaido, mapasDisponiveis,
-  useHabitat, type Camera, type Habitat, type Mapa, type Visual,
+  MAPAS_DEV, NOME_CAMERA, NOME_CONTROLE, NOME_MAPA, NOME_VISUAL, VISUAIS, escolherCamera, escolherControle, escolherMapa, escolherVisual, habitatEscolhido,
+  mapaCaido, mapasDisponiveis, useHabitat, type Camera, type Controle, type Habitat, type Mapa, type Visual,
 } from "../../habitat.ts";
+import { recentrar } from "../pet/orbita.ts";
 import type { Pele } from "../../pele.ts";
 import type { Tema } from "../../tema.ts";
 import { resumoAparencia } from "./EscolhaPele.tsx";
@@ -20,6 +21,11 @@ const DESCRICAO: Record<Mapa, string> = {
 };
 const DESCRICAO_CAMERA: Record<Camera, string> = { atras: "de cima, atrás do pet", lateral: "de lado, quase sem perspectiva" };
 const CAMERAS: readonly Camera[] = ["atras", "lateral"];
+const DESCRICAO_CONTROLE: Record<Controle, string> = {
+  livre: "roda aproxima e afasta, Shift + roda gira; arrastar na cena gira e inclina (no toque, dois dedos aproximam)",
+  fixa: "a câmera escolhida acima, sem mexer",
+};
+const CONTROLES: readonly Controle[] = ["livre", "fixa"];
 const DESCRICAO_VISUAL: Record<Visual, string> = {
   normal: "a cena como ela é",
   "gba-hd": "pixel grande, cor clara e saturada (o jeito do Cassette Beasts)",
@@ -60,12 +66,16 @@ function Grupo<T extends string>({ id, titulo, opcoes, atual, nome, descricao, e
 
 export function EscolhaHabitat({ temMundo }: { temMundo: boolean }) {
   useHabitat();
-  const { mapa, camera, visual } = habitatEscolhido(), caido = mapaCaido(), mapas = mapasDisponiveis();
+  const { mapa, camera, visual, controle } = habitatEscolhido(), caido = mapaCaido(), mapas = mapasDisponiveis();
   const descMapa = (m: Mapa) => DESCRICAO[m] + (MAPAS_DEV.includes(m) ? " (só no modo dev)" : "");
   return (
     <>
       <Grupo id="cfg-mapa" titulo="Mapa do habitat" opcoes={mapas} atual={mapa} nome={NOME_MAPA} descricao={descMapa} escolher={escolherMapa} desligado={!temMundo} />
       <Grupo id="cfg-camera" titulo="Câmera do habitat" opcoes={CAMERAS} atual={camera} nome={NOME_CAMERA} descricao={c => DESCRICAO_CAMERA[c]} escolher={escolherCamera} desligado={!temMundo} />
+      <Grupo id="cfg-controle" titulo="Controle da câmera" opcoes={CONTROLES} atual={controle} nome={NOME_CONTROLE} descricao={c => DESCRICAO_CONTROLE[c]}
+        escolher={escolherControle} desligado={!temMundo} />
+      {temMundo && controle === "livre" && <p className="mc-apoio">
+        <button type="button" className="hx-btn" onClick={recentrar}>Recentralizar a câmera</button></p>}
       <Grupo id="cfg-visual" titulo="Visual do habitat" opcoes={VISUAIS} atual={visual} nome={NOME_VISUAL} descricao={v => DESCRICAO_VISUAL[v]} escolher={escolherVisual}
         desligado={!temMundo} colunas={3} />
       {caido && <p className="mc-apoio" role="status">O mapa {NOME_MAPA[caido]} não carregou nesta máquina (faltam os arquivos em Assets/kits3d); o habitat voltou para a Ilha.</p>}
