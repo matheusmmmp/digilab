@@ -2847,3 +2847,41 @@ Só a VERIFICADA na C0 (`docs/referencias/v3c0_referencias_verificadas.csv`), e 
 | **AD7-3** (DECIDIDA) | como o S1 entra na leitura | **pela classe de A6.6** (o "> 0" do S1 pede o IC fora da margem); no P-A, o primário manda, como na A6.7 | o S1 pelo "passa" (limite inferior > 0), como o P-A: um S1 positivo menor que a margem leva à linha 2 (a corrida candidata a substituir o crédito), com um efeito que a run não distingue de 0 pela régua dela; pela classe, ele leva à linha 3, que só registra |
 | **AD7-4** (DECIDIDA) | as definições dos descritivos novos | **o índice por corrida** (o `repeticao_apos_alivio` de hoje sobre as corridas, A7.8, item 2) e **a norma L1 do H por comportamento, na escala S** (item 4), os dois sem gate, calculados no orquestrador com as funções de hoje do `metrics.py` | outro índice por opção (uma função nova no `metrics.py`): mais código e um nome novo antes da run, por um descritivo; outra norma (a máxima, a L2): muda só a escala da leitura, e nada se decide com ela |
 | **AD7-5** (DECIDIDA) | o σ de planejamento | **o maior dp de 4 células das cinco fontes, com a folga de 20 % (0,0484), mesmo vindo do M2 − M0 da C1, que difere em dois módulos** | o σ só dos contrastes de um módulo (0,0319 × 1,2 = 0,038): a margem cai para cerca de 0,009 com K = 150, e se o M2c tiver a dispersão do M2 − M0, o poder real fica abaixo de 0,8; o σ conservador custa só o "≈ 0" mais difícil com o efeito 0 (A7.6), não o critério do primário |
+
+### A7.13 A run (75101 a 75505): o registro, antes da primeira vida (2026-10-31, worker da C2, etapa 4, Claude Code, Opus 5.5)
+
+**O que é:** o registro de A7.10, num commit empurrado antes da primeira vida. **Nenhuma vida da faixa roda neste registro,** e nada
+de A7.0 a A7.12 muda. A run roda uma vez; o resultado é registrado como está.
+
+- **O commit de onde sai:** a `main` em `85d6fad` (o #515), mais este registro, na worktree `v3-habito-intencao-run`, com a árvore limpa.
+- **A config:** `experiments/configs/v2_habito_intencao/habito_intencao.json`, sha256 `07ecfb1d…3277`.
+- **As bases e o K:** 75101, 75202, 75303, 75404 e 75505, K = 30 por base, o prefixo `digibrain_prototipo` (A7.3): **150 unidades.**
+  - a primeira (75101, k = 0): a semente 4903838292565027304 e o genoma 14456903659021078797;
+  - a última (75505, k = 29): a semente 14179391536349349281 e o genoma 8352692262559576071.
+- **Os braços e as células:** M1 e M2 de `SUBCHAVES_CONSERTO` e M2c de `SUBCHAVES_C2`, com a `intencao_suspensa` desligada; os 4 donos ×
+  `longe_fixo`, comedouro e longe; 14 dias, orçamento de 16: **5 400 vidas** (A7.2).
+- **Os sha256** (antes deste registro):
+  - o orquestrador `experiments/run_v2_habito_intencao.py`: `d84dfd8c…ce11`;
+  - o protótipo `experiments/run_v2_digibrain_prototipo.py`: `a2e01ee9…8022`;
+  - `digilab/config.py`: `a00e4512…aba`; `digilab/engine.py`: `48ba51ce…3630` (o congelado); `digilab/metrics.py`: `8c6a6794…a425`;
+    `digilab/mundo.py`: `78120bdf…83bb`; `digilab/digibrain/estado.py`: `1a621069…6339`;
+  - este plano, antes desta seção: `dc0f31e0…2ba8`. O `meta.json` grava o sha do plano com esta seção.
+- **A pasta de saída:** `artifacts_v2_digibrain_prototipo/habito_intencao/run/`, a de A7.10 e o padrão do orquestrador (o `SAIDA`); ela
+  não existe, e a pasta-mãe só tem o `adendo7_poder.json`. Sem `--saida`.
+- **O comando** (da raiz da worktree, depois da suíte, sem sobrepor; V3-D8):
+
+      python experiments/run_v2_habito_intencao.py --config experiments/configs/v2_habito_intencao/habito_intencao.json --processos 4
+
+- **Nenhuma vida da faixa em disco:** em 2026-10-31 nenhuma worktree em `D:\Trab\digilab` tem a pasta `habito_intencao/run/`; as pastas
+  `habito_intencao/` (nas worktrees `v3-habito-intencao-plano`, `v3-habito-intencao-run` e `v3-tema-peles`) só têm o `adendo7_poder.json`.
+- **O tempo estimado:** cerca de 1 h 40 min de parede, até 2 h com a análise (A7.9).
+- **Os pré-requisitos de A7.10, conferidos antes da primeira vida:**
+  - **a suíte:** A7.10 diz, como está: "**Antes da run:** os testes de mecanismo e de vidas, os gabaritos (o G2) e a suíte. **Qualquer
+    quebra do G1, do G2 ou do G-MECANISMO para tudo.**" A suíte rodou inteira (`python -m pytest -q`) do commit `85d6fad`, antes da run e
+    sem sobrepor: **43 falhas, 3 878 passam e 1 pulado, em 1 h 24 min; as 43 falhas são todas de `tests/test_hooks.py` e `tests/test_hook_h4.py`,** e nenhuma outra (nenhuma do G1, do G2 nem do G-MECANISMO). As falhas conhecidas de `tests/test_hooks.py` e `tests/test_hook_h4.py` (os `.claude/hooks/` apagados
+    da `main` pelo `2586b0e`) não são nenhum dos três; qualquer outra falha pararia a run;
+  - **a árvore limpa:** o `meta.json` grava o `git_head` e o `git_limpo`; a run sai do commit deste registro, empurrado;
+  - **a config e as sementes:** as travas do orquestrador (o adendo APROVADO, a faixa em `FAIXAS_RESERVADAS`, as bases, o K, os dias, o
+    orçamento); a faixa está em `experiments/bancada/faixas.py` (75101, 75505);
+  - **a máquina (V3-D8):** nenhum outro processo Python rodando antes da suíte (nenhuma run de pesquisa nem medição do combate); a suíte e
+    a run não se sobrepõem; 4 processos.
