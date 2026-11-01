@@ -391,7 +391,7 @@ As ME-1 a ME-7 e as C4-E1 a C4-E3 não fixam estes oito pontos. **Todos DECIDIDO
 |---|---|---|---|
 | **MA-1** | σ da visita vazia = min(0, r da ida) | **aprovada e implementada** | M1: `c6c6e51` (#530, `episodio_autobio`), teste `test_t_me_1_a_visita_vazia_*` |
 | **MA-2** | o valor do lugar pela soma dos σ | **aprovada e implementada** | M2: PR `v3-memoria-m2m3` (`Memoria.valores_soma`, `recuperar`), testes `test_t_me_2_o_valor_do_lugar_*` |
-| **MA-3** | "REL sem negativos" grava σ < 0 como 0 | **aprovada, ainda não implementada** | entra com o `controle_mem` (7.2), que nenhum PR criou; a espec não o prende a uma etapa, e ele só tem efeito quando a lembrança e o lugar leem o σ (M2) |
+| **MA-3** | "REL sem negativos" grava σ < 0 como 0 | **aprovada e implementada** | `controle_mem` (7.2): PR `v3-memoria-controle` (`Memoria.codificar_autobio`); a espec não o prende a uma etapa, e ele só tem efeito quando a lembrança e o lugar leem o σ (M2) |
 | **MA-4** | o empate da lembrança por ordem fixa | **aprovada e implementada** | M2: PR `v3-memoria-m2m3` (`Memoria.lembrar`), teste `test_t_me_2_o_empate_*` |
 | **MA-5** | três facetas nomeadas | **aprovada, ainda não implementada** | entra na M5 (6.2) |
 | **MA-6** | a subchave `facetas_mem` | **aprovada, ainda não implementada** | entra na M5 (6.2, 7.3) |

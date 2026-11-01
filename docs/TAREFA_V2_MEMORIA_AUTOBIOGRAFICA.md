@@ -264,3 +264,23 @@ A espec, 7.1 (ME-6, MA-8, T-ME-6). Nenhum número novo; nenhuma vida; só as sem
   o verificador com cliente falso; o motivo do N6; o gabarito em dia) e o do web.
 - **O que não houve:** nenhuma vida de pesquisa; `engine.py` e o cérebro do jogo não mudam; o `controle_mem` fica de fora. Os PROPOSTOS
   estão no registro de desvios.
+
+## 16. O `controle_mem`: os cinco braços (2026-11-01, worker, Claude Code, Sonnet 5.5, worktree `v3-memoria-controle`)
+
+A espec, 7.2 e 9 (MA-3). Nenhum número novo; nenhuma vida de pesquisa nem faixa; só as sementes de teste 101…505.
+
+- **A chave:** `ConfigDigibrain.controle_mem: str = "rel"`, com `CONTROLES_MEM = ("rel", "sem", "rec", "emb", "rel_sem_neg")`. Valor fora da
+  lista, ou diferente de `"rel"` sem a `memoria_autobio`: `ValueError`. O `"rel"` é o comportamento de hoje, byte a byte (o estado
+  interno só ganha o campo `controle` fora do `"rel"`).
+- **Os braços** (`Memoria`, `digilab/digibrain/mem.py`): **sem**: `lembrar` devolve nenhuma lembrança (sem somar `rec`) e `valores_soma`
+  é vazio; o episódio é codificado e consolidado, e as facetas seguem os consolidados; **rec**: a lembrança é o mais recente das três
+  memórias (a decisão, depois o id), `sim` = 0, e o lugar é o do consumo bom mais recente; **emb**: a lembrança é um dos guardados
+  (recente, duradoura, central) sorteado por `random.Random(derivar_semente(semente, "mem_emb"))`, e o lugar é o do sorteado, se for consumo
+  bom; **rel_sem_neg**: o `"rel"` com todo σ < 0 gravado como 0 em `codificar_autobio` (MA-3).
+- **A rng:** o `DigiBrain` ganhou o parâmetro `semente` (padrão `None`); o M-ADAPT monta a rng do EMB e a entrega ao M-MEM (o `mem.py` não
+  importa `random` nem `protocol`, o T-ME-0 por AST). O orquestrador `run_v2_digibrain_prototipo.py` passa a semente da vida à fábrica
+  (uma linha). Só o EMB tem rng; o EMB sem a rng falha alto. A rng de política não é tocada.
+- **Os testes** (`tests/test_memoria_controle.py`): a chave e os erros altos; cada braço pela tabela 7.2; o T-ME-VISITA (o REL pesa a visita,
+  o sem negativos não); a rng; o replay bit a bit dos cinco braços nas cinco sementes; o REL idêntico à vida de hoje com a chave ligada.
+- **O que não houve:** nenhuma vida de pesquisa, faixa, plano de análise ou validação (o plano é o próximo passo); `engine.py`, a web e a
+  fala não mudam; nenhum gabarito regravado.

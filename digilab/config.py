@@ -2356,6 +2356,8 @@ CONFIG_CONTRATO_LIGADO = ConfigContrato(sensores=True, controlador=True)
 #     etapa posterior). Exige o `m_mem` e as duas subchaves do cheiro (o M3* do conserto); nao se combina com a `credito_corrida`, a
 #     `intencao_suspensa` nem a `redecidir_evento` (MA-7: a C4 sem combinar com a C2 nem com a C3).
 CONTROLES_G_APR = ("nenhum", "embaralhado", "constante")
+# os bracos da memoria autobiografica (a C4, espec 7.2): a relevante, sem recuperacao, a recencia, a embaralhada e "REL sem negativos"
+CONTROLES_MEM = ("rel", "sem", "rec", "emb", "rel_sem_neg")
 
 
 @dataclass(frozen=True)
@@ -2375,6 +2377,7 @@ class ConfigDigibrain:
     redecidir_evento: bool = False           # PROPOSTO, SEM FONTE como valor (C3, RD-2 e RD-3; direcao: Gadanho e Hallam 2001): segurar a escolha
     memoria_autobio: bool = False            # PROPOSTO, SEM FONTE como valor (C4, espec 7.3; direcao: Ho 2005 e o PEPE): o episodio e a codificacao
     facetas_mem: bool = False                # PROPOSTO, SEM FONTE como valor (C4, M5, MA-6; direcao: Ho 2005): as tres facetas adquiridas
+    controle_mem: str = "rel"                # PROPOSTO, SEM FONTE como valor (C4, espec 7.2): o braco da memoria (CONTROLES_MEM); "rel" e o de hoje
 
     def __post_init__(self) -> None:
         for nome in ("ligada", "modula_g_apr", "p2", "m_mem", "persistencia", "p1", "cheiro_inato", "intencao_cheiro",
@@ -2399,6 +2402,11 @@ class ConfigDigibrain:
                              "(docs/ESPEC_MEMORIA_AUTOBIOGRAFICA_DIGIBRAIN_MODULAR.md, MA-7)")
         if self.facetas_mem and not self.memoria_autobio:
             raise ValueError("facetas_mem so com a memoria_autobio (docs/ESPEC_MEMORIA_AUTOBIOGRAFICA_DIGIBRAIN_MODULAR.md, MA-6 e 7.3)")
+        if self.controle_mem not in CONTROLES_MEM:
+            raise ValueError(f"ConfigDigibrain.controle_mem: so {CONTROLES_MEM}, nao {self.controle_mem!r}")
+        if self.controle_mem != "rel" and not self.memoria_autobio:
+            raise ValueError("controle_mem diferente de 'rel' so com a memoria_autobio "
+                             "(docs/ESPEC_MEMORIA_AUTOBIOGRAFICA_DIGIBRAIN_MODULAR.md, 7.2 e 7.3)")
         if self.controle_g_apr not in CONTROLES_G_APR:
             raise ValueError(f"ConfigDigibrain.controle_g_apr: so {CONTROLES_G_APR}, nao {self.controle_g_apr!r}")
         if type(self.g_apr_constante) is not int:

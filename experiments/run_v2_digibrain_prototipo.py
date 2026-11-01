@@ -361,7 +361,7 @@ def fabricas(braco: str, dono: str, semente: int, dias: int, orcamento_por_dia: 
         cd = config_do_braco(braco, g_apr_con, conserto)
 
         def fp(cfg=None):
-            return Registro(DigiBrain(cfg or CONFIG_PADRAO, cd, CM, inatos=inatos, serie_e_doadora=serie_e), CONFIG_DIGIBRAIN_INATOS.escala)
+            return Registro(DigiBrain(cfg or CONFIG_PADRAO, cd, CM, inatos=inatos, serie_e_doadora=serie_e, semente=semente), CONFIG_DIGIBRAIN_INATOS.escala)
     return fp, fm
 
 
