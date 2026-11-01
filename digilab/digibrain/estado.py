@@ -53,7 +53,19 @@ Ela e entregue ao P2 uma vez so, na primeira decisao de outro comportamento (`es
 dessa troca ja abre a corrida seguinte. As intencoes, o C, o F, os fins e a persistencia seguem como hoje, so deixam de entregar ao P2 cada
 uma por si (o M-ADAPT nao credita as opcoes). O reflexo do sono e uma decisao de `dormir`: fecha a corrida em curso como qualquer troca de
 comportamento. No fim da vida a corrida aberta nao e entregue, como a opcao aberta de hoje (T-CORRIDA-3). Desligada, nada disso existe.
-Sem rng."""
+
+**A C3** (docs/ESPEC_REDECIDIR_EVENTO_DIGIBRAIN_MODULAR.md, secoes 2 a 4; a subchave `redecidir_evento`; a direcao vem de Gadanho e Hallam
+2001, pela tese, o resto e PROPOSTO e SEM FONTE): a unidade escolhida na decisao anterior fica, sem sorteio, enquanto nao houver um evento.
+O M-ESTADO confere os eventos no comeco da decisao (`eventos`, antes do contexto), contra o retrato da decisao anterior:
+  - E-REFLEXO: o reflexo do sono vale nesta decisao ou valeu na anterior (RE-1: o dormir do reflexo nao e uma escolha a segurar);
+  - E-RECEPTOR: alguma urgencia muda de faixa (os quartos de S: os limites S/4, S/2 e 3S/4);
+  - E-MUNDO: o conjunto das comidas boas a vista muda, o cheiro aparece ou some, o alvo do candidato sai da vista, o dono agiu;
+  - E-FIM: a opcao da decisao anterior acabou na consequencia com um motivo que nao e `unica` (RE-3); o M-ADAPT acrescenta o E-FIM quando o
+    candidato nao esta na lista com peso positivo (RE-2);
+  - E-TETO: o candidato ja foi segurado `n_seg_max` decisoes seguidas.
+Sem evento, o candidato vai ao M-ARB, que o escolhe sem sorteio; a escolha segurada chega ao `escolhida` como qualquer escolha (o C, o `n`,
+os fins, o F e o credito sao os de hoje). `registrar_redecisao` guarda o candidato da decisao seguinte e o `n_seg`. Desligada, nada disso
+existe. Sem rng."""
 from __future__ import annotations
 
 from ..config import CONFIG_DIGIBRAIN_INATOS, Config, ConfigDigibrain, ConfigDigibrainInatos
@@ -65,6 +77,7 @@ BUSCA = ("comer", "cheiro")                      # a intencao da DX-4, so com a 
 IDA = ("comer", "comida")
 SUSPENDEM = (BUSCA, IDA)                         # a L-2 (LS-2): os tipos que o reflexo do sono suspende, com `intencao_suspensa`
 FINS_SUSPENSA = ("saciou", "expirou", "superada")  # os fins novos da L-2 ("sumiu" e "achou" ja existem)
+EVENTOS = ("E-REFLEXO", "E-RECEPTOR", "E-MUNDO", "E-FIM", "E-TETO")   # a C3 (RD-3 e RD-4), na ordem do registro
 
 
 def e_intencao(chave: tuple, intencao_cheiro: bool = False) -> bool:
@@ -97,6 +110,14 @@ class EstadoDinamico:
         if self.cd.intencao_suspensa:
             for motivo in FINS_SUSPENSA:
                 self.fins[motivo] = 0
+        self.candidato: tuple | None = None   # a C3: a ultima escolha fora do reflexo, a segurar (so com `redecidir_evento`)
+        self.n_seg = 0                        # as decisoes seguradas seguidas (o E-TETO)
+        self._retrato: dict | None = None     # as faixas, as comidas boas a vista e o cheiro da decisao anterior
+        self._reflexo_antes = False
+        self._fim_antes = False
+        self.seguradas = 0
+        self.com_evento = {e: 0 for e in EVENTOS}
+        self.tetos = 0
 
     def contexto(self) -> dict:
         self.F = self.F - mul(self.k_f_desce, self.F, self.S)
@@ -207,9 +228,62 @@ class EstadoDinamico:
             self.corridas_fechadas.append(c)
         self.corrida = {"b": b, "chave": (b,), "inicio": k, "e": list(z), "r": 0, "n": 1, "g_apr": g_apr}
 
+    # ------------------------------------------------------------ a C3: a escolha segurada ate um evento
+    def _faixa(self, u: int) -> int:
+        S = self.S
+        return (u >= S // 4) + (u >= S // 2) + (u >= 3 * S // 4)
+
+    def eventos(self, sens: dict, afeto: dict, reflexo: bool, dono_agiu: bool) -> tuple[list[str], tuple | None]:
+        """os eventos desta decisao contra a anterior e o candidato a segurar (None com evento, na 1.a decisao ou depois do reflexo); guarda
+        o retrato desta decisao (docstring do modulo). So com `redecidir_evento`; sem rng."""
+        if not self.cd.redecidir_evento:
+            raise RuntimeError("M-ESTADO: eventos sem a subchave redecidir_evento")
+        objetos = sens["objetos"]
+        retrato = {"faixas": {r: self._faixa(u) for r, u in afeto["urgencias"].items()},
+                   "boas": sorted(o["id"] for o in objetos if o["classe"] in COMIDAS_BOAS), "cheiro": sens["ha_cheiro"]}
+        antes, self._retrato = self._retrato, retrato
+        reflexo_antes, self._reflexo_antes = self._reflexo_antes, reflexo
+        if antes is None:                                  # a primeira decisao da vida: o sorteio de hoje
+            return [], None
+        cand = self.candidato
+        ev = []
+        if reflexo or reflexo_antes:
+            ev.append("E-REFLEXO")
+        if retrato["faixas"] != antes["faixas"]:
+            ev.append("E-RECEPTOR")
+        alvo_saiu = cand is not None and cand[1] in ("comida", "bola") and not any(
+            o["id"] == cand[2] and (o["classe"] == "bola") == (cand[1] == "bola") for o in objetos)
+        if retrato["boas"] != antes["boas"] or retrato["cheiro"] != antes["cheiro"] or alvo_saiu or dono_agiu:
+            ev.append("E-MUNDO")
+        if self._fim_antes:
+            ev.append("E-FIM")
+        if cand is not None and self.n_seg >= self.p.n_seg_max:
+            ev.append("E-TETO")
+        return ev, (None if ev else cand)
+
+    def registrar_redecisao(self, chave: tuple, segurada: bool, reflexo: bool, evento: list[str]) -> None:
+        """a escolha da decisao (segurada ou nao): o candidato da seguinte, o `n_seg` e as contagens (so com `redecidir_evento`)"""
+        if not self.cd.redecidir_evento:
+            raise RuntimeError("M-ESTADO: registrar_redecisao sem a subchave redecidir_evento")
+        if segurada and (reflexo or evento or chave != self.candidato):
+            raise RuntimeError("M-ESTADO: a escolha segurada com o reflexo, com evento ou fora do candidato")
+        if "E-TETO" in evento:
+            self.tetos += 1
+        for e in evento:
+            self.com_evento[e] += 1
+        self.seguradas += segurada
+        self.n_seg = self.n_seg + 1 if segurada else 0
+        self.candidato = None if reflexo else chave
+
     def consequencia(self, r_n: int, ocorrido: dict | None, depois: dict) -> list[dict]:
         """a consequencia da decisao em curso. `depois` = {"visto": o alvo nos `vistos` depois de andar, "d": a distancia a ele (None sem
-        ele), "ha_cheiro"}. Devolve as opcoes que acabaram nela."""
+        ele), "ha_cheiro"}. Devolve as opcoes que acabaram nela (com a C3, guarda se alguma acabou com um motivo que nao e `unica`)."""
+        fins = self._consequencia(r_n, ocorrido, depois)
+        if self.cd.redecidir_evento:
+            self._fim_antes = any(f["motivo"] != "unica" for f in fins)
+        return fins
+
+    def _consequencia(self, r_n: int, ocorrido: dict | None, depois: dict) -> list[dict]:
         op = self.opcao
         if op is None:
             raise RuntimeError("M-ESTADO: consequencia sem a opcao da decisao")
@@ -280,6 +354,9 @@ class EstadoDinamico:
             out["suspensas"], out["retomadas"] = self.suspensas, self.retomadas
             if I is not None and "n_susp" in I:
                 out["I"]["n_susp"] = I["n_susp"]
+        if self.cd.redecidir_evento:                    # so com a C3 (desligada, o estado e o de hoje, byte a byte)
+            out["redecidir"] = {"candidato": None if self.candidato is None else chave_json(self.candidato), "n_seg": self.n_seg,
+                                "seguradas": self.seguradas, "com_evento": dict(self.com_evento), "tetos": self.tetos}
         return out
 
     def suspensa_resumo(self) -> dict | None:

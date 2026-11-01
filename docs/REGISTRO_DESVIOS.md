@@ -467,3 +467,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-31 — TEMA DOS MENUS, as peles refeitas (worker, Claude Code, Opus 5.5, worktree `v3-tema-peles`): Militar e Sci-fi distintas](registro/2026-10.md)
 - [2026-10-31 — C2 HÁBITO NA INTENÇÃO, etapa 4 (worker, Claude Code, Opus 5.5, worktree `v3-habito-intencao-run`): a run e a leitura](registro/2026-10.md)
 - [2026-10-31 — C3 REDECIDIR POR EVENTO, etapa 1 (worker, Claude Code, Opus 5.5, worktree `v3-redecidir-papel`): "a intenção" lida como a escolha, e o M-MEM nos braços](registro/2026-10.md)
+- [2026-10-31 — C3 REDECIDIR POR EVENTO, etapa 2 (worker, Claude Code, Opus 5.5, worktree `v3-redecidir-evento-espec`): a espec, o gabarito antes e a subchave `redecidir_evento`](registro/2026-10.md)
