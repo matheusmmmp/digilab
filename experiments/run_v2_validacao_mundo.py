@@ -413,7 +413,7 @@ def main() -> None:
     print(json.dumps({"G-MUNDO": {k: r["G-MUNDO"][k] for k in ("media", "ic95", "passa")},
                       "G-MF1r": {k: r["G-MF1r"][k] for k in ("media", "ic95", "ic90", "categoria")},
                       "secundarios": {n: {"passa": g["passa"], "p": g["holm"]["p"]} for n, g in r["secundarios"].items()},
-                      "leitura": r["leitura"]}, indent=2, ensure_ascii=False))
+                      "leitura": r["leitura"]}, indent=2))
 
 
 if __name__ == "__main__":

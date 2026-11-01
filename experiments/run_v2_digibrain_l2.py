@@ -552,7 +552,7 @@ def main() -> None:
         raise SystemExit("a fumaca precisa de --saida (fora de artifacts_v2_digibrain_prototipo/)")
     saida = Path(a.saida) if a.saida else RAIZ / SAIDA[cfg["fase"]]
     r = rodar(cfg, saida, a.processos, caminho)["resultado"]
-    print(json.dumps({k: v for k, v in r.items() if k != "descritivos"}, indent=1, ensure_ascii=False, default=str)[:4000])
+    print(json.dumps({k: v for k, v in r.items() if k != "descritivos"}, indent=1, default=str)[:4000])
 
 
 if __name__ == "__main__":

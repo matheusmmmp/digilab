@@ -444,6 +444,12 @@ def rodar(cfg: dict, pasta: Path, processos: int, caminho_config: Path | None = 
     return {"meta": meta, "registros": registros, "resultado": resultado}
 
 
+def _imprimir_resumo(r: dict) -> None:
+    """O resumo no console: ASCII puro (ensure_ascii), para nao quebrar num console cp1252 com '≈' na leitura; os artefatos gravados nao passam por aqui."""
+    print(json.dumps({k: r[k] for k in ("modo", "vidas", "primario", "secundarias", "premissas", "leitura")}, indent=1, ensure_ascii=True,
+                     default=str)[:4000])
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--config", required=True)
@@ -457,8 +463,7 @@ def main() -> None:
         raise SystemExit("a fumaca precisa de --saida (fora de artifacts_v2_digibrain_prototipo/)")
     saida = Path(a.saida) if a.saida else RAIZ / SAIDA
     r = rodar(cfg, saida, a.processos, caminho)["resultado"]
-    print(json.dumps({k: r[k] for k in ("modo", "vidas", "primario", "secundarias", "premissas", "leitura")}, indent=1, ensure_ascii=False,
-                     default=str)[:4000])
+    _imprimir_resumo(r)
 
 
 if __name__ == "__main__":

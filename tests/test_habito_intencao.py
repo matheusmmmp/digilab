@@ -267,3 +267,17 @@ def test_a_fumaca_roda_de_ponta_a_ponta(tmp_path):
     assert set(res["descritivo"]) == {"indices", "corridas_e_h", "corpo", "outros"}
     with pytest.raises(FileExistsError):
         hi.rodar(cfg, pasta, 1)
+
+
+def test_resumo_no_console_cp1252_nao_quebra(monkeypatch):
+    """O print do resumo com '≈' num stdout cp1252 (console Windows) nao levanta (D-C2-4-4)."""
+    import io
+    import run_v2_habito_intencao as hi
+    import run_v2_longe_regular as lr
+    r = {"modo": "m", "vidas": 1, "primario": {}, "secundarias": {}, "premissas": {}, "sorteado": {}, "leitura": "≈ 0,5"}
+    for mod in (hi, lr):
+        buf = io.TextIOWrapper(io.BytesIO(), encoding="cp1252", errors="strict")
+        monkeypatch.setattr("sys.stdout", buf)
+        mod._imprimir_resumo(r)
+        buf.flush()
+        assert "2248" in buf.buffer.getvalue().decode("ascii")
