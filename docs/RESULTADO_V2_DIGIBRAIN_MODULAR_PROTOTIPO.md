@@ -1098,3 +1098,158 @@ necessidade fica em 0 (até a quarta casa) nos três braços.
   - no sorteado, a run não separa um efeito pequeno negativo de nenhum: o IC fica entre −0,024 e +0,002;
   - **a C1 não mostra que o modular é superior** a nada além do M2 nestas condições: o A11 não rodou. O M3\* também troca de meta muito
     mais (+28 por vida no `longe_fixo`) e tem mais exaustão no longe.
+
+## 14. A C2, o hábito com o crédito na corrida (2026-10-31, worker da C2, etapa 4, Claude Code, Opus 5.5; adendo 7, A7.4 a A7.8)
+
+**Antes dos números:**
+- **as regras** são as do adendo 7 (APROVADO em 2026-10-31), lidas como estão: o primário de A7.4, as premissas de A7.5, a classe de
+  A6.6 com a margem δ = 0,011 (A7.6), a regra de leitura de A7.7 e os descritivos de A7.8. **Todo número é PROPOSTO,** e os limiares (a
+  margem, o 1,1 da P-CORRIDA, o 0,01 da G-PESA, o 0,15 da C5, o −0,5 do g1) são SEM FONTE externa (A7.11);
+- **a run rodou uma vez** (A7.13), e nada foi ajustado depois de ver o resultado;
+- **a leitura não afirma** que o modular supera o A (o A11 não está na run), que o protótipo está pronto, um tamanho de efeito fora das
+  condições da run, nem nada sobre o gatilho de reavaliação (a C3) (o `nao_demonstra` do `resultado.json`).
+
+**Como rodou:**
+- **o comando** de A7.13, do commit `4be65a0` (o registro, empurrado antes da primeira vida), com a árvore limpa (`git_limpo` = true), 4
+  processos, depois da suíte e sem sobrepor (V3-D8);
+- **as vidas:** as 150 unidades da faixa 75101…75505 × 3 braços × 12 células, 14 dias: **5 400 vidas,** das 22h11 às 23h09 de 2026-10-31
+  (3 505 s de parede; a estimativa de A7.9 era cerca de 1 h 40 min);
+- **o processo saiu com 1, depois de gravar tudo:** a função `rodar` voltou com os três artefatos gravados e o `meta.json` fechado (com o
+  `fim` e os sha256 do `medidas.json` e do `resultado.json`); o erro foi no `print` final do resumo no `main`, um `UnicodeEncodeError` do
+  "≈" no console cp1252 do Windows (o `run.log`). Nenhuma vida, conferência ou análise ficou por fazer. O desvio está no registro
+  (`docs/registro/2026-10.md`, a seção da etapa 4);
+- **as conferências da run,** todas falhando alto, em cada vida: o replay bit a bit do disco (o G1, `orq.conferir_replay`), o
+  T-CENARIO-1, o G-MECANISMO com a conferência do crédito (por opção e, no M2c, por corrida: o `conferir_credito_corrida` do #513), as
+  corridas do orquestrador iguais às entregues ao P2 no M2c, e os fins de intenção (só os conhecidos de A7.10: `achou`, `desistiu`,
+  `meta`, `sumiu` e `trocou`; nenhum outro apareceu). A contagem de 5 400 vidas foi conferida no fim (600 por braço e lugar);
+- **a conferência depois da run:** os sha256 do `medidas.json` e do `resultado.json` são os do `meta.json`; a análise refeita do
+  `medidas.json` gravado (`analisar`, sem mudança) sai igual ao `resultado.json`; o `vidas.tar.gz` tem as 5 400 vidas;
+- **os artefatos,** em `artifacts_v2_digibrain_prototipo/habito_intencao/run/`:
+  - o `meta.json` (sha256 `5ab56d67…71c6`), com o `git_head` `4be65a0`, o sha256 da config (`07ecfb1d…3277`), do orquestrador
+    (`d84dfd8c…ce11`), do protótipo (`a2e01ee9…8022`), do plano com A7.13 (`b56988f4…444c`) e dos módulos;
+  - o `medidas.json` (sha256 `93b136d6…5a33`, 49,5 MB) e o `resultado.json` (sha256 `5c7e51a5…d5eb`), os mesmos do `meta.json`;
+  - o `run.log` (a saída da run, em LF; sha256 `fac91014…980d`) e o `vidas.tar.gz` com as 5 400 vidas (sha256 `261d1fbc…572b`,
+    26,5 MB).
+
+### 14.1 As premissas (A7.5): passam as duas
+
+| premissa | no M2c, nas 8 células, por unidade | IC95 (t, 150 unidades) | o limiar (o limite inferior) | passa |
+|---|---|---|---|---|
+| **P-CORRIDA** (decisões por corrida creditada, a vida inteira) | **1,501** | [1,496; 1,506] | > 1,1 | **sim** |
+| **G-PESA do hábito** (a fração dos dias 8 a 14 em que o hábito mudou a escolha) | **0,111** | [0,108; 0,114] | > 0,01 | **sim** |
+
+O primário é **conclusivo** (`premissas.conclusivo` = true).
+
+### 14.2 O primário P-A (A7.4): M2c − M2 no índice "ganhou, fica", nas 8 células, 150 unidades
+
+| a medida | o valor |
+|---|---|
+| a média das diferenças por unidade | **+0,0028** |
+| o IC95 pelo t (gl 149) | **[−0,0003; +0,0060]** |
+| o t e o p unilateral | 1,77; 0,040 |
+| o g1 das 150 diferenças | +0,250 (acima de −0,5: sem a ressalva da assimetria) |
+| o IC95 percentil do bootstrap (a convenção da seção 5.2.1, anticonservadora com 5 bases, A4.4) | [+0,0006; +0,0046] |
+| a margem efetiva (o menor efeito com poder 0,8 pelo dp observado) | 0,0045 (a planejada: 0,011) |
+| **passa** (o limite inferior acima de 0) | **não** |
+| **a classe** (A6.6) | **"≈ 0"** (o IC inteiro dentro de (−0,011; +0,011), sem sinal: ele cruza o 0) |
+
+A previsão "> 0" de A7.1 **não se confirma.** O p unilateral (0,040) fica acima de 0,025, o mesmo critério do limite inferior. O IC
+percentil do bootstrap exclui o 0, mas ele é rotulado como anticonservador e não é o teste (A4.4; A7.4); fica registrado ao lado, como
+está.
+
+### 14.3 As secundárias (A7.4; sem gate, sem Holm)
+
+| contraste | a previsão | a média | IC95 (t) | t; g1 | a classe |
+|---|---|---|---|---|---|
+| **S1: M2c − M1** | > 0 | **−0,0126** | [−0,0162; −0,0089] | −6,81; +0,503 | **"< 0"** |
+| **S2: M2 − M1** (a réplica do G-ABLA-P2) | sem previsão | **−0,0154** | [−0,0192; −0,0116] | −8,09; +0,317 | **"< 0"** |
+
+A previsão "> 0" do S1 **não se confirma:** com a corrida, o hábito continua abaixo do sem-hábito. O S2 repete, no cenário novo, o sinal
+do G-ABLA-P2 das runs anteriores (−0,011 a −0,018).
+
+### 14.4 A regra de leitura (A7.7)
+
+- **A linha:** premissas passam, P-A "≈ 0" (o primário não passa; a classe manda), S1 "< 0". Vale a **linha 4:** "nestas condições, a
+  unidade de crédito não é a causa. Fica a H-P2a: o índice mede a sensibilidade ao resultado, e um hábito é a repetição pouco sensível".
+- **O que se faz** (a mesma linha): **volta ao Matheus a medida do P2, não um mecanismo novo** (a `leitura` do `resultado.json`).
+- **O S2 e os descritivos (14.5) não mudam a linha** (A7.7). **A run não se repete** (A7.7).
+
+### 14.5 Os descritivos (A7.8, sem gate; nenhum muda 14.4)
+
+Todos com o IC95 do t sobre as 150 unidades e a classe de A6.6 (δ = 0,011). Os subgrupos que o próprio mecanismo cria (as corridas por
+comportamento) saem só somados por braço (a LP-2).
+
+**1. O índice de hoje por lugar** (o nível e os três pares):
+
+| lugar | M1 | M2 | M2c | M2c − M2 | M2c − M1 | M2 − M1 |
+|---|---|---|---|---|---|---|
+| comedouro | −0,079 | −0,088 | −0,084 | +0,0037 [−0,0008; +0,0083] ≈ 0 | −0,0051 [−0,0103; +0,0001] ≈ 0 | −0,0088 [−0,0140; −0,0037] < 0 |
+| `longe_fixo` | −0,087 | −0,110 | −0,108 | +0,0019 [−0,0025; +0,0062] ≈ 0 | −0,0199 [−0,0252; −0,0146] < 0 | −0,0218 [−0,0274; −0,0162] < 0 |
+| longe sorteado | −0,070 | −0,112 | −0,109 | +0,0025 [−0,0015; +0,0065] ≈ 0 | −0,0390 [−0,0444; −0,0337] < 0 | −0,0415 [−0,0471; −0,0359] < 0 |
+
+**No longe sorteado,** onde o G-ABLA-P2 falhou na reavaliação (−0,045), o M2 − M1 dá −0,042 de novo, e o M2c − M2 dá +0,0025, "≈ 0": a
+corrida não desfaz a falha onde ela mora.
+
+**O índice da DX-5** (só os pares cuja primeira decisão tem r possível), nas 8 células: M2c − M2 **+0,0071 [+0,0009; +0,0133], "> 0"**;
+M2c − M1 −0,0093 [−0,0160; −0,0025], "< 0"; M2 − M1 −0,0159 [−0,0225; −0,0094], "< 0". Por lugar, o M2c − M2: comedouro +0,0112
+[+0,0023; +0,0201] "> 0", `longe_fixo` +0,0028 [−0,0047; +0,0103] "≈ 0", longe +0,0028 [−0,0066; +0,0123] "indeterminado". Por ação, nas
+8 células: o comer, M2c − M2 +0,0064 [−0,0064; +0,0193] "indeterminado" (M2 − M1 +0,0256 [+0,0119; +0,0394] "> 0"); o explorar, M2c − M2
++0,0071 [−0,0003; +0,0145] "indeterminado" (M2 − M1 −0,0133 [−0,0209; −0,0057] "< 0"). **É descritivo e não muda a linha 4** (A7.7).
+
+**2. O índice por corrida** (AD7-4; só entre braços, não em nível com o de hoje): nas 8 células, M1 +0,0135, M2 +0,0155, M2c +0,0154;
+M2c − M2 −0,0001 [−0,0016; +0,0014] "≈ 0"; M2c − M1 +0,0022 [+0,0006; +0,0039] "≈ 0 +"; M2 − M1 +0,0024 [+0,0008; +0,0040] "≈ 0 +". Nos
+três lugares, o M2c − M2 fica "≈ 0".
+
+**3. As corridas** (por vida; a P-CORRIDA é a do M2c nas 8 células):
+- **as decisões por corrida,** nas 8 células: M1 1,528, M2 1,501, M2c 1,501; por lugar, de 1,42 (longe) a 1,57 (comedouro, M1);
+- **por comportamento** (somadas por braço e lugar, sem contraste; LP-2): o dormir tem as corridas mais longas (1,59 a 1,79 decisão), o
+  explorar 1,35 a 1,55, o chamar atenção 1,30 a 1,38, o comer 1,11 a 1,19 e o brincar 1,02 a 1,04. Os números por lugar e braço estão em
+  `descritivo.corridas_e_h.por_comportamento_somado`.
+
+**4. O H** (só a leitura; HI-7):
+- **os créditos do P2 por vida,** nas 8 células: M2 1 336,2, M2c 897,5 (a razão, 1,49, acompanha o comprimento médio da corrida);
+- **o H no teto:** 0 em todas as vidas do M2 e do M2c;
+- **a norma L1 do H por comportamento no fim, na escala S,** nas 8 células (M2; M2c): o comer 0,626; 0,619; o explorar 0,474; 0,517; o
+  brincar 0,468; 0,449; os outros comportamentos 0 (até a terceira casa).
+
+**5. O corpo** (as medidas da C5, AD6-4, SEM FONTE; o limiar 0,15):
+- **a taxa de fechamento por episódio de fome,** nas 8 células: M1 0,610, M2 0,601, M2c 0,608; M2c − M2 +0,0067 [−0,0029; +0,0162], M2c −
+  M1 −0,0016 [−0,0130; +0,0097] e M2 − M1 −0,0083 [−0,0190; +0,0024], todos "indeterminado" (e por lugar também);
+- **a fração do tempo com algum estado abaixo de 0,15,** na vida, nas 8 células: M1 0,279, M2 0,279, M2c 0,274; M2c − M2 −0,0040 [−0,0087;
+  +0,0006] "≈ 0". Nos dias 8 a 14: 0,337, 0,338, 0,332; M2c − M2 −0,0055 [−0,0141; +0,0032] "indeterminado";
+- **a menor necessidade** (média e mínimo, vida e dias 8 a 14): o M2c − M2 sai "≈ 0" nas 8 células e em cada lugar. No longe sorteado o
+  mínimo fica em 0 (até a quarta casa) nos três braços;
+- **o hábito e o pet** (a pergunta da tarefa, 4.4): no longe sorteado, o M2 − M1 sai "< 0" na fração fora (−0,024 na vida) e "> 0" na
+  menor necessidade média (+0,009): o pet com hábito passa menos tempo em falta ali; no comedouro, a fração fora sai "> 0" (+0,008). O
+  M2c − M2 não sai do "≈ 0" nem do "indeterminado" em nenhuma medida do corpo;
+- **a privação de hoje,** ao lado (nas 8 células): M1 0,302, M2 0,307, M2c 0,300.
+
+**6. Os outros:**
+- **a G-PESA do hábito por lugar** (M2; M2c): comedouro 0,086; 0,094; `longe_fixo` 0,119; 0,129; longe 0,109; 0,118;
+- **os fins das intenções** (somas por braço e lugar, na ordem `achou`, `desistiu`, `meta`, `sumiu`, `trocou`): comedouro M1 7 543, 0,
+  27 239, 0, 4 791; M2 8 853, 0, 31 583, 0, 5 578; M2c 8 761, 0, 31 410, 0, 5 377; `longe_fixo` M1 8 649, 9, 22 092, 393, 9 860; M2 9 674,
+  9, 24 428, 412, 11 061; M2c 9 704, 9, 24 409, 384, 10 937; longe M1 11 861, 9, 17 924, 1 036, 15 864; M2 12 871, 11, 19 917, 1 109,
+  17 137; M2c 12 824, 9, 19 679, 1 122, 17 100. Nenhum outro fim;
+- **as células sem índice** (o índice `None`, fora da média da unidade; A7.4): só no `longe_fixo`, M1 22, M2 5 e M2c 6 das 600 vidas de
+  cada; no comedouro e no longe, nenhuma. Nenhuma unidade ficou fora do P-A (n = 150);
+- **os episódios por vida** (8 células): M1 14,8, M2 14,3, M2c 14,3. **A exaustão:** 0,190, 0,199 e 0,200;
+- **por dono:** só no `resultado.json` (`descritivo.outros.indice_por_dono`), sem leitura.
+
+### 14.6 O que é verificado, o que é resultado e o que é interpretação
+
+- **Verificado por testes e hashes:** a suíte antes da run (43 falhas, todas dos hooks; nenhuma do G1, do G2 ou do G-MECANISMO, A7.10); o
+  replay bit a bit, o T-CENARIO-1, o G-MECANISMO com a conferência do crédito por corrida e os fins de intenção em cada vida; as 5 400
+  vidas; o `meta.json` com o commit do registro, a árvore limpa e os sha256 de A7.13; o `resultado.json` refeito igual do `medidas.json`.
+- **Resultado** (do `resultado.json`, pelas regras do adendo 7): 14.1 a 14.5.
+- **Interpretação** (do worker, não testada, PROPOSTA):
+  - **a corrida mudou pouco a unidade de crédito:** com 1,50 decisão por corrida em média (o comer perto de 1,1 e o brincar de 1,0), o
+    crédito por corrida fica perto do crédito por passo. A P-CORRIDA passa com folga pelo limiar escrito (1,1), mas o contraste testa uma
+    diferença pequena de mecanismo. O "≈ 0" não diz que uma unidade bem mais longa (a que o gatilho da C3 daria) também sairia nula; isso
+    é a hipótese da C3, não um resultado desta run, e Gadanho e Hallam (2001) não dizem que o efeito aparece sem o gatilho (A7.11);
+  - **o hábito continua abaixo do sem-hábito no índice** (S1 e S2 "< 0", mais fundo no longe sorteado), enquanto o hábito pesa (a G-PESA,
+    0,11) e o corpo não piora com ele (no longe sorteado, o M2 até passa menos tempo em falta que o M1). Isso vai na direção da H-P2a da
+    linha 4: o índice "ganhou, fica" lê a sensibilidade da repetição ao resultado, e um hábito repete com pouca sensibilidade. Não é teste
+    dela;
+  - **o "> 0" da DX-5 no M2c − M2** (+0,007, sobretudo no comedouro) é descritivo, menor que a margem (0,011), e não ajusta nada: a linha
+    continua a 4;
+  - **a C2 não mostra que o modular é superior** a nada: os três braços são do modular, e o A11 não rodou.
