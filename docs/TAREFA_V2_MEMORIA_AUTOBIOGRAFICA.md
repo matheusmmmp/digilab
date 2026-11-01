@@ -152,3 +152,5 @@ Ho et al. usam de 10 a 50 execuções por condição, sem teste de hipótese: é
 - **O desvio:** `docs/registro/2026-11.md`, a seção da M0 e da M1. **Vai ao Matheus:** o limiar afetivo pelo nível do estresse codifica
   quase tudo num pet estressado (o achado do registro), antes da M2 e da M3.
 - **O próximo:** a M2 e a M3 juntas (a lembrança, o lugar pela soma e a consolidação), num PR próprio.
+- **Decidido pelo Matheus em 2026-11-01 (#530, pela recomendação):** o afeto lido pela variação, não pelo nível (a espec, 3.3); a M2 e a
+  M3 juntas no próximo PR, já com essa troca.
