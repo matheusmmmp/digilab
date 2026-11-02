@@ -1,7 +1,8 @@
 # TAREFA V3 — LAB-MODULAR: o DigiBrain modular inteiro no jogo, em modo laboratório (2026-11-01)
 
 Coordenador: Gerente da V3 (Claude Code, Opus 5.5). Worker: um por etapa, numa worktree `v3-lab-modular-<etapa>` com o branch do mesmo
-nome, cortado da `origin/main`. Status: **ABERTA, só papel.** Nenhum código foi escrito para esta tarefa.
+nome, cortado da `origin/main`. Status: **ABERTA**, com as LAB-1 a LAB-5 DECIDIDAS pelo Matheus em 2026-11-01, pela recomendação ("Aprova"). Nenhum código foi
+escrito para esta tarefa.
 
 Categoria: implementacao. Origem: Matheus, 2026-11-01. Ele perguntou se dava para levar o cérebro modular inteiro ao jogo web para
 testar já. O Gerente recomendou esperar o resultado da C4 e então levar o modular inteiro, num **modo laboratório** atrás de uma chave
@@ -33,7 +34,7 @@ Não é run de pesquisa e não mede se o modular é melhor. O laboratório serve
   conferência da fala de memória (`web/app/src/falaMemoria.ts`, #536).
 - **O PR #541** (a run da C4) na `main`, com a D-C4-1 decidida: sem ela, a `memoria_autobio` sai da seção 3 e a LM3 porta só o lugar
   lembrado.
-- **As LAB-1 a LAB-5** (seção 8). A LM0 começa com a LAB-1 decidida.
+- **As LAB-1 a LAB-5** (seção 8), DECIDIDAS em 2026-11-01.
 
 ## 3. Mudança mínima: o que entra (a recomendação da LAB-1)
 
@@ -106,6 +107,8 @@ As etapas LM0 a LM4 só tocam o motor e os testes. A LM5b é a única que toca a
 - O painel mostra o motivo por módulo e a lembrança, sem rótulo que prometa mais do que o cérebro faz.
 - Cada etapa num PR próprio, com o relato conferido por `tools/verificar_relato.py`, e o painel da V3 atualizado.
 ## 8. Precisa do Matheus
+
+**DECIDIDAS em 2026-11-01:** as cinco, pela recomendação ("Aprova", no chat com o Gerente da V3).
 
 Cada uma com a recomendação e o custo de errar.
 
