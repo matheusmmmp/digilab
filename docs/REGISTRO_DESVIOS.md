@@ -480,3 +480,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-01 — C4 MEMÓRIA AUTOBIOGRÁFICA, `controle_mem` (worker, Claude Code, Sonnet 5.5, worktree `v3-memoria-controle`): o que a espec deixou aberto em cada braço](registro/2026-11.md)
 - [2026-11-01 — A LACUNA DO A v11 NA FALA (worker, Claude Code, Sonnet 5.5, worktree `v3-fala-a-v11`): o modo simples da conferência](registro/2026-11.md)
 - [2026-11-01 — C4 MEMÓRIA AUTOBIOGRÁFICA, o plano da validação causal (worker, Claude Code, Opus 5.5, worktree `v3-memoria-plano`): o adendo 9 e o que ele leu](registro/2026-11.md)
+- [2026-11-01 — L3 LABORATÓRIO DO MODULAR, a tarefa (Gerente da V3, Claude Code, Opus 5.5, worktree `v3-lab-modular`): a L3 muda de escopo](registro/2026-11.md)
