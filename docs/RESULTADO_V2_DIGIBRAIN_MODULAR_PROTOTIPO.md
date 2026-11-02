@@ -1404,3 +1404,170 @@ lugares e o M2R estão em `descritivo.mecanismo.eventos_somados`.
     ajuda onde a comida muda de lugar e talvez custe perto da ração. É descritivo, sem previsão escrita antes, e não muda a linha 6;
     testá-lo exigiria uma pergunta nova com plano e faixa próprios;
   - **a C3 não mostra que o modular é superior** a nada: os quatro braços são do modular, e o A11 não rodou.
+
+## 16. A C4, a memória autobiográfica relevante ao contexto (2026-11-01, worker da run da C4, Claude Code, Opus 5.5; adendo 9, A9.4 a A9.9)
+
+**Antes dos números:**
+- **as regras** são as do adendo 9 (APROVADO em 2026-11-01), lidas como estão: o primário com o Holm, a guarda e as secundárias de A9.4,
+  as premissas de A9.5, a classe de A6.6 com a margem δ = 0,032 (A9.6), a regra de leitura de A9.7 e o descritivo de A9.8. **Todo número é
+  PROPOSTO,** e os limiares (a margem, o α da família, o 0,01 da P-PESA, o 80 % e os 3 episódios da G-ELEGIVEL-EP, o 0,15 da C5, o −0,5 do
+  g1) são SEM FONTE externa (A9.11);
+- **a run rodou uma vez** (A9.13), e nada foi ajustado depois de ver o resultado;
+- **a leitura não afirma** (o `nao_demonstra` do `resultado.json`) que o modular supera o A, que o protótipo está pronto, um tamanho de
+  efeito fora das condições da run, que o mecanismo é novo, que o pet "lembra" em algum sentido além do registro e da sonda, a fidelidade
+  de uma fala por LLM (as vidas não falam) nem o efeito combinado com a C2 ou a C3.
+
+**Como rodou:**
+- **o comando** de A9.13, do commit `a287ba2` (o registro com a volta ao D:, empurrado antes da primeira vida), com a árvore limpa
+  (`git_limpo` = true), 4 processos, depois da suíte e sem sobrepor (V3-D8), com `PYTHONIOENCODING=utf-8` no ambiente (só o console);
+- **o lugar:** a worktree `D:\Trab\digilab\v3-memoria-run`. A faixa, o registro e a suíte rodaram antes numa worktree no C: (o D: estava
+  sem espaço; A9.13 e o desvio 1 do registro); nenhuma vida rodou no C:;
+- **as vidas:** as 200 unidades da faixa 77101…77505 × 6 braços × 12 células, 14 dias: **14 400 vidas,** das 18h45 às 21h59 de
+  2026-11-01 (11 598 s de parede nas vidas, 3 h 13 min; 11 609 s com a análise; a estimativa de A9.9 era de 2 h 29 min a 4 h 24 min). O
+  processo saiu com 0. O CPU por vida foi de 2,80 s (SEM) a 3,47 s (REL+F), 3,15 s na média (a varredura de A9.9 dava 2,46 s);
+- **as conferências da run,** todas falhando alto, em cada vida: o replay bit a bit do disco (o G1), o T-CENARIO-1, o G-MECANISMO com a
+  conferência do crédito, a `conferir_memoria` (A9.10) e os fins de intenção (só os conhecidos: `achou`, `desistiu`, `meta`, `sumiu` e
+  `trocou`; nenhum outro apareceu). A contagem foi conferida no fim: 800 vidas por braço e lugar;
+- **a conferência depois da run:** os sha256 do `medidas.json` e do `resultado.json` são os do `meta.json`; a análise refeita do
+  `medidas.json` gravado (`analisar`, sem mudança) sai igual ao `resultado.json`, byte a byte; o `vidas.tar.gz` tem as 14 400 vidas;
+- **os artefatos,** em `artifacts_v2_digibrain_prototipo/memoria_autobio/run/`:
+  - o `meta.json` (sha256 `6315784c…3a18`), com o `git_head` `a287ba2`, o sha256 da config (`784c35fd…deab`), do orquestrador
+    (`dcc83a04…0cf0`), do plano com A9.13 (`e719def3…9a38`) e dos módulos;
+  - o `medidas.json` (sha256 `869ff397…3023`, 138,2 MB), **no git como `medidas.json.gz`** (sha256 `8b48d0a2…d93b`, 12,7 MB; `gzip -n
+    -9`; descomprimido, sai o sha256 do `meta.json`): o arquivo passa do limite de 100 MB do GitHub (o desvio 2 do registro); o
+    `resultado.json` (sha256 `6f8c91d8…d6d3`), o mesmo do `meta.json`;
+  - o `run.log` (a saída da run, em LF; sha256 `07d3e632…4e62`) e o `vidas.tar.gz` com as 14 400 vidas (sha256 `aa0c3987…0aed`, 67,5 MB).
+
+### 16.1 As premissas (A9.5): passam as duas
+
+| premissa | a medida | o valor | IC95 (t, 200 unidades) | o limiar | passa |
+|---|---|---|---|---|---|
+| **P-PESA** | no REL, `longe_fixo`: a fração das decisões dos dias 8 a 14 em que a memória mudou a escolha (`memoria_decidiu`) | **0,189** | [0,187; 0,192] | limite inferior > 0,01 | **sim** |
+| **G-ELEGIVEL-EP** | a fração das vidas do `longe_fixo` com 3 episódios ou mais | REL **0,960**; SEM **0,963**; REC **0,959**; EMB **0,961** | — | ≥ 0,80 nos quatro | **sim** |
+
+O primário é **conclusivo** (`premissas.conclusivo` = true). Ao lado, sem premissa: a fração em que **só** a lembrança mudou a escolha
+(`lembranca_decidiu`) no REL do `longe_fixo` é 0,063.
+
+### 16.2 O primário (A9.4): a família REL − SEM, REL − REC e REL − EMB na taxa por episódio, nas 4 células do `longe_fixo`, 200 unidades
+
+| contraste | a média | IC95 (t, gl 199) | t; p unilateral | g1 | IC95 do bootstrap (rotulado, A4.4) | a margem efetiva | o Holm (ordem; limiar; p ajustado) | **passa** | a classe (A6.6) |
+|---|---|---|---|---|---|---|---|---|---|
+| **REL − SEM** | **+0,0646** | [+0,0515; +0,0778] | 9,70; 9,5e-19 | +0,087 | [+0,0456; +0,0814] | 0,0188 | 2.º; 0,0125; 2,5e-18 | **sim** | `> 0` |
+| **REL − REC** | **+0,0560** | [+0,0427; +0,0693] | 8,28; 8,7e-15 | +0,050 | [+0,0468; +0,0653] | 0,0190 | 3.º; 0,025; 8,7e-15 | **sim** | `> 0` |
+| **REL − EMB** | **+0,0636** | [+0,0507; +0,0764] | 9,72; 8,2e-19 | +0,116 | [+0,0473; +0,0825] | 0,0184 | 1.º; 0,0083; 2,5e-18 | **sim** | `> 0` |
+
+O Holm rejeita os três (α = 0,025 na família). As três previsões de sinal de A9.1 **se confirmam.** Nenhum g1 chega a −0,5 (sem a
+ressalva da assimetria). Nenhuma unidade ficou fora (n = 200 nos três). O nulo plausível do REL − REC escrito antes (A9.1) não apareceu: o
+REL − REC (+0,056) sai perto do REL − SEM. A margem efetiva (cerca de 0,019) ficou abaixo da planejada (0,032): a dispersão observada das
+diferenças ficou abaixo do σ de planejamento (0,1369).
+
+### 16.3 A guarda G-COMEDOURO e as secundárias (A9.4)
+
+| contraste | a previsão | a média | IC95 (t) | t; g1 | a classe | o papel |
+|---|---|---|---|---|---|---|
+| **G-COMEDOURO: REL − SEM** (comedouro) | não `< 0` | **+0,1981** | [+0,1861; +0,2101] | +32,56; +0,139 | `> 0` | a guarda **não falha** (só `< 0` falha) |
+| **E2-FIXO: REL − RELsN** (`longe_fixo`) | sem previsão | **−0,0019** | [−0,0087; +0,0048] | −0,56; −0,004 | `≈ 0` | secundária, sem gate |
+| **E2-SORTEADO: REL − RELsN** (longe sorteado) | `> 0` | **+0,0003** | [−0,0075; +0,0080] | +0,07; +0,158 | `≈ 0` | secundária, sem gate |
+| **FACETAS: REL+F − REL** (`longe_fixo`) | sem previsão | **−0,0023** | [−0,0120; +0,0075] | −0,46; −0,109 | `≈ 0` | secundária, sem gate |
+| **SEM-SORTEADO: REL − SEM** (longe sorteado) | sem previsão | **−0,0223** | [−0,0347; −0,0098] | −3,53; −0,199 | `< 0` | secundária, sem gate |
+
+- **A previsão da E2-SORTEADO não se confirma:** sai `≈ 0`. Gravar ou não os episódios de σ < 0 não muda a taxa por episódio em nenhum
+  dos dois lugares longe, nem no comedouro (−0,0022 [−0,0060; +0,0017], `≈ 0`, no descritivo).
+- **As FACETAS saem `≈ 0`:** as três facetas por cima da lembrança não movem a taxa por episódio no `longe_fixo`.
+- **O SEM-SORTEADO sai `< 0`:** no longe sorteado, o REL fecha menos episódios que o SEM. Pela A9.7, ele não muda a linha; volta ao
+  Matheus como dado (D-C4-2).
+
+### 16.4 A regra de leitura (A9.7)
+
+- **A linha:** as premissas passam (a linha 1 não serve); a guarda é `> 0`, não `< 0` (a linha 2 não serve); os três contrastes do primário
+  leem `> 0` pelo Holm. Vale a **linha 3:** "nestas condições, a lembrança pelo contexto melhora o episódio de fome, e não basta lembrar
+  qualquer episódio" (a `leitura` do `resultado.json`).
+- **O que se faz** (a mesma linha): **a `memoria_autobio` (REL) vira candidata; volta ao Matheus. Não vai ao jogo sem plano próprio**
+  (D-C4-1). Ela segue desligada no código, como está.
+- **As secundárias e o descritivo (16.5) não mudam a linha** (A9.7). **A run não se repete,** e uma faixa nova só vem com um adendo novo.
+
+### 16.5 O descritivo (A9.8, sem gate; nenhum muda 16.4)
+
+Todos com o IC95 do t sobre as 200 unidades e a classe de A6.6 (δ = 0,032). Os grupos que o próprio mecanismo cria (as decisões com
+lembrança, os episódios por memória, as lembranças negativas) saem só por braço (a LP-2).
+
+**1. A taxa por episódio por lugar** (os níveis e os contrastes do REL):
+
+| lugar | REL | SEM | REC | EMB | RELsN | REL+F | REL − SEM | REL − REC | REL − EMB |
+|---|---|---|---|---|---|---|---|---|---|
+| comedouro | 0,876 | 0,678 | 0,831 | 0,803 | 0,878 | 0,879 | +0,198 `> 0` | +0,045 [+0,035; +0,055] `> 0` | +0,073 [+0,063; +0,084] `> 0` |
+| `longe_fixo` | 0,583 | 0,518 | 0,527 | 0,519 | 0,585 | 0,581 | +0,065 `> 0` | +0,056 `> 0` | +0,064 `> 0` |
+| longe sorteado | 0,437 | 0,459 | 0,426 | 0,429 | 0,437 | 0,439 | −0,022 `< 0` | +0,012 [−0,001; +0,024] `≈ 0` | +0,008 [−0,004; +0,020] `≈ 0` |
+
+**2. A lembrança e a sonda** (a tarefa, seção 0; por braço e lugar, a média por unidade):
+
+| lugar | braço | com lembrança | a memória decidiu (dias 8 a 14) | só a lembrança decidiu |
+|---|---|---|---|---|
+| `longe_fixo` | REL; RELsN; REL+F | 0,872; 0,870; 0,874 | 0,189; 0,190; 0,188 | 0,063; 0,063; 0,059 |
+| `longe_fixo` | REC; EMB; SEM | 0,949; 0,949; 0 | 0,165; 0,109; 0 | 0,034; 0,056; 0 |
+| comedouro | REL; REC; EMB | 0,896; 0,974; 0,974 | 0,147; 0,117; 0,107 | 0,053; 0,027; 0,054 |
+| longe sorteado | REL; REC; EMB | 0,869; 0,969; 0,969 | 0,219; 0,203; 0,115 | 0,042; 0,026; 0,044 |
+
+A lembrança acontece em quase toda decisão nos cinco braços que lembram, e o REL é o que mais muda escolhas pela memória nos três lugares.
+As lembranças de σ < 0, somadas: no `longe_fixo`, REL 155 882, REC 139 291, EMB 17 510, RELsN 0 (a MA-3), SEM 0.
+
+**3. Os episódios e as visitas** (a C4-E1; somados por braço no `longe_fixo`):
+- **os codificados:** REL 124 688, SEM 85 680, REC 116 901, EMB 95 592; **as consolidações:** 10 400 em todos; **os esquecidos:** REL 854,
+  SEM 8 460, REC 0, EMB 183; **os de σ < 0 guardados no fim:** REL 3 187, SEM 15, REC 3 309, EMB 433, RELsN 0. Os outros lugares em
+  `descritivo.episodios.somados`;
+- **as visitas ao lugar lembrado** (somadas; todas vazias no `longe_fixo` e no comedouro, como na C1 e na C3): `longe_fixo` REL 42 674,
+  REC 37 917, EMB 3 963, SEM 0; no longe sorteado, REL 53 883 (8 com comida). Por unidade, o REL − RELsN sai `< 0` no `longe_fixo` (−0,96
+  [−1,70; −0,22] visitas) e no longe sorteado (−2,40): o RELsN visita um pouco **mais** o lugar lembrado, e a taxa por episódio não muda
+  (16.3).
+
+**4. O corpo** (as medidas da C5, AD6-4, SEM FONTE; o limiar 0,15):
+- **a fração do tempo com algum estado abaixo de 0,15,** na vida: o REL − SEM sai `< 0` no comedouro (−0,037) e no `longe_fixo` (−0,025) e
+  `> 0` no longe sorteado (+0,053); o REL − REC sai `< 0` no `longe_fixo` (−0,033) e no sorteado (−0,030). Nos dias 8 a 14, o mesmo
+  quadro (`longe_fixo`: REL − SEM −0,058, REL − REC −0,057, REL − EMB −0,039, todos `< 0`);
+- **a menor necessidade** (média e mínimo): os contrastes do REL saem `≈ 0` (quase todos com o sinal + no comedouro e no `longe_fixo`); o
+  REL − SEM na média dos dias 8 a 14 do `longe_fixo` sai `> 0` (+0,029);
+- **a exaustão:** `≈ 0` em quase tudo; o REL − SEM no longe sorteado sai `> 0` (+0,038);
+- **a privação de hoje:** o REL − SEM sai `< 0` no comedouro (−0,058) e no `longe_fixo` (−0,060) e `> 0` no longe sorteado (+0,024).
+
+**5. As facetas (só no REL+F):** o valor médio no fim, no `longe_fixo`, em unidades de S: `cautela_comida` −181,0, `apego_dono` +152,5,
+`ousadia_longe` +181,2 (os outros lugares no mesmo sentido); as mudanças somadas no `longe_fixo`: 9 050, 7 714 e 9 328; a faceta mudou a
+escolha em 0,044 das decisões dos dias 8 a 14 no `longe_fixo` (0,038 no comedouro, 0,035 no sorteado).
+
+**6. A conferência da fala** (AD9-10; sobre alegações sintéticas do registro; **mede a régua, não uma fala**):
+- **as verdadeiras, as causas e as facetas** saem como a regra diz em todo braço e lugar: as verdadeiras e as causas verdadeiras 1,0
+  sustentadas; as causas falsas e as facetas falsas 0;
+- **as falsas sustentadas** (o que a raiz em comum deixa passar): no `longe_fixo`, REL 0,208 (204 736 de 986 386), REC 0,205, RELsN 0,206,
+  REL+F 0,210, EMB 0,098; no longe sorteado, de 0,069 (EMB) a 0,115 (REC), REL 0,078; no comedouro, de 0,011 a 0,024; no SEM, 0 (a decisão
+  sem lembrança).
+
+**7. Os outros:**
+- **a G-PESA por módulo** no `longe_fixo`: a memória REL 0,189, REC 0,165, EMB 0,109, SEM 0; o aprendido REL 0,269, REC 0,245, EMB 0,195,
+  SEM 0,121; o hábito de 0,107 a 0,116 em todos;
+- **os episódios de fome por vida** no `longe_fixo`: REL 13,4, SEM 13,2, REC 12,8, EMB 13,4; no comedouro, o SEM tem menos (15,0 contra
+  17,1 do REL);
+- **os fins das intenções** (somas por braço e lugar, na ordem `achou`, `desistiu`, `meta`, `sumiu`, `trocou`): `longe_fixo` REL 9 307,
+  16, 78 616, 398, 28 136; SEM 12 643, 17, 32 098, 605, 14 984; REC 10 534, 16, 71 201, 474, 30 548; EMB 12 170, 16, 41 362, 487, 32 067.
+  Os outros em `descritivo.outros.fins_somados`. Nenhum outro fim;
+- **por dono:** só no `resultado.json` (`descritivo.outros.por_dono`), sem leitura.
+
+### 16.6 O que é verificado, o que é resultado e o que é interpretação
+
+- **Verificado por testes e hashes:** a suíte antes da run (44 falhas: as 43 dos hooks e 1 `MemoryError` de
+  `tests/test_competicao_etapa0.py` que passa sozinho, 3 de 3; nenhuma do G1, do G2, do G-MECANISMO, de replay ou de paridade; A9.13); o
+  replay bit a bit, o T-CENARIO-1, o G-MECANISMO, a `conferir_memoria` e os fins de intenção em cada vida; as 14 400 vidas; o `meta.json`
+  com o commit do registro, a árvore limpa e os sha256 de A9.13; o `resultado.json` refeito igual do `medidas.json`.
+- **Resultado** (do `resultado.json`, pelas regras do adendo 9): 16.1 a 16.5.
+- **Interpretação** (do worker, não testada, PROPOSTA):
+  - **o REL − SEM não isola a lembrança:** o SEM não tem nem a lembrança nem o lugar lembrado do M-MEM (A9.2), e os níveis dele ficam
+    perto dos do M2 da C3 (na seção 15.5, o M2 tem 0,683 no comedouro e 0,519 no `longe_fixo`; aqui o SEM tem 0,678 e 0,518, em outra
+    faixa). A guarda grande (+0,198) é sobretudo isso: perto da ração, o lugar lembrado pesa muito. **O que separa a relevância é o
+    REL − REC e o REL − EMB,** e os dois saem `> 0` no `longe_fixo` e no comedouro; no longe sorteado, saem `≈ 0`;
+  - **as visitas ao lugar lembrado seguem vazias** (C4-E1): o ganho do REL não vem de achar comida no lugar lembrado. Tirar os negativos
+    (o RELsN) não muda a taxa, e a E2 no sorteado, onde Ho prevê o sinal, sai `≈ 0`: nestas condições, os episódios negativos não pesam na
+    taxa por episódio;
+  - **o SEM-SORTEADO `< 0`** diz que, onde a comida muda de lugar, lembrar (o lugar e o episódio) custa um pouco contra não lembrar nada
+    (−0,022), na mesma direção do M3\* − M2 da C1 no sorteado (−0,011, "indeterminado"). O REL não perde para o REC nem para o EMB ali;
+  - **a fala:** cerca de um quinto das falsas sintéticas passa pela raiz em comum no `longe_fixo` (0,21), o tamanho que a varredura já
+    mostrava (cerca de 0,19); é o que o verificador por regex deixa passar no registro real, não uma fala;
+  - **a C4 não mostra que o modular é superior** a nada: os seis braços são do modular, e o A não rodou. Ho (2005) e o PEPE (Francis, Mehta
+    e Ram, 2009) deram só a direção (A9.11); nada aqui é alegação de novidade.
