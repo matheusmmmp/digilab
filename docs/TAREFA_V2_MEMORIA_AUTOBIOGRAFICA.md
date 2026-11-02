@@ -347,4 +347,4 @@ A run única do adendo 9 (APROVADO em 2026-11-01). O resultado completo está na
   `longe_fixo`.
 - **Os artefatos** em `artifacts_v2_digibrain_prototipo/memoria_autobio/run/`; o `medidas.json` (138 MB) entra no git como
   `medidas.json.gz` (o limite de 100 MB do GitHub).
-- **Vai ao Matheus:** as D-C4-1 a D-C4-4 (no registro de 2026-11 e no PR).
+- **As D-C4-1 a D-C4-4 DECIDIDAS pelo Matheus em 2026-11-01, pela recomendação** (no registro de 2026-11 e no PR).
