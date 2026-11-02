@@ -325,3 +325,26 @@ sementes dos testes (101…505).
 - **A varredura** (101…505, K = 1, 14 dias, os 6 braços, 360 vidas, 4 processos, fora do git): nenhum fim desconhecido, nenhuma
   conferência falhou; os números no PR e no registro de 2026-11.
 - **Vai ao Matheus:** as AD9-1 a AD9-10 (A9.12); depois da aprovação, a faixa num commit próprio, e o registro da run (A9.13).
+
+## 19. A run da validação causal (2026-11-01, worker da run, Claude Code, Opus 5.5, worktree `v3-memoria-run`; adendo 9, A9.13)
+
+A run única do adendo 9 (APROVADO em 2026-11-01). O resultado completo está na seção 16 do `docs/RESULTADO_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`.
+
+- **A faixa** 77101…77505 em `FAIXAS_RESERVADAS`, num commit próprio (`ac1f77d`); **o registro** A9.13 empurrado antes da primeira vida
+  (`3ce715b` e `a287ba2`, a volta ao D:).
+- **A suíte antes da run** (do `3ce715b`, 4 fatias em paralelo): 44 falhas (as 43 dos hooks e 1 `MemoryError` que passa sozinho), 4 227
+  passaram, 7 puladas; nenhuma do G1, do G2, do G-MECANISMO, de replay ou de paridade.
+- **A run:** 14 400 vidas (200 unidades × 6 braços × 12 células, 14 dias), das 18h45 às 21h59 (3 h 13 min de parede), 4 processos, saída
+  0, `git_limpo`; o replay, o T-CENARIO-1, o G-MECANISMO, a `conferir_memoria` e os fins passaram em toda vida; a análise refeita do
+  `medidas.json` sai igual ao `resultado.json`, byte a byte.
+- **As premissas passam:** a P-PESA 0,189 [0,187; 0,192]; a G-ELEGIVEL-EP de 0,959 a 0,963 nos quatro braços.
+- **O primário:** o Holm rejeita os três. REL − SEM +0,0646 [+0,0515; +0,0778]; REL − REC +0,0560 [+0,0427; +0,0693]; REL − EMB +0,0636
+  [+0,0507; +0,0764]. **A guarda** REL − SEM no comedouro +0,198, `> 0`: não falha.
+- **A leitura (A9.7): a linha 3.** A `memoria_autobio` (REL) vira candidata e volta ao Matheus; não vai ao jogo sem plano próprio.
+- **As secundárias:** E2-FIXO, E2-SORTEADO e FACETAS `≈ 0` (a previsão `> 0` da E2-SORTEADO não se confirma); SEM-SORTEADO `< 0`
+  (−0,0223).
+- **A fala** (a régua, não uma fala): as verdadeiras, as causas e as facetas como a regra diz; as falsas sustentadas 0,208 no REL do
+  `longe_fixo`.
+- **Os artefatos** em `artifacts_v2_digibrain_prototipo/memoria_autobio/run/`; o `medidas.json` (138 MB) entra no git como
+  `medidas.json.gz` (o limite de 100 MB do GitHub).
+- **As D-C4-1 a D-C4-4 DECIDIDAS pelo Matheus em 2026-11-01, pela recomendação** (no registro de 2026-11 e no PR).
