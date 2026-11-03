@@ -49,3 +49,16 @@ export const NOITE = {
 } as const;
 /** a luz fraca do ninho a noite: o raio (celulas) e a cor */
 export const LUZ_NINHO = { raio: 2.2, cor: "255,214,140" } as const;
+
+/* os objetos do cuidado e a coreografia (docs/TAREFA_V3_HABITAT_OBJETOS.md): so vista, como o resto deste arquivo */
+/** o saco de pancada do treino, em celulas a partir do ninho do layout (no MVP: o ninho em (4, 15), o saco em (7, 11), ao norte entre
+    o ninho e o comedouro), e o kit medico da lesao, ao lado do ninho */
+export const SACO_DESDE_NINHO: readonly [number, number] = [3, -4], KIT_DESDE_NINHO: readonly [number, number] = [1.3, -1];
+/** o treino na ilha: a ida ate o saco, os golpes e a volta (ms); um golpe a cada GOLPE_MS; o pet para a GOLPE_DIST celulas do saco */
+export const TREINO_MS = { ida: 900, golpes: 2400, volta: 900 } as const, GOLPE_MS = 600, GOLPE_DIST = 1.35;
+/** a batida na bola: quanto dura o golpe (ms) */
+export const BATER_BOLA_MS = 450;
+/** a bola desenhada vai ate a do motor com esta constante de tempo (ms); salta quando a distancia passa de BOLA_SALTO celulas */
+export const BOLA_TAU_MS = 140, BOLA_SALTO = 12;
+/** o balanco do saco a cada golpe: a amplitude (radianos) e a constante de tempo do amortecimento (ms) */
+export const SACO_BALANCO = { amplitude: 0.32, tau: 650, periodo: 520 } as const;

@@ -469,6 +469,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-31 — C3 REDECIDIR POR EVENTO, etapa 1 (worker, Claude Code, Opus 5.5, worktree `v3-redecidir-papel`): "a intenção" lida como a escolha, e o M-MEM nos braços](registro/2026-10.md)
 - [2026-10-31 — C3 REDECIDIR POR EVENTO, etapa 2 (worker, Claude Code, Opus 5.5, worktree `v3-redecidir-evento-espec`): a espec, o gabarito antes e a subchave `redecidir_evento`](registro/2026-10.md)
 - [2026-11-01 — C3 REDECIDIR POR EVENTO, etapa 3 (worker, Claude Code, Opus 5.5, worktree `v3-redecidir-evento-plano`): o adendo 8, o poder e o orquestrador](registro/2026-11.md)
+- [2026-11-01 — HABITAT_OBJETOS (Claude Code, Opus 5.5, worktree `v3-habitat-objetos`): a direção do golpe e a versão do pet](registro/2026-11.md)
 - [2026-11-01 — C3 REDECIDIR POR EVENTO, etapa 4 (worker, Claude Code, Opus 5.5, worktree `v3-redecidir-evento-run`): a run e a leitura](registro/2026-11.md)
 - [2026-11-01 — C4 MEMÓRIA AUTOBIOGRÁFICA, a espec (worker, Claude Code, Opus 5.5, worktree `v3-memoria-espec`): só papel, as MA-1 a MA-8](registro/2026-11.md)
 - [2026-11-01 — C4 MEMÓRIA AUTOBIOGRÁFICA, M0 e M1 (worker, Claude Code, Opus 5.5, worktree `v3-memoria-m0m1`): o episódio fora da escolha, o tick e o limiar do estresse](registro/2026-11.md)

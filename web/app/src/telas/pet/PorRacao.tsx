@@ -20,7 +20,9 @@ function useRacao(): typeof ESTADO {
   return ESTADO;
 }
 /** o arrasto so comeca depois de 6 px: antes disso e um toque (abre a faixa) */
-const LIMIAR_ARRASTO = 6;
+export const LIMIAR_ARRASTO = 6;
+/** o aviso sobre o dock (AvisoRacao) com outra mensagem: a da bola (PorBola.tsx) */
+export const avisarNoDock = (msg: string): void => mudar(() => { ESTADO.mensagem = msg; });
 
 /** poe a racao em (x, y) do mapa, se for uma posicao do mapa; a mensagem diz onde (a regiao do layout) */
 export function porRacaoEm(x: number, y: number): boolean {

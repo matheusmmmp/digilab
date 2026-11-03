@@ -17,6 +17,7 @@ import { AMPULHETA } from "../../grades.ts";
 import { abrirModal } from "../../componentes/modal.ts";
 import { mudarMotor, useJogo } from "../../jogo.ts";
 import { hhmm } from "../pet/TelaPet.tsx";
+import { CENA } from "../pet/cenaEstado.ts";
 
 /* icones de treino do UP (hexagonos pintados, nao pixel art): 54 x 61 no botao, como pede o guia (secao 6) */
 const ICONE_TREINO: Record<Exercicio, string> = { levantar_pedra: "treino_pedra", corrida: "treino_corrida", alvo: "treino_soco", esquiva: "treino_arrancada", meditar: "treino_cachoeira", resistencia: "treino_saco" };
@@ -166,6 +167,7 @@ export function TelaTreinar({ lutando = false }: { lutando?: boolean }) {
       let texto = "";
       mudarMotor(mm => {
         const s = mm.treinar(ex);
+        CENA.treino = performance.now();         /* a ilha mostra o pet no saco de pancada (so vista) */
         const g = Object.entries(s.ganho).map(([k, v]) => `+${dec(v as number, 2)} ${NOME_STAT[k as Stat] || k}`).join(", ");
         texto = s.enrolou ? "Ele enrolou: a sessão não rendeu." + (s.forcada ? " A sobrecarga entrou mesmo assim." : "")
           : `${s.forcada ? "Forçado: " : ""}${g || "sem ganho (teto atingido)"}.${mm.pausaTreino ? " Ele pediu pausa." : ""}`;
