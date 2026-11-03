@@ -58,12 +58,14 @@ def test_a_chave_desligada_por_padrao_com_as_subchaves():
 
 
 def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
-    """o G2: a chave nao chega ao motor, a bancada nem as ferramentas; so o config, o pacote e o orquestrador do prototipo"""
+    """o G2: a chave nao chega ao motor, a bancada nem as ferramentas; so o config, o pacote, o orquestrador do prototipo e o exportador
+    do gabarito do modular para a web (LM0, #543: monta a config do braco REL pelo orquestrador; desvio de 2026-11-03)"""
     nomes = re.compile(r"\b(ConfigDigibrain\w*|CONFIG_DIGIBRAIN\w*)\b|digilab\.digibrain|from \.digibrain|from \.\.digibrain")
     citam = {p.relative_to(RAIZ).as_posix() for pasta in ("digilab", "experiments", "tools") for p in (RAIZ / pasta).rglob("*.py")
              if nomes.search(p.read_text(encoding="utf-8"))}
     assert {c for c in citam if not c.startswith("digilab/digibrain/")} == {"digilab/config.py",
-                                                                             "experiments/run_v2_digibrain_prototipo.py"}
+                                                                             "experiments/run_v2_digibrain_prototipo.py",
+                                                                             "experiments/exportar_gabarito_digibrain_modular.py"}
 
 
 def test_o_digibrain_so_existe_com_a_chave_ligada_e_e_a_v13():
