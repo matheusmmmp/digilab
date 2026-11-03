@@ -26,9 +26,11 @@ import { usePele } from "../../pele.ts";
 import { escolherTema, useTema, type Tema } from "../../tema.ts";
 import { EscolhaHabitat, resumoVisual } from "./EscolhaHabitat.tsx";
 import { EscolhaPele } from "./EscolhaPele.tsx";
+import { Laboratorio } from "./Laboratorio.tsx";
+import { labLigado, useLab } from "../../lab.ts";
 import { VELOCIDADES, escolherVelocidade, pularUmaHora, useTempo } from "../../tempo.ts";
 
-const TITULO: Record<ParteConfig, string> = { principal: "Ajustes", visual: "Visual", dados: "Registro e replay", fala: "Fala do pet", sobre: "Sobre" };
+const TITULO: Record<ParteConfig, string> = { principal: "Ajustes", visual: "Visual", dados: "Registro e replay", fala: "Fala do pet", laboratorio: "Laboratório", sobre: "Sobre" };
 const NOME_MODO: Record<ModoFala, string> = { template: "frases prontas", moldura: "moldura", livre: "livre" };
 export const nomeVelocidade = (v: number): string => VELOCIDADES.find(([, x]) => x === v)?.[0] ?? `${v} min/s`;
 
@@ -44,7 +46,7 @@ function Linha({ ic, titulo, resumo, tag, abrir }: { ic: ReactNode; titulo: stri
 function Principal({ abrir }: { abrir: (p: ParteConfig) => void }) {
   const { motor: m } = useJogo(), tema = useTema(), pele = usePele(), habitat = useHabitat(), fl = useFalaLivre(), { velocidade } = useTempo();
   const [dicas, setDicas] = useState(dicasLigadas);
-  useFalaLLM();
+  useFalaLLM(); useLab();
   return (
     <>
       <h3 className="mc-sec">Jogo</h3>
@@ -60,6 +62,8 @@ function Principal({ abrir }: { abrir: (p: ParteConfig) => void }) {
         <Linha ic={<Deco nome={ICONE.registro} />} titulo="Registro e replay" resumo={`semente ${m.semente} · ${m.log.length} eventos · exportar`} abrir={() => abrir("dados")} />
         <Linha ic={<Deco nome={ICONE.tempo} />} titulo="Tempo" tag="TESTE" resumo={velocidade === 0 ? "pausado" : `velocidade ${nomeVelocidade(velocidade)}`} abrir={() => abrir("dados")} />
       </div>
+      <h3 className="mc-sec">Laboratório</h3>
+      <div className="mc-menu"><Linha ic={<Peca nome="emoji_estrela" escala={2} />} titulo="Laboratório" tag="EXPERIMENTAL" resumo={labLigado() ? "modo ligado · o pet de teste com o DigiBrain modular" : "desligado · o jogo é o de hoje"} abrir={() => abrir("laboratorio")} /></div>
       <h3 className="mc-sec">Sobre</h3>
       <div className="mc-menu"><Linha ic={<Deco nome="Digivice_Circle_01" />} titulo="Sobre o Digilab" resumo="versão, créditos e procedência" abrir={() => abrir("sobre")} /></div>
       <h3 className="mc-sec">Som</h3>
@@ -101,7 +105,7 @@ function Visual() {
   );
 }
 function Dados({ irPet }: { irPet: () => void }) {
-  const { motor: m } = useJogo(), { velocidade } = useTempo(), [msg, setMsg] = useState<{ txt: string; erro?: boolean } | null>(null), [confirmar, setConfirmar] = useState(false);
+  const { motor: m, emLab } = useJogo(), { velocidade } = useTempo(), [msg, setMsg] = useState<{ txt: string; erro?: boolean } | null>(null), [confirmar, setConfirmar] = useState(false);
   const verificar = () => {
     const t0 = performance.now();
     try {
@@ -145,12 +149,13 @@ function Dados({ irPet }: { irPet: () => void }) {
           <BotaoHx onClick={pularUmaHora}>+1 h</BotaoHx>
         </div>
       </section>
-      <section className="mc-risco" aria-label="Área de risco">
+      {emLab ? <section className="mc-risco" aria-label="Área de risco"><p className="mc-apoio">Este é o pet de teste. Para chocar um ovo novo, volte ao seu pet; o pet de teste se descarta em Ajustes › Laboratório.</p></section>
+      : <section className="mc-risco" aria-label="Área de risco">
         <div className="mc-linha">
           <BotaoHx onClick={() => setConfirmar(true)}>Novo ovo (apaga este pet)</BotaoHx>
           {confirmar && <BotaoHx tom="perigo" onClick={() => { setConfirmar(false); abrirEscolhaBrasao(); irPet(); }}>Confirmar: apagar este pet</BotaoHx>}
         </div>
-      </section>
+      </section>}
     </>
   );
 }
@@ -211,7 +216,7 @@ export function TelaConfig({ parte, abrir, irPet }: { parte: ParteConfig; abrir:
         </div>
       )}
       {parte === "principal" ? <Principal abrir={abrir} /> : parte === "visual" ? <Visual /> : parte === "dados" ? <Dados irPet={irPet} />
-        : parte === "fala" ? <Fala /> : <Sobre />}
+        : parte === "fala" ? <Fala /> : parte === "laboratorio" ? <Laboratorio irPet={irPet} /> : <Sobre />}
     </section>
   );
 }

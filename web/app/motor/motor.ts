@@ -29,6 +29,7 @@ import { MotorCorpo, estadoNascimentoPy, type PoliticaCorpo } from "./motor_corp
 import { MotorCorpoMundo, type PoliticaCorpoMundo } from "./motor_corpo_mundo.ts";
 import { eventoDeixarComida, lerDeixarComida, type Mundo } from "./mundo.ts";
 import { bracoV11 } from "./pet_v11.ts";
+import { leituraLab, type LeituraLab } from "./digibrain/leitura.ts";
 import { DigiBrain } from "./digibrain/adapt.ts";
 import { leituraAprendido, leituraDecisao, mapaDecisao, mapaPesos, type ArestaMapa, type LeituraDecisao, type MapaDecisao } from "./digibrain.ts";
 import { desafiadoDaVersao, regrasDaVersao, type Lutador, type RegrasLuta, type ResultadoLuta, type Desafiado } from "./combate.ts";
@@ -305,6 +306,9 @@ export class Motor {
       },
     };
   }
+  /** o laboratorio (v16): a leitura do ultimo motivo do DigiBrain modular para o painel (digibrain/leitura.ts); null nos outros pets e antes da
+      primeira decisao. So le */
+  leituraLab(): LeituraLab | null { return this.lab === null ? null : leituraLab(this.lab); }
   /** v12: o mundo fisico do pet (null nos v1-v11). A tela so le */
   get mundo(): Mundo | null { return this.v11 && this.v11.laco instanceof MotorCorpoMundo ? this.v11.laco.mundo : null; }
   /** a observacao de agora, a que o pet le: nos v11, com os receptores do corpo */

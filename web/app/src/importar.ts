@@ -2,8 +2,9 @@
    {semente, log, versao}. Importar = replay do registro (tem que abrir); pet novo vai para a espera. Mesma semente com
    outro registro = conflito: o dono escolhe qual fica, e o outro vai para a espera (ninguem e apagado). */
 import { useEffect, useState } from "react";
-import { Motor, VERSOES_PET, type EventoRegistro } from "../motor/index.ts";
-import { jogoAtual, trocarMotor } from "./jogo.ts";
+import { Motor, VERSAO_PET_LAB, VERSOES_PET, type EventoRegistro } from "../motor/index.ts";
+import { motorReal, sairDoLab, trocarMotor } from "./jogo.ts";
+import { guardarImportadoLab, lerPetLab } from "./lab.ts";
 import { CHAVE_GUARDADOS, abrirGuardado, lerGuardados, type Guardado } from "./pets.ts";
 import { textoSave } from "./save.ts";
 import { diaDe } from "./telas/pet/TelaPet.tsx";
@@ -13,7 +14,7 @@ import { nomeForma } from "../motor/index.ts";
 let aberta = false;
 const ouvintes = new Set<() => void>();
 const avisar = (): void => { for (const o of ouvintes) o(); };
-export function abrirImportar(): void { aberta = true; avisar(); }
+export function abrirImportar(): void { sairDoLab(); aberta = true; avisar(); }
 export function fecharImportar(): void { aberta = false; avisar(); }
 export function useImportar(): boolean {
   const [, t] = useState(0);
@@ -34,7 +35,8 @@ export function exportarArquivo(m: Motor): void {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-export interface Lido { g: Guardado; m: Motor; arquivo: string }
+/** `lab`: o arquivo e do pet de teste (v16): ele vai para o espaco do laboratorio, nunca para os pets de hoje */
+export interface Lido { g: Guardado; m: Motor; arquivo: string; lab: boolean }
 /** le e confere o arquivo: JSON {semente, log, versao} que o replay abre, da versao de hoje (a dos ovos novos); falha alto com o motivo */
 export function lerArquivo(texto: string, arquivo: string): Lido {
   let d: unknown;
@@ -43,27 +45,35 @@ export function lerArquivo(texto: string, arquivo: string): Lido {
   if (!Number.isInteger(s.semente) || !Array.isArray(s.log)) throw new Error("o arquivo não tem semente e registro");
   const g: Guardado = { semente: s.semente as number, log: s.log as EventoRegistro[], versao: (s.versao ?? 1) as number };
   /* o descarte 6 (COMBATE-TR, E2): os pets de antes da luta em tempo real nao abrem mais, nem pelo arquivo */
-  if (!VERSOES_PET.includes(g.versao)) throw new Error(`este pet é da versão ${g.versao} do jogo${g.versao < Math.min(...VERSOES_PET) ? ", com o combate por turnos," : ""} e não abre nesta versão (só a ${VERSOES_PET.join(" e a ")}, com a luta em tempo real)`);
+  const lab = g.versao === VERSAO_PET_LAB;
+  if (!lab && !VERSOES_PET.includes(g.versao)) throw new Error(`este pet é da versão ${g.versao} do jogo${g.versao < Math.min(...VERSOES_PET) ? ", com o combate por turnos," : ""} e não abre nesta versão (só a ${VERSOES_PET.join(" e a ")}, com a luta em tempo real, e a ${VERSAO_PET_LAB} do laboratório)`);
   let m: Motor;
   try { m = Motor.reproduzir(g.semente, g.log, g.versao); } catch (err) { throw new Error("o replay do registro não confere: " + (err instanceof Error ? err.message : String(err))); }
-  return { g, m, arquivo };
+  return { g, m, arquivo, lab };
 }
 
 /** onde o pet de mesma semente esta aqui: o ativo, um guardado (indice) ou nenhum */
 export type Onde = { tipo: "ativo" } | { tipo: "guardado"; i: number } | { tipo: "nenhum" };
 export function localizar(semente: number): Onde {
-  if (jogoAtual().motor.semente === semente) return { tipo: "ativo" };
+  if (motorReal().semente === semente) return { tipo: "ativo" };
   const i = lerGuardados().findIndex(g => g.semente === semente);
   return i >= 0 ? { tipo: "guardado", i } : { tipo: "nenhum" };
 }
 /** o pet aqui, com a mesma semente (para comparar) */
 export function petAqui(o: Onde): Motor | null {
-  return o.tipo === "ativo" ? jogoAtual().motor : o.tipo === "guardado" ? abrirGuardado(lerGuardados()[o.i]) : null;
+  return o.tipo === "ativo" ? motorReal() : o.tipo === "guardado" ? abrirGuardado(lerGuardados()[o.i]) : null;
 }
 const igual = (a: Guardado, b: Motor): boolean => JSON.stringify(a.log) === JSON.stringify(b.log) && (a.versao ?? 1) === b.versao;
 
 /** sem conflito: vai para a espera. Devolve a mensagem para a tela */
 export function importarSemConflito(l: Lido): string {
+  if (l.lab) {
+    /* o pet de teste (v16): no espaco do laboratorio, um por vez; o mesmo registro ja la e so um aviso */
+    const aqui = lerPetLab();
+    if (aqui.tipo === "ok" && aqui.motor.semente === l.g.semente && igual(l.g, aqui.motor)) return `${nomeForma(l.m.forma)} de teste já está no Laboratório, com o mesmo registro.`;
+    guardarImportadoLab(l.m);
+    return `${nomeForma(l.m.forma)} de teste importado: está em Ajustes › Laboratório, fora dos seus pets.`;
+  }
   const o = localizar(l.g.semente);
   if (o.tipo !== "nenhum") {
     if (igual(l.g, petAqui(o)!)) return `${nomeForma(l.m.forma)} já está aqui, com o mesmo registro.`;
@@ -74,9 +84,11 @@ export function importarSemConflito(l: Lido): string {
 }
 /** conflito resolvido a favor do arquivo: ele toma o lugar do de aqui, e o de aqui vai para a espera */
 export function ficarComArquivo(l: Lido): void {
+  if (l.lab) throw new Error("o pet de teste não toma o lugar de um pet: ele só entra no Laboratório");
+  sairDoLab();
   const o = localizar(l.g.semente), g = lerGuardados();
   if (o.tipo === "ativo") {
-    g.push(JSON.parse(textoSave(jogoAtual().motor)) as Guardado);
+    g.push(JSON.parse(textoSave(motorReal())) as Guardado);
     localStorage.setItem(CHAVE_GUARDADOS, JSON.stringify(g));
     trocarMotor(l.m, "save");
   } else if (o.tipo === "guardado") {

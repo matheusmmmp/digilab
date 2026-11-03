@@ -6,7 +6,7 @@ import { useDecoracao } from "./decoracao.ts";
 import { Nav } from "./componentes/Nav.tsx";
 import { BoasVindas } from "./componentes/BoasVindas.tsx";
 import { RevelacaoEvolucao } from "./componentes/Revelacao.tsx";
-import { useJogo } from "./jogo.ts";
+import { sairDoLab, useJogo } from "./jogo.ts";
 import {
   DESTINOS, NOME_ABA, NOME_DESTINO, ROTA_INICIAL, ENDERECO_LUTA, configDoEndereco, ehLuta, enderecoDaConfig, enderecoDaRota, gravarAbaLembrada, lerAbaLembrada,
   rotaDoEndereco, type Aba, type Destino, type ParteConfig, type Rota,
@@ -216,7 +216,7 @@ export function App() {
       <DicaBit />
       {/* o habitat (a cena do Pet) e a camada de fundo de toda rota: fica montado, nao sobe nem desce ao trocar de destino */}
       <Habitat escurecer={!!painel} />
-      <TopoHabitat abrirMeusPets={() => setMeusPets(true)} irConversar={() => irDestino("conversar")} abrirConfig={() => abrirConfig("principal")} />
+      <TopoHabitat abrirMeusPets={() => { sairDoLab(); setMeusPets(true); }} irConversar={() => irDestino("conversar")} abrirConfig={() => abrirConfig("principal")} />
       {!painel && <TelaPet irRegistro={() => ir({ destino: "diario", aba: "registro" })} irEvolucao={() => { ir({ destino: "crescer", aba: "evolucao" }); scrollTo(0, 0); }} />}
       {painel && (lado ? <PainelLado d={painel.d}>{painel.corpo}</PainelLado> : <PainelModal d={painel.d} nav={navNoModal ? nav : null}>{painel.corpo}</PainelModal>)}
       {!navNoModal && nav}

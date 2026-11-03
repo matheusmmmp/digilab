@@ -5,6 +5,7 @@
 import { useEffect, useState } from "react";
 import { Motor, PetMorto } from "../motor/index.ts";
 import { ligarProduto } from "./produto.ts";
+import { CHAVE_LAB } from "./lab.ts";
 import { CHAVE, gravarSave, lerSave, petExemplo, textoSave, type Armazenamento } from "./save.ts";
 import { CHAVE_TAMER, Tamer, conferirCampeao, conferirItensDasMedalhas, conferirMedalhas, conferirRecordes, gravarTamer, lerTamer, sincronizarPet, type MedalhaGanha } from "./tamer.ts";
 
@@ -22,6 +23,9 @@ export interface Jogo {
   erroTamer: string | null;
   /** o pet que acabou de voltar a ser o ativo evoluiu ao receber as medalhas: quantas evolucoes ele tinha antes (revelacao) */
   evolucoesAoTrocar: number | null;
+  /** o laboratorio (LM5b, LM5-7): enquanto o pet de teste esta na tela, `motor` e ele e este e o pet de hoje, guardado como estava (nunca
+      perde o lugar de ativo); null fora do laboratorio. Nada do pet de teste vai para o save do pet de hoje: ele grava em CHAVE-lab */
+  emLab: Motor | null;
 }
 
 let jogo: Jogo | null = null;
@@ -36,7 +40,7 @@ export function iniciarJogo(armaz: Armazenamento): Jogo {
   armazenamento = armaz;
   let erroTamer: string | null = null;
   try { tamer = lerTamer(armaz); } catch (err) { tamer = new Tamer(); erroTamer = err instanceof Error ? err.message : String(err); }
-  const l = lerSave(armaz), extra = { erroTamer, evolucoesAoTrocar: null };
+  const l = lerSave(armaz), extra = { erroTamer, evolucoesAoTrocar: null, emLab: null };
   if (l.tipo === "ok") jogo = { motor: l.motor, origem: "save", erroSave: null, revisao: 0, nascendo: 0, ...extra };
   else jogo = { motor: petExemplo(), origem: "exemplo", erroSave: l.tipo === "erro" ? { erro: l.erro, bruto: l.bruto } : null, revisao: 0, nascendo: 0, ...extra };
   /* o pet salvo pode estar atras do Tamer (medalha ganha com outro pet): recebe o "u" ja na abertura */
@@ -49,6 +53,7 @@ export const tamerAtual = (): Tamer => tamer;
     Tamer vira o evento "recorde", e o pet ativo passa a conhecer as medalhas que o Tamer tem (evento "u"; o motor re-verifica a evolucao)
     e, com o titulo, a Fronteira aberta (evento "f"). Nada disso com save ou registro do Tamer que nao abriu. */
 function medalhas(j: Jogo): { novas: MedalhaGanha[]; mudou: boolean } {
+  if (j.emLab) return { novas: [], mudou: false };       // o pet de teste nao recebe nem da medalha ao Tamer
   if (!armazenamento || j.erroSave || j.erroTamer) return { novas: [], mudou: false };
   const novas = conferirMedalhas(tamer, j.motor), itens = conferirItensDasMedalhas(tamer, j.motor), titulo = conferirCampeao(tamer, j.motor);
   const recordes = conferirRecordes(tamer, j.motor);
@@ -74,7 +79,8 @@ const avisar = (): void => { for (const o of ouvintes) o(); };
 function gravar(): void {
   const j = jogoAtual();
   if (j.erroSave || !armazenamento) return;
-  gravarSave(armazenamento, j.motor);
+  if (j.emLab) armazenamento.setItem(CHAVE_LAB, textoSave(j.motor));   // o pet de teste vai para o espaco dele, nunca para o save de hoje
+  else gravarSave(armazenamento, j.motor);
   ultimoGravado = performance.now(); pendente = false;
 }
 /** grava o que ficou pendente (fechar ou esconder a aba) */
@@ -98,6 +104,7 @@ export function mudarMotor(f: (m: Motor) => void, quando: "agora" | "adiado" = "
 }
 /** troca o pet inteiro (ovo novo, pet anterior, save mudado em outra aba) */
 export function trocarMotor(m: Motor, origem: Origem, nascendo = 0): void {
+  sairDoLab();            // trocar o pet e sempre sobre o pet de hoje: o pet de teste sai da tela, com o save dele intacto
   const j = jogoAtual();
   j.motor = m; j.origem = origem; j.erroSave = null; j.nascendo = nascendo; j.revisao++;
   /* pet guardado que estava pronto: recebe as medalhas agora e evolui (a revelacao conta a partir de antes) */
@@ -105,6 +112,24 @@ export function trocarMotor(m: Motor, origem: Origem, nascendo = 0): void {
   medalhas(j);
   j.evolucoesAoTrocar = m.evolucoes.length > antes ? antes : null;
   gravar();
+  avisar();
+}
+/** o pet de hoje: o ativo, mesmo com o pet de teste na tela */
+export function motorReal(): Motor { const j = jogoAtual(); return j.emLab ?? j.motor; }
+/** LM5-7: mostra o pet de teste na tela Pet sem trocar o pet ativo (o de hoje fica guardado em `emLab`, com o tempo parado como o de um guardado) */
+export function abrirLab(m: Motor): void {
+  const j = jogoAtual();
+  j.emLab ??= j.motor;
+  j.motor = m; j.origem = "save"; j.nascendo = 0; j.revisao++;
+  avisar();
+}
+/** volta ao pet de hoje; o pet de teste ja esta gravado em CHAVE-lab. Sem pet de teste na tela, nao faz nada */
+export function sairDoLab(): void {
+  const j = jogoAtual();
+  if (!j.emLab) return;
+  if (armazenamento && !j.erroSave && pendente) armazenamento.setItem(CHAVE_LAB, textoSave(j.motor));
+  pendente = false;
+  j.motor = j.emLab; j.emLab = null; j.revisao++;
   avisar();
 }
 /** quadros do palco (120 ms cada) com o ovo chocando: ~5 s, para o nascimento ser um momento e nao um corte. PROPOSTO, SEM FONTE */
@@ -137,8 +162,9 @@ export function ouvirOutrasAbas(): () => void {
       jogo.revisao++; avisar(); return;
     }
     if (ev.key !== CHAVE || !armazenamento || !jogo) return;
-    if (ev.newValue === null || ev.newValue === textoSave(jogo.motor)) return;
+    if (ev.newValue === null || ev.newValue === textoSave(motorReal())) return;
     const l = lerSave(armazenamento);
+    if (jogo.emLab) { if (l.tipo === "ok") jogo.emLab = l.motor; return; }    // o pet de hoje, guardado: relê ele, o de teste segue na tela
     if (l.tipo === "ok") { jogo.motor = l.motor; jogo.origem = "save"; jogo.erroSave = null; jogo.revisao++; pendente = false; avisar(); }
     else if (l.tipo === "erro") { jogo.erroSave = { erro: "outra aba gravou um save que não abre: " + l.erro, bruto: l.bruto }; avisar(); }
   };

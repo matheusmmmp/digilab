@@ -1,0 +1,31 @@
+/* O laboratorio do modular (LM5b; pranchas docs/pranchas/lab/): o selo "experimental", a lista do pet de teste, a confirmacao do descarte e o
+   painel DigiBrain do modular. So tokens existentes (--hx-* nos menus, --dl-* no habitat); nenhum token novo. */
+.lab-selo{ display:inline-flex; align-items:center; gap:4px; width:fit-content; padding:1px 6px; border:1px solid var(--hx-alerta, #F0B429); color:var(--hx-alerta, #F0B429);
+  font:700 12px/1.3 var(--hx-f, inherit); letter-spacing:.08em; text-transform:uppercase; background:rgba(0,0,0,.25) }
+.lab-pet{ display:flex; gap:12px; align-items:center; padding:10px; border:1px solid var(--hx-borda); background:var(--hx-miolo) }
+.lab-pet__ret{ flex:none; width:56px; height:56px; display:grid; place-items:center; border:1px solid var(--hx-borda) }
+.lab-pet__txt{ display:grid; gap:2px; min-width:0; justify-items:start }
+.lab-pet__txt small{ color:var(--hx-sec); font-size:14px }
+.lab-aviso{ border-style:dashed; border-color:var(--hx-alerta, #F0B429) }
+.lab-aviso b{ color:var(--hx-alerta, #F0B429); letter-spacing:.08em; text-transform:uppercase; font-size:13px }
+.lab-conf__corpo{ display:grid; gap:12px; padding:16px; background:var(--hx-miolo); border:2px solid var(--hx-perigo) }
+.lab-conf__lista{ margin:0; padding:0; list-style:none; display:grid; gap:8px }
+.lab-conf__lista li{ display:grid; gap:2px }
+.lab-conf__lista small{ color:var(--hx-sec); font-size:14px }
+.topo-lab{ display:flex; align-items:center; gap:6px; margin-top:2px; flex-wrap:wrap }
+.topo-lab__volta{ min-height:24px; padding:0 4px; background:none; border:0; border-bottom:1px solid currentColor; color:var(--hx-texto-2); font:500 12px/1.2 var(--hx-f); cursor:pointer }
+.topo-lab__volta:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:2px }
+
+/* o painel DigiBrain do modular: barras divergentes (a linha do zero no meio; a negativa para a esquerda, na cor de perigo, com o sinal no numero) */
+.db-barras--div .db-trilho{ position:relative }
+.db-barras--div .db-trilho::after{ content:""; position:absolute; left:50%; top:-2px; bottom:-2px; width:1px; background:var(--dl-text-2, currentColor); opacity:.7 }
+.db-barras--div .db-trilho b{ left:50%; border-radius:0 5px 5px 0 }
+.db-barras--div .db-trilho b.neg{ left:auto; right:50%; border-radius:5px 0 0 5px }
+.lab-lembranca{ border-style:dashed }
+.lab-int{ margin:0; display:grid; gap:2px }
+.lab-int div{ display:flex; justify-content:space-between; gap:8px; font-weight:800 }
+.lab-int dt, .lab-int dd{ margin:0 }
+.lab-int dd{ font-family:var(--dl-f-lcd); font-weight:400 }
+.db-conteudo--lab .db-chips li[data-muda="true"]{ border-color:var(--hx-alerta, #F0B429) }
+
+.db-folha-selo{ margin-bottom:10px }
