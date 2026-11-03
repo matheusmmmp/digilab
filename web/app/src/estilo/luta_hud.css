@@ -1,0 +1,85 @@
+/* A luta no layout habitat (B3; docs/TAREFA_V3_LUTA_LAYOUT.md e as pranchas de docs/pranchas/b3/): a cena a tela inteira atras de tudo, o HUD em
+   caixas da mesma linguagem da tela Pet (.hud-caixa de pet_hud.css; o vidro e o Militar vem das duas peles, nenhum token novo), a etiqueta
+   do modo e o cartao de contexto no alto, o cartao da regra em uso (a direita no desktop, uma faixa acima do dock no celular) e o dock
+   no rodape. Tudo sob .luta-tela para vencer as regras antigas de lutar.css (a previa da Arena segue com elas). Sem animacao nova. */
+.luta-tela{
+  --g:10px; --gap:6px; --ret:36px; --modo-y:80px; --dk-b:10px; --rt:24px;
+  position:fixed; inset:0; display:block; overflow:hidden; background:#05080C; color:var(--hx-texto); font-family:var(--hx-f);
+}
+@media (min-width:900px){ .luta-tela{ --g:16px; --gap:12px; --ret:46px; --modo-y:96px; --dk-b:18px; --rt:30px } }
+
+/* ---- a cena: o palco e o canvas cobrem a tela; um degrade escurece o alto e o pe (leitura do HUD) */
+.luta-tela .palco-luta{ position:absolute; inset:0; margin:0; display:block }
+.luta-tela .luta-arena{ position:absolute; inset:0; height:auto; border:0; border-radius:0; box-shadow:none; background:#05080C }
+.luta-tela .luta-arena::after{ content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:linear-gradient(180deg, rgba(0,0,0,.45), transparent 22%, transparent 70%, rgba(0,0,0,.55)) }
+.luta-tela .luta-arena .luta-callout{ top:34%; z-index:2 }
+.luta-tela .luta-arena .luta-aviso-asset{ top:calc(var(--modo-y) + 64px); bottom:auto; z-index:6 }
+
+/* ---- o HUD do topo: uma plaquinha por lutador e o relogio entre elas */
+.luta-tela .luta-hud{ z-index:3; left:var(--g); right:var(--g); top:var(--g); gap:var(--gap); align-items:start }
+@media (min-width:900px){ .luta-tela .luta-hud{ left:50%; right:auto; transform:translateX(-50%); width:min(980px, calc(100% - 2 * var(--g))) } }
+.luta-tela .hud-lado.hud-caixa{ padding:5px 6px; gap:6px; min-width:0; color:var(--hx-texto); border-radius:0; box-shadow:var(--hud-brilho) }
+.luta-tela .hud-lado--rival.hud-caixa{ flex-direction:row-reverse }
+:root[data-pele] .luta-tela .hud-caixa.hud-lado--rival{ border-color:var(--hx-perigo) }
+@media (min-width:900px){ .luta-tela .hud-lado.hud-caixa{ padding:6px 8px; gap:8px } }
+.luta-tela .hud-ret, .luta-tela .hud-lado--rival .hud-ret{ width:var(--ret); height:var(--ret); background:var(--hx-miolo-2); border:1px solid var(--hx-borda); border-radius:0 }
+.luta-tela .hud-txt{ gap:3px }
+.luta-tela .hud-nome{ font:700 13px/1.1 var(--hx-f); letter-spacing:.08em; text-transform:uppercase; color:var(--hx-texto) }
+@media (min-width:900px){ .luta-tela .hud-nome{ font-size:15px } }
+.luta-tela .hud-vida, .luta-tela .hud-guts{ border-radius:0; background:var(--hx-medidor-trilho); border:1px solid var(--hx-borda) }
+.luta-tela .hud-vida{ height:9px }
+.luta-tela .hud-guts{ height:7px }
+@media (min-width:900px){ .luta-tela .hud-vida{ height:12px } }
+.luta-tela .hud-vida i, .luta-tela .hud-guts i{ border-radius:0; -webkit-mask-image:var(--hx-mascara); mask-image:var(--hx-mascara) }
+.luta-tela .hud-vida i{ background:var(--hx-ok) }
+.luta-tela .hud-guts i{ background:var(--hx-alerta) }
+.luta-tela .hud-lado--rival .hud-vida i{ background:var(--hx-perigo) }
+/* o relogio: TEMPO, m:ss e o limite (ou a morte subita), tudo numa caixa so */
+.luta-tela .hud-meio.hud-caixa{ gap:0; padding:4px 10px 5px; min-width:78px; text-align:center; align-items:center }
+@media (min-width:900px){ .luta-tela .hud-meio.hud-caixa{ padding:5px 14px 6px; min-width:92px } }
+.luta-tela .hud-meio .turno-hex{ width:auto; height:auto; background:none; border:0; clip-path:none; display:block }
+.luta-tela .hud-meio .turno-hex small{ display:block; color:var(--hx-rotulo); font:600 11px/1 var(--hx-f); letter-spacing:.12em }
+.luta-tela .hud-meio .turno-hex .dl-num{ display:block; font:700 var(--rt)/1 var(--hx-f-num); color:var(--hx-num); font-style:normal; font-variant-numeric:tabular-nums; text-shadow:none; -webkit-text-stroke:0 }
+.luta-tela .hud-meio .luta-dist{ background:none; border:0; border-radius:0; padding:0; margin-top:2px; color:var(--hx-texto-2); font:600 11px/1.2 var(--hx-f); letter-spacing:.1em; text-transform:uppercase }
+
+/* ---- a etiqueta do modo e o cartao de contexto (serie, Liga, carta, Lago, instalacao): no alto ao centro, sob o relogio */
+.luta-tela .luta-contexto{ position:absolute; z-index:4; left:50%; top:var(--modo-y); translate:-50% 0; width:max-content;
+  max-width:min(560px, calc(100% - 2 * var(--g))); padding:4px 10px; display:grid; gap:4px; text-align:center; box-sizing:border-box }
+@media (min-width:900px){ .luta-tela .luta-contexto{ max-width:min(560px, calc(100% - 2 * (300px + 2 * var(--g)))); min-width:min(240px, 100%) } }
+.luta-tela .luta-modo{ margin:0; font:600 12px/1.2 var(--hx-f); letter-spacing:.1em; text-transform:uppercase; color:var(--hx-texto-2) }
+.luta-tela .luta-contexto .luta-arena-aviso{ margin:0; padding:0; background:none; border:0; border-radius:0; box-shadow:none; color:var(--hx-texto-2); font:500 14px/1.3 var(--hx-f); text-align:center }
+.luta-tela .luta-contexto .luta-arena-aviso b{ color:var(--hx-texto) }
+
+/* ---- a regra em uso (so leitura): faixa de uma ou duas linhas acima do dock no celular, cartao a direita sob o HUD no desktop */
+.luta-tela .palco-luta-baixo{ position:absolute; z-index:4; left:var(--g); right:var(--g); bottom:84px; padding:0 }
+.luta-tela .luta-card{ display:block; padding:0; margin:0; color:var(--hx-texto); font-family:var(--hx-f) }
+.luta-tela .luta-card h2{ position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap }
+.luta-tela .luta-regra-card{ margin:6px; padding:7px 9px; gap:5px; background:var(--hx-miolo-2); border:1px dashed var(--hx-aprendido); border-radius:0; box-shadow:none; color:var(--hx-texto) }
+.luta-tela .luta-regra-cab{ background:none; padding:0; color:var(--hx-aprendido); font:600 11px/1.2 var(--hx-f); letter-spacing:.1em }
+.luta-tela .luta-regra-txt{ font:600 16px/20px var(--hx-f); color:var(--hx-texto) }
+.luta-tela .luta-card .luta-turno{ margin:0; padding:0 9px 6px; color:var(--hx-sec); font:500 14px/1.25 var(--hx-f); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden }
+@media (min-width:900px){
+  .luta-tela .palco-luta-baixo{ left:auto; right:var(--g); top:96px; bottom:auto; width:300px }
+  .luta-tela .luta-card h2{ position:static; width:auto; height:auto; overflow:visible; clip-path:none; padding:9px 12px 0; margin:0; font:700 14px/1.1 var(--hx-f); letter-spacing:.1em; text-transform:uppercase; color:var(--hx-rotulo) }
+  .luta-tela .luta-regra-card{ margin:8px 12px 12px; padding:9px 10px }
+  .luta-tela .luta-regra-txt{ font-size:17px; line-height:22px }
+  .luta-tela .luta-card .luta-turno{ padding:0 12px 10px; display:block }
+}
+
+/* ---- o dock: Pausar e x2 juntos, um separador, Desistir (ou Sair do replay) a parte */
+.luta-tela .luta-dock{ position:absolute; z-index:5; left:50%; bottom:var(--dk-b); translate:-50% 0; display:flex; align-items:center; gap:8px; padding:6px 8px }
+.luta-tela .luta-dock .luta-ctl, .luta-tela .luta-dock .luta-desistir{ box-sizing:border-box; min-width:48px; height:48px; min-height:48px; margin:0; padding:0 12px;
+  display:grid; place-items:center; border-radius:0; font:700 17px/1 var(--hx-f); cursor:pointer }
+.luta-tela .luta-dock .luta-ctl{ background:var(--hx-tecla, var(--hx-miolo-2)); border:1px solid var(--hx-borda); color:var(--hx-texto) }
+.luta-tela .luta-dock .luta-ctl:hover{ background:var(--hx-tecla-hover, var(--hx-miolo-2)) }
+.luta-tela .luta-dock .luta-ctl svg{ width:18px; height:18px; fill:var(--hx-texto) }
+.luta-tela .luta-dock .luta-ctl[aria-pressed="true"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido-borda) }
+.luta-tela .luta-dock .luta-ctl[aria-pressed="true"] svg{ fill:var(--hx-escolhido-ink) }
+.luta-tela .luta-dock .luta-desistir{ margin-left:0; font-size:15px; letter-spacing:.08em; text-transform:uppercase }
+.luta-tela .luta-dock-sep{ width:1px; align-self:stretch; background:var(--hx-borda) }
+.luta-tela .luta-dock button:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:2px }
+
+/* ---- sem luta: um cartao no meio */
+.luta-tela .luta-vazio{ position:absolute; top:40%; left:50%; translate:-50% -50%; width:min(360px, calc(100% - 2 * var(--g))); padding:16px; display:grid; gap:12px; box-sizing:border-box }
+.luta-tela .luta-vazia{ margin:0; color:var(--hx-texto-2); font-weight:500; font-size:16px }

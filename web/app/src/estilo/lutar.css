@@ -223,12 +223,6 @@
 body.tela-cheia{overflow:hidden}
 .app--tela-cheia{padding:0!important;min-height:100dvh}
 .luta-tela{display:flex;flex-direction:column;min-height:100dvh;height:100dvh;overflow:auto;color:var(--dl-text)}
-.luta-topo{display:flex;align-items:center;gap:12px;padding:10px 14px;flex:none}
-.luta-topo h1{margin:0;font-size:24px;line-height:1.1;white-space:nowrap}
-.luta-topo-sub{color:#FFFFFF;font-size:12px;font-weight:800;opacity:.9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
-.luta-desistir{margin-left:auto;flex:none;min-height:44px;padding:0 16px}
-.luta-tela .palco-luta{margin:0;flex:1;display:flex;flex-direction:column}
-.luta-tela .palco-luta-baixo{padding:12px 14px 16px}
 .luta-card{display:grid;gap:8px}
 .luta-card h2{margin:0;font-size:15px;font-weight:900}
 .luta-card p{margin:0}
@@ -237,7 +231,6 @@ body.tela-cheia{overflow:hidden}
 .luta-card--turnos{flex:1}
 .luta-card--turnos .luta-log{box-shadow:none;padding:0;background:none}
 .luta-vazia{margin:24px 14px}
-.luta-controles{position:absolute;left:10px;bottom:10px;display:flex;gap:6px;z-index:2}
 .luta-ctl{width:44px;height:44px;border-radius:12px;background:#FFFFFF;border:3px solid var(--dl-navy);display:grid;place-items:center;padding:0;cursor:pointer;
   font-family:var(--dl-f-num);font-style:italic;font-weight:900;font-size:15px;color:var(--dl-navy)}
 .luta-ctl svg{width:16px;height:16px;fill:var(--dl-navy)}

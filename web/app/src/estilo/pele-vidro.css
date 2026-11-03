@@ -26,8 +26,7 @@
 }
 /* ---------- painel de vidro: superficie, reflexo, contorno externo com as diagonais do chanfro, desfoque */
 :root[data-pele="vidro"] :is(.hx-painel, .pet-prioridade, .pet-pedido .chamado.dl-card, .pet-dock .chamado--morte,
-  .app--pet .racao-faixa, dialog.modal-conf.ab-hx, dialog.res.ab-hx, .dica-bit.ab-hx, .ab-hx .ab-cab, .evm.ab-hx .evm-bloco,
-  .luta-tela.ab-hx .luta-card, .luta-tela.ab-hx .hud-lado),
+  .app--pet .racao-faixa, dialog.modal-conf.ab-hx, dialog.res.ab-hx, .dica-bit.ab-hx, .ab-hx .ab-cab, .evm.ab-hx .evm-bloco),
 :root[data-pele="vidro"] .pet-dock .dock::after, :root[data-pele="vidro"] .dock-mais::after{
   --ch:var(--hx-chanfro);
   border:1px solid var(--hx-borda); border-radius:0; box-shadow:none;
@@ -44,11 +43,10 @@
    cortaria) e o fantasma da racao e position:fixed (um backdrop-filter no menu viraria o bloco de contencao dele) */
 :root[data-pele="vidro"] :is(.pet-dock .dock, .dock-mais){ border-color:transparent; background:none; box-shadow:none }
 :root[data-pele="vidro"] :is(.pet-dock .dock, .dock-mais)::after{ content:""; position:absolute; inset:-1px; z-index:-1; pointer-events:none }
-:root[data-pele="vidro"] .luta-tela.ab-hx .hud-lado.hud-lado--rival{ border-color:var(--hx-perigo) }
 /* a borda de topo mais grossa do Militar some: o destaque e o trecho de luz */
 :root[data-pele="vidro"] .hx-painel__cab{ border-bottom-color:var(--hx-borda-int) }
 /* trecho de luz 96 x 2 px no topo esquerdo (no lugar da hachura) e marcador 4 x 4 px no canto inferior direito */
-:root[data-pele="vidro"] :is(.hx-painel__cab, .pet-dock .dock, .luta-tela.ab-hx .luta-topo)::before,
+:root[data-pele="vidro"] :is(.hx-painel__cab, .pet-dock .dock)::before,
 :root[data-pele="vidro"] dialog.modal-conf.ab-hx h2::before, :root[data-pele="vidro"] .res.ab-hx .res-faixa::before{
   inset:0 auto auto 0; width:96px; height:2px; background:var(--hx-luz); background-image:none; box-shadow:0 0 8px var(--hx-luz);
 }
@@ -153,7 +151,6 @@
 :root[data-pele="vidro"] .ab-hx .cj-anel{ background:rgba(58,168,255,.12) }
 :root[data-pele="vidro"] .ab-hx .cj-pontos i.on{ background:var(--hx-luz) }
 :root[data-pele="vidro"] .ab-hx :is(.br-card, .cj-cartao){ border-top-width:1px }
-:root[data-pele="vidro"] .luta-tela.ab-hx .luta-topo{ border-top-width:1px }
 
 /* ---------- linhas, teclas e cartoes dentro de um painel de vidro: sem outro fundo escuro por cima, so um realce azul leve */
 :root[data-pele="vidro"] :is(.hx-linha, .hx-btn, .hx-chip, .mod-registro li, .evo-mod, .mod-registro-ic, .pet-prioridade-ic, .pet-dock .chamado-ic,

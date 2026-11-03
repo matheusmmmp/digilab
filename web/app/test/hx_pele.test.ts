@@ -107,6 +107,49 @@ describe("pele Sci-fi (vidro)", () => {
   });
 });
 
+/* B3 (docs/TAREFA_V3_LUTA_LAYOUT.md, teste 4): as caixas da luta (plaquinhas, relogio, etiqueta e contexto, cartao da regra, dock) ficam sobre o
+   mapa do UP do lugar, a tela inteira. O pior fundo e o pixel mais claro dos mapas depois do desfoque (a media local de 24 px, medida em
+   Assets/arena_up/mapas, que fica fora do repositorio): no alto (as plaquinhas, o relogio, o contexto e o cartao da regra no desktop) o ceu
+   claro da praia e o fundo do ringue; embaixo (o dock e a faixa da regra no celular) o piso da praia e o do ringue, os mais claros. O degrade
+   escuro do alto e do pe (luta_hud.css) so ajuda. Nenhum token novo: o CSS da luta nao declara --hx-* nem --hud-*. */
+describe("caixas da luta nas duas peles", () => {
+  const lutaCss = readFileSync(new URL("../src/estilo/luta_hud.css", import.meta.url), "utf8");
+  /* ceu da praia (cenasTR.ts) e praia_piso.jpg, sob o degrade preto de luta_hud.css (.45 no topo, 0 em 22 %; 0 em 70 %, .55 no pe): as caixas do
+     alto ficam de 1 % a 26 % da altura (alfa >= .2 mesmo no pior ponto) e o dock e a faixa da regra de 90 % a 99 % (alfa >= .35) */
+  const escurecer = (c: Rgb, a: number): Rgb => c.map(x => x * (1 - a)) as Rgb;
+  const ALTO = escurecer([217, 240, 247], .2), PE = escurecer([255, 252, 244], .35);
+  const vidroSobre = (fundo: Rgb) => sobre("rgba(170,225,255,.10)", sobre(tokenVidro("hx-miolo-2"), fundo));
+  const tVidro = (t: string) => tokenVidro(t).replace(/^var\(--hx-texto\)$/, token("hx-texto"));
+  it("Vidro, no alto: todo texto das caixas passa 4,5:1 sobre o vidro com o mapa mais claro atras; no cartao da regra tambem", () => {
+    const pior = vidroSobre(ALTO), regra = sobre(tokenVidro("hx-miolo-2"), pior);
+    for (const t of ["hx-texto", "hx-texto-2", "hx-sec", "hx-rotulo", "hx-num", "hx-aprendido", "hx-perigo", "hx-ok", "hx-alerta"]) {
+      expect(contraste(tVidro(t), hex(pior)), `alto ${t}`).toBeGreaterThanOrEqual(4.5);
+    }
+    for (const t of ["hx-texto", "hx-aprendido", "hx-sec", "hx-rotulo"]) expect(contraste(tVidro(t), hex(regra)), `regra ${t}`).toBeGreaterThanOrEqual(4.5);
+  });
+  it("Vidro, no pe: o dock e a faixa da regra (texto, aprendido, perigo do Desistir, o escolhido) sobre o piso mais claro", () => {
+    const pior = vidroSobre(PE), regra = sobre(tokenVidro("hx-miolo-2"), pior);
+    for (const t of ["hx-texto", "hx-texto-2", "hx-perigo"]) expect(contraste(tVidro(t), hex(pior)), `pe ${t}`).toBeGreaterThanOrEqual(4.5);
+    for (const t of ["hx-texto", "hx-aprendido"]) expect(contraste(tVidro(t), hex(regra)), `faixa ${t}`).toBeGreaterThanOrEqual(4.5);
+    expect(contraste(tokenVidro("hx-escolhido-ink"), hex(sobre("rgba(58,168,255,.40)", pior)))).toBeGreaterThanOrEqual(4.5);
+  });
+  it("Militar: a caixa quase opaca sobre o mapa mais claro; texto 4,5:1, o cartao da regra e o escolhido do dock tambem", () => {
+    for (const fundo of [ALTO, PE]) {
+      const caixa = hex(sobre("rgba(30,33,36,.97)", fundo));
+      for (const t of ["hx-texto", "hx-texto-2", "hx-sec", "hx-rotulo", "hx-aprendido", "hx-perigo", "hx-ok", "hx-alerta"]) expect(contraste(token(t), caixa), `militar ${t}`).toBeGreaterThanOrEqual(4.5);
+    }
+    for (const t of ["hx-texto", "hx-aprendido", "hx-sec"]) expect(contraste(token(t), token("hx-miolo-2")), `regra ${t}`).toBeGreaterThanOrEqual(4.5);
+    expect(contraste(token("hx-escolhido-ink"), token("hx-escolhido"))).toBeGreaterThanOrEqual(4.5);
+  });
+  it("luta_hud.css so usa tokens que ja existem, sem animacao, e e importado pela tela da luta", () => {
+    const semComentario = lutaCss.replace(/\/\*[\s\S]*?\*\//g, "");
+    expect(semComentario).not.toMatch(/--hx-[a-z-]+\s*:|--hud-[a-z-]+\s*:/);
+    expect(semComentario).not.toMatch(/animation|transition|@keyframes/);
+    for (const [, nome] of semComentario.matchAll(/var\((--(?:hx|hud)-[a-z0-9-]+)/g)) expect(tokens, nome).toContain(nome + ":");
+    expect(readFileSync(new URL("../src/telas/lutar/TelaLuta.tsx", import.meta.url), "utf8")).toContain('import "../../estilo/luta_hud.css"');
+  });
+});
+
 describe("hud.css e fonte", () => {
   it("respeita prefers-reduced-motion (transicao so em no-preference) e define foco", () => {
     expect(hud).toMatch(/@media \(prefers-reduced-motion: no-preference\)\{[^@]*transition/);
