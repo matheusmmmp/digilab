@@ -160,3 +160,27 @@ O exportador do gabarito está pronto: `experiments/exportar_gabarito_digibrain_
   execução nova (comparando o texto, não o gzip), o sha256 e o limite de 10 MB, as constantes efetivas, a cobertura.
 - **Achado, não resolvido (LAB-3):** a "próxima versão livre (hoje a v15)" já está em uso: o PR #525 (aberto, `v3-habitat-objetos`) usa pet
   v15. A LM4 decide o número depois de conferir a `main`.
+
+## 10. Resumo da etapa LM1 (2026-11-03, worker Claude Code, Sonnet 5.5, worktree `v3-lab-modular-lm1`)
+
+Os espelhos TS de `_comum`, M-SENS, M-AFETO e M-IMPULSO estão em `web/app/motor/digibrain/` (`_comum.ts`, `sens.ts`, `afeto.ts`, `impulso.ts`,
+mais `constantes.ts`), com o G-PAR de cada módulo passando. Nada do jogo os usa ainda: nenhuma tela, laço ou chave; o `digibrain.ts` do A v11, o
+`digilab/engine.py` e o pacote `digilab/digibrain/` não mudaram, e os três gabaritos da LM0 não foram regravados.
+
+- **Nomes:** as classes (`Sens`, `Afeto`, `Impulso`) e as funções seguem o Python em camelCase, como o resto do motor TS (`div_arred` →
+  `divArred`, `sinal_corpo` → `sinalCorpo`); os campos dos dados (`falta`, `g_apr`, `termos`…) ficam em snake_case, como no gabarito.
+- **Constantes:** `constantes.ts` copia a `ConfigDigibrainInatos` e a `ConfigDigibrain` do braço REL do `digibrain_modular_constantes.json`;
+  `test/digibrain_modular_constantes.test.ts` confere cada folha. O gabarito da LM0 não traz os números do `Config` e da `ConfigMundo` que o
+  M-SENS lê (passo de 15 ticks, noite 1320–420, `sub` 16, raio 6, 8 vistos): ficam em `CONFIG_MODULAR_MUNDO` e o teste os confere contra
+  `constantes_python.json` e a `CMU` do motor.
+- **Aritmética:** só inteira, com o `divArred` do jogo (`mundo.ts`); o único float é o `vetor_estado[7]` (a hora), que vira o minuto pelo
+  `round` do Python (meio para o par), como no Python. Sem rng nestes módulos. As funções do A (`faltaReceptor`, `leituraReceptor`,
+  `contribuicoesCorpo`, `sinalCorpo`) vêm do `lobos.ts`, com os pesos `w_d` todos 1, como o Python sem `pesos_drives`.
+- **O que o gabarito da LM0 não bastava:** o `Impulso.unidades` recebe o M-PLAST (`<plasticidade>` no gabarito), e o incentivo não se reconstrói
+  dos termos (`mul(incentivo, prox)` perde o incentivo). Pedi uma leitura nova ao exportador, num commit próprio: `--leituras-plast` grava
+  `digibrain_modular_leituras_plast.json.gz` (as chamadas `plast.habito` e `plast.incentivo` de dentro do impulso, 8 vidas × 384 decisões), sem
+  tocar os três arquivos da LM0. O teste do impulso usa um M-PLAST de mentira que devolve o que o Python devolveu e confere a entrada de cada
+  pergunta. O `casa` (`<fn>`, do M-MEM) é refeito no teste (a LM3 porta o oficial). A persistência chega por `{textoDaChave(chave): h}`.
+- **Fora do laboratório:** `facetas_mem` (LAB-1). O `Impulso` falha alto se ligada ou se vierem `facetas`; o ramo das facetas do Python não foi portado.
+- **G-PAR (conferidas, nas 8 vidas):** `sens.codificar` 3 072; `afeto.ler` 3 072, `afeto.drives` 3 072, `afeto.consequencia` 3 064;
+  `impulso.unidades` 3 072 (com lembrança, lugar lembrado, incentivo, hábito e persistência cada um em pelo menos uma decisão). Cada teste falha se a conta for zero.
