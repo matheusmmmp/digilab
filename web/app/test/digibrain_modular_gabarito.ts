@@ -2,6 +2,7 @@
    os .json.gz das vidas, a resolucao dos `$ref` (a saida de uma chamada anterior da mesma decisao) e a comparacao estrita (inclusive -0). */
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { gunzipSync } from "node:zlib";
 
 export interface Chamada { m: string; e: unknown[]; s: unknown; rng_antes?: string[]; rng_depois?: string[] }
@@ -57,3 +58,21 @@ export function conferir(onde: string, obtido: unknown, esperado: unknown): void
     throw new Error(`${onde}: difere perto do caractere ${i}\n  TS:     ...${a.slice(Math.max(0, i - 80), i + 120)}\n  Python: ...${b.slice(Math.max(0, i - 80), i + 120)}`);
   }
 }
+
+/** a assinatura do estado (LM0): o sha256 (16 primeiros hex) do `estado_interno()` em JSON com as chaves ordenadas e sem espacos, o `_texto` do
+ *  exportador (json.dumps(sort_keys=True, separators=(",", ":"))). So inteiros, texto, booleano e null. */
+export function textoCanonico(v: unknown): string {
+  if (v === null || typeof v === "string" || typeof v === "boolean") return JSON.stringify(v);
+  if (typeof v === "number") {
+    if (!Number.isInteger(v)) throw new Error(`textoCanonico: ${v} nao e inteiro`);
+    return String(v);
+  }
+  if (Array.isArray(v)) return `[${v.map(textoCanonico).join(",")}]`;
+  if (typeof v === "object") {
+    const o = v as Record<string, unknown>;
+    return `{${Object.keys(o).sort().map(k => `${JSON.stringify(k)}:${textoCanonico(o[k])}`).join(",")}}`;
+  }
+  throw new Error(`textoCanonico: tipo ${typeof v}`);
+}
+export const sha16 = (texto: string): string => createHash("sha256").update(texto, "utf8").digest("hex").slice(0, 16);
+export const assinar = (estadoInterno: unknown): string => sha16(textoCanonico(estadoInterno));
