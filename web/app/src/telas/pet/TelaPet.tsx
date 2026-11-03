@@ -36,6 +36,8 @@ import { AvisoRacao, BarraRacao, FaixaRacao, InfoMundo } from "./PorRacao.tsx";
 import "../../estilo/pet_dock.css";
 import "../../estilo/pet_hud.css";
 import { ConteudoDigiBrain, SeloDigiBrain } from "../../componentes/DigiBrain.tsx";
+import { ConteudoDigiBrainLab } from "../../componentes/DigiBrainLab.tsx";
+import { SeloExperimental } from "../config/Laboratorio.tsx";
 import { duracao, previsaoEvo } from "../crescer/TelaEvolucao.tsx";
 
 export const hhmm = (t: number): string => { const m = t % TPD; return String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0"); };
@@ -468,6 +470,12 @@ function PainelHud({ id, aberto, alternar, resumo, children }: { id: PainelHud; 
   );
 }
 
+/** o painel DigiBrain: o do modular no pet de teste (v16), o do A v11 nos outros */
+function PainelDigiBrain() {
+  const { motor: m } = useJogo();
+  return m.lab ? <div className="pet-painel__folha dl digibrain"><div className="db-folha-selo"><SeloExperimental /><span className="db-selo">cérebro modular</span></div><ConteudoDigiBrainLab /></div>
+    : <div className="pet-painel__folha dl digibrain"><div className="db-folha-selo"><SeloDigiBrain replay={false} /></div><ConteudoDigiBrain /></div>;
+}
 function ConteudoPainel({ id, v, irRegistro, irEvolucao, detalhes, alternarDetalhes }: {
   id: Painel; v: VistaFala; irRegistro: () => void; irEvolucao: () => void; detalhes: boolean; alternarDetalhes: () => void;
 }) {
@@ -476,7 +484,7 @@ function ConteudoPainel({ id, v, irRegistro, irEvolucao, detalhes, alternarDetal
     case "evolucao": return <ProximaEvolucao irEvolucao={irEvolucao} />;
     case "acoes": return <UltimasAcoes irRegistro={irRegistro} />;
     /* o DigiBrain e o porque da fala, com a pele escura (D8) */
-    case "digibrain": return <div className="pet-painel__folha dl digibrain"><div className="db-folha-selo"><SeloDigiBrain replay={false} /></div><ConteudoDigiBrain /></div>;
+    case "digibrain": return <PainelDigiBrain />;
     case "fala": return <div className="pet-painel__folha dl"><DetalheFala v={v} semTitulo /></div>;
   }
 }

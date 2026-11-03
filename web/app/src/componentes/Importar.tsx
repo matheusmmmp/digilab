@@ -37,7 +37,7 @@ export function ImportarPet({ fechar, pagina = false }: { fechar: () => void; pa
     setMsg(""); setErro(""); setLido(null); setConflito(null);
     if (!f) return;
     try {
-      const l = lerArquivo(await f.text(), f.name), o = localizar(l.g.semente), aqui = petAqui(o);
+      const l = lerArquivo(await f.text(), f.name), aqui = l.lab ? null : petAqui(localizar(l.g.semente));
       setLido(l);
       if (aqui && JSON.stringify(aqui.log) !== JSON.stringify(l.g.log)) { setConflito(aqui); return; }
       setMsg(importarSemConflito(l));

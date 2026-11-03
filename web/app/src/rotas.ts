@@ -44,8 +44,8 @@ export function gravarAbaLembrada(armaz: Armazenamento, r: Rota): void {
 }
 
 /* Configuracoes (desenhos Cfg*): tela fora dos 4 destinos, aberta pela engrenagem do Diario; #/config/<parte> */
-export type ParteConfig = "principal" | "visual" | "dados" | "fala" | "sobre";
-const PARTES_CONFIG: readonly ParteConfig[] = ["principal", "visual", "dados", "fala", "sobre"];
+export type ParteConfig = "principal" | "visual" | "dados" | "fala" | "laboratorio" | "sobre";
+const PARTES_CONFIG: readonly ParteConfig[] = ["principal", "visual", "dados", "fala", "laboratorio", "sobre"];
 /** "#/config" -> principal; "#/config/dados" -> dados; outra coisa -> null. "#/config/aparencia" (a subarea antiga, ate 2026-11-01)
  *  leva ao Visual, que a substituiu */
 export function configDoEndereco(hash: string): ParteConfig | null {

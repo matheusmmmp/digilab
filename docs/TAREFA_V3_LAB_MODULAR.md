@@ -257,3 +257,26 @@ gabarito existente foi regravado. Os desvios estão no registro (2026-11, LM4).
   replay e por save. G2: a suíte inteira (contagens no PR).
 - **Cobertura que falta:** os ramos `sumiu`/`desistiu` das intenções com alvo (`comer/comida`, `brincar/bola`, `explorar/ponto`) não ocorreram em nenhuma vida achada;
   seguem portados sem G-PAR-VIDA.
+
+## 15. Resumo da etapa LM5a2 (2026-11-03, worker Claude Code, Sonnet 5.5, worktree `v3-lab-modular-lm5a2`)
+
+A prancha extra da LM5-5, aprovada pelo Matheus em 2026-11-03: **Ajustes › Laboratório com o pet de teste já nascido** (nome, forma, idade, Abrir e Descartar) e a **confirmação
+do Descartar** (o save do pet de teste é apagado e não volta; os pets de hoje não são tocados), em `docs/pranchas/lab/` (`ajustes_vivo_*`, `ajustes_descartar_*`), 390 e 1280 px,
+Vidro e Militar, 8 capturas. Papel só: nenhum código em `web/app/`. A fonte de cada campo está no `LEIA.md`. O pet de teste é a v16 (a v15 é do #525). Decisões novas
+LM5-7 (o que o Abrir faz), LM5-8 (força da confirmação) e LM5-9 (baixar o log antes), cada uma com recomendação e custo de errar no `LEIA.md`. A LM5b espera a B3.
+
+## 16. Resumo da etapa LM5b (2026-11-03, worker Claude Code, Sonnet 5.5, worktree `v3-lab-modular-lm5b`)
+
+A tela do laboratório está no jogo web, atrás da chave desligada: **Ajustes › Laboratório** (a explicação, a chave, o ovo de teste v16 e a lista com Abrir e Descartar), o selo "experimental" na plaquinha do topo, o **painel
+DigiBrain do modular** (a folha no celular, a coluna no desktop) e o import e o export dos saves v16. A LM5b veio **antes da B3**, a pedido do Matheus em 2026-11-03 (o desvio está no registro); a B3 parte desta tela.
+O pet de hoje, o painel do A v11 e os saves antigos abrem iguais; `digibrain/adapt.ts`, o laço e os gabaritos não mudaram.
+
+- **Ajustes › Laboratório** (`src/telas/config/Laboratorio.tsx`, `src/lab.ts`): a chave `CHAVE-lab-ligado` (desligada); o pet de teste em `CHAVE-lab`, um por vez; **Abrir** (LM5-7) mostra o pet na tela Pet sem trocar o pet ativo
+  (`jogo.ts`: `abrirLab`, `sairDoLab`; o botão "voltar ao meu pet" na plaquinha); **Descartar** (LM5-8) abre a confirmação sem digitar, com o foco em Cancelar, e apaga só `CHAVE-lab`. Sem baixar o log (LM5-9).
+- **O painel** (`src/componentes/DigiBrainLab.tsx`, `Motor.leituraLab()` em `motor/digibrain/leitura.ts`): Agora, Lembrança da vez (o lugar em coordenadas, LM5-4), o peso de cada módulo (só as barras não nulas, divergentes, com o "−", LM5-2 e LM5-3;
+  a linha "Sem contribuição agora"), Intenção em curso com C, F e n_sp e uma linha de explicação (LM5-6), as opções e a chance de cada uma, o que mudaria a escolha (as sondas) e as últimas ações. Todo número vem do motivo do motor.
+- **Os saves v16** (`src/importar.ts`): o arquivo v16 abre pelo replay e vai para o Laboratório; nunca vira pet ativo nem guardado.
+- **Fora:** a fala de memória (a conferência `falaMemoria.ts` não foi ligada; ver o registro).
+- **Testes:** `test/lab_leitura.test.ts` (a leitura), `test/lab_tela.test.ts` (o espaço do save, o Abrir, o descarte que só apaga o save do teste, o importar e exportar v16), `e2e/lab_modular.spec.ts` (chocar, abrir, o painel mostra o motivo, descartar com
+  confirmação) e `e2e_capturas/lab.spec.ts` (as capturas, só com `DIGILAB_CAPTURAS_LAB=<pasta>`). As contagens estão no PR.
+- **Capturas** (390 e 1280 px, Vidro e Militar, claro e escuro, 40 PNG): `docs/pranchas/lab-tela/capturas/`.
