@@ -221,3 +221,19 @@ mudaram, nenhum gabarito foi regravado e o exportador não precisou de leitura n
   3 042, habito 21 504, incentivo 988). Cada teste falha se a conta for zero.
 - **Cobertura que o gabarito não tem:** os fins `sumiu` e `desistiu` do M-ESTADO não aparecem nas 8 vidas (só `meta`, `trocou`, `achou`, `unica`);
   o ramo `sumiu`/`desistiu` está portado linha a linha, mas sem G-PAR. Pedir outras vidas ao exportador é decisão da LM4.
+
+## 13. Resumo da etapa LM3 (2026-11-03, worker Claude Code, Sonnet 5.5, worktree `v3-lab-modular-lm3`)
+
+O espelho TS do M-MEM está em `web/app/motor/digibrain/mem.ts`, com o G-PAR em `web/app/test/digibrain_modular_mem.test.ts` passando. Nada do jogo o usa ainda;
+`digilab/engine.py`, `digilab/digibrain/` e `web/app/motor/digibrain.ts` não mudaram, nenhum gabarito foi regravado e o exportador não precisou de leitura nova.
+
+- **O que entrou:** o lugar lembrado (`codificar`, `recuperar`, o `casa` oficial, que o teste do impulso passou a usar) e a `memoria_autobio` REL: o episódio completo
+  (`episodioAutobio`), o tick (`relogio`), as faixas do corpo, a lembrança (`lembrar`), o lugar pela soma, a consolidação (duradoura e central), o termo
+  `L = mul(w_lem, sigma)` (`termoLembranca`) e o `estadoInterno`.
+- **Fora do laboratório (LAB-1):** `facetas_mem` e os bracos de pesquisa do `controle_mem` (sem, rec, emb, rel_sem_neg) falham no construtor; `evidenciaFaceta` e
+  `classesComPositivo` falham alto; os ganchos do M-PERS não existem no TS. Sem rng, aritmética só inteira.
+- **O gabarito:** o `adapt.episodio_autobio` do fechamento da decisão `k-1` está na lista da `k-1` e o `$ref` dele na da `k` (o gravador conta `adapt.*` como `k - 1`); o G-PAR resolve isso (ver o registro).
+- **G-PAR (conferidas, nas 8 vidas, 18 797 chamadas):** `mem.relogio` 3 072; `mem.consolidar` 3 072 (24 registros não nulos); `mem.lembrar` 3 072 (2 097 lembranças, nas três memórias);
+  `mem.termo_lembranca` 3 072; `mem.recuperar` 3 072 (471 lugares recuperados); `mem.codificar` 154; `mem.codificar_autobio` 219; `adapt.episodio_autobio` 3 064 (219 episódios de
+  origem consumo, evento e visita; 2 845 sem episódio). Mais as sondas: o `impulso.unidades` e o `arb.escolher` refeitos com o termo e o `casa` do `mem.ts` nas 3 072 decisões
+  (`sem_lembranca` presente nas 3 072, `lembranca_decidiu` em 81, unidade com termo `L` em 1 514 decisões) e a assinatura do `mem` igual ao fim de cada decisão. O teste falha se uma conta for zero.
