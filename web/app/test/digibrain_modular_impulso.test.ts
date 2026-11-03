@@ -1,21 +1,15 @@
 /* G-PAR do M-IMPULSO (LM1): cada `impulso.unidades` do gabarito da LM0 (as unidades, os termos, as ativacoes e o z).
    O gabarito guarda `<plasticidade>` e `<fn>` (o `casa` do M-MEM) como texto. O que o impulso pede ao M-PLAST (`habito` e `incentivo`) vem do
    arquivo digibrain_modular_leituras_plast.json.gz (a leitura nova da LM1 no exportador): o TS recebe um M-PLAST de mentira que devolve o que o
-   Python devolveu, conferindo a entrada de cada pergunta. O `casa` e o do M-MEM (mem.py), refeito aqui com o lugar_de = x // sub. */
+   Python devolveu, conferindo a entrada de cada pergunta. O `casa` e o oficial do M-MEM (mem.ts, LM3). */
 import { describe, expect, test } from "vitest";
 import { CONFIG_DIGIBRAIN_LAB, CONFIG_MODULAR_MUNDO } from "../motor/digibrain/constantes.ts";
-import { Impulso, type AlvoImpulso, type PlastImpulso, type TermoLembranca } from "../motor/digibrain/impulso.ts";
+import { Impulso, type PlastImpulso, type TermoLembranca } from "../motor/digibrain/impulso.ts";
+import { Memoria } from "../motor/digibrain/mem.ts";
 import { conferir, entrada, leiturasPlast, vidasModular } from "./digibrain_modular_gabarito.ts";
 
-const casa = (termo: TermoLembranca, u: AlvoImpulso): boolean => {
-  if (u.acao !== termo.acao) return false;
-  if (termo.so_comportamento) return true;
-  if (u.tipo !== termo.alvo) return false;
-  if (u.tipo !== "ponto") return true;
-  const [x, y] = u.chave[2] as readonly [number, number];
-  const sub = CONFIG_MODULAR_MUNDO.sub;
-  return Math.floor(x / sub) === termo.lugar[0] && Math.floor(y / sub) === termo.lugar[1];
-};
+/** o `casa` oficial do M-MEM (mem.ts, LM3) */
+const casa = new Memoria({ sub: CONFIG_MODULAR_MUNDO.sub }, null, CONFIG_DIGIBRAIN_LAB).casa;
 
 /** a chave da persistencia no Python (`str` da tupla) em JSON: ('comer', 'cheiro', None) -> ["comer","cheiro",null] */
 const chaveDoPython = (t: string): string => JSON.stringify(JSON.parse(t.replace(/'/g, '"').replace(/None/g, "null").replace(/\(/g, "[").replace(/\)/g, "]")));
