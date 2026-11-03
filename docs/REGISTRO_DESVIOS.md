@@ -487,3 +487,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-03 — L3 LABORATÓRIO DO MODULAR, a LM5a (worker, Claude Code, Sonnet 5.5, worktree `v3-lab-modular-lm5a`): as pranchas do laboratório e do painel por módulo](registro/2026-11.md)
 - [2026-11-03 — L3 LABORATÓRIO DO MODULAR, a LM2 (worker, Claude Code, Sonnet 5.5, worktree `v3-lab-modular-lm2`): a rng do M-ARB refeita no TS e o estado conferido pela assinatura](registro/2026-11.md)
 - [2026-11-03 — L3 LABORATÓRIO DO MODULAR, a LM3 (worker, Claude Code, Sonnet 5.5, worktree `v3-lab-modular-lm3`): o espelho TS do M-MEM e o fechamento que o gravador atribui à decisão anterior](registro/2026-11.md)
+- [2026-11-03 — L3 LABORATÓRIO DO MODULAR, a LM4 (worker, Claude Code, Sonnet 5.5, worktree `v3-lab-modular-lm4`): o M-ADAPT em TS, o laço com a chave do laboratório e o pet de teste v16](registro/2026-11.md)

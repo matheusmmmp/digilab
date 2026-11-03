@@ -34,3 +34,4 @@ export * from "./motor_corpo.ts";
 export * from "./motor_corpo_mundo.ts";
 export * from "./digibrain.ts";
 export * from "./combate_tr/index.ts";
+export * from "./pet_lab.ts";

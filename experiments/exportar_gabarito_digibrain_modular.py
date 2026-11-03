@@ -216,10 +216,10 @@ class Gravador:
         return {nome: _sha(_texto(paraj(getattr(m, nome).estado_interno())), 16) for nome in ASSINADOS}
 
 
-def viver(dono: str, lugar: str, semente: int, gravar: bool = True):
+def viver(dono: str, lugar: str, semente: int, gravar: bool = True, inatos=None):
     """a vida: (o motor, o cerebro, o gravador). Sem `gravar`, a mesma vida sem o embrulho (o gravador e None): o teste confere que o
-    Gravador nao a muda"""
-    fp, fm = orq.fabricas(BRACO, dono, semente, DIAS, orq.ORCAMENTO_POR_DIA, conserto=True)
+    Gravador nao a muda. `inatos` (LM4, so o arquivo dos fins): os valores de partida de outra `ConfigDigibrainInatos`; None, os de hoje"""
+    fp, fm = orq.fabricas(BRACO, dono, semente, DIAS, orq.ORCAMENTO_POR_DIA, conserto=True, inatos=inatos)
     registro = fp(CONFIG_PADRAO)
     cerebro = orq.cerebro_de(registro)
     g = Gravador(cerebro) if gravar else None
@@ -365,7 +365,74 @@ def leituras_plast() -> bytes:
     return gzip.compress(texto_do_arquivo({"versao": 1, "braco": BRACO, "vidas": vidas}).encode("utf-8"), compresslevel=9, mtime=0)
 
 
+# ---------------------------------------------------------------------------------------------------------------------------------------
+# LM4: o log das oito vidas (para o G-PAR-VIDA rejogar a vida inteira no laco do TS). O gabarito da LM0 grava o sha256 do log, nao o log: o TS
+# precisa dos eventos do dono (os avancos, os gestos e a racao deixada) para rodar a mesma vida. Arquivo a parte; os da LM0 nao mudam.
+ARQUIVO_LOGS = f"{PREFIXO}logs.json.gz"
+
+
+def _log_da_vida(dono: str, lugar: str, semente: int) -> dict:
+    """os eventos do log do motor da vida (tick, tipo, valor) e o sha256 do `para_jsonl`, o mesmo `log` do gabarito da vida"""
+    motor, _, _ = viver(dono, lugar, semente, gravar=False)
+    return {"dono": dono, "lugar": lugar, "semente": semente, "dias": DIAS, "log": [ev.para_dict() for ev in motor.log],
+            "log_sha256": hashlib.sha256(motor.log.para_jsonl().encode("utf-8")).hexdigest()}
+
+
+def logs() -> bytes:
+    """o gz (mtime 0, nivel 9) dos logs das mesmas oito vidas do gabarito, na mesma ordem"""
+    vidas = [_log_da_vida(d, lg, s) for lg in LUGARES for d in DONOS for s in SEMENTES]
+    return gzip.compress(texto_do_arquivo({"versao": 1, "braco": BRACO, "vidas": vidas}).encode("utf-8"), compresslevel=9, mtime=0)
+
+
+# ---------------------------------------------------------------------------------------------------------------------------------------
+# LM4: os fins `sumiu` e `desistiu` do M-ESTADO, que as oito vidas da LM0 nao tem (a LM2 os portou sem G-PAR). Arquivo novo e enxuto: por
+# decisao so a acao, o motivo e a assinatura (o que o G-PAR-VIDA confere), mais o log da vida para o laco do TS. As vidas do `sumiu` usam os
+# valores de hoje (estilo `longe`, onde a busca perde o cheiro). O `desistiu` nao aparece com os valores de hoje em nenhuma das vidas de 4, 8
+# e 14 dias (4 estilos de lugar, 4 donos, 9 sementes): a busca desiste so com `n_desiste_cheiro` (6) decisoes sem achar, e o cheiro leva o
+# pet a comida antes. As vidas dele rodam com `n_desiste_cheiro = 2` (`inatos`, so aqui; a ConfigDigibrainInatos de hoje nao muda), e o TS
+# recebe o mesmo valor do arquivo. So a BUSCA (`comer/cheiro`) acaba em `sumiu` e `desistiu` nestas vidas: os ramos das intencoes com
+# alvo (comer/comida, brincar/bola, explorar/ponto), em 80 vidas com `n_desiste = 1`, nao aparecem; ficam sem G-PAR-VIDA. Sementes dos
+# testes; nao sao vidas de pesquisa.
+ARQUIVO_FINS = f"{PREFIXO}fins.json.gz"
+INATOS_DESISTE = {"n_desiste_cheiro": 2}
+VIDAS_FINS = (("incoerente", "longe", 404, {}), ("incoerente", "longe", 505, {}),
+              ("relapso", "longe_fixo", 202, INATOS_DESISTE), ("atencioso", "longe_fixo", 202, INATOS_DESISTE),
+              ("incoerente", "longe_fixo", 101, INATOS_DESISTE), ("incoerente", "longe_fixo", 202, INATOS_DESISTE))
+
+
+def _vida_fins(dono: str, lugar: str, semente: int, ajuste: dict) -> dict:
+    inatos = replace(CONFIG_DIGIBRAIN_INATOS, **ajuste) if ajuste else None
+    motor, cerebro, g = viver(dono, lugar, semente, inatos=inatos)
+    decisoes = [{"k": k, "acao": cerebro.motivos[k]["acao"], "assinatura": g.assinaturas[k], "motivo": paraj(cerebro.motivos[k])}
+                for k in range(len(cerebro.motivos))]
+    fins = sorted({f["motivo"] for m in cerebro.motivos for f in m["fins"]})
+    return {"dono": dono, "lugar": lugar, "semente": semente, "dias": DIAS, "inatos": dict(ajuste), "decisoes": decisoes, "fins": fins,
+            "log": [ev.para_dict() for ev in motor.log], "log_sha256": hashlib.sha256(motor.log.para_jsonl().encode("utf-8")).hexdigest(),
+            "estado": hashlib.sha256(_texto(paraj(cerebro.estado_interno())).encode("utf-8")).hexdigest(),
+            "assinatura_final": g.assinar()}
+
+
+def fins() -> bytes:
+    """o gz (mtime 0, nivel 9) das vidas dos fins `sumiu` e `desistiu`"""
+    vidas = [_vida_fins(*v) for v in VIDAS_FINS]
+    for v in vidas:
+        quer = "sumiu" if not v["inatos"] else "desistiu"
+        if quer not in v["fins"]:
+            raise RuntimeError(f"a vida {v['dono']}/{v['lugar']}/{v['semente']} nao tem o fim {quer}")
+    return gzip.compress(texto_do_arquivo({"versao": 1, "braco": BRACO, "vidas": vidas}).encode("utf-8"), compresslevel=9, mtime=0)
+
+
 if __name__ == "__main__":
+    if "--fins" in sys.argv:                          # so o arquivo dos fins da LM4
+        b = fins()
+        (PASTA / ARQUIVO_FINS).write_bytes(b)
+        print(f"{PASTA / ARQUIVO_FINS} ({len(b) / 1024 / 1024:.2f} MiB)")
+        sys.exit(0)
+    if "--logs" in sys.argv:                          # so o arquivo da LM4; os da LM0 e da LM1 ficam como estao
+        b = logs()
+        (PASTA / ARQUIVO_LOGS).write_bytes(b)
+        print(f"{PASTA / ARQUIVO_LOGS} ({len(b) / 1024 / 1024:.2f} MiB)")
+        sys.exit(0)
     if "--leituras-plast" in sys.argv:                # so o arquivo da LM1; os da LM0 ficam como estao
         b = leituras_plast()
         (PASTA / ARQUIVO_LEITURAS_PLAST).write_bytes(b)

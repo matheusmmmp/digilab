@@ -59,6 +59,10 @@ export const CDJ = { limiarNecessidade: .3, limiarVontade: .1, limiarTom: .2, kC
 export const VERSAO_PET = 14;
 /** as versoes de pet que abrem: a v13 (o tempo real de antes da rodada de equilibrio) e a v14 (CV14-1) */
 export const VERSOES_PET: readonly number[] = [13, 14];
+/** o pet de teste do laboratorio (docs/TAREFA_V3_LAB_MODULAR.md, LM4; LAB-3): a v14 com o DigiBrain modular no lugar do cerebro A. Nasce so pela
+    fabrica do laboratorio (motor/pet_lab.ts); nenhum ovo padrao muda (VERSAO_PET segue 14) e a lista acima tambem (o teste dos pets v14 a
+    confere). A v15 esta tomada pelo PR #525 (o habitat, a bola fisica), por isso a v16 (desvio registrado) */
+export const VERSAO_PET_LAB = 16;
 /* medalhas do Tamer que cada evolucao pede nos pets v6 (decisao do Matheus, 2026-09-29: 1, 3 e 5; so no jogo), pela
    chave do estagio de destino: Rookie -> Champion (adolescente), Champion -> Ultimate (adulto), Ultimate -> Mega (mega).
    In-Training -> Rookie nao pede medalha. A tabela das medalhas fica em medalhas.ts */

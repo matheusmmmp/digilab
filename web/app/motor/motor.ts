@@ -7,7 +7,7 @@
    assinatura das vidas v13 nao muda (test/vidas_v13.test.ts). */
 import {
   ACAO_CHAMADO, ACOES_DONO_JOGO_V11, ACOES_PET, CAT, CDJ, CHAMADO_BEBE, CHAMADO_BEBE_CORPO, CHAMADO_FOME_CORPO, CHE, CLE, CMG, EIXOS_TEMP, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
-  TICK_INICIAL, VERSAO_PET, VERSAO_V14, VERSOES_PET,
+  TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V14, VERSOES_PET,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
 import { APRENDIZADO_V14, CHIP_ANTES_V14 } from "./combate_tr/constantes_tr.ts";
@@ -26,9 +26,10 @@ import { caraterV11, formaAdultaDe, linhaDoCarater, type QuandoCarater } from ".
 import { CCO_CORPO_V11 } from "./corpo.ts";
 import { desejoLobos, type BracoConsequencia, type CerebroA, type ObservacaoLobos } from "./lobos.ts";
 import { MotorCorpo, estadoNascimentoPy, type PoliticaCorpo } from "./motor_corpo.ts";
-import { MotorCorpoMundo } from "./motor_corpo_mundo.ts";
+import { MotorCorpoMundo, type PoliticaCorpoMundo } from "./motor_corpo_mundo.ts";
 import { eventoDeixarComida, lerDeixarComida, type Mundo } from "./mundo.ts";
 import { bracoV11 } from "./pet_v11.ts";
+import { DigiBrain } from "./digibrain/adapt.ts";
 import { leituraAprendido, leituraDecisao, mapaDecisao, mapaPesos, type ArestaMapa, type LeituraDecisao, type MapaDecisao } from "./digibrain.ts";
 import { desafiadoDaVersao, regrasDaVersao, type Lutador, type RegrasLuta, type ResultadoLuta, type Desafiado } from "./combate.ts";
 import { ConfiancaCombate } from "./confianca.ts";
@@ -211,10 +212,13 @@ export class Motor {
   /** v11: o cerebro A atras do braco da consequencia e o laco do corpo por tick, que roda a vida por baixo (o estado do pet e o do laco;
       `e` e a copia dele depois de cada passo). null nos v1-v10. Nos v12, o laco e o com o mundo fisico (MotorCorpoMundo) */
   v11: { braco: BracoConsequencia; laco: MotorCorpo } | null = null;
+  /** o laboratorio (LM4; v16, VERSAO_PET_LAB): o DigiBrain modular decide no lugar do cerebro A (o `braco` fica so para o desejo e o carater,
+      sem aprender); null nos outros pets */
+  lab: DigiBrain | null = null;
 
   constructor(semente: number, versao: number = VERSAO_PET) {
     /* so a v13 e a v14 (CV14-1): os pets de antes (v1-v12, com o combate por turnos) foram descartados (o descarte 6, src/tamer.ts) */
-    if (!VERSOES_PET.includes(versao)) throw new Error(`versão de pet desconhecida: ${versao} (só a ${VERSOES_PET.join(" e a ")} abrem; os pets de antes, com o combate por turnos, foram descartados)`);
+    if (!VERSOES_PET.includes(versao) && versao !== VERSAO_PET_LAB) throw new Error(`versão de pet desconhecida: ${versao} (só a ${VERSOES_PET.join(" e a ")} abrem; os pets de antes, com o combate por turnos, foram descartados)`);
     this.semente = semente; this.versao = versao as VersaoPet;
     /* temperamento do ovo: rng propria, nao mexe nas outras */
     this.temp = temperamentoDe(semente);
@@ -224,7 +228,9 @@ export class Motor {
     const braco = bracoV11(), m = this;
     /* o laco chama o cerebro por aqui: o desejo antes de decidir (como o gabarito da vontade) e, depois da decisao, o que o Motor
        registra dela (nada que mexa no estado do pet: o efeito da acao e do laco) */
-    const politica: PoliticaCorpo = {
+    const lab = versao === VERSAO_PET_LAB ? new DigiBrain() : null;
+    this.lab = lab;
+    const politicaA: PoliticaCorpoMundo = {
       agir(o, rng) {
         const t = m.v11!.laco.estado.tick, d = m.desejoAtual(o, t), a = braco.agir(o, rng);
         m._decisaoV11(o, a, t, d);
@@ -235,10 +241,25 @@ export class Motor {
       receberAcaoDono: (a, tick) => braco.receberAcaoDono(a, tick),
       mudancaNoCorpo: (antes, depois) => braco.mudancaNoCorpo(antes, depois),
     };
+    /* o pet de teste (v16): o mesmo embrulho, com o DigiBrain modular no lugar do A; o laco com a chave do laboratorio da o mundo ao cerebro,
+       pergunta o alvo e chama o consequenciaMundo */
+    const politica: PoliticaCorpoMundo = lab === null ? politicaA : {
+      agir(o, rng) {
+        const t = m.v11!.laco.estado.tick, d = m.desejoAtual(o, t), a = lab.agir(o, rng);
+        m._decisaoV11(o, a, t, d);
+        return a;
+      },
+      observar: tr => lab.observar(tr),
+      consequenciaCorpo: (a, oc, depois) => lab.consequenciaCorpo(a, oc, depois),
+      receberAcaoDono: (a, tick) => lab.receberAcaoDono(a, tick),
+      mudancaNoCorpo: () => lab.mudancaNoCorpo(),
+      escolherAlvo: lab.escolherAlvo,
+      consequenciaMundo: (a, oc, depois) => lab.consequenciaMundo(a, oc, depois),
+    };
     /* o laco com o mundo fisico (MV-1), o do produto (CMU_MVP: sem arvores, so a racao do jogador; a opcao 1 do Matheus de 2026-10-24);
        a regra de cada decisao vai ao registro do mundo, como o ultima_regra do Python */
     const laco = new MotorCorpoMundo(politica, semente, CCO_CORPO_V11, estadoNascimentoPy(TICK_INICIAL),
-                                     { regra: () => braco.cerebro.ultimaRegra, cfgMundo: CMU_MVP });
+                                     { regra: () => braco.cerebro.ultimaRegra, cfgMundo: CMU_MVP, digibrain: lab !== null });
     this.v11 = { braco, laco };
     this.e = laco.estado;
     /* o vinculo B (coerencia por situacao, sem pedido), sem obediencia */
@@ -1002,6 +1023,7 @@ export class Motor {
       ...(this.liga.tentativas ? [["liga", this.liga]] : []),
       ...(this.fronteira ? [["fronteira", this.instalacoes]] : []), ...(this.salao.tentativas ? [["salao", this.salao]] : []),
       [this.men, this.honestidadeEspecie], this.conf.assinatura(),
+      ...(this.lab ? [["lab", { ...this.lab.estadoInterno(), motivos: undefined }]] : []),
       ["v11", this.v11!.braco.cerebro.estadoInterno(), this.v11!.laco.estadoDict(), this.v11!.laco.proximaDecisao],
       ["mundo", this.mundo!.resumo(), [...(this.v11!.laco as MotorCorpoMundo).vistosEm]]]);
   }
