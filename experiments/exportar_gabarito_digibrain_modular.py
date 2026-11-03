@@ -216,10 +216,10 @@ class Gravador:
         return {nome: _sha(_texto(paraj(getattr(m, nome).estado_interno())), 16) for nome in ASSINADOS}
 
 
-def viver(dono: str, lugar: str, semente: int, gravar: bool = True):
+def viver(dono: str, lugar: str, semente: int, gravar: bool = True, inatos=None):
     """a vida: (o motor, o cerebro, o gravador). Sem `gravar`, a mesma vida sem o embrulho (o gravador e None): o teste confere que o
-    Gravador nao a muda"""
-    fp, fm = orq.fabricas(BRACO, dono, semente, DIAS, orq.ORCAMENTO_POR_DIA, conserto=True)
+    Gravador nao a muda. `inatos` (LM4, so o arquivo dos fins): os valores de partida de outra `ConfigDigibrainInatos`; None, os de hoje"""
+    fp, fm = orq.fabricas(BRACO, dono, semente, DIAS, orq.ORCAMENTO_POR_DIA, conserto=True, inatos=inatos)
     registro = fp(CONFIG_PADRAO)
     cerebro = orq.cerebro_de(registro)
     g = Gravador(cerebro) if gravar else None
@@ -365,7 +365,31 @@ def leituras_plast() -> bytes:
     return gzip.compress(texto_do_arquivo({"versao": 1, "braco": BRACO, "vidas": vidas}).encode("utf-8"), compresslevel=9, mtime=0)
 
 
+# ---------------------------------------------------------------------------------------------------------------------------------------
+# LM4: o log das oito vidas (para o G-PAR-VIDA rejogar a vida inteira no laco do TS). O gabarito da LM0 grava o sha256 do log, nao o log: o TS
+# precisa dos eventos do dono (os avancos, os gestos e a racao deixada) para rodar a mesma vida. Arquivo a parte; os da LM0 nao mudam.
+ARQUIVO_LOGS = f"{PREFIXO}logs.json.gz"
+
+
+def _log_da_vida(dono: str, lugar: str, semente: int) -> dict:
+    """os eventos do log do motor da vida (tick, tipo, valor) e o sha256 do `para_jsonl`, o mesmo `log` do gabarito da vida"""
+    motor, _, _ = viver(dono, lugar, semente, gravar=False)
+    return {"dono": dono, "lugar": lugar, "semente": semente, "dias": DIAS, "log": [ev.para_dict() for ev in motor.log],
+            "log_sha256": hashlib.sha256(motor.log.para_jsonl().encode("utf-8")).hexdigest()}
+
+
+def logs() -> bytes:
+    """o gz (mtime 0, nivel 9) dos logs das mesmas oito vidas do gabarito, na mesma ordem"""
+    vidas = [_log_da_vida(d, lg, s) for lg in LUGARES for d in DONOS for s in SEMENTES]
+    return gzip.compress(texto_do_arquivo({"versao": 1, "braco": BRACO, "vidas": vidas}).encode("utf-8"), compresslevel=9, mtime=0)
+
+
 if __name__ == "__main__":
+    if "--logs" in sys.argv:                          # so o arquivo da LM4; os da LM0 e da LM1 ficam como estao
+        b = logs()
+        (PASTA / ARQUIVO_LOGS).write_bytes(b)
+        print(f"{PASTA / ARQUIVO_LOGS} ({len(b) / 1024 / 1024:.2f} MiB)")
+        sys.exit(0)
     if "--leituras-plast" in sys.argv:                # so o arquivo da LM1; os da LM0 ficam como estao
         b = leituras_plast()
         (PASTA / ARQUIVO_LEITURAS_PLAST).write_bytes(b)
