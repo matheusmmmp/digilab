@@ -237,3 +237,23 @@ O espelho TS do M-MEM está em `web/app/motor/digibrain/mem.ts`, com o G-PAR em 
   `mem.termo_lembranca` 3 072; `mem.recuperar` 3 072 (471 lugares recuperados); `mem.codificar` 154; `mem.codificar_autobio` 219; `adapt.episodio_autobio` 3 064 (219 episódios de
   origem consumo, evento e visita; 2 845 sem episódio). Mais as sondas: o `impulso.unidades` e o `arb.escolher` refeitos com o termo e o `casa` do `mem.ts` nas 3 072 decisões
   (`sem_lembranca` presente nas 3 072, `lembranca_decidiu` em 81, unidade com termo `L` em 1 514 decisões) e a assinatura do `mem` igual ao fim de cada decisão. O teste falha se uma conta for zero.
+
+## 14. Resumo da etapa LM4 (2026-11-03, worker Claude Code, Sonnet 5.5, worktree `v3-lab-modular-lm4`)
+
+O M-ADAPT está em `web/app/motor/digibrain/adapt.ts` (a classe `DigiBrain`: `agir`, `observar`, `estadoInterno`, `escolherAlvo`, `consequenciaMundo`,
+`consequenciaCorpo`, `receberAcaoDono`, o fechamento com o `episodioAutobio`), o laço pergunta ao modular quando a chave do laboratório está ligada, e o pet de teste
+(v16) nasce só pela fábrica `petDeTeste` (`motor/pet_lab.ts`). `digilab/engine.py`, `digilab/digibrain/`, `motor/digibrain.ts` e `web/app/src/` não mudaram; nenhum
+gabarito existente foi regravado. Os desvios estão no registro (2026-11, LM4).
+
+- **A versão (LAB-3):** a v15 está tomada pelo PR #525 (aberto), então o pet de teste é a **v16** (`VERSAO_PET_LAB`). Herda a v14 (regras de luta `CV21E_TR14`, mundo do
+  produto, corpo) menos o cérebro. `VERSAO_PET` segue 14 e `VERSOES_PET` segue `[13, 14]`; a v16 entra por exceção explícita. O `bracoV11` fica na v16 só para o desejo e o
+  caráter, sem decidir nem aprender.
+- **O laço:** a chave `digibrain` de `OpcoesLacoMundo` (a "chave da v13") é a do laboratório: ligada, o laço dá `obs.mundo` ao cérebro, pergunta o alvo e chama o
+  `consequenciaMundo` depois do `observar`. Desligada, o laço é o de hoje (G2).
+- **As leituras novas do exportador (commits próprios):** `--logs` (`digibrain_modular_logs.json.gz`, o log do motor das 8 vidas) e `--fins`
+  (`digibrain_modular_fins.json.gz`, 6 vidas com `sumiu` e `desistiu` do M-ESTADO; o `desistiu` só aparece com `n_desiste_cheiro = 2`, valor do próprio arquivo).
+- **Os gates:** G-PAR-VIDA (`test/digibrain_modular_vida.test.ts`): 3 072 decisões das 8 vidas da LM0 e 2 304 das 6 dos fins (5 376 no total), iguais ao Python em ação, motivo
+  e assinatura dos seis módulos, mais o sha256 do estado interno inteiro no fim de cada vida. G1 (`test/pet_lab.test.ts`): o replay do pet de teste, evento a evento, por
+  replay e por save. G2: a suíte inteira (contagens no PR).
+- **Cobertura que falta:** os ramos `sumiu`/`desistiu` das intenções com alvo (`comer/comida`, `brincar/bola`, `explorar/ponto`) não ocorreram em nenhuma vida achada;
+  seguem portados sem G-PAR-VIDA.
