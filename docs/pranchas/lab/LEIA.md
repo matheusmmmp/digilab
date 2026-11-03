@@ -92,6 +92,8 @@ prancha curta a mais (o pet de teste já nascido, com Abrir e Descartar com conf
 
 ## LM5a2 (2026-11-03): o pet de teste já nascido e o Descartar (LM5-5, aprovada)
 
+**DECIDIDAS pelo Matheus em 2026-11-03, as LM5-7 a LM5-9 pela recomendação** ("Sim, aprove e mescle", no chat com o Gerente da V3).
+
 Mais duas telas, nas mesmas 4 variantes (390 e 1280 px, Vidro e Militar), 8 capturas: `ajustes_vivo_*` (Ajustes › Laboratório com o pet de teste vivo) e
 `ajustes_descartar_*` (a confirmação do Descartar). O pet de teste é a **v16** (`VERSAO_PET_LAB`, LM4), não a v15, que o #525 usa; as pranchas da LM5a não citam a versão,
 então nada precisou ser corrigido nelas.
