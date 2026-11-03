@@ -28,7 +28,7 @@ test("o laboratorio: chocar, abrir, ver o motivo, descartar com confirmacao", as
   await expect(page.locator(".lab-selo")).toHaveCount(0);       // a chave desligada: nada do laboratorio na tela Pet
   await page.locator(".acoes-pet button", { hasText: "Carinho" }).click();      // uma acao do dono grava o save do pet de hoje
   const petDeHoje = await hoje(page);
-  expect(petDeHoje.versao).toBe(14);
+  expect(petDeHoje.versao).toBe(15);     // o ovo padrao de hoje (a v15 do #525)
 
   /* Ajustes > Laboratorio: a chave vem desligada e o ovo de teste so aparece com ela ligada */
   await page.goto(APP + "#/config/laboratorio");

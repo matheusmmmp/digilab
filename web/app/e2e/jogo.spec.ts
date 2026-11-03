@@ -397,7 +397,7 @@ test("luta em tempo real: a primeira abertura descarta os pets de antes, avisa, 
   await expect(page.locator("dialog.brasao-tela[open]")).toHaveCount(0);
   const r = await page.evaluate(c => ({ save: JSON.parse(localStorage.getItem(c)!), g: localStorage.getItem(c + "-guardados"), aviso: localStorage.getItem(c + "-aviso-tr"),
     tamer: JSON.parse(localStorage.getItem(c + "-tamer")!), marca: localStorage.getItem(c + "-descarte"), antigos: JSON.parse(localStorage.getItem(c + "-descartados")!) }), CHAVE);
-  expect(r.save.versao).toBe(14);                    /* o ovo novo nasce na versao atual (v14: a luta em tempo real com o candidato da rodada de equilibrio) */
+  expect(r.save.versao).toBe(15);                    /* o ovo novo nasce na versao atual (v15: a v14, a luta em tempo real do candidato da rodada de equilibrio, com a bola no golpe do #525) */
   expect(r.g).toBe("[]");
   expect(r.aviso).toBeNull();
   expect(r.marca).toBe("6");
@@ -427,7 +427,7 @@ test("luta em tempo real: o pet v6 de antes sai com o aviso, e o Tamer fica com 
   await expect(page.locator("dialog.brasao-tela[open]")).toHaveCount(0);
   const r = await page.evaluate(c => ({ save: JSON.parse(localStorage.getItem(c)!), marca: localStorage.getItem(c + "-descarte"),
     tamer: JSON.parse(localStorage.getItem(c + "-tamer")!) }), CHAVE);
-  expect(r.save.versao).toBe(14);
+  expect(r.save.versao).toBe(15);
   expect(r.save.semente).not.toBe(SAVE_ANTIGO_V6.semente);
   expect(r.marca).toBe("6");
   /* a medalha fica (a abertura ainda da o item dela ao Tamer, como sempre) */
@@ -1273,7 +1273,7 @@ for (const [largura, altura] of [[360, 800], [390, 844], [1280, 800]]) {
     await expect(page.locator(".acoes-pet .acao-extra")).toHaveCount(0);
     await page.locator(".acoes-pet .acao-mais").click();
     await expect(page.locator(".acoes-pet .acao-extra")).toHaveCount(largura >= 900 ? 0 : 2);
-    await expect(page.locator(".acoes-pet .racao-bt")).toBeVisible();
+    await expect(page.locator(".acoes-pet .racao-bt:not(.bola-bt)")).toBeVisible();
     await page.keyboard.press("Escape");
     await expect(page.locator("#acoes-mais")).toHaveCount(0);
     /* sem fundo de hexagonos no cenario e sem retrato redondo no cabecalho do Pet */
@@ -1518,7 +1518,7 @@ async function infoMundoNoEstado(page: Page, texto: string | null): Promise<void
 /** arrasta "Por racao" ate o ponto do cliente, com o mouse (o gesto) */
 async function arrastarRacao(page: Page, alvo: [number, number]): Promise<void> {
   await abrirMais(page);
-  const b = (await page.locator(".racao-bt").boundingBox())!;
+  const b = (await page.locator(".racao-bt:not(.bola-bt)").boundingBox())!;
   await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2);
   await page.mouse.down();
   await page.mouse.move(b.x + b.width / 2 + 20, b.y - 20, { steps: 4 });
