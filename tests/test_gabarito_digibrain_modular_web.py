@@ -100,3 +100,15 @@ def test_o_gravador_nao_muda_a_vida(lugar):
     assert c_com.motivos == c_sem.motivos
     assert json.dumps(c_com.estado_interno(), sort_keys=True) == json.dumps(c_sem.estado_interno(), sort_keys=True)
     assert c_com.k == c_sem.k and len(c_com.motivos) == c_com.k
+
+
+def test_as_leituras_do_plast_da_lm1_batem_com_uma_execucao_nova_e_cobrem_as_oito_vidas():
+    """o arquivo que a LM1 pediu ao exportador (habito e incentivo dentro do impulso): sai igual em duas execucoes e bate com o gravado"""
+    novo = E.leituras_plast()
+    assert gzip.decompress(novo) == gzip.decompress(E.leituras_plast())
+    gravado = (E.PASTA / E.ARQUIVO_LEITURAS_PLAST).read_bytes()
+    assert gzip.decompress(gravado) == gzip.decompress(novo)
+    vidas = json.loads(gzip.decompress(gravado))["vidas"]
+    assert len(vidas) == 8
+    assert all(len(v["decisoes"]) == 384 for v in vidas)
+    assert sum(len(d["chamadas"]) for v in vidas for d in v["decisoes"]) > 0
