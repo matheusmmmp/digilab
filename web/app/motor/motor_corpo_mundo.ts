@@ -17,8 +17,10 @@
        eventos diretos ao pet, sem posicao do dono (MV-7).
 
    O cerebro A fica como no v11 (MV-2): sem as chaves do mundo, o alvo e o padrao do motor (o `escolher_alvo` dos lobos devolve null) e o
-   `consequencia_mundo` dele nao faz nada; nenhum dos dois e chamado aqui. So a chave da v13 (`digibrain`, desligada; o modular, DM-5)
-   faz o laco perguntar o alvo ao cerebro, com o `ponto` do lugar lembrado aceito so no explorar (a PE-14 revista; T-PONTO-4). O `fruta_comida` tambem nao (o A do TS nao o tem).
+   `consequencia_mundo` dele nao faz nada; nenhum dos dois e chamado aqui. So a chave do laboratorio (`digibrain`, desligada; o DigiBrain
+   modular, docs/TAREFA_V3_LAB_MODULAR.md, LM4; antes, a "chave da v13", DM-5) faz o laco dar o mundo ao cerebro (`obs.mundo`), perguntar o
+   alvo (`escolherAlvo`, com o `ponto` do lugar lembrado aceito so no explorar: a PE-14 revista; T-PONTO-4) e chamar o `consequenciaMundo`
+   depois do `observar`, como o embrulho do MotorMundo do Python. O `fruta_comida` nao (o A do TS nao o tem).
 
    `paridade`: o laco aceita tambem o elogio e a bronca, como o MotorCorpo do Python, so para rejogar o gabarito (os donos sinteticos
    da etapa 0 os usam). O jogo nao liga: o v12, como o v11, nao tem elogio nem bronca. */
@@ -27,6 +29,7 @@ import type { ConfigCorpo, ConfigMundo } from "./constantes.ts";
 import { CCO_CORPO_V11 } from "./corpo.ts";
 import { efeitoAcaoPet } from "./estado.ts";
 import { ACOES_DONO_V11, MotorCorpo, estadoNascimentoPy, type EventoCorpo, type PoliticaCorpo } from "./motor_corpo.ts";
+import type { ObservacaoLobos } from "./lobos.ts";
 import { Mundo, eventoDeixarComida, lerDeixarComida, regiaoDe, type PercepcaoMundo } from "./mundo.ts";
 import type { AcaoPet, EstadoVida } from "./tipos.ts";
 
@@ -37,6 +40,11 @@ export interface OcorridoMundo {
   vistos_novos?: [number, string][];
 }
 
+/** a politica do laboratorio: o `consequenciaMundo` (o `consequencia_mundo` do Python) depois do `observar`, nas decisoes com alvo */
+export interface PoliticaCorpoMundo extends PoliticaCorpo {
+  consequenciaMundo?(acao: AcaoPet, ocorrido: OcorridoMundo, obsDepois: ObservacaoLobos): void;
+}
+
 export interface OpcoesLacoMundo {
   /** a regra da ultima decisao do cerebro (o `ultima_regra` do Python, no registro de cada decisao do mundo); sem ela, null */
   regra?: () => string | null;
@@ -44,9 +52,10 @@ export interface OpcoesLacoMundo {
   paridade?: boolean;
   /** o mundo (o `cfg_mundo` do Python); sem ele, o da pesquisa (CMU, o layout padrao) */
   cfgMundo?: ConfigMundo;
-  /** a chave da v13 (o `ConfigDigibrain.ligada` do Python, DM-5), desligada: so com ela o laco pergunta o alvo ao cerebro
-   *  (`politica.escolherAlvo`, o `escolher_alvo` do Python), e o Mundo valida o que vier (os candidatos e, so no explorar, o `ponto`
-   *  inteiro dentro do mapa; T-PONTO-4). Desligada (o v12 e o A), o alvo e o padrao do motor, como hoje */
+  /** a chave do laboratorio (o `ConfigDigibrain.ligada` do Python, DM-5; LM4), desligada: so com ela o laco da a percepcao do mundo ao
+   *  cerebro (`obs.mundo`), pergunta o alvo (`politica.escolherAlvo`, o `escolher_alvo` do Python) e chama o `consequenciaMundo`; o Mundo
+   *  valida o que vier (os candidatos e, so no explorar, o `ponto` inteiro dentro do mapa; T-PONTO-4). Desligada (o v12 e o A), o alvo e o
+   *  padrao do motor e nada disso e chamado, como hoje */
   digibrain?: boolean;
   /** a chave do produto `decisaoNaComida` (o `ConfigDecisaoNaComida.ligada` do Python), desligada: com ela, a comida que o dono deixa no
    *  chao faz o pet decidir ja no proximo passo do laco, em vez de esperar o fim do intervalo. O cerebro e a politica nao mudam: so o
@@ -117,8 +126,9 @@ export class MotorCorpoMundo extends MotorCorpo {
   // ------------------------------------------------------------ a decisao (MotorCorpo._decidir com o embrulho do mundo)
   protected override decidir(produzidas: [number, AcaoPet][]): void {
     const intervalo = C.intervalo;
-    const obs = this.observacao();
-    this.antesDaDecisao();
+    const base = this.observacao();
+    const percepcao = this.antesDaDecisao();
+    const obs = this.digibrain ? { ...base, mundo: percepcao } : base;       // a chave do laboratorio: o cerebro ve o mundo (obs.mundo)
     const acao = this.politica.agir(obs, this.rngPolitica);
     this.acaoAtual = acao;
     const e = efeitoAcaoPet(this.estado, acao);
@@ -129,8 +139,10 @@ export class MotorCorpoMundo extends MotorCorpo {
     produzidas.push([this.estado.tick, acao]);
     this.proximaDecisao = this.estado.tick + intervalo;
     // o observar do embrulho: a consequencia do mundo antes do cerebro, e a transicao com a observacao de depois dela
-    this.consequencia(acao);
-    this.politica.observar({ observacao: obs, acao, observacaoSeguinte: this.observacao() });
+    const ocorrido = this.consequencia(acao);
+    const seguinte = this.digibrain ? { ...this.observacao(), mundo: this.mundo.perceber(this.estado.tick) } : this.observacao();
+    this.politica.observar({ observacao: obs, acao, observacaoSeguinte: seguinte });
+    if (this.digibrain && ocorrido !== null) (this.politica as PoliticaCorpoMundo).consequenciaMundo?.(acao, ocorrido, seguinte);
     this.conferirEstimulo("decisao", new Set());
     this.sincronizar();
     this.politica.consequenciaCorpo(acao, { acao, estimulos: this.estimulos.map((s) => [...s]) }, this.observacao());
