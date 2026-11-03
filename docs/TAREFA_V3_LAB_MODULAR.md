@@ -132,3 +132,31 @@ Cada uma com a recomendação e o custo de errar.
   - Recomendação: assim.
   - Custo de errar: com a LM5b antes da B3, as duas disputam a tela e uma refaz a outra.
 
+
+## 9. Resumo da etapa LM0 (2026-11-03, worker Claude Code, Sonnet 5.5, worktree `v3-lab-modular-lm0`)
+
+O exportador do gabarito está pronto: `experiments/exportar_gabarito_digibrain_modular.py`. Nenhum código TS, nenhum parâmetro novo;
+`digilab/engine.py` e `digilab/digibrain/` não mudaram, e nenhum gabarito existente foi regravado.
+
+- **A configuração:** o braço REL da C4 (`run_v2_digibrain_prototipo.SUBCHAVES_C4["REL"]`, com `conserto=True`): `ligada`, `p1`, `p2`, `m_mem`,
+  `persistencia`, `cheiro_inato`, `intencao_cheiro`, `memoria_autobio` e `controle_mem = "rel"`; desligadas `facetas_mem`,
+  `redecidir_evento`, `credito_corrida`, `intencao_suspensa` e `modula_g_apr`. As constantes efetivas (`ConfigDigibrain` e
+  `ConfigDigibrainInatos`) estão em `digibrain_modular_constantes.json`.
+- **As vidas:** o mundo do MVP (`CONFIG_MUNDO_MVP`), `longe_fixo` e comedouro × donos atencioso e relapso × sementes 101 e 202 × 4 dias
+  (384 decisões) = 8 vidas. Por que essas: com 4 dias há 3 consolidações do dia (a lembrança vem da duradoura e da central); o relapso deixa de
+  cuidar e provoca a busca e o lugar lembrado; o atencioso cobre a comida posta. A soma das 8 vidas cobre, pelo `cobertura` das constantes:
+  o P2 (hábito ≠ 0 em 2 361 das 3 072 decisões), o P1, a persistência, a busca guardada (DX-4, 16 decisões com `busca_entregue`), os fins
+  `achou`, `meta` e `trocou`, a memória recuperada, a lembrança com termo `L` e sem ele (as sondas `sem_lembranca` em toda decisão), o
+  lugar lembrado como alvo (`Alvo.ponto`, 104 decisões), as consolidações, os episódios autobiográficos e os gestos do dono. A vida
+  atencioso/`longe_fixo`/101 não come (só explora e dorme): fica pelo caso sem episódios.
+- **O tamanho:** cada lugar tem ~27 MiB de texto (4 vidas × ~6,8 MiB; ~17,8 KiB por decisão), acima dos 10 MB. Os arquivos vão em
+  `.json.gz` (mtime 0, nível 9: 1,2 e 1,3 MiB) e o sha256 do texto original fica em `arquivos` nas constantes. Mais vidas ou dias
+  custariam repositório sem ganho de cobertura; a LM4 pode pedir outras vidas pelo mesmo exportador.
+- **O formato:** o docstring do exportador. Por decisão: as chamadas em ordem (`adapt.*` e os métodos dos módulos que o M-ADAPT chama direto,
+  com `e`, `s` e `$ref` para o objeto que repete uma saída da decisão), o `motivo` final e a `assinatura` (sha256 de 16 hex do
+  `estado_interno` de sens, afeto, estado, mem, arb e plast); por vida, o sha256 do log e do estado interno. A rng de política vira o
+  sha256 do estado antes e depois.
+- **Teste:** `tests/test_gabarito_digibrain_modular_web.py` (8 testes): o Gravador não muda a vida (log, ações, rngs, motivos, estado interno, `episodio_autobio` restaurado), o exportador sai igual em duas execuções e o gravado bate com uma
+  execução nova (comparando o texto, não o gzip), o sha256 e o limite de 10 MB, as constantes efetivas, a cobertura.
+- **Achado, não resolvido (LAB-3):** a "próxima versão livre (hoje a v15)" já está em uso: o PR #525 (aberto, `v3-habitat-objetos`) usa pet
+  v15. A LM4 decide o número depois de conferir a `main`.
