@@ -216,17 +216,25 @@ class Gravador:
         return {nome: _sha(_texto(paraj(getattr(m, nome).estado_interno())), 16) for nome in ASSINADOS}
 
 
-def _vida(dono: str, lugar: str, semente: int) -> tuple[dict, dict]:
-    """(a vida gravada, a cobertura dela)"""
+def viver(dono: str, lugar: str, semente: int, gravar: bool = True):
+    """a vida: (o motor, o cerebro, o gravador). Sem `gravar`, a mesma vida sem o embrulho (o gravador e None): o teste confere que o
+    Gravador nao a muda"""
     fp, fm = orq.fabricas(BRACO, dono, semente, DIAS, orq.ORCAMENTO_POR_DIA, conserto=True)
     registro = fp(CONFIG_PADRAO)
     cerebro = orq.cerebro_de(registro)
-    g = Gravador(cerebro)
+    g = Gravador(cerebro) if gravar else None
     try:
         d = DonoComLugar(criar_dono(dono), lugar, semente, dono, orq.CM)
         motor, _ = simular_vida_fisico(d, registro, semente, DIAS, orq.ORCAMENTO_POR_DIA * DIAS, dono, fm)
     finally:
-        g.soltar()
+        if g is not None:
+            g.soltar()
+    return motor, cerebro, g
+
+
+def _vida(dono: str, lugar: str, semente: int) -> tuple[dict, dict]:
+    """(a vida gravada, a cobertura dela)"""
+    motor, cerebro, g = viver(dono, lugar, semente)
     n = len(cerebro.motivos)
     decisoes = []
     for k in range(n):

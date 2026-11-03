@@ -79,3 +79,24 @@ def test_toda_decisao_tem_o_agir_o_motivo_e_a_assinatura():
         for d in vida["decisoes"]:
             assert any(ch["m"] == "adapt.agir" for ch in d["chamadas"])
             assert d["motivo"]["k"] == d["k"] and set(d["assinatura"]) == set(E.ASSINADOS)
+
+
+@pytest.mark.parametrize("lugar", E.LUGARES)
+def test_o_gravador_nao_muda_a_vida(lugar):
+    """a vida com o Gravador e a mesma sem ele: log, acoes, rngs (o resumo do motor), motivos e estado interno final; e o `soltar()`
+    devolve o `episodio_autobio` original"""
+    import run_v2_digibrain_prototipo  # noqa: F401
+    from bancada_v2 import resumo_motor
+
+    from digilab.digibrain import adapt as adapt_mod
+    original = adapt_mod.episodio_autobio
+    com, c_com, g = E.viver("relapso", lugar, 101, gravar=True)
+    assert adapt_mod.episodio_autobio is original
+    sem, c_sem, _ = E.viver("relapso", lugar, 101, gravar=False)
+    assert adapt_mod.episodio_autobio is original
+    assert g.chamadas
+    assert com.log.para_jsonl() == sem.log.para_jsonl()
+    assert resumo_motor(com) == resumo_motor(sem)
+    assert c_com.motivos == c_sem.motivos
+    assert json.dumps(c_com.estado_interno(), sort_keys=True) == json.dumps(c_sem.estado_interno(), sort_keys=True)
+    assert c_com.k == c_sem.k and len(c_com.motivos) == c_com.k

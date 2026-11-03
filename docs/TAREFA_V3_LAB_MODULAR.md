@@ -156,7 +156,7 @@ O exportador do gabarito está pronto: `experiments/exportar_gabarito_digibrain_
   com `e`, `s` e `$ref` para o objeto que repete uma saída da decisão), o `motivo` final e a `assinatura` (sha256 de 16 hex do
   `estado_interno` de sens, afeto, estado, mem, arb e plast); por vida, o sha256 do log e do estado interno. A rng de política vira o
   sha256 do estado antes e depois.
-- **Teste:** `tests/test_gabarito_digibrain_modular_web.py` (6 testes): o exportador sai igual em duas execuções e o gravado bate com uma
+- **Teste:** `tests/test_gabarito_digibrain_modular_web.py` (8 testes): o Gravador não muda a vida (log, ações, rngs, motivos, estado interno, `episodio_autobio` restaurado), o exportador sai igual em duas execuções e o gravado bate com uma
   execução nova (comparando o texto, não o gzip), o sha256 e o limite de 10 MB, as constantes efetivas, a cobertura.
 - **Achado, não resolvido (LAB-3):** a "próxima versão livre (hoje a v15)" já está em uso: o PR #525 (aberto, `v3-habitat-objetos`) usa pet
   v15. A LM4 decide o número depois de conferir a `main`.
