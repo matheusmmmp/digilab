@@ -332,7 +332,45 @@ def gravar(dados: dict[str, bytes]) -> None:
         (PASTA / nome).write_bytes(b)
 
 
+# ---------------------------------------------------------------------------------------------------------------------------------------
+# LM1: as leituras do M-PLAST dentro do `Impulso.unidades` (`habito` e `incentivo`). O gabarito da LM0 nao as guarda (ficam dentro da saida do
+# impulso), e o incentivo nao se reconstroi so dos termos (mul(incentivo, prox) perde o incentivo). Arquivo a parte: o das vidas da LM0 nao muda.
+ARQUIVO_LEITURAS_PLAST = f"{PREFIXO}leituras_plast.json.gz"
+
+
+def _leituras_da_vida(dono: str, lugar: str, semente: int) -> list:
+    """por decisao k, as chamadas do `plast.habito(b, z)` e do `plast.incentivo(pc, classe, drives)` na ordem em que o impulso as fez"""
+    fp, fm = orq.fabricas(BRACO, dono, semente, DIAS, orq.ORCAMENTO_POR_DIA, conserto=True)
+    registro = fp(CONFIG_PADRAO)
+    cerebro = orq.cerebro_de(registro)
+    por_k: dict[int, list] = {}
+    plast = cerebro.m.plast
+    for metodo in ("habito", "incentivo"):
+        original = getattr(plast, metodo)
+
+        def f(*args, _o=original, _m=metodo):
+            r = _o(*args)
+            por_k.setdefault(cerebro.k, []).append({"m": f"plast.{_m}", "e": [paraj(a) for a in args], "s": r})
+            return r
+        setattr(plast, metodo, f)
+    d = DonoComLugar(criar_dono(dono), lugar, semente, dono, orq.CM)
+    simular_vida_fisico(d, registro, semente, DIAS, orq.ORCAMENTO_POR_DIA * DIAS, dono, fm)
+    return [{"k": k, "chamadas": por_k.get(k, [])} for k in range(len(cerebro.motivos))]
+
+
+def leituras_plast() -> bytes:
+    """o gz (mtime 0, nivel 9) das leituras do M-PLAST das mesmas oito vidas do gabarito, na mesma ordem"""
+    vidas = [{"dono": d, "lugar": lg, "semente": s, "decisoes": _leituras_da_vida(d, lg, s)}
+             for lg in LUGARES for d in DONOS for s in SEMENTES]
+    return gzip.compress(texto_do_arquivo({"versao": 1, "braco": BRACO, "vidas": vidas}).encode("utf-8"), compresslevel=9, mtime=0)
+
+
 if __name__ == "__main__":
+    if "--leituras-plast" in sys.argv:                # so o arquivo da LM1; os da LM0 ficam como estao
+        b = leituras_plast()
+        (PASTA / ARQUIVO_LEITURAS_PLAST).write_bytes(b)
+        print(f"{PASTA / ARQUIVO_LEITURAS_PLAST} ({len(b) / 1024 / 1024:.2f} MiB)")
+        sys.exit(0)
     dados = arquivos()
     gravar(dados)
     for nome, b in dados.items():

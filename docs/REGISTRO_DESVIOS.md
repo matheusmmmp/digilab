@@ -483,3 +483,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-01 — C4 MEMÓRIA AUTOBIOGRÁFICA, a run única (worker, Claude Code, Opus 5.5, worktree `v3-memoria-run`): o lugar, o `medidas.json.gz` e as decisões](registro/2026-11.md)
 - [2026-11-01 — L3 LABORATÓRIO DO MODULAR, a tarefa (Gerente da V3, Claude Code, Opus 5.5, worktree `v3-lab-modular`): a L3 muda de escopo](registro/2026-11.md)
 - [2026-11-03 — L3 LABORATÓRIO DO MODULAR, a LM0 (worker, Claude Code, Sonnet 5.5, worktree `v3-lab-modular-lm0`): o gabarito do modular em `.gz`](registro/2026-11.md)
+- [2026-11-03 — L3 LABORATÓRIO DO MODULAR, a LM1 (worker, Claude Code, Sonnet 5.5, worktree `v3-lab-modular-lm1`): uma leitura nova do M-PLAST e os números do mundo](registro/2026-11.md)
