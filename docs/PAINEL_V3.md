@@ -1,6 +1,6 @@
 # PAINEL V3: onde a V3 está, em uma página
 
-**Atualizado em 2026-11-03** (`main` `6b54b48`, depois do #549), pelo Gerente da V3. O plano é o `docs/PLANO_V3.md`; o
+**Atualizado em 2026-11-03** (`main` `8dd179b`, depois do #551), pelo Gerente da V3. O plano é o `docs/PLANO_V3.md`; o
 fechamento da V2, o `docs/FECHAMENTO_V2.md` (tag `v2-final`).
 
 - Quem atualiza: o coordenador de cada trilha, uma linha por PR mergeado.
@@ -28,11 +28,11 @@ fechamento da V2, o `docs/FECHAMENTO_V2.md` (tag `v2-final`).
 | **C5** viabilidade do corpo | as medidas do corpo fora da faixa, do replay | medidas na `main` (#506) e lidas na C1 (#510), nos termos do AD6-4 | `docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`, adendo 6 |
 | **L1** M7 do layout | o fechamento do layout habitat | **na `main`** (#477) | `docs/TAREFA_V2_LAYOUT_HABITAT.md` |
 | **L2** tema dos menus T1–T3 | a pele Vidro como padrão, a escolha em Ajustes, as capturas nas duas peles | T1 (#486), T2 (#499) e T3 (#505) **na `main`** | `docs/TAREFA_V2_TEMA_MENUS.md`, seção 5 |
-| **L3** o modular no jogo, em modo laboratório | o DigiBrain modular inteiro na configuração validada (o M3\* da C1 e a `memoria_autobio` REL da C4), atrás de uma chave desligada, num pet de teste (a **v16**: a v15 é do #525); o A v11 segue o padrão. Substitui a L3 de uma peça só (Matheus, 2026-11-01) | a tarefa e as LAB-1 a LAB-5 **na `main`** (#542); o motor inteiro em TS com paridade **na `main`**: o gabarito (LM0, #543), sens, afeto e impulso (LM1, #545), estado, arb e plast (LM2, #546), a memória (LM3, #547), o adapt e o laço com o pet v16 (LM4, #548: o G-PAR-VIDA em 5 376 decisões, o G1 e o G2); as pranchas **na `main`** (LM5a, #544; o pet já nascido e o Descartar, #549), com as LM5-1 a LM5-9 DECIDIDAS; a tela (LM5b) **em voo**, antes da B3 por pedido do Matheus (2026-11-03). Sem G-PAR: o `sumiu` e o `desistiu` das intenções com alvo, que não ocorreram nas vidas tentadas | `docs/TAREFA_V3_LAB_MODULAR.md` |
+| **L3** o modular no jogo, em modo laboratório | o DigiBrain modular inteiro na configuração validada (o M3\* da C1 e a `memoria_autobio` REL da C4), atrás de uma chave desligada, num pet de teste (a **v16**: a v15 é do #525); o A v11 segue o padrão. Substitui a L3 de uma peça só (Matheus, 2026-11-01) | a tarefa e as LAB-1 a LAB-5 **na `main`** (#542); o motor inteiro em TS com paridade **na `main`**: o gabarito (LM0, #543), sens, afeto e impulso (LM1, #545), estado, arb e plast (LM2, #546), a memória (LM3, #547), o adapt e o laço com o pet v16 (LM4, #548: o G-PAR-VIDA em 5 376 decisões, o G1 e o G2); as pranchas **na `main`** (LM5a, #544; o pet já nascido e o Descartar, #549), com as LM5-1 a LM5-9 DECIDIDAS; a tela (LM5b) **na `main`** (#551, antes da B3 por pedido do Matheus, 2026-11-03): o pet de teste nasce em Ajustes › Laboratório, num save próprio, abre na ilha com o selo experimental, sem trocar o pet ativo, e tem o painel do modular e o Descartar; a fala de memória ficou de fora, e lutar com o pet de teste não foi testado. Sem G-PAR: o `sumiu` e o `desistiu` das intenções com alvo, que não ocorreram nas vidas tentadas | `docs/TAREFA_V3_LAB_MODULAR.md` |
 | **L4** habitat como ilha 3D | a cena do modo mundo (v12) como ilha 3D, com o pet em papel; só vista | H0 a H5 **na `main`** (#488 a #494; a H1b liga o `CLIPES_UP`); faltam as capturas aprovadas e a M3 | `docs/TAREFA_V3_HABITAT_ILHA_3D.md` |
 | **B1** rodada 2 do equilíbrio | as fases do `PLANO_EQUILIBRIO_COMBATE_TR_R2.md` | **na `main`**, com a conferência única (R2-5, #502): 13 metas passam, 14 falham | `docs/EQUILIBRIO_COMBATE_TR.md` |
 | **B2** ligar a v14 | o pet v14 com o candidato da conferência; a v13 viva (CV14-1) | **na `main`** (#504); o Matheus decidiu ligar já (2026-10-30), contra a recomendação de esperar a rodada 3 | `docs/TAREFA_V3_COMBATE_V14.md` |
-| **B3** a luta no layout novo | o HUD e o palco na pele dos menus | a tarefa e as pranchas **na `main`** (#537), com as B3-1 a B3-5 aprovadas; o código não começou e vai partir da tela que a LM5b deixar | `docs/TAREFA_V3_LUTA_LAYOUT.md` |
+| **B3** a luta no layout novo | o HUD e o palco na pele dos menus | a tarefa e as pranchas **na `main`** (#537), com as B3-1 a B3-5 aprovadas; o código não começou e parte da tela da LM5b (#551) | `docs/TAREFA_V3_LUTA_LAYOUT.md` |
 | **L** balões e HUD (fora do plano, sessões próprias) | os balões soltos vão ao painel Estado; o HUD da tela Pet | **na `main`** (#498, #501) | `docs/TAREFA_V2_LAYOUT_HABITAT.md`, `docs/TAREFA_V3_LAYOUT_HUD.md` |
 
 ## 2. Decisões abertas do Matheus
@@ -46,19 +46,20 @@ fechamento da V2, o `docs/FECHAMENTO_V2.md` (tag `v2-final`).
 
 Cada uma com a recomendação do Gerente e o custo de errar.
 
-- **O PR #525 (habitat: o saco de pancada, o treino e a bola, pet v15) em conflito** com a LM4 (`motor.ts`, `motor_corpo_mundo.ts`,
-  `constantes.ts`, `tipos.ts`, `combate.ts`) e, depois da LM5b, com a tela Pet. Recomendação: a sessão dona junta a `main` depois do merge da
-  LM5b, uma vez só. Custo de errar: juntar antes obriga a juntar de novo quando a LM5b entrar.
+- **O PR #525 (habitat: o saco de pancada, o treino e a bola, pet v15)** juntou a `main` antes da LM5b e entra no git sem conflito
+  depois do #551, mas um teste da LM5b falha na junção: o `lab_tela.test.ts` espera que um save v15 não abra, e o #525 faz a v15 abrir.
+  Recomendação: a sessão dona junta a `main` de novo e troca essa espera para "a v15 abre e não é de laboratório". Custo de errar:
+  mesclar sem isso deixa a `main` com um teste do web vermelho (o CI do PR não roda o `npm test`).
 - **A cobertura do `sumiu` e do `desistiu` nas intenções com alvo** (ir à comida, à bola, ao lugar): portados, sem G-PAR-VIDA (LM4).
   Recomendação: deixar como está até um cenário que os produza; registrado na tarefa. Custo de errar: um erro nesses ramos só aparece jogando.
 - **O rótulo `livre-v9`** quando a fala de memória for gravada no modo livre. Recomendação: entra junto da primeira fala de memória gravada
-  (a LM5b diz se liga a fala). Custo de errar: uma fala livre gravada sem rótulo de versão não se separa das antigas no log.
+  (a LM5b, #551, não ligou a fala; ela fica para uma etapa própria). Custo de errar: uma fala livre gravada sem rótulo de versão não se separa das antigas no log.
 - **As worktrees antigas no `D:`:** seis não foram removidas na limpeza de 2026-11-01 (duas sem merge, `v3-habitat-objetos` e
   `v3-poc-orgaos-genetica`; duas com mudanças, `v3-habitat-mapas` e `v3-c4-proveniencia`; duas destacadas, `v3-capturas-peles` e
   `v3-habito-intencao-run`), e duas pastas vazias travadas em `v3\.claude\worktrees\` (`agitated-rubin-b2128e`, `cool-panini-6f93b7`).
   Recomendação: o Matheus olha as quatro primeiras; as duas destacadas e as pastas vazias saem quando nada as segurar. Custo de errar: apagar
   uma worktree com mudança perde trabalho que não está no git.
-- **As worktrees das etapas do laboratório** (`v3-lab-modular`, `v3-lab-modular-lm0` a `lm4`, `lm5a`, `lm5a2`), já na `main`: removíveis com
+- **As worktrees das etapas do laboratório** (`v3-lab-modular`, `v3-lab-modular-lm0` a `lm4`, `lm5a`, `lm5a2`, `lm5b`), já na `main`: removíveis com
   `git worktree remove`, sem força, quando o Matheus disser.
 
 ## 3. Riscos
