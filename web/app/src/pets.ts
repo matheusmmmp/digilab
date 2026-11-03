@@ -9,7 +9,7 @@
    versao de hoje (v13): o dono simulado so usa as acoes do dono dos v11 em diante (sem elogio, bronca, petisco e banheiro), e cada pet
    conhece as 5 medalhas das evolucoes (o evento "u" no comeco do registro dele), para a escada chegar ao Ultimate como antes. */
 import { ACOES_DONO_JOGO_V11, CAT, CD, CMD, CTR, Motor, TPD, criarDono, criarRng, hashSemente, type EventoRegistro, type Exercicio, type TipoDono, type VisaoDono } from "../motor/index.ts";
-import { jogoAtual, trocarMotor } from "./jogo.ts";
+import { jogoAtual, motorReal, sairDoLab, trocarMotor } from "./jogo.ts";
 import { LUTA, previa } from "./luta.ts";
 import { CHAVE, textoSave } from "./save.ts";
 
@@ -41,6 +41,7 @@ export const abrirGuardado = (g: Guardado): Motor => Motor.reproduzir(g.semente,
 
 /** ativa o guardado i: o ativo vai para o lugar dele, o escolhido passa a correr o tempo */
 export function ativarGuardado(i: number): void {
+  sairDoLab();        // com o pet de teste na tela, o ativo que volta ao lugar dele e o de hoje, nunca o de teste
   const g = lerGuardados(), escolhido = g[i];
   if (!escolhido) throw new Error("pet guardado não existe: " + i);
   const m = abrirGuardado(escolhido);

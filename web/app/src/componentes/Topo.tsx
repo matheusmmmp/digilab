@@ -5,12 +5,13 @@
 import { Cloud, CloudOff, MessageCircle, Moon, Settings, Sun } from "lucide-react";
 import { DO_ESP, NOME_ESP, NOME_EST, TPD, eNoite, nomeEstagio, nomeForma } from "../../motor/index.ts";
 import { BRASAO } from "../decoracao.ts";
-import { useJogo } from "../jogo.ts";
+import { sairDoLab, useJogo } from "../jogo.ts";
+import { SeloExperimental } from "../telas/config/Laboratorio.tsx";
 import { Retrato, diaDe, hhmm } from "../telas/pet/TelaPet.tsx";
 import { Deco } from "./Deco.tsx";
 
 export function TopoHabitat({ abrirMeusPets, irConversar, abrirConfig }: { abrirMeusPets: () => void; irConversar: () => void; abrirConfig: () => void }) {
-  const { motor: m, nascendo, erroSave } = useJogo(), ovo = nascendo > 0, e = m.e, noite = eNoite(e.tick % TPD);
+  const { motor: m, nascendo, erroSave, emLab } = useJogo(), ovo = nascendo > 0, e = m.e, noite = eNoite(e.tick % TPD);
   return (
     <header className="topo-hab">
       <div className="topo-pet">
@@ -19,6 +20,7 @@ export function TopoHabitat({ abrirMeusPets, irConversar, abrirConfig }: { abrir
           <span className="topo-pet-nome"><b>{ovo ? "Digi-Egg " + DO_ESP[m.especie] : nomeForma(m.forma)}</b></span>
           <span className="topo-pet-sub"><span className="dl-tag dl-tag--estagio">{ovo ? NOME_EST.ovo : nomeEstagio(m.forma)}</span>
             <span aria-hidden="true">·</span><Deco nome={BRASAO[m.especie].peca} largura={20} altura={13} alt="" />{NOME_ESP[m.especie]}</span>
+          {emLab && <span className="topo-lab"><SeloExperimental /><button type="button" className="topo-lab__volta" onClick={sairDoLab}>voltar ao meu pet</button></span>}
         </span>
       </div>
       <b className="topo-logo" aria-hidden="true"><span className="topo-logo-marca" />DIGILAB</b>
