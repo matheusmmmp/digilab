@@ -1,0 +1,104 @@
+/* Pranchas da B3 (docs/TAREFA_V3_LUTA_LAYOUT.md): a luta no layout habitat. HTML estatico, so desenho; nenhum codigo do jogo.
+   Os tokens abaixo sao copias dos de web/app/src/estilo/tokens.css (Militar = :root, Holografico = data-pele="vidro"); nao ha token novo.
+   Os sprites e os mapas ficam fora do git (D:\Trab\digilab\Assets, UI_GUIDELINES 5.1): gerar.py aponta para la, so para as capturas. */
+:root{
+  --hx-chao:#101214; --hx-miolo:#131518; --hx-miolo-2:#1C1F22; --hx-borda:#3E4442; --hx-borda-topo:#6E7872;
+  --hx-texto:#E4E7E2; --hx-texto-2:#C9D0C8; --hx-sec:#9DA89F; --hx-rotulo:#B9C3A4;
+  --hx-escolhido:#C5CFB0; --hx-escolhido-ink:#12150D; --hx-escolhido-borda:#C5CFB0;
+  --hx-medidor-trilho:rgba(150,160,150,.18);
+  --hx-alerta:#FFB020; --hx-perigo:#E07C7C; --hx-ok:#4BE07E; --hx-aprendido:#6FE3FF; --hx-foco:#F4F1E4;
+  --hx-f:"Saira Condensed","Rajdhani",system-ui,sans-serif; --hx-f-num:var(--hx-f); --hx-num:var(--hx-texto);
+  --hx-vidro:none; --hx-reflexo:linear-gradient(transparent,transparent); --hx-luz:transparent;
+  --hud-fundo-1:rgba(30,33,36,.97); --hud-fundo-2:rgba(19,21,24,.97); --hud-ch:0px;
+}
+:root[data-pele="vidro"]{
+  --hx-chao:rgba(6,18,38,.82); --hx-miolo:rgba(5,14,30,.86); --hx-miolo-2:rgba(10,26,52,.78);
+  --hx-borda:rgba(110,200,255,.72); --hx-borda-topo:rgba(110,200,255,.72);
+  --hx-texto:#EAF5FF; --hx-texto-2:#D2E6F7; --hx-sec:#C2D7EA; --hx-rotulo:#8ED8FF;
+  --hx-escolhido:linear-gradient(180deg,rgba(58,168,255,.40),rgba(58,168,255,.16)); --hx-escolhido-ink:#fff; --hx-escolhido-borda:#5FD4FF;
+  --hx-alerta:#FFBE45; --hx-perigo:#F7B4B4; --hx-foco:#fff;
+  --hx-f:"Barlow",system-ui,sans-serif; --hx-f-num:"Rajdhani",system-ui,sans-serif; --hx-num:#7FE3FF;
+  --hx-vidro:blur(12px) saturate(140%);
+  --hx-reflexo:linear-gradient(155deg,rgba(170,225,255,.10),rgba(170,225,255,.02) 34%,transparent 35%);
+  --hx-luz:#5FD4FF;
+  --hud-fundo-1:var(--hx-miolo-2); --hud-fundo-2:var(--hx-miolo); --hud-ch:12px;
+}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:#05080C;color:var(--hx-texto);font:500 15px/1.25 var(--hx-f);overflow:hidden}
+button{font:inherit;color:inherit}
+
+/* o palco: a cena inteira atras de tudo (B3-2). O mapa do UP cobre a tela; o chao com os dois lutadores fica no terco de baixo. */
+.palco{position:fixed;inset:0;overflow:hidden;background:#1a1330}
+.palco .fundo{position:absolute;left:0;right:0;top:0;height:62%;background:var(--assets-fundo) center/cover no-repeat}
+.palco .piso{position:absolute;left:0;right:0;bottom:0;height:46%;background:var(--assets-piso) center bottom/cover no-repeat}
+.palco::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.45),transparent 22%,transparent 70%,rgba(0,0,0,.55))}
+.lut{position:absolute;bottom:var(--lut-y);width:calc(98.9px*var(--k));height:calc(76.9px*var(--k));image-rendering:pixelated;z-index:2;
+  background-repeat:no-repeat;background-size:calc(791px*var(--k)) calc(538px*var(--k));background-position:0 calc(-307.6px*var(--k))}
+.lut.a{background-image:var(--assets-sprA);left:var(--lut-a)}
+.lut.b{background-image:var(--assets-sprB);left:var(--lut-b);transform:scaleX(-1);width:calc(116.8px*var(--k));height:calc(70.8px*var(--k));
+  background-size:calc(701px*var(--k)) calc(425px*var(--k));background-position:0 calc(-283.3px*var(--k))}
+.sombra{position:absolute;bottom:calc(var(--lut-y) - 4px);width:calc(70px*var(--k));height:calc(14px*var(--k));border-radius:50%;background:rgba(0,0,0,.4);z-index:1}
+.num{position:absolute;z-index:3;font:700 24px/1 var(--hx-f-num);color:#fff;text-shadow:0 2px 0 #000,0 0 6px #000}
+.num.dano{color:#FF9A9A}
+
+/* caixa da HUD: a mesma da tela Pet (hud-caixa); no Vidro com chanfro e desfoque, no Militar reta, com linha de topo */
+.caixa{position:relative;border:1px solid var(--hx-borda);--ch:var(--hud-ch);
+  background:var(--hx-reflexo) border-box,linear-gradient(180deg,var(--hud-fundo-1),var(--hud-fundo-2)) border-box;
+  -webkit-backdrop-filter:var(--hx-vidro);backdrop-filter:var(--hx-vidro);
+  clip-path:polygon(0 0,calc(100% - var(--ch)) 0,100% var(--ch),100% 100%,var(--ch) 100%,0 calc(100% - var(--ch)))}
+:root:not([data-pele="vidro"]) .caixa{border-top:2px solid var(--hx-borda-topo)}
+:root[data-pele="vidro"] .caixa::before{content:"";position:absolute;left:0;top:0;width:72px;height:2px;background:var(--hx-luz);box-shadow:0 0 8px var(--hx-luz)}
+
+/* HUD do topo: plaquinha de cada lutador e o relogio no meio (so o que o motor tem: nome, vida, guts, tempo, limite ou morte subita) */
+.hud{position:fixed;z-index:10;left:var(--g);right:var(--g);top:var(--g);display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:var(--gap);align-items:start}
+.plaq{display:flex;align-items:center;gap:8px;padding:6px 8px;min-width:0}
+.plaq.b{flex-direction:row-reverse;border-color:var(--hx-perigo)}
+:root:not([data-pele="vidro"]) .plaq.b{border-top-color:var(--hx-perigo)}
+.ret{width:var(--ret);height:var(--ret);flex:none;background:var(--hx-miolo-2);border:1px solid var(--hx-borda);overflow:hidden;position:relative}
+.ret i{position:absolute;left:50%;top:50%;width:98.9px;height:76.9px;background-repeat:no-repeat;background-size:791px 538px;background-position:0 -307.6px;transform:translate(-50%,-56%) scale(var(--zr));image-rendering:pixelated}
+.plaq.b .ret i{transform:translate(-50%,-56%) scale(var(--zr)) scaleX(-1);width:116.8px;height:70.8px;background-size:701px 425px;background-position:0 -283.3px}
+.txt{display:grid;gap:3px;min-width:0;flex:1}
+.plaq.b .txt{text-align:right}
+.nome{font:700 var(--nm)/1.1 var(--hx-f);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar{display:block;height:var(--bh);border:1px solid var(--hx-borda);background:var(--hx-medidor-trilho);position:relative;overflow:hidden}
+.bar i{display:block;height:100%;width:var(--v);background:var(--c);-webkit-mask:repeating-linear-gradient(90deg,#000 0 7px,transparent 7px 9px);mask:repeating-linear-gradient(90deg,#000 0 7px,transparent 7px 9px)}
+.plaq.b .bar i{margin-left:auto}
+.vida{--c:var(--hx-ok)} .plaq.b .vida{--c:var(--hx-perigo)} .guts{--c:var(--hx-alerta);height:7px}
+.rel{padding:5px 14px 6px;text-align:center;min-width:92px}
+.rel small{display:block;font:600 11px/1 var(--hx-f);letter-spacing:.12em;color:var(--hx-rotulo)}
+.rel b{display:block;font:700 var(--rt)/1 var(--hx-f-num);font-variant-numeric:tabular-nums;color:var(--hx-num)}
+.rel em{display:block;font:600 11px/1.2 var(--hx-f);font-style:normal;letter-spacing:.1em;text-transform:uppercase;color:var(--hx-texto-2);margin-top:2px}
+/* etiqueta do modo, logo abaixo do relogio (no lugar da faixa "Luta · Arena" de antes) */
+.modo{position:fixed;z-index:10;left:50%;transform:translateX(-50%);top:var(--modo-y);padding:3px 10px;font:600 12px/1.2 var(--hx-f);letter-spacing:.1em;text-transform:uppercase;color:var(--hx-texto-2);white-space:nowrap}
+
+/* regra em uso (B3-3): cartao com a regra que o pet esta seguindo; so leitura */
+.regra{position:fixed;z-index:10}
+.regra h2{font:700 14px/1.1 var(--hx-f);letter-spacing:.1em;text-transform:uppercase;color:var(--hx-rotulo);padding:9px 12px 0}
+.regra .corpo{margin:8px 12px 12px;padding:9px 10px;border:1px dashed var(--hx-aprendido);background:var(--hx-miolo-2);display:grid;gap:5px}
+.regra .corpo small{font:600 11px/1.2 var(--hx-f);letter-spacing:.1em;color:var(--hx-aprendido);text-transform:uppercase}
+.regra .corpo span{font:600 17px/22px var(--hx-f)}
+
+/* dock da luta (B3-4): pausar e x2 juntos, Desistir separado e afastado */
+.dock{position:fixed;z-index:11;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:6px 8px;bottom:var(--dk-b)}
+.bt{min-width:48px;height:48px;display:grid;place-items:center;border:1px solid var(--hx-borda);background:var(--hx-miolo-2);padding:0 12px;cursor:pointer;font:700 17px/1 var(--hx-f)}
+.bt svg{width:18px;height:18px;fill:var(--hx-texto)}
+.bt[aria-pressed="true"]{background:var(--hx-escolhido);color:var(--hx-escolhido-ink);border-color:var(--hx-escolhido-borda)}
+.bt.perigo{color:var(--hx-perigo);border-color:var(--hx-perigo);letter-spacing:.08em;text-transform:uppercase;font-size:15px}
+.sep{width:1px;align-self:stretch;background:var(--hx-borda)}
+
+/* nota de prancha (so nas pranchas, nao e tela; some com ?sem) */
+.nota{position:fixed;z-index:20;font:600 11px/1.3 system-ui,sans-serif;color:#0b1320;background:#FFE08A;padding:2px 6px;border-radius:3px}
+body.sem-notas .nota{display:none}
+
+/* ---- celular, 390 px ---- */
+body.m{--g:10px;--gap:6px;--ret:34px;--zr:.5;--nm:13px;--bh:9px;--rt:24px;--modo-y:80px;--dk-b:10px;--k:1.5;--lut-y:19%;--lut-a:4%;--lut-b:49%}
+body.m .rel{min-width:78px;padding:4px 8px 5px} body.m .plaq{padding:5px 6px;gap:6px}
+body.m .regra{left:var(--g);right:var(--g);bottom:84px}
+body.m .regra h2{display:none}
+body.m .regra .corpo{margin:6px;padding:7px 9px}
+body.m .regra .corpo span{font-size:16px;line-height:20px}
+/* ---- desktop, 1280 px ---- */
+body.d{--g:16px;--gap:12px;--ret:46px;--zr:.7;--nm:15px;--bh:12px;--rt:30px;--modo-y:96px;--dk-b:18px;--k:3.4;--lut-y:17%;--lut-a:26%;--lut-b:56%}
+body.d .hud{left:50%;right:auto;transform:translateX(-50%);width:min(980px,calc(100% - 2*var(--g)))}
+body.d .regra{right:var(--g);top:96px;width:300px}

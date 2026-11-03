@@ -85,7 +85,7 @@ describe("vinculo B (pets v10) e paridade com o Python", () => {
     expect(VERSAO_PET).toBe(15); expect(CVB.versaoPet).toBe(10);
     expect(new Motor(1).vinc.porSituacao).toBe(true); expect(new Motor(1).vinc.assinatura().length).toBe(8);
     expect(() => new Motor(1, 9)).toThrow(/versão/);
-    expect(() => new Motor(1, 16)).toThrow();
+    expect(() => new Motor(1, 17)).toThrow();
   });
 
 });

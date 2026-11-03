@@ -11,7 +11,13 @@ da L-2, docs/ESPEC_LONGE_L2_DIGIBRAIN_MODULAR.md, secao 2.3), o M-ESTADO cuida d
 (`cuidar_suspensa`); as que acabam ali vao ao P2 e ao registro com as do `escolhida`, e o motivo ganha a `suspensa`. Com a subchave
 `redecidir_evento` (a C3, docs/ESPEC_REDECIDIR_EVENTO_DIGIBRAIN_MODULAR.md, secao 2.3), o M-ESTADO confere os eventos antes do contexto
 (`eventos`, com o gesto do dono desde a decisao anterior), o M-ARB segura o candidato sem sorteio quando nao ha evento, e o motivo ganha
-`segurada` e `evento`.
+`segurada` e `evento`. Com a subchave `memoria_autobio` (a C4, M0 e M1, docs/ESPEC_MEMORIA_AUTOBIOGRAFICA_DIGIBRAIN_MODULAR.md, secao
+3), a decisao guarda o tick do relogio do pet e o afeto de antes, e o fechamento monta o episodio completo e o entrega ao M-MEM
+(`episodio_autobio`, `codificar_autobio`), com o id em `consequencia["autobio"]`; nenhuma decisao o le ainda (a M4 e etapa posterior). Na M2 e na M3, antes do `recuperar` a decisao roda o relogio, a consolidacao do dia
+novo (`consolidar`) e a lembranca (`lembrar`), e o motivo ganha `lembranca` e `consolidacao`; a lembranca ainda nao entra na escolha, e o
+lugar lembrado passa a valer pela soma dos sigma (MA-2). Com a `facetas_mem` (a C4, M5, secao 6.2), a consolidacao do dia novo faz as tres
+facetas andarem um passo (`_mudar_facetas`, M-PERS), o M-IMPULSO soma o termo `faceta` e o motivo ganha `faceta` (os valores e as mudancas
+com os ids dos episodios).
 
 **O alvo** (`escolher_alvo`): o candidato do motor do tipo (e do id) da unidade escolhida; o `u` do motor e ignorado. **A excecao unica**
 (a PE-14 revista): em EXPLORAR, o lugar lembrado do M-MEM e entregue como `Alvo.ponto(x, y)`, fora da lista do motor, que o valida por
@@ -46,12 +52,14 @@ from ..modelo_mundo import raiz_inteira
 from ..mundo import ACOES_COM_ALVO, Alvo
 from ..policies.lobos import leitura_receptor
 from ..policy import Observacao, Transicao
+from ..protocol import derivar_semente
 from ._comum import chave_json
 from .afeto import Afeto
 from .arb import Arbitragem
 from .estado import EstadoDinamico
 from .impulso import Impulso
-from .mem import Memoria
+from .mem import Memoria, episodio_autobio
+from .pers import FACETAS, SENTIDO, Personalidade
 from .plast import Plasticidade
 from .sens import COMIDAS_BOAS, Sens, classe_do_tipo
 
@@ -82,16 +90,20 @@ class Modulos:
     mem: Memoria
     arb: Arbitragem
     plast: Plasticidade
+    pers: Personalidade | None = None             # o M-PERS (a C4, M5): so com a `facetas_mem`
 
     def itens(self) -> tuple:
-        return (("sens", self.sens), ("afeto", self.afeto), ("estado", self.estado), ("impulso", self.impulso), ("mem", self.mem),
-                ("arb", self.arb), ("plast", self.plast))
+        out = (("sens", self.sens), ("afeto", self.afeto), ("estado", self.estado), ("impulso", self.impulso), ("mem", self.mem),
+               ("arb", self.arb), ("plast", self.plast))
+        return out if self.pers is None else out + (("pers", self.pers),)
 
 
 def montar_modulos(cfg: Config, cd: ConfigDigibrain, cm: ConfigMundo, inatos: ConfigDigibrainInatos,
-                   serie_e_doadora: tuple | None) -> Modulos:
+                   serie_e_doadora: tuple | None, semente: int | None = None) -> Modulos:
     return Modulos(sens=Sens(cfg, cm, inatos), afeto=Afeto(cfg, cd, inatos, serie_e_doadora), estado=EstadoDinamico(cfg, cd, inatos),
-                   impulso=Impulso(inatos, cd), mem=Memoria(cm, inatos), arb=Arbitragem(inatos), plast=Plasticidade(cd, inatos))
+                   impulso=Impulso(inatos, cd), mem=Memoria(cm, inatos, cd.memoria_autobio, cd.controle_mem,
+                                 None if semente is None else random.Random(derivar_semente(semente, "mem_emb"))), arb=Arbitragem(inatos, cd.memoria_autobio, cd.facetas_mem), plast=Plasticidade(cd, inatos),
+                   pers=Personalidade(inatos.eta_faceta, inatos.teto_faceta, True) if cd.facetas_mem else None)
 
 
 def intencao_da_unidade(unidade: dict) -> Intencao:
@@ -109,7 +121,8 @@ class DigiBrain:
     versao_pet = VERSAO_PET_DIGIBRAIN
 
     def __init__(self, cfg: Config | None = None, cfg_digibrain: ConfigDigibrain | None = None, cfg_mundo: ConfigMundo | None = None,
-                 inatos: ConfigDigibrainInatos | None = None, serie_e_doadora: tuple | None = None) -> None:
+                 inatos: ConfigDigibrainInatos | None = None, serie_e_doadora: tuple | None = None,
+                 semente: int | None = None) -> None:
         self.cd = cfg_digibrain or CONFIG_DIGIBRAIN
         if not self.cd.ligada:
             raise DigibrainDesligado("o DigiBrain modular so existe com a ConfigDigibrain ligada")
@@ -117,7 +130,7 @@ class DigiBrain:
         self.cm = cfg_mundo or CONFIG_MUNDO_LIGADA      # so a geometria (o raio da visao, a celula): a mesma no layout do MVP
         self.inatos = inatos or CONFIG_DIGIBRAIN_INATOS
         self.S = self.inatos.escala
-        self.m = montar_modulos(self.cfg, self.cd, self.cm, self.inatos, serie_e_doadora)
+        self.m = montar_modulos(self.cfg, self.cd, self.cm, self.inatos, serie_e_doadora, semente)
         self.k = 0
         self.motivos: list[dict] = []
         self._pendencia: dict | None = None
@@ -146,8 +159,17 @@ class DigiBrain:
         fins_susp = m.estado.cuidar_suspensa(sens, afeto, reflexo) if cd.intencao_suspensa else []
         evento, segurar = m.estado.eventos(sens, afeto, reflexo, bool(self._gestos)) if cd.redecidir_evento else ([], None)
         ctx = m.estado.contexto()
+        if cd.memoria_autobio:                        # a C4, M2 e M3: o relogio, a consolidacao do dia novo e a lembranca da decisao
+            tick = m.mem.relogio(sens["minuto"])
+            consolidacao = m.mem.consolidar(k)
+            mudancas = self._mudar_facetas(consolidacao) if cd.facetas_mem and consolidacao is not None else []
+            lembranca = m.mem.lembrar(sens)
+            termo_lem = m.mem.termo_lembranca(lembranca)
         memoria = m.mem.recuperar(sens, afeto) if cd.m_mem else None
-        unidades, z = m.impulso.unidades(sens, afeto, ctx, m.plast, memoria, m.afeto.drives(receptores))
+        unidades, z = m.impulso.unidades(
+            sens, afeto, ctx, m.plast, memoria, m.afeto.drives(receptores),
+            None if not cd.memoria_autobio or termo_lem is None else (termo_lem, m.mem.casa),
+            (dict(m.pers.valores), m.mem.classes_com_positivo()) if cd.facetas_mem else None)
         esc = m.arb.escolher(unidades, afeto, sens, rng, reflexo, segurar)  # a rng de politica vai so ao M-ARB
         self._conferir_desligadas(unidades)
         unidade = esc["unidade"]
@@ -182,6 +204,13 @@ class DigiBrain:
         entregue = [_fim(f) for f in fins if not f.get("registro", True)]
         if entregue:                                  # a busca guardada (DX-4), entregue sem a opcao composta: so com a subchave
             self.motivos[-1]["busca_entregue"] = entregue
+        if cd.memoria_autobio:                        # a C4, M2 e M3: desligada, nenhum campo novo
+            self.motivos[-1]["lembranca"] = {**lembranca, "L": None if termo_lem is None else termo_lem["L"],
+                                             "unidades": [] if termo_lem is None else
+                                             [chave_json(x["chave"]) for x in unidades if m.mem.casa(termo_lem, x)]}
+            self.motivos[-1]["consolidacao"] = consolidacao
+        if cd.facetas_mem:                            # a C4, M5: desligada, nenhum campo novo
+            self.motivos[-1]["faceta"] = {"valores": dict(m.pers.valores), "mudancas": mudancas}
         if cd.credito_corrida:                        # a C2: desligada, nenhum campo novo
             self.motivos[-1]["corridas"] = corridas
         if cd.intencao_suspensa:                      # a L-2: a suspensa ao fim da decisao e a retomada (desligada, nenhum campo novo)
@@ -190,11 +219,28 @@ class DigiBrain:
         if cd.redecidir_evento:                       # a C3: desligada, nenhum campo novo
             self.motivos[-1]["segurada"] = esc["segurada"]
             self.motivos[-1]["evento"] = evento
-        self._gestos = []
         self._pendencia = {"k": k, "intencao": intencao, "unidade": unidade, "sens": sens, "g_apr": afeto["g_apr"], "pediu": False,
                            "alvo": None, "corpo": None, "transicao": None, "mundo": None}
+        if cd.memoria_autobio:                        # a C4: o que o episodio completo le no fechamento
+            self._pendencia.update({"tick": tick, "afeto": {"V": afeto["V"], "E": afeto["E"]},
+                                    "gestos": self._gestos})
+        self._gestos = []
         self.k += 1
         return intencao.acao
+
+    def _mudar_facetas(self, consolidacao: dict) -> list[dict]:
+        """a M5 (6.2): na consolidacao diaria, cada faceta anda um passo `eta_faceta` no sentido da soma dos sigma da evidencia (zero se a
+        soma for 0), com os ids dos episodios; devolve as mudancas registradas"""
+        m = self.m
+        out = []
+        for nome in FACETAS:
+            evidencia = m.mem.evidencia_faceta(nome)
+            soma = sum(s for _, s in evidencia)
+            passo = SENTIDO[nome] * ((soma > 0) - (soma < 0)) * self.inatos.eta_faceta
+            reg = m.pers.mudar_faceta(nome, passo, [i for i, _ in evidencia], consolidacao["dia"]) if passo else None
+            if reg is not None:
+                out.append({**reg, "soma": soma})
+        return out
 
     def escolher_alvo(self, acao: AcaoPet, candidatos: list, percepcao, u: int):
         p = self._pendente(acao, "escolher_alvo")
@@ -272,6 +318,8 @@ class DigiBrain:
             raise RuntimeError("sem o P2, o habito fica em 0")
         if not cd.m_mem and m.mem.episodios:
             raise RuntimeError("sem o M-MEM, a memoria fica vazia")
+        if not cd.memoria_autobio and m.mem.autobio:
+            raise RuntimeError("sem a memoria_autobio, o M-MEM nao tem a recente")
 
     def _fechar(self, p: dict) -> None:
         """a consequencia da decisao anterior aos modulos"""
@@ -324,12 +372,21 @@ class DigiBrain:
             elif chave[1] == "ponto" and ocorrido["chegou"]:
                 episodio = m.mem.codificar({**base, "ponto": chave[2], "classe": "nao_havia", "origem": "visita", "r": 0,
                                                  "r_n": 0})
+        autobio = None
+        if self.cd.memoria_autobio:                   # a C4, M0 e M1: o episodio completo, que nenhuma decisao le ainda
+            ida = next((f["r"] for f in fins if f["chave"] == chave), None) if chave[1] == "ponto" else None
+            desfecho = {"comeu": classe_comida, "chegou": ocorrido is not None and ocorrido["chegou"], "r_ida": ida}
+            ep = episodio_autobio(p["sens"], pm1, recs, l0, l1, p["afeto"], cons, p["gestos"], p["unidade"], desfecho, p["k"],
+                                  p["tick"], self.inatos)
+            autobio = None if ep is None else m.mem.codificar_autobio(ep)
         motivo = self.motivos[p["k"]]
         motivo["consequencia"] = {"r": cons["r"], "r_n": cons["r_n"], "canais": cons["canais"],
                                   "comeu": None if comeu is None else {"id": comeu["id"], "tipo": comeu["tipo"],
                                                                        "situacao": comeu["situacao"], "como": comeu["como"]},
                                   "chegou": None if ocorrido is None else ocorrido["chegou"], "p1": p1, "creditos": creditos,
                                   "episodio": episodio}
+        if self.cd.memoria_autobio:                   # desligada, nenhum campo novo
+            motivo["consequencia"]["autobio"] = autobio
         motivo["fins"] = motivo["fins"] + _registrados(fins)
 
 

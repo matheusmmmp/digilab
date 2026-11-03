@@ -70,6 +70,8 @@ FATORES: dict[str, dict[str, str]] = {
                         "adolescente": "a que eu mais procuro...", "adulto": "porque é a que eu mais procuro"},
     "escolha_aprendida_fruta": {"marcador": "aprendi a escolher", "bebe": "", "crianca": "[:aprendi a escolher:]",
                                 "adolescente": "aprendi a escolher...", "adulto": "porque aprendi a escolher essa"},
+    "memoria_fruta": {"marcador": "lembrei dessa fruta", "bebe": "", "crianca": "[:lembrei dessa fruta:]",
+                      "adolescente": "lembrei dessa fruta...", "adulto": "porque lembrei dessa fruta"},
     # memoria (Parte B)
     # o pet que pensa, etapa 2 (TAREFA_V2_PET_QUE_PENSA, secao 2.2): o plano decidiu. So nomeia o que os modelos tem: o lugar e o tipo
     # que mais pesou (p0, p1), a comida que o pet via (p0) ou o tipo que pesou contra a outra escolha (p0)

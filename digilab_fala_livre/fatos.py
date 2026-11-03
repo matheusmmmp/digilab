@@ -10,6 +10,7 @@ tamanho, e falha alto (FatosInvalidos) em qualquer outra coisa. Cada fato ganha 
     H habito meu   O habito do dono   P gosto   L marco        (a historia: digilab/historia.py)
     F o que dizer agora (a versao falsa de uma MENTIRA decidida pelo motor; o registro guarda a verdade)
     W coisa que ouvi no Digimundo (uma entrada do almanaque, pelo id: a web nunca manda o texto)
+    Q lembranca autobiografica (Q1, Q2) e Z mudanca de faceta (C4, M6; chave "memoria_autobio"; digilab_fala_livre/memoria_fala.py)
     A arvore da minha especie (com "arvore": true, so o servidor liga; o texto vem de arvore.py pela especie)
 
 Temperamento e carater entram so nos eixos extremos (|valor| >= LIMIAR_EXTREMO); o vinculo so em faixa.
@@ -93,7 +94,7 @@ def fatos_de_estado(e: dict) -> list[Fato]:
     if not isinstance(e, dict):
         raise FatosInvalidos("estado precisa ser um objeto")
     desconhecidas = set(e) - {"identidade", "temperamento", "carater", "estado", "memorias", "desejo", "motivos",
-                              "vinculo", "gatilho", "historia", "mentira", "almanaque", "arvore"}
+                              "vinculo", "gatilho", "historia", "mentira", "almanaque", "arvore", "memoria_autobio"}
     if desconhecidas:
         raise FatosInvalidos(f"chaves desconhecidas: {sorted(desconhecidas)}")
     fatos: list[Fato] = []
@@ -198,6 +199,11 @@ def fatos_de_estado(e: dict) -> list[Fato]:
         verdade, falsa, molde, fonte = distorcer(m["tema"], est, fatos)
         fatos = [f for f in fatos if f.id != fonte]
         fatos.append(Fato("F1", TIPO_MENTIRA, falsa, (("mentira", True), ("verdade", verdade), ("molde", molde))))
+
+    if e.get("memoria_autobio") is not None:      # a C4, M6: so com a memoria autobiografica ligada; sem a chave, nenhum fato novo
+        from .memoria_fala import fatos_de_memoria
+        for i, t, x in fatos_de_memoria(e["memoria_autobio"], _txt):
+            fatos.append(Fato(i, t, x))
 
     if e.get("almanaque") is not None:
         from .almanaque import entrada        # import tardio: le o arquivo versionado

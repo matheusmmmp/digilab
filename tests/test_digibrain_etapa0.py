@@ -99,7 +99,7 @@ def test_os_ganchos_vazios():
 
 
 # ------------------------------------------------------------ o G-INT, a G-RECEPTOR, o G-SEM-DIRECAO e o preflight
-ARQUIVOS = {"__init__.py", "_comum.py", "adapt.py", "afeto.py", "arb.py", "estado.py", "ganchos.py", "impulso.py", "mem.py", "plast.py",
+ARQUIVOS = {"__init__.py", "_comum.py", "adapt.py", "afeto.py", "arb.py", "estado.py", "ganchos.py", "impulso.py", "mem.py", "pers.py", "plast.py",
             "sens.py"}
 
 

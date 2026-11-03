@@ -2349,7 +2349,15 @@ CONFIG_CONTRATO_LIGADO = ConfigContrato(sensores=True, controlador=True)
 #     reavaliacao). A unidade escolhida na decisao anterior fica, sem sorteio, enquanto nao houver um evento (o reflexo do sono, uma
 #     urgencia que muda de quarto de S, o mundo, o fim da opcao, o teto `ConfigDigibrainInatos.n_seg_max`). Nao se combina com a
 #     `credito_corrida` nem com a `intencao_suspensa` (a D-C2-4) e so existe com as duas subchaves do cheiro (os bracos M3* e M2 do conserto).
+# A C4 (docs/ESPEC_MEMORIA_AUTOBIOGRAFICA_DIGIBRAIN_MODULAR.md, secoes 3 e 7.3; MA-1 a MA-8 DECIDIDAS pelo Matheus em 2026-11-01) pede mais
+# uma, desligada por padrao (desligada, as vidas saem byte a byte: tests/gabaritos/memoria_autobio_de_hoje.json):
+#   - `memoria_autobio`: PROPOSTO, SEM FONTE como valor; a direcao vem de Ho (2005, a tese) e do PEPE (Francis, Mehta e Ram 2009). Nas M0 e
+#     M1 o M-MEM monta o episodio completo e codifica pela significancia (ME-1), numa lista propria que nenhuma decisao le ainda (a M4 e
+#     etapa posterior). Exige o `m_mem` e as duas subchaves do cheiro (o M3* do conserto); nao se combina com a `credito_corrida`, a
+#     `intencao_suspensa` nem a `redecidir_evento` (MA-7: a C4 sem combinar com a C2 nem com a C3).
 CONTROLES_G_APR = ("nenhum", "embaralhado", "constante")
+# os bracos da memoria autobiografica (a C4, espec 7.2): a relevante, sem recuperacao, a recencia, a embaralhada e "REL sem negativos"
+CONTROLES_MEM = ("rel", "sem", "rec", "emb", "rel_sem_neg")
 
 
 @dataclass(frozen=True)
@@ -2367,10 +2375,13 @@ class ConfigDigibrain:
     intencao_suspensa: bool = False          # DECIDIDO (LS-1 e LS-2, 2026-10-29): a parte (b) da L-2, desligada por padrao
     credito_corrida: bool = False            # PROPOSTO, SEM FONTE como valor (C2, HI-3; direcao: Gadanho e Hallam 2001): o P2 na corrida
     redecidir_evento: bool = False           # PROPOSTO, SEM FONTE como valor (C3, RD-2 e RD-3; direcao: Gadanho e Hallam 2001): segurar a escolha
+    memoria_autobio: bool = False            # PROPOSTO, SEM FONTE como valor (C4, espec 7.3; direcao: Ho 2005 e o PEPE): o episodio e a codificacao
+    facetas_mem: bool = False                # PROPOSTO, SEM FONTE como valor (C4, M5, MA-6; direcao: Ho 2005): as tres facetas adquiridas
+    controle_mem: str = "rel"                # PROPOSTO, SEM FONTE como valor (C4, espec 7.2): o braco da memoria (CONTROLES_MEM); "rel" e o de hoje
 
     def __post_init__(self) -> None:
         for nome in ("ligada", "modula_g_apr", "p2", "m_mem", "persistencia", "p1", "cheiro_inato", "intencao_cheiro",
-                     "intencao_suspensa", "credito_corrida", "redecidir_evento"):
+                     "intencao_suspensa", "credito_corrida", "redecidir_evento", "memoria_autobio", "facetas_mem"):
             if type(getattr(self, nome)) is not bool:
                 raise TypeError(f"ConfigDigibrain.{nome} e bool: {getattr(self, nome)!r}")
         if self.credito_corrida and self.intencao_suspensa:
@@ -2381,6 +2392,21 @@ class ConfigDigibrain:
         if self.redecidir_evento and not (self.cheiro_inato and self.intencao_cheiro):
             raise ValueError("redecidir_evento so com as duas subchaves do cheiro (cheiro_inato e intencao_cheiro): os bracos M3* e M2 do "
                              "conserto (docs/ESPEC_REDECIDIR_EVENTO_DIGIBRAIN_MODULAR.md, RE-4)")
+        if self.memoria_autobio and not self.m_mem:
+            raise ValueError("memoria_autobio so com o M-MEM (m_mem) (docs/ESPEC_MEMORIA_AUTOBIOGRAFICA_DIGIBRAIN_MODULAR.md, secao 7.3)")
+        if self.memoria_autobio and (self.credito_corrida or self.intencao_suspensa or self.redecidir_evento):
+            raise ValueError("memoria_autobio nao se combina com a credito_corrida, a intencao_suspensa nem a redecidir_evento "
+                             "(docs/ESPEC_MEMORIA_AUTOBIOGRAFICA_DIGIBRAIN_MODULAR.md, MA-7)")
+        if self.memoria_autobio and not (self.cheiro_inato and self.intencao_cheiro):
+            raise ValueError("memoria_autobio so com as duas subchaves do cheiro (cheiro_inato e intencao_cheiro): o M3* do conserto "
+                             "(docs/ESPEC_MEMORIA_AUTOBIOGRAFICA_DIGIBRAIN_MODULAR.md, MA-7)")
+        if self.facetas_mem and not self.memoria_autobio:
+            raise ValueError("facetas_mem so com a memoria_autobio (docs/ESPEC_MEMORIA_AUTOBIOGRAFICA_DIGIBRAIN_MODULAR.md, MA-6 e 7.3)")
+        if self.controle_mem not in CONTROLES_MEM:
+            raise ValueError(f"ConfigDigibrain.controle_mem: so {CONTROLES_MEM}, nao {self.controle_mem!r}")
+        if self.controle_mem != "rel" and not self.memoria_autobio:
+            raise ValueError("controle_mem diferente de 'rel' so com a memoria_autobio "
+                             "(docs/ESPEC_MEMORIA_AUTOBIOGRAFICA_DIGIBRAIN_MODULAR.md, 7.2 e 7.3)")
         if self.controle_g_apr not in CONTROLES_G_APR:
             raise ValueError(f"ConfigDigibrain.controle_g_apr: so {CONTROLES_G_APR}, nao {self.controle_g_apr!r}")
         if type(self.g_apr_constante) is not int:
@@ -2504,6 +2530,26 @@ class ConfigDigibrainInatos:
     lambda_busca: int = _S // 4               # PROPOSTO, SEM FONTE: a pista, a urgencia da fome acima deste limiar
     d_max: int = 1024                         # PROPOSTO, SEM FONTE: a distancia (subunidades) em que o lugar lembrado deixa de atrair
     w_mem: int = _S                           # PROPOSTO, SEM FONTE: M = mul(w_mem, valor)
+    # a C4, M0 e M1 (docs/ESPEC_MEMORIA_AUTOBIOGRAFICA_DIGIBRAIN_MODULAR.md, secoes 3 e 8), so com a subchave `memoria_autobio`
+    theta_sig: int = _S // 8                  # DECIDIDO (2026-11-01), SEM FONTE: o |sigma| que faz um evento virar episodio; a metade do lambda_busca
+    n_rec: int = 16                           # DECIDIDO (2026-11-01), SEM FONTE: a capacidade da recente; o n_ep de hoje
+    # (o `theta_afeto`, S/2, saiu em 2026-11-01: o afeto passou a ser lido pela subida >= theta_sig e o campo ficou sem uso; o Matheus
+    # decidiu remove-lo, comentario do PR #532)
+    # a C4, M2 e M3 (espec, secoes 4 e 8; DECIDIDOS em 2026-11-01, SEM FONTE; nenhuma calibracao por no)
+    n_dur: int = 32                           # DECIDIDO, SEM FONTE: a capacidade da duradoura; o dobro da recente
+    n_cen: int = 8                            # DECIDIDO, SEM FONTE: a capacidade da central, em categorias (um episodio por categoria)
+    janela_rec: int = 96                      # DECIDIDO, SEM FONTE: as decisoes na recente antes de subir ou ser esquecido; um dia do pet
+    theta_dur: int = _S // 4                  # DECIDIDO, SEM FONTE: o |sigma| que sobe da recente sem repeticao nem recuperacao
+    n_rep_central: int = 2                    # DECIDIDO, SEM FONTE: as repeticoes para a central; o minimo que exclui o episodio unico
+    w_lugar: int = 2                          # DECIDIDO, SEM FONTE: o peso do lugar na semelhanca da lembranca (4.1)
+    w_vista: int = 1                          # DECIDIDO, SEM FONTE: o peso do que estava a vista (as classes, o cheiro, a noite)
+    w_corpo: int = 1                          # DECIDIDO, SEM FONTE: o peso do corpo (as faixas dos receptores)
+    sim_min: int = 3 * _S // 4                # DECIDIDO, SEM FONTE: a semelhanca minima para lembrar; alta, para o contexto novo nao lembrar
+    # a C4, M4 (espec, secoes 6.1 e 8; DECIDIDO em 2026-11-01, SEM FONTE; nenhuma calibracao por no)
+    w_lem: int = _S // 2                      # DECIDIDO, SEM FONTE: L = mul(w_lem, sigma), o termo da lembranca; a metade do w_mem
+    # a C4, M5 (espec, secoes 6.2 e 8; DECIDIDOS em 2026-11-01, SEM FONTE; nenhuma calibracao por no), so com a subchave `facetas_mem`
+    eta_faceta: int = _S // 64                # DECIDIDO, SEM FONTE: o passo da faceta por dia; 16 dias para o teto ("devagar", ME-4)
+    teto_faceta: int = _S // 4                # DECIDIDO, SEM FONTE: o |f| maximo de uma faceta; pequeno (ME-4)
 
     def __post_init__(self) -> None:
         for f in fields(self):
@@ -2536,18 +2582,28 @@ class ConfigDigibrainInatos:
                 raise ValueError(f"constante de tempo abaixo do passo do cerebro (15 ticks): {tau}")
         if not 0 < self.g_min <= self.g0 <= self.g_max or self.r_norm <= 0 or self.s_v <= 0 or self.n_ep <= 0 or self.n_desiste <= 0 \
                 or self.escala_cuidado <= 0 or self.d_max <= 0 or self.h_max <= 0 or self.n_desiste_cheiro <= 0 \
-                or self.n_suspensa_max <= 0 or not 0 <= self.lambda_retomar <= self.escala or self.n_seg_max <= 0:
+                or self.n_suspensa_max <= 0 or not 0 <= self.lambda_retomar <= self.escala or self.n_seg_max <= 0 or self.n_rec <= 0 \
+                or not 0 < self.theta_sig <= self.escala or self.n_dur <= 0 or self.n_cen <= 0 or self.janela_rec <= 0 \
+                or not 0 < self.theta_dur <= self.escala or self.n_rep_central <= 0 or self.w_lugar < 0 or self.w_vista < 0 \
+                or self.w_corpo < 0 or self.w_lugar + self.w_vista + self.w_corpo <= 0 or not 0 < self.sim_min <= self.escala \
+                or self.w_lem < 0 or not 0 < self.eta_faceta <= self.teto_faceta <= self.escala:
             raise ValueError("ConfigDigibrainInatos: g_min <= g0 <= g_max; r_norm, s_v, n_ep, n_desiste, escala_cuidado, d_max, h_max, "
-                             "n_desiste_cheiro, n_suspensa_max e n_seg_max positivos; lambda_retomar em [0, S]")
+                             "n_desiste_cheiro, n_suspensa_max, n_seg_max, n_rec, n_dur, n_cen, janela_rec e n_rep_central positivos; "
+                             "lambda_retomar em [0, S]; theta_sig, theta_dur e sim_min em (0, S]; os pesos da semelhanca "
+                             "nao negativos, com soma positiva; w_lem nao negativo; 0 < eta_faceta <= teto_faceta <= S")
 
 
 CONFIG_DIGIBRAIN_INATOS = ConfigDigibrainInatos()
 # o status de cada campo (conferido por teste contra os campos da dataclass): tudo PROPOSTO, salvo a escala (PE-12) e os dois da parte (b)
-# da L-2 (LS-4: os valores emprestados, sem calibracao)
+# da L-2 (LS-4: os valores emprestados, sem calibracao) e os tres das M0 e M1 da C4 (a secao 8 da espec, decidida em 2026-11-01)
 PARAMETROS_DIGIBRAIN_INATOS: dict[str, tuple[str, str]] = {
     f.name: (("DECIDIDO", "PE-12 (2026-10-25): S = 1024, o do A") if f.name == "escala" else
              ("DECIDIDO", "LS-4 (2026-10-29, docs/ESPEC_LONGE_L2_DIGIBRAIN_MODULAR.md, secao 3.1): o valor de um campo que ja existe, sem "
                           "calibracao; SEM FONTE") if f.name in ("n_suspensa_max", "lambda_retomar") else
+             ("DECIDIDO", "2026-11-01 (docs/ESPEC_MEMORIA_AUTOBIOGRAFICA_DIGIBRAIN_MODULAR.md, secao 8): pela recomendacao da espec; "
+                          "SEM FONTE") if f.name in (
+                 "theta_sig", "n_rec", "n_dur", "n_cen", "janela_rec", "theta_dur", "n_rep_central", "w_lugar", "w_vista", "w_corpo",
+                 "sim_min", "w_lem", "eta_faceta", "teto_faceta") else
              ("PROPOSTO", "docs/ESPEC_DIGIBRAIN_MODULAR.md, secoes 2 a 7; valor de partida a mao (etapa 1a), SEM FONTE salvo o que o "
                           "comentario do campo cita"))
     for f in fields(ConfigDigibrainInatos)}

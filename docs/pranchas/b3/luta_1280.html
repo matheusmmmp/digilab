@@ -1,0 +1,30 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>B3 · luta 1280 px</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@400;500;600;700&family=Barlow:wght@400;600;700&family=Rajdhani:wght@700&display=swap">
+<link rel="stylesheet" href="luta.css">
+<style>:root{--assets-fundo:url("../../../../Assets/arena_up/mapas/ringue_fundo.jpg");--assets-piso:url("../../../../Assets/arena_up/mapas/ringue_piso.jpg");--assets-sprA:url("../../../../Assets/arena_up/sprites/Gabumon.png");--assets-sprB:url("../../../../Assets/arena_up/sprites/Monochromon.png")}</style>
+<script>const q=new URLSearchParams(location.search);if((q.get("pele")||"vidro")==="vidro")document.documentElement.dataset.pele="vidro";if(q.has("sem"))addEventListener("DOMContentLoaded",()=>document.body.classList.add("sem-notas"));</script>
+</head><body class="d">
+<div class="palco" role="img" aria-label="Palco da luta: Gabumon contra Monochromon">
+  <div class="fundo"></div><div class="piso"></div>
+  <div class="sombra" style="left:calc(var(--lut-a) + 12px)"></div><div class="lut a"></div>
+  <div class="sombra" style="left:calc(var(--lut-b) + 12px)"></div><div class="lut b"></div>
+  <span class="num dano" style="left:calc(var(--lut-b) + 90px);bottom:calc(var(--lut-y) + 190px)">-12,4</span>
+</div>
+<header class="hud">
+  <div class="caixa plaq a"><span class="ret"><i style="background-image:var(--assets-sprA)"></i></span><span class="txt"><span class="nome">Gabumon</span><span class="bar vida" role="img" aria-label="vida do seu pet"><i style="--v:78%"></i></span><span class="bar guts" role="img" aria-label="guts do seu pet"><i style="--v:34%"></i></span></span></div>
+  <div class="caixa rel" aria-label="tempo da luta"><small>TEMPO</small><b>0:03</b><em>até 1:20</em></div>
+  <div class="caixa plaq b"><span class="ret"><i style="background-image:var(--assets-sprB)"></i></span><span class="txt"><span class="nome">Monochromon</span><span class="bar vida" role="img" aria-label="vida do rival"><i style="--v:56%"></i></span><span class="bar guts" role="img" aria-label="guts do rival"><i style="--v:81%"></i></span></span></div>
+</header>
+<div class="caixa modo">Arena · treino</div>
+<section class="caixa regra" aria-live="polite"><h2>Regra em uso</h2><div class="corpo"><small>O que Gabumon faz</small><span>se distância é perto e meu guts ≥ 20 → golpe rápido</span></div></section>
+<nav class="caixa dock" aria-label="Controles da luta">
+  <button class="bt" aria-label="Pausar a animação" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3h3v10H4zM9 3h3v10H9z"/></svg></button>
+  <button class="bt" aria-label="Velocidade dobrada" aria-pressed="true">×2</button>
+  <span class="sep"></span>
+  <button class="bt perigo">Desistir</button>
+</nav>
+<span class="nota" style="left:50%;top:128px;transform:translateX(-50%)">cena a tela inteira (B3-2); sem trilho (B3-1)</span>
+<span class="nota" style="right:16px;top:72px">regra em uso, à direita (B3-3)</span>
+<span class="nota" style="left:50%;bottom:78px;transform:translateX(-50%)">dock da luta (B3-4)</span>
+</body></html>

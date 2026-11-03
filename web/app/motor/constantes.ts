@@ -64,6 +64,10 @@ export const VERSAO_PET = 15;
 export const VERSOES_PET: readonly number[] = [13, 14, 15];
 /** a versao de pet da bola no golpe (a chave bolaNoGolpe do Mundo) */
 export const VERSAO_V15 = 15;
+/** o pet de teste do laboratorio (docs/TAREFA_V3_LAB_MODULAR.md, LM4; LAB-3): a v14 com o DigiBrain modular no lugar do cerebro A. Nasce so pela
+    fabrica do laboratorio (motor/pet_lab.ts); nenhum ovo padrao muda e a lista acima tambem nao o inclui (o teste dos pets v14 a
+    confere). A v15 e a do PR #525 (o habitat, a bola fisica), por isso a v16 (desvio registrado) */
+export const VERSAO_PET_LAB = 16;
 /* medalhas do Tamer que cada evolucao pede nos pets v6 (decisao do Matheus, 2026-09-29: 1, 3 e 5; so no jogo), pela
    chave do estagio de destino: Rookie -> Champion (adolescente), Champion -> Ultimate (adulto), Ultimate -> Mega (mega).
    In-Training -> Rookie nao pede medalha. A tabela das medalhas fica em medalhas.ts */
