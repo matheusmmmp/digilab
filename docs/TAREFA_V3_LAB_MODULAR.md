@@ -184,3 +184,19 @@ mais `constantes.ts`), com o G-PAR de cada módulo passando. Nada do jogo os usa
 - **Fora do laboratório:** `facetas_mem` (LAB-1). O `Impulso` falha alto se ligada ou se vierem `facetas`; o ramo das facetas do Python não foi portado.
 - **G-PAR (conferidas, nas 8 vidas):** `sens.codificar` 3 072; `afeto.ler` 3 072, `afeto.drives` 3 072, `afeto.consequencia` 3 064;
   `impulso.unidades` 3 072 (com lembrança, lugar lembrado, incentivo, hábito e persistência cada um em pelo menos uma decisão). Cada teste falha se a conta for zero.
+
+## 11. Resumo da etapa LM5a (2026-11-03, worker Claude Code, Sonnet 5.5, worktree `v3-lab-modular-lm5a`)
+
+As pranchas estão em `docs/pranchas/lab/` (só papel; nenhum código em `web/app/`): Ajustes › Laboratório, a tela Pet com o selo
+"experimental" e o painel do DigiBrain modular, cada uma em 390 e 1280 px, nas peles Vidro e Militar (12 capturas PNG, `gerar.py`,
+`capturar.sh`, `lab.css`). O `LEIA.md` da pasta tem o quadro de onde vem cada barra e cada texto (o campo do motivo de `adapt.py`) e as
+decisões LM5-1 a LM5-6.
+
+- **O painel:** as barras são a parte de cada termo da unidade escolhida (`termos.inato`, `prox`+`nov`, `incentivo` P1, `habito` P2,
+  `memoria`, `lembranca`, `persistencia`; a faceta fica desligada), a lembrança da vez (`alvo`, `lembranca`), a intenção em curso
+  (`estado.I`, `C`, `F`, `n_sp`), as chances (`unidades[].w`), o que mudaria a escolha (as `sondas`) e as últimas ações.
+- **Decisões para o Matheus:** LM5-1 (painel no celular: folha), LM5-2 (barras: só as não nulas), LM5-3 (barra negativa: divergente),
+  LM5-4 (o lugar lembrado em coordenadas, não em região), LM5-5 (uma prancha a mais para o pet de teste já nascido, com descarte), LM5-6
+  (mostrar compromisso e frustração). Cada uma com a recomendação e o custo de errar no `LEIA.md`.
+- **O que depende de leitura fora do motivo:** o "desde a decisão N" (`estado_interno().modulos.estado.I.inicio`) e a região do episódio.
+- A LM5b só começa com as pranchas aprovadas (LAB-4) e depois da B3 (LAB-5).
