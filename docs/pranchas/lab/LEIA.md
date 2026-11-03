@@ -56,6 +56,9 @@ seção à parte).
 
 ## Decisões para o Matheus (LM5-1 a LM5-6)
 
+**DECIDIDAS pelo Matheus em 2026-11-03, as seis pela recomendação** ("Sim, tudo", no chat com o Gerente da V3). A LM5-5 pede uma
+prancha curta a mais (o pet de teste já nascido, com Abrir e Descartar com confirmação) antes da LM5b.
+
 - **LM5-1, onde fica o painel no celular.** Recomendação: a folha que sobe de baixo, até 85% da altura, com rolagem, aberta pelo botão
   Cérebro, como o painel do A v11 (a prancha `painel_390`). No desktop, a coluna à direita. Alternativa: uma página própria com rota
   (`#/cerebro`). **Custo de errar:** a folha cobre o pet enquanto se lê; a página tira o pet da tela. Trocar depois é refazer o
