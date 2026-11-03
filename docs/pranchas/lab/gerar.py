@@ -144,7 +144,70 @@ def painel(m: bool) -> str:
             '\n<div class="pet" style="left:calc(50% - 95px);bottom:60%;opacity:.9;transform:scale(.5);transform-origin:bottom"></div>' + corpo + notas)
 
 
+# ---------------------------------------------------------------- 4 e 5. Ajustes > Laboratorio com o pet de teste ja nascido (LM5-5)
+def _aj_cabeca() -> str:
+    return '''<header><h1>Ajustes</h1><button class="bt" style="min-height:40px;padding:0 12px" aria-label="Fechar">×</button></header>
+  <div class="abas"><span>Geral</span><span>Som</span><span>Fala</span><span class="on">Laboratório</span></div>
+  <div class="sec" style="border:0;padding:0">
+    <h2>O que é o laboratório</h2>
+    <p>Um pet de teste com o <b>DigiBrain modular</b>: cada decisão dele mostra qual módulo pesou. Os pets de hoje seguem com o cérebro A v11 e não mudam.</p>
+  </div>
+  <div class="sec">
+    <div class="chave on" role="switch" aria-checked="true" aria-label="Modo laboratório"><span class="tr"><i></i></span><b>Modo laboratório · ligado</b></div>
+  </div>'''
+
+
+def _aj_pet() -> str:
+    return f'''<div class="sec">
+    <h2>Pet de teste</h2>
+    <div class="pt-viv">
+      <div class="pt-lista" style="border:0;padding:0;background:none">{RET}<span style="display:grid;gap:3px"><b>Agumon</b><span class="peq"><span class="selo" style="padding:2px 6px">experimental</span> Rookie · dia 3</span><span class="peq">cérebro modular · versão 16</span></span></div>
+      <div class="bts"><button class="bt prim">Abrir</button><button class="bt perigo">Descartar</button></div>
+    </div>
+    <small>Só um pet de teste por vez. Para chocar outro ovo de teste, descarte este antes. Abrir mostra o pet na tela do Pet, com o selo “experimental”.</small>
+  </div>
+  <div class="aviso"><b>Experimental</b><span>O pet de teste fica num espaço próprio do save, ao lado dos seus pets, e não troca o cérebro de nenhum deles.</span></div>'''
+
+
+def ajustes_vivo(m: bool) -> str:
+    pos = "left:10px;right:10px;top:34px" if m else "right:16px;top:16px;bottom:16px;width:500px"
+    notas = (nota("a linha vem da lista de pets; o selo é o da tela Pet", "left:10px;top:8px") if m else
+             nota("lista de um item só (um pet de teste por vez)", "right:530px;top:24px"))
+    return f'''
+<div class="cena escura"><div class="fundo"></div><div class="piso"></div></div>
+<section class="caixa painel-aj" style="{pos}" aria-label="Ajustes · Laboratório · pet de teste">
+  {_aj_cabeca()}
+  {_aj_pet()}
+</section>
+{notas}'''
+
+
+def ajustes_descartar(m: bool) -> str:
+    pos = "left:10px;right:10px;top:34px" if m else "right:16px;top:16px;bottom:16px;width:500px"
+    dpos = "left:14px;right:14px;top:250px" if m else "left:calc(50% - 250px);top:170px;width:500px"
+    notas = (nota("diálogo de alerta, como o Cruzar da Nova geração; foco em Cancelar", "left:10px;top:8px") if m else
+             nota("o foco abre em Cancelar; Descartar só pelo clique", "left:calc(50% - 250px);top:120px"))
+    return f'''
+<div class="cena escura"><div class="fundo"></div><div class="piso"></div></div>
+<section class="caixa painel-aj" style="{pos};filter:brightness(.55)" aria-hidden="true">
+  {_aj_cabeca()}
+  {_aj_pet()}
+</section>
+<div class="caixa conf" style="{dpos}" role="alertdialog" aria-labelledby="conf-tit">
+  <h2 id="conf-tit" style="font-size:18px">Descartar o pet de teste?</h2>
+  <ul class="conf-l">
+    <li>{RET}<span><b>O save do Agumon de teste é apagado</b><small>O log dele, do ovo ao dia 3. Não volta.</small></span></li>
+    <li><span class="ret ok"><i class="ck">✓</i></span><span><b>Seus pets de hoje não são tocados</b><small>Os saves de Meus pets, as medidas e o Diário ficam como estão.</small></span></li>
+    <li><span class="ret ok"><i class="ck">✓</i></span><span><b>Dá para chocar outro ovo de teste depois</b><small>Ele nasce do zero, com o mesmo cérebro modular.</small></span></li>
+  </ul>
+  <p class="conf-av">Não dá para desfazer.</p>
+  <div class="bts"><button class="bt">Cancelar</button><button class="bt perigo">Descartar o pet de teste</button></div>
+</div>
+{notas}'''
+
+
 d = Path(__file__).parent
-for nome, f, rot in (("ajustes", ajustes, "Ajustes › Laboratório"), ("pet", tela_pet, "tela Pet com o pet de teste"), ("painel", painel, "painel DigiBrain modular")):
+for nome, f, rot in (("ajustes", ajustes, "Ajustes › Laboratório"), ("pet", tela_pet, "tela Pet com o pet de teste"), ("painel", painel, "painel DigiBrain modular"),
+                ("ajustes_vivo", ajustes_vivo, "Ajustes › Laboratório com o pet de teste"), ("ajustes_descartar", ajustes_descartar, "confirmação do Descartar")):
     (d / f"{nome}_390.html").write_text(cab(f"{rot} 390 px", "m") + f(True) + FIM, encoding="utf-8", newline="\n")
     (d / f"{nome}_1280.html").write_text(cab(f"{rot} 1280 px", "d") + f(False) + FIM, encoding="utf-8", newline="\n")

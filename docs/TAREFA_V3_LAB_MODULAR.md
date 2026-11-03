@@ -257,3 +257,10 @@ gabarito existente foi regravado. Os desvios estão no registro (2026-11, LM4).
   replay e por save. G2: a suíte inteira (contagens no PR).
 - **Cobertura que falta:** os ramos `sumiu`/`desistiu` das intenções com alvo (`comer/comida`, `brincar/bola`, `explorar/ponto`) não ocorreram em nenhuma vida achada;
   seguem portados sem G-PAR-VIDA.
+
+## 15. Resumo da etapa LM5a2 (2026-11-03, worker Claude Code, Sonnet 5.5, worktree `v3-lab-modular-lm5a2`)
+
+A prancha extra da LM5-5, aprovada pelo Matheus em 2026-11-03: **Ajustes › Laboratório com o pet de teste já nascido** (nome, forma, idade, Abrir e Descartar) e a **confirmação
+do Descartar** (o save do pet de teste é apagado e não volta; os pets de hoje não são tocados), em `docs/pranchas/lab/` (`ajustes_vivo_*`, `ajustes_descartar_*`), 390 e 1280 px,
+Vidro e Militar, 8 capturas. Papel só: nenhum código em `web/app/`. A fonte de cada campo está no `LEIA.md`. O pet de teste é a v16 (a v15 é do #525). Decisões novas
+LM5-7 (o que o Abrir faz), LM5-8 (força da confirmação) e LM5-9 (baixar o log antes), cada uma com recomendação e custo de errar no `LEIA.md`. A LM5b espera a B3.
