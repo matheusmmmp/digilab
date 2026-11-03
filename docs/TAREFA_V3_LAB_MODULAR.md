@@ -200,3 +200,24 @@ decisões LM5-1 a LM5-6.
   (mostrar compromisso e frustração). Cada uma com a recomendação e o custo de errar no `LEIA.md`.
 - **O que depende de leitura fora do motivo:** o "desde a decisão N" (`estado_interno().modulos.estado.I.inicio`) e a região do episódio.
 - A LM5b só começa com as pranchas aprovadas (LAB-4) e depois da B3 (LAB-5).
+
+## 12. Resumo da etapa LM2 (2026-11-03, worker Claude Code, Sonnet 5.5, worktree `v3-lab-modular-lm2`)
+
+Os espelhos TS do M-ESTADO, do M-ARB e do M-PLAST (P1 e P2) estão em `web/app/motor/digibrain/` (`estado.ts`, `arb.ts`, `plast.ts`), com um G-PAR
+por módulo em `web/app/test/` passando. Nada do jogo os usa ainda; `digilab/engine.py`, `digilab/digibrain/` e `web/app/motor/digibrain.ts` não
+mudaram, nenhum gabarito foi regravado e o exportador não precisou de leitura nova.
+
+- **Fora do laboratório (LAB-1):** o `EstadoDinamico` levanta erro se `credito_corrida`, `intencao_suspensa` ou `redecidir_evento` vierem ligadas
+  (e `cuidarSuspensa`, `eventos` e `registrarRedecisao` levantam erro); a `Arbitragem` levanta erro com `facetas_mem` ou com `segurar`.
+  `modula_g_apr` e os controles já estavam fora na LM1.
+- **A rng do M-ARB:** o gabarito guarda só o sha256 do estado da rng. O TS a refaz com o `RandomPy` do jogo semeado com `semente + 1_000_003`
+  (a `_rng_politica` do `engine.py`) e confere, a cada `arb.escolher`, o sha256 do `getstate()` antes e depois contra `rng_antes` e `rng_depois`.
+- **O estado:** o gabarito não grava o estado por chamada, só a assinatura ao fim de cada decisão. Cada G-PAR refaz a vida inteira num módulo
+  novo, na ordem das chamadas, e confere a assinatura dele (`estado`, `arb`, `plast`) ao fim das 3 072 decisões; a saída é conferida em toda chamada.
+- **O M-PLAST:** o `habito` e o `incentivo` chamados pelo impulso vêm do `leituras_plast` da LM1, refeitos no ponto do `impulso.unidades`, com o estado
+  de agora do M-PLAST.
+- **G-PAR (conferidas, nas 8 vidas):** estado 9 208 (contexto 3 072, escolhida 3 072, consequência 3 064) e 3 072 assinaturas; arb 6 144 (reflexo
+  3 072, escolher 3 072: 2 505 sorteios, 567 sem sorteio, 522 reflexos); plast 28 772 (montar 3 072, consequencia_p1 166 com 91 consumos, creditar
+  3 042, habito 21 504, incentivo 988). Cada teste falha se a conta for zero.
+- **Cobertura que o gabarito não tem:** os fins `sumiu` e `desistiu` do M-ESTADO não aparecem nas 8 vidas (só `meta`, `trocou`, `achou`, `unica`);
+  o ramo `sumiu`/`desistiu` está portado linha a linha, mas sem G-PAR. Pedir outras vidas ao exportador é decisão da LM4.
