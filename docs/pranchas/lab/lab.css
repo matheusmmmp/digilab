@@ -124,3 +124,13 @@ body.sem-notas .nota{display:none}
 body.m{--k:2}
 body.d{--k:3}
 .nota,.fonte{}body.sem-notas .fonte{display:none}
+
+/* LM5-5: pet de teste ja nascido e a confirmacao do Descartar */
+.pt-viv{border:1px solid var(--hx-borda);background:var(--hx-miolo-2);padding:10px 12px;display:grid;gap:10px}
+.bts{display:flex;gap:8px;flex-wrap:wrap}.bts .bt{flex:1 1 140px}
+.bt.perigo{border-color:var(--hx-perigo);color:var(--hx-perigo)}
+.conf{position:absolute;z-index:20;padding:16px;display:grid;gap:12px;background:linear-gradient(180deg,var(--hud-fundo-1),var(--hud-fundo-2))}
+.conf-l{list-style:none;padding:0;display:grid;gap:10px}
+.conf-l li{display:flex;gap:10px;align-items:center}.conf-l li>span:last-child{display:grid;gap:2px}
+.ret.ok{display:grid;place-items:center;border-color:var(--hx-ok)}.ret.ok i.ck{position:static;transform:none;background:none;width:auto;height:auto;color:var(--hx-ok);font:700 20px/1 var(--hx-f)}
+.conf-av{font:700 14px/1.2 var(--hx-f);letter-spacing:.06em;text-transform:uppercase;color:var(--hx-perigo)}

@@ -89,3 +89,34 @@ prancha curta a mais (o pet de teste já nascido, com Abrir e Descartar com conf
 - O mapa de fundo é um cenário de apoio do `arena_up`, não o habitat 3D.
 - Nenhum campo novo no motivo é pedido, mas o "desde a decisão N" e o nome da região (LM5-4) dependem de leituras do estado que o
   motivo não traz; ficam para a LM5b só se o Matheus aceitar.
+
+## LM5a2 (2026-11-03): o pet de teste já nascido e o Descartar (LM5-5, aprovada)
+
+Mais duas telas, nas mesmas 4 variantes (390 e 1280 px, Vidro e Militar), 8 capturas: `ajustes_vivo_*` (Ajustes › Laboratório com o pet de teste vivo) e
+`ajustes_descartar_*` (a confirmação do Descartar). O pet de teste é a **v16** (`VERSAO_PET_LAB`, LM4), não a v15, que o #525 usa; as pranchas da LM5a não citam a versão,
+então nada precisou ser corrigido nelas.
+
+| o que a tela mostra | de onde vem |
+|---|---|
+| nome "Agumon" | `nomeForma(m.forma)` do pet de teste (`motor/pet_lab.ts` devolve um `Motor` v16), como na lista de Meus pets |
+| "Rookie" | `nomeEstagio(m.forma)` |
+| "dia 3" | `diaDe(m.e.tick)`, o mesmo de Meus pets |
+| "cérebro modular · versão 16" | `VERSAO_PET_LAB` (`motor/constantes.ts`) |
+| selo "experimental" | o mesmo da tela Pet; vem de a versão do pet ser a do laboratório |
+| Abrir | mostra o pet de teste na tela Pet (LM5-7) |
+| Descartar | abre o diálogo; só o diálogo apaga o save do pet de teste |
+| diálogo: "o save do Agumon de teste é apagado… Não volta" | o save do pet de teste (seu espaço próprio do save); o "do ovo ao dia 3" sai do log e do `diaDe` |
+| diálogo: "seus pets de hoje não são tocados" | a regra do `web/app/CLAUDE.md` (apagar save só com decisão do Matheus e aviso na tela): o descarte só alcança o espaço do pet de teste |
+
+O diálogo copia o formato do "Começar a geração" de `componentes/Heranca.tsx` (`alertdialog`, três linhas, "Não dá para desfazer.", Cancelar e a ação). Os números ("dia 3")
+são de exemplo. Sem pet de teste, vale a prancha `ajustes_*` da LM5a (o ovo e o botão Chocar); com um vivo, o botão Chocar some e aparece a nota "só um por vez".
+
+**Decisões novas (propostas, ao Matheus):**
+
+- **LM5-7, o que o Abrir faz.** Recomendação: fecha Ajustes e mostra o pet de teste na tela Pet, com o selo "experimental"; o pet de hoje continua o ativo em Meus pets e
+  volta pelo caminho de hoje. Alternativa: Abrir também troca o pet ativo do jogo. **Custo de errar:** trocar o ativo mistura os saves e faz o jogador achar que o pet
+  de hoje sumiu; não trocar obriga a LM5b a mostrar qual dos dois está na tela.
+- **LM5-8, a força da confirmação.** Recomendação: o diálogo como desenhado, foco em Cancelar, sem pedir para digitar o nome. Alternativa: digitar "descartar". **Custo
+  de errar:** sem digitar, um toque duplo apaga o save (só o do teste, que se rechoca); digitar irrita para um pet experimental.
+- **LM5-9, baixar o log antes.** O jogo já sabe baixar saves (`AvisoCombateTR`, `.digilab`). Recomendação: não oferecer no diálogo agora. Alternativa: um link "Baixar o
+  log antes de descartar". **Custo de errar:** sem o link, um log curioso se perde (o pet de teste não gera medida de pesquisa); com o link, o diálogo ganha uma saída a mais.
