@@ -116,7 +116,7 @@ def test_as_leituras_do_plast_da_lm1_batem_com_uma_execucao_nova_e_cobrem_as_oit
 
 def test_os_logs_da_lm4_batem_com_uma_execucao_nova_e_com_o_sha_das_vidas():
     """o log de cada uma das oito vidas: o gravado e igual ao de uma execucao nova e o sha256 dele e o `log` do gabarito da LM0"""
-    assert E.logs() == (E.PASTA / E.ARQUIVO_LOGS).read_bytes()
+    assert gzip.decompress(E.logs()) == gzip.decompress((E.PASTA / E.ARQUIVO_LOGS).read_bytes())    # o texto, nao os bytes do gzip
     gravado = json.loads(gzip.decompress((E.PASTA / E.ARQUIVO_LOGS).read_bytes()))
     vidas = [v for lg in E.LUGARES for v in json.loads(gzip.decompress((E.PASTA / f"{E.PREFIXO}{lg}.json.gz").read_bytes()))["vidas"]]
     assert len(gravado["vidas"]) == len(vidas) == 8
@@ -126,7 +126,7 @@ def test_os_logs_da_lm4_batem_com_uma_execucao_nova_e_com_o_sha_das_vidas():
 
 
 def test_os_fins_da_lm4_batem_com_uma_execucao_nova_e_cobrem_sumiu_e_desistiu():
-    assert E.fins() == (E.PASTA / E.ARQUIVO_FINS).read_bytes()
+    assert gzip.decompress(E.fins()) == gzip.decompress((E.PASTA / E.ARQUIVO_FINS).read_bytes())    # o texto, nao os bytes do gzip
     vidas = json.loads(gzip.decompress((E.PASTA / E.ARQUIVO_FINS).read_bytes()))["vidas"]
     assert {f for v in vidas for f in v["fins"]} >= {"sumiu", "desistiu"}
     assert all(not v["inatos"] for v in vidas if "desistiu" not in v["fins"])
