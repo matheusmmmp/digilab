@@ -113,6 +113,8 @@ from .ambiente import PoliticaInstintoBola
 from .config import CONFIG_BOLA, CONFIG_DONOS, CONFIG_MUNDO, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, N_PONTOS_LONGE_FIXO, TICKS_POR_DIA, Config, ConfigMundo
 from .config import CONFIG_BANHEIRO, CONFIG_PQP_MUNDO, ConfigBanheiro, ConfigDonos, ConfigPetQuePensaMundo
 from .config import CONFIG_PALADAR, ConfigPaladar
+from .config import CONFIG_GENOMA, ConfigGenoma
+from .genoma import TIPO_EVENTO as TIPO_GENOMA, Genoma
 from .config import CONFIG_FRUTA_AO_LADO, ConfigFrutaAoLado
 from .config import CONFIG_CONTRATO, ConfigContrato
 from .config import CONFIG_BOLA_NO_GOLPE, CONFIG_DECISAO_NA_COMIDA, ConfigBolaNoGolpe, ConfigDecisaoNaComida
@@ -1906,20 +1908,30 @@ class MotorMundo(MotorFrutas):
 
 # ================================================================== replay
 def reproduzir_mundo(log: LogDeEventos, politica_fabrica: Callable, cfg: Config | None = None, semente: int = 42,
-                     fabrica_motor: Callable | None = None, ate_tick: int | None = None) -> MotorMundo:
+                     fabrica_motor: Callable | None = None, ate_tick: int | None = None,
+                     cfg_genoma: ConfigGenoma | None = None) -> MotorMundo:
     """O replay que entende os eventos do mundo (`deixar_comida`, `deixar_bola`). `ate_tick`: para antes do primeiro evento nesse
     tick (corta o avanco que o atravessa), como o reproduzir_educacao. Evento desconhecido levanta erro; luta, origem, fala e
-    decisao externa tambem: o mundo minimo roda sem educacao e sem lesoes."""
+    decisao externa tambem: o mundo minimo roda sem educacao e sem lesoes.
+
+    O evento `genoma` (V3 G0, E2; G0-4, G0-7): so com `cfg_genoma.ligado`, so como primeiro evento do log e so um (o genoma vazio nao
+    muda a vida: a trajetoria sai igual). Com a chave desligada (o padrao), fora da primeira posicao ou repetido, levanta erro."""
     cfg = cfg or CONFIG_PADRAO
     if fabrica_motor is None:
         raise ValueError("reproduzir_mundo precisa da fabrica do MotorMundo")
     motor = fabrica_motor(politica_fabrica(cfg), cfg, semente)
     if not isinstance(motor, MotorMundo):
         raise TypeError(f"a fabrica devolveu {type(motor).__name__}, nao MotorMundo")
-    for evento in log:
+    cg = cfg_genoma or CONFIG_GENOMA
+    for i, evento in enumerate(log):
+        if evento.tipo == TIPO_GENOMA and (not cg.ligado or i != 0):
+            raise ValueError("o evento genoma so vale com a ConfigGenoma ligada e como o primeiro evento do log (G0-4)"
+                             if i == 0 else f"o evento genoma so vale como o primeiro evento do log (posicao {i}; G0-4)")
         if ate_tick is not None and evento.tick >= ate_tick:
             break
-        if evento.tipo == "avanco":
+        if evento.tipo == TIPO_GENOMA:
+            Genoma.de_evento(evento)             # confere o formato; o genoma vazio ("hoje") nao muda nada
+        elif evento.tipo == "avanco":
             motor._avancar(int(evento.valor) if ate_tick is None else min(int(evento.valor), ate_tick - evento.tick))
         elif evento.tipo == "acao_usuario":
             motor._aplicar_acao_usuario(AcaoUsuario(evento.valor))
