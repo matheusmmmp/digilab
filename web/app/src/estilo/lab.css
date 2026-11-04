@@ -29,3 +29,8 @@
 .db-conteudo--lab .db-chips li[data-muda="true"]{ border-color:var(--hx-alerta, #F0B429) }
 
 .db-folha-selo{ margin-bottom:10px }
+/* o cerebro do pet (Ajustes > Laboratorio): os dois grupos de escolha */
+.lab-cerebro{ display:flex; flex-wrap:wrap; gap:6px 18px; margin:8px 0 0; padding:8px 10px; border:1px solid var(--hx-borda); background:var(--hx-miolo) }
+.lab-cerebro legend{ padding:0 4px }
+.lab-cerebro label{ display:inline-flex; gap:6px; align-items:center; cursor:pointer }
+.lab-cerebro input:disabled + *{ opacity:.6 }

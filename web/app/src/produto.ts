@@ -6,13 +6,15 @@
      - CHAMADOS_PELO_CORPO (docs/TAREFA_V2_PRODUTO_CUIDADO.md): os tres chamados do bebe abrem pelo corpo, com os limiares do bebe
        (CHAMADO_BEBE_CORPO; no bebe, o da fome no lugar do CHAMADO_FOME_CORPO). */
 import type { Motor } from "../motor/index.ts";
+import { nascerComCerebro } from "./cerebro.ts";
 
 export const CHAMADO_PELA_FOME = true;
 export const DECISAO_NA_COMIDA = true;
 export const CHAMADOS_PELO_CORPO = true;
 
-/** grava as chaves num ovo novo (os pets v13, os unicos que abrem desde o descarte 6). Devolve o mesmo motor */
+/** grava as chaves num ovo novo (os pets v13, os unicos que abrem desde o descarte 6) e, nos v17, o cerebro dos ovos novos (src/cerebro.ts;
+    o modular por padrao). Devolve o mesmo motor */
 export function ligarProduto(m: Motor): Motor {
   m.ligarProduto({ chamadoPelaFome: CHAMADO_PELA_FOME, decisaoNaComida: DECISAO_NA_COMIDA, chamadosPeloCorpo: CHAMADOS_PELO_CORPO });
-  return m;
+  return nascerComCerebro(m);
 }

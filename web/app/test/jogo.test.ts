@@ -56,7 +56,8 @@ describe("jogo", () => {
     const j = jogoAtual();
     expect(QUADROS_CHOCANDO).toBe(40);
     expect(j.nascendo).toBe(QUADROS_CHOCANDO);
-    const log = [[TICK_INICIAL, "p", { chamadoPelaFome: true, decisaoNaComida: true, chamadosPeloCorpo: true }]];
+    /* e o cerebro dos ovos novos (src/cerebro.ts): o modular por padrao */
+    const log = [[TICK_INICIAL, "p", { chamadoPelaFome: true, decisaoNaComida: true, chamadosPeloCorpo: true }], [TICK_INICIAL, "cb", { cerebro: "modular" }]];
     expect(j.motor.log).toEqual(log);
     expect(j.motor.produto).toEqual({ chamadoPelaFome: true, decisaoNaComida: true, chamadosPeloCorpo: true });
     expect(JSON.parse(a.dados[CHAVE])).toEqual({ semente: j.motor.semente, log, versao: VERSAO_PET });
