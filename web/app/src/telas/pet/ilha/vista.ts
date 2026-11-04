@@ -231,7 +231,7 @@ class VistaIlha {
     CURVA.uTempo.value = reduzido ? 0 : agora / 1000;
     const noite = eNoite(m.e.tick % TPD);
     if (noite !== this.noite) { this.noite = noite; this.cenaIlha.aplicarNoite(noite); }
-    this.itens.sincronizar(mu, m.e.tick, noite, agora, dtMs, m.lesionadoDesde !== null, reduzido);
+    this.itens.sincronizar(mu, m.e.tick, noite, agora, dtMs, m.lesionadoDesde !== null, reduzido, m.e.sujeira, this.petCel);
     const ret = this.papel.atualizar({
       agora, dt: Math.min(0.05, dtMs / 1000), quadro, cel: this.petCel, motor: mu.pet, camera: this.camera,
       ppu: this.ppu, pxPorTexel: this.pxPorTexel, canvas: [this.renderer.domElement.width, this.renderer.domElement.height],
@@ -333,6 +333,7 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
     }, 10_000);
   });
   CENA.modo3d = true;
+  CENA.cocoNoChao = true;
   CENA.mundo = {
     paraMundo: (cx, cy) => vista.paraMundo(cx, cy),
     paraTela: (x, y) => vista.paraTela(x, y),
@@ -343,7 +344,7 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
     vivo = false;
     cancelAnimationFrame(pedido); obs.disconnect(); if (esperaKits) clearTimeout(esperaKits); canvas.removeEventListener("webglcontextlost", perdeu);
     soltarControles();
-    CENA.modo3d = false; CENA.ret = null; CENA.medir = null; CENA.mundo = null;
+    CENA.modo3d = false; CENA.cocoNoChao = false; CENA.ret = null; CENA.medir = null; CENA.mundo = null;
     vista.dispose();
   };
 }

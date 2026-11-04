@@ -8,14 +8,16 @@
      - o saco de pancada do treino (docs/TAREFA_V3_HABITAT_OBJETOS.md): um poste com o saco pendurado, perto do ninho, que balanca a cada
        golpe (baterNoSaco);
      - o kit medico: uma maleta branca com a cruz, ao lado do ninho, enquanto o pet esta lesionado;
+     - o coco: um por unidade da sujeira do motor, no chao onde o pet estava quando ela subiu (cocos.ts);
    todos com a sombra redonda. As posicoes do motor sao em subunidades; aqui, em celulas. Os tamanhos e as cores sao do desenho:
    PROPOSTO, SEM FONTE. */
 import * as THREE from "three";
 import type { Mundo } from "../../../../motor/index.ts";
 import { ninhoDe } from "../vistaMundo.ts";
 import { CENA } from "../cenaEstado.ts";
-import { BOLA_SALTO, BOLA_TAU_MS, KIT_DESDE_NINHO, LUZ_NINHO, SACO_BALANCO, SACO_DESDE_NINHO } from "./constantes.ts";
+import { BOLA_SALTO, BOLA_TAU_MS, COCO, KIT_DESDE_NINHO, LUZ_NINHO, SACO_BALANCO, SACO_DESDE_NINHO } from "./constantes.ts";
 import { GEO_SOMBRA, curvar, materialSombra, toon } from "./cena.ts";
+import { Cocos } from "./cocos.ts";
 
 const COR_RACAO = { madura: [0x9b6a3c, 0xc08a55], podre: [0x6b6b3a, 0x85854a] } as const;
 /** a cor de cada fruta do motor (os tipos de motor/mundo.ts, FRUTAS) */
@@ -152,6 +154,41 @@ function brilho(): THREE.Mesh {
   return m;
 }
 
+/* o coco (cocos.ts): a geometria e o material, os mesmos para todos os cocos */
+const VOLTAS: readonly (readonly [number, number, number])[] = [[0.22, 0.09, 0], [0.165, 0.2, 0.03], [0.11, 0.3, -0.02]];
+let pecas: { voltas: THREE.BufferGeometry[]; ponta: THREE.BufferGeometry; claro: THREE.Material; escuro: THREE.Material } | null = null;
+function pecasDoCoco() {
+  if (!pecas) pecas = {
+    voltas: VOLTAS.map(([r]) => new THREE.SphereGeometry(r, 12, 8).scale(1, 0.55, 1)),
+    ponta: new THREE.ConeGeometry(0.07, 0.13, 8),
+    claro: toon({ color: COCO.cor[0] }),
+    escuro: toon({ color: COCO.cor[1] }),
+  };
+  return pecas;
+}
+
+/** um coco: tres voltas achatadas, cada uma menor e mais alta, e a ponta torta em cima, com a sombra redonda */
+function coco(i: number): THREE.Group {
+  const giro = i * 1.9;
+  const p = pecasDoCoco(), g = new THREE.Group(), corpo = new THREE.Group();
+  VOLTAS.forEach(([, y, dx], i) => {
+    const v = new THREE.Mesh(p.voltas[i], i % 2 ? p.escuro : p.claro);
+    v.position.set(dx, y, 0);
+    corpo.add(v);
+  });
+  const ponta = new THREE.Mesh(p.ponta, p.claro);
+  ponta.position.set(-0.03, 0.39, 0);
+  ponta.rotation.z = 0.35;
+  corpo.add(ponta);
+  corpo.rotation.y = giro;
+  const s = new THREE.Mesh(GEO_SOMBRA, materialSombra());
+  s.scale.set(0.6, 1, 0.6);
+  s.position.y = 0.02;
+  s.renderOrder = 1;
+  g.add(s, corpo);
+  return g;
+}
+
 export class Itens {
   readonly raiz = new THREE.Group();
   private readonly comidas = new Map<number, { g: THREE.Group; podre: boolean | null }>();
@@ -159,6 +196,7 @@ export class Itens {
   private readonly brilho = brilho();
   private readonly saco = saco();
   private readonly kit = kit();
+  readonly cocos = new Cocos(coco);
   private readonly sub: number;
   /** onde a bola esta desenhada (celulas), indo ate a do motor sem pular; null antes do primeiro quadro */
   private bolaCel: [number, number] | null = null;
@@ -181,7 +219,7 @@ export class Itens {
     this.kit.position.set(nx / sub + KIT_DESDE_NINHO[0], 0, ny / sub + KIT_DESDE_NINHO[1]);
     this.kit.rotation.y = -0.4;
     this.kit.visible = false;
-    this.raiz.add(n, t, this.bola.g, this.brilho, this.saco.g, this.kit);
+    this.raiz.add(n, t, this.bola.g, this.brilho, this.saco.g, this.kit, this.cocos.raiz);
   }
 
   /** onde a bola esta desenhada (subunidades do mapa), para pegar a bola na cena (PorBola.tsx); null antes do primeiro quadro */
@@ -195,8 +233,9 @@ export class Itens {
   }
 
   /** a racao e a fruta entram e saem e a podre muda de cor; a bola vai aonde o motor diz, girando; o saco balanca; o kit so com a lesao;
-      a luz do ninho so a noite */
-  sincronizar(mu: Mundo, tick: number, noite: boolean, agora: number, dtMs: number, lesionado: boolean, reduzido: boolean): void {
+      a luz do ninho so a noite; os cocos da `sujeira`, caindo perto do pet (`pet`, celulas) */
+  sincronizar(mu: Mundo, tick: number, noite: boolean, agora: number, dtMs: number, lesionado: boolean, reduzido: boolean, sujeira: number,
+    pet: readonly [number, number]): void {
     const vistas = new Set<number>(), sub = this.sub;
     for (const c of mu.comidas.values()) {
       const sit = mu.situacao(c, tick);
@@ -225,6 +264,7 @@ export class Itens {
     this.balancarSaco(agora, reduzido);
     this.kit.visible = lesionado;
     this.brilho.visible = noite;
+    this.cocos.sincronizar(sujeira, pet, agora, reduzido);
   }
 
   /** a bola desenhada vai ate a do motor (constante BOLA_TAU_MS; salta longe ou com movimento reduzido) e gira em volta do eixo do chao

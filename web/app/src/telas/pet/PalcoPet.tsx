@@ -99,7 +99,8 @@ function desenharExtras3D(cx: CanvasRenderingContext2D, g: Geo): void {
   const a = atlasAtual(), pal = paleta(corDominante(m.tracos)), K = g.K;
   const ec = Math.max(2, Math.round(r.h / 40)), pes = r.y + r.h;
   cx.setTransform(ec * K, 0, 0, ec * K, 0, 0);
-  for (let i = 0; i < m.e.sujeira; i++) {
+  /* na ilha, a sujeira e o coco 3D no chao (ilha/cocos.ts); aqui so na sala 3D e na reserva do mundo */
+  for (let i = 0; i < (CENA.cocoNoChao ? 0 : m.e.sujeira); i++) {
     const xc = i < 3 ? r.x - 10 * ec - i * 9 * ec : r.x + r.w + 2 * ec + (i - 3) * 9 * ec;
     desenharGrade(cx, S.coco, Math.round(xc / ec), Math.round((pes - 6 * ec) / ec), { ...pal, d: "#8A5A2B" });
   }
