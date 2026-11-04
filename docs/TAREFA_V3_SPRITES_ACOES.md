@@ -332,10 +332,17 @@ Não há run. É só vista. Não há sementes nem plano de análise.
 
 **Aberta:**
 
-- **SA-9. Os Digimon sem um par de boca aberta e fechada nos quadros do UP.**
-  - **Recomendação:** esperar o catálogo da M1. Se forem poucos, a queda é a prova 1 (morde sem abrir). Se forem muitos, o Matheus
-    decide desenhar à mão só a boca, que é um quadro por Digimon.
-  - **Custo de errar:** baixo enquanto o catálogo não sai.
+- **SA-9 (decidida em 2026-11-04, depois do catálogo da M1).** O catálogo da M1 achou o par de boca aberta e fechada em 11 dos 60
+  Digimon. Os outros 49 se dividem assim: 26 sem boca visível, 5 sempre de boca aberta e 18 que só abrem a boca numa pose sem versão
+  fechada.
+  - **O Matheus decidiu:**
+    - "os 8; fracos na prova 1": Agumon, Guilmon (com a carne 2 px à esquerda), MetalSeadramon, Togemon, Gomamon, Patamon, Tanemon e
+      Tsunomon abrem a boca. Aquilamon, Garurumon e Palmon vão de prova 1;
+    - "desenhar a boca dos 23" (os 18 e os 5): um quadro por Digimon, a pose aberta com a boca fechada pintada por cima, num
+      `.aseprite` derivado fora do git (`remaster/acoes/bocas/`);
+    - os 26 sem boca vão de prova 1.
+  - **Como entra:** os 23 começam com a prova 1 provisória, para o atlas ter as 60 formas. Duas amostras (Greymon e Seadramon) vão ao
+    Matheus antes dos outros; se ficarem ruins, ele decide se desenha ele mesmo.
 
 Registro das propostas, como foram levadas ao Matheus:
 
