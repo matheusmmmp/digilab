@@ -14,20 +14,25 @@ ou tapa como recompensa ou punição, como era na v1.
 `origin/v3-vida-pet-ref`), seção 5.2: partir do modular, não do A; o vaguear primeiro; o seguir o dono só depois de um evento de presença
 do dono; o toque com lugar no corpo depois.
 
+**O que mudou no mesmo dia (#562, na `main` em `d0f7f17`):** o modular virou o cérebro padrão dos ovos novos (a **v17**, a v15 com o cérebro
+trocável pelo evento `cb` do registro), e o A ficou selecionável em Ajustes › Laboratório. O custo de errar da pesquisa (5.2.1, "amarrar a
+vida do pet a um cérebro que ainda não é o padrão") deixou de valer: o passeio, portado, chega ao pet normal do jogo, e não só ao de teste.
+Isso pesa a favor da guarda (AN-1) e muda a versão do porte (AN-7).
+
 ## 0. Os cinco pontos
 
 | ponto | resposta |
 |---|---|
-| a capacidade | o pet de teste do laboratório sai para passear sozinho quando o corpo pede (o tédio, a curiosidade), com um destino que segura por algumas decisões, e volta às necessidades quando elas apertam |
-| o marco que desbloqueia | o Matheus vê, no pet de teste, o pet andar até um lugar e voltar, sem clicar nada, e o painel do modular mostra "passeio" com o motivo |
-| a evidência | o G-PAR e o G-PAR-VIDA do passeio no pet de teste; o G2 (a chave desligada deixa o Python e o jogo byte a byte); a guarda G-COMEDOURO-AN no plano próprio (seção 4) |
-| as dependências reais | o laboratório do modular na `main` (LM0 a LM5b, até o #551); as AN-1 a AN-7 decididas; o plano `PLANO_ANALISE_V3_ACOES_NOVAS.md` antes de qualquer vida |
-| se o gate falhar | a subchave fica desligada, o pet de teste segue como hoje, e o resultado negativo é registrado como está |
+| a capacidade | o pet com o modular (o v17 e o de teste) sai para passear sozinho quando o corpo pede (o tédio, a curiosidade), com um destino que segura por algumas decisões, e volta às necessidades quando elas apertam |
+| o marco que desbloqueia | o Matheus vê, num pet com o modular, o pet andar até um lugar e voltar, sem clicar nada, e o painel do modular mostra "passeio" com o motivo |
+| a evidência | o G-PAR e o G-PAR-VIDA do passeio no espelho TS; o G2 (a chave desligada deixa o Python e o jogo byte a byte); a guarda G-COMEDOURO-AN no plano próprio (seção 4) |
+| as dependências reais | o laboratório do modular e o cérebro primário na `main` (LM0 a LM5b; #562); as AN-1 a AN-7 decididas; o plano `PLANO_ANALISE_V3_ACOES_NOVAS.md` antes de qualquer vida |
+| se o gate falhar | a subchave fica desligada, os pets seguem como hoje, e o resultado negativo é registrado como está |
 
 ## 1. Pergunta
 
-**Um passeio sem alvo de necessidade, disparado pelo tédio e pela curiosidade que o corpo já tem, faz o pet de teste se mover mais e de
-forma legível, sem piorar o cuidado das necessidades perto do comedouro?**
+**Um passeio sem alvo de necessidade, disparado pelo tédio e pela curiosidade que o corpo já tem, faz o pet com o DigiBrain modular se
+mover mais e de forma legível, sem piorar o cuidado das necessidades perto do comedouro?**
 
 - **De onde vem:** do pedido do Matheus (o "pet parado") e da recomendação 5.2.2 da pesquisa de referências. Não vem de uma hipótese do
   `docs/PLANO_V2_PESQUISA.md`: é uma mecânica do produto (`docs/PRODUTO_VISAO.md`), com o método da pesquisa porque mexe no cérebro.
@@ -37,14 +42,14 @@ forma legível, sem piorar o cuidado das necessidades perto do comedouro?**
 ## 2. Depende de
 
 - **Na `main`, já:** o pacote `digilab/digibrain/` com a C4 (o braço REL); o laboratório do modular inteiro no jogo, o pet de teste v16
-  (`docs/TAREFA_V3_LAB_MODULAR.md`, LM0 a LM5b).
+  (`docs/TAREFA_V3_LAB_MODULAR.md`, LM0 a LM5b); o modular como cérebro padrão dos ovos novos, a v17 (`docs/TAREFA_V3_CEREBRO_PRIMARIO.md`, #562).
 - **Fora da `main`, e não bloqueia o papel:** a pesquisa de referências (PR #560) e o passo 1, o pet que se move na vista (PR #561). O
   marco da seção 0 (o Matheus vê o pet andar) precisa do passo 1 na `main`; o código do Python não precisa.
 - **As decisões AN-1 a AN-7** (seção 8).
 - **A vez em `digilab/digibrain/`:** o pacote é arquivo disputado (`docs/PAINEL_V3.md`, seção 3: uma missão por vez). A AN2 só começa sem
   outra missão da trilha C aberta nele.
 
-### 2.1 O que já existe (lido no código da `main` em `a7c000f`)
+### 2.1 O que já existe (lido no código da `main` em `a7c000f`; o #562 conferido em `d0f7f17`)
 
 **O vaguear já existe no modular, como a unidade `explorar/vagar`.** O passo 3 não cria um verbo; ele muda como o verbo que já existe dura.
 
@@ -58,10 +63,10 @@ forma legível, sem piorar o cuidado das necessidades perto do comedouro?**
 | a duração | **o vagar é opção de uma decisão só:** sem intenção I\*, sem compromisso C, sem persistência e sem frustração. A cada decisão o ponto é outro | `digilab/digibrain/estado.py`, docstring do módulo |
 | a intenção com alvo fixo | o lugar lembrado (`explorar/ponto`) já é intenção: o ponto fixo, entregue ao motor como `Alvo.ponto`, com a meta "chegou ao lugar" (`ocorrido["chegou"]`), os fins `meta`, `trocou`, `sumiu`, `desistiu` e a persistência `h = mul(w_pers, C)` | `digilab/digibrain/estado.py`; `digilab/digibrain/adapt.py`, `escolher_alvo` |
 | os gestos do dono | o M-ADAPT só os registra; **nenhum módulo os recebe como sinal**: o corpo os sente pelos receptores (a D-B do `PLANO_V2_PESQUISA`) | `digilab/digibrain/adapt.py`, docstring e `receber_acao_dono` |
-| no jogo | o espelho TS de todos os módulos, com o G-PAR-VIDA em 5 376 decisões (LM4), no pet de teste v16 | `web/app/motor/digibrain/`; `docs/TAREFA_V3_LAB_MODULAR.md`, seção 14 |
+| no jogo | o espelho TS de todos os módulos, com o G-PAR-VIDA em 5 376 decisões (LM4), no pet de teste v16; desde o #562, também o cérebro padrão dos ovos novos (v17), com o A selecionável pelo evento `cb` | `web/app/motor/digibrain/`; `docs/TAREFA_V3_LAB_MODULAR.md`, seção 14; `docs/TAREFA_V3_CEREBRO_PRIMARIO.md` |
 
 **A leitura** [HIPÓTESE, SEM FONTE]: com o ponto novo a cada decisão, o vaguear de hoje é um zigue-zague de passos curtos em direções
-sorteadas, e não um passeio que o jogador lê como "foi até ali". Quanto o vagar é escolhido no pet de teste **não foi medido**: é a AN0.
+sorteadas, e não um passeio que o jogador lê como "foi até ali". Quanto o vagar é escolhido no modular **não foi medido**: é a AN0.
 
 **O achado do E0 que pesa aqui** (`docs/futuro/v3_espaco_acoes.md`, seção 0, [HIPÓTESE] do próprio documento): somar verbos sem abrir a
 arbitragem dá opções quase nunca escolhidas. No modular a arbitragem já é um sorteio entre unidades (não a prioridade fixa do A), e a
@@ -133,7 +138,7 @@ regra ao modular inteiro é outra decisão (seção 6).
 
 - `digilab/engine.py`, o `AcaoPet`, o bandit e as runs da v1;
 - o motor (`digilab/mundo.py` e o espelho TS): o ponto do vagar e o `Alvo.ponto` já existem;
-- o cérebro A (`digilab/policies/lobos.py` e `web/app/motor/lobos.ts`) e os pets v11 a v14;
+- o cérebro A (`digilab/policies/lobos.py` e `web/app/motor/lobos.ts`), os pets v11 a v15 e o pet v17 com o A (`cb` A);
 - o W0, o `g_exp` e todo valor de `ConfigDigibrainInatos` (AN-3);
 - os gabaritos de hoje: nenhum é regravado.
 
@@ -146,7 +151,7 @@ regra ao modular inteiro é outra decisão (seção 6).
 | **AN2** | o passeio no Python, atrás da `passeio` desligada (3.1 a 3.4), com testes | `digilab/digibrain/estado.py`, `adapt.py`, `impulso.py`; `digilab/config.py` | **G2-py:** desligada, os gabaritos da AN1 e todos os de hoje passam sem regravar; ligada, os testes dos fins, da guarda e do crédito descartado; o replay bit a bit | Sonnet; Opus se a guarda e a persistência se cruzarem de um jeito que a espec não previu |
 | **AN3** | o plano de análise, **antes de qualquer vida**: `docs/PLANO_ANALISE_V3_ACOES_NOVAS.md` (seção 4), com a faixa pedida ao coordenador | `docs/` | o Matheus aprova o plano | Opus |
 | **AN4** | a run única do plano, uma vez, nos lugares do MVP | `experiments/run_v3_acoes_novas.py` | os gates do plano; o negativo é registrado como está | Sonnet |
-| **AN5** | o porte ao jogo, **só com a AN-7**: o passeio no espelho TS, a versão do pet de teste (AN-7) e a paridade | `web/app/motor/digibrain/`, `web/app/test/` | **G-PAR** do M-ESTADO e do M-ADAPT com o passeio; **G-PAR-VIDA** no pet de teste nas vidas do exportador com a `passeio` ligada; **G1** o replay; **G2-web** desligada, os gabaritos de hoje e o pet v16 abrem iguais | Sonnet |
+| **AN5** | o porte ao jogo, **só com a AN-7**: o passeio no espelho TS, a versão nova do pet (AN-7) e a paridade | `web/app/motor/digibrain/`, `web/app/motor/constantes.ts`, `web/app/test/` | **G-PAR** do M-ESTADO e do M-ADAPT com o passeio; **G-PAR-VIDA** nas vidas do exportador com a `passeio` ligada; **G1** o replay; **G2-web** desligada, os gabaritos de hoje e os pets v13 a v17 abrem iguais | Sonnet |
 
 A ordem faz o Python primeiro (AN0 a AN4) e a web depois (AN5). A cena do passeio (o pet que anda até o ponto, a chegada) é o passo 2,
 só vista, e não entra aqui.
@@ -200,7 +205,7 @@ que ele precisa medir, para o Matheus decidir a AN-1 com o custo à vista.
   investigar (`explorar/cheiro`, `explorar/ponto`) e o brincar com a bola já são intenções com alvo no modular (a pesquisa, seção 1); a
   cena deles é o passo 2.
 - **A cena** do passeio, o nome "passeio" no painel e qualquer animação: o passo 2, só vista.
-- **O modular como cérebro do ovo padrão** (`docs/TAREFA_V2_DIGIBRAIN_MODULAR_PRODUTO.md`) e a D-C1-3.
+- **A D-C1-3** (de onde vem o ganho do M3\*) e o que o #562 deixou de fora (o selo do painel, a fala e o caráter lidos do A).
 - **A calibração** do W0, do `g_exp` e dos limiares: a rodada de equilíbrio, no fim.
 
 ## 7. Critérios de aceitação
@@ -212,7 +217,7 @@ que ele precisa medir, para o Matheus decidir a AN-1 com o custo à vista.
   (`meta`, `trocou`, `desistiu`, `interrompido`), um da persistência zerada acima do limiar e um do crédito descartado pelo gesto.
 - **AN3:** o plano commitado antes da primeira vida da faixa (o `git log` mostra a ordem).
 - **AN4:** o `RESULTADO_V3_ACOES_NOVAS.md` com a guarda e o movimento, cada número com o artefato.
-- **AN5:** o G-PAR-VIDA do passeio passa no `npm test`; o e2e do laboratório passa; o pet v16 e os saves de hoje abrem iguais.
+- **AN5:** o G-PAR-VIDA do passeio passa no `npm test`; o e2e do laboratório e o do cérebro primário passam; os pets v13 a v17 e os saves de hoje abrem iguais.
 
 ## 8. Precisa do Matheus
 
@@ -227,7 +232,7 @@ pede um valor, a recomendação é reusar um que já existe.
 | **AN-4** | a guarda no cérebro: quais necessidades e qual limiar zeram a persistência e acabam o passeio | **fome, higiene, energia e saúde, com o limiar `urgencia_lambda` que já existe na `ConfigDigibrainInatos` (S/2, PROPOSTO).** O tédio, a curiosidade, a solidão e o estresse ficam fora: são o que dispara o passeio ou o que o dono resolve | limiar alto: o passeio segura o pet com fome, e a guarda do plano falha. Baixo: o passeio quase nunca dura, e o pet volta ao zigue-zague. Um limiar novo: número sem fonte |
 | **AN-5** | o `interrompido` sobe a frustração F? | **não** (como o `achou` da DX-4) | sobe: o F tem peso S/2 no explorar, e cada passeio interrompido pela fome empurra o pet a explorar de novo, contra a necessidade que o interrompeu |
 | **AN-6** | o crédito do passeio com um gesto do dono no intervalo | **não é entregue ao P2, e o motivo registra `credito: "gesto"`** (3.3; o precedente do G-SEM-CREDITO) | entregue: o carinho no meio do passeio sobe o hábito de passear pelo corpo, e o dono treina o pet por clique, contra a regra do Matheus. Descartado: o passeio perde parte do crédito do corpo (quanto, a AN4 conta) |
-| **AN-7** | o porte ao jogo (AN5) e a versão do pet de teste | **só depois da run (AN4), e só se a guarda não falhar; com uma versão nova do pet de teste (a próxima livre na `main` quando a AN5 começar), que herda a v16 com a `passeio` ligada.** A v16 continua abrindo igual | portar antes: o jogador vê um passeio que pode estar tirando o pet do comedouro. Ligar na v16: os saves v16 de hoje mudam de vida no replay (a DM-5: cada mudança que altere a vida usa uma versão nova) |
+| **AN-7** | o porte ao jogo (AN5) e a versão | **só depois da run (AN4), e só se a guarda não falhar; com uma versão nova (a próxima livre na `main` quando a AN5 começar), que herda a v17 com a `passeio` ligada no modular; o pet com o A (`cb` A) não muda.** A v17 continua abrindo igual, e o pet de teste v16 fica como está | portar antes: desde o #562 o modular é o cérebro padrão, e o jogador de todo ovo novo veria um passeio que pode estar tirando o pet do comedouro. Ligar na v17: os saves v17 de hoje mudam de vida no replay (a DM-5: cada mudança que altere a vida usa uma versão nova). Os pets v17 vivos passarem à versão nova (como a promoção v15 → v17 do #562) é decisão à parte, na AN5 |
 
 ## 9. Literatura
 
