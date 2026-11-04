@@ -4,6 +4,7 @@
    Abrir mostra o pet de teste na tela Pet sem trocar o pet ativo (jogo.ts: abrirLab). Descartar apaga so CHAVE-lab. Nao ha opcao de baixar o log. */
 import { useEffect, useState } from "react";
 import { Motor, VERSAO_PET_LAB, petDeTeste, type EventoRegistro } from "../motor/index.ts";
+import { ligarProduto } from "./produto.ts";
 import { CHAVE, textoSave } from "./save.ts";
 
 export const CHAVE_LAB = CHAVE + "-lab";
@@ -48,7 +49,9 @@ export function gravarPetLab(m: Motor): void {
 /** choca o ovo de teste: um pet v16 novo no espaco proprio. So um por vez: com um vivo (ou um save que nao abre), falha */
 export function chocarOvoLab(): Motor {
   if (lerPetLab().tipo !== "vazio") throw new Error("já existe um pet de teste; descarte-o antes de chocar outro ovo de teste");
-  const m = petDeTeste((Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0);
+  /* as chaves do produto, como em todo ovo novo do jogo (src/produto.ts): sem elas o bebe chamava pelo relogio (fome a cada 30 min,
+     carinho a cada 45), sem olhar o corpo (o Matheus, 2026-11-04). Os pets de teste ja chocados seguem como estao no registro */
+  const m = ligarProduto(petDeTeste((Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0));
   gravarPetLab(m);
   avisar();
   return m;
