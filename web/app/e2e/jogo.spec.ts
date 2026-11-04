@@ -493,7 +493,7 @@ test("arenas: a Cidadela pede três lutas seguidas sem cura e dá a medalha; no 
   const lutar = page.locator(".camp-lutar:not([disabled])");
   await expect(lutar).toContainText("Desafiar Myotismon (3 lutas seguidas)");
   await lutar.click();
-  await expect(page.locator(".luta-topo-sub")).toContainText("luta 1 de 3");
+  await expect(page.locator(".luta-modo")).toContainText("Luta 1 de 3");
   await expect(page.locator(".luta-serie")).toContainText("sem cura entre as lutas");
   await page.locator(".luta-ctl--x2").click();
   await expect(page.locator(".luta-serie")).toContainText("Luta 2 de 3", { timeout: 90_000 });
@@ -776,7 +776,7 @@ test("fronteira: com as 6 medalhas a ilha abre; a Liga tem 6 lutas sem cura, dá
   await expect(lutar).toContainText("Desafiar a Liga (6 lutas seguidas)");
   const l0 = await numLog(page, "l");
   await lutar.click();
-  await expect(page.locator(".luta-topo-sub")).toContainText("luta 1 de 6");
+  await expect(page.locator(".luta-modo")).toContainText("Luta 1 de 6");
   await expect(page.locator(".luta-liga")).toContainText("Liga dos Líderes · luta 1 de 6");
   await expect(page.locator(".luta-liga")).toContainText("as cartas não valem");
   await page.locator(".luta-ctl--x2").click();
@@ -914,7 +914,7 @@ test("fronteira: com o título, a Torre de Batalha dá 7 vitórias seguidas sem 
   const l0 = await numLog(page, "l");
   await torre.locator(".fr-inst-tentar:not([disabled])").click();
   await expect(page.locator(".luta-inst")).toContainText("Torre de Batalha · vitória 1");
-  await expect(page.locator(".luta-topo-sub")).toContainText("vitória 1");
+  await expect(page.locator(".luta-modo")).toContainText("vitória 1");
   await page.locator(".luta-ctl--x2").click();
   await expect(page.locator(".luta-inst")).toContainText("vitória 2", { timeout: 90_000 });
   await expect(page.locator(".luta-inst")).toContainText("sem cura, seu pet começou esta luta com");

@@ -86,7 +86,10 @@ export function desenharLutaTR(cv: HTMLCanvasElement, c: CenaDesenho, a: AtlasOk
   const passo = c.sim ? c.sim.S.passo : 0;
   const xs = c.sim ? c.sim.S.L.map(l => l.x) : [CTR_TR.centro - CTR_TR.entrada, CTR_TR.centro + CTR_TR.entrada];
   const alturas = a ? [c.A, c.B].map(L => dimSprite(a.dados, L.sprite)[1]) : [48, 48];
-  const escLuta = Math.max(1, Math.min(3, Math.floor(ALT_MAX / Math.max(...alturas))));
+  /* a escala inteira dos sprites no chao novo (B3, palco a tela inteira): limitada pela altura e tambem pela largura, para os dois nao
+     se cobrirem numa tela estreita (390 px: 2; 1280 e 1920 px: 3) */
+  const larguraMax = a ? Math.max(...[c.A, c.B].map(L => dimSprite(a.dados, L.sprite)[0])) : 28;
+  const escLuta = Math.max(1, Math.min(3, Math.floor(ALT_MAX / Math.max(...alturas)), Math.floor(W / (larguraMax * 1.6))));
   /* o centro de cada lutador na tela (px de CSS): o corpo do motor tem o raio CTR_TR.raio e o sprite e mais largo, entao a frente do sprite
      fica na frente do corpo (o excesso vai para tras) e os dois nao se sobrepoem no contato */
   const larguras = a ? [c.A, c.B].map(L => dimSprite(a.dados, L.sprite)[0]) : [28, 28], raioTela = CTR_TR.raio / LARG * W * FRACAO_CHAO;

@@ -1,16 +1,18 @@
-/* Luta em andamento (#/lutar/luta; DIRETRIZES_REPLICAR secao 7, pranchas UpLuta e BatDesktop): tela cheia, sem menu
-   nem abas, rolagem do fundo travada. No fim, o modal Resultado; Continuar volta para a aba de origem (Arena ou
+/* Luta em andamento (#/lutar/luta; B3, docs/TAREFA_V3_LUTA_LAYOUT.md e docs/pranchas/b3/): a cena a tela inteira, o HUD em caixas (as
+   plaquinhas, o relogio, o cartao da regra), a etiqueta do modo e o cartao de contexto no alto, e o dock no rodape (Pausar, x2 e
+   Desistir). Sem menu nem abas, rolagem do fundo travada. No fim, o modal Resultado; Continuar volta para a aba de origem (Arena ou
    Campanha) e Ver replay abre a luta no Diario. Desistir (botao ou o Voltar do navegador) pede confirmacao: a luta ja foi decidida e gravada no registro
    quando comecou, entao desistir so pula a animacao e sai. */
 import { useEffect, useRef, useState } from "react";
 import { abrirModal } from "../../componentes/modal.ts";
 import { useJogo } from "../../jogo.ts";
-import { LUTA, previa, pularAnimacao, reverLuta, sparringTexto, useLuta, type Modo, type Palco } from "../../luta.ts";
-import { NOME_V2, cartaDe } from "../../../motor/index.ts";
+import { LUTA, alternarPausa, alternarRapido, previa, pularAnimacao, reverLuta, sparringTexto, useLuta, type Modo, type Palco } from "../../luta.ts";
+import { cartaDe } from "../../../motor/index.ts";
 import { ModalResultado } from "./ModalResultado.tsx";
 import { PalcoTR } from "./palcoTR/PalcoTR.tsx";
 import { BotaoContinuar, BotaoHx } from "../../componentes/hx/index.ts";
 import "../../estilo/abertas.css";
+import "../../estilo/luta_hud.css";
 
 function ConfirmarDesistir({ ficar, desistir }: { ficar: () => void; desistir: () => void }) {
   const ref = useRef<HTMLDialogElement>(null), saiu = useRef(false);
@@ -43,6 +45,13 @@ function FimReplay({ p, deNovo, voltar }: { p: Palco; deNovo: () => void; voltar
   );
 }
 
+/** a etiqueta do modo, sob o relogio (no lugar da faixa "Luta · Arena" de antes); o contexto longo vai no cartao ao lado */
+export function etiquetaModo(p: Palco, modo: Modo, replay: boolean, sparring: string | null, rivalFixo: boolean): string {
+  const base = modo === "arena" ? `Arena · ${rivalFixo ? "cenário" : "treino"}${sparring && !rivalFixo ? ` ${sparring}` : ""}` : modo === "fronteira" ? "Fronteira" : "Campanha";
+  const k = p.serie ? ` · Luta ${p.serie.k} de ${p.serie.n}` : p.sequencia ? ` · vitória ${p.sequencia.k}` : "";
+  return `${replay ? "Replay · " : ""}${base}${k}${replay ? " · refeita do registro" : ""}`;
+}
+
 export function TelaLuta({ sair, verReplay, sairReplay, pedidoDesistir, fecharPedido }: {
   sair: (modo: Modo) => void; verReplay: (modo: Modo, idx: number) => void; sairReplay: (idx: number) => void; pedidoDesistir: boolean; fecharPedido: () => void;
 }) {
@@ -54,21 +63,19 @@ export function TelaLuta({ sair, verReplay, sairReplay, pedidoDesistir, fecharPe
   const voltar = () => { previa(modo); sair(modo); };
   if (!p) return (
     <section className="luta-tela ab-hx dl">
-      <div className="luta-topo dl-faixa"><h1 className="dl-num">Luta</h1></div>
-      <p className="luta-vazia">Nenhuma luta em andamento.</p>
-      <BotaoContinuar onClick={() => sair("arena")}>Voltar para a Arena</BotaoContinuar>
+      <div className="luta-contexto hud-caixa"><h1 className="luta-modo">Luta</h1></div>
+      <div className="luta-vazio hud-caixa">
+        <p className="luta-vazia">Nenhuma luta em andamento.</p>
+        <BotaoContinuar onClick={() => sair("arena")}>Voltar para a Arena</BotaoContinuar>
+      </div>
     </section>
   );
   const sp = sparringTexto(m), rep = luta.replay;
   return (
     <section className="luta-tela ab-hx dl" aria-labelledby="luta-tit">
-      <div className="luta-topo hx-painel__cab dl-faixa">
-        <h1 className="dl-num" id="luta-tit">{rep !== null ? "Replay" : "Luta"} · {modo === "arena" ? "Arena" : modo === "fronteira" ? "Fronteira" : "Campanha"}</h1>
-        <span className="luta-topo-sub">{p.A.nomeTela} × {p.B.nomeTela}{p.serie ? ` · luta ${p.serie.k} de ${p.serie.n}` : p.sequencia ? ` · vitória ${p.sequencia.k}` : ""}{rep !== null ? " · refeita do registro" : sp && modo === "arena" && !LUTA.rivalFixo ? ` · treino ${sp}` : ""}</span>
-        {rep !== null
-          ? <BotaoHx className="luta-desistir" onClick={() => { pularAnimacao(); sairReplay(rep); }}>Sair do replay</BotaoHx>
-          : <BotaoHx tom="perigo" className="luta-desistir" disabled={!luta.lutando} onClick={() => setDesistindo(true)}>Desistir</BotaoHx>}
-      </div>
+      <PalcoTR />
+      <div className="luta-contexto hud-caixa">
+        <h1 className="luta-modo" id="luta-tit">{etiquetaModo(p, modo, rep !== null, sp, LUTA.rivalFixo !== null)}</h1>
       {p.sequencia && <p className="luta-arena-aviso luta-serie luta-liga luta-inst" role="status">
         <b>{p.sequencia.inst.nome} · vitória {p.sequencia.k}</b>: {p.B.nomeTela} ({p.B.estiloTela}). {p.sequencia.k - 1} vitória{p.sequencia.k === 2 ? "" : "s"} seguida{p.sequencia.k === 2 ? "" : "s"} até aqui;
         {p.sequencia.k > 1 ? ` sem cura, seu pet começou esta luta com ${Math.round(p.sequencia.vida * 100)}% da vida.` : " sem cura entre as lutas; as cartas não valem."}
@@ -79,7 +86,17 @@ export function TelaLuta({ sair, verReplay, sairReplay, pedidoDesistir, fecharPe
         ? <p className="luta-arena-aviso luta-serie luta-liga" role="status"><b>Liga dos Líderes · luta {p.serie.k} de {p.serie.n}</b>: {p.B.nomeTela}, o Mega de {p.B.estiloTela?.replace(/^.* de /, "")}. Sem cura entre as lutas; as cartas não valem.</p>
         : <p className="luta-arena-aviso luta-serie" role="status"><b>Luta {p.serie.k} de {p.serie.n}</b> · Cidadela: sem cura entre as lutas; a medalha só vem com as {p.serie.n} vitórias.</p>)}
       {p.arena?.regra === "vinculo" && <p className="luta-arena-aviso" role="note"><b>Arena do Lago:</b> aqui as suas travas e vetos não valem. {p.A.nomeTela} decide sozinho, com as regras que ele aprendeu.</p>}
-      <PalcoTR />
+      </div>
+      <div className="luta-dock hud-caixa" role="group" aria-label="Controles da luta">
+        {luta.lutando && <>
+          <button type="button" className="luta-ctl" aria-label={luta.pausado ? "Continuar a animação" : "Pausar a animação"} aria-pressed={luta.pausado} onClick={alternarPausa}>
+            {luta.pausado ? <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3l9 5-9 5z" /></svg> : <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3h3v10H4zM9 3h3v10H9z" /></svg>}</button>
+          <button type="button" className="luta-ctl luta-ctl--x2" aria-label="Velocidade dobrada" aria-pressed={luta.rapido} onClick={alternarRapido}>×2</button>
+          <span className="luta-dock-sep" aria-hidden="true" /></>}
+        {rep !== null
+          ? <BotaoHx className="luta-desistir" onClick={() => { pularAnimacao(); sairReplay(rep); }}>Sair do replay</BotaoHx>
+          : <BotaoHx tom="perigo" className="luta-desistir" disabled={!luta.lutando} onClick={() => setDesistindo(true)}>Desistir</BotaoHx>}
+      </div>
       {rep !== null && p.fimReplay && !luta.lutando && <FimReplay p={p} deNovo={() => reverLuta(rep)} voltar={() => sairReplay(rep)} />}
       {rep === null && p.resultado && !luta.lutando && <ModalResultado p={p} continuar={voltar} verReplay={idx => { previa(modo); verReplay(modo, idx); }} />}
       {desistindo && luta.lutando && <ConfirmarDesistir ficar={() => setDesistindo(false)} desistir={() => { setDesistindo(false); pularAnimacao(); voltar(); }} />}

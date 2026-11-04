@@ -1,6 +1,6 @@
 # TAREFA V3 — LUTA_LAYOUT: a luta dentro do layout habitat, a B3 (2026-11-01)
 
-Coordenador: Gerente da V3 (Claude Code). Worker: Claude Code, Sonnet 5.5 (a etapa de papel). Worktree e branch: `v3-luta-layout`. Status: etapa 1 (papel) ENTREGUE e aprovada pelo Matheus em 2026-11-01 (pranchas e B3-1 a B3-5); a etapa 2 (código) está liberada e ainda não começou.
+Coordenador: Gerente da V3 (Claude Code). Worker: Claude Code, Sonnet 5.5 (a etapa de papel). Worktree e branch: `v3-luta-layout`. Status: etapa 1 (papel) ENTREGUE e aprovada pelo Matheus em 2026-11-01 (pranchas e B3-1 a B3-5); etapa 2 (código) ENTREGUE em 2026-11-03 (worktree `v3-luta-codigo`, PR contra a `main`, aguarda o merge do Matheus).
 
 Categoria: implementacao. Origem: Claude Code, 2026-11-01: B3 do `docs/PLANO_V3.md` (seção 4), pedida pelo Gerente da V3 depois da B2 (#504) e da L2, com a regra de o Matheus aprovar as pranchas antes do código.
 
@@ -114,3 +114,15 @@ Cada uma com a recomendação e o custo de errar. Nenhuma é número de jogo.
 | **B3-5** | os avisos de contexto (série, Liga, carta, Lago, instalação): um cartão compacto sob o relógio (as pranchas), ou em linhas largas sobre a cena como hoje | **cartão compacto no alto ao centro**, com o mesmo texto de hoje; no celular, uma linha sob o HUD | o texto de série e de Liga é longo (duas frases): em 390 px ele vira duas ou três linhas e cobre o céu da cena; se incomodar, vai para dentro do cartão da regra (troca barata) | **DECIDIDA, 2026-11-01: pela recomendação** ("Aprovo todas") |
 
 Já decididas e que esta tarefa só aplica: as duas peles e o padrão Vidro (TM1 a TM5), o layout habitat e o HUD (HUD-1 a HUD-4), a v14 (B2, CV14-1), as capturas em 1920×950 (D10).
+
+## 9. Resultado (etapa 2, código, 2026-11-03)
+
+A luta (`#/lutar/luta`) está desenhada como nas pranchas aprovadas, nas duas peles (Vidro e Militar), a 390, 1280 e 1920×950: cena a tela inteira atrás de tudo,
+plaquinhas e relógio em `.hud-caixa`, etiqueta do modo e cartão de contexto no alto (B3-5), cartão da regra à direita no desktop e faixa acima do dock no celular
+(B3-3), dock no rodapé com Pausar e ×2 juntos e Desistir à parte (B3-4), sem trilho nem barra (B3-1). Mudaram `TelaLuta.tsx`, `palcoTR/PalcoTR.tsx`,
+`palcoTR/desenhoTR.ts` (só a escala dos sprites), o `luta_hud.css` novo e as regras velhas de `abertas.css`, `lutar.css` e `pele-vidro.css`. Não mudaram:
+`web/app/motor/`, o Python, os gabaritos (`git diff origin/main -- web/app/test/gabaritos/` vazio), `App.tsx`, `Nav.tsx`, `tokens.css`, `pet.css` e
+`pele-xcom.css`. Nenhum token novo, nenhum número de jogo.
+
+Os testes 1 a 6 da seção 5 e as contagens estão no corpo do PR. Os desvios (a v15 no teste do replay, o contraste medido sob o degrade da cena, a escala dos
+sprites limitada pela largura, o texto da etiqueta) estão em `docs/registro/2026-11.md`, seção "B3 LUTA NO LAYOUT HABITAT, etapa 2".
