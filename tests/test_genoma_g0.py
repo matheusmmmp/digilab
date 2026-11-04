@@ -288,3 +288,53 @@ def test_e2_o_genoma_em_outros_replays_falha_g0_7():
             fn(log, fp, CONFIG_PADRAO, 101)
     with pytest.raises(ValueError):
         reproduzir(log, fp, CONFIG_PADRAO, 101)
+
+
+# ------------------------------------------------------------------ E3: a bancada
+import bancada_v2 as bv  # noqa: E402
+
+
+def _vida_b(semente=101, ligada=False, mundo="fisico", registro=None):
+    b = bv.Bancada(2, 32, cfg_genoma=CONFIG_GENOMA_LIGADO if ligada else CONFIG_GENOMA)
+    kw = {} if registro is None else {"registro_genoma": registro}
+    lugar = "perto" if mundo.startswith("fisico") else None
+    return b, b.vida(bv.EspecVida("atencioso", "P0", semente, None, mundo, lugar=lugar, **kw))
+
+
+def test_e3_a_espec_carrega_o_registro_vazio_por_padrao_e_nao_muda_nome_nem_celula():
+    e = bv.EspecVida("atencioso", "P0", 101)
+    assert e.registro_genoma == Genoma() and CONFIG_GENOMA.ligado is False
+    assert e.nome == "atencioso-P0@101" and e.celula == ("atencioso", 101, None, "padrao", "lobos")
+    hash(e)    # continua usavel como chave
+
+
+def test_e3_chave_desligada_nao_grava_o_genoma_e_o_resumo_nao_o_leva():
+    _, v = _vida_b()
+    assert all(e.tipo != "genoma" for e in v.motor.log) and v.genoma_sha256 is None
+    assert Genoma().sha256() not in json.dumps(bv.resumo_motor(v.motor), default=repr)
+
+
+def test_e3_chave_ligada_e_genoma_vazio_a_trajetoria_e_a_mesma_e_o_resumo_leva_o_sha256():
+    _, sem = _vida_b()
+    b, com = _vida_b(ligada=True)
+    linhas = com.motor.log.para_jsonl().splitlines()
+    assert linhas[1:] == sem.motor.log.para_jsonl().splitlines() and Genoma().evento().tipo == "genoma"
+    assert com.motor.log[0].tick == 0 and com.motor.log[0].valor == CANONICO
+    assert com.genoma_sha256 == Genoma().sha256()
+    r_sem, r_com = bv.resumo_motor(sem.motor), bv.resumo_motor(com.motor)
+    assert r_com[1:5] == r_sem[1:5] and r_com[5:-1] == r_sem[5:] and r_com[-1] == Genoma().sha256()
+    assert com.interacoes == sem.interacoes
+    b.conferir_replay(com)                                   # o replay a partir do disco refaz a vida com o genoma
+
+
+def test_e3_o_modo_acoplado_preserva_o_evento_genoma():
+    b, origem = _vida_b(ligada=True)
+    for braco in ("P0", "P1"):
+        ac = b.acoplar(origem, braco, "nenhum")
+        assert ac.motor.log[0] == Genoma().evento() and ac.genoma_sha256 == Genoma().sha256()
+        assert sum(e.tipo == "genoma" for e in ac.motor.log) == 1
+
+
+def test_e3_chave_ligada_fora_do_mundo_fisico_falha_alto():
+    with pytest.raises(ValueError, match="mundo fisico"):
+        _vida_b(ligada=True, mundo="padrao")
