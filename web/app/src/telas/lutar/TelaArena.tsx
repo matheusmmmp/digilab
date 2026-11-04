@@ -9,6 +9,7 @@ import {
   LUTA, RIVAIS_ADULTOS, RIVAIS_CLASSICOS, escolherRival, exibirBot, lutarAnimado, melhorDe10, previa, reconstruirLuta, sparringTexto, useLuta,
 } from "../../luta.ts";
 import { EditorRegras } from "./EditorRegras.tsx";
+import { PainelAprendizado } from "./PainelAprendizado.tsx";
 import { Cena } from "./palcoTR/PalcoTR.tsx";
 import { ENDERECO_LUTA } from "../../rotas.ts";
 import { EscolhaCarta } from "../../componentes/EscolhaCarta.tsx";
@@ -97,6 +98,7 @@ export function TelaArena({ voltarPet, verReplay }: { voltarPet: () => void; ver
       </div>
       <div className="arena-col-regras">
       <section className="bloco"><h2>Regras de combate do seu pet</h2><EditorRegras /></section>
+      <PainelAprendizado />
       <details className="dl-apoio"><summary>Como funciona</summary>
         <p>Lute contra um rival. Seu pet decide por <b>regras de combate</b> que ele mesmo aprende lutando; você pode travar ou vetar regras. Distância, guts e golpe pesado anunciado um turno antes, com os <b>stats da forma</b>, a <b>técnica da linha</b> (Champion) e a <b>passiva</b> (Ultimate e Mega). A lista de regras (condição → ação) cresce a cada nível: Rookie 3, Champion 5, Ultimate e Mega 8. A campanha contra os NPCs fica na aba <b>Exploração</b>.</p></details>
       <details className="dl-apoio"><summary>Regras da luta</summary>

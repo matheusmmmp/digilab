@@ -502,3 +502,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-04 — PONTE LUTA, a tarefa no papel (worker, Claude Code, Opus 5.5, worktree `v3-ponte-luta`)](registro/2026-11.md)
 - [2026-11-04 — AÇÕES NOVAS, a tarefa no papel do passo 3 da "Vida do pet" (worker, Claude Code, Opus 5.5, worktree `v3-acoes-novas`)](registro/2026-11.md)
 - [2026-11-04 — PET SE MEXE NA VISTA (worker, Claude Code, Sonnet 5.5, worktree `v3-pet-movimento`)](registro/2026-11.md)
+- [2026-11-04 — LUTA: O QUE O PET APRENDEU, o painel na Arena (worker, Claude Code, Sonnet 5.5, worktree `v3-luta-aprendizado`)](registro/2026-11.md)
