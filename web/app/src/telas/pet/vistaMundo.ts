@@ -4,7 +4,7 @@
      presa nas bordas do mapa;
    - os lugares nomeados do caminho acessivel (MV-4): o comedouro do mapa, "perto do pet" (perto_max_celulas a leste) e "longe"
      (longe_min_celulas para o lado com mais espaco), com as distancias do motor (CMU) e o deslocar do motor, que prende no mapa;
-   - o seguidor: a posicao desenhada vai ate a do motor em ~250 ms (so vista; salta quando a distancia passa de 8 celulas, ao trocar de
+   - o seguidor: a posicao desenhada vai ate a do motor (so vista; caminha pelo intervalo entre as decisoes e se mexe no lugar, ver Seguidor; salta quando a distancia passa de 8 celulas, ao trocar de
      pet ou recarregar). Os numeros da janela e do seguidor sao da vista, nao do jogo: nao mudam a vida. */
 import { centroDaCelula, deslocar, regiaoDe, type ConfigMundo } from "../../../motor/index.ts";
 
@@ -54,14 +54,96 @@ export function naRegiao(cm: ConfigMundo, x: number): string {
 /** o ninho do layout, em subunidades */
 export const ninhoDe = (cm: ConfigMundo): [number, number] => centroDaCelula(cm.layout.ninho, cm);
 
-/** a posicao desenhada, que vai ate a do motor sem pular (so vista) */
+/** o que o seguidor precisa saber do jogo para andar e mexer o pet (so vista; tudo vem de fora, o seguidor nao le o motor) */
+export interface Movimento {
+  /** a velocidade do jogo, em minutos de jogo por segundo (0 = Pausa) */
+  velJogo: number;
+  /** a acao do motor agora */
+  acao: string;
+  /** dormindo (ou ovo): fica como era, sem passo novo */
+  dorme: boolean;
+  /** prefers-reduced-motion: nada novo se mexe */
+  reduzido: boolean;
+}
+/** o intervalo entre duas decisoes do motor, em minutos de jogo (CMU.intervalo = 15) */
+export const INTERVALO_DECISAO_MIN = 15;
+/** a caminhada ocupa esta fracao do intervalo real (chega antes da proxima decisao), com piso e teto em ms. O teto vale a 1x, onde o
+    intervalo real e de 15 min de relogio: sem ele o pet rastejaria sem se ver mexer. O piso (o tau de antes) vale nas velocidades altas */
+const FRACAO_CAMINHADA = 0.9, CAMINHADA_MIN_MS = TAU_MS, CAMINHADA_MAX_MS = 6000;
+/** as acoes em que o pet fica no lugar do motor: ele se mexe ali, no raio abaixo (subunidades; 16 = uma celula) */
+export const ACOES_NO_LUGAR: readonly string[] = ["ocioso", "brincar", "chamar_atencao"];
+export const RAIO_NO_LUGAR = 4;
+const TAU_PASSINHO_MS = 200, TROCA_MIN_MS = 500, TROCA_VAR_MS = 700;
+
+/** o tempo (ms) que a caminhada de uma decisao leva na velocidade `velJogo` (min de jogo por s) */
+export function duracaoCaminhadaMs(velJogo: number): number {
+  const intervaloMs = (INTERVALO_DECISAO_MIN / velJogo) * 1000;
+  return Math.min(CAMINHADA_MAX_MS, Math.max(CAMINHADA_MIN_MS, intervaloMs * FRACAO_CAMINHADA));
+}
+function mulberry32(a: number): () => number {
+  return () => { a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+}
+
+/** a posicao desenhada, que vai ate a do motor sem pular (so vista). Sem `mov`, o suave de ~250 ms de antes. Com `mov`:
+    - andando (o alvo mudou): caminha em velocidade constante e chega em ate 90% do intervalo real entre as decisoes; em Pausa fica parada;
+    - nas acoes de ACOES_NO_LUGAR, acordado e ja no alvo: passinhos curtos num raio de RAIO_NO_LUGAR, sempre voltando ao ponto do motor;
+    - dormindo ou com movimento reduzido: o suave de antes, sem passinhos. */
 export class Seguidor {
   pos: [number, number] | null = null;
-  seguir(alvo: readonly [number, number], dtMs: number, cm: ConfigMundo): [number, number] {
-    const p = this.pos;
-    if (!p || Math.hypot(alvo[0] - p[0], alvo[1] - p[1]) > SALTO_CELULAS * cm.sub) return (this.pos = [alvo[0], alvo[1]]);
-    if (!(dtMs > 0)) return p;
-    const k = 1 - Math.exp(-dtMs / TAU_MS), q: [number, number] = [p[0] + (alvo[0] - p[0]) * k, p[1] + (alvo[1] - p[1]) * k];
-    return (this.pos = Math.hypot(alvo[0] - q[0], alvo[1] - q[1]) < 0.05 ? [alvo[0], alvo[1]] : q);
+  /** a caminhada em curso (a base ainda nao chegou ao alvo): a vista pode usar o clipe de andar */
+  caminhando = false;
+  /** onde a caminhada esta (sem o passinho) e o alvo dela */
+  private base: [number, number] | null = null;
+  private alvoVisto: [number, number] | null = null;
+  private vel = 0;
+  private off: [number, number] = [0, 0];
+  private offAlvo: [number, number] = [0, 0];
+  private troca = 0;
+  private readonly rng: () => number;
+  constructor(semente = 1) { this.rng = mulberry32(semente); }
+
+  seguir(alvo: readonly [number, number], dtMs: number, cm: ConfigMundo, mov?: Movimento): [number, number] {
+    const b = this.base;
+    if (!b || Math.hypot(alvo[0] - b[0], alvo[1] - b[1]) > SALTO_CELULAS * cm.sub) {
+      this.base = [alvo[0], alvo[1]]; this.alvoVisto = [alvo[0], alvo[1]]; this.off = [0, 0]; this.offAlvo = [0, 0];
+      return (this.pos = [alvo[0], alvo[1]]);
+    }
+    if (!(dtMs > 0)) return this.pos!;
+    if (!mov || mov.dorme || mov.reduzido) {
+      /* o suave de antes (e o de quando a Pausa nao e dada) */
+      if (mov && mov.velJogo <= 0) return this.pos!;
+      const k = 1 - Math.exp(-dtMs / TAU_MS);
+      const q: [number, number] = [b[0] + (alvo[0] - b[0]) * k, b[1] + (alvo[1] - b[1]) * k];
+      this.base = Math.hypot(alvo[0] - q[0], alvo[1] - q[1]) < 0.05 ? [alvo[0], alvo[1]] : q;
+      this.alvoVisto = [alvo[0], alvo[1]]; this.vel = 0; this.caminhando = false; this.off = [0, 0]; this.offAlvo = [0, 0];
+      return (this.pos = [this.base[0], this.base[1]]);
+    }
+    if (!(mov.velJogo > 0)) return this.pos!;                       /* Pausa: nada se mexe */
+    const av = this.alvoVisto;
+    if (!av || av[0] !== alvo[0] || av[1] !== alvo[1]) {
+      this.alvoVisto = [alvo[0], alvo[1]];
+      this.vel = Math.hypot(alvo[0] - b[0], alvo[1] - b[1]) / duracaoCaminhadaMs(mov.velJogo);
+    }
+    const dx = alvo[0] - b[0], dy = alvo[1] - b[1], d = Math.hypot(dx, dy), passo = this.vel * dtMs;
+    const andando = d > 0.05;
+    this.base = !andando || passo >= d ? [alvo[0], alvo[1]] : [b[0] + (dx / d) * passo, b[1] + (dy / d) * passo];
+    const parado = Math.hypot(alvo[0] - this.base[0], alvo[1] - this.base[1]) < 0.05;
+    this.caminhando = !parado;
+    if (parado && ACOES_NO_LUGAR.includes(mov.acao)) {
+      this.troca -= dtMs;
+      if (this.troca <= 0) {
+        this.troca = TROCA_MIN_MS + this.rng() * TROCA_VAR_MS;
+        if (this.offAlvo[0] !== 0 || this.offAlvo[1] !== 0) this.offAlvo = [0, 0];            /* volta ao ponto do motor */
+        else {
+          const ang = this.rng() * 2 * Math.PI, r = RAIO_NO_LUGAR * (0.4 + 0.6 * this.rng());
+          this.offAlvo = [Math.cos(ang) * r, Math.sin(ang) * r];
+        }
+      }
+    } else this.offAlvo = [0, 0];
+    const ko = 1 - Math.exp(-dtMs / TAU_PASSINHO_MS);
+    let ox = this.off[0] + (this.offAlvo[0] - this.off[0]) * ko, oy = this.off[1] + (this.offAlvo[1] - this.off[1]) * ko;
+    if (this.offAlvo[0] === 0 && this.offAlvo[1] === 0 && Math.hypot(ox, oy) < 0.05) { ox = 0; oy = 0; }
+    this.off = [ox, oy];
+    return (this.pos = [prender(this.base[0] + ox, 0, largura(cm)), prender(this.base[1] + oy, 0, profundidade(cm))]);
   }
 }
