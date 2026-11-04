@@ -37,14 +37,15 @@ modulador e a lembrança emocional), nunca os mapeamentos, as escalas ou os nome
 
 - **Na `main`, já:** a luta em tempo real (`web/app/motor/combate_tr/`), o `GambitsPet` com o aprendizado do candidato v14
   (`web/app/motor/gambits_pet.ts`, `APRENDIZADO_V14`), a confiança M1 (`web/app/motor/confianca.ts`), o modular inteiro em TS no pet de
-  teste v16 (a L3, #542 a #551) e a memória autobiográfica no Python (a C4, #529 a #541).
+  teste v16 (a L3, #542 a #551), o modular como cérebro padrão dos ovos novos, na v17, com o A selecionável (o #562,
+  `docs/TAREFA_V3_CEREBRO_PRIMARIO.md`) e a memória autobiográfica no Python (a C4, #529 a #541).
 - **Antes da etapa PE1:** a PE0 confirma que o pet de teste v16 luta. Isso **não foi testado**: a L3 deixou "lutar com o pet de teste não
   foi testado" e a B3 deixou de fora "a luta com o pet de teste v16" (`docs/PAINEL_V3.md`, seção 1, as linhas da L3 e da B3).
 - **Do Matheus:** as PL-1 a PL-8 (seção 8), antes da PE1.
 - **A outra sessão (a opção 1, a tela do aprendizado):** nenhuma dependência de código. Se ela mudar o `GambitsPet` (ela não deveria: é
   uma tela), a PE0 é refeita.
 
-## 2.1 O que já existe (verificado na `main` em `a7c000f`)
+## 2.1 O que já existe (verificado na `main` em `d0f7f17`, depois do #562)
 
 ### A luta e o aprendizado dela (só na web)
 
@@ -55,14 +56,18 @@ modulador e a lembrança emocional), nunca os mapeamentos, as escalas ou os nome
 | a nota por regra | depois de cada luta, cada regra que agiu tem a nota puxada para a média do saldo de dano das ações dela, mais o bônus do resultado: `nota += alfa × novidade × (saldo médio + bonus × (pontos − 0,5) − nota)` | `GambitsPet.aprender`, `gambits_pet.ts:327-353` |
 | a reordenação | a lista se ordena pela nota; nos v14, mais o peso fixo da posição na lista de partida (`prior`) | `GambitsPet.ordenar` e `chaveOrdem`, `gambits_pet.ts:189-226` |
 | a troca da pior regra (a "exploração" do repertório) | a pior regra livre (sem trava e sem chip) abaixo do limiar dá lugar a uma candidata do repertório, sorteada pela rng `hashSemente("propor", semente)` da luta | `gambits_pet.ts:342-351` |
-| os números do aprendizado | o `GA = { base: .05, alfa: .2, bonusResultado: .1, limiarTroca: -.02 }` (os v13) e o `APRENDIZADO_V14 = { alfa: .2, prior: .1, bonus: .1, limiar: .05 }` (os v14, DR2-5) | `web/app/motor/constantes.ts:354`; `web/app/motor/combate_tr/constantes_tr.ts:101-102` |
+| os números do aprendizado | o `GA = { base: .05, alfa: .2, bonusResultado: .1, limiarTroca: -.02 }` (os v13) e o `APRENDIZADO_V14 = { alfa: .2, prior: .1, bonus: .1, limiar: .05 }` (os v14, DR2-5) | `web/app/motor/constantes.ts:364`; `web/app/motor/combate_tr/constantes_tr.ts:101-102` |
 | o dono | só trava (a regra fica na posição) ou veta (o pet não a usa), entre as lutas, pelo evento `"g"` | `GambitsPet.intervir`, `gambits_pet.ts:354-372` |
-| a confiança M1 | um estado derivado das lutas do registro: a novidade por rival (`exp(−λ m)`), a confiança `c` empurrada pelo resultado (a derrota pesa mais pela sensibilidade do temperamento) e decaindo no tempo; a insegurança soma `kappaEps × max(0, −c)` ao ε | `web/app/motor/confianca.ts`; `CCF` em `constantes.ts:107` |
-| o ponto em que a luta ensina | para cada luta da série: `conf.registrar(...)`, depois `gp.aprender(res, s, M.usadas, novidade)`; a novidade do rival multiplica o passo | `web/app/motor/motor.ts:557-566` (`_lutar`) |
+| a confiança M1 | um estado derivado das lutas do registro: a novidade por rival (`exp(−λ m)`), a confiança `c` empurrada pelo resultado (a derrota pesa mais pela sensibilidade do temperamento) e decaindo no tempo; a insegurança soma `kappaEps × max(0, −c)` ao ε | `web/app/motor/confianca.ts`; `CCF` em `constantes.ts:117` |
+| o ponto em que a luta ensina | para cada luta da série: `conf.registrar(...)`, depois `gp.aprender(res, s, M.usadas, novidade)`; a novidade do rival multiplica o passo | `web/app/motor/motor.ts:585-594` (`_lutar`) |
 
 **O que a luta não toca hoje:** o corpo químico e o cérebro. Nada em `web/app/motor/corpo.ts`, `motor_corpo.ts`, `motor_corpo_mundo.ts`
-nem em `web/app/motor/digibrain/` lê uma luta (procurado por `lut`, `combate`, `rival`). No pet de teste v16 a luta passa ao lado do
-modular: o `_lutar` é o mesmo de todo pet, e o `DigiBrain` (`this.lab`, `motor.ts:232-233`) não é chamado.
+nem em `web/app/motor/digibrain/` lê uma luta (procurado por `lut`, `combate`, `rival`). No pet de teste v16 e no pet v17 com o modular
+ativo a luta passa ao lado do modular: o `_lutar` é o mesmo de todo pet, e o `DigiBrain` (`this.lab`, `motor.ts:216-237`) não é chamado.
+
+**O pet v17 (o #562, na `main` desde 2026-11-04):** os ovos novos nascem v17 com o modular decidindo; o evento `"cb"` troca o cérebro no
+meio da vida, e o que sai fica parado (`Motor._trocarCerebro`, `motor.ts:1052-1058`). A v17 luta como a v14 (a `docs/TAREFA_V3_CEREBRO_PRIMARIO.md`,
+seção 3). Ou seja: **o modular já decide em pets de verdade**, e a D-C1-3 deixou de ser a porta para isso (PL-7).
 
 ### O modular (Python de referência e espelho TS no pet v16)
 
@@ -114,7 +119,7 @@ número mexe num parâmetro que o aprendizado da luta já tem. A lista, a nota, 
 **O que não muda nessa direção:** a lembrança (a pista não ganha o rival; ver PL-6), as facetas (fora do laboratório, LAB-1), o M-PLAST
 (a luta não é consequência de uma decisão do modular: não há crédito a dar a nenhuma unidade dele), a confiança M1 e o `GambitsPet`.
 
-**Uma luta numa série** (Cidadela, Liga, instalações) gera um estímulo e um resumo por luta, como a confiança já faz (`motor.ts:557-563`);
+**Uma luta numa série** (Cidadela, Liga, instalações) gera um estímulo e um resumo por luta, como a confiança já faz (`motor.ts:585-591`);
 as lutas da série entram na mesma decisão seguinte, na ordem.
 
 ### 3.3 Do cérebro para a luta (a direção que entra depois)
@@ -169,7 +174,7 @@ A PE4 só depende da PE0 (não da PE1 a PE3): se o Matheus preferir ver primeiro
 
 - `digilab/engine.py` (o sha256 congelado), o `combate_tr` (a luta em si: a física, o controlador, as condições), o `GambitsPet.aprender`,
   a nota, a reordenação, a troca e as rngs da luta.
-- Os pets v13, v14 e v15 (cérebro A): nenhuma ponte (PL-7). Os saves de hoje abrem iguais.
+- Os pets v13, v14, v15 e v17: nenhuma ponte nas etapas PE0 a PE4 (PL-7). Os saves de hoje abrem iguais.
 - A confiança M1 e o `CCF`.
 - O `docs/ESPEC_COMBATE_TR.md` e as metas do equilíbrio do combate.
 
@@ -200,7 +205,7 @@ nenhuma outra frente está com esses arquivos abertos.
 - A tela do aprendizado da luta (a opção 1, outra sessão) e qualquer tela desta ponte (o painel do laboratório mostrar a lembrança de uma
   luta é tarefa própria, depois da PE3).
 - Portar o `combate_tr` ou o `GambitsPet` ao Python (a E1 do combate).
-- A ponte nos pets com o cérebro A (v13, v14, v15) e no ovo padrão.
+- A ponte nos pets v13 a v15 e no v17 (o ovo padrão), até a decisão da PL-7 depois da PE4.
 - A `modula_g_apr`, as facetas, a C2, a C3 e a L-2 no pet de teste (LAB-1).
 - O outro pet como participante (o `outro` passa a ter o rival da luta, não um pet do mundo).
 - A calibração de qualquer número (a rodada de equilíbrio, no fim).
@@ -226,5 +231,5 @@ Cada uma com a recomendação e o custo de errar.
 | **PL-4** | qual leitura do cérebro muda a luta primeiro | **o `g_exp` no ε da luta**, `ε × g_exp / e0`, neutro no `e0` | a valência no ε duplica a insegurança da confiança M1; o `g_apr` no `alfa` não muda nada no pet de teste (é constante) |
 | **PL-5** | o `g_apr` no passo do aprendizado e o estresse ou o medo no limiar da troca | **fora agora**; voltam só com a `modula_g_apr` validada ou com fonte para o sentido | dentro: um controle de pesquisa (`modula_g_apr`) volta ao pet sem validação, e o pet troca regras por um sentido sem fonte, o que muda a lista que o dono vê |
 | **PL-6** | a lembrança do rival na luta (o rival na pista, ou a soma dos σ do rival na confiança) | **depois**, com papel próprio (PE5), quando a PE3 mostrar episódios de luta guardados de verdade | antes: a memória de luta pesa na luta sem nenhum episódio para olhar, e a lembrança passa a disputar com a confiança M1, que já lê o rival |
-| **PL-7** | a versão de pet | **só o pet de teste v16 do laboratório, até a D-C1-3** (de onde vem o ganho do M3\*) ser lida e o modular virar o cérebro padrão; os v13 a v15 seguem sem ponte | nos pets com o A: a ponte não tem cérebro modular onde ligar, e o corpo da luta mudaria pets de verdade que não voltam atrás. Esperar mais que a D-C1-3: nenhum, porque o laboratório não depende dela |
+| **PL-7** | a versão de pet: só o pet de teste v16, ou também o v17 (o pet de verdade, com o modular por padrão desde o #562) | **as etapas PE0 a PE4 só no v16 do laboratório;** levar a ponte ao v17 é uma decisão própria depois da PE4, com o Matheus vendo o v16 lutar. Mudar como um v17 vivo luta pede uma versão nova (ou um evento no registro, como o `"cb"`), para o replay dos v17 de hoje sair igual. A pergunta do pedido, "até a D-C1-3?", perdeu o objeto: o #562 já pôs o modular no ovo padrão sem esperar a D-C1-3 | direto no v17: um número SEM FONTE (a dor da luta) e uma memória de luta entram em pets de verdade, que não voltam atrás, antes de alguém ver o efeito no laboratório; e um v17 vivo mudaria no replay. Ficar só no v16 para sempre: a ponte nunca chega ao pet que o Matheus joga |
 | **PL-8** | medir se o pet luta melhor com a ponte | **não nesta tarefa:** o laboratório serve para ver o pet; uma medida pede plano de análise e faixa de sementes próprios, e a bancada da luta (`web/app/scripts/equilibrio_tr/`) não roda o modular | medir sem plano: um número do jogo vira resultado sem gate, contra a regra do `CLAUDE.md` |

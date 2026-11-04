@@ -31,7 +31,7 @@ export type RegrasLuta = RegrasV21;
 /** as regras das lutas de uma versao de pet: a v13 (CV21E_TR) e a v14 e a v15 (CV21E_TR14, o candidato da rodada de equilibrio; a v15 so
     muda a bola); as outras falham alto */
 export const regrasDaVersao = (versao: number): RegrasLuta => {
-  if (versao === CV21E_TR14.versaoPet || versao === 15 || versao === VERSAO_PET_LAB) return CV21E_TR14;     // a v15 (a bola no golpe) e o pet de teste do laboratorio lutam como a v14
+  if (versao === CV21E_TR14.versaoPet || versao === 15 || versao === VERSAO_PET_LAB || versao === 17) return CV21E_TR14;     // a v15 (a bola no golpe), o pet de teste do laboratorio e a v17 (o cerebro trocavel) lutam como a v14
   if (versao !== CV21E_TR.versaoPet) throw new Error(`regras de luta da versão ${versao} não existem mais (só a ${VERSOES_PET.join(" e a ")})`);
   return CV21E_TR;
 };
