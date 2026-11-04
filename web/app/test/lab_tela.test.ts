@@ -37,6 +37,8 @@ describe("o espaco do pet de teste", () => {
     expect(lerPetLab().tipo).toBe("vazio");
     const m = chocarOvoLab();
     expect(m.versao).toBe(VERSAO_PET_LAB);
+    /* os chamados do bebe pelo corpo, como nos ovos do jogo, e nao pelo relogio (2026-11-04) */
+    expect(m.produto).toEqual({ chamadoPelaFome: true, decisaoNaComida: true, chamadosPeloCorpo: true });
     const l = lerPetLab();
     expect(l.tipo === "ok" && l.motor.assinatura()).toBe(m.assinatura());
     expect(() => chocarOvoLab()).toThrow(/já existe um pet de teste/);
