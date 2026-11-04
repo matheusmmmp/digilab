@@ -579,3 +579,17 @@ dialog.modal-res::backdrop,dialog.modal-conf::backdrop,dialog.folha::backdrop{ba
 /* o lugar na folha do celular: o titulo da folha ja diz o nome */
 .folha .camp-det{margin:0;padding:0;box-shadow:none}
 .folha .camp-det-cab b{display:none}
+
+/* O que o pet aprendeu (PainelAprendizado): so leitura */
+.ap-painel{display:grid;gap:8px}
+.ap-painel h3{margin:6px 0 0;font-size:.9375rem}
+.ap-linha{display:grid;grid-template-columns:36px minmax(0,1fr);gap:8px;align-items:center;background:var(--dl-surface);border-radius:12px;box-shadow:0 0 0 2px var(--dl-border);padding:8px}
+.ap-travada{box-shadow:0 0 0 3px var(--dl-highlight)}
+.ap-barra{display:block;height:6px;border-radius:3px;background:var(--dl-border);overflow:hidden}
+.ap-barra i{display:block;height:100%;background:var(--dl-navy)}
+.ap-barra i.neg{background:var(--dl-text-2)}
+.ap-var{font-weight:800}
+.ap-sobe{color:var(--dl-success,#1f7a3a)}
+.ap-desce{color:var(--dl-danger,#b3261e)}
+.ap-hist{margin:0;padding-left:18px;display:grid;gap:4px;font-size:.8125rem}
+.ap-sub{margin:0;font-size:.8125rem;font-weight:800}
