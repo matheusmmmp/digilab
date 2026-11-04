@@ -1,6 +1,6 @@
 # TAREFA V3 — PONTE_LUTA (2026-11-04)
 
-Coordenador: Gerente da V3 (Claude Code). Worker: Claude Code, Opus 5.5, worktree `v3-ponte-luta`. Worktree e branch: `v3-ponte-luta`. Status: ENTREGUE (só o papel); as PL-1 a PL-9 (seção 8) aguardam o Matheus.
+Coordenador: Gerente da V3 (Claude Code). Worker: Claude Code, Opus 5.5, worktree `v3-ponte-luta`. Worktree e branch: `v3-ponte-luta`. Status: ENTREGUE (só o papel); as PL-1 a PL-9 (seção 8) DECIDIDAS pelo Matheus em 2026-11-04, todas pela recomendação ("Aprovo e mescle"); o código (PE0 em diante) liberado.
 
 Categoria: arquitetura. Origem: Matheus, 2026-11-04: o Matheus pediu o cérebro presente na luta, aprendendo com ela; o Gerente mostrou três opções e ele aprovou ligar o cérebro à luta, começando por esta tarefa no papel.
 
@@ -240,6 +240,8 @@ nenhuma outra frente está com esses arquivos abertos.
 ## 8. Precisa do Matheus
 
 Cada uma com a recomendação e o custo de errar.
+
+**DECIDIDAS pelo Matheus em 2026-11-04, todas pela recomendação:** "Aprovo e mescle".
 
 | decisão | a pergunta | recomendação | custo de errar |
 |---|---|---|---|
