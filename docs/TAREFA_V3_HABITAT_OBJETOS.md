@@ -48,3 +48,18 @@ nela e ela se mexe; o dono pode arrastar a bola, como a ração; e assets 3D par
 - Não conferido na tela:
   - a batida na bola, que depende de o cérebro decidir brincar;
   - o kit médico, porque o save não tem lesão.
+
+## O coco 3D no chao (2026-11-04)
+
+Pedido do Matheus: o coco era a grade 2D presa ao lado do sprite e tinha de virar um objeto 3D no mapa, feito pelo pet.
+
+- `ilha/cocos.ts` (novo) desenha um coco 3D procedural por unidade de `e.sujeira`, no material toon da ilha e com a sombra redonda.
+  - O coco cai num anel em volta de onde a vista desenha o pet quando a sujeira sobe (`lugarDoCoco`, angulo de ouro) e surge com um
+    pulinho.
+  - Ele fica parado onde caiu quando o pet anda. Quando a sujeira cai (Limpar), saem os mais antigos.
+- O `Itens` da ilha (`itens.ts`) sincroniza os cocos. `CENA.cocoNoChao` faz o `PalcoPet` deixar de desenhar o coco 2D na ilha.
+  - A sala 3D antiga e a reserva do mundo continuam com o 2D.
+- Os numeros em `COCO` (`constantes.ts`) sao PROPOSTOS, SEM FONTE: o raio de 0,85, o passo de 0,25, o pulinho de 380 ms e as cores.
+- Os limites, porque e so vista:
+  - o motor guarda so a contagem, sem o lugar, entao o log, o save e o replay nao mudam;
+  - ao recarregar a pagina, os cocos que ja existiam reaparecem em volta do pet, e nao onde cairam.

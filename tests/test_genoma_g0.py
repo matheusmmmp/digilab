@@ -165,7 +165,7 @@ def test_a_config_genoma_e_desligada_com_status_e_fonte():
 
 
 def test_o_genoma_nao_toca_o_motor_e_so_usa_a_biblioteca_padrao():
-    """o preflight: so a stdlib no pacote (a AST), engine.py intacto, e nenhum arquivo do pacote le a chave ainda"""
+    """o preflight: so a stdlib no pacote (a AST), engine.py intacto, e so o config.py e o mundo.py (E2) leem a chave"""
     import run_arena
     assert sorted(run_arena._imports_externos(RAIZ / "digilab")) == []
     assert sha256_engine() == ENGINE_SHA256_V0
@@ -175,4 +175,116 @@ def test_o_genoma_nao_toca_o_motor_e_so_usa_a_biblioteca_padrao():
         elif isinstance(n, ast.ImportFrom) and n.level == 0:
             assert n.module.split(".")[0] in sys.stdlib_module_names
     citam = {p.name for p in (RAIZ / "digilab").rglob("*.py") if "ConfigGenoma" in p.read_text(encoding="utf-8")}
-    assert citam == {"config.py"}   # a E2 e a E3 ligam a chave
+    assert citam == {"config.py", "mundo.py"}   # a E2 liga a chave no replay do mundo; a E3 liga na bancada
+
+
+# ============================================================ E2: o replay do mundo (docs/TAREFA_V3_GENOMA_G0.md, secao 3.2; G0-4, G0-5, G0-7)
+import gabarito_dois_pets as gdp  # noqa: E402,F401  (tests/ no sys.path abaixo)
+import gabarito_genoma_g0 as GAB  # noqa: E402
+
+from digilab.config import CONFIG_PADRAO  # noqa: E402
+from digilab.events import LogDeEventos  # noqa: E402
+from digilab.mundo import reproduzir_mundo  # noqa: E402
+
+
+@pytest.fixture(scope="module")
+def vidas_de_hoje():
+    """as 40 vidas da E0, geradas agora com o codigo desta etapa e a chave desligada"""
+    return GAB.gerar()
+
+
+def test_e2_chave_desligada_as_vidas_da_e0_saem_iguais_ao_gabarito_no_log_e_na_trajetoria(vidas_de_hoje):
+    gravado = json.loads(GAB.ARQUIVO.read_text(encoding="utf-8"))
+    assert set(vidas_de_hoje) == set(gravado) and len(gravado) == 40
+    for chave, v in gravado.items():
+        assert vidas_de_hoje[chave]["log"] == v["log"], chave
+        assert vidas_de_hoje[chave]["trajetoria"] == v["trajetoria"], chave
+        assert vidas_de_hoje[chave]["partes"] == v["partes"], chave
+
+
+@pytest.fixture(scope="module", params=[("padrao", "perto", 101), ("afastado", "longe", 202)], ids=lambda p: f"{p[0]}-{p[1]}-{p[2]}")
+def vida_a(request):
+    layout, lugar, s = request.param
+    fp, fm = gdp.fabricas_diretas(layout, "quimica", "lobos")
+    dono = gdp.DonoComBolaPerto(gdp.DonoComLugar(gdp.criar_dono("atencioso"), lugar, s, "atencioso", gdp.LAYOUTS[layout]))
+    v = gdp.simular_vida_mundo("atencioso", dono, fp(gdp.CONFIG_PADRAO), s, GAB.DIAS_A, 16 * GAB.DIAS_A, fm, rotulo_dono="atencioso")
+    return v.motor, fp, fm, s
+
+
+def _refazer(motor, fp, fm, s, eventos, **kw):
+    return reproduzir_mundo(LogDeEventos(eventos), fp, CONFIG_PADRAO, s, fabrica_motor=fm, **kw)
+
+
+def _com_genoma(motor):
+    return [Genoma().evento()] + list(motor.log)
+
+
+def test_e2_chave_ligada_genoma_vazio_a_trajetoria_sai_igual_e_o_log_ganha_o_genoma_na_frente(vida_a):
+    motor, fp, fm, s = vida_a
+    sem = _refazer(motor, fp, fm, s, list(motor.log))
+    com = _refazer(motor, fp, fm, s, _com_genoma(motor), cfg_genoma=CONFIG_GENOMA_LIGADO)
+    assert GAB.impressao(sem, [])["partes"] == GAB.impressao(com, [])["partes"]
+    assert sem.log.para_jsonl() == motor.log.para_jsonl()                   # o replay de hoje refaz o log de hoje
+    linhas = com.log.para_jsonl().splitlines()
+    assert linhas[1:] == motor.log.para_jsonl().splitlines()                # o log e o de hoje...
+    assert linhas[0] == LogDeEventos([Genoma().evento()]).para_jsonl().splitlines()[0]   # ...com o genoma na frente
+
+
+def test_e2_replay_do_log_com_genoma_refeito_da_a_mesma_vida(vida_a):
+    motor, fp, fm, s = vida_a
+    com = _refazer(motor, fp, fm, s, _com_genoma(motor), cfg_genoma=CONFIG_GENOMA_LIGADO)
+    de_novo = _refazer(motor, fp, fm, s, list(LogDeEventos.de_jsonl(com.log.para_jsonl())), cfg_genoma=CONFIG_GENOMA_LIGADO)
+    assert de_novo.log.para_jsonl() == com.log.para_jsonl()
+    assert GAB.impressao(de_novo, []) == GAB.impressao(com, [])
+    assert repr(de_novo._estado) == repr(motor._estado)
+
+
+def test_e2_ate_tick_com_genoma_para_antes_do_primeiro_avanco(vida_a):
+    motor, fp, fm, s = vida_a
+    r = _refazer(motor, fp, fm, s, _com_genoma(motor), cfg_genoma=CONFIG_GENOMA_LIGADO, ate_tick=5)
+    base = _refazer(motor, fp, fm, s, list(motor.log), ate_tick=5)
+    assert GAB.impressao(r, [])["partes"] == GAB.impressao(base, [])["partes"]
+
+
+def test_e2_o_genoma_com_a_chave_desligada_falha(vida_a):
+    motor, fp, fm, s = vida_a
+    with pytest.raises(ValueError, match="genoma"):
+        _refazer(motor, fp, fm, s, _com_genoma(motor))
+    with pytest.raises(ValueError, match="genoma"):
+        _refazer(motor, fp, fm, s, _com_genoma(motor), cfg_genoma=CONFIG_GENOMA)
+
+
+def test_e2_o_genoma_fora_da_primeira_posicao_falha(vida_a):
+    motor, fp, fm, s = vida_a
+    ev = list(motor.log)
+    with pytest.raises(ValueError, match="primeiro"):
+        _refazer(motor, fp, fm, s, [ev[0], Genoma().evento()] + ev[1:], cfg_genoma=CONFIG_GENOMA_LIGADO)
+    with pytest.raises(ValueError, match="primeiro"):
+        _refazer(motor, fp, fm, s, ev + [Genoma().evento()], cfg_genoma=CONFIG_GENOMA_LIGADO)
+
+
+def test_e2_dois_genomas_no_mesmo_log_falham(vida_a):
+    motor, fp, fm, s = vida_a
+    g = Genoma().evento()
+    with pytest.raises(ValueError, match="primeiro"):
+        _refazer(motor, fp, fm, s, [g, g] + list(motor.log), cfg_genoma=CONFIG_GENOMA_LIGADO)
+
+
+def test_e2_genoma_malformado_falha_alto_no_replay(vida_vazia=None):
+    fp, fm = gdp.fabricas_diretas("padrao", "quimica", "lobos")
+    ruim = Evento(tick=0, tipo="genoma", valor='{"versao":1}')
+    with pytest.raises(GenomaInvalido):
+        reproduzir_mundo(LogDeEventos([ruim]), fp, CONFIG_PADRAO, 101, fabrica_motor=fm, cfg_genoma=CONFIG_GENOMA_LIGADO)
+
+
+def test_e2_o_genoma_em_outros_replays_falha_g0_7():
+    """a educacao, as frutas, o ambiente e o motor base seguem sem o evento (G0-7): nele o genoma falha alto"""
+    from digilab import ambiente, educacao, frutas
+    from digilab.engine import reproduzir
+    log = LogDeEventos([Genoma().evento()])
+    fp = lambda cfg=None: gdp.PoliticaInstintoMundo(cfg or CONFIG_PADRAO)  # noqa: E731
+    for fn in (educacao.reproduzir_educacao, frutas.reproduzir_frutas, ambiente.reproduzir_ambiente):
+        with pytest.raises(ValueError):
+            fn(log, fp, CONFIG_PADRAO, 101)
+    with pytest.raises(ValueError):
+        reproduzir(log, fp, CONFIG_PADRAO, 101)

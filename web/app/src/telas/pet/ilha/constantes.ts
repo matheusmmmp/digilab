@@ -62,3 +62,6 @@ export const BATER_BOLA_MS = 450;
 export const BOLA_TAU_MS = 140, BOLA_SALTO = 12;
 /** o balanco do saco a cada golpe: a amplitude (radianos) e a constante de tempo do amortecimento (ms) */
 export const SACO_BALANCO = { amplitude: 0.32, tau: 650, periodo: 520 } as const;
+/** o coco no chao (cocos.ts): o raio do anel em volta do pet onde ele cai e o passo entre aneis (celulas), quanto dura o pulinho ao
+    surgir (ms) e as duas cores das voltas; PROPOSTO, SEM FONTE */
+export const COCO = { raio: 0.85, passo: 0.25, surgirMs: 380, cor: [0x8a5a2b, 0x6f4520] } as const;
