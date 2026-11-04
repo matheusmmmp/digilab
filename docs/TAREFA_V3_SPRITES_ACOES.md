@@ -1,7 +1,7 @@
 # TAREFA V3 — SPRITES_ACOES (2026-11-04)
 
 Coordenador: o Gerente da frente (sessão Claude Code, worktree `v3-sprites-acoes`). Worker: uma sessão por missão (seção 3.6).
-Worktree e branch: `v3-sprites-acoes` (esta tarefa); as missões em `v3-sprites-<missao>`. Status: ABERTA (decisões SA-1 a SA-8 pendentes).
+Worktree e branch: `v3-sprites-acoes` (esta tarefa); as missões em `v3-sprites-<missao>`. Status: ABERTA. SA-1 a SA-8 DECIDIDAS pelo Matheus em 2026-11-04 (seção 8): o Comer vai primeiro, de ponta a ponta.
 
 Categoria: arquitetura. Origem: Matheus, 2026-11-04: pedido do Matheus ao Gerente da frente: uma animação própria para cada ação do pet
 e do dono, para o dono ler o estado do pet olhando para ele (passo 2 da Vida do pet).
@@ -131,6 +131,17 @@ vista) → clipe. Ela fica em `src/`, nunca em `motor/`.
   - A ponta do focinho achada sozinha acerta no Agumon, no Garurumon e no Seadramon.
   - Erra no Tanemon e no Gatomon, que estão de frente: pega a folha e a orelha.
   - **Logo, cada Digimon precisa de um ponto de boca conferido à mão.** É uma tabela de 60 pares de números, versionada.
+- **O Matheus olhou a prova 1:** "tem que fechar e abrir" a boca. Só inclinar o `Idle` não abre a boca.
+- **A prova 2 (`gerar_comer2.lua`, `Agumon_comer2_x4.gif`):** a boca abre e fecha com os quadros do próprio UP, sem desenho.
+  - O `Attack_1` do Agumon tem a boca aberta nos quadros 9 a 14 e fechada no 15 e no 16, na mesma pose inclinada.
+  - O Comer alterna 15 (fechada), 11 e 12 (aberta), 15 com uma mordida, 13 e 14 (aberta), e 16 com uma mordida.
+  - Os ms são 133, 100, 67, 133, 100, 67, 133 e 133 (~0,87 s). A carne perde um pedaço a cada vez que a boca fecha.
+- **Logo, a receita do Comer é escolher quadros, não deformar.**
+  - Por Digimon, a tabela de âncoras ganha a sequência de quadros com a boca aberta e fechada, tirada do `Attack_1`, do `Evol` ou do
+    `Stun`, além da ponta do focinho.
+  - **Não se sabe ainda quantos dos 60 têm um par aberta e fechada na mesma pose.** Um Digimon que golpeia com as mãos pode não ter.
+    A M1 faz esse catálogo primeiro (seção 3.6).
+  - Onde não houver, a queda é a prova 1 (inclinar e morder sem abrir). O Matheus decide se desenha à mão os que sobrarem (SA-9).
 
 **O que dá para gerar por programa a partir dos clipes que existem:**
 
@@ -224,11 +235,15 @@ depois, porque a fonte é um `.aseprite` (SA-3).
 Uma sessão e um PR por missão, em `D:\Trab\digilab\v3-sprites-<missao>`, no branch `v3-sprites-<missao>`, de `origin/main`. Cada
 missão tem escopo fechado e entrega verificável.
 
-- **M1 — receitas no Aseprite (`v3-sprites-receitas`):**
+- **M1 — o Comer no Aseprite (`v3-sprites-receitas`):**
+  - **Primeiro, o catálogo das bocas:** para cada um dos 60 Digimon das formas, uma folha com todos os quadros do `.aseprite`
+    numerados. A sessão propõe o par aberta e fechada de cada um e marca os que não têm. O Matheus aprova a lista antes da receita
+    rodar nos 60.
   - **O que faz:**
-    - `tools/sprites_acoes/gerar.lua`: as receitas das tags do lote 1, versionado. É só código e lê os arquivos do UP pelo caminho;
-    - `tools/sprites_acoes/ancoras.json`: a boca e o topo da cabeça dos 60 Digimon das formas, versionado. São números, não
-      imagem;
+    - `tools/sprites_acoes/gerar.lua`: a receita do Comer, a partir da prova 2, versionado. É só código e lê os arquivos do UP pelo
+      caminho;
+    - `tools/sprites_acoes/ancoras.json`: por Digimon, a sequência de quadros do Comer (boca aberta e fechada) e a ponta do focinho,
+      versionado. São números, não imagem;
     - `tools/sprites_acoes/gerar_acoes.py`: chama o Aseprite em linha de comando para os 60, no máximo 4 processos ao mesmo tempo;
     - um teste em Python que confere o pé, a caixa e os ms sobre o export gerado (pula com aviso se o `remaster/` não existe).
   - **Sai fora do git:** `remaster/acoes/aseprite`, `remaster/acoes/export` e as folhas de contato (os 60 × as tags, em 2×).
@@ -257,7 +272,8 @@ missão tem escopo fechado e entrega verificável.
       com o caminho no PR.
   - **Entrega:** `npm run e2e` e as capturas para o Matheus aprovar.
 
-O lote 2 e o lote 3 (a SA-1) repetem a M1 a M4 com as tags deles. A M1 e a M2 podem correr juntas se a M2 usar a prova do Agumon
+**Pela SA-1, a primeira rodada da M1 a M4 é só o Comer.** As outras ações repetem a M1 a M4 depois que o Comer estiver no jogo e
+aprovado. A M3 já monta a escolha do clipe com as regras da SA-5, mas só com o Comer e os clipes que existem. A M1 e a M2 podem correr juntas se a M2 usar a prova do Agumon
 como entrada. A M3 espera o #561.
 
 ## 4. Experimento e gate (se houver run)
@@ -305,7 +321,23 @@ Não há run. É só vista. Não há sementes nem plano de análise.
 
 ## 8. Precisa do Matheus
 
-Todas as decisões abaixo estão PROPOSTAS, cada uma com a recomendação e o custo de errar.
+**Decididas em 2026-11-04** (Matheus, nesta sessão):
+
+- **SA-1: "Só o Comer primeiro".** O Comer passa pela M1 a M4 inteira antes das outras ações. Depois vão Feliz, Chamar, Emburrar,
+  Sacudir e o `Die` na morte; depois o lote 2 de baixo; por último o treino.
+- **SA-3: "Aseprite, no atlas".**
+- **SA-5: "Reação por 1 ciclo".**
+- **SA-2, SA-4, SA-6, SA-7 e SA-8: "Aprovo todas"**, pela recomendação.
+- **Sobre a prova 1:** "tem que fechar e abrir" a boca. Por isso veio a prova 2 (seção 3.3) e a receita por escolha de quadros.
+
+**Aberta:**
+
+- **SA-9. Os Digimon sem um par de boca aberta e fechada nos quadros do UP.**
+  - **Recomendação:** esperar o catálogo da M1. Se forem poucos, a queda é a prova 1 (morde sem abrir). Se forem muitos, o Matheus
+    decide desenhar à mão só a boca, que é um quadro por Digimon.
+  - **Custo de errar:** baixo enquanto o catálogo não sai.
+
+Registro das propostas, como foram levadas ao Matheus:
 
 - **SA-1. Quais ações primeiro.**
   - **Recomendação:**
@@ -349,3 +381,9 @@ Todas as decisões abaixo estão PROPOSTAS, cada uma com a recomendação e o cu
     canvas, um trabalho próprio para poucos aparelhos.
   - **Custo de errar:** o dono sem WebGL não vê as ações, como hoje.
 - **Q-1 (questão, não decisão):** a recusa não existe nos pets de hoje. A animação dela espera um dado do motor.
+
+## 9. Resumo das etapas
+
+- **2026-11-04, a tarefa (Gerente):**
+  - o levantamento em `origin/main`, a tabela 3.2 e as duas provas do Comer do Agumon;
+  - as SA-1 a SA-8 decididas, e a SA-9 aberta até o catálogo das bocas da M1.
