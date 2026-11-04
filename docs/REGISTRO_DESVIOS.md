@@ -496,3 +496,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-04 — GENOMA G0, a tarefa no papel (worker, Claude Code, Opus 5.5, worktree `v3-genoma-g0`)](registro/2026-11.md)
 - [2026-11-04 — GENOMA G0, etapa E0, o gabarito das vidas de hoje (worker, Claude Code, Sonnet 5.5, worktree `v3-genoma-g0-e0`)](registro/2026-11.md)
 - [2026-11-04 — GENOMA G0, etapa E1, o registro do genoma (worker, Claude Code, Sonnet 5.5, worktree `v3-genoma-g0-e1`)](registro/2026-11.md)
+- [2026-11-04 — PONTE LUTA, a tarefa no papel (worker, Claude Code, Opus 5.5, worktree `v3-ponte-luta`)](registro/2026-11.md)
