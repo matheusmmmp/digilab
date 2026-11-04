@@ -1310,10 +1310,9 @@ for (const [largura, altura] of [[360, 800], [390, 844], [1280, 800]]) {
       await page.keyboard.press("Escape");
       await expect(page.locator("#pet-painel")).toHaveCount(0);
     }
-    await page.locator(".cena-fala").click();
-    await expect(page.locator("#pet-painel .det-fala .fala-status")).toBeVisible();
-    await page.getByRole("button", { name: "Fechar Por que ele disse isso" }).click();
-    await expect(page.locator("#pet-painel")).toHaveCount(0);
+    /* o balao da fala (PR #559): so aparece com uma fala registrada, por 15 s depois de cada reacao. Este save termina com o pet dormindo e
+       sem motivo registrado, entao o balao vazio ("…") de antes nao aparece mais, nem ao recarregar */
+    await expect(page.locator(".cena-fala")).toHaveCount(0);
     expect(erros).toEqual([]);
   });
 }
