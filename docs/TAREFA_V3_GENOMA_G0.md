@@ -1,6 +1,6 @@
 # TAREFA V3 — GENOMA_G0 (2026-11-04)
 
-Coordenador: Gerente da V3 (Claude Code). Worker: Claude Code, Opus 5.5, worktree `v3-genoma-g0`. Worktree e branch: `v3-genoma-g0`. Status: ENTREGUE (só o papel; o código espera as G0-n).
+Coordenador: Gerente da V3 (Claude Code). Worker: Claude Code, Opus 5.5, worktree `v3-genoma-g0`. Worktree e branch: `v3-genoma-g0`. Status: ENTREGUE (só o papel); as G0-1 a G0-7 DECIDIDAS em 2026-11-04 pela recomendação; o código (E0 a E3) liberado.
 
 Categoria: arquitetura. Origem: Matheus, 2026-11-04: o Matheus seguiu a recomendação de 2026-11-03: depois da B3, começar a genética pelo G0, só infraestrutura e antes do Gate I.
 
@@ -156,7 +156,7 @@ tem órgão em TS (`motor/corpo.ts`: ligado, falha alto).
 
 ## 8. Precisa do Matheus
 
-As decisões que o worker não toma. Cada uma com a recomendação e o custo de errar. **Todas PROPOSTAS** até o Matheus decidir.
+As decisões que o worker não toma. Cada uma com a recomendação e o custo de errar. **DECIDIDAS pelo Matheus em 2026-11-04, todas pela recomendação** ("Aprovo e mescle", no chat com o Gerente da V3).
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
