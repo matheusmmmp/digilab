@@ -19,6 +19,7 @@ from digilab.config import (CONFIG_BOLA, CONFIG_BOLA_LIGADA, CONFIG_CONSEQUENCIA
 from digilab.config import ConfigCompeticao, ConfigCorpo
 from digilab.config import CONFIG_TROCA_DIGESTAO, ConfigTrocaDigestao
 from digilab.config import CONFIG_GRUPO_LIGADA, ConfigGrupo
+from digilab.config import CONFIG_GENOMA, ConfigGenoma
 from digilab.grupo import Grupo, PetDoGrupo, RegistroGrupo, reproduzir_grupo, sementes_do_grupo, simular_grupo
 from digilab.gestos import CanalComGestos, DonoComGestos, simular_vida_gestos
 from digilab.motor_corpo import com_corpo
@@ -80,6 +81,7 @@ class Bancada:
     cfg_competicao: ConfigCompeticao | None = None       # V3-3/V3-4 (TAREFA_V2_V3_COMPETICAO): a competicao entre as regras urgentes
                                                          # em todo cerebro A da bancada (o R1 e, com o aprendizado desligado, o
                                                          # R1-congelado); None ou desligada: a vida de hoje
+    cfg_genoma: ConfigGenoma = CONFIG_GENOMA             # V3 G0, E3: a chave do evento genoma no log (so o mundo fisico, G0-7); desligada: a vida de hoje
 
     def __post_init__(self) -> None:
         if self.dias <= 0 or self.orcamento <= 0:
@@ -287,6 +289,8 @@ class Bancada:
         mundo = mundo_de(espec.mundo)
         if (espec.lugar is not None) != (mundo.fisico is not None):
             raise ValueError(f"{espec.nome}: o lugar do dono existe so no mundo fisico, e la e obrigatorio")
+        if self.cfg_genoma.ligado and mundo.fisico is None:
+            raise ValueError(f"{espec.nome}: o evento genoma (ConfigGenoma ligada) so vale no mundo fisico, o unico replay que o conhece (G0-7)")
         b = braco_de(espec.braco)
         if b.gestos is not None and (mundo.fisico is not None or mundo.bola == "a1"):
             raise ValueError(f"{espec.nome}: os gestos do dono (DonoComGestos) ficam fora do mundo fisico e do bola_a1 (o plano do corpo "
@@ -344,6 +348,8 @@ class Bancada:
             retirados = gestos["sem_gesto"]      # a bronca do modo sem tapa gasta o orcamento e nao chega ao log
             if isinstance(dono_, DonoTapaFruta):
                 gestos.update({"fruta_x": dono_.fruta, "tapas_fruta": len(dono_.tapas), "descartados": len(dono_.descartados)})
+        if self.cfg_genoma.ligado:               # V3 G0, E3 (G0-4): o genoma e o primeiro evento do log, no tick 0
+            motor._log = LogDeEventos([espec.registro_genoma.evento(), *motor.log])
         dono, eventos_mundo = contar_acoes(motor.log)
         dono += contar_gestos_mundo(motor.log)   # o deixar_comida e o deixar_bola do mundo fisico gastam o orcamento (0 nos outros)
         dono -= broncas + julgamentos + carinhos    # a bronca do pedido, o julgamento e o carinho do banheiro estao no log, mas vieram
@@ -426,7 +432,7 @@ class Bancada:
     def rejogar(self, log: LogDeEventos, espec: EspecVida):
         fp, fm = self.fabrica_politica(espec), self.fabrica_motor(espec)
         if mundo_de(espec.mundo).fisico is not None:
-            return reproduzir_mundo(log, fp, semente=espec.semente, fabrica_motor=fm)
+            return reproduzir_mundo(log, fp, semente=espec.semente, fabrica_motor=fm, cfg_genoma=self.cfg_genoma)
         if mundo_de(espec.mundo).ambiente:
             return reproduzir_ambiente(log, fp, semente=espec.semente, fabrica_motor=fm)
         return reproduzir_com_feedback(log, fp, semente=espec.semente, fabrica_motor=fm)
@@ -482,7 +488,8 @@ class Bancada:
             return reg
 
         fisico = mundo_de(vida.espec.mundo).fisico is not None
-        repro = reproduzir_mundo if fisico else reproduzir_com_feedback     # o mundo fisico tem eventos proprios no log
+        repro = ((lambda *a, **kw: reproduzir_mundo(*a, cfg_genoma=self.cfg_genoma, **kw)) if fisico
+                 else reproduzir_com_feedback)     # o mundo fisico tem eventos proprios no log (e o genoma, com a chave)
         fm_base = self.fabrica_motor(vida.espec)
         sonda_metab: list = []
 
@@ -911,7 +918,8 @@ class Bancada:
         fab, fm, T = self.fabrica_politica(vida.espec), self.fabrica_motor(vida.espec), TICKS_POR_DIA
         pesos = None                             # o instinto do alivio nao aprende o alvo (o herdado, sem pesos)
         if vida.espec.cerebro == "lobos":
-            pesos = [do_braco(reproduzir_mundo(vida.motor.log, fab, semente=vida.espec.semente, fabrica_motor=fm, ate_tick=d * T)
+            pesos = [do_braco(reproduzir_mundo(vida.motor.log, fab, semente=vida.espec.semente, fabrica_motor=fm, ate_tick=d * T,
+                                             cfg_genoma=self.cfg_genoma)
                               .politica).cerebro.estado_interno()["pesos_alvo"] for d in range(1, self.dias + 1)]
         return medidas_banheiro_de([(a["tick"], a["dentro"], a["urgente"]) for a in alivios], self.dias, carinhos, limpador, pesos,
                                    cuidado, [(a["tick"], a["alvo"], a["dentro"], a["distancia"]) for a in alivios if not a["urgente"]])
@@ -1050,7 +1058,7 @@ class Bancada:
             # fisico tem eventos proprios no log: o replay dele, com o mesmo corte no tick
             if fisico:
                 pol = do_braco(reproduzir_mundo(log, fab, semente=vida.espec.semente, fabrica_motor=fm,
-                                                ate_tick=d * TICKS_POR_DIA).politica)
+                                                ate_tick=d * TICKS_POR_DIA, cfg_genoma=self.cfg_genoma).politica)
             else:
                 pol = do_braco(politica_no_tick(log, fab, vida.espec.semente, d * TICKS_POR_DIA, fm))
             serie.append(jsd_media(distribuicoes_de_acao(pol, estados, sonda["amostras"], sonda["semente"]), d_prior))
