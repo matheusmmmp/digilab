@@ -9,11 +9,12 @@ O `experiments/bancada_v2.py` continua sendo a porta de entrada: ele reexporta t
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 
 from digilab.ambiente import MotorAmbiente
 from digilab.events import LogDeEventos
 from digilab.frutas import MotorFrutas
+from digilab.genoma import TIPO_EVENTO as TIPO_GENOMA, Genoma
 from digilab.mundo import MotorMundo
 from digilab.obediencia import MotorPersonalidade
 from digilab.treino import MotorComFeedback
@@ -35,6 +36,7 @@ class EspecVida:
     mundo: str = "padrao"
     cerebro: str = "lobos"
     lugar: str | None = None         # mundo fisico: onde o dono solta a racao (DonoComLugar; PMF-4); so nele, e obrigatorio nele
+    registro_genoma: Genoma = field(default_factory=Genoma, hash=False)   # V3 G0, E3: o genoma da vida (vazio por padrao); a bancada o grava no log so com a ConfigGenoma ligada
 
     @property
     def nome(self) -> str:
@@ -77,6 +79,11 @@ class VidaBancada:
         if self.origem is None:
             return b
         return f"{b}<{self.origem_braco}:{self.filtro}"
+
+    @property
+    def genoma_sha256(self) -> str | None:
+        """O sha256 do genoma gravado no log da vida (None com a chave desligada)."""
+        return genoma_sha256(self.motor.log)
 
     @property
     def eventos_mundo(self) -> int:
@@ -148,8 +155,21 @@ def resumo_motor(motor) -> tuple:
         extra = extra + (motor.resumo_mundo(),)
     if isinstance(motor, MotorMundo) and motor.cmf.ligada:
         extra = extra + (motor.resumo_mundo_fisico(),)
+    sha = genoma_sha256(motor.log)
+    if sha is not None:                      # V3 G0, E3: o sha256 do genoma entra no resumo so quando o log o carrega (chave ligada)
+        extra = extra + (sha,)
     return (motor.log.para_jsonl(), motor.estado(), motor.acoes_recentes(10**9), motor._rng_politica.getstate(),
             motor._rng_ambiente.getstate(), *extra)
+
+
+def genoma_sha256(log: LogDeEventos) -> str | None:
+    """O sha256 do genoma do log (o evento `genoma`, que so existe como o primeiro), ou None se o log nao o carrega."""
+    achados = [e for e in log if e.tipo == TIPO_GENOMA]
+    if not achados:
+        return None
+    if len(achados) != 1 or log[0] is not achados[0]:
+        raise ValueError("o evento genoma so vale uma vez e como o primeiro do log (G0-4)")
+    return Genoma.de_evento(achados[0]).sha256()
 
 
 def _interno(motor) -> str:
