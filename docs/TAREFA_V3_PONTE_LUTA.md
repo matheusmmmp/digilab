@@ -1,6 +1,6 @@
 # TAREFA V3 — PONTE_LUTA (2026-11-04)
 
-Coordenador: Gerente da V3 (Claude Code). Worker: Claude Code, Opus 5.5, worktree `v3-ponte-luta`. Worktree e branch: `v3-ponte-luta`. Status: ENTREGUE (só o papel); as PL-1 a PL-8 (seção 8) aguardam o Matheus.
+Coordenador: Gerente da V3 (Claude Code). Worker: Claude Code, Opus 5.5, worktree `v3-ponte-luta`. Worktree e branch: `v3-ponte-luta`. Status: ENTREGUE (só o papel); as PL-1 a PL-9 (seção 8) aguardam o Matheus.
 
 Categoria: arquitetura. Origem: Matheus, 2026-11-04: o Matheus pediu o cérebro presente na luta, aprendendo com ela; o Gerente mostrou três opções e ele aprovou ligar o cérebro à luta, começando por esta tarefa no papel.
 
@@ -39,9 +39,11 @@ modulador e a lembrança emocional), nunca os mapeamentos, as escalas ou os nome
   (`web/app/motor/gambits_pet.ts`, `APRENDIZADO_V14`), a confiança M1 (`web/app/motor/confianca.ts`), o modular inteiro em TS no pet de
   teste v16 (a L3, #542 a #551), o modular como cérebro padrão dos ovos novos, na v17, com o A selecionável (o #562,
   `docs/TAREFA_V3_CEREBRO_PRIMARIO.md`) e a memória autobiográfica no Python (a C4, #529 a #541).
-- **Antes da etapa PE1:** a PE0 confirma que o pet de teste v16 luta. Isso **não foi testado**: a L3 deixou "lutar com o pet de teste não
-  foi testado" e a B3 deixou de fora "a luta com o pet de teste v16" (`docs/PAINEL_V3.md`, seção 1, as linhas da L3 e da B3).
-- **Do Matheus:** as PL-1 a PL-8 (seção 8), antes da PE1.
+- **Antes da etapa PE1:** a PE0 confirma que o pet de teste v16 e o pet v17 lutam com o modular ativo. No v16 isso **não foi testado**: a
+  L3 deixou "lutar com o pet de teste não foi testado" e a B3 deixou de fora "a luta com o pet de teste v16" (`docs/PAINEL_V3.md`, seção 1,
+  as linhas da L3 e da B3). A v17 "luta como a v14" (`docs/TAREFA_V3_CEREBRO_PRIMARIO.md`, seção 3), mas nenhum teste citado lá luta com o
+  modular ativo.
+- **Do Matheus:** as PL-1 a PL-9 (seção 8), antes da PE1.
 - **A outra sessão (a opção 1, a tela do aprendizado):** nenhuma dependência de código. Se ela mudar o `GambitsPet` (ela não deveria: é
   uma tela), a PE0 é refeita.
 
@@ -69,7 +71,7 @@ ativo a luta passa ao lado do modular: o `_lutar` é o mesmo de todo pet, e o `D
 meio da vida, e o que sai fica parado (`Motor._trocarCerebro`, `motor.ts:1052-1058`). A v17 luta como a v14 (a `docs/TAREFA_V3_CEREBRO_PRIMARIO.md`,
 seção 3). Ou seja: **o modular já decide em pets de verdade**, e a D-C1-3 deixou de ser a porta para isso (PL-7).
 
-### O modular (Python de referência e espelho TS no pet v16)
+### O modular (Python de referência e espelho TS no pet v16 e no v17)
 
 | peça | o que faz | onde |
 |---|---|---|
@@ -161,11 +163,11 @@ Cada etapa num PR próprio, cada mecânica atrás da sua chave desligada, e **o 
 
 | etapa | o quê | onde | gabarito antes | gate | modelo |
 |---|---|---|---|---|---|
-| **PE0** | o pet de teste v16 luta? Um e2e e um teste do motor: o v16 nasce, chega a um estágio que luta, luta contra um bot e uma série, e o replay refaz as lutas. **O gabarito das lutas do v16 de hoje:** vidas curtas do v16 com lutas (sementes 101…505), gravando por luta o `ResultadoLuta` resumido, a assinatura do `GambitsPet`, a da confiança e o `estadoInterno` do modular | `web/app/test/`, `web/app/e2e/` | — (é ele) | o v16 luta e o replay sai bit a bit; se não lutar, a ponte para e o conserto vira tarefa própria | Sonnet |
+| **PE0** | o v16 e o v17 lutam com o modular ativo? Um e2e e um teste do motor: o pet nasce, chega a um estágio que luta, luta contra um bot e uma série, e o replay refaz as lutas. **O gabarito das lutas de hoje:** vidas curtas com lutas (sementes 101…505) do v16, do v17 com o modular, do v17 com o A e do v17 com um `"cb"` entre duas lutas, gravando por luta o `ResultadoLuta` resumido, a assinatura do `GambitsPet`, a da confiança e o `estadoInterno` do modular | `web/app/test/`, `web/app/e2e/` | — (é ele) | os dois lutam e o replay sai bit a bit; se não lutarem, a ponte para e o conserto vira tarefa própria | Sonnet |
 | **PE1** | o estímulo da luta no corpo (a dor pela vida perdida) e o evento do resumo no replay do mundo do Python | `digilab/corpo.py`, `digilab/config.py` (`luta_corpo`), `digilab/mundo.py` (o evento, aceito só com a chave) | os gabaritos de hoje que passam pelo corpo e pelo mundo (o da LM0, `web/app/test/gabaritos/digibrain_modular_*.json.gz`; o do G0, `tests/gabaritos/genoma_g0_vidas_de_hoje.json`) seguem byte a byte com a chave desligada | **G2:** desligada, byte a byte; **T-PL-1:** um resumo com vida perdida sobe a dor exatamente `div_arred(...)`, sem rng; um resumo com a chave desligada levanta erro | Sonnet |
 | **PE2** | o gancho `receber_luta`, o resumo na Observação e a origem `luta` no M-MEM (`outro` = rival) | `digilab/digibrain/adapt.py`, `sens.py`, `mem.py`, `digilab/config.py` (`luta_memoria`) | o gabarito da C4 e o da LM0, byte a byte desligada | **G2**; **T-PL-2:** um resumo de derrota com dor vira um episódio `luta` com o rival em `outro`; um empate sem dor não vira; o mesmo log dá os mesmos episódios; a consolidação guarda um por categoria `("lutar", rival, sinal)` | Sonnet |
-| **PE3** | o espelho TS da PE1 e da PE2, e o `_lutar` do v16 entregando o resumo ao corpo e ao `DigiBrain` | `web/app/motor/corpo.ts`, `web/app/motor/digibrain/`, `motor.ts` | o da PE0 e todos os de hoje | **G-PAR** do corpo e do M-MEM com um exportador novo de leituras (`experiments/exportar_gabarito_digibrain_modular.py`, numa opção nova, como o `--fins` da LM4); **G2:** o gabarito da PE0 passa com as chaves desligadas; **G1:** o replay do v16 com luta bit a bit | Sonnet |
-| **PE4** | o ε da luta pelo `g_exp`, só no v16 | `web/app/motor/gambits_pet.ts` (`estiloDoPet`), `motor.ts` | o da PE0 | **G2:** desligada, o gabarito da PE0 byte a byte; **T-PL-4:** com `g_exp = e0` o ε é o de hoje; o ε lido é o da última decisão; o replay bit a bit | Sonnet |
+| **PE3** | o espelho TS da PE1 e da PE2; o evento da ponte no registro (o nome PROPOSTO `"pl"`, gravado no ovo novo pelo `ligarProduto`, como o `"cb"`, e no ovo de teste do laboratório); e o `_lutar` do v16 e do v17 com o evento entregando o resumo ao corpo e, com o modular ativo, ao `DigiBrain` (3.7) | `web/app/motor/corpo.ts`, `web/app/motor/digibrain/`, `motor.ts` | o da PE0 e todos os de hoje | **G-PAR** do corpo e do M-MEM com um exportador novo de leituras (`experiments/exportar_gabarito_digibrain_modular.py`, numa opção nova, como o `--fins` da LM4); **G2:** o gabarito da PE0 passa com as chaves desligadas; **G1:** o replay do v16 e do v17 com luta bit a bit, com o modular e com o A, e com um `"cb"` no meio | Sonnet |
+| **PE4** | o ε da luta pelo `g_exp`, no v16 e no v17 com o evento da ponte e o modular ativo (com o A, o ε de hoje, 3.7) | `web/app/motor/gambits_pet.ts` (`estiloDoPet`), `motor.ts` | o da PE0 | **G2:** desligada, o gabarito da PE0 byte a byte; **T-PL-4:** com `g_exp = e0` o ε é o de hoje; o ε lido é o da última decisão; o replay bit a bit | Sonnet |
 | **PE5** (só se o Matheus decidir, PL-6) | a lembrança do rival na luta | papel antes do código | — | — | Opus |
 
 A PE4 só depende da PE0 (não da PE1 a PE3): se o Matheus preferir ver primeiro o cérebro mudando a luta, ela pode vir antes (PL-2).
@@ -174,9 +176,25 @@ A PE4 só depende da PE0 (não da PE1 a PE3): se o Matheus preferir ver primeiro
 
 - `digilab/engine.py` (o sha256 congelado), o `combate_tr` (a luta em si: a física, o controlador, as condições), o `GambitsPet.aprender`,
   a nota, a reordenação, a troca e as rngs da luta.
-- Os pets v13, v14, v15 e v17: nenhuma ponte nas etapas PE0 a PE4 (PL-7). Os saves de hoje abrem iguais.
+- Os pets v13, v14 e v15: nenhuma ponte. Os v16 e v17 sem o evento da ponte (todos os que estão vivos hoje) saem como hoje, byte a byte
+  (PL-7). Os saves de hoje abrem iguais.
 - A confiança M1 e o `CCF`.
 - O `docs/ESPEC_COMBATE_TR.md` e as metas do equilíbrio do combate.
+
+### 3.7 Quando o cérebro ativo é o A (o v17 depois de um `"cb"` do A)
+
+A regra do #562: o cérebro que sai "fica parado enquanto o outro decide (não recebe decisão, consequência nem gesto do dono); ao voltar,
+continua dali" (`docs/registro/2026-11.md`, a seção CÉREBRO PRIMÁRIO, interpretação 1). A ponte segue a mesma regra (a recomendação da PL-9):
+
+| peça da ponte | com o modular ativo | com o A ativo |
+|---|---|---|
+| o estímulo da luta no corpo (a dor) | sim | **sim:** o corpo é do pet, não do cérebro. O A sente a dor pelos receptores, como sente o tapa (a dor está entre os receptores e os drives do A, `web/app/motor/lobos.ts:49-51`) |
+| o resumo na Observação e o episódio `luta` | sim | **não:** o modular está parado. A luta não vira episódio, e o resumo não fica guardado para quando ele voltar |
+| o ε da luta pelo `g_exp` | sim | **não:** o ε é o de hoje. O `g_exp` do modular parado é de antes da troca e não descreve o pet de agora |
+| o `GambitsPet` e a confiança M1 | iguais | iguais: a luta aprende como hoje com qualquer cérebro |
+
+**Ao voltar ao modular:** ele continua dali, sem as lutas do tempo do A na memória, e só lê a dor que ainda estiver no corpo. **O A nunca
+recebe nada da ponte além do corpo:** o A é a linha de base e o controle, e nenhum gancho novo entra nele.
 
 ## 4. Experimento e gate (se houver run)
 
@@ -205,16 +223,16 @@ nenhuma outra frente está com esses arquivos abertos.
 - A tela do aprendizado da luta (a opção 1, outra sessão) e qualquer tela desta ponte (o painel do laboratório mostrar a lembrança de uma
   luta é tarefa própria, depois da PE3).
 - Portar o `combate_tr` ou o `GambitsPet` ao Python (a E1 do combate).
-- A ponte nos pets v13 a v15 e no v17 (o ovo padrão), até a decisão da PL-7 depois da PE4.
+- A ponte nos pets v13 a v15, e ligá-la num v16 ou v17 que já está vivo (PL-7).
 - A `modula_g_apr`, as facetas, a C2, a C3 e a L-2 no pet de teste (LAB-1).
 - O outro pet como participante (o `outro` passa a ter o rival da luta, não um pet do mundo).
 - A calibração de qualquer número (a rodada de equilíbrio, no fim).
 
 ## 7. Critérios de aceitação
 
-- Desta etapa (o papel): este documento na `main` com as PL-1 a PL-8 decididas pelo Matheus.
+- Desta etapa (o papel): este documento na `main` com as PL-1 a PL-9 decididas pelo Matheus.
 - De cada etapa de código: com as chaves desligadas, todos os gabaritos e e2e de hoje passam sem regravar; com elas ligadas, o replay do
-  pet v16 com luta é bit a bit; o lado do cérebro tem G-PAR Python × TS; nenhum número sem status e sem fonte (ou SEM FONTE) em
+  pet v16 e do v17 com luta é bit a bit, com qualquer dos dois cérebros; o lado do cérebro tem G-PAR Python × TS; nenhum número sem status e sem fonte (ou SEM FONTE) em
   `digilab/config.py`.
 - Nenhum módulo do modular recebe o resultado da luta como recompensa: um teste confere que, com a dor zerada à mão, uma derrota não muda
   nenhum `g_apr`, `V`, `E` nem crédito do M-PLAST.
@@ -231,5 +249,6 @@ Cada uma com a recomendação e o custo de errar.
 | **PL-4** | qual leitura do cérebro muda a luta primeiro | **o `g_exp` no ε da luta**, `ε × g_exp / e0`, neutro no `e0` | a valência no ε duplica a insegurança da confiança M1; o `g_apr` no `alfa` não muda nada no pet de teste (é constante) |
 | **PL-5** | o `g_apr` no passo do aprendizado e o estresse ou o medo no limiar da troca | **fora agora**; voltam só com a `modula_g_apr` validada ou com fonte para o sentido | dentro: um controle de pesquisa (`modula_g_apr`) volta ao pet sem validação, e o pet troca regras por um sentido sem fonte, o que muda a lista que o dono vê |
 | **PL-6** | a lembrança do rival na luta (o rival na pista, ou a soma dos σ do rival na confiança) | **depois**, com papel próprio (PE5), quando a PE3 mostrar episódios de luta guardados de verdade | antes: a memória de luta pesa na luta sem nenhum episódio para olhar, e a lembrança passa a disputar com a confiança M1, que já lê o rival |
-| **PL-7** | a versão de pet: só o pet de teste v16, ou também o v17 (o pet de verdade, com o modular por padrão desde o #562) | **as etapas PE0 a PE4 só no v16 do laboratório;** levar a ponte ao v17 é uma decisão própria depois da PE4, com o Matheus vendo o v16 lutar. Mudar como um v17 vivo luta pede uma versão nova (ou um evento no registro, como o `"cb"`), para o replay dos v17 de hoje sair igual. A pergunta do pedido, "até a D-C1-3?", perdeu o objeto: o #562 já pôs o modular no ovo padrão sem esperar a D-C1-3 | direto no v17: um número SEM FONTE (a dor da luta) e uma memória de luta entram em pets de verdade, que não voltam atrás, antes de alguém ver o efeito no laboratório; e um v17 vivo mudaria no replay. Ficar só no v16 para sempre: a ponte nunca chega ao pet que o Matheus joga |
+| **PL-7** | em que pets a ponte liga | **no v16 do laboratório e no v17, pelo evento da ponte no registro, gravado no ovo novo** (como o `"cb"`); um v16 ou v17 já vivo, sem o evento, fica como hoje. Com o #562, o modular já é o cérebro do pet de verdade: a ponte não fica restrita ao pet de teste (pedido do Gerente, 2026-11-04). A pergunta "até a D-C1-3?" perdeu o objeto | sem o evento, isto é, a ponte em todo v17: o replay de todo v17 vivo muda e o save não abre igual. Ligar num pet vivo: a dor SEM FONTE e a memória de luta entram num pet que não volta atrás; se o Matheus quiser, é um evento a mais, como o `"cb"` do pet ativo (CP-1) |
 | **PL-8** | medir se o pet luta melhor com a ponte | **não nesta tarefa:** o laboratório serve para ver o pet; uma medida pede plano de análise e faixa de sementes próprios, e a bancada da luta (`web/app/scripts/equilibrio_tr/`) não roda o modular | medir sem plano: um número do jogo vira resultado sem gate, contra a regra do `CLAUDE.md` |
+| **PL-9** | o que a ponte faz com o A ativo | **só o corpo:** a dor da luta vale com qualquer cérebro; o episódio e o ε pelo `g_exp` só com o modular ativo; com o A, nada fica guardado para o modular (3.7) | a dor só com o modular: o corpo passa a depender de qual cérebro decide, e um pet que perde uma luta sob o A não sente nada. Guardar as lutas para o modular: o cérebro parado passa a receber, contra a regra do #562 |
