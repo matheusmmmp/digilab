@@ -502,4 +502,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-04 — PONTE LUTA, a tarefa no papel (worker, Claude Code, Opus 5.5, worktree `v3-ponte-luta`)](registro/2026-11.md)
 - [2026-11-04 — AÇÕES NOVAS, a tarefa no papel do passo 3 da "Vida do pet" (worker, Claude Code, Opus 5.5, worktree `v3-acoes-novas`)](registro/2026-11.md)
 - [2026-11-04 — PET SE MEXE NA VISTA (worker, Claude Code, Sonnet 5.5, worktree `v3-pet-movimento`)](registro/2026-11.md)
+- [2026-11-04 — G0 E3, a bancada grava o genoma (worker, Claude Code, Sonnet 5.5, worktree `v3-genoma-g0-e3`)](registro/2026-11.md)
 - [2026-11-04 — SPRITES_ACOES, missão M1: o Comer no Aseprite (worker, Claude Code, Opus 5.5, worktree `v3-sprites-receitas`)](registro/2026-11.md)
