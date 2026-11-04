@@ -1,4 +1,5 @@
-/* Ajustes > Laboratorio (docs/TAREFA_V3_LAB_MODULAR.md, LM5b; pranchas docs/pranchas/lab/ajustes_*): o que e o laboratorio, a chave (desligada),
+/* Ajustes > Laboratorio. O cerebro do pet (docs/TAREFA_V3_CEREBRO_PRIMARIO.md; src/cerebro.ts): o do pet ativo, que troca na hora, e o dos
+   ovos novos (o modular por padrao), sempre visiveis, com a chave do laboratorio ligada ou nao. Depois, o laboratorio (docs/TAREFA_V3_LAB_MODULAR.md, LM5b; pranchas docs/pranchas/lab/ajustes_*): o que e o laboratorio, a chave (desligada),
    o botao de chocar o ovo de teste (v16, so um por vez), e o pet de teste vivo com Abrir (LM5-7: mostra na tela Pet sem trocar o pet ativo) e
    Descartar (LM5-8: confirmacao sem digitar, foco em Cancelar; apaga so o save do pet de teste). Sem opcao de baixar o log (LM5-9). */
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -6,7 +7,8 @@ import "../../estilo/lab.css";
 import { VERSAO_PET_LAB, nomeEstagio, nomeForma, type Motor } from "../../../motor/index.ts";
 import { BotaoContinuar, BotaoHx } from "../../componentes/hx/index.ts";
 import { abrirModal } from "../../componentes/modal.ts";
-import { abrirLab, sairDoLab, useJogo } from "../../jogo.ts";
+import { abrirLab, sairDoLab, trocarCerebroDoPet, useJogo } from "../../jogo.ts";
+import { CEREBRO_PADRAO, NOME_CEREBRO, escolherCerebroDosOvos, podeTrocarCerebro, useCerebroDosOvos, type Cerebro } from "../../cerebro.ts";
 import { chocarOvoLab, descartarPetLab, labLigado, lerPetLab, ligarLab, useLab } from "../../lab.ts";
 import { Retrato, diaDe } from "../pet/TelaPet.tsx";
 
@@ -36,6 +38,39 @@ function ConfirmarDescarte({ m, cancelar, confirmar }: { m: Motor; cancelar: () 
   );
 }
 
+const CEREBROS_TELA: readonly Cerebro[] = ["modular", "a"];
+const rotulo = (c: Cerebro): string => NOME_CEREBRO[c] + (c === CEREBRO_PADRAO ? " (padrão)" : "");
+
+/** o cerebro do pet ativo e o dos ovos novos */
+function CerebroDoPet() {
+  const { motor: m, emLab } = useJogo(), ovos = useCerebroDosOvos(), [erro, setErro] = useState("");
+  const atual = m.cerebroAtual, troca = !emLab && podeTrocarCerebro(m);
+  const trocar = (c: Cerebro) => { try { setErro(""); trocarCerebroDoPet(c); } catch (err) { setErro(err instanceof Error ? err.message : String(err)); } };
+  return (
+    <section className="mc-bloco" aria-labelledby="lab-cerebro">
+      <h3 className="mc-bloco__tit" id="lab-cerebro">Cérebro</h3>
+      <p>O <b>DigiBrain modular</b> é o cérebro primário dos pets. O <b>cérebro A</b> (a linha de base) continua selecionável.</p>
+      {emLab ? <p className="mc-apoio">Este é o pet de teste. Para trocar o cérebro do seu pet, volte a ele.</p> : <>
+        <fieldset className="lab-cerebro" aria-describedby="lab-cerebro-pet">
+          <legend><b>Seu pet decide com</b></legend>
+          {CEREBROS_TELA.map(c => (
+            <label key={c}><input type="radio" name="cerebro-pet" value={c} checked={atual === c} disabled={!troca}
+              onChange={() => trocar(c)} /> {NOME_CEREBRO[c]}</label>))}
+        </fieldset>
+        <p className="mc-apoio" id="lab-cerebro-pet">{troca
+          ? "A troca vale na hora e fica no registro do pet. Cada cérebro guarda o que aprendeu e fica parado enquanto o outro decide."
+          : `Este pet é da versão ${m.versao} e não troca de cérebro: ele segue com o cérebro A.`}</p>
+      </>}
+      <fieldset className="lab-cerebro">
+        <legend><b>Ovos novos nascem com</b></legend>
+        {CEREBROS_TELA.map(c => (
+          <label key={c}><input type="radio" name="cerebro-ovos" value={c} checked={ovos === c} onChange={() => escolherCerebroDosOvos(c)} /> {rotulo(c)}</label>))}
+      </fieldset>
+      {erro && <p className="mc-erro" role="alert">{erro}</p>}
+    </section>
+  );
+}
+
 export function Laboratorio({ irPet }: { irPet: () => void }) {
   const rev = useLab(), { emLab, motor } = useJogo(), ligado = labLigado();
   const [erro, setErro] = useState(""), [descartando, setDescartando] = useState(false);
@@ -46,9 +81,10 @@ export function Laboratorio({ irPet }: { irPet: () => void }) {
   const descartar = () => { sairDoLab(); descartarPetLab(); setDescartando(false); };
   return (
     <>
+      <CerebroDoPet />
       <section className="mc-bloco" aria-labelledby="lab-que">
         <h3 className="mc-bloco__tit" id="lab-que">O que é o laboratório</h3>
-        <p>Um pet de teste com o <b>DigiBrain modular</b>: cada decisão dele mostra qual módulo pesou. Os pets de hoje seguem com o cérebro A v11 e não mudam.</p>
+        <p>Um pet de teste com o <b>DigiBrain modular</b>, num espaço próprio do save: cada decisão dele mostra qual módulo pesou. Ele não troca o cérebro dos seus pets.</p>
       </section>
       <label className="mc-interruptor"><span><b>Modo laboratório · {ligado ? "ligado" : "desligado"}</b><small>desligado, o jogo é o de hoje e nada do laboratório aparece</small></span>
         <input type="checkbox" role="switch" checked={ligado} onChange={e => ligarLab((e.target as HTMLInputElement).checked)} /></label>

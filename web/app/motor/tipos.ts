@@ -80,10 +80,12 @@ export type EventoBola = [tick: number, tipo: "db", bola: { x: number; y: number
     nos ovos novos desde 2026-10-30; o evento sem ela (os ovos de antes dela) a deixa desligada */
 export interface ChavesProduto { chamadoPelaFome: boolean; decisaoNaComida: boolean; chamadosPeloCorpo?: boolean }
 export type EventoProduto = [tick: number, tipo: "p", chaves: ChavesProduto];
+/** v17: o cerebro que decide dali em diante (o modular ou o A) */
+export type EventoCerebro = [tick: number, tipo: "cb", troca: { cerebro: "modular" | "a" }];
 export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem | EventoConfig | EventoLiberacao
-  | EventoItem | EventoCarta | EventoFronteira | EventoFala | EventoComida | EventoBola | EventoProduto;
+  | EventoItem | EventoCarta | EventoFronteira | EventoFala | EventoComida | EventoBola | EventoProduto | EventoCerebro;
 
-export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16;
+export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17;
 
 /** estado de vida (camada 1) */
 export interface EstadoVida {
