@@ -134,3 +134,8 @@
 /* a borda do escolhido (o --hx-escolhido do vidro e um gradiente e anularia o fundo do balao) */
 .app--pet .pet-balcao .cena-fala:hover{ --balao-cor:var(--hx-escolhido-borda) }
 .app--pet .pet-balcao .cena-fala:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:-5px }
+
+/* o resumo do alto e o balao da fala se arrastam pela tela (hudPet.ts, 2026-11-04) */
+.pet-tela [data-arrastavel]{ touch-action:none; cursor:grab; user-select:none }
+.pet-tela [data-arrastavel]:active{ cursor:grabbing }
+.pet-tela [data-arrastavel] .pet-prioridade{ cursor:inherit }

@@ -3,8 +3,9 @@
    save. Duas abas no mesmo navegador (o HTML antigo e o app, ou dois apps) nao se sobrescrevem: quando o save
    muda em outra aba, esta relê o save em vez de gravar por cima. */
 import { useEffect, useState } from "react";
-import { Motor, PetMorto } from "../motor/index.ts";
+import { Motor, PetMorto, VERSAO_V17 } from "../motor/index.ts";
 import { ligarProduto } from "./produto.ts";
+import { podeTrocarCerebro, type Cerebro } from "./cerebro.ts";
 import { CHAVE_LAB } from "./lab.ts";
 import { CHAVE, gravarSave, lerSave, petExemplo, textoSave, type Armazenamento } from "./save.ts";
 import { CHAVE_TAMER, Tamer, conferirCampeao, conferirItensDasMedalhas, conferirMedalhas, conferirRecordes, gravarTamer, lerTamer, sincronizarPet, type MedalhaGanha } from "./tamer.ts";
@@ -131,6 +132,17 @@ export function sairDoLab(): void {
   pendente = false;
   j.motor = j.emLab; j.emLab = null; j.revisao++;
   avisar();
+}
+/** troca o cerebro do pet ativo (Ajustes > Laboratorio): um "cb" no registro dele, gravado na hora. O pet v15 passa a v17 antes (o mesmo
+    registro refeito, conferido pela assinatura). Com o pet de teste na tela ou um save que nao abriu, falha */
+export function trocarCerebroDoPet(c: Cerebro): void {
+  const j = jogoAtual();
+  if (j.emLab) throw new Error("volte ao seu pet para trocar o cérebro dele");
+  if (j.erroSave) throw new Error("o save não abriu: o cérebro não troca");
+  if (!podeTrocarCerebro(j.motor)) throw new Error(`este pet é da versão ${j.motor.versao} e não troca de cérebro`);
+  if (j.motor.cerebroAtual === c) throw new Error(`o pet já decide com o cérebro ${c}`);
+  if (j.motor.versao !== VERSAO_V17) { j.motor = Motor.promoverV17(j.motor); j.revisao++; }
+  mudarMotor(m => m.trocarCerebro(c));
 }
 /** quadros do palco (120 ms cada) com o ovo chocando: ~5 s, para o nascimento ser um momento e nao um corte. PROPOSTO, SEM FONTE */
 export const QUADROS_CHOCANDO = 40;

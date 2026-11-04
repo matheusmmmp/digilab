@@ -27,10 +27,10 @@ function viver(m: Motor, dias: number, longe: boolean): void {
 
 describe("o pet de teste do laboratorio (v16)", () => {
   test("a fabrica e a unica porta: o ovo padrao segue o padrao (a v15 do PR #525) e as versoes que abrem nao incluem o pet de teste", () => {
-    expect(VERSAO_PET).toBe(15);
-    expect(VERSOES_PET).toEqual([13, 14, 15]);
+    expect(VERSAO_PET).toBe(17);
+    expect(VERSOES_PET).toEqual([13, 14, 15, 17]);
     expect(VERSAO_PET_LAB).toBe(16);
-    expect(new Motor(101).versao).toBe(15);
+    expect(new Motor(101).versao).toBe(17);
     expect(new Motor(101).lab).toBeNull();
     const p = petDeTeste(101);
     expect(p.versao).toBe(16);
@@ -38,7 +38,7 @@ describe("o pet de teste do laboratorio (v16)", () => {
     expect(p.v11!.laco).toBeInstanceOf(MotorCorpoMundo);
     expect(p.mundo!.cm).toBe(CMU_MVP);
     expect(p.mundo!.bolaNoGolpe).toBe(false);     // a v14 com o modular: a bola de antes
-    expect(() => new Motor(101, 17)).toThrow(/versão de pet desconhecida/);
+    expect(() => new Motor(101, 18)).toThrow(/versão de pet desconhecida/);
   });
 
   test("herda a v14 menos o cerebro: as regras de luta sao as do candidato v14", () => {

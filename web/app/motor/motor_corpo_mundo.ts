@@ -75,7 +75,8 @@ export class MotorCorpoMundo extends MotorCorpo {
   readonly vistosEm = new Map<number, number>();
   private readonly regra: () => string | null;
   private readonly paridade: boolean;
-  private readonly digibrain: boolean;
+  /** a chave do laboratorio (OpcoesLacoMundo.digibrain); o Motor da v17 a vira quando o cerebro troca (o evento "cb"), sempre entre decisoes */
+  digibrain: boolean;
   /** a chave `decisaoNaComida` (OpcoesLacoMundo); o Motor do jogo a liga pelo evento das chaves do produto, no comeco do registro */
   decidirNaComida: boolean;
 

@@ -99,3 +99,20 @@ Pedido do Matheus (pela sessão que coordena): três pontos, sem redesenhar a p�
   caixa escura translúcida chanfrada, contorno e traço ciano, texto claro e "toque para ver o porquê" no secundário. A fala fria ou
   sombria troca o ciano pelo lilás. O toque continua abrindo o porquê.
 - Capturas em `D:\Trab\digilab\capturas_hud_aprovar_r2\` (16, fora do git), aprovadas pelo Matheus em 2026-10-30.
+
+## HUD temporário, fome discreta e detalhes opcionais (2026-11-04)
+
+Pedido do Matheus, direto nesta sessão (Claude Code, worktree `v3-hud-transitorio`):
+
+- **Estado do alto e balão da fala:** saem da tela fixa. Aparecem quando mudam (o resumo, quando o texto muda; o balão, a cada reação nova
+  do pet) e somem depois de 15 s (`AVISO_MS` em `src/hudPet.ts`). O pedido urgente com o Atender, a morte e a fome crítica ficam. Sem
+  fala registrada, o balão "…" não aparece.
+- **Arrastar:** os dois se arrastam pela tela; a posição fica no navegador (chave `-hud-arraste`), fora do save. Um arraste não vira clique.
+- **Fome:** só vira texto ("está com fome") abaixo de 15 % (`FOME_FALA`); abaixo de 50 % (`FOME_EMOTE`), só o emoji da carne sobre a
+  cabeça do pet (`PalcoPet.tsx`). O chamado de fome só aparece na tela abaixo de 15 %; o motor continua abrindo e fechando o chamado como
+  antes. Limiares do Matheus, PROPOSTOS.
+- **Ajustes > Exibir detalhes do pet:** liga ou desliga Estado atual, Evolução, Últimas ações e DigiBrain (ligado por padrão; chave
+  `-detalhes-pet`). O porquê da fala continua.
+- **Pet de teste:** o ovo do laboratório nasce com as chaves do produto (`ligarProduto` em `chocarOvoLab`), como todo ovo do jogo. Sem
+  elas o bebê chamava pelo relógio (fome a cada 30 min, carinho a cada 45), sem olhar o corpo; era isso o "pede comida com 76 %". Os pets
+  de teste já chocados seguem como estão no registro.
