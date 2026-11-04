@@ -20,6 +20,7 @@ import type { ParteConfig } from "../../rotas.ts";
 import { AvisoSom } from "../../componentes/AvisoSom.tsx";
 import { SOM, useSom } from "../../som.ts";
 import { dicasLigadas, ligarDicas } from "../../dicas.ts";
+import { ligarDetalhesPet, useDetalhesPet } from "../../hudPet.ts";
 import { textoSave } from "../../save.ts";
 import { useHabitat } from "../../habitat.ts";
 import { usePele } from "../../pele.ts";
@@ -45,7 +46,7 @@ function Linha({ ic, titulo, resumo, tag, abrir }: { ic: ReactNode; titulo: stri
 }
 function Principal({ abrir }: { abrir: (p: ParteConfig) => void }) {
   const { motor: m } = useJogo(), tema = useTema(), pele = usePele(), habitat = useHabitat(), fl = useFalaLivre(), { velocidade } = useTempo();
-  const [dicas, setDicas] = useState(dicasLigadas);
+  const [dicas, setDicas] = useState(dicasLigadas), detalhesPet = useDetalhesPet();
   useFalaLLM(); useLab();
   return (
     <>
@@ -54,6 +55,8 @@ function Principal({ abrir }: { abrir: (p: ParteConfig) => void }) {
       <section className="mc-bloco" aria-label="Dicas">
         <label className="mc-interruptor"><span><b>Mostrar dicas</b><small>o Professor Agumon explica cada coisa nova, uma vez</small></span>
           <input type="checkbox" role="switch" checked={dicas} onChange={e => { ligarDicas((e.target as HTMLInputElement).checked); setDicas(dicasLigadas()); }} /></label>
+        <label className="mc-interruptor"><span><b>Exibir detalhes do pet</b><small>os painéis Estado atual, Evolução, Últimas ações e DigiBrain na tela do pet</small></span>
+          <input type="checkbox" role="switch" checked={detalhesPet} onChange={e => ligarDetalhesPet((e.target as HTMLInputElement).checked)} /></label>
       </section>
       <h3 className="mc-sec">Fala</h3>
       <div className="mc-menu"><Linha ic={<Peca nome="emoji_feliz" escala={2} />} titulo="Fala do pet" resumo={`modo ${NOME_MODO[fl.modo]} · ${rotuloLLM().texto}`} abrir={() => abrir("fala")} /></div>

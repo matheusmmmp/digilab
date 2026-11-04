@@ -31,6 +31,7 @@ import { useJogo } from "../../jogo.ts";
 import { abrirEscolhaBrasao } from "../../jornada.ts";
 import { useTempo } from "../../tempo.ts";
 import { CHAVE } from "../../save.ts";
+import { FOME_FALA, chamadosVisiveis, useArrastavel, useAviso, useDetalhesPet } from "../../hudPet.ts";
 import { BarraBola } from "./PorBola.tsx";
 import { AvisoRacao, BarraRacao, FaixaRacao, InfoMundo } from "./PorRacao.tsx";
 import "../../estilo/pet_dock.css";
@@ -128,9 +129,14 @@ function CausaIcones() {
 }
 /** a fala de agora num balao sobre o cenario; tocar abre o porque no painel de detalhes */
 const MODO_CURTO: Record<string, string> = { template: "frases prontas", moldura: "moldura", livre: "fala livre" };
+/** some AVISO_MS depois da ultima reacao (hudPet.ts); sem fala registrada, nada; arrasta pela tela */
 function BalaoFala({ v, abrir }: { v: VistaFala; abrir: () => void }) {
+  const { motor: m } = useJogo(), mot = m.motivo;
+  const chave = mot && mot.origem === "vida" ? `${mot.acao}|${mot.fatores.join(",")}|${mot.recusa?.acaoDono ?? ""}|${v.texto}` : v.texto;
+  const vis = useAviso(chave), arr = useArrastavel<HTMLButtonElement>("fala");
+  if (!vis || (!v.texto && !v.detalhe)) return null;
   return (
-    <button type="button" className={v.classe + " cena-fala"} title={v.titulo} aria-haspopup="dialog" onClick={abrir}>
+    <button type="button" className={v.classe + " cena-fala"} title={v.titulo} aria-haspopup="dialog" onClick={abrir} {...arr}>
       <span className="balao-txt">{v.balao}</span><small>toque para ver o porquê</small></button>
   );
 }
@@ -222,7 +228,7 @@ function Morte() {
   );
 }
 function Chamados({ agir }: { agir: (a: AcaoDono) => void }) {
-  const { motor: m } = useJogo(), ab = m.chamadosAbertos(), tick = m.e.tick;
+  const { motor: m } = useJogo(), ab = chamadosVisiveis(m), tick = m.e.tick;
   if (!ab.length && m.acao === "chamar_atencao") return (
     <div className="dl-card chamado">
       <span className="chamado-ic"><Peca nome="emoji_exclam" escala={2} reserva="!" /></span>
@@ -261,7 +267,7 @@ function Desejo() {
 
 /* ------------------------------------------------ a necessidade prioritaria */
 type Necessidade = "fome" | "energia" | "higiene" | "humor";
-const ROTULO_BAIXO: Record<Necessidade, string> = { fome: "comida baixa", energia: "energia baixa", higiene: "higiene baixa", humor: "humor baixo" };
+const ROTULO_BAIXO: Record<Necessidade, string> = { fome: "está com fome", energia: "energia baixa", higiene: "higiene baixa", humor: "humor baixo" };
 const EMOTE_NEC: Record<Necessidade, string | null> = { fome: "emoji_carne", energia: null, higiene: null, humor: "emoji_nota" };
 const ACAO_NEC: Record<Necessidade, AcaoDono | null> = { fome: "alimentar", energia: null, higiene: "limpar", humor: "brincar" };
 const ACAO_DESEJO: Record<string, AcaoDono> = { comer: "alimentar", brincar: "brincar", limpar: "limpar", chamar_atencao: "acariciar" };
@@ -274,9 +280,10 @@ const TEXTO_CHAMADO: Record<Chamado, string> = { fome: "está com fome", higiene
 function resumoAgora(m: Motor, nascendo: number): Resumo {
   if (nascendo > 0) return { texto: "o ovo está chocando", emote: null, acao: null };
   /* chamado aberto que ainda nao aperta: so o resumo (e a acao certa destacada no dock); o cartao com o Atender e o temPedido */
-  const c = m.chamadosAbertos()[0];
+  const c = chamadosVisiveis(m)[0];
   if (c) return { texto: TEXTO_CHAMADO[c], emote: EMOTE_CHAMADO[c], acao: ACAO_CHAMADO[c][0] };
-  const baixa = NEC_PET.map(([k]) => k).filter(k => m.e[k] < LIMIAR_NEC).sort((a, b) => m.e[a] - m.e[b])[0];
+  /* a fome so vira texto abaixo de FOME_FALA; entre ela e a metade, so o emoji sobre a cabeca do pet (PalcoPet) */
+  const baixa = NEC_PET.map(([k]) => k).filter(k => m.e[k] < (k === "fome" ? FOME_FALA : LIMIAR_NEC)).sort((a, b) => m.e[a] - m.e[b])[0];
   if (baixa) return { texto: ROTULO_BAIXO[baixa], emote: EMOTE_NEC[baixa], acao: ACAO_NEC[baixa] };
   const d = m.desejoAtual(m.observacaoAgora(), m.e.tick);
   if (d) return { texto: (d.tipo === "necessidade" ? "precisa " : "quer ") + ALVOS_DESEJO[d.alvo][1], emote: EMOTE_DESEJO[d.alvo] ?? null, acao: ACAO_DESEJO[d.alvo] ?? null };
@@ -287,15 +294,19 @@ function resumoAgora(m: Motor, nascendo: number): Resumo {
 const URGENTE_RESTA = CAT.janelaChamado / 3;
 function temPedido(m: Motor): boolean {
   const tick = m.e.tick;
-  return m.chamadosAbertos().some(c => CAT.janelaChamado - (tick - m.chamados.abertos[c]!) <= URGENTE_RESTA) || m.acao === "chamar_atencao";
+  return chamadosVisiveis(m).some(c => CAT.janelaChamado - (tick - m.chamados.abertos[c]!) <= URGENTE_RESTA) || m.acao === "chamar_atencao";
 }
 /** a necessidade prioritaria, no cartao do alto ao centro: a morte, um pedido aberto (com o Atender) ou o resumo, que abre o Estado.
     Sem o nome do pet (ele esta na plaquinha do topo) */
 function Prioridade({ abrirDetalhes }: { abrirDetalhes: () => void }) {
-  const { motor: m, nascendo } = useJogo();
-  if (m.morte) return <Morte />;
-  if (nascendo === 0 && temPedido(m)) return <div className="pet-pedido"><Chamados agir={agir} /></div>;
-  const r = resumoAgora(m, nascendo);
+  const { motor: m, nascendo } = useJogo(), r = resumoAgora(m, nascendo), pedido = !m.morte && nascendo === 0 && temPedido(m);
+  /* o resumo so aparece por AVISO_MS quando muda (hudPet.ts); a fome critica, o pedido e a morte ficam */
+  const vis = useAviso(r.texto, nascendo === 0 && m.e.fome < FOME_FALA), arr = useArrastavel<HTMLDivElement>("alerta");
+  const corpo = m.morte ? <Morte /> : pedido ? <div className="pet-pedido"><Chamados agir={agir} /></div> : vis ? <Resumo r={r} nascendo={nascendo} abrirDetalhes={abrirDetalhes} /> : null;
+  if (!corpo) return null;
+  return <div className="pet-alerta" {...arr}>{corpo}</div>;
+}
+function Resumo({ r, nascendo, abrirDetalhes }: { r: Resumo; nascendo: number; abrirDetalhes: () => void }) {
   return (
     <button type="button" className="pet-prioridade" onClick={abrirDetalhes}>
       <span className="pet-prioridade-ic" aria-hidden="true">{r.emote ? <Peca nome={r.emote} escala={2} reserva="•" /> : nascendo > 0 ? "•" : <Peca nome="emoji_feliz" escala={2} reserva="•" />}</span>
@@ -503,11 +514,12 @@ function useReservaDoHabitat(ref: { current: HTMLElement | null }): void {
 }
 export function TelaPet({ irRegistro, irEvolucao }: { irRegistro: () => void; irEvolucao: () => void }) {
   const { motor: m, nascendo } = useJogo(), fala = useFala(), largo = useLargo(), [aberto, setAberto] = useState<Painel | null>(null);
-  const [hud, mudarHud] = useAbertosHud();
+  const [hud, mudarHud] = useAbertosHud(), detalhesPet = useDetalhesPet();
   const painel = useRef<HTMLDivElement>(null), gatilho = useRef<HTMLElement | null>(null), dock = useRef<HTMLDivElement>(null), pilha = useRef<HTMLElement>(null);
   useReservaDoHabitat(dock);
   const vivo = nascendo === 0 && !m.morte, p = vivo ? previsaoEvo(m) : null, temEvo = !!p;
-  const tem = (id: Painel): boolean => id === "estado" || (nascendo === 0 && (id === "evolucao" ? temEvo : id === "digibrain" || id === "fala" ? true : vivo));
+  /* "Exibir detalhes do pet" desligado (Ajustes): sem Estado, Evolucao, Ultimas acoes e DigiBrain; o porque da fala fica */
+  const tem = (id: Painel): boolean => id === "fala" ? nascendo === 0 : !detalhesPet ? false : id === "estado" || (nascendo === 0 && (id === "evolucao" ? temEvo : id === "digibrain" ? true : vivo));
   /* o painel que deixou de fazer sentido (o ovo chocando, o pet que morreu) fecha sozinho; no desktop Estado, Evolucao e Ultimas acoes
      ficam na pilha, e o painel flutuante e so o do DigiBrain e o do porque */
   const valido = (q: Painel | null): q is Painel => q !== null && tem(q) && (!largo || q === "digibrain" || q === "fala");
@@ -530,8 +542,8 @@ export function TelaPet({ irRegistro, irEvolucao }: { irRegistro: () => void; ir
         {vivo && <BalaoFala v={fala} abrir={() => abrir("fala")} />}
         {m.mundo && vivo && <FaixaRacao />}
       </div>
-      <div className="pet-alerta"><Prioridade abrirDetalhes={abrirEstado} /></div>
-      {largo ? (!atual && (
+      <Prioridade abrirDetalhes={abrirEstado} />
+      {largo ? (!atual && detalhesPet && (
         <aside className="pet-hud" ref={pilha} aria-label="Painéis do pet">
           <PainelHud id="estado" aberto={hud.estado} alternar={() => mudarHud("estado")}>{conteudo("estado")}</PainelHud>
           {temEvo && <PainelHud id="evolucao" aberto={hud.evolucao} alternar={() => mudarHud("evolucao")} resumo={resumoEvo}>{conteudo("evolucao")}</PainelHud>}
@@ -539,7 +551,7 @@ export function TelaPet({ irRegistro, irEvolucao }: { irRegistro: () => void; ir
             <UltimasAcoes irRegistro={irRegistro} n={5} /></PainelHud>}
         </aside>
       )) : (
-        <nav className="pet-lado" aria-label="Painéis do pet">
+        detalhesPet && <nav className="pet-lado" aria-label="Painéis do pet">
           {LADO_CELULAR.filter(tem).map(id => {
             const I = ICONE_PAINEL[id];
             return <button type="button" key={id} className="hx-btn pet-lado__bt" aria-pressed={atual === id} aria-controls="pet-painel" aria-label={TITULO_PAINEL[id]} title={TITULO_PAINEL[id]}
@@ -547,7 +559,7 @@ export function TelaPet({ irRegistro, irEvolucao }: { irRegistro: () => void; ir
           })}
         </nav>
       )}
-      {largo && nascendo === 0 && (
+      {largo && nascendo === 0 && detalhesPet && (
         <button type="button" className="pet-etiqueta-db" aria-pressed={atual === "digibrain"} aria-controls="pet-painel" aria-label="DigiBrain" onClick={() => abrir("digibrain")}>
           <Brain size={18} aria-hidden="true" /><span>DigiBrain</span></button>
       )}
