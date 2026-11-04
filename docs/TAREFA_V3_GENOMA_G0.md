@@ -174,3 +174,10 @@ A tarefa do G0 está escrita, sem código, sem vida e sem número de jogo. O que
 cada pedaço: cinco inatos espalhados, nenhum no log, e só o `origem` da v1 como evento de nascimento. O achado da semente (o paladar usa
 `espec.semente`, o temperamento e as frutas usam `espec.genoma`) foi registrado como desvio e não muda no G0. O código (E0 a E3, e a E4
 se a G0-1 levar à web) espera as G0-1 a G0-7.
+
+## 10. Resumo da E0 (2026-11-04, o gabarito das vidas de hoje)
+
+A E0 gravou `tests/gabaritos/genoma_g0_vidas_de_hoje.json` (40 vidas, sementes 101 a 505, sha256 do log e da trajetória de cada uma) com o gerador
+`tests/gabarito_genoma_g0.py`, num commit anterior a qualquer mudança no pacote. Os três caminhos: o mundo com o corpo e o cérebro A (20), o modular REL da C4 (10) e o mundo
+com o paladar (10). `tests/test_gabarito_genoma_g0.py` confere que o gabarito se regera igual duas vezes e está em dia. Nenhum arquivo de `digilab/`, de
+`experiments/bancada/` nem o `engine.py` mudou. Desvios em `docs/registro/2026-11.md`. A E1 (o `genoma.py`) é outra etapa.
