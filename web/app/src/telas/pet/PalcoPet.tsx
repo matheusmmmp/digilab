@@ -11,6 +11,7 @@ import { flashAtual } from "../../flash.ts";
 import { balancoOvo, jogoAtual, passarQuadroOvo } from "../../jogo.ts";
 import { CENA } from "./cenaEstado.ts";
 import { alturaSono, desenharZz } from "./sono.ts";
+import { fomeNoEmote } from "../../hudPet.ts";
 
 const ICONE_ACAO: Record<string, string> = { dormir: "zz", chamar_atencao: "exclam", emburrar: "raiva", brincar: "nota", explorar: "pergunta", comer: "carne" };
 const EMOTE_ICONE: Record<string, string> = { carne: "emoji_carne", nota: "emoji_nota", exclam: "emoji_exclam", coracao: "emoji_coracao" };
@@ -140,8 +141,8 @@ function desenharPetUp(cx: CanvasRenderingContext2D, a: AtlasOk, g: Geo, quadro:
 /* icone sobre o pet: o da acao do dono (flash); emote do UP (2x) acima e a direita do sprite */
 function desenharIcone(cx: CanvasRenderingContext2D, a: AtlasOk, g: Geo, x: number, y: number, w: number): void {
   const m = jogoAtual().motor, pal = paleta(corDominante(m.tracos)), K = g.K;
-  const icone: string | null = flashAtual();
-  /* sem acao do dono agora, o pet dormindo solta o "zz" (sono.ts) */
+  /* sem acao do dono agora: a comida abaixo da metade poe a carne sobre a cabeca (hudPet.ts); o pet dormindo solta o "zz" (sono.ts) */
+  const icone: string | null = flashAtual() ?? (m.acao !== "dormir" && fomeNoEmote(m) ? "carne" : null);
   if (!icone) { if (m.acao === "dormir") desenharZz(cx, K, x, y, w, performance.now(), matchMedia("(prefers-reduced-motion: reduce)").matches, pal); return; }
   if (EMOTE_ICONE[icone]) {
     const [pw0, ph0] = dimSprite(a.dados, EMOTE_ICONE[icone]), es = escalaSprite() * 2, pw = pw0 * es / K, ph = ph0 * es / K;
@@ -158,7 +159,7 @@ function desenharIcone(cx: CanvasRenderingContext2D, a: AtlasOk, g: Geo, x: numb
 /* sem atlas: icone em grade (o da acao do dono, ou o do que ele faz), acima e a direita do sprite de reserva */
 function desenharIconeGrade(cx: CanvasRenderingContext2D, g: Geo, x: number, y: number, w: number): void {
   const m = jogoAtual().motor, pal = paleta(corDominante(m.tracos)), K = g.K;
-  const icone: string | null = flashAtual() ?? ICONE_ACAO[m.acao] ?? null;
+  const icone: string | null = flashAtual() ?? (m.acao !== "dormir" && fomeNoEmote(m) ? "carne" : ICONE_ACAO[m.acao] ?? null);
   if (!icone) return;
   const ic = S[icone]; if (!ic) throw new Error("icone desconhecido: " + icone);
   const bx = Math.min(g.W - 30, x + w - 4), by = Math.max(TOPO_LIVRE, y - 30);
