@@ -187,3 +187,10 @@ com o paladar (10). `tests/test_gabarito_genoma_g0.py` confere que o gabarito se
 A E1 criou `digilab/genoma.py` (o `Genoma` com as cinco seções na forma `"hoje"`, o evento `genoma` no tick 0 em JSON canônico, o sha256 e as falhas altas), a `ConfigGenoma`
 desligada (`ligado=False`, PROPOSTO, SEM FONTE) em `digilab/config.py` e `tests/test_genoma_g0.py`. Nenhum arquivo do motor, do `mundo.py`, da bancada nem o `engine.py` mudou; o `genoma.py`
 não cita o `ConfigDigibrain*`. A E2 (o replay do mundo aceita o evento) e a E3 (a bancada o grava) são outras etapas. Desvios em `docs/registro/2026-11.md`.
+
+## 12. Resumo da E2 (2026-11-04, o replay)
+
+A E2 fez o `reproduzir_mundo` (`digilab/mundo.py`) aceitar o evento `genoma`, com o parametro novo `cfg_genoma` (padrao `CONFIG_GENOMA`, desligada). O evento so vale com a chave ligada, como o primeiro evento do log e uma vez so (G0-4);
+com a chave desligada, fora da primeira posicao ou repetido, levanta `ValueError`; um `genoma` malformado levanta `GenomaInvalido`. O genoma vazio (`"hoje"`) nao muda nada na vida. O `engine.py` nao mudou, nem a bancada (E3).
+Os testes da coluna da E2 estao em `tests/test_genoma_g0.py`: chave desligada, as 40 vidas da E0 iguais ao gabarito (log, trajetoria e as tres partes); chave ligada e genoma vazio, trajetoria igual e log com o `genoma` na frente; replay do log com o `genoma` refeito igual (e `ate_tick`);
+os erros (fora da primeira posicao, chave desligada, dois `genoma`, malformado); e o `genoma` falhando na educacao, nas frutas, no ambiente e no `reproduzir` base (G0-7). O teste da E1 que dizia que so o `config.py` cita a `ConfigGenoma` passou a aceitar tambem o `mundo.py`. Desvios em `docs/registro/2026-11.md`.
