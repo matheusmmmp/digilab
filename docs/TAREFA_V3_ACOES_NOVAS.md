@@ -1,7 +1,7 @@
 # TAREFA V3 — ACOES_NOVAS: o passo 3 da "Vida do pet", ações novas no cérebro (2026-11-04)
 
 Coordenador: Gerente da V3 (Claude Code, Opus 5.5). Worker do papel: Claude Code, Opus 5.5, worktree e branch `v3-acoes-novas`.
-Status: ABERTA, **só no papel**. Nenhum código, nenhuma vida e nenhum número novo de jogo; as decisões AN-1 a AN-7 (seção 8) são do Matheus.
+Status: ABERTA, **só no papel**. Nenhum código, nenhuma vida e nenhum número novo de jogo; as decisões AN-1 a AN-7 (seção 8) DECIDIDAS pelo Matheus em 2026-11-04, todas pela recomendação ("Aprovo e mescle").
 
 Categoria: arquitetura. Origem: Matheus, 2026-11-04: o pet fica parado e não faz nada; o Matheus quer mais ações e movimento, sem treino por clique (2026-11-04).
 
@@ -221,7 +221,7 @@ que ele precisa medir, para o Matheus decidir a AN-1 com o custo à vista.
 
 ## 8. Precisa do Matheus
 
-As sete decisões que o worker não toma. A recomendação vem primeiro; todas PROPOSTAS. Nenhuma traz número novo de jogo: onde uma decisão
+As sete decisões que o worker não toma. A recomendação vem primeiro; todas DECIDIDAS pelo Matheus em 2026-11-04 pela recomendação ("Aprovo e mescle"). Nenhuma traz número novo de jogo: onde uma decisão
 pede um valor, a recomendação é reusar um que já existe.
 
 | # | decisão | recomendação | custo de errar |
