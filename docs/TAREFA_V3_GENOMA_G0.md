@@ -181,3 +181,9 @@ A E0 gravou `tests/gabaritos/genoma_g0_vidas_de_hoje.json` (40 vidas, sementes 1
 `tests/gabarito_genoma_g0.py`, num commit anterior a qualquer mudança no pacote. Os três caminhos: o mundo com o corpo e o cérebro A (20), o modular REL da C4 (10) e o mundo
 com o paladar (10). `tests/test_gabarito_genoma_g0.py` confere que o gabarito se regera igual duas vezes e está em dia. Nenhum arquivo de `digilab/`, de
 `experiments/bancada/` nem o `engine.py` mudou. Desvios em `docs/registro/2026-11.md`. A E1 (o `genoma.py`) é outra etapa.
+
+## 11. Resumo da E1 (2026-11-04, o registro)
+
+A E1 criou `digilab/genoma.py` (o `Genoma` com as cinco seções na forma `"hoje"`, o evento `genoma` no tick 0 em JSON canônico, o sha256 e as falhas altas), a `ConfigGenoma`
+desligada (`ligado=False`, PROPOSTO, SEM FONTE) em `digilab/config.py` e `tests/test_genoma_g0.py`. Nenhum arquivo do motor, do `mundo.py`, da bancada nem o `engine.py` mudou; o `genoma.py`
+não cita o `ConfigDigibrain*`. A E2 (o replay do mundo aceita o evento) e a E3 (a bancada o grava) são outras etapas. Desvios em `docs/registro/2026-11.md`.

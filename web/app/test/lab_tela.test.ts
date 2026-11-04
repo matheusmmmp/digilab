@@ -37,6 +37,8 @@ describe("o espaco do pet de teste", () => {
     expect(lerPetLab().tipo).toBe("vazio");
     const m = chocarOvoLab();
     expect(m.versao).toBe(VERSAO_PET_LAB);
+    /* os chamados do bebe pelo corpo, como nos ovos do jogo, e nao pelo relogio (2026-11-04) */
+    expect(m.produto).toEqual({ chamadoPelaFome: true, decisaoNaComida: true, chamadosPeloCorpo: true });
     const l = lerPetLab();
     expect(l.tipo === "ok" && l.motor.assinatura()).toBe(m.assinatura());
     expect(() => chocarOvoLab()).toThrow(/já existe um pet de teste/);
@@ -120,12 +122,12 @@ describe("importar e exportar o save v16", () => {
     expect(JSON.parse(textoSave(m)).versao).toBe(VERSAO_PET_LAB);
   });
   test("um arquivo de hoje (v15, a bola no golpe do #525) nao e de laboratorio, nem o v14; uma versao que ainda nao existe segue sem abrir", () => {
-    const m = new Motor(31); m.avancar(200);
+    const m = new Motor(31, 15); m.avancar(200);
     expect(m.versao).toBe(15);
     expect(lerArquivo(textoSave(m), "a").lab).toBe(false);
     const v14 = new Motor(31, 14); v14.avancar(200);
     expect(lerArquivo(textoSave(v14), "a").lab).toBe(false);
-    expect(() => lerArquivo(JSON.stringify({ semente: 31, log: [], versao: 17 }), "a")).toThrow(/versão 17/);
+    expect(() => lerArquivo(JSON.stringify({ semente: 31, log: [], versao: 18 }), "a")).toThrow(/versão 18/);
   });
   test("o v16 importado vai para o Laboratorio, nunca para o pet ativo nem para os guardados; um por vez", () => {
     const { texto, guardados } = jogoDeHoje();

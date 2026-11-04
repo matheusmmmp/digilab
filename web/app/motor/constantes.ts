@@ -58,10 +58,20 @@ export const CDJ = { limiarNecessidade: .3, limiarVontade: .1, limiarTom: .2, kC
    (decisao CV14-1, recomendacao do Gerente da V3 que vale ate o Matheus dizer outra coisa); so os ovos novos nascem v14;
    15 = o v14 com a bola no golpe (docs/TAREFA_V3_HABITAT_OBJETOS.md; a chave bolaNoGolpe do Mundo): quando o pet brinca, a bola sai na
    direcao em que ele vinha, com a distancia sorteada de sempre. A luta e a do v14 (as regras CV21E_TR14). Os v13 e os v14 seguem vivos,
-   com a bola de antes; so os ovos novos nascem v15 */
-export const VERSAO_PET = 15;
-/** as versoes de pet que abrem: a v13 (o tempo real de antes da rodada de equilibrio), a v14 (CV14-1) e a v15 (a bola no golpe) */
-export const VERSOES_PET: readonly number[] = [13, 14, 15];
+   com a bola de antes;
+   17 = o v15 com o cerebro trocavel (docs/TAREFA_V3_CEREBRO_PRIMARIO.md; pedido do Matheus de 2026-11-04): o evento "cb" do registro poe o
+   DigiBrain modular (o do laboratorio, motor/digibrain/) ou o cerebro A a decidir dali em diante. Cada cerebro guarda o que aprendeu e fica
+   parado enquanto o outro decide; o A segue dando o desejo e o carater, como no pet de teste. Sem "cb", a v17 e a v15 (o replay e o mesmo),
+   e por isso um pet v15 vivo passa a v17 quando o jogador troca o cerebro dele (Motor.promoverV17). Os ovos novos nascem v17, com o "cb"
+   do cerebro que os Ajustes escolhem (o modular por padrao). A v16 (o pet de teste) nao muda */
+export const VERSAO_PET = 17;
+/** as versoes de pet que abrem: a v13 (o tempo real de antes da rodada de equilibrio), a v14 (CV14-1), a v15 (a bola no golpe) e a v17
+    (o cerebro trocavel). A v16 e so a do laboratorio */
+export const VERSOES_PET: readonly number[] = [13, 14, 15, 17];
+/** a versao de pet do cerebro trocavel (o evento "cb") */
+export const VERSAO_V17 = 17;
+/** os cerebros que o evento "cb" escolhe: o DigiBrain modular e o cerebro A (os lobos, a linha de base) */
+export const CEREBROS = ["modular", "a"] as const;
 /** a versao de pet da bola no golpe (a chave bolaNoGolpe do Mundo) */
 export const VERSAO_V15 = 15;
 /** o pet de teste do laboratorio (docs/TAREFA_V3_LAB_MODULAR.md, LM4; LAB-3): a v14 com o DigiBrain modular no lugar do cerebro A. Nasce so pela

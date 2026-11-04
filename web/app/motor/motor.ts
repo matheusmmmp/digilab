@@ -7,7 +7,7 @@
    assinatura das vidas v13 nao muda (test/vidas_v13.test.ts). */
 import {
   ACAO_CHAMADO, ACOES_DONO_JOGO_V11, ACOES_PET, CAT, CDJ, CHAMADO_BEBE, CHAMADO_BEBE_CORPO, CHAMADO_FOME_CORPO, CHE, CLE, CMG, EIXOS_TEMP, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
-  TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V14, VERSAO_V15, VERSOES_PET,
+  TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V14, VERSAO_V15, VERSAO_V17, VERSOES_PET, CEREBROS,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
 import { APRENDIZADO_V14, CHIP_ANTES_V14 } from "./combate_tr/constantes_tr.ts";
@@ -214,8 +214,12 @@ export class Motor {
       `e` e a copia dele depois de cada passo). null nos v1-v10. Nos v12, o laco e o com o mundo fisico (MotorCorpoMundo) */
   v11: { braco: BracoConsequencia; laco: MotorCorpo } | null = null;
   /** o laboratorio (LM4; v16, VERSAO_PET_LAB): o DigiBrain modular decide no lugar do cerebro A (o `braco` fica so para o desejo e o carater,
-      sem aprender); null nos outros pets */
-  lab: DigiBrain | null = null;
+      sem aprender); null nos outros pets. Na v17, o modular so enquanto ele e o cerebro que decide (o evento "cb") */
+  get lab(): DigiBrain | null { return this.modularAtivo ? this.modular : null; }
+  /** o DigiBrain modular do pet: o da v16 desde o ovo; o da v17 desde o primeiro "cb" do modular (e fica, parado, quando o A volta) */
+  private modular: DigiBrain | null = null;
+  /** o modular decide agora (a v16 sempre; a v17 depois de um "cb" do modular) */
+  private modularAtivo = false;
 
   constructor(semente: number, versao: number = VERSAO_PET) {
     /* so a v13 e a v14 (CV14-1): os pets de antes (v1-v12, com o combate por turnos) foram descartados (o descarte 6, src/tamer.ts) */
@@ -230,7 +234,7 @@ export class Motor {
     /* o laco chama o cerebro por aqui: o desejo antes de decidir (como o gabarito da vontade) e, depois da decisao, o que o Motor
        registra dela (nada que mexa no estado do pet: o efeito da acao e do laco) */
     const lab = versao === VERSAO_PET_LAB ? new DigiBrain() : null;
-    this.lab = lab;
+    this.modular = lab; this.modularAtivo = lab !== null;
     const politicaA: PoliticaCorpoMundo = {
       agir(o, rng) {
         const t = m.v11!.laco.estado.tick, d = m.desejoAtual(o, t), a = braco.agir(o, rng);
@@ -244,7 +248,31 @@ export class Motor {
     };
     /* o pet de teste (v16): o mesmo embrulho, com o DigiBrain modular no lugar do A; o laco com a chave do laboratorio da o mundo ao cerebro,
        pergunta o alvo e chama o consequenciaMundo */
-    const politica: PoliticaCorpoMundo = lab === null ? politicaA : {
+    /* a v17 (o cerebro trocavel): cada gancho vai ao cerebro que decide agora. A troca e um evento entre decisoes, e o laco chama o agir,
+       o alvo e as consequencias de uma decisao no mesmo passo: a decisao inteira fica com um cerebro so */
+    const qual = (): DigiBrain | null => m.modularAtivo ? m.modular : null;
+    const politicaTrocavel: PoliticaCorpoMundo = {
+      agir(o, rng) {
+        const b = qual(), t = m.v11!.laco.estado.tick, d = m.desejoAtual(o, t), a = b ? b.agir(o, rng) : braco.agir(o, rng);
+        m._decisaoV11(o, a, t, d);
+        return a;
+      },
+      observar: tr => { const b = qual(); if (b) b.observar(tr); else braco.observar(tr); },
+      consequenciaCorpo: (a, oc, depois) => { const b = qual(); if (b) b.consequenciaCorpo(a, oc, depois); else braco.consequenciaCorpo(a, oc, depois); },
+      receberAcaoDono: (a, tick) => { const b = qual(); if (b) b.receberAcaoDono(a, tick); else braco.receberAcaoDono(a, tick); },
+      mudancaNoCorpo: (antes, depois) => { const b = qual(); if (b) b.mudancaNoCorpo(); else braco.mudancaNoCorpo(antes, depois); },
+      escolherAlvo: (acao, candidatos, percepcao, u) => {
+        const b = qual();
+        if (!b) throw new Error("o laco pediu o alvo ao cerebro A (so o modular escolhe o alvo)");
+        return b.escolherAlvo(acao, candidatos, percepcao, u);
+      },
+      consequenciaMundo: (a, oc, depois) => {
+        const b = qual();
+        if (!b) throw new Error("o laco deu a consequencia do mundo ao cerebro A (so o modular a recebe)");
+        b.consequenciaMundo(a, oc, depois);
+      },
+    };
+    const politica: PoliticaCorpoMundo = versao === VERSAO_V17 ? politicaTrocavel : lab === null ? politicaA : {
       agir(o, rng) {
         const t = m.v11!.laco.estado.tick, d = m.desejoAtual(o, t), a = lab.agir(o, rng);
         m._decisaoV11(o, a, t, d);
@@ -261,7 +289,7 @@ export class Motor {
        a regra de cada decisao vai ao registro do mundo, como o ultima_regra do Python */
     const laco = new MotorCorpoMundo(politica, semente, CCO_CORPO_V11, estadoNascimentoPy(TICK_INICIAL),
                                      { regra: () => braco.cerebro.ultimaRegra, cfgMundo: CMU_MVP, digibrain: lab !== null,
-                                       bolaNoGolpe: versao === VERSAO_V15 });     // o pet de teste (v16) e a v14 com o modular: a bola de antes
+                                       bolaNoGolpe: versao === VERSAO_V15 || versao === VERSAO_V17 });     // o pet de teste (v16) e a v14 com o modular: a bola de antes; a v17 e a v15
     this.v11 = { braco, laco };
     this.e = laco.estado;
     /* o vinculo B (coerencia por situacao, sem pedido), sem obediencia */
@@ -1000,6 +1028,43 @@ export class Motor {
     if (!r || !r.medalhas || r.medalhas.ok) return null;
     return r.tempo && (r.lutas ?? true) && (r.taxa ?? true) && (r.vinculo ?? true) ? r.medalhas : null;
   }
+  /* ---------------------------------------------------------------- o cerebro trocavel (v17) */
+  /** v17: algum "cb" ja entrou no registro */
+  private cerebroEscolhido = false;
+  /** o cerebro que decide agora: "modular" ou "a" (os pets de antes da v17 tem um so: o A, ou o modular no pet de teste) */
+  get cerebroAtual(): "modular" | "a" { return this.modularAtivo ? "modular" : "a"; }
+  /** v17: o dono troca o cerebro do pet (os Ajustes): o escolhido decide dali em diante, o outro fica parado com o que aprendeu. Entre
+      decisoes, com o pet vivo; o mesmo cerebro de agora e erro (o registro so guarda trocas de verdade, menos o do ovo, no comeco) */
+  trocarCerebro(cerebro: "modular" | "a"): void {
+    this._conferirMorte(); this._vivo();
+    const v = { cerebro };
+    this._validarCerebro(v);
+    this.log.push([this.e.tick, "cb", v]);
+    this._trocarCerebro(v);
+  }
+  private _validarCerebro(v: unknown): asserts v is { cerebro: "modular" | "a" } {
+    if (this.versao !== VERSAO_V17) throw new Error(`só os pets v${VERSAO_V17} trocam de cérebro (este é v${this.versao})`);
+    if (!v || typeof v !== "object" || Object.keys(v).join() !== "cerebro" || !(CEREBROS as readonly unknown[]).includes((v as { cerebro: unknown }).cerebro))
+      throw new Error(`troca de cérebro inválida: ${JSON.stringify(v)}`);
+    const c = (v as { cerebro: string }).cerebro, noOvo = !this.cerebroEscolhido && !this.nDecisoes && this.e.tick === TICK_INICIAL;
+    if (!noOvo && c === this.cerebroAtual) throw new Error(`o pet já decide com o cérebro ${c}`);
+  }
+  private _trocarCerebro(v: unknown): void {
+    this._validarCerebro(v);
+    this._conferirMorte(); this._vivo();
+    if (v.cerebro === "modular") this.modular ??= new DigiBrain();
+    this.modularAtivo = v.cerebro === "modular";
+    this.cerebroEscolhido = true;
+    (this.v11!.laco as MotorCorpoMundo).digibrain = this.modularAtivo;   // o modular ve o mundo, escolhe o alvo e recebe a consequencia dele
+  }
+  /** um pet v15 vivo como v17, para trocar de cerebro: o mesmo registro, reproduzido na v17 (sem "cb", a v17 e a v15). Confere que o pet
+      refeito e o mesmo (a assinatura) antes de devolver; o pet de entrada nao muda */
+  static promoverV17(m: Motor): Motor {
+    if (m.versao !== VERSAO_V15) throw new Error(`só um pet v${VERSAO_V15} passa a v${VERSAO_V17} (este é v${m.versao})`);
+    const p = Motor.reproduzir(m.semente, m.log, VERSAO_V17);
+    if (p.assinatura() !== m.assinatura()) throw new Error("o pet refeito na v17 não é o mesmo da v15: a promoção não vale");
+    return p;
+  }
   /** o Tamer ganhou medalha: grava "o Tamer tem n medalhas a partir deste tick" e re-verifica a evolucao na hora */
   liberar(n: number): void {
     this._conferirMorte(); this._vivo();
@@ -1042,7 +1107,9 @@ export class Motor {
       ...(this.liga.tentativas ? [["liga", this.liga]] : []),
       ...(this.fronteira ? [["fronteira", this.instalacoes]] : []), ...(this.salao.tentativas ? [["salao", this.salao]] : []),
       [this.men, this.honestidadeEspecie], this.conf.assinatura(),
-      ...(this.lab ? [["lab", { ...this.lab.estadoInterno(), motivos: undefined }]] : []),
+      ...(this.versao === VERSAO_PET_LAB ? [["lab", { ...this.modular!.estadoInterno(), motivos: undefined }]] : []),
+      /* a v17 depois do primeiro "cb": o cerebro que decide e o modular (a v17 sem "cb" assina como a v15) */
+      ...(this.cerebroEscolhido ? [["cb", this.modularAtivo ? "modular" : "a", this.modular ? { ...this.modular.estadoInterno(), motivos: undefined } : null]] : []),
       ["v11", this.v11!.braco.cerebro.estadoInterno(), this.v11!.laco.estadoDict(), this.v11!.laco.proximaDecisao],
       ["mundo", this.mundo!.resumo(), [...(this.v11!.laco as MotorCorpoMundo).vistosEm]]]);
   }
@@ -1062,6 +1129,7 @@ export class Motor {
       case "o": this._origem(ev[2]); break;
       case "c": this._config(ev[2].dur); break;
       case "p": this._produto(ev[2]); break;
+      case "cb": this._trocarCerebro(ev[2]); break;
       case "u": this._liberar(ev[2].n); break;
       case "i": this._item(ev[2].op, ev[2].id); break;
       case "k": this._armarCarta(ev[2].id); break;

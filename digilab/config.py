@@ -2645,3 +2645,23 @@ class ConfigBolaNoGolpe:
 
 CONFIG_BOLA_NO_GOLPE = ConfigBolaNoGolpe()
 CONFIG_BOLA_NO_GOLPE_LIGADA = ConfigBolaNoGolpe(ligada=True)
+
+
+# O genoma no log (docs/TAREFA_V3_GENOMA_G0.md, G0-1 a G0-7 DECIDIDAS em 2026-11-04; digilab/genoma.py): o evento `genoma` no tick 0 do log
+# do mundo. Desligada, a vida de hoje sai byte a byte (tests/gabaritos/genoma_g0_vidas_de_hoje.json). A E1 so cria o registro; o replay
+# (E2) e a bancada (E3) leem a chave.
+@dataclass(frozen=True)
+class ConfigGenoma:
+    ligado: bool = False                     # PROPOSTO: a chave do genoma no log
+
+    def __post_init__(self) -> None:
+        if type(self.ligado) is not bool:
+            raise TypeError(f"ConfigGenoma.ligado e bool: {self.ligado!r}")
+
+
+CONFIG_GENOMA = ConfigGenoma()
+CONFIG_GENOMA_LIGADO = ConfigGenoma(ligado=True)
+# status e fonte de cada campo (CLAUDE.md: nenhum numero sem status)
+PARAMETROS_GENOMA = {
+    "ligado": ("PROPOSTO", "SEM FONTE; o formato e a regra do genoma vazio sao SEM FONTE (TAREFA_V3_GENOMA_G0, secao 1)"),
+}
