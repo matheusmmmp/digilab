@@ -6,7 +6,8 @@
    `coberto`: um painel ou modal esta aberto por cima do habitat (o veu ligado; Habitat.tsx); a ilha desenha mais devagar por tras dele.
    `bolaNaMao`: o dono esta arrastando a bola (PorBola.tsx); a vista a esconde ate ela cair.
    `treino`: o ultimo treino pedido na tela Treinar (performance.now()); a ilha mostra o pet indo ao saco de pancada, batendo e voltando
-   (so vista: o ganho e o do motor, na hora; docs/TAREFA_V3_HABITAT_OBJETOS.md). */
+   (so vista: o ganho e o do motor, na hora; docs/TAREFA_V3_HABITAT_OBJETOS.md).
+   `cocoNoChao`: a ilha desenha a sujeira como cocos 3D no chao (ilha/cocos.ts); o PalcoPet deixa de desenhar o coco 2D ao lado do pet. */
 export interface VistaDoMundo {
   /** o ponto do cliente (px) no chao, em subunidades inteiras do mapa; null fora do mapa ou fora do chao */
   paraMundo: (clientX: number, clientY: number) => [number, number] | null;
@@ -26,4 +27,5 @@ export const CENA: {
   coberto: boolean;
   bolaNaMao: boolean;
   treino: number | null;
-} = { modo3d: false, modoMundo: false, ret: null, medir: null, mundo: null, coberto: false, bolaNaMao: false, treino: null };
+  cocoNoChao: boolean;
+} = { modo3d: false, modoMundo: false, ret: null, medir: null, mundo: null, coberto: false, bolaNaMao: false, treino: null, cocoNoChao: false };
