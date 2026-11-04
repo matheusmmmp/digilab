@@ -6,7 +6,8 @@ import { useEffect, useRef, useState } from "react";
 import { OVO, chaveSprite, corDominante, type Mundo } from "../../../motor/index.ts";
 import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { S, gradeDe, imagemGrade, paleta } from "../../grades.ts";
-import { useJogo } from "../../jogo.ts";
+import { jogoAtual, useJogo } from "../../jogo.ts";
+import { velocidadeAtual } from "../../tempo.ts";
 import { CENA } from "./cenaEstado.ts";
 import { alturaSono } from "./sono.ts";
 import { Seguidor, dentroDoMapa, janelaEm, ninhoDe, type Janela } from "./vistaMundo.ts";
@@ -27,7 +28,9 @@ export function MundoReserva() {
   useEffect(() => {
     const t = setInterval(() => {
       const agora = performance.now();
-      seguidor.current.seguir(mu.pet, agora - ultimo.current, cm);
+      const jg = jogoAtual();
+      seguidor.current.seguir(mu.pet, agora - ultimo.current, cm, { velJogo: velocidadeAtual(), acao: jg.motor.acao, dorme: jg.nascendo > 0 || jg.motor.acao === "dormir",
+        reduzido: matchMedia("(prefers-reduced-motion: reduce)").matches });
       ultimo.current = agora;
       redesenhar(x => x + 1);
     }, 120);

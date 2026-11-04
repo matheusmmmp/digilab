@@ -16,6 +16,7 @@ import { habitatAtual, voltarParaIlha, type Habitat } from "../../../habitat.ts"
 import { jogoAtual } from "../../../jogo.ts";
 import { CENA } from "../cenaEstado.ts";
 import { Seguidor, dentroDoMapa } from "../vistaMundo.ts";
+import { velocidadeAtual } from "../../../tempo.ts";
 import { AFASTAR_MAX, BATER_BOLA_MS, CAMERAS, COBERTO_MS, GOLPE_DIST, GOLPE_MS, KITS_COBERTO_MS, FPS_MIN, LARGURA_MIN, LONGE, NEVOA, PERTO, QUEDA_MS,
   RAZAO_MAX, TEXEL_ALVO, TREINO_MS, type CameraHabitat } from "./constantes.ts";
 import { CURVA, type CenaIlha, type Objetos } from "./cena.ts";
@@ -193,7 +194,7 @@ class VistaIlha {
       this.treino = { pedido: CENA.treino, desde: agora, ponto: [sx + lado * rx * GOLPE_DIST, sz + lado * rz * GOLPE_DIST], golpe: -1 };
     }
     const t = this.treino;
-    if (!t) return { cel: motorCel, golpe: this.bateBola, andando: false };
+    if (!t) return { cel: motorCel, golpe: this.bateBola, andando: this.seguidor.caminhando };
     const dt = agora - t.desde, { ida, golpes, volta } = TREINO_MS, ponto = t.ponto;
     const suave = (f: number) => (reduzido ? 1 : f * f * (3 - 2 * f)), entre = (a: [number, number], b: [number, number], f: number): [number, number] =>
       [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f];
@@ -206,7 +207,7 @@ class VistaIlha {
     }
     if (dt < ida + golpes + volta) return { cel: entre(ponto, motorCel, suave((dt - ida - golpes) / volta)), golpe: null, andando: !reduzido };
     this.treino = null;
-    return { cel: motorCel, golpe: this.bateBola, andando: false };
+    return { cel: motorCel, golpe: this.bateBola, andando: this.seguidor.caminhando };
   }
 
   /** um quadro: o pet onde o motor diz (interpolado), a camera atras dele, a racao e a bola, o dia ou a noite; devolve o retangulo do pet */
@@ -216,9 +217,10 @@ class VistaIlha {
     THREE.ColorManagement.enabled = true;
     CURVA.uCurva.value = this.estilo.dobra;
     const { motor: m } = jogoAtual(), mu = m.mundo ?? this.mu, cm = mu.cm, sub = cm.sub;
-    const dtMs = agora - this.ultimo, pos = this.seguidor.seguir(mu.pet, dtMs, cm);
+    const dtMs = agora - this.ultimo, reduzido = movimentoReduzido(), jg = jogoAtual();
+    const pos = this.seguidor.seguir(mu.pet, dtMs, cm, { velJogo: velocidadeAtual(), acao: m.acao, dorme: jg.nascendo > 0 || m.acao === "dormir", reduzido });
     this.ultimo = agora;
-    const reduzido = movimentoReduzido(), cor = this.coreografia(mu, agora, [pos[0] / sub, pos[1] / sub], reduzido);
+    const cor = this.coreografia(mu, agora, [pos[0] / sub, pos[1] / sub], reduzido);
     this.petCel = cor.cel;
     this.atualizarOrbita();
     const [px, pz] = this.petCel, a = this.afast;
