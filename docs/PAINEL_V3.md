@@ -1,6 +1,6 @@
 # PAINEL V3: onde a V3 está, em uma página
 
-**Atualizado em 2026-11-03** (`main` `8dd179b`, depois do #551), pelo Gerente da V3. O plano é o `docs/PLANO_V3.md`; o
+**Atualizado em 2026-11-04** (`main` `d7ec740`, depois do #553), pelo Gerente da V3. O plano é o `docs/PLANO_V3.md`; o
 fechamento da V2, o `docs/FECHAMENTO_V2.md` (tag `v2-final`).
 
 - Quem atualiza: o coordenador de cada trilha, uma linha por PR mergeado.
@@ -32,7 +32,7 @@ fechamento da V2, o `docs/FECHAMENTO_V2.md` (tag `v2-final`).
 | **L4** habitat como ilha 3D | a cena do modo mundo (v12) como ilha 3D, com o pet em papel; só vista | H0 a H5 **na `main`** (#488 a #494; a H1b liga o `CLIPES_UP`); faltam as capturas aprovadas e a M3 | `docs/TAREFA_V3_HABITAT_ILHA_3D.md` |
 | **B1** rodada 2 do equilíbrio | as fases do `PLANO_EQUILIBRIO_COMBATE_TR_R2.md` | **na `main`**, com a conferência única (R2-5, #502): 13 metas passam, 14 falham | `docs/EQUILIBRIO_COMBATE_TR.md` |
 | **B2** ligar a v14 | o pet v14 com o candidato da conferência; a v13 viva (CV14-1) | **na `main`** (#504); o Matheus decidiu ligar já (2026-10-30), contra a recomendação de esperar a rodada 3 | `docs/TAREFA_V3_COMBATE_V14.md` |
-| **B3** a luta no layout novo | o HUD e o palco na pele dos menus | a tarefa e as pranchas **na `main`** (#537), com as B3-1 a B3-5 aprovadas; o código não começou e parte da tela da LM5b (#551) | `docs/TAREFA_V3_LUTA_LAYOUT.md` |
+| **B3** a luta no layout novo | o HUD e o palco na pele dos menus | a tarefa e as pranchas **na `main`** (#537), com as B3-1 a B3-5 aprovadas; o código **na `main`** (#553, 2026-11-04): a cena a tela inteira, o HUD no alto, a regra num cartão à direita (faixa no celular) e o dock no rodapé, nas duas peles, a 390, 1280 e 1920×950; o replay quadro a quadro igual nos pets v13, v14 e v15; o contraste medido sobre o pior pixel dos mapas sob o degradê da cena (desvio). Fora: a luta com o pet de teste v16 e as capturas do portão (a T3) | `docs/TAREFA_V3_LUTA_LAYOUT.md` |
 | **L** balões e HUD (fora do plano, sessões próprias) | os balões soltos vão ao painel Estado; o HUD da tela Pet | **na `main`** (#498, #501) | `docs/TAREFA_V2_LAYOUT_HABITAT.md`, `docs/TAREFA_V3_LAYOUT_HUD.md` |
 
 ## 2. Decisões abertas do Matheus
@@ -42,14 +42,17 @@ fechamento da V2, o `docs/FECHAMENTO_V2.md` (tag `v2-final`).
 - **Os hooks** (`.claude/hooks/` e `.claude/settings.json`) apagados pelo `2586b0e` (a H2): 43 falhas na suíte; um card proposto para restaurar.
 - **A CV14-1:** a v13 continua viva (pela recomendação, até o Matheus dizer outra coisa); um pet v13 enfrenta a Fábrica v14, que é da conta.
 
-### 2.1 Pendências (2026-11-03)
+### 2.1 Pendências (2026-11-04)
 
 Cada uma com a recomendação do Gerente e o custo de errar.
 
-- **O PR #525 (habitat: o saco de pancada, o treino e a bola, pet v15)** juntou a `main` antes da LM5b e entra no git sem conflito
-  depois do #551, mas um teste da LM5b falha na junção: o `lab_tela.test.ts` espera que um save v15 não abra, e o #525 faz a v15 abrir.
-  Recomendação: a sessão dona junta a `main` de novo e troca essa espera para "a v15 abre e não é de laboratório". Custo de errar:
-  mesclar sem isso deixa a `main` com um teste do web vermelho (o CI do PR não roda o `npm test`).
+- **O #525 (habitat, pet v15) na `main`** (2026-11-03), com o teste do save v15 ajustado antes do merge; os 12 e2e que ele quebrou (a versão
+  esperada e o seletor da ração, que achava também o botão da bola) consertados no #554. O teste da chave do DigiBrain, quebrado desde a LM0
+  pelo exportador do gabarito, consertado no #552. Lição: o CI do PR não roda o `npm test` nem o e2e; o Gerente roda os dois na junção
+  antes de mesclar um PR do web.
+- **Os órgãos digitais e a genética** (Matheus, 2026-11-03, "segue sua recomendacao"): nenhuma frente nova antes da B3; depois dela,
+  o G0 da genética (`docs/futuro/ecossistema_genetico.md`: o genoma no log e o replay, atrás de chave); os órgãos só com fonte. O PR #516
+  fica como referência, sem merge.
 - **A cobertura do `sumiu` e do `desistiu` nas intenções com alvo** (ir à comida, à bola, ao lugar): portados, sem G-PAR-VIDA (LM4).
   Recomendação: deixar como está até um cenário que os produza; registrado na tarefa. Custo de errar: um erro nesses ramos só aparece jogando.
 - **O rótulo `livre-v9`** quando a fala de memória for gravada no modo livre. Recomendação: entra junto da primeira fala de memória gravada
