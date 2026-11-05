@@ -109,6 +109,9 @@ def test_ancoras_60_e_modos():
             assert 0 <= e["escala_inclinacao"] <= 1 and isinstance(e["recuo_carne"], int), n
     for linha in d["prova1"]:
         assert isinstance(linha[5], int) and linha[5] > 0
+    desl = d["carne_deslocamento"]
+    assert set(desl) == {"perfil", "frente"}
+    assert all(len(v) == 2 and all(isinstance(c, int) for c in v) for v in desl.values())
 
 
 # ---- o export gerado, quando existe ----

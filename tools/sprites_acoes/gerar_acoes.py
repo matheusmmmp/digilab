@@ -46,6 +46,7 @@ def parametros(nome: str, e: dict, anc: dict, remaster: Path) -> dict[str, str]:
     elif e["modo"] in ("prova1", "desenhar"):   # desenhar: provisorio pela prova 1 ate a boca desenhada (SA-9)
         pr.update(modo="prova1", boca="{},{}".format(*e["boca"]),
                   escala_inclinacao=str(e["escala_inclinacao"]), recuo_carne=str(e["recuo_carne"]),
+                  carne_desl="{},{}".format(*anc["carne_deslocamento"][e["orientacao"]]),
                   tabela=";".join(",".join(map(str, q)) for q in anc["prova1"]))
     else:
         raise ValueError(f"{nome}: modo desconhecido {e['modo']}")

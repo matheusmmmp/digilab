@@ -111,6 +111,8 @@ elseif modo == "prova1" then
   -- ajustes por Digimon do ancoras.json, para caber na caixa: a fracao da inclinacao usada e o recuo da carne em x
   local escala = tonumber(req("escala_inclinacao"))
   local recuo = tonumber(req("recuo_carne"))
+  local desl = nums(req("carne_desl"))
+  if #desl ~= 2 then error("carne_desl precisa de dx,dy") end
   for item in req("tabela"):gmatch("[^;]+") do
     local off, k, sy, mo, fa, ms = table.unpack(nums(item))
     k = k * escala
@@ -120,8 +122,8 @@ elseif modo == "prova1" then
     local by = math.floor(foot - (foot - b[2]) * sy + 0.5)
     local bx = b[1] + math.floor(k * (foot - b[2]) / alt + 0.5)
     local x, y
-    if FRENTE then x, y = bx - 5, by + 2 else x, y = bx - 2, by + 2 end
-    x = x + recuo
+    -- o canto da carne: o carne_deslocamento da orientacao (ancoras.json) a partir da boca, mais o recuo
+    x, y = bx + desl[1] + recuo, by + desl[2]
     Q[#Q + 1] = { q = q, ms = ms, img = img, sombra = q, mordidas = mo, farelo = fa == 1, x = x, y = y }
   end
 else
