@@ -118,7 +118,7 @@ class Impulso:
         persist = contexto["persistencia"]
         out = []
         em_passeio = contexto["I"] if self.cd.passeio and contexto["I"] is not None and contexto["I"][:2] == ("explorar", "passeio") else None
-        for u in self.alvos(sens, memoria, em_passeio):
+        for u in (self.alvos(sens, memoria, em_passeio) if self.cd.passeio else self.alvos(sens, memoria)):
             b, o = u["acao"], u["objeto"]
             termos = dict.fromkeys(TERMOS + (("lembranca",) if self.cd.memoria_autobio else ()) + (("faceta",) if self.cd.facetas_mem else ()), 0)
             termos["inato"] = inato_b[b] + (self.w0_tipo.get(b, {}).get(u["tipo"], 0) if u["tipo"] is not None else 0)
