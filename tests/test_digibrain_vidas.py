@@ -171,7 +171,9 @@ def test_t_ponto_3_so_o_orquestrador_do_prototipo_monta_o_digibrain():
     nomes = re.compile(r"digilab\.digibrain|from \.digibrain|from \.\.digibrain|import digibrain")
     citam = {p.relative_to(RAIZ).as_posix() for pasta in ("digilab", "experiments", "tools") for p in (RAIZ / pasta).rglob("*.py")
              if nomes.search(p.read_text(encoding="utf-8"))}
-    assert {c for c in citam if not c.startswith("digilab/digibrain/")} == {"experiments/run_v2_digibrain_prototipo.py"}
+    assert {c for c in citam if not c.startswith("digilab/digibrain/")} == {"experiments/run_v2_digibrain_prototipo.py",
+                                                                             # o exportador do gabarito do modular (LM0, #543) monta o braco REL pelo orquestrador
+                                                                             "experiments/exportar_gabarito_digibrain_modular.py"}
     assert "lembranca" not in (RAIZ / "digilab" / "mundo.py").read_text(encoding="utf-8")
 
 

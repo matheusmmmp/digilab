@@ -2422,3 +2422,59 @@ def viabilidade_do_corpo(ticks: Sequence[tuple[int, float, float, float, float, 
     if not n:
         raise ValueError("viabilidade do corpo sem tick na janela")
     return {"n_ticks": n, "fracao_fora": fora / n, "menor_media": soma_menor / n, "menor_minimo": menor}
+
+
+# --- o movimento, a leitura do produto da AN4 (docs/PLANO_ANALISE_V3_ACOES_NOVAS.md, 4.3; AN3-5, DECIDIDA; SEM FONTE)
+def movimento_nas_decisoes(decisoes: Sequence[tuple[str, float, float]], dias: int, acao_da_corrida: str = "explorar") -> dict:
+    """O MOV da AN4 (4.3 do plano). `decisoes` = (acao, x, y) de cada decisao da vida, na ordem: a acao escolhida e a posicao do pet no
+    tick da decisao (o `x, y` do `Observacao.mundo`, em unidades de posicao do mundo). O passo da decisao k e a distancia euclidiana da
+    posicao de k a de k + 1; a ultima decisao nao tem passo e fica fora. Uma decisao "sai do lugar" com o passo > 0.
+
+    - `mov`: a fracao das decisoes fora do dormir (a acao nao e `dormir`, o reflexo do sono incluido) que saem do lugar;
+    - `distancia_por_dia`: a soma dos passos de todas as decisoes, sobre `dias`;
+    - o zigue-zague (so descritivo; as duas medidas da AN0, `experiments/medir_v3_acoes_novas_hoje.py`), sobre as corridas de decisoes
+      seguidas com a acao `acao_da_corrida`: `liquido_sobre_caminho`, o deslocamento liquido (da posicao da primeira decisao a da decisao
+      seguinte a ultima) somado sobre o caminho (a soma dos passos) somado, nas corridas de 2 decisoes ou mais que nao terminam a vida; e
+      `fracao_que_inverte`, a fracao dos pares de decisoes seguidas da corrida, os dois passos > 0, cujo passo inverte o anterior (o produto
+      escalar < 0). As somas saem ao lado, para somar vidas como a AN0 somou.
+    Falha alto sem decisao, com dias < 1 ou sem decisao fora do dormir com passo."""
+    if not decisoes:
+        raise ValueError("movimento sem decisoes")
+    if dias < 1:
+        raise ValueError(f"movimento com {dias} dias")
+    pos = [(x, y) for _, x, y in decisoes]
+    acoes = [a for a, _, _ in decisoes]
+    passos = [(pos[k + 1][0] - pos[k][0], pos[k + 1][1] - pos[k][1]) for k in range(len(pos) - 1)]
+    dist = [math.hypot(dx, dy) for dx, dy in passos]
+    fora = [k for k in range(len(passos)) if acoes[k] != "dormir"]
+    if not fora:
+        raise ValueError("movimento sem decisao fora do dormir com passo")
+    saem = sum(1 for k in fora if dist[k] > 0)
+    na_corrida = [a == acao_da_corrida for a in acoes]
+    pares = inverte = 0
+    for k in range(len(passos) - 1):
+        if na_corrida[k] and na_corrida[k + 1]:
+            a, b = passos[k], passos[k + 1]
+            if a != (0, 0) and b != (0, 0):
+                pares += 1
+                inverte += (a[0] * b[0] + a[1] * b[1]) < 0
+    liquido = caminho = 0.0
+    corridas = 0
+    k = 0
+    while k < len(acoes):
+        if not na_corrida[k]:
+            k += 1
+            continue
+        ini = k
+        while k < len(acoes) and na_corrida[k]:
+            k += 1
+        n = k - ini
+        if n >= 2 and ini + n < len(pos):
+            corridas += 1
+            liquido += math.hypot(pos[ini + n][0] - pos[ini][0], pos[ini + n][1] - pos[ini][1])
+            caminho += sum(dist[j] for j in range(ini, ini + n))
+    return {"n_fora_do_dormir": len(fora), "saem_do_lugar": saem, "mov": saem / len(fora),
+            "distancia": sum(dist), "distancia_por_dia": sum(dist) / dias,
+            "zigue_zague": {"acao": acao_da_corrida, "corridas_de_2_ou_mais": corridas, "liquido": liquido, "caminho": caminho,
+                            "liquido_sobre_caminho": liquido / caminho if caminho else None,
+                            "pares": pares, "pares_que_invertem": inverte, "fracao_que_inverte": inverte / pares if pares else None}}

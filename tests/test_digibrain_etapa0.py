@@ -65,7 +65,9 @@ def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
              if nomes.search(p.read_text(encoding="utf-8"))}
     assert {c for c in citam if not c.startswith("digilab/digibrain/")} == {"digilab/config.py",
                                                                              "experiments/run_v2_digibrain_prototipo.py",
-                                                                             "experiments/exportar_gabarito_digibrain_modular.py"}
+                                                                             "experiments/exportar_gabarito_digibrain_modular.py",
+                                                                             # a AN0 (#575): so le as constantes (CONFIG_DIGIBRAIN_INATOS, RECEPTORES_DIGIBRAIN); nenhuma vida
+                                                                             "experiments/medir_v3_acoes_novas_hoje.py"}
 
 
 def test_o_digibrain_so_existe_com_a_chave_ligada_e_e_a_v13():
