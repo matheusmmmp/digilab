@@ -510,3 +510,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-05 — ACOES_NOVAS AN3, o plano de análise do passeio (worker, Claude Code, Opus 5.5, worktree `v3-acoes-novas-an3`)](registro/2026-11.md)
 - [2026-11-05 — ACOES_NOVAS AN2, o passeio no Python (worker, Claude Code, Sonnet 5.5, worktree `v3-acoes-novas-an2`)](registro/2026-11.md)
 - [2026-11-05 — ACOES_NOVAS AN2, o teste do gabarito no CI (coordenador, Gerente da V3, Claude Code, Opus 5.5, worktree `v3-passeio-ci`)](registro/2026-11.md)
+- [2026-11-05 — SAUDE, seis testes de separação vermelhos na main (worker, Claude Code, Sonnet 5.5, worktree `v3-saude-citacao`)](registro/2026-11.md)

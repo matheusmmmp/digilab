@@ -680,7 +680,13 @@ def test_g2_separado_nada_fora_do_pacote_le_a_chave():
                       "web/app/src/falaMemoria.ts",
                       # o plano da validacao (o adendo 9, que a espec 9 permite: o orquestrador): os bracos SUBCHAVES_C4, a run e o poder
                       "experiments/run_v2_digibrain_prototipo.py", "experiments/run_v2_memoria_autobio.py",
-                      "experiments/adendo9_poder_memoria_autobio.py"}
+                      "experiments/adendo9_poder_memoria_autobio.py",
+                      # o espelho TS do modular (LM1-LM4, #545-#548) porta o pacote para a web e so le; o exportador do gabarito (LM0, #543) monta o braco REL pelo orquestrador
+                      "web/app/motor/digibrain/adapt.ts", "web/app/motor/digibrain/constantes.ts", "web/app/motor/digibrain/impulso.ts",
+                      "web/app/motor/digibrain/mem.ts", "web/app/test/digibrain_modular_arb.test.ts", "web/app/test/digibrain_modular_mem.test.ts",
+                      "experiments/exportar_gabarito_digibrain_modular.py",
+                      # o poder da AN3 (#577): so le o artefato da run da C4 no git e importa o poder do adendo 9; nenhuma vida
+                      "experiments/plano_an3_poder_acoes_novas.py"}
     achados = set()
     for pasta in ("digilab", "experiments", "web", "tools", "servidor", "digilab_fala_livre"):
         if not (RAIZ / pasta).exists():
@@ -948,7 +954,12 @@ def test_g2_separado_nada_fora_do_pacote_le_a_chave_das_facetas():
     donos_da_chave = {"digilab/config.py", "digilab/digibrain/adapt.py", "digilab/digibrain/impulso.py", "digilab/digibrain/pers.py",
                     "digilab/digibrain/ganchos.py", "tests/test_memoria_autobio.py",      # os dois ultimos so citam o nome na docstring
                     # o plano da validacao (o adendo 9): o REL+F em SUBCHAVES_C4, a run que o confere e o teste dela
-                    "experiments/run_v2_digibrain_prototipo.py", "experiments/run_v2_memoria_autobio.py", "tests/test_memoria_autobio_run.py"}
+                    "experiments/run_v2_digibrain_prototipo.py", "experiments/run_v2_memoria_autobio.py", "tests/test_memoria_autobio_run.py",
+                    # o espelho TS do modular (LM1-LM4, #545-#548) porta o pacote para a web e so le; o exportador do gabarito (LM0, #543) e o teste dele
+                    "web/app/motor/digibrain/adapt.ts", "web/app/motor/digibrain/arb.ts", "web/app/motor/digibrain/constantes.ts",
+                    "web/app/motor/digibrain/impulso.ts", "web/app/motor/digibrain/mem.ts", "web/app/test/digibrain_modular_arb.test.ts",
+                    "web/app/test/digibrain_modular_impulso.test.ts", "web/app/test/digibrain_modular_mem.test.ts",
+                    "experiments/exportar_gabarito_digibrain_modular.py", "tests/test_gabarito_digibrain_modular_web.py"}
     achados = set()
     for pasta in ("digilab", "experiments", "web", "tools", "servidor", "digilab_fala_livre", "tests"):
         if not (RAIZ / pasta).exists():
