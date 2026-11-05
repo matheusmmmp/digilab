@@ -100,8 +100,10 @@ def test_ancoras_60_e_modos():
         assert 0 <= bx < w and 0 <= by < h, n
         if "fonte" in e:   # um .aseprite derivado, fora do git, e a regra que o fez
             assert e["fonte"].startswith("acoes/bocas/") and e["fonte"].endswith(".aseprite"), n
-            assert ("olhos_do_idle" in e) != ("boca_desenhada" in e), n
-            if "olhos_do_idle" in e:   # os olhos do Idle nos quadros da boca
+            assert sum(k in e for k in ("olhos_do_idle", "boca_desenhada", "boca_par")) == 1, n
+            if "boca_par" in e:        # um par de quadros do proprio Digimon, intactos (so sem as faiscas soltas)
+                assert e["modo"] == "par" and e["boca_par"]["tipo"] in ("par", "levada", "sempre_aberta", "cerrar"), n
+            elif "olhos_do_idle" in e:   # os olhos do Idle nos quadros da boca
                 o = e["olhos_do_idle"]
                 assert e["idle"][0] <= o["idle"] <= e["idle"][1], n
                 assert set(o["quadros"].values()) <= set(e["fechada"]) | set(e["aberta"]), n
