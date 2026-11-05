@@ -6,9 +6,11 @@ import { useEffect, useRef, useState } from "react";
 import { OVO, chaveSprite, corDominante, type Mundo } from "../../../motor/index.ts";
 import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { S, gradeDe, imagemGrade, paleta } from "../../grades.ts";
-import { useJogo } from "../../jogo.ts";
+import { jogoAtual, useJogo } from "../../jogo.ts";
+import { velocidadeAtual } from "../../tempo.ts";
 import { CENA } from "./cenaEstado.ts";
 import { alturaSono } from "./sono.ts";
+import { SEM_GESTO, gestoAgora } from "./cenaAcao.ts";
 import { Seguidor, dentroDoMapa, janelaEm, ninhoDe, type Janela } from "./vistaMundo.ts";
 
 /** a faixa de ceu no alto da caixa (fracao da altura): so vista */
@@ -27,7 +29,9 @@ export function MundoReserva() {
   useEffect(() => {
     const t = setInterval(() => {
       const agora = performance.now();
-      seguidor.current.seguir(mu.pet, agora - ultimo.current, cm);
+      const jg = jogoAtual();
+      seguidor.current.seguir(mu.pet, agora - ultimo.current, cm, { velJogo: velocidadeAtual(), acao: jg.motor.acao, dorme: jg.nascendo > 0 || jg.motor.acao === "dormir",
+        reduzido: matchMedia("(prefers-reduced-motion: reduce)").matches });
       ultimo.current = agora;
       redesenhar(x => x + 1);
     }, 120);
@@ -48,6 +52,12 @@ export function MundoReserva() {
   /* dormindo (sono.ts): achatado e respirando a cada passo de 120 ms, num tom apagado, com o pe no chao */
   const dorme = nascendo === 0 && m.acao === "dormir", alt = dorme ? alturaSono(performance.now(), matchMedia("(prefers-reduced-motion: reduce)").matches) : 1;
   const estiloSono = { transform: `scale(${1 + (1 - alt) / 2}, ${alt})`, transformOrigin: "50% 100%", filter: "brightness(.85) saturate(.85)" };
+  /* a cena da acao do motor, o cocô e a reacao ao toque (cenaAcao.ts; so vista): o gesto em px, um texel do sprite ~ 1/40 da altura dele */
+  const reduzidoCena = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const gesto = nascendo > 0 ? SEM_GESTO : gestoAgora({ acao: m.acao, sujeira: m.e.sujeira, chave: String(m.semente) }, performance.now(), reduzidoCena,
+    !seguidor.current.caminhando && !dorme, velocidadeAtual() <= 0), texel = sprite.h / 40;
+  const estiloGesto = gesto === SEM_GESTO || (gesto.frente === 0 && gesto.alto === 0 && gesto.estica === 1) ? {} : {
+    transform: `translate(${gesto.frente * texel}px, ${-gesto.alto * texel}px) scale(${1 + (1 - gesto.estica) / 2}, ${gesto.estica})`, transformOrigin: "50% 100%" };
   const [ppx, ppy] = paraCaixa(g, pos[0], pos[1]), ret ={ x: Math.round(ppx - sprite.w / 2), y: Math.round(ppy - sprite.h), w: sprite.w, h: sprite.h };
   useEffect(() => {
     CENA.modoMundo = true;
@@ -91,7 +101,7 @@ export function MundoReserva() {
         })}
         {ponto(...mu.bolaEm(m.e.tick), "cena-mundo-bola")}
         <span className="cena-mundo-sombra" style={{ left: ppx, top: ppy }} />
-        <img className="dl-pix cena-mundo-pet" src={sprite.url} width={sprite.w} height={sprite.h} alt="" style={{ left: ret.x, top: ret.y, ...(dorme ? estiloSono : {}) }} />
+        <img className="dl-pix cena-mundo-pet" src={sprite.url} width={sprite.w} height={sprite.h} alt="" style={{ left: ret.x, top: ret.y, ...(dorme ? estiloSono : estiloGesto) }} />
       </>}
     </div>
   );
