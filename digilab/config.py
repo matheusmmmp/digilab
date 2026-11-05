@@ -2378,12 +2378,16 @@ class ConfigDigibrain:
     memoria_autobio: bool = False            # PROPOSTO, SEM FONTE como valor (C4, espec 7.3; direcao: Ho 2005 e o PEPE): o episodio e a codificacao
     facetas_mem: bool = False                # PROPOSTO, SEM FONTE como valor (C4, M5, MA-6; direcao: Ho 2005): as tres facetas adquiridas
     controle_mem: str = "rel"                # PROPOSTO, SEM FONTE como valor (C4, espec 7.2): o braco da memoria (CONTROLES_MEM); "rel" e o de hoje
+    passeio: bool = False                    # PROPOSTO, SEM FONTE como valor (AN-2, docs/TAREFA_V3_ACOES_NOVAS.md, 3.1): o vagar que segura o destino
 
     def __post_init__(self) -> None:
         for nome in ("ligada", "modula_g_apr", "p2", "m_mem", "persistencia", "p1", "cheiro_inato", "intencao_cheiro",
-                     "intencao_suspensa", "credito_corrida", "redecidir_evento", "memoria_autobio", "facetas_mem"):
+                     "intencao_suspensa", "credito_corrida", "redecidir_evento", "memoria_autobio", "facetas_mem", "passeio"):
             if type(getattr(self, nome)) is not bool:
                 raise TypeError(f"ConfigDigibrain.{nome} e bool: {getattr(self, nome)!r}")
+        if self.passeio and (self.credito_corrida or self.intencao_suspensa or self.redecidir_evento):
+            raise ValueError("passeio nao se combina com a credito_corrida, a intencao_suspensa nem a redecidir_evento "
+                             "(docs/TAREFA_V3_ACOES_NOVAS.md, 3.1: PROPOSTO, sem teste da combinacao)")
         if self.credito_corrida and self.intencao_suspensa:
             raise ValueError("credito_corrida nao se combina com a intencao_suspensa (docs/TAREFA_V3_HABITO_INTENCAO.md, D-C1-2)")
         if self.redecidir_evento and (self.credito_corrida or self.intencao_suspensa):

@@ -20,6 +20,8 @@ u_humor)`), a frustracao F do M-ESTADO e a valencia V e a excitacao E do M-AFETO
 **A DX-3** (o adendo 3 do plano, A3.4; a subchave `cheiro_inato`): o inato da unidade `comer/cheiro` soma o `w0_tipo_cheiro` (o cheiro de
 comida vale como comida, sem a proximidade). Desligada, o termo e o de hoje (o W0_tipo do comer nao tem o tipo `cheiro`). O cerebro
 continua lendo so se ha cheiro (o G-SEM-DIRECAO).
+**O passeio** (docs/TAREFA_V3_ACOES_NOVAS.md, 3.1; a subchave `passeio`): com um passeio em curso (`contexto["I"]`), a unidade dele
+(`explorar`, `passeio`, (x, y)), com o tipo `vagar` e a distancia ao ponto, ocupa o lugar do `explorar/vagar`; o resto da ativacao e o do vagar.
 Sem estado e sem rng."""
 from __future__ import annotations
 
@@ -66,8 +68,9 @@ class Impulso:
         return z
 
     @staticmethod
-    def alvos(sens: dict, memoria: dict | None) -> list[dict]:
-        """as unidades possiveis da decisao, na ordem fixa: {chave, acao, tipo (o tipo do alvo para o W0_tipo), objeto, d}"""
+    def alvos(sens: dict, memoria: dict | None, passeio: tuple | None = None) -> list[dict]:
+        """as unidades possiveis da decisao, na ordem fixa: {chave, acao, tipo (o tipo do alvo para o W0_tipo), objeto, d}. `passeio` = a chave
+        (explorar, passeio, (x, y)) do passeio em curso (so com a subchave): a unidade dele ocupa o lugar do vagar, com o mesmo tipo"""
         out = []
         x, y = sens["pos"]
         for b in COMPORTAMENTOS_DIGIBRAIN:
@@ -84,7 +87,12 @@ class Impulso:
                 if not bolas:
                     out.append({"chave": chave_unidade(b), "acao": b, "tipo": None, "objeto": None, "d": None})
             elif b == "explorar":
-                out.append({"chave": chave_unidade(b, "vagar"), "acao": b, "tipo": "vagar", "objeto": None, "d": None})
+                if passeio is None:
+                    out.append({"chave": chave_unidade(b, "vagar"), "acao": b, "tipo": "vagar", "objeto": None, "d": None})
+                else:
+                    px, py = passeio[2]
+                    d = raiz_inteira((px - x) * (px - x) + (py - y) * (py - y))
+                    out.append({"chave": passeio, "acao": b, "tipo": "vagar", "objeto": None, "d": d})
                 if sens["ha_cheiro"]:
                     out.append({"chave": chave_unidade(b, "cheiro"), "acao": b, "tipo": "cheiro", "objeto": None, "d": None})
                 if memoria is not None and memoria["recuperado"] is not None:
@@ -109,7 +117,8 @@ class Impulso:
         incentivos: dict = {}
         persist = contexto["persistencia"]
         out = []
-        for u in self.alvos(sens, memoria):
+        em_passeio = contexto["I"] if self.cd.passeio and contexto["I"] is not None and contexto["I"][:2] == ("explorar", "passeio") else None
+        for u in (self.alvos(sens, memoria, em_passeio) if self.cd.passeio else self.alvos(sens, memoria)):
             b, o = u["acao"], u["objeto"]
             termos = dict.fromkeys(TERMOS + (("lembranca",) if self.cd.memoria_autobio else ()) + (("faceta",) if self.cd.facetas_mem else ()), 0)
             termos["inato"] = inato_b[b] + (self.w0_tipo.get(b, {}).get(u["tipo"], 0) if u["tipo"] is not None else 0)
