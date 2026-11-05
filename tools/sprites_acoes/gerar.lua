@@ -132,14 +132,17 @@ else
 end
 if #Q == 0 then error("sequencia vazia") end
 
--- as acoes do lote 1 (Feliz, Sacudir, Chamar, Emburrar): transformacoes de um quadro do Idle, ancoradas no pe dele (a ultima linha
--- opaca do quadro), vizinho mais proximo, sem desenho. Cada quadro: { deslocamento no Idle, dx, dy, sx, sy, k, ms, abaixar }:
+-- as acoes do lote 1 (Feliz, Sacudir, Chamar, Emburrar): transformacoes de um quadro do UP (do Idle ou uma pose de outra tag, que o
+-- gerar_acoes.py resolve pelo lote1.json), ancoradas no pe dele (a ultima linha opaca do quadro), vizinho mais proximo, sem desenho.
+-- Cada quadro: { quadro do UP, dx, dy, sx, sy, k, ms, abaixar, espelho, quadro da sombra }:
 --   dx, dy:  translacao em px (dy < 0 sobe; nunca desce abaixo do pe, o conferir_pe falha);
 --   sx, sy:  escala em x (pelo meio da caixa do personagem) e em y (pelo pe); sy < 1 amassa;
 --   k:       cisalhamento, o topo anda k px e o pe fica;
---   abaixar: px tirados da altura pelo pe (o Emburrar), somados ao sy.
--- A sombra e a do quadro do Idle de origem, sem mudanca (secao 3.4). Falha alto se um pixel opaco cairia fora da caixa.
-local function transformar(img, dx, dy, sx, sy, k, abaixar, onde)
+--   abaixar: px tirados da altura pelo pe (o Emburrar), somados ao sy;
+--   espelho: 1 espelha o personagem pelo meio dele (o lado oposto), antes do resto;
+--   sombra:  o quadro do UP de onde vem a sombra, sem mudanca (secao 3.4): o do Idle de origem, ou o 1o do Idle para as poses.
+-- Falha alto se um pixel opaco cairia fora da caixa.
+local function transformar(img, dx, dy, sx, sy, k, abaixar, espelho, onde)
   local top, foot = caixa(img)
   local left, right = W, -1
   for y = top, foot do for x = 0, W - 1 do
@@ -153,7 +156,8 @@ local function transformar(img, dx, dy, sx, sy, k, abaixar, onde)
   -- ida: todo pixel opaco tem de cair dentro da caixa
   for ys = top, foot do for xs = left, right do
     if A(img:getPixel(xs, ys)) > 0 then
-      local x = math.floor(cx + (xs - cx) * sx + cis(ys) + dx + 0.5)
+      local xe = espelho == 1 and (left + right - xs) or xs
+      local x = math.floor(cx + (xe - cx) * sx + cis(ys) + dx + 0.5)
       local y = math.floor(foot - (foot - ys) * syf + dy + 0.5)
       if x < 0 or y < 0 or x >= W or y >= H then error(("%s: pixel opaco fora da caixa em (%d,%d)"):format(onde, x, y)) end
     end
@@ -165,6 +169,7 @@ local function transformar(img, dx, dy, sx, sy, k, abaixar, onde)
     if ys >= top and ys <= foot then
       for x = 0, W - 1 do
         local xs = math.floor(cx + (x - dx - cis(ys) - cx) / sx + 0.5)
+        if espelho == 1 then xs = left + right - xs end
         if xs >= left and xs <= right then
           local px = img:getPixel(xs, ys)
           if A(px) > 0 then out:drawPixel(x, y, px) end
@@ -181,11 +186,11 @@ for _, nome in ipairs(LOTE1) do
   local spec = req("acao_" .. nome)
   local de = #Q + 1
   for item in spec:gmatch("[^;]+") do
-    local off, dx, dy, sx, sy, k, ms, abx = table.unpack(nums(item))
-    if abx == nil then error(nome .. ": quadro sem os 8 campos: " .. item) end
-    local q = i0 + (off % n)
-    local onde = ("%s quadro %d (Idle %d)"):format(nome, #Q - de + 2, q)
-    Q[#Q + 1] = { q = q, ms = ms, img = transformar(plano(pers, q), dx, dy, sx, sy, k, abx, onde), sombra = q, onde = onde }
+    local q, dx, dy, sx, sy, k, ms, abx, esp, qs = table.unpack(nums(item))
+    if qs == nil then error(nome .. ": quadro sem os 10 campos: " .. item) end
+    if esp ~= 0 and esp ~= 1 then error(nome .. ": espelho tem de ser 0 ou 1: " .. item) end
+    local onde = ("%s quadro %d (UP %d)"):format(nome, #Q - de + 2, q)
+    Q[#Q + 1] = { q = q, ms = ms, img = transformar(plano(pers, q), dx, dy, sx, sy, k, abx, esp, onde), sombra = qs, onde = onde }
   end
   if #Q < de then error(nome .. ": sem quadros") end
   tags[#tags + 1] = { nome = nome, de = de, ate = #Q }

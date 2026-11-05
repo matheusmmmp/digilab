@@ -40,24 +40,43 @@ def quadros_lote1(nome: str, e: dict, lote: dict, remaster: Path) -> dict[str, s
         raise ValueError(f"{nome}: escala_pulo {escala} fora de (0, 1]")
     if set(lote["acoes"]) != set(ACOES_LOTE1):
         raise ValueError(f"lote1.json: acoes {sorted(lote['acoes'])}, esperado {sorted(ACOES_LOTE1)}")
+    poses = lote["poses"].get(nome)
+    if poses is None:
+        raise ValueError(f"{nome}: sem poses no lote1.json (os quadros do UP de cada papel, conferidos a mao)")
     up = json.loads((remaster / "export" / f"{nome}.json").read_text(encoding="utf-8"))
     t = {x["name"]: x for x in up["meta"]["frameTags"]}["Idle"]
     ms_idle = [int(f["duration"]) for f in up["frames"][t["from"]:t["to"] + 1]]
     if len(ms_idle) != e["idle"][1] - e["idle"][0] + 1:
         raise ValueError(f"{nome}: o Idle do export tem {len(ms_idle)} quadros, o ancoras.json diz {e['idle']}")
+    i0, n = e["idle"][0], len(ms_idle)
+
+    def resolver(fonte) -> tuple[int, int]:
+        """(quadro do UP, quadro da sombra): um int e o deslocamento no Idle (a sombra dele); "pose:<papel>" e o quadro do papel no
+        poses do Digimon (a sombra do 1o quadro do Idle, como no Comer par)."""
+        if isinstance(fonte, int):
+            return i0 + fonte % n, i0 + fonte % n
+        if isinstance(fonte, str) and fonte.startswith("pose:"):
+            papel = fonte[5:]
+            if papel not in poses:
+                raise ValueError(f"{nome}: sem a pose {papel!r} no lote1.json")
+            return int(poses[papel]), i0
+        raise ValueError(f"{nome}: fonte de quadro invalida {fonte!r}")
+
     pr = {}
     for acao in ACOES_LOTE1:
         a = lote["acoes"][acao]
         if "todo_idle" in a:
             ti = a["todo_idle"]
-            qs = [[i, ti["dx"], ti["dy"], ti["sx"], ti["sy"], ti["k"], int(round(ms * ti["ms_fator"])), ti["abaixar"]]
+            qs = [[i, ti["dx"], ti["dy"], ti["sx"], ti["sy"], ti["k"], int(round(ms * ti["ms_fator"])), ti["abaixar"], ti["espelho"]]
                   for i, ms in enumerate(ms_idle)]
         else:
             qs = [list(q) for q in a["quadros"]]
-        for q in qs:
-            if len(q) != 8 or not isinstance(q[6], int) or q[6] <= 0:
+        for i, q in enumerate(qs):
+            if len(q) != 9 or not isinstance(q[6], int) or q[6] <= 0 or q[8] not in (0, 1):
                 raise ValueError(f"{nome} {acao}: quadro invalido {q}")
             q[2] = int(round(q[2] * escala))   # o pulo (dy) na fracao do ajuste
+            q[0], sombra = resolver(q[0])
+            qs[i] = q + [sombra]
         pr["acao_" + acao] = ";".join(",".join(map(str, q)) for q in qs)
     return pr
 

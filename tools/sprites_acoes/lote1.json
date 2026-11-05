@@ -1,60 +1,75 @@
 {
- "versao": 1,
+ "versao": 2,
  "status": "PROPOSTO",
- "fonte": "SEM FONTE: receitas da M1 do lote 1 da SPRITES_ACOES (2026-11-05), da tabela 3.2 da docs/TAREFA_V3_SPRITES_ACOES.md; os px e os ms foram escolhidos a olho no Agumon",
- "quadro_formato": "[deslocamento no Idle (modulo o tamanho do Idle), dx, dy, sx, sy, k, ms, abaixar]: dx e dy em px (dy < 0 sobe); sx pelo meio do personagem e sy pelo pe (sy < 1 amassa); k o cisalhamento (o topo anda k px, o pe fica); abaixar, px tirados da altura pelo pe. A sombra e a do quadro do Idle de origem",
- "todo_idle_formato": "o Idle inteiro do UP, quadro a quadro: dx, dy, sx, sy, k e abaixar fixos, e o ms de cada quadro do Idle vezes ms_fator, arredondado",
+ "fonte": "SEM FONTE: receitas da M1 do lote 1 da SPRITES_ACOES (2026-11-05), da tabela 3.2 da docs/TAREFA_V3_SPRITES_ACOES.md; os px e os ms foram escolhidos a olho no Agumon. A v1 (so deslocamentos do Idle) foi reprovada pelo Matheus em 2026-11-05: as quatro pareciam iguais; a v2 usa poses de outras tags do UP, espelho e squash and stretch forte",
+ "quadro_formato": "[fonte, dx, dy, sx, sy, k, ms, abaixar, espelho]: fonte e um int (o deslocamento no Idle, modulo o tamanho dele; a sombra e a do proprio quadro) ou \"pose:<papel>\" (o quadro do UP do papel em poses do Digimon; a sombra e a do 1o quadro do Idle). dx e dy em px (dy < 0 sobe); sx pelo meio do personagem e sy pelo pe (sy < 1 amassa, > 1 estica); k o cisalhamento (o topo anda k px, o pe fica); abaixar, px tirados da altura pelo pe; espelho 1 vira o personagem para o lado oposto",
+ "todo_idle_formato": "o Idle inteiro do UP, quadro a quadro: dx, dy, sx, sy, k, abaixar e espelho fixos, e o ms de cada quadro do Idle vezes ms_fator, arredondado",
  "escala_pulo": "por Digimon (ajustes), a fracao do dy usada, arredondada, para o pulo caber na caixa do export (a receita falha alto sem ela)",
+ "papeis": {
+  "alto": "o alto do pulo do Feliz: bracos abertos e boca aberta (a corrida do UP)",
+  "salto": "a saida e a volta do pulo do Feliz: em pe, boca aberta",
+  "susto_a": "o chacoalhao do Sacudir: a pose do Stun",
+  "susto_b": "o outro quadro do Stun",
+  "aceno_a": "o Chamar: o braco levantado (\"ei\")",
+  "aceno_b": "o Chamar: o braco mais alto, o outro tempo do aceno",
+  "grito": "o Chamar: a mao na boca, segurado antes da pausa"
+ },
+ "poses": {
+  "Agumon": {"alto": 44, "salto": 29, "susto_a": 51, "susto_b": 52, "aceno_a": 4, "aceno_b": 6, "grito": 8}
+ },
  "acoes": {
   "Feliz": {
    "loop": false,
-   "descricao": "um pulinho com amassado na volta, uma vez; o coracao e a nota ficam na vista",
+   "descricao": "agacha forte, estica na saida, pulo alto de bracos abertos, estica na queda e amassa forte na volta; uma vez. O coracao fica na vista",
    "quadros": [
-    [0, 0, 0, 1.0, 1.0, 0, 100, 0],
-    [1, 0, 0, 1.06, 0.9, 0, 100, 0],
-    [2, 0, -4, 1.0, 1.0, 0, 67, 0],
-    [2, 0, -6, 1.0, 1.0, 0, 133, 0],
-    [3, 0, -6, 1.0, 1.0, 0, 100, 0],
-    [3, 0, -3, 1.0, 1.0, 0, 67, 0],
-    [4, 0, 0, 1.08, 0.86, 0, 100, 0],
-    [4, 0, 0, 1.03, 0.95, 0, 67, 0],
-    [5, 0, 0, 1.0, 1.0, 0, 66, 0]
+    [0, 0, 0, 1.12, 0.82, 0, 100, 0, 0],
+    ["pose:salto", 0, -3, 0.92, 1.1, 0, 67, 0, 0],
+    ["pose:alto", 0, -8, 1.0, 1.0, 0, 100, 0, 0],
+    ["pose:alto", 0, -9, 1.0, 1.0, 0, 133, 0, 0],
+    ["pose:alto", 0, -7, 1.0, 1.0, 0, 100, 0, 0],
+    ["pose:salto", 0, -3, 0.94, 1.08, 0, 67, 0, 0],
+    [0, 0, 0, 1.15, 0.8, 0, 100, 0, 0],
+    [1, 0, 0, 1.05, 0.93, 0, 67, 0, 0],
+    [2, 0, 0, 1.0, 1.0, 0, 66, 0, 0]
    ]
   },
   "Sacudir": {
    "loop": false,
-   "descricao": "oscila de lado com o pe parado (cisalhamento), uma vez; o brilho e as bolhas ficam na vista",
+   "descricao": "chacoalhao de cachorro saindo da agua: a pose do Stun espelhada a cada quadro, 4 px para cada lado, 60 ms, amassado leve, sem pulo; uma vez. As gotas ficam na vista",
    "quadros": [
-    [0, 0, 0, 1.0, 0.97, -3, 80, 0],
-    [1, 0, 0, 1.0, 0.97, 3, 80, 0],
-    [2, 0, 0, 1.0, 0.97, -4, 80, 0],
-    [3, 0, 0, 1.0, 0.97, 4, 80, 0],
-    [4, 0, 0, 1.0, 0.97, -4, 80, 0],
-    [5, 0, 0, 1.0, 0.97, 4, 80, 0],
-    [0, 0, 0, 1.0, 0.98, -3, 80, 0],
-    [1, 0, 0, 1.0, 0.98, 3, 80, 0],
-    [2, 0, 0, 1.0, 1.0, -1, 80, 0],
-    [3, 0, 0, 1.0, 1.0, 0, 80, 0]
+    ["pose:susto_a", -4, 0, 1.04, 0.95, -2, 60, 0, 0],
+    ["pose:susto_b", 4, 0, 1.04, 0.95, 2, 60, 0, 1],
+    ["pose:susto_a", -4, 0, 1.04, 0.95, -2, 60, 0, 0],
+    ["pose:susto_b", 4, 0, 1.04, 0.95, 2, 60, 0, 1],
+    ["pose:susto_a", -4, 0, 1.04, 0.95, -2, 60, 0, 0],
+    ["pose:susto_b", 4, 0, 1.04, 0.95, 2, 60, 0, 1],
+    ["pose:susto_a", -3, 0, 1.03, 0.96, -2, 60, 0, 0],
+    ["pose:susto_b", 3, 0, 1.03, 0.96, 2, 60, 0, 1],
+    ["pose:susto_a", -2, 0, 1.02, 0.97, -1, 60, 0, 0],
+    ["pose:susto_b", 2, 0, 1.02, 0.97, 1, 60, 0, 1],
+    ["pose:susto_a", -1, 0, 1.0, 1.0, 0, 60, 0, 0],
+    ["pose:susto_b", 1, 0, 1.0, 1.0, 0, 60, 0, 1],
+    [0, 0, 0, 1.0, 1.0, 0, 80, 0, 0]
    ]
   },
   "Chamar": {
    "loop": true,
-   "descricao": "um pulinho curto por ciclo, em laco (os pulinhos seguidos); o ! fica na vista. Nao vira para a camera: o UP nao tem a pose",
+   "descricao": "\"ei, ei!\": o braco levantado com balanco para a frente e dois pulinhos curtos, a mao na boca segurada e uma pausa parado; em laco (insistencia). O ! fica na vista",
    "quadros": [
-    [0, 0, 0, 1.0, 1.0, 0, 133, 0],
-    [1, 0, 0, 1.05, 0.92, 0, 67, 0],
-    [1, 0, -2, 1.0, 1.0, 0, 67, 0],
-    [2, 0, -3, 1.0, 1.0, 0, 100, 0],
-    [2, 0, -2, 1.0, 1.0, 0, 67, 0],
-    [3, 0, 0, 1.05, 0.92, 0, 67, 0],
-    [4, 0, 0, 1.0, 1.0, 0, 100, 0],
-    [5, 0, 0, 1.0, 1.0, 0, 100, 0]
+    ["pose:aceno_a", 0, 0, 1.0, 1.0, 2, 100, 0, 0],
+    ["pose:aceno_b", 0, -2, 1.0, 1.0, 3, 67, 0, 0],
+    ["pose:aceno_b", 0, 0, 1.06, 0.93, 3, 67, 0, 0],
+    ["pose:aceno_a", 0, 0, 1.0, 1.0, 1, 100, 0, 0],
+    ["pose:aceno_b", 0, -2, 1.0, 1.0, 3, 67, 0, 0],
+    ["pose:aceno_b", 0, 0, 1.06, 0.93, 3, 67, 0, 0],
+    ["pose:grito", 0, 0, 1.0, 1.0, 2, 267, 0, 0],
+    [0, 0, 0, 1.0, 1.0, 0, 333, 0, 0]
    ]
   },
   "Emburrar": {
    "loop": true,
-   "descricao": "o Idle inteiro abaixado 2 px pelo pe e 1,5 vez mais lento, em laco; o tom mais escuro, a nuvem e o virar de lado ficam na vista",
-   "todo_idle": {"dx": 0, "dy": 0, "sx": 1.0, "sy": 1.0, "k": 0, "abaixar": 2, "ms_fator": 1.5}
+   "descricao": "virado para o lado oposto (espelhado), abaixado 3 px pelo pe, inclinado 2 px para tras e com o Idle 2,25 vezes mais lento, sem pulo; em laco. O tom escuro e a raiva ficam na vista",
+   "todo_idle": {"dx": 0, "dy": 0, "sx": 1.0, "sy": 1.0, "k": 2, "abaixar": 3, "espelho": 1, "ms_fator": 2.25}
   }
  },
  "ajustes": {}
