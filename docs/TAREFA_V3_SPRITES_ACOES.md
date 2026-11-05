@@ -189,7 +189,17 @@ depois, porque a fonte é um `.aseprite` (SA-3).
    - uma folha `<Nome>_objeto.png`/`.json` com só a camada do objeto, nas mesmas tags e nos mesmos ms.
 4. O `Assets/gerar_atlas_up_clipes.py` (fora do git) lê também o `remaster/acoes/export/` e junta as tags novas a cada sprite do
    `digilab_atlas_up_clipes.json`, com o mesmo empacotamento.
-5. O jogo carrega o atlas como hoje.
+5. **O portão (o Matheus, 2026-11-04: "eu não quero que essas sprites vão direto para o jogo. Eu quero poder ver ele no Atlas, ver
+   como é que ficou").** Antes do passo 4, as ações entram no **visualizador do atlas**, uma cópia local da página
+   `remaster/fonte/site/atlas_digimon_up.html` com os 60 Digimon das formas:
+   - cada Digimon mostra as animações do UP mais `Comer` (com a comida) e `Comer_sem_objeto`, quadro a quadro e com os ms;
+   - o visualizador é gerado por `remaster/acoes/visualizador/gerar_site.py` e servido em `http://localhost:8802` (a configuração
+     `atlas-acoes` do `.claude/launch.json`);
+   - tudo fica fora do git, por serem quadros do UP.
+
+   **O `Assets/digilab_atlas_up_clipes.json` do jogo só é regerado com as ações depois que o Matheus as aprova no visualizador.** Até
+   lá ele fica como está hoje, sem `Comer`. Conferido em 2026-11-04.
+6. O jogo carrega o atlas como hoje.
 
 ### 3.4 O formato de saída
 
