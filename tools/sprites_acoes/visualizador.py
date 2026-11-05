@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import json
 import shutil
+import time
 import sys
 from pathlib import Path
 
@@ -107,6 +108,19 @@ def main() -> int:
     if 'tag = A.t.find(t => t[0] === "Idle") || A.t[0];' not in html:
         raise ValueError("a pagina do atlas mudou: o ponto de abrir no Idle nao foi achado")
     html = html.replace('tag = A.t.find(t => t[0] === "Idle") || A.t[0];', 'tag = A.t.find(t => t[0] === "Comer") || A.t.find(t => t[0] === "Idle") || A.t[0];')
+    # sem cache: o http.server nao manda no-cache, e o navegador mostrava o atlas antigo depois de regerar (2026-11-05)
+    versao = str(int(time.time()))
+    trocas = [
+        ("<script>", f'<script>\nconst VERSAO = "{versao}";', 1),
+        ('fetch("atlas/index.json")', 'fetch("atlas/index.json?v=" + VERSAO, {cache: "no-store"})', 1),
+        ('im.src = "atlas/" + encodeURIComponent(n) + ".png";', 'im.src = "atlas/" + encodeURIComponent(n) + ".png?v=" + VERSAO;', 1),
+        ('"url(atlas/miniaturas.png)"', '"url(atlas/miniaturas.png?v=" + VERSAO + ")"', 1),
+        ('img.src.endsWith(encodeURIComponent(atual) + ".png")', 'img.src.includes("/" + encodeURIComponent(atual) + ".png")', 2),
+    ]
+    for antes, depois, n in trocas:
+        if html.count(antes) != n:
+            raise ValueError(f"a pagina do atlas mudou: {antes!r} aparece {html.count(antes)} vezes, esperado {n}")
+        html = html.replace(antes, depois)
     (SAIDA / "index.html").write_text(html, encoding="utf-8")
     print(f"{len(indice)} Digimon em {SAIDA}")
     return 0
