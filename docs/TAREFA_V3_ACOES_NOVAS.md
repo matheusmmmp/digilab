@@ -402,3 +402,31 @@ faixa do plano (de 45 min a 1 h 15 min). É estimativa; o tempo real vai ao RESU
 passeio fica no motivo como `explorar/vagar`, e a conferência do crédito do protótipo, como está, recusaria todo LAB+P; o orquestrador passa
 a ela uma vista em que a abertura é a primeira decisão do passeio, depois de conferir cada abertura. O código do passeio, o plano (salvo a
 seção 14, o registro que ele pede) e o `engine.py` não mudaram.
+
+## 15. Resumo do resultado da AN4: a guarda falha (2026-11-05, worker Claude Code, Opus 5.5, branch `v3-acoes-novas-an4-resultado`)
+
+**A linha 2 da seção 7.4 do plano: a guarda G-COMEDOURO-AN falha, e nestas condições o passeio tira o pet do comedouro.** A `passeio` fica
+desligada e a AN5 não roda. O resultado completo, com o artefato de cada número, está em `docs/RESULTADO_V3_ACOES_NOVAS.md`. Os artefatos
+estão em `artifacts_v3_acoes_novas/run/`.
+
+| o quê | o valor | onde (`resultado.json`) |
+|---|---|---|
+| a run | 3 200 vidas (200 unidades da faixa 78101…78505 × 2 braços × 8 células), 14 dias; das 15h59 às 17h38 de 2026-11-05, 4 processos, saída 0; `git_head` `cff554fd`, árvore limpa | `meta.json` |
+| P-PASSEIO | 0,0836 [0,0823; 0,0849], passa (> 0,01) | `premissas.P-PASSEIO` |
+| G-ELEGIVEL-EP | LAB 1,000; LAB+P 0,999; passa | `premissas.G-ELEGIVEL-EP` |
+| **G-COMEDOURO-AN** | **−0,0263 [−0,0362; −0,0164]**, t = −5,22, n = 200; **classe "< 0", falha** (δ = 0,018; margem efetiva 0,0142) | `guarda` |
+| MOV | +0,0236 [+0,0203; +0,0269]: o passeio move o pet (não é gate) | `movimento` |
+| LONGE-AN | −0,0169 [−0,0340; +0,0001], "indeterminado" | `descritivo.longe.LONGE-AN` |
+| o zigue-zague (só em nível) | comedouro: líquido/caminho de 0,474 para 0,615; pares que invertem de 0,524 para 0,329 | `descritivo.movimento.zigue_zague` |
+| os passeios no comedouro | 7,85 por dia; 1,55 decisão em média; fins `meta` 48 %, `interrompido` 34 %, `trocou` 18 %; crédito descartado 0 | `descritivo.passeio` |
+| o corpo | a menor necessidade média dos dias 8 a 14 sai "< 0" nos dois lugares (−0,016 e −0,012); a privação e a exaustão sobem pouco | `descritivo.corpo` |
+| a leitura | linha 2; `an5_pode_rodar` = false | `leitura` |
+
+**A conferência depois da run, sem nenhuma vida:**
+- os sha256 dos artefatos e do código conferem com o `meta.json` e com o registro;
+- o `analisar` refeito do `medidas.json` sai igual ao `resultado.json`, byte a byte;
+- uma conta da guarda fora do orquestrador dá a mesma média e o mesmo t.
+
+**Para o Matheus** (o RESULTADO, seção 8): o que fazer com o passeio depois do negativo. A recomendação é fechar a frente como negativa e
+deixar a calibração do limiar e do raio do vagar para a rodada de equilíbrio. Os desvios D-AN4R-1 a D-AN4R-5 estão no
+`docs/registro/2026-11.md`.
