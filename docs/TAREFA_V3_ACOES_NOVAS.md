@@ -318,3 +318,30 @@ três conjuntos abaixo comparam uma vida **nova** do Python com o gravado, byte 
 **Decisão do Matheus (2026-11-04, "Sim, mescle e aceite"):** a recomendação acima ACEITA: a AN2 regrava só o `digibrain_modular_constantes.json`, com a diferença exata de `"passeio": false`, num commit próprio, com o teste de que as oito vidas não mudam um byte.
 
 **Gate:** o gabarito se regera igual duas vezes: `test_o_exportador_sai_igual_em_duas_execucoes_byte_a_byte` e `test_o_gabarito_se_regera_igual_duas_vezes` passam. Nada novo gravado.
+
+## 12. Resumo da AN3: o plano de análise da run única (2026-11-05, worker Claude Code, Opus 5.5, branch `v3-acoes-novas-an3`)
+
+**O plano está em `docs/PLANO_ANALISE_V3_ACOES_NOVAS.md`, PROPOSTO.** Ele só vale com a aprovação do Matheus (as AN3-1 a AN3-9, na seção 13 dele), e a AN4 só roda depois
+dela, com a AN2 na `main` e o orquestrador com a trava. **Nenhuma vida, nenhuma run e nenhum código do passeio** neste PR.
+
+| o quê | o PROPOSTO | onde |
+|---|---|---|
+| a pergunta | o passeio move o pet (sem limiar) **sem piorar a comida perto do comedouro** (o gate) | plano, seção 1 |
+| os braços | **LAB** (o REL da C4, `SUBCHAVES_C4["REL"]`) contra **LAB+P** (o mesmo com a `passeio`); o cenário da C4, 14 dias, os 4 donos; o comedouro e o `longe_fixo`: 16 vidas por unidade | seção 2, AN3-1 |
+| as sementes | a faixa **78101…78505** (em `FAIXAS_RESERVADAS` neste PR, o primeiro commit); as bases 78101 a 78505; **K = 40 por base, 200 unidades, 3 200 vidas** | seção 3, AN3-2, AN3-9 |
+| a guarda **G-COMEDOURO-AN** (o único gate) | LAB+P − LAB na taxa por episódio de fome, nas 4 células do comedouro; o IC95 do t; **falha só com a classe "< 0"** de A6.6 com **δ = 0,018** | seções 6 e 7.2 |
+| as premissas | a **P-PASSEIO** (o passeio dura perto da ração: o limite inferior > 0,01) e a G-ELEGIVEL-EP; se uma falha, a guarda é inconclusiva e a AN5 não roda | 7.1, AN3-4, AN3-8 |
+| o movimento (o produto) | **MOV:** a fração das decisões fora do dormir em que o pet sai do lugar, LAB+P − LAB nas 8 células; "o passeio move o pet" só com o limite inferior do IC95 acima de 0; sem limiar; um nulo plausível escrito antes | 4.3, 7.3, AN3-5, AN3-7 |
+| a medida nova | só o MOV (com a distância por dia e o zigue-zague): uma função em `digilab/metrics.py`, no PR do orquestrador da AN4, com teste contra a AN0, antes de qualquer vida | 4.3 |
+| o descritivo | o `longe_fixo` (sem previsão), o corpo (privação e C5), os passeios e os fins (só no LAB+P), o crédito descartado, o zigue-zague | seção 8 |
+| a máquina | 4 processos; **de 45 min a 1 h 15 min** com a análise (pela C4: 0,805 s de parede por vida; o REL 8 % mais caro que a média) | seção 10 |
+
+**De onde saem os números:** `experiments/plano_an3_poder_acoes_novas.py` lê só a C4 do git (o `medidas.json.gz`, sha256 `8b48d0a2…`, e o `meta.json`, `6315784c…`) e grava
+`artifacts_v3_acoes_novas/plano_an3_poder.json` (sha256 `7b1168c2…aa77`), igual em duas execuções (`tests/test_plano_an3_poder.py`). O σ de planejamento é o maior dp dos quatro
+contrastes do comedouro entre o REL e um braço que difere numa subchave ou num controle (o REL − EMB, 0,0763), com a folga de 20 % (0,0915). Todos os números são PROPOSTOS, SEM
+FONTE externa.
+
+**O que a AN3 mudou fora do plano:** a urgência no passeio virou conferência que falha alto (pela 3.2, ela não passa do limiar nas decisões que continuam um passeio); a "saúde ao
+fim" não entra como medida nova (AN3-6). Os desvios estão no `docs/registro/2026-11.md`.
+
+**Decisão do Matheus (2026-11-05, "Aprovo e mescle"):** o plano APROVADO e as AN3-1 a AN3-9 DECIDIDAS, todas pela recomendação (K = 200, δ = 0,018, 3 200 vidas na faixa 78101…78505). A AN4 roda depois da AN2 na `main` e do PR do orquestrador.
