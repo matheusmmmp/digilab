@@ -14,7 +14,14 @@ export const ATLAS_CLIPES_URL = "../../../Assets/digilab_atlas_up_clipes.json";
 
 /** [x, y, largura, altura, deslocamento x, deslocamento y] de cada quadro dentro da caixa do sprite */
 export type Quadro = [number, number, number, number, number, number];
-export type Clipe = "Idle" | "Run" | "Attack_1" | "Stun" | "Die" | "Evol";
+export type Clipe = "Idle" | "Run" | "Attack_1" | "Stun" | "Die" | "Evol" | ClipeAcao;
+/** acoes novas (docs/TAREFA_V3_SPRITES_ACOES.md, secao 3.4; missao M2): saem do Aseprite (remaster/acoes/export) e entram no atlas de clipes.
+    `<Tag>_objeto` e so a camada do objeto (a comida), com os mesmos quadros contados e os mesmos ms do clipe dele. Tocar e da M3. */
+export const CLIPES_ACOES = ["Comer", "Comer_objeto"] as const;
+export type ClipeAcao = typeof CLIPES_ACOES[number];
+const SUFIXO_OBJETO = "_objeto";
+/** os NPCs e os bots da luta (chaves npc_* e bot_*) nao precisam das acoes; as outras chaves do atlas de clipes sao as formas */
+const ehForma = (chave: string): boolean => !chave.startsWith("npc_") && !chave.startsWith("bot_");
 /** um clipe: quadros, a duracao de cada um em ms e se repete; quadro vazio = [0,0,0,0,0,0] */
 export interface ClipeUp { quadros: Quadro[]; ms: number[]; loop: boolean }
 /** `clipes` so existe com a chave CLIPES_UP ligada; entao `quadros` e o Idle e a imagem e a do atlas de clipes */
@@ -61,7 +68,9 @@ const carregarImagem = (png: string, rotulo: string): Promise<HTMLImageElement> 
   img.src = png;
 });
 /** junta os clipes ao atlas atual: cada sprite do atlas de clipes troca o do atlas atual (caixa e Idle como `quadros`); o resto (ovos, pecas,
-    oraculo, guia) fica. Falha alto: sprite sem Idle ou clipe com `ms` que nao casa com os quadros. */
+    oraculo, guia) fica. Falha alto: sprite sem Idle; clipe com `ms` que nao casa com os quadros; `<Tag>_objeto` sem o clipe dele ou que nao
+    casa com ele em quadros e em ms; acao nova que existe numa forma e falta em outra (ou todas as formas tem, ou nenhuma; NPCs e bots nao
+    precisam). */
 export function juntarClipes(base: AtlasUp, c: AtlasClipes): AtlasUp {
   const sprites = { ...base.sprites };
   for (const [k, s] of Object.entries(c.sprites)) {
@@ -70,7 +79,20 @@ export function juntarClipes(base: AtlasUp, c: AtlasClipes): AtlasUp {
     for (const [nome, cl] of Object.entries(s.clipes))
       if (!cl || cl.quadros.length === 0 || cl.quadros.length !== cl.ms.length || cl.ms.some(m => !(m > 0)))
         throw new Error(`atlas de clipes: clipe ${nome} de ${k} sem quadros ou com duracao invalida`);
+    for (const [nome, obj] of Object.entries(s.clipes)) {
+      if (!nome.endsWith(SUFIXO_OBJETO) || !obj) continue;
+      const dono = s.clipes[nome.slice(0, -SUFIXO_OBJETO.length) as Clipe];
+      if (!dono) throw new Error(`atlas de clipes: ${nome} de ${k} sem o clipe ${nome.slice(0, -SUFIXO_OBJETO.length)}`);
+      if (obj.ms.length !== dono.ms.length || obj.ms.some((m, i) => m !== dono.ms[i]))
+        throw new Error(`atlas de clipes: ${nome} de ${k} nao casa com o clipe dele em quadros e ms`);
+    }
     sprites[k] = { caixa: s.caixa, quadros: idle.quadros, clipes: s.clipes };
+  }
+  const formas = Object.keys(c.sprites).filter(ehForma);
+  for (const nome of CLIPES_ACOES) {
+    const sem = formas.filter(k => !c.sprites[k].clipes[nome]);
+    if (sem.length > 0 && sem.length < formas.length)
+      throw new Error(`atlas de clipes: a acao ${nome} existe em ${formas.length - sem.length} formas e falta em ${sem.length}: ${sem.slice(0, 5).join(", ")}`);
   }
   return { ...base, sprites };
 }
