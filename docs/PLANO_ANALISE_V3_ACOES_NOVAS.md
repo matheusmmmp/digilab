@@ -371,3 +371,44 @@ Só as linhas verificadas que a tarefa já usa (a seção 9 dela; `docs/referenc
 | **AN3-7** | a linha 4 (a guarda passa, o MOV não sobe) (PROPOSTA) | **a AN5 pode rodar pela AN-7, e o relato diz que o MOV não subiu; o Matheus decide jogando** (7.4) | parar a AN5 sem o MOV: o MOV vira gate sem limiar, contra a AN-1, e um passeio que só muda a forma do andar (o que a tarefa pede: "legível") não chega ao jogo; ir sem dizer: o Matheus vê no jogo uma mudança que o Python não mediu como "mais movimento" sem saber disso |
 | **AN3-8** | o inconclusivo por premissa e o porte (PROPOSTA) | **a AN5 não roda; volta ao Matheus** (7.4, a linha 1) | portar no inconclusivo: a AN-7 diz "só se a guarda não falhar", e uma guarda que não testou não é uma guarda que passou; o passeio chegaria a todo ovo novo (o v17 é o padrão desde o #562) sem a medida que a AN-1 pediu |
 | **AN3-9** | a faixa e quando ela entra (PROPOSTA) | **78101…78505, as bases 78101, 78202, 78303, 78404 e 78505; em `FAIXAS_RESERVADAS` já neste PR, a pedido do coordenador, com a fonte "PROPOSTO" e nenhuma vida antes da aprovação** (seção 3) | depois da aprovação (o precedente da AD9-7): nenhum custo além de um commit a mais; reservar agora e o plano mudar: a faixa fica presa a um plano que mudou, e o adendo que mudar diz se ela segue ou se queima; outra faixa: só trocar as bases no orquestrador, na config e no teste |
+
+## 14. O registro da run (AN4; 2026-11-05, worker do orquestrador, Claude Code, Opus 5.5, branch `v3-acoes-novas-an4`)
+
+Gerado por `python experiments/run_v3_acoes_novas.py --registro` (nenhuma vida; só deriva as sementes), num commit empurrado antes da
+primeira vida (seção 11). **O commit da run** é o da `main` com o PR do orquestrador mesclado: ele vai ao `meta.json` (`git_head`,
+`git_limpo`), e os sha256 abaixo amarram o código. **A trava confere** cada sha256 contra a árvore antes da primeira vida: um arquivo
+mudado depois deste registro recusa a run, e um registro novo vai num commit antes dela (o desvio D-AN4-7). Nenhuma vida da faixa
+78101…78505 está em disco neste commit.
+
+- **A config:** `experiments/configs/v3_acoes_novas/acoes_novas.json` (o sha256 na lista abaixo).
+- **As bases:** 78101, 78202, 78303, 78404, 78505; **K = 40 por base**, 200 unidades, o prefixo `digibrain_prototipo`; 3200 vidas de 14 dias, orcamento 16 por dia.
+- **A primeira unidade:** base 78101, k 0, semente 9302717491086198706, genoma 5029551504080525806.
+- **A ultima unidade:** base 78505, k 39, semente 17128216646918455119, genoma 16126371893882073772.
+- **Os bracos:** LAB = `{"cheiro_inato": true, "controle_mem": "rel", "intencao_cheiro": true, "memoria_autobio": true}` sobre a config ligada do DigiBrain; LAB+P = `{"cheiro_inato": true, "controle_mem": "rel", "intencao_cheiro": true, "memoria_autobio": true, "passeio": true}` sobre a config ligada do DigiBrain.
+- **As celulas:** atencioso/comedouro, atencioso/longe_fixo, relapso/comedouro, relapso/longe_fixo, aleatorio/comedouro, aleatorio/longe_fixo, incoerente/comedouro, incoerente/longe_fixo.
+- **A saida:** `artifacts_v3_acoes_novas/run/`, que nao existe antes da run (a run recusa gravar por cima).
+- **O comando:** `python experiments/run_v3_acoes_novas.py --config experiments/configs/v3_acoes_novas/acoes_novas.json --processos 4`.
+- **Os sha256** (a trava confere cada um contra a arvore antes da primeira vida; o plano fica fora, porque guarda o registro):
+
+- `experiments/run_v3_acoes_novas.py`: `5aa5b8364abe84abd8acee7443a0f7be46a5eb81fd90b9d95b0f3f02f5b95278`
+- `experiments/run_v2_digibrain_prototipo.py`: `e3071e6729a6a9dade31946c1372606215bc68b10e0c6f72584d1fa3ba45ae63`
+- `experiments/run_v2_longe_regular.py`: `5583a217edd04ad2493c91c23d67d913605adb780699a14a9495e6b58a9a900c`
+- `experiments/run_v2_habito_intencao.py`: `8a6cc3de0d3af4cc8fa4a19b15215b9607bd016989129bc8bb666c31c4102701`
+- `experiments/run_v2_memoria_autobio.py`: `dcc83a04f88db17e777a66d95b467a3e15ff24e59a5c7ab510db0a7925b30cf0`
+- `experiments/configs/v3_acoes_novas/acoes_novas.json`: `452de2addda238bfb911c5e3ca0e9d93cd9ed500609cf2306be81faf8fb3503a`
+- `digilab/config.py`: `08b32ce64c04e387c695346ab11764bb4d6fc3aa99fe4b98dfd611d0aa9cabbd`
+- `digilab/engine.py`: `48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630`
+- `digilab/metrics.py`: `5e04403e18649b54382cdbfcddfc793d573d432bf171c8da6273b3aa11648b29`
+- `digilab/mundo.py`: `eceb37e9e3749f8e9cb598fb67af49d90947b992fdabac84d10e16b5cde3899e`
+- `digilab/digibrain/__init__.py`: `3d50ce23bd4001f607018485282fbea22b021d7e4f825c070b9be87197cb2b55`
+- `digilab/digibrain/_comum.py`: `164ef9c3e5781f68a711d50de9a014751073ea7343540e5d6af9feff0a81d160`
+- `digilab/digibrain/adapt.py`: `ab2f281ea25a1d7fbe0e580d75f156b10437f2b70591183ee654e24eb3b42300`
+- `digilab/digibrain/afeto.py`: `e890523b5239b6b12818997a5d82ff5f722f390ecf3f69ebcfd60324c43c525f`
+- `digilab/digibrain/arb.py`: `f5465f353366a81da3fd32b84377d40988ff46d60dda17237ad47c3053d3fa64`
+- `digilab/digibrain/estado.py`: `76a5f54acccdee3ec3305d6127f2f459b67ce615e0970c3e350955150b34b3c6`
+- `digilab/digibrain/ganchos.py`: `595e7f57fddb5e3d06bf2aa939acd59dce379843b503a7f04021821b2328a224`
+- `digilab/digibrain/impulso.py`: `01ca39d48c5f77fdc6a993a226d83d952616824b9817d1124c91a375d7e3c7c3`
+- `digilab/digibrain/mem.py`: `69b5907c3b19ba3f38779d8894eb19dfb2dc3c6581dda882e1fa85fe570f5b05`
+- `digilab/digibrain/pers.py`: `c0e3ef850d84d12b7263baeba438f5395512f34a05e49fea831c346ab1594528`
+- `digilab/digibrain/plast.py`: `6739a7032a7a45328b251916c54e81b91755c34168409b12b5ba3044c681b0b8`
+- `digilab/digibrain/sens.py`: `fa58b1e6161ca6388027a5ce6cc8a111b25f1cc7ab0eb9fe9ca6a1e135872d8a`

@@ -369,3 +369,36 @@ com o replay bit a bit e uma com carinho injetado) e `tests/test_passeio_gabarit
 **Duas coisas fora do que a tarefa nomeou, para o Matheus ver:** (a) `web/app/motor/digibrain/constantes.ts` ganhou só `passeio: false` em `CONFIG_DIGIBRAIN_LAB`, porque o teste de paridade
 `digibrain_modular_constantes.test.ts` compara a config folha a folha com o arquivo regravado e ficaria vermelho; nenhuma lógica da web mudou (o porte é a AN5). O `vitest` não pôde ser rodado aqui
 (a worktree não tem `node_modules`). (b) o gesto é lido do que o dono entrega (`receber_acao_dono`); o carinho no meio do passeio só é injetável em teste, como a AN0 já avisou.
+
+## 14. Resumo do PR do orquestrador da AN4 (2026-11-05, worker Claude Code, Opus 5.5, branch `v3-acoes-novas-an4`)
+
+**O que o plano pede antes da primeira vida está pronto; a run não rodou.** Nenhuma vida da faixa 78101…78505 rodou, nem para teste. A run é
+a etapa seguinte, depois do merge, uma vez, com o comando do registro (a seção 14 do plano).
+
+| peça | onde | o que faz |
+|---|---|---|
+| o MOV (4.3) | `digilab/metrics.py`, `movimento_nas_decisoes` | a fração das decisões fora do dormir que saem do lugar, a distância por dia e o zigue-zague (o líquido sobre o caminho e os pares que invertem) |
+| o teste do MOV | `tests/test_movimento_an4.py` | unidade, e contra a AN0 nas 8 vidas da LM0: 206 pares, 104 invertem (0,504854), líquido/caminho 0,488214, exatos; a distância e as decisões que saem do lugar batem com o `hoje.json` |
+| o orquestrador | `experiments/run_v3_acoes_novas.py`, `experiments/configs/v3_acoes_novas/acoes_novas.json` | os braços LAB e LAB+P (`SUBCHAVES_AN` do orquestrador do protótipo), as 8 células, as bases e o K do plano, 14 dias, orçamento 16, até 4 processos |
+| a trava | o mesmo | o plano com "APROVADO pelo Matheus" no cabeçalho (testado trocado nos dois sentidos), a faixa em `FAIXAS_RESERVADAS`, o registro da run com os sha256 de hoje, só as bases, o K, os dias e o orçamento do plano (outra base levanta `SementeSemPlano`), nada por cima de uma pasta que existe, no máximo 4 processos |
+| as conferências, em toda vida | o mesmo | o G1 (replay bit a bit do disco), o T-CENARIO-1, o G-MECANISMO e o crédito (com a abertura do passeio lida como a primeira decisão dele, D-AN4-1), a `conferir_memoria` da C4, os fins conhecidos lidos da `estado.py`; o passeio: a urgência no limiar ou abaixo em toda decisão que continua um passeio, o alvo no ponto dele com `do_passeio`, o F refeito (o `interrompido` não sobe o F), o LAB sem passeio nenhum |
+| a análise | o mesmo, `analisar` | as premissas (P-PASSEIO, G-ELEGIVEL-EP), a guarda G-COMEDOURO-AN (falha só com "< 0", δ = 0,018), o MOV (move só com o limite inferior acima de 0), a linha de 7.4 e o descritivo da seção 8 |
+| os testes | `tests/test_acoes_novas_an4.py` | o desenho, a trava, o registro, as conferências numa vida de cada braço (e estragadas: a urgência, o alvo, o F, o LAB), a análise com dados sintéticos, a varredura de ponta a ponta nas sementes dos testes (1 dia, 80 vidas) e o isolamento |
+
+**A varredura (seção 11 do plano; não é dado da AN4):** o orquestrador inteiro com as bases 101 a 505, K = 1, os 2 braços, as 8 células e
+14 dias (80 vidas; `experiments/configs/v3_acoes_novas/varredura.json`, saída fora do repositório), 4 processos, saída 0. Todas as
+conferências passaram em toda vida. Os fins que apareceram são só os conhecidos: no LAB, `meta`, `trocou`, `achou` e `sumiu`; no LAB+P, os
+mesmos e o `interrompido` (791 no comedouro, 303 no `longe_fixo`); `desistiu` 0 nos dois. Os passeios: 2 374 abertos no comedouro e 1 476
+no `longe_fixo` (20 vidas cada); os fins deles, comedouro 1 161 `meta`, 421 `trocou`, 791 `interrompido`; o crédito descartado pelo gesto,
+0 (os donos sem ensino quase não fazem carinho; o plano já previa). A P-PASSEIO no comedouro, 0,088 [0,082; 0,094] sobre 5 unidades
+(passaria o 0,01); a urgência máxima nas aberturas, 512, o limiar (D-AN4-2). Nenhum número da varredura é resultado.
+
+**A parede (sementes dos testes):** 80 vidas de 14 dias em 183 s de parede com 4 processos (5 unidades em 4 processos: a última rodou
+sozinha). A CPU por vida: média 3,67 s (o LAB 4,22 s, mediana 4,41; o LAB+P 3,13 s, mediana 3,12). Pela razão parede/CPU da C4 com 4
+processos (0,805 / 3,15), as 3 200 vidas custam cerca de **50 min** de vidas; com a análise e a gravação, **de 50 min a 1 h**, dentro da
+faixa do plano (de 45 min a 1 h 15 min). É estimativa; o tempo real vai ao RESULTADO.
+
+**Os desvios** (D-AN4-1 a D-AN4-8, no `docs/registro/2026-11.md`): nenhum mexe na guarda. O principal é o D-AN4-1: a decisão que abre o
+passeio fica no motivo como `explorar/vagar`, e a conferência do crédito do protótipo, como está, recusaria todo LAB+P; o orquestrador passa
+a ela uma vista em que a abertura é a primeira decisão do passeio, depois de conferir cada abertura. O código do passeio, o plano (salvo a
+seção 14, o registro que ele pede) e o `engine.py` não mudaram.
