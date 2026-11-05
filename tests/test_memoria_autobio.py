@@ -686,7 +686,10 @@ def test_g2_separado_nada_fora_do_pacote_le_a_chave():
                       "web/app/motor/digibrain/mem.ts", "web/app/test/digibrain_modular_arb.test.ts", "web/app/test/digibrain_modular_mem.test.ts",
                       "experiments/exportar_gabarito_digibrain_modular.py",
                       # o poder da AN3 (#577): so le o artefato da run da C4 no git e importa o poder do adendo 9; nenhuma vida
-                      "experiments/plano_an3_poder_acoes_novas.py"}
+                      "experiments/plano_an3_poder_acoes_novas.py",
+                      # o orquestrador da AN4: importa o da C4 so pela conferir_memoria (o papel REL nos dois bracos); a config passa pelo
+                      # orquestrador do prototipo
+                      "experiments/run_v3_acoes_novas.py"}
     achados = set()
     for pasta in ("digilab", "experiments", "web", "tools", "servidor", "digilab_fala_livre"):
         if not (RAIZ / pasta).exists():
