@@ -31,6 +31,10 @@ export const CENA_ACAO = {
   migalhas: 3, migalhaMs: 700, migalhaQueda: 14,
   /** os coracoes da reacao: o ciclo de subida (ms) e a subida (px de CSS) */
   coracaoMs: 1100, coracaoSobe: 34,
+  /** o clipe Comer (docs/TAREFA_V3_SPRITES_ACOES.md, M3, SA-5): acima desta velocidade (minutos de jogo por segundo; 60 = 1 h/s) os momentos
+      do mundo ("comeu a racao") saem; um momento que chega durante uma reacao do dono espera ela acabar ate momentoEsperaMs, e depois e
+      descartado. PROPOSTO (a regra da SA-5), SEM FONTE */
+  momentoVelMax: 60, momentoEsperaMs: 1000,
 } as const;
 
 /** o emote de cada acao do motor (a chave do atlas ou da grade); null onde a cena nao inventa: o dormir tem o "zz" do sono.ts e o ocioso nada */
@@ -115,10 +119,11 @@ function gestoDoCoco(agora: number): Gesto {
 }
 
 /** o gesto de agora: a reacao ao toque, o cocô e, com o pet parado e acordado, o da acao. Com movimento reduzido, nenhum; em Pausa (como o
-    Seguidor, vistaMundo.ts) so a reacao ao toque, que e resposta a uma mao do dono, e nao a vida que anda */
-export function gestoAgora(e: EntradaCena, agora: number, reduzido: boolean, parado: boolean, pausa = false): Gesto {
+    Seguidor, vistaMundo.ts) so a reacao ao toque, que e resposta a uma mao do dono, e nao a vida que anda. Com um clipe tocando no corpo
+    (`clipe`, o Comer do atlas: escolherComer), nenhum: o clipe e o corpo, e o gesto e o clipe nunca vao juntos */
+export function gestoAgora(e: EntradaCena, agora: number, reduzido: boolean, parado: boolean, pausa = false, clipe = false): Gesto {
   vigiarCoco(e.chave, e.sujeira, agora);
-  if (reduzido) return SEM_GESTO;
+  if (reduzido || clipe) return SEM_GESTO;
   const r = reacaoAtual(agora);
   if (r) return gestoDaReacao(r, agora);
   if (pausa) return SEM_GESTO;
@@ -126,20 +131,95 @@ export function gestoAgora(e: EntradaCena, agora: number, reduzido: boolean, par
   return parado ? gestoDaAcao(e.acao, agora) : SEM_GESTO;
 }
 
-/** o emote de agora: a reacao ao toque (o coracao de quem relaxou; a gota de quem temeu a mao), o cocô (a gota do esforco) ou o da acao */
-export function emoteAgora(e: EntradaCena, agora: number): string | null {
+/** o emote de agora: a reacao ao toque (o coracao de quem relaxou; a gota de quem temeu a mao), o cocô (a gota do esforco) ou o da acao.
+    Com o clipe Comer no corpo (`clipe`), a carne da acao sai: o clipe ja traz a comida (o Comer_objeto) */
+export function emoteAgora(e: EntradaCena, agora: number, clipe = false): string | null {
   vigiarCoco(e.chave, e.sujeira, agora);
   const r = reacaoAtual(agora);
   if (r) return r.medo > 0 ? "gota" : r.tipo === "relaxou" ? "coracao" : null;
   if (noCoco(agora)) return "gota";
+  if (clipe) return null;
   return EMOTE_DA_ACAO[e.acao] ?? null;
 }
+
+/* ------------------------------------------------------------------ o clipe Comer (docs/TAREFA_V3_SPRITES_ACOES.md, M3; SA-4 e SA-5) */
+/** o que a vista le para escolher o corpo do comer. `ciclo` e a soma dos ms do clipe Comer do sprite (null: sem o atlas, ou um sprite sem o
+    Comer: fica o gesto de hoje); `consumos` e o tamanho de `mundo.consumos`; `alvo` onde estava a comida da ultima entrada (celulas; null se
+    a vista nao a viu); `donoDesde` o inicio da ultima acao do dono que a vista mostra (o flash; a reacao ao toque entra sozinha) */
+export interface EntradaComer {
+  chave: string; acao: string; consumos: number; alvo: readonly [number, number] | null; ciclo: number | null;
+  velocidade: number; andando: boolean; pausa: boolean; donoDesde: number | null;
+}
+/** o corpo do comer agora. `tocou` e o campo que o teste le: "clipe" (o Comer do atlas no corpo), "gesto" (o achatar de hoje: sem o
+    clipe, a queda explicita) ou null (nenhum dos dois: nao come, anda, esta na Pausa ou a reacao do dono ocupa o corpo). `desde` e o inicio
+    do ciclo do clipe (para o quadro); `momento` diz que e o "comeu a racao" (uma vez, virado para `alvo`) e nao o laco da acao; `reacao`
+    diz que a reacao do dono ocupa o corpo */
+export interface EscolhaComer { tocou: "clipe" | "gesto" | null; desde: number; momento: boolean; alvo: readonly [number, number] | null; reacao: boolean }
+const NADA_COMER: EscolhaComer = { tocou: null, desde: 0, momento: false, alvo: null, reacao: false };
+
+interface Comendo { desde: number; laco: boolean; fim: number | null; alvo: readonly [number, number] | null }
+let comerVisto: { chave: string; consumos: number } | null = null, comendo: Comendo | null = null;
+let momentoPendente: { em: number; alvo: readonly [number, number] | null } | null = null, ultimaComer: EscolhaComer = NADA_COMER;
+
+/** a escolha do corpo do comer, chamada uma vez por quadro (as regras da SA-5, so com o Comer):
+     - `m.acao === "comer"`: o clipe em laco; quando a acao troca, ele vai ate o fim do ciclo em que esta, e toca no minimo um ciclo inteiro;
+     - uma entrada nova em `mundo.consumos` (a primeira olhada e a troca de pet nao contam): o clipe uma vez, virado para a comida (SA-4);
+       acima de momentoVelMax ela sai; durante uma reacao do dono espera ate momentoEsperaMs, e depois sai; se a acao segue "comer", o laco
+       continua do fim dela;
+     - a reacao do dono (o toque ou o flash) ocupa o corpo por um ciclo do Comer, e depois o clipe volta do comeco; se ele ja tinha cumprido
+       o ciclo minimo e a acao trocou, nao volta;
+     - andando, o Run (o laco do comer cede; o "comeu a racao" nao, como o golpe); na Pausa, nada (como o gesto).
+    Sem o clipe (`ciclo` null), o gesto de hoje: `tocou` = "gesto" quando a acao e comer, parado e fora da Pausa */
+export function escolherComer(e: EntradaComer, agora: number): EscolhaComer {
+  const novoPet = !comerVisto || comerVisto.chave !== e.chave, novo = !novoPet && e.consumos > comerVisto!.consumos;
+  comerVisto = { chave: e.chave, consumos: e.consumos };
+  if (novoPet) { comendo = null; momentoPendente = null; }
+  const ciclo = e.ciclo;
+  if (ciclo === null) {
+    comendo = null; momentoPendente = null;
+    return (ultimaComer = e.acao === "comer" && !e.andando && !e.pausa ? { ...NADA_COMER, tocou: "gesto" } : NADA_COMER);
+  }
+  if (!(ciclo > 0) || !Number.isFinite(ciclo)) throw new Error("ciclo do Comer invalido: " + ciclo);
+  if (novo && e.velocidade <= CENA_ACAO.momentoVelMax) momentoPendente = { em: agora, alvo: e.alvo };
+  if (e.pausa) return (ultimaComer = NADA_COMER);
+  /* a reacao do dono no corpo: um ciclo do Comer desde a ultima (o toque ou o flash) */
+  const r = reacao && agora >= reacao.desde ? reacao.desde : null, d = e.donoDesde !== null && agora >= e.donoDesde ? e.donoDesde : null;
+  const dono = r === null ? d : d === null ? r : Math.max(r, d);
+  if (dono !== null && agora - dono < ciclo) {
+    if (comendo && comendo.desde < dono + ciclo) {
+      /* cumpriu o ciclo minimo antes da reacao: um ciclo inteiro entre o inicio e o toque */
+      const cumpriu = dono - comendo.desde >= ciclo;
+      comendo = cumpriu && (!comendo.laco || e.acao !== "comer") ? null : { ...comendo, desde: dono + ciclo, fim: comendo.laco ? null : dono + 2 * ciclo };
+    }
+    return (ultimaComer = { ...NADA_COMER, reacao: true });
+  }
+  /* o "comeu a racao": espera a reacao acabar ate momentoEsperaMs; depois, uma vez, virado para a comida */
+  if (momentoPendente) {
+    if (agora - momentoPendente.em <= CENA_ACAO.momentoEsperaMs) comendo = { desde: agora, laco: false, fim: agora + ciclo, alvo: momentoPendente.alvo };
+    momentoPendente = null;
+  }
+  if (!comendo && e.acao === "comer" && !e.andando) comendo = { desde: agora, laco: true, fim: null, alvo: null };
+  if (comendo && comendo.laco) {
+    if (e.acao === "comer") comendo.fim = null;
+    else if (comendo.fim === null) comendo.fim = comendo.desde + Math.max(1, Math.ceil((agora - comendo.desde) / ciclo)) * ciclo;
+  }
+  if (comendo && comendo.fim !== null && agora >= comendo.fim) {
+    /* acabou o ciclo: o momento vira o laco se a acao segue comer (do fim dele, sem pulo); o laco acaba */
+    comendo = !comendo.laco && e.acao === "comer" ? { desde: comendo.fim, laco: true, fim: null, alvo: null } : null;
+  }
+  if (!comendo || (comendo.laco && e.andando)) return (ultimaComer = NADA_COMER);
+  return (ultimaComer = { tocou: "clipe", desde: comendo.desde, momento: !comendo.laco, alvo: comendo.alvo, reacao: false });
+}
+/** a ultima escolha do comer (o palco le para tirar a carne e as migalhas; o teste le o `tocou`) */
+export const comerAgora = (): EscolhaComer => ultimaComer;
+/** so para os testes: esquece o comer visto */
+export function esquecerComer(): void { comerVisto = null; comendo = null; momentoPendente = null; ultimaComer = NADA_COMER; }
 
 /* ------------------------------------------------------------------ o desenho dos efeitos (canvas 2D, por cima do pet) */
 /** os efeitos soltos do pet: as migalhas de quem come e os coracoes de quem relaxou. (x, y, w, h) e o retangulo do sprite em px de CSS, K = px
     do canvas por px de CSS. Com movimento reduzido, so um coracao parado */
 export function desenharEfeitos(cx: CanvasRenderingContext2D, K: number, x: number, y: number, w: number, h: number, e: EntradaCena, agora: number,
-    reduzido: boolean, pal: Paleta, pausa = false): void {
+    reduzido: boolean, pal: Paleta, pausa = false, clipe = false): void {
   const C = CENA_ACAO, r = reacaoAtual(agora);
   if (r && r.tipo === "relaxou") {
     /* um coracao a mais por inteiro do carinho que o corpo aplicou: de 1 (sem carinho nenhum) a 3 */
@@ -153,8 +233,8 @@ export function desenharEfeitos(cx: CanvasRenderingContext2D, K: number, x: numb
       cx.restore();
     }
   }
-  if (reduzido || pausa || e.acao !== "comer" || r) return;
-  /* as migalhas: pedacinhos que caem da boca, defasados */
+  if (reduzido || pausa || e.acao !== "comer" || r || clipe) return;
+  /* as migalhas: pedacinhos que caem da boca, defasados (o gesto de hoje: com o clipe Comer no corpo, saem) */
   cx.save(); cx.fillStyle = pal.d ?? "#C9533A"; cx.strokeStyle = "#1D2233"; cx.lineWidth = Math.max(1, K * 0.5);
   for (let i = 0; i < C.migalhas; i++) {
     const f = ((agora / C.migalhaMs) + i / C.migalhas) % 1, lado = (i - (C.migalhas - 1) / 2) * 0.16;

@@ -13,7 +13,7 @@ import { balancoOvo, jogoAtual, passarQuadroOvo } from "../../jogo.ts";
 import { CENA } from "./cenaEstado.ts";
 import { alturaSono, desenharZz } from "./sono.ts";
 import { fomeNoEmote } from "../../hudPet.ts";
-import { EMOTE_ATLAS as EMOTE_ICONE, EMOTE_GRADE as GRADE_DO_EMOTE, desenharEfeitos, emoteAgora, type EntradaCena } from "./cenaAcao.ts";
+import { EMOTE_ATLAS as EMOTE_ICONE, EMOTE_GRADE as GRADE_DO_EMOTE, comerAgora, desenharEfeitos, emoteAgora, type EntradaCena } from "./cenaAcao.ts";
 
 const ICONE_ACAO: Record<string, string> = { dormir: "zz", chamar_atencao: "exclam", emburrar: "raiva", brincar: "nota", explorar: "pergunta", comer: "carne" };
 
@@ -142,17 +142,19 @@ function desenharPetUp(cx: CanvasRenderingContext2D, a: AtlasOk, g: Geo, quadro:
 }
 /** a entrada da cena de acao (cenaAcao.ts) com o que o motor registrou agora */
 function entradaCena(): EntradaCena { const m = jogoAtual().motor; return { acao: m.acao, sujeira: m.e.sujeira, chave: String(m.semente) }; }
-/** o icone de agora: o flash do dono; a cena (o toque, o cocô, a acao do pet); a fome, so se a cena nao tem um */
+/** o clipe Comer no corpo do pet da ilha (cenaAcao.ts, escolherComer): a carne sobre a cabeca e as migalhas saem, o clipe ja traz a comida */
+const comeNoClipe = (): boolean => comerAgora().tocou === "clipe";
+/** o icone de agora: o flash do dono; a cena (o toque, o cocô, a acao do pet); a fome, so se a cena nao tem um (e sem o clipe Comer) */
 function iconeAgora(): string | null {
-  const m = jogoAtual().motor;
-  return flashAtual() ?? emoteAgora(entradaCena(), performance.now()) ?? (m.acao !== "dormir" && fomeNoEmote(m) ? "carne" : null);
+  const m = jogoAtual().motor, clipe = comeNoClipe();
+  return flashAtual() ?? emoteAgora(entradaCena(), performance.now(), clipe) ?? (!clipe && m.acao !== "dormir" && fomeNoEmote(m) ? "carne" : null);
 }
 /* icone sobre o pet: o da acao do dono (flash); emote do UP (2x) acima e a direita do sprite */
 function desenharIcone(cx: CanvasRenderingContext2D, a: AtlasOk, g: Geo, x: number, y: number, w: number, h: number): void {
   const m = jogoAtual().motor, pal = paleta(corDominante(m.tracos)), K = g.K;
   /* sem acao do dono agora: a comida abaixo da metade poe a carne sobre a cabeca (hudPet.ts); o pet dormindo solta o "zz" (sono.ts) */
   const icone = iconeAgora();
-  desenharEfeitos(cx, K, x, y, w, h, entradaCena(), performance.now(), matchMedia("(prefers-reduced-motion: reduce)").matches, pal, velocidadeAtual() <= 0);
+  desenharEfeitos(cx, K, x, y, w, h, entradaCena(), performance.now(), matchMedia("(prefers-reduced-motion: reduce)").matches, pal, velocidadeAtual() <= 0, comeNoClipe());
   if (!icone) { if (m.acao === "dormir") desenharZz(cx, K, x, y, w, performance.now(), matchMedia("(prefers-reduced-motion: reduce)").matches, pal); return; }
   if (EMOTE_ICONE[icone]) {
     const [pw0, ph0] = dimSprite(a.dados, EMOTE_ICONE[icone]), es = escalaSprite() * 2, pw = pw0 * es / K, ph = ph0 * es / K;
@@ -170,7 +172,7 @@ function desenharIcone(cx: CanvasRenderingContext2D, a: AtlasOk, g: Geo, x: numb
 function desenharIconeGrade(cx: CanvasRenderingContext2D, g: Geo, x: number, y: number, w: number, h: number): void {
   const m = jogoAtual().motor, pal = paleta(corDominante(m.tracos)), K = g.K;
   const icone: string | null = flashAtual() ?? emoteAgora(entradaCena(), performance.now()) ?? (m.acao !== "dormir" && fomeNoEmote(m) ? "carne" : ICONE_ACAO[m.acao] ?? null);
-  desenharEfeitos(cx, K, x, y, w, h, entradaCena(), performance.now(), matchMedia("(prefers-reduced-motion: reduce)").matches, pal, velocidadeAtual() <= 0);
+  desenharEfeitos(cx, K, x, y, w, h, entradaCena(), performance.now(), matchMedia("(prefers-reduced-motion: reduce)").matches, pal, velocidadeAtual() <= 0, comeNoClipe());
   if (!icone) return;
   const ic = S[GRADE_DO_EMOTE[icone] ?? icone]; if (!ic) throw new Error("icone desconhecido: " + icone);
   const bx = Math.min(g.W - 30, x + w - 4), by = Math.max(TOPO_LIVRE, y - 30);
