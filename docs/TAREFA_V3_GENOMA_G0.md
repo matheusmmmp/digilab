@@ -194,3 +194,10 @@ A E2 fez o `reproduzir_mundo` (`digilab/mundo.py`) aceitar o evento `genoma`, co
 com a chave desligada, fora da primeira posicao ou repetido, levanta `ValueError`; um `genoma` malformado levanta `GenomaInvalido`. O genoma vazio (`"hoje"`) nao muda nada na vida. O `engine.py` nao mudou, nem a bancada (E3).
 Os testes da coluna da E2 estao em `tests/test_genoma_g0.py`: chave desligada, as 40 vidas da E0 iguais ao gabarito (log, trajetoria e as tres partes); chave ligada e genoma vazio, trajetoria igual e log com o `genoma` na frente; replay do log com o `genoma` refeito igual (e `ate_tick`);
 os erros (fora da primeira posicao, chave desligada, dois `genoma`, malformado); e o `genoma` falhando na educacao, nas frutas, no ambiente e no `reproduzir` base (G0-7). O teste da E1 que dizia que so o `config.py` cita a `ConfigGenoma` passou a aceitar tambem o `mundo.py`. Desvios em `docs/registro/2026-11.md`.
+
+## 13. Resumo da E3 (2026-11-04, a bancada)
+
+A E3 deu à `EspecVida` o campo `registro_genoma` (um `Genoma`, vazio por padrão) e à `Bancada` a chave `cfg_genoma` (`ConfigGenoma`, desligada). Ligada, a `vida` grava o evento `genoma` na frente do log (só no mundo físico; fora dele levanta erro, G0-7)
+e o replay da bancada o recebe com a mesma chave. O `resumo_motor` leva o sha256 do genoma como último item só quando o log o carrega (também a `VidaBancada.genoma_sha256`); desligada, o resumo e os gabaritos são os de hoje.
+Testes da E3 em `tests/test_genoma_g0.py`: espec vazia sem mudar nome nem célula; chave desligada sem evento; chave ligada com genoma vazio (trajetória igual, log com o evento na frente, replay do disco); acoplado preserva o evento; chave ligada fora do mundo físico falha.
+Desvios em `docs/registro/2026-11.md`. O `engine.py` não mudou. Nenhuma run. A E3 fecha o código do G0 (a E4 só existe se a G0-1 levar à web, e ela não levou).

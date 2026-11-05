@@ -1,6 +1,6 @@
 # PAINEL V3: onde a V3 está, em uma página
 
-**Atualizado em 2026-11-04** (`main` `d7ec740`, depois do #553), pelo Gerente da V3. O plano é o `docs/PLANO_V3.md`; o
+**Atualizado em 2026-11-04** (`main` `b61ccb5`, depois do #573), pelo Gerente da V3. O plano é o `docs/PLANO_V3.md`; o
 fechamento da V2, o `docs/FECHAMENTO_V2.md` (tag `v2-final`).
 
 - Quem atualiza: o coordenador de cada trilha, uma linha por PR mergeado.
@@ -29,11 +29,15 @@ fechamento da V2, o `docs/FECHAMENTO_V2.md` (tag `v2-final`).
 | **L1** M7 do layout | o fechamento do layout habitat | **na `main`** (#477) | `docs/TAREFA_V2_LAYOUT_HABITAT.md` |
 | **L2** tema dos menus T1–T3 | a pele Vidro como padrão, a escolha em Ajustes, as capturas nas duas peles | T1 (#486), T2 (#499) e T3 (#505) **na `main`** | `docs/TAREFA_V2_TEMA_MENUS.md`, seção 5 |
 | **L3** o modular no jogo, em modo laboratório | o DigiBrain modular inteiro na configuração validada (o M3\* da C1 e a `memoria_autobio` REL da C4), atrás de uma chave desligada, num pet de teste (a **v16**: a v15 é do #525); o A v11 segue o padrão. Substitui a L3 de uma peça só (Matheus, 2026-11-01) | a tarefa e as LAB-1 a LAB-5 **na `main`** (#542); o motor inteiro em TS com paridade **na `main`**: o gabarito (LM0, #543), sens, afeto e impulso (LM1, #545), estado, arb e plast (LM2, #546), a memória (LM3, #547), o adapt e o laço com o pet v16 (LM4, #548: o G-PAR-VIDA em 5 376 decisões, o G1 e o G2); as pranchas **na `main`** (LM5a, #544; o pet já nascido e o Descartar, #549), com as LM5-1 a LM5-9 DECIDIDAS; a tela (LM5b) **na `main`** (#551, antes da B3 por pedido do Matheus, 2026-11-03): o pet de teste nasce em Ajustes › Laboratório, num save próprio, abre na ilha com o selo experimental, sem trocar o pet ativo, e tem o painel do modular e o Descartar; a fala de memória ficou de fora, e lutar com o pet de teste não foi testado. Sem G-PAR: o `sumiu` e o `desistiu` das intenções com alvo, que não ocorreram nas vidas tentadas | `docs/TAREFA_V3_LAB_MODULAR.md` |
+| **cérebro primário** (fora do plano, a pedido do Matheus) | o modular vira o cérebro padrão do pet do jogo | **na `main`** (#562, 2026-11-04): os ovos novos nascem **v17** com o modular; o A fica selecionável pelo evento `cb`; o v15 é promovido a v17; a v17 luta como a v14 | o PR #562 |
 | **L4** habitat como ilha 3D | a cena do modo mundo (v12) como ilha 3D, com o pet em papel; só vista | H0 a H5 **na `main`** (#488 a #494; a H1b liga o `CLIPES_UP`); faltam as capturas aprovadas e a M3 | `docs/TAREFA_V3_HABITAT_ILHA_3D.md` |
 | **B1** rodada 2 do equilíbrio | as fases do `PLANO_EQUILIBRIO_COMBATE_TR_R2.md` | **na `main`**, com a conferência única (R2-5, #502): 13 metas passam, 14 falham | `docs/EQUILIBRIO_COMBATE_TR.md` |
 | **B2** ligar a v14 | o pet v14 com o candidato da conferência; a v13 viva (CV14-1) | **na `main`** (#504); o Matheus decidiu ligar já (2026-10-30), contra a recomendação de esperar a rodada 3 | `docs/TAREFA_V3_COMBATE_V14.md` |
 | **B3** a luta no layout novo | o HUD e o palco na pele dos menus | a tarefa e as pranchas **na `main`** (#537), com as B3-1 a B3-5 aprovadas; o código **na `main`** (#553, 2026-11-04): a cena a tela inteira, o HUD no alto, a regra num cartão à direita (faixa no celular) e o dock no rodapé, nas duas peles, a 390, 1280 e 1920×950; o replay quadro a quadro igual nos pets v13, v14 e v15; o contraste medido sobre o pior pixel dos mapas sob o degradê da cena (desvio). Fora: a luta com o pet de teste v16 e as capturas do portão (a T3) | `docs/TAREFA_V3_LUTA_LAYOUT.md` |
-| **L** balões e HUD (fora do plano, sessões próprias) | os balões soltos vão ao painel Estado; o HUD da tela Pet | **na `main`** (#498, #501) | `docs/TAREFA_V2_LAYOUT_HABITAT.md`, `docs/TAREFA_V3_LAYOUT_HUD.md` |
+| **B4** o pet aprende na luta | caminho 1: mostrar o aprendizado que o `GambitsPet` já faz; caminho 2: a ponte entre o modular e a luta | o painel "O que o pet aprendeu" na Arena **na `main`** (#571), só leitura (o motor não guarda a nota luta a luta); a ponte no papel **na `main`** (#564), com as PL-1 a PL-9 DECIDIDAS pelo Matheus (2026-11-04, pela recomendação): da luta para o cérebro primeiro, só a dor no corpo, o `g_exp` no ε, o evento `pl` no ovo novo. Próximo: o código (PE0 em diante) | `docs/TAREFA_V3_PONTE_LUTA.md` |
+| **G0** o genoma no log | o genoma como evento `genoma` no tick 0, atrás da `ConfigGenoma` desligada, só no Python | a tarefa **na `main`** (#556), G0-1 a G0-7 DECIDIDAS; o código completo **na `main`**: o gabarito (E0, #557), o registro (E1, #558), o replay do mundo (E2, #563) e a bancada com o sha256 no resumo (E3, #570) | `docs/TAREFA_V3_GENOMA_G0.md` |
+| **Vida do pet** (fora do plano, pedido do Matheus em 2026-11-04) | o pet não fica parado: passo 1 o movimento na vista, passo 2 uma cena por ação e o toque, passo 3 ações novas no cérebro; nunca treino por clicar carinho e tapa | as referências **na `main`** (#560); o passo 1 **na `main`** (#561); o passo 2 **na `main`** (#573; os números da cena PROPOSTOS, aceitos para ajustar jogando); o passo 3 no papel **na `main`** (#565), com as AN-1 a AN-7 DECIDIDAS pela recomendação. Próximo: o código do passo 3. As animações do pet (SPRITES_ACOES, #568, #569, #572) estão abertas noutra sessão | `docs/TAREFA_V3_VIDA_PET_REF.md`, `docs/TAREFA_V3_ACOES_NOVAS.md` |
+| **L** balões e HUD (fora do plano, sessões próprias) | os balões soltos vão ao painel Estado; o HUD da tela Pet | **na `main`** (#498, #501); o HUD transitório e arrastável **na `main`** (#559), com o e2e consertado no #566; o cocô como objeto 3D na ilha (#567) | `docs/TAREFA_V2_LAYOUT_HABITAT.md`, `docs/TAREFA_V3_LAYOUT_HUD.md` |
 
 ## 2. Decisões abertas do Matheus
 
@@ -50,9 +54,13 @@ Cada uma com a recomendação do Gerente e o custo de errar.
   esperada e o seletor da ração, que achava também o botão da bola) consertados no #554. O teste da chave do DigiBrain, quebrado desde a LM0
   pelo exportador do gabarito, consertado no #552. Lição: o CI do PR não roda o `npm test` nem o e2e; o Gerente roda os dois na junção
   antes de mesclar um PR do web.
-- **Os órgãos digitais e a genética** (Matheus, 2026-11-03, "segue sua recomendacao"): nenhuma frente nova antes da B3; depois dela,
-  o G0 da genética (`docs/futuro/ecossistema_genetico.md`: o genoma no log e o replay, atrás de chave); os órgãos só com fonte. O PR #516
-  fica como referência, sem merge.
+- **Os órgãos digitais e a genética** (Matheus, 2026-11-03, "segue sua recomendacao"): o G0 veio depois da B3 e o código está completo
+  (E0 a E3, até o #570); os órgãos só com fonte. O PR #516 fica como referência, sem merge.
+- **O que fica para depois do G0 e da Vida do pet:** o código do passo 3 (AN) e o da ponte da luta (PE0 em diante) mexem os dois no
+  cérebro modular. Recomendação: um de cada vez, a ponte depois do passo 3, para o `digilab/digibrain/` ter um dono só. Custo de errar: dois
+  PRs no mesmo módulo, conflito e paridade a refazer.
+- **O e2e do painel "Por que ele disse isso" pelo balão** saiu com o #566 (o save do teste não tem fala). Recomendação: um save com fala
+  registrada num ajuste pequeno. Custo de errar: o caminho do balão ao painel quebra sem teste.
 - **A cobertura do `sumiu` e do `desistiu` nas intenções com alvo** (ir à comida, à bola, ao lugar): portados, sem G-PAR-VIDA (LM4).
   Recomendação: deixar como está até um cenário que os produza; registrado na tarefa. Custo de errar: um erro nesses ramos só aparece jogando.
 - **O rótulo `livre-v9`** quando a fala de memória for gravada no modo livre. Recomendação: entra junto da primeira fala de memória gravada

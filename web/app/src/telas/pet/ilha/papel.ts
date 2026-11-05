@@ -21,6 +21,8 @@ import { OVO, chaveSprite } from "../../../../motor/index.ts";
 import { atlasAtual, chaveUp, desenharSprite, dimSprite, quadroAgora, type AtlasOk, type Clipe } from "../../../atlas.ts";
 import { balancoOvo, jogoAtual } from "../../../jogo.ts";
 import { SONO, alturaSono } from "../sono.ts";
+import { SEM_GESTO, gestoAgora } from "../cenaAcao.ts";
+import { velocidadeAtual } from "../../../tempo.ts";
 import { fonteDoPet } from "../fontePet.ts";
 import { ANDANDO_MS, BORDA_PAPEL, LADO_MIN, PULO_MS, PULO_TEXELS, VIRAR_POR_S } from "./constantes.ts";
 import { GEO_SOMBRA, materialSombra } from "./cena.ts";
@@ -218,7 +220,10 @@ export class Papel {
       this.papel.material.needsUpdate = this.silhueta.material.needsUpdate = true;
     }
     /* dormindo (sono.ts): o quadro parado achatado, respirando, num tom apagado */
-    const dorme = !ovo && jogoAtual().motor.acao === "dormir", alt = dorme ? alturaSono(p.agora, p.reduzido) : 1;
+    const mo = jogoAtual().motor, dorme = !ovo && mo.acao === "dormir";
+    /* a cena da acao do motor, o cocô e a reacao ao toque (cenaAcao.ts; so vista): o gesto do corpo sobre o desenho. Parado e acordado ele faz o da acao */
+    const gesto = ovo ? SEM_GESTO : gestoAgora({ acao: mo.acao, sujeira: mo.e.sujeira, chave: String(mo.semente) }, p.agora, p.reduzido, !andando && !dorme, velocidadeAtual() <= 0);
+    const alt = (dorme ? alturaSono(p.agora, p.reduzido) : 1) * gesto.estica;
     this.papel.material.color.setHex(p.noite ? NOITE_PAPEL : dorme ? SONO.tom : 0xffffff);
     /* o lado ao longo da direita da camera no chao (com a camera livre ela gira; fixa, e o x do mundo): no golpe, o do ponto em que o pet
        bate; fora dele, o do passo da posicao desenhada */
@@ -233,13 +238,13 @@ export class Papel {
     const passo = VIRAR_POR_S * p.dt;
     this.escalaX = p.reduzido || Math.abs(this.lado - this.escalaX) <= passo ? this.lado : this.escalaX + Math.sign(this.lado - this.escalaX) * passo;
     /* o tamanho em pixels inteiros do canvas; o pulinho em texels inteiros; o ovo balanca um texel de lado */
-    const n = p.pxPorTexel, wpx = Math.round(folha.w * n * (dorme ? 1 + (1 - alt) / 2 : 1)), hpx = Math.round(folha.h * n * alt), { nascendo } = jogoAtual();
-    const pulo = andando && !p.reduzido && !ovo ? Math.round(Math.abs(Math.sin(p.agora / PULO_MS)) * PULO_TEXELS) * n : 0;
+    const n = p.pxPorTexel, wpx = Math.round(folha.w * n * (dorme || gesto.estica !== 1 ? 1 + (1 - alt) / 2 : 1)), hpx = Math.round(folha.h * n * alt), { nascendo } = jogoAtual();
+    const pulo = (andando && !p.reduzido && !ovo ? Math.round(Math.abs(Math.sin(p.agora / PULO_MS)) * PULO_TEXELS) * n : 0) + Math.round(gesto.alto) * n;
     const balanco = ovo && !p.reduzido ? balancoOvo(nascendo) * n : 0;
     /* o pe do papel no chao (o foco: sem dobra), projetado; o canto vai ao pixel inteiro mais perto */
     this.v.set(p.cel[0], 0, p.cel[1]).project(p.camera);
     const [W, H] = p.canvas, ax = ((this.v.x + 1) / 2) * W, ay = ((1 - this.v.y) / 2) * H;
-    const esquerda = Math.round(ax - wpx / 2) + balanco, base = Math.round(ay) - pulo;
+    const esquerda = Math.round(ax - wpx / 2) + balanco + Math.round(gesto.frente) * n * this.lado, base = Math.round(ay) - pulo;
     const dx = (esquerda + wpx / 2 - ax) / p.ppu, dy = (ay - base) / p.ppu;
     const cam = p.camera, direita = this.v.set(1, 0, 0).applyQuaternion(cam.quaternion).clone(), cima = new THREE.Vector3(0, 1, 0).applyQuaternion(cam.quaternion);
     this.papel.quaternion.copy(cam.quaternion);

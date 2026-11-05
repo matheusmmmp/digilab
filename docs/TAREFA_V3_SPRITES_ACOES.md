@@ -16,7 +16,7 @@ produto (`docs/PRODUTO_VISAO.md`).
 ## 2. Depende de
 
 - **As decisões SA-1 a SA-8 do Matheus** (seção 8). Sem elas nenhuma missão sai.
-- **A M3 (tocar na ilha) depende do PR #561 na `main`.** O #561 mexe em `ilha/vista.ts` e `vistaMundo.ts`, e a M3 também. A M1 e a
+- **A M3 (tocar na ilha) dependia do PR #561, que já entrou; agora depende do #568 (o `Clipe`) e parte do `cenaAcao.ts` da "Vida do pet" (seção 3.6).** Antes, a frase era: a M3 depende do PR #561 na `main`. O #561 mexe em `ilha/vista.ts` e `vistaMundo.ts`, e a M3 também. A M1 e a
   M2 não dependem dele.
 - **O passo 3 (#565) não cria membro novo no `AcaoPet`.** O passeio usa o `explorar`, então a tabela abaixo já cobre o que ele traz.
 - **Os sprites são os do Digimon UP do projeto.** A decisão é definitiva (2026-10-24, `docs/UI_GUIDELINES.md` 5.1). Os quadros
@@ -255,14 +255,30 @@ missão tem escopo fechado e entrega verificável.
     - `atlas.ts`: as tags novas no `Clipe` e as validações novas do `juntarClipes` (seção 3.4);
     - um teste do carregador com um atlas sintético de arte própria (`test/`), com os casos que passam e os que falham alto.
   - **Entrega:** `npm test` e `npm run tipos`.
-- **M3 — tocar na ilha (`v3-sprites-ilha`; depois do #561 na `main`):**
+- **M3 — tocar o Comer na ilha (`v3-sprites-ilha`; depois do #568 e do #569 na `main`; o #561 já entrou):**
+  - **O que mudou na `main` (2026-11-04):** a frente "Vida do pet" pôs o passo 2 como gestos da vista, em
+    `src/telas/pet/cenaAcao.ts`:
+    - o `gestoAgora` faz o comer achatar e soltar migalhas, com a carne sobre a cabeça;
+    - há pulinhos e tremidas por ação;
+    - há a reação ao toque (`reacaoAtual`, `ToquePet.tsx`);
+    - o `papel.ts` aplica o gesto sobre a folha.
+
+    A M3 parte disso. Ela não cria a `clipePet.ts` paralela, e as regras da SA-5 entram no `cenaAcao.ts`.
   - **O que faz:**
-    - `src/telas/pet/clipePet.ts`: a função pura da escolha do clipe, com as prioridades, o mínimo de um ciclo, a reação do dono e
-      os momentos do mundo da seção 3.2;
-    - `papel.ts`: usa essa função, com o corte alargado generalizado e o pet olhando para o alvo (SA-4);
-    - `PalcoPet.tsx`: os sobrepostos novos, com as grades de arte própria em `grades.ts`;
-    - os números em `ilha/constantes.ts`, PROPOSTOS.
-  - **Testes:** um da função (cada linha da tabela 3.2 e cada regra de coincidência) e um do corte (mesmo centro e mesmo pé).
+    - no `papel.ts` (`folhaAgora`), com o atlas tendo `Comer`, o pet com `m.acao === "comer"` toca o clipe em laço. A entrada nova em
+      `mundo.consumos` toca o clipe uma vez, virado para onde estava a ração (SA-4). O gesto do comer (`estica`) e a carne sobre a cabeça
+      saem enquanto o clipe toca, porque o clipe já morde e já traz o `Comer_objeto`;
+    - sem o atlas, ou com um sprite sem `Comer`, fica o gesto de hoje: é a queda explícita, e um campo lido pelo teste diz qual dos
+      dois tocou;
+    - o corte do `Comer` e do `Comer_objeto` é o alargado, com o mesmo centro e o mesmo pé (o `corteGolpe` generalizado);
+    - a reação ao dono (a `reacaoAtual` e o `flash`) ocupa um ciclo por cima do Comer e depois volta (SA-5). O mínimo é um ciclo
+      inteiro do Comer, mesmo que a ação troque. Acima de 1 h/s, o "comeu a ração" sai;
+    - os números novos vão em `ilha/constantes.ts` ou no `CENA_ACAO`, PROPOSTOS.
+  - **Testes:**
+    - o gesto e o clipe nunca juntos;
+    - a queda sem o atlas;
+    - o um-ciclo-mínimo e a reação por cima;
+    - o corte com o mesmo centro e o mesmo pé.
   - **Entrega:** `npm test`, `npm run tipos`, e o diff do motor vazio.
 - **M4 — e2e e capturas (`v3-sprites-e2e`):**
   - **O que faz:**
