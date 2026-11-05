@@ -62,9 +62,7 @@ def test_os_bracos_sao_o_rel_da_c4_com_e_sem_a_passeio():
     rel = orq.config_do_braco("REL", conserto=True)
     assert lab == rel and not lab.passeio
     assert labp.passeio and {k: v for k, v in vars(labp).items() if k != "passeio"} == {k: v for k, v in vars(rel).items() if k != "passeio"}
-    for cd in (lab, labp):
-        assert not (cd.credito_corrida or cd.redecidir_evento or cd.intencao_suspensa or cd.facetas_mem)
-        assert cd.memoria_autobio and cd.controle_mem == "rel"
+    assert orq.SUBCHAVES_AN["LAB"] == orq.SUBCHAVES_C4["REL"] and orq.SUBCHAVES_AN["LAB+P"] == {**orq.SUBCHAVES_C4["REL"], "passeio": True}
     with pytest.raises(ValueError):
         orq.config_do_braco("LAB+P")                      # so nas fases do conserto
 
@@ -152,7 +150,7 @@ def test_recusa_outro_k_outros_dias_outro_orcamento_e_outro_plano(sem_registro):
 def test_recusa_chave_a_mais_fase_errada_e_fumaca_com_dias_demais():
     cfg = _cfg("varredura")
     assert an.modo_da_config(cfg) == "fumaca"
-    for mudar in (lambda c: c.update(extra=1), lambda c: c.update(fase="memoria_autobio"), lambda c: c.update(dias=15)):
+    for mudar in (lambda c: c.update(extra=1), lambda c: c.update(fase="longe_regular"), lambda c: c.update(dias=15)):
         c = copy.deepcopy(cfg)
         mudar(c)
         with pytest.raises(ValueError):

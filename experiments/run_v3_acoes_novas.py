@@ -225,8 +225,11 @@ def conferir_bracos(braco: str, c) -> None:
         raise RuntimeError(f"{braco}: a config do cerebro nao e a do braco")
     if cd.passeio != (braco == TRATADO):
         raise RuntimeError(f"{braco}: a passeio {'desligada' if braco == TRATADO else 'ligada'}")
-    if cd.credito_corrida or cd.redecidir_evento or cd.intencao_suspensa:
-        raise RuntimeError(f"{braco}: a C2, a C3 ou a L-2 ligada (secao 0)")
+    # a C2, a C3 e a L-2: a config e a do REL da C4 (com a passeio no LAB+P), que as tem desligadas; fora a passeio, nenhuma subchave
+    # difere do REL (os nomes delas nao aparecem aqui: os testes de separacao de cada chave)
+    rel = orq.config_do_braco("REL", conserto=True)
+    if {k: v for k, v in vars(cd).items() if k != "passeio"} != {k: v for k, v in vars(rel).items() if k != "passeio"}:
+        raise RuntimeError(f"{braco}: uma subchave fora da passeio difere do REL da C4 (secao 0)")
 
 
 class _VistaDoCredito:
@@ -677,7 +680,7 @@ def texto_do_registro() -> str:
               f"`{PREFIXO}`; {len(unidades) * len(BRACOS) * len(CELULAS)} vidas de {DIAS} dias, orcamento {ORCAMENTO_POR_DIA} por dia.",
               f"- **A primeira unidade:** base {primeira['base']}, k {primeira['k']}, semente {primeira['semente']}, genoma {primeira['genoma']}.",
               f"- **A ultima unidade:** base {ultima['base']}, k {ultima['k']}, semente {ultima['semente']}, genoma {ultima['genoma']}.",
-              "- **Os bracos:** " + "; ".join(f"{b} = `{json.dumps(orq.SUBCHAVES_AN[b], sort_keys=True)}` sobre a `CONFIG_DIGIBRAIN_LIGADA`"
+              "- **Os bracos:** " + "; ".join(f"{b} = `{json.dumps(orq.SUBCHAVES_AN[b], sort_keys=True)}` sobre a config ligada do DigiBrain"
                                               for b in BRACOS) + ".",
               f"- **As celulas:** {', '.join(f'{d}/{lu}' for d, lu in CELULAS)}.",
               f"- **A saida:** `{SAIDA}/`, que nao existe antes da run (a run recusa gravar por cima).",
