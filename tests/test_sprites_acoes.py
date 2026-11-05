@@ -100,9 +100,13 @@ def test_ancoras_60_e_modos():
         assert 0 <= bx < w and 0 <= by < h, n
         if "fonte" in e:   # um .aseprite derivado, fora do git, e a regra que o fez
             assert e["fonte"].startswith("acoes/bocas/") and e["fonte"].endswith(".aseprite"), n
-            o = e["olhos_do_idle"]
-            assert e["idle"][0] <= o["idle"] <= e["idle"][1], n
-            assert set(o["quadros"].values()) <= set(e["fechada"]) | set(e["aberta"]), n
+            assert ("olhos_do_idle" in e) != ("boca_desenhada" in e), n
+            if "olhos_do_idle" in e:   # os olhos do Idle nos quadros da boca
+                o = e["olhos_do_idle"]
+                assert e["idle"][0] <= o["idle"] <= e["idle"][1], n
+                assert set(o["quadros"].values()) <= set(e["fechada"]) | set(e["aberta"]), n
+            else:                      # a boca desenhada (SA-9) que ja abre e fecha pelo par
+                assert e["modo"] == "par" and e["boca_desenhada"]["quadro_up"] >= 1, n
         if e["modo"] == "par":
             assert len(e["seq"]) > 0 and e["fechada"] and e["aberta"], n
             assert {q[0] for q in e["seq"]} <= set(e["fechada"]) | set(e["aberta"]), n
