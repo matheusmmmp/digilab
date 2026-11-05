@@ -285,3 +285,36 @@ limpar 88 de 145) contra 1 745 de 4 829 sem gesto, o que não separa o efeito do
 
 **O que a AN0 não fez:** nenhuma vida nova (não há o carinho para conferir), nenhum plano de análise (a AN3), nenhuma faixa. As vidas da LM4 não gravam a posição,
 então o deslocamento e o zigue-zague vêm só da LM0 (3 072 decisões).
+
+## 11. Resumo da AN1: os gabaritos de hoje bastam para a AN2 (2026-11-04, worker Sonnet 5.5, branch `v3-acoes-novas-an1`)
+
+**Conclusão: os gabaritos que já estão na `main` bastam. Nenhum gabarito novo foi gravado, e nenhum código mudou.** Este PR só documenta a conferência. Os
+três conjuntos abaixo comparam uma vida **nova** do Python com o gravado, byte a byte (não são só hashes de um arquivo parado), e passam hoje (`59a24cf`):
+
+| conjunto | o que fixa | teste | rodado hoje |
+|---|---|---|---|
+| LM0 e LM4 (`web/app/test/gabaritos/digibrain_modular_*`) | o braço REL (a configuração do pet de teste, a mesma do braço LAB do plano) em 8 vidas de 4 dias (comedouro e `longe_fixo`, atencioso e relapso, sementes 101 e 202) com **todas as chamadas dos módulos, o motivo e a assinatura do estado por decisão**; 6 vidas da LM4 (inclui o dono incoerente) com motivo, fins e o sha do log; os logs e as leituras do M-PLAST | `tests/test_gabarito_digibrain_modular_web.py` (exportador igual em duas execuções, gravado igual a uma execução nova, fins, logs, plast) | 15 passam em 59 s, com `tests/test_gabarito_genoma_g0.py` |
+| G0, o caminho REL (`tests/gabaritos/genoma_g0_vidas_de_hoje.json`) | 10 vidas do REL (comedouro e `longe_fixo`, sementes 101 a 505, 3 dias): sha256 do log e da trajetória (decisões, estados por passo do dono, resumo com política interna e medidas), com o sha de cada parte | `tests/test_gabarito_genoma_g0.py` (se regera igual duas vezes; em dia byte a byte) | passam (junto com a linha de cima) |
+| o modular de hoje (`tests/gabaritos/digibrain_modular_de_hoje.json`) | 8 braços (M0 a M4-con) × 2 sementes × 12 células, 3 dias: log, estado interno do cérebro e medidas | `tests/test_gabarito_digibrain_modular.py` | 2 passam em 41 s |
+
+**Por que bastam para a AN2 (a `passeio` desligada tem de deixar tudo igual):**
+- **O vagar está lá, decisão a decisão.** As vidas da LM0 e da LM4 têm 1 027 decisões `explorar/vagar` em 5 376 (`artifacts_v3_acoes_novas/hoje.json`, `total`),
+  com 732 corridas, e o motivo de cada uma (a ação, o alvo, a intenção, os fins) está no gabarito. Um passeio que vazasse com a chave desligada mudaria a
+  assinatura do estado ou o motivo de alguma delas.
+- **Os fins que a AN2 toca estão cobertos:** `achou`, `meta`, `trocou` nas vidas da LM0 e `desistiu` e `sumiu` na LM4 (o teste dos fins da LM4 confere os dois últimos).
+- **O G0 cobre as medidas e o log inteiro** de 10 vidas do mesmo braço, em outras sementes (303, 404, 505), com os estados por passo.
+- **O caminho que a AN2 mexe (`estado.py`, `adapt.py`, `impulso.py`, `config.py`) roda em todas essas vidas.** Não há ramo do vagar fora delas: o vagar sai do M-IMPULSO em toda decisão.
+
+**O que a AN2 tem de respeitar (achado desta conferência, não é um furo do gabarito):**
+- `digibrain_modular_constantes.json` grava `config_digibrain` como `asdict(ConfigDigibrain)` (as 16 chaves de hoje; `experiments/exportar_gabarito_digibrain_modular.py:278`),
+  e `desligadas` como as chaves falsas. **A subchave `passeio` aparece nesse arquivo no instante em que entra na `ConfigDigibrain`**, e `test_o_gabarito_gravado_bate_com_uma_execucao_nova`
+  falha, mesmo com a vida igual. O 3.5 diz "nenhum gabarito é regravado". A AN2 não tem como cumprir isso ao pé da letra; a saída que recomendo [PROPOSTO] é regravar
+  **só** esse arquivo, com a diferença exata de `"passeio": false` em `config_digibrain` e em `desligadas`, num commit próprio, com um teste que confere que as
+  oito vidas (os `.json.gz` e os sha256 de `arquivos`) não mudaram um byte. A web (`digibrain_modular_constantes.test.ts`, "cada folha igual") precisa do campo na AN5. O
+  Gerente decide antes da AN2 (custo de errar: regravar mais que a chave esconderia uma mudança de vida; não regravar deixa o teste do exportador vermelho).
+- **O motivo só ganha `do_passeio` com a chave ligada** (a 3.4): como o motivo está em todos os gabaritos, um campo novo sempre presente mudaria todos eles.
+- **A assinatura do estado** (`estado_interno`) segue o padrão do módulo: o que é novo só entra com a chave ligada (como o `guardada` com a `intencao_cheiro`).
+
+**Decisão do Matheus (2026-11-04, "Sim, mescle e aceite"):** a recomendação acima ACEITA: a AN2 regrava só o `digibrain_modular_constantes.json`, com a diferença exata de `"passeio": false`, num commit próprio, com o teste de que as oito vidas não mudam um byte.
+
+**Gate:** o gabarito se regera igual duas vezes: `test_o_exportador_sai_igual_em_duas_execucoes_byte_a_byte` e `test_o_gabarito_se_regera_igual_duas_vezes` passam. Nada novo gravado.

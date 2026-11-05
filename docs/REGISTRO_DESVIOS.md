@@ -506,3 +506,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-04 — G0 E3, a bancada grava o genoma (worker, Claude Code, Sonnet 5.5, worktree `v3-genoma-g0-e3`)](registro/2026-11.md)
 - [2026-11-04 — VIDA DO PET, a cena e o toque (worker, Claude Code, Sonnet 5.5, worktree `v3-vida-pet-cena`)](registro/2026-11.md)
 - [2026-11-04 — ACOES_NOVAS AN0, o descritivo de hoje (worker, Claude Code, Sonnet 5.5, worktree `v3-acoes-novas-an0`)](registro/2026-11.md)
+- [2026-11-04 — ACOES_NOVAS AN1, o gabarito das vidas de hoje (worker, Claude Code, Sonnet 5.5, worktree `v3-acoes-novas-an1`)](registro/2026-11.md)
