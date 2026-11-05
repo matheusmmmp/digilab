@@ -89,7 +89,8 @@ def main() -> int:
         bb = m.getbbox() or (0, 0, W, H)
         m = m.crop(bb); m.thumbnail((TAM, TAM), Image.NEAREST)
         minis.append(m)
-        indice[n] = {"w": W, "h": H, "sw": folha.width, "sh": folha.height, "f": f, "t": tags, "modo": modos[n]}
+        indice[n] = {"w": W, "h": H, "sw": folha.width, "sh": folha.height, "f": f, "t": tags, "modo": modos[n],
+                    "l": ["sombra", "personagem", "comida"]}   # a pagina le A.l (as camadas); sem ele o play para
     cols = 16
     mini = Image.new("RGBA", (cols * TAM, ((len(minis) + cols - 1) // cols) * TAM), (0, 0, 0, 0))
     for i, (n, m) in enumerate(zip(digimons, minis)):
