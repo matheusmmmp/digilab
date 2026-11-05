@@ -30,7 +30,8 @@ def parametros(nome: str, e: dict, anc: dict, remaster: Path) -> dict[str, str]:
     """Os --script-param do gerar.lua para um Digimon."""
     acoes = remaster / "acoes"
     pr = {
-        "src": str(remaster / "aseprite" / e["aseprite"]),
+        # "fonte": um .aseprite derivado (fora do git, em remaster/acoes/bocas/), com os quadros do UP e os ajustados no fim
+        "src": str(remaster / e["fonte"]) if "fonte" in e else str(remaster / "aseprite" / e["aseprite"]),
         "caixa": "{},{}".format(*e["caixa"]),
         "pe": str(e["pe_idle"]),
         "out_ase": str(acoes / "aseprite" / f"{nome}_acoes.aseprite"),
