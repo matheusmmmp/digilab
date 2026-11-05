@@ -16,7 +16,7 @@ import { iniciarTempo } from "./tempo.ts";
 import { CHAVE_GUARDADOS, semearGuardados } from "./pets.ts";
 import { descartarPetsAntigos } from "./tamer.ts";
 import { ligarEscala } from "../motor/index.ts";
-import { reacaoAtual } from "./telas/pet/cenaAcao.ts";
+import { comerAgora, reacaoAtual } from "./telas/pet/cenaAcao.ts";
 import { CENA } from "./telas/pet/cenaEstado.ts";
 import { lugaresNomeados } from "./telas/pet/vistaMundo.ts";
 import "./estilo/tokens.css";
@@ -62,7 +62,7 @@ iniciarFalaLivre();
 addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") gravarPendente(); });
 addEventListener("pagehide", gravarPendente);
 /* conferencia (teste ponta a ponta, Etapa 5): so leitura do pet vivo; nada aqui muda o motor */
-/* o que os testes leem (so leitura): a assinatura, o registro, o tick, o DigiBrain e, nos pets v12, o mundo do motor e a vista dele
+/* o que os testes leem (so leitura): a assinatura, o registro, o tick, o DigiBrain, o corpo do comer e, nos pets v12, o mundo do motor e a vista dele
    (docs/TAREFA_V2_MVP_MUNDO_PRODUTO.md, etapa 2: o E2E-COMIDA e o E2E-CENA) */
 const lerMundo = () => {
   const m = jogoAtual().motor, mu = m.mundo;
@@ -72,7 +72,9 @@ const lerMundo = () => {
 };
 Object.assign(window, { __digilab: { assinatura: () => jogoAtual().motor.assinatura(), registro: () => textoSave(jogoAtual().motor), tick: () => jogoAtual().motor.e.tick, digibrain: () => jogoAtual().motor.digibrain(),
   mundo: lerMundo, cena: () => CENA.mundo && { pet: [...CENA.mundo.pet], bola: CENA.mundo.bola ?? null, modo3d: CENA.modo3d, ret: CENA.ret },
-  reacao: () => reacaoAtual(performance.now()), cenaPara: (x: number, y: number) => CENA.mundo?.paraTela(x, y) ?? null } });
+  reacao: () => reacaoAtual(performance.now()),
+  /* o que tocou no comer no ultimo quadro da ilha: "clipe", "gesto" ou null (cenaAcao.ts, escolherComer; docs/TAREFA_V3_SPRITES_ACOES.md, M4) */
+  comer: () => comerAgora().tocou, cenaPara: (x: number, y: number) => CENA.mundo?.paraTela(x, y) ?? null } });
 /* varios pets: no primeiro acesso a esta versao, a escada de pets guardados de exemplo (fraco -> forte), depois da
    primeira pintura para nao atrasar a abertura */
 setTimeout(() => { try { semearGuardados(); } catch (err) { console.error("pets guardados de exemplo:", err); } }, 400);
