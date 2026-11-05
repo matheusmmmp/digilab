@@ -318,3 +318,28 @@ três conjuntos abaixo comparam uma vida **nova** do Python com o gravado, byte 
 **Decisão do Matheus (2026-11-04, "Sim, mescle e aceite"):** a recomendação acima ACEITA: a AN2 regrava só o `digibrain_modular_constantes.json`, com a diferença exata de `"passeio": false`, num commit próprio, com o teste de que as oito vidas não mudam um byte.
 
 **Gate:** o gabarito se regera igual duas vezes: `test_o_exportador_sai_igual_em_duas_execucoes_byte_a_byte` e `test_o_gabarito_se_regera_igual_duas_vezes` passam. Nada novo gravado.
+
+## 12. Resumo da AN2: o passeio no Python (2026-11-05, worker Sonnet 5.5, branch `v3-acoes-novas-an2`)
+
+**O passeio está no cérebro modular, atrás da subchave `passeio` (desligada).** Dois commits: (1) o campo `passeio: False` na `ConfigDigibrain`, a regravação **só** do
+`web/app/test/gabaritos/digibrain_modular_constantes.json` (a diferença exata de `"passeio": false` em `config_digibrain` e em `desligadas`) e o teste de que as oito vidas não
+mudam um byte (`tests/test_passeio_gabarito.py`: sha256 do texto e bytes do gzip, mais uma execução nova igual); (2) o comportamento. `engine.py` e o motor não mudaram.
+
+| peça | onde | o que faz |
+|---|---|---|
+| abrir | `estado.abrir_passeio`, chamado no `adapt.escolher_alvo` | o `explorar/vagar` escolhido sem urgência vira a I\* (`explorar`, `passeio`, (x, y)) com o ponto que o motor sorteou; com urgência fica opção de uma decisão |
+| seguir | `impulso.alvos` | a unidade do passeio (tipo `vagar`, distância ao ponto) ocupa o lugar do vagar; o `adapt` a entrega como `Alvo.ponto` |
+| fins | `estado._consequencia`, `cuidar_passeio` | `meta` (`chegou`), `trocou`, `desistiu` (`n_desiste`) e o novo `interrompido`; o `interrompido` não sobe o F (AN-5) |
+| guarda | `estado.contexto(urgencias)`, `cuidar_passeio` | urgência máxima de fome, higiene, energia, saúde acima do `urgencia_lambda` (`>`): persistência do passeio 0 e fim `interrompido` no começo da decisão; o reflexo do sono vence (`trocou`) |
+| gesto | `estado.cuidar_passeio`, `_acabar`, `adapt._fim` | gesto do dono (`acariciar`, `elogiar`, `tapa`, `repreender`) entre o começo e o fim do passeio: o fim sai com `credito: False`, não vai ao P2, e o motivo registra `credito: "gesto"` |
+| motivo | `adapt` | `alvo.do_passeio` e o estado `passeio` só com a chave ligada |
+
+**Parâmetros novos:** nenhum número. A subchave é PROPOSTA (SEM FONTE como valor); o limiar é o `urgencia_lambda` que já existe (AN-4). A combinação com `credito_corrida`, `intencao_suspensa` e
+`redecidir_evento` levanta `ValueError` (não testada; PROPOSTA). Com a `memoria_autobio` do braço REL, o passeio não vira episódio de "visita" (essa é do lugar lembrado).
+
+**Testes (G2-py):** `tests/test_passeio_an2.py` (27: desligada sem campo novo, abrir, os quatro fins, a guarda por necessidade, o reflexo antes do `interrompido`, o gesto em cada fim, uma vida
+com o replay bit a bit e uma com carinho injetado) e `tests/test_passeio_gabarito.py` (3). Os gabaritos de hoje (LM0/LM4, G0, `digibrain_modular_de_hoje`) passam sem regravar, salvo o arquivo de constantes.
+
+**Duas coisas fora do que a tarefa nomeou, para o Matheus ver:** (a) `web/app/motor/digibrain/constantes.ts` ganhou só `passeio: false` em `CONFIG_DIGIBRAIN_LAB`, porque o teste de paridade
+`digibrain_modular_constantes.test.ts` compara a config folha a folha com o arquivo regravado e ficaria vermelho; nenhuma lógica da web mudou (o porte é a AN5). O `vitest` não pôde ser rodado aqui
+(a worktree não tem `node_modules`). (b) o gesto é lido do que o dono entrega (`receber_acao_dono`); o carinho no meio do passeio só é injetável em teste, como a AN0 já avisou.
