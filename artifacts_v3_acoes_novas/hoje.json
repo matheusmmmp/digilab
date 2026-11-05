@@ -1,0 +1,1665 @@
+{
+  "braco": "REL",
+  "conferencia_3_3": {
+    "canais_do_r": [
+      "fome",
+      "higiene",
+      "energia",
+      "humor",
+      "saude",
+      "tedio",
+      "curiosidade",
+      "solidao",
+      "estresse",
+      "dor"
+    ],
+    "fora_do_r": [
+      "susto"
+    ],
+    "gestos_de_carinho_ou_tapa_nas_vidas_gravadas": [],
+    "leitura": "o carinho baixa solidao e estresse no corpo (digilab/corpo.py, `ACARICIAR`), e os dois fazem o r (so o susto fica fora); logo o canal existe pela configuracao. As vidas gravadas NAO trazem carinho nem tapa (so alimentar, limpar e brincar), entao o efeito do carinho no r do vagar nao e observavel aqui sem vida nova: fica para o teste da AN2.",
+    "solidao_e_estresse_no_r": true
+  },
+  "fontes": [
+    "web/app/test/gabaritos/digibrain_modular_comedouro.json.gz",
+    "web/app/test/gabaritos/digibrain_modular_longe_fixo.json.gz",
+    "web/app/test/gabaritos/digibrain_modular_fins.json.gz"
+  ],
+  "grupos": {
+    "lm0|comedouro|atencioso": {
+      "corridas_de_vagar": {
+        "comprimento_maximo": 4,
+        "comprimento_medio": 1.304348,
+        "decisoes_em_corridas_de_2_ou_mais": 69,
+        "histograma": {
+          "1": 111,
+          "2": 16,
+          "3": 7,
+          "4": 4
+        },
+        "n": 138
+      },
+      "decisoes": 768,
+      "decisoes_vagar": 180,
+      "deslocamento_por_decisao": {
+        "nao_explorar": {
+          "fracao_sem_sair_do_lugar": 0.926,
+          "maximo": 60.959003,
+          "media": 3.026396,
+          "n": 500
+        },
+        "outro_explorar": {
+          "fracao_sem_sair_do_lugar": 0.0,
+          "maximo": 60.811183,
+          "media": 60.3258,
+          "n": 86
+        },
+        "vagar": {
+          "fracao_sem_sair_do_lugar": 0.0,
+          "maximo": 61.294372,
+          "media": 60.029655,
+          "n": 180
+        }
+      },
+      "fracao_vagar": 0.234375,
+      "gestos_do_dono": {
+        "opcoes_sem_gesto": {
+          "com_r_diferente_de_0": 279,
+          "opcoes": 670
+        },
+        "por_tipo": {
+          "alimentar": {
+            "com_r_diferente_de_0": 19,
+            "opcoes": 50,
+            "soma_do_r": 4979
+          },
+          "brincar": {
+            "com_r_diferente_de_0": 4,
+            "opcoes": 20,
+            "soma_do_r": 1326
+          },
+          "limpar": {
+            "com_r_diferente_de_0": 22,
+            "opcoes": 30,
+            "soma_do_r": 7425
+          }
+        }
+      },
+      "mistura_das_escolhas": {
+        "brincar": 8,
+        "chamar_atencao": 89,
+        "comer/cheiro": 4,
+        "comer/comida/1": 2,
+        "comer/comida/10": 1,
+        "comer/comida/11": 1,
+        "comer/comida/12": 2,
+        "comer/comida/13": 3,
+        "comer/comida/14": 2,
+        "comer/comida/15": 2,
+        "comer/comida/16": 1,
+        "comer/comida/17": 1,
+        "comer/comida/18": 1,
+        "comer/comida/19": 2,
+        "comer/comida/2": 2,
+        "comer/comida/20": 2,
+        "comer/comida/21": 2,
+        "comer/comida/23": 2,
+        "comer/comida/24": 1,
+        "comer/comida/26": 1,
+        "comer/comida/3": 2,
+        "comer/comida/4": 2,
+        "comer/comida/5": 2,
+        "comer/comida/6": 2,
+        "comer/comida/7": 2,
+        "comer/comida/8": 2,
+        "comer/comida/9": 1,
+        "dormir": 339,
+        "emburrar": 5,
+        "explorar/cheiro": 78,
+        "explorar/ponto/[168, 248]": 8,
+        "explorar/vagar": 180,
+        "ocioso": 16
+      },
+      "urgencia_nas_decisoes_de_vagar": {
+        "guarda_an4": {
+          "acima_do_lambda": 48,
+          "fracao_acima_do_lambda": 0.266667,
+          "maximo": 768,
+          "media": 359.433333,
+          "n": 180
+        },
+        "todas_as_necessidades": {
+          "maximo": 1024,
+          "media": 846.444444
+        },
+        "urgencia_lambda_de_hoje": 512
+      },
+      "vidas": 2,
+      "zigue_zague_do_vagar": {
+        "fracao_que_inverte": 0.428571,
+        "pares_de_vagar_seguidos_com_passo": 42,
+        "pares_que_invertem": 18,
+        "razao_liquido_sobre_caminho_nas_corridas_de_2_ou_mais": 0.573674
+      }
+    },
+    "lm0|comedouro|relapso": {
+      "corridas_de_vagar": {
+        "comprimento_maximo": 6,
+        "comprimento_medio": 1.774194,
+        "decisoes_em_corridas_de_2_ou_mais": 148,
+        "histograma": {
+          "1": 72,
+          "2": 28,
+          "3": 11,
+          "4": 7,
+          "5+": 6
+        },
+        "n": 124
+      },
+      "decisoes": 768,
+      "decisoes_vagar": 220,
+      "deslocamento_por_decisao": {
+        "nao_explorar": {
+          "fracao_sem_sair_do_lugar": 0.95679,
+          "maximo": 60.811183,
+          "media": 1.911232,
+          "n": 486
+        },
+        "outro_explorar": {
+          "fracao_sem_sair_do_lugar": 0.283333,
+          "maximo": 60.811183,
+          "media": 37.59271,
+          "n": 60
+        },
+        "vagar": {
+          "fracao_sem_sair_do_lugar": 0.0,
+          "maximo": 61.294372,
+          "media": 60.06553,
+          "n": 220
+        }
+      },
+      "fracao_vagar": 0.286458,
+      "gestos_do_dono": {
+        "opcoes_sem_gesto": {
+          "com_r_diferente_de_0": 299,
+          "opcoes": 742
+        },
+        "por_tipo": {
+          "alimentar": {
+            "com_r_diferente_de_0": 13,
+            "opcoes": 24,
+            "soma_do_r": 5362
+          },
+          "brincar": {
+            "com_r_diferente_de_0": 13,
+            "opcoes": 24,
+            "soma_do_r": 5362
+          },
+          "limpar": {
+            "com_r_diferente_de_0": 13,
+            "opcoes": 24,
+            "soma_do_r": 5362
+          }
+        }
+      },
+      "mistura_das_escolhas": {
+        "brincar": 2,
+        "chamar_atencao": 97,
+        "comer/cheiro": 6,
+        "comer/comida/1": 2,
+        "comer/comida/10": 2,
+        "comer/comida/11": 2,
+        "comer/comida/12": 2,
+        "comer/comida/2": 2,
+        "comer/comida/3": 2,
+        "comer/comida/4": 2,
+        "comer/comida/5": 2,
+        "comer/comida/6": 2,
+        "comer/comida/7": 3,
+        "comer/comida/8": 2,
+        "comer/comida/9": 2,
+        "dormir": 346,
+        "explorar/cheiro": 12,
+        "explorar/ponto/[168, 248]": 48,
+        "explorar/vagar": 220,
+        "ocioso": 12
+      },
+      "urgencia_nas_decisoes_de_vagar": {
+        "guarda_an4": {
+          "acima_do_lambda": 61,
+          "fracao_acima_do_lambda": 0.277273,
+          "maximo": 820,
+          "media": 375.759091,
+          "n": 220
+        },
+        "todas_as_necessidades": {
+          "maximo": 1024,
+          "media": 775.590909
+        },
+        "urgencia_lambda_de_hoje": 512
+      },
+      "vidas": 2,
+      "zigue_zague_do_vagar": {
+        "fracao_que_inverte": 0.489583,
+        "pares_de_vagar_seguidos_com_passo": 96,
+        "pares_que_invertem": 47,
+        "razao_liquido_sobre_caminho_nas_corridas_de_2_ou_mais": 0.48002
+      }
+    },
+    "lm0|comedouro|todos": {
+      "corridas_de_vagar": {
+        "comprimento_maximo": 6,
+        "comprimento_medio": 1.526718,
+        "decisoes_em_corridas_de_2_ou_mais": 217,
+        "histograma": {
+          "1": 183,
+          "2": 44,
+          "3": 18,
+          "4": 11,
+          "5+": 6
+        },
+        "n": 262
+      },
+      "decisoes": 1536,
+      "decisoes_vagar": 400,
+      "deslocamento_por_decisao": {
+        "nao_explorar": {
+          "fracao_sem_sair_do_lugar": 0.941176,
+          "maximo": 60.959003,
+          "media": 2.476731,
+          "n": 986
+        },
+        "outro_explorar": {
+          "fracao_sem_sair_do_lugar": 0.116438,
+          "maximo": 60.811183,
+          "media": 50.983434,
+          "n": 146
+        },
+        "vagar": {
+          "fracao_sem_sair_do_lugar": 0.0,
+          "maximo": 61.294372,
+          "media": 60.049387,
+          "n": 400
+        }
+      },
+      "fracao_vagar": 0.260417,
+      "gestos_do_dono": {
+        "opcoes_sem_gesto": {
+          "com_r_diferente_de_0": 578,
+          "opcoes": 1412
+        },
+        "por_tipo": {
+          "alimentar": {
+            "com_r_diferente_de_0": 32,
+            "opcoes": 74,
+            "soma_do_r": 10341
+          },
+          "brincar": {
+            "com_r_diferente_de_0": 17,
+            "opcoes": 44,
+            "soma_do_r": 6688
+          },
+          "limpar": {
+            "com_r_diferente_de_0": 35,
+            "opcoes": 54,
+            "soma_do_r": 12787
+          }
+        }
+      },
+      "mistura_das_escolhas": {
+        "brincar": 10,
+        "chamar_atencao": 186,
+        "comer/cheiro": 10,
+        "comer/comida/1": 4,
+        "comer/comida/10": 3,
+        "comer/comida/11": 3,
+        "comer/comida/12": 4,
+        "comer/comida/13": 3,
+        "comer/comida/14": 2,
+        "comer/comida/15": 2,
+        "comer/comida/16": 1,
+        "comer/comida/17": 1,
+        "comer/comida/18": 1,
+        "comer/comida/19": 2,
+        "comer/comida/2": 4,
+        "comer/comida/20": 2,
+        "comer/comida/21": 2,
+        "comer/comida/23": 2,
+        "comer/comida/24": 1,
+        "comer/comida/26": 1,
+        "comer/comida/3": 4,
+        "comer/comida/4": 4,
+        "comer/comida/5": 4,
+        "comer/comida/6": 4,
+        "comer/comida/7": 5,
+        "comer/comida/8": 4,
+        "comer/comida/9": 3,
+        "dormir": 685,
+        "emburrar": 5,
+        "explorar/cheiro": 90,
+        "explorar/ponto/[168, 248]": 56,
+        "explorar/vagar": 400,
+        "ocioso": 28
+      },
+      "urgencia_nas_decisoes_de_vagar": {
+        "guarda_an4": {
+          "acima_do_lambda": 109,
+          "fracao_acima_do_lambda": 0.2725,
+          "maximo": 820,
+          "media": 368.4125,
+          "n": 400
+        },
+        "todas_as_necessidades": {
+          "maximo": 1024,
+          "media": 807.475
+        },
+        "urgencia_lambda_de_hoje": 512
+      },
+      "vidas": 4,
+      "zigue_zague_do_vagar": {
+        "fracao_que_inverte": 0.471014,
+        "pares_de_vagar_seguidos_com_passo": 138,
+        "pares_que_invertem": 65,
+        "razao_liquido_sobre_caminho_nas_corridas_de_2_ou_mais": 0.509925
+      }
+    },
+    "lm0|longe_fixo|atencioso": {
+      "corridas_de_vagar": {
+        "comprimento_maximo": 4,
+        "comprimento_medio": 1.190476,
+        "decisoes_em_corridas_de_2_ou_mais": 27,
+        "histograma": {
+          "1": 73,
+          "2": 7,
+          "3": 3,
+          "4": 1
+        },
+        "n": 84
+      },
+      "decisoes": 768,
+      "decisoes_vagar": 100,
+      "deslocamento_por_decisao": {
+        "nao_explorar": {
+          "fracao_sem_sair_do_lugar": 0.965909,
+          "maximo": 60.811183,
+          "media": 1.729981,
+          "n": 616
+        },
+        "outro_explorar": {
+          "fracao_sem_sair_do_lugar": 0.08,
+          "maximo": 61.05735,
+          "media": 54.788646,
+          "n": 50
+        },
+        "vagar": {
+          "fracao_sem_sair_do_lugar": 0.01,
+          "maximo": 60.827625,
+          "media": 59.583533,
+          "n": 100
+        }
+      },
+      "fracao_vagar": 0.130208,
+      "gestos_do_dono": {
+        "opcoes_sem_gesto": {
+          "com_r_diferente_de_0": 164,
+          "opcoes": 656
+        },
+        "por_tipo": {
+          "alimentar": {
+            "com_r_diferente_de_0": 21,
+            "opcoes": 99,
+            "soma_do_r": 2177
+          },
+          "brincar": {
+            "com_r_diferente_de_0": 2,
+            "opcoes": 9,
+            "soma_do_r": -70
+          },
+          "limpar": {
+            "com_r_diferente_de_0": 5,
+            "opcoes": 10,
+            "soma_do_r": 1937
+          }
+        }
+      },
+      "mistura_das_escolhas": {
+        "brincar": 9,
+        "chamar_atencao": 193,
+        "comer/cheiro": 10,
+        "comer/comida/13": 1,
+        "comer/comida/14": 1,
+        "comer/comida/15": 1,
+        "comer/comida/21": 1,
+        "comer/comida/30": 1,
+        "comer/comida/33": 1,
+        "comer/comida/37": 1,
+        "comer/comida/39": 1,
+        "comer/comida/4": 1,
+        "comer/comida/43": 1,
+        "comer/comida/44": 2,
+        "comer/comida/5": 1,
+        "dormir": 344,
+        "emburrar": 43,
+        "explorar/cheiro": 35,
+        "explorar/ponto/[502, 386]": 15,
+        "explorar/vagar": 100,
+        "ocioso": 6
+      },
+      "urgencia_nas_decisoes_de_vagar": {
+        "guarda_an4": {
+          "acima_do_lambda": 46,
+          "fracao_acima_do_lambda": 0.46,
+          "maximo": 1024,
+          "media": 584.28,
+          "n": 100
+        },
+        "todas_as_necessidades": {
+          "maximo": 1024,
+          "media": 824.77
+        },
+        "urgencia_lambda_de_hoje": 512
+      },
+      "vidas": 2,
+      "zigue_zague_do_vagar": {
+        "fracao_que_inverte": 0.533333,
+        "pares_de_vagar_seguidos_com_passo": 15,
+        "pares_que_invertem": 8,
+        "razao_liquido_sobre_caminho_nas_corridas_de_2_ou_mais": 0.502139
+      }
+    },
+    "lm0|longe_fixo|relapso": {
+      "corridas_de_vagar": {
+        "comprimento_maximo": 7,
+        "comprimento_medio": 1.504762,
+        "decisoes_em_corridas_de_2_ou_mais": 83,
+        "histograma": {
+          "1": 75,
+          "2": 16,
+          "3": 9,
+          "4": 3,
+          "5+": 2
+        },
+        "n": 105
+      },
+      "decisoes": 768,
+      "decisoes_vagar": 158,
+      "deslocamento_por_decisao": {
+        "nao_explorar": {
+          "fracao_sem_sair_do_lugar": 0.924354,
+          "maximo": 60.811183,
+          "media": 3.937364,
+          "n": 542
+        },
+        "outro_explorar": {
+          "fracao_sem_sair_do_lugar": 0.136364,
+          "maximo": 61.032778,
+          "media": 50.143155,
+          "n": 66
+        },
+        "vagar": {
+          "fracao_sem_sair_do_lugar": 0.0,
+          "maximo": 60.811183,
+          "media": 60.260321,
+          "n": 158
+        }
+      },
+      "fracao_vagar": 0.205729,
+      "gestos_do_dono": {
+        "opcoes_sem_gesto": {
+          "com_r_diferente_de_0": 257,
+          "opcoes": 742
+        },
+        "por_tipo": {
+          "alimentar": {
+            "com_r_diferente_de_0": 15,
+            "opcoes": 24,
+            "soma_do_r": 5939
+          },
+          "brincar": {
+            "com_r_diferente_de_0": 15,
+            "opcoes": 24,
+            "soma_do_r": 5939
+          },
+          "limpar": {
+            "com_r_diferente_de_0": 15,
+            "opcoes": 24,
+            "soma_do_r": 5939
+          }
+        }
+      },
+      "mistura_das_escolhas": {
+        "brincar": 4,
+        "brincar/bola/0": 1,
+        "chamar_atencao": 134,
+        "comer/cheiro": 25,
+        "comer/comida/1": 1,
+        "comer/comida/10": 2,
+        "comer/comida/11": 1,
+        "comer/comida/12": 1,
+        "comer/comida/2": 3,
+        "comer/comida/3": 1,
+        "comer/comida/4": 2,
+        "comer/comida/5": 1,
+        "comer/comida/6": 3,
+        "comer/comida/7": 1,
+        "comer/comida/8": 2,
+        "comer/comida/9": 1,
+        "dormir": 353,
+        "emburrar": 3,
+        "explorar/cheiro": 33,
+        "explorar/ponto/[406, 10]": 6,
+        "explorar/ponto/[411, 5]": 4,
+        "explorar/ponto/[468, 120]": 1,
+        "explorar/ponto/[468, 124]": 1,
+        "explorar/ponto/[573, 246]": 4,
+        "explorar/ponto/[581, 248]": 8,
+        "explorar/ponto/[583, 240]": 9,
+        "explorar/vagar": 158,
+        "ocioso": 5
+      },
+      "urgencia_nas_decisoes_de_vagar": {
+        "guarda_an4": {
+          "acima_do_lambda": 64,
+          "fracao_acima_do_lambda": 0.405063,
+          "maximo": 1024,
+          "media": 469.556962,
+          "n": 158
+        },
+        "todas_as_necessidades": {
+          "maximo": 1024,
+          "media": 710.297468
+        },
+        "urgencia_lambda_de_hoje": 512
+      },
+      "vidas": 2,
+      "zigue_zague_do_vagar": {
+        "fracao_que_inverte": 0.584906,
+        "pares_de_vagar_seguidos_com_passo": 53,
+        "pares_que_invertem": 31,
+        "razao_liquido_sobre_caminho_nas_corridas_de_2_ou_mais": 0.427188
+      }
+    },
+    "lm0|longe_fixo|todos": {
+      "corridas_de_vagar": {
+        "comprimento_maximo": 7,
+        "comprimento_medio": 1.365079,
+        "decisoes_em_corridas_de_2_ou_mais": 110,
+        "histograma": {
+          "1": 148,
+          "2": 23,
+          "3": 12,
+          "4": 4,
+          "5+": 2
+        },
+        "n": 189
+      },
+      "decisoes": 1536,
+      "decisoes_vagar": 258,
+      "deslocamento_por_decisao": {
+        "nao_explorar": {
+          "fracao_sem_sair_do_lugar": 0.946459,
+          "maximo": 60.811183,
+          "media": 2.763143,
+          "n": 1158
+        },
+        "outro_explorar": {
+          "fracao_sem_sair_do_lugar": 0.112069,
+          "maximo": 61.05735,
+          "media": 52.145522,
+          "n": 116
+        },
+        "vagar": {
+          "fracao_sem_sair_do_lugar": 0.003876,
+          "maximo": 60.827625,
+          "media": 59.998,
+          "n": 258
+        }
+      },
+      "fracao_vagar": 0.167969,
+      "gestos_do_dono": {
+        "opcoes_sem_gesto": {
+          "com_r_diferente_de_0": 421,
+          "opcoes": 1398
+        },
+        "por_tipo": {
+          "alimentar": {
+            "com_r_diferente_de_0": 36,
+            "opcoes": 123,
+            "soma_do_r": 8116
+          },
+          "brincar": {
+            "com_r_diferente_de_0": 17,
+            "opcoes": 33,
+            "soma_do_r": 5869
+          },
+          "limpar": {
+            "com_r_diferente_de_0": 20,
+            "opcoes": 34,
+            "soma_do_r": 7876
+          }
+        }
+      },
+      "mistura_das_escolhas": {
+        "brincar": 13,
+        "brincar/bola/0": 1,
+        "chamar_atencao": 327,
+        "comer/cheiro": 35,
+        "comer/comida/1": 1,
+        "comer/comida/10": 2,
+        "comer/comida/11": 1,
+        "comer/comida/12": 1,
+        "comer/comida/13": 1,
+        "comer/comida/14": 1,
+        "comer/comida/15": 1,
+        "comer/comida/2": 3,
+        "comer/comida/21": 1,
+        "comer/comida/3": 1,
+        "comer/comida/30": 1,
+        "comer/comida/33": 1,
+        "comer/comida/37": 1,
+        "comer/comida/39": 1,
+        "comer/comida/4": 3,
+        "comer/comida/43": 1,
+        "comer/comida/44": 2,
+        "comer/comida/5": 2,
+        "comer/comida/6": 3,
+        "comer/comida/7": 1,
+        "comer/comida/8": 2,
+        "comer/comida/9": 1,
+        "dormir": 697,
+        "emburrar": 46,
+        "explorar/cheiro": 68,
+        "explorar/ponto/[406, 10]": 6,
+        "explorar/ponto/[411, 5]": 4,
+        "explorar/ponto/[468, 120]": 1,
+        "explorar/ponto/[468, 124]": 1,
+        "explorar/ponto/[502, 386]": 15,
+        "explorar/ponto/[573, 246]": 4,
+        "explorar/ponto/[581, 248]": 8,
+        "explorar/ponto/[583, 240]": 9,
+        "explorar/vagar": 258,
+        "ocioso": 11
+      },
+      "urgencia_nas_decisoes_de_vagar": {
+        "guarda_an4": {
+          "acima_do_lambda": 110,
+          "fracao_acima_do_lambda": 0.426357,
+          "maximo": 1024,
+          "media": 514.023256,
+          "n": 258
+        },
+        "todas_as_necessidades": {
+          "maximo": 1024,
+          "media": 754.666667
+        },
+        "urgencia_lambda_de_hoje": 512
+      },
+      "vidas": 4,
+      "zigue_zague_do_vagar": {
+        "fracao_que_inverte": 0.573529,
+        "pares_de_vagar_seguidos_com_passo": 68,
+        "pares_que_invertem": 39,
+        "razao_liquido_sobre_caminho_nas_corridas_de_2_ou_mais": 0.445113
+      }
+    },
+    "lm0|todos|todos": {
+      "corridas_de_vagar": {
+        "comprimento_maximo": 7,
+        "comprimento_medio": 1.45898,
+        "decisoes_em_corridas_de_2_ou_mais": 327,
+        "histograma": {
+          "1": 331,
+          "2": 67,
+          "3": 30,
+          "4": 15,
+          "5+": 8
+        },
+        "n": 451
+      },
+      "decisoes": 3072,
+      "decisoes_vagar": 658,
+      "deslocamento_por_decisao": {
+        "nao_explorar": {
+          "fracao_sem_sair_do_lugar": 0.94403,
+          "maximo": 60.959003,
+          "media": 2.631426,
+          "n": 2144
+        },
+        "outro_explorar": {
+          "fracao_sem_sair_do_lugar": 0.114504,
+          "maximo": 61.05735,
+          "media": 51.497946,
+          "n": 262
+        },
+        "vagar": {
+          "fracao_sem_sair_do_lugar": 0.00152,
+          "maximo": 61.294372,
+          "media": 60.029238,
+          "n": 658
+        }
+      },
+      "fracao_vagar": 0.214193,
+      "gestos_do_dono": {
+        "opcoes_sem_gesto": {
+          "com_r_diferente_de_0": 999,
+          "opcoes": 2810
+        },
+        "por_tipo": {
+          "alimentar": {
+            "com_r_diferente_de_0": 68,
+            "opcoes": 197,
+            "soma_do_r": 18457
+          },
+          "brincar": {
+            "com_r_diferente_de_0": 34,
+            "opcoes": 77,
+            "soma_do_r": 12557
+          },
+          "limpar": {
+            "com_r_diferente_de_0": 55,
+            "opcoes": 88,
+            "soma_do_r": 20663
+          }
+        }
+      },
+      "mistura_das_escolhas": {
+        "brincar": 23,
+        "brincar/bola/0": 1,
+        "chamar_atencao": 513,
+        "comer/cheiro": 45,
+        "comer/comida/1": 5,
+        "comer/comida/10": 5,
+        "comer/comida/11": 4,
+        "comer/comida/12": 5,
+        "comer/comida/13": 4,
+        "comer/comida/14": 3,
+        "comer/comida/15": 3,
+        "comer/comida/16": 1,
+        "comer/comida/17": 1,
+        "comer/comida/18": 1,
+        "comer/comida/19": 2,
+        "comer/comida/2": 7,
+        "comer/comida/20": 2,
+        "comer/comida/21": 3,
+        "comer/comida/23": 2,
+        "comer/comida/24": 1,
+        "comer/comida/26": 1,
+        "comer/comida/3": 5,
+        "comer/comida/30": 1,
+        "comer/comida/33": 1,
+        "comer/comida/37": 1,
+        "comer/comida/39": 1,
+        "comer/comida/4": 7,
+        "comer/comida/43": 1,
+        "comer/comida/44": 2,
+        "comer/comida/5": 6,
+        "comer/comida/6": 7,
+        "comer/comida/7": 6,
+        "comer/comida/8": 6,
+        "comer/comida/9": 4,
+        "dormir": 1382,
+        "emburrar": 51,
+        "explorar/cheiro": 158,
+        "explorar/ponto/[168, 248]": 56,
+        "explorar/ponto/[406, 10]": 6,
+        "explorar/ponto/[411, 5]": 4,
+        "explorar/ponto/[468, 120]": 1,
+        "explorar/ponto/[468, 124]": 1,
+        "explorar/ponto/[502, 386]": 15,
+        "explorar/ponto/[573, 246]": 4,
+        "explorar/ponto/[581, 248]": 8,
+        "explorar/ponto/[583, 240]": 9,
+        "explorar/vagar": 658,
+        "ocioso": 39
+      },
+      "urgencia_nas_decisoes_de_vagar": {
+        "guarda_an4": {
+          "acima_do_lambda": 219,
+          "fracao_acima_do_lambda": 0.332827,
+          "maximo": 1024,
+          "media": 425.506079,
+          "n": 658
+        },
+        "todas_as_necessidades": {
+          "maximo": 1024,
+          "media": 786.768997
+        },
+        "urgencia_lambda_de_hoje": 512
+      },
+      "vidas": 8,
+      "zigue_zague_do_vagar": {
+        "fracao_que_inverte": 0.504854,
+        "pares_de_vagar_seguidos_com_passo": 206,
+        "pares_que_invertem": 104,
+        "razao_liquido_sobre_caminho_nas_corridas_de_2_ou_mais": 0.488214
+      }
+    },
+    "lm4_fins|longe_fixo|atencioso": {
+      "corridas_de_vagar": {
+        "comprimento_maximo": 4,
+        "comprimento_medio": 1.243902,
+        "decisoes_em_corridas_de_2_ou_mais": 17,
+        "histograma": {
+          "1": 34,
+          "2": 5,
+          "3": 1,
+          "4": 1
+        },
+        "n": 41
+      },
+      "decisoes": 384,
+      "decisoes_vagar": 51,
+      "deslocamento_por_decisao": null,
+      "fracao_vagar": 0.132812,
+      "gestos_do_dono": {
+        "opcoes_sem_gesto": {
+          "com_r_diferente_de_0": 117,
+          "opcoes": 328
+        },
+        "por_tipo": {
+          "alimentar": {
+            "com_r_diferente_de_0": 18,
+            "opcoes": 44,
+            "soma_do_r": 2219
+          },
+          "brincar": {
+            "com_r_diferente_de_0": 2,
+            "opcoes": 6,
+            "soma_do_r": -70
+          },
+          "limpar": {
+            "com_r_diferente_de_0": 5,
+            "opcoes": 9,
+            "soma_do_r": 1937
+          }
+        }
+      },
+      "mistura_das_escolhas": {
+        "brincar": 9,
+        "chamar_atencao": 68,
+        "comer/cheiro": 10,
+        "comer/comida/13": 1,
+        "comer/comida/14": 1,
+        "comer/comida/15": 1,
+        "comer/comida/21": 1,
+        "comer/comida/30": 1,
+        "comer/comida/33": 1,
+        "comer/comida/37": 1,
+        "comer/comida/39": 1,
+        "comer/comida/4": 1,
+        "comer/comida/43": 1,
+        "comer/comida/44": 2,
+        "comer/comida/5": 1,
+        "dormir": 167,
+        "emburrar": 14,
+        "explorar/cheiro": 35,
+        "explorar/ponto/[502, 386]": 15,
+        "explorar/vagar": 51,
+        "ocioso": 2
+      },
+      "urgencia_nas_decisoes_de_vagar": {
+        "guarda_an4": {
+          "acima_do_lambda": 8,
+          "fracao_acima_do_lambda": 0.156863,
+          "maximo": 1024,
+          "media": 331.392157,
+          "n": 51
+        },
+        "todas_as_necessidades": {
+          "maximo": 1024,
+          "media": 795.980392
+        },
+        "urgencia_lambda_de_hoje": 512
+      },
+      "vidas": 1,
+      "zigue_zague_do_vagar": null
+    },
+    "lm4_fins|longe_fixo|incoerente": {
+      "corridas_de_vagar": {
+        "comprimento_maximo": 3,
+        "comprimento_medio": 1.242105,
+        "decisoes_em_corridas_de_2_ou_mais": 42,
+        "histograma": {
+          "1": 76,
+          "2": 15,
+          "3": 4
+        },
+        "n": 95
+      },
+      "decisoes": 768,
+      "decisoes_vagar": 118,
+      "deslocamento_por_decisao": null,
+      "fracao_vagar": 0.153646,
+      "gestos_do_dono": {
+        "opcoes_sem_gesto": {
+          "com_r_diferente_de_0": 250,
+          "opcoes": 652
+        },
+        "por_tipo": {
+          "alimentar": {
+            "com_r_diferente_de_0": 36,
+            "opcoes": 87,
+            "soma_do_r": 2335
+          },
+          "brincar": {
+            "com_r_diferente_de_0": 6,
+            "opcoes": 13,
+            "soma_do_r": 2486
+          },
+          "limpar": {
+            "com_r_diferente_de_0": 14,
+            "opcoes": 18,
+            "soma_do_r": 3730
+          }
+        }
+      },
+      "mistura_das_escolhas": {
+        "brincar": 17,
+        "brincar/bola/0": 2,
+        "chamar_atencao": 123,
+        "comer/cheiro": 21,
+        "comer/comida/11": 1,
+        "comer/comida/12": 1,
+        "comer/comida/13": 1,
+        "comer/comida/15": 1,
+        "comer/comida/16": 1,
+        "comer/comida/18": 1,
+        "comer/comida/19": 2,
+        "comer/comida/2": 1,
+        "comer/comida/22": 2,
+        "comer/comida/25": 1,
+        "comer/comida/30": 2,
+        "comer/comida/31": 2,
+        "comer/comida/33": 1,
+        "comer/comida/35": 1,
+        "comer/comida/37": 2,
+        "comer/comida/40": 2,
+        "comer/comida/41": 1,
+        "comer/comida/42": 2,
+        "comer/comida/45": 1,
+        "comer/comida/5": 1,
+        "comer/comida/7": 1,
+        "comer/comida/9": 1,
+        "dormir": 324,
+        "emburrar": 29,
+        "explorar/cheiro": 72,
+        "explorar/ponto/[411, 5]": 5,
+        "explorar/ponto/[532, 251]": 10,
+        "explorar/ponto/[538, 248]": 5,
+        "explorar/ponto/[564, 412]": 5,
+        "explorar/vagar": 118,
+        "ocioso": 8
+      },
+      "urgencia_nas_decisoes_de_vagar": {
+        "guarda_an4": {
+          "acima_do_lambda": 21,
+          "fracao_acima_do_lambda": 0.177966,
+          "maximo": 1024,
+          "media": 354.076271,
+          "n": 118
+        },
+        "todas_as_necessidades": {
+          "maximo": 1024,
+          "media": 857.70339
+        },
+        "urgencia_lambda_de_hoje": 512
+      },
+      "vidas": 2,
+      "zigue_zague_do_vagar": null
+    },
+    "lm4_fins|longe_fixo|relapso": {
+      "corridas_de_vagar": {
+        "comprimento_maximo": 8,
+        "comprimento_medio": 1.529412,
+        "decisoes_em_corridas_de_2_ou_mais": 45,
+        "histograma": {
+          "1": 33,
+          "2": 15,
+          "3": 1,
+          "4": 1,
+          "5+": 1
+        },
+        "n": 51
+      },
+      "decisoes": 384,
+      "decisoes_vagar": 78,
+      "deslocamento_por_decisao": null,
+      "fracao_vagar": 0.203125,
+      "gestos_do_dono": {
+        "opcoes_sem_gesto": {
+          "com_r_diferente_de_0": 155,
+          "opcoes": 371
+        },
+        "por_tipo": {
+          "alimentar": {
+            "com_r_diferente_de_0": 4,
+            "opcoes": 12,
+            "soma_do_r": 37
+          },
+          "brincar": {
+            "com_r_diferente_de_0": 4,
+            "opcoes": 12,
+            "soma_do_r": 37
+          },
+          "limpar": {
+            "com_r_diferente_de_0": 4,
+            "opcoes": 12,
+            "soma_do_r": 37
+          }
+        }
+      },
+      "mistura_das_escolhas": {
+        "brincar/bola/0": 3,
+        "chamar_atencao": 44,
+        "comer/cheiro": 24,
+        "comer/comida/1": 1,
+        "comer/comida/10": 1,
+        "comer/comida/11": 1,
+        "comer/comida/12": 1,
+        "comer/comida/2": 1,
+        "comer/comida/3": 1,
+        "comer/comida/4": 1,
+        "comer/comida/5": 1,
+        "comer/comida/6": 1,
+        "comer/comida/7": 1,
+        "comer/comida/8": 1,
+        "comer/comida/9": 1,
+        "dormir": 179,
+        "explorar/cheiro": 11,
+        "explorar/ponto/[406, 10]": 5,
+        "explorar/ponto/[467, 127]": 3,
+        "explorar/ponto/[468, 124]": 7,
+        "explorar/ponto/[480, 128]": 2,
+        "explorar/ponto/[569, 244]": 3,
+        "explorar/ponto/[581, 248]": 12,
+        "explorar/vagar": 78,
+        "ocioso": 1
+      },
+      "urgencia_nas_decisoes_de_vagar": {
+        "guarda_an4": {
+          "acima_do_lambda": 21,
+          "fracao_acima_do_lambda": 0.269231,
+          "maximo": 948,
+          "media": 397.679487,
+          "n": 78
+        },
+        "todas_as_necessidades": {
+          "maximo": 1024,
+          "media": 816.346154
+        },
+        "urgencia_lambda_de_hoje": 512
+      },
+      "vidas": 1,
+      "zigue_zague_do_vagar": null
+    },
+    "lm4_fins|longe_fixo|todos": {
+      "corridas_de_vagar": {
+        "comprimento_maximo": 8,
+        "comprimento_medio": 1.320856,
+        "decisoes_em_corridas_de_2_ou_mais": 104,
+        "histograma": {
+          "1": 143,
+          "2": 35,
+          "3": 6,
+          "4": 2,
+          "5+": 1
+        },
+        "n": 187
+      },
+      "decisoes": 1536,
+      "decisoes_vagar": 247,
+      "deslocamento_por_decisao": null,
+      "fracao_vagar": 0.160807,
+      "gestos_do_dono": {
+        "opcoes_sem_gesto": {
+          "com_r_diferente_de_0": 522,
+          "opcoes": 1351
+        },
+        "por_tipo": {
+          "alimentar": {
+            "com_r_diferente_de_0": 58,
+            "opcoes": 143,
+            "soma_do_r": 4591
+          },
+          "brincar": {
+            "com_r_diferente_de_0": 12,
+            "opcoes": 31,
+            "soma_do_r": 2453
+          },
+          "limpar": {
+            "com_r_diferente_de_0": 23,
+            "opcoes": 39,
+            "soma_do_r": 5704
+          }
+        }
+      },
+      "mistura_das_escolhas": {
+        "brincar": 26,
+        "brincar/bola/0": 5,
+        "chamar_atencao": 235,
+        "comer/cheiro": 55,
+        "comer/comida/1": 1,
+        "comer/comida/10": 1,
+        "comer/comida/11": 2,
+        "comer/comida/12": 2,
+        "comer/comida/13": 2,
+        "comer/comida/14": 1,
+        "comer/comida/15": 2,
+        "comer/comida/16": 1,
+        "comer/comida/18": 1,
+        "comer/comida/19": 2,
+        "comer/comida/2": 2,
+        "comer/comida/21": 1,
+        "comer/comida/22": 2,
+        "comer/comida/25": 1,
+        "comer/comida/3": 1,
+        "comer/comida/30": 3,
+        "comer/comida/31": 2,
+        "comer/comida/33": 2,
+        "comer/comida/35": 1,
+        "comer/comida/37": 3,
+        "comer/comida/39": 1,
+        "comer/comida/4": 2,
+        "comer/comida/40": 2,
+        "comer/comida/41": 1,
+        "comer/comida/42": 2,
+        "comer/comida/43": 1,
+        "comer/comida/44": 2,
+        "comer/comida/45": 1,
+        "comer/comida/5": 3,
+        "comer/comida/6": 1,
+        "comer/comida/7": 2,
+        "comer/comida/8": 1,
+        "comer/comida/9": 2,
+        "dormir": 670,
+        "emburrar": 43,
+        "explorar/cheiro": 118,
+        "explorar/ponto/[406, 10]": 5,
+        "explorar/ponto/[411, 5]": 5,
+        "explorar/ponto/[467, 127]": 3,
+        "explorar/ponto/[468, 124]": 7,
+        "explorar/ponto/[480, 128]": 2,
+        "explorar/ponto/[502, 386]": 15,
+        "explorar/ponto/[532, 251]": 10,
+        "explorar/ponto/[538, 248]": 5,
+        "explorar/ponto/[564, 412]": 5,
+        "explorar/ponto/[569, 244]": 3,
+        "explorar/ponto/[581, 248]": 12,
+        "explorar/vagar": 247,
+        "ocioso": 11
+      },
+      "urgencia_nas_decisoes_de_vagar": {
+        "guarda_an4": {
+          "acima_do_lambda": 50,
+          "fracao_acima_do_lambda": 0.202429,
+          "maximo": 1024,
+          "media": 363.161943,
+          "n": 247
+        },
+        "todas_as_necessidades": {
+          "maximo": 1024,
+          "media": 831.898785
+        },
+        "urgencia_lambda_de_hoje": 512
+      },
+      "vidas": 4,
+      "zigue_zague_do_vagar": null
+    },
+    "lm4_fins|longe|incoerente": {
+      "corridas_de_vagar": {
+        "comprimento_maximo": 4,
+        "comprimento_medio": 1.297872,
+        "decisoes_em_corridas_de_2_ou_mais": 48,
+        "histograma": {
+          "1": 74,
+          "2": 14,
+          "3": 4,
+          "4": 2
+        },
+        "n": 94
+      },
+      "decisoes": 768,
+      "decisoes_vagar": 122,
+      "deslocamento_por_decisao": null,
+      "fracao_vagar": 0.158854,
+      "gestos_do_dono": {
+        "opcoes_sem_gesto": {
+          "com_r_diferente_de_0": 224,
+          "opcoes": 668
+        },
+        "por_tipo": {
+          "alimentar": {
+            "com_r_diferente_de_0": 28,
+            "opcoes": 66,
+            "soma_do_r": 2145
+          },
+          "brincar": {
+            "com_r_diferente_de_0": 6,
+            "opcoes": 17,
+            "soma_do_r": 2670
+          },
+          "limpar": {
+            "com_r_diferente_de_0": 10,
+            "opcoes": 18,
+            "soma_do_r": 3901
+          }
+        }
+      },
+      "mistura_das_escolhas": {
+        "brincar": 22,
+        "chamar_atencao": 175,
+        "comer/cheiro": 8,
+        "comer/comida/1": 4,
+        "comer/comida/10": 1,
+        "comer/comida/11": 1,
+        "comer/comida/12": 1,
+        "comer/comida/14": 1,
+        "comer/comida/15": 1,
+        "comer/comida/17": 1,
+        "comer/comida/20": 2,
+        "comer/comida/22": 2,
+        "comer/comida/23": 2,
+        "comer/comida/24": 1,
+        "comer/comida/25": 1,
+        "comer/comida/27": 1,
+        "comer/comida/28": 2,
+        "comer/comida/29": 1,
+        "comer/comida/30": 1,
+        "comer/comida/32": 1,
+        "comer/comida/5": 2,
+        "comer/comida/6": 1,
+        "comer/comida/7": 2,
+        "dormir": 310,
+        "emburrar": 5,
+        "explorar/cheiro": 73,
+        "explorar/ponto/[0, 479]": 8,
+        "explorar/ponto/[445, 0]": 1,
+        "explorar/vagar": 122,
+        "ocioso": 15
+      },
+      "urgencia_nas_decisoes_de_vagar": {
+        "guarda_an4": {
+          "acima_do_lambda": 5,
+          "fracao_acima_do_lambda": 0.040984,
+          "maximo": 692,
+          "media": 277.934426,
+          "n": 122
+        },
+        "todas_as_necessidades": {
+          "maximo": 1024,
+          "media": 798.47541
+        },
+        "urgencia_lambda_de_hoje": 512
+      },
+      "vidas": 2,
+      "zigue_zague_do_vagar": null
+    },
+    "lm4_fins|longe|todos": {
+      "corridas_de_vagar": {
+        "comprimento_maximo": 4,
+        "comprimento_medio": 1.297872,
+        "decisoes_em_corridas_de_2_ou_mais": 48,
+        "histograma": {
+          "1": 74,
+          "2": 14,
+          "3": 4,
+          "4": 2
+        },
+        "n": 94
+      },
+      "decisoes": 768,
+      "decisoes_vagar": 122,
+      "deslocamento_por_decisao": null,
+      "fracao_vagar": 0.158854,
+      "gestos_do_dono": {
+        "opcoes_sem_gesto": {
+          "com_r_diferente_de_0": 224,
+          "opcoes": 668
+        },
+        "por_tipo": {
+          "alimentar": {
+            "com_r_diferente_de_0": 28,
+            "opcoes": 66,
+            "soma_do_r": 2145
+          },
+          "brincar": {
+            "com_r_diferente_de_0": 6,
+            "opcoes": 17,
+            "soma_do_r": 2670
+          },
+          "limpar": {
+            "com_r_diferente_de_0": 10,
+            "opcoes": 18,
+            "soma_do_r": 3901
+          }
+        }
+      },
+      "mistura_das_escolhas": {
+        "brincar": 22,
+        "chamar_atencao": 175,
+        "comer/cheiro": 8,
+        "comer/comida/1": 4,
+        "comer/comida/10": 1,
+        "comer/comida/11": 1,
+        "comer/comida/12": 1,
+        "comer/comida/14": 1,
+        "comer/comida/15": 1,
+        "comer/comida/17": 1,
+        "comer/comida/20": 2,
+        "comer/comida/22": 2,
+        "comer/comida/23": 2,
+        "comer/comida/24": 1,
+        "comer/comida/25": 1,
+        "comer/comida/27": 1,
+        "comer/comida/28": 2,
+        "comer/comida/29": 1,
+        "comer/comida/30": 1,
+        "comer/comida/32": 1,
+        "comer/comida/5": 2,
+        "comer/comida/6": 1,
+        "comer/comida/7": 2,
+        "dormir": 310,
+        "emburrar": 5,
+        "explorar/cheiro": 73,
+        "explorar/ponto/[0, 479]": 8,
+        "explorar/ponto/[445, 0]": 1,
+        "explorar/vagar": 122,
+        "ocioso": 15
+      },
+      "urgencia_nas_decisoes_de_vagar": {
+        "guarda_an4": {
+          "acima_do_lambda": 5,
+          "fracao_acima_do_lambda": 0.040984,
+          "maximo": 692,
+          "media": 277.934426,
+          "n": 122
+        },
+        "todas_as_necessidades": {
+          "maximo": 1024,
+          "media": 798.47541
+        },
+        "urgencia_lambda_de_hoje": 512
+      },
+      "vidas": 2,
+      "zigue_zague_do_vagar": null
+    },
+    "lm4_fins|todos|todos": {
+      "corridas_de_vagar": {
+        "comprimento_maximo": 8,
+        "comprimento_medio": 1.313167,
+        "decisoes_em_corridas_de_2_ou_mais": 152,
+        "histograma": {
+          "1": 217,
+          "2": 49,
+          "3": 10,
+          "4": 4,
+          "5+": 1
+        },
+        "n": 281
+      },
+      "decisoes": 2304,
+      "decisoes_vagar": 369,
+      "deslocamento_por_decisao": null,
+      "fracao_vagar": 0.160156,
+      "gestos_do_dono": {
+        "opcoes_sem_gesto": {
+          "com_r_diferente_de_0": 746,
+          "opcoes": 2019
+        },
+        "por_tipo": {
+          "alimentar": {
+            "com_r_diferente_de_0": 86,
+            "opcoes": 209,
+            "soma_do_r": 6736
+          },
+          "brincar": {
+            "com_r_diferente_de_0": 18,
+            "opcoes": 48,
+            "soma_do_r": 5123
+          },
+          "limpar": {
+            "com_r_diferente_de_0": 33,
+            "opcoes": 57,
+            "soma_do_r": 9605
+          }
+        }
+      },
+      "mistura_das_escolhas": {
+        "brincar": 48,
+        "brincar/bola/0": 5,
+        "chamar_atencao": 410,
+        "comer/cheiro": 63,
+        "comer/comida/1": 5,
+        "comer/comida/10": 2,
+        "comer/comida/11": 3,
+        "comer/comida/12": 3,
+        "comer/comida/13": 2,
+        "comer/comida/14": 2,
+        "comer/comida/15": 3,
+        "comer/comida/16": 1,
+        "comer/comida/17": 1,
+        "comer/comida/18": 1,
+        "comer/comida/19": 2,
+        "comer/comida/2": 2,
+        "comer/comida/20": 2,
+        "comer/comida/21": 1,
+        "comer/comida/22": 4,
+        "comer/comida/23": 2,
+        "comer/comida/24": 1,
+        "comer/comida/25": 2,
+        "comer/comida/27": 1,
+        "comer/comida/28": 2,
+        "comer/comida/29": 1,
+        "comer/comida/3": 1,
+        "comer/comida/30": 4,
+        "comer/comida/31": 2,
+        "comer/comida/32": 1,
+        "comer/comida/33": 2,
+        "comer/comida/35": 1,
+        "comer/comida/37": 3,
+        "comer/comida/39": 1,
+        "comer/comida/4": 2,
+        "comer/comida/40": 2,
+        "comer/comida/41": 1,
+        "comer/comida/42": 2,
+        "comer/comida/43": 1,
+        "comer/comida/44": 2,
+        "comer/comida/45": 1,
+        "comer/comida/5": 5,
+        "comer/comida/6": 2,
+        "comer/comida/7": 4,
+        "comer/comida/8": 1,
+        "comer/comida/9": 2,
+        "dormir": 980,
+        "emburrar": 48,
+        "explorar/cheiro": 191,
+        "explorar/ponto/[0, 479]": 8,
+        "explorar/ponto/[406, 10]": 5,
+        "explorar/ponto/[411, 5]": 5,
+        "explorar/ponto/[445, 0]": 1,
+        "explorar/ponto/[467, 127]": 3,
+        "explorar/ponto/[468, 124]": 7,
+        "explorar/ponto/[480, 128]": 2,
+        "explorar/ponto/[502, 386]": 15,
+        "explorar/ponto/[532, 251]": 10,
+        "explorar/ponto/[538, 248]": 5,
+        "explorar/ponto/[564, 412]": 5,
+        "explorar/ponto/[569, 244]": 3,
+        "explorar/ponto/[581, 248]": 12,
+        "explorar/vagar": 369,
+        "ocioso": 26
+      },
+      "urgencia_nas_decisoes_de_vagar": {
+        "guarda_an4": {
+          "acima_do_lambda": 55,
+          "fracao_acima_do_lambda": 0.149051,
+          "maximo": 1024,
+          "media": 334.98374,
+          "n": 369
+        },
+        "todas_as_necessidades": {
+          "maximo": 1024,
+          "media": 820.848238
+        },
+        "urgencia_lambda_de_hoje": 512
+      },
+      "vidas": 6,
+      "zigue_zague_do_vagar": null
+    },
+    "total": {
+      "corridas_de_vagar": {
+        "comprimento_maximo": 8,
+        "comprimento_medio": 1.403005,
+        "decisoes_em_corridas_de_2_ou_mais": 479,
+        "histograma": {
+          "1": 548,
+          "2": 116,
+          "3": 40,
+          "4": 19,
+          "5+": 9
+        },
+        "n": 732
+      },
+      "decisoes": 5376,
+      "decisoes_vagar": 1027,
+      "deslocamento_por_decisao": {
+        "nao_explorar": {
+          "fracao_sem_sair_do_lugar": 0.94403,
+          "maximo": 60.959003,
+          "media": 2.631426,
+          "n": 2144
+        },
+        "outro_explorar": {
+          "fracao_sem_sair_do_lugar": 0.114504,
+          "maximo": 61.05735,
+          "media": 51.497946,
+          "n": 262
+        },
+        "vagar": {
+          "fracao_sem_sair_do_lugar": 0.00152,
+          "maximo": 61.294372,
+          "media": 60.029238,
+          "n": 658
+        }
+      },
+      "fracao_vagar": 0.191034,
+      "gestos_do_dono": {
+        "opcoes_sem_gesto": {
+          "com_r_diferente_de_0": 1745,
+          "opcoes": 4829
+        },
+        "por_tipo": {
+          "alimentar": {
+            "com_r_diferente_de_0": 154,
+            "opcoes": 406,
+            "soma_do_r": 25193
+          },
+          "brincar": {
+            "com_r_diferente_de_0": 52,
+            "opcoes": 125,
+            "soma_do_r": 17680
+          },
+          "limpar": {
+            "com_r_diferente_de_0": 88,
+            "opcoes": 145,
+            "soma_do_r": 30268
+          }
+        }
+      },
+      "mistura_das_escolhas": {
+        "brincar": 71,
+        "brincar/bola/0": 6,
+        "chamar_atencao": 923,
+        "comer/cheiro": 108,
+        "comer/comida/1": 10,
+        "comer/comida/10": 7,
+        "comer/comida/11": 7,
+        "comer/comida/12": 8,
+        "comer/comida/13": 6,
+        "comer/comida/14": 5,
+        "comer/comida/15": 6,
+        "comer/comida/16": 2,
+        "comer/comida/17": 2,
+        "comer/comida/18": 2,
+        "comer/comida/19": 4,
+        "comer/comida/2": 9,
+        "comer/comida/20": 4,
+        "comer/comida/21": 4,
+        "comer/comida/22": 4,
+        "comer/comida/23": 4,
+        "comer/comida/24": 2,
+        "comer/comida/25": 2,
+        "comer/comida/26": 1,
+        "comer/comida/27": 1,
+        "comer/comida/28": 2,
+        "comer/comida/29": 1,
+        "comer/comida/3": 6,
+        "comer/comida/30": 5,
+        "comer/comida/31": 2,
+        "comer/comida/32": 1,
+        "comer/comida/33": 3,
+        "comer/comida/35": 1,
+        "comer/comida/37": 4,
+        "comer/comida/39": 2,
+        "comer/comida/4": 9,
+        "comer/comida/40": 2,
+        "comer/comida/41": 1,
+        "comer/comida/42": 2,
+        "comer/comida/43": 2,
+        "comer/comida/44": 4,
+        "comer/comida/45": 1,
+        "comer/comida/5": 11,
+        "comer/comida/6": 9,
+        "comer/comida/7": 10,
+        "comer/comida/8": 7,
+        "comer/comida/9": 6,
+        "dormir": 2362,
+        "emburrar": 99,
+        "explorar/cheiro": 349,
+        "explorar/ponto/[0, 479]": 8,
+        "explorar/ponto/[168, 248]": 56,
+        "explorar/ponto/[406, 10]": 11,
+        "explorar/ponto/[411, 5]": 9,
+        "explorar/ponto/[445, 0]": 1,
+        "explorar/ponto/[467, 127]": 3,
+        "explorar/ponto/[468, 120]": 1,
+        "explorar/ponto/[468, 124]": 8,
+        "explorar/ponto/[480, 128]": 2,
+        "explorar/ponto/[502, 386]": 30,
+        "explorar/ponto/[532, 251]": 10,
+        "explorar/ponto/[538, 248]": 5,
+        "explorar/ponto/[564, 412]": 5,
+        "explorar/ponto/[569, 244]": 3,
+        "explorar/ponto/[573, 246]": 4,
+        "explorar/ponto/[581, 248]": 20,
+        "explorar/ponto/[583, 240]": 9,
+        "explorar/vagar": 1027,
+        "ocioso": 65
+      },
+      "urgencia_nas_decisoes_de_vagar": {
+        "guarda_an4": {
+          "acima_do_lambda": 274,
+          "fracao_acima_do_lambda": 0.266796,
+          "maximo": 1024,
+          "media": 392.9815,
+          "n": 1027
+        },
+        "todas_as_necessidades": {
+          "maximo": 1024,
+          "media": 799.013632
+        },
+        "urgencia_lambda_de_hoje": 512
+      },
+      "vidas": 14,
+      "zigue_zague_do_vagar": {
+        "fracao_que_inverte": 0.504854,
+        "pares_de_vagar_seguidos_com_passo": 206,
+        "pares_que_invertem": 104,
+        "razao_liquido_sobre_caminho_nas_corridas_de_2_ou_mais": 0.488214
+      }
+    }
+  },
+  "nota": "AN0, descritivo de HOJE: so vidas ja gravadas (sementes dos testes); nenhum numero e resultado",
+  "posicao": "unidades de posicao do mundo (x, y do Observacao.mundo); distancia euclidiana entre decisoes seguidas",
+  "urgencia": "escala S = 1024 (afeto.urgencias)"
+}

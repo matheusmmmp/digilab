@@ -249,6 +249,43 @@ Só as linhas verificadas de `docs/referencias/referencias_verificadas.csv`, no 
 persistência e do crédito descartado; toda leitura marcada [HIPÓTESE]. **Nenhuma linha deste documento diz que o passeio é inédito:** pets
 que andam sozinhos estão em quase todo jogo da pesquisa de referências (P2, "rotina e surpresa").
 
+## 10. Resumo da AN0: o descritivo de hoje (2026-11-04, worker Sonnet 5.5, branch `v3-acoes-novas-an0`)
+
+**Nenhum número abaixo é resultado.** É o descritivo das vidas já gravadas do modular (braço REL; sementes dos testes; os gabaritos da LM0 e da LM4), sem vida
+nova, sem faixa e sem o motor. Script `experiments/medir_v3_acoes_novas_hoje.py`; artefato `artifacts_v3_acoes_novas/hoje.json` (sha256 `363579dc…`, igual em duas
+execuções; `--conferir` e `tests/test_medir_v3_acoes_novas_hoje.py`). As fontes: 4 vidas no comedouro e 4 no `longe_fixo` (LM0, com a posição) e 6 vidas da LM4
+(só o motivo, sem posição), 4 dias cada, 5 376 decisões. Os grupos por lugar e dono estão no artefato; abaixo, o `total` e o `lm0|todos|todos`.
+
+| medida | valor | artefato (`grupos.<chave>`) |
+|---|---|---|
+| decisões `explorar/vagar` | 1 027 de 5 376 (19,1%); LM0: 21,4% (comedouro 26,0%, `longe_fixo` 16,8%) | `total`, `lm0|comedouro|todos`, `lm0|longe_fixo|todos` |
+| por dono (comedouro, LM0) | atencioso 23,4%, relapso 28,6% | `lm0|comedouro|atencioso`, `…|relapso` |
+| corridas de vagar seguidas | 732; 548 (75%) de 1 decisão; média 1,40; máximo 8 | `total.corridas_de_vagar` |
+| deslocamento por decisão (LM0, unidades de posição) | vagar: média 60,0 (0,15% sem sair do lugar); outro explorar: 51,5; não explorar: 2,6 (94% sem sair) | `lm0|todos|todos.deslocamento_por_decisao` |
+| zigue-zague do vagar seguido (LM0) | 104 de 206 pares de vagar seguidos (50,5%) invertem o passo anterior; liquido / caminho nas corridas de 2 ou mais: 0,49 | `lm0|todos|todos.zigue_zague_do_vagar` |
+| urgência máxima (fome, higiene, energia, saúde) nas decisões de vagar | média 393 (S = 1024); 274 de 1 027 (26,7%) passam do `urgencia_lambda` de hoje (512) | `total.urgencia_nas_decisoes_de_vagar` |
+
+**Leituras (descritivas, [HIPÓTESE] onde não há medida):**
+- **O vagar é escolhido, e não é raro:** cerca de uma decisão em cinco. Mas 75% das corridas têm uma decisão só, como diz a docstring do `estado.py`: sem
+  intenção, o ponto é outro a cada decisão. A premissa da AN-2 (o pet de hoje não segura o destino) está confirmada pelas corridas.
+- **Cada vagar anda (média 60 unidades; quase nunca fica parado), e o pet em geral fica parado fora do explorar** (94% das decisões que não são explorar não saem
+  do lugar). O "pet parado" do Matheus vem do que o pet faz fora do explorar, e não de um vagar que não anda.
+- **O zigue-zague:** metade dos pares de passos seguidos inverte o sentido, e o deslocamento líquido de uma corrida é cerca de metade do caminho. Isso é compatível
+  com direções sorteadas sem memória; não distingue, sozinho, "parece zigue-zague" de "parece passeio" para o jogador (SEM FONTE, a pergunta fica no jogo).
+- **Para a guarda da AN-4:** 26,7% das decisões em que o pet vagou tinham fome, higiene, energia ou saúde acima do limiar (33,3% na LM0, 42,6% no `longe_fixo`).
+  Com a regra da 3.2, esses vagares não teriam persistência, e o passeio só se seguraria nos 73% restantes. É o tamanho do que a guarda corta; a AN2 e a AN4
+  medem o efeito.
+
+**A conferência da 3.3 (o gesto entra no r?):** pela configuração, **sim, o canal existe**: o carinho baixa solidão e estresse no corpo (`digilab/corpo.py`), e
+`fora_do_r` é só o susto (`canais_do_r` no artefato traz os outros dez, solidão e estresse entre eles). **Mas as vidas gravadas não têm carinho nem tapa** (os
+donos gravados só alimentam, limpam e brincam: `gestos_do_dono` no artefato), então o efeito do carinho sobre o r de uma opção de vagar **não é observável sem
+vida nova**. O descritivo só mostra que os gestos que há (alimentar, limpar, brincar) coincidem com opções de r ≠ 0 (alimentar 154 de 406; brincar 52 de 125;
+limpar 88 de 145) contra 1 745 de 4 829 sem gesto, o que não separa o efeito do gesto do efeito do que o gesto resolve. A regra da AN-6 (3.3) fica como está, e
+**o teste do crédito descartado na AN2 é quem fecha a conferência**, com um carinho injetado numa vida de teste.
+
+**O que a AN0 não fez:** nenhuma vida nova (não há o carinho para conferir), nenhum plano de análise (a AN3), nenhuma faixa. As vidas da LM4 não gravam a posição,
+então o deslocamento e o zigue-zague vêm só da LM0 (3 072 decisões).
+
 ## 11. Resumo da AN1: os gabaritos de hoje bastam para a AN2 (2026-11-04, worker Sonnet 5.5, branch `v3-acoes-novas-an1`)
 
 **Conclusão: os gabaritos que já estão na `main` bastam. Nenhum gabarito novo foi gravado, e nenhum código mudou.** Este PR só documenta a conferência. Os
@@ -277,5 +314,7 @@ três conjuntos abaixo comparam uma vida **nova** do Python com o gravado, byte 
   Gerente decide antes da AN2 (custo de errar: regravar mais que a chave esconderia uma mudança de vida; não regravar deixa o teste do exportador vermelho).
 - **O motivo só ganha `do_passeio` com a chave ligada** (a 3.4): como o motivo está em todos os gabaritos, um campo novo sempre presente mudaria todos eles.
 - **A assinatura do estado** (`estado_interno`) segue o padrão do módulo: o que é novo só entra com a chave ligada (como o `guardada` com a `intencao_cheiro`).
+
+**Decisão do Matheus (2026-11-04, "Sim, mescle e aceite"):** a recomendação acima ACEITA: a AN2 regrava só o `digibrain_modular_constantes.json`, com a diferença exata de `"passeio": false`, num commit próprio, com o teste de que as oito vidas não mudam um byte.
 
 **Gate:** o gabarito se regera igual duas vezes: `test_o_exportador_sai_igual_em_duas_execucoes_byte_a_byte` e `test_o_gabarito_se_regera_igual_duas_vezes` passam. Nada novo gravado.
