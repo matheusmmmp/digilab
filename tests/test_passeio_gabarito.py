@@ -37,7 +37,8 @@ def test_uma_execucao_nova_das_oito_vidas_sai_igual_ao_gravado_com_a_subchave_no
     novo = E.arquivos()
     for nome, sha in SHA_VIDAS_ANTES.items():
         assert hashlib.sha256(E.texto_original(nome + ".gz", novo[nome + ".gz"])).hexdigest() == sha, nome
-        assert novo[nome + ".gz"] == (E.PASTA / (nome + ".gz")).read_bytes(), nome
+        # o texto, nao os bytes do gzip: o zlib do CI comprime diferente (o padrao do test_gabarito_digibrain_modular_web.py)
+        assert gzip.decompress(novo[nome + ".gz"]) == gzip.decompress((E.PASTA / (nome + ".gz")).read_bytes()), nome
 
 
 def test_a_subchave_passeio_e_so_o_acrescimo_nas_constantes_e_vem_desligada():
