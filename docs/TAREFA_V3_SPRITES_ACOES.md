@@ -420,3 +420,9 @@ Registro das propostas, como foram levadas ao Matheus:
 - **2026-11-04, a tarefa (Gerente):**
   - o levantamento em `origin/main`, a tabela 3.2 e as duas provas do Comer do Agumon;
   - as SA-1 a SA-8 decididas, e a SA-9 aberta até o catálogo das bocas da M1.
+- **2026-11-05, a M3 (worker, `v3-sprites-ilha`):**
+  - o `escolherComer` no `cenaAcao.ts`: o laço da ação comer (mínimo de um ciclo), o "comeu a ração" uma vez virado para a comida (sai
+    acima de 1 h/s), a reação do dono por um ciclo por cima e a queda explícita para o gesto sem o clipe (o campo `tocou`);
+  - o `papel.ts` toca o `Comer` com o `Comer_objeto` por cima, no corte alargado de `ilha/corte.ts` (o `corteGolpe` generalizado, com o
+    mesmo centro e o mesmo pé); o gesto, a carne e as migalhas saem enquanto o clipe toca;
+  - os testes em `web/app/test/ilha_comer_clipe.test.ts`; as interpretações em `docs/registro/2026-11.md`.
