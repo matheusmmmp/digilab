@@ -248,3 +248,157 @@ Só as linhas verificadas de `docs/referencias/referencias_verificadas.csv`, no 
 **SEM FONTE:** que o passeio aumenta o apego do jogador; que o zigue-zague de hoje parece "parado" ao jogador; o desenho da guarda, da
 persistência e do crédito descartado; toda leitura marcada [HIPÓTESE]. **Nenhuma linha deste documento diz que o passeio é inédito:** pets
 que andam sozinhos estão em quase todo jogo da pesquisa de referências (P2, "rotina e surpresa").
+
+## 10. Resumo da AN0: o descritivo de hoje (2026-11-04, worker Sonnet 5.5, branch `v3-acoes-novas-an0`)
+
+**Nenhum número abaixo é resultado.** É o descritivo das vidas já gravadas do modular (braço REL; sementes dos testes; os gabaritos da LM0 e da LM4), sem vida
+nova, sem faixa e sem o motor. Script `experiments/medir_v3_acoes_novas_hoje.py`; artefato `artifacts_v3_acoes_novas/hoje.json` (sha256 `363579dc…`, igual em duas
+execuções; `--conferir` e `tests/test_medir_v3_acoes_novas_hoje.py`). As fontes: 4 vidas no comedouro e 4 no `longe_fixo` (LM0, com a posição) e 6 vidas da LM4
+(só o motivo, sem posição), 4 dias cada, 5 376 decisões. Os grupos por lugar e dono estão no artefato; abaixo, o `total` e o `lm0|todos|todos`.
+
+| medida | valor | artefato (`grupos.<chave>`) |
+|---|---|---|
+| decisões `explorar/vagar` | 1 027 de 5 376 (19,1%); LM0: 21,4% (comedouro 26,0%, `longe_fixo` 16,8%) | `total`, `lm0|comedouro|todos`, `lm0|longe_fixo|todos` |
+| por dono (comedouro, LM0) | atencioso 23,4%, relapso 28,6% | `lm0|comedouro|atencioso`, `…|relapso` |
+| corridas de vagar seguidas | 732; 548 (75%) de 1 decisão; média 1,40; máximo 8 | `total.corridas_de_vagar` |
+| deslocamento por decisão (LM0, unidades de posição) | vagar: média 60,0 (0,15% sem sair do lugar); outro explorar: 51,5; não explorar: 2,6 (94% sem sair) | `lm0|todos|todos.deslocamento_por_decisao` |
+| zigue-zague do vagar seguido (LM0) | 104 de 206 pares de vagar seguidos (50,5%) invertem o passo anterior; liquido / caminho nas corridas de 2 ou mais: 0,49 | `lm0|todos|todos.zigue_zague_do_vagar` |
+| urgência máxima (fome, higiene, energia, saúde) nas decisões de vagar | média 393 (S = 1024); 274 de 1 027 (26,7%) passam do `urgencia_lambda` de hoje (512) | `total.urgencia_nas_decisoes_de_vagar` |
+
+**Leituras (descritivas, [HIPÓTESE] onde não há medida):**
+- **O vagar é escolhido, e não é raro:** cerca de uma decisão em cinco. Mas 75% das corridas têm uma decisão só, como diz a docstring do `estado.py`: sem
+  intenção, o ponto é outro a cada decisão. A premissa da AN-2 (o pet de hoje não segura o destino) está confirmada pelas corridas.
+- **Cada vagar anda (média 60 unidades; quase nunca fica parado), e o pet em geral fica parado fora do explorar** (94% das decisões que não são explorar não saem
+  do lugar). O "pet parado" do Matheus vem do que o pet faz fora do explorar, e não de um vagar que não anda.
+- **O zigue-zague:** metade dos pares de passos seguidos inverte o sentido, e o deslocamento líquido de uma corrida é cerca de metade do caminho. Isso é compatível
+  com direções sorteadas sem memória; não distingue, sozinho, "parece zigue-zague" de "parece passeio" para o jogador (SEM FONTE, a pergunta fica no jogo).
+- **Para a guarda da AN-4:** 26,7% das decisões em que o pet vagou tinham fome, higiene, energia ou saúde acima do limiar (33,3% na LM0, 42,6% no `longe_fixo`).
+  Com a regra da 3.2, esses vagares não teriam persistência, e o passeio só se seguraria nos 73% restantes. É o tamanho do que a guarda corta; a AN2 e a AN4
+  medem o efeito.
+
+**A conferência da 3.3 (o gesto entra no r?):** pela configuração, **sim, o canal existe**: o carinho baixa solidão e estresse no corpo (`digilab/corpo.py`), e
+`fora_do_r` é só o susto (`canais_do_r` no artefato traz os outros dez, solidão e estresse entre eles). **Mas as vidas gravadas não têm carinho nem tapa** (os
+donos gravados só alimentam, limpam e brincam: `gestos_do_dono` no artefato), então o efeito do carinho sobre o r de uma opção de vagar **não é observável sem
+vida nova**. O descritivo só mostra que os gestos que há (alimentar, limpar, brincar) coincidem com opções de r ≠ 0 (alimentar 154 de 406; brincar 52 de 125;
+limpar 88 de 145) contra 1 745 de 4 829 sem gesto, o que não separa o efeito do gesto do efeito do que o gesto resolve. A regra da AN-6 (3.3) fica como está, e
+**o teste do crédito descartado na AN2 é quem fecha a conferência**, com um carinho injetado numa vida de teste.
+
+**O que a AN0 não fez:** nenhuma vida nova (não há o carinho para conferir), nenhum plano de análise (a AN3), nenhuma faixa. As vidas da LM4 não gravam a posição,
+então o deslocamento e o zigue-zague vêm só da LM0 (3 072 decisões).
+
+## 11. Resumo da AN1: os gabaritos de hoje bastam para a AN2 (2026-11-04, worker Sonnet 5.5, branch `v3-acoes-novas-an1`)
+
+**Conclusão: os gabaritos que já estão na `main` bastam. Nenhum gabarito novo foi gravado, e nenhum código mudou.** Este PR só documenta a conferência. Os
+três conjuntos abaixo comparam uma vida **nova** do Python com o gravado, byte a byte (não são só hashes de um arquivo parado), e passam hoje (`59a24cf`):
+
+| conjunto | o que fixa | teste | rodado hoje |
+|---|---|---|---|
+| LM0 e LM4 (`web/app/test/gabaritos/digibrain_modular_*`) | o braço REL (a configuração do pet de teste, a mesma do braço LAB do plano) em 8 vidas de 4 dias (comedouro e `longe_fixo`, atencioso e relapso, sementes 101 e 202) com **todas as chamadas dos módulos, o motivo e a assinatura do estado por decisão**; 6 vidas da LM4 (inclui o dono incoerente) com motivo, fins e o sha do log; os logs e as leituras do M-PLAST | `tests/test_gabarito_digibrain_modular_web.py` (exportador igual em duas execuções, gravado igual a uma execução nova, fins, logs, plast) | 15 passam em 59 s, com `tests/test_gabarito_genoma_g0.py` |
+| G0, o caminho REL (`tests/gabaritos/genoma_g0_vidas_de_hoje.json`) | 10 vidas do REL (comedouro e `longe_fixo`, sementes 101 a 505, 3 dias): sha256 do log e da trajetória (decisões, estados por passo do dono, resumo com política interna e medidas), com o sha de cada parte | `tests/test_gabarito_genoma_g0.py` (se regera igual duas vezes; em dia byte a byte) | passam (junto com a linha de cima) |
+| o modular de hoje (`tests/gabaritos/digibrain_modular_de_hoje.json`) | 8 braços (M0 a M4-con) × 2 sementes × 12 células, 3 dias: log, estado interno do cérebro e medidas | `tests/test_gabarito_digibrain_modular.py` | 2 passam em 41 s |
+
+**Por que bastam para a AN2 (a `passeio` desligada tem de deixar tudo igual):**
+- **O vagar está lá, decisão a decisão.** As vidas da LM0 e da LM4 têm 1 027 decisões `explorar/vagar` em 5 376 (`artifacts_v3_acoes_novas/hoje.json`, `total`),
+  com 732 corridas, e o motivo de cada uma (a ação, o alvo, a intenção, os fins) está no gabarito. Um passeio que vazasse com a chave desligada mudaria a
+  assinatura do estado ou o motivo de alguma delas.
+- **Os fins que a AN2 toca estão cobertos:** `achou`, `meta`, `trocou` nas vidas da LM0 e `desistiu` e `sumiu` na LM4 (o teste dos fins da LM4 confere os dois últimos).
+- **O G0 cobre as medidas e o log inteiro** de 10 vidas do mesmo braço, em outras sementes (303, 404, 505), com os estados por passo.
+- **O caminho que a AN2 mexe (`estado.py`, `adapt.py`, `impulso.py`, `config.py`) roda em todas essas vidas.** Não há ramo do vagar fora delas: o vagar sai do M-IMPULSO em toda decisão.
+
+**O que a AN2 tem de respeitar (achado desta conferência, não é um furo do gabarito):**
+- `digibrain_modular_constantes.json` grava `config_digibrain` como `asdict(ConfigDigibrain)` (as 16 chaves de hoje; `experiments/exportar_gabarito_digibrain_modular.py:278`),
+  e `desligadas` como as chaves falsas. **A subchave `passeio` aparece nesse arquivo no instante em que entra na `ConfigDigibrain`**, e `test_o_gabarito_gravado_bate_com_uma_execucao_nova`
+  falha, mesmo com a vida igual. O 3.5 diz "nenhum gabarito é regravado". A AN2 não tem como cumprir isso ao pé da letra; a saída que recomendo [PROPOSTO] é regravar
+  **só** esse arquivo, com a diferença exata de `"passeio": false` em `config_digibrain` e em `desligadas`, num commit próprio, com um teste que confere que as
+  oito vidas (os `.json.gz` e os sha256 de `arquivos`) não mudaram um byte. A web (`digibrain_modular_constantes.test.ts`, "cada folha igual") precisa do campo na AN5. O
+  Gerente decide antes da AN2 (custo de errar: regravar mais que a chave esconderia uma mudança de vida; não regravar deixa o teste do exportador vermelho).
+- **O motivo só ganha `do_passeio` com a chave ligada** (a 3.4): como o motivo está em todos os gabaritos, um campo novo sempre presente mudaria todos eles.
+- **A assinatura do estado** (`estado_interno`) segue o padrão do módulo: o que é novo só entra com a chave ligada (como o `guardada` com a `intencao_cheiro`).
+
+**Decisão do Matheus (2026-11-04, "Sim, mescle e aceite"):** a recomendação acima ACEITA: a AN2 regrava só o `digibrain_modular_constantes.json`, com a diferença exata de `"passeio": false`, num commit próprio, com o teste de que as oito vidas não mudam um byte.
+
+**Gate:** o gabarito se regera igual duas vezes: `test_o_exportador_sai_igual_em_duas_execucoes_byte_a_byte` e `test_o_gabarito_se_regera_igual_duas_vezes` passam. Nada novo gravado.
+
+## 12. Resumo da AN3: o plano de análise da run única (2026-11-05, worker Claude Code, Opus 5.5, branch `v3-acoes-novas-an3`)
+
+**O plano está em `docs/PLANO_ANALISE_V3_ACOES_NOVAS.md`, PROPOSTO.** Ele só vale com a aprovação do Matheus (as AN3-1 a AN3-9, na seção 13 dele), e a AN4 só roda depois
+dela, com a AN2 na `main` e o orquestrador com a trava. **Nenhuma vida, nenhuma run e nenhum código do passeio** neste PR.
+
+| o quê | o PROPOSTO | onde |
+|---|---|---|
+| a pergunta | o passeio move o pet (sem limiar) **sem piorar a comida perto do comedouro** (o gate) | plano, seção 1 |
+| os braços | **LAB** (o REL da C4, `SUBCHAVES_C4["REL"]`) contra **LAB+P** (o mesmo com a `passeio`); o cenário da C4, 14 dias, os 4 donos; o comedouro e o `longe_fixo`: 16 vidas por unidade | seção 2, AN3-1 |
+| as sementes | a faixa **78101…78505** (em `FAIXAS_RESERVADAS` neste PR, o primeiro commit); as bases 78101 a 78505; **K = 40 por base, 200 unidades, 3 200 vidas** | seção 3, AN3-2, AN3-9 |
+| a guarda **G-COMEDOURO-AN** (o único gate) | LAB+P − LAB na taxa por episódio de fome, nas 4 células do comedouro; o IC95 do t; **falha só com a classe "< 0"** de A6.6 com **δ = 0,018** | seções 6 e 7.2 |
+| as premissas | a **P-PASSEIO** (o passeio dura perto da ração: o limite inferior > 0,01) e a G-ELEGIVEL-EP; se uma falha, a guarda é inconclusiva e a AN5 não roda | 7.1, AN3-4, AN3-8 |
+| o movimento (o produto) | **MOV:** a fração das decisões fora do dormir em que o pet sai do lugar, LAB+P − LAB nas 8 células; "o passeio move o pet" só com o limite inferior do IC95 acima de 0; sem limiar; um nulo plausível escrito antes | 4.3, 7.3, AN3-5, AN3-7 |
+| a medida nova | só o MOV (com a distância por dia e o zigue-zague): uma função em `digilab/metrics.py`, no PR do orquestrador da AN4, com teste contra a AN0, antes de qualquer vida | 4.3 |
+| o descritivo | o `longe_fixo` (sem previsão), o corpo (privação e C5), os passeios e os fins (só no LAB+P), o crédito descartado, o zigue-zague | seção 8 |
+| a máquina | 4 processos; **de 45 min a 1 h 15 min** com a análise (pela C4: 0,805 s de parede por vida; o REL 8 % mais caro que a média) | seção 10 |
+
+**De onde saem os números:** `experiments/plano_an3_poder_acoes_novas.py` lê só a C4 do git (o `medidas.json.gz`, sha256 `8b48d0a2…`, e o `meta.json`, `6315784c…`) e grava
+`artifacts_v3_acoes_novas/plano_an3_poder.json` (sha256 `7b1168c2…aa77`), igual em duas execuções (`tests/test_plano_an3_poder.py`). O σ de planejamento é o maior dp dos quatro
+contrastes do comedouro entre o REL e um braço que difere numa subchave ou num controle (o REL − EMB, 0,0763), com a folga de 20 % (0,0915). Todos os números são PROPOSTOS, SEM
+FONTE externa.
+
+**O que a AN3 mudou fora do plano:** a urgência no passeio virou conferência que falha alto (pela 3.2, ela não passa do limiar nas decisões que continuam um passeio); a "saúde ao
+fim" não entra como medida nova (AN3-6). Os desvios estão no `docs/registro/2026-11.md`.
+
+**Decisão do Matheus (2026-11-05, "Aprovo e mescle"):** o plano APROVADO e as AN3-1 a AN3-9 DECIDIDAS, todas pela recomendação (K = 200, δ = 0,018, 3 200 vidas na faixa 78101…78505). A AN4 roda depois da AN2 na `main` e do PR do orquestrador.
+## 13. Resumo da AN2: o passeio no Python (2026-11-05, worker Sonnet 5.5, branch `v3-acoes-novas-an2`)
+
+**O passeio está no cérebro modular, atrás da subchave `passeio` (desligada).** Dois commits: (1) o campo `passeio: False` na `ConfigDigibrain`, a regravação **só** do
+`web/app/test/gabaritos/digibrain_modular_constantes.json` (a diferença exata de `"passeio": false` em `config_digibrain` e em `desligadas`) e o teste de que as oito vidas não
+mudam um byte (`tests/test_passeio_gabarito.py`: sha256 do texto e bytes do gzip, mais uma execução nova igual); (2) o comportamento. `engine.py` e o motor não mudaram.
+
+| peça | onde | o que faz |
+|---|---|---|
+| abrir | `estado.abrir_passeio`, chamado no `adapt.escolher_alvo` | o `explorar/vagar` escolhido sem urgência vira a I\* (`explorar`, `passeio`, (x, y)) com o ponto que o motor sorteou; com urgência fica opção de uma decisão |
+| seguir | `impulso.alvos` | a unidade do passeio (tipo `vagar`, distância ao ponto) ocupa o lugar do vagar; o `adapt` a entrega como `Alvo.ponto` |
+| fins | `estado._consequencia`, `cuidar_passeio` | `meta` (`chegou`), `trocou`, `desistiu` (`n_desiste`) e o novo `interrompido`; o `interrompido` não sobe o F (AN-5) |
+| guarda | `estado.contexto(urgencias)`, `cuidar_passeio` | urgência máxima de fome, higiene, energia, saúde acima do `urgencia_lambda` (`>`): persistência do passeio 0 e fim `interrompido` no começo da decisão; o reflexo do sono vence (`trocou`) |
+| gesto | `estado.cuidar_passeio`, `_acabar`, `adapt._fim` | gesto do dono (`acariciar`, `elogiar`, `tapa`, `repreender`) entre o começo e o fim do passeio: o fim sai com `credito: False`, não vai ao P2, e o motivo registra `credito: "gesto"` |
+| motivo | `adapt` | `alvo.do_passeio` e o estado `passeio` só com a chave ligada |
+
+**Parâmetros novos:** nenhum número. A subchave é PROPOSTA (SEM FONTE como valor); o limiar é o `urgencia_lambda` que já existe (AN-4). A combinação com `credito_corrida`, `intencao_suspensa` e
+`redecidir_evento` levanta `ValueError` (não testada; PROPOSTA). Com a `memoria_autobio` do braço REL, o passeio não vira episódio de "visita" (essa é do lugar lembrado).
+
+**Testes (G2-py):** `tests/test_passeio_an2.py` (27: desligada sem campo novo, abrir, os quatro fins, a guarda por necessidade, o reflexo antes do `interrompido`, o gesto em cada fim, uma vida
+com o replay bit a bit e uma com carinho injetado) e `tests/test_passeio_gabarito.py` (3). Os gabaritos de hoje (LM0/LM4, G0, `digibrain_modular_de_hoje`) passam sem regravar, salvo o arquivo de constantes.
+
+**Duas coisas fora do que a tarefa nomeou, para o Matheus ver:** (a) `web/app/motor/digibrain/constantes.ts` ganhou só `passeio: false` em `CONFIG_DIGIBRAIN_LAB`, porque o teste de paridade
+`digibrain_modular_constantes.test.ts` compara a config folha a folha com o arquivo regravado e ficaria vermelho; nenhuma lógica da web mudou (o porte é a AN5). O `vitest` não pôde ser rodado aqui
+(a worktree não tem `node_modules`). (b) o gesto é lido do que o dono entrega (`receber_acao_dono`); o carinho no meio do passeio só é injetável em teste, como a AN0 já avisou.
+
+## 14. Resumo do PR do orquestrador da AN4 (2026-11-05, worker Claude Code, Opus 5.5, branch `v3-acoes-novas-an4`)
+
+**O que o plano pede antes da primeira vida está pronto; a run não rodou.** Nenhuma vida da faixa 78101…78505 rodou, nem para teste. A run é
+a etapa seguinte, depois do merge, uma vez, com o comando do registro (a seção 14 do plano).
+
+| peça | onde | o que faz |
+|---|---|---|
+| o MOV (4.3) | `digilab/metrics.py`, `movimento_nas_decisoes` | a fração das decisões fora do dormir que saem do lugar, a distância por dia e o zigue-zague (o líquido sobre o caminho e os pares que invertem) |
+| o teste do MOV | `tests/test_movimento_an4.py` | unidade, e contra a AN0 nas 8 vidas da LM0: 206 pares, 104 invertem (0,504854), líquido/caminho 0,488214, exatos; a distância e as decisões que saem do lugar batem com o `hoje.json` |
+| o orquestrador | `experiments/run_v3_acoes_novas.py`, `experiments/configs/v3_acoes_novas/acoes_novas.json` | os braços LAB e LAB+P (`SUBCHAVES_AN` do orquestrador do protótipo), as 8 células, as bases e o K do plano, 14 dias, orçamento 16, até 4 processos |
+| a trava | o mesmo | o plano com "APROVADO pelo Matheus" no cabeçalho (testado trocado nos dois sentidos), a faixa em `FAIXAS_RESERVADAS`, o registro da run com os sha256 de hoje, só as bases, o K, os dias e o orçamento do plano (outra base levanta `SementeSemPlano`), nada por cima de uma pasta que existe, no máximo 4 processos |
+| as conferências, em toda vida | o mesmo | o G1 (replay bit a bit do disco), o T-CENARIO-1, o G-MECANISMO e o crédito (com a abertura do passeio lida como a primeira decisão dele, D-AN4-1), a `conferir_memoria` da C4, os fins conhecidos lidos da `estado.py`; o passeio: a urgência no limiar ou abaixo em toda decisão que continua um passeio, o alvo no ponto dele com `do_passeio`, o F refeito (o `interrompido` não sobe o F), o LAB sem passeio nenhum |
+| a análise | o mesmo, `analisar` | as premissas (P-PASSEIO, G-ELEGIVEL-EP), a guarda G-COMEDOURO-AN (falha só com "< 0", δ = 0,018), o MOV (move só com o limite inferior acima de 0), a linha de 7.4 e o descritivo da seção 8 |
+| os testes | `tests/test_acoes_novas_an4.py` | o desenho, a trava, o registro, as conferências numa vida de cada braço (e estragadas: a urgência, o alvo, o F, o LAB), a análise com dados sintéticos, a varredura de ponta a ponta nas sementes dos testes (1 dia, 80 vidas) e o isolamento |
+
+**A varredura (seção 11 do plano; não é dado da AN4):** o orquestrador inteiro com as bases 101 a 505, K = 1, os 2 braços, as 8 células e
+14 dias (80 vidas; `experiments/configs/v3_acoes_novas/varredura.json`, saída fora do repositório), 4 processos, saída 0. Todas as
+conferências passaram em toda vida. Os fins que apareceram são só os conhecidos: no LAB, `meta`, `trocou`, `achou` e `sumiu`; no LAB+P, os
+mesmos e o `interrompido` (791 no comedouro, 303 no `longe_fixo`); `desistiu` 0 nos dois. Os passeios: 2 374 abertos no comedouro e 1 476
+no `longe_fixo` (20 vidas cada); os fins deles, comedouro 1 161 `meta`, 421 `trocou`, 791 `interrompido`; o crédito descartado pelo gesto,
+0 (os donos sem ensino quase não fazem carinho; o plano já previa). A P-PASSEIO no comedouro, 0,088 [0,082; 0,094] sobre 5 unidades
+(passaria o 0,01); a urgência máxima nas aberturas, 512, o limiar (D-AN4-2). Nenhum número da varredura é resultado.
+
+**A parede (sementes dos testes):** 80 vidas de 14 dias em 183 s de parede com 4 processos (5 unidades em 4 processos: a última rodou
+sozinha). A CPU por vida: média 3,67 s (o LAB 4,22 s, mediana 4,41; o LAB+P 3,13 s, mediana 3,12). Pela razão parede/CPU da C4 com 4
+processos (0,805 / 3,15), as 3 200 vidas custam cerca de **50 min** de vidas; com a análise e a gravação, **de 50 min a 1 h**, dentro da
+faixa do plano (de 45 min a 1 h 15 min). É estimativa; o tempo real vai ao RESULTADO.
+
+**Os desvios** (D-AN4-1 a D-AN4-8, no `docs/registro/2026-11.md`): nenhum mexe na guarda. O principal é o D-AN4-1: a decisão que abre o
+passeio fica no motivo como `explorar/vagar`, e a conferência do crédito do protótipo, como está, recusaria todo LAB+P; o orquestrador passa
+a ela uma vista em que a abertura é a primeira decisão do passeio, depois de conferir cada abertura. O código do passeio, o plano (salvo a
+seção 14, o registro que ele pede) e o `engine.py` não mudaram.

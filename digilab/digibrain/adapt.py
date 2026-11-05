@@ -19,6 +19,11 @@ lugar lembrado passa a valer pela soma dos sigma (MA-2). Com a `facetas_mem` (a 
 facetas andarem um passo (`_mudar_facetas`, M-PERS), o M-IMPULSO soma o termo `faceta` e o motivo ganha `faceta` (os valores e as mudancas
 com os ids dos episodios).
 
+Com a subchave `passeio` (docs/TAREFA_V3_ACOES_NOVAS.md, secoes 3.1 a 3.4), o M-ESTADO cuida do passeio antes do contexto (`cuidar_passeio`, com
+as urgencias, o reflexo e o gesto do dono desde a decisao anterior); o `explorar/vagar` escolhido sem urgencia vira o passeio no
+`escolher_alvo` (o ponto que o motor sorteou), e nas decisoes seguintes o passeio e entregue como `Alvo.ponto`. O motivo ganha `do_passeio`
+no alvo, e o fim do passeio sem credito pelo gesto traz `credito: "gesto"`. Desligada, nenhum campo novo.
+
 **O alvo** (`escolher_alvo`): o candidato do motor do tipo (e do id) da unidade escolhida; o `u` do motor e ignorado. **A excecao unica**
 (a PE-14 revista): em EXPLORAR, o lugar lembrado do M-MEM e entregue como `Alvo.ponto(x, y)`, fora da lista do motor, que o valida por
 conta propria (`MotorMundo._validar_alvo`: so em EXPLORAR, coordenadas inteiras dentro do mapa). Brincar sem bola a vista nao tem alvo
@@ -56,7 +61,7 @@ from ..protocol import derivar_semente
 from ._comum import chave_json
 from .afeto import Afeto
 from .arb import Arbitragem
-from .estado import EstadoDinamico
+from .estado import GESTOS_DO_DONO, EstadoDinamico
 from .impulso import Impulso
 from .mem import Memoria, episodio_autobio
 from .pers import FACETAS, SENTIDO, Personalidade
@@ -77,6 +82,7 @@ class Intencao:
     tipo_alvo: str | None = None
     id_alvo: int | None = None
     ponto: tuple | None = None
+    passeio: bool = False
 
 
 @dataclass
@@ -111,6 +117,8 @@ def intencao_da_unidade(unidade: dict) -> Intencao:
     a = AcaoPet(acao)
     if tipo == "ponto":
         return Intencao(a, "ponto", None, tuple(ident))
+    if tipo == "passeio":                             # o passeio (AN-2): o ponto fixo, entregue ao motor como o lugar lembrado
+        return Intencao(a, "ponto", None, tuple(ident), True)
     return Intencao(a, tipo, ident if tipo in ("comida", "bola") else None)
 
 
@@ -157,8 +165,9 @@ class DigiBrain:
         reflexo = m.arb.reflexo(sens)                              # uma conta so, ao M-ESTADO e ao M-ARB (a L-2, secao 2.3)
         retomadas = m.estado.retomadas
         fins_susp = m.estado.cuidar_suspensa(sens, afeto, reflexo) if cd.intencao_suspensa else []
+        fins_passeio = m.estado.cuidar_passeio(afeto["urgencias"], reflexo, any(g[0] in GESTOS_DO_DONO for g in self._gestos)) if cd.passeio else []
         evento, segurar = m.estado.eventos(sens, afeto, reflexo, bool(self._gestos)) if cd.redecidir_evento else ([], None)
-        ctx = m.estado.contexto()
+        ctx = m.estado.contexto(afeto["urgencias"]) if cd.passeio else m.estado.contexto()
         if cd.memoria_autobio:                        # a C4, M2 e M3: o relogio, a consolidacao do dia novo e a lembranca da decisao
             tick = m.mem.relogio(sens["minuto"])
             consolidacao = m.mem.consolidar(k)
@@ -173,7 +182,7 @@ class DigiBrain:
         esc = m.arb.escolher(unidades, afeto, sens, rng, reflexo, segurar)  # a rng de politica vai so ao M-ARB
         self._conferir_desligadas(unidades)
         unidade = esc["unidade"]
-        fins = fins_susp + m.estado.escolhida(unidade, z, afeto["g_apr"], k, reflexo)
+        fins = fins_susp + fins_passeio + m.estado.escolhida(unidade, z, afeto["g_apr"], k, reflexo)
         if cd.redecidir_evento:                       # a C3: o candidato fora da lista (ou com peso 0) e o E-FIM (RE-2)
             evento = evento + (["E-FIM"] if esc["fora"] else [])
             m.estado.registrar_redecisao(unidade["chave"], esc["segurada"], reflexo, evento)
@@ -256,7 +265,9 @@ class DigiBrain:
             if acao is not AcaoPet.EXPLORAR:                        # pragma: no cover - so o explorar tem a unidade do lugar
                 raise ValueError(f"o lugar lembrado (Alvo.ponto) so em EXPLORAR, nao em {acao.value}")
             alvo = Alvo.ponto(*it.ponto)
-            self.motivos[-1]["alvo"] = {**alvo.para_dict(), "do_mem": True}
+            self.motivos[-1]["alvo"] = {**alvo.para_dict(), "do_mem": not it.passeio}
+            if self.cd.passeio:
+                self.motivos[-1]["alvo"]["do_passeio"] = it.passeio
             p["alvo"] = alvo
             return alvo
         alvo = next((c for c in candidatos if c.tipo == it.tipo_alvo and (it.id_alvo is None or c.id == it.id_alvo)), None)
@@ -264,6 +275,15 @@ class DigiBrain:
             raise ValueError(f"o alvo da intencao ({it.tipo_alvo}, {it.id_alvo}) nao esta entre os candidatos do motor: "
                              f"{[(c.tipo, c.id) for c in candidatos]}")
         self.motivos[-1]["alvo"] = {**alvo.para_dict(), "do_mem": False}
+        if self.cd.passeio:                           # o vagar escolhido sem urgencia vira o passeio, com o ponto que o motor sorteou
+            nova = None
+            if p["unidade"]["chave"][:2] == ("explorar", "vagar"):
+                x, y = p["sens"]["pos"]
+                d = raiz_inteira((alvo.x - x) * (alvo.x - x) + (alvo.y - y) * (alvo.y - y))
+                nova = self.m.estado.abrir_passeio((alvo.x, alvo.y), d)
+                if nova is not None:
+                    p["unidade"] = {**p["unidade"], "chave": nova, "d": d}
+            self.motivos[-1]["alvo"]["do_passeio"] = nova is not None
         p["alvo"] = alvo
         return alvo
 
@@ -320,6 +340,8 @@ class DigiBrain:
             raise RuntimeError("sem o M-MEM, a memoria fica vazia")
         if not cd.memoria_autobio and m.mem.autobio:
             raise RuntimeError("sem a memoria_autobio, o M-MEM nao tem a recente")
+        if not cd.passeio and (m.estado.passeios or any(x["chave"][1] == "passeio" for x in unidades)):
+            raise RuntimeError("sem o passeio, o M-ESTADO nao abre passeio")
 
     def _fechar(self, p: dict) -> None:
         """a consequencia da decisao anterior aos modulos"""
@@ -356,7 +378,7 @@ class DigiBrain:
         if chave[1] in ("comida", "bola"):
             alvo = next((v for v in pm1.vistos if v[0] == chave[2]), None)
             visto, d = alvo is not None, None if alvo is None else alvo[4]
-        elif chave[1] == "ponto":
+        elif chave[1] in ("ponto", "passeio"):
             px, py = chave[2]
             d = raiz_inteira((px - pos1[0]) * (px - pos1[0]) + (py - pos1[1]) * (py - pos1[1]))
         fins = m.estado.consequencia(cons["r_n"], ocorrido, {
@@ -408,6 +430,8 @@ def _fim(f: dict) -> dict:
     out = {"chave": chave_json(f["chave"]), "inicio": f["inicio"], "n": f["n"], "motivo": f["motivo"], "meta": f["meta"], "r": f["r"]}
     if f.get("composta"):
         out["composta"] = True
+    if f.get("credito_descartado"):                   # o passeio (AN-6): so com a subchave, o gesto do dono no intervalo
+        out["credito"] = f["credito_descartado"]
     if "n_susp" in f:                                 # a L-2: a intencao que ja foi suspensa (so com a subchave), para as S-1 e S-2
         out["n_susp"] = f["n_susp"]
     return out

@@ -123,3 +123,5 @@ artifacts_v2_rede_de_si/**/vidas/
 # a competicao entre as regras urgentes (docs/PLANO_ANALISE_V2_V3_COMPETICAO.md, secao 13): o piloto e a validacao entram; as vidas, nao
 !artifacts_v2_v3_competicao/
 artifacts_v2_v3_competicao/**/vidas/
+# ACOES_NOVAS (docs/TAREFA_V3_ACOES_NOVAS.md): o descritivo de hoje (AN0)
+!artifacts_v3_acoes_novas/

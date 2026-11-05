@@ -70,7 +70,8 @@ from bancada.regras_mundo import simular_vida_fisico  # noqa: E402
 from digilab.config import (CONFIG_DIGIBRAIN_INATOS, CONFIG_DIGIBRAIN_LIGADA, CONFIG_MUNDO_MVP, CONFIG_PADRAO,  # noqa: E402
                             TICKS_POR_DIA, ConfigDigibrain, ConfigDigibrainInatos)
 from digilab.digibrain import DigiBrain  # noqa: E402
-from digilab.digibrain.estado import EstadoDinamico  # noqa: E402
+from digilab.digibrain._comum import mul  # noqa: E402,F401 (a AN4 refaz o F do M-ESTADO: experiments/run_v3_acoes_novas.py)
+from digilab.digibrain.estado import NECESSIDADES_DO_PASSEIO, EstadoDinamico  # noqa: E402,F401
 from digilab.donos import criar_dono  # noqa: E402
 from digilab.events import LogDeEventos  # noqa: E402
 from digilab.metrics import (ACOES_R_POSSIVEL, JANELA_8_14, MODULOS_SONDA, MOTIVOS_EPISODIO, assimetria_g1, cadeia_comida_corpo,  # noqa: E402
@@ -128,6 +129,9 @@ SUBCHAVES_C3 = {"M3R": {**SUBCHAVES_CONSERTO["M3"], "redecidir_evento": True}, "
 SUBCHAVES_C4 = {**{b: {**SUBCHAVES_CONSERTO["M3"], "memoria_autobio": True, "controle_mem": c}
                    for b, c in (("REL", "rel"), ("SEM", "sem"), ("REC", "rec"), ("EMB", "emb"), ("RELsN", "rel_sem_neg"))},
                 "REL+F": {**SUBCHAVES_CONSERTO["M3"], "memoria_autobio": True, "controle_mem": "rel", "facetas_mem": True}}
+# a AN4 (docs/PLANO_ANALISE_V3_ACOES_NOVAS.md, secao 2 e AN3-1; a run em experiments/run_v3_acoes_novas.py): o LAB (o REL da C4, a
+# configuracao do pet de teste) e o LAB+P (o mesmo com a `passeio`)
+SUBCHAVES_AN = {"LAB": dict(SUBCHAVES_C4["REL"]), "LAB+P": {**SUBCHAVES_C4["REL"], "passeio": True}}
 BRACOS_DA_FASE.update({"calibracao_conserto": ("M3",), "piloto_conserto": BRACOS_CONSERTO, "reavaliacao": BRACOS_CONSERTO})
 G_MVP_EP = {"w_decisoes": 8, "fome_elegivel": 0.5, "taxa_vida": 0.5, "limiar": 0.8}         # A3.3: os numeros da PPM-4, por episodio
 G_ELEGIVEL_EP = {"frac_vidas": 0.8, "episodios": 3}                                          # A3.3: a premissa G-ELEGIVEL-EP
@@ -290,9 +294,9 @@ def bancada(dias: int, orcamento_por_dia: int) -> bv.Bancada:
 
 def config_do_braco(braco: str, g_apr_con: int | None = None, conserto: bool = False) -> ConfigDigibrain:
     """a ConfigDigibrain do braco: a do prototipo (SUBCHAVES) ou, nas fases do conserto, a do adendo 3 (SUBCHAVES_CONSERTO), com os dois
-    bracos da L-2 (SUBCHAVES_L2, o adendo 5), o da C2 (SUBCHAVES_C2, o adendo 7), os da C3 (SUBCHAVES_C3, o adendo 8) e os da C4
-    (SUBCHAVES_C4, o adendo 9)"""
-    tabela = {**SUBCHAVES_CONSERTO, **SUBCHAVES_L2, **SUBCHAVES_C2, **SUBCHAVES_C3, **SUBCHAVES_C4} if conserto else SUBCHAVES
+    bracos da L-2 (SUBCHAVES_L2, o adendo 5), o da C2 (SUBCHAVES_C2, o adendo 7), os da C3 (SUBCHAVES_C3, o adendo 8), os da C4
+    (SUBCHAVES_C4, o adendo 9) e os da AN4 (SUBCHAVES_AN, docs/PLANO_ANALISE_V3_ACOES_NOVAS.md)"""
+    tabela = {**SUBCHAVES_CONSERTO, **SUBCHAVES_L2, **SUBCHAVES_C2, **SUBCHAVES_C3, **SUBCHAVES_C4, **SUBCHAVES_AN} if conserto else SUBCHAVES
     if braco not in tabela:
         raise ValueError(f"braco do modular {braco!r}: so {tuple(tabela)}")
     extra = {"g_apr_constante": g_apr_con} if braco == "M4-con" else {}
