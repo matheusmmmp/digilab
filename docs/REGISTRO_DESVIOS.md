@@ -512,3 +512,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-05 — ACOES_NOVAS AN2, o teste do gabarito no CI (coordenador, Gerente da V3, Claude Code, Opus 5.5, worktree `v3-passeio-ci`)](registro/2026-11.md)
 - [2026-11-05 — SAUDE, seis testes de separação vermelhos na main (worker, Claude Code, Sonnet 5.5, worktree `v3-saude-citacao`)](registro/2026-11.md)
 - [2026-11-05 — ACOES_NOVAS AN4, o orquestrador da run do passeio (worker, Claude Code, Opus 5.5, worktree `v3-acoes-novas-an4`)](registro/2026-11.md)
+- [2026-11-04 — SPRITES AÇÕES, a tarefa das animações do pet (Gerente da frente, Claude Code, Opus 5.5, worktree `v3-sprites-acoes`)](registro/2026-11.md)
