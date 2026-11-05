@@ -1,11 +1,12 @@
 """SPRITES_ACOES, missao M1: o visualizador das acoes novas, para o Matheus ver o Comer antes de ele ir para o jogo (2026-11-04).
 
 Copia a pagina do atlas do UP (remaster/fonte/site/atlas_digimon_up.html) com os 60 Digimon das formas, cada um com as animacoes do
-export do UP mais as novas (Comer, com a comida por cima, e Comer_sem_objeto), e o modo de cada um no ancoras.json. A saida fica FORA
+export do UP mais as novas do lote 1 (Comer, com a comida por cima, e Comer_sem_objeto; Feliz, Sacudir, Chamar e Emburrar, sem
+objeto), e o modo de cada um no ancoras.json. A saida fica FORA
 DO GIT, em remaster/acoes/visualizador/site (sao quadros do UP). Nada daqui entra no jogo: o Assets/digilab_atlas_up_clipes.json so e
 regerado depois que o Matheus aprova aqui. Fora do pacote digilab/, entao pode usar Pillow. Falha alto.
 
-Uso: python -I tools/sprites_acoes/visualizador.py   (depois do gerar_acoes.py; sirva a saida com python -m http.server dentro dela)
+Uso: python -I tools/sprites_acoes/visualizador.py [--prova]   (depois do gerar_acoes.py; sirva a saida com python -m http.server dentro dela)
 """
 from __future__ import annotations
 
@@ -26,6 +27,7 @@ CATALOGO = RAIZ / "Assets" / "catalogo_sprites_up.json"
 ANCORAS = AQUI / "ancoras.json"
 SAIDA = RAIZ / "remaster" / "acoes" / "visualizador" / "site"
 COLUNAS = 8
+TAGS_LOTE1 = ("Comer", "Feliz", "Sacudir", "Chamar", "Emburrar")
 TAM = 64                                                 # lado da miniatura
 
 
@@ -45,6 +47,10 @@ def quadros(json_path: Path, png_path: Path) -> tuple[list[tuple[Image.Image, in
 
 
 def main() -> int:
+    # --prova: aceita Digimon so com o Comer (o lote 1 gerado num Digimon de prova antes dos 60); sem ele, falta de tag levanta
+    prova = "--prova" in sys.argv[1:]
+    if set(sys.argv[1:]) - {"--prova"}:
+        raise SystemExit(f"argumento desconhecido: {sys.argv[1:]}")
     cat = json.loads(CATALOGO.read_text(encoding="utf-8"))
     digimons = sorted({e["digimon"] for e in cat["formas"].values()})
     anc = json.loads(ANCORAS.read_text(encoding="utf-8"))["digimon"]
@@ -59,24 +65,36 @@ def main() -> int:
     for n in digimons:
         up, tags_up, caixa = quadros(EXPORT_UP / f"{n}.json", EXPORT_UP / f"{n}.png")
         ac, tags_ac, caixa_ac = quadros(EXPORT_ACOES / f"{n}.json", EXPORT_ACOES / f"{n}.png")
-        ob, _, caixa_ob = quadros(EXPORT_ACOES / f"{n}_objeto.json", EXPORT_ACOES / f"{n}_objeto.png")
-        if caixa_ac != caixa or caixa_ob != caixa or len(ob) != len(ac):
+        ob, tags_ob, caixa_ob = quadros(EXPORT_ACOES / f"{n}_objeto.json", EXPORT_ACOES / f"{n}_objeto.png")
+        if caixa_ac != caixa or caixa_ob != caixa:
             raise ValueError(f"{n}: export das acoes nao casa com o do UP ({caixa_ac}, {caixa_ob}, {caixa})")
-        com_objeto = []
-        for (a, ms), (o, ms2) in zip(ac, ob):
-            if ms != ms2:
-                raise ValueError(f"{n}: ms do objeto difere")
-            c = a.copy(); c.alpha_composite(o); com_objeto.append((c, ms))
+        faltam_tags = [t for t in TAGS_LOTE1 if t not in {x["name"] for x in tags_ac}]
+        if faltam_tags and not (prova and "Comer" not in faltam_tags):
+            raise ValueError(f"{n}: o export das acoes nao tem {faltam_tags} (rode tools/sprites_acoes/gerar_acoes.py)")
+        objetos = {t["name"]: ob[t["from"]:t["to"] + 1] for t in tags_ob}   # so as acoes com objeto (o Comer)
         lista, tags = [], []
         for t in tags_up:
             tags.append([t["name"], len(lista) + t["from"], len(lista) + t["to"]])
         lista += up
+        sem_objeto = []
         for t in tags_ac:
-            tags.append([t["name"], len(lista) + t["from"], len(lista) + t["to"]])
-        lista += com_objeto
-        for t in tags_ac:
-            tags.append([t["name"] + "_sem_objeto", len(lista) + t["from"], len(lista) + t["to"]])
-        lista += ac
+            qs = ac[t["from"]:t["to"] + 1]
+            if t["name"] in objetos:
+                os_ = objetos.pop(t["name"])
+                if [ms for _, ms in qs] != [ms for _, ms in os_]:
+                    raise ValueError(f"{n}: o objeto de {t['name']} nao casa com a acao em quadros e ms")
+                com = []
+                for (a, ms), (o, _) in zip(qs, os_):
+                    c = a.copy(); c.alpha_composite(o); com.append((c, ms))
+                sem_objeto.append((t["name"] + "_sem_objeto", qs))
+                qs = com
+            tags.append([t["name"], len(lista), len(lista) + len(qs) - 1])
+            lista += qs
+        if objetos:
+            raise ValueError(f"{n}: objeto sem a acao: {sorted(objetos)}")
+        for nome, qs in sem_objeto:
+            tags.append([nome, len(lista), len(lista) + len(qs) - 1])
+            lista += qs
         W, H = caixa
         linhas = (len(lista) + COLUNAS - 1) // COLUNAS
         folha = Image.new("RGBA", (COLUNAS * (W + 1), linhas * (H + 1)), (0, 0, 0, 0))
@@ -104,10 +122,10 @@ def main() -> int:
     html = html.replace('document.title = "Atlas DIGIMON UP";', 'document.title = "Atlas das ações";')
     # a pagina foi feita para o artifact (que poe o esqueleto); servida solta, precisa do charset
     html = '<!doctype html>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n' + html.replace("<title>Atlas DIGIMON UP</title>", "<title>Atlas das ações</title>")
-    # abre no Comer em vez do Idle (as animacoes do UP continuam na lista)
+    # abre no Feliz, a primeira acao nova do lote 1, em vez do Idle (as animacoes do UP e o Comer continuam na lista)
     if 'tag = A.t.find(t => t[0] === "Idle") || A.t[0];' not in html:
         raise ValueError("a pagina do atlas mudou: o ponto de abrir no Idle nao foi achado")
-    html = html.replace('tag = A.t.find(t => t[0] === "Idle") || A.t[0];', 'tag = A.t.find(t => t[0] === "Comer") || A.t.find(t => t[0] === "Idle") || A.t[0];')
+    html = html.replace('tag = A.t.find(t => t[0] === "Idle") || A.t[0];', 'tag = A.t.find(t => t[0] === "Feliz") || A.t.find(t => t[0] === "Idle") || A.t[0];')
     # sem cache: o http.server nao manda no-cache, e o navegador mostrava o atlas antigo depois de regerar (2026-11-05)
     versao = str(int(time.time()))
     trocas = [

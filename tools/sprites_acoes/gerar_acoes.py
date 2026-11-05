@@ -1,10 +1,11 @@
-"""SPRITES_ACOES, missao M1: gera o clipe Comer dos 60 Digimon das formas pelo Aseprite em linha de comando.
+"""SPRITES_ACOES, missao M1: gera as acoes do lote 1 (Comer, Feliz, Sacudir, Chamar, Emburrar) dos 60 Digimon das formas pelo
+Aseprite em linha de comando.
 
-Le tools/sprites_acoes/ancoras.json e chama tools/sprites_acoes/gerar.lua uma vez por Digimon, no maximo 4 processos ao mesmo tempo
+Le tools/sprites_acoes/ancoras.json (o Comer), tools/sprites_acoes/lote1.json (as outras quatro) e chama tools/sprites_acoes/gerar.lua uma vez por Digimon, no maximo 4 processos ao mesmo tempo
 (V3-D8). Sai fora do git, em remaster/acoes/:
   aseprite/<Nome>_acoes.aseprite
-  export/<Nome>.png/.json          (a acao: sombra e personagem; json_array, frameTags, sem corte, caixa do export do UP)
-  export/<Nome>_objeto.png/.json   (so a camada comida, nas mesmas tags e ms)
+  export/<Nome>.png/.json          (as acoes: sombra e personagem, as 5 tags; json_array, frameTags, sem corte, caixa do export do UP)
+  export/<Nome>_objeto.png/.json   (so a camada comida, so a tag Comer, nos mesmos ms)
 Falha alto: qualquer Digimon que falhe derruba a geracao (codigo de saida 1), com a mensagem do Aseprite.
 
 Uso: python tools/sprites_acoes/gerar_acoes.py [--remaster DIR] [--aseprite EXE] [Nome ...]
@@ -21,12 +22,47 @@ from pathlib import Path
 AQUI = Path(__file__).resolve().parent
 ANCORAS = AQUI / "ancoras.json"
 LUA = AQUI / "gerar.lua"
+LOTE1 = AQUI / "lote1.json"
+ACOES_LOTE1 = ("Feliz", "Sacudir", "Chamar", "Emburrar")   # a ordem das tags depois do Comer
 REMASTER = AQUI.parents[2] / "remaster"   # D:\Trab\digilab\remaster, ao lado das worktrees
 ASEPRITE = Path(r"C:\Program Files (x86)\Steam\steamapps\common\Aseprite\Aseprite.exe")
 PROCESSOS = 4                             # V3-D8: no maximo 4 processos
 
 
-def parametros(nome: str, e: dict, anc: dict, remaster: Path) -> dict[str, str]:
+def quadros_lote1(nome: str, e: dict, lote: dict, remaster: Path) -> dict[str, str]:
+    """Os --script-param acao_<Tag> de um Digimon: os quadros de cada acao do lote1.json, com o ajuste de pulo dele."""
+    ajuste = lote["ajustes"].get(nome, {})
+    desconhecidos = set(ajuste) - {"escala_pulo", "motivo"}
+    if desconhecidos:
+        raise ValueError(f"{nome}: ajuste desconhecido {sorted(desconhecidos)}")
+    escala = ajuste.get("escala_pulo", 1.0)
+    if not 0 < escala <= 1:
+        raise ValueError(f"{nome}: escala_pulo {escala} fora de (0, 1]")
+    if set(lote["acoes"]) != set(ACOES_LOTE1):
+        raise ValueError(f"lote1.json: acoes {sorted(lote['acoes'])}, esperado {sorted(ACOES_LOTE1)}")
+    up = json.loads((remaster / "export" / f"{nome}.json").read_text(encoding="utf-8"))
+    t = {x["name"]: x for x in up["meta"]["frameTags"]}["Idle"]
+    ms_idle = [int(f["duration"]) for f in up["frames"][t["from"]:t["to"] + 1]]
+    if len(ms_idle) != e["idle"][1] - e["idle"][0] + 1:
+        raise ValueError(f"{nome}: o Idle do export tem {len(ms_idle)} quadros, o ancoras.json diz {e['idle']}")
+    pr = {}
+    for acao in ACOES_LOTE1:
+        a = lote["acoes"][acao]
+        if "todo_idle" in a:
+            ti = a["todo_idle"]
+            qs = [[i, ti["dx"], ti["dy"], ti["sx"], ti["sy"], ti["k"], int(round(ms * ti["ms_fator"])), ti["abaixar"]]
+                  for i, ms in enumerate(ms_idle)]
+        else:
+            qs = [list(q) for q in a["quadros"]]
+        for q in qs:
+            if len(q) != 8 or not isinstance(q[6], int) or q[6] <= 0:
+                raise ValueError(f"{nome} {acao}: quadro invalido {q}")
+            q[2] = int(round(q[2] * escala))   # o pulo (dy) na fracao do ajuste
+        pr["acao_" + acao] = ";".join(",".join(map(str, q)) for q in qs)
+    return pr
+
+
+def parametros(nome: str, e: dict, anc: dict, remaster: Path, lote: dict) -> dict[str, str]:
     """Os --script-param do gerar.lua para um Digimon."""
     acoes = remaster / "acoes"
     pr = {
@@ -51,12 +87,13 @@ def parametros(nome: str, e: dict, anc: dict, remaster: Path) -> dict[str, str]:
                   tabela=";".join(",".join(map(str, q)) for q in anc["prova1"]))
     else:
         raise ValueError(f"{nome}: modo desconhecido {e['modo']}")
+    pr.update(quadros_lote1(nome, e, lote, remaster))
     return pr
 
 
-def gerar(nome: str, e: dict, anc: dict, remaster: Path, exe: Path) -> tuple[str, str]:
+def gerar(nome: str, e: dict, anc: dict, remaster: Path, exe: Path, lote: dict) -> tuple[str, str]:
     cmd = [str(exe), "-b"]
-    for k, v in parametros(nome, e, anc, remaster).items():
+    for k, v in parametros(nome, e, anc, remaster, lote).items():
         cmd += ["--script-param", f"{k}={v}"]
     cmd += ["--script", str(LUA)]
     r = subprocess.run(cmd, capture_output=True, text=True)
@@ -74,6 +111,10 @@ def main() -> int:
     a = ap.parse_args()
     anc = json.loads(ANCORAS.read_text(encoding="utf-8"))
     dig = anc["digimon"]
+    lote = json.loads(LOTE1.read_text(encoding="utf-8"))
+    fora = set(lote["ajustes"]) - set(dig)
+    if fora:
+        raise SystemExit(f"lote1.json: ajustes fora do ancoras.json: {sorted(fora)}")
     nomes = a.nomes or sorted(dig)
     faltam = [n for n in nomes if n not in dig]
     if faltam:
@@ -84,7 +125,7 @@ def main() -> int:
         (a.remaster / "acoes" / d).mkdir(parents=True, exist_ok=True)
     erros = []
     with ThreadPoolExecutor(PROCESSOS) as ex:
-        futs = [ex.submit(gerar, n, dig[n], anc, a.remaster, a.aseprite) for n in nomes]
+        futs = [ex.submit(gerar, n, dig[n], anc, a.remaster, a.aseprite, lote) for n in nomes]
         for f in futs:
             try:
                 n, s = f.result()
