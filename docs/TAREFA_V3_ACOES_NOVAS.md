@@ -343,3 +343,5 @@ FONTE externa.
 
 **O que a AN3 mudou fora do plano:** a urgência no passeio virou conferência que falha alto (pela 3.2, ela não passa do limiar nas decisões que continuam um passeio); a "saúde ao
 fim" não entra como medida nova (AN3-6). Os desvios estão no `docs/registro/2026-11.md`.
+
+**Decisão do Matheus (2026-11-05, "Aprovo e mescle"):** o plano APROVADO e as AN3-1 a AN3-9 DECIDIDAS, todas pela recomendação (K = 200, δ = 0,018, 3 200 vidas na faixa 78101…78505). A AN4 roda depois da AN2 na `main` e do PR do orquestrador.

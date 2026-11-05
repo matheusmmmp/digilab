@@ -1,6 +1,6 @@
 # PLANO DE ANÁLISE V3 — AÇÕES NOVAS: o passeio ligado contra desligado (AN3; 2026-11-05, worker da AN3, Claude Code, Opus 5.5)
 
-**Status: PROPOSTO.** O plano só vale com a aprovação do Matheus, e as decisões AN3-1 a AN3-9 (seção 13) estão todas PROPOSTAS. **Nenhuma
+**Status: APROVADO pelo Matheus em 2026-11-05 ("Aprovo e mescle").** As decisões AN3-1 a AN3-9 (seção 13) DECIDIDAS, todas pela recomendação. **Nenhuma
 vida da faixa 78101…78505 rodou nem roda antes de quatro coisas:** este cabeçalho com a marca "APROVADO pelo Matheus"; o código do passeio
 (a AN2) na `main`, com o G2-py; a medida do movimento em `digilab/metrics.py` e o orquestrador da AN4, com a trava e a varredura (seção
 11); e o registro da run (seção 11), num commit empurrado antes da primeira vida.
@@ -358,7 +358,7 @@ Só as linhas verificadas que a tarefa já usa (a seção 9 dela; `docs/referenc
   planejamento; o 0,01 da P-PASSEIO (o da G-PESA), o 80 % e os 3 episódios da G-ELEGIVEL-EP, o −0,5 do g1, o 0,15 da C5; a faixa. Os números
   de contexto saem dos artefatos citados ([poder], [AN0]).
 
-## 13. As decisões do Matheus (PROPOSTAS)
+## 13. As decisões do Matheus (DECIDIDAS em 2026-11-05, todas pela recomendação)
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
