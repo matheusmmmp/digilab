@@ -515,4 +515,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-05 — ACOES_NOVAS AN4, o orquestrador da run do passeio (worker, Claude Code, Opus 5.5, worktree `v3-acoes-novas-an4`)](registro/2026-11.md)
 - [2026-11-04 — SPRITES AÇÕES, missão M2, o Comer no atlas de clipes (worker, Claude Code, Opus 5.5, worktree `v3-sprites-atlas`)](registro/2026-11.md)
 - [2026-11-05 — SPRITES AÇÕES, missão M3, o Comer na ilha (worker, Claude Code, Opus 5.5, worktree `v3-sprites-ilha`)](registro/2026-11.md)
+- [2026-11-05 — SPRITES AÇÕES, missão M4, o e2e e as capturas do Comer (worker, Claude Code, Opus 5.5, worktree `v3-sprites-e2e`)](registro/2026-11.md)
 - [2026-11-05 — ACOES_NOVAS AN4, o resultado da run do passeio (worker, Claude Code, Opus 5.5, worktree `v3-acoes-novas-an4-run`)](registro/2026-11.md)

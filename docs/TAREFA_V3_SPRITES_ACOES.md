@@ -426,3 +426,10 @@ Registro das propostas, como foram levadas ao Matheus:
   - o `papel.ts` toca o `Comer` com o `Comer_objeto` por cima, no corte alargado de `ilha/corte.ts` (o `corteGolpe` generalizado, com o
     mesmo centro e o mesmo pé); o gesto, a carne e as migalhas saem enquanto o clipe toca;
   - os testes em `web/app/test/ilha_comer_clipe.test.ts`; as interpretações em `docs/registro/2026-11.md`.
+- **2026-11-05, a M4 (worker, `v3-sprites-e2e`):**
+  - o e2e `web/app/e2e/sprites_comer.spec.ts`, em 390 e 1280 px: sem o atlas, o gesto (`__digilab.comer() === "gesto"`) com a carne e as
+    migalhas no palco 2D; com um atlas de clipes sintético pela rota (arte própria, as 60 formas), o clipe, e o palco 2D vazio;
+  - as capturas com o atlas real (`web/app/e2e_capturas/sprites_comer.spec.ts`, `DIGILAB_CAPTURAS_COMER=1`), fora do git em
+    `D:\Trab\digilab\remaster\acoes\capturas\m4\`: Gabumon, Agumon, Greymon e WereGarurumon, a tela e oito recortes seguidos;
+  - o achado: o Comer do WereGarurumon pula a cada mordida (quadro de salto do UP na âncora); as interpretações em
+    `docs/registro/2026-11.md`.
