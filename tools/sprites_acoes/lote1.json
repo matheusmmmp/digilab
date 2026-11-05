@@ -1,7 +1,7 @@
 {
- "versao": 3,
+ "versao": 4,
  "status": "PROPOSTO",
- "fonte": "SEM FONTE: receitas da M1 do lote 1 da SPRITES_ACOES (2026-11-05), da tabela 3.2 da docs/TAREFA_V3_SPRITES_ACOES.md; os px e os ms foram escolhidos a olho no Agumon. A v1 (so deslocamentos do Idle) foi reprovada pelo Matheus em 2026-11-05: as quatro pareciam iguais; a v2 usa poses de outras tags do UP, espelho e squash and stretch forte; o Emburrar da v2 foi reprovado (parecia o Idle) e a v3 usa os bracos cruzados do Attack_1 com bufada e batida de pe",
+ "fonte": "SEM FONTE: receitas da M1 do lote 1 da SPRITES_ACOES (2026-11-05), da tabela 3.2 da docs/TAREFA_V3_SPRITES_ACOES.md; os px e os ms foram escolhidos a olho no Agumon. A v1 (so deslocamentos do Idle) foi reprovada pelo Matheus em 2026-11-05: as quatro pareciam iguais; a v2 usa poses de outras tags do UP, espelho e squash and stretch forte; o Emburrar da v2 (Idle espelhado) e o da v3 (bracos cruzados) foram reprovados: pareciam o Idle; a v4 fica de costas (a pose do Stun) com bufada, batida de pe e uma espiada",
  "quadro_formato": "[fonte, dx, dy, sx, sy, k, ms, abaixar, espelho]: fonte e um int (o deslocamento no Idle, modulo o tamanho dele; a sombra e a do proprio quadro) ou \"pose:<papel>\" (o quadro do UP do papel em poses do Digimon; a sombra e a do 1o quadro do Idle). dx e dy em px (dy < 0 sobe); sx pelo meio do personagem e sy pelo pe (sy < 1 amassa, > 1 estica); k o cisalhamento (o topo anda k px, o pe fica); abaixar, px tirados da altura pelo pe; espelho 1 vira o personagem para o lado oposto",
  "todo_idle_formato": "o Idle inteiro do UP, quadro a quadro: dx, dy, sx, sy, k, abaixar e espelho fixos, e o ms de cada quadro do Idle vezes ms_fator, arredondado",
  "escala_pulo": "por Digimon (ajustes), a fracao do dy usada, arredondada, para o pulo caber na caixa do export (a receita falha alto sem ela)",
@@ -13,7 +13,7 @@
   "aceno_a": "o Chamar: o braco levantado (\"ei\")",
   "aceno_b": "o Chamar: o braco mais alto, o outro tempo do aceno",
   "grito": "o Chamar: a mao na boca, segurado antes da pausa",
-  "bracos_cruzados": "o Emburrar: o braco cruzado na frente do peito (o comeco do golpe), parado, espelhado e encolhido"
+  "costas": "o Emburrar: de costas para a camera (a pose do Stun, a mesma do Sacudir), parada"
  },
  "poses": {
   "Agumon": {
@@ -24,7 +24,7 @@
    "aceno_a": 4,
    "aceno_b": 6,
    "grito": 8,
-   "bracos_cruzados": 2
+   "costas": 51
   }
  },
  "acoes": {
@@ -378,95 +378,95 @@
   },
   "Emburrar": {
    "loop": true,
-   "descricao": "birra: de bracos cruzados e virado para o lado oposto (espelhado), encolhido 4 px pelo pe e com a cabeca para a frente e para baixo (cisalhamento); parado, de vez em quando uma bufada (o corpo infla de lado e sobe 2 px, depois solta abaixo do repouso) e uma batida de pe (dois trancos de 1 px com amassado), e uma pausa longa; sem pulo; em laco. O tom escuro e a raiva ficam na vista. A v2 (o Idle espelhado e lento) foi reprovada: parecia o Idle",
+   "descricao": "birra de costas: a pose de costas parada, encolhida 3 px pelo pe e alargada (os ombros caidos); pausa longa, uma bufada (infla 1 px e solta 1 px abaixo), uma batida de pe (dois trancos de 1 px com amassado), outra pausa, uma espiada rapida por cima do ombro (o 1o quadro do Idle, de frente, encolhido) e de volta de costas; sem pulo; em laco. O tom escuro e a raiva ficam na vista. A v2 (Idle espelhado e lento) e a v3 (bracos cruzados) foram reprovadas: pareciam o Idle",
    "quadros": [
     [
-     "pose:bracos_cruzados",
-     0,
-     0,
-     1.0,
-     1.0,
-     -4,
-     700,
-     4,
-     1
-    ],
-    [
-     "pose:bracos_cruzados",
+     "pose:costas",
      0,
      0,
      1.04,
      1.0,
-     -4,
-     100,
+     0,
+     800,
      3,
-     1
+     0
     ],
     [
-     "pose:bracos_cruzados",
+     "pose:costas",
      0,
      0,
-     1.08,
+     1.06,
      1.0,
-     -4,
-     167,
-     2,
-     1
-    ],
-    [
-     "pose:bracos_cruzados",
      0,
-     0,
-     1.0,
-     1.0,
-     -5,
      100,
-     5,
-     1
+     2,
+     0
     ],
     [
-     "pose:bracos_cruzados",
+     "pose:costas",
+     0,
+     0,
+     1.04,
+     1.0,
+     0,
+     133,
+     4,
+     0
+    ],
+    [
+     "pose:costas",
      -1,
      0,
-     1.04,
-     0.95,
-     -5,
+     1.06,
+     0.96,
+     0,
      67,
-     4,
-     1
+     3,
+     0
     ],
     [
-     "pose:bracos_cruzados",
+     "pose:costas",
      1,
      0,
+     1.04,
      1.0,
-     1.0,
-     -5,
+     0,
      67,
-     4,
-     1
+     3,
+     0
     ],
     [
-     "pose:bracos_cruzados",
-     -1,
+     "pose:costas",
+     0,
      0,
      1.04,
-     0.95,
-     -5,
-     67,
-     4,
-     1
+     1.0,
+     0,
+     600,
+     3,
+     0
     ],
     [
-     "pose:bracos_cruzados",
+     0,
      0,
      0,
      1.0,
      1.0,
-     -4,
+     0,
+     233,
+     3,
+     0
+    ],
+    [
+     "pose:costas",
+     0,
+     0,
+     1.04,
+     1.0,
+     0,
      900,
-     4,
-     1
+     3,
+     0
     ]
    ]
   }
