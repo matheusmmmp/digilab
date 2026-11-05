@@ -505,6 +505,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-04 — LUTA: O QUE O PET APRENDEU, o painel na Arena (worker, Claude Code, Sonnet 5.5, worktree `v3-luta-aprendizado`)](registro/2026-11.md)
 - [2026-11-04 — G0 E3, a bancada grava o genoma (worker, Claude Code, Sonnet 5.5, worktree `v3-genoma-g0-e3`)](registro/2026-11.md)
 - [2026-11-04 — VIDA DO PET, a cena e o toque (worker, Claude Code, Sonnet 5.5, worktree `v3-vida-pet-cena`)](registro/2026-11.md)
+- [2026-11-04 — SPRITES AÇÕES, a tarefa das animações do pet (Gerente da frente, Claude Code, Opus 5.5, worktree `v3-sprites-acoes`)](registro/2026-11.md)
 - [2026-11-04 — ACOES_NOVAS AN0, o descritivo de hoje (worker, Claude Code, Sonnet 5.5, worktree `v3-acoes-novas-an0`)](registro/2026-11.md)
 - [2026-11-04 — ACOES_NOVAS AN1, o gabarito das vidas de hoje (worker, Claude Code, Sonnet 5.5, worktree `v3-acoes-novas-an1`)](registro/2026-11.md)
 - [2026-11-05 — ACOES_NOVAS AN3, o plano de análise do passeio (worker, Claude Code, Opus 5.5, worktree `v3-acoes-novas-an3`)](registro/2026-11.md)
