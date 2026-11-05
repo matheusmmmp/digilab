@@ -1,0 +1,148 @@
+{
+ "versao": 1,
+ "status": "PROPOSTO",
+ "fonte": "catalogo das bocas da M1 SPRITES_ACOES (2026-11-04): folhas em remaster/acoes/catalogo/, revisao visual; a sequencia e os ms copiam a prova 2 do Agumon (remaster/acoes/prova/gerar_comer2.lua), SEM FONTE",
+ "quadros": "base 1, indice do quadro no .aseprite",
+ "seq_formato": "[quadro, ms, mordida 0/1, farelo 0/1]",
+ "modos": "par: alterna quadros do UP com a boca aberta e fechada (prova 2); prova1: o Idle inclinado e achatado no pe, sem abrir a boca (prova 1); desenhar: a boca fechada vai ser pintada a mao num .aseprite derivado (SA-9) e, ate la, sai pela prova 1 (provisorio: true)",
+ "prova1": [
+  [
+   0,
+   0,
+   1.0,
+   0,
+   0,
+   133
+  ],
+  [
+   1,
+   4,
+   0.97,
+   0,
+   0,
+   100
+  ],
+  [
+   2,
+   7,
+   0.94,
+   0,
+   0,
+   100
+  ],
+  [
+   2,
+   8,
+   0.9,
+   1,
+   1,
+   133
+  ],
+  [
+   3,
+   6,
+   0.95,
+   1,
+   0,
+   100
+  ],
+  [
+   3,
+   8,
+   0.9,
+   2,
+   1,
+   133
+  ],
+  [
+   4,
+   4,
+   0.97,
+   2,
+   0,
+   100
+  ],
+  [
+   5,
+   0,
+   1.0,
+   2,
+   0,
+   133
+  ]
+ ],
+ "prova1_formato": "[deslocamento no Idle (modulo o tamanho do Idle), inclinacao do topo em px, achatamento no pe, mordidas, farelo 0/1, ms]",
+ "carne_regra": "par: o canto da carne e o campo carne de cada Digimon (a boca aberta do UP a morde); prova1 e desenhar: canto (boca.x + dx, boca.y + dy) com o carne_deslocamento da orientacao, levado pela inclinacao, mais o recuo_carne em x. Com dy = -4 o meio da carne (8 px) fica na altura da boca e a ponta mordida encosta nela (2026-11-05, pedido do Matheus; antes era (-2, +2) no perfil e (-5, +2) de frente, e a carne caia abaixo da boca)",
+ "carne_deslocamento": {
+  "perfil": [
+   -2,
+   -4
+  ],
+  "frente": [
+   -2,
+   -4
+  ]
+ },
+ "digimon": {
+  "Agumon": {"aseprite": "Agumon_v04.aseprite", "caixa": [94, 68], "pe_idle": 58, "par": true, "idle": [33, 38], "modo": "par", "provisorio": false, "orientacao": "perfil", "fechada": [15, 16], "aberta": [11, 12, 13, 14], "boca": [73, 22], "boca_origem": "auto", "carne": [71, 24], "seq": [[15, 133, 0, 0], [11, 100, 0, 0], [12, 67, 0, 0], [15, 133, 1, 1], [13, 100, 0, 0], [14, 67, 0, 0], [16, 133, 1, 1], [15, 133, 0, 0]]},
+  "Angemon": {"aseprite": "Angemon_v02.aseprite", "caixa": [103, 101], "pe_idle": 87, "par": false, "idle": [37, 42], "modo": "prova1", "provisorio": false, "orientacao": "frente", "boca": [57, 39], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "sem_boca"},
+  "Angewomon": {"aseprite": "Angewomon_v02.aseprite", "caixa": [139, 129], "pe_idle": 118, "par": false, "idle": [32, 37], "modo": "prova1", "provisorio": false, "orientacao": "frente", "boca": [86, 50], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "sem_boca"},
+  "Ankiromon": {"aseprite": "Ankiromon_v02.aseprite", "caixa": [146, 70], "pe_idle": 58, "par": false, "idle": [32, 37], "modo": "prova1", "provisorio": false, "orientacao": "perfil", "boca": [93, 44], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "sem_boca"},
+  "Aquilamon": {"aseprite": "Aquilamon_v02.aseprite", "caixa": [112, 84], "pe_idle": 70, "par": true, "idle": [37, 49], "modo": "prova1", "provisorio": false, "orientacao": "perfil", "boca": [79, 49], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "par_fraco"},
+  "Armadillomon": {"aseprite": "Armadillomon_v02.aseprite", "caixa": [117, 81], "pe_idle": 68, "par": false, "idle": [34, 39], "modo": "prova1", "provisorio": false, "orientacao": "perfil", "boca": [76, 57], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "sem_boca"},
+  "Birdramon": {"aseprite": "Birdramon_v02.aseprite", "caixa": [145, 111], "pe_idle": 91, "par": false, "idle": [39, 46], "modo": "par", "provisorio": false, "orientacao": "perfil", "boca": [126, 70], "boca_origem": "manual", "sem_par": "abre_em_outra_pose", "fonte": "acoes/bocas/Birdramon_par.aseprite", "fechada": [58], "aberta": [57], "carne": [124, 66], "seq": [[58, 133, 0, 0], [57, 100, 0, 0], [57, 67, 0, 0], [58, 133, 1, 1], [57, 100, 0, 0], [57, 67, 0, 0], [58, 133, 1, 1], [58, 133, 0, 0]], "boca_par": {"tipo": "levada", "aberta_up": 4, "fechada_up": 39, "mesma_pose": false, "confianca": "media"}},
+  "Demiveemon": {"aseprite": "Demiveemon_v02.aseprite", "caixa": [150, 116], "pe_idle": 107, "par": false, "idle": [37, 42], "modo": "par", "provisorio": false, "orientacao": "frente", "boca": [79, 91], "boca_origem": "manual", "sem_par": "abre_em_outra_pose", "fonte": "acoes/bocas/Demiveemon_par.aseprite", "fechada": [52], "aberta": [51], "carne": [77, 87], "seq": [[52, 133, 0, 0], [51, 100, 0, 0], [51, 67, 0, 0], [52, 133, 1, 1], [51, 100, 0, 0], [51, 67, 0, 0], [52, 133, 1, 1], [52, 133, 0, 0]], "boca_par": {"tipo": "sempre_aberta", "aberta_up": 1, "fechada_up": 37, "mesma_pose": false, "confianca": "media"}},
+  "Dinobeemon": {"aseprite": "Dinobeemon_v02.aseprite", "caixa": [217, 132], "pe_idle": 120, "par": false, "idle": [38, 43], "modo": "prova1", "provisorio": false, "orientacao": "frente", "boca": [101, 73], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "sem_boca"},
+  "ExVeemon": {"aseprite": "ExVeemon_v02.aseprite", "caixa": [110, 97], "pe_idle": 86, "par": false, "idle": [36, 42], "modo": "par", "provisorio": false, "orientacao": "perfil", "boca": [84, 52], "boca_origem": "manual", "sem_par": "abre_em_outra_pose", "fonte": "acoes/bocas/ExVeemon_par.aseprite", "fechada": [54], "aberta": [53], "carne": [82, 48], "seq": [[54, 133, 0, 0], [53, 100, 0, 0], [53, 67, 0, 0], [54, 133, 1, 1], [53, 100, 0, 0], [53, 67, 0, 0], [54, 133, 1, 1], [54, 133, 0, 0]], "boca_par": {"tipo": "levada", "aberta_up": 14, "fechada_up": 36, "mesma_pose": false, "confianca": "alta"}},
+  "Gabumon": {"aseprite": "Gabumon_v02.aseprite", "caixa": [98, 76], "pe_idle": 66, "par": false, "idle": [39, 44], "modo": "par", "provisorio": false, "orientacao": "perfil", "boca": [77, 37], "boca_origem": "manual", "sem_par": "abre_em_outra_pose", "fonte": "acoes/bocas/Gabumon_par.aseprite", "fechada": [58], "aberta": [57], "carne": [75, 33], "seq": [[58, 133, 0, 0], [57, 100, 0, 0], [57, 67, 0, 0], [58, 133, 1, 1], [57, 100, 0, 0], [57, 67, 0, 0], [58, 133, 1, 1], [58, 133, 0, 0]], "boca_par": {"tipo": "levada", "aberta_up": 10, "fechada_up": 39, "mesma_pose": false, "confianca": "media"}},
+  "Gallantmon": {"aseprite": "Gallantmon_v02.aseprite", "caixa": [189, 144], "pe_idle": 132, "par": false, "idle": [41, 46], "modo": "prova1", "provisorio": false, "orientacao": "frente", "boca": [68, 66], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "sem_boca"},
+  "Gargomon": {"aseprite": "Gargomon_v02.aseprite", "caixa": [118, 78], "pe_idle": 65, "par": false, "idle": [35, 40], "modo": "par", "provisorio": false, "orientacao": "frente", "boca": [79, 23], "boca_origem": "manual", "sem_par": "abre_em_outra_pose", "fonte": "acoes/bocas/Gargomon_par.aseprite", "fechada": [51], "aberta": [50], "carne": [77, 19], "seq": [[51, 133, 0, 0], [50, 100, 0, 0], [50, 67, 0, 0], [51, 133, 1, 1], [50, 100, 0, 0], [50, 67, 0, 0], [51, 133, 1, 1], [51, 133, 0, 0]], "boca_par": {"tipo": "levada", "aberta_up": 48, "fechada_up": 35, "mesma_pose": false, "confianca": "baixa"}},
+  "Garudamon": {"aseprite": "Garudamon_v02.aseprite", "caixa": [184, 143], "pe_idle": 129, "par": false, "idle": [49, 58], "modo": "prova1", "provisorio": false, "orientacao": "frente", "boca": [120, 69], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "sem_boca"},
+  "Garurumon": {"aseprite": "Garurumon_v02.aseprite", "caixa": [132, 87], "pe_idle": 71, "par": true, "idle": [38, 43], "modo": "prova1", "provisorio": false, "orientacao": "perfil", "boca": [104, 54], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "par_fraco"},
+  "Gatomon": {"aseprite": "Gatomon_v02.aseprite", "caixa": [152, 131], "pe_idle": 113, "par": false, "idle": [36, 41], "modo": "par", "provisorio": false, "orientacao": "frente", "boca": [75, 88], "boca_origem": "manual", "sem_par": "abre_em_outra_pose", "fonte": "acoes/bocas/Gatomon_par.aseprite", "fechada": [53], "aberta": [52], "carne": [73, 84], "seq": [[53, 133, 0, 0], [52, 100, 0, 0], [52, 67, 0, 0], [53, 133, 1, 1], [52, 100, 0, 0], [52, 67, 0, 0], [53, 133, 1, 1], [53, 133, 0, 0]], "boca_par": {"tipo": "levada", "aberta_up": 14, "fechada_up": 36, "mesma_pose": false, "confianca": "media"}},
+  "Gomamon": {"aseprite": "Gomamon_v02.aseprite", "caixa": [127, 108], "pe_idle": 97, "par": true, "idle": [48, 53], "modo": "par", "provisorio": false, "orientacao": "frente", "fechada": [18], "aberta": [1], "boca": [91, 84], "boca_origem": "manual", "carne": [89, 80], "seq": [[18, 133, 0, 0], [1, 100, 0, 0], [1, 67, 0, 0], [18, 133, 1, 1], [1, 100, 0, 0], [1, 67, 0, 0], [18, 133, 1, 1], [18, 133, 0, 0]]},
+  "Greymon": {"aseprite": "Greymon_v02.aseprite", "caixa": [88, 78], "pe_idle": 67, "par": false, "idle": [34, 39], "modo": "par", "provisorio": false, "orientacao": "perfil", "boca": [66, 29], "boca_origem": "manual", "sem_par": "abre_em_outra_pose", "fonte": "acoes/bocas/Greymon_attack.aseprite", "fechada": [51], "aberta": [50], "carne": [66, 24], "seq": [[51, 133, 0, 0], [50, 100, 0, 0], [50, 67, 0, 0], [51, 133, 1, 1], [50, 100, 0, 0], [50, 67, 0, 0], [51, 133, 1, 1], [51, 133, 0, 0]], "boca_desenhada": {"quadro_up": 13, "versao": "v7", "fechada_de": {"quadro_up": 14, "deslocamento": [0, 0]}, "regra": "aberta e fechada: dois quadros vizinhos do Attack_1 do UP, intactos, sem as faiscas soltas"}},
+  "Growlmon": {"aseprite": "Growlmon_v02.aseprite", "caixa": [105, 77], "pe_idle": 67, "par": false, "idle": [34, 39], "modo": "par", "provisorio": false, "orientacao": "perfil", "boca": [84, 32], "boca_origem": "manual", "sem_par": "abre_em_outra_pose", "fonte": "acoes/bocas/Growlmon_par.aseprite", "fechada": [51], "aberta": [50], "carne": [82, 28], "seq": [[51, 133, 0, 0], [50, 100, 0, 0], [50, 67, 0, 0], [51, 133, 1, 1], [50, 100, 0, 0], [50, 67, 0, 0], [51, 133, 1, 1], [51, 133, 0, 0]], "boca_par": {"tipo": "levada", "aberta_up": 2, "fechada_up": 34, "mesma_pose": false, "confianca": "media"}},
+  "Guilmon": {"aseprite": "Guilmon_v02.aseprite", "caixa": [75, 65], "pe_idle": 56, "par": true, "idle": [31, 36], "modo": "par", "provisorio": false, "orientacao": "perfil", "fechada": [12, 13], "aberta": [9, 7], "boca": [67, 27], "boca_origem": "auto", "carne": [63, 29], "seq": [[12, 133, 0, 0], [9, 100, 0, 0], [7, 67, 0, 0], [12, 133, 1, 1], [9, 100, 0, 0], [7, 67, 0, 0], [13, 133, 1, 1], [12, 133, 0, 0]]},
+  "HerculesKabuterimon": {"aseprite": "HerculesKabuterimon_v02.aseprite", "caixa": [177, 163], "pe_idle": 149, "par": false, "idle": [42, 53], "modo": "par", "provisorio": false, "orientacao": "frente", "boca": [123, 107], "boca_origem": "manual", "sem_par": "sempre_aberta", "fonte": "acoes/bocas/HerculesKabuterimon_par.aseprite", "fechada": [81], "aberta": [80], "carne": [121, 103], "seq": [[81, 133, 0, 0], [80, 100, 0, 0], [80, 67, 0, 0], [81, 133, 1, 1], [80, 100, 0, 0], [80, 67, 0, 0], [81, 133, 1, 1], [81, 133, 0, 0]], "boca_par": {"tipo": "sempre_aberta", "aberta_up": 44, "fechada_up": 42, "mesma_pose": true, "confianca": "alta"}},
+  "Ikkakumon": {"aseprite": "Ikkakumon_v02.aseprite", "caixa": [104, 81], "pe_idle": 69, "par": false, "idle": [32, 37], "modo": "prova1", "provisorio": false, "orientacao": "frente", "boca": [65, 40], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "sem_boca"},
+  "Imperialdramon_DragonMode": {"aseprite": "Imperialdramon_DragonMode_v02.aseprite", "caixa": [213, 192], "pe_idle": 170, "par": false, "idle": [39, 44], "modo": "par", "provisorio": false, "orientacao": "perfil", "boca": [177, 137], "boca_origem": "manual", "sem_par": "abre_em_outra_pose", "fonte": "acoes/bocas/Imperialdramon_DragonMode_par.aseprite", "fechada": [56], "aberta": [55], "carne": [175, 133], "seq": [[56, 133, 0, 0], [55, 100, 0, 0], [55, 67, 0, 0], [56, 133, 1, 1], [55, 100, 0, 0], [55, 67, 0, 0], [56, 133, 1, 1], [56, 133, 0, 0]], "boca_par": {"tipo": "par", "aberta_up": 43, "fechada_up": 41, "mesma_pose": true, "confianca": "alta"}},
+  "Imperialdramon_FighterMode": {"aseprite": "Imperialdramon_FighterMode_v02.aseprite", "caixa": [213, 139], "pe_idle": 120, "par": false, "idle": [39, 44], "modo": "prova1", "provisorio": false, "orientacao": "frente", "boca": [131, 51], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "sem_boca"},
+  "Kabuterimon": {"aseprite": "Kabuterimon_v02.aseprite", "caixa": [132, 111], "pe_idle": 97, "par": false, "idle": [41, 46], "modo": "par", "provisorio": false, "orientacao": "frente", "boca": [99, 51], "boca_origem": "manual", "sem_par": "abre_em_outra_pose", "fonte": "acoes/bocas/Kabuterimon_par.aseprite", "fechada": [62], "aberta": [61], "carne": [97, 47], "seq": [[62, 133, 0, 0], [61, 100, 0, 0], [61, 67, 0, 0], [62, 133, 1, 1], [61, 100, 0, 0], [61, 67, 0, 0], [62, 133, 1, 1], [62, 133, 0, 0]], "boca_par": {"tipo": "levada", "aberta_up": 41, "fechada_up": 2, "mesma_pose": false, "confianca": "baixa"}},
+  "Koromon": {"aseprite": "Koromon_v02.aseprite", "caixa": [113, 92], "pe_idle": 74, "par": false, "idle": [38, 43], "modo": "par", "provisorio": false, "orientacao": "frente", "boca": [78, 68], "boca_origem": "manual", "sem_par": "abre_em_outra_pose", "fonte": "acoes/bocas/Koromon_par.aseprite", "fechada": [55], "aberta": [54], "carne": [76, 64], "seq": [[55, 133, 0, 0], [54, 100, 0, 0], [54, 67, 0, 0], [55, 133, 1, 1], [54, 100, 0, 0], [54, 67, 0, 0], [55, 133, 1, 1], [55, 133, 0, 0]], "boca_par": {"tipo": "levada", "aberta_up": 47, "fechada_up": 38, "mesma_pose": false, "confianca": "media"}},
+  "Kyubimon": {"aseprite": "Kyubimon_v02.aseprite", "caixa": [140, 99], "pe_idle": 86, "par": false, "idle": [39, 44], "modo": "prova1", "provisorio": false, "orientacao": "perfil", "boca": [119, 63], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "sem_boca"},
+  "Lillymon": {"aseprite": "Lillymon_v02.aseprite", "caixa": [129, 103], "pe_idle": 92, "par": false, "idle": [43, 50], "modo": "prova1", "provisorio": false, "orientacao": "frente", "boca": [82, 56], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "sem_boca"},
+  "MagnaAngemon": {"aseprite": "MagnaAngemon_v02.aseprite", "caixa": [185, 171], "pe_idle": 156, "par": false, "idle": [45, 50], "modo": "prova1", "provisorio": false, "orientacao": "frente", "boca": [114, 84], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "sem_boca"},
+  "Magnadramon": {"aseprite": "Magnadramon_v02.aseprite", "caixa": [150, 128], "pe_idle": 112, "par": false, "idle": [42, 53], "modo": "par", "provisorio": false, "orientacao": "perfil", "boca": [139, 49], "boca_origem": "manual", "sem_par": "abre_em_outra_pose", "fonte": "acoes/bocas/Magnadramon_par.aseprite", "fechada": [65], "aberta": [64], "carne": [137, 45], "seq": [[65, 133, 0, 0], [64, 100, 0, 0], [64, 67, 0, 0], [65, 133, 1, 1], [64, 100, 0, 0], [64, 67, 0, 0], [65, 133, 1, 1], [65, 133, 0, 0]], "boca_par": {"tipo": "par", "aberta_up": 48, "fechada_up": 44, "mesma_pose": true, "confianca": "media"}},
+  "MegaGargomon": {"aseprite": "MegaGargomon_v02.aseprite", "caixa": [186, 149], "pe_idle": 127, "par": false, "idle": [30, 35], "modo": "prova1", "provisorio": false, "orientacao": "frente", "boca": [108, 39], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "sem_boca"},
+  "MegaKabuterimon": {"aseprite": "MegaKabuterimon_v02.aseprite", "caixa": [191, 132], "pe_idle": 112, "par": false, "idle": [36, 41], "modo": "par", "provisorio": false, "orientacao": "frente", "boca": [79, 108], "boca_origem": "manual", "sem_par": "sempre_aberta", "fonte": "acoes/bocas/MegaKabuterimon_par.aseprite", "fechada": [57], "aberta": [56], "carne": [77, 104], "seq": [[57, 133, 0, 0], [56, 100, 0, 0], [56, 67, 0, 0], [57, 133, 1, 1], [56, 100, 0, 0], [56, 67, 0, 0], [57, 133, 1, 1], [57, 133, 0, 0]], "boca_par": {"tipo": "levada", "aberta_up": 39, "fechada_up": 19, "mesma_pose": false, "confianca": "media"}},
+  "MegaSeadramon": {"aseprite": "MegaSeadramon_v02.aseprite", "caixa": [205, 144], "pe_idle": 121, "par": false, "idle": [29, 35], "modo": "par", "provisorio": false, "orientacao": "perfil", "boca": [167, 60], "boca_origem": "manual", "sem_par": "sempre_aberta", "fonte": "acoes/bocas/MegaSeadramon_par.aseprite", "fechada": [45], "aberta": [44], "carne": [165, 56], "seq": [[45, 133, 0, 0], [44, 100, 0, 0], [44, 67, 0, 0], [45, 133, 1, 1], [44, 100, 0, 0], [44, 67, 0, 0], [45, 133, 1, 1], [45, 133, 0, 0]], "boca_par": {"tipo": "sempre_aberta", "aberta_up": 29, "fechada_up": 35, "mesma_pose": true, "confianca": "media"}},
+  "MetalGarurumon": {"aseprite": "MetalGarurumon_v02.aseprite", "caixa": [159, 108], "pe_idle": 95, "par": false, "idle": [40, 45], "modo": "par", "provisorio": false, "orientacao": "perfil", "boca": [126, 63], "boca_origem": "manual", "sem_par": "abre_em_outra_pose", "fonte": "acoes/bocas/MetalGarurumon_par.aseprite", "fechada": [57], "aberta": [56], "carne": [124, 59], "seq": [[57, 133, 0, 0], [56, 100, 0, 0], [56, 67, 0, 0], [57, 133, 1, 1], [56, 100, 0, 0], [56, 67, 0, 0], [57, 133, 1, 1], [57, 133, 0, 0]], "boca_par": {"tipo": "levada", "aberta_up": 9, "fechada_up": 40, "mesma_pose": false, "confianca": "media"}},
+  "MetalGreymon": {"aseprite": "MetalGreymon_v02.aseprite", "caixa": [176, 111], "pe_idle": 98, "par": false, "idle": [36, 41], "modo": "prova1", "provisorio": false, "orientacao": "perfil", "boca": [124, 53], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "sem_boca"},
+  "MetalSeadramon": {"aseprite": "MetalSeadramon_v02.aseprite", "caixa": [218, 210], "pe_idle": 180, "par": true, "idle": [30, 41], "modo": "par", "provisorio": false, "orientacao": "perfil", "fechada": [15], "aberta": [10, 12, 13], "boca": [192, 72], "boca_origem": "auto", "carne": [190, 74], "seq": [[15, 133, 0, 0], [10, 100, 0, 0], [12, 67, 0, 0], [15, 133, 1, 1], [13, 100, 0, 0], [10, 67, 0, 0], [15, 133, 1, 1], [15, 133, 0, 0]]},
+  "Paildramon": {"aseprite": "Paildramon_v02.aseprite", "caixa": [165, 121], "pe_idle": 105, "par": false, "idle": [42, 47], "modo": "prova1", "provisorio": false, "orientacao": "frente", "boca": [111, 38], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "sem_boca"},
+  "Palmon": {"aseprite": "Palmon_v02.aseprite", "caixa": [145, 70], "pe_idle": 61, "par": true, "idle": [37, 44], "modo": "prova1", "provisorio": false, "orientacao": "frente", "boca": [82, 41], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "par_fraco"},
+  "Patamon": {"aseprite": "Patamon_v02.aseprite", "caixa": [131, 99], "pe_idle": 81, "par": true, "idle": [41, 46], "modo": "par", "provisorio": false, "orientacao": "perfil", "fechada": [12, 13], "aberta": [57, 58], "boca": [85, 49], "boca_origem": "manual", "carne": [83, 47], "seq": [[12, 133, 0, 0], [57, 100, 0, 0], [58, 67, 0, 0], [12, 133, 1, 1], [57, 100, 0, 0], [58, 67, 0, 0], [13, 133, 1, 1], [12, 133, 0, 0]], "fonte": "acoes/bocas/Patamon_olhos.aseprite", "olhos_do_idle": {"idle": 41, "quadros": {"11": 57, "35": 58}, "regra": "o quadro da boca com os olhos do Idle no lugar; a boca e o resto do quadro sao os do UP"}},
+  "Phoenixmon": {"aseprite": "Phoenixmon_v02.aseprite", "caixa": [194, 163], "pe_idle": 146, "par": false, "idle": [43, 50], "modo": "par", "provisorio": false, "orientacao": "perfil", "boca": [163, 108], "boca_origem": "manual", "sem_par": "sempre_aberta", "fonte": "acoes/bocas/Phoenixmon_par.aseprite", "fechada": [62], "aberta": [61], "carne": [161, 104], "seq": [[62, 133, 0, 0], [61, 100, 0, 0], [61, 67, 0, 0], [62, 133, 1, 1], [61, 100, 0, 0], [61, 67, 0, 0], [62, 133, 1, 1], [62, 133, 0, 0]], "boca_par": {"tipo": "levada", "aberta_up": 47, "fechada_up": 55, "mesma_pose": false, "confianca": "media"}},
+  "Rapidmon": {"aseprite": "Rapidmon_v02.aseprite", "caixa": [169, 131], "pe_idle": 116, "par": false, "idle": [46, 51], "modo": "prova1", "provisorio": false, "orientacao": "frente", "boca": [113, 61], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "sem_boca"},
+  "Rosemon": {"aseprite": "Rosemon_v02.aseprite", "caixa": [155, 123], "pe_idle": 112, "par": false, "idle": [55, 62], "modo": "prova1", "provisorio": false, "orientacao": "frente", "boca": [115, 44], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "sem_boca"},
+  "Sakuyamon": {"aseprite": "Sakuyamon_v02.aseprite", "caixa": [118, 118], "pe_idle": 102, "par": false, "idle": [39, 43], "modo": "prova1", "provisorio": false, "orientacao": "frente", "boca": [75, 39], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "sem_boca"},
+  "Seadramon": {"aseprite": "Seadramon_v02.aseprite", "caixa": [225, 127], "pe_idle": 105, "par": false, "idle": [22, 27], "modo": "par", "provisorio": false, "orientacao": "perfil", "boca": [142, 62], "boca_origem": "manual", "sem_par": "sempre_aberta", "fonte": "acoes/bocas/Seadramon_par.aseprite", "fechada": [38], "aberta": [37], "carne": [140, 58], "seq": [[38, 133, 0, 0], [37, 100, 0, 0], [37, 67, 0, 0], [38, 133, 1, 1], [37, 100, 0, 0], [37, 67, 0, 0], [38, 133, 1, 1], [38, 133, 0, 0]], "boca_par": {"tipo": "cerrar", "aberta_up": 22, "fechada_up": 22, "mesma_pose": true, "confianca": "alta"}},
+  "Seraphimon": {"aseprite": "Seraphimon_v02.aseprite", "caixa": [155, 141], "pe_idle": 128, "par": false, "idle": [33, 38], "modo": "prova1", "provisorio": false, "orientacao": "frente", "boca": [108, 47], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "sem_boca"},
+  "Shakkoumon": {"aseprite": "Shakkoumon_v02.aseprite", "caixa": [124, 127], "pe_idle": 108, "par": false, "idle": [37, 43], "modo": "prova1", "provisorio": false, "orientacao": "frente", "boca": [66, 53], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "sem_boca"},
+  "Silphymon": {"aseprite": "Silphymon_v02.aseprite", "caixa": [139, 115], "pe_idle": 104, "par": false, "idle": [34, 39], "modo": "prova1", "provisorio": false, "orientacao": "frente", "boca": [73, 44], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "sem_boca"},
+  "SlashAngemon": {"aseprite": "SlashAngemon_v02.aseprite", "caixa": [218, 203], "pe_idle": 187, "par": false, "idle": [42, 47], "modo": "prova1", "provisorio": false, "orientacao": "frente", "boca": [120, 118], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "sem_boca"},
+  "Stingmon": {"aseprite": "Stingmon_v02.aseprite", "caixa": [160, 90], "pe_idle": 79, "par": false, "idle": [41, 46], "modo": "prova1", "provisorio": false, "orientacao": "frente", "boca": [76, 35], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "sem_boca"},
+  "Tanemon": {"aseprite": "Tanemon_v02.aseprite", "caixa": [109, 67], "pe_idle": 56, "par": true, "idle": [37, 44], "modo": "par", "provisorio": false, "orientacao": "frente", "fechada": [1, 27], "aberta": [5, 16, 26], "boca": [79, 55], "boca_origem": "manual", "carne": [77, 51], "seq": [[1, 133, 0, 0], [5, 100, 0, 0], [16, 67, 0, 0], [1, 133, 1, 1], [26, 100, 0, 0], [5, 67, 0, 0], [27, 133, 1, 1], [1, 133, 0, 0]]},
+  "Taomon": {"aseprite": "Taomon_v02.aseprite", "caixa": [131, 113], "pe_idle": 98, "par": false, "idle": [39, 44], "modo": "prova1", "provisorio": false, "orientacao": "frente", "boca": [64, 38], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "sem_boca"},
+  "Togemon": {"aseprite": "Togemon_v02.aseprite", "caixa": [122, 100], "pe_idle": 85, "par": true, "idle": [40, 47], "modo": "par", "provisorio": false, "orientacao": "frente", "fechada": [58, 59], "aberta": [1, 2], "boca": [80, 57], "boca_origem": "manual", "carne": [78, 53], "seq": [[58, 133, 0, 0], [1, 100, 0, 0], [2, 67, 0, 0], [58, 133, 1, 1], [1, 100, 0, 0], [2, 67, 0, 0], [59, 133, 1, 1], [58, 133, 0, 0]], "fonte": "acoes/bocas/Togemon_olhos.aseprite", "olhos_do_idle": {"idle": 40, "quadros": {"6": 58, "7": 59}, "regra": "o quadro da boca com os olhos do Idle no lugar; a boca e o resto do quadro sao os do UP"}},
+  "Tsunomon": {"aseprite": "Tsunomon_v02.aseprite", "caixa": [98, 74], "pe_idle": 63, "par": true, "idle": [28, 33], "modo": "par", "provisorio": false, "orientacao": "frente", "fechada": [10], "aberta": [6, 7], "boca": [64, 60], "boca_origem": "manual", "carne": [62, 56], "seq": [[10, 133, 0, 0], [6, 100, 0, 0], [7, 67, 0, 0], [10, 133, 1, 1], [6, 100, 0, 0], [7, 67, 0, 0], [10, 133, 1, 1], [10, 133, 0, 0]]},
+  "Valkyrimon": {"aseprite": "Valkyrimon_v02.aseprite", "caixa": [205, 187], "pe_idle": 173, "par": false, "idle": [52, 57], "modo": "prova1", "provisorio": false, "orientacao": "frente", "boca": [110, 106], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "sem_boca"},
+  "Veemon": {"aseprite": "Veemon_v02.aseprite", "caixa": [155, 109], "pe_idle": 100, "par": false, "idle": [32, 37], "modo": "par", "provisorio": false, "orientacao": "frente", "boca": [65, 74], "boca_origem": "manual", "sem_par": "abre_em_outra_pose", "fonte": "acoes/bocas/Veemon_par.aseprite", "fechada": [49], "aberta": [48], "carne": [63, 70], "seq": [[49, 133, 0, 0], [48, 100, 0, 0], [48, 67, 0, 0], [49, 133, 1, 1], [48, 100, 0, 0], [48, 67, 0, 0], [49, 133, 1, 1], [49, 133, 0, 0]], "boca_par": {"tipo": "levada", "aberta_up": 14, "fechada_up": 32, "mesma_pose": false, "confianca": "media"}},
+  "Vikemon": {"aseprite": "Vikemon_v02.aseprite", "caixa": [178, 155], "pe_idle": 134, "par": false, "idle": [33, 38], "modo": "par", "provisorio": false, "orientacao": "frente", "boca": [106, 58], "boca_origem": "manual", "sem_par": "abre_em_outra_pose", "fonte": "acoes/bocas/Vikemon_par.aseprite", "fechada": [50], "aberta": [49], "carne": [104, 54], "seq": [[50, 133, 0, 0], [49, 100, 0, 0], [49, 67, 0, 0], [50, 133, 1, 1], [49, 100, 0, 0], [49, 67, 0, 0], [50, 133, 1, 1], [50, 133, 0, 0]], "boca_par": {"tipo": "levada", "aberta_up": 5, "fechada_up": 33, "mesma_pose": false, "confianca": "media"}},
+  "WarGreymon": {"aseprite": "WarGreymon_v02.aseprite", "caixa": [197, 149], "pe_idle": 134, "par": false, "idle": [43, 48], "modo": "prova1", "provisorio": false, "orientacao": "frente", "boca": [128, 70], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "sem_boca"},
+  "Wargrowlmon": {"aseprite": "Wargrowlmon_v02.aseprite", "caixa": [139, 108], "pe_idle": 93, "par": false, "idle": [48, 53], "modo": "par", "provisorio": false, "orientacao": "perfil", "boca": [95, 26], "boca_origem": "manual", "sem_par": "abre_em_outra_pose", "fonte": "acoes/bocas/Wargrowlmon_par.aseprite", "fechada": [65], "aberta": [64], "carne": [93, 22], "seq": [[65, 133, 0, 0], [64, 100, 0, 0], [64, 67, 0, 0], [65, 133, 1, 1], [64, 100, 0, 0], [64, 67, 0, 0], [65, 133, 1, 1], [65, 133, 0, 0]], "boca_par": {"tipo": "par", "aberta_up": 37, "fechada_up": 45, "mesma_pose": false, "confianca": "media"}},
+  "WereGarurumon": {"aseprite": "WereGarurumon_v02.aseprite", "caixa": [207, 175], "pe_idle": 151, "par": false, "idle": [40, 45], "modo": "prova1", "provisorio": false, "orientacao": "perfil", "boca": [139, 98], "boca_origem": "manual", "escala_inclinacao": 1, "recuo_carne": 0, "sem_par": "abre_em_outra_pose"},
+  "Zudomon": {"aseprite": "Zudomon_v02.aseprite", "caixa": [177, 148], "pe_idle": 130, "par": false, "idle": [32, 37], "modo": "par", "provisorio": false, "orientacao": "frente", "boca": [112, 65], "boca_origem": "manual", "sem_par": "abre_em_outra_pose", "fonte": "acoes/bocas/Zudomon_par.aseprite", "fechada": [49], "aberta": [48], "carne": [110, 61], "seq": [[49, 133, 0, 0], [48, 100, 0, 0], [48, 67, 0, 0], [49, 133, 1, 1], [48, 100, 0, 0], [48, 67, 0, 0], [49, 133, 1, 1], [49, 133, 0, 0]], "boca_par": {"tipo": "levada", "aberta_up": 5, "fechada_up": 32, "mesma_pose": false, "confianca": "media"}}
+ }
+}
