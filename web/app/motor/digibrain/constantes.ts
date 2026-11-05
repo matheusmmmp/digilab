@@ -83,6 +83,7 @@ export const CONFIG_DIGIBRAIN_LAB = {
   modula_g_apr: false,
   p1: true,
   p2: true,
+  passeio: false,
   persistencia: true,
   redecidir_evento: false,
 } as const;

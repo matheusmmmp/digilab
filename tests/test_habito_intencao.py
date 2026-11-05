@@ -150,7 +150,8 @@ def test_todo_fim_que_a_estado_py_escreve_e_conhecido_ou_e_da_l2_desligada():
     literais = _literais_de_fim()
     assert {"meta", "trocou", "sumiu", "desistiu", "achou"} <= literais
     conhecidos = hi.fins_conhecidos("M2c")
-    assert literais - conhecidos == set(mod_estado.FINS_SUSPENSA)          # o resto e da L-2, que fica desligada nos tres bracos
+    # o resto e da L-2 e o "interrompido" e do passeio (AN-2): as duas ficam desligadas nos tres bracos
+    assert literais - conhecidos == set(mod_estado.FINS_SUSPENSA) | {"interrompido"}
     assert not set(mod_estado.FINS_SUSPENSA) & conhecidos
 
 

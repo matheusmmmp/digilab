@@ -65,7 +65,18 @@ O M-ESTADO confere os eventos no comeco da decisao (`eventos`, antes do contexto
   - E-TETO: o candidato ja foi segurado `n_seg_max` decisoes seguidas.
 Sem evento, o candidato vai ao M-ARB, que o escolhe sem sorteio; a escolha segurada chega ao `escolhida` como qualquer escolha (o C, o `n`,
 os fins, o F e o credito sao os de hoje). `registrar_redecisao` guarda o candidato da decisao seguinte e o `n_seg`. Desligada, nada disso
-existe. Sem rng."""
+existe. Sem rng.
+
+**O passeio** (docs/TAREFA_V3_ACOES_NOVAS.md, secoes 3.1 a 3.3; a subchave `passeio`; PROPOSTO e SEM FONTE como valor): o vagar que segura o
+destino. Na decisao em que o `explorar/vagar` e escolhido sem urgencia, o M-ADAPT entrega o ponto que o motor sorteou (`abrir_passeio`) e a
+opcao de uma decisao vira a intencao I* = (`explorar`, `passeio`, (x, y)); nas decisoes seguintes a unidade do passeio, com o mesmo ponto,
+ocupa o lugar do vagar. Os fins sao os do lugar lembrado (`meta`, `trocou`, `desistiu`) e um novo:
+  - a guarda (AN-4): a urgencia maxima de fome, higiene, energia e saude acima do `urgencia_lambda` zera a persistencia do passeio
+    (`contexto`) e o acaba como "interrompido" no comeco da decisao (`cuidar_passeio`); o F nao sobe (AN-5). O reflexo do sono tem
+    prioridade: acaba o passeio como "trocou", e nao como "interrompido". Com urgencia, o vagar nao abre passeio (fica uma opcao de uma decisao);
+  - o credito (AN-6): com um gesto do dono (`GESTOS_DO_DONO`) no intervalo do passeio, a opcao nao e entregue ao P2 e o fim traz
+    `credito_descartado = "gesto"`.
+Desligada, nada disso existe."""
 from __future__ import annotations
 
 from ..config import CONFIG_DIGIBRAIN_INATOS, Config, ConfigDigibrain, ConfigDigibrainInatos
@@ -77,6 +88,9 @@ BUSCA = ("comer", "cheiro")                      # a intencao da DX-4, so com a 
 IDA = ("comer", "comida")
 SUSPENDEM = (BUSCA, IDA)                         # a L-2 (LS-2): os tipos que o reflexo do sono suspende, com `intencao_suspensa`
 FINS_SUSPENSA = ("saciou", "expirou", "superada")  # os fins novos da L-2 ("sumiu" e "achou" ja existem)
+PASSEIO = ("explorar", "passeio")                # o passeio (AN-2): a intencao do vagar que segura o destino, so com a subchave `passeio`
+NECESSIDADES_DO_PASSEIO = ("fome", "higiene", "energia", "saude")   # AN-4: as urgencias que zeram a persistencia e acabam o passeio
+GESTOS_DO_DONO = ("acariciar", "elogiar", "tapa", "repreender")      # AN-6: o carinho e o tapa (o `elogiar` e o `repreender` do dono sintetico)
 EVENTOS = ("E-REFLEXO", "E-RECEPTOR", "E-MUNDO", "E-FIM", "E-TETO")   # a C3 (RD-3 e RD-4), na ordem do registro
 
 
@@ -118,11 +132,24 @@ class EstadoDinamico:
         self.seguradas = 0
         self.com_evento = {e: 0 for e in EVENTOS}
         self.tetos = 0
+        self.passeios = 0                     # o passeio (AN-2): os abertos e as opcoes sem credito pelo gesto do dono (AN-6)
+        self.descartados = 0
+        self.urgente = False                  # a guarda do passeio nesta decisao (AN-4)
+        if self.cd.passeio:
+            self.fins["interrompido"] = 0
 
-    def contexto(self) -> dict:
+    def _urgente(self, urgencias: dict) -> bool:
+        return max((urgencias.get(r, 0) for r in NECESSIDADES_DO_PASSEIO), default=0) > self.p.urgencia_lambda
+
+    def contexto(self, urgencias: dict | None = None) -> dict:
+        """o contexto da decisao; `urgencias` so com a subchave `passeio` (a guarda: persistencia 0 no passeio com urgencia)"""
         self.F = self.F - mul(self.k_f_desce, self.F, self.S)
         h = {}
-        if self.I is not None and self.cd.persistencia:
+        if self.cd.passeio:
+            if urgencias is None:
+                raise RuntimeError("M-ESTADO: o contexto do passeio pede as urgencias")
+            self.urgente = self._urgente(urgencias)
+        if self.I is not None and self.cd.persistencia and not (self.urgente and self.I["chave"][:2] == PASSEIO):
             h[self.I["chave"]] = mul(self.p.w_pers, self.I["C"], self.S)
         return {"F": self.F, "persistencia": h, "I": None if self.I is None else self.I["chave"],
                 "C": 0 if self.I is None else self.I["C"], "n_sp": 0 if self.I is None else self.I["n_sp"]}
@@ -133,7 +160,44 @@ class EstadoDinamico:
             self.F = self.F + mul(self.k_f_sobe, self.S - self.F, self.S)
         self.fins[motivo] += 1
         self.I = None
-        return {**I, "C": 0, "motivo": motivo, "meta": meta}
+        out = {**I, "C": 0, "motivo": motivo, "meta": meta}
+        if I.get("gesto"):                    # AN-6: o gesto do dono no intervalo do passeio; nada vai ao P2
+            out["credito"] = False
+            out["credito_descartado"] = "gesto"
+            self.descartados += 1
+        return out
+
+    # ------------------------------------------------------------ o passeio: o vagar que segura o destino
+    def cuidar_passeio(self, urgencias: dict, reflexo: bool, gesto: bool) -> list[dict]:
+        """o cuidado do passeio no comeco da decisao (antes do contexto): marca o gesto do dono no intervalo e, com urgencia sem o reflexo
+        do sono, acaba o passeio como "interrompido" (o F nao sobe). Devolve as opcoes que acabaram aqui. So com `passeio`; sem rng."""
+        if not self.cd.passeio:
+            raise RuntimeError("M-ESTADO: cuidar_passeio sem a subchave passeio")
+        I = self.I
+        if I is None or I["chave"][:2] != PASSEIO:
+            return []
+        if gesto:
+            I["gesto"] = True
+        if reflexo or not self._urgente(urgencias):
+            return []
+        return [self._acabar("interrompido", False, frustra=False)]
+
+    def abrir_passeio(self, ponto: tuple, d: int | None) -> tuple | None:
+        """o vagar escolhido vira o passeio, com o ponto que o motor sorteou (`d` = a distancia a ele); sem urgencia. Devolve a chave nova
+        ou None (com urgencia, o vagar fica uma opcao de uma decisao)"""
+        if not self.cd.passeio:
+            raise RuntimeError("M-ESTADO: abrir_passeio sem a subchave passeio")
+        op = self.opcao
+        if op is None or self.I is not None or op["chave"][:2] != ("explorar", "vagar"):
+            raise RuntimeError("M-ESTADO: abrir_passeio fora da opcao do vagar")
+        if self.urgente:
+            return None
+        op["chave"] = (PASSEIO[0], PASSEIO[1], tuple(ponto))
+        op["d"] = d
+        self.I = {**op, "C": mul(self.k_c, self.S, self.S), "n_sp": 0}
+        self.opcao = self.I
+        self.passeios += 1
+        return op["chave"]
 
     # ------------------------------------------------------------ a L-2: a intencao suspensa no reflexo do sono
     def _acabar_suspensa(self, motivo: str, frustra: bool) -> dict:
@@ -344,6 +408,10 @@ class EstadoDinamico:
             out["guardada"] = None if g is None else {"chave": chave_json(g["chave"]), "inicio": g["inicio"], "n": g["n"], "r": g["r"]}
             if I is not None and I.get("composta"):
                 out["I"]["composta"] = True
+        if self.cd.passeio:                             # so com o passeio (desligada, o estado e o de hoje, byte a byte)
+            out["passeio"] = {"abertos": self.passeios, "credito_descartado": self.descartados}
+            if I is not None and I.get("gesto"):
+                out["I"]["gesto"] = True
         if self.cd.credito_corrida:                     # so com a C2 (desligada, o estado e o de hoje, byte a byte)
             c = self.corrida
             out["corrida"] = None if c is None else {"b": c["b"], "inicio": c["inicio"], "n": c["n"], "r": c["r"]}
