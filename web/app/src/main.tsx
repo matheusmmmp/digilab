@@ -16,6 +16,7 @@ import { iniciarTempo } from "./tempo.ts";
 import { CHAVE_GUARDADOS, semearGuardados } from "./pets.ts";
 import { descartarPetsAntigos } from "./tamer.ts";
 import { ligarEscala } from "../motor/index.ts";
+import { reacaoAtual } from "./telas/pet/cenaAcao.ts";
 import { CENA } from "./telas/pet/cenaEstado.ts";
 import { lugaresNomeados } from "./telas/pet/vistaMundo.ts";
 import "./estilo/tokens.css";
@@ -70,7 +71,8 @@ const lerMundo = () => {
     lugares: lugaresNomeados(mu), bola: mu.bolaEm(m.e.tick), rolagens: mu.rolagens.length };
 };
 Object.assign(window, { __digilab: { assinatura: () => jogoAtual().motor.assinatura(), registro: () => textoSave(jogoAtual().motor), tick: () => jogoAtual().motor.e.tick, digibrain: () => jogoAtual().motor.digibrain(),
-  mundo: lerMundo, cena: () => CENA.mundo && { pet: [...CENA.mundo.pet], bola: CENA.mundo.bola ?? null, modo3d: CENA.modo3d }, cenaPara: (x: number, y: number) => CENA.mundo?.paraTela(x, y) ?? null } });
+  mundo: lerMundo, cena: () => CENA.mundo && { pet: [...CENA.mundo.pet], bola: CENA.mundo.bola ?? null, modo3d: CENA.modo3d, ret: CENA.ret },
+  reacao: () => reacaoAtual(performance.now()), cenaPara: (x: number, y: number) => CENA.mundo?.paraTela(x, y) ?? null } });
 /* varios pets: no primeiro acesso a esta versao, a escada de pets guardados de exemplo (fraco -> forte), depois da
    primeira pintura para nao atrasar a abertura */
 setTimeout(() => { try { semearGuardados(); } catch (err) { console.error("pets guardados de exemplo:", err); } }, 400);

@@ -7,14 +7,15 @@ import { OVO, chaveSprite, corDominante } from "../../../motor/index.ts";
 import { zoomAtual } from "../../escala.ts";
 import { atlasAtual, desenharSprite, dimSprite, escalaSprite, quadroAgora, type AtlasOk } from "../../atlas.ts";
 import { S, desenharGrade, gradeDe, paleta } from "../../grades.ts";
+import { velocidadeAtual } from "../../tempo.ts";
 import { flashAtual } from "../../flash.ts";
 import { balancoOvo, jogoAtual, passarQuadroOvo } from "../../jogo.ts";
 import { CENA } from "./cenaEstado.ts";
 import { alturaSono, desenharZz } from "./sono.ts";
 import { fomeNoEmote } from "../../hudPet.ts";
+import { EMOTE_ATLAS as EMOTE_ICONE, EMOTE_GRADE as GRADE_DO_EMOTE, desenharEfeitos, emoteAgora, type EntradaCena } from "./cenaAcao.ts";
 
 const ICONE_ACAO: Record<string, string> = { dormir: "zz", chamar_atencao: "exclam", emburrar: "raiva", brincar: "nota", explorar: "pergunta", comer: "carne" };
-const EMOTE_ICONE: Record<string, string> = { carne: "emoji_carne", nota: "emoji_nota", exclam: "emoji_exclam", coracao: "emoji_coracao" };
 
 /* icone rapido depois de uma acao do dono (1,4 s): src/flash.ts (o caminho compartilhado das acoes, src/acoes.ts, o dispara) */
 export { mostrarFlash } from "../../flash.ts";
@@ -84,7 +85,7 @@ function desenharPalco(cv: HTMLCanvasElement, cx: CanvasRenderingContext2D, quad
   desenharGrade(cx, grade, 0, 0, pal, nascendo > 0 ? {} : { olhosFechados: acao === "dormir" || (quadro % 17 === 0), espelho: acao === "explorar" && Math.cos(quadro / 3) < 0 });
   cx.setTransform(1, 0, 0, 1, 0, 0);
   if (nascendo > 0) { if (!CENA.coberto) passarQuadroOvo(); return; }
-  desenharIconeGrade(cx, g, x, y, larg * u);
+  desenharIconeGrade(cx, g, x, y, larg * u, alt * u);
   if (e.saude < .3) marcaSaude(cx, K);
 }
 
@@ -106,7 +107,7 @@ function desenharExtras3D(cx: CanvasRenderingContext2D, g: Geo): void {
   }
   cx.setTransform(1, 0, 0, 1, 0, 0);
   if (nascendo > 0) return;
-  if (a.tipo === "ok") desenharIcone(cx, a, g, r.x, r.y, r.w); else desenharIconeGrade(cx, g, r.x, r.y, r.w);
+  if (a.tipo === "ok") desenharIcone(cx, a, g, r.x, r.y, r.w, r.h); else desenharIconeGrade(cx, g, r.x, r.y, r.w, r.h);
   if (m.e.saude < .3) marcaSaude(cx, K);
 }
 
@@ -136,14 +137,22 @@ function desenharPetUp(cx: CanvasRenderingContext2D, a: AtlasOk, g: Geo, quadro:
     cx.restore();
     y += h * (1 - alt);
   }
-  desenharIcone(cx, a, g, x, y, w);
+  desenharIcone(cx, a, g, x, y, w, h);
   if (m.e.saude < .3) marcaSaude(cx, K);
 }
+/** a entrada da cena de acao (cenaAcao.ts) com o que o motor registrou agora */
+function entradaCena(): EntradaCena { const m = jogoAtual().motor; return { acao: m.acao, sujeira: m.e.sujeira, chave: String(m.semente) }; }
+/** o icone de agora: o flash do dono; a cena (o toque, o cocô, a acao do pet); a fome, so se a cena nao tem um */
+function iconeAgora(): string | null {
+  const m = jogoAtual().motor;
+  return flashAtual() ?? emoteAgora(entradaCena(), performance.now()) ?? (m.acao !== "dormir" && fomeNoEmote(m) ? "carne" : null);
+}
 /* icone sobre o pet: o da acao do dono (flash); emote do UP (2x) acima e a direita do sprite */
-function desenharIcone(cx: CanvasRenderingContext2D, a: AtlasOk, g: Geo, x: number, y: number, w: number): void {
+function desenharIcone(cx: CanvasRenderingContext2D, a: AtlasOk, g: Geo, x: number, y: number, w: number, h: number): void {
   const m = jogoAtual().motor, pal = paleta(corDominante(m.tracos)), K = g.K;
   /* sem acao do dono agora: a comida abaixo da metade poe a carne sobre a cabeca (hudPet.ts); o pet dormindo solta o "zz" (sono.ts) */
-  const icone: string | null = flashAtual() ?? (m.acao !== "dormir" && fomeNoEmote(m) ? "carne" : null);
+  const icone = iconeAgora();
+  desenharEfeitos(cx, K, x, y, w, h, entradaCena(), performance.now(), matchMedia("(prefers-reduced-motion: reduce)").matches, pal, velocidadeAtual() <= 0);
   if (!icone) { if (m.acao === "dormir") desenharZz(cx, K, x, y, w, performance.now(), matchMedia("(prefers-reduced-motion: reduce)").matches, pal); return; }
   if (EMOTE_ICONE[icone]) {
     const [pw0, ph0] = dimSprite(a.dados, EMOTE_ICONE[icone]), es = escalaSprite() * 2, pw = pw0 * es / K, ph = ph0 * es / K;
@@ -158,11 +167,12 @@ function desenharIcone(cx: CanvasRenderingContext2D, a: AtlasOk, g: Geo, x: numb
   cx.setTransform(1, 0, 0, 1, 0, 0);
 }
 /* sem atlas: icone em grade (o da acao do dono, ou o do que ele faz), acima e a direita do sprite de reserva */
-function desenharIconeGrade(cx: CanvasRenderingContext2D, g: Geo, x: number, y: number, w: number): void {
+function desenharIconeGrade(cx: CanvasRenderingContext2D, g: Geo, x: number, y: number, w: number, h: number): void {
   const m = jogoAtual().motor, pal = paleta(corDominante(m.tracos)), K = g.K;
-  const icone: string | null = flashAtual() ?? (m.acao !== "dormir" && fomeNoEmote(m) ? "carne" : ICONE_ACAO[m.acao] ?? null);
+  const icone: string | null = flashAtual() ?? emoteAgora(entradaCena(), performance.now()) ?? (m.acao !== "dormir" && fomeNoEmote(m) ? "carne" : ICONE_ACAO[m.acao] ?? null);
+  desenharEfeitos(cx, K, x, y, w, h, entradaCena(), performance.now(), matchMedia("(prefers-reduced-motion: reduce)").matches, pal, velocidadeAtual() <= 0);
   if (!icone) return;
-  const ic = S[icone]; if (!ic) throw new Error("icone desconhecido: " + icone);
+  const ic = S[GRADE_DO_EMOTE[icone] ?? icone]; if (!ic) throw new Error("icone desconhecido: " + icone);
   const bx = Math.min(g.W - 30, x + w - 4), by = Math.max(TOPO_LIVRE, y - 30);
   cx.setTransform(3 * K, 0, 0, 3 * K, 0, 0);
   cx.fillStyle = "#FFFFFF"; cx.fillRect(Math.round(bx / 3) - 1, Math.round(by / 3) - 1, 9, ic.length + 2);
