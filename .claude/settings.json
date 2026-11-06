@@ -21,7 +21,8 @@
     "Stop": [
       {
         "hooks": [
-          {"type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/h1b_engine_sha.py\"", "timeout": 30}
+          {"type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/h1b_engine_sha.py\"", "timeout": 30},
+          {"type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/h2_testes.py\"", "timeout": 660}
         ]
       }
     ]

@@ -177,7 +177,8 @@ def test_h3_push_sem_refspec_depende_do_branch(projeto):
 
 def test_proposta_e_os_hooks_ligados():
     """A configuração proposta existe e aponta os scripts que existem. Ligados no projeto, os que o Matheus escolheu: o H1, o H1b e o
-    H3 (2026-10-14, religados no #590); o H4, o H6 e o H9 (D-IA-7, 2026-11-06). O H2 fica desligado até a medida do Stop."""
+    H3 (2026-10-14, religados no #590); o H4, o H6 e o H9 (D-IA-7, 2026-11-06); o H2, depois da medida do Stop (2026-11-06). A
+    proposta e o projeto ficam iguais."""
     proposta = json.loads((RAIZ / "docs" / "propostas" / "hooks_settings.json").read_text(encoding="utf-8"))
     comandos = [h["command"] for evento in proposta["hooks"].values() for grupo in evento for h in grupo["hooks"]]
     assert sorted({Path(c.split("/.claude/hooks/")[1].rstrip('"')).name for c in comandos}) == \
@@ -186,8 +187,8 @@ def test_proposta_e_os_hooks_ligados():
     ativo = json.loads((RAIZ / ".claude" / "settings.json").read_text(encoding="utf-8"))
     ligados = [h["command"] for evento in ativo["hooks"].values() for grupo in evento for h in grupo["hooks"]]
     assert sorted({Path(c.split("/.claude/hooks/")[1].rstrip('"')).name for c in ligados}) == \
-        ["h1_engine.py", "h1b_engine_sha.py", "h3_main.py", "h4_autorizo.py", "h6_capturas.py", "h9_faixas.py"]
-    assert set(ligados) <= set(comandos)
+        ["h1_engine.py", "h1b_engine_sha.py", "h2_testes.py", "h3_main.py", "h4_autorizo.py", "h6_capturas.py", "h9_faixas.py"]
+    assert ativo == proposta
 
 
 # ------------------------------------------------------------------ INFRA_AGENTES E1 (docs/TAREFA_V3_INFRA_AGENTES.md, seção 3.1)

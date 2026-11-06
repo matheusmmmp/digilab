@@ -259,7 +259,7 @@ Worker: Claude Code, Opus 5.5, worktree `v3-infra-agentes-e1`, branch empilhado 
 
 - **O H2 estendido** (`.claude/hooks/h2_testes.py`): a lista fixa de replay (só com mudança em `digilab/` ou `experiments/bancada/`), os
   testes da frente pelo branch (o prefixo mais longo do nome que acha um `tests/test_<prefixo>*.py`) e o estouro do limite com código 2,
-  uma vez por sessão. **Continua desligado** (D-IA-7).
+  uma vez por sessão. **Ligado** pelo Matheus em 2026-11-06, depois da medida abaixo ("Sim, ligar o H2").
 - **O H1b** confere também as `FAIXAS_QUEIMADAS` do disco contra as do `origin/main` (o `sed` que o H9 não vê); sem `origin/main`, código 2
   com "rode git fetch".
 - **O H6** (`h6_capturas.py`): código 2 ao escrever em `*-snapshots/` e na pasta de `DIGILAB_CAPTURAS`, pela ferramenta ou pelo shell
@@ -267,7 +267,8 @@ Worker: Claude Code, Opus 5.5, worktree `v3-infra-agentes-e1`, branch empilhado 
   do Playwright (o `git push -u` passa).
 - **O H9** (`h9_faixas.py`): código 2 ao remover ou mudar uma faixa queimada, ou quando o texto depois não se lê; `ask` ao queimar uma
   nova no fim; as reservadas passam.
-- **Ligados** em `.claude/settings.json`: H1, H1b, H3, H4, H6 e H9; na proposta (`docs/propostas/hooks_settings.json`), também o H2.
+- **Ligados** em `.claude/settings.json`: H1, H1b, H2, H3, H4, H6 e H9, igual à proposta (`docs/propostas/hooks_settings.json`); o teste
+  confere que os dois arquivos são iguais.
 - **Testes:** `python -m pytest tests/test_hooks.py tests/test_hook_h4.py -q -p no:cacheprovider` → 77 passed (antes, 43 failed e 3
   passed sem os hooks).
 - **A medida do Stop** (o H2 estendido nesta worktree, com um arquivo temporário não rastreado e o limite levantado para medir; outra
