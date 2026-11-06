@@ -217,3 +217,10 @@ Matheus, 2026-11-05, nesta sessão (resposta "B, hooks antes"):
   (a prancha da B em `docs/pranchas/ux-pet/`, para o ok do Matheus antes de qualquer código), com os agentes (A2) entrando junto da P1.
 
 UX-3 a UX-8 continuam PROPOSTAS.
+
+## 9. Etapa A0: os hooks restaurados (2026-11-05)
+
+Branch `v3-hooks-a0`, empilhada sobre a `v3-ux-tela-pet`. `.claude/hooks/` (seis arquivos) e `.claude/settings.json` voltam iguais aos de
+`2586b0e^`, por `git checkout`, sem edição à mão. Com o merge, voltam a valer o H1, o H1b e o H3, que o Matheus ligou em 2026-10-14; o H2 e o
+H4 seguem desligados. O Matheus decidiu religar os três (2026-11-05, "Sim, religar"). `python -m pytest tests/test_hooks.py tests/test_hook_h4.py tests/test_conferir_saude.py -q`: 68 passed (antes, 43
+failed e 25 passed). Próxima: a A1.
