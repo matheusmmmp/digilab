@@ -128,7 +128,8 @@ from .events import (ACOES_BOLA, ACOES_FRUTAS, ACOES_MAO, ACOES_TROCA_ARVORES, F
                      LogDeEventos, fruta_dada, ler_deixar_bola, ler_deixar_comida, par_da_troca)
 from .events import deixar_bola as evento_deixar_bola
 from .events import deixar_fruta as evento_deixar_fruta
-from .events import ler_deixar_fruta
+from .events import LutaSemChave, ler_deixar_fruta, ler_resumo_luta
+from .events import resumo_luta as evento_resumo_luta
 from .events import deixar_comida as evento_deixar_comida
 from .frutas import MotorFrutas
 from .policy import Observacao, Transicao
@@ -1802,6 +1803,16 @@ class MotorMundo(MotorFrutas):
         self._log.anexar(evento)
         self._aplicar_deixar_fruta(*ler_deixar_fruta(evento))
 
+    def resumo_luta(self, rival: str, resultado: int, vida_perdida_s: int) -> None:
+        """O resumo pronto de uma luta (ponte da luta, PE1): vai ao log e ao corpo. So com o corpo e a ConfigLutaCorpo ligada."""
+        evento = evento_resumo_luta(self._estado.tick, rival, resultado, vida_perdida_s)
+        self._aplicar_resumo_luta(*ler_resumo_luta(evento))     # confere a chave antes de gravar no log
+        self._log.anexar(evento)
+
+    def _aplicar_resumo_luta(self, rival: str, resultado: int, vida_perdida_s: int) -> None:
+        """Sem o corpo (o MotorCorpo a sobrepoe), o evento `pl` nao existe: falha alto."""
+        raise LutaSemChave("o evento pl exige o corpo com ConfigLutaCorpo ligada (luta_corpo; ponte da luta, PE1)")
+
     def deixar_bola(self, x: int, y: int) -> None:
         if not self.cmf.ligada:
             raise MundoSemChave("deixar_bola com ConfigMundo.ligada = False")
@@ -1941,6 +1952,8 @@ def reproduzir_mundo(log: LogDeEventos, politica_fabrica: Callable, cfg: Config 
             motor._aplicar_deixar_bola(*ler_deixar_bola(evento))
         elif evento.tipo == "deixar_fruta":
             motor._aplicar_deixar_fruta(*ler_deixar_fruta(evento))
+        elif evento.tipo == "pl":
+            motor._aplicar_resumo_luta(*ler_resumo_luta(evento))
         else:
             raise ValueError(f"tipo de evento desconhecido no log do mundo: {evento.tipo!r}")
     motor._log = LogDeEventos([e for e in log if ate_tick is None or e.tick < ate_tick])

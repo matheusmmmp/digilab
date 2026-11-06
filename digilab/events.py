@@ -320,6 +320,34 @@ def ler_deixar_fruta(evento: Evento) -> tuple[str, int, int]:
     return (partes[0],) + _posicao_mundo(_inteiro_do_log(partes[1]), _inteiro_do_log(partes[2]))
 
 
+class LutaSemChave(ValueError):
+    """O resumo da luta (evento `pl`) num motor sem o corpo com ConfigLutaCorpo ligada (luta_corpo; ponte da luta, PE1)."""
+
+
+TIPO_PL = "pl"      # o resumo da luta (docs/TAREFA_V3_PONTE_LUTA.md, 3.4; PE1): so com ConfigLutaCorpo.ligada (luta_corpo)
+
+
+def resumo_luta(tick: int, rival: str, resultado: int, vida_perdida_s: int) -> Evento:
+    """O resumo pronto de uma luta, em inteiros: o rival (o rotulo), o resultado (-1, 0, +1) e a vida perdida em S. O Python nao simula a
+    luta: recebe o que ela deu. O valor e `rival|resultado|vida_perdida_s`."""
+    if not isinstance(rival, str) or not rival or "|" in rival or chr(10) in rival:
+        raise ValueError(f"rival do resumo da luta invalido: {rival!r}")
+    if type(resultado) is not int or resultado not in (-1, 0, 1):
+        raise ValueError(f"resultado do resumo da luta fora de -1, 0, +1: {resultado!r}")
+    if type(vida_perdida_s) is not int or vida_perdida_s < 0:
+        raise ValueError(f"vida perdida do resumo da luta precisa ser inteiro >= 0: {vida_perdida_s!r}")
+    return Evento(tick=tick, tipo=TIPO_PL, valor=f"{rival}|{resultado}|{vida_perdida_s}")
+
+
+def ler_resumo_luta(evento: Evento) -> tuple[str, int, int]:
+    if evento.tipo != TIPO_PL:
+        raise ValueError(f"evento nao e {TIPO_PL}: {evento.tipo!r}")
+    partes = str(evento.valor).split("|")
+    if len(partes) != 3 or not partes[0] or partes[1] not in ("-1", "0", "1") or not partes[2].isdigit():
+        raise ValueError(f"resumo da luta malformado: {evento.valor!r}")
+    return partes[0], int(partes[1]), int(partes[2])
+
+
 def deixar_bola(tick: int, x: int, y: int) -> Evento:
     x, y = _posicao_mundo(x, y)
     return Evento(tick=tick, tipo="deixar_bola", valor=f"{x}|{y}")
