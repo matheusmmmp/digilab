@@ -6,7 +6,7 @@ Coordenador: Matheus. Worker: Claude Code (sessão do especificador, worktree `v
 Categoria: arquitetura. Origem: Matheus, 2026-11-06: gates impostos pelo harness e revisores novos por lente para o desenvolvimento do
 cérebro e do jogo: hooks restaurados, agentes somente leitura, gate de pré-run, testador de navegador isolado, CI do web.
 
-Tudo aqui é **PROPOSTO** até o Matheus decidir (seção 8).
+Tudo aqui é **PROPOSTO** até o Matheus decidir (seção 8). A D-IA-1, a D-IA-4, a D-IA-5 e a D-IA-7 estão **DECIDIDAS** (seção 8.1).
 
 ## 1. Pergunta
 
@@ -239,10 +239,16 @@ Nenhuma run. Nenhuma semente.
 
 | id | decisão | recomendação | custo de errar |
 |---|---|---|---|
-| **D-IA-1** | quais testes o Stop roda | **sempre que `digilab/`, `experiments/` ou `tests/` mudou: os da frente e os dos arquivos mudados (o H2 de hoje); a lista fixa de replay (22 arquivos, seção 3.1) só quando mudou `digilab/` ou `experiments/bancada/`**; a suíte inteira continua no PR. Medido nesta sessão: os 22 de replay, `108 passed in 424.91s` (~7 min), abaixo do limite de 600 s do H2 | lista curta demais: um replay quebrado passa até a suíte do PR (36 min depois, ou na `main`); longa demais: cada turno que mexe em código espera minutos, e a sessão aprende a fugir do hook |
+| **D-IA-1** (DECIDIDA) | quais testes o Stop roda | **sempre que `digilab/`, `experiments/` ou `tests/` mudou: os da frente e os dos arquivos mudados (o H2 de hoje); a lista fixa de replay (22 arquivos, seção 3.1) só quando mudou `digilab/` ou `experiments/bancada/`**; a suíte inteira continua no PR. Medido nesta sessão: os 22 de replay, `108 passed in 424.91s` (~7 min), abaixo do limite de 600 s do H2 | lista curta demais: um replay quebrado passa até a suíte do PR (36 min depois, ou na `main`); longa demais: cada turno que mexe em código espera minutos, e a sessão aprende a fugir do hook |
 | **D-IA-2** | o `pre_run` entra nos orquestradores ou só no hook | **no hook (E3) e, daqui para a frente, nos `run_v3_*` novos, numa linha no começo do `main()`; os `run_v2_*` não mudam** | só no hook: uma run lançada pelo terminal do Matheus ou por outra ferramenta pula o gate e pode queimar uma faixa; em todos os orquestradores: mexe em 26 arquivos da V2 congelada, cada um com teste |
 | **D-IA-3** | o e2e visual roda no Linux | **não; no CI só `tipos`, `npm test` e `build`**. O e2e nem roda no CI como está: os sete specs leem o atlas fora do git, e as referências das capturas também estão fora do git (não há `*-snapshots/` versionado). O e2e fica no Stop do web (H5) e no testador | rodar no Linux: referências novas por plataforma, dois conjuntos para aprovar, e o atlas teria de ir ao CI (não pode: arte fora do git); não rodar: uma quebra do e2e só aparece na junção, como hoje (o Gerente roda antes do merge) |
-| **D-IA-4** | o H9 diante de uma faixa queimada nova | **código 2 para remover ou alterar; `ask` para acrescentar no fim** | negar tudo: queimar uma faixa depois de uma run caída exige editar fora do Claude Code; deixar acrescentar sem perguntar: um agente pode queimar uma faixa reservada viva por engano |
-| **D-IA-5** | a divisão com a UX_TELA_PET (#589, #590) | **a A0 é o #590 (a E1 parte dele, sem refazer); o H6 é feito uma vez, aqui, com o desenho da UX; o H5 e o H8 ficam na UX A1; o `testador-navegador` é o `ux-browser-tester` (um arquivo, o daqui, que a UX A2 referencia); a lente do `rev-replay` na web fica na UX, e o `revisor-determinismo` cobre o Python e a paridade** | duas frentes escrevendo o mesmo hook ou o mesmo agente: dois H6 com regras diferentes, dois testadores, e um merge que apaga o outro (como o `2586b0e` apagou os hooks) |
+| **D-IA-4** (DECIDIDA) | o H9 diante de uma faixa queimada nova | **código 2 para remover ou alterar; `ask` para acrescentar no fim** | negar tudo: queimar uma faixa depois de uma run caída exige editar fora do Claude Code; deixar acrescentar sem perguntar: um agente pode queimar uma faixa reservada viva por engano |
+| **D-IA-5** (DECIDIDA) | a divisão com a UX_TELA_PET (#589, #590) | **a A0 é o #590 (a E1 parte dele, sem refazer); o H6 é feito uma vez, aqui, com o desenho da UX; o H5 e o H8 ficam na UX A1; o `testador-navegador` é o `ux-browser-tester` (um arquivo, o daqui, que a UX A2 referencia); a lente do `rev-replay` na web fica na UX, e o `revisor-determinismo` cobre o Python e a paridade** | duas frentes escrevendo o mesmo hook ou o mesmo agente: dois H6 com regras diferentes, dois testadores, e um merge que apaga o outro (como o `2586b0e` apagou os hooks) |
 | **D-IA-6** | o que é "plano commitado" no `pre_run` | **o commit do plano alcançável do `origin/main`**, não só no branch | só no branch: uma run roda sobre um plano que o Matheus não aprovou na `main`; no `origin/main`: um `git fetch` velho recusa uma run legítima (o motivo diz "rode `git fetch`") |
-| **D-IA-7** | quais hooks ligar, e quando | **H6, H9 e H10 ao mergear a etapa (são baratos, só leem o evento); o H2 estendido depois da medida do Stop na E1; o H4 junto (está pronto desde o IM-8)** | ligar o Stop sem medir: turnos lentos; não ligar: a regra volta a ser só pedido no prompt, que é o problema desta frente |
+| **D-IA-7** (DECIDIDA) | quais hooks ligar, e quando | **H6, H9 e H10 ao mergear a etapa (são baratos, só leem o evento); o H2 estendido depois da medida do Stop na E1; o H4 junto (está pronto desde o IM-8)** | ligar o Stop sem medir: turnos lentos; não ligar: a regra volta a ser só pedido no prompt, que é o problema desta frente |
+
+### 8.1 Decididas
+
+- **D-IA-1, D-IA-4, D-IA-5 e D-IA-7: DECIDIDAS pela recomendação** (Matheus, 2026-11-06, nesta sessão: "das suas recomendações", ao
+  pedir o prompt da E1, e "Empilhar sobre o #590"). A E1 sai empilhada sobre o #590 (branch `v3-hooks-a0`), que ainda não está na `main`.
+- A D-IA-2, a D-IA-3 e a D-IA-6 seguem PROPOSTAS: valem para a E3 e a E5.
