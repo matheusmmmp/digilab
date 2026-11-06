@@ -324,13 +324,12 @@ Cada decisão vem com a recomendação e o custo de errar. Todas estão abertas.
   - **Custo de errar:**
     - com poucos takes, um still fraco contamina todos os clipes daquele Digimon, porque tudo deriva dele;
     - com muitos, cada take a mais custa ~US$ 0,04 a 0,15 e mais tempo de olho na aprovação.
-- **D-SG-3. Feliz e "Acalmar": depois do Comer ou junto.**
+- **D-SG-3. Feliz e Emburrar: depois do Comer ou junto.**
   - **Recomendação:** **depois.** Só depois de a pergunta 1 dar "igual ou melhor" no Comer, como a SA-1 fez com o derivado.
   - **Duas observações:**
-    - o Feliz já está sendo feito pela receita derivada no lote 1 (`v3-sprites-lote1`), e gerá-lo junto disputa o mesmo Digimon e a
-      mesma pasta;
-    - **"Acalmar" não existe** na tabela 3.2 da SPRITES_ACOES nem no motor (busca por "acalmar" em `docs/`, `web/app/src` e
-      `web/app/motor`, sem resultado). Precisa do Matheus dizer qual ação é: o Sacudir (limpar), o Emburrar, ou uma ação nova do passo 3.
+    - o Feliz e o Emburrar já estão sendo feitos pela receita derivada no lote 1 (`v3-sprites-lote1`), e gerá-los junto disputa o
+      mesmo Digimon e a mesma pasta;
+    - o pedido dizia "Feliz e Acalmar"; o Matheus esclareceu em 2026-11-05 que o "Acalmar" é o **Emburrar** (registro D-SG-B).
   - **Custo de errar:**
     - junto, dobra o gasto antes de saber se o pipeline serve, e colide com o lote 1;
     - depois, atrasa as duas ações em uma etapa.
