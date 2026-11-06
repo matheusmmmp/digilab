@@ -192,3 +192,20 @@ provedor o da M5. **Página** (`falaLivre.ts`, Ajustes → Fala do pet): chave "
 de apresentação continua na tela e não vai ao prompt; a fala espontânea não muda. O `comando` volta e é validado de novo pelo caminho do botão.
 **Testes:** `tests/test_conversa_m2.py` (23, incluindo resposta igual com a chave desligada e a injeção), `web/app/test/comando_chat.test.ts`
 (2 novos), `web/app/e2e/conversa_nova.spec.ts` (servidor falso). Sem rodada, sem gate do comando, sem chamada à API. Desvios: D-CP-M2-1 a 3.
+
+## 10. Mudança de rumo: a fala que nasce da rede (2026-11-06, Gerente)
+
+- **DR-1 (Matheus, 2026-11-06):** a fala do pet não deve ser "uma LLM lendo os fatos acumulados dos logs". O pet se conecta às redes neurais
+  e elas dizem o que ele quer dizer; a LLM só põe em palavras ("LLM só como voz", escolhida entre três opções; a linguagem própria aprendida
+  sem LLM ficou de fora por ora). Base: a ideia do Matheus de 2026-10-04 em `docs/futuro/decodificador_conceitos.md`.
+- **Achado que motivou:** a fala de hoje não recebe nada do cérebro modular que decide nos pets v17 (os motivos que ela lê são só do treino;
+  a memória é do Bandit; o desejo e o caráter, do cérebro A parado). Mapa em [docs/research/MAPA_ESTADO_MODULAR.md](research/MAPA_ESTADO_MODULAR.md).
+- **A especificação:** [docs/research/ESPEC_DECODIFICADOR_FALA.md](research/ESPEC_DECODIFICADOR_FALA.md): conceitos com confiança a partir
+  dos sinais nomeados do `motivo` do modular, intenção da fala, a voz recebendo só intenção e conceitos, verificador contra os conceitos.
+- **DC-A a DC-E DECIDIDAS pelo Matheus em 2026-11-06, todas pela recomendação:** só sinais do modular na fala (DC-A); intenção por regra na
+  primeira versão e a rede escolhendo falar como pesquisa em seguida (DC-B); a lembrança de luta não muda escolhas nesta frente (DC-C); nada
+  de afeto pelo dono inventado na fala (DC-D); o que já está na `main` fica atrás das chaves como base da voz e da trava, e a M6 e a
+  avaliação antiga ficam pausadas (DC-E).
+- **Próximas missões:** DC1 (o decodificador, Python e TS, com paridade) e DC2 (a voz que recebe só intenção e conceitos), em paralelo pelo
+  formato fixo da espec (seção 2); DC3 (a rede escolhendo falar) depois, com plano de análise; DC4 (a avaliação, plano reescrito).
+

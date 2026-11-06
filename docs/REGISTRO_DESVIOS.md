@@ -513,3 +513,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-06 — LONGE_REGULAR, o plano da D-C1-3 no REL, o adendo 11 (worker, Claude Code, Opus 5.5, branch `v3-dc13-rel-plano`)](registro/2026-11.md)
 - [2026-11-06 — LONGE_REGULAR, o código do descritivo da D-C1-3 no REL, o adendo 11 (A11.8) (worker, Claude Code, Sonnet 5.5, branch `v3-dc13-rel-codigo`)](registro/2026-11.md)
 - [2026-11-06 — CONVERSA_PET, M2 ligar o `conversa-v1` na conversa do jogo (worker, Claude Code, Sonnet 5.5, branch `v3-conversa-m2-ligar`)](registro/2026-11.md)
+- [2026-11-06 — CONVERSA_PET, a mudança de rumo para o decodificador de conceitos (Gerente da frente, Claude Code, Opus 5.5, branch `v3-conversa-decodificador`)](registro/2026-11.md)
