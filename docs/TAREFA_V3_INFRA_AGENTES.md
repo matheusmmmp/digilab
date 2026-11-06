@@ -339,3 +339,19 @@ Worker: Claude Code, Opus 5.5, worktree `v3-infra-agentes-e4`, branch empilhado 
   - O Vitest: 1 falha, com o arquivo, a linha 5, o nome e "expected 2 to be 3"; 92 arquivos e 907 testes passaram.
   - Sem o arquivo, `npm test` → 92 arquivos e 907 testes passados, em 77 s.
   - O e2e não rodou nesta prova (8 a 12 min na medida do H5 da UX).
+
+## 13. Resumo da etapa E5 (2026-11-06)
+
+Worker: Claude Code, Opus 5.5, worktree `v3-infra-agentes-e5`, branch empilhado sobre o #615 (E4).
+
+- **O job `web`** em `.github/workflows/verificar-pr.yml`, num runner Linux, no `pull_request`:
+  - um passo olha `git diff --quiet origin/$BASE_REF...HEAD -- web/app/` e sai cedo, com uma linha no resumo do job, se o PR não muda `web/app/`;
+  - senão roda em `web/app` o `npm ci`, o `npm run tipos`, o `npm test` (Vitest) e o `npm run build`, no Node 24 (o `engines` do
+    `package.json`), com o cache do npm;
+  - o e2e fica fora (D-IA-3).
+  O filtro é um passo, e não o `paths:` do `on:`, para não tirar o job `relato` dos PRs de documento. Sem secrets, `permissions: contents: read`.
+- **O `tools/verificar_relato.py`:** o alerta dos testes do `web/app` diz agora que o job `web` roda os tipos, o Vitest e o build, e que só o
+  Playwright segue declarado. O `docs/infra/GUIA_OPERACIONAL.md` ganhou o job `web` na seção "O que o CI confere".
+- **Testes:** `python -m pytest tests/test_infra_*.py -q -p no:cacheprovider` → 60 passed; o YAML do workflow lido sem erro.
+- **A prova é o próprio PR:** este branch traz o `web/app/registry.json` do #593, então o diff contra a `main` muda `web/app/` e o job roda os
+  passos todos. O resultado fica no relato do PR, pelo check do GitHub.
