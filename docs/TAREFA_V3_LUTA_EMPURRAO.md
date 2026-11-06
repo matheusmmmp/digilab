@@ -237,3 +237,21 @@ As outras falhas de hoje seguem falhando. A tabela inteira está no `resumo.txt`
 Pela EMP-8, a etapa para aqui e volta ao Matheus, e nenhum número da seção 8 foi mexido. O desenho (etapa 5) foi escrito enquanto a medição
 rodava e está no branch, mas o GIF e o PR de código esperam a decisão.
 
+### 9.2 A segunda medição, a defesa sem empurrão (2026-11-06): o gate ainda reprova
+
+Na mesma calibração (72101–72505), contra o mesmo "antes" (seção 4.2). Artefatos em
+`web/app/scripts/medicoes/equilibrio_tr/empurrao/depois_defesa0/`, o log ao lado e a tabela em `resumo_defesa0.txt`.
+
+| meta | v14 (hoje) | v18, EMP-5 original | v18, a defesa sem empurrão |
+|---|---|---|---|
+| F-3 | passa (o duelista vence 3 formas) | falha (1) | falha (1) |
+| G-2 | passa | falha (Tortomon, 0,83) | **passa** |
+| G-3 | passa (0,43 a 0,72) | falha (0,22 a 0,95; duelista, muralha e tita fora) | falha (0,24 a 0,91; duelista e tita fora) |
+| T-2 no limite (total; pior par) | 0,012; duelista × sentinela 0,145 | 0,054; duelista × muralha 0,93 | 0,054; duelista × muralha 0,92 |
+| T-1 (já falha hoje) | 33,9 s | 36,7 s | 36,9 s |
+
+- Tirar o empurrão da defesa conserta o G-2 e tira a muralha da lista do G-3, mas quase não mexe no duelista: o F-3 e o par duelista ×
+  muralha no limite ficam iguais. As outras metas que passavam continuam passando.
+- Uma leitura, sem medição: a muralha luta sobretudo com o contra-golpe (`motor/bots.ts`, a primeira regra dela), que segue empurrando
+  pela metade; o duelista, que abre com a investida, é quem mais sofre com o empurrão de ida e volta. Nada foi ajustado; volta ao Matheus.
+
