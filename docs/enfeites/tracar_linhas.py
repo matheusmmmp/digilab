@@ -2,8 +2,8 @@
 cartunesco, com tracos mais firmes, fortes, na textura mesmo", no jeito de Borderlands).
 
 Sobre a textura ja chapada (achatar_cores.py e limpar_faces.py), um traco escuro em cada aresta da malha que e:
-  - uma quina (o angulo entre as duas faces passa de LIMIAR graus, e a aresta tem pelo menos COMP_MIN de comprimento: as quininhas das
-    facetas arredondadas da Meshy davam riscos soltos) ou uma borda solta;
+  - uma quina grande (o angulo entre as duas faces passa de LIMIAR graus, e a aresta tem pelo menos COMP_MIN de comprimento: com 38 graus
+    e sem o comprimento, as facetas da Meshy davam riscos soltos e sujos, pelo revisor) ou uma borda solta;
   - uma divisa de cor (as duas faces tem cores diferentes; a cor de cada face e a mais comum no triangulo de UV dela).
 O traco e desenhado no segmento de UV da aresta em cada face dos dois lados (arestas_uv.py), com a ESPESSURA em pixels da textura de
 1024; metade dele cai dentro de cada triangulo. A cor e a tinta (TINTA), quase preta e quente. Os numeros sao PROPOSTOS, SEM FONTE.
@@ -14,7 +14,7 @@ import json, sys
 from collections import Counter
 from PIL import Image, ImageDraw
 
-LIMIAR, ESPESSURA, TINTA, COMP_MIN = 38.0, 7, (43, 34, 32), 0.06
+LIMIAR, ESPESSURA, TINTA, COMP_MIN = 70.0, 5, (43, 34, 32), 0.12
 
 
 def cor_das_faces(im: Image.Image, tris: list) -> list:

@@ -10,7 +10,7 @@
     "vistas": "01a1b192-aeab-7488-b040-60880aa48744",
     "malha": "01a1b193-9160-7618-aa5b-8800a7de5d4e"
    },
-   "pipeline": "docs/TAREFA_V3_ITENS_3D.md; a malha da Meshy mantida, com a cor chapada na paleta do concept, uma cor por face, e os tracos de nanquim nas quinas e nas divisas de cor (tracar_linhas.py)",
+   "pipeline": "docs/TAREFA_V3_ITENS_3D.md; a malha da Meshy mantida, com a cor chapada na paleta do concept, uma cor por face, e os tracos de nanquim nas divisas de cor e nas quinas grandes (tracar_linhas.py)",
    "licenca": "License.txt ao lado"
   }
  },

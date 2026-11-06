@@ -28,7 +28,12 @@ describe("onde ficam os enfeites (E-G10)", () => {
       expect(ilha.naArea(Math.floor(e.x), Math.floor(e.z))).toBe(false);
       expect(c.tipo).toBe("grama");
       expect(d).toBeGreaterThanOrEqual(G.perto); expect(d).toBeLessThanOrEqual(G.longe);
-      if (G.norte) { expect(e.z).toBeLessThan(0); expect(Math.abs(e.x - (cm.layout.ninho[0] + 0.5))).toBeLessThanOrEqual(G.casa); }
+      if (G.norte) {
+        const dx = e.x - (cm.layout.ninho[0] + 0.5);
+        expect(e.z).toBeLessThan(0);
+        if ("faixa" in G) { expect(dx).toBeGreaterThanOrEqual(G.faixa[0]); expect(dx).toBeLessThanOrEqual(G.faixa[1]); }
+        else expect(Math.abs(dx)).toBeLessThanOrEqual(G.casa);
+      }
       for (const o of altos) expect(Math.hypot(o.x - e.x, o.z - e.z)).toBeGreaterThanOrEqual(G.deAlto);
       /* a distancia de quem chega depois (a ordem da lista) */
       for (const f of ilha.enfeites.slice(0, ilha.enfeites.indexOf(e))) expect(Math.hypot(f.x - e.x, f.z - e.z)).toBeGreaterThanOrEqual(G.entreSi);

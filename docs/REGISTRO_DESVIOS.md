@@ -542,3 +542,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-06 — INFRA_AGENTES, etapa E6, o Bash só de leitura do auditor (worker, Claude Code, Opus 5.5, branch `v3-infra-agentes-e6`)](registro/2026-11.md)
 - [2026-11-06 — INFRA_AGENTES, etapa E7, as medições do combate no gate (worker, Claude Code, Opus 5.5, branch `v3-infra-agentes-e7`)](registro/2026-11.md)
 - [2026-11-06 — PONTE_LUTA, etapa PE4, o ε da luta pelo `g_exp` do modular (worker, Claude Code, Sonnet 5.5, branch `v3-ponte-luta-pe4`)](registro/2026-11.md)
+- [2026-11-06 — MUNDO_ENFEITES, E3: a geladeira e o trilho (Gerente da frente, Claude Code, Opus 5.5, branch `v3-mundo-enfeites-e3`)](registro/2026-11.md)

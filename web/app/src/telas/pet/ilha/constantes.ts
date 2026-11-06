@@ -83,8 +83,10 @@ export const ENFEITES_GRADE = {
   sal: 0x5e7e17e5, tentativas: 4000,
   poste: { quantos: 14, perto: 1.5, longe: 4, entreSi: 4, deAlto: 2, folga: 0, norte: false, casa: 0 },
   carro: { quantos: 1, perto: 1.5, longe: 3, entreSi: 3, deAlto: 2, folga: 1, norte: true, casa: 12 },
-  geladeira: { quantos: 1, perto: 1.5, longe: 3.5, entreSi: 3, deAlto: 1.8, folga: 1, norte: true, casa: 24 },
-  trilho: { quantos: 1, perto: 1.5, longe: 4, entreSi: 3, deAlto: 1.6, folga: 1, norte: true, casa: 32 },
+  /* a geladeira e o trilho numa faixa de x a partir do ninho que a camera ve sem o painel Estado na frente (o revisor achou o trilho
+     atras dele, em x = 20 no mvp) */
+  geladeira: { quantos: 1, perto: 1.5, longe: 3.5, entreSi: 3, deAlto: 1.4, folga: 1, norte: true, casa: 0, faixa: [-12, 14] },
+  trilho: { quantos: 1, perto: 1.5, longe: 4, entreSi: 3, deAlto: 1.6, folga: 1, norte: true, casa: 0, faixa: [-9, 9] },
 } as const;
 /** a luz dos enfeites a noite (enfeites.ts): o halo na lanterna, na fracao `altura` da altura do modelo, com `tamanho` celulas de
     diametro, em cascas (as fracoes do tamanho) de opacidade `forca` cada (aditiva), e o quanto os vidros brilham (emissiveIntensity).
