@@ -1,5 +1,55 @@
 {
- "fonte": "as regioes do concept 3 (caminhonete) e as cores dominantes da textura da Meshy (mediana em 12 cores): o azul-ceu da lataria, o vidro claro, o musgo e a grama em dois verdes, as flores rosa e laranja e a lanterna vermelha; PROPOSTO",
- "paleta": [[130, 200, 232], [96, 162, 204], [220, 238, 246], [146, 190, 86], [100, 146, 72], [244, 150, 178], [246, 178, 86], [214, 82, 82]],
- "nomes": ["lataria", "lataria escura", "vidro", "musgo", "grama", "flor rosa", "flor laranja", "lanterna"]
+ "fonte": "as regioes do concept 3 (caminhonete) e as cores dominantes da textura da Meshy (mediana em 12 cores): o azul-ceu da lataria, o vidro claro, o musgo e a grama em dois verdes, as flores rosa e laranja e a lanterna vermelha; PROPOSTO; rodada 2, depois do revisor: o azul e as flores mais saturados",
+ "paleta": [
+  [
+   104,
+   190,
+   240
+  ],
+  [
+   78,
+   150,
+   206
+  ],
+  [
+   220,
+   238,
+   246
+  ],
+  [
+   146,
+   196,
+   80
+  ],
+  [
+   96,
+   150,
+   66
+  ],
+  [
+   250,
+   128,
+   170
+  ],
+  [
+   252,
+   170,
+   64
+  ],
+  [
+   220,
+   70,
+   70
+  ]
+ ],
+ "nomes": [
+  "lataria",
+  "lataria escura",
+  "vidro",
+  "musgo",
+  "grama",
+  "flor rosa",
+  "flor laranja",
+  "lanterna"
+ ]
 }
