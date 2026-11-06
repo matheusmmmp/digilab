@@ -524,3 +524,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-06 — UX_TELA_PET A1, as escolhas dos hooks H5, H6 e H8 (Gerente da frente, Claude Code, Opus 5.5, worktree `v3-hooks-a1`)](registro/2026-11.md)
 - [2026-11-06 — UX_TELA_PET P1, a B refeita a partir do que o motor registra (Gerente da frente, Claude Code, Opus 5.5, branch `v3-ux-p1`; plano e prancha pelo `ux-designer`)](registro/2026-11.md)
 - [2026-11-06 — UX_TELA_PET M1, o portão do desktop sem o ruído da cena 3D (Gerente da frente, Claude Code, Opus 5.5, branch `v3-ux-mobile`)](registro/2026-11.md)
+- [2026-11-06 — UX_TELA_PET L2, Crescer no saco de pancada: as interpretações do código (Gerente da frente, Claude Code, Opus 5.5, branch `v3-ux-lugares-menus`; código pelo `ux-implementador`)](registro/2026-11.md)

@@ -7,6 +7,10 @@ import type { Motor } from "../../../motor/index.ts";
 import { agir } from "../../acoes.ts";
 import { jogoAtual } from "../../jogo.ts";
 import { CENA } from "./cenaEstado.ts";
+import { lugarAberto } from "../../viagem.ts";
+
+/** o toque no pet nao vale: um painel cobre a cena, a bola esta na mao ou um lugar esta aberto (Crescer, L2: a ilha fica viva, mas clicar nela nao grava) */
+export const toqueIgnorado = (): boolean => CENA.coberto || CENA.bolaNaMao || lugarAberto();
 import { mostrarReacao, reacaoDoCorpo, type LeituraCorpo } from "./cenaAcao.ts";
 
 /** o toque: quanto o ponteiro pode andar (px) e quanto pode demorar (ms) para ainda ser um toque; a folga em volta do sprite (px, para o dedo).
@@ -44,7 +48,7 @@ export function ToquePet({ alvo }: { alvo: RefObject<HTMLElement | null> }) {
     if (!el) return;
     let mao: { id: number; x: number; y: number; t: number } | null = null;
     const baixo = (e: PointerEvent) => {
-      if ((e.pointerType === "mouse" && e.button !== 0) || CENA.coberto || CENA.bolaNaMao) return;
+      if ((e.pointerType === "mouse" && e.button !== 0) || toqueIgnorado()) return;
       if (!noSprite(e.clientX, e.clientY, el.getBoundingClientRect(), CENA.ret)) return;
       mao = { id: e.pointerId, x: e.clientX, y: e.clientY, t: performance.now() };
     };
@@ -53,7 +57,7 @@ export function ToquePet({ alvo }: { alvo: RefObject<HTMLElement | null> }) {
     };
     const cima = (e: PointerEvent) => {
       const m = mao; mao = null;
-      if (!m || m.id !== e.pointerId || CENA.coberto || CENA.bolaNaMao) return;
+      if (!m || m.id !== e.pointerId || toqueIgnorado()) return;
       const agora = performance.now();
       if (agora - m.t <= TOQUE.duraMax && Math.hypot(e.clientX - m.x, e.clientY - m.y) <= TOQUE.andaMax) tocarNoPet(agora);
     };

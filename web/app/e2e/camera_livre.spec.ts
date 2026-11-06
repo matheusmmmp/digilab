@@ -82,6 +82,9 @@ test("no celular nao ha minimapa nem camera solta", async ({ browser }) => {
   await page.keyboard.down("d"); await page.waitForTimeout(600); await page.keyboard.up("d");
   await expect(page.locator(".minimapa")).toHaveCount(0);
   await expect(page.locator(".pet-seguir")).toHaveCount(0);
-  await expect(page.locator(".topo-retrato")).toHaveAttribute("aria-label", "Meus pets");
+  /* abaixo de 900 px o retrato e o do mobile minimo (#619, M1-1): `.mm-retrato`, "Painéis do pet" (o leque); o `.topo-retrato` "Meus pets" so existe
+     de 900 px em diante. Conflito da soma #619 + #636: o spec da L1 ainda procurava o retrato de antes */
+  await expect(page.locator(".mm-retrato")).toHaveAttribute("aria-label", "Painéis do pet");
+  await expect(page.locator(".topo-retrato")).toHaveCount(0);
   await ctx.close();
 });

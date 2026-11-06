@@ -25,7 +25,7 @@ describe("tokens --hx-*", () => {
   });
   it("todo texto passa 4,5:1 contra o pior fundo dos menus, e as bordas 3:1", () => {
     const fundos = [token("hx-chao"), token("hx-miolo"), token("hx-miolo-2"), "#0E1E16"];
-    for (const t of ["hx-texto", "hx-texto-2", "hx-sec", "hx-rotulo", "hx-btn-ink", "hx-alerta", "hx-perigo", "hx-ok", "hx-necessidade", "hx-aprendido"]) {
+    for (const t of ["hx-texto", "hx-texto-2", "hx-sec", "hx-rotulo", "hx-btn-ink", "hx-alerta", "hx-perigo", "hx-ok", "hx-necessidade", "hx-aprendido", "hx-sombrio"]) {
       for (const f of fundos) expect(contraste(token(t), f), `${t} sobre ${f}`).toBeGreaterThanOrEqual(4.5);
     }
     expect(contraste(token("hx-escolhido-ink"), token("hx-escolhido"))).toBeGreaterThanOrEqual(4.5);
@@ -55,7 +55,7 @@ describe("pele Sci-fi (vidro)", () => {
   const grama: Rgb = [161, 225, 113];
   const pior = sobre("rgba(170,225,255,.10)", sobre(tokenVidro("hx-miolo-2"), grama));
   it("todo texto passa 4,5:1 sobre o vidro com o habitat mais claro atras; bordas e foco 3:1", () => {
-    for (const t of ["hx-texto", "hx-texto-2", "hx-sec", "hx-rotulo", "hx-num", "hx-alerta", "hx-perigo", "hx-ok", "hx-aprendido", "hx-foco"]) {
+    for (const t of ["hx-texto", "hx-texto-2", "hx-sec", "hx-rotulo", "hx-num", "hx-alerta", "hx-perigo", "hx-ok", "hx-aprendido", "hx-foco", "hx-sombrio"]) {
       expect(contraste(tokenVidro(t).replace(/^var\(--hx-texto\)$/, token("hx-texto")), hex(pior)), t).toBeGreaterThanOrEqual(4.5);
     }
     const escolhido = sobre("rgba(58,168,255,.40)", pior), botao = sobre(tokenVidro("hx-btn-bg"), pior);
@@ -80,7 +80,7 @@ describe("pele Sci-fi (vidro)", () => {
       ["hud-brilho", "none"], ["hud-fundo-1", "rgba(30,33,36,.97)"]]) expect(tokens).toContain(`--${t}:${v};`);
     /* o pior fundo da HUD: a caixa de alfa .97 sobre branco puro */
     const hud = hex(sobre("rgba(30,33,36,.97)", [255, 255, 255]));
-    for (const t of ["hx-texto", "hx-texto-2", "hx-sec", "hx-rotulo", "hx-btn-ink", "hx-alerta", "hx-perigo", "hx-foco"]) {
+    for (const t of ["hx-texto", "hx-texto-2", "hx-sec", "hx-rotulo", "hx-btn-ink", "hx-alerta", "hx-perigo", "hx-foco", "hx-sombrio"]) {
       expect(contraste(token(t), hud), t).toBeGreaterThanOrEqual(4.5);
     }
   });
@@ -122,7 +122,7 @@ describe("caixas da luta nas duas peles", () => {
   const tVidro = (t: string) => tokenVidro(t).replace(/^var\(--hx-texto\)$/, token("hx-texto"));
   it("Vidro, no alto: todo texto das caixas passa 4,5:1 sobre o vidro com o mapa mais claro atras; no cartao da regra tambem", () => {
     const pior = vidroSobre(ALTO), regra = sobre(tokenVidro("hx-miolo-2"), pior);
-    for (const t of ["hx-texto", "hx-texto-2", "hx-sec", "hx-rotulo", "hx-num", "hx-aprendido", "hx-perigo", "hx-ok", "hx-alerta"]) {
+    for (const t of ["hx-texto", "hx-texto-2", "hx-sec", "hx-rotulo", "hx-num", "hx-aprendido", "hx-perigo", "hx-ok", "hx-alerta", "hx-sombrio"]) {
       expect(contraste(tVidro(t), hex(pior)), `alto ${t}`).toBeGreaterThanOrEqual(4.5);
     }
     for (const t of ["hx-texto", "hx-aprendido", "hx-sec", "hx-rotulo"]) expect(contraste(tVidro(t), hex(regra)), `regra ${t}`).toBeGreaterThanOrEqual(4.5);
@@ -136,7 +136,7 @@ describe("caixas da luta nas duas peles", () => {
   it("Militar: a caixa quase opaca sobre o mapa mais claro; texto 4,5:1, o cartao da regra e o escolhido do dock tambem", () => {
     for (const fundo of [ALTO, PE]) {
       const caixa = hex(sobre("rgba(30,33,36,.97)", fundo));
-      for (const t of ["hx-texto", "hx-texto-2", "hx-sec", "hx-rotulo", "hx-aprendido", "hx-perigo", "hx-ok", "hx-alerta"]) expect(contraste(token(t), caixa), `militar ${t}`).toBeGreaterThanOrEqual(4.5);
+      for (const t of ["hx-texto", "hx-texto-2", "hx-sec", "hx-rotulo", "hx-aprendido", "hx-perigo", "hx-ok", "hx-alerta", "hx-sombrio"]) expect(contraste(token(t), caixa), `militar ${t}`).toBeGreaterThanOrEqual(4.5);
     }
     for (const t of ["hx-texto", "hx-aprendido", "hx-sec"]) expect(contraste(token(t), token("hx-miolo-2")), `regra ${t}`).toBeGreaterThanOrEqual(4.5);
     expect(contraste(token("hx-escolhido-ink"), token("hx-escolhido"))).toBeGreaterThanOrEqual(4.5);

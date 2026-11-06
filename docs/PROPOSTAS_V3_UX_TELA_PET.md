@@ -1079,3 +1079,284 @@ A prancha e as sete recomendações foram aprovadas ("Aprovado, seguir"): **L1-1
 até a janela em volta da câmera; **L1-2** o pet rosa com o anel claro; **L1-3** com a câmera "Fixa" o minimapa aparece, sem mover a
 câmera; **L1-4** o cocô e o kit médico fora; **L1-5** Q/E, +/− e as setas e o Enter no minimapa; **L1-6** o DigiBrain como a 4ª linha da
 pilha; **L1-7** os números como PROPOSTO, SEM FONTE.
+
+## Lugares da ilha: menus (L2/L3) (2026-11-06, `ux-designer`; rodada 3)
+
+Direção B, escolhida pelo Matheus em 2026-11-06: **cada menu é um lugar da ilha**. Abrir Crescer, Lutar ou Diário leva a câmera até o
+lugar, o pet anda até lá e o painel aparece ancorado ao lado do objeto (no celular, numa folha que sobe da base), com a ilha visível e
+viva em volta. Status: **PROPOSTO**. Só vista: o motor, o save, as rotas (`#/crescer/treinar` etc.) e o hash não mudam, e nenhum
+número de jogo é criado (os níveis vêm do plano de progressão, abaixo). A prancha está em `docs/pranchas/ux-lugares-menus/`:
+- `gerar.py` (o desktop; chama o `gerar_movel.py`, o celular, com os mesmos ajudantes), `lugares.css`, `movel.css`, `capturar.sh`;
+- o antes em `img/antes/` e `antes_palavras.json`, medido pelo `medir_antes.mjs`;
+- as capturas em `D:\Trab\digilab\capturas_ux_lugares_menus_aprovar\`: `<tela>_<1920|390|360>_<vidro|militar>.png`, e
+  `<tela>_390_vidro_notas.png` (no celular, as notas só aparecem com `?notas`).
+
+**O que o Matheus decidiu (2026-11-06).**
+- Rodada 1: "ainda tem muito texto, principalmente em itens e evolução". Daí a **regra do texto**, abaixo.
+- **O portão da arena e a barraca do Tamer entram na ilha 3D** como objetos low-poly CC0 do mesmo kit, nos pontos da prancha
+  (DECIDIDO). Na prancha continuam como desenho provisório.
+- **Os lugares têm trava de progresso**, com o nível do Tamer: o plano está DECIDIDO em `docs/PLANO_V3_PROGRESSAO_TUTORIAL.md` (branch
+  `v3-progressao`, PR #634), com as P-1 a P-11 aceitas. A trilha e a vista dela estão abaixo, em "A trava de progresso".
+- Rodada 3: "baseado nas alterações que foram propostas para todas as telas do desktop, vai ter que ser revisto para o mobile também".
+  Daí "No celular", abaixo: cada tela do desktop tem a sua versão a 390, e o Itens também a 360.
+
+**A regra do texto (vale para todas as abas, nas duas larguras).** À vista ficam só ícone, número e um rótulo de 1 a 3 palavras. Frase,
+só no "Como funciona" fechado ou num balão no foco ou no hover (e no `aria-label`/`aria-describedby`, para o leitor de tela). A exceção
+é o cartão de destrave, que tem uma frase de até 8 palavras (plano, 4.1). Os exemplos que saíram da vista: "último: Corrida · 07:31 · um
+treino por vez, 10 min de intervalo" (fica "Pronto" e "Corrida 07:31"; o intervalo vai para o balão), "a campanha fica na Exploração",
+"Nenhuma luta ainda. A primeira aparece aqui." (a linha some até haver luta), "abre a Exploração", "a câmera vai ao portão", os resumos
+das linhas dos Ajustes, as etiquetas de tipo do Registro (viram ícone).
+
+**Objetivo do jogador.** Ir fazer uma coisa num lugar ("vou treinar no saco") e ver de relance o que importa agora, sem ler.
+
+**Os lugares.**
+
+| menu | lugar | objeto | abas (ícones) | abre no (plano 3.3) |
+|---|---|---|---|---|
+| Diário | a barraca do Tamer | nova, junto ao barranco (DECIDIDO: entra na ilha 3D) | Registro, Catálogo, Gerações, Cenários | Nv 2, atendeu 3 chamados |
+| Crescer | o saco de pancada | existe (o `CENA.treino` de hoje já leva o pet até ele) | Treinar, Aprendizado, Evolução, Itens | Nv 3, virou Rookie (o Itens no Nv 5) |
+| Conversar | não é lugar | o ícone de hoje | — | Nv 3, virou Rookie |
+| Lutar | o portão da arena | novo, no fim do caminho de terra (DECIDIDO: entra na ilha 3D) | Arena, Exploração, Fronteira, Medalhas | Nv 4, o primeiro treino (a Fronteira no Nv 8) |
+| Ajustes | não é lugar | o leque do retrato (o nível do Tamer, Meus pets, DigiBrain, Ajustes) | uma lista só | sempre |
+
+**Hierarquia, dentro do painel.** (1) O destaque, um por tela (borda `--hx-alerta`): "Pronto" no Treinar, o próximo item nos Itens, o
+que o nível pede na Evolução, as lutas de treino na Arena, a próxima medalha, a semente no Registro, "3/19" no Catálogo. (2) A ação da
+aba. (3) O que recua, em ícone e número. (4) O "Como funciona", fechado (aberto só no quadro do Registro).
+
+**Sempre visível × por gesto.** Dentro de um lugar: o topo, o trilho (Pet, Crescer, Lutar, Diário, Conversar; Ajustes sai para o
+retrato), o minimapa, a placa do lugar e o conector. Recolhem: a pilha, o dock e a linha do agora. Por gesto: o rótulo das abas
+inativas, os balões, o "Como funciona", as listas fechadas, a ficha de uma forma. O atalho direto (PROPOSTO): `C`, `L`, `D` abrem com
+corte seco; `1`–`4` trocam de aba; `Esc` volta; clicar ou `Esc` na viagem pula; "Viagem da câmera" nos Ajustes a desliga.
+
+**A transição** (`transicao_1`, `_2`, `_3`, nas duas larguras): a ilha e o clique; a câmera a caminho com o pet andando; o painel ao
+lado do saco (no celular, a folha subindo da base). Durações PROPOSTAS, SEM FONTE: câmera 700 ms; o painel em 180 ms (o "card entrando"
+do guia, seção 11). Reduzir movimento: corte seco.
+
+**A trava de progresso** (o plano decidido: `docs/PLANO_V3_PROGRESSAO_TUTORIAL.md`, P-1 a P-11).
+- **O nível** é do Tamer (P-1) e é a quantidade de marcos (3.2, P-2). A trilha (3.3, P-3):
+  - Nv 2, atendeu 3 chamados: o Diário;
+  - Nv 3, virou Rookie: Crescer e Conversar;
+  - Nv 4, o primeiro treino: Lutar;
+  - Nv 5, a primeira medalha: o Itens;
+  - Nv 6, virou Champion: as regras de luta e o Forçar (P-4: só esconder o editor e o cartão, sem tocar no motor);
+  - Nv 8, 6 medalhas: a Fronteira.
+- **Na tela** (P-8): "Tamer Nv N" no leque do retrato, e o cadeado com "Nv N" nos lugares.
+- **Trancado** (3.4, P-11): o lugar fica visível na ilha desde o Nv 1, apagado, com o cadeado e "Nv N".
+  - A dica (no foco ou no hover) e o `aria-label` dizem o marco: "Abre quando ele virar Rookie" (o exemplo da 3.4). Os outros textos de
+    marco são da prancha, montados da coluna "marco" da 3.3: "Abre com 3 chamados atendidos", "Abre com o primeiro treino", "Abre com a
+    primeira medalha", "Abre quando ele virar Champion", "Abre com 6 medalhas".
+  - No trilho do desktop, o ícone fica igual, só apagado. Na coluna do celular, apagado e com o cadeado e o "Nv N" ao lado.
+  - A tecla e a rota de um lugar trancado abrem o cartão do motivo, não o painel.
+- **Destravado** (3.4, 4.1 e 4.2): o cadeado se abre na ilha e o lugar brilha uma vez em `--hx-alerta` (com reduzir movimento, sem
+  brilho: só o cartão). Aparece o cartão de destrave: o ícone do lugar, o título de até 3 palavras, a frase de até 8 palavras (o texto da
+  4.2) e **Ir** (a câmera vai ao lugar) e **Depois**. O Diário: `tent`, "Diário", "Veja o que ele fez e por quê." (4.2, linha do Nv 2).
+- **`lugar_trancado`:** Tamer Nv 1, o pet é o Koromon (In-Training). A barraca mostra Nv 2, o saco Nv 3 e o portão Nv 4, apagados na
+  ilha, no trilho e no minimapa; Conversar fica apagado no trilho. A dica do saco aparece aberta como demonstração. **`lugar_destravado`:**
+  Tamer Nv 2 (o Koromon atendeu 3 chamados). A barraca abre, com o cadeado aberto e o brilho; o saco e o portão continuam trancados; e
+  aparece o cartão.
+- **O nível do save do antes** (o das outras telas: Growlmon Champion, o Tamer sem medalha), pela contagem de marcos: chocou (1), atendeu
+  3 chamados (2; o histórico do antes diz "virou Agumon (cuidado 100%)"), virou Rookie (3), o primeiro treino (4; o save tem treino, "o
+  seu pet tem 10"), virou Champion (5); a primeira medalha falta. **Tamer Nv 5.** Por isso:
+  - o leque mostra "Tamer Nv 5";
+  - as regras de luta (o cartão "Regras" na Arena) e o Forçar (no Treinar) aparecem trancados com "Nv 6";
+  - a Fronteira (a aba em Lutar e o botão do minimapa) aparece com "Nv 8" e a dica "Abre com 6 medalhas";
+  - o Itens (Nv 5) fica aberto pela contagem. Ver a pergunta 11: pelo marco (a primeira medalha), ele estaria trancado.
+
+**No celular (390×844; o Itens também a 360×800).** Segue o mobile mínimo aprovado (#619, `docs/pranchas/ux-mobile/`):
+- **o que vem do mínimo:** o retrato e a hora no canto de cima à esquerda; a coluna Conversar, Crescer, Lutar e Diário no canto de cima à
+  direita; as quatro ações em círculos embaixo; o leque no retrato; nenhuma barra de abas.
+- **O lugar:** tocar no ícone da coluna leva a câmera ao lugar, com a mesma viagem do desktop (com reduzir movimento, corte seco). Os 3
+  quadros estão em `transicao_1_390` a `_3_390`.
+  - O painel vira uma **folha que sobe da base e cobre só a parte de baixo**; em cima ficam o lugar e o pet. Isso substitui a faixa no
+    topo da folha da rodada 2.
+  - A folha tem a alça, o ícone e o nome do destino, o lugar (3 palavras) e o × "Fechar e voltar ao Pet"; embaixo vêm as abas em
+    ícones e o corpo, que é o mesmo do desktop e rola. O Esc e o toque fora também fecham.
+  - **A altura:** a folha começa em y 400 a 390×844 e em y 380 a 360×800. PROPOSTO, SEM FONTE.
+- **As travas:** os ícones da coluna mostram o cadeado com "Nv N" ao lado quando o lugar está trancado; o cartão de destrave aparece no
+  alto da tela; o "Tamer Nv N" fica no leque do retrato.
+- **O minimapa** (a L1 é só do desktop): no celular vira o botão **Mapa** no leque do retrato, que abre o mapa por cima, com os lugares
+  tocáveis e a Fronteira trancada. Nenhum círculo fixo na tela (tela `mapa_390`). A alternativa é a pergunta 12.
+- **Ajustes:** sobe como folha sobre a ilha de sempre, sem viagem; o leque se fecha quando ela abre.
+
+```
+390×844, Crescer · Itens
+┌──────────────────────────────────────┐
+│ (◉)[D3 07:42]                   [Con]│  o retrato, a hora; a coluna (48 px)
+│                                 [Cre]│  a atual em destaque
+│        ┌┐                       [Lut]│
+│        ││ saco         (Growlmon)[Diá]│  o lugar e o pet, no terço de cima
+│        ██                            │  (Nv N + cadeado ao lado do ícone, se trancado)
+│       ═══                            │
+├────────────────────────────────────── ┤  y 400: a folha sobe da base (PROPOSTO, SEM FONTE)
+│               ────                   │  a alça
+│ ▦ CRESCER  saco de pancada       [×] │  "Fechar e voltar ao Pet", Esc, toque fora
+│ [tr][ap][ev][▦ ITENS]                │  as abas em ícones
+│ ▦ 0 chips ▭ 0 cartas △ 10/11 (c1)(c3)(c5)│
+│ ┃Força  ┊ ┊Guarda ┊ ┊Recuo  ┊          │  o corpo do desktop, que rola
+│ ┊Oport. ┊ ┊Persegu┊ ┊Aparo  ┊          │
+└──────────────────────────────────────┘
+
+390×844, o leque do retrato com o mapa
+┌──────────────────────────────────────┐
+│ (◉)[D3 07:42]                   [Con]│
+│ [Tamer Nv 5]                    [Cre]│  P-8
+│ [ali 64 ene 81 hig 40 hum 72 saú 95] │  os vitais (o Estado atual)
+│ [Evo] ┌────────── Mapa ───── [×] ┐   │
+│ [Últ] │   ( círculo da ilha )     │   │  os lugares tocáveis; a Fronteira Nv 8
+│ [Dgb] │   [saco] [portão] [barraca]   │
+│ [Map]◀│                           │   │  o botão novo no leque
+│ [Cfg] └───────────────────────────┘   │
+│ [Pets]                               │
+│       (Ali)  (Bri)  (Lim)  (⋯)       │  as ações
+└──────────────────────────────────────┘
+```
+
+**As telas.**
+
+| tela | 1920 | 390 | o que mostra |
+|---|---|---|---|
+| `transicao_1`, `_2`, `_3` | sim | sim | a viagem até o saco |
+| `crescer_treinar` | sim | sim | "Pronto", os 6 exercícios, a fadiga e a sobrecarga em número; o Forçar trancado (Nv 6) |
+| `crescer_itens` | sim | sim, e a 360 | cada item como ícone, nome curto e efeito em 2 a 4 palavras; tracejado e cadeado = ainda não é seu; as vagas como três encaixes trancados (1, 3, 5 medalhas, `CIT.vagas`); "treino 10/11" |
+| `crescer_evolucao` | sim | sim | a forma, "15h 15min até Ultimate", os 3 selos apagados e "0/10 lutas", a árvore só da linha do pet |
+| `lutar_arena`, `lutar_medalhas` | sim | sim | as lutas de treino em destaque; as Regras trancadas (Nv 6); a Fronteira com Nv 8 |
+| `diario_registro`, `diario_catalogo` | sim | sim | a regra aplicada (o Registro com o "Como funciona" aberto) |
+| `ajustes` | sim | sim | a lista só com ícone e nome; "Tamer Nv 5" no leque (desktop) |
+| `mapa` | — | sim | o leque do retrato com "Tamer Nv 5" e o Mapa aberto |
+| `lugar_trancado`, `lugar_destravado` | sim | sim | a trava (acima) |
+| `antes_depois_itens`, `antes_depois_evolucao` | sim | sim (`_390`) | o jogo de hoje ao lado do depois, com a contagem |
+
+**As contagens de palavras** (o `innerText` do painel inteiro, com a regex `/[\p{L}\p{N}]+(?:[-'’][\p{L}\p{N}]+)*/gu`; o antes no
+`antes_palavras.json`, com o que só aparece rolando; o depois contado na própria página; o balão, o "Como funciona" fechado e a dica fora
+do foco não entram, porque não estão à vista). A rodada 2, medida nas etiquetas da captura:
+
+| tela | antes | depois (rodada 2, medido) | o que foi para o balão ou para o "Como funciona" |
+|---|---|---|---|
+| Itens, 1920 | 455 | **61** | o parágrafo "Os itens são seus…", a regra das vagas, o "Agora os itens não fazem efeito…", o efeito inteiro de cada item, o "Ainda não é seu: vença X em Y", a regra completa do chip de regra, o "Este chip fica coberto…", o "Nenhuma agora. Vem da revanche…" |
+| Itens, 390 | 455 | **61** (rodada 2: 58; a folha de baixo da rodada 3) | o mesmo |
+| Evolução, 1920 | 235 | **30** | "Faltam 3 medalhas: …" (o lugar vai ao balão de cada selo), "0 vitórias / experiência de combate…", "nenhuma luta / vitórias nas lutas deste estágio…", "se evoluísse agora…", "Toque num nó…", a legenda da árvore, os eixos e os arquétipos dos nós, "Por que Growlmon?", o histórico, as duas frases do pé |
+| Evolução, 390 | 235 | **30** (rodada 3) | o mesmo |
+| Treinar, Arena, Medalhas, Registro, Catálogo, Ajustes | não medido | ~54, ~42, ~37, ~87 (35 do "Como funciona" aberto), ~23, ~18 (estimativas) | os resumos, as frases de apoio e as regras longas |
+
+A rodada 3 trocou a faixa da folha a 390 pela folha de baixo e pôs "Nv 6" e "Nv 8" em Arena e em Treinar; os números a 390 da tabela
+são os das etiquetas da rodada 3 (lidos das páginas `antes_depois_*` em 2026-11-06).
+
+**Tokens.** Só os das peles atuais (cópia de `src/estilo/tokens.css`): `--hx-chao`, `--hx-miolo`, `--hx-miolo-2`, `--hx-borda`,
+`--hx-borda-topo`, `--hx-texto`, `--hx-texto-2`, `--hx-sec`, `--hx-rotulo`, `--hx-escolhido` (`-ink`, `-borda`, `-brilho`),
+`--hx-hachura`, `--hx-btn-bg`/`-ink`/`-borda`, `--hx-medidor`, `--hx-medidor-trilho`, `--hx-medidor-alt`, `--hx-mascara`,
+`--hx-alerta` (o destaque, o brilho do destrave, o cartão e o "Tamer Nv N"), `--hx-ok`, `--hx-aprendido`, `--hx-foco`, `--hx-f`,
+`--hx-f-num`, `--hx-num`, `--hx-vidro`, `--hx-reflexo`, `--hx-luz`, `--hx-sombra`, `--hx-tecla`, `--hx-tecla-hover`, `--hud-fundo-1`,
+`--hud-fundo-2`, `--hud-desfoque`, `--hud-ch`, `--hud-ch-p`, `--hud-brilho`, `--hud-risca`.
+- **Nada de novo em cor:** nenhum `--dl-*` e nenhuma cor hex nova.
+- **Literais:** a sombra `rgba(0,0,0,.4)` (B3), o fundo da marca (`casca.css`) e a nota amarela (B3, também nas etiquetas de contagem).
+- **O trancado** usa `filter: grayscale`, que não é cor; o saco apagado é um recorte do próprio fundo, apagado.
+- **Os objetos novos** são trechos do próprio fundo. Fontes: as das peles.
+
+**Wireframe a 1920×950** (Crescer · Itens):
+
+```
+┌──────────────────────────────────────────────────────────────────────────────────────────────┐
+│ [◉ Growlmon Champion]                         DIGILAB                    [Dia 3 07:42 ● salvo]│
+│ ┌────┐                          ┌ Crescer · saco de pancada ───────────────── [×] ┐          │
+│ │Pet │      [SACO DE PANCADA]   │ [tr][ap][ev][▦ ITENS]                           │          │
+│ │Cre◀│            │             │ ▦ 0 chips  ▭ 0 cartas  △ treino 10/11  (c1)(c3)(c5) vagas│
+│ │Lut │           ┌┴┐  ─ ─ ─ ─ ─ ┤ CHIPS                                           │          │
+│ │Diá │           │█│            │ ┃Força      ┊ ┊Guarda     ┊ ┊Recuo  Champion  ┊│ ilha viva│
+│ │Con │  (Growlmon│█│            │ ┃+1 força   ┊ ┊+1 guarda  ┊ ┊pesado → recuar ┊│          │
+│ └────┘   no saco) │            │ ┊Oportunista┊ ┊Perseguidor┊ ┊Aparo  Ultimate ┊│          │
+│                  ═╧═           │ CARTAS  ┊Fôlego ×0┊ ┊Cura ×0┊ ┊Foco ×0┊          │ (minimapa)│
+│                                 │ ▸ Como funciona                                 │          │
+│                                 └─────────────────────────────────────────────────┘          │
+└──────────────────────────────────────────────────────────────────────────────────────────────┘
+```
+(`(c1)` = o encaixe trancado, com o cadeado de traço e o nº de medalhas que o abre; `┊` = tracejado, ainda não é seu; `┃` = o destaque)
+
+**O que muda na leitura do estado do pet.**
+- O que importa vem primeiro e é o único destaque da tela; o resto se lê por ícone e número, e as frases ficam a um foco de distância.
+- **Nos Itens,** o estado de cada item (tem ou não tem; vaga livre, ocupada ou trancada) é forma (sólido, tracejado, cadeado), não frase.
+- **Na Evolução,** o que o nível pede são três selos e um número, e a árvore mostra só o caminho do pet.
+- **A trava** diz onde o jogador está na jornada: o "Tamer Nv N" e o cadeado com o nível de cada lugar, e o marco na dica.
+- Nenhum dado novo: cada número e texto vem do motor, da tela de hoje ou do plano de progressão (tabela abaixo).
+
+**Custo em determinismo e em e2e.**
+- **Determinismo: nenhum.** É só vista: a câmera, o pet andando, a trava, o cartão e a dica não entram no registro. A trava é a opção V
+  do plano (P-5): uma função pura do registro do Tamer e dos pets. Com o mundo físico ligado, o pet que anda é só a vista e volta à
+  posição do motor ao sair.
+- **e2e:** as rotas ficam, mas os seletores por texto quebram: as abas viram ícones com `aria-label`, os textos de apoio saem da vista e
+  as etiquetas do Registro viram ícones.
+  - A viagem precisa de um modo sem animação nos testes.
+  - Os testes que procuram frases ("Ainda não é seu", "Faltam 3 medalhas", "Nenhuma luta ainda") passam a procurar o `aria-label` ou o
+    balão.
+  - A trava pede o e2e do lugar trancado (o plano, seção 6).
+  - No celular, a folha muda de forma (de modal cheio para folha de baixo), e os testes de foco da folha mudam com ela.
+- Os efeitos curtos dos itens são texto novo de tela (um mapa na tela, não no `itens.ts`).
+
+**Número ou texto → fonte.**
+
+| na tela | fonte |
+|---|---|
+| Growlmon, Koromon, Agumon, Guilmon, Greymon, Kyubimon, Birdramon, MetalGreymon…; os níveis | `motor/nomes.ts` (`DIGIMON_DA_FORMA`, `NOME_EST`, `NOME_ARQ`) |
+| os 6 chips e as 3 cartas, o efeito (inteiro no balão) | `motor/itens.ts` (`ITENS`) |
+| de onde vem cada item | `itens.ts` (`ITEM_DA_MEDALHA`, `CARTA_DA_REVANCHE`); `TelaItens.tsx` (`deOnde`), `tamer.ts` (`comoGanhar`) |
+| Champion/Ultimate no chip de regra | `TelaItens.tsx` ("pede um …", `estagioMinimo`) |
+| vagas 1/3/5 | `constantes.ts` `CIT.vagas`; `itens.ts` `vagasDeChip` |
+| +20 guts; 30% → +20% | `CIT.gutsFolego`, `CIT.curaAbaixo`, `CIT.curaFracao` |
+| "treino 10/11" | `porqueItensNaoValem` do save (o texto do antes); `CIT_V9.treinoMinimo` × `CIT.tipico` |
+| 3 medalhas para o Ultimate; Campina, Torre de pedra, Floresta | `CMD.adulto`; `tamer.ts` `medalhasQueFaltam`; `medalhas.ts` |
+| 0/10 lutas; 80% | `CAT.sparring`, `CLE.limiarTaxa`; `luta.ts` `sparringTexto` |
+| +2 x +1 y; a estrela da aptidão em Levantar pedra e Esquiva | `CTR`; `APTIDAO.brasa` |
+| marcas 40/60 e 30/60 | `CTR.limiarPausa`, `CTR.limiteForcar`, `CSO.aviso`, `CSO.sombrio` |
+| "5 regras" (Champion) | o "Como funciona" da Arena; no jogo, `m.gp.ativas.length` |
+| os rivais e os estilos | `luta.ts`, `nomesRivais.ts` (`DIGIMON_BOT`), `bots.ts` (`NOME_BOT`) |
+| as medalhas, os líderes, a regra, o item, o que libera | `medalhas.ts`, `bots.ts`, `arenas.ts`, `itens.ts`, `TelaMedalhas.tsx` |
+| Nv 2, 3, 4, 5, 6 e 8 de cada lugar e peça; o marco de cada um | `docs/PLANO_V3_PROGRESSAO_TUTORIAL.md`, seção 3.3 (a tabela, uma linha por nível) |
+| "Abre quando ele virar Rookie" | o plano, 3.4 (os outros textos de marco: a prancha, da coluna "marco" da 3.3) |
+| "Tamer Nv 5" | o plano, 3.2 e P-8; a conta dos marcos do save (acima) |
+| o cartão do Diário: `tent`, "Diário", "Veja o que ele fez e por quê.", Ir e Depois | o plano, 4.1 (tipo A) e 4.2 (linha do Nv 2) |
+| a Fronteira "Nv 8 · Abre com 6 medalhas" | o plano, 3.3 (linha 8); `MapaExploracao.tsx`; `liga.ts` (`MEDALHAS_LIGA`) |
+| as linhas do registro | `motor.ts` (`_hist`), `NOME_PET`, `TelaRegistro.tsx` |
+| 19 formas, 3/19 | `TelaCatalogo.tsx` (`formasDoBrasao`) |
+| a lista dos Ajustes; "Mostrar dicas" | `TelaConfig.tsx` |
+| os vitais no leque do celular (64, 81, 40, 72, 95) | o mínimo (#619): os cinco vitais do Estado atual (`TelaPet.tsx`); os números são exemplo |
+| **exemplo, nunca dado** | Dia 3, 07:42, 07:31, 15h 15min, fadiga 20, estágio 10/12, semente 7000, 76 eventos, as horas do registro, o rival escolhido, os vitais |
+| **novo, de tela (PROPOSTO)** | "Portão da arena", "Barraca do Tamer", os efeitos curtos dos itens, os textos de marco que não estão na 3.4, "Viagem da câmera", o botão Mapa, as teclas, as durações, a altura da folha |
+
+**Perguntas abertas ao Matheus** (a do portão e da barraca foi aprovada, e a da trava virou o plano decidido: saíram da lista).
+1. **As teclas do atalho direto:** `C`/`L`/`D`, `1`–`4` nas abas e `Esc`? Recomendo as letras. Custo baixo (só fora de campo de texto).
+2. **A Fronteira vira lugar próprio ou continua aba trancada?** Recomendo aba por agora (Nv 8). Custo baixo.
+3. **O pet andando com o mundo físico ligado:** a vista anda e volta ao sair, como o `CENA.treino`? Recomendo que sim. Custo: vista e
+   motor divergindo sem aviso.
+4. **Câmera 700 ms (SEM FONTE) e painel 180 ms (do guia)?** Custo: viagem longa irrita; o atalho e a "Viagem da câmera" cobrem.
+5. **Um `--hx-sombrio` nas duas peles** (o roxo era `--dl-dark`): recomendo criar, com o contraste conferido. Sem ele, a sobrecarga e
+   a forma sombria ficam sem a cor própria (na prancha, a sombria da árvore é o listrado `--hx-hachura`).
+6. **Abas só em ícone, com o rótulo na ativa e na dica:** recomendo manter. Custo: quem não reconhece o ícone precisa do foco ou do hover.
+7. **As duas contas de medalha do save não batem.**
+   - O pet sabe de 1 (evento "u", `m.medalhas`): é a conta que o motor usa na trava da evolução e nas vagas.
+   - O Tamer tem 0 (`tamer.ts`): é dele que sai a lista do que falta.
+   - O jogo de hoje mostra as duas lado a lado ("1 de 3" e "Faltam 3"). A prancha desenha só a do Tamer.
+   - Recomendo uma conta só na tela, a do Tamer, e conferir o save: um Champion v6 precisa de 1 medalha, então o Tamer do save deveria ter
+     a da Campina.
+   - Custo de errar: a tela diz "1 de 3" e "faltam 3" ao mesmo tempo, como hoje.
+8. **As lutas de treino ficaram na Evolução** como "0/10 lutas", com o 80% no balão. Recomendo manter (é o que mais demora). Custo de
+   tirar: o jogador vê o tempo e as medalhas e não sabe que faltam lutas.
+9. **No Catálogo, só as formas vistas mostram o nome;** as outras, a silhueta, com o nome no balão. Recomendo assim. Custo: quem quer o
+   nome de todas precisa passar por cada uma.
+10. **Os efeitos curtos dos itens** ("pesado → recuar", "guts < 20 → pesado", "não se distrai") são texto novo. Recomendo um mapa na tela
+    (`TelaItens.tsx`), sem mexer no motor. Custo de errar: um resumo que diga menos do que a regra; a frase inteira continua no balão.
+11. **(nova) A trava é pela contagem de marcos ou marco a marco?**
+    - No save do antes, o pet já é Champion (o marco do Nv 6), mas a primeira medalha (o marco do Nv 5) falta: 5 marcos, Nv 5.
+    - Pela contagem, o Itens (Nv 5) abre e as Regras e o Forçar (Nv 6) ficam trancados com "Abre quando ele virar Champion", num pet que
+      já é Champion.
+    - Marco a marco, seria o contrário: o Itens trancado e as Regras abertas.
+    - Recomendo que cada peça abra pelo seu próprio marco (a vista nunca abre antes do motor, plano 3.3) e que o número do Tamer seja a
+      contagem. Num save coerente (o Tamer com a medalha da Campina), as duas leituras dão o Nv 6 e tudo aberto.
+    - A prancha seguiu a contagem, como pedido, e não mudou a tela de Itens.
+    - Custo de errar: o jogador vê um cadeado que pede o que ele já fez.
+12. **(nova) O minimapa no celular:** o botão **Mapa** no leque do retrato (recomendado; tela `mapa_390`), ou mais um ícone na coluna de
+    cima, que abre o mesmo mapa por cima?
+    - Recomendo o leque: a coluna fica com os quatro destinos do mínimo, e o mapa é consulta, não destino.
+    - Custo de errar: no leque, o mapa fica a dois toques; na coluna, a coluna cresce para cinco ícones e ocupa mais do canto da cena.
+13. **(nova) A altura da folha no celular:** de y 400 para baixo a 390×844 (e de y 380 a 360×800), uns 53% da tela, PROPOSTO, SEM
+    FONTE.
+    - Recomendo essa altura, com a folha rolando por dentro e um gesto de puxar a alça para cima para ver tudo.
+    - Custo de errar: mais alta, esconde o lugar e o pet (perde a direção); mais baixa, o corpo das abas cabe pouco e quase tudo rola.

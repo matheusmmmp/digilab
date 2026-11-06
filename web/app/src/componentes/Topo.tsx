@@ -16,7 +16,8 @@ import { BotaoMovel } from "./BotaoMovel.tsx";
 import { Deco } from "./Deco.tsx";
 import { seguirPet, useCameraLivre } from "../telas/pet/cameraLivre.ts";
 
-interface PropsTopo { abrirMeusPets: () => void; irConversar: () => void; irDestino: (d: Destino) => void; abrirConfig: () => void }
+/** `lugar`: o lugar de Crescer esta aberto (L2): no celular, o icone de Crescer na coluna fica em destaque */
+interface PropsTopo { abrirMeusPets: () => void; irConversar: () => void; irDestino: (d: Destino) => void; abrirConfig: () => void; lugar?: boolean }
 
 /** a partir de 900 px o topo de sempre; abaixo, o do mobile minimo (M1): o retrato e a hora, e a coluna dos destinos */
 export function TopoHabitat(p: PropsTopo) { return usePainelLado() ? <TopoLargo {...p} /> : <TopoMovel {...p} />; }
@@ -28,7 +29,7 @@ const DESTINOS_COLUNA: Destino[] = ["crescer", "lutar", "diario"];
    (redondo no Vidro, reto no Militar), que abre o leque dos vitais e dos painéis (TelaPet.tsx, LequePet), com o ponto rosa quando há uma necessidade, e a
    hora; no canto de cima à direita a coluna Conversar, Crescer, Lutar e Diário, só ícone. Sem barra de abas: a tela Pet é a casa. O nome e o estágio do
    pet ficam no Meus pets e na Evolução; o "salvo" fica escondido e só o erro de gravação aparece (M1-12). */
-function TopoMovel({ irConversar, irDestino }: PropsTopo) {
+function TopoMovel({ irConversar, irDestino, lugar }: PropsTopo) {
   const { motor: m, nascendo, erroSave } = useJogo(), ovo = nascendo > 0, e = m.e, aberto = useLeque() === "paineis", nec = necessidadeMovel(m, nascendo);
   return (
     <header className="mm-topo">
@@ -45,7 +46,7 @@ function TopoMovel({ irConversar, irDestino }: PropsTopo) {
         <nav className="mm-destinos" aria-label="Destinos">
           {DESTINOS_COLUNA.map(d => {
             const I = ICONE_DESTINO[d]!;
-            return <BotaoMovel key={d} className="mm-caixa mm-forma mm-bt mm-bt48" rotulo={NOME_DESTINO[d]} lado="esq" onClick={() => irDestino(d)}><I aria-hidden="true" /></BotaoMovel>;
+            return <BotaoMovel key={d} className="mm-caixa mm-forma mm-bt mm-bt48" rotulo={NOME_DESTINO[d]} lado="esq" aria-current={lugar && d === "crescer" ? "page" : undefined} aria-keyshortcuts={d === "crescer" ? "C" : undefined} onClick={() => irDestino(d)}><I aria-hidden="true" /></BotaoMovel>;
           })}
         </nav>
       </div>
