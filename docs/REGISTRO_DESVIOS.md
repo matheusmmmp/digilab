@@ -555,3 +555,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-06 — LONGE_REGULAR, o código do descritivo da D-C1-3 (A10.8) (worker, Claude Code, Sonnet 5.5, branch `v3-dc13-codigo`)](registro/2026-11.md)
 - [2026-11-06 — SPRITES_REACOES, o Dormir no jogo (worker, Claude Code, Sonnet 5.5, branch `v3-sprites-dormir`)](registro/2026-11.md)
 - [2026-11-06 — LONGE_REGULAR, o resultado do descritivo da D-C1-3, a seção 13.6 (worker, Claude Code, Sonnet 5.5, branch `v3-dc13-resultado`)](registro/2026-11.md)
+- [2026-11-06 — LUTA_EFEITOS, a tarefa dos efeitos da luta em tempo real (Gerente da missão SPRITES_GERACAO, Claude Code, Opus 5.5, worktree `v3-luta-efeitos`)](registro/2026-11.md)
