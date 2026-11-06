@@ -9,8 +9,8 @@ const acoes = JSON.parse(readFileSync(new URL("./atlas_acoes_sintetico.json", im
 const base: AtlasUp = { atlas: "a.png", ms_por_quadro: 120, sprites: {}, pecas: {} };
 const copia = (): AtlasClipes => structuredClone(acoes);
 
-test("as acoes do atlas: Comer, Comer_objeto e as quatro do lote 1", () => {
-  expect([...CLIPES_ACOES]).toEqual(["Comer", "Comer_objeto", "Feliz", "Sacudir", "Chamar", "Emburrar"]);
+test("as acoes do atlas: Comer, Comer_objeto, as quatro do lote 1 e o Dormir", () => {
+  expect([...CLIPES_ACOES]).toEqual(["Comer", "Comer_objeto", "Feliz", "Sacudir", "Chamar", "Emburrar", "Dormir"]);
 });
 
 test("passa: todas as formas com o Comer e o objeto casando; NPCs e bots sem as acoes", () => {
