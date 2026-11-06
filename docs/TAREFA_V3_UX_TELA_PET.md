@@ -1,7 +1,8 @@
 # TAREFA V3 — UX_TELA_PET (2026-11-05)
 
 Coordenador: Gerente da frente UX_TELA_PET (Claude Code, Opus 5.5). Worker: o mesmo, na etapa de papel. Worktree e branch:
-`v3-ux-tela-pet`. Status: etapa 0 (papel) ENTREGUE; tudo aqui é **PROPOSTO** até o Matheus decidir (seção 8).
+`v3-ux-tela-pet`. Status: etapa 0 (papel) ENTREGUE. **UX-1 e UX-2 DECIDIDAS** pelo Matheus em 2026-11-05 (proposta B; os hooks
+antes, seção 8.1); o resto continua **PROPOSTO** até ele decidir (seção 8).
 
 Categoria: arquitetura. Origem: Matheus, 2026-11-05: arquitetura de agentes para a interface do jogo (designer, implementador, testador
 no navegador, revisores por lente, hooks como gate) e propostas de layout e UX de jogo para a tela Pet.
@@ -205,3 +206,14 @@ Das etapas seguintes (para depois): os critérios de cada linha da seção 3.4 e
 | **UX-6** | instalar o plugin `frontend-design`, o shadcn MCP e o Playwright MCP | **sim, os três**, o Playwright MCP só no frontmatter do testador | sem eles, os papéis caem para prompt puro, e o limite deixa de ser do harness |
 | **UX-7** | o testador classifica o diff com o próprio modelo ou um agente separado para isso | **o próprio testador**, com a regra de que a classificação não aprova | separado: mais um agente e mais tokens; o próprio: o mesmo modelo que roda pode querer "explicar" a falha. A regra do G-VISAO segura os dois casos |
 | **UX-8** | onde ficam as capturas para aprovar | **`D:\Trab\digilab\capturas_ux_pet_aprovar\`, fora do git**, como o HUD e a M7 | dentro do git: o repositório cresce com PNGs e o `.gitignore` do atlas fica ambíguo |
+
+### 8.1 Decididas
+
+Matheus, 2026-11-05, nesta sessão (resposta "B, hooks antes"):
+
+- **UX-1: a proposta B** ("O porquê no balão") vira a prancha da P1. A faixa de vitais da A fica como passo seguinte possível, sem
+  decisão; a C fica de fora por ora.
+- **UX-2: os hooks antes.** A ordem é A0 (restaurar os H1–H4 apagados no `2586b0e`) → A1 (H5, H6 e H8, desligados, com testes) → P1
+  (a prancha da B em `docs/pranchas/ux-pet/`, para o ok do Matheus antes de qualquer código), com os agentes (A2) entrando junto da P1.
+
+UX-3 a UX-8 continuam PROPOSTAS.
