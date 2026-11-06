@@ -76,7 +76,7 @@ for (const chave of Object.keys(SAVES)) {
     const depois = JSON.parse(await registro(page)).log as unknown[][];
     expect(depois.slice(0, regAntes.length)).toEqual(regAntes);
     expect(depois.filter(e => e[1] === "l")).toEqual(regAntes.filter(e => e[1] === "l"));
-    expect(await page.evaluate(() => (window as any).__digilab.assinatura() as string)).toContain(chave === "v16" ? '"lab"' : '"cb"');
+    expect(await page.evaluate(() => (window as any).__digilab.assinatura() as string)).toContain(chave.startsWith("v16") ? '"lab"' : '"cb"');
     expect(erros).toEqual([]);
   });
 }
