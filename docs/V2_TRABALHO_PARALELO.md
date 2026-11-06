@@ -54,7 +54,9 @@ git -C D:/Trab/digilab/v2 worktree add D:/Trab/digilab/v2-<frente> -b v2-<frente
   (3101…3505 e 4101…4505 para os gates da fase 1, conforme o plano de análise de cada frente).
 - **Arquivos que todos editam** (o registro de desvios): cada worker acrescenta a própria seção no fim e não reescreve a dos outros.
   No conflito de merge, mantêm-se todas as seções. Desde a etapa 2 da rodada de saúde (2026-10-13), o registro é dividido por mês: a
-  seção vai no fim de `docs/registro/AAAA-MM.md` (o mês da data dela), e uma linha no fim do índice `docs/REGISTRO_DESVIOS.md`. Um PR
+  seção vai no fim de `docs/registro/AAAA-MM.md` (o mês da data dela). Desde 2026-11-06 o índice `docs/REGISTRO_DESVIOS.md` é gerado
+  (`python tools/gerar_indice_desvios.py`) por quem faz o merge: o worker não o edita, e um conflito nele se resolve rodando o gerador,
+  nunca à mão (`docs/TAREFA_V3_INDICE_DESVIOS.md`). Um PR
   que ainda escreveu no formato antigo é absorvido por `python tools/registro_por_mes.py absorver <commit>`. Desde a etapa 1 da rodada de saúde (2026-10-13), o `CLAUDE.md` não recebe seção de
   etapa: o resumo vai no documento da frente, e o `CLAUDE.md` só muda com o ok do Matheus. As pendências estão no `docs/PAINEL_V2.md`,
   que é do coordenador.
