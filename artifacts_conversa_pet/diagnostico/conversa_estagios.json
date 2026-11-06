@@ -1,0 +1,174 @@
+{
+ "adolescente": [
+  {
+   "jogador": "oi! tudo bem com você?",
+   "pet": "Mmn...",
+   "fatos": [],
+   "lat": 4.464812699996401,
+   "comando": null,
+   "prompt": "livre-v2",
+   "erro": null
+  },
+  {
+   "jogador": "eu sou o Matheus, prazer",
+   "pet": "Hum...",
+   "fatos": [],
+   "lat": 4.903230199997779,
+   "comando": null,
+   "prompt": "livre-v2",
+   "erro": null
+  },
+  {
+   "jogador": "lembra meu nome?",
+   "pet": "Mmn... Matheus...",
+   "fatos": [
+    "V1",
+    "T1"
+   ],
+   "lat": 5.118500299984589,
+   "comando": null,
+   "prompt": "livre-v2",
+   "erro": null
+  },
+  {
+   "jogador": "por que você está bravo?",
+   "pet": "Você me deixou esperando...",
+   "fatos": [
+    "M1"
+   ],
+   "lat": 4.78005529998336,
+   "comando": null,
+   "prompt": "livre-v2",
+   "erro": null
+  },
+  {
+   "jogador": "hoje meu dia foi difícil no trabalho",
+   "pet": "Mmn... Difícil...",
+   "fatos": [],
+   "lat": 4.968037800019374,
+   "comando": null,
+   "prompt": "livre-v2",
+   "erro": null
+  },
+  {
+   "jogador": "você lutou ontem, né?",
+   "pet": "Mmn...?",
+   "fatos": [],
+   "lat": 5.49726920001558,
+   "comando": null,
+   "prompt": "livre-v2",
+   "erro": null
+  },
+  {
+   "jogador": "vai comer",
+   "pet": "Comer... agora?",
+   "fatos": [
+    "E1",
+    "D1"
+   ],
+   "lat": 5.187418500019703,
+   "comando": null,
+   "prompt": "livre-v2",
+   "erro": null
+  },
+  {
+   "jogador": "me conta alguma coisa sobre você",
+   "pet": "Mmn... sou Growlmon. Quero comer...",
+   "fatos": [
+    "I1",
+    "E1",
+    "D1"
+   ],
+   "lat": 6.32340719999047,
+   "comando": null,
+   "prompt": "livre-v2",
+   "erro": null
+  }
+ ],
+ "adulto": [
+  {
+   "jogador": "oi! tudo bem com você?",
+   "pet": "Hmm. Tudo bem?",
+   "fatos": [],
+   "lat": 4.463690099975793,
+   "comando": null,
+   "prompt": "livre-v2",
+   "erro": null
+  },
+  {
+   "jogador": "eu sou o Matheus, prazer",
+   "pet": "Hum. Matheus?",
+   "fatos": [],
+   "lat": 4.2678626000124495,
+   "comando": null,
+   "prompt": "livre-v2",
+   "erro": null
+  },
+  {
+   "jogador": "lembra meu nome?",
+   "pet": "Matheus...?",
+   "fatos": [
+    "T1",
+    "T2",
+    "T3",
+    "V1"
+   ],
+   "lat": 5.444287399994209,
+   "comando": null,
+   "prompt": "livre-v2",
+   "erro": null
+  },
+  {
+   "jogador": "por que você está bravo?",
+   "pet": "Matheus... Você me deixou esperando.",
+   "fatos": [
+    "M1"
+   ],
+   "lat": 4.8787336999957915,
+   "comando": null,
+   "prompt": "livre-v2",
+   "erro": null
+  },
+  {
+   "jogador": "hoje meu dia foi difícil no trabalho",
+   "pet": "Hum. Difícil?",
+   "fatos": [],
+   "lat": 4.519535300001735,
+   "comando": null,
+   "prompt": "livre-v2",
+   "erro": null
+  },
+  {
+   "jogador": "você lutou ontem, né?",
+   "pet": "Luta? Não lembra?",
+   "fatos": [],
+   "lat": 4.489052499993704,
+   "comando": null,
+   "prompt": "livre-v2",
+   "erro": null
+  },
+  {
+   "jogador": "vai comer",
+   "pet": "Comi?",
+   "fatos": [
+    "D1"
+   ],
+   "lat": 4.552360800007591,
+   "comando": null,
+   "prompt": "livre-v2",
+   "erro": null
+  },
+  {
+   "jogador": "me conta alguma coisa sobre você",
+   "pet": "Eu sou um WarGrowlmon. Prefiro ser chamado de WarGrowlmon.",
+   "fatos": [
+    "I1",
+    "T1"
+   ],
+   "lat": 6.283839200012153,
+   "comando": null,
+   "prompt": "livre-v2",
+   "erro": null
+  }
+ ]
+}
