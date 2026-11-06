@@ -52,7 +52,8 @@ export async function enfeites(ilha: Ilha, base: string): Promise<Enfeites> {
     if (!lista.length) continue;
     const m = ENFEITES_MODELOS[nome];
     const { pecas } = await carregarVariante(gltf, new URL("enfeites/" + m.arquivos[0], base).href, m);
-    const [lx, lz] = lampada(pecas), lado = Math.hypot(lx, lz) > 1e-3 ? Math.atan2(lx, lz) : 0;
+    /* so o que tem luz tem um lado (a lanterna); os outros viram a frente do glTF (+z) para a area */
+    const [lx, lz] = ENFEITES_LUZ[nome] ? lampada(pecas) : [0, 0], lado = Math.hypot(lx, lz) > 1e-3 ? Math.atan2(lx, lz) : 0;
     const lugar = lista.map(e => {
       const giro = e.giro - lado, y = ilha.altura(e.x, e.z);
       if (ENFEITES_LUZ[nome]) {

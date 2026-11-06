@@ -417,3 +417,36 @@ def test_montar_candidato_so_com_derivado(tmp_path):
     assert c.tags_do_arquivo == ["Comer"]                   # sem o lote 1
     d = F.ler_export(REMASTER / "acoes" / "export" / "Agumon", "Comer")
     assert c.ms == d.ms and all((a == b).all() for a, b in zip(c.quadros, d.quadros))
+
+
+# --------------------------------------------------------------------------- G2, E3: limpar.py (a reserva do snap, D-SG-N)
+import limpar as L  # noqa: E402
+
+
+def test_limpar_snap_leva_a_paleta_e_mantem_o_alfa():
+    pal = np.array([COR_A, COR_B], np.uint8)
+    q = np.zeros((2, 2, 4), np.uint8)
+    q[0, 0] = (190, 40, 35, 255)   # perto de COR_A
+    q[0, 1] = (40, 35, 190, 255)   # perto de COR_B
+    out = L.snap(q, pal)
+    assert tuple(out[0, 0, :3]) == COR_A and tuple(out[0, 1, :3]) == COR_B
+    assert (out[..., 3] == q[..., 3]).all()
+    assert (out[1] == 0).all()
+
+
+def test_limpar_amostra_na_grade_e_binariza_o_alfa():
+    # referencia: um quadro 3x2 ampliado 4x com o canto em (2, 2); master = 1 * referencia + 0
+    fr = np.zeros((16, 16, 4), np.uint8)
+    fr[2:6, 2:6] = (*COR_A, 255)
+    fr[2:6, 6:10] = (*COR_B, 200)
+    fr[6:10, 2:6] = (*COR_A, 60)   # alfa abaixo do corte: some
+    q = L.amostrar(fr, (3, 2), 1.0, (0.0, 0.0), 4, (2, 2), "t")
+    assert tuple(q[0, 0]) == (*COR_A, 255) and tuple(q[0, 1]) == (*COR_B, 255)
+    assert tuple(q[1, 0]) == (0, 0, 0, 0) and tuple(q[0, 2]) == (0, 0, 0, 0)
+
+
+def test_limpar_falha_com_pixel_opaco_fora_da_grade():
+    fr = np.zeros((16, 16, 4), np.uint8)
+    fr[14, 14] = (*COR_A, 255)
+    with pytest.raises(ValueError, match="fora da grade"):
+        L.amostrar(fr, (2, 2), 1.0, (0.0, 0.0), 2, (0, 0), "t")
