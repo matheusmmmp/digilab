@@ -254,3 +254,20 @@ Cada uma com a recomendação e o custo de errar.
 | **PL-7** | em que pets a ponte liga | **no v16 do laboratório e no v17, pelo evento da ponte no registro, gravado no ovo novo** (como o `"cb"`); um v16 ou v17 já vivo, sem o evento, fica como hoje. Com o #562, o modular já é o cérebro do pet de verdade: a ponte não fica restrita ao pet de teste (pedido do Gerente, 2026-11-04). A pergunta "até a D-C1-3?" perdeu o objeto | sem o evento, isto é, a ponte em todo v17: o replay de todo v17 vivo muda e o save não abre igual. Ligar num pet vivo: a dor SEM FONTE e a memória de luta entram num pet que não volta atrás; se o Matheus quiser, é um evento a mais, como o `"cb"` do pet ativo (CP-1) |
 | **PL-8** | medir se o pet luta melhor com a ponte | **não nesta tarefa:** o laboratório serve para ver o pet; uma medida pede plano de análise e faixa de sementes próprios, e a bancada da luta (`web/app/scripts/equilibrio_tr/`) não roda o modular | medir sem plano: um número do jogo vira resultado sem gate, contra a regra do `CLAUDE.md` |
 | **PL-9** | o que a ponte faz com o A ativo | **só o corpo:** a dor da luta vale com qualquer cérebro; o episódio e o ε pelo `g_exp` só com o modular ativo; com o A, nada fica guardado para o modular (3.7) | a dor só com o modular: o corpo passa a depender de qual cérebro decide, e um pet que perde uma luta sob o A não sente nada. Guardar as lutas para o modular: o cérebro parado passa a receber, contra a regra do #562 |
+
+## 9. PE0, o resumo da etapa (2026-11-06, Sonnet 5.5, branch `v3-ponte-luta-pe0`)
+
+**Resposta: o pet de teste v16 e o v17 lutam** (com o modular, com o A e com um `"cb"` entre duas lutas), e o replay refaz as lutas bit a bit.
+Nenhum conserto foi preciso: a PE1 pode seguir. Os desvios D-PE0-1 a D-PE0-5 estão em `docs/registro/2026-11.md`.
+
+- **O dono e o resumo da luta:** `web/app/test/ponte_luta_pe0.ts` (a vida curta com lutas, 2 dias, e o resumo por luta).
+- **O gabarito das lutas de hoje:** `web/app/test/gabaritos/ponte_luta_pe0.json.gz`, 20 vidas (v16, v17 modular, v17 A e v17 `"cb"` × sementes 101…505) e
+  512 lutas; por luta, o `ResultadoLuta` resumido e o sha256 da assinatura do `GambitsPet`, da confiança e do `estadoInterno` do modular.
+  Gravado por `web/app/test/gerar_gabarito_pe0.ts` (Node), num commit antes do e2e e dos documentos. Daqui em diante é o gabarito G2 das PE1 a PE4:
+  com as chaves da ponte desligadas, tem de sair byte a byte.
+- **O teste do motor:** `web/app/test/ponte_luta_pe0.test.ts` (43 testes): cada vida nasce, passa do In-Training, luta contra bots e na Liga, o
+  cérebro que decidia em cada luta é o esperado (o A parado e o modular continuando dali no `"cb"`), o replay evento a evento e por
+  `Motor.reproduzir` fecha, e a vida de hoje sai igual ao gabarito luta a luta.
+- **O e2e:** `web/app/e2e/ponte_luta.spec.ts` (saves de `e2e/gerar_save_ponte_luta.mjs`): v16 (pelo laboratório), v17 modular e v17 A lutam na Arena e na
+  Liga e o app reabre o save com as mesmas lutas.
+- **Limite:** a série do gabarito é a Liga, que o pet de vida curta quase sempre perde na primeira luta (1 série de 2 lutas em 20; D-PE0-2).
