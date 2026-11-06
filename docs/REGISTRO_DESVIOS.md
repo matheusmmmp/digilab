@@ -518,3 +518,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-05 — SPRITES AÇÕES, missão M3, o Comer na ilha (worker, Claude Code, Opus 5.5, worktree `v3-sprites-ilha`)](registro/2026-11.md)
 - [2026-11-05 — SPRITES AÇÕES, missão M4, o e2e e as capturas do Comer (worker, Claude Code, Opus 5.5, worktree `v3-sprites-e2e`)](registro/2026-11.md)
 - [2026-11-05 — ACOES_NOVAS AN4, o resultado da run do passeio (worker, Claude Code, Opus 5.5, worktree `v3-acoes-novas-an4-run`)](registro/2026-11.md)
+- [2026-11-06 — UX_TELA_PET A1, as escolhas dos hooks H5, H6 e H8 (Gerente da frente, Claude Code, Opus 5.5, worktree `v3-hooks-a1`)](registro/2026-11.md)

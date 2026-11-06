@@ -224,3 +224,25 @@ Branch `v3-hooks-a0`, empilhada sobre a `v3-ux-tela-pet`. `.claude/hooks/` (seis
 `2586b0e^`, por `git checkout`, sem edição à mão. Com o merge, voltam a valer o H1, o H1b e o H3, que o Matheus ligou em 2026-10-14; o H2 e o
 H4 seguem desligados. O Matheus decidiu religar os três (2026-11-05, "Sim, religar"). `python -m pytest tests/test_hooks.py tests/test_hook_h4.py tests/test_conferir_saude.py -q`: 68 passed (antes, 43
 failed e 25 passed). Próxima: a A1.
+
+## 10. Etapa A1: H5, H6 e H8, desligados (2026-11-06)
+
+Branch `v3-hooks-a1`, empilhada sobre a `v3-hooks-a0`. Os três hooks da seção 3.3 existem em `.claude/hooks/` e a configuração proposta em
+`docs/propostas/hooks_ux_settings.json`; **nada foi ligado** (o `.claude/settings.json` é o da A0, e um teste confere). O H8 não entra no
+`settings.json`: a proposta traz, em `agentes_h8`, o matcher e o comando de cada papel para o frontmatter dos agentes da A2.
+
+- **H5 `h5_web.py`** (`Stop`): roda tipos, Vitest e e2e em `web/app` quando o diff contra o `merge-base` com `origin/main`, mais o não
+  commitado e os arquivos novos, toca `web/app/src/`, `web/app/e2e*`, `web/app/test/` ou `web/app/motor/`. Para no primeiro passo que
+  falha e não bloqueia duas vezes pelo mesmo motivo. `DIGILAB_H5_PASSOS` troca os passos (a UX-3 e os testes); um passo além de
+  `DIGILAB_H5_LIMITE_S` (padrão 1 800 s) não bloqueia.
+- **H6 `h6_capturas.py`**: nega editar `*-snapshots/` e a pasta `DIGILAB_CAPTURAS`; no shell, `ask` no Playwright com
+  `--update-snapshots`/`-u` e negação para comando que cita essas pastas e não é só leitura (ou que redireciona para lá).
+- **H8 `h8_escopo.py <papel>`**: designer, implementador e testador como na seção 3.2; papel desconhecido bloqueia.
+
+Testes: `python -m pytest tests/test_hooks.py -q` → 101 passed (32 de antes, 69 novos).
+
+**A medida do H5** (`docs/propostas/medida_h5_2026-11-06.txt`, três rodadas sem nenhuma mudança em `web/app`): tipos 4–9 s, Vitest 110–169 s
+(822 testes, todos passam), e2e 481–709 s. O total por turno fica entre **10,8 e 13,7 min**, acima dos ~10 min da UX-3. O e2e **oscilou no
+mesmo código**: 3 falhas na rodada 1, 1 na rodada 2 (o treino com "Forçar levantar pedra?", nas duas), nenhuma na 3. Com o H5 ligado, uma
+oscilação dessas devolveria o turno ao agente uma vez por assinatura. Isso pesa na UX-3 e na UX-5 (ligar o H5 só depois de estabilizar ou
+de reduzir o e2e do `Stop`).
