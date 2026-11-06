@@ -53,6 +53,7 @@ TEMPERATURA_OLLAMA = 0.7         # 0,3 -> 0,7 na fala-v3: com 0,3 o modelo copia
 MAX_TOKENS_OLLAMA = 60
 REPETICAO_OLLAMA = 1.5           # penaliza o loop de carinhas
 MAX_TOKENS_SAIDA = 300          # fala curta; limita o pior caso de cada chamada
+LIMITE_USD_LIVRE_PADRAO = 3.00   # teto TOTAL da FALA LIVRE com o Claude (CONVERSA_PET M5), PROPOSTO no plano de analise
 LIMITE_USD_PADRAO = 2.00        # teto TOTAL acumulado (decisao do pesquisador, 2026-09-24)
 ARQUIVO_GASTO = Path(__file__).with_name("gasto_fala.json")   # fora do git
 
@@ -63,6 +64,9 @@ PRECOS_USD_POR_MTOK = {
     "claude-sonnet-5": (2.00, 10.00),
     "claude-opus-5": (5.00, 25.00),
     "claude-fable-5-1": (10.00, 50.00),
+    # CONVERSA_PET M5 (fala livre, comparacao cega D5): precos da Anthropic de 2026-10 (haiku-5-5 ate 100K tokens de prompt)
+    "claude-haiku-5-5": (0.10, 0.50),
+    "claude-sonnet-5-5": (2.00, 10.00),
 }
 
 

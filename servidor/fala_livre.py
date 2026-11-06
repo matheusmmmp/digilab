@@ -5,8 +5,11 @@
     POST /api/fala-livre/verificar  {"fala": "...", "fatos_citados": [...], "fatos": [...], "semente": 0}
     GET  /api/fala-livre/status
 
-So Ollama local (DIGILAB_MODELO_LIVRE, padrao gemma2:9b). As chamadas sao em fila (uma GPU). A pagina
-guarda as falas no log de apresentacao dela; o servidor nao grava nada do pet.
+Provedor (CONVERSA_PET M5, decisao D5): `DIGILAB_PROVEDOR_LIVRE` = `ollama` (padrao, local, gemma2:9b) ou `claude` (API; teto
+de gasto proprio, `--limite-usd-livre`, arquivo `servidor/gasto_fala_livre.json`); `DIGILAB_MODELO_LIVRE` escolhe o modelo. O
+verificador tem cliente proprio (`DIGILAB_PROVEDOR_VERIF`, `DIGILAB_MODELO_VERIF`; padrao ollama gemma2:9b: o plano fixa o mesmo
+verificador em todos os bracos). Com --remoto o provedor Claude fica desligado salvo --claude-remoto. As chamadas sao em fila
+(uma GPU). A pagina guarda as falas no log de apresentacao dela; o servidor nao grava nada do pet.
 
 Voz propria (DESIGN_VOZ_PROPRIA, parte 4; pedido com "voz": true, pets v5): prompt livre-v6 (o pet pode inventar,
 opinar e cobrar), autocorrecao pelo proprio modelo (so volta manipulacao; a fala que nao pode ser verificada e cortada),
@@ -43,9 +46,13 @@ from digilab_fala_livre.ollama import URL_PADRAO, ClienteOllama
 from digilab_fala_livre.prompt import VERSAO_PROMPT, VERSAO_PROMPT_V6, VERSAO_PROMPT_V8, VERSAO_PROMPT_V9
 from digilab_fala_livre.revisao import gerar_com_revisao
 from digilab_fala_livre.verificador import VERSAO_VERIFICADOR_V5, verificar
+from servidor.fala_llm import ControleGasto
+from servidor.fala_livre_claude import (ARQUIVO_GASTO_LIVRE, LIMITE_USD_LIVRE_PADRAO, ClienteClaude)
 
 ROTA_FALA, ROTA_VERIF, ROTA_STATUS = "/api/fala-livre", "/api/fala-livre/verificar", "/api/fala-livre/status"
 MODELO_PADRAO = "gemma2:9b"          # escolhido na rodada 2 (artifacts_fala_livre/rodada2/RELATORIO.md)
+PROVEDORES = ("ollama", "claude")
+PROVEDOR_PADRAO = "ollama"
 MAX_TEXTO_JOGADOR = 300
 MAX_TROCAS = 10
 MAX_FATOS = 40
@@ -71,16 +78,60 @@ def _semente(v) -> int:
 
 
 class ServicoFalaLivre:
-    def __init__(self, modelo: str | None = None, cliente: ClienteOllama | None = None) -> None:
-        self.cliente = cliente or ClienteOllama(modelo or os.environ.get("DIGILAB_MODELO_LIVRE", MODELO_PADRAO),
-                                                os.environ.get("DIGILAB_OLLAMA_URL", URL_PADRAO))
+    def __init__(self, modelo: str | None = None, cliente: ClienteOllama | None = None, ambiente: dict | None = None,
+                 gasto: ControleGasto | None = None, sdk=None, claude_permitido=None) -> None:
+        """`cliente` injeta o cliente de geracao (teste). `ambiente` (padrao os.environ) traz DIGILAB_PROVEDOR_LIVRE,
+        DIGILAB_MODELO_LIVRE, DIGILAB_PROVEDOR_VERIF e DIGILAB_MODELO_VERIF; `claude_permitido()` False desliga o Claude."""
+        amb = os.environ if ambiente is None else ambiente
+        url = amb.get("DIGILAB_OLLAMA_URL", URL_PADRAO)
+        self.gasto = gasto
+        self._sdk, self._permitido = sdk, claude_permitido
+        self.provedor = amb.get("DIGILAB_PROVEDOR_LIVRE", PROVEDOR_PADRAO)
+        self.provedor_verif = amb.get("DIGILAB_PROVEDOR_VERIF", PROVEDOR_PADRAO)
+        modelo_gerador = modelo or amb.get("DIGILAB_MODELO_LIVRE", MODELO_PADRAO)
+        modelo_verif = amb.get("DIGILAB_MODELO_VERIF", MODELO_PADRAO)
+        self.cliente = cliente or self._construir(self.provedor, modelo_gerador, url)
+        # verificador proprio so quando difere do gerador; senao `cliente_verif` e o proprio `self.cliente` (o de hoje).
+        # Um cliente injetado (teste) so ganha verificador proprio se o ambiente pedir um
+        if cliente is not None:
+            proprio = "DIGILAB_PROVEDOR_VERIF" in amb or "DIGILAB_MODELO_VERIF" in amb
+        else:
+            proprio = not (self.provedor == "ollama" and self.provedor_verif == "ollama" and modelo_verif == modelo_gerador)
+        self._verif_proprio = self._construir(self.provedor_verif, modelo_verif, url) if proprio else None
+        if self._verif_proprio is not None:
+            self.cliente.cliente_verif = self._verif_proprio    # o revisor (gerar_com_revisao) le daqui
         self.trava = threading.Lock()
         self.especies, meta, self.corpus_sha = corpus.carregar()
         self.corpus_exemplo = bool(meta["exemplo"])
         self.almanaque_sha = almanaque.carregar()[1]
 
+    @property
+    def cliente_verif(self):
+        return self._verif_proprio if self._verif_proprio is not None else self.cliente
+
+    def _construir(self, provedor: str, modelo: str, url: str):
+        if provedor not in PROVEDORES:
+            raise ValueError(f"provedor desconhecido: {provedor!r} (use {' ou '.join(PROVEDORES)})")
+        if provedor == "ollama":
+            return ClienteOllama(modelo, url)
+        if self.gasto is None:                           # um controle so para o gerador e o verificador Claude
+            self.gasto = ControleGasto(LIMITE_USD_LIVRE_PADRAO, ARQUIVO_GASTO_LIVRE)
+        return ClienteClaude(modelo, self.gasto, sdk=self._sdk, permitido=self._permitido)
+
+    def definir_teto(self, limite_usd: float, alerta=None) -> None:
+        """--limite-usd-livre e o alerta de e-mail, conhecidos so depois que as rotas foram instaladas."""
+        if limite_usd < 0:
+            raise ValueError("limite de gasto negativo")
+        if self.gasto is not None:
+            self.gasto.limite = limite_usd
+            self.gasto.alerta = alerta
+
     def status(self) -> dict:
-        return {"versao_app": VERSAO_APP, "modelo": self.cliente.modelo, "carregado": self.cliente.carregado}
+        ativo = self.provedor != "claude" or self._permitido is None or bool(self._permitido())
+        return {"versao_app": VERSAO_APP, "provedor": self.provedor, "modelo": self.cliente.modelo,
+                "provedor_verificador": self.provedor_verif, "modelo_verificador": self.cliente_verif.modelo,
+                "carregado": self.cliente.carregado, "ativo": ativo,
+                "gasto": self.gasto.para_dict() if self.gasto is not None else None}
 
     def fala(self, d: dict) -> dict:
         situacao = d.get("situacao")
@@ -159,8 +210,8 @@ class ServicoFalaLivre:
         versao = VERSAO_VERIFICADOR_V5 if d.get("voz") is True else None
         with self.trava:
             if versao is None:
-                return verificar(self.cliente, fala, cit, fatos, _semente(d.get("semente", 0))).para_dict()
-            return verificar(self.cliente, fala, cit, fatos, _semente(d.get("semente", 0)), versao=versao).para_dict()
+                return verificar(self.cliente_verif, fala, cit, fatos, _semente(d.get("semente", 0))).para_dict()
+            return verificar(self.cliente_verif, fala, cit, fatos, _semente(d.get("semente", 0)), versao=versao).para_dict()
 
 
 def _fato_ok(f) -> bool:
@@ -179,7 +230,12 @@ def _fato_ok(f) -> bool:
 
 def instalar(modulo, servico: ServicoFalaLivre | None = None) -> None:
     """Acopla as rotas ao Tratador de `servidor_local` (GANCHO fala-livre: a unica chamada fica la)."""
-    svc = servico or ServicoFalaLivre()
+    def claude_permitido() -> bool:
+        t = modulo.Tratador                  # --limite-usd-livre e --remoto so sao lidos depois da instalacao: valem na chamada
+        svc.definir_teto(t.limite_usd_livre, t.alerta_livre)
+        return not t.remoto or t.claude_remoto
+
+    svc = servico or ServicoFalaLivre(claude_permitido=claude_permitido)
     trat = modulo.Tratador
     modulo.ROTAS_REMOTAS = tuple(modulo.ROTAS_REMOTAS) + (ROTA_FALA, ROTA_VERIF, ROTA_STATUS,
                                                          f"{modulo.PREFIXO}/web/modulos/fala_livre.js")
