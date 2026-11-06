@@ -99,9 +99,12 @@ class VistaIlha {
   /** os modelos do estilo (na ilha, os kits de public/kits3d) entram depois do terreno */
   async carregarObjetos(): Promise<void> {
     THREE.ColorManagement.enabled = true;
-    const o = await this.estilo.objetos(this.ilha);
+    /* os itens gerados (a bola, public/itens/) entram junto e falham do mesmo jeito: em todos os mapas, porque os itens sao os mesmos */
+    const [o] = await Promise.all([this.estilo.objetos(this.ilha), this.itens.carregar(document.baseURI)]);
     this.objetos = o;
     this.cenaIlha.cena.add(o.grupo);
+    /* data-objetos: os kits e os itens ja estao na cena (as capturas dos itens esperam por ele, como o data-pronto) */
+    this.renderer.domElement.parentElement?.setAttribute("data-objetos", "1");
     if (this.baixa) this.menosGrama();
   }
 

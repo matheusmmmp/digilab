@@ -196,3 +196,68 @@ primeira etapa de item o mesmo cálculo entra no teste da G1 a G5. Os números d
 baixos (12): 155 285 288 326 379 494 615 642 755 880 1690 3216    -> mediana 554,5
 altos  (16): 12 44 48 72 84 900 1368 1646 3182 3505 3648 3947 4066 4964 5648 6265 -> mediana 2414
 ```
+
+## 10. Antes da bola: os termos da Meshy e a referência (2026-11-05, Gerente, Claude Code, Opus 5.5, worktree `v3-itens-3d-bola`)
+
+**Os termos de uso da Meshy** (`meshy.ai/terms-of-use`, atualizados em 2026-09-19, lidos em 2026-11-05). Servem para a ilha, com dois cuidados:
+- **De quem é a malha:** no plano pago, do cliente ("customers on a paid Meshy plan own their Customer Output", §3.2). No plano grátis, a
+  Meshy é a dona e libera em CC BY 4.0 com crédito; por isso nada se gera no plano grátis para o jogo. Postar na comunidade da Meshy põe o
+  item em CC0 (§3.3): não postar.
+- **Uso no jogo:** os termos não falam de jogo nem de uso comercial; a posse no plano pago cobre publicar. A Meshy não garante que o item
+  seja único (§7.2): o revisor confere se ele não copia um item conhecido.
+- **Cuidado 1, a marca de IA:** é proibido tirar ou alterar "AI identifiers such as metadata or watermarks" (§2.4). O remesh e a exportação
+  no Blender podem apagar os metadados do GLB; o pipeline copia o `asset` e os `extras` de origem do GLB da Meshy para o `.gltf` final, e
+  o `License.txt` diz que o item foi gerado pela Meshy (G8 passa a conferir os dois).
+- **Cuidado 2, o treino:** a Meshy pode usar as entradas e as saídas de clientes fora do Enterprise (o Pro incluído) para treinar (§2.9),
+  salvo pedido de exclusão a support@meshy.ai. Recomendação: o Matheus pede a exclusão ao assinar (o concept e a referência da ilha vão
+  como entrada). Custo de não pedir: o concept e a malha podem entrar no treino da Meshy; nada no jogo muda.
+- Também vale: o cliente revisa a saída antes de usar (§2.4) e não usa as saídas para treinar um gerador concorrente (§2.6).
+
+**A referência da bola de hoje** (a bola procedural, para o par lado a lado; seção 7). Roteiro: `web/app/e2e_capturas/itens_bola_referencia.spec.ts`
+(com `DIGILAB_CAPTURAS_ITENS=1`); saves: `web/app/e2e_capturas/saves_bola.json`, de `gerar_saves_bola.mjs` (semente 4242, pet v17
+Gomamon, a bola 2 células a leste do pet, 13:00 e 22:30, o relógio parado). As 12 imagens (tela inteira e recorte em volta da bola, 390 e
+1280, claro, escuro e noite) ficam fora do git, em `D:\Trab\digilab\capturas_itens3d\bola\referencia\`, porque o pet é sprite do UP; os
+sha256 e a M3 de cada uma estão em `docs/itens3d/bola/referencia.json`, e as M3 inteiras em `docs/itens3d/bola/*_m3.json`.
+
+| tela | draw calls (claro / escuro / noite) |
+|---|---|
+| 1280 × 800 | 89 / 89 / 109 |
+| 390 × 844 | 82 / 82 / 98 |
+
+O G9 da bola gerada é ter o mesmo número ou menos em cada uma das seis. O `fps_media` dessas medidas (60) é do Chrome sem janela do
+Playwright e não é o fps do jogo: a medida de fps continua com o Matheus (seção 7).
+
+## 11. A bola na ilha (2026-11-06, Gerente, Claude Code, Opus 5.5, worktree `v3-itens-3d-bola`)
+
+A primeira etapa (D-I1). Em ordem, com o que cada passo deixou em `docs/itens3d/bola/`:
+
+| etapa | o que saiu | créditos (saldo) |
+|---|---|---|
+| 1 concept | quatro concepts pelo Image to Image (nano-banana-2) com dois recortes da ilha sem o pet; o Matheus escolheu o 2, gomos (`concept/`) | 24 (1 100 → 1 076) |
+| 2 multivista | três vistas coerentes do concept 2 (`vistas/`) | 6 (→ 1 070) |
+| 3 malha | Multi-Image to 3D com remesh para 500: 524 triângulos, um material, textura de 2048 px; **facetada, amassada, gomos borrados e sombra embutida** (`malha/`) | 30 (→ 1 040) |
+| 4–6 conserto (decisão do Matheus: no Blender, sem gerar de novo) | uma esfera UV limpa de 440 triângulos recebe a cor da Meshy por bake; a cor é chapada em três tons (`conserto/`, `consertar_bola.py`, `achatar_cores.py`) | 0 |
+| 7 exportação | `web/app/public/itens/bola/` (glTF separado, 1024 px, a marca de IA no `asset.extras`, o `License.txt`) | 0 |
+| 8 render na ilha | seis capturas lado a lado com a bola de hoje, a M3 de cada uma | 0 |
+| 9 revisão | o revisor novo (uma sessão que só viu o concept e as capturas): **aprovado com ressalva**, cores lavadas e o amarelo some à noite; a paleta foi saturada (rodada 2) e as capturas refeitas | 0 |
+
+Gasto total: 60 créditos, ≈ R$ 6,50 (o Pro a R$ 0,108 o crédito), dentro do teto de R$ 120 (D-I6).
+
+**Os gates** (o teste `web/app/test/ilha_itens3d.test.ts` confere G1 a G8):
+- G1 440 triângulos (teto 554); G2 a caixa igual nos três eixos, normalizada para 0,72 célula (o diâmetro da bola de antes);
+- G3 PNG de 1024 px; G4 um material com textura; G5 nenhum mapa extra;
+- G6 o glTF-Validator 2.0.0-dev.3.10 com 0 erros e 0 avisos (`validacao.json`); G7 os arquivos do item somam cerca de 26 KB;
+- G8 o `License.txt` e o `asset.extras` com a Meshy e as três tarefas;
+- G9 os draw calls iguais aos da bola de antes nas seis cenas: 89, 89 e 109 em 1280; 82, 82 e 98 em 390 (`referencia.json`, `gerada.json`).
+
+**A resposta à pergunta da seção 1, para a bola:** a malha do gerador **não** entrou com a qualidade dos kits; entrou depois do conserto no
+Blender, em que só a cor do gerador sobreviveu (a forma é uma esfera do Blender, as cores são a paleta do concept). Com o conserto, o custo
+de render é o mesmo da bola de antes. O risco da D-I1 se confirmou: a esfera é a forma mais fácil de fazer sem gerador, então a bola diz
+pouco sobre os itens de forma livre (o saco, o kit médico, o cocô).
+
+**O código da vista** (D-I4): `ITENS_MODELOS` em `modelos.ts`; em `itens.ts`, a bola procedural sai e o glTF entra pelo
+`carregarVariante` dos kits, com o pivô no centro para o giro; o `vista.ts` carrega os itens junto dos kits (falha alto do mesmo jeito) e
+marca `data-objetos` quando terminam; o crédito em Ajustes › Sobre. A bola nova vale em todos os mapas do habitat, porque os itens são
+os mesmos em todos. O motor, o log e o save não mudam.
+
+**Fora:** o fps de verdade (a M3 no Chrome do desktop, com o Matheus); a aprovação das capturas pelo Matheus.

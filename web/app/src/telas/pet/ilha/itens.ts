@@ -16,8 +16,10 @@ import type { Mundo } from "../../../../motor/index.ts";
 import { ninhoDe } from "../vistaMundo.ts";
 import { CENA } from "../cenaEstado.ts";
 import { BOLA_SALTO, BOLA_TAU_MS, COCO, KIT_DESDE_NINHO, LUZ_NINHO, SACO_BALANCO, SACO_DESDE_NINHO } from "./constantes.ts";
-import { GEO_SOMBRA, curvar, materialSombra, toon } from "./cena.ts";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { GEO_SOMBRA, carregarVariante, curvar, materialSombra, toon } from "./cena.ts";
 import { Cocos } from "./cocos.ts";
+import { ITENS_MODELOS } from "./modelos.ts";
 
 const COR_RACAO = { madura: [0x9b6a3c, 0xc08a55], podre: [0x6b6b3a, 0x85854a] } as const;
 /** a cor de cada fruta do motor (os tipos de motor/mundo.ts, FRUTAS) */
@@ -82,21 +84,26 @@ function fruta(tipo: string): THREE.Group {
   g.add(sombra(0.3), corpo, folha);
   return g;
 }
-/** a bola: branca com duas faixas azuis */
-function bola(): { g: THREE.Group; esfera: THREE.Mesh } {
-  const c = document.createElement("canvas");
-  c.width = 64; c.height = 32;
-  const x = c.getContext("2d");
-  if (!x) throw new Error("canvas 2d indisponível");
-  x.fillStyle = "#ffffff"; x.fillRect(0, 0, 64, 32);
-  x.fillStyle = "#378add"; x.fillRect(0, 7, 64, 6); x.fillRect(0, 19, 64, 6);
-  const t = new THREE.CanvasTexture(c);
-  t.colorSpace = THREE.SRGBColorSpace;
-  const esfera = new THREE.Mesh(new THREE.SphereGeometry(R_BOLA, 16, 12), toon({ map: t }));
+/** a bola: o item gerado (docs/TAREFA_V3_ITENS_3D.md; public/itens/bola/), que entra depois por `carregarBola`. A `esfera` e o pivo no
+    centro da bola, que gira ao rolar; as malhas do glTF entram nela descidas de meia altura (o carregador poe a base em y = 0) */
+function bola(): { g: THREE.Group; esfera: THREE.Group } {
+  const esfera = new THREE.Group();
   esfera.position.y = R_BOLA;
   const g = new THREE.Group();
-  g.add(sombra(0.4), esfera);
+  g.add(sombra(ITENS_MODELOS.bola.sombra), esfera);
   return { g, esfera };
+}
+/** poe as malhas do glTF da bola na `esfera`; falha alto se o arquivo nao carrega (a ilha cai na reserva, como sem os kits) */
+async function carregarBola(esfera: THREE.Group, base: string): Promise<void> {
+  const m = ITENS_MODELOS.bola;
+  if (m.altura !== 2 * R_BOLA) throw new Error(`a altura da bola na tabela (${m.altura}) nao e o diametro da vista (${2 * R_BOLA})`);
+  const v = await carregarVariante(new GLTFLoader(), new URL("itens/" + m.arquivos[0], base).href, m);
+  const desce = new THREE.Matrix4().makeTranslation(0, -R_BOLA, 0);
+  for (const p of v.pecas) {
+    const malha = new THREE.Mesh(p.geo, p.mat);
+    malha.applyMatrix4(desce.clone().multiply(p.local));
+    esfera.add(malha);
+  }
 }
 /** o saco de pancada: a base, o poste, o braco e a corrente, e o saco (vermelho, com as faixas) pendurado no `pivo`, que balanca */
 function saco(): { g: THREE.Group; pivo: THREE.Group } {
@@ -221,6 +228,9 @@ export class Itens {
     this.kit.visible = false;
     this.raiz.add(n, t, this.bola.g, this.brilho, this.saco.g, this.kit, this.cocos.raiz);
   }
+
+  /** os itens gerados (public/itens/): por ora, a bola; `base` e a URL da pagina */
+  carregar(base: string): Promise<void> { return carregarBola(this.bola.esfera, base); }
 
   /** onde a bola esta desenhada (subunidades do mapa), para pegar a bola na cena (PorBola.tsx); null antes do primeiro quadro */
   get bolaDesenhada(): [number, number] | null { return this.bolaCel && [this.bolaCel[0] * this.sub, this.bolaCel[1] * this.sub]; }
