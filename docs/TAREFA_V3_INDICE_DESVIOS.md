@@ -215,8 +215,8 @@ git checkout -qb F; sed -i 's/BASE: s0/BASE: s0b/' docs/registro/2026-11.md docs
 - **Testes:** `tests/test_infra_indice_desvios.py` (novo, 5: a ordem dos arquivos no caso T1, escrever e conferir, a linha em branco, a
   falha alta, o índice da `main` contido no gerado); `tests/test_conferir_saude.py` (o atraso passa, fora da ordem, linha repetida,
   arquivo errado, a virada do mês T3 com o gerador acertando); `tests/test_infra_estado_atual.py` (o fixture ganhou o arquivo do mês).
-- **O `CLAUDE.md` não mudou** (desvio D-ID-W1): a aprovação chegou repassada por outra sessão. O texto, para o Matheus aplicar ou
-  confirmar, troca na seção "Trabalho em paralelo" a frase do desvio:
+- **O `CLAUDE.md`** (desvio D-ID-W1): a aprovação chegou repassada por outra sessão, e a troca esperou o Matheus confirmar direto
+  nesta sessão ("Sim, aplique", 2026-11-06). Aplicada: na seção "Trabalho em paralelo", a frase do desvio passou a ser:
 
   > - **O desvio** (interpretação, número escolhido, achado) vai numa seção própria no fim de `docs/registro/AAAA-MM.md` (o mês da data),
   >   com data, nome e worker. O índice `docs/REGISTRO_DESVIOS.md` é gerado (`tools/gerar_indice_desvios.py`), e o worker não o edita.
