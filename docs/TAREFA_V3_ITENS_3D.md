@@ -196,3 +196,33 @@ primeira etapa de item o mesmo cálculo entra no teste da G1 a G5. Os números d
 baixos (12): 155 285 288 326 379 494 615 642 755 880 1690 3216    -> mediana 554,5
 altos  (16): 12 44 48 72 84 900 1368 1646 3182 3505 3648 3947 4066 4964 5648 6265 -> mediana 2414
 ```
+
+## 10. Antes da bola: os termos da Meshy e a referência (2026-11-05, Gerente, Claude Code, Opus 5.5, worktree `v3-itens-3d-bola`)
+
+**Os termos de uso da Meshy** (`meshy.ai/terms-of-use`, atualizados em 2026-09-19, lidos em 2026-11-05). Servem para a ilha, com dois cuidados:
+- **De quem é a malha:** no plano pago, do cliente ("customers on a paid Meshy plan own their Customer Output", §3.2). No plano grátis, a
+  Meshy é a dona e libera em CC BY 4.0 com crédito; por isso nada se gera no plano grátis para o jogo. Postar na comunidade da Meshy põe o
+  item em CC0 (§3.3): não postar.
+- **Uso no jogo:** os termos não falam de jogo nem de uso comercial; a posse no plano pago cobre publicar. A Meshy não garante que o item
+  seja único (§7.2): o revisor confere se ele não copia um item conhecido.
+- **Cuidado 1, a marca de IA:** é proibido tirar ou alterar "AI identifiers such as metadata or watermarks" (§2.4). O remesh e a exportação
+  no Blender podem apagar os metadados do GLB; o pipeline copia o `asset` e os `extras` de origem do GLB da Meshy para o `.gltf` final, e
+  o `License.txt` diz que o item foi gerado pela Meshy (G8 passa a conferir os dois).
+- **Cuidado 2, o treino:** a Meshy pode usar as entradas e as saídas de clientes fora do Enterprise (o Pro incluído) para treinar (§2.9),
+  salvo pedido de exclusão a support@meshy.ai. Recomendação: o Matheus pede a exclusão ao assinar (o concept e a referência da ilha vão
+  como entrada). Custo de não pedir: o concept e a malha podem entrar no treino da Meshy; nada no jogo muda.
+- Também vale: o cliente revisa a saída antes de usar (§2.4) e não usa as saídas para treinar um gerador concorrente (§2.6).
+
+**A referência da bola de hoje** (a bola procedural, para o par lado a lado; seção 7). Roteiro: `web/app/e2e_capturas/itens_bola_referencia.spec.ts`
+(com `DIGILAB_CAPTURAS_ITENS=1`); saves: `web/app/e2e_capturas/saves_bola.json`, de `gerar_saves_bola.mjs` (semente 4242, pet v17
+Gomamon, a bola 2 células a leste do pet, 13:00 e 22:30, o relógio parado). As 12 imagens (tela inteira e recorte em volta da bola, 390 e
+1280, claro, escuro e noite) ficam fora do git, em `D:\Trab\digilab\capturas_itens3d\bola\referencia\`, porque o pet é sprite do UP; os
+sha256 e a M3 de cada uma estão em `docs/itens3d/bola/referencia.json`, e as M3 inteiras em `docs/itens3d/bola/*_m3.json`.
+
+| tela | draw calls (claro / escuro / noite) |
+|---|---|
+| 1280 × 800 | 89 / 89 / 109 |
+| 390 × 844 | 82 / 82 / 98 |
+
+O G9 da bola gerada é ter o mesmo número ou menos em cada uma das seis. O `fps_media` dessas medidas (60) é do Chrome sem janela do
+Playwright e não é o fps do jogo: a medida de fps continua com o Matheus (seção 7).
