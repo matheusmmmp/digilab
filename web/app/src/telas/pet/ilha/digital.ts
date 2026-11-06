@@ -5,16 +5,16 @@
        arcos em volta dele), so de dia; a noite fica o degrade de sempre;
      - os fios entre os postes: cada poste ligado aos vizinhos mais perto (ate DIGITAL.fios.alcance celulas), um fio pendurado (uma
        parabola) do alto de um ao do outro. Uma malha de segmentos so.
-   Tudo deterministico (a rng da grade com um sal proprio). Os numeros sao do desenho: PROPOSTO, SEM FONTE. */
+   Tudo deterministico (a rng da grade com um sal proprio); as contas ficam em digitalConta.ts, sem DOM. Os numeros sao do desenho: PROPOSTO, SEM FONTE. */
 import * as THREE from "three";
 import { curvar } from "./cena.ts";
 import { DIGITAL } from "./constantes.ts";
-import { rng, type Ilha } from "./grade.ts";
-import { ENFEITES_MODELOS } from "./modelos.ts";
+import { lugaresDasParticulas, segmentosDosFios } from "./digitalConta.ts";
+import type { Ilha } from "./grade.ts";
 
 /** as particulas, e o que a vista chama quando a noite muda */
 export function particulas(ilha: Ilha): { malha: THREE.InstancedMesh; noite: (n: boolean) => void } {
-  const P = DIGITAL.particulas, r = rng(P.sal), n = P.quantas;
+  const P = DIGITAL.particulas;
   const mat = curvar(new THREE.MeshBasicMaterial({
     color: new THREE.Color(P.cor), transparent: true, opacity: P.opacidade[0], depthWrite: false, blending: THREE.AdditiveBlending, fog: false,
   }), 0, {
@@ -30,13 +30,9 @@ float giroP = uTempo * ${P.giro.toFixed(2)} + faseP;
 transformed.xz = mat2(cos(giroP), -sin(giroP), sin(giroP), cos(giroP)) * transformed.xz;
 transformed.y += sin(uTempo * ${P.vel.toFixed(2)} + faseP) * ${P.sobe.toFixed(2)};`,
   });
-  const malha = new THREE.InstancedMesh(new THREE.OctahedronGeometry(P.tamanho, 0), mat, n);
+  const lugares = lugaresDasParticulas(ilha), malha = new THREE.InstancedMesh(new THREE.OctahedronGeometry(P.tamanho, 0), mat, lugares.length);
   const m = new THREE.Matrix4();
-  for (let i = 0; i < n; i++) {
-    const x = -P.margem + r() * (ilha.area.w + 2 * P.margem), z = -P.margem + r() * (ilha.area.h + 2 * P.margem);
-    m.makeTranslation(x, ilha.altura(x, z) + P.altura[0] + r() * (P.altura[1] - P.altura[0]), z);
-    malha.setMatrixAt(i, m);
-  }
+  lugares.forEach(([x, y, z], i) => malha.setMatrixAt(i, m.makeTranslation(x, y, z)));
   malha.frustumCulled = false;
   malha.renderOrder = 3;
   return { malha, noite: noite => { mat.opacity = P.opacidade[noite ? 1 : 0]; } };
@@ -63,31 +59,11 @@ export function ceuComGrade(img: HTMLImageElement | ImageBitmap): HTMLCanvasElem
   return c;
 }
 
-/** os fios entre os postes: uma malha de segmentos */
+/** os fios entre os postes: uma malha de segmentos (digitalConta.ts, segmentosDosFios) */
 export function fios(ilha: Ilha): THREE.LineSegments {
-  const F = DIGITAL.fios, postes = ilha.enfeites.filter(e => e.nome === "poste");
-  const topo = (e: { x: number; z: number }) => new THREE.Vector3(e.x, ilha.altura(e.x, e.z) + ENFEITES_MODELOS.poste.altura * F.alto, e.z);
-  const ligados = new Set<string>(), pos: number[] = [];
-  postes.forEach((a, i) => {
-    const viz = postes.map((b, j) => ({ j, d: Math.hypot(a.x - b.x, a.z - b.z) })).filter(v => v.j !== i && v.d <= F.alcance)
-      .sort((p, q) => p.d - q.d);
-    for (const v of viz.slice(0, F.porPoste)) {
-      const chave = `${Math.min(i, v.j)}-${Math.max(i, v.j)}`;
-      if (ligados.has(chave)) continue;
-      ligados.add(chave);
-      const p0 = topo(a), p1 = topo(postes[v.j]), queda = v.d * F.queda;
-      let ant = p0;
-      for (let s = 1; s <= F.segmentos; s++) {
-        const u = s / F.segmentos, p = p0.clone().lerp(p1, u);
-        p.y -= 4 * queda * u * (1 - u);
-        pos.push(ant.x, ant.y, ant.z, p.x, p.y, p.z);
-        ant = p;
-      }
-    }
-  });
   const g = new THREE.BufferGeometry();
-  g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
-  const l = new THREE.LineSegments(g, curvar(new THREE.LineBasicMaterial({ color: F.cor })));
+  g.setAttribute("position", new THREE.Float32BufferAttribute(segmentosDosFios(ilha), 3));
+  const l = new THREE.LineSegments(g, curvar(new THREE.LineBasicMaterial({ color: DIGITAL.fios.cor })));
   l.frustumCulled = false;
   return l;
 }
