@@ -216,7 +216,10 @@ Matheus, 2026-11-05, nesta sessão (resposta "B, hooks antes"):
 - **UX-2: os hooks antes.** A ordem é A0 (restaurar os H1–H4 apagados no `2586b0e`) → A1 (H5, H6 e H8, desligados, com testes) → P1
   (a prancha da B em `docs/pranchas/ux-pet/`, para o ok do Matheus antes de qualquer código), com os agentes (A2) entrando junto da P1.
 
-UX-3 a UX-8 continuam PROPOSTAS.
+- **UX-3: o e2e inteiro no `Stop`** (Matheus, 2026-11-06, "O e2e inteiro", depois da medida da A1: 10,8 a 13,7 min por turno).
+  O H5 fica com os passos padrão (tipos, Vitest e `npm run e2e`); a `DIGILAB_H5_PASSOS` não é usada para reduzir o e2e.
+
+UX-4 a UX-8 continuam PROPOSTAS.
 
 ## 9. Etapa A0: os hooks restaurados (2026-11-05)
 
@@ -244,5 +247,4 @@ Testes: `python -m pytest tests/test_hooks.py -q` → 101 passed (32 de antes, 6
 **A medida do H5** (`docs/propostas/medida_h5_2026-11-06.txt`, três rodadas sem nenhuma mudança em `web/app`): tipos 4–9 s, Vitest 110–169 s
 (822 testes, todos passam), e2e 481–709 s. O total por turno fica entre **10,8 e 13,7 min**, acima dos ~10 min da UX-3. O e2e **oscilou no
 mesmo código**: 3 falhas na rodada 1, 1 na rodada 2 (o treino com "Forçar levantar pedra?", nas duas), nenhuma na 3. Com o H5 ligado, uma
-oscilação dessas devolveria o turno ao agente uma vez por assinatura. Isso pesa na UX-3 e na UX-5 (ligar o H5 só depois de estabilizar ou
-de reduzir o e2e do `Stop`).
+oscilação dessas devolveria o turno ao agente uma vez por assinatura. Isso pesa na UX-5. A UX-3 ficou decidida pelo e2e inteiro (seção 8.1), com o custo medido.
