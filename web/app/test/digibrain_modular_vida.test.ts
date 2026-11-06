@@ -9,7 +9,7 @@ import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { gunzipSync } from "node:zlib";
 import { CMU_MVP } from "../motor/constantes.ts";
-import { CCO_CORPO_V11 } from "../motor/corpo.ts";
+import { CCO_CORPO_V11, CONFIG_LUTA_CORPO_LIGADA } from "../motor/corpo.ts";
 import { DigiBrain } from "../motor/digibrain/adapt.ts";
 import { CONFIG_DIGIBRAIN_LAB, INATOS_MODULAR } from "../motor/digibrain/constantes.ts";
 import { MotorCorpoMundo } from "../motor/motor_corpo_mundo.ts";
@@ -43,10 +43,10 @@ function textoPy(v: unknown, chave = ""): string {
 }
 const sha = (t: string): string => createHash("sha256").update(t, "utf8").digest("hex");
 
-interface Vivida { cerebro: DigiBrain; assinaturas: Record<string, string>[]; m: MotorCorpoMundo }
+interface Vivida { cerebro: DigiBrain; assinaturas: Record<string, string>[]; m: MotorCorpoMundo; dores: { tick: number; vida_perdida_s: number; dor_antes: number; dor_depois: number }[] }
 /** a vida no laco do TS: o log do Python aplicado a um MotorCorpoMundo com o DigiBrain e a chave do laboratorio ligada */
-function viver(semente: number, log: readonly EventoCorpo[], inatos: typeof INATOS_MODULAR = INATOS_MODULAR): Vivida {
-  const cerebro = new DigiBrain(CONFIG_DIGIBRAIN_LAB, inatos);
+function viver(semente: number, log: readonly EventoCorpo[], inatos: typeof INATOS_MODULAR = INATOS_MODULAR, luta = false): Vivida {
+  const cerebro = new DigiBrain(CONFIG_DIGIBRAIN_LAB, inatos, luta);
   const assinaturas: Record<string, string>[] = [];
   const agir = cerebro.agir.bind(cerebro);
   cerebro.agir = (obs, rng) => {                         // a assinatura do estado depois do `agir`, como o Gravador do exportador
@@ -55,8 +55,14 @@ function viver(semente: number, log: readonly EventoCorpo[], inatos: typeof INAT
     return a;
   };
   const m = new MotorCorpoMundo(cerebro, semente, CCO_CORPO_V11, estadoNascimentoPy(0), { paridade: true, cfgMundo: CMU_MVP, digibrain: true });
+  const dores: Vivida["dores"] = [];
+  if (luta) {                                            // a ponte da luta (PE3): a dor no corpo e o resumo ao modular; a dor de cada resumo, antes e depois
+    m.corpo.luta = CONFIG_LUTA_CORPO_LIGADA;
+    const original = m.corpo.estimuloLuta.bind(m.corpo);
+    m.corpo.estimuloLuta = (v: number) => { const antes = m.corpo.q["dor"]!; original(v); dores.push({ tick: m.estado.tick, vida_perdida_s: v, dor_antes: antes, dor_depois: m.corpo.q["dor"]! }); };
+  }
   for (const e of log) m.aplicarEvento(e);
-  return { cerebro, assinaturas, m };
+  return { cerebro, assinaturas, m, dores };
 }
 
 function conferirVida(nome: string, v: Vivida, decisoes: readonly DecisaoLeve[]): void {
@@ -112,5 +118,31 @@ describe("G-PAR-VIDA: as vidas dos fins sumiu e desistiu do M-ESTADO", () => {
     expect(vistos.has("sumiu")).toBe(true);
     expect(vistos.has("desistiu")).toBe(true);
     expect(fins.reduce((n, v) => n + v.decisoes.length, 0)).toBe(2304);
+  });
+});
+
+interface VidaLuta extends VidaLog { decisoes: DecisaoLeve[]; estado: string; dores: Vivida["dores"]; episodios_luta: number; assinatura_final: Record<string, string> }
+describe("G-PAR-VIDA (PE3 da ponte da luta): o corpo e o M-MEM com o resumo da luta, `lt`, nas vidas do Python", () => {
+  const vidas = lerGz<{ vidas: VidaLuta[] }>("digibrain_modular_luta.json.gz").vidas;
+  vidas.forEach(g => {
+    test(`${g.lugar}/${g.dono}/${g.semente}: a dor de cada resumo, cada decisao (acao, motivo com as lutas, assinatura) e o estado interno no fim`, () => {
+      expect(g.log.filter(e => e.tipo === "lt").length).toBe(6);
+      const v = viver(g.semente, g.log, INATOS_MODULAR, true);
+      conferir(`${g.lugar} dores`, v.dores, g.dores);
+      conferirVida(`${g.lugar}/${g.dono}/${g.semente}`, v, g.decisoes);
+      expect(sha(textoPy(v.cerebro.estadoInterno())), "estado interno no fim").toBe(g.estado);
+      const final = Object.fromEntries(ASSINADOS.map(n => [n, assinar(v.cerebro[n].estadoInterno())]));
+      conferir("assinatura final", final, g.assinatura_final);
+      const eps = v.cerebro.mem.guardados().filter(e => e.origem === "luta");
+      expect(eps.length).toBe(g.episodios_luta);
+      expect(eps.length).toBeGreaterThanOrEqual(2);
+      expect(eps.every(e => e.outro === e.classe && e.acao[0] === "lutar" && e.dono.length === 0)).toBe(true);
+    });
+  });
+  test("a vida de hoje: sem a chave o resumo da luta levanta erro (o corpo e o DigiBrain)", () => {
+    const g = vidas[0]!;
+    expect(() => viver(g.semente, g.log, INATOS_MODULAR, false)).toThrow(/ConfigLutaCorpo/);
+    const c = new DigiBrain();
+    expect(() => c.receberLuta("muralha", -1, 400, 30)).toThrow(/luta_memoria/);
   });
 });

@@ -130,3 +130,14 @@ def test_os_fins_da_lm4_batem_com_uma_execucao_nova_e_cobrem_sumiu_e_desistiu():
     vidas = json.loads(gzip.decompress((E.PASTA / E.ARQUIVO_FINS).read_bytes()))["vidas"]
     assert {f for v in vidas for f in v["fins"]} >= {"sumiu", "desistiu"}
     assert all(not v["inatos"] for v in vidas if "desistiu" not in v["fins"])
+
+
+def test_a_luta_da_pe3_bate_com_uma_execucao_nova_e_tem_episodios_de_luta():
+    """PE3 da ponte da luta: o arquivo das vidas com resumos de luta escritos a mao (evento `lt`)"""
+    assert gzip.decompress(E.luta()) == gzip.decompress((E.PASTA / E.ARQUIVO_LUTA).read_bytes())      # o texto, nao os bytes do gzip
+    vidas = json.loads(gzip.decompress((E.PASTA / E.ARQUIVO_LUTA).read_bytes()))["vidas"]
+    assert len(vidas) == len(E.VIDAS_LUTA)
+    for v in vidas:
+        assert v["episodios_luta"] >= 2 and len(v["dores"]) == len(E.RESUMOS_LUTA)
+        assert sum(1 for e in v["log"] if e["tipo"] == "lt") == len(E.RESUMOS_LUTA)
+        assert any(d["dor_depois"] > d["dor_antes"] for d in v["dores"])

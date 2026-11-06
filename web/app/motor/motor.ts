@@ -23,7 +23,7 @@ import { ESTAGIOS_SALAO, RIVAL_SALAO, formaRivalSalao, rivalSalao, sementeSalao 
 import { CIT_V9, CMU_MVP } from "./constantes.ts";
 import { cartaDe, chipDe, chipServe, estagioMinimo, itensValem, porqueItensNaoValem, pontosComChips, vagasDeChip } from "./itens.ts";
 import { caraterV11, formaAdultaDe, linhaDoCarater, type QuandoCarater } from "./carater.ts";
-import { CCO_CORPO_V11 } from "./corpo.ts";
+import { CCO_CORPO_V11, CONFIG_LUTA_CORPO_LIGADA } from "./corpo.ts";
 import { desejoLobos, type BracoConsequencia, type CerebroA, type ObservacaoLobos } from "./lobos.ts";
 import { MotorCorpo, estadoNascimentoPy, type PoliticaCorpo } from "./motor_corpo.ts";
 import { MotorCorpoMundo, type PoliticaCorpoMundo } from "./motor_corpo_mundo.ts";
@@ -158,6 +158,8 @@ export class Motor {
       assinatura) */
   private ultimoChamado: Partial<Record<Chamado, number>> = {};
   private produtoLido = false;
+  /** a ponte da luta (PE3): o registro tem a marca "pl" (ovo novo v16/v17); sem ela, a luta passa ao lado do corpo e do cerebro, como hoje */
+  ponteLuta = false;
   sparring = 0;
   motivos: MotivoVida[] = [];
   motivo: MotivoVida | null = null;
@@ -386,8 +388,26 @@ export class Motor {
     this.produto = { chamadosPeloCorpo: false, ...(ch as ChavesProduto) }; this.produtoLido = true;
     (this.v11!.laco as MotorCorpoMundo).decidirNaComida = this.produto.decisaoNaComida;
   }
+  /** a ponte da luta (PE3), uma vez, no comeco do registro de um ovo v16 ou v17 (depois das chaves do produto e do "cb" do ovo): a luta passa a
+      entregar o resumo ao corpo e, com o modular ativo, ao DigiBrain. O jogo grava nos ovos novos (src/produto.ts); a pesquisa e os gabaritos
+      nunca chamam */
+  ligarPonteLuta(): void {
+    const v = { luta: true as const };
+    this._ponteLuta(v);
+    this.log.push([this.e.tick, "pl", v]);
+  }
+  private _ponteLuta(v: unknown): void {
+    if (!v || typeof v !== "object" || Object.keys(v).join() !== "luta" || (v as { luta: unknown }).luta !== true)
+      throw new Error(`marca da ponte da luta inválida: ${JSON.stringify(v)}`);
+    if (this.versao !== VERSAO_V17 && this.versao !== VERSAO_PET_LAB) throw new Error(`só os pets v${VERSAO_PET_LAB} e v${VERSAO_V17} têm a ponte da luta (este é v${this.versao})`);
+    if (this.ponteLuta || this.nDecisoes || this.nDono || this.e.tick !== TICK_INICIAL)
+      throw new Error("a marca da ponte da luta vai uma vez, no começo do registro");
+    this.ponteLuta = true;
+    (this.v11!.laco as MotorCorpoMundo).corpo.luta = CONFIG_LUTA_CORPO_LIGADA;
+    this.modular?.ligarLutaMemoria();                    // o modular da v16 e o da v17 com o "cb" do ovo (o "cb" de depois liga em _trocarCerebro)
+  }
   registrarOrigem(o: Origem): void {
-    if (this.log.some(ev => ev[1] !== "c" && ev[1] !== "p")) throw new Error("a origem precisa ser o primeiro evento do registro");
+    if (this.log.some(ev => ev[1] !== "c" && ev[1] !== "p" && ev[1] !== "pl")) throw new Error("a origem precisa ser o primeiro evento do registro");
     this.log.push([this.e.tick, "o", o]);
     this._origem(o);
   }
@@ -592,6 +612,7 @@ export class Motor {
         res.pontosA === 1 ? 1 : res.pontosA === 0 ? -1 : 0, this.temp.sensibilidade) : null;
       if (rc) this.confEvento.push(ordemL);
       if (this.gp) this.gp.aprender(res, s, M.usadas!, rc ? rc.novidade : 1);
+      if (this.ponteLuta) this._resumoDaLuta(rivalDaConfianca(rival, semente, k, estSalao), res);   // a ponte da luta (PE3): so com a marca "pl"
       if (this.estagioAtual === "adolescente") this.sparring++;
       const contra = liga ? `na Liga dos Líderes, contra ${nomeMegaLiga(k)} de ${NOME_BOT[LIGA[k].lider]}`
         : inst ? `${inst.id === "palacio" ? "no" : "na"} ${inst.nome}, contra ${nomeForma(formaRivalInstalacao(semente, k))}`
@@ -625,6 +646,22 @@ export class Motor {
     this.vida5.lutas.push({ tick: this.e.tick, rival, lesao,
       resultado: res.pontosA === 1 ? "vitoria" : res.pontosA === 0 ? "derrota" : "empate" });
     return { ...M, res, venceu, lesao };
+  }
+  /** a ponte da luta (PE3; docs/TAREFA_V3_PONTE_LUTA.md, 3.2 e 3.7): o resumo de uma luta da serie, em inteiros (o rival, o resultado, a vida
+      perdida em S), vai ao corpo (a dor, com qualquer cerebro) e, so com o modular ativo, ao DigiBrain. Com o A ativo o modular esta parado e
+      nao recebe nada (a regra do #562); o A nunca recebe o resumo. Sem rng */
+  private _resumoDaLuta(rival: string, res: ResultadoLuta): void {
+    const resultado = res.pontosA === 1 ? 1 : res.pontosA === 0 ? -1 : 0;
+    /* a vida da luta e float (hp em decimos de ponto): a vida perdida em S e o arredondamento (meio para cima; o dano e >= 0) de dano x S / vida
+       maxima, com o dano da vida do comeco da luta ate a do fim (cortada em 0: o golpe que passa da vida nao conta a mais), e cortada em [0, S] */
+    const lado = res.E0.L[0], depois = res.E.L[0];
+    if (!(lado.hpMax > 0)) throw new Error(`vida maxima da luta invalida: ${lado.hpMax}`);
+    const dano = Math.max(0, lado.hp - Math.max(0, depois.hp));
+    const s = (this.v11!.laco as MotorCorpoMundo).corpo.S;
+    const vidaPerdidaS = Math.min(s, Math.max(0, Math.round(dano * s / lado.hpMax)));
+    const laco = this.v11!.laco as MotorCorpoMundo;
+    laco.aplicarResumoLuta(rival, resultado, vidaPerdidaS);
+    if (this.lab !== null) this.lab.receberLuta(rival, resultado, vidaPerdidaS, laco.estado.tick);
   }
   /** intervencao do dono nos gambits: travar, destravar, vetar, liberar */
   intervirGambit(op: OpGambit, k: string): void {
@@ -1052,7 +1089,7 @@ export class Motor {
   private _trocarCerebro(v: unknown): void {
     this._validarCerebro(v);
     this._conferirMorte(); this._vivo();
-    if (v.cerebro === "modular") this.modular ??= new DigiBrain();
+    if (v.cerebro === "modular") { this.modular ??= new DigiBrain(); if (this.ponteLuta) this.modular.ligarLutaMemoria(); }
     this.modularAtivo = v.cerebro === "modular";
     this.cerebroEscolhido = true;
     (this.v11!.laco as MotorCorpoMundo).digibrain = this.modularAtivo;   // o modular ve o mundo, escolhe o alvo e recebe a consequencia dele
@@ -1110,6 +1147,7 @@ export class Motor {
       ...(this.versao === VERSAO_PET_LAB ? [["lab", { ...this.modular!.estadoInterno(), motivos: undefined }]] : []),
       /* a v17 depois do primeiro "cb": o cerebro que decide e o modular (a v17 sem "cb" assina como a v15) */
       ...(this.cerebroEscolhido ? [["cb", this.modularAtivo ? "modular" : "a", this.modular ? { ...this.modular.estadoInterno(), motivos: undefined } : null]] : []),
+      ...(this.ponteLuta ? [["pl", true]] : []),      /* a ponte da luta: so com a marca (a assinatura dos pets sem ela nao muda) */
       ["v11", this.v11!.braco.cerebro.estadoInterno(), this.v11!.laco.estadoDict(), this.v11!.laco.proximaDecisao],
       ["mundo", this.mundo!.resumo(), [...(this.v11!.laco as MotorCorpoMundo).vistosEm]]]);
   }
@@ -1130,6 +1168,7 @@ export class Motor {
       case "c": this._config(ev[2].dur); break;
       case "p": this._produto(ev[2]); break;
       case "cb": this._trocarCerebro(ev[2]); break;
+      case "pl": this._ponteLuta(ev[2]); break;
       case "u": this._liberar(ev[2].n); break;
       case "i": this._item(ev[2].op, ev[2].id); break;
       case "k": this._armarCarta(ev[2].id); break;

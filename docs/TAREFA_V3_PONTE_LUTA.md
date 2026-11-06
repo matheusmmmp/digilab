@@ -303,3 +303,20 @@ desligada.** Os desvios D-PE2-1 a D-PE2-3 estão em `docs/registro/2026-11.md`.
   episódios, no replay do mundo; a consolidação guarda um por categoria `("lutar", rival, sinal)`; a seção 7: com a dor zerada nenhum módulo anda). **G2:** os gabaritos da C4
   (`test_gabarito_memoria_autobio`), da LM0 (`test_gabarito_digibrain_modular*`), do G0 e do corpo seguem byte a byte; nenhum arquivo de gabarito foi tocado.
 - **Limite:** nada na web (o espelho TS e o `"pl"` do ovo são a PE3). O A não recebe nada (3.7): o gancho só existe no DigiBrain.
+
+## 12. PE3, o resumo da etapa (2026-11-06, Sonnet 5.5, branch `v3-ponte-luta-pe3`)
+
+**Resposta: a dor da luta e o episódio `luta` já chegam ao jogo (v16 e v17 com a marca `"pl"`), com o corpo e o M-MEM conferidos contra o Python.** Os desvios D-PE3-1 a
+D-PE3-7 estão em `docs/registro/2026-11.md`.
+
+- **O espelho TS:** `Corpo.estimuloLuta` e `CONFIG_LUTA_CORPO` (`motor/corpo.ts`), o evento `lt` do `MotorCorpo` (`motor/motor_corpo.ts`: `resumoLuta`, `aplicarResumoLuta`,
+  `lerResumoLuta`), `DigiBrain.receberLuta`/`ligarLutaMemoria`, `Sens.resumirLutas`, `Afeto.sigmaLuta`, `episodioLuta` e a origem `luta` (`motor/digibrain/`).
+- **A marca e o `_lutar`:** `Motor.ligarPonteLuta()` grava `"pl"` (`{ luta: true }`, depois do `"cb"`) no ovo novo pelo `ligarProduto` (`src/produto.ts`, que também cobre o ovo
+  de teste do laboratório); `Motor._lutar` calcula a vida perdida em S de cada luta da série (D-PE3-3) e entrega o resumo ao corpo (qualquer cérebro) e, só com o modular
+  ativo, ao `DigiBrain` (3.7). Sem a marca, o `_lutar` é o de hoje.
+- **G-PAR:** `experiments/exportar_gabarito_digibrain_modular.py --luta` grava `web/app/test/gabaritos/digibrain_modular_luta.json.gz` (3 vidas, 6 resumos cada); o
+  `test/digibrain_modular_vida.test.ts` confere a dor de cada resumo, cada decisão (ação, motivo com as lutas, assinatura) e o estado interno no fim; o pytest
+  (`tests/test_gabarito_digibrain_modular_web.py`) confere que o arquivo bate com uma execução nova.
+- **G2:** o gabarito da PE0 e todos os de hoje passam sem mudar nenhum arquivo deles; **G1:** `test/ponte_luta_pe3.test.ts` (20 vidas com a marca: v16, v17 modular, v17 A e v17 com um
+  `"cb"` no meio × 5 sementes; replay bit a bit; a dor exata; o A ativo não entrega nada ao modular; a marca só nos v16/v17, uma vez) e o e2e (`e2e/ponte_luta.spec.ts` com os saves `_ponte`).
+- **Limite:** nada do ε (PE4). Os v16/v17 vivos sem a marca seguem como hoje (PL-7); nenhum save de hoje ganha a marca.
