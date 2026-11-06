@@ -177,17 +177,20 @@ def test_h3_push_sem_refspec_depende_do_branch(projeto):
 
 def test_proposta_e_os_hooks_ligados():
     """A configuração proposta existe e aponta os scripts que existem. Ligados no projeto, os que o Matheus escolheu: o H1, o H1b e o
-    H3 (2026-10-14, religados no #590); o H4, o H6 e o H9 (D-IA-7, 2026-11-06); o H2, depois da medida do Stop (2026-11-06). A
+    H3 (2026-10-14, religados no #590); o H4, o H6 e o H9 (D-IA-7, 2026-11-06); o H2, depois da medida do Stop, e o H10 (E3), os dois em
+    2026-11-06. A
     proposta e o projeto ficam iguais."""
     proposta = json.loads((RAIZ / "docs" / "propostas" / "hooks_settings.json").read_text(encoding="utf-8"))
     comandos = [h["command"] for evento in proposta["hooks"].values() for grupo in evento for h in grupo["hooks"]]
     assert sorted({Path(c.split("/.claude/hooks/")[1].rstrip('"')).name for c in comandos}) == \
-        ["h1_engine.py", "h1b_engine_sha.py", "h2_testes.py", "h3_main.py", "h4_autorizo.py", "h6_capturas.py", "h9_faixas.py"]
+        ["h10_pre_run.py", "h1_engine.py", "h1b_engine_sha.py", "h2_testes.py", "h3_main.py", "h4_autorizo.py", "h6_capturas.py",
+         "h9_faixas.py"]
     assert all((HOOKS / Path(c.split("/.claude/hooks/")[1].rstrip('"')).name).exists() for c in comandos)
     ativo = json.loads((RAIZ / ".claude" / "settings.json").read_text(encoding="utf-8"))
     ligados = [h["command"] for evento in ativo["hooks"].values() for grupo in evento for h in grupo["hooks"]]
     assert sorted({Path(c.split("/.claude/hooks/")[1].rstrip('"')).name for c in ligados}) == \
-        ["h1_engine.py", "h1b_engine_sha.py", "h2_testes.py", "h3_main.py", "h4_autorizo.py", "h6_capturas.py", "h9_faixas.py"]
+        ["h10_pre_run.py", "h1_engine.py", "h1b_engine_sha.py", "h2_testes.py", "h3_main.py", "h4_autorizo.py", "h6_capturas.py",
+         "h9_faixas.py"]
     assert ativo == proposta
 
 
@@ -360,3 +363,58 @@ def test_h9_write_e_multiedit(com_faixas):
     assert r.returncode == 2
     r = rodar("h9_faixas.py", pre_tool("Write", {"file_path": caminho, "content": "FAIXAS_QUEIMADAS = (\n"}, p), p)
     assert r.returncode == 2 and b"consigo ler" in r.stderr
+
+
+# ------------------------------------------------------------------ H10: o pre_run antes da run (INFRA_AGENTES E3, seção 3.3)
+
+
+@pytest.fixture
+def com_pre_run(com_faixas):
+    """O projeto com as faixas, o tools/pre_run.py de verdade, um plano na main e uma config com a faixa reservada 77101...77505."""
+    p = com_faixas
+    (p / "tools").mkdir()
+    shutil.copyfile(RAIZ / "tools" / "pre_run.py", p / "tools" / "pre_run.py")
+    (p / "docs").mkdir()
+    (p / "docs" / "PLANO_ANALISE_V3_X.md").write_text("# plano\n", encoding="utf-8")
+    (p / "experiments" / "configs").mkdir()
+    (p / "experiments" / "configs" / "x.json").write_text(
+        json.dumps({"plano": "docs/PLANO_ANALISE_V3_X.md", "unidades": {"bases": [77101], "k": 1}}), encoding="utf-8")
+    (p / "experiments" / "configs" / "queimada.json").write_text(
+        json.dumps({"plano": "docs/PLANO_ANALISE_V3_X.md", "unidades": {"bases": [15101], "k": 1}}), encoding="utf-8")
+    commitar(p, "plano e configs")
+    git(p, "update-ref", "refs/remotes/origin/main", "HEAD")
+    return p
+
+
+def h10(p: Path, comando: str, tool: str = "Bash", processos: str = "[]") -> subprocess.CompletedProcess:
+    return rodar("h10_pre_run.py", pre_tool(tool, {"command": comando}, p), p, DIGILAB_PRE_RUN_PROCESSOS=processos)
+
+
+@pytest.mark.parametrize("comando", [
+    "python experiments/run_v3_x.py --config experiments/configs/x.json --processos 4",
+    "cd D:/Trab && python experiments/run_v2_y.py --config=experiments/configs/x.json",
+    "python experiments/run_v3_x.py --help",
+    "python -m pytest tests/test_run_v2_y.py -q",
+    "git log -- experiments/run_v2_y.py",
+])
+def test_h10_deixa_passar(com_pre_run, comando):
+    for tool in ("Bash", "PowerShell"):
+        r = h10(com_pre_run, comando, tool)
+        assert r.returncode == 0, r.stderr.decode("utf-8", "replace")
+
+
+@pytest.mark.parametrize("comando,texto", [
+    ("python experiments/run_v3_x.py --config experiments/configs/x.json --processos 5", "no máximo 4"),
+    (r"python experiments\run_v3_x.py --config experiments/configs/queimada.json", "faixa queimada"),
+    (".venv/Scripts/python.exe experiments/run_v2_y.py --config experiments/configs/nao_existe.json", "não existe"),
+    ("python experiments/run_v3_x.py --processos 2", "sem --config"),
+])
+def test_h10_recusa(com_pre_run, comando, texto):
+    r = h10(com_pre_run, comando)
+    assert r.returncode == 2 and texto in r.stderr.decode("utf-8")
+
+
+def test_h10_outra_run_em_andamento(com_pre_run):
+    r = h10(com_pre_run, "python experiments/run_v3_x.py --config experiments/configs/x.json",
+            processos=json.dumps(["python experiments/run_v3_outra.py --config c.json"]))
+    assert r.returncode == 2 and "outra run" in r.stderr.decode("utf-8")
