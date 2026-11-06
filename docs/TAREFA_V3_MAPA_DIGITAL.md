@@ -2,7 +2,7 @@
 
 Coordenador: o Gerente da frente MAPA_DIGITAL (Claude Code, Opus 5.5, nesta sessão; o mesmo da MUNDO_ENFEITES). Worker: a definir por
 etapa. Worktree e branch: `v3-mapa-digital` (na worktree `v3-mundo-enfeites`). Status: ABERTA; a direção B escolhida pelo Matheus
-(2026-11-06); D-MD1 a D-MD5 com recomendação (seção 8); nada foi feito no jogo.
+(2026-11-06); D-MD1 a D-MD5 DECIDIDAS pela recomendação (2026-11-06, seção 8); nada foi feito no jogo.
 
 Categoria: arquitetura. Origem: Matheus, 2026-11-06: o chão, as texturas e os objetos da ilha estão genéricos ("bem o que veio do kit");
 pediu uma estética "mais na pegada do anime, com as cores mais chapadas" e um mapa mais temático. Mostrou como referência de clima
@@ -25,8 +25,8 @@ modelo, textura, logotipo ou nome desses jogos; as imagens de terceiros não vã
 
 ## 2. Depende de
 
-- A MUNDO_ENFEITES na `main` (a E3 é o PR #631): os postes, o carro, a geladeira, o trilho e o `tracar_linhas.py`.
-- As decisões D-MD1 a D-MD5 (seção 8).
+- A MUNDO_ENFEITES na `main` (a E3 entrou no PR #631): os postes, o carro, a geladeira, o trilho e o `tracar_linhas.py`.
+- As decisões D-MD1 a D-MD5 (seção 8), tomadas.
 
 ## 3. Mudança mínima
 
@@ -88,6 +88,9 @@ seção no fim deste arquivo; as capturas com o pet fora do git (`D:\Trab\digila
 - **A maquete é pintura, o jogo é 3D:** o alvo é a direção (cor, céu, chão, o digital), não a imagem igual.
 
 ## 8. Precisa do Matheus
+
+**DECIDIDAS em 2026-11-06:** o Matheus aceitou as cinco recomendações abaixo ("Sim, mescle os dois", à pergunta "Aceito as cinco
+recomendações e mesclo o #631 e o #632?").
 
 - **D-MD1, o digital como estilo novo ou no lugar da ilha.** Recomendação: um estilo novo, "Digital", em Ajustes › Mapa, e ele vira o
   padrão quando as capturas forem aprovadas; a ilha de hoje fica selecionável. Custo de errar: trocar o padrão sem aprovação muda a cara

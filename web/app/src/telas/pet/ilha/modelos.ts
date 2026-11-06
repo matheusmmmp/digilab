@@ -54,6 +54,9 @@ export const ENFEITES_MODELOS = {
   /* o carro: a caminhonete com o jardim na cacamba, gerada pela Meshy (E2); maior que um carro na escala do pet, como um brinquedo, para
      ser visto na beira do plato (o revisor achou 1,3 pequeno demais) */
   carro: { arquivos: ["carro/carro.gltf"], altura: 1.9, vento: 0, sombra: 1.3, baixo: false },
+  /* a geladeira com o vaso e o trilho com o vagao (E3), com os tracos de nanquim na textura; na escala de brinquedo do carro */
+  geladeira: { arquivos: ["geladeira/geladeira.gltf"], altura: 1.7, vento: 0, sombra: 0.8, baixo: false },
+  trilho: { arquivos: ["trilho/trilho.gltf"], altura: 1.0, vento: 0, sombra: 1.3, baixo: false },
 } as const satisfies Record<string, Modelo>;
 export type NomeEnfeite = keyof typeof ENFEITES_MODELOS;
 /** a mascara das partes que acendem a noite (o emissiveMap; fora do glTF, ao lado dele), por enfeite que tem luz */

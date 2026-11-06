@@ -57,6 +57,7 @@ sys.path.insert(0, str(RAIZ))
 
 from servidor.alerta import EMAIL_ALERTA_PADRAO, NIVEIS_ALERTA, AlertaEmail  # noqa: E402
 from servidor.fala_llm import (  # noqa: E402
+    LIMITE_USD_LIVRE_PADRAO,
     LIMITE_USD_PADRAO,
     URL_OLLAMA_PADRAO,
     GeradorFala,
@@ -135,6 +136,9 @@ class Tratador(SimpleHTTPRequestHandler):
     motivo_inicial: str = ""
     remoto: bool = False             # modo remoto: restringe rotas (e exige senha, se houver)
     senha: str | None = None
+    limite_usd_livre: float = LIMITE_USD_LIVRE_PADRAO   # --limite-usd-livre (teto da fala livre com o Claude)
+    alerta_livre = None              # o alerta de e-mail do gasto da fala livre
+    claude_remoto: bool = False      # --claude-remoto: a API paga tambem no modo remoto (fala geral e fala livre)
 
     def _barrado(self) -> bool:
         """True se a resposta ja foi enviada (sem senha, rota fora do jogo ou tunel sem --remoto)."""
@@ -258,6 +262,9 @@ def main(argv=None) -> int:
     ap.add_argument("--ollama-url", default=URL_OLLAMA_PADRAO)
     ap.add_argument("--limite-usd", type=float, default=LIMITE_USD_PADRAO,
                     help="teto TOTAL de gasto com a API do Claude (acumulado em servidor/gasto_fala.json)")
+    ap.add_argument("--limite-usd-livre", type=float, default=LIMITE_USD_LIVRE_PADRAO,
+                    help="teto TOTAL de gasto da FALA LIVRE com o Claude (DIGILAB_PROVEDOR_LIVRE=claude), em arquivo "
+                         "proprio (servidor/gasto_*.json), separado do --limite-usd")
     ap.add_argument("--alerta-email", default=EMAIL_ALERTA_PADRAO,
                     help="destino do alerta de gasto (50%%, 80%% e 100%% do teto); SMTP em servidor/alerta.py")
     ap.add_argument("--testar-alerta", action="store_true", help="manda um e-mail de teste e sai")
@@ -279,6 +286,10 @@ def main(argv=None) -> int:
     if a.sem_senha and not a.remoto:
         raise SystemExit("--sem-senha so faz sentido com --remoto")
     Tratador.remoto = a.remoto
+    Tratador.claude_remoto = a.claude_remoto
+    if a.limite_usd_livre < 0:
+        raise SystemExit("--limite-usd-livre negativo")
+    Tratador.limite_usd_livre, Tratador.alerta_livre = a.limite_usd_livre, alerta.avisar
     if a.remoto and not a.sem_senha:
         senha = os.environ.get("DIGILAB_SENHA", "")
         if len(senha) < SENHA_MIN:

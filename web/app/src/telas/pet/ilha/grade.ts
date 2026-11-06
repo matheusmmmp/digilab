@@ -246,8 +246,9 @@ export class Ilha {
       for (let k = 0, tent = 0; k < n; tent++) {
         if (tent >= n * ENFEITES_GRADE.tentativas) throw new Error(`sem lugar para o enfeite ${nome} na ilha ${this.cm.layout.nome}: ${k} de ${n}`);
         /* os do norte sao sorteados so na faixa ao norte da area, a ate `casa` celulas do ninho em x (onde a camera da tela Pet mais fica;
-           pela grade inteira, quase nenhum sorteio cairia ali) */
-        const x = G.norte ? ninho[0] + (r() * 2 - 1) * G.casa : this.x0 + 0.5 + r() * (this.larg - 1);
+           pela grade inteira, quase nenhum sorteio cairia ali); com `faixa`, entre os dois deslocamentos em x a partir do ninho */
+        const x = !G.norte ? this.x0 + 0.5 + r() * (this.larg - 1)
+          : "faixa" in G ? ninho[0] + G.faixa[0] + r() * (G.faixa[1] - G.faixa[0]) : ninho[0] + (r() * 2 - 1) * G.casa;
         const z = G.norte ? -(G.perto + r() * (G.longe - G.perto)) : this.z0 + 0.5 + r() * (this.prof - 1);
         const d = this.distanciaDaArea(x, z);
         if (!plana(x, z, G.folga) || d < G.perto || d > G.longe || (G.norte && z >= 0)) continue;
