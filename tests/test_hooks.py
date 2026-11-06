@@ -635,6 +635,14 @@ def test_h8_shell_do_testador(projeto, comando, passa):
     ("sha256sum x > y.txt", False),
     ("find . -name x -delete", False),
     ("npm test", False),
+    ("tar -tzf artifacts_v3_acoes_novas/run/vidas.tar.gz", True),     # E6b: o tar só para listar
+    ("tar tzf artifacts_v3_acoes_novas/run/vidas.tar.gz", True),
+    ("tar --list -zf artifacts_v3_acoes_novas/run/vidas.tar.gz", True),
+    ("tar -xzf artifacts_v3_acoes_novas/run/vidas.tar.gz", False),
+    ("tar -czf x.tar.gz docs", False),
+    ("tar -tzf a.tar.gz --to-command=sh", False),
+    ("tar -t -I zstd -f a.tar", False),
+    ("tar -zf a.tar.gz", False),
 ])
 def test_h8_shell_do_auditor(projeto, comando, passa):
     for tool in ("Bash", "PowerShell"):
