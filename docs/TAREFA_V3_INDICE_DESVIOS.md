@@ -100,7 +100,8 @@ aparecer, mas a resolução é `git checkout --theirs docs/REGISTRO_DESVIOS.md` 
 - **Novo:** `tools/gerar_indice_desvios.py` (escreve o índice; `--conferir` só confere). Reusa `CABECALHO_INDICE`, `linha_indice`,
   `partir` e `arquivos_do_mes` de `tools/registro_por_mes.py`; nenhuma regra de formato duplicada.
 - **Novo:** `tests/test_infra_indice_desvios.py` (entra sozinho no CI, que roda os `tests/test_infra_*.py`): o gerado é o índice da
-  `main` de hoje byte a byte; os casos T1 e T3 da tabela; um índice atrasado passa no PR e falha no `--conferir`; uma linha sem seção falha.
+  `main` de hoje sem as linhas em branco soltas (conferido em 2026-11-06: as 485 linhas iguais e na ordem; o arquivo de hoje tem 52
+  bytes a mais, de linhas em branco entre as entradas, que o `ler_indice` já ignora e a primeira regeneração tira); os casos T1 e T3 da tabela; um índice atrasado passa no PR e falha no `--conferir`; uma linha sem seção falha.
 - **Alterado:** `tools/conferir_saude.py`, o ponto 2 do G-CONCAT (subsequência no PR, igualdade no `--conferir`; D-ID3).
 - **Alterado:** `tools/registro_por_mes.py`: o texto de `CABECALHO_INDICE` (a regra de onde escrever) e o `absorver`, que passa a
   regenerar o índice em vez de acrescentar a linha.
@@ -126,8 +127,8 @@ a ordem do índice, ponha a linha da seção do mês anterior antes das do mês 
 
 ## 4. Experimento e gate (se houver run)
 
-Sem run. O critério do código, depois do ok: `python tools/conferir_saude.py` passa na `main` de hoje com o índice gerado igual ao
-atual, byte a byte, e os testes da seção 3.4 passam.
+Sem run. O critério do código, depois do ok: `python tools/conferir_saude.py` passa na `main` de hoje com o índice gerado (o atual sem as
+linhas em branco soltas: as mesmas 485 entradas, na mesma ordem), e os testes da seção 3.4 passam.
 
 ## 5. Entrega
 
