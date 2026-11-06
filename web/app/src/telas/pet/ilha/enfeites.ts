@@ -2,13 +2,14 @@
    ficam; aqui cada modelo de ENFEITES_MODELOS (public/enfeites/<nome>/) entra pelo carregarVariante dos kits e vira um InstancedMesh por
    peca, como os objetos da grade: varios postes custam o de um (E-G9). Cada enfeite tem a sombra redonda. A noite, o que tem luz acende:
    as partes da mascara (ENFEITES_LUZ, o emissiveMap) brilham na cor da luz do ninho, e um brilho no chao sob a lampada (o raio e a cor
-   de LUZ_NINHO), aditivo; nada disso ilumina o resto da cena.
+   de LUZ_NINHO) e um halo na lanterna (ENFEITE_HALO: cascas translucidas, um desenho por casca para todos), aditivos; nada disso ilumina o
+   resto da cena.
    O giro da grade vira a frente do enfeite para a area andavel; num modelo com a lampada para um lado (o poste), a "frente" e o lado da
    lampada, achado pelo ponto mais alto do modelo. Os numeros sao do desenho: PROPOSTO, SEM FONTE. */
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { GEO_SOMBRA, carregarVariante, curvar, materialSombra } from "./cena.ts";
-import { LUZ_NINHO } from "./constantes.ts";
+import { ENFEITE_HALO, LUZ_NINHO } from "./constantes.ts";
 import type { Ilha } from "./grade.ts";
 import { ENFEITES_LUZ, ENFEITES_MODELOS, type NomeEnfeite } from "./modelos.ts";
 
@@ -45,6 +46,7 @@ function texturaBrilho(): THREE.Texture {
 export async function enfeites(ilha: Ilha, base: string): Promise<Enfeites> {
   const grupo = new THREE.Group(), luzes = new THREE.Group(), gltf = new GLTFLoader();
   const sombras: { x: number; z: number; r: number }[] = [], brilhos: [number, number][] = [], acesos: THREE.MeshToonMaterial[] = [];
+  const halos: number[] = [];
   for (const nome of Object.keys(ENFEITES_MODELOS) as NomeEnfeite[]) {
     const lista = ilha.enfeites.filter(e => e.nome === nome);
     if (!lista.length) continue;
@@ -53,7 +55,11 @@ export async function enfeites(ilha: Ilha, base: string): Promise<Enfeites> {
     const [lx, lz] = lampada(pecas), lado = Math.hypot(lx, lz) > 1e-3 ? Math.atan2(lx, lz) : 0;
     const lugar = lista.map(e => {
       const giro = e.giro - lado, y = ilha.altura(e.x, e.z);
-      if (ENFEITES_LUZ[nome]) brilhos.push([e.x + Math.sin(giro) * lz + Math.cos(giro) * lx, e.z + Math.cos(giro) * lz - Math.sin(giro) * lx]);
+      if (ENFEITES_LUZ[nome]) {
+        const bx = e.x + Math.sin(giro) * lz + Math.cos(giro) * lx, bz = e.z + Math.cos(giro) * lz - Math.sin(giro) * lx;
+        brilhos.push([bx, bz]);
+        halos.push(bx, ilha.altura(bx, bz) + m.altura * ENFEITE_HALO.altura, bz);
+      }
       sombras.push({ x: e.x, z: e.z, r: m.sombra });
       return new THREE.Matrix4().compose(new THREE.Vector3(e.x, y, e.z), new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), giro),
         new THREE.Vector3(1, 1, 1));
@@ -66,6 +72,7 @@ export async function enfeites(ilha: Ilha, base: string): Promise<Enfeites> {
       for (const p of pecas) {
         const m = p.mat as THREE.MeshToonMaterial;
         m.emissiveMap = t; m.emissive.setStyle(`rgb(${LUZ_NINHO.cor})`); m.emissiveIntensity = 0;
+        m.needsUpdate = true;
         acesos.push(m);
       }
     }
@@ -93,7 +100,21 @@ export async function enfeites(ilha: Ilha, base: string): Promise<Enfeites> {
     b.renderOrder = 1;
     luzes.add(b);
   }
+  if (halos.length) {
+    /* o halo: cascas translucidas e aditivas em volta da lanterna, uma dentro da outra (a soma cai do centro para a borda, sem a borda
+       dura de uma esfera so); a frente delas passa na frente do vidro. Um desenho por casca, para todos os postes */
+    const n = halos.length / 3, cor = new THREE.Color(`rgb(${LUZ_NINHO.cor})`);
+    for (const f of ENFEITE_HALO.cascas) {
+      const mat = curvar(new THREE.MeshBasicMaterial({ color: cor, transparent: true, opacity: ENFEITE_HALO.forca, depthWrite: false,
+        blending: THREE.AdditiveBlending }));
+      const h = new THREE.InstancedMesh(new THREE.SphereGeometry((ENFEITE_HALO.tamanho * f) / 2, 16, 12), mat, n);
+      for (let i = 0; i < n; i++) h.setMatrixAt(i, new THREE.Matrix4().makeTranslation(halos[3 * i], halos[3 * i + 1], halos[3 * i + 2]));
+      h.frustumCulled = false;
+      h.renderOrder = 2;
+      luzes.add(h);
+    }
+  }
   luzes.visible = false;
   grupo.add(luzes);
-  return { grupo, noite: n => { luzes.visible = n; for (const m of acesos) m.emissiveIntensity = n ? 1 : 0; } };
+  return { grupo, noite: n => { luzes.visible = n; for (const m of acesos) m.emissiveIntensity = n ? ENFEITE_HALO.vidro : 0; } };
 }

@@ -79,6 +79,10 @@ export const COCO = { raio: 0.85, passo: 0.25, surgirMs: 380 } as const;
     arvores; perto o bastante para a camera ver), a distancia minima entre eles e das coisas altas de hoje, e as tentativas por enfeite
     antes de falhar alto. PROPOSTO, SEM FONTE */
 export const ENFEITES_GRADE = {
-  sal: 0x5e7e17e5, quantos: { poste: 8 }, perto: 1.5, longe: 4, entreSi: 4, deAlto: 2, tentativas: 400,
+  sal: 0x5e7e17e5, quantos: { poste: 14 }, perto: 1.5, longe: 4, entreSi: 4, deAlto: 2, tentativas: 400,
 } as const;
+/** a luz dos enfeites a noite (enfeites.ts): o halo na lanterna, na fracao `altura` da altura do modelo, com `tamanho` celulas de
+    diametro, em cascas (as fracoes do tamanho) de opacidade `forca` cada (aditiva), e o quanto os vidros brilham (emissiveIntensity).
+    PROPOSTO, SEM FONTE */
+export const ENFEITE_HALO = { altura: 0.86, tamanho: 1.1, cascas: [0.55, 0.78, 1], forca: 0.08, vidro: 1.6 } as const;
 
