@@ -501,14 +501,16 @@ class MotorCorpo:
         self._sincronizar()
 
     def _aplicar_resumo_luta(self, rival: str, resultado: int, vida_perdida_s: int) -> None:
-        """Ponte da luta, PE1: o resumo da luta e um estimulo no corpo (a dor). So com `luta_corpo`; o rival e o resultado ficam para a PE2
-        (aqui nao entram em nenhum modulo). Nao e contato nem gasta orcamento; e um evento do log, como o deixar_bola."""
+        """Ponte da luta, PE1: o resumo da luta e um estimulo no corpo (a dor). So com `luta_corpo`; o rival e o resultado vao, na PE2, ao DigiBrain com a
+        `luta_memoria` (receber_luta); o corpo nao os usa. Nao e contato nem gasta orcamento; e um evento do log, como o deixar_bola."""
         if not (self._ligado() and self.cll.ligada):
             raise LutaSemChave("o evento lt exige o corpo com ConfigLutaCorpo ligada (luta_corpo; ponte da luta, PE1)")
         self._conferir_sincronia("antes do resumo da luta")
         self.corpo.estimulo_luta(vida_perdida_s)
         self._n_eventos += 1
         self._sincronizar()
+        if getattr(self.politica, "luta_memoria", False):      # a ponte da luta, PE2: o DigiBrain com a luta_memoria recebe o resumo pronto
+            self.politica.receber_luta(rival, resultado, vida_perdida_s, self._estado.tick)
 
     def _estimulo_mao(self, f: str) -> None:
         """O J5: a fruta na mao escreve fome e humor em float (a conta da fruta madura do mundo): vira o estimulo da fruta madura do mapa,
