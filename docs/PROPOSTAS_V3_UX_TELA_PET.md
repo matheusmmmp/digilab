@@ -401,7 +401,7 @@ e2e de ação usa.
 
 ## P1 — o plano da prancha da B (2026-11-06, `ux-designer`)
 
-Status: **PROPOSTO**, para o ok do Matheus antes de qualquer código (UX-1 decidida: a B). A prancha está em `docs/pranchas/ux-pet/`
+Status: **DECIDIDO** (Matheus, 2026-11-06, "Siga com a sua recomendação."; a prancha e as P1-1 a P1-6, tarefa seção 8.1). A prancha está em `docs/pranchas/ux-pet/`
 (`gerar.py`, `pet.css`, `capturar.sh`); as capturas vão para `D:\Trab\digilab\capturas_ux_pet_aprovar\`, fora do git (UX-8). A skill
 `frontend-design` não foi achada nesta sessão; o método é o da seção 0, com o guia acima de tudo.
 
