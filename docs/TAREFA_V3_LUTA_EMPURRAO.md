@@ -193,3 +193,33 @@ SPRITES_GERACAO, e o Gerente repassou a resposta ao worker com as palavras liter
 | **EMP-6** | o deslize no motor ou o salto | **deslize de 10 passos (160 ms)** no motor | com o salto, o motor fica mais simples, mas o desenho precisa inventar o meio do caminho, e o que se vê deixa de ser o `x` do motor |
 | **EMP-7** | a versão | **a v18**, e os pets v13 a v17 seguem vivos lutando como hoje; só os ovos novos nascem v18 | trocar a luta dos pets que já existem mudaria lutas já jogadas, o que a regra de uma versão por mecânica proíbe |
 | **EMP-8** | a medição e o gate (a seção 4) | **calibração 72101–72505, v18 contra v14; se uma meta que passa piorar, volta ao Matheus** | sem medir, a v18 entra com o equilíbrio desconhecido. Recalibrar sozinho iria contra a regra dos números PROPOSTOS |
+
+## 9. Resultado
+
+### 9.1 A medição de equilíbrio (etapa 4, 2026-11-06): o gate reprova
+
+Rodada pelo plano 4.1, na calibração 72101–72505, com 4 processos (cerca de 7 min por lado). Os artefatos estão em
+`web/app/scripts/medicoes/equilibrio_tr/empurrao/`: as pastas `antes/` e `depois/`, os dois logs e o `resumo.txt`.
+
+**Três metas que passam hoje falham com a v18,** e o gate da seção 4 reprova:
+
+| meta | antes (v14) | depois (v18) |
+|---|---|---|
+| F-3 | passa (o duelista vence 3 formas) | falha (o duelista vence 1) |
+| G-2 | passa | falha: o Tortomon (`npc_tier2_sentinela`), pior forma o guardião, 0,83 |
+| G-3 | passa: a Liga de 0,43 a 0,72 | falha: de 0,22 a 0,95, com o duelista, a muralha e o tita fora |
+
+**O T-2 piora muito,** embora já falhasse hoje:
+- o total de lutas no limite de tempo vai de 0,012 para 0,054;
+- o pior par vai de duelista × sentinela, 0,145, para **duelista × muralha, 0,93**.
+
+**O que melhora ou fica igual:**
+- o T-1 (a luta média vai de 33,9 s para 36,7 s, e segue falhando);
+- o T-3, o T-4, o T-5, o P-1, o P-2, o P-4, o G-4, o G-5, o G-6 e o I-2 continuam passando;
+- o F-1 tem menos formas fora (duas, contra quatro).
+
+As outras falhas de hoje seguem falhando. A tabela inteira está no `resumo.txt`.
+
+Pela EMP-8, a etapa para aqui e volta ao Matheus, e nenhum número da seção 8 foi mexido. O desenho (etapa 5) foi escrito enquanto a medição
+rodava e está no branch, mas o GIF e o PR de código esperam a decisão.
+
