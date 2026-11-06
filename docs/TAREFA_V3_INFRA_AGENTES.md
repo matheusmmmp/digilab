@@ -331,10 +331,8 @@ Worker: Claude Code, Opus 5.5, worktree `v3-infra-agentes-e4`, branch empilhado 
   - no `tests/test_hooks.py`, os dois lados acrescentaram casos; dois nomes repetidos ganharam o sufixo `_infra`;
   - o `test_proposta_ux_aponta_scripts_que_existem_e_nada_ligado` aceita o H6 ligado (D-IA-7);
   - o `test_os_seis_agentes_e_nenhum_outro` (UX) aceita os três revisores da E2.
-- **Testes:**
-  - `python -m pytest tests/test_hooks.py tests/test_hook_h4.py tests/test_agentes.py tests/test_agentes_ux.py tests/test_pre_run.py -q -p no:cacheprovider`
-    → 193 passed, antes destes ajustes, com 2 falhas da junção;
-  - depois, os 66 casos de agentes, testador e H8 passaram.
+- **Testes:** `python -m pytest tests/test_hooks.py tests/test_hook_h4.py tests/test_agentes.py tests/test_agentes_ux.py tests/test_pre_run.py tests/test_infra_*.py -q -p no:cacheprovider`
+  → 258 passed. Antes dos ajustes da junção, os dois testes da UX acima falhavam.
 - **O testador rodado uma vez** (num agente geral, em Sonnet, com o corpo do `ux-browser-tester.md`; a sessão não carrega a pasta de
   agentes): só o `npm run tipos` e o `npm test`, com um `test/_quebrado_e4.test.ts` temporário que espera `1 + 1` ser 3.
   - O tsc passou.
