@@ -152,3 +152,12 @@ Não há run de pesquisa. O gate de cada etapa tem três partes:
 - **D-LE-3, a ordem.**
   - **Recomendação:** E1, E2, E3, E4 e E5. A E1 sozinha já muda a sensação da luta.
   - **Custo de errar:** só a ordem.
+
+## 9. Resumo da E1, o impacto (2026-11-06)
+
+- **Feito:** `web/app/src/telas/lutar/palcoTR/efeitosTR.ts` (estado e funções puras dos efeitos: pausa, tremida, clarão, empurrão, faísca, fonte de
+  pixel) e o desenho em `desenhoTR.ts`; a pausa e a espera do fim em `src/luta.ts`. Tudo sai dos eventos `dano` e `acao` e do `passo`.
+- **Força (D-LE-2, PROPOSTO, SEM FONTE):** pausa 70 ms (35 no leve), tremida ≤ 4 px, clarão 2 quadros, empurrão 2–5 px; constante `IMPACTO`.
+- **Testes:** `test/luta_efeitos_e1.test.ts` (mesmo estado visual para a mesma luta, fim igual ao do motor), `e2e/luta_efeitos_e1.spec.ts`
+  (tremida aparece; com `prefers-reduced-motion` não aparece). `git diff origin/main -- web/app/motor digilab` vazio.
+- **Próxima:** E2, os projéteis por elemento (depende da D-LE-1).
