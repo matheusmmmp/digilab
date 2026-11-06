@@ -66,7 +66,8 @@ for (const [nome, largura, semWebGL] of [["a cena 3D", 390, false], ["a reserva 
     expect(r, "a reacao do corpo ficou na vista").not.toBeNull();
     expect(["relaxou", "calmo"]).toContain(r!.tipo);
     expect(r!.carinho + r!.medo).toBeCloseTo(1, 9);
-    /* o botao Carinho grava o mesmo evento */
+    /* o botao Carinho grava o mesmo evento (no celular ele mora no Mais, M1-2) */
+    if (largura < 900) await page.locator(".acoes-pet .acao-mais").click();
     await page.getByRole("button", { name: "Carinho", exact: true }).first().click();
     await expect.poll(() => eventosD(page)).toEqual([...antes, "acariciar", "acariciar"]);
     expect(erros).toEqual([]);
