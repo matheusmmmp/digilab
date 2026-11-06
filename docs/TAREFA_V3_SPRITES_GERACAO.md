@@ -497,3 +497,13 @@ recomendado": as recomendações abaixo valem como estão; registro D-SG-H).
     - O resultado vale para o Agumon, o derivado mais forte (D-SG-4); ele ainda não diz nada sobre os 49 sem boca.
   - **As capturas do jogo (seção 7):** o Matheus viu os GIFs do jogo em 390 e 1280 px e o gerado lado a lado com o derivado, e respondeu
     **"Não aprovo"**. O critério "o e2e com o clipe novo tem referência aprovada" fica **não cumprido**; o motivo ainda vai ser pedido a ele.
+  - **O take 4, uma prova nova a pedido do Matheus** ("Eu quero que ele abra mais a boca", D-SG-U):
+    - **O prompt:** é o do t03, com "opens its jaws WIDE"; o R-envio aprovou (`revisoes/E2_envio_t04.md`).
+    - **O custo:** US$ 0,448; o ledger soma 7 chamadas e **US$ 2,032**.
+    - **O corte automático** pegou o maior alcance do corpo e deixou a boca aberta só num quadro. O corte manual (D-SG-V) usa os quadros
+      [0, 24, 40, 48, 56, 64, 72, 84, 92] da fonte, com os ms [100, 83, 83, 133, 83, 133, 83, 83, 83], que somam 864 ms, e põe as duas
+      aberturas da boca em 133 ms cada.
+    - **Os gates** (`remaster/geracao/Agumon/gates.json`, agora do t04b): passa nos 7, com o G-AREA de 1 299 a 1 410 e o G-CARGA.
+    - **O jogo:** o e2e no candidato novo dá 8 de 8. As capturas estão em `remaster/geracao/capturas/`; as do t03 foram para
+      `capturas_t03/`.
+    - **A aprovação das capturas do t04 aguarda o Matheus.**
