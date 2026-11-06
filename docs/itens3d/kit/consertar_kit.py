@@ -2,7 +2,8 @@
 # textura dela nao tem a cruz vermelha (nenhum pixel vermelho), e a cruz e o que faz o kit ser lido como kit. O que o script faz:
 #   1. encolhe os UVs para 96 % (em volta de u = v = 0), como o prepara_textura_kit.py encolheu a imagem: o mapeamento nao muda e sobra
 #      uma faixa livre na borda, onde esta o quadrado vermelho;
-#   2. poe uma cruz plana (dois retangulos, 4 triangulos) sobre a tampa, um pouco acima do ponto mais alto da tampa sob ela (raios de cima
+#   2. poe uma cruz plana (dois retangulos, 4 triangulos) sobre a tampa, na metade da frente (-y no Blender, +z no jogo, o lado da
+#      camera; a alca de corda passa no meio, em y ~ 0, e cobria a cruz no centro), um pouco acima do ponto mais alto da tampa sob ela (raios de cima
 #      para baixo, de Z_RAIO, que passam pela alca de corda ate a tampa, abaixo de Z_TAMPA; as fatias da secao 13 poem a tampa em z ~ 0,5), com os UVs no quadrado vermelho;
 #   3. a textura chapada, um material so de cor, sem face dupla; exporta o glTF separado e renderiza uma previa.
 # uso (da raiz): blender -b --factory-startup --python docs/itens3d/kit/consertar_kit.py -- <meshy.glb> <cor_chapada.png> <saida.gltf> <previa.png>
@@ -13,7 +14,7 @@ from mathutils.bvhtree import BVHTree
 ent, cor, sai, previa = sys.argv[sys.argv.index("--") + 1:]
 ENCOLHE = 0.96
 VERMELHO_UV = (1006 / 1024, 1 - 18 / 1024)   # o centro do quadrado vermelho (prepara_textura_kit.py), v para cima
-CENTRO, BRACO, LARGURA, ACIMA, Z_RAIO, Z_TAMPA = (0.0, 0.1), 0.36, 0.11, 0.012, 0.95, 0.6
+CENTRO, BRACO, LARGURA, ACIMA, Z_RAIO, Z_TAMPA = (0.0, -0.36), 0.30, 0.14, 0.012, 0.95, 0.6
 
 bpy.ops.wm.read_factory_settings(use_empty=True)
 bpy.ops.import_scene.gltf(filepath=ent)
@@ -47,6 +48,8 @@ for dx in (-BRACO, -BRACO / 2, 0, BRACO / 2, BRACO):
                     break
                 z0 = hit[0].z - 1e-3
             zs.append(hit[0].z)
+if max(zs) - min(zs) > 0.2:
+    raise SystemExit(f"a cruz sai da tampa: os raios vao de {min(zs):.3f} a {max(zs):.3f}")
 z = max(zs) + ACIMA
 print("TAMPA z", round(min(zs), 3), "a", round(max(zs), 3), "; cruz em", round(z, 3))
 

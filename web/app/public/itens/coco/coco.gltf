@@ -10,7 +10,7 @@
     "vistas": "01a1b0ef-88bf-70fd-ac3b-2c6dbd0e3679",
     "malha": "01a1b0f1-0849-76f5-a1b1-2e70dd46a52d"
    },
-   "pipeline": "docs/TAREFA_V3_ITENS_3D.md; a malha da Meshy mantida, com a cor chapada na paleta do concept",
+   "pipeline": "docs/TAREFA_V3_ITENS_3D.md; a malha da Meshy mantida, com a cor chapada na paleta do concept, uma cor por face",
    "licenca": "License.txt ao lado"
   }
  },

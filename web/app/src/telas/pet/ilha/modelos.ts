@@ -38,9 +38,9 @@ export const ITENS_MODELOS = {
   bola: { arquivos: ["bola/bola.gltf"], altura: 0.72, vento: 0, sombra: 0.4, baixo: false },
   /* o saco: a altura do saco procedural de antes (o alto do braco, 2,48), e a mesma sombra */
   saco: { arquivos: ["saco/saco.gltf"], altura: 2.48, vento: 0, sombra: 0.7, baixo: false },
-  /* o kit: um pouco mais alto que a maleta procedural (0,385 com a alca), porque o caixote e quase um cubo e ficaria estreito; o coco: a
+  /* o kit: mais alto que a maleta procedural (0,385 com a alca), para ficar um pouco mais largo que ela (0,56; o revisor achou o caixote pequeno em 390 px); o coco: a
      altura do coco procedural (0,46 com a ponta) menos a ponta mais curta do gerado; as sombras, as de antes */
-  kit: { arquivos: ["kit/kit.gltf"], altura: 0.45, vento: 0, sombra: 0.45, baixo: false },
+  kit: { arquivos: ["kit/kit.gltf"], altura: 0.58, vento: 0, sombra: 0.45, baixo: false },
   coco: { arquivos: ["coco/coco.gltf"], altura: 0.42, vento: 0, sombra: 0.3, baixo: false },
 } as const satisfies Record<string, Modelo>;
 export type NomeItem = keyof typeof ITENS_MODELOS;
