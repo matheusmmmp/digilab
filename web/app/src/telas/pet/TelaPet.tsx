@@ -5,6 +5,7 @@
    motor na hora de desenhar; so mudarMotor() altera o pet. */
 import type { ReactNode } from "react";
 import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import {
   Activity, ArrowRight, Ban, Brain, ChevronDown, ChevronRight, Droplet, Drumstick, Ellipsis, Hand, HeartPulse, History, PawPrint, Smile, TrendingUp, Zap,
   type LucideIcon,
@@ -32,6 +33,7 @@ import { abrirEscolhaBrasao } from "../../jornada.ts";
 import { useTempo } from "../../tempo.ts";
 import { CHAVE } from "../../save.ts";
 import { FOME_FALA, chamadosVisiveis, useArrastavel, useAviso, useDetalhesPet } from "../../hudPet.ts";
+import { ChipCausa, LinhaAgora } from "./LinhaAgora.tsx";
 import { BarraBola } from "./PorBola.tsx";
 import { AvisoRacao, BarraRacao, FaixaRacao, InfoMundo } from "./PorRacao.tsx";
 import "../../estilo/pet_dock.css";
@@ -77,10 +79,12 @@ function TextoFala({ txt, est, atlasOk }: { txt: string; est: string; atlasOk: b
   partes.push(txt.slice(ult));
   return <>{partes}</>;
 }
+/** o chip de causa do balao e do "Por que ele disse isso" (so com MotivoVida): fator de memoria, malha ciano com o evento; o treino
+    com pausa, "vem do corpo"; outro fator, o marcador neutro; sem fator ou exploracao, "? sem motivo registrado" (LinhaAgora.tsx) */
 function Causa({ mot, refs }: { mot: MotivoVida; refs: number[] }) {
-  if (mot.exploracao || !mot.fatores.length) return <span className="dl-causa dl-causa--sem">? sem motivo registrado</span>;
-  const mem = mot.fatores.filter(f => CAUSA_MEMORIA[f]).slice(0, 2);
-  return <>{mem.map(f => {
+  const mem = mot.exploracao ? [] : mot.fatores.filter(f => CAUSA_MEMORIA[f]).slice(0, 2);
+  if (!mem.length) return <ChipCausa mot={mot} />;
+  return <>{mot.fatores.includes("fadiga_treino") && <ChipCausa mot={{ ...mot, fatores: ["fadiga_treino"] }} />}{mem.map(f => {
     const c = CAUSA_MEMORIA[f];
     return <span key={f} className="dl-causa dl-causa--registro dl-malha">{EMOTE_CAUSA[c] && <Peca nome={EMOTE_CAUSA[c]} />}{c}{refs.length ? " · evento #" + refs.join(", #") : ""}</span>;
   })}</>;
@@ -137,7 +141,7 @@ function BalaoFala({ v, abrir }: { v: VistaFala; abrir: () => void }) {
   if (!vis || (!v.texto && !v.detalhe)) return null;
   return (
     <button type="button" className={v.classe + " cena-fala"} title={v.titulo} aria-haspopup="dialog" onClick={abrir} {...arr}>
-      <span className="balao-txt">{v.balao}</span><small>toque para ver o porquê</small></button>
+      <span className="balao-txt">{v.balao}</span>{v.causa}<small>toque para ver o porquê</small></button>
   );
 }
 /** no painel: o que ele faz, a causa registrada, o detalhe e a fonte da fala */
@@ -512,6 +516,13 @@ function useReservaDoHabitat(ref: { current: HTMLElement | null }): void {
     return () => { ro.disconnect(); raiz.removeProperty("--hab-baixo"); };
   }, [ref]);
 }
+/** a fileira do topo da casca (Topo.tsx): a linha do agora entra nela, logo depois da plaquinha (a prancha da P1); no servidor e no
+    primeiro desenho ainda nao ha topo, e a linha espera */
+function useTopo(): HTMLElement | null {
+  const [topo, setTopo] = useState<HTMLElement | null>(null);
+  useEffect(() => { setTopo(document.querySelector<HTMLElement>(".topo-hab")); }, []);
+  return topo;
+}
 export function TelaPet({ irRegistro, irEvolucao }: { irRegistro: () => void; irEvolucao: () => void }) {
   const { motor: m, nascendo } = useJogo(), fala = useFala(), largo = useLargo(), [aberto, setAberto] = useState<Painel | null>(null);
   const [hud, mudarHud] = useAbertosHud(), detalhesPet = useDetalhesPet();
@@ -533,7 +544,7 @@ export function TelaPet({ irRegistro, irEvolucao }: { irRegistro: () => void; ir
     setAberto(null); mudarHud("estado", true);
     setTimeout(() => pilha.current?.querySelector<HTMLElement>("[data-painel-pet='estado'] .hud-painel__bt")?.focus(), 0);
   };
-  const ult = ultimasDoRegistro(m, 1)[0];
+  const ult = ultimasDoRegistro(m, 1)[0], topo = useTopo();
   const resumoEvo = p ? (p.falta > 0 ? `próxima forma em ${duracao(p.falta)}` : "tempo do estágio cumprido") : undefined;
   const conteudo = (id: Painel) => <ConteudoPainel id={id} v={fala} irRegistro={irRegistro} irEvolucao={irEvolucao} detalhes={hud.detalhes} alternarDetalhes={() => mudarHud("detalhes")} />;
   return (
@@ -542,6 +553,7 @@ export function TelaPet({ irRegistro, irEvolucao }: { irRegistro: () => void; ir
         {vivo && <BalaoFala v={fala} abrir={() => abrir("fala")} />}
         {m.mundo && vivo && <FaixaRacao />}
       </div>
+      {topo && createPortal(<LinhaAgora aberto={atual === "digibrain"} aoAbrir={detalhesPet ? () => abrir("digibrain") : undefined} />, topo, "agora")}
       <Prioridade abrirDetalhes={abrirEstado} />
       {largo ? (!atual && detalhesPet && (
         <aside className="pet-hud" ref={pilha} aria-label="Painéis do pet">

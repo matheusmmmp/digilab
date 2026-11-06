@@ -12,7 +12,7 @@ import { hhmm } from "../telas/pet/TelaPet.tsx";
 import { LegendaMapa, MapaPesos } from "./MapaPesos.tsx";
 
 /** a regra do instinto que disparou, em texto do jogo */
-const REGRA_TXT: Record<RegraLobos, string> = {
+export const REGRA_TXT: Record<RegraLobos, string> = {
   sono_exaustao: "Exausto", sono_continuar: "Ainda com sono", sono_noite: "De noite", pedido_necessidade: "Precisando de você",
   abandono: "Sem cuidado há muito tempo", fome_moderada: "Com fome", tempo_livre: "Tempo livre",
 };
@@ -21,7 +21,7 @@ const ACAO_INF: Record<AcaoPet, string> = {
   ocioso: "ficar à toa", dormir: "dormir", comer: "comer", brincar: "brincar", chamar_atencao: "chamar você", explorar: "explorar", emburrar: "emburrar",
 };
 /** a acao como opcao (curta) */
-const ACAO_CURTA: Record<AcaoPet, string> = {
+export const ACAO_CURTA: Record<AcaoPet, string> = {
   ocioso: "à toa", dormir: "dormir", comer: "comer", brincar: "brincar", chamar_atencao: "chamar você", explorar: "explorar", emburrar: "emburrar",
 };
 /** as entradas da percepcao, com os nomes da tela do Pet (a fome e a barra "comida") */
