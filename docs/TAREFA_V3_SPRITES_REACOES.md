@@ -1,7 +1,7 @@
 # TAREFA V3 — SPRITES_REACOES (2026-11-06)
 
 Coordenador: o Gerente da missão SPRITES_GERACAO (Claude Code, Opus 5.5). Worker: a definir por etapa. Worktree e branch: `v3-sprites-reacoes`.
-Status: PROPOSTA (as decisões da seção 8 ficam com o Matheus).
+Status: ABERTA. D-RE-1 a D-RE-4 DECIDIDAS em 2026-11-06; a R1 (o Dormir) gerada para os 60, falta levá-la ao jogo (seção 9).
 
 Categoria: arquitetura. Origem: Matheus, 2026-11-06. O pedido foi listar as reações, as ações e os emotes que faltam ao pet, com base em
 jogos do gênero e nas folhas do Digimon Battle Spirit, antes de desenhar. Depois ele acrescentou que o **dormir vem primeiro, para todos os
@@ -169,3 +169,48 @@ Não há run de pesquisa. O gate de cada reação tem duas partes:
 - **D-RE-4, o Digimon de prova da R1.**
   - **Recomendação:** o **Agumon** primeiro, depois um grande (o WarGreymon) e um alado (o Birdramon), antes dos outros 57.
   - **Custo de errar:** sem a prova, um defeito da pose se repete nos 60 e custa até US$ 14 para refazer.
+
+## 9. As decisões do Matheus e a R1, o Dormir (2026-11-06)
+
+- **D-RE-1 a D-RE-4, DECIDIDAS pelo Matheus em 2026-11-06** ("Sim, começar o Dormir"): a pose sentada, a ordem da seção 3.3, o teto de
+  US$ 15 para a R1 e a prova no Agumon, num grande e num alado. O Birdramon deu lugar ao Aquilamon na prova, porque a ficha do Birdramon
+  recusa: o Idle dele flutua acima do pé da âncora.
+- **A R1 gerada (fora do git, em `remaster/geracao/reacoes/dormir/`):**
+  - os 60 Digimon das formas têm o quadro de dormir: `final/<Nome>.png`, na caixa do UP, com o pé no `pe_idle` e as cores só do Idle de
+    cada um. As escolhas e as rotas estão em `escolhas.json`, e o resumo do lote em `lote.json`;
+  - as rotas: 37 pela edição do sprite (2 takes), 20 pela geração do zero com o sprite como referência (mais 2 takes) e 3 só com o olho
+    fechado (Tsunomon, Veemon e Koromon);
+  - o gasto, pelo ledger `forge/.forge/ledger.jsonl`: **US$ 14,16**, dentro do teto;
+  - os bots e os NPCs (16) ficam sem o Dormir. Eles não são pet; o Matheus confirmou: "Não precisa".
+- **O que a R1 ensinou:**
+  - **A geração do zero inventa partes.** O Tsunomon e o Koromon ganharam braços, e o Veemon ganhou uma asa. A regra do Matheus: o
+    personagem nunca ganha nada, e, onde o olho aparece, a reação é **só mexer no rosto** ("O Tsunomon era literalmente só fechar o olho
+    dele"). A geração do zero fica só para quando a edição não muda nada e o olho não aparece (o WarGreymon, de capacete).
+  - **As cores do Idle.** O snap na paleta da ficha (todas as cores do export, 3 684 no Agumon) deixava passar os degradês da IA. O quadro
+    final usa só as cores do Idle 0 de cada Digimon.
+  - **O `snap` do `limpar.py` estoura a memória** em paletas grandes (o WarGreymon, com 10 465 cores). O lote usou uma árvore k-d com o
+    mesmo resultado.
+  - **Uma regra de "não mudou":** a silhueta muda menos de 15 % em relação ao Idle (PROPOSTO, SEM FONTE). Ela separa o WarGreymon parado
+    (no máximo 7 %) dos que mudaram (25 % ou mais), mas não vale para as reações só de rosto.
+  - **A galeria** local (`remaster/geracao/galeria.html`, servida pelo `galeria-acoes` do `.claude/launch.json`) mostra cada par em escala
+    inteira, sem filtro, com o "zz" saindo da cabeça.
+- **O que falta para o jogo** (a etapa de código, numa sessão própria): o quadro `Dormir` nos exports, o atlas gerado de novo e o
+  `sono.ts`, que, com o quadro, não achata nem escurece o sprite e põe o "zz" na cabeça.
+
+## 10. O custo das próximas reações (PROPOSTO, 2026-11-06)
+
+Os preços vêm do ledger da R1: US$ 0,08 por imagem (Nano Banana 2 edit). O câmbio de US$ 1 = R$ 5,50 está A CONFIRMAR. A coluna "esperado"
+soma 30 % de retakes, a taxa observada na R1 (SEM FONTE além dela).
+
+| reação | o que muda | takes por Digimon | US$ para os 60 | esperado |
+|---|---|---|---|---|
+| Triste, Cansado, Carinho, Medo, Envergonhado, Recusa | só o rosto (olho, boca); o emote por cima | 1 | 4,80 | ~6,25 (R$ 34) |
+| Doente | o rosto e a cor apagada (a cor sai na vista, de graça) | 1 | 4,80 | ~6,25 |
+| Cocô | a pose agachada; o cocô desenhado uma vez para todos | 2 | 9,60 | ~12,50 (R$ 69) |
+| Vitória | a pose de comemoração | 2 | 9,60 | ~12,50 |
+| Derrota | a pose sentada e caída | 2 | 9,60 | ~12,50 |
+| Acordar ou acenar | uma pose | 2 | 9,60 | ~12,50 |
+| Emotes novos (lágrima, "...", caveira, moscas, estrelas, X, curativo) | desenhados uma vez em grade | 0 | 0 | 0 |
+
+Tudo junto, as 11 reações dos 60 custam perto de **US$ 95**, cerca de R$ 520. Começando pelas três da prioridade 2 (o cocô, a vitória e a
+derrota), são cerca de US$ 37,50.

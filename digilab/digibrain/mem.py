@@ -118,11 +118,35 @@ def episodio_autobio(sens: dict, pm1, recs: tuple, l0: list, l1: list, afeto_ant
             "fome_antes": sens["falta"].get("fome"), "hora": sens["minuto"], "rep": 0, "rec": 0, "memoria": "recente"}
 
 
+def episodio_luta(sens: dict, recs: tuple, l0: list, l1: list, afeto: dict, cons: dict, resumo: dict, k: int, tick: int,
+                  p: ConfigDigibrainInatos) -> dict | None:
+    """o episodio da luta (ponte da luta, PE2; TAREFA_V3_PONTE_LUTA, 3.2), ou None se ela nao vira episodio. A regra e a de hoje, sem
+    limiar novo: |sigma| >= `theta_sig` ou a subida da dor, do susto ou do estresse >= `theta_sig`, com o corpo de antes (o da consequencia
+    anterior) e o de depois (o da Observacao). `afeto` e o V e o E de agora (a luta nao os mexe), `cons` o r e o r_n da variacao do corpo.
+    A origem e `luta`; o rival vai em `outro` e na classe; a acao e (lutar, rival); a categoria, (lutar, rival, sinal de sigma)"""
+    corpo_antes, corpo_depois = dict(zip(recs, l0)), dict(zip(recs, l1))
+    subida = max((corpo_depois[r] - corpo_antes[r] for r in AFETIVOS if r in corpo_depois), default=0)
+    if abs(cons["r_n"]) < p.theta_sig and subida < p.theta_sig:
+        return None
+    rival, sigma = resumo["rival"], cons["r_n"]
+    vistas = {o["classe"] for o in sens["objetos"]}
+    return {"decisao": k, "tick": tick, "ponto": tuple(sens["pos"]), "regiao": sens["regiao"],
+            "vista": [c for c in TIPOS_ALVO_DIGIBRAIN if c in vistas], "cheiro": bool(sens["ha_cheiro"]),
+            "noite": sens["contexto"]["noite"] > 0, "acao": ["lutar", rival], "objeto": None,
+            "dono": [], "outro": rival, "corpo_antes": corpo_antes, "corpo_depois": corpo_depois,
+            "delta": {r: b - a for r, a, b in zip(recs, l0, l1)},
+            "V_antes": afeto["V"], "V_depois": afeto["V"], "E_antes": afeto["E"], "E_depois": afeto["E"],
+            "r": cons["r"], "r_n": cons["r_n"], "sigma": sigma,
+            "classe": rival, "origem": "luta", "categoria": ["lutar", rival, _sinal(sigma)],
+            "resultado": resumo["resultado"], "vida_perdida_s": resumo["vida_perdida_s"],
+            "fome_antes": sens["falta"].get("fome"), "hora": sens["minuto"], "rep": 0, "rec": 0, "memoria": "recente"}
+
+
 class Memoria:
     """o M-MEM (docstring do modulo)"""
 
     def __init__(self, cfg_mundo: ConfigMundo, inatos: ConfigDigibrainInatos | None = None, autobio: bool = False,
-                 controle: str = "rel", rng_emb=None) -> None:
+                 controle: str = "rel", rng_emb=None, luta: bool = False) -> None:
         self.p = inatos or CONFIG_DIGIBRAIN_INATOS
         self.S = self.p.escala
         self.sub = cfg_mundo.sub
@@ -131,6 +155,9 @@ class Memoria:
         self.saidas: list[dict] = []          # os episodios que sairam por capacidade (id, |r|): o registro da PE-16
         self.recuperacoes = 0
         self.autobio = autobio
+        self.luta = luta                              # a ponte da luta (PE2): a origem `luta`; desligada, nenhum campo novo
+        if luta and not autobio:
+            raise ValueError("M-MEM: a origem luta so com a memoria_autobio")
         self.controle = controle
         if controle != "rel" and not autobio:
             raise ValueError("M-MEM: o controle so com a memoria_autobio")
@@ -185,7 +212,10 @@ class Memoria:
         """guarda o episodio completo (de `episodio_autobio`) na recente e devolve o id"""
         if not self.autobio:
             raise RuntimeError("M-MEM: o episodio completo so com a memoria_autobio")
-        if ep["classe"] not in CLASSES_AUTOBIO or ep["origem"] not in ORIGENS_AUTOBIO:
+        if ep["origem"] == "luta":                    # a ponte da luta (PE2): a classe e o rival, e o outro tambem
+            if not self.luta or type(ep["outro"]) is not str or not ep["outro"] or ep["classe"] != ep["outro"]:
+                raise ValueError(f"M-MEM: episodio de luta {ep!r}")
+        elif ep["classe"] not in CLASSES_AUTOBIO or ep["origem"] not in ORIGENS_AUTOBIO:
             raise ValueError(f"M-MEM: episodio {ep!r}")
         if ep["origem"] == "visita" and (ep["sigma"] > 0 or ep["classe"] != "nao_havia"):
             raise ValueError("M-MEM: a visita sem comida tem sigma <= 0 e a classe nao_havia")
@@ -281,7 +311,7 @@ class Memoria:
         if lembranca["recuperado"] is None:
             return None
         e = next(e for e in self._guardados() if e["id"] == lembranca["recuperado"])
-        acao, tipo, _ = e["acao"]
+        acao, tipo = e["acao"][0], e["acao"][1]     # a luta tem (lutar, rival); nenhuma unidade casa com ela
         alvo = e["objeto"]["classe"] if e["objeto"] is not None else tipo       # a classe de alvo do episodio
         return {"id": e["id"], "L": mul(self.p.w_lem, e["sigma"], self.S), "acao": acao, "alvo": alvo, "lugar": tuple(e["lugar"]),
                 "so_comportamento": e["classe"] == "sem_alvo"}

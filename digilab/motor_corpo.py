@@ -65,12 +65,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass, replace
 
-from .config import CONFIG_CORPO, CONFIG_OLFATO, CONFIG_OUVIDO, ConfigCorpo, ConfigOlfato, ConfigOuvido
+from .config import CONFIG_CORPO, CONFIG_LUTA_CORPO, CONFIG_OLFATO, CONFIG_OUVIDO, ConfigCorpo, ConfigLutaCorpo, ConfigOlfato, ConfigOuvido
 from .corpo import DRIVE_DO_QUIMICO, Corpo, grafo_do_corpo, taxas_de
 from .corpo_grafo import checar
 from .educacao import MotorEducacao
 from .engine import Motor
-from .events import ACOES_CORPO, ACOES_MAO, ACOES_TREINO, ACOES_TROCA_ARVORES, AcaoPet, AcaoUsuario
+from .events import ACOES_CORPO, ACOES_MAO, ACOES_TREINO, ACOES_TROCA_ARVORES, AcaoPet, AcaoUsuario, LutaSemChave
 from .obediencia import MotorPersonalidade
 from .policy import Observacao, Transicao, efeito_da_acao_do_pet
 from .state import avancar_um_tick
@@ -137,9 +137,11 @@ class MotorCorpo:
     """Mixin: vai na frente de um motor de hoje (use `com_corpo`). `cfg_corpo` liga o corpo."""
 
     def __init__(self, *a, cfg_corpo: ConfigCorpo | None = None, cfg_olfato: ConfigOlfato | None = None,
-                 cfg_ouvido: ConfigOuvido | None = None, troca_digestao: tuple[int, int] | None = None, **kw) -> None:
+                 cfg_ouvido: ConfigOuvido | None = None, troca_digestao: tuple[int, int] | None = None,
+                 cfg_luta_corpo: ConfigLutaCorpo | None = None, **kw) -> None:
         super().__init__(*a, **kw)
         self.cc = cfg_corpo or CONFIG_CORPO
+        self.cll = cfg_luta_corpo or CONFIG_LUTA_CORPO         # a ponte da luta, PE1 (desligada: o evento lt levanta erro)
         self.co = cfg_olfato or CONFIG_OLFATO
         self.cv = cfg_ouvido or CONFIG_OUVIDO
         # rede de si, etapa 2b: a troca da digestao pedida (tick, taxa) e a feita (o registro derivado; None ate o tick)
@@ -157,11 +159,12 @@ class MotorCorpo:
         self._cfg_evo = treino.cfg_evo if treino is not None else None
         if self._orgaos_ligados():                    # os orgaos: so com o mundo fisico (conferido acima)
             self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo, com_mundo=True, cfg_olfato=self.co,
-                                         cfg_ouvido=self.cv)
+                                         cfg_ouvido=self.cv, cfg_luta=self.cll)
         elif self.cc.drives_novos or self.cc.paladar:  # etapa 6: a curiosidade so existe com o mundo fisico (CD-8); o paladar exige o mundo
-            self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo, com_mundo=self._mundo_ligado())
+            self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo, com_mundo=self._mundo_ligado(),
+                                         cfg_luta=self.cll)
         else:
-            self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo)
+            self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo, cfg_luta=self.cll)
         self._estado = self.corpo.no_estado(self._estado)
         self._estimulos: list[tuple] = []             # os estimulos da decisao em curso (para o `ocorrido`)
         self.consequencias = 0                        # quantas vezes o gancho `consequencia_corpo` foi chamado
@@ -496,6 +499,18 @@ class MotorCorpo:
         if deltas:
             self.corpo.acao_dono(acao)
         self._sincronizar()
+
+    def _aplicar_resumo_luta(self, rival: str, resultado: int, vida_perdida_s: int) -> None:
+        """Ponte da luta, PE1: o resumo da luta e um estimulo no corpo (a dor). So com `luta_corpo`; o rival e o resultado vao, na PE2, ao DigiBrain com a
+        `luta_memoria` (receber_luta); o corpo nao os usa. Nao e contato nem gasta orcamento; e um evento do log, como o deixar_bola."""
+        if not (self._ligado() and self.cll.ligada):
+            raise LutaSemChave("o evento lt exige o corpo com ConfigLutaCorpo ligada (luta_corpo; ponte da luta, PE1)")
+        self._conferir_sincronia("antes do resumo da luta")
+        self.corpo.estimulo_luta(vida_perdida_s)
+        self._n_eventos += 1
+        self._sincronizar()
+        if getattr(self.politica, "luta_memoria", False):      # a ponte da luta, PE2: o DigiBrain com a luta_memoria recebe o resumo pronto
+            self.politica.receber_luta(rival, resultado, vida_perdida_s, self._estado.tick)
 
     def _estimulo_mao(self, f: str) -> None:
         """O J5: a fruta na mao escreve fome e humor em float (a conta da fruta madura do mundo): vira o estimulo da fruta madura do mapa,

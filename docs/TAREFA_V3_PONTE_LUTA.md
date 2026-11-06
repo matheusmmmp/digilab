@@ -271,3 +271,52 @@ Nenhum conserto foi preciso: a PE1 pode seguir. Os desvios D-PE0-1 a D-PE0-5 est
 - **O e2e:** `web/app/e2e/ponte_luta.spec.ts` (saves de `e2e/gerar_save_ponte_luta.mjs`): v16 (pelo laboratório), v17 modular e v17 A lutam na Arena e na
   Liga e o app reabre o save com as mesmas lutas.
 - **Limite:** a série do gabarito é a Liga, que o pet de vida curta quase sempre perde na primeira luta (1 série de 2 lutas em 20; D-PE0-2).
+
+## 10. PE1, o resumo da etapa (2026-11-06, Sonnet 5.5, branch `v3-ponte-luta-pe1`)
+
+**Resposta: o resumo de uma luta já sobe a dor do corpo e entra no replay do mundo do Python, atrás de uma chave desligada.** Os desvios D-PE1-1 a
+D-PE1-5 estão em `docs/registro/2026-11.md`.
+
+- **A chave:** `ConfigLutaCorpo(ligada=False)` em `digilab/config.py` (`CONFIG_LUTA_CORPO`, `CONFIG_LUTA_CORPO_LIGADA`, status em
+  `PARAMETROS_LUTA_CORPO`: PROPOSTO, sem número livre). Fica fora de `ConfigCorpo` para o dump do gabarito de paridade do corpo e o `corpo.test.ts` não mudarem (D-PE1-1).
+- **A dor:** `Corpo.estimulo_luta(vida_perdida_s)` em `digilab/corpo.py`: a dor sobe exatamente `div_arred(p × C, S)`, com `p` cortado em [0, S], sem rng
+  (D-PE1-2). Exige `gestos`.
+- **O evento:** `lt` (renomeado do `pl` a pedido do Matheus na revisão: o `"pl"` fica livre para a marca do ovo da PE3) com valor `rival|resultado|vida_perdida_s` (`digilab/events.py`: `resumo_luta`, `ler_resumo_luta`, `LutaSemChave`);
+  `MotorMundo.resumo_luta` e o `reproduzir_mundo` (`digilab/mundo.py`) o entendem; o `MotorCorpo` (`digilab/motor_corpo.py`) o aplica. Com a chave
+  desligada, ou sem o corpo, levanta `LutaSemChave`.
+- **Testes:** `tests/test_ponte_luta_pe1.py` (T-PL-1: a dor exata, o corte, o erro com a chave desligada, o replay refaz o corpo). **G2:** os
+  gabaritos da LM0 (`digibrain_modular_*`), do G0 (`genoma_g0_vidas_de_hoje.json`), do corpo, do corpo no mundo e do passeio seguem byte a byte; nenhum
+  arquivo de gabarito foi tocado.
+- **Limite:** o rival e o resultado só são validados; entram em módulo na PE2. Nada na web (o espelho TS é a PE3).
+
+## 11. PE2, o resumo da etapa (2026-11-06, Sonnet 5.5, branch `v3-ponte-luta-pe2`)
+
+**Resposta: o resumo de uma luta já chega ao DigiBrain modular, vira (ou não) um episódio `luta` no M-MEM com o rival em `outro`, atrás de uma chave
+desligada.** Os desvios D-PE2-1 a D-PE2-3 estão em `docs/registro/2026-11.md`.
+
+- **A chave:** `ConfigLutaMemoria(ligada=False)` em `digilab/config.py` (`CONFIG_LUTA_MEMORIA`, `CONFIG_LUTA_MEMORIA_LIGADA`, `PARAMETROS_LUTA_MEMORIA`:
+  PROPOSTO, sem número livre), fora de `ConfigDigibrain` (D-PE2-1). Só com a `memoria_autobio`.
+- **O gancho e a Observação:** `DigiBrain.receber_luta(rival, resultado, vida_perdida_s, tick)` (`adapt.py`), entregue pelo `MotorCorpo` ao aplicar o evento `lt`
+  da PE1; o M-SENS o põe em `sens["lutas"]` na decisão seguinte (`Sens.resumir_lutas`). O `"pl"` não é usado.
+- **O episódio:** `episodio_luta` e a origem `luta` em `mem.py` (a regra de hoje, `theta_sig`; σ pela variação do corpo, sem mexer em V, E, g_apr nem M-PLAST: `Afeto.sigma_luta`).
+- **Testes:** `tests/test_ponte_luta_pe2.py` (T-PL-2: derrota com dor vira episódio com o rival em `outro`; empate sem dor não; o mesmo log dá os mesmos
+  episódios, no replay do mundo; a consolidação guarda um por categoria `("lutar", rival, sinal)`; a seção 7: com a dor zerada nenhum módulo anda). **G2:** os gabaritos da C4
+  (`test_gabarito_memoria_autobio`), da LM0 (`test_gabarito_digibrain_modular*`), do G0 e do corpo seguem byte a byte; nenhum arquivo de gabarito foi tocado.
+- **Limite:** nada na web (o espelho TS e o `"pl"` do ovo são a PE3). O A não recebe nada (3.7): o gancho só existe no DigiBrain.
+
+## 12. PE3, o resumo da etapa (2026-11-06, Sonnet 5.5, branch `v3-ponte-luta-pe3`)
+
+**Resposta: a dor da luta e o episódio `luta` já chegam ao jogo (v16 e v17 com a marca `"pl"`), com o corpo e o M-MEM conferidos contra o Python.** Os desvios D-PE3-1 a
+D-PE3-7 estão em `docs/registro/2026-11.md`.
+
+- **O espelho TS:** `Corpo.estimuloLuta` e `CONFIG_LUTA_CORPO` (`motor/corpo.ts`), o evento `lt` do `MotorCorpo` (`motor/motor_corpo.ts`: `resumoLuta`, `aplicarResumoLuta`,
+  `lerResumoLuta`), `DigiBrain.receberLuta`/`ligarLutaMemoria`, `Sens.resumirLutas`, `Afeto.sigmaLuta`, `episodioLuta` e a origem `luta` (`motor/digibrain/`).
+- **A marca e o `_lutar`:** `Motor.ligarPonteLuta()` grava `"pl"` (`{ luta: true }`, depois do `"cb"`) no ovo novo pelo `ligarProduto` (`src/produto.ts`, que também cobre o ovo
+  de teste do laboratório); `Motor._lutar` calcula a vida perdida em S de cada luta da série (D-PE3-3) e entrega o resumo ao corpo (qualquer cérebro) e, só com o modular
+  ativo, ao `DigiBrain` (3.7). Sem a marca, o `_lutar` é o de hoje.
+- **G-PAR:** `experiments/exportar_gabarito_digibrain_modular.py --luta` grava `web/app/test/gabaritos/digibrain_modular_luta.json.gz` (3 vidas, 6 resumos cada); o
+  `test/digibrain_modular_vida.test.ts` confere a dor de cada resumo, cada decisão (ação, motivo com as lutas, assinatura) e o estado interno no fim; o pytest
+  (`tests/test_gabarito_digibrain_modular_web.py`) confere que o arquivo bate com uma execução nova.
+- **G2:** o gabarito da PE0 e todos os de hoje passam sem mudar nenhum arquivo deles; **G1:** `test/ponte_luta_pe3.test.ts` (20 vidas com a marca: v16, v17 modular, v17 A e v17 com um
+  `"cb"` no meio × 5 sementes; replay bit a bit; a dor exata; o A ativo não entrega nada ao modular; a marca só nos v16/v17, uma vez) e o e2e (`e2e/ponte_luta.spec.ts` com os saves `_ponte`).
+- **Limite:** nada do ε (PE4). Os v16/v17 vivos sem a marca seguem como hoje (PL-7); nenhum save de hoje ganha a marca.
