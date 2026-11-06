@@ -221,3 +221,14 @@ O quadro de dormir dos 60 Digimon (seção 9) entrou no jogo pelo mesmo caminho 
 `CLIPES_ACOES` (em laço), e `papel.ts` desenha o quadro quando o pet dorme e a forma tem o clipe: sem achatar, sem escurecer, sem escala fracionária. O "zz" sai do topo da cabeça do quadro
 (`CENA.zzX`). Sem o clipe, o sono é o de hoje (`sono.ts`). O desvio está em `docs/registro/2026-11.md`, seção "SPRITES_REACOES, o Dormir no jogo". Nada mudou em `web/app/motor`, nos gabaritos nem
 em `digilab/`. Testes: `npm test` 94 arquivos, 937 passam; `npm run tipos` limpo; o e2e de capturas (Agumon e WarGreymon, 390 e 1280 px) passa, com o quadro no corpo e o atlas carregado.
+
+## 12. R-rosto-jogo: as 7 reações de rosto no jogo (2026-11-06)
+
+As 7 reações de rosto dos 8 Digimon do estágio criança (Agumon, Gabumon, Armadillomon, Gomamon, Guilmon, Palmon, Patamon e Veemon; seção 3.3 e o lote da sessão de 2026-11-06, aprovado pelo
+Matheus) entraram no jogo pelo mesmo caminho do Emburrar e do Dormir. Os desvios estão em `docs/registro/2026-11.md`, seção "SPRITES_REACOES, as reações de rosto no jogo" (D-RRJ-1 a D-RRJ-5).
+- **Atlas:** as 7 tags (1 quadro cada) nos 8 exports; o atlas regenerado com `CLIPES_REACOES`, opcionais **por forma** (as 7 ou nenhuma; teste `atlas_reacoes.test.ts`).
+- **Vista:** `reacao.ts` decide, `papel.ts` desenha o quadro no lugar do Idle (o Idle por 300 ms, depois a expressão, 1 texel de movimento) e o emote sai do alto da cabeça (`PalcoPet.tsx`).
+  Emotes novos em `grades.ts`: lágrima, reticências, X e espiral.
+- **Gatilhos ligados:** Triste (tapa, humor baixo), Medo (tapa repetido), Carinho (acariciar), Recusa (alimentar sem fome), Doente (lesão ou saúde baixa) e Cansado (energia baixa).
+  **Sem gatilho no jogo de hoje:** o Envergonhado (o elogio não existe nas ações do dono dos pets v11); o quadro está no atlas, sem ligação.
+- Nada mudou em `web/app/motor`, nos gabaritos nem em `digilab/`.

@@ -3920,3 +3920,241 @@ da 77xxx que estão no git. **Estender a decomposição ao REL é uma decisão �
 | **AD10-5** | o que a leitura vale | **descritiva e geradora de hipótese; não muda o jogo nem o cérebro padrão**; se apontar para H1 ou H1′, a recomendação seguinte é um teste causal com plano e faixa próprios, decidido depois | ler como causa uma escolha feita nos mesmos dados levaria ao produto um mecanismo não testado |
 | **AD10-6** | a extensão ao REL da C4 (o cérebro padrão) | **não agora;** um adendo próprio depois deste, com o REL − SEM, se a leitura aqui não for "indeterminado" | o cérebro padrão segue sem a resposta direta. Fazer junto dobra o replay e mistura dois contrastes diferentes |
 | **AD10-7** | a ordem | **o estágio 1 e o estágio 2 no mesmo PR de código, e um replay só** | rodar o estágio 1 antes e olhar o resultado convida a mexer na partição do estágio 2 |
+
+## Adendo 11: de onde vem o ganho do REL sobre o SEM no `longe_fixo`, a decomposição da D-C1-3 no cérebro padrão (2026-11-06, worker do plano da D-C1-3, Claude Code, Opus 5.5)
+
+**Status: APROVADO pelo Matheus em 2026-11-06 ("Aprovo e mescle").** As AD11-1 a AD11-7 (A11.9) estão DECIDIDAS, todas pela recomendação. **Nenhum replay e nenhuma conta deste adendo rodam antes
+de duas coisas:** a marca "APROVADO pelo Matheus" neste cabeçalho, e o código de A11.8 na `main`. Este adendo **não calcula nenhum número
+de resultado.** Os números que ele cita já estão registrados nas seções 13.6 e 16 do RESULTADO e servem só de contexto.
+
+**De onde vem:**
+- a AD10-6 (A10.9): a extensão ao cérebro padrão fica para um adendo próprio, se a leitura da D-C1-3 não for "indeterminado";
+- a seção 13.6 do RESULTADO: a leitura pela regra de A10.5 **aponta para H3**, com a nota da substituição. Ela não é "indeterminado", então
+  a condição da AD10-6 se cumpre. A recomendação da 13.6 é estender a decomposição ao REL − SEM, nos logs da 77xxx, sem vida nova e sem faixa;
+- **a decisão do Matheus, no chat do Gerente da V3 (2026-11-06): "Sim, mescle e siga"**, isto é, a recomendação da 13.6. Ela pede este
+  plano e não aprova este adendo;
+- a C4 (o adendo 9 e a seção 16 do RESULTADO): o REL − SEM no `longe_fixo` deu +0,0646 [+0,0515; +0,0778] na taxa por episódio, e **as
+  visitas ao lugar lembrado do REL no `longe_fixo` seguem todas vazias** (42 674 de 42 674, 16.5, item 3).
+
+**Por que um adendo e não um `PLANO_ANALISE_V3_*` (AD11-1):** a C4 é a frente herdada MEMORIA_AUTOBIOGRAFICA, e o plano dela é o adendo 9
+deste arquivo. A pergunta é a da D-C1-3, que já tem o adendo 10 aqui. Este adendo reusa os dois.
+
+**Reusa, sem mudar:**
+- do adendo 9: o cenário e os braços (A9.2), a unidade (base, semente) com a média das 4 células do `longe_fixo`, o IC95 do t sobre as 200
+  unidades (A4.4.6), a classe de A6.6 e a margem δ = 0,032 (A9.6, AD9-5);
+- do adendo 10: a partição dos episódios fechados (F-a a F-d) e das perdas (P-a a P-e), a soma que tem de fechar, as medidas de apoio D1 a
+  D7, o registro de cada visita (A10.4), a regra de leitura (A10.5) e as interpretações do código (D-DC13-6 a D-DC13-10, no registro);
+- a lição LP-2 (A6.8, item 3) e os cortes de d₀ (`orq.geometria()`).
+
+**O que este adendo não afirma:**
+- que o ganho do REL tem uma causa só, ou que o descritivo prova uma causa. Ele é pós hoc (A11.6);
+- que o REL ganha pelo mesmo caminho do M3\* da C1. Isso é o que ele mede (A11.5);
+- que o modular supera o A, ou que a memória autobiográfica está pronta para o jogo.
+
+**Nenhuma alegação de novidade.**
+
+### A11.0 O que não muda
+
+- **O código.** O motor, o `engine.py`, o corpo, o mundo, os cérebros e as medidas por vida da C4 continuam como estão. Só entra um script
+  de leitura (A11.8). O `experiments/descritivo_dc13_longe_fixo.py` e o `descritivo.json` da C1 não mudam.
+- **Os resultados.** Nada aqui muda o primário da C4, a linha 3 de A9.7, a D-C4-1 nem a leitura da 13.6.
+- **O cérebro padrão e o jogo.** O REL segue o padrão dos ovos pelo #562, qualquer que seja a leitura.
+- **As sementes.** Nenhuma vida nova, nenhuma semente nova e nenhuma faixa reservada. A faixa 77101…77505 é lida só pelos artefatos que já
+  estão no git.
+
+### A11.1 A pergunta
+
+**De onde vem o ganho do REL sobre o SEM na taxa por episódio do `longe_fixo`**, se nenhuma visita ao lugar lembrado acha ração? **E é o
+mesmo caminho do M3\* sobre o M2 na C1?**
+
+O REL e o SEM diferem em três coisas ao mesmo tempo (A9.2; 16.6):
+- o lugar lembrado (o SEM não tem);
+- a lembrança do episódio a cada decisão (o SEM codifica e consolida, mas nunca lê);
+- o lugar, que no REL sai da soma dos episódios (MA-2), e não da memória de lugar do M3\* da C1. Por isso as visitas vazias pesam no REL
+  (A10.7).
+
+Então o REL − SEM não é o M3\* − M2. Os níveis do SEM ficam perto dos do M2 da C3 (16.6), mas isso é outra faixa e não faz dele um M2.
+
+### A11.2 A fonte dos dados (AD11-2)
+
+**Os artefatos da C4 em disco, conferidos nesta tarefa:** o sha256 de cada um, com `sha256sum`, é igual ao registrado na seção 16 do
+RESULTADO e no `meta.json`. Todos estão no git, em `artifacts_v2_digibrain_prototipo/memoria_autobio/run/`:
+
+| arquivo | sha256 | o que dá |
+|---|---|---|
+| `meta.json` | `6315784c…3a18` | o `git_head` `a287ba2`, `git_limpo` true, os sha256 de 18 módulos (16 de `digilab/` e 2 de `digilab_fala_livre/`), dos 4 orquestradores, da config e do plano |
+| `medidas.json.gz` (12,7 MB) | `8b48d0a2…d93b` | as medidas por vida das 14 400 vidas; descomprimido, o `medidas.json` tem de dar o `869ff397…3023` do `meta.json`, ou falha alto |
+| `resultado.json` | `6f8c91d8…d6d3` | o primário (o REL − SEM no `longe_fixo`, a régua da soma) e o descritivo de A9.8 |
+| `vidas.tar.gz` (67,5 MB) | `aa0c3987…0aed` | os 14 400 logs; cada log tem só as ações do dono e os avanços de tempo |
+| `run.log` | `07d3e632…4e62` | a saída da run; não entra em nenhuma conta |
+
+Ao lado, para a comparação de A11.5, o artefato da C1: `artifacts_v2_digibrain_prototipo/longe_regular/dc13/descritivo.json` (sha256
+`28db9e82…3798`, o registrado na 13.6). Ele só é lido.
+
+**Os dois estágios, os mesmos de A10.2:**
+1. **O estágio 1 lê só o `medidas.json`.** A C4 grava, por vida, as medidas do `orq.medidas` do protótipo (as mesmas da C1: os episódios
+   de fome, a `racao_na_janela`, a `cadeia`, os fins e a influência), mais o corpo e a memória. O código de A11.8 confere que cada campo
+   que o estágio 1 usa existe, e falha alto se faltar.
+2. **O estágio 2 refaz no replay as vidas do `longe_fixo` do REL e do SEM, sem vida nova:** 200 unidades × 4 donos × 2 braços, isto é,
+   **1 600 vidas** (AD11-3). O log é o evento (o event sourcing), e a vida se refaz igual a partir dele.
+
+**Achado desta tarefa: o código de hoje não é o da run.** Comparei os sha256 do `meta.json` com a árvore de `origin/main` (`8b94239`):
+- **9 dos 16 módulos de `digilab/` mudaram** desde o `a287ba2`: `config.py`, `metrics.py`, `mundo.py` e seis de `digibrain/` (`adapt.py`,
+  `afeto.py`, `estado.py`, `impulso.py`, `mem.py` e `sens.py`);
+- o protótipo `experiments/run_v2_digibrain_prototipo.py` também mudou;
+- são os mesmos: os dois módulos da fala, o orquestrador da C4 (`experiments/run_v2_memoria_autobio.py`), o `run_v2_longe_regular.py`, o
+  `run_v2_habito_intencao.py` e a config (`experiments/configs/v2_memoria_autobio/memoria_autobio.json`).
+
+**A recomendação (AD11-2), a mesma de A10.2:** o estágio 2 roda com o código do `a287ba2`, numa worktree destacada nesse commit e fora do
+branch de qualquer frente. O script de A11.8 fica na `main` e importa o pacote da worktree antiga.
+
+**Três conferências falham alto, antes de qualquer medida:**
+- **o código:** os sha256 dos 18 módulos, dos 4 orquestradores e da config são iguais aos do `meta.json`. É o `conferir_codigo` do
+  descritivo da C1, com a lista da C4;
+- **a fonte:** o `medidas.json` descomprimido tem o sha256 do `meta.json`;
+- **o G1 de cada vida:** as medidas refeitas no replay são iguais às do `medidas.json`, menos o `custo`, e o log rejogado é igual ao do disco.
+  O replay usa o `viver` do orquestrador da C4, com o coletor das categorias, e a `conferir_memoria` de A9.10.
+
+**O que não serve de fonte:**
+- os outros braços e lugares da C4 (A11.3);
+- a C1: ela só entra na comparação de A11.5, pelo `descritivo.json` dela;
+- a C3 (76xxx): outra faixa, sem a memória autobiográfica.
+
+**Vida nova:** nenhuma. Um teste causal com vidas novas (A11.7) pede uma faixa ao coordenador e um adendo próprio.
+
+### A11.3 Os braços e o lugar (AD11-3)
+
+- **O contraste: REL − SEM**, por unidade, com a média das 4 células do `longe_fixo`. É o par da AD10-6 e o primeiro contraste do primário
+  da C4.
+- **Só o `longe_fixo`.** A pergunta é a dos pontos fixos. No longe sorteado não há ponto fixo (A10.6). O comedouro é outra pergunta: a
+  guarda deu +0,198 ali (16.3), e de onde vem esse ganho não é a D-C1-3.
+- **Os outros quatro braços ficam fora:**
+  - **o REC e o EMB:** o REL − REC e o REL − EMB perguntam se a relevância importa, e a C4 já respondeu (16.2). Decompor o REL − REC diria
+    por qual caminho a relevância ganha, uma pergunta que ninguém fez;
+  - **o RELsN:** o E2-FIXO saiu "≈ 0" (16.3). Não há ganho para decompor;
+  - **o REL+F:** o FACETAS saiu "≈ 0" (16.3). Também não há ganho para decompor.
+- **Não há um terceiro braço como régua do pet que não lembra** (o papel do M0 na AD10-3). O SEM já é o braço sem memória lida.
+
+### A11.4 As hipóteses e as medidas: o que muda do adendo 10
+
+**As hipóteses H1, H1′, H2, H3 e H4 são as de A10.3, com as mesmas assinaturas.** Todas são [HIPÓTESE] e SEM FONTE. **Entra uma hipótese
+nova, porque o REL tem uma coisa que o M3\* da C1 não tinha:**
+
+| | a hipótese | o caminho | a assinatura que a separa |
+|---|---|---|---|
+| **H5** | **a lembrança** | o episódio lembrado a cada decisão muda escolhas fora das idas. Por exemplo, o pet vai comer mais cedo, ou troca menos uma busca pelo cheiro, porque lembrou de um episódio parecido | o ganho passa por fechamentos F-a, F-c e F-d em que a decisão que pôs o pet a caminho da ração teve a lembrança decidindo (`lembranca_decidiu`). Sugerida pela fração em que só a lembrança mudou a escolha, 0,063 no REL do `longe_fixo` (16.1) |
+
+**As hipóteses foram escritas depois de ler a 13.6 e a seção 16 do RESULTADO.** Além do H5, dois números já lidos tocam as assinaturas:
+- **H3:** a fração do tempo com algum estado abaixo de 0,15 sai menor no REL que no SEM, −0,025 na vida e −0,058 nos dias 8 a 14 (16.5,
+  item 4). Na C1, o D4 (o corpo na queda) saiu "≈ 0" (13.6);
+- **H4:** a seção 16 não traz a taxa por ração. Os episódios por vida quase não mudam, 13,4 no REL e 13,2 no SEM (16.5, item 7).
+
+**A partição e as medidas são as de A10.4, com três mudanças:**
+1. **O contraste é REL − SEM,** e não M3\* − M2. A margem é δ = 0,032 (AD9-5), com as 200 unidades. O G é o REL − SEM do `longe_fixo`,
+   recalculado do `medidas.json`. Ele tem de dar o +0,0646 do `resultado.json`, ou falha alto.
+2. **Os grupos do cruzamento com o módulo** (a D-DC13-7, com uma separação a mais). A decisão que pôs o pet a caminho continua sendo a
+   primeira da janela com `escolha` `comer/comida` e o id da ração. Os grupos são exclusivos e aplicados nesta ordem:
+
+   | grupo | a decisão que pôs o pet a caminho |
+   |---|---|
+   | "lembrança" | tem `lembranca_decidiu` |
+   | "memória (lugar)" | tem `memoria_decidiu`, sem `lembranca_decidiu` |
+   | "aprendido e hábito" | só `aprendido` e `habito` |
+   | "inato" | nenhuma sonda |
+   | "outro" | qualquer outra combinação |
+   | "sem comer dirigida" | não houve |
+
+   No SEM, a lembrança e a memória nunca decidem, por construção (a `conferir_memoria`), e o código confere isso.
+3. **O registro de cada visita** (A10.4, D) passa a ser do REL, com dois campos a mais, porque as visitas vazias pesam no REL (A10.7):
+   - **o alvo da ida**, o lugar pela soma (MA-2), e a distância dele ao ponto fixo mais próximo, em células;
+   - **o episódio que a visita codificou:** se ela codificou um, e o σ dele. O registro do `a287ba2` já grava o id do episódio
+     codificado (a `consequencia.autobio` de cada decisão) e o σ dele (a `medidas_memoria` os conta).
+
+   O código de A11.8 confere esses campos, e falha alto se faltarem. Eles saem só por braço, sem contraste (a LP-2).
+
+A D6 (o H4) sai como na C1. O `orq.medidas` do `a287ba2` grava a `cadeia` e a `cadeia_w` por vida, então as refeições por dia e a taxa
+por ração existem no `medidas.json` da C4, embora a seção 16 não as traga.
+
+**O que não muda na partição:** F-b continua sendo "a ração entra na vista durante uma ida `explorar/ponto`". No SEM, como no M2, F-b é 0
+por construção (o SEM não tem lugar lembrado). A ressalva de A10.4 também vale: a decomposição diz por onde o REL fecha a mais, não o que
+teria acontecido sem a ida.
+
+### A11.5 A regra de leitura, escrita antes
+
+**A regra é a de A10.5, como está.** A única mudança é uma parcela a mais:
+- **H5 = F-a + F-c + F-d no grupo "lembrança".** Ela não pede nenhuma condição de D1, porque não fala da posição.
+- **H2 continua sendo F-c + F-d nos grupos "inato" e "aprendido e hábito"**, e pede D1 não "< 0".
+- **H1, H1′, H3 e H4** ficam como em A10.5, inclusive a condição de D1 no H1′, que fez o H1′ cair na C1 (D-DC13-12; AD11-4).
+- **As lacunas da D-DC13-10 viram regra escrita:**
+  - duas ou mais hipóteses que "explicam a maior parte" fora dos pares de A10.5 são registradas como mistura, sem escolher;
+  - uma só que "contribui", sem nenhuma que "explique", fica "indeterminado", com a parte registrada.
+- **A substituição** (A10.5) vale igual: se F-b explica e F-c fica "< 0", o relato não lê H1′ como ganho líquido da patrulha.
+
+**A comparação com a C1 (AD11-5), descritiva, sem teste entre as duas runs:**
+
+| se a linha do REL for | a leitura |
+|---|---|
+| a mesma da 13.6 ("aponta para H3") | **o caminho se repete no cérebro padrão,** pela mesma regra |
+| outra linha (outra hipótese, mistura, ou o H5) | **o caminho não se transfere:** ficam duas leituras, uma por cérebro, cada uma com as partes dela |
+| "indeterminado" | **o caminho do REL fica sem leitura;** a da C1 não muda |
+| o código, a fonte ou o G1 falham (A11.2) | **nenhuma leitura:** o estágio 2 não vale, e o estágio 1 sai sozinho, rotulado como parcial |
+
+- Além da linha, saem lado a lado, só como descrição, o s de cada parcela e a classe de cada uma nas duas runs. **Não há IC da diferença
+  entre as runs:** são faixas, contrastes e margens diferentes (0,022 na C1 e 0,032 na C4).
+- **Uma linha igual não diz que o mecanismo é o mesmo.** Diz que a mesma regra, nos mesmos termos, aponta para o mesmo lugar.
+
+### A11.6 O que este descritivo não decide
+
+- **Nenhuma causa fica provada.** As vidas são as da C4, o primário já foi lido, e as hipóteses foram escritas depois disso. **A leitura é
+  descritiva e gera hipótese** (A10.6).
+- **Nada muda no jogo nem no cérebro padrão.** O REL segue padrão pelo #562.
+- **O comedouro e o sorteado não entram** (A11.3). O SEM-SORTEADO "< 0" (16.3) segue como dado para o Matheus (D-C4-2), fora daqui.
+- **Nenhum número novo vira parâmetro.** O 1/2 de A10.5 continua PROPOSTO e SEM FONTE. O δ = 0,032 é o da C4, e não é escolhido de novo.
+
+### A11.7 O que fica de fora
+
+- **O teste causal da H3 (ou da ida),** em qualquer cérebro. Ele pede vidas novas, um plano próprio e uma faixa pedida ao coordenador, como
+  diz a 13.6. Por exemplo: um braço que volta o pet ao ponto de partida depois da ida, ou que proíbe a ida perto da queda. Não é este
+  adendo.
+- **A decomposição do REL − REC, do REL − EMB, do E2 e das FACETAS** (A11.3).
+- **O comedouro** (a guarda +0,198) **e o longe sorteado** (o SEM-SORTEADO "< 0").
+- **O A e a comparação com ele.** Nenhum braço do A rodou na C4.
+- **A fala.** A conferência da fala da C4 (16.5, item 6) não entra.
+- **Uma regra nova depois de ver o resultado.** Uma partição ou uma regra diferente entra por adendo, antes do replay.
+
+### A11.8 O que falta antes do primeiro replay
+
+- **O código, num PR próprio, depois da aprovação:**
+  - `experiments/descritivo_dc13_rel.py` (nome PROPOSTO): só lê os artefatos, e no estágio 2 refaz as vidas na worktree do `a287ba2`, com
+    as três conferências de A11.2. Ele reusa as funções da partição e das contas do `descritivo_dc13_longe_fixo.py` por import, **sem mudar
+    aquele arquivo**, e acrescenta os grupos de A11.4, o H5, os campos da visita e a comparação de A11.5;
+  - um teste (`tests/test_descritivo_dc13_rel.py`), nas sementes dos testes (101…505), que confere:
+    - que a partição cobre cada episódio uma vez só e que as somas fecham;
+    - que no SEM a lembrança e a memória nunca decidem;
+    - que o script falha alto com código diferente do `meta.json` e com o `medidas.json` de outro sha256;
+    - que duas execuções saem iguais, byte a byte;
+    - que o descritivo da C1 continua saindo igual (o teste dele, `tests/test_descritivo_dc13.py`, passa sem mudança).
+
+  O modelo recomendado é o Sonnet: implementação com escopo claro.
+- **O artefato:** `artifacts_v2_digibrain_prototipo/memoria_autobio/dc13/descritivo_rel.json`, com os sha256 das fontes e do código, no git.
+- **A máquina (V3-D8):** no máximo 4 processos, e o replay conta como a run de pesquisa do momento.
+  - O custo é estimado e SEM medida própria. Pela C1, o replay custou cerca de metade do CPU da vida (693 s de parede com 4 processos para
+    1 800 vidas, contra 3,24 s de CPU por vida na run). Pela C4, 3,15 s de CPU por vida na média. Então 1 600 vidas dão **de 10 a 20 min de
+    parede** com 4 processos, mais a descompressão do `medidas.json` (138 MB);
+  - o tempo real vai ao relato.
+- **O relato:** uma seção nova no fim da seção 16 do RESULTADO ("16.7, a D-C1-3 no REL") e uma linha no PR.
+- **Roda uma vez.** Nada se ajusta olhando o resultado.
+
+### A11.9 As decisões do Matheus
+
+Todas DECIDIDAS pelo Matheus em 2026-11-06 ("Aprovo e mescle"), pela recomendação. Cada uma vem com a recomendação e o custo de errar.
+
+| # | decisão | recomendação | custo de errar |
+|---|---|---|---|
+| **AD11-1** | o lugar do plano | **este adendo 11 ao `PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`** (a C4 é frente herdada, com o plano no adendo 9; a pergunta é a do adendo 10) | um `PLANO_ANALISE_V3_*` separaria a leitura das regras que ela reusa; o custo é só de arquivo |
+| **AD11-2** | a fonte | **os artefatos da C4 no git (estágio 1) e o replay das vidas do `longe_fixo` do REL e do SEM com o código do `a287ba2` (estágio 2), com o código, a fonte e o G1 conferidos; nenhuma vida nova** | com o código de hoje, 9 módulos e o protótipo mudados podem refazer outra vida: o G1 pegaria, mas o estágio 2 seria perdido. Com vidas novas, gasta-se uma faixa numa pergunta que os logs respondem |
+| **AD11-3** | os braços e o lugar | **o REL e o SEM, só no `longe_fixo`: 1 600 vidas.** O REC, o EMB, o RELsN e o REL+F, o comedouro e o sorteado ficam fora | com o REC: +800 vidas para decompor uma pergunta (por onde a relevância ganha) que ninguém fez. Sem nenhum outro braço, o REL − SEM mistura o lugar e a lembrança; o H5 e os grupos de A11.4 separam os dois por dentro do REL, mas só como parte do ganho, não como causa |
+| **AD11-4** | a partição e a regra | **a de A10.4 e A10.5 como estão, com o H5 e os grupos de A11.4, o δ = 0,032 da C4 e o s ≥ 1/2; a condição de D1 no H1′ fica** | mudar a regra do H1′ agora, depois de ver a 13.6, seria ajustar a regra pelo resultado, e as duas leituras não se comparariam. Mantê-la tem um custo conhecido: um F-b grande com D1 "< 0" cai de novo para H3 ou para mistura, e o relato traz a nota da substituição. Com δ = 0,022 (o da C1): uma margem que a C4 não planejou, com outro σ |
+| **AD11-5** | a comparação com a C1 | **pela linha da regra, lado a lado, sem teste entre as runs** (A11.5) | um teste da diferença entre as runs compararia faixas, contrastes e margens diferentes como se fossem um só desenho. Sem nenhuma comparação, a pergunta "o caminho se transfere?", que é a razão da AD10-6, fica sem resposta |
+| **AD11-6** | o que a leitura vale | **descritiva e geradora de hipótese; não muda o jogo nem o cérebro padrão.** O teste causal fica fora, com plano e faixa próprios (A11.7) | ler como causa uma escolha feita nos mesmos dados levaria ao produto um mecanismo não testado, agora no cérebro que está nos ovos |
+| **AD11-7** | o código e a ordem | **um script novo, que reusa o da C1 sem mudá-lo, os dois estágios no mesmo PR de código e um replay só** | mudar o script da C1 para servir aos dois arrisca o `descritivo.json` dele, que já está no git. Rodar o estágio 1 antes e olhar o resultado convida a mexer na partição do estágio 2 |

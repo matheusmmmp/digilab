@@ -8,7 +8,8 @@
    Os tres novos sao planos, como os POCs do #480 (a dobra e do estilo Animal Crossing). */
 import type { Mapa } from "../../../habitat.ts";
 import * as THREE from "three";
-import { PALETA_DIGITAL, doisTons, flores, montarCena, objetos, terreno, type CenaIlha, type Objetos } from "./cena.ts";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { PALETA_DIGITAL, carregarVariante, doisTons, flores, montarCena, objetos, terreno, usarDoisTons, type CenaIlha, type Objetos } from "./cena.ts";
 import { arquivosCassette, carregadorCassette, terrenoCassette } from "./cassette.ts";
 import { CEU_DIGITAL, DOBRA_K } from "./constantes.ts";
 import { enfeites } from "./enfeites.ts";
@@ -28,6 +29,12 @@ export interface Estilo {
 
 /** o estilo de um mapa; `base` e a URL da pagina (document.baseURI), de onde saem os caminhos dos kits */
 export function estiloDe(mapa: Mapa, base: string): Estilo {
+  const e = estiloSemTons(mapa, base);
+  /* os materiais toon que a vista cria depois de montar (os itens, os modelos) seguem os tons do estilo (cena.ts, usarDoisTons) */
+  return { ...e, montar: i => { usarDoisTons(e.id === "digital"); return e.montar(i); } };
+}
+
+function estiloSemTons(mapa: Mapa, base: string): Estilo {
   switch (mapa) {
     case "ilha": return {
       id: mapa, dobra: DOBRA_K, montar: i => montarCena(i),
@@ -39,8 +46,9 @@ export function estiloDe(mapa: Mapa, base: string): Estilo {
       },
     };
     case "digital": {
-      /* o estilo digital (docs/TAREFA_V3_MAPA_DIGITAL.md, D1): a mesma ilha e os mesmos objetos, no fundo de anime: o ceu pintado
-         (public/mapa_digital/ceu.jpg), a paleta chapada com as flores, o barranco de pedra e o toon de dois tons em tudo */
+      /* o estilo digital (docs/TAREFA_V3_MAPA_DIGITAL.md, D1 e D2): a mesma ilha e os mesmos objetos, no fundo de anime: o ceu pintado
+         (public/mapa_digital/ceu.jpg), a paleta chapada com as flores, o barranco de pedra, os kits recoloridos e o toon de dois tons
+         em tudo, os itens inclusive (usarDoisTons) */
       const ceuDia = new THREE.TextureLoader().load(new URL("mapa_digital/ceu.jpg", base).href);
       ceuDia.colorSpace = THREE.SRGBColorSpace;
       ceuDia.userData.cobrir = true;    /* cobre a tela sem esticar (cena.ts, cobrirFundo) */
@@ -48,12 +56,16 @@ export function estiloDe(mapa: Mapa, base: string): Estilo {
         id: mapa, dobra: DOBRA_K,
         montar: i => {
           const chao = new THREE.Group().add(terreno(i, PALETA_DIGITAL), flores(i));
-          const c = montarCena(i, chao, { nuvens: false, ceuDia, horizonteDia: CEU_DIGITAL.horizonte, chaoHemi: CEU_DIGITAL.chaoHemi });
+          const c = montarCena(i, chao, { nuvens: false, ceuDia, horizonteDia: CEU_DIGITAL.horizonte, chaoHemi: CEU_DIGITAL.chaoHemi, nevoa: CEU_DIGITAL.nevoa });
           doisTons(c.cena);
           return c;
         },
         objetos: async i => {
-          const [o, e] = await Promise.all([objetos(i, base), enfeites(i, base)]);
+          /* os kits com as texturas recoloridas do estilo (public/kits3d_digital/, docs/mapa_digital/kits_digital.py; D2) */
+          const gltf = new GLTFLoader();
+          const kits = (arq: string, _id: string, modelo: Parameters<typeof carregarVariante>[2]) =>
+            carregarVariante(gltf, new URL("kits3d_digital/" + arq, base).href, modelo);
+          const [o, e] = await Promise.all([objetos(i, base, kits), enfeites(i, base)]);
           o.grupo.add(e.grupo);
           doisTons(o.grupo);
           return { ...o, noite: e.noite };
