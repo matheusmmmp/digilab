@@ -521,3 +521,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-05 — SPRITES GERAÇÃO, a tarefa do pipeline híbrido (Gerente da missão, Claude Code, Opus 5.5, worktree `v3-sprites-geracao`)](registro/2026-11.md)
 - [2026-11-05 — ITENS_3D, a tarefa (Gerente da frente, Claude Code, Opus 5.5, worktree `v3-itens-3d`)](registro/2026-11.md)
 - [2026-11-06 — SPRITES GERAÇÃO, etapa G1, os scripts e a linha de base (worker, Claude Code, Sonnet 5.5, branch `v3-sprites-geracao-g1`)](registro/2026-11.md)
+- [2026-11-06 — SPRITES GERAÇÃO, etapa G2, a instalação e os termos (worker, Claude Code, Opus 5.5, branch `v3-sprites-geracao-g2`)](registro/2026-11.md)

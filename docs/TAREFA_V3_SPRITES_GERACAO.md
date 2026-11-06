@@ -301,9 +301,11 @@ estimativas: o worker confere a página do modelo antes do primeiro envio.
 
 ## 8. Precisa do Matheus
 
-Cada decisão vem com a recomendação e o custo de errar. A D-SG-4 está decidida (2026-11-06); as outras estão abertas.
+Cada decisão vem com a recomendação e o custo de errar. A D-SG-4 está decidida (2026-11-06). As D-SG-1, D-SG-2, D-SG-3 e D-SG-5 foram decididas pelo Matheus em 2026-11-06 ("Continue com o
+recomendado": as recomendações abaixo valem como estão; registro D-SG-H).
 
-- **D-SG-1. Qual gerador.**
+- **D-SG-1. Qual gerador. DECIDIDA pelo Matheus em 2026-11-06: o Agent Sprite Forge, pela rota fal.ai com o Kling 3.0 Pro sem áudio, e o
+  pixel-mcp para o snap**, com o ok para instalar o Sprite Forge, as dependências dele e o ffmpeg (registro D-SG-H).
   - **Recomendação:** o **Agent Sprite Forge** primeiro, pela leitura do levantamento (`05_ARQUITETURAS_ORQUESTRACAO.md` 2.3: "o item mais
     próximo do que o DigiLab precisaria"). Ele é o único da lista com o fluxo still, vídeo e quadros, mais gates por clipe, retake
     limitado, ledger e teto em dólar.
@@ -317,14 +319,14 @@ Cada decisão vem com a recomendação e o custo de errar. A D-SG-4 está decidi
     - no máximo o teto da D-SG-5 e uma sessão;
     - nada entra no jogo, porque o atlas candidato fica fora de `Assets`;
     - trocar de gerador depois aproveita a G1 inteira (ficha, gates, conversão).
-- **D-SG-2. Quantos takes do still.**
+- **D-SG-2. Quantos takes do still. DECIDIDA pelo Matheus em 2026-11-06: 3 takes gerados, mais o take 0** (registro D-SG-H).
   - **Recomendação:** **3 takes gerados, mais o take 0**, que é o próprio quadro do `Idle` do UP e não custa nada. O take 0 serve de
     controle: se nenhum gerado for tão fiel quanto ele, o Matheus escolhe o take 0, e a E2 parte dele. O vault pede de 3 a 6. O exemplo
     do Sprite Forge usa 3.
   - **Custo de errar:**
     - com poucos takes, um still fraco contamina todos os clipes daquele Digimon, porque tudo deriva dele;
     - com muitos, cada take a mais custa ~US$ 0,04 a 0,15 e mais tempo de olho na aprovação.
-- **D-SG-3. Feliz e Emburrar: depois do Comer ou junto.**
+- **D-SG-3. Feliz e Emburrar: depois do Comer ou junto. DECIDIDA pelo Matheus em 2026-11-06: depois** (registro D-SG-H).
   - **Recomendação:** **depois.** Só depois de a pergunta 1 dar "igual ou melhor" no Comer, como a SA-1 fez com o derivado.
   - **Duas observações:**
     - o Feliz e o Emburrar já estão sendo feitos pela receita derivada no lote 1 (`v3-sprites-lote1`), e gerá-los junto disputa o
@@ -342,7 +344,8 @@ Cada decisão vem com a recomendação e o custo de errar. A D-SG-4 está decidi
     menos sobre a qualidade.
   - **Custo de errar:** com o Agumon, um "igual" ainda não prova que o gerado salva os 49 fracos. A próxima prova seria num sem boca, a
     mais 3,08 a 9,24 reais pelo vídeo.
-- **D-SG-5. O teto de gasto e o câmbio.**
+- **D-SG-5. O teto de gasto e o câmbio. DECIDIDA pelo Matheus em 2026-11-06: US$ 5, com `--budget-usd 5 --max-calls 8`**; o câmbio do
+  dia do gasto vai no PR, com a fonte (registro D-SG-H).
   - **Recomendação:** um teto de **US$ 5 (R$ 27,50 a 5,50)** para a G2 inteira, passado ao Sprite Forge por `--budget-usd 5` e
     `--max-calls 8`. O câmbio do dia é confirmado pelo Matheus no momento do ok.
   - A estimativa do primeiro clipe é de US$ 0,68 a 2,13, então o teto cobre o pior caso com folga para um retake de still.
@@ -376,4 +379,30 @@ Cada decisão vem com a recomendação e o custo de errar. A D-SG-4 está decidi
     do pixel-mcp), sem sombra, num `quadros.json` próprio; o JSON real do Sprite Forge é adaptado na G2. O conversor grava o export no formato
     do Aseprite direto (sem chamar o Aseprite) e a carne de arte própria é a porta do `gerar.lua`, que reproduz byte a byte a camada
     `comida` do Agumon derivado (testado).
-
+- **2026-11-06, a etapa G2, primeira parte (worker, Claude Code, Opus 5.5, branch `v3-sprites-geracao-g2`):**
+  - **As decisões:** D-SG-1, D-SG-2, D-SG-3 e D-SG-5 registradas como DECIDIDAS (registro D-SG-H).
+  - **A instalação (fora do repositório, em `D:\Trab\digilab\ferramentas\`):**
+    - o Agent Sprite Forge, clonado em `agent-sprite-forge` (commit `72fa5ad`), com a venv `venv-forge` (Python 3.13; numpy 2.5.4,
+      Pillow 13.0.0, scipy 1.18.1);
+    - o ffmpeg 9.0.2 (`winget install Gyan.FFmpeg`), com libvpx-vp9 e libx264;
+    - o pixel-mcp 0.5.0 (willibrandon), binário oficial do release com o sha256 conferido contra o `checksums.txt`, em `pixel-mcp`. O
+      MCP do Aseprite que já existia (`aseprite-mcp`, pacote npm `@letsagents/aseprite-mcp`) **não é** o pixel-mcp.
+  - **Os preços, conferidos nas páginas dos modelos no fal.ai em 2026-11-06:** o Kling 3.0 Pro image-to-video custa US$ 0,112 por
+    segundo sem áudio (5 s = US$ 0,56; o mínimo do modelo é 3 s); o Nano Banana 2 edit (a imagem padrão do Sprite Forge no fal.ai) custa
+    US$ 0,08 por imagem em 1K. A estimativa da seção 4.3 se confirma: 3 takes do still a US$ 0,24 e 1 a 3 vídeos de 5 s a US$ 0,56 a 1,68.
+  - **O achado dos termos (D-SG-I), que para a geração:** os Termos de Serviço do fal.ai (`https://fal.ai/legal/terms-of-service`,
+    seção 6, lidos em 2026-11-06) dizem que o cliente garante ter todos os direitos sobre o que envia e que não envia material protegido
+    por direito autoral sem a permissão do dono. O take 0 e o still são quadros do Digimon UP, cujos direitos não são do Matheus. Enviar
+    contraria os termos do provedor. **Nenhum envio foi feito**; a decisão volta ao Matheus (D-SG-6, abaixo).
+  - **A chave:** a `FAL_KEY` não está no ambiente (nem na sessão, nem como variável de usuário).
+  - **O take 0:** `remaster/geracao/Agumon/still/take_0.png` (o `Idle_00` do UP a 10×, vizinho mais próximo, 940×680), mais a versão na
+    caixa e a versão em fundo magenta. Custo zero.
+  - **O que não rodou:** os scripts do Sprite Forge (o `forge_doctor.py` foi barrado pelo classificador de permissões da sessão); a E1 a
+    E7. Gasto: US$ 0,00 (não há ledger).
+  - **D-SG-6, PROPOSTA, precisa do Matheus:** como seguir diante dos termos do fal.ai.
+    - **Recomendação:** não enviar quadros do UP ao fal.ai. A rota que respeita os termos é a prova com arte própria (fora desta
+      tarefa, seção 6), ou um provedor cujos termos o Matheus confira e aceite para esse uso.
+    - **Alternativas:** (a) o Matheus pede permissão ao dono dos direitos; (b) o Matheus lê os termos e decide enviar assim mesmo, sob a
+      responsabilidade dele; (c) a rota local do Codex ou do Grok, cujos termos também precisam ser lidos antes.
+    - **Custo de errar:** enviar contra os termos arrisca a suspensão da conta do fal.ai e o uso do material fora do que o provedor
+      permite; não enviar deixa a pergunta 1 sem resposta nesta tarefa.
