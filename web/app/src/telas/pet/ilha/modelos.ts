@@ -36,6 +36,8 @@ export type NomeModelo = keyof typeof MODELOS;
    e o diametro da bola procedural de antes (2 x R_BOLA), para o tamanho na tela nao mudar. PROPOSTO, SEM FONTE. */
 export const ITENS_MODELOS = {
   bola: { arquivos: ["bola/bola.gltf"], altura: 0.72, vento: 0, sombra: 0.4, baixo: false },
+  /* o saco: a altura do saco procedural de antes (o alto do braco, 2,48), e a mesma sombra */
+  saco: { arquivos: ["saco/saco.gltf"], altura: 2.48, vento: 0, sombra: 0.7, baixo: false },
 } as const satisfies Record<string, Modelo>;
 export type NomeItem = keyof typeof ITENS_MODELOS;
 /** os modelos que podem entrar na area andavel sem um objeto do motor (regra 5) */

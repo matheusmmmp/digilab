@@ -1,5 +1,6 @@
 /* Os itens gerados da ilha (docs/TAREFA_V3_ITENS_3D.md, secao 4.2): a tabela ITENS_MODELOS contra a pasta public/itens/, com os gates
-   G1 (triangulos abaixo do teto da categoria), G2 (caixa com altura e proporcao de bola), G3 (texturas PNG/JPG ate 1024 px, potencia de 2),
+   G1 (triangulos abaixo do teto da categoria), G2 (a caixa: a bola com as tres medidas iguais; o saco mais alto que largo, com as duas
+   pecas `suporte` e `saco` que a vista separa), G3 (texturas PNG/JPG ate 1024 px, potencia de 2),
    G4 (nenhuma primitiva sem textura de cor, um material por primitiva), G5 (nenhum mapa normal, metalico, oclusao ou emissivo),
    G6 (o relatorio do glTF-Validator em docs/itens3d/<item>/validacao.json, com 0 erros e 0 avisos), G7 (bytes por item e da pasta) e
    G8 (o License.txt ao lado e a marca de IA no asset.extras). Os tetos sao as medianas dos kits CC0 (docs/itens3d/kits_cc0_medidas.json,
@@ -11,11 +12,12 @@ import { ITENS_MODELOS, MODELOS } from "../src/telas/pet/ilha/modelos.ts";
 
 const APP = join(__dirname, ".."), ITENS = join(APP, "public", "itens"), DOCS = join(APP, "..", "..", "docs", "itens3d");
 /** o teto de triangulos por item (D-I3): os pequenos, a mediana dos kits baixos; o saco, a dos altos */
-const TETO: Record<string, number> = { bola: 554 };
+const TETO: Record<string, number> = { bola: 554, saco: 2414 };
 const LADO_MAX = 1024, BYTES_ITEM = 300 * 1024, BYTES_PASTA = 2 * 1024 * 1024;
 
 type Gltf = {
   asset: { extras?: { gerado_por_ia?: boolean; gerador?: string } };
+  nodes: { name?: string; mesh?: number; translation?: number[]; rotation?: number[]; scale?: number[]; matrix?: number[] }[];
   buffers: { uri: string }[]; images?: { uri: string }[]; accessors: { count: number; min?: number[]; max?: number[] }[];
   meshes: { primitives: { attributes: Record<string, number>; indices?: number; material?: number; mode?: number }[] }[];
   materials?: { pbrMetallicRoughness?: { baseColorTexture?: unknown; metallicRoughnessTexture?: unknown }; normalTexture?: unknown;
@@ -54,11 +56,19 @@ describe("os itens gerados da ilha", () => {
         tri += (p.indices !== undefined ? g.accessors[p.indices].count : g.accessors[p.attributes.POSITION].count) / 3;
       }
       expect(tri).toBeLessThanOrEqual(TETO[n]);
-      const pos = g.accessors[g.meshes[0].primitives[0].attributes.POSITION];
-      const lado = [0, 1, 2].map(i => pos.max![i] - pos.min![i]);
+      /* a caixa de todas as malhas juntas (os nos sem transformacao: as posicoes ja sao as do item) */
+      expect(g.nodes.every(no => !no.translation && !no.rotation && !no.scale && !no.matrix), "nos com transformacao").toBe(true);
+      const ps = g.meshes.flatMap(me => me.primitives.map(p => g.accessors[p.attributes.POSITION]));
+      const lado = [0, 1, 2].map(i => Math.max(...ps.map(p => p.max![i])) - Math.min(...ps.map(p => p.min![i])));
       expect(lado[1]).toBeGreaterThan(0);
-      /* a bola: as tres medidas iguais (+-5 %), para a normalizacao pela altura dar o diametro certo */
-      for (const l of lado) expect(Math.abs(l / lado[1] - 1)).toBeLessThan(0.05);
+      if (n === "bola") {
+        /* a bola: as tres medidas iguais (+-5 %), para a normalizacao pela altura dar o diametro certo */
+        for (const l of lado) expect(Math.abs(l / lado[1] - 1)).toBeLessThan(0.05);
+      } else {
+        /* o saco: mais alto que largo, e as duas pecas pelo nome do no (itens.ts, carregarSaco) */
+        expect(Math.max(lado[0], lado[2]) / lado[1]).toBeLessThan(0.7);
+        expect(g.nodes.map(no => no.name).sort()).toEqual(["saco", "suporte"]);
+      }
     });
 
     test(`${n}: G3 texturas, G4 materiais e G5 sem mapas extras`, () => {
