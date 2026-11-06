@@ -253,7 +253,8 @@ export class Ilha {
         const d = this.distanciaDaArea(x, z);
         if (!plana(x, z, G.folga) || d < G.perto || d > G.longe || (G.norte && z >= 0)) continue;
         if (altos.some(o => Math.hypot(o.x - x, o.z - z) < G.deAlto)) continue;
-        if (this.enfeites.some(e => Math.hypot(e.x - x, e.z - z) < G.entreSi)) continue;
+        /* dos postes, `entreSi`; dos outros marcos, `entreMarcos` (os marcos sao grandes: o carro e o trilho tem ~5 celulas de comprimento) */
+        if (this.enfeites.some(e => Math.hypot(e.x - x, e.z - z) < (e.nome !== "poste" && "entreMarcos" in G ? G.entreMarcos : G.entreSi))) continue;
         const ax = Math.min(Math.max(x, 0), this.area.w), az = Math.min(Math.max(z, 0), this.area.h);
         this.enfeites.push({ nome, x, z, giro: Math.atan2(ax - x, az - z) });
         k++;

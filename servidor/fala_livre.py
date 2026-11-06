@@ -28,6 +28,12 @@ Comando sem a voz propria (CONVERSA_PET, M1, decisao D1 do Matheus em 2026-11-06
 (e sem "voz") usa o prompt livre-v9 (as regras de verdade do livre-v2 + o estilo da especie pelo corpus + o COMANDO da v8):
 o pet nao inventa, fala no tom da especie e devolve "comando" validado pelo catalogo. Sem o campo, tudo como antes (livre-v2).
 "comando" so vale na CONVERSA, sozinho (nao junto com "voz") e precisa ser booleano: a entrada da pagina nao e confiavel.
+
+Conversa nova (CONVERSA_PET, M2, decisao D2 do Matheus, 2026-11-06): o campo "prompt": "conversa-v1" (enum fechado em PROMPTS_CONVERSA;
+qualquer outro valor, inclusive null, e 400) liga o prompt conversa-v1 (M3) na CONVERSA, sem "voz": estilo da especie pelo corpus,
+"comando" opcional como no livre-v9 e historico de fronteira, [jogador, pet, estagio] (o estagio vem do catalogo ESTAGIOS; as trocas
+de outro estagio o prompt descarta). O texto do jogador passa pela mesma validacao de hoje (tipo e tamanho) e so entra no prompt pelas
+`mensagens` do conversa-v1. Sem o campo, tudo como antes (livre-v2 ou livre-v9): a chave da pagina nasce desligada.
 """
 
 from __future__ import annotations
@@ -38,12 +44,13 @@ import random
 import threading
 
 from digilab_fala_livre import VERSAO_APP
-from digilab_fala_livre.fatos import FatosInvalidos
+from digilab_fala_livre.fatos import ESTAGIOS, FatosInvalidos
 from digilab_fala_livre import almanaque, corpus
 from digilab_fala_livre.arvore import ARVORE
 from digilab_fala_livre.gerar import gerar
 from digilab_fala_livre.ollama import URL_PADRAO, ClienteOllama
-from digilab_fala_livre.prompt import VERSAO_PROMPT, VERSAO_PROMPT_V6, VERSAO_PROMPT_V8, VERSAO_PROMPT_V9
+from digilab_fala_livre.prompt import (VERSAO_CONVERSA_V1, VERSAO_PROMPT, VERSAO_PROMPT_V6, VERSAO_PROMPT_V8,
+                                           VERSAO_PROMPT_V9)
 from digilab_fala_livre.revisao import gerar_com_revisao
 from digilab_fala_livre.verificador import VERSAO_VERIFICADOR_V5, verificar
 from servidor.fala_llm import ControleGasto
@@ -53,6 +60,7 @@ ROTA_FALA, ROTA_VERIF, ROTA_STATUS = "/api/fala-livre", "/api/fala-livre/verific
 MODELO_PADRAO = "gemma2:9b"          # escolhido na rodada 2 (artifacts_fala_livre/rodada2/RELATORIO.md)
 PROVEDORES = ("ollama", "claude")
 PROVEDOR_PADRAO = "ollama"
+PROMPTS_CONVERSA = (VERSAO_CONVERSA_V1,)       # M2: enum fechado do campo "prompt"
 MAX_TEXTO_JOGADOR = 300
 MAX_TROCAS = 10
 MAX_FATOS = 40
@@ -141,7 +149,12 @@ class ServicoFalaLivre:
         hist = d.get("historico") or []
         if not isinstance(hist, list) or len(hist) > MAX_TROCAS:
             raise PedidoInvalido("historico invalido")
-        hist = [(_texto(j, "historico"), _texto(p, "historico", 400)) for j, p in hist]
+        prompt = d.get("prompt", None) if "prompt" in d else False
+        if prompt is not False and prompt not in PROMPTS_CONVERSA:
+            raise PedidoInvalido("prompt invalido")
+        if prompt is not False and (situacao != "conversa" or d.get("voz") is True):
+            raise PedidoInvalido("prompt so vale na conversa e sem voz")
+        hist = self._historico(hist, com_estagio=prompt is not False)
         semente = _semente(d.get("semente", 0))
         comando = d.get("comando", False)
         if not isinstance(comando, bool):
@@ -151,18 +164,31 @@ class ServicoFalaLivre:
         if d.get("voz") is True:
             return self._fala_voz(d, situacao, jog, hist, semente)
         especie, versao = None, VERSAO_PROMPT
-        if comando:                                   # livre-v9: estilo da especie pelo corpus + comando, sem a voz propria
+        if comando or prompt is not False:                                 # livre-v9: estilo da especie pelo corpus + comando, sem a voz propria
             ident = d["estado"].get("identidade") if isinstance(d.get("estado"), dict) else None
             forma = ident.get("forma") if isinstance(ident, dict) else None
             especie = self.especies.get(forma.removesuffix(" sombrio")) if isinstance(forma, str) else None
-            versao = VERSAO_PROMPT_V9
+            versao = VERSAO_CONVERSA_V1 if prompt is not False else VERSAO_PROMPT_V9
         with self.trava:
             r = gerar(self.cliente, d.get("estado"), situacao, jog, hist, semente, versao=versao, especie=especie,
                       comando=comando)
         return {"versao_app": VERSAO_APP, "fala": r.fala, "fatos_citados": list(r.fatos_citados), "fatos": list(r.fatos),
                 "estagio": r.estagio, "modelo": r.modelo, "versao_prompt": r.versao_prompt, "latencia_s": r.latencia_s,
                 "erro": r.erro, "comando": r.comando if comando else None,
-                **({"especie_corpus": r.especie, "corpus_sha256": self.corpus_sha} if comando else {})}
+                **({"especie_corpus": r.especie, "corpus_sha256": self.corpus_sha} if comando or prompt is not False else {})}
+
+    @staticmethod
+    def _historico(hist: list, com_estagio: bool) -> list:
+        """Valida o historico. Sem o campo "prompt": pares [jogador, pet], como sempre. Com ele: trios [jogador, pet, estagio],
+        o estagio do catalogo; o texto do jogador tem a validacao de sempre."""
+        out = []
+        for troca in hist:
+            if not isinstance(troca, list) or len(troca) != (3 if com_estagio else 2):
+                raise PedidoInvalido("historico invalido")
+            if com_estagio and troca[2] not in ESTAGIOS:
+                raise PedidoInvalido("historico: estagio fora do catalogo")
+            out.append((_texto(troca[0], "historico"), _texto(troca[1], "historico", 400)) + ((troca[2],) if com_estagio else ()))
+        return out
 
     def _fala_voz(self, d: dict, situacao: str, jog, hist, semente: int) -> dict:
         estado = d.get("estado")

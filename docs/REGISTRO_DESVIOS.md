@@ -1,12 +1,12 @@
 # Registro de desvios de pré-condição e de interpretação
 
 Desde 2026-10-13 (rodada de saúde, etapa 2; `docs/TAREFA_V2_SAUDE.md`) o registro fica **dividido por mês**, em
-`docs/registro/AAAA-MM.md`. Este arquivo é só o **índice**: uma linha por seção, na ordem em que as seções entraram.
+`docs/registro/AAAA-MM.md`. Este arquivo é só o **índice**: uma linha por seção, na ordem dos arquivos do mês.
 
-**Onde o worker escreve o desvio novo:**
-1. **a seção,** `## AAAA-MM-DD — <FRENTE> (worker X): ...`, no **fim do arquivo do mês da data dela**, `docs/registro/AAAA-MM.md` (no
-   primeiro desvio de um mês, o arquivo é criado);
-2. **uma linha no fim deste índice,** com o título igual ao da seção: `- [AAAA-MM-DD — ...](registro/AAAA-MM.md)`.
+**Este índice é gerado; não o edite** (`docs/TAREFA_V3_INDICE_DESVIOS.md`, 2026-11-06). O worker escreve só **a seção,**
+`## AAAA-MM-DD — <FRENTE> (worker X): ...`, no **fim do arquivo do mês da data dela**, `docs/registro/AAAA-MM.md` (no primeiro desvio de
+um mês, o arquivo é criado). Quem faz o merge regenera o índice com `python tools/gerar_indice_desvios.py`; um conflito aqui se resolve
+rodando o gerador, nunca à mão.
 
 Nunca escreva a seção aqui. Um PR que ainda escreveu no formato antigo é absorvido por `python tools/registro_por_mes.py absorver
 <commit>`, e `python tools/conferir_saude.py` confere tudo (G-CONCAT).
@@ -249,117 +249,65 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-14 — PALADAR, etapa 4 (worker D): o paladar nos braços do J5, as medidas e a calibração montada](registro/2026-10.md)
 - [2026-10-14 — SAUDE-ETAPA-4: os hooks, desligados (worker C)](registro/2026-10.md)
 - [2026-10-14 — ECOSSISTEMA-GENETICO (worker C): o desenho do genoma da V2 e das três formas de gerar o genoma de outro](registro/2026-10.md)
-
 - [2026-10-14 — PET-QUE-PENSA-PALADAR, a run (worker D): a calibração do `ganho_gosto` e do `g_plano`, a G-REVAL-POSSIVEL e o piloto](registro/2026-10.md)
 - [2026-10-14 — J5-ADENDO-5 (worker C): a fruta ao lado da ração, e as decisões EG marcadas](registro/2026-10.md)
-
-
 - [2026-10-14 — FRUTA-AO-LADO (worker A): o dono põe a fruta ao lado da ração, o lado do mundo e do dono](registro/2026-10.md)
-
 - [2026-10-17 — CONNECTOME-CEREBRO-A (worker de uma sessão lateral): o cérebro A desenhado como grafo dos pesos](registro/2026-10.md)
-
 - [2026-10-17 — W-PORTE, etapa 1 (esta sessão, coordenador e worker): o ponto do v11 e os gabaritos do cérebro A](registro/2026-10.md)
 - [2026-10-18 — W-PORTE, PW-3 e PW-4 (worker B): a vontade com o cérebro A e a medida do caráter do v11](registro/2026-10.md)
 - [2026-10-18 — DIGIBRAIN-V3-E0 (worker de uma sessão lateral): a auditoria da decisão do cérebro A no v11](registro/2026-10.md)
 - [2026-10-18 — W-PORTE, etapa 3 (worker de uma sessão lateral): o G-PAR-L1 pelos ganchos do cérebro, sem o laço do corpo](registro/2026-10.md)
-
 - [2026-10-18 — METABOLISMO, etapa 4 (worker de uma sessão lateral): o metabolismo no corpo.ts, com a paridade, sem o laço do corpo do v11](registro/2026-10.md)
 - [2026-10-18 — DECISOES-1018 (worker C): PW-3 a PW-8, CN-1 a CN-9 e PJ5-1 a PJ5-6 marcadas; o painel e o roadmap](registro/2026-10.md)
-
 - [2026-10-18 — PQP-AO-LADO (worker D): a bancada do adendo 5 do J5, a fruta ao lado da ração nos braços e a calibração montada](registro/2026-10.md)
-
 - [2026-10-18 — INFRA-MULTIAGENTE (esta sessão, coordenador e worker): o relato verificado por categoria e o estado derivado](registro/2026-10.md)
 - [2026-10-18 — W-PORTE, etapa 4, parte 1 (worker de uma sessão lateral): o laço do corpo em TS, a rng do ambiente do Python e o gate do laço](registro/2026-10.md)
-
 - [2026-10-18 — PQP-AO-LADO-CALIBRACAO, a run (worker D): a calibração e o piloto do J5 com a fruta ao lado da ração](registro/2026-10.md)
-
 - [2026-10-18 — UI-DESKTOP (worker "Digilab interface design"): a casca limpa do desktop e a tela do Pet](registro/2026-10.md)
-
 - [2026-10-18 — W-PORTE, etapa 4, parte 3a (worker de uma sessão lateral): a escala e o deslocamento do caráter do v11, a vontade e o caráter em TS](registro/2026-10.md)
 - [2026-10-18 — BANHEIRO-FALHA-ALTA (sessão lateral): o `configCorpo` do TS com o banheiro, a ordem E-9 dos gestos](registro/2026-10.md)
 - [2026-10-18 — PQP-VALIDACAO, a run (worker D): a validação do J5 com a fruta ao lado da ração](registro/2026-10.md)
 - [2026-10-18 — ROTEAMENTO-MODELOS (ChatGPT Work): escolha de modelo e contexto no CLAUDE.md](registro/2026-10.md)
-
-
 - [2026-10-18 — WORLD-POC-001 (worker A): a investigação do mundo 3D e as decisões W-1 a W-7](registro/2026-10.md)
-
 - [2026-10-18 — W-PORTE, etapa 4, parte 3b (worker de uma sessão lateral): o pet v11 no Motor do jogo](registro/2026-10.md)
-
 - [2026-10-18 — W-PORTE, etapa 5 (worker de uma sessão lateral): o painel DigiBrain no jogo web](registro/2026-10.md)
-
 - [2026-10-18 — J5-ADENDO-7 (worker C): a validação inconclusiva registrada, e os dois testes consertados numa run só](registro/2026-10.md)
 - [2026-10-18 — PQP-ADENDO7 (worker D): a bancada do adendo 7 do J5, o piloto e a validação apontando as faixas novas](registro/2026-10.md)
 - [2026-10-19 — PQP-PILOTO-ADENDO7, a run (worker D): o piloto do adendo 7 do J5, parado pela G-OPORTUNIDADE](registro/2026-10.md)
-
 - [2026-10-19 — WORLD-POC-01 (worker A): a tarefa do POC-01a e a leitura da W-5](registro/2026-10.md)
-
 - [2026-10-19 — WORLD-POC-01a, PR 1 (worker A): o mundo do POC sem a vista](registro/2026-10.md)
-
 - [2026-10-19 — J5-ADENDO-8 (worker C): tirar a x das árvores no T1, e contar a ida às árvores novas no T2](registro/2026-10.md)
-
 - [2026-10-19 — W-PORTE, o mapa dos pesos no painel DigiBrain (worker de uma sessão lateral)](registro/2026-10.md)
-
 - [2026-10-19 — WORLD-POC-01a, PR 2 (worker A): a vista em Three.js e as medidas M1 a M6](registro/2026-10.md)
-
 - [2026-10-19 — WORLD-POC-02 (worker A): o Gate A aprovado e a tarefa do Gate B](registro/2026-10.md)
-
 - [2026-10-19 — WORLD-POC-02, PR 1 (worker A): o corpo químico no POC e o Gate B](registro/2026-10.md)
-
 - [2026-10-19 — PQP-ADENDO8 (worker D): o evento que para as árvores, a bancada do adendo 8 do J5, o piloto e a validação apontando as faixas novas](registro/2026-10.md)
-
 - [2026-10-19 — V3-ESPACO-ACOES: tarefa de investigação para o Claude Code](registro/2026-10.md)
-
 - [2026-10-19 — WORLD-POC-02, PR 2 (worker A): o painel do corpo e a premissa da CP-4 corrigida](registro/2026-10.md)
-
 - [2026-10-19 — WORLD-POC-02 (worker A): o Gate B aprovado e o mundo 3D pausado até o Gate C](registro/2026-10.md)
-
 - [2026-10-19 — PQP-PILOTO-ADENDO8, a run (worker D): o piloto do adendo 8 do J5, parado pela G-EXPOSICAO e pela G-OPORTUNIDADE do T2](registro/2026-10.md)
-
 - [2026-10-19 — V3, o espaço de ações (worker B): os quatro limites medidos e a ligação com o J5](registro/2026-10.md)
-
 - [2026-10-19 — PRANCHAS-CELULAR, as telas do celular no modelo novo (Claude Code, sessão de design)](registro/2026-10.md)
-
 - [2026-10-19 — PQP-VALIDACAO-ADENDO8, a run (worker D): a validação do J5 com o adendo 8 — o G-T1 passa](registro/2026-10.md)
-
 - [2026-10-19 — V3-CREDITO-CANAL, o desenho (worker B): a soma linear e o corte da reexperiência no T1](registro/2026-10.md)
-
 - [2026-10-21 — V3-CREDITO-CANAL, a etapa 0 (worker B): as tabelas sombra e a G0-PODE-MUDAR, que não passa](registro/2026-10.md)
-
 - [2026-10-21 — GATEC-P4 (Claude Code, worktree `v2-gatec-p4`): o Gate C em parte, as CC decididas e o esboço da P4](registro/2026-10.md)
 - [2026-10-21 — P4-ETAPA0 (worker D): os gabaritos das vidas de hoje que a P4 vai tocar, no Python e no TS](registro/2026-10.md)
-
-
 - [2026-10-21 — P4-PLANO (Claude Code, worktree `v2-p4-plano`): as P4 decididas e o plano da replicação do T1](registro/2026-10.md)
-
-
 - [2026-10-21 — V3-COMPETICAO, o desenho (worker B): o que a abertura alcança e o preço do prior forte](registro/2026-10.md)
-
-
 - [2026-10-21 — GATE-INTEGRACAO (Claude Code, worktree `v2-gate-integracao`): o Gate I, a decisão do cérebro e o escopo genético](registro/2026-10.md)
-
 - [2026-10-21 — GATE-I (Claude Code, worktree `v2-gate-i`): as GI decididas, o marco, a tarefa e o plano do Gate I](registro/2026-10.md)
-
 - [2026-10-21 — V3-COMPETICAO, a etapa 0 (worker B): a G0-R1-PODE-APRENDER passa, e a disputa é do pet negligenciado](registro/2026-10.md)
-
 - [2026-10-21 — GATE-I-DECISOES (Claude Code, worktree `v2-gate-i`): as GT-1 a GT-7 decididas; a GT-8 fica aberta](registro/2026-10.md)
-
 - [2026-10-21 — V3-COMPETICAO, o código (worker B): a chave numa config própria e as regras dentro do lobos.py](registro/2026-10.md)
-
 - [2026-10-21 — V3-COMPETICAO, o orquestrador (worker B): as medidas pelo motivo da decisão e o prefixo `competicao`](registro/2026-10.md)
-
 - [2026-10-21 — P4-ETAPA1 (worker D): o contrato sensório-motor no mundo do motor em Python](registro/2026-10.md)
-
 - [2026-10-21 — GATE-I-GT8 (Claude Code, worktree `v2-gate-i`): a GT-8 decidida](registro/2026-10.md)
 - [2026-10-21 — P4-ETAPA2 (worker D): a paridade Python/TS do contrato (a G-PAR-CONTRATO)](registro/2026-10.md)
-
 - [2026-10-22 — V3-COMPETICAO, o piloto (worker B): as margens com escala, o K = 10 subpotenciado e a G-ABRE passando](registro/2026-10.md)
-
 - [2026-10-22 — P4-ETAPA3 (worker D): o cérebro A com o planejador nas vidas do J5 com o contrato](registro/2026-10.md)
-
 - [2026-10-22 — V3-COMPETICAO, a validação (worker B): todos os gates passam, e a disputa ajuda onde o pet é negligenciado](registro/2026-10.md)
-
 - [2026-10-24 — PROMPT-MESTRE (Claude Code, worktree `v2-prompt-mestre`): a direção modular, a auditoria e a reorganização dos documentos](registro/2026-10.md)
-
 - [2026-10-22 — P4-ETAPA4 (worker D): o adendo 1, parte A, do plano da P4](registro/2026-10.md)
 - [2026-10-24 — MVP-ETAPA0 (worker D): os gabaritos do MVP, o v11 de hoje no TS e o laço do pet com o mundo no Python](registro/2026-10.md)
 - [2026-10-24 — MVP-ETAPA1 (worker D): o pet v12 com o mundo físico, o evento da comida e o G-PAR do laço](registro/2026-10.md)
@@ -554,11 +502,16 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-06 — INFRA_AGENTES, a prova ao vivo e a etapa E6b, o tar só para listar (worker, Claude Code, Opus 5.5, branch `v3-infra-agentes-e6b`)](registro/2026-11.md)
 - [2026-11-06 — MAPA_DIGITAL, D1: o chão, o barranco, o toon e o céu (Gerente da frente, Claude Code, Opus 5.5, branch `v3-mapa-digital-d1`)](registro/2026-11.md)
 - [2026-11-06 — LONGE_REGULAR, o código do descritivo da D-C1-3 (A10.8) (worker, Claude Code, Sonnet 5.5, branch `v3-dc13-codigo`)](registro/2026-11.md)
+- [2026-11-06 — INDICE_DESVIOS, o índice de desvios gerado (worker, Claude Code, Opus 5.5, branch `v3-indice-desvios`)](registro/2026-11.md)
 - [2026-11-06 — SPRITES_REACOES, o Dormir no jogo (worker, Claude Code, Sonnet 5.5, branch `v3-sprites-dormir`)](registro/2026-11.md)
 - [2026-11-06 — SPRITES_REACOES, as reações de rosto no jogo (worker, Claude Code, Sonnet 5.5, branch `v3-sprites-rosto`)](registro/2026-11.md)
 - [2026-11-06 — LONGE_REGULAR, o resultado do descritivo da D-C1-3, a seção 13.6 (worker, Claude Code, Sonnet 5.5, branch `v3-dc13-resultado`)](registro/2026-11.md)
 - [2026-11-06 — LUTA_EFEITOS, a tarefa dos efeitos da luta em tempo real (Gerente da missão SPRITES_GERACAO, Claude Code, Opus 5.5, worktree `v3-luta-efeitos`)](registro/2026-11.md)
+- [2026-11-06 — LUTA_EFEITOS E1, o impacto (worker, Claude Code, Sonnet 5.5, branch `v3-luta-efeitos-e1`)](registro/2026-11.md)
 - [2026-11-06 — MAPA_DIGITAL, D2: os kits, a névoa, os dois tons e o poste (Gerente da frente, Claude Code, Opus 5.5, branch `v3-mapa-digital-d2`)](registro/2026-11.md)
 - [2026-11-06 — CONVERSA_PET, M4 a conversa como fonte de fato rotulada (worker, Claude Code, Sonnet 5.5, branch `v3-conversa-m4-fato`)](registro/2026-11.md)
 - [2026-11-06 — LONGE_REGULAR, o plano da D-C1-3 no REL, o adendo 11 (worker, Claude Code, Opus 5.5, branch `v3-dc13-rel-plano`)](registro/2026-11.md)
 - [2026-11-06 — LUTA_EMPURRAO, a tarefa do empurrão de verdade no motor da luta (worker, Claude Code, Opus 5.5, branch `v3-luta-empurrao`)](registro/2026-11.md)
+- [2026-11-06 — MAPA_DIGITAL, D3: as partículas, a grade, os fios e a escala (Gerente da frente, Claude Code, Opus 5.5, branch `v3-mapa-digital-d3`)](registro/2026-11.md)
+- [2026-11-06 — LONGE_REGULAR, o código do descritivo da D-C1-3 no REL, o adendo 11 (A11.8) (worker, Claude Code, Sonnet 5.5, branch `v3-dc13-rel-codigo`)](registro/2026-11.md)
+- [2026-11-06 — CONVERSA_PET, M2 ligar o `conversa-v1` na conversa do jogo (worker, Claude Code, Sonnet 5.5, branch `v3-conversa-m2-ligar`)](registro/2026-11.md)

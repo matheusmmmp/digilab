@@ -69,7 +69,7 @@ evolutivo com IA, inspirado em Tamagotchi e Digimon.
   (`python tools/nova_tarefa.py <FRENTE> --fase V3 ...`). As frentes herdadas da V2 continuam no `TAREFA_V2_*` delas.
 - **Um PR por tarefa ou etapa,** com o relato no corpo do PR. O worker entrega e para. **O merge é só do Matheus.**
 - **O desvio** (interpretação, número escolhido, achado) vai numa seção própria no fim de `docs/registro/AAAA-MM.md` (o mês da data),
-  com data, nome e worker, e com uma linha no fim do índice `docs/REGISTRO_DESVIOS.md`.
+  com data, nome e worker. O índice `docs/REGISTRO_DESVIOS.md` é gerado (`tools/gerar_indice_desvios.py`), e o worker não o edita.
 - **O resumo da etapa não vai no CLAUDE.md.** Vai no corpo do PR e numa seção no fim do documento da frente: o `RESULTADO_V3_*.md` da
   run, ou o `TAREFA_V3_*.md` da etapa de código (o `_V2_` numa frente herdada). O coordenador põe uma linha no `docs/PAINEL_V3.md`. Este arquivo só muda com o ok do
   Matheus.

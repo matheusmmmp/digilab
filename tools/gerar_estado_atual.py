@@ -6,7 +6,7 @@ docs/PAINEL_V2.md (mantido pelo coordenador); este índice só junta, num lugar,
 - a linha `Status:` de cada docs/TAREFA_V2_*.md, como está escrita (muitas ficaram ABERTA depois da entrega);
 - quais docs/RESULTADO_V2_*.md citam a tarefa ou o plano pelo nome do arquivo (a citação que o próprio resultado faz; a falta dela não quer
   dizer que a run não rodou);
-- as últimas linhas do índice de desvios.
+- as últimas seções do registro de desvios (dos arquivos do mês, na ordem do índice).
 
 O conteúdo depende só dos arquivos, não do commit nem da hora: regenerar sem mudança nas fontes dá o mesmo arquivo.
 
@@ -20,6 +20,9 @@ import argparse
 import re
 import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import gerar_indice_desvios as gid  # noqa: E402
 
 DESTINO = Path("docs/ESTADO_ATUAL.md")
 ULTIMOS_REGISTROS = 10
@@ -95,13 +98,13 @@ def gerar(raiz: Path) -> str:
     for p in planos:
         l.append(f"| [{p.stem}]({p.name}) | {celula(titulo(p.read_text(encoding='utf-8')))} | {citam(p.name)} |")
 
-    indice = (docs / "REGISTRO_DESVIOS.md").read_text(encoding="utf-8")
-    entradas = [x.strip() for x in indice.splitlines() if x.strip().startswith("- [")]
+    # Dos arquivos do mês, não do índice: o índice pode estar atrasado até quem faz o merge regenerar (docs/TAREFA_V3_INDICE_DESVIOS.md).
+    entradas = [gid.rpm.linha_indice(t).rstrip("\n") for t, _ in gid.entradas(raiz)]
     l += [
         "",
         f"## 3. Os últimos {ULTIMOS_REGISTROS} desvios registrados",
         "",
-        f"Do índice [REGISTRO_DESVIOS.md](REGISTRO_DESVIOS.md) ({len(entradas)} entradas), na ordem em que entraram.",
+        f"Dos arquivos do mês em `docs/registro/` ({len(entradas)} seções), na ordem do índice [REGISTRO_DESVIOS.md](REGISTRO_DESVIOS.md).",
         "",
         *entradas[-ULTIMOS_REGISTROS:],
         "",
