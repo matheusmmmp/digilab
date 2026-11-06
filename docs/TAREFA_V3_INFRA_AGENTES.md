@@ -317,3 +317,25 @@ Worker: Claude Code, Opus 5.5, worktree `v3-infra-agentes-e3`, branch empilhado 
     → 166 passed.
 - **No repositório de verdade, com a lista real de processos:** a varredura da AN4 (`experiments/configs/v3_acoes_novas/varredura.json`)
   passa com `--processos 4` (código 0) e é recusada com `--processos 5` (código 2); a `acoes_novas.json` passa com 4.
+
+## 12. Resumo da etapa E4 (2026-11-06)
+
+Worker: Claude Code, Opus 5.5, worktree `v3-infra-agentes-e4`, branch empilhado sobre o #612 (E3) e o #593 (UX_TELA_PET A2, sobre o #592).
+
+- **Um testador só (D-IA-5): o `ux-browser-tester` do #593,** e nenhum `testador-navegador.md`. Ele já cumpria a seção 3.4: sem escrita, a
+  porta própria (`DIGILAB_PORTA_E2E`), os quatro processos e o retorno só com falhas, capturas, diff e console. **Faltava o `npm run tipos`
+  e o `npm test`:** os dois entram antes do e2e, e uma falha neles já é a resposta. O `h8_escopo.py` do testador passa a deixar rodar os
+  dois.
+- **A junção com a UX:**
+  - o #604 adota o `h6_capturas.py` do #592, byte a byte; os 20 casos do H6 desta frente passam com ele;
+  - no `tests/test_hooks.py`, os dois lados acrescentaram casos; dois nomes repetidos ganharam o sufixo `_infra`;
+  - o `test_proposta_ux_aponta_scripts_que_existem_e_nada_ligado` aceita o H6 ligado (D-IA-7);
+  - o `test_os_seis_agentes_e_nenhum_outro` (UX) aceita os três revisores da E2.
+- **Testes:** `python -m pytest tests/test_hooks.py tests/test_hook_h4.py tests/test_agentes.py tests/test_agentes_ux.py tests/test_pre_run.py tests/test_infra_*.py -q -p no:cacheprovider`
+  → 258 passed. Antes dos ajustes da junção, os dois testes da UX acima falhavam.
+- **O testador rodado uma vez** (num agente geral, em Sonnet, com o corpo do `ux-browser-tester.md`; a sessão não carrega a pasta de
+  agentes): só o `npm run tipos` e o `npm test`, com um `test/_quebrado_e4.test.ts` temporário que espera `1 + 1` ser 3.
+  - O tsc passou.
+  - O Vitest: 1 falha, com o arquivo, a linha 5, o nome e "expected 2 to be 3"; 92 arquivos e 907 testes passaram.
+  - Sem o arquivo, `npm test` → 92 arquivos e 907 testes passados, em 77 s.
+  - O e2e não rodou nesta prova (8 a 12 min na medida do H5 da UX).
