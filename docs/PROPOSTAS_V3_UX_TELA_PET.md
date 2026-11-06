@@ -1079,3 +1079,162 @@ A prancha e as sete recomendações foram aprovadas ("Aprovado, seguir"): **L1-1
 até a janela em volta da câmera; **L1-2** o pet rosa com o anel claro; **L1-3** com a câmera "Fixa" o minimapa aparece, sem mover a
 câmera; **L1-4** o cocô e o kit médico fora; **L1-5** Q/E, +/− e as setas e o Enter no minimapa; **L1-6** o DigiBrain como a 4ª linha da
 pilha; **L1-7** os números como PROPOSTO, SEM FONTE.
+
+## Lugares da ilha: menus (L2/L3) (2026-11-06, `ux-designer`)
+
+Direção B, escolhida pelo Matheus em 2026-11-06: **cada menu é um lugar da ilha**. Abrir Crescer, Lutar ou Diário leva a câmera até o
+lugar, o pet anda até lá e o painel aparece ancorado ao lado do objeto, com a ilha visível e viva em volta. Status: **PROPOSTO**. Só
+vista: o motor, o save, as rotas (`#/crescer/treinar` etc.) e o hash não mudam, e nenhum número de jogo é criado. A prancha está em
+`docs/pranchas/ux-lugares-menus/` (`gerar.py`, `lugares.css`, `capturar.sh`; capturas em
+`D:\Trab\digilab\capturas_ux_lugares_menus_aprovar\`, `<tela>_1920_<vidro|militar>.png`). O plano e a prancha vão juntos, a pedido
+do Matheus.
+
+**Objetivo do jogador.** Ir fazer uma coisa num lugar ("vou treinar no saco") e ver de relance o que importa agora (o treino pronto, a
+luta que libera medalha), sem uma janela genérica cobrindo meia tela. Quem só quer conferir algo não espera a viagem.
+
+**Os lugares.**
+
+| menu | lugar | objeto | abas (ícones) |
+|---|---|---|---|
+| Crescer | o saco de pancada | existe (o `CENA.treino` de hoje já leva o pet até ele) | Treinar, Aprendizado, Evolução, Itens |
+| Lutar | o portão da arena | **novo**, no fim do caminho de terra, à direita (desenho provisório) | Arena, Exploração, Fronteira, Medalhas |
+| Diário | a barraca do Tamer | **nova**, à esquerda, junto ao barranco (desenho provisório) | Registro, Catálogo, Gerações, Cenários |
+| Ajustes | não é lugar | o leque do retrato (Meus pets, DigiBrain, Ajustes) | uma lista só |
+
+**Hierarquia, dentro do painel.**
+1. o destaque, um por tela (borda `--hx-alerta`, o "amarelo = momento de destaque" do guia, seção 3): o treino pronto, o que falta para
+   evoluir, a luta que libera medalha, a próxima medalha, o seu pet no Catálogo, a semente e o replay no Registro;
+2. a ação da aba (os 6 exercícios, os rivais e Lutar, as linhas do registro, as formas);
+3. o que recua: medidores compactos, as outras medalhas numa linha cada, listas fechadas ("Treinado na vida", "Histórico", "Regras de
+   combate do seu pet");
+4. o "Como funciona", sempre fechado (aberto num quadro só, o do Registro).
+
+**Sempre visível × por gesto.**
+- Sempre, dentro de um lugar: o topo (plaquinha e relógio), o trilho (Pet, Crescer, Lutar, Diário, Conversar; **Ajustes sai** para o
+  leque do retrato), o minimapa (contexto; o da outra sessão), a placa com o nome do lugar sobre o objeto e o conector até o painel.
+- Recolhem ao entrar num lugar: a pilha (Estado, Evolução, Últimas ações), o dock e a linha do agora; voltam ao sair.
+- Por gesto: o rótulo das abas inativas (foco ou hover, e sempre no `aria-label`; a ativa mostra o rótulo), a dica do motivo de uma aba
+  trancada, o "Como funciona", as listas fechadas, a ficha de uma forma.
+- O atalho direto (PROPOSTO): `C`, `L`, `D` abrem o lugar com **corte seco**, sem viagem; `1`–`4` trocam de aba; `Esc` volta à ilha;
+  clicar ou `Esc` durante a viagem pula para o fim. Em Ajustes, "Viagem da câmera" (nova; preferência de tela, não de jogo) desliga a
+  viagem de vez.
+
+**A transição (três quadros: `transicao_1`, `_2`, `_3`).** (1) A ilha normal, o clique em Crescer (no trilho, na tecla ou no saco do
+minimapa). (2) A câmera a caminho: o plano da ilha escala e desliza até o enquadramento do saco, o pet anda até lá, a pilha e o dock
+saem. (3) Chegou: o painel entra ao lado do saco. **Durações, PROPOSTO, SEM FONTE:** câmera 700 ms, ease-out; o painel entra em 180 ms
+(o "card entrando" do guia, seção 11). **Reduzir movimento:** nem viagem nem pet andando: corte seco direto ao quadro 3 (guia, seção 11).
+
+**Tokens.** Só os das peles atuais, cópia de `src/estilo/tokens.css`: `--hx-chao`, `--hx-miolo`, `--hx-miolo-2`, `--hx-borda`,
+`--hx-borda-topo`, `--hx-texto`, `--hx-texto-2`, `--hx-sec`, `--hx-rotulo`, `--hx-escolhido` (`-ink`, `-borda`, `-brilho`),
+`--hx-hachura` (o Forçar), `--hx-btn-bg`/`-ink`/`-borda` (a ação: Lutar, Verificar replay, Ir à Exploração), `--hx-medidor`,
+`--hx-medidor-trilho`, `--hx-medidor-alt`, `--hx-mascara`, `--hx-alerta` (destaque, um por tela), `--hx-ok` (percorrido),
+`--hx-aprendido` (as regras de combate, tracejado), `--hx-foco`, `--hx-f`, `--hx-f-num`, `--hx-num`, `--hx-vidro`, `--hx-reflexo`,
+`--hx-luz`, `--hx-tecla`, `--hx-tecla-hover`, e os `--hud-fundo-1`, `--hud-fundo-2`, `--hud-desfoque`, `--hud-ch`, `--hud-ch-p`,
+`--hud-brilho`, `--hud-risca`. **Nenhum `--dl-*`** e nenhuma cor hex nova. Os literais: a sombra no chão `rgba(0,0,0,.4)` (prancha B3),
+o fundo da marca DIGILAB (`casca.css`) e a nota amarela (prancha B3). Os objetos novos não têm cor: cada parte é um trecho liso do
+próprio fundo, ampliado (a pedra da base do saco, a madeira do poste, o vermelho do saco, a areia do caminho, as faixas do barranco).
+Fontes: as das peles (Saira Condensed no Militar; Barlow e Rajdhani no Sci-fi).
+
+**Wireframe a 1920×950** (Crescer · Treinar; Lutar põe o painel à esquerda do portão, x 690–1300; Diário à direita da barraca, x 800–1420):
+
+```
+┌──────────────────────────────────────────────────────────────────────────────────────────────┐
+│ [◉ Gabumon Rookie]                         DIGILAB                        [Dia 3 07:42 ● salvo]│
+│ ┌────┐                         ┌ Crescer · no saco de pancada ──────────[× Esc]┐              │
+│ │Pet │          [▣ SACO DE      │ [▤ TREINAR][ap][ev][it]   (ícones; rótulo só na ativa) │      │
+│ │Cre◀│           PANCADA]       │ ┃ AGORA  Pronto para treinar                  │              │
+│ │Lut │               │          │ ┃ último: Corrida · 07:31 · 10 min            │   ilha viva  │
+│ │Diá │              ┌┴┐  ─ ─ ─ ─┤ [Levantar][Corrida][Alvo ★]                    │              │
+│ │Con │              │█│         │ [Esquiva ][Meditar★][Resistência]             │              │
+│ └────┘      (Gabumon│█│         │ aptidão: Amizade rende 1,2× em mira…          │              │
+│              no saco)│         │ Cansaço  fadiga ▮▮▯▯▯ 40|60  sobrec. ▯▯▯ 30|60 │              │
+│                     ═╧═        │ [Forçar treino ▨] abre com fadiga 60   +3,1/36 │              │
+│                                 │ ▸ Treinado na vida      ▸ Como funciona      │   ( minimapa )│
+│                                 └───────────────────────────────────────────────┘ (C L D  F*)  │
+│                                                         * Fronteira trancada no minimapa    │
+└──────────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Um lugar trancado.** A Fronteira (aba de Lutar e ponto do minimapa) fica apagada, tracejada e com cadeado, com o motivo no
+`aria-label` e na dica: "abre com as 6 medalhas (0 de 6)" (`MapaExploracao.tsx`, `liga.ts` `MEDALHAS_LIGA = MEDALHAS.length`). É a única
+condição de liberação de lugar que o motor tem hoje: Crescer, Lutar e Diário não têm condição (só o treino tem, "o In-Training ainda não
+treina"). Ver a pergunta 3.
+
+**O que muda na leitura do estado do pet.**
+- O que importa vem primeiro e com destaque: o treino pronto (antes era um selo "pronto para treinar" na foto da sala), o que falta para
+  evoluir com o atalho para a luta, a luta que libera medalha na própria Arena (hoje só aparece na Evolução e nas Medalhas).
+- O lugar diz o que o menu é: o pet no saco treinando, no portão, à barraca. A ilha não fica escurecida nem parada atrás.
+- Menos texto à vista: as regras longas da Arena, do Treino, da Evolução e do Catálogo vão para o "Como funciona" fechado; as abas viram
+  ícones.
+- Some da vista, por estar dentro de um lugar: a pilha e a linha do agora (voltam ao sair). A Evolução da pilha passa a dizer o que
+  falta ("Champion: falta 1 medalha") e leva ao saco.
+- Nenhum dado novo: cada número e texto vem do motor ou da tela de hoje (tabela abaixo).
+
+**Custo em determinismo e em e2e.**
+- Determinismo: nenhum. A câmera, o pet andando e o painel são vista: nada entra no registro. Com o mundo físico ligado (`MotorMundo`), o
+  pet do motor tem posição: o pet que anda até o lugar é só a vista (como o `CENA.treino` de hoje) e volta à posição do motor ao sair.
+  Ver a pergunta 4.
+- e2e: as rotas ficam, mas o painel muda de lugar e de forma (as abas viram ícones com `aria-label`, os seletores por texto da aba
+  quebram); a viagem precisa de um modo sem animação nos testes (o "reduzir movimento" ou a tecla de atalho). Conferir as capturas de
+  `e2e_capturas/` e o teste de foco dos painéis. Os objetos novos (portão, barraca) entram na ilha 3D: um asset novo, com a procedência
+  (guia 5.1).
+
+**Número ou texto → fonte.**
+
+| na tela | fonte |
+|---|---|
+| Gabumon, Tsunomon, Patamon, os Champions, Ultimates e Megas do Amizade; Rookie, Champion… | `motor/nomes.ts` (`DIGIMON_DA_FORMA`, `NOME_EST`, `NOME_ARQ`) |
+| Amizade, Coragem, Conhecimento, Sinceridade | `nomes.ts` `NOME_ESP` |
+| "Pronto para treinar", o intervalo de 10 min, a legenda da aptidão | `TelaTreinar.tsx`; `constantes.ts` `CTR.intervalo` |
+| os 6 exercícios e "+2 x · +1 y" | `nomes.ts` `NOME_EXERCICIO`, `NOME_STAT`; `CTR.exercicios`, `CTR.ganhoPri`, `CTR.ganhoSec` |
+| selo "aptidão" em Alvo e Meditar; "1,2× em mira e 1,1× em recuperação" | `constantes.ts` `APTIDAO.cirro` |
+| marcas 40 · pede pausa, 60 · só forçar; 30 · aviso, 60 · sombria | `CTR.limiarPausa`, `CTR.limiteForcar`, `CSO.aviso`, `CSO.sombrio` |
+| "de 36" na vida | `CTR.tetoVida` |
+| "abre com fadiga 60" | `TelaTreinar.tsx` |
+| 0 de 1 medalha; 1 Champion, 3 Ultimate, 5 Mega | `constantes.ts` `CMD` |
+| "Falta a Medalha da Campina: vença o Gazimon na Campina." | `src/tamer.ts` `textoFalta`, `comoGanhar`; `medalhas.ts`; `bots.ts` (Gazimon) |
+| impetuoso, paciente, atento, resistente | `CAT.adolescente[l].eixo` |
+| "cuidado ≥ 80%" / "< 80%" | `CAT.limiarCuidado` (o `SUB_RAMO` de `TelaEvolucao.tsx`) |
+| "caráter: todos os eixos na faixa comum" | `TelaEvolucao.tsx` `fmtCar` |
+| os Champions como "?" sem nome | `TelaEvolucao.tsx` (forma não decidida = silhueta sem nome; guia, seção 5) |
+| Kuramon aleatório … Jijimon referência | `src/luta.ts` `RIVAIS_CLASSICOS`, `src/nomesRivais.ts` `DIGIMON_BOT`, `bots.ts` `NOME_BOT`, `TelaArena.tsx` |
+| "+ 8 formas adultas" | `luta.ts` `RIVAIS_ADULTOS` |
+| "3 regras de combate" (Rookie) | o "Como funciona" da Arena ("Rookie 3"); no jogo, `m.gp.ativas.length` |
+| "Nenhuma luta ainda. A primeira aparece aqui." | `TelaArena.tsx` |
+| as 6 medalhas, os líderes e os lugares | `medalhas.ts` `MEDALHAS`, `bots.ts`, `tamer.ts` `comoGanhar` |
+| "O básico: sem regra especial…" | `arenas.ts` (titulo, frase) |
+| Chip de Força; revanche Carta de Fôlego | `itens.ts` `ITEM_DA_MEDALHA`, `CARTA_DA_REVANCHE` |
+| "libera a Fronteira" (6ª); a medalha de ouro e os recordes | `TelaMedalhas.tsx` (`libera`, a medalha de ouro, os recordes) |
+| a Fronteira "abre com as 6 medalhas (0 de 6)" | `MapaExploracao.tsx`; `liga.ts` `MEDALHAS_LIGA` |
+| as linhas do registro ("carinho", "alimentar", "treinou corrida", "brincando", "explorando", "dormindo") | `motor.ts` `_hist`; `nomes.ts` `NOME_PET` |
+| as etiquetas e os filtros (você, pet, treino, regras; tudo, você, pet, lutas, recusas, treino) | `TelaRegistro.tsx` (`TIPO_REG`, `FILTROS`) |
+| "Linhas reconstruídas do registro: N"; o texto do replay | `TelaRegistro.tsx` |
+| 19 formas, "N de 19 vistas" | `TelaCatalogo.tsx` `formasDoBrasao` |
+| a lista e os resumos dos Ajustes | `TelaConfig.tsx`; `pele.ts` `NOME_PELE` (Militar, Sci-fi) |
+| **exemplo, nunca dado** | Dia 3, 07:42, 07:31, as horas do registro, fadiga 20, +3,1, 1d 4h, semente 7000 e 76 eventos (da captura de hoje), 0 medalhas, o rival escolhido, 10 min/s |
+| **novo, de tela (PROPOSTO)** | os nomes "Portão da arena" e "Barraca do Tamer", "Viagem da câmera", as teclas, as durações |
+
+**Perguntas ao Matheus.**
+1. **Os dois objetos novos (portão e barraca) entram na ilha 3D?** Recomendo que sim, como asset low-poly do mesmo kit da ilha (CC0),
+   nos pontos da prancha. Custo de errar: se não entrarem, Lutar e Diário viram "câmera para um canto vazio" e a direção perde o
+   sentido; se entrarem no lugar errado, só se move o objeto.
+2. **As teclas do atalho direto: `C`/`L`/`D` (e `1`–`4` nas abas, `Esc` para voltar) ou números para os lugares?** Recomendo as letras,
+   que se lembram pelo nome. Custo de errar: baixo, é só a tabela de teclas; conflito com o campo da Conversa (as teclas só valem fora
+   de um campo de texto).
+3. **Um lugar se destrava com o progresso (o NookPhone)?** O motor não tem condição para Crescer, Lutar ou Diário; a única trava real é a
+   Fronteira (6 medalhas). Recomendo não inventar trava agora e mostrar só a Fronteira trancada; se quiser o portão fechado no
+   In-Training, isso é regra de jogo nova (com versão de pet). Custo de errar: inventar uma trava sem regra no motor é mostrar dado que
+   o motor não tem.
+4. **A Fronteira vira um lugar próprio na ilha ou continua aba de Lutar?** Recomendo continuar aba (trancada) agora e virar lugar depois
+   do título da Liga. Custo de errar: baixo; muda só a vista.
+5. **O pet andando até o lugar com o mundo físico ligado:** a vista anda e o pet do motor fica onde está (proposta), ou a câmera vai e o
+   pet não anda? Recomendo a vista andar e voltar ao sair, como o `CENA.treino`. Custo de errar: se a vista e o motor divergirem sem
+   aviso, o jogador vê o pet num lugar e o DigiBrain fala de outro.
+6. **As durações (câmera 700 ms, painel 180 ms):** confirma como ponto de partida? São PROPOSTAS, SEM FONTE (só os 180 ms vêm do guia).
+   Custo de errar: viagem longa irrita quem só quer conferir; o atalho e a "Viagem da câmera" desligada cobrem isso.
+7. **A sobrecarga sem o roxo:** a pele não tem token de "sombrio" (o roxo era `--dl-dark`, da paleta reprovada). Na prancha ela ficou
+   neutra, com as marcas 30/60. Recomendo um `--hx-sombrio` nas duas peles (decisão de token, com o contraste conferido). Custo de
+   errar: sem ele, o caminho sombrio perde a cor própria do guia (seção 3) e fica só no texto.
+8. **"Nada importante só no hover" (guia 13) e as abas só em ícone:** a aba ativa mostra o rótulo, as outras têm `aria-label` e a dica
+   no foco. Aceita, ou prefere rótulos curtos sempre visíveis embaixo do ícone? Recomendo o ícone com a dica (o que o Matheus pediu).
+   Custo de errar: quem não reconhece o ícone tem de passar o mouse; o rótulo aparece no foco do teclado também.
