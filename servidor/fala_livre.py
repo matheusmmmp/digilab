@@ -61,7 +61,8 @@ from digilab_fala_livre.ollama import URL_PADRAO, ClienteOllama
 from digilab_fala_livre.prompt import (VERSAO_CONVERSA_V1, VERSAO_PROMPT, VERSAO_PROMPT_V6, VERSAO_PROMPT_V8,
                                            VERSAO_PROMPT_V9)
 from digilab_fala_livre.revisao import gerar_com_revisao
-from digilab_fala_livre.verificador import VERSAO_VERIFICADOR_V5, TIPO_DONO_DISSE, verificar, verificar_conceitos
+from digilab_fala_livre.verificador import (TIPO_DONO_DISSE, VERSAO_VERIFICADOR_V5, VERSAO_VERIFICADOR_V6, verificar,
+                                             verificar_conceitos)
 from digilab_fala_livre.voz import gerar_voz
 from servidor.fala_llm import ControleGasto
 from servidor.fala_livre_claude import (ARQUIVO_GASTO_LIVRE, LIMITE_USD_LIVRE_PADRAO, ClienteClaude)
@@ -299,8 +300,20 @@ class ServicoFalaLivre:
         if not (isinstance(fatos, list) and len(fatos) <= MAX_FATOS and all(_fato_ok(f) for f in fatos)):
             raise PedidoInvalido("fatos invalidos")
         if "conceitos" in d:
+            if "prompt" in d:
+                raise PedidoInvalido("conceitos nao se mistura com prompt")
             return self._verificar_conceitos(d, fala, cit, fatos)
-        versao = VERSAO_VERIFICADOR_V5 if d.get("voz") is True else None
+        # M2b: com "prompt": "conversa-v1" (mesmo enum validado da fala) a verificacao e a verif-v6, a unica que sabe que o [J] "o dono me
+        # disse" so sustenta "o dono disse X". Fatos [J] sem o campo sao 400: o verif-v3 os trataria como fato comum.
+        prompt = d.get("prompt", None) if "prompt" in d else False
+        if prompt is not False and prompt not in PROMPTS_CONVERSA:
+            raise PedidoInvalido("prompt invalido")
+        if prompt is not False and d.get("voz") is True:
+            raise PedidoInvalido("prompt so vale na conversa e sem voz")
+        if prompt is False and any(f["tipo"] == TIPO_DONO_DISSE for f in fatos):
+            raise PedidoInvalido("fato 'o dono me disse' so existe com prompt conversa-v1")
+        versao = (VERSAO_VERIFICADOR_V6 if prompt is not False
+                  else VERSAO_VERIFICADOR_V5 if d.get("voz") is True else None)
         with self.trava:
             if versao is None:
                 return verificar(self.cliente_verif, fala, cit, fatos, _semente(d.get("semente", 0))).para_dict()

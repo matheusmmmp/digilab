@@ -2722,3 +2722,58 @@ CONFIG_GENOMA_LIGADO = ConfigGenoma(ligado=True)
 PARAMETROS_GENOMA = {
     "ligado": ("PROPOSTO", "SEM FONTE; o formato e a regra do genoma vazio sao SEM FONTE (TAREFA_V3_GENOMA_G0, secao 1)"),
 }
+
+
+# O decodificador de conceitos da fala (docs/research/ESPEC_DECODIFICADOR_FALA.md, DC1; DC-A, DC-B e DR-1 DECIDIDAS pelo Matheus em
+# 2026-11-06): `digilab/digibrain/decodificador.py`, o `dec-v1`, CBM manual sem treino. So le o `motivo` do modular; nada muda na vida.
+# Todo numero abaixo e PROPOSTO, SEM FONTE, ate a calibracao da DC4. Os pesos sao inteiros: o conceito e a media ponderada dos sinais (todos na
+# escala S = 1024) com `div_arred`.
+@dataclass(frozen=True)
+class ConfigDecodificador:
+    # o que a fala (DC2) le: o conceito so entra acima do limiar de valor; com a confianca abaixo do outro, entra como hesitacao
+    limiar_valor: int = _S // 2               # PROPOSTO, SEM FONTE
+    limiar_confianca: int = _S // 2           # PROPOSTO, SEM FONTE
+    piso_sonda: int = 5 * _S // 8             # PROPOSTO, SEM FONTE: o valor minimo de `lembranca` e `determinacao` quando a sonda decidiu (> limiar_valor)
+    ganho_v: int = 4                          # PROPOSTO, SEM FONTE: |V| e pequeno (dezenas) contra S; bem_estar e mal_estar = clamp(ganho_v x |V|)
+    ganho_sigma: int = 8                      # PROPOSTO, SEM FONTE: aversao = mul(sim, clamp(ganho_sigma x |sigma|)), sigma < 0
+    n_sp_teto: int = 8                        # PROPOSTO, SEM FONTE: decisoes sem progresso que valem S na frustracao
+    fins_frustrantes: tuple = ("desistiu", "sumiu", "trocou")   # PROPOSTO, SEM FONTE: os motivos de fim da intencao que contam como frustracao
+    # os pesos de cada sinal (media ponderada)
+    p_fome_urgencia: int = 2
+    p_fome_fracao: int = 1
+    p_fome_intencao: int = 1
+    p_fome_pista: int = 1
+    p_sono_urgencia: int = 2
+    p_sono_fracao: int = 1
+    p_sono_reflexo: int = 1
+    p_sono_noite: int = 1
+    p_agitacao_e: int = 3
+    p_agitacao_urgencia: int = 2
+    p_frustracao_f: int = 2
+    p_frustracao_fim: int = 1
+    p_frustracao_n_sp: int = 1
+    p_determinacao_c: int = 2
+    p_determinacao_persistencia: int = 1
+    p_indecisao_margem: int = 2
+    p_indecisao_sondas: int = 1
+    p_solidao_urgencia: int = 2
+    p_solidao_fracao: int = 1
+    p_curiosidade_urgencia: int = 1
+    p_curiosidade_tedio: int = 1
+    p_curiosidade_g_exp: int = 1
+    p_curiosidade_fracao: int = 1
+
+    def __post_init__(self) -> None:
+        for nome, v in self.__dict__.items():
+            if nome == "fins_frustrantes":
+                continue
+            if type(v) is not int or v < 0:
+                raise ValueError(f"ConfigDecodificador.{nome} e um inteiro >= 0: {v!r}")
+        if self.piso_sonda <= self.limiar_valor:
+            raise ValueError("ConfigDecodificador.piso_sonda tem de passar o limiar_valor (a sonda que decidiu faz o conceito entrar na fala)")
+
+
+CONFIG_DECODIFICADOR = ConfigDecodificador()
+# status e fonte de cada campo (CLAUDE.md: nenhum numero sem status); a ideia do gargalo de conceitos e o CBM de Koh et al. 2020 (arXiv:2007.04612,
+# VERIFICADA), mas nenhum numero daqui vem dela
+PARAMETROS_DECODIFICADOR = {f.name: ("PROPOSTO", "SEM FONTE; CBM manual, calibracao na DC4") for f in fields(ConfigDecodificador)}

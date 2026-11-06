@@ -67,7 +67,9 @@ def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
                                                                              "experiments/run_v2_digibrain_prototipo.py",
                                                                              "experiments/exportar_gabarito_digibrain_modular.py",
                                                                              # a AN0 (#575): so le as constantes (CONFIG_DIGIBRAIN_INATOS, RECEPTORES_DIGIBRAIN); nenhuma vida
-                                                                             "experiments/medir_v3_acoes_novas_hoje.py"}
+                                                                             "experiments/medir_v3_acoes_novas_hoje.py",
+                                                                             # a DC1 (2026-11-06): o gabarito do decodificador de conceitos le o motivo; nenhuma vida
+                                                                             "experiments/exportar_decodificador.py"}
 
 
 def test_o_digibrain_so_existe_com_a_chave_ligada_e_e_a_v13():
@@ -103,7 +105,7 @@ def test_os_ganchos_vazios():
 
 
 # ------------------------------------------------------------ o G-INT, a G-RECEPTOR, o G-SEM-DIRECAO e o preflight
-ARQUIVOS = {"__init__.py", "_comum.py", "adapt.py", "afeto.py", "arb.py", "estado.py", "ganchos.py", "impulso.py", "mem.py", "pers.py", "plast.py",
+ARQUIVOS = {"__init__.py", "_comum.py", "adapt.py", "afeto.py", "arb.py", "decodificador.py", "estado.py", "ganchos.py", "impulso.py", "mem.py", "pers.py", "plast.py",
             "sens.py"}
 
 
