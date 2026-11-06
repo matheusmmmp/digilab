@@ -1,0 +1,14 @@
+{
+ "id": "01a1b193-2abf-716b-8c9f-fa16d82cb247",
+ "type": "image-to-image",
+ "ai_model": "nano-banana-2",
+ "prompt": "Multiple views of the same short train track with wooden sleepers and a small red wagon with round windows and a cream roof: front, side and back, same style, same colors, plain light grey background.",
+ "status": "SUCCEEDED",
+ "consumed_credits": 6,
+ "created_at": 1793980574651,
+ "finished_at": 1793980597326,
+ "saldo": {
+  "antes": 686,
+  "depois": 680
+ }
+}

@@ -1,0 +1,9 @@
+{
+ "id": "01a1b191-5c54-77a1-8222-b6a1ade0f748",
+ "ai_model": "nano-banana-2",
+ "prompt": "Concept art of a single short piece of old train track with one small old train wagon resting on it, abandoned in nature, as a prop for a cozy low-poly 3D island game for children, cute and friendly, nothing dirty, rusty, broken or scary. Match exactly the art style of the reference screenshots: simple chunky rounded shapes, toy-like proportions, flat toon shading with three tones, soft saturated colors, no outlines, no realistic texture. The track is short, with wooden sleepers and two rails, and ends on both sides. No brand, no logo, no text. Nature has taken it gently: grass, moss and small flowers growing on it. Show only the track and the wagon, full object in frame, three-quarter view from slightly above, on a plain light grey background, no ground, no shadow, no characters. A small open cargo wagon in soft green, filled with soil and growing flowers and a little tree like a planter, mushrooms near the wheels.",
+ "status": "SUCCEEDED",
+ "consumed_credits": 6,
+ "created_at": 1793980456246,
+ "finished_at": 1793980478563
+}
