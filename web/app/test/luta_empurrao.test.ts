@@ -44,7 +44,7 @@ describe("a versao 18 e a chave", () => {
     expect(relogioDe(CV21E_TR).empurraoAlvo).toBeNull(); expect(RELOGIO_V14.empurraoAlvo).toBeNull();
     /* o RELOGIO_V18 e o da v14 com o empurrao: nada mais muda */
     expect({ ...RELOGIO_V18, empurraoAlvo: null }).toEqual(RELOGIO_V14);
-    expect(EMPURRAO_V18).toEqual({ forca: { investida: 40, pesado: 60 }, derruba: ["investida", "pesado"], queda: 62, deslize: 10, guarda: .5 });
+    expect(EMPURRAO_V18).toEqual({ forca: { investida: 40, pesado: 60 }, derruba: ["investida", "pesado"], queda: 62, deslize: 10, guarda: .5, defesa: 0 });
   });
   test("a v14 nao empurra nem derruba (nenhum evento de empurrao)", () => {
     const r = jogarTR(pesado(), postura("carregar"), 1, { R: CV21E_TR14, eventos: true });
@@ -88,14 +88,18 @@ describe("a forca de cada golpe e a queda (EMP-1, EMP-2, EMP-6)", () => {
 });
 
 describe("as posturas (EMP-5)", () => {
-  test("a defesa e o contra-golpe cortam o pesado pela metade e seguram a queda", () => {
+  test("o contra-golpe corta o pesado pela metade e segura a queda; a defesa nao e empurrada (EMP-5 trocada)", () => {
     /* entre duas posturas ha a brecha ate a proxima decisao (o ritmo): ali o pesado pega em cheio */
-    for (const p of ["defender", "contra_golpe"]) {
+    for (const [p, px] of [["defender", 0], ["contra_golpe", 30]] as const) {
       const r = jogarTR(pesado(), postura(p), 1, { R, eventos: true }), es = empurroes(r, 1);
-      expect(es.some(e => e.px === 30 && !e.queda), p).toBe(true);
+      const acertosNaPostura = r.eventos!.filter(e => e.tipo === "dano" && e.lado === 1 &&
+        r.acoes.some(a => a.lado === 1 && a.nome === p && e.t >= a.inicio && e.t < a.inicio + 125));
+      expect(acertosNaPostura.length, p).toBeGreaterThan(0);
+      if (px > 0) expect(es.some(e => e.px === px && !e.queda), p).toBe(true);
       for (const e of es) {
         const naPostura = r.acoes.some(a => a.lado === 1 && a.nome === p && e.t >= a.inicio && e.t < a.inicio + 125);
-        expect(e, p).toMatchObject(naPostura ? { px: 30, queda: false } : { px: 60, queda: true });
+        if (naPostura) expect(px, p).toBeGreaterThan(0);
+        expect(e, p).toMatchObject(naPostura ? { px, queda: false } : { px: 60, queda: true });
       }
     }
   });

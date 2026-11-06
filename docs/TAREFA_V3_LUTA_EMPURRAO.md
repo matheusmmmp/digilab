@@ -150,6 +150,20 @@ Cada etapa num PR, com o merge pelo Matheus.
   etapa para e volta ao Matheus, sem mexer nos números da seção 8.
 - **Os artefatos:** os JSON de cada bancada nas duas pastas e o `resumo.txt` com a tabela.
 
+### 4.2 A segunda medição: a defesa sem empurrão (registrada em 2026-11-06, antes da primeira luta dela)
+
+- **Por quê:** a primeira medição reprovou o gate (seção 9.1). O Matheus escolheu, nas palavras dele, "Testar defesa sem empurrão": a
+  EMP-5 muda só na defesa (`defender`). O golpe que acerta a defesa não empurra nem derruba; o contra-golpe e a pele dura seguem cortando
+  pela metade; a investida e o pesado seguem como nas EMP-1 a EMP-4 (desvio D-EMP-9).
+- **O código:** `EMPURRAO_V18.defesa = 0` (o campo novo `defesa` do `EmpurraoAlvo`; `guarda` = 0,5 fica para o contra-golpe e a pele).
+- **O comando** (em `web/app`, no máximo 4 processos, uma run): `python scripts/equilibrio_tr/medir_tudo.py --faixa calibracao2 --empurrao v18
+  --saida scripts/medicoes/equilibrio_tr/empurrao/depois_defesa0`; a tabela:
+  `python scripts/equilibrio_tr/resumo_metas.py scripts/medicoes/equilibrio_tr/empurrao/antes scripts/medicoes/equilibrio_tr/empurrao/depois_defesa0`.
+- **O "antes":** o mesmo da 4.1 (`empurrao/antes/`, igual à `r2_4b`, D-EMP-6); não roda de novo, porque o código da v14 não mudou.
+- **A faixa:** a mesma, `72101` a `72505` (calibração). Tempo estimado: ~7 min.
+- **O gate:** o mesmo da seção 4; o pedido do Matheus nomeia F-3, G-2, G-3 e o teto do T-2. Se ainda falhar, a etapa para e volta com a
+  tabela (meta, v14, v18 com a defesa sem empurrão, pior par).
+
 ## 5. Entrega
 
 - Testes: em `web/app`, `npm test`, `npm run tipos` e `npm run e2e` (no máximo 4 processos); o e2e `e2e/luta_layout.spec.ts` na etapa 5.
