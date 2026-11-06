@@ -422,3 +422,18 @@ recomendado": as recomendações abaixo valem como estão; registro D-SG-H).
   - **O `forge_doctor.py`, liberado pelo Matheus nesta sessão:**
     - as dependências estão OK;
     - o ffmpeg não aparece no PATH de um processo aberto antes da instalação, então a E2 passa o caminho do winget explicitamente.
+  - **A E1 rodada (2026-11-06), depois do crédito no fal.ai:**
+    - **A geração:** `master_still.py generate --takes 3` pela rota `api:fal` (`fal-ai/nano-banana-2/edit`), com
+      `--budget-usd 5 --max-calls 8`. O ledger registra 3 chamadas pagas e **US$ 0,24**.
+    - **As medidas** (`remaster/geracao/Agumon/still/master.json`, PROPOSTO), com os takes reduzidos à caixa de 94×68:
+
+      | take | silhueta XOR | pé | fora da paleta antes do snap | distância RGB média |
+      |---|---|---|---|---|
+      | take 0 | 0 | 58 | 0 | 0 |
+      | take 1 | 0 | 58 | 917 de 1 410 | 4,46 |
+      | take 2 | 0 | 58 | 927 de 1 410 | 4,62 |
+      | take 3 | 0 | 58 | 945 de 1 410 | 4,87 |
+
+      O gerador reproduziu a silhueta do take 0 e só deslocou as cores. A escala estimada é 10,04×.
+    - **O R-still** (`remaster/geracao/Agumon/revisoes/E1.md`): os 3 takes estão aprovados, e a recomendação é o take 1.
+    - **A folha de contato** (`still/contato_still_x4.png`) foi enviada ao Matheus.
