@@ -274,6 +274,28 @@ Matheus, 2026-11-05, nesta sessão (resposta "B, hooks antes"):
   - **L1-7:** os números (o círculo de 232 px, 12 células/s no WASD, o "seguir o pet" a partir de 6 células, a transição de 400 ms)
     **ficam PROPOSTO, SEM FONTE**. O Matheus não comentou nenhum deles.
 
+- **A prancha L2/L3, os menus como lugares da ilha, e as 13 perguntas dela** (Matheus, 2026-11-06: "Aprovar a prancha", à versão 2 do
+  commit `9a708694`, rebaseado como `b51fe31a`). Valem as recomendações das 13 perguntas, em `docs/PROPOSTAS_V3_UX_TELA_PET.md`, seção
+  "Lugares da ilha: menus (L2/L3)":
+  - **1:** os atalhos `C`/`L`/`D` para os lugares, `1`–`4` nas abas e `Esc` para voltar, só fora de campo de texto;
+  - **2:** a Fronteira continua aba de Lutar, trancada até o Nv 8;
+  - **3:** a vista anda até o lugar e volta ao sair; o pet do motor não se move (como o `CENA.treino`);
+  - **4:** o painel entra em 180 ms (do guia, seção 11);
+  - **5:** um `--hx-sombrio` nas duas peles, com o contraste conferido;
+  - **6:** as abas só em ícone, com o rótulo na ativa e na dica de foco ou de hover;
+  - **7:** uma conta de medalhas só na tela, a do Tamer, e o save das capturas conferido;
+  - **8:** "0/10 lutas" fica na Evolução, com o 80% no balão;
+  - **9:** no Catálogo, só as formas vistas mostram o nome;
+  - **10:** os efeitos curtos dos itens ficam num mapa na tela (`TelaItens.tsx`), sem tocar o motor;
+  - **11:** cada peça abre pelo próprio marco, e o "Tamer Nv N" é a contagem;
+  - **12:** no celular, o minimapa é o botão Mapa no leque do retrato;
+  - **13:** a folha do celular desce de y 400 a 390×844 (de y 380 a 360×800), com a alça para puxar.
+  - **Os números ficam PROPOSTO, SEM FONTE:** a câmera de 700 ms e a folha de ~53 % da tela. O Matheus não comentou nenhum dos dois.
+  - **A ordem do código** (pedido do coordenador, 2026-11-06): uma etapa e um PR por vez, empilhados sobre a L1 (`v3-ux-lugares`, PR #636).
+    - Primeiro a **L2**: Crescer no saco de pancada, desktop e celular, com os lugares todos abertos.
+    - Depois a **L3**: Lutar no portão e Diário na barraca, com os dois objetos CC0.
+    - Por último o código dos níveis e das travas (o plano `docs/PLANO_V3_PROGRESSAO_TUTORIAL.md`, PR #634).
+
 UX-4 a UX-8 continuam PROPOSTAS.
 
 ## 9. Etapa A0: os hooks restaurados (2026-11-05)
