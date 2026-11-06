@@ -168,3 +168,26 @@ com o pet). E-G11: o revisor (um subagente Sonnet que só viu o concept e as cap
 
 **Fora:** os marcos (E2 e E3); o fps no desktop e no celular.
 
+## 10. E2: o carro abandonado (2026-11-06, Gerente, Claude Code, Opus 5.5, branch `v3-mundo-enfeites-e2`)
+
+**O carro, pela Meshy:** quatro concepts (24 créditos); o Matheus escolheu o 3, a caminhonete azul-céu com um jardim na caçamba (a van
+lembrava demais um modelo real). Vistas (6) e malha (30): 1 946 triângulos (teto 2 414 dos marcos), a forma do concept; as flores da
+caçamba viraram pétalas pontudas, que ainda se leem como jardim. Saldo 800 → 740 (`docs/enfeites/carro/`). O conserto
+(`consertar_carro.py`): a malha fica; a cor chapada em oito cores (`paleta.json`), uma por face, com uma rodada pelos vizinhos.
+
+**O lugar dos marcos (a grade):** `ENFEITES_GRADE` passou a ter os números por enfeite; os postes vêm primeiro e saem iguais aos da E1.
+O carro fica só ao norte da área (o lado que a câmera da tela Pet vê), a até 12 células do ninho em x (onde a câmera mais fica), entre 1,5
+e 3 células da área, em chão plano com folga de 1 célula, a 2 das coisas altas e a 3 dos postes (a distância é a de quem chega; com 6, os
+postes do norte não deixavam lugar). Os marcos do norte são sorteados só na faixa (pela grade inteira, quase nenhum sorteio caía nela), com
+até 4 000 tentativas. Os do motor: mvp (10,4; −1,8) e padrão (4,5; −1,5). Os enfeites sem luz não usam a lanterna para o giro: a frente do
+glTF (+z) vira para a área, e a caminhonete mostra o lado com o jardim.
+
+**O caminho até o lugar:** primeiro, sorteado na moldura inteira, o carro caiu em x = 33, longe da casa; depois, a 2 a 5 células da área,
+ficou no platô atrás do barranco e de um tronco, pálido pela névoa; a 1,5 a 3 células, aparece inteiro na beira do platô.
+
+**Os gates:** E-G0 e E-G10 passam (com o norte e a casa no teste); E-G1 a E-G8 num teste (1 946 triângulos, 1024 px, 0 erros e 0 avisos no
+validador, cerca de 180 KB); E-G9: um draw call a mais, de dia e de noite (78 → 79 e 100 → 101 em 390; 85 → 86 e 106 → 107 em 1280;
+`D:\Trab\digilab\capturas_enfeites\referencia_e2\` e `\carro\`). E-G11: o revisor (um subagente Sonnet que só viu o concept e as
+capturas) **aprovou com ressalva**: pequeno e distante demais em 390 e à noite, o azul pouco saturado; o conserto foi o dele, a altura de
+1,3 para 1,9 e a paleta mais saturada (rodada 2), e as capturas refeitas. À noite ele escurece com a cena, como o resto da moldura.
+

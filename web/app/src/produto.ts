@@ -17,6 +17,6 @@ export const CHAMADOS_PELO_CORPO = true;
 export function ligarProduto(m: Motor): Motor {
   m.ligarProduto({ chamadoPelaFome: CHAMADO_PELA_FOME, decisaoNaComida: DECISAO_NA_COMIDA, chamadosPeloCorpo: CHAMADOS_PELO_CORPO });
   nascerComCerebro(m);
-  if (m.versao === VERSAO_V17 || m.versao === VERSAO_PET_LAB) m.ligarPonteLuta();   // a ponte da luta (PONTE_LUTA, PE3), como o "cb": so no ovo novo, depois dele
+  if (m.versao === VERSAO_V17 || m.versao === VERSAO_PET_LAB) m.ligarPonteLuta(true);   // a ponte da luta (PONTE_LUTA, PE3) com o epsilon pelo g_exp (PE4: { luta, eps }), como o "cb": so no ovo novo, depois dele
   return m;
 }

@@ -51,6 +51,9 @@ export type NomeItem = keyof typeof ITENS_MODELOS;
    ilha); a altura e a de um poste na escala do pet (o pet tem cerca de 1 celula). PROPOSTO, SEM FONTE */
 export const ENFEITES_MODELOS = {
   poste: { arquivos: ["poste/poste.gltf"], altura: 3.0, vento: 0, sombra: 0.4, baixo: false },
+  /* o carro: a caminhonete com o jardim na cacamba, gerada pela Meshy (E2); maior que um carro na escala do pet, como um brinquedo, para
+     ser visto na beira do plato (o revisor achou 1,3 pequeno demais) */
+  carro: { arquivos: ["carro/carro.gltf"], altura: 1.9, vento: 0, sombra: 1.3, baixo: false },
 } as const satisfies Record<string, Modelo>;
 export type NomeEnfeite = keyof typeof ENFEITES_MODELOS;
 /** a mascara das partes que acendem a noite (o emissiveMap; fora do glTF, ao lado dele), por enfeite que tem luz */

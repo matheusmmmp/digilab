@@ -31,6 +31,7 @@ import { eventoDeixarBola, eventoDeixarComida, lerDeixarBola, lerDeixarComida, t
 import { bracoV11 } from "./pet_v11.ts";
 import { leituraLab, type LeituraLab } from "./digibrain/leitura.ts";
 import { DigiBrain } from "./digibrain/adapt.ts";
+import { INATOS_MODULAR } from "./digibrain/constantes.ts";
 import { leituraAprendido, leituraDecisao, mapaDecisao, mapaPesos, type ArestaMapa, type LeituraDecisao, type MapaDecisao } from "./digibrain.ts";
 import { desafiadoDaVersao, regrasDaVersao, type Lutador, type RegrasLuta, type ResultadoLuta, type Desafiado } from "./combate.ts";
 import { ConfiancaCombate } from "./confianca.ts";
@@ -160,6 +161,17 @@ export class Motor {
   private produtoLido = false;
   /** a ponte da luta (PE3): o registro tem a marca "pl" (ovo novo v16/v17); sem ela, a luta passa ao lado do corpo e do cerebro, como hoje */
   ponteLuta = false;
+  /** PE4: a marca "pl" tem eps; o epsilon da luta le o g_exp da ultima decisao do modular (so com o modular ativo) */
+  epsLuta = false;
+  /** PE4 (docs/TAREFA_V3_PONTE_LUTA.md, 3.3 e 3.7): o fator g_exp / e0 do epsilon da luta, lido da ultima decisao do modular (sem decisao nova
+      nem rng; e0 = 512 e S = 1024 sao potencias de 2, a divisao e exata). null: o epsilon e o de hoje (sem a marca eps, com o A ativo, ou
+      antes da primeira decisao do modular) */
+  fatorEpsLuta(): number | null {
+    if (!this.epsLuta || this.lab === null) return null;
+    const m = this.lab.ultimoMotivo;
+    if (m === null) return null;
+    return (m["afeto"] as { g_exp: number }).g_exp / INATOS_MODULAR.e0;
+  }
   sparring = 0;
   motivos: MotivoVida[] = [];
   motivo: MotivoVida | null = null;
@@ -391,18 +403,22 @@ export class Motor {
   /** a ponte da luta (PE3), uma vez, no comeco do registro de um ovo v16 ou v17 (depois das chaves do produto e do "cb" do ovo): a luta passa a
       entregar o resumo ao corpo e, com o modular ativo, ao DigiBrain. O jogo grava nos ovos novos (src/produto.ts); a pesquisa e os gabaritos
       nunca chamam */
-  ligarPonteLuta(): void {
-    const v = { luta: true as const };
+  ligarPonteLuta(eps = false): void {
+    /* PE4: com `eps`, a marca e { luta: true, eps: true } e o epsilon da luta passa a ler o g_exp do modular; sem ela ({ luta: true }, os
+       saves da PE3) o epsilon e o de hoje, byte a byte */
+    const v = eps ? { luta: true as const, eps: true as const } : { luta: true as const };
     this._ponteLuta(v);
     this.log.push([this.e.tick, "pl", v]);
   }
   private _ponteLuta(v: unknown): void {
-    if (!v || typeof v !== "object" || Object.keys(v).join() !== "luta" || (v as { luta: unknown }).luta !== true)
+    const chaves = v && typeof v === "object" ? Object.keys(v).join() : "";
+    if (!v || typeof v !== "object" || (chaves !== "luta" && chaves !== "luta,eps") || (v as { luta: unknown }).luta !== true
+      || (chaves === "luta,eps" && (v as { eps: unknown }).eps !== true))
       throw new Error(`marca da ponte da luta inválida: ${JSON.stringify(v)}`);
     if (this.versao !== VERSAO_V17 && this.versao !== VERSAO_PET_LAB) throw new Error(`só os pets v${VERSAO_PET_LAB} e v${VERSAO_V17} têm a ponte da luta (este é v${this.versao})`);
     if (this.ponteLuta || this.nDecisoes || this.nDono || this.e.tick !== TICK_INICIAL)
       throw new Error("a marca da ponte da luta vai uma vez, no começo do registro");
-    this.ponteLuta = true;
+    this.ponteLuta = true; this.epsLuta = chaves === "luta,eps";
     (this.v11!.laco as MotorCorpoMundo).corpo.luta = CONFIG_LUTA_CORPO_LIGADA;
     this.modular?.ligarLutaMemoria();                    // o modular da v16 e o da v17 com o "cb" do ovo (o "cb" de depois liga em _trocarCerebro)
   }
@@ -1147,7 +1163,7 @@ export class Motor {
       ...(this.versao === VERSAO_PET_LAB ? [["lab", { ...this.modular!.estadoInterno(), motivos: undefined }]] : []),
       /* a v17 depois do primeiro "cb": o cerebro que decide e o modular (a v17 sem "cb" assina como a v15) */
       ...(this.cerebroEscolhido ? [["cb", this.modularAtivo ? "modular" : "a", this.modular ? { ...this.modular.estadoInterno(), motivos: undefined } : null]] : []),
-      ...(this.ponteLuta ? [["pl", true]] : []),      /* a ponte da luta: so com a marca (a assinatura dos pets sem ela nao muda) */
+      ...(this.ponteLuta ? [this.epsLuta ? ["pl", "eps"] : ["pl", true]] : []),   /* a ponte da luta: so com a marca (a assinatura dos pets sem ela nao muda) */
       ["v11", this.v11!.braco.cerebro.estadoInterno(), this.v11!.laco.estadoDict(), this.v11!.laco.proximaDecisao],
       ["mundo", this.mundo!.resumo(), [...(this.v11!.laco as MotorCorpoMundo).vistosEm]]]);
   }
