@@ -114,7 +114,7 @@
   --hx-mascara:repeating-linear-gradient(90deg,#000 0 7px,transparent 7px 9px);
   /* semantica do UI_GUIDELINES §3 na pele escura: destaque (amarelo), perigo, ok (verde), necessidade (rosa), aprendido (ciano); sao dados
      do pet e ficam nas duas peles */
-  --hx-alerta:#FFB020; --hx-perigo:#E07C7C; --hx-ok:#4BE07E; --hx-necessidade:#FF7FC0; --hx-aprendido:#6FE3FF;
+  --hx-alerta:#FFB020; --hx-perigo:#E07C7C; --hx-sombrio:#D3B6FA; --hx-ok:#4BE07E; --hx-necessidade:#FF7FC0; --hx-aprendido:#6FE3FF;
   --hx-foco:#F4F1E4;
   --hx-f:"Saira Condensed", "Rajdhani", system-ui, sans-serif;
   --hx-f-num:var(--hx-f); --hx-num:var(--hx-texto);
@@ -152,7 +152,7 @@
   --hx-hachura:none; --hx-hachura-verde:none;
   --hx-btn-bg:rgba(58,168,255,.26); --hx-btn-ink:#F2FAFF; --hx-btn-borda:#5FD4FF;
   --hx-medidor:#5FD4FF; --hx-medidor-trilho:rgba(95,190,255,.16);
-  --hx-alerta:#FFBE45; --hx-perigo:#F7B4B4;
+  --hx-alerta:#FFBE45; --hx-perigo:#F7B4B4; --hx-sombrio:#D3B6FA;
   --hx-foco:#FFFFFF;
   --hx-f:"Barlow", system-ui, sans-serif;
   --hx-f-num:"Rajdhani", system-ui, sans-serif; --hx-num:#7FE3FF;

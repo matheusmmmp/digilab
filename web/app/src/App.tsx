@@ -35,6 +35,12 @@ import { MeusPets } from "./telas/pet/MeusPets.tsx";
 import { TopoHabitat } from "./componentes/Topo.tsx";
 import { Habitat } from "./componentes/Habitat.tsx";
 import { PainelLado, PainelModal, type DadosPainel } from "./componentes/PainelTela.tsx";
+import { LugarFolha, LugarLado, type DadosLugar } from "./componentes/PainelLugar.tsx";
+import { Brain, Dumbbell, GitBranch, Package, Sprout } from "lucide-react";
+import { MarcasDoLugar } from "./componentes/MarcasDoLugar.tsx";
+import { ligarAtalhosLugar } from "./atalhosLugar.ts";
+import { entrarLugar, sairLugar } from "./viagem.ts";
+import { soltarTeclas } from "./telas/pet/cameraLivre.ts";
 import { DicaBit } from "./componentes/Bit.tsx";
 import { AcoesMeusPets, MeusPetsDesktop } from "./telas/pet/MeusPetsDesktop.tsx";
 import { useDesktop, usePainelLado } from "./desktop.ts";
@@ -49,6 +55,11 @@ import { dicasDoMomento, type IdDica } from "./dicas.ts";
 import { CHAVE } from "./save.ts";
 
 const armaz = (): Storage => localStorage;
+
+/** os icones das abas do lugar (Crescer, L2): so a escolhida mostra o rotulo; as teclas 1 a 4 trocam de aba */
+const ICONE_ABA: Partial<Record<Aba, ReactNode>> = {
+  treinar: <Dumbbell aria-hidden="true" />, aprend: <Brain aria-hidden="true" />, evolucao: <GitBranch aria-hidden="true" />, itens: <Package aria-hidden="true" />,
+};
 
 /* slogan so na primeira visita (preferencia de tela, chave propria; a chave do save nao muda) */
 function primeiraVisita(): boolean {
@@ -176,14 +187,34 @@ export function App() {
     : rota.aba === "catalogo" ? <TelaCatalogo /> : rota.aba === "geracoes" ? <TelaGeracoes /> : rota.aba === "chat" ? <TelaConversar voltar={irPet} /> : <TelaCenarios />;
   const idBase = "painel-aba";
   let painel: { d: DadosPainel; corpo: ReactNode } | null = null;
+  let lugar: { d: DadosLugar; corpo: ReactNode } | null = null;
   if (importando && desk) painel = { d: { titulo: "Importar pet", fechar: fecharImportar, idBase }, corpo: <ImportarPet pagina fechar={fecharImportar} /> };
   else if (her && desk) painel = { d: { titulo: "Nova geração", fechar: fecharHeranca, idBase }, corpo: <Heranca pagina pai2={her.pai2} fim={irPet} /> };
   else if (meusPets && desk) painel = { d: { titulo: "Meus pets", fechar: () => setMeusPets(false), idBase }, corpo: <><div className="painel-tela__acoes"><AcoesMeusPets /></div><MeusPetsDesktop fechar={() => setMeusPets(false)} /></> };
   else if (config) painel = { d: { titulo: "Ajustes", fechar: fecharPainel, idBase }, corpo: <TelaConfig parte={config} abrir={abrirConfig} fechar={() => { setConfig(null); scrollTo(0, 0); }} irPet={irPet} /> };
+  /* Crescer e um lugar da ilha (L2): o painel ao lado do saco de pancada, com a ilha viva em volta; so com o mundo (os pets sem mundo ficam na sala) */
+  else if (rota.destino === "crescer" && !!jogo.motor.mundo) lugar = {
+    d: { titulo: NOME_DESTINO.crescer, sub: "saco de pancada", icone: <Sprout aria-hidden="true" />, idBase,
+      abas: abas.map((a, i) => ({ id: a, rotulo: NOME_ABA[a], icone: ICONE_ABA[a], atalho: String(i + 1) })), aba: rota.aba, irAba: id => ir({ destino: rota.destino, aba: id as Aba }), fechar: fecharPainel },
+    corpo: corpoDestino(),
+  };
   else if (rota.destino !== "pet") painel = {
     d: { titulo: NOME_DESTINO[rota.destino], abas: abas.map(a => ({ id: a, rotulo: NOME_ABA[a] })), aba: rota.aba, irAba: id => ir({ destino: rota.destino, aba: id as Aba }), fechar: fecharPainel, idBase },
     corpo: corpoDestino(),
   };
+  /* a viagem da camera: entrar no lugar leva a camera e o pet ao saco; sair os traz de volta (so vista, viagem.ts) */
+  const noLugar = !!lugar;
+  useEffect(() => { if (noLugar) { soltarTeclas(); entrarLugar(); } else sairLugar(); }, [noLugar]);
+  /* os atalhos diretos (atalhosLugar.ts): C, 1 a 4 e Esc; valem so com a casca livre (sem luta, boas-vindas, aviso ou tela por cima) */
+  const ref = useRef({ ativo: false, emCrescer: false, aba: "" });
+  ref.current = { ativo: !emLuta && !boasVindas && !comoJogar && !escolhendoBrasao && !descartados && !avisoTR && !conclusao && !config && !meusPets && !importando && !her,
+    emCrescer: rota.destino === "crescer", aba: rota.aba };
+  useEffect(() => ligarAtalhosLugar({
+    ativo: () => ref.current.ativo, emCrescer: () => ref.current.emCrescer,
+    abrirCrescer: () => acoes.current.abrir(), irAba: i => acoes.current.aba(i), sair: () => acoes.current.sair(),
+  }), []);
+  const acoes = useRef({ abrir: () => {}, aba: (_i: number) => {}, sair: () => {} });
+  acoes.current = { abrir: () => irDestino("crescer"), aba: i => { const a = DESTINOS.crescer[i]; if (a) ir({ destino: "crescer", aba: a }); }, sair: fecharPainel };
   if (emLuta) return (
     <div className="app app--tela-cheia">
       <TelaLuta sair={sairDaLuta} verReplay={verReplay} sairReplay={sairReplay} pedidoDesistir={pedidoDesistir} fecharPedido={() => setPedidoDesistir(false)} />
@@ -195,7 +226,7 @@ export function App() {
   const abrirMeusPets = () => { sairDoLab(); setMeusPets(true); };
 
   return (
-    <div className={"app app--habitat " + (painel ? "app--painel" : "app--pet")}>
+    <div className={"app app--habitat " + (lugar ? "app--painel app--lugar" : painel ? "app--painel" : "app--pet")}>
       <div className="avisos">
       <AvisoSom />
       {jogo.erroSave && (
@@ -221,9 +252,11 @@ export function App() {
       <DicaBit />
       {/* o habitat (a cena do Pet) e a camada de fundo de toda rota: fica montado, nao sobe nem desce ao trocar de destino */}
       <Habitat escurecer={!!painel} />
-      <TopoHabitat abrirMeusPets={abrirMeusPets} irConversar={() => irDestino("conversar")} irDestino={irDestino} abrirConfig={() => abrirConfig("principal")} />
-      {!painel && <TelaPet irRegistro={() => ir({ destino: "diario", aba: "registro" })} irEvolucao={() => { ir({ destino: "crescer", aba: "evolucao" }); scrollTo(0, 0); }}
+      <TopoHabitat lugar={!!lugar} abrirMeusPets={abrirMeusPets} irConversar={() => irDestino("conversar")} irDestino={irDestino} abrirConfig={() => abrirConfig("principal")} />
+      {!painel && !lugar && <TelaPet irRegistro={() => ir({ destino: "diario", aba: "registro" })} irEvolucao={() => { ir({ destino: "crescer", aba: "evolucao" }); scrollTo(0, 0); }}
         abrirConfig={() => abrirConfig("principal")} abrirMeusPets={abrirMeusPets} />}
+      {lugar && lado && <MarcasDoLugar />}
+      {lugar && (lado ? <LugarLado d={lugar.d}>{lugar.corpo}</LugarLado> : <LugarFolha d={lugar.d}>{lugar.corpo}</LugarFolha>)}
       {painel && (lado ? <PainelLado d={painel.d}>{painel.corpo}</PainelLado> : <PainelModal d={painel.d}>{painel.corpo}</PainelModal>)}
       {lado && nav}
       <RevelacaoEvolucao continuar={() => { ir({ destino: "crescer", aba: "evolucao" }); scrollTo(0, 0); }} />

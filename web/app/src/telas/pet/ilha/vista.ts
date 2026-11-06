@@ -8,6 +8,8 @@
    - o dia e a noite do motor (eNoite) escurecem o ceu, a nevoa, a luz e a agua;
    - a camera solta (cameraLivre.ts, L1 de "Lugares da ilha"): a partir de 900 px e com o controle "Livre", a camera olha um ponto que
      pode sair do pet (o foco); a dobra e a camera centram nele, e a vista publica a cada quadro o que o minimapa e a HUD leem;
+   - a viagem ao lugar (viagem.ts, L2 de "Lugares da ilha"): com Crescer aberto, a camera vai ao saco de pancada (deixando-o a esquerda do painel, no
+     celular no alto, acima da folha) e o pet desenhado anda ate ele e fica; ao sair, os dois voltam. So o desenho, como a coreografia abaixo;
    - a coreografia (docs/TAREFA_V3_HABITAT_OBJETOS.md): pedido um treino (CENA.treino), o pet desenhado vai ao saco de pancada, bate e
      volta (TREINO_MS); quando o motor rola a bola (uma rolagem nova no Mundo), o pet da um golpe nela. So o desenho: a posicao do motor,
      o ganho do treino e o log nao mudam.
@@ -31,6 +33,7 @@ import { ORBITA, aplicarOrbita, ligarControles, recentrar } from "../orbita.ts";
 import { CONSULTA_SOLTA, VISTA, despublicarVista, focoDoQuadro, ligarCameraLivre, publicarVista, type Limites, type MapaDaIlha } from "../cameraLivre.ts";
 import { pixelsDoMapa } from "./minimapa.ts";
 import { PRESETS, Pos } from "./pos.ts";
+import { SACO_NA_TELA, ZOOM_LUGAR_MOVEL, lugarAberto, progressoViagem } from "../../../viagem.ts";
 
 const movimentoReduzido = (): boolean => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -54,6 +57,10 @@ class VistaIlha {
   /** a fracao da altura do canvas em que a camera enquadra a cena (1 de 900 px em diante; no celular, a altura menos o pe reservado, reservaDoPe) */
   private fracEnq = 1;
   private afast = 1;
+  /** o afastamento do retrato sem o zoom do lugar (ajustar); `afast` e ele vezes o zoom da viagem (so abaixo de 900 px) */
+  private afastBase = 1;
+  /** a largura de 900 px em diante (lida em ajustar, nao a cada quadro) */
+  private largo = true;
   private noite: boolean | null = null;
   private ultimo = performance.now();
   private petCel: [number, number] = [0, 0];
@@ -151,6 +158,7 @@ class VistaIlha {
   /** ajusta o canvas a caixa (px de CSS): a resolucao, a proporcao e o afastamento da camera em retrato */
   ajustar(larguraCss: number, alturaCss: number): void {
     this.larguraCss = Math.max(1, larguraCss); this.alturaCss = Math.max(1, alturaCss);
+    this.largo = typeof matchMedia === "function" && matchMedia("(min-width: 900px)").matches;
     this.renderer.setPixelRatio(this.baixa ? 1 : Math.min(RAZAO_MAX, devicePixelRatio || 1));
     this.renderer.setSize(this.larguraCss, this.alturaCss, false);
     this.canvas.style.width = `${this.larguraCss}px`; this.canvas.style.height = `${this.alturaCss}px`;
@@ -163,7 +171,8 @@ class VistaIlha {
     /* a largura vista na altura do pet, com a camera do POC; em retrato, a camera se afasta ate caber LARGURA_MIN */
     /* o afastamento do retrato e o da camera do habitat (sem a orbita: o zoom nao se desfaz aqui) */
     const fundo = this.profundidadeDoPet(1, this.cam), larg = 2 * fundo * Math.tan(THREE.MathUtils.degToRad(this.cam.fov / 2)) * this.camera.aspect;
-    this.afast = Math.min(AFASTAR_MAX, Math.max(1, LARGURA_MIN / larg));
+    this.afastBase = Math.min(AFASTAR_MAX, Math.max(1, LARGURA_MIN / larg));
+    this.afast = this.afastBase;
     this.camera.updateProjectionMatrix();
     /* a nevoa e o texel dependem tambem da orbita */
     this.orbitaVersao = -1;
@@ -198,7 +207,7 @@ class VistaIlha {
 
   /** a coreografia sobre a posicao do motor (`motorCel`, celulas): o treino no saco e a batida na bola. Devolve onde desenhar o pet, o
       golpe e se a vista o esta movendo */
-  private coreografia(mu: Mundo, agora: number, motorCel: [number, number], reduzido: boolean)
+  private coreografia(mu: Mundo, agora: number, motorCel0: [number, number], reduzido: boolean, viagem: number)
       : { cel: [number, number]; golpe: { desde: number; alvo: [number, number] } | null; andando: boolean } {
     /* a batida na bola: uma rolagem nova; o pet olha para onde a bola vai (parada, para onde ela esta) */
     const n = mu.rolagens.length, sub = mu.cm.sub;
@@ -211,17 +220,21 @@ class VistaIlha {
     /* o treino: um pedido novo comeca do lugar em que o pet esta; ele para a GOLPE_DIST do saco, ao lado dele na tela (ao longo da
        direita da camera no chao, que gira com a camera livre), do lado em que o pet ja esta: nem na frente do saco, nem atras */
     const [sx, sz] = this.itens.sacoEm;
+    /* a viagem ao lugar: o pet anda do que o motor diz ate o lado esquerdo do saco na tela (o painel abre a direita) e fica; o treino parte
+       dai e volta para ca. `motorCel` e, daqui para baixo, onde o pet estaria sem o treino */
+    const motorCel: [number, number] = viagem > 0 ? this.entre(motorCel0, this.pontoDoLugar(), reduzido ? 1 : this.suave(viagem)) : motorCel0;
+    const emViagem = viagem > 0 && viagem < 1 && !reduzido;
     if (CENA.treino !== null && CENA.treino !== this.treinoVisto) {
       this.treinoVisto = CENA.treino;
       const dir = new THREE.Vector3(1, 0, 0).applyQuaternion(this.camera.quaternion), h = Math.hypot(dir.x, dir.z) || 1;
-      const [rx, rz] = [dir.x / h, dir.z / h], lado = (motorCel[0] - sx) * rx + (motorCel[1] - sz) * rz >= 0 ? 1 : -1;
+      const [rx, rz] = [dir.x / h, dir.z / h], lado = viagem > 0 ? -1 : (motorCel[0] - sx) * rx + (motorCel[1] - sz) * rz >= 0 ? 1 : -1;
       this.treino = { pedido: CENA.treino, desde: agora, ponto: [sx + lado * rx * GOLPE_DIST, sz + lado * rz * GOLPE_DIST], golpe: -1 };
     }
     const t = this.treino;
-    if (!t) return { cel: motorCel, golpe: this.bateBola, andando: this.seguidor.caminhando };
+    const caminhando = viagem <= 0 && this.seguidor.caminhando;
+    if (!t) return { cel: motorCel, golpe: this.bateBola, andando: emViagem || caminhando };
     const dt = agora - t.desde, { ida, golpes, volta } = TREINO_MS, ponto = t.ponto;
-    const suave = (f: number) => (reduzido ? 1 : f * f * (3 - 2 * f)), entre = (a: [number, number], b: [number, number], f: number): [number, number] =>
-      [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f];
+    const suave = (f: number) => (reduzido ? 1 : this.suave(f)), entre = (a: [number, number], b: [number, number], f: number) => this.entre(a, b, f);
     if (dt < ida) return { cel: entre(motorCel, ponto, suave(dt / ida)), golpe: null, andando: !reduzido };
     if (dt < ida + golpes) {
       const k = Math.floor((dt - ida) / GOLPE_MS), desde = t.desde + ida + k * GOLPE_MS;
@@ -231,7 +244,36 @@ class VistaIlha {
     }
     if (dt < ida + golpes + volta) return { cel: entre(ponto, motorCel, suave((dt - ida - golpes) / volta)), golpe: null, andando: !reduzido };
     this.treino = null;
-    return { cel: motorCel, golpe: this.bateBola, andando: this.seguidor.caminhando };
+    return { cel: motorCel, golpe: this.bateBola, andando: emViagem || caminhando };
+  }
+
+  private suave(f: number): number { return f * f * (3 - 2 * f); }
+  private entre(a: [number, number], b: [number, number], f: number): [number, number] { return [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f]; }
+  /** a direita da camera no chao (unitaria): a direita da direcao em que ela olha */
+  private get direita(): [number, number] { return [-this.dirDobra[1], this.dirDobra[0]]; }
+  /** onde o pet fica no lugar: a GOLPE_DIST do saco, a esquerda dele na tela (o painel abre a direita) */
+  private pontoDoLugar(): [number, number] {
+    const [sx, sz] = this.itens.sacoEm, [rx, rz] = this.direita;
+    return [sx - rx * GOLPE_DIST, sz - rz * GOLPE_DIST];
+  }
+  /** o ponto olhado com a viagem: do que a camera olharia sem ela ate o saco, deslocado para o saco ficar onde o painel deixa (a esquerda dele
+      de 900 px em diante; no alto, acima da folha, abaixo). `p` e o progresso (0 a 1) */
+  private focoDaViagem(base: [number, number], p: number, reduzido: boolean): [number, number] {
+    const [sx, sz] = this.itens.sacoEm, [rx, rz] = this.direita, [fx, fz] = this.dirDobra;
+    const ppc = Math.max(1e-6, this.ppu / this.renderer.getPixelRatio());      // px de CSS por celula na distancia do ponto olhado
+    let ax = sx, az = sz;
+    if (this.largo) {
+      /* o saco a esquerda do centro: o foco fica a direita dele */
+      const k = (0.5 - SACO_NA_TELA.largo) * this.larguraCss / ppc;
+      ax += rx * k; az += rz * k;
+    } else {
+      /* o saco acima do centro do quadro da camera: o foco fica antes dele, no chao (a distancia na tela encurta pelo seno da elevacao) */
+      const seno = Math.max(0.2, Math.abs(this.orbitaVista.desloc[1]) / (Math.hypot(...this.orbitaVista.desloc) || 1));
+      const k = (this.alturaCss * this.fracEnq / 2 - SACO_NA_TELA.movel * this.alturaCss) / ppc / seno;
+      ax -= fx * k; az -= fz * k;
+    }
+    const s = reduzido ? 1 : this.suave(p);
+    return this.entre(base, [ax, az], s);
   }
 
   /** um quadro: o pet onde o motor diz (interpolado), a camera atras dele, a racao e a bola, o dia ou a noite; devolve o retangulo do pet */
@@ -244,11 +286,17 @@ class VistaIlha {
     const dtMs = agora - this.ultimo, reduzido = movimentoReduzido(), jg = jogoAtual();
     const pos = this.seguidor.seguir(mu.pet, dtMs, cm, { velJogo: velocidadeAtual(), acao: m.acao, dorme: jg.nascendo > 0 || m.acao === "dormir", reduzido });
     this.ultimo = agora;
-    const cor = this.coreografia(mu, agora, [pos[0] / sub, pos[1] / sub], reduzido);
+    const viagem = progressoViagem(agora);
+    const cor = this.coreografia(mu, agora, [pos[0] / sub, pos[1] / sub], reduzido, viagem);
     this.petCel = cor.cel;
+    /* o zoom do lugar: abaixo de 900 px a camera se aproxima do saco com a viagem (o saco e o pet ficam grandes no terco de cima) e volta ao sair */
+    const zoom = viagem > 0 && !this.largo
+      ? 1 - (1 - ZOOM_LUGAR_MOVEL) * (reduzido ? 1 : this.suave(viagem)) : 1;
+    if (this.afastBase * zoom !== this.afast) { this.afast = this.afastBase * zoom; this.orbitaVersao = -1; }
     this.atualizarOrbita();
     const pode = this.podeSoltar;
     this.foco = focoDoQuadro(this.petCel, agora, dtMs, this.dirDobra, this.limites, pode);
+    if (viagem > 0) this.foco = this.focoDaViagem(this.foco, viagem, reduzido);
     const [px, pz] = this.foco, a = this.afast;
     const { desloc, olhar } = this.orbitaVista;
     this.camera.position.set(px + desloc[0] * a, desloc[1] * a, pz + desloc[2] * a);
@@ -305,6 +353,7 @@ class VistaIlha {
       petFora: fora, lado: Math.abs(lado) >= Math.abs(frente) ? (lado > 0 ? "direita" : "esquerda") : (frente > 0 ? "cima" : "baixo"),
       pxPorCelula: this.ppu / this.renderer.getPixelRatio(), senoElevacao: Math.abs(desloc[1]) / (Math.hypot(desloc[0], desloc[1], desloc[2]) || 1),
       mapa: this.mapa, limites: this.limites,
+      sacoTela: lugarAberto() ? this.paraTela(this.itens.sacoEm[0] * sub, this.itens.sacoEm[1] * sub) : undefined,
     }, true, pode);
   }
 
@@ -369,6 +418,8 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
     if (medida) medida.push(agora - ultimoQuadro);
     if (agora - ultimoQuadro > 500) janela = { inicio: agora, quadros: 0 };
     ultimoQuadro = agora;
+    /* com um lugar aberto (Crescer) o tempo nao conta: o painel de vidro sobre a cena nao pode degradar a ilha de vez */
+    if (lugarAberto()) janela = { inicio: agora, quadros: 0 };
     janela.quadros++;
     if (agora - janela.inicio >= QUEDA_MS) {
       if (!vista.qualidadeBaixa && (janela.quadros * 1000) / (agora - janela.inicio) < FPS_MIN) { vista.baixarQualidade(); ajustar(); }

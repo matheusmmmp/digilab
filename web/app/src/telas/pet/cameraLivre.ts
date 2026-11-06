@@ -11,6 +11,7 @@
 import { useSyncExternalStore } from "react";
 import { CENA } from "./cenaEstado.ts";
 import { aproximar, girar } from "./orbita.ts";
+import { lugarAberto } from "../../viagem.ts";
 
 /** celulas por segundo no WASD; a distancia (celulas) a partir da qual o "seguir o pet" aparece; a transicao (ms) ao voltar ao pet ou ir a
     um ponto do minimapa; o giro (rad) e o fator de zoom por toque de Q/E e de +/- */
@@ -53,6 +54,8 @@ export interface VistaPublicada {
   petFora: boolean; lado: Lado;
   /** px de CSS por celula na distancia do ponto olhado (o arrasto direito) e o seno da elevacao da camera */
   pxPorCelula: number; senoElevacao: number;
+  /** o pe do saco na tela (px do cliente), publicado depois da camera do quadro (a placa do lugar, L2) */
+  sacoTela?: Par;
   mapa: MapaDaIlha;
   limites: Limites;
 }
@@ -80,18 +83,21 @@ const movimentoReduzido = (): boolean => typeof matchMedia === "function" && mat
 
 /** solta a camera a partir do ponto olhado de agora (o pet, se ela seguia) */
 function soltar(): void {
+  if (lugarAberto()) return;      /* com um lugar aberto a camera esta no lugar: nada a solta */
   const v = VISTA.atual;
   if (!LIVRE.solta) LIVRE.foco = v ? [...v.foco] : LIVRE.foco;
   LIVRE.solta = true; LIVRE.trans = null;
 }
 /** anda o ponto olhado no plano da vista: `frente` e `lado` em celulas (frente: para onde a camera olha; lado: para a direita) */
 export function andar(frente: number, lado: number, f: Par, l: Limites): void {
+  if (lugarAberto()) return;
   soltar();
   /* a direita no chao e a frente girada 90 graus: com a frente para o norte (0, -1), a direita e o leste (1, 0) */
   LIVRE.foco = dentro([LIVRE.foco[0] + f[0] * frente - f[1] * lado, LIVRE.foco[1] + f[1] * frente + f[0] * lado], l);
 }
 /** leva a camera a um ponto (celulas); `transicao` falso: na hora (o arrasto no minimapa) */
 export function irPara(x: number, z: number, agora: number, transicao = true): void {
+  if (lugarAberto()) return;
   const v = VISTA.atual, alvo: Par = v ? dentro([x, z], v.limites) : [x, z];
   const de: Par = v ? [...v.foco] : alvo;
   LIVRE.solta = true;
@@ -100,11 +106,14 @@ export function irPara(x: number, z: number, agora: number, transicao = true): v
 }
 /** volta a camera ao pet e passa a segui-lo (com a transicao, sem ela com "reduzir movimento") */
 export function seguirPet(agora = performance.now()): void {
+  if (lugarAberto()) return;
   if (!LIVRE.solta) return;
   if (movimentoReduzido() || !VISTA.atual) { LIVRE.solta = false; LIVRE.trans = null; return; }
   LIVRE.trans = { de: [...VISTA.atual.foco], para: "pet", desde: agora };
 }
 /** de volta ao comeco (a camera segue o pet), sem transicao: o controle "Fixa", a largura do celular, a cena que desliga */
+/** solta as teclas de andar seguradas (ao entrar no lugar: um keyup perdido deixaria a camera andando ao sair) */
+export function soltarTeclas(): void { teclas.clear(); }
 export function zerarCamera(): void { LIVRE.solta = false; LIVRE.trans = null; teclas.clear(); }
 
 /** o ponto olhado deste quadro; `pet` e o desenhado (celulas), `dtMs` o tempo desde o anterior, `f` a frente da camera no chao.
@@ -169,7 +178,8 @@ function focoSolto(): boolean {
 /** liga o teclado e o arrasto direito/do meio; `pode` diz se a camera pode soltar agora (o controle "Livre" e a largura).
     Devolve a funcao que desliga */
 export function ligarCameraLivre(pode: () => boolean, elevacao0: () => number): () => void {
-  const livreAgora = () => pode() && !CENA.coberto;
+  /* com um lugar aberto (Crescer, L2) a camera esta no lugar: andar, girar e o arrasto direito ficam parados ate sair */
+  const livreAgora = () => pode() && !CENA.coberto && !lugarAberto();
   const baixo = (e: KeyboardEvent) => {
     /* uma tecla que um componente ja tratou (defaultPrevented) fica com ele */
     if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey || !livreAgora() || teclaDoCampo(e.target)) return;

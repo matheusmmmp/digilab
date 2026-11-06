@@ -440,3 +440,23 @@ seção "Lugares da ilha (L1)", e em `docs/pranchas/ux-lugares/`; as decisões, 
   minimapa só redesenha quando algo muda; nada publicado abaixo de 900 px). Os outros ficam como questões abertas no PR.
 - **As referências de captura a 1920** (`npm run capturas`) mudam nas telas Pet: o minimapa entra e a etiqueta sai. Não foram regravadas;
   isso espera o ok do Matheus.
+
+## 14. Etapa L2 de "Lugares da ilha": Crescer no saco de pancada (2026-11-06)
+
+**O que é.** O primeiro menu como lugar da ilha, pela prancha L2/L3 aprovada (`docs/pranchas/ux-lugares-menus/`, as 13 decisões na
+seção 8.1). Só Crescer, no desktop e no celular, com tudo aberto (as travas e os níveis são outra tarefa; Lutar e Diário são a L3). É só
+vista: o motor, o save, as rotas e os gabaritos não mudam. O branch é `v3-ux-lugares-menus`, sobre o `v3-ux-integra` (só a soma do #619
+com o #636).
+- **A viagem** (`src/viagem.ts`): abrir Crescer leva a câmera ao saco em 700 ms (PROPOSTO, SEM FONTE), e o pet anda até ele só na vista
+  e volta ao sair (`ilha/vista.ts`, junto da coreografia do `CENA.treino`). Corte seco com reduzir movimento, com `?viagem=0` ou com a
+  opção nova "Viagem da câmera" (Ajustes > Visual, chave própria do `localStorage`). Clique ou Esc durante a viagem pulam para o fim.
+- **O painel** (`src/componentes/PainelLugar.tsx`, `src/estilo/lugar.css`): a 1920, ao lado do saco, com a placa "Saco de pancada", o
+  conector e o minimapa da L1 só para ver (`MarcasDoLugar.tsx`); a 390, a folha que sobe da base (52,5 dvh: y 400 a 390×844), com a alça e
+  o ×, e a câmera mais perto. As abas em ícone, com o rótulo na ativa e na dica. Entra em 180 ms (o guia, seção 11).
+- **O texto:** o corte da prancha, com os balões (`src/componentes/Dica.tsx`) e o "Como funciona" fechado. À vista, com o save das capturas (o
+  Growlmon Champion) e a regex da prancha: Itens 60, Evolução 30 (mais 32 só para o leitor de tela, no aviso `role="status"`), Treinar
+  50, iguais a 1920 e a 390 (a prancha: ~61, ~30 e ~54).
+- **Os atalhos** (`src/atalhosLugar.ts`): C, 1 a 4 e Esc, só fora de campo de texto e sem modificador.
+- **O token `--hx-sombrio`** (`#D3B6FA`) nas duas peles, com o contraste no `test/hx_pele.test.ts`.
+- **As interpretações** estão em `docs/registro/2026-11.md` ("UX_TELA_PET L2"), e o relato inteiro, com as contagens, os portões e os
+  achados dos revisores, no corpo do PR.

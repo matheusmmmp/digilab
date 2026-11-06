@@ -81,7 +81,8 @@ function desenhar(ctx: CanvasRenderingContext2D, dpr: number, v: VistaPublicada,
   marcas.pet.current?.classList.toggle("chama", e.chama);
 }
 
-export function Minimapa({ chama = false }: { chama?: boolean }) {
+/** `soMostra`: so desenha (dentro do lugar, L2: a camera esta no lugar): sem foco, sem rotulo, sem teclado, roda nem ponteiro */
+export function Minimapa({ chama = false, soMostra = false }: { chama?: boolean; soMostra?: boolean }) {
   const { ativa, podeSoltar, solta } = useCameraLivre();
   const cv = useRef<HTMLCanvasElement>(null);
   const marcas: Marcas = { ninho: useRef(null), comedouro: useRef(null), saco: useRef(null), bola: useRef(null), pet: useRef(null) };
@@ -148,6 +149,7 @@ export function Minimapa({ chama = false }: { chama?: boolean }) {
       if (passo) { ev.preventDefault(); andar(passo[0], passo[1], v.frente, v.limites); return; }
       if (ev.code === "Enter") { ev.preventDefault(); seguirPet(); }
     };
+    if (soMostra) return () => cancelAnimationFrame(pedido);
     canvas.addEventListener("pointerdown", baixo);
     canvas.addEventListener("pointermove", mover);
     canvas.addEventListener("pointerup", cima);
@@ -165,17 +167,19 @@ export function Minimapa({ chama = false }: { chama?: boolean }) {
     };
     // as marcas sao refs estaveis; o laco le o estado pelo ref
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ativa]);
+  }, [ativa, soMostra]);
 
   if (!ativa) return null;
   return (
     <div className={"minimapa-caixa" + (podeSoltar ? "" : " fixa")}>
       {/* role="application": o minimapa trata as setas, o Enter e a roda por conta propria, e o leitor de tela precisa deixar essas teclas
           passarem (um "button" prometeria so Enter e Espaco). O nome e a descricao dos atalhos vao em aria-label e aria-describedby */}
-      <canvas ref={cv} className="minimapa" role="application" aria-label="Minimapa da ilha" aria-describedby={idDesc}
-        aria-keyshortcuts={podeSoltar ? "ArrowUp ArrowDown ArrowLeft ArrowRight Enter" : undefined}
-        tabIndex={podeSoltar ? 0 : -1} style={{ width: MINIMAPA_PX, height: MINIMAPA_PX }} />
-      <span id={idDesc} className="minimapa-desc">Clique ou arraste para levar a câmera. Setas movem a câmera, Enter volta ao pet, a roda aproxima.</span>
+      {soMostra
+        ? <canvas ref={cv} className="minimapa" role="presentation" tabIndex={-1} style={{ width: MINIMAPA_PX, height: MINIMAPA_PX, cursor: "default" }} />
+        : <canvas ref={cv} className="minimapa" role="application" aria-label="Minimapa da ilha" aria-describedby={idDesc}
+          aria-keyshortcuts={podeSoltar ? "ArrowUp ArrowDown ArrowLeft ArrowRight Enter" : undefined}
+          tabIndex={podeSoltar ? 0 : -1} style={{ width: MINIMAPA_PX, height: MINIMAPA_PX }} />}
+      {!soMostra && <span id={idDesc} className="minimapa-desc">Clique ou arraste para levar a câmera. Setas movem a câmera, Enter volta ao pet, a roda aproxima.</span>}
       <span className="minimapa-n" aria-hidden="true">N</span>
       <div ref={marcas.ninho} className="minimapa-marca minimapa-ic" aria-hidden="true"><Bed /></div>
       <div ref={marcas.comedouro} className="minimapa-marca minimapa-ic" aria-hidden="true"><Utensils /></div>

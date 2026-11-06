@@ -9,6 +9,7 @@ import {
   mapaCaido, mapasDisponiveis, useHabitat, type Camera, type Controle, type Habitat, type Mapa, type Visual,
 } from "../../habitat.ts";
 import { recentrar } from "../pet/orbita.ts";
+import { escolherViagem, useViagemLigada } from "../../viagem.ts";
 import type { Pele } from "../../pele.ts";
 import type { Tema } from "../../tema.ts";
 import { resumoAparencia } from "./EscolhaPele.tsx";
@@ -26,6 +27,11 @@ const DESCRICAO_CONTROLE: Record<Controle, string> = {
   fixa: "a câmera escolhida acima, sem mexer",
 };
 const CONTROLES: readonly Controle[] = ["livre", "fixa"];
+/** "Viagem da camera" (L2 de "Lugares da ilha"): so vista, numa chave propria do localStorage (viagem.ts), nunca no save */
+const VIAGENS = ["ligada", "desligada"] as const;
+type Viagem = typeof VIAGENS[number];
+const NOME_VIAGEM: Record<Viagem, string> = { ligada: "Ligada", desligada: "Desligada" };
+const DESCRICAO_VIAGEM: Record<Viagem, string> = { ligada: "Crescer leva a câmera até o saco de pancada", desligada: "corte seco, sem viagem" };
 const DESCRICAO_VISUAL: Record<Visual, string> = {
   normal: "a cena como ela é",
   "gba-hd": "pixel grande, cor clara e saturada (o jeito do Cassette Beasts)",
@@ -66,6 +72,7 @@ function Grupo<T extends string>({ id, titulo, opcoes, atual, nome, descricao, e
 
 export function EscolhaHabitat({ temMundo }: { temMundo: boolean }) {
   useHabitat();
+  const viagem = useViagemLigada();
   const { mapa, camera, visual, controle } = habitatEscolhido(), caido = mapaCaido(), mapas = mapasDisponiveis();
   const descMapa = (m: Mapa) => DESCRICAO[m] + (MAPAS_DEV.includes(m) ? " (só no modo dev)" : "");
   return (
@@ -76,6 +83,8 @@ export function EscolhaHabitat({ temMundo }: { temMundo: boolean }) {
         escolher={escolherControle} desligado={!temMundo} />
       {temMundo && controle === "livre" && <p className="mc-apoio">
         <button type="button" className="hx-btn" onClick={recentrar}>Recentralizar a câmera</button></p>}
+      <Grupo id="cfg-viagem" titulo="Viagem da câmera" opcoes={VIAGENS} atual={viagem ? "ligada" : "desligada"} nome={NOME_VIAGEM} descricao={v => DESCRICAO_VIAGEM[v]}
+        escolher={v => escolherViagem(v === "ligada")} desligado={!temMundo} />
       <Grupo id="cfg-visual" titulo="Visual do habitat" opcoes={VISUAIS} atual={visual} nome={NOME_VISUAL} descricao={v => DESCRICAO_VISUAL[v]} escolher={escolherVisual}
         desligado={!temMundo} colunas={3} />
       {caido && <p className="mc-apoio" role="status">O mapa {NOME_MAPA[caido]} não carregou nesta máquina (faltam os arquivos em Assets/kits3d); o habitat voltou para a Ilha.</p>}

@@ -14,7 +14,7 @@ export function Nav({ atual, ir, configAberta, abrirConfig }: { atual: Destino |
       {DESTINOS_BARRA.map(d => {
         const I = ICONE[d];
         return (
-          <button type="button" key={d} className="hx-nav__bt" aria-current={d === atual ? "page" : undefined} onClick={() => ir(d)}>
+          <button type="button" key={d} className="hx-nav__bt" aria-current={d === atual ? "page" : undefined} aria-keyshortcuts={d === "crescer" ? "C" : undefined} onClick={() => ir(d)}>
             <I className="hx-nav__ic" aria-hidden="true" /><span className="hx-nav__rot">{NOME_DESTINO[d]}</span>
           </button>
         );
