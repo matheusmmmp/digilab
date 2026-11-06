@@ -48,15 +48,16 @@ const glslVento = (amp: number) => `
 transformed.x += uVento * sin(uTempo * 1.7 + baseVento.x * 0.9 + baseVento.z * 0.6) * ${amp.toFixed(3)} * max(transformed.y, 0.0);
 transformed.z += uVento * cos(uTempo * 1.3 + baseVento.x * 0.5) * ${(amp * 0.5).toFixed(3)} * max(transformed.y, 0.0);`;
 
-/** liga a dobra do mundo (e o vento, se amp > 0) num material do three; devolve o mesmo material */
-export function curvar<M extends THREE.Material>(m: M, vento = 0): M {
+/** liga a dobra do mundo (e o vento, se amp > 0) num material do three; devolve o mesmo material. `mexer`: um trecho de GLSL depois do
+    begin_vertex (pode mudar `transformed`, com os uniforms da curva; as particulas do estilo digital, digital.ts), com o nome dele na chave */
+export function curvar<M extends THREE.Material>(m: M, vento = 0, mexer?: { nome: string; glsl: string }): M {
   m.onBeforeCompile = s => {
     Object.assign(s.uniforms, CURVA);
     s.vertexShader = GLSL_CURVA_PARS + s.vertexShader
-      .replace("#include <begin_vertex>", "#include <begin_vertex>" + (vento > 0 ? glslVento(vento) : ""))
+      .replace("#include <begin_vertex>", "#include <begin_vertex>" + (vento > 0 ? glslVento(vento) : "") + (mexer?.glsl ?? ""))
       .replace("#include <project_vertex>", GLSL_PROJETAR);
   };
-  m.customProgramCacheKey = () => `curva-${vento}`;
+  m.customProgramCacheKey = () => `curva-${vento}-${mexer?.nome ?? ""}`;
   return m;
 }
 
