@@ -16,8 +16,8 @@ export const ATLAS_CLIPES_URL = "../../../Assets/digilab_atlas_up_clipes.json";
 export type Quadro = [number, number, number, number, number, number];
 export type Clipe = "Idle" | "Run" | "Attack_1" | "Stun" | "Die" | "Evol" | ClipeAcao;
 /** acoes novas (docs/TAREFA_V3_SPRITES_ACOES.md, secao 3.4; missao M2): saem do Aseprite (remaster/acoes/export) e entram no atlas de clipes.
-    `<Tag>_objeto` e so a camada do objeto (a comida), com os mesmos quadros contados e os mesmos ms do clipe dele. Tocar e da M3. Do lote 1 (PR #597) entram tambem Feliz, Sacudir, Chamar e Emburrar; o jogo toca so o Comer e o Emburrar. */
-export const CLIPES_ACOES = ["Comer", "Comer_objeto", "Feliz", "Sacudir", "Chamar", "Emburrar"] as const;
+    `<Tag>_objeto` e so a camada do objeto (a comida), com os mesmos quadros contados e os mesmos ms do clipe dele. Tocar e da M3. Do lote 1 (PR #597) entram tambem Feliz, Sacudir, Chamar e Emburrar; o jogo toca so o Comer, o Emburrar e o Dormir (o quadro de dormir, 1 quadro, docs/TAREFA_V3_SPRITES_REACOES.md, R1). */
+export const CLIPES_ACOES = ["Comer", "Comer_objeto", "Feliz", "Sacudir", "Chamar", "Emburrar", "Dormir"] as const;
 export type ClipeAcao = typeof CLIPES_ACOES[number];
 const SUFIXO_OBJETO = "_objeto";
 /** os NPCs e os bots da luta (chaves npc_* e bot_*) nao precisam das acoes; as outras chaves do atlas de clipes sao as formas */

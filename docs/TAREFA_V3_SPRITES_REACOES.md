@@ -214,3 +214,10 @@ soma 30 % de retakes, a taxa observada na R1 (SEM FONTE além dela).
 
 Tudo junto, as 11 reações dos 60 custam perto de **US$ 95**, cerca de R$ 520. Começando pelas três da prioridade 2 (o cocô, a vitória e a
 derrota), são cerca de US$ 37,50.
+
+## 11. R1-jogo: o Dormir no jogo (2026-11-06)
+
+O quadro de dormir dos 60 Digimon (seção 9) entrou no jogo pelo mesmo caminho do Emburrar (#609). Os exports ganharam a tag `Dormir` (1 quadro), o atlas de clipes foi regenerado com `Dormir` em
+`CLIPES_ACOES` (em laço), e `papel.ts` desenha o quadro quando o pet dorme e a forma tem o clipe: sem achatar, sem escurecer, sem escala fracionária. O "zz" sai do topo da cabeça do quadro
+(`CENA.zzX`). Sem o clipe, o sono é o de hoje (`sono.ts`). O desvio está em `docs/registro/2026-11.md`, seção "SPRITES_REACOES, o Dormir no jogo". Nada mudou em `web/app/motor`, nos gabaritos nem
+em `digilab/`. Testes: `npm test` 94 arquivos, 937 passam; `npm run tipos` limpo; o e2e de capturas (Agumon e WarGreymon, 390 e 1280 px) passa, com o quadro no corpo e o atlas carregado.

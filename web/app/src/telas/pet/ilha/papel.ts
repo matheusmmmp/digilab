@@ -24,7 +24,8 @@ import { OVO, chaveSprite } from "../../../../motor/index.ts";
 import { atlasAtual, chaveUp, desenharSprite, dimSprite, quadroAgora, type AtlasOk, type Clipe } from "../../../atlas.ts";
 import { balancoOvo, jogoAtual } from "../../../jogo.ts";
 import { SONO, alturaSono } from "../sono.ts";
-import { SEM_GESTO, escolherComer, esquecerComer, marcarEmburrar, gestoAgora, type EscolhaComer } from "../cenaAcao.ts";
+import { SEM_GESTO, escolherComer, esquecerComer, marcarEmburrar, marcarDormir, gestoAgora, type EscolhaComer } from "../cenaAcao.ts";
+import { CENA } from "../cenaEstado.ts";
 import { flashDesde } from "../../../flash.ts";
 import { alargarCorte, unirCaixas, type Corte } from "./corte.ts";
 import { velocidadeAtual } from "../../../tempo.ts";
@@ -58,13 +59,13 @@ interface Folha { tex: THREE.CanvasTexture; w: number; h: number }
     do papel e o centro do que se ve do Digimon (a sombra cai embaixo dele, e a virada de lado nao o faz pular). O corte alargado pode
     passar das bordas do quadro: o que fica fora e transparente */
 function recortar(c: HTMLCanvasElement, corte: Corte): HTMLCanvasElement {
-  const B = BORDA_PAPEL, cw = corte.x1 - corte.x0 + 1, ch = Math.min(c.height, corte.pe), w = cw + 2 * B, h = ch + 2 * B;
+  const B = BORDA_PAPEL, topo = corte.topo ?? 0, cw = corte.x1 - corte.x0 + 1, ch = Math.min(c.height, corte.pe) - topo, w = cw + 2 * B, h = ch + 2 * B;
   const s = document.createElement("canvas");
   s.width = w; s.height = h;
   const g = s.getContext("2d");
   if (!g) throw new Error("canvas 2d indisponível");
   const sx0 = Math.max(0, corte.x0), sx1 = Math.min(c.width - 1, corte.x1);
-  if (sx1 >= sx0) g.drawImage(c, sx0, 0, sx1 - sx0 + 1, ch, B + sx0 - corte.x0, B, sx1 - sx0 + 1, ch);
+  if (sx1 >= sx0) g.drawImage(c, sx0, topo, sx1 - sx0 + 1, ch, B + sx0 - corte.x0, B, sx1 - sx0 + 1, ch);
   const d = g.getImageData(0, 0, w, h), px = d.data;
   for (let k = 3; k < px.length; k += 4) if (px[k] < 230) px[k] = 0;
   const opaco = (x: number, y: number) => x >= 0 && y >= 0 && x < w && y < h && px[(y * w + x) * 4 + 3] > 0;
@@ -89,6 +90,18 @@ function caixaOpaca(c: HTMLCanvasElement): Corte | null {
     pe = y + 1;
   }
   return x1 < 0 ? null : { x0, x1, pe };
+}
+/** a linha mais alta com pixel opaco (alfa >= 230) e o centro das colunas opacas dela (em meios texels: coluna + 0,5); null se nada e opaco */
+function topoOpaco(c: HTMLCanvasElement): { linha: number; cx: number } | null {
+  const g = c.getContext("2d", { willReadFrequently: true });
+  if (!g) throw new Error("canvas 2d indisponível");
+  const px = g.getImageData(0, 0, c.width, c.height).data;
+  for (let y = 0; y < c.height; y++) {
+    let x0 = -1, x1 = -1;
+    for (let x = 0; x < c.width; x++) if (px[(y * c.width + x) * 4 + 3] >= 230) { if (x0 < 0) x0 = x; x1 = x; }
+    if (x0 >= 0) return { linha: y, cx: (x0 + x1 + 1) / 2 };
+  }
+  return null;
 }
 /** o corte inteiro de um canvas (a grade de reserva: ela nao tem sombra nem folga) */
 const corteInteiro = (c: HTMLCanvasElement): Corte => ({ x0: 0, x1: c.width - 1, pe: c.height });
@@ -132,6 +145,9 @@ export class Papel {
   private readonly sombra: THREE.Mesh;
   private readonly folhas = new Map<string, Folha>();
   private readonly cortes = new Map<string, Corte>();
+  /** a coluna do topo do quadro Dormir (fracao da largura do papel, sem espelhar), por corte; `zzFx` e a de agora (null fora do quadro Dormir) */
+  private readonly zzs = new Map<string, number>();
+  private zzFx: number | null = null;
   private dono = "";                    // as folhas sao de um sprite so: trocou a forma, saem todas
   private clipe: Clipe = "Idle";
   private t0 = 0;
@@ -162,7 +178,7 @@ export class Papel {
   }
 
   /** a folha (textura com a borda) do quadro de agora: do atlas, ou da grade de reserva */
-  private folhaAgora(quadro: number, andando: boolean, agora: number, golpe: Passo["golpe"], comer: EscolhaComer, emburra: boolean): { folha: Folha; ovo: boolean } {
+  private folhaAgora(quadro: number, andando: boolean, agora: number, golpe: Passo["golpe"], comer: EscolhaComer, emburra: boolean, dormeQ: boolean): { folha: Folha; ovo: boolean } {
     const { motor: m, nascendo } = jogoAtual(), a = atlasAtual();
     if (a.tipo !== "ok") {
       const f = fonteDoPet(quadro);
@@ -173,18 +189,38 @@ export class Papel {
     if (come && !s?.clipes?.Comer) throw new Error("o comer escolheu o clipe Comer num sprite sem ele: " + nome);
     const emb = emburra && !ovo && !bate && !come;
     if (emb && !s?.clipes?.Emburrar) throw new Error("o emburrar escolheu o clipe Emburrar num sprite sem ele: " + nome);
-    const clipe: Clipe = bate ? "Attack_1" : come ? "Comer" : emb ? "Emburrar" : !ovo && andando && s?.clipes?.Run ? "Run" : "Idle";
+    const dorm = dormeQ && !ovo && !bate && !come && !emb;
+    if (dorm && !s?.clipes?.Dormir) throw new Error("o sono escolheu o clipe Dormir num sprite sem ele: " + nome);
+    const clipe: Clipe = bate ? "Attack_1" : come ? "Comer" : emb ? "Emburrar" : dorm ? "Dormir" : !ovo && andando && s?.clipes?.Run ? "Run" : "Idle";
     if (clipe !== this.clipe || (bate && golpe!.desde !== this.golpeDesde)) { this.clipe = clipe; this.t0 = bate ? golpe!.desde : agora; }
     this.golpeDesde = bate ? golpe!.desde : null;
     if (come) this.t0 = comer.desde;
     const iq = ovo ? 0 : quadroAgora(a, nome, m.acao === "dormir" && !bate, clipe, this.t0), sombria = !ovo && m.sombria;
-    const corte = bate || come || emb ? this.corteAlargado(a, nome, sombria, clipe) : this.corte(a, nome, sombria);
+    const corte = dorm ? this.corteDormir(a, nome, sombria) : bate || come || emb ? this.corteAlargado(a, nome, sombria, clipe) : this.corte(a, nome, sombria);
     return { folha: this.folha(`${nome}|${clipe}|${iq}|${sombria ? 1 : 0}`, () => recortar(quadroAtlas(a, nome, iq, sombria, clipe), corte)), ovo };
   }
   /** a forma de agora tem o clipe Emburrar no atlas? (sem atlas, no ovo ou sem o clipe: fica o tremor de cenaAcao.ts) */
   private temEmburrar(): boolean {
     const { motor: m, nascendo } = jogoAtual(), a = atlasAtual();
     return a.tipo === "ok" && nascendo <= 0 && !!a.dados.sprites[chaveUp(a.dados, chaveSprite(m.forma))]?.clipes?.Emburrar;
+  }
+  /** a forma de agora tem o clipe Dormir no atlas? (sem atlas, no ovo ou sem o clipe: fica o sono de sono.ts, achatado) */
+  private temDormir(): boolean {
+    const { motor: m, nascendo } = jogoAtual(), a = atlasAtual();
+    return a.tipo === "ok" && nascendo <= 0 && !!a.dados.sprites[chaveUp(a.dados, chaveSprite(m.forma))]?.clipes?.Dormir;
+  }
+  /** o corte do quadro Dormir: o alargado (mesmo centro e mesmo pe do Idle) e, em cima, so a partir do topo do que e opaco, para o retangulo
+      do pet comecar na cabeca (o "zz" sai dali). Guarda a coluna do topo (fracao da largura do papel, sem espelhar) em `zzFx` */
+  private corteDormir(a: AtlasOk, nome: string, sombria: boolean): Corte {
+    const ch = `${nome}|${sombria ? 1 : 0}|Dormir`, pronto = this.cortes.get(ch);
+    if (pronto) { this.zzFx = this.zzs.get(ch) ?? null; return pronto; }
+    const q = quadroAtlas(a, nome, 0, sombria, "Dormir"), caixa = caixaOpaca(q), t = topoOpaco(q);
+    if (!caixa || !t) throw new Error("o quadro Dormir de " + nome + " e todo transparente");
+    const al = alargarCorte(this.corte(a, nome, sombria), [caixa]), final: Corte = { ...al, topo: t.linha };
+    this.cortes.set(ch, final);
+    const B = BORDA_PAPEL, fx = (t.cx - al.x0 + B) / (al.x1 - al.x0 + 1 + 2 * B);
+    this.zzs.set(ch, fx); this.zzFx = fx;
+    return final;
   }
   /** a soma dos ms do clipe Comer do sprite de agora (um ciclo); null sem o atlas, no ovo ou num sprite sem o Comer: fica o gesto de hoje */
   private cicloComer(): number | null {
@@ -246,8 +282,11 @@ export class Papel {
     const andando = !golpe && !noClipe && andaBase;
     /* o emburrar: o clipe Emburrar (laco) toca com o pet parado e acordado na acao `emburrar`; o tremor programatico sai (o clipe e o corpo) */
     const emburra = !golpe && !noClipe && !andando && mo0.nascendo <= 0 && mo0.motor.acao === "emburrar" && this.temEmburrar();
-    const { folha, ovo } = this.folhaAgora(p.quadro, andando, p.agora, golpe, comer, emburra);
-    marcarEmburrar(emburra && !ovo);
+    /* o dormir: com o quadro Dormir do atlas, o quadro e o corpo (sem achatar, sem escurecer, sem respirar); sem ele, o sono de sono.ts */
+    const dormeQ = !golpe && !noClipe && mo0.nascendo <= 0 && mo0.motor.acao === "dormir" && this.temDormir();
+    this.zzFx = null;
+    const { folha, ovo } = this.folhaAgora(p.quadro, andando, p.agora, golpe, comer, emburra, dormeQ);
+    marcarEmburrar(emburra && !ovo); marcarDormir(dormeQ && !ovo);
     if (this.papel.material.map !== folha.tex) {
       this.papel.material.map = this.silhueta.material.map = folha.tex;
       this.papel.material.needsUpdate = this.silhueta.material.needsUpdate = true;
@@ -256,8 +295,8 @@ export class Papel {
     const mo = jogoAtual().motor, dorme = !ovo && mo.acao === "dormir";
     /* a cena da acao do motor, o cocô e a reacao ao toque (cenaAcao.ts; so vista): o gesto do corpo sobre o desenho. Parado e acordado ele faz o da acao */
     const gesto = ovo ? SEM_GESTO : gestoAgora({ acao: mo.acao, sujeira: mo.e.sujeira, chave: String(mo.semente) }, p.agora, p.reduzido, !andando && !dorme, velocidadeAtual() <= 0, noClipe, emburra);
-    const alt = (dorme ? alturaSono(p.agora, p.reduzido) : 1) * gesto.estica;
-    this.papel.material.color.setHex(p.noite ? NOITE_PAPEL : dorme ? SONO.tom : 0xffffff);
+    const achata = dorme && !dormeQ, alt = (achata ? alturaSono(p.agora, p.reduzido) : 1) * gesto.estica;
+    this.papel.material.color.setHex(p.noite ? NOITE_PAPEL : achata ? SONO.tom : 0xffffff);
     /* o lado ao longo da direita da camera no chao (com a camera livre ela gira; fixa, e o x do mundo): no golpe, o do ponto em que o pet
        bate e o da comida no "comeu a racao" (SA-4); fora deles, o do passo da posicao desenhada */
     const dir = this.v.set(1, 0, 0).applyQuaternion(p.camera.quaternion), h = Math.hypot(dir.x, dir.z) || 1;
@@ -272,7 +311,7 @@ export class Papel {
     const passo = VIRAR_POR_S * p.dt;
     this.escalaX = p.reduzido || Math.abs(this.lado - this.escalaX) <= passo ? this.lado : this.escalaX + Math.sign(this.lado - this.escalaX) * passo;
     /* o tamanho em pixels inteiros do canvas; o pulinho em texels inteiros; o ovo balanca um texel de lado */
-    const n = p.pxPorTexel, wpx = Math.round(folha.w * n * (dorme || gesto.estica !== 1 ? 1 + (1 - alt) / 2 : 1)), hpx = Math.round(folha.h * n * alt), { nascendo } = jogoAtual();
+    const n = p.pxPorTexel, wpx = Math.round(folha.w * n * (achata || gesto.estica !== 1 ? 1 + (1 - alt) / 2 : 1)), hpx = Math.round(folha.h * n * alt), { nascendo } = jogoAtual();
     const pulo = (andando && !p.reduzido && !ovo ? Math.round(Math.abs(Math.sin(p.agora / PULO_MS)) * PULO_TEXELS) * n : 0) + Math.round(gesto.alto) * n;
     const balanco = ovo && !p.reduzido ? balancoOvo(nascendo) * n : 0;
     /* o pe do papel no chao (o foco: sem dobra), projetado; o canto vai ao pixel inteiro mais perto */
@@ -288,9 +327,12 @@ export class Papel {
     const larg = wpx / p.ppu;
     this.sombra.scale.set(larg * 0.85, 1, larg * 0.42);
     this.sombra.position.set(0, 0.03, 0);
-    return { x: esquerda / p.razao, y: (base - hpx) / p.razao, w: wpx / p.razao, h: hpx / p.razao };
+    const ret = { x: esquerda / p.razao, y: (base - hpx) / p.razao, w: wpx / p.razao, h: hpx / p.razao };
+    /* o "zz" sai do alto da cabeca do quadro Dormir: a coluna do topo do que e opaco (espelhada com o papel), em px de CSS da cena */
+    CENA.zzX = this.zzFx === null ? null : ret.x + ret.w * (this.escalaX < 0 ? 1 - this.zzFx : this.zzFx);
+    return ret;
   }
 
   /** solta as texturas */
-  dispose(): void { for (const f of this.folhas.values()) f.tex.dispose(); this.folhas.clear(); esquecerComer(); marcarEmburrar(false); }
+  dispose(): void { for (const f of this.folhas.values()) f.tex.dispose(); this.folhas.clear(); esquecerComer(); marcarEmburrar(false); marcarDormir(false); CENA.zzX = null; }
 }
