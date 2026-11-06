@@ -31,7 +31,11 @@ export interface SaidaSens {
   objetos: ObjetoSens[];
   conjuncoes: { comida_vista: number; sem_comida: number; bola_vista: number };
   ha_cheiro: boolean; pos: readonly [number, number]; regiao: number; minuto: number; pc: CorpoModular;
+  /** a ponte da luta (PE3): os resumos desde a decisao anterior; so com a `luta_memoria` (desligada, o campo nao existe) */
+  lutas?: ResumoLutaSens[];
 }
+/** o resumo da luta na Observacao: em inteiros (o rival, o resultado -1, 0, +1, a vida perdida em S e o tick) */
+export interface ResumoLutaSens { rival: string; resultado: number; vida_perdida_s: number; tick: number }
 
 /** Config.e_noite */
 export function eNoite(cfg: ConfigSens, tickDoDia: number): boolean {
@@ -91,7 +95,18 @@ export class Sens {
     return clamp(this.S - divArred(d * this.S, this.raio), 0, this.S);
   }
 
-  codificar(obs: ObservacaoModular): SaidaSens {
+  /** o resumo da luta na Observacao (ponte da luta, PE3; espelho de `Sens.resumir_lutas`): na ordem; falha alto num resumo malformado */
+  resumirLutas(lutas: readonly ResumoLutaSens[]): ResumoLutaSens[] {
+    return lutas.map(r => {
+      if (typeof r.rival !== "string" || r.rival === "" || ![-1, 0, 1].includes(r.resultado) || !Number.isInteger(r.resultado)
+          || !Number.isInteger(r.vida_perdida_s) || r.vida_perdida_s < 0 || !Number.isInteger(r.tick)) {
+        throw new Error(`M-SENS: resumo da luta malformado ${JSON.stringify(r)}`);
+      }
+      return { rival: r.rival, resultado: r.resultado, vida_perdida_s: r.vida_perdida_s, tick: r.tick };
+    });
+  }
+
+  codificar(obs: ObservacaoModular, lutas?: readonly ResumoLutaSens[]): SaidaSens {
     const S = this.S, pc = obs.corpo, pm = obs.mundo;
     const recs = this._receptores(pc);
     const pcl = pc as PercepcaoCorpoLobos;
@@ -120,8 +135,10 @@ export class Sens {
       if ((COMIDAS_BOAS as readonly string[]).includes(o.classe)) comida = Math.max(comida, o.prox);
       else if (o.classe === "bola") bola = Math.max(bola, o.prox);
     }
-    return { falta, leitura, contexto, objetos, conjuncoes: { comida_vista: comida, sem_comida: S - comida, bola_vista: bola },
+    const out: SaidaSens = { falta, leitura, contexto, objetos, conjuncoes: { comida_vista: comida, sem_comida: S - comida, bola_vista: bola },
       ha_cheiro: pm.direcao_cheiro !== 0, pos: [pm.x, pm.y], regiao: pm.regiao, minuto, pc };
+    if (lutas !== undefined) out.lutas = this.resumirLutas(lutas);      // a ponte da luta (PE3): desligada, nenhum campo novo
+    return out;
   }
 
   estadoInterno(): { hab: Record<string, number>; receptores: string[] | null } {
