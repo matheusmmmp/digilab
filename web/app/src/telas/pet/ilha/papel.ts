@@ -21,11 +21,12 @@
    Sem o atlas (os e2e e as capturas; ou carregando), a grade de reserva do jogo (fontePet.ts). So desenho: PROPOSTO, SEM FONTE. */
 import * as THREE from "three";
 import { OVO, chaveSprite } from "../../../../motor/index.ts";
-import { atlasAtual, chaveUp, desenharSprite, dimSprite, quadroAgora, type AtlasOk, type Clipe } from "../../../atlas.ts";
+import { CLIPES_REACOES, atlasAtual, chaveUp, desenharSprite, dimSprite, quadroAgora, type AtlasOk, type Clipe, type ClipeReacao } from "../../../atlas.ts";
 import { balancoOvo, jogoAtual } from "../../../jogo.ts";
 import { SONO, alturaSono } from "../sono.ts";
 import { SEM_GESTO, escolherComer, esquecerComer, marcarEmburrar, marcarDormir, gestoAgora, type EscolhaComer } from "../cenaAcao.ts";
 import { CENA } from "../cenaEstado.ts";
+import { bobDaReacao, escolherReacao, marcarReacaoRosto } from "../reacao.ts";
 import { flashDesde } from "../../../flash.ts";
 import { alargarCorte, unirCaixas, type Corte } from "./corte.ts";
 import { velocidadeAtual } from "../../../tempo.ts";
@@ -148,6 +149,9 @@ export class Papel {
   /** a coluna do topo do quadro Dormir (fracao da largura do papel, sem espelhar), por corte; `zzFx` e a de agora (null fora do quadro Dormir) */
   private readonly zzs = new Map<string, number>();
   private zzFx: number | null = null;
+  /** o alto da cabeca do quadro de uma reacao de rosto (fracoes da largura e da altura do papel, sem espelhar), por corte; `cabecaF` e o de agora */
+  private readonly cabecas = new Map<string, [number, number]>();
+  private cabecaF: [number, number] | null = null;
   private dono = "";                    // as folhas sao de um sprite so: trocou a forma, saem todas
   private clipe: Clipe = "Idle";
   private t0 = 0;
@@ -178,7 +182,7 @@ export class Papel {
   }
 
   /** a folha (textura com a borda) do quadro de agora: do atlas, ou da grade de reserva */
-  private folhaAgora(quadro: number, andando: boolean, agora: number, golpe: Passo["golpe"], comer: EscolhaComer, emburra: boolean, dormeQ: boolean): { folha: Folha; ovo: boolean } {
+  private folhaAgora(quadro: number, andando: boolean, agora: number, golpe: Passo["golpe"], comer: EscolhaComer, emburra: boolean, dormeQ: boolean, rosto: ClipeReacao | null): { folha: Folha; ovo: boolean } {
     const { motor: m, nascendo } = jogoAtual(), a = atlasAtual();
     if (a.tipo !== "ok") {
       const f = fonteDoPet(quadro);
@@ -191,12 +195,15 @@ export class Papel {
     if (emb && !s?.clipes?.Emburrar) throw new Error("o emburrar escolheu o clipe Emburrar num sprite sem ele: " + nome);
     const dorm = dormeQ && !ovo && !bate && !come && !emb;
     if (dorm && !s?.clipes?.Dormir) throw new Error("o sono escolheu o clipe Dormir num sprite sem ele: " + nome);
-    const clipe: Clipe = bate ? "Attack_1" : come ? "Comer" : emb ? "Emburrar" : dorm ? "Dormir" : !ovo && andando && s?.clipes?.Run ? "Run" : "Idle";
+    const ros = rosto !== null && !ovo && !bate && !come && !emb && !dorm;
+    if (ros && !s?.clipes?.[rosto]) throw new Error(`a reacao escolheu o clipe ${rosto} num sprite sem ele: ` + nome);
+    const clipe: Clipe = bate ? "Attack_1" : come ? "Comer" : emb ? "Emburrar" : dorm ? "Dormir" : ros ? rosto : !ovo && andando && s?.clipes?.Run ? "Run" : "Idle";
     if (clipe !== this.clipe || (bate && golpe!.desde !== this.golpeDesde)) { this.clipe = clipe; this.t0 = bate ? golpe!.desde : agora; }
     this.golpeDesde = bate ? golpe!.desde : null;
     if (come) this.t0 = comer.desde;
     const iq = ovo ? 0 : quadroAgora(a, nome, m.acao === "dormir" && !bate, clipe, this.t0), sombria = !ovo && m.sombria;
-    const corte = dorm ? this.corteDormir(a, nome, sombria) : bate || come || emb ? this.corteAlargado(a, nome, sombria, clipe) : this.corte(a, nome, sombria);
+    const corte = dorm ? this.corteDormir(a, nome, sombria) : bate || come || emb || ros ? this.corteAlargado(a, nome, sombria, clipe) : this.corte(a, nome, sombria);
+    this.cabecaF = ros ? this.cabecaDe(a, nome, sombria, clipe, corte) : null;
     return { folha: this.folha(`${nome}|${clipe}|${iq}|${sombria ? 1 : 0}`, () => recortar(quadroAtlas(a, nome, iq, sombria, clipe), corte)), ovo };
   }
   /** a forma de agora tem o clipe Emburrar no atlas? (sem atlas, no ovo ou sem o clipe: fica o tremor de cenaAcao.ts) */
@@ -208,6 +215,23 @@ export class Papel {
   private temDormir(): boolean {
     const { motor: m, nascendo } = jogoAtual(), a = atlasAtual();
     return a.tipo === "ok" && nascendo <= 0 && !!a.dados.sprites[chaveUp(a.dados, chaveSprite(m.forma))]?.clipes?.Dormir;
+  }
+  /** a forma de agora tem as reacoes de rosto no atlas? (so os Digimon do estagio crianca; sem o atlas, no ovo ou sem elas: nada muda) */
+  private temReacoes(): boolean {
+    const { motor: m, nascendo } = jogoAtual(), a = atlasAtual();
+    return a.tipo === "ok" && nascendo <= 0 && CLIPES_REACOES.every(r => !!a.dados.sprites[chaveUp(a.dados, chaveSprite(m.forma))]?.clipes?.[r]);
+  }
+  /** onde fica o alto da cabeca no papel de um clipe de reacao (o quadro 0; so o rosto muda, entao e o da silhueta do Idle): a coluna central da
+      primeira linha opaca e essa linha, em fracoes do papel (a borda do papel entra), para o emote sair dali */
+  private cabecaDe(a: AtlasOk, nome: string, sombria: boolean, clipe: Clipe, corte: Corte): [number, number] {
+    const ch = `${nome}|${sombria ? 1 : 0}|${clipe}`, pronto = this.cabecas.get(ch);
+    if (pronto) return pronto;
+    const q = quadroAtlas(a, nome, 0, sombria, clipe), t = topoOpaco(q);
+    if (!t) throw new Error(`o quadro ${clipe} de ${nome} e todo transparente`);
+    const B = BORDA_PAPEL, topo = corte.topo ?? 0, cw = corte.x1 - corte.x0 + 1, h = Math.min(q.height, corte.pe) - topo + 2 * B;
+    const f: [number, number] = [(t.cx - corte.x0 + B) / (cw + 2 * B), (t.linha - topo + B) / h];
+    this.cabecas.set(ch, f);
+    return f;
   }
   /** o corte do quadro Dormir: o alargado (mesmo centro e mesmo pe do Idle) e, em cima, so a partir do topo do que e opaco, para o retangulo
       do pet comecar na cabeca (o "zz" sai dali). Guarda a coluna do topo (fracao da largura do papel, sem espelhar) em `zzFx` */
@@ -284,9 +308,16 @@ export class Papel {
     const emburra = !golpe && !noClipe && !andando && mo0.nascendo <= 0 && mo0.motor.acao === "emburrar" && this.temEmburrar();
     /* o dormir: com o quadro Dormir do atlas, o quadro e o corpo (sem achatar, sem escurecer, sem respirar); sem ele, o sono de sono.ts */
     const dormeQ = !golpe && !noClipe && mo0.nascendo <= 0 && mo0.motor.acao === "dormir" && this.temDormir();
-    this.zzFx = null;
-    const { folha, ovo } = this.folhaAgora(p.quadro, andando, p.agora, golpe, comer, emburra, dormeQ);
-    marcarEmburrar(emburra && !ovo); marcarDormir(dormeQ && !ovo);
+    /* a reacao de rosto (reacao.ts): parado, acordado e sem outro clipe no corpo, o quadro da reacao no lugar do Idle, com o emote por cima */
+    let rosto: ClipeReacao | null = null;
+    if (!golpe && !noClipe && !andando && !emburra && !dormeQ && mo0.nascendo <= 0 && this.temReacoes()) {
+      const mt = mo0.motor, r = escolherReacao({ chave: String(mt.semente), humor: mt.e.humor, energia: mt.e.energia, saude: mt.e.saude,
+        lesionado: mt.lesionadoDesde !== null, dormindo: mt.acao === "dormir" }, p.agora);
+      if (r?.mostrar) rosto = r.reacao;
+    }
+    this.zzFx = null; this.cabecaF = null;
+    const { folha, ovo } = this.folhaAgora(p.quadro, andando, p.agora, golpe, comer, emburra, dormeQ, rosto);
+    marcarEmburrar(emburra && !ovo); marcarDormir(dormeQ && !ovo); marcarReacaoRosto(rosto && !ovo ? rosto : null);
     if (this.papel.material.map !== folha.tex) {
       this.papel.material.map = this.silhueta.material.map = folha.tex;
       this.papel.material.needsUpdate = this.silhueta.material.needsUpdate = true;
@@ -294,7 +325,9 @@ export class Papel {
     /* dormindo (sono.ts): o quadro parado achatado, respirando, num tom apagado */
     const mo = jogoAtual().motor, dorme = !ovo && mo.acao === "dormir";
     /* a cena da acao do motor, o cocô e a reacao ao toque (cenaAcao.ts; so vista): o gesto do corpo sobre o desenho. Parado e acordado ele faz o da acao */
-    const gesto = ovo ? SEM_GESTO : gestoAgora({ acao: mo.acao, sujeira: mo.e.sujeira, chave: String(mo.semente) }, p.agora, p.reduzido, !andando && !dorme, velocidadeAtual() <= 0, noClipe, emburra);
+    const gesto0 = ovo ? SEM_GESTO : gestoAgora({ acao: mo.acao, sujeira: mo.e.sujeira, chave: String(mo.semente) }, p.agora, p.reduzido, !andando && !dorme, velocidadeAtual() <= 0, noClipe, emburra);
+    /* a expressao se mexe 1 texel inteiro (reacao.ts, bobDaReacao); sem reacao, o gesto de sempre */
+    const gesto = rosto && !ovo ? { ...gesto0, alto: gesto0.alto + bobDaReacao(p.agora, p.reduzido) } : gesto0;
     const achata = dorme && !dormeQ, alt = (achata ? alturaSono(p.agora, p.reduzido) : 1) * gesto.estica;
     this.papel.material.color.setHex(p.noite ? NOITE_PAPEL : achata ? SONO.tom : 0xffffff);
     /* o lado ao longo da direita da camera no chao (com a camera livre ela gira; fixa, e o x do mundo): no golpe, o do ponto em que o pet
@@ -330,9 +363,11 @@ export class Papel {
     const ret = { x: esquerda / p.razao, y: (base - hpx) / p.razao, w: wpx / p.razao, h: hpx / p.razao };
     /* o "zz" sai do alto da cabeca do quadro Dormir: a coluna do topo do que e opaco (espelhada com o papel), em px de CSS da cena */
     CENA.zzX = this.zzFx === null ? null : ret.x + ret.w * (this.escalaX < 0 ? 1 - this.zzFx : this.zzFx);
+    /* o alto da cabeca da reacao de rosto, em px de CSS da cena: o emote sai dali (PalcoPet.desenharIcone) */
+    CENA.cabeca = this.cabecaF === null ? null : [ret.x + ret.w * (this.escalaX < 0 ? 1 - this.cabecaF[0] : this.cabecaF[0]), ret.y + ret.h * this.cabecaF[1]];
     return ret;
   }
 
   /** solta as texturas */
-  dispose(): void { for (const f of this.folhas.values()) f.tex.dispose(); this.folhas.clear(); esquecerComer(); marcarEmburrar(false); marcarDormir(false); CENA.zzX = null; }
+  dispose(): void { for (const f of this.folhas.values()) f.tex.dispose(); this.folhas.clear(); esquecerComer(); marcarEmburrar(false); marcarDormir(false); marcarReacaoRosto(null); CENA.zzX = null; CENA.cabeca = null; }
 }

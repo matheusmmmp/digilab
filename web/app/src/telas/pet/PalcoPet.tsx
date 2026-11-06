@@ -12,6 +12,7 @@ import { flashAtual } from "../../flash.ts";
 import { balancoOvo, jogoAtual, passarQuadroOvo } from "../../jogo.ts";
 import { CENA } from "./cenaEstado.ts";
 import { alturaSono, desenharZz } from "./sono.ts";
+import { emoteDaReacaoAgora } from "./reacao.ts";
 import { fomeNoEmote } from "../../hudPet.ts";
 import { EMOTE_ATLAS as EMOTE_ICONE, EMOTE_GRADE as GRADE_DO_EMOTE, comerAgora, desenharEfeitos, emoteAgora, type EntradaCena } from "./cenaAcao.ts";
 
@@ -147,7 +148,7 @@ const comeNoClipe = (): boolean => comerAgora().tocou === "clipe";
 /** o icone de agora: o flash do dono; a cena (o toque, o cocô, a acao do pet); a fome, so se a cena nao tem um (e sem o clipe Comer) */
 function iconeAgora(): string | null {
   const m = jogoAtual().motor, clipe = comeNoClipe();
-  return flashAtual() ?? emoteAgora(entradaCena(), performance.now(), clipe) ?? (!clipe && m.acao !== "dormir" && fomeNoEmote(m) ? "carne" : null);
+  return emoteDaReacaoAgora() ?? flashAtual() ?? emoteAgora(entradaCena(), performance.now(), clipe) ?? (!clipe && m.acao !== "dormir" && fomeNoEmote(m) ? "carne" : null);
 }
 /* icone sobre o pet: o da acao do dono (flash); emote do UP (2x) acima e a direita do sprite */
 function desenharIcone(cx: CanvasRenderingContext2D, a: AtlasOk, g: Geo, x: number, y: number, w: number, h: number): void {
@@ -162,9 +163,11 @@ function desenharIcone(cx: CanvasRenderingContext2D, a: AtlasOk, g: Geo, x: numb
     return;
   }
   const ic = S[icone]; if (!ic) throw new Error("icone desconhecido: " + icone);
-  const bx = Math.min(g.W - 30, x + w - 4), by = Math.max(TOPO_LIVRE, y - 30);
+  /* o emote de uma reacao de rosto sai do alto da cabeca (CENA.cabeca, papel.ts); os outros, acima e a direita do sprite */
+  const cab = icone === emoteDaReacaoAgora() ? CENA.cabeca : null, larg = Math.max(...ic.map(l => l.length));
+  const bx = cab ? Math.min(g.W - 30, Math.max(2, cab[0] - (larg * 3) / 2)) : Math.min(g.W - 30, x + w - 4), by = cab ? Math.max(TOPO_LIVRE, cab[1] - ic.length * 3 - 6) : Math.max(TOPO_LIVRE, y - 30);
   cx.setTransform(3 * K, 0, 0, 3 * K, 0, 0);
-  cx.fillStyle = "#FFFFFF"; cx.fillRect(Math.round(bx / 3) - 1, Math.round(by / 3) - 1, 9, ic.length + 2);
+  cx.fillStyle = "#FFFFFF"; cx.fillRect(Math.round(bx / 3) - 1, Math.round(by / 3) - 1, larg + 2, ic.length + 2);
   desenharGrade(cx, ic, Math.round(bx / 3), Math.round(by / 3), pal);
   cx.setTransform(1, 0, 0, 1, 0, 0);
 }
