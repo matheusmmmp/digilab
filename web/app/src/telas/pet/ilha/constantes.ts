@@ -75,11 +75,14 @@ export const SACO_FOLGA_POSTE = 0.14;
 export const COCO = { raio: 0.85, passo: 0.25, surgirMs: 380 } as const;
 
 /** os enfeites do mundo humano na moldura (docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 4.3; grade.ts, porEnfeites): o sal da rng propria
-    (os objetos de hoje nao mudam, E-G0), quantos de cada por mapa, a faixa de distancia da area andavel (nada alto rente a ela, como as
-    arvores; perto o bastante para a camera ver), a distancia minima entre eles e das coisas altas de hoje, e as tentativas por enfeite
-    antes de falhar alto. PROPOSTO, SEM FONTE */
+    (os objetos de hoje nao mudam, E-G0) e as tentativas por enfeite antes de falhar alto; e, por enfeite, quantos por mapa, a faixa de
+    distancia da area andavel (nada alto rente a ela, como as arvores; perto o bastante para a camera ver), a distancia minima dos enfeites ja
+    postos (os postes vem antes, e a distancia e a de quem chega) e das coisas altas de hoje, a folga de chao plano em volta (celulas) e se fica so ao norte da area (o lado que a camera da tela
+    Pet ve, atras do pet), e entao a ate `casa` celulas do ninho em x. Os repetidos (o poste) e os marcos (o carro). PROPOSTO, SEM FONTE */
 export const ENFEITES_GRADE = {
-  sal: 0x5e7e17e5, quantos: { poste: 14 }, perto: 1.5, longe: 4, entreSi: 4, deAlto: 2, tentativas: 400,
+  sal: 0x5e7e17e5, tentativas: 4000,
+  poste: { quantos: 14, perto: 1.5, longe: 4, entreSi: 4, deAlto: 2, folga: 0, norte: false, casa: 0 },
+  carro: { quantos: 1, perto: 2, longe: 5, entreSi: 3, deAlto: 2, folga: 1, norte: true, casa: 12 },
 } as const;
 /** a luz dos enfeites a noite (enfeites.ts): o halo na lanterna, na fracao `altura` da altura do modelo, com `tamanho` celulas de
     diametro, em cascas (as fracoes do tamanho) de opacidade `forca` cada (aditiva), e o quanto os vidros brilham (emissiveIntensity).
