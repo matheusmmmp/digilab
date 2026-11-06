@@ -67,7 +67,10 @@
   :root[data-pele="xcom"] body .mm-coluna .topo-bt.mm-bt{ border-top:2px solid var(--hx-borda-topo); background:var(--xcom-cantos), linear-gradient(180deg, var(--hud-fundo-1), var(--hud-fundo-2)) border-box }
 
   /* ---------- sobre o pet: o icone do que ele faz (a linha do agora so em icone; o toque abre o DigiBrain) */
-  .mm-agora{ position:absolute; z-index:6; left:50%; top:43.5%; translate:-50% 0; width:48px; height:48px; display:grid; place-items:center }
+  /* o icone preso ao pet (LinhaAgora.tsx, AgoraIcone): a ancora e o ponto logo acima da cabeca (a cena publica o retangulo do pet); o icone fica 14 px acima dele,
+     o bico incluido. O left/top de reserva vale ate a cena subir */
+  .mm-agora-ancora{ position:absolute; z-index:6; left:50%; top:43.5%; width:0; height:0; pointer-events:none }
+  .mm-agora{ position:absolute; left:-24px; top:-62px; width:48px; height:48px; display:grid; place-items:center }
   .mm-agora::after{ content:""; position:absolute; left:50%; bottom:-8px; width:12px; height:8px; translate:-50% 0; background:var(--hx-borda); clip-path:polygon(0 0, 100% 0, 50% 100%) }
   /* um fundo proprio quase opaco (--hud-fundo-* sobre --hx-miolo): o icone passa de 3:1 sobre o pior pixel, e sem o desfoque, que nao teria o que mostrar */
   :root[data-pele] body .mm-agora{ background:linear-gradient(180deg, var(--hud-fundo-1), var(--hud-fundo-2)), linear-gradient(var(--hx-miolo), var(--hx-miolo));

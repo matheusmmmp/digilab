@@ -361,3 +361,20 @@ as M1-1 a M1-15 (seção 8.1). O plano está em `docs/PROPOSTAS_V3_UX_TELA_PET.m
 - **Fica para a M2:**
   - nas folhas abaixo de 900 px, a faixa de 64 px que a barra reservava (o `--casca-barra`) continua vazia embaixo do modal;
   - a medida M3 da cena no celular, que agora é ~24 % maior, e do blur do Vidro (achados do `rev-cena`).
+
+**A revisão do Matheus no #619 (2026-11-06): o sprite e o tamanho do pet.**
+- **O sprite errado nas capturas** era a corrida do atlas de clipes com o relógio falso do `telas.spec.ts`, na base e no branch (desvio
+  em `docs/registro/2026-11.md`). O spec agora espera o atlas e falha alto sem ele.
+- **O pet.** Pelo `CENA.ret`, a 390 × 844 o pet tinha o mesmo tamanho em px (49 × 52 no v11 e 68 × 88 no v12), mas descia 109 px, centrado na
+  caixa mais alta. Agora a câmera enquadra a altura antiga e estende o quadro para baixo:
+  - na sala, `cena3d.ts`, pelo limite ortográfico;
+  - na ilha, `ilha/vista.ts`, pelo `setViewOffset`.
+
+  A diferença vem do `reservaDoPe()` em `cenaEstado.ts`: 157 px abaixo de 900 px, e 0 a partir daí. O número é PROPOSTO e SEM FONTE,
+  medido como o dock de antes (69 px), mais a folga (24 px), mais a barra (64 px). O pet volta ao lugar de antes (171,424 no v11 e
+  161,388 no v12).
+- **O ícone do agora** fica preso logo acima da cabeça do pet, pelo `CENA.ret`.
+- **Os portões de novo:**
+  - o desktop (o DOM e a captura sem o canvas) dá 84 de 84 iguais;
+  - a captura cheia a 1920 com o atlas carregado tem o mesmo perfil de ruído da base contra ela mesma;
+  - o e2e inteiro dá 123 passed.
