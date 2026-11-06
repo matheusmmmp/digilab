@@ -73,3 +73,12 @@ export const SACO_FOLGA_POSTE = 0.14;
 /** o coco no chao (cocos.ts): o raio do anel em volta do pet onde ele cai e o passo entre aneis (celulas), quanto dura o pulinho ao
     surgir (ms); o desenho e o item gerado (itens.ts, public/itens/coco/); PROPOSTO, SEM FONTE */
 export const COCO = { raio: 0.85, passo: 0.25, surgirMs: 380 } as const;
+
+/** os enfeites do mundo humano na moldura (docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 4.3; grade.ts, porEnfeites): o sal da rng propria
+    (os objetos de hoje nao mudam, E-G0), quantos de cada por mapa, a faixa de distancia da area andavel (nada alto rente a ela, como as
+    arvores; perto o bastante para a camera ver), a distancia minima entre eles e das coisas altas de hoje, e as tentativas por enfeite
+    antes de falhar alto. PROPOSTO, SEM FONTE */
+export const ENFEITES_GRADE = {
+  sal: 0x5e7e17e5, quantos: { poste: 8 }, perto: 1.5, longe: 4, entreSi: 4, deAlto: 2, tentativas: 400,
+} as const;
+

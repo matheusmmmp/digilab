@@ -4,7 +4,8 @@ A textura da Meshy traz a sombra embutida, e o achatar_cores.py a leva para a co
 Aqui cada face fica com uma cor so: a mais comum dos pixels dentro do triangulo de UV dela; depois, RODADAS vezes, a face que discorda
 da maioria dos vizinhos (uv_faces.py) passa para a cor deles. Cada triangulo e repintado com 3 px de margem, os maiores primeiro.
 
-uso (da raiz): python -I docs/itens3d/limpar_faces.py <cor_chapada.png> <uv_faces.json> <saida.png>
+uso (da raiz): python -I docs/itens3d/limpar_faces.py <cor_chapada.png> <uv_faces.json> <saida.png> [rodadas]
+(rodadas = 0 num item com pecas pequenas de outra cor, como os vidros do poste, que os vizinhos apagariam)
 """
 import json, sys
 from collections import Counter
@@ -13,7 +14,7 @@ from PIL import Image, ImageDraw
 RODADAS, MARGEM = 2, 3
 
 
-def main(ent: str, faces_arq: str, sai: str) -> None:
+def main(ent: str, faces_arq: str, sai: str, rodadas: int = RODADAS) -> None:
     im = Image.open(ent).convert("RGB")
     w, h = im.size
     j = json.load(open(faces_arq, encoding="utf-8"))
@@ -32,7 +33,7 @@ def main(ent: str, faces_arq: str, sai: str) -> None:
         c = Counter(px[x, y] for x in range(caixa[0], caixa[2]) for y in range(caixa[1], caixa[3]) if mp[x, y])
         cor.append(c.most_common(1)[0][0])
     mudou = 0
-    for _ in range(RODADAS):
+    for _ in range(rodadas):
         nova = list(cor)
         for i, vs in enumerate(j["vizinhos"]):
             if not vs:
@@ -51,4 +52,4 @@ def main(ent: str, faces_arq: str, sai: str) -> None:
 
 
 if __name__ == "__main__":
-    main(*sys.argv[1:4])
+    main(*sys.argv[1:4], *(int(x) for x in sys.argv[4:5]))
