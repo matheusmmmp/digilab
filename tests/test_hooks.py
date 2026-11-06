@@ -420,6 +420,25 @@ def test_h10_outra_run_em_andamento(com_pre_run):
     assert r.returncode == 2 and "outra run" in r.stderr.decode("utf-8")
 
 
+@pytest.mark.parametrize("comando", [
+    "cd web/app && python scripts/equilibrio_tr/medir_tudo.py --faixa calibracao2 --saida scripts/medicoes/equilibrio_tr/r3",
+    "npx tsx scripts/equilibrio_tr/fase1_relogio.ts --faixa calibracao2 --base v14 --saida x.json",
+    "node node_modules/tsx/dist/cli.mjs web/app/scripts/equilibrio_tr/fase3_estagio.ts --parte p1",
+])
+def test_h10_medicao_do_combate(com_pre_run, comando):
+    """E7: a medição do combate passa sozinha e é barrada com outra run em andamento (V3-D8)."""
+    assert h10(com_pre_run, comando).returncode == 0
+    r = h10(com_pre_run, comando, processos=json.dumps(["python experiments/run_v3_outra.py --config c.json"]))
+    assert r.returncode == 2 and "outra run" in r.stderr.decode("utf-8")
+
+
+def test_h10_deixa_ler_a_medicao(com_pre_run):
+    outra = json.dumps(["python experiments/run_v3_outra.py --config c.json"])
+    for comando in ("cat scripts/equilibrio_tr/medir_tudo.py", "git diff -- web/app/scripts/equilibrio_tr/fase2_formas.ts",
+                    "python scripts/equilibrio_tr/medir_tudo.py --help"):
+        assert h10(com_pre_run, comando, processos=outra).returncode == 0, comando
+
+
 # ------------------------------------------------------------------ A1 da UX_TELA_PET (docs/TAREFA_V3_UX_TELA_PET.md, seção 3.3)
 # H5, H6 e H8 estão DESLIGADOS: a proposta fica em docs/propostas/hooks_ux_settings.json (SA-5; UX-5).
 
@@ -603,6 +622,30 @@ def test_h8_shell_do_testador(projeto, comando, passa):
     for tool in ("Bash", "PowerShell"):
         r = rodar_com("h8_escopo.py", pre_tool(tool, {"command": comando}, projeto), projeto, "testador")
         assert (r.returncode == 0) == passa, (comando, r.stderr.decode("utf-8"))
+
+
+@pytest.mark.parametrize("comando,passa", [
+    ("sha256sum artifacts_v3_acoes_novas/run/run.log", True),       # INFRA_AGENTES E6: o hash e o tamanho dos artefatos
+    ("stat -c %s artifacts_v3_acoes_novas/run/medidas.json", True),
+    ("Get-FileHash artifacts_v3_acoes_novas/run/run.log", True),
+    ("du -b artifacts_v3_acoes_novas/run/vidas.tar.gz", True),
+    ("cat docs/RESULTADO_V3_ACOES_NOVAS.md", True),
+    ("python -c \"print(1)\"", False),
+    ("rm artifacts_v3_acoes_novas/run/run.log", False),
+    ("sha256sum x > y.txt", False),
+    ("find . -name x -delete", False),
+    ("npm test", False),
+])
+def test_h8_shell_do_auditor(projeto, comando, passa):
+    for tool in ("Bash", "PowerShell"):
+        r = rodar_com("h8_escopo.py", pre_tool(tool, {"command": comando}, projeto), projeto, "auditor")
+        assert (r.returncode == 0) == passa, (comando, r.stderr.decode("utf-8"))
+
+
+def test_h8_auditor_nao_escreve(projeto):
+    for tool in ("Edit", "Write"):
+        r = rodar_com("h8_escopo.py", pre_tool(tool, {"file_path": "docs/RESULTADO_V3_X.md"}, projeto), projeto, "auditor")
+        assert r.returncode == 2 and "auditor" in r.stderr.decode("utf-8")
 
 
 def test_h8_designer_sem_shell_implementador_com_shell(projeto):

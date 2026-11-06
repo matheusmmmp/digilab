@@ -355,3 +355,35 @@ Worker: Claude Code, Opus 5.5, worktree `v3-infra-agentes-e5`, branch empilhado 
 - **Testes:** `python -m pytest tests/test_infra_*.py -q -p no:cacheprovider` → 60 passed; o YAML do workflow lido sem erro.
 - **A prova é o próprio PR:** este branch traz o `web/app/registry.json` do #593, então o diff contra a `main` muda `web/app/` e o job roda os
   passos todos. O resultado fica no relato do PR, pelo check do GitHub.
+
+## 14. Resumo da etapa E6 (2026-11-06): o Bash do auditor
+
+Worker: Claude Code, Opus 5.5, worktree `v3-infra-agentes-e5`, branch `v3-infra-agentes-e6`, de `origin/main`. A recomendação da E2
+(seção 10, D-IA-E2-1), seguida pelo Matheus em 2026-11-06 ("siga com as recomendações").
+
+- **O papel `auditor` no `.claude/hooks/h8_escopo.py`:** nenhuma escrita. No shell, só os comandos de leitura da lista do H6 (que tem o
+  `sha256sum`, o `Get-FileHash`, o `stat` e o `du`), sem `find` e sem redirecionamento.
+- **O `auditor-numeros`:** `tools: Read, Grep, Glob, Bash`, com o H8 do papel `auditor` no frontmatter, para `Edit|Write|MultiEdit|NotebookEdit|Bash|PowerShell`;
+  o `PowerShell` segue negado. O corpo diz como tirar o sha256 e o tamanho de um arquivo.
+- **Testes:** `python -m pytest tests/test_hooks.py tests/test_hook_h4.py tests/test_agentes.py tests/test_agentes_ux.py tests/test_pre_run.py tests/test_infra_*.py -q -p no:cacheprovider`
+  → todos passam (a contagem no corpo do PR). Os casos novos: dez comandos do auditor (cinco de leitura passam; `python -c`, `rm`, o `>`,
+  o `find -delete` e o `npm test` não) e a edição negada.
+- **Não rodado:** uma segunda rodada do auditor sobre o `RESULTADO_V3_ACOES_NOVAS.md`, para ver os quatro SEM FONTE de hash e tamanho
+  virarem VERIFICADO. Ela vale numa sessão aberta depois do merge, que carrega o agente pelo tipo.
+
+## 15. Resumo da etapa E7 (2026-11-06): as medições do combate no gate
+
+Worker: Claude Code, Opus 5.5, worktree `v3-infra-agentes-e5`, branch `v3-infra-agentes-e7`, empilhado sobre o #622 (E6). A questão
+aberta da E3 (seção 11), seguida pelo Matheus em 2026-11-06 ("siga com as recomendações").
+
+- **As medições do combate** são os scripts de `web/app/scripts/equilibrio_tr/`: os orquestradores em Python (`medir_tudo.py`, os
+  `grade_*_r2.py`, rodados em `web/app`) e as bancadas em TypeScript (`fase1_relogio.ts` a `fase4_progressao.ts`, pelo `npx tsx`). Elas
+  usam faixas por nome (`--faixa calibracao2`), não config com plano e bases; o `tools/medir_*` que a E3 citava não existe.
+- **O `tools/pre_run.py`:**
+  - `--medicao` confere só a regra de uma carga por vez;
+  - a lista de processos inclui o Node;
+  - uma medição em andamento conta como run para as outras, e uma run de pesquisa conta para a medição.
+- **O H10:** acha `python … scripts/equilibrio_tr/*.py` e `npx tsx`/`node … scripts/equilibrio_tr/*.ts` no comando e chama o
+  `pre_run.py --medicao`; ler os scripts (`cat`, `git diff`) e o `--help` passam.
+- **Testes:** `python -m pytest tests/test_hooks.py tests/test_hook_h4.py tests/test_agentes.py tests/test_agentes_ux.py tests/test_pre_run.py tests/test_infra_*.py -q -p no:cacheprovider`
+  → 278 passed. Na máquina real: `python tools/pre_run.py web/app/scripts/equilibrio_tr/medir_tudo.py --medicao` → código 0.

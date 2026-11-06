@@ -537,4 +537,6 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-06 — INFRA_AGENTES, etapa E3, o pre_run e o H10 (worker, Claude Code, Opus 5.5, branch `v3-infra-agentes-e3`)](registro/2026-11.md)
 - [2026-11-06 — INFRA_AGENTES, etapa E4, o testador e a junção com a UX (worker, Claude Code, Opus 5.5, branch `v3-infra-agentes-e4`)](registro/2026-11.md)
 - [2026-11-06 — INFRA_AGENTES, etapa E5, o job web no CI (worker, Claude Code, Opus 5.5, branch `v3-infra-agentes-e5`)](registro/2026-11.md)
+- [2026-11-06 — INFRA_AGENTES, etapa E6, o Bash só de leitura do auditor (worker, Claude Code, Opus 5.5, branch `v3-infra-agentes-e6`)](registro/2026-11.md)
+- [2026-11-06 — INFRA_AGENTES, etapa E7, as medições do combate no gate (worker, Claude Code, Opus 5.5, branch `v3-infra-agentes-e7`)](registro/2026-11.md)
 - [2026-11-06 — PONTE_LUTA, etapa PE4, o ε da luta pelo `g_exp` do modular (worker, Claude Code, Sonnet 5.5, branch `v3-ponte-luta-pe4`)](registro/2026-11.md)

@@ -18,6 +18,8 @@ Os papéis:
   - `npm run build`, `npm run e2e`, `npm run capturas` e `npx playwright test`, sempre sem `--update-snapshots`/`-u`;
   - leitura (`ls`, `cat`, `git diff`…);
   - nenhum redirecionamento `>`.
+- **auditor** (o `auditor-numeros` da INFRA_AGENTES, E6): nenhuma escrita. No shell, só leitura (a lista do H6, que tem o `sha256sum`, o
+  `Get-FileHash`, o `stat` e o `du`, para o hash e o tamanho dos artefatos), sem `find` e sem redirecionamento `>`.
 
 Um papel desconhecido bloqueia: um agente com o hook mal configurado não ganha escopo livre.
 """
@@ -34,7 +36,7 @@ from h3_main import segmentos  # noqa: E402
 from h6_capturas import (FERRAMENTAS_DE_EDICAO, FERRAMENTAS_DE_SHELL, atualiza_referencia, protegido,  # noqa: E402
                          so_leitura)
 
-PAPEIS = ("designer", "implementador", "testador")
+PAPEIS = ("designer", "implementador", "testador", "auditor")
 DESIGNER_PASTAS = ("docs/pranchas/ux-pet/",)
 DESIGNER_ARQUIVOS = ("docs/PROPOSTAS_V3_UX_TELA_PET.md",)
 IMPLEMENTADOR_NEGADOS = ("web/app/motor/", "web/app/test/gabaritos/", "web/app/src/save.ts", "web/app/src/rotas.ts", "digilab/",
@@ -64,6 +66,8 @@ def casa(rel: str, prefixos: tuple[str, ...]) -> bool:
 def checar_edicao(papel: str, alvo: str, raiz: Path, cwd: Path) -> str | None:
     if papel == "testador":
         return "H8: o testador não escreve arquivos; devolve as falhas e os diffs ao Gerente."
+    if papel == "auditor":
+        return "H8: o auditor não escreve arquivos; devolve a tabela dos números ao coordenador."
     rel = relativo(alvo, raiz, cwd)
     if rel is None:
         return f"H8: o {papel} só escreve dentro do projeto ({alvo} está fora)."
@@ -103,7 +107,13 @@ def checar_shell(papel: str, comando: str) -> str | None:
     if papel == "implementador":
         return None                            # o shell do implementador é coberto pelo H6 (e pelo H1/H3 da sessão)
     if REDIRECIONAMENTO.search(comando):
-        return "H8: o testador não redireciona saída para arquivo."
+        return f"H8: o {papel} não redireciona saída para arquivo."
+    if papel == "auditor":
+        for tokens in segmentos(comando):
+            resto = [t for t in tokens if not re.match(r"^[A-Za-z_][A-Za-z0-9_]*=", t)]
+            if resto and not (so_leitura(resto) and Path(resto[0]).stem.lower() != "find"):
+                return f"H8: o auditor só roda comandos de leitura (sha256sum, Get-FileHash, stat, du, cat, ls…); não: {' '.join(tokens)}"
+        return None
     for tokens in segmentos(comando):
         if not comando_do_testador(tokens):
             return ("H8: o testador só roda npm run build/e2e/capturas, npx playwright test (sem --update-snapshots/-u) e leitura; "

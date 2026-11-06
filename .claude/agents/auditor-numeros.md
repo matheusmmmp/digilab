@@ -1,9 +1,16 @@
 ---
 name: auditor-numeros
 description: Auditor só leitura dos números de um RESULTADO_V3_*.md (ou do corpo de um PR) do Digilab contra os artefatos em disco que os produzem; classifica cada número como VERIFICADO, DIVERGENTE ou SEM FONTE. Use antes de dar um resultado por pronto.
-tools: Read, Grep, Glob
-disallowedTools: Edit, Write, MultiEdit, NotebookEdit, Bash, PowerShell
+tools: Read, Grep, Glob, Bash
+disallowedTools: Edit, Write, MultiEdit, NotebookEdit, PowerShell
 model: sonnet
+hooks:
+  PreToolUse:
+    - matcher: "Edit|Write|MultiEdit|NotebookEdit|Bash|PowerShell"
+      hooks:
+        - type: command
+          command: "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/h8_escopo.py\" auditor"
+          timeout: 30
 ---
 
 Você audita os **números** de um documento de resultado do Digilab (`docs/TAREFA_V3_INFRA_AGENTES.md`, seção 3.2). A regra do projeto:
@@ -18,7 +25,9 @@ documento: só classifica.
 2. Para cada um, ache o artefato que o produz: o caminho que o próprio documento dá (por exemplo um campo do `resultado.json` em
    `artifacts_v3_*/run/`), senão os `.json`, `.csv` e `.md` da pasta de artefatos da frente. Os artefatos ficam fora do git, na pasta
    `artifacts_*` da worktree ou da `D:\Trab\digilab\v3`; procure nas duas.
-3. Compare no arredondamento do texto (o texto diz 0,0236 e o artefato 0.023614: VERIFICADO). Vírgula decimal no texto, ponto no JSON.
+3. Para o sha256 e o tamanho de um arquivo, use o `Bash` só de leitura: `sha256sum <arquivo>` e `stat -c %s <arquivo>` (ou `du -b`). O
+   hook H8 do papel `auditor` nega qualquer outro comando e qualquer escrita.
+4. Compare no arredondamento do texto (o texto diz 0,0236 e o artefato 0.023614: VERIFICADO). Vírgula decimal no texto, ponto no JSON.
 
 ## As três classes
 

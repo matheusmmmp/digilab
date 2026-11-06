@@ -127,3 +127,34 @@ def test_a_lista_de_processos_da_maquina_responde(monkeypatch):
     monkeypatch.delenv("DIGILAB_PRE_RUN_PROCESSOS", raising=False)
     linhas = pre_run.linhas_de_comando()
     assert any("pytest" in c for _, c in linhas)
+
+
+# ------------------------------------------------------------------ E7: as medições do combate (seção 14 da tarefa; V3-D8)
+
+MEDIR = "web/app/scripts/equilibrio_tr/medir_tudo.py"
+
+
+def test_medicao_passa_sozinha_e_espera_outra_run(monkeypatch):
+    assert pre_run.conferir_medicao(MEDIR) == []
+    monkeypatch.setenv("DIGILAB_PRE_RUN_PROCESSOS", json.dumps(["python experiments/run_v3_x.py --config c.json"]))
+    m = pre_run.conferir_medicao("scripts/equilibrio_tr/fase2_formas.ts")
+    assert len(m) == 1 and "outra run" in m[0]
+
+
+def test_medicao_em_andamento_barra_a_run_de_pesquisa(repo, monkeypatch):
+    monkeypatch.setenv("DIGILAB_PRE_RUN_PROCESSOS", json.dumps([
+        r"C:\Program Files\nodejs\node.exe C:\x\tsx\cli.mjs scripts/equilibrio_tr/fase4_progressao.ts --faixa calibracao2 --parte g1"]))
+    m = motivos(repo, config(repo))
+    assert len(m) == 1 and "outra run" in m[0] and "fase4_progressao" in m[0]
+
+
+def test_script_que_nao_e_medicao():
+    assert "não é uma medição" in pre_run.conferir_medicao("scripts/outra/coisa.ts")[0]
+
+
+def test_medicao_pela_linha_de_comando(monkeypatch):
+    monkeypatch.setenv("DIGILAB_PRE_RUN_PROCESSOS", "[]")
+    r = subprocess.run([sys.executable, str(RAIZ / "tools" / "pre_run.py"), MEDIR, "--medicao"], capture_output=True, cwd=RAIZ)
+    assert r.returncode == 0, r.stderr.decode("utf-8", "replace")
+    r = subprocess.run([sys.executable, str(RAIZ / "tools" / "pre_run.py"), "experiments/run_v3_x.py"], capture_output=True, cwd=RAIZ)
+    assert r.returncode == 2 and "--config" in r.stderr.decode("utf-8")
