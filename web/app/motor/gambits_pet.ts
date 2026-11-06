@@ -387,6 +387,8 @@ export interface PetLutador {
   conf?: ConfiancaCombate | null;
   /** pets v9 (itens.ts): os chips de regra fazem efeito agora (o treino minimo)? Sem isto, nao ha chip no fim da lista */
   chipsValem?(): boolean;
+  /** PE4: g_exp / e0 da ultima decisao do modular, ou null (o epsilon e o de hoje) */
+  fatorEpsLuta?(): number | null;
 }
 export function estiloDoPet(m: PetLutador): Estilo {
   const e: Estilo = m.gp ? { ...m.gp.estilo(), base: m.gp.linha! } : { ...estiloBot("aleatorio"), base: "aleatorio" };
@@ -399,6 +401,9 @@ export function estiloDoPet(m: PetLutador): Estilo {
     - Math.min(CLE.expMax, (m.vitoriasVida ?? 0) * CLE.expPorVitoria));
   /* v8 (M1, espelho de educacao.epsilon_pet): inseguro hesita e erra mais; a confianca positiva nao reduz */
   if (m.versao >= 8 && m.conf) e.eps += epsilonConfianca(m.conf.valor(m.e.tick), CCF.kappaEps);
+  /* PE4 (ponte da luta): o g_exp do modular na ultima decisao escala o epsilon de hoje; g_exp = e0 deixa igual */
+  const f = m.fatorEpsLuta?.() ?? null;
+  if (f !== null) e.eps = Math.min(1, e.eps * f);
   return e;
 }
 /** lutador do pet (so o que a luta usa; sprite, cor e grade sao da interface) */
