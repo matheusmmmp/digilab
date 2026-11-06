@@ -19,7 +19,8 @@ Os papéis:
   - leitura (`ls`, `cat`, `git diff`…);
   - nenhum redirecionamento `>`.
 - **auditor** (o `auditor-numeros` da INFRA_AGENTES, E6): nenhuma escrita. No shell, só leitura (a lista do H6, que tem o `sha256sum`, o
-  `Get-FileHash`, o `stat` e o `du`, para o hash e o tamanho dos artefatos), sem `find` e sem redirecionamento `>`.
+  `Get-FileHash`, o `stat` e o `du`, para o hash e o tamanho dos artefatos), e o `tar` só para listar (`tar -tzf`, E6b), sem `find` e
+  sem redirecionamento `>`.
 
 Um papel desconhecido bloqueia: um agente com o hook mal configurado não ganha escopo livre.
 """
@@ -101,6 +102,29 @@ def comando_do_testador(tokens: list[str]) -> bool:
     return so_leitura(resto) and nome not in ("find",)   # o find tem -delete e -exec
 
 
+TAR_ESCRITA_CURTA = set("xcruA")                 # extrair, criar, acrescentar, atualizar, concatenar
+TAR_ESCRITA_LONGA = ("--extract", "--get", "--create", "--append", "--update", "--catenate", "--concatenate", "--delete",
+                     "--to-command", "--use-compress-program", "--checkpoint-action", "--info-script", "--new-volume-script")
+
+
+def tar_so_lista(argumentos: list[str]) -> bool:
+    """O tar só no modo de listar: um `-t`/`--list` (ou o `t` no grupo de letras do começo, `tzf`), nada que extraia, crie ou rode
+    programa (o auditor, INFRA_AGENTES E6b)."""
+    lista = False
+    for i, a in enumerate(argumentos):
+        if a.startswith("--"):
+            nome = a.split("=", 1)[0]
+            if nome in TAR_ESCRITA_LONGA:
+                return False
+            lista = lista or nome == "--list"
+        elif a.startswith("-") or (i == 0 and a.isalpha()):
+            letras = a.lstrip("-")
+            if set(letras) & TAR_ESCRITA_CURTA or "I" in letras:
+                return False
+            lista = lista or "t" in letras
+    return lista
+
+
 def checar_shell(papel: str, comando: str) -> str | None:
     if papel == "designer":
         return "H8: o designer não roda comandos; escreve o plano e a prancha."
@@ -111,6 +135,10 @@ def checar_shell(papel: str, comando: str) -> str | None:
     if papel == "auditor":
         for tokens in segmentos(comando):
             resto = [t for t in tokens if not re.match(r"^[A-Za-z_][A-Za-z0-9_]*=", t)]
+            if resto and Path(resto[0]).stem.lower() == "tar":
+                if not tar_so_lista(resto[1:]):
+                    return f"H8: o auditor só usa o tar para listar (-t, --list), sem extrair nem criar; não: {' '.join(tokens)}"
+                continue
             if resto and not (so_leitura(resto) and Path(resto[0]).stem.lower() != "find"):
                 return f"H8: o auditor só roda comandos de leitura (sha256sum, Get-FileHash, stat, du, cat, ls…); não: {' '.join(tokens)}"
         return None

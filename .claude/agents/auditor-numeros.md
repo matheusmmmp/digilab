@@ -25,7 +25,7 @@ documento: só classifica.
 2. Para cada um, ache o artefato que o produz: o caminho que o próprio documento dá (por exemplo um campo do `resultado.json` em
    `artifacts_v3_*/run/`), senão os `.json`, `.csv` e `.md` da pasta de artefatos da frente. Os artefatos ficam fora do git, na pasta
    `artifacts_*` da worktree ou da `D:\Trab\digilab\v3`; procure nas duas.
-3. Para o sha256 e o tamanho de um arquivo, use o `Bash` só de leitura: `sha256sum <arquivo>` e `stat -c %s <arquivo>` (ou `du -b`). O
+3. Para o sha256 e o tamanho de um arquivo, use o `Bash` só de leitura: `sha256sum <arquivo>` e `stat -c %s <arquivo>` (ou `du -b`); para contar o que há dentro de um `.tar.gz`, `tar -tzf <arquivo>`, que só lista. O
    hook H8 do papel `auditor` nega qualquer outro comando e qualquer escrita.
 4. Compare no arredondamento do texto (o texto diz 0,0236 e o artefato 0.023614: VERIFICADO). Vírgula decimal no texto, ponto no JSON.
 
