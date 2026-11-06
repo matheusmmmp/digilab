@@ -1,6 +1,6 @@
 /* Os itens gerados da ilha (docs/TAREFA_V3_ITENS_3D.md, secao 4.2): a tabela ITENS_MODELOS contra a pasta public/itens/, com os gates
    G1 (triangulos abaixo do teto da categoria), G2 (a caixa: a bola com as tres medidas iguais; o saco mais alto que largo, com as duas
-   pecas `suporte` e `saco` que a vista separa), G3 (texturas PNG/JPG ate 1024 px, potencia de 2),
+   pecas `suporte` e `saco` que a vista separa; o kit e o coco com um no so), G3 (texturas PNG/JPG ate 1024 px, potencia de 2),
    G4 (nenhuma primitiva sem textura de cor, um material por primitiva), G5 (nenhum mapa normal, metalico, oclusao ou emissivo),
    G6 (o relatorio do glTF-Validator em docs/itens3d/<item>/validacao.json, com 0 erros e 0 avisos), G7 (bytes por item e da pasta) e
    G8 (o License.txt ao lado e a marca de IA no asset.extras). Os tetos sao as medianas dos kits CC0 (docs/itens3d/kits_cc0_medidas.json,
@@ -12,7 +12,7 @@ import { ITENS_MODELOS, MODELOS } from "../src/telas/pet/ilha/modelos.ts";
 
 const APP = join(__dirname, ".."), ITENS = join(APP, "public", "itens"), DOCS = join(APP, "..", "..", "docs", "itens3d");
 /** o teto de triangulos por item (D-I3): os pequenos, a mediana dos kits baixos; o saco, a dos altos */
-const TETO: Record<string, number> = { bola: 554, saco: 2414 };
+const TETO: Record<string, number> = { bola: 554, saco: 2414, kit: 554, coco: 554 };
 const LADO_MAX = 1024, BYTES_ITEM = 300 * 1024, BYTES_PASTA = 2 * 1024 * 1024;
 
 type Gltf = {
@@ -64,6 +64,9 @@ describe("os itens gerados da ilha", () => {
       if (n === "bola") {
         /* a bola: as tres medidas iguais (+-5 %), para a normalizacao pela altura dar o diametro certo */
         for (const l of lado) expect(Math.abs(l / lado[1] - 1)).toBeLessThan(0.05);
+      } else if (n !== "saco") {
+        /* o kit e o coco: um no so */
+        expect(g.nodes.length).toBe(1);
       } else {
         /* o saco: mais alto que largo, e as duas pecas pelo nome do no (itens.ts, carregarSaco) */
         expect(Math.max(lado[0], lado[2]) / lado[1]).toBeLessThan(0.7);
