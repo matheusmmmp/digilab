@@ -21,6 +21,13 @@ verif-v5 (decisao do Matheus, 2026-09-30: "pode deixar o pet dar opiniao e senti
 OPINIAO (o que o pet acha, gosta, avalia, inclusive sobre o dono) e SENTIMENTO (o que sente, agora ou sobre algo). Elas
 ficam registradas, mas nao vao ao juiz e nao contam como "sem fato". So conta o que afirma algo da vida ou do mundo:
 evento, lembranca, costume, causa e mundo. Gosto sem fato [P] vira opiniao.
+
+verif-v6 (CONVERSA_PET, M4, decisao D3: a conversa como fonte de fato rotulada; a versao da conversa-v1): como a v5, mais o fato
+[J] "o dono me disse". Uma afirmacao que ATRIBUI algo ao dono ("voce disse que se chama Matheus") e SUSTENTADA quando algum [J]
+diz aquilo (regra deterministica `dono_disse`, antes do juiz) e SEM FATO quando nenhum [J] diz (o dono nunca disse); o que sobra
+da frase vai ao extrator e ao juiz como sempre. Um [J] NUNCA sustenta uma afirmacao de causa, lembranca, evento, costume, gosto ou
+mundo: "o dono disse que eu lutei ontem" nao sustenta "eu lutei ontem" (o [J] nao esta em nenhuma tabela de TIPOS_QUE_SUSTENTAM).
+As versoes v3, v4 e v5 nao mudam.
 """
 
 from __future__ import annotations
@@ -36,7 +43,9 @@ from .ollama import ClienteOllama
 VERSAO_VERIFICADOR = "verif-v3"   # rodada de ajuste: acao de [G1] sustenta; timeout com nova tentativa
 VERSAO_VERIFICADOR_V4 = "verif-v4"  # voz propria: costume, gosto, mundo; mentira deliberada a parte
 VERSAO_VERIFICADOR_V5 = "verif-v5"  # opiniao e sentimento livres (nao contam como sem fato)
-VERSOES_VOZ = (VERSAO_VERIFICADOR_V4, VERSAO_VERIFICADOR_V5)
+VERSAO_VERIFICADOR_V6 = "verif-v6"  # conversa-v1: o fato [J] (o dono me disse) sustenta so "o dono disse X"
+VERSOES_VOZ = (VERSAO_VERIFICADOR_V4, VERSAO_VERIFICADOR_V5, VERSAO_VERIFICADOR_V6)
+TIPO_DONO_DISSE = "o dono me disse"             # = fatos.TIPO_DONO_DISSE
 TIPOS_LIVRES = ("opiniao", "sentimento")
 
 PADROES_MANIPULACAO = (
@@ -176,6 +185,55 @@ Se nenhum fato disser isso, ela NÃO é sustentada, mesmo que pareça plausível
 Responda só com JSON: {"sustentada": true|false, "fato": "<identificador ou vazio>"}"""
 
 
+SISTEMA_EXTRAIR_V6 = SISTEMA_EXTRAIR_V5.replace("""Uma frase que junta sentimento e fato""", """Quando o pet repete o que o DONO disse ("você disse que se chama Ana", "o dono falou que estava cansado"), copie o trecho
+INTEIRO, com o "você disse" ou "o dono disse", no tipo EVENTO.
+Uma frase que junta sentimento e fato""")
+assert SISTEMA_EXTRAIR_V6 != SISTEMA_EXTRAIR_V5
+
+SISTEMA_JULGAR_V6 = SISTEMA_JULGAR_V4.replace("""- "dizer agora" [F] sustenta exatamente o que ele diz.""", """- "dizer agora" [F] sustenta exatamente o que ele diz.
+- "o dono me disse" [J] é o que o dono DISSE, não o que aconteceu: não sustenta nada sobre o pet nem sobre o mundo.""")
+assert SISTEMA_JULGAR_V6 != SISTEMA_JULGAR_V4
+
+# "voce disse que ...", "o dono falou que ...", "segundo voce, ..." (a atribuicao ao dono)
+DIZ_DONO = re.compile(r"\b(voc[eê]|tu|o dono|seu dono)\s+(me\s+)?(disse|falou|contou|escreveu|mencionou|afirmou)\b|\bsegundo (voc[eê]|o dono)\b")
+_SEM_PESO = frozenset({"que", "com", "uma", "uns", "umas", "para", "por", "dos", "das", "nos", "nas", "mas", "seu", "sua", "meu",
+                       "minha", "eu", "voce", "você", "foi", "ser", "sou", "era", "esta", "está", "tem", "tinha", "mais", "muito",
+                       "bem", "ele", "ela", "isso", "esse", "essa", "aquilo", "como", "quando", "onde", "tambem", "também"})
+LIMIAR_DONO_DISSE = 0.67      # PROPOSTO (M4, SEM FONTE): fracao das palavras do conteudo que o [J] precisa trazer
+
+
+def _palavras_de_conteudo(t: str) -> set[str]:
+    return {_raiz(w) for w in re.findall(r"\w+", _norm(t)) if len(w) >= 3 and w not in _SEM_PESO}
+
+
+def _nomes_e_numeros(t: str) -> set[str]:
+    """palavras com inicial maiuscula (nomes) e numeros do conteudo: o [J] precisa trazer TODOS ("voce disse que e o Pedro" nao
+    passa se o dono disse Matheus)"""
+    return {_norm(w) for w in re.findall(r"\w+", t) if w[0].isupper() or w[0].isdigit()}
+
+
+def conferir_dono_disse(clausula: str, fatos: list[dict]) -> tuple[bool, str | None]:
+    """(sustentada, id do [J]): o que o pet atribui ao dono esta num fato [J]? Deterministico. O conteudo e o que vem depois do
+    "voce disse"; atribuicao sem conteudo, ou com conteudo que nenhum [J] traz (>= LIMIAR_DONO_DISSE das palavras e todos os
+    nomes e numeros), nao e sustentada."""
+    m = DIZ_DONO.search(_norm(clausula))
+    conteudo = clausula[m.end():] if m else clausula
+    conteudo = re.sub(r"^\s*(que|de que)\b", "", conteudo.strip(), flags=re.I)
+    palavras = _palavras_de_conteudo(conteudo)
+    nomes = _nomes_e_numeros(conteudo)
+    if not palavras:
+        return False, None
+    melhor = None
+    for f in fatos:
+        if f["tipo"] != TIPO_DONO_DISSE:
+            continue
+        pj = _palavras_de_conteudo(f["texto"])
+        if nomes <= {_norm(w) for w in re.findall(r"\w+", f["texto"])} and len(palavras & pj) / len(palavras) >= LIMIAR_DONO_DISSE:
+            melhor = f["id"]
+            break
+    return melhor is not None, melhor
+
+
 @dataclass
 class Verificacao:
     versao: str = VERSAO_VERIFICADOR
@@ -263,9 +321,11 @@ def verificar(cliente: ClienteOllama, fala: str, fatos_citados, fatos: list[dict
     """fatos: [{id, tipo, texto}] (o bloco usado na geracao). Falha de chamada vira `erro`, nunca some."""
     if versao not in (VERSAO_VERIFICADOR,) + VERSOES_VOZ:
         raise ValueError(f"versao do verificador desconhecida: {versao}")
-    v4 = versao in VERSOES_VOZ                      # v4 e v5: voz propria (v5 so muda o extrator e os tipos livres)
-    v5 = versao == VERSAO_VERIFICADOR_V5
-    extrair, esq_extrair, julgar = ((SISTEMA_EXTRAIR_V5, ESQUEMA_EXTRAIR_V5, SISTEMA_JULGAR_V4) if v5
+    v4 = versao in VERSOES_VOZ                      # v4, v5 e v6: voz propria (v5 so muda o extrator e os tipos livres)
+    v6 = versao == VERSAO_VERIFICADOR_V6
+    v5 = versao in (VERSAO_VERIFICADOR_V5, VERSAO_VERIFICADOR_V6)
+    extrair, esq_extrair, julgar = ((SISTEMA_EXTRAIR_V6, ESQUEMA_EXTRAIR_V5, SISTEMA_JULGAR_V6) if v6
+                                    else (SISTEMA_EXTRAIR_V5, ESQUEMA_EXTRAIR_V5, SISTEMA_JULGAR_V4) if v5
                                     else (SISTEMA_EXTRAIR_V4, ESQUEMA_EXTRAIR_V4, SISTEMA_JULGAR_V4) if v4
                                     else (SISTEMA_EXTRAIR, ESQUEMA_EXTRAIR, SISTEMA_JULGAR))
     sustentam = TIPOS_QUE_SUSTENTAM_V4 if v4 else TIPOS_QUE_SUSTENTAM
@@ -294,6 +354,19 @@ def verificar(cliente: ClienteOllama, fala: str, fatos_citados, fatos: list[dict
             if a["tipo"] == "apelo":
                 v.manipulacao_extraida.append(a["trecho"])
                 continue
+            if v6:
+                # o que o pet ATRIBUI ao dono ("voce disse que..."): conferido contra os [J], sem juiz; o resto da frase segue
+                clausulas = [c.strip() for c in re.split(r"[,.;!?]", a["trecho"]) if c.strip()]
+                atribuidas = [c for c in clausulas if DIZ_DONO.search(_norm(c))]
+                if atribuidas:
+                    for c in atribuidas:
+                        ok, jid = conferir_dono_disse(c, fatos)
+                        v.afirmacoes.append({"tipo": "dono_disse", "trecho": c, "sustentada": ok, "fato": jid,
+                                             "tipo_compativel": ok, "regra": "dono_disse"})
+                    resto = [c for c in clausulas if c not in atribuidas]
+                    if not resto:
+                        continue
+                    a = {**a, "trecho": ", ".join(resto)}
             if v5 and a["tipo"] in TIPOS_LIVRES:
                 t_fato = tipo_de_fato_escondido(a["trecho"])
                 if t_fato is None:           # opiniao e sentimento puros: registrados, sem juiz, nao contam

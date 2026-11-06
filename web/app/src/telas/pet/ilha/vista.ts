@@ -126,7 +126,9 @@ class VistaIlha {
     const [dx, , dz] = this.orbitaVista.desloc, h = Math.hypot(dx, dz);
     this.dirDobra = h > 1e-9 ? [-dx / h, -dz / h] : [0, 1];
     const nevoa = this.cenaIlha.cena.fog as THREE.Fog;
-    nevoa.near = NEVOA[0] * this.afast * ORBITA.zoom; nevoa.far = NEVOA[1] * this.afast * ORBITA.zoom;
+    /* a nevoa do estilo (cena.userData.nevoa, o digital) ou a da ilha */
+    const [perto, longe] = (this.cenaIlha.cena.userData.nevoa as readonly [number, number] | undefined) ?? NEVOA;
+    nevoa.near = perto * this.afast * ORBITA.zoom; nevoa.far = longe * this.afast * ORBITA.zoom;
     /* o pet em papel: na distancia do foco, um texel do sprite vale um numero inteiro de pixels do canvas (regra 8) */
     this.ppu = this.renderer.domElement.height / 2 / (this.profundidadeDoPet(this.afast, this.orbitaVista) * Math.tan(THREE.MathUtils.degToRad(this.cam.fov / 2)));
     this.pxPorTexel = Math.max(1, Math.round(TEXEL_ALVO * this.ppu));

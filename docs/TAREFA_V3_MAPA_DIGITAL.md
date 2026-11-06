@@ -131,3 +131,28 @@ três tons por região, as flores maiores e mais numerosas), e as capturas foram
 tons), sem os traços (D2); as partículas, a grade no céu e os fios (D3); a lata (D4). Os itens (a bola, o saco, o kit, o cocô) seguem com
 os três tons: eles entram depois da cena.
 
+## 10. D2: os kits recoloridos, a névoa, os itens em dois tons e os traços do poste (2026-11-06, Gerente, Claude Code, Opus 5.5, branch `v3-mapa-digital-d2`)
+
+**O que entrou:**
+- **Os kits do Digital** (`docs/mapa_digital/kits_digital.py`): as 9 texturas dos kits CC0 (`public/kits3d/`) recoloridas em poucos tons
+  (4; 6 a 8 nos atlas), com o filtro de moda, a saturação ×1,35 e o brilho ×1,08 (×1,3 nos pinheiros), o alfa das folhas intacto, em `public/kits3d_digital/`
+  (740 KB), com a licença de cada kit; os glTF copiados apontam para a textura nova e para o `.bin` de sempre (`../../kits3d/`), sem
+  duplicar a geometria. O estilo Digital carrega os kits de lá; a ilha não muda.
+- **A névoa do estilo** (`CEU_DIGITAL.nevoa`, de 34 a 85 em vez de 26 a 62; a de 42 a 95 deixou os pinheiros pesados, pelo revisor): a vista recalculava a névoa com a órbita a partir de
+  `NEVOA`; agora usa a do estilo quando ele tem uma (`cena.userData.nevoa`). As árvores de trás deixaram de sair desbotadas.
+- **Os itens em dois tons** (`usarDoisTons`): o estilo diz, antes de montar, o degradê dos materiais toon criados depois (os itens da
+  vista, os cocôs, os modelos carregados).
+- **Os traços de nanquim no poste** (`tracar_linhas.py` sobre a textura chapada; a máscara da luz refeita): vale nos dois estilos, como
+  na geladeira e no trilho.
+
+**O que não entrou, e por quê:**
+- **Os traços nas árvores e nos kits:** as texturas são divididas entre vários modelos (a casca e as folhas de todas as árvores), e as
+  folhas são cartões transparentes; um traço pelas arestas de um modelo sujaria os outros.
+- **Os traços no carro:** a malha da Meshy dele usa só 9 % da largura do mapa de textura (u de 0 a 0,091); um traço sai ~11 vezes mais
+  grosso na horizontal e borra o carro. Pede refazer os UVs no Blender, uma tarefa à parte.
+
+**Os gates:** D-G0 (o E-G0 passa); D-G1, os draw calls iguais aos da D1 (79 e 101 em 390, 88 e 109 em 1280;
+`D:\Trab\digilab\capturas_mapa_digital\d2\`); D-G2, os kits do Digital num teste (`test/mapa_digital.test.ts`: cada modelo da tabela
+com a textura, o `.bin` de sempre e a licença, e a pasta abaixo de 2 MB). D-G4: o revisor (corpo do PR). Comparação:
+`comparacao_d2.png` e `zoom_arvores_d1_d2.png`.
+
