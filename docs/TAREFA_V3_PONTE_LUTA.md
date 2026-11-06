@@ -271,3 +271,20 @@ Nenhum conserto foi preciso: a PE1 pode seguir. Os desvios D-PE0-1 a D-PE0-5 est
 - **O e2e:** `web/app/e2e/ponte_luta.spec.ts` (saves de `e2e/gerar_save_ponte_luta.mjs`): v16 (pelo laboratório), v17 modular e v17 A lutam na Arena e na
   Liga e o app reabre o save com as mesmas lutas.
 - **Limite:** a série do gabarito é a Liga, que o pet de vida curta quase sempre perde na primeira luta (1 série de 2 lutas em 20; D-PE0-2).
+
+## 10. PE1, o resumo da etapa (2026-11-06, Sonnet 5.5, branch `v3-ponte-luta-pe1`)
+
+**Resposta: o resumo de uma luta já sobe a dor do corpo e entra no replay do mundo do Python, atrás de uma chave desligada.** Os desvios D-PE1-1 a
+D-PE1-5 estão em `docs/registro/2026-11.md`.
+
+- **A chave:** `ConfigLutaCorpo(ligada=False)` em `digilab/config.py` (`CONFIG_LUTA_CORPO`, `CONFIG_LUTA_CORPO_LIGADA`, status em
+  `PARAMETROS_LUTA_CORPO`: PROPOSTO, sem número livre). Fica fora de `ConfigCorpo` para o dump do gabarito de paridade do corpo e o `corpo.test.ts` não mudarem (D-PE1-1).
+- **A dor:** `Corpo.estimulo_luta(vida_perdida_s)` em `digilab/corpo.py`: a dor sobe exatamente `div_arred(p × C, S)`, com `p` cortado em [0, S], sem rng
+  (D-PE1-2). Exige `gestos`.
+- **O evento:** `lt` (renomeado do `pl` a pedido do Matheus na revisão: o `"pl"` fica livre para a marca do ovo da PE3) com valor `rival|resultado|vida_perdida_s` (`digilab/events.py`: `resumo_luta`, `ler_resumo_luta`, `LutaSemChave`);
+  `MotorMundo.resumo_luta` e o `reproduzir_mundo` (`digilab/mundo.py`) o entendem; o `MotorCorpo` (`digilab/motor_corpo.py`) o aplica. Com a chave
+  desligada, ou sem o corpo, levanta `LutaSemChave`.
+- **Testes:** `tests/test_ponte_luta_pe1.py` (T-PL-1: a dor exata, o corte, o erro com a chave desligada, o replay refaz o corpo). **G2:** os
+  gabaritos da LM0 (`digibrain_modular_*`), do G0 (`genoma_g0_vidas_de_hoje.json`), do corpo, do corpo no mundo e do passeio seguem byte a byte; nenhum
+  arquivo de gabarito foi tocado.
+- **Limite:** o rival e o resultado só são validados; entram em módulo na PE2. Nada na web (o espelho TS é a PE3).
