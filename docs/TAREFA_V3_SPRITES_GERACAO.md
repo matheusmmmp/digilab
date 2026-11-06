@@ -370,7 +370,7 @@ Cada decisão vem com a recomendação e o custo de errar. A D-SG-4 está decidi
     contra a faixa [1 253,7; 1 556,5]; carne 40 a 62 contra 208,95), G-MS (866 ms) e G-CARGA (fumaça sobre o candidato só com derivados).
   - **O derivado reprovava o G-ALFA (a regra era 0 pixels):** nos quadros 2, 4 e 5 do `Comer` (os de boca aberta, quadros 12 e 14 do UP) há 2 pixels
     semitransparentes acima do pé, em (56,56) com alfa 238 e (57,57) com alfa 243, que vêm do próprio UP. A faixa PROPOSTA "0 pixels"
-    está errada para o derivado. **Não foi ajustada**: o Matheus decidiu em 2026-11-06 tolerar até 2 px por quadro (registro D-SG-E). Com a regra nova
+    está errada para o derivado. **Não foi ajustada**: o Matheus decidiu em 2026-11-06 tolerar até 2 px por quadro (registro D-SG-E; D-SG-E DECIDIDA). Com a regra nova
     o derivado passa em todos os gates e o `gates_derivado.json` foi regravado (G-ALFA com limite 2, medido 0 a 2).
   - **O que o conversor assume (contrato PROPOSTO, SEM FONTE):** os quadros do gerador chegam já na paleta e com alfa binário (o snap é
     do pixel-mcp), sem sombra, num `quadros.json` próprio; o JSON real do Sprite Forge é adaptado na G2. O conversor grava o export no formato
