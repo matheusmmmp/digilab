@@ -495,3 +495,5 @@ recomendado": as recomendações abaixo valem como estão; registro D-SG-H).
     - **A chave** (`remaster/geracao/Agumon/cego.json`): A é o gerado (o t03) e B é o derivado.
     - **O resultado da pergunta 1: "melhor".** O gerado passa nos 7 gates (o `gates.json`), e o Matheus o marcou como melhor.
     - O resultado vale para o Agumon, o derivado mais forte (D-SG-4); ele ainda não diz nada sobre os 49 sem boca.
+  - **As capturas do jogo (seção 7):** o Matheus viu os GIFs do jogo em 390 e 1280 px e o gerado lado a lado com o derivado, e respondeu
+    **"Não aprovo"**. O critério "o e2e com o clipe novo tem referência aprovada" fica **não cumprido**; o motivo ainda vai ser pedido a ele.
