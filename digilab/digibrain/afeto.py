@@ -106,5 +106,12 @@ class Afeto:
         self.ultimo = {"r": r, "r_n": r_n, "canais": canais, "V": self.V, "E": self.E}
         return self.ultimo
 
+    def sigma_luta(self, pc_antes, pc_depois, receptores: tuple) -> dict:
+        """a variacao do corpo da luta (ponte da luta, PE2): o mesmo r e r_n da `consequencia`, SEM mexer em V nem em E (a luta chega
+        pelo corpo, nunca como recompensa direta: TAREFA_V3_PONTE_LUTA, 3.1 e 7)"""
+        p, S = self.p, self.S
+        r = sinal_corpo(pc_antes, pc_depois, self.drives(receptores), p.ganho_r, S)
+        return {"r": r, "r_n": clamp(div_arred(r, p.r_norm), -S, S)}
+
     def estado_interno(self) -> dict:
         return {"V": self.V, "E": self.E, "decisoes": self.decisoes, "ultimo": self.ultimo}

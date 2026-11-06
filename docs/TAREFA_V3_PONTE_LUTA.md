@@ -288,3 +288,18 @@ D-PE1-5 estão em `docs/registro/2026-11.md`.
   gabaritos da LM0 (`digibrain_modular_*`), do G0 (`genoma_g0_vidas_de_hoje.json`), do corpo, do corpo no mundo e do passeio seguem byte a byte; nenhum
   arquivo de gabarito foi tocado.
 - **Limite:** o rival e o resultado só são validados; entram em módulo na PE2. Nada na web (o espelho TS é a PE3).
+
+## 11. PE2, o resumo da etapa (2026-11-06, Sonnet 5.5, branch `v3-ponte-luta-pe2`)
+
+**Resposta: o resumo de uma luta já chega ao DigiBrain modular, vira (ou não) um episódio `luta` no M-MEM com o rival em `outro`, atrás de uma chave
+desligada.** Os desvios D-PE2-1 a D-PE2-3 estão em `docs/registro/2026-11.md`.
+
+- **A chave:** `ConfigLutaMemoria(ligada=False)` em `digilab/config.py` (`CONFIG_LUTA_MEMORIA`, `CONFIG_LUTA_MEMORIA_LIGADA`, `PARAMETROS_LUTA_MEMORIA`:
+  PROPOSTO, sem número livre), fora de `ConfigDigibrain` (D-PE2-1). Só com a `memoria_autobio`.
+- **O gancho e a Observação:** `DigiBrain.receber_luta(rival, resultado, vida_perdida_s, tick)` (`adapt.py`), entregue pelo `MotorCorpo` ao aplicar o evento `lt`
+  da PE1; o M-SENS o põe em `sens["lutas"]` na decisão seguinte (`Sens.resumir_lutas`). O `"pl"` não é usado.
+- **O episódio:** `episodio_luta` e a origem `luta` em `mem.py` (a regra de hoje, `theta_sig`; σ pela variação do corpo, sem mexer em V, E, g_apr nem M-PLAST: `Afeto.sigma_luta`).
+- **Testes:** `tests/test_ponte_luta_pe2.py` (T-PL-2: derrota com dor vira episódio com o rival em `outro`; empate sem dor não; o mesmo log dá os mesmos
+  episódios, no replay do mundo; a consolidação guarda um por categoria `("lutar", rival, sinal)`; a seção 7: com a dor zerada nenhum módulo anda). **G2:** os gabaritos da C4
+  (`test_gabarito_memoria_autobio`), da LM0 (`test_gabarito_digibrain_modular*`), do G0 e do corpo seguem byte a byte; nenhum arquivo de gabarito foi tocado.
+- **Limite:** nada na web (o espelho TS e o `"pl"` do ovo são a PE3). O A não recebe nada (3.7): o gancho só existe no DigiBrain.
