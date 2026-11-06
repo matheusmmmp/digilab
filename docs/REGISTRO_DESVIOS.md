@@ -558,6 +558,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-06 — SPRITES_REACOES, as reações de rosto no jogo (worker, Claude Code, Sonnet 5.5, branch `v3-sprites-rosto`)](registro/2026-11.md)
 - [2026-11-06 — LONGE_REGULAR, o resultado do descritivo da D-C1-3, a seção 13.6 (worker, Claude Code, Sonnet 5.5, branch `v3-dc13-resultado`)](registro/2026-11.md)
 - [2026-11-06 — LUTA_EFEITOS, a tarefa dos efeitos da luta em tempo real (Gerente da missão SPRITES_GERACAO, Claude Code, Opus 5.5, worktree `v3-luta-efeitos`)](registro/2026-11.md)
+- [2026-11-06 — LUTA_EFEITOS E1, o impacto (worker, Claude Code, Sonnet 5.5, branch `v3-luta-efeitos-e1`)](registro/2026-11.md)
 - [2026-11-06 — MAPA_DIGITAL, D2: os kits, a névoa, os dois tons e o poste (Gerente da frente, Claude Code, Opus 5.5, branch `v3-mapa-digital-d2`)](registro/2026-11.md)
 - [2026-11-06 — CONVERSA_PET, M4 a conversa como fonte de fato rotulada (worker, Claude Code, Sonnet 5.5, branch `v3-conversa-m4-fato`)](registro/2026-11.md)
 - [2026-11-06 — LONGE_REGULAR, o plano da D-C1-3 no REL, o adendo 11 (worker, Claude Code, Opus 5.5, branch `v3-dc13-rel-plano`)](registro/2026-11.md)
