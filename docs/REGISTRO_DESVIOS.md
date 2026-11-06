@@ -514,3 +514,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-06 — MAPA_DIGITAL, D3: as partículas, a grade, os fios e a escala (Gerente da frente, Claude Code, Opus 5.5, branch `v3-mapa-digital-d3`)](registro/2026-11.md)
 - [2026-11-06 — LONGE_REGULAR, o código do descritivo da D-C1-3 no REL, o adendo 11 (A11.8) (worker, Claude Code, Sonnet 5.5, branch `v3-dc13-rel-codigo`)](registro/2026-11.md)
 - [2026-11-06 — CONVERSA_PET, M2 ligar o `conversa-v1` na conversa do jogo (worker, Claude Code, Sonnet 5.5, branch `v3-conversa-m2-ligar`)](registro/2026-11.md)
+- [2026-11-06 — LONGE_REGULAR, o resultado do adendo 11, a seção 13.7 (Gerente da V3, Claude Code, Opus 5.5, branch `v3-dc13-rel-resultado`)](registro/2026-11.md)
