@@ -521,6 +521,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-05 — SPRITES GERAÇÃO, a tarefa do pipeline híbrido (Gerente da missão, Claude Code, Opus 5.5, worktree `v3-sprites-geracao`)](registro/2026-11.md)
 - [2026-11-05 — ITENS_3D, a tarefa (Gerente da frente, Claude Code, Opus 5.5, worktree `v3-itens-3d`)](registro/2026-11.md)
 - [2026-11-06 — SPRITES GERAÇÃO, etapa G1, os scripts e a linha de base (worker, Claude Code, Sonnet 5.5, branch `v3-sprites-geracao-g1`)](registro/2026-11.md)
+- [2026-11-06 — SPRITES GERAÇÃO, etapa G2, a instalação e os termos (worker, Claude Code, Opus 5.5, branch `v3-sprites-geracao-g2`)](registro/2026-11.md)
 - [2026-11-06 — ITENS_3D, a bola na ilha (Gerente, Claude Code, Opus 5.5, worktree `v3-itens-3d-bola`)](registro/2026-11.md)
 - [2026-11-06 — ITENS_3D, o saco de pancada (Gerente, Claude Code, Opus 5.5, worktree `v3-itens-3d-saco`)](registro/2026-11.md)
 - [2026-11-06 — PONTE_LUTA, etapa PE0, o v16 e o v17 lutam e o gabarito das lutas de hoje (worker, Claude Code, Sonnet 5.5, branch `v3-ponte-luta-pe0`)](registro/2026-11.md)
