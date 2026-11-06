@@ -43,7 +43,7 @@ fechamento da V2, o `docs/FECHAMENTO_V2.md` (tag `v2-final`).
 ## 2. Decisões abertas do Matheus
 
 - **A L4:** aprovar as capturas da ilha (390 e 1280; claro, escuro e noite) e medir a M3 com `?medir3d=1` no desktop e num celular.
-- **A D-C1-3:** de onde vem o ganho do M3\* no `longe_fixo` (nenhuma visita ao lugar lembrado achou ração): questão aberta, sem run; um descritivo com plano próprio antes de o modular virar o cérebro padrão (o laboratório da L3 não espera por ela).
+- **A D-C1-3:** ENCERRADA como descritiva (Matheus, 2026-11-06, "Sim, mescle e encerre"). Na C1 (#640) o ganho do M3\* no `longe_fixo` aponta para a H3 (menos episódios perdidos para o sono); no REL da C4 (adendo 11, #655) é a mistura da H3 e da H5 (a lembrança muda escolhas fora das idas), e o caminho não se transfere entre os dois cérebros. Um teste de causa só com plano, faixa e vidas próprios.
 - **Os hooks** apagados pelo `2586b0e`: restaurados na `main` pelo #590 (2026-11-06), e a INFRA_AGENTES ligou os novos (#604 a #616). Pendência fechada.
 - **A CV14-1:** a v13 continua viva (pela recomendação, até o Matheus dizer outra coisa); um pet v13 enfrenta a Fábrica v14, que é da conta.
 
@@ -57,9 +57,7 @@ Cada uma com a recomendação do Gerente e o custo de errar.
   antes de mesclar um PR do web.
 - **Os órgãos digitais e a genética** (Matheus, 2026-11-03, "segue sua recomendacao"): o G0 veio depois da B3 e o código está completo
   (E0 a E3, até o #570); os órgãos só com fonte. O PR #516 fica como referência, sem merge.
-- **O que vem depois da ponte da luta** (2026-11-06): o `digilab/digibrain/` fica livre. Recomendação do Gerente: o descritivo da D-C1-3,
-  com plano próprio e sem vida nova, porque o modular já é o cérebro padrão desde o #562 e a pergunta de onde vem o ganho do M3\* ficou para trás.
-  Custo de errar: o cérebro padrão segue sem saber se o ganho no `longe_fixo` vem da memória do lugar ou de outro caminho.
+- **O que vem depois da ponte da luta** (2026-11-06): feito. O descritivo da D-C1-3 rodou na C1 (#633, #640) e no REL (adendo 11, #642, #646, #655), e a D-C1-3 fechou como descritiva; o `digilab/digibrain/` fica livre.
 - **O e2e do painel "Por que ele disse isso" pelo balão** saiu com o #566 (o save do teste não tem fala). Recomendação: um save com fala
   registrada num ajuste pequeno. Custo de errar: o caminho do balão ao painel quebra sem teste.
 - **A cobertura do `sumiu` e do `desistiu` nas intenções com alvo** (ir à comida, à bola, ao lugar): portados, sem G-PAR-VIDA (LM4).
