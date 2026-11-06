@@ -1,0 +1,14 @@
+{
+ "id": "01a1b12a-54d5-73ef-9a49-62ff7e9cbc43",
+ "type": "image-to-image",
+ "ai_model": "nano-banana-2",
+ "prompt": "Multiple views of the same dark green vintage lamp post with a lantern on top, vine and mossy base: front, side and back, same style, same colors, plain light grey background.",
+ "status": "SUCCEEDED",
+ "consumed_credits": 6,
+ "created_at": 1793973704199,
+ "finished_at": 1793973725528,
+ "saldo": {
+  "antes": 836,
+  "depois": 830
+ }
+}
