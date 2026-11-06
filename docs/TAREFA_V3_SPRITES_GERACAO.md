@@ -437,3 +437,56 @@ recomendado": as recomendações abaixo valem como estão; registro D-SG-H).
       O gerador reproduziu a silhueta do take 0 e só deslocou as cores. A escala estimada é 10,04×.
     - **O R-still** (`remaster/geracao/Agumon/revisoes/E1.md`): os 3 takes estão aprovados, e a recomendação é o take 1.
     - **A folha de contato** (`still/contato_still_x4.png`) foi enviada ao Matheus.
+  - **O still escolhido:** o take 0, o próprio `Idle_00` do UP, pela resposta do Matheus ("Sim, take 0").
+    - Os takes 1 a 3 eram iguais a olho: o gerador só copiou a referência, com uma deriva de cor.
+    - O R-still tinha recomendado o take 1, e o take 0 continuava sendo o mais fiel.
+    - O `master.json` do Sprite Forge foi feito com `master_still.py approve --still`.
+  - **A E2, 3 takes de vídeo** (Kling 3.0 Pro, 4 s, US$ 0,448 cada, o último quadro preso ao still), cada um aprovado antes pelo R-envio
+    (`remaster/geracao/Agumon/revisoes/E2_envio_t0N.md`):
+
+    | take | resultado | G-AREA (áreas por quadro) |
+    |---|---|---|
+    | t01 | a cabeça desce e o corpo encolhe; a garra solta à frente da boca | reprovado: 1 097 a 1 410, piso 1 253,7 |
+    | t02 | o corpo fica mais de pé; só o quadro da cabeça mais baixa encolhe | reprovado: 1 213 no quadro 4 |
+    | t03 | só a cabeça e a mandíbula se mexem | aprovado: 1 399 a 1 432 |
+
+  - **Os gates do Sprite Forge:** passaram nos 3 takes. O de tempo deu aviso (de 3,0 a 3,2 s de ação), e o retime levou cada take a 9
+    quadros e 833 ms.
+  - **A E3, pela reserva** (D-SG-N):
+    - o script é `tools/sprites_geracao/limpar.py`;
+    - cada quadro registrado é amostrado no centro de cada pixel do UP, direto na caixa de 94×68;
+    - o alfa fica binário com corte em 128;
+    - o snap vai à `paleta.gpl` em CIELAB.
+    - No quadro parado, a silhueta volta igual à do UP (XOR 0); cerca de 30 % dos pixels voltam à cor exata.
+  - **A E4 e a E5 sobre o t03** (`remaster/geracao/Agumon/gates.json`): os 7 gates passam.
+
+    | gate | resultado |
+    |---|---|
+    | G-PAL | 0 pixels fora da paleta |
+    | G-CAIXA | passa |
+    | G-PE | pé na linha 58, desvio do centro x igual a 0 |
+    | G-ALFA | 0 pixels semitransparentes |
+    | G-AREA | 1 399 a 1 432 |
+    | G-MS | 9 quadros, 833 ms |
+    | G-CARGA | passa |
+
+  - **O R-clipe, cego** (`revisoes/E5_rclipe.md`, com a chave à parte em `revisoes/rclipe_chave.json`):
+    - o derivado foi reprovado: a boca abre com clareza uma vez só, e o corpo desliza de 1 a 2 px;
+    - o gerado foi aprovado com ressalvas: a boca fica aberta longa, talvez não sejam dois ciclos; o último quadro repete o primeiro; são
+      1 659 cores;
+    - na leitura dele, o gerado se lê melhor como "comer".
+  - **A E6:**
+    - o candidato com os 60 Digimon, o Agumon do gerado, está em `remaster/geracao/candidato/`;
+    - o `gerar_atlas_up_clipes.py` rodou sem erro;
+    - o e2e `e2e_capturas/sprites_comer.spec.ts` rodou com `DIGILAB_ATLAS_CLIPES_PASTA` no candidato: 8 de 8 passaram, com
+      `__digilab.comer() === "clipe"` em 390 e 1280 px;
+    - as capturas estão em `remaster/geracao/capturas/`;
+    - o R-final aprovou (`revisoes/E6_rfinal.md`);
+    - em `web/app`, o `npm test` dá 822 de 822 e o `npm run tipos` passa.
+  - **A leitura cega (4.2):** a página `remaster/geracao/Agumon/cego/index.html` mostra A e B lado a lado, a 4×, em laço e quadro a
+    quadro. O sorteio é novo, feito uma vez, e a chave está em `cego.json`. A leitura aguarda o Matheus.
+  - **O gasto, pelo ledger** (`remaster/geracao/Agumon/forge/.forge/ledger.jsonl`, `media_ledger.py summary`): 6 chamadas pagas,
+    **US$ 1,584**. As 3 imagens custaram US$ 0,24 e os 3 vídeos, US$ 1,344.
+    - Em reais, o gasto dá **R$ 8,72**. O câmbio é o comercial de US$ 1 = R$ 5,5037, da AwesomeAPI
+      (`economia.awesomeapi.com.br/json/last/USD-BRL`) em 2026-11-05 às 19:48, sem o IOF e sem o spread do cartão.
+    - O depósito de US$ 10 que o Matheus fez no fal.ai fica à parte: ele não é gasto, e sobra crédito para os próximos clipes.

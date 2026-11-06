@@ -11,7 +11,10 @@ import { fileURLToPath } from "node:url";
 const SAVES: Record<string, { semente: number; versao: number; log: unknown[] }> = JSON.parse(readFileSync(new URL("./saves_cena.json", import.meta.url), "utf8"));
 const REPO = fileURLToPath(new URL("../../..", import.meta.url)), PREFIXO = `/${basename(REPO)}`, APP = `${PREFIXO}/web/dist/`, CHAVE = "digilab-web-v21-sprites";
 const SAIDA = process.env.DIGILAB_CAPTURAS_COMER_PASTA ?? "D:\\Trab\\digilab\\remaster\\acoes\\capturas\\m4";
-const ATLAS_CLIPES = join(REPO, "..", "Assets", "digilab_atlas_up_clipes.json");
+/* DIGILAB_ATLAS_CLIPES_PASTA (opcional, docs/TAREFA_V3_SPRITES_GERACAO.md 3.1): a pasta de um atlas de clipes candidato (o .json e o
+   .png); a rota serve os dois no lugar dos de Assets. Sem ela, o teste e o de sempre */
+const PASTA_CANDIDATO = process.env.DIGILAB_ATLAS_CLIPES_PASTA;
+const ATLAS_CLIPES = join(PASTA_CANDIDATO ?? join(REPO, "..", "Assets"), "digilab_atlas_up_clipes.json");
 const TELAS: [number, number][] = [[390, 844], [1280, 800]];
 /* o Gabumon (a forma do pet do save: a troca nao muda nada), o Agumon (a prova da M1) e dois da lista dos duvidosos da M1. Com a troca, a
    plaquinha do topo tambem mostra o Digimon trocado (ela le o mesmo atlas), com o nome do pet de verdade */
@@ -33,6 +36,8 @@ for (const [w, h] of TELAS) {
       const trocado = { ...real, sprites: Object.fromEntries(Object.entries(real.sprites).map(([k, s]) => [k, ehForma(k) ? alvo : s])) };
       const ctx = await browser.newContext({ baseURL: test.info().project.use.baseURL, viewport: { width: w, height: h }, deviceScaleFactor: 1 });
       await ctx.route(/\/Assets\/digilab_atlas_up_clipes\.json/, r => r.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(trocado) }));
+      if (PASTA_CANDIDATO)
+        await ctx.route(/\/Assets\/digilab_atlas_up_clipes\.png/, r => r.fulfill({ status: 200, contentType: "image/png", body: readFileSync(join(PASTA_CANDIDATO, "digilab_atlas_up_clipes.png")) }));
       /* o relogio do jogo parado (src/tempo.ts, o unico setInterval de 100 ms): o motor fica na acao "comer" */
       await ctx.addInitScript(() => {
         const orig = window.setInterval.bind(window);
