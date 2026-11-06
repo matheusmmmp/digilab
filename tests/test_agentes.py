@@ -43,7 +43,8 @@ def test_o_revisor_existe_e_so_le(nome):
     assert campos["name"] == nome
     assert campos["description"]
     assert campos["model"] in {"opus", "sonnet", "haiku"}
-    assert not lista(campos["tools"]) & (ESCRITA | {"Bash", "PowerShell"})
+    shell = {"Bash"} if nome == "auditor-numeros" else set()          # E6: o auditor tem o Bash só de leitura, preso pelo H8
+    assert not lista(campos["tools"]) & (ESCRITA | {"Bash", "PowerShell"} - shell)
     assert ESCRITA <= lista(campos["disallowedTools"])
     assert "Read" in lista(campos["tools"])
     # todo achado aponta onde está: arquivo:linha nos revisores; a linha do documento no auditor
@@ -74,6 +75,13 @@ def test_o_testador_e_o_da_ux_com_a_secao_3_4():
         assert termo in corpo, termo
     texto = (AGENTES / "ux-browser-tester.md").read_text(encoding="utf-8")
     assert "h8_escopo.py\\\" testador" in texto or 'h8_escopo.py\\" testador' in texto
+
+
+def test_o_bash_do_auditor_passa_pelo_h8():
+    """E6: o Bash do auditor só existe com o hook do papel `auditor` no frontmatter (o H8 nega escrita e todo comando que não é leitura)."""
+    texto = (AGENTES / "auditor-numeros.md").read_text(encoding="utf-8")
+    assert 'h8_escopo.py\\" auditor' in texto
+    assert "sha256sum" in ler("auditor-numeros")[1]
 
 
 def test_o_auditor_tem_as_tres_classes():
