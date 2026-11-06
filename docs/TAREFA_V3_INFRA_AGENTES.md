@@ -387,3 +387,18 @@ aberta da E3 (seção 11), seguida pelo Matheus em 2026-11-06 ("siga com as reco
   `pre_run.py --medicao`; ler os scripts (`cat`, `git diff`) e o `--help` passam.
 - **Testes:** `python -m pytest tests/test_hooks.py tests/test_hook_h4.py tests/test_agentes.py tests/test_agentes_ux.py tests/test_pre_run.py tests/test_infra_*.py -q -p no:cacheprovider`
   → 278 passed. Na máquina real: `python tools/pre_run.py web/app/scripts/equilibrio_tr/medir_tudo.py --medicao` → código 0.
+
+## 16. A prova ao vivo e a etapa E6b (2026-11-06)
+
+- **A prova ao vivo,** numa sessão nova aberta em `D:\Trab\digilab\v3-infra-agentes-e5` (a `main` em `d9900a0`), em Sonnet:
+  - editar o `digilab/engine.py`: bloqueado pelo H1;
+  - trocar a `FAIXAS_QUEIMADAS` por uma tupla vazia: bloqueado pelo H9;
+  - a varredura da AN4 com `--processos 5`: bloqueada pelo H10;
+  - o `auditor-numeros`, chamado pelo tipo, nas linhas 40 a 45 do `docs/RESULTADO_V3_ACOES_NOVAS.md`: 14 VERIFICADO, 0 DIVERGENTE e 1 SEM
+    FONTE. Os hashes e os tamanhos que na primeira rodada (seção 10) saíam SEM FONTE agora saem VERIFICADO.
+  - O `git status --short` ficou vazio depois.
+- **O SEM FONTE que sobrou** foram as "3 200 vidas" dentro do `vidas.tar.gz`: o H8 negou ao auditor o `tar -tzf`.
+- **A E6b, a pedido do Matheus ("Sim, liberar"):** o papel `auditor` do H8 aceita o `tar` só no modo de listar (`-t`, `--list` ou o `t` no
+  grupo de letras do começo). Nega o `-x`, o `-c`, o `-r`, o `-u`, o `-A`, o `-I`, o `--delete`, o `--to-command` e as outras opções que
+  extraem, criam ou rodam programa, e o `tar` sem `-t`. O `auditor-numeros.md` diz como usar.
+- **Testes:** oito casos novos do `tar` no `test_h8_shell_do_auditor`; o conjunto de hooks, agentes, `pre_run` e infra passa inteiro.

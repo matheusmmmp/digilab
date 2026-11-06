@@ -21,7 +21,7 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RAIZ))
 
-from servidor.fala_llm import MAX_TOKENS_SAIDA, PRECOS_USD_POR_MTOK  # noqa: E402
+from servidor.fala_llm import LIMITE_USD_LIVRE_PADRAO, MAX_TOKENS_SAIDA, PRECOS_USD_POR_MTOK  # noqa: E402
 
 SAIDA = RAIZ / "artifacts_custo_llm"
 HORAS_MES = 730                       # 24 * 365 / 12
@@ -38,6 +38,14 @@ VIDAS_CONFIRMATORIA = 160 * 5
 DIAS_VIDA = 14
 PASSOS_DIA = 96                       # dono decide a cada 15 min (ConfigDonos)
 EVENTOS_DIA = 10                      # PROPOSTO, sem fonte: travessuras/decisoes da LLM por dia simulado
+
+
+# CONVERSA_PET M5 (PLANO_ANALISE_V3_CONVERSA_PET, secoes 2 e 7): a comparacao cega gemma2:9b x haiku-5-5 x sonnet-5-5 da fala livre.
+# 12 roteiros x 8 turnos x (calibracao + validacao) = 192 turnos por braco, 384 nos dois; ~2 600 tokens de entrada e ~100 de saida
+# por turno (estimativa do plano, PROPOSTA, sem medida ainda). Teto separado PROPOSTO: US$ 3 (servidor/fala_llm.LIMITE_USD_LIVRE_PADRAO).
+TURNOS_LIVRE_POR_BRACO = 12 * 8 * 2
+TOKENS_TURNO_LIVRE = (2600, 100)
+MODELOS_LIVRE = ("claude-haiku-5-5", "claude-sonnet-5-5")
 
 
 def tokens_pedido() -> tuple[int, int]:
@@ -80,7 +88,14 @@ def main() -> int:
         pesquisa[nome] = {"chamadas": total,
                           "usd": {m: round(total * custo_chamada[m], 2) for m in custo_chamada},
                           "horas_gpu_local": {mod: round(total * v["p50_s"] / 3600, 1) for mod, v in lat.items()}}
-    res = {"tokens_por_chamada": {"entrada": ent, "saida": sai},
+    ent_l, sai_l = TOKENS_TURNO_LIVRE
+    livre = {"turnos_por_braco": TURNOS_LIVRE_POR_BRACO, "tokens_por_turno": {"entrada": ent_l, "saida": sai_l},
+             "usd_por_braco": {m: round(TURNOS_LIVRE_POR_BRACO * (ent_l * PRECOS_USD_POR_MTOK[m][0]
+                                                                  + sai_l * PRECOS_USD_POR_MTOK[m][1]) / 1e6, 4)
+                               for m in MODELOS_LIVRE},
+             "teto_usd_proposto": LIMITE_USD_LIVRE_PADRAO, "status": "PROPOSTO, sem medida: tokens do plano, secao 7"}
+    livre["usd_total_dois_bracos"] = round(sum(livre["usd_por_braco"].values()), 4)
+    res = {"fala_livre_comparacao_d5": livre, "tokens_por_chamada": {"entrada": ent, "saida": sai},
            "usd_por_chamada": {m: round(v, 6) for m, v in custo_chamada.items()},
            "cenarios": CENARIOS, "custo_api_usd_mes_por_usuarios_simultaneos": api,
            "latencia_local_medida": lat, "capacidade_uma_gpu_usuarios_simultaneos": capacidade,
@@ -95,7 +110,7 @@ def main() -> int:
         for m in api[c]:
             ln.append(f"| {c} | {m} | " + " | ".join(f"{api[c][m][str(n)]:,.0f}" for n in USUARIOS) + " |")
     (SAIDA / "tabela.md").write_text("\n".join(ln) + "\n", encoding="utf-8")
-    print(json.dumps({k: res[k] for k in ("tokens_por_chamada", "usd_por_chamada", "latencia_local_medida",
+    print(json.dumps({k: res[k] for k in ("fala_livre_comparacao_d5", "tokens_por_chamada", "usd_por_chamada", "latencia_local_medida",
                                           "capacidade_uma_gpu_usuarios_simultaneos", "pesquisa_vidas_da_confirmatoria")},
                      indent=1))
     print("\n".join(ln))
