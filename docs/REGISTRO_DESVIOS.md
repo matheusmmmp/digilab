@@ -526,6 +526,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-06 — ITENS_3D, o saco de pancada (Gerente, Claude Code, Opus 5.5, worktree `v3-itens-3d-saco`)](registro/2026-11.md)
 - [2026-11-06 — PONTE_LUTA, etapa PE0, o v16 e o v17 lutam e o gabarito das lutas de hoje (worker, Claude Code, Sonnet 5.5, branch `v3-ponte-luta-pe0`)](registro/2026-11.md)
 - [2026-11-06 — SPRITES_ACOES, o Emburrar no jogo (worker, Claude Code, Sonnet 5.5, branch `v3-sprites-emburrar`)](registro/2026-11.md)
+- [2026-11-06 — SPRITES_REACOES, a tarefa das reações do pet (Gerente da missão SPRITES_GERACAO, Claude Code, Opus 5.5, worktree `v3-sprites-reacoes`)](registro/2026-11.md)
 - [2026-11-06 — ITENS_3D, o kit médico e o cocô (Gerente, Claude Code, Opus 5.5, worktree `v3-itens-3d-kit-coco`)](registro/2026-11.md)
 - [2026-11-06 — PONTE_LUTA, etapa PE1, o estímulo da luta no corpo e o evento `lt` no replay do mundo (worker, Claude Code, Sonnet 5.5, branch `v3-ponte-luta-pe1`)](registro/2026-11.md)
 - [2026-11-06 — PONTE_LUTA, etapa PE2, o gancho `receber_luta`, o resumo na Observação e a origem `luta` no M-MEM (worker, Claude Code, Sonnet 5.5, branch `v3-ponte-luta-pe2`)](registro/2026-11.md)
