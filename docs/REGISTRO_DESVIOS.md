@@ -529,6 +529,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-06 — PONTE_LUTA, etapa PE2, o gancho `receber_luta`, o resumo na Observação e a origem `luta` no M-MEM (worker, Claude Code, Sonnet 5.5, branch `v3-ponte-luta-pe2`)](registro/2026-11.md)
 - [2026-11-06 — MUNDO_ENFEITES, a tarefa (Gerente da frente, Claude Code, Opus 5.5, worktree `v3-mundo-enfeites`)](registro/2026-11.md)
 - [2026-11-06 — PONTE_LUTA, etapa PE3, o espelho TS da dor e da luta como episódio, a marca `pl` e o `_lutar` com o resumo (worker, Claude Code, Sonnet 5.5, branch `v3-ponte-luta-pe3`)](registro/2026-11.md)
+- [2026-11-06 — UX_TELA_PET A1, as escolhas dos hooks H5, H6 e H8 (Gerente da frente, Claude Code, Opus 5.5, worktree `v3-hooks-a1`)](registro/2026-11.md)
 - [2026-11-06 — INFRA_AGENTES, a especificação das etapas E1 a E5 (especificador, Claude Code, Opus 5.5, branch `v3-infra-agentes`)](registro/2026-11.md)
 - [2026-11-06 — INFRA_AGENTES, etapa E1, os hooks H2, H1b, H6 e H9 (worker, Claude Code, Opus 5.5, branch `v3-infra-agentes-e1`)](registro/2026-11.md)
 - [2026-11-06 — INFRA_AGENTES, etapa E2, os três revisores somente leitura (worker, Claude Code, Opus 5.5, branch `v3-infra-agentes-e2`)](registro/2026-11.md)

@@ -1,0 +1,25 @@
+{
+  "_comentario": "PROPOSTA (docs/TAREFA_V3_UX_TELA_PET.md, seção 3.3, etapa A1): só o Matheus liga, em .claude/settings.json (SA-5; UX-5). O H8 não entra aqui: vai no frontmatter de cada agente (.claude/agents/*.md, etapa A2), com o papel como argumento; o exemplo está em agentes_h8.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit|NotebookEdit",
+        "hooks": [{"type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/h6_capturas.py\"", "timeout": 30}]
+      },
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [{"type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/h6_capturas.py\"", "timeout": 30}]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [{"type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/h5_web.py\"", "timeout": 1900}]
+      }
+    ]
+  },
+  "agentes_h8": {
+    "designer": {"matcher": "Write|Edit|MultiEdit|NotebookEdit|Bash|PowerShell", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/h8_escopo.py\" designer"},
+    "implementador": {"matcher": "Edit|Write|MultiEdit|NotebookEdit", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/h8_escopo.py\" implementador"},
+    "testador": {"matcher": "Edit|Write|MultiEdit|NotebookEdit|Bash|PowerShell", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/h8_escopo.py\" testador"}
+  }
+}
