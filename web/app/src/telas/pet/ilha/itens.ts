@@ -7,8 +7,8 @@
      - a bola: a bola, que desliza ate onde o motor diz e gira ao rolar, e some enquanto o dono a arrasta (CENA.bolaNaMao);
      - o saco de pancada do treino (docs/TAREFA_V3_HABITAT_OBJETOS.md): um poste com o saco pendurado, perto do ninho, que balanca a cada
        golpe (baterNoSaco);
-     - o kit medico: uma maleta branca com a cruz, ao lado do ninho, enquanto o pet esta lesionado;
-     - o coco: um por unidade da sujeira do motor, no chao onde o pet estava quando ela subiu (cocos.ts);
+     - o kit medico: um caixote com a tampa branca e a cruz (o item gerado), ao lado do ninho, enquanto o pet esta lesionado;
+     - o coco: um por unidade da sujeira do motor, no chao onde o pet estava quando ela subiu (cocos.ts; o item gerado);
    todos com a sombra redonda. As posicoes do motor sao em subunidades; aqui, em celulas. Os tamanhos e as cores sao do desenho:
    PROPOSTO, SEM FONTE. */
 import * as THREE from "three";
@@ -17,7 +17,7 @@ import { ninhoDe } from "../vistaMundo.ts";
 import { CENA } from "../cenaEstado.ts";
 import { BOLA_SALTO, BOLA_TAU_MS, COCO, KIT_DESDE_NINHO, LUZ_NINHO, SACO_AMASSO, SACO_BALANCO, SACO_DESDE_NINHO, SACO_FOLGA_POSTE, SACO_GIRO } from "./constantes.ts";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { GEO_SOMBRA, carregarVariante, curvar, materialSombra, toon } from "./cena.ts";
+import { GEO_SOMBRA, carregarVariante, curvar, materialSombra, toon, type Variante } from "./cena.ts";
 import { Cocos } from "./cocos.ts";
 import { ITENS_MODELOS } from "./modelos.ts";
 
@@ -144,19 +144,25 @@ async function carregarSaco(s: Saco, base: string): Promise<void> {
   s.corpo.add(mc);
   s.meio = (caixa.min.y + caixa.max.y) / 2 - topo.y;
 }
-/** o kit medico: a maleta branca, a alca e a cruz vermelha em cima */
-function kit(): THREE.Group {
-  const g = new THREE.Group(), vermelho = toon({ color: 0xd8382f });
-  const caixa = new THREE.Mesh(new THREE.BoxGeometry(0.56, 0.36, 0.42), toon({ color: 0xf6f8fb }));
-  caixa.position.y = 0.18;
-  const alca = new THREE.Mesh(new THREE.TorusGeometry(0.1, 0.025, 5, 12, Math.PI), toon({ color: 0x3a3a44 }));
-  alca.position.y = 0.36;
-  const cruzA = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.02, 0.08), vermelho), cruzB = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.02, 0.26), vermelho);
-  cruzA.position.set(0.12, 0.365, 0); cruzB.position.set(0.12, 0.365, 0);
-  const frente = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.06, 0.02), vermelho), frenteV = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.2, 0.02), vermelho);
-  frente.position.set(0, 0.18, 0.215); frenteV.position.set(0, 0.18, 0.215);
-  g.add(sombra(0.45), caixa, alca, cruzA, cruzB, frente, frenteV);
-  return g;
+/** o kit medico: o item gerado (docs/TAREFA_V3_ITENS_3D.md; public/itens/kit/), um caixote de madeira com a tampa branca e a cruz, que
+    entra depois por `carregarSimples` no `corpo` */
+function kit(): { g: THREE.Group; corpo: THREE.Group } {
+  const g = new THREE.Group(), corpo = new THREE.Group();
+  g.add(sombra(ITENS_MODELOS.kit.sombra), corpo);
+  return { g, corpo };
+}
+/** as pecas de um item gerado de uma peca so (o kit e o coco), normalizadas pela altura da tabela, com a base em y = 0 */
+async function pecasDe(nome: "kit" | "coco", base: string): Promise<Variante["pecas"]> {
+  const m = ITENS_MODELOS[nome];
+  return (await carregarVariante(new GLTFLoader(), new URL("itens/" + m.arquivos[0], base).href, m)).pecas;
+}
+/** poe as pecas no grupo, cada uma como uma malha (a geometria e o material sao os mesmos em todos os grupos) */
+function porPecas(g: THREE.Group, pecas: Variante["pecas"]): void {
+  for (const p of pecas) {
+    const m = new THREE.Mesh(p.geo, p.mat);
+    m.applyMatrix4(p.local);
+    g.add(m);
+  }
 }
 /** a luz fraca do ninho a noite: um brilho no chao, aditivo, que nao ilumina mais nada */
 function brilho(): THREE.Mesh {
@@ -174,39 +180,27 @@ function brilho(): THREE.Mesh {
   return m;
 }
 
-/* o coco (cocos.ts): a geometria e o material, os mesmos para todos os cocos */
-const VOLTAS: readonly (readonly [number, number, number])[] = [[0.22, 0.09, 0], [0.165, 0.2, 0.03], [0.11, 0.3, -0.02]];
-let pecas: { voltas: THREE.BufferGeometry[]; ponta: THREE.BufferGeometry; claro: THREE.Material; escuro: THREE.Material } | null = null;
-function pecasDoCoco() {
-  if (!pecas) pecas = {
-    voltas: VOLTAS.map(([r]) => new THREE.SphereGeometry(r, 12, 8).scale(1, 0.55, 1)),
-    ponta: new THREE.ConeGeometry(0.07, 0.13, 8),
-    claro: toon({ color: COCO.cor[0] }),
-    escuro: toon({ color: COCO.cor[1] }),
-  };
-  return pecas;
-}
+/* o coco (cocos.ts): o item gerado (docs/TAREFA_V3_ITENS_3D.md; public/itens/coco/), o mesmo glTF para todos os cocos. Os cocos
+   podem cair antes de o glTF chegar (um save com sujeira): o corpo deles fica vazio ate la e e preenchido quando ele chega */
+let pecasCoco: Variante["pecas"] | null = null;
+const cocosSemCorpo: THREE.Group[] = [];
 
-/** um coco: tres voltas achatadas, cada uma menor e mais alta, e a ponta torta em cima, com a sombra redonda */
+/** um coco: o corpo (o glTF), girado para os cocos seguidos nao ficarem iguais, e a sombra redonda */
 function coco(i: number): THREE.Group {
-  const giro = i * 1.9;
-  const p = pecasDoCoco(), g = new THREE.Group(), corpo = new THREE.Group();
-  VOLTAS.forEach(([, y, dx], i) => {
-    const v = new THREE.Mesh(p.voltas[i], i % 2 ? p.escuro : p.claro);
-    v.position.set(dx, y, 0);
-    corpo.add(v);
-  });
-  const ponta = new THREE.Mesh(p.ponta, p.claro);
-  ponta.position.set(-0.03, 0.39, 0);
-  ponta.rotation.z = 0.35;
-  corpo.add(ponta);
-  corpo.rotation.y = giro;
+  const g = new THREE.Group(), corpo = new THREE.Group();
+  corpo.rotation.y = i * 1.9;
+  if (pecasCoco) porPecas(corpo, pecasCoco); else cocosSemCorpo.push(corpo);
   const s = new THREE.Mesh(GEO_SOMBRA, materialSombra());
-  s.scale.set(0.6, 1, 0.6);
+  s.scale.set(ITENS_MODELOS.coco.sombra * 2, 1, ITENS_MODELOS.coco.sombra * 2);
   s.position.y = 0.02;
   s.renderOrder = 1;
   g.add(s, corpo);
   return g;
+}
+/** carrega o coco e preenche os que ja cairam */
+async function carregarCoco(base: string): Promise<void> {
+  pecasCoco = await pecasDe("coco", base);
+  for (const corpo of cocosSemCorpo.splice(0)) porPecas(corpo, pecasCoco);
 }
 
 export class Itens {
@@ -239,14 +233,17 @@ export class Itens {
     this.brilho.visible = false;
     this.sacoEm = [nx / sub + SACO_DESDE_NINHO[0], ny / sub + SACO_DESDE_NINHO[1]];
     this.saco.g.position.set(this.sacoEm[0], 0, this.sacoEm[1]);
-    this.kit.position.set(nx / sub + KIT_DESDE_NINHO[0], 0, ny / sub + KIT_DESDE_NINHO[1]);
-    this.kit.rotation.y = -0.4;
-    this.kit.visible = false;
-    this.raiz.add(n, t, this.bola.g, this.brilho, this.saco.g, this.kit, this.cocos.raiz);
+    this.kit.g.position.set(nx / sub + KIT_DESDE_NINHO[0], 0, ny / sub + KIT_DESDE_NINHO[1]);
+    this.kit.g.rotation.y = -0.4;
+    this.kit.g.visible = false;
+    this.raiz.add(n, t, this.bola.g, this.brilho, this.saco.g, this.kit.g, this.cocos.raiz);
   }
 
-  /** os itens gerados (public/itens/): a bola e o saco; `base` e a URL da pagina */
-  async carregar(base: string): Promise<void> { await Promise.all([carregarBola(this.bola.esfera, base), carregarSaco(this.saco, base)]); }
+  /** os itens gerados (public/itens/): a bola, o saco, o kit e o coco; `base` e a URL da pagina */
+  async carregar(base: string): Promise<void> {
+    await Promise.all([carregarBola(this.bola.esfera, base), carregarSaco(this.saco, base),
+      pecasDe("kit", base).then(ps => porPecas(this.kit.corpo, ps)), carregarCoco(base)]);
+  }
 
   /** onde a bola esta desenhada (subunidades do mapa), para pegar a bola na cena (PorBola.tsx); null antes do primeiro quadro */
   get bolaDesenhada(): [number, number] | null { return this.bolaCel && [this.bolaCel[0] * this.sub, this.bolaCel[1] * this.sub]; }
@@ -290,7 +287,7 @@ export class Itens {
     this.naMaoAntes = CENA.bolaNaMao;
     this.bola.g.visible = !CENA.bolaNaMao;
     this.balancarSaco(agora, reduzido);
-    this.kit.visible = lesionado;
+    this.kit.g.visible = lesionado;
     this.brilho.visible = noite;
     this.cocos.sincronizar(sujeira, pet, agora, reduzido);
   }
