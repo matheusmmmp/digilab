@@ -275,7 +275,7 @@ Matheus, 2026-11-05, nesta sessão (resposta "B, hooks antes"):
     **ficam PROPOSTO, SEM FONTE**. O Matheus não comentou nenhum deles.
 
 - **A prancha L2/L3, os menus como lugares da ilha, e as 13 perguntas dela** (Matheus, 2026-11-06: "Aprovar a prancha", à versão 2 do
-  commit `9a708694`, rebaseado como `b51fe31a`). Valem as recomendações das 13 perguntas, em `docs/PROPOSTAS_V3_UX_TELA_PET.md`, seção
+  commit `9a708694`, rebaseado como `a2240bfc`). Valem as recomendações das 13 perguntas, em `docs/PROPOSTAS_V3_UX_TELA_PET.md`, seção
   "Lugares da ilha: menus (L2/L3)":
   - **1:** os atalhos `C`/`L`/`D` para os lugares, `1`–`4` nas abas e `Esc` para voltar, só fora de campo de texto;
   - **2:** a Fronteira continua aba de Lutar, trancada até o Nv 8;
