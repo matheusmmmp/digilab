@@ -23,6 +23,8 @@ export function TopoHabitat({ abrirMeusPets, irConversar, abrirConfig }: { abrir
           {emLab && <span className="topo-lab"><SeloExperimental /><button type="button" className="topo-lab__volta" onClick={sairDoLab}>voltar ao meu pet</button></span>}
         </span>
       </div>
+      {/* o encaixe da linha do agora (TelaPet, por portal): logo depois da plaquinha na ordem do DOM (a tabulacao segue o visual) e sem largura, para o logo e o relogio ficarem onde estao */}
+      <span className="topo-agora" />
       <b className="topo-logo" aria-hidden="true"><span className="topo-logo-marca" />DIGILAB</b>
       <span className="topo-relogio" role="group" aria-label={`${hhmm(e.tick)}, dia ${diaDe(e.tick)}`}>
         {noite ? <Moon className="topo-sol" aria-hidden="true" /> : <Sun className="topo-sol" aria-hidden="true" />}
