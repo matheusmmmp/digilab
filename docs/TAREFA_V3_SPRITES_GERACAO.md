@@ -496,7 +496,7 @@ recomendado": as recomendações abaixo valem como estão; registro D-SG-H).
     - **O resultado da pergunta 1: "melhor".** O gerado passa nos 7 gates (o `gates.json`), e o Matheus o marcou como melhor.
     - O resultado vale para o Agumon, o derivado mais forte (D-SG-4); ele ainda não diz nada sobre os 49 sem boca.
   - **As capturas do jogo (seção 7):** o Matheus viu os GIFs do jogo em 390 e 1280 px e o gerado lado a lado com o derivado, e respondeu
-    **"Não aprovo"**. O critério "o e2e com o clipe novo tem referência aprovada" fica **não cumprido**; o motivo ainda vai ser pedido a ele.
+    **"Não aprovo"**. O critério "o e2e com o clipe novo tem referência aprovada" ficou **não cumprido** para o t03; o motivo veio a seguir (D-SG-T).
   - **O take 4, uma prova nova a pedido do Matheus** ("Eu quero que ele abra mais a boca", D-SG-U):
     - **O prompt:** é o do t03, com "opens its jaws WIDE"; o R-envio aprovou (`revisoes/E2_envio_t04.md`).
     - **O custo:** US$ 0,448; o ledger soma 7 chamadas e **US$ 2,032**.
@@ -506,4 +506,26 @@ recomendado": as recomendações abaixo valem como estão; registro D-SG-H).
     - **Os gates** (`remaster/geracao/Agumon/gates.json`, agora do t04b): passa nos 7, com o G-AREA de 1 299 a 1 410 e o G-CARGA.
     - **O jogo:** o e2e no candidato novo dá 8 de 8. As capturas estão em `remaster/geracao/capturas/`; as do t03 foram para
       `capturas_t03/`.
-    - **A aprovação das capturas do t04 aguarda o Matheus.**
+    - **As capturas do t04, aprovadas pelo Matheus em 2026-11-06:** "Aprovo o take 4" (D-SG-W). O critério da seção 7, "o e2e com o
+      clipe novo tem referência aprovada", fica cumprido com o t04b. O t04 não passou por leitura cega; a pergunta 1 continua fechada pela
+      leitura do t03 (D-SG-S).
+  - **A E7, as lições:**
+    - **O custo real** (o ledger, `media_ledger.py summary`): 7 chamadas pagas, **US$ 2,032** (R$ 11,18 ao câmbio de cima), de um teto de
+      US$ 5 e 8 chamadas. As 3 imagens da E1 (US$ 0,24) não serviram: o still escolhido foi o take 0, de graça. Os 4 vídeos (US$ 1,792)
+      são o custo de fato de um clipe; o primeiro aproveitável foi o 3.º, e o aprovado, o 4.º.
+    - **O resultado da pergunta 1:** "melhor" para o Agumon, pela leitura cega do t03, e o t04 aprovado no jogo. Nada se diz ainda dos 49
+      sem boca.
+    - **O que deu certo:**
+      - o take 0 (o `Idle_00` do UP) como still: o gerador de imagem só copiava a referência, e o vídeo preso ao último quadro manteve a
+        silhueta;
+      - a reserva da E3 (`limpar.py`): a amostragem na grade do UP e o snap em CIELAB levaram os quadros aos 7 gates sem retoque à mão;
+      - o G-AREA como filtro barato: reprovou o t01 e o t02 (o corpo encolhia) antes de qualquer olho humano;
+      - o teto num intermediário fora do git (`route_media_teto.py`): nenhuma chamada passou sem `--budget-usd 5 --max-calls 8`.
+    - **O que errou:**
+      - os termos do fal.ai só foram lidos na G2 e pararam a etapa (D-SG-6); a leitura dos termos deve vir antes do plano de custo;
+      - a conta sem saldo parou a E1 duas vezes; conferir o saldo antes da primeira chamada;
+      - o prompt do `sprite_set.py` traz negações que a tarefa proíbe (D-SG-O); o prompt literal teve de ser montado à parte;
+      - o retime automático escolhe pelo alcance do corpo, não pela boca: no t04 perdeu as mordidas, e o corte foi à mão (D-SG-V);
+      - a recusa das capturas do t03 veio depois da leitura cega: o critério do Matheus (a boca bem aberta) só apareceu vendo o clipe no
+        jogo; mostrar o GIF no jogo antes do take seguinte teria poupado uma chamada;
+      - o pixel-mcp não serve para paletas de milhares de cores (D-SG-N).
