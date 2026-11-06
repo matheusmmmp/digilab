@@ -119,6 +119,14 @@ export class Afeto {
     return this.ultimo;
   }
 
+  /** a variacao do corpo da luta (ponte da luta, PE3; espelho de `Afeto.sigma_luta`): o mesmo r e r_n da `consequencia`, SEM mexer em V nem em E */
+  sigmaLuta(pcAntes: CorpoModular, pcDepois: CorpoModular, receptores: readonly string[]): { r: number; r_n: number } {
+    const p = this.p, S = this.S;
+    const drives = this.drives(receptores);
+    const r = sinalCorpo(pcAntes as PercepcaoCorpoLobos, pcDepois as PercepcaoCorpoLobos, drives, p.ganho_r, S, pesosUm(drives));
+    return { r, r_n: clamp(divArred(r, p.r_norm), -S, S) };
+  }
+
   estadoInterno(): { V: number; E: number; decisoes: number; ultimo: UltimoAfeto | null } {
     return { V: this.V, E: this.E, decisoes: this.decisoes, ultimo: this.ultimo };
   }

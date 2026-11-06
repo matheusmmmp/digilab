@@ -82,8 +82,11 @@ export interface ChavesProduto { chamadoPelaFome: boolean; decisaoNaComida: bool
 export type EventoProduto = [tick: number, tipo: "p", chaves: ChavesProduto];
 /** v17: o cerebro que decide dali em diante (o modular ou o A) */
 export type EventoCerebro = [tick: number, tipo: "cb", troca: { cerebro: "modular" | "a" }];
+/** a ponte da luta (PE3; docs/TAREFA_V3_PONTE_LUTA.md, 3.5): a marca gravada no ovo novo, como o "cb"; so nos v16 e v17. Com ela, a luta entrega o
+    resumo ao corpo (a dor) e, com o modular ativo, ao DigiBrain (a memoria). Sem ela, a vida de hoje, byte a byte */
+export type EventoPonteLuta = [tick: number, tipo: "pl", marca: { luta: true }];
 export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem | EventoConfig | EventoLiberacao
-  | EventoItem | EventoCarta | EventoFronteira | EventoFala | EventoComida | EventoBola | EventoProduto | EventoCerebro;
+  | EventoItem | EventoCarta | EventoFronteira | EventoFala | EventoComida | EventoBola | EventoProduto | EventoCerebro | EventoPonteLuta;
 
 export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17;
 

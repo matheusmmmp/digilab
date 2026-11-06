@@ -218,7 +218,7 @@ describe("(b) a decisao do pet logo depois da racao no chao", () => {
 describe("as chaves no registro: o evento \"p\"", () => {
   test("o jogo grava as chaves no comeco do registro dos ovos novos, e o replay as le de la", () => {
     const m = ligarProduto(new Motor(101));
-    expect(m.log).toEqual([[TICK_INICIAL, "p", JOGO], [TICK_INICIAL, "cb", { cerebro: "modular" }]]);   // e o cerebro dos ovos novos (src/cerebro.ts)
+    expect(m.log).toEqual([[TICK_INICIAL, "p", JOGO], [TICK_INICIAL, "cb", { cerebro: "modular" }], [TICK_INICIAL, "pl", { luta: true }]]);   // o cerebro dos ovos novos (src/cerebro.ts) e a ponte da luta (PE3)
     expect(m.produto).toEqual(JOGO);
     brincarCedo(m, 6, 120, (t) => { if (t === 77) racaoPerto(m, 32); });
     const r = Motor.reproduzir(101, m.log);
@@ -231,7 +231,7 @@ describe("as chaves no registro: o evento \"p\"", () => {
     expect(semP.assinatura()).not.toBe(m.assinatura());
     /* o ritmo antes das chaves (o brasao), e a origem do filho antes delas */
     const cl = new Motor(202); cl.configurar("classica"); ligarProduto(cl);
-    expect(cl.log.map(ev => ev[1])).toEqual(["c", "p", "cb"]);
+    expect(cl.log.map(ev => ev[1])).toEqual(["c", "p", "cb", "pl"]);
   });
 
   test("o evento invalido falha alto: fora do comeco, duas vezes, malformado", () => {

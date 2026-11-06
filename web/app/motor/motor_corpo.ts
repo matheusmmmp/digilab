@@ -34,10 +34,28 @@ export interface PoliticaCorpo {
   /** o `escolher_alvo` do Python (mundo.py): o laco com o mundo so o pergunta com a chave da v13 (OpcoesLacoMundo.digibrain); o A nao o
    *  tem (o alvo dele e o padrao do motor, MV-2) */
   escolherAlvo?: EscolherAlvo;
+  /** a ponte da luta (PE3): o DigiBrain com a `luta_memoria` recebe o resumo pronto; o A nao tem o gancho (3.7) */
+  readonly lutaMemoria?: boolean;
+  receberLuta?(rival: string, resultado: number, vidaPerdidaS: number, tick: number): void;
 }
 
 /** um evento do log do Python (events.py): o avanco e a acao do dono (e, no laco com o mundo dos v12, a comida deixada pelo dono) */
-export interface EventoCorpo { tick: number; tipo: "avanco" | "acao_usuario" | "deixar_comida"; valor: number | string }
+export interface EventoCorpo { tick: number; tipo: "avanco" | "acao_usuario" | "deixar_comida" | "lt"; valor: number | string }
+
+/** o resumo pronto de uma luta, em inteiros (docs/TAREFA_V3_PONTE_LUTA.md, 3.4; o `events.resumo_luta` do Python): o valor do evento `lt` e
+ *  `rival|resultado|vida_perdida_s`. O rival sem `|` nem quebra de linha, o resultado em -1, 0, +1, a vida perdida inteira >= 0 */
+export function valorResumoLuta(rival: string, resultado: number, vidaPerdidaS: number): string {
+  if (typeof rival !== "string" || rival === "" || rival.includes("|") || /\n/.test(rival)) throw new Error(`rival do resumo da luta invalido: ${JSON.stringify(rival)}`);
+  if (![-1, 0, 1].includes(resultado)) throw new Error(`resultado do resumo da luta fora de -1, 0, +1: ${resultado}`);
+  if (!Number.isInteger(vidaPerdidaS) || vidaPerdidaS < 0) throw new Error(`vida perdida do resumo da luta precisa ser inteiro >= 0: ${vidaPerdidaS}`);
+  return `${rival}|${resultado}|${vidaPerdidaS}`;
+}
+/** o `events.ler_resumo_luta`: [rival, resultado, vida perdida em S]; falha alto num valor malformado */
+export function lerResumoLuta(valor: unknown): [string, number, number] {
+  const partes = String(valor).split("|");
+  if (partes.length !== 3 || !partes[0] || !["-1", "0", "1"].includes(partes[1]!) || !/^[0-9]+$/.test(partes[2]!)) throw new Error(`resumo da luta malformado: ${String(valor)}`);
+  return [partes[0], Number(partes[1]), Number(partes[2])];
+}
 
 /** as acoes do dono que o v11 aceita: as quatro de cuidado e o tapa (o carinho e o tapa sao gestos, CD-6) */
 export const ACOES_DONO_V11 = ["alimentar", "limpar", "brincar", "acariciar", VALOR_TAPA] as const;
@@ -108,7 +126,26 @@ export class MotorCorpo {
     if (e.tick !== this.estado.tick) throw new Error(`evento no tick ${e.tick}, o motor esta no ${this.estado.tick}`);
     if (e.tipo === "avanco") this.avancar(e.valor as number);
     else if (e.tipo === "acao_usuario") this.observar(e.valor as string);
+    else if (e.tipo === "lt") this.resumoLuta(...lerResumoLuta(e.valor));
     else throw new Error(`evento desconhecido no log: ${JSON.stringify(e)}`);
+  }
+
+  /** a ponte da luta (PE3; `MotorMundo.resumo_luta` do Python): o resumo pronto de uma luta vai ao log e ao corpo */
+  resumoLuta(rival: string, resultado: number, vidaPerdidaS: number): void {
+    const valor = valorResumoLuta(rival, resultado, vidaPerdidaS);
+    this.aplicarResumoLuta(rival, resultado, vidaPerdidaS);          // confere a chave antes de gravar no log
+    this.log.push({ tick: this.estado.tick, tipo: "lt", valor });
+  }
+
+  /** o resumo da luta sem o log do MotorCorpo (os pets do jogo gravam o registro do Motor): a dor no corpo e, se o cerebro tem a `luta_memoria`,
+   *  o resumo pronto ao DigiBrain (`MotorCorpo._aplicar_resumo_luta` do Python). Sem a chave do corpo, falha alto */
+  aplicarResumoLuta(rival: string, resultado: number, vidaPerdidaS: number): void {
+    if (!this.corpo.luta.ligada) throw new Error("o evento lt exige o corpo com ConfigLutaCorpo ligada (luta_corpo; ponte da luta, PE3)");
+    valorResumoLuta(rival, resultado, vidaPerdidaS);
+    this.conferirSincronia("antes do resumo da luta");
+    this.corpo.estimuloLuta(vidaPerdidaS);
+    this.sincronizar();
+    if (this.politica.lutaMemoria && this.politica.receberLuta) this.politica.receberLuta(rival, resultado, vidaPerdidaS, this.estado.tick);
   }
 
   /** o motor.estado() do Python: o Estado (com os nomes do Python), a acao atual, a hora do dia e o corpo */

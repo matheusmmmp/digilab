@@ -20,11 +20,13 @@ export interface Luta {
 }
 export interface Vida { variante: Variante; semente: number; versao: number; estagio: string; log: EventoRegistro[]; lutas: Luta[]; assinatura: string }
 
-export function nascer(v: Variante, semente: number): Motor {
+/** `ponte` (PE3): grava no ovo a marca "pl" da ponte da luta, como o jogo faz nos ovos novos (src/produto.ts); sem ela, a vida de hoje (o gabarito) */
+export function nascer(v: Variante, semente: number, ponte = false): Motor {
   const m = v === "v16" ? petDeTeste(semente) : new Motor(semente);
   if (v !== "v16") m.ligarProduto({ chamadoPelaFome: true, decisaoNaComida: true, chamadosPeloCorpo: true });
   if (v === "v17_modular" || v === "v17_cb") m.trocarCerebro("modular");
   if (v === "v17_a") m.trocarCerebro("a");
+  if (ponte) m.ligarPonteLuta();
   return m;
 }
 
@@ -41,8 +43,8 @@ function resumir(m: Motor, rival: string, r: ReturnType<Motor["lutar"]>): Luta {
 }
 
 /** a vida curta com lutas: o dono cuida (racao, limpeza, carinho) e, do Rookie em diante, manda lutar; no `v17_cb` o cerebro troca entre duas lutas */
-export function viverComLutas(v: Variante, semente: number, dias = DIAS): Vida {
-  const m = nascer(v, semente), lutas: Luta[] = [];
+export function viverComLutas(v: Variante, semente: number, dias = DIAS, ponte = false): Vida {
+  const m = nascer(v, semente, ponte), lutas: Luta[] = [];
   let k = 0;
   for (let p = 0; p < Math.round(dias * TPD / 30) && !m.morte; p++) {
     m.avancar(30);
