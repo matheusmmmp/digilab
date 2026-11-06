@@ -1685,6 +1685,59 @@ class ConfigCorpo:
             raise ValueError(f"ConfigCorpo.paladar_h_min > paladar_h_max: {self.paladar_h_min}, {self.paladar_h_max}")
 
 
+@dataclass(frozen=True)
+class ConfigLutaCorpo:
+    """A ponte da luta, o lado do corpo (docs/TAREFA_V3_PONTE_LUTA.md, secoes 3.2 e 3.4; PL-1, PL-3 e PL-7; etapa PE1). Ligada, o resumo da
+    luta (o evento `lt`) e um estimulo no corpo: a dor sobe div_arred(vida_perdida_s x C, S), a fracao da vida perdida na luta na escala da
+    propria luta (S); sem rng e sem numero livre. O estresse da derrota fica fora (PL-3). Exige o corpo com `gestos` (a dor e dos gestos).
+    Desligada (o padrao), o evento levanta erro e a vida de hoje sai byte a byte. Fica numa config propria, e nao em `ConfigCorpo`, para o
+    dump da ConfigCorpo (o gabarito de paridade do corpo e o espelho TS) nao mudar: a web ganha a chave na PE3. Status em
+    PARAMETROS_LUTA_CORPO."""
+
+    ligada: bool = False
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigLutaCorpo.ligada e bool: {self.ligada!r}")
+
+
+# Status dos campos da ConfigLutaCorpo (conferido por teste). Nenhum numero livre: a escala da dor e a da propria luta (S) no corpo (C).
+PARAMETROS_LUTA_CORPO: dict[str, tuple[str, str]] = {
+    "ligada": ("PROPOSTO", "TAREFA_V3_PONTE_LUTA, 3.2 (chave `luta_corpo`, PROPOSTA); o desenho e as decisoes PL-1, PL-3 e PL-7 sao "
+                           "DECIDIDOS (Matheus, 2026-11-04). Sem numero livre; a dor pela luta e SEM FONTE (Ho 2005 sustenta so a sigma, pela C4)"),
+}
+
+CONFIG_LUTA_CORPO = ConfigLutaCorpo()
+CONFIG_LUTA_CORPO_LIGADA = ConfigLutaCorpo(ligada=True)
+
+
+@dataclass(frozen=True)
+class ConfigLutaMemoria:
+    """A ponte da luta, o lado da memoria (docs/TAREFA_V3_PONTE_LUTA.md, secoes 3.2 e 3.7; PL-2, PL-6, PL-7 e PL-9; etapa PE2). Ligada, o
+    DigiBrain modular recebe o resumo da luta (`receber_luta`, irmao do `receber_acao_dono`), o entrega ao M-SENS na decisao seguinte (a
+    Observacao) e o M-MEM guarda a luta como episodio de origem `luta`, com o rival em `outro` e a categoria (lutar, rival, sinal de
+    sigma). Vira episodio pela regra de hoje (|sigma| ou a subida da dor >= `theta_sig`): nenhum limiar novo, nenhum numero livre. So
+    vale com a `memoria_autobio` do DigiBrain e com a `luta_corpo` no motor (o evento `lt` e dela). Desligada (o padrao), o DigiBrain nao
+    ganha campo, estado nem gancho novo, e a vida de hoje sai byte a byte. Fica numa config propria, e nao em `ConfigDigibrain`, para o
+    dump dela (o gabarito de paridade do modular) nao mudar: a web ganha a chave na PE3. Status em PARAMETROS_LUTA_MEMORIA."""
+
+    ligada: bool = False
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigLutaMemoria.ligada e bool: {self.ligada!r}")
+
+
+# Status dos campos da ConfigLutaMemoria (conferido por teste). Nenhum numero livre: o limiar e o `theta_sig` da C4.
+PARAMETROS_LUTA_MEMORIA: dict[str, tuple[str, str]] = {
+    "ligada": ("PROPOSTO", "TAREFA_V3_PONTE_LUTA, 3.2 (chave `luta_memoria`, PROPOSTA); o desenho e as decisoes PL-1, PL-2, PL-6, PL-7 e PL-9 sao "
+                           "DECIDIDOS (Matheus, 2026-11-04). Sem numero livre (o limiar e o theta_sig da C4); a memoria da luta e SEM FONTE "
+                           "como valor (direcao: Ho 2005, pela C4)"),
+}
+
+CONFIG_LUTA_MEMORIA = ConfigLutaMemoria()
+CONFIG_LUTA_MEMORIA_LIGADA = ConfigLutaMemoria(ligada=True)
+
 CONFIG_CORPO = ConfigCorpo()
 CONFIG_CORPO_LIGADA = ConfigCorpo(ligada=True)
 CONFIG_CORPO_DRIVES = ConfigCorpo(ligada=True, digestao=True, vida=True, drives_novos=True, gestos=True)   # a etapa 6 inteira
