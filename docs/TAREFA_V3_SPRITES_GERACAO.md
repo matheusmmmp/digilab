@@ -490,3 +490,8 @@ recomendado": as recomendações abaixo valem como estão; registro D-SG-H).
     - Em reais, o gasto dá **R$ 8,72**. O câmbio é o comercial de US$ 1 = R$ 5,5037, da AwesomeAPI
       (`economia.awesomeapi.com.br/json/last/USD-BRL`) em 2026-11-05 às 19:48, sem o IOF e sem o spread do cartão.
     - O depósito de US$ 10 que o Matheus fez no fal.ai fica à parte: ele não é gasto, e sobra crédito para os próximos clipes.
+  - **A leitura cega (4.2), 2026-11-06:**
+    - **A resposta do Matheus, literal e dada antes da chave:** "A melhor". Ele não deu a frase.
+    - **A chave** (`remaster/geracao/Agumon/cego.json`): A é o gerado (o t03) e B é o derivado.
+    - **O resultado da pergunta 1: "melhor".** O gerado passa nos 7 gates (o `gates.json`), e o Matheus o marcou como melhor.
+    - O resultado vale para o Agumon, o derivado mais forte (D-SG-4); ele ainda não diz nada sobre os 49 sem boca.
