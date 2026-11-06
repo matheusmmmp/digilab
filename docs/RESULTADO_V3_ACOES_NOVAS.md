@@ -239,3 +239,5 @@ não da persistência.
 **Recomendação: (a).** A calibração do `urgencia_lambda` e do raio do vagar fica para a rodada de equilíbrio, no fim (a regra
 "Calibração no fim"). Um desenho novo do passeio, se o Matheus quiser, entra como tarefa própria depois dela, e não como repetição desta
 run.
+
+**Decisão do Matheus (2026-11-06, "Siga aí com as recomendações de onde você parou."):** a opção (a). A frente do passeio fecha como negativa, a `passeio` fica desligada, e o `urgencia_lambda` e o raio do vagar ficam para a rodada de equilíbrio do fim.
