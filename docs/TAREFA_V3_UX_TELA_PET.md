@@ -230,6 +230,14 @@ Matheus, 2026-11-05, nesta sessão (resposta "B, hooks antes"):
   - **P1-5:** com "Exibir detalhes do pet" desligado, **a linha fica, como texto sem botão**;
   - **P1-6:** o rótulo é **"aprendido"**.
 
+- **O mobile Digivice** (Matheus, 2026-11-06): reestruturar todo o mobile do jogo web (abaixo de 900 px), que hoje é o desktop
+  espremido e "não parece um jogo", **sem alterar nada do desktop**. Entre as duas direções da prancha de direção
+  (https://claude.ai/artifact/4kQh77wKGzbaijGb5H2qmB), ele escolheu a **Digivice** (as classes `.d2`): a paleta `--dl-*` e as fontes do
+  guia 4.2, a placa no alto, os vitais em cartões, a linha do agora como balão preso ao pet, botões gordos que afundam ao toque e a barra
+  de abas com círculos. São três etapas, um PR cada: **M1** (a tela Pet e as abas), **M2** (as folhas Crescer, Lutar e Diário) e **M3**
+  (a luta e o treino). O plano da M1 está em `docs/PROPOSTAS_V3_UX_TELA_PET.md`, seção "Mobile Digivice"; as perguntas M1-* continuam
+  PROPOSTAS até o ok dele.
+
 UX-4 a UX-8 continuam PROPOSTAS.
 
 ## 9. Etapa A0: os hooks restaurados (2026-11-05)

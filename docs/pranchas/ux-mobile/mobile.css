@@ -1,0 +1,170 @@
+/* Prancha da M1 do mobile "Digivice" da UX_TELA_PET (docs/PROPOSTAS_V3_UX_TELA_PET.md, secao "Mobile Digivice (M1, 2026-11-06)"):
+   a tela Pet e a barra de abas abaixo de 900 px. HTML estatico, so desenho; nenhum codigo do jogo. Os tokens abaixo sao copias dos
+   --dl-* de web/app/src/estilo/tokens.css (o claro, linhas 6-34; o escuro, [data-tema="escuro"], linhas 50-60); nao ha cor nova. O
+   Digivice so usa --dl-*, entao a pele (data-pele vidro|xcom) nao muda nada aqui: o que muda e o tema (data-tema claro|escuro).
+   Os literais que nao sao token vem do CSS ou do codigo do app e estao citados onde aparecem. O sprite fica fora do git
+   (D:\Trab\digilab\Assets, UI_GUIDELINES 5.1): gerar.py aponta para la, so para as capturas. */
+:root{
+  /* --dl-* claro (tokens.css:7-12, :14, :16, :18, :22, :25, :27-28, :32-34) */
+  --dl-bg:#E8F0FB; --dl-surface:#FFFFFF; --dl-surface-2:#F4F8FE;
+  --dl-border:#9FC2EF; --dl-border-shadow:#7FA6DC; --dl-navy:#173A8A; --dl-navy-deep:#0F2A66;
+  --dl-action:#2C73E0; --dl-action-press:#1B54B4; --dl-text:#13244D; --dl-text-2:#3A5288;
+  --dl-need:#E5489F; --dl-learned:#6FE3FF; --dl-learned-bg:#0F3A86; --dl-highlight:#FFD23F; --dl-highlight-ink:#3B2A00;
+  --dl-ok:#3FCF6A;
+  --dl-rim:#FFFFFF; --dl-action-ink:#FFFFFF; --dl-need-ink:#0B1636;
+  --dl-none-ink:#56657F; --dl-none-edge:#8A9AC0; --dl-none-bg:#F1F5FB;
+  --dl-nav-circ:#1F4AA8; --dl-nav-circ-edge:#4A7EE6; --dl-nav-ink:#C7D8F5;
+  --dl-hex-img:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='48'%3E%3Cpath d='M14 0L28 8V24L14 32L0 24V8ZM14 32V48' fill='none' stroke='%23D4E3F7' stroke-width='1.5'/%3E%3C/svg%3E");
+  --dl-plate:#1F4AA8; --dl-plate-hi:#4A7EE6; --dl-learned-ink:#E6FBFF; --dl-highlight-press:#E0A800;
+  --dl-f-num:"Rubik", system-ui, sans-serif;
+  --dl-f-texto:"M PLUS Rounded 1c", system-ui, sans-serif;
+  --dl-f-lcd:"DotGothic16", ui-monospace, monospace;
+  /* a grade da malha de aprendido: a do .dl-malha (web/app/src/estilo/pet.css:3) */
+  --malha:linear-gradient(rgba(111,227,255,.38) 1px,transparent 1px),linear-gradient(90deg,rgba(111,227,255,.38) 1px,transparent 1px);
+  /* medidas da prancha (layout, nao numero de jogo): a altura da barra de abas, o pe do pet acima da base e a escala do sprite */
+  --abas-h:78px; --pet-y:214px; --k:2;
+  color-scheme:light;
+}
+/* --dl-* escuro (tokens.css:50-60) */
+:root[data-tema="escuro"]{
+  color-scheme:dark;
+  --dl-bg:#0B1636; --dl-surface:#152A5C; --dl-surface-2:#1B3470;
+  --dl-border:#2C5BBD; --dl-border-shadow:#0F2A66; --dl-navy:#173A8A; --dl-navy-deep:#0A1D4A;
+  --dl-action:#4F93F2; --dl-action-press:#2C73E0; --dl-text:#E6EEFF; --dl-text-2:#B4C6EC;
+  --dl-need:#FF7FC0; --dl-ok:#4BE07E;
+  --dl-rim:#152A5C; --dl-action-ink:#0B1636;
+  --dl-none-ink:#B4C6EC; --dl-none-edge:#6F80A8; --dl-none-bg:#152A5C;
+  --dl-hex-img:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='48'%3E%3Cpath d='M14 0L28 8V24L14 32L0 24V8ZM14 32V48' fill='none' stroke='%231B3163' stroke-width='1.5'/%3E%3C/svg%3E");
+}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{color:var(--dl-text);font:700 15px/1.25 var(--dl-f-texto);overflow:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* foco (guia 7.1): anel --dl-highlight de 3 px por fora */
+:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:3px}
+/* todo icone da prancha: traco na cor do texto (currentColor); no jogo sao os lucide e as pecas do atlas de hoje */
+svg{width:22px;height:22px;flex:none;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---- a cena: o fundo hexagonal do guia (--dl-bg, --dl-hex-img) no lugar da ilha 3D, e o pet em escala inteira (como na ux-pet) */
+.cena{position:fixed;inset:0;background:var(--dl-bg) var(--dl-hex-img) 0 0/28px 48px repeat}
+.pet{position:absolute;left:50%;bottom:var(--pet-y);width:calc(98.9px*var(--k));height:calc(76.9px*var(--k));transform:translateX(-50%);z-index:2;
+  image-rendering:pixelated;background-image:var(--assets-spr);background-repeat:no-repeat;
+  background-size:calc(791px*var(--k)) calc(538px*var(--k));background-position:0 calc(-307.6px*var(--k))}
+/* dormindo (sono.ts: SONO.achata 0,84 e o tom SONO.tom multiplicado): achatado pelo pe; o tom e aproximado por brilho, porque no jogo e canvas */
+.pet.dorme{transform:translateX(-50%) scaleY(.84);transform-origin:50% 100%;filter:brightness(.82) saturate(.9)}
+/* o "zz" (sono.ts desenharZz: o "z" claro #EEF3FF com a sombra #1D2233, literais de la) */
+.zz{position:absolute;z-index:3;left:calc(50% + 40px);bottom:calc(var(--pet-y) + 118px);font:28px/1 var(--dl-f-lcd);color:#EEF3FF;text-shadow:2px 2px 0 #1D2233}
+.zz i{font-style:normal;font-size:20px;margin-left:6px;vertical-align:8px}
+/* o emote da carne sobre a cabeca (PalcoPet.tsx:150, fomeNoEmote em hudPet.ts:22); no jogo e a peca do atlas, aqui so o lugar */
+.emote{position:absolute;z-index:3;left:calc(50% + 46px);bottom:calc(var(--pet-y) + 112px);width:40px;height:40px;display:grid;place-items:center;border-radius:12px;
+  background:var(--dl-surface);border:3px solid var(--dl-navy);color:var(--dl-need)}
+/* a sombra do pet: o mesmo literal da prancha B3 (docs/pranchas/b3/luta.css:41) */
+.sombra{position:absolute;left:50%;bottom:calc(var(--pet-y) - 4px);width:calc(70px*var(--k));height:calc(14px*var(--k));transform:translateX(-50%);border-radius:50%;background:rgba(0,0,0,.4);z-index:1}
+
+/* ---- botao do Digivice (guia 4.3 e 7.1): borda --dl-rim de 3 px, contorno --dl-navy de 2 px, sombra dura embaixo que some ao apertar
+   (o botao desce; 80 ms, guia 11) */
+.bt{display:grid;place-items:center;border:3px solid var(--dl-rim);border-radius:12px;background:var(--dl-surface-2);color:var(--dl-text);
+  box-shadow:0 0 0 2px var(--dl-navy),0 5px 0 2px var(--dl-navy-deep);transition:transform 80ms,box-shadow 80ms}
+.bt:active,.ac:active{transform:translateY(4px);box-shadow:0 0 0 2px var(--dl-navy),0 1px 0 2px var(--dl-navy-deep)}
+
+/* ---- o topo: a placa (retrato, nome, estagio), o relogio LCD e o Conversar */
+.topo{position:fixed;z-index:20;top:10px;left:10px;right:10px;height:58px;display:flex;gap:10px;align-items:stretch}
+.placa{flex:1 1 auto;min-width:0;display:flex;gap:8px;align-items:center;padding:3px 12px 3px 4px;border-radius:16px;background:var(--dl-plate);
+  border:3px solid var(--dl-plate-hi);box-shadow:0 4px 0 var(--dl-navy-deep);color:var(--dl-nav-ink)}
+/* o retrato redondo (guia 4.3 e 7.11): abre Meus pets */
+.retrato{width:46px;height:46px;flex:none;border-radius:50%;border:2px solid var(--dl-nav-ink);background:var(--dl-navy-deep);overflow:hidden;position:relative;padding:0}
+.retrato i{position:absolute;left:50%;top:50%;width:98.9px;height:76.9px;background-image:var(--assets-spr);background-repeat:no-repeat;background-size:791px 538px;
+  background-position:0 -307.6px;transform:translate(-50%,-50%) scale(.5);image-rendering:pixelated}
+.placa-txt{display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0}
+.placa-txt b{font:900 16px/1.1 var(--dl-f-texto);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+/* a etiqueta do estagio (guia 7.4: pilula, 11 px 900, caixa alta, amarela) */
+.estagio{font:900 11px/1 var(--dl-f-texto);letter-spacing:.06em;text-transform:uppercase;padding:3px 7px;border-radius:6px;background:var(--dl-highlight);color:var(--dl-highlight-ink)}
+/* o relogio LCD (guia 4.2: DotGothic16 400, 13-18 px) */
+.lcd{flex:none;display:flex;align-items:baseline;gap:6px;padding:0 12px;border-radius:12px;background:var(--dl-navy-deep);border:3px solid var(--dl-border);
+  font:400 18px/52px var(--dl-f-lcd);color:var(--dl-nav-ink);font-variant-numeric:tabular-nums}
+.lcd small{font-size:13px}
+.topo .bt{width:52px;flex:none}
+
+/* ---- os cinco vitais: cartoes com o numero grande (guia 4.2: Rubik italico 900 com contorno --dl-navy e sombra de 4 px) */
+.vitais{position:fixed;z-index:6;top:80px;left:10px;right:10px;display:grid;grid-template-columns:repeat(5,1fr);gap:6px;list-style:none;padding:0}
+.vit{display:flex;flex-direction:column;align-items:center;gap:1px;padding:5px 2px 6px;border-radius:12px;background:var(--dl-surface);
+  border:2px solid var(--dl-border);box-shadow:0 3px 0 var(--dl-border-shadow);color:var(--dl-text)}
+.vit svg{width:18px;height:18px;color:var(--dl-text-2)}
+.vit b{font:italic 900 26px/1.05 var(--dl-f-num);-webkit-text-stroke:2px var(--dl-navy);paint-order:stroke fill;text-shadow:0 4px 0 var(--dl-border-shadow)}
+.vit b small{font-size:13px;-webkit-text-stroke:1px var(--dl-navy)}
+.vit .rot{font:800 11px/1.1 var(--dl-f-texto);color:var(--dl-text-2)}
+/* o vital baixo (abaixo de LIMIAR_NEC, TelaPet.tsx:279): rosa solido (guia 3, vem do corpo); a forma solida carrega o sentido sem cor */
+.vit.nec{background:var(--dl-need);border:2px solid var(--dl-rim);box-shadow:0 3px 0 var(--dl-navy-deep);color:var(--dl-need-ink)}
+.vit.nec svg,.vit.nec .rot{color:var(--dl-need-ink)}
+.vit.nec b{-webkit-text-stroke:0;text-shadow:none;color:var(--dl-need-ink)}
+.vit.nec b small{-webkit-text-stroke:0}
+/* o pulso so com ?pulsa (pergunta M1-2: o guia 11 proibe piscar em loop) */
+@keyframes pulsa{50%{transform:scale(1.07)}}
+body.pulsa .vit.nec{animation:pulsa 1.4s ease-in-out infinite}
+
+/* ---- a coluna do lado: Estado atual, Evolucao, Ultimas acoes, DigiBrain e, depois de um vao, Configuracoes (quadrados de 46 px) */
+.lado{position:fixed;z-index:6;right:10px;top:172px;display:flex;flex-direction:column;gap:10px}
+.lado .bt{width:46px;height:46px}
+.lado .bt.cfg{margin-top:8px}
+.lado .bt[aria-pressed="true"]{background:var(--dl-action);color:var(--dl-action-ink)}
+
+/* ---- o cartao do alto (o pedido com Atender, ou o resumo que abre o Estado): card do guia 4.3, sem o "agora" */
+.alerta{position:fixed;z-index:6;top:172px;left:10px;right:70px;display:flex;align-items:center;gap:10px;min-height:60px;padding:8px;border-radius:14px;
+  background:var(--dl-surface);border:3px solid var(--dl-rim);box-shadow:0 0 0 2px var(--dl-border),0 4px 0 2px var(--dl-border-shadow);color:var(--dl-text);text-align:left}
+.alerta .ic{width:40px;height:40px;flex:none;display:grid;place-items:center;border-radius:10px;background:var(--dl-navy);color:var(--dl-nav-ink);font:italic 900 22px/1 var(--dl-f-num)}
+.alerta .txt{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:2px}
+.alerta .txt b{font:900 15px/1.2 var(--dl-f-texto)}
+.alerta .txt small{font:700 12px/1.2 var(--dl-f-texto);color:var(--dl-text-2)}
+.alerta .ver{display:flex;align-items:center;gap:2px;font:800 13px/1 var(--dl-f-texto);color:var(--dl-text-2)}
+.alerta .ver svg{width:16px;height:16px}
+/* o botao primario (guia 7.1): Atender */
+.prim{min-height:44px;padding:0 14px;border:3px solid var(--dl-rim);border-radius:12px;background:var(--dl-action);color:var(--dl-action-ink);font:900 14px/1 var(--dl-f-texto);
+  box-shadow:0 0 0 2px var(--dl-navy),inset 0 -4px 0 var(--dl-action-press)}
+
+/* ---- o balao do agora, preso ao pet (guia 7.8: contorno marinho 3 px, sombra dura, rabinho para o pet). Abre o DigiBrain como hoje */
+.agora{position:fixed;z-index:6;left:50%;transform:translateX(-50%);bottom:calc(var(--pet-y) + 76.9px*var(--k) + 20px);max-width:calc(100% - 140px);
+  min-height:44px;display:flex;align-items:center;gap:6px;padding:4px 6px 4px 12px;border-radius:16px;background:var(--dl-surface);border:3px solid var(--dl-navy);
+  box-shadow:0 4px 0 var(--dl-navy-deep);color:var(--dl-text);font:800 15px/1.2 var(--dl-f-texto);white-space:nowrap;text-align:left}
+.agora::after{content:"";position:absolute;left:50%;bottom:-10px;width:14px;height:14px;background:var(--dl-surface);border-right:3px solid var(--dl-navy);
+  border-bottom:3px solid var(--dl-navy);transform:translateX(-50%) rotate(45deg)}
+.agora .acao{flex:none}
+.agora .ponto{color:var(--dl-text-2);flex:none}
+.agora .seta{width:18px;height:18px;color:var(--dl-text-2)}
+.agora .neutro{font:700 13px/1.2 var(--dl-f-texto);color:var(--dl-text-2);overflow:hidden;text-overflow:ellipsis;min-width:0}
+/* os chips de causa (guia 3 e 7.7): a forma carrega o sentido sem cor */
+.chip{display:inline-flex;align-items:center;gap:5px;min-height:24px;padding:1px 8px;border-radius:6px;font:800 12px/1.2 var(--dl-f-texto);white-space:nowrap;flex:none}
+.chip.aprendido{color:var(--dl-learned-ink);border:2px dashed var(--dl-learned);background-color:var(--dl-learned-bg);background-image:var(--malha);background-size:10px 10px;
+  letter-spacing:.06em;text-transform:uppercase}
+.chip.sem{color:var(--dl-none-ink);border:2px dashed var(--dl-none-edge);background:var(--dl-none-bg)}
+.chip.sem b{font:900 14px/1 var(--dl-f-num)}
+
+/* ---- as acoes: botoes gordos (borda clara, contorno marinho, sombra embaixo) que afundam ao toque; a sugerida e amarela e sobe */
+.dock{position:fixed;z-index:11;left:10px;right:10px;bottom:calc(var(--abas-h) + 16px);display:flex;gap:8px;align-items:flex-end}
+.ac{flex:1 1 0;min-width:0;min-height:66px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 2px 7px;
+  border:3px solid var(--dl-rim);border-radius:16px;background:var(--dl-action);color:var(--dl-action-ink);font:900 12px/1.1 var(--dl-f-texto);
+  box-shadow:0 0 0 2px var(--dl-navy),0 5px 0 2px var(--dl-navy-deep),inset 0 -4px 0 var(--dl-action-press);transition:transform 80ms,box-shadow 80ms}
+.ac svg{width:26px;height:26px}
+.ac small{font:700 11px/1 var(--dl-f-texto)}
+.ac.mais{flex:0 0 54px}
+/* a sugerida (resumoAgora(...).acao, TelaPet.tsx:356): o destaque amarelo do guia 3, um por tela */
+.ac.sug{background:var(--dl-highlight);color:var(--dl-highlight-ink);transform:translateY(-6px);
+  box-shadow:0 0 0 2px var(--dl-navy),0 5px 0 2px var(--dl-navy-deep),inset 0 -4px 0 var(--dl-highlight-press)}
+.ac.sug:active{transform:translateY(-2px)}
+
+/* ---- a barra de abas: circulos de 44 px com o rotulo sempre visivel (guia 7.12); a ativa e um circulo maior que sobe */
+.abas{position:fixed;z-index:30;left:0;right:0;bottom:0;height:var(--abas-h);padding-bottom:env(safe-area-inset-bottom,0px);display:flex;
+  background:var(--dl-navy);border-top:3px solid var(--dl-navy-deep)}
+.aba{flex:1 1 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:0;background:none;color:var(--dl-nav-ink);
+  font:900 11px/1 var(--dl-f-texto);letter-spacing:.06em;text-transform:uppercase}
+.aba .circ{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--dl-nav-circ);border:2px solid var(--dl-nav-circ-edge)}
+/* a ativa pelo guia 7.12 (circulo --dl-action, anel ciano); com ?aba=amarela, a da direcao (pergunta M1-1) */
+.aba[aria-current="page"] .circ{width:58px;height:58px;margin-top:-26px;background:var(--dl-action);color:var(--dl-action-ink);border:3px solid var(--dl-learned);
+  box-shadow:0 5px 0 var(--dl-navy-deep)}
+body.aba-amarela .aba[aria-current="page"] .circ{background:var(--dl-highlight);color:var(--dl-highlight-ink);border-color:var(--dl-rim);box-shadow:0 5px 0 var(--dl-highlight-press)}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* nota de prancha (so nas pranchas, nao e tela; some com ?sem): o mesmo literal da B3 (docs/pranchas/b3/luta.css:91) */
+.nota{position:fixed;z-index:40;font:600 11px/1.3 system-ui,sans-serif;color:#0b1320;background:#FFE08A;padding:2px 6px;border-radius:3px;max-width:230px}
+body.sem-notas .nota{display:none}
