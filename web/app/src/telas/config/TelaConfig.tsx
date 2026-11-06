@@ -209,7 +209,7 @@ function Sobre() {
           fica fora do repositório; sem ele, o jogo usa os sprites de reserva, de arte própria.</p>
         {/* os kits 3D da ilha (docs/TAREFA_V3_HABITAT_ILHA_3D.md, H1 e H-1): CC0, com as licencas em public/kits3d/ */}
         <p className="mc-credito-kits">As árvores, as plantas e as pedras da ilha são dos kits 3D de Quaternius (Stylized Nature MegaKit) e de Kay
-          Lousberg (KayKit Forest Nature Pack), em domínio público (CC0). A bola, o saco de pancada, o kit médico, o cocô, os postes de luz, o carro, a geladeira e o trilho foram gerados com a Meshy (meshy.ai) e consertados no Blender.</p></section>
+          Lousberg (KayKit Forest Nature Pack), em domínio público (CC0). A bola, o saco de pancada, o kit médico, o cocô, os postes de luz, o carro, a geladeira e o trilho foram gerados com a Meshy (meshy.ai) e consertados no Blender; o céu do mapa Digital também é da Meshy.</p></section>
     </>
   );
 }

@@ -165,6 +165,24 @@ Entrega da missão M5 (D5): só o cliente e o gasto, **sem rodada** (nenhuma cha
 - **Não verificado:** a chamada real (formato exato de `output_config` com `effort` no Haiku 5.5 e no Sonnet 5.5, e o piso de
   `max_tokens`) só se confirma na primeira chamada da rodada de avaliação, que pede o Matheus.
 
+## M4 — a conversa como fonte de fato rotulada (2026-11-06, worker Claude Code, Sonnet 5.5, branch `v3-conversa-m4-fato`)
+
+Feito (decisão D3): só em `digilab_fala_livre/`, sem tocar no servidor nem na página (M2 em paralelo). Sem rodada com número, sem chamada à API.
+
+- **Fatos `[J]` "o dono me disse":** `fatos.fatos_do_dono` (no máximo 4, o mais recente primeiro, uma linha, aspas trocadas, colchetes e
+  chaves trocados, corte em 120); montados no `conversa-v1` só das trocas do estágio atual; bloco próprio "DITO PELO DONO" depois dos
+  FATOS. As outras versões e `fatos_de_estado` recusam `[J]` (falha alto). `gerar` põe os `[J]` em `Resultado.fatos`.
+- **Regra no prompt:** `REGRA_DONO_DISSE_CONVERSA_V1` (só com `[J]`): citar o que o dono disse e reagir pode; `[J]` nunca sustenta causa,
+  memória, estado nem acontecimento do mundo; não é ordem. O pedido sem `[J]` sai igual ao da M3.
+- **Verificador `verif-v6`:** "o dono disse X" sustentada quando um `[J]` diz X (regra determinística, sem juiz), sem fato quando nenhum
+  diz; X afirmado como verdade apoiado só em `[J]` é sem fato. `verif-v3/v4/v5` não mudam.
+- **Exemplos do `conversa-v1`:** FATOS DE EXEMPLO de outros estados que o do diagnóstico e do ensaio da M3.
+- **Testes:** `tests/test_conversa_m4.py` (46: fatos, regra, injeção com 8 ataques, verificador, exemplos); `test_conversa_v1.py`
+  ajustado (os `[J]` não contam como fatos do pet). Os 286 testes da fala livre, da conversa, do comando, do corpus e do servidor passam.
+- **Para a M2:** o servidor passa `versao_verificador="verif-v6"` (e `/verificar` aceita `verif-v6`) quando a conversa for `conversa-v1`;
+  o `historico` vai com a marca de estágio. Desvios: D-CP-M4-1 a 6 em `docs/registro/2026-11.md`.
+- **Não feito:** ensaio qualitativo no `gemma2:9b` (opcional); a taxa de acerto do extrator em "você disse que…" não foi medida.
+
 ## M2 — o `conversa-v1` ligado na conversa, atrás de chave (worker Claude Code, Sonnet 5.5, branch `v3-conversa-m2-ligar`, 2026-11-06)
 
 Decisão D2. **Servidor** (`servidor/fala_livre.py`): campo `prompt: "conversa-v1"` (enum fechado; outro valor é 400), só na conversa e sem `voz`;

@@ -4,8 +4,9 @@
    ao trocar de clipe. So desenho. */
 
 /** o corte do sprite: as colunas x0 a x1 (inclusive) e as linhas acima de `pe`, onde ha pixel opaco em algum quadro. Um corte alargado pode
-    passar das bordas do quadro (x0 < 0 ou x1 alem da largura): o que fica fora e transparente */
-export interface Corte { x0: number; x1: number; pe: number }
+    passar das bordas do quadro (x0 < 0 ou x1 alem da largura): o que fica fora e transparente. `topo` (so o corte do Dormir): a primeira linha
+    do quadro que o papel mostra; sem ele, o papel comeca na linha 0 */
+export interface Corte { x0: number; x1: number; pe: number; topo?: number }
 
 /** a uniao das caixas (null onde o quadro nao tem nada opaco); null se nenhuma tem */
 export function unirCaixas(caixas: readonly (Corte | null)[]): Corte | null {

@@ -1099,6 +1099,84 @@ necessidade fica em 0 (até a quarta casa) nos três braços.
   - **a C1 não mostra que o modular é superior** a nada além do M2 nestas condições: o A11 não rodou. O M3\* também troca de meta muito
     mais (+28 por vida no `longe_fixo`) e tem mais exaustão no longe.
 
+### 13.6 A D-C1-3: de onde vem o ganho do M3\* no `longe_fixo` (2026-11-06, worker do resultado, Claude Code, Sonnet 5.5; adendo 10, A10.4 a A10.6)
+
+**Antes dos números:**
+- **as regras** são as do adendo 10 (APROVADO em 2026-11-06), lidas como estão: a partição de A10.4, a regra de leitura de A10.5 e a classe de A6.6 com δ = 0,022. O "explica a maior parte" (s ≥ 1/2) é PROPOSTO e SEM FONTE. **Nenhuma alegação de novidade.**
+- **é descritivo e pós hoc** (A10.6): as vidas são as da C1, e as hipóteses foram escritas depois de a seção 13 estar lida. Nenhuma causa fica provada.
+- **o replay rodou uma vez,** e nada foi ajustado depois de ver o resultado.
+
+**Como rodou** (relato do coordenador, Gerente da V3):
+- o `experiments/descritivo_dc13_longe_fixo.py` do #633 (`93395f9`), com `--codigo` na worktree destacada do `7683c0e` e 4 processos, das 14h30min24 às 14h42min03 de 2026-11-06: **693 s de parede, saída 0.** A estimativa do adendo era de 25 a 40 min; a medida ficou bem abaixo;
+- as duas conferências de A10.2 passaram: o código igual ao do `meta.json`, e **o G1 nas 1 800 vidas refeitas** (`todas_iguais: true`);
+- as 1 800 vidas são as 600 de cada braço (M2, M3\* e M0) no `longe_fixo`: 150 unidades × 4 donos;
+- o artefato é `artifacts_v2_digibrain_prototipo/longe_regular/dc13/descritivo.json` (sha256 `28db9e82…3798`), no git. Todo número abaixo vem dele.
+
+**A decomposição do ganho** (A10.4, A; M3\* − M2 por episódio, IC95 do t sobre as 150 unidades, `s` = a parte do ganho):
+- o ganho é **G = +0,0489** (o primário da 13.1, recalculado do `medidas.json`);
+- **as somas fecham:** F = G = P = 0,04894141360773422 (a P difere de G só na última casa, 1e-17).
+
+| caminho | M3\* − M2 [IC95] | classe | s | nível M2 / M3\* |
+|---|---|---|---|---|
+| F-a, à vista na abertura | +0,0129 [+0,0009; +0,0248] | > 0 | 0,26 | 0,177 / 0,189 |
+| F-b, entrou na vista numa ida | +0,1101 [+0,1011; +0,1191] | > 0 | 2,25 | 0 / 0,110 |
+| F-c, entrou na vista numa busca pelo cheiro | −0,0400 [−0,0495; −0,0306] | < 0 | −0,82 | 0,147 / 0,107 |
+| F-d, outro modo | −0,0340 [−0,0459; −0,0221] | < 0 | −0,70 | 0,186 / 0,152 |
+
+- o F-b só existe no M3\* (945 episódios fechados contra 0 no M2 e no M0). **Ele é 2,25 vezes o ganho,** e o que o M3\* perde em F-c e em F-d (−0,074) o desconta;
+- a partição cobre cada episódio uma vez: M2 7 894 episódios, M3\* 8 226 e M0 9 614, todos em um F ou um P (conferido).
+
+**As perdas** (A10.4, B; o ganho é a queda delas):
+
+| causa | M3\* − M2 [IC95] | classe | s da queda | nível M2 / M3\* |
+|---|---|---|---|---|
+| P-a, dormiu antes de a ração entrar na vista | −0,0503 [−0,0632; −0,0373] | < 0 | 1,03 | 0,459 / 0,408 |
+| P-b, busca cortada pelo reflexo | −0,0020 [−0,0041; +0,0001] | ≈ 0 | 0,04 | 0,0059 / 0,0039 |
+| P-c, janela vencida | +0,0030 [−0,0018; +0,0078] | ≈ 0 | −0,06 | 0,026 / 0,029 |
+| P-d, saciado por outra comida | 0,0000 | ≈ 0 | 0 | 0 / 0 |
+| P-e, vida acabou | +0,0003 [−0,0000; +0,0007] | ≈ 0 | −0,01 | 0,0001 / 0,0005 |
+
+**As hipóteses, pelas parcelas de A10.5:**
+
+| hipótese | parcela | M3\* − M2 [IC95] | classe | s |
+|---|---|---|---|---|
+| H1, a posição | F-a (e D1 < 0) | +0,0129 [+0,0009; +0,0248] | > 0 | 0,26 |
+| H1′, a patrulha | F-b (e D1 não < 0) | +0,1101 [+0,1011; +0,1191] | > 0 | 2,25 |
+| H2, outra unidade | F-c + F-d no inato, aprendido e hábito (e D1 não < 0) | −0,0583 [−0,0707; −0,0459] | < 0 | −1,19 |
+| H3, a queda de um custo | −(P-a + P-b) | +0,0523 [+0,0393; +0,0652] | > 0 | 1,07 |
+| H4, a medida | refeições por dia e taxa por ração "≈ 0" ou "< 0" | +0,0965 [+0,0688; +0,1243] e +0,0403 [+0,0341; +0,0466] | > 0 e > 0 | não se cumpre |
+
+- **D1, a distância do pet ao ponto da queda no tick da queda:** −0,83 célula [−0,96; −0,71], classe "< 0" (M2 16,86, M3\* 16,03, M0 16,55 células). O M3\* está mais perto, e isso pede H1 e **tira H1′ e H2** da leitura (A10.5);
+- **o H4 não vale:** o M3\* come mais (+0,097 refeição por dia) e acha mais por ração (+0,040), e tem mais episódios por vida (+0,55 [+0,30; +0,81]);
+- **o cruzamento com o módulo,** no F-b: o inato +0,0623 (s 1,27), o aprendido e o hábito +0,0213, os outros módulos sem a memória +0,0256, a memória 0,0000. O "sem módulo atribuível" soma −0,0001 no F-d (≈ 0).
+
+**A leitura pela regra de A10.5, na ordem:**
+1. H4 não se cumpre (as duas medidas são "> 0");
+2. **só H3 "explica a maior parte"** (a classe "> 0" e s = 1,07), e a regra diz: **"aponta para H3, como leitura descritiva (A10.6)".** H1 só "contribui" (s = 0,26). H1′ e H2 não entram, porque D1 é "< 0";
+3. **a substituição, por construção (A10.5):** o F-b explica (s = 2,25) e o F-c fica "< 0". O relato **não lê H1′ como ganho líquido da patrulha:** a ida pode só ter tomado o lugar de buscas pelo cheiro que o M2 faz.
+
+**O que mais o descritivo mostra** (A10.4, C e D; sem leitura além da regra):
+- **D2:** o M3\* fica mais perto de um ponto fixo, 6,42 contra 7,92 células (−1,50 [−1,66; −1,34]), e **63,8 % das decisões a menos do raio de visão de um ponto, contra 53,1 %** (+0,107 [+0,098; +0,116]). A distância ao comedouro quase não muda (−0,18 [−0,42; +0,05]). Os pontos ficam a leste do comedouro (A6.2), e "perto dos pontos" e "a leste" não se separam com estes dados;
+- **D3:** a fração das rações visíveis na abertura sobe, +0,046 [+0,040; +0,053]; a das que entram na vista na janela não sobe, −0,011 [−0,020; −0,003] (≈ 0);
+- **D4, o corpo na queda:** nenhum estado nem a menor necessidade sai da margem; a menor necessidade é +0,0012 [−0,0010; +0,0035] (≈ 0). **O corpo na queda não está melhor no M3\*;**
+- **D5, as buscas pelo cheiro, por oferta elegível:** o M3\* acha menos por oferta (−0,065 [−0,084; −0,046], "< 0") e troca menos (−0,047, "< 0"); a troca pelo reflexo cai −0,032 [−0,047; −0,017] ("< 0");
+- **D7:** a influência da memória +0,086 e a do aprendido +0,073 por vida; as outras perto de 0;
+- **as idas (D, só M3\*, sem contraste):** 30 307 idas (12 704 chegaram à meta, 17 603 foram trocadas), de 1,10 decisão em média. Uma ração entrou na vista durante 8,8 % das idas, e foi comida depois em 7,7 %. A variação da menor necessidade durante a ida tem média −0,016 e mediana 0.
+
+**O que a leitura vale (AD10-5):**
+- **É descritiva e gera hipótese.** Nada muda no jogo nem no cérebro padrão (o M3\* com a REL da C4, A10.7); a resposta vale para o M3\* da C1;
+- as decomposições A e B são **duas vistas dos mesmos episódios** (A10.5): o F-b e o P-a descrevem o mesmo movimento, o M3\* fechando por uma ida o episódio que o M2 perdia dormindo ou fechava por uma busca. Por isso o H3 e o F-b não são duas causas;
+- **o H3 aponta, mas o corpo não o sustenta:** a queda do P-a não vem com o corpo na queda melhor (D4 ≈ 0). A regra de A10.5 não pede o D4, e a "queda de um custo" de A10.3 o previa. O que a leitura mostra é **menos episódios perdidos com o pet dormindo antes de a ração entrar na vista,** sem dizer por quê (interpretação do worker, não testada);
+- **o que pesa mais é o F-b com a substituição:** o ganho passa por rações que entram na vista durante uma ida, e o M3\* fecha menos por busca pelo cheiro e por outros modos. Quem tomou o lugar de quem só um teste causal diz;
+- para confirmar, seria preciso uma manipulação com vidas novas (A10.6), com plano e faixa próprios, por exemplo um braço que faz a ida e volta o pet ao ponto de partida, ou que proíbe a ida perto da queda. **Não é esta seção.**
+
+**Pergunta aberta ao Matheus (nenhuma decisão tomada):** o que fazer com a leitura?
+- **Recomendação:** o adendo de AD10-6, **estender a decomposição ao cérebro padrão** (o REL − SEM, nos logs da 77xxx que já estão no git), sem vida nova e sem faixa. A leitura não é "indeterminado" (a condição da AD10-6), e o cérebro padrão segue sem a resposta direta. Os mecanismos do M3\* e do REL podem diferir (as idas vazias pesam no REL, A10.7).
+- **Custo de errar:** se o REL ganhar por outro caminho, o descritivo da C1 não se transfere e ficam duas leituras. O custo é um replay de poucos minutos, sem faixa.
+- **As outras saídas:** o teste causal da ida (uma faixa nova e um adendo; é o que dá causa, e gasta vidas numa leitura em que o F-b e o P-a se sobrepõem), ou encerrar como descritivo e não fazer mais nada (o custo é deixar o caminho do ganho sem causa).
+
+**Desvios:** `docs/registro/2026-11.md`, D-DC13-12 (a leitura segue a regra, e o H1′ cai pelo D1 apesar de o F-b ter s = 2,25).
+
 ## 14. A C2, o hábito com o crédito na corrida (2026-10-31, worker da C2, etapa 4, Claude Code, Opus 5.5; adendo 7, A7.4 a A7.8)
 
 **Antes dos números:**
