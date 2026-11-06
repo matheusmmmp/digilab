@@ -3923,7 +3923,7 @@ da 77xxx que estão no git. **Estender a decomposição ao REL é uma decisão �
 
 ## Adendo 11: de onde vem o ganho do REL sobre o SEM no `longe_fixo`, a decomposição da D-C1-3 no cérebro padrão (2026-11-06, worker do plano da D-C1-3, Claude Code, Opus 5.5)
 
-**Status: PROPOSTO.** As AD11-1 a AD11-7 (A11.9) esperam a decisão do Matheus. **Nenhum replay e nenhuma conta deste adendo rodam antes
+**Status: APROVADO pelo Matheus em 2026-11-06 ("Aprovo e mescle").** As AD11-1 a AD11-7 (A11.9) estão DECIDIDAS, todas pela recomendação. **Nenhum replay e nenhuma conta deste adendo rodam antes
 de duas coisas:** a marca "APROVADO pelo Matheus" neste cabeçalho, e o código de A11.8 na `main`. Este adendo **não calcula nenhum número
 de resultado.** Os números que ele cita já estão registrados nas seções 13.6 e 16 do RESULTADO e servem só de contexto.
 
@@ -4147,7 +4147,7 @@ teria acontecido sem a ida.
 
 ### A11.9 As decisões do Matheus
 
-Todas PROPOSTAS. Cada uma vem com a recomendação e o custo de errar.
+Todas DECIDIDAS pelo Matheus em 2026-11-06 ("Aprovo e mescle"), pela recomendação. Cada uma vem com a recomendação e o custo de errar.
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
