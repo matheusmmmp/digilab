@@ -282,3 +282,25 @@ Testes: `python -m pytest tests/test_agentes_ux.py -q` → 18 passed.
 
 Não conferido: se o Claude Code carrega os seis agentes e se os MCPs sobem. Uma sessão só lê `.claude/agents/` do próprio projeto ao
 abrir, e o `frontend-design` não está instalado nesta máquina (UX-6); sem ele, a skill é pulada com aviso.
+
+## 12. Etapa P1: a prancha da B e o código (2026-11-06)
+
+**A prancha.** Está no branch `v3-ux-p1` (PR #596). A B foi refeita a partir do que o motor registra: a linha do agora lê
+`Motor.digibrain().decisao`, e o balão leva o chip só quando há `MotivoVida`. O Matheus aprovou a prancha e as P1-1 a P1-6 (seção 8.1).
+
+**O código.** Está no branch `v3-ux-p1-codigo`, empilhado sobre o #596. Foi feito pelo `ux-implementador`, testado pelo
+`ux-browser-tester` e revisto pelo `rev-a11y`, pelo `rev-cena` e pelo `rev-replay`.
+- **Arquivos:** `LinhaAgora.tsx` é novo. A linha entra por portal num encaixe do `Topo.tsx`, logo depois da plaquinha. O chip mudou no
+  `Causa` do `TelaPet.tsx`, e os estilos estão em `pet_hud.css`.
+- **Testes:**
+  - `npm run tipos`: ok;
+  - `npm test`: 836 passed;
+  - `npm run e2e`: 123 passed.
+- **Capturas:**
+  - A comparação foi feita contra uma linha de base capturada do `v3-ux-p1`, que é o app de antes da mudança. As referências de
+    2026-10-31 estão defasadas do app de hoje em todas as telas.
+  - Mudam só as telas Pet, na faixa do topo, que é a linha do agora. O resto é ruído do quadro do sprite e da cena 3D.
+- **Achado de processo:** sem `DIGILAB_CAPTURAS`, o `npm run capturas` compara contra `../../artifacts_v2_front_react/capturas` da
+  própria worktree. Numa worktree nova essa pasta não existe, e o Playwright grava as imagens como referências novas, em silêncio.
+  - Não foi regravada nenhuma referência verdadeira. As de `D:\Trab\digilab\v3\artifacts_v2_front_react\capturas` estão intocadas.
+  - O teste da pasta sem referência fica como pendência para o H6 ou o G-REFERENCIA.
