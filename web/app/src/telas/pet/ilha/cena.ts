@@ -294,7 +294,8 @@ export function materialSombra(): THREE.MeshBasicMaterial {
 export const GEO_SOMBRA = new THREE.PlaneGeometry(1, 1).rotateX(-Math.PI / 2);
 
 /* ---------- os modelos dos kits ---------- */
-export interface Variante { pecas: { geo: THREE.BufferGeometry; mat: THREE.Material; local: THREE.Matrix4 }[] }
+/** as pecas de uma variante; `nome` e o do no do glTF, quando o carregador da (os itens gerados separam as pecas que se mexem pelo nome) */
+export interface Variante { pecas: { nome?: string; geo: THREE.BufferGeometry; mat: THREE.Material; local: THREE.Matrix4 }[] }
 
 export async function carregarVariante(loader: GLTFLoader, url: string, modelo: Modelo): Promise<Variante> {
   const gltf = await loader.loadAsync(url);
@@ -316,13 +317,15 @@ export async function carregarVariante(loader: GLTFLoader, url: string, modelo: 
       map: orig.map, color: orig.color, vertexColors: !!mesh.geometry.attributes.color && orig.vertexColors,
       alphaTest: orig.alphaTest > 0 ? Math.max(orig.alphaTest, 0.4) : 0, side: orig.side, transparent: false,
     }, modelo.vento);
-    pecas.push({ geo: mesh.geometry, mat, local: norm.clone().multiply(mesh.matrixWorld) });
+    pecas.push({ nome: mesh.name, geo: mesh.geometry, mat, local: norm.clone().multiply(mesh.matrixWorld) });
   });
   return { pecas };
 }
 
 /** os objetos da ilha prontos: o grupo e as malhas da grama (a queda de qualidade tira metade delas) */
-export interface Objetos { grupo: THREE.Group; grama: THREE.InstancedMesh[] }
+/** os objetos da ilha prontos: o grupo e as malhas da grama (a queda de qualidade tira metade delas); `noite`, o que muda a noite
+    (os postes acesos, enfeites.ts) */
+export interface Objetos { grupo: THREE.Group; grama: THREE.InstancedMesh[]; noite?: (noite: boolean) => void }
 
 /** carrega uma variante de um modelo da grade (o arquivo, o modelo da grade e a linha da tabela MODELOS) */
 export type Carregador = (arquivo: string, id: NomeModelo, modelo: Modelo) => Promise<Variante>;

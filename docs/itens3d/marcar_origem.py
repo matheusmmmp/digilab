@@ -3,13 +3,16 @@
 Da o nome final a imagem (<item>_cor.png), e escreve no asset.extras de onde o item veio: o gerador, as tarefas da Meshy (concept,
 vistas, malha), que ele e gerado por IA e o que o pipeline fez depois. O asset.generator do exportador fica como esta.
 
-uso (da raiz): python -I docs/itens3d/marcar_origem.py <item.gltf> <pasta do item em docs/itens3d> <nome do concept escolhido>
+uso (da raiz): python -I docs/itens3d/marcar_origem.py <item.gltf> <pasta do item em docs/itens3d> <nome do concept escolhido> [o que o pipeline fez]
 """
 import json, sys
 from pathlib import Path
 
 
-def main(gltf: str, docs: str, concept: str) -> None:
+BOLA = "a cor da malha da Meshy passada a uma esfera limpa e chapada na paleta do concept"
+
+
+def main(gltf: str, docs: str, concept: str, feito: str = BOLA) -> None:
     g, d = Path(gltf), Path(docs)
     j = json.loads(g.read_text(encoding="utf-8"))
     item = g.stem
@@ -27,7 +30,7 @@ def main(gltf: str, docs: str, concept: str) -> None:
         "gerador": "Meshy (meshy.ai), plano Pro, conta do Matheus",
         "tarefas_meshy": {"concept": tarefa(f"concept/{concept}.json"), "vistas": tarefa("vistas/vistas.json"),
                           "malha": tarefa("malha/malha.json")},
-        "pipeline": "docs/TAREFA_V3_ITENS_3D.md; a cor da malha da Meshy passada a uma esfera limpa e chapada na paleta do concept",
+        "pipeline": "docs/TAREFA_V3_ITENS_3D.md; " + feito,
         "licenca": "License.txt ao lado",
     }
     g.write_text(json.dumps(j, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
@@ -35,4 +38,4 @@ def main(gltf: str, docs: str, concept: str) -> None:
 
 
 if __name__ == "__main__":
-    main(*sys.argv[1:4])
+    main(*sys.argv[1:5])

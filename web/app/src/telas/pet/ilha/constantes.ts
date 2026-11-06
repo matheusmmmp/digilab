@@ -62,6 +62,27 @@ export const BATER_BOLA_MS = 450;
 export const BOLA_TAU_MS = 140, BOLA_SALTO = 12;
 /** o balanco do saco a cada golpe: a amplitude (radianos) e a constante de tempo do amortecimento (ms) */
 export const SACO_BALANCO = { amplitude: 0.32, tau: 650, periodo: 520 } as const;
+/** o saco gerado (docs/TAREFA_V3_ITENS_3D.md) reage ao golpe tambem com um giro na corrente (radianos; o sentido vem do lado de quem
+    bateu) e com o amassado na direcao do golpe (a fracao que o saco achata nela, maxima no instante do golpe, e volta oscilando, como
+    lona cheia); a constante de tempo e o periodo em ms. PROPOSTO, SEM FONTE */
+export const SACO_GIRO = { amplitude: 0.22, tau: 900, periodo: 1500 } as const;
+export const SACO_AMASSO = { amplitude: 0.14, tau: 150, periodo: 300 } as const;
+/** o maior angulo do balanco na direcao do poste (radianos): no saco gerado, o vao entre o saco e o poste e de ~0,29 celula e o fundo do
+    saco fica ~1,84 celula abaixo do pivo, entao o saco toca o poste perto de asin(0,29 / 1,84) = 0,16; com folga, 0,14. PROPOSTO */
+export const SACO_FOLGA_POSTE = 0.14;
 /** o coco no chao (cocos.ts): o raio do anel em volta do pet onde ele cai e o passo entre aneis (celulas), quanto dura o pulinho ao
-    surgir (ms) e as duas cores das voltas; PROPOSTO, SEM FONTE */
-export const COCO = { raio: 0.85, passo: 0.25, surgirMs: 380, cor: [0x8a5a2b, 0x6f4520] } as const;
+    surgir (ms); o desenho e o item gerado (itens.ts, public/itens/coco/); PROPOSTO, SEM FONTE */
+export const COCO = { raio: 0.85, passo: 0.25, surgirMs: 380 } as const;
+
+/** os enfeites do mundo humano na moldura (docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 4.3; grade.ts, porEnfeites): o sal da rng propria
+    (os objetos de hoje nao mudam, E-G0), quantos de cada por mapa, a faixa de distancia da area andavel (nada alto rente a ela, como as
+    arvores; perto o bastante para a camera ver), a distancia minima entre eles e das coisas altas de hoje, e as tentativas por enfeite
+    antes de falhar alto. PROPOSTO, SEM FONTE */
+export const ENFEITES_GRADE = {
+  sal: 0x5e7e17e5, quantos: { poste: 14 }, perto: 1.5, longe: 4, entreSi: 4, deAlto: 2, tentativas: 400,
+} as const;
+/** a luz dos enfeites a noite (enfeites.ts): o halo na lanterna, na fracao `altura` da altura do modelo, com `tamanho` celulas de
+    diametro, em cascas (as fracoes do tamanho) de opacidade `forca` cada (aditiva), e o quanto os vidros brilham (emissiveIntensity).
+    PROPOSTO, SEM FONTE */
+export const ENFEITE_HALO = { altura: 0.86, tamanho: 1.1, cascas: [0.55, 0.78, 1], forca: 0.08, vidro: 1.6 } as const;
+

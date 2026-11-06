@@ -65,7 +65,19 @@ class Sens:
     def proximidade(self, d: int) -> int:
         return clamp(self.S - div_arred(d * self.S, self.raio), 0, self.S)
 
-    def codificar(self, obs) -> dict:
+    def resumir_lutas(self, lutas: list[dict]) -> list[dict]:
+        """o resumo da luta na Observacao (ponte da luta, PE2): os resumos que chegaram desde a decisao anterior, na ordem, em inteiros
+        (o rival, o resultado -1, 0, +1, a vida perdida em S e o tick). Falha alto num resumo malformado"""
+        out = []
+        for r in lutas:
+            if (type(r.get("rival")) is not str or not r["rival"] or r.get("resultado") not in (-1, 0, 1)
+                    or type(r.get("resultado")) is not int or type(r.get("vida_perdida_s")) is not int or r["vida_perdida_s"] < 0
+                    or type(r.get("tick")) is not int):
+                raise ValueError(f"M-SENS: resumo da luta malformado {r!r}")
+            out.append({"rival": r["rival"], "resultado": r["resultado"], "vida_perdida_s": r["vida_perdida_s"], "tick": r["tick"]})
+        return out
+
+    def codificar(self, obs, lutas: list[dict] | None = None) -> dict:
         S = self.S
         pc, pm = obs.corpo, obs.mundo
         recs = self._receptores(pc)
@@ -91,9 +103,12 @@ class Sens:
             self.hab[c] = integrar(self.hab[c], S if c in vistas else 0, self.k_hab, S)
         comida = max((o["prox"] for o in objetos if o["classe"] in COMIDAS_BOAS), default=0)
         bola = max((o["prox"] for o in objetos if o["classe"] == "bola"), default=0)
-        return {"falta": falta, "leitura": leitura, "contexto": contexto, "objetos": objetos,
-                "conjuncoes": {"comida_vista": comida, "sem_comida": S - comida, "bola_vista": bola},
-                "ha_cheiro": pm.direcao_cheiro != 0, "pos": (pm.x, pm.y), "regiao": pm.regiao, "minuto": minuto, "pc": pc}
+        out = {"falta": falta, "leitura": leitura, "contexto": contexto, "objetos": objetos,
+               "conjuncoes": {"comida_vista": comida, "sem_comida": S - comida, "bola_vista": bola},
+               "ha_cheiro": pm.direcao_cheiro != 0, "pos": (pm.x, pm.y), "regiao": pm.regiao, "minuto": minuto, "pc": pc}
+        if lutas is not None:                          # a ponte da luta (PE2): desligada, nenhum campo novo
+            out["lutas"] = self.resumir_lutas(lutas)
+        return out
 
     def estado_interno(self) -> dict:
         return {"hab": dict(self.hab), "receptores": None if self.receptores is None else list(self.receptores)}

@@ -1,6 +1,6 @@
 # PAINEL V3: onde a V3 está, em uma página
 
-**Atualizado em 2026-11-06** (`main` `23e9f5a`, depois do #584 da frente AN), pelo Gerente da V3. O plano é o `docs/PLANO_V3.md`; o
+**Atualizado em 2026-11-06** (`main` `f18de8b`, depois do #616 da INFRA_AGENTES), pelo Gerente da V3 e pela sessão da INFRA_AGENTES. O plano é o `docs/PLANO_V3.md`; o
 fechamento da V2, o `docs/FECHAMENTO_V2.md` (tag `v2-final`).
 
 - Quem atualiza: o coordenador de cada trilha, uma linha por PR mergeado.
@@ -38,12 +38,13 @@ fechamento da V2, o `docs/FECHAMENTO_V2.md` (tag `v2-final`).
 | **G0** o genoma no log | o genoma como evento `genoma` no tick 0, atrás da `ConfigGenoma` desligada, só no Python | a tarefa **na `main`** (#556), G0-1 a G0-7 DECIDIDAS; o código completo **na `main`**: o gabarito (E0, #557), o registro (E1, #558), o replay do mundo (E2, #563) e a bancada com o sha256 no resumo (E3, #570) | `docs/TAREFA_V3_GENOMA_G0.md` |
 | **Vida do pet** (fora do plano, pedido do Matheus em 2026-11-04) | o pet não fica parado: passo 1 o movimento na vista, passo 2 uma cena por ação e o toque, passo 3 ações novas no cérebro; nunca treino por clicar carinho e tapa | as referências **na `main`** (#560); o passo 1 **na `main`** (#561); o passo 2 **na `main`** (#573; os números da cena PROPOSTOS, aceitos para ajustar jogando); o passo 3 no papel **na `main`** (#565), com as AN-1 a AN-7 DECIDIDAS pela recomendação; o descritivo do vagar (AN0, #575) e os gabaritos (AN1, #576); o passeio atrás da chave `passeio` (AN2, #578; o teste do gabarito pelo texto, #579); o plano APROVADO (AN3, #577); o orquestrador (AN4, #581); **a run única rodou, na `main`** (#584): as premissas passam, a guarda G-COMEDOURO-AN falha (−0,0263 [−0,0362; −0,0164]) e o MOV sobe (+0,0236 [+0,0203; +0,0269]); linha 2, a `passeio` fica desligada e a AN5 não roda. O Matheus seguiu a recomendação (2026-11-06, opção (a) da seção 8 do RESULTADO): a frente fecha como negativa, e o limiar e o raio do vagar ficam para a rodada de equilíbrio. As animações do pet (SPRITES_ACOES) seguem noutra sessão | `docs/TAREFA_V3_VIDA_PET_REF.md`, `docs/TAREFA_V3_ACOES_NOVAS.md`, `docs/RESULTADO_V3_ACOES_NOVAS.md` |
 | **L** balões e HUD (fora do plano, sessões próprias) | os balões soltos vão ao painel Estado; o HUD da tela Pet | **na `main`** (#498, #501); o HUD transitório e arrastável **na `main`** (#559), com o e2e consertado no #566; o cocô como objeto 3D na ilha (#567) | `docs/TAREFA_V2_LAYOUT_HABITAT.md`, `docs/TAREFA_V3_LAYOUT_HUD.md` |
+| **infra · INFRA_AGENTES** (fora do plano, pedido do Matheus em 2026-11-06) | as regras não negociáveis impostas pela ferramenta (hooks, gate, CI) e revisores somente leitura com lente fixa | **na `main`** (2026-11-06): a especificação e as D-IA-1 a D-IA-7 DECIDIDAS (#601); os hooks restaurados (#590, UX A0), o H2 com replay, o H1b com as faixas queimadas, o H6 (o da UX A1, #592) e o H9 (#604); o `revisor-metodo`, o `revisor-determinismo` e o `auditor-numeros` (#610); o `tools/pre_run.py` e o H10 (#612); o `ux-browser-tester` (#593) como o testador único, com tipos e Vitest antes do e2e (#615); o job `web` do CI com tipos, Vitest e build (#616). Ligados: H1, H1b, H2, H3, H4, H6, H9 e H10; o H5 e o H8 (UX) fora do `settings.json` | `docs/TAREFA_V3_INFRA_AGENTES.md` |
 
 ## 2. Decisões abertas do Matheus
 
 - **A L4:** aprovar as capturas da ilha (390 e 1280; claro, escuro e noite) e medir a M3 com `?medir3d=1` no desktop e num celular.
 - **A D-C1-3:** de onde vem o ganho do M3\* no `longe_fixo` (nenhuma visita ao lugar lembrado achou ração): questão aberta, sem run; um descritivo com plano próprio antes de o modular virar o cérebro padrão (o laboratório da L3 não espera por ela).
-- **Os hooks** (`.claude/hooks/` e `.claude/settings.json`) apagados pelo `2586b0e` (a H2): a restauração está no PR #590 (UX_TELA_PET A0, empilhado sobre o #589), aberto.
+- **Os hooks** apagados pelo `2586b0e`: restaurados na `main` pelo #590 (2026-11-06), e a INFRA_AGENTES ligou os novos (#604 a #616). Pendência fechada.
 - **A CV14-1:** a v13 continua viva (pela recomendação, até o Matheus dizer outra coisa); um pet v13 enfrenta a Fábrica v14, que é da conta.
 
 ### 2.1 Pendências (2026-11-06)

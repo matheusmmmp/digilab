@@ -36,8 +36,25 @@ export type NomeModelo = keyof typeof MODELOS;
    e o diametro da bola procedural de antes (2 x R_BOLA), para o tamanho na tela nao mudar. PROPOSTO, SEM FONTE. */
 export const ITENS_MODELOS = {
   bola: { arquivos: ["bola/bola.gltf"], altura: 0.72, vento: 0, sombra: 0.4, baixo: false },
+  /* o saco: a altura do saco procedural de antes (o alto do braco, 2,48), e a mesma sombra */
+  saco: { arquivos: ["saco/saco.gltf"], altura: 2.48, vento: 0, sombra: 0.7, baixo: false },
+  /* o kit: mais alto que a maleta procedural (0,385 com a alca), para ficar um pouco mais largo que ela (0,56; o revisor achou o caixote pequeno em 390 px); o coco: a
+     altura do coco procedural (0,46 com a ponta) menos a ponta mais curta do gerado; as sombras, as de antes */
+  kit: { arquivos: ["kit/kit.gltf"], altura: 0.58, vento: 0, sombra: 0.45, baixo: false },
+  coco: { arquivos: ["coco/coco.gltf"], altura: 0.42, vento: 0, sombra: 0.3, baixo: false },
 } as const satisfies Record<string, Modelo>;
 export type NomeItem = keyof typeof ITENS_MODELOS;
+
+/* Os enfeites do mundo humano na moldura (docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 3): outra tabela irma, em public/enfeites/<nome>/, com
+   o License.txt de procedencia propria. A grade (grade.ts, porEnfeites) sorteia onde ficam; a vista (enfeites.ts) os poe instanciados.
+   O poste: o lampiao gerado pela Meshy (o poste do City Kit Roads da Kenney, CC0, foi testado e saiu um poste de rodovia, sem nada da
+   ilha); a altura e a de um poste na escala do pet (o pet tem cerca de 1 celula). PROPOSTO, SEM FONTE */
+export const ENFEITES_MODELOS = {
+  poste: { arquivos: ["poste/poste.gltf"], altura: 3.0, vento: 0, sombra: 0.4, baixo: false },
+} as const satisfies Record<string, Modelo>;
+export type NomeEnfeite = keyof typeof ENFEITES_MODELOS;
+/** a mascara das partes que acendem a noite (o emissiveMap; fora do glTF, ao lado dele), por enfeite que tem luz */
+export const ENFEITES_LUZ: Partial<Record<NomeEnfeite, string>> = { poste: "poste/poste_luz.png" };
 /** os modelos que podem entrar na area andavel sem um objeto do motor (regra 5) */
 export const MODELOS_BAIXOS = (Object.keys(MODELOS) as NomeModelo[]).filter(n => MODELOS[n].baixo);
 /** o modelo das arvores do layout do motor (as `arvores`, J* e M*), as unicas coisas altas dentro da area andavel */
