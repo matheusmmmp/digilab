@@ -12,6 +12,10 @@ Sai com código 0 (pode rodar) ou 2 (recusa, com todos os motivos no stderr). N�
    quando o próprio orquestrador chama o gate);
 5. passam de 4 processos (V3-D8).
 
+**As medições do combate** (`web/app/scripts/equilibrio_tr/*.py` e `*.ts`; a V3-D8 diz que elas contam) entram por
+`python tools/pre_run.py <script> --medicao`: só a regra 4, porque elas não têm config com plano nem bases (as faixas delas vão por nome,
+`--faixa calibracao2`). E uma medição em andamento conta como run para as outras (INFRA_AGENTES E7).
+
 Quem chama: o hook H10 (`.claude/hooks/h10_pre_run.py`), antes do comando da run, e, daqui para a frente, os `run_v3_*` novos no começo
 do `main()` (D-IA-2), por `conferir(...)`. Os `run_v2_*` da V2 congelada não mudam.
 
@@ -33,6 +37,7 @@ RAIZ = Path(__file__).resolve().parents[1]
 FAIXAS = Path("experiments") / "bancada" / "faixas.py"
 MAX_PROCESSOS = 4                                          # V3-D8 (docs/PLANO_V3.md, seção 7)
 RUN = re.compile(r"experiments[\\/]+run_v[23]_[A-Za-z0-9_]+\.py")
+MEDICAO = re.compile(r"scripts[\\/]+equilibrio_tr[\\/]+[A-Za-z0-9_]+\.(py|ts)")      # as medições do combate (E7)
 
 
 class Recusa(Exception):
@@ -94,12 +99,12 @@ def motivos_das_bases(raiz: Path, bases: list[int]) -> list[str]:
 
 
 def linhas_de_comando() -> list[tuple[int, str]]:
-    """(pid, linha de comando) de cada processo Python da máquina."""
+    """(pid, linha de comando) de cada processo Python ou Node da máquina (o Node é o das medições do combate, pelo `tsx`)."""
     falsa = os.environ.get("DIGILAB_PRE_RUN_PROCESSOS")
     if falsa is not None:
         return [(0, c) for c in json.loads(falsa)]
     if os.name == "nt":
-        script = ("Get-CimInstance Win32_Process -Filter \"Name like 'python%'\" | "
+        script = ("Get-CimInstance Win32_Process -Filter \"Name like 'python%' or Name like 'node%'\" | "
                   "ForEach-Object { \"$($_.ProcessId)`t$($_.CommandLine)\" }")
         r = subprocess.run(["powershell", "-NoProfile", "-NonInteractive", "-Command", script], capture_output=True, timeout=60)
     else:
@@ -109,14 +114,14 @@ def linhas_de_comando() -> list[tuple[int, str]]:
     saida = []
     for linha in r.stdout.decode("utf-8", "replace").splitlines():
         pid, _, comando = linha.strip().replace("\t", " ", 1).partition(" ")
-        if pid.isdigit() and ("python" in comando.lower() or os.name == "nt"):
+        if pid.isdigit() and (os.name == "nt" or "python" in comando.lower() or "node" in comando.lower()):
             saida.append((int(pid), comando))
     return saida
 
 
 def motivos_de_outra_run() -> list[str]:
     meus = {os.getpid(), os.getppid()}
-    outras = [c for pid, c in linhas_de_comando() if pid not in meus and RUN.search(c)]
+    outras = [c for pid, c in linhas_de_comando() if pid not in meus and (RUN.search(c) or MEDICAO.search(c))]
     if outras:
         return ["há outra run em andamento (uma run de pesquisa por vez, V3-D8): " + " | ".join(o[:160] for o in outras)]
     return []
@@ -141,6 +146,13 @@ def conferir(orquestrador: str, config: str, processos: int = 1, raiz: Path = RA
     return motivos
 
 
+def conferir_medicao(script: str) -> list[str]:
+    """Uma medição do combate: só a regra de uma carga por vez (V3-D8)."""
+    if not MEDICAO.search(script.replace("\\", "/")):
+        return [f"{script} não é uma medição do combate (web/app/scripts/equilibrio_tr/*.py ou *.ts)"]
+    return motivos_de_outra_run()
+
+
 def exigir(orquestrador: str, config: str, processos: int = 1, raiz: Path = RAIZ) -> None:
     """Para os orquestradores novos: levanta `Recusa` com os motivos, em vez de deixar a run começar."""
     motivos = conferir(orquestrador, config, processos, raiz)
@@ -149,13 +161,20 @@ def exigir(orquestrador: str, config: str, processos: int = 1, raiz: Path = RAIZ
 
 
 def main(argv: list[str] | None = None) -> int:
+    sys.stderr.reconfigure(encoding="utf-8")        # o console do Windows usaria outra codificação nos erros do argparse
     ap = argparse.ArgumentParser(description="o gate antes de uma run de pesquisa (INFRA_AGENTES E3)")
     ap.add_argument("orquestrador")
-    ap.add_argument("--config", required=True)
+    ap.add_argument("--config")
+    ap.add_argument("--medicao", action="store_true", help="uma medição do combate: só a regra de uma carga por vez")
     ap.add_argument("--processos", type=int, default=1)
     ap.add_argument("--raiz", default=str(RAIZ))
     a = ap.parse_args(argv)
-    motivos = conferir(a.orquestrador, a.config, a.processos, Path(a.raiz).resolve())
+    if a.medicao:
+        motivos = conferir_medicao(a.orquestrador)
+    elif a.config is None:
+        ap.error("--config é obrigatório numa run de pesquisa (ou --medicao, para uma medição do combate)")
+    else:
+        motivos = conferir(a.orquestrador, a.config, a.processos, Path(a.raiz).resolve())
     if motivos:
         sys.stderr.buffer.write(("pre_run recusou a run:\n- " + "\n- ".join(motivos) + "\n").encode("utf-8"))
         return 2

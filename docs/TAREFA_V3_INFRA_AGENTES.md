@@ -370,3 +370,20 @@ Worker: Claude Code, Opus 5.5, worktree `v3-infra-agentes-e5`, branch `v3-infra-
   o `find -delete` e o `npm test` não) e a edição negada.
 - **Não rodado:** uma segunda rodada do auditor sobre o `RESULTADO_V3_ACOES_NOVAS.md`, para ver os quatro SEM FONTE de hash e tamanho
   virarem VERIFICADO. Ela vale numa sessão aberta depois do merge, que carrega o agente pelo tipo.
+
+## 15. Resumo da etapa E7 (2026-11-06): as medições do combate no gate
+
+Worker: Claude Code, Opus 5.5, worktree `v3-infra-agentes-e5`, branch `v3-infra-agentes-e7`, empilhado sobre o #622 (E6). A questão
+aberta da E3 (seção 11), seguida pelo Matheus em 2026-11-06 ("siga com as recomendações").
+
+- **As medições do combate** são os scripts de `web/app/scripts/equilibrio_tr/`: os orquestradores em Python (`medir_tudo.py`, os
+  `grade_*_r2.py`, rodados em `web/app`) e as bancadas em TypeScript (`fase1_relogio.ts` a `fase4_progressao.ts`, pelo `npx tsx`). Elas
+  usam faixas por nome (`--faixa calibracao2`), não config com plano e bases; o `tools/medir_*` que a E3 citava não existe.
+- **O `tools/pre_run.py`:**
+  - `--medicao` confere só a regra de uma carga por vez;
+  - a lista de processos inclui o Node;
+  - uma medição em andamento conta como run para as outras, e uma run de pesquisa conta para a medição.
+- **O H10:** acha `python … scripts/equilibrio_tr/*.py` e `npx tsx`/`node … scripts/equilibrio_tr/*.ts` no comando e chama o
+  `pre_run.py --medicao`; ler os scripts (`cat`, `git diff`) e o `--help` passam.
+- **Testes:** `python -m pytest tests/test_hooks.py tests/test_hook_h4.py tests/test_agentes.py tests/test_agentes_ux.py tests/test_pre_run.py tests/test_infra_*.py -q -p no:cacheprovider`
+  → 278 passed. Na máquina real: `python tools/pre_run.py web/app/scripts/equilibrio_tr/medir_tudo.py --medicao` → código 0.
