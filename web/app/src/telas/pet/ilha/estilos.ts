@@ -1,14 +1,16 @@
 /* Os estilos do habitat (src/habitat.ts, caminho A de 2026-10-31): cada mapa e uma vista da MESMA grade do motor (grade.ts), so com outro
    terreno, outros modelos e outra dobra. A area andavel, a moldura, os objetos e o lugar do pet nao mudam; a vista (vista.ts) e a mesma.
      - ilha: a da L4 (cena.ts), com o mundo curvo (DOBRA_K) e os kits CC0 de public/kits3d;
+     - digital: a ilha no fundo de anime (docs/TAREFA_V3_MAPA_DIGITAL.md), com o ceu pintado e os dois tons;
      - voxel: a ilha em cubos (voxel.ts), sem asset;
      - floresta: o kit Tiny Fantasy Forest (floresta.ts), so no dev;
      - cassette: as texturas e as arvores do Cassette Beasts (cassette.ts), so no dev.
    Os tres novos sao planos, como os POCs do #480 (a dobra e do estilo Animal Crossing). */
 import type { Mapa } from "../../../habitat.ts";
-import { montarCena, objetos, terreno, type CenaIlha, type Objetos } from "./cena.ts";
+import * as THREE from "three";
+import { PALETA_DIGITAL, doisTons, flores, montarCena, objetos, terreno, type CenaIlha, type Objetos } from "./cena.ts";
 import { arquivosCassette, carregadorCassette, terrenoCassette } from "./cassette.ts";
-import { DOBRA_K } from "./constantes.ts";
+import { CEU_DIGITAL, DOBRA_K } from "./constantes.ts";
 import { enfeites } from "./enfeites.ts";
 import { PALETA_FLORESTA, arquivosFloresta, carregadorFloresta } from "./floresta.ts";
 import type { Ilha } from "./grade.ts";
@@ -36,6 +38,28 @@ export function estiloDe(mapa: Mapa, base: string): Estilo {
         return { ...o, noite: e.noite };
       },
     };
+    case "digital": {
+      /* o estilo digital (docs/TAREFA_V3_MAPA_DIGITAL.md, D1): a mesma ilha e os mesmos objetos, no fundo de anime: o ceu pintado
+         (public/mapa_digital/ceu.jpg), a paleta chapada com as flores, o barranco de pedra e o toon de dois tons em tudo */
+      const ceuDia = new THREE.TextureLoader().load(new URL("mapa_digital/ceu.jpg", base).href);
+      ceuDia.colorSpace = THREE.SRGBColorSpace;
+      ceuDia.userData.cobrir = true;    /* cobre a tela sem esticar (cena.ts, cobrirFundo) */
+      return {
+        id: mapa, dobra: DOBRA_K,
+        montar: i => {
+          const chao = new THREE.Group().add(terreno(i, PALETA_DIGITAL), flores(i));
+          const c = montarCena(i, chao, { nuvens: false, ceuDia, horizonteDia: CEU_DIGITAL.horizonte, chaoHemi: CEU_DIGITAL.chaoHemi });
+          doisTons(c.cena);
+          return c;
+        },
+        objetos: async i => {
+          const [o, e] = await Promise.all([objetos(i, base), enfeites(i, base)]);
+          o.grupo.add(e.grupo);
+          doisTons(o.grupo);
+          return { ...o, noite: e.noite };
+        },
+      };
+    }
     case "voxel": return { id: mapa, dobra: 0, montar: i => montarCena(i, terrenoVoxel(i)), objetos: async i => objetosVoxel(i) };
     case "floresta": return {
       id: mapa, dobra: 0, montar: i => montarCena(i, terreno(i, PALETA_FLORESTA)),

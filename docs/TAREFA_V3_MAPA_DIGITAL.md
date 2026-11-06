@@ -104,3 +104,30 @@ recomendações e mesclo o #631 e o #632?").
   além do previsto num mês de plano.
 - **D-MD5, os números PROPOSTOS** (a paleta, a densidade das partículas, a transparência da grade, a curva dos fios). Recomendação: aceitar
   e ajustar jogando. Custo de errar: só vista.
+
+## 9. D1: o estilo Digital, com o chão, o barranco, o toon e o céu (2026-11-06, Gerente, Claude Code, Opus 5.5, branch `v3-mapa-digital-d1`)
+
+**O que entrou:**
+- **O estilo "Digital"** em Ajustes › Mapa (`habitat.ts`, `EscolhaHabitat.tsx`, `estilos.ts`), sobre a mesma grade da ilha. O padrão
+  continua a ilha até as capturas serem aprovadas (D-MD1).
+- **O céu pintado** (D-MD2): uma imagem da Meshy (Image to Image, 16:9, 6 créditos, saldo 602 → 596), com a maquete A como referência de
+  estilo e um pedido só de céu (`docs/mapa_digital/ceu/`). Em `public/mapa_digital/ceu.jpg`, com a saturação a 85 %, depois do
+  revisor. Ele cobre a tela sem esticar (`cobrirFundo` em `cena.ts`): corta os lados no celular em pé e mantém o alto do céu. As
+  nuvens de sprite da ilha saem nesse estilo. A noite continua o degradê de hoje.
+- **O chão** (`PALETA_DIGITAL`): a grama em três verdes por região, sorteados por célula, como um xadrez solto; o caminho de terra quente;
+  o barranco de pedra cinza (as faixas de estrato) com a borda de musgo. **As florzinhas** (`flores`): discos brancos, rosa e amarelos,
+  ~1,1 por célula de grama, numa malha só.
+- **O cel shading de dois tons** (`doisTons`): os materiais toon da cena e dos objetos passam de três tons para dois; a luz de baixo do
+  céu de dia fica azulada (`CEU_DIGITAL.chaoHemi`), a sombra do anime.
+
+**Os gates:** D-G0, a mesma grade e os mesmos objetos (o E-G0 passa; o estilo não toca `grade.ts`); D-G1, os draw calls iguais ou menores
+que os da ilha (390: 81 → 79 de dia e 103 → 101 à noite, sem as nuvens de sprite; 1280: 88 → 88 e 109 → 109;
+`D:\Trab\digilab\capturas_mapa_digital\d1\`); D-G2, o `License.txt` do céu e o tamanho num teste (`test/mapa_digital.test.ts`); D-G3, o pet
+legível sobre o chão novo, de dia e de noite (o revisor). D-G4: o revisor (um subagente Sonnet que só viu as capturas e a maquete)
+**aprovou com ressalva**: o verde quase neon contra o azul elétrico; o conserto foi o dele (a saturação da grama e do céu ~15 % menor,
+três tons por região, as flores maiores e mais numerosas), e as capturas foram refeitas. Comparação: `comparacao_d1.png`.
+
+**Fica para as próximas etapas:** as árvores, os arbustos e as pedras dos kits ainda com as cores e o toon deles (só o toon passa a dois
+tons), sem os traços (D2); as partículas, a grade no céu e os fios (D3); a lata (D4). Os itens (a bola, o saco, o kit, o cocô) seguem com
+os três tons: eles entram depois da cena.
+
