@@ -1,4 +1,4 @@
 {
- "fonte": "as cores medianas das regioes iluminadas do concept_2_gomos.png (branco, azul, amarelo); PROPOSTO",
- "paleta": [[244, 239, 235], [110, 184, 223], [248, 219, 87]]
+ "fonte": "rodada 1: as medianas do concept_2_gomos.png [[244,239,235],[110,184,223],[248,219,87]] sairam lavadas na ilha (revisor, 2026-11-06); rodada 2: o azul da bola procedural de antes (#378add) e um amarelo mais saturado; o branco igual. PROPOSTO, SEM FONTE",
+ "paleta": [[244, 239, 235], [55, 138, 221], [246, 196, 40]]
 }

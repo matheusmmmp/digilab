@@ -40,6 +40,9 @@ for (const [w, h] of TELAS) {
       await expect(page.locator(".pet-cena .cena3d")).toBeVisible();
       await expect(page.locator("[data-pronto='1']")).toHaveCount(1, { timeout: 30_000 });
       await expect.poll(() => page.evaluate(() => (window as any).__digilab.cena()?.bola ?? null), { timeout: 30_000, message: "a bola desenhada" }).not.toBeNull();
+      /* os kits e os itens carregados (vista.ts, data-objetos); a referencia de 2026-11-05 foi tirada antes deste marco, com a bola
+         procedural, que nao dependia de carga */
+      if (ROTULO !== "referencia") await expect(page.locator("[data-objetos='1']")).toHaveCount(1, { timeout: 30_000 });
       await page.waitForTimeout(1500);
       mkdirSync(SAIDA, { recursive: true });
       const nome = `bola_${w}_${cena.nome}`;

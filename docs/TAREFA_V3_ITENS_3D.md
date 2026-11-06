@@ -226,3 +226,38 @@ sha256 e a M3 de cada uma estão em `docs/itens3d/bola/referencia.json`, e as M3
 
 O G9 da bola gerada é ter o mesmo número ou menos em cada uma das seis. O `fps_media` dessas medidas (60) é do Chrome sem janela do
 Playwright e não é o fps do jogo: a medida de fps continua com o Matheus (seção 7).
+
+## 11. A bola na ilha (2026-11-06, Gerente, Claude Code, Opus 5.5, worktree `v3-itens-3d-bola`)
+
+A primeira etapa (D-I1). Em ordem, com o que cada passo deixou em `docs/itens3d/bola/`:
+
+| etapa | o que saiu | créditos (saldo) |
+|---|---|---|
+| 1 concept | quatro concepts pelo Image to Image (nano-banana-2) com dois recortes da ilha sem o pet; o Matheus escolheu o 2, gomos (`concept/`) | 24 (1 100 → 1 076) |
+| 2 multivista | três vistas coerentes do concept 2 (`vistas/`) | 6 (→ 1 070) |
+| 3 malha | Multi-Image to 3D com remesh para 500: 524 triângulos, um material, textura de 2048 px; **facetada, amassada, gomos borrados e sombra embutida** (`malha/`) | 30 (→ 1 040) |
+| 4–6 conserto (decisão do Matheus: no Blender, sem gerar de novo) | uma esfera UV limpa de 440 triângulos recebe a cor da Meshy por bake; a cor é chapada em três tons (`conserto/`, `consertar_bola.py`, `achatar_cores.py`) | 0 |
+| 7 exportação | `web/app/public/itens/bola/` (glTF separado, 1024 px, a marca de IA no `asset.extras`, o `License.txt`) | 0 |
+| 8 render na ilha | seis capturas lado a lado com a bola de hoje, a M3 de cada uma | 0 |
+| 9 revisão | o revisor novo (uma sessão que só viu o concept e as capturas): **aprovado com ressalva**, cores lavadas e o amarelo some à noite; a paleta foi saturada (rodada 2) e as capturas refeitas | 0 |
+
+Gasto total: 60 créditos, ≈ R$ 6,50 (o Pro a R$ 0,108 o crédito), dentro do teto de R$ 120 (D-I6).
+
+**Os gates** (o teste `web/app/test/ilha_itens3d.test.ts` confere G1 a G8):
+- G1 440 triângulos (teto 554); G2 a caixa igual nos três eixos, normalizada para 0,72 célula (o diâmetro da bola de antes);
+- G3 PNG de 1024 px; G4 um material com textura; G5 nenhum mapa extra;
+- G6 o glTF-Validator 2.0.0-dev.3.10 com 0 erros e 0 avisos (`validacao.json`); G7 os arquivos do item somam cerca de 26 KB;
+- G8 o `License.txt` e o `asset.extras` com a Meshy e as três tarefas;
+- G9 os draw calls iguais aos da bola de antes nas seis cenas: 89, 89 e 109 em 1280; 82, 82 e 98 em 390 (`referencia.json`, `gerada.json`).
+
+**A resposta à pergunta da seção 1, para a bola:** a malha do gerador **não** entrou com a qualidade dos kits; entrou depois do conserto no
+Blender, em que só a cor do gerador sobreviveu (a forma é uma esfera do Blender, as cores são a paleta do concept). Com o conserto, o custo
+de render é o mesmo da bola de antes. O risco da D-I1 se confirmou: a esfera é a forma mais fácil de fazer sem gerador, então a bola diz
+pouco sobre os itens de forma livre (o saco, o kit médico, o cocô).
+
+**O código da vista** (D-I4): `ITENS_MODELOS` em `modelos.ts`; em `itens.ts`, a bola procedural sai e o glTF entra pelo
+`carregarVariante` dos kits, com o pivô no centro para o giro; o `vista.ts` carrega os itens junto dos kits (falha alto do mesmo jeito) e
+marca `data-objetos` quando terminam; o crédito em Ajustes › Sobre. A bola nova vale em todos os mapas do habitat, porque os itens são
+os mesmos em todos. O motor, o log e o save não mudam.
+
+**Fora:** o fps de verdade (a M3 no Chrome do desktop, com o Matheus); a aprovação das capturas pelo Matheus.
