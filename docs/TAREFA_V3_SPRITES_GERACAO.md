@@ -399,10 +399,26 @@ recomendado": as recomendações abaixo valem como estão; registro D-SG-H).
     caixa e a versão em fundo magenta. Custo zero.
   - **O que não rodou:** os scripts do Sprite Forge (o `forge_doctor.py` foi barrado pelo classificador de permissões da sessão); a E1 a
     E7. Gasto: US$ 0,00 (não há ledger).
-  - **D-SG-6, PROPOSTA, precisa do Matheus:** como seguir diante dos termos do fal.ai.
+  - **D-SG-6, DECIDIDA pelo Matheus em 2026-11-06: a opção (b), enviar sob a responsabilidade dele** (registro D-SG-L). Ele respondeu
+    "envie b" na sessão de planejamento e confirmou nesta sessão da G2 ("Confirmo, envie"), depois de ver o achado D-SG-I. O que estava
+    em jogo:
     - **Recomendação:** não enviar quadros do UP ao fal.ai. A rota que respeita os termos é a prova com arte própria (fora desta
       tarefa, seção 6), ou um provedor cujos termos o Matheus confira e aceite para esse uso.
     - **Alternativas:** (a) o Matheus pede permissão ao dono dos direitos; (b) o Matheus lê os termos e decide enviar assim mesmo, sob a
       responsabilidade dele; (c) a rota local do Codex ou do Grok, cujos termos também precisam ser lidos antes.
     - **Custo de errar:** enviar contra os termos arrisca a suspensão da conta do fal.ai e o uso do material fora do que o provedor
       permite; não enviar deixa a pergunta 1 sem resposta nesta tarefa.
+  - **A E1, primeira tentativa (2026-11-06), parou por falta de saldo:**
+    - **O que rodou:**
+      - o `master_still.py prompt` (local);
+      - o `route_media.py --dry-run`, que resolveu a rota `api:fal` com o `fal-ai/nano-banana-2/edit` a US$ 0,08 por take;
+      - o `master_still.py generate --takes 3`, com `--budget-usd 5 --max-calls 8`.
+    - **O resultado:** os 3 takes falharam no upload da referência, antes do pedido pago. O fal.ai respondeu "API HTTP 403: User is
+      locked. Reason: Exhausted balance".
+    - **O ledger** (`remaster/geracao/Agumon/forge/.forge/ledger.jsonl`, `media_ledger.py summary`): 0 chamadas, US$ 0,00.
+    - **Os arquivos:** a ficha do still em `forge/refs/spec_agumon.json` e a referência em `forge/refs/agumon_up_idle0.png`, só os
+      pixels de alfa 255 acima do pé, a 10× sobre magenta.
+    - **Pela instrução da missão,** nenhuma outra rota foi tentada. A E1 volta a rodar depois que o Matheus puser crédito na conta.
+  - **O `forge_doctor.py`, liberado pelo Matheus nesta sessão:**
+    - as dependências estão OK;
+    - o ffmpeg não aparece no PATH de um processo aberto antes da instalação, então a E2 passa o caminho do winget explicitamente.
