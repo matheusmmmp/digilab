@@ -160,7 +160,7 @@ def test_mensagens_da_avaliacao_20_por_classe_e_esperado_no_catalogo():
 def test_livre_v8_so_muda_o_bloco_comando():
     from digilab_fala_livre.prompt import (BLOCO_COMANDO_V8, DESCRICAO_COMANDOS, DESCRICAO_COMANDOS_V8, SISTEMA_V8,
                                            VERSAO_PROMPT_V8, VERSOES_COMANDO)
-    assert VERSAO_PROMPT_V8 in VERSOES and VERSAO_PROMPT_V8 in VERSOES_VOZ and VERSOES_COMANDO == (VERSAO_PROMPT_V7, VERSAO_PROMPT_V8)
+    assert VERSAO_PROMPT_V8 in VERSOES and VERSAO_PROMPT_V8 in VERSOES_VOZ and VERSOES_COMANDO[:2] == (VERSAO_PROMPT_V7, VERSAO_PROMPT_V8)   # o livre-v9 (CONVERSA_PET, M1) vem depois
     # o sistema: igual a v7 fora da regra do COMANDO
     antes, depois = SISTEMA_V7.split("Na conversa pode vir um bloco COMANDO")[0], SISTEMA_V7.split("Nunca invente uma ação fora da lista.")[1]
     assert SISTEMA_V8.startswith(antes) and SISTEMA_V8.endswith(depois) and SISTEMA_V8 != SISTEMA_V7

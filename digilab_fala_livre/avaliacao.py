@@ -279,7 +279,10 @@ def fase_csv(modelo: str | None = None) -> str:
 RODADAS_COMANDO = {1: {"pasta": "rodada1", "sementes": (20261003, 20261004, 20261005), "estilo": False, "prompt": "livre-v7"},
                    2: {"pasta": "rodada2_estilo", "sementes": (20261003, 20261004, 20261005), "estilo": True, "prompt": "livre-v7"},
                    3: {"pasta": "rodada3", "sementes": (20261201, 20261301, 20261401), "estilo": False, "prompt": "livre-v8"},
-                   4: {"pasta": "rodada4_estilo", "sementes": (20261501, 20261601, 20261701), "estilo": True, "prompt": "livre-v8"}}
+                   4: {"pasta": "rodada4_estilo", "sementes": (20261501, 20261601, 20261701), "estilo": True, "prompt": "livre-v8"},
+                   # CONVERSA_PET M1 (D1): livre-v9 (regras do v2 + estilo + comando) com o estilo da especie, sementes NOVAS da faixa
+                   # 20261900-20262199 (docs/PLANO_ANALISE_V3_CONVERSA_PET.md, secao 6); a rodada "4" do plano, a chave 5 aqui
+                   5: {"pasta": "rodada4_v9", "sementes": (20261901, 20262001, 20262101), "estilo": True, "prompt": "livre-v9"}}
 MODELO_COMANDO = "gemma2:9b"
 GATE_FP_NEGATIVAS = 0.05
 GATE_IMPERATIVOS = 0.80
