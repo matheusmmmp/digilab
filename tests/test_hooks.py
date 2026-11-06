@@ -605,6 +605,30 @@ def test_h8_shell_do_testador(projeto, comando, passa):
         assert (r.returncode == 0) == passa, (comando, r.stderr.decode("utf-8"))
 
 
+@pytest.mark.parametrize("comando,passa", [
+    ("sha256sum artifacts_v3_acoes_novas/run/run.log", True),       # INFRA_AGENTES E6: o hash e o tamanho dos artefatos
+    ("stat -c %s artifacts_v3_acoes_novas/run/medidas.json", True),
+    ("Get-FileHash artifacts_v3_acoes_novas/run/run.log", True),
+    ("du -b artifacts_v3_acoes_novas/run/vidas.tar.gz", True),
+    ("cat docs/RESULTADO_V3_ACOES_NOVAS.md", True),
+    ("python -c \"print(1)\"", False),
+    ("rm artifacts_v3_acoes_novas/run/run.log", False),
+    ("sha256sum x > y.txt", False),
+    ("find . -name x -delete", False),
+    ("npm test", False),
+])
+def test_h8_shell_do_auditor(projeto, comando, passa):
+    for tool in ("Bash", "PowerShell"):
+        r = rodar_com("h8_escopo.py", pre_tool(tool, {"command": comando}, projeto), projeto, "auditor")
+        assert (r.returncode == 0) == passa, (comando, r.stderr.decode("utf-8"))
+
+
+def test_h8_auditor_nao_escreve(projeto):
+    for tool in ("Edit", "Write"):
+        r = rodar_com("h8_escopo.py", pre_tool(tool, {"file_path": "docs/RESULTADO_V3_X.md"}, projeto), projeto, "auditor")
+        assert r.returncode == 2 and "auditor" in r.stderr.decode("utf-8")
+
+
 def test_h8_designer_sem_shell_implementador_com_shell(projeto):
     assert rodar_com("h8_escopo.py", pre_tool("Bash", {"command": "ls"}, projeto), projeto, "designer").returncode == 2
     assert rodar_com("h8_escopo.py", pre_tool("Bash", {"command": "npm test"}, projeto), projeto, "implementador").returncode == 0
