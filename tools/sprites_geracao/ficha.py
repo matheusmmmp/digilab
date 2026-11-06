@@ -34,6 +34,7 @@ FATOR_CARNE_MAX = 0.15
 CICLO_MIN_MS, CICLO_MAX_MS, QUADRO_MAX_MS = 800, 1000, 200
 CENTRO_X_MAX = 2.0                                # px, o centro x das 3 linhas de baixo contra o do Idle
 LINHAS_PE = 3
+ALFA_SEMI_MAX = 2                                 # px semitransparentes por quadro acima do pe (D-SG-E, Matheus 2026-11-06)
 
 # A carne e arte propria da M1 (tools/sprites_acoes/gerar.lua, tabela `cor`): a paleta dela vale para a camada comida.
 CARNE_PALETA = [(58, 31, 20), (181, 83, 47), (233, 138, 92), (243, 234, 210)]
@@ -158,7 +159,7 @@ def montar_ficha(nome: str, remaster: Path = REMASTER, ancoras: Path = ANCORAS) 
         "carne": {"paleta": ["%02x%02x%02x" % c for c in CARNE_PALETA], "canto": canto, "canto_aproximado": aprox,
                   "sequencia": seq, "fonte": "tools/sprites_acoes/gerar.lua (arte propria da M1)"},
         "acao": ACAO,
-        "tolerancias": {"centro_x_px": CENTRO_X_MAX, "linhas_pe": LINHAS_PE},
+        "tolerancias": {"centro_x_px": CENTRO_X_MAX, "linhas_pe": LINHAS_PE, "alfa_semi_max": ALFA_SEMI_MAX},
     }
 
 

@@ -44,7 +44,7 @@ def ficha() -> dict:
         "area": {"faixa": [0.9 * corpo, 1.1 * (corpo + 4)], "carne_max": 70.0},
         "ms_alvo": [200, 200, 200, 200, 100],
         "ms_limites": {"ciclo_min": 800, "ciclo_max": 1000, "quadro_max": 200},
-        "tolerancias": {"centro_x_px": 2.0, "linhas_pe": 3},
+        "tolerancias": {"centro_x_px": 2.0, "linhas_pe": 3, "alfa_semi_max": 2},
         "carne": {"paleta": ["%02x%02x%02x" % c for c in carne], "canto": [20, 3], "canto_aproximado": False,
                   "sequencia": [{"ms": 200, "mordidas": 0, "farelo": 0}, {"ms": 200, "mordidas": 1, "farelo": 1},
                                 {"ms": 200, "mordidas": 2, "farelo": 0}, {"ms": 200, "mordidas": 2, "farelo": 0},
@@ -162,9 +162,17 @@ def test_g_pe_falha_com_centro_x_longe(base):
 # ---- G-ALFA
 def test_g_alfa_falha_com_semitransparente_acima_do_pe(base):
     c, o, f, i0 = base
-    c.quadros[2][PE - 6, 9] = (*COR_A, 238)
+    for x in (9, 10, 11):                                   # 3 pixels: acima do limite de 2 por quadro
+        c.quadros[2][PE - 6, x] = (*COR_A, 238)
     with pytest.raises(G.GateFalhou, match="G-ALFA"):
         G.g_alfa(c, o, f)
+
+
+def test_g_alfa_tolera_ate_2_px_por_quadro(base):
+    c, o, f, i0 = base
+    c.quadros[2][PE - 6, 9] = (*COR_A, 238)
+    c.quadros[2][PE - 6, 10] = (*COR_A, 243)
+    assert G.g_alfa(c, o, f)["semitransparentes_acima_do_pe"][2] == 2
 
 
 def test_g_alfa_aceita_semitransparente_so_na_sombra(base):

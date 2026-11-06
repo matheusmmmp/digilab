@@ -107,7 +107,7 @@ def g_pe(clipe: F.Clipe, ficha: dict, idle0: np.ndarray) -> dict:
 
 
 def g_alfa(clipe: F.Clipe, objeto: F.Clipe, ficha: dict) -> dict:
-    """Acima do pe (linhas < pe_idle), todo pixel do personagem tem alfa 0 ou 255; a carne, em todo o quadro."""
+    """Acima do pe (linhas < pe_idle), no maximo `alfa_semi_max` (2, D-SG-E) pixels com alfa intermediario por quadro; a carne, 0."""
     pe = ficha["pe_idle"]
     semi = []
     for i, q in enumerate(clipe.quadros):
@@ -118,9 +118,11 @@ def g_alfa(clipe: F.Clipe, objeto: F.Clipe, ficha: dict) -> dict:
     for q in objeto.quadros:
         a = q[..., 3]
         semi_c.append(int(((a > 0) & (a < 255)).sum()))
-    medido = {"semitransparentes_acima_do_pe": semi, "semitransparentes_carne": semi_c}
-    if any(semi) or any(semi_c):
-        raise GateFalhou(f"G-ALFA: pixels semitransparentes acima do pe (personagem {semi}, carne {semi_c})")
+    lim = ficha["tolerancias"]["alfa_semi_max"]
+    medido = {"semitransparentes_acima_do_pe": semi, "limite_por_quadro": lim, "semitransparentes_carne": semi_c}
+    if max(semi) > lim or any(semi_c):
+        raise GateFalhou(f"G-ALFA: mais de {lim} pixel(s) semitransparente(s) acima do pe por quadro (personagem {semi}), ou alfa "
+                         f"intermediario na carne ({semi_c})")
     return medido
 
 
