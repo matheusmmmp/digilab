@@ -248,3 +248,26 @@ Testes: `python -m pytest tests/test_hooks.py -q` → 101 passed (32 de antes, 6
 (822 testes, todos passam), e2e 481–709 s. O total por turno fica entre **10,8 e 13,7 min**, acima dos ~10 min da UX-3. O e2e **oscilou no
 mesmo código**: 3 falhas na rodada 1, 1 na rodada 2 (o treino com "Forçar levantar pedra?", nas duas), nenhuma na 3. Com o H5 ligado, uma
 oscilação dessas devolveria o turno ao agente uma vez por assinatura. Isso pesa na UX-5. A UX-3 ficou decidida pelo e2e inteiro (seção 8.1), com o custo medido.
+
+## 11. Etapa A2: os seis agentes e o registro local (2026-11-06)
+
+Branch `v3-ux-a2`, empilhada sobre a `v3-hooks-a1`. Os seis agentes da seção 3.2 em `.claude/agents/`, no formato da documentação de
+subagentes do Claude Code (frontmatter com `name`, `description`, `tools`, `disallowedTools`, `model`, `skills`, `mcpServers`, `hooks`):
+
+| agente | modelo | ferramentas | limite do harness |
+|---|---|---|---|
+| `ux-designer` | opus | Read, Grep, Glob, Write, Edit, Skill; a skill `frontend-design` | H8 `designer`; sem shell |
+| `ux-implementador` | sonnet | Read, Grep, Glob, Edit, Write, Bash; o shadcn MCP (`npx shadcn@latest mcp`) só nele | H8 `implementador` e H6 |
+| `ux-browser-tester` | sonnet | Read, Grep, Glob, Bash; o Playwright MCP (`npx -y @playwright/mcp@latest`) só nele | sem escrita; H8 `testador` e H6 |
+| `rev-replay` | opus | Read, Grep, Glob | sem escrita e sem shell |
+| `rev-a11y` | sonnet | Read, Grep, Glob | sem escrita e sem shell |
+| `rev-cena` | sonnet | Read, Grep, Glob | sem escrita e sem shell |
+
+O `web/app/registry.json` é o índice local no formato de registro do shadcn: os seis `hx/*`, o `ui/button` e as peles (`tokens.css`,
+`pele-xcom.css`, `pele-vidro.css`). O `components.json` não ganhou `registries` (UX-4). A documentação do shadcn só mostra registros por
+URL https, então o MCP não lê este arquivo sozinho; ele serve de índice ao implementador.
+
+Testes: `python -m pytest tests/test_agentes_ux.py -q` → 18 passed.
+
+Não conferido: se o Claude Code carrega os seis agentes e se os MCPs sobem. Uma sessão só lê `.claude/agents/` do próprio projeto ao
+abrir, e o `frontend-design` não está instalado nesta máquina (UX-6); sem ele, a skill é pulada com aviso.
