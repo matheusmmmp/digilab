@@ -68,6 +68,51 @@ jobs:
         run: |
           python tools/gerar_estado_atual.py --conferir || echo "::warning::docs/ESTADO_ATUAL.md está desatualizado; o coordenador regenera no fim da rodada"
 
+  # O jogo web (INFRA_AGENTES E5, docs/TAREFA_V3_INFRA_AGENTES.md, seção 3.5; D-IA-3): só quando o PR muda web/app/. Os tipos, o Vitest e o
+  # build; o e2e não, porque os specs leem o atlas de D:\Trab\digilab\Assets e as referências das capturas, que ficam fora do git.
+  # O filtro é um passo, e não o `paths:` do `on:`, porque o `paths:` valeria para o workflow inteiro e tiraria o job `relato`.
+  web:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: web/app
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: O PR muda web/app?
+        id: mudou
+        working-directory: .
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          if git diff --quiet "origin/$BASE_REF...HEAD" -- web/app/; then
+            echo "web=nao" >> "$GITHUB_OUTPUT"
+            echo "O PR não muda web/app/: o job web não roda os testes do jogo." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "web=sim" >> "$GITHUB_OUTPUT"
+            echo "O PR muda web/app/: tipos, Vitest e build (VERIFICADA); o e2e fica fora do CI (D-IA-3)." >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/setup-node@v4
+        if: steps.mudou.outputs.web == 'sim'
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: web/app/package-lock.json
+      - if: steps.mudou.outputs.web == 'sim'
+        run: npm ci --no-audit --no-fund
+      - name: Tipos
+        if: steps.mudou.outputs.web == 'sim'
+        run: npm run tipos
+      - name: Vitest
+        if: steps.mudou.outputs.web == 'sim'
+        run: npm test
+      - name: Build
+        if: steps.mudou.outputs.web == 'sim'
+        run: npm run build
+
   suite-inteira:
     if: github.event_name == 'workflow_dispatch' && inputs.suite_inteira
     runs-on: windows-latest

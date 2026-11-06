@@ -138,7 +138,7 @@ GitHub Actions: use o `verificar-pr` que já existe; esta POC não adiciona Acti
 
 | categoria | o que é VERIFICADA (o repositório confere) |
 |---|---|
-| implementacao | algum teste mudou ou é citado (`tests/*.py`, ou qualquer `*.test.*` e `*.spec.*` sob `web/app/`, como `test/`, `e2e/`, `e2e_poc/` e `poc/`), e todo teste citado existe. Quem roda os testes do Python é o job `testes`. **Os do `web/app` (Vitest e Playwright) o CI não roda**: saem como alerta DECLARADA |
+| implementacao | algum teste mudou ou é citado (`tests/*.py`, ou qualquer `*.test.*` e `*.spec.*` sob `web/app/`, como `test/`, `e2e/`, `e2e_poc/` e `poc/`), e todo teste citado existe. Quem roda os testes do Python é o job `testes`. **Os do `web/app`:** o Vitest e os tipos rodam no job `web` (abaixo); o Playwright (e2e) o CI não roda, e ele sai como alerta DECLARADA |
 | experimento | o `PLANO_ANALISE_V2_*` citado existe e o primeiro commit dele vem antes do primeiro commit de todo artefato novo; todo `artifacts*/…` citado existe. A run não é refeita |
 | literatura | Origem, DOIs, Resultados e Limitações estão preenchidos; todo DOI está em `docs/referencias/` e não está marcado como não verificado na tabela; nada mudou fora de `docs/` |
 | arquitetura | o relato diz PROPOSTO; as decisões do Matheus estão listadas; nada mudou em `digilab/`, `experiments/` ou `web/app/src/` |
@@ -150,6 +150,10 @@ Uma frase como "os testes passam" no corpo vira **alerta DECLARADA**: só conta 
 1. roda os `tests/test_*.py` que o PR mudou e os `tests/test_infra_*.py`;
 2. roda `tools/conferir_saude.py`;
 3. roda `tools/gerar_estado_atual.py --conferir`, que só avisa.
+
+**Job `web`** (Linux; INFRA_AGENTES E5, `docs/TAREFA_V3_INFRA_AGENTES.md`, seção 3.5): só quando o PR muda `web/app/`, roda em `web/app`
+o `npm ci`, o `npm run tipos`, o `npm test` (Vitest) e o `npm run build`. O e2e fica fora: os specs leem o atlas de `D:\Trab\digilab\Assets`
+e as referências das capturas, que não estão no git (D-IA-3). Ele continua com o Gerente na junção e com o testador.
 
 A suíte inteira (~36 min) roda só manualmente: Actions > verificar-pr > Run workflow > `suite_inteira`.
 
