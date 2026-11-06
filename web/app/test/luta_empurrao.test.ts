@@ -88,9 +88,9 @@ describe("a forca de cada golpe e a queda (EMP-1, EMP-2, EMP-6)", () => {
 });
 
 describe("as posturas (EMP-5)", () => {
-  test("o contra-golpe corta o pesado pela metade e segura a queda; a defesa nao e empurrada (EMP-5 trocada)", () => {
+  test("a defesa e o contra-golpe nao sao empurrados nem caem (EMP-5 trocada)", () => {
     /* entre duas posturas ha a brecha ate a proxima decisao (o ritmo): ali o pesado pega em cheio */
-    for (const [p, px] of [["defender", 0], ["contra_golpe", 30]] as const) {
+    for (const [p, px] of [["defender", 0], ["contra_golpe", 0]] as const) {
       const r = jogarTR(pesado(), postura(p), 1, { R, eventos: true }), es = empurroes(r, 1);
       const acertosNaPostura = r.eventos!.filter(e => e.tipo === "dano" && e.lado === 1 &&
         r.acoes.some(a => a.lado === 1 && a.nome === p && e.t >= a.inicio && e.t < a.inicio + 125));

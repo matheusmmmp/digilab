@@ -190,13 +190,13 @@ function golpe(Lt: LutaTR, atk: number, a: string, danos: Dano[], causa: number,
     }
   } else if (r === "carregar") rec = bruto * CV.multCarregar;
   if (peleAlvo) rec *= CV21.multPele;
-  /* o empurrao de quem leva o golpe (a v18): pela forca do golpe; a defesa (o fator defesa), o contra-golpe e a pele dura (o fator guarda)
+  /* o empurrao de quem leva o golpe (a v18): pela forca do golpe; a defesa e o contra-golpe (o fator defesa) e a pele dura (o fator guarda)
      cortam e seguram a queda; o golpe que a esquiva anula (o pesado e o disparo) nao empurra, nem quando o duelista leva o dano dele (EMP-5) */
   const E = S.C.empurraoAlvo;
   let emp = 0, cai = false;
   if (E && rec > 0 && !(r === "esquivar" && (a === "pesado" || a === "disparo"))) {
     const guarda = r === "defender" || r === "contra_golpe" || peleAlvo;
-    emp = (E.forca[a] ?? 0) * (r === "defender" ? E.defesa : guarda ? E.guarda : 1);
+    emp = (E.forca[a] ?? 0) * (r === "defender" || r === "contra_golpe" ? E.defesa : guarda ? E.guarda : 1);
     cai = !guarda && E.derruba.includes(a);
   }
   if (rec > 0) danos.push({ para: alvo, valor: rec, causa, cac, emp, cai });

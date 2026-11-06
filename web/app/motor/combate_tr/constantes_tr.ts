@@ -70,9 +70,9 @@ export interface EmpurraoAlvo {
   readonly queda: number;
   /** em quantos passos o empurrao se faz (o deslize, a velocidade constante) */
   readonly deslize: number;
-  /** o fator do empurrao no contra-golpe e sob a pele dura (que tambem seguram a queda) */
+  /** o fator do empurrao sob a pele dura (que tambem segura a queda) */
   readonly guarda: number;
-  /** o fator do empurrao na defesa (defender), que tambem segura a queda */
+  /** o fator do empurrao na defesa e no contra-golpe (as posturas), que tambem seguram a queda */
   readonly defesa: number;
 }
 /** o relogio dos pets v13 (os numeros de CTR_TR, sem calibracao; o disparo sem multiplicador, 1) */
@@ -98,8 +98,9 @@ export const RELOGIO_V14: RelogioTR = { ...RELOGIO_V13, empurrao: 0, medio: 120,
     - EMP-1: a investida 40 px (do contato, 44, ao medio), o pesado 60 px; o golpe rapido, a finta e o disparo nao empurram (com 6 px no leve
       a fase 1 da rodada viu as listas defensivas no limite de tempo; docs/EQUILIBRIO_COMBATE_TR.md, fase 1);
     - EMP-2: o pesado e a investida derrubam, 62 passos (~1 s); EMP-3: o caido pode levar golpe;
-    - EMP-5: o contra-golpe e a pele dura cortam pela metade e seguram a queda; a defesa (defender) nao e empurrada nem cai (trocada pelo
-      Matheus em 2026-11-06, depois da primeira medicao: "Testar defesa sem empurrao"; antes a defesa cortava pela metade, como os outros);
+    - EMP-5: a pele dura corta pela metade e segura a queda; a defesa e o contra-golpe nao sao empurrados nem caem (trocada pelo Matheus em
+      2026-11-06, depois das medicoes: "Testar defesa sem empurrao" e depois "Contra-golpe sem empurrao"; antes as duas posturas cortavam
+      pela metade, como a pele);
     - EMP-6: o deslize em 10 passos (160 ms) */
 export const EMPURRAO_V18: EmpurraoAlvo = { forca: { investida: 40, pesado: 60 }, derruba: ["investida", "pesado"], queda: 62, deslize: 10, guarda: .5, defesa: 0 };
 /** o relogio dos pets v18: o da v14 com o empurrao de quem leva o golpe (o empurrao antigo, o do atacante e do alvo, segue 0) */

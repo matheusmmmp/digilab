@@ -164,6 +164,17 @@ Cada etapa num PR, com o merge pelo Matheus.
 - **O gate:** o mesmo da seção 4; o pedido do Matheus nomeia F-3, G-2, G-3 e o teto do T-2. Se ainda falhar, a etapa para e volta com a
   tabela (meta, v14, v18 com a defesa sem empurrão, pior par).
 
+### 4.3 A terceira medição: o contra-golpe também sem empurrão (registrada em 2026-11-06, antes da primeira luta dela)
+
+- **Por quê:** a segunda medição ainda reprovou (seção 9.2). O Matheus escolheu, nas palavras dele, "Contra-golpe sem empurrão": a EMP-5
+  ampliada ao contra-golpe. O golpe que acerta a defesa ou o contra-golpe não empurra nem derruba; a pele dura segue cortando pela metade
+  (desvio D-EMP-11).
+- **O código:** o fator `defesa` (0) passa a valer para o `defender` e o `contra_golpe`; o `guarda` (0,5) fica só para a pele dura.
+- **O comando** (em `web/app`, no máximo 4 processos, uma run): `python scripts/equilibrio_tr/medir_tudo.py --faixa calibracao2 --empurrao v18
+  --saida scripts/medicoes/equilibrio_tr/empurrao/depois_posturas0`; a tabela contra o mesmo `empurrao/antes/`, em `resumo_posturas0.txt`.
+- **A faixa e o gate:** os da seção 4.2 (72101–72505; F-3, G-2, G-3 e o teto do T-2 nomeados). Se ainda falhar, a etapa para e volta com
+  a tabela e uma leitura do que segura o duelista contra a muralha.
+
 ## 5. Entrega
 
 - Testes: em `web/app`, `npm test`, `npm run tipos` e `npm run e2e` (no máximo 4 processos); o e2e `e2e/luta_layout.spec.ts` na etapa 5.
