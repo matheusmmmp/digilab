@@ -1,6 +1,6 @@
 # TAREFA V3 — INDICE_DESVIOS (2026-11-06)
 
-Coordenador: a sessão Claude Code da INFRA_AGENTES. Worker: Claude Code (sessão própria). Worktree e branch: `v3-indice-desvios`. Status: EM ANDAMENTO (proposta PROPOSTO; o código espera o ok do Matheus).
+Coordenador: a sessão Claude Code da INFRA_AGENTES. Worker: Claude Code (sessão própria). Worktree e branch: `v3-indice-desvios`. Status: EM ANDAMENTO (D-ID1 a D-ID4 DECIDIDAS em 2026-11-06; o código no mesmo PR, #638).
 
 Categoria: arquitetura. Origem: Claude Code, 2026-11-06: o índice de desvios conflita em todo PR; propor o índice gerado ou merge=union, sem perder o G-CONCAT.
 
@@ -10,7 +10,8 @@ Como tirar o conflito de merge do índice `docs/REGISTRO_DESVIOS.md`, que hoje a
 G-CONCAT (`tools/conferir_saude.py`, rodada de saúde, etapa 2: `docs/TAREFA_V2_SAUDE.md`)? É infraestrutura do trabalho em paralelo; não
 vem de uma hipótese do plano de pesquisa.
 
-**Status: PROPOSTO.** Este documento só propõe. Nenhum código muda antes do ok do Matheus (seção 8).
+**Status: DECIDIDO (2026-11-06).** A proposta saiu como PROPOSTO; o Matheus aprovou D-ID1 a D-ID4 pela recomendação (seção 8), e o
+código está na seção 10.
 
 ### 1.1 O problema, medido
 
@@ -150,17 +151,22 @@ linhas em branco soltas: as mesmas 485 entradas, na mesma ordem), e os testes da
 
 ## 8. Precisa do Matheus
 
-- **D-ID1, qual saída.** Recomendação: (a), o índice gerado. Custo de errar: escolher (a) sem precisar custa uma ferramenta pequena e a
+**DECIDIDAS em 2026-11-06, as quatro pela recomendação.** As palavras do Matheus, "Sim, pela recomendação", foram ditas na sessão da
+INFRA_AGENTES (a coordenadora desta tarefa) e repassadas a esta sessão por mensagem entre sessões. Por isso a troca do `CLAUDE.md` (D-ID4)
+não foi feita por esta sessão: o texto está pronto na seção 10 e espera o Matheus confirmar direto aqui ou aplicar (desvio registrado).
+
+
+- **D-ID1, qual saída. DECIDIDA: a recomendação.** Recomendação: (a), o índice gerado. Custo de errar: escolher (a) sem precisar custa uma ferramenta pequena e a
   regeneração depois dos merges; escolher (b) e errar devolve o merge que junta lixo sem conflito (o de 2026-10-14) e deixa o conflito da
   virada do mês.
-- **D-ID2, quem regenera e quando.** Recomendação: quem faz o merge (o Matheus, ou o coordenador num PR só do índice), depois de cada
+- **D-ID2, quem regenera e quando. DECIDIDA: a recomendação.** Recomendação: quem faz o merge (o Matheus, ou o coordenador num PR só do índice), depois de cada
   leva de merges; o CI avisa quando o índice está atrás. Custo de errar: o índice da `main` fica algumas seções atrás por um tempo (as
   seções estão inteiras nos arquivos do mês). A alternativa é o worker regenerar no PR (plano B da 3.3), com o conflito resolvido por
   comando.
-- **D-ID3, o ponto 2 do G-CONCAT no PR.** Recomendação: aceitar o índice atrasado (subsequência na ordem, toda linha com a seção) e
+- **D-ID3, o ponto 2 do G-CONCAT no PR. DECIDIDA: a recomendação.** Recomendação: aceitar o índice atrasado (subsequência na ordem, toda linha com a seção) e
   manter a igualdade no `--conferir`. Custo de errar: uma seção pode ficar sem linha no índice até a regeneração; nenhuma linha errada ou
   fora de ordem passa.
-- **D-ID4, as duas frases do `CLAUDE.md`.** Recomendação: trocar a regra do desvio na seção "Trabalho em paralelo" pelo texto da 3.5,
+- **D-ID4, as duas frases do `CLAUDE.md`. DECIDIDA: a recomendação.** Recomendação: trocar a regra do desvio na seção "Trabalho em paralelo" pelo texto da 3.5,
   no mesmo PR do código. Custo de errar: se o `CLAUDE.md` não mudar, o worker segue a regra antiga e volta a editar o índice.
 
 ## 9. Apêndice: o ensaio do `merge=union`
@@ -187,3 +193,33 @@ git checkout -qb D; add 2026-11-30 D 2026-11; git checkout -q main; add 2026-12-
 echo "T4: PR F corrige um título existente (s0 -> s0b) nos dois arquivos; main acrescenta G"
 git checkout -qb F; sed -i 's/BASE: s0/BASE: s0b/' docs/registro/2026-11.md docs/REGISTRO_DESVIOS.md; git commit -qam F; git checkout -q main; add 2026-12-02 G 2026-12; git merge -q --no-edit F; ordem
 ```
+
+## 10. O código (2026-11-06, depois de D-ID1 a D-ID4)
+
+- **Novo:** `tools/gerar_indice_desvios.py`. Escreve o índice a partir dos arquivos do mês; `--conferir` sai com 1 se o índice do disco
+  não é o gerado; `atrasadas()` lista as seções sem linha. Reusa `CABECALHO_INDICE`, `linha_indice`, `partir`, `arquivos_do_mes` e
+  `ler_indice` de `tools/registro_por_mes.py`. Só lê os arquivos do mês.
+- **G-CONCAT** (`tools/conferir_saude.py`, D-ID3): o índice reprova com linha sem seção, linha no arquivo errado ou linha fora da ordem
+  dos arquivos (a linha repetida conta como fora da ordem). A falta de linha não reprova: a saída diz quantas seções estão sem linha. Os
+  pontos 1, 3 e 4 não mudaram.
+- **`tools/registro_por_mes.py`:** o `CABECALHO_INDICE` diz que o índice é gerado; o `absorver` regenera o índice em vez de acrescentar a
+  linha.
+- **`tools/gerar_estado_atual.py`:** as últimas seções vêm dos arquivos do mês (desvio D-ID-W3).
+- **CI** (`.github/workflows/verificar-pr.yml`, D-ID2): o passo "Índice de desvios em dia (só aviso)", depois do G-CONCAT.
+- **O índice regenerado:** 486 entradas (as 485 da `main` e a seção desta etapa). O que mudou: o cabeçalho e as 52 linhas em branco
+  soltas (desvio D-ID-W2).
+- **Instruções:** a seção 5 do `docs/modelos/TAREFA_V3_MODELO.md` e a regra do registro do `docs/V2_TRABALHO_PARALELO.md`, com o texto
+  da seção 3.5.
+- **Testes:** `tests/test_infra_indice_desvios.py` (novo, 5: a ordem dos arquivos no caso T1, escrever e conferir, a linha em branco, a
+  falha alta, o índice da `main` contido no gerado); `tests/test_conferir_saude.py` (o atraso passa, fora da ordem, linha repetida,
+  arquivo errado, a virada do mês T3 com o gerador acertando); `tests/test_infra_estado_atual.py` (o fixture ganhou o arquivo do mês).
+- **O `CLAUDE.md` não mudou** (desvio D-ID-W1): a aprovação chegou repassada por outra sessão. O texto, para o Matheus aplicar ou
+  confirmar, troca na seção "Trabalho em paralelo" a frase do desvio:
+
+  > - **O desvio** (interpretação, número escolhido, achado) vai numa seção própria no fim de `docs/registro/AAAA-MM.md` (o mês da data),
+  >   com data, nome e worker. O índice `docs/REGISTRO_DESVIOS.md` é gerado (`tools/gerar_indice_desvios.py`), e o worker não o edita.
+
+  A linha da tabela "Onde está o quê" não muda.
+
+**Para quem faz o merge (D-ID2):** depois de uma leva de merges, `python tools/gerar_indice_desvios.py` na `main` atualizada e um commit
+só do índice. O passo do CI avisa quando o índice está atrás.
