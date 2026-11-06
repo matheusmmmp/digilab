@@ -235,8 +235,20 @@ Matheus, 2026-11-05, nesta sessão (resposta "B, hooks antes"):
   (https://claude.ai/artifact/4kQh77wKGzbaijGb5H2qmB), ele escolheu a **Digivice** (as classes `.d2`): a paleta `--dl-*` e as fontes do
   guia 4.2, a placa no alto, os vitais em cartões, a linha do agora como balão preso ao pet, botões gordos que afundam ao toque e a barra
   de abas com círculos. São três etapas, um PR cada: **M1** (a tela Pet e as abas), **M2** (as folhas Crescer, Lutar e Diário) e **M3**
-  (a luta e o treino). O plano da M1 está em `docs/PROPOSTAS_V3_UX_TELA_PET.md`, seção "Mobile Digivice"; as perguntas M1-* continuam
-  PROPOSTAS até o ok dele.
+  (a luta e o treino).
+- **A Digivice reprovada; o mobile mínimo no lugar** (Matheus, 2026-11-06, ao ver a prancha da M1 do commit `08b3dff8`): "ela tá com um
+  estilo completamente anterior, de versões muito antigas [...] tem muito botão, muita informação [...] Deixa tudo com ícones
+  minimalistas", e "o menu ali embaixo [...] pode estar em alguma outra área da interface, e daí embaixo só fica os botões de ações".
+  Ele aprovou para virar prancha a direção **mínima** (https://claude.ai/artifact/HxEPJtmUXByNtDkMBaH5WE):
+  - as peles atuais, Vidro e Militar (`--hx-*`, `--hud-*`), no lugar da paleta `--dl-*` e das fontes do guia 4.2;
+  - a cena 3D visível atrás de tudo;
+  - sempre na tela, só o retrato e a hora, a coluna de ícones (Conversar, Crescer, Lutar, Diário), o ícone do agora sobre o pet e quatro
+    ações só com ícone;
+  - sem a barra de abas e sem a aba Pet: a tela Pet é a casa, e cada folha volta pelo seu ×;
+  - o resto aparece só quando há motivo (a necessidade, o retrato aberto, o ⋯ aberto).
+
+  O plano da M1 está em `docs/PROPOSTAS_V3_UX_TELA_PET.md`, seção "Mobile mínimo (M1)"; as perguntas M1-* continuam PROPOSTAS até o ok
+  dele.
 
 UX-4 a UX-8 continuam PROPOSTAS.
 
