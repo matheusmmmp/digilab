@@ -3656,3 +3656,267 @@ de A9.0 a A9.12 muda. A run roda uma vez; o resultado é registrado como está.
     empurrado;
   - **a máquina (V3-D8):** nenhuma run de pesquisa nem medição do combate rodando antes da suíte; a suíte e a run não se sobrepõem; 4
     processos.
+
+
+## Adendo 10: de onde vem o ganho do M3\* no `longe_fixo`, o descritivo da D-C1-3 (2026-11-06, worker do plano da D-C1-3, Claude Code, Opus 5.5)
+
+**Status: APROVADO pelo Matheus em 2026-11-06 ("Aprovo e mescle").** As AD10-1 a AD10-7 (A10.9) estão DECIDIDAS, todas pela recomendação. **Nenhum replay e nenhuma conta deste adendo
+rodam antes de duas coisas:** a marca de aprovação do Matheus neste cabeçalho, e o código da A10.8 na `main`. Este adendo **não calcula nenhum
+número de resultado.** Os números que ele cita já estão registrados na seção 13 do RESULTADO e servem só de contexto.
+
+**De onde vem:**
+- a D-C1-3 (`docs/TAREFA_V2_LONGE_REGULAR.md`, "Decisões depois da C1", DECIDIDA em 2026-10-31): de onde vem o ganho do M3\* no `longe_fixo`
+  fica como questão aberta, sem run, com um descritivo de plano próprio;
+- o registro de 2026-11-01 (`docs/registro/2026-11.md`, a L3 do laboratório): o descritivo passa a vir antes de o modular virar o cérebro
+  padrão. **Ele já é o padrão desde o #562,** então este adendo chega depois da ordem que o registro pedia;
+- o RESULTADO da C1 (`docs/RESULTADO_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`, seção 13): o primário M3\* − M2 por episódio no `longe_fixo` deu
+  +0,0489 [+0,0355; +0,0624], e **nenhuma das 12 704 visitas ao lugar lembrado achou ração** (13.4, item 2). A interpretação da 13.5, não
+  testada, é que "a ida ao lugar lembrado deixa o pet perto dos 3 pontos fixos quando a ração cai";
+- a espec da memória autobiográfica (`docs/ESPEC_MEMORIA_AUTOBIOGRAFICA_DIGIBRAIN_MODULAR.md`, seção 5): o registro de cada visita (o custo
+  da ida no corpo, o número de decisões da ida, as classes à vista na chegada e na decisão seguinte, e se uma comida boa entrou na vista
+  durante a ida). Este adendo reconstrói esse registro no replay da C1 (A10.2), porque o M3\* da C1 não tem a `memoria_autobio`.
+
+**Por que um adendo e não um `PLANO_ANALISE_V3_*` próprio (AD10-1):** pela regra do `CLAUDE.md`, uma frente herdada da V2 ganha um adendo ao
+`PLANO_ANALISE_V2_*` dela. A C1 é a frente herdada LONGE_REGULAR. Os dados são os do adendo 6, e este adendo reusa sem mudar a unidade, o
+IC95, a classe de A6.6 e a margem δ = 0,022. As C2, C3 e C4, também herdadas, seguiram a mesma regra (os adendos 7 a 9). Um
+`PLANO_ANALISE_V3_*` próprio separaria a leitura das regras que ela reusa.
+
+**Reusa, sem mudar:**
+- o cenário e os braços (A6.2), a taxa de fechamento por episódio de fome (o G-MVP-EP de A3.3, com a W(d₀) de A3.2, a medida de A6.4);
+- a unidade (base, semente), com a média das 4 células do `longe_fixo`, e o IC95 do t sobre as 150 unidades (A4.4.6, `metrics.ic_t`);
+- a classe de cada contraste e a margem δ = 0,022 (A6.6, AD6-2);
+- os cortes de d₀ (`orq.geometria()`: na visão até 6 células, só no cheiro de 6 a 24, além do cheiro acima de 24) e a lição LP-2 (A6.8,
+  item 3).
+
+**O que este adendo não afirma:**
+- que o ganho tem uma causa só;
+- que o descritivo prova uma causa. Ele é pós hoc, sobre vidas cujo resultado já foi lido (A10.6);
+- que o modular supera o A, ou que o cérebro padrão de hoje (o M3\* com a `memoria_autobio` REL da C4) ganha pelo mesmo caminho (A10.7).
+
+**Nenhuma alegação de novidade.**
+
+### A10.0 O que não muda
+
+- **O código.** O motor, o `engine.py`, o corpo, o mundo, os cérebros e as medidas por vida da C1 continuam como estão. Só entra um
+  script de leitura (A10.8).
+- **Os resultados.** Nada aqui muda o primário da C1, a classe dele nem a leitura de A6.7. A D-C1-1 (a L-3 fica fora) e a D-C1-2 também
+  não mudam.
+- **As sementes.** Este adendo não roda nenhuma vida nova, não usa nenhuma semente nova e não reserva nenhuma faixa. A faixa 71101…71505
+  é lida só pelos artefatos que já estão no git.
+
+### A10.1 A pergunta
+
+**De onde vem o ganho do M3\* sobre o M2 na taxa por episódio do `longe_fixo`**, se nenhuma visita ao lugar lembrado acha ração?
+
+O M2 e o M3\* só diferem no M-MEM, o lugar lembrado (A6.2). Então todo o ganho é efeito do M-MEM. **A pergunta não é se o M-MEM causa o
+ganho** (o primário já responde, pela ablação). **A pergunta é por qual caminho**: o que muda no comportamento do pet entre a presença do
+M-MEM e a ração comida.
+
+### A10.2 A fonte dos dados (AD10-2)
+
+**Os artefatos da C1 em disco, conferidos nesta tarefa** (o sha256 de cada um, com `sha256sum`, igual ao registrado na seção 13 do
+RESULTADO e no `meta.json`), todos no git, em `artifacts_v2_digibrain_prototipo/longe_regular/run/`:
+
+| arquivo | sha256 | o que dá |
+|---|---|---|
+| `meta.json` | `b2cb111a…4770` | o `git_head` `7683c0e`, os sha256 dos 15 módulos de `digilab/`, do orquestrador e da config |
+| `medidas.json` (32,7 MB) | `5a4fb207…722d` | as medidas por vida das 3 600 vidas (a lista dos campos está no estágio 1) |
+| `resultado.json` | `b1872745…1209` | o primário e os descritivos de A6.4 a A6.8, como registrados |
+| `vidas.tar.gz` (18,0 MB) | `a1fb0010…f7ee` | os 3 600 logs (1 200 por braço: M0, M2 e M3); cada log tem só as ações do dono e os avanços de tempo |
+
+**Os dois estágios:**
+
+1. **O estágio 1 lê só o `medidas.json`.** Usa os campos que já existem por vida:
+   - `episodios_fome.episodios`, a lista (k, d₀, w, fim, motivo) de cada episódio;
+   - `racao_na_janela` (`elegiveis`, `visiveis_em_k0`, `entraram_na_visao`);
+   - `cadeia` e `cadeia_w`, `fins`, `metas` (os fins por busca e por ida), `influencia_vida`, `corpo` e `reflexos`.
+
+   O estágio 1 não precisa de replay nem de código do motor.
+2. **O estágio 2 refaz no replay as vidas do `longe_fixo`, sem vida nova.** O log é o evento (o event sourcing), e a vida se refaz igual a
+   partir dele. Ele refaz as 600 vidas de cada braço (M2, M3\* e M0, AD10-3), isto é, 1 800 vidas. Ele lê a posição do pet, os 3 pontos
+   fixos, o ponto e o tick de cada queda de ração, os estados do corpo e o registro do cérebro em cada decisão (os `motivos` do orquestrador:
+   a ação, a escolha, as sondas `<modulo>_decidiu`, o reflexo e os fins das intenções).
+
+**Achado desta tarefa: o código de hoje não é o da run.** Comparei os sha256 do `meta.json` com a árvore de `origin/main` (`86b5596`):
+- 11 dos 15 módulos de `digilab/` mudaram desde o `7683c0e` (`config.py`, `metrics.py`, `mundo.py` e oito de `digibrain/`, pelas C2, C3 e
+  C4 e pelo laboratório);
+- `experiments/run_v2_longe_regular.py` e `experiments/run_v2_digibrain_prototipo.py` também mudaram;
+- a config da run (`experiments/configs/v2_longe_regular/longe_regular.json`) é a mesma.
+
+**A recomendação (AD10-2):** o estágio 2 roda com o código do `7683c0e`, numa worktree destacada nesse commit e fora do branch de qualquer
+frente. O script da A10.8 fica na `main` e importa o pacote da worktree antiga.
+
+**Duas conferências falham alto, antes de qualquer medida:**
+- **o código:** os sha256 dos 15 módulos, do orquestrador e da config são iguais aos do `meta.json`, como o `conferir_codigo` da L0
+  (`experiments/longe_l0_digibrain.py`);
+- **o G1 de cada vida:** as medidas refeitas no replay são iguais às do `medidas.json`, menos o `custo`, como na L0.
+
+**O que não serve de fonte:**
+- o `caido_1/`: são vidas iguais às da run, que não entram em nenhum cálculo (A6.15);
+- a reavaliação 66xxx: outra faixa, sem o `longe_fixo`;
+- a C4: não tem o M2 (A10.7).
+
+**Vida nova:** nenhuma. Se o Matheus quiser confirmar uma hipótese com vidas novas (A10.6), isso pede uma faixa ao coordenador e um adendo
+próprio. Não é este.
+
+### A10.3 As hipóteses rivais, escritas antes
+
+Todas são [HIPÓTESE]. **Nenhuma tem fonte externa** que sustente o caminho: são SEM FONTE.
+- A linha de Ho, Dautenhahn e Nehaniv (CEC 2005, `10.1109/cec.2005.1554734`, verificada na C0) diz que a memória que refaz o caminho exato
+  falha quando os recursos mudam de lugar. Isso dá direção à pergunta, não a um caminho.
+- **As hipóteses foram escritas depois de ler a seção 13 do RESULTADO.** Algumas foram sugeridas por números de lá, e isso vai marcado em
+  cada uma.
+
+Cada hipótese vem com a assinatura que a separa das outras. As medidas estão em A10.4.
+
+| | a hipótese | o caminho | a assinatura que a separa |
+|---|---|---|---|
+| **H1** | **a posição na queda** (a interpretação da 13.5) | a ida ao lugar lembrado leva o pet para perto dos 3 pontos fixos, e na queda seguinte a ração cai mais perto dele | o M3\* está mais perto do ponto da queda no tick da queda (D1 < 0), e o ganho passa pela ração **visível na abertura** do episódio (o caminho F-a de A10.4) |
+| **H1′** | **a patrulha** | a ida passa pela ração depois da queda: a ração entra na vista durante uma ida, e o pet troca de meta e come | no tick da queda, D1 ≈ igual nos dois braços, e o ganho passa pelas rações que **entram na vista durante uma ida** (F-b). Sugerida pelas 2 554 idas cortadas "por outra unidade" (13.4, item 3) |
+| **H2** | **outra unidade** | com o M-MEM, os outros módulos decidem diferente (o aprendido, o hábito ou o cheiro inato): mais buscas pelo cheiro que acham, ou escolhas de comer mais cedo, sem relação com o lugar | o ganho passa por aproximações **decididas pelo aprendido, pelo hábito ou pelo cheiro inato**, fora das idas (F-c e F-d), sem a assinatura de H1. Sugerida pela G-PESA do aprendido, 0,125 no M2 e 0,226 no M3\* (13.4, item 5) |
+| **H3** | **a queda de um custo** | a ida toma o lugar de ações que custam ao corpo (buscas pelo cheiro que terminam em troca, por exemplo), e o pet chega à queda com o corpo melhor; perde menos episódios para o sono e para o reflexo | o ganho é **a queda das perdas por corpo** (P-a e P-b de A10.4): menos episódios perdidos com o pet dormindo ou com a busca cortada pelo reflexo; o corpo na queda melhor (D4). Sugerida pela fração fora menor no M3\*, −0,025 [−0,032; −0,018] (13.4, item 4) |
+| **H4** | **a medida** | o M3\* muda quais episódios existem (quando o pet tem fome), e a taxa por episódio sobe sem que ele coma mais | a taxa por episódio sobe, mas as refeições por dia e a taxa por ração não sobem. **O dado registrado já é contra:** a taxa por ração subiu +0,040 [+0,034; +0,047] (13.4, item 5). H4 entra para fechar a conta |
+
+**Elas não se excluem.** O ganho pode ter mais de um caminho, e a regra de leitura (A10.5) prevê a mistura.
+
+### A10.4 As medidas
+
+**A regra geral:**
+- **toda medida é da vida inteira ou de todas as ofertas e episódios da vida** (a LP-2);
+- **o contraste é M3\* − M2 por unidade** (a média das 4 células), com o IC95 do t sobre as 150 unidades;
+- **o M0 sai ao lado, só como nível,** sem contraste e sem leitura;
+- **o que só existe no M3\*** (as visitas, as idas) **sai só por braço,** como leitura (a LP-2).
+
+**A. A decomposição do ganho pelo caminho do fechamento** (o centro do descritivo; o estágio 2, com o d₀ do estágio 1).
+- **A partição dos episódios fechados.** Cada episódio fechado entra em um e um só caminho. A regra é aplicada em ordem, pela primeira
+  entrada da ração do episódio na visão (o raio de visão de `orq.geometria()`):
+  - **F-a:** a ração já está visível na abertura (d₀ ≤ raio de visão);
+  - **F-b:** a ração entra na visão durante uma ida ao lugar lembrado (a escolha `explorar`/`ponto` em curso); só existe no M3\*;
+  - **F-c:** a ração entra na visão durante uma busca pelo cheiro (`comer`/`cheiro`);
+  - **F-d:** a ração entra na visão de outro modo (vagar, outra ação) ou sem passar pela visão.
+- **O cruzamento com o módulo.** Cada caminho se cruza com o módulo que decidiu a decisão que pôs o pet a caminho da ração (a primeira
+  `comer` dirigida a ela). O módulo é a sonda `<modulo>_decidiu` daquela decisão: memória, aprendido, hábito, ou nenhum, que é o inato.
+- **A soma que tem de fechar.** Em cada vida, taxa por episódio = Σ_j fechados_j / episódios. Então o ganho G (o primário) é a soma exata
+  dos c_j = M3\* − M2 de cada parcela, unidade a unidade. **A soma é conferida e falha alto se não fechar.** G é recalculado do
+  `medidas.json` e tem de dar o +0,0489 do `resultado.json`, ou falha alto.
+- **O que sai:** cada c_j com o IC95 do t e a classe de A6.6 (δ = 0,022), e a parte s_j = c_j / G.
+- **A ressalva, escrita antes:** a decomposição diz **por onde o M3\* fecha a mais, não o que teria acontecido sem a ida.** Um fechamento
+  que no M3\* passa por F-b pode, no M2, passar por F-c (a substituição). Por isso F-b sai sempre ao lado de F-c e F-d.
+
+**B. A decomposição das perdas** (o espelho de A; estágios 1 e 2). Cada episódio não fechado entra numa causa e numa só, em ordem:
+- **P-a:** o pet dorme (reflexo ou sono escolhido) em alguma decisão da janela antes de a ração entrar na visão;
+- **P-b:** uma busca dirigida à ração (`comer`/`cheiro` ou `comer`/`comida`) é cortada pelo reflexo;
+- **P-c:** `janela_vencida` sem P-a nem P-b (a ração não foi alcançada a tempo);
+- **P-d:** `saciado_por_outra_comida`;
+- **P-e:** `vida_acabou`.
+
+Como 1 − taxa = Σ perdas_j / episódios, G = −Σ (M3\* − M2) das perdas_j. Sai como em A.
+
+**C. As medidas de apoio** (cada uma ligada a uma hipótese):
+
+| | a medida | por vida | estágio | a hipótese |
+|---|---|---|---|---|
+| **D1** | a distância do pet ao ponto onde a ração caiu, no tick da queda | a média sobre todas as ofertas (`alimentar`) da vida | 2 | H1 (< 0), H1′ (≈) |
+| **D2** | a distância do pet ao ponto fixo mais próximo, em cada decisão; e a fração das decisões a menos do raio de visão e a menos do corte do cheiro de algum ponto fixo | a vida inteira | 2 | H1 |
+| **D3** | a fração das rações elegíveis visíveis em k0 e a das que entram na vista na janela (`racao_na_janela`) | todas as rações elegíveis da vida | 1 | H1 (a primeira), H1′ e H2 (a segunda) |
+| **D4** | os cinco estados do corpo e a menor necessidade no tick de cada queda | a média sobre as ofertas | 2 | H3 |
+| **D5** | as buscas pelo cheiro: `achou`, `trocou` (pelo reflexo, pelo dormir sorteado, por outra unidade), `sumiu`, `desistiu` | por oferta, a vida inteira | 1 | H2 (mais `achou`), H3 (menos `trocou` pelo reflexo) |
+| **D6** | as refeições da ração por dia, as ofertas por vida, os episódios por vida e a taxa por ração (`cadeia`, `cadeia_w`) | a vida | 1 | H4 |
+| **D7** | a influência por módulo (`influencia_vida`) | a vida | 1 | H2 |
+
+- **D1 e D2 estão em células.** Para elas não há margem de "≈" (este adendo não cria uma); a classe sai só pelo sinal: "> 0", "< 0" ou
+  "indeterminado", quando o IC cruza o 0. **A exceção é a linha de H1′ em A10.5,** que pede D1 sem o sinal de H1: o limite superior do IC
+  não fica abaixo de 0.
+- **As outras medidas usam a classe de A6.6**, com δ = 0,022 para frações e taxas.
+
+**D. O registro de cada visita** (a espec, seção 5; só o M3\*, só por braço, sem contraste). Para cada ida ao lugar lembrado:
+- o número de decisões da ida e o fim (`meta` ou `trocou`, com o motivo);
+- o custo da ida no corpo: a variação da menor necessidade entre a partida e o fim. Ele faz o papel do σ = min(0, r da ida) da espec, que
+  não existe no M3\* da C1;
+- as classes à vista na chegada e na decisão seguinte;
+- se uma ração entrou na vista durante a ida, e se ela foi comida depois.
+
+As distribuições saem por estilo do dono, sem leitura de contraste. Elas servem para ler H1′ e H3 por dentro.
+
+### A10.5 A regra de leitura, escrita antes
+
+**Os termos:**
+- **"explica a maior parte":** a soma dos c_j da hipótese tem a classe "> 0" de A6.6 e s ≥ 1/2;
+- **"contribui":** a soma tem o limite inferior do IC acima de 0, mas não cumpre a linha acima.
+
+**As parcelas de cada hipótese** (as de A10.4):
+- **H1 = F-a.** Pede também D1 "< 0". Sem D1 "< 0", F-a sozinha não aponta H1: o pet pode chegar perto por outro motivo, e a linha fica
+  "indeterminado" quanto ao caminho.
+- **H1′ = F-b.** Pede também D1 sem o sinal de H1 (o limite superior do IC não fica abaixo de 0).
+- **H2 = F-c + F-d, decididas pelo aprendido, pelo hábito ou pelo inato.** Pede também a ausência da assinatura de H1: D1 não "< 0".
+- **H3 = a queda de P-a + P-b,** isto é, −(c_Pa + c_Pb).
+- **H4:** D6, com as refeições por dia e a taxa por ração "≈ 0" ou "< 0".
+
+**As linhas, na ordem:**
+
+| se | a leitura |
+|---|---|
+| H4 se cumpre | **o ganho é da medida:** o M3\* não come mais, ele muda os episódios. As outras linhas não se leem. (O registrado já é contra; ver A10.3) |
+| uma só hipótese "explica a maior parte" | **aponta para ela,** como leitura descritiva (A10.6) |
+| H1 e H3 (ou H1′ e H3) "explicam a maior parte" ao mesmo tempo | **mistura de posição e custo:** as decomposições A e B são duas vistas dos mesmos episódios, e um episódio pode estar nas duas. Fica registrado como mistura, sem escolher |
+| nenhuma "explica a maior parte", mas duas ou mais "contribuem" | **mistura:** registrada com as partes, sem escolher |
+| a maior parte está em F-d sem módulo atribuível, ou nenhuma hipótese "contribui" | **indeterminado: o caminho não é nenhum dos previstos.** Fica registrado assim, e nenhuma hipótese nova se testa nos mesmos dados |
+| o código ou o G1 falham (A10.2) | **nenhuma leitura:** o estágio 2 não vale, e o estágio 1 sai sozinho, rotulado como parcial |
+
+**O que fica "indeterminado" por construção:**
+- **a substituição:** se F-b explica a maior parte e, ao mesmo tempo, F-c fica "< 0", a ida pode só ter tomado o lugar de buscas que o M2
+  faria. O relato diz isso e não lê H1′ como ganho líquido da patrulha;
+- **o lado do mapa (A6.2):** os 3 pontos fixos ficam a leste do comedouro. "Perto dos pontos" e "a leste" não se separam com estes dados.
+  D2 sai ao lado da distância ao comedouro, sem leitura.
+
+### A10.6 O que este descritivo não decide
+
+- **Nenhuma causa fica provada.** As vidas são as da C1, e o primário delas já foi lido. As hipóteses foram escritas depois disso, e a
+  regra escolhe entre elas nos mesmos dados. **A leitura de A10.5 é descritiva e gera hipótese.** Para confirmar, seria preciso uma
+  manipulação causal com vidas novas: por exemplo, um braço que faz a ida e volta o pet ao ponto de partida, ou que proíbe a ida perto da
+  queda. Isso pede um adendo e uma faixa próprios, e não é este.
+- **Nada muda no jogo nem no cérebro padrão.** O M3\* com a REL segue padrão pelo #562, qualquer que seja a linha.
+- **O sorteado não entra.** No longe sorteado não há ponto fixo, e a pergunta não se aplica. A classe dele segue "indeterminado" (13.2).
+- **A C4-E1 não é lida aqui.** O risco da espec (seção 5), de que cortar as idas vazias tire o ganho, só se lê na C4 e no braço dela.
+- **Nenhum número novo vira parâmetro.** O 1/2 de A10.5 é PROPOSTO e SEM FONTE.
+
+### A10.7 O cérebro padrão de hoje
+
+O cérebro padrão dos ovos (o #562) é o M3\* com a `memoria_autobio` REL da C4, não o M3\* da C1. **A resposta deste adendo vale para o
+M3\* da C1.** Ela não se transfere sozinha ao REL: na C4, o lugar lembrado do REL é o da soma dos episódios (MA-2), e as idas vazias pesam.
+
+A C4 não tem o M2, então ela não dá o mesmo contraste. O par mais próximo seria o REL − SEM (o SEM não tem lugar lembrado; A9.2), nos logs
+da 77xxx que estão no git. **Estender a decomposição ao REL é uma decisão à parte (AD10-6).**
+
+### A10.8 O que falta antes do primeiro replay
+
+- **O código, num PR próprio, depois da aprovação:**
+  - `experiments/descritivo_dc13_longe_fixo.py` (nome PROPOSTO): só lê os artefatos, e no estágio 2 refaz as vidas na worktree do
+    `7683c0e`, com as duas conferências de A10.2;
+  - um teste (`tests/test_descritivo_dc13.py`) nas sementes dos testes (101…505), que confere:
+    - que a partição de A10.4 cobre cada episódio uma vez só, e que as somas fecham;
+    - que o script falha alto com código diferente do `meta.json`;
+    - que duas execuções saem iguais, byte a byte.
+
+  O modelo recomendado é o Sonnet: implementação com escopo claro.
+- **O artefato:** `artifacts_v2_digibrain_prototipo/longe_regular/dc13/descritivo.json`, com os sha256 das fontes e do código, no git.
+- **A máquina (V3-D8):** no máximo 4 processos, e o replay conta como a run de pesquisa do momento.
+  - O custo do replay é estimado e SEM medida própria: pela C1, 3,24 s de CPU por vida, então 1 800 vidas dão cerca de 1,6 h de CPU e de
+    25 a 40 min de parede com 4 processos;
+  - o tempo real vai ao relato.
+- **O relato:** uma seção nova no fim da seção 13 do RESULTADO (a 13.6, "a D-C1-3") e uma linha no PR.
+- **Roda uma vez.** Nada se ajusta olhando o resultado. Uma partição ou uma regra diferente entra por adendo, antes do replay.
+
+### A10.9 As decisões do Matheus
+
+**Todas DECIDIDAS pelo Matheus em 2026-11-06 ("Aprovo e mescle"), pela recomendação.** Cada uma vem com a recomendação e o custo de errar.
+
+| # | decisão | recomendação | custo de errar |
+|---|---|---|---|
+| **AD10-1** | o lugar do plano | **este adendo 10 ao `PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`** (frente herdada; os dados e as regras do adendo 6) | um `PLANO_ANALISE_V3_*` separaria a leitura das regras que ela reusa; o custo é só de arquivo |
+| **AD10-2** | a fonte | **os artefatos da C1 no git (estágio 1) e o replay das vidas do `longe_fixo` com o código do `7683c0e` (estágio 2), com o código e o G1 conferidos; nenhuma vida nova** | só com o estágio 1, H1, H1′ e H3 ficam sem D1, D4 nem a decomposição A, e quase tudo sai "indeterminado". Com o replay no código de hoje, 11 módulos mudados podem refazer outra vida: o G1 pegaria, mas o estágio 2 seria perdido. Com vidas novas, gasta-se uma faixa numa pergunta que os logs respondem |
+| **AD10-3** | os braços do replay | **M2 e M3\* (o contraste) e o M0 ao lado, só como nível: 1 800 vidas** | sem o M0, perde-se a régua do pet que não aprende; o custo é cerca de 1/3 a mais de replay |
+| **AD10-4** | a regra de leitura | **as decomposições A e B, a classe de A6.6 com δ = 0,022 para cada parcela, e o "explica a maior parte" com s ≥ 1/2** (SEM FONTE) | um limiar mais baixo daria "aponta" a uma parcela minoritária; um mais alto deixaria quase tudo como mistura. O δ é o da C1, para não criar margem nova |
+| **AD10-5** | o que a leitura vale | **descritiva e geradora de hipótese; não muda o jogo nem o cérebro padrão**; se apontar para H1 ou H1′, a recomendação seguinte é um teste causal com plano e faixa próprios, decidido depois | ler como causa uma escolha feita nos mesmos dados levaria ao produto um mecanismo não testado |
+| **AD10-6** | a extensão ao REL da C4 (o cérebro padrão) | **não agora;** um adendo próprio depois deste, com o REL − SEM, se a leitura aqui não for "indeterminado" | o cérebro padrão segue sem a resposta direta. Fazer junto dobra o replay e mistura dois contrastes diferentes |
+| **AD10-7** | a ordem | **o estágio 1 e o estágio 2 no mesmo PR de código, e um replay só** | rodar o estágio 1 antes e olhar o resultado convida a mexer na partição do estágio 2 |
