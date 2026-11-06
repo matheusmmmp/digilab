@@ -1,0 +1,408 @@
+[
+ {
+  "nome": "arvore_redonda",
+  "altura": 4.2,
+  "arquivo": "quaternius/CommonTree_1.gltf",
+  "tri": 6265,
+  "prims": 2,
+  "materiais": 2,
+  "prims_sem_textura": 0,
+  "imagens": [
+   "Bark_NormalTree.png 1024x1024",
+   "Leaves_NormalTree_C.png 1024x1024"
+  ],
+  "outros_mapas": [],
+  "bytes_gltf_bin": 494296
+ },
+ {
+  "nome": "arvore_redonda",
+  "altura": 4.2,
+  "arquivo": "quaternius/CommonTree_2.gltf",
+  "tri": 5648,
+  "prims": 2,
+  "materiais": 2,
+  "prims_sem_textura": 0,
+  "imagens": [
+   "Bark_NormalTree.png 1024x1024",
+   "Leaves_NormalTree_C.png 1024x1024"
+  ],
+  "outros_mapas": [],
+  "bytes_gltf_bin": 425741
+ },
+ {
+  "nome": "arvore_redonda",
+  "altura": 4.2,
+  "arquivo": "quaternius/CommonTree_3.gltf",
+  "tri": 3505,
+  "prims": 2,
+  "materiais": 2,
+  "prims_sem_textura": 0,
+  "imagens": [
+   "Bark_NormalTree.png 1024x1024",
+   "Leaves_NormalTree_C.png 1024x1024"
+  ],
+  "outros_mapas": [],
+  "bytes_gltf_bin": 299699
+ },
+ {
+  "nome": "arvore_redonda",
+  "altura": 4.2,
+  "arquivo": "quaternius/CommonTree_4.gltf",
+  "tri": 4066,
+  "prims": 2,
+  "materiais": 2,
+  "prims_sem_textura": 0,
+  "imagens": [
+   "Bark_NormalTree.png 1024x1024",
+   "Leaves_NormalTree_C.png 1024x1024"
+  ],
+  "outros_mapas": [],
+  "bytes_gltf_bin": 310312
+ },
+ {
+  "nome": "arvore_redonda",
+  "altura": 4.2,
+  "arquivo": "quaternius/CommonTree_5.gltf",
+  "tri": 3182,
+  "prims": 2,
+  "materiais": 2,
+  "prims_sem_textura": 0,
+  "imagens": [
+   "Bark_NormalTree.png 1024x1024",
+   "Leaves_NormalTree_C.png 1024x1024"
+  ],
+  "outros_mapas": [],
+  "bytes_gltf_bin": 255707
+ },
+ {
+  "nome": "pinheiro",
+  "altura": 5,
+  "arquivo": "quaternius/Pine_1.gltf",
+  "tri": 3947,
+  "prims": 2,
+  "materiais": 2,
+  "prims_sem_textura": 0,
+  "imagens": [
+   "Bark_NormalTree.png 1024x1024",
+   "Leaf_Pine_C.png 1024x1024"
+  ],
+  "outros_mapas": [],
+  "bytes_gltf_bin": 278175
+ },
+ {
+  "nome": "pinheiro",
+  "altura": 5,
+  "arquivo": "quaternius/Pine_2.gltf",
+  "tri": 3648,
+  "prims": 2,
+  "materiais": 2,
+  "prims_sem_textura": 0,
+  "imagens": [
+   "Bark_NormalTree.png 1024x1024",
+   "Leaf_Pine_C.png 1024x1024"
+  ],
+  "outros_mapas": [],
+  "bytes_gltf_bin": 261020
+ },
+ {
+  "nome": "pinheiro",
+  "altura": 5,
+  "arquivo": "quaternius/Pine_3.gltf",
+  "tri": 4964,
+  "prims": 2,
+  "materiais": 2,
+  "prims_sem_textura": 0,
+  "imagens": [
+   "Bark_NormalTree.png 1024x1024",
+   "Leaf_Pine_C.png 1024x1024"
+  ],
+  "outros_mapas": [],
+  "bytes_gltf_bin": 347966
+ },
+ {
+  "nome": "pinheiro",
+  "altura": 5,
+  "arquivo": "quaternius/Pine_5.gltf",
+  "tri": 1646,
+  "prims": 2,
+  "materiais": 2,
+  "prims_sem_textura": 0,
+  "imagens": [
+   "Bark_NormalTree.png 1024x1024",
+   "Leaf_Pine_C.png 1024x1024"
+  ],
+  "outros_mapas": [],
+  "bytes_gltf_bin": 123662
+ },
+ {
+  "nome": "arbusto",
+  "altura": 1,
+  "arquivo": "quaternius/Bush_Common.gltf",
+  "tri": 900,
+  "prims": 1,
+  "materiais": 1,
+  "prims_sem_textura": 0,
+  "imagens": [
+   "Leaves_TwistedTree_C.png 1024x1024"
+  ],
+  "outros_mapas": [],
+  "bytes_gltf_bin": 93353
+ },
+ {
+  "nome": "arbusto",
+  "altura": 1,
+  "arquivo": "quaternius/Bush_Common_Flowers.gltf",
+  "tri": 1368,
+  "prims": 2,
+  "materiais": 2,
+  "prims_sem_textura": 0,
+  "imagens": [
+   "Leaves_NormalTree_C.png 1024x1024",
+   "Flowers.png 1008x981"
+  ],
+  "outros_mapas": [],
+  "bytes_gltf_bin": 131623
+ },
+ {
+  "nome": "arbusto",
+  "altura": 1,
+  "arquivo": "kaykit/Bush_1_A_Color1.gltf",
+  "tri": 72,
+  "prims": 1,
+  "materiais": 1,
+  "prims_sem_textura": 0,
+  "imagens": [
+   "forest_texture.png 1024x1024"
+  ],
+  "outros_mapas": [],
+  "bytes_gltf_bin": 3704
+ },
+ {
+  "nome": "arbusto",
+  "altura": 1,
+  "arquivo": "kaykit/Bush_2_A_Color1.gltf",
+  "tri": 44,
+  "prims": 1,
+  "materiais": 1,
+  "prims_sem_textura": 0,
+  "imagens": [
+   "forest_texture.png 1024x1024"
+  ],
+  "outros_mapas": [],
+  "bytes_gltf_bin": 2380
+ },
+ {
+  "nome": "pedra",
+  "altura": 0.6,
+  "arquivo": "kaykit/Rock_1_A_Color1.gltf",
+  "tri": 48,
+  "prims": 1,
+  "materiais": 1,
+  "prims_sem_textura": 0,
+  "imagens": [
+   "forest_texture.png 1024x1024"
+  ],
+  "outros_mapas": [],
+  "bytes_gltf_bin": 4178
+ },
+ {
+  "nome": "pedra",
+  "altura": 0.6,
+  "arquivo": "kaykit/Rock_2_A_Color1.gltf",
+  "tri": 12,
+  "prims": 1,
+  "materiais": 1,
+  "prims_sem_textura": 0,
+  "imagens": [
+   "forest_texture.png 1024x1024"
+  ],
+  "outros_mapas": [],
+  "bytes_gltf_bin": 2190
+ },
+ {
+  "nome": "pedra",
+  "altura": 0.6,
+  "arquivo": "kaykit/Rock_3_A_Color1.gltf",
+  "tri": 84,
+  "prims": 1,
+  "materiais": 1,
+  "prims_sem_textura": 0,
+  "imagens": [
+   "forest_texture.png 1024x1024"
+  ],
+  "outros_mapas": [],
+  "bytes_gltf_bin": 5794
+ },
+ {
+  "nome": "flor",
+  "altura": 0.45,
+  "arquivo": "quaternius/Flower_3_Group.gltf",
+  "tri": 755,
+  "prims": 2,
+  "materiais": 2,
+  "prims_sem_textura": 0,
+  "imagens": [
+   "Leaves.png 1024x1024",
+   "Flowers.png 1008x981"
+  ],
+  "outros_mapas": [],
+  "bytes_gltf_bin": 30434
+ },
+ {
+  "nome": "flor",
+  "altura": 0.45,
+  "arquivo": "quaternius/Flower_4_Group.gltf",
+  "tri": 1690,
+  "prims": 2,
+  "materiais": 2,
+  "prims_sem_textura": 0,
+  "imagens": [
+   "Leaves.png 1024x1024",
+   "Flowers.png 1008x981"
+  ],
+  "outros_mapas": [],
+  "bytes_gltf_bin": 64898
+ },
+ {
+  "nome": "flor",
+  "altura": 0.45,
+  "arquivo": "quaternius/Flower_3_Single.gltf",
+  "tri": 285,
+  "prims": 2,
+  "materiais": 2,
+  "prims_sem_textura": 0,
+  "imagens": [
+   "Leaves.png 1024x1024",
+   "Flowers.png 1008x981"
+  ],
+  "outros_mapas": [],
+  "bytes_gltf_bin": 13457
+ },
+ {
+  "nome": "flor",
+  "altura": 0.45,
+  "arquivo": "quaternius/Flower_4_Single.gltf",
+  "tri": 642,
+  "prims": 2,
+  "materiais": 2,
+  "prims_sem_textura": 0,
+  "imagens": [
+   "Leaves.png 1024x1024",
+   "Flowers.png 1008x981"
+  ],
+  "outros_mapas": [],
+  "bytes_gltf_bin": 26476
+ },
+ {
+  "nome": "trevo",
+  "altura": 0.2,
+  "arquivo": "quaternius/Clover_1.gltf",
+  "tri": 379,
+  "prims": 1,
+  "materiais": 1,
+  "prims_sem_textura": 0,
+  "imagens": [
+   "Leaves.png 1024x1024"
+  ],
+  "outros_mapas": [],
+  "bytes_gltf_bin": 14478
+ },
+ {
+  "nome": "trevo",
+  "altura": 0.2,
+  "arquivo": "quaternius/Clover_2.gltf",
+  "tri": 615,
+  "prims": 1,
+  "materiais": 1,
+  "prims_sem_textura": 0,
+  "imagens": [
+   "Leaves.png 1024x1024"
+  ],
+  "outros_mapas": [],
+  "bytes_gltf_bin": 22537
+ },
+ {
+  "nome": "grama",
+  "altura": 0.3,
+  "arquivo": "quaternius/Grass_Common_Short.gltf",
+  "tri": 155,
+  "prims": 1,
+  "materiais": 1,
+  "prims_sem_textura": 0,
+  "imagens": [
+   "Grass.png 512x512"
+  ],
+  "outros_mapas": [],
+  "bytes_gltf_bin": 8531
+ },
+ {
+  "nome": "grama",
+  "altura": 0.3,
+  "arquivo": "quaternius/Grass_Wispy_Short.gltf",
+  "tri": 494,
+  "prims": 1,
+  "materiais": 1,
+  "prims_sem_textura": 0,
+  "imagens": [
+   "Grass.png 512x512"
+  ],
+  "outros_mapas": [],
+  "bytes_gltf_bin": 26805
+ },
+ {
+  "nome": "grama_alta",
+  "altura": 0.45,
+  "arquivo": "quaternius/Grass_Common_Tall.gltf",
+  "tri": 326,
+  "prims": 1,
+  "materiais": 1,
+  "prims_sem_textura": 0,
+  "imagens": [
+   "Grass.png 512x512"
+  ],
+  "outros_mapas": [],
+  "bytes_gltf_bin": 15557
+ },
+ {
+  "nome": "samambaia",
+  "altura": 0.45,
+  "arquivo": "quaternius/Fern_1.gltf",
+  "tri": 288,
+  "prims": 1,
+  "materiais": 1,
+  "prims_sem_textura": 0,
+  "imagens": [
+   "Leaves.png 1024x1024"
+  ],
+  "outros_mapas": [],
+  "bytes_gltf_bin": 12954
+ },
+ {
+  "nome": "cogumelo",
+  "altura": 0.3,
+  "arquivo": "quaternius/Mushroom_Common.gltf",
+  "tri": 880,
+  "prims": 1,
+  "materiais": 1,
+  "prims_sem_textura": 0,
+  "imagens": [
+   "Mushrooms.png 1024x1024"
+  ],
+  "outros_mapas": [],
+  "bytes_gltf_bin": 24373
+ },
+ {
+  "nome": "cogumelo",
+  "altura": 0.3,
+  "arquivo": "quaternius/Mushroom_Laetiporus.gltf",
+  "tri": 3216,
+  "prims": 1,
+  "materiais": 1,
+  "prims_sem_textura": 0,
+  "imagens": [
+   "Mushrooms.png 1024x1024"
+  ],
+  "outros_mapas": [],
+  "bytes_gltf_bin": 78432
+ }
+]
