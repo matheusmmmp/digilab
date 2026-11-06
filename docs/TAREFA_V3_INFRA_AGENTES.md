@@ -296,3 +296,24 @@ Worker: Claude Code, Opus 5.5, worktree `v3-infra-agentes-e2`, branch empilhado 
   `vidas.tar.gz`, e os tamanhos do `medidas.json` e do `vidas.tar.gz`): pelo menos um é falso SEM FONTE (o sha256 do `run.log` começa por
   `bde44a87`, como o texto). Os outros 5 são números que vêm de outro documento ou de outra run (o plano, a C4, a AN0) ou que o próprio
   texto marca como hipótese.
+
+## 11. Resumo da etapa E3 (2026-11-06)
+
+Worker: Claude Code, Opus 5.5, worktree `v3-infra-agentes-e3`, branch empilhado sobre o #610 (E2).
+
+- **`tools/pre_run.py`** (só biblioteca padrão): `python tools/pre_run.py <orquestrador> --config <json> [--processos N]` sai com 0 ou com
+  2 e todos os motivos. Recusa:
+  - a config sem `plano` ou sem `unidades.bases`;
+  - o plano fora do git, com mudança não commitada, ou com texto diferente do `origin/main` (D-IA-6); sem `origin/main`, pede `git fetch`;
+  - a base fora de toda faixa reservada ou dentro de uma queimada (as faixas lidas pela AST);
+  - outra run em andamento, pela lista de processos Python da máquina (o `Get-CimInstance` no Windows, o `ps` fora dele);
+  - mais de 4 processos.
+  Para os orquestradores novos, o `pre_run.exigir(...)` levanta `Recusa` com os mesmos motivos (D-IA-2).
+- **O H10** (`.claude/hooks/h10_pre_run.py`), ligado: acha `python … experiments/run_v[23]_*.py` no comando, tira o `--config` e o
+  `--processos` e chama o `pre_run.py`; código 2 se ele recusa ou se falta o `--config`; o `--help` passa.
+- **Testes:**
+  - `python -m pytest tests/test_pre_run.py -q -p no:cacheprovider` → 13 passed;
+  - `python -m pytest tests/test_hooks.py tests/test_hook_h4.py tests/test_pre_run.py tests/test_agentes.py tests/test_infra_*.py -q -p no:cacheprovider`
+    → 166 passed.
+- **No repositório de verdade, com a lista real de processos:** a varredura da AN4 (`experiments/configs/v3_acoes_novas/varredura.json`)
+  passa com `--processos 4` (código 0) e é recusada com `--processos 5` (código 2); a `acoes_novas.json` passa com 4.
