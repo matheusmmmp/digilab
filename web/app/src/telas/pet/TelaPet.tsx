@@ -553,7 +553,7 @@ export function TelaPet({ irRegistro, irEvolucao }: { irRegistro: () => void; ir
         {vivo && <BalaoFala v={fala} abrir={() => abrir("fala")} />}
         {m.mundo && vivo && <FaixaRacao />}
       </div>
-      {topo && createPortal(<LinhaAgora aberto={atual === "digibrain"} aoAbrir={detalhesPet ? () => abrir("digibrain") : undefined} />, topo, "agora")}
+      {topo && createPortal(<LinhaAgora aberto={atual === "digibrain"} sobPainel={atual !== null} aoAbrir={detalhesPet ? () => abrir("digibrain") : undefined} />, topo, "agora")}
       <Prioridade abrirDetalhes={abrirEstado} />
       {largo ? (!atual && detalhesPet && (
         <aside className="pet-hud" ref={pilha} aria-label="Painéis do pet">

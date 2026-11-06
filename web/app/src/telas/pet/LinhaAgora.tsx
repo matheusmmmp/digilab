@@ -59,27 +59,29 @@ function Meio({ v }: { v: VistaAgora }) {
 }
 
 /** a linha ja decidida (para o teste e para a tela). Com `aoAbrir` e um botao que abre o DigiBrain; sem ele (os detalhes do pet desligados), texto */
-export function LinhaAgoraVista({ v, aoAbrir, aberto = false }: { v: VistaAgora; aoAbrir?: () => void; aberto?: boolean }) {
+export function LinhaAgoraVista({ v, aoAbrir, aberto = false, sobPainel = false }: { v: VistaAgora; aoAbrir?: () => void; aberto?: boolean; sobPainel?: boolean }) {
   const corpo: ReactNode = (
     <>
       <span className="agora-rot" aria-hidden="true">agora</span><span className="agora-acao" aria-hidden="true">{v.acao}</span>
       <span className="agora-ponto" aria-hidden="true">·</span><span className="agora-meio" aria-hidden="true"><Meio v={v} /></span>
     </>
   );
-  if (!aoAbrir) return <div className="hud-caixa pet-agora pet-agora--texto" role="group" aria-label={rotuloAgora(v, false)} data-caso={v.caso}>{corpo}</div>;
+  if (!aoAbrir) return <div className="hud-caixa pet-agora pet-agora--texto" role="group" aria-label={rotuloAgora(v, false)} data-caso={v.caso} data-sob-painel={sobPainel}>{corpo}</div>;
   return (
-    <button type="button" className="hud-caixa pet-agora" aria-label={rotuloAgora(v, true)} aria-pressed={aberto} aria-controls="pet-painel" data-caso={v.caso} onClick={aoAbrir}>
+    <button type="button" className="hud-caixa pet-agora" aria-label={rotuloAgora(v, true)} aria-pressed={aberto} aria-controls="pet-painel" data-caso={v.caso} data-sob-painel={sobPainel} onClick={aoAbrir}>
       {corpo}<ChevronRight className="agora-seta" size={18} aria-hidden="true" />
     </button>
   );
 }
 
 /** a linha sempre visivel da tela Pet: some com o ovo chocando e com o pet morto. A leitura e refeita so quando o motor muda (a revisao) */
-export function LinhaAgora({ aoAbrir, aberto }: { aoAbrir?: () => void; aberto: boolean }) {
+/** `sobPainel`: um painel da tela Pet esta aberto (a 390 px ele cobre a linha, e o painel vence: a linha se esconde por CSS, sem sair da arvore,
+    para o foco voltar a ela ao fechar) */
+export function LinhaAgora({ aoAbrir, aberto, sobPainel = false }: { aoAbrir?: () => void; aberto: boolean; sobPainel?: boolean }) {
   const { motor: m, revisao, nascendo } = useJogo();
   const v = useMemo(() => vistaAgora(m), [m, revisao]);
   if (nascendo > 0 || m.morte) return null;
-  return <LinhaAgoraVista v={v} aoAbrir={aoAbrir} aberto={aberto} />;
+  return <LinhaAgoraVista v={v} aoAbrir={aoAbrir} aberto={aberto} sobPainel={sobPainel} />;
 }
 
 /* ------------------------------------------------ o chip de causa do balao */
