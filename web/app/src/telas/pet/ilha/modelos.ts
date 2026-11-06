@@ -29,6 +29,15 @@ export const MODELOS = {
 } as const satisfies Record<string, Modelo>;
 
 export type NomeModelo = keyof typeof MODELOS;
+
+/* Os itens gerados da ilha (docs/TAREFA_V3_ITENS_3D.md, D-I4: uma tabela irma, fora da grade e dos estilos): os arquivos ficam em
+   web/app/public/itens/<item>/ com o License.txt de procedencia propria, e o teste test/ilha_itens3d.test.ts confere os gates G1 a G8.
+   A vista (itens.ts) carrega o item pelo mesmo carregarVariante dos kits, que normaliza a caixa para a altura da tabela. A altura da bola
+   e o diametro da bola procedural de antes (2 x R_BOLA), para o tamanho na tela nao mudar. PROPOSTO, SEM FONTE. */
+export const ITENS_MODELOS = {
+  bola: { arquivos: ["bola/bola.gltf"], altura: 0.72, vento: 0, sombra: 0.4, baixo: false },
+} as const satisfies Record<string, Modelo>;
+export type NomeItem = keyof typeof ITENS_MODELOS;
 /** os modelos que podem entrar na area andavel sem um objeto do motor (regra 5) */
 export const MODELOS_BAIXOS = (Object.keys(MODELOS) as NomeModelo[]).filter(n => MODELOS[n].baixo);
 /** o modelo das arvores do layout do motor (as `arvores`, J* e M*), as unicas coisas altas dentro da area andavel */

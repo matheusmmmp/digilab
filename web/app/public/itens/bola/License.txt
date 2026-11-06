@@ -1,0 +1,17 @@
+DigiLab: a bola da ilha (bola.gltf, bola.bin, bola_cor.png)
+
+Procedencia: item gerado por IA, com o gerador Meshy (meshy.ai), no plano Pro pago, na conta do Matheus, em 2026-11-06.
+Pelos termos de uso da Meshy (atualizados em 2026-09-19, secao 3.2), a saida de um plano pago e do cliente.
+Os termos proibem tirar a marca de IA (secao 2.4): a marca fica no asset.extras do bola.gltf e neste arquivo.
+
+Como foi feito (docs/TAREFA_V3_ITENS_3D.md e docs/itens3d/bola/ no repositorio):
+- concept: Meshy Image to Image (nano-banana-2), com duas referencias de estilo recortadas da propria ilha do jogo (kits CC0 e a bola
+  procedural de antes, sem o pet); o concept 2 (gomos) escolhido pelo Matheus;
+- vistas: Meshy Image to Image com multivista, a partir do concept;
+- malha: Meshy Multi-Image to 3D (remesh em triangulos, so a cor);
+- conserto no Blender 4.5 LTS, por script: uma esfera UV limpa de 440 triangulos recebe a cor da malha da Meshy por bake, e a cor e
+  chapada nas tres cores do concept (sem a sombra embutida).
+As tarefas da Meshy (concept, vistas, malha) estao no asset.extras do bola.gltf.
+
+Uso: no jogo DigiLab, publicado. Credito: "Bola gerada com a Meshy (meshy.ai)".
+Aprovacao: o Matheus escolheu o concept e aprovou o conserto em 2026-11-06; a aprovacao da captura na ilha fica no PR da bola.
