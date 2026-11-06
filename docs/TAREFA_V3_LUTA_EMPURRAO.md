@@ -134,6 +134,22 @@ Cada etapa num PR, com o merge pelo Matheus.
   - se alguma meta piorar, a etapa para e volta ao Matheus com os números. Nenhum número da seção 8 é ajustado sem ele.
 - **GPU:** não.
 
+### 4.1 O plano da medição (registrado em 2026-11-06, antes da primeira luta da medição)
+
+- **A faixa:** a calibração da rodada 2, `72101` a `72505`, já reservada em `experiments/bancada/faixas.py` (DR2-2). É o uso dela:
+  calibração do equilíbrio do tempo real. Nenhuma faixa nova.
+- **Os comandos** (em `web/app`, um depois do outro, cada um em no máximo 4 processos):
+  1. antes: `python scripts/equilibrio_tr/medir_tudo.py --faixa calibracao2 --saida scripts/medicoes/equilibrio_tr/empurrao/antes`;
+  2. depois: `python scripts/equilibrio_tr/medir_tudo.py --faixa calibracao2 --empurrao v18 --saida scripts/medicoes/equilibrio_tr/empurrao/depois`;
+  3. a tabela: `python scripts/equilibrio_tr/resumo_metas.py scripts/medicoes/equilibrio_tr/empurrao/antes scripts/medicoes/equilibrio_tr/empurrao/depois`.
+- **O que muda entre os dois:** só o `empurraoAlvo` do relógio (`--empurrao v18`, `scripts/equilibrio_tr/empurrao.ts`). As listas, os
+  fatores, o aprendizado e as cartas são os da v14, nos dois (os da bancada de hoje). O "antes" roda de novo no código de hoje, em vez de
+  reaproveitar a `r2_4b/`, para os dois lados saírem do mesmo código.
+- **As metas:** as 29 da rodada (T-1 a T-5, F-1 a F-7, P-1 a P-4, G-1 a G-6, I-1 a I-5), lidas pelo `resumo_metas.py`.
+- **O gate** (o da seção 4): nenhuma meta que passa no "antes" falha no "depois". O T-1 e o T-2 vão lado a lado. Se uma meta piorar, a
+  etapa para e volta ao Matheus, sem mexer nos números da seção 8.
+- **Os artefatos:** os JSON de cada bancada nas duas pastas e o `resumo.txt` com a tabela.
+
 ## 5. Entrega
 
 - Testes: em `web/app`, `npm test`, `npm run tipos` e `npm run e2e` (no máximo 4 processos); o e2e `e2e/luta_layout.spec.ts` na etapa 5.
