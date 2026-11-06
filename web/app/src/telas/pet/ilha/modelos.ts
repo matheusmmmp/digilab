@@ -13,11 +13,14 @@ export const ALTURA_BAIXA = 0.5;
 
 export interface Modelo { arquivos: readonly string[]; altura: number; vento: number; sombra: number; baixo: boolean }
 
+/* a escala (2026-11-06, pedido do Matheus: "esses objetos tem que ser muito maiores do que o pet; ele e uma crianca, tem que ser
+   pequenininho perto deles"): as arvores, os postes, o carro, a geladeira e o trilho cresceram (arvore 4,2 -> 6, pinheiro 5 -> 7, poste
+   3 -> 4,5, carro 1,9 -> 3,4, geladeira 1,7 -> 3, trilho 1 -> 2), para um pet de ~1 celula. PROPOSTO, SEM FONTE */
 const qua = (...n: string[]) => n.map(x => `quaternius/${x}.gltf`), kay = (...n: string[]) => n.map(x => `kaykit/${x}.gltf`);
 
 export const MODELOS = {
-  arvore_redonda: { arquivos: qua("CommonTree_1", "CommonTree_2", "CommonTree_3", "CommonTree_4", "CommonTree_5"), altura: 4.2, vento: 0.004, sombra: 1.5, baixo: false },
-  pinheiro: { arquivos: qua("Pine_1", "Pine_2", "Pine_3", "Pine_5"), altura: 5.0, vento: 0.003, sombra: 1.3, baixo: false },
+  arvore_redonda: { arquivos: qua("CommonTree_1", "CommonTree_2", "CommonTree_3", "CommonTree_4", "CommonTree_5"), altura: 6.0, vento: 0.004, sombra: 1.5, baixo: false },
+  pinheiro: { arquivos: qua("Pine_1", "Pine_2", "Pine_3", "Pine_5"), altura: 7.0, vento: 0.003, sombra: 1.3, baixo: false },
   arbusto: { arquivos: [...qua("Bush_Common", "Bush_Common_Flowers"), ...kay("Bush_1_A_Color1", "Bush_2_A_Color1")], altura: 1.0, vento: 0.02, sombra: 0.7, baixo: false },
   pedra: { arquivos: kay("Rock_1_A_Color1", "Rock_2_A_Color1", "Rock_3_A_Color1"), altura: 0.6, vento: 0, sombra: 0.5, baixo: false },
   flor: { arquivos: qua("Flower_3_Group", "Flower_4_Group", "Flower_3_Single", "Flower_4_Single"), altura: 0.45, vento: 0.06, sombra: 0, baixo: true },
@@ -50,13 +53,13 @@ export type NomeItem = keyof typeof ITENS_MODELOS;
    O poste: o lampiao gerado pela Meshy (o poste do City Kit Roads da Kenney, CC0, foi testado e saiu um poste de rodovia, sem nada da
    ilha); a altura e a de um poste na escala do pet (o pet tem cerca de 1 celula). PROPOSTO, SEM FONTE */
 export const ENFEITES_MODELOS = {
-  poste: { arquivos: ["poste/poste.gltf"], altura: 3.0, vento: 0, sombra: 0.4, baixo: false },
+  poste: { arquivos: ["poste/poste.gltf"], altura: 4.5, vento: 0, sombra: 0.4, baixo: false },
   /* o carro: a caminhonete com o jardim na cacamba, gerada pela Meshy (E2); maior que um carro na escala do pet, como um brinquedo, para
      ser visto na beira do plato (o revisor achou 1,3 pequeno demais) */
-  carro: { arquivos: ["carro/carro.gltf"], altura: 1.9, vento: 0, sombra: 1.3, baixo: false },
+  carro: { arquivos: ["carro/carro.gltf"], altura: 3.4, vento: 0, sombra: 2.3, baixo: false },
   /* a geladeira com o vaso e o trilho com o vagao (E3), com os tracos de nanquim na textura; na escala de brinquedo do carro */
-  geladeira: { arquivos: ["geladeira/geladeira.gltf"], altura: 1.7, vento: 0, sombra: 0.8, baixo: false },
-  trilho: { arquivos: ["trilho/trilho.gltf"], altura: 1.0, vento: 0, sombra: 1.3, baixo: false },
+  geladeira: { arquivos: ["geladeira/geladeira.gltf"], altura: 3.0, vento: 0, sombra: 1.4, baixo: false },
+  trilho: { arquivos: ["trilho/trilho.gltf"], altura: 2.0, vento: 0, sombra: 2.6, baixo: false },
 } as const satisfies Record<string, Modelo>;
 export type NomeEnfeite = keyof typeof ENFEITES_MODELOS;
 /** a mascara das partes que acendem a noite (o emissiveMap; fora do glTF, ao lado dele), por enfeite que tem luz */
