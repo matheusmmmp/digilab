@@ -93,6 +93,7 @@ export const ENFEITES_GRADE = {
     PROPOSTO, SEM FONTE */
 export const ENFEITE_HALO = { altura: 0.86, tamanho: 1.1, cascas: [0.55, 0.78, 1], forca: 0.08, vidro: 1.6 } as const;
 /** o ceu do estilo digital (estilos.ts; docs/TAREFA_V3_MAPA_DIGITAL.md, D1): a cor do horizonte do ceu pintado (a media da faixa de baixo
-    da imagem), para a nevoa, e a cor de baixo da luz do ceu de dia, azulada (a sombra do anime). PROPOSTO, SEM FONTE */
-export const CEU_DIGITAL = { horizonte: 0xabe9fe, chaoHemi: 0x6f8fc8 } as const;
+    da imagem), para a nevoa, a cor de baixo da luz do ceu de dia, azulada (a sombra do anime), e a nevoa mais longe que a da ilha (o fundo
+    de anime tem as arvores de tras nitidas; a de 26 a 62 desbotava tudo, e a de 42 a 95 as deixava pesadas; D2). PROPOSTO, SEM FONTE */
+export const CEU_DIGITAL = { horizonte: 0xabe9fe, chaoHemi: 0x6f8fc8, nevoa: [34, 85] } as const;
 

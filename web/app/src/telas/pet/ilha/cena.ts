@@ -67,7 +67,10 @@ const GRADIENTE = (() => {
   t.needsUpdate = true;
   return t;
 })();
-export const toon = (p: THREE.MeshToonMaterialParameters, vento = 0) => curvar(new THREE.MeshToonMaterial({ gradientMap: GRADIENTE, ...p }), vento);
+/** o degrade dos materiais toon criados daqui em diante: o de tres tons, ou o de dois no estilo digital (usarDoisTons, chamado pelo estilo
+    antes de montar a cena; os itens e os modelos carregados depois entram ja com ele) */
+let gradienteAtual: THREE.Texture = GRADIENTE;
+export const toon = (p: THREE.MeshToonMaterialParameters, vento = 0) => curvar(new THREE.MeshToonMaterial({ gradientMap: gradienteAtual, ...p }), vento);
 /* o cel shading de dois tons do estilo digital (docs/TAREFA_V3_MAPA_DIGITAL.md, D1): a sombra e a luz, sem o meio-tom */
 const GRADIENTE_DOIS = (() => {
   const t = new THREE.DataTexture(new Uint8Array([150, 150, 150, 255, 255, 255, 255, 255]), 2, 1, THREE.RGBAFormat);
@@ -75,6 +78,8 @@ const GRADIENTE_DOIS = (() => {
   t.needsUpdate = true;
   return t;
 })();
+/** os materiais toon novos com dois tons (o estilo digital) ou tres (os outros); vale ate a proxima chamada */
+export function usarDoisTons(sim: boolean): void { gradienteAtual = sim ? GRADIENTE_DOIS : GRADIENTE; }
 /** passa os materiais toon de tres tons de um objeto (e dos filhos) para os dois tons do estilo digital */
 export function doisTons(o: THREE.Object3D): void {
   o.traverse(f => {
@@ -481,11 +486,12 @@ function nuvens(ilha: Ilha): THREE.Group {
 export interface CenaIlha { cena: THREE.Scene; aplicarNoite(noite: boolean): void }
 /** `chao`: o terreno do estilo (o da ilha, se nada vier); `agua`: false tira a agua por celula e o mar (o estilo desenha a dele);
     `ceuDia`, um ceu pintado no lugar do degrade do dia, com a cor do horizonte (a nevoa) dele; `chaoHemi`, a cor de baixo da luz do ceu
-    de dia (o estilo digital a puxa para o azul, a sombra azulada do anime) */
+    de dia (o estilo digital a puxa para o azul, a sombra azulada do anime); `nevoa`, o comeco e o fim da nevoa (celulas) */
 export function montarCena(ilha: Ilha, chao: THREE.Object3D = terreno(ilha),
-  opcoes: { agua?: boolean; nuvens?: boolean; ceuDia?: THREE.Texture; horizonteDia?: number; chaoHemi?: number } = {}): CenaIlha {
+  opcoes: { agua?: boolean; nuvens?: boolean; ceuDia?: THREE.Texture; horizonteDia?: number; chaoHemi?: number; nevoa?: readonly [number, number] } = {}): CenaIlha {
   const cena = new THREE.Scene(), fundo = { dia: opcoes.ceuDia ?? ceu(DIA.ceu), noite: ceu(NOITE.ceu) };
-  cena.fog = new THREE.Fog(DIA.horizonte, 26, 62);
+  cena.fog = new THREE.Fog(DIA.horizonte, opcoes.nevoa?.[0] ?? 26, opcoes.nevoa?.[1] ?? 62);
+  if (opcoes.nevoa) cena.userData.nevoa = opcoes.nevoa;    /* a vista recalcula a nevoa com a orbita a partir desta (vista.ts) */
   const hemi = new THREE.HemisphereLight(), sol = new THREE.DirectionalLight();
   sol.position.set(-0.6, 1, 0.75);
   const ceuNuvens = opcoes.nuvens === false ? new THREE.Group() : nuvens(ilha);
