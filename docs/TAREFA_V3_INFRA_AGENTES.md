@@ -252,3 +252,25 @@ Nenhuma run. Nenhuma semente.
 - **D-IA-1, D-IA-4, D-IA-5 e D-IA-7: DECIDIDAS pela recomendação** (Matheus, 2026-11-06, nesta sessão: "das suas recomendações", ao
   pedir o prompt da E1, e "Empilhar sobre o #590"). A E1 sai empilhada sobre o #590 (branch `v3-hooks-a0`), que ainda não está na `main`.
 - A D-IA-2, a D-IA-3 e a D-IA-6 seguem PROPOSTAS: valem para a E3 e a E5.
+
+## 9. Resumo da etapa E1 (2026-11-06)
+
+Worker: Claude Code, Opus 5.5, worktree `v3-infra-agentes-e1`, branch empilhado sobre o #590 (`v3-hooks-a0`) e o #601.
+
+- **O H2 estendido** (`.claude/hooks/h2_testes.py`): a lista fixa de replay (só com mudança em `digilab/` ou `experiments/bancada/`), os
+  testes da frente pelo branch (o prefixo mais longo do nome que acha um `tests/test_<prefixo>*.py`) e o estouro do limite com código 2,
+  uma vez por sessão. **Continua desligado** (D-IA-7).
+- **O H1b** confere também as `FAIXAS_QUEIMADAS` do disco contra as do `origin/main` (o `sed` que o H9 não vê); sem `origin/main`, código 2
+  com "rode git fetch".
+- **O H6** (`h6_capturas.py`): código 2 ao escrever em `*-snapshots/` e na pasta de `DIGILAB_CAPTURAS`, pela ferramenta ou pelo shell
+  (`rm`, `mv`, `cp`, os cmdlets, o redirecionamento, o `git checkout`/`restore`/`rm`, o `sed -i`); `ask` no `--update-snapshots` e no `-u`
+  do Playwright (o `git push -u` passa).
+- **O H9** (`h9_faixas.py`): código 2 ao remover ou mudar uma faixa queimada, ou quando o texto depois não se lê; `ask` ao queimar uma
+  nova no fim; as reservadas passam.
+- **Ligados** em `.claude/settings.json`: H1, H1b, H3, H4, H6 e H9; na proposta (`docs/propostas/hooks_settings.json`), também o H2.
+- **Testes:** `python -m pytest tests/test_hooks.py tests/test_hook_h4.py -q -p no:cacheprovider` → 77 passed (antes, 43 failed e 3
+  passed sem os hooks).
+- **A medida do Stop** (o H2 estendido nesta worktree, com um arquivo temporário não rastreado e o limite levantado para medir; outra
+  sessão rodava testes ao mesmo tempo, a `ponte_luta_pe1`): mudança em `digilab/`, 341,8 s, 327,0 s e 323,8 s; só em `tests/`, 3,5 s,
+  9,8 s e 3,9 s (a frente `infra_agentes_e1` cai no prefixo `infra`, os `tests/test_infra_*.py`). O limite de 600 s não estoura.
+- **Conferido à mão:** um evento de Edit que apaga a linha da faixa 15101…15505 do `experiments/bancada/faixas.py` real sai com código 2.
