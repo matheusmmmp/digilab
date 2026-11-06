@@ -108,3 +108,8 @@ igual. O `livre-v2` e o `livre-v8` continuam no pacote e reproduzem.
   grava o evento do botão).
 - **Avaliação do comando (G4):** `artifacts_fala_livre/comando/rodada4_v9/` — falsos positivos 3,3 % (passa), imperativos 78,3 % (**falha**, limite 80 %).
   Detalhe e a decisão aberta em `docs/registro/2026-11.md` (D-M1-4).
+## 9. Decisões depois das missões
+
+- **DM1-1 (2026-11-06, Matheus): o `livre-v9` da M1 fica como está**, com o gate do comando falho por 1,7 ponto (imperativos 78,3 %
+  contra o mínimo de 80 %; falsos positivos 3,3 %, passa; `artifacts_fala_livre/comando/rodada4_v9/`, PR #626). Recomendação do worker e
+  do Gerente: os erros vão para o lado seguro (comando nulo). O reforço da regra do comando (v9b) fica para depois da M3, em faixa nova.
