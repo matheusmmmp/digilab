@@ -99,6 +99,37 @@ igual. O `livre-v2` e o `livre-v8` continuam no pacote e reproduzem.
 - **D6** memória da conversa entre sessões nesta frente: recomendo não agora. Custo: o pet não lembra de um dia para o outro.
 - **D7** avaliação cega pareada pelo Matheus, juiz LLM só como triagem: recomendo sim. Custo: sem o Matheus, a frente otimiza o gosto do juiz.
 
+## M1 — o comando e o estilo da espécie religados (2026-11-06, worker Claude Code Sonnet 5.5, branch `v3-conversa-m1-comando`)
+
+- **Feito:** `livre-v9` em `digilab_fala_livre/prompt.py`; o campo `comando: true` do pedido da conversa em `servidor/fala_livre.py`; a
+  conversa (e só ela) manda `comando: true` em `web/app/src/falaLivre.ts`. Mentira, história H/O/P/L, almanaque W e voz espontânea continuam fora.
+- **Testes:** `tests/test_conversa_m1.py` (novo) e `tests/test_comando_chat.py` (ajustado: o `livre-v9` entra em `VERSOES_COMANDO`, 5 pastas de
+  rodada); `web/app/test/comando_chat.test.ts` (pedido com `comando: true`); `web/app/e2e/conversa_comando.spec.ts` (novo: "vai comer" na Conversar
+  grava o evento do botão).
+- **Avaliação do comando (G4):** `artifacts_fala_livre/comando/rodada4_v9/` — falsos positivos 3,3 % (passa), imperativos 78,3 % (**falha**, limite 80 %).
+  Detalhe e a decisão aberta em `docs/registro/2026-11.md` (D-M1-4).
+## 9. Decisões depois das missões
+
+- **DM1-1 (2026-11-06, Matheus): o `livre-v9` da M1 fica como está**, com o gate do comando falho por 1,7 ponto (imperativos 78,3 %
+  contra o mínimo de 80 %; falsos positivos 3,3 %, passa; `artifacts_fala_livre/comando/rodada4_v9/`, PR #626). Recomendação do worker e
+  do Gerente: os erros vão para o lado seguro (comando nulo). O reforço da regra do comando (v9b) fica para depois da M3, em faixa nova.
+
+## M3 — o prompt `conversa-v1` (2026-11-06, worker Claude Code, Sonnet 5.5, branch `v3-conversa-m3-prompt`)
+
+Feito (decisão D2): `conversa-v1` em `digilab_fala_livre/prompt.py`, ao lado das outras versões (nenhuma mudou; os 176 testes da fala livre
+passam). Persona e estilo da espécie no começo; as REGRAS DE VERDADE (6, enxutas) repetidas no pedido, logo antes da fala do dono; tamanho por
+estágio sem "frases curtas" para todos; pedido de reagir, manter o assunto e devolver pergunta ou puxar um fato (nunca tema inventado); exemplos
+à mão por estágio (4 a 5 trocas, rotulados); histórico `(jogador, pet, estágio)` com descarte das trocas de outro estágio; recusa dos fatos
+H/O/P/L/F/W; comando e estilo opcionais por parâmetro; ponto de extensão do `[J]` (M4) só documentado. Testes: `tests/test_conversa_v1.py`
+(29, incluindo a injeção).
+
+Ensaio qualitativo, sem gate: `artifacts_conversa_pet/m3_ensaio/ensaio.md` (e `.json`, `ensaio.py`), `gemma2:9b`, sementes de diagnóstico.
+Tamanho médio da fala: adolescente 7 → 45 caracteres, adulto 10 → 36; perguntas ao dono: adolescente 0 → 5 de 8, adulto 1 → 1 de 8. Limites:
+os exemplos têm o mesmo estado do ensaio (uma fala saiu copiada), o adulto ainda responde curto às vezes, sem verificador, uma conversa por
+estágio. Desvios: D-CP-M3-1 a 4 em `docs/registro/2026-11.md`.
+
+Não ligado no servidor nem na página (M2, leva 2). Depende da M2 mandar a marca de estágio no histórico.
+
 ## M5 — o cliente Claude da fala livre (worker, Claude Code, Sonnet 5.5, branch `v3-conversa-m5-claude`, 2026-11-06)
 
 Entrega da missão M5 (D5): só o cliente e o gasto, **sem rodada** (nenhuma chamada real à API; gastar é decisão da rodada da avaliação).

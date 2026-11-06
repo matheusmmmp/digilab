@@ -301,9 +301,11 @@ estimativas: o worker confere a página do modelo antes do primeiro envio.
 
 ## 8. Precisa do Matheus
 
-Cada decisão vem com a recomendação e o custo de errar. A D-SG-4 está decidida (2026-11-06); as outras estão abertas.
+Cada decisão vem com a recomendação e o custo de errar. A D-SG-4 está decidida (2026-11-06). As D-SG-1, D-SG-2, D-SG-3 e D-SG-5 foram decididas pelo Matheus em 2026-11-06 ("Continue com o
+recomendado": as recomendações abaixo valem como estão; registro D-SG-H).
 
-- **D-SG-1. Qual gerador.**
+- **D-SG-1. Qual gerador. DECIDIDA pelo Matheus em 2026-11-06: o Agent Sprite Forge, pela rota fal.ai com o Kling 3.0 Pro sem áudio, e o
+  pixel-mcp para o snap**, com o ok para instalar o Sprite Forge, as dependências dele e o ffmpeg (registro D-SG-H).
   - **Recomendação:** o **Agent Sprite Forge** primeiro, pela leitura do levantamento (`05_ARQUITETURAS_ORQUESTRACAO.md` 2.3: "o item mais
     próximo do que o DigiLab precisaria"). Ele é o único da lista com o fluxo still, vídeo e quadros, mais gates por clipe, retake
     limitado, ledger e teto em dólar.
@@ -317,14 +319,14 @@ Cada decisão vem com a recomendação e o custo de errar. A D-SG-4 está decidi
     - no máximo o teto da D-SG-5 e uma sessão;
     - nada entra no jogo, porque o atlas candidato fica fora de `Assets`;
     - trocar de gerador depois aproveita a G1 inteira (ficha, gates, conversão).
-- **D-SG-2. Quantos takes do still.**
+- **D-SG-2. Quantos takes do still. DECIDIDA pelo Matheus em 2026-11-06: 3 takes gerados, mais o take 0** (registro D-SG-H).
   - **Recomendação:** **3 takes gerados, mais o take 0**, que é o próprio quadro do `Idle` do UP e não custa nada. O take 0 serve de
     controle: se nenhum gerado for tão fiel quanto ele, o Matheus escolhe o take 0, e a E2 parte dele. O vault pede de 3 a 6. O exemplo
     do Sprite Forge usa 3.
   - **Custo de errar:**
     - com poucos takes, um still fraco contamina todos os clipes daquele Digimon, porque tudo deriva dele;
     - com muitos, cada take a mais custa ~US$ 0,04 a 0,15 e mais tempo de olho na aprovação.
-- **D-SG-3. Feliz e Emburrar: depois do Comer ou junto.**
+- **D-SG-3. Feliz e Emburrar: depois do Comer ou junto. DECIDIDA pelo Matheus em 2026-11-06: depois** (registro D-SG-H).
   - **Recomendação:** **depois.** Só depois de a pergunta 1 dar "igual ou melhor" no Comer, como a SA-1 fez com o derivado.
   - **Duas observações:**
     - o Feliz e o Emburrar já estão sendo feitos pela receita derivada no lote 1 (`v3-sprites-lote1`), e gerá-los junto disputa o
@@ -342,7 +344,8 @@ Cada decisão vem com a recomendação e o custo de errar. A D-SG-4 está decidi
     menos sobre a qualidade.
   - **Custo de errar:** com o Agumon, um "igual" ainda não prova que o gerado salva os 49 fracos. A próxima prova seria num sem boca, a
     mais 3,08 a 9,24 reais pelo vídeo.
-- **D-SG-5. O teto de gasto e o câmbio.**
+- **D-SG-5. O teto de gasto e o câmbio. DECIDIDA pelo Matheus em 2026-11-06: US$ 5, com `--budget-usd 5 --max-calls 8`**; o câmbio do
+  dia do gasto vai no PR, com a fonte (registro D-SG-H).
   - **Recomendação:** um teto de **US$ 5 (R$ 27,50 a 5,50)** para a G2 inteira, passado ao Sprite Forge por `--budget-usd 5` e
     `--max-calls 8`. O câmbio do dia é confirmado pelo Matheus no momento do ok.
   - A estimativa do primeiro clipe é de US$ 0,68 a 2,13, então o teto cobre o pior caso com folga para um retake de still.
@@ -376,4 +379,153 @@ Cada decisão vem com a recomendação e o custo de errar. A D-SG-4 está decidi
     do pixel-mcp), sem sombra, num `quadros.json` próprio; o JSON real do Sprite Forge é adaptado na G2. O conversor grava o export no formato
     do Aseprite direto (sem chamar o Aseprite) e a carne de arte própria é a porta do `gerar.lua`, que reproduz byte a byte a camada
     `comida` do Agumon derivado (testado).
+- **2026-11-06, a etapa G2, primeira parte (worker, Claude Code, Opus 5.5, branch `v3-sprites-geracao-g2`):**
+  - **As decisões:** D-SG-1, D-SG-2, D-SG-3 e D-SG-5 registradas como DECIDIDAS (registro D-SG-H).
+  - **A instalação (fora do repositório, em `D:\Trab\digilab\ferramentas\`):**
+    - o Agent Sprite Forge, clonado em `agent-sprite-forge` (commit `72fa5ad`), com a venv `venv-forge` (Python 3.13; numpy 2.5.4,
+      Pillow 13.0.0, scipy 1.18.1);
+    - o ffmpeg 9.0.2 (`winget install Gyan.FFmpeg`), com libvpx-vp9 e libx264;
+    - o pixel-mcp 0.5.0 (willibrandon), binário oficial do release com o sha256 conferido contra o `checksums.txt`, em `pixel-mcp`. O
+      MCP do Aseprite que já existia (`aseprite-mcp`, pacote npm `@letsagents/aseprite-mcp`) **não é** o pixel-mcp.
+  - **Os preços, conferidos nas páginas dos modelos no fal.ai em 2026-11-06:** o Kling 3.0 Pro image-to-video custa US$ 0,112 por
+    segundo sem áudio (5 s = US$ 0,56; o mínimo do modelo é 3 s); o Nano Banana 2 edit (a imagem padrão do Sprite Forge no fal.ai) custa
+    US$ 0,08 por imagem em 1K. A estimativa da seção 4.3 se confirma: 3 takes do still a US$ 0,24 e 1 a 3 vídeos de 5 s a US$ 0,56 a 1,68.
+  - **O achado dos termos (D-SG-I), que para a geração:** os Termos de Serviço do fal.ai (`https://fal.ai/legal/terms-of-service`,
+    seção 6, lidos em 2026-11-06) dizem que o cliente garante ter todos os direitos sobre o que envia e que não envia material protegido
+    por direito autoral sem a permissão do dono. O take 0 e o still são quadros do Digimon UP, cujos direitos não são do Matheus. Enviar
+    contraria os termos do provedor. **Nenhum envio foi feito**; a decisão volta ao Matheus (D-SG-6, abaixo).
+  - **A chave:** a `FAL_KEY` não está no ambiente (nem na sessão, nem como variável de usuário).
+  - **O take 0:** `remaster/geracao/Agumon/still/take_0.png` (o `Idle_00` do UP a 10×, vizinho mais próximo, 940×680), mais a versão na
+    caixa e a versão em fundo magenta. Custo zero.
+  - **O que não rodou:** os scripts do Sprite Forge (o `forge_doctor.py` foi barrado pelo classificador de permissões da sessão); a E1 a
+    E7. Gasto: US$ 0,00 (não há ledger).
+  - **D-SG-6, DECIDIDA pelo Matheus em 2026-11-06: a opção (b), enviar sob a responsabilidade dele** (registro D-SG-L). Ele respondeu
+    "envie b" na sessão de planejamento e confirmou nesta sessão da G2 ("Confirmo, envie"), depois de ver o achado D-SG-I. O que estava
+    em jogo:
+    - **Recomendação:** não enviar quadros do UP ao fal.ai. A rota que respeita os termos é a prova com arte própria (fora desta
+      tarefa, seção 6), ou um provedor cujos termos o Matheus confira e aceite para esse uso.
+    - **Alternativas:** (a) o Matheus pede permissão ao dono dos direitos; (b) o Matheus lê os termos e decide enviar assim mesmo, sob a
+      responsabilidade dele; (c) a rota local do Codex ou do Grok, cujos termos também precisam ser lidos antes.
+    - **Custo de errar:** enviar contra os termos arrisca a suspensão da conta do fal.ai e o uso do material fora do que o provedor
+      permite; não enviar deixa a pergunta 1 sem resposta nesta tarefa.
+  - **A E1, primeira tentativa (2026-11-06), parou por falta de saldo:**
+    - **O que rodou:**
+      - o `master_still.py prompt` (local);
+      - o `route_media.py --dry-run`, que resolveu a rota `api:fal` com o `fal-ai/nano-banana-2/edit` a US$ 0,08 por take;
+      - o `master_still.py generate --takes 3`, com `--budget-usd 5 --max-calls 8`.
+    - **O resultado:** os 3 takes falharam no upload da referência, antes do pedido pago. O fal.ai respondeu "API HTTP 403: User is
+      locked. Reason: Exhausted balance".
+    - **O ledger** (`remaster/geracao/Agumon/forge/.forge/ledger.jsonl`, `media_ledger.py summary`): 0 chamadas, US$ 0,00.
+    - **Os arquivos:** a ficha do still em `forge/refs/spec_agumon.json` e a referência em `forge/refs/agumon_up_idle0.png`, só os
+      pixels de alfa 255 acima do pé, a 10× sobre magenta.
+    - **Pela instrução da missão,** nenhuma outra rota foi tentada. A E1 volta a rodar depois que o Matheus puser crédito na conta.
+  - **O `forge_doctor.py`, liberado pelo Matheus nesta sessão:**
+    - as dependências estão OK;
+    - o ffmpeg não aparece no PATH de um processo aberto antes da instalação, então a E2 passa o caminho do winget explicitamente.
+  - **A E1 rodada (2026-11-06), depois do crédito no fal.ai:**
+    - **A geração:** `master_still.py generate --takes 3` pela rota `api:fal` (`fal-ai/nano-banana-2/edit`), com
+      `--budget-usd 5 --max-calls 8`. O ledger registra 3 chamadas pagas e **US$ 0,24**.
+    - **As medidas** (`remaster/geracao/Agumon/still/master.json`, PROPOSTO), com os takes reduzidos à caixa de 94×68:
 
+      | take | silhueta XOR | pé | fora da paleta antes do snap | distância RGB média |
+      |---|---|---|---|---|
+      | take 0 | 0 | 58 | 0 | 0 |
+      | take 1 | 0 | 58 | 917 de 1 410 | 4,46 |
+      | take 2 | 0 | 58 | 927 de 1 410 | 4,62 |
+      | take 3 | 0 | 58 | 945 de 1 410 | 4,87 |
+
+      O gerador reproduziu a silhueta do take 0 e só deslocou as cores. A escala estimada é 10,04×.
+    - **O R-still** (`remaster/geracao/Agumon/revisoes/E1.md`): os 3 takes estão aprovados, e a recomendação é o take 1.
+    - **A folha de contato** (`still/contato_still_x4.png`) foi enviada ao Matheus.
+  - **O still escolhido:** o take 0, o próprio `Idle_00` do UP, pela resposta do Matheus ("Sim, take 0").
+    - Os takes 1 a 3 eram iguais a olho: o gerador só copiou a referência, com uma deriva de cor.
+    - O R-still tinha recomendado o take 1, e o take 0 continuava sendo o mais fiel.
+    - O `master.json` do Sprite Forge foi feito com `master_still.py approve --still`.
+  - **A E2, 3 takes de vídeo** (Kling 3.0 Pro, 4 s, US$ 0,448 cada, o último quadro preso ao still), cada um aprovado antes pelo R-envio
+    (`remaster/geracao/Agumon/revisoes/E2_envio_t0N.md`):
+
+    | take | resultado | G-AREA (áreas por quadro) |
+    |---|---|---|
+    | t01 | a cabeça desce e o corpo encolhe; a garra solta à frente da boca | reprovado: 1 097 a 1 410, piso 1 253,7 |
+    | t02 | o corpo fica mais de pé; só o quadro da cabeça mais baixa encolhe | reprovado: 1 213 no quadro 4 |
+    | t03 | só a cabeça e a mandíbula se mexem | aprovado: 1 399 a 1 432 |
+
+  - **Os gates do Sprite Forge:** passaram nos 3 takes. O de tempo deu aviso (de 3,0 a 3,2 s de ação), e o retime levou cada take a 9
+    quadros e 833 ms.
+  - **A E3, pela reserva** (D-SG-N):
+    - o script é `tools/sprites_geracao/limpar.py`;
+    - cada quadro registrado é amostrado no centro de cada pixel do UP, direto na caixa de 94×68;
+    - o alfa fica binário com corte em 128;
+    - o snap vai à `paleta.gpl` em CIELAB.
+    - No quadro parado, a silhueta volta igual à do UP (XOR 0); cerca de 30 % dos pixels voltam à cor exata.
+  - **A E4 e a E5 sobre o t03** (`remaster/geracao/Agumon/gates.json`): os 7 gates passam.
+
+    | gate | resultado |
+    |---|---|
+    | G-PAL | 0 pixels fora da paleta |
+    | G-CAIXA | passa |
+    | G-PE | pé na linha 58, desvio do centro x igual a 0 |
+    | G-ALFA | 0 pixels semitransparentes |
+    | G-AREA | 1 399 a 1 432 |
+    | G-MS | 9 quadros, 833 ms |
+    | G-CARGA | passa |
+
+  - **O R-clipe, cego** (`revisoes/E5_rclipe.md`, com a chave à parte em `revisoes/rclipe_chave.json`):
+    - o derivado foi reprovado: a boca abre com clareza uma vez só, e o corpo desliza de 1 a 2 px;
+    - o gerado foi aprovado com ressalvas: a boca fica aberta longa, talvez não sejam dois ciclos; o último quadro repete o primeiro; são
+      1 659 cores;
+    - na leitura dele, o gerado se lê melhor como "comer".
+  - **A E6:**
+    - o candidato com os 60 Digimon, o Agumon do gerado, está em `remaster/geracao/candidato/`;
+    - o `gerar_atlas_up_clipes.py` rodou sem erro;
+    - o e2e `e2e_capturas/sprites_comer.spec.ts` rodou com `DIGILAB_ATLAS_CLIPES_PASTA` no candidato: 8 de 8 passaram, com
+      `__digilab.comer() === "clipe"` em 390 e 1280 px;
+    - as capturas estão em `remaster/geracao/capturas/`;
+    - o R-final aprovou (`revisoes/E6_rfinal.md`);
+    - em `web/app`, o `npm test` dá 822 de 822 e o `npm run tipos` passa.
+  - **A leitura cega (4.2):** a página `remaster/geracao/Agumon/cego/index.html` mostra A e B lado a lado, a 4×, em laço e quadro a
+    quadro. O sorteio é novo, feito uma vez, e a chave está em `cego.json`. A leitura aguarda o Matheus.
+  - **O gasto, pelo ledger** (`remaster/geracao/Agumon/forge/.forge/ledger.jsonl`, `media_ledger.py summary`): 6 chamadas pagas,
+    **US$ 1,584**. As 3 imagens custaram US$ 0,24 e os 3 vídeos, US$ 1,344.
+    - Em reais, o gasto dá **R$ 8,72**. O câmbio é o comercial de US$ 1 = R$ 5,5037, da AwesomeAPI
+      (`economia.awesomeapi.com.br/json/last/USD-BRL`) em 2026-11-05 às 19:48, sem o IOF e sem o spread do cartão.
+    - O depósito de US$ 10 que o Matheus fez no fal.ai fica à parte: ele não é gasto, e sobra crédito para os próximos clipes.
+  - **A leitura cega (4.2), 2026-11-06:**
+    - **A resposta do Matheus, literal e dada antes da chave:** "A melhor". Ele não deu a frase.
+    - **A chave** (`remaster/geracao/Agumon/cego.json`): A é o gerado (o t03) e B é o derivado.
+    - **O resultado da pergunta 1: "melhor".** O gerado passa nos 7 gates (o `gates.json`), e o Matheus o marcou como melhor.
+    - O resultado vale para o Agumon, o derivado mais forte (D-SG-4); ele ainda não diz nada sobre os 49 sem boca.
+  - **As capturas do jogo (seção 7):** o Matheus viu os GIFs do jogo em 390 e 1280 px e o gerado lado a lado com o derivado, e respondeu
+    **"Não aprovo"**. O critério "o e2e com o clipe novo tem referência aprovada" ficou **não cumprido** para o t03; o motivo veio a seguir (D-SG-T).
+  - **O take 4, uma prova nova a pedido do Matheus** ("Eu quero que ele abra mais a boca", D-SG-U):
+    - **O prompt:** é o do t03, com "opens its jaws WIDE"; o R-envio aprovou (`revisoes/E2_envio_t04.md`).
+    - **O custo:** US$ 0,448; o ledger soma 7 chamadas e **US$ 2,032**.
+    - **O corte automático** pegou o maior alcance do corpo e deixou a boca aberta só num quadro. O corte manual (D-SG-V) usa os quadros
+      [0, 24, 40, 48, 56, 64, 72, 84, 92] da fonte, com os ms [100, 83, 83, 133, 83, 133, 83, 83, 83], que somam 864 ms, e põe as duas
+      aberturas da boca em 133 ms cada.
+    - **Os gates** (`remaster/geracao/Agumon/gates.json`, agora do t04b): passa nos 7, com o G-AREA de 1 299 a 1 410 e o G-CARGA.
+    - **O jogo:** o e2e no candidato novo dá 8 de 8. As capturas estão em `remaster/geracao/capturas/`; as do t03 foram para
+      `capturas_t03/`.
+    - **As capturas do t04, aprovadas pelo Matheus em 2026-11-06:** "Aprovo o take 4" (D-SG-W). O critério da seção 7, "o e2e com o
+      clipe novo tem referência aprovada", fica cumprido com o t04b. O t04 não passou por leitura cega; a pergunta 1 continua fechada pela
+      leitura do t03 (D-SG-S).
+  - **A E7, as lições:**
+    - **O custo real** (o ledger, `media_ledger.py summary`): 7 chamadas pagas, **US$ 2,032** (R$ 11,18 ao câmbio de cima), de um teto de
+      US$ 5 e 8 chamadas. As 3 imagens da E1 (US$ 0,24) não serviram: o still escolhido foi o take 0, de graça. Os 4 vídeos (US$ 1,792)
+      são o custo de fato de um clipe; o primeiro aproveitável foi o 3.º, e o aprovado, o 4.º.
+    - **O resultado da pergunta 1:** "melhor" para o Agumon, pela leitura cega do t03, e o t04 aprovado no jogo. Nada se diz ainda dos 49
+      sem boca.
+    - **O que deu certo:**
+      - o take 0 (o `Idle_00` do UP) como still: o gerador de imagem só copiava a referência, e o vídeo preso ao último quadro manteve a
+        silhueta;
+      - a reserva da E3 (`limpar.py`): a amostragem na grade do UP e o snap em CIELAB levaram os quadros aos 7 gates sem retoque à mão;
+      - o G-AREA como filtro barato: reprovou o t01 e o t02 (o corpo encolhia) antes de qualquer olho humano;
+      - o teto num intermediário fora do git (`route_media_teto.py`): nenhuma chamada passou sem `--budget-usd 5 --max-calls 8`.
+    - **O que errou:**
+      - os termos do fal.ai só foram lidos na G2 e pararam a etapa (D-SG-6); a leitura dos termos deve vir antes do plano de custo;
+      - a conta sem saldo parou a E1 duas vezes; conferir o saldo antes da primeira chamada;
+      - o prompt do `sprite_set.py` traz negações que a tarefa proíbe (D-SG-O); o prompt literal teve de ser montado à parte;
+      - o retime automático escolhe pelo alcance do corpo, não pela boca: no t04 perdeu as mordidas, e o corte foi à mão (D-SG-V);
+      - a recusa das capturas do t03 veio depois da leitura cega: o critério do Matheus (a boca bem aberta) só apareceu vendo o clipe no
+        jogo; mostrar o GIF no jogo antes do take seguinte teria poupado uma chamada;
+      - o pixel-mcp não serve para paletas de milhares de cores (D-SG-N).

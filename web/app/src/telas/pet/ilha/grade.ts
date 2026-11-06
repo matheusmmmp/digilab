@@ -135,7 +135,7 @@ export class Ilha {
       this.celulas.push({ tipo, nivel, cantos: [h, h, h, h], regiao });
     }
     this.porObjetos(semente, ninho, comedouro);
-    this.porEnfeites(semente);
+    this.porEnfeites(semente, ninho);
   }
 
   /** a celula (x, z) em celulas do motor, ou undefined fora da grade */
@@ -226,18 +226,31 @@ export class Ilha {
     }
   }
 
-  /* os enfeites repetidos (os postes) na moldura: em grama plana, a uma distancia da area entre `perto` e `longe`, longe uns dos outros
-     e das coisas altas de hoje; o giro vira a frente do modelo para o ponto mais perto da area. Falha alto se faltar lugar */
-  private porEnfeites(semente: number): void {
-    const r = rng(semente ^ ENFEITES_GRADE.sal), G = ENFEITES_GRADE;
+  /* os enfeites na moldura, na ordem da tabela (os postes primeiro, depois os marcos): em grama plana (com a folga do enfeite), a uma
+     distancia da area entre `perto` e `longe` (os marcos, so ao norte e perto da casa), longe dos outros enfeites e das coisas altas de hoje; o giro vira
+     a frente do modelo para o ponto mais perto da area. Falha alto se faltar lugar */
+  private porEnfeites(semente: number, ninho: [number, number]): void {
+    const r = rng(semente ^ ENFEITES_GRADE.sal);
     const altos = this.objetos.filter(o => !MODELOS[o.modelo].baixo);
+    const plana = (x: number, z: number, folga: number) => {
+      const c0 = this.cel(Math.floor(x), Math.floor(z));
+      if (!c0) return false;
+      for (let dz = -folga; dz <= folga; dz++) for (let dx = -folga; dx <= folga; dx++) {
+        const c = this.cel(Math.floor(x) + dx, Math.floor(z) + dz);
+        if (!c || c.tipo !== "grama" || c.nivel !== c0.nivel || c.cantos.some(h => h !== c.cantos[0])) return false;
+      }
+      return true;
+    };
     for (const nome of Object.keys(ENFEITES_MODELOS) as NomeEnfeite[]) {
-      const n = G.quantos[nome];
+      const G = ENFEITES_GRADE[nome], n = G.quantos;
       for (let k = 0, tent = 0; k < n; tent++) {
-        if (tent >= n * G.tentativas) throw new Error(`sem lugar para o enfeite ${nome} na ilha ${this.cm.layout.nome}: ${k} de ${n}`);
-        const x = this.x0 + 0.5 + r() * (this.larg - 1), z = this.z0 + 0.5 + r() * (this.prof - 1);
-        const c = this.cel(Math.floor(x), Math.floor(z)), d = this.distanciaDaArea(x, z);
-        if (!c || c.tipo !== "grama" || c.cantos.some(h => h !== c.cantos[0]) || d < G.perto || d > G.longe) continue;
+        if (tent >= n * ENFEITES_GRADE.tentativas) throw new Error(`sem lugar para o enfeite ${nome} na ilha ${this.cm.layout.nome}: ${k} de ${n}`);
+        /* os do norte sao sorteados so na faixa ao norte da area, a ate `casa` celulas do ninho em x (onde a camera da tela Pet mais fica;
+           pela grade inteira, quase nenhum sorteio cairia ali) */
+        const x = G.norte ? ninho[0] + (r() * 2 - 1) * G.casa : this.x0 + 0.5 + r() * (this.larg - 1);
+        const z = G.norte ? -(G.perto + r() * (G.longe - G.perto)) : this.z0 + 0.5 + r() * (this.prof - 1);
+        const d = this.distanciaDaArea(x, z);
+        if (!plana(x, z, G.folga) || d < G.perto || d > G.longe || (G.norte && z >= 0)) continue;
         if (altos.some(o => Math.hypot(o.x - x, o.z - z) < G.deAlto)) continue;
         if (this.enfeites.some(e => Math.hypot(e.x - x, e.z - z) < G.entreSi)) continue;
         const ax = Math.min(Math.max(x, 0), this.area.w), az = Math.min(Math.max(z, 0), this.area.h);
