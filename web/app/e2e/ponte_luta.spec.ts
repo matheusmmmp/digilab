@@ -1,6 +1,6 @@
 /* PE0 da ponte da luta (docs/TAREFA_V3_PONTE_LUTA.md, 3.5): o pet de teste v16 e o v17 (modular e A) lutam no app: uma luta na Arena contra
    um bot e a Liga dos Lideres (a serie), e o replay do registro no app sai igual (a assinatura depois de recarregar). Os saves vem de
-   e2e/gerar_save_ponte_luta.mjs. Nada da ponte (PE1 em diante) existe ainda: e a vida de hoje. */
+   e2e/gerar_save_ponte_luta.mjs. Os saves sem sufixo sao a vida de hoje (sem a marca "pl"); os `_ponte` (PE3) levam a marca: a luta entrega o resumo ao corpo e, com o modular, a memoria. */
 import { expect, test, type Page } from "@playwright/test";
 import { readFileSync } from "node:fs";
 import { basename } from "node:path";
@@ -13,7 +13,7 @@ const TAMER_6 = { versao: 2, log: ["campina", "torre", "floresta", "cidadela", "
   ["medalha", { id, n: i + 1, quando: 1 + i, pet: 1, forma: "Agumon", tick: 900 + i }]) };
 
 async function semear(page: Page, chave: string): Promise<void> {
-  const lab = chave === "v16";
+  const lab = chave.startsWith("v16");
   await page.goto("/Assets/digilab_atlas_up.json");
   await page.evaluate(([k, s, t, lab]) => {
     localStorage.clear(); localStorage.setItem(k + "-boas-vindas", "1"); localStorage.setItem(k + "-tamer", t);
@@ -24,7 +24,7 @@ async function semear(page: Page, chave: string): Promise<void> {
 }
 /** abre o pet: o ativo (v17) ou o de teste pelo laboratorio (v16) */
 async function abrir(page: Page, chave: string, hash: string): Promise<void> {
-  if (chave === "v16") {
+  if (chave.startsWith("v16")) {
     await page.goto(APP + "#/config/laboratorio");
     await page.getByRole("button", { name: "Abrir", exact: true }).click();
     await expect(page.locator(".topo-lab .lab-selo")).toBeVisible();
@@ -44,6 +44,7 @@ for (const chave of Object.keys(SAVES)) {
     await abrir(page, chave, "#/lutar/arena");
     const versao = JSON.parse(await registro(page)).versao;
     expect(versao).toBe(SAVES[chave].versao);
+    expect(await numLog(page, "pl"), "a marca da ponte da luta so nos saves da PE3").toBe(chave.endsWith("_ponte") ? 1 : 0);
     const l0 = await numLog(page, "l");
     /* a luta contra um bot, na Arena */
     await page.locator(".lutar-grande").click();

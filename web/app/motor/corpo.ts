@@ -108,6 +108,13 @@ export const CCO_METABOLISMO = configCorpo({ ...CCO_DRIVES, metabolismo: true })
 /** o corpo dos pets v11: o CCO_V11 (o ponto das vidas do v11 do gabarito) completado e conferido */
 export const CCO_CORPO_V11 = configCorpo(CCO_V11);
 
+/** a ponte da luta, o lado do corpo (PE3; a `ConfigLutaCorpo` do Python, docs/TAREFA_V3_PONTE_LUTA.md, 3.2): ligada, o resumo da luta (o evento
+ *  `lt`) e um estimulo no corpo, a dor. Fica fora da ConfigCorpo para o dump dela (o gabarito de paridade do corpo) nao mudar (D-PE1-1).
+ *  Desligada (o padrao), o resumo levanta erro e a vida de hoje sai byte a byte */
+export interface ConfigLutaCorpo { readonly ligada: boolean }
+export const CONFIG_LUTA_CORPO: ConfigLutaCorpo = { ligada: false };
+export const CONFIG_LUTA_CORPO_LIGADA: ConfigLutaCorpo = { ligada: true };
+
 /** os quimicos que o corpo tem com estas chaves: os cinco de hoje, os de cada orgao ligado e os da etapa 6 (a curiosidade so com o
  *  mundo fisico) */
 export function quimicosDe(cc: ConfigCorpo, comMundo = false): string[] {
@@ -602,6 +609,7 @@ export interface OpcoesCorpo {
   cc?: ConfigCorpo;
   duracoes?: DuracoesEstagio;    // a cfg_evo do Python (so com a Vida)
   comMundo?: boolean;            // o mundo fisico: a curiosidade existe (CD-8)
+  lutaCorpo?: ConfigLutaCorpo;   // a ponte da luta (PE3); sem ela, desligada
 }
 type DrivesHoje = { fome: number; higiene: number; energia: number; humor: number; saude: number };
 
@@ -630,11 +638,15 @@ export class Corpo {
   private readonly transferencias: Reacao[];
   readonly contas_metabolismo: Record<ContaMetabolismo, number> | null;
   readonly limiares_estagio: number[];
+  /** a ponte da luta (PE3): a dor da luta. Mutavel: o pet liga no comeco da vida, pelo evento `pl` do registro (Motor); desligada por padrao */
+  luta: ConfigLutaCorpo;
 
   constructor(q: Record<string, number>, opcoes: OpcoesCorpo = {}) {
     this.cc = opcoes.cc ?? CCO_LIGADA;
     if (!this.cc.ligada) throw new Error("Corpo com ConfigCorpo desligada: com a chave desligada o corpo nao existe");
     this.comMundo = opcoes.comMundo ?? false;
+    this.luta = opcoes.lutaCorpo ?? CONFIG_LUTA_CORPO;
+    if (this.luta.ligada && !this.cc.gestos) throw new Error("ConfigLutaCorpo.ligada exige ConfigCorpo.gestos (a dor da luta e o quimico dos gestos)");
     this.C = this.cc.escala;
     this.S = this.cc.escala_receptor;
     this.t = taxasDe(this.cc);
@@ -777,6 +789,16 @@ export class Corpo {
   /** comer uma fruta: fome + nutricao e humor + o efeito da fruta. Sem a digestao, direto na fome */
   estimuloFruta(nutricao: number, efeitoHumor: number): void {
     this.efeito({ fome: menos(naGrade(nutricao, this.C, "nutricao")), tristeza: menos(naGrade(efeitoHumor, this.C, "efeito_humor")) }, true);
+  }
+
+  // ---------------------------------------------------------- a ponte da luta (docs/TAREFA_V3_PONTE_LUTA.md, 3.2; PE3, espelho de `Corpo.estimulo_luta`)
+  /** o fim de uma luta: a dor sobe div_arred(p x C, S), com p a vida perdida em S (inteiro, cortado em [0, S]) e C a escala do corpo. Sem rng e
+   *  sem numero livre. A dor e o unico efeito (PL-3). Sem a chave, falha alto */
+  estimuloLuta(vidaPerdidaS: number): void {
+    if (!this.luta.ligada) throw new Error("estimulo da luta sem a ConfigLutaCorpo ligada (luta_corpo)");
+    if (!Number.isInteger(vidaPerdidaS) || vidaPerdidaS < 0) throw new Error(`vida perdida na luta precisa ser inteiro >= 0: ${vidaPerdidaS}`);
+    const p = Math.min(vidaPerdidaS, this.cc.escala_receptor);
+    this.somar({ dor: divArred(p * this.C, this.S) });
   }
 
   // ---------------------------------------------------------- o mundo fisico
