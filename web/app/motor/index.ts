@@ -35,4 +35,5 @@ export * from "./motor_corpo_mundo.ts";
 export * from "./digibrain.ts";
 export * from "./combate_tr/index.ts";
 export * from "./pet_lab.ts";
+export { decodificar, CATALOGO_CONCEITOS, VERSAO_DECODIFICADOR, type Conceito, type ConceitosDec, type NomeConceito } from "./digibrain/decodificador.ts";
 export { ORDEM_TERMOS, type BarraLab, type ChanceLab, type LeituraLab, type SondaLab, type TermoLab } from "./digibrain/leitura.ts";

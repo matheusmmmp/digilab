@@ -2,7 +2,8 @@
    useJogo(): todo numero sai de `Motor.leituraLab()` (motor/digibrain/leitura.ts, o ultimo motivo do M-ADAPT em inteiros) e do historico; a
    tela so escolhe o texto e formata. Nenhum rotulo diz "pensando", "sentindo" ou "querendo": dizem o modulo ou o que o motivo guarda. O painel
    do A v11 (DigiBrain.tsx) segue igual para os pets v11. */
-import { NOME_PET, ORDEM_TERMOS, type AcaoPet, type LeituraLab, type TermoLab } from "../../motor/index.ts";
+import { NOME_PET, ORDEM_TERMOS, type AcaoPet, type ConceitosDec, type LeituraLab, type NomeConceito, type TermoLab } from "../../motor/index.ts";
+import { CONFIG_DECODIFICADOR } from "../../motor/digibrain/constantes.ts";
 import { useJogo } from "../jogo.ts";
 import { hhmm } from "../telas/pet/TelaPet.tsx";
 import "../estilo/lab.css";
@@ -29,8 +30,30 @@ export function rotuloUnidade(chave: readonly [string, string | null, unknown]):
   if (tipo === "bola") return `${verbo} com a bola`;
   return verbo;
 }
+const NOME_CONCEITO: Record<NomeConceito, string> = {
+  fome: "Fome", sono: "Sono", bem_estar: "Bem-estar", mal_estar: "Mal-estar", agitacao: "Agitação", aversao: "Aversão aprendida", frustracao: "Frustração",
+  determinacao: "Determinação", indecisao: "Indecisão", lembranca: "Lembrança ativa", solidao: "Solidão", curiosidade: "Curiosidade",
+};
+const pctS = (v: number): number => Math.round((v * 100) / 1024);
 const dez = (permil: number): number => Math.round(permil / 10);
 const pct = (permil: number, sinal: boolean): string => (sinal && permil > 0 ? "+" : "") + String(dez(permil)).replace("-", "−") + "%";
+
+/** os conceitos do decodificador dec-v1 (DC1), so leitura: o que os sinais do motivo dizem, com valor e confianca; nao muda a vida e ainda nao fala */
+function Conceitos({ c }: { c: ConceitosDec }) {
+  const lista = [...c.conceitos].sort((a, b) => b.valor - a.valor);
+  return (
+    <section aria-labelledby="dl-conc" data-versao={c.versao}>
+      <h3 className="db-sec" id="dl-conc">Conceitos lidos do motivo</h3>
+      <div className="db-agora"><b>{NOME_CONCEITO[c.intencao]}</b><small>conceito de maior valor{c.intencao === "lembranca" ? " (a lembrança decidiu a escolha)" : ""} · {c.versao}</small></div>
+      <ul className="db-barras" data-testid="conceitos-dec">
+        {lista.map(x => <li key={x.nome} data-conceito={x.nome} data-acima={x.valor >= CONFIG_DECODIFICADOR.limiar_valor}><span>{NOME_CONCEITO[x.nome]}{x.alvo ? <small> · {x.alvo}</small> : null}</span>
+          <span className="db-trilho" aria-hidden="true"><b style={{ width: pctS(x.valor) + "%" }} /></span>
+          <em>{pctS(x.valor)}% · confiança {pctS(x.confianca)}%</em></li>)}
+      </ul>
+      <p className="db-vazio">Cada conceito é uma conta fixa sobre os sinais do motivo (urgências, afeto, opções, sondas). Só leitura: não muda o que ele faz.</p>
+    </section>
+  );
+}
 
 function Barras({ l }: { l: LeituraLab }) {
   const zeradas = ORDEM_TERMOS.filter(t => l.zeradas.includes(t));
@@ -50,7 +73,7 @@ function Barras({ l }: { l: LeituraLab }) {
 
 /** o conteudo do painel do modular, o mesmo no desktop (coluna) e no celular (folha) */
 export function ConteudoDigiBrainLab() {
-  const { motor: m } = useJogo(), l = m.leituraLab();
+  const { motor: m } = useJogo(), l = m.leituraLab(), conc = m.conceitosDec();
   const ultimas = m.historico.filter(h => h.quem === "pet").slice(-5).reverse();
   if (l === null) return <div className="db-conteudo"><p className="db-vazio">Ainda não decidiu nada.</p></div>;
   const peso = l.barras.find(b => b.termo === "lembranca");
@@ -98,6 +121,7 @@ export function ConteudoDigiBrainLab() {
         {l.reflexo ? <p className="db-vazio">No reflexo do sono, nenhuma sonda decide.</p>
           : <ul className="db-chips">{l.sondas.filter(s => s.nome in NOME_SONDA).map(s => <li key={s.nome} data-sonda={s.nome} data-muda={s.mudaria}>{NOME_SONDA[s.nome]}: {s.mudaria ? "muda" : "não muda"}</li>)}</ul>}
       </section>
+      {conc !== null && <Conceitos c={conc} />}
       <section aria-labelledby="dl-ult">
         <h3 className="db-sec" id="dl-ult">Últimas ações</h3>
         <ol className="db-ultimas">{ultimas.map((h, i) => <li key={i}><span className="dl-lcd">{hhmm(h.t)}</span>{NOME_PET[h.a as AcaoPet] ?? h.a}</li>)}</ol>

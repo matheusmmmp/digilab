@@ -219,3 +219,18 @@ sustentada), 2 asserções novas em `web/app/test/comando_chat.test.ts`. Passam:
 - **Próximas missões:** DC1 (o decodificador, Python e TS, com paridade) e DC2 (a voz que recebe só intenção e conceitos), em paralelo pelo
   formato fixo da espec (seção 2); DC3 (a rede escolhendo falar) depois, com plano de análise; DC4 (a avaliação, plano reescrito).
 
+
+## DC1 — o decodificador de conceitos `dec-v1` (2026-11-06, worker Claude Code, Sonnet 5.5, branch `v3-conversa-dc1-decodificador`)
+
+- **Entregue:** `digilab/digibrain/decodificador.py` (função pura, inteiros na escala S, sem rng, falha alto) com os pesos e limiares em
+  `ConfigDecodificador` (`digilab/config.py`, PROPOSTOS, SEM FONTE); o espelho `web/app/motor/digibrain/decodificador.ts`; `Motor.conceitosDec()`;
+  o bloco "Conceitos lidos do motivo" no painel do DigiBrain (só leitura); o exportador `experiments/exportar_decodificador.py` e o gabarito
+  `web/app/test/gabaritos/decodificador_python.json.gz` (14 vidas curtas do braço REL, sementes dos testes, 5376 decisões); os testes
+  `tests/test_decodificador.py` e `web/app/test/decodificador.test.ts`.
+- **O formato** é o fixo da espec (seção 2): `{versao: "dec-v1", k, intencao, conceitos: [{nome, valor, confianca, alvo?}]}`, os 12 nomes do catálogo
+  sempre, na ordem dela; a DC2 filtra pelos limiares (`limiar_valor`, `limiar_confianca`, também na config). A intenção é a regra I-a: `lembranca`
+  quando a sonda `lembranca_decidiu` é verdadeira; senão o conceito de maior valor (empate: ordem do catálogo), sem contar a `lembranca`.
+- **Fidelidade mínima (testes):** `lembranca` só é a intenção quando a sonda `sem_lembranca` decidiu (e então passa o limiar); a `determinacao` passa
+  o limiar quando a sonda da persistência decidiu, é zero sem intenção em curso, e a média dela é maior com a sonda.
+- **Nada muda na vida:** o decodificador só lê; nenhum módulo da vida o chama (teste); os gabaritos das vidas de hoje não mudaram.
+- **Não feito (DC2, DC3, DC4):** ligar na fala, a rede escolhendo falar, a calibração e a avaliação. Desvios D-CP-DC1-1 a 6 no `docs/registro/2026-11.md`.
