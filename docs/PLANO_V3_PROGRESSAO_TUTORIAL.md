@@ -1,7 +1,7 @@
 # Plano de progressão e de tutorial do jogo web (2026-11-06, PROPOSTO)
 
-**Status:** planejamento, sem código. Tudo o que está aqui é PROPOSTO até o Matheus decidir, exceto o que vem marcado como DECIDIDO.
-Os números novos são PROPOSTOS e SEM FONTE.
+**Status:** planejamento, sem código. As decisões P-1 a P-11 (seção 8) estão DECIDIDAS pelo Matheus em 2026-11-06, todas com a opção recomendada.
+Os números novos são SEM FONTE; entraram com as decisões de 2026-11-06 como estão no plano.
 
 **De onde vem:** em 2026-11-06 o Matheus decidiu refazer os menus como **lugares da ilha**: Crescer no saco de pancada, Lutar no portão
 da arena e Diário na barraca do Tamer (`docs/PROPOSTAS_V3_UX_TELA_PET.md`, seção "Lugares da ilha: menus (L2/L3)", branch
@@ -301,48 +301,48 @@ Cada seta é um marco. Ao chegar num nível: o cartão de destrave, depois a dic
 
 ## 8. Decisões para o Matheus
 
-Cada uma com a recomendação e o custo de errar.
+Cada uma com a recomendação e o custo de errar. Em 2026-11-06 o Matheus aceitou todas as recomendações (P-2 a P-11); os números continuam como estão no plano.
 
 - **P-1. O nível é do Tamer.** DECIDIDO pelo Matheus em 2026-11-06. Fica registrado aqui para a prancha e para as tarefas de código.
-- **P-2. O nível sobe por marcos (dez, na tabela da seção 3.3), não por XP de ação.**
+- **P-2. O nível sobe por marcos (dez, na tabela da seção 3.3), não por XP de ação.** **DECIDIDO em 2026-11-06 pelo Matheus ("Aceitar todas"), com a opção recomendada.**
   Recomendo os marcos. Custo de errar: com XP, o jogador aprende a repetir um botão para subir, e a curva pede calibração; com marcos, o
   nível sobe pouco depois do título da Liga, e as mecânicas futuras precisam de marcos novos (o que é barato: um marco por mecânica).
-- **P-3. A ordem: Pet → Diário → Crescer e Conversar → Lutar → Itens → Regras de luta → Fronteira → Fábrica e Salão.**
+- **P-3. A ordem: Pet → Diário → Crescer e Conversar → Lutar → Itens → Regras de luta → Fronteira → Fábrica e Salão.** **DECIDIDO em 2026-11-06 pelo Matheus ("Aceitar todas"), com a opção recomendada.**
   Recomendo essa ordem, que segue o que o motor já impõe. Custo de errar: se Lutar abrir antes do treino, o primeiro rival vence o pet sem
   treino e o jogador não sabe por quê; se o Diário vier tarde, o "atendeu X de Y" da revelação do Rookie não tem onde ser lido.
-- **P-4. As regras de combate (Travar, Vetar) e o Forçar passam a se apresentar no Champion (nível 6)?** Hoje elas já aparecem no
+- **P-4. As regras de combate (Travar, Vetar) e o Forçar passam a se apresentar no Champion (nível 6)?** **DECIDIDO em 2026-11-06 pelo Matheus ("Aceitar todas"), com a opção recomendada. Fica: só esconder o editor e o cartão até o nível 6, sem tocar no motor.** Hoje elas já aparecem no
   Rookie: o pet tira regras das lutas desde o começo. Recomendo **só esconder o editor e o cartão até o nível 6, sem tocar no motor**: o
   pet continua aprendendo as regras desde o Rookie, e o jogador vê o editor quando chega lá. Custo de errar: esconder demais faz o
   jogador não entender uma derrota do Rookie; mostrar cedo põe o conceito mais abstrato do jogo (`docs/JORNADA_JOGADOR.md`, ponto 7)
   junto com o primeiro treino.
-- **P-5. Onde o nível fica: só na vista (opção V), e no registro do Tamer (opção T) quando o multiplayer chegar.**
+- **P-5. Onde o nível fica: só na vista (opção V), e no registro do Tamer (opção T) quando o multiplayer chegar.** **DECIDIDO em 2026-11-06 pelo Matheus ("Aceitar todas"), com a opção recomendada.**
   Recomendo a V. Custo de errar: na V, o nível é refeito a cada abertura e um jogador consegue abrir um painel pelo endereço (sem efeito
   de regra); se o multiplayer chegar sem a T, o nível não é conferível entre jogadores. Pôr a M agora custa uma versão de pet e uma
   paridade com o Python por uma regra que a pesquisa não usa.
-- **P-6. Quem tem save entra com o nível dos marcos que já fez e piso no nível 4, sem cartões repetidos.**
+- **P-6. Quem tem save entra com o nível dos marcos que já fez e piso no nível 4, sem cartões repetidos.** **DECIDIDO em 2026-11-06 pelo Matheus ("Aceitar todas"), com a opção recomendada.**
   Recomendo o piso 4. Custo de errar: sem piso, quem tem um In-Training hoje perde Crescer e Lutar, que já usava; com piso mais alto, quem
   tem um pet novo perde os cartões de Itens e da Fronteira (só o texto; o lugar abre do mesmo jeito).
-- **P-7. "Já conheço o jogo" nas boas-vindas: pula o Como jogar e os cartões, mas o nível sobe pelos marcos como para todo mundo?** Ou
+- **P-7. "Já conheço o jogo" nas boas-vindas: pula o Como jogar e os cartões, mas o nível sobe pelos marcos como para todo mundo?** **DECIDIDO em 2026-11-06 pelo Matheus ("Aceitar todas"), com a opção recomendada. Fica: abrir os níveis 1 a 4 e pular os cartões.** Ou
   abre de saída os níveis 1 a 4? Recomendo **abrir os níveis 1 a 4 e pular os cartões**; o resto (Itens, Fronteira) segue os marcos,
   porque depende do motor. Custo de errar: sem a opção, quem recomeça um save assiste ao tutorial de novo; com ela, alguém novo que
   clique por engano perde os cartões (volta por "Rever o tutorial").
-- **P-8. O nível aparece na tela como "Tamer Nv 4", no leque do retrato.** Ou só nos lugares trancados (`🔒 Nv 3`)? Recomendo **os dois**:
+- **P-8. O nível aparece na tela como "Tamer Nv 4", no leque do retrato.** **DECIDIDO em 2026-11-06 pelo Matheus ("Aceitar todas"), com a opção recomendada. Fica: os dois (o número no leque e o cadeado com o nível).** Ou só nos lugares trancados (`🔒 Nv 3`)? Recomendo **os dois**:
   o número pequeno no leque e o cadeado com o nível no lugar. Custo de errar: sem o número à vista, o "Nv 3" do cadeado fica sem
   referência; com o número grande demais, vira meta de subir de nível em vez de cuidar do pet.
-- **P-9. O Como jogar encolhe para uma página (Cuide), e o resto vem com os níveis.** A página "Ensine" ainda diz "Elogie ou repreenda",
+- **P-9. O Como jogar encolhe para uma página (Cuide), e o resto vem com os níveis.** **DECIDIDO em 2026-11-06 pelo Matheus ("Aceitar todas"), com a opção recomendada.** A página "Ensine" ainda diz "Elogie ou repreenda",
   que os pets v11 não têm. Recomendo **uma página e corrigir o texto**: o Ensine e o Veja crescer viram os cartões dos níveis 3 e 6.
   Custo de errar: manter as três páginas repete o que os cartões dizem e ensina um botão que não existe.
-- **P-10. O multiplayer e as mecânicas futuras entram do nível 10 em diante, cada uma com o seu marco.** O marco exato (o primeiro Mega,
+- **P-10. O multiplayer e as mecânicas futuras entram do nível 10 em diante, cada uma com o seu marco.** **DECIDIDO em 2026-11-06 pelo Matheus ("Aceitar todas"), com a opção recomendada.** O marco exato (o primeiro Mega,
   o segundo pet, o título da Liga) fica para a tarefa da mecânica. Recomendo **não fixar agora** e manter o nível 10 como "depois do
   título da Liga". Custo de errar: fixar cedo um marco para algo que ainda não existe; deixar muito tarde (o título da Liga é o fim da
   jornada) pode afastar o jogador do social, que em Pokémon GO entra no nível 10 de 50.
-- **P-11. O portão e a barraca ficam visíveis na ilha desde o nível 1, trancados.** Ou só aparecem quando abrem? Recomendo **visíveis e
+- **P-11. O portão e a barraca ficam visíveis na ilha desde o nível 1, trancados.** **DECIDIDO em 2026-11-06 pelo Matheus ("Aceitar todas"), com a opção recomendada. Fica: visíveis e trancados.** Ou só aparecem quando abrem? Recomendo **visíveis e
   trancados**: o jogador vê para onde vai. Custo de errar: escondidos, a ilha muda de repente e o minimapa precisa saber o nível;
   visíveis, quem é novo pode clicar e ver o cadeado (o que é o motivo do cadeado existir).
 
 ## 9. O que vem depois
 
-1. O Matheus decide as P-2 a P-11.
+1. ~~O Matheus decide as P-2 a P-11.~~ Feito em 2026-11-06: todas aceitas como recomendadas.
 2. A prancha L2/L3 (`v3-ux-lugares-menus`) troca o exemplo do lugar trancado e do destrave pelos níveis e textos decididos.
 3. Uma tarefa de código (só na vista, se a P-5 for a V): a função do nível, a chave `-nivel`, o cartão de destrave na fila das dicas, o
    lugar trancado no trilho, nas teclas, nas rotas e no minimapa, o "Rever o tutorial", o piso dos saves antigos e o Como jogar de uma
