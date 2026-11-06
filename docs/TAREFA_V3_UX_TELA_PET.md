@@ -216,7 +216,10 @@ Matheus, 2026-11-05, nesta sessão (resposta "B, hooks antes"):
 - **UX-2: os hooks antes.** A ordem é A0 (restaurar os H1–H4 apagados no `2586b0e`) → A1 (H5, H6 e H8, desligados, com testes) → P1
   (a prancha da B em `docs/pranchas/ux-pet/`, para o ok do Matheus antes de qualquer código), com os agentes (A2) entrando junto da P1.
 
-UX-3 a UX-8 continuam PROPOSTAS.
+- **UX-3: o e2e inteiro no `Stop`** (Matheus, 2026-11-06, "O e2e inteiro", depois da medida da A1: 10,8 a 13,7 min por turno).
+  O H5 fica com os passos padrão (tipos, Vitest e `npm run e2e`); a `DIGILAB_H5_PASSOS` não é usada para reduzir o e2e.
+
+UX-4 a UX-8 continuam PROPOSTAS.
 
 ## 9. Etapa A0: os hooks restaurados (2026-11-05)
 
@@ -224,3 +227,47 @@ Branch `v3-hooks-a0`, empilhada sobre a `v3-ux-tela-pet`. `.claude/hooks/` (seis
 `2586b0e^`, por `git checkout`, sem edição à mão. Com o merge, voltam a valer o H1, o H1b e o H3, que o Matheus ligou em 2026-10-14; o H2 e o
 H4 seguem desligados. O Matheus decidiu religar os três (2026-11-05, "Sim, religar"). `python -m pytest tests/test_hooks.py tests/test_hook_h4.py tests/test_conferir_saude.py -q`: 68 passed (antes, 43
 failed e 25 passed). Próxima: a A1.
+
+## 10. Etapa A1: H5, H6 e H8, desligados (2026-11-06)
+
+Branch `v3-hooks-a1`, empilhada sobre a `v3-hooks-a0`. Os três hooks da seção 3.3 existem em `.claude/hooks/` e a configuração proposta em
+`docs/propostas/hooks_ux_settings.json`; **nada foi ligado** (o `.claude/settings.json` é o da A0, e um teste confere). O H8 não entra no
+`settings.json`: a proposta traz, em `agentes_h8`, o matcher e o comando de cada papel para o frontmatter dos agentes da A2.
+
+- **H5 `h5_web.py`** (`Stop`): roda tipos, Vitest e e2e em `web/app` quando o diff contra o `merge-base` com `origin/main`, mais o não
+  commitado e os arquivos novos, toca `web/app/src/`, `web/app/e2e*`, `web/app/test/` ou `web/app/motor/`. Para no primeiro passo que
+  falha e não bloqueia duas vezes pelo mesmo motivo. `DIGILAB_H5_PASSOS` troca os passos (a UX-3 e os testes); um passo além de
+  `DIGILAB_H5_LIMITE_S` (padrão 1 800 s) não bloqueia.
+- **H6 `h6_capturas.py`**: nega editar `*-snapshots/` e a pasta `DIGILAB_CAPTURAS`; no shell, `ask` no Playwright com
+  `--update-snapshots`/`-u` e negação para comando que cita essas pastas e não é só leitura (ou que redireciona para lá).
+- **H8 `h8_escopo.py <papel>`**: designer, implementador e testador como na seção 3.2; papel desconhecido bloqueia.
+
+Testes: `python -m pytest tests/test_hooks.py -q` → 101 passed (32 de antes, 69 novos).
+
+**A medida do H5** (`docs/propostas/medida_h5_2026-11-06.txt`, três rodadas sem nenhuma mudança em `web/app`): tipos 4–9 s, Vitest 110–169 s
+(822 testes, todos passam), e2e 481–709 s. O total por turno fica entre **10,8 e 13,7 min**, acima dos ~10 min da UX-3. O e2e **oscilou no
+mesmo código**: 3 falhas na rodada 1, 1 na rodada 2 (o treino com "Forçar levantar pedra?", nas duas), nenhuma na 3. Com o H5 ligado, uma
+oscilação dessas devolveria o turno ao agente uma vez por assinatura. Isso pesa na UX-5. A UX-3 ficou decidida pelo e2e inteiro (seção 8.1), com o custo medido.
+
+## 11. Etapa A2: os seis agentes e o registro local (2026-11-06)
+
+Branch `v3-ux-a2`, empilhada sobre a `v3-hooks-a1`. Os seis agentes da seção 3.2 em `.claude/agents/`, no formato da documentação de
+subagentes do Claude Code (frontmatter com `name`, `description`, `tools`, `disallowedTools`, `model`, `skills`, `mcpServers`, `hooks`):
+
+| agente | modelo | ferramentas | limite do harness |
+|---|---|---|---|
+| `ux-designer` | opus | Read, Grep, Glob, Write, Edit, Skill; a skill `frontend-design` | H8 `designer`; sem shell |
+| `ux-implementador` | sonnet | Read, Grep, Glob, Edit, Write, Bash; o shadcn MCP (`npx shadcn@latest mcp`) só nele | H8 `implementador` e H6 |
+| `ux-browser-tester` | sonnet | Read, Grep, Glob, Bash; o Playwright MCP (`npx -y @playwright/mcp@latest`) só nele | sem escrita; H8 `testador` e H6 |
+| `rev-replay` | opus | Read, Grep, Glob | sem escrita e sem shell |
+| `rev-a11y` | sonnet | Read, Grep, Glob | sem escrita e sem shell |
+| `rev-cena` | sonnet | Read, Grep, Glob | sem escrita e sem shell |
+
+O `web/app/registry.json` é o índice local no formato de registro do shadcn: os seis `hx/*`, o `ui/button` e as peles (`tokens.css`,
+`pele-xcom.css`, `pele-vidro.css`). O `components.json` não ganhou `registries` (UX-4). A documentação do shadcn só mostra registros por
+URL https, então o MCP não lê este arquivo sozinho; ele serve de índice ao implementador.
+
+Testes: `python -m pytest tests/test_agentes_ux.py -q` → 18 passed.
+
+Não conferido: se o Claude Code carrega os seis agentes e se os MCPs sobem. Uma sessão só lê `.claude/agents/` do próprio projeto ao
+abrir, e o `frontend-design` não está instalado nesta máquina (UX-6); sem ele, a skill é pulada com aviso.
