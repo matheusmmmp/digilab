@@ -209,3 +209,30 @@ de apresentação continua na tela e não vai ao prompt; a fala espontânea não
 - **Próximas missões:** DC1 (o decodificador, Python e TS, com paridade) e DC2 (a voz que recebe só intenção e conceitos), em paralelo pelo
   formato fixo da espec (seção 2); DC3 (a rede escolhendo falar) depois, com plano de análise; DC4 (a avaliação, plano reescrito).
 
+
+## DC2 — a voz que recebe só a intenção e os conceitos (worker, Claude Code, Sonnet 5.5, branch `v3-conversa-dc2-voz`, 2026-11-06)
+
+Decisão DR-1 do Matheus: a fala nasce da rede, a LLM só como voz. Esta missão entrega o lado da voz do formato fixo `dec-v1` (espec,
+seção 2); o decodificador é a DC1, em paralelo, e a página ainda **não** manda conceitos.
+
+- **O formato** (`digilab_fala_livre/conceitos.py`): `{versao: "dec-v1", k, intencao, conceitos: [{nome, valor, confianca, alvo?}]}`,
+  catálogo fechado dos 12 nomes, inteiros em [0, 1024], `alvo` só de catálogo (classe de objeto, `ep<N>` de episódio, rival do corpus),
+  sem repetir `(nome, alvo)`. Qualquer desvio levanta `ConceitosInvalidos`, e o servidor responde 400.
+- **O prompt `voz-v1`** (`prompt.py`, `mensagens_voz`): o pedido tem a intenção, os conceitos com valor ≥ `LIMIAR_VALOR` (cada um com id
+  `[C1]…`, a faixa e a marca CERTO ou CONFIANÇA BAIXA), o estágio, o estilo da espécie e, na conversa, a fala do dono e os `[J]` da M4.
+  Não tem fato de estado, memória, desejo nem log. Regras: dizer só o que os conceitos dizem; confiança baixa vira hesitação; lembrança só
+  pelo conceito `lembranca`; sem culpa nem chantagem; comando pelo catálogo como hoje. Tamanho por estágio como no `conversa-v1`.
+  Nenhuma versão antiga mudou (`voz-v1` fica fora de `VERSOES`).
+- **O servidor** (`servidor/fala_livre.py`): o campo `conceitos` liga a `voz-v1` na conversa e na fala espontânea. Com ele, `estado` só pode
+  ser `{identidade: {estagio, forma?}}`, e `voz`, `prompt`, `internet` e `rival` são 400. A resposta traz a `verificacao` (verif-v7).
+  `/api/fala-livre/verificar` também aceita `conceitos` (os `fatos` só podem ser `[J]`). Sem o campo, o servidor é o de antes.
+- **O verificador `verif-v7`** (`verificador.py`, `verificar_conceitos`): o extrator (LLM) lista as afirmações da frase e o conceito de cada
+  uma; o julgamento é do código: conceito ativo sustenta; conceito ausente, abaixo do limiar ou `nenhum` é `sem_conceito`; confiança
+  baixa sem hesitação na frase é `sem_hesitacao`; objeto diferente do alvo é `alvo_errado`; causa e evento nenhum conceito sustenta;
+  lembrança só pelo conceito `lembranca`; o que a frase atribui ao dono é conferido contra os `[J]` (regra da verif-v6).
+- **Limiares PROPOSTOS, SEM FONTE:** valor mínimo S/4 = 256, confiança mínima S/2 = 512, "forte" 3S/4 (só o rótulo do prompt). A espec
+  chama os dois limiares de PROPOSTOS e não dá o número; se a DC1 fixar outros, os dois lados têm de coincidir antes da ligação.
+- **Testes:** `tests/test_voz_dc2.py` (formato, recusa fora do catálogo e de tipo, injeção nos campos, a voz sem fato de estado, o
+  verificador contra os conceitos, as rotas); os 16 arquivos de fala/conversa/servidor continuam passando.
+- **Falta:** a ligação na página (`web/app/src/falaLivre.ts` manda os conceitos da DC1 no lugar do `estadoDoPet`, atrás de chave desligada),
+  a revisão da fala quando o verif-v7 aponta problema (hoje só se devolve a verificação) e a avaliação (DC4).
