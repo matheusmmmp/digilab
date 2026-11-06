@@ -549,5 +549,6 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-06 — CONVERSA_PET, M1, o comando e o estilo da espécie religados na conversa (worker, Claude Code, Sonnet 5.5, branch `v3-conversa-m1-comando`)](registro/2026-11.md)
 - [2026-11-06 — CONVERSA_PET, M3: o prompt `conversa-v1` (worker, Claude Code, Sonnet 5.5, branch `v3-conversa-m3-prompt`)](registro/2026-11.md)
 - [2026-11-06 — LONGE_REGULAR, o plano do descritivo da D-C1-3 (worker, Claude Code, Opus 5.5, branch `v3-dc13-plano`)](registro/2026-11.md)
+- [2026-11-06 — MAPA_DIGITAL, a tarefa (Gerente da frente, Claude Code, Opus 5.5, branch `v3-mapa-digital`)](registro/2026-11.md)
 - [2026-11-06 — CONVERSA_PET, M5 o cliente Claude da fala livre (worker, Claude Code, Sonnet 5.5, branch `v3-conversa-m5-claude`)](registro/2026-11.md)
 - [2026-11-06 — INFRA_AGENTES, a prova ao vivo e a etapa E6b, o tar só para listar (worker, Claude Code, Opus 5.5, branch `v3-infra-agentes-e6b`)](registro/2026-11.md)
