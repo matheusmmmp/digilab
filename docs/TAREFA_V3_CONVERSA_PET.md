@@ -98,3 +98,32 @@ igual. O `livre-v2` e o `livre-v8` continuam no pacote e reproduzem.
   US$ 1,50 estimados, teto separado. Custo: escolher a API traz rede e gasto ao jogo.
 - **D6** memória da conversa entre sessões nesta frente: recomendo não agora. Custo: o pet não lembra de um dia para o outro.
 - **D7** avaliação cega pareada pelo Matheus, juiz LLM só como triagem: recomendo sim. Custo: sem o Matheus, a frente otimiza o gosto do juiz.
+
+## M5 — o cliente Claude da fala livre (worker, Claude Code, Sonnet 5.5, branch `v3-conversa-m5-claude`, 2026-11-06)
+
+Entrega da missão M5 (D5): só o cliente e o gasto, **sem rodada** (nenhuma chamada real à API; gastar é decisão da rodada da avaliação).
+
+- **O cliente:** `servidor/fala_livre_claude.py`, `ClienteClaude(modelo, gasto)` com o `conversar(mensagens, esquema, max_tokens, semente)`
+  do `ClienteOllama`. As mensagens de sistema viram o `system`; o esquema JSON vai em `output_config.format`; esforço `low`; sem
+  temperatura nem semente (a API não aceita; a semente fica só no log do chamador). Falha (rede, recusa, `max_tokens`, teto, credencial)
+  sobe como `ErroClaude(OSError)`, que o `gerar` e o `gerar_com_revisao` já capturam: cai na fala genérica, como com o Ollama. JSON
+  inválido volta como texto e o `saida.ler` levanta, como com o Ollama.
+- **O gasto:** o `ControleGasto` de `fala_llm.py`, em arquivo próprio (`servidor/gasto_fala_livre.json`, no `.gitignore`) e teto próprio
+  (`--limite-usd-livre`, padrão US$ 3, PROPOSTO). Reserva o pior caso antes e acerta pelo `usage`; falha sem `usage` conta o máximo.
+  `PRECOS_USD_POR_MTOK` ganhou `claude-haiku-5-5` (0,10 / 0,50) e `claude-sonnet-5-5` (2,00 / 10,00). Modelo sem preço não liga.
+- **O provedor:** `DIGILAB_PROVEDOR_LIVRE` (`ollama`, padrão, ou `claude`) e `DIGILAB_MODELO_LIVRE`. O verificador tem cliente próprio
+  (`DIGILAB_PROVEDOR_VERIF`, `DIGILAB_MODELO_VERIF`; padrão `ollama` `gemma2:9b`). Com `--remoto`, o Claude fica desligado salvo
+  `--claude-remoto`. A chave só vem do ambiente (`ANTHROPIC_API_KEY` ou o perfil do `ant`). `/api/fala-livre/status` traz o provedor, o
+  modelo, o verificador, `ativo` e o gasto.
+- **Mudanças fora do pedido literal (mínimas):** `digilab_fala_livre/revisao.py` lê `cliente.cliente_verif` (se existir) para o
+  verificador, uma linha, porque o `gerar_com_revisao` usava um cliente só para gerar e verificar; sem o atributo, tudo como antes.
+  `servidor_local.py` ganhou a flag e três atributos da classe `Tratador` (sem tocar no gancho: o teste que conta "fala_livre" no arquivo
+  continua em 1).
+- **Custo (artefato):** `python tools/estimar_custo_llm.py` → `artifacts_custo_llm/estimativa.json`, bloco `fala_livre_comparacao_d5`:
+  192 turnos por braço, ~2 600 tokens de entrada e ~100 de saída (do plano, PROPOSTO, sem medida): US$ 0,0595 no Haiku 5.5, US$ 1,1904
+  no Sonnet 5.5, US$ 1,2499 nos dois, contra o teto proposto de US$ 3.
+- **Testes:** `tests/test_fala_livre_claude.py` (19 casos, SDK falso): interface igual, esquema passado, sem temperatura nem semente,
+  queda na fala genérica em erro, recusa, corte e JSON inválido, teto que barra, preço ausente que barra, provedor padrão Ollama sem
+  mudança, remoto que desliga. O SDK `anthropic` não está instalado nesta máquina; os testes não precisam dele.
+- **Não verificado:** a chamada real (formato exato de `output_config` com `effort` no Haiku 5.5 e no Sonnet 5.5, e o piso de
+  `max_tokens`) só se confirma na primeira chamada da rodada de avaliação, que pede o Matheus.
