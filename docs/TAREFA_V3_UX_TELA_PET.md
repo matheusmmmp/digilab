@@ -1,0 +1,226 @@
+# TAREFA V3 — UX_TELA_PET (2026-11-05)
+
+Coordenador: Gerente da frente UX_TELA_PET (Claude Code, Opus 5.5). Worker: o mesmo, na etapa de papel. Worktree e branch:
+`v3-ux-tela-pet`. Status: etapa 0 (papel) ENTREGUE. **UX-1 e UX-2 DECIDIDAS** pelo Matheus em 2026-11-05 (proposta B; os hooks
+antes, seção 8.1); o resto continua **PROPOSTO** até ele decidir (seção 8).
+
+Categoria: arquitetura. Origem: Matheus, 2026-11-05: arquitetura de agentes para a interface do jogo (designer, implementador, testador
+no navegador, revisores por lente, hooks como gate) e propostas de layout e UX de jogo para a tela Pet.
+
+## 1. Pergunta
+
+Sem hipótese de pesquisa: é trilha L (layout) da V3. Duas perguntas:
+
+1. **Que arquitetura de agentes deixa a tela Pet mudar de desenho sem que o replay, o e2e pixel a pixel e a autoridade do Matheus sobre o
+   visual dependam da boa vontade do modelo?** (a regra sem exceção vira hook; o resto fica no papel de cada agente)
+2. **Qual dos três desenhos da tela Pet (`docs/PROPOSTAS_V3_UX_TELA_PET.md`) dá ao jogador a melhor leitura do estado do pet**, sem
+   tocar o motor, o save ou as rotas?
+
+## 2. Depende de
+
+- **Os hooks H1 a H4 de volta.** O commit `2586b0e` (a H2 da ilha, 2026-10-30) apagou `.claude/settings.json` e `.claude/hooks/`
+  (`_comum.py`, `h1_engine.py`, `h1b_engine_sha.py`, `h2_testes.py`, `h3_main.py`, `h4_autorizo.py`); o `tests/test_hooks.py` ficou e
+  falha (o `PAINEL_V3.md`, seção 2, conta 43 falhas na suíte; há um card proposto para restaurar). Os hooks novos desta tarefa usam o
+  mesmo `_comum.py` e o mesmo arquivo de teste: **a restauração vem antes** da etapa A1 (seção 3.4).
+- **As ferramentas instaladas pelo Matheus** (configuração persistente é dele, SA-5 da `docs/TAREFA_V2_SAUDE.md`): o plugin
+  `frontend-design` (`/plugin install frontend-design@claude-plugins-official`), o shadcn MCP (`npx shadcn@latest mcp init --client claude`)
+  e o Playwright MCP (`npx @playwright/mcp@latest`, declarado só no frontmatter do testador). Nesta sessão nenhum dos três foi conferido
+  como instalado.
+- **As decisões UX-1 a UX-8** (seção 8).
+
+## 3. Mudança mínima
+
+Esta etapa é só papel: este documento e `docs/PROPOSTAS_V3_UX_TELA_PET.md`. **Nada em `web/app/`, `.claude/`, `digilab/` ou
+`experiments/` muda neste PR.** As seções abaixo descrevem o que as etapas seguintes criam.
+
+### 3.1 O fluxo
+
+```
+Matheus ─ pedido ─▶ Gerente da frente (sessão principal, Opus; a única que fala com o Matheus e abre o PR)
+                         │
+       ┌─────────────────┼──────────────────────────────┬──────────────────────────┐
+       ▼                 ▼                              ▼                          ▼
+  ux-designer      ux-implementador               ux-browser-tester          rev-replay · rev-a11y · rev-cena
+  (plano em        (código só com os              (sobe o servidor, roda     (só leitura, uma lente cada,
+   texto, depois    componentes do projeto)        e2e e capturas; devolve    sem ver a conversa)
+   a prancha)                                      só falhas e diffs)
+       │                 │                              │                          │
+       └── Matheus aprova o plano e a prancha ──▶ código ──▶ hooks no Stop ──▶ testador ──▶ revisores ──▶ PR
+                                                                                     │
+                                       capturas novas ─▶ D:\Trab\digilab\capturas_ux_pet_aprovar\ ─▶ Matheus aprova ─▶ --update-snapshots
+```
+
+A ordem é a da B3 e do HUD: **plano → prancha → ok do Matheus → código**. Um escritor por vez em `web/app/src/` (o implementador); os
+outros só leem ou só rodam comandos.
+
+### 3.2 Os papéis (os arquivos `.claude/agents/*.md`, criados na etapa A2)
+
+O limite de cada papel é imposto pelo harness (o campo `tools` do frontmatter e os hooks do agente), não pedido no prompt. O frontmatter
+segue a documentação dos subagentes (`name`, `description`, `tools`, `disallowedTools`, `model`, `mcpServers`, `hooks`, `maxTurns`).
+
+#### `ux-designer` — o plano de design em texto, antes de qualquer código
+
+- **Modelo:** Opus (desenho é incerteza; CLAUDE.md, "Escolha de modelo").
+- **Ferramentas:** `Read, Grep, Glob, Write, Skill` (a skill `frontend-design`). Sem `Edit` em código, sem `Bash`.
+- **Hook do agente:** `PreToolUse` em `Write` com o `h8_escopo.py designer`: só escreve em `docs/pranchas/ux-pet/` e em
+  `docs/PROPOSTAS_V3_UX_TELA_PET.md`; fora disso, código 2.
+- **Entrega:** para cada proposta, o plano em texto no formato da seção 0 do `docs/PROPOSTAS_V3_UX_TELA_PET.md` (o objetivo do jogador,
+  a hierarquia, o que fica sempre visível, o que aparece por gesto, as cores pelos tokens, o wireframe ASCII a 1920×950 e a 390, o custo
+  em determinismo e em e2e). Depois do ok do plano, a prancha HTML em `docs/pranchas/ux-pet/` no padrão de `docs/pranchas/b3/`
+  (`gerar.py`, `capturar.sh`, `*.css`, capturas nas duas peles).
+- **Como o plugin entra:** o `frontend-design` pede um plano com 4 a 6 cores hex, tipografia, wireframe ASCII e uma revisão contra o
+  pedido antes de codar. **Aqui o `UI_GUIDELINES.md` vence o plugin** (o guia diz que vale sobre a prancha, seção 0): nenhuma cor hex
+  nova, só os tokens `--dl-*`, `--hx-*` e a paleta `--hud-*` do HUD-5; nenhuma fonte fora da seção 4.2; a semântica fixa da seção 3. A lista
+  de anti-padrões do plugin vira checklist do revisor, somada à seção 14 do guia.
+- **Proibido:** dado que o motor não tem (princípio 1 do guia; a prancha do HUD tinha "3 dias" de idade, que saiu); número de jogo novo.
+
+#### `ux-implementador` — o código, só com os componentes do projeto
+
+- **Modelo:** Sonnet (escopo claro depois da prancha aprovada).
+- **Ferramentas:** `Read, Grep, Glob, Edit, Write, Bash` e o shadcn MCP.
+- **O registro de componentes:** o `web/app/components.json` (shadcn, estilo new-york, ícones lucide) só tem `ui/button.tsx`; o kit de
+  verdade da tela Pet é o `src/componentes/hx/` (`PainelHx`, `MedidorHx`…) e as classes `hx-*`, `hud-*` e `dl-*`. Para o shadcn MCP
+  enxergar esse kit, a etapa A2 cria um registro local (`web/app/registry.json`, com os `hx/*` e o `ui/button`) e o `components.json`
+  fica sem registro público. **Componente novo de registro público só com o ok do Matheus** (UX-4).
+- **Hook do agente:** `PreToolUse` em `Edit|Write|MultiEdit` com o `h8_escopo.py implementador`: nega `web/app/motor/`,
+  `web/app/test/gabaritos/`, `web/app/src/save.ts`, as rotas e o hash (`web/app/src/rotas.ts`), `digilab/`, `experiments/`, `servidor/` e qualquer pasta de capturas (seção 3.3, H6).
+- **Entrega:** o diff e a lista dos arquivos tocados; roda `npm run tipos` e `npm test` antes de devolver (o hook H5 confere de novo).
+
+#### `ux-browser-tester` — o navegador isolado, sem escrita
+
+- **Modelo:** Haiku ou Sonnet: rodar é mecânico; a triagem do diff (abaixo) é a parte que pensa. Se a triagem errar duas vezes no mesmo
+  PR, escala para Sonnet (CLAUDE.md, "Escalar o modelo").
+- **Ferramentas:** `Read, Grep, Glob, Bash`. **`disallowedTools: Edit, Write, MultiEdit, NotebookEdit`.**
+- **`mcpServers`:** o Playwright MCP declarado no próprio frontmatter, de modo que as ferramentas de navegador só existem dentro dele; a
+  sessão principal nunca as carrega.
+- **Hook do agente:** `PreToolUse` em `Bash|PowerShell` com o `h8_escopo.py testador`: só a lista `npm run build`, `npm run e2e`,
+  `npm run capturas`, `npx playwright test …` **sem** `--update-snapshots`/`-u`, e leitura (`ls`, `cat`, `git diff`). Qualquer outro
+  comando, código 2. Isso fecha o buraco do `Bash` escrevendo arquivo.
+- **O que faz:** sobe o servidor pelo `webServer` do `playwright.config.ts` (o `servidor/servidor_local.py --provedor nenhum`, porta
+  `DIGILAB_PORTA_E2E`, uma por worktree para não brigar com outra frente na 8799), roda o e2e e as capturas (`DIGILAB_CAPTURAS_LARGURAS`
+  com 390 e 1920, as duas peles por `DIGILAB_CAPTURAS_PELE`), com o relógio falso de sempre (`page.clock.install` + `pauseAt` + `runFor`,
+  como o `e2e_capturas/telas.spec.ts`). Três workers mais o servidor: quatro processos (V3-D8).
+- **O que devolve, e só isso:** os testes que falharam (nome, largura, pele), o caminho de cada `*-actual.png`, `*-expected.png` e
+  `*-diff.png`, o número de pixels diferentes, os trechos de console e `pageerror`, e **a classificação de cada diff** em uma de três:
+  `provável bug` (texto sobreposto, sprite esticado ou fora da escala inteira, alvo menor que 44 px, elemento cortado), `mudança
+  pretendida` (bate com a prancha aprovada) ou `ruído` (o caso da GPU já documentado, que vai para o projeto `software`). **A
+  classificação não aprova nada:** o diff continua reprovando o teste.
+
+#### Os revisores, só leitura, uma lente cada
+
+`tools: Read, Grep, Glob`. Cada um recebe o diff, a prancha aprovada e o plano de design; **não recebe a conversa** (o "revisor virgem").
+Instrução comum: sem estilo; cada achado com arquivo:linha, o cenário que falha e a evidência (comando e saída, ou captura); achado sem
+isso o Gerente descarta (o filtro do `/code-review`). Rodam em paralelo depois do testador.
+
+| agente | modelo | a lente | o que confere, no mínimo |
+|---|---|---|---|
+| `rev-replay` | Opus | o determinismo do replay | nada em `src/` altera o motor fora de `mudarMotor()`; nenhum `Math.random`, `Date.now` ou `performance.now` chega ao estado do pet (hoje eles existem só na apresentação: `PalcoPet.tsx`, `MundoReserva.tsx`, e o `Math.random` de `jogo.ts`, `lab.ts`, `heranca.ts`, `jornada.ts`, `som.ts`, que este revisor lê e diz se é vista ou estado); preferência de tela em chave própria do `localStorage` (como `-hud`, `-hud-arraste`, `-detalhes-pet`), nunca no save; `git diff origin/main -- web/app/test/gabaritos/ web/app/motor/` vazio; o `motor_sem_dom` passa |
+| `rev-a11y` | Sonnet | a acessibilidade | a seção 13 e a 7 do guia: alvo ≥ 44×44, foco visível com o anel, ordem de tabulação igual à visual, `aria-label` em botão só com ícone, `aria-expanded`/`aria-controls` nos que abrem, nada importante só no hover nem só num gesto sem equivalente de teclado, `prefers-reduced-motion` e `prefers-reduced-transparency`, contraste medido (o padrão do `hx_pele.test.ts`, sobre o pior pixel da cena), zoom a 200 % |
+| `rev-cena` | Sonnet | o desempenho da cena | o three.js só entra pelo `cena3d.ts` por `import()` (`ilha_fronteira.test.ts`); o `Habitat` não remonta ao trocar de rota; o `CENA.coberto` segue o véu; o HUD não re-renderiza a cada quadro; `backdrop-filter` do Vidro sobre o canvas WebGL (custo por área); a medida da M3 com `?medir3d=1` antes e depois, no desktop e num celular |
+
+### 3.3 Os hooks (o gate que não depende do modelo)
+
+Ficam em `.claude/hooks/` no padrão dos H1 a H4 (Python, só biblioteca padrão, o `_comum.py` para ler o evento e bloquear) e entram como
+proposta em `docs/propostas/hooks_ux_settings.json`; **só o Matheus os liga** em `.claude/settings.json` (SA-5).
+
+| hook | evento e matcher | o que faz | código |
+|---|---|---|---|
+| **H5 `h5_web.py`** | `Stop` | se o diff da worktree (contra o `merge-base` com `origin/main`, mais o não commitado) toca `web/app/src/`, `web/app/e2e*/`, `web/app/test/` ou `web/app/motor/`: roda `npm run tipos`, `npm test` e `npm run e2e` em `web/app`. Em falha, devolve o turno com o resumo (os nomes dos testes que falharam, não o log inteiro) | 2 em falha. Como o H2: **não bloqueia duas vezes pelo mesmo motivo** (`stop_hook_active` ou a mesma assinatura de falha, guardada na pasta temporária, por sessão), senão um teste quebrado prende a sessão |
+| **H6 `h6_capturas.py`** | `PreToolUse`, `Edit\|Write\|MultiEdit\|NotebookEdit` e `Bash\|PowerShell` | nega escrever, mover ou apagar em qualquer pasta `*-snapshots/` **e na pasta das referências do portão**, que fica fora do git (`DIGILAB_CAPTURAS`, padrão `artifacts_v2_front_react/capturas/`, o `snapshotPathTemplate` do `playwright.capturas.config.ts`). Num comando de shell com `--update-snapshots` ou `-u` do Playwright, pede a aprovação na hora (a decisão `ask`, como o H3): é o único caminho para trocar uma referência | 2 (negar) nas edições; `ask` no `--update-snapshots` |
+| **H8 `h8_escopo.py <papel>`** | `PreToolUse`, no frontmatter de cada agente (não no `settings.json`) | o escopo de escrita de cada papel (seção 3.2) | 2 fora do escopo |
+
+O H7 fica livre de propósito (o número não importa; a numeração seguiu a ordem em que os hooks foram pensados).
+
+**O custo do H5:** o `npm run e2e` faz o build e roda todo o `e2e/` com três workers. A duração não foi medida nesta sessão (SEM MEDIDA);
+a etapa A1 mede três vezes e grava no registro. Se passar de ~10 min por turno, a UX-3 decide entre o e2e inteiro e só os specs da tela
+Pet (`jogo.spec.ts`, `vida_pet_cena.spec.ts`, `sprites_comer.spec.ts`) no `Stop`, com o inteiro só antes do PR. O CI do PR não roda o
+`npm test` nem o e2e (`GUIA_OPERACIONAL.md`, seção 3): hoje é o Gerente que roda na junção; com o H5, o turno do agente também.
+
+### 3.4 As etapas que vêm depois deste PR
+
+| etapa | o quê | arquivos | categoria |
+|---|---|---|---|
+| A0 | restaurar H1 a H4 (o card que já existe) | `.claude/hooks/`, `docs/propostas/hooks_settings.json` | implementacao (outra tarefa) |
+| A1 | H5, H6 e H8, desligados; casos novos no `tests/test_hooks.py` (o evento no stdin, o código de saída); a duração do H5 medida | `.claude/hooks/h5_web.py`, `h6_capturas.py`, `h8_escopo.py`, `docs/propostas/hooks_ux_settings.json`, `tests/test_hooks.py` | implementacao |
+| A2 | os seis agentes e o registro local do shadcn | `.claude/agents/ux-designer.md`, `ux-implementador.md`, `ux-browser-tester.md`, `rev-replay.md`, `rev-a11y.md`, `rev-cena.md`; `web/app/registry.json` | implementacao |
+| P1 | a proposta escolhida vira prancha (o designer) e, com o ok, código (o implementador), testada e revista pelos outros | `docs/pranchas/ux-pet/`, depois `web/app/src/telas/pet/`, `web/app/src/estilo/pet_hud.css`, `pet_dock.css`, `web/app/e2e/` | papel, depois implementacao |
+
+A ordem entre A e P é a UX-2.
+
+## 4. Experimento e gate (se houver run)
+
+Não há run de pesquisa. Os gates são de regressão e visuais:
+
+- **G-PIXEL:** o e2e pixel a pixel continua o gate (`toHaveScreenshot` com `threshold: 0` e `maxDiffPixels: 0`, o relógio pausado, uma
+  nova tentativa só para o ruído de GPU já conhecido). Nenhum agente afrouxa esses números.
+- **G-VISAO:** o modelo de visão só **classifica** o diff (provável bug, mudança pretendida, ruído) e escreve o resumo; nunca aprova,
+  nunca troca uma referência e nunca transforma uma reprovação em aprovação.
+- **G-REFERENCIA:** uma referência só muda com a aprovação do Matheus: as capturas novas vão para `D:\Trab\digilab\capturas_ux_pet_aprovar\`
+  (fora do git, como o `capturas_hud_aprovar`), o Matheus aprova no chat, e só então o `--update-snapshots` roda, pelo pedido `ask` do H6.
+- **G-REPLAY:** `git diff origin/main -- web/app/motor/ web/app/test/gabaritos/` vazio; a paridade e o `motor_sem_dom` passam sem regravar
+  nada.
+- **G-HOOKS-UX:** cada hook novo tem caso no `tests/test_hooks.py` (o padrão do G-HOOKS da rodada de saúde).
+
+## 5. Entrega
+
+**Esta etapa (papel):** este documento e o `docs/PROPOSTAS_V3_UX_TELA_PET.md`. Um PR de categoria arquitetura contra a `main`, com o corpo
+no modelo `.github/pull_request_template.md`, conferido por `python tools/verificar_relato.py`. O merge é só do Matheus.
+
+**Nas etapas seguintes:** `npm run tipos`, `npm test` e `npm run e2e` em `web/app` (no máximo 4 processos); `python -m pytest
+tests/test_hooks.py -q` na A1; o desvio, se houver, numa seção no fim de `docs/registro/2026-11.md` com a linha no índice
+`docs/REGISTRO_DESVIOS.md`; o resumo da etapa no fim deste documento e no corpo do PR.
+
+## 6. Fora desta tarefa
+
+- O motor (`web/app/motor/`, `digilab/`), o save, as rotas e o hash, os eventos do log, os gabaritos, as versões de pet.
+- Qualquer número de jogo, inclusive os limiares do HUD transitório (`AVISO_MS`, `FOME_FALA`, `FOME_EMOTE`, PROPOSTOS na `TAREFA_V3_LAYOUT_HUD.md`).
+- A restauração dos H1 a H4 (A0, o card que já existe).
+- As outras telas (Crescer, Lutar, Diário, Conversar, Ajustes) e a luta (B3, já na `main`).
+- O histórico de motivos: o motor só guarda o motivo da decisão de agora (`Motor.motivo`, `MotivoVida`); o `historico` não tem causa. Uma
+  fita de "por quês" passados precisaria de mudança no motor e fica fora.
+- Os Playwright Test Agents: o planner e o generator podem ajudar a escrever e2e de interação numa etapa futura; **o healer fica proibido
+  nos testes de captura** (consertar seletor ou espera num teste pixel a pixel esconde regressão).
+
+## 7. Critérios de aceitação
+
+Desta etapa:
+
+- `docs/TAREFA_V3_UX_TELA_PET.md` e `docs/PROPOSTAS_V3_UX_TELA_PET.md` existem; `git diff --stat origin/main` só toca `docs/`.
+- As três propostas têm, cada uma: o objetivo do jogador, a hierarquia, o sempre visível, o que vem por gesto, as cores por token, os
+  wireframes a 1920×950 e a 390, o que muda na leitura do estado e o custo em determinismo e em e2e; uma trata a ilha como figura
+  principal, outra mostra o porquê sem abrir painel.
+- As decisões UX-1 a UX-8 estão na seção 8, cada uma com a recomendação e o custo de errar.
+- O `tools/verificar_relato.py` aceita o corpo do PR.
+
+Das etapas seguintes (para depois): os critérios de cada linha da seção 3.4 e os gates da seção 4.
+
+## 8. Precisa do Matheus
+
+| # | decisão | recomendação | custo de errar |
+|---|---|---|---|
+| **UX-1** | qual proposta vira prancha: **A** (a ilha na frente, o HUD recua), **B** (o porquê no balão, sem painel) ou **C** (as necessidades dentro dos botões) | **B, e depois o pedaço "faixa de vitais" da A.** A B é a que mais serve ao diferencial do jogo (princípio 2 do guia: o aprendizado visível), usa só dado que o motor já registra, muda pouco da tela de hoje (o balão e um chip) e fecha a pendência do e2e do porquê | B errada custa pouco: o balão volta ao de hoje. A errada desfaz a HUD-2 (a pilha aberta) e troca quase todas as capturas da tela Pet. C errada mexe no dock, que todo e2e de ação usa |
+| **UX-2** | a arquitetura de agentes entra **antes** ou **depois** da proposta escolhida | **antes, mas só A0 e A1 (os hooks)**; os agentes (A2) entram junto com a P1, que é o primeiro uso deles. Os hooks protegem a P1 desde o primeiro commit; agente sem tarefa real é configuração que ninguém testou | antes demais: dias de configuração sem tela nova. Depois: a P1 roda sem o H5 e o H6, e uma referência pode mudar sem a aprovação (o que o G-REFERENCIA quer impedir) |
+| **UX-3** | o H5 roda o e2e **inteiro** ou **só os specs da tela Pet** no `Stop` | **decidir depois da medida da A1**; se o inteiro passar de ~10 min, os da tela Pet no `Stop` e o inteiro antes do PR | inteiro e lento: cada fim de turno fica parado minutos, e a tentação é desligar o hook. Só os da Pet: uma regressão noutra tela passa até o PR |
+| **UX-4** | o implementador pode instalar componente de registro público do shadcn | **não**; só o registro local (`web/app/registry.json` com os `hx/*`); um componente público novo vem como pergunta | sim: componentes "parecidos mas diferentes" do kit `hx-*`, e duas peles para manter. Não: algum componente pronto (um popover acessível) é escrito à mão |
+| **UX-5** | ligar os hooks H5, H6 e H8 (configuração persistente, sua) | **ligar H6 e H8 assim que a A1 passar; o H5 depois da UX-3** | H6 desligado: a referência pode ser regravada por um agente. H5 ligado cedo demais: turnos lentos |
+| **UX-6** | instalar o plugin `frontend-design`, o shadcn MCP e o Playwright MCP | **sim, os três**, o Playwright MCP só no frontmatter do testador | sem eles, os papéis caem para prompt puro, e o limite deixa de ser do harness |
+| **UX-7** | o testador classifica o diff com o próprio modelo ou um agente separado para isso | **o próprio testador**, com a regra de que a classificação não aprova | separado: mais um agente e mais tokens; o próprio: o mesmo modelo que roda pode querer "explicar" a falha. A regra do G-VISAO segura os dois casos |
+| **UX-8** | onde ficam as capturas para aprovar | **`D:\Trab\digilab\capturas_ux_pet_aprovar\`, fora do git**, como o HUD e a M7 | dentro do git: o repositório cresce com PNGs e o `.gitignore` do atlas fica ambíguo |
+
+### 8.1 Decididas
+
+Matheus, 2026-11-05, nesta sessão (resposta "B, hooks antes"):
+
+- **UX-1: a proposta B** ("O porquê no balão") vira a prancha da P1. A faixa de vitais da A fica como passo seguinte possível, sem
+  decisão; a C fica de fora por ora.
+- **UX-2: os hooks antes.** A ordem é A0 (restaurar os H1–H4 apagados no `2586b0e`) → A1 (H5, H6 e H8, desligados, com testes) → P1
+  (a prancha da B em `docs/pranchas/ux-pet/`, para o ok do Matheus antes de qualquer código), com os agentes (A2) entrando junto da P1.
+
+UX-3 a UX-8 continuam PROPOSTAS.
+
+## 9. Etapa A0: os hooks restaurados (2026-11-05)
+
+Branch `v3-hooks-a0`, empilhada sobre a `v3-ux-tela-pet`. `.claude/hooks/` (seis arquivos) e `.claude/settings.json` voltam iguais aos de
+`2586b0e^`, por `git checkout`, sem edição à mão. Com o merge, voltam a valer o H1, o H1b e o H3, que o Matheus ligou em 2026-10-14; o H2 e o
+H4 seguem desligados. O Matheus decidiu religar os três (2026-11-05, "Sim, religar"). `python -m pytest tests/test_hooks.py tests/test_hook_h4.py tests/test_conferir_saude.py -q`: 68 passed (antes, 43
+failed e 25 passed). Próxima: a A1.
