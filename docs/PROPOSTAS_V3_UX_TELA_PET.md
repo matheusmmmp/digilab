@@ -695,7 +695,7 @@ Só o que o motor (ou a vista que já existe) tem. Os lugares da L2/L3 (o portã
 | `Utensils` | o comedouro | `Mundo.comedouro` (`motor/mundo.ts`), `LayoutMundo.comedouro` `[10, 15]` (`motor/constantes.ts:406`) |
 | `Dumbbell` | o saco de pancada | **só da vista**: `Itens.sacoEm` = ninho + `SACO_DESDE_NINHO` (`ilha/itens.ts:217`, `ilha/constantes.ts:56`); é o lugar da L2 |
 | `Volleyball` | a bola | `Mundo.bola` (`motor/mundo.ts`), a desenhada (`Itens.bolaDesenhada`) |
-| ponto verde-escuro | as árvores de fruta do layout (J1–J3, M1–M6) | `Mundo.arvores` (`motor/mundo.ts`), `LayoutMundo.arvores` (`motor/constantes.ts:407-409`) |
+| ponto verde-escuro | as árvores de fruta do motor (J1–J3, M1–M6 no layout padrão; o layout MVP dos pets v13+ não tem nenhuma, `motor/constantes.ts:450`) | `Mundo.arvores` (`motor/mundo.ts`), `LayoutMundo.arvores` (`motor/constantes.ts:407-409`) |
 | ponto da cor da comida | ração e fruta no chão | `Mundo.comidas` (`motor/mundo.ts`); as cores são as da cena (`COR_RACAO`, `COR_FRUTA`, `ilha/itens.ts:22-24`) |
 | — | o cocô e o kit médico | **fora**: são enfeites da vista (`cocos.ts`, `itens.ts`), e encheriam a casa de pontos (pergunta L1-4) |
 
@@ -816,3 +816,10 @@ do jogo), e o minimapa é a ilha de verdade, gerada da grade (`ilha_json.mts` e 
 | L1-5 | os atalhos a mais: Q/E giram, +/− aproximam, as setas e o Enter no minimapa com foco | **sim**: o guia 13 pede teclado para tudo, e hoje o giro e o zoom só têm mouse | conflito com algum atalho: Q, E, + e − não têm uso no app hoje |
 | L1-6 | a etiqueta do DigiBrain vira a 4ª linha da pilha da direita | **sim** | só a linha do agora: uma peça a menos, mas o DigiBrain fica escondido para quem não sabe que a linha abre |
 | L1-7 | os números: o círculo de 232 px, a câmera a 12 células/s no WASD, o "seguir" a partir de 6 células, a transição de 400 ms | **PROPOSTO, SEM FONTE**, para ajustar depois, na mão | só vista; nenhum número de jogo |
+
+### As decisões (o Matheus, 2026-11-06)
+
+A prancha e as sete recomendações foram aprovadas ("Aprovado, seguir"): **L1-1** a ilha inteira, com a roda sobre o minimapa aproximando
+até a janela em volta da câmera; **L1-2** o pet rosa com o anel claro; **L1-3** com a câmera "Fixa" o minimapa aparece, sem mover a
+câmera; **L1-4** o cocô e o kit médico fora; **L1-5** Q/E, +/− e as setas e o Enter no minimapa; **L1-6** o DigiBrain como a 4ª linha da
+pilha; **L1-7** os números como PROPOSTO, SEM FONTE.

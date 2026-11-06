@@ -207,6 +207,8 @@ export class Itens {
   private golpeSaco: { em: number; eixo: THREE.Vector3 } | null = null;
   /** onde fica o saco de pancada (celulas) */
   readonly sacoEm: [number, number];
+  /** onde fica o ninho (celulas), para o minimapa */
+  readonly ninhoEm: [number, number];
 
   constructor(mu: Mundo) {
     const sub = (this.sub = mu.cm.sub), [nx, ny] = ninhoDe(mu.cm), n = ninho(), t = tigela();
@@ -214,6 +216,7 @@ export class Itens {
     t.position.set(mu.comedouro[0] / sub, 0, mu.comedouro[1] / sub);
     this.brilho.position.set(nx / sub, 0.05, ny / sub);
     this.brilho.visible = false;
+    this.ninhoEm = [nx / sub, ny / sub];
     this.sacoEm = [nx / sub + SACO_DESDE_NINHO[0], ny / sub + SACO_DESDE_NINHO[1]];
     this.saco.g.position.set(this.sacoEm[0], 0, this.sacoEm[1]);
     this.kit.position.set(nx / sub + KIT_DESDE_NINHO[0], 0, ny / sub + KIT_DESDE_NINHO[1]);
@@ -221,6 +224,22 @@ export class Itens {
     this.kit.visible = false;
     this.raiz.add(n, t, this.bola.g, this.brilho, this.saco.g, this.kit, this.cocos.raiz);
   }
+
+  /** a comida no chao para o minimapa (L1 de "Lugares da ilha"): onde (celulas) e a cor que a cena pinta (a racao madura ou podre, a fruta
+      pelo tipo); a mesma regra de sincronizar (a situacao do motor; sem situacao, nao esta no chao) */
+  comidasNoMapa(mu: Mundo, tick: number): { x: number; z: number; cor: number }[] {
+    const r: { x: number; z: number; cor: number }[] = [], sub = this.sub;
+    for (const c of mu.comidas.values()) {
+      const sit = mu.situacao(c, tick);
+      if (sit === null) continue;
+      const cor = c.tipo === "racao" ? COR_RACAO[sit === "podre" ? "podre" : "madura"][1] : COR_FRUTA[c.tipo];
+      if (cor === undefined) throw new Error("fruta sem cor no minimapa: " + c.tipo);
+      r.push({ x: c.x / sub, z: c.y / sub, cor });
+    }
+    return r;
+  }
+  /** onde a bola esta desenhada (celulas); null antes do primeiro quadro */
+  get bolaCelula(): [number, number] | null { return this.bolaCel; }
 
   /** onde a bola esta desenhada (subunidades do mapa), para pegar a bola na cena (PorBola.tsx); null antes do primeiro quadro */
   get bolaDesenhada(): [number, number] | null { return this.bolaCel && [this.bolaCel[0] * this.sub, this.bolaCel[1] * this.sub]; }

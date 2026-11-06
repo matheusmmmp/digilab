@@ -6,6 +6,8 @@
    - o contrato CENA (cenaEstado.ts) fica igual: ret (o retangulo do pet em px de CSS, para o PalcoPet), medir (a M3), e mundo.paraMundo,
      paraTela e pet, que passam pela mesma dobra do shader (curva.ts, regra 6);
    - o dia e a noite do motor (eNoite) escurecem o ceu, a nevoa, a luz e a agua;
+   - a camera solta (cameraLivre.ts, L1 de "Lugares da ilha"): a partir de 900 px e com o controle "Livre", a camera olha um ponto que
+     pode sair do pet (o foco); a dobra e a camera centram nele, e a vista publica a cada quadro o que o minimapa e a HUD leem;
    - a coreografia (docs/TAREFA_V3_HABITAT_OBJETOS.md): pedido um treino (CENA.treino), o pet desenhado vai ao saco de pancada, bate e
      volta (TREINO_MS); quando o motor rola a bola (uma rolagem nova no Mundo), o pet da um golpe nela. So o desenho: a posicao do motor,
      o ganho do treino e o log nao mudam.
@@ -21,11 +23,13 @@ import { AFASTAR_MAX, BATER_BOLA_MS, CAMERAS, COBERTO_MS, GOLPE_DIST, GOLPE_MS, 
   RAZAO_MAX, TEXEL_ALVO, TREINO_MS, type CameraHabitat } from "./constantes.ts";
 import { CURVA, type CenaIlha, type Objetos } from "./cena.ts";
 import { estiloDe, type Estilo } from "./estilos.ts";
-import { paraMundoCel, paraTelaNdc, type CameraLida, type Dobra } from "./curva.ts";
+import { dobrarY, paraMundoCel, paraTelaNdc, type CameraLida, type Dobra } from "./curva.ts";
 import { ilhaDe, type Ilha } from "./grade.ts";
 import { Itens } from "./itens.ts";
 import { Papel, type Ret } from "./papel.ts";
 import { ORBITA, aplicarOrbita, ligarControles, recentrar } from "../orbita.ts";
+import { CONSULTA_SOLTA, VISTA, despublicarVista, focoDoQuadro, ligarCameraLivre, publicarVista, type Limites, type MapaDaIlha } from "../cameraLivre.ts";
+import { pixelsDoMapa } from "./minimapa.ts";
 import { PRESETS, Pos } from "./pos.ts";
 
 const movimentoReduzido = (): boolean => matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -51,6 +55,13 @@ class VistaIlha {
   private noite: boolean | null = null;
   private ultimo = performance.now();
   private petCel: [number, number] = [0, 0];
+  /** o ponto que a camera olha (celulas): o pet, ou outro com a camera solta (cameraLivre.ts) */
+  private foco: [number, number] = [0, 0];
+  private readonly dirCam = new THREE.Vector3();
+  /** a ilha vista de cima e os limites do foco, para o minimapa (feitos uma vez) */
+  private readonly mapa: MapaDaIlha;
+  private readonly limites: Limites;
+  private readonly consultaSolta = typeof matchMedia === "function" ? matchMedia(CONSULTA_SOLTA) : null;
   /** o treino na ilha: o pedido (CENA.treino) que esta tocando, quando comecou, o ponto em que o pet para para bater (ao lado do saco
       na tela) e o ultimo golpe que balancou o saco */
   private treino: { pedido: number; desde: number; ponto: [number, number]; golpe: number } | null = null;
@@ -94,7 +105,13 @@ class VistaIlha {
     this.itens = new Itens(mu);
     this.cenaIlha.cena.add(this.itens.raiz, this.papel.raiz);
     CURVA.uVento.value = 1;
+    const il = this.ilha;
+    this.mapa = { imagem: new ImageData(pixelsDoMapa(il, this.estilo.paleta), il.larg, il.prof), x0: il.x0, z0: il.z0, larg: il.larg, prof: il.prof, area: il.area };
+    this.limites = { x0: il.x0, z0: il.z0, x1: il.x0 + il.larg, z1: il.z0 + il.prof };
   }
+
+  /** a camera pode soltar agora: o controle "Livre" e a largura do desktop */
+  get podeSoltar(): boolean { return habitatAtual().controle === "livre" && !!this.consultaSolta?.matches; }
 
   /** os modelos do estilo (na ilha, os kits de public/kits3d) entram depois do terreno */
   async carregarObjetos(): Promise<void> {
@@ -105,8 +122,8 @@ class VistaIlha {
     if (this.baixa) this.menosGrama();
   }
 
-  /** a dobra de agora: centrada no pet desenhado, ao longo da direcao em que a camera olha no chao */
-  private get dobra(): Dobra { return { k: this.estilo.dobra, focoX: this.petCel[0], focoZ: this.petCel[1], dir: this.dirDobra }; }
+  /** a dobra de agora: centrada no ponto olhado (o pet desenhado, ou o foco da camera solta), ao longo da direcao em que a camera olha no chao */
+  private get dobra(): Dobra { return { k: this.estilo.dobra, focoX: this.foco[0], focoZ: this.foco[1], dir: this.dirDobra }; }
   /** a camera com a orbita (orbita.ts): o deslocamento e o ponto olhado em relacao ao pet; a fixa e a do habitat */
   private orbitaVista = { desloc: [0, 0, 0] as [number, number, number], olhar: [0, 0, 0] as [number, number, number], elevacao0: 0 };
   private orbitaVersao = -1;
@@ -223,7 +240,9 @@ class VistaIlha {
     const cor = this.coreografia(mu, agora, [pos[0] / sub, pos[1] / sub], reduzido);
     this.petCel = cor.cel;
     this.atualizarOrbita();
-    const [px, pz] = this.petCel, a = this.afast;
+    const pode = this.podeSoltar;
+    this.foco = focoDoQuadro(this.petCel, agora, dtMs, this.dirDobra, this.limites, pode);
+    const [px, pz] = this.foco, a = this.afast;
     const { desloc, olhar } = this.orbitaVista;
     this.camera.position.set(px + desloc[0] * a, desloc[1] * a, pz + desloc[2] * a);
     this.camera.lookAt(px + olhar[0] * a, olhar[1] * a, pz + olhar[2] * a);
@@ -234,15 +253,52 @@ class VistaIlha {
     const noite = eNoite(m.e.tick % TPD);
     if (noite !== this.noite) { this.noite = noite; this.cenaIlha.aplicarNoite(noite); }
     this.itens.sincronizar(mu, m.e.tick, noite, agora, dtMs, m.lesionadoDesde !== null, reduzido, m.e.sujeira, this.petCel);
+    /* com a camera solta, o pet fica longe do foco: o chao sob ele desce pela dobra, e o tamanho do papel vale na distancia dele (senao o
+       texel deixa de ser inteiro e o pet cresce ou encolhe com a distancia ao foco) */
+    let ppu = this.ppu, pxPorTexel = this.pxPorTexel, yChao = 0;
+    if (this.petCel[0] !== px || this.petCel[1] !== pz) {
+      yChao = dobrarY(0, this.petCel[1], this.dobra, this.petCel[0]);
+      const dir = this.camera.getWorldDirection(this.dirCam), prof = (this.petCel[0] - this.camera.position.x) * dir.x
+        + (yChao - this.camera.position.y) * dir.y + (this.petCel[1] - this.camera.position.z) * dir.z;
+      if (prof > 1e-3) {
+        ppu = this.renderer.domElement.height / 2 / (prof * Math.tan(THREE.MathUtils.degToRad(this.cam.fov / 2)));
+        pxPorTexel = Math.max(1, Math.round(TEXEL_ALVO * ppu));
+      }
+    }
     const ret = this.papel.atualizar({
       agora, dt: Math.min(0.05, dtMs / 1000), quadro, cel: this.petCel, motor: mu.pet, camera: this.camera,
-      ppu: this.ppu, pxPorTexel: this.pxPorTexel, canvas: [this.renderer.domElement.width, this.renderer.domElement.height],
+      ppu, pxPorTexel, yChao, canvas: [this.renderer.domElement.width, this.renderer.domElement.height],
       razao: this.renderer.getPixelRatio(), reduzido, noite, golpe: cor.golpe, andandoVista: cor.andando,
     });
     /* o foco do HD-2D: a altura do pet na tela (0 embaixo, 1 em cima) */
     this.renderer.info.reset();
     this.pos.desenhar(this.cenaIlha.cena, this.camera, PRESETS[habitatAtual().visual], 1 - (ret.y + ret.h * 0.6) / this.alturaCss);
+    this.publicar(mu, m.e.tick, ret, pode);
     return ret;
+  }
+
+  /** o que o minimapa e a HUD leem (cameraLivre.ts): o foco, o pet, a vista, os lugares, a comida, e se o pet saiu da tela e para que lado */
+  private publicar(mu: Mundo, tick: number, ret: Ret, pode: boolean): void {
+    /* abaixo de 900 px nada le o minimapa nem o resumo: sem alocar por quadro (o celular), e o que estava publicado sai uma vez */
+    if (!this.consultaSolta?.matches) { if (VISTA.atual) despublicarVista(); return; }
+    const [fx, fz] = this.dirDobra, [ox, oz] = this.foco, [px, pz] = this.petCel, sub = mu.cm.sub;
+    const { desloc } = this.orbitaVista, a = this.afast;
+    /* o pet atras da camera (no chao) ou com o desenho fora do canvas: fora da tela */
+    const atras = (px - (ox + desloc[0] * a)) * fx + (pz - (oz + desloc[2] * a)) * fz < 0;
+    const cx = ret.x + ret.w / 2, cy = ret.y + ret.h / 2;
+    const fora = atras || cx < 0 || cx > this.larguraCss || cy < 0 || cy > this.alturaCss;
+    /* o lado: o pet no plano da vista (a direita e a frente girada 90 graus) */
+    const dx = px - ox, dz = pz - oz, lado = dx * -fz + dz * fx, frente = dx * fx + dz * fz;
+    const meia = Math.atan(Math.tan(THREE.MathUtils.degToRad(this.cam.fov / 2)) * this.camera.aspect);
+    publicarVista({
+      foco: [ox, oz], pet: [px, pz], bola: this.itens.bolaCelula, frente: [fx, fz], meiaAbertura: meia,
+      comidas: this.itens.comidasNoMapa(mu, tick), ninho: this.itens.ninhoEm, comedouro: [mu.comedouro[0] / sub, mu.comedouro[1] / sub], saco: this.itens.sacoEm,
+      /* as arvores de fruta do motor (o layout MVP dos pets v13+ nao tem nenhuma; as arvores da ilha sao enfeite da vista) */
+      arvores: mu.arvores.map(t => [t.x / sub, t.y / sub] as [number, number]),
+      petFora: fora, lado: Math.abs(lado) >= Math.abs(frente) ? (lado > 0 ? "direita" : "esquerda") : (frente > 0 ? "cima" : "baixo"),
+      pxPorCelula: this.ppu / this.renderer.getPixelRatio(), senoElevacao: Math.abs(desloc[1]) / (Math.hypot(desloc[0], desloc[1], desloc[2]) || 1),
+      mapa: this.mapa, limites: this.limites,
+    }, true, pode);
   }
 
   dispose(): void { this.papel.dispose(); this.pos.dispose(); this.renderer.dispose(); }
@@ -272,6 +328,8 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
   canvas.addEventListener("webglcontextlost", perdeu);
   /* a camera livre (orbita.ts): a roda, o arrasto e a pinca na cena, com a opcao ligada em Ajustes */
   const soltarControles = ligarControles(() => habitatAtual().controle === "livre", () => vista.elevacao0);
+  /* a camera solta (cameraLivre.ts): o teclado e o arrasto direito/do meio, so no desktop com o controle "Livre" */
+  const soltarLivre = ligarCameraLivre(() => vista.podeSoltar, () => vista.elevacao0);
   let vivo = true, quadro = 0, pedido = 0;
   /* os kits: na hora, ou, se a ilha abriu coberta pelo veu, quando ela ficar a vista (no maximo KITS_COBERTO_MS) */
   let kitsPedidos = false;
@@ -345,7 +403,7 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
   return () => {
     vivo = false;
     cancelAnimationFrame(pedido); obs.disconnect(); if (esperaKits) clearTimeout(esperaKits); canvas.removeEventListener("webglcontextlost", perdeu);
-    soltarControles();
+    soltarControles(); soltarLivre(); despublicarVista();
     CENA.modo3d = false; CENA.cocoNoChao = false; CENA.ret = null; CENA.medir = null; CENA.mundo = null;
     vista.dispose();
   };

@@ -1,21 +1,26 @@
 /* Topo flutuante da casca (docs/TAREFA_V2_LAYOUT_HABITAT.md, M2), por cima do habitat em toda rota menos a luta em tela cheia: o retrato
    do pet (abre Meus pets), o logo, o relogio do jogo com o aviso de salvo e, so abaixo de 900 px, Conversar e Ajustes. O retrato, o
    relogio e o visual deles seguiam nos tokens --dl-*; desde o HUD (docs/TAREFA_V3_LAYOUT_HUD.md) a plaquinha e o relogio sao caixas
-   escuras chanfradas (estilo/pet_hud.css), no mesmo sistema dos menus. */
+   escuras chanfradas (estilo/pet_hud.css), no mesmo sistema dos menus. Com a camera solta da ilha (telas/pet/cameraLivre.ts), o retrato
+   volta a camera ao pet. */
 import { Cloud, CloudOff, MessageCircle, Moon, Settings, Sun } from "lucide-react";
 import { DO_ESP, NOME_ESP, NOME_EST, TPD, eNoite, nomeEstagio, nomeForma } from "../../motor/index.ts";
 import { BRASAO } from "../decoracao.ts";
 import { sairDoLab, useJogo } from "../jogo.ts";
 import { SeloExperimental } from "../telas/config/Laboratorio.tsx";
 import { Retrato, diaDe, hhmm } from "../telas/pet/TelaPet.tsx";
+import { seguirPet, useCameraLivre } from "../telas/pet/cameraLivre.ts";
 import { Deco } from "./Deco.tsx";
 
 export function TopoHabitat({ abrirMeusPets, irConversar, abrirConfig }: { abrirMeusPets: () => void; irConversar: () => void; abrirConfig: () => void }) {
-  const { motor: m, nascendo, erroSave, emLab } = useJogo(), ovo = nascendo > 0, e = m.e, noite = eNoite(e.tick % TPD);
+  const { motor: m, nascendo, erroSave, emLab } = useJogo(), ovo = nascendo > 0, e = m.e, noite = eNoite(e.tick % TPD), cam = useCameraLivre();
   return (
     <header className="topo-hab">
       <div className="topo-pet">
-        <button type="button" className="topo-retrato" aria-haspopup="dialog" aria-label="Meus pets" onClick={abrirMeusPets}><Retrato m={m} ovo={ovo} /></button>
+        {/* com a camera solta (L1 de "Lugares da ilha", so a partir de 900 px), um toque no retrato volta a camera ao pet, como o F; senao, Meus pets */}
+        {cam.solta
+          ? <button type="button" className="topo-retrato" aria-label="Seguir o pet" aria-keyshortcuts="F" onClick={() => seguirPet()}><Retrato m={m} ovo={ovo} /></button>
+          : <button type="button" className="topo-retrato" aria-haspopup="dialog" aria-label="Meus pets" onClick={abrirMeusPets}><Retrato m={m} ovo={ovo} /></button>}
         <span className="topo-pet-txt">
           <span className="topo-pet-nome"><b>{ovo ? "Digi-Egg " + DO_ESP[m.especie] : nomeForma(m.forma)}</b></span>
           <span className="topo-pet-sub"><span className="dl-tag dl-tag--estagio">{ovo ? NOME_EST.ovo : nomeEstagio(m.forma)}</span>

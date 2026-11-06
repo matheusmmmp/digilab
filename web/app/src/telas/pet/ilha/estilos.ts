@@ -6,7 +6,7 @@
      - cassette: as texturas e as arvores do Cassette Beasts (cassette.ts), so no dev.
    Os tres novos sao planos, como os POCs do #480 (a dobra e do estilo Animal Crossing). */
 import type { Mapa } from "../../../habitat.ts";
-import { montarCena, objetos, terreno, type CenaIlha, type Objetos } from "./cena.ts";
+import { PALETA_ILHA, montarCena, objetos, terreno, type CenaIlha, type Objetos, type PaletaTerreno } from "./cena.ts";
 import { arquivosCassette, carregadorCassette, terrenoCassette } from "./cassette.ts";
 import { DOBRA_K } from "./constantes.ts";
 import { PALETA_FLORESTA, arquivosFloresta, carregadorFloresta } from "./floresta.ts";
@@ -21,19 +21,22 @@ export interface Estilo {
   montar(ilha: Ilha): CenaIlha;
   /** os objetos da grade (podem baixar arquivos; falham alto se faltar um) */
   objetos(ilha: Ilha): Promise<Objetos>;
+  /** as cores do minimapa (ilha/minimapa.ts): a paleta do terreno do estilo; o Voxel e o Cassette, que pintam o terreno por outro
+      caminho, usam a da ilha (o mesmo layout, as mesmas regioes) */
+  readonly paleta: PaletaTerreno;
 }
 
 /** o estilo de um mapa; `base` e a URL da pagina (document.baseURI), de onde saem os caminhos dos kits */
 export function estiloDe(mapa: Mapa, base: string): Estilo {
   switch (mapa) {
-    case "ilha": return { id: mapa, dobra: DOBRA_K, montar: i => montarCena(i), objetos: i => objetos(i, base) };
-    case "voxel": return { id: mapa, dobra: 0, montar: i => montarCena(i, terrenoVoxel(i)), objetos: async i => objetosVoxel(i) };
+    case "ilha": return { id: mapa, dobra: DOBRA_K, paleta: PALETA_ILHA, montar: i => montarCena(i), objetos: i => objetos(i, base) };
+    case "voxel": return { id: mapa, dobra: 0, paleta: PALETA_ILHA, montar: i => montarCena(i, terrenoVoxel(i)), objetos: async i => objetosVoxel(i) };
     case "floresta": return {
-      id: mapa, dobra: 0, montar: i => montarCena(i, terreno(i, PALETA_FLORESTA)),
+      id: mapa, dobra: 0, paleta: PALETA_FLORESTA, montar: i => montarCena(i, terreno(i, PALETA_FLORESTA)),
       objetos: async i => objetos(i, base, await carregadorFloresta(base), arquivosFloresta),
     };
     case "cassette": return {
-      id: mapa, dobra: 0, montar: i => montarCena(i, terrenoCassette(i, base)),
+      id: mapa, dobra: 0, paleta: PALETA_ILHA, montar: i => montarCena(i, terrenoCassette(i, base)),
       objetos: async i => objetos(i, base, await carregadorCassette(base), arquivosCassette, false),
     };
   }
