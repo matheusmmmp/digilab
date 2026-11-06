@@ -1,7 +1,7 @@
 # TAREFA V3 — LUTA_EMPURRAO (2026-11-06)
 
 Coordenador: o Gerente da missão SPRITES_GERACAO (Claude Code). Worker: Claude Code, Opus 5.5. Worktree e branch: `v3-luta-empurrao`.
-Status: PROPOSTA (os números da seção 8 ficam com o Matheus).
+Status: EM ANDAMENTO (as EMP-1 a EMP-8 DECIDIDAS pelo Matheus em 2026-11-06, pela recomendação; seção 8).
 
 Categoria: arquitetura. Origem: Matheus, 2026-11-06. O pedido foi o empurrão de verdade no motor da luta em tempo real: quem leva o golpe
 vai para trás e, no pesado, cai. Nas palavras dele:
@@ -47,7 +47,7 @@ A tarefa é de produto (a trilha B, batalha), não uma hipótese de pesquisa. A 
 
 ### 3.2 O desenho do empurrão
 
-Os números abaixo são **PROPOSTOS, SEM FONTE** (nenhum vem de medição; a etapa 4 mede o efeito). Cada um vira decisão na seção 8.
+Os números abaixo são **DECIDIDOS pelo Matheus em 2026-11-06 (EMP-1 a EMP-8, seção 8), SEM FONTE**: nenhum vem de medição, e a etapa 4 mede o efeito.
 
 **A força de cada golpe** (a distância que o alvo desliza para trás quando leva o golpe em cheio):
 
@@ -163,7 +163,9 @@ Cada etapa num PR, com o merge pelo Matheus.
 
 ## 8. Precisa do Matheus
 
-Cada uma com a recomendação e o custo de errar. Todos os números são PROPOSTOS, SEM FONTE.
+**DECIDIDAS pelo Matheus em 2026-11-06, todas pela recomendação.** As palavras dele foram "Aceito todas", em resposta à pergunta "Aceita as
+recomendações das EMP-1 a EMP-8 como estão?", com a tabela das oito na frente. Ele respondeu na sessão de planejamento da missão
+SPRITES_GERACAO, e o Gerente repassou a resposta ao worker com as palavras literais. Os números seguem SEM FONTE.
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
