@@ -7,7 +7,8 @@
    `bolaNaMao`: o dono esta arrastando a bola (PorBola.tsx); a vista a esconde ate ela cair.
    `treino`: o ultimo treino pedido na tela Treinar (performance.now()); a ilha mostra o pet indo ao saco de pancada, batendo e voltando
    (so vista: o ganho e o do motor, na hora; docs/TAREFA_V3_HABITAT_OBJETOS.md).
-   `cocoNoChao`: a ilha desenha a sujeira como cocos 3D no chao (ilha/cocos.ts); o PalcoPet deixa de desenhar o coco 2D ao lado do pet. */
+   `cocoNoChao`: a ilha desenha a sujeira como cocos 3D no chao (ilha/cocos.ts); o PalcoPet deixa de desenhar o coco 2D ao lado do pet.
+   `zzX`: com o quadro Dormir, o x (px de CSS da cena) do topo da cabeca, de onde sai o "zz" (papel.ts); null fora dele. */
 export interface VistaDoMundo {
   /** o ponto do cliente (px) no chao, em subunidades inteiras do mapa; null fora do mapa ou fora do chao */
   paraMundo: (clientX: number, clientY: number) => [number, number] | null;
@@ -28,4 +29,5 @@ export const CENA: {
   bolaNaMao: boolean;
   treino: number | null;
   cocoNoChao: boolean;
-} = { modo3d: false, modoMundo: false, ret: null, medir: null, mundo: null, coberto: false, bolaNaMao: false, treino: null, cocoNoChao: false };
+  zzX: number | null;
+} = { modo3d: false, modoMundo: false, ret: null, medir: null, mundo: null, coberto: false, bolaNaMao: false, treino: null, cocoNoChao: false, zzX: null };

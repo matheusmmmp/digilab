@@ -155,7 +155,7 @@ function desenharIcone(cx: CanvasRenderingContext2D, a: AtlasOk, g: Geo, x: numb
   /* sem acao do dono agora: a comida abaixo da metade poe a carne sobre a cabeca (hudPet.ts); o pet dormindo solta o "zz" (sono.ts) */
   const icone = iconeAgora();
   desenharEfeitos(cx, K, x, y, w, h, entradaCena(), performance.now(), matchMedia("(prefers-reduced-motion: reduce)").matches, pal, velocidadeAtual() <= 0, comeNoClipe());
-  if (!icone) { if (m.acao === "dormir") desenharZz(cx, K, x, y, w, performance.now(), matchMedia("(prefers-reduced-motion: reduce)").matches, pal); return; }
+  if (!icone) { if (m.acao === "dormir") desenharZz(cx, K, x, y, w, performance.now(), matchMedia("(prefers-reduced-motion: reduce)").matches, pal, CENA.zzX); return; }
   if (EMOTE_ICONE[icone]) {
     const [pw0, ph0] = dimSprite(a.dados, EMOTE_ICONE[icone]), es = escalaSprite() * 2, pw = pw0 * es / K, ph = ph0 * es / K;
     desenharSprite(cx, a, EMOTE_ICONE[icone], Math.min(g.W - pw - 6, x + w - 6) * K, Math.max(TOPO_LIVRE, y - ph - 4) * K, es, 0);
