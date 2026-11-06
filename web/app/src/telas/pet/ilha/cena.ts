@@ -68,6 +68,23 @@ const GRADIENTE = (() => {
   return t;
 })();
 export const toon = (p: THREE.MeshToonMaterialParameters, vento = 0) => curvar(new THREE.MeshToonMaterial({ gradientMap: GRADIENTE, ...p }), vento);
+/* o cel shading de dois tons do estilo digital (docs/TAREFA_V3_MAPA_DIGITAL.md, D1): a sombra e a luz, sem o meio-tom */
+const GRADIENTE_DOIS = (() => {
+  const t = new THREE.DataTexture(new Uint8Array([150, 150, 150, 255, 255, 255, 255, 255]), 2, 1, THREE.RGBAFormat);
+  t.minFilter = t.magFilter = THREE.NearestFilter;
+  t.needsUpdate = true;
+  return t;
+})();
+/** passa os materiais toon de tres tons de um objeto (e dos filhos) para os dois tons do estilo digital */
+export function doisTons(o: THREE.Object3D): void {
+  o.traverse(f => {
+    const ms = (f as THREE.Mesh).material;
+    for (const m of Array.isArray(ms) ? ms : ms ? [ms] : []) {
+      const t = m as THREE.MeshToonMaterial;
+      if (t.isMeshToonMaterial && t.gradientMap === GRADIENTE) { t.gradientMap = GRADIENTE_DOIS; t.needsUpdate = true; }
+    }
+  });
+}
 
 /* ---------- o terreno ---------- */
 /** a grama por regiao do layout (a casa aparada e clara, o campo mais seco, a mata mais escura) e a da moldura */
@@ -84,6 +101,20 @@ export const PALETA_ILHA: PaletaTerreno = {
   grama: GRAMA, caminho: [0xd9c08c, 0xd5bb87], areia: [0xf3e2b0, 0xf0dead], fundo: [0xc9b07a], borda: 0x6fb84e,
   estrato: [0xe9c79a, 0xdcae7c, 0xcf9c6a], estratoAreia: [0xe8d39f, 0xdcc48f], margem: [0xa88a5c, 0x97794e],
 };
+/** a paleta do estilo digital (docs/TAREFA_V3_MAPA_DIGITAL.md, D1; a maquete B): a grama em verdes saturados de anime (dois por regiao,
+    sorteados por celula, como um xadrez solto; o revisor achou a primeira rodada quase neon, e a saturacao caiu ~15 %), o caminho de terra quente, o barranco de pedra cinza (as faixas de estrato) com a borda de
+    musgo, a agua e a areia mais vivas. PROPOSTO, SEM FONTE */
+export const PALETA_DIGITAL: PaletaTerreno = {
+  grama: {
+    casa: [0x74c45c, 0x68b952, 0x7dcb63], jardim: [0x6cbf55, 0x60b44b, 0x75c75d], campo: [0x82c862, 0x77be58, 0x8acf69],
+    mata: [0x55a347, 0x4c9940, 0x5caa4e], [FORA]: [0x6cbf55, 0x60b44b, 0x75c75d],
+  },
+  caminho: [0xe2ba74, 0xdab26c], areia: [0xf8e5aa, 0xf2dc9e], fundo: [0x8fc7d8], borda: 0x4cb339,
+  estrato: [0xa6adb3, 0x959da5, 0x878f97], estratoAreia: [0xe2cf98, 0xd6c08a], margem: [0x8f969c, 0x7e858b],
+};
+/** as florzinhas do chao do estilo digital: brancas, rosa e amarelas, salpicadas na grama (a maquete B); a densidade por celula de grama e
+    o raio (celulas). PROPOSTO, SEM FONTE */
+const FLORES = { cores: [0xffffff, 0xffffff, 0xff9ec8, 0xffe066], porCelula: 1.1, raio: 0.06 } as const;
 const cor = (hex: number) => new THREE.Color(hex);
 
 export class Malha {
@@ -132,6 +163,27 @@ export function terreno(ilha: Ilha, COR: PaletaTerreno = PALETA_ILHA): THREE.Mes
     for (const e of ARESTAS) parede(m, ilha, c, x, z, e, COR);
   }
   return new THREE.Mesh(m.geometria(), toon({ vertexColors: true }));
+}
+
+/** as florzinhas da grama (FLORES): discos de seis triangulos rente ao chao, so nas celulas de grama planas, por uma rng propria (o chao
+    sai sempre igual); uma malha so, um desenho so */
+export function flores(ilha: Ilha): THREE.Mesh {
+  const m = new Malha(), r = rng(31), cima = new THREE.Vector3(0, 1, 0), R = FLORES.raio;
+  for (let j = 0; j < ilha.prof; j++) for (let i = 0; i < ilha.larg; i++) {
+    const x = ilha.x0 + i, z = ilha.z0 + j, c = ilha.cel(x, z)!;
+    if (c.tipo !== "grama") continue;
+    for (let n = Math.floor(FLORES.porCelula + r()); n > 0; n--) {
+      const fx = x + 0.1 + r() * 0.8, fz = z + 0.1 + r() * 0.8, y = ilha.altura(fx, fz) + 0.012, k = cor(FLORES.cores[Math.floor(r() * FLORES.cores.length)]);
+      const centro = new THREE.Vector3(fx, y, fz);
+      for (let a = 0; a < 6; a++) {
+        const p = (b: number) => new THREE.Vector3(fx + Math.cos((b * Math.PI) / 3) * R, y, fz + Math.sin((b * Math.PI) / 3) * R);
+        m.tri(centro, p(a), p(a + 1), k, cima);
+      }
+    }
+  }
+  const malha = new THREE.Mesh(m.geometria(), toon({ vertexColors: true, polygonOffset: true, polygonOffsetFactor: -1 }));
+  malha.frustumCulled = false;
+  return malha;
 }
 
 /* a parede de uma aresta: do tampo desta celula ate o do vizinho (ou ate o fundo, na borda da grade), em faixas */
@@ -392,6 +444,18 @@ export function ceu(cores: readonly string[]): THREE.Texture {
   return t;
 }
 
+/** um ceu pintado (a textura com userData.cobrir) cobrindo a tela sem esticar: corta os lados numa tela mais estreita que a imagem (o
+    celular em pe) e a parte de baixo numa mais larga, mantendo o alto do ceu; o degrade (sem cobrir) fica como esta */
+export function cobrirFundo(fundo: THREE.Color | THREE.Texture | null, aspecto: number): void {
+  const t = fundo as THREE.Texture | null;
+  if (!t?.isTexture || !t.userData.cobrir) return;
+  const img = t.image as { width?: number; height?: number } | undefined;
+  if (!img?.width || !img.height) return;
+  const ai = img.width / img.height;
+  if (aspecto < ai) { t.repeat.set(aspecto / ai, 1); t.offset.set((1 - aspecto / ai) / 2, 0); }
+  else { const r = ai / aspecto; t.repeat.set(1, r); t.offset.set(0, 1 - r); }
+}
+
 /* as nuvens: planos brancos e fofos bem longe, ao norte, que nao dobram (ficam no ceu) */
 function nuvens(ilha: Ilha): THREE.Group {
   const c = document.createElement("canvas");
@@ -415,9 +479,12 @@ function nuvens(ilha: Ilha): THREE.Group {
 
 /** a cena estatica da ilha: o ceu, a nevoa, as luzes, o terreno, a agua e as nuvens (os objetos, o pet e os itens entram depois) */
 export interface CenaIlha { cena: THREE.Scene; aplicarNoite(noite: boolean): void }
-/** `chao`: o terreno do estilo (o da ilha, se nada vier); `agua`: false tira a agua por celula e o mar (o estilo desenha a dele) */
-export function montarCena(ilha: Ilha, chao: THREE.Object3D = terreno(ilha), opcoes: { agua?: boolean; nuvens?: boolean } = {}): CenaIlha {
-  const cena = new THREE.Scene(), fundo = { dia: ceu(DIA.ceu), noite: ceu(NOITE.ceu) };
+/** `chao`: o terreno do estilo (o da ilha, se nada vier); `agua`: false tira a agua por celula e o mar (o estilo desenha a dele);
+    `ceuDia`, um ceu pintado no lugar do degrade do dia, com a cor do horizonte (a nevoa) dele; `chaoHemi`, a cor de baixo da luz do ceu
+    de dia (o estilo digital a puxa para o azul, a sombra azulada do anime) */
+export function montarCena(ilha: Ilha, chao: THREE.Object3D = terreno(ilha),
+  opcoes: { agua?: boolean; nuvens?: boolean; ceuDia?: THREE.Texture; horizonteDia?: number; chaoHemi?: number } = {}): CenaIlha {
+  const cena = new THREE.Scene(), fundo = { dia: opcoes.ceuDia ?? ceu(DIA.ceu), noite: ceu(NOITE.ceu) };
   cena.fog = new THREE.Fog(DIA.horizonte, 26, 62);
   const hemi = new THREE.HemisphereLight(), sol = new THREE.DirectionalLight();
   sol.position.set(-0.6, 1, 0.75);
@@ -427,8 +494,8 @@ export function montarCena(ilha: Ilha, chao: THREE.Object3D = terreno(ilha), opc
   const aplicarNoite = (noite: boolean) => {
     const p = noite ? NOITE : DIA;
     cena.background = noite ? fundo.noite : fundo.dia;
-    (cena.fog as THREE.Fog).color.setHex(p.horizonte);
-    hemi.color.setHex(p.hemi[0]); hemi.groundColor.setHex(p.hemi[1]); hemi.intensity = p.hemi[2];
+    (cena.fog as THREE.Fog).color.setHex(!noite && opcoes.horizonteDia !== undefined ? opcoes.horizonteDia : p.horizonte);
+    hemi.color.setHex(p.hemi[0]); hemi.groundColor.setHex(!noite && opcoes.chaoHemi !== undefined ? opcoes.chaoHemi : p.hemi[1]); hemi.intensity = p.hemi[2];
     sol.color.setHex(p.sol[0]); sol.intensity = p.sol[1];
     CURVA.uNoite.value = noite ? 1 : 0;
     for (const s of ceuNuvens.children) ((s as THREE.Sprite).material as THREE.SpriteMaterial).opacity = p.nuvens;

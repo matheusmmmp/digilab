@@ -552,6 +552,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-06 — MAPA_DIGITAL, a tarefa (Gerente da frente, Claude Code, Opus 5.5, branch `v3-mapa-digital`)](registro/2026-11.md)
 - [2026-11-06 — CONVERSA_PET, M5 o cliente Claude da fala livre (worker, Claude Code, Sonnet 5.5, branch `v3-conversa-m5-claude`)](registro/2026-11.md)
 - [2026-11-06 — INFRA_AGENTES, a prova ao vivo e a etapa E6b, o tar só para listar (worker, Claude Code, Opus 5.5, branch `v3-infra-agentes-e6b`)](registro/2026-11.md)
+- [2026-11-06 — MAPA_DIGITAL, D1: o chão, o barranco, o toon e o céu (Gerente da frente, Claude Code, Opus 5.5, branch `v3-mapa-digital-d1`)](registro/2026-11.md)
 - [2026-11-06 — LONGE_REGULAR, o código do descritivo da D-C1-3 (A10.8) (worker, Claude Code, Sonnet 5.5, branch `v3-dc13-codigo`)](registro/2026-11.md)
 - [2026-11-06 — SPRITES_REACOES, o Dormir no jogo (worker, Claude Code, Sonnet 5.5, branch `v3-sprites-dormir`)](registro/2026-11.md)
 - [2026-11-06 — LONGE_REGULAR, o resultado do descritivo da D-C1-3, a seção 13.6 (worker, Claude Code, Sonnet 5.5, branch `v3-dc13-resultado`)](registro/2026-11.md)
