@@ -531,3 +531,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-06 — MUNDO_ENFEITES, E1: os postes (Gerente da frente, Claude Code, Opus 5.5, branch `v3-mundo-enfeites-e1`)](registro/2026-11.md)
 - [2026-11-06 — PONTE_LUTA, etapa PE3, o espelho TS da dor e da luta como episódio, a marca `pl` e o `_lutar` com o resumo (worker, Claude Code, Sonnet 5.5, branch `v3-ponte-luta-pe3`)](registro/2026-11.md)
 - [2026-11-06 — INFRA_AGENTES, a especificação das etapas E1 a E5 (especificador, Claude Code, Opus 5.5, branch `v3-infra-agentes`)](registro/2026-11.md)
+- [2026-11-06 — INFRA_AGENTES, etapa E1, os hooks H2, H1b, H6 e H9 (worker, Claude Code, Opus 5.5, branch `v3-infra-agentes-e1`)](registro/2026-11.md)
