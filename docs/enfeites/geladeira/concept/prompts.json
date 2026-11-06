@@ -1,0 +1,11 @@
+{
+ "ai_model": "nano-banana-2",
+ "referencias": ["ref_ilha_saco_gerado.png", "ref_ilha_kits.png"],
+ "prompt_base": "Concept art of a single old refrigerator standing alone in nature, as a prop for a cozy low-poly 3D island game for children, cute and friendly, nothing dirty, rusty, broken or scary. Match exactly the art style of the reference screenshots: simple chunky rounded shapes, toy-like proportions, flat toon shading with three tones, soft saturated colors, no outlines, no realistic texture. A retro rounded fridge with a big handle, closed doors, no brand, no logo, no text. Nature has taken it gently: moss, small plants and flowers growing on it. Show only the fridge, full object in frame, three-quarter view from slightly above, on a plain light grey background, no ground, no shadow, no characters.",
+ "variantes": [
+  {"nome": "concept_1_menta", "prompt": "A rounded retro fridge in pastel mint green with a chrome handle, moss on the top and a small flower pot growing a plant on its roof."},
+  {"nome": "concept_2_creme", "prompt": "A rounded retro fridge in cream white with a red handle, a green vine climbing up one side and little daisies at its feet."},
+  {"nome": "concept_3_rosa", "prompt": "A small rounded retro fridge in soft pink with two doors and silver handles, moss patches on the sides and a little bird nest on top."},
+  {"nome": "concept_4_azul", "prompt": "A rounded retro fridge in pastel blue, slightly tilted, with colorful round fridge magnets on the door, moss on the top and grass growing around the base."}
+ ]
+}

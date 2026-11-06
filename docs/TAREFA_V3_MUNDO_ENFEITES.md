@@ -191,3 +191,25 @@ validador, cerca de 180 KB); E-G9: um draw call a mais, de dia e de noite (78 �
 capturas) **aprovou com ressalva**: pequeno e distante demais em 390 e à noite, o azul pouco saturado; o conserto foi o dele, a altura de
 1,3 para 1,9 e a paleta mais saturada (rodada 2), e as capturas refeitas. À noite ele escurece com a cena, como o resto da moldura.
 
+## 11. E3: a geladeira e o trilho, com traços de nanquim (2026-11-06, Gerente, Claude Code, Opus 5.5, branch `v3-mundo-enfeites-e3`)
+
+**Os dois, pela Meshy:** quatro concepts de cada (48 créditos); o Matheus escolheu a geladeira 1 (menta, com o vaso de flores) e o
+trilho 1 (o vagão vermelho de janelas redondas). Vistas (12) e malhas (60): a geladeira com 2 062 triângulos e o trilho com 1 760 (teto
+2 414 dos marcos), as duas com a forma do concept. Saldo 740 → 620 (`docs/enfeites/geladeira/`, `docs/enfeites/trilho/`).
+
+**Os traços de nanquim (pedido do Matheus, 2026-11-06: "mais cartunesco, traços firmes, fortes, na textura mesmo", no jeito de
+Borderlands):** sobre a textura chapada (seis cores por item, uma por face), `docs/enfeites/arestas_uv.py` lista as arestas da malha no
+espaço da textura (as faces dos dois lados, o ângulo, o comprimento e o segmento de UV em cada face), e `docs/enfeites/tracar_linhas.py`
+desenha um traço quase preto (`TINTA`) de 5 px em cada divisa de cor e em cada quina grande (mais de 70° e com pelo menos 0,12 de
+comprimento). Na primeira rodada (38°, sem o comprimento, 7 px), as facetas da Meshy davam riscos soltos e sujos; o revisor apontou, e o
+limiar subiu. Os traços ficam só na textura: nenhum shader novo.
+
+**O lugar:** os dois ficam ao norte, como o carro, numa faixa de x a partir do ninho (`faixa`: −12 a 14 para a geladeira, −9 a 9 para o
+trilho), com 3 células dos outros enfeites; os do motor: mvp, geladeira (2,8; −2,6) e trilho (6,1; −1,6); padrão, geladeira (−1,3; −1,6) e
+trilho (7,4; −3,9). Na primeira rodada, o trilho foi parar em x = 20 no mvp, atrás do painel Estado.
+
+**Os gates:** E-G0 e E-G10 passam; E-G1 a E-G8 num teste (2 062 e 1 760 triângulos, 1024 px, 0 erros e 0 avisos, cerca de 210 KB cada);
+E-G9: dois draw calls a mais, de dia e de noite (80 → 81 e 101 → 103 em 390; 86 → 88 e 107 → 109 em 1280;
+`D:\Trab\digilab\capturas_enfeites\referencia_e3\` e `\e3\`). E-G11: o revisor reprovou o trilho e aprovou a geladeira com ressalva na
+rodada 1 (traços sujos, o trilho atrás do HUD); a rodada 2 está no corpo do PR. Os postes e o carro ficam sem traços nesta etapa.
+
