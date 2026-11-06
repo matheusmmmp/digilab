@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import inspect
+import json
 import sys
 from pathlib import Path
 from types import SimpleNamespace
@@ -18,7 +19,9 @@ from digilab_fala_livre.ollama import ClienteOllama, Resposta  # noqa: E402
 from digilab_fala_livre.prompt import esquema  # noqa: E402
 from servidor import fala_livre_claude as flc  # noqa: E402
 from servidor.fala_livre import ServicoFalaLivre  # noqa: E402
-from servidor.fala_livre_claude import ClienteClaude, ErroClaude  # noqa: E402
+from servidor.fala_livre_claude import PALAVRAS_NAO_ACEITAS, PENSAMENTO, ClienteClaude, ErroClaude, traduzir_esquema  # noqa: E402
+from digilab_fala_livre.prompt import MAX_CHARS  # noqa: E402
+from digilab_fala_livre.saida import aparar  # noqa: E402
 from servidor.fala_llm import PRECOS_USD_POR_MTOK, ControleGasto  # noqa: E402
 from test_fala_livre import ESTADO  # noqa: E402
 
@@ -58,7 +61,7 @@ def test_sistema_esquema_esforco_e_sem_temperatura_nem_semente():
     _cliente(sdk).conversar(MSGS, esq, 360, 7)
     kw = sdk.chamadas[0]
     assert kw["system"] == "Regra A.\n\nRegra B." and kw["messages"] == [{"role": "user", "content": "oi"}]
-    assert kw["output_config"] == {"effort": "low", "format": {"type": "json_schema", "schema": esq}}
+    assert kw["output_config"] == {"effort": "low", "format": {"type": "json_schema", "schema": traduzir_esquema(esq)}}
     assert not {"temperature", "top_p", "top_k", "seed", "semente"} & set(kw)
     assert kw["max_tokens"] >= 360
 
@@ -166,3 +169,56 @@ def test_arquivo_de_gasto_proprio_e_teto_padrao_3():
 def test_chave_nunca_em_arquivo_do_servidor():
     for arq in ("fala_livre_claude.py", "fala_livre.py"):
         assert "sk-ant" not in (RAIZ / "servidor" / arq).read_text(encoding="utf-8")
+
+
+def _chaves(x):
+    if isinstance(x, dict):
+        for k, v in x.items():
+            yield k
+            yield from _chaves(v)
+    elif isinstance(x, list):
+        for v in x:
+            yield from _chaves(v)
+
+
+@pytest.mark.parametrize("est", ["bebe", "crianca", "adolescente", "adulto"])
+@pytest.mark.parametrize("comando", [False, True])
+def test_esquema_enviado_nao_tem_palavra_proibida(est, comando):
+    sdk = SdkFalso()
+    original = esquema(est, comando)
+    _cliente(sdk).conversar(MSGS, original, 360, 0)
+    enviado = sdk.chamadas[0]["output_config"]["format"]["schema"]
+    assert not PALAVRAS_NAO_ACEITAS & set(_chaves(enviado))
+    assert enviado["additionalProperties"] is False and enviado["required"] == original["required"]
+    if comando:
+        assert enviado["properties"]["comando"] == original["properties"]["comando"]      # o enum com null fica
+    assert "maxLength" in set(_chaves(original))                  # o original (Ollama) nao foi mexido
+
+
+def test_fala_longa_e_cortada_no_limite_e_depois_aparada():
+    """O `aparar` sozinho nao corta (so tira o pedaco incompleto de quem o Ollama parou no limite): o cliente corta no `maxLength`
+    que o esquema do Ollama tinha, como o Ollama faria, e o `aparar` deixa so o inteiro."""
+    longa = "Oi, tudo bem. " * 40
+    assert len(aparar(longa, MAX_CHARS["adulto"])) > MAX_CHARS["adulto"]           # documenta o limite do aparar
+    sdk = SdkFalso(texto='{"fala": "%s", "fatos_citados": []}' % longa)
+    r = _cliente(sdk).conversar(MSGS, esquema("adulto"), 360, 0)
+    assert len(json.loads(r.texto)["fala"]) == MAX_CHARS["adulto"]
+    res = gerar(_cliente(sdk), ESTADO, "espontanea", semente=1)
+    assert res.erro is None and 0 < len(res.fala) <= MAX_CHARS[res.estagio] and res.fala.endswith(".")
+
+
+def test_fala_dentro_do_limite_passa_intacta():
+    assert _cliente(SdkFalso()).conversar(MSGS, esquema("adulto"), 360, 0).texto == BOA
+
+
+def test_pensamento_desligado_por_modelo():
+    for modelo, esperado in (("claude-haiku-5-5", {"type": "disabled"}), ("claude-sonnet-5-5", {"type": "between_tools"})):
+        sdk = SdkFalso()
+        _cliente(sdk, modelo=modelo).conversar(MSGS, esquema("adulto"), 360, 0)
+        assert sdk.chamadas[0]["thinking"] == esperado == PENSAMENTO[modelo]
+        assert sdk.chamadas[0]["output_config"]["effort"] == "low"      # between_tools/disabled so valem com esforco high ou abaixo
+
+
+def test_modelo_com_preco_mas_sem_regra_de_pensamento_nao_liga():
+    with pytest.raises(ValueError, match="pensamento"):
+        ClienteClaude("claude-opus-5", ControleGasto(1.0, None), sdk=SdkFalso())

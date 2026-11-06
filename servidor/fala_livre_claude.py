@@ -18,6 +18,7 @@ Nenhuma chamada de rede acontece na importacao deste modulo.
 
 from __future__ import annotations
 
+import json
 import math
 import time
 from pathlib import Path
@@ -27,15 +28,53 @@ from servidor.fala_llm import LIMITE_USD_LIVRE_PADRAO, PRECOS_USD_POR_MTOK, Cont
 
 ARQUIVO_GASTO_LIVRE = Path(__file__).with_name("gasto_fala_livre.json")     # fora do git
 ESFORCO = "low"
-# PROPOSTO, SEM FONTE: piso de max_tokens por chamada. O modelo pode pensar antes de responder (adaptativo) e o `max_tokens`
-# conta o pensamento; com o teto de saida do Ollama (dezenas de tokens) a resposta seria cortada. O piso entra no pior caso reservado.
-PISO_MAX_TOKENS = 1024
+# PROPOSTO, SEM FONTE: piso de max_tokens por chamada (era 1024 com o pensamento ligado; com ele desligado o JSON da fala cabe no
+# teto por estagio, 80 a 360, e o piso so da folga ao tokenizador do Claude). Entra no pior caso reservado.
+PISO_MAX_TOKENS = 512
+# Fala de chat sem pensar (latencia e conta): Haiku 5.5 aceita `disabled` (com esforco high ou abaixo); no Sonnet 5.5 o `disabled`
+# da 400 e o lugar dele e `between_tools` (so com esforco high ou abaixo, sem outro campo). Modelo fora da tabela nao liga.
+PENSAMENTO = {"claude-haiku-5-5": {"type": "disabled"}, "claude-sonnet-5-5": {"type": "between_tools"}}
+# O `output_config.format` nao aceita limites de string, array nem numero, e exige `additionalProperties: false` em todo objeto
+# (skill claude-api, tool-use-concepts, "JSON Schema Limitations"). O limite de caracteres da fala fica por conta do `saida.aparar`
+# e o catalogo do comando (enum) por conta do `saida.ler`, ambos depois da chamada.
+PALAVRAS_NAO_ACEITAS = frozenset({"minLength", "maxLength", "minItems", "maxItems", "minimum", "maximum", "exclusiveMinimum",
+                                  "exclusiveMaximum", "multipleOf", "uniqueItems", "pattern"})
 TIMEOUT_S = 60.0
 MODELOS_CLAUDE_LIVRE = ("claude-haiku-5-5", "claude-sonnet-5-5")
 
 
 class ErroClaude(OSError):
     """Falha do cliente Claude (rede, recusa, corte, teto, credencial): o chamador cai na fala generica."""
+
+
+def traduzir_esquema(esq):
+    """Copia do esquema do Ollama sem as palavras que a API do Claude nao aceita e com `additionalProperties: false`."""
+    if isinstance(esq, list):
+        return [traduzir_esquema(x) for x in esq]
+    if not isinstance(esq, dict):
+        return esq
+    out = {k: traduzir_esquema(v) for k, v in esq.items() if k not in PALAVRAS_NAO_ACEITAS}
+    if out.get("type") == "object" and "properties" in out:
+        out["additionalProperties"] = False
+    return out
+
+
+def impor_limites(texto: str, esq: dict) -> str:
+    """O Ollama para a geracao no `maxLength` do esquema (a fala vem cortada e o `saida.aparar` deixa so o inteiro). A API do
+    Claude nao aceita `maxLength`, entao a fala longa e cortada aqui no mesmo ponto, antes do `aparar`. Texto que nao e JSON
+    de objeto passa intacto: o `saida.ler` levanta, como com o Ollama."""
+    try:
+        obj = json.loads(texto)
+    except ValueError:
+        return texto
+    if not isinstance(obj, dict):
+        return texto
+    mudou = False
+    for nome, p in (esq.get("properties") or {}).items():
+        lim = p.get("maxLength") if isinstance(p, dict) else None
+        if lim is not None and isinstance(obj.get(nome), str) and len(obj[nome]) > lim:
+            obj[nome], mudou = obj[nome][:lim], True
+    return json.dumps(obj, ensure_ascii=False) if mudou else texto
 
 
 def _partir(mensagens: list[dict]) -> tuple[str, list[dict]]:
@@ -62,6 +101,8 @@ class ClienteClaude:
                  timeout: float = TIMEOUT_S) -> None:
         if modelo not in PRECOS_USD_POR_MTOK:
             raise ValueError(f"modelo sem preco conhecido: {modelo!r}; sem preco nao da para garantir o teto de gasto")
+        if modelo not in PENSAMENTO:
+            raise ValueError(f"modelo sem regra de pensamento: {modelo!r}; so {', '.join(PENSAMENTO)}")
         self.modelo = modelo
         self.gasto = gasto if gasto is not None else ControleGasto(LIMITE_USD_LIVRE_PADRAO, ARQUIVO_GASTO_LIVRE)
         self._sdk = sdk
@@ -99,7 +140,9 @@ class ClienteClaude:
         try:
             sdk = self._cliente()
             resp = sdk.messages.create(model=self.modelo, max_tokens=teto_saida, system=sistema, messages=conversa,
-                                       output_config={"effort": ESFORCO, "format": {"type": "json_schema", "schema": esquema}})
+                                       thinking=PENSAMENTO[self.modelo],
+                                       output_config={"effort": ESFORCO,
+                                                      "format": {"type": "json_schema", "schema": traduzir_esquema(esquema)}})
         except ErroClaude:
             self.gasto.acertar(custo_max, 0.0)           # nada saiu da maquina
             raise
@@ -117,5 +160,5 @@ class ClienteClaude:
         if resp.stop_reason == "max_tokens":
             raise ErroClaude(f"resposta cortada por max_tokens ({teto_saida})")
         texto = next((b.text for b in resp.content if b.type == "text"), "")
-        return Resposta(texto, getattr(resp, "model", self.modelo), time.perf_counter() - t0, ent, sai,
+        return Resposta(impor_limites(texto, esquema), getattr(resp, "model", self.modelo), time.perf_counter() - t0, ent, sai,
                         resp.stop_reason == "end_turn")
