@@ -89,6 +89,7 @@ test.describe("laboratorio do modular", () => {
           await page.waitForFunction(() => !!document.querySelector(".pet-cena .cena3d[data-pronto]") || !document.querySelector(".pet-cena"));
           await page.waitForTimeout(500);
           await foto(page, "pet_" + sufixo);
+          if (larg < 900) await page.getByRole("button", { name: "Painéis do pet", exact: true }).click();     /* o DigiBrain mora no leque do retrato (< 900 px) */
           await page.getByRole("button", { name: "DigiBrain", exact: true }).click();
           await page.waitForTimeout(400);
           await foto(page, "painel_" + sufixo);

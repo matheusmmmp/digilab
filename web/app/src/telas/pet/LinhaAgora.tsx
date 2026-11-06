@@ -2,11 +2,13 @@
    So le o motor: a acao de agora (Motor.acao, o texto de NOME_PET) e o porque do cerebro A (a leitura da ultima decisao, a mesma do
    painel DigiBrain). Os textos da regra e da acao sao os do painel (REGRA_TXT, ACAO_CURTA); a linha nao inventa frase do pet. A marca
    de "aprendido" so aparece quando o aprendido mudou a escolha (quem_decidiu.mudou); o neutro e silencio. */
-import { ChevronRight } from "lucide-react";
-import { useMemo, type ReactNode } from "react";
-import { FATORES_TXT, NOME_PET, leituraDecisao, type LeituraDecisao, type MotivoVida, type Motor } from "../../../motor/index.ts";
+import { Angry, ChevronRight, Coffee, Compass, Drumstick, Megaphone, Moon, Music, type LucideIcon } from "lucide-react";
+import { useEffect, useMemo, useRef, type ReactNode } from "react";
+import { FATORES_TXT, NOME_PET, leituraDecisao, type AcaoPet, type LeituraDecisao, type MotivoVida, type Motor } from "../../../motor/index.ts";
+import { BotaoMovel } from "../../componentes/BotaoMovel.tsx";
 import { ACAO_CURTA, REGRA_TXT } from "../../componentes/DigiBrain.tsx";
 import { useJogo } from "../../jogo.ts";
+import { CENA } from "./cenaEstado.ts";
 
 export type CasoAgora = "modular" | "sem" | "aprendido" | "instinto" | "uma";
 export interface VistaAgora {
@@ -84,6 +86,47 @@ export function LinhaAgora({ aoAbrir, aberto, sobPainel = false }: { aoAbrir?: (
   const v = useMemo(() => vistaAgora(m), [m, revisao]);
   if (nascendo > 0 || m.morte) return null;
   return <LinhaAgoraVista v={v} aoAbrir={aoAbrir} aberto={aberto} sobPainel={sobPainel} />;
+}
+
+/* ------------------------------------------------ o icone do agora (celular, M1 do mobile minimo) */
+/** o icone de cada acao do pet (M1-5; PROPOSTO, desenho do ux-designer): a nota e a carne repetem os emotes da cena (cenaAcao.ts). O Record deixa
+    o tsc acusar uma acao nova do motor sem icone */
+export const ICONE_AGORA: Record<AcaoPet, LucideIcon> = {
+  ocioso: Coffee, dormir: Moon, comer: Drumstick, brincar: Music, chamar_atencao: Megaphone, explorar: Compass, emburrar: Angry,
+};
+/** a linha do agora abaixo de 900 px: so o icone, sem texto (o nome acessivel e o mesmo da linha). Com `aoAbrir` e um botao que abre o DigiBrain;
+    sem ele (os detalhes do pet desligados, M1-11), so desenho. O caso "aprendido" e ciano tracejado; "sem motivo", um "?" no canto */
+export function AgoraIconeVista({ v, icone: I, aoAbrir, aberto = false, sobPainel = false }: { v: VistaAgora; icone: LucideIcon; aoAbrir?: () => void; aberto?: boolean; sobPainel?: boolean }) {
+  const corpo = <><I aria-hidden="true" />{v.caso === "sem" && <span className="mm-agora-q" aria-hidden="true">?</span>}</>;
+  const cls = "mm-caixa mm-forma mm-agora";
+  if (!aoAbrir) return <div className={cls + " mm-agora--desenho"} role="img" aria-label={rotuloAgora(v, false)} data-caso={v.caso} data-sob-painel={sobPainel}>{corpo}</div>;
+  return (
+    <BotaoMovel className={"mm-bt " + cls} rotulo={`Agora: ${v.acao}`} lado="cima" aria-label={rotuloAgora(v, true)} aria-expanded={aberto} aria-controls="pet-painel"
+      data-caso={v.caso} data-sob-painel={sobPainel} onClick={aoAbrir}>{corpo}</BotaoMovel>
+  );
+}
+/** o icone sempre visivel da tela Pet no celular: some com o ovo chocando e com o pet morto, como a linha */
+export function AgoraIcone({ aoAbrir, aberto, sobPainel = false }: { aoAbrir?: () => void; aberto: boolean; sobPainel?: boolean }) {
+  const { motor: m, revisao, nascendo } = useJogo();
+  const v = useMemo(() => vistaAgora(m), [m, revisao]), ancora = useRef<HTMLSpanElement>(null);
+  /* preso ao pet: o icone fica logo acima da cabeca, no retangulo que a cena publica a cada quadro (CENA.ret, o mesmo do balao e do toque no pet; px de
+     CSS desde o canto da caixa do habitat, que no celular e a tela). Nunca sobre o pet: o toque nele e o carinho. Sem retangulo (a cena ainda nao subiu), fica
+     no lugar de reserva do CSS */
+  useEffect(() => {
+    let id = 0, ultimo = "";
+    const laco = () => {
+      const r = CENA.ret, el = ancora.current;
+      if (el && r) {
+        const x = Math.round(Math.min(Math.max(r.x + r.w / 2, 32), innerWidth - 32)), y = Math.round(Math.max(r.y, 76)), chave = x + "," + y;
+        if (chave !== ultimo) { ultimo = chave; el.style.left = x + "px"; el.style.top = y + "px"; }
+      }
+      id = requestAnimationFrame(laco);
+    };
+    id = requestAnimationFrame(laco);
+    return () => cancelAnimationFrame(id);
+  }, []);
+  if (nascendo > 0 || m.morte) return null;
+  return <span className="mm-agora-ancora" ref={ancora}><AgoraIconeVista v={v} icone={ICONE_AGORA[m.acao]} aoAbrir={aoAbrir} aberto={aberto} sobPainel={sobPainel} /></span>;
 }
 
 /* ------------------------------------------------ o chip de causa do balao */

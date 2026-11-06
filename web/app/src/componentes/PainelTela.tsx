@@ -1,7 +1,7 @@
 /* Painel dos destinos que nao sao o Pet (docs/TAREFA_V2_LAYOUT_HABITAT.md, M2). Abre sobre o habitat, que fica escurecido:
    - a partir de 900 px, painel grande a direita (PainelHx, com as abas do destino no cabecalho) e o pet visivel a esquerda;
-   - abaixo de 900 px, modal centralizado (<dialog> com showModal: foco preso e, ao fechar, de volta a quem abriu), com a barra de
-     destinos dentro dele (`nav`), porque o resto da pagina fica inerte enquanto o modal esta aberto.
+   - abaixo de 900 px, modal centralizado (<dialog> com showModal: foco preso e, ao fechar, de volta a quem abriu). Sem barra de destinos
+     (M1 do mobile minimo, M1-10): voltar ao Pet e o x, o Esc ou o toque fora; trocar de folha passa pelo Pet.
    O "x" (e o Esc) chamam `fechar`, que volta para o Pet. O conteudo entra como cada tela o desenha hoje, numa folha escura de uma coluna (estilo/painel-hx.css, M4); o painel tem no maximo 760 px. */
 import { useEffect, useRef, type ReactNode } from "react";
 import { AbasHx, PainelHx, type AbaHx } from "./hx/index.ts";
@@ -32,7 +32,7 @@ export function PainelLado({ d, children }: { d: DadosPainel; children: ReactNod
   );
 }
 
-export function PainelModal({ d, nav, children }: { d: DadosPainel; nav: ReactNode; children: ReactNode }) {
+export function PainelModal({ d, children }: { d: DadosPainel; children: ReactNode }) {
   const ref = useRef<HTMLDialogElement>(null), saindo = useRef(false);
   useEffect(() => {
     const dlg = ref.current; if (!dlg) return;
@@ -45,7 +45,6 @@ export function PainelModal({ d, nav, children }: { d: DadosPainel; nav: ReactNo
       onClose={e => { if (e.target === e.currentTarget && !saindo.current) d.fechar(); }}
       onClick={e => { if (e.target === ref.current) ref.current?.close(); }}>
       <Conteudo d={d} fechar={() => ref.current?.close()}>{children}</Conteudo>
-      {nav}
     </dialog>
   );
 }

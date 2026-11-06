@@ -229,3 +229,30 @@ describe("MedidorHx", () => {
     expect(() => renderToStaticMarkup(h(MedidorHx, { valor: 2, max: 5, rotulo: "x", porcento: true }))).toThrow();
   });
 });
+
+/* M1 do mobile minimo (pet_movel.css): os circulos de acao e o icone do agora, no celular, levam um fundo proprio quase opaco (--hx-miolo por baixo) e
+   nao usam desfoque. O icone passa de 3:1 sobre o pior pixel da cena (a grama clara e o branco puro) nas duas peles. */
+describe("o celular (mobile minimo): acoes e icone do agora", () => {
+  const movelCss = readFileSync(new URL("../src/estilo/pet_movel.css", import.meta.url), "utf8");
+  const clara = [[161, 225, 113], [255, 255, 255]] as Rgb[];
+  const acaoVidro = (f: Rgb) => sobre(tokenVidro("hx-btn-bg"), sobre(tokenVidro("hx-miolo"), f));
+  it("Vidro: o icone da acao e o do agora (--hx-btn-ink, --hx-texto) passam 3:1 sobre o pior pixel", () => {
+    for (const f of clara) {
+      expect(contraste(tokenVidro("hx-btn-ink"), hex(acaoVidro(f))), `acao ${f}`).toBeGreaterThanOrEqual(3);
+      const agora = sobre(tokenVidro("hud-fundo-1").replace("var(--hx-miolo-2)", tokenVidro("hx-miolo-2")), sobre(tokenVidro("hx-miolo"), f));
+      expect(contraste(token("hx-texto"), hex(agora)), `agora ${f}`).toBeGreaterThanOrEqual(3);
+    }
+  });
+  it("Militar: o mesmo, com o --hx-btn-bg quase opaco sobre o --hx-miolo", () => {
+    for (const f of clara) {
+      expect(contraste(token("hx-btn-ink"), hex(sobre("rgba(14,30,22,.92)", sobre(token("hx-miolo"), f))))).toBeGreaterThanOrEqual(3);
+      expect(contraste(token("hx-texto"), hex(sobre("rgba(30,33,36,.97)", sobre(token("hx-miolo"), f))))).toBeGreaterThanOrEqual(3);
+    }
+  });
+  it("o CSS poe o --hx-miolo por baixo do --hx-btn-bg, tira o desfoque dos circulos e do agora, e o anel de foco leva o halo escuro", () => {
+    expect(movelCss).toMatch(/background:linear-gradient\(var\(--hx-btn-bg\), var\(--hx-btn-bg\)\), linear-gradient\(var\(--hx-miolo\), var\(--hx-miolo\)\)/);
+    expect(movelCss).toMatch(/\.mm-acao, \.mm-extra, \.mm-mais \.racao-bt\)\{[^}]*backdrop-filter:none/);
+    expect(movelCss).toMatch(/\.mm-agora\{[^}]*backdrop-filter:none/);
+    expect(movelCss).toMatch(/:root\[data-pele\] body \.mm-bt:focus-visible\{[^}]*box-shadow:0 0 0 5px var\(--hx-miolo\) !important/);
+  });
+});

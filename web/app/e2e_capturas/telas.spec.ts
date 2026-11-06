@@ -85,6 +85,14 @@ for (const [largura, altura] of LARGURAS.map(l => [l, l >= 1900 ? 950 : l >= 110
         || !!document.querySelector(".pet-cena .cena3d[data-pronto]"));
       /* a Exploracao: o mapa 3D tambem chega por import dinamico; espera ele desenhar (ou a tela cair no mapa 2D) */
       await page.waitForFunction(() => !document.querySelector(".camp-tela--expl") || !!document.querySelector(".mapa-expl[data-pronto]"));
+      /* o atlas (e o de clipes, ~32 MB) chega por fetch em tempo real; a cena le o atlas a cada quadro, mas com o relogio parado so ha os
+         quadros do runFor abaixo: se o atlas chegar depois, a captura fica com o pet de reserva (2026-11-06, M1 do mobile). O retrato do
+         topo so ganha a imagem quando o atlas fica pronto; sem ele (ou com o aviso de que nao carregou) a captura falha alto */
+      if (!reserva) {
+        await page.waitForFunction(() => !!document.querySelector(".topo-retrato img, .mm-retrato img") || !!document.querySelector(".avisos .aviso")
+          || !document.querySelector(".topo-retrato, .mm-retrato"), undefined, { timeout: 90_000 });
+        await expect(page.locator(".avisos .aviso", { hasText: "Atlas" })).toHaveCount(0);
+      }
       await page.clock.runFor(1000);
       /* o momento da evolucao: o pet evolui enquanto o relogio anda, e a revelacao abre */
       if (SO_JANELA.has(nome)) await page.locator("dialog.revelacao[open]").waitFor();
