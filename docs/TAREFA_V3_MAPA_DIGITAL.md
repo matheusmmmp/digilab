@@ -179,3 +179,8 @@ distância aos postes); a geladeira e o trilho numa faixa de −14 a 16 e de −
 81 e 103 em 390, 90 e 111 em 1280 (`D:\Trab\digilab\capturas_mapa_digital\d3\`); D-G3, o pet legível, agora pequeno perto dos objetos.
 D-G4: o revisor (corpo do PR). Comparação: `comparacao_d3.png`; a ilha com a escala nova: `ilha_d3\`.
 
+**O teste da D3 (2026-11-06, depois do merge do #650):** as contas da D3 ficaram em `digitalConta.ts` (sem DOM) e são testadas em
+`test/mapa_digital.test.ts` nos dois layouts: as 140 partículas dentro da área com a margem e entre as alturas, sempre iguais; os pares de
+postes sem repetição e dentro do alcance; um segmento por pedaço de fio. O #650 tinha entrado sem teste (o check `relato` reprovou e o
+merge não esperou por ele; D-MD-13).
+
