@@ -99,8 +99,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass, replace
 
-from .config import (CONFIG_EVOLUCAO_PESQUISA, CONFIG_OLFATO, CONFIG_OUVIDO, CONFIG_PADRAO, TICKS_POR_DIA, Config, ConfigCorpo,
-                     ConfigEvolucaoPesquisa, ConfigMundo, ConfigOlfato, ConfigOuvido)
+from .config import (CONFIG_EVOLUCAO_PESQUISA, CONFIG_LUTA_CORPO, CONFIG_OLFATO, CONFIG_OUVIDO, CONFIG_PADRAO, TICKS_POR_DIA, Config,
+                     ConfigCorpo, ConfigEvolucaoPesquisa, ConfigLutaCorpo, ConfigMundo, ConfigOlfato, ConfigOuvido)
 from .corpo_grafo import Emissor, Grafo, Leitura, Orgao, Quimico, Reacao, checar
 from .events import ACOES_PET_BANHEIRO, ACOES_PET_HOJE, FRUTAS, TIPOS_COMIDA_MUNDO, AcaoPet, AcaoUsuario
 from .state import Estado
@@ -565,7 +565,7 @@ class Corpo:
 
     def __init__(self, q: dict[str, int], cfg: Config | None = None, cc: ConfigCorpo | None = None,
                  cfg_evo: ConfigEvolucaoPesquisa | None = None, com_mundo: bool = False, cfg_olfato: ConfigOlfato | None = None,
-                 cfg_ouvido: ConfigOuvido | None = None) -> None:
+                 cfg_ouvido: ConfigOuvido | None = None, cfg_luta: ConfigLutaCorpo | None = None) -> None:
         self.cfg = cfg or CONFIG_PADRAO
         self.cfg_evo = cfg_evo or CONFIG_EVOLUCAO_PESQUISA
         self.cc = cc or ConfigCorpo(ligada=True)
@@ -574,6 +574,9 @@ class Corpo:
         self.com_mundo = com_mundo
         self.co = cfg_olfato or CONFIG_OLFATO
         self.cv = cfg_ouvido or CONFIG_OUVIDO
+        self.cl = cfg_luta or CONFIG_LUTA_CORPO
+        if self.cl.ligada and not self.cc.gestos:
+            raise ValueError("ConfigLutaCorpo.ligada exige ConfigCorpo.gestos (a dor da luta e o quimico dos gestos)")
         self.C = self.cc.escala
         self.S = self.cc.escala_receptor
         self.t = taxas_de(self.cfg, self.cc)
@@ -633,7 +636,7 @@ class Corpo:
     @classmethod
     def de_estado(cls, estado: Estado, cfg: Config | None = None, cc: ConfigCorpo | None = None,
                   cfg_evo: ConfigEvolucaoPesquisa | None = None, com_mundo: bool = False, cfg_olfato: ConfigOlfato | None = None,
-                  cfg_ouvido: ConfigOuvido | None = None) -> Corpo:
+                  cfg_ouvido: ConfigOuvido | None = None, cfg_luta: ConfigLutaCorpo | None = None) -> Corpo:
         """O corpo de um Estado de hoje (o do nascimento, por exemplo). Cada drive tem de cair na grade de C. A Vida e a do tick do
         Estado (C no nascimento). Os quimicos da etapa 6 comecam em 0 (`com_mundo`: a curiosidade existe)."""
         cc = cc or ConfigCorpo(ligada=True)
@@ -648,7 +651,7 @@ class Corpo:
             q["reserva"] = cc.reserva_inicial
         for nome in quimicos_de(cc, com_mundo, cfg_olfato, cfg_ouvido):
             q.setdefault(nome, 0)                          # os drives novos, os gestos e a adaptacao dos orgaos: zero no nascimento
-        return cls(q, cfg, cc, cfg_evo, com_mundo, cfg_olfato, cfg_ouvido)
+        return cls(q, cfg, cc, cfg_evo, com_mundo, cfg_olfato, cfg_ouvido, cfg_luta)
 
     # ---------------------------------------------------------- estimulos
 
@@ -767,6 +770,19 @@ class Corpo:
         """A necessidade deixada no chao: o "cheiro" imediato, desconforto + necessidade_desconforto."""
         self._exigir_banheiro()
         self._estimulo("necessidade")
+
+    # ---------------------------------------------------------- a ponte da luta (docs/TAREFA_V3_PONTE_LUTA.md, 3.2; PE1)
+
+    def estimulo_luta(self, vida_perdida_s: int) -> None:
+        """O fim de uma luta: a dor sobe div_arred(p x C, S), com p a vida perdida em S (inteiro, cortado em [0, S]; S = escala_receptor) e
+        C a escala do corpo. Sem rng e sem numero livre. A dor e o unico efeito (PL-3: o estresse da derrota fica fora). Sem a sub-chave
+        `luta_corpo`, falha alto."""
+        if not self.cl.ligada:
+            raise ValueError("estimulo da luta sem a ConfigLutaCorpo ligada (luta_corpo)")
+        if type(vida_perdida_s) is not int or vida_perdida_s < 0:
+            raise ValueError(f"vida perdida na luta precisa ser inteiro >= 0: {vida_perdida_s!r}")
+        p = min(vida_perdida_s, self.cc.escala_receptor)
+        self._somar({"dor": div_arred(p * self.C, self.S)})
 
     # ---------------------------------------------------------- o mundo fisico
     def estimulo_andar(self, deslocamento: int, custo_por_subunidade: float) -> None:
