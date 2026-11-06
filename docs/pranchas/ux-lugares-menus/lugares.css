@@ -96,8 +96,9 @@ svg.ic{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-wid
 .topo-pet{display:flex;align-items:center;gap:10px;padding:4px 16px 4px 4px;flex:none}
 .retrato{width:44px;height:44px;flex:none;padding:0;background:var(--hx-tecla);border:1px solid var(--hx-borda);overflow:hidden;position:relative}
 .retrato[aria-expanded="true"]{background:var(--hx-escolhido);border-color:var(--hx-escolhido-borda)}
-.retrato i{position:absolute;left:50%;top:50%;width:98.875px;height:76.857px;background-image:var(--assets-spr);background-repeat:no-repeat;
-  background-size:791px 538px;background-position:0 -307.43px;transform:translate(-50%,-52%) scale(.5);image-rendering:pixelated}
+/* o Growlmon: quadro 105 x 77 numa folha de 741 x 467, passo 106 x 78 (Assets/arena_up/dados/atlas.json, "Growlmon") */
+.retrato i{position:absolute;left:50%;top:50%;width:105px;height:77px;background-image:var(--assets-spr);background-repeat:no-repeat;
+  background-size:741px 467px;background-position:0 0;transform:translate(-50%,-52%) scale(.5);image-rendering:pixelated}
 .topo-pet-txt{display:flex;flex-direction:column;line-height:1.2}
 .topo-pet-txt b{font:700 17px/1.15 var(--hx-f);letter-spacing:.02em}
 .topo-pet-txt small{font:500 13px/1.2 var(--hx-f);color:var(--hx-texto-2)}
@@ -247,7 +248,7 @@ svg.conector{position:absolute;inset:0;width:1920px;height:950px;z-index:7;point
 .palco{position:relative;width:150px;height:112px;border:1px solid var(--hx-borda);background:var(--hx-tecla);overflow:hidden}
 .palco .disco{position:absolute;left:50%;bottom:8px;width:100px;height:18px;transform:translateX(-50%);border-radius:50%;border:2px solid var(--hx-rotulo);opacity:.6}
 .palco .spr{position:absolute;left:50%;bottom:4px;transform:translateX(-50%)}
-.spr{image-rendering:pixelated;background-image:var(--assets-spr);background-repeat:no-repeat}
+.spr{display:inline-block;image-rendering:pixelated;background-image:var(--assets-spr);background-repeat:no-repeat}
 .heroi .nome{font:700 24px/1.1 var(--hx-f)}
 .prazo{text-align:right}
 .prazo .num{--n:26px;display:block}
@@ -293,8 +294,8 @@ svg.conector{position:absolute;inset:0;width:1920px;height:950px;z-index:7;point
 .libera li b{font:700 18px/1 var(--hx-f-num);color:var(--hx-num)}
 .lider{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start}
 .lider-spr{width:112px;height:92px;border:1px solid var(--hx-borda);background:var(--hx-tecla);position:relative;overflow:hidden}
-/* o Gazimon: a folha dele tem 6 x 6 quadros (Assets/arena_up/sprites/Gazimon.png); 600% de largura e o quadro 0,0, sem saber os px */
-.lider-spr i{position:absolute;left:0;top:6px;width:112px;height:64px;background:url("../../../../Assets/arena_up/sprites/Gazimon.png") 0 0/600% auto no-repeat;image-rendering:pixelated}
+/* o Gazimon: quadro 126 x 73 numa folha de 761 x 443 (Assets/arena_up/dados/atlas.json, "Gazimon"), o quadro 0,0 a 0,8x */
+.lider-spr i{position:absolute;left:5px;top:12px;width:100.8px;height:58.4px;background:url("../../../../Assets/arena_up/sprites/Gazimon.png") 0 0/608.8px 354.4px no-repeat;image-rendering:pixelated}
 .lider-spr small{position:absolute;left:0;right:0;bottom:2px;text-align:center;font:600 11px/1 var(--hx-f);color:var(--hx-sec)}
 .med-lista{display:flex;flex-direction:column;gap:4px}
 .med-li{display:grid;grid-template-columns:30px 1fr auto;align-items:center;gap:10px;min-height:44px;padding:4px 10px;border:1px solid var(--hx-borda);background:transparent;text-align:left;width:100%}
@@ -354,6 +355,140 @@ svg.conector{position:absolute;inset:0;width:1920px;height:950px;z-index:7;point
 .cursor path{fill:var(--hx-chao);stroke:var(--hx-foco);stroke-width:1.5}
 .pular{--ch:var(--hud-ch-p);position:absolute;z-index:26;left:50%;bottom:28px;transform:translateX(-50%);display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 16px;font:600 14px/1 var(--hx-f);color:var(--hx-texto-2)}
 .pular kbd{padding:2px 6px;border:1px solid var(--hx-borda-topo);font:600 12px/1 var(--hx-f)}
+
+/* ==================================================================================================== RODADA 2: a regra do texto
+   A vista so tem icone, numero e um rotulo de 1 a 3 palavras. Frase so no "como funciona" fechado ou no balao (foco ou hover). O balao
+   fica no HTML com o atributo hidden (o innerText nao o conta); o balao aberto de demonstracao fica FORA do .painel-lugar. */
+[hidden]{display:none !important}
+.balao{--ch:var(--hud-ch-p);position:absolute;z-index:50;max-width:300px;padding:8px 12px;border-color:var(--hx-rotulo);font:500 13px/1.35 var(--hx-f);color:var(--hx-texto);text-align:left}
+.balao b{font-weight:700}
+.balao::after{content:"";position:absolute;left:18px;top:-7px;width:12px;height:12px;background:var(--hud-fundo-1);border-left:1px solid var(--hx-rotulo);border-top:1px solid var(--hx-rotulo);transform:rotate(45deg)}
+.balao.prof{display:flex;gap:10px;align-items:flex-start;max-width:340px;border-color:var(--hx-alerta)}
+.balao.prof::after{border-color:var(--hx-alerta)}
+.balao.prof .bts{display:flex;gap:6px;margin-top:8px}
+/* a contagem de palavras: etiqueta da prancha, nao do jogo (o literal da nota) */
+.contagem{position:absolute;z-index:60;font:700 12px/1.3 system-ui,sans-serif;color:#0b1320;background:#FFE08A;padding:3px 8px;border-radius:3px;white-space:nowrap}
+.contagem b{font-size:15px}
+body.sem-notas .contagem.so-nota{display:none}
+.ic-p{width:16px;height:16px}
+.num-g{font:700 22px/1 var(--hx-f-num);color:var(--hx-num)}
+
+/* ---- Itens */
+.itens-topo{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.conta-ic{display:inline-flex;align-items:center;gap:6px}
+.conta-ic > .ic{color:var(--hx-rotulo)}
+.conta-ic small,.req small,.vagas small{font:600 12px/1 var(--hx-f);letter-spacing:.06em;text-transform:uppercase;color:var(--hx-sec)}
+.vagas{display:inline-flex;align-items:center;gap:6px;margin-left:auto}
+.slot{position:relative;width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--hx-borda-topo);border-radius:50%;color:var(--hx-sec)}
+.slot.livre{border-style:dashed}
+.slot.ocupada{background:var(--hx-escolhido);border-color:var(--hx-escolhido-borda)}
+.slot.trancada{opacity:.6;border-style:dotted}
+.slot.trancada .ic{width:14px;height:14px}
+.slot.trancada small{position:absolute;right:-6px;bottom:-6px;min-width:16px;height:16px;display:grid;place-items:center;background:var(--hx-chao);border:1px solid var(--hx-sec);border-radius:50%;font:700 10px/1 var(--hx-f-num);color:var(--hx-texto-2)}
+.aviso-it{display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:0 10px;border:1px dashed var(--hx-sec);color:var(--hx-texto-2);font:600 13px/1 var(--hx-f)}
+.aviso-it b{font:700 15px/1 var(--hx-f-num);color:var(--hx-num)}
+.item-grade{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.item{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-height:86px;padding:9px 10px 8px;border:1px solid var(--hx-borda);background:var(--hx-tecla);text-align:left}
+.item > .ic{width:24px;height:24px;color:var(--hx-rotulo);stroke-width:1.8}
+.item b{font:700 15px/1.1 var(--hx-f)}
+.item small{font:500 12px/1.2 var(--hx-f);color:var(--hx-sec)}
+.item.falta{border-style:dashed;background:transparent}
+.item.falta > .ic,.item.falta b{opacity:.7}
+.item .canto{position:absolute;right:6px;top:6px;display:flex;gap:4px;align-items:center}
+.item .canto .ic{width:14px;height:14px;color:var(--hx-sec)}
+.item .qtd{font:700 13px/1 var(--hx-f-num);color:var(--hx-num)}
+.item.proximo{border:1px solid var(--hx-alerta);border-left-width:4px}
+
+/* ---- Evolucao */
+.evo-topo{display:grid;grid-template-columns:132px 1fr auto;align-items:center;gap:14px}
+.evo-topo .palco{width:132px;height:100px}
+.evo-nome .nome{font:700 26px/1.1 var(--hx-f)}
+.evo-nome .linha{gap:8px;margin-top:4px}
+.prazo2{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.prazo2 .linha{gap:6px}
+.prazo2 .ic{color:var(--hx-rotulo)}
+.reqs{display:flex;align-items:center;gap:22px}
+.req{display:inline-flex;align-items:center;gap:8px}
+.req > .ic{color:var(--hx-rotulo)}
+.selo.falta{opacity:.5}
+.selo.falta i{color:var(--hx-sec)}
+.arv2{display:flex;flex-direction:column;gap:6px}
+.arv2 .fila{display:grid;grid-template-columns:92px 1fr;align-items:center;gap:8px}
+.arv2 .fila > .rot{color:var(--hx-sec)}
+.arv2 .nos{display:flex;gap:6px;align-items:center}
+.n{position:relative;width:48px;height:48px;display:grid;place-items:center;border:1px solid var(--hx-borda);background:transparent;padding:0;overflow:hidden;
+  font:800 15px/1 var(--hx-f);color:var(--hx-sec)}
+.n.ok{border-color:var(--hx-ok)}
+.n.ok .v{position:absolute;right:2px;top:2px;width:12px;height:12px;color:var(--hx-ok)}
+.n.agora{border:2px solid var(--hx-escolhido-borda);background:var(--hx-escolhido);box-shadow:var(--hx-escolhido-brilho)}
+.n.possivel{border-style:dashed;color:var(--hx-texto-2)}
+.n.fechado{opacity:.35;border-style:dotted;width:34px;height:34px}
+.n.sombria{border-style:dotted;background-image:var(--hx-hachura)}
+.n .spr{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+.bts-linha{display:flex;gap:8px}
+
+/* ---- trancado e destravado (a trava de progresso; a regra fica para o plano de progressao) */
+.apagado{filter:grayscale(1) brightness(.62)}
+.apagado > *{position:absolute}  /* as partes da barraca apagada ficam no lugar delas, como em .mundo > * */
+.nav-bt.trancado{opacity:.45}
+.nav-bt.trancado .cad-t{position:absolute;left:4px;top:4px;width:14px;height:14px}
+.cadeado-ilha{--ch:var(--hud-ch-p);position:absolute;z-index:8;display:grid;place-items:center;width:56px;height:56px;transform:translate(-50%,-50%);color:var(--hx-texto)}
+.cadeado-ilha .ic{width:28px;height:28px}
+.novo-selo{position:absolute;z-index:9;width:14px;height:14px;background:var(--hx-alerta);transform:rotate(45deg)}
+.prof-ag{flex:none;width:64px;height:50px;position:relative;overflow:hidden;border:1px solid var(--hx-borda);background:var(--hx-tecla)}
+
+/* ---- antes x depois a 1920 */
+.antes-cx{position:absolute;z-index:30;left:40px;top:60px;width:852px;height:800px;overflow:hidden;border:2px solid var(--hx-borda-topo);background:var(--hx-chao)}
+.antes-cx i{position:absolute;inset:0;background-repeat:no-repeat;background-position:-1068px -70px}
+.antes-cx i.cel{background-position:0 0}
+.titulo-pr{position:absolute;z-index:60;left:40px;top:16px;font:700 16px/1.3 system-ui,sans-serif;color:#0b1320;background:#FFE08A;padding:4px 10px;border-radius:3px}
+.cel-cx{position:absolute;z-index:30;top:40px;width:390px;height:844px;border:0;overflow:hidden;background:var(--hx-chao)}
+
+/* ---- o celular (rodada 3): a folha sobe da base e cobre so a parte de baixo; o lugar e o pet ficam visiveis em cima.
+   Substitui a faixa do topo da rodada 2. A altura (--folha-top: 400 px a 390 x 844, 380 a 360 x 800) e PROPOSTA, SEM FONTE. */
+body.cel{width:390px;height:844px}
+html.cel{width:390px;height:844px}
+html.c360,body.c360{width:360px;height:800px}
+.cena-cel{position:absolute;inset:0;background:url("img/cena_sem_pet.jpg") 40% 50%/auto 100% no-repeat}
+.veu{position:absolute;inset:0;background:var(--chao-sombra)}
+.folha{--ch:var(--hud-ch);position:absolute;z-index:10;left:0;right:0;top:var(--folha-top,400px);bottom:0;display:flex;flex-direction:column;overflow:hidden;
+  border-left:0;border-right:0;border-bottom:0}
+.folha .alca{display:block;width:40px;height:4px;margin:6px auto 0;background:var(--hx-borda-topo);border-radius:2px;flex:none}
+.folha .lp-cab{padding:4px 10px 0 14px}
+.folha .abas{padding:8px 10px}
+.folha .lp-corpo{padding:12px 10px 14px;gap:10px;overflow:hidden}
+.folha .item-grade{gap:6px}
+.folha .item{min-height:80px;padding:8px}
+.folha .item .canto{position:static;align-self:flex-end;margin:-2px -2px 2px 0}  /* a 390 a etiqueta do nivel nao cobre o icone */
+.folha .evo-topo{grid-template-columns:96px 1fr;gap:10px}
+.folha .evo-topo .palco{width:96px;height:80px}
+.folha .prazo2{grid-column:1 / -1;flex-direction:row;align-items:center;justify-content:flex-start}
+.folha .reqs{gap:14px;flex-wrap:wrap}
+.folha .arv2 .fila{grid-template-columns:80px 1fr}
+.folha .vagas{margin-left:0}
+
+/* ==================================================================================================== RODADA 3: os niveis do Tamer
+   (docs/PLANO_V3_PROGRESSAO_TUTORIAL.md, secoes 3.3, 3.4, 4.1 e 4.2; P-1 a P-11, DECIDIDAS) */
+.nv{display:inline-flex;align-items:center;gap:3px;padding:1px 6px;border:1px solid var(--hx-sec);font:700 12px/1.2 var(--hx-f-num);color:var(--hx-texto-2);white-space:nowrap}
+.aba-nv{position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);padding:0 4px;background:var(--hx-chao);border:1px solid var(--hx-sec);
+  font:700 10px/13px var(--hx-f-num);color:var(--hx-texto-2);letter-spacing:0;white-space:nowrap}
+.mini-bt .mini-nv{position:absolute;left:50%;bottom:-10px;transform:translateX(-50%);padding:0 4px;background:var(--hx-chao);border:1px solid var(--hx-sec);
+  font:700 10px/13px var(--hx-f-num);color:var(--hx-texto-2);white-space:nowrap}
+.cadeado-ilha{width:auto;min-width:56px;height:auto;min-height:48px;padding:6px 10px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.cadeado-ilha b{font:700 14px/1 var(--hx-f-num);color:var(--hx-texto)}
+.cadeado-ilha.aberto{border-color:var(--hx-alerta);color:var(--hx-alerta)}
+.brilho{border:3px solid var(--hx-alerta);border-radius:50%;box-shadow:0 0 28px var(--hx-alerta),inset 0 0 22px var(--hx-alerta);opacity:.85;z-index:6}
+@media (prefers-reduced-motion: reduce){.brilho{display:none}}
+.cartao-destrave{--ch:var(--hud-ch-p);position:absolute;z-index:40;display:flex;gap:14px;align-items:flex-start;width:300px;padding:14px 16px;border-color:var(--hx-alerta)}
+.cartao-destrave .cd-ic{display:grid;place-items:center;width:52px;height:52px;flex:none;border:1px solid var(--hx-alerta);color:var(--hx-alerta)}
+.cartao-destrave .cd-ic .ic{width:28px;height:28px}
+.cartao-destrave .cd-txt{display:flex;flex-direction:column;gap:4px}
+.cartao-destrave b{font:700 20px/1.1 var(--hx-f);letter-spacing:.04em}
+.cartao-destrave .cd-txt > span:not(.cd-bts){font:500 14px/1.3 var(--hx-f);color:var(--hx-texto-2)}
+.cartao-destrave .cd-bts{display:flex;gap:8px;margin-top:8px}
+.tamer-nv{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;border:1px solid var(--hx-alerta);color:var(--hx-alerta);font:700 14px/1 var(--hx-f-num);letter-spacing:.04em;white-space:nowrap}
+.fechado.trancado{opacity:.6;border-style:dashed}
+.fechado.trancado .nv{margin-left:auto}
 
 /* nota de prancha (so nas pranchas, nao e tela; some com ?sem); o mesmo literal da B3 (docs/pranchas/b3/luta.css:91) */
 .nota{position:absolute;z-index:60;font:600 11px/1.3 system-ui,sans-serif;color:#0b1320;background:#FFE08A;padding:2px 6px;border-radius:3px;max-width:300px}
