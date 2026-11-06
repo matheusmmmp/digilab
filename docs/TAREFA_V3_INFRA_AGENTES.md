@@ -6,7 +6,7 @@ Coordenador: Matheus. Worker: Claude Code (sessão do especificador, worktree `v
 Categoria: arquitetura. Origem: Matheus, 2026-11-06: gates impostos pelo harness e revisores novos por lente para o desenvolvimento do
 cérebro e do jogo: hooks restaurados, agentes somente leitura, gate de pré-run, testador de navegador isolado, CI do web.
 
-Tudo aqui é **PROPOSTO** até o Matheus decidir (seção 8). A D-IA-1, a D-IA-4, a D-IA-5 e a D-IA-7 estão **DECIDIDAS** (seção 8.1).
+Tudo aqui é **PROPOSTO** até o Matheus decidir (seção 8). As D-IA-1 a D-IA-7 estão **DECIDIDAS** (seção 8.1).
 
 ## 1. Pergunta
 
@@ -240,18 +240,19 @@ Nenhuma run. Nenhuma semente.
 | id | decisão | recomendação | custo de errar |
 |---|---|---|---|
 | **D-IA-1** (DECIDIDA) | quais testes o Stop roda | **sempre que `digilab/`, `experiments/` ou `tests/` mudou: os da frente e os dos arquivos mudados (o H2 de hoje); a lista fixa de replay (22 arquivos, seção 3.1) só quando mudou `digilab/` ou `experiments/bancada/`**; a suíte inteira continua no PR. Medido nesta sessão: os 22 de replay, `108 passed in 424.91s` (~7 min), abaixo do limite de 600 s do H2 | lista curta demais: um replay quebrado passa até a suíte do PR (36 min depois, ou na `main`); longa demais: cada turno que mexe em código espera minutos, e a sessão aprende a fugir do hook |
-| **D-IA-2** | o `pre_run` entra nos orquestradores ou só no hook | **no hook (E3) e, daqui para a frente, nos `run_v3_*` novos, numa linha no começo do `main()`; os `run_v2_*` não mudam** | só no hook: uma run lançada pelo terminal do Matheus ou por outra ferramenta pula o gate e pode queimar uma faixa; em todos os orquestradores: mexe em 26 arquivos da V2 congelada, cada um com teste |
-| **D-IA-3** | o e2e visual roda no Linux | **não; no CI só `tipos`, `npm test` e `build`**. O e2e nem roda no CI como está: os sete specs leem o atlas fora do git, e as referências das capturas também estão fora do git (não há `*-snapshots/` versionado). O e2e fica no Stop do web (H5) e no testador | rodar no Linux: referências novas por plataforma, dois conjuntos para aprovar, e o atlas teria de ir ao CI (não pode: arte fora do git); não rodar: uma quebra do e2e só aparece na junção, como hoje (o Gerente roda antes do merge) |
+| **D-IA-2** (DECIDIDA) | o `pre_run` entra nos orquestradores ou só no hook | **no hook (E3) e, daqui para a frente, nos `run_v3_*` novos, numa linha no começo do `main()`; os `run_v2_*` não mudam** | só no hook: uma run lançada pelo terminal do Matheus ou por outra ferramenta pula o gate e pode queimar uma faixa; em todos os orquestradores: mexe em 26 arquivos da V2 congelada, cada um com teste |
+| **D-IA-3** (DECIDIDA) | o e2e visual roda no Linux | **não; no CI só `tipos`, `npm test` e `build`**. O e2e nem roda no CI como está: os sete specs leem o atlas fora do git, e as referências das capturas também estão fora do git (não há `*-snapshots/` versionado). O e2e fica no Stop do web (H5) e no testador | rodar no Linux: referências novas por plataforma, dois conjuntos para aprovar, e o atlas teria de ir ao CI (não pode: arte fora do git); não rodar: uma quebra do e2e só aparece na junção, como hoje (o Gerente roda antes do merge) |
 | **D-IA-4** (DECIDIDA) | o H9 diante de uma faixa queimada nova | **código 2 para remover ou alterar; `ask` para acrescentar no fim** | negar tudo: queimar uma faixa depois de uma run caída exige editar fora do Claude Code; deixar acrescentar sem perguntar: um agente pode queimar uma faixa reservada viva por engano |
 | **D-IA-5** (DECIDIDA) | a divisão com a UX_TELA_PET (#589, #590) | **a A0 é o #590 (a E1 parte dele, sem refazer); o H6 é feito uma vez, aqui, com o desenho da UX; o H5 e o H8 ficam na UX A1; o `testador-navegador` é o `ux-browser-tester` (um arquivo, o daqui, que a UX A2 referencia); a lente do `rev-replay` na web fica na UX, e o `revisor-determinismo` cobre o Python e a paridade** | duas frentes escrevendo o mesmo hook ou o mesmo agente: dois H6 com regras diferentes, dois testadores, e um merge que apaga o outro (como o `2586b0e` apagou os hooks) |
-| **D-IA-6** | o que é "plano commitado" no `pre_run` | **o commit do plano alcançável do `origin/main`**, não só no branch | só no branch: uma run roda sobre um plano que o Matheus não aprovou na `main`; no `origin/main`: um `git fetch` velho recusa uma run legítima (o motivo diz "rode `git fetch`") |
+| **D-IA-6** (DECIDIDA) | o que é "plano commitado" no `pre_run` | **o commit do plano alcançável do `origin/main`**, não só no branch | só no branch: uma run roda sobre um plano que o Matheus não aprovou na `main`; no `origin/main`: um `git fetch` velho recusa uma run legítima (o motivo diz "rode `git fetch`") |
 | **D-IA-7** (DECIDIDA) | quais hooks ligar, e quando | **H6, H9 e H10 ao mergear a etapa (são baratos, só leem o evento); o H2 estendido depois da medida do Stop na E1; o H4 junto (está pronto desde o IM-8)** | ligar o Stop sem medir: turnos lentos; não ligar: a regra volta a ser só pedido no prompt, que é o problema desta frente |
 
 ### 8.1 Decididas
 
 - **D-IA-1, D-IA-4, D-IA-5 e D-IA-7: DECIDIDAS pela recomendação** (Matheus, 2026-11-06, nesta sessão: "das suas recomendações", ao
   pedir o prompt da E1, e "Empilhar sobre o #590"). A E1 sai empilhada sobre o #590 (branch `v3-hooks-a0`), que ainda não está na `main`.
-- A D-IA-2, a D-IA-3 e a D-IA-6 seguem PROPOSTAS: valem para a E3 e a E5.
+- **D-IA-2, D-IA-3 e D-IA-6: DECIDIDAS pela recomendação** (Matheus, 2026-11-06, "segue com as recomendações", depois da E1): o
+  `pre_run` no hook e nos `run_v3_*` novos; no CI do web só `tipos`, `npm test` e `build`; o plano exigido no `origin/main`.
 
 ## 9. Resumo da etapa E1 (2026-11-06)
 
@@ -275,3 +276,23 @@ Worker: Claude Code, Opus 5.5, worktree `v3-infra-agentes-e1`, branch empilhado 
   sessão rodava testes ao mesmo tempo, a `ponte_luta_pe1`): mudança em `digilab/`, 341,8 s, 327,0 s e 323,8 s; só em `tests/`, 3,5 s,
   9,8 s e 3,9 s (a frente `infra_agentes_e1` cai no prefixo `infra`, os `tests/test_infra_*.py`). O limite de 600 s não estoura.
 - **Conferido à mão:** um evento de Edit que apaga a linha da faixa 15101…15505 do `experiments/bancada/faixas.py` real sai com código 2.
+
+## 10. Resumo da etapa E2 (2026-11-06)
+
+Worker: Claude Code, Opus 5.5, worktree `v3-infra-agentes-e2`, branch empilhado sobre o #604 (E1).
+
+- **Três agentes em `.claude/agents/`**, no formato de subagente do Claude Code (`name`, `description`, `tools`, `disallowedTools`, `model`;
+  o `skills` no `revisor-metodo`):
+  - `revisor-metodo` (Opus): `tools: Read, Grep, Glob, Skill`, com a skill `literatura-digilab` carregada no começo;
+  - `revisor-determinismo` (Opus): `tools: Read, Grep, Glob`; a lente da interface web fica no `rev-replay` da UX (D-IA-5);
+  - `auditor-numeros` (Sonnet): `tools: Read, Grep, Glob`, as classes VERIFICADO, DIVERGENTE e SEM FONTE.
+  Os três negam `Edit`, `Write`, `MultiEdit`, `NotebookEdit`, `Bash` e `PowerShell` no `disallowedTools`.
+- **Teste:** `python -m pytest tests/test_agentes.py -q -p no:cacheprovider` → 6 passed (o frontmatter lido à mão, sem PyYAML).
+- **O auditor rodado uma vez** sobre o `docs/RESULTADO_V3_ACOES_NOVAS.md`, contra `artifacts_v3_acoes_novas/run/`: **0 DIVERGENTE, 9 SEM
+  FONTE, cerca de 229 VERIFICADO** (a contagem dos VERIFICADO foi feita pelo agente, à mão). A sessão desta etapa não carregava o arquivo novo
+  como tipo de agente (a pasta `.claude/agents/` nasceu nela), então rodou um agente geral, em Sonnet, com o corpo do `auditor-numeros.md`
+  como instrução e só leitura. Conferido à mão: o `movimento.media` (0.023628) e o `vidas` (3200) do `resultado.json` batem com o texto.
+- **Dos 9 SEM FONTE,** 4 são hashes ou tamanhos de arquivo que o auditor não calcula sem `Bash` (o sha256 do `meta.json`, do `run.log` e do
+  `vidas.tar.gz`, e os tamanhos do `medidas.json` e do `vidas.tar.gz`): pelo menos um é falso SEM FONTE (o sha256 do `run.log` começa por
+  `bde44a87`, como o texto). Os outros 5 são números que vêm de outro documento ou de outra run (o plano, a C4, a AN0) ou que o próprio
+  texto marca como hipótese.
