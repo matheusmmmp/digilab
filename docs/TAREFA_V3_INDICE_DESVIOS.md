@@ -207,7 +207,9 @@ git checkout -qb F; sed -i 's/BASE: s0/BASE: s0b/' docs/registro/2026-11.md docs
 - **`tools/gerar_estado_atual.py`:** as últimas seções vêm dos arquivos do mês (desvio D-ID-W3).
 - **CI** (`.github/workflows/verificar-pr.yml`, D-ID2): o passo "Índice de desvios em dia (só aviso)", depois do G-CONCAT.
 - **O índice regenerado:** 486 entradas (as 485 da `main` e a seção desta etapa). O que mudou: o cabeçalho e as 52 linhas em branco
-  soltas (desvio D-ID-W2).
+  soltas (desvio D-ID-W2). Ao trazer a `main` (`4bde2ea0`), o índice conflitou com as 6 seções novas dela; a resolução foi rodar o
+  gerador (492 entradas) e o G-CONCAT passou, o primeiro uso do caminho novo. O `merge=union` do arquivo do mês pôs a seção desta etapa
+  antes das 6 da `main` (o caso T1, a questão aberta da seção 6).
 - **Instruções:** a seção 5 do `docs/modelos/TAREFA_V3_MODELO.md` e a regra do registro do `docs/V2_TRABALHO_PARALELO.md`, com o texto
   da seção 3.5.
 - **Testes:** `tests/test_infra_indice_desvios.py` (novo, 5: a ordem dos arquivos no caso T1, escrever e conferir, a linha em branco, a
