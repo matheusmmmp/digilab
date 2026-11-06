@@ -1,0 +1,146 @@
+{
+ "asset": {
+  "generator": "Khronos glTF Blender I/O v4.5.51",
+  "version": "2.0",
+  "extras": {
+   "gerado_por_ia": true,
+   "gerador": "Meshy (meshy.ai), plano Pro, conta do Matheus",
+   "tarefas_meshy": {
+    "concept": "01a1b18f-6c41-74ba-b1a5-6b4486144729",
+    "vistas": "01a1b192-aeab-7488-b040-60880aa48744",
+    "malha": "01a1b193-9160-7618-aa5b-8800a7de5d4e"
+   },
+   "pipeline": "docs/TAREFA_V3_ITENS_3D.md; a malha da Meshy mantida, com a cor chapada na paleta do concept, uma cor por face, e os tracos de nanquim nas divisas de cor e nas quinas grandes (tracar_linhas.py)",
+   "licenca": "License.txt ao lado"
+  }
+ },
+ "scene": 0,
+ "scenes": [
+  {
+   "name": "Scene",
+   "nodes": [
+    0
+   ]
+  }
+ ],
+ "nodes": [
+  {
+   "mesh": 0,
+   "name": "geladeira"
+  }
+ ],
+ "materials": [
+  {
+   "name": "geladeira",
+   "pbrMetallicRoughness": {
+    "baseColorTexture": {
+     "index": 0
+    },
+    "metallicFactor": 0
+   }
+  }
+ ],
+ "meshes": [
+  {
+   "name": "geladeira",
+   "primitives": [
+    {
+     "attributes": {
+      "POSITION": 0,
+      "NORMAL": 1,
+      "TEXCOORD_0": 2
+     },
+     "indices": 3,
+     "material": 0
+    }
+   ]
+  }
+ ],
+ "textures": [
+  {
+   "sampler": 0,
+   "source": 0
+  }
+ ],
+ "images": [
+  {
+   "mimeType": "image/png",
+   "name": "geladeira_cor",
+   "uri": "geladeira_cor.png"
+  }
+ ],
+ "accessors": [
+  {
+   "bufferView": 0,
+   "componentType": 5126,
+   "count": 4038,
+   "max": [
+    0.5948209762573242,
+    0.9467589855194092,
+    0.5557760000228882
+   ],
+   "min": [
+    -0.591261088848114,
+    -0.9498810768127441,
+    -0.5551649332046509
+   ],
+   "type": "VEC3"
+  },
+  {
+   "bufferView": 1,
+   "componentType": 5126,
+   "count": 4038,
+   "type": "VEC3"
+  },
+  {
+   "bufferView": 2,
+   "componentType": 5126,
+   "count": 4038,
+   "type": "VEC2"
+  },
+  {
+   "bufferView": 3,
+   "componentType": 5123,
+   "count": 6186,
+   "type": "SCALAR"
+  }
+ ],
+ "bufferViews": [
+  {
+   "buffer": 0,
+   "byteLength": 48456,
+   "byteOffset": 0,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 48456,
+   "byteOffset": 48456,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 32304,
+   "byteOffset": 96912,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 12372,
+   "byteOffset": 129216,
+   "target": 34963
+  }
+ ],
+ "samplers": [
+  {
+   "magFilter": 9729,
+   "minFilter": 9987
+  }
+ ],
+ "buffers": [
+  {
+   "byteLength": 141588,
+   "uri": "geladeira.bin"
+  }
+ ]
+}
