@@ -1,0 +1,9 @@
+{
+ "id": "01a1b0df-c299-7468-b5ff-c5fdaf635098",
+ "ai_model": "nano-banana-2",
+ "prompt": "Concept art of a single small cartoon poop prop for a cozy low-poly 3D island virtual pet game, cute and clean, not gross. Match exactly the art style of the reference screenshots: simple chunky rounded shapes, flat toon shading with three tones, soft saturated colors, no outlines, no realistic texture. It is a swirl of stacked coils, each smaller and higher, with a little bent tip on top. Show only the poop, full object in frame, three-quarter view from slightly above, on a plain light grey background, no ground, no shadow, no text, no logo, no face, no eyes, no characters, no flies. Three coils in a dark earthy brown with a couple of tiny green grass bits stuck on it, as if it fell on the island grass.",
+ "status": "SUCCEEDED",
+ "consumed_credits": 6,
+ "created_at": 1793968816847,
+ "finished_at": 1793968830242
+}

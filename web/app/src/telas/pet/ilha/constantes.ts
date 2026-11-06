@@ -71,5 +71,5 @@ export const SACO_AMASSO = { amplitude: 0.14, tau: 150, periodo: 300 } as const;
     saco fica ~1,84 celula abaixo do pivo, entao o saco toca o poste perto de asin(0,29 / 1,84) = 0,16; com folga, 0,14. PROPOSTO */
 export const SACO_FOLGA_POSTE = 0.14;
 /** o coco no chao (cocos.ts): o raio do anel em volta do pet onde ele cai e o passo entre aneis (celulas), quanto dura o pulinho ao
-    surgir (ms) e as duas cores das voltas; PROPOSTO, SEM FONTE */
-export const COCO = { raio: 0.85, passo: 0.25, surgirMs: 380, cor: [0x8a5a2b, 0x6f4520] } as const;
+    surgir (ms); o desenho e o item gerado (itens.ts, public/itens/coco/); PROPOSTO, SEM FONTE */
+export const COCO = { raio: 0.85, passo: 0.25, surgirMs: 380 } as const;
