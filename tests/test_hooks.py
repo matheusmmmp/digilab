@@ -581,6 +581,10 @@ def test_h8_escrita_por_papel(projeto, tmp_path, papel, tool, alvo, passa):
     ("npm run build", True),
     ("npm run e2e", True),
     ("npm run e2e -- e2e/jogo.spec.ts", True),
+    ("npm run tipos", True),                    # INFRA_AGENTES E4 (seção 3.4)
+    ("npm test", True),
+    ("cd web/app && npm run test", True),
+    ("npm test -- --update", False),
     ("DIGILAB_CAPTURAS_LARGURAS=390,1920 npm run capturas", True),
     ("cd web/app && npx playwright test e2e/jogo.spec.ts --project=gpu", True),
     ("git diff --stat", True),

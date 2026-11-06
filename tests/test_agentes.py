@@ -63,6 +63,19 @@ def test_o_revisor_de_determinismo_tem_a_lente_dele():
         assert termo in corpo, termo
 
 
+def test_o_testador_e_o_da_ux_com_a_secao_3_4():
+    """E4 (seção 3.4): um testador só, o ux-browser-tester da UX_TELA_PET (D-IA-5), sem escrita, com tipos, Vitest e e2e, a porta própria
+    e o H8 no frontmatter."""
+    assert not (AGENTES / "testador-navegador.md").exists()
+    campos, corpo = ler("ux-browser-tester")
+    assert not lista(campos["tools"]) & ESCRITA
+    assert ESCRITA <= lista(campos["disallowedTools"])
+    for termo in ("npm run tipos", "npm test", "npm run e2e", "DIGILAB_PORTA_E2E", "console", "*-diff.png"):
+        assert termo in corpo, termo
+    texto = (AGENTES / "ux-browser-tester.md").read_text(encoding="utf-8")
+    assert "h8_escopo.py\\\" testador" in texto or 'h8_escopo.py\\" testador' in texto
+
+
 def test_o_auditor_tem_as_tres_classes():
     _, corpo = ler("auditor-numeros")
     for classe in ("VERIFICADO", "DIVERGENTE", "SEM FONTE"):

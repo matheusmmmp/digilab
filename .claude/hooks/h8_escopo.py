@@ -14,6 +14,7 @@ Os papéis:
 
   O shell dele não passa por aqui: quem o cobre é o H6.
 - **testador:** nenhuma escrita. No shell, só estes comandos:
+  - `npm run tipos`, `npm test` e `npm run test` (INFRA_AGENTES E4);
   - `npm run build`, `npm run e2e`, `npm run capturas` e `npx playwright test`, sempre sem `--update-snapshots`/`-u`;
   - leitura (`ls`, `cat`, `git diff`…);
   - nenhum redirecionamento `>`.
@@ -38,7 +39,7 @@ DESIGNER_PASTAS = ("docs/pranchas/ux-pet/",)
 DESIGNER_ARQUIVOS = ("docs/PROPOSTAS_V3_UX_TELA_PET.md",)
 IMPLEMENTADOR_NEGADOS = ("web/app/motor/", "web/app/test/gabaritos/", "web/app/src/save.ts", "web/app/src/rotas.ts", "digilab/",
                          "experiments/", "servidor/")
-TESTADOR_NPM = {"build", "e2e", "capturas"}
+TESTADOR_NPM = {"build", "e2e", "capturas", "tipos", "test", "teste"}   # tipos e test: INFRA_AGENTES E4, seção 3.4
 REDIRECIONAMENTO = re.compile(r"(?<![0-9&])>{1,2}(?!&)")
 
 
@@ -90,7 +91,7 @@ def comando_do_testador(tokens: list[str]) -> bool:
         return False
     nome = Path(resto[0]).stem.lower()
     if nome == "npm":
-        return len(resto) >= 3 and resto[1] == "run" and resto[2] in TESTADOR_NPM
+        return (len(resto) >= 3 and resto[1] == "run" and resto[2] in TESTADOR_NPM) or (len(resto) == 2 and resto[1] == "test")
     if nome == "npx":
         return len(resto) >= 3 and resto[1] == "playwright" and resto[2] == "test"
     return so_leitura(resto) and nome not in ("find",)   # o find tem -delete e -exec
