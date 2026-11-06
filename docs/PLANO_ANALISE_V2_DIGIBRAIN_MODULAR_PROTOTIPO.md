@@ -3660,7 +3660,7 @@ de A9.0 a A9.12 muda. A run roda uma vez; o resultado é registrado como está.
 
 ## Adendo 10: de onde vem o ganho do M3\* no `longe_fixo`, o descritivo da D-C1-3 (2026-11-06, worker do plano da D-C1-3, Claude Code, Opus 5.5)
 
-**Status: PROPOSTO.** Este adendo aguarda a aprovação do Matheus (as AD10-1 a AD10-7, em A10.9). **Nenhum replay e nenhuma conta deste adendo
+**Status: APROVADO pelo Matheus em 2026-11-06 ("Aprovo e mescle").** As AD10-1 a AD10-7 (A10.9) estão DECIDIDAS, todas pela recomendação. **Nenhum replay e nenhuma conta deste adendo
 rodam antes de duas coisas:** a marca de aprovação do Matheus neste cabeçalho, e o código da A10.8 na `main`. Este adendo **não calcula nenhum
 número de resultado.** Os números que ele cita já estão registrados na seção 13 do RESULTADO e servem só de contexto.
 
@@ -3909,7 +3909,7 @@ da 77xxx que estão no git. **Estender a decomposição ao REL é uma decisão �
 
 ### A10.9 As decisões do Matheus
 
-**Todas PROPOSTAS.** Cada uma vem com a recomendação e o custo de errar.
+**Todas DECIDIDAS pelo Matheus em 2026-11-06 ("Aprovo e mescle"), pela recomendação.** Cada uma vem com a recomendação e o custo de errar.
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
