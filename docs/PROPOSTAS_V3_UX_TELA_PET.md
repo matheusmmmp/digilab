@@ -630,3 +630,196 @@ O sprite é o Gabumon de `D:\Trab\digilab\Assets\arena_up` (fora do git, como na
 | P1-4 | a 1920, a linha mostra também "o que mais pesou" (`percepcao[0]`, com o ícone da medida) no lugar dos ícones de `CausaIcones` | **não nesta etapa**: a linha fica com a ação e o aprendido; o "o que mais pesou" já está no DigiBrain | sim: a linha cresce ~160 px e a malha perde o peso; não: a B perde os "ícones da causa" que prometia, e a tela diz menos sem abrir nada |
 | P1-5 | com "Exibir detalhes do pet" desligado, a linha fica | **fica, como texto sem botão** (o porquê de agora é a leitura principal da B; o detalhe é que sai) | some: quem desliga os detalhes perde o porquê; fica como botão: abriria um painel que a preferência tirou |
 | P1-6 | o rótulo do chip é "aprendido", e não "aprendido com você" | **"aprendido"**: o A aprende pela consequência no corpo, que vem dos cuidados do dono e também do que o pet vive sozinho (`lobos.ts:19-21`) | "com você" afirma uma origem que o motor não separa; "aprendido" pode ler menos pessoal do que o princípio 2 quer |
+
+---
+
+## Lugares da ilha (L1) — a câmera solta e o minimapa, no desktop (2026-11-06)
+
+A direção escolhida pelo Matheus em 2026-11-06 é a **B, "Lugares da ilha"** (página de direção, seção "Minimapa e câmera livre"): cada menu
+vira um lugar da ilha, e abrir o menu leva a câmera até lá. A **L1** é o primeiro passo e só vale **a partir de 900 px**: soltar a câmera do
+pet e pôr o minimapa. A L2 (Treinar no saco), a L3 (a arena e o diário) e o celular (junto da M2 do mobile) ficam fora. **O celular não
+muda nesta etapa.**
+
+### O objetivo do jogador
+
+Olhar outras partes da ilha sem perder o pet: saber onde a câmera está, onde ele está, e voltar a ele com um gesto. Hoje a câmera livre
+(`orbita.ts`, Ajustes > Visual > Controle "Livre") gira e aproxima, mas fica presa ao pet: `vista.ts` põe a câmera em `petCel + desloc` a
+cada quadro (`desenhar`, "a camera atras dele").
+
+### A hierarquia
+
+1. a ilha (a cena 3D inteira), que passa a poder ser percorrida;
+2. o minimapa, no canto de baixo à direita: onde a câmera olha, onde o pet está e os lugares que já existem;
+3. o "seguir o pet" e o aviso de borda, que só aparecem quando a câmera está longe dele;
+4. a HUD de hoje (topo, trilho, pilha, dock), sem mudança, menos a etiqueta do DigiBrain, que sai do canto.
+
+### Sempre visível (≥ 900 px)
+
+| peça | onde | o que mostra |
+|---|---|---|
+| **minimapa** | círculo de 232 px (PROPOSTO, SEM FONTE), a 16 px da direita e de baixo, no lugar da etiqueta do DigiBrain | a ilha vista de cima, norte para cima; o pet (ponto rosa); o cone da vista; os ícones dos lugares e objetos (tabela abaixo); um "N" pequeno no alto |
+
+Com o controle "Fixa" não há câmera solta; o minimapa fica (serve para se localizar), sem mover a câmera ao clicar (pergunta L1-3).
+
+### Por gesto
+
+| gesto | efeito | teclado |
+|---|---|---|
+| <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> e as setas | a câmera anda no chão, na direção em que olha (W é a frente da vista) | o próprio |
+| arrastar com o botão **direito** ou o **do meio** na cena | a câmera anda junto (o chão acompanha o cursor) | WASD |
+| arrastar com o **esquerdo**, a roda, Shift + roda | como hoje: gira e inclina, aproxima, gira | <kbd>Q</kbd>/<kbd>E</kbd> giram, <kbd>+</kbd>/<kbd>−</kbd> aproximam (pergunta L1-5) |
+| <kbd>F</kbd>, um toque no retrato, o botão "seguir o pet" | a câmera volta ao pet e passa a segui-lo (transição curta; sem transição com "reduzir movimento") | <kbd>F</kbd> |
+| clique no minimapa | a câmera vai até o ponto (a mesma transição) | com o foco no minimapa, as setas andam e <kbd>Enter</kbd> = <kbd>F</kbd> (pergunta L1-5) |
+| segurar e arrastar no minimapa | a câmera vai junto, sem transição | — |
+| **o pet chama** e está fora da tela | um aviso na borda da tela, do lado em que ele está, com a seta; clicar nele = <kbd>F</kbd> | <kbd>F</kbd> |
+
+- **Quando solta:** WASD, as setas, o arrasto direito ou do meio e o minimapa trocam a câmera de "seguindo" para "solta". O giro, a
+  inclinação e o zoom de hoje **não** soltam: continuam em volta do ponto olhado, que é o pet enquanto ela segue.
+- **O "seguir o pet"** (botão só com o ícone `LocateFixed` e a tecla <kbd>F</kbd> ao lado, nome acessível "Seguir o pet") aparece em cima
+  do minimapa quando o ponto olhado está a mais de **6 células** do pet (PROPOSTO, SEM FONTE).
+- **"Quando o pet chama":** os chamados visíveis do In-Training (`chamadosVisiveis`, `hudPet.ts`) ou o pet chamando você
+  (`Motor.acao === "chamar_atencao"`), os mesmos casos do cartão do chamado (`TelaPet.tsx:301`).
+- **A câmera fica dentro da ilha:** o ponto olhado não sai da grade (`Ilha.x0 … x0 + larg`, `z0 … z0 + prof`, `grade.ts`, classe `Ilha`).
+- **As teclas valem só com a cena livre:** nenhum painel por cima (`CENA.coberto`) e nenhum campo de texto em foco, para não roubar o WASD
+  do Conversar nem de um formulário.
+
+### Os ícones do minimapa e a fonte de cada um
+
+Só o que o motor (ou a vista que já existe) tem. Os lugares da L2/L3 (o portão da arena e a barraca do diário) **não entram** até existirem.
+
+| marca | o que é | fonte |
+|---|---|---|
+| ponto rosa | o pet desenhado (a posição do motor, interpolada) | `Mundo.pet` (`motor/mundo.ts`, campo `pet`), pelo `Seguidor` (`vista.ts`, `petDesenhado`) |
+| cone | a vista: o ponto olhado e a direção da câmera no chão | `ORBITA` e a câmera do habitat (`orbita.ts`, `CAMERAS` em `ilha/constantes.ts`); nada do motor |
+| `Bed` | o ninho | `LayoutMundo.ninho` (`motor/constantes.ts:406`, `[4, 15]`), por `ninhoDe` (`vistaMundo.ts`) |
+| `Utensils` | o comedouro | `Mundo.comedouro` (`motor/mundo.ts`), `LayoutMundo.comedouro` `[10, 15]` (`motor/constantes.ts:406`) |
+| `Dumbbell` | o saco de pancada | **só da vista**: `Itens.sacoEm` = ninho + `SACO_DESDE_NINHO` (`ilha/itens.ts:217`, `ilha/constantes.ts:56`); é o lugar da L2 |
+| `Volleyball` | a bola | `Mundo.bola` (`motor/mundo.ts`), a desenhada (`Itens.bolaDesenhada`) |
+| ponto verde-escuro | as árvores de fruta do motor (J1–J3, M1–M6 no layout padrão; o layout MVP dos pets v13+ não tem nenhuma, `motor/constantes.ts:450`) | `Mundo.arvores` (`motor/mundo.ts`), `LayoutMundo.arvores` (`motor/constantes.ts:407-409`) |
+| ponto da cor da comida | ração e fruta no chão | `Mundo.comidas` (`motor/mundo.ts`); as cores são as da cena (`COR_RACAO`, `COR_FRUTA`, `ilha/itens.ts:22-24`) |
+| — | o cocô e o kit médico | **fora**: são enfeites da vista (`cocos.ts`, `itens.ts`), e encheriam a casa de pontos (pergunta L1-4) |
+
+O fundo do minimapa sai da **grade que a cena já lê** (`ilhaDe(mu.cm)`, `grade.ts:230`): uma célula por pixel de um canvas pequeno, nas
+cores da própria ilha (`PALETA_ILHA`, `cena.ts:83-86`: a grama por região, o caminho e a areia; a água do shader, `cena.ts:206`), com o
+planalto e o morro um pouco mais escuros, para ler o relevo. **Nenhuma cor nova**: são as que a cena já pinta. Nos mapas Voxel, Floresta
+e Cassette, a mesma grade com a paleta do estilo (`estilos.ts`).
+
+**A escala:** o círculo mostra a área andável inteira (64 × 30 células, `CMU`, `motor/constantes.ts:437`) e um pouco da moldura, a ~3,3 px
+por célula, norte para cima e fixo (a lição do Scarlet e Violet, na página de direção). Pergunta L1-1.
+
+### O estágio (guia 9)
+
+Nada muda por estágio: o minimapa e a câmera são do dono, não do pet. Com o ovo chocando o minimapa também aparece (a ilha existe).
+
+### As cores pelos tokens
+
+| peça | token |
+|---|---|
+| a moldura do círculo | `--hx-borda` e `--hud-brilho`; no Vidro, a luz `--hx-luz` (como o `.hud-painel::before`) |
+| o fundo em volta da ilha (fora da grade) | `--hud-fundo-2` |
+| o pet | `--hx-necessidade` (o rosa), com o anel `--hx-foco` (pergunta L1-2) |
+| o cone | `--hx-foco` com 30 % de opacidade |
+| os ícones | uma caixinha `--hx-miolo` com `--hx-borda`, o traço em `--hx-texto` |
+| o "N" | `--hx-rotulo`, `--hx-f`, 11 px |
+| o "seguir o pet" e a tecla | a caixa da HUD (`.hud-caixa`, `--hud-ch-p`), a tecla com `--hx-tecla` |
+| o aviso de borda | a caixa da HUD com a borda `--hx-necessidade` (é um chamado de cuidado, guia 3) |
+| o foco | `outline: 2px solid var(--hx-foco)` |
+
+### O DigiBrain sai do canto
+
+A etiqueta do DigiBrain (`TelaPet.tsx:575`) ocupa hoje o canto do minimapa. **Recomendação: ela vira a quarta linha da pilha da direita**,
+"DigiBrain", no formato de "Evolução" e "Últimas ações" (o ícone `Brain`, o título e a risca), e abre o mesmo painel. A linha do agora
+(P1-3) continua abrindo o DigiBrain. A página de direção sugeria o retrato, mas o retrato já abre "Meus pets" e passa a voltar a câmera
+ao pet (<kbd>F</kbd>); um terceiro uso nele confundiria. Pergunta L1-6.
+
+### Wireframes
+
+```
+1920×950, a câmera seguindo (o normal)
+┌──────────────────────────────────────────────────────────────────────────────────────────────┐
+│[◉ Gomamon][AGORA dormindo · Exausto · só havia uma opção ›]  DIGILAB      [Dia 1 14:10 ● salvo]│
+│ ┌────┐                                                              ┌ Estado atual ─────────┐│
+│ │Pet │                                                              │ com ▮▮▮▮▮▯▯▯▯ 49 %    ││
+│ │Cre │                                                              │ …                     ││
+│ │Lut │                                                              ├ Evolução ─────────────┤│
+│ │Diá │                                                              ├ Últimas ações ────────┤│
+│ │Con │                                                              ├ DigiBrain (NOVA) ─────┤│
+│ │Aju │                                                              └───────────────────────┘│
+│ └────┘                           (pet)                                                       │
+│                         ilha 3D (tela inteira)                                  ╭────────╮   │
+│                                                                                 │   N    │   │
+│                                                                                 │ ▲◉     │   │
+│            [Alimentar][Brincar][Limpar][Carinho][Tapa][Tratar][Mais]            ╰────────╯   │
+└──────────────────────────────────────────────────────────────────────────────────────────────┘
+
+1920×950, a câmera solta, longe do pet, com o pet chamando
+┌──────────────────────────────────────────────────────────────────────────────────────────────┐
+│ (topo igual)                                                                                 │
+│ trilho                                                                 pilha                 │
+│ ┌───────┐                                                                                    │
+│ │◂ ! ◉  │ ← aviso na borda, do lado em que o pet está (só quando ele chama)                   │
+│ └───────┘                                                                                    │
+│                       a mata, a leste (sem o pet na tela)                       [⌖ F]        │
+│                                                                                ╭────────╮    │
+│                                                                                │ ◉    ▲ │    │
+│            [Alimentar][Brincar][Limpar][Carinho][Tapa][Tratar][Mais]           ╰────────╯    │
+└──────────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+Até 899 px **nada muda**: sem minimapa, sem WASD, e a etiqueta e os botões da borda como hoje.
+
+### O que muda na leitura do estado do pet
+
+- **Ganha:** onde o pet está na ilha, de relance, e onde ficam o ninho, o comedouro, a bola e as árvores com fruta; dá para ver o pet ir
+  até uma fruta que caiu longe.
+- **Risco:** com a câmera longe, o pet sai da tela e o dono pode perder um chamado. O aviso de borda e o ponto rosa cobrem isso; o
+  cartão do chamado (no alto, ao centro) continua igual.
+- A HUD não muda, menos a etiqueta do DigiBrain.
+
+### O custo em determinismo
+
+Nenhum: tudo é vista, como a `ORBITA` (`orbita.ts`, cabeçalho). O ponto olhado, o modo "seguindo/solta" e o minimapa ficam só nesta
+página, fora do save, do registro e do replay; o minimapa só lê o `Motor.mundo` (pet, bola, comidas, árvores) e a grade. O `paraMundo`
+e o `paraTela` (o arrasto da comida e da bola) passam a usar a dobra centrada no ponto olhado, e não no pet: é uma pergunta para o
+`rev-cena` (o mundo curvo centrado longe do pet).
+
+### O custo em e2e
+
+- **Capturas:** o minimapa entra em toda captura da tela Pet a 1920 (nas duas peles), e a etiqueta do DigiBrain sai do canto; essas
+  referências mudam e precisam do ok do Matheus antes do `--update-snapshots`. **As de 390 e 360 não podem mudar** (portão: o DOM e a
+  captura com o canvas escondido, base × branch).
+- **Testes novos:** a câmera solta, pura (o WASD no plano da vista, o limite da grade, o "seguir" volta ao pet, a distância do botão); o
+  minimapa (célula ↔ px, o clique leva o ponto olhado); um e2e a 1920 que aperta D, vê o botão aparecer, aperta F e o vê sumir; o nome
+  acessível do minimapa.
+
+### A prancha
+
+`python docs/pranchas/ux-lugares/gerar.py` escreve `lugares_normal.html`, `lugares_longe.html` e `lugares_mapa.html` (`?pele=vidro|xcom`;
+`?sem` tira as notas). `sh docs/pranchas/ux-lugares/capturar.sh`, com `python -m http.server 8765 --bind 127.0.0.1` em `D:\Trab\digilab`,
+grava as seis capturas em `D:\Trab\digilab\capturas_ux_lugares_aprovar\`. O fundo é uma captura real da ilha a 1920 (o Gomamon, o sprite
+do jogo), e o minimapa é a ilha de verdade, gerada da grade (`ilha_json.mts` e `ilha_png.py`, ao lado); as imagens ficam fora do git, em
+`capturas_ux_lugares_aprovar\fundo\` (UI_GUIDELINES 5.1).
+
+- **normal:** a tela de hoje com o minimapa no canto e a linha "DigiBrain" na pilha.
+- **longe:** a câmera solta sobre a mata, o pet fora da tela chamando: o aviso na borda, o "seguir o pet" com o <kbd>F</kbd>, o cone longe
+  do ponto rosa.
+- **mapa:** num quadro da prancha (não é tela), as duas escalas da pergunta L1-1 ampliadas e a legenda de cada marca, com a fonte.
+
+### Perguntas ao Matheus
+
+| # | pergunta | recomendação | custo de errar |
+|---|---|---|---|
+| L1-1 | a escala do minimapa: **A**, a ilha inteira, fixa, norte para cima (~3,3 px por célula); ou **B**, a janela de ~27 × 27 células em volta do ponto olhado (9 px por célula) | **A, e a roda sobre o minimapa aproxima até a B** (as duas na prancha `lugares_mapa`) | só a A: na casa o ninho, o saco, o comedouro e o pet se encostam (a prancha mostra); só a B: não mostra os lugares longe, que é o que o minimapa veio resolver |
+| L1-2 | o pet é o ponto rosa (`--hx-necessidade`), como na página de direção | **sim, com o anel branco** | o guia 3 reserva o rosa sólido para "vem do corpo"; um ponto pequeno no mapa dificilmente confunde, e a alternativa é o retrato do pet num círculo |
+| L1-3 | com o controle "Fixa", o minimapa aparece | **aparece, sem mover a câmera** | some: quem usa a câmera fixa perde o "onde está"; aparece e move: a "Fixa" deixa de ser fixa |
+| L1-4 | o cocô e o kit médico ficam fora do minimapa | **fora** nesta etapa | dentro: mais pontos na casa, onde já está apertado |
+| L1-5 | os atalhos a mais: Q/E giram, +/− aproximam, as setas e o Enter no minimapa com foco | **sim**: o guia 13 pede teclado para tudo, e hoje o giro e o zoom só têm mouse | conflito com algum atalho: Q, E, + e − não têm uso no app hoje |
+| L1-6 | a etiqueta do DigiBrain vira a 4ª linha da pilha da direita | **sim** | só a linha do agora: uma peça a menos, mas o DigiBrain fica escondido para quem não sabe que a linha abre |
+| L1-7 | os números: o círculo de 232 px, a câmera a 12 células/s no WASD, o "seguir" a partir de 6 células, a transição de 400 ms | **PROPOSTO, SEM FONTE**, para ajustar depois, na mão | só vista; nenhum número de jogo |
+
+### As decisões (o Matheus, 2026-11-06)
+
+A prancha e as sete recomendações foram aprovadas ("Aprovado, seguir"): **L1-1** a ilha inteira, com a roda sobre o minimapa aproximando
+até a janela em volta da câmera; **L1-2** o pet rosa com o anel claro; **L1-3** com a câmera "Fixa" o minimapa aparece, sem mover a
+câmera; **L1-4** o cocô e o kit médico fora; **L1-5** Q/E, +/− e as setas e o Enter no minimapa; **L1-6** o DigiBrain como a 4ª linha da
+pilha; **L1-7** os números como PROPOSTO, SEM FONTE.

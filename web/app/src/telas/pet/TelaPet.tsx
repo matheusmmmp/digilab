@@ -34,6 +34,8 @@ import { useTempo } from "../../tempo.ts";
 import { CHAVE } from "../../save.ts";
 import { FOME_FALA, chamadosVisiveis, useArrastavel, useAviso, useDetalhesPet } from "../../hudPet.ts";
 import { ChipCausa, LinhaAgora } from "./LinhaAgora.tsx";
+import { CameraHud, petChama } from "./CameraHud.tsx";
+import { Minimapa } from "./Minimapa.tsx";
 import { BarraBola } from "./PorBola.tsx";
 import { AvisoRacao, BarraRacao, FaixaRacao, InfoMundo } from "./PorRacao.tsx";
 import "../../estilo/pet_dock.css";
@@ -485,6 +487,26 @@ function PainelHud({ id, aberto, alternar, resumo, children }: { id: PainelHud; 
   );
 }
 
+/** o DigiBrain como a 4a linha da pilha (L1 de "Lugares da ilha", decisao L1-6: a etiqueta saiu do canto, que ficou para o minimapa): o
+    mesmo cabecalho de Evolucao e Ultimas acoes, mas abre o painel flutuante (como a linha do agora), sem recolher nada */
+function LinhaDigiBrain({ abrir }: { abrir: () => void }) {
+  const desc = useId();
+  return (
+    <section className="hud-painel hud-painel--abre" data-painel-pet="digibrain" data-aberto="false">
+      <h2 className="hud-painel__cab">
+        <button type="button" className="hud-painel__bt" aria-haspopup="dialog" aria-controls="pet-painel" aria-label={TITULO_PAINEL.digibrain}
+          aria-describedby={desc} onClick={abrir}>
+          <Brain className="hud-painel__ic" aria-hidden="true" />
+          <span className="hud-painel__txt"><span className="hud-painel__tit">{TITULO_PAINEL.digibrain}</span>
+            <span className="hud-painel__resumo" id={desc}>o porquê das escolhas</span></span>
+          <span className="hud-risca" aria-hidden="true" />
+          <ChevronRight className="hud-painel__seta" aria-hidden="true" />
+        </button>
+      </h2>
+    </section>
+  );
+}
+
 /** o painel DigiBrain: o do modular no pet de teste (v16), o do A v11 nos outros */
 function PainelDigiBrain() {
   const { motor: m } = useJogo();
@@ -561,6 +583,7 @@ export function TelaPet({ irRegistro, irEvolucao }: { irRegistro: () => void; ir
           {temEvo && <PainelHud id="evolucao" aberto={hud.evolucao} alternar={() => mudarHud("evolucao")} resumo={resumoEvo}>{conteudo("evolucao")}</PainelHud>}
           {vivo && <PainelHud id="acoes" aberto={hud.acoes} alternar={() => mudarHud("acoes")} resumo={ult ? `${hhmm(ult.t)} · ${textoHist(ult)}` : "nada no registro ainda"}>
             <UltimasAcoes irRegistro={irRegistro} n={5} /></PainelHud>}
+          {nascendo === 0 && <LinhaDigiBrain abrir={() => abrir("digibrain")} />}
         </aside>
       )) : (
         detalhesPet && <nav className="pet-lado" aria-label="Painéis do pet">
@@ -571,10 +594,10 @@ export function TelaPet({ irRegistro, irEvolucao }: { irRegistro: () => void; ir
           })}
         </nav>
       )}
-      {largo && nascendo === 0 && detalhesPet && (
-        <button type="button" className="pet-etiqueta-db" aria-pressed={atual === "digibrain"} aria-controls="pet-painel" aria-label="DigiBrain" onClick={() => abrir("digibrain")}>
-          <Brain size={18} aria-hidden="true" /><span>DigiBrain</span></button>
-      )}
+      {/* a camera solta (L1 de "Lugares da ilha"): o minimapa no canto de baixo a direita, onde ficava a etiqueta do DigiBrain, e o "seguir o
+          pet" e o aviso de borda; so a partir de 900 px, e o minimapa sai enquanto um painel flutuante ocupa a direita */}
+      {largo && !atual && <Minimapa chama={vivo && petChama(m)} />}
+      {largo && <CameraHud />}
       {atual && (
         <div className="pet-painel" id="pet-painel" data-painel-pet={atual} ref={painel} tabIndex={-1} onKeyDown={e => { if (e.key === "Escape") { e.stopPropagation(); fechar(); } }}>
           <PainelHx titulo={TITULO_PAINEL[atual]} onFechar={fechar} rotuloFechar={`Fechar ${TITULO_PAINEL[atual]}`} className="pet-painel__hx">
