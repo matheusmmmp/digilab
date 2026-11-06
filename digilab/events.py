@@ -321,10 +321,10 @@ def ler_deixar_fruta(evento: Evento) -> tuple[str, int, int]:
 
 
 class LutaSemChave(ValueError):
-    """O resumo da luta (evento `pl`) num motor sem o corpo com ConfigLutaCorpo ligada (luta_corpo; ponte da luta, PE1)."""
+    """O resumo da luta (evento `lt`) num motor sem o corpo com ConfigLutaCorpo ligada (luta_corpo; ponte da luta, PE1)."""
 
 
-TIPO_PL = "pl"      # o resumo da luta (docs/TAREFA_V3_PONTE_LUTA.md, 3.4; PE1): so com ConfigLutaCorpo.ligada (luta_corpo)
+TIPO_LT = "lt"      # o resumo da luta (docs/TAREFA_V3_PONTE_LUTA.md, 3.4; PE1): so com ConfigLutaCorpo.ligada (luta_corpo)
 
 
 def resumo_luta(tick: int, rival: str, resultado: int, vida_perdida_s: int) -> Evento:
@@ -336,12 +336,12 @@ def resumo_luta(tick: int, rival: str, resultado: int, vida_perdida_s: int) -> E
         raise ValueError(f"resultado do resumo da luta fora de -1, 0, +1: {resultado!r}")
     if type(vida_perdida_s) is not int or vida_perdida_s < 0:
         raise ValueError(f"vida perdida do resumo da luta precisa ser inteiro >= 0: {vida_perdida_s!r}")
-    return Evento(tick=tick, tipo=TIPO_PL, valor=f"{rival}|{resultado}|{vida_perdida_s}")
+    return Evento(tick=tick, tipo=TIPO_LT, valor=f"{rival}|{resultado}|{vida_perdida_s}")
 
 
 def ler_resumo_luta(evento: Evento) -> tuple[str, int, int]:
-    if evento.tipo != TIPO_PL:
-        raise ValueError(f"evento nao e {TIPO_PL}: {evento.tipo!r}")
+    if evento.tipo != TIPO_LT:
+        raise ValueError(f"evento nao e {TIPO_LT}: {evento.tipo!r}")
     partes = str(evento.valor).split("|")
     if len(partes) != 3 or not partes[0] or partes[1] not in ("-1", "0", "1") or not partes[2].isdigit():
         raise ValueError(f"resumo da luta malformado: {evento.valor!r}")

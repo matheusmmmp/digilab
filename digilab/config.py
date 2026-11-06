@@ -1688,7 +1688,7 @@ class ConfigCorpo:
 @dataclass(frozen=True)
 class ConfigLutaCorpo:
     """A ponte da luta, o lado do corpo (docs/TAREFA_V3_PONTE_LUTA.md, secoes 3.2 e 3.4; PL-1, PL-3 e PL-7; etapa PE1). Ligada, o resumo da
-    luta (o evento `pl`) e um estimulo no corpo: a dor sobe div_arred(vida_perdida_s x C, S), a fracao da vida perdida na luta na escala da
+    luta (o evento `lt`) e um estimulo no corpo: a dor sobe div_arred(vida_perdida_s x C, S), a fracao da vida perdida na luta na escala da
     propria luta (S); sem rng e sem numero livre. O estresse da derrota fica fora (PL-3). Exige o corpo com `gestos` (a dor e dos gestos).
     Desligada (o padrao), o evento levanta erro e a vida de hoje sai byte a byte. Fica numa config propria, e nao em `ConfigCorpo`, para o
     dump da ConfigCorpo (o gabarito de paridade do corpo e o espelho TS) nao mudar: a web ganha a chave na PE3. Status em

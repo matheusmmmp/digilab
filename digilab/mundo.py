@@ -1810,8 +1810,8 @@ class MotorMundo(MotorFrutas):
         self._log.anexar(evento)
 
     def _aplicar_resumo_luta(self, rival: str, resultado: int, vida_perdida_s: int) -> None:
-        """Sem o corpo (o MotorCorpo a sobrepoe), o evento `pl` nao existe: falha alto."""
-        raise LutaSemChave("o evento pl exige o corpo com ConfigLutaCorpo ligada (luta_corpo; ponte da luta, PE1)")
+        """Sem o corpo (o MotorCorpo a sobrepoe), o evento `lt` nao existe: falha alto."""
+        raise LutaSemChave("o evento lt exige o corpo com ConfigLutaCorpo ligada (luta_corpo; ponte da luta, PE1)")
 
     def deixar_bola(self, x: int, y: int) -> None:
         if not self.cmf.ligada:
@@ -1952,7 +1952,7 @@ def reproduzir_mundo(log: LogDeEventos, politica_fabrica: Callable, cfg: Config 
             motor._aplicar_deixar_bola(*ler_deixar_bola(evento))
         elif evento.tipo == "deixar_fruta":
             motor._aplicar_deixar_fruta(*ler_deixar_fruta(evento))
-        elif evento.tipo == "pl":
+        elif evento.tipo == "lt":
             motor._aplicar_resumo_luta(*ler_resumo_luta(evento))
         else:
             raise ValueError(f"tipo de evento desconhecido no log do mundo: {evento.tipo!r}")

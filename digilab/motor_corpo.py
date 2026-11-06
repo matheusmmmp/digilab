@@ -141,7 +141,7 @@ class MotorCorpo:
                  cfg_luta_corpo: ConfigLutaCorpo | None = None, **kw) -> None:
         super().__init__(*a, **kw)
         self.cc = cfg_corpo or CONFIG_CORPO
-        self.cll = cfg_luta_corpo or CONFIG_LUTA_CORPO         # a ponte da luta, PE1 (desligada: o evento pl levanta erro)
+        self.cll = cfg_luta_corpo or CONFIG_LUTA_CORPO         # a ponte da luta, PE1 (desligada: o evento lt levanta erro)
         self.co = cfg_olfato or CONFIG_OLFATO
         self.cv = cfg_ouvido or CONFIG_OUVIDO
         # rede de si, etapa 2b: a troca da digestao pedida (tick, taxa) e a feita (o registro derivado; None ate o tick)
@@ -504,7 +504,7 @@ class MotorCorpo:
         """Ponte da luta, PE1: o resumo da luta e um estimulo no corpo (a dor). So com `luta_corpo`; o rival e o resultado ficam para a PE2
         (aqui nao entram em nenhum modulo). Nao e contato nem gasta orcamento; e um evento do log, como o deixar_bola."""
         if not (self._ligado() and self.cll.ligada):
-            raise LutaSemChave("o evento pl exige o corpo com ConfigLutaCorpo ligada (luta_corpo; ponte da luta, PE1)")
+            raise LutaSemChave("o evento lt exige o corpo com ConfigLutaCorpo ligada (luta_corpo; ponte da luta, PE1)")
         self._conferir_sincronia("antes do resumo da luta")
         self.corpo.estimulo_luta(vida_perdida_s)
         self._n_eventos += 1

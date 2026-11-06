@@ -281,7 +281,7 @@ D-PE1-5 estão em `docs/registro/2026-11.md`.
   `PARAMETROS_LUTA_CORPO`: PROPOSTO, sem número livre). Fica fora de `ConfigCorpo` para o dump do gabarito de paridade do corpo e o `corpo.test.ts` não mudarem (D-PE1-1).
 - **A dor:** `Corpo.estimulo_luta(vida_perdida_s)` em `digilab/corpo.py`: a dor sobe exatamente `div_arred(p × C, S)`, com `p` cortado em [0, S], sem rng
   (D-PE1-2). Exige `gestos`.
-- **O evento:** `pl` com valor `rival|resultado|vida_perdida_s` (`digilab/events.py`: `resumo_luta`, `ler_resumo_luta`, `LutaSemChave`);
+- **O evento:** `lt` (renomeado do `pl` a pedido do Matheus na revisão: o `"pl"` fica livre para a marca do ovo da PE3) com valor `rival|resultado|vida_perdida_s` (`digilab/events.py`: `resumo_luta`, `ler_resumo_luta`, `LutaSemChave`);
   `MotorMundo.resumo_luta` e o `reproduzir_mundo` (`digilab/mundo.py`) o entendem; o `MotorCorpo` (`digilab/motor_corpo.py`) o aplica. Com a chave
   desligada, ou sem o corpo, levanta `LutaSemChave`.
 - **Testes:** `tests/test_ponte_luta_pe1.py` (T-PL-1: a dor exata, o corte, o erro com a chave desligada, o replay refaz o corpo). **G2:** os

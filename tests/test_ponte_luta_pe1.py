@@ -1,5 +1,5 @@
 """A ponte da luta, PE1 (docs/TAREFA_V3_PONTE_LUTA.md, secoes 3.2, 3.4 e 3.5): o estimulo da luta no corpo (a dor pela vida perdida) e o
-evento `pl` do resumo da luta no replay do mundo do Python, atras de `ConfigLutaCorpo.ligada` (a chave `luta_corpo`, desligada).
+evento `lt` do resumo da luta no replay do mundo do Python, atras de `ConfigLutaCorpo.ligada` (a chave `luta_corpo`, desligada).
 
 T-PL-1: um resumo com vida perdida sobe a dor exatamente div_arred(p x C, S), sem rng; um resumo com a chave desligada levanta erro.
 G2: desligada, a vida de hoje sai igual (os gabaritos de hoje estao nos testes deles; aqui, a tabela do corpo e o replay).
@@ -83,14 +83,14 @@ def test_t_pl_1_falha_alto():
 
 def test_o_evento_pl_ida_e_volta_e_falhas():
     e = resumo_luta(5, "muralha", -1, 300)
-    assert (e.tipo, e.valor) == ("pl", "muralha|-1|300")
+    assert (e.tipo, e.valor) == ("lt", "muralha|-1|300")
     assert ler_resumo_luta(e) == ("muralha", -1, 300)
     for args in (("", 0, 1), ("a|b", 0, 1), ("a", 2, 1), ("a", 0, -1), ("a", 0, 1.0)):
         with pytest.raises(ValueError):
             resumo_luta(0, *args)
     for valor in ("a|0", "a|0|1|2", "a|7|1", "a|0|-3", "|0|1"):
         with pytest.raises(ValueError):
-            ler_resumo_luta(Evento(tick=0, tipo="pl", valor=valor))
+            ler_resumo_luta(Evento(tick=0, tipo="lt", valor=valor))
     with pytest.raises(ValueError):
         ler_resumo_luta(Evento(tick=0, tipo="luta", valor="x|1"))
 
@@ -106,7 +106,7 @@ def test_no_motor_o_resumo_sobe_a_dor_sem_rng_e_o_replay_fecha():
     if antes_rng is not None:
         assert m._rng.getstate() == antes_rng
     m.avancar(20)
-    assert [e.tipo for e in m.log if e.tipo == "pl"] == ["pl", "pl"]
+    assert [e.tipo for e in m.log if e.tipo == "lt"] == ["lt", "lt"]
     r = reproduzir_mundo(m.log, lambda cfg=None: PoliticaInstintoMundo(CFG), CFG, 101, fabrica_motor=_fabrica(CL))
     assert r.corpo.q == m.corpo.q and r.estado() == m.estado()
 
