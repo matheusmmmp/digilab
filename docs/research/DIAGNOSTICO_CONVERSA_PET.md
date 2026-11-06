@@ -177,7 +177,7 @@ de ~1 000 tokens pode não cachear. A conta é estimativa, refeita com o `estima
 
 ## 8. As decisões para o Matheus
 
-Cada uma com a recomendação e o custo de errar. Nada disso foi decidido.
+Cada uma com a recomendação e o custo de errar. **Decididas pelo Matheus em 2026-11-06, todas pela recomendação ("Aceito todas").**
 
 - **D1. Consertar a regressão do comando agora, como missão própria (O1)?** Recomendo **sim**, antes de tudo: a tela promete uma coisa
   que não acontece. *Custo de errar:* se o comando tinha saído de propósito na R2b, ele volta sem querer; mitigação: o conserto só

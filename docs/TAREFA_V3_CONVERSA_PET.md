@@ -1,7 +1,9 @@
 # TAREFA V3 — CONVERSA_PET (2026-11-06)
 
 Coordenador: Gerente da frente CONVERSA_PET (Claude Code, Opus 5.5). Worker: um por missão (seção 3). Worktree e branch: `v3-conversa-<missao>`,
-criados de `origin/main`. Status: ABERTA, PROPOSTA; **aguarda as decisões D1 a D7 do Matheus** (seção 8) antes de despachar as missões.
+criados de `origin/main` (enquanto o PR #618 não entra na `main`, de `origin/v3-conversa-diagnostico`, para a tarefa existir no branch).
+Status: ABERTA. **D1 a D7 DECIDIDAS pelo Matheus em 2026-11-06, todas pela recomendação** (seção 8). Ordem das missões: leva 1 = M1, M3, M5;
+leva 2 = M2, M4 (depois de M1 e M3); leva 3 = M6 (depois do prompt, D4).
 
 Categoria: arquitetura. Origem: Matheus, 2026-11-06: "o chat não está dialogando de uma maneira... não parece real, parece um diálogo de verdade."
 
@@ -83,8 +85,8 @@ igual. O `livre-v2` e o `livre-v8` continuam no pacote e reproduzem.
 
 ## 8. Precisa do Matheus
 
-As sete decisões estão em [docs/research/DIAGNOSTICO_CONVERSA_PET.md](research/DIAGNOSTICO_CONVERSA_PET.md), seção 8, com a recomendação e o
-custo de errar. Em uma linha cada:
+**Decididas pelo Matheus em 2026-11-06 ("Aceito todas"), cada uma pela recomendação abaixo.** O detalhe e o custo de errar estão em
+[docs/research/DIAGNOSTICO_CONVERSA_PET.md](research/DIAGNOSTICO_CONVERSA_PET.md), seção 8. Em uma linha cada:
 
 - **D1** consertar o comando agora (M1): recomendo sim, primeiro. Custo de errar: religar algo que a R2b tirou de propósito.
 - **D2** prompt `conversa-v1` com histórico de fronteira, exemplos e iniciativa (M2, M3): recomendo sim. Custo: fala mais longa, mais
