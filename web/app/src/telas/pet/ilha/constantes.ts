@@ -82,11 +82,11 @@ export const COCO = { raio: 0.85, passo: 0.25, surgirMs: 380 } as const;
 export const ENFEITES_GRADE = {
   sal: 0x5e7e17e5, tentativas: 4000,
   poste: { quantos: 14, perto: 1.5, longe: 4, entreSi: 4, deAlto: 2, folga: 0, norte: false, casa: 0 },
-  carro: { quantos: 1, perto: 1.5, longe: 3, entreSi: 3, deAlto: 2, folga: 1, norte: true, casa: 12 },
+  carro: { quantos: 1, perto: 2.4, longe: 4, entreSi: 2.5, entreMarcos: 6.5, deAlto: 2, folga: 1, norte: true, casa: 12 },
   /* a geladeira e o trilho numa faixa de x a partir do ninho que a camera ve sem o painel Estado na frente (o revisor achou o trilho
      atras dele, em x = 20 no mvp) */
-  geladeira: { quantos: 1, perto: 1.5, longe: 3.5, entreSi: 3, deAlto: 1.4, folga: 1, norte: true, casa: 0, faixa: [-12, 14] },
-  trilho: { quantos: 1, perto: 1.5, longe: 4, entreSi: 3, deAlto: 1.6, folga: 1, norte: true, casa: 0, faixa: [-9, 9] },
+  geladeira: { quantos: 1, perto: 1.8, longe: 4, entreSi: 2.5, entreMarcos: 5, deAlto: 1.4, folga: 1, norte: true, casa: 0, faixa: [-14, 16] },
+  trilho: { quantos: 1, perto: 2, longe: 5, entreSi: 2.5, entreMarcos: 6, deAlto: 1.2, folga: 1, norte: true, casa: 0, faixa: [-16, 18] },
 } as const;
 /** a luz dos enfeites a noite (enfeites.ts): o halo na lanterna, na fracao `altura` da altura do modelo, com `tamanho` celulas de
     diametro, em cascas (as fracoes do tamanho) de opacidade `forca` cada (aditiva), e o quanto os vidros brilham (emissiveIntensity).
@@ -97,3 +97,14 @@ export const ENFEITE_HALO = { altura: 0.86, tamanho: 1.1, cascas: [0.55, 0.78, 1
     de anime tem as arvores de tras nitidas; a de 26 a 62 desbotava tudo, e a de 42 a 95 as deixava pesadas; D2). PROPOSTO, SEM FONTE */
 export const CEU_DIGITAL = { horizonte: 0xabe9fe, chaoHemi: 0x6f8fc8, nevoa: [34, 85] } as const;
 
+/** o toque digital do estilo Digital (digital.ts; docs/TAREFA_V3_MAPA_DIGITAL.md, D3): as particulas (quantas, o sal da rng, a margem
+    alem da area, a altura acima do chao, o tamanho, a cor, a opacidade de dia e de noite, o sobe e desce, a velocidade e o giro), a
+    grade no ceu (a cor, a opacidade, a espessura, os meridianos de cada lado, os paralelos e o ponto de fuga acima da imagem, em alturas
+    dela) e os fios (o alto do poste onde prendem, a fracao da altura; o alcance; quantos por poste; a queda por celula de vao; os
+    segmentos; a cor). PROPOSTO, SEM FONTE */
+export const DIGITAL = {
+  particulas: { quantas: 140, sal: 0xd161a1, margem: 3, altura: [0.6, 3.2], tamanho: 0.06, cor: 0x7ff3ff, opacidade: [0.55, 0.95],
+    sobe: 0.25, vel: 0.8, giro: 0.9 },
+  grade: { cor: "#b8faff", alfa: 0.5, espessura: 3, meridianos: 9, paralelos: 8, fuga: 0.25 },
+  fios: { alto: 0.93, alcance: 10, porPoste: 2, queda: 0.06, segmentos: 12, cor: 0x2b2a33 },
+} as const;
