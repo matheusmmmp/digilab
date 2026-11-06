@@ -63,6 +63,11 @@ jobs:
           python -m pytest "${testes[@]}" -q
       - name: Rodada de saúde (G-NADA-PERDIDO, G-CONCAT)
         run: python tools/conferir_saude.py
+      # O índice de desvios é gerado e pode estar atrasado no PR (docs/TAREFA_V3_INDICE_DESVIOS.md, D-ID2 e D-ID3): só aviso.
+      - name: Índice de desvios em dia (só aviso)
+        shell: bash
+        run: |
+          python tools/gerar_indice_desvios.py --conferir || echo "::warning::docs/REGISTRO_DESVIOS.md está atrás dos arquivos do mês; quem faz o merge regenera com python tools/gerar_indice_desvios.py"
       - name: Estado atual derivado (só aviso)
         shell: bash
         run: |

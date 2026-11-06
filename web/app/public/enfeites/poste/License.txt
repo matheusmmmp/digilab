@@ -10,7 +10,8 @@ Como foi feito (docs/TAREFA_V3_MUNDO_ENFEITES.md e docs/enfeites/poste/ no repos
 - vistas: Meshy Image to Image com multivista, a partir do concept;
 - malha: Meshy Multi-Image to 3D (remesh em triangulos, so a cor);
 - conserto no Blender 4.5 LTS e em Python, por script: a malha da Meshy fica como veio; a cor e chapada em quatro cores do concept, uma
-  por face (sem a sombra embutida); poste_luz.png e a mascara dos vidros, que acendem a noite no jogo.
+  por face (sem a sombra embutida), com tracos de nanquim nas divisas de cor e nas quinas grandes (2026-11-06, a D2 do mapa Digital);
+  poste_luz.png e a mascara dos vidros, que acendem a noite no jogo.
 As tarefas da Meshy (concept, vistas, malha) estao no asset.extras do poste.gltf.
 
 Uso: no jogo DigiLab, publicado. Credito: "Poste de luz gerado com a Meshy (meshy.ai)".
