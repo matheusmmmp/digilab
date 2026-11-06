@@ -23,7 +23,7 @@ describe("a linha do agora: os cinco estados", () => {
     expect(s).toContain("dl-malha");
     expect(s).toContain("aprendido");
     expect(s).toContain("sem ele: à toa");
-    expect(rotulo(s)).toBe("Agora: brincando. Aprendido: sem ele, à toa. Abrir o porquê no DigiBrain.");
+    expect(rotulo(s)).toBe("Agora: brincando. Aprendido: sem ele, à toa. Porquê no DigiBrain.");
   });
   test("o instinto bastava: a regra e 'o instinto faria o mesmo', sem malha", () => {
     const v = vistaAgora(pet("explorar"), decisao("tempo_livre", true, false)), s = linha(v);
@@ -31,7 +31,7 @@ describe("a linha do agora: os cinco estados", () => {
     expect(s).toContain("Tempo livre · o instinto faria o mesmo");
     expect(s).toContain(">instinto<");   /* a forma curta, a 390 */
     expect(s).not.toContain("dl-malha");
-    expect(rotulo(s)).toBe("Agora: explorando. Tempo livre: o instinto faria o mesmo. Abrir o porquê no DigiBrain.");
+    expect(rotulo(s)).toBe("Agora: explorando. Tempo livre: o instinto faria o mesmo. Porquê no DigiBrain.");
   });
   test("uma opcao so: 'só havia uma opção', sem malha", () => {
     const v = vistaAgora(pet("dormir"), decisao("sono_exaustao", false, false)), s = linha(v);
@@ -39,7 +39,7 @@ describe("a linha do agora: os cinco estados", () => {
     expect(s).toContain("Exausto · só havia uma opção");
     expect(s).toContain(">uma opção<");
     expect(s).not.toContain("dl-malha");
-    expect(rotulo(s)).toBe("Agora: dormindo. Exausto: só havia uma opção. Abrir o porquê no DigiBrain.");
+    expect(rotulo(s)).toBe("Agora: dormindo. Exausto: só havia uma opção. Porquê no DigiBrain.");
   });
   test("antes da primeira decisao: o '?' tracejado e 'sem motivo registrado'", () => {
     const v = vistaAgora(pet("ocioso"), null), s = linha(v);
@@ -47,7 +47,7 @@ describe("a linha do agora: os cinco estados", () => {
     expect(s).toContain("chip-causa--sem");
     expect(s).toContain("sem motivo registrado");
     expect(s).not.toContain("dl-malha");
-    expect(rotulo(s)).toBe("Agora: à toa. Sem motivo registrado. Abrir o porquê no DigiBrain.");
+    expect(rotulo(s)).toBe("Agora: à toa. Sem motivo registrado. Porquê no DigiBrain.");
   });
   test("o modular decide: 'cérebro modular', sem marca, e a decisao do A (que parou) nao conta", () => {
     const v = vistaAgora(pet("brincar", {}), decisao("tempo_livre", true, true)), s = linha(v);
@@ -55,27 +55,48 @@ describe("a linha do agora: os cinco estados", () => {
     expect(s).toContain("cérebro modular");
     expect(s).not.toContain("chip-causa");
     expect(s).not.toContain("dl-malha");
-    expect(rotulo(s)).toBe("Agora: brincando. Cérebro modular. Abrir o porquê no DigiBrain.");
+    expect(rotulo(s)).toBe("Agora: brincando. Cérebro modular. Porquê no DigiBrain.");
   });
 });
 
 describe("a linha do agora: o botao", () => {
-  test("com os detalhes do pet, um botao que abre o DigiBrain (aria-controls e aria-pressed)", () => {
+  test("com os detalhes do pet, um botao que abre o DigiBrain (aria-controls e aria-expanded, o nome sem 'abrir')", () => {
     const s = linha(vistaAgora(pet("brincar"), decisao("tempo_livre", true, false)));
     expect(s).toMatch(/^<button type="button"/);
     expect(s).toContain('aria-controls="pet-painel"');
-    expect(s).toContain('aria-pressed="false"');
+    expect(s).toContain('aria-expanded="false"');
+    expect(s).not.toContain("aria-pressed");
+    expect(renderToStaticMarkup(h(LinhaAgoraVista, { v: vistaAgora(pet("brincar"), null), aoAbrir: () => {}, aberto: true }))).toContain('aria-expanded="true"');
   });
-  test("sem os detalhes do pet (P1-5): texto sem botao, com nome acessivel e sem o convite a abrir", () => {
+  test("sem os detalhes do pet (P1-5): texto sem botao, lido por um sr-only (sem role nem aria-label que escondam a linha)", () => {
     const s = linha(vistaAgora(pet("brincar"), decisao("tempo_livre", true, true)), false);
     expect(s).not.toContain("<button");
-    expect(s).toContain('role="group"');
-    expect(rotulo(s)).toBe("Agora: brincando. Aprendido: sem ele, à toa.");
+    expect(s).not.toContain("role=");
+    expect(s).not.toContain("aria-label");
+    expect(s).toContain('<span class="sr-only">Agora: brincando. Aprendido: sem ele, à toa.</span>');
     expect(rotuloAgora(vistaAgora(pet("ocioso"), null), false)).toBe("Agora: à toa. Sem motivo registrado.");
   });
 });
 
 describe("a leitura da decisao", () => {
+  test("com o modular decidindo, a leitura do A nem roda", () => {
+    const m = { acao: "brincar", lab: {}, get cerebro(): never { throw new Error("leu o cerebro A com o modular ativo"); } } as unknown as Motor;
+    expect(vistaAgora(m).caso).toBe("modular");
+  });
+  test("pureza: ler a linha no meio da vida nao muda o pet (estado, registro e o proximo passo)", () => {
+    const a = new Motor(101); a.avancar(400);
+    const b = Motor.reproduzir(101, a.log);
+    for (let i = 0; i < 5; i++) { decisaoAgora(b); vistaAgora(b); vistaAgora(b, decisaoAgora(b)); }
+    expect(JSON.stringify(b.e)).toBe(JSON.stringify(a.e));
+    a.avancar(600); b.avancar(600);
+    for (let i = 0; i < 3; i++) vistaAgora(b);
+    expect(JSON.stringify(b.e)).toBe(JSON.stringify(a.e));
+    expect(JSON.stringify(b.log)).toBe(JSON.stringify(a.log));
+    expect(b.acao).toBe(a.acao);
+    a.avancar(300); b.avancar(300);
+    expect(JSON.stringify(b.e)).toBe(JSON.stringify(a.e));
+    expect(b.acao).toBe(a.acao);
+  });
   test("sem montar o mapa, ela e a mesma de Motor.digibrain().decisao", () => {
     const m = new Motor(101); m.avancar(300);
     const db = m.digibrain();

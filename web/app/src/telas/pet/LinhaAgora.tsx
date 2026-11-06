@@ -27,9 +27,10 @@ export function decisaoAgora(m: Motor): LeituraDecisao | null {
 }
 
 /** o caso da linha, pela ordem em que a tela testa: o modular decide; sem decisao; o aprendido mudou a escolha; o instinto bastava; uma opcao so */
-export function vistaAgora(m: Motor, d: LeituraDecisao | null = decisaoAgora(m)): VistaAgora {
+export function vistaAgora(m: Motor, decisao?: LeituraDecisao | null): VistaAgora {
   const acao = NOME_PET[m.acao];
-  if (m.lab !== null) return { caso: "modular", acao, regra: null, semEle: null };
+  if (m.lab !== null) return { caso: "modular", acao, regra: null, semEle: null };   /* o modular decide: o A parou, nao se le */
+  const d = decisao === undefined ? decisaoAgora(m) : decisao;
   if (d === null) return { caso: "sem", acao, regra: null, semEle: null };
   const regra = REGRA_TXT[d.regra], q = d.quem_decidiu;
   if (q.escolha && q.mudou) return { caso: "aprendido", acao, regra, semEle: ACAO_CURTA[q.acao_instinto] };
@@ -39,14 +40,14 @@ export function vistaAgora(m: Motor, d: LeituraDecisao | null = decisaoAgora(m))
 /** as frases do painel DigiBrain ("Agora"), na forma curta da linha */
 const FRASE: Record<"instinto" | "uma", [string, string]> = { instinto: ["o instinto faria o mesmo", "instinto"], uma: ["só havia uma opção", "uma opção"] };
 
-/** o nome acessivel junta tudo; sem o botao (P1-5) nao ha o convite a abrir */
+/** o nome acessivel junta tudo; com o botao, o nome nao diz "abrir" (o estado vai em aria-expanded); sem ele (P1-5), e o texto lido da linha */
 export function rotuloAgora(v: VistaAgora, comBotao: boolean): string {
   const base = `Agora: ${v.acao}. `;
   const porque = v.caso === "modular" ? "Cérebro modular."
     : v.caso === "sem" ? "Sem motivo registrado."
       : v.caso === "aprendido" ? `Aprendido: sem ele, ${v.semEle}.`
         : `${v.regra}: ${FRASE[v.caso][0]}.`;
-  return base + porque + (comBotao ? " Abrir o porquê no DigiBrain." : "");
+  return base + porque + (comBotao ? " Porquê no DigiBrain." : "");
 }
 
 function Meio({ v }: { v: VistaAgora }) {
@@ -66,9 +67,10 @@ export function LinhaAgoraVista({ v, aoAbrir, aberto = false, sobPainel = false 
       <span className="agora-ponto" aria-hidden="true">·</span><span className="agora-meio" aria-hidden="true"><Meio v={v} /></span>
     </>
   );
-  if (!aoAbrir) return <div className="hud-caixa pet-agora pet-agora--texto" role="group" aria-label={rotuloAgora(v, false)} data-caso={v.caso} data-sob-painel={sobPainel}>{corpo}</div>;
+  /* sem botao: o visual curto fica escondido e um sr-only diz a linha inteira, para o leitor de tela ler em modo de navegacao */
+  if (!aoAbrir) return <div className="hud-caixa pet-agora pet-agora--texto" data-caso={v.caso} data-sob-painel={sobPainel}>{corpo}<span className="sr-only">{rotuloAgora(v, false)}</span></div>;
   return (
-    <button type="button" className="hud-caixa pet-agora" aria-label={rotuloAgora(v, true)} aria-pressed={aberto} aria-controls="pet-painel" data-caso={v.caso} data-sob-painel={sobPainel} onClick={aoAbrir}>
+    <button type="button" className="hud-caixa pet-agora" aria-label={rotuloAgora(v, true)} aria-expanded={aberto} aria-controls="pet-painel" data-caso={v.caso} data-sob-painel={sobPainel} onClick={aoAbrir}>
       {corpo}<ChevronRight className="agora-seta" size={18} aria-hidden="true" />
     </button>
   );
