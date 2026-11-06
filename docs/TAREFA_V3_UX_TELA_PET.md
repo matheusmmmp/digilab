@@ -219,6 +219,17 @@ Matheus, 2026-11-05, nesta sessão (resposta "B, hooks antes"):
 - **UX-3: o e2e inteiro no `Stop`** (Matheus, 2026-11-06, "O e2e inteiro", depois da medida da A1: 10,8 a 13,7 min por turno).
   O H5 fica com os passos padrão (tipos, Vitest e `npm run e2e`); a `DIGILAB_H5_PASSOS` não é usada para reduzir o e2e.
 
+- **A prancha da P1 e as P1-1 a P1-6** (Matheus, 2026-11-06, ao ler as sete perguntas do PR #596: "Siga com a sua recomendação."). As
+  perguntas estão em `docs/PROPOSTAS_V3_UX_TELA_PET.md`, seção "P1":
+  - **o ok à prancha** da B refinada (`docs/pranchas/ux-pet/`): a linha do agora lê `Motor.digibrain().decisao`, e o balão leva o chip
+    só quando há `MotivoVida`;
+  - **P1-1: sim**, o chip do treino com pausa (`fadiga_treino`) usa a caixa sólida de necessidade, "vem do corpo";
+  - **P1-2:** com o modular decidindo, a linha diz **"cérebro modular", sem marca**; o porquê do modular fica para uma etapa própria;
+  - **P1-3:** a linha **abre o DigiBrain**;
+  - **P1-4: não**, a linha não mostra `percepcao[0]` nesta etapa;
+  - **P1-5:** com "Exibir detalhes do pet" desligado, **a linha fica, como texto sem botão**;
+  - **P1-6:** o rótulo é **"aprendido"**.
+
 UX-4 a UX-8 continuam PROPOSTAS.
 
 ## 9. Etapa A0: os hooks restaurados (2026-11-05)
