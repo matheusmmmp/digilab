@@ -197,7 +197,7 @@ def test_rodada4_do_comando_com_estilo_e_sementes_novas():
     assert r4 == {"pasta": "rodada4_estilo", "sementes": (20261501, 20261601, 20261701), "estilo": True, "prompt": "livre-v8"}
     assert RODADAS_COMANDO[3] == {"pasta": "rodada3", "sementes": (20261201, 20261301, 20261401), "estilo": False, "prompt": "livre-v8"}
     assert RODADAS_COMANDO[2]["sementes"] == RODADAS_COMANDO[1]["sementes"] == (20261003, 20261004, 20261005)
-    assert len({r["pasta"] for r in RODADAS_COMANDO.values()}) == 4
+    assert len({r["pasta"] for r in RODADAS_COMANDO.values()}) == 5
     n = len(MENSAGENS_COMANDO)
     usadas = {s + i for k, r in RODADAS_COMANDO.items() if k != 4 for s in r["sementes"] for i in range(n)}
     assert not {s + i for s in r4["sementes"] for i in range(n)} & usadas

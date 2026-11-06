@@ -83,6 +83,7 @@ describe("execucao direta e o registro do pet", () => {
     const antes = m.log.map(e => [...e]), n = antes.length;
     await conversar("vai comer", "alimentar");
     expect(pedidos[pedidos.length - 1].voz).toBeUndefined();          /* os v11 nao tem a voz propria (a mentira) */
+    expect(pedidos.find(p => p.situacao === "conversa")?.comando).toBe(true);           /* CONVERSA_PET M1 (D1): a conversa pede o comando (livre-v9), nao a voz */
     /* o gemeo: o mesmo registro ate antes, mais o clique no botao Alimentar (Motor.observar, como acoes.agir) */
     const gemeo = Motor.reproduzir(m.semente, antes as never, m.versao);
     gemeo.observar("alimentar");

@@ -98,3 +98,13 @@ igual. O `livre-v2` e o `livre-v8` continuam no pacote e reproduzem.
   US$ 1,50 estimados, teto separado. Custo: escolher a API traz rede e gasto ao jogo.
 - **D6** memória da conversa entre sessões nesta frente: recomendo não agora. Custo: o pet não lembra de um dia para o outro.
 - **D7** avaliação cega pareada pelo Matheus, juiz LLM só como triagem: recomendo sim. Custo: sem o Matheus, a frente otimiza o gosto do juiz.
+
+## M1 — o comando e o estilo da espécie religados (2026-11-06, worker Claude Code Sonnet 5.5, branch `v3-conversa-m1-comando`)
+
+- **Feito:** `livre-v9` em `digilab_fala_livre/prompt.py`; o campo `comando: true` do pedido da conversa em `servidor/fala_livre.py`; a
+  conversa (e só ela) manda `comando: true` em `web/app/src/falaLivre.ts`. Mentira, história H/O/P/L, almanaque W e voz espontânea continuam fora.
+- **Testes:** `tests/test_conversa_m1.py` (novo) e `tests/test_comando_chat.py` (ajustado: o `livre-v9` entra em `VERSOES_COMANDO`, 5 pastas de
+  rodada); `web/app/test/comando_chat.test.ts` (pedido com `comando: true`); `web/app/e2e/conversa_comando.spec.ts` (novo: "vai comer" na Conversar
+  grava o evento do botão).
+- **Avaliação do comando (G4):** `artifacts_fala_livre/comando/rodada4_v9/` — falsos positivos 3,3 % (passa), imperativos 78,3 % (**falha**, limite 80 %).
+  Detalhe e a decisão aberta em `docs/registro/2026-11.md` (D-M1-4).

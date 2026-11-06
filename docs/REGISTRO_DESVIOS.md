@@ -532,3 +532,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-06 — PONTE_LUTA, etapa PE3, o espelho TS da dor e da luta como episódio, a marca `pl` e o `_lutar` com o resumo (worker, Claude Code, Sonnet 5.5, branch `v3-ponte-luta-pe3`)](registro/2026-11.md)
 - [2026-11-06 — INFRA_AGENTES, a especificação das etapas E1 a E5 (especificador, Claude Code, Opus 5.5, branch `v3-infra-agentes`)](registro/2026-11.md)
 - [2026-11-06 — CONVERSA_PET, o diagnóstico (Gerente da frente, Claude Code, Opus 5.5, branch `v3-conversa-diagnostico`)](registro/2026-11.md)
+- [2026-11-06 — CONVERSA_PET, M1, o comando e o estilo da espécie religados na conversa (worker, Claude Code, Sonnet 5.5, branch `v3-conversa-m1-comando`)](registro/2026-11.md)

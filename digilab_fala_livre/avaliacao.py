@@ -316,10 +316,13 @@ def fase_comando_gerar(modelo: str, sementes: tuple[int, ...], estilo: bool, ver
         raise ValueError(f"prompt sem comando: {versao}")
     especies, _, _ = carregar()
     cli = ClienteOllama(modelo)
-    gerar(cli, PETS_COMANDO[0], "conversa", "oi", semente=0, versao=versao, comando=True)   # aquece
+    aquece = PETS_COMANDO[0] if versao != "livre-v9" else {k: v for k, v in PETS_COMANDO[0].items() if k != "historia"}
+    gerar(cli, aquece, "conversa", "oi", semente=0, versao=versao, comando=True)   # aquece
     linhas, t_ini = [], time.perf_counter()
     for i, (texto, classe, esperado) in enumerate(MENSAGENS_COMANDO):
         pet = PETS_COMANDO[i % len(PETS_COMANDO)]
+        if versao == "livre-v9":      # o livre-v9 recusa os fatos H/O/P/L/F/W e o estadoDoPet do jogo nao manda historia
+            pet = {k: v for k, v in pet.items() if k not in ("historia", "mentira", "almanaque", "arvore")}
         esp = especies.get(pet["identidade"]["forma"]) if estilo else None
         for k, s0 in enumerate(sementes):
             r = gerar(cli, pet, "conversa", texto, semente=s0 + i, versao=versao, especie=esp, comando=True)
@@ -332,7 +335,7 @@ def fase_comando_gerar(modelo: str, sementes: tuple[int, ...], estilo: bool, ver
     cli.descarregar()
     _gravar("mensagens.json", {"versao_app": VERSAO_APP, "modelo": modelo, "sementes": list(sementes), "estilo_da_especie": estilo,
                                "versao_prompt": versao,
-                               "pets": list(PETS_COMANDO),
+                               "pets": [p if versao != "livre-v9" else {k: v for k, v in p.items() if k not in ("historia", "mentira", "almanaque", "arvore")} for p in PETS_COMANDO],
                                "mensagens": [{"i": i, "mensagem": m, "classe": c, "esperado": e} for i, (m, c, e) in enumerate(MENSAGENS_COMANDO)]})
     _gravar("respostas.jsonl", "".join(json.dumps(l, ensure_ascii=False, sort_keys=True) + "\n" for l in linhas))
     _gravar("tempos.json", {"modelo": modelo, "memoria": _memoria_modelo(modelo), "tempo_total_s": time.perf_counter() - t_ini,
