@@ -1,7 +1,7 @@
 {
- "versao": 4,
+ "versao": 5,
  "status": "PROPOSTO",
- "fonte": "SEM FONTE: receitas da M1 do lote 1 da SPRITES_ACOES (2026-11-05), da tabela 3.2 da docs/TAREFA_V3_SPRITES_ACOES.md; os px e os ms foram escolhidos a olho no Agumon. A v1 (so deslocamentos do Idle) foi reprovada pelo Matheus em 2026-11-05: as quatro pareciam iguais; a v2 usa poses de outras tags do UP, espelho e squash and stretch forte; o Emburrar da v2 (Idle espelhado) e o da v3 (bracos cruzados) foram reprovados: pareciam o Idle; a v4 fica de costas (a pose do Stun) com bufada, batida de pe e uma espiada",
+ "fonte": "SEM FONTE: receitas da M1 do lote 1 da SPRITES_ACOES (2026-11-05), da tabela 3.2 da docs/TAREFA_V3_SPRITES_ACOES.md; os px e os ms foram escolhidos a olho no Agumon. A v1 (so deslocamentos do Idle) foi reprovada pelo Matheus em 2026-11-05: as quatro pareciam iguais; a v2 usa poses de outras tags do UP, espelho e squash and stretch forte; o Emburrar da v2 (Idle espelhado) e o da v3 (bracos cruzados) foram reprovados: pareciam o Idle; a v4 fica de costas (a pose do Stun) com bufada, batida de pe e uma espiada; a v5 cataloga as poses dos outros 59 a olho nos quadros do UP (2026-11-05), com a alternativa do proprio UP e a duvida registrada onde falta a pose",
  "quadro_formato": "[fonte, dx, dy, sx, sy, k, ms, abaixar, espelho]: fonte e um int (o deslocamento no Idle, modulo o tamanho dele; a sombra e a do proprio quadro) ou \"pose:<papel>\" (o quadro do UP do papel em poses do Digimon; a sombra e a do 1o quadro do Idle). dx e dy em px (dy < 0 sobe); sx pelo meio do personagem e sy pelo pe (sy < 1 amassa, > 1 estica); k o cisalhamento (o topo anda k px, o pe fica); abaixar, px tirados da altura pelo pe; espelho 1 vira o personagem para o lado oposto",
  "todo_idle_formato": "o Idle inteiro do UP, quadro a quadro: dx, dy, sx, sy, k, abaixar e espelho fixos, e o ms de cada quadro do Idle vezes ms_fator, arredondado",
  "escala_pulo": "por Digimon (ajustes), a fracao do dy usada, arredondada, para o pulo caber na caixa do export (a receita falha alto sem ela)",
@@ -13,7 +13,7 @@
   "aceno_a": "o Chamar: o braco levantado (\"ei\")",
   "aceno_b": "o Chamar: o braco mais alto, o outro tempo do aceno",
   "grito": "o Chamar: a mao na boca, segurado antes da pausa",
-  "costas": "o Emburrar: de costas para a camera (a pose do Stun, a mesma do Sacudir), parada"
+  "costas": "o Emburrar: de costas para a camera (a pose do Stun, a mesma do Sacudir), parada. Quem nao tem quadro de costas usa o Stun (ou outro encolhido) com costas_espelho 1, virado para o outro lado"
  },
  "poses": {
   "Agumon": {
@@ -25,6 +25,911 @@
    "aceno_b": 6,
    "grito": 8,
    "costas": 51
+  },
+  "Angemon": {
+   "alto": 36,
+   "salto": 35,
+   "susto_a": 51,
+   "susto_b": 52,
+   "aceno_a": 3,
+   "aceno_b": 4,
+   "grito": 33,
+   "costas": 51,
+   "costas_espelho": 1,
+   "duvidas": [
+    "grito: rosto coberto pelo elmo, sem boca; usado o Evol com o braco apontando",
+    "costas: sem quadro de costas; Stun espelhado"
+   ]
+  },
+  "Angewomon": {
+   "alto": 27,
+   "salto": 30,
+   "susto_a": 46,
+   "susto_b": 47,
+   "aceno_a": 22,
+   "aceno_b": 23,
+   "grito": 29,
+   "costas": 46,
+   "costas_espelho": 1,
+   "duvidas": [
+    "grito: rosto coberto, sem boca aberta; usado o Evol com o arco erguido",
+    "costas: sem quadro de costas; Stun espelhado"
+   ]
+  },
+  "Ankiromon": {
+   "alto": 21,
+   "salto": 28,
+   "susto_a": 46,
+   "susto_b": 47,
+   "aceno_a": 13,
+   "aceno_b": 30,
+   "grito": 2,
+   "costas": 46,
+   "costas_espelho": 1,
+   "duvidas": [
+    "alto: quadrupede sem bracos; Evol com a cauda erguida",
+    "aceno: sem braco; usada a cauda levantada (Attack_1 13, Evol 30)",
+    "grito: sem boca aberta clara; preparo do Attack_1 com a cabeca a frente",
+    "costas: sem quadro de costas; Stun espelhado"
+   ]
+  },
+  "Aquilamon": {
+   "alto": 32,
+   "salto": 31,
+   "susto_a": 58,
+   "susto_b": 59,
+   "aceno_a": 26,
+   "aceno_b": 25,
+   "grito": 12,
+   "costas": 58,
+   "costas_espelho": 1,
+   "duvidas": [
+    "aceno: ave, asa em vez de braco",
+    "grito: bico pouco aberto; Attack_1 limpo apos o disparo",
+    "costas: sem quadro de costas; Stun espelhado"
+   ]
+  },
+  "Armadillomon": {
+   "alto": 27,
+   "salto": 21,
+   "susto_a": 48,
+   "susto_b": 48,
+   "aceno_a": 3,
+   "aceno_b": 4,
+   "grito": 28,
+   "costas": 48,
+   "costas_espelho": 1,
+   "duvidas": [
+    "alto: sem pose de bracos abertos; Evol em pe com o braco estendido",
+    "susto: Stun de 1 quadro, os dois iguais",
+    "costas: sem quadro de costas; Stun espelhado"
+   ]
+  },
+  "Birdramon": {
+   "alto": 30,
+   "salto": 29,
+   "susto_a": 55,
+   "susto_b": 56,
+   "aceno_a": 28,
+   "aceno_b": 31,
+   "grito": 33,
+   "costas": 55,
+   "costas_espelho": 1,
+   "duvidas": [
+    "grito: o Attack_1 antes do disparo ja tem fogo nas asas; usado o Evol 33",
+    "costas: sem quadro de costas; Stun espelhado"
+   ]
+  },
+  "Demiveemon": {
+   "alto": 34,
+   "salto": 15,
+   "susto_a": 49,
+   "susto_b": 50,
+   "aceno_a": 24,
+   "aceno_b": 25,
+   "grito": 3,
+   "costas": 49,
+   "costas_espelho": 1,
+   "duvidas": [
+    "costas: sem quadro de costas (o 32 e a silhueta do Evol); Stun espelhado"
+   ]
+  },
+  "Dinobeemon": {
+   "alto": 36,
+   "salto": 37,
+   "susto_a": 52,
+   "susto_b": 53,
+   "aceno_a": 4,
+   "aceno_b": 26,
+   "grito": 10,
+   "costas": 52,
+   "costas_espelho": 1,
+   "duvidas": [
+    "grito: sem boca aberta visivel; Attack_1 limpo com o braco estendido",
+    "costas: sem quadro de costas; Stun espelhado"
+   ]
+  },
+  "ExVeemon": {
+   "alto": 33,
+   "salto": 29,
+   "susto_a": 51,
+   "susto_b": 52,
+   "aceno_a": 27,
+   "aceno_b": 28,
+   "grito": 30,
+   "costas": 51,
+   "costas_espelho": 1,
+   "duvidas": [
+    "costas: sem quadro de costas; Stun espelhado (o Stun tem a boca bem aberta)"
+   ]
+  },
+  "Gabumon": {
+   "alto": 37,
+   "salto": 34,
+   "susto_a": 55,
+   "susto_b": 56,
+   "aceno_a": 30,
+   "aceno_b": 31,
+   "grito": 34,
+   "costas": 55,
+   "costas_espelho": 1,
+   "duvidas": [
+    "costas: sem quadro de costas; Stun espelhado",
+    "salto: o quadro escolhido antes nao cabia na caixa esticado (o topo do UP rente a ela); trocado por um do Evol mais baixo"
+   ]
+  },
+  "Gallantmon": {
+   "alto": 28,
+   "salto": 39,
+   "susto_a": 55,
+   "susto_b": 56,
+   "aceno_a": 26,
+   "aceno_b": 27,
+   "grito": 30,
+   "costas": 55,
+   "costas_espelho": 1,
+   "duvidas": [
+    "alto e aceno: a lanca erguida faz as vezes do braco levantado",
+    "grito: rosto coberto pelo elmo; Evol 30",
+    "costas: sem quadro de costas; Stun espelhado"
+   ]
+  },
+  "Gargomon": {
+   "alto": 45,
+   "salto": 33,
+   "susto_a": 48,
+   "susto_b": 49,
+   "aceno_a": 2,
+   "aceno_b": 3,
+   "grito": 32,
+   "costas": 48,
+   "costas_espelho": 1,
+   "duvidas": [
+    "alto: sem pose de vitoria; Run com as orelhas e bracos abertos",
+    "aceno: o braco-arma erguido do preparo",
+    "grito: sem boca aberta clara; Evol 32",
+    "costas: sem quadro de costas; Stun espelhado"
+   ]
+  },
+  "Garudamon": {
+   "alto": 39,
+   "salto": 44,
+   "susto_a": 68,
+   "susto_b": 69,
+   "aceno_a": 40,
+   "aceno_b": 41,
+   "grito": 37,
+   "costas": 68,
+   "costas_espelho": 1,
+   "duvidas": [
+    "grito: o Attack_1 tem fogo logo cedo; usado o Evol 37",
+    "costas: sem quadro de costas (o Evol 35 e de frente, de asas fechadas); Stun espelhado"
+   ]
+  },
+  "Garurumon": {
+   "alto": 29,
+   "salto": 35,
+   "susto_a": 52,
+   "susto_b": 53,
+   "aceno_a": 26,
+   "aceno_b": 27,
+   "grito": 30,
+   "costas": 52,
+   "costas_espelho": 1,
+   "duvidas": [
+    "alto: quadrupede; Evol com a cabeca erguida e boca aberta",
+    "aceno: sem pata levantada; Evol com a cabeca erguida",
+    "costas: sem quadro de costas; Stun espelhado"
+   ]
+  },
+  "Gatomon": {
+   "alto": 25,
+   "salto": 24,
+   "susto_a": 50,
+   "susto_b": 51,
+   "aceno_a": 33,
+   "aceno_b": 34,
+   "grito": 31,
+   "costas": 50,
+   "costas_espelho": 1,
+   "duvidas": [
+    "grito: boca pequena; Evol com as patas erguidas",
+    "costas: sem quadro de costas; Stun (encolhido) espelhado"
+   ]
+  },
+  "Gomamon": {
+   "alto": 57,
+   "salto": 17,
+   "susto_a": 62,
+   "susto_b": 63,
+   "aceno_a": 56,
+   "aceno_b": 16,
+   "grito": 55,
+   "costas": 3,
+   "duvidas": [
+    "aceno: sem braco levantado; patas abertas do Run (56) e do Attack no ar (16)"
+   ]
+  },
+  "Greymon": {
+   "alto": 26,
+   "salto": 32,
+   "susto_a": 48,
+   "susto_b": 49,
+   "aceno_a": 2,
+   "aceno_b": 26,
+   "grito": 16,
+   "costas": 48,
+   "costas_espelho": 1,
+   "duvidas": [
+    "salto: o Evol de boca aberta (29-31) tem brasas; 32 e o pos-rugido limpo, parecido com o Idle",
+    "aceno_b repete o alto (26, os dois bracos erguidos)",
+    "grito: 16 (Attack depois do disparo, boca entreaberta); os de boca bem aberta tem fogo",
+    "costas: o Stun e de frente (recuo); espelhado"
+   ]
+  },
+  "Growlmon": {
+   "alto": 23,
+   "salto": 22,
+   "susto_a": 48,
+   "susto_b": 49,
+   "aceno_a": 2,
+   "aceno_b": 24,
+   "grito": 26,
+   "costas": 48,
+   "costas_espelho": 1,
+   "duvidas": [
+    "aceno: sem braco erguido; 24 e o braco estendido para a frente",
+    "costas: o Stun e de frente (recuo); espelhado"
+   ]
+  },
+  "Guilmon": {
+   "alto": 24,
+   "salto": 28,
+   "susto_a": 45,
+   "susto_b": 46,
+   "aceno_a": 23,
+   "aceno_b": 25,
+   "grito": 26,
+   "costas": 45,
+   "costas_espelho": 1,
+   "duvidas": [
+    "aceno: sem braco levantado; preparo do Evol (23) e o rugido de cabeca erguida (25)",
+    "costas: o Stun e de frente (recuo); espelhado"
+   ]
+  },
+  "HerculesKabuterimon": {
+   "alto": 34,
+   "salto": 33,
+   "susto_a": 78,
+   "susto_b": 79,
+   "aceno_a": 32,
+   "aceno_b": 36,
+   "grito": 29,
+   "costas": 78,
+   "costas_espelho": 1,
+   "duvidas": [
+    "grito: boca pouco legivel; 29 (Evol, cabeca a frente)",
+    "costas: o Stun e de frente (bracos abertos); espelhado"
+   ]
+  },
+  "Ikkakumon": {
+   "alto": 39,
+   "salto": 27,
+   "susto_a": 44,
+   "susto_b": 45,
+   "aceno_a": 40,
+   "aceno_b": 41,
+   "grito": 28,
+   "costas": 44,
+   "costas_espelho": 1,
+   "duvidas": [
+    "alto: corpo nao estica; 39 (Run, as duas patas erguidas)",
+    "grito: boca escondida pelo bigode; 28 (Evol, cabeca erguida)",
+    "costas: o Stun e de frente; espelhado"
+   ]
+  },
+  "Imperialdramon_DragonMode": {
+   "alto": 28,
+   "salto": 32,
+   "susto_a": 53,
+   "susto_b": 54,
+   "aceno_a": 30,
+   "aceno_b": 29,
+   "grito": 31,
+   "costas": 53,
+   "costas_espelho": 1,
+   "duvidas": [
+    "aceno: quadrupede; garra a frente (30) e empinado (29)",
+    "costas: o Stun e de frente; espelhado"
+   ]
+  },
+  "Imperialdramon_FighterMode": {
+   "alto": 38,
+   "salto": 31,
+   "susto_a": 61,
+   "susto_b": 62,
+   "aceno_a": 31,
+   "aceno_b": 28,
+   "grito": 29,
+   "costas": 61,
+   "costas_espelho": 1,
+   "duvidas": [
+    "aceno: o braco erguido e o do canhao (28); aceno_a repete o salto (31)",
+    "grito: rosto de mascara, sem boca; 29 (Evol)",
+    "costas: o Stun e curvado de lado, nao de costas; espelhado"
+   ]
+  },
+  "Kabuterimon": {
+   "alto": 34,
+   "salto": 32,
+   "susto_a": 59,
+   "susto_b": 60,
+   "aceno_a": 33,
+   "aceno_b": 35,
+   "grito": 36,
+   "costas": 59,
+   "costas_espelho": 1,
+   "duvidas": [
+    "grito: boca pouco legivel; 36 (Evol no ar, bracos abertos)",
+    "costas: o Stun e de frente; espelhado"
+   ]
+  },
+  "Koromon": {
+   "alto": 47,
+   "salto": 48,
+   "susto_a": 52,
+   "susto_b": 53,
+   "aceno_a": 34,
+   "aceno_b": 35,
+   "grito": 46,
+   "costas": 7,
+   "costas_espelho": 1,
+   "duvidas": [
+    "aceno: sem bracos; as orelhas erguidas do Evol (34, 35)",
+    "costas: sem quadro de costas; 7 (Attack, de perfil, olhos fechados e bochecha inflada, parece emburrado, no ar), espelhado"
+   ]
+  },
+  "Kyubimon": {
+   "alto": 50,
+   "salto": 36,
+   "susto_a": 53,
+   "susto_b": 53,
+   "aceno_a": 48,
+   "aceno_b": 49,
+   "grito": 17,
+   "costas": 53,
+   "costas_espelho": 1,
+   "duvidas": [
+    "Stun de 1 quadro: susto_a = susto_b",
+    "aceno: quadrupede; pata dianteira erguida do Run (48, 49)",
+    "grito: sem boca bem aberta limpa; 17 (fim do Attack, cabeca a frente)",
+    "costas: o Stun e de perfil (recuo); espelhado"
+   ]
+  },
+  "Lillymon": {
+   "alto": 38,
+   "salto": 21,
+   "susto_a": 63,
+   "susto_b": 64,
+   "aceno_a": 33,
+   "aceno_b": 37,
+   "grito": 20,
+   "costas": 63,
+   "costas_espelho": 1,
+   "duvidas": [
+    "alto/aceno: a flor-canhao na mao faz parte do corpo (sem brilho), mas aparece",
+    "grito: boca nao legivel; 20 (fim do Attack, mao perto do peito)",
+    "costas: o Stun e de frente; espelhado"
+   ]
+  },
+  "MagnaAngemon": {
+   "alto": 38,
+   "salto": 31,
+   "susto_a": 59,
+   "susto_b": 60,
+   "aceno_a": 34,
+   "aceno_b": 35,
+   "grito": 32,
+   "costas": 59,
+   "costas_espelho": 1,
+   "duvidas": [
+    "grito: rosto de elmo, sem boca; 32 (Evol, asas abertas)",
+    "costas: o Stun e curvado de perfil; espelhado"
+   ]
+  },
+  "Magnadramon": {
+   "alto": 38,
+   "salto": 40,
+   "susto_a": 62,
+   "susto_b": 63,
+   "aceno_a": 31,
+   "aceno_b": 32,
+   "grito": 39,
+   "costas": 62,
+   "costas_espelho": 1,
+   "duvidas": [
+    "aceno: quadrupede; pata dianteira erguida do Evol (31, 32)",
+    "costas: o Stun e de frente (recuo); espelhado"
+   ]
+  },
+  "MegaGargomon": {
+   "alto": 13,
+   "salto": 12,
+   "susto_a": 44,
+   "susto_b": 45,
+   "aceno_a": 25,
+   "aceno_b": 26,
+   "grito": 24,
+   "costas": 44,
+   "costas_espelho": 1,
+   "duvidas": [
+    "robo rigido: alto/salto sao 13/12 (Attack, bracos afastados), pouco expressivos",
+    "aceno: sem braco levantado; os canhoes do ombro erguidos (25, 26)",
+    "grito: sem boca; 24 (Evol)",
+    "as pontas amarelas dos misseis do ombro sao do corpo, nao efeito",
+    "costas: o Stun e de frente; espelhado"
+   ]
+  },
+  "MegaKabuterimon": {
+   "alto": 34,
+   "salto": 29,
+   "susto_a": 54,
+   "susto_b": 55,
+   "aceno_a": 11,
+   "aceno_b": 12,
+   "grito": 28,
+   "costas": 54,
+   "costas_espelho": 1,
+   "duvidas": [
+    "costas: sem quadro de costas; Stun espelhado",
+    "aceno: sem braco levantado claro; Attack_1 sem efeito (11,12) com o chifre erguido",
+    "grito: boca pouco visivel; Evol"
+   ]
+  },
+  "MegaSeadramon": {
+   "alto": 1,
+   "salto": 18,
+   "susto_a": 42,
+   "susto_b": 43,
+   "aceno_a": 19,
+   "aceno_b": 1,
+   "grito": 17,
+   "costas": 42,
+   "costas_espelho": 1,
+   "duvidas": [
+    "sem Evol: alto/salto/grito do Attack_1 limpo",
+    "aceno: sem bracos; cabeca erguida no lugar",
+    "costas: Stun de frente (cabeca para cima); espelhado"
+   ]
+  },
+  "MetalGarurumon": {
+   "alto": 51,
+   "salto": 33,
+   "susto_a": 54,
+   "susto_b": 55,
+   "aceno_a": 30,
+   "aceno_b": 31,
+   "grito": 19,
+   "costas": 54,
+   "costas_espelho": 1,
+   "duvidas": [
+    "costas: sem quadro de costas; Stun espelhado",
+    "aceno: quadrupede; pata levantada do Evol (30,31)"
+   ]
+  },
+  "MetalGreymon": {
+   "alto": 47,
+   "salto": 31,
+   "susto_a": 50,
+   "susto_b": 51,
+   "aceno_a": 2,
+   "aceno_b": 3,
+   "grito": 17,
+   "costas": 50,
+   "costas_espelho": 1,
+   "duvidas": [
+    "costas: Stun de cabeca baixa, de frente; espelhado"
+   ]
+  },
+  "MetalSeadramon": {
+   "alto": 1,
+   "salto": 19,
+   "susto_a": 54,
+   "susto_b": 55,
+   "aceno_a": 19,
+   "aceno_b": 1,
+   "grito": 19,
+   "costas": 54,
+   "costas_espelho": 1,
+   "duvidas": [
+    "sem Evol: so Attack_1 limpo (1,19)",
+    "aceno: sem bracos; cabeca erguida no lugar",
+    "costas: Stun de frente; espelhado"
+   ]
+  },
+  "Paildramon": {
+   "alto": 50,
+   "salto": 41,
+   "susto_a": 56,
+   "susto_b": 57,
+   "aceno_a": 31,
+   "aceno_b": 32,
+   "grito": 40,
+   "costas": 56,
+   "costas_espelho": 1,
+   "duvidas": [
+    "costas: Stun de lado (recuo); espelhado",
+    "grito: boca pouco visivel; Evol"
+   ]
+  },
+  "Palmon": {
+   "alto": 46,
+   "salto": 28,
+   "susto_a": 51,
+   "susto_b": 52,
+   "aceno_a": 2,
+   "aceno_b": 3,
+   "grito": 27,
+   "costas": 51,
+   "costas_espelho": 1,
+   "duvidas": [
+    "costas: Stun de frente encolhido; espelhado"
+   ]
+  },
+  "Patamon": {
+   "alto": 37,
+   "salto": 36,
+   "susto_a": 55,
+   "susto_b": 56,
+   "aceno_a": 29,
+   "aceno_b": 38,
+   "grito": 34,
+   "costas": 31,
+   "costas_espelho": 1,
+   "duvidas": [
+    "costas: sem quadro de costas; o Evol 31 (olhos fechados, cabeca baixa), espelhado"
+   ]
+  },
+  "Phoenixmon": {
+   "alto": 36,
+   "salto": 34,
+   "susto_a": 59,
+   "susto_b": 60,
+   "aceno_a": 38,
+   "aceno_b": 40,
+   "grito": 37,
+   "costas": 59,
+   "costas_espelho": 1,
+   "duvidas": [
+    "costas: Stun encolhido, nao de costas; espelhado",
+    "aceno/grito: ave; asa erguida do Evol e bico pouco visivel"
+   ]
+  },
+  "Rapidmon": {
+   "alto": 40,
+   "salto": 31,
+   "susto_a": 60,
+   "susto_b": 61,
+   "aceno_a": 36,
+   "aceno_b": 39,
+   "grito": 23,
+   "costas": 60,
+   "costas_espelho": 1,
+   "duvidas": [
+    "costas: Stun de frente; espelhado",
+    "grito: sem boca aberta visivel; Attack_1 limpo"
+   ]
+  },
+  "Rosemon": {
+   "alto": 63,
+   "salto": 54,
+   "susto_a": 69,
+   "susto_b": 70,
+   "aceno_a": 25,
+   "aceno_b": 67,
+   "grito": 25,
+   "costas": 69,
+   "costas_espelho": 1,
+   "duvidas": [
+    "Attack_1 e Evol quase todos com efeito ou silhueta rosa; so 25 e 54 limpos",
+    "aceno: sem braco levantado limpo; 25 e o Run 67",
+    "grito: sem boca aberta; 25",
+    "costas: Stun de frente; espelhado"
+   ]
+  },
+  "Sakuyamon": {
+   "alto": 29,
+   "salto": 27,
+   "susto_a": 52,
+   "susto_b": 53,
+   "aceno_a": 28,
+   "aceno_b": 37,
+   "grito": 20,
+   "costas": 52,
+   "costas_espelho": 1,
+   "duvidas": [
+    "grito: mascara, sem boca; Attack_1 20 limpo",
+    "costas: Stun de frente; espelhado"
+   ]
+  },
+  "Seadramon": {
+   "alto": 33,
+   "salto": 29,
+   "susto_a": 35,
+   "susto_b": 36,
+   "aceno_a": 1,
+   "aceno_b": 14,
+   "grito": 14,
+   "costas": 35,
+   "costas_espelho": 1,
+   "duvidas": [
+    "sem Evol: alto/salto do Run",
+    "aceno: sem bracos; cabeca do Attack_1",
+    "costas: o Stun e de perfil, nao de costas; espelhado"
+   ]
+  },
+  "Seraphimon": {
+   "alto": 26,
+   "salto": 27,
+   "susto_a": 48,
+   "susto_b": 49,
+   "aceno_a": 22,
+   "aceno_b": 24,
+   "grito": 29,
+   "costas": 48,
+   "costas_espelho": 1,
+   "duvidas": [
+    "grito: elmo, sem boca; Evol",
+    "costas: Stun de lado; espelhado",
+    "salto: o quadro escolhido antes nao cabia na caixa esticado (o topo do UP rente a ela); trocado por um do Evol mais baixo"
+   ]
+  },
+  "Shakkoumon": {
+   "alto": 26,
+   "salto": 35,
+   "susto_a": 52,
+   "susto_b": 53,
+   "aceno_a": 3,
+   "aceno_b": 25,
+   "grito": 24,
+   "costas": 52,
+   "costas_espelho": 1,
+   "duvidas": [
+    "grito: sem boca; Evol 24",
+    "costas: Stun de frente; espelhado",
+    "salto: o quadro escolhido antes nao cabia na caixa esticado (o topo do UP rente a ela); trocado por um do Evol mais baixo"
+   ]
+  },
+  "Silphymon": {
+   "alto": 25,
+   "salto": 28,
+   "susto_a": 48,
+   "susto_b": 49,
+   "aceno_a": 23,
+   "aceno_b": 24,
+   "grito": 13,
+   "costas": 48,
+   "costas_espelho": 1,
+   "duvidas": [
+    "grito: sem boca visivel (mascara); Attack_1 limpo 13",
+    "costas: Stun de frente (recuo); espelhado",
+    "susto: Stun tem 3 quadros, usados 48 e 49"
+   ]
+  },
+  "SlashAngemon": {
+   "alto": 29,
+   "salto": 27,
+   "susto_a": 56,
+   "susto_b": 57,
+   "aceno_a": 3,
+   "aceno_b": 5,
+   "grito": 30,
+   "costas": 56,
+   "costas_espelho": 1,
+   "duvidas": [
+    "grito: sem boca visivel; Evol 30 de bracos abertos",
+    "costas: Stun de frente; espelhado"
+   ]
+  },
+  "Stingmon": {
+   "alto": 29,
+   "salto": 28,
+   "susto_a": 55,
+   "susto_b": 56,
+   "aceno_a": 1,
+   "aceno_b": 2,
+   "grito": 16,
+   "costas": 55,
+   "costas_espelho": 1,
+   "duvidas": [
+    "grito: sem boca visivel; Attack_1 16 limpo (pos-disparo)",
+    "costas: Stun de frente; espelhado"
+   ]
+  },
+  "Tanemon": {
+   "alto": 31,
+   "salto": 32,
+   "susto_a": 51,
+   "susto_b": 52,
+   "aceno_a": 3,
+   "aceno_b": 4,
+   "grito": 16,
+   "costas": 51,
+   "costas_espelho": 1,
+   "duvidas": [
+    "aceno: sem bracos; quadros com as folhas inclinadas",
+    "costas: Stun de frente (olhos fechados); espelhado"
+   ]
+  },
+  "Taomon": {
+   "alto": 29,
+   "salto": 28,
+   "susto_a": 53,
+   "susto_b": 54,
+   "aceno_a": 3,
+   "aceno_b": 33,
+   "grito": 32,
+   "costas": 53,
+   "costas_espelho": 1,
+   "duvidas": [
+    "grito: sem boca aberta; Evol 32 de pincel erguido",
+    "costas: Stun de perfil/tres quartos; espelhado"
+   ]
+  },
+  "Togemon": {
+   "alto": 36,
+   "salto": 35,
+   "susto_a": 56,
+   "susto_b": 57,
+   "aceno_a": 3,
+   "aceno_b": 4,
+   "grito": 18,
+   "costas": 56,
+   "costas_espelho": 1,
+   "duvidas": [
+    "costas: Stun de frente encolhido; espelhado"
+   ]
+  },
+  "Tsunomon": {
+   "alto": 39,
+   "salto": 24,
+   "susto_a": 42,
+   "susto_b": 43,
+   "aceno_a": 22,
+   "aceno_b": 23,
+   "grito": 7,
+   "costas": 42,
+   "costas_espelho": 1,
+   "duvidas": [
+    "alto: sem Evol de vitoria; Run 39 no ar",
+    "aceno: sem bracos; Evol 22/23 com o chifre inclinado",
+    "costas: Stun de frente (olhos fechados); espelhado"
+   ]
+  },
+  "Valkyrimon": {
+   "alto": 40,
+   "salto": 49,
+   "susto_a": 66,
+   "susto_b": 67,
+   "aceno_a": 41,
+   "aceno_b": 42,
+   "grito": 20,
+   "costas": 66,
+   "costas_espelho": 1,
+   "duvidas": [
+    "grito: sem boca visivel; Attack_1 20 limpo",
+    "costas: Stun de frente; espelhado"
+   ]
+  },
+  "Veemon": {
+   "alto": 28,
+   "salto": 30,
+   "susto_a": 46,
+   "susto_b": 47,
+   "aceno_a": 2,
+   "aceno_b": 15,
+   "grito": 29,
+   "costas": 46,
+   "costas_espelho": 1,
+   "duvidas": [
+    "salto: Evol 30 ja no ar (nao ha em pe animado limpo alem do Idle)",
+    "costas: Stun de frente; espelhado"
+   ]
+  },
+  "Vikemon": {
+   "alto": 25,
+   "salto": 29,
+   "susto_a": 47,
+   "susto_b": 48,
+   "aceno_a": 4,
+   "aceno_b": 5,
+   "grito": 6,
+   "costas": 47,
+   "costas_espelho": 1,
+   "duvidas": [
+    "costas: Stun de frente (escudo erguido); espelhado"
+   ]
+  },
+  "WarGreymon": {
+   "alto": 31,
+   "salto": 29,
+   "susto_a": 57,
+   "susto_b": 58,
+   "aceno_a": 34,
+   "aceno_b": 36,
+   "grito": 30,
+   "costas": 57,
+   "costas_espelho": 1,
+   "duvidas": [
+    "grito: sem boca visivel (elmo); Evol 30",
+    "costas: Stun de lado; espelhado"
+   ]
+  },
+  "Wargrowlmon": {
+   "alto": 35,
+   "salto": 44,
+   "susto_a": 62,
+   "susto_b": 63,
+   "aceno_a": 36,
+   "aceno_b": 40,
+   "grito": 18,
+   "costas": 62,
+   "costas_espelho": 1,
+   "duvidas": [
+    "grito: boca pouco visivel; Attack_1 18 limpo",
+    "costas: Stun de frente; espelhado"
+   ]
+  },
+  "WereGarurumon": {
+   "alto": 33,
+   "salto": 31,
+   "susto_a": 54,
+   "susto_b": 55,
+   "aceno_a": 1,
+   "aceno_b": 34,
+   "grito": 20,
+   "costas": 54,
+   "costas_espelho": 1,
+   "duvidas": [
+    "grito: sem boca bem aberta; Attack_1 20 limpo",
+    "costas: Stun de frente; espelhado"
+   ]
+  },
+  "Zudomon": {
+   "alto": 27,
+   "salto": 24,
+   "susto_a": 46,
+   "susto_b": 47,
+   "aceno_a": 5,
+   "aceno_b": 6,
+   "grito": 28,
+   "costas": 46,
+   "costas_espelho": 1,
+   "duvidas": [
+    "salto: sem pose animada clara; Evol 24 parecido com o Idle",
+    "grito: sem boca aberta; Evol 28 de braco estendido",
+    "costas: Stun de frente; espelhado"
+   ]
   }
  },
  "acoes": {
@@ -471,5 +1376,93 @@
    ]
   }
  },
- "ajustes": {}
+ "ajustes": {
+  "Angewomon": {
+   "escala_pulo": 0.6,
+   "motivo": "o pulo do Feliz sai da caixa pelo topo com a escala cheia; a maior escala de 0,1 em 0,1 que cabe"
+  },
+  "Ankiromon": {
+   "escala_pulo": 0.4,
+   "motivo": "o pulo do Feliz sai da caixa pelo topo com a escala cheia; a maior escala de 0,1 em 0,1 que cabe"
+  },
+  "Aquilamon": {
+   "escala_pulo": 0.6,
+   "motivo": "o pulo do Feliz sai da caixa pelo topo com a escala cheia; a maior escala de 0,1 em 0,1 que cabe"
+  },
+  "Gallantmon": {
+   "escala_pulo": 0.6,
+   "motivo": "o pulo do Feliz sai da caixa pelo topo com a escala cheia; a maior escala de 0,1 em 0,1 que cabe"
+  },
+  "Greymon": {
+   "escala_pulo": 0.6,
+   "motivo": "o pulo do Feliz sai da caixa pelo topo com a escala cheia; a maior escala de 0,1 em 0,1 que cabe"
+  },
+  "Guilmon": {
+   "escala_pulo": 0.8,
+   "motivo": "o pulo do Feliz sai da caixa pelo topo com a escala cheia; a maior escala de 0,1 em 0,1 que cabe"
+  },
+  "Ikkakumon": {
+   "escala_pulo": 0.8,
+   "motivo": "o pulo do Feliz sai da caixa pelo topo com a escala cheia; a maior escala de 0,1 em 0,1 que cabe"
+  },
+  "Kabuterimon": {
+   "escala_pulo": 0.9,
+   "motivo": "o pulo do Feliz sai da caixa pelo topo com a escala cheia; a maior escala de 0,1 em 0,1 que cabe"
+  },
+  "Kyubimon": {
+   "escala_dx": 0.5,
+   "motivo": "o Stun espelhado e largo e sai da caixa pelo lado no Sacudir; metade do dx"
+  },
+  "Lillymon": {
+   "escala_pulo": 0.7,
+   "motivo": "o pulo do Feliz sai da caixa pelo topo com a escala cheia; a maior escala de 0,1 em 0,1 que cabe"
+  },
+  "MagnaAngemon": {
+   "escala_pulo": 0.7,
+   "motivo": "o pulo do Feliz sai da caixa pelo topo com a escala cheia; a maior escala de 0,1 em 0,1 que cabe"
+  },
+  "Paildramon": {
+   "escala_pulo": 0.6,
+   "motivo": "o pulo do Feliz sai da caixa pelo topo com a escala cheia; a maior escala de 0,1 em 0,1 que cabe"
+  },
+  "Rapidmon": {
+   "escala_pulo": 0.7,
+   "motivo": "o pulo do Feliz sai da caixa pelo topo com a escala cheia; a maior escala de 0,1 em 0,1 que cabe"
+  },
+  "Sakuyamon": {
+   "escala_pulo": 0.6,
+   "motivo": "o pulo do Feliz sai da caixa pelo topo com a escala cheia; a maior escala de 0,1 em 0,1 que cabe"
+  },
+  "Shakkoumon": {
+   "escala_pulo": 0.9,
+   "motivo": "o pulo do Feliz sai da caixa pelo topo com a escala cheia; a maior escala de 0,1 em 0,1 que cabe"
+  },
+  "SlashAngemon": {
+   "escala_pulo": 0.9,
+   "motivo": "o pulo do Feliz sai da caixa pelo topo com a escala cheia; a maior escala de 0,1 em 0,1 que cabe"
+  },
+  "Tsunomon": {
+   "escala_pulo": 0.6,
+   "motivo": "o pulo do Feliz sai da caixa pelo topo com a escala cheia; a maior escala de 0,1 em 0,1 que cabe"
+  },
+  "Veemon": {
+   "escala_pulo": 0.8,
+   "motivo": "o pulo do Feliz sai da caixa pelo topo com a escala cheia; a maior escala de 0,1 em 0,1 que cabe"
+  },
+  "Vikemon": {
+   "escala_pulo": 0.8,
+   "motivo": "o pulo do Feliz sai da caixa pelo topo com a escala cheia; a maior escala de 0,1 em 0,1 que cabe"
+  },
+  "Wargrowlmon": {
+   "escala_pulo": 0.4,
+   "motivo": "o pulo do Feliz sai da caixa pelo topo com a escala cheia; a maior escala de 0,1 em 0,1 que cabe; o Stun espelhado e largo e sai da caixa pelo lado no Sacudir; metade do dx",
+   "escala_dx": 0.5
+  },
+  "Zudomon": {
+   "escala_pulo": 0.6,
+   "motivo": "o pulo do Feliz sai da caixa pelo topo com a escala cheia; a maior escala de 0,1 em 0,1 que cabe"
+  }
+ },
+ "poses_formato": "poses[Digimon][papel]: o quadro do UP (1-based); <papel>_espelho 1 espelha de novo o quadro desse papel (a alternativa de quem nao tem a pose); duvidas: o que falta e a alternativa usada, por papel",
+ "escala_dx": "por Digimon (ajustes), a fracao do dx usada, arredondada, para o balanco de lado (o Sacudir) caber na caixa do export"
 }

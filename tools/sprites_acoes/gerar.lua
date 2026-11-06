@@ -144,6 +144,9 @@ if #Q == 0 then error("sequencia vazia") end
 -- Falha alto se um pixel opaco cairia fora da caixa.
 local function transformar(img, dx, dy, sx, sy, k, abaixar, espelho, onde)
   local top, foot = caixa(img)
+  -- uma pose de outra tag do UP com o pe abaixo do pe do Idle (o Stun encolhido, por exemplo) sobe ate ele: assenta no chao do Idle
+  -- (lote 1, 2026-11-05; o Agumon nao tem pose assim, e as acoes dele saem iguais)
+  dy = dy - math.max(0, foot - PE)
   local left, right = W, -1
   for y = top, foot do for x = 0, W - 1 do
     if A(img:getPixel(x, y)) > 0 then if x < left then left = x end; if x > right then right = x end end

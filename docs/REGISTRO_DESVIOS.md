@@ -519,3 +519,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-05 — SPRITES AÇÕES, missão M4, o e2e e as capturas do Comer (worker, Claude Code, Opus 5.5, worktree `v3-sprites-e2e`)](registro/2026-11.md)
 - [2026-11-05 — ACOES_NOVAS AN4, o resultado da run do passeio (worker, Claude Code, Opus 5.5, worktree `v3-acoes-novas-an4-run`)](registro/2026-11.md)
 - [2026-11-05 — ITENS_3D, a tarefa (Gerente da frente, Claude Code, Opus 5.5, worktree `v3-itens-3d`)](registro/2026-11.md)
+- [2026-11-05 — SPRITES AÇÕES, missão M1, o lote 1 (Feliz, Sacudir, Chamar e Emburrar) dos 60 (worker, Claude Code, Opus 5.5, worktree `v3-sprites-lote1`)](registro/2026-11.md)

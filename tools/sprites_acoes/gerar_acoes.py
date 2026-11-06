@@ -32,12 +32,15 @@ PROCESSOS = 4                             # V3-D8: no maximo 4 processos
 def quadros_lote1(nome: str, e: dict, lote: dict, remaster: Path) -> dict[str, str]:
     """Os --script-param acao_<Tag> de um Digimon: os quadros de cada acao do lote1.json, com o ajuste de pulo dele."""
     ajuste = lote["ajustes"].get(nome, {})
-    desconhecidos = set(ajuste) - {"escala_pulo", "motivo"}
+    desconhecidos = set(ajuste) - {"escala_pulo", "escala_dx", "motivo"}
     if desconhecidos:
         raise ValueError(f"{nome}: ajuste desconhecido {sorted(desconhecidos)}")
     escala = ajuste.get("escala_pulo", 1.0)
     if not 0 < escala <= 1:
         raise ValueError(f"{nome}: escala_pulo {escala} fora de (0, 1]")
+    escala_dx = ajuste.get("escala_dx", 1.0)
+    if not 0 <= escala_dx <= 1:
+        raise ValueError(f"{nome}: escala_dx {escala_dx} fora de [0, 1]")
     if set(lote["acoes"]) != set(ACOES_LOTE1):
         raise ValueError(f"lote1.json: acoes {sorted(lote['acoes'])}, esperado {sorted(ACOES_LOTE1)}")
     poses = lote["poses"].get(nome)
@@ -49,17 +52,28 @@ def quadros_lote1(nome: str, e: dict, lote: dict, remaster: Path) -> dict[str, s
     if len(ms_idle) != e["idle"][1] - e["idle"][0] + 1:
         raise ValueError(f"{nome}: o Idle do export tem {len(ms_idle)} quadros, o ancoras.json diz {e['idle']}")
     i0, n = e["idle"][0], len(ms_idle)
+    papeis = set(lote["papeis"])
+    chaves = papeis | {p + "_espelho" for p in papeis} | {"duvidas"}
+    if set(poses) - chaves:
+        raise ValueError(f"{nome}: chave de pose desconhecida {sorted(set(poses) - chaves)}")
+    ultimo = max(t["to"] for t in up["meta"]["frameTags"]) + 1   # o ultimo quadro do UP, 1-based
+    for papel in papeis & set(poses):
+        if not isinstance(poses[papel], int) or not 1 <= poses[papel] <= ultimo:
+            raise ValueError(f"{nome}: a pose {papel} = {poses[papel]!r} fora dos quadros do UP (1..{ultimo})")
+        if poses.get(papel + "_espelho", 0) not in (0, 1):
+            raise ValueError(f"{nome}: {papel}_espelho = {poses[papel + '_espelho']!r}, esperado 0 ou 1")
 
-    def resolver(fonte) -> tuple[int, int]:
-        """(quadro do UP, quadro da sombra): um int e o deslocamento no Idle (a sombra dele); "pose:<papel>" e o quadro do papel no
-        poses do Digimon (a sombra do 1o quadro do Idle, como no Comer par)."""
+    def resolver(fonte) -> tuple[int, int, int]:
+        """(quadro do UP, quadro da sombra, espelho extra): um int e o deslocamento no Idle (a sombra dele); "pose:<papel>" e o
+        quadro do papel no poses do Digimon (a sombra do 1o quadro do Idle, como no Comer par), espelhado de novo se o
+        <papel>_espelho for 1 (a alternativa de quem nao tem a pose: o quadro virado para o outro lado)."""
         if isinstance(fonte, int):
-            return i0 + fonte % n, i0 + fonte % n
+            return i0 + fonte % n, i0 + fonte % n, 0
         if isinstance(fonte, str) and fonte.startswith("pose:"):
             papel = fonte[5:]
             if papel not in poses:
                 raise ValueError(f"{nome}: sem a pose {papel!r} no lote1.json")
-            return int(poses[papel]), i0
+            return poses[papel], i0, poses.get(papel + "_espelho", 0)
         raise ValueError(f"{nome}: fonte de quadro invalida {fonte!r}")
 
     pr = {}
@@ -75,7 +89,9 @@ def quadros_lote1(nome: str, e: dict, lote: dict, remaster: Path) -> dict[str, s
             if len(q) != 9 or not isinstance(q[6], int) or q[6] <= 0 or q[8] not in (0, 1):
                 raise ValueError(f"{nome} {acao}: quadro invalido {q}")
             q[2] = int(round(q[2] * escala))   # o pulo (dy) na fracao do ajuste
-            q[0], sombra = resolver(q[0])
+            q[1] = int(round(q[1] * escala_dx))   # o balanco de lado (dx) na fracao do ajuste
+            q[0], sombra, esp = resolver(q[0])
+            q[8] ^= esp
             qs[i] = q + [sombra]
         pr["acao_" + acao] = ";".join(",".join(map(str, q)) for q in qs)
     return pr
