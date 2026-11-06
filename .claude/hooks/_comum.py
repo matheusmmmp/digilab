@@ -7,6 +7,7 @@ Cada hook lê do stdin o JSON do evento (o formato da documentação do Claude C
 """
 from __future__ import annotations
 
+import ast
 import hashlib
 import json
 import os
@@ -45,6 +46,19 @@ def sha_do_engine(raiz: Path) -> tuple[str, str]:
     if m is None:
         raise RuntimeError("não achei ENGINE_SHA256_V0 em digilab/protocol.py")
     return atual, m.group(1)
+
+
+FAIXAS = Path("experiments") / "bancada" / "faixas.py"
+
+
+def queimadas_do_texto(texto: str) -> tuple:
+    """A tupla `FAIXAS_QUEIMADAS` de um texto de `faixas.py`, lida pela AST (sem importar a bancada). Levanta se não há a atribuição
+    no nível do módulo ou se o valor não é um literal."""
+    for no in ast.parse(texto).body:
+        alvos = no.targets if isinstance(no, ast.Assign) else [no.target] if isinstance(no, ast.AnnAssign) else []
+        if any(isinstance(a, ast.Name) and a.id == "FAIXAS_QUEIMADAS" for a in alvos) and no.value is not None:
+            return tuple(ast.literal_eval(no.value))
+    raise ValueError("não achei FAIXAS_QUEIMADAS no nível do módulo")
 
 
 def bloquear(motivo: str) -> None:

@@ -24,7 +24,7 @@ import { OVO, chaveSprite } from "../../../../motor/index.ts";
 import { atlasAtual, chaveUp, desenharSprite, dimSprite, quadroAgora, type AtlasOk, type Clipe } from "../../../atlas.ts";
 import { balancoOvo, jogoAtual } from "../../../jogo.ts";
 import { SONO, alturaSono } from "../sono.ts";
-import { SEM_GESTO, escolherComer, esquecerComer, gestoAgora, type EscolhaComer } from "../cenaAcao.ts";
+import { SEM_GESTO, escolherComer, esquecerComer, marcarEmburrar, gestoAgora, type EscolhaComer } from "../cenaAcao.ts";
 import { flashDesde } from "../../../flash.ts";
 import { alargarCorte, unirCaixas, type Corte } from "./corte.ts";
 import { velocidadeAtual } from "../../../tempo.ts";
@@ -162,7 +162,7 @@ export class Papel {
   }
 
   /** a folha (textura com a borda) do quadro de agora: do atlas, ou da grade de reserva */
-  private folhaAgora(quadro: number, andando: boolean, agora: number, golpe: Passo["golpe"], comer: EscolhaComer): { folha: Folha; ovo: boolean } {
+  private folhaAgora(quadro: number, andando: boolean, agora: number, golpe: Passo["golpe"], comer: EscolhaComer, emburra: boolean): { folha: Folha; ovo: boolean } {
     const { motor: m, nascendo } = jogoAtual(), a = atlasAtual();
     if (a.tipo !== "ok") {
       const f = fonteDoPet(quadro);
@@ -171,13 +171,20 @@ export class Papel {
     const ovo = nascendo > 0, nome = ovo ? OVO[m.especie] : chaveSprite(m.forma), s = a.dados.sprites[chaveUp(a.dados, nome)];
     const bate = !ovo && !!golpe && !!s?.clipes?.Attack_1, come = !ovo && !bate && comer.tocou === "clipe";
     if (come && !s?.clipes?.Comer) throw new Error("o comer escolheu o clipe Comer num sprite sem ele: " + nome);
-    const clipe: Clipe = bate ? "Attack_1" : come ? "Comer" : !ovo && andando && s?.clipes?.Run ? "Run" : "Idle";
+    const emb = emburra && !ovo && !bate && !come;
+    if (emb && !s?.clipes?.Emburrar) throw new Error("o emburrar escolheu o clipe Emburrar num sprite sem ele: " + nome);
+    const clipe: Clipe = bate ? "Attack_1" : come ? "Comer" : emb ? "Emburrar" : !ovo && andando && s?.clipes?.Run ? "Run" : "Idle";
     if (clipe !== this.clipe || (bate && golpe!.desde !== this.golpeDesde)) { this.clipe = clipe; this.t0 = bate ? golpe!.desde : agora; }
     this.golpeDesde = bate ? golpe!.desde : null;
     if (come) this.t0 = comer.desde;
     const iq = ovo ? 0 : quadroAgora(a, nome, m.acao === "dormir" && !bate, clipe, this.t0), sombria = !ovo && m.sombria;
-    const corte = bate || come ? this.corteAlargado(a, nome, sombria, clipe) : this.corte(a, nome, sombria);
+    const corte = bate || come || emb ? this.corteAlargado(a, nome, sombria, clipe) : this.corte(a, nome, sombria);
     return { folha: this.folha(`${nome}|${clipe}|${iq}|${sombria ? 1 : 0}`, () => recortar(quadroAtlas(a, nome, iq, sombria, clipe), corte)), ovo };
+  }
+  /** a forma de agora tem o clipe Emburrar no atlas? (sem atlas, no ovo ou sem o clipe: fica o tremor de cenaAcao.ts) */
+  private temEmburrar(): boolean {
+    const { motor: m, nascendo } = jogoAtual(), a = atlasAtual();
+    return a.tipo === "ok" && nascendo <= 0 && !!a.dados.sprites[chaveUp(a.dados, chaveSprite(m.forma))]?.clipes?.Emburrar;
   }
   /** a soma dos ms do clipe Comer do sprite de agora (um ciclo); null sem o atlas, no ovo ou num sprite sem o Comer: fica o gesto de hoje */
   private cicloComer(): number | null {
@@ -237,7 +244,10 @@ export class Papel {
     const noClipe = comer.tocou === "clipe" && !golpe;
     this.comer = golpe && comer.tocou === "clipe" ? null : comer.tocou;
     const andando = !golpe && !noClipe && andaBase;
-    const { folha, ovo } = this.folhaAgora(p.quadro, andando, p.agora, golpe, comer);
+    /* o emburrar: o clipe Emburrar (laco) toca com o pet parado e acordado na acao `emburrar`; o tremor programatico sai (o clipe e o corpo) */
+    const emburra = !golpe && !noClipe && !andando && mo0.nascendo <= 0 && mo0.motor.acao === "emburrar" && this.temEmburrar();
+    const { folha, ovo } = this.folhaAgora(p.quadro, andando, p.agora, golpe, comer, emburra);
+    marcarEmburrar(emburra && !ovo);
     if (this.papel.material.map !== folha.tex) {
       this.papel.material.map = this.silhueta.material.map = folha.tex;
       this.papel.material.needsUpdate = this.silhueta.material.needsUpdate = true;
@@ -245,7 +255,7 @@ export class Papel {
     /* dormindo (sono.ts): o quadro parado achatado, respirando, num tom apagado */
     const mo = jogoAtual().motor, dorme = !ovo && mo.acao === "dormir";
     /* a cena da acao do motor, o cocô e a reacao ao toque (cenaAcao.ts; so vista): o gesto do corpo sobre o desenho. Parado e acordado ele faz o da acao */
-    const gesto = ovo ? SEM_GESTO : gestoAgora({ acao: mo.acao, sujeira: mo.e.sujeira, chave: String(mo.semente) }, p.agora, p.reduzido, !andando && !dorme, velocidadeAtual() <= 0, noClipe);
+    const gesto = ovo ? SEM_GESTO : gestoAgora({ acao: mo.acao, sujeira: mo.e.sujeira, chave: String(mo.semente) }, p.agora, p.reduzido, !andando && !dorme, velocidadeAtual() <= 0, noClipe, emburra);
     const alt = (dorme ? alturaSono(p.agora, p.reduzido) : 1) * gesto.estica;
     this.papel.material.color.setHex(p.noite ? NOITE_PAPEL : dorme ? SONO.tom : 0xffffff);
     /* o lado ao longo da direita da camera no chao (com a camera livre ela gira; fixa, e o x do mundo): no golpe, o do ponto em que o pet
@@ -282,5 +292,5 @@ export class Papel {
   }
 
   /** solta as texturas */
-  dispose(): void { for (const f of this.folhas.values()) f.tex.dispose(); this.folhas.clear(); esquecerComer(); }
+  dispose(): void { for (const f of this.folhas.values()) f.tex.dispose(); this.folhas.clear(); esquecerComer(); marcarEmburrar(false); }
 }

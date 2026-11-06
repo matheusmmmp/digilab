@@ -320,3 +320,16 @@ D-PE3-7 estão em `docs/registro/2026-11.md`.
 - **G2:** o gabarito da PE0 e todos os de hoje passam sem mudar nenhum arquivo deles; **G1:** `test/ponte_luta_pe3.test.ts` (20 vidas com a marca: v16, v17 modular, v17 A e v17 com um
   `"cb"` no meio × 5 sementes; replay bit a bit; a dor exata; o A ativo não entrega nada ao modular; a marca só nos v16/v17, uma vez) e o e2e (`e2e/ponte_luta.spec.ts` com os saves `_ponte`).
 - **Limite:** nada do ε (PE4). Os v16/v17 vivos sem a marca seguem como hoje (PL-7); nenhum save de hoje ganha a marca.
+
+## 13. PE4, o resumo da etapa (2026-11-06, Sonnet 5.5, branch `v3-ponte-luta-pe4`)
+
+**Resposta: o cérebro já muda a luta por um parâmetro só, o ε, pelo `g_exp` da última decisão do modular, nos ovos novos (marca `{ luta: true, eps: true }`).** Os desvios D-PE4-1 a
+D-PE4-3 estão em `docs/registro/2026-11.md`.
+
+- **A conta:** `ε da luta = min(1, ε de hoje × g_exp / e0)` em `estiloDoPet` (`motor/gambits_pet.ts`), com o fator `Motor.fatorEpsLuta()` (`motor/motor.ts`): lê o `afeto.g_exp`
+  do `ultimoMotivo` do modular no começo da luta (a série inteira usa a mesma leitura), sem decisão nova nem rng. Com o A ativo, ou antes da primeira decisão, o ε é o de hoje (3.7).
+- **A marca (D-PE4-1):** só `{ luta: true, eps: true }` liga; os saves com `{ luta: true }` (PE3) e os sem marca seguem com o ε de hoje, byte a byte. O `ligarProduto` grava `eps`.
+- **Testes:** `test/ponte_luta_pe4.test.ts` (T-PL-4: `g_exp = e0` dá o ε de hoje, `256` metade, `1024` o dobro cortado em 1; o ε lido é o da última decisão e a leitura não mexe no
+  modular; 20 vidas com `eps` — v16, v17 modular, v17 A e v17 com um `"cb"` no meio × 5 sementes — refazem bit a bit; com o A o fator é nulo; a validação da marca). **G2:** o gabarito da
+  PE0, o da PE3 e os testes da PE3 (marca `{ luta: true }`) passam sem mudar nenhum arquivo de gabarito.
+- **Limite:** não se mediu se o pet luta melhor; é outra pergunta (PL-8). O A não recebe nada. Fica a PE5 (a lembrança do rival), só se o Matheus decidir (PL-6).
