@@ -8,7 +8,8 @@
      (norte e oeste), o rio (leste) ou a areia (sul): o pet para ali porque o motor o prende, e a vista mostra um limite.
    A vista (cena.ts) so desenha o que esta aqui. Todos os numeros sao do desenho: PROPOSTO, SEM FONTE. */
 import type { ConfigMundo } from "../../../../motor/index.ts";
-import { MODELOS, MODELO_ARVORE_DO_MOTOR, type NomeModelo } from "./modelos.ts";
+import { ENFEITES_GRADE } from "./constantes.ts";
+import { ENFEITES_MODELOS, MODELOS, MODELO_ARVORE_DO_MOTOR, type NomeEnfeite, type NomeModelo } from "./modelos.ts";
 
 /** a moldura em volta da area andavel, em celulas (pelo menos 8 de cada lado, secao 5) */
 export const MOLDURA = { oeste: 10, leste: 14, norte: 12, sul: 10 } as const;
@@ -27,6 +28,9 @@ export const FORA = "moldura";
 export interface Celula { tipo: Tipo; nivel: number; cantos: [number, number, number, number]; regiao: Regiao }
 /** um objeto posto na ilha: o modelo, o centro (em celulas, continuo), o giro, a escala e, se veio do motor, o id da arvore do layout */
 export interface Objeto { modelo: NomeModelo; x: number; z: number; giro: number; escala: number; doMotor: string | null }
+/** um enfeite do mundo humano na moldura (docs/TAREFA_V3_MUNDO_ENFEITES.md): o modelo, o lugar (celulas) e o giro, que vira a frente
+    do modelo (+z do glTF) para a area andavel */
+export interface Enfeite { nome: NomeEnfeite; x: number; z: number; giro: number }
 
 /* um gerador simples com semente (mulberry32): a decoracao sai sempre igual */
 export function rng(semente: number): () => number {
@@ -83,6 +87,8 @@ export class Ilha {
   readonly area: { w: number; h: number };
   readonly celulas: Celula[] = [];
   readonly objetos: Objeto[] = [];
+  /** os enfeites (docs/TAREFA_V3_MUNDO_ENFEITES.md): numa lista propria e com a rng propria, para os `objetos` sairem iguais (E-G0) */
+  readonly enfeites: Enfeite[] = [];
   /** a coluna oeste do rio (a leste da area) */
   readonly rioX: number;
 
@@ -129,6 +135,7 @@ export class Ilha {
       this.celulas.push({ tipo, nivel, cantos: [h, h, h, h], regiao });
     }
     this.porObjetos(semente, ninho, comedouro);
+    this.porEnfeites(semente);
   }
 
   /** a celula (x, z) em celulas do motor, ou undefined fora da grade */
@@ -216,6 +223,27 @@ export class Ilha {
       if (!c || c.tipo !== "areia" || !longe(x, z, 2, alto) || this.distanciaDaArea(x, z) < 1.5) continue;
       por("pedra", x, z, [0.6, 0.9]);
       k++;
+    }
+  }
+
+  /* os enfeites repetidos (os postes) na moldura: em grama plana, a uma distancia da area entre `perto` e `longe`, longe uns dos outros
+     e das coisas altas de hoje; o giro vira a frente do modelo para o ponto mais perto da area. Falha alto se faltar lugar */
+  private porEnfeites(semente: number): void {
+    const r = rng(semente ^ ENFEITES_GRADE.sal), G = ENFEITES_GRADE;
+    const altos = this.objetos.filter(o => !MODELOS[o.modelo].baixo);
+    for (const nome of Object.keys(ENFEITES_MODELOS) as NomeEnfeite[]) {
+      const n = G.quantos[nome];
+      for (let k = 0, tent = 0; k < n; tent++) {
+        if (tent >= n * G.tentativas) throw new Error(`sem lugar para o enfeite ${nome} na ilha ${this.cm.layout.nome}: ${k} de ${n}`);
+        const x = this.x0 + 0.5 + r() * (this.larg - 1), z = this.z0 + 0.5 + r() * (this.prof - 1);
+        const c = this.cel(Math.floor(x), Math.floor(z)), d = this.distanciaDaArea(x, z);
+        if (!c || c.tipo !== "grama" || c.cantos.some(h => h !== c.cantos[0]) || d < G.perto || d > G.longe) continue;
+        if (altos.some(o => Math.hypot(o.x - x, o.z - z) < G.deAlto)) continue;
+        if (this.enfeites.some(e => Math.hypot(e.x - x, e.z - z) < G.entreSi)) continue;
+        const ax = Math.min(Math.max(x, 0), this.area.w), az = Math.min(Math.max(z, 0), this.area.h);
+        this.enfeites.push({ nome, x, z, giro: Math.atan2(ax - x, az - z) });
+        k++;
+      }
     }
   }
 

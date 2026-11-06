@@ -136,3 +136,35 @@ linha no índice; o resumo numa seção no fim deste arquivo; as capturas com o 
 - **As quantidades e as distâncias** da seção 4.3, PROPOSTAS. Recomendação: aceitar e ajustar jogando. Custo de errar: só vista.
 - **O plano da Meshy:** o Pro de um mês da D-I2 tem 860 créditos de saldo (2026-11-06). Recomendação: usar o saldo nas E2 e E3 enquanto o
   plano está ativo; renovar ou não é do Matheus. Custo de errar: perder o saldo que vence, ou pagar um mês a mais sem uso.
+
+## 9. E1: os postes na ilha (2026-11-06, Gerente, Claude Code, Opus 5.5, branch `v3-mundo-enfeites-e1`)
+
+**O gabarito primeiro (E-G0):** os `objetos` de hoje da grade, nos dois layouts do motor (mvp: 630; padrão: 634), gravados em
+`web/app/test/gabaritos/ilha_objetos.json` num commit próprio, antes dos enfeites (`scripts/gabarito_ilha_objetos.ts`). O teste
+`test/ilha_enfeites.test.ts` confere item a item; passa com os enfeites.
+
+**A grade:** `Ilha.enfeites`, sorteada por `rng(semente ^ ENFEITES_GRADE.sal)` depois de `porObjetos` (D-EN-2), com 14 postes por mapa
+(`ENFEITES_GRADE`, PROPOSTO; eram 8, e só 1 aparecia na tela), entre 1,5 e 4 células da área, a 4 um do outro e a 2 das coisas altas;
+o giro vira a lanterna para a área. E-G10 num teste, nos dois layouts.
+
+**O poste, primeiro do kit (D-E2) e depois pela Meshy:**
+- o kit `kenney_cityKitRoads` (City Kit Roads 2.2, CC0, 2,8 MB, baixado com o ok do Matheus; fora do git, em
+  `D:\Trab\digilab\Assets\kits3d\kenney_city_roads\`) tem o `light-curved`: 92 triângulos, cinza, fino, de rodovia. Na ilha, saiu
+  sem nada do estilo dela (captura em `D:\Trab\digilab\capturas_enfeites\poste_kenney\`); o Matheus escolheu a Meshy;
+- pela Meshy: quatro concepts (24 créditos), o Matheus escolheu o 1, lampião; vistas (6) e malha (30): 455 triângulos (teto 554), fiel ao
+  concept, mesmo com as vistas achatadas. Saldo 860 → 800 (`docs/enfeites/poste/`);
+- o conserto (`consertar_poste.py`): a malha fica; a cor chapada em quatro cores (`paleta.json`), uma por face, sem a troca pelos
+  vizinhos (`limpar_faces.py` com 0 rodadas: os vizinhos apagavam os vidros, de 8 faces).
+
+**A luz à noite:** os vidros acendem pelo `emissiveMap` (a máscara `poste_luz.png`, de `mascara_luz.py`, fora do glTF por causa do G5), um
+halo em cascas aditivas em volta da lanterna (`ENFEITE_HALO`; um ponto do three e uma esfera só não serviram: o ponto não apareceu e a
+esfera parecia uma bolha) e o brilho no chão de `LUZ_NINHO`. Nada disso ilumina a cena.
+
+**Os gates:** E-G0 e E-G10 passam; E-G1 a E-G8 num teste (455 triângulos, 1024 px, 0 erros e 0 avisos no validador, cerca de 87 KB com a
+máscara, `License.txt` e `asset.extras`); E-G9, os draw calls, com o save da bola: de dia, 76 → 78 (390) e 83 → 85 (1280), os postes e a
+sombra; à noite, 94 → 100 e 100 → 106, mais o brilho e as três cascas do halo (`D:\Trab\digilab\capturas_enfeites\`, fora do git,
+com o pet). E-G11: o revisor (um subagente Sonnet que só viu o concept e as capturas) **aprovou com ressalva**: os postes ficam no fundo
+(a moldura é a borda do mapa), e o da direita, em 1280, fica parcialmente atrás do painel Estado. E-G12, o fps de verdade, com o Matheus.
+
+**Fora:** os marcos (E2 e E3); o fps no desktop e no celular.
+
