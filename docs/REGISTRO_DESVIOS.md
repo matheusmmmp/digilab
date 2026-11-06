@@ -561,3 +561,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-06 — MAPA_DIGITAL, D2: os kits, a névoa, os dois tons e o poste (Gerente da frente, Claude Code, Opus 5.5, branch `v3-mapa-digital-d2`)](registro/2026-11.md)
 - [2026-11-06 — CONVERSA_PET, M4 a conversa como fonte de fato rotulada (worker, Claude Code, Sonnet 5.5, branch `v3-conversa-m4-fato`)](registro/2026-11.md)
 - [2026-11-06 — LONGE_REGULAR, o plano da D-C1-3 no REL, o adendo 11 (worker, Claude Code, Opus 5.5, branch `v3-dc13-rel-plano`)](registro/2026-11.md)
+- [2026-11-06 — LUTA_EMPURRAO, a tarefa do empurrão de verdade no motor da luta (worker, Claude Code, Opus 5.5, branch `v3-luta-empurrao`)](registro/2026-11.md)
