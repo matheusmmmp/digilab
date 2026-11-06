@@ -1,0 +1,14 @@
+{
+ "id": "01a1b192-aeab-7488-b040-60880aa48744",
+ "type": "image-to-image",
+ "ai_model": "nano-banana-2",
+ "prompt": "Multiple views of the same rounded mint green retro fridge with a flower pot on top and moss on the sides: front, side and back, same style, same colors, plain light grey background.",
+ "status": "SUCCEEDED",
+ "consumed_credits": 6,
+ "created_at": 1793980542893,
+ "finished_at": 1793980570304,
+ "saldo": {
+  "antes": 692,
+  "depois": 686
+ }
+}

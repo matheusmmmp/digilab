@@ -38,7 +38,7 @@ describe("onde ficam os enfeites (E-G10)", () => {
 
 const APP = join(__dirname, ".."), ENF = join(APP, "public", "enfeites"), DOCS = join(APP, "..", "..", "docs", "enfeites");
 /* o teto da categoria (D-I3): 554 para os repetidos, 2 414 para os marcos */
-const TETO: Record<string, number> = { poste: 554, carro: 2414 }, LADO_MAX = 1024, BYTES = 300 * 1024;
+const TETO: Record<string, number> = { poste: 554, carro: 2414, geladeira: 2414, trilho: 2414 }, LADO_MAX = 1024, BYTES = 300 * 1024;
 type Gltf = {
   asset: { extras?: { gerado_por_ia?: boolean; gerador?: string } }; nodes: { name?: string }[]; buffers: { uri: string }[];
   images?: { uri: string }[]; accessors: { count: number }[];

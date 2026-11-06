@@ -83,6 +83,8 @@ export const ENFEITES_GRADE = {
   sal: 0x5e7e17e5, tentativas: 4000,
   poste: { quantos: 14, perto: 1.5, longe: 4, entreSi: 4, deAlto: 2, folga: 0, norte: false, casa: 0 },
   carro: { quantos: 1, perto: 1.5, longe: 3, entreSi: 3, deAlto: 2, folga: 1, norte: true, casa: 12 },
+  geladeira: { quantos: 1, perto: 1.5, longe: 3.5, entreSi: 3, deAlto: 1.8, folga: 1, norte: true, casa: 24 },
+  trilho: { quantos: 1, perto: 1.5, longe: 4, entreSi: 3, deAlto: 1.6, folga: 1, norte: true, casa: 32 },
 } as const;
 /** a luz dos enfeites a noite (enfeites.ts): o halo na lanterna, na fracao `altura` da altura do modelo, com `tamanho` celulas de
     diametro, em cascas (as fracoes do tamanho) de opacidade `forca` cada (aditiva), e o quanto os vidros brilham (emissiveIntensity).

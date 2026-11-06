@@ -1,0 +1,146 @@
+{
+ "asset": {
+  "generator": "Khronos glTF Blender I/O v4.5.51",
+  "version": "2.0",
+  "extras": {
+   "gerado_por_ia": true,
+   "gerador": "Meshy (meshy.ai), plano Pro, conta do Matheus",
+   "tarefas_meshy": {
+    "concept": "01a1b190-d183-76d5-b3af-692cfaafb81b",
+    "vistas": "01a1b193-2abf-716b-8c9f-fa16d82cb247",
+    "malha": "01a1b194-adb2-7227-b1b4-c8b135ec7079"
+   },
+   "pipeline": "docs/TAREFA_V3_ITENS_3D.md; a malha da Meshy mantida, com a cor chapada na paleta do concept, uma cor por face, e os tracos de nanquim nas quinas e nas divisas de cor (tracar_linhas.py)",
+   "licenca": "License.txt ao lado"
+  }
+ },
+ "scene": 0,
+ "scenes": [
+  {
+   "name": "Scene",
+   "nodes": [
+    0
+   ]
+  }
+ ],
+ "nodes": [
+  {
+   "mesh": 0,
+   "name": "trilho"
+  }
+ ],
+ "materials": [
+  {
+   "name": "trilho",
+   "pbrMetallicRoughness": {
+    "baseColorTexture": {
+     "index": 0
+    },
+    "metallicFactor": 0
+   }
+  }
+ ],
+ "meshes": [
+  {
+   "name": "trilho",
+   "primitives": [
+    {
+     "attributes": {
+      "POSITION": 0,
+      "NORMAL": 1,
+      "TEXCOORD_0": 2
+     },
+     "indices": 3,
+     "material": 0
+    }
+   ]
+  }
+ ],
+ "textures": [
+  {
+   "sampler": 0,
+   "source": 0
+  }
+ ],
+ "images": [
+  {
+   "mimeType": "image/png",
+   "name": "trilho_cor",
+   "uri": "trilho_cor.png"
+  }
+ ],
+ "accessors": [
+  {
+   "bufferView": 0,
+   "componentType": 5126,
+   "count": 4189,
+   "max": [
+    0.9497681260108948,
+    0.3590080440044403,
+    0.3534150719642639
+   ],
+   "min": [
+    -0.946785032749176,
+    -0.3599250614643097,
+    -0.3540610074996948
+   ],
+   "type": "VEC3"
+  },
+  {
+   "bufferView": 1,
+   "componentType": 5126,
+   "count": 4189,
+   "type": "VEC3"
+  },
+  {
+   "bufferView": 2,
+   "componentType": 5126,
+   "count": 4189,
+   "type": "VEC2"
+  },
+  {
+   "bufferView": 3,
+   "componentType": 5123,
+   "count": 5280,
+   "type": "SCALAR"
+  }
+ ],
+ "bufferViews": [
+  {
+   "buffer": 0,
+   "byteLength": 50268,
+   "byteOffset": 0,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 50268,
+   "byteOffset": 50268,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 33512,
+   "byteOffset": 100536,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 10560,
+   "byteOffset": 134048,
+   "target": 34963
+  }
+ ],
+ "samplers": [
+  {
+   "magFilter": 9729,
+   "minFilter": 9987
+  }
+ ],
+ "buffers": [
+  {
+   "byteLength": 144608,
+   "uri": "trilho.bin"
+  }
+ ]
+}
