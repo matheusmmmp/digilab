@@ -1177,6 +1177,67 @@ necessidade fica em 0 (até a quarta casa) nos três braços.
 
 **Desvios:** `docs/registro/2026-11.md`, D-DC13-12 (a leitura segue a regra, e o H1′ cai pelo D1 apesar de o F-b ter s = 2,25).
 
+### 13.7 A D-C1-3 no cérebro padrão: de onde vem o ganho do REL sobre o SEM no `longe_fixo` (2026-11-06, Gerente da V3, Claude Code, Opus 5.5; adendo 11)
+
+**Antes dos números:**
+- **as regras** são as do adendo 11 (APROVADO em 2026-11-06), lidas como estão: a partição e a regra de A10.4 e A10.5, com a H5, o δ = 0,032 da C4 e o s ≥ 1/2 (PROPOSTO, SEM FONTE). **Nenhuma alegação de novidade;**
+- **é descritivo e pós hoc** (AD11-6): as vidas são as da C4 (#541), e as hipóteses foram escritas depois de a 13.6 estar lida. Nenhuma causa fica provada, e nada muda no jogo nem no cérebro padrão;
+- **o replay rodou uma vez,** e nada foi ajustado depois de ver o resultado.
+
+**Como rodou** (relato do coordenador):
+- o `experiments/descritivo_dc13_rel.py` do #646 (`9e890fe`), com `--codigo` na worktree destacada do `a287ba2` e 4 processos, das 18h28min21 às 19h03min30 de 2026-11-06: **2 105 s de parede, saída 0.** A estimativa do adendo era de 10 a 20 min com a máquina livre (D-DC13-22); a medida ficou acima;
+- as conferências de AD11-2 passaram: o código, a fonte e **o G1 nas 1 600 vidas refeitas** (`todas_iguais: true`), as 800 do REL e as 800 do SEM no `longe_fixo`, em 200 unidades;
+- o artefato é `artifacts_v2_digibrain_prototipo/memoria_autobio/dc13/descritivo_rel.json` (sha256 `1d2d6dea…12a8`), no git. Todo número abaixo vem dele.
+
+**A decomposição do ganho** (REL − SEM por episódio, IC95 do t sobre as 200 unidades, `s` = a parte do ganho):
+- o ganho é **G = +0,0646** (o primário da C4, recalculado);
+- **as somas fecham:** F = G = P = 0,0646.
+
+| caminho | REL − SEM [IC95] | classe | s | nível SEM / REL |
+|---|---|---|---|---|
+| F-a, à vista na abertura | +0,0090 [−0,0011; +0,0191] | ≈ 0 | 0,14 | 0,180 / 0,189 |
+| F-b, entrou na vista numa ida | +0,1410 [+0,1331; +0,1489] | > 0 | 2,18 | 0 / 0,141 |
+| F-c, entrou na vista numa busca pelo cheiro | −0,0658 [−0,0741; −0,0574] | < 0 | −1,02 | 0,150 / 0,084 |
+| F-d, outro modo | −0,0196 [−0,0301; −0,0091] | ≈ 0 | −0,30 | 0,188 / 0,168 |
+
+| perda | REL − SEM [IC95] | classe | nível SEM / REL |
+|---|---|---|---|
+| P-a, dormiu antes de a ração entrar na vista | −0,0574 [−0,0706; −0,0441] | < 0 | 0,450 / 0,393 |
+| P-b, busca cortada pelo reflexo | −0,0007 [−0,0023; +0,0010] | ≈ 0 | 0,004 / 0,004 |
+| P-c, janela vencida | −0,0067 [−0,0108; −0,0026] | ≈ 0 | 0,026 / 0,019 |
+| P-d, saciado por outra comida | 0,0000 | ≈ 0 | 0 / 0 |
+| P-e, vida acabou | +0,0001 [−0,0007; +0,0009] | ≈ 0 | 0,001 / 0,001 |
+
+**As hipóteses:**
+
+| hipótese | REL − SEM [IC95] | classe | s |
+|---|---|---|---|
+| H1, a posição | +0,0090 [−0,0011; +0,0191] | ≈ 0 | 0,14 |
+| H1′, a patrulha | +0,1410 [+0,1331; +0,1489] | > 0 | 2,18 |
+| H2, outra unidade | −0,0618 [−0,0733; −0,0503] | < 0 | −0,96 |
+| H3, a queda de um custo | +0,0580 [+0,0448; +0,0712] | > 0 | 0,90 |
+| **H5, a lembrança** | +0,0406 [+0,0365; +0,0447] | > 0 | 0,63 |
+
+- **D1, a distância ao ponto da queda:** −0,94 célula [−1,06; −0,82], classe "< 0" (SEM 16,67, REL 15,73). O REL está mais perto, e isso tira H1′ e H2 da leitura (A10.5).
+
+**A leitura pela regra:** **"mistura (H3, H5 explicam ao mesmo tempo): registrada com as partes, sem escolher (A11.5)".** H3 (s = 0,90) e H5 (s = 0,63) explicam cada uma mais da metade; as duas parcelas se sobrepõem, então a soma passa de 1. **A substituição:** o F-b explica (s = 2,18) e o F-c fica "< 0"; não se lê H1′ como ganho líquido da patrulha.
+
+**Lado a lado com a C1** (AD11-5; sem teste entre as runs; a mesma regra, desenhos diferentes):
+
+| hipótese | C1 (M3\* − M2): classe, s | C4 (REL − SEM): classe, s |
+|---|---|---|
+| H1 | > 0, 0,26 | ≈ 0, 0,14 |
+| H1′ | > 0, 2,25 | > 0, 2,18 |
+| H2 | < 0, −1,19 | < 0, −0,96 |
+| H3 | > 0, 1,07 | > 0, 0,90 |
+| H5 | (não existe na C1) | > 0, 0,63 |
+
+- a linha da C1 é "aponta para H3"; a do REL é "mistura (H3, H5)". O veredito do artefato: **"o caminho nao se transfere: ficam duas leituras, uma por cerebro, cada uma com as partes dela".** A queda das perdas para o sono (H3) aparece nas duas; no REL, a lembrança que muda escolhas fora das idas (H5) soma por cima. A posição na queda (H1), que contribuía na C1, fica ≈ 0 no REL.
+
+**Pergunta aberta ao Matheus (nenhuma decisão tomada):** o que fazer com as duas leituras?
+- **Recomendação: encerrar a D-C1-3 como descritiva.** As duas leituras ficam registradas; o próximo passo, se houver, é um teste causal com plano e faixa próprios (por exemplo, a H3: tirar o custo do sono no braço sem memória e ver se o ganho some), e ele não é urgente para o produto.
+- **Custo de errar:** encerrar deixa o caminho do ganho sem causa provada; testar agora gasta vidas e a fila da máquina numa pergunta que não muda o jogo de hoje.
+
 ## 14. A C2, o hábito com o crédito na corrida (2026-10-31, worker da C2, etapa 4, Claude Code, Opus 5.5; adendo 7, A7.4 a A7.8)
 
 **Antes dos números:**
