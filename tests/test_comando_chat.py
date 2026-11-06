@@ -160,7 +160,7 @@ def test_mensagens_da_avaliacao_20_por_classe_e_esperado_no_catalogo():
 def test_livre_v8_so_muda_o_bloco_comando():
     from digilab_fala_livre.prompt import (BLOCO_COMANDO_V8, DESCRICAO_COMANDOS, DESCRICAO_COMANDOS_V8, SISTEMA_V8,
                                            VERSAO_PROMPT_V8, VERSOES_COMANDO)
-    assert VERSAO_PROMPT_V8 in VERSOES and VERSAO_PROMPT_V8 in VERSOES_VOZ and VERSOES_COMANDO == (VERSAO_PROMPT_V7, VERSAO_PROMPT_V8)
+    assert VERSAO_PROMPT_V8 in VERSOES and VERSAO_PROMPT_V8 in VERSOES_VOZ and VERSOES_COMANDO[:2] == (VERSAO_PROMPT_V7, VERSAO_PROMPT_V8)   # o livre-v9 (CONVERSA_PET, M1) vem depois
     # o sistema: igual a v7 fora da regra do COMANDO
     antes, depois = SISTEMA_V7.split("Na conversa pode vir um bloco COMANDO")[0], SISTEMA_V7.split("Nunca invente uma ação fora da lista.")[1]
     assert SISTEMA_V8.startswith(antes) and SISTEMA_V8.endswith(depois) and SISTEMA_V8 != SISTEMA_V7
@@ -197,7 +197,7 @@ def test_rodada4_do_comando_com_estilo_e_sementes_novas():
     assert r4 == {"pasta": "rodada4_estilo", "sementes": (20261501, 20261601, 20261701), "estilo": True, "prompt": "livre-v8"}
     assert RODADAS_COMANDO[3] == {"pasta": "rodada3", "sementes": (20261201, 20261301, 20261401), "estilo": False, "prompt": "livre-v8"}
     assert RODADAS_COMANDO[2]["sementes"] == RODADAS_COMANDO[1]["sementes"] == (20261003, 20261004, 20261005)
-    assert len({r["pasta"] for r in RODADAS_COMANDO.values()}) == 4
+    assert len({r["pasta"] for r in RODADAS_COMANDO.values()}) == 5
     n = len(MENSAGENS_COMANDO)
     usadas = {s + i for k, r in RODADAS_COMANDO.items() if k != 4 for s in r["sementes"] for i in range(n)}
     assert not {s + i for s in r4["sementes"] for i in range(n)} & usadas

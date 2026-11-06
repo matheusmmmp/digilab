@@ -20,6 +20,11 @@ rodada 3 do comando; a v7 continua no pacote e a rodada 1 reproduz) e a resposta
 traz "comando": uma acao do catalogo fechado (as 9 acoes do dono) que o pet entendeu como pedido claro, ou null. O
 servidor so propoe (saida.ler falha alto fora do catalogo); o app valida de novo e grava o evento `d` de sempre. Na fala
 espontanea e sem "voz" o campo vem null.
+
+Comando sem a voz propria (CONVERSA_PET, M1, decisao D1 do Matheus em 2026-11-06): o pedido da conversa com "comando": true
+(e sem "voz") usa o prompt livre-v9 (as regras de verdade do livre-v2 + o estilo da especie pelo corpus + o COMANDO da v8):
+o pet nao inventa, fala no tom da especie e devolve "comando" validado pelo catalogo. Sem o campo, tudo como antes (livre-v2).
+"comando" so vale na CONVERSA, sozinho (nao junto com "voz") e precisa ser booleano: a entrada da pagina nao e confiavel.
 """
 
 from __future__ import annotations
@@ -35,7 +40,7 @@ from digilab_fala_livre import almanaque, corpus
 from digilab_fala_livre.arvore import ARVORE
 from digilab_fala_livre.gerar import gerar
 from digilab_fala_livre.ollama import URL_PADRAO, ClienteOllama
-from digilab_fala_livre.prompt import VERSAO_PROMPT_V6, VERSAO_PROMPT_V8
+from digilab_fala_livre.prompt import VERSAO_PROMPT, VERSAO_PROMPT_V6, VERSAO_PROMPT_V8, VERSAO_PROMPT_V9
 from digilab_fala_livre.revisao import gerar_com_revisao
 from digilab_fala_livre.verificador import VERSAO_VERIFICADOR_V5, verificar
 
@@ -87,13 +92,26 @@ class ServicoFalaLivre:
             raise PedidoInvalido("historico invalido")
         hist = [(_texto(j, "historico"), _texto(p, "historico", 400)) for j, p in hist]
         semente = _semente(d.get("semente", 0))
+        comando = d.get("comando", False)
+        if not isinstance(comando, bool):
+            raise PedidoInvalido("comando precisa ser booleano")
+        if comando and (situacao != "conversa" or d.get("voz") is True):
+            raise PedidoInvalido("comando so vale na conversa e sem voz")
         if d.get("voz") is True:
             return self._fala_voz(d, situacao, jog, hist, semente)
+        especie, versao = None, VERSAO_PROMPT
+        if comando:                                   # livre-v9: estilo da especie pelo corpus + comando, sem a voz propria
+            ident = d["estado"].get("identidade") if isinstance(d.get("estado"), dict) else None
+            forma = ident.get("forma") if isinstance(ident, dict) else None
+            especie = self.especies.get(forma.removesuffix(" sombrio")) if isinstance(forma, str) else None
+            versao = VERSAO_PROMPT_V9
         with self.trava:
-            r = gerar(self.cliente, d.get("estado"), situacao, jog, hist, semente)
+            r = gerar(self.cliente, d.get("estado"), situacao, jog, hist, semente, versao=versao, especie=especie,
+                      comando=comando)
         return {"versao_app": VERSAO_APP, "fala": r.fala, "fatos_citados": list(r.fatos_citados), "fatos": list(r.fatos),
                 "estagio": r.estagio, "modelo": r.modelo, "versao_prompt": r.versao_prompt, "latencia_s": r.latencia_s,
-                "erro": r.erro, "comando": None}
+                "erro": r.erro, "comando": r.comando if comando else None,
+                **({"especie_corpus": r.especie, "corpus_sha256": self.corpus_sha} if comando else {})}
 
     def _fala_voz(self, d: dict, situacao: str, jog, hist, semente: int) -> dict:
         estado = d.get("estado")

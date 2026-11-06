@@ -279,7 +279,10 @@ def fase_csv(modelo: str | None = None) -> str:
 RODADAS_COMANDO = {1: {"pasta": "rodada1", "sementes": (20261003, 20261004, 20261005), "estilo": False, "prompt": "livre-v7"},
                    2: {"pasta": "rodada2_estilo", "sementes": (20261003, 20261004, 20261005), "estilo": True, "prompt": "livre-v7"},
                    3: {"pasta": "rodada3", "sementes": (20261201, 20261301, 20261401), "estilo": False, "prompt": "livre-v8"},
-                   4: {"pasta": "rodada4_estilo", "sementes": (20261501, 20261601, 20261701), "estilo": True, "prompt": "livre-v8"}}
+                   4: {"pasta": "rodada4_estilo", "sementes": (20261501, 20261601, 20261701), "estilo": True, "prompt": "livre-v8"},
+                   # CONVERSA_PET M1 (D1): livre-v9 (regras do v2 + estilo + comando) com o estilo da especie, sementes NOVAS da faixa
+                   # 20261900-20262199 (docs/PLANO_ANALISE_V3_CONVERSA_PET.md, secao 6); a rodada "4" do plano, a chave 5 aqui
+                   5: {"pasta": "rodada4_v9", "sementes": (20261901, 20262001, 20262101), "estilo": True, "prompt": "livre-v9"}}
 MODELO_COMANDO = "gemma2:9b"
 GATE_FP_NEGATIVAS = 0.05
 GATE_IMPERATIVOS = 0.80
@@ -313,10 +316,13 @@ def fase_comando_gerar(modelo: str, sementes: tuple[int, ...], estilo: bool, ver
         raise ValueError(f"prompt sem comando: {versao}")
     especies, _, _ = carregar()
     cli = ClienteOllama(modelo)
-    gerar(cli, PETS_COMANDO[0], "conversa", "oi", semente=0, versao=versao, comando=True)   # aquece
+    aquece = PETS_COMANDO[0] if versao != "livre-v9" else {k: v for k, v in PETS_COMANDO[0].items() if k != "historia"}
+    gerar(cli, aquece, "conversa", "oi", semente=0, versao=versao, comando=True)   # aquece
     linhas, t_ini = [], time.perf_counter()
     for i, (texto, classe, esperado) in enumerate(MENSAGENS_COMANDO):
         pet = PETS_COMANDO[i % len(PETS_COMANDO)]
+        if versao == "livre-v9":      # o livre-v9 recusa os fatos H/O/P/L/F/W e o estadoDoPet do jogo nao manda historia
+            pet = {k: v for k, v in pet.items() if k not in ("historia", "mentira", "almanaque", "arvore")}
         esp = especies.get(pet["identidade"]["forma"]) if estilo else None
         for k, s0 in enumerate(sementes):
             r = gerar(cli, pet, "conversa", texto, semente=s0 + i, versao=versao, especie=esp, comando=True)
@@ -329,7 +335,7 @@ def fase_comando_gerar(modelo: str, sementes: tuple[int, ...], estilo: bool, ver
     cli.descarregar()
     _gravar("mensagens.json", {"versao_app": VERSAO_APP, "modelo": modelo, "sementes": list(sementes), "estilo_da_especie": estilo,
                                "versao_prompt": versao,
-                               "pets": list(PETS_COMANDO),
+                               "pets": [p if versao != "livre-v9" else {k: v for k, v in p.items() if k not in ("historia", "mentira", "almanaque", "arvore")} for p in PETS_COMANDO],
                                "mensagens": [{"i": i, "mensagem": m, "classe": c, "esperado": e} for i, (m, c, e) in enumerate(MENSAGENS_COMANDO)]})
     _gravar("respostas.jsonl", "".join(json.dumps(l, ensure_ascii=False, sort_keys=True) + "\n" for l in linhas))
     _gravar("tempos.json", {"modelo": modelo, "memoria": _memoria_modelo(modelo), "tempo_total_s": time.perf_counter() - t_ini,
