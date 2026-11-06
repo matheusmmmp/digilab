@@ -266,3 +266,24 @@ A pasta foi movida para `artifacts_v2_digibrain_prototipo/longe_regular/caido_1/
   nenhuma combinação sem hipótese e plano próprios.
 - **D-C1-3, DECIDIDA:** de onde vem o ganho do M3\* no `longe_fixo` fica como questão aberta no RESULTADO, sem run agora; um descritivo
   com plano próprio antes da L3.
+
+## O plano do descritivo da D-C1-3 (2026-11-06, worker Claude Code, Opus 5.5, worktree `v3-dc13-plano`)
+
+- **O plano, PROPOSTO:** o adendo 10 do `docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`. É só o papel: nenhuma vida, nenhum replay
+  e nenhum número de resultado.
+- **A fonte:**
+  - os artefatos da C1 no git, com os sha256 conferidos iguais aos registrados;
+  - o replay das 1 800 vidas do `longe_fixo` (M0, M2 e M3\*), com o código do `7683c0e`. **O código de hoje difere do da run em 11 dos
+    15 módulos.**
+
+  Nenhuma vida nova e nenhuma faixa.
+- **As hipóteses:**
+  - H1, a posição na queda;
+  - H1′, a patrulha;
+  - H2, outra unidade;
+  - H3, a queda de um custo;
+  - H4, a medida.
+
+  Elas se separam pela decomposição exata do ganho em caminhos de fechamento e em causas de perda, com a classe de A6.6.
+- **As decisões do Matheus:** as AD10-1 a AD10-7 (A10.9).
+- **O que vem depois da aprovação:** o código de leitura num PR próprio; depois, o replay, uma vez.
