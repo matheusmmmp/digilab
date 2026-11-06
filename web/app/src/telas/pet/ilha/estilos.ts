@@ -9,6 +9,7 @@ import type { Mapa } from "../../../habitat.ts";
 import { montarCena, objetos, terreno, type CenaIlha, type Objetos } from "./cena.ts";
 import { arquivosCassette, carregadorCassette, terrenoCassette } from "./cassette.ts";
 import { DOBRA_K } from "./constantes.ts";
+import { enfeites } from "./enfeites.ts";
 import { PALETA_FLORESTA, arquivosFloresta, carregadorFloresta } from "./floresta.ts";
 import type { Ilha } from "./grade.ts";
 import { objetosVoxel, terrenoVoxel } from "./voxel.ts";
@@ -26,7 +27,15 @@ export interface Estilo {
 /** o estilo de um mapa; `base` e a URL da pagina (document.baseURI), de onde saem os caminhos dos kits */
 export function estiloDe(mapa: Mapa, base: string): Estilo {
   switch (mapa) {
-    case "ilha": return { id: mapa, dobra: DOBRA_K, montar: i => montarCena(i), objetos: i => objetos(i, base) };
+    case "ilha": return {
+      id: mapa, dobra: DOBRA_K, montar: i => montarCena(i),
+      /* os enfeites do mundo humano (enfeites.ts) so neste estilo (docs/TAREFA_V3_MUNDO_ENFEITES.md, D-EN-3) */
+      objetos: async i => {
+        const [o, e] = await Promise.all([objetos(i, base), enfeites(i, base)]);
+        o.grupo.add(e.grupo);
+        return { ...o, noite: e.noite };
+      },
+    };
     case "voxel": return { id: mapa, dobra: 0, montar: i => montarCena(i, terrenoVoxel(i)), objetos: async i => objetosVoxel(i) };
     case "floresta": return {
       id: mapa, dobra: 0, montar: i => montarCena(i, terreno(i, PALETA_FLORESTA)),
