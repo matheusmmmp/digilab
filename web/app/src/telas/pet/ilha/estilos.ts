@@ -12,6 +12,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { PALETA_DIGITAL, carregarVariante, doisTons, flores, montarCena, objetos, terreno, usarDoisTons, type CenaIlha, type Objetos } from "./cena.ts";
 import { arquivosCassette, carregadorCassette, terrenoCassette } from "./cassette.ts";
 import { CEU_DIGITAL, DOBRA_K } from "./constantes.ts";
+import { ceuComGrade, fios, particulas } from "./digital.ts";
 import { enfeites } from "./enfeites.ts";
 import { PALETA_FLORESTA, arquivosFloresta, carregadorFloresta } from "./floresta.ts";
 import type { Ilha } from "./grade.ts";
@@ -49,7 +50,9 @@ function estiloSemTons(mapa: Mapa, base: string): Estilo {
       /* o estilo digital (docs/TAREFA_V3_MAPA_DIGITAL.md, D1 e D2): a mesma ilha e os mesmos objetos, no fundo de anime: o ceu pintado
          (public/mapa_digital/ceu.jpg), a paleta chapada com as flores, o barranco de pedra, os kits recoloridos e o toon de dois tons
          em tudo, os itens inclusive (usarDoisTons) */
-      const ceuDia = new THREE.TextureLoader().load(new URL("mapa_digital/ceu.jpg", base).href);
+      /* o ceu pintado, com a grade digital desenhada por cima quando a imagem chega (D3, digital.ts) */
+      const ceuDia = new THREE.Texture();
+      new THREE.TextureLoader().load(new URL("mapa_digital/ceu.jpg", base).href, t => { ceuDia.image = ceuComGrade(t.image); ceuDia.needsUpdate = true; });
       ceuDia.colorSpace = THREE.SRGBColorSpace;
       ceuDia.userData.cobrir = true;    /* cobre a tela sem esticar (cena.ts, cobrirFundo) */
       return {
@@ -66,9 +69,12 @@ function estiloSemTons(mapa: Mapa, base: string): Estilo {
           const kits = (arq: string, _id: string, modelo: Parameters<typeof carregarVariante>[2]) =>
             carregarVariante(gltf, new URL("kits3d_digital/" + arq, base).href, modelo);
           const [o, e] = await Promise.all([objetos(i, base, kits), enfeites(i, base)]);
-          o.grupo.add(e.grupo);
+          /* o toque digital (D3): as particulas e os fios dos postes */
+          const p = particulas(i);
+          o.grupo.add(e.grupo, fios(i));
           doisTons(o.grupo);
-          return { ...o, noite: e.noite };
+          o.grupo.add(p.malha);
+          return { ...o, noite: n => { e.noite(n); p.noite(n); } };
         },
       };
     }

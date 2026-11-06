@@ -156,3 +156,26 @@ os três tons: eles entram depois da cena.
 com a textura, o `.bin` de sempre e a licença, e a pasta abaixo de 2 MB). D-G4: o revisor (corpo do PR). Comparação:
 `comparacao_d2.png` e `zoom_arvores_d1_d2.png`.
 
+## 11. D3: as partículas, a grade no céu, os fios, e a escala nova (2026-11-06, Gerente, Claude Code, Opus 5.5, branch `v3-mapa-digital-d3`)
+
+**O toque digital** (`web/app/src/telas/pet/ilha/digital.ts`, `DIGITAL` em `constantes.ts`, PROPOSTO):
+- **as partículas de dados:** 140 cristais ciano (octaedros) sobre a área e 3 células em volta dela, entre 0,6 e 3,2 acima do chão; sobem,
+  descem e giram pelo shader (o `uTempo` da curva: paradas com movimento reduzido); aditivas, mais fortes à noite (0,55 de dia, 0,95 à
+  noite). Um `InstancedMesh` só; o `curvar` ganhou o trecho `mexer` (o GLSL depois do `begin_vertex`, com o nome na chave do programa);
+- **a grade no céu:** meridianos que saem de um ponto de fuga acima da imagem e arcos em volta dele, em ciano (50 %, 3 px; a primeira rodada, a 22 % e
+  1,5 px, quase não aparecia, pelo revisor), desenhados por cima do céu pintado quando a imagem chega; só de dia;
+- **os fios:** cada poste ligado aos dois vizinhos mais perto até 10 células, um fio pendurado (uma parábola com queda de 6 % do vão) do
+  alto de um ao do outro; uma malha de segmentos só.
+
+**A escala (pedido do Matheus no meio da D3, 2026-11-06: os objetos têm que ser muito maiores que o pet, que é uma criança):** em
+`modelos.ts`, a árvore redonda de 4,2 para 6, o pinheiro de 5 para 7, o poste de 3 para 4,5, o carro de 1,9 para 3,4, a geladeira de 1,7
+para 3 e o trilho de 1 para 2 (para um pet de cerca de 1 célula); vale nos dois estilos. Com os marcos maiores, a grade os afasta: o carro
+de 2,4 a 4 células da área, a geladeira de 1,8 a 4, o trilho de 2 a 5, e entre os marcos 5 a 6,5 células (`entreMarcos`, separado da
+distância aos postes); a geladeira e o trilho numa faixa de −14 a 16 e de −16 a 18 células do ninho em x. Os do motor: mvp, carro (−1;
+−3,7), geladeira (6,2; −2) e trilho (11,6; −4,7); padrão, carro (8; −3,9), geladeira (18,9; −2,7) e trilho (−3; −3,7). Os objetos da grade
+(E-G0) não mudam de lugar: só de tamanho.
+
+**Os gates:** D-G0 (o E-G0 passa); E-G10 (as distâncias, com a de marcos) passa; D-G1, dois draw calls a mais (as partículas e os fios):
+81 e 103 em 390, 90 e 111 em 1280 (`D:\Trab\digilab\capturas_mapa_digital\d3\`); D-G3, o pet legível, agora pequeno perto dos objetos.
+D-G4: o revisor (corpo do PR). Comparação: `comparacao_d3.png`; a ilha com a escala nova: `ilha_d3\`.
+
