@@ -182,3 +182,13 @@ Feito (decisão D3): só em `digilab_fala_livre/`, sem tocar no servidor nem na 
 - **Para a M2:** o servidor passa `versao_verificador="verif-v6"` (e `/verificar` aceita `verif-v6`) quando a conversa for `conversa-v1`;
   o `historico` vai com a marca de estágio. Desvios: D-CP-M4-1 a 6 em `docs/registro/2026-11.md`.
 - **Não feito:** ensaio qualitativo no `gemma2:9b` (opcional); a taxa de acerto do extrator em "você disse que…" não foi medida.
+
+## M2 — o `conversa-v1` ligado na conversa, atrás de chave (worker Claude Code, Sonnet 5.5, branch `v3-conversa-m2-ligar`, 2026-11-06)
+
+Decisão D2. **Servidor** (`servidor/fala_livre.py`): campo `prompt: "conversa-v1"` (enum fechado; outro valor é 400), só na conversa e sem `voz`;
+histórico `[jogador, pet, estágio]` com o estágio validado contra `ESTAGIOS`; estilo da espécie, `comando` e `versao_prompt` como no `livre-v9`;
+provedor o da M5. **Página** (`falaLivre.ts`, Ajustes → Fala do pet): chave "Conversa nova (teste)", desligada por padrão, preferência de tela
+(localStorage), fora do registro do pet; ligada, a conversa manda `prompt` e só as trocas desta sessão e do estágio atual, com o estágio; o log
+de apresentação continua na tela e não vai ao prompt; a fala espontânea não muda. O `comando` volta e é validado de novo pelo caminho do botão.
+**Testes:** `tests/test_conversa_m2.py` (23, incluindo resposta igual com a chave desligada e a injeção), `web/app/test/comando_chat.test.ts`
+(2 novos), `web/app/e2e/conversa_nova.spec.ts` (servidor falso). Sem rodada, sem gate do comando, sem chamada à API. Desvios: D-CP-M2-1 a 3.
