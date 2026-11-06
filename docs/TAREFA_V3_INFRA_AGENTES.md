@@ -74,7 +74,9 @@ em `.claude/settings.json` (SA-5; D-IA-7). Este PR só muda este documento e o r
 2. **O Stop dos testes: o H2 estendido** (`.claude/hooks/h2_testes.py`), em vez de um hook novo, porque o H2 já tem o conjunto rápido, o
    limite de tempo e a guarda contra prender a sessão. Acrescenta ao conjunto que ele já monta:
    - **os testes de replay**, uma lista fixa no próprio hook (D-IA-1): `tests/test_engine.py`, `tests/test_gabarito_*.py`,
-     `tests/test_gabaritos_*.py`, `tests/test_p4_gabaritos.py`, `tests/test_passeio_gabarito.py` (22 arquivos hoje);
+     `tests/test_gabaritos_*.py`, `tests/test_p4_gabaritos.py`, `tests/test_passeio_gabarito.py` (22 arquivos hoje; medido nesta
+     sessão: 108 passed in 424.91s, ~7 min, os quatro mais lentos os `byte_a_byte` do DigiBrain, de 37 a 58 s), **só quando o turno mudou
+     `digilab/` ou `experiments/bancada/`** (o código que pode mudar uma vida);
    - **os testes da frente:** `tests/test_<frente>*.py`, com a frente tirada do branch `v3-<frente>` (hífen vira sublinhado), se existir;
    - continua só rodando quando o `git status` mostra mudança em `digilab/`, `experiments/` ou `tests/` (sem isso, nenhum teste no Stop de
      uma sessão que só escreveu documento).
@@ -237,7 +239,7 @@ Nenhuma run. Nenhuma semente.
 
 | id | decisão | recomendação | custo de errar |
 |---|---|---|---|
-| **D-IA-1** | quais testes o Stop roda | **os de replay (lista fixa de 22 arquivos, seção 3.1) mais os da frente e os dos arquivos mudados, só quando `digilab/`, `experiments/` ou `tests/` mudou**; a suíte inteira continua no PR. Medido nesta sessão: os 22 de replay em TEMPO_REPLAY | lista curta demais: um replay quebrado passa até a suíte do PR (36 min depois, ou na `main`); longa demais: cada turno que mexe em código espera minutos, e a sessão aprende a fugir do hook |
+| **D-IA-1** | quais testes o Stop roda | **sempre que `digilab/`, `experiments/` ou `tests/` mudou: os da frente e os dos arquivos mudados (o H2 de hoje); a lista fixa de replay (22 arquivos, seção 3.1) só quando mudou `digilab/` ou `experiments/bancada/`**; a suíte inteira continua no PR. Medido nesta sessão: os 22 de replay, `108 passed in 424.91s` (~7 min), abaixo do limite de 600 s do H2 | lista curta demais: um replay quebrado passa até a suíte do PR (36 min depois, ou na `main`); longa demais: cada turno que mexe em código espera minutos, e a sessão aprende a fugir do hook |
 | **D-IA-2** | o `pre_run` entra nos orquestradores ou só no hook | **no hook (E3) e, daqui para a frente, nos `run_v3_*` novos, numa linha no começo do `main()`; os `run_v2_*` não mudam** | só no hook: uma run lançada pelo terminal do Matheus ou por outra ferramenta pula o gate e pode queimar uma faixa; em todos os orquestradores: mexe em 26 arquivos da V2 congelada, cada um com teste |
 | **D-IA-3** | o e2e visual roda no Linux | **não; no CI só `tipos`, `npm test` e `build`**. O e2e nem roda no CI como está: os sete specs leem o atlas fora do git, e as referências das capturas também estão fora do git (não há `*-snapshots/` versionado). O e2e fica no Stop do web (H5) e no testador | rodar no Linux: referências novas por plataforma, dois conjuntos para aprovar, e o atlas teria de ir ao CI (não pode: arte fora do git); não rodar: uma quebra do e2e só aparece na junção, como hoje (o Gerente roda antes do merge) |
 | **D-IA-4** | o H9 diante de uma faixa queimada nova | **código 2 para remover ou alterar; `ask` para acrescentar no fim** | negar tudo: queimar uma faixa depois de uma run caída exige editar fora do Claude Code; deixar acrescentar sem perguntar: um agente pode queimar uma faixa reservada viva por engano |
