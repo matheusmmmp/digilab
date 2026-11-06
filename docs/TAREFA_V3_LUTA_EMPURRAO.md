@@ -266,3 +266,25 @@ Na mesma calibração (72101–72505), contra o mesmo "antes" (seção 4.2). Art
 - Uma leitura, sem medição: a muralha luta sobretudo com o contra-golpe (`motor/bots.ts`, a primeira regra dela), que segue empurrando
   pela metade; o duelista, que abre com a investida, é quem mais sofre com o empurrão de ida e volta. Nada foi ajustado; volta ao Matheus.
 
+### 9.3 A terceira medição, a defesa e o contra-golpe sem empurrão (2026-11-06): só o F-3 reprova
+
+Na mesma calibração (72101–72505), contra o mesmo "antes" (seção 4.3). Artefatos em
+`web/app/scripts/medicoes/equilibrio_tr/empurrao/depois_posturas0/`, o log ao lado e a tabela em `resumo_posturas0.txt`.
+
+| meta | v14 (hoje) | v18, a defesa sem empurrão | v18, a defesa e o contra-golpe sem empurrão |
+|---|---|---|---|
+| F-3 | passa (o duelista vence 3 formas) | falha (1) | **falha (1)** |
+| G-2 | passa | passa | passa |
+| G-3 | passa (0,43 a 0,72) | falha (0,24 a 0,91) | **passa (0,37 a 0,85; ninguém fora)** |
+| T-2 no limite (total; pior par) | 0,012; duelista × sentinela 0,145 | 0,054; duelista × muralha 0,92 | 0,015; duelista × sentinela 0,13 (duelista × muralha 0,09) |
+| T-1 (já falha hoje) | 33,9 s | 36,9 s | 34,8 s |
+
+- Todas as outras metas que passam hoje continuam passando; o F-3 é a única que passa a falhar.
+- **O duelista contra as outras formas** (a fração de vitórias dele na matriz dos adultos): emboscador 0,74 → 0,09; Titã 0,838 → 0,195;
+  muralha 0,063 → 0,07; vigia 0,805 → 0,698. Ele vencia o emboscador, o vigia e o Titã; agora só o vigia.
+- **Uma leitura, sem medição:** o duelista vive da investida (do médio, `motor/bots.ts`), e a investida agora empurra o rival 40 px e o
+  derruba, o que o leva de volta ao médio. Contra o emboscador, que recua e atira do médio (o disparo ×6 da v14), o empurrão entrega a
+  distância que ele quer. Contra o Titã, a pele dura segura a queda e corta o empurrão pela metade, e o Titã segue com o pesado de perto.
+  O que segurava o duelista contra a muralha (o empurrão do contra-golpe, que o tirava do alcance e virava luta por tempo) saiu com esta
+  troca. Nada foi ajustado; volta ao Matheus.
+
