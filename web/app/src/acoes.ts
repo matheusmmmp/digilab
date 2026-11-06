@@ -4,6 +4,7 @@
    catalogo fechado (AcaoDono) e contra o estado do pet antes de virar o mesmo clique do botao. */
 import { ACOES_DONO_JOGO_V11, ACOES_DONO_V4, ACOES_EDUCACAO, type AcaoDono, type Motor } from "../motor/index.ts";
 import { mostrarFlash } from "./flash.ts";
+import { registrarAcaoDono } from "./telas/pet/reacao.ts";
 import { jogoAtual, mudarMotor } from "./jogo.ts";
 import { ajustarVelocidadeChamado } from "./tempo.ts";
 
@@ -30,6 +31,7 @@ export const podeAgir = (m: Motor, nascendo: number): boolean => nascendo === 0 
 export function agir(a: AcaoDono): boolean {
   const j = jogoAtual();
   if (!podeAgir(j.motor, j.nascendo)) return false;
+  registrarAcaoDono(a, performance.now(), j.motor.e.fome);   /* a reacao de rosto (reacao.ts; so vista) le o que o dono fez e a fome de antes */
   mudarMotor(mm => mm.observar(a));
   mostrarFlash(ICONE_DONO[a]);
   ajustarVelocidadeChamado();                  /* atendeu o chamado: volta a velocidade de antes */
