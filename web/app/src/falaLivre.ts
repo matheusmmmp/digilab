@@ -116,7 +116,9 @@ async function falar(situacao: "espontanea" | "conversa", gatilho: string | null
   const t = motor.e.tick;
   try {
     const estado = estadoDoPet(motor, gatilho);
-    const d = await post("/api/fala-livre", { estado, situacao, fala_jogador: falaJogador, historico: FL.sessao.slice(-MAX_TROCAS), semente });
+    /* CONVERSA_PET M1 (D1): so a conversa pede o comando (livre-v9: estilo da especie + comando, sem a voz propria); a espontanea nao */
+    const d = await post("/api/fala-livre", { estado, situacao, fala_jogador: falaJogador, historico: FL.sessao.slice(-MAX_TROCAS), semente,
+      ...(situacao === "conversa" ? { comando: true } : {}) });
     const reg: RegistroFala = {
       versao: VERSAO_LOG, t, situacao, fala_jogador: falaJogador || null, fala: d.fala as string, fatos_citados: d.fatos_citados as string[],
       fatos: d.fatos, estagio: d.estagio as string, modelo: d.modelo as string, versao_prompt: d.versao_prompt as string, semente,

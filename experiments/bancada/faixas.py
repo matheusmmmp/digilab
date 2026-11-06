@@ -126,6 +126,9 @@ FAIXAS_RESERVADAS = (
     (50001, 50020, "analise de poder, piloto"), (60001, 60160, "confirmatoria"), (69001, 69001, "M1, gate G1"),
     (80001, 82004, "linhagem E1 (piloto, genomas e ambientes)"),
     (20260900, 20261800, "fala, voz, comando e bootstraps (sementes de 2026-09/10 e semente + i)"),
+    (20261900, 20262899, "CONVERSA_PET (conversa com o pet): 20261900-20262199 a reavaliacao do comando na M1, 20262200-20262499 a calibracao do "
+                         "conversa-v1, 20262500-20262899 a validacao, uma vez (docs/PLANO_ANALISE_V3_CONVERSA_PET.md, secao 6, PROPOSTO; "
+                         "faixa pedida ao coordenador e aprovada pelo Matheus em 2026-11-06 com a decisao D1-D7; a missao M1 acrescenta a linha)"),
 )
 
 

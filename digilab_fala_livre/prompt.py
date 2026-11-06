@@ -38,13 +38,19 @@ VERSAO_PROMPT_V7 = "livre-v7"
 VERSAO_PROMPT_V8 = "livre-v8"
 # conversa-v1 (CONVERSA_PET, M3, decisao D2 do Matheus, 2026-11-06): prompt SO da conversa, escrito para o dialogo (persona fixa no
 # comeco, regras de verdade enxutas no fim, tamanho por estagio, exemplos, reacao e iniciativa). Nao tem fala espontanea, nem
-# historia (H, O, P, L), nem mentira (F), nem almanaque (W). Nenhuma versao anterior muda.
+# historia (H, O, P, L), nem mentira (F), nem almanaque (W). Nenhuma versao anterior muda. Fica fora de VERSOES_COMANDO: tem o
+# comando por parametro (a avaliacao do comando fica como estava).
 VERSAO_CONVERSA_V1 = "conversa-v1"
+# livre-v9 (CONVERSA_PET, M1, decisao D1 do Matheus em 2026-11-06): as regras de VERDADE do livre-v2 (o pet nao inventa) + o bloco de
+# ESTILO DA ESPECIE (so o tom, como na v3) + o COMANDO da v8. Sem a historia H/O/P/L, a mentira F e o almanaque W: o livre-v8 e o
+# livre-v6 com comando, e o livre-v6 deixa o pet inventar (decisao revogada pela R2b). As versoes antigas nao mudam.
+VERSAO_PROMPT_V9 = "livre-v9"
 VERSOES = (VERSAO_PROMPT, VERSAO_PROMPT_V3, VERSAO_PROMPT_V4, VERSAO_PROMPT_V5, VERSAO_PROMPT_V6, VERSAO_PROMPT_V7,
-           VERSAO_PROMPT_V8, VERSAO_CONVERSA_V1)
+           VERSAO_PROMPT_V8, VERSAO_PROMPT_V9, VERSAO_CONVERSA_V1)
 VERSOES_VOZ = (VERSAO_PROMPT_V3, VERSAO_PROMPT_V4, VERSAO_PROMPT_V5, VERSAO_PROMPT_V6, VERSAO_PROMPT_V7, VERSAO_PROMPT_V8,
-               VERSAO_CONVERSA_V1)
-VERSOES_COMANDO = (VERSAO_PROMPT_V7, VERSAO_PROMPT_V8)          # a conversa-v1 tem o comando por parametro, fora desta tupla (a avaliacao do comando fica como estava)
+               VERSAO_PROMPT_V9, VERSAO_CONVERSA_V1)     # as que aceitam o bloco de estilo da especie
+VERSOES_COMANDO = (VERSAO_PROMPT_V7, VERSAO_PROMPT_V8, VERSAO_PROMPT_V9)
+TIPOS_FATO_FORA_V9 = "HOPLFWA"       # historia, mentira, almanaque e arvore: so nas versoes de voz propria
 MAX_TROCAS = 10          # historico da conversa: so da sessao, ultimas 10 trocas
 
 SISTEMA = """Você é a voz de um pet virtual do jogo Digilab. Você fala como o próprio pet, em primeira pessoa, em português do Brasil.
@@ -223,6 +229,17 @@ assert SISTEMA_V7 != SISTEMA_V6 and "COMANDO" in SISTEMA_V7
 _REGRA_COMANDO_V7 = """Se a mensagem do jogador MANDOU ou PEDIU de forma clara uma dessas ações ("vai comer", "toma banho", "come isso", "pode brincar"), ponha o nome dela em "comando". Você continua respondendo do seu jeito, e pode até reclamar: quem decide se a ação acontece é o dono, não você. Em qualquer dúvida, "comando" é null. Se o jogador falou de NÃO fazer ("não come agora", "sem petisco hoje"), perguntou ("você quer comer?", "já comeu?"), ou só contou algo, "comando" é null. Nunca invente uma ação fora da lista."""
 SISTEMA_V8 = SISTEMA_V7.replace(_REGRA_COMANDO_V7, """Se a mensagem do jogador MANDOU ou PEDIU de forma clara uma dessas ações ("vai comer", "toma banho", "come isso", "pode brincar"), ponha o nome dela em "comando". Em quatro ações a própria mensagem do dono É a ação: se ele elogia você ("muito bem!", "parabéns"), o comando é "elogiar"; se ele dá bronca ("isso foi feio", "não faz mais"), é "repreender"; se diz que vai fazer carinho ou cafuné, é "acariciar"; se diz que vai cuidar do seu machucado ou fazer um curativo, é "tratar_lesao". Você continua respondendo do seu jeito, e pode até reclamar: quem decide se a ação acontece é o dono, não você. Em qualquer dúvida, "comando" é null. Se o jogador falou de NÃO fazer a ação ("não come agora", "sem petisco hoje", "não vou te dar bronca"), perguntou ("você quer comer?", "já comeu?"), levantou uma hipótese ("se você se comportar, ganha petisco"), deixou para depois ("mais tarde eu te dou banho") ou só contou algo, "comando" é null. Nunca invente uma ação fora da lista.""")
 assert SISTEMA_V8 != SISTEMA_V7 and _REGRA_COMANDO_V7 not in SISTEMA_V8
+
+# livre-v9 = livre-v2 (regras de verdade) + ESTILO DA ESPECIE + o COMANDO do livre-v8 (o trecho do sistema e o mesmo da v8)
+_COMANDO_E_SAIDA_V8 = SISTEMA_V8[SISTEMA_V8.index("COMANDO (só na conversa)"):]
+_ESTILO_V9 = ("\nPode vir também um bloco ESTILO DA ESPÉCIE: ele diz o jeito do seu Digimon (tom, jeito de falar). Use-o só para o TOM. "
+              "Ele não é fato: não conte nada dele como se tivesse acontecido com você e não copie as frases de exemplo.")
+_SAIDA_V2 = SISTEMA[SISTEMA.index("SAÍDA\nResponda"):]
+SISTEMA_V9 = (SISTEMA.replace("o que quer e por que fez o que fez.", "o que quer e por que fez o que fez." + _ESTILO_V9, 1)
+              .replace("O tom segue o temperamento dos FATOS (", "O tom segue o ESTILO DA ESPÉCIE, se houver, e o temperamento dos FATOS (", 1)
+              .replace(_SAIDA_V2, _COMANDO_E_SAIDA_V8))
+assert "ESTILO DA ESPÉCIE" in SISTEMA_V9 and SISTEMA_V9.count("COMANDO (só na conversa)") == 1
+assert SISTEMA_V9.count("REGRAS DE VERDADE") == 1 and "Na fala espontânea não há" in SISTEMA_V9 and _ESTILO_V9 in SISTEMA_V9
 
 # o catalogo fechado do comando (= AcaoDono do jogo web), uma frase por acao; a ordem e a do jogo
 DESCRICAO_COMANDOS: tuple[tuple[str, str], ...] = (
@@ -435,12 +452,14 @@ def mensagens(fatos: list[Fato], situacao: str, fala_jogador: str | None = None,
         raise ValueError(f"versao de prompt desconhecida: {versao}")
     if versao == VERSAO_PROMPT and (estilo is not None or any(f.id[0] in "HOPLFWQZ" for f in fatos)):
         raise ValueError("historia, mentira, almanaque e estilo so existem nos prompts da voz propria (v3, v4)")
+    if versao == VERSAO_PROMPT_V9 and any(f.id[0] in TIPOS_FATO_FORA_V9 for f in fatos):
+        raise ValueError("o livre-v9 nao aceita fatos de historia, mentira, almanaque ou arvore (H, O, P, L, F, W, A)")
     if situacao not in ("espontanea", "conversa"):
         raise ValueError(f"situacao desconhecida: {situacao}")
     if situacao == "conversa" and not (isinstance(fala_jogador, str) and fala_jogador.strip()):
         raise ValueError("conversa sem fala do jogador")
     if comando and (versao not in (*VERSOES_COMANDO, VERSAO_CONVERSA_V1) or situacao != "conversa"):
-        raise ValueError("o comando so existe no livre-v7/v8 e so na conversa")
+        raise ValueError("o comando so existe no livre-v7/v8/v9 e no conversa-v1, e so na conversa")
     if versao == VERSAO_CONVERSA_V1:
         if situacao != "conversa":
             raise ValueError("conversa-v1 so existe na conversa")
@@ -451,12 +470,12 @@ def mensagens(fatos: list[Fato], situacao: str, fala_jogador: str | None = None,
     msgs = [{"role": "system", "content": {VERSAO_PROMPT: SISTEMA, VERSAO_PROMPT_V3: SISTEMA_V3,
                                            VERSAO_PROMPT_V4: SISTEMA_V4, VERSAO_PROMPT_V5: SISTEMA_V5,
                                            VERSAO_PROMPT_V6: SISTEMA_V6, VERSAO_PROMPT_V7: SISTEMA_V7,
-                                           VERSAO_PROMPT_V8: SISTEMA_V8}[versao] + (REGRAS_MEMORIA if memoria else "")}]
+                                           VERSAO_PROMPT_V8: SISTEMA_V8, VERSAO_PROMPT_V9: SISTEMA_V9}[versao] + (REGRAS_MEMORIA if memoria else "")}]
     for jog, pet in (historico or [])[-MAX_TROCAS:]:
         msgs += [{"role": "user", "content": f"Jogador: {jog}"}, {"role": "assistant", "content": pet}]
     pedido = (estilo + "\n\n" if estilo else "") + bloco(fatos) + f"\nESTAGIO: {estagio_de(fatos)}\n"
     if comando:
-        pedido += (BLOCO_COMANDO_V8 if versao == VERSAO_PROMPT_V8 else BLOCO_COMANDO) + "\n"
+        pedido += (BLOCO_COMANDO_V8 if versao in (VERSAO_PROMPT_V8, VERSAO_PROMPT_V9) else BLOCO_COMANDO) + "\n"
     pedido += ("SITUAÇÃO: fala espontânea." if situacao == "espontanea"
                else f'SITUAÇÃO: conversa. Jogador: "{fala_jogador.strip()[:300]}"')
     msgs.append({"role": "user", "content": pedido})
