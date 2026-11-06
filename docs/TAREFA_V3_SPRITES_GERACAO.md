@@ -210,7 +210,7 @@ O `gates.py` roda cada gate no clipe gerado e no derivado, quadro a quadro. Um g
 | **G-PAL** paleta | todo pixel com alfa 255 do personagem é uma cor da paleta do sprite: o conjunto das cores RGB opacas do export inteiro do UP daquele Digimon (`remaster/export/<Nome>.png`). Pode haver **0** pixels fora. A camada `comida` confere contra a paleta da carne da M1 | pedido do Matheus; o snap da E3 deve garantir |
 | **G-CAIXA** caixa | todos os quadros com `sourceSize` igual à caixa do UP (`ancoras.json`), sem trim e sem rotação, e nenhum pixel opaco cortado pela borda | `gerar_atlas_up_clipes.py` (`ler_folha`) |
 | **G-PE** âncora dos pés | a última linha opaca do personagem acima da sombra é a `pe_idle` em todos os quadros (diferença 0); nenhum pixel do personagem abaixo dela; o centro x das 3 linhas de baixo do personagem fica a no máximo 2 px do mesmo centro no quadro 0 do `Idle`; a sombra é a do `Idle`, byte a byte | SPRITES_ACOES 3.4 ("o pé"); o achado da M4 (o WereGarurumon pulando a cada mordida) |
-| **G-ALFA** alfa binário | acima da linha do pé, todo pixel tem alfa 0 ou 255. A sombra fica fora do gate (desvio D-SG-A, seção 9) | pedido do Matheus |
+| **G-ALFA** alfa binário | acima da linha do pé, no máximo 2 pixels por quadro com alfa diferente de 0 e 255 (D-SG-E, Matheus, 2026-11-06; antes: 0), e a carne com 0. A sombra fica fora do gate (desvio D-SG-A, seção 9) | pedido do Matheus |
 | **G-AREA** área | os pixels opacos do personagem em cada quadro ficam em [0,90 × a menor área do `Idle`; 1,10 × a maior área do `Idle`] do mesmo Digimon. A carne conta à parte e não pode passar de 15 % da área do `Idle` | PROPOSTO; conferido primeiro no derivado (G1) |
 | **G-MS** duração | os `ms` são inteiros e maiores que 0, um por quadro; a tag `Comer` é `forward` com laço; o `Comer_objeto` tem os mesmos quadros contados e os mesmos `ms`; o ciclo dura de 800 a 1 000 ms; cada quadro dura no máximo 200 ms | `atlas.ts` (`juntarClipes`); SPRITES_ACOES 3.2 (~0,9 s) |
 | **G-CARGA** o jogo carrega | o `gerar_atlas_up_clipes.py` roda sem erro sobre o candidato, e o `juntarClipes` (no e2e) não levanta | seção 7 |
@@ -301,7 +301,7 @@ estimativas: o worker confere a página do modelo antes do primeiro envio.
 
 ## 8. Precisa do Matheus
 
-Cada decisão vem com a recomendação e o custo de errar. Todas estão abertas.
+Cada decisão vem com a recomendação e o custo de errar. A D-SG-4 está decidida (2026-11-06); as outras estão abertas.
 
 - **D-SG-1. Qual gerador.**
   - **Recomendação:** o **Agent Sprite Forge** primeiro, pela leitura do levantamento (`05_ARQUITETURAS_ORQUESTRACAO.md` 2.3: "o item mais
@@ -333,7 +333,7 @@ Cada decisão vem com a recomendação e o custo de errar. Todas estão abertas.
   - **Custo de errar:**
     - junto, dobra o gasto antes de saber se o pipeline serve, e colide com o lote 1;
     - depois, atrasa as duas ações em uma etapa.
-- **D-SG-4. O Digimon da prova.**
+- **D-SG-4. O Digimon da prova. DECIDIDA pelo Matheus em 2026-11-06: o Agumon** (a recomendação foi aceita; registro D-SG-D).
   - **Recomendação:** o **Agumon.**
     - É o derivado mais forte (par de boca real do UP, perfil, aprovado na prova 2), então "igual ou melhor" ali é a barra mais
       exigente.
@@ -361,3 +361,19 @@ Cada decisão vem com a recomendação e o custo de errar. Todas estão abertas.
     `Idle` e 3 do `Comer` derivado, a semitransparência está quase toda abaixo do pé (a sombra, 108 a 148 pixels por quadro), com 0 a 2
     pixels acima. Daí o G-ALFA só acima do pé (desvio D-SG-A em `docs/registro/2026-11.md`).
   - **O plano:** os papéis, o pipeline E0 a E7, os gates, o custo e as D-SG-1 a D-SG-5. Nada instalado, gerado ou gasto.
+- **2026-11-06, a etapa G1 (worker, Claude Code, Sonnet 5.5, branch `v3-sprites-geracao-g1`):**
+  - **O que entrou:** `tools/sprites_geracao/` (`ficha.py`, `gates.py`, `converter.py`, `montar_candidato.py`) e
+    `tests/test_sprites_geracao.py` (35 testes, um caso que falha alto por gate da seção 4.1, o conversor com quadros sintéticos, e três
+    testes que leem o `remaster/` e pulam sem ele). Nada instalado, gerado ou gasto; `web/app`, `digilab` e `experiments` sem mudança.
+  - **A E0 e a E5 sobre o `Comer` derivado do Agumon (35 testes)** (`D:\Trab\digilab\remaster\geracao\Agumon\gates_derivado.json`, fora do git): passam
+    G-PAL (0 fora da paleta; 3 684 cores de paleta), G-CAIXA, G-PE (desvio do centro x até 2,00 px, no limite), G-AREA (1 394 a 1 429
+    contra a faixa [1 253,7; 1 556,5]; carne 40 a 62 contra 208,95), G-MS (866 ms) e G-CARGA (fumaça sobre o candidato só com derivados).
+  - **O derivado reprovava o G-ALFA (a regra era 0 pixels):** nos quadros 2, 4 e 5 do `Comer` (os de boca aberta, quadros 12 e 14 do UP) há 2 pixels
+    semitransparentes acima do pé, em (56,56) com alfa 238 e (57,57) com alfa 243, que vêm do próprio UP. A faixa PROPOSTA "0 pixels"
+    está errada para o derivado. **Não foi ajustada**: o Matheus decidiu em 2026-11-06 tolerar até 2 px por quadro (registro D-SG-E; D-SG-E DECIDIDA). Com a regra nova
+    o derivado passa em todos os gates e o `gates_derivado.json` foi regravado (G-ALFA com limite 2, medido 0 a 2).
+  - **O que o conversor assume (contrato PROPOSTO, SEM FONTE):** os quadros do gerador chegam já na paleta e com alfa binário (o snap é
+    do pixel-mcp), sem sombra, num `quadros.json` próprio; o JSON real do Sprite Forge é adaptado na G2. O conversor grava o export no formato
+    do Aseprite direto (sem chamar o Aseprite) e a carne de arte própria é a porta do `gerar.lua`, que reproduz byte a byte a camada
+    `comida` do Agumon derivado (testado).
+
