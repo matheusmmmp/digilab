@@ -23,6 +23,11 @@ export const S: Record<string, string[]> = {
   carne: ["....kk.", "...kwwk", ".kkkkk.", "kddddk.", "kddddk.", ".kkkk.."],
   brilho: ["...k...", "...y...", ".k.y.k.", "kyyyyyk", ".k.y.k.", "...y...", "...k..."],
   gota: ["...k...", "..kck..", ".kccck.", ".kccck.", "..kkk.."],
+  /* as reacoes de rosto (docs/TAREFA_V3_SPRITES_REACOES.md, R-rosto-jogo; arte propria, rascunhos de remaster/geracao/reacoes_crianca.html) */
+  lagrima: ["...k...", "..kck..", ".kcccck", ".kcwck.", "kccccck", "kccccck", ".kcccck", "..kkk.."],
+  reticencias: ["kk.kk.kk", "kw.kw.kw", "kk.kk.kk"],
+  x: ["kk...kk", "krk.krk", ".krkrk.", "..krk..", ".krkrk.", "krk.krk", "kk...kk"],
+  espiral: [".kkkkkkk.", "kkgggggkk", "kgkkkkkgk", "kgkgggkgk", "kgkgkgkgk", "kgkggkkgk", "kgkkkkkgk", "kkggggkkk", ".kkkkkk.."],
 };
 /* ampulheta original (a crianca fala com icones; o UP nao tem emote de demora) */
 export const AMPULHETA = ["kkkkkkk", "kwwwwwk", ".kyyyk.", "..kyk..", "..kwk..", ".kwywk.", "kwyyywk", "kkkkkkk"];
@@ -34,7 +39,7 @@ const CORES: Record<TracoCombate, [string, string, string]> = {
 export type Paleta = Record<string, string>;
 export function paleta(cor: TracoCombate): Paleta {
   const [b, l, d] = CORES[cor];
-  return { k: "#1D2233", b, l, d, w: "#FFFFFF", p: "#FF8FA3", h: "#F5C542", s: "#7FB8E8", r: "#E8445A", y: "#F5C542", c: "#7FC8F0" };
+  return { k: "#1D2233", b, l, d, w: "#FFFFFF", p: "#FF8FA3", h: "#F5C542", s: "#7FB8E8", r: "#E8445A", y: "#F5C542", c: "#7FC8F0", g: "#9BE15D" };
 }
 /** desenha uma grade (1 unidade por pixel da grade); cor que falta aparece em magenta, como no HTML */
 export function desenharGrade(ctx: CanvasRenderingContext2D, grade: string[], x0: number, y0: number, pal: Paleta,

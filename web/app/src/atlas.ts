@@ -14,11 +14,15 @@ export const ATLAS_CLIPES_URL = "../../../Assets/digilab_atlas_up_clipes.json";
 
 /** [x, y, largura, altura, deslocamento x, deslocamento y] de cada quadro dentro da caixa do sprite */
 export type Quadro = [number, number, number, number, number, number];
-export type Clipe = "Idle" | "Run" | "Attack_1" | "Stun" | "Die" | "Evol" | ClipeAcao;
+export type Clipe = "Idle" | "Run" | "Attack_1" | "Stun" | "Die" | "Evol" | ClipeAcao | ClipeReacao;
 /** acoes novas (docs/TAREFA_V3_SPRITES_ACOES.md, secao 3.4; missao M2): saem do Aseprite (remaster/acoes/export) e entram no atlas de clipes.
     `<Tag>_objeto` e so a camada do objeto (a comida), com os mesmos quadros contados e os mesmos ms do clipe dele. Tocar e da M3. Do lote 1 (PR #597) entram tambem Feliz, Sacudir, Chamar e Emburrar; o jogo toca so o Comer, o Emburrar e o Dormir (o quadro de dormir, 1 quadro, docs/TAREFA_V3_SPRITES_REACOES.md, R1). */
 export const CLIPES_ACOES = ["Comer", "Comer_objeto", "Feliz", "Sacudir", "Chamar", "Emburrar", "Dormir"] as const;
 export type ClipeAcao = typeof CLIPES_ACOES[number];
+/** as reacoes de rosto (docs/TAREFA_V3_SPRITES_REACOES.md, R-rosto-jogo): 1 quadro cada, OPCIONAIS por forma. Ao contrario de CLIPES_ACOES, nao
+    precisam existir em todas as formas (so os 8 Digimon do estagio crianca as tem); a regra e por forma: ou as 7, ou nenhuma (juntarClipes). */
+export const CLIPES_REACOES = ["Triste", "Cansado", "Carinho", "Medo", "Envergonhado", "Recusa", "Doente"] as const;
+export type ClipeReacao = typeof CLIPES_REACOES[number];
 const SUFIXO_OBJETO = "_objeto";
 /** os NPCs e os bots da luta (chaves npc_* e bot_*) nao precisam das acoes; as outras chaves do atlas de clipes sao as formas */
 const ehForma = (chave: string): boolean => !chave.startsWith("npc_") && !chave.startsWith("bot_");
@@ -87,6 +91,11 @@ export function juntarClipes(base: AtlasUp, c: AtlasClipes): AtlasUp {
         throw new Error(`atlas de clipes: ${nome} de ${k} nao casa com o clipe dele em quadros e ms`);
     }
     sprites[k] = { caixa: s.caixa, quadros: idle.quadros, clipes: s.clipes };
+  }
+  /* as reacoes de rosto sao opcionais por forma, mas uma forma com so parte delas e erro (nunca esconde um quadro que faltou) */
+  for (const [k, s] of Object.entries(c.sprites)) {
+    const tem = CLIPES_REACOES.filter(r => s.clipes[r]), falta = CLIPES_REACOES.filter(r => !s.clipes[r]);
+    if (tem.length > 0 && falta.length > 0) throw new Error(`atlas de clipes: ${k} tem so parte das reacoes de rosto, faltam ${falta.join(", ")}`);
   }
   const formas = Object.keys(c.sprites).filter(ehForma);
   for (const nome of CLIPES_ACOES) {
