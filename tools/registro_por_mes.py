@@ -12,7 +12,7 @@ Dois comandos, os dois sem perder nem reescrever um byte das seções:
 
   python tools/registro_por_mes.py absorver <commit>
       para um PR que ainda escreveu no formato antigo (a seção no fim do REGISTRO_DESVIOS.md): lê o REGISTRO_DESVIOS.md do commit pelo
-      git, põe cada seção nova no fim do arquivo do mês dela, acrescenta a linha no índice e registra o lote. Uma seção que já existe
+      git, põe cada seção nova no fim do arquivo do mês dela, regenera o índice (tools/gerar_indice_desvios.py) e registra o lote. Uma seção que já existe
       com outro texto falha alto.
 
 A conferência fica em tools/conferir_saude.py (G-CONCAT).
@@ -36,12 +36,12 @@ MARCA_INDICE = "## Índice"
 CABECALHO_INDICE = """# Registro de desvios de pré-condição e de interpretação
 
 Desde 2026-10-13 (rodada de saúde, etapa 2; `docs/TAREFA_V2_SAUDE.md`) o registro fica **dividido por mês**, em
-`docs/registro/AAAA-MM.md`. Este arquivo é só o **índice**: uma linha por seção, na ordem em que as seções entraram.
+`docs/registro/AAAA-MM.md`. Este arquivo é só o **índice**: uma linha por seção, na ordem dos arquivos do mês.
 
-**Onde o worker escreve o desvio novo:**
-1. **a seção,** `## AAAA-MM-DD — <FRENTE> (worker X): ...`, no **fim do arquivo do mês da data dela**, `docs/registro/AAAA-MM.md` (no
-   primeiro desvio de um mês, o arquivo é criado);
-2. **uma linha no fim deste índice,** com o título igual ao da seção: `- [AAAA-MM-DD — ...](registro/AAAA-MM.md)`.
+**Este índice é gerado; não o edite** (`docs/TAREFA_V3_INDICE_DESVIOS.md`, 2026-11-06). O worker escreve só **a seção,**
+`## AAAA-MM-DD — <FRENTE> (worker X): ...`, no **fim do arquivo do mês da data dela**, `docs/registro/AAAA-MM.md` (no primeiro desvio de
+um mês, o arquivo é criado). Quem faz o merge regenera o índice com `python tools/gerar_indice_desvios.py`; um conflito aqui se resolve
+rodando o gerador, nunca à mão.
 
 Nunca escreva a seção aqui. Um PR que ainda escreveu no formato antigo é absorvido por `python tools/registro_por_mes.py absorver
 <commit>`, e `python tools/conferir_saude.py` confere tudo (G-CONCAT).
@@ -161,7 +161,8 @@ def dividir(raiz: Path, base: str) -> dict:
 
 
 def absorver(raiz: Path, commit: str) -> list[str]:
-    """As seções novas do REGISTRO_DESVIOS.md antigo de um commit, no fim do arquivo do mês, no índice e num lote. Devolve os títulos."""
+    """As seções novas do REGISTRO_DESVIOS.md antigo de um commit, no fim do arquivo do mês e num lote, e o índice regenerado.
+    Devolve os títulos."""
     antigo = git_show(raiz, commit, REGISTRO)
     _, secoes = partir(antigo)
     conhecidas: dict[str, str] = {}
@@ -181,13 +182,12 @@ def absorver(raiz: Path, commit: str) -> list[str]:
         novas.append((titulo, trecho.rstrip()))
     if not novas:
         raise ValueError(f"o commit {commit} não tem seção nova no registro")
-    indice = ler(raiz / REGISTRO)
     for titulo, corpo in novas:
         caminho = raiz / PASTA / f"{mes(titulo)}.md"
         atual = ler(caminho) if caminho.exists() else ""
         escrever(caminho, (atual + "\n" if atual else "") + corpo + "\n")
-        indice += linha_indice(titulo)
-    escrever(raiz / REGISTRO, indice)
+    import gerar_indice_desvios  # aqui, e não no topo: o gerador importa este módulo
+    escrever(raiz / REGISTRO, gerar_indice_desvios.gerar(raiz))
     lotes = json.loads(ler(raiz / LOTES))
     lotes["lotes"].append({"commit": commit, "secoes": [t for t, _ in novas]})
     escrever(raiz / LOTES, json.dumps(lotes, ensure_ascii=False, indent=2) + "\n")
