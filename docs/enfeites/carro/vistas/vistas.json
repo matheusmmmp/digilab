@@ -1,0 +1,14 @@
+{
+ "id": "01a1b146-96eb-77f6-9108-93e83b4b1f79",
+ "type": "image-to-image",
+ "ai_model": "nano-banana-2",
+ "prompt": "Multiple views of the same small sky blue pickup truck with a flower garden in the cargo bed and moss on the wheels: front, side and back, same style, same colors, plain light grey background.",
+ "status": "SUCCEEDED",
+ "consumed_credits": 6,
+ "created_at": 1793975556064,
+ "finished_at": 1793975575432,
+ "saldo": {
+  "antes": 776,
+  "depois": 770
+ }
+}
