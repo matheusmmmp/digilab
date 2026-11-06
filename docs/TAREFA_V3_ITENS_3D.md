@@ -1,7 +1,7 @@
 # TAREFA V3 — ITENS_3D (2026-11-05)
 
 Coordenador: o Gerente da frente ITENS_3D (Claude Code, Opus 5.5, nesta sessão). Worker: a definir, depois das decisões da seção 8.
-Worktree e branch: `v3-itens-3d`. Status: ABERTA, em planejamento; nada foi instalado, gerado ou pago.
+Worktree e branch: `v3-itens-3d`. Status: ABERTA; D-I1 a D-I6 DECIDIDAS (2026-11-05); nada foi instalado, gerado ou pago.
 
 Categoria: arquitetura. Origem: Matheus, 2026-11-05: um pipeline para gerar itens próprios da ilha em glTF (bola, cocô, frutas, saco, kit
 médico) com o MCP for Blender e um gerador de malha, entrando na ilha com procedência própria.
@@ -169,6 +169,12 @@ Em todos os 28, cada primitiva tem textura de cor (`baseColorTexture`), há um m
 - O `License.txt` e os artefatos de `docs/itens3d/<item>/` existem; o crédito do gerador entra em Ajustes › Sobre, como o dos kits.
 
 ## 8. Precisa do Matheus
+
+**D-I1 a D-I6 DECIDIDAS pelo Matheus em 2026-11-05, pela recomendação** ("Sim, as seis", no chat desta sessão): a bola primeiro, a Meshy
+com um mês do Pro, o teto pela mediana por categoria (554 e 2 414), a tabela irmã `ITENS_MODELOS` com a troca em `itens.ts`, instalar o
+Blender LTS e o MCP for Blender (socket só em localhost, modo seguro) e o teto de gasto de R$ 120. A instalação, a assinatura e a primeira
+geração ficam para a etapa da bola, num PR de implementação; esta tarefa não instala nem gasta. Os 300 KB por item, os 2 MB da pasta e os
+5 % de fps (seção 4.2 e 7) continuam PROPOSTOS.
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
