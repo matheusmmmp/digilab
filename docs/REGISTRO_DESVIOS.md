@@ -534,3 +534,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-06 — INFRA_AGENTES, etapa E1, os hooks H2, H1b, H6 e H9 (worker, Claude Code, Opus 5.5, branch `v3-infra-agentes-e1`)](registro/2026-11.md)
 - [2026-11-06 — INFRA_AGENTES, etapa E2, os três revisores somente leitura (worker, Claude Code, Opus 5.5, branch `v3-infra-agentes-e2`)](registro/2026-11.md)
 - [2026-11-06 — INFRA_AGENTES, etapa E3, o pre_run e o H10 (worker, Claude Code, Opus 5.5, branch `v3-infra-agentes-e3`)](registro/2026-11.md)
+- [2026-11-06 — INFRA_AGENTES, etapa E4, o testador e a junção com a UX (worker, Claude Code, Opus 5.5, branch `v3-infra-agentes-e4`)](registro/2026-11.md)
