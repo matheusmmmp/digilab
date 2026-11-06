@@ -192,3 +192,13 @@ provedor o da M5. **Página** (`falaLivre.ts`, Ajustes → Fala do pet): chave "
 de apresentação continua na tela e não vai ao prompt; a fala espontânea não muda. O `comando` volta e é validado de novo pelo caminho do botão.
 **Testes:** `tests/test_conversa_m2.py` (23, incluindo resposta igual com a chave desligada e a injeção), `web/app/test/comando_chat.test.ts`
 (2 novos), `web/app/e2e/conversa_nova.spec.ts` (servidor falso). Sem rodada, sem gate do comando, sem chamada à API. Desvios: D-CP-M2-1 a 3.
+
+## M2b — a verificação da conversa nova com o `verif-v6` (worker Claude Code, Sonnet 5.5, branch `v3-conversa-m2b-verif`, 2026-11-06)
+
+Fecha a brecha achada na revisão da M2: a página verificava a conversa nova com o `verif-v3`, que trata o `[J]` como fato comum. **Servidor**
+(`servidor/fala_livre.py`): a rota de verificação aceita o campo `prompt` (enum `PROMPTS_CONVERSA`) e, com `"conversa-v1"`, usa o `verif-v6`;
+fato `[J]` sem o campo é 400; `prompt` inválido ou com `voz` é 400. **Página** (`falaLivre.ts`): com a chave ligada a verificação manda
+`prompt: "conversa-v1"`; desligada, o pedido é o de hoje. **Saneamento do `[J]`:** já estava na M4 (colchetes e chaves viram parênteses); só ganhou teste.
+**Testes:** `tests/test_conversa_m2b.py` (8, com o ponta a ponta: "eu lutei ontem" citando `[J1]` sai sem fato; "você disse que eu lutei ontem" sai
+sustentada), 2 asserções novas em `web/app/test/comando_chat.test.ts`. Passam: 317 testes Python da fala/conversa/comando/corpus/servidor, 942 do vitest,
+`npm run tipos` e os 131 do `e2e`. Sem rodada, sem chamada à API. Desvios: D-CP-M2b-1 a 3.
