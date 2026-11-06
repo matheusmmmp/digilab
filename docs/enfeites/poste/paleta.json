@@ -1,0 +1,5 @@
+{
+ "fonte": "as regioes do concept 1 (lampiao) e as cores dominantes da textura da Meshy (mediana em 10 cores): o verde escuro do poste em dois tons, o musgo e a trepadeira num tom so e o vidro amarelo quente do lampiao; PROPOSTO",
+ "paleta": [[40, 72, 42], [60, 98, 54], [114, 150, 62], [246, 224, 150]],
+ "nomes": ["poste escuro", "poste", "musgo", "vidro"]
+}

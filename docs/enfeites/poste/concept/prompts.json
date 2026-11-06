@@ -1,0 +1,11 @@
+{
+ "ai_model": "nano-banana-2",
+ "referencias": ["ref_ilha_saco_gerado.png", "ref_ilha_kits.png"],
+ "prompt_base": "Concept art of a single old street lamp post prop, abandoned in nature, for a cozy low-poly 3D island game for children, cute and friendly, nothing dirty or broken. Match exactly the art style of the reference screenshots: simple chunky rounded shapes, slightly thick proportions, flat toon shading with three tones, soft saturated colors, no outlines, no realistic texture. A tall post on a small round base with one lantern head on top, the lantern glass warm yellow. Show only the lamp post, full object in frame, three-quarter view from slightly above, on a plain light grey background, no ground, no shadow, no text, no logo, no characters.",
+ "variantes": [
+  {"nome": "concept_1_lampiao", "prompt": "A dark green vintage lamp post with a classic four-sided lantern on top, a green vine with small leaves winding around the post and a little patch of moss on the base."},
+  {"nome": "concept_2_madeira", "prompt": "A wooden post with a short wooden arm and a round lantern hanging from it, tied with rope, a small round bird sitting on the arm and a few mushrooms at the base."},
+  {"nome": "concept_3_curvo", "prompt": "A soft pastel sky blue post that curves gently at the top like a candy cane, ending in a round bell-shaped lamp, with small pink and white flowers growing at its base."},
+  {"nome": "concept_4_creme", "prompt": "A cream white lamp post with rounded ornaments, a round globe lamp on top, moss on the lower part of the post and a tiny bird nest resting on top of the lamp."}
+ ]
+}
