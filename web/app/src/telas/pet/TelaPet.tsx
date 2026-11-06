@@ -516,11 +516,11 @@ function useReservaDoHabitat(ref: { current: HTMLElement | null }): void {
     return () => { ro.disconnect(); raiz.removeProperty("--hab-baixo"); };
   }, [ref]);
 }
-/** a fileira do topo da casca (Topo.tsx): a linha do agora entra nela, logo depois da plaquinha (a prancha da P1); no servidor e no
+/** o encaixe do topo da casca (Topo.tsx, .topo-agora): a linha do agora entra nele, logo depois da plaquinha (a prancha da P1); no servidor e no
     primeiro desenho ainda nao ha topo, e a linha espera */
 function useTopo(): HTMLElement | null {
   const [topo, setTopo] = useState<HTMLElement | null>(null);
-  useEffect(() => { setTopo(document.querySelector<HTMLElement>(".topo-hab")); }, []);
+  useEffect(() => { setTopo(document.querySelector<HTMLElement>(".topo-agora")); }, []);
   return topo;
 }
 export function TelaPet({ irRegistro, irEvolucao }: { irRegistro: () => void; irEvolucao: () => void }) {
