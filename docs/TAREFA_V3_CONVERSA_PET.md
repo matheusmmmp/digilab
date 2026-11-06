@@ -164,3 +164,13 @@ Entrega da missão M5 (D5): só o cliente e o gasto, **sem rodada** (nenhuma cha
   mudança, remoto que desliga. O SDK `anthropic` não está instalado nesta máquina; os testes não precisam dele.
 - **Não verificado:** a chamada real (formato exato de `output_config` com `effort` no Haiku 5.5 e no Sonnet 5.5, e o piso de
   `max_tokens`) só se confirma na primeira chamada da rodada de avaliação, que pede o Matheus.
+
+## M2 — o `conversa-v1` ligado na conversa, atrás de chave (worker Claude Code, Sonnet 5.5, branch `v3-conversa-m2-ligar`, 2026-11-06)
+
+Decisão D2. **Servidor** (`servidor/fala_livre.py`): campo `prompt: "conversa-v1"` (enum fechado; outro valor é 400), só na conversa e sem `voz`;
+histórico `[jogador, pet, estágio]` com o estágio validado contra `ESTAGIOS`; estilo da espécie, `comando` e `versao_prompt` como no `livre-v9`;
+provedor o da M5. **Página** (`falaLivre.ts`, Ajustes → Fala do pet): chave "Conversa nova (teste)", desligada por padrão, preferência de tela
+(localStorage), fora do registro do pet; ligada, a conversa manda `prompt` e só as trocas desta sessão e do estágio atual, com o estágio; o log
+de apresentação continua na tela e não vai ao prompt; a fala espontânea não muda. O `comando` volta e é validado de novo pelo caminho do botão.
+**Testes:** `tests/test_conversa_m2.py` (23, incluindo resposta igual com a chave desligada e a injeção), `web/app/test/comando_chat.test.ts`
+(2 novos), `web/app/e2e/conversa_nova.spec.ts` (servidor falso). Sem rodada, sem gate do comando, sem chamada à API. Desvios: D-CP-M2-1 a 3.

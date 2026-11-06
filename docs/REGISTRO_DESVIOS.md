@@ -549,3 +549,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-06 — CONVERSA_PET, M3: o prompt `conversa-v1` (worker, Claude Code, Sonnet 5.5, branch `v3-conversa-m3-prompt`)](registro/2026-11.md)
 - [2026-11-06 — LONGE_REGULAR, o plano do descritivo da D-C1-3 (worker, Claude Code, Opus 5.5, branch `v3-dc13-plano`)](registro/2026-11.md)
 - [2026-11-06 — CONVERSA_PET, M5 o cliente Claude da fala livre (worker, Claude Code, Sonnet 5.5, branch `v3-conversa-m5-claude`)](registro/2026-11.md)
+- [2026-11-06 — CONVERSA_PET, M2 ligar o `conversa-v1` na conversa do jogo (worker, Claude Code, Sonnet 5.5, branch `v3-conversa-m2-ligar`)](registro/2026-11.md)

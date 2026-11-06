@@ -13,7 +13,7 @@ import { BotaoHx, ChipHx, LinhaHx } from "../../componentes/hx/index.ts";
 import { Peca } from "../../componentes/Imagens.tsx";
 import { ICONE } from "../../decoracao.ts";
 import { FALA_LLM, ligarFalaLLM, rotuloLLM, useFalaLLM } from "../../fala.ts";
-import { escolherModo, useFalaLivre, type ModoFala } from "../../falaLivre.ts";
+import { escolherConversaNova, escolherModo, useFalaLivre, type ModoFala } from "../../falaLivre.ts";
 import { useJogo } from "../../jogo.ts";
 import { abrirEscolhaBrasao } from "../../jornada.ts";
 import type { ParteConfig } from "../../rotas.ts";
@@ -185,6 +185,10 @@ function Fala() {
           </button>
         ))}
       </div>
+      <section className="mc-bloco">
+        <label className="mc-interruptor"><span><b>Conversa nova (teste)</b><small>Só no modo Livre: prompt novo da conversa, com a memória só desta sessão e do estágio de agora.</small></span>
+          <input type="checkbox" role="switch" checked={fl.conversaNova} disabled={fl.modo !== "livre"} onChange={ev => escolherConversaNova((ev.target as HTMLInputElement).checked)} /></label>
+      </section>
       <p className="mc-apoio">Em todos os modos, a fala não decide nada e o que você escreve na conversa não ensina o pet.</p>
     </>
   );
