@@ -2,7 +2,7 @@
  "uri": "saco.gltf",
  "mimeType": "model/gltf+json",
  "validatorVersion": "2.0.0-dev.3.10",
- "validatedAt": "2026-11-06T11:46:12.974Z",
+ "validatedAt": "2026-11-06T12:00:05.522Z",
  "issues": {
   "numErrors": 0,
   "numWarnings": 0,
@@ -20,7 +20,7 @@
     "mimeType": "application/gltf-buffer",
     "storage": "external",
     "uri": "saco.bin",
-    "byteLength": 148464
+    "byteLength": 148240
    },
    {
     "pointer": "/images/0",
@@ -44,7 +44,7 @@
   "hasTextures": true,
   "hasDefaultScene": true,
   "drawCallCount": 2,
-  "totalVertexCount": 4249,
+  "totalVertexCount": 4242,
   "totalTriangleCount": 2082,
   "maxUVs": 1,
   "maxInfluences": 0,

@@ -15,7 +15,7 @@ import * as THREE from "three";
 import type { Mundo } from "../../../../motor/index.ts";
 import { ninhoDe } from "../vistaMundo.ts";
 import { CENA } from "../cenaEstado.ts";
-import { BOLA_SALTO, BOLA_TAU_MS, COCO, KIT_DESDE_NINHO, LUZ_NINHO, SACO_AMASSO, SACO_BALANCO, SACO_DESDE_NINHO, SACO_GIRO } from "./constantes.ts";
+import { BOLA_SALTO, BOLA_TAU_MS, COCO, KIT_DESDE_NINHO, LUZ_NINHO, SACO_AMASSO, SACO_BALANCO, SACO_DESDE_NINHO, SACO_FOLGA_POSTE, SACO_GIRO } from "./constantes.ts";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { GEO_SOMBRA, carregarVariante, curvar, materialSombra, toon } from "./cena.ts";
 import { Cocos } from "./cocos.ts";
@@ -314,7 +314,11 @@ export class Itens {
     const g = this.golpeSaco, t = g && !reduzido ? agora - g.em : Infinity;
     const onda = (o: { amplitude: number; tau: number; periodo: number }, f: (x: number) => number) =>
       t > 6 * o.tau ? 0 : o.amplitude * Math.exp(-t / o.tau) * f((2 * Math.PI * t) / o.periodo);
-    const a = onda(SACO_BALANCO, Math.sin), b = onda(SACO_GIRO, Math.sin), k = onda(SACO_AMASSO, Math.cos);
+    const b = onda(SACO_GIRO, Math.sin), k = onda(SACO_AMASSO, Math.cos);
+    /* o balanco para o lado do poste (-x) para em SACO_FOLGA_POSTE: o fundo do saco anda d * a, e o poste esta a uma folga curta */
+    let a = onda(SACO_BALANCO, Math.sin);
+    const ax = g ? a * g.eixo.z : 0;
+    if (g && ax < -SACO_FOLGA_POSTE) a = -SACO_FOLGA_POSTE / g.eixo.z;
     const p = this.saco.pivo, c = this.saco.corpo, am = this.amasso;
     if (!g) { p.quaternion.identity(); c.matrix.identity(); return; }
     p.quaternion.setFromAxisAngle(g.eixo, a).multiply(this.giroSaco.setFromAxisAngle(CIMA, g.lado * b));

@@ -92,7 +92,7 @@
   {
    "bufferView": 0,
    "componentType": 5126,
-   "count": 2128,
+   "count": 2213,
    "max": [
     0.4250120222568512,
     1.901595115661621,
@@ -108,103 +108,103 @@
   {
    "bufferView": 1,
    "componentType": 5126,
-   "count": 2128,
+   "count": 2213,
    "type": "VEC3"
   },
   {
    "bufferView": 2,
    "componentType": 5126,
-   "count": 2128,
+   "count": 2213,
    "type": "VEC2"
   },
   {
    "bufferView": 3,
    "componentType": 5123,
-   "count": 2937,
+   "count": 3153,
    "type": "SCALAR"
   },
   {
    "bufferView": 4,
    "componentType": 5126,
-   "count": 2121,
+   "count": 2029,
    "max": [
     0.5166119933128357,
     1.6515100002288818,
-    0.29683202505111694
+    0.23798000812530518
    ],
    "min": [
     -0.1507290154695511,
-    0.0007420778274536133,
-    -0.3175640106201172
+    0.24318110942840576,
+    -0.22088190913200378
    ],
    "type": "VEC3"
   },
   {
    "bufferView": 5,
    "componentType": 5126,
-   "count": 2121,
+   "count": 2029,
    "type": "VEC3"
   },
   {
    "bufferView": 6,
    "componentType": 5126,
-   "count": 2121,
+   "count": 2029,
    "type": "VEC2"
   },
   {
    "bufferView": 7,
    "componentType": 5123,
-   "count": 3309,
+   "count": 3093,
    "type": "SCALAR"
   }
  ],
  "bufferViews": [
   {
    "buffer": 0,
-   "byteLength": 25536,
+   "byteLength": 26556,
    "byteOffset": 0,
    "target": 34962
   },
   {
    "buffer": 0,
-   "byteLength": 25536,
-   "byteOffset": 25536,
+   "byteLength": 26556,
+   "byteOffset": 26556,
    "target": 34962
   },
   {
    "buffer": 0,
-   "byteLength": 17024,
-   "byteOffset": 51072,
+   "byteLength": 17704,
+   "byteOffset": 53112,
    "target": 34962
   },
   {
    "buffer": 0,
-   "byteLength": 5874,
-   "byteOffset": 68096,
+   "byteLength": 6306,
+   "byteOffset": 70816,
    "target": 34963
   },
   {
    "buffer": 0,
-   "byteLength": 25452,
-   "byteOffset": 73972,
+   "byteLength": 24348,
+   "byteOffset": 77124,
    "target": 34962
   },
   {
    "buffer": 0,
-   "byteLength": 25452,
-   "byteOffset": 99424,
+   "byteLength": 24348,
+   "byteOffset": 101472,
    "target": 34962
   },
   {
    "buffer": 0,
-   "byteLength": 16968,
-   "byteOffset": 124876,
+   "byteLength": 16232,
+   "byteOffset": 125820,
    "target": 34962
   },
   {
    "buffer": 0,
-   "byteLength": 6618,
-   "byteOffset": 141844,
+   "byteLength": 6186,
+   "byteOffset": 142052,
    "target": 34963
   }
  ],
@@ -216,7 +216,7 @@
  ],
  "buffers": [
   {
-   "byteLength": 148464,
+   "byteLength": 148240,
    "uri": "saco.bin"
   }
  ]

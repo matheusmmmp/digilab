@@ -1,7 +1,7 @@
 # O conserto do saco no Blender (docs/TAREFA_V3_ITENS_3D.md, secao 4.1, etapas 4 a 7). Ao contrario da bola, a malha da Meshy fica: ela
 # saiu com a forma do concept e abaixo do teto (2 082 triangulos; teto de 2 414). O que o script faz:
 #   1. corta a malha em duas pecas pelo vao entre o poste e o saco: o `saco` (a corrente e o saco) sao as faces com o centro do lado do
-#      saco (x < CORTE_X, no glb da Meshy) e abaixo do braco (z < CORTE_Z); o resto e o `suporte` (a base, o poste e o braco). As fatias
+#      saco (x < CORTE_X, no glb da Meshy), abaixo do braco (z < CORTE_Z) e acima da pedra da base (z > CORTE_Z_BAIXO); o resto e o `suporte` (a base, o poste e o braco). As fatias
 #      por altura (docs/TAREFA_V3_ITENS_3D.md, secao 12) mostram o vao em toda a altura do saco: o saco so toca o suporte pela corrente, no braco;
 #   2. gira 180 graus em volta da vertical, para o poste ficar do lado -x, como no saco procedural de antes (itens.ts, SACO_PENDURADO);
 #   3. troca a textura pela chapada (achatar_cores.py), com o material so de cor (sem metal, rugosidade 1);
@@ -12,7 +12,7 @@ import math, sys, bpy, bmesh
 from mathutils import Matrix
 
 ent, cor, sai, previa = sys.argv[sys.argv.index("--") + 1:]
-CORTE_X, CORTE_Z = 0.05, 0.63
+CORTE_X, CORTE_Z, CORTE_Z_BAIXO = 0.05, 0.63, -0.7
 
 bpy.ops.wm.read_factory_settings(use_empty=True)
 bpy.ops.import_scene.gltf(filepath=ent)
@@ -35,7 +35,7 @@ bpy.ops.mesh.select_all(action="DESELECT")
 n = 0
 for f in bm.faces:
     c = f.calc_center_median()
-    f.select = c.x < CORTE_X and c.z < CORTE_Z
+    f.select = c.x < CORTE_X and CORTE_Z_BAIXO < c.z < CORTE_Z
     n += f.select
 bmesh.update_edit_mesh(o.data)
 print("CORTE faces do saco", n, "de", len(bm.faces))
