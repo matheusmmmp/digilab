@@ -217,6 +217,10 @@ export const comerAgora = (): EscolhaComer => ultimaComer;
 let emburrando = false;
 export const marcarEmburrar = (b: boolean): void => { emburrando = b; };
 export const emburrarAgora = (): boolean => emburrando;
+/** o quadro Dormir do atlas esta no corpo do pet agora? (mesmo caminho do Emburrar; o e2e le por window.__digilab.dormir) */
+let dormindoQ = false;
+export const marcarDormir = (b: boolean): void => { dormindoQ = b; };
+export const dormirAgora = (): boolean => dormindoQ;
 /** so para os testes: esquece o comer visto */
 export function esquecerComer(): void { comerVisto = null; comendo = null; momentoPendente = null; ultimaComer = NADA_COMER; }
 

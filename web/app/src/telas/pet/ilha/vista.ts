@@ -19,7 +19,7 @@ import { Seguidor, dentroDoMapa } from "../vistaMundo.ts";
 import { velocidadeAtual } from "../../../tempo.ts";
 import { AFASTAR_MAX, BATER_BOLA_MS, CAMERAS, COBERTO_MS, GOLPE_DIST, GOLPE_MS, KITS_COBERTO_MS, FPS_MIN, LARGURA_MIN, LONGE, NEVOA, PERTO, QUEDA_MS,
   RAZAO_MAX, TEXEL_ALVO, TREINO_MS, type CameraHabitat } from "./constantes.ts";
-import { CURVA, type CenaIlha, type Objetos } from "./cena.ts";
+import { CURVA, type CenaIlha, type Objetos, cobrirFundo } from "./cena.ts";
 import { estiloDe, type Estilo } from "./estilos.ts";
 import { paraMundoCel, paraTelaNdc, type CameraLida, type Dobra } from "./curva.ts";
 import { ilhaDe, type Ilha } from "./grade.ts";
@@ -236,6 +236,7 @@ class VistaIlha {
     CURVA.uTempo.value = reduzido ? 0 : agora / 1000;
     const noite = eNoite(m.e.tick % TPD);
     if (noite !== this.noite) { this.noite = noite; this.cenaIlha.aplicarNoite(noite); }
+    cobrirFundo(this.cenaIlha.cena.background, this.camera.aspect);
     this.objetos?.noite?.(noite);
     this.itens.sincronizar(mu, m.e.tick, noite, agora, dtMs, m.lesionadoDesde !== null, reduzido, m.e.sujeira, this.petCel);
     const ret = this.papel.atualizar({

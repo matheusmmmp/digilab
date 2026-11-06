@@ -13,7 +13,7 @@ from dataclasses import dataclass
 from .corpus import Especie, bloco_estilo, repete_citacao
 from .fatos import TIPO_MENTIRA, estagio_de, fatos_de_estado
 from .ollama import ClienteOllama
-from .prompt import MAX_CHARS, MAX_TOKENS, VERSAO_PROMPT, VERSOES_VOZ, esquema, mensagens
+from .prompt import MAX_CHARS, MAX_TOKENS, VERSAO_PROMPT, VERSOES_VOZ, esquema, fatos_da_conversa, mensagens
 from .saida import FALA_GENERICA, FalaLivre, SaidaInvalida, aparar, ler
 
 
@@ -50,7 +50,7 @@ def gerar(cliente: ClienteOllama, estado: dict, situacao: str, fala_jogador: str
     est = estagio_de(fatos)
     estilo = bloco_estilo(especie, rival) if especie is not None else None
     msgs = mensagens(fatos, situacao, fala_jogador, historico, versao=versao, estilo=estilo, comando=comando)
-    base = dict(fatos=tuple(f.para_dict() for f in fatos), estagio=est, modelo=cliente.modelo, versao_prompt=versao,
+    base = dict(fatos=tuple(f.para_dict() for f in fatos_da_conversa(fatos, historico, versao)), estagio=est, modelo=cliente.modelo, versao_prompt=versao,
                 especie=especie.especie if especie is not None else None)
     try:
         r = cliente.conversar(msgs, esquema(est, comando), MAX_TOKENS[est], semente)

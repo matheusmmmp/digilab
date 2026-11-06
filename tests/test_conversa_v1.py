@@ -234,7 +234,7 @@ def test_injecao_nao_vira_fatos_nem_regra():
     assert m[0]["content"] == msgs()[0]["content"]
     # os ids citaveis sao os do estado, nao o M9
     assert [f.id for f in fatos_de_estado(estado())] == [l[1:l.index("]")] for l in pedido.splitlines()
-                                                           if re.match(r"\[[A-Z]\d+\] ", l)]
+                                                           if re.match(r"\[[A-IK-Z]\d+\] ", l)]     # [J] e do dono (M4)
 
 
 def test_fala_do_jogador_cortada_em_300():
