@@ -113,3 +113,19 @@ igual. O `livre-v2` e o `livre-v8` continuam no pacote e reproduzem.
 - **DM1-1 (2026-11-06, Matheus): o `livre-v9` da M1 fica como está**, com o gate do comando falho por 1,7 ponto (imperativos 78,3 %
   contra o mínimo de 80 %; falsos positivos 3,3 %, passa; `artifacts_fala_livre/comando/rodada4_v9/`, PR #626). Recomendação do worker e
   do Gerente: os erros vão para o lado seguro (comando nulo). O reforço da regra do comando (v9b) fica para depois da M3, em faixa nova.
+
+## M3 — o prompt `conversa-v1` (2026-11-06, worker Claude Code, Sonnet 5.5, branch `v3-conversa-m3-prompt`)
+
+Feito (decisão D2): `conversa-v1` em `digilab_fala_livre/prompt.py`, ao lado das outras versões (nenhuma mudou; os 176 testes da fala livre
+passam). Persona e estilo da espécie no começo; as REGRAS DE VERDADE (6, enxutas) repetidas no pedido, logo antes da fala do dono; tamanho por
+estágio sem "frases curtas" para todos; pedido de reagir, manter o assunto e devolver pergunta ou puxar um fato (nunca tema inventado); exemplos
+à mão por estágio (4 a 5 trocas, rotulados); histórico `(jogador, pet, estágio)` com descarte das trocas de outro estágio; recusa dos fatos
+H/O/P/L/F/W; comando e estilo opcionais por parâmetro; ponto de extensão do `[J]` (M4) só documentado. Testes: `tests/test_conversa_v1.py`
+(29, incluindo a injeção).
+
+Ensaio qualitativo, sem gate: `artifacts_conversa_pet/m3_ensaio/ensaio.md` (e `.json`, `ensaio.py`), `gemma2:9b`, sementes de diagnóstico.
+Tamanho médio da fala: adolescente 7 → 45 caracteres, adulto 10 → 36; perguntas ao dono: adolescente 0 → 5 de 8, adulto 1 → 1 de 8. Limites:
+os exemplos têm o mesmo estado do ensaio (uma fala saiu copiada), o adulto ainda responde curto às vezes, sem verificador, uma conversa por
+estágio. Desvios: D-CP-M3-1 a 4 em `docs/registro/2026-11.md`.
+
+Não ligado no servidor nem na página (M2, leva 2). Depende da M2 mandar a marca de estágio no histórico.
