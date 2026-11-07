@@ -56,11 +56,30 @@ export interface RelogioTR {
   readonly ritmo: number; readonly atordoaInterrupcao: number; readonly andar: number; readonly recuo: number; readonly arrancada: number;
   readonly projetil: number; readonly perto: number; readonly medio: number; readonly contato: number; readonly empurrao: number;
   readonly disparo: number;
+  /** o empurrao de verdade de quem leva o golpe (a v18; docs/TAREFA_V3_LUTA_EMPURRAO.md). null = desligado (a v13 a v17): a luta sai byte a
+      byte como antes */
+  readonly empurraoAlvo: EmpurraoAlvo | null;
+}
+/** o empurrao de quem leva o golpe: o alvo desliza para tras pela forca do golpe e, nos golpes que derrubam, cai (atordoado) */
+export interface EmpurraoAlvo {
+  /** px que o alvo desliza para tras quando leva o golpe em cheio, por golpe (o que nao esta aqui nao empurra) */
+  readonly forca: Readonly<Record<string, number>>;
+  /** os golpes que derrubam quem os leva em cheio */
+  readonly derruba: readonly string[];
+  /** quanto dura a queda (passos): o caido nao decide e perde a acao em curso e o preparo */
+  readonly queda: number;
+  /** em quantos passos o empurrao se faz (o deslize, a velocidade constante) */
+  readonly deslize: number;
+  /** o fator do empurrao sob a pele dura (que tambem segura a queda) */
+  readonly guarda: number;
+  /** o fator do empurrao na defesa e no contra-golpe (as posturas), que tambem seguram a queda */
+  readonly defesa: number;
 }
 /** o relogio dos pets v13 (os numeros de CTR_TR, sem calibracao; o disparo sem multiplicador, 1) */
 export const RELOGIO_V13: RelogioTR = {
   ritmo: CTR_TR.ritmo, atordoaInterrupcao: CTR_TR.atordoaInterrupcao, andar: CTR_TR.andar, recuo: CTR_TR.recuo, arrancada: CTR_TR.arrancada,
   projetil: CTR_TR.projetil, perto: CTR_TR.perto, medio: CTR_TR.medio, contato: CTR_TR.contato, empurrao: CTR_TR.empurrao, disparo: 1,
+  empurraoAlvo: null,
 };
 /** o relogio candidato dos pets v14, da fase 1 da rodada de equilibrio (docs/PLANO_EQUILIBRIO_COMBATE_TR.md; docs/EQUILIBRIO_COMBATE_TR.md,
     fase 1). PROPOSTOS, calibrados so nas sementes de calibracao (68101 a 68505): web/app/scripts/medicoes/equilibrio_tr/fase1/grade3/
@@ -73,6 +92,19 @@ export const RELOGIO_V13: RelogioTR = {
       conferencia em disparo/conferencia_d6/). Todo valor acima de 1 reprova o T-1 da fase 1 (a luta media cai para perto de 35 s), e o
       Matheus decidiu ligar o 6 mesmo assim (DE-9, 2026-10-30): o T-1 fica reprovado e registrado como esta */
 export const RELOGIO_V14: RelogioTR = { ...RELOGIO_V13, empurrao: 0, medio: 120, recuo: .6, arrancada: 500 * PASSO_TR_MS / 1000, disparo: 6 };
+
+/** o empurrao dos pets v18 (docs/TAREFA_V3_LUTA_EMPURRAO.md, secao 3.2). DECIDIDOS pelo Matheus em 2026-11-06 pela recomendacao (EMP-1 a
+    EMP-8), SEM FONTE (nenhum vem de medicao; a etapa 4 da tarefa mede o efeito):
+    - EMP-1: a investida 20 px (era 40; rodada curta do F-3, a medicao A, aceita pelo Matheus em 2026-11-07, PROPOSTO, SEM FONTE), o pesado
+      60 px; o golpe rapido, a finta e o disparo nao empurram (com 6 px no leve a fase 1 da rodada viu as listas defensivas no limite de tempo; docs/EQUILIBRIO_COMBATE_TR.md, fase 1);
+    - EMP-2: o pesado e a investida derrubam, 62 passos (~1 s); EMP-3: o caido pode levar golpe;
+    - EMP-5: a pele dura corta pela metade e segura a queda; a defesa e o contra-golpe nao sao empurrados nem caem (trocada pelo Matheus em
+      2026-11-06, depois das medicoes: "Testar defesa sem empurrao" e depois "Contra-golpe sem empurrao"; antes as duas posturas cortavam
+      pela metade, como a pele);
+    - EMP-6: o deslize em 10 passos (160 ms) */
+export const EMPURRAO_V18: EmpurraoAlvo = { forca: { investida: 20, pesado: 60 }, derruba: ["investida", "pesado"], queda: 62, deslize: 10, guarda: .5, defesa: 0 };
+/** o relogio dos pets v18: o da v14 com o empurrao de quem leva o golpe (o empurrao antigo, o do atacante e do alvo, segue 0) */
+export const RELOGIO_V18: RelogioTR = { ...RELOGIO_V14, empurraoAlvo: EMPURRAO_V18 };
 
 /** os fatores candidatos dos pets v14, da fase 4 da rodada de equilibrio (docs/EQUILIBRIO_COMBATE_TR.md, fase 4). PROPOSTOS, calibrados so
     nas sementes de calibracao (68101 a 68505): web/app/scripts/medicoes/equilibrio_tr/fase4/. As tabelas inteiras, com as mesmas chaves

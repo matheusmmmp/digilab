@@ -22,7 +22,7 @@ export interface Vida { variante: Variante; semente: number; versao: number; est
 
 /** `ponte` (PE3): grava no ovo a marca "pl" da ponte da luta, como o jogo faz nos ovos novos (src/produto.ts); sem ela, a vida de hoje (o gabarito) */
 export function nascer(v: Variante, semente: number, ponte: boolean | "eps" = false): Motor {
-  const m = v === "v16" ? petDeTeste(semente) : new Motor(semente);
+  const m = v === "v16" ? petDeTeste(semente) : new Motor(semente, 17);   // a v17 pedida: o ovo padrao e a v18 (LUTA_EMPURRAO), e o gabarito e o da v17
   if (v !== "v16") m.ligarProduto({ chamadoPelaFome: true, decisaoNaComida: true, chamadosPeloCorpo: true });
   if (v === "v17_modular" || v === "v17_cb") m.trocarCerebro("modular");
   if (v === "v17_a") m.trocarCerebro("a");
@@ -77,7 +77,7 @@ export const todasAsVidas = (): Vida[] => VARIANTES.flatMap(v => SEMENTES.map(s 
 
 /** o replay do registro evento a evento: depois de cada "l", as tres assinaturas (a mesma conta do resumir); o motor refeito sai junto */
 export function refazer(v: Vida): { m: Motor; lutas: Pick<Luta, "evento" | "gambits" | "confianca" | "modular">[] } {
-  const m = v.variante === "v16" ? petDeTeste(v.semente) : new Motor(v.semente), lutas: Pick<Luta, "evento" | "gambits" | "confianca" | "modular">[] = [];
+  const m = v.variante === "v16" ? petDeTeste(v.semente) : new Motor(v.semente, 17), lutas: Pick<Luta, "evento" | "gambits" | "confianca" | "modular">[] = [];
   v.log.forEach((ev, i) => {
     m.aplicarEvento(ev);
     if (ev[1] === "l") lutas.push({ evento: i, gambits: sha(JSON.stringify(m.gp!.assinatura())), confianca: sha(JSON.stringify(m.conf.assinatura())),

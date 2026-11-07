@@ -16,8 +16,9 @@ export const IMPACTO = {
   fracaoTremidaMax: .15,
 } as const;
 
-/** um acerto desenhavel: quem levou, quando (passo da luta), quanto (fracao da vida maxima do alvo) e se foi forte */
-export interface ImpactoTR { lado: number; t0: number; frac: number; forte: boolean }
+/** um acerto desenhavel: quem levou, quando (passo da luta), quanto (fracao da vida maxima do alvo) e se foi forte; motor: o motor empurrou
+    o alvo neste acerto (o empurrao de verdade da v18, LUTA_EMPURRAO): o empurrao so visual acima nao entra, para nao somar dois */
+export interface ImpactoTR { lado: number; t0: number; frac: number; forte: boolean; motor?: boolean }
 
 /** os numeros que sobem (dano, cura, erro) e somem: o tempo de cada um em passos da luta */
 export interface NumeroTR { txt: string; cor: string; t0: number; lado: number; forte?: boolean }
@@ -47,6 +48,8 @@ export function aplicarEventosTR(v: VisualTR, sim: LutaTR, ev: readonly EventoTR
     } else if (e.tipo === "cura") v.numeros.push({ txt: "+" + Math.round(e.valor), cor: COR_CURA, t0: e.t, lado: e.lado });
     else if (e.tipo === "erro") v.numeros.push({ txt: "errou", cor: COR_TINTA, t0: e.t, lado: e.lado });
     else if (e.tipo === "interrompe") v.numeros.push({ txt: "interrompido!", cor: COR_TINTA, t0: e.t, lado: e.lado });
+    /* o empurrao do motor (a v18) sai no mesmo passo do dano: o acerto desse lado passa a ser do motor */
+    else if (e.tipo === "empurrao" && e.px > 0) for (const i of v.impactos) if (i.lado === e.lado && i.t0 === e.t) i.motor = true;
   }
   v.numeros = v.numeros.filter(n => sim.S.passo - n.t0 < VIDA_NUMERO);
   v.impactos = v.impactos.filter(i => sim.S.passo - i.t0 < IMPACTO.durMax);
@@ -75,11 +78,36 @@ export const clarao = (v: VisualTR, passo: number, lado: number): boolean => viv
 export function empurraoDoPasso(v: VisualTR, passo: number, lado: number): number {
   let m = 0;
   for (const i of vivos(v, passo)) {
-    const idade = passo - i.t0; if (i.lado !== lado || idade >= IMPACTO.durEmpurrao) continue;
+    const idade = passo - i.t0; if (i.lado !== lado || i.motor || idade >= IMPACTO.durEmpurrao) continue;
     const meio = IMPACTO.durEmpurrao / 2, f = idade < meio ? (idade + 1) / meio : (IMPACTO.durEmpurrao - idade) / meio;
     m = Math.max(m, Math.round(IMPACTO.empurraoPx[i.forte ? 1 : 0] * Math.min(1, f)));
   }
   return m;
+}
+
+/** O movimento da luta de verdade (LUTA_EMPURRAO, etapa 5; so vista, a partir do estado do motor). PROPOSTO, SEM FONTE: ajustar nas
+    capturas. pulo: quanto o caido sobe (px de CSS) enquanto e jogado para tras; rastro: as copias da investida, a cada quantos passos de
+    arrancada e com que opacidade; poeira: o ciclo das nuvens nos pes (passos) e o tamanho delas (pixels de poeira) */
+export const MOVIMENTO = { pulo: 10, rastroPassos: 3, rastroAlfa: [.4, .25, .12], poeiraCiclo: 8, poeiraTam: 3 } as const;
+
+/** a altura (px de CSS, para cima) de quem cai enquanto o motor ainda o desliza para tras: um arco que sobe e volta ao chao no fim do deslize;
+    0 fora da queda */
+export function puloDaQueda(passo: number, quedaDe: number, deslizeAte: number): number {
+  if (quedaDe < 0 || passo < quedaDe || passo >= deslizeAte) return 0;
+  const dur = deslizeAte - quedaDe, f = (passo - quedaDe) / dur;
+  return Math.round(MOVIMENTO.pulo * 4 * f * (1 - f));
+}
+
+/** as nuvens de poeira nos pes neste passo (na arrancada e no deslize): deslocamentos em pixels de poeira para tras (dx >= 0, o desenho poe o
+    sinal) e para cima, e o tamanho. idade: os passos desde que o movimento comecou. Sem acaso: a mesma idade da a mesma poeira */
+export function poeiraDoPasso(idade: number): { dx: number; dy: number; tam: number }[] {
+  if (idade < 0) return [];
+  const out: { dx: number; dy: number; tam: number }[] = [];
+  for (let k = 0; k < 3; k++) {
+    const fase = (idade + k * 3) % MOVIMENTO.poeiraCiclo, f = fase / MOVIMENTO.poeiraCiclo;
+    out.push({ dx: Math.round(2 + f * 6 + k * 2), dy: Math.round(f * 3 + (k % 2)), tam: Math.max(1, MOVIMENTO.poeiraTam - Math.floor(f * 3)) });
+  }
+  return out;
 }
 
 /** os pixels da faisca de um impacto: deslocamentos (em unidades de pixel de faisca) e a cor, no passo dado. Os raios sao fixos (sem acaso) */

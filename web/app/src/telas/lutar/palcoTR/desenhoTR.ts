@@ -9,7 +9,7 @@ import { CTR_TR, NOME_V2, PASSO_TR_MS, type EventoTR, type LadoTR, type LutaTR }
 import { chaveUp, desenharSprite, dimSprite, quadroDoClipe, type AtlasOk, type Clipe } from "../../../atlas.ts";
 import { zoomAtual } from "../../../escala.ts";
 import { VISUAL_CENA, prontas, type IdCenaTR } from "./cenasTR.ts";
-import { IMPACTO, COR_FORTE, COR_TINTA, VIDA_NUMERO, clarao, empurraoDoPasso, faiscaDoPasso, pixelsDoTexto, textoDeDano, tremidaDoPasso, type VisualTR } from "./efeitosTR.ts";
+import { IMPACTO, COR_FORTE, COR_TINTA, MOVIMENTO, VIDA_NUMERO, clarao, empurraoDoPasso, faiscaDoPasso, pixelsDoTexto, poeiraDoPasso, puloDaQueda, textoDeDano, tremidaDoPasso, type VisualTR } from "./efeitosTR.ts";
 
 /** os efeitos de impacto (so vista) ficam em efeitosTR.ts; estes nomes continuam saindo daqui */
 export { aplicarEventosTR, visualNovoTR, type NumeroTR, type VisualTR } from "./efeitosTR.ts";
@@ -30,6 +30,8 @@ export const movimentoReduzido = (): boolean => typeof matchMedia === "function"
 /** o clipe do lado agora e o tempo dentro dele (ms da luta) */
 export function clipeDoLado(l: LadoTR, passo: number, koEm: number | null): { clipe: Clipe; t: number } {
   if (l.hp <= 0) return { clipe: "Die", t: (passo - (koEm ?? passo)) * PASSO_TR_MS };
+  /* a queda do empurrao (a v18): o Stun desde o passo em que caiu, ate levantar */
+  if (l.quedaDe >= 0 && passo >= l.quedaDe && passo < l.atordoadoAte) return { clipe: "Stun", t: (passo - l.quedaDe) * PASSO_TR_MS };
   if (passo < l.atordoadoAte) return { clipe: "Stun", t: (passo - (l.atordoadoAte - CTR_TR.atordoaInterrupcao)) * PASSO_TR_MS };
   const a = l.acao;
   if (a && a.nome === "investida" && !a.feito) return { clipe: "Run", t: (passo - a.inicio) * PASSO_TR_MS };
@@ -100,16 +102,36 @@ export function desenharLutaTR(cv: HTMLCanvasElement, c: CenaDesenho, a: AtlasOk
     if (!s?.clipes && lado && lado.hp <= 0) cx.globalAlpha = .45;
     const opc = { sombria: L.sombra, espelho: i === 1, ...(s?.clipes ? { clipe } : {}) }, dx = Math.round(empAlvo(i) * K);
     empurros[i] = dx / K;
+    /* a queda (a v18): quem cai sobe num arco enquanto o motor o desliza para tras; o x e sempre o do motor */
+    const dy = reduzido || !lado ? 0 : -Math.round(puloDaQueda(passoLuta, lado.quedaDe, lado.deslizeAte) * K);
+    /* o rastro da investida: copias mais apagadas atras de quem arranca, so no caminho ja feito (desde o x0) */
+    const inv = lado?.acao?.nome === "investida" && !lado.acao.feito ? lado.acao : null;
+    if (!reduzido && inv && c.sim) MOVIMENTO.rastroAlfa.forEach((alfa, k) => {
+      const atras = (k + 1) * MOVIMENTO.rastroPassos * c.sim!.S.C.arrancada, rumo = i ? -1 : 1;
+      if (rumo * (lado!.x - inv.x0) < atras) return;
+      const xr = centros[i] + xTela(lado!.x - rumo * atras, W) - xTela(lado!.x, W);
+      cx.globalAlpha = alfa; desenharSprite(cx, a, L.sprite, xr * K - w * e / 2, PES * K - h * e, e, iq, opc); cx.globalAlpha = 1;
+    });
     if (!reduzido && c.sim && clarao(c.visual, passo, i)) {
       /* o clarao: o sprite vira branco (so onde ha pixel) numa folha a parte, na mesma escala inteira */
       const m = 4 * e, f = document.createElement("canvas"); f.width = w * e + 2 * m; f.height = h * e + 2 * m;
       const fx = f.getContext("2d"); if (!fx) throw new Error("canvas 2d indisponível");
       desenharSprite(fx, a, L.sprite, m, m, e, iq, opc);
       fx.globalCompositeOperation = "source-atop"; fx.fillStyle = "#fff"; fx.fillRect(0, 0, f.width, f.height);
-      cx.imageSmoothingEnabled = false; cx.drawImage(f, Math.round(x * K - w * e / 2) - m + dx, Math.round(PES * K - h * e) - m);
-    } else desenharSprite(cx, a, L.sprite, x * K - w * e / 2 + dx, PES * K - h * e, e, iq, opc);
+      cx.imageSmoothingEnabled = false; cx.drawImage(f, Math.round(x * K - w * e / 2) - m + dx, Math.round(PES * K - h * e) - m + dy);
+    } else desenharSprite(cx, a, L.sprite, x * K - w * e / 2 + dx, PES * K - h * e + dy, e, iq, opc);
     cx.globalAlpha = 1;
     topo.push(PES - h * e / K);
+  });
+  /* a poeira nos pes (a v18 e a investida): na arrancada, atras de quem arranca; no deslize do empurrao, na frente de quem e empurrado (o
+     lado de onde veio o golpe). Pixels inteiros, sem acaso */
+  if (!reduzido && c.sim) c.sim.S.L.forEach((l, i) => {
+    const inv = l.acao?.nome === "investida" && !l.acao.feito ? l.acao : null, desliza = passoLuta < l.deslizeAte;
+    if (!inv && !desliza) return;
+    const idade = inv ? passoLuta - inv.inicio : passoLuta - (l.deslizeAte - c.sim!.S.C.empurraoAlvo!.deslize),
+      atras = i ? 1 : -1, sinal = inv ? atras : -atras, ps = Math.max(1, Math.round(2 * K));
+    cx.fillStyle = "rgba(214,196,160,.8)";
+    for (const p of poeiraDoPasso(idade)) cx.fillRect(Math.round((centros[i] + sinal * (14 + p.dx * 2)) * K), Math.round((PES - 2 - p.dy * 2) * K), ps * p.tam, ps * p.tam);
   });
   /* os projeteis em voo */
   if (c.sim) for (const pr of c.sim.S.projeteis) {

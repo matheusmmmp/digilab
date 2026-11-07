@@ -7,7 +7,7 @@
    assinatura das vidas v13 nao muda (test/vidas_v13.test.ts). */
 import {
   ACAO_CHAMADO, ACOES_DONO_JOGO_V11, ACOES_PET, CAT, CDJ, CHAMADO_BEBE, CHAMADO_BEBE_CORPO, CHAMADO_FOME_CORPO, CHE, CLE, CMG, EIXOS_TEMP, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
-  TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V14, VERSAO_V15, VERSAO_V17, VERSOES_PET, CEREBROS,
+  TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V14, VERSAO_V15, VERSAO_V17, VERSOES_PET, CEREBROS, ehCerebroTrocavel,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
 import { APRENDIZADO_V14, CHIP_ANTES_V14 } from "./combate_tr/constantes_tr.ts";
@@ -287,7 +287,7 @@ export class Motor {
         b.consequenciaMundo(a, oc, depois);
       },
     };
-    const politica: PoliticaCorpoMundo = versao === VERSAO_V17 ? politicaTrocavel : lab === null ? politicaA : {
+    const politica: PoliticaCorpoMundo = ehCerebroTrocavel(versao) ? politicaTrocavel : lab === null ? politicaA : {
       agir(o, rng) {
         const t = m.v11!.laco.estado.tick, d = m.desejoAtual(o, t), a = lab.agir(o, rng);
         m._decisaoV11(o, a, t, d);
@@ -304,7 +304,7 @@ export class Motor {
        a regra de cada decisao vai ao registro do mundo, como o ultima_regra do Python */
     const laco = new MotorCorpoMundo(politica, semente, CCO_CORPO_V11, estadoNascimentoPy(TICK_INICIAL),
                                      { regra: () => braco.cerebro.ultimaRegra, cfgMundo: CMU_MVP, digibrain: lab !== null,
-                                       bolaNoGolpe: versao === VERSAO_V15 || versao === VERSAO_V17 });     // o pet de teste (v16) e a v14 com o modular: a bola de antes; a v17 e a v15
+                                       bolaNoGolpe: versao === VERSAO_V15 || ehCerebroTrocavel(versao) });     // o pet de teste (v16) e a v14 com o modular: a bola de antes; a v17 e a v15
     this.v11 = { braco, laco };
     this.e = laco.estado;
     /* o vinculo B (coerencia por situacao, sem pedido), sem obediencia */
@@ -426,7 +426,7 @@ export class Motor {
     if (!v || typeof v !== "object" || (chaves !== "luta" && chaves !== "luta,eps") || (v as { luta: unknown }).luta !== true
       || (chaves === "luta,eps" && (v as { eps: unknown }).eps !== true))
       throw new Error(`marca da ponte da luta inválida: ${JSON.stringify(v)}`);
-    if (this.versao !== VERSAO_V17 && this.versao !== VERSAO_PET_LAB) throw new Error(`só os pets v${VERSAO_PET_LAB} e v${VERSAO_V17} têm a ponte da luta (este é v${this.versao})`);
+    if (!ehCerebroTrocavel(this.versao) && this.versao !== VERSAO_PET_LAB) throw new Error(`só os pets v${VERSAO_PET_LAB} e v${VERSAO_V17} (e a v18, a v17 com o empurrão) têm a ponte da luta (este é v${this.versao})`);
     if (this.ponteLuta || this.nDecisoes || this.nDono || this.e.tick !== TICK_INICIAL)
       throw new Error("a marca da ponte da luta vai uma vez, no começo do registro");
     this.ponteLuta = true; this.epsLuta = chaves === "luta,eps";
@@ -1107,7 +1107,7 @@ export class Motor {
     this._trocarCerebro(v);
   }
   private _validarCerebro(v: unknown): asserts v is { cerebro: "modular" | "a" } {
-    if (this.versao !== VERSAO_V17) throw new Error(`só os pets v${VERSAO_V17} trocam de cérebro (este é v${this.versao})`);
+    if (!ehCerebroTrocavel(this.versao)) throw new Error(`só os pets v${VERSAO_V17} (e a v18, a v17 com o empurrão) trocam de cérebro (este é v${this.versao})`);
     if (!v || typeof v !== "object" || Object.keys(v).join() !== "cerebro" || !(CEREBROS as readonly unknown[]).includes((v as { cerebro: unknown }).cerebro))
       throw new Error(`troca de cérebro inválida: ${JSON.stringify(v)}`);
     const c = (v as { cerebro: string }).cerebro, noOvo = !this.cerebroEscolhido && !this.nDecisoes && this.e.tick === TICK_INICIAL;

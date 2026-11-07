@@ -12,7 +12,7 @@ import type { Perfil } from "../catalogo.ts";
 import { CSO, CV, CV21 } from "../constantes.ts";
 import { derivarSemente } from "../mundo.ts";
 import { criarRng, type Rng } from "../rng.ts";
-import { CTR_TR, RELOGIO_V13, RELOGIO_V14, T_TR, type RelogioTR } from "./constantes_tr.ts";
+import { CTR_TR, RELOGIO_V13, RELOGIO_V14, RELOGIO_V18, T_TR, type RelogioTR } from "./constantes_tr.ts";
 import { decidirTR, faixaTR, intencaoTR, marcaAtivaTR, peleAtivaTR } from "./controlador.ts";
 
 /** a acao em curso: ocupa os passos [inicio, fim); o golpe cai em inicio + instante */
@@ -42,6 +42,10 @@ export interface LadoTR {
   /** as acoes comecadas, na ordem (oponente_repete, oponente_frequente) */
   hist: string[];
   cura: CuraLuta | null;
+  /** o empurrao em curso (so com o empurraoAlvo, a v18): px por passo, somados ao movimento ate o passo deslizeAte (exclusivo) */
+  deslizeV: number; deslizeAte: number;
+  /** o passo da ultima queda (-1: nunca caiu); a queda vai ate atordoadoAte */
+  quedaDe: number;
 }
 interface ProjetilTR { de: number; x: number; marcado: boolean; emboscada: boolean; causa: number }
 /** C: os numeros do relogio desta luta (os das regras dela; RelogioTR) */
@@ -55,6 +59,8 @@ export type EventoTR =
   | { t: number; tipo: "erro"; lado: number; nome: string }
   | { t: number; tipo: "interrompe"; lado: number }
   | { t: number; tipo: "cura"; lado: number; valor: number }
+  /** so com o empurraoAlvo (a v18): o lado leva um empurrao de px (o deslize comeca no passo seguinte) e, com queda, cai */
+  | { t: number; tipo: "empurrao"; lado: number; px: number; queda: boolean }
   | { t: number; tipo: "fim"; pontosA: number; fim: "ko" | "limite" };
 export interface ResultadoLutaTR {
   /** a vida maxima e o Guts do comeco de cada lado */
@@ -84,11 +90,13 @@ export const sementePoliticaTR = (semente: number, lado: number): number => Numb
 const LIMITE_ESQ = CTR_TR.centro - CTR_TR.meiaLargura, LIMITE_DIR = CTR_TR.centro + CTR_TR.meiaLargura;
 
 /** o relogio da luta: o das regras, ou o da versao delas (a v14, RELOGIO_V14; antes, RELOGIO_V13) */
-export const relogioDe = (R: RegrasLuta | null | undefined): RelogioTR => R?.relogio ?? (R && R.versaoPet >= 14 ? RELOGIO_V14 : RELOGIO_V13);
+export const relogioDe = (R: RegrasLuta | null | undefined): RelogioTR =>
+  R?.relogio ?? (R && R.versaoPet >= 18 ? RELOGIO_V18 : R && R.versaoPet >= 14 ? RELOGIO_V14 : RELOGIO_V13);
 export function estadoTR(pa: Perfil, pb: Perfil, C: RelogioTR = RELOGIO_V13): EstadoTR {
   const L = (p: Perfil, x: number): LadoTR => ({
     p, hp: p.hpMax, hpMax: p.hpMax, guts: p.guts0, gutsMax: p.gutsMax, regen: p.regen, x, ritmo: p.ritmoCarta ?? C.ritmo, acao: null, ultima: -1, prep: false,
     prepPele: false, atordoadoAte: 0, marcaAte: 0, peleAte: 0, sentinelaPronta: 0, disparou: false, hist: [], cura: null,
+    deslizeV: 0, deslizeAte: 0, quedaDe: -1,
   });
   return { passo: 0, L: [L(pa, CTR_TR.centro - CTR_TR.entrada), L(pb, CTR_TR.centro + CTR_TR.entrada)], projeteis: [], C };
 }
@@ -107,8 +115,9 @@ export function fimTR(S: EstadoTR, desafiado: Desafiado = null): [number, "ko" |
   return null;
 }
 
-/** um dano do passo: quem recebe, quanto (antes da escala e da morte subita) e a acao que o causou (null: nenhuma) */
-interface Dano { para: number; valor: number; causa: number | null; cac: boolean }
+/** um dano do passo: quem recebe, quanto (antes da escala e da morte subita) e a acao que o causou (null: nenhuma); emp e cai: o empurrao de
+    quem recebe (px) e se ele cai (so com o empurraoAlvo; sem ele, 0 e false) */
+interface Dano { para: number; valor: number; causa: number | null; cac: boolean; emp: number; cai: boolean }
 
 /** a luta em andamento: o estado, as duas RNG de politica, o registro das acoes e o dos eventos */
 export interface LutaTR {
@@ -181,10 +190,21 @@ function golpe(Lt: LutaTR, atk: number, a: string, danos: Dano[], causa: number,
     }
   } else if (r === "carregar") rec = bruto * CV.multCarregar;
   if (peleAlvo) rec *= CV21.multPele;
-  if (rec > 0) danos.push({ para: alvo, valor: rec, causa, cac });
+  /* o empurrao de quem leva o golpe (a v18): pela forca do golpe; a defesa e o contra-golpe (o fator defesa) e a pele dura (o fator guarda)
+     cortam e seguram a queda; o golpe que a esquiva anula (o pesado e o disparo) nao empurra, nem quando o duelista leva o dano dele (EMP-5) */
+  const E = S.C.empurraoAlvo;
+  let emp = 0, cai = false;
+  if (E && rec > 0 && !(r === "esquivar" && (a === "pesado" || a === "disparo"))) {
+    const guarda = r === "defender" || r === "contra_golpe" || peleAlvo;
+    emp = (E.forca[a] ?? 0) * (r === "defender" || r === "contra_golpe" ? E.defesa : guarda ? E.guarda : 1);
+    cai = !guarda && E.derruba.includes(a);
+  }
+  if (rec > 0) danos.push({ para: alvo, valor: rec, causa, cac, emp, cai });
+  /* o dano que volta ao atacante (o parry e o contra-golpe) empurra pela forca do golpe rapido, sem queda */
+  const empVolta = E ? (E.forca.golpe_rapido ?? 0) * (peleAtivaTR(S, eu) ? E.guarda : 1) : 0;
   /* o parry da defesa contra o golpe rapido (ou a finta) devolve dano ao atacante */
-  if ((a === "golpe_rapido" || a === "fintar") && r === "defender") danos.push({ para: atk, valor: CV.parry, causa: causaAlvo, cac: true });
-  if (dev) danos.push({ para: atk, valor: dev * (peleAtivaTR(S, eu) ? CV21.multPele : 1), causa: causaAlvo, cac: true });
+  if ((a === "golpe_rapido" || a === "fintar") && r === "defender") danos.push({ para: atk, valor: CV.parry, causa: causaAlvo, cac: true, emp: empVolta, cai: false });
+  if (dev) danos.push({ para: atk, valor: dev * (peleAtivaTR(S, eu) ? CV21.multPele : 1), causa: causaAlvo, cac: true, emp: empVolta, cai: false });
   /* o golpe rapido, a investida e a finta interrompem o preparo do pesado (menos sob pele dura) */
   if ((a === "golpe_rapido" || a === "investida" || a === "fintar") && r === "preparar_pesado" && !peleAlvo) {
     al.acao = null; al.prep = false; al.atordoadoAte = S.passo + S.C.atordoaInterrupcao;
@@ -227,6 +247,8 @@ export function passoTR(Lt: LutaTR, desafiado: Desafiado = null): [number, "ko" 
     else if (a.nome === "investida" && !a.feito && !travado[l]) dx[l] = rumo(l) * S.C.arrancada;
     else if (a.nome === "recuar") dx[l] = -rumo(l) * S.C.andar * (a.sentinela ? 1 : S.C.recuo);
   }
+  /* o empurrao em curso (a v18) soma ao movimento proprio */
+  for (const l of [0, 1]) if (t < S.L[l].deslizeAte) dx[l] += S.L[l].deslizeV;
   for (const l of [0, 1]) S.L[l].x += dx[l];
   acomodar(S);
   const d = S.L[1].x - S.L[0].x;
@@ -297,13 +319,14 @@ function aplicarDanos(Lt: LutaTR, danos: Dano[]): void {
   if (!danos.length) return;
   const S = Lt.S, ea = S.L[0].p.escala, eb = S.L[1].p.escala;
   const ms = S.passo >= CTR_TR.morteSubita ? CV.multMS : 1;
-  const total = [0, 0], cac = [false, false];
+  const total = [0, 0], cac = [false, false], emp = [0, 0], cai = [false, false];
   for (const x of danos) {
     /* a escala: o dano recebido por i veio do oponente e passa para as unidades de i por E_oponente / E_i */
     const esc = ea !== undefined && eb !== undefined ? (x.para === 0 ? eb / ea : ea / eb) : 1;
     const v = x.valor * esc * ms;
     total[x.para] += v;
     if (x.cac) cac[x.para] = true;
+    emp[x.para] = Math.max(emp[x.para], x.emp); if (x.cai) cai[x.para] = true;
     if (x.causa !== null) Lt.acoes[x.causa].saldo += v / Lt.hpMax0[Lt.acoes[x.causa].lado];
     const atual = S.L[x.para].acao?.idx ?? S.L[x.para].ultima;
     if (atual >= 0) Lt.acoes[atual].saldo -= v / Lt.hpMax0[x.para];
@@ -314,6 +337,14 @@ function aplicarDanos(Lt: LutaTR, danos: Dano[]): void {
     s.hp -= total[l];
     Lt.eventos?.push({ t: S.passo, tipo: "dano", lado: l, valor: total[l], resta: s.hp });
     if (cac[l]) { s.marcaAte = 0; s.x -= rumo(l) * S.C.empurrao; }
+    /* o empurrao de verdade (a v18): o deslize para tras nos proximos passos e, com queda, o lado cai (perde a acao e o preparo e nao decide
+       ate levantar). O maior empurrao do passo vale; um novo deslize troca o que estava em curso */
+    const E = S.C.empurraoAlvo;
+    if (E && (emp[l] > 0 || cai[l])) {
+      if (emp[l] > 0) { s.deslizeV = -rumo(l) * emp[l] / E.deslize; s.deslizeAte = S.passo + 1 + E.deslize; }
+      if (cai[l]) { s.acao = null; s.prep = false; s.atordoadoAte = Math.max(s.atordoadoAte, S.passo + E.queda); s.quedaDe = S.passo; }
+      Lt.eventos?.push({ t: S.passo, tipo: "empurrao", lado: l, px: emp[l], queda: cai[l] });
+    }
   }
   acomodar(S);
 }
