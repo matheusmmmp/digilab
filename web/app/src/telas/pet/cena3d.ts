@@ -15,7 +15,7 @@ import * as THREE from "three";
 import { habitatAtual } from "../../habitat.ts";
 import { balancoOvo, jogoAtual } from "../../jogo.ts";
 import { SONO, alturaSono } from "./sono.ts";
-import { CENA } from "./cenaEstado.ts";
+import { CENA, reservaDoPe } from "./cenaEstado.ts";
 import { fonteDoPet } from "./fontePet.ts";
 import { iniciarIlha } from "./ilha/vista.ts";
 
@@ -59,6 +59,7 @@ class VistaPet {
   private texels: [number, number] = [1, 1];
   private larguraPx = 0;
   private alturaPx = 0;
+  private extraPx = 0;        // o pe do canvas alem da altura enquadrada (reservaDoPe): o quadro se estende para baixo, o enquadramento fica como se a caixa nao o tivesse
   private P = 1;               // pixels do canvas por subunidade (inteiro em retrato)
   private pxPorTexel = 1;      // pixels do canvas por texel do sprite (inteiro)
   private desloc = 0;          // quanto a janela da camera desce, em subunidades (multiplo de 1/P)
@@ -121,27 +122,30 @@ class VistaPet {
   ajustar(larguraCss: number, alturaCss: number, razao: number): void {
     const r = Math.max(1, Math.floor(razao));
     this.larguraPx = 2 * Math.floor((larguraCss * r) / 2); this.alturaPx = 2 * Math.floor((alturaCss * r) / 2);
+    /* a altura em que a sala e enquadrada: a do canvas menos o pe reservado (0 de 900 px em diante); o canvas desenha o pe a mais, sem mexer no resto */
+    this.extraPx = Math.min(this.alturaPx - 2, 2 * Math.floor((reservaDoPe() * r) / 2));
+    const A0 = this.alturaPx - this.extraPx;
     this.renderer.setPixelRatio(1);
     this.renderer.setSize(this.larguraPx, this.alturaPx, false);
     this.canvas.style.width = `${this.larguraPx / r}px`; this.canvas.style.height = `${this.alturaPx / r}px`;
-    const e = THREE.MathUtils.degToRad(ELEVACAO_GRAUS), forma = this.larguraPx > this.alturaPx ? "paisagem" : "retrato";
+    const e = THREE.MathUtils.degToRad(ELEVACAO_GRAUS), forma = this.larguraPx > A0 ? "paisagem" : "retrato";
     /* pixels do canvas por subunidade: inteiro em retrato (o celular, como no POC); em paisagem (o modulo do desktop), fracionario, para a
        sala encher a caixa mesmo com 1 pixel do aparelho por pixel de CSS. O pet continua nitido: o tamanho e o canto dele sao contados
        em pixels inteiros do canvas (desenhar) */
-    const P = Math.min((this.larguraPx * 1.1) / LARGURA, (this.alturaPx * FRACAO_CHAO[forma]) / (ALTURA * Math.sin(e)));
+    const P = Math.min((this.larguraPx * 1.1) / LARGURA, (A0 * FRACAO_CHAO[forma]) / (ALTURA * Math.sin(e)));
     this.P = forma === "retrato" ? Math.max(1, Math.floor(P)) : Math.max(1, P);
     if (this.janela) { this.janela.position.y = JANELA_Y[forma]; this.janela.scale.y = JANELA_ESCALA[forma]; }
     if (this.janela && forma === "paisagem") {
       /* a parede que aparece acima do chao, em subunidades: a janela fica no meio dela e ocupa no maximo 60% da altura */
-      const parede = (this.alturaPx * 0.98 - ALTURA * Math.sin(e) * this.P) / (this.P * Math.cos(e));
+      const parede = (A0 * 0.98 - ALTURA * Math.sin(e) * this.P) / (this.P * Math.cos(e));
       this.janela.scale.y = Math.min(JANELA_ESCALA.paisagem, (parede * 0.6) / 76);
       this.janela.position.y = Math.min(JANELA_Y.paisagem, parede * 0.55);
     }
-    const meiaL = this.larguraPx / (2 * this.P), meiaA = this.alturaPx / (2 * this.P);
+    const meiaL = this.larguraPx / (2 * this.P), meiaA = A0 / (2 * this.P);
     /* a frente da sala a 2% do fundo do canvas: a janela da camera desce o que sobra (em pixels inteiros) */
     const frenteNaTela = -(ALTURA / 2) * Math.sin(e);
-    this.desloc = Math.round((frenteNaTela + meiaA - this.alturaPx * 0.02 / this.P) * this.P) / this.P;
-    Object.assign(this.camera, { left: -meiaL, right: meiaL, top: meiaA + this.desloc, bottom: -meiaA + this.desloc });
+    this.desloc = Math.round((frenteNaTela + meiaA - A0 * 0.02 / this.P) * this.P) / this.P;
+    Object.assign(this.camera, { left: -meiaL, right: meiaL, top: meiaA + this.desloc, bottom: -meiaA + this.desloc - this.extraPx / this.P });
     this.camera.updateProjectionMatrix();
     this.chave = "";
   }
@@ -160,7 +164,7 @@ class VistaPet {
       this.texels = [f.canvas.width, f.canvas.height];
       /* na sala, o pet em ate 42% da altura e 60% da largura */
       const [fa, fl] = [0.42, 0.6];
-      this.pxPorTexel = Math.max(1, Math.min(12, Math.floor(Math.min(this.alturaPx * fa / this.texels[1], this.larguraPx * fl / this.texels[0]))));
+      this.pxPorTexel = Math.max(1, Math.min(12, Math.floor(Math.min((this.alturaPx - this.extraPx) * fa / this.texels[1], this.larguraPx * fl / this.texels[0]))));
       this.chave = f.chave;
     }
     /* dormindo (sono.ts): achatado, respirando e num tom apagado */
@@ -185,7 +189,7 @@ class VistaPet {
     this.sombra.position.set(px, 0.2, lugar[1]);
     this.renderer.render(this.cena, this.camera);
     const k = Math.max(1, Math.floor(razao));
-    return { x: (this.larguraPx / 2 + esquerda) / k, y: (this.alturaPx / 2 - (base + h)) / k, w: w / k, h: h / k };
+    return { x: (this.larguraPx / 2 + esquerda) / k, y: ((this.alturaPx - this.extraPx) / 2 - (base + h)) / k, w: w / k, h: h / k };
   }
 }
 

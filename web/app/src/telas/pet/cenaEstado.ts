@@ -29,3 +29,10 @@ export const CENA: {
   treino: number | null;
   cocoNoChao: boolean;
 } = { modo3d: false, modoMundo: false, ret: null, medir: null, mundo: null, coberto: false, bolaNaMao: false, treino: null, cocoNoChao: false };
+
+/** o pe que a caixa do habitat reservava no celular antes do mobile minimo (M1): a altura do dock de entao (69 px) + a folga de 24 px + a barra de abas
+    (--casca-barra, 64 px), medido em 390x844 e 360x800 (caixa de 687 e 643 px). Sem a barra a caixa ocupa a tela inteira por tras das acoes, mas a camera
+    segue enquadrando como se a caixa tivesse a altura de antes (a altura menos esta reserva), e o quadro se estende para baixo: o pet sai do mesmo tamanho
+    em px. So abaixo de 900 px; de 900 px em diante e 0, e a cena nao muda. PROPOSTO, SEM FONTE (numero de interface, nao de jogo) */
+const RESERVA_MOVEL_PX = 157;
+export const reservaDoPe = (): number => (typeof matchMedia === "function" && matchMedia("(max-width: 899px)").matches ? RESERVA_MOVEL_PX : 0);

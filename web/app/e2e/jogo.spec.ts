@@ -35,6 +35,9 @@ async function semear(page: Page, save: object | null, tema?: string, tamer: obj
     if (t) localStorage.setItem(chave + "-tema", t);
   }, [CHAVE, save ? JSON.stringify(save) : null, tema ?? null, JSON.stringify(tamer)] as const);
 }
+/** abaixo de 900 px (mobile minimo, M1) o retrato abre o leque dos vitais e dos paineis (Estado atual, Evolucao, Ultimas acoes, DigiBrain, Configuracoes, Meus
+    pets); o leque fecha ao escolher um item, entao cada painel pede o leque aberto de novo. Um so leque por vez: nao abre se ja esta aberto */
+const abrirLeque = async (page: Page) => { if (!await page.locator("#leque-pet").count()) await page.getByRole("button", { name: "Painéis do pet", exact: true }).click(); };
 /** a Exploracao no painel (no maximo 760 px) e a do celular: o detalhe do lugar (.camp-arena, .camp-lutar) abre na folha ao tocar no cartao do lugar escolhido (layout habitat, M4) */
 async function lugarAberto(page: Page): Promise<void> {
   await expect(page.locator(".expl-cartao.sel").first()).toBeVisible();
@@ -270,7 +273,7 @@ for (const pele of ["vidro", "xcom"]) test(`foco visível pelo teclado (pele ${p
   expect(semFoco, "elementos sem indicação de foco").toEqual([]);
 });
 
-/* layouts (tokens.css): abaixo de 900 px o das pranchas de celular (barra embaixo, uma coluna); de 900 a 1099 barra
+/* layouts (tokens.css): abaixo de 900 px o das pranchas de celular (sem barra: os destinos na coluna do topo da tela Pet, uma coluna); de 900 a 1099 barra
    lateral e uma coluna; de 1100 em diante o das pranchas *Desktop (conteudo + painel ao lado) */
 for (const largura of [390, 899, 900, 1099, 1100, 1280]) {
   test(`layout em ${largura} px`, async ({ page }) => {
@@ -282,10 +285,10 @@ for (const largura of [390, 899, 900, 1099, 1100, 1280]) {
       await page.goto(APP + "#/" + rota);
       await page.waitForTimeout(500);
       const r = await page.evaluate(([e, d]) => {
-        const nav = document.querySelector(".dl-nav")!.getBoundingClientRect(), a = document.querySelector(e)!.getBoundingClientRect(), b = document.querySelector(d)!.getBoundingClientRect();
-        return { navLateral: nav.height > nav.width, aoLado: b.left >= a.right - 1, larg: document.documentElement.scrollWidth, janela: innerWidth };
+        const nav = document.querySelector(".dl-nav")?.getBoundingClientRect(), a = document.querySelector(e)!.getBoundingClientRect(), b = document.querySelector(d)!.getBoundingClientRect();
+        return { navLateral: nav ? nav.height > nav.width : null, aoLado: b.left >= a.right - 1, larg: document.documentElement.scrollWidth, janela: innerWidth };
       }, [esq, dir] as const);
-      expect(r.navLateral, `${rota}: barra lateral`).toBe(lateral);
+      expect(r.navLateral, `${rota}: barra lateral (abaixo de 900 px nao ha barra: os destinos sao a coluna do topo da tela Pet)`).toBe(lateral ? true : null);
       /* as telas do painel (Crescer, Lutar) ficam numa coluna so (M4); a Conversar e da M5 */
       expect(r.aoLado, `${rota}: painel ao lado do conteúdo`).toBe(rota.startsWith("conversar") && desktop);
       expect(r.larg, `${rota}: rolagem lateral`).toBeLessThanOrEqual(r.janela);
@@ -612,7 +615,13 @@ test("exploração: sem WebGL, o mapa 2D de antes", async ({ browser }) => {
 const numTamer = (page: Page, tipo: string) => page.evaluate(([c, t]) => JSON.parse(localStorage.getItem(c + "-tamer")!).log.filter((e: unknown[]) => e[0] === t).length, [CHAVE, tipo] as const);
 /** vai para a aba pela barra e pelas abas (dentro do app, sem recarregar) */
 async function irPara(page: Page, destino: string, aba: string, rota: string): Promise<void> {
-  await page.locator(".dl-nav").getByRole("button", { name: destino, exact: true }).click();
+  /* abaixo de 900 px não há barra de abas (M1 do mobile mínimo, 2026-11-06): o destino fica na coluna de ícones da tela Pet, e de
+     dentro de uma folha volta-se ao Pet pelo × antes */
+  if ((page.viewportSize()?.width ?? 1280) < 900) {
+    const fechar = page.getByRole("button", { name: "Fechar e voltar ao Pet" });
+    if (await fechar.count() > 0) await fechar.first().click();
+    await page.locator(".mm-destinos").getByRole("button", { name: destino, exact: true }).click();
+  } else await page.locator(".dl-nav").getByRole("button", { name: destino, exact: true }).click();
   await page.getByRole("tab", { name: aba }).click();
   await expect(page).toHaveURL(new RegExp("#/" + rota + "$"));
 }
@@ -1169,7 +1178,8 @@ for (const largura of [390, 1280]) {
     await expect(page.locator(".pet-tela")).toBeVisible();
     await expect(page.locator(".digibrain")).toBeHidden();
     if (largura < 900) await expect(page.locator(".topo-bt[aria-label=\"Conversar\"]")).toBeVisible();          /* o Conversar fica no topo flutuante (< 900 px) */
-    await page.getByRole("button", { name: "DigiBrain", exact: true }).click();       /* o botao quadrado da borda direita abre o painel */
+    if (largura < 900) await abrirLeque(page);                                         /* o DigiBrain mora no leque do retrato (< 900 px) */
+    await page.getByRole("button", { name: "DigiBrain", exact: true }).click();       /* o botao do leque (celular) ou a etiqueta do cenario (desktop) abre o painel */
     const raiz = page.locator("#pet-painel");
     await expect(raiz.locator(".digibrain")).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -1200,6 +1210,7 @@ for (const largura of [390, 1280]) {
     const erros = vigiarErros(page);
     await page.goto(APP + "#/pet/estado");
     await expect(page.locator(".pet-tela")).toBeVisible();
+    if (largura < 900) await abrirLeque(page);
     await page.getByRole("button", { name: "DigiBrain", exact: true }).click();
     const raiz = page.locator("#pet-painel");
     const mapa = raiz.locator("svg.mp");
@@ -1268,11 +1279,11 @@ for (const [largura, altura] of [[360, 800], [390, 844], [1280, 800]]) {
     expect(g.cena, "o cenario e a maior area").toBeGreaterThan(g.doca * 2);
     expect(g.pix).toBe("pixelated");
     expect(g.larg).toBeLessThanOrEqual(g.janela);
-    /* o dock: seis acoes no desktop; no celular quatro e o Mais, com o Tapa, o Tratar e o Por racao (so pets com mundo) */
-    await expect(page.locator(".acoes-pet .acao-destaque")).toHaveCount(largura >= 900 ? 6 : 4);
+    /* o dock: seis acoes no desktop; no celular tres (Alimentar, Brincar, Limpar) e o Mais, com o Carinho, o Tapa, o Tratar e o Por racao (so pets com mundo) */
+    await expect(page.locator(".acoes-pet .acao-destaque")).toHaveCount(largura >= 900 ? 6 : 3);
     await expect(page.locator(".acoes-pet .acao-extra")).toHaveCount(0);
     await page.locator(".acoes-pet .acao-mais").click();
-    await expect(page.locator(".acoes-pet .acao-extra")).toHaveCount(largura >= 900 ? 0 : 2);
+    await expect(page.locator(".acoes-pet .acao-extra")).toHaveCount(largura >= 900 ? 0 : 3);
     await expect(page.locator(".acoes-pet .racao-bt:not(.bola-bt)")).toBeVisible();
     await page.keyboard.press("Escape");
     await expect(page.locator("#acoes-mais")).toHaveCount(0);
@@ -1300,11 +1311,15 @@ for (const [largura, altura] of [[360, 800], [390, 844], [1280, 800]]) {
       await expect(page.getByRole("button", { name: "Evolução", exact: true })).toHaveAttribute("aria-expanded", "true");
       await expect(page.getByRole("button", { name: "Estado atual", exact: true })).toHaveAttribute("aria-expanded", "false");
     } else {
+      /* celular (M1): os vitais e os paineis moram no leque do retrato, que fecha ao escolher um deles */
+      await abrirLeque(page);
       await page.getByRole("button", { name: "Estado atual", exact: true }).click();
       await expect(page.locator("#pet-painel .necessidades4")).toBeVisible();
+      await abrirLeque(page);
       await page.getByRole("button", { name: "Evolução", exact: true }).click();
       await expect(page.locator("#pet-painel")).toHaveCount(1);
       await expect(page.locator("#pet-painel")).toContainText("até virar");
+      await abrirLeque(page);
       await page.getByRole("button", { name: "Últimas ações", exact: true }).click();
       await expect(page.locator("#pet-painel .mod-registro li").first()).toBeVisible();
       await page.keyboard.press("Escape");
@@ -1504,6 +1519,7 @@ const abrirMais = async (page: Page) => { if (!await page.locator("#acoes-mais")
 async function infoMundoNoEstado(page: Page, texto: string | null): Promise<void> {
   const pilha = await page.locator(".pet-hud").count() > 0;
   const bt = page.getByRole("button", { name: "Estado atual", exact: true });
+  if (!pilha) await abrirLeque(page);                  /* celular: o "Estado atual" mora no leque do retrato */
   if (!pilha || await bt.getAttribute("aria-expanded") === "false") await bt.click();
   const raiz = page.locator(pilha ? ".pet-hud [data-painel-pet='estado']" : ".pet-painel"), det = raiz.getByRole("button", { name: "Detalhes" });
   if (await det.getAttribute("aria-expanded") === "false") await det.click();
@@ -1512,7 +1528,7 @@ async function infoMundoNoEstado(page: Page, texto: string | null): Promise<void
   await expect(page.locator(".pet-balcao .mundo-info")).toHaveCount(0);
   await det.click();
   await expect(info).toHaveCount(0);
-  if (!pilha) { await bt.click(); await expect(page.locator(".pet-painel")).toHaveCount(0); }
+  if (!pilha) { await page.getByRole("button", { name: "Fechar Estado atual" }).click(); await expect(page.locator(".pet-painel")).toHaveCount(0); }
 }
 /** arrasta "Por racao" ate o ponto do cliente, com o mouse (o gesto) */
 async function arrastarRacao(page: Page, alvo: [number, number]): Promise<void> {

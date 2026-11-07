@@ -161,7 +161,11 @@ export function App() {
   const irPet = () => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); };
   const fecharPainel = () => {
     irPet();
-    setTimeout(() => document.querySelector<HTMLElement>('.dl-nav .hx-nav__bt[aria-current="page"]')?.focus(), 60);
+    /* abaixo de 900 px nao ha barra: se o foco nao foi para outro lugar (o modal devolve a quem abriu), ele volta ao retrato, de onde a tela Pet parte */
+    setTimeout(() => {
+      const barra = document.querySelector<HTMLElement>('.dl-nav .hx-nav__bt[aria-current="page"]');
+      if (barra) barra.focus(); else if (document.activeElement === document.body) document.querySelector<HTMLElement>(".mm-retrato")?.focus();
+    }, 60);
   };
   const corpoDestino = (): ReactNode => rota.aba === "treinar" ? <TelaTreinar /> : rota.aba === "aprend" ? <TelaAprend /> : rota.aba === "evolucao" ? <TelaEvolucao /> : rota.aba === "itens" ? <TelaItens />
     : rota.aba === "arena" ? <TelaArena voltarPet={irPet} verReplay={abrirReplay} />
@@ -186,8 +190,9 @@ export function App() {
     </div>
   );
   const nav = <Nav atual={config ? null : rota.destino} ir={irDestino} configAberta={!!config} abrirConfig={() => abrirConfig("principal")} />;
-  /* abaixo de 900 px o painel e um modal e a barra de destinos vai para dentro dele (o resto da pagina fica inerte) */
-  const navNoModal = !!painel && !lado;
+  /* abaixo de 900 px nao ha barra de destinos (M1 do mobile minimo): Crescer, Lutar, Diario e Conversar sao a coluna do topo (Topo.tsx), e o painel e um
+     modal que volta ao Pet pelo x, pelo Esc ou pelo toque fora */
+  const abrirMeusPets = () => { sairDoLab(); setMeusPets(true); };
 
   return (
     <div className={"app app--habitat " + (painel ? "app--painel" : "app--pet")}>
@@ -216,10 +221,11 @@ export function App() {
       <DicaBit />
       {/* o habitat (a cena do Pet) e a camada de fundo de toda rota: fica montado, nao sobe nem desce ao trocar de destino */}
       <Habitat escurecer={!!painel} />
-      <TopoHabitat abrirMeusPets={() => { sairDoLab(); setMeusPets(true); }} irConversar={() => irDestino("conversar")} abrirConfig={() => abrirConfig("principal")} />
-      {!painel && <TelaPet irRegistro={() => ir({ destino: "diario", aba: "registro" })} irEvolucao={() => { ir({ destino: "crescer", aba: "evolucao" }); scrollTo(0, 0); }} />}
-      {painel && (lado ? <PainelLado d={painel.d}>{painel.corpo}</PainelLado> : <PainelModal d={painel.d} nav={navNoModal ? nav : null}>{painel.corpo}</PainelModal>)}
-      {!navNoModal && nav}
+      <TopoHabitat abrirMeusPets={abrirMeusPets} irConversar={() => irDestino("conversar")} irDestino={irDestino} abrirConfig={() => abrirConfig("principal")} />
+      {!painel && <TelaPet irRegistro={() => ir({ destino: "diario", aba: "registro" })} irEvolucao={() => { ir({ destino: "crescer", aba: "evolucao" }); scrollTo(0, 0); }}
+        abrirConfig={() => abrirConfig("principal")} abrirMeusPets={abrirMeusPets} />}
+      {painel && (lado ? <PainelLado d={painel.d}>{painel.corpo}</PainelLado> : <PainelModal d={painel.d}>{painel.corpo}</PainelModal>)}
+      {lado && nav}
       <RevelacaoEvolucao continuar={() => { ir({ destino: "crescer", aba: "evolucao" }); scrollTo(0, 0); }} />
       {meusPets && !desk && <MeusPets fechar={() => setMeusPets(false)} irRegistro={() => { setMeusPets(false); ir({ destino: "diario", aba: "registro" }); }} />}
       {boasVindas && <BoasVindas fechar={() => { setBoasVindas(false); ir({ destino: "pet", aba: "estado" }); if (semPetNoInicio) setComoJogar(true); }} />}

@@ -230,6 +230,38 @@ Matheus, 2026-11-05, nesta sessão (resposta "B, hooks antes"):
   - **P1-5:** com "Exibir detalhes do pet" desligado, **a linha fica, como texto sem botão**;
   - **P1-6:** o rótulo é **"aprendido"**.
 
+- **O mobile Digivice** (Matheus, 2026-11-06): reestruturar todo o mobile do jogo web (abaixo de 900 px), que hoje é o desktop
+  espremido e "não parece um jogo", **sem alterar nada do desktop**. Entre as duas direções da prancha de direção
+  (https://claude.ai/artifact/4kQh77wKGzbaijGb5H2qmB), ele escolheu a **Digivice** (as classes `.d2`): a paleta `--dl-*` e as fontes do
+  guia 4.2, a placa no alto, os vitais em cartões, a linha do agora como balão preso ao pet, botões gordos que afundam ao toque e a barra
+  de abas com círculos. São três etapas, um PR cada: **M1** (a tela Pet e as abas), **M2** (as folhas Crescer, Lutar e Diário) e **M3**
+  (a luta e o treino).
+- **A Digivice reprovada; o mobile mínimo no lugar** (Matheus, 2026-11-06, ao ver a prancha da M1 do commit `08b3dff8`): "ela tá com um
+  estilo completamente anterior, de versões muito antigas [...] tem muito botão, muita informação [...] Deixa tudo com ícones
+  minimalistas", e "o menu ali embaixo [...] pode estar em alguma outra área da interface, e daí embaixo só fica os botões de ações".
+  Ele aprovou para virar prancha a direção **mínima** (https://claude.ai/artifact/HxEPJtmUXByNtDkMBaH5WE):
+  - as peles atuais, Vidro e Militar (`--hx-*`, `--hud-*`), no lugar da paleta `--dl-*` e das fontes do guia 4.2;
+  - a cena 3D visível atrás de tudo;
+  - sempre na tela, só o retrato e a hora, a coluna de ícones (Conversar, Crescer, Lutar, Diário), o ícone do agora sobre o pet e quatro
+    ações só com ícone;
+  - sem a barra de abas e sem a aba Pet: a tela Pet é a casa, e cada folha volta pelo seu ×;
+  - o resto aparece só quando há motivo (a necessidade, o retrato aberto, o ⋯ aberto).
+
+  O plano da M1 está em `docs/PROPOSTAS_V3_UX_TELA_PET.md`, seção "Mobile mínimo (M1)".
+- **A prancha mínima e as M1-1 a M1-15** (Matheus, 2026-11-06, ao ver a prancha do commit `1d04d92e`: "Aprovar e codar"). Valem as
+  recomendações da seção "Mobile mínimo (M1)", sem comentário dele em nenhuma:
+  - **M1-1:** no celular, o retrato chama-se "Painéis do pet" e abre o leque; "Meus pets" vira item do leque. É o único nome acessível que
+    muda, e só abaixo de 900 px;
+  - **M1-2:** o Carinho vai para o ⋯. **M1-3:** o Pôr ração fica no ⋯;
+  - **M1-4:** ícones de traço do lucide nas ações. **M1-5:** um ícone por ação no agora, em posição fixa, fora do pet;
+  - **M1-6:** o aviso usa a regra da sugerida de hoje (`resumoAgora`). **M1-7:** o aviso dura 15 s; o ponto e a ação ficam enquanto a
+    necessidade vale. **M1-8:** dormindo, sem aviso de energia;
+  - **M1-9:** o toque longo mostra o rótulo depois de **500 ms, PROPOSTO, SEM FONTE** (o Matheus não comentou o número);
+  - **M1-10:** a volta das folhas é o × "Fechar e voltar ao Pet" (as folhas são da M2). **M1-11:** "Exibir detalhes do pet" desligado,
+    como hoje. **M1-12:** o salvo mostra só o erro "não salva", como ícone;
+  - **M1-13:** rosa só para a necessidade, a vontade aprendida em ciano, e uma marca no ⋯ quando a sugerida mora nele. **M1-14:** o vital
+    baixo rosa no leque. **M1-15:** o balão da fala continua.
+
 UX-4 a UX-8 continuam PROPOSTAS.
 
 ## 9. Etapa A0: os hooks restaurados (2026-11-05)
@@ -304,3 +336,45 @@ abrir, e o `frontend-design` não está instalado nesta máquina (UX-6); sem ele
   própria worktree. Numa worktree nova essa pasta não existe, e o Playwright grava as imagens como referências novas, em silêncio.
   - Não foi regravada nenhuma referência verdadeira. As de `D:\Trab\digilab\v3\artifacts_v2_front_react\capturas` estão intocadas.
   - O teste da pasta sem referência fica como pendência para o H6 ou o G-REFERENCIA.
+
+## 13. Etapa M1: o mobile mínimo, a tela Pet sem a barra de abas (2026-11-06)
+
+**A prancha.** A Digivice (commit `08b3dff8`) foi reprovada. A mínima (`docs/pranchas/ux-mobile/`, commit `1d04d92e`) foi aprovada com
+as M1-1 a M1-15 (seção 8.1). O plano está em `docs/PROPOSTAS_V3_UX_TELA_PET.md`, seção "Mobile mínimo (M1)".
+
+**O código.** Está no branch `v3-ux-mobile`, empilhado sobre o `v3-ux-p1-codigo`. Foi feito pelo `ux-implementador` e revisto pelo
+`rev-a11y` e pelo `rev-cena`; os achados que bloqueavam e os que deviam estão corrigidos.
+- **Abaixo de 900 px** ficam:
+  - o retrato ("Painéis do pet") e a hora;
+  - a coluna Conversar, Crescer, Lutar e Diário;
+  - o ícone do agora;
+  - as quatro ações só com ícone.
+
+  O leque do retrato tem os vitais e os painéis, e o ⋯ tem as outras ações. A necessidade aparece no aviso, no ponto rosa e na ação rosa.
+  A barra de abas sai, inclusive de dentro do modal.
+- **Arquivos novos:** `src/movel.ts`, com o `SEGURAR_MS` e o estado do leque; `src/componentes/BotaoMovel.tsx`;
+  `src/estilo/pet_movel.css`, todo dentro de `@media (max-width:899px)`; e `test/movel.test.ts`.
+- **Arquivos alterados:** `TelaPet.tsx`, `LinhaAgora.tsx`, `Topo.tsx`, `App.tsx` e `PainelTela.tsx`. O desktop continua no corpo de
+  antes, pelo `TopoLargo` e pelo `DockLargo`.
+- **O desktop não muda:** os 42 DOM e as 42 capturas com a cena escondida (21 telas, nas duas peles, a 1920) são iguais à base. O
+  portão foi trocado porque a base comparada com ela mesma já varia na cena 3D (desvio em `docs/registro/2026-11.md`).
+- **Fica para a M2:**
+  - nas folhas abaixo de 900 px, a faixa de 64 px que a barra reservava (o `--casca-barra`) continua vazia embaixo do modal;
+  - a medida M3 da cena no celular, que agora é ~24 % maior, e do blur do Vidro (achados do `rev-cena`).
+
+**A revisão do Matheus no #619 (2026-11-06): o sprite e o tamanho do pet.**
+- **O sprite errado nas capturas** era a corrida do atlas de clipes com o relógio falso do `telas.spec.ts`, na base e no branch (desvio
+  em `docs/registro/2026-11.md`). O spec agora espera o atlas e falha alto sem ele.
+- **O pet.** Pelo `CENA.ret`, a 390 × 844 o pet tinha o mesmo tamanho em px (49 × 52 no v11 e 68 × 88 no v12), mas descia 109 px, centrado na
+  caixa mais alta. Agora a câmera enquadra a altura antiga e estende o quadro para baixo:
+  - na sala, `cena3d.ts`, pelo limite ortográfico;
+  - na ilha, `ilha/vista.ts`, pelo `setViewOffset`.
+
+  A diferença vem do `reservaDoPe()` em `cenaEstado.ts`: 157 px abaixo de 900 px, e 0 a partir daí. O número é PROPOSTO e SEM FONTE,
+  medido como o dock de antes (69 px), mais a folga (24 px), mais a barra (64 px). O pet volta ao lugar de antes (171,424 no v11 e
+  161,388 no v12).
+- **O ícone do agora** fica preso logo acima da cabeça do pet, pelo `CENA.ret`.
+- **Os portões de novo:**
+  - o desktop (o DOM e a captura sem o canvas) dá 84 de 84 iguais;
+  - a captura cheia a 1920 com o atlas carregado tem o mesmo perfil de ruído da base contra ela mesma;
+  - o e2e inteiro dá 123 passed.

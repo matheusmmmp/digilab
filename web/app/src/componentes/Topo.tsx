@@ -2,15 +2,56 @@
    do pet (abre Meus pets), o logo, o relogio do jogo com o aviso de salvo e, so abaixo de 900 px, Conversar e Ajustes. O retrato, o
    relogio e o visual deles seguiam nos tokens --dl-*; desde o HUD (docs/TAREFA_V3_LAYOUT_HUD.md) a plaquinha e o relogio sao caixas
    escuras chanfradas (estilo/pet_hud.css), no mesmo sistema dos menus. */
-import { Cloud, CloudOff, MessageCircle, Moon, Settings, Sun } from "lucide-react";
+import { BookOpen, Cloud, CloudOff, MessageCircle, Moon, Settings, Sprout, Sun, Swords, type LucideIcon } from "lucide-react";
 import { DO_ESP, NOME_ESP, NOME_EST, TPD, eNoite, nomeEstagio, nomeForma } from "../../motor/index.ts";
 import { BRASAO } from "../decoracao.ts";
 import { sairDoLab, useJogo } from "../jogo.ts";
+import { usePainelLado } from "../desktop.ts";
+import { alternarLeque, useLeque } from "../movel.ts";
+import { NOME_DESTINO, type Destino } from "../rotas.ts";
 import { SeloExperimental } from "../telas/config/Laboratorio.tsx";
-import { Retrato, diaDe, hhmm } from "../telas/pet/TelaPet.tsx";
+import { Retrato, diaDe, hhmm, necessidadeMovel } from "../telas/pet/TelaPet.tsx";
+import { BotaoMovel } from "./BotaoMovel.tsx";
 import { Deco } from "./Deco.tsx";
 
-export function TopoHabitat({ abrirMeusPets, irConversar, abrirConfig }: { abrirMeusPets: () => void; irConversar: () => void; abrirConfig: () => void }) {
+interface PropsTopo { abrirMeusPets: () => void; irConversar: () => void; irDestino: (d: Destino) => void; abrirConfig: () => void }
+
+/** a partir de 900 px o topo de sempre; abaixo, o do mobile minimo (M1): o retrato e a hora, e a coluna dos destinos */
+export function TopoHabitat(p: PropsTopo) { return usePainelLado() ? <TopoLargo {...p} /> : <TopoMovel {...p} />; }
+
+const ICONE_DESTINO: Partial<Record<Destino, LucideIcon>> = { crescer: Sprout, lutar: Swords, diario: BookOpen };
+const DESTINOS_COLUNA: Destino[] = ["crescer", "lutar", "diario"];
+
+/* O topo do celular (docs/PROPOSTAS_V3_UX_TELA_PET.md, "Mobile mínimo", M1; prancha em docs/pranchas/ux-mobile/): no canto de cima à esquerda o retrato
+   (redondo no Vidro, reto no Militar), que abre o leque dos vitais e dos painéis (TelaPet.tsx, LequePet), com o ponto rosa quando há uma necessidade, e a
+   hora; no canto de cima à direita a coluna Conversar, Crescer, Lutar e Diário, só ícone. Sem barra de abas: a tela Pet é a casa. O nome e o estágio do
+   pet ficam no Meus pets e na Evolução; o "salvo" fica escondido e só o erro de gravação aparece (M1-12). */
+function TopoMovel({ irConversar, irDestino }: PropsTopo) {
+  const { motor: m, nascendo, erroSave } = useJogo(), ovo = nascendo > 0, e = m.e, aberto = useLeque() === "paineis", nec = necessidadeMovel(m, nascendo);
+  return (
+    <header className="mm-topo">
+      <BotaoMovel className="mm-caixa mm-forma mm-bt mm-retrato" rotulo="Painéis do pet" lado="baixo" aria-label="Painéis do pet" aria-haspopup="true" aria-expanded={aberto} aria-controls="leque-pet"
+        onClick={() => alternarLeque("paineis")}>
+        <Retrato m={m} ovo={ovo} semArrastar />{nec && <span className="mm-ponto" aria-hidden="true" />}
+      </BotaoMovel>
+      <span className="mm-caixa mm-pilula mm-relogio" role="group" aria-label={`${hhmm(e.tick)}, dia ${diaDe(e.tick)}${erroSave ? ", não salva" : ""}`}>
+        <small aria-hidden="true">D{diaDe(e.tick)}</small><b aria-hidden="true">{hhmm(e.tick)}</b>
+        {erroSave && <CloudOff className="mm-salvo-erro" aria-hidden="true" />}
+      </span>
+      <div className="mm-coluna">
+        <BotaoMovel className="mm-caixa mm-forma mm-bt mm-bt48 topo-bt" rotulo="Conversar" lado="esq" aria-label="Conversar" onClick={irConversar}><MessageCircle aria-hidden="true" /></BotaoMovel>
+        <nav className="mm-destinos" aria-label="Destinos">
+          {DESTINOS_COLUNA.map(d => {
+            const I = ICONE_DESTINO[d]!;
+            return <BotaoMovel key={d} className="mm-caixa mm-forma mm-bt mm-bt48" rotulo={NOME_DESTINO[d]} lado="esq" onClick={() => irDestino(d)}><I aria-hidden="true" /></BotaoMovel>;
+          })}
+        </nav>
+      </div>
+    </header>
+  );
+}
+
+function TopoLargo({ abrirMeusPets, irConversar, abrirConfig }: PropsTopo) {
   const { motor: m, nascendo, erroSave, emLab } = useJogo(), ovo = nascendo > 0, e = m.e, noite = eNoite(e.tick % TPD);
   return (
     <header className="topo-hab">
