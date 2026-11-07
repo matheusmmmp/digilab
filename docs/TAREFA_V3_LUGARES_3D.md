@@ -107,3 +107,31 @@ em `test/lugares3d.test.ts`, agora para todo `LUGARES_LUZ`. Os passos e os scrip
 `LUGARES_LUZ.cais` como `emissiveMap` (`flipY = false`), como a do portão. O cais na ilha é futuro (o multiplayer): o modelo entra, a cena não.
 
 Com o cais, os três lugares da tarefa estão entregues.
+
+## 12. Os lugares na ilha e no estilo dela (2026-11-07, Gerente, Claude Code, Opus 5.5, branch `v3-lugares-na-ilha`)
+
+**Por que aqui:** a sessão da L3 ("Lugares da ilha") não existe mais, e o Matheus pediu que eu pusesse os três na cena e melhorasse as
+texturas, para os modelos se encaixarem no estilo do mapa e ficarem mais bonitos (D-LG-14).
+
+**O que entrou:**
+- `web/app/src/telas/pet/ilha/lugares.ts`: carrega os três pelo `carregarVariante`, com a sombra redonda, e acende a máscara do lugar
+  aberto. Ainda não há o nível do Tamer, então `LUGAR_ABERTO` diz o estado: o portão e a barraca abertos, o cais trancado (D-LG-16).
+  Entra nos mapas Ilha e Digital, como os enfeites (`estilos.ts`).
+- `grade.ts`, `porLugares`: depois dos enfeites, com a rng própria. O portão e a barraca ficam ao norte da área, no ponto que cabe mais perto
+  de um alvo ao lado do ninho; o cais fica na última linha de areia antes do mar. Cada lugar abre uma clareira: a vista não desenha a
+  decoração ali (`Ilha.escondidos`), e a lista `objetos` não muda (o E-G0 passa). Os números estão em `LUGARES_GRADE` e `LUGAR_LUZ`, em
+  `constantes.ts` (D-LG-15).
+- **O estilo da Ilha nas texturas:** `docs/lugares3d/estilo_ilha.py` troca cada cor chapada pela versão da Ilha, mais escura e mais saturada,
+  perto dos kits. As cores novas ficam na `paleta_ilha` de cada `paleta.json`, e a textura de antes fica em `conserto/cor_antes_ilha.png`.
+  A saída é um PNG de paleta, sem perda e uns 35 % mais leve (D-LG-17).
+- `web/app/test/ilha_lugares.test.ts`: LG-G1 a LG-G5 (onde ficam, a frente para a área, a clareira e a paleta publicada).
+
+**As capturas** (fora do git): `D:\Trab\digilab\capturas_lugares3d\ilha\`.
+- Depois: `visao_ilha.jpg`, `visao_digital.jpg`, `barraca_ilha.jpg`, `portao_ilha.jpg` e `cais_ilha.jpg`.
+- Antes: `antes_cais_pastel.jpg`, `antes_portao_arvores.jpg` e `antes_barraca_oeste.jpg`.
+
+**Fica para depois:**
+- o nível do Tamer: o cadeado e o "Nv" no lugar trancado, o brilho de quando o lugar abre e a entrada pelo lugar, que hoje não se clica;
+- o cais é visto da água pela câmera de trás.
+
+A entrada da barraca lê na ilha (o vão escuro sob o arco), então refazer a malha (D-LG-9) não é necessário.

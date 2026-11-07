@@ -1,7 +1,7 @@
 /* A camera livre do habitat (o Matheus, 2026-11-01: "como nas POCs dos mapas 3D", poc/mapa_ac e poc/cassette): com a opcao ligada em
    Ajustes > Visual (habitat.ts, controle "livre"), a roda do mouse aproxima e afasta, Shift + roda gira em volta do pet, e arrastar na
    cena gira (de lado) e inclina (para cima e para baixo); no toque, um dedo arrasta e dois dedos aproximam. A camera continua seguindo o
-   pet. So vista: fora do save, do registro e do replay; o giro, a inclinacao e o zoom ficam so nesta pagina. Os numeros sao PROPOSTO,
+   pet (menos com o pet na mao: CENA.petNaMao, PegarPet.tsx). So vista: fora do save, do registro e do replay; o giro, a inclinacao e o zoom ficam so nesta pagina. Os numeros sao PROPOSTO,
    SEM FONTE (os limites do zoom e da inclinacao e a sensibilidade, perto dos do POC). */
 import { CENA } from "./cenaEstado.ts";
 
@@ -43,7 +43,7 @@ export function aplicarOrbita(desloc: readonly [number, number, number], olhar: 
 /** liga a roda, o arrasto e a pinca na cena (o que cai dentro de .habitat, sem painel por cima); `ativo` diz se a opcao esta ligada.
     Devolve a funcao que desliga */
 export function ligarControles(ativo: () => boolean, elevacao0: () => number): () => void {
-  const naCena = (e: Event) => ativo() && !CENA.coberto && e.target instanceof Element && !!e.target.closest(".habitat");
+  const naCena = (e: Event) => ativo() && !CENA.coberto && !CENA.petNaMao && e.target instanceof Element && !!e.target.closest(".habitat");
   const roda = (e: WheelEvent) => {
     if (!naCena(e)) return;
     e.preventDefault();
@@ -62,6 +62,8 @@ export function ligarControles(ativo: () => boolean, elevacao0: () => number): (
   const move = (e: PointerEvent) => {
     if (!toques.has(e.pointerId)) return;
     toques.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    /* o pet na mao (PegarPet.tsx, que escuta a cena antes desta janela): a camera nao gira nem aproxima; o arrasto deste toque acaba aqui */
+    if (CENA.petNaMao) { arrasto = null; pinca = null; return; }
     if (pinca !== null && toques.size === 2) {
       const [a, b] = [...toques.values()], d = Math.hypot(a.x - b.x, a.y - b.y);
       if (d > 0 && pinca > 0) aproximar(pinca / d);

@@ -353,6 +353,42 @@ def deixar_bola(tick: int, x: int, y: int) -> Evento:
     return Evento(tick=tick, tipo="deixar_bola", valor=f"{x}|{y}")
 
 
+def _ponto_solto(x, y) -> tuple[int, int]:
+    """o ponto onde o dono soltou o pet (levar_pet, docs/TAREFA_V3_PEGAR_PET.md): inteiro e com sinal; fora do mapa vale, porque quem o
+    limita ao mapa e o MotorMundo (PP-4). So inteiros seguros (|n| <= 2**53 - 1), os que o jogo web representa sem perda"""
+    if type(x) is not int or type(y) is not int:
+        raise ValueError(f"levar_pet com posicao nao inteira: ({x!r}, {y!r})")
+    if abs(x) > _MAIOR_INTEIRO_SEGURO or abs(y) > _MAIOR_INTEIRO_SEGURO:
+        raise ValueError(f"levar_pet com posicao grande demais: ({x}, {y})")
+    return x, y
+
+
+_MAIOR_INTEIRO_SEGURO = 2 ** 53 - 1                 # o Number.MAX_SAFE_INTEGER do TS (paridade do formato, nao um parametro do mundo)
+
+
+def levar_pet(tick: int, x: int, y: int) -> Evento:
+    """o dono pega o pet e o solta em (x, y) do mapa do mundo (subunidades inteiras, com sinal); o jogo web, pets v19"""
+    x, y = _ponto_solto(x, y)
+    return Evento(tick=tick, tipo="levar_pet", valor=f"{x}|{y}")
+
+
+def _inteiro_com_sinal_do_log(texto: str) -> int:
+    """o inteiro com sinal na forma canonica (sem zero a esquerda, sem '+' e sem '-0'): a mesma regra do lerLevarPet do TS"""
+    corpo = texto[1:] if texto.startswith("-") else texto
+    if not corpo.isascii() or not corpo.isdigit() or (len(corpo) > 1 and corpo[0] == "0") or texto == "-0":
+        raise ValueError(f"inteiro malformado no log: {texto!r}")
+    return int(texto)
+
+
+def ler_levar_pet(evento: Evento) -> tuple[int, int]:
+    if evento.tipo != "levar_pet":
+        raise ValueError(f"evento nao e levar_pet: {evento.tipo!r}")
+    partes = str(evento.valor).split("|")
+    if len(partes) != 2:
+        raise ValueError(f"levar_pet malformado: {evento.valor!r}")
+    return _ponto_solto(_inteiro_com_sinal_do_log(partes[0]), _inteiro_com_sinal_do_log(partes[1]))
+
+
 def _inteiro_do_log(texto: str) -> int:
     if not texto.isdigit():
         raise ValueError(f"inteiro malformado no log: {texto!r}")

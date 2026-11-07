@@ -22,9 +22,9 @@ afterAll(() => ligarEscala(escalaAntes));
 
 describe("a versao 14", () => {
   test("os ovos novos nascem v15 (o v14 com a bola no golpe), e a v13 e a v14 seguem abrindo (CV14-1)", () => {
-    expect(VERSAO_PET).toBe(18);
-    expect(VERSOES_PET).toEqual([13, 14, 15, 17, 18]);
-    expect(new Motor(1).versao).toBe(18);
+    expect(VERSAO_PET).toBe(19);
+    expect(VERSOES_PET).toEqual([13, 14, 15, 17, 18, 19]);
+    expect(new Motor(1).versao).toBe(19);
     expect(new Motor(1, 15).versao).toBe(15);
     expect(new Motor(1, 14).versao).toBe(14);
     expect(new Motor(1, 13).versao).toBe(13);

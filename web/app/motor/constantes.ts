@@ -67,17 +67,24 @@ export const CDJ = { limiarNecessidade: .3, limiarVontade: .1, limiarTom: .2, kC
    18 = o v17 com o empurrao de verdade na luta em tempo real (docs/TAREFA_V3_LUTA_EMPURRAO.md; EMP-1 a EMP-8, decididas pelo Matheus em
    2026-11-06): quem leva o golpe desliza para tras pela forca dele, e o pesado e a investida derrubam (o relogio RELOGIO_V18,
    combate_tr/constantes_tr.ts; as regras CV21E_TR18). O resto e o v17 (o cerebro trocavel, a ponte da luta, a bola no golpe). Os v13 a v17
-   seguem vivos, lutando como antes; so os ovos novos nascem v18 */
-export const VERSAO_PET = 18;
-/** as versoes de pet que abrem: a v13 (o tempo real de antes da rodada de equilibrio), a v14 (CV14-1), a v15 (a bola no golpe) e a v17
-    (o cerebro trocavel) e a v18 (o empurrao). A v16 e so a do laboratorio */
-export const VERSOES_PET: readonly number[] = [13, 14, 15, 17, 18];
+   seguem vivos, lutando como antes; so os ovos novos nascem v18;
+   19 = o v18 com o "levar pet" (docs/TAREFA_V3_PEGAR_PET.md; PP-1 a PP-5, decididas pelo Matheus em 2026-11-07): o evento "lp" do
+   registro poe o pet onde o dono o soltou (limitado ao mapa, PP-4), sem mexer no humor, no corpo nem no aprendizado (PP-1); com o pet
+   dormindo, falha alto (PP-2). O resto e o v18 (a luta, o cerebro trocavel). Os v13 a v18 seguem vivos, sem o "lp"; so os ovos novos
+   nascem v19 */
+export const VERSAO_PET = 19;
+/** as versoes de pet que abrem: a v13 (o tempo real de antes da rodada de equilibrio), a v14 (CV14-1), a v15 (a bola no golpe), a v17
+    (o cerebro trocavel), a v18 (o empurrao) e a v19 (o levar pet). A v16 e so a do laboratorio */
+export const VERSOES_PET: readonly number[] = [13, 14, 15, 17, 18, 19];
 /** a versao de pet do cerebro trocavel (o evento "cb") */
 export const VERSAO_V17 = 17;
 /** a versao de pet do empurrao de verdade na luta (a v17 com o RELOGIO_V18) */
 export const VERSAO_V18 = 18;
-/** a versao tem o cerebro trocavel, a ponte da luta e a bola no golpe da v17: a v17 e a v18 (a v18 e a v17 com o empurrao) */
-export const ehCerebroTrocavel = (versao: number): boolean => versao === VERSAO_V17 || versao === VERSAO_V18;
+/** a versao de pet do levar pet (o evento "lp"; a v18 com o dono que pega o pet e o solta noutro lugar) */
+export const VERSAO_V19 = 19;
+/** a versao tem o cerebro trocavel, a ponte da luta e a bola no golpe da v17: a v17, a v18 (a v17 com o empurrao) e a v19 (a v18 com o
+    levar pet) */
+export const ehCerebroTrocavel = (versao: number): boolean => versao === VERSAO_V17 || versao === VERSAO_V18 || versao === VERSAO_V19;
 /** os cerebros que o evento "cb" escolhe: o DigiBrain modular e o cerebro A (os lobos, a linha de base) */
 export const CEREBROS = ["modular", "a"] as const;
 /** a versao de pet da bola no golpe (a chave bolaNoGolpe do Mundo) */

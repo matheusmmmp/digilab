@@ -261,7 +261,7 @@ export function direcaoDoCheiro(x: number, y: number, fontes: readonly FonteChei
 // ================================================================== os eventos do log (events.deixar_comida, deixar_bola)
 export const TIPOS_COMIDA_MUNDO = ["racao", "a", "b", "c"] as const;
 export type TipoComidaMundo = typeof TIPOS_COMIDA_MUNDO[number];
-export interface EventoMundo { tick: number; tipo: "deixar_comida" | "deixar_bola"; valor: string }
+export interface EventoMundo { tick: number; tipo: "deixar_comida" | "deixar_bola" | "levar_pet"; valor: string }
 
 function posicaoMundo(x: unknown, y: unknown): [number, number] {
   if (typeof x !== "number" || typeof y !== "number" || !Number.isInteger(x) || !Number.isInteger(y))
@@ -299,6 +299,34 @@ export function lerDeixarBola(e: EventoMundo): [number, number] {
   const p = e.valor.split("|");
   if (p.length !== 2) throw new Error(`deixar_bola malformado: ${e.valor}`);
   return posicaoMundo(inteiroDoLog(p[0]), inteiroDoLog(p[1]));
+}
+
+/** o levar pet (v19; events.levar_pet do Python): o ponto onde o dono soltou o pet, inteiro e com sinal (fora do mapa vale: quem o limita
+    e o Mundo.levarPet, PP-4). So inteiros seguros, como o int do Python que cabe no float do TS */
+function pontoSolto(x: unknown, y: unknown): [number, number] {
+  if (typeof x !== "number" || typeof y !== "number" || !Number.isSafeInteger(x) || !Number.isSafeInteger(y))
+    throw new Error(`levar_pet com posicao nao inteira: (${String(x)}, ${String(y)})`);
+  return [x === 0 ? 0 : x, y === 0 ? 0 : y];         // o -0 vira 0 (o log grava "0")
+}
+
+/** o inteiro com sinal do log, na forma canonica (sem zero a esquerda, sem "+" e sem "-0"): a mesma regra do Python */
+function inteiroComSinalDoLog(texto: string): number {
+  if (!/^(0|-?[1-9][0-9]*)$/.test(texto)) throw new Error(`inteiro malformado no log: ${texto}`);
+  const n = Number(texto);
+  if (!Number.isSafeInteger(n)) throw new Error(`inteiro grande demais no log: ${texto}`);
+  return n;
+}
+
+export function eventoLevarPet(tick: number, x: unknown, y: unknown): EventoMundo {
+  const [px, py] = pontoSolto(x, y);
+  return { tick, tipo: "levar_pet", valor: `${px}|${py}` };
+}
+
+export function lerLevarPet(e: EventoMundo): [number, number] {
+  if (e.tipo !== "levar_pet") throw new Error(`evento nao e levar_pet: ${e.tipo}`);
+  const p = e.valor.split("|");
+  if (p.length !== 2) throw new Error(`levar_pet malformado: ${e.valor}`);
+  return pontoSolto(inteiroComSinalDoLog(p[0]), inteiroComSinalDoLog(p[1]));
 }
 
 // ================================================================== percepcao, alvos e o mundo
@@ -384,6 +412,8 @@ export class Mundo {
   readonly sumidas: Record<string, unknown>[] = [];
   readonly deixadas: Record<string, unknown>[] = [];
   readonly bolasDeixadas: { tick: number; x: number; y: number }[] = [];
+  /** v19: cada vez que o dono levou o pet (o tick, de onde, o ponto pedido e onde ele caiu, ja no mapa) */
+  readonly levadas: { tick: number; de: [number, number]; pedido: [number, number]; para: [number, number] }[] = [];
   readonly rolagens: Record<string, unknown>[] = [];
   readonly decisoes: Record<string, unknown>[] = [];
   readonly regioes: { tick: number; de: number; para: number }[] = [];
@@ -786,6 +816,17 @@ export class Mundo {
     this.bolasDeixadas.push({ tick, x, y });
   }
 
+  /** v19 (MotorMundo._aplicar_levar_pet do Python): o dono solta o pet em (x, y); fora do mapa, ele cai na borda mais proxima (noMapa,
+   *  PP-4). O destino que o pet tinha (o pendente) se perde: na proxima decisao ele escolhe de novo, de onde caiu. So a posicao muda (PP-1):
+   *  nada do registro das decisoes, das regioes nem das manchas, que andam so na decisao */
+  levarPet(tick: number, x: number, y: number): void {
+    const [px, py] = lerLevarPet(eventoLevarPet(tick, x, y));
+    const de: [number, number] = [this.pet[0], this.pet[1]];
+    this.pet = noMapa(px, py, this.cm);
+    this.pendente = null;
+    this.levadas.push({ tick, de, pedido: [px, py], para: [this.pet[0], this.pet[1]] });
+  }
+
   // ------------------------------------------------------------ leitura
   /** o MotorMundo.resumo_mundo_fisico, sem as rngs */
   resumo(): Record<string, unknown> {
@@ -797,6 +838,7 @@ export class Mundo {
       rolagens: this.rolagens, decisoes: this.decisoes, regioes: this.regioes, visitas: this.visitas,
       manchas_abertas: [...this.manchasAbertas.values()].map(v => ({ ...v })),
       ...(contratoLigado(this.cct) ? { orientacao: this.orientacao, contrato_decisoes: this.contratoDecisoes } : {}),
+      ...(this.levadas.length > 0 ? { levadas: this.levadas.map(l => ({ ...l, de: [...l.de], pedido: [...l.pedido], para: [...l.para] })) } : {}),   // so com alguma levada: a vida de antes sai byte a byte
     };
   }
 }
