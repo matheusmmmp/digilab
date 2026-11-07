@@ -13,17 +13,22 @@ constantes daqui sao leituras dela (DC2b, D-CP-DC2b-1), e um teste falha se dive
 Formatos: `dec-v1` (DC1/DC2) e `dec-v2` (DC2b): o v2 so acrescenta ao conceito `lembranca` o campo `episodio` = {acao, classe, desfecho}, tudo
 de catalogo fechado (acao: os 7 comportamentos; classe: as 8 classes de episodio; desfecho: bom, ruim ou neutro), decodificado do episodio
 recuperado. Nenhum texto livre do episodio chega aqui, e o `episodio` fora do catalogo e erro (400 no servidor).
+`dec-v3` (DC3d): os conceitos do dec-v2, com a `intencao` vinda da unidade de fala que o modular escolheu (a subchave `fala_unidades`): so um dos
+tres conteudos de INTENCOES_FALA (fome, higiene, solidao), que sao os CONTEUDOS_FALA de digilab/config.py. No dec-v3 a intencao fora deles, ou
+um nome do catalogo que nao e conteudo de fala, e erro (400). A intencao e um PEDIDO ao dono (PEDIDO_DITO), e liga a voz-v3 e a verif-v9.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 
-from digilab.config import CONFIG_DECODIFICADOR
+from digilab.config import CONFIG_DECODIFICADOR, CONTEUDOS_FALA
 
 VERSAO_DEC = "dec-v1"
 VERSAO_DEC_V2 = "dec-v2"
-VERSOES_DEC = (VERSAO_DEC, VERSAO_DEC_V2)
+VERSAO_DEC_V3 = "dec-v3"
+VERSOES_DEC = (VERSAO_DEC, VERSAO_DEC_V2, VERSAO_DEC_V3)
+INTENCOES_FALA = CONTEUDOS_FALA                    # a intencao do dec-v3: o conteudo da unidade de fala (catalogo fechado)
 S = 1024                                  # escala inteira do modular (digilab/digibrain): valor e confianca em [0, S]
 NOMES = ("fome", "sono", "bem_estar", "mal_estar", "agitacao", "aversao", "frustracao", "determinacao", "indecisao",
          "lembranca", "solidao", "curiosidade")                              # catalogo fechado (espec, secao 2)
@@ -55,6 +60,9 @@ CLASSE_DITA = {"racao": "ração", "a": "uma fruta (A)", "b": "uma fruta (B)", "
                "nao_havia": "um lugar onde não havia comida", "bola": "a bola", "sem_alvo": "nada em especial"}
 DESFECHO_DITO = {"bom": "foi bom", "ruim": "foi ruim", "neutro": "não foi nem bom nem ruim"}
 assert set(ACAO_DITA) == set(ACOES_EPISODIO) and set(CLASSE_DITA) == set(CLASSES_EPISODIO) and set(DESFECHO_DITO) == set(DESFECHOS)
+# como a voz-v3 diz o pedido do dec-v3 (o que a rede escolheu pedir ao dono; so palavras de catalogo)
+PEDIDO_DITO = {"fome": "pedir comida ao dono", "higiene": "pedir ao dono para te limpar", "solidao": "pedir a companhia do dono"}
+assert tuple(PEDIDO_DITO) == INTENCOES_FALA == ("fome", "higiene", "solidao")
 
 
 class ConceitosInvalidos(ValueError):
@@ -67,7 +75,7 @@ class Conceito:
     valor: int
     confianca: int
     alvo: str | None = None
-    episodio: tuple | None = None            # (acao, classe, desfecho), so no conceito `lembranca` do dec-v2
+    episodio: tuple | None = None            # (acao, classe, desfecho), so no conceito `lembranca` do dec-v2 e do dec-v3
 
     @property
     def hesitante(self) -> bool:
@@ -85,6 +93,11 @@ class Conceitos:
     intencao: str
     conceitos: tuple[Conceito, ...]
     versao: str = VERSAO_DEC
+
+    @property
+    def pedido(self) -> str | None:
+        """O pedido do dec-v3 (o conteudo da unidade de fala que a rede escolheu); None nos outros formatos."""
+        return self.intencao if self.versao == VERSAO_DEC_V3 else None
 
     def ativos(self) -> tuple[Conceito, ...]:
         """Os que entram na fala: valor >= LIMIAR_VALOR, do maior valor para o menor (empate: a ordem do catalogo)."""
@@ -116,7 +129,7 @@ def _episodio(c: dict, versao: str) -> tuple:
     """O `episodio` do conceito `lembranca` do dec-v2: exatamente {acao, classe, desfecho}, cada um de catalogo (valor de tipo errado,
     inclusive lista ou dict, nunca casa); so no dec-v2, so na `lembranca` e so com alvo de episodio (`ep<N>`)."""
     e = c["episodio"]
-    if versao != VERSAO_DEC_V2 or c["nome"] != "lembranca":
+    if versao not in (VERSAO_DEC_V2, VERSAO_DEC_V3) or c["nome"] != "lembranca":
         raise ConceitosInvalidos("conceitos: episodio so existe na lembranca do dec-v2")
     alvo = c.get("alvo")
     if not isinstance(alvo, str) or not alvo.startswith(PREFIXO_EPISODIO) or alvo in CLASSES_OBJETO:
@@ -138,7 +151,7 @@ def validar(d, rivais=frozenset()) -> Conceitos:
         raise ConceitosInvalidos(f"conceitos: versao precisa ser uma de {VERSOES_DEC!r}")
     versao = d["versao"]
     k = _inteiro(d["k"], "k", 0, 2**31 - 1)
-    if d["intencao"] not in NOMES:                      # `in` numa tupla de str: tipo errado (lista, dict) nao casa
+    if d["intencao"] not in (INTENCOES_FALA if versao == VERSAO_DEC_V3 else NOMES):   # `in` numa tupla de str: tipo errado nao casa
         raise ConceitosInvalidos("conceitos: intencao fora do catalogo")
     lista = d["conceitos"]
     if not isinstance(lista, list) or len(lista) > MAX_CONCEITOS:

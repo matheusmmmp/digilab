@@ -246,3 +246,30 @@ Não há run de pesquisa. O gate de cada etapa tem três partes:
   WarGrowlmon (pele dura, preparo, pronto), o Kuramon (esquiva) e o Silphymon (marcar), em 390 e 1280 px, nas duas peles, com GIF nos três
   primeiros. Aprovadas pelo Matheus em 2026-11-07 ("Faça o merge e siga cm o resto", repassado pela sessão que coordena a frente).
 - **Próxima:** E5.
+
+## 13. Resumo da E5, o nocaute e a câmera (2026-11-07), e o fecho da tarefa
+
+- **Feito:** `palcoTR/nocauteTR.ts` e `palcoTR/cameraTR.ts`, puros; o desenho em `desenhoTR.ts`; a barra em `PalcoTR.tsx`; a câmera lenta e
+  a espera do fim em `src/luta.ts`; `geometriaTR` com a câmera opcional (sem ela, a de antes). Tudo sai dos eventos `dano` e `cura` e do
+  `passo` (mais a espera do fim, `visual.extra`).
+- **O desenho:**
+  - **a barra:** o pedaço da vida que saiu fica branco (~0,2 s), segura (~0,5 s) e esvazia em vermelho até a vida;
+  - **o nocaute:** os últimos 36 passos a um terço da velocidade, o cenário escurece, o "K.O." em pixel sai uma vez e meia maior e encolhe
+    até o final; o Die anda na espera, que no nocaute é de 1,8 s;
+  - **a câmera:** segue a distância com histerese, no passo da luta; o zoom é uma escala inteira do sprite em pixels da tela (em 1280 px,
+    1,33 e 1,67); os dois lutadores ficam sempre na tela (o empurrão da v18 e a cerca); os efeitos da E1 à E4 vão junto. Em 390 px não há
+    zoom (D-LE-E5-2).
+- **Movimento reduzido:** sem câmera lenta, sem tremida, sem a passagem do zoom e sem o "K.O." encolher; o "K.O." e a barra ficam.
+- **Números:** `BARRA`, `NOCAUTE`, `CAMERA` e `PAUSA_FIM_KO`, PROPOSTOS, SEM FONTE (D-LE-E5-8).
+- **Testes:**
+  - `test/luta_efeitos_e5.test.ts` (16): a barra, a câmera lenta com o fim igual ao do `ResultadoLutaTR`, o escuro e o "K.O.", a histerese,
+    a escala inteira, os dois na tela no zoom e no deslize, o mundo junto com o zoom, o determinismo e o movimento reduzido;
+  - `e2e/luta_efeitos_e5.spec.ts` (2): contra o Monochromon, a barra atrasada, o escuro, o "K.O." e o zoom em 1280 px; com o movimento
+    reduzido, o "K.O." e a barra sem tremida nem encolher;
+  - `git diff origin/main -- web/app/motor digilab` sai vazio.
+- **Capturas:** `e2e_capturas/luta_efeitos_e5.spec.ts`, no servidor do Vite: o Gabumon v18 contra o Monochromon (a luta inteira até o
+  nocaute e a folha com sete momentos) e contra o Zudomon (a câmera longe e perto, com o empurrão), em 390 e 1280 px, nas duas peles.
+  Aprovadas pelo Matheus em 2026-11-07 ("Aprovo e mergeia", repassado pela sessão que coordena a frente), com D-LE-E5-1 a 9.
+- **A tarefa LUTA_EFEITOS fecha aqui:** as cinco etapas (o impacto, os projéteis por elemento, a telegrafia e o chão, as posturas, o
+  nocaute e a câmera) estão feitas, só na vista. Ficam para depois: D-LE-E3-1 (o cartão sobre os pés no 390), D-LE-E4-5 (o ícone alto
+  nos sprites com vão em cima) e a calibração dos números PROPOSTOS na rodada de equilíbrio visual.

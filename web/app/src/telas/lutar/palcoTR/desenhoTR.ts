@@ -10,7 +10,9 @@ import { chaveUp, desenharSprite, dimSprite, quadroDoClipe, type AtlasOk, type C
 import { zoomAtual } from "../../../escala.ts";
 import { VISUAL_CENA, prontas, type IdCenaTR } from "./cenasTR.ts";
 import { ELEMENTO, elementoDoSprite } from "./elementosTR.ts";
-import { GOLPES_RAJADA, VOO, cabecaVisivel, fracaoDaRajada, fracaoDoVoo, geometriaTR, pixelsDaCabeca, pixelsDoEstouro, pixelsDoRastro, pontoDoVoo, xTela, type GeometriaTR, type PixelTR } from "./projeteisTR.ts";
+import { GOLPES_RAJADA, VOO, cabecaVisivel, fracaoDaRajada, fracaoDoVoo, pixelsDaCabeca, pixelsDoEstouro, pixelsDoRastro, pontoDoVoo, type GeometriaTR, type PixelTR } from "./projeteisTR.ts";
+import { cameraDoQuadro } from "./cameraTR.ts";
+import { escuroDoPasso, koDoPasso, pixelsDoKO } from "./nocauteTR.ts";
 import { CHAO, alfaDaMarca, pixelsDaCratera, pixelsDaOnda, pixelsDaTelegrafia, pixelsDoArrasto, poeiraDaNuvem, poeiraDoPassoTR, telegrafiaDoPasso } from "./chaoTR.ts";
 import { COR_PELE, NOME_POSTURA, POSTURA, efeitoDaPostura, pixelsDaAura, pixelsDoContra, pixelsDoEscudo, pixelsDoIcone, posturaDoLado, type PosturaTR } from "./posturasTR.ts";
 import { IMPACTO, COR_FORTE, COR_TINTA, MOVIMENTO, VIDA_NUMERO, clarao, empurraoDoPasso, faiscaDoPasso, pixelsDoTexto, poeiraDoPasso, puloDaQueda, textoDeDano, tremidaDoPasso, type VisualTR } from "./efeitosTR.ts";
@@ -93,20 +95,33 @@ export function desenharLutaTR(cv: HTMLCanvasElement, c: CenaDesenho, a: AtlasOk
   const cx = cv.getContext("2d"); if (!cx) throw new Error("canvas 2d indisponível");
   const { K, W, H } = ajustar(cv), Wp = cv.width, Hp = cv.height;
   cx.setTransform(1, 0, 0, 1, 0, 0); cx.clearRect(0, 0, Wp, Hp);
-  const reduzido = movimentoReduzido(), faltou = desenharCenario(cx, c.cena, Wp, Hp, Math.round(H * .62 * K));
-  cx.imageSmoothingEnabled = false;
+  const reduzido = movimentoReduzido();
   const passoLuta = c.sim ? c.sim.S.passo : 0, passo = passoLuta + c.visual.extra;
   const xs = c.sim ? c.sim.S.L.map(l => l.x) : [CTR_TR.centro - CTR_TR.entrada, CTR_TR.centro + CTR_TR.entrada];
-  /* a escala inteira dos sprites, o centro de cada lutador e o topo (projeteisTR.ts, geometriaTR: a mesma conta que o teste do projetil usa) */
-  const geo = geometriaTR(W, H, K, a ? [c.A, c.B].map(L => dimSprite(a.dados, L.sprite)) : [[28, 48], [28, 48]], xs), { PES, centros } = geo;
+  /* a camera (E5, cameraTR.ts) e, com ela, a escala inteira dos sprites, o centro de cada lutador e o topo (projeteisTR.ts, geometriaTR: a
+     mesma conta que os testes usam). Sem simulacao (a previa), a de sempre */
+  const dims: [number, number][] = a ? [c.A, c.B].map(L => dimSprite(a.dados, L.sprite)) : [[28, 48], [28, 48]];
+  const { geo, e0 } = cameraDoQuadro(c.sim ? c.visual.cam : null, W, H, K, dims, xs, passoLuta, reduzido), { PES, centros } = geo, Z = geo.s;
+  /* para os testes e as capturas: a escala do sprite (px de CSS por pixel do sprite), o zoom do mundo e se o zoom esta na passagem */
+  cv.dataset.esc = String(geo.esc); cv.dataset.zoom = Z.toFixed(3); cv.dataset.passagem = Math.abs(Z - geo.e / e0) > 1e-9 ? "1" : "0";
+  /* o cenario com o zoom do mundo, em volta da linha dos pes (o chao fica no lugar; o centro e o da camera) */
+  cx.setTransform(Z, 0, 0, Z, Math.round(K * (W / 2 - geo.cx * Z)), Math.round(K * PES * (1 - Z)));
+  const faltou = desenharCenario(cx, c.cena, Wp, Hp, Math.round(H * .62 * K));
+  cx.setTransform(1, 0, 0, 1, 0, 0);
+  cx.imageSmoothingEnabled = false;
+  /* o nocaute (E5): o cenario escurece; os lutadores e os efeitos vem por cima */
+  const koVal = c.koEm.filter((k): k is number => k !== null), koEm = koVal.length ? Math.min(...koVal) : null;
+  const escuro = c.sim && koEm !== null ? escuroDoPasso(passo - koEm) : 0;
+  if (escuro > 0) { cx.fillStyle = `rgba(4,8,20,${escuro.toFixed(3)})`; cx.fillRect(0, 0, Wp, Hp); }
+  cv.dataset.escuro = escuro.toFixed(2);
   /* as sombras */
   cx.fillStyle = "rgba(0,0,0,.35)";
-  for (const x of centros) { cx.beginPath(); cx.ellipse(x * K, PES * K, 34 * K, 6 * K, 0, 0, Math.PI * 2); cx.fill(); }
+  for (const x of centros) { cx.beginPath(); cx.ellipse(x * K, PES * K, 34 * K * Z, 6 * K * Z, 0, 0, Math.PI * 2); cx.fill(); }
   /* o chao (E3, chaoTR.ts), por baixo dos lutadores: as marcas no piso, a elipse da telegrafia e a onda de choque do pesado. Pixels de chao
      na grade do sprite (CHAO.pixel pixels do sprite cada); as marcas ficam no x da luta (presas ao chao, nao ao lutador) */
   const elementos = [elementoDoSprite(c.A.sprite), elementoDoSprite(c.B.sprite)], uChao = geo.e * CHAO.pixel;
   const meiaChao = (i: number): number => Math.max(3, Math.round(geo.meias[i] * K / uChao));
-  const xChao = (i: number, x: number): number => centros[i] + xTela(x, W) - xTela(xs[i], W);
+  const xChao = (i: number, x: number): number => centros[i] + geo.x(x) - geo.x(xs[i]);
   let marcas = 0, telegrafias = 0, prontas = 0, ondas = 0, preparosMeio = 0, carregarMeio = 0;
   if (c.sim) {
     for (const m of c.visual.marcas) {
@@ -136,12 +151,13 @@ export function desenharLutaTR(cv: HTMLCanvasElement, c: CenaDesenho, a: AtlasOk
   /* as posturas (E4, posturasTR.ts): os efeitos de cada lado neste passo, do estado e das batidas; nada aqui empurra (D-EMP-9/11) */
   const efs = c.sim ? c.sim.S.L.map((l, i) => efeitoDaPostura(l, i, passoLuta, c.visual.batidas, reduzido)) : [null, null];
   const nPost = { escudos: 0, escudosAcesos: 0, fantasmas: 0, fantasmasAbertos: 0, auras: 0, contras: 0, claroes: 0, peles: 0 };
-  const empAlvo = (i: number): number => reduzido || !c.sim ? 0 : (i ? 1 : -1) * empurraoDoPasso(c.visual, passo, i);
+  const empAlvo = (i: number): number => reduzido || !c.sim ? 0 : (i ? 1 : -1) * Math.round(empurraoDoPasso(c.visual, passo, i) * Z);
   [c.A, c.B].forEach((L, i) => {
     const x = centros[i], lado = c.sim?.S.L[i] ?? null;
     if (!a) { cx.fillStyle = i ? COR.vermelho : COR.azul; cx.fillRect((x - 14) * K, (PES - 40) * K, 28 * K, 40 * K); topo.push(PES - 44); return; }
     const k = chaveUp(a.dados, L.sprite), s = a.dados.sprites[k], [w, h] = dimSprite(a.dados, L.sprite), e = geo.e;
-    const { clipe, t } = lado ? clipeDoLado(lado, passoLuta, c.koEm[i]) : { clipe: "Idle" as Clipe, t: performance.now() };
+    /* o Die do nocaute (E5) anda tambem na espera do fim (passo com visual.extra): sem isso ele ficava no primeiro quadro, de pe */
+    const { clipe, t } = lado ? clipeDoLado(lado, lado.hp <= 0 ? passo : passoLuta, c.koEm[i]) : { clipe: "Idle" as Clipe, t: performance.now() };
     let iq = 0;
     if (s?.clipes) { const cl = s.clipes[clipe]; if (!cl) throw new Error(`clipe ${clipe} indisponível para ${L.sprite}`); iq = quadroDoClipe(cl.ms, cl.loop, t); }
     else if (s) iq = lado && lado.hp <= 0 ? 0 : Math.floor(t / a.dados.ms_por_quadro) % s.quadros.length;
@@ -149,7 +165,7 @@ export function desenharLutaTR(cv: HTMLCanvasElement, c: CenaDesenho, a: AtlasOk
     const opc = { sombria: L.sombra, espelho: i === 1, ...(s?.clipes ? { clipe } : {}) }, dx = Math.round(empAlvo(i) * K);
     empurros[i] = dx / K;
     /* a queda (a v18): quem cai sobe num arco enquanto o motor o desliza para tras; o x e sempre o do motor */
-    const dy = reduzido || !lado ? 0 : -Math.round(puloDaQueda(passoLuta, lado.quedaDe, lado.deslizeAte) * K);
+    const dy = reduzido || !lado ? 0 : -Math.round(puloDaQueda(passoLuta, lado.quedaDe, lado.deslizeAte) * Z * K);
     const ef = efs[i], atras = i ? 1 : -1;
     /* a imagem fantasma da esquiva (E4): copias apagadas para tras, na cor do elemento, por baixo do sprite; com o movimento reduzido ficam
        paradas */
@@ -168,7 +184,7 @@ export function desenharLutaTR(cv: HTMLCanvasElement, c: CenaDesenho, a: AtlasOk
     if (!reduzido && inv && c.sim) MOVIMENTO.rastroAlfa.forEach((alfa, k) => {
       const atras = (k + 1) * MOVIMENTO.rastroPassos * c.sim!.S.C.arrancada, rumo = i ? -1 : 1;
       if (rumo * (lado!.x - inv.x0) < atras) return;
-      const xr = centros[i] + xTela(lado!.x - rumo * atras, W) - xTela(lado!.x, W);
+      const xr = centros[i] + geo.x(lado!.x - rumo * atras) - geo.x(lado!.x);
       cx.globalAlpha = alfa; desenharSprite(cx, a, L.sprite, xr * K - w * e / 2, PES * K - h * e, e, iq, opc); cx.globalAlpha = 1;
     });
     const branco = !reduzido && !!c.sim && clarao(c.visual, passo, i);
@@ -215,18 +231,18 @@ export function desenharLutaTR(cv: HTMLCanvasElement, c: CenaDesenho, a: AtlasOk
      lados. Pixels inteiros, sem acaso; sem poeira com o movimento reduzido */
   let poeiras = 0;
   if (!reduzido && c.sim) {
-    const ps = Math.max(1, Math.round(2 * K));
+    const ps = Math.max(1, Math.round(2 * K * Z));
     cx.fillStyle = "rgba(214,196,160,.8)";
     for (const f of poeiraDoPassoTR(c.sim, c.visual.marcas, passoLuta)) {
       const i = f.lado, base = f.x === null ? centros[i] : xChao(i, f.x), sinal = f.sentido * (i ? 1 : -1);
       poeiras++;
       if (f.sentido === 0) {
-        for (const p of poeiraDaNuvem(f.idade, f.tipo === "pesado")) cx.fillRect(Math.round((base + Math.sign(p.dx) * 10 + p.dx * 2) * K), Math.round((PES - 2 - p.dy * 2) * K), ps * p.tam, ps * p.tam);
+        for (const p of poeiraDaNuvem(f.idade, f.tipo === "pesado")) cx.fillRect(Math.round((base + (Math.sign(p.dx) * 10 + p.dx * 2) * Z) * K), Math.round((PES - (2 + p.dy * 2) * Z) * K), ps * p.tam, ps * p.tam);
         continue;
       }
       /* a corrida levanta menos: duas nuvens menores */
       const nuvens = f.tipo === "corrida" ? poeiraDoPasso(f.idade).slice(0, 2).map(p => ({ ...p, tam: Math.max(1, p.tam - 1) })) : poeiraDoPasso(f.idade);
-      for (const p of nuvens) cx.fillRect(Math.round((base + sinal * (14 + p.dx * 2)) * K), Math.round((PES - 2 - p.dy * 2) * K), ps * p.tam, ps * p.tam);
+      for (const p of nuvens) cx.fillRect(Math.round((base + sinal * (14 + p.dx * 2) * Z) * K), Math.round((PES - (2 + p.dy * 2) * Z) * K), ps * p.tam, ps * p.tam);
     }
   }
   cv.dataset.poeiras = String(poeiras);
@@ -276,7 +292,7 @@ export function desenharLutaTR(cv: HTMLCanvasElement, c: CenaDesenho, a: AtlasOk
   for (const [k, n] of Object.entries(nPost)) cv.dataset[k] = String(n);
   /* a faisca no ponto do golpe: pixels inteiros na frente do alvo (do lado de quem bateu), na altura do peito */
   if (c.sim) for (const im of c.visual.impactos) {
-    const ps = Math.max(1, Math.round(3 * K)), dir = im.lado === 0 ? 1 : -1, xc = Math.round((centros[im.lado] + empurros[im.lado] + dir * 14) * K), yc = Math.round((PES - (topo.length ? (PES - topo[im.lado]) / 2 : 20)) * K);
+    const ps = Math.max(1, Math.round(3 * K * Z)), dir = im.lado === 0 ? 1 : -1, xc = Math.round((centros[im.lado] + empurros[im.lado] + dir * 14 * Z) * K), yc = Math.round((PES - (topo.length ? (PES - topo[im.lado]) / 2 : 20)) * K);
     for (const p of faiscaDoPasso(im, passo)) { cx.fillStyle = p.cor; cx.fillRect(xc + p.dx * ps * 2, yc + p.dy * ps * 2, ps * (im.forte ? 2 : 1), ps * (im.forte ? 2 : 1)); }
     /* o estouro na cor do elemento de quem bateu (E2), por cima da faisca */
     pintar(cx, pixelsDoEstouro(elementos[1 - im.lado], passo - im.t0, im.forte, reduzido), xc / K, yc / K, geo, dir);
@@ -306,6 +322,18 @@ export function desenharLutaTR(cv: HTMLCanvasElement, c: CenaDesenho, a: AtlasOk
     const f = document.createElement("canvas"); f.width = cv.width; f.height = cv.height;
     const fx = f.getContext("2d"); if (!fx) throw new Error("canvas 2d indisponível");
     fx.drawImage(cv, 0, 0); cx.setTransform(1, 0, 0, 1, 0, 0); cx.clearRect(0, 0, cv.width, cv.height); cx.drawImage(f, Math.round(t.x * K), Math.round(t.y * K));
+  }
+  /* o "K.O." (E5): grande no meio do palco, em fonte de pixel com contorno e sombra, depois da tremida (ele nao treme) */
+  const ko = c.sim && koEm !== null ? koDoPasso(passo - koEm, Wp, Hp, reduzido) : null;
+  cv.dataset.ko = ko ? String(ko.p) : ""; cv.dataset.koPronto = ko?.pronto ? "1" : "0";
+  if (ko) {
+    const { px, w: kw, h: kh } = pixelsDoKO(), p = ko.p, x0 = ko.cx - Math.round(kw * p / 2), y0 = ko.cy - Math.round(kh * p / 2), o = Math.max(1, Math.round(p / 3));
+    cx.fillStyle = "#8a1c2b"; for (const [gx, gy] of px) cx.fillRect(x0 + gx * p + o, y0 + gy * p + 2 * o, p, p);
+    cx.fillStyle = COR_TINTA;
+    for (const [ox, oy] of [[-1, 0], [1, 0], [0, -1], [0, 1], [-1, -1], [1, 1], [-1, 1], [1, -1]]) for (const [gx, gy] of px) cx.fillRect(x0 + gx * p + ox * o, y0 + gy * p + oy * o, p, p);
+    cx.fillStyle = COR_FORTE; for (const [gx, gy] of px) cx.fillRect(x0 + gx * p, y0 + gy * p, p, p);
+    /* o brilho em cima de cada coluna (um terco do pixel), para o K.O. nao ficar chapado */
+    cx.fillStyle = "#fff6c2"; for (const [gx, gy] of px) if (!px.some(([a, b]) => a === gx && b === gy - 1)) cx.fillRect(x0 + gx * p, y0 + gy * p, p, o);
   }
   return faltou;
 }
