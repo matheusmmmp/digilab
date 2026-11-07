@@ -1,0 +1,23 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Prancha D1b da UX_TELA_PET: o DigiBrain como modal pequeno, so o mapa dos pesos (Matheus 2026-11-07: "Apenas um modalzinho com o
+     cerebro, sem essa quantidade de texto"). Substitui o desenho da tela cheia (digibrain.html) ate o ok dele.
+     So desenho; nenhum codigo do jogo. Le os dados reais de dados.json (os mesmos da prancha do scan).
+     Parametros: ?estado=com_escolha|uma_opcao|sem_decisao|replay|mudou; ?pele=vidro|xcom; ?largura=1920|390;
+     ?lugar=direita|centro (so a 1920); ?dica (a dica do icone "i" aberta); ?texto (o mapa em texto no lugar do desenho);
+     ?selo=vivo|pausado; ?fundo=0 (sem a captura da ilha por baixo). Precisa de servidor http. -->
+<title>DigiBrain modal (D1b) · prancha</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700&family=Rajdhani:wght@600;700&family=Saira+Condensed:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="digibrain.css">
+<link rel="stylesheet" href="modal.css">
+<script>
+(() => {
+  const p = new URLSearchParams(location.search).get("pele") ?? "vidro";
+  if (p !== "vidro" && p !== "xcom") { window.__erroPele = "pele desconhecida: " + p + " (vidro ou xcom)"; document.documentElement.dataset.pele = "vidro"; }
+  else document.documentElement.dataset.pele = p;
+})();
+</script>
+</head><body>
+<div id="tela" class="tela"></div>
+<script src="https://unpkg.com/lucide@0.441.0/dist/umd/lucide.min.js"></script>
+<script src="modal.js"></script>
+</body></html>

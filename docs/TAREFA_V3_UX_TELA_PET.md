@@ -296,6 +296,16 @@ Matheus, 2026-11-05, nesta sessão (resposta "B, hooks antes"):
     - Depois a **L3**: Lutar no portão e Diário na barraca, com os dois objetos CC0.
     - Por último o código dos níveis e das travas (o plano `docs/PLANO_V3_PROGRESSAO_TUTORIAL.md`, PR #634).
 
+- **O DigiBrain "scan holográfico", a prancha D1 e as D1-1 a D1-11** (Matheus, 2026-11-07: escolheu a direção A, "scan holográfico", no
+  protótipo https://claude.ai/artifact/5Yay8iVFaPv4kTE3r4Lhut; depois "Aprovar e codar" à prancha do commit `26285e7a`). As perguntas e as
+  recomendações aceitas estão em `docs/PROPOSTAS_V3_UX_TELA_PET.md`, seção "DigiBrain scan (D1)", e a prancha em `docs/pranchas/ux-digibrain/`:
+  - SVG; a varredura em 1,2 s, o pulso em 0,8 s e o giro de ±8° em 40 s, **PROPOSTO, SEM FONTE**; sem giro no celular; o plano inteiro
+    balança, sem profundidade por nó;
+  - as barras dos lobos com o eixo no zero; no replay, só o destaque troca; o mapa em texto com os inteiros `w` e `w0`;
+  - o e2e "sem animação" com o reduzir movimento, mais um teste de que as animações terminam;
+  - o `DigiBrainLab` fica no painel de hoje; o tempo do jogo segue andando, com o cartão do chamado por cima;
+  - os números de layout ficam **PROPOSTO, SEM FONTE**.
+
 UX-4 a UX-8 continuam PROPOSTAS.
 
 ## 9. Etapa A0: os hooks restaurados (2026-11-05)
@@ -441,7 +451,108 @@ seção "Lugares da ilha (L1)", e em `docs/pranchas/ux-lugares/`; as decisões, 
 - **As referências de captura a 1920** (`npm run capturas`) mudam nas telas Pet: o minimapa entra e a etiqueta sai. Não foram regravadas;
   isso espera o ok do Matheus.
 
-## 14. Etapa L2 de "Lugares da ilha": Crescer no saco de pancada (2026-11-06)
+## 14. Etapa D1: o DigiBrain "scan holográfico" (2026-11-07)
+
+Branch `v3-ux-digibrain`, empilhada sobre a `v3-ux-integra`. A prancha (`docs/pranchas/ux-digibrain/`) e o ok do Matheus às D1-1 a D1-11
+estão na seção 8.1 e em `docs/PROPOSTAS_V3_UX_TELA_PET.md`, seção "DigiBrain scan (D1)".
+
+**O que mudou:**
+- O painel do cérebro A dos pets v11 abre como "modo scan":
+  - no desktop, um `<dialog>` modal em tela cheia por cima da ilha;
+  - no celular, a folha inteira.
+- O mapa dos pesos é o da prancha. Cada ponto é um nó do motor e cada fio é um peso de `Motor.digibrain().mapa`.
+- O movimento:
+  - a varredura e o pulso só aparecem numa decisão nova, e terminam;
+  - o giro lento só existe no desktop;
+  - com "reduzir movimento", nada se move.
+- O `DigiBrainLab` continua no painel de hoje.
+
+**Os arquivos:**
+- novos: `web/app/src/componentes/ScanDigiBrain.tsx`, `web/app/src/estilo/scan_digibrain.css` e `web/app/test/scan_digibrain.test.ts`;
+- mudados: `TelaPet.tsx` (o scan no lugar do painel do A, o chamado sobre o scan e o foco de volta), `DigiBrain.tsx` e `MapaPesos.tsx` (só `export`), `digibrain.css` e `e2e/jogo.spec.ts`.
+
+**Os portões:**
+- `npm run tipos` está limpo e o Vitest deu 95 arquivos e 891 testes.
+- No `npm run e2e` (porta 8831), 131 passaram e 1 falhou: o `camera_livre.spec.ts:74`, que falha igual na base `v3-ux-integra` (procura o `.topo-retrato` "Meus pets", que a M1 trocou). Os 11 testes do DigiBrain passam.
+- O "nada fora do DigiBrain muda": o DOM e a captura com o canvas escondido, nas 21 telas do `telas.spec.ts`, a 1920 e a 390, nas duas peles, base × branch. Dá 84 DOM iguais e 84 capturas com 0 px de diferença. O ruído medido na base contra ela mesma é de no máximo 1 captura com 42 px por rodada.
+- Revisaram o `rev-a11y`, o `rev-cena` e o `rev-replay`. Os achados que bloqueavam foram consertados: a cena coberta pelo scan, o vidro de tela cheia, o foco de volta à pilha, os 11 px do texto do desenho e o mapa em texto que cobria o botão.
+
+**PROPOSTO, SEM FONTE:** a varredura em 1,2 s, o pulso em 0,8 s, o giro de ±8° em 40 s e os números de layout. O desvio está em
+`docs/registro/2026-11.md`.
+
+## 15. Etapa D1b: o DigiBrain como modal pequeno (2026-11-07)
+
+O Matheus trocou a tela cheia da D1 por um modal pequeno, só com o mapa dos pesos. A prancha `docs/pranchas/ux-digibrain/modal.html` e o ok
+dele às D1b-1 a D1b-7 ("Aprovar e codar") estão em `docs/PROPOSTAS_V3_UX_TELA_PET.md`, seção D1b. Fica no mesmo PR da D1.
+
+**O que mudou:**
+- **Desktop:** o `<dialog>` modal fica à direita, com até 720 px, sobre a pilha de painéis, e o pet fica à vista no meio.
+- **Celular:** abaixo de 900 px, uma folha baixa presa embaixo.
+- **Fechar:** pelo Esc, pelo X ou com um clique fora. O foco volta a quem abriu.
+- **O que sai:**
+  - os seis cartões, a legenda do rodapé e o parágrafo;
+  - o "pesou mais" e a região da memória;
+  - o `CENA.coberto` e o fundo opaco. A ilha fica a pleno ritmo sob um véu leve, sem desfoque, e o vidro da pele fica só na caixa.
+- **O que fica:**
+  - o selo, só como forma;
+  - o "i", com a dica (a forma é só desenho, a legenda curta e o significado do selo);
+  - o mapa em texto, como botão de ícone que troca o desenho;
+  - as regiões "ações", "regras", "percepção" e "receptores do corpo".
+- O movimento é o da D1.
+
+**Os arquivos:** `ScanDigiBrain.tsx`, `scan_digibrain.css`, `test/scan_digibrain.test.ts` e `e2e/jogo.spec.ts`. O `TelaPet.tsx` não mudou.
+
+**Os portões:**
+- `npm run tipos` está limpo. O Vitest dá 95 arquivos e 893 testes, inclusive o contraste do desenho sobre a ilha nas duas peles.
+- No e2e inteiro (porta 8831), 132 passaram e 1 falhou: o `camera_livre.spec.ts:74`, herdado da base. Depois dos consertos das revisões, os 12 e2e do DigiBrain passam.
+- O portão "nada fora do DigiBrain muda": 21 telas, a 1920 e a 390, nas duas peles, base × branch.
+  - Na primeira rodada, as 84 telas deram DOM igual e 0 px.
+  - Na segunda, uma captura deu 310 px: a `evolucao-momento` a 390 no Militar. Rodada de novo duas vezes, deu 0 px e o mesmo DOM.
+- O `rev-replay` e o `rev-cena` não acharam bloqueios. O `rev-a11y` achou dois, e os dois foram consertados:
+  - o foco ao abrir caía no botão do chamado;
+  - o contraste não era medido, e agora há um teste.
+
+**Fica pendente:** a medida de quadros com `?medir3d=1`, com o modal aberto e fechado, nas duas peles, no desktop e no celular. O `rev-cena`
+a pede antes da aprovação final do vidro na caixa.
+
+**PROPOSTO, SEM FONTE:** os 720 px, a metade da direita com o piso de 560 px, a folha e o véu a 28 %. Os desvios estão em
+`docs/registro/2026-11.md`, seção D1b.
+
+## 16. Etapa D1c: o DigiBrain como campo pequeno (2026-11-07)
+
+O Matheus achou o modal da D1b grande demais ("Ele tem que ser um campo pequeno"). Viu duas opções capturadas no jogo
+(`D:\Trab\digilab\capturas_ux_digibrain_aprovar\modal_menor\`) e escolheu "(a) desk, (b) celular" (`docs/PROPOSTAS_V3_UX_TELA_PET.md`,
+seção D1c). Fica no mesmo PR da D1.
+
+**O que mudou:**
+- **Desktop (900 px ou mais):** um painel de 420 px sob o relógio, no lugar da pilha de painéis. A altura acompanha o desenho (~312 px a
+  1920).
+- **Celular:** uma folha de 210 px na largura toda, com o ícone, o selo e os botões numa coluna à esquerda do desenho. Os nomes das regiões
+  saem.
+- **O título** é só o ícone do cérebro; o nome "DigiBrain" fica num `.sr-only`, e o diálogo continua com esse nome.
+- **Os rótulos:** só o caminho aceso (as entradas das arestas acesas, a regra e a ação) e as candidatas, com a chance. O de outro ponto
+  aparece ao passar o mouse ou ao tocar nele; tocar é só vista e não grava evento. A dica do "i" diz isso e aponta o mapa em texto.
+- Os botões do topo continuam com 44 × 44 px.
+
+**Os arquivos:** `ScanDigiBrain.tsx`, `scan_digibrain.css` e `e2e/jogo.spec.ts` (o tamanho e o lugar, o título só com o ícone e um teste novo
+dos rótulos a 390 e a 1280).
+
+**Os portões:**
+- `npm run tipos` está limpo. O Vitest dá 95 arquivos e 893 testes; depois dos consertos do `rev-a11y`, o `scan_digibrain.test.ts` deu 14/14.
+- No e2e inteiro (porta 8831), 134 passaram e 1 falhou: o `camera_livre.spec.ts:74`, herdado da base. Depois dos consertos, os 14 e2e do
+  DigiBrain e o `lab_modular.spec.ts` passam.
+- O portão "nada fora do DigiBrain muda": 21 telas, a 1920 e a 390, nas duas peles, base × branch.
+  - Nas duas rodadas, o DOM das 84 telas ficou igual.
+  - As capturas tiveram diferenças pequenas que trocam de tela de uma rodada para outra: 4 telas na primeira (26 a 698 px) e 1 na segunda
+    (73 px). Três delas, rodadas de novo, deram 0 px. A que ainda variou, a `crescer-itens` a 390 no Vidro (42 px), varia no mesmo lugar
+    entre duas capturas da própria base. É ruído.
+- O `rev-a11y` barrou os botões de 36 px das capturas das opções. Eles voltaram a 44 px. Das ressalvas, foram aceitas a dica com altura
+  máxima a 390, um alvo de toque maior no celular e a linha da dica sobre o mapa em texto.
+
+**PROPOSTO, SEM FONTE:** os 420 px, a folha de 210 px e o corte em 900 px (o pedido falava em 768). Os desvios estão em
+`docs/registro/2026-11.md`, seção D1c.
+
+## 17. Etapa L2 de "Lugares da ilha": Crescer no saco de pancada (2026-11-06)
 
 **O que é.** O primeiro menu como lugar da ilha, pela prancha L2/L3 aprovada (`docs/pranchas/ux-lugares-menus/`, as 13 decisões na
 seção 8.1). Só Crescer, no desktop e no celular, com tudo aberto (as travas e os níveis são outra tarefa; Lutar e Diário são a L3). É só
