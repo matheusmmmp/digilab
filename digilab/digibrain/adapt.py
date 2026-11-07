@@ -24,6 +24,10 @@ as urgencias, o reflexo e o gesto do dono desde a decisao anterior); o `explorar
 `escolher_alvo` (o ponto que o motor sorteou), e nas decisoes seguintes o passeio e entregue como `Alvo.ponto`. O motivo ganha `do_passeio`
 no alvo, e o fim do passeio sem credito pelo gesto traz `credito: "gesto"`. Desligada, nenhum campo novo.
 
+Com a subchave `fala_unidades` (docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, 3.1), o M-IMPULSO divide o `chamar_atencao` nas tres unidades de
+fala (o conteudo so na chave da escolha, `[chamar_atencao, c, None]`); a acao entregue ao motor e o chamar de hoje, e a opcao de fala credita
+a linha de H do conteudo. Desligada, nenhum campo novo; ligada, nenhum campo novo no motivo (o conteudo esta na `escolha`).
+
 **O alvo** (`escolher_alvo`): o candidato do motor do tipo (e do id) da unidade escolhida; o `u` do motor e ignorado. **A excecao unica**
 (a PE-14 revista): em EXPLORAR, o lugar lembrado do M-MEM e entregue como `Alvo.ponto(x, y)`, fora da lista do motor, que o valida por
 conta propria (`MotorMundo._validar_alvo`: so em EXPLORAR, coordenadas inteiras dentro do mapa). Brincar sem bola a vista nao tem alvo
@@ -56,8 +60,9 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass
 
-from ..config import (CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, CONFIG_LUTA_MEMORIA, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO,
-                      VERSAO_PET_DIGIBRAIN, Config, ConfigDigibrain, ConfigDigibrainInatos, ConfigLutaMemoria, ConfigMundo)
+from ..config import (CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, CONFIG_LUTA_MEMORIA, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, CONTEUDOS_FALA,
+                      VERSAO_PET_DIGIBRAIN, Config, ConfigDigibrain, ConfigDigibrainInatos, ConfigFalaUnidades, ConfigLutaMemoria,
+                      ConfigMundo)
 from ..events import AcaoPet, AcaoUsuario, LutaSemChave, resumo_luta
 from ..modelo_mundo import raiz_inteira
 from ..mundo import ACOES_COM_ALVO, Alvo
@@ -111,9 +116,10 @@ class Modulos:
 
 
 def montar_modulos(cfg: Config, cd: ConfigDigibrain, cm: ConfigMundo, inatos: ConfigDigibrainInatos,
-                   serie_e_doadora: tuple | None, semente: int | None = None, luta: bool = False) -> Modulos:
+                   serie_e_doadora: tuple | None, semente: int | None = None, luta: bool = False,
+                   cfg_fala: ConfigFalaUnidades | None = None) -> Modulos:
     return Modulos(sens=Sens(cfg, cm, inatos), afeto=Afeto(cfg, cd, inatos, serie_e_doadora), estado=EstadoDinamico(cfg, cd, inatos),
-                   impulso=Impulso(inatos, cd), mem=Memoria(cm, inatos, cd.memoria_autobio, cd.controle_mem,
+                   impulso=Impulso(inatos, cd, cfg_fala), mem=Memoria(cm, inatos, cd.memoria_autobio, cd.controle_mem,
                                  None if semente is None else random.Random(derivar_semente(semente, "mem_emb")),
                                  luta), arb=Arbitragem(inatos, cd.memoria_autobio, cd.facetas_mem), plast=Plasticidade(cd, inatos),
                    pers=Personalidade(inatos.eta_faceta, inatos.teto_faceta, True) if cd.facetas_mem else None)
@@ -126,6 +132,8 @@ def intencao_da_unidade(unidade: dict) -> Intencao:
         return Intencao(a, "ponto", None, tuple(ident))
     if tipo == "passeio":                             # o passeio (AN-2): o ponto fixo, entregue ao motor como o lugar lembrado
         return Intencao(a, "ponto", None, tuple(ident), True)
+    if a is AcaoPet.CHAMAR_ATENCAO:                   # a unidade de fala (DC3, 3.1): o conteudo fica so na chave; o mundo e o do chamar
+        return Intencao(a, None, None)
     return Intencao(a, tipo, ident if tipo in ("comida", "bola") else None)
 
 
@@ -137,7 +145,8 @@ class DigiBrain:
 
     def __init__(self, cfg: Config | None = None, cfg_digibrain: ConfigDigibrain | None = None, cfg_mundo: ConfigMundo | None = None,
                  inatos: ConfigDigibrainInatos | None = None, serie_e_doadora: tuple | None = None,
-                 semente: int | None = None, cfg_luta_memoria: ConfigLutaMemoria | None = None) -> None:
+                 semente: int | None = None, cfg_luta_memoria: ConfigLutaMemoria | None = None,
+                 cfg_fala: ConfigFalaUnidades | None = None) -> None:
         self.cd = cfg_digibrain or CONFIG_DIGIBRAIN
         if not self.cd.ligada:
             raise DigibrainDesligado("o DigiBrain modular so existe com a ConfigDigibrain ligada")
@@ -148,7 +157,7 @@ class DigiBrain:
         self.luta_memoria = (cfg_luta_memoria or CONFIG_LUTA_MEMORIA).ligada     # a ponte da luta (PE2)
         if self.luta_memoria and not self.cd.memoria_autobio:
             raise ValueError("luta_memoria so com a memoria_autobio (docs/TAREFA_V3_PONTE_LUTA.md, 3.2)")
-        self.m = montar_modulos(self.cfg, self.cd, self.cm, self.inatos, serie_e_doadora, semente, self.luta_memoria)
+        self.m = montar_modulos(self.cfg, self.cd, self.cm, self.inatos, serie_e_doadora, semente, self.luta_memoria, cfg_fala)
         self._lutas: list[dict] = []                  # os resumos desde a decisao anterior (so com a luta_memoria)
         self._pc_antes_luta = None                    # o corpo da ultima consequencia fechada (so com a luta_memoria)
         self.k = 0
@@ -380,6 +389,9 @@ class DigiBrain:
             raise RuntimeError("sem a memoria_autobio, o M-MEM nao tem a recente")
         if not cd.passeio and (m.estado.passeios or any(x["chave"][1] == "passeio" for x in unidades)):
             raise RuntimeError("sem o passeio, o M-ESTADO nao abre passeio")
+        fala = [x["chave"][1] for x in unidades if x["acao"] == "chamar_atencao"]
+        if fala != (list(CONTEUDOS_FALA) if cd.fala_unidades else [None]):
+            raise RuntimeError(f"as unidades do chamar {fala} nao sao as da fala_unidades {'ligada' if cd.fala_unidades else 'desligada'}")
 
     def _fechar(self, p: dict) -> None:
         """a consequencia da decisao anterior aos modulos"""

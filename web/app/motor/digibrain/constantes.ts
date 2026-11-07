@@ -74,6 +74,7 @@ export const CONFIG_DIGIBRAIN_LAB = {
   controle_mem: "rel",
   credito_corrida: false,
   facetas_mem: false,
+  fala_unidades: false,
   g_apr_constante: 0,
   intencao_cheiro: true,
   intencao_suspensa: false,
