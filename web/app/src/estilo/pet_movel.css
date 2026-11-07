@@ -135,7 +135,9 @@
   :root[data-pele] body .pet-dock .mm-mais .racao-bt--ativo{ color:var(--hx-texto); border-color:var(--hx-escolhido-borda) }
 
   /* ---------- por gesto: o toque no retrato abre os vitais e os paineis (TelaPet.tsx, LequePet); o leque fica acima do painel aberto (.pet-painel, z 7) */
-  .mm-vitais{ position:absolute; z-index:8; top:84px; left:14px; display:flex; gap:4px; padding:6px 8px; pointer-events:auto }
+  /* o "Tamer Nv N" (P-8) fica no alto do leque; os vitais e os paineis descem 52 px (prancha ajustes_390) */
+  .mm-tamer{ position:absolute; z-index:8; top:84px; left:14px; pointer-events:none }
+  .mm-vitais{ position:absolute; z-index:8; top:136px; left:14px; display:flex; gap:4px; padding:6px 8px; pointer-events:auto }
   .mm-vit{ width:46px; min-height:44px; display:grid; justify-items:center; align-content:center; gap:3px }
   .mm-vit svg{ width:18px; height:18px; color:var(--hx-rotulo) }
   .mm-vit b{ font:700 16px/1 var(--hx-f-num); font-variant-numeric:tabular-nums; padding:1px 4px }
@@ -146,8 +148,8 @@
   .mm-vit--critica svg{ color:var(--hx-perigo) }
   .mm-vit--critica b{ box-shadow:inset 0 0 0 2px var(--hx-perigo) }
   /* altura baixa (paisagem, zoom): a coluna dos paineis quebra em mais colunas e, se ainda nao couber, rola; o padding deixa o anel de foco inteiro */
-  .mm-leque-paineis{ position:absolute; z-index:8; top:150px; left:12px; display:flex; flex-direction:column; flex-wrap:wrap; align-content:flex-start; gap:10px; padding:6px;
-    max-height:calc(100dvh - 150px - 14px); max-width:calc(100vw - 76px - 12px); overflow:visible; pointer-events:none }
+  .mm-leque-paineis{ position:absolute; z-index:8; top:202px; left:12px; display:flex; flex-direction:column; flex-wrap:wrap; align-content:flex-start; gap:10px; padding:6px;
+    max-height:calc(100dvh - 202px - 14px); max-width:calc(100vw - 76px - 12px); overflow:visible; pointer-events:none }
   /* a rolagem só com a altura baixa (paisagem, zoom): fora dela o balão do nome sai da caixa sem ser cortado */
   @media (max-height:520px){ .mm-leque-paineis{ overflow:auto } }
 }

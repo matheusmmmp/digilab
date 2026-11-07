@@ -35,8 +35,9 @@ import { CONSULTA_SOLTA, VISTA, despublicarVista, focoDoQuadro, ligarCameraLivre
 import { pixelsDoMapa } from "./minimapa.ts";
 import { PRESETS, Pos } from "./pos.ts";
 import { SACO_NA_TELA, VIAGEM, ZOOM_LUGAR_MOVEL, lugarAberto, progressoViagem, type Lugar } from "../../../viagem.ts";
-import { LUGARES, ORDEM_LUGARES, pontoDoLugar as pontoLugarDe, pontoDoPet } from "./lugares.ts";
-import { montarMarcadores, type Marcadores } from "./marcadoresLugar.ts";
+import { LUGARES, ORDEM_LUGARES, estadoDoLugar, pontoDoLugar as pontoLugarDe, pontoDoPet } from "./lugares.ts";
+import { Apagador, montarMarcadores, type Marcadores } from "./marcadoresLugar.ts";
+import { TRANCAS } from "../../../trancas.ts";
 
 const movimentoReduzido = (): boolean => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -54,6 +55,13 @@ class VistaIlha {
   private readonly pontos: Record<Lugar, [number, number]>;
   /** os marcadores provisorios do portao e da barraca (marcadoresLugar.ts), soltos no dispose */
   private readonly marcadores: Marcadores;
+  /** os lugares trancados (nivel do Tamer, trancas.ts) saem apagados: a versao da tabela de trancas que a cena ja aplicou */
+  private readonly apagador = new Apagador();
+  private versaoTrancas = -1;
+  /** onde cada lugar cai na tela (o pe em px de CSS e a altura em px), reaproveitado a cada quadro; o retangulo do canvas e lido so em `ajustar` */
+  private readonly lugaresTela: Record<Lugar, [number, number, number]> = { saco: [0, 0, 0], portao: [0, 0, 0], barraca: [0, 0, 0] };
+  private readonly vLugar = new THREE.Vector3();
+  private rectCanvas = { left: 0, top: 0, width: 1, height: 1 };
   private objetos: Objetos | null = null;
   /** a qualidade caiu (regra 10): sem vento, metade da grama e pixelRatio 1 */
   private baixa = false;
@@ -169,6 +177,7 @@ class VistaIlha {
   /** ajusta o canvas a caixa (px de CSS): a resolucao, a proporcao e o afastamento da camera em retrato */
   ajustar(larguraCss: number, alturaCss: number): void {
     this.larguraCss = Math.max(1, larguraCss); this.alturaCss = Math.max(1, alturaCss);
+    { const r = this.canvas.getBoundingClientRect(); this.rectCanvas = { left: r.left, top: r.top, width: r.width || this.larguraCss, height: r.height || this.alturaCss }; }
     this.largo = typeof matchMedia === "function" && matchMedia("(min-width: 900px)").matches;
     this.renderer.setPixelRatio(this.baixa ? 1 : Math.min(RAZAO_MAX, devicePixelRatio || 1));
     this.renderer.setSize(this.larguraCss, this.alturaCss, false);
@@ -407,6 +416,7 @@ class VistaIlha {
     CURVA.uTempo.value = reduzido ? 0 : agora / 1000;
     const noite = eNoite(m.e.tick % TPD);
     if (noite !== this.noite) { this.noite = noite; this.cenaIlha.aplicarNoite(noite); }
+    this.aplicarTrancas();
     this.itens.sincronizar(mu, m.e.tick, noite, agora, dtMs, m.lesionadoDesde !== null, reduzido, m.e.sujeira, this.petCel);
     /* com a camera solta, o pet fica longe do foco: o chao sob ele desce pela dobra, e o tamanho do papel vale na distancia dele (senao o
        texel deixa de ser inteiro e o pet cresce ou encolhe com a distancia ao foco) */
@@ -429,7 +439,31 @@ class VistaIlha {
     this.renderer.info.reset();
     this.pos.desenhar(this.cenaIlha.cena, this.camera, PRESETS[habitatAtual().visual], 1 - (ret.y + ret.h * 0.6) / this.alturaCss);
     this.publicar(mu, m.e.tick, ret, pode);
+    this.publicarLugaresTela();
     return ret;
+  }
+
+  /** o lugar trancado fica apagado e o destrancado volta ao normal; so quando a tabela de trancas mudou (trancas.ts, escrita pelo nivel do Tamer) */
+  private aplicarTrancas(): void {
+    if (this.versaoTrancas === TRANCAS.versao) return;
+    this.versaoTrancas = TRANCAS.versao;
+    for (const id of ORDEM_LUGARES) {
+      const raiz = id === "saco" ? this.itens.sacoRaiz : this.marcadores.porLugar.get(id);
+      if (raiz) this.apagador.aplicar(raiz, estadoDoLugar(id) === "trancado");
+    }
+  }
+  /** onde cada lugar cai na tela (o pe, em px de CSS, e a altura dele em px): o cadeado com o "Nv N" (CadeadosDaIlha.tsx) fica sobre ele. Em qualquer largura */
+  private publicarLugaresTela(): void {
+    const cb = CENA.aoLugares;
+    if (!cb) return;                                    // sem consumidor (nenhum cadeado nem brilho na tela): nao calcula
+    const ppc = this.ppu / this.renderer.getPixelRatio(), r = this.rectCanvas, v = this.vLugar, alvo = this.lugaresTela;
+    for (const id of ORDEM_LUGARES) {
+      const x = this.pontos[id][0], z = this.pontos[id][1];
+      v.set(x, dobrarY(0, z, this.dobra, x), z).project(this.camera);
+      const a = alvo[id];
+      a[0] = r.left + ((v.x + 1) / 2) * r.width; a[1] = r.top + ((1 - v.y) / 2) * r.height; a[2] = LUGARES[id].altura * ppc;
+    }
+    cb(alvo);
   }
 
   /** o que o minimapa e a HUD leem (cameraLivre.ts): o foco, o pet, a vista, os lugares, a comida, e se o pet saiu da tela e para que lado */

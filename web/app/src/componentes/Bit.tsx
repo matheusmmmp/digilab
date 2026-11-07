@@ -5,7 +5,9 @@ import { useEffect, useRef } from "react";
 import { desenharSprite, dimSprite, escalaSprite, quadroAgora, useAtlas } from "../atlas.ts";
 import { BotaoContinuar } from "./hx/index.ts";
 import "../estilo/abertas.css";
-import { dispensarDica, DICAS, NOME_MENTOR, useDicaAtual } from "../dicas.ts";
+import { dispensarDica, DICAS, NOME_MENTOR, ehCartao, useDicaAtual } from "../dicas.ts";
+import { CartaoDestrave } from "./CartaoNivel.tsx";
+import type { Rota } from "../rotas.ts";
 
 /* 12 x 12: . vazio, n contorno, b corpo, c visor, o olho, a antena, y luz, w chave */
 const GRADE = [
@@ -52,9 +54,12 @@ export function RetratoGuia() {
   return <canvas ref={ref} className="bit bit-guia" style={{ width: `${w}px`, height: `${h}px` }} aria-hidden="true" />;
 }
 
-export function DicaBit() {
+/** a faixa do Professor Agumon, ou o cartao de destrave do nivel quando ele esta na frente da fila (dicas.ts). `livre`: a tela Pet esta a vista, fora da luta
+    e de outra tela cheia; o cartao espera por ela (e as dicas atras dele, que seguem a ordem da fila). `ir` leva a camera ao lugar do cartao */
+export function DicaBit({ livre = true, ir }: { livre?: boolean; ir: (r: Rota) => void }) {
   const id = useDicaAtual();
   if (!id) return null;
+  if (ehCartao(id)) return livre ? <CartaoDestrave id={id} ir={ir} /> : null;
   return (
     <aside className="dica-bit ab-hx" role="status" aria-live="polite">
       <RetratoGuia />
