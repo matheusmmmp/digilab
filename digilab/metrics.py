@@ -2478,3 +2478,77 @@ def movimento_nas_decisoes(decisoes: Sequence[tuple[str, float, float]], dias: i
             "zigue_zague": {"acao": acao_da_corrida, "corridas_de_2_ou_mais": corridas, "liquido": liquido, "caminho": caminho,
                             "liquido_sobre_caminho": liquido / caminho if caminho else None,
                             "pares": pares, "pares_que_invertem": inverte, "fracao_que_inverte": inverte / pares if pares else None}}
+
+
+# --- a CONVERSA_PET, DC3: a rede escolhendo falar (docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, secoes 4.1 e 4.2)
+CONTEUDOS_DA_FALA = ("fome", "higiene", "solidao")     # a ordem do desempate (4.2)
+JANELAS_DA_FALA = ((1, 3), (8, 14))                    # 4.1: os dias 1 a 3 e 8 a 14
+
+
+def maior_urgencia_da_fala(urgencias: Mapping[str, int]) -> str:
+    """4.2: o receptor de maior urgencia entre fome, higiene e solidao (empate: essa ordem). Falha alto sem um dos tres."""
+    faltam = [r for r in CONTEUDOS_DA_FALA if r not in urgencias]
+    if faltam:
+        raise ValueError(f"as urgencias sem {faltam}")
+    return max(CONTEUDOS_DA_FALA, key=lambda r: (urgencias[r], -CONTEUDOS_DA_FALA.index(r)))
+
+
+def fala_nas_decisoes(decisoes: Sequence[tuple[int, str, str | None, Mapping[str, int]]], dias: int, limiar: int,
+                      ticks_por_dia: int = TICKS_POR_DIA, acao_fala: str = "chamar_atencao",
+                      janelas: Sequence[tuple[int, int]] = JANELAS_DA_FALA) -> dict:
+    """A fala da DC3 (4.1 e 4.2 do plano). `decisoes` = (tick, acao, conteudo, urgencias) de cada decisao da vida, na ordem: o tick da
+    decisao (o dia e `tick // ticks_por_dia + 1`), a acao escolhida, o conteudo da unidade de fala (None fora dela, e no `chamar_atencao`
+    sem conteudo) e as urgencias do pet na decisao (ao menos fome, higiene e solidao, inteiros na escala S).
+
+    - uma **fala** e uma decisao com a acao `acao_fala`;
+    - ela e **pertinente** com o conteudo igual ao receptor de maior urgencia entre fome, higiene e solidao naquela decisao (empate: essa
+      ordem) e essa urgencia acima de `limiar` (estrito; o `urgencia_lambda`, S/2). O chamar sem conteudo nunca e pertinente.
+    Por janela (dias `ini` a `fim`, cortados em `dias`; None se a janela comeca depois do ultimo dia) e na vida: as falas, as falas por dia,
+    as pertinentes, a pertinencia (pertinentes / falas; None sem fala) e a fala pertinente por dia. Tambem por janela e na vida (o adendo 1
+    do plano, A1.2): as **decisoes com necessidade** (fora do dormir, com a maior urgencia entre fome, higiene e solidao acima de `limiar`,
+    estrito), a fracao delas que e fala pertinente, **P(fala pertinente | necessidade)** (None sem decisao com necessidade), e a media
+    dessa maior urgencia nelas (None sem decisao com necessidade). Na vida tambem: a fracao das decisoes fora
+    do dormir que sao fala (a P-FALA), as falas por dia de 1 a `dias`, as falas por conteudo (`sem_conteudo`: o chamar sem conteudo) e, nas falas com a maior urgencia no limiar
+    ou abaixo, o conteudo (o descritivo da secao 8, item 3). Falha alto sem decisao, com dias < 1, com uma decisao depois do ultimo dia,
+    ou com conteudo fora da fala ou fora de CONTEUDOS_DA_FALA."""
+    if not decisoes:
+        raise ValueError("fala sem decisoes")
+    if dias < 1:
+        raise ValueError(f"fala com {dias} dias")
+    linhas = []
+    for t, acao, conteudo, urg in decisoes:
+        dia = t // ticks_por_dia + 1
+        if dia > dias:
+            raise ValueError(f"a decisao do tick {t} cai no dia {dia}, depois do dia {dias}")
+        fala = acao == acao_fala
+        if conteudo is not None and (not fala or conteudo not in CONTEUDOS_DA_FALA):
+            raise ValueError(f"o conteudo {conteudo!r} na decisao de {acao!r}")
+        maior = maior_urgencia_da_fala(urg)
+        pert = fala and conteudo == maior and urg[maior] > limiar
+        linhas.append((dia, acao, fala, conteudo, pert, urg[maior] > limiar, urg[maior]))
+
+    def resumo(sel: list, n_dias: int) -> dict:
+        falas = sum(1 for x in sel if x[2])
+        pert = sum(1 for x in sel if x[4])
+        nec = [x for x in sel if x[1] != "dormir" and x[5]]                # A1.2: as decisoes com necessidade
+        pert_nec = sum(1 for x in nec if x[4])
+        return {"dias": n_dias, "decisoes": len(sel), "falas": falas, "falas_por_dia": falas / n_dias, "pertinentes": pert,
+                "pertinencia": pert / falas if falas else None, "pertinente_por_dia": pert / n_dias,
+                "com_necessidade": len(nec), "pertinentes_com_necessidade": pert_nec,
+                "p_pertinente_dado_necessidade": pert_nec / len(nec) if nec else None,
+                "urgencia_media_com_necessidade": sum(x[6] for x in nec) / len(nec) if nec else None}
+
+    out = {"vida": resumo(linhas, dias)}
+    for ini, fim in janelas:
+        if ini < 1 or fim < ini:
+            raise ValueError(f"janela de dias {ini}..{fim}")
+        f = min(fim, dias)
+        out[f"dias_{ini}_{fim}"] = None if ini > dias else resumo([x for x in linhas if ini <= x[0] <= f], f - ini + 1)
+    fora = [x for x in linhas if x[1] != "dormir"]
+    out["vida"]["fora_do_dormir"] = len(fora)
+    out["vida"]["frac_fala_fora_do_dormir"] = sum(1 for x in fora if x[2]) / len(fora) if fora else None
+    out["falas_por_dia"] = [sum(1 for x in linhas if x[0] == d and x[2]) for d in range(1, dias + 1)]
+    rotulos = tuple((c, c) for c in CONTEUDOS_DA_FALA) + (("sem_conteudo", None),)
+    out["por_conteudo"] = {n: sum(1 for x in linhas if x[2] and x[3] == c) for n, c in rotulos}
+    out["abaixo_do_limiar"] = {n: sum(1 for x in linhas if x[2] and not x[5] and x[3] == c) for n, c in rotulos}
+    return out
