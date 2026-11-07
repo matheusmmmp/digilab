@@ -380,10 +380,13 @@ export async function carregarVariante(loader: GLTFLoader, url: string, modelo: 
   return { pecas };
 }
 
-/** os objetos da ilha prontos: o grupo e as malhas da grama (a queda de qualidade tira metade delas) */
 /** os objetos da ilha prontos: o grupo e as malhas da grama (a queda de qualidade tira metade delas); `noite`, o que muda a noite
-    (os postes acesos, enfeites.ts) */
-export interface Objetos { grupo: THREE.Group; grama: THREE.InstancedMesh[]; noite?: (noite: boolean) => void }
+    (os postes acesos, enfeites.ts); `quadro`, o que segue a camera a cada quadro (o foco, a dobra e a direcao dela, a meia largura visivel por unidade de distancia; a lata do estilo
+    digital, digital.ts) */
+export interface Objetos {
+  grupo: THREE.Group; grama: THREE.InstancedMesh[]; noite?: (noite: boolean) => void;
+  quadro?: (foco: readonly [number, number], dobra: number, dir: readonly [number, number], meiaLargura: number) => void;
+}
 
 /** carrega uma variante de um modelo da grade (o arquivo, o modelo da grade e a linha da tabela MODELOS) */
 export type Carregador = (arquivo: string, id: NomeModelo, modelo: Modelo) => Promise<Variante>;

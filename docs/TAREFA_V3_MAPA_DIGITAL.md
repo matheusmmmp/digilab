@@ -184,3 +184,25 @@ D-G4: o revisor (corpo do PR). Comparação: `comparacao_d3.png`; a ilha com a e
 postes sem repetição e dentro do alcance; um segmento por pedaço de fio. O #650 tinha entrado sem teste (o check `relato` reprovou e o
 merge não esperou por ele; D-MD-13).
 
+
+## 12. D4: a lata gigante (2026-11-06, Gerente, Claude Code, Opus 5.5, branch `v3-mapa-digital-d4`)
+
+**O modelo** (`docs/mapa_digital/lata/`, `web/app/public/mapa_digital/lata/`): pela Meshy, como os enfeites. Quatro concepts (cereja, limão,
+uva, pêssego), sem marca e sem texto, com duas referências geradas pela própria Meshy para o DigiLab (o recorte da lata na maquete B e o
+concept da geladeira); o Matheus escolheu o 1, a cereja. Depois a multivista e a malha (1 978 triângulos, abaixo do teto 2 414 dos marcos).
+O conserto: a cor chapada nas nove cores do concept (`paleta.json`) e o corpo repintado sem o alumínio e sem os reflexos brancos
+(`faces_corpo.py`, `pintar_corpo.py`); sem o `limpar_faces.py` e sem os traços, que quebravam as faixas onduladas (D-MD-16). glTF-Validator
+sem erro nem aviso; `License.txt` com a marca de IA. Gasto: 60 créditos (saldo 596 → 536); a frente soma 84, dentro do teto da D-MD4.
+
+**No jogo** (`digital.ts`, `lata`; a conta em `digitalConta.ts`, `lugarDaLata`; `DIGITAL.lata` em `constantes.ts`, PROPOSTO): a lata fica no
+horizonte, a `longe` células ao norte do pet, andando com ele só com a fração 1 − `paralaxe`, de lado por uma fração da meia largura
+visível, com a dobra do mundo descontada e sem névoa; a parte de baixo some atrás do penhasco e da mata, como na maquete (D-MD-14). A vista
+a reposiciona a cada quadro pelo gancho novo `quadro` dos objetos (D-MD-17). Só vista: a grade e o motor não mudam.
+
+**Os gates:** D-G0 (o E-G0 passa); D-G1, um draw call a mais (82 e 104 em 390, 91 e 112 em 1280); D-G2, os arquivos da lata num teste
+(`test/mapa_digital.test.ts`, com o lugar no horizonte nos dois layouts); D-G3, a lata longe do pet e do HUD fixo. D-G4: o revisor
+(um subagente Sonnet que só viu as capturas e a maquete) **aprovou com ressalva**: a lata lia como uma faixa pastel, sem a tampa; o conserto
+foi o dele (subir e trazer para a esquerda), e as capturas foram refeitas (`D:\Trab\digilab\capturas_mapa_digital\d4\`, `comparacao_d4.png`).
+Ficam: à noite ela fica escura e quase ilegível (o revisor sugere um leve brilho; não feito, fica para o Matheus), e o fps de verdade (D-G5).
+
+**Com a D4, as etapas da tarefa estão feitas.** Falta o Matheus aprovar o Digital como padrão (D-MD1) e medir o fps (D-G5).

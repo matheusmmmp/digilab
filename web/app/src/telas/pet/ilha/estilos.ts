@@ -12,7 +12,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { PALETA_DIGITAL, carregarVariante, doisTons, flores, montarCena, objetos, terreno, usarDoisTons, type CenaIlha, type Objetos } from "./cena.ts";
 import { arquivosCassette, carregadorCassette, terrenoCassette } from "./cassette.ts";
 import { CEU_DIGITAL, DOBRA_K } from "./constantes.ts";
-import { ceuComGrade, fios, particulas } from "./digital.ts";
+import { ceuComGrade, fios, lata, particulas } from "./digital.ts";
 import { enfeites } from "./enfeites.ts";
 import { PALETA_FLORESTA, arquivosFloresta, carregadorFloresta } from "./floresta.ts";
 import type { Ilha } from "./grade.ts";
@@ -68,13 +68,13 @@ function estiloSemTons(mapa: Mapa, base: string): Estilo {
           const gltf = new GLTFLoader();
           const kits = (arq: string, _id: string, modelo: Parameters<typeof carregarVariante>[2]) =>
             carregarVariante(gltf, new URL("kits3d_digital/" + arq, base).href, modelo);
-          const [o, e] = await Promise.all([objetos(i, base, kits), enfeites(i, base)]);
-          /* o toque digital (D3): as particulas e os fios dos postes */
+          const [o, e, l] = await Promise.all([objetos(i, base, kits), enfeites(i, base), lata(i, base)]);
+          /* o toque digital (D3): as particulas e os fios dos postes; e a lata gigante no fundo (D4) */
           const p = particulas(i);
-          o.grupo.add(e.grupo, fios(i));
+          o.grupo.add(e.grupo, fios(i), l.grupo);
           doisTons(o.grupo);
           o.grupo.add(p.malha);
-          return { ...o, noite: n => { e.noite(n); p.noite(n); } };
+          return { ...o, noite: n => { e.noite(n); p.noite(n); }, quadro: l.quadro };
         },
       };
     }

@@ -5,7 +5,7 @@
      - segmentosDosFios: os segmentos dos fios entre os postes (x0, y0, z0, x1, y1, z1 por segmento): cada poste ligado aos vizinhos mais
        perto (ate DIGITAL.fios.porPoste, ate DIGITAL.fios.alcance celulas), sem repetir um par, cada fio uma parabola do alto de um poste ao
        do outro, com a queda proporcional ao vao. */
-import { DIGITAL } from "./constantes.ts";
+import { CAMERA_DESLOC, DIGITAL } from "./constantes.ts";
 import { rng, type Ilha } from "./grade.ts";
 import { ENFEITES_MODELOS } from "./modelos.ts";
 
@@ -32,6 +32,19 @@ export function paresDosFios(ilha: Ilha): { a: number; b: number; vao: number }[
     }
   });
   return pares;
+}
+
+/** onde fica a lata gigante (D4) com o pet (o foco da camera e da dobra) em `foco`: o pe dela (x, y, z) e o giro. Ela fica no horizonte
+    ao norte (DIGITAL.lata): x anda com o foco so com a fracao 1 - paralaxe, em volta do meio da area, mais `lado` vezes a meia largura
+    visivel la longe (`meiaLargura`: a tangente da metade do campo de visao vezes o aspecto da tela; a distancia e `longe` mais o recuo
+    da camera); y desconta a dobra do mundo (curvar: dobra * dz^2, com dz a distancia ao foco na direcao da dobra `dir`), para o pe
+    ficar sempre na mesma altura na tela */
+export function lugarDaLata(ilha: Ilha, foco: readonly [number, number], dobra: number, dir: readonly [number, number], meiaLargura: number):
+    { x: number; y: number; z: number; giro: number } {
+  const L = DIGITAL.lata, meio = ilha.area.w / 2;
+  const x = meio + (foco[0] - meio) * (1 - L.paralaxe) + L.lado * (L.longe + CAMERA_DESLOC[2]) * meiaLargura, z = foco[1] - L.longe;
+  const dz = (x - foco[0]) * dir[0] + (z - foco[1]) * dir[1];
+  return { x, y: ilha.altura(foco[0], foco[1]) + L.base + dobra * dz * dz, z, giro: L.giro };
 }
 
 export function segmentosDosFios(ilha: Ilha): number[] {
