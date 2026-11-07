@@ -533,3 +533,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-07 — CONVERSA_PET, DC3, o plano de análise da rede escolhendo falar (Gerente da frente, Claude Code, Opus 5.5, branch `v3-conversa-dc3-plano`)](registro/2026-11.md)
 - [2026-11-01 — C4 MEMÓRIA AUTOBIOGRÁFICA, a proveniência das aprovações (Matheus, sessão do Claude Code, Opus 5.5, worktree `v3-c4-proveniencia`): as decisões repassadas pelo Gerente, ratificadas](registro/2026-11.md)
 - [2026-11-07 — CONVERSA_PET, DC3a, o código da rede escolhendo falar (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc3a-codigo`)](registro/2026-11.md)
+- [2026-11-07 — PEGAR_PET, P1, o motor do levar pet (worker da P1, Claude Code, Opus 5.5, branch `v3-pegar-pet-p1`)](registro/2026-11.md)
+- [2026-11-07 — CONVERSA_PET, DC3a, o adendo 1 do plano (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc3a-codigo`)](registro/2026-11.md)

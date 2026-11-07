@@ -32,8 +32,8 @@ function lutaDe(A: Lutador, B: Lutador, d: number) {
 
 describe("a versao 18 e a chave", () => {
   test("os ovos novos nascem v18; a v13 a v17 seguem abrindo; a v18 tem o cerebro trocavel da v17", () => {
-    expect(VERSAO_PET).toBe(18); expect(VERSOES_PET).toEqual([13, 14, 15, 17, 18]);
-    expect(new Motor(101).versao).toBe(18);
+    expect(VERSAO_PET).toBe(19); expect(VERSOES_PET).toEqual([13, 14, 15, 17, 18, 19]);
+    expect(new Motor(101).versao).toBe(19);
     for (const v of [13, 14, 15, 17]) expect(new Motor(101, v).versao).toBe(v);
     expect(ehCerebroTrocavel(17)).toBe(true); expect(ehCerebroTrocavel(18)).toBe(true); expect(ehCerebroTrocavel(15)).toBe(false);
   });

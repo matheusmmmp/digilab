@@ -348,3 +348,7 @@ O código da linha DC3a do [plano da DC3](PLANO_ANALISE_V3_CONVERSA_DC3.md) (se�
   quando forçada.
 - **O achado D-CP-DC3a-11:** no comedouro, o `alimentar` do dono vira ração no chão, e o corpo só muda quando o pet come. O cuidado que
   chega ao r_n da fala é o `limpar` e o `acariciar`.
+- **A varredura do adendo ficou para depois do merge (D-CP-DC3a-14):** o hook H10 recusou a varredura, porque o plano do branch, com o
+  adendo, não é o da `origin/main` (D-IA-6). Pelo coordenador, a DC3a sai com a fumaça do orquestrador e os testes. Os artefatos de
+  `artifacts_v3_conversa_dc3/varredura/` ficam velhos, do código antes do adendo. A varredura é refeita na DC3b, antes do registro da run,
+  com o adendo na `main`, e a estimativa de ~1 h da run vem dela.
