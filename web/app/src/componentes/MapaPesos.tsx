@@ -6,16 +6,16 @@
    paridade com o Python); a tela so posiciona. Sem animacao nem transicao: entre duas decisoes o mapa fica parado. */
 import { ACOES_LOBOS, ENTRADAS_LOBOS, REGRAS_LOBOS, type AcaoPet, type ArestaMapa, type LeituraDecisao, type MapaDecisao, type RegraLobos } from "../../motor/index.ts";
 
-const TXT_ENTRADA: Record<string, string> = {
+export const TXT_ENTRADA: Record<string, string> = {
   vies: "viés", fome: "comida", higiene: "higiene", energia: "energia", humor: "humor", saude: "saúde", sujeira: "sujeira",
   dormindo: "dormindo", hora: "hora", ticks_sem_cuidado: "sem cuidado", tedio: "tédio", curiosidade: "curiosidade", solidao: "solidão",
   estresse: "estresse", dor: "dor", susto: "susto", vontade: "vontade", conforto: "conforto",
 };
-const TXT_REGRA: Record<RegraLobos, string> = {
+export const TXT_REGRA: Record<RegraLobos, string> = {
   sono_exaustao: "exausto", sono_continuar: "sono", sono_noite: "noite", pedido_necessidade: "precisando", abandono: "sem cuidado",
   fome_moderada: "fome", tempo_livre: "tempo livre",
 };
-const TXT_ACAO: Record<AcaoPet, string> = {
+export const TXT_ACAO: Record<AcaoPet, string> = {
   ocioso: "à toa", dormir: "dormir", comer: "comer", brincar: "brincar", chamar_atencao: "chamar você", explorar: "explorar", emburrar: "emburrar",
 };
 

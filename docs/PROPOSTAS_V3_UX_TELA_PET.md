@@ -1079,3 +1079,339 @@ A prancha e as sete recomendações foram aprovadas ("Aprovado, seguir"): **L1-1
 até a janela em volta da câmera; **L1-2** o pet rosa com o anel claro; **L1-3** com a câmera "Fixa" o minimapa aparece, sem mover a
 câmera; **L1-4** o cocô e o kit médico fora; **L1-5** Q/E, +/− e as setas e o Enter no minimapa; **L1-6** o DigiBrain como a 4ª linha da
 pilha; **L1-7** os números como PROPOSTO, SEM FONTE.
+
+---
+
+## DigiBrain scan (D1) — o painel do cérebro A como "scan holográfico" (2026-11-07)
+
+**A direção é a A, "scan holográfico"**, escolhida pelo Matheus em 2026-11-07 na prancha de direção
+(`D:\Trab\digilab\capturas_digibrain_direcao.html`): o cérebro em malha numa moldura de scanner, sobre uma grade, com as leituras nos dois
+lados. O que ele já decidiu e não se reabre aqui: a paleta da pele Vidro (e a prancha funcionando na Militar); a silhueta de cérebro honesta
+com o dado (cada ponto um nó do motor, cada fio uma aresta, nenhum enfeite que pareça nó, o rótulo "mapa dos pesos"); a varredura só numa
+decisão; o pulso entrada → regra → ação; o giro lento da câmera como vista; tudo parado com "reduzir movimento"; no desktop em tela cheia por
+cima da ilha (o "modo scan", com Fechar e Esc); no celular a folha inteira. **O `DigiBrainLab` (o cérebro modular) fica fora** desta etapa.
+
+Esta seção é o plano e a prancha juntos, porque a direção já foi aprovada; **o código só depois do ok do Matheus à prancha**.
+
+### O objetivo do jogador
+
+Ver **por que o pet fez o que fez agora** e **o que ele já aprendeu com você**, num desenho que dá vontade de abrir: a decisão acende um
+caminho de verdade (a entrada, a regra, a ação) no meio dos pesos dele. Hoje isso mora numa coluna de 296 px com um mapa de 284 unidades;
+o scan dá ao mapa a tela inteira, sem acrescentar nenhum dado.
+
+### A hierarquia
+
+1. **O mapa dos pesos**, no centro, na moldura do scanner: a decisão acesa (a regra, as candidatas com a chance, a ação escolhida, as três
+   entradas que mais pesaram e os fios dela) sobre todos os pesos do pet, e a região que "pesou mais".
+2. **O agora**, no alto da coluna esquerda: a regra e a ação, e a frase "quem decidiu" (só uma opção / o instinto faria o mesmo / sem o
+   aprendido teria decidido X, com a marca do aprendido).
+3. **As opções e a chance**, no alto da coluna direita, a escolhida com o "escolhido" da pele.
+4. **O peso de cada lobo** e **o que mais pesou** (esquerda); **o que aprendeu desde que nasceu** e **as últimas ações** (direita).
+5. O topo: o título, o selo (ao vivo, pausado, replay) e o Fechar com o Esc.
+
+### Sempre visível, só quando existe, por gesto
+
+| peça | quando | de onde vem (o motor) |
+|---|---|---|
+| o título "DigiBrain · mapa dos pesos", o selo e o Fechar | sempre | o selo é `estadoSelo` (`src/seloDigiBrain.ts`), do app |
+| a moldura com o mapa, a contagem ("29 pontos · 77 pesos"), a legenda e a nota honesta | sempre | `ENTRADAS_LOBOS`, `REGRAS_LOBOS`, `ACOES_LOBOS` (`motor/lobos.ts:34-43`), `mapa.receptores` e `mapa.arestas.length` (`Motor.digibrain`, `motor/motor.ts:319`) |
+| o agora | sempre; sem decisão, "Ainda não decidiu nada." | `decisao.regra`, `.acao`, `.quem_decidiu` (`leituraDecisao`, `motor/digibrain.ts:14-35`) |
+| o peso de cada lobo (com a emoção de hoje), o que mais pesou, as opções | só com uma decisão (como hoje) | `decisao.barras`, `.percepcao`, `.chances`; a emoção é a última de `pol.mem.emocoes` (`DigiBrain.tsx:65`) |
+| o que aprendeu | sempre; vazio, "Ainda igual ao instinto." | `aprendido` (`leituraAprendido`, `motor/digibrain.ts:87`) |
+| as últimas ações | sempre; vazio, "Nenhuma ação ainda." (texto novo; hoje a lista vazia não diz nada) | `m.historico`, `quem = pet`, as 5 últimas (`DigiBrain.tsx:74`), com `hhmm(t)` |
+| a decisão acesa no mapa | só com `mapa.acesas` | `mapaDecisao` (`motor/digibrain.ts:101`): as arestas, a `forca`, o `lobo_decisivo` |
+| a varredura e o pulso | **só numa decisão nova** (`mapa.acesas.n` mudou), com o selo "ao vivo" e sem "reduzir movimento" | nenhum dado novo: é o mesmo `acesas` |
+| o giro lento da câmera | enquanto o scan está aberto, sem "reduzir movimento" (D1-3, D1-4) | nenhum: é vista |
+| **o mapa em texto** | por gesto: o botão "O mapa em texto" | o mesmo `mapa`: a lista das acesas (a favor/contra e a força) e a tabela dos pesos (regra, ação, entrada, `w`, `w0`, a marca) |
+| fechar | o botão "Fechar DigiBrain", o <kbd>Esc</kbd>; no celular, o × | — |
+
+**"Últimas ações" ficou num ladrilho**, embaixo na coluna da direita (desktop) e por último na folha (celular), como no painel de hoje.
+
+### O desenho: a silhueta honesta
+
+- **Os pontos são os nós do motor, e só eles:** as 10 entradas de `ENTRADAS_LOBOS` e os receptores de `mapa.receptores` (5 no save do
+  e2e: tédio, solidão, estresse, dor, susto, com o anel verde do corpo, como o `mp-corpo` de hoje), as 7 regras e as 7 ações. São 29 pontos
+  no save do e2e. Nenhum ponto é enfeite.
+- **Os fios são as arestas de `mapa.arestas`, e só elas,** cada uma da entrada à ação **passando pela regra** (CN-2), com a espessura
+  `0,4 + 1,4·espessura` do `MapaPesos` (a `espessura` é √|w|/S, CN-3), a cor do aprendido de hoje (cinza onde `aprendido = 0`, `--mp-mais`
+  acima, `--mp-menos` abaixo, mais forte quanto maior) e o tracejado no peso negativo.
+- **A decisão acesa** é a de hoje: os fios de `mapa.acesas.arestas` na cor de "esta decisão" (`--mp-aceso`) com a espessura pela `forca`
+  (o termo negativo tracejado), o resto dos pesos a 35 %; a regra que disparou, as três entradas de `decisao.percepcao`, as candidatas (com
+  a chance) e a escolhida acesas; a região do `lobo_decisivo` com a caixa "pesou mais".
+- **A forma de cérebro é só o desenho:** a silhueta (o hemisfério e o cerebelo; o tronco saiu depois do ok, porque os traços dele não eram nó nem peso) é preenchida por uma trama fina da malha, que não
+  se lê como fio, e quatro rótulos de região, todos fora dos nós: **decisão** na frente (as ações, de cima para baixo na ordem de
+  `ACOES_LOBOS`), **impulsos** no meio (as regras na ordem em que o instinto as testa), **percepção** atrás (as entradas num arco, na ordem do
+  motor, com os receptores do corpo no fim, embaixo, sobre o cerebelo) e **memória e emoção · sem pesos** embaixo, **sem nenhum ponto**,
+  porque o lobo não tem pesos (é o "memória e emoção: sem pesos" de hoje).
+- **A nota fixa embaixo do mapa:** "Cada ponto é uma entrada, uma regra ou uma ação do pet; cada fio é um peso, da entrada à ação, passando
+  pela regra. A espessura é o tamanho do peso. A forma de cérebro e as regiões são só o desenho."
+- **Nenhum texto diz** "neurônio", "pensando", "sentindo", "conectoma" ou "connectome" (o e2e de hoje procura os quatro últimos).
+
+### O movimento (descrito; a prancha é o quadro parado)
+
+- **A varredura:** uma faixa horizontal da cor da malha desce a moldura uma vez quando chega uma decisão nova (`mapa.acesas.n` maior que a
+  última vista pela tela). Sem decisão nova, nada passa. No replay, no pausado e sem decisão, não passa.
+- **O pulso:** junto da varredura, um ponto claro (`--hx-foco`) corre ao mesmo tempo em cada fio aceso, da entrada até a regra e da regra até
+  a ação, e para. É o mesmo caminho que fica aceso; não há ponto fora de um fio.
+- **O destaque:** troca de uma vez (sem transição) quando a decisão muda, como hoje.
+- **O giro lento:** a vista balança devagar em volta do eixo vertical, como uma câmera em volta do scan. É só vista (D1-3, D1-4).
+- **"Reduzir movimento"** (`prefers-reduced-motion` ou o ajuste do jogo): sem varredura, sem pulso, sem giro; só o destaque troca.
+- **Os números do movimento não estão decididos:** a duração da varredura e do pulso, a amplitude e o ciclo do giro vão como pergunta
+  (D1-2), PROPOSTO, SEM FONTE. Nada pisca em loop (guia 11).
+
+### As cores pelos tokens
+
+Nenhuma cor hex nova. A prancha copia os tokens do app com a linha de origem (`digibrain.css` da prancha, cabeçalho).
+
+| peça | token |
+|---|---|
+| o fundo do modo scan | `--hx-chao` com `--hx-vidro` (no Vidro a ilha transparece; na Militar é opaco) |
+| a malha da silhueta, os cantos da moldura, a varredura | `--hx-medidor` (Vidro `#5FD4FF`, o ciano da direção; Militar `#AEB9A6`), apelidado **`--scan-malha`** |
+| a grade da moldura | `--hx-medidor-trilho`, apelidado **`--scan-grade`** |
+| as divisas e os rótulos das regiões | `--hx-borda` tracejado; `--hx-rotulo` |
+| o fio do instinto | `--hx-sec` a 45 %, apelidado **`--scan-prior`** (hoje `--dl-muted`) |
+| o aprendeu a mais, a menos, esta decisão | `--mp-mais`, `--mp-menos`, `--mp-aceso` (os literais de hoje, `src/estilo/digibrain.css:48`) |
+| os pontos | o miolo `--hx-miolo` com o anel `--scan-malha`; o receptor do corpo com o anel `--hx-ok`; aceso e escolhida em `--mp-aceso`, a escolhida com o anel `--hx-foco`; a candidata com o anel `--hx-texto` |
+| o pulso | `--hx-foco` |
+| "pesou mais" | a caixa `--hud-fundo-2` com o contorno `--hx-foco` |
+| os ladrilhos | a caixa da HUD (`--hud-fundo-1`/`-2`, `--hx-borda`, `--hud-brilho`, `--xcom-cantos`) |
+| as barras dos lobos | impulsos `--hx-alerta` (o amarelo de hoje), aprendido `--hx-aprendido`, corpo `--hx-ok`, memória e emoção e piso `--hx-sec`; o trilho `--hx-medidor-trilho`, o eixo no zero `--hx-sec` |
+| a opção escolhida | `--hx-escolhido` / `--hx-escolhido-ink`; a barra em `--mp-aceso` (a mesma cor do mapa) |
+| a marca do aprendido (o agora que mudou, o ladrilho "o que aprendeu") | `--hx-aprendido` tracejado (guia 3) |
+| a favor / contra | `--hx-ok` / `--hx-sec`, com a palavra |
+| o selo | ao vivo: ponto `--hx-ok`; pausado: duas barras `--hx-sec`; replay: triângulo `--hx-rotulo` (a forma também diz) |
+| os números | `--hx-f-num`, `--hx-num` |
+| o Fechar e "O mapa em texto" | `--hx-btn-bg`, `--hx-btn-ink`, `--hx-btn-borda`; a tecla `--hx-tecla` |
+| o foco | `outline: 2px solid var(--hx-foco)` |
+
+**Os tokens PROPOSTOS** (só apelidos, nenhum valor novo; entram em `tokens.css` se o Matheus quiser o nome, ou ficam locais no CSS do
+DigiBrain):
+- `--scan-malha` = `var(--hx-medidor)` nas duas peles (o ciano `#5FD4FF` no Vidro). **Não** é o `--hx-aprendido` (`#6FE3FF`): o ciano do
+  aprendido continua reservado à marca do aprendido (guia 3), e a malha usa o ciano do medidor da pele, que é o da moldura do Vidro;
+- `--scan-grade` = `var(--hx-medidor-trilho)`;
+- `--scan-prior` = `var(--hx-sec)`.
+
+### Wireframes
+
+Uma coluna vale ~20 px a 1920 e ~10 px a 390. Os números são os do estado `com_escolha` do `dados.json`.
+
+```
+1920×950, o modo scan por cima da ilha (com_escolha, ao vivo, logo depois da decisão)
+┌──────────────────────────────────────────────────────────────────────────────────────────────┐
+│ DigiBrain MAPA DOS PESOS   ● ao vivo                                              [× Esc]    │
+├──────────────────────────────────────────────────────────────────────────────────────────────┤
+│┌ AGORA ─────────────┐ ┌[MAPA DOS PESOS 29 pontos · 77 pesos]────────────┐ ┌ AS OPÇÕES ───────┐│
+││Tempo livre: decidiu│ │   DECISÃO        IMPULSOS             PERCEPÇÃO   │ │à toa   ▮▮▯  27%  ││
+││chamar você         │ │        ╭───────── pesou mais ──╮  ● viés         │ │explorar▮▮▯  27%  ││
+││O instinto sozinho  │ │  à toa ◉ ╲     ● exausto       ╲ ● comida        │ │brincar ▮▮▮  37%  ││
+││faria o mesmo.      │ │  dormir ●  ╲   ● sono          ╱ ◉ higiene       │ │█chamar você ·esc█││
+│├ O PESO DE CADA LOBO┤ │   comer ●   ╲  ● noite        ╱  ● energia       │ └──────────────────┘│
+││Impulsos   |▮▮▮ 105%│ │ brincar ◉ ══╪══● precisando  ╱   ● humor         │ ┌┄ O QUE APRENDEU ┄┐│
+││Aprendido ▮|   −3,3%│ │ chamar  ◉═══╪══● sem cuidado     ● saúde         │ ┆mais explorar +0,28┆│
+││Corpo     ▮|   −1,6%│ │  você 9%    ╲══◉ tempo livre ════◉ hora          │ ┆menos chamar −0,05 ┆│
+││Memória e  |    0,0%│ │ explorar ◉  ═══ varredura (parada) ════════      │ ┆menos à toa  −0,05 ┆│
+││emoção de hoje:     │ │ emburrar ●                       ◉ tédio ○ corpo │ └┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┘│
+││alegria · memória   │ │        MEMÓRIA E EMOÇÃO · SEM PESOS  RECEPT. DO CORPO│ ┌ ÚLTIMAS AÇÕES ───┐│
+│├ O QUE MAIS PESOU ──┤ └─────────────────────────────────────────────────┘ │20:45 chamando você││
+││[hora do dia 86%    │  ─ instinto ─ a mais ─ a menos ━ esta decisão ┄ neg ○ │20:30 brincando    ││
+││ contra][tédio 45%  │  Cada ponto é uma entrada, uma regra ou uma ação…     │20:15 explorando   ││
+││ contra][higiene 48%│  A forma de cérebro e as regiões são só o desenho.    │20:00 brincando    ││
+││ a favor]           │                               [≡ O mapa em texto]     │19:15 chamando você││
+│└────────────────────┘                                                       └───────────────────┘│
+└──────────────────────────────────────────────────────────────────────────────────────────────┘
+  ◉ aceso/candidata · ● ponto · ═ fio aceso · ─ fios do instinto e do aprendido a 35 %
+
+390×844, a folha inteira (com_escolha); a folha rola (a ordem é a do painel de hoje)
+┌──────────────────────────────────────┐
+│ DigiBrain   ● ao vivo          [ × ] │
+├──────────────────────────────────────┤
+│┌ AGORA ─────────────────────────────┐│
+││Tempo livre: decidiu chamar você    ││
+││O instinto sozinho faria o mesmo.   ││
+│└────────────────────────────────────┘│
+│┌[MAPA DOS PESOS 29 pontos · 77 pesos]┐│
+││ DECISÃO   IMPULSOS     PERCEPÇÃO   ││
+││  ◉ à toa 27%   ◉ tempo     ◉ hora  ││
+││  ◉ brincar 37% livre       ◉ tédio ││
+││  ◉ chamar você 9%          ◉ higiene││
+││  ◉ explorar 27%   (só os rótulos   ││
+││        acesos; o resto, no texto)  ││
+│└────────────────────────────────────┘│
+│ ─ instinto ─ a mais ─ a menos ━ esta │
+│ Cada ponto é uma entrada, uma regra… │
+│ [≡ O mapa em texto]                  │
+│┌ O PESO DE CADA LOBO NESTA ESCOLHA ─┐│
+││Impulsos     |▮▮▮▮▮  105%           ││
+││…                                   ││
+   (rola: o que mais pesou, as opções, o que aprendeu, as últimas ações)
+```
+
+**O mudou** (`mudou`, "o pet v11 com o aprendido"): o agora ganha a marca do aprendido (a borda tracejada `--hx-aprendido`, a etiqueta
+"aprendido" e "Sem o aprendido, teria decidido chamar você."), a barra do aprendido cresce (+61,8 %) e a região **decisão** fica com o
+"pesou mais" (`lobo_decisivo = decisao`). **O uma_opcao:** um fio aceso só (o viés de "sono" para "dormir"), "Nesta situação só havia uma
+opção." e "Nada do que ele lê pesou nesta regra.". **O sem_decisao:** os 14 fios do instinto, nada aceso, sem varredura; à esquerda só o
+agora. **O replay:** o `com_escolha` com o selo "replay" e sem a varredura e o pulso.
+
+### O que muda na leitura do estado do pet
+
+**Nada no que se lê.** A tela continua lendo só `Motor.digibrain()` (a decisão, o aprendido e o mapa), o histórico e a memória das emoções,
+como o painel de hoje (`DigiBrain.tsx`, `MapaPesos.tsx`). Muda a apresentação:
+- o mapa ganha a tela inteira e vira a peça principal; as colunas fixas viram a silhueta (as posições são só desenho, a ordem dos nós é a
+  do motor);
+- **a contagem** ("29 pontos · 77 pesos") sai do `aria-label` de hoje para a tela;
+- **as barras dos lobos ganham o eixo no zero** (o positivo à direita, o negativo à esquerda) no lugar do rosa de hoje no negativo (D1-5);
+- **"pesou mais"** passa da caixa da região de hoje para uma caixa no rótulo da região;
+- **o mapa em texto** é novo: a mesma leitura em lista e tabela, para quem não lê o desenho;
+- **"Nenhuma ação ainda."** quando o histórico está vazio (hoje, a lista vazia);
+- **a 390, só os rótulos acesos e das candidatas** ficam no desenho; os outros nomes vão para o mapa em texto (o espaço não deixa 29
+  rótulos a 11 px).
+
+### A prancha
+
+Em `docs/pranchas/ux-digibrain/`, ao lado do `dados.json` (escrita em `docs/pranchas/ux-pet/digibrain/` por causa do H8 e movida pelo Gerente): `digibrain.html`,
+`digibrain.css`, `digibrain.js` e `capturar.sh`. **Uma página só, sem `gerar.py`:** o JS lê o `dados.json` no navegador (o `fetch`, que
+pede o `python -m http.server 8765` em `D:\Trab\digilab`) e desenha os nós e os fios a partir dele; nenhum número foi copiado à mão. O
+caminho dos dados é a constante `DADOS`, no alto do `digibrain.js` (hoje `../../ux-digibrain/dados.json`; depois do movimento,
+`dados.json`). Os parâmetros:
+- `?estado=com_escolha|uma_opcao|sem_decisao|replay|mudou` (e os extras `com_aprendido` e `save_e2e`); o padrão é `com_escolha`;
+- `?pele=vidro|xcom`; `?largura=1920|390` (a página tem o tamanho exato; a 390 o `capturar.sh` a põe num iframe);
+- `?notas`: a fonte de cada leitura por cima do desenho (o campo do `Motor.digibrain()` e o arquivo do motor);
+- `?texto`: o mapa em texto aberto; `?rolar`: a folha de 390 rolada até o fim; `?reduzir`: o quadro de "reduzir movimento";
+- `?selo=vivo|pausado`: o selo é do app (`estadoSelo`), não do `dados.json`; o replay força "replay".
+
+Um estado, uma pele, uma largura ou um parâmetro desconhecido, um nó fora do mapa ou o `acesas` fora de par com a `decisao` **aparecem como
+erro na tela** (a faixa vermelha embaixo), não como desenho vazio. `sh capturar.sh` grava em `D:\Trab\digilab\capturas_ux_digibrain_aprovar\`
+os cinco estados nas duas larguras e nas duas peles, as notas no Vidro e os extras (o texto aberto, a folha rolada, o reduzir, o pausado).
+A 1920, atrás do scan há uma cor neutra com "a ilha 3D continua por baixo do modo scan"; a constante `FUNDO_ILHA` aceita uma captura da ilha.
+
+### SVG ou canvas, no código
+
+**Recomendação: SVG**, como o `MapaPesos` de hoje, e a prancha já é SVG.
+- **O tamanho cabe com folga:** 77 fios e 29 nós no save do e2e (o pior caso conhecido, os dois pets do `connectome_cerebro_a.md`, dá
+  ~240 pesos); o SVG só pesa na casa dos milhares.
+- **O e2e de hoje lê o DOM do mapa:** `svg.mp[data-n]`, `.mp-pesos path`, `.mp-acesas path`, `[data-regra].mp-lit`, `.mp-esc`, `.mp-cand`,
+  `.mp-pct`, `[data-entrada].mp-lit`, `.mp-dest[data-lobo]`. A prancha mantém essas classes; em canvas, o teste inteiro teria de virar um
+  gancho de leitura.
+- **As peles entram pelo CSS** (`var(--hx-*)` direto no `stroke`), sem copiar cor para o JS.
+- **A acessibilidade:** `role="img"` com o `aria-label` de hoje, e o mapa em texto ao lado.
+- **O movimento é barato:** o pulso é um `stroke-dashoffset` animado em ≤ 15 caminhos (uma aresta acesa por entrada) com `pathLength="1"` (a Web Animations API, que o
+  `getAnimations()` do e2e enxerga); a varredura, um elemento HTML por cima; o giro, um `transform` CSS na camada do desenho (D1-4), sem
+  recalcular os 77 caminhos a cada quadro.
+
+### O custo em determinismo
+
+**Nenhum.** A tela só lê; nada vai ao log, ao save, à rng ou ao replay. A varredura, o pulso e o giro dependem só do relógio da vista
+(`requestAnimationFrame`) e da troca de `mapa.acesas.n`, que o motor já expõe. O replay continua igual: o selo "replay" e o mapa da
+decisão do passo.
+
+### O custo em e2e
+
+O e2e de hoje (`e2e/jogo.spec.ts:1166-1260`) usa, e a prancha mantém:
+- **`#pet-painel`** e **`.digibrain`**: o scan é o `<div id="pet-painel" class="scan digibrain" role="dialog" aria-modal="true">` (a 1920)
+  e a folha inteira a 390, com o mesmo `#pet-painel` e `.digibrain` que o e2e procura nas duas larguras (o seletor do mapa já aceita o
+  `dialog.folha[open] svg.mp`). Fica também o `.digibrain` escondido antes de abrir;
+- **`.db-selo`** com o texto exato "ao vivo" (a forma do selo é CSS, fora do texto);
+- **`.db-barras li`** (4, ou 5 com o piso) e **`li[data-lobo='impulsos']`**; **`.db-opcoes li.esc`** (1); **`.db-emo`** com "memória do
+  pet"; **`.db-ultimas li`**;
+- **`svg.mp`** com as classes do mapa listadas acima (o pulso fica num grupo `.mp-pulso` à parte, fora da contagem de `.mp-acesas path`);
+- **"Fechar DigiBrain"** (o nome do botão), e o `#pet-painel` some ao fechar;
+- o texto sem "pensando", "sentindo", "conectoma" e "connectome".
+
+**O que precisa mudar:**
+- **O teste "sem animação"** (`getAnimations().length === 0` e a `transition` `0s`, `jogo.spec.ts:1246-1250`) quebra com o pulso e o giro.
+  Recomendação (D1-8): ele passa a rodar com `page.emulateMedia({ reducedMotion: "reduce" })` (é o contrato do reduzir: zero animação), e um
+  teste novo, sem o reduzir, confere que depois de uma decisão nova a varredura e o pulso existem e **terminam** (nenhuma animação infinita
+  além do giro).
+- **As capturas** `digibrain-<largura>.png` e `digibrain-mapa-*` mudam inteiras (as duas peles), e a da tela Pet a 1920 com o painel aberto
+  também; precisam do ok do Matheus antes do `--update-snapshots`.
+- **O `camera_livre.spec.ts`** ("o minimapa sai enquanto ele está aberto") continua valendo: o scan cobre a ilha e o minimapa.
+- **O `lab_modular.spec.ts`** (`.db-barras--div`, "Fechar DigiBrain") não muda se o `DigiBrainLab` continuar no painel de hoje (D1-9).
+- **Testes novos:** o Esc fecha o scan e devolve o foco à linha "DigiBrain" da pilha (ou à linha do agora, se foi ela que abriu); o mapa em
+  texto abre, tem uma linha por `mapa.arestas` e o nome acessível; a 1920 o scan cobre a viewport inteira; nenhum rolamento horizontal a 390.
+
+### A acessibilidade
+
+- **O equivalente em texto:** o `aria-label` do `svg.mp` de hoje ("Mapa dos pesos do pet, 77 pesos. Nesta decisão: regra tempo livre,
+  escolheu chamar você com 9% de chance.") e o botão **"O mapa em texto"** (`aria-expanded`, `aria-controls`), que abre a lista das arestas
+  acesas (a entrada, a favor ou contra, a força) e a tabela dos pesos com `<caption>` e `<th scope="col">`. Os ladrilhos já são texto.
+- **O foco:** ao abrir, o foco vai para o "Fechar DigiBrain"; o foco fica preso no scan (`aria-modal`); a ordem é a visual (Fechar, "O mapa
+  em texto", os ladrilhos não têm foco); ao fechar, volta a quem abriu. Os nós do mapa **não** recebem foco (29 paradas de Tab; o texto cobre).
+- **O Esc** fecha no desktop e no celular (com teclado); o × da folha tem o mesmo nome.
+- **Os 44 px:** o Fechar e "O mapa em texto" têm 44 × 44 no mínimo; nada mais no scan é clicável.
+- **Nada só pela cor:** o aprendido tem o tracejado e a palavra; o negativo, o tracejado; o selo, a forma; a escolhida, "· escolhida"; a
+  favor e contra, a palavra; "pesou mais", a caixa e a palavra.
+- **Reduzir movimento:** sem varredura, pulso nem giro; o `prefers-reduced-transparency` deixa o Vidro opaco, como no app.
+- **O contraste:** o texto em `--hx-texto` e `--hx-sec` sobre o `--hx-chao`, como a HUD; os fios são objetos gráficos (3:1).
+
+### Perguntas ao Matheus
+
+| # | pergunta | recomendação | custo de errar |
+|---|---|---|---|
+| D1-1 | o desenho em SVG ou em canvas no código | **SVG** (a seção acima): cabe, mantém o e2e e as peles pelo CSS | canvas: o e2e do mapa vira um gancho de leitura e as cores passam pelo JS; SVG: só pesaria com milhares de fios, que o A não tem |
+| D1-2 | os números do movimento | **PROPOSTO, SEM FONTE, para ajustar na mão:** a varredura em 1,2 s, o pulso em 0,8 s logo depois, o giro de ±8° num ciclo de 40 s | só vista; nenhum número de jogo. Rápido demais pisca; lento demais atrasa a leitura da decisão |
+| D1-3 | o giro no celular | **desligado no celular**, só no desktop | ligado: bateria e os rótulos acesos, que já são poucos, balançando a 11 px; desligado: o celular perde um enfeite |
+| D1-4 | como o giro gira | **o plano inteiro balança (`rotateY` em CSS)**, sem dar profundidade a cada nó | dar um z a cada região inventa uma profundidade que o motor não tem e pede recalcular os fios a cada quadro; o plano é "menos 3D" |
+| D1-5 | as barras dos lobos com o eixo no zero | **sim**: o negativo à esquerda do eixo, na cor do lobo, no lugar do rosa de hoje | o rosa é "vem do corpo" (guia 3) e hoje marca qualquer negativo, inclusive o do aprendido; com o eixo, o cheio de um lado passa a ser 100 % (o impulsos de 105 % enche a metade) |
+| D1-6 | o pulso e a varredura no replay | **não**: no replay só o destaque troca a cada passo, como no reduzir | com o pulso, o replay rápido vira um pisca-pisca; sem ele, o replay fica igual ao de hoje |
+| D1-7 | o mapa em texto mostra os inteiros `w` e `w0` | **sim, na tabela**, com a marca em palavras (instinto, aprendeu a mais, a menos, negativo); a lista das acesas fica só com a palavra e a força | sem os inteiros, quem pesquisa perde o número; com eles, sem a escala S, um jogador pode estranhar "1024" |
+| D1-8 | o e2e do "sem animação" | **roda com o reduzir emulado**, e um teste novo confere que a varredura e o pulso terminam | sem a troca, o teste quebra no primeiro pulso; trocá-lo sem o teste novo deixa passar uma animação em loop |
+| D1-9 | o `DigiBrainLab` (o modular) | **continua no painel de hoje** até a etapa dele | abrir o modular no scan agora pede o desenho dos módulos, que é outra prancha; por um tempo, os dois cérebros abrem em lugares diferentes |
+| D1-10 | o tempo do jogo com o scan aberto | **continua andando** (é uma vista; o selo diz "ao vivo"), e **o cartão do chamado do pet aparece por cima do scan**, no alto ao centro, como na tela Pet | pausar mudaria o selo e a varredura nunca passaria; andar sem o chamado por cima deixa o dono perder um pedido enquanto olha o mapa |
+| D1-11 | os números de layout: as colunas de 420 px, o topo de 72 px (56 na folha), a moldura de 262 px de altura a 390 | **PROPOSTO, SEM FONTE**, só layout | nenhum número de jogo; a 1600 px as colunas pedem 360 px (a conferir no código) |
+
+### Decididas (Matheus, 2026-11-07)
+
+"Aprovar e codar": valem as recomendações D1-1 a D1-11 da tabela acima, como estão. Os números do movimento (D1-2) e os de layout (D1-11)
+ficam PROPOSTO, SEM FONTE. Antes do código, a prancha corrigiu três defeitos que ela mesma apontava: o rótulo "receptores do corpo" cortado a
+390, o rótulo "sem cuidado" sob a varredura a 1920 (agora a varredura passa por baixo dos rótulos) e os traços do "tronco", que saíram.
+
+### D1b — o modal pequeno (Matheus, 2026-11-07, depois do PR #668)
+
+O Matheus mudou a direção depois de ver o código: "A ideia, na verdade, é a tela do DigiBrain ela ser muito menor. Não ocupar a tela
+inteira. Apenas um modalzinho com o cérebro, sem essa quantidade de texto." **A aprovação da tela cheia fica suspensa** até ele ver a prancha
+nova: `docs/pranchas/ux-digibrain/modal.html` (mesmos dados, `dados.json`), com as capturas em
+`D:\Trab\digilab\capturas_ux_digibrain_aprovar\modal\` (`capturar_modal.sh`; o fundo é a Tela Pet real do mesmo pet, tirada do jogo).
+
+**O que sai do modal:**
+- os cartões Agora, Peso dos lobos, O que mais pesou, Opções, Aprendido e Últimas ações;
+- a legenda do rodapé e o parágrafo;
+- o rótulo "pesou mais" e a região "memória e emoção · sem pesos".
+
+**O que fica:**
+- o título "DigiBrain";
+- o selo só como forma (ponto, barras, triângulo), com a dica;
+- o "i", que abre a dica "a forma é só desenho" com a legenda curta;
+- "O mapa em texto" como botão de ícone, que troca o desenho pela tabela, no mesmo tamanho;
+- o fechar (Esc, e um clique fora);
+- o mapa, com a percepção, os receptores do corpo, as regras, as ações e o caminho aceso.
+
+O movimento é o da D1, sem mudar.
+
+| # | decisão | recomendação | custo de errar |
+|---|---|---|---|
+| D1b-1 | onde o modal fica a 1920 | **à direita, sobre a pilha de painéis** (de onde ele abre), 720 px de largura, a 72 px do alto: o pet fica à vista no meio. A alternativa é no centro (`?lugar=centro`) | no centro, o modal cobre o pet, e o dono não vê a ação que o mapa explica |
+| D1b-2 | o tamanho | 720 px de largura (o desenho, 696 × 437) a 1920; a 390, uma folha baixa de ~320 px (o desenho, 374 × 235). **PROPOSTO, SEM FONTE** | maior, volta a ser tela; menor, os rótulos dos nós caem abaixo de 11 px a 1920 |
+| D1b-3 | o fundo | **um véu leve, sem desfoque**: a ilha continua a pleno ritmo. Saem o `CENA.coberto` e o fundo opaco da D1; o vidro fica só no próprio modal, como num painel da HUD | com o desfoque, a cena inteira paga o vidro a cada quadro (o que a rev-cena barrou); sem o véu, o modal parece solto na tela |
+| D1b-4 | a 390 | **folha baixa presa embaixo**, com o pet visível acima; só os rótulos acesos e das candidatas | o cartão central cobre o pet, e a folha inteira volta ao que o Matheus recusou |
+| D1b-5 | o selo ao vivo, pausado ou replay | **só a forma, ao lado do título**, com a dica e o nome acessível | sem selo, o replay parece ao vivo; com o texto, volta texto que ele tirou |
+| D1b-6 | os rótulos das regiões | **"ações", "regras" e "percepção"** (os nomes que o dono entende), mais "receptores do corpo" | "decisão" e "impulsos" são os nomes dos lobos e confundem quem não leu o motor; o `data-lobo` do e2e continua no código |
+| D1b-7 | a legenda | **vai para a dica do "i"** | sem legenda nenhuma, o vermelho e o azul do aprendido ficam sem explicação |
+
+**Decididas (Matheus, 2026-11-07):** "Aprovar e codar". Valem as recomendações D1b-1 a D1b-7 como estão na tabela, e os números de layout
+ficam PROPOSTO, SEM FONTE. No código, o cabeçalho "AGORA" e o mapa vêm do mesmo pet (na prancha divergiam por causa dos dados de teste).
+
+### D1c — o campo pequeno (Matheus, 2026-11-07, depois do código da D1b)
+
+Depois de ver o código da D1b, o Matheus pediu: "Na verdade, faz esse modal menor, ele está muito grande. Ele tem que ser um campo pequeno."
+Isso revoga o tamanho da D1b-2. Foram duas opções, tiradas do jogo real com o CSS de cada uma, em
+`D:\Trab\digilab\capturas_ux_digibrain_aprovar\modal_menor\` (com um `LEIA.md`):
+- **(a):** 420 px a 1920, no canto direito sob o relógio; a 390, um cartão de 264 × 210 px no canto de baixo.
+- **(b):** 520 px a 1920; a 390, uma folha de 210 px com os botões numa coluna à esquerda do desenho.
+
+**Decidida (Matheus, 2026-11-07):** "(a) desk, (b) celular". Fica assim:
+- **Desktop:** o painel de 420 px sob o relógio, com a altura acompanhando o desenho (~306 px).
+- **Celular:** a folha de 210 px na largura toda, com os botões numa coluna à esquerda e sem os nomes das regiões, que não cabem.
+- **O título** é só o ícone do cérebro, ao lado do selo; o nome "DigiBrain" fica para o leitor de tela.
+- **Os rótulos** ficam só no caminho aceso e nas opções; o de outro ponto aparece ao passar o mouse ou ao tocar nele. A legenda fica no "i".
+
+Os tamanhos são PROPOSTO, SEM FONTE.
