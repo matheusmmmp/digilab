@@ -1,0 +1,11 @@
+{
+ "ai_model": "nano-banana-2",
+ "referencias": ["ref_maquete_lata.png", "ref_geladeira_gerada.png"],
+ "prompt_base": "Concept art of a single giant soda can standing upright, as a landmark prop for a cozy low-poly 3D island game for children with an anime digital-world look, cute and friendly, nothing dirty, dented, rusty or scary. Match the art style of the reference images: simple chunky rounded shapes, toy-like proportions, flat cel shading with two tones, soft saturated colors, clean flat color areas. A classic aluminium drink can with a silver top rim and pull tab, closed, no brand, no logo, no text, no letters, no numbers, only simple big graphic shapes and a fruit picture. Show only the can, full object in frame, three-quarter view from slightly below, on a plain light grey background, no ground, no shadow, no characters.",
+ "variantes": [
+  {"nome": "concept_1_cereja", "prompt": "Pastel rainbow stripes of soft color blocks (mint, lilac, yellow, pink) with a big cute pair of red cherries on the front."},
+  {"nome": "concept_2_limao", "prompt": "Bright lime green with white bubbles and a big simple lemon slice drawing on the front, a little green vine with leaves climbing from its base."},
+  {"nome": "concept_3_uva", "prompt": "Soft lavender purple with a big bunch of grapes on the front and simple white star sparkles around it."},
+  {"nome": "concept_4_pessego", "prompt": "Warm peach orange fading to pink with a big round peach with a leaf on the front and a cyan glowing digital line pattern around the top rim."}
+ ]
+}

@@ -519,4 +519,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-06 — CONVERSA_PET, M2b a verificação da conversa nova usa o `verif-v6` (worker, Claude Code, Sonnet 5.5, branch `v3-conversa-m2b-verif`)](registro/2026-11.md)
 - [2026-11-06 — CONVERSA_PET, a mudança de rumo para o decodificador de conceitos (Gerente da frente, Claude Code, Opus 5.5, branch `v3-conversa-decodificador`)](registro/2026-11.md)
 - [2026-11-06 — CONVERSA_PET, DC1 o decodificador de conceitos `dec-v1` (worker, Claude Code, Sonnet 5.5, branch `v3-conversa-dc1-decodificador`)](registro/2026-11.md)
+- [2026-11-06 — MAPA_DIGITAL, D4: a lata gigante (Gerente da frente, Claude Code, Opus 5.5, branch `v3-mapa-digital-d4`)](registro/2026-11.md)
 - [2026-11-06 — CONVERSA_PET, DC2 a voz que recebe só a intenção e os conceitos (worker, Claude Code, Sonnet 5.5, branch `v3-conversa-dc2-voz`)](registro/2026-11.md)
