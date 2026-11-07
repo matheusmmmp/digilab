@@ -1,6 +1,6 @@
 # PLANO DE ANÁLISE V3 — CONVERSA_PET, DC3: a rede escolhendo falar (2026-11-07, Gerente da CONVERSA_PET, Claude Code, Opus 5.5)
 
-**Status: PROPOSTO.** As decisões DC3-1 a DC3-9 (seção 12) esperam o Matheus. **Nenhuma vida da faixa 79101…79505 roda antes de quatro
+**Status: APROVADO pelo Matheus em 2026-11-07 ("Aprovo todas").** As decisões DC3-1 a DC3-9 (seção 12) DECIDIDAS, todas pela recomendação. **Nenhuma vida da faixa 79101…79505 roda antes de quatro
 coisas:** este cabeçalho com a marca "APROVADO pelo Matheus"; o código da DC3a na `main` (seção 10), desligado e byte a byte; a medida da
 fala em `digilab/metrics.py` com os testes dela; e o registro da run (seção 11), num commit empurrado antes da primeira vida.
 
@@ -128,7 +128,7 @@ três unidades nos dias 1, 3, 8 e 14. Os artefatos `meta.json`, `medidas.json` (
 
 ## 7. A análise e a regra de leitura
 
-### 7.1 As premissas (PROPOSTAS, SEM FONTE; DC3-7)
+### 7.1 As premissas (DECIDIDAS na DC3-7; SEM FONTE)
 
 Se uma falha, o gate e a guarda são **inconclusivos por premissa**.
 - **P-FALA:** no LAB+F com o dono que ignora, a fração das decisões fora do dormir que são fala tem o limite inferior do IC95 > 0,01 (o
@@ -184,7 +184,7 @@ Antes da primeira vida, num commit empurrado: o comando, o sha256 da config, do 
 braço, nenhuma unidade de fala no LAB e nenhum atendimento sem fala no passo (no LAB+F). Depois da run: os sha256 dos artefatos e a análise
 refeita do `medidas.json`, byte a byte.
 
-## 12. As decisões (PROPOSTAS; cada uma com a recomendação e o custo de errar)
+## 12. As decisões (DECIDIDAS pelo Matheus em 2026-11-07, todas pela recomendação; cada uma com o custo de errar)
 
 | | decisão | recomendação | custo de errar |
 |---|---|---|---|

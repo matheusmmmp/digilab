@@ -293,8 +293,8 @@ não mudaram. Desvios: D-CP-DC2b-1 a 8 em `docs/registro/2026-11.md`.
 
 ## DC3 — o plano de análise da rede escolhendo falar (2026-11-07, Gerente, Claude Code, Opus 5.5, branch `v3-conversa-dc3-plano`)
 
-O plano [PLANO_ANALISE_V3_CONVERSA_DC3.md](PLANO_ANALISE_V3_CONVERSA_DC3.md), PROPOSTO: o `chamar_atencao` do modular dividido em três
+O plano [PLANO_ANALISE_V3_CONVERSA_DC3.md](PLANO_ANALISE_V3_CONVERSA_DC3.md): o `chamar_atencao` do modular dividido em três
 unidades de fala com conteúdo (fome, higiene, solidão), subchave `fala_unidades`, aprendendo pelo P2 de hoje; o LAB contra o LAB+F, cruzados
 com um dono que atende a fala (no mesmo passo e orçamento) e o de hoje, que ignora; o gate G-ESCUTA (a fala pertinente sobe com o dono que
 atende) e a guarda G-COMEDOURO-DC3 (com o dono que ignora, falar não tira o pet da comida). A faixa 79101…79505, reservada no primeiro
-commit. Decisões DC3-1 a DC3-9 esperam o Matheus; nenhuma vida antes da aprovação e do código da DC3a.
+commit. **APROVADO pelo Matheus em 2026-11-07 ("Aprovo todas"), DC3-1 a DC3-9 DECIDIDAS pela recomendação;** nenhuma vida antes do código da DC3a e do registro da run.
