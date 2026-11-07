@@ -13,6 +13,9 @@ const APP = `${PREFIXO}/web/dist/`, CHAVE = "digilab-web-v21-sprites";
 const SAVE = { semente: 101, versao: 18, log: [[480, "u", { n: 1 }], [480, "t", 210]] };
 const TAMER = { versao: 7, log: [["medalha", { id: "campina", n: 1, quando: 1, pet: 101, forma: "Agumon", tick: 480 }]] };
 const SEGUNDOS = Number(process.env.DIGILAB_GIF_SEGUNDOS ?? 40), INTERVALO_MS = 60;
+/* o rival: o card adulto de indice DIGILAB_GIF_RIVAL na ordem de RIVAIS_ADULTOS (6 = o vigia, que prepara o pesado de perto e derruba
+   muito; o bot padrao da Arena so troca golpes rapidos com o Rookie, e o empurrao nao aparece) */
+const RIVAL = Number(process.env.DIGILAB_GIF_RIVAL ?? 6);
 
 test("os quadros do GIF do empurrao (v18)", async ({ page }) => {
   test.skip(!PASTA, "so com DIGILAB_GIF_EMPURRAO=<pasta>");
@@ -26,6 +29,8 @@ test("os quadros do GIF do empurrao (v18)", async ({ page }) => {
     localStorage.setItem(chave, s);
   }, [CHAVE, JSON.stringify(SAVE), JSON.stringify(TAMER)] as const);
   await page.goto(`${APP}?clipes_up=1#/lutar/arena`);
+  if (RIVAL >= 2) await page.locator(".rivais-mais").click();
+  await page.locator(".rival-card--adulto").nth(RIVAL).click();
   await page.locator(".lutar-grande").click();
   await expect(page).toHaveURL(/#\/lutar\/luta$/);
   const cv = page.locator(".arena-cv");
