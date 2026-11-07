@@ -95,14 +95,14 @@ export const RELOGIO_V14: RelogioTR = { ...RELOGIO_V13, empurrao: 0, medio: 120,
 
 /** o empurrao dos pets v18 (docs/TAREFA_V3_LUTA_EMPURRAO.md, secao 3.2). DECIDIDOS pelo Matheus em 2026-11-06 pela recomendacao (EMP-1 a
     EMP-8), SEM FONTE (nenhum vem de medicao; a etapa 4 da tarefa mede o efeito):
-    - EMP-1: a investida 40 px (do contato, 44, ao medio), o pesado 60 px; o golpe rapido, a finta e o disparo nao empurram (com 6 px no leve
+    - EMP-1: a investida 20 px (era 40; rodada curta do F-3, medicao C, PROPOSTO, SEM FONTE), o pesado 60 px; o golpe rapido, a finta e o disparo nao empurram (com 6 px no leve
       a fase 1 da rodada viu as listas defensivas no limite de tempo; docs/EQUILIBRIO_COMBATE_TR.md, fase 1);
-    - EMP-2: o pesado derruba, 62 passos (~1 s); a investida nao derruba (rodada curta do F-3, medicao B, PROPOSTO, SEM FONTE); EMP-3: o caido pode levar golpe;
+    - EMP-2: o pesado derruba, 62 passos (~1 s); a investida nao derruba (rodada curta do F-3, medicao C, PROPOSTO, SEM FONTE); EMP-3: o caido pode levar golpe;
     - EMP-5: a pele dura corta pela metade e segura a queda; a defesa e o contra-golpe nao sao empurrados nem caem (trocada pelo Matheus em
       2026-11-06, depois das medicoes: "Testar defesa sem empurrao" e depois "Contra-golpe sem empurrao"; antes as duas posturas cortavam
       pela metade, como a pele);
     - EMP-6: o deslize em 10 passos (160 ms) */
-export const EMPURRAO_V18: EmpurraoAlvo = { forca: { investida: 40, pesado: 60 }, derruba: ["pesado"], queda: 62, deslize: 10, guarda: .5, defesa: 0 };
+export const EMPURRAO_V18: EmpurraoAlvo = { forca: { investida: 20, pesado: 60 }, derruba: ["pesado"], queda: 62, deslize: 10, guarda: .5, defesa: 0 };
 /** o relogio dos pets v18: o da v14 com o empurrao de quem leva o golpe (o empurrao antigo, o do atacante e do alvo, segue 0) */
 export const RELOGIO_V18: RelogioTR = { ...RELOGIO_V14, empurraoAlvo: EMPURRAO_V18 };
 

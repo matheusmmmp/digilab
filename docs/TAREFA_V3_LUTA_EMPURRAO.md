@@ -314,3 +314,12 @@ Artefatos em `web/app/scripts/medicoes/equilibrio_tr/empurrao/r_a_inv20/`, a tab
 - G-3 passa (0,40 a 0,81); T-2 0,014 no total, pior par duelista × sentinela 0,135; T-1 35,1 s. As outras metas que passam hoje passam.
 - Não fecha; segue a medição B (seção 4.4).
 
+### 9.5 A rodada curta do F-3, medição B (a investida 40 px sem derrubar, 2026-11-06): o F-3 e o G-2 falham
+
+Artefatos em `web/app/scripts/medicoes/equilibrio_tr/empurrao/r_b_inv40_sem_queda/`, a tabela em `resumo_r_b_inv40_sem_queda.txt`.
+
+- **F-3 falha:** o duelista vence 1 forma (o emboscador, 0,685); o vigia cai para 0,233 (era 0,805 hoje), o Titã fica em 0,208.
+- **G-2 falha:** no Tortomon, os pets sem treino vencem 0,31 (teto 0,3), como na A.
+- G-3 passa (0,37 a 0,80); T-2 0,016 no total, pior par duelista × sentinela 0,18; T-1 35,2 s.
+- Não fecha; segue a medição C (seção 4.4).
+
