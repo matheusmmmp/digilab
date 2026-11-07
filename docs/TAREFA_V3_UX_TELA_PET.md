@@ -656,3 +656,16 @@ vai até um objeto. Esta etapa faz só a prancha da A, sem código do jogo (bran
 - **As perguntas I1-1 a I1-10** e a lista do que a direção C vai precisar estão no `PERGUNTAS.md` e no `LEIA.md`.
 
 **Fica com o Matheus:** aprovar as telas e responder as perguntas I1-1 a I1-10. O código da A só começa depois disso.
+
+**Rodada 2 (o Matheus respondeu, 2026-11-07):**
+
+> "Que fio, eu pedi pra ser drag and drop. [...] Não tem fio nenhum. Acredito que a ideia de clicar na árvore, ela sacudir, é interessante
+> para cair a flor, né? A fruta. Daí segue a recomendação para as outras opções."
+
+- **O fio saiu por inteiro,** e a I1-2 (o getter do alvo) e a I1-10 caíram com ele.
+- **Clicar no pet é carinho, e segurar o leva** (I1-1). Isso já existe no jogo (PEGAR_PET, #673 e #674). O estado "fio ao tocar no pet"
+  virou "segurar e arrastar o pet", desenhado como o jogo já faz.
+- **Tocar na árvore a sacode e faz cair uma fruta** (I1-3). Isso pede motor novo, e o PERGUNTAS.md descreve a tarefa própria: Python
+  primeiro, depois o TS com paridade, numa versão de pet nova e atrás de uma chave desligada. Nenhum motor mudou aqui.
+- **As I1-4 a I1-9 ficaram DECIDIDAS** pela recomendação.
+- **As capturas foram refeitas** sobre a main com o #689, com pets v19. As da rodada 1 estão em `prancha_a\antes\`.

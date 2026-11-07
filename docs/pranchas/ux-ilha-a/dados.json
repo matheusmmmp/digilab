@@ -2,10 +2,10 @@
  "fonte": "gerar_dados.py, dos quadros em capturas_ux_ilha_aprovar/prancha_a/fundo",
  "estados": {
   "nada_tocado|vidro|1920": {
-   "fundo": "d04_vidro_1920.png",
+   "fundo": "d03_vidro_1920.png",
    "semente": 6503,
-   "tick": 864,
-   "hora": "14:24",
+   "tick": 937,
+   "hora": "15:37",
    "acao": "dormir",
    "regra": "sono_continuar",
    "chance": 1,
@@ -20,10 +20,10 @@
     658
    ],
    "pet_ret": {
-    "x": 857,
-    "y": 402,
-    "w": 207,
-    "h": 256
+    "x": 852,
+    "y": 520,
+    "w": 216,
+    "h": 138
    },
    "tigela": [
     1030,
@@ -33,57 +33,59 @@
     1179,
     508
    ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
    "racao_madura": 1,
    "racao_podre": 0,
    "aprendido": {
-    "ocioso": 0.1141214370727539,
-    "brincar": -0.07642606353759765,
-    "explorar": -0.05788581848144531
+    "ocioso": 0.1148660117255317,
+    "brincar": -0.0780934354994032,
+    "explorar": -0.05660855611165365
    },
    "aprendido_top": [
     {
      "acao": "ocioso",
-     "desvio": 0.1141214370727539
+     "desvio": 0.1148660117255317
     },
     {
      "acao": "brincar",
-     "desvio": -0.07642606353759765
+     "desvio": -0.0780934354994032
     },
     {
      "acao": "explorar",
-     "desvio": -0.05788581848144531
+     "desvio": -0.05660855611165365
     }
    ],
    "treinos_hoje": 0,
    "treinou_alguma_vez": false,
    "mao": {
     "saco": [
-     772,
-     352
+     752,
+     312
     ],
     "barraca": [
-     150,
-     455
+     605,
+     135
     ],
     "ninho": [
      415,
-     640
+     660
     ],
     "arvore": [
-     716,
-     236
+     172,
+     150
     ],
-    "tigela_vis": [
-     1030,
-     652
+    "fruta": [
+     196,
+     318
     ]
    }
   },
   "nada_tocado|vidro|390": {
-   "fundo": "d04_vidro_390.png",
+   "fundo": "d03_vidro_390.png",
    "semente": 6503,
-   "tick": 860,
-   "hora": "14:20",
+   "tick": 897,
+   "hora": "14:57",
    "acao": "dormir",
    "regra": "sono_continuar",
    "chance": 1,
@@ -98,10 +100,10 @@
     476
    ],
    "pet_ret": {
-    "x": 160,
-    "y": 394,
-    "w": 70,
-    "h": 82
+    "x": 159,
+    "y": 430,
+    "w": 72,
+    "h": 46
    },
    "tigela": [
     220,
@@ -111,54 +113,59 @@
     281,
     417
    ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
    "racao_madura": 1,
    "racao_podre": 0,
    "aprendido": {
-    "ocioso": 0.11408063846164279,
-    "brincar": -0.07633470069037543,
-    "explorar": -0.05795580546061198
+    "ocioso": 0.11445802561442057,
+    "brincar": -0.077179807027181,
+    "explorar": -0.05730842590332032
    },
    "aprendido_top": [
     {
      "acao": "ocioso",
-     "desvio": 0.11408063846164279
+     "desvio": 0.11445802561442057
     },
     {
      "acao": "brincar",
-     "desvio": -0.07633470069037543
+     "desvio": -0.077179807027181
     },
     {
      "acao": "explorar",
-     "desvio": -0.05795580546061198
+     "desvio": -0.05730842590332032
     }
    ],
    "treinos_hoje": 0,
    "treinou_alguma_vez": false,
    "mao": {
     "saco": [
-     121,
-     338
+     112,
+     345
     ],
-    "barraca": null,
+    "barraca": [
+     24,
+     240
+    ],
     "ninho": [
-     14,
+     15,
      470
     ],
     "arvore": [
-     72,
-     268
+     128,
+     180
     ],
-    "tigela_vis": [
-     220,
-     470
+    "fruta": [
+     130,
+     292
     ]
    }
   },
   "nada_tocado|xcom|1920": {
-   "fundo": "d04_xcom_1920.png",
+   "fundo": "d03_xcom_1920.png",
    "semente": 6503,
-   "tick": 867,
-   "hora": "14:27",
+   "tick": 939,
+   "hora": "15:39",
    "acao": "dormir",
    "regra": "sono_continuar",
    "chance": 1,
@@ -173,10 +180,10 @@
     658
    ],
    "pet_ret": {
-    "x": 858,
-    "y": 397,
-    "w": 205,
-    "h": 261
+    "x": 852,
+    "y": 520,
+    "w": 216,
+    "h": 138
    },
    "tigela": [
     1030,
@@ -186,57 +193,59 @@
     1179,
     508
    ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
    "racao_madura": 1,
    "racao_podre": 0,
    "aprendido": {
-    "ocioso": 0.11415203603108724,
-    "brincar": -0.07649458567301433,
-    "explorar": -0.05783332824707031
+    "ocioso": 0.11488641103108724,
+    "brincar": -0.07813911692301431,
+    "explorar": -0.05657356262207031
    },
    "aprendido_top": [
     {
      "acao": "ocioso",
-     "desvio": 0.11415203603108724
+     "desvio": 0.11488641103108724
     },
     {
      "acao": "brincar",
-     "desvio": -0.07649458567301433
+     "desvio": -0.07813911692301431
     },
     {
      "acao": "explorar",
-     "desvio": -0.05783332824707031
+     "desvio": -0.05657356262207031
     }
    ],
    "treinos_hoje": 0,
    "treinou_alguma_vez": false,
    "mao": {
     "saco": [
-     772,
-     352
+     752,
+     312
     ],
     "barraca": [
-     150,
-     455
+     605,
+     135
     ],
     "ninho": [
      415,
-     640
+     660
     ],
     "arvore": [
-     716,
-     236
+     172,
+     150
     ],
-    "tigela_vis": [
-     1030,
-     652
+    "fruta": [
+     196,
+     318
     ]
    }
   },
   "nada_tocado|xcom|390": {
-   "fundo": "d04_xcom_390.png",
+   "fundo": "d03_xcom_390.png",
    "semente": 6503,
-   "tick": 863,
-   "hora": "14:23",
+   "tick": 935,
+   "hora": "15:35",
    "acao": "dormir",
    "regra": "sono_continuar",
    "chance": 1,
@@ -251,10 +260,10 @@
     476
    ],
    "pet_ret": {
-    "x": 161,
-    "y": 392,
-    "w": 69,
-    "h": 84
+    "x": 159,
+    "y": 430,
+    "w": 72,
+    "h": 46
    },
    "tigela": [
     220,
@@ -264,54 +273,59 @@
     281,
     417
    ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
    "racao_madura": 1,
    "racao_podre": 0,
    "aprendido": {
-    "ocioso": 0.11411123741997613,
-    "brincar": -0.0764032228257921,
-    "explorar": -0.05790331522623697
+    "ocioso": 0.11484561241997614,
+    "brincar": -0.07804775407579209,
+    "explorar": -0.05664354960123698
    },
    "aprendido_top": [
     {
      "acao": "ocioso",
-     "desvio": 0.11411123741997613
+     "desvio": 0.11484561241997614
     },
     {
      "acao": "brincar",
-     "desvio": -0.0764032228257921
+     "desvio": -0.07804775407579209
     },
     {
      "acao": "explorar",
-     "desvio": -0.05790331522623697
+     "desvio": -0.05664354960123698
     }
    ],
    "treinos_hoje": 0,
    "treinou_alguma_vez": false,
    "mao": {
     "saco": [
-     121,
-     338
+     112,
+     345
     ],
-    "barraca": null,
+    "barraca": [
+     24,
+     240
+    ],
     "ninho": [
-     14,
+     15,
      470
     ],
     "arvore": [
-     72,
-     268
+     128,
+     180
     ],
-    "tigela_vis": [
-     220,
-     470
+    "fruta": [
+     130,
+     292
     ]
    }
   },
   "etiqueta_aberta|vidro|1920": {
-   "fundo": "d04_vidro_1920.png",
+   "fundo": "d03_vidro_1920.png",
    "semente": 6503,
-   "tick": 864,
-   "hora": "14:24",
+   "tick": 937,
+   "hora": "15:37",
    "acao": "dormir",
    "regra": "sono_continuar",
    "chance": 1,
@@ -326,10 +340,10 @@
     658
    ],
    "pet_ret": {
-    "x": 857,
-    "y": 402,
-    "w": 207,
-    "h": 256
+    "x": 852,
+    "y": 520,
+    "w": 216,
+    "h": 138
    },
    "tigela": [
     1030,
@@ -339,57 +353,59 @@
     1179,
     508
    ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
    "racao_madura": 1,
    "racao_podre": 0,
    "aprendido": {
-    "ocioso": 0.1141214370727539,
-    "brincar": -0.07642606353759765,
-    "explorar": -0.05788581848144531
+    "ocioso": 0.1148660117255317,
+    "brincar": -0.0780934354994032,
+    "explorar": -0.05660855611165365
    },
    "aprendido_top": [
     {
      "acao": "ocioso",
-     "desvio": 0.1141214370727539
+     "desvio": 0.1148660117255317
     },
     {
      "acao": "brincar",
-     "desvio": -0.07642606353759765
+     "desvio": -0.0780934354994032
     },
     {
      "acao": "explorar",
-     "desvio": -0.05788581848144531
+     "desvio": -0.05660855611165365
     }
    ],
    "treinos_hoje": 0,
    "treinou_alguma_vez": false,
    "mao": {
     "saco": [
-     772,
-     352
+     752,
+     312
     ],
     "barraca": [
-     150,
-     455
+     605,
+     135
     ],
     "ninho": [
      415,
-     640
+     660
     ],
     "arvore": [
-     716,
-     236
+     172,
+     150
     ],
-    "tigela_vis": [
-     1030,
-     652
+    "fruta": [
+     196,
+     318
     ]
    }
   },
   "etiqueta_aberta|vidro|390": {
-   "fundo": "d04_vidro_390.png",
+   "fundo": "d03_vidro_390.png",
    "semente": 6503,
-   "tick": 860,
-   "hora": "14:20",
+   "tick": 897,
+   "hora": "14:57",
    "acao": "dormir",
    "regra": "sono_continuar",
    "chance": 1,
@@ -404,10 +420,10 @@
     476
    ],
    "pet_ret": {
-    "x": 160,
-    "y": 394,
-    "w": 70,
-    "h": 82
+    "x": 159,
+    "y": 430,
+    "w": 72,
+    "h": 46
    },
    "tigela": [
     220,
@@ -417,54 +433,59 @@
     281,
     417
    ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
    "racao_madura": 1,
    "racao_podre": 0,
    "aprendido": {
-    "ocioso": 0.11408063846164279,
-    "brincar": -0.07633470069037543,
-    "explorar": -0.05795580546061198
+    "ocioso": 0.11445802561442057,
+    "brincar": -0.077179807027181,
+    "explorar": -0.05730842590332032
    },
    "aprendido_top": [
     {
      "acao": "ocioso",
-     "desvio": 0.11408063846164279
+     "desvio": 0.11445802561442057
     },
     {
      "acao": "brincar",
-     "desvio": -0.07633470069037543
+     "desvio": -0.077179807027181
     },
     {
      "acao": "explorar",
-     "desvio": -0.05795580546061198
+     "desvio": -0.05730842590332032
     }
    ],
    "treinos_hoje": 0,
    "treinou_alguma_vez": false,
    "mao": {
     "saco": [
-     121,
-     338
+     112,
+     345
     ],
-    "barraca": null,
+    "barraca": [
+     24,
+     240
+    ],
     "ninho": [
-     14,
+     15,
      470
     ],
     "arvore": [
-     72,
-     268
+     128,
+     180
     ],
-    "tigela_vis": [
-     220,
-     470
+    "fruta": [
+     130,
+     292
     ]
    }
   },
   "etiqueta_aberta|xcom|1920": {
-   "fundo": "d04_xcom_1920.png",
+   "fundo": "d03_xcom_1920.png",
    "semente": 6503,
-   "tick": 867,
-   "hora": "14:27",
+   "tick": 939,
+   "hora": "15:39",
    "acao": "dormir",
    "regra": "sono_continuar",
    "chance": 1,
@@ -479,10 +500,10 @@
     658
    ],
    "pet_ret": {
-    "x": 858,
-    "y": 397,
-    "w": 205,
-    "h": 261
+    "x": 852,
+    "y": 520,
+    "w": 216,
+    "h": 138
    },
    "tigela": [
     1030,
@@ -492,57 +513,59 @@
     1179,
     508
    ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
    "racao_madura": 1,
    "racao_podre": 0,
    "aprendido": {
-    "ocioso": 0.11415203603108724,
-    "brincar": -0.07649458567301433,
-    "explorar": -0.05783332824707031
+    "ocioso": 0.11488641103108724,
+    "brincar": -0.07813911692301431,
+    "explorar": -0.05657356262207031
    },
    "aprendido_top": [
     {
      "acao": "ocioso",
-     "desvio": 0.11415203603108724
+     "desvio": 0.11488641103108724
     },
     {
      "acao": "brincar",
-     "desvio": -0.07649458567301433
+     "desvio": -0.07813911692301431
     },
     {
      "acao": "explorar",
-     "desvio": -0.05783332824707031
+     "desvio": -0.05657356262207031
     }
    ],
    "treinos_hoje": 0,
    "treinou_alguma_vez": false,
    "mao": {
     "saco": [
-     772,
-     352
+     752,
+     312
     ],
     "barraca": [
-     150,
-     455
+     605,
+     135
     ],
     "ninho": [
      415,
-     640
+     660
     ],
     "arvore": [
-     716,
-     236
+     172,
+     150
     ],
-    "tigela_vis": [
-     1030,
-     652
+    "fruta": [
+     196,
+     318
     ]
    }
   },
   "etiqueta_aberta|xcom|390": {
-   "fundo": "d04_xcom_390.png",
+   "fundo": "d03_xcom_390.png",
    "semente": 6503,
-   "tick": 863,
-   "hora": "14:23",
+   "tick": 935,
+   "hora": "15:35",
    "acao": "dormir",
    "regra": "sono_continuar",
    "chance": 1,
@@ -557,10 +580,10 @@
     476
    ],
    "pet_ret": {
-    "x": 161,
-    "y": 392,
-    "w": 69,
-    "h": 84
+    "x": 159,
+    "y": 430,
+    "w": 72,
+    "h": 46
    },
    "tigela": [
     220,
@@ -570,54 +593,59 @@
     281,
     417
    ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
    "racao_madura": 1,
    "racao_podre": 0,
    "aprendido": {
-    "ocioso": 0.11411123741997613,
-    "brincar": -0.0764032228257921,
-    "explorar": -0.05790331522623697
+    "ocioso": 0.11484561241997614,
+    "brincar": -0.07804775407579209,
+    "explorar": -0.05664354960123698
    },
    "aprendido_top": [
     {
      "acao": "ocioso",
-     "desvio": 0.11411123741997613
+     "desvio": 0.11484561241997614
     },
     {
      "acao": "brincar",
-     "desvio": -0.0764032228257921
+     "desvio": -0.07804775407579209
     },
     {
      "acao": "explorar",
-     "desvio": -0.05790331522623697
+     "desvio": -0.05664354960123698
     }
    ],
    "treinos_hoje": 0,
    "treinou_alguma_vez": false,
    "mao": {
     "saco": [
-     121,
-     338
+     112,
+     345
     ],
-    "barraca": null,
+    "barraca": [
+     24,
+     240
+    ],
     "ninho": [
-     14,
+     15,
      470
     ],
     "arvore": [
-     72,
-     268
+     128,
+     180
     ],
-    "tigela_vis": [
-     220,
-     470
+    "fruta": [
+     130,
+     292
     ]
    }
   },
-  "fio_toque_pet|vidro|1920": {
-   "fundo": "b03_vidro_1920.png",
+  "segurar_pet|vidro|1920": {
+   "fundo": "p00_vidro_1920.png",
    "semente": 6503,
-   "tick": 811,
-   "hora": "13:31",
+   "tick": 817,
+   "hora": "13:37",
    "acao": "brincar",
    "regra": "tempo_livre",
    "chance": 0.3628664286247097,
@@ -644,67 +672,65 @@
     658
    ],
    "pet_ret": {
-    "x": 864,
-    "y": 349,
+    "x": 1094,
+    "y": 205,
     "w": 192,
     "h": 303
    },
    "tigela": [
-    769,
-    624
+    780,
+    575
    ],
    "bola": [
     960,
+    456
+   ],
+   "mao_ponteiro": [
+    1190,
     482
    ],
+   "pet_na_mao": true,
    "racao_madura": 1,
    "racao_podre": 0,
    "aprendido": {
-    "brincar": -0.10644425286187065,
-    "ocioso": 0.0855866241455078,
-    "explorar": 0.03281153869628906
+    "brincar": -0.10624056837293837,
+    "ocioso": 0.0853482666015625,
+    "explorar": 0.03278526306152344
    },
    "aprendido_top": [
     {
      "acao": "brincar",
-     "desvio": -0.10644425286187065
+     "desvio": -0.10624056837293837
     },
     {
      "acao": "ocioso",
-     "desvio": 0.0855866241455078
+     "desvio": 0.0853482666015625
     },
     {
      "acao": "explorar",
-     "desvio": 0.03281153869628906
+     "desvio": 0.03278526306152344
     }
    ],
    "treinos_hoje": 0,
    "treinou_alguma_vez": false,
    "mao": {
     "saco": [
-     565,
-     316
+     572,
+     305
     ],
-    "barraca": null,
-    "ninho": [
-     200,
-     590
+    "barraca": [
+     490,
+     185
     ],
-    "arvore": [
-     605,
-     255
-    ],
-    "tigela_vis": [
-     770,
-     590
-    ]
+    "ninho": null,
+    "arvore": null
    }
   },
-  "fio_toque_pet|vidro|390": {
-   "fundo": "b04_vidro_390.png",
+  "segurar_pet|vidro|390": {
+   "fundo": "p00_vidro_390.png",
    "semente": 6503,
-   "tick": 811,
-   "hora": "13:31",
+   "tick": 814,
+   "hora": "13:34",
    "acao": "brincar",
    "regra": "tempo_livre",
    "chance": 0.3628664286247097,
@@ -731,64 +757,62 @@
     476
    ],
    "pet_ret": {
-    "x": 163,
-    "y": 373,
+    "x": 232,
+    "y": 295,
     "w": 64,
     "h": 101
    },
    "tigela": [
-    125,
-    464
+    130,
+    418
    ],
    "bola": [
-    195,
-    406
+    194,
+    376
    ],
+   "mao_ponteiro": [
+    265,
+    389
+   ],
+   "pet_na_mao": true,
    "racao_madura": 1,
    "racao_podre": 0,
    "aprendido": {
-    "brincar": -0.10644425286187065,
-    "ocioso": 0.0855866241455078,
-    "explorar": 0.03281153869628906
+    "brincar": -0.10634241061740451,
+    "ocioso": 0.08546744537353516,
+    "explorar": 0.03279840087890625
    },
    "aprendido_top": [
     {
      "acao": "brincar",
-     "desvio": -0.10644425286187065
+     "desvio": -0.10634241061740451
     },
     {
      "acao": "ocioso",
-     "desvio": 0.0855866241455078
+     "desvio": 0.08546744537353516
     },
     {
      "acao": "explorar",
-     "desvio": 0.03281153869628906
+     "desvio": 0.03279840087890625
     }
    ],
    "treinos_hoje": 0,
    "treinou_alguma_vez": false,
    "mao": {
     "saco": [
-     36,
-     340
+     40,
+     312
     ],
     "barraca": null,
     "ninho": null,
-    "arvore": [
-     16,
-     270
-    ],
-    "tigela_vis": [
-     124,
-     462
-    ]
+    "arvore": null
    }
   },
-  "fio_toque_pet|xcom|1920": {
-   "fundo": "b04_xcom_1920.png",
+  "segurar_pet|xcom|1920": {
+   "fundo": "p00_xcom_1920.png",
    "semente": 6503,
-   "tick": 811,
-   "hora": "13:31",
+   "tick": 813,
+   "hora": "13:33",
    "acao": "brincar",
    "regra": "tempo_livre",
    "chance": 0.3628664286247097,
@@ -815,67 +839,65 @@
     658
    ],
    "pet_ret": {
-    "x": 864,
-    "y": 349,
+    "x": 1091,
+    "y": 205,
     "w": 192,
     "h": 303
    },
    "tigela": [
-    773,
-    603
+    793,
+    512
    ],
    "bola": [
-    960,
-    470
+    957,
+    424
    ],
+   "mao_ponteiro": [
+    1190,
+    488
+   ],
+   "pet_na_mao": true,
    "racao_madura": 1,
    "racao_podre": 0,
    "aprendido": {
-    "brincar": -0.10644425286187065,
-    "ocioso": 0.0855866241455078,
-    "explorar": 0.03281153869628906
+    "brincar": -0.10637635803222657,
+    "ocioso": 0.08550717163085939,
+    "explorar": 0.03280278015136719
    },
    "aprendido_top": [
     {
      "acao": "brincar",
-     "desvio": -0.10644425286187065
+     "desvio": -0.10637635803222657
     },
     {
      "acao": "ocioso",
-     "desvio": 0.0855866241455078
+     "desvio": 0.08550717163085939
     },
     {
      "acao": "explorar",
-     "desvio": 0.03281153869628906
+     "desvio": 0.03280278015136719
     }
    ],
    "treinos_hoje": 0,
    "treinou_alguma_vez": false,
    "mao": {
     "saco": [
-     565,
-     316
+     580,
+     268
     ],
-    "barraca": null,
-    "ninho": [
-     200,
-     590
+    "barraca": [
+     505,
+     172
     ],
-    "arvore": [
-     605,
-     255
-    ],
-    "tigela_vis": [
-     770,
-     590
-    ]
+    "ninho": null,
+    "arvore": null
    }
   },
-  "fio_toque_pet|xcom|390": {
-   "fundo": "b07_xcom_390.png",
+  "segurar_pet|xcom|390": {
+   "fundo": "p00_xcom_390.png",
    "semente": 6503,
-   "tick": 812,
-   "hora": "13:32",
+   "tick": 813,
+   "hora": "13:33",
    "acao": "brincar",
    "regra": "tempo_livre",
    "chance": 0.3628664286247097,
@@ -902,75 +924,73 @@
     476
    ],
    "pet_ret": {
-    "x": 163,
-    "y": 374,
+    "x": 233,
+    "y": 295,
     "w": 64,
     "h": 101
    },
    "tigela": [
-    125,
-    468
+    127,
+    410
    ],
    "bola": [
-    195,
-    408
+    190,
+    371
    ],
+   "mao_ponteiro": [
+    265,
+    389
+   ],
+   "pet_na_mao": true,
    "racao_madura": 1,
    "racao_podre": 0,
    "aprendido": {
-    "brincar": -0.10641030544704862,
-    "ocioso": 0.0855468978881836,
-    "explorar": 0.03280715942382813
+    "brincar": -0.10637635803222657,
+    "ocioso": 0.08550717163085939,
+    "explorar": 0.03280278015136719
    },
    "aprendido_top": [
     {
      "acao": "brincar",
-     "desvio": -0.10641030544704862
+     "desvio": -0.10637635803222657
     },
     {
      "acao": "ocioso",
-     "desvio": 0.0855468978881836
+     "desvio": 0.08550717163085939
     },
     {
      "acao": "explorar",
-     "desvio": 0.03280715942382813
+     "desvio": 0.03280278015136719
     }
    ],
    "treinos_hoje": 0,
    "treinou_alguma_vez": false,
    "mao": {
     "saco": [
-     36,
-     340
+     40,
+     312
     ],
     "barraca": null,
     "ninho": null,
-    "arvore": [
-     16,
-     270
-    ],
-    "tigela_vis": [
-     124,
-     462
-    ]
+    "arvore": null
    }
   },
   "indo_tigela|vidro|1920": {
-   "fundo": "q07_vidro_1920.png",
+   "fundo": "q01_vidro_1920.png",
    "semente": 6521,
    "tick": 1479,
    "hora": "00:39",
    "acao": "comer",
    "regra": "fome_moderada",
-   "chance": 0.9745801820415902,
+   "chance": 0.9746682192444726,
    "chances": [
     {
      "acao": "comer",
-     "chance": 0.9745801820415902
+     "chance": 0.9746682192444726
     },
     {
      "acao": "chamar_atencao",
-     "chance": 0.02541981795840975
+     "chance": 0.025331780755527427
     }
    ],
    "pet": [
@@ -979,77 +999,156 @@
    ],
    "pet_ret": {
     "x": 864,
-    "y": 349,
+    "y": 355,
     "w": 192,
     "h": 303
    },
    "tigela": [
-    1370,
-    540
+    1165,
+    572
    ],
    "bola": [
-    3941,
+    3810,
     540
    ],
-   "racao_madura": 8,
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
+   "racao_madura": 7,
    "racao_podre": 0,
    "aprendido": {
-    "ocioso": 0.1600628122965495,
-    "chamar_atencao": 0.16003636372884117,
-    "explorar": -0.14944662170410156
+    "ocioso": 0.1607952341715495,
+    "chamar_atencao": 0.16076878560384117,
+    "explorar": -0.15066732482910156
    },
    "aprendido_top": [
     {
      "acao": "ocioso",
-     "desvio": 0.1600628122965495
+     "desvio": 0.1607952341715495
     },
     {
      "acao": "chamar_atencao",
-     "desvio": 0.16003636372884117
+     "desvio": 0.16076878560384117
     },
     {
      "acao": "explorar",
-     "desvio": -0.14944662170410156
+     "desvio": -0.15066732482910156
     }
    ],
    "treinos_hoje": 0,
    "treinou_alguma_vez": false,
    "mao": {
     "saco": [
-     1093,
-     300
+     878,
+     290
     ],
     "barraca": [
-     610,
-     330
+     690,
+     185
+    ],
+    "ninho": [
+     625,
+     560
+    ],
+    "arvore": null,
+    "tigela": [
+     1165,
+     572
+    ]
+   }
+  },
+  "indo_tigela|xcom|1920": {
+   "fundo": "q13_xcom_1920.png",
+   "semente": 6521,
+   "tick": 1479,
+   "hora": "00:39",
+   "acao": "comer",
+   "regra": "fome_moderada",
+   "chance": 0.9746682192444726,
+   "chances": [
+    {
+     "acao": "comer",
+     "chance": 0.9746682192444726
+    },
+    {
+     "acao": "chamar_atencao",
+     "chance": 0.025331780755527427
+    }
+   ],
+   "pet": [
+    960,
+    658
+   ],
+   "pet_ret": {
+    "x": 864,
+    "y": 352,
+    "w": 192,
+    "h": 303
+   },
+   "tigela": [
+    1366,
+    540
+   ],
+   "bola": [
+    3937,
+    540
+   ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
+   "racao_madura": 7,
+   "racao_podre": 0,
+   "aprendido": {
+    "ocioso": 0.1607952341715495,
+    "chamar_atencao": 0.16076878560384117,
+    "explorar": -0.15066732482910156
+   },
+   "aprendido_top": [
+    {
+     "acao": "ocioso",
+     "desvio": 0.1607952341715495
+    },
+    {
+     "acao": "chamar_atencao",
+     "desvio": 0.16076878560384117
+    },
+    {
+     "acao": "explorar",
+     "desvio": -0.15066732482910156
+    }
+   ],
+   "treinos_hoje": 0,
+   "treinou_alguma_vez": false,
+   "mao": {
+    "saco": [
+     1060,
+     268
+    ],
+    "barraca": [
+     790,
+     170
     ],
     "ninho": [
      845,
      520
     ],
-    "arvore": null,
-    "tigela_vis": [
-     1366,
-     518
-    ]
+    "arvore": null
    }
   },
-  "indo_tigela|vidro|390": {
-   "fundo": "q11_vidro_390.png",
+  "indo_tigela|xcom|390": {
+   "fundo": "q07_xcom_390.png",
    "semente": 6521,
-   "tick": 1484,
-   "hora": "00:44",
+   "tick": 1483,
+   "hora": "00:43",
    "acao": "comer",
    "regra": "fome_moderada",
-   "chance": 0.9745801820415902,
+   "chance": 0.9746682192444726,
    "chances": [
     {
      "acao": "comer",
-     "chance": 0.9745801820415902
+     "chance": 0.9746682192444726
     },
     {
      "acao": "chamar_atencao",
-     "chance": 0.02541981795840975
+     "chance": 0.025331780755527427
     }
    ],
    "pet": [
@@ -1058,37 +1157,39 @@
    ],
    "pet_ret": {
     "x": 163,
-    "y": 373,
+    "y": 375,
     "w": 64,
     "h": 101
    },
    "tigela": [
-    305,
-    431
+    285,
+    440
    ],
    "bola": [
-    1291,
+    1288,
     431
    ],
-   "racao_madura": 8,
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
+   "racao_madura": 7,
    "racao_podre": 0,
    "aprendido": {
-    "ocioso": 0.1596039530436198,
-    "chamar_atencao": 0.15957411363389756,
-    "explorar": -0.1491389134724935
+    "ocioso": 0.16042814676920575,
+    "chamar_atencao": 0.1603989855278863,
+    "explorar": -0.1504211582438151
    },
    "aprendido_top": [
     {
      "acao": "ocioso",
-     "desvio": 0.1596039530436198
+     "desvio": 0.16042814676920575
     },
     {
      "acao": "chamar_atencao",
-     "desvio": 0.15957411363389756
+     "desvio": 0.1603989855278863
     },
     {
      "acao": "explorar",
-     "desvio": -0.1491389134724935
+     "desvio": -0.1504211582438151
     }
    ],
    "treinos_hoje": 0,
@@ -1096,115 +1197,36 @@
    "mao": {
     "saco": null,
     "barraca": [
-     42,
-     392
+     88,
+     262
     ],
     "ninho": [
-     105,
-     425
+     85,
+     432
     ],
     "arvore": null,
-    "tigela_vis": [
-     303,
-     420
+    "tigela": [
+     285,
+     440
     ]
    }
   },
-  "indo_tigela|xcom|1920": {
-   "fundo": "q07_xcom_1920.png",
+  "indo_tigela|vidro|390": {
+   "fundo": "r19_vidro_390.png",
    "semente": 6521,
-   "tick": 1481,
-   "hora": "00:41",
+   "tick": 1483,
+   "hora": "00:43",
    "acao": "comer",
    "regra": "fome_moderada",
-   "chance": 0.9745801820415902,
+   "chance": 0.9746682192444726,
    "chances": [
     {
      "acao": "comer",
-     "chance": 0.9745801820415902
+     "chance": 0.9746682192444726
     },
     {
      "acao": "chamar_atencao",
-     "chance": 0.02541981795840975
-    }
-   ],
-   "pet": [
-    960,
-    658
-   ],
-   "pet_ret": {
-    "x": 864,
-    "y": 349,
-    "w": 192,
-    "h": 303
-   },
-   "tigela": [
-    1310,
-    540
-   ],
-   "bola": [
-    3882,
-    540
-   ],
-   "racao_madura": 8,
-   "racao_podre": 0,
-   "aprendido": {
-    "ocioso": 0.1598792685953776,
-    "chamar_atencao": 0.15985146369086373,
-    "explorar": -0.14932353841145837
-   },
-   "aprendido_top": [
-    {
-     "acao": "ocioso",
-     "desvio": 0.1598792685953776
-    },
-    {
-     "acao": "chamar_atencao",
-     "desvio": 0.15985146369086373
-    },
-    {
-     "acao": "explorar",
-     "desvio": -0.14932353841145837
-    }
-   ],
-   "treinos_hoje": 0,
-   "treinou_alguma_vez": false,
-   "mao": {
-    "saco": [
-     1093,
-     300
-    ],
-    "barraca": [
-     610,
-     330
-    ],
-    "ninho": [
-     845,
-     520
-    ],
-    "arvore": null,
-    "tigela_vis": [
-     1366,
-     518
-    ]
-   }
-  },
-  "indo_tigela|xcom|390": {
-   "fundo": "q12_xcom_390.png",
-   "semente": 6521,
-   "tick": 1484,
-   "hora": "00:44",
-   "acao": "comer",
-   "regra": "fome_moderada",
-   "chance": 0.9745801820415902,
-   "chances": [
-    {
-     "acao": "comer",
-     "chance": 0.9745801820415902
-    },
-    {
-     "acao": "chamar_atencao",
-     "chance": 0.02541981795840975
+     "chance": 0.025331780755527427
     }
    ],
    "pet": [
@@ -1218,32 +1240,34 @@
     "h": 101
    },
    "tigela": [
-    305,
+    311,
     431
    ],
    "bola": [
-    1291,
+    1297,
     431
    ],
-   "racao_madura": 8,
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
+   "racao_madura": 7,
    "racao_podre": 0,
    "aprendido": {
-    "ocioso": 0.1596039530436198,
-    "chamar_atencao": 0.15957411363389756,
-    "explorar": -0.1491389134724935
+    "ocioso": 0.16042814676920575,
+    "chamar_atencao": 0.1603989855278863,
+    "explorar": -0.1504211582438151
    },
    "aprendido_top": [
     {
      "acao": "ocioso",
-     "desvio": 0.1596039530436198
+     "desvio": 0.16042814676920575
     },
     {
      "acao": "chamar_atencao",
-     "desvio": 0.15957411363389756
+     "desvio": 0.1603989855278863
     },
     {
      "acao": "explorar",
-     "desvio": -0.1491389134724935
+     "desvio": -0.1504211582438151
     }
    ],
    "treinos_hoje": 0,
@@ -1251,25 +1275,21 @@
    "mao": {
     "saco": null,
     "barraca": [
-     42,
-     392
+     85,
+     262
     ],
     "ninho": [
-     105,
-     425
+     110,
+     430
     ],
-    "arvore": null,
-    "tigela_vis": [
-     303,
-     420
-    ]
+    "arvore": null
    }
   },
   "toque_arvore|vidro|1920": {
-   "fundo": "d04_vidro_1920.png",
+   "fundo": "d03_vidro_1920.png",
    "semente": 6503,
-   "tick": 864,
-   "hora": "14:24",
+   "tick": 937,
+   "hora": "15:37",
    "acao": "dormir",
    "regra": "sono_continuar",
    "chance": 1,
@@ -1284,10 +1304,10 @@
     658
    ],
    "pet_ret": {
-    "x": 857,
-    "y": 402,
-    "w": 207,
-    "h": 256
+    "x": 852,
+    "y": 520,
+    "w": 216,
+    "h": 138
    },
    "tigela": [
     1030,
@@ -1297,57 +1317,59 @@
     1179,
     508
    ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
    "racao_madura": 1,
    "racao_podre": 0,
    "aprendido": {
-    "ocioso": 0.1141214370727539,
-    "brincar": -0.07642606353759765,
-    "explorar": -0.05788581848144531
+    "ocioso": 0.1148660117255317,
+    "brincar": -0.0780934354994032,
+    "explorar": -0.05660855611165365
    },
    "aprendido_top": [
     {
      "acao": "ocioso",
-     "desvio": 0.1141214370727539
+     "desvio": 0.1148660117255317
     },
     {
      "acao": "brincar",
-     "desvio": -0.07642606353759765
+     "desvio": -0.0780934354994032
     },
     {
      "acao": "explorar",
-     "desvio": -0.05788581848144531
+     "desvio": -0.05660855611165365
     }
    ],
    "treinos_hoje": 0,
    "treinou_alguma_vez": false,
    "mao": {
     "saco": [
-     772,
-     352
+     752,
+     312
     ],
     "barraca": [
-     150,
-     455
+     605,
+     135
     ],
     "ninho": [
      415,
-     640
+     660
     ],
     "arvore": [
-     716,
-     236
+     172,
+     150
     ],
-    "tigela_vis": [
-     1030,
-     652
+    "fruta": [
+     196,
+     318
     ]
    }
   },
   "toque_arvore|vidro|390": {
-   "fundo": "d04_vidro_390.png",
+   "fundo": "d03_vidro_390.png",
    "semente": 6503,
-   "tick": 860,
-   "hora": "14:20",
+   "tick": 897,
+   "hora": "14:57",
    "acao": "dormir",
    "regra": "sono_continuar",
    "chance": 1,
@@ -1362,10 +1384,10 @@
     476
    ],
    "pet_ret": {
-    "x": 160,
-    "y": 394,
-    "w": 70,
-    "h": 82
+    "x": 159,
+    "y": 430,
+    "w": 72,
+    "h": 46
    },
    "tigela": [
     220,
@@ -1375,54 +1397,59 @@
     281,
     417
    ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
    "racao_madura": 1,
    "racao_podre": 0,
    "aprendido": {
-    "ocioso": 0.11408063846164279,
-    "brincar": -0.07633470069037543,
-    "explorar": -0.05795580546061198
+    "ocioso": 0.11445802561442057,
+    "brincar": -0.077179807027181,
+    "explorar": -0.05730842590332032
    },
    "aprendido_top": [
     {
      "acao": "ocioso",
-     "desvio": 0.11408063846164279
+     "desvio": 0.11445802561442057
     },
     {
      "acao": "brincar",
-     "desvio": -0.07633470069037543
+     "desvio": -0.077179807027181
     },
     {
      "acao": "explorar",
-     "desvio": -0.05795580546061198
+     "desvio": -0.05730842590332032
     }
    ],
    "treinos_hoje": 0,
    "treinou_alguma_vez": false,
    "mao": {
     "saco": [
-     121,
-     338
+     112,
+     345
     ],
-    "barraca": null,
+    "barraca": [
+     24,
+     240
+    ],
     "ninho": [
-     14,
+     15,
      470
     ],
     "arvore": [
-     72,
-     268
+     128,
+     180
     ],
-    "tigela_vis": [
-     220,
-     470
+    "fruta": [
+     130,
+     292
     ]
    }
   },
   "toque_arvore|xcom|1920": {
-   "fundo": "d04_xcom_1920.png",
+   "fundo": "d03_xcom_1920.png",
    "semente": 6503,
-   "tick": 867,
-   "hora": "14:27",
+   "tick": 939,
+   "hora": "15:39",
    "acao": "dormir",
    "regra": "sono_continuar",
    "chance": 1,
@@ -1437,10 +1464,10 @@
     658
    ],
    "pet_ret": {
-    "x": 858,
-    "y": 397,
-    "w": 205,
-    "h": 261
+    "x": 852,
+    "y": 520,
+    "w": 216,
+    "h": 138
    },
    "tigela": [
     1030,
@@ -1450,57 +1477,59 @@
     1179,
     508
    ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
    "racao_madura": 1,
    "racao_podre": 0,
    "aprendido": {
-    "ocioso": 0.11415203603108724,
-    "brincar": -0.07649458567301433,
-    "explorar": -0.05783332824707031
+    "ocioso": 0.11488641103108724,
+    "brincar": -0.07813911692301431,
+    "explorar": -0.05657356262207031
    },
    "aprendido_top": [
     {
      "acao": "ocioso",
-     "desvio": 0.11415203603108724
+     "desvio": 0.11488641103108724
     },
     {
      "acao": "brincar",
-     "desvio": -0.07649458567301433
+     "desvio": -0.07813911692301431
     },
     {
      "acao": "explorar",
-     "desvio": -0.05783332824707031
+     "desvio": -0.05657356262207031
     }
    ],
    "treinos_hoje": 0,
    "treinou_alguma_vez": false,
    "mao": {
     "saco": [
-     772,
-     352
+     752,
+     312
     ],
     "barraca": [
-     150,
-     455
+     605,
+     135
     ],
     "ninho": [
      415,
-     640
+     660
     ],
     "arvore": [
-     716,
-     236
+     172,
+     150
     ],
-    "tigela_vis": [
-     1030,
-     652
+    "fruta": [
+     196,
+     318
     ]
    }
   },
   "toque_arvore|xcom|390": {
-   "fundo": "d04_xcom_390.png",
+   "fundo": "d03_xcom_390.png",
    "semente": 6503,
-   "tick": 863,
-   "hora": "14:23",
+   "tick": 935,
+   "hora": "15:35",
    "acao": "dormir",
    "regra": "sono_continuar",
    "chance": 1,
@@ -1515,10 +1544,10 @@
     476
    ],
    "pet_ret": {
-    "x": 161,
-    "y": 392,
-    "w": 69,
-    "h": 84
+    "x": 159,
+    "y": 430,
+    "w": 72,
+    "h": 46
    },
    "tigela": [
     220,
@@ -1528,46 +1557,51 @@
     281,
     417
    ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
    "racao_madura": 1,
    "racao_podre": 0,
    "aprendido": {
-    "ocioso": 0.11411123741997613,
-    "brincar": -0.0764032228257921,
-    "explorar": -0.05790331522623697
+    "ocioso": 0.11484561241997614,
+    "brincar": -0.07804775407579209,
+    "explorar": -0.05664354960123698
    },
    "aprendido_top": [
     {
      "acao": "ocioso",
-     "desvio": 0.11411123741997613
+     "desvio": 0.11484561241997614
     },
     {
      "acao": "brincar",
-     "desvio": -0.0764032228257921
+     "desvio": -0.07804775407579209
     },
     {
      "acao": "explorar",
-     "desvio": -0.05790331522623697
+     "desvio": -0.05664354960123698
     }
    ],
    "treinos_hoje": 0,
    "treinou_alguma_vez": false,
    "mao": {
     "saco": [
-     121,
-     338
+     112,
+     345
     ],
-    "barraca": null,
+    "barraca": [
+     24,
+     240
+    ],
     "ninho": [
-     14,
+     15,
      470
     ],
     "arvore": [
-     72,
-     268
+     128,
+     180
     ],
-    "tigela_vis": [
-     220,
-     470
+    "fruta": [
+     130,
+     292
     ]
    }
   }

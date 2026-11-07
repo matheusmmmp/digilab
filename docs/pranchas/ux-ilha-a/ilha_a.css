@@ -1,6 +1,6 @@
 /* Prancha ux-ilha-a ("Objetos que falam"), da UX_TELA_PET. So desenho; nenhum codigo do jogo.
    Nenhuma cor nova: as cores sao os tokens do app, lidos direto de web/app/src/estilo/tokens.css (as duas peles) e de pele-xcom.css (os cantos
-   em L do Militar), ligados no ilha_a.html. As medidas (a altura das etiquetas, a largura do cartao, o traco do fio, a duracao) sao de layout:
+   em L do Militar), ligados no ilha_a.html. As medidas (a altura das etiquetas, a largura do cartao, o tremor da arvore, a duracao) sao de layout:
    PROPOSTO, SEM FONTE. */
 
 *{ box-sizing:border-box }
@@ -11,8 +11,6 @@ body{ font-family:var(--hx-f); color:var(--hx-texto) }
 .tela--390{ width:390px; height:844px }
 .erro{ position:absolute; inset:0; display:grid; place-items:center; padding:24px; font:700 20px/1.4 var(--hx-f); color:var(--hx-perigo);
   background:var(--hx-chao); white-space:pre-wrap }
-svg.fios{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible }
-
 /* ---------- a caixa de HUD comum (etiqueta, cartao, selo): a mesma superficie das caixas da tela Pet */
 .caixa{ position:absolute; background:linear-gradient(180deg, var(--hud-fundo-1), var(--hud-fundo-2)); border:1px solid var(--hx-borda);
   box-shadow:var(--hud-brilho), var(--hx-sombra); backdrop-filter:var(--hud-desfoque); -webkit-backdrop-filter:var(--hud-desfoque); color:var(--hx-texto) }
@@ -34,11 +32,6 @@ svg.fios{ position:absolute; inset:0; width:100%; height:100%; pointer-events:no
 .tela--390 .etq b{ font-size:16px }
 .tela--390 .etq .ic{ font-size:15px }
 
-/* a chance do cerebro no fim do fio */
-.chance b{ color:var(--hx-escolhido-ink) }
-.chance{ background:var(--hx-escolhido); border-color:var(--hx-escolhido-borda); color:var(--hx-escolhido-ink) }
-:root[data-pele="xcom"] .chance{ background:var(--hx-escolhido) }
-.chance .ic{ color:var(--hx-escolhido-ink) }
 
 /* o aprendido: ciano, como o tracejado do aprendido no Registro */
 .aprendeu{ color:var(--hx-aprendido) }
@@ -74,13 +67,16 @@ svg.fios{ position:absolute; inset:0; width:100%; height:100%; pointer-events:no
 .tela--390 .cartao-linha{ font-size:13px; margin-top:8px }
 .tela--390 .gesto{ height:44px; font-size:15px; margin-top:10px }
 
-/* o fio da intencao: tracejado, na cor do escolhido; o anel no alvo */
-.fio{ fill:none; stroke:var(--hx-escolhido-borda); stroke-width:3; stroke-dasharray:10 8; stroke-linecap:round }
-.tela--390 .fio{ stroke-width:2.5; stroke-dasharray:7 6 }
-.fio-sombra{ fill:none; stroke:var(--hx-chao); stroke-opacity:.55; stroke-width:6; stroke-linecap:round }
-.anel{ fill:none; stroke:var(--hx-escolhido-borda); stroke-width:2.5 }
+/* o toque (anel), o sacudir da arvore, a queda e a fruta; o dedo que segura o pet */
 .toque{ fill:none; stroke:var(--hx-foco); stroke-width:2.5; stroke-opacity:.9 }
 .toque-2{ fill:none; stroke:var(--hx-foco); stroke-width:1.5; stroke-opacity:.45 }
+.sacode{ fill:none; stroke:var(--hx-foco); stroke-width:3; stroke-linecap:round }
+.tela--390 .sacode{ stroke-width:2 }
+.queda{ fill:none; stroke:var(--hx-foco); stroke-width:2; stroke-dasharray:4 5; stroke-opacity:.8 }
+.fruta{ fill:var(--hx-perigo); stroke:var(--hx-chao); stroke-width:2 }
+.dedo{ transform:none; height:32px; padding:0 7px }
+.dedo .ic{ font-size:18px; color:var(--hx-texto) }
+svg.fios{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible }
 
 /* ---------- as notas de fonte (?notas): o numero sobre cada elemento e a legenda */
 .nota{ position:absolute; z-index:20; display:grid; place-items:center; width:24px; height:24px; margin:-12px 0 0 -12px; border-radius:50%;

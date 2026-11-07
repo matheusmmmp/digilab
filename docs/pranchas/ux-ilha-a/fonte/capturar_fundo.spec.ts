@@ -28,8 +28,19 @@ for (const pele of ["vidro", "xcom"]) for (const larg of [1920, 390]) {
     }, [CHAVE, JSON.stringify(SAVE)] as const);
     await page.goto(APP + `?pele=${pele}#/pet/estado`);
     await expect(page.locator(".pet-cena .cena3d")).toBeVisible();
-    await page.waitForTimeout(600);
+    await page.waitForTimeout(Number(process.env.CAP_ESPERA ?? 600));
     const quadros: unknown[] = [];
+    let dedo: number[] | null = null;
+    /* CAP_PEGAR: segura o pet (o arrasto que comeca no sprite, PegarPet.tsx) e o leva para cima e para a direita, sem soltar */
+    if (process.env.CAP_PEGAR) {
+      const c = await page.evaluate(() => (window as any).__digilab.cena());
+      const cena = (await page.locator(".pet-cena").boundingBox())!;
+      const px = cena.x + c.ret.x + c.ret.w / 2, py = cena.y + c.ret.y + c.ret.h * 0.6;
+      const [dx, dy] = larg >= 1100 ? [230, -150] : [70, -80];
+      await page.mouse.move(px, py); await page.mouse.down();
+      await page.mouse.move(px + dx, py + dy, { steps: 20 }); dedo = [Math.round(px + dx), Math.round(py + dy)];
+      await page.waitForTimeout(500);
+    }
     for (let i = 0; i < Number(process.env.CAP_N ?? 36); i++) {
       const nome = `${process.env.CAP_PREF ?? "q"}${String(i).padStart(2, "0")}_${pele}_${larg}`;
       const dados = await page.evaluate(() => {
@@ -40,11 +51,11 @@ for (const pele of ["vidro", "xcom"]) for (const larg of [1920, 390]) {
         const db = d.digibrain();
         return { tick: d.tick(), acao: m.acao, pet: m.pet, petTela: c ? p(c.pet[0], c.pet[1]) : null, petMotorTela: p(m.pet[0], m.pet[1]), ret: c?.ret, cenaRet: [cena.x, cena.y, cena.width, cena.height],
           comedouro: m.comedouro, comedouroTela: p(m.comedouro[0], m.comedouro[1]), bola: m.bola, bolaTela: p(m.bola[0], m.bola[1]),
-          comidas: m.comidas, lugares: m.lugares, fome: m.fome,
+          comidas: m.comidas, lugares: m.lugares, fome: m.fome, petNaMao: d.petNaMao ? d.petNaMao() : null, dormindo: null,
           decisao: db?.decisao ? { acao: db.decisao.acao, chances: db.decisao.chances, regra: db.decisao.regra } : null, aprendido: db?.aprendido ?? null };
       });
       await page.screenshot({ path: `${OUT}/${nome}.png` });
-      quadros.push({ nome, ...dados as object });
+      quadros.push({ nome, dedo, ...dados as object });
       await page.waitForTimeout(Number(process.env.CAP_PASSO ?? 150));
     }
     writeFileSync(`${OUT}/${process.env.CAP_PREF ?? "q"}quadros_${pele}_${larg}.json`, JSON.stringify({ save: SAVE, erros, quadros }, null, 1));

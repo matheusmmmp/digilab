@@ -1,72 +1,78 @@
 # Ilha A, "Objetos que falam": perguntas ao Matheus
 
-Prancha da direção A da ilha interativa (UX_TELA_PET, 2026-11-07). O pedido foi "Siga com as recomendações": a A primeiro, a C depois, a B
-como pesquisa no Python; tocar no objeto acompanha a barra de ações; o fio aparece só no toque e quando o pet vai até um objeto.
-Cada pergunta vem com a recomendação e o custo de errar. As medidas novas da prancha são PROPOSTO, SEM FONTE. O que cada elemento lê do
-motor está no [LEIA.md](LEIA.md).
+Esta é a prancha da direção A da ilha interativa (UX_TELA_PET, 2026-11-07). O pedido foi "Siga com as recomendações": a A primeiro, a C
+depois e a B como pesquisa no Python. O que cada elemento lê do motor está no [LEIA.md](LEIA.md). As medidas novas são PROPOSTO, SEM FONTE.
 
-**I1-1. O toque no pet já é o carinho. O fio entra junto?**
-Hoje tocar no pet grava um `acariciar` (o mesmo evento do botão Carinho; `e2e/vida_pet_cena.spec.ts`). O fio da intenção é só vista.
-- **Recomendação:** o toque continua sendo o carinho e também mostra o fio por 3 s (PROPOSTO, SEM FONTE). Não nasce gesto novo e o registro
-  não muda.
-- **Alternativa:** o fio sai do carinho e vai para um toque longo, ou para o ícone do DigiBrain.
-- **Custo de errar:** com o fio no toque, quem só quer ver a intenção também faz carinho, e o carinho conta para o vínculo e o cérebro.
-  Corrigir depois é mudar só a vista.
+## A resposta do Matheus (2026-11-07, rodada 2)
 
-**I1-2. Ler o alvo do cérebro pede um getter só de leitura no `Mundo` do TS. Pode?**
-A chance já sai de `Motor.digibrain().decisao.chances`. O alvo escolhido (a tigela, a bola, o ponto de vagar) fica no `pendente`, que é
-privado em `web/app/motor/mundo.ts`. Hoje a vista só tem o tipo (`percepcao.alvo_pendente`) e os candidatos (`ultimosCandidatos`).
-- **Recomendação:** um getter `alvoAtual` só de leitura no `Mundo` do TS, como o `digibrain()`. Não muda o log, o replay, a rng nem os gabaritos.
-  Entra com um teste de que a leitura não altera a assinatura.
-- **Custo de errar:** sem ele, a vista teria de adivinhar o alvo pela direção do passo, e o fio poderia apontar para o objeto errado.
+> "Que fio, eu pedi pra ser drag and drop. Quando o jogador segura no patch, se ele clica, ele faz carinho. Se ele segura, ele agarra o
+> patch e daí eu posso arrastar ele pra qualquer lugar do mapa. Então, é isso. Não tem fio nenhum. Acredito que a ideia de clicar na
+> árvore, ela sacudir, é interessante para cair a flor, né? A fruta. Daí segue a recomendação para as outras opções."
 
-**I1-3. A árvore não dá frutas no jogo. O que o toque na árvore faz?**
-O jogo roda o mundo `CMU_MVP`, sem árvores e só com a ração do jogador (`web/app/motor/motor.ts`, a opção 1 de 2026-10-24). As frutas, a
-queda e a recarga só existem no Python (`digilab/frutas.py`, `digilab/mundo.py`). Nem lá existe gesto de sacudir. As árvores da ilha são
-enfeites.
-- **Recomendação:** nesta etapa o toque na árvore só mostra o nome e "sem frutas nesta ilha", como na prancha. "Sacudir para cair uma fruta"
-  fica para uma tarefa de motor própria (o `trocar_arvores` e o `dar_fruta` do Python mostram o caminho).
-- **Alternativa:** a árvore não reage ao toque.
-- **Custo de errar:** um gesto de sacudir sem motor seria uma mecânica falsa, sem efeito no pet. É o pior caso.
+Isso mudou três coisas na prancha:
+- **O fio da intenção saiu por inteiro,** dos estados, das notas e do LEIA. A I1-2 (o getter `alvoAtual`) e a I1-10 (o fio sem alvo)
+  caíram junto com ele.
+- **O estado "fio ao tocar no pet" virou "segurar e arrastar o pet",** desenhado como o jogo já faz. O estado "indo até a tigela" ficou
+  sem fio.
+- **O toque na árvore agora a sacode e faz cair uma fruta.** Isso pede motor novo (I1-3).
 
-**I1-4. Quando aparece a etiqueta curta dos objetos?**
-- **Recomendação:** no hover (só no desktop), no toque e quando o objeto é o alvo atual. Fora disso a ilha fica limpa, como no estado
-  "nada tocado". O cartão aberto fecha no ×, num toque fora ou depois de 6 s sem mexer (PROPOSTO, SEM FONTE).
-- **Custo de errar:** com as etiquetas sempre à vista, a ilha vira um painel, contra a regra de pouco texto.
+## As decisões
 
-**I1-5. O "diário novo" na barraca: guardar onde?**
-Não existe no jogo a ideia de "lido". Guardar isso no save fica fora desta frente (não tocar o save).
-- **Recomendação:** o ponto rosa aparece quando o registro tem uma linha "aprendido" ou uma evolução depois da última vez que o Diário foi
-  aberto. A marca da última abertura fica num `localStorage` só da vista, ao lado da pele, fora do save e do replay.
-- **Alternativa:** a barraca fica sem selo nesta etapa.
-- **Custo de errar:** o ponto pode aparecer de novo em outro navegador. Não muda o pet.
+**I1-1. Clicar no pet e segurar o pet. DECIDIDA.**
+Clicar no pet é carinho (um `acariciar`, como o botão Carinho). Segurar agarra o pet, e o jogador o arrasta e solta em qualquer lugar do
+mapa (`Motor.levarPet`, o evento `lp`). Isso já existe no jogo: PEGAR_PET P1 (#673) e P2 (#674). A prancha desenha o pet na mão como o
+jogo já o mostra e não acrescenta nada. Não há fio.
 
-**I1-6. O selo do lugar e o balão do pet no mesmo lugar: quem cede?**
-A 390, de noite, o balão "26 %" do pet cobre o saco (o estado "indo até a tigela").
-- **Recomendação:** o balão do pet tem prioridade, e o selo do lugar some enquanto se sobrepõe.
-- **Custo de errar:** o selo pode sumir num momento em que o dono queria ver o treino. É pouco: o Crescer mostra tudo.
+**I1-2. O getter só de leitura do alvo no `Mundo` do TS. CAIU com o fio.**
+Sem o fio, nada precisa saber para onde o pet vai. A etiqueta do alvo atual (I1-4) usa o que a vista já lê: o tipo do alvo pendente da
+percepção (`alvo_pendente = "comida"`) e a ração na tigela. No `CMU_MVP`, a comida só vem do dono, então não há getter novo.
 
-**I1-7. O selo do saco: o que mostrar?**
-- **Recomendação:** os treinos de hoje (os eventos `tr` do registro no dia do jogo) e um visto quando já pode treinar
-  (`TreinoPet.podeTocar`). Quando ainda não pode, o visto vira o relógio da próxima vez, como o "Corrida 07:31" do Treinar. A fadiga fica no
-  Treinar.
-- **Custo de errar:** com a fadiga no selo, fica mais um número a ler na ilha.
+**I1-3. Tocar na árvore a sacode e faz cair uma fruta. DECIDIDA. PEDE MOTOR NOVO.**
+Hoje o jogo roda o mundo `CMU_MVP`, sem árvores e sem frutas no TS (`web/app/motor/motor.ts`). O Python tem as árvores, as quedas, a
+recarga e as frutas com gosto (`digilab/frutas.py`, `digilab/mundo.py`), mas não o gesto de sacudir. A prancha só desenha o sacudir e a
+fruta no chão. Nenhum código de motor entra nesta etapa.
 
-**I1-8. "Gosta" e "evita" vêm do desvio aprendido da ação, não do objeto. Serve?**
-O paladar ainda não existe no TS (`web/app/motor/corpo.ts`, "etapa 5 do paladar"). O que existe é `digibrain().aprendido`, o desvio
-aprendido por ação. A vista liga a ação ao objeto: comer → tigela, brincar → bola.
-- **Recomendação:** usar assim, com "brinca menos" ou "brinca mais" (comparado ao que nasceu). Quando a ação não está entre as 3 maiores,
-  aparece "nada novo sobre comer". O paladar por fruta entra quando o motor tiver.
-- **Custo de errar:** "gosta da bola" pode soar mais forte do que o número é (o desvio desta prancha é −0,11). Por isso o texto é "brinca
-  menos", não "evita a bola".
+O que a mecânica vai precisar, como tarefa própria (`docs/TAREFA_V3_<FRENTE>.md`, pelo `tools/nova_tarefa.py`):
+1. **Python primeiro:**
+   - um evento do dono `sacudir_arvore(id)` em `digilab/events.py`, que o replay refaz e que levanta erro se for desconhecido;
+   - no `MotorFrutas` ou no `MotorMundo`, o efeito: uma fruta madura da árvore cai no chão, perto dela. Ou nada, se a árvore estiver vazia
+     ou em recarga;
+   - uma rng própria derivada por `derivar_semente` (por exemplo, `"mundo-sacudir"`), para não mexer na rng do ambiente nem na da
+     política;
+   - uma chave desligada numa `Config` nova em `digilab/config.py`, com os números PROPOSTO, SEM FONTE (quantas frutas por sacudida, o
+     intervalo entre sacudidas, se o sacudir conta como contato ou cuidado);
+   - desligada, a vida de hoje sai byte a byte, com o gabarito gravado num commit antes da mudança e um teste que confere;
+   - a pergunta de método antes: o sacudir é contato do dono? Se for, mexe no vínculo e no aprendizado, e isso pede uma decisão.
+2. **Depois o TS, com paridade:**
+   - as árvores e as frutas no mundo do jogo, que hoje é o `CMU_MVP` sem árvores (a opção 1 de 2026-10-24 muda aqui);
+   - o evento no `Motor` e no `aplicarEvento`;
+   - um gabarito exportado por `experiments/exportar_*.py` em `web/app/test/gabaritos/` e o teste de paridade;
+   - uma constante nova conferida por `constantes.test.mjs`.
+3. **Uma versão de pet nova** (`VERSAO_PET` 20 ou a próxima livre): os pets v19 e anteriores não mudam, nem as assinaturas, nem os gabaritos.
+4. **Só então a vista:** o toque na árvore, o tremor da copa, a fruta que cai (o modelo de hoje de `ilha/itens.ts`) e a etiqueta da árvore
+   com quantas frutas ela tem.
 
-**I1-9. O gesto no cartão: igual ao da barra?**
-- **Recomendação:** sim. "Servir ração" no cartão da tigela é o mesmo `observar("alimentar")` do botão Alimentar (a ração no comedouro). O
-  cartão da bola teria "Mover a bola", que é o mesmo arrasto do "Pôr bola" (`deixarBola`). A barra de baixo continua igual nas duas larguras.
-- **Custo de errar:** com dois caminhos diferentes para a mesma ação, o registro ficaria ambíguo. Por isso é um caminho só (`acoes.ts`).
+**I1-4. Quando aparece a etiqueta curta. DECIDIDA (a recomendação).**
+Aparece no hover (só no desktop), no toque e quando o objeto é o alvo atual. Fora disso, a ilha fica limpa. O cartão aberto fecha no ×,
+num toque fora ou depois de 6 s sem mexer (PROPOSTO, SEM FONTE).
 
-**I1-10. O fio sem alvo.**
-Dormir, descansar e chamar não têm alvo (só `ACOES_COM_ALVO`: comer, explorar, brincar).
-- **Recomendação:** com o toque no pet numa ação sem alvo, não há fio. Aparece só a etiqueta da ação com a chance acima do pet (ex.: "Dormir
-  100 %").
-- **Custo de errar:** pouco. É só a vista.
+**I1-5. O "diário novo" na barraca. DECIDIDA (a recomendação).**
+O ponto rosa aparece quando o registro tem uma linha "aprendido" ou uma evolução depois da última abertura do Diário. A marca da última
+abertura fica num `localStorage` só da vista, ao lado da pele, fora do save e do replay.
+
+**I1-6. O selo do lugar e o balão do pet no mesmo lugar. DECIDIDA (a recomendação).**
+O balão do pet tem prioridade, e o selo do lugar some enquanto se sobrepõe.
+
+**I1-7. O selo do saco. DECIDIDA (a recomendação).**
+Mostra os treinos de hoje (os eventos `tr` do registro no dia do jogo) e um visto quando já pode treinar (`TreinoPet.podeTocar`). Quando
+ainda não pode, o visto vira o relógio da próxima vez. A fadiga fica no Treinar.
+
+**I1-8. "Gosta" e "evita" pelo desvio aprendido da ação. DECIDIDA (a recomendação).**
+A linha usa `digibrain().aprendido`, e a vista liga a ação ao objeto: comer vira a tigela, brincar vira a bola. O texto é "brinca menos"
+ou "brinca mais", comparado ao que nasceu. O paladar por fruta entra quando o motor tiver; ele vem com a I1-3.
+
+**I1-9. O gesto no cartão é o mesmo da barra. DECIDIDA (a recomendação).**
+"Servir ração" é o mesmo `observar("alimentar")` do botão Alimentar. "Mover a bola" é o mesmo arrasto do "Pôr bola" (`deixarBola`). A barra
+de baixo continua igual.
+
+**I1-10. O fio sem alvo. CAIU com o fio.**

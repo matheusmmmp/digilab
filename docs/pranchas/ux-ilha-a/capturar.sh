@@ -23,7 +23,7 @@ celular(){
   python -c "from PIL import Image; Image.open(r'$(cygpath -w "$OUT/_m_$1.png")').crop((0,0,390,844)).save(r'$(cygpath -w "$OUT/$1.png")')"
   rm -f "$OUT/_m_$1.png" "_m_$1.html"
 }
-ESTADOS=${ESTADOS:-"nada_tocado etiqueta_aberta fio_toque_pet indo_tigela toque_arvore"}
+ESTADOS=${ESTADOS:-"nada_tocado etiqueta_aberta segurar_pet indo_tigela toque_arvore"}
 for pele in vidro xcom; do
   nome=$pele; [ "$pele" = xcom ] && nome=militar
   for estado in $ESTADOS; do
