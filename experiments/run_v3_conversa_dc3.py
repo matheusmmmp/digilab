@@ -10,13 +10,18 @@ por unidade, as bases 79101, 79202, 79303, 79404 e 79505, K = 40 por base (200 u
 
 Em toda vida (secao 11), falhando alto: o replay bit a bit do disco (o G1), o T-CENARIO-1, o G-MECANISMO do prototipo, a `conferir_memoria`
 da C4 (o papel REL nos dois bracos), os fins conhecidos lidos da `estado.py` com a config de cada braco, nenhuma unidade de fala no LAB (e as
-tres no LAB+F, sempre), nenhum atendimento sem fala no passo, e a conferencia do credito da 4.4 (a fracao dos atendimentos dentro do intervalo
-da opcao de fala que os provocou, com o tick da consequencia lido do motor). As medidas: as do prototipo (`orq.medidas`, `conserto=True`),
+tres no LAB+F, sempre), nenhum atendimento sem fala no passo, e a conferencia do credito da 4.4 (no LAB+F, todo atendimento dentro do intervalo
+da opcao de fala que o provocou, com os ticks lidos do motor; adendo 1, A1.3). As medidas: as do prototipo (`orq.medidas`, `conserto=True`),
 as da C5, a fala (`metrics.fala_nas_decisoes`, 4.1 e 4.2), os atendimentos, as linhas de H das unidades de fala nos dias 1, 3, 8 e 14 e a
 coincidencia do conteudo com a intencao do decodificador (3.2).
 
-A analise (secao 7), no `resultado.json`: as premissas (P-FALA, P-ATENDE, G-ELEGIVEL-EP), o gate G-ESCUTA (atende - ignora no LAB+F, a fala
-pertinente por dia nos dias 8 a 14, nas 4 celulas de dono; "> 0" so com o limite inferior do IC95 pelo t acima de 0, sem margem, DC3-6), a
+O adendo 1 do plano (APROVADO em 2026-11-07, DC3-A1 a DC3-A4): no LAB+F a opcao de fala credita o corpo ate a decisao seguinte (A1.1, no
+`adapt.py`), e a conferencia do credito falha alto (todo atendimento dentro do intervalo da fala que o provocou, salvo o da ultima decisao,
+cujo intervalo fica aberto).
+
+A analise (secao 7), no `resultado.json`: as premissas (P-FALA, P-ATENDE, G-ELEGIVEL-EP e a P-NECESSIDADE do adendo 1), o gate G-ESCUTA
+(atende - ignora no LAB+F, P(fala pertinente | necessidade) nos dias 8 a 14, nas 4 celulas de dono, A1.2; "> 0" so com o limite inferior
+do IC95 pelo t acima de 0, sem margem, DC3-6), a
 guarda G-COMEDOURO-DC3 (LAB+F - LAB na taxa por episodio de fome, com o dono que ignora; falha so com a classe "< 0" de A6.6 com
 delta = 0,018, DC3-5), a linha de 7.4 e o descritivo da secao 8.
 
@@ -57,7 +62,7 @@ from digilab.digibrain.decodificador import decodificar  # noqa: E402
 from digilab.digibrain.estado import EstadoDinamico  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
 from digilab.events import AcaoUsuario  # noqa: E402
-from digilab.metrics import fala_nas_decisoes, maior_urgencia_da_fala  # noqa: E402
+from digilab.metrics import JANELAS_DA_FALA, fala_nas_decisoes, maior_urgencia_da_fala  # noqa: E402
 from digilab.mundo import DonoComLugar  # noqa: E402
 from digilab.temperamento import NEUTRO  # noqa: E402
 
@@ -205,6 +210,24 @@ def fins_conhecidos(braco: str) -> frozenset:
     return frozenset(EstadoDinamico(CONFIG_PADRAO, config_do_braco(braco), CONFIG_DIGIBRAIN_INATOS).fins)
 
 
+CUIDADOS = frozenset(CUIDADO.values())
+
+
+class DonoQueLe:
+    """So le (o adendo 1 do plano, A1.3): guarda os cuidados (alimentar, limpar, acariciar) que o dono de hoje pede em cada passo, com o
+    passo e o tick, e repassa as acoes dele como estao, sem rng nova. Os do dono que atende ficam no `DonoQueAtende`."""
+
+    def __init__(self, base) -> None:
+        self.base = base
+        self.nome = base.nome
+        self.cuidados: list[dict] = []
+
+    def decidir(self, visao, rng) -> list:
+        acoes = list(self.base.decidir(visao, rng))
+        self.cuidados += [{"passo": visao.passo, "tick": visao.estado["tick"], "acao": a.value} for a in acoes if a in CUIDADOS]
+        return acoes
+
+
 class DonoQueAtende:
     """O dono que atende (secao 2, DC3-3): o dono sintetico de hoje, mais uma regra, sem rng nova. Depois das acoes dele no passo, para cada
     decisao do pet no passo com a acao `chamar_atencao` e com orcamento no passo (as acoes abaixo do `maximo_permitido`, o teto do mesmo
@@ -259,8 +282,9 @@ def fabricas(braco: str, dono: str, semente: int, dias: int, orcamento_por_dia: 
 def viver(braco: str, modo: str, dono: str, semente: int, dias: int, orcamento_por_dia: int, cfg_fala: ConfigFalaUnidades | None = None):
     """uma vida: o cerebro do braco, o motor que grava o corpo e o dono do modo (o `ignora` e o `DonoComLugar` de hoje; o `atende`, o mesmo
     com o `DonoQueAtende` por dentro). So le: o tick da consequencia de cada decisao (o do motor quando o `consequencia_corpo` chega, para a
-    4.4) e as linhas de H das unidades de fala no fim de cada dia (antes da primeira decisao do dia seguinte; o ultimo, no fim da vida). O
-    G1 rejoga a vida com as fabricas, sem nada disso. Devolve (o motor, o registro, as fabricas, o dono que atende ou None, as leituras)."""
+    4.4), o tick de cada decisao (o do motor quando o `agir` chega; o intervalo da opcao de fala do adendo 1, A1.1), os cuidados que o dono
+    de hoje pediu (`DonoQueLe`) e as linhas de H das unidades de fala no fim de cada dia (antes da primeira decisao do dia seguinte; o
+    ultimo, no fim da vida). O G1 rejoga a vida com as fabricas, sem nada disso. Devolve (o motor, o registro, as fabricas, o dono que atende ou None, as leituras)."""
     if modo not in MODOS:
         raise ValueError(f"modo do dono {modo!r}: so {MODOS}")
     fp, fm0 = fabricas(braco, dono, semente, dias, orcamento_por_dia, cfg_fala)
@@ -273,7 +297,7 @@ def viver(braco: str, modo: str, dono: str, semente: int, dias: int, orcamento_p
 
     registro = fp(CONFIG_PADRAO)
     c = orq.cerebro_de(registro)
-    leituras = {"tick_consequencia": [], "habito": {}}
+    leituras = {"tick_consequencia": [], "tick_decisao": [], "habito": {}}
     agir, consequencia = registro.agir, registro.consequencia_corpo
 
     def _h() -> dict:
@@ -284,6 +308,7 @@ def viver(braco: str, modo: str, dono: str, semente: int, dias: int, orcamento_p
         k = c.k
         if k and k % DECISOES_POR_DIA == 0:
             leituras["habito"][k // DECISOES_POR_DIA] = _h()
+        leituras["tick_decisao"].append(caixa[0]._estado.tick)          # so le o relogio do motor (A1.3)
         return agir(obs, rng)
 
     def consequencia_e_ler(acao, ocorrido, obs_depois):
@@ -291,7 +316,7 @@ def viver(braco: str, modo: str, dono: str, semente: int, dias: int, orcamento_p
         return consequencia(acao, ocorrido, obs_depois)
 
     registro.agir, registro.consequencia_corpo = agir_e_ler, consequencia_e_ler
-    base = criar_dono(dono)
+    base = DonoQueLe(criar_dono(dono))
     atende = DonoQueAtende(base, c.motivos) if modo == ATENDE else None
     d = DonoComLugar(atende if atende is not None else base, LUGAR, semente, dono, orq.CM)
     motor, _ = simular_vida_fisico(d, registro, semente, dias, orcamento_por_dia * dias, dono, fm)
@@ -299,6 +324,7 @@ def viver(braco: str, modo: str, dono: str, semente: int, dias: int, orcamento_p
     leituras["habito"][dias] = _h()
     if len(caixa) != 1 or caixa[0] is not motor:
         raise RuntimeError("a vida montou outro motor")
+    leituras["cuidados_de_hoje"] = base.cuidados
     return motor, registro, (fp, fm0), atende, leituras
 
 
@@ -330,20 +356,62 @@ def conferir_fala(braco: str, c) -> None:
         raise RuntimeError(f"{braco}: as linhas de H do chamar sao {linhas}")
 
 
-def conferir_atendimentos(braco: str, modo: str, c, atende: DonoQueAtende | None, tick_consequencia: list) -> dict | None:
-    """secao 11 e 4.4. Com o dono que ignora, nenhum dono que atende. Com o que atende: todo atendimento (e toda fala sem orcamento) vem de
-    uma decisao de fala do mesmo passo (o tick da decisao k e k x 15, dentro do passo; o atendimento e depois dela), com o conteudo da
-    escolha (LAB+F) ou o de maior urgencia (LAB), e cada decisao de fala tem um atendimento ou uma falta de orcamento, uma vez so. A
-    conferencia do credito (4.4): o atendimento cai dentro do intervalo da opcao de fala que o provocou se o tick dele nao passa do tick em
-    que a consequencia da opcao (uma opcao de uma decisao: a da propria decisao) chegou ao cerebro. Devolve as contagens (None no ignora)."""
-    if modo == IGNORA:
-        if atende is not None:
-            raise RuntimeError("o dono que ignora com a regra de atender")
-        return None
+def intervalos_de_fala(braco: str, c, tick_consequencia: list, tick_decisao: list) -> dict:
+    """{k: (o tick da decisao k, o tick em que a consequencia dela fecha)} das decisoes de fala. No LAB+F (o adendo 1, A1.1) a opcao de
+    fala fecha na decisao seguinte (o tick do `agir` k + 1); no LAB, no tick da acao, como hoje (o do `consequencia_corpo`). A ultima
+    decisao da vida nao tem decisao seguinte: no LAB+F o intervalo dela fica aberto (o fim None, e a consequencia dela nao existe).
+    Falha alto com um tick de decisao ou de consequencia fora de k x 15, ou com a consequencia de uma decisao fechada (ou aberta) fora da
+    regra: toda decisao fecha, salvo a ultima."""
     passo_t = CONFIG_PADRAO.intervalo_decisao_ticks
     ms = c.motivos
     if len(tick_consequencia) != len(ms) or any(t != k * passo_t for k, t in enumerate(tick_consequencia)):
         raise RuntimeError(f"{braco}: a consequencia de uma decisao chegou fora do tick da decisao")
+    if len(tick_decisao) != len(ms) or any(t != k * passo_t for k, t in enumerate(tick_decisao)):
+        raise RuntimeError(f"{braco}: uma decisao fora do tick k x 15")
+    abertas = [m["k"] for m in ms if m["consequencia"] is None]
+    if abertas != [len(ms) - 1]:
+        raise RuntimeError(f"{braco}: as decisoes sem consequencia sao {abertas}, so a ultima ({len(ms) - 1}) fica aberta")
+    out = {}
+    for m in ms:
+        if m["acao"] != FALA:
+            continue
+        k = m["k"]
+        if braco == TRATADO:
+            out[k] = (tick_decisao[k], tick_decisao[k + 1] if k + 1 < len(ms) else None)
+        else:
+            out[k] = (tick_decisao[k], tick_consequencia[k])
+    return out
+
+
+def conferir_atendimentos(braco: str, modo: str, c, atende: DonoQueAtende | None, tick_consequencia: list, tick_decisao: list,
+                          cuidados_de_hoje: list) -> dict:
+    """secao 11 e 4.4 (a 4.4 com o adendo 1, A1.3). Com o dono que ignora, nenhum dono que atende. Com o que atende: todo atendimento (e
+    toda fala sem orcamento) vem de uma decisao de fala do mesmo passo (o tick da decisao k e k x 15, dentro do passo; o atendimento e
+    depois dela), com o conteudo da escolha (LAB+F) ou o de maior urgencia (LAB), e cada decisao de fala tem um atendimento ou uma falta de
+    orcamento, uma vez so.
+
+    **A conferencia do credito (4.4):** um atendimento cai dentro do intervalo da opcao de fala que o provocou se o tick dele passa do tick
+    da decisao e nao passa do tick em que a consequencia dela fecha (`intervalos_de_fala`). **No LAB+F a conferencia falha alto** (A1.3):
+    todo atendimento cai dentro, salvo o da ultima decisao da vida, cujo intervalo fica aberto (contado em `na_ultima_decisao`). No LAB ela
+    so conta (a opcao fecha no tick da acao: nenhum atendimento cabe dentro).
+
+    **Os cuidados do dono de hoje** (o que nao responde a fala; A1.3, nos dois donos): quantos caem dentro de um intervalo de fala, pela
+    mesma regra (o cuidado do passo p cai no intervalo da decisao p). Devolve as contagens (no ignora, so as dos cuidados de hoje)."""
+    passo_t = CONFIG_PADRAO.intervalo_decisao_ticks
+    ms = c.motivos
+    iv = intervalos_de_fala(braco, c, tick_consequencia, tick_decisao)
+
+    def dentro_de(k: int, t: int) -> bool:
+        ini, fim = iv[k]
+        return fim is not None and ini < t <= fim
+
+    hoje_dentro = sum(1 for x in cuidados_de_hoje if x["passo"] in iv and dentro_de(x["passo"], x["tick"]))
+    hoje = {"cuidados": len(cuidados_de_hoje), "dentro_de_fala": hoje_dentro,
+            "fracao_dentro": hoje_dentro / len(cuidados_de_hoje) if cuidados_de_hoje else None}
+    if modo == IGNORA:
+        if atende is not None:
+            raise RuntimeError("o dono que ignora com a regra de atender")
+        return {"cuidados_de_hoje": hoje}
     vistos = set()
     for a in atende.atendimentos + atende.sem_orcamento:
         k, m = a["k"], ms[a["k"]]
@@ -356,13 +424,42 @@ def conferir_atendimentos(braco: str, modo: str, c, atende: DonoQueAtende | None
         if k in vistos:
             raise RuntimeError(f"{braco}: a fala da decisao {k} atendida duas vezes")
         vistos.add(k)
-    falas = {m["k"] for m in ms if m["acao"] == FALA}     # a decisao k cai no passo k, e o dono age depois de todo passo
-    if vistos != falas:
-        raise RuntimeError(f"{braco}: {len(falas - vistos)} falas sem atendimento nem falta de orcamento")
-    dentro = sum(1 for a in atende.atendimentos if a["tick"] <= tick_consequencia[a["k"]])
+    if vistos != set(iv):                             # a decisao k cai no passo k, e o dono age depois de todo passo
+        raise RuntimeError(f"{braco}: {len(set(iv) - vistos)} falas sem atendimento nem falta de orcamento")
+    dentro = ultima = 0
+    for a in atende.atendimentos:
+        k = a["k"]
+        if braco == TRATADO and iv[k][1] is None:
+            ultima += 1
+            continue
+        ok = dentro_de(k, a["tick"])
+        if braco == TRATADO and not ok:
+            raise RuntimeError(f"{braco}: o atendimento {a} fora do intervalo {iv[k]} da opcao de fala que o provocou (4.4, A1.3)")
+        dentro += ok
     n = len(atende.atendimentos)
-    return {"atendimentos": n, "sem_orcamento": len(atende.sem_orcamento), "dentro_do_intervalo": dentro, "fora_do_intervalo": n - dentro,
-            "fracao_dentro": dentro / n if n else None}
+    return {"atendimentos": n, "sem_orcamento": len(atende.sem_orcamento), "dentro_do_intervalo": dentro,
+            "fora_do_intervalo": n - dentro - ultima, "na_ultima_decisao": ultima,
+            "fracao_dentro": dentro / (n - ultima) if n - ultima else None, "cuidados_de_hoje": hoje}
+
+
+def credito_da_fala(c, dias: int) -> dict:
+    """o adendo 1, A1.3 (so descritivo): a media do r_n da consequencia das opcoes de fala (o que o P2 credita na linha da unidade), por
+    janela (dias 1 a 3 e 8 a 14, cortados em `dias`; None sem fala fechada na janela, ou com a janela depois do ultimo dia) e por conteudo na
+    vida (no LAB, `sem_conteudo`). A ultima decisao da vida nao fecha e fica fora (`aberta`: 1 se ela e fala)."""
+    passo_t = CONFIG_PADRAO.intervalo_decisao_ticks
+    falas = [(m["k"] * passo_t // TICKS_POR_DIA + 1, m["escolha"][1] or "sem_conteudo", m["consequencia"]) for m in c.motivos
+             if m["acao"] == FALA]
+    fechadas = [(d, x, cons["r_n"]) for d, x, cons in falas if cons is not None]
+
+    def media(vs: list):
+        return sum(vs) / len(vs) if vs else None
+
+    out = {}
+    for ini, fim in JANELAS_DA_FALA:
+        out[f"dias_{ini}_{fim}"] = None if ini > dias else media([r for d, _, r in fechadas if ini <= d <= min(fim, dias)])
+    out["por_conteudo"] = {x: media([r for _, y, r in fechadas if y == x]) for x in CONTEUDOS_FALA + ("sem_conteudo",)}
+    out["aberta"] = len(falas) - len(fechadas)
+    return out
 
 
 def conferir_fins(braco: str, c) -> dict:
@@ -434,7 +531,8 @@ def _vida(cfg: dict, braco: str, modo: str, dono: str, unidade: dict, pasta: str
     c = orq.cerebro_de(registro)
     conferir_bracos(braco, c)
     conferir_fala(braco, c)
-    credito = conferir_atendimentos(braco, modo, c, atende, leituras["tick_consequencia"])
+    credito = conferir_atendimentos(braco, modo, c, atende, leituras["tick_consequencia"], leituras["tick_decisao"],
+                                    leituras["cuidados_de_hoje"])
     orq.conferir_mecanismo(braco, registro, None)
     ma.conferir_memoria(PAPEL_DA_MEMORIA, c)
     fins = conferir_fins(braco, c)
@@ -443,6 +541,7 @@ def _vida(cfg: dict, braco: str, modo: str, dono: str, unidade: dict, pasta: str
             "semente": unidade["semente"], "base": unidade["base"], "k": unidade["k"], **med,
             "corpo": lr.medidas_do_corpo(motor, registro, cfg["dias"]), "fins_conferidos": fins,
             "fala": medidas_fala(c, cfg["dias"]), "atendimento": medidas_atendimento(atende, cfg["dias"]), "credito": credito,
+            "credito_da_fala": credito_da_fala(c, cfg["dias"]),
             "habito": {str(d): leituras["habito"][d] for d in DIAS_DO_HABITO if d in leituras["habito"]},
             "coincidencia_dec": coincidencia_dec(c),
             "custo": {"vida_cpu": time.process_time() - c0, "vida_parede": time.perf_counter() - p0}}
@@ -500,6 +599,9 @@ def estimativa(difs: dict, margem: float = MARGEM) -> dict:
 
 EPISODIO = lr.EPISODIO
 PERTINENTE_8_14 = lambda r: None if r["fala"]["dias_8_14"] is None else r["fala"]["dias_8_14"]["pertinente_por_dia"]   # noqa: E731
+NECESSIDADE_8_14 = lambda r: (None if r["fala"]["dias_8_14"] is None                                                     # noqa: E731
+                              else r["fala"]["dias_8_14"]["p_pertinente_dado_necessidade"])
+P_NECESSIDADE_LIMIAR = 0.8                                                            # adendo 1, A1.2 (DC3-A3): 80 % das unidades, SEM FONTE
 FRAC_FALA = lambda r: r["fala"]["vida"]["frac_fala_fora_do_dormir"]                                                     # noqa: E731
 ATENDE_1_3 = lambda r: r["atendimento"]["dias_1_3_por_dia"]                                                              # noqa: E731
 
@@ -509,14 +611,18 @@ def _ic(c: dict) -> dict:
 
 
 def escuta(registros: list[dict], boot: dict) -> dict:
-    """7.2: o G-ESCUTA, atende - ignora no LAB+F, a fala pertinente por dia nos dias 8 a 14, nas 4 celulas de dono; passa so com a classe
-    "> 0" pelo IC95 do t sem margem (DC3-6). Ao lado, o efeito detectavel com poder 0,8 pelo dp observado (secao 6), em fala por dia."""
-    difs = por_unidade(registros, (TRATADO, ATENDE), (TRATADO, IGNORA), PERTINENTE_8_14)
+    """7.2 com o adendo 1 (A1.2, DC3-A2): o G-ESCUTA, atende - ignora no LAB+F, P(fala pertinente | necessidade) nos dias 8 a 14, nas 4
+    celulas de dono (a celula com None num dos lados fica fora da media da unidade; a unidade sem celula valida sai do gate e e contada em
+    `unidades_fora`); passa so com a classe "> 0" pelo IC95 do t sem margem (DC3-6). Ao lado, o efeito detectavel com poder 0,8 pelo dp
+    observado (secao 6), em fracao."""
+    difs = por_unidade(registros, (TRATADO, ATENDE), (TRATADO, IGNORA), NECESSIDADE_8_14)
     c = orq.contraste_t(difs, boot)
     cl = classe_sem_margem(_ic(c))
     dp = estimativa(difs)["dp"]
-    return {"contraste": "G-ESCUTA: atende - ignora, no LAB+F, a fala pertinente por dia nos dias 8 a 14, nas 4 celulas de dono", **c,
-            "classe": cl, "passa": cl["classe"] == "> 0", "dp": dp, "efeito_detectavel": lr.margem_efetiva(dp, c["n"])}
+    n_unidades = len({(r["base"], r["semente"]) for r in registros})
+    return {"contraste": "G-ESCUTA: atende - ignora, no LAB+F, P(fala pertinente | necessidade) nos dias 8 a 14, nas 4 celulas de dono",
+            **c, "classe": cl, "passa": cl["classe"] == "> 0", "dp": dp, "efeito_detectavel": lr.margem_efetiva(dp, c["n"]),
+            "unidades": n_unidades, "unidades_fora": n_unidades - len(difs)}
 
 
 def guarda(registros: list[dict], boot: dict) -> dict:
@@ -532,8 +638,9 @@ def guarda(registros: list[dict], boot: dict) -> dict:
 def premissas(registros: list[dict]) -> dict:
     """7.1 (DC3-7): a P-FALA (no LAB+F com o dono que ignora, a fracao das decisoes fora do dormir que sao fala, por unidade; o limite
     inferior do IC95 pelo t > 0,01), a P-ATENDE (no LAB+F com o dono que atende, os atendimentos por dia nos dias 1 a 3, por unidade; o
-    limite inferior > 1) e a G-ELEGIVEL-EP (no LAB e no LAB+F com o dono que ignora, ao menos 80 % das vidas com 3 episodios de fome ou
-    mais). Se uma falha, o gate e a guarda sao inconclusivos por premissa."""
+    limite inferior > 1), a G-ELEGIVEL-EP (no LAB e no LAB+F com o dono que ignora, ao menos 80 % das vidas com 3 episodios de fome ou
+    mais) e a P-NECESSIDADE do adendo 1 (A1.2, DC3-A3: ao menos 80 % das unidades do LAB+F com o G-ESCUTA definido, ao menos uma celula
+    valida; conta as que sairam). Se uma falha, o gate e a guarda sao inconclusivos por premissa."""
     def lim(est: dict, limiar: float) -> dict:
         lo = est["ic95"]["ic_inferior"]
         return {**est, "limiar": limiar, "passa": lo is not None and lo > limiar}
@@ -546,7 +653,13 @@ def premissas(registros: list[dict]) -> dict:
         frac = sum(1 for r in vs if r["episodios_fome"]["n"] >= G_ELEGIVEL_EP["episodios"]) / len(vs)
         elegivel[b] = {"frac_vidas": frac, "vidas": len(vs), "limiar": G_ELEGIVEL_EP["frac_vidas"], "passa": frac >= G_ELEGIVEL_EP["frac_vidas"]}
     eleg = {"por_braco": elegivel, "passa": all(v["passa"] for v in elegivel.values())}
-    return {"P-FALA": pf, "P-ATENDE": pa, "G-ELEGIVEL-EP": eleg, "conclusivo": pf["passa"] and pa["passa"] and eleg["passa"]}
+    n_unidades = len({(r["base"], r["semente"]) for r in registros})
+    definidas = len(por_unidade(registros, (TRATADO, ATENDE), (TRATADO, IGNORA), NECESSIDADE_8_14))
+    pn = {"unidades": n_unidades, "com_gate_definido": definidas, "sairam": n_unidades - definidas,
+          "frac": definidas / n_unidades if n_unidades else None, "limiar": P_NECESSIDADE_LIMIAR,
+          "passa": n_unidades > 0 and definidas / n_unidades >= P_NECESSIDADE_LIMIAR}
+    return {"P-FALA": pf, "P-ATENDE": pa, "G-ELEGIVEL-EP": eleg, "P-NECESSIDADE": pn,
+            "conclusivo": pf["passa"] and pa["passa"] and eleg["passa"] and pn["passa"]}
 
 
 def leitura(prem: dict, esc: dict, gua: dict) -> dict:
@@ -561,8 +674,8 @@ def leitura(prem: dict, esc: dict, gua: dict) -> dict:
     if esc["passa"]:
         return {**base, "linha": 3, "o_que_diria": "aprende, mas falar tira o pet da comida quando ninguem escuta", "dc3d_pode_rodar": False,
                 "o_que_se_faz": "a subchave fica desligada; volta ao Matheus"}
-    return {**base, "linha": 4, "o_que_diria": "o P2 de hoje nao liga a fala a resposta do dono", "dc3d_pode_rodar": False,
-            "o_que_se_faz": "a subchave fica desligada; a leitura do credito (4.4) diz por que"}
+    return {**base, "linha": 4, "o_que_diria": "com o credito ate a decisao seguinte, o P2 nao liga a fala a resposta do dono",
+            "dc3d_pode_rodar": False, "o_que_se_faz": "a subchave fica desligada; volta ao Matheus"}
 
 
 # ------------------------------------------------------------------ o descritivo (secao 8; sem gate)
@@ -601,7 +714,7 @@ def descritivo_fala(registros: list[dict]) -> dict:
     e = estimativa(por_unidade(registros, (TRATADO, IGNORA), None, ext))
     out["EXT"] = {**e, "classe": classe_sem_margem({**e["ic95"], "motivo": e["motivo"]}), "previsao": "< 0", "gate": None}
     for j in ("vida", "dias_1_3", "dias_8_14"):
-        for campo in ("falas_por_dia", "pertinencia", "pertinente_por_dia"):
+        for campo in ("falas_por_dia", "pertinencia", "pertinente_por_dia", "p_pertinente_dado_necessidade"):
             out[f"{j}|{campo}"] = _niveis(registros, janela(j, campo))
     for campo in ("por_conteudo", "abaixo_do_limiar"):
         soma: dict = {}
@@ -634,16 +747,44 @@ def descritivo_habito(registros: list[dict]) -> dict:
 
 
 def descritivo_credito(registros: list[dict]) -> dict:
-    """a conferencia do credito (4.4), somada por braco: os atendimentos, os dentro e os fora do intervalo da opcao de fala, as falas sem
-    orcamento, e a fracao das vidas com algum atendimento dentro"""
-    out = {}
+    """a conferencia do credito (4.4, com o adendo 1, A1.3), somada por braco: os atendimentos, os dentro e os fora do intervalo da opcao de
+    fala, os da ultima decisao (intervalo aberto, no LAB+F), as falas sem orcamento e a fracao das vidas com algum atendimento dentro; e,
+    por braco e modo, a fracao dos cuidados do dono de hoje dentro de intervalos de fala"""
+    out: dict = {}
     for b in BRACOS:
         vs = [r["credito"] for r in registros if r["braco"] == b and r["modo"] == ATENDE]
         n = sum(v["atendimentos"] for v in vs)
         dentro = sum(v["dentro_do_intervalo"] for v in vs)
-        out[b] = {"vidas": len(vs), "atendimentos": n, "dentro_do_intervalo": dentro, "fora_do_intervalo": n - dentro,
-                  "fracao_dentro": dentro / n if n else None, "sem_orcamento": sum(v["sem_orcamento"] for v in vs),
+        ultima = sum(v["na_ultima_decisao"] for v in vs)
+        out[b] = {"vidas": len(vs), "atendimentos": n, "dentro_do_intervalo": dentro, "fora_do_intervalo": n - dentro - ultima,
+                  "na_ultima_decisao": ultima, "fracao_dentro": dentro / (n - ultima) if n - ultima else None,
+                  "sem_orcamento": sum(v["sem_orcamento"] for v in vs),
                   "vidas_com_algum_dentro": sum(1 for v in vs if v["dentro_do_intervalo"] > 0)}
+    hoje = {}
+    for b, mo in CHAVES:
+        vs = [r["credito"]["cuidados_de_hoje"] for r in registros if r["braco"] == b and r["modo"] == mo]
+        n = sum(v["cuidados"] for v in vs)
+        d = sum(v["dentro_de_fala"] for v in vs)
+        hoje[f"{b}|{mo}"] = {"cuidados": n, "dentro_de_fala": d, "fracao_dentro": d / n if n else None}
+    out["cuidados_de_hoje"] = hoje
+    return out
+
+
+def descritivo_necessidade(registros: list[dict]) -> dict:
+    """o adendo 1 (A1.2 e A1.3), so descritivo: por braco, modo e dono (a media das vidas), P(fala pertinente | necessidade), as decisoes
+    com necessidade e a urgencia media nelas, por janela; e a media do r_n creditado as opcoes de fala, por janela e por conteudo"""
+    out: dict = {}
+    for b, mo in CHAVES:
+        for dono in DONOS:
+            vs = [r for r in registros if r["braco"] == b and r["modo"] == mo and r["dono"] == dono]
+            linha: dict = {}
+            for j in ("dias_1_3", "dias_8_14"):
+                for campo in ("p_pertinente_dado_necessidade", "com_necessidade", "urgencia_media_com_necessidade"):
+                    linha[f"{j}|{campo}"] = _media([None if r["fala"][j] is None else r["fala"][j][campo] for r in vs])
+                linha[f"{j}|r_n_da_fala"] = _media([r["credito_da_fala"][j] for r in vs])
+            for x in CONTEUDOS_FALA + ("sem_conteudo",):
+                linha[f"r_n_da_fala|{x}"] = _media([r["credito_da_fala"]["por_conteudo"][x] for r in vs])
+            out[f"{b}|{mo}|{dono}"] = linha
     return out
 
 
@@ -687,7 +828,8 @@ def analisar(registros: list[dict], boot: dict = orq.BOOTSTRAP) -> dict:
     prem, esc, gua = premissas(registros), escuta(registros, boot), guarda(registros, boot)
     return {"premissas": prem, "escuta": esc, "guarda": gua, "leitura": leitura(prem, esc, gua),
             "descritivo": {"fala": descritivo_fala(registros), "habito": descritivo_habito(registros),
-                           "credito": descritivo_credito(registros), "coincidencia_dec": descritivo_coincidencia(registros),
+                           "credito": descritivo_credito(registros), "necessidade": descritivo_necessidade(registros),
+                           "coincidencia_dec": descritivo_coincidencia(registros),
                            "corpo": corpo(registros)},
             "margem": MARGEM, "nao_demonstra": NAO_DEMONSTRA}
 

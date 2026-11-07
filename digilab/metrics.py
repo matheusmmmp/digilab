@@ -2504,7 +2504,10 @@ def fala_nas_decisoes(decisoes: Sequence[tuple[int, str, str | None, Mapping[str
     - ela e **pertinente** com o conteudo igual ao receptor de maior urgencia entre fome, higiene e solidao naquela decisao (empate: essa
       ordem) e essa urgencia acima de `limiar` (estrito; o `urgencia_lambda`, S/2). O chamar sem conteudo nunca e pertinente.
     Por janela (dias `ini` a `fim`, cortados em `dias`; None se a janela comeca depois do ultimo dia) e na vida: as falas, as falas por dia,
-    as pertinentes, a pertinencia (pertinentes / falas; None sem fala) e a fala pertinente por dia. Na vida tambem: a fracao das decisoes fora
+    as pertinentes, a pertinencia (pertinentes / falas; None sem fala) e a fala pertinente por dia. Tambem por janela e na vida (o adendo 1
+    do plano, A1.2): as **decisoes com necessidade** (fora do dormir, com a maior urgencia entre fome, higiene e solidao acima de `limiar`,
+    estrito), a fracao delas que e fala pertinente, **P(fala pertinente | necessidade)** (None sem decisao com necessidade), e a media
+    dessa maior urgencia nelas (None sem decisao com necessidade). Na vida tambem: a fracao das decisoes fora
     do dormir que sao fala (a P-FALA), as falas por dia de 1 a `dias`, as falas por conteudo (`sem_conteudo`: o chamar sem conteudo) e, nas falas com a maior urgencia no limiar
     ou abaixo, o conteudo (o descritivo da secao 8, item 3). Falha alto sem decisao, com dias < 1, com uma decisao depois do ultimo dia,
     ou com conteudo fora da fala ou fora de CONTEUDOS_DA_FALA."""
@@ -2522,13 +2525,18 @@ def fala_nas_decisoes(decisoes: Sequence[tuple[int, str, str | None, Mapping[str
             raise ValueError(f"o conteudo {conteudo!r} na decisao de {acao!r}")
         maior = maior_urgencia_da_fala(urg)
         pert = fala and conteudo == maior and urg[maior] > limiar
-        linhas.append((dia, acao, fala, conteudo, pert, urg[maior] > limiar))
+        linhas.append((dia, acao, fala, conteudo, pert, urg[maior] > limiar, urg[maior]))
 
     def resumo(sel: list, n_dias: int) -> dict:
         falas = sum(1 for x in sel if x[2])
         pert = sum(1 for x in sel if x[4])
+        nec = [x for x in sel if x[1] != "dormir" and x[5]]                # A1.2: as decisoes com necessidade
+        pert_nec = sum(1 for x in nec if x[4])
         return {"dias": n_dias, "decisoes": len(sel), "falas": falas, "falas_por_dia": falas / n_dias, "pertinentes": pert,
-                "pertinencia": pert / falas if falas else None, "pertinente_por_dia": pert / n_dias}
+                "pertinencia": pert / falas if falas else None, "pertinente_por_dia": pert / n_dias,
+                "com_necessidade": len(nec), "pertinentes_com_necessidade": pert_nec,
+                "p_pertinente_dado_necessidade": pert_nec / len(nec) if nec else None,
+                "urgencia_media_com_necessidade": sum(x[6] for x in nec) / len(nec) if nec else None}
 
     out = {"vida": resumo(linhas, dias)}
     for ini, fim in janelas:

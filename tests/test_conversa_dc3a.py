@@ -1,6 +1,8 @@
-"""A DC3a (docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, secao 10): a subchave `fala_unidades` do modular (3.1), o dono que atende (secao 2), a
-`fala_nas_decisoes` do metrics.py (4.1 e 4.2), o orquestrador da run (secoes 5, 7 e 11, com a fumaca nas sementes dos testes e a analise com
-dados sinteticos) e o `ganho_conteudo` da condicao da 3.1. Desligada, a vida de hoje sai byte a byte: tests/test_gabarito_conversa_dc3.py."""
+"""A DC3a (docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, secao 10, e o adendo 1): a subchave `fala_unidades` do modular (3.1, com o credito da
+fala ate a decisao seguinte, A1.1), o dono que atende (secao 2), a `fala_nas_decisoes` do metrics.py (4.1, 4.2 e a medida condicionada a
+necessidade, A1.2), o orquestrador da run (secoes 5, 7 e 11, com a fumaca nas sementes dos testes, a analise com dados sinteticos e a
+conferencia do credito que falha alto, A1.3) e o `ganho_conteudo` da condicao da 3.1. Desligada, a vida de hoje sai byte a byte:
+tests/test_gabarito_conversa_dc3.py."""
 from __future__ import annotations
 
 import json
@@ -112,7 +114,9 @@ def test_a_vida_do_lab_f_fala_com_conteudo_e_passa_as_conferencias(tmp_path):
     assert set(r["habito"]) == {"1", "3"} and set(r["habito"]["1"]) == {f"chamar_atencao/{c}" for c in CONTEUDOS_FALA}
     lab = dc._vida({"dias": 2, "orcamento_por_dia": 16}, "LAB", "ignora", "atencioso", u, str(tmp_path))
     assert lab["fala"]["por_conteudo"] == {"fome": 0, "higiene": 0, "solidao": 0, "sem_conteudo": lab["fala"]["vida"]["falas"]}
-    assert lab["atendimento"] is None and lab["credito"] is None and set(lab["habito"]["1"]) == {"chamar_atencao"}
+    assert lab["atendimento"] is None and set(lab["credito"]) == {"cuidados_de_hoje"} and set(lab["habito"]["1"]) == {"chamar_atencao"}
+    assert r["credito"]["fora_do_intervalo"] == 0 and r["credito"]["dentro_do_intervalo"] + r["credito"]["na_ultima_decisao"] == \
+        r["credito"]["atendimentos"]
 
 
 def test_a_conferencia_da_fala_falha_alto_com_uma_unidade_de_fala_no_lab():
@@ -196,6 +200,27 @@ def test_as_janelas_dos_dias_1_a_3_e_8_a_14():
     assert fala_nas_decisoes([(0, "comer", None, _u())], 1, 512)["vida"]["pertinencia"] is None
 
 
+def test_a_fala_pertinente_dada_a_necessidade_conta_so_as_decisoes_fora_do_dormir_acima_do_limiar():
+    dec = [(0, "chamar_atencao", "fome", _u(f=600)),              # necessidade, pertinente
+           (15, "comer", None, _u(f=700)),                        # necessidade, nao fala
+           (30, "chamar_atencao", "higiene", _u(f=800, h=600)),   # necessidade, fala nao pertinente
+           (45, "dormir", None, _u(f=900)),                       # dormindo: fora
+           (60, "chamar_atencao", "fome", _u(f=512)),             # no limiar: sem necessidade (estrito)
+           (75, "explorar", None, _u(s=100)),                     # sem necessidade
+           (7 * T, "chamar_atencao", "solidao", _u(s=900)),       # dia 8: necessidade, pertinente
+           (7 * T + 15, "comer", None, _u(h=700))]                # dia 8: necessidade, nao fala
+    r = fala_nas_decisoes(dec, 8, 512)
+    v = r["vida"]
+    assert v["com_necessidade"] == 5 and v["pertinentes_com_necessidade"] == 2 and v["p_pertinente_dado_necessidade"] == 2 / 5
+    assert v["urgencia_media_com_necessidade"] == (600 + 700 + 800 + 900 + 700) / 5
+    d = r["dias_1_3"]
+    assert d["com_necessidade"] == 3 and d["p_pertinente_dado_necessidade"] == 1 / 3
+    e = r["dias_8_14"]
+    assert e["dias"] == 1 and e["com_necessidade"] == 2 and e["p_pertinente_dado_necessidade"] == 1 / 2
+    sem = fala_nas_decisoes([(0, "dormir", None, _u(f=900)), (15, "chamar_atencao", "fome", _u(f=100))], 1, 512)["vida"]
+    assert sem["com_necessidade"] == 0 and sem["p_pertinente_dado_necessidade"] is None and sem["urgencia_media_com_necessidade"] is None
+
+
 def test_a_fala_falha_alto():
     with pytest.raises(ValueError):
         fala_nas_decisoes([], 1, 512)
@@ -210,9 +235,11 @@ def test_a_fala_falha_alto():
 
 
 # ================================================================== a analise, com dados sinteticos
-def _registros(escuta: float, guarda: float, frac_fala: float = 0.05, atende: float = 3.0, n: int = 12) -> list[dict]:
-    """vidas sinteticas: n unidades, 4 donos, os 2 bracos e os 2 modos; a fala pertinente nos dias 8 a 14 sobe `escuta` com o dono que
-    atende no LAB+F; a taxa por episodio do LAB+F com o que ignora fica `guarda` acima da do LAB; um ruido fixo por unidade"""
+def _registros(escuta: float, guarda: float, frac_fala: float = 0.05, atende: float = 3.0, n: int = 12,
+               sem_necessidade: int = 0) -> list[dict]:
+    """vidas sinteticas: n unidades, 4 donos, os 2 bracos e os 2 modos; P(fala pertinente | necessidade) nos dias 8 a 14 sobe `escuta` com
+    o dono que atende no LAB+F; a taxa por episodio do LAB+F com o que ignora fica `guarda` acima da do LAB; um ruido fixo por unidade. As
+    `sem_necessidade` primeiras unidades nao tem decisao com necessidade no LAB+F com o dono que ignora (a medida None)"""
     out = []
     for i in range(n):
         s = 1000 + i
@@ -220,12 +247,13 @@ def _registros(escuta: float, guarda: float, frac_fala: float = 0.05, atende: fl
         for dono in dc.DONOS:
             for b in dc.BRACOS:
                 for mo in dc.MODOS:
-                    pert = 1.0 + ruido + (escuta if (b, mo) == ("LAB+F", "atende") else 0)
+                    pert = 0.3 + ruido + (escuta if (b, mo) == ("LAB+F", "atende") else 0)
+                    nec = None if i < sem_necessidade and (b, mo) == ("LAB+F", "ignora") else pert
                     taxa = 0.6 + ruido / 2 + (guarda if (b, mo) == ("LAB+F", "ignora") else 0)
                     out.append({"semente": s, "base": 101 + (i % 5), "dono": dono, "braco": b, "modo": mo,
                                 "episodios_fome": {"n": 5, "taxa": taxa},
                                 "fala": {"vida": {"frac_fala_fora_do_dormir": frac_fala + ruido / 100},
-                                         "dias_8_14": {"pertinente_por_dia": pert}},
+                                         "dias_8_14": {"pertinente_por_dia": -pert, "p_pertinente_dado_necessidade": nec}},
                                 "atendimento": {"dias_1_3_por_dia": atende + ruido} if mo == "atende" else None})
     return out
 
@@ -246,10 +274,20 @@ def test_a_analise_le_as_linhas_1_3_e_4():
     esc = dc.escuta(rs, BOOT)
     assert esc["classe"]["classe"] == "indeterminado" and not esc["passa"]          # sem margem: nao ha "~ 0" (DC3-6)
     assert dc.leitura(dc.premissas(rs), esc, dc.guarda(rs, BOOT))["linha"] == 4
-    for falha in ({"frac_fala": 0.0}, {"atende": 0.5}):
+    assert dc.leitura(dc.premissas(rs), esc, dc.guarda(rs, BOOT))["o_que_diria"] == \
+        "com o credito ate a decisao seguinte, o P2 nao liga a fala a resposta do dono"
+    for falha in ({"frac_fala": 0.0}, {"atende": 0.5}, {"sem_necessidade": 3}):
         rs = _registros(escuta=0.5, guarda=0.0, **falha)
         prem = dc.premissas(rs)
         assert not prem["conclusivo"] and dc.leitura(prem, dc.escuta(rs, BOOT), dc.guarda(rs, BOOT))["linha"] == 1
+
+
+def test_o_g_escuta_e_a_fala_pertinente_dada_a_necessidade_e_a_premissa_conta_as_unidades_que_sairam():
+    rs = _registros(escuta=0.5, guarda=0.0, sem_necessidade=2)    # 10 de 12 unidades com o gate definido: 83 % >= 80 %
+    prem, esc = dc.premissas(rs), dc.escuta(rs, BOOT)
+    pn = prem["P-NECESSIDADE"]
+    assert pn["unidades"] == 12 and pn["com_gate_definido"] == 10 and pn["sairam"] == 2 and pn["passa"] and prem["conclusivo"]
+    assert esc["n"] == 10 and esc["unidades_fora"] == 2 and esc["passa"]   # a fala pertinente por dia (negativa aqui) nao entra no gate
 
 
 def test_a_celula_com_none_fica_fora_da_media_da_unidade():
@@ -286,3 +324,70 @@ def test_a_fumaca_do_orquestrador_inteiro_nas_sementes_dos_testes(tmp_path):
     assert json.loads((tmp_path / "run" / "resultado.json").read_text(encoding="utf-8"))["vidas"] == len(lidos) == 32
     with pytest.raises(FileExistsError):
         dc.rodar(cfg, tmp_path / "run", 1)
+
+
+# ================================================================== o credito da fala ate a decisao seguinte (adendo 1)
+def _ler_corpos(monkeypatch) -> dict:
+    """so le: o corpo percebido em cada `agir` e o do `consequencia_corpo` de cada decisao, do DigiBrain"""
+    corpos = {"agir": [], "depois": []}
+    agir0, cons0 = dc.DigiBrain.agir, dc.DigiBrain.consequencia_corpo
+
+    def agir(self, obs, rng):
+        corpos["agir"].append(obs.corpo)
+        return agir0(self, obs, rng)
+
+    def cons(self, acao, ocorrido, obs_depois):
+        corpos["depois"].append(obs_depois.corpo)
+        return cons0(self, acao, ocorrido, obs_depois)
+
+    monkeypatch.setattr(dc.DigiBrain, "agir", agir)
+    monkeypatch.setattr(dc.DigiBrain, "consequencia_corpo", cons)
+    return corpos
+
+
+@pytest.mark.parametrize("braco", ["LAB+F", "LAB"])
+def test_o_r_n_da_fala_le_o_corpo_da_decisao_seguinte_so_no_lab_f_e_as_outras_opcoes_o_do_tick_da_acao(monkeypatch, braco):
+    corpos = _ler_corpos(monkeypatch)
+    _, reg, _, atende, leituras = dc.viver(braco, "atende", "atencioso", 101, 1, 16)
+    c = dc.orq.cerebro_de(reg)
+    ms, recs = c.motivos, c.m.sens.receptores
+    assert len(corpos["agir"]) == len(corpos["depois"]) == len(ms) and ms[-1]["consequencia"] is None
+    atendidas = {a["k"] for a in atende.atendimentos}
+    mudou = 0
+    for k, m in enumerate(ms[:-1]):
+        no_tick = c.m.afeto.sigma_luta(corpos["agir"][k], corpos["depois"][k], recs)["r_n"]     # sem mexer no V nem no E
+        seguinte = c.m.afeto.sigma_luta(corpos["agir"][k], corpos["agir"][k + 1], recs)["r_n"]
+        fala_lab_f = braco == "LAB+F" and m["acao"] == "chamar_atencao"
+        assert m["consequencia"]["r_n"] == (seguinte if fala_lab_f else no_tick)
+        mudou += fala_lab_f and k in atendidas and seguinte != no_tick
+    assert (mudou > 0) == (braco == "LAB+F")          # o atendimento entra no r_n da fala, e so no LAB+F
+    assert atendidas
+
+
+def test_a_conferencia_do_credito_falha_alto_quando_um_atendimento_cai_fora_do_intervalo():
+    def m(k, acao, conteudo=None, fechada=True):
+        return {"k": k, "acao": acao, "escolha": [acao, conteudo, None], "afeto": {"urgencias": _u(s=900)},
+                "consequencia": {"r_n": 0} if fechada else None}
+
+    c = SimpleNamespace(motivos=[m(0, "comer"), m(1, "chamar_atencao", "solidao"), m(2, "chamar_atencao", "solidao", fechada=False)])
+    ticks = [0, 15, 30]
+
+    def atende(t1):
+        return SimpleNamespace(atendimentos=[{"passo": 1, "tick": t1, "k": 1, "conteudo": "solidao", "acao": "acariciar"},
+                                             {"passo": 2, "tick": 45, "k": 2, "conteudo": "solidao", "acao": "acariciar"}],
+                               sem_orcamento=[])
+
+    hoje = [{"passo": 1, "tick": 30, "acao": "limpar"}, {"passo": 0, "tick": 15, "acao": "limpar"}]
+    r = dc.conferir_atendimentos("LAB+F", "atende", c, atende(30), ticks, ticks, hoje)
+    assert (r["dentro_do_intervalo"], r["na_ultima_decisao"], r["fora_do_intervalo"]) == (1, 1, 0)
+    assert r["cuidados_de_hoje"] == {"cuidados": 2, "dentro_de_fala": 1, "fracao_dentro": 0.5}
+    with pytest.raises(RuntimeError, match="fora do intervalo"):
+        dc.conferir_atendimentos("LAB+F", "atende", c, atende(45), ticks, ticks, hoje)      # depois da decisao seguinte
+    lab = dc.conferir_atendimentos("LAB", "atende", c, atende(30), ticks, ticks, hoje)       # no LAB a opcao fecha no tick: so conta
+    assert lab["dentro_do_intervalo"] == 0 and lab["fora_do_intervalo"] == 2
+    c.motivos[1]["consequencia"] = None
+    with pytest.raises(RuntimeError, match="sem consequencia"):
+        dc.conferir_atendimentos("LAB+F", "atende", c, atende(30), ticks, ticks, hoje)
+    c.motivos[1]["consequencia"] = {"r_n": 0}
+    with pytest.raises(RuntimeError, match="fora do tick"):
+        dc.conferir_atendimentos("LAB+F", "atende", c, atende(30), ticks, [0, 15, 31], hoje)

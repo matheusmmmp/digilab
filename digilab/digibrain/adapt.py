@@ -26,7 +26,9 @@ no alvo, e o fim do passeio sem credito pelo gesto traz `credito: "gesto"`. Desl
 
 Com a subchave `fala_unidades` (docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, 3.1), o M-IMPULSO divide o `chamar_atencao` nas tres unidades de
 fala (o conteudo so na chave da escolha, `[chamar_atencao, c, None]`); a acao entregue ao motor e o chamar de hoje, e a opcao de fala credita
-a linha de H do conteudo. Desligada, nenhum campo novo; ligada, nenhum campo novo no motivo (o conteudo esta na `escolha`).
+a linha de H do conteudo. A consequencia da opcao de fala (o r_n que o P2 credita, o V e o E, o episodio) le o corpo de depois na
+decisao seguinte, antes da acao seguinte (o adendo 1 do plano, A1.1: o intervalo contem o cuidado do dono); o mundo de depois e o de
+hoje. Desligada, nenhum campo novo; ligada, nenhum campo novo no motivo (o conteudo esta na `escolha`).
 
 **O alvo** (`escolher_alvo`): o candidato do motor do tipo (e do id) da unidade escolhida; o `u` do motor e ignorado. **A excecao unica**
 (a PE-14 revista): em EXPLORAR, o lugar lembrado do M-MEM e entregue como `Alvo.ponto(x, y)`, fora da lista do motor, que o valida por
@@ -175,7 +177,7 @@ class DigiBrain:
         if obs.corpo is None or obs.mundo is None:
             raise ValueError("o DigiBrain modular decide com o corpo e o mundo na Observacao (obs.corpo e obs.mundo)")
         if self._pendencia is not None:
-            self._fechar(self._pendencia)
+            self._fechar(self._pendencia, obs)
             self._pendencia = None
         m, cd = self.m, self.cd
         k = self.k
@@ -393,8 +395,11 @@ class DigiBrain:
         if fala != (list(CONTEUDOS_FALA) if cd.fala_unidades else [None]):
             raise RuntimeError(f"as unidades do chamar {fala} nao sao as da fala_unidades {'ligada' if cd.fala_unidades else 'desligada'}")
 
-    def _fechar(self, p: dict) -> None:
-        """a consequencia da decisao anterior aos modulos"""
+    def _fechar(self, p: dict, obs_seguinte: Observacao) -> None:
+        """a consequencia da decisao anterior aos modulos. Com a `fala_unidades` (o adendo 1 do plano da DC3, A1.1), a opcao de fala (as
+        tres unidades do chamar) le o corpo de depois na percepcao da decisao seguinte (`obs_seguinte`, antes da acao seguinte): o
+        intervalo contem o passo inteiro, com o cuidado do dono. As outras opcoes, e o chamar desligada a subchave, leem o corpo do tick
+        da acao, como hoje. A ultima decisao da vida nao tem decisao seguinte e fica sem fechar, como toda ultima decisao de hoje."""
         it, m, S = p["intencao"], self.m, self.S
         acao = it.acao
         if p["corpo"] is None or p["transicao"] is None:
@@ -406,6 +411,10 @@ class DigiBrain:
             raise RuntimeError(f"a decisao de {acao.value} ficou sem o consequencia_mundo")
         pc0 = p["sens"]["pc"]
         pc1 = p["corpo"][1].corpo
+        if self.cd.fala_unidades and acao is AcaoPet.CHAMAR_ATENCAO:     # A1.1: a fala ate a decisao seguinte
+            if p["unidade"]["chave"][1] not in CONTEUDOS_FALA:
+                raise RuntimeError(f"a fala da decisao {p['k']} sem conteudo com a fala_unidades ligada")
+            pc1 = obs_seguinte.corpo
         pm1 = p["transicao"].observacao_seguinte.mundo
         if pc1 is None or pm1 is None:
             raise RuntimeError("a consequencia sem o corpo ou sem o mundo de depois")
