@@ -73,8 +73,10 @@ export const ESCADA: readonly Receita[] = [
 ];
 const EXERCICIOS: readonly Exercicio[] = ["levantar_pedra", "corrida", "alvo", "esquiva", "meditar", "resistencia"];
 
-/** o pet de uma receita: dono simulado (mesmo laco dos Cenarios) + treino em rodizio quando o motor deixa */
-export function petDaReceita(r: Receita): Motor {
+/** o pet de uma receita: dono simulado (mesmo laco dos Cenarios) + treino em rodizio quando o motor deixa.
+    tratarLesao (os Cenarios do Lab, 2026-11-07): o dono simulado trata a lesao do sparring no mesmo passo; o dono do motor nao trata, e
+    o pet de varios dias morria da lesao sem tratamento. Desligado, a escada sai a mesma (as assinaturas dela em nivelTela.ts) */
+export function petDaReceita(r: Receita, tratarLesao = false): Motor {
   /* a versao de hoje; as medalhas que as evolucoes pedem (sem elas o Rookie nao passa a Champion) */
   const m = new Motor(r.semente), dono = criarDono(r.dono), rng = criarRng(hashSemente("dono", r.semente, r.dono));
   m.liberar(CMD.mega);
@@ -86,6 +88,7 @@ export function petDaReceita(r: Receita): Motor {
     const v: VisaoDono = { e: m.e, acao: m.acao, passo: p, passos, orc, gasto, min, max, atrasado: gasto < orc * (p + 1) / passos, chamados: m.chamadosAbertos() };
     for (const a of dono.decidir(v, rng)) if (ACOES_DONO_JOGO_V11.includes(a)) { m.observar(a); gasto++; }
     if (m.estagioAtual === "adolescente" && m.sparring < CAT.sparring) m.lutar("aleatorio", hashSemente("sparring", r.semente, p));
+    if (tratarLesao && m.lesionadoDesde !== null) { m.observar("tratar_lesao"); gasto++; }
     /* treino: sem forcar (para abaixo do limite), respeitando o intervalo e a meta do dia */
     const dia = Math.floor(m.e.tick / TPD);
     if (r.treinoDia > 0 && m.estagioAtual !== "bebe" && m.treino.podeTocar(m.e.tick) && m.treino.fadiga + CTR.fadigaSessao < CTR.limiarPausa
