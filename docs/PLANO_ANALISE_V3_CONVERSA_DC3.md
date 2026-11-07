@@ -1,6 +1,6 @@
 # PLANO DE ANÁLISE V3 — CONVERSA_PET, DC3: a rede escolhendo falar (2026-11-07, Gerente da CONVERSA_PET, Claude Code, Opus 5.5)
 
-**Status: APROVADO pelo Matheus em 2026-11-07 ("Aprovo todas").** **O adendo 1 (no fim do documento) está PROPOSTO** e muda o crédito da fala e o gate antes da primeira vida. As decisões DC3-1 a DC3-9 (seção 12) DECIDIDAS, todas pela recomendação. **Nenhuma vida da faixa 79101…79505 roda antes de quatro
+**Status: APROVADO pelo Matheus em 2026-11-07 ("Aprovo todas").** **O adendo 1 (no fim do documento) foi APROVADO pelo Matheus em 2026-11-07 ("Aprovo todas")** e muda o crédito da fala e o gate antes da primeira vida. As decisões DC3-1 a DC3-9 (seção 12) DECIDIDAS, todas pela recomendação. **Nenhuma vida da faixa 79101…79505 roda antes de quatro
 coisas:** este cabeçalho com a marca "APROVADO pelo Matheus"; o código da DC3a na `main` (seção 10), desligado e byte a byte; a medida da
 fala em `digilab/metrics.py` com os testes dela; e o registro da run (seção 11), num commit empurrado antes da primeira vida.
 
@@ -200,8 +200,8 @@ refeita do `medidas.json`, byte a byte.
 
 ## Adendo 1 — o crédito da fala até a decisão seguinte e o gate condicionado à necessidade (2026-11-07, Gerente da CONVERSA_PET, Opus 5.5)
 
-**Status: PROPOSTO.** O Matheus pediu o adendo em 2026-11-07 ("Fazer o adendo"), depois do achado D-CP-DC3a-1. O texto ainda precisa da
-aprovação dele. Nenhuma vida da faixa 79101…79505 rodou. **O adendo vale antes da primeira vida.** Ele muda as seções 3.1, 4, 7.2, 7.4 e 11,
+**Status: APROVADO pelo Matheus em 2026-11-07 ("Aprovo todas"), DC3-A1 a DC3-A4 pela recomendação.** O Matheus pediu o adendo em
+2026-11-07 ("Fazer o adendo"), depois do achado D-CP-DC3a-1. Nenhuma vida da faixa 79101…79505 rodou. **O adendo vale antes da primeira vida.** Ele muda as seções 3.1, 4, 7.2, 7.4 e 11,
 e o resto do plano fica como está. Quando aprovado, ele entra no sha256 do plano no registro da run (seção 11).
 
 ### A1.0 Por que (o achado da DC3a)
@@ -271,7 +271,7 @@ DC3-9.
 **A varredura da DC3a** é refeita nas sementes dos testes só para conferir o código (A1.1 e a conferência da A1.3). Nada se ajusta
 olhando para ela.
 
-### A1.5 As decisões do adendo (PROPOSTAS; cada uma com a recomendação e o custo de errar)
+### A1.5 As decisões do adendo (DECIDIDAS pelo Matheus em 2026-11-07; cada uma com a recomendação e o custo de errar)
 
 | | decisão | recomendação | custo de errar |
 |---|---|---|---|
