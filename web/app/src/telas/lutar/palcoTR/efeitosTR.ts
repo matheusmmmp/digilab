@@ -5,6 +5,8 @@ import type { EventoTR, LutaTR } from "../../../../motor/index.ts";
 import { VOO, seguirProjeteisTR, type VooTR } from "./projeteisTR.ts";
 import { seguirChaoTR, type MarcaTR } from "./chaoTR.ts";
 import { seguirPosturasTR, type BatidaTR } from "./posturasTR.ts";
+import { seguirCameraTR, type CameraTR } from "./cameraTR.ts";
+import { anotarVidaTR, vidasNovasTR, type VidaTR } from "./nocauteTR.ts";
 
 /** A forca do impacto (D-LE-2 da tarefa). PROPOSTO, SEM FONTE: ajustar nas capturas da E1.
     - pausaMs: a pausa do desenho no acerto (a luta nao para; so o proximo quadro demora); o pesado pausa o dobro do leve.
@@ -39,8 +41,12 @@ export interface VisualTR {
   marcas: MarcaTR[];
   /** os golpes que bateram numa postura (E4, posturasTR.ts): o escudo que acende e o contra-golpe que devolve */
   batidas: BatidaTR[];
+  /** a linha da vida de cada lado, para a barra com o dano atrasado (E5, nocauteTR.ts) */
+  vidas: VidaTR[];
+  /** a camera que acompanha a distancia (E5, cameraTR.ts); null antes do primeiro passo */
+  cam: CameraTR | null;
 }
-export const visualNovoTR = (): VisualTR => ({ numeros: [], impactos: [], ultimoGolpe: ["", ""], pausaMs: 0, extra: 0, voos: [], marcas: [], batidas: [] });
+export const visualNovoTR = (): VisualTR => ({ numeros: [], impactos: [], ultimoGolpe: ["", ""], pausaMs: 0, extra: 0, voos: [], marcas: [], batidas: [], vidas: vidasNovasTR(), cam: null });
 export const VIDA_NUMERO = 45;   /* passos (~0,7 s) */
 
 export const COR_CURA = "#2f9e44", COR_TINTA = "#1d2433", COR_AZUL = "#2c73e0", COR_VERMELHO = "#d6336c", COR_FORTE = "#ffd23f";
@@ -54,7 +60,11 @@ export function aplicarEventosTR(v: VisualTR, sim: LutaTR, ev: readonly EventoTR
       v.impactos.push({ lado: e.lado, t0: e.t, frac, forte, golpe: v.ultimoGolpe[1 - e.lado] });
       v.pausaMs = Math.max(v.pausaMs, forte ? IMPACTO.pausaMs : Math.round(IMPACTO.pausaMs / 2));
       v.numeros.push({ txt: "-" + Math.round(e.valor * 10) / 10, cor: e.lado === 0 ? COR_VERMELHO : COR_AZUL, t0: e.t, lado: e.lado, forte });
-    } else if (e.tipo === "cura") v.numeros.push({ txt: "+" + Math.round(e.valor), cor: COR_CURA, t0: e.t, lado: e.lado });
+      anotarVidaTR(v.vidas[e.lado], e.t, e.resta + e.valor, e.resta, sim.S.L[e.lado].hpMax, true);
+    } else if (e.tipo === "cura") {
+      v.numeros.push({ txt: "+" + Math.round(e.valor), cor: COR_CURA, t0: e.t, lado: e.lado });
+      const hp = sim.S.L[e.lado].hp; anotarVidaTR(v.vidas[e.lado], e.t, hp - e.valor, hp, sim.S.L[e.lado].hpMax, false);
+    }
     else if (e.tipo === "erro") v.numeros.push({ txt: "errou", cor: COR_TINTA, t0: e.t, lado: e.lado });
     else if (e.tipo === "interrompe") v.numeros.push({ txt: "interrompido!", cor: COR_TINTA, t0: e.t, lado: e.lado });
     /* o empurrao do motor (a v18) sai no mesmo passo do dano: o acerto desse lado passa a ser do motor */
@@ -66,6 +76,7 @@ export function aplicarEventosTR(v: VisualTR, sim: LutaTR, ev: readonly EventoTR
   seguirProjeteisTR(v, sim);
   seguirChaoTR(v, sim, ev);
   seguirPosturasTR(v, sim, ev);
+  seguirCameraTR(v, sim);
 }
 
 /** a pausa pedida desde a ultima chamada (ms), zerando o pedido; 0 com o movimento reduzido */

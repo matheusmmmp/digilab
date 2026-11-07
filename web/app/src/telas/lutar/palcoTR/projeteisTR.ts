@@ -68,21 +68,26 @@ export const cabecaVisivel = (o: VooTR, passo: number): boolean =>
   passo >= o.t0 && (o.tFim === null || passo < o.tFim || passo < o.t0 + VOO.minVisivel);
 
 /** a geometria da luta na tela (px de CSS), a mesma que o desenho usa: a escala inteira dos sprites, o centro, a meia-largura e o topo de cada
-    lutador e a linha dos pes */
-export interface GeometriaTR { e: number; K: number; PES: number; centros: number[]; meias: number[]; topo: number[] }
+    lutador e a linha dos pes. Com a camera (E5, cameraTR.ts): s e o zoom do mundo (o cenario, o x da luta e os tamanhos em px de CSS), cx o x
+    da tela base que fica no meio, e x(xm) o x de tela de um x da luta (sem o excesso do sprite). Sem camera, s = 1 e x = xTela, como antes */
+export interface GeometriaTR { e: number; K: number; PES: number; centros: number[]; meias: number[]; topo: number[]; esc: number; s: number; cx: number; x: (xm: number) => number }
+/** a camera de um quadro: a escala inteira dos sprites (e, em px do canvas por pixel do sprite), o zoom do mundo e o centro (px da tela base) */
+export interface CameraQuadro { e: number; s: number; cx: number }
 const FRACAO_CHAO = .84, ESQ = CTR_TR.centro - CTR_TR.meiaLargura, LARG = 2 * CTR_TR.meiaLargura;
 export const xTela = (x: number, W: number): number => W * (1 - FRACAO_CHAO) / 2 + (x - ESQ) / LARG * W * FRACAO_CHAO;
-export function geometriaTR(W: number, H: number, K: number, dims: readonly (readonly [number, number])[], xs: readonly number[]): GeometriaTR {
-  const PES = H * .8, ALT_MAX = H * .45;
-  /* a escala inteira dos sprites no chao novo (B3, palco a tela inteira): limitada pela altura e tambem pela largura, para os dois nao
-     se cobrirem numa tela estreita (390 px: 2; 1280 e 1920 px: 3) */
-  const escLuta = Math.max(1, Math.min(3, Math.floor(ALT_MAX / Math.max(...dims.map(d => d[1]))), Math.floor(W / (Math.max(...dims.map(d => d[0])) * 1.6))));
-  const e = Math.max(1, Math.floor(escLuta * K)), raioTela = CTR_TR.raio / LARG * W * FRACAO_CHAO;
+/** a escala inteira dos sprites no chao novo sem zoom (B3, palco a tela inteira): limitada pela altura e tambem pela largura, para os dois nao
+    se cobrirem numa tela estreita (390 px: 2; 1280 e 1920 px: 3) */
+export const escalaBaseTR = (W: number, H: number, dims: readonly (readonly [number, number])[]): number =>
+  Math.max(1, Math.min(3, Math.floor(H * .45 / Math.max(...dims.map(d => d[1]))), Math.floor(W / (Math.max(...dims.map(d => d[0])) * 1.6))));
+export function geometriaTR(W: number, H: number, K: number, dims: readonly (readonly [number, number])[], xs: readonly number[], cam?: CameraQuadro): GeometriaTR {
+  const PES = H * .8, s = cam?.s ?? 1, cx = cam?.cx ?? W / 2;
+  const e = cam?.e ?? Math.max(1, Math.floor(escalaBaseTR(W, H, dims) * K)), escLuta = e / K, raioTela = CTR_TR.raio / LARG * W * FRACAO_CHAO * s;
+  const x = s === 1 && cx === W / 2 ? (xm: number) => xTela(xm, W) : (xm: number) => (xTela(xm, W) - cx) * s + W / 2;
   /* o centro de cada lutador na tela: o corpo do motor tem o raio CTR_TR.raio e o sprite e mais largo, entao a frente do sprite fica na
      frente do corpo (o excesso vai para tras) e os dois nao se sobrepoem no contato */
   const meias = dims.map(d => d[0] * e / K / 2);
-  const centros = xs.map((x, i) => { const exc = Math.max(0, meias[i] - raioTela); return xTela(x, W) + (i ? exc : -exc); });
-  return { e, K, PES, centros, meias, topo: dims.map(d => PES - d[1] * e / K) };
+  const centros = xs.map((xm, i) => { const exc = Math.max(0, meias[i] - raioTela); return x(xm) + (i ? exc : -exc); });
+  return { e, K, PES, centros, meias, topo: dims.map(d => PES - d[1] * e / K), esc: escLuta, s, cx, x };
 }
 /** o ponto do voo na tela (px de CSS) na fracao f: da boca do atirador a frente do alvo, na altura do peito do atirador */
 export function pontoDoVoo(g: GeometriaTR, de: number, f: number): { x: number; y: number } {
