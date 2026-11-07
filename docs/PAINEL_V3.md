@@ -58,8 +58,9 @@ Cada uma com a recomendação do Gerente e o custo de errar.
 - **Os órgãos digitais e a genética** (Matheus, 2026-11-03, "segue sua recomendacao"): o G0 veio depois da B3 e o código está completo
   (E0 a E3, até o #570); os órgãos só com fonte. O PR #516 fica como referência, sem merge.
 - **O que vem depois da ponte da luta** (2026-11-06): feito. O descritivo da D-C1-3 rodou na C1 (#633, #640) e no REL (adendo 11, #642, #646, #655), e a D-C1-3 fechou como descritiva; o `digilab/digibrain/` fica livre.
-- **O e2e do painel "Por que ele disse isso" pelo balão** saiu com o #566 (o save do teste não tem fala). Recomendação: um save com fala
-  registrada num ajuste pequeno. Custo de errar: o caminho do balão ao painel quebra sem teste.
+- **O e2e do painel "Por que ele disse isso" pelo balão:** feito (#659, 2026-11-07): um save com fala registrada, gerado e conferido pelo replay, e o e2e do balão ao painel com a causa, a 390 e a 1280 px. Pendência fechada.
+- **A D-PE3-3, a vida perdida em S na luta** (PROPOSTA, `docs/registro/2026-11.md`): o dano da luta cortado na vida que o pet tinha, arredondado na escala do receptor. Recomendação do Gerente: decidir como está. Custo de errar: o golpe final que passa da vida não dói a mais, e a dor de uma derrota fica um pouco menor do que o golpe.
+- **A PE5, a lembrança do rival na luta** (PL-6, só se o Matheus decidir): recomendação do Gerente, ainda não; esperar a rodada de equilíbrio da luta, porque o empurrão (v18) e os efeitos da luta estão mudando agora, e a confiança M1 já lê o rival. Custo de errar: o pet não lembra de um rival em particular até lá.
 - **A cobertura do `sumiu` e do `desistiu` nas intenções com alvo** (ir à comida, à bola, ao lugar): portados, sem G-PAR-VIDA (LM4).
   Recomendação: deixar como está até um cenário que os produza; registrado na tarefa. Custo de errar: um erro nesses ramos só aparece jogando.
 - **O rótulo `livre-v9`** quando a fala de memória for gravada no modo livre. Recomendação: entra junto da primeira fala de memória gravada
