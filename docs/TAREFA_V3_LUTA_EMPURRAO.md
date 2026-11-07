@@ -342,3 +342,11 @@ Artefatos em `web/app/scripts/medicoes/equilibrio_tr/empurrao/r_c_inv20_sem_qued
   treino; hoje 0,10 e 0,09). Com as posturas sem empurrão e a investida 40 px, era 0,2975. São ~5 lutas em 400 acima do teto.
 - As três medições combinadas não fecharam; a rodada para e volta ao Matheus (seção 4.4). Nada foi ajustado além do plano.
 
+### 9.7 A decisão: a medição A (2026-11-07)
+
+- O Matheus decidiu, nas palavras dele (repassadas pela sessão de planejamento), "Aceitar a A". O motor volta à versão A: a investida
+  empurra 20 px e derruba; a defesa e o contra-golpe não são empurrados; a pele dura corta pela metade; o pesado fica em 60 px e derruba.
+- O G-2 em 0,31 (o Tortomon contra os pets sem treino, teto 0,3) fica aceito e vai para a rodada de equilíbrio do fim. Todos os números
+  do empurrão seguem PROPOSTOS e SEM FONTE (calibrados só nas sementes 72101–72505; nenhuma validação rodou).
+- Os números da v18 são os da medição A (seção 9.4; `empurrao/r_a_inv20/`).
+

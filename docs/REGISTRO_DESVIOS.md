@@ -517,3 +517,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-06 — CONVERSA_PET, M2 ligar o `conversa-v1` na conversa do jogo (worker, Claude Code, Sonnet 5.5, branch `v3-conversa-m2-ligar`)](registro/2026-11.md)
 - [2026-11-06 — LUTA_EMPURRAO, a medição de equilíbrio da v18 e o desenho (worker, Claude Code, Opus 5.5, branch `v3-luta-empurrao-motor`)](registro/2026-11.md)
 - [2026-11-06 — LUTA_EMPURRAO, a EMP-5 trocada: a defesa sem empurrão (worker, Claude Code, Opus 5.5, branch `v3-luta-empurrao-motor`)](registro/2026-11.md)
+- [2026-11-07 — LUTA_EMPURRAO, a medição A aceita (worker, Claude Code, Opus 5.5, branch `v3-luta-empurrao-motor`)](registro/2026-11.md)
