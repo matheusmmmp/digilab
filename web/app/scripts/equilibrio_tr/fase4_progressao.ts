@@ -35,6 +35,7 @@ import {
   lutadorLiga, perfilDe, pontosComChips, posicaoDoChipV14, regraQueCobre, rivalInstalacao, rivalSalao,
   type Chip, type Estagio, type Forma, type FormaAdultaNormal, type ListaGambits, type Lutador, type Regra, type RegrasLuta,
 } from "../../motor/index.ts";
+import { comEmpurrao } from "./empurrao.ts";
 import { ligarEscala } from "../../motor/catalogo.ts";
 import { VARIANTES_LIDER } from "./variantes_lideres_r2.ts";
 
@@ -46,7 +47,7 @@ const faixa = arg("faixa"), saida = arg("saida"), parte = arg("parte");
 if (!faixa || !(faixa in FAIXAS)) throw new Error("--faixa calibracao | conferencia | calibracao2 | conferencia2");
 if (!saida) throw new Error("--saida <arquivo.json>");
 if (!parte || !PARTES.includes(parte)) throw new Error("--parte " + PARTES.join(" | "));
-const R: RegrasLuta = { ...CV21E_TR, relogio: RELOGIO_V14 }, VERSAO = R.versaoPet;
+const R: RegrasLuta = { ...CV21E_TR, relogio: comEmpurrao(RELOGIO_V14) }, VERSAO = R.versaoPet;   /* --empurrao v18 */
 
 /* os fatores: os de hoje, com os de --fatores por cima (so as chaves conhecidas) */
 interface Fatores { lider: Record<string, number>; npc: Record<string, number>; liga: Record<string, number>; instalacao: number; fabrica: number; salao: Record<string, number> }

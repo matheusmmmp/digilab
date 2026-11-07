@@ -88,7 +88,7 @@ export type EventoPonteLuta = [tick: number, tipo: "pl", marca: { luta: true; ep
 export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem | EventoConfig | EventoLiberacao
   | EventoItem | EventoCarta | EventoFronteira | EventoFala | EventoComida | EventoBola | EventoProduto | EventoCerebro | EventoPonteLuta;
 
-export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17;
+export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18;
 
 /** estado de vida (camada 1) */
 export interface EstadoVida {

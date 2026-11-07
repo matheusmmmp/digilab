@@ -28,6 +28,7 @@ import {
   APRENDIZADO_V14, ARENAS, FATORES_V14, RELOGIO_V14, STATS, arenaDaLuta, caraterCanonico, copiarGambits, gambitsAdulto, hashSemente, jogarSerie, jogarTR, lutadorBot, perfilDe,
   type Estagio, type Forma, type ListaGambits, type Lutador, type RegrasLuta,
 } from "../../motor/index.ts";
+import { comEmpurrao } from "./empurrao.ts";
 import { ligarEscala } from "../../motor/catalogo.ts";
 
 const arg = (k: string): string | null => { const i = process.argv.indexOf("--" + k); return i < 0 ? null : process.argv[i + 1] ?? null; };
@@ -40,7 +41,7 @@ if (parte !== null && !["p1", "p2", "p34"].includes(parte)) throw new Error("--p
 /* --disparo X: o multiplicador do disparo do tempo real por cima do RELOGIO_V14 */
 const disparo = arg("disparo") === null ? {} : { disparo: Number(arg("disparo")) };
 if ("disparo" in disparo && !(disparo.disparo > 0)) throw new Error("--disparo precisa ser um numero > 0");
-const R: RegrasLuta = { ...CV21E_TR, relogio: { ...RELOGIO_V14, ...disparo } }, VERSAO = R.versaoPet;
+const R: RegrasLuta = { ...CV21E_TR, relogio: comEmpurrao({ ...RELOGIO_V14, ...disparo }) }, VERSAO = R.versaoPet;   /* --empurrao v18 */
 /* DE-10: a reserva fixa no fim da lista do pet que aprende (o candidato v14); --sem-reserva desliga */
 const RESERVA_NO_FIM = !process.argv.includes("--sem-reserva");
 const FATOR_RIVAL = JSON.parse(arg("fator-rival") ?? "{}") as Record<string, number>;

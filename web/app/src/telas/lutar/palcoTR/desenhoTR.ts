@@ -9,16 +9,15 @@ import { CTR_TR, NOME_V2, PASSO_TR_MS, type EventoTR, type LadoTR, type LutaTR }
 import { chaveUp, desenharSprite, dimSprite, quadroDoClipe, type AtlasOk, type Clipe } from "../../../atlas.ts";
 import { zoomAtual } from "../../../escala.ts";
 import { VISUAL_CENA, prontas, type IdCenaTR } from "./cenasTR.ts";
-import { IMPACTO, COR_FORTE, COR_TINTA, VIDA_NUMERO, clarao, empurraoDoPasso, faiscaDoPasso, pixelsDoTexto, textoDeDano, tremidaDoPasso, type VisualTR } from "./efeitosTR.ts";
+import { elementoDoSprite } from "./elementosTR.ts";
+import { GOLPES_RAJADA, VOO, cabecaVisivel, fracaoDaRajada, fracaoDoVoo, geometriaTR, pixelsDaCabeca, pixelsDoEstouro, pixelsDoRastro, pontoDoVoo, xTela, type GeometriaTR, type PixelTR } from "./projeteisTR.ts";
+import { IMPACTO, COR_FORTE, COR_TINTA, MOVIMENTO, VIDA_NUMERO, clarao, empurraoDoPasso, faiscaDoPasso, pixelsDoTexto, poeiraDoPasso, puloDaQueda, textoDeDano, tremidaDoPasso, type VisualTR } from "./efeitosTR.ts";
 
 /** os efeitos de impacto (so vista) ficam em efeitosTR.ts; estes nomes continuam saindo daqui */
 export { aplicarEventosTR, visualNovoTR, type NumeroTR, type VisualTR } from "./efeitosTR.ts";
 
 /** cores do chao liso (o recuo quando o mapa nao carrega) */
 const COR = { ceuA: "#cfe6f5", ceuB: "#eaf5fb", chaoA: "#9fcf7a", chaoB: "#8cc068", tinta: "#1d2433", azul: "#2c73e0", vermelho: "#d6336c", cura: "#2f9e44" };
-/** o chao do motor (combate_tr: 240 +- 190 px) ocupa esta fracao da largura do palco, centrado */
-const FRACAO_CHAO = .84;
-const ESQ = CTR_TR.centro - CTR_TR.meiaLargura, LARG = 2 * CTR_TR.meiaLargura;
 /** os golpes (Attack_1), os movimentos (Run) e as posturas (a etiqueta sobre a cabeca) */
 const GOLPES = ["golpe_rapido", "fintar", "pesado", "disparo", "investida"];
 const MOVIMENTOS = ["avancar", "recuar"];
@@ -30,6 +29,8 @@ export const movimentoReduzido = (): boolean => typeof matchMedia === "function"
 /** o clipe do lado agora e o tempo dentro dele (ms da luta) */
 export function clipeDoLado(l: LadoTR, passo: number, koEm: number | null): { clipe: Clipe; t: number } {
   if (l.hp <= 0) return { clipe: "Die", t: (passo - (koEm ?? passo)) * PASSO_TR_MS };
+  /* a queda do empurrao (a v18): o Stun desde o passo em que caiu, ate levantar */
+  if (l.quedaDe >= 0 && passo >= l.quedaDe && passo < l.atordoadoAte) return { clipe: "Stun", t: (passo - l.quedaDe) * PASSO_TR_MS };
   if (passo < l.atordoadoAte) return { clipe: "Stun", t: (passo - (l.atordoadoAte - CTR_TR.atordoaInterrupcao)) * PASSO_TR_MS };
   const a = l.acao;
   if (a && a.nome === "investida" && !a.feito) return { clipe: "Run", t: (passo - a.inicio) * PASSO_TR_MS };
@@ -47,7 +48,21 @@ function ajustar(cv: HTMLCanvasElement): { K: number; W: number; H: number } {
   if (cv.width !== bw || cv.height !== bh) { cv.width = bw; cv.height = bh; cv.style.width = W + "px"; cv.style.height = H + "px"; }
   return { K, W, H };
 }
-const xTela = (x: number, W: number): number => W * (1 - FRACAO_CHAO) / 2 + (x - ESQ) / LARG * W * FRACAO_CHAO;
+
+/** desenha pixels de efeito (projeteisTR.ts) em volta de (x, y) px de CSS, na grade dos pixels do sprite: cada pixel de efeito tem
+    VOO.pixel pixels do sprite (e px do canvas cada, inteiro), e pelo menos VOO.pixelMinCss px de CSS (um sprite grande deixa a escala em 1);
+    dir -1 espelha */
+function pintar(cx: CanvasRenderingContext2D, px: readonly PixelTR[], x: number, y: number, g: GeometriaTR, dir: number): void {
+  const x0 = Math.round(x * g.K), y0 = Math.round(y * g.K), u = g.e * Math.max(VOO.pixel, Math.ceil(VOO.pixelMinCss * g.K / g.e));
+  for (const luz of [true, false]) {
+    cx.globalCompositeOperation = luz ? "lighter" : "source-over";
+    for (const p of px) if (p.luz === luz) {
+      const t = p.tam * u; cx.globalAlpha = p.alfa; cx.fillStyle = p.cor;
+      cx.fillRect(x0 + dir * p.dx * u - (dir < 0 ? t - u : 0), y0 + p.dy * u, t, t);
+    }
+  }
+  cx.globalCompositeOperation = "source-over"; cx.globalAlpha = 1;
+}
 
 /** o cenario: o ceu (degrade), o fundo do mapa e o piso; devolve se faltou alguma imagem do mapa */
 function desenharCenario(cx: CanvasRenderingContext2D, id: IdCenaTR, Wp: number, Hp: number, chao: number): boolean {
@@ -69,21 +84,14 @@ function desenharCenario(cx: CanvasRenderingContext2D, id: IdCenaTR, Wp: number,
 /** desenha a luta (ou a previa, sem simulacao: os dois no comeco, em Idle). Devolve se faltou imagem do mapa (o palco avisa) */
 export function desenharLutaTR(cv: HTMLCanvasElement, c: CenaDesenho, a: AtlasOk | null): boolean {
   const cx = cv.getContext("2d"); if (!cx) throw new Error("canvas 2d indisponível");
-  const { K, W, H } = ajustar(cv), Wp = cv.width, Hp = cv.height, PES = H * .8, ALT_MAX = H * .45;
+  const { K, W, H } = ajustar(cv), Wp = cv.width, Hp = cv.height;
   cx.setTransform(1, 0, 0, 1, 0, 0); cx.clearRect(0, 0, Wp, Hp);
   const reduzido = movimentoReduzido(), faltou = desenharCenario(cx, c.cena, Wp, Hp, Math.round(H * .62 * K));
   cx.imageSmoothingEnabled = false;
   const passoLuta = c.sim ? c.sim.S.passo : 0, passo = passoLuta + c.visual.extra;
   const xs = c.sim ? c.sim.S.L.map(l => l.x) : [CTR_TR.centro - CTR_TR.entrada, CTR_TR.centro + CTR_TR.entrada];
-  const alturas = a ? [c.A, c.B].map(L => dimSprite(a.dados, L.sprite)[1]) : [48, 48];
-  /* a escala inteira dos sprites no chao novo (B3, palco a tela inteira): limitada pela altura e tambem pela largura, para os dois nao
-     se cobrirem numa tela estreita (390 px: 2; 1280 e 1920 px: 3) */
-  const larguraMax = a ? Math.max(...[c.A, c.B].map(L => dimSprite(a.dados, L.sprite)[0])) : 28;
-  const escLuta = Math.max(1, Math.min(3, Math.floor(ALT_MAX / Math.max(...alturas)), Math.floor(W / (larguraMax * 1.6))));
-  /* o centro de cada lutador na tela (px de CSS): o corpo do motor tem o raio CTR_TR.raio e o sprite e mais largo, entao a frente do sprite
-     fica na frente do corpo (o excesso vai para tras) e os dois nao se sobrepoem no contato */
-  const larguras = a ? [c.A, c.B].map(L => dimSprite(a.dados, L.sprite)[0]) : [28, 28], raioTela = CTR_TR.raio / LARG * W * FRACAO_CHAO;
-  const centros = xs.map((x, i) => { const exc = Math.max(0, larguras[i] * Math.max(1, Math.floor(escLuta * K)) / K / 2 - raioTela); return xTela(x, W) + (i ? exc : -exc); });
+  /* a escala inteira dos sprites, o centro de cada lutador e o topo (projeteisTR.ts, geometriaTR: a mesma conta que o teste do projetil usa) */
+  const geo = geometriaTR(W, H, K, a ? [c.A, c.B].map(L => dimSprite(a.dados, L.sprite)) : [[28, 48], [28, 48]], xs), { PES, centros } = geo;
   /* as sombras */
   cx.fillStyle = "rgba(0,0,0,.35)";
   for (const x of centros) { cx.beginPath(); cx.ellipse(x * K, PES * K, 34 * K, 6 * K, 0, 0, Math.PI * 2); cx.fill(); }
@@ -92,7 +100,7 @@ export function desenharLutaTR(cv: HTMLCanvasElement, c: CenaDesenho, a: AtlasOk
   [c.A, c.B].forEach((L, i) => {
     const x = centros[i], lado = c.sim?.S.L[i] ?? null;
     if (!a) { cx.fillStyle = i ? COR.vermelho : COR.azul; cx.fillRect((x - 14) * K, (PES - 40) * K, 28 * K, 40 * K); topo.push(PES - 44); return; }
-    const k = chaveUp(a.dados, L.sprite), s = a.dados.sprites[k], [w, h] = dimSprite(a.dados, L.sprite), e = Math.max(1, Math.floor(escLuta * K));
+    const k = chaveUp(a.dados, L.sprite), s = a.dados.sprites[k], [w, h] = dimSprite(a.dados, L.sprite), e = geo.e;
     const { clipe, t } = lado ? clipeDoLado(lado, passoLuta, c.koEm[i]) : { clipe: "Idle" as Clipe, t: performance.now() };
     let iq = 0;
     if (s?.clipes) { const cl = s.clipes[clipe]; if (!cl) throw new Error(`clipe ${clipe} indisponível para ${L.sprite}`); iq = quadroDoClipe(cl.ms, cl.loop, t); }
@@ -100,22 +108,69 @@ export function desenharLutaTR(cv: HTMLCanvasElement, c: CenaDesenho, a: AtlasOk
     if (!s?.clipes && lado && lado.hp <= 0) cx.globalAlpha = .45;
     const opc = { sombria: L.sombra, espelho: i === 1, ...(s?.clipes ? { clipe } : {}) }, dx = Math.round(empAlvo(i) * K);
     empurros[i] = dx / K;
+    /* a queda (a v18): quem cai sobe num arco enquanto o motor o desliza para tras; o x e sempre o do motor */
+    const dy = reduzido || !lado ? 0 : -Math.round(puloDaQueda(passoLuta, lado.quedaDe, lado.deslizeAte) * K);
+    /* o rastro da investida: copias mais apagadas atras de quem arranca, so no caminho ja feito (desde o x0) */
+    const inv = lado?.acao?.nome === "investida" && !lado.acao.feito ? lado.acao : null;
+    if (!reduzido && inv && c.sim) MOVIMENTO.rastroAlfa.forEach((alfa, k) => {
+      const atras = (k + 1) * MOVIMENTO.rastroPassos * c.sim!.S.C.arrancada, rumo = i ? -1 : 1;
+      if (rumo * (lado!.x - inv.x0) < atras) return;
+      const xr = centros[i] + xTela(lado!.x - rumo * atras, W) - xTela(lado!.x, W);
+      cx.globalAlpha = alfa; desenharSprite(cx, a, L.sprite, xr * K - w * e / 2, PES * K - h * e, e, iq, opc); cx.globalAlpha = 1;
+    });
     if (!reduzido && c.sim && clarao(c.visual, passo, i)) {
       /* o clarao: o sprite vira branco (so onde ha pixel) numa folha a parte, na mesma escala inteira */
       const m = 4 * e, f = document.createElement("canvas"); f.width = w * e + 2 * m; f.height = h * e + 2 * m;
       const fx = f.getContext("2d"); if (!fx) throw new Error("canvas 2d indisponível");
       desenharSprite(fx, a, L.sprite, m, m, e, iq, opc);
       fx.globalCompositeOperation = "source-atop"; fx.fillStyle = "#fff"; fx.fillRect(0, 0, f.width, f.height);
-      cx.imageSmoothingEnabled = false; cx.drawImage(f, Math.round(x * K - w * e / 2) - m + dx, Math.round(PES * K - h * e) - m);
-    } else desenharSprite(cx, a, L.sprite, x * K - w * e / 2 + dx, PES * K - h * e, e, iq, opc);
+      cx.imageSmoothingEnabled = false; cx.drawImage(f, Math.round(x * K - w * e / 2) - m + dx, Math.round(PES * K - h * e) - m + dy);
+    } else desenharSprite(cx, a, L.sprite, x * K - w * e / 2 + dx, PES * K - h * e + dy, e, iq, opc);
     cx.globalAlpha = 1;
     topo.push(PES - h * e / K);
   });
-  /* os projeteis em voo */
-  if (c.sim) for (const pr of c.sim.S.projeteis) {
-    cx.fillStyle = pr.de === 0 ? COR.azul : COR.vermelho;
-    cx.beginPath(); cx.arc(xTela(pr.x, W) * K, (PES - 28) * K, 5 * K, 0, Math.PI * 2); cx.fill();
+  /* a poeira nos pes (a v18 e a investida): na arrancada, atras de quem arranca; no deslize do empurrao, na frente de quem e empurrado (o
+     lado de onde veio o golpe). Pixels inteiros, sem acaso */
+  if (!reduzido && c.sim) c.sim.S.L.forEach((l, i) => {
+    const inv = l.acao?.nome === "investida" && !l.acao.feito ? l.acao : null, desliza = passoLuta < l.deslizeAte;
+    if (!inv && !desliza) return;
+    const idade = inv ? passoLuta - inv.inicio : passoLuta - (l.deslizeAte - c.sim!.S.C.empurraoAlvo!.deslize),
+      atras = i ? 1 : -1, sinal = inv ? atras : -atras, ps = Math.max(1, Math.round(2 * K));
+    cx.fillStyle = "rgba(214,196,160,.8)";
+    for (const p of poeiraDoPasso(idade)) cx.fillRect(Math.round((centros[i] + sinal * (14 + p.dx * 2)) * K), Math.round((PES - 2 - p.dy * 2) * K), ps * p.tam, ps * p.tam);
+  });
+  /* os projeteis em voo (E2): da boca de quem atira a frente do alvo, na cor e na forma do elemento, com rastro e halo de luz; a cabeca fica
+     na tela pelo menos VOO.minVisivel passos (o voo no motor pode durar so 5) */
+  const elementos = [elementoDoSprite(c.A.sprite), elementoDoSprite(c.B.sprite)];
+  let cabecas = 0, meioDoVoo = 0;
+  if (c.sim) for (const o of c.visual.voos) {
+    const dir = o.de === 0 ? 1 : -1, k = reduzido ? VOO.rastroReduzido : VOO.rastro;
+    /* o rastro: as posicoes de 1 a k passos atras; depois do acerto ele se recolhe no ponto do acerto e some em VOO.rastroFica passos */
+    if (o.tFim === null || passo < o.tFim + VOO.rastroFica) for (let j = k; j >= 1; j--) {
+      const f = fracaoDoVoo(o, passo - j); if (f === null) continue;
+      const pt = pontoDoVoo(geo, o.de, f); pintar(cx, pixelsDoRastro(elementos[o.de], j, k, passo, reduzido), pt.x, pt.y, geo, dir);
+    }
+    if (!cabecaVisivel(o, passo)) continue;
+    const f = fracaoDoVoo(o, passo)!, pt = pontoDoVoo(geo, o.de, f); cabecas++;
+    if (f >= .3 && f <= .7) meioDoVoo++;
+    pintar(cx, pixelsDaCabeca(elementos[o.de], passo, reduzido), pt.x, pt.y, geo, dir);
   }
+  /* para os testes e as capturas: as cabecas desenhadas neste quadro e as que estao no meio do caminho */
+  /* a rajada dos golpes corpo a corpo que acertam (E2): da boca de quem bateu a frente do alvo, na cor do elemento, com o rastro do voo */
+  let rajadas = 0;
+  if (c.sim) for (const im of c.visual.impactos) {
+    if (!im.golpe || !GOLPES_RAJADA.includes(im.golpe)) continue;
+    const de = 1 - im.lado, idade = passo - im.t0, f = fracaoDaRajada(idade); if (f === null) continue;
+    /* a rajada e um feixe: o dobro dos pontos do rastro e um pixel de efeito mais grosso, da boca ate a cabeca */
+    const dir = de === 0 ? 1 : -1, k = 2 * (reduzido ? VOO.rastroReduzido : VOO.rastro);
+    for (let j = k; j >= 1; j--) {
+      const fr = Math.max(0, f * (1 - j / (k + 1))), pt = pontoDoVoo(geo, de, fr);
+      pintar(cx, pixelsDoRastro(elementos[de], j, k, passo, reduzido).map(p => ({ ...p, tam: p.tam + 1 })), pt.x, pt.y, geo, dir);
+    }
+    const pt = pontoDoVoo(geo, de, f); pintar(cx, pixelsDaCabeca(elementos[de], passo, reduzido), pt.x, pt.y, geo, dir); rajadas++;
+  }
+  cv.dataset.rajadas = String(rajadas);
+  cv.dataset.projeteis = String(cabecas); cv.dataset.projeteisMeio = String(meioDoVoo);
   /* a postura sobre a cabeca (defende, esquiva, prepara o pesado...) */
   cx.font = `${Math.round(11 * K)}px system-ui, sans-serif`; cx.textAlign = "center";
   if (c.sim) c.sim.S.L.forEach((l, i) => {
@@ -129,6 +184,8 @@ export function desenharLutaTR(cv: HTMLCanvasElement, c: CenaDesenho, a: AtlasOk
   if (c.sim) for (const im of c.visual.impactos) {
     const ps = Math.max(1, Math.round(3 * K)), dir = im.lado === 0 ? 1 : -1, xc = Math.round((centros[im.lado] + empurros[im.lado] + dir * 14) * K), yc = Math.round((PES - (topo.length ? (PES - topo[im.lado]) / 2 : 20)) * K);
     for (const p of faiscaDoPasso(im, passo)) { cx.fillStyle = p.cor; cx.fillRect(xc + p.dx * ps * 2, yc + p.dy * ps * 2, ps * (im.forte ? 2 : 1), ps * (im.forte ? 2 : 1)); }
+    /* o estouro na cor do elemento de quem bateu (E2), por cima da faisca */
+    pintar(cx, pixelsDoEstouro(elementos[1 - im.lado], passo - im.t0, im.forte, reduzido), xc / K, yc / K, geo, dir);
   }
   /* os numeros que sobem: o dano em fonte de pixel com contorno (o forte, maior e amarelo); cura, erro e interrompido em texto */
   cx.font = `bold ${Math.round(13 * K)}px system-ui, sans-serif`;
@@ -148,6 +205,8 @@ export function desenharLutaTR(cv: HTMLCanvasElement, c: CenaDesenho, a: AtlasOk
   const t = reduzido || !c.sim ? { x: 0, y: 0 } : tremidaDoPasso(c.visual, passo);
   cv.dataset.tremida = `${t.x},${t.y}`;
   cv.dataset.impactos = String(c.sim ? c.visual.impactos.filter(i => passo - i.t0 < IMPACTO.durFaisca).length : 0);
+  /* os estouros por elemento ja depois do clarao (E2; para as capturas) */
+  cv.dataset.estourosMeio = String(c.sim ? c.visual.impactos.filter(i => passo - i.t0 >= IMPACTO.clarao && passo - i.t0 < VOO.durImpacto - 4).length : 0);
   cv.dataset.tremidaMax = String(Math.max(Number(cv.dataset.tremidaMax ?? 0), Math.abs(t.x), Math.abs(t.y)));
   if (t.x || t.y) {
     const f = document.createElement("canvas"); f.width = cv.width; f.height = cv.height;
