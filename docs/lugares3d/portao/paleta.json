@@ -1,5 +1,87 @@
 {
  "fonte": "as regioes do concept 1 (pedra) e as cores dominantes da textura da Meshy (mediana em 12 cores): a pedra clara, a pedra areia e a sombra da pedra, o estandarte vermelho, a borda dourada, o portal ciano e as linhas claras da grade; PROPOSTO",
- "paleta": [[226, 224, 216], [206, 194, 176], [160, 162, 160], [128, 28, 34], [228, 186, 82], [18, 206, 198], [110, 240, 230]],
- "nomes": ["pedra", "pedra areia", "pedra sombra", "estandarte", "dourado", "portal", "portal claro"]
+ "paleta": [
+  [
+   226,
+   224,
+   216
+  ],
+  [
+   206,
+   194,
+   176
+  ],
+  [
+   160,
+   162,
+   160
+  ],
+  [
+   128,
+   28,
+   34
+  ],
+  [
+   228,
+   186,
+   82
+  ],
+  [
+   18,
+   206,
+   198
+  ],
+  [
+   110,
+   240,
+   230
+  ]
+ ],
+ "nomes": [
+  "pedra",
+  "pedra areia",
+  "pedra sombra",
+  "estandarte",
+  "dourado",
+  "portal",
+  "portal claro"
+ ],
+ "paleta_ilha": [
+  [
+   212,
+   206,
+   194
+  ],
+  [
+   178,
+   164,
+   146
+  ],
+  [
+   120,
+   124,
+   132
+  ],
+  [
+   196,
+   44,
+   52
+  ],
+  [
+   246,
+   184,
+   40
+  ],
+  [
+   0,
+   196,
+   190
+  ],
+  [
+   96,
+   236,
+   226
+  ]
+ ],
+ "fonte_ilha": "estilo_ilha.py (secao 12 da tarefa): cada cor mais escura e mais saturada, perto dos kits CC0 da Ilha vistos na cena com o toon (o marrom dos troncos, o cinza-azulado das pedras); PROPOSTO, SEM FONTE"
 }

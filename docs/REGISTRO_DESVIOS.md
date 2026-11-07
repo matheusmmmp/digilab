@@ -535,5 +535,6 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-07 — CONVERSA_PET, DC3a, o código da rede escolhendo falar (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc3a-codigo`)](registro/2026-11.md)
 - [2026-11-07 — LUTA_EFEITOS, E3 a telegrafia e o chão (worker, Claude Code, Opus 5.5, branch `v3-luta-efeitos-e3`)](registro/2026-11.md)
 - [2026-11-07 — PEGAR_PET, P1, o motor do levar pet (worker da P1, Claude Code, Opus 5.5, branch `v3-pegar-pet-p1`)](registro/2026-11.md)
+- [2026-11-07 — LUGARES_3D, os lugares na ilha e no estilo dela (Gerente da frente, Claude Code, Opus 5.5, branch `v3-lugares-na-ilha`)](registro/2026-11.md)
 - [2026-11-07 — PEGAR_PET, P2, a tela e a animação de pegar o pet (worker da P2, Claude Code, Opus 5.5, branch `v3-pegar-pet-p2`)](registro/2026-11.md)
 - [2026-11-07 — CONVERSA_PET, DC3a, o adendo 1 do plano (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc3a-codigo`)](registro/2026-11.md)
