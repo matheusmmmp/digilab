@@ -1,7 +1,7 @@
 # TAREFA V3 — PEGAR_PET (2026-11-07)
 
 Coordenador: a sessão de planejamento do Claude Code. Worker: Claude Code (Opus 5.5), uma sessão por etapa. Worktree e branch:
-`v3-pegar-pet` (a P1 no branch `v3-pegar-pet-p1`). Status: EM ANDAMENTO (a P1 entregue; a P2 aberta).
+`v3-pegar-pet` (a P1 no branch `v3-pegar-pet-p1`). Status: EM ANDAMENTO (a P1 e a P2 entregues, nos PRs).
 
 Categoria: implementacao. Origem: Matheus, 2026-11-07: o dono pega o pet com o mouse, o pet se balança agoniado e com careta, e cai onde
 for solto.
@@ -141,3 +141,27 @@ Worker: Claude Code (Opus 5.5), branch `v3-pegar-pet-p1`, de `origin/main` em `3
 - **Os desvios:** `docs/registro/2026-11.md`, seção "PEGAR_PET, P1" (D-PP-P1-1 a 7).
 - **Para a P2:** só a v19 é levada; um pet v18 vivo não (D-PP-P1-7). A tela grava `Motor.levarPet(x, y)` ao soltar, com `x` e `y`
   inteiros, e não precisa limitar o ponto ao mapa (o motor limita); a sombra do pouso usa o mesmo `noMapa`.
+
+## 10. Resumo da P2, a tela e a animação (2026-11-07)
+
+Worker: Claude Code (Opus 5.5), branch `v3-pegar-pet-p2`, de `origin/v3-pegar-pet-p1` em `695a0d12` (depende do #673).
+
+- **O gesto** (`web/app/src/telas/pet/PegarPet.tsx`, no modelo do `ArrastoBola`): um pointerdown no sprite e um arrasto de mais de 6 px
+  pegam o pet (PP-5), com o mouse e com o dedo. O toque rápido segue sendo carinho: o `ToquePet` larga o toque quando o pet está na mão
+  (ele fica ligado antes do `PegarPet` no mesmo alvo). Não pega: o pet dormindo (PP-2), no ovo, morto, de versão anterior à v19, com um
+  painel por cima ou com a bola na mão.
+- **A câmera:** a marca `CENA.petNaMao` (`cenaEstado.ts`) para a câmera livre (`orbita.ts`: não gira nem aproxima) e prende a câmera e o
+  foco da dobra (`ilha/vista.ts`), então o `paraMundo` não muda sob o dedo.
+- **Na mão** (`ilha/mao.ts` e `ilha/papel.ts`): o papel sobe do chão, segue o ponteiro, balança como um pêndulo preso pelo alto, com um
+  tremor de 1 texel, e faz careta (PP-3): o `Medo` com a gota nas formas com reações de rosto, o `Stun` nas outras. Nenhuma parte nem
+  sprite novo. A sombra fica no chão onde ele vai cair, já no mapa (PP-4).
+- **Ao soltar:** o `Motor.levarPet(x, y)` por `mudarMotor()`, no ponto do chão sob o pé; a queda e um quique pequeno; o desenho começa onde
+  o motor o pôs (`Seguidor.pular`), sem correr de volta. Com movimento reduzido, só a careta.
+- **PP-1:** a tela só grava o "lp"; nada no humor, na química, no aprendizado, no contato ou no cuidado. O motor não mudou além da P1.
+- **O gate:** `npx vitest run --maxWorkers=4`: 107 arquivos, 1 052 testes (os 11 novos em `web/app/test/pegar_pet.test.ts`: o arrasto
+  acima de 6 px pega, o toque curto é carinho, o pet dormindo não é pego, as contas do pêndulo, do tremor e do quique); `npm run tipos`
+  passa; o e2e `web/app/e2e/pegar_pet.spec.ts` (1280 e 390 px: o "lp" gravado e o pet do motor no lugar novo) passa com o
+  `vida_pet_cena` e o `sprites_comer`.
+- **As capturas** (aprovadas pelo Matheus): `web/app/e2e_capturas/pegar_pet_p2.spec.ts`; os GIFs do bebê (Stun) e do Rookie (Medo) em 390
+  px (com o dedo) e 1280 px, e as folhas nas peles vidro e militar, fora do repositório (na pasta de notas das sessões).
+- **Os desvios:** `docs/registro/2026-11.md`, seção "PEGAR_PET, P2" (D-PP-P2-1 a 7).
