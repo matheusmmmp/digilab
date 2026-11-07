@@ -1,7 +1,7 @@
 {
   "artefatos_sha256": {
-    "medidas.json": "816070100ade38e32c613d223caae40847bdaf416e6310bc64e72c027b180fcf",
-    "resultado.json": "67274be36e674c5c378c7edc2f7b83f0fe635e2640c24abb9a8080f00b0c0942"
+    "medidas.json": "a83238628544a5f9778dec7918be0ce0f70436c922d82a913046834e9d3d284a",
+    "resultado.json": "48781d28f3ca3aa2864a25ca5f73c5ead5ecb55d150cbd58e12286158dce9418"
   },
   "bracos": {
     "LAB": {
@@ -74,19 +74,19 @@
   "config_sha256": "b050114b2488b685fa9e7353288d0cac9bc533e9e75c1c61cd142ebfaab2021c",
   "custo": {
     "LAB": {
-      "cpu_media_s": 2.69375,
-      "parede_media_s": 2.7445817125002576,
+      "cpu_media_s": 2.648046875,
+      "parede_media_s": 2.6764599174994146,
       "vidas": 40
     },
     "LAB+F": {
-      "cpu_media_s": 2.941796875,
-      "parede_media_s": 3.047658777500055,
+      "cpu_media_s": 2.746875,
+      "parede_media_s": 2.8767912850002175,
       "vidas": 40
     }
   },
-  "duracao_s": 91.31577730178833,
+  "duracao_s": 87.24441766738892,
   "fase": "conversa_dc3",
-  "fim": "2026-11-07T10:25:43",
+  "fim": "2026-11-07T15:40:09",
   "fins_conhecidos": {
     "LAB": [
       "achou",
@@ -103,23 +103,23 @@
       "trocou"
     ]
   },
-  "git_head": "e8548ddb6aff50cac5c6151c55d97e8874050373",
+  "git_head": "a8142f6af353902049cbe09d2ce81b4c2f0176ba",
   "git_limpo": false,
-  "inicio": "2026-11-07T10:24:12",
+  "inicio": "2026-11-07T15:38:42",
   "lugar": "comedouro",
   "modo": "fumaca",
   "plano": "docs/PLANO_ANALISE_V3_CONVERSA_DC3.md",
-  "plano_sha256": "a05370a12c587589490367d650bc6c2ffc8ca91d46762c1e4999519a1a4ce210",
+  "plano_sha256": "9f3ca99ea3f904f3f0cd37e715653f58be00fd900d159872ce0c7b800794af20",
   "processos": 4,
   "python": "3.13.0",
   "sha256": {
     "digilab/config.py": "13ac680575f2fe0fc18281ca590f598260d6ea4b7d3bbee9ed3b2c247de89ea9",
     "digilab/digibrain/__init__.py": "3d50ce23bd4001f607018485282fbea22b021d7e4f825c070b9be87197cb2b55",
     "digilab/digibrain/_comum.py": "164ef9c3e5781f68a711d50de9a014751073ea7343540e5d6af9feff0a81d160",
-    "digilab/digibrain/adapt.py": "041bdb9610477e9266182d874b2fe9741b7d71e2b0e382cf890fa72b3c982766",
+    "digilab/digibrain/adapt.py": "ea7a3edd0d5ad1dc18788d9b229ab7e49577c906a66f93ca6f44deb55c606ece",
     "digilab/digibrain/afeto.py": "4b1b8d9caf8cf5de40048f9689d0b7fc844bba59a58ac044a2bcaed073ee2f99",
     "digilab/digibrain/arb.py": "f5465f353366a81da3fd32b84377d40988ff46d60dda17237ad47c3053d3fa64",
-    "digilab/digibrain/decodificador.py": "8c810e5aec5d3f938683229b2f0acfe2b0876a62dcef7d0a2a3f9238d04a96bd",
+    "digilab/digibrain/decodificador.py": "743764f0b230862f88d99ea3e997b4b27b1da6604b0f796fbb912cd4577df1f8",
     "digilab/digibrain/estado.py": "76a5f54acccdee3ec3305d6127f2f459b67ce615e0970c3e350955150b34b3c6",
     "digilab/digibrain/ganchos.py": "595e7f57fddb5e3d06bf2aa939acd59dce379843b503a7f04021821b2328a224",
     "digilab/digibrain/impulso.py": "afe1b803726ab72863fdc0f4150e7321f42a90ec63840b60106fb80817031340",
@@ -129,13 +129,13 @@
     "digilab/digibrain/sens.py": "4b0ab309d86c7bbdef27f9338a715a72e29691df5786c075f4933c1b0d107f77",
     "digilab/donos.py": "282d197c336bf7e9027209a165d6c632570e2c6da7eca41b6d917edc89754b70",
     "digilab/engine.py": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
-    "digilab/metrics.py": "2b825dd97ae34e989e42cf113c3e99f923f74bc0c0a350099eff932dc194c82c",
-    "digilab/mundo.py": "9716bb8edcbe2394a87dc81f468a8f40a361cf578b63186b51768e6221e964c1",
+    "digilab/metrics.py": "9cff75ae75e5111ca0459c398126003c4090d85ecef8a8cb7f0a5fa491208e6b",
+    "digilab/mundo.py": "a759ec186ed9233baa5d6e583ab4cb836ed4b46c2b50df762eb4fd0b58a688a2",
     "experiments/configs/v3_conversa_dc3/conversa_dc3.json": "b9ee63a71f6d9ebbf72b48754c562b0d47e275e61e183b0ccd4903f74996dcae",
     "experiments/run_v2_digibrain_prototipo.py": "e3071e6729a6a9dade31946c1372606215bc68b10e0c6f72584d1fa3ba45ae63",
     "experiments/run_v2_longe_regular.py": "5583a217edd04ad2493c91c23d67d913605adb780699a14a9495e6b58a9a900c",
     "experiments/run_v2_memoria_autobio.py": "dcc83a04f88db17e777a66d95b467a3e15ff24e59a5c7ab510db0a7925b30cf0",
-    "experiments/run_v3_conversa_dc3.py": "148f56be4d4a922a515338ddee531e13e748e63c808737f385a36c4f2f904d69"
+    "experiments/run_v3_conversa_dc3.py": "fe661aa83219a6bbdc8dac5b313ea0873746cf7d34b1a0434b0c7f121271d53c"
   },
   "unidades": [
     {
@@ -169,5 +169,5 @@
       "semente": 16393802630952801052
     }
   ],
-  "vidas_parede_s": 91.13710960000026
+  "vidas_parede_s": 86.9834520000004
 }
