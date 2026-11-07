@@ -1,0 +1,18 @@
+DigiLab: a barraca do Tamer, o lugar do Diario (barraca.gltf, barraca.bin, barraca_cor.png)
+
+Procedencia: item gerado por IA, com o gerador Meshy (meshy.ai), no plano Pro pago, na conta do Matheus, em 2026-11-07.
+Pelos termos de uso da Meshy (atualizados em 2026-09-19, secao 3.2), a saida de um plano pago e do cliente.
+Os termos proibem tirar a marca de IA (secao 2.4): a marca fica no asset.extras do barraca.gltf e neste arquivo.
+
+Como foi feito (docs/TAREFA_V3_LUGARES_3D.md e docs/lugares3d/barraca/ no repositorio):
+- concept: Meshy Image to Image (nano-banana-2), com duas referencias de estilo geradas pela propria Meshy para o DigiLab (a maquete B do
+  mapa digital e o concept da geladeira), sem o pet e sem imagem de terceiros; sem texto, sem marca, sem simbolo; o concept 2 (o domo
+  digital) escolhido pelo Matheus;
+- vistas: Meshy Image to Image com multivista, a partir do concept;
+- malha: Meshy Multi-Image to 3D (remesh em triangulos, so a cor);
+- conserto no Blender 4.5 LTS e em Python, por script: a malha da Meshy fica como veio; a cor e chapada nas cores do concept, pelo matiz, com uma
+  cor por face.
+As tarefas da Meshy (concept, vistas, malha) estao no asset.extras do barraca.gltf.
+
+Uso: no jogo DigiLab, publicado. Credito: "Barraca do Tamer gerada com a Meshy (meshy.ai)".
+Aprovacao: o Matheus escolheu o concept em 2026-11-07; a aprovacao da previa fica no PR da barraca.
