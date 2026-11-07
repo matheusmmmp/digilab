@@ -544,4 +544,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-07 — CONVERSA_PET, DC3b e DC3c, a run única e o resultado (Gerente da frente, Claude Code, Opus 5.5, branch `v3-conversa-dc3c-resultado`)](registro/2026-11.md)
 - [2026-11-07 — INFRA_AGENTES, o H11 do índice de desvios (especificador da frente, Claude Code, Opus 5.5, branch `v3-infra-agentes-h11`)](registro/2026-11.md)
 - [2026-11-07 — INDIVIDUALIDADE, I0: as decisões e a conferência das sondas (Claude Code, Opus 5.5, branch `v3-individualidade-i0`)](registro/2026-11.md)
+- [2026-11-07 — LUTA_EFEITOS, E5 o nocaute e a câmera (worker, Claude Code, Opus 5.5, branch `v3-luta-efeitos-e5`)](registro/2026-11.md)
 - [2026-11-07 — CONVERSA_PET, DC3d, o porte da fala com conteúdo ao jogo (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc3d-porte`)](registro/2026-11.md)
