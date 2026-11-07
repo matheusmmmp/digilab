@@ -300,10 +300,16 @@ def test_a_celula_com_none_fica_fora_da_media_da_unidade():
 
 
 # ================================================================== a trava e a fumaca
-def test_a_config_da_run_recusa_rodar_antes_do_registro_e_a_fumaca_passa():
+def test_a_config_da_run_recusa_rodar_antes_do_registro_e_a_fumaca_passa(monkeypatch):
     cfg = json.loads((RAIZ / "experiments/configs/v3_conversa_dc3/conversa_dc3.json").read_text(encoding="utf-8"))
-    with pytest.raises(RuntimeError, match="registro da run"):
+    # o registro (secao 13) entrou no plano no #679 e a run ja rodou: a trava e conferida no plano sem a secao 13, como era antes dela
+    plano = dc._plano()
+    i = plano.find("\n" + dc.REGISTRO_TITULO)
+    assert i >= 0
+    monkeypatch.setattr(dc, "_plano", lambda: plano[:i])
+    with pytest.raises(RuntimeError, match="registro da run .* nao esta no plano"):
         dc.modo_da_config(cfg)
+    monkeypatch.undo()
     fum = json.loads((RAIZ / "experiments/configs/v3_conversa_dc3/varredura.json").read_text(encoding="utf-8"))
     assert dc.modo_da_config(fum) == "fumaca"
     with pytest.raises(dc.bv.SementeSemPlano):
