@@ -9,6 +9,9 @@
    (so vista: o ganho e o do motor, na hora; docs/TAREFA_V3_HABITAT_OBJETOS.md).
    `cocoNoChao`: a ilha desenha a sujeira como cocos 3D no chao (ilha/cocos.ts); o PalcoPet deixa de desenhar o coco 2D ao lado do pet.
    `cabeca`: com um clipe de reacao de rosto (reacao.ts), o alto da cabeca [x, y] em px de CSS da cena, de onde sai o emote dela (papel.ts); null fora dele.
+   `petNaMao`: o dono esta segurando o pet (PegarPet.tsx; docs/TAREFA_V3_PEGAR_PET.md, P2): a camera livre nao gira, e a camera e o foco da
+   dobra param de seguir o pet (o paraMundo nao muda sob o dedo). `maoPet`: com ele na mao, o ponto do cliente (px) onde fica o pe do pet
+   (o ponteiro mais a distancia do pe ao ponteiro quando ele foi pego); a vista desenha o pet ali, suspenso, e a sombra onde ele vai cair.
    `zzX`: com o quadro Dormir, o x (px de CSS da cena) do topo da cabeca, de onde sai o "zz" (papel.ts); null fora dele. */
 export interface VistaDoMundo {
   /** o ponto do cliente (px) no chao, em subunidades inteiras do mapa; null fora do mapa ou fora do chao */
@@ -19,6 +22,9 @@ export interface VistaDoMundo {
   pet: [number, number];
   /** onde a vista desenha a bola agora (subunidades, interpolado); sem ele, onde o motor diz */
   bola?: [number, number];
+  /** o pet na mao (a ilha 3D; a reserva nao tem): o ponto do chao (subunidades inteiras, SEM limitar ao mapa) em que cai o pe do pet
+      desenhado no ponto do cliente (px) `pe`, ja descontada a altura em que a mao o segura; null fora do chao (o ceu, fora da cena) */
+  pousoEm?: (peX: number, peY: number) => [number, number] | null;
 }
 export const CENA: {
   modo3d: boolean;
@@ -28,8 +34,10 @@ export const CENA: {
   mundo: VistaDoMundo | null;
   coberto: boolean;
   bolaNaMao: boolean;
+  petNaMao: boolean;
+  maoPet: { x: number; y: number } | null;
   treino: number | null;
   cocoNoChao: boolean;
   zzX: number | null;
   cabeca: [number, number] | null;
-} = { modo3d: false, modoMundo: false, ret: null, medir: null, mundo: null, coberto: false, bolaNaMao: false, treino: null, cocoNoChao: false, zzX: null, cabeca: null };
+} = { modo3d: false, modoMundo: false, ret: null, medir: null, mundo: null, coberto: false, bolaNaMao: false, petNaMao: false, maoPet: null, treino: null, cocoNoChao: false, zzX: null, cabeca: null };
