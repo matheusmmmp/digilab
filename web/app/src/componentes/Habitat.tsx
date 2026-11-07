@@ -8,6 +8,7 @@ import { CenaPet } from "../telas/pet/CenarioPet.tsx";
 import { CENA } from "../telas/pet/cenaEstado.ts";
 import { PalcoPet } from "../telas/pet/PalcoPet.tsx";
 import { ArrastoBola } from "../telas/pet/PorBola.tsx";
+import { PegarPet } from "../telas/pet/PegarPet.tsx";
 import { ToquePet } from "../telas/pet/ToquePet.tsx";
 import { Deco } from "./Deco.tsx";
 
@@ -25,6 +26,8 @@ export function Habitat({ escurecer }: { escurecer: boolean }) {
         {m.mundo && <ArrastoBola alvo={cena} />}
         {/* o toque no pet e o carinho do botao; a reacao vem do corpo (ToquePet.tsx) */}
         <ToquePet alvo={cena} />
+        {/* pegar o pet e solta-lo no chao (o evento "lp", pets v19); depois do ToquePet, que larga o toque com o pet na mao (PegarPet.tsx) */}
+        {m.mundo && <PegarPet alvo={cena} />}
       </section>
       <div className={"habitat-veu" + (escurecer ? " habitat-veu--ligado" : "")} aria-hidden="true" />
     </div>

@@ -102,6 +102,12 @@ export class Seguidor {
   private readonly rng: () => number;
   constructor(semente = 1) { this.rng = mulberry32(semente); }
 
+  /** o pet esta desenhado em `alvo` agora, sem caminhar ate la (o dono o soltou ali: PegarPet.tsx). O proximo `seguir` parte daqui */
+  pular(alvo: readonly [number, number]): void {
+    this.base = [alvo[0], alvo[1]]; this.alvoVisto = [alvo[0], alvo[1]]; this.vel = 0; this.caminhando = false;
+    this.off = [0, 0]; this.offAlvo = [0, 0]; this.pos = [alvo[0], alvo[1]];
+  }
+
   seguir(alvo: readonly [number, number], dtMs: number, cm: ConfigMundo, mov?: Movimento): [number, number] {
     const b = this.base;
     if (!b || Math.hypot(alvo[0] - b[0], alvo[1] - b[1]) > SALTO_CELULAS * cm.sub) {
