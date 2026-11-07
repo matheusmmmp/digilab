@@ -457,3 +457,41 @@ estão na seção 8.1 e em `docs/PROPOSTAS_V3_UX_TELA_PET.md`, seção "DigiBrai
 
 **PROPOSTO, SEM FONTE:** a varredura em 1,2 s, o pulso em 0,8 s, o giro de ±8° em 40 s e os números de layout. O desvio está em
 `docs/registro/2026-11.md`.
+
+## 15. Etapa D1b: o DigiBrain como modal pequeno (2026-11-07)
+
+O Matheus trocou a tela cheia da D1 por um modal pequeno, só com o mapa dos pesos. A prancha `docs/pranchas/ux-digibrain/modal.html` e o ok
+dele às D1b-1 a D1b-7 ("Aprovar e codar") estão em `docs/PROPOSTAS_V3_UX_TELA_PET.md`, seção D1b. Fica no mesmo PR da D1.
+
+**O que mudou:**
+- **Desktop:** o `<dialog>` modal fica à direita, com até 720 px, sobre a pilha de painéis, e o pet fica à vista no meio.
+- **Celular:** abaixo de 900 px, uma folha baixa presa embaixo.
+- **Fechar:** pelo Esc, pelo X ou com um clique fora. O foco volta a quem abriu.
+- **O que sai:**
+  - os seis cartões, a legenda do rodapé e o parágrafo;
+  - o "pesou mais" e a região da memória;
+  - o `CENA.coberto` e o fundo opaco. A ilha fica a pleno ritmo sob um véu leve, sem desfoque, e o vidro da pele fica só na caixa.
+- **O que fica:**
+  - o selo, só como forma;
+  - o "i", com a dica (a forma é só desenho, a legenda curta e o significado do selo);
+  - o mapa em texto, como botão de ícone que troca o desenho;
+  - as regiões "ações", "regras", "percepção" e "receptores do corpo".
+- O movimento é o da D1.
+
+**Os arquivos:** `ScanDigiBrain.tsx`, `scan_digibrain.css`, `test/scan_digibrain.test.ts` e `e2e/jogo.spec.ts`. O `TelaPet.tsx` não mudou.
+
+**Os portões:**
+- `npm run tipos` está limpo. O Vitest dá 95 arquivos e 893 testes, inclusive o contraste do desenho sobre a ilha nas duas peles.
+- No e2e inteiro (porta 8831), 132 passaram e 1 falhou: o `camera_livre.spec.ts:74`, herdado da base. Depois dos consertos das revisões, os 12 e2e do DigiBrain passam.
+- O portão "nada fora do DigiBrain muda": 21 telas, a 1920 e a 390, nas duas peles, base × branch.
+  - Na primeira rodada, as 84 telas deram DOM igual e 0 px.
+  - Na segunda, uma captura deu 310 px: a `evolucao-momento` a 390 no Militar. Rodada de novo duas vezes, deu 0 px e o mesmo DOM.
+- O `rev-replay` e o `rev-cena` não acharam bloqueios. O `rev-a11y` achou dois, e os dois foram consertados:
+  - o foco ao abrir caía no botão do chamado;
+  - o contraste não era medido, e agora há um teste.
+
+**Fica pendente:** a medida de quadros com `?medir3d=1`, com o modal aberto e fechado, nas duas peles, no desktop e no celular. O `rev-cena`
+a pede antes da aprovação final do vidro na caixa.
+
+**PROPOSTO, SEM FONTE:** os 720 px, a metade da direita com o piso de 560 px, a folha e o véu a 28 %. Os desvios estão em
+`docs/registro/2026-11.md`, seção D1b.

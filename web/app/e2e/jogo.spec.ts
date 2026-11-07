@@ -1183,16 +1183,30 @@ for (const largura of [390, 1280]) {
     const raiz = page.locator("#pet-painel");
     await expect(raiz.locator(".digibrain")).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-    await expect(raiz.locator(".db-selo")).toHaveText("ao vivo");                    /* o tempo do jogo andando */
-    /* o painel le o motor: uma decisao, as barras dos lobos (o piso so quando entra na conta) e uma escolhida */
+    /* o selo so como forma, com o nome acessivel (D1b-5): o tempo do jogo andando */
+    await expect(raiz.getByRole("img", { name: "ao vivo" })).toBeVisible();
+    /* o modal pequeno (D1b): so o mapa dos pesos do motor, sem os cartoes nem a legenda do rodape */
     const db = await page.evaluate(() => (window as any).__digilab.digibrain());
     expect(db).not.toBeNull();
     expect(db.decisao).not.toBeNull();
-    await expect(raiz.locator(".db-barras li")).toHaveCount(db.decisao.barras.piso === 0 ? 4 : 5);
-    await expect(raiz.locator(".db-barras li[data-lobo='impulsos']")).toBeVisible();
-    await expect(raiz.locator(".db-opcoes li.esc")).toHaveCount(1);
-    await expect(raiz.locator(".db-emo")).toContainText(/memória do pet/);
-    await expect(raiz.locator(".db-ultimas li").first()).toBeVisible();
+    await expect(raiz.locator("svg.mp")).toBeVisible();
+    await expect(raiz.locator(".db-barras, .db-opcoes, .db-ultimas, .db-emo, .mp-nota")).toHaveCount(0);
+    await expect(raiz.locator(".mp-leg")).toBeHidden();                               /* a legenda mora na dica do "i" (D1b-7) */
+    await raiz.getByRole("button", { name: "O que é este desenho" }).click();
+    await expect(raiz.locator("#db-dica")).toContainText("só desenho");
+    await expect(raiz.locator(".mp-leg")).toBeVisible();
+    await page.keyboard.press("Escape");                                              /* o Esc com a dica aberta fecha so a dica */
+    await expect(raiz.locator("#db-dica")).toBeHidden();
+    await expect(raiz).toBeVisible();
+    /* o tamanho (D1b-1, D1b-2): no desktop a direita, ate 720 px, com o pet a vista; no celular uma folha baixa presa embaixo */
+    const caixa = (await raiz.locator(".scan-in").boundingBox())!;
+    if (largura >= 900) {
+      expect(caixa.width).toBeLessThanOrEqual(720.5);
+      expect(caixa.x).toBeGreaterThan(largura / 2);
+    } else {
+      expect(Math.round(caixa.y + caixa.height)).toBe(800);
+      expect(caixa.height).toBeLessThan(800 / 2);
+    }
     /* nada promete mais do que uma soma de pesos */
     expect(await raiz.innerText()).not.toMatch(/pensando|sentindo/i);
     await page.screenshot({ path: test.info().outputPath(`digibrain-${largura}.png`) });     /* a captura do gate da etapa 5 */
@@ -1202,7 +1216,7 @@ for (const largura of [390, 1280]) {
   });
 }
 /* o mapa dos pesos (ScanDigiBrain.tsx, MapaScan), no lugar do icone estatico: cada traco e um peso do motor (Motor.digibrain().mapa), e a cada
-   decisao acendem a regra, os candidatos com a chance, a acao escolhida e o lobo que pesou mais. Com "reduzir movimento" (D1-8, o contrato do
+   decisao acendem a regra, os candidatos com a chance e a acao escolhida (o "pesou mais" saiu no modal pequeno, D1b-6). Com "reduzir movimento" (D1-8, o contrato do
    reduzir: zero animacao) so o destaque troca; o movimento sem o reduzir tem o teste logo abaixo */
 for (const largura of [390, 1280]) {
   test(`DigiBrain: o mapa dos pesos acende a cada decisão em ${largura} px`, async ({ page }) => {
@@ -1228,7 +1242,7 @@ for (const largura of [390, 1280]) {
           esc: [...s.querySelectorAll(".mp-esc")].map(g => g.getAttribute("data-acao")),
           cand: [...s.querySelectorAll(".mp-cand")].map(g => g.getAttribute("data-acao")).sort(),
           pct: s.querySelectorAll(".mp-pct").length, top: [...s.querySelectorAll("[data-entrada].mp-lit")].map(g => g.getAttribute("data-entrada")).sort(),
-          dest: [...s.querySelectorAll(".mp-dest")].map(g => g.getAttribute("data-lobo")), db,
+          dest: s.querySelectorAll(".mp-dest").length, regioes: [...s.querySelectorAll(".mp-reg")].map(t => t.textContent), db,
         };
       });
       const m = r.db.mapa, d = r.db.decisao;
@@ -1240,7 +1254,8 @@ for (const largura of [390, 1280]) {
       expect(r.cand).toEqual(d.chances.map((c: { acao: string }) => c.acao).sort());
       expect(r.pct).toBe(d.chances.length);
       expect(r.top).toEqual(d.percepcao.map((p: { entrada: string }) => p.entrada).sort());
-      expect(r.dest).toEqual([m.acesas.lobo_decisivo]);
+      expect(r.dest).toBe(0);
+      expect(r.regioes).toEqual(["ações", "regras", "percepção"]);
       return r.n;
     };
     const n0 = await conferir();
@@ -1349,14 +1364,13 @@ for (const [largura, altura] of [[390, 844], [1280, 800], [1920, 950]]) {
       .map(t => ({ txt: t.textContent, h: t.getBoundingClientRect().height }))
       .filter(t => t.h < 11));
     expect(pequenos, "textos do mapa com menos de 11 px de altura").toEqual([]);
-    /* os rotulos de regiao (.mp-reg text, .mp-sub) nao se sobrepoem entre si nem a caixa do titulo do mapa */
+    /* os rotulos de regiao (.mp-reg, .mp-sub) nao se sobrepoem entre si */
     const colisoes = await page.evaluate(() => {
       const c = (e: Element) => { const r = e.getBoundingClientRect(); return { l: r.left, r: r.right, t: r.top, b: r.bottom }; };
       const cruza = (a: ReturnType<typeof c>, b: ReturnType<typeof c>) => a.l < b.r && b.l < a.r && a.t < b.b && b.t < a.b;
-      const rot = [...document.querySelectorAll("#pet-painel .mp-reg text, #pet-painel .mp-sub")].filter(t => getComputedStyle(t).display !== "none");
-      const tit = c(document.querySelector("#pet-painel .scan-moldura-tit")!), out: string[] = [];
+      const rot = [...document.querySelectorAll("#pet-painel .mp-reg, #pet-painel .mp-sub")].filter(t => getComputedStyle(t).display !== "none");
+      const out: string[] = [];
       rot.forEach((a, i) => {
-        if (cruza(c(a), tit)) out.push(`"${a.textContent}" cobre o titulo do mapa`);
         rot.slice(i + 1).forEach(b => { if (cruza(c(a), c(b))) out.push(`"${a.textContent}" cobre "${b.textContent}"`); });
       });
       return out;
@@ -1365,8 +1379,8 @@ for (const [largura, altura] of [[390, 844], [1280, 800], [1920, 950]]) {
     expect(erros).toEqual([]);
   });
 }
-/* o mapa em texto fica em fluxo na coluna do centro: nao cobre o botao que o fecha nem a legenda, nem numa janela baixa */
-test("DigiBrain: o mapa em texto aberto nao se sobrepoe ao botao nem a legenda a 1280x540", async ({ page }) => {
+/* o mapa em texto troca o desenho, no mesmo tamanho: nao cobre os botoes do topo, e o modal cabe inteiro numa janela baixa */
+test("DigiBrain: o mapa em texto fica no lugar do desenho e o modal cabe a 1280x540", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 540 });
   await semear(page, SAVE_V11);
   const erros = vigiarErros(page);
@@ -1374,17 +1388,42 @@ test("DigiBrain: o mapa em texto aberto nao se sobrepoe ao botao nem a legenda a
   await expect(page.locator(".pet-tela")).toBeVisible();
   await page.getByRole("button", { name: "DigiBrain", exact: true }).click();
   const raiz = page.locator("#pet-painel");
-  await raiz.getByRole("button", { name: "O mapa em texto" }).click();
+  const bt = raiz.getByRole("button", { name: "O mapa em texto" });
+  await expect(bt).toHaveAttribute("aria-pressed", "false");
+  await bt.click();
+  await expect(bt).toHaveAttribute("aria-pressed", "true");
   await expect(raiz.locator(".scan-texto")).toBeVisible();
+  await expect(raiz.locator("svg.mp")).toHaveCount(0);
   const r = await page.evaluate(() => {
     const q = (s: string) => document.querySelector(s)!.getBoundingClientRect();
-    const t = q("#pet-painel .scan-texto"), bt = q("#pet-painel .scan-texto-bt"), leg = q("#pet-painel .mp-leg");
+    const t = q("#pet-painel .scan-texto"), topo = q("#pet-painel .scan-topo"), cx = q("#pet-painel .scan-in");
     const cruza = (a: DOMRect, b: DOMRect) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
-    return { botao: cruza(t, bt), legenda: cruza(t, leg), h: t.height };
+    return { topo: cruza(t, topo), h: t.height, fundo: cx.bottom, alto: innerHeight };
   });
-  expect(r.botao, "o texto cobre o botao").toBe(false);
-  expect(r.legenda, "o texto cobre a legenda").toBe(false);
+  expect(r.topo, "o texto cobre o topo com os botoes").toBe(false);
   expect(r.h).toBeGreaterThan(40);
+  expect(r.fundo, "o modal passa do fim da janela").toBeLessThanOrEqual(r.alto);
+  await bt.click();
+  await expect(raiz.locator("svg.mp")).toBeVisible();
+  expect(erros).toEqual([]);
+});
+/* um clique fora do modal (no veu) fecha, e o foco volta a quem abriu; o CENA.coberto saiu (D1b-3), conferido na fonte pelo Vitest */
+test("DigiBrain: um clique fora fecha o modal", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await semear(page, SAVE_V11);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/pet/estado");
+  await expect(page.locator(".pet-tela")).toBeVisible();
+  const abre = page.locator("button.pet-agora");
+  await abre.click();
+  const raiz = page.locator("#pet-painel");
+  await expect(raiz.locator("svg.mp")).toBeVisible();
+  const antes = (await numLog(page, "d")) + (await numLog(page, "dc"));
+  await page.mouse.click(200, 600);
+  await expect(raiz).toHaveCount(0);
+  /* o clique cai no veu, nao na ilha: nenhum carinho nem evento do dono (rev-replay da D1b) */
+  expect((await numLog(page, "d")) + (await numLog(page, "dc"))).toBe(antes);
+  await expect(abre).toBeFocused();
   expect(erros).toEqual([]);
 });
 /* o "Atender" do cartao do chamado, dentro do scan aberto, grava um unico evento do dono. Um bebe v13 com o chamado de carinho em urgencia (55 min depois
@@ -1404,6 +1443,8 @@ test("DigiBrain: o Atender do chamado dentro do scan grava um único evento", as
   await expect(raiz.locator(".digibrain")).toBeVisible();
   const cartao = raiz.locator(".pet-alerta .chamado");
   await expect(cartao).toBeVisible();
+  /* com um chamado aberto, o foco ao abrir fica no topo do modal (o Fechar), nao num botao do chamado (rev-a11y da D1b) */
+  expect(await page.evaluate(() => !!document.activeElement?.closest("#pet-painel .scan-topo"))).toBe(true);
   await expect(raiz.locator("[role=status]")).toContainText(/Chamado/);
   const antes = await eventos();
   await cartao.getByRole("button", { name: "Atender" }).click();

@@ -1396,3 +1396,6 @@ O movimento é o da D1, sem mudar.
 | D1b-5 | o selo ao vivo, pausado ou replay | **só a forma, ao lado do título**, com a dica e o nome acessível | sem selo, o replay parece ao vivo; com o texto, volta texto que ele tirou |
 | D1b-6 | os rótulos das regiões | **"ações", "regras" e "percepção"** (os nomes que o dono entende), mais "receptores do corpo" | "decisão" e "impulsos" são os nomes dos lobos e confundem quem não leu o motor; o `data-lobo` do e2e continua no código |
 | D1b-7 | a legenda | **vai para a dica do "i"** | sem legenda nenhuma, o vermelho e o azul do aprendido ficam sem explicação |
+
+**Decididas (Matheus, 2026-11-07):** "Aprovar e codar". Valem as recomendações D1b-1 a D1b-7 como estão na tabela, e os números de layout
+ficam PROPOSTO, SEM FONTE. No código, o cabeçalho "AGORA" e o mapa vêm do mesmo pet (na prancha divergiam por causa dos dados de teste).

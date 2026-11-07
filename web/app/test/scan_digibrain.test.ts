@@ -4,10 +4,10 @@
 // tempo de montar o SVG com os ~80 fios (impresso, nao assertado: a maquina muda).
 import { createElement as h } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
+import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
 import { Motor } from "../motor/index.ts";
-import { GIRO_CICLO_S, GIRO_GRAUS, MapaScan, PULSO_MS, VARREDURA_MS, cobrirCena } from "../src/componentes/ScanDigiBrain.tsx";
-import { CENA } from "../src/telas/pet/cenaEstado.ts";
+import { GIRO_CICLO_S, GIRO_GRAUS, MapaScan, PULSO_MS, VARREDURA_MS } from "../src/componentes/ScanDigiBrain.tsx";
 
 /* o pet v11 do e2e do DigiBrain (e2e/jogo.spec.ts) */
 const LOG: [number, string, unknown][] = [[480, "t", 120], [600, "d", "acariciar"], [600, "t", 120], [720, "d", "tapa"], [720, "t", 120],
@@ -36,8 +36,10 @@ describe("o mapa do scan: cada ponto e cada fio vem do motor", () => {
       expect(contar(s, /class="mp-no[^"]*mp-cand/g)).toBe(d.chances.length);
       expect(contar(s, /class="mp-pct"/g)).toBe(d.chances.length);
       expect(contar(s, /class="mp-no[^"]*mp-lit[^"]*" data-entrada=/g)).toBe(d.percepcao.length);
-      expect(contar(s, /class="mp-reg [^"]*mp-dest"/g)).toBe(1);
-      expect(s).toContain(`class="mp-reg mp-reg--${ac.lobo_decisivo} mp-dest" data-lobo="${ac.lobo_decisivo}"`);
+      /* as tres regioes com os nomes do dono (D1b-6), sem o "pesou mais" nem a regiao sem pesos da memoria */
+      expect([...s.matchAll(/<text class="mp-reg" data-lobo="([^"]+)"[^>]*>([^<]+)<\/text>/g)].map(x => [x[1], x[2]]))
+        .toEqual([["decisao", "ações"], ["impulsos", "regras"], ["percepcao", "percepção"]]);
+      expect(s).not.toMatch(/mp-dest|pesou mais|memória e emoção/);
       /* um no por entrada, regra e acao */
       expect(contar(s, /data-entrada=/g)).toBe(10 + db.mapa.receptores.length);
       expect(contar(s, /data-regra=/g)).toBe(7);
@@ -62,6 +64,18 @@ describe("o mapa do scan: cada ponto e cada fio vem do motor", () => {
     expect(s).not.toContain("mp-pulso");
     expect(s).not.toContain("mp-lit");
     expect(s).not.toContain("mp-dest");
+  });
+  test("o viewBox e o recorte da silhueta; no desktop o rotulo da regra fica em cima do ponto, e a 390 a direita dele", () => {
+    expect(montar(false, false)).toContain('viewBox="90 16 880 552"');
+    /* o y do rotulo menos o y do ponto, na regra sono_exaustao */
+    const y = (s: string): number => {
+      const g = s.slice(s.indexOf('data-regra="sono_exaustao"'));
+      return Number(g.match(/<text[^>]* y="([-\d.]+)"/)![1]) - Number(g.match(/ cy="([-\d.]+)"/)![1]);
+    };
+    expect(y(montar(false, false))).toBeLessThan(0);
+    const g = montar(true, false), r = g.slice(g.indexOf('data-regra="sono_exaustao"'));
+    expect(Number(r.match(/<text x="([-\d.]+)"/)![1]) - Number(r.match(/ cx="([-\d.]+)"/)![1])).toBeGreaterThan(0);
+    expect(r).toMatch(/<text[^>]*text-anchor="start"/);
   });
 });
 
@@ -104,20 +118,53 @@ describe("o custo de montar o SVG", () => {
   });
 });
 
-describe("o scan cobre a ilha", () => {
-  /* o ScanDigiBrain chama `useEffect(cobrirCena, [])`; o ambiente dos testes e node (sem jsdom no projeto), entao o par montar/desmontar e
-     testado pela funcao que o efeito usa */
-  test("montado, CENA.coberto fica true; desmontado, volta a false", () => {
-    expect(CENA.coberto).toBe(false);
-    const limpar = cobrirCena();
-    expect(CENA.coberto).toBe(true);
-    limpar();
-    expect(CENA.coberto).toBe(false);
-  });
-  test("a ordem do DOM e a do celular: agora, mapa, lobos, percepcao, opcoes, aprendido, ultimas", async () => {
+describe("o modal pequeno nao cobre a ilha (D1b-3)", () => {
+  /* o ambiente dos testes e node (sem jsdom no projeto): o contrato e conferido na fonte */
+  test("sem CENA.coberto, sem os cartoes nem a legenda do rodape", async () => {
     const { readFileSync } = await import("node:fs");
     const fonte = readFileSync(new URL("../src/componentes/ScanDigiBrain.tsx", import.meta.url), "utf8");
-    expect(fonte).toContain("{agora}{centro}{lobos}{perc}{opc}{apr}{ult}");
-    expect(fonte).toContain("useEffect(cobrirCena, [])");
+    expect(fonte).not.toMatch(/cenaEstado|CENA.coberto =|cobrirCena/);
+    expect(fonte).not.toMatch(/db-barras|db-opcoes|db-ultimas|SeloEmocao|mp-nota/);
+    const css = readFileSync(new URL("../src/estilo/scan_digibrain.css", import.meta.url), "utf8");
+    expect(css).not.toMatch(/#[0-9a-fA-F]{3,8}/);
+    expect(css.match(/\.scan::backdrop\{[^}]*\}/)![0]).not.toMatch(/backdrop-filter|blur/);
   });
+});
+
+/* o contraste do desenho (rev-a11y da D1b): o modal fica sobre a ilha, entao o pior fundo e o do habitat mais claro, como em hx_pele.test.ts
+   (a grama de dia; no Militar, o branco puro). A pilha, de baixo para cima: o fundo, o veu do ::backdrop (o --hx-miolo a 28 %), a caixa
+   (o --hud-fundo-1, o lado mais claro do gradiente) e a moldura do desenho (o --hx-miolo a 55 %). O contorno escuro dos rotulos (paint-order)
+   so ajuda e nao entra na conta. Com "reduzir transparencia" os tokens ficam opacos e mais escuros, entao o caso translucido e o pior */
+describe("o contraste do desenho sobre a ilha, nas duas peles", () => {
+  const tokensCss = readFileSync(new URL("../src/estilo/tokens.css", import.meta.url), "utf8");
+  type Rgb = [number, number, number];
+  const bloco = (sel: string) => { const i = tokensCss.indexOf(sel); if (i < 0) throw new Error(`sem ${sel}`); return tokensCss.slice(i, tokensCss.indexOf("}", i)); };
+  const raiz = tokensCss;
+  const ler = (b: string, nome: string): string => {
+    const m = b.match(new RegExp(`--${nome}:([^;]+);`)) ?? raiz.match(new RegExp(`--${nome}:([^;]+);`));
+    if (!m) throw new Error(`token ${nome}`);
+    const v = m[1]!.trim(), ref = v.match(/^var\(--([\w-]+)\)$/);
+    return ref ? ler(b, ref[1]!) : v;
+  };
+  const rgba = (v: string): [Rgb, number] => {
+    const h = v.match(/^#([0-9A-Fa-f]{6})$/); if (h) return [[1, 3, 5].map(i => parseInt(v.slice(i, i + 2), 16)) as Rgb, 1];
+    const m = v.match(/^rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)$/); if (!m) throw new Error(`cor ${v}`);
+    return [[+m[1]!, +m[2]!, +m[3]!], +m[4]!];
+  };
+  const sobre = (cor: string, fundo: Rgb, mult = 1): Rgb => { const [c, a0] = rgba(cor), a = a0 * mult; return c.map((x, i) => x * a + fundo[i]! * (1 - a)) as Rgb; };
+  const lum = (c: Rgb) => { const l = c.map(x => x / 255).map(x => (x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4)); return 0.2126 * l[0]! + 0.7152 * l[1]! + 0.0722 * l[2]!; };
+  const contraste = (a: Rgb, b: Rgb) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x! + 0.05) / (y! + 0.05); };
+  const casos: [string, string, Rgb][] = [["vidro", ':root[data-pele="vidro"]{', [161, 225, 113]], ["militar", ":root{", [255, 255, 255]]];
+  for (const [pele, sel, ilha] of casos) {
+    test(`${pele}: os rotulos 4,5:1 e as formas do selo 3:1`, () => {
+      const b = pele === "vidro" ? bloco(sel) : raiz, t = (n: string) => rgba(ler(b, n))[0];
+      const veu = sobre(ler(b, "hx-miolo"), ilha, 0.28), caixa = sobre(ler(b, "hud-fundo-1"), veu), desenho = sobre(ler(b, "hx-miolo"), caixa, 0.55);
+      /* os nos (--hx-sec), as regioes (--hx-rotulo), os receptores do corpo (--hx-ok), os acesos (--hx-texto) e a chance (--hx-num), no desenho */
+      for (const n of ["hx-sec", "hx-rotulo", "hx-ok", "hx-texto", "hx-num"]) expect(contraste(t(n), desenho), `${pele} ${n} no desenho`).toBeGreaterThanOrEqual(4.5);
+      /* o titulo e os icones do topo, na caixa */
+      for (const n of ["hx-texto", "hx-texto-2"]) expect(contraste(t(n), caixa), `${pele} ${n} na caixa`).toBeGreaterThanOrEqual(4.5);
+      /* o selo: o ponto (--hx-ok), as barras (--hx-sec) e o triangulo (--hx-rotulo), na caixa */
+      for (const n of ["hx-ok", "hx-sec", "hx-rotulo"]) expect(contraste(t(n), caixa), `${pele} selo ${n}`).toBeGreaterThanOrEqual(3);
+    });
+  }
 });

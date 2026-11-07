@@ -1,21 +1,19 @@
-/* O painel DigiBrain como "scan holografico" (D1 da UX_TELA_PET; prancha aprovada em docs/pranchas/ux-digibrain/, direcao A; decisoes D1-1 a
-   D1-11 de docs/PROPOSTAS_V3_UX_TELA_PET.md). Um <dialog> modal em tela cheia (foco preso, Esc fecha, o foco volta a quem abriu) com tres
-   colunas no desktop e uma folha que rola no celular. So le o motor por useJogo(): todo numero sai de Motor.digibrain() (mapa, decisao,
-   aprendido), do historico e da memoria das emocoes; nenhum mudarMotor aqui. Cada ponto do desenho e um no do motor (entrada, regra ou
-   acao) e cada fio e uma aresta de mapa.arestas; a forma de cerebro e as regioes sao so desenho, e a tela diz isso.
-   O movimento e so vista e so numa decisao nova (mapa.acesas.n muda): a varredura passa uma vez e o pulso percorre as arestas acesas;
-   os dois terminam. O giro lento do plano (so no desktop) e CSS puro. Com "reduzir movimento" nada se move; no replay e com o tempo
-   pausado so o destaque troca. O relogio do navegador aqui e so animacao: nada do que e gravado depende dele. */
-import { memo, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactNode } from "react";
-import { List, X } from "lucide-react";
-import { ACOES_LOBOS, ENTRADAS_LOBOS, NOME_PET, REGRAS_LOBOS, type AcaoPet, type LeituraDecisao, type MapaDecisao, type RegraLobos } from "../../motor/index.ts";
+/* O painel DigiBrain como modal pequeno (D1b da UX_TELA_PET; prancha aprovada em docs/pranchas/ux-digibrain/modal.html, decisoes D1b-1 a
+   D1b-7 de docs/PROPOSTAS_V3_UX_TELA_PET.md, sobre a direcao A "scan holografico" da D1). Um <dialog> modal (foco preso, Esc fecha, um clique
+   fora fecha, o foco volta a quem abriu) so com o mapa dos pesos: no desktop, a direita, com a ilha e o pet a vista em volta; no celular, uma
+   folha baixa. So le o motor por useJogo(): todo numero sai de Motor.digibrain() (mapa, decisao); nenhum mudarMotor aqui. Cada ponto do
+   desenho e um no do motor (entrada, regra ou acao) e cada fio e uma aresta de mapa.arestas; a forma de cerebro e as regioes sao so desenho,
+   e a dica do "i" diz isso. O movimento e o da D1: so vista e so numa decisao nova (mapa.acesas.n muda), a varredura passa uma vez e o pulso
+   percorre as arestas acesas, os dois terminam; o giro lento do plano (so no desktop) e CSS puro. Com "reduzir movimento" nada se move; no
+   replay e com o tempo pausado so o destaque troca. O relogio do navegador aqui e so animacao: nada do que e gravado depende dele.
+   A ilha continua a pleno ritmo por tras (D1b-3: sem CENA.coberto e sem desfoque de tela cheia). */
+import { memo, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type MouseEvent, type ReactNode, type SyntheticEvent } from "react";
+import { Info, List, X } from "lucide-react";
+import { ACOES_LOBOS, ENTRADAS_LOBOS, REGRAS_LOBOS, type AcaoPet, type LeituraDecisao, type MapaDecisao, type RegraLobos } from "../../motor/index.ts";
 import { useJogo } from "../jogo.ts";
-import { CENA } from "../telas/pet/cenaEstado.ts";
-import { hhmm } from "../telas/pet/TelaPet.tsx";
+import type { EstadoSelo } from "../seloDigiBrain.ts";
 import "../estilo/scan_digibrain.css";
-import {
-  ACAO_CURTA, ACAO_INF, COM_SINAL, ENTRADA_TXT, LOBO_TXT, REGRA_TXT, SeloDigiBrain, SeloEmocao, num, pct, useEstadoSelo,
-} from "./DigiBrain.tsx";
+import { ACAO_CURTA, REGRA_TXT, pct, useEstadoSelo } from "./DigiBrain.tsx";
 import { abrirModal } from "./modal.ts";
 import { TXT_ACAO, TXT_ENTRADA, TXT_REGRA, type DadosMapa } from "./MapaPesos.tsx";
 
@@ -31,19 +29,19 @@ export const GIRO_CICLO_S = 40;
 /** a folga depois do fim da animacao antes de tirar a varredura e o pulso do DOM, em ms (so para o timer; nao e o tempo da animacao) */
 const FOLGA_MS = 150;
 
-/* ---------------------------------------------------------------- a geometria do desenho (unidades do viewBox 1000 x 620; so desenho)
-   PROPOSTO, SEM FONTE (D1-11): a frente do cerebro fica a esquerda. Percepcao atras (um arco: as entradas na ordem do motor e os receptores do
-   corpo no fim, embaixo), impulsos no meio (as regras de cima para baixo, na ordem em que o instinto as testa), decisao na frente (as acoes na
-   ordem de ACOES_LOBOS). Memoria e emocao e a regiao de baixo, sem nenhum ponto: o lobo nao tem pesos. */
-const VB = "0 0 1000 620";
+/* ---------------------------------------------------------------- a geometria do desenho (unidades do desenho; so desenho)
+   PROPOSTO, SEM FONTE (D1-11, D1b-2): a frente do cerebro fica a esquerda. Percepcao atras (um arco: as entradas na ordem do motor e os
+   receptores do corpo no fim, embaixo), as regras no meio (de cima para baixo, na ordem em que o instinto as testa), as acoes na frente (na ordem
+   de ACOES_LOBOS). O viewBox e recortado na silhueta (x 90 a 970, y 16 a 568), para o desenho encher o modal. */
+const VB_X = 90, VB_Y = 16, VB_L = 880, VB_A = 552;
+const VB = `${VB_X} ${VB_Y} ${VB_L} ${VB_A}`;
 const SILHUETA = "M120 330C100 210 220 80 420 62C600 45 820 90 890 220C935 300 900 390 820 420C760 440 700 430 650 445C600 470 540 500 470 488C380 475 330 430 250 430C170 430 130 390 120 330Z";
 const CEREBELO = "M650 445C655 505 760 535 825 505C865 485 860 440 820 420C760 440 700 430 650 445Z";
-const DIVISAS = ["M380 66C360 180 372 300 345 410", "M612 54C592 170 602 300 592 420", "M300 432C360 392 540 388 640 446"];
-/** as regioes: o lobo (o mesmo id de lobo_decisivo e do data-lobo), o rotulo e onde ele fica. Os "receptores do corpo" ficam centrados sob o cerebelo */
-const REGIOES: [string, string, number, number][] = [
-  ["decisao", "decisão", 250, 34], ["impulsos", "impulsos", 490, 30], ["percepcao", "percepção", 760, 40], ["memoria_emocao", "memória e emoção · sem pesos", 460, 526],
-];
-const SUB_CORPO = { x: 757, y: 566 };
+const DIVISAS = ["M380 66C360 180 372 300 345 410", "M612 54C592 170 602 300 592 420"];
+/** as regioes (D1b-6): tres rotulos curtos na mesma linha, com os nomes que o dono entende; o id e o do lobo de cada uma (data-lobo). O "pesou
+    mais" e a regiao sem pesos da memoria sairam do modal. Os "receptores do corpo" ficam centrados sob o cerebelo */
+const REGIOES: [string, string, number][] = [["decisao", "ações", 250], ["impulsos", "regras", 490], ["percepcao", "percepção", 760]];
+const Y_REGIOES = 36, SUB_CORPO = { x: 757, y: 556 };
 const f = (v: number): number => Math.round(v * 10) / 10;
 
 type Ponto = [number, number];
@@ -65,33 +63,8 @@ function txt<T extends string>(tabela: Record<string, string>, k: T, onde: strin
   return v;
 }
 
-/** o rotulo de uma regiao; a que pesou mais ganha "pesou mais" e uma caixa medida depois das fontes (a prancha mede o getBBox do texto) */
-function Regiao({ lobo, nome, x, y, dest, movel }: { lobo: string; nome: string; x: number; y: number; dest: boolean; movel: boolean }) {
-  const ref = useRef<SVGTextElement>(null);
-  const [caixa, setCaixa] = useState<{ x: number; y: number; w: number; h: number } | null>(null);
-  useLayoutEffect(() => {
-    if (!dest) { setCaixa(null); return; }
-    let vivo = true;
-    const medir = () => {
-      const t = ref.current;
-      if (!vivo || !t || typeof t.getBBox !== "function") return;
-      const b = t.getBBox(), m = movel ? 10 : 6;
-      setCaixa({ x: f(b.x - m), y: f(b.y - m / 2), w: f(b.width + 2 * m), h: f(b.height + m) });
-    };
-    medir();
-    void document.fonts?.ready.then(medir);
-    return () => { vivo = false; };
-  }, [dest, nome, movel]);
-  return (
-    <g className={"mp-reg mp-reg--" + lobo + (dest ? " mp-dest" : "")} data-lobo={lobo}>
-      {dest && caixa && <rect className="mp-dest-caixa" x={caixa.x} y={caixa.y} width={caixa.w} height={caixa.h} />}
-      <text ref={ref} x={x} y={y} textAnchor="middle">{nome}{dest && <tspan className="mp-mais-peso"> · pesou mais</tspan>}</text>
-    </g>
-  );
-}
-
 /** o mapa dos pesos em SVG (D1-1). As classes que o e2e le: svg.mp com data-n, .mp-pesos path, .mp-acesas path, .mp-lit, .mp-cand, .mp-esc, .mp-pct,
-    .mp-dest[data-lobo]. `movendo`: o pulso (um ponto que percorre cada aresta acesa) esta no DOM; o pai o tira quando termina */
+    .mp-reg[data-lobo]. `movendo`: o pulso (um ponto que percorre cada aresta acesa) esta no DOM; o pai o tira quando termina */
 function MapaScanBruto({ mapa, decisao, movel, movendo }: { mapa: DadosMapa; decisao: LeituraDecisao | null; movel: boolean; movendo: boolean }) {
   const { ent, pe, pr, pa } = posicoes(mapa.receptores);
   for (const a of mapa.arestas) {
@@ -108,9 +81,8 @@ function MapaScanBruto({ mapa, decisao, movel, movendo }: { mapa: DadosMapa; dec
   };
   const top = new Set(decisao ? decisao.percepcao.map(p => p.entrada) : []);
   const chance = new Map(decisao ? decisao.chances.map(c => [c.acao, c.chance]) : []);
-  const dest = ac ? ac.lobo_decisivo : null;
-  /* a espessura de hoje (MapaPesos.tsx) vezes a escala do desenho; os raios idem */
-  const K = movel ? 2.6 : 1.1, R = movel ? 2 : 1;
+  /* a espessura de hoje (MapaPesos.tsx) vezes a escala do desenho; os raios idem (a 390 o desenho fica menor, entao os tracos crescem) */
+  const K = movel ? 2.2 : 1.1, R = movel ? 1.8 : 1;
   const tracejado = (neg: boolean): CSSProperties | undefined => neg ? { strokeDasharray: `${f(6 * K)} ${f(4 * K)}` } : undefined;
   const rotulo = ac && decisao
     ? `Mapa dos pesos do pet, ${mapa.arestas.length} pesos. Nesta decisão: regra ${TXT_REGRA[ac.regra]}, escolheu ${TXT_ACAO[ac.acao]} com ${Math.round(chance.get(ac.acao)! * 100)}% de chance.`
@@ -123,8 +95,10 @@ function MapaScanBruto({ mapa, decisao, movel, movendo }: { mapa: DadosMapa; dec
         <path className="mp-silhueta" d={SILHUETA} /><path className="mp-silhueta" d={CEREBELO} />
         <g className="mp-divisas">{DIVISAS.map(p => <path key={p} d={p} />)}</g>
       </g>
-      {REGIOES.map(([lobo, nome, x, y]) => <Regiao key={lobo} lobo={lobo} nome={nome} x={x} y={y} dest={dest === lobo} movel={movel} />)}
-      {mapa.receptores.length > 0 && <text className="mp-sub" x={SUB_CORPO.x} y={SUB_CORPO.y} textAnchor="middle">receptores do corpo</text>}
+      <g aria-hidden="true">
+        {REGIOES.map(([lobo, nome, x]) => <text key={lobo} className="mp-reg" data-lobo={lobo} x={x} y={Y_REGIOES} textAnchor="middle">{nome}</text>)}
+        {mapa.receptores.length > 0 && <text className="mp-sub" x={SUB_CORPO.x} y={SUB_CORPO.y} textAnchor="middle">receptores do corpo</text>}
+      </g>
       <g className={"mp-pesos" + (ac ? " mp-pesos--fundo" : "")}>
         {mapa.arestas.map(a => {
           const cls = a.aprendido > 0 ? "mp-mais" : a.aprendido < 0 ? "mp-menos" : "mp-prior";
@@ -149,7 +123,10 @@ function MapaScanBruto({ mapa, decisao, movel, movendo }: { mapa: DadosMapa; dec
         {REGRAS_LOBOS.map(r => {
           const [x, y] = pr.get(r)!, lit = ac !== null && r === ac.regra;
           return <g key={r} className={"mp-no" + (lit ? " mp-lit" : "")} data-regra={r}>
-            <circle cx={f(x)} cy={f(y)} r={f(R * (lit ? 9 : 6.5))} /><text x={f(x)} y={f(y - 14 * R)} textAnchor="middle">{TXT_REGRA[r]}</text></g>;
+            <circle cx={f(x)} cy={f(y)} r={f(R * (lit ? 9 : 6.5))} />
+            {/* a 390 o rotulo da regra vai para a direita do ponto: em cima bate no da acao ao lado, embaixo no ponto da regra seguinte */}
+            {movel ? <text x={f(x + 14 * R)} y={f(y + 5 * R)} textAnchor="start">{TXT_REGRA[r]}</text>
+              : <text x={f(x)} y={f(y - 14 * R)} textAnchor="middle">{TXT_REGRA[r]}</text>}</g>;
         })}
         {ACOES_LOBOS.map(a => {
           const [x, y] = pa.get(a)!, c = chance.get(a), esc = ac !== null && a === ac.acao;
@@ -224,15 +201,9 @@ export function useDecisaoNova(n: number | null, pode: boolean): number | null {
   return mov;
 }
 
-/** o scan cobre a ilha: a cena 3D desenha mais devagar enquanto ele esta aberto (CENA.coberto, o mesmo sinal do veu dos outros paineis).
-    Devolve a limpeza, que volta o valor a false */
-export function cobrirCena(): () => void {
-  CENA.coberto = true;
-  return () => { CENA.coberto = false; };
-}
 /** a escala do desenho (a largura renderizada sobre a do viewBox, a menor das duas por causa do "meet") numa variavel CSS: o CSS pede o texto
     do mapa com pelo menos 11 px na tela, max(base, 11px / escala), em unidades do viewBox. So vista */
-const VB_L = 1000, VB_A = 620, TEXTO_MIN_PX = 11;
+const TEXTO_MIN_PX = 11;
 function useEscalaDoMapa(ref: { current: HTMLElement | null }, ativo: boolean): void {
   useEffect(() => {
     const el = ref.current; if (!el || !ativo || typeof ResizeObserver !== "function") return;
@@ -243,13 +214,34 @@ function useEscalaDoMapa(ref: { current: HTMLElement | null }, ativo: boolean): 
   }, [ref, ativo]);
 }
 
-/* ---------------------------------------------------------------- a tela */
+/* ---------------------------------------------------------------- o modal */
+/** o selo so como forma (D1b-5): o ponto (ao vivo), as duas barras (pausado) ou o triangulo (replay), com o nome acessivel e a dica */
+const SELO_TXT: Record<EstadoSelo, string> = { vivo: "ao vivo", pausado: "pausado", replay: "replay: uma decisão do passado" };
+function SeloForma({ replay }: { replay: boolean }) {
+  const estado = useEstadoSelo(replay);
+  return <span className={"db-selo db-selo--" + estado} role="img" aria-label={SELO_TXT[estado]} title={SELO_TXT[estado]}><i aria-hidden="true" /></span>;
+}
+
+/** a dica do "i" (D1b-7): a forma e so desenho, e a legenda curta que saiu do rodape */
+function Dica({ receptores, aberta }: { receptores: boolean; aberta: boolean }) {
+  return (
+    <div className="scan-dica scan-cx" id="db-dica" hidden={!aberta}>
+      <p>A forma de cérebro é só desenho. Cada ponto é o que o pet sente, uma regra ou uma ação; cada fio é um peso.</p>
+      <p className="scan-dica-selo">Ao lado do título: o ponto é ao vivo, as duas barras são pausado e o triângulo é um replay.</p>
+      <ul className="mp-leg">
+        <li><span className="scan-leg scan-leg--aceso" />esta decisão</li><li><span className="scan-leg scan-leg--mais" />aprendeu a mais</li>
+        <li><span className="scan-leg scan-leg--menos" />aprendeu a menos</li><li><span className="scan-leg scan-leg--neg" />peso negativo</li>
+        {receptores && <li><span className="scan-leg scan-leg--corpo" />receptor do corpo</li>}
+      </ul>
+    </div>
+  );
+}
+
 export function ScanDigiBrain({ fechar, movel, replay = false, chamado }: { fechar: () => void; movel: boolean; replay?: boolean; chamado?: ReactNode }) {
   const { motor: m } = useJogo(), db = m.digibrain();
-  const ref = useRef<HTMLDialogElement>(null), saindo = useRef(false), texto = useRef<HTMLElement>(null);
-  const giro = useRef<HTMLDivElement>(null), [verTexto, setVerTexto] = useState(false);
-  useEffect(cobrirCena, []);
-  useEscalaDoMapa(giro, db !== null);
+  const ref = useRef<HTMLDialogElement>(null), saindo = useRef(false);
+  const giro = useRef<HTMLDivElement>(null), [verTexto, setVerTexto] = useState(false), [verDica, setVerDica] = useState(false);
+  useEscalaDoMapa(giro, db !== null && !verTexto);
   const selo = useEstadoSelo(replay), reduzir = useReduzirMovimento();
   const mov = useDecisaoNova(db?.mapa.acesas ? db.mapa.acesas.n : null, selo === "vivo" && !reduzir);
   /* o modal: showModal prende o foco e deixa o resto inerte; o Esc dispara o close nativo; ao fechar, o foco volta a quem abriu (modal.ts) */
@@ -259,119 +251,46 @@ export function ScanDigiBrain({ fechar, movel, replay = false, chamado }: { fech
     abrirModal(dlg);
     return () => { saindo.current = true; if (dlg.open) dlg.close(); };
   }, []);
-  useEffect(() => { if (verTexto && movel) texto.current?.scrollIntoView({ block: "nearest" }); }, [verTexto, movel]);
+  /* o Esc com a dica aberta fecha so a dica */
+  const cancelar = (e: SyntheticEvent<HTMLDialogElement>) => { if (verDica) { e.preventDefault(); setVerDica(false); } };
+  /* um clique fora fecha (D1b-3): o clique no ::backdrop chega ao proprio <dialog>, que nao tem area propria (a caixa o preenche inteiro) */
+  const cliqueFora = (e: MouseEvent<HTMLDialogElement>) => { if (e.target === e.currentTarget) ref.current?.close(); };
 
-  const raiz = (corpo: ReactNode) => (
-    <dialog className="scan" id="pet-painel" data-painel-pet="digibrain" aria-labelledby="db-titulo" ref={ref}
-      style={{ "--scan-giro-graus": GIRO_GRAUS + "deg", "--scan-giro-ciclo": GIRO_CICLO_S + "s" } as CSSProperties}
-      onClose={() => { if (!saindo.current) fechar(); }}>
-      <div className="scan-in digibrain">
-      <header className="scan-topo">
-        <h2 className="scan-tit" id="db-titulo">DigiBrain <small>mapa dos pesos</small></h2>
-        <SeloDigiBrain replay={replay} />
-        <button type="button" className="hx-btn scan-fechar" aria-label="Fechar DigiBrain" onClick={() => ref.current?.close()}>
-          <X aria-hidden="true" /><kbd aria-hidden="true">Esc</kbd></button>
-      </header>
+  const d = db?.decisao ?? null, mapa = db?.mapa ?? null;
+  if (mapa && (d === null) !== (mapa.acesas === null)) throw new Error("a decisao e as arestas acesas fora de par");
+  return (
+    <dialog className={"scan" + (movel ? " scan--folha" : "")} id="pet-painel" data-painel-pet="digibrain" aria-labelledby="db-titulo" ref={ref}
+      style={{ "--scan-giro-graus": GIRO_GRAUS + "deg", "--scan-giro-ciclo": GIRO_CICLO_S + "s", "--scan-t-varre": VARREDURA_MS + "ms", "--scan-t-pulso": PULSO_MS + "ms" } as CSSProperties}
+      onCancel={cancelar} onClick={cliqueFora} onClose={() => { if (!saindo.current) fechar(); }}>
+      <div className="scan-in scan-cx digibrain">
+        {movel && <span className="scan-alca" aria-hidden="true" />}
+        <header className="scan-topo">
+          <h2 className="scan-tit" id="db-titulo">DigiBrain</h2>
+          <SeloForma replay={replay} />
+          {mapa && <>
+            <button type="button" className="scan-ic scan-info" aria-label="O que é este desenho" aria-expanded={verDica} aria-controls="db-dica"
+              onClick={() => setVerDica(v => !v)}><Info aria-hidden="true" /></button>
+            <button type="button" className="scan-ic scan-texto-bt" aria-label="O mapa em texto" aria-pressed={verTexto}
+              onClick={() => setVerTexto(v => !v)}><List aria-hidden="true" /></button>
+          </>}
+          <button type="button" className="scan-ic scan-fechar" aria-label="Fechar DigiBrain" title="Fechar (Esc)" data-autofocus onClick={() => ref.current?.close()}>
+            <X aria-hidden="true" /></button>
+        </header>
+        {mapa && <Dica receptores={mapa.receptores.length > 0} aberta={verDica} />}
+        {mapa === null ? <p className="scan-vazio">Este pet não tem mapa dos pesos.</p> : (
+          <div className="scan-moldura">
+            {verTexto
+              ? <section className="scan-texto db-texto" id="db-texto" aria-label="O mapa em texto" tabIndex={0}><MapaEmTexto mapa={mapa} d={d} /></section>
+              : <>
+                {mov !== null && <div className="scan-varre-trilho" key={"varre" + mov} aria-hidden="true"><div className="scan-varredura" /></div>}
+                <div className="scan-giro" ref={giro}><MapaScan mapa={mapa} decisao={d} movel={movel} movendo={mov !== null} /></div>
+              </>}
+          </div>
+        )}
+      </div>
+      {/* o cartao do chamado do pet (D1-10) fica fora da caixa, no alto ao centro da tela, como na tela Pet; depois da caixa no DOM, para o foco
+          nao cair num botao do chamado ao abrir (rev-a11y da D1b) */}
       {chamado}
-      {corpo}
-      </div>
     </dialog>
-  );
-  if (db === null) return raiz(<div className="scan-corpo scan-corpo--vazio"><p className="scan-vazio">Este pet não tem mapa dos pesos.</p></div>);
-
-  const d = db.decisao, mapa = db.mapa, ac = mapa.acesas;
-  if ((d === null) !== (ac === null)) throw new Error("a decisao e as arestas acesas fora de par");
-  const aprendido = d !== null && d.quem_decidiu.mudou;
-  const nPontos = ENTRADAS_LOBOS.length + mapa.receptores.length + REGRAS_LOBOS.length + ACOES_LOBOS.length;
-  const ultimas = m.historico.filter(h => h.quem === "pet").slice(-5).reverse();
-
-  const agora = (
-    <section className={"scan-cx scan-lad scan-agora sec-agora" + (aprendido ? " scan-agora--aprendido" : "")} aria-labelledby="db-agora">
-      <h3 className="scan-sec" id="db-agora">Agora</h3>
-      {aprendido && <span className="scan-tag-aprendido">aprendido</span>}
-      {d ? <>
-        <b>{txt(REGRA_TXT, d.regra, "regra")}: decidiu {txt(ACAO_INF, d.acao, "ação")}</b>
-        <small>{!d.quem_decidiu.escolha ? "Nesta situação só havia uma opção."
-          : d.quem_decidiu.mudou ? `Sem o aprendido, teria decidido ${txt(ACAO_INF, d.quem_decidiu.acao_instinto, "ação")}.`
-            : "O instinto sozinho faria o mesmo."}</small></> : <small>Ainda não decidiu nada.</small>}
-    </section>
-  );
-  const lobos = d && (
-    <section className="scan-cx scan-lad sec-lobos" aria-labelledby="db-lobos">
-      <h3 className="scan-sec" id="db-lobos">O peso de cada lobo nesta escolha</h3>
-      <ul className="db-barras">
-        {LOBO_TXT.filter(([l]) => l !== "piso" || d.barras.piso !== 0).map(([l, nome]) => {
-          const v = d.barras[l];
-          if (typeof v !== "number") throw new Error(`barras.${l} ausente`);
-          /* o eixo no zero (D1-5): o positivo a direita, o negativo a esquerda, o cheio de um lado e 100% */
-          return <li key={l} data-lobo={l}><span>{nome}</span>
-            <span className="scan-trilho scan-trilho--sinal"><b className={v < 0 ? "neg" : ""} style={{ width: Math.min(50, Math.abs(v) * 50) + "%" }} /></span>
-            <em>{pct(v, l === "impulsos" ? 0 : 1, COM_SINAL.has(l))}</em></li>;
-        })}
-      </ul>
-      <SeloEmocao />
-    </section>
-  );
-  const perc = d && (
-    <section className="scan-cx scan-lad sec-perc" aria-labelledby="db-perc">
-      <h3 className="scan-sec" id="db-perc">O que mais pesou</h3>
-      {d.percepcao.length ? <ul className="scan-chips">{d.percepcao.map(p => <li key={p.entrada}>
-        {ENTRADA_TXT[p.entrada] ?? p.entrada} {p.entrada === "dormindo" ? (p.x ? "sim" : "não") : pct(p.x, 0, false)}{" "}
-        <span className={p.termo > 0 ? "scan-favor" : "scan-contra"}>{p.termo > 0 ? "a favor" : "contra"}</span></li>)}</ul>
-        : <p className="scan-vazio">Nada do que ele lê pesou nesta regra.</p>}
-    </section>
-  );
-  const opc = d && (
-    <section className="scan-cx scan-lad sec-opc" aria-labelledby="db-opc">
-      <h3 className="scan-sec" id="db-opc">As opções e a chance de cada uma</h3>
-      <ul className="db-opcoes">{d.chances.map(c => <li key={c.acao} className={c.acao === d.acao ? "esc" : ""}>
-        <span>{txt(ACAO_CURTA, c.acao, "ação")}{c.acao === d.acao && <small> · escolhida</small>}</span>
-        <span className="scan-trilho"><b style={{ width: c.chance * 100 + "%" }} /></span><em>{pct(c.chance, 0, false)}</em></li>)}</ul>
-    </section>
-  );
-  const apr = (
-    <section className="scan-cx scan-lad sec-apr" aria-labelledby="db-apr">
-      <h3 className="scan-sec" id="db-apr">O que aprendeu desde que nasceu</h3>
-      {db.aprendido.length ? <ul className="scan-aprendeu">{db.aprendido.map(a => <li key={a.acao}>
-        <span>{a.desvio > 0 ? "mais" : "menos"} {txt(ACAO_CURTA, a.acao, "ação")} do que o instinto</span><em>{num(a.desvio)}</em></li>)}</ul>
-        : <p className="scan-vazio">Ainda igual ao instinto.</p>}
-    </section>
-  );
-  const ult = (
-    <section className="scan-cx scan-lad sec-ult" aria-labelledby="db-ult">
-      <h3 className="scan-sec" id="db-ult">Últimas ações</h3>
-      {ultimas.length ? <ol className="db-ultimas">{ultimas.map((h, i) => <li key={i}><span className="scan-hora">{hhmm(h.t)}</span>{NOME_PET[h.a as AcaoPet] ?? h.a}</li>)}</ol>
-        : <p className="scan-vazio">Nenhuma ação ainda.</p>}
-    </section>
-  );
-  const legenda = (
-    <ul className="mp-leg">
-      <li><span className="scan-leg scan-leg--prior" />instinto</li><li><span className="scan-leg scan-leg--mais" />aprendeu a mais</li>
-      <li><span className="scan-leg scan-leg--menos" />aprendeu a menos</li><li><span className="scan-leg scan-leg--aceso" />esta decisão</li>
-      <li><span className="scan-leg scan-leg--neg" />peso negativo</li>{mapa.receptores.length > 0 && <li><span className="scan-leg scan-leg--corpo" />receptor do corpo</li>}
-    </ul>
-  );
-  const centro = (
-    <section className="scan-centro" aria-labelledby="db-mapa">
-      <div className="scan-moldura" style={{ "--scan-t-varre": VARREDURA_MS + "ms", "--scan-t-pulso": PULSO_MS + "ms" } as CSSProperties}>
-        <h3 className="scan-moldura-tit" id="db-mapa">Mapa dos pesos <small>{nPontos} pontos · {mapa.arestas.length} pesos</small></h3>
-        {mov !== null && <div className="scan-varre-trilho" key={"varre" + mov} aria-hidden="true"><div className="scan-varredura" /></div>}
-        <div className="scan-mapa-caixa"><div className="scan-giro" ref={giro}><MapaScan mapa={mapa} decisao={d} movel={movel} movendo={mov !== null} /></div></div>
-      </div>
-      <div className="scan-rodape-mapa">
-        {legenda}
-        <p className="mp-nota">Cada ponto é uma entrada, uma regra ou uma ação do pet; cada fio é um peso, da entrada à ação, passando pela regra. A espessura é o tamanho do peso. A forma de cérebro e as regiões são só o desenho.</p>
-        <button type="button" className="hx-btn scan-texto-bt" aria-expanded={verTexto} aria-controls="db-texto" onClick={() => setVerTexto(v => !v)}>
-          <List aria-hidden="true" />O mapa em texto</button>
-      </div>
-      <section className="scan-cx scan-texto db-texto" id="db-texto" aria-labelledby="db-texto-tit" hidden={!verTexto} ref={texto}>
-        <h3 className="scan-sec" id="db-texto-tit">O mapa em texto</h3><MapaEmTexto mapa={mapa} d={d} />
-      </section>
-    </section>
-  );
-  return raiz(
-    <div className="scan-corpo">{/* a ordem do DOM e a do celular; o desktop se arruma por grid-area (scan_digibrain.css) */}
-      {agora}{centro}{lobos}{perc}{opc}{apr}{ult}
-    </div>,
   );
 }
