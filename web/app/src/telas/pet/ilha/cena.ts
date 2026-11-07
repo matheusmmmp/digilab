@@ -14,7 +14,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { DIA, DOBRA_K, NOITE } from "./constantes.ts";
 import { ALTURA_NIVEL, FORA, NIVEL_AGUA, rng, type Celula, type Ilha, type Objeto } from "./grade.ts";
-import { MODELOS, type Modelo, type NomeModelo } from "./modelos.ts";
+import { MODELOS, type Modelo, type NomeLugar, type NomeModelo } from "./modelos.ts";
 
 /* ---------- o mundo curvo ---------- */
 /** os uniforms globais: a dobra, o foco (o pet) e a direcao da dobra no chao (a da camera; z sem a camera livre), o tempo (s), o vento
@@ -386,6 +386,8 @@ export async function carregarVariante(loader: GLTFLoader, url: string, modelo: 
 export interface Objetos {
   grupo: THREE.Group; grama: THREE.InstancedMesh[]; noite?: (noite: boolean) => void;
   quadro?: (foco: readonly [number, number], dobra: number, dir: readonly [number, number], meiaLargura: number) => void;
+  /** os lugares da ilha (lugares.ts), nos estilos que os tem: a caixa de cada um, para o toque */
+  lugares?: Map<NomeLugar, THREE.Box3>;
 }
 
 /** carrega uma variante de um modelo da grade (o arquivo, o modelo da grade e a linha da tabela MODELOS) */

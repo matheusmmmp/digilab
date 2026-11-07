@@ -25,9 +25,10 @@ import { AFASTAR_MAX, BATER_BOLA_MS, CAMERAS, COBERTO_MS, GOLPE_DIST, GOLPE_MS, 
   RAZAO_MAX, TEXEL_ALVO, TREINO_MS, type CameraHabitat } from "./constantes.ts";
 import { CURVA, type CenaIlha, type Objetos, cobrirFundo } from "./cena.ts";
 import { estiloDe, type Estilo } from "./estilos.ts";
-import { dobrarY, paraMundoCel, paraTelaNdc, type CameraLida, type Dobra } from "./curva.ts";
+import { dobrarY, lugarNoPonto, paraMundoCel, paraTelaNdc, type CameraLida, type Dobra } from "./curva.ts";
 import { ilhaDe, type Ilha } from "./grade.ts";
 import { Itens } from "./itens.ts";
+import type { NomeLugar } from "./modelos.ts";
 import { Papel, type Ret, type Suspenso } from "./papel.ts";
 import { MAO, Pendulo, alturaDepoisDeSoltar, soltarAcabou, tremorAgora } from "./mao.ts";
 import { ORBITA, aplicarOrbita, ligarControles, recentrar } from "../orbita.ts";
@@ -193,6 +194,12 @@ class VistaIlha {
   pousoEm(peX: number, peY: number): [number, number] | null {
     const p = this.chaoSob(peX, peY), sub = this.mu.cm.sub;
     return p ? [Math.round(p[0] * sub), Math.round(p[1] * sub)] : null;
+  }
+  /** o lugar da ilha (lugares.ts) sob o ponto do cliente (px), pela mesma dobra; null fora da cena, antes dos modelos ou num estilo sem lugares */
+  lugarEm(cx: number, cy: number): NomeLugar | null {
+    const caixas = this.objetos?.lugares, r = this.canvas.getBoundingClientRect();
+    if (!caixas || !(r.width > 0 && r.height > 0) || cx < r.left || cx > r.right || cy < r.top || cy > r.bottom) return null;
+    return lugarNoPonto(caixas, (x, y, z) => paraTelaNdc(this.lida, this.dobra, x, z, y), ((cx - r.left) / r.width) * 2 - 1, 1 - ((cy - r.top) / r.height) * 2);
   }
   /** o modo mundo: o ponto do mapa (subunidades) no cliente (px), pela mesma dobra */
   paraTela(x: number, y: number): [number, number] {
@@ -410,6 +417,7 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
     paraMundo: (cx, cy) => vista.paraMundo(cx, cy),
     paraTela: (x, y) => vista.paraTela(x, y),
     pousoEm: (x, y) => vista.pousoEm(x, y),
+    lugarEm: (x, y) => vista.lugarEm(x, y),
     get pet() { const p = vista.petDesenhado; if (!p) throw new Error("a cena do mundo ainda nao desenhou o pet"); return p; },
     get bola() { return vista.bolaDesenhada ?? undefined; },
   };

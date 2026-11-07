@@ -215,7 +215,7 @@ export function App() {
       </div>
       <DicaBit />
       {/* o habitat (a cena do Pet) e a camada de fundo de toda rota: fica montado, nao sobe nem desce ao trocar de destino */}
-      <Habitat escurecer={!!painel} />
+      <Habitat escurecer={!!painel} irLugar={irDestino} />
       <TopoHabitat abrirMeusPets={() => { sairDoLab(); setMeusPets(true); }} irConversar={() => irDestino("conversar")} abrirConfig={() => abrirConfig("principal")} />
       {!painel && <TelaPet irRegistro={() => ir({ destino: "diario", aba: "registro" })} irEvolucao={() => { ir({ destino: "crescer", aba: "evolucao" }); scrollTo(0, 0); }} />}
       {painel && (lado ? <PainelLado d={painel.d}>{painel.corpo}</PainelLado> : <PainelModal d={painel.d} nav={navNoModal ? nav : null}>{painel.corpo}</PainelModal>)}

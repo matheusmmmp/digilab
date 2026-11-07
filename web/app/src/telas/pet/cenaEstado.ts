@@ -13,6 +13,7 @@
    dobra param de seguir o pet (o paraMundo nao muda sob o dedo). `maoPet`: com ele na mao, o ponto do cliente (px) onde fica o pe do pet
    (o ponteiro mais a distancia do pe ao ponteiro quando ele foi pego); a vista desenha o pet ali, suspenso, e a sombra onde ele vai cair.
    `zzX`: com o quadro Dormir, o x (px de CSS da cena) do topo da cabeca, de onde sai o "zz" (papel.ts); null fora dele. */
+import type { NomeLugar } from "./lugaresIlha.ts";
 export interface VistaDoMundo {
   /** o ponto do cliente (px) no chao, em subunidades inteiras do mapa; null fora do mapa ou fora do chao */
   paraMundo: (clientX: number, clientY: number) => [number, number] | null;
@@ -25,6 +26,8 @@ export interface VistaDoMundo {
   /** o pet na mao (a ilha 3D; a reserva nao tem): o ponto do chao (subunidades inteiras, SEM limitar ao mapa) em que cai o pe do pet
       desenhado no ponto do cliente (px) `pe`, ja descontada a altura em que a mao o segura; null fora do chao (o ceu, fora da cena) */
   pousoEm?: (peX: number, peY: number) => [number, number] | null;
+  /** os lugares da ilha (ilha/lugares.ts; a ilha 3D nos estilos que os tem): o lugar sob o ponto do cliente (px), ou null */
+  lugarEm?: (cx: number, cy: number) => NomeLugar | null;
 }
 export const CENA: {
   modo3d: boolean;
