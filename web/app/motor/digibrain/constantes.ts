@@ -89,6 +89,21 @@ export const CONFIG_DIGIBRAIN_LAB = {
   redecidir_evento: false,
 } as const;
 
+/** a ConfigDigibrain que o M-ADAPT recebe: a do laboratorio, com a subchave `fala_unidades` (DC3d) ligada ou nao */
+export type ConfigDigibrainModular = Omit<typeof CONFIG_DIGIBRAIN_LAB, "fala_unidades"> & { readonly fala_unidades: boolean };
+/** o laboratorio com a subchave `fala_unidades` ligada (docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, 3.1 e A1.1; o braco LAB+F da DC3): so o pet de
+ *  teste com a marca "fu" no registro (motor.ts) */
+export const CONFIG_DIGIBRAIN_LAB_FALA: ConfigDigibrainModular = { ...CONFIG_DIGIBRAIN_LAB, fala_unidades: true };
+
+/** As unidades de fala (digilab/config.py, CONTEUDOS_FALA e TERMO_DO_CONTEUDO; DC3, 3.1): com a `fala_unidades`, o `chamar_atencao` vira
+ *  (chamar_atencao, c) com c em CONTEUDOS_FALA; o termo do receptor de cada conteudo no W0 do chamar. Conferidas contra o gabarito da DC3d
+ *  (test/gabaritos/digibrain_fala_unidades.json.gz) por test/digibrain_fala_unidades.test.ts. */
+export const CONTEUDOS_FALA = ["fome", "higiene", "solidao"] as const;
+export type ConteudoFala = typeof CONTEUDOS_FALA[number];
+export const TERMO_DO_CONTEUDO = [["fome", "fome_sem_comida"], ["higiene", "u_higiene"], ["solidao", "u_solidao"]] as const;
+/** a ConfigFalaUnidades (digilab/config.py): `ganho_conteudo` = 3S/2, PROPOSTO, SEM FONTE (fixado na DC3a pela condicao da 3.1) */
+export const CONFIG_FALA_UNIDADES = { ganho_conteudo: 1536 } as const;
+
 /** os numeros do Config e da ConfigMundo que o M-SENS le: o passo do cerebro (Config.intervalo_decisao_ticks), a noite (Config.inicio_noite_tick,
  *  fim_noite_tick) e a visao (ConfigMundo.sub, raio_visao_celulas, max_vistos). Conferidos contra o motor e contra constantes_python.json. */
 export const CONFIG_MODULAR_MUNDO = {

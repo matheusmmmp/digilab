@@ -1,7 +1,13 @@
 /* CONVERSA_PET, DC2b (decisao DR-1 do Matheus, 2026-11-06: a fala nasce da rede, a LLM so como voz): o que a pagina manda ao servidor com a chave
    "Fala pela rede (teste)" ligada. Sao SO os conceitos do `dec-v2` da ultima decisao do modular (Motor.conceitosDec) e a identidade do pet (estagio
-   e forma, para o estilo da especie): nenhum `estadoDoPet`, log, memoria do Bandit nem desejo. Apresentacao pura: nada daqui escreve no pet. */
+   e forma, para o estilo da especie): nenhum `estadoDoPet`, log, memoria do Bandit nem desejo. Apresentacao pura: nada daqui escreve no pet.
+   DC3d (o plano da DC3, tabela das etapas): no pet de teste com a fala com conteudo (a marca "fu"), quando a ultima decisao do modular foi uma unidade
+   de fala, o conteudo dela (fome, higiene ou solidao) e a intencao do pedido, no formato `dec-v3` (os mesmos conceitos do `dec-v2`; o servidor
+   aceita so esses tres conteudos como intencao e liga a voz-v3). E a rede que escolheu pedir: a LLM so poe em palavras (DR-1). */
 import { nomeForma, type ConceitosDec, type Motor } from "../motor/index.ts";
+
+/** o formato do pedido com a intencao da unidade de fala (digilab_fala_livre/conceitos.py VERSAO_DEC_V3) */
+export const VERSAO_DEC_FALA = "dec-v3";
 
 /** as classes de objeto que o servidor aceita como `alvo` (digilab_fala_livre/conceitos.py CLASSES_OBJETO) */
 const CLASSES_ALVO = ["racao", "a", "b", "c", "podre", "bola"];
@@ -17,8 +23,9 @@ export function alvoDeCatalogo(alvo: string | undefined): string | undefined {
 export function conceitosDaVoz(m: Motor): { versao: string; k: number; intencao: string; conceitos: Record<string, unknown>[] } | null {
   const c: ConceitosDec | null = m.conceitosDec("dec-v2");
   if (c === null) return null;
+  const fala = m.conteudoDaFala();                      // DC3d: a unidade de fala escolhida vira a intencao (dec-v3)
   return {
-    versao: c.versao, k: c.k, intencao: c.intencao,
+    versao: fala === null ? c.versao : VERSAO_DEC_FALA, k: c.k, intencao: fala === null ? c.intencao : fala,
     conceitos: c.conceitos.map(x => {
       const alvo = alvoDeCatalogo(x.alvo);
       return { nome: x.nome, valor: x.valor, confianca: x.confianca, ...(alvo !== undefined ? { alvo } : {}), ...(x.episodio !== undefined ? { episodio: x.episodio } : {}) };

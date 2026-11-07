@@ -36,4 +36,5 @@ export * from "./digibrain.ts";
 export * from "./combate_tr/index.ts";
 export * from "./pet_lab.ts";
 export { decodificar, decodificarV2, episodioDec, desfechoDoEpisodio, CATALOGO_CONCEITOS, CLASSES_EPISODIO_DEC, DESFECHOS, VERSAO_DECODIFICADOR, VERSAO_DECODIFICADOR_V2, type Conceito, type ConceitosDec, type EpisodioDec, type NomeConceito } from "./digibrain/decodificador.ts";
+export { CONTEUDOS_FALA, type ConteudoFala } from "./digibrain/constantes.ts";
 export { ORDEM_TERMOS, type BarraLab, type ChanceLab, type LeituraLab, type SondaLab, type TermoLab } from "./digibrain/leitura.ts";

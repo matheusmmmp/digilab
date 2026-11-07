@@ -361,3 +361,34 @@ O código da linha DC3a do [plano da DC3](PLANO_ANALISE_V3_CONVERSA_DC3.md) (se�
   - o efeito vem do dono atencioso, cuja célula conta duas vezes;
   - só a fala de companhia aprende; a de comida não compensa.
 - **O próximo passo** é a DC3d, o porte ao jogo atrás de chave.
+
+## DC3d — o porte da fala com conteúdo ao jogo (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc3d-porte`, 2026-11-07)
+
+A linha DC3d da tabela das etapas do [plano da DC3](PLANO_ANALISE_V3_CONVERSA_DC3.md): o espelho TS, a paridade e a fala no jogo, atrás de
+chave desligada. Nenhuma run; só testes. O `digilab/` não muda. Desvios D-CP-DC3d-1 a 8 em `docs/registro/2026-11.md`.
+
+- **O gabarito antes, num commit próprio** (`9631a18f`): `web/app/test/dc3d_hoje.ts` e `dc3d_vidas_hoje.test.ts` gravam as vidas de hoje
+  dos pets que abrem no jogo (v13 a v19 e o pet de teste v16; sementes 101 a 505; 3 dias): o registro, a assinatura, os motivos do modular e
+  o `dec-v2` da última decisão. Sem a marca, todas saem byte a byte, também pelo replay.
+- **O espelho TS** (`web/app/motor/digibrain/`): `CONTEUDOS_FALA`, `TERMO_DO_CONTEUDO` e `CONFIG_FALA_UNIDADES` (o `ganho_conteudo` 3S/2) em
+  `constantes.ts`, com a `CONFIG_DIGIBRAIN_LAB_FALA`; o M-IMPULSO divide o `chamar_atencao` nas três unidades (o inato com o termo do
+  conteúdo vezes o ganho); o M-PLAST tem uma linha de H por unidade (`linhaDaOpcao`); o M-ADAPT entrega o chamar de hoje ao motor, fecha a
+  fala com o corpo da decisão seguinte (A1.1) e falha alto com a fala sem conteúdo ou com as unidades do chamar fora da subchave.
+- **A paridade:** `experiments/exportar_gabarito_fala_unidades.py` grava `web/app/test/gabaritos/digibrain_fala_unidades.json.gz` (o LAB+F da
+  DC3 no comedouro; atencioso e relapso, ignorando e atendendo; 101 a 505; 3 dias; 20 vidas, 5 760 decisões, com falas dos três
+  conteúdos). `web/app/test/digibrain_fala_unidades.test.ts` rejoga o log do Python e confere a ação, o motivo e a assinatura de cada
+  decisão e o sha256 do estado interno no fim; `tests/test_gabarito_fala_unidades_web.py` confere que o arquivo é o que o Python de hoje
+  produz. Mutações conferidas: tirar o A1.1 ou mudar o `ganho_conteudo` em 1 quebra a paridade.
+- **A fala no jogo:** a "Fala com conteúdo (teste)" (Ajustes → Laboratório, `CHAVE-lab-fala`, desligada) faz o ovo de teste nascer com a
+  marca `"fu"` no registro (`Motor.ligarFalaUnidades`); o replay a lê. Com a "Fala pela rede (teste)" ligada, quando a última decisão do
+  modular foi uma unidade de fala (`Motor.conteudoDaFala`), o pedido da voz leva o `dec-v3`, com a intenção do conteúdo; nas outras
+  decisões, o `dec-v2` de hoje. O pet ativo não muda.
+- **O servidor:** o `dec-v3` é de catálogo fechado (intenção só `fome`, `higiene` ou `solidao`; fora dela, 400 sem chamar a LLM, também na
+  verificação) e liga a voz-v3 (a intenção é um pedido `[P]` ao dono, com texto fixo de catálogo; o estado só pelos conceitos) e a verif-v9
+  (o pedido só é sustentado se pede o que a rede escolheu). Nenhuma versão antiga mudou.
+- **Testes:** `tests/test_dc3d.py` (36: o formato, a injeção pela intenção, a voz-v3, a verif-v9, as rotas), `tests/test_gabarito_fala_unidades_web.py`
+  (2); no web, `test/digibrain_fala_unidades.test.ts` (24), `test/dc3d_vidas_hoje.test.ts` (41), `test/fala_unidades_jogo.test.ts` (6: a
+  marca, a preferência, o pedido da voz) e `e2e/fala_unidades.spec.ts`.
+- **O que se vê no jogo (D-CP-DC3d-7):** com quem atende, a fala de comida cai; a de companhia é a que a DC3c diz aprender. Não é bug do
+  porte, e a mecânica não foi tocada.
+- **Falta:** a avaliação da voz-v3 e da verif-v9 com modelo de verdade (só cliente falso aqui) e a DC4.

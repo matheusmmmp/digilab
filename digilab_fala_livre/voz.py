@@ -12,8 +12,8 @@ from .corpus import Especie, bloco_estilo, repete_citacao
 from .fatos import ESTAGIOS
 from .gerar import Resultado
 from .ollama import ClienteOllama
-from .prompt import (MAX_CHARS, MAX_TOKENS, esquema, fatos_do_dono_voz, ids_conceitos, linha_conceito, mensagens_voz,
-                     versao_voz)
+from .prompt import (ID_PEDIDO, MAX_CHARS, MAX_TOKENS, TIPO_PEDIDO, esquema, fatos_do_dono_voz, ids_conceitos, linha_conceito,
+                     linha_pedido, mensagens_voz, versao_voz)
 from .saida import FALA_GENERICA, SaidaInvalida, aparar, ler
 
 TIPO_CONCEITO = "conceito"
@@ -23,6 +23,9 @@ def fatos_da_voz(conceitos: Conceitos, historico, estagio: str, situacao: str = 
     """Os `fatos` do verificador: {id, tipo, texto} dos conceitos ativos e dos [J]. O texto do conceito e a linha do prompt."""
     fatos = [{"id": cid, "tipo": TIPO_CONCEITO, "texto": linha_conceito(cid, c).split("] ", 1)[1], **c.para_dict()}
              for cid, c in ids_conceitos(conceitos).items()]
+    if conceitos.pedido is not None:          # dec-v3 (DC3d): o pedido que a rede escolheu, [P]
+        fatos.insert(0, {"id": ID_PEDIDO, "tipo": TIPO_PEDIDO, "texto": linha_pedido(conceitos.pedido).split("] ", 1)[1],
+                         "intencao": conceitos.pedido})
     if situacao == "conversa":
         fatos += [f.para_dict() for f in fatos_do_dono_voz(historico, estagio)]
     return fatos
