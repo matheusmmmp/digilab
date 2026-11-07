@@ -12,7 +12,7 @@
     linear-gradient(var(--hx-rotulo), var(--hx-rotulo)) right 3px bottom 3px / 9px 1px no-repeat padding-box,
     linear-gradient(var(--hx-rotulo), var(--hx-rotulo)) right 3px bottom 3px / 1px 9px no-repeat padding-box;
 }
-:root[data-pele="xcom"] :is(.hud-caixa, .pet-hud .hud-painel, .pet-etiqueta-db, .topo-pet, .topo-relogio),
+:root[data-pele="xcom"] :is(.hud-caixa, .pet-hud .hud-painel, .topo-pet, .topo-relogio),
 :root[data-pele="xcom"] body .pet-tela .pet-alerta :is(.pet-prioridade, .chamado.dl-card),
 :root[data-pele="xcom"] body .hx-nav::before{
   border-top:2px solid var(--hx-borda-topo);

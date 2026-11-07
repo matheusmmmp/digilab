@@ -50,6 +50,9 @@ export interface Passo {
   golpe?: { desde: number; alvo: readonly [number, number] } | null;
   /** a vista move o pet desenhado sem o motor (a ida e a volta do treino): conta como andando */
   andandoVista?: boolean;
+  /** a altura do chao sob o pet pela dobra do mundo curvo (curva.ts, dobrarY): 0 quando o pet e o foco da camera; com a camera solta
+      (cameraLivre.ts) o foco sai do pet e o chao sob ele desce, e o papel desce junto */
+  yChao?: number;
 }
 
 interface Folha { tex: THREE.CanvasTexture; w: number; h: number }
@@ -265,8 +268,9 @@ export class Papel {
     const n = p.pxPorTexel, wpx = Math.round(folha.w * n * (dorme || gesto.estica !== 1 ? 1 + (1 - alt) / 2 : 1)), hpx = Math.round(folha.h * n * alt), { nascendo } = jogoAtual();
     const pulo = (andando && !p.reduzido && !ovo ? Math.round(Math.abs(Math.sin(p.agora / PULO_MS)) * PULO_TEXELS) * n : 0) + Math.round(gesto.alto) * n;
     const balanco = ovo && !p.reduzido ? balancoOvo(nascendo) * n : 0;
-    /* o pe do papel no chao (o foco: sem dobra), projetado; o canto vai ao pixel inteiro mais perto */
-    this.v.set(p.cel[0], 0, p.cel[1]).project(p.camera);
+    /* o pe do papel no chao (no foco, sem dobra; com a camera solta, o chao dobrado sob o pet), projetado; o canto vai ao pixel inteiro mais perto */
+    const yChao = p.yChao ?? 0;
+    this.v.set(p.cel[0], yChao, p.cel[1]).project(p.camera);
     const [W, H] = p.canvas, ax = ((this.v.x + 1) / 2) * W, ay = ((1 - this.v.y) / 2) * H;
     const esquerda = Math.round(ax - wpx / 2) + balanco + Math.round(gesto.frente) * n * this.lado, base = Math.round(ay) - pulo;
     const dx = (esquerda + wpx / 2 - ax) / p.ppu, dy = (ay - base) / p.ppu;
@@ -274,10 +278,11 @@ export class Papel {
     this.papel.quaternion.copy(cam.quaternion);
     this.papel.position.set(0, 0, 0).addScaledVector(direita, dx).addScaledVector(cima, dy);
     this.papel.scale.set((Math.abs(this.escalaX) < 0.06 ? 0.06 * Math.sign(this.escalaX || 1) : this.escalaX) * wpx / p.ppu, hpx / p.ppu, 1);
-    this.raiz.position.set(p.cel[0], 0, p.cel[1]);
+    this.raiz.position.set(p.cel[0], yChao, p.cel[1]);
     const larg = wpx / p.ppu;
     this.sombra.scale.set(larg * 0.85, 1, larg * 0.42);
-    this.sombra.position.set(0, 0.03, 0);
+    /* a sombra ja dobra no shader (curvar): a raiz desceu yChao, e a sombra sobe o mesmo tanto para nao descer duas vezes */
+    this.sombra.position.set(0, 0.03 - yChao, 0);
     return { x: esquerda / p.razao, y: (base - hpx) / p.razao, w: wpx / p.razao, h: hpx / p.razao };
   }
 

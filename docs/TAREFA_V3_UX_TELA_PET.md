@@ -262,6 +262,18 @@ Matheus, 2026-11-05, nesta sessão (resposta "B, hooks antes"):
   - **M1-13:** rosa só para a necessidade, a vontade aprendida em ciano, e uma marca no ⋯ quando a sugerida mora nele. **M1-14:** o vital
     baixo rosa no leque. **M1-15:** o balão da fala continua.
 
+- **A direção "Lugares da ilha" e a prancha da L1, com as L1-1 a L1-7** (Matheus, 2026-11-06: escolheu a direção B, "Lugares da ilha";
+  depois "Aprovado, seguir" e "Aprovar a L1" à prancha do commit `77fb11e2`). As perguntas estão em `docs/PROPOSTAS_V3_UX_TELA_PET.md`,
+  seção "Lugares da ilha (L1)":
+  - **L1-1:** o minimapa mostra **a ilha inteira** (a escala A), e **a roda sobre ele aproxima até a janela** em volta da câmera (a B);
+  - **L1-2:** o pet é o **ponto rosa** (`--hx-necessidade`) com o anel claro;
+  - **L1-3:** com a câmera "Fixa", **o minimapa aparece, sem mover a câmera**;
+  - **L1-4:** o cocô e o kit médico **ficam fora** do minimapa;
+  - **L1-5:** **sim** aos atalhos Q/E (girar), +/− (aproximar) e às setas e ao Enter no minimapa com foco;
+  - **L1-6:** o DigiBrain vira **a 4ª linha da pilha** da direita;
+  - **L1-7:** os números (o círculo de 232 px, 12 células/s no WASD, o "seguir o pet" a partir de 6 células, a transição de 400 ms)
+    **ficam PROPOSTO, SEM FONTE**. O Matheus não comentou nenhum deles.
+
 UX-4 a UX-8 continuam PROPOSTAS.
 
 ## 9. Etapa A0: os hooks restaurados (2026-11-05)
@@ -378,3 +390,31 @@ as M1-1 a M1-15 (seção 8.1). O plano está em `docs/PROPOSTAS_V3_UX_TELA_PET.m
   - o desktop (o DOM e a captura sem o canvas) dá 84 de 84 iguais;
   - a captura cheia a 1920 com o atlas carregado tem o mesmo perfil de ruído da base contra ela mesma;
   - o e2e inteiro dá 123 passed.
+
+## 13. Etapa L1 de "Lugares da ilha": a câmera solta e o minimapa (2026-11-06)
+
+**A direção.** O Matheus escolheu a B, "Lugares da ilha", entre as três da página de direção: cada menu vira um lugar da ilha. A L1 é o
+primeiro passo e só vale a partir de 900 px. O plano, a prancha e as decisões L1-1 a L1-7 estão em `docs/PROPOSTAS_V3_UX_TELA_PET.md`,
+seção "Lugares da ilha (L1)", e em `docs/pranchas/ux-lugares/`; as decisões, também na seção 8.1.
+
+**O código.** Está no branch `v3-ux-lugares`, empilhado sobre o `v3-ux-p1-codigo`. É só vista: fora do save, do registro e do replay.
+- `cameraLivre.ts` (novo): o ponto olhado, que solta do pet com WASD, as setas e o arrasto direito ou do meio; F, o retrato, o "seguir o
+  pet" e o aviso de borda voltam; Q/E e +/− giram e aproximam. A vista (`ilha/vista.ts`) centra a câmera e a dobra no ponto olhado e
+  publica a cada quadro o que o minimapa e a HUD leem (a versão só sobe quando algo mudou; abaixo de 900 px, nada).
+- `Minimapa.tsx`, `minimapaGeo.ts` e `minimapa.css` (novos): o círculo de 232 px com a ilha da grade (`ilha/minimapa.ts`, nas cores da
+  própria cena), o pet, o cone, os lugares e a comida; o clique, o arrasto, a roda (da ilha inteira até a janela em volta da câmera) e o
+  teclado (setas e Enter).
+- `CameraHud.tsx` (novo): o "seguir o pet" e o aviso de borda, com uma região viva para o leitor de tela.
+- `TelaPet.tsx`: a etiqueta do DigiBrain virou a 4ª linha da pilha. `Topo.tsx`: com a câmera solta, o retrato vira "Seguir o pet".
+- `ilha/papel.ts`: com o pet longe do ponto olhado, o papel desce com o chão dobrado e tem o tamanho da distância dele.
+- **Testes:** `npm run tipos` ok; `npm test` 866 passed (93 arquivos); `npm run e2e` 125 passed (porta 8833), com o
+  `e2e/camera_livre.spec.ts` novo (o D solta, o F volta, o minimapa leva a câmera, o DigiBrain pela pilha, nenhum evento novo no registro;
+  no celular nada disso existe).
+- **O celular sai igual:** o DOM e a captura com o canvas escondido, 22 telas × 390 e 360 × Vidro e Militar (88), base (`60f4f441`) ×
+  branch: 0 diferenças de DOM e 0 de pixel. A única diferença de uma rodada, no `evolucao-momento` (a revelação animada), não se repetiu em
+  quatro rodadas de cada lado. O sprite das capturas é o do Digimon (o Gomamon), não a reserva.
+- **Revisores:** `rev-replay` sem achado; `rev-a11y` e `rev-cena` com achados, os de custo baixo corrigidos (a pilha não desce até o
+  minimapa e ele sai com pouca altura; as teclas respeitam `defaultPrevented` e mais papéis; a região viva; o papel do pet na dobra; o
+  minimapa só redesenha quando algo muda; nada publicado abaixo de 900 px). Os outros ficam como questões abertas no PR.
+- **As referências de captura a 1920** (`npm run capturas`) mudam nas telas Pet: o minimapa entra e a etiqueta sai. Não foram regravadas;
+  isso espera o ok do Matheus.
