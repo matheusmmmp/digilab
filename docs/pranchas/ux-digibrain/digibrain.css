@@ -168,10 +168,10 @@ em{ font-style:normal }
 .moldura-tit{ position:absolute; left:20px; top:12px; z-index:2; margin:0; padding:5px 12px; font:700 14px/1.2 var(--hx-f); letter-spacing:var(--hx-titulo-esp);
   text-transform:uppercase; color:var(--hx-rotulo); border:1px solid var(--hx-borda); background:var(--hud-fundo-2) }
 .moldura-tit small{ margin-left:8px; font-weight:500; text-transform:none; letter-spacing:.02em; color:var(--hx-sec) }
-.mapa-caixa{ position:absolute; inset:52px 20px 14px }
+.mapa-caixa{ position:absolute; inset:52px 20px 14px; z-index:1 }   /* acima da varredura: os rotulos ficam por cima dela */
 .mapa-caixa svg{ display:block; width:100%; height:100% }
 /* a varredura, parada num quadro (so numa decisao nova) */
-.varredura{ position:absolute; left:8px; right:8px; top:41%; height:64px; pointer-events:none;
+.varredura{ position:absolute; z-index:0; left:8px; right:8px; top:41%; height:64px; pointer-events:none;
   background:linear-gradient(to bottom, transparent, color-mix(in srgb, var(--scan-malha) 26%, transparent)); border-bottom:2px solid var(--scan-malha) }
 
 /* o rodape do mapa: a legenda, a nota honesta e o mapa em texto */
@@ -202,7 +202,6 @@ em{ font-style:normal }
 .mp *{ transition:none }
 .mp-malha{ fill:none; stroke:var(--scan-malha); stroke-opacity:.12; stroke-width:1 }
 .mp-silhueta{ fill:url(#db-malha); stroke:var(--scan-malha); stroke-opacity:.6; stroke-width:1.5 }
-.mp-tronco{ fill:none; stroke:var(--scan-malha); stroke-opacity:.45; stroke-width:1.5 }
 .mp-divisas path{ fill:none; stroke:var(--hx-borda); stroke-dasharray:4 7; stroke-width:1.2 }
 .mp-reg text, .mp-sub{ font-size:14px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; fill:var(--hx-rotulo) }
 .mp-sub{ fill:var(--hx-ok); letter-spacing:.1em }
@@ -261,7 +260,7 @@ em{ font-style:normal }
 .tela--390 .mp-reg text, .tela--390 .mp-sub{ font-size:26px; letter-spacing:.08em }
 .tela--390 .mp-dest-caixa{ stroke-width:2.5 }
 .tela--390 .mp-divisas path{ stroke-width:2.5; stroke-dasharray:8 14 }
-.tela--390 .mp-silhueta, .tela--390 .mp-tronco{ stroke-width:3 }
+.tela--390 .mp-silhueta{ stroke-width:3 }
 .tela--390 .mp-malha{ stroke-width:2 }
 .tela--390 .mp-no circle{ stroke-width:3 }
 .tela--390 .mp-cand circle{ stroke-width:5 }

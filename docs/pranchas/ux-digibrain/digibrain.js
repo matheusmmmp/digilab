@@ -81,7 +81,6 @@ function posicoes(receptores) {
 }
 const SILHUETA = "M120 330C100 210 220 80 420 62C600 45 820 90 890 220C935 300 900 390 820 420C760 440 700 430 650 445C600 470 540 500 470 488C380 475 330 430 250 430C170 430 130 390 120 330Z";
 const CEREBELO = "M650 445C655 505 760 535 825 505C865 485 860 440 820 420C760 440 700 430 650 445Z";
-const TRONCO = "M600 468C608 520 612 560 618 604M664 474C664 520 668 560 674 604";
 const DIVISAS = ["M380 66C360 180 372 300 345 410", "M612 54C592 170 602 300 592 420", "M300 432C360 392 540 388 640 446"];
 /* as regioes: o lobo (o mesmo id de lobo_decisivo e do data-lobo de hoje), o rotulo e onde ele fica */
 const REGIOES = [["decisao", "decisão", 250, 34], ["impulsos", "impulsos", 490, 30], ["percepcao", "percepção", 760, 40], ["memoria_emocao", "memória e emoção · sem pesos", 460, 526]];
@@ -110,7 +109,7 @@ function svgMapa(mapa, d, varredura) {
   const regioes = REGIOES.map(([lobo, nome, x, y]) =>
     `<g class="mp-reg mp-reg--${lobo}${dest === lobo ? " mp-dest" : ""}" data-lobo="${lobo}"><text x="${x}" y="${y}" text-anchor="middle">${nome}` +
     `${dest === lobo ? '<tspan class="mp-mais-peso"> · pesou mais</tspan>' : ""}</text></g>`).join("") +
-    (mapa.receptores.length ? '<text class="mp-sub" x="800" y="566">receptores do corpo</text>' : "");
+    (mapa.receptores.length ? '<text class="mp-sub" x="757" y="566" text-anchor="middle">receptores do corpo</text>' : "");
 
   const pesos = mapa.arestas.map(a => {
     const cls = a.aprendido > 0 ? "mp-mais" : a.aprendido < 0 ? "mp-menos" : "mp-prior";
@@ -149,7 +148,7 @@ function svgMapa(mapa, d, varredura) {
 
   return `<svg class="mp" viewBox="${VB}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${esc(rotulo)}" data-n="${ac ? ac.n : ""}">
 <defs><pattern id="db-malha" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(28)"><path class="mp-malha" d="M0 0H16M0 0V16"/></pattern></defs>
-<g class="mp-desenho" aria-hidden="true"><path class="mp-silhueta" d="${SILHUETA}"/><path class="mp-silhueta" d="${CEREBELO}"/><path class="mp-tronco" d="${TRONCO}"/>
+<g class="mp-desenho" aria-hidden="true"><path class="mp-silhueta" d="${SILHUETA}"/><path class="mp-silhueta" d="${CEREBELO}"/>
 <g class="mp-divisas">${DIVISAS.map(p => `<path d="${p}"/>`).join("")}</g></g>
 ${regioes}
 <g class="mp-pesos${ac ? " mp-pesos--fundo" : ""}">${pesos}</g>${acesas}${pulso}

@@ -274,6 +274,16 @@ Matheus, 2026-11-05, nesta sessão (resposta "B, hooks antes"):
   - **L1-7:** os números (o círculo de 232 px, 12 células/s no WASD, o "seguir o pet" a partir de 6 células, a transição de 400 ms)
     **ficam PROPOSTO, SEM FONTE**. O Matheus não comentou nenhum deles.
 
+- **O DigiBrain "scan holográfico", a prancha D1 e as D1-1 a D1-11** (Matheus, 2026-11-07: escolheu a direção A, "scan holográfico", no
+  protótipo https://claude.ai/artifact/5Yay8iVFaPv4kTE3r4Lhut; depois "Aprovar e codar" à prancha do commit `26285e7a`). As perguntas e as
+  recomendações aceitas estão em `docs/PROPOSTAS_V3_UX_TELA_PET.md`, seção "DigiBrain scan (D1)", e a prancha em `docs/pranchas/ux-digibrain/`:
+  - SVG; a varredura em 1,2 s, o pulso em 0,8 s e o giro de ±8° em 40 s, **PROPOSTO, SEM FONTE**; sem giro no celular; o plano inteiro
+    balança, sem profundidade por nó;
+  - as barras dos lobos com o eixo no zero; no replay, só o destaque troca; o mapa em texto com os inteiros `w` e `w0`;
+  - o e2e "sem animação" com o reduzir movimento, mais um teste de que as animações terminam;
+  - o `DigiBrainLab` fica no painel de hoje; o tempo do jogo segue andando, com o cartão do chamado por cima;
+  - os números de layout ficam **PROPOSTO, SEM FONTE**.
+
 UX-4 a UX-8 continuam PROPOSTAS.
 
 ## 9. Etapa A0: os hooks restaurados (2026-11-05)

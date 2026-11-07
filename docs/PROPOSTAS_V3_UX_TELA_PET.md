@@ -1138,7 +1138,7 @@ o scan dá ao mapa a tela inteira, sem acrescentar nenhum dado.
 - **A decisão acesa** é a de hoje: os fios de `mapa.acesas.arestas` na cor de "esta decisão" (`--mp-aceso`) com a espessura pela `forca`
   (o termo negativo tracejado), o resto dos pesos a 35 %; a regra que disparou, as três entradas de `decisao.percepcao`, as candidatas (com
   a chance) e a escolhida acesas; a região do `lobo_decisivo` com a caixa "pesou mais".
-- **A forma de cérebro é só o desenho:** a silhueta (o hemisfério, o cerebelo e o tronco) é preenchida por uma trama fina da malha, que não
+- **A forma de cérebro é só o desenho:** a silhueta (o hemisfério e o cerebelo; o tronco saiu depois do ok, porque os traços dele não eram nó nem peso) é preenchida por uma trama fina da malha, que não
   se lê como fio, e quatro rótulos de região, todos fora dos nós: **decisão** na frente (as ações, de cima para baixo na ordem de
   `ACOES_LOBOS`), **impulsos** no meio (as regras na ordem em que o instinto as testa), **percepção** atrás (as entradas num arco, na ordem do
   motor, com os receptores do corpo no fim, embaixo, sobre o cerebelo) e **memória e emoção · sem pesos** embaixo, **sem nenhum ponto**,
@@ -1358,3 +1358,9 @@ O e2e de hoje (`e2e/jogo.spec.ts:1166-1260`) usa, e a prancha mantém:
 | D1-9 | o `DigiBrainLab` (o modular) | **continua no painel de hoje** até a etapa dele | abrir o modular no scan agora pede o desenho dos módulos, que é outra prancha; por um tempo, os dois cérebros abrem em lugares diferentes |
 | D1-10 | o tempo do jogo com o scan aberto | **continua andando** (é uma vista; o selo diz "ao vivo"), e **o cartão do chamado do pet aparece por cima do scan**, no alto ao centro, como na tela Pet | pausar mudaria o selo e a varredura nunca passaria; andar sem o chamado por cima deixa o dono perder um pedido enquanto olha o mapa |
 | D1-11 | os números de layout: as colunas de 420 px, o topo de 72 px (56 na folha), a moldura de 262 px de altura a 390 | **PROPOSTO, SEM FONTE**, só layout | nenhum número de jogo; a 1600 px as colunas pedem 360 px (a conferir no código) |
+
+### Decididas (Matheus, 2026-11-07)
+
+"Aprovar e codar": valem as recomendações D1-1 a D1-11 da tabela acima, como estão. Os números do movimento (D1-2) e os de layout (D1-11)
+ficam PROPOSTO, SEM FONTE. Antes do código, a prancha corrigiu três defeitos que ela mesma apontava: o rótulo "receptores do corpo" cortado a
+390, o rótulo "sem cuidado" sob a varredura a 1920 (agora a varredura passa por baixo dos rótulos) e os traços do "tronco", que saíram.
