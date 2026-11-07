@@ -6,9 +6,11 @@
    - Um laco proprio de requestAnimationFrame redesenha o canvas so quando a vista ou o zoom mudou; as caixinhas dos lugares e o pet sao
      elementos posicionados por estilo direto (sem setState por quadro). So vista: nada do motor, do save nem do replay.
    Nao importa nada de ilha/ nem o three (teste ilha_fronteira). */
-import { useEffect, useId, useRef, type RefObject } from "react";
-import { Bed, Dumbbell, Swords, Tent, Utensils, Volleyball } from "lucide-react";
+import { useEffect, useId, useRef, type ReactNode, type RefObject } from "react";
+import { Bed, Dumbbell, Lock, Swords, Tent, Utensils, Volleyball } from "lucide-react";
 import { VISTA, andar, irPara, seguirPet, useCameraLivre, type Par, type VistaPublicada } from "./cameraLivre.ts";
+import { useNivel } from "../../nivelTela.ts";
+import { PECAS, PECA_DO_LUGAR, nivelDaPeca, pecaAberta } from "../../nivel.ts";
 import {
   LIMIAR_ARRASTO, MINIMAPA_PX, ZOOM_PASSO, celulaParaPx, corComAlfa, corDoNumero, dentroDoCirculo, janelaDe, limitarZoom, passoDaSeta,
   pontasDoCone, pxParaCelula, type Janela,
@@ -88,7 +90,14 @@ export function Minimapa({ chama = false, soMostra = false }: { chama?: boolean;
   const marcas: Marcas = { ninho: useRef(null), comedouro: useRef(null), saco: useRef(null), portao: useRef(null), barraca: useRef(null), bola: useRef(null), pet: useRef(null) };
   const estado = useRef<Estado>({ chama, solta, podeSoltar });
   estado.current = { chama, solta, podeSoltar };
-  const idDesc = useId();
+  const idDesc = useId(), nivel = useNivel();
+  /* o lugar trancado (docs/PLANO_V3_PROGRESSAO_TUTORIAL.md, 3.4): a marca apagada e tracejada, com o cadeado e o "Nv N" */
+  const trancados = (["saco", "portao", "barraca"] as const).filter(l => !pecaAberta(nivel, PECA_DO_LUGAR[l]));
+  const marca = (l: "saco" | "portao" | "barraca", icone: ReactNode) => (
+    <div ref={marcas[l]} className={"minimapa-marca minimapa-ic" + (trancados.includes(l) ? " minimapa-marca--trancado" : "")} aria-hidden="true">
+      {icone}{trancados.includes(l) && <span className="nivel-nv"><Lock />Nv {nivelDaPeca(PECA_DO_LUGAR[l])}</span>}
+    </div>
+  );
 
   useEffect(() => {
     const canvas = cv.current;
@@ -179,13 +188,14 @@ export function Minimapa({ chama = false, soMostra = false }: { chama?: boolean;
         : <canvas ref={cv} className="minimapa" role="application" aria-label="Minimapa da ilha" aria-describedby={idDesc}
           aria-keyshortcuts={podeSoltar ? "ArrowUp ArrowDown ArrowLeft ArrowRight Enter" : undefined}
           tabIndex={podeSoltar ? 0 : -1} style={{ width: MINIMAPA_PX, height: MINIMAPA_PX }} />}
-      {!soMostra && <span id={idDesc} className="minimapa-desc">Clique ou arraste para levar a câmera. Setas movem a câmera, Enter volta ao pet, a roda aproxima.</span>}
+      {!soMostra && <span id={idDesc} className="minimapa-desc">Clique ou arraste para levar a câmera. Setas movem a câmera, Enter volta ao pet, a roda aproxima.
+        {trancados.map(l => ` ${PECAS[PECA_DO_LUGAR[l]].nome} trancado, Nv ${nivelDaPeca(PECA_DO_LUGAR[l])}: ${PECAS[PECA_DO_LUGAR[l]].motivo}.`).join("")}</span>}
       <span className="minimapa-n" aria-hidden="true">N</span>
       <div ref={marcas.ninho} className="minimapa-marca minimapa-ic" aria-hidden="true"><Bed /></div>
       <div ref={marcas.comedouro} className="minimapa-marca minimapa-ic" aria-hidden="true"><Utensils /></div>
-      <div ref={marcas.saco} className="minimapa-marca minimapa-ic" aria-hidden="true"><Dumbbell /></div>
-      <div ref={marcas.portao} className="minimapa-marca minimapa-ic" aria-hidden="true"><Swords /></div>
-      <div ref={marcas.barraca} className="minimapa-marca minimapa-ic" aria-hidden="true"><Tent /></div>
+      {marca("saco", <Dumbbell />)}
+      {marca("portao", <Swords />)}
+      {marca("barraca", <Tent />)}
       <div ref={marcas.bola} className="minimapa-marca minimapa-ic" aria-hidden="true"><Volleyball /></div>
       <div ref={marcas.pet} className="minimapa-marca minimapa-pet" aria-hidden="true" />
     </div>

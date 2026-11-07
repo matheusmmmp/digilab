@@ -28,7 +28,10 @@ export const CENA: {
   bolaNaMao: boolean;
   treino: number | null;
   cocoNoChao: boolean;
-} = { modo3d: false, modoMundo: false, ret: null, medir: null, mundo: null, coberto: false, bolaNaMao: false, treino: null, cocoNoChao: false };
+  /** o consumidor da posicao dos lugares (CadeadosDaIlha.tsx, so quando ha cadeado ou brilho na tela): a vista o chama no fim de cada quadro com [x, y do pe, altura]
+      de cada lugar, em px de CSS. null: ninguem quer, e a vista nem calcula */
+  aoLugares: ((p: Readonly<Record<"saco" | "portao" | "barraca", readonly [number, number, number]>>) => void) | null;
+} = { modo3d: false, modoMundo: false, ret: null, medir: null, mundo: null, coberto: false, bolaNaMao: false, treino: null, cocoNoChao: false, aoLugares: null };
 
 /** o pe que a caixa do habitat reservava no celular antes do mobile minimo (M1): a altura do dock de entao (69 px) + a folga de 24 px + a barra de abas
     (--casca-barra, 64 px), medido em 390x844 e 360x800 (caixa de 687 e 643 px). Sem a barra a caixa ocupa a tela inteira por tras das acoes, mas a camera

@@ -40,8 +40,14 @@ export function ligarDicas(v: boolean): void {
   avisar();
 }
 
-/* fila: uma dica por vez */
-let fila: IdDica[] = [];
+/* fila: uma dica por vez. O cartao de destrave do nivel do Tamer (nivel.ts, docs/PLANO_V3_PROGRESSAO_TUTORIAL.md, 4.1 tipo A) usa a mesma fila e vai
+   ANTES das dicas do mesmo momento; quem o desenha e o CartaoNivel.tsx, e o "ja visto" dele fica no nivelTela.ts (nao em CHAVE_DICAS) */
+export type IdCartao = `nivel:${number}`;
+export type ItemFila = IdDica | IdCartao;
+export const idCartao = (n: number): IdCartao => `nivel:${n}`;
+export const ehCartao = (x: ItemFila): x is IdCartao => x.startsWith("nivel:");
+export const numeroDoCartao = (x: IdCartao): number => Number(x.slice(6));
+let fila: ItemFila[] = [];
 const ouvintes = new Set<() => void>();
 const avisar = (): void => { for (const o of ouvintes) o(); };
 /** pede uma dica: entra na fila se ainda nao foi vista (e se as dicas estao ligadas) */
@@ -50,12 +56,32 @@ export function pedirDica(id: IdDica): void {
   fila = [...fila, id];
   avisar();
 }
+/** pede o cartao do marco `n`: entra na frente das dicas, na ordem dos marcos (com as dicas desligadas, nao entra e volta a ser pedido quando ligar) */
+export function pedirCartao(n: number): void {
+  const id = idCartao(n);
+  if (!dicasLigadas() || fila.includes(id)) return;
+  const cartoes = [...fila.filter(ehCartao), id].sort((a, b) => numeroDoCartao(a) - numeroDoCartao(b));
+  fila = [...cartoes, ...fila.filter(x => !ehCartao(x))];
+  avisar();
+}
+/** tira o cartao do marco `n` da fila (visto, ou o nivel recomecou) */
+export function retirarCartao(n: number): void {
+  const id = idCartao(n);
+  if (!fila.includes(id)) return;
+  fila = fila.filter(x => x !== id);
+  avisar();
+}
+/** "Rever o tutorial" (Ajustes): as dicas vistas voltam a valer, cada uma no proximo momento dela */
+export function esquecerDicasVistas(): void {
+  try { localStorage.removeItem(CHAVE_DICAS); } catch { /* preferencia de tela */ }
+  avisar();
+}
 /* dicas de evento (a derrota, a regra nova) ficam na fila; as de estagio so valem para o estagio do pet ativo */
 const DE_EVENTO: readonly IdDica[] = ["derrota_campanha", "regra_nova", "lesao"];
 /** as dicas do momento do pet ativo: tira da fila as de outro estagio (trocar de pet ou evoluir) e pede as novas */
 export function dicasDoMomento(ids: readonly IdDica[]): void {
   const antes = fila.join();
-  fila = fila.filter(x => DE_EVENTO.includes(x) || ids.includes(x));
+  fila = fila.filter(x => ehCartao(x) || DE_EVENTO.includes(x) || ids.includes(x));
   if (fila.join() !== antes) avisar();
   for (const id of ids) pedirDica(id);
 }
@@ -65,7 +91,7 @@ export function dispensarDica(id: IdDica): void {
   fila = fila.filter(x => x !== id);
   avisar();
 }
-export function useDicaAtual(): IdDica | null {
+export function useDicaAtual(): ItemFila | null {
   const [, t] = useState(0);
   useEffect(() => { const f = () => t(x => x + 1); ouvintes.add(f); return () => { ouvintes.delete(f); }; }, []);
   return dicasLigadas() ? fila[0] ?? null : null;

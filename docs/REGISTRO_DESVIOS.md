@@ -526,3 +526,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-06 — UX_TELA_PET M1, o portão do desktop sem o ruído da cena 3D (Gerente da frente, Claude Code, Opus 5.5, branch `v3-ux-mobile`)](registro/2026-11.md)
 - [2026-11-06 — UX_TELA_PET L2, Crescer no saco de pancada: as interpretações do código (Gerente da frente, Claude Code, Opus 5.5, branch `v3-ux-lugares-menus`; código pelo `ux-implementador`)](registro/2026-11.md)
 - [2026-11-06 — UX_TELA_PET L3, Lutar no portão e Diário na barraca: as interpretações do código (Gerente da frente, Claude Code, Opus 5.5, branch `v3-ux-lugares-l3`; código pelo `ux-implementador`)](registro/2026-11.md)
+- [2026-11-07 — UX_TELA_PET, os níveis do Tamer e as travas, só na vista: as interpretações do código (Gerente da frente, Claude Code, Opus 5.5, branch `v3-ux-lugares-niveis`; código pelo `ux-implementador`)](registro/2026-11.md)

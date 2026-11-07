@@ -5,7 +5,7 @@
    Visual (2026-11-01, no lugar da Aparencia; #/config/aparencia leva a ela), e as dicas ficam no menu principal; nada aqui muda o motor, as regras ou o save, a nao ser pelas mesmas acoes de antes
    (tempo e ovo novo, via jogo.ts/tempo.ts). Opcoes das pranchas que o app nao tem ficam de fora. Rotas #/config/<parte> iguais. */
 import { useId } from "react";
-import { Activity, Camera, ChevronRight, Clock, Eye, FlaskConical, Info, Lightbulb, MessageCircle, ScrollText, Volume1, Volume2, type LucideIcon } from "lucide-react";
+import { Activity, Camera, ChevronRight, Clock, Eye, FlaskConical, Info, Lightbulb, MessageCircle, RotateCcw, ScrollText, Volume1, Volume2, type LucideIcon } from "lucide-react";
 import { Balao, propsBalao } from "../../componentes/Dica.tsx";
 import { escolherViagem, useViagemLigada } from "../../viagem.ts";
 import { useState } from "react";
@@ -22,6 +22,7 @@ import type { ParteConfig } from "../../rotas.ts";
 import { AvisoSom } from "../../componentes/AvisoSom.tsx";
 import { SOM, useSom } from "../../som.ts";
 import { dicasLigadas, ligarDicas } from "../../dicas.ts";
+import { reverOTutorial } from "../../nivelTela.ts";
 import { ligarDetalhesPet, useDetalhesPet } from "../../hudPet.ts";
 import { textoSave } from "../../save.ts";
 import { useHabitat } from "../../habitat.ts";
@@ -57,12 +58,15 @@ function Aj({ ic: I, nome, rotulo, resumo, tag, novo, interruptor, abrir }: {
 }
 function Principal({ abrir }: { abrir: (p: ParteConfig) => void }) {
   const { motor: m } = useJogo(), tema = useTema(), pele = usePele(), habitat = useHabitat(), fl = useFalaLivre(), { velocidade } = useTempo(), viagem = useViagemLigada(), som = useSom();
-  const [dicas, setDicas] = useState(dicasLigadas), detalhesPet = useDetalhesPet();
+  const [dicas, setDicas] = useState(dicasLigadas), detalhesPet = useDetalhesPet(), [revisto, setRevisto] = useState(false);
   useFalaLLM(); useLab();
   return (
     <div className="aj-lista lg">
       <Aj ic={Eye} nome="Visual" resumo={resumoVisual(pele, tema, habitat, !!m.mundo)} abrir={() => abrir("visual")} />
       <Aj ic={Lightbulb} nome="Dicas" resumo="o Professor Agumon explica cada coisa nova, uma vez" interruptor={{ ligado: dicas, mudar: v => { ligarDicas(v); setDicas(dicasLigadas()); } }} />
+      <Aj ic={RotateCcw} nome="Rever o tutorial" tag={revisto ? "feito" : undefined} resumo="os cartões dos níveis e as dicas do Professor Agumon voltam, cada um no seu momento (com as dicas ligadas)"
+        abrir={() => { reverOTutorial(); setRevisto(true); }} />
+      <span className="sr-only" role="status" aria-live="polite">{revisto ? "Tutorial reiniciado" : ""}</span>
       <Aj ic={Activity} nome="Detalhes do pet" rotulo="Exibir detalhes do pet" resumo="os painéis Estado atual, Evolução, Últimas ações e DigiBrain na tela do pet"
         interruptor={{ ligado: detalhesPet, mudar: ligarDetalhesPet }} />
       <Aj ic={Camera} nome="Viagem da câmera" novo resumo="desligada, os lugares abrem num corte seco" interruptor={{ ligado: viagem, mudar: escolherViagem }} />

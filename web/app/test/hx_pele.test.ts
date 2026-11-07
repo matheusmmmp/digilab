@@ -256,3 +256,30 @@ describe("o celular (mobile minimo): acoes e icone do agora", () => {
     expect(movelCss).toMatch(/:root\[data-pele\] body \.mm-bt:focus-visible\{[^}]*box-shadow:0 0 0 5px var\(--hx-miolo\) !important/);
   });
 });
+
+/* os itens trancados do nivel do Tamer (nivel.css; trilho, coluna do celular, minimapa e pecas): apagados por cor de token (--hx-sec), borda tracejada e cadeado, sem opacity no
+   conjunto. O texto passa 4,5:1 e o icone 3:1 nas duas peles (o vidro no pior caso, a grama de dia atras) */
+describe("itens trancados do nivel do Tamer", () => {
+  const nivelCss = readFileSync(new URL("../src/estilo/nivel.css", import.meta.url), "utf8");
+  const bloco = (sel: string) => { const i = nivelCss.indexOf(sel); if (i < 0) throw new Error("sem " + sel); return nivelCss.slice(i, nivelCss.indexOf("}", i)); };
+  it("o apagado e cor de token, sem opacity, com a borda tracejada", () => {
+    for (const sel of [".hx-nav__bt--trancado{", ":root[data-pele] body .mm-coluna .mm-bt--trancado{", ".minimapa-ic.minimapa-marca--trancado{", ".fechado-trancado{"]) {
+      const b = bloco(sel);
+      expect(b, sel).toContain("color:var(--hx-sec)");
+      expect(b, sel).toMatch(/dashed/);
+      expect(b, sel).not.toContain("opacity");
+    }
+  });
+  it("Militar: o --hx-sec passa 4,5:1 (texto) e 3:1 (icone) sobre os fundos dos menus", () => {
+    for (const f of [token("hx-chao"), token("hx-miolo"), token("hx-miolo-2"), "#0E1E16"]) {
+      expect(contraste(token("hx-sec"), f), f).toBeGreaterThanOrEqual(4.5);
+      expect(contraste(token("hx-sec"), f), f).toBeGreaterThanOrEqual(3);
+    }
+    expect(contraste(token("hx-texto-2"), token("hx-miolo"))).toBeGreaterThanOrEqual(4.5);   // o "Nv N" do minimapa
+  });
+  it("Vidro: o --hx-sec passa 4,5:1 e 3:1 no pior caso do habitat", () => {
+    const pior = sobre("rgba(170,225,255,.10)", sobre(tokenVidro("hx-miolo-2"), [161, 225, 113]));
+    expect(contraste(tokenVidro("hx-sec"), hex(pior))).toBeGreaterThanOrEqual(4.5);
+    expect(contraste(tokenVidro("hx-sec"), hex(pior))).toBeGreaterThanOrEqual(3);
+  });
+});

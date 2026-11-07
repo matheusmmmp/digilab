@@ -43,6 +43,9 @@ import { AvisoRacao, BarraRacao, FaixaRacao, InfoMundo } from "./PorRacao.tsx";
 import "../../estilo/pet_dock.css";
 import "../../estilo/pet_hud.css";
 import "../../estilo/pet_movel.css";
+import "../../estilo/nivel.css";
+import { useNivel } from "../../nivelTela.ts";
+import { nivelDe } from "../../nivel.ts";
 import { ConteudoDigiBrain, SeloDigiBrain } from "../../componentes/DigiBrain.tsx";
 import { ConteudoDigiBrainLab } from "../../componentes/DigiBrainLab.tsx";
 import { SeloExperimental } from "../config/Laboratorio.tsx";
@@ -627,7 +630,7 @@ function ConteudoPainel({ id, v, irRegistro, irEvolucao, detalhes, alternarDetal
 function LequePet({ tem, abrirDe, abrirConfig, abrirMeusPets }: {
   tem: (id: Painel) => boolean; abrirDe: (q: Painel) => void; abrirConfig: () => void; abrirMeusPets: () => void;
 }) {
-  const { motor: m } = useJogo(), aberto = useLeque() === "paineis", raiz = useRef<HTMLDivElement>(null), desc = useId();
+  const { motor: m } = useJogo(), aberto = useLeque() === "paineis", raiz = useRef<HTMLDivElement>(null), desc = useId(), nivelTamer = nivelDe(useNivel());
   const retrato = () => document.querySelector<HTMLElement>(".mm-retrato");
   const fechar = (voltarFoco: boolean) => { fecharLeque("paineis"); if (voltarFoco) retrato()?.focus(); };
   useEffect(() => {
@@ -647,6 +650,8 @@ function LequePet({ tem, abrirDe, abrirConfig, abrirMeusPets }: {
   const abrirModalDe = (abrir: () => void) => () => { retrato()?.focus(); fecharLeque("paineis"); abrir(); };
   return (
     <div className="mm-leque" id="leque-pet" ref={raiz} role="group" aria-label="Painéis do pet">
+      {/* o nivel do Tamer (P-8, docs/PLANO_V3_PROGRESSAO_TUTORIAL.md): a contagem dos marcos, acima dos vitais */}
+      <span className="mm-caixa mm-pilula tamer-nv mm-tamer" role="img" aria-label={`Tamer, nível ${nivelTamer}`}>Tamer Nv {nivelTamer}</span>
       {tem("estado") && (
         <button type="button" className="mm-caixa mm-pilula mm-bt mm-vitais" aria-label={TITULO_PAINEL.estado} aria-describedby={desc} onClick={() => abrirDe("estado")}>
           {vitais.map(x => (

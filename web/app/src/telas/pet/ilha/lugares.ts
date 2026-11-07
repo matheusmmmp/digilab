@@ -12,9 +12,11 @@
      cadeado (`cadeado`) tambem ficam aqui, vazios hoje;
    - quando o glTF entrar, o marcador provisorio (marcadoresLugar.ts) fica ate o modelo carregar, e a falha do glTF deve ser ALTA (erro visivel, como a
      dos kits em vista.ts), nunca um lugar vazio em silencio; a carga ainda nao esta implementada;
-   - o estado e "aberto" para todos na L3. A tarefa dos niveis o troca por "trancado"; a vista entao apaga o modelo e poe o cadeado.
+   - o estado vem do nivel do Tamer (nivel.ts, via trancas.ts): `estado` abaixo e o de partida ("aberto") e `estadoDoLugar` o de agora; trancado, a
+     vista apaga o lugar (marcadoresLugar.ts, itens.ts) e a tela poe o cadeado com o "Nv N" (CadeadosDaIlha.tsx). So vista.
    Todos os numeros sao do desenho: PROPOSTO, SEM FONTE (numero de interface, nao de jogo). */
 import { SACO_DESDE_NINHO } from "./constantes.ts";
+import { lugarTrancado } from "../../../trancas.ts";
 
 export type IdLugar = "saco" | "portao" | "barraca";
 export type EstadoLugar = "aberto" | "trancado";
@@ -67,6 +69,8 @@ export const LUGARES: Readonly<Record<IdLugar, LugarIlha>> = {
     ponto: b => [Math.max(FOLGA_BORDA, b.ninho[0] + BARRACA_DESDE_NINHO[0]), Math.min(b.area.h - 2, b.ninho[1] + BARRACA_DESDE_NINHO[1])],
   },
 };
+/** o estado de agora: o nivel do Tamer tranca o lugar (trancas.ts); fora isso, o `estado` da tabela */
+export const estadoDoLugar = (id: IdLugar): EstadoLugar => lugarTrancado(id) ? "trancado" : LUGARES[id].estado;
 export const ORDEM_LUGARES: readonly IdLugar[] = ["saco", "portao", "barraca"];
 
 /** o ponto do lugar no mundo de `base` */
