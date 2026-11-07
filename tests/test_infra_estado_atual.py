@@ -18,6 +18,9 @@ def fontes(tmp: Path) -> Path:
                                          encoding="utf-8")
     (d / "REGISTRO_DESVIOS.md").write_text("# Registro\n\n## Índice\n\n" + "".join(f"- [2026-10-{i:02d} — R{i}](registro/2026-10.md)\n"
                                                                                 for i in range(1, 13)), encoding="utf-8")
+    # as entradas vêm dos arquivos do mês, não do índice (docs/TAREFA_V3_INDICE_DESVIOS.md)
+    (d / "registro").mkdir()
+    (d / "registro" / "2026-10.md").write_text("".join(f"## 2026-10-{i:02d} — R{i}\n\ntexto\n\n" for i in range(1, 13)), encoding="utf-8")
     return tmp
 
 
@@ -32,7 +35,7 @@ def test_copia_o_declarado_e_cita_a_fonte(tmp_path):
 
 def test_so_os_ultimos_registros(tmp_path):
     texto = ge.gerar(fontes(tmp_path))
-    assert "R12" in texto and "R3]" in texto and "R2]" not in texto and "(12 entradas)" in texto
+    assert "R12" in texto and "R3]" in texto and "R2]" not in texto and "(12 seções)" in texto
 
 
 def test_conferir(tmp_path):

@@ -308,7 +308,7 @@ export function App() {
       <CartaoMotivo />
       <AnuncioNivel />
       {/* o habitat (a cena do Pet) e a camada de fundo de toda rota: fica montado, nao sobe nem desce ao trocar de destino */}
-      <Habitat escurecer={!!painel} />
+      <Habitat escurecer={!!painel} irLugar={irDestino} />
       <TopoHabitat lugar={idLugar ? rota.destino : null} abrirMeusPets={abrirMeusPets} irConversar={() => irDestino("conversar")} irDestino={irDestino} abrirConfig={() => abrirConfig("principal")} />
       {!painel && (!lugar || lugar.d.semLugar) && <TelaPet irRegistro={() => ir({ destino: "diario", aba: "registro" })} irEvolucao={() => { ir({ destino: "crescer", aba: "evolucao" }); scrollTo(0, 0); }}
         abrirConfig={() => abrirConfig("principal")} abrirMeusPets={abrirMeusPets} />}

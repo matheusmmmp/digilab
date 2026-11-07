@@ -27,6 +27,8 @@ Você é o testador no navegador da frente UX_TELA_PET do Digilab. A tarefa é a
 ## O que você roda
 
 Em `web/app`, só estes comandos (o hook H8 bloqueia os outros):
+- **antes do e2e,** `npm run tipos` (o tsc estrito) e `npm test` (o Vitest: paridade, motor e telas), nessa ordem; uma falha neles já é a
+  resposta, e o e2e só roda se os dois passarem (o testador também da INFRA_AGENTES, `docs/TAREFA_V3_INFRA_AGENTES.md`, seção 3.4);
 - `npm run build`, `npm run e2e`, `npm run capturas`, `npx playwright test …`, **nunca** com `--update-snapshots` ou `-u`;
 - leitura: `ls`, `cat`, `head`, `tail`, `git diff`, `git status`, `git log`;
 - variáveis na frente do comando: `DIGILAB_PORTA_E2E` (use uma porta própria da worktree, não a 8799, se outra frente estiver rodando),
@@ -40,7 +42,10 @@ e2e: **o portão é o teste pixel a pixel** (`threshold 0`, `maxDiffPixels 0`).
 
 ## O que você devolve, e só isso
 
-Para cada teste que falhou:
+Para cada falha do `npm run tipos`: o arquivo, a linha e a mensagem do tsc. Para cada teste do `npm test` que falhou: o arquivo, o nome e
+o trecho do erro (o esperado e o recebido).
+
+Para cada teste do e2e que falhou:
 - o nome, a largura e a pele;
 - os caminhos do `*-actual.png`, do `*-expected.png` e do `*-diff.png`;
 - o número de pixels diferentes;

@@ -27,8 +27,8 @@ describe("habitat.ts", () => {
   });
   it("os mapas com assets fora do repositorio so aparecem no dev", async () => {
     const { m } = await carregar("", {});
-    expect(m.mapasDisponiveis(false)).toEqual(["ilha", "voxel"]);
-    expect(m.mapasDisponiveis(true)).toEqual(["ilha", "voxel", "floresta", "cassette"]);
+    expect(m.mapasDisponiveis(false)).toEqual(["ilha", "digital", "voxel"]);
+    expect(m.mapasDisponiveis(true)).toEqual(["ilha", "digital", "voxel", "floresta", "cassette"]);
     /* no build, um floresta gravado (de uma sessao do dev) ou no endereco cai na ilha */
     const b = await carregar("?mapa=cassette", { [CHAVE]: JSON.stringify({ mapa: "floresta", camera: "lateral", visual: "normal" }) });
     b.m.iniciarHabitat(false);

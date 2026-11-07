@@ -1,17 +1,21 @@
 /* Habitat em tela cheia (docs/TAREFA_V2_LAYOUT_HABITAT.md, M2): a cena da tela Pet (3D, ou a reserva; no v12, a do mundo) e o canvas
    do pet, como camada de fundo da casca. Fica montado em todas as rotas (menos a luta em tela cheia), para o three.js nao subir e
-   descer a cada troca de destino. Com o mundo, a bola se pega na cena (PorBola.tsx). `escurecer`: um painel esta aberto por cima (o veu so escurece; o pet segue visivel). */
+   descer a cada troca de destino. Com o mundo, a bola se pega na cena (PorBola.tsx). `escurecer`: um painel esta aberto por cima (o veu so escurece; o pet segue visivel). `irLugar`: abre o destino de um lugar
+   da ilha tocado (ToqueLugar.tsx). */
 import { useEffect, useRef } from "react";
 import { eNoite, TPD } from "../../motor/index.ts";
 import { useJogo } from "../jogo.ts";
+import type { Destino } from "../rotas.ts";
 import { CenaPet } from "../telas/pet/CenarioPet.tsx";
 import { CENA } from "../telas/pet/cenaEstado.ts";
 import { PalcoPet } from "../telas/pet/PalcoPet.tsx";
 import { ArrastoBola } from "../telas/pet/PorBola.tsx";
+import { PegarPet } from "../telas/pet/PegarPet.tsx";
+import { ToqueLugar } from "../telas/pet/ToqueLugar.tsx";
 import { ToquePet } from "../telas/pet/ToquePet.tsx";
 import { Deco } from "./Deco.tsx";
 
-export function Habitat({ escurecer }: { escurecer: boolean }) {
+export function Habitat({ escurecer, irLugar }: { escurecer: boolean; irLugar: (d: Destino) => void }) {
   const { motor: m, nascendo } = useJogo(), cena = useRef<HTMLElement>(null);
   /* a cena sabe que esta coberta pelo veu (a ilha desenha mais devagar por tras dele) */
   useEffect(() => { CENA.coberto = escurecer; return () => { CENA.coberto = false; }; }, [escurecer]);
@@ -25,6 +29,10 @@ export function Habitat({ escurecer }: { escurecer: boolean }) {
         {m.mundo && <ArrastoBola alvo={cena} />}
         {/* o toque no pet e o carinho do botao; a reacao vem do corpo (ToquePet.tsx) */}
         <ToquePet alvo={cena} />
+        {/* pegar o pet e solta-lo no chao (o evento "lp", pets v19); depois do ToquePet, que larga o toque com o pet na mao (PegarPet.tsx) */}
+        {m.mundo && <PegarPet alvo={cena} />}
+        {/* o portao abre o Lutar e a barraca o Diario (ToqueLugar.tsx; so na ilha 3D, que conta onde os lugares estao) */}
+        {m.mundo && <ToqueLugar alvo={cena} ir={irLugar} />}
       </section>
       <div className={"habitat-veu" + (escurecer ? " habitat-veu--ligado" : "")} aria-hidden="true" />
     </div>

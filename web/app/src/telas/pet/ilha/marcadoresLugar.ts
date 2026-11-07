@@ -1,17 +1,17 @@
-/* Os marcadores provisorios do portao da arena e da barraca do Tamer (L3 de "Lugares da ilha"; os pontos, o giro e a altura estao em lugares.ts).
-   Enquanto o glTF de cada lugar nao chega (`modelo` null em lugares.ts), a vista desenha aqui um volume simples e neutro: pouca geometria (um
+/* Os marcadores provisorios do portao da arena e da barraca do Tamer (L3 de "Lugares da ilha"; o ponto, o giro e a altura do chao vem da grade da
+   ilha, BaseDoMundo.grade, e a altura de lugares.ts). Desde a mescla com a LUGARES_3D (2026-11-07) os modelos 3D existem: o marcador so aparece
+   enquanto o modelo nao carrega e nos estilos sem lugares (o Voxel), e a vista o tira quando o modelo chega (vista.ts, `porModelos`). Ate la, a vista desenha aqui um volume simples e neutro: pouca geometria (um
    punhado de caixas e uma piramide), um material toon por cor (compartilhado) e uma geometria por tamanho (compartilhada), e nenhum custo por quadro
    (o grupo e montado uma vez e fica parado). As cores sao as dos tokens da pele (--hx-rotulo, --hx-texto-2, --hx-sec), lidas do CSS na montagem;
    nenhuma cor nova. `montarMarcadores` devolve tambem o `dispose`, que a vista chama ao desligar (a GEO_SOMBRA e a textura da sombra sao do modulo
    cena.ts e ficam).
-   A TROCA PELO MODELO e so apontar `modelo` em lugares.ts: a vista carrega o glTF (carregarVariante, cena.ts), redimensiona-o ate `altura`, poe o
-   pivo no centro da base e o giro de `giro`. O MARCADOR FICA ATE O MODELO CARREGAR (so entao sai, `porLugar` dá o grupo de cada lugar), e a FALHA DO
-   glTF DEVE SER ALTA (erro no console e na tela, como a dos kits em vista.ts; nunca um lugar sem nada e em silencio). O "trancado" e o mesmo desenho
+   O MODELO vem de lugaresCena.ts (`lugares`, a cena da LUGARES_3D, pelo carregarVariante de cena.ts, com a altura e o giro da grade). O MARCADOR FICA
+   ATE O MODELO CARREGAR (so entao sai, `tirar`), e a FALHA DO glTF E ALTA (erro no console e na tela, como a dos kits em vista.ts; nunca um lugar sem nada e em silencio). O "trancado" e o mesmo desenho
    apagado (o `Apagador` abaixo escurece as cores dos materiais do lugar; cada lugar tem os seus), e o cadeado com o "Nv N" e DOM (CadeadosDaIlha.tsx); o
    modelo 3D do cadeado vem depois do ITENS_3D. So vista: o motor nao sabe dos lugares. */
 import * as THREE from "three";
 import { toon, GEO_SOMBRA, materialSombra } from "./cena.ts";
-import { LUGARES, type BaseDoMundo, type IdLugar } from "./lugares.ts";
+import { LUGARES, chaoDoLugar, type BaseDoMundo, type IdLugar } from "./lugares.ts";
 
 /** a cor de um token da pele de agora (--hx-*); falha alto se o token faltar */
 export function corDoToken(nome: string): THREE.Color {
@@ -40,8 +40,10 @@ export class Apagador {
 
 export interface Marcadores {
   raiz: THREE.Group;
-  /** o grupo de cada lugar com marcador (so os que ainda nao tem modelo) */
+  /** o grupo de cada lugar com marcador (a vista tira o de um lugar quando o modelo dele chega, `tirar`) */
   porLugar: Map<IdLugar, THREE.Group>;
+  /** tira da cena o marcador de um lugar (o modelo chegou); os materiais e geometrias ficam ate o dispose */
+  tirar: (id: IdLugar) => void;
   /** solta as geometrias e os materiais deste conjunto (nao toca na GEO_SOMBRA nem na textura da sombra, que sao do modulo) */
   dispose: () => void;
 }
@@ -91,18 +93,18 @@ export function montarMarcadores(base: BaseDoMundo): Marcadores {
     return g;
   };
   for (const id of ["portao", "barraca"] as const satisfies readonly IdLugar[]) {
-    const l = LUGARES[id];
-    if (l.modelo !== null) continue;                    // o modelo chegou: a vista o carrega (o marcador fica ate la)
+    const l = LUGARES[id], [x, z] = l.ponto(base), giro = base.grade?.[id]?.giro ?? 0;
     lugarAgora = id;
-    const g = id === "portao" ? portao(l.altura) : barraca(l.altura), [x, z] = l.ponto(base);
-    g.position.set(x, 0, z); g.rotation.y = l.giro; g.name = "lugar-" + id;
+    const g = id === "portao" ? portao(l.altura) : barraca(l.altura);
+    g.position.set(x, chaoDoLugar(id, base), z); g.rotation.y = giro; g.name = "marcador-" + id;
     raiz.add(g); porLugar.set(id, g);
   }
+  const tirar = (id: IdLugar) => { const g = porLugar.get(id); if (g) { raiz.remove(g); porLugar.delete(id); } };
   const dispose = () => {
     for (const g of geometrias.values()) g.dispose();
     for (const m of materiais.values()) m.dispose();
     for (const m of sombras) m.dispose();
     geometrias.clear(); materiais.clear(); sombras.length = 0; porLugar.clear(); raiz.clear();
   };
-  return { raiz, porLugar, dispose };
+  return { raiz, porLugar, tirar, dispose };
 }

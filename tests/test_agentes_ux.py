@@ -36,8 +36,12 @@ def lista(valor: str | None) -> set[str]:
     return {t.strip() for t in (valor or "").split(",") if t.strip()}
 
 
+# os três revisores da INFRA_AGENTES E2 (docs/TAREFA_V3_INFRA_AGENTES.md, seção 3.2), conferidos em tests/test_agentes.py
+INFRA = {"revisor-metodo", "revisor-determinismo", "auditor-numeros"}
+
+
 def test_os_seis_agentes_e_nenhum_outro():
-    assert sorted(p.stem for p in AGENTES.glob("*.md")) == sorted(ESPERADOS)
+    assert sorted(p.stem for p in AGENTES.glob("*.md")) == sorted(set(ESPERADOS) | INFRA)
 
 
 @pytest.mark.parametrize("nome", sorted(ESPERADOS))

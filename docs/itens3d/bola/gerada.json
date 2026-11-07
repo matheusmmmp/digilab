@@ -1,0 +1,70 @@
+{
+ "pasta": "D:Trabdigilabcapturas_itens3d\bolagerada (fora do git: o pet e sprite do UP)",
+ "roteiro": "web/app/e2e_capturas/itens_bola_referencia.spec.ts, DIGILAB_CAPTURAS_ITENS_ROTULO=gerada",
+ "paleta": "docs/itens3d/bola/conserto/paleta.json (rodada 2)",
+ "nota": "fps do Chrome sem janela nao e o do jogo; vale o draw_calls (G9)",
+ "imagens": {
+  "bola_1280_claro.png": "edebc0059cde79b424ecd0969bf91dd97b707d062f40a1d971a9fc94ad0b1ae9",
+  "bola_1280_claro_recorte.png": "6384fac431cfebe5595869871cee073d977b412bd2c847814edba86fd8e4cef4",
+  "bola_1280_escuro.png": "b29cf01b01bced409938a7b0082d18c2f539f1b09cf554e67a3c64031f34bf28",
+  "bola_1280_escuro_recorte.png": "b44b97f9c7da3ed669d893b3fd9f33922cacd5c76f3e9045f1c7fe84ffb0908e",
+  "bola_1280_noite.png": "e0e6c60786a67ecd3b4932b0f2b0dadc13c952aba65e0e980788e643a1d3dafc",
+  "bola_1280_noite_recorte.png": "db3da1bc84fd61a0bd497167df6904676c992a5473e362946d3fb42ed3e863ec",
+  "bola_390_claro.png": "1b85bef908b794fad9c2229261b2859e139b3db3306d1cf3821b3038bd79160d",
+  "bola_390_claro_recorte.png": "f748333781270bfef7964fc68337961d67efb307a1d85ec7ad5e2420532af828",
+  "bola_390_escuro.png": "7df1ba2a7993ab83e25e448bbb3de1dfa25c5f3bf813abc084b4b4e1eb29fe0c",
+  "bola_390_escuro_recorte.png": "8b050c4c1464c596df5cc20b2cc74c9846739026f274e185c94a12aa94ef14be",
+  "bola_390_noite.png": "87adc13f4f05b00d038e5eaa6071fcc500509a059be1a0867a19a621614baca4",
+  "bola_390_noite_recorte.png": "4d1a9901d6b7b9c7db6fe91dbc3306fb3a076d7577f86b38f11c97ffa1bff48e"
+ },
+ "m3": {
+  "bola_1280_claro": {
+   "draw_calls": 89,
+   "fps_media_sem_janela": 60,
+   "canvas_px": [
+    1280,
+    800
+   ]
+  },
+  "bola_1280_escuro": {
+   "draw_calls": 89,
+   "fps_media_sem_janela": 60,
+   "canvas_px": [
+    1280,
+    800
+   ]
+  },
+  "bola_1280_noite": {
+   "draw_calls": 109,
+   "fps_media_sem_janela": 60,
+   "canvas_px": [
+    1280,
+    800
+   ]
+  },
+  "bola_390_claro": {
+   "draw_calls": 82,
+   "fps_media_sem_janela": 60,
+   "canvas_px": [
+    390,
+    687
+   ]
+  },
+  "bola_390_escuro": {
+   "draw_calls": 82,
+   "fps_media_sem_janela": 60,
+   "canvas_px": [
+    390,
+    687
+   ]
+  },
+  "bola_390_noite": {
+   "draw_calls": 98,
+   "fps_media_sem_janela": 60,
+   "canvas_px": [
+    390,
+    687
+   ]
+  }
+ }
+}

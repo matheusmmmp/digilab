@@ -127,8 +127,11 @@ from .events import ACOES_PARAR_ARVORES, tipo_parado
 from .events import (ACOES_BOLA, ACOES_FRUTAS, ACOES_MAO, ACOES_TROCA_ARVORES, FRUTAS, TIPOS_COMIDA_MUNDO, AcaoPet, AcaoUsuario,
                      LogDeEventos, fruta_dada, ler_deixar_bola, ler_deixar_comida, par_da_troca)
 from .events import deixar_bola as evento_deixar_bola
+from .events import levar_pet as evento_levar_pet
+from .events import ler_levar_pet
 from .events import deixar_fruta as evento_deixar_fruta
-from .events import ler_deixar_fruta
+from .events import LutaSemChave, ler_deixar_fruta, ler_resumo_luta
+from .events import resumo_luta as evento_resumo_luta
 from .events import deixar_comida as evento_deixar_comida
 from .frutas import MotorFrutas
 from .policy import Observacao, Transicao
@@ -1095,6 +1098,7 @@ class MotorMundo(MotorFrutas):
         # os registros do pet (derivados; o replay reconstroi tudo)
         self.consumos_mundo: list[dict] = []
         self.deixadas: list[dict] = []
+        self.levadas: list[dict] = []           # cada vez que o dono levou o pet (levar_pet): tick, de, o ponto pedido e onde ele caiu
         self.decisoes_mundo: list[dict] = []
         self.regioes: list[dict] = []
         self.visitas: list[dict] = []
@@ -1802,12 +1806,47 @@ class MotorMundo(MotorFrutas):
         self._log.anexar(evento)
         self._aplicar_deixar_fruta(*ler_deixar_fruta(evento))
 
+    def resumo_luta(self, rival: str, resultado: int, vida_perdida_s: int) -> None:
+        """O resumo pronto de uma luta (ponte da luta, PE1): vai ao log e ao corpo. So com o corpo e a ConfigLutaCorpo ligada."""
+        evento = evento_resumo_luta(self._estado.tick, rival, resultado, vida_perdida_s)
+        self._aplicar_resumo_luta(*ler_resumo_luta(evento))     # confere a chave antes de gravar no log
+        self._log.anexar(evento)
+
+    def _aplicar_resumo_luta(self, rival: str, resultado: int, vida_perdida_s: int) -> None:
+        """Sem o corpo (o MotorCorpo a sobrepoe), o evento `lt` nao existe: falha alto."""
+        raise LutaSemChave("o evento lt exige o corpo com ConfigLutaCorpo ligada (luta_corpo; ponte da luta, PE1)")
+
     def deixar_bola(self, x: int, y: int) -> None:
         if not self.cmf.ligada:
             raise MundoSemChave("deixar_bola com ConfigMundo.ligada = False")
         evento = evento_deixar_bola(self._estado.tick, x, y)
         self._log.anexar(evento)
         self._aplicar_deixar_bola(*ler_deixar_bola(evento))
+
+    def levar_pet(self, x: int, y: int) -> None:
+        """O dono pega o pet e o solta em (x, y) (docs/TAREFA_V3_PEGAR_PET.md; os pets v19 do jogo web). Valida o evento e o estado antes
+        do log: o pet dormindo falha alto (PP-2)."""
+        if not self.cmf.ligada:
+            raise MundoSemChave("levar_pet com ConfigMundo.ligada = False")
+        evento = evento_levar_pet(self._estado.tick, x, y)
+        self._aplicar_levar_pet(*ler_levar_pet(evento))
+        self._log.anexar(evento)
+
+    def _aplicar_levar_pet(self, x: int, y: int) -> None:
+        """So a posicao do pet muda (PP-1): ele cai em no_mapa(x, y), a borda mais proxima quando o ponto fica fora (PP-4), e o destino
+        que tinha (o pendente) se perde; na proxima decisao ele escolhe de novo, de onde caiu. Nao e contato nem cuidado: nao passa
+        pelo estado, pelo corpo nem pelo cerebro (nenhum gancho), como o deixar_bola. O registro das decisoes, das regioes e das
+        manchas anda so na decisao. O pet dormindo nao e pego (PP-2)."""
+        if not self.cmf.ligada:
+            raise MundoSemChave("levar_pet com ConfigMundo.ligada = False")
+        tick = self._estado.tick
+        if self._estado.dormindo:
+            raise RuntimeError(f"levar_pet com o pet dormindo (tick {tick}): o dono pega o pet acordado")
+        de = self.pet
+        self.pet = no_mapa(x, y, self.cmf)
+        self._pendente = None
+        self.levadas.append({"tick": self._tm(tick), "de": list(de), "pedido": [x, y], "para": list(self.pet)})
+        self._n_eventos += 1                     # e um evento do log, mas NAO e contato (o deixar_bola)
 
     def _aplicar_deixar_comida(self, tipo: str, x: int, y: int) -> None:
         if not self.cmf.ligada:
@@ -1884,7 +1923,8 @@ class MotorMundo(MotorFrutas):
                 **({} if not self.cpq.ligada else {"troncos_vistos": dict(self.troncos_vistos), "trocas_tipo": m.trocas_tipo}),
                 **({} if m.paradas_arvores is None else {"paradas_arvores": m.paradas_arvores}),
                 **({} if not self.cfal.ligada else {"frutas_ao_lado": self.frutas_ao_lado}),
-                **({} if not self.cct.ligada else {"orientacao": self.orientacao, "contrato_decisoes": self.contrato_decisoes})}
+                **({} if not self.cct.ligada else {"orientacao": self.orientacao, "contrato_decisoes": self.contrato_decisoes}),
+                **({} if not self.levadas else {"levadas": self.levadas})}     # so com alguma levada: a vida de antes sai byte a byte
 
     # ------------------------------------------------------------ o avanco em ticks (o grupo, dois pets, etapa 2)
     # O `_avancar(n)` de hoje e: o que cada classe faz uma vez por avanco (o MotorPersonalidade conta o evento de avanco no indice dos
@@ -1910,7 +1950,7 @@ class MotorMundo(MotorFrutas):
 def reproduzir_mundo(log: LogDeEventos, politica_fabrica: Callable, cfg: Config | None = None, semente: int = 42,
                      fabrica_motor: Callable | None = None, ate_tick: int | None = None,
                      cfg_genoma: ConfigGenoma | None = None) -> MotorMundo:
-    """O replay que entende os eventos do mundo (`deixar_comida`, `deixar_bola`). `ate_tick`: para antes do primeiro evento nesse
+    """O replay que entende os eventos do mundo (`deixar_comida`, `deixar_bola`, `levar_pet`). `ate_tick`: para antes do primeiro evento nesse
     tick (corta o avanco que o atravessa), como o reproduzir_educacao. Evento desconhecido levanta erro; luta, origem, fala e
     decisao externa tambem: o mundo minimo roda sem educacao e sem lesoes.
 
@@ -1939,8 +1979,12 @@ def reproduzir_mundo(log: LogDeEventos, politica_fabrica: Callable, cfg: Config 
             motor._aplicar_deixar_comida(*ler_deixar_comida(evento))
         elif evento.tipo == "deixar_bola":
             motor._aplicar_deixar_bola(*ler_deixar_bola(evento))
+        elif evento.tipo == "levar_pet":
+            motor._aplicar_levar_pet(*ler_levar_pet(evento))
         elif evento.tipo == "deixar_fruta":
             motor._aplicar_deixar_fruta(*ler_deixar_fruta(evento))
+        elif evento.tipo == "lt":
+            motor._aplicar_resumo_luta(*ler_resumo_luta(evento))
         else:
             raise ValueError(f"tipo de evento desconhecido no log do mundo: {evento.tipo!r}")
     motor._log = LogDeEventos([e for e in log if ate_tick is None or e.tick < ate_tick])

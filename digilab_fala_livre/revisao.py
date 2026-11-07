@@ -68,7 +68,8 @@ def gerar_com_revisao(cliente: ClienteOllama, estado: dict, situacao: str = "esp
                      estilo=bloco_estilo(especie, rival) if especie is not None else None, comando=comando)
     atual = r
     for n in range(max_revisoes + 1):
-        v = verificar(cliente, atual.fala, atual.fatos_citados, list(atual.fatos), semente=semente + 7919 * (n + 1),
+        # o verificador pode ter cliente proprio (M5: o mesmo verificador em todos os bracos da comparacao)
+        v = verificar(getattr(cliente, "cliente_verif", None) or cliente, atual.fala, atual.fatos_citados, list(atual.fatos), semente=semente + 7919 * (n + 1),
                       versao=versao_verificador)
         probs = _problemas(v, so_respeito) if v.erro is None else []
         tentativas.append({"fala": atual.fala, "fatos_citados": list(atual.fatos_citados), "problemas": probs,

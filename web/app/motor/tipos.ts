@@ -73,6 +73,9 @@ export type EventoFronteira = [tick: number, tipo: "f", fronteira: { campeao: tr
 export type EventoComida = [tick: number, tipo: "dc", comida: { tipo: "racao"; x: number; y: number }];
 /** o dono poe a bola parada em (x, y) do mapa do mundo (subunidades inteiras); qualquer pet com o mundo */
 export type EventoBola = [tick: number, tipo: "db", bola: { x: number; y: number }];
+/** v19 (docs/TAREFA_V3_PEGAR_PET.md): o dono pega o pet e o solta em (x, y) do mapa do mundo (subunidades inteiras, com sinal: o ponto
+    onde o dono soltou; o motor o limita ao mapa, PP-4). So muda a posicao (PP-1); com o pet dormindo, falha alto (PP-2) */
+export type EventoLevarPet = [tick: number, tipo: "lp", levar: { x: number; y: number }];
 /** pets v12, as chaves do produto (docs/TAREFA_V2_PRODUTO_FOME.md): o chamado de fome do bebe pela fome do corpo, e nao pelo relogio,
     e a decisao do pet logo depois de o dono por comida no chao. So no comeco do registro, uma vez; o jogo grava nos ovos novos. Sem ele
     (os saves de antes, a pesquisa e os gabaritos), as duas ficam desligadas e a vida e a de hoje.
@@ -82,10 +85,13 @@ export interface ChavesProduto { chamadoPelaFome: boolean; decisaoNaComida: bool
 export type EventoProduto = [tick: number, tipo: "p", chaves: ChavesProduto];
 /** v17: o cerebro que decide dali em diante (o modular ou o A) */
 export type EventoCerebro = [tick: number, tipo: "cb", troca: { cerebro: "modular" | "a" }];
+/** a ponte da luta (PE3; docs/TAREFA_V3_PONTE_LUTA.md, 3.5): a marca gravada no ovo novo, como o "cb"; so nos v16 e v17. Com ela, a luta entrega o
+    resumo ao corpo (a dor) e, com o modular ativo, ao DigiBrain (a memoria). Sem ela, a vida de hoje, byte a byte */
+export type EventoPonteLuta = [tick: number, tipo: "pl", marca: { luta: true; eps?: true }];
 export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem | EventoConfig | EventoLiberacao
-  | EventoItem | EventoCarta | EventoFronteira | EventoFala | EventoComida | EventoBola | EventoProduto | EventoCerebro;
+  | EventoItem | EventoCarta | EventoFronteira | EventoFala | EventoComida | EventoBola | EventoLevarPet | EventoProduto | EventoCerebro | EventoPonteLuta;
 
-export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17;
+export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19;
 
 /** estado de vida (camada 1) */
 export interface EstadoVida {

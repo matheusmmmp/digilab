@@ -204,7 +204,7 @@ def _implementacao(corpo, sec, mudados, raiz):
         itens.append(Item("o teste citado existe", "VERIFICADA", (raiz / c).exists(), c))
     if web_mudados or citados_web:
         itens.append(Item("testes do web/app", "DECLARADA", True,
-                          "o CI não roda Vitest nem Playwright: a execução deles é só declarada no relato", alerta=True))
+                          "o job web do CI roda os tipos, o Vitest e o build; o Playwright (e2e) não: a execução dele é só declarada no relato", alerta=True))
     return itens
 
 

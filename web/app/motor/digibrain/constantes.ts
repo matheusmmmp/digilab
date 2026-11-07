@@ -74,6 +74,7 @@ export const CONFIG_DIGIBRAIN_LAB = {
   controle_mem: "rel",
   credito_corrida: false,
   facetas_mem: false,
+  fala_unidades: false,
   g_apr_constante: 0,
   intencao_cheiro: true,
   intencao_suspensa: false,
@@ -102,3 +103,20 @@ export const RECEPTORES_DIGIBRAIN = ["fome", "higiene", "energia", "humor", "sau
 export const COMPORTAMENTOS_DIGIBRAIN = ["ocioso", "dormir", "comer", "brincar", "chamar_atencao", "explorar", "emburrar"] as const;
 export const CARACTERISTICAS_DIGIBRAIN = ["vies", ...RECEPTORES_DIGIBRAIN.map(r => `u_${r}`), "noite", "dormindo", "sem_cuidado", "comida_vista",
   "sem_comida", "bola_vista", "fome_sem_comida", "cuidado_humor", "F", "V", "E"] as const;
+
+
+/** A ConfigDecodificador (digilab/config.py, DC1): os pesos e os limiares do `dec-v1`, PROPOSTOS, SEM FONTE. Conferida folha a folha contra
+ *  test/gabaritos/decodificador_python.json por test/decodificador.test.ts. */
+export const CONFIG_DECODIFICADOR = {
+  limiar_valor: 512, limiar_confianca: 512, limiar_desfecho: 128, piso_sonda: 640, ganho_v: 4, ganho_sigma: 8, n_sp_teto: 8,
+  fins_frustrantes: ["desistiu", "sumiu", "trocou"],
+  p_fome_urgencia: 2, p_fome_fracao: 1, p_fome_intencao: 1, p_fome_pista: 1,
+  p_sono_urgencia: 2, p_sono_fracao: 1, p_sono_reflexo: 1, p_sono_noite: 1,
+  p_agitacao_e: 3, p_agitacao_urgencia: 2,
+  p_frustracao_f: 2, p_frustracao_fim: 1, p_frustracao_n_sp: 1,
+  p_determinacao_c: 2, p_determinacao_persistencia: 1,
+  p_indecisao_margem: 2, p_indecisao_sondas: 1,
+  p_solidao_urgencia: 2, p_solidao_fracao: 1,
+  p_curiosidade_urgencia: 1, p_curiosidade_tedio: 1, p_curiosidade_g_exp: 1, p_curiosidade_fracao: 1,
+} as const;
+export type ConfigDecodificador = typeof CONFIG_DECODIFICADOR;

@@ -1,0 +1,19 @@
+DigiLab: o cais, o lugar do multiplayer (cais.gltf, cais.bin, cais_cor.png, cais_luz.png)
+
+Procedencia: item gerado por IA, com o gerador Meshy (meshy.ai), no plano Pro pago, na conta do Matheus, em 2026-11-07.
+Pelos termos de uso da Meshy (atualizados em 2026-09-19, secao 3.2), a saida de um plano pago e do cliente.
+Os termos proibem tirar a marca de IA (secao 2.4): a marca fica no asset.extras do cais.gltf e neste arquivo.
+
+Como foi feito (docs/TAREFA_V3_LUGARES_3D.md e docs/lugares3d/cais/ no repositorio):
+- concept: Meshy Image to Image (nano-banana-2), com duas referencias de estilo geradas pela propria Meshy para o DigiLab (a maquete B do
+  mapa digital e o concept da geladeira), sem o pet e sem imagem de terceiros; sem texto, sem marca, sem simbolo; o concept 3 (o pier
+  digital) escolhido pelo Matheus;
+- vistas: Meshy Image to Image com multivista, a partir do concept;
+- malha: Meshy Multi-Image to 3D (remesh em triangulos, so a cor);
+- conserto no Blender 4.5 LTS e em Python, por script: a malha da Meshy fica como veio; a cor e chapada em oito cores da textura,
+  conferidas com o concept, uma cor por face e o tampo dos deques na cor da tabua; a mascara do ciano (cais_luz.png) marca os cristais e a
+  boia, para a vista acender com o lugar aberto.
+As tarefas da Meshy (concept, vistas, malha) estao no asset.extras do cais.gltf.
+
+Uso: no jogo DigiLab, publicado. Credito: "Cais gerado com a Meshy (meshy.ai)".
+Aprovacao: o Matheus escolheu o concept em 2026-11-07; a aprovacao da previa fica no PR do cais.

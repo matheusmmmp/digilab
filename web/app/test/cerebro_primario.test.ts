@@ -57,7 +57,7 @@ describe("a v17: o cerebro trocavel", () => {
   });
 
   test("o ovo novo nasce com o modular por padrao, e com o A pela preferencia; o replay le o cerebro do registro", () => {
-    expect(VERSAO_PET).toBe(17);
+    expect(VERSAO_PET).toBe(19);
     expect(CHAVE_CEREBRO).toBe(CHAVE + "-cerebro");
     expect(cerebroDosOvos()).toBe("modular");
     const m = ligarProduto(new Motor(303));
@@ -144,7 +144,7 @@ describe("no app", () => {
     expect(() => trocarCerebroDoPet("modular")).toThrow(/versão 14/);
     escolherCerebroDosOvos("a");
     novoPet();
-    expect(jogoAtual().motor.versao).toBe(17);
+    expect(jogoAtual().motor.versao).toBe(19);
     expect(jogoAtual().motor.cerebroAtual).toBe("a");
     expect((JSON.parse(a.d[CHAVE]!) as { log: EventoRegistro[] }).log[1]).toEqual([TICK_INICIAL, "cb", { cerebro: "a" }]);
   });

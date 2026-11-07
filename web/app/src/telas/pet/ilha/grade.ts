@@ -8,7 +8,8 @@
      (norte e oeste), o rio (leste) ou a areia (sul): o pet para ali porque o motor o prende, e a vista mostra um limite.
    A vista (cena.ts) so desenha o que esta aqui. Todos os numeros sao do desenho: PROPOSTO, SEM FONTE. */
 import type { ConfigMundo } from "../../../../motor/index.ts";
-import { MODELOS, MODELO_ARVORE_DO_MOTOR, type NomeModelo } from "./modelos.ts";
+import { ENFEITES_GRADE, LUGARES_GRADE } from "./constantes.ts";
+import { ENFEITES_MODELOS, MODELOS, MODELO_ARVORE_DO_MOTOR, type NomeEnfeite, type NomeLugar, type NomeModelo } from "./modelos.ts";
 
 /** a moldura em volta da area andavel, em celulas (pelo menos 8 de cada lado, secao 5) */
 export const MOLDURA = { oeste: 10, leste: 14, norte: 12, sul: 10 } as const;
@@ -27,6 +28,12 @@ export const FORA = "moldura";
 export interface Celula { tipo: Tipo; nivel: number; cantos: [number, number, number, number]; regiao: Regiao }
 /** um objeto posto na ilha: o modelo, o centro (em celulas, continuo), o giro, a escala e, se veio do motor, o id da arvore do layout */
 export interface Objeto { modelo: NomeModelo; x: number; z: number; giro: number; escala: number; doMotor: string | null }
+/** um enfeite do mundo humano na moldura (docs/TAREFA_V3_MUNDO_ENFEITES.md): o modelo, o lugar (celulas) e o giro, que vira a frente
+    do modelo (+z do glTF) para a area andavel */
+export interface Enfeite { nome: NomeEnfeite; x: number; z: number; giro: number }
+/** um lugar da ilha (docs/TAREFA_V3_LUGARES_3D.md): o modelo, o lugar (celulas), o giro (a frente, +z do glTF, para a area) e a altura do
+    chao em que ele fica (o cais fica na areia, com metade sobre a agua) */
+export interface Lugar { nome: NomeLugar; x: number; z: number; giro: number; y: number }
 
 /* um gerador simples com semente (mulberry32): a decoracao sai sempre igual */
 export function rng(semente: number): () => number {
@@ -83,6 +90,12 @@ export class Ilha {
   readonly area: { w: number; h: number };
   readonly celulas: Celula[] = [];
   readonly objetos: Objeto[] = [];
+  /** os enfeites (docs/TAREFA_V3_MUNDO_ENFEITES.md): numa lista propria e com a rng propria, para os `objetos` sairem iguais (E-G0) */
+  readonly enfeites: Enfeite[] = [];
+  /** os lugares (docs/TAREFA_V3_LUGARES_3D.md, secao 12): depois dos enfeites, com a rng propria */
+  readonly lugares: Lugar[] = [];
+  /** os indices de `objetos` que a vista nao desenha: a decoracao dentro da clareira de um lugar (os objetos em si nao mudam, E-G0) */
+  readonly escondidos = new Set<number>();
   /** a coluna oeste do rio (a leste da area) */
   readonly rioX: number;
 
@@ -129,6 +142,8 @@ export class Ilha {
       this.celulas.push({ tipo, nivel, cantos: [h, h, h, h], regiao });
     }
     this.porObjetos(semente, ninho, comedouro);
+    this.porEnfeites(semente, ninho);
+    this.porLugares(semente, ninho);
   }
 
   /** a celula (x, z) em celulas do motor, ou undefined fora da grade */
@@ -216,6 +231,94 @@ export class Ilha {
       if (!c || c.tipo !== "areia" || !longe(x, z, 2, alto) || this.distanciaDaArea(x, z) < 1.5) continue;
       por("pedra", x, z, [0.6, 0.9]);
       k++;
+    }
+  }
+
+  /* os enfeites na moldura, na ordem da tabela (os postes primeiro, depois os marcos): em grama plana (com a folga do enfeite), a uma
+     distancia da area entre `perto` e `longe` (os marcos, so ao norte e perto da casa), longe dos outros enfeites e das coisas altas de hoje; o giro vira
+     a frente do modelo para o ponto mais perto da area. Falha alto se faltar lugar */
+  private porEnfeites(semente: number, ninho: [number, number]): void {
+    const r = rng(semente ^ ENFEITES_GRADE.sal);
+    const altos = this.objetos.filter(o => !MODELOS[o.modelo].baixo);
+    const plana = (x: number, z: number, folga: number) => {
+      const c0 = this.cel(Math.floor(x), Math.floor(z));
+      if (!c0) return false;
+      for (let dz = -folga; dz <= folga; dz++) for (let dx = -folga; dx <= folga; dx++) {
+        const c = this.cel(Math.floor(x) + dx, Math.floor(z) + dz);
+        if (!c || c.tipo !== "grama" || c.nivel !== c0.nivel || c.cantos.some(h => h !== c.cantos[0])) return false;
+      }
+      return true;
+    };
+    for (const nome of Object.keys(ENFEITES_MODELOS) as NomeEnfeite[]) {
+      const G = ENFEITES_GRADE[nome], n = G.quantos;
+      for (let k = 0, tent = 0; k < n; tent++) {
+        if (tent >= n * ENFEITES_GRADE.tentativas) throw new Error(`sem lugar para o enfeite ${nome} na ilha ${this.cm.layout.nome}: ${k} de ${n}`);
+        /* os do norte sao sorteados so na faixa ao norte da area, a ate `casa` celulas do ninho em x (onde a camera da tela Pet mais fica;
+           pela grade inteira, quase nenhum sorteio cairia ali); com `faixa`, entre os dois deslocamentos em x a partir do ninho */
+        const x = !G.norte ? this.x0 + 0.5 + r() * (this.larg - 1)
+          : "faixa" in G ? ninho[0] + G.faixa[0] + r() * (G.faixa[1] - G.faixa[0]) : ninho[0] + (r() * 2 - 1) * G.casa;
+        const z = G.norte ? -(G.perto + r() * (G.longe - G.perto)) : this.z0 + 0.5 + r() * (this.prof - 1);
+        const d = this.distanciaDaArea(x, z);
+        if (!plana(x, z, G.folga) || d < G.perto || d > G.longe || (G.norte && z >= 0)) continue;
+        if (altos.some(o => Math.hypot(o.x - x, o.z - z) < G.deAlto)) continue;
+        /* dos postes, `entreSi`; dos outros marcos, `entreMarcos` (os marcos sao grandes: o carro e o trilho tem ~5 celulas de comprimento) */
+        if (this.enfeites.some(e => Math.hypot(e.x - x, e.z - z) < (e.nome !== "poste" && "entreMarcos" in G ? G.entreMarcos : G.entreSi))) continue;
+        const ax = Math.min(Math.max(x, 0), this.area.w), az = Math.min(Math.max(z, 0), this.area.h);
+        this.enfeites.push({ nome, x, z, giro: Math.atan2(ax - x, az - z) });
+        k++;
+      }
+    }
+  }
+
+  /* os lugares (LUGARES_GRADE), o maior primeiro: a barraca e o portao em grama plana ao norte, no ponto que cabe mais perto do alvo, longe dos enfeites, das
+     arvores do motor e um do outro, com a frente para o ponto mais perto da area; o cais na ultima linha de areia antes do mar, longe das
+     arvores do motor, com a frente para o norte (o comprido do pier ao longo da beira). Cada um abre a clareira dele (escondidos). Falha
+     alto se faltar lugar */
+  private porLugares(semente: number, ninho: [number, number]): void {
+    const r = rng(semente ^ LUGARES_GRADE.sal), T = LUGARES_GRADE.tentativas;
+    const doMotor = this.objetos.filter(o => o.doMotor !== null);
+    const plana = (x: number, z: number, folga: number) => {
+      const c0 = this.cel(Math.floor(x), Math.floor(z));
+      if (!c0) return false;
+      for (let dz = -folga; dz <= folga; dz++) for (let dx = -folga; dx <= folga; dx++) {
+        const c = this.cel(Math.floor(x) + dx, Math.floor(z) + dz);
+        if (!c || c.tipo !== "grama" || c.nivel !== c0.nivel || c.cantos.some(h => h !== c.cantos[0])) return false;
+      }
+      return true;
+    };
+    const abrir = (x: number, z: number, raio: number) => this.objetos.forEach((o, i) => {
+      if (o.doMotor === null && Math.hypot(o.x - x, o.z - z) < raio) this.escondidos.add(i);
+    });
+    for (const nome of ["barraca", "portao"] as const) {
+      const G = LUGARES_GRADE[nome], ax0 = ninho[0] + G.alvo[0], az0 = G.alvo[1];
+      /* uma busca na grade de quartos de celula, sem sorteio: entre os pontos que cabem, o mais perto do alvo */
+      let melhor: [number, number] | null = null, dm = Infinity;
+      for (let z = -G.perto; z >= -G.longe; z -= 0.25) for (let x = this.x0 + 0.5; x < this.x0 + this.larg - 0.5; x += 0.25) {
+        const d = Math.hypot(x - ax0, z - az0);
+        if (d >= dm || !plana(x, z, G.folga)) continue;
+        if (doMotor.some(o => Math.hypot(o.x - x, o.z - z) < G.clareira)) continue;
+        if (this.enfeites.some(e => Math.hypot(e.x - x, e.z - z) < G.deEnfeite)) continue;
+        if (this.lugares.some(l => Math.hypot(l.x - x, l.z - z) < G.deEnfeite + G.clareira)) continue;
+        melhor = [x, z]; dm = d;
+      }
+      if (!melhor) throw new Error(`sem lugar para o lugar ${nome} na ilha ${this.cm.layout.nome}`);
+      const [x, z] = melhor, ax = Math.min(Math.max(x, 0), this.area.w), az = Math.min(Math.max(z, 0), this.area.h);
+      this.lugares.push({ nome, x, z, giro: Math.atan2(ax - x, az - z), y: this.altura(x, z) });
+      abrir(x, z, G.clareira);
+    }
+    const C = LUGARES_GRADE.cais;
+    for (let tent = 0; ; tent++) {
+      if (tent >= T) throw new Error(`sem lugar para o cais na ilha ${this.cm.layout.nome}`);
+      const x = this.area.w * (C.faixa[0] + r() * (C.faixa[1] - C.faixa[0])), i = Math.floor(x);
+      /* a ultima linha de areia nesta coluna: a celula seguinte ao sul e agua */
+      let j = this.area.h;
+      while (this.cel(i, j + 1)?.tipo === "areia") j++;
+      if (this.cel(i, j)?.tipo !== "areia" || this.cel(i, j + 1)?.tipo !== "agua") continue;
+      const z = j + 1;
+      if (doMotor.some(o => Math.hypot(o.x - x, o.z - z) < C.clareira)) continue;
+      this.lugares.push({ nome: "cais", x, z, giro: Math.PI, y: this.altura(x, j + 0.5) });
+      abrir(x, z, C.clareira);
+      break;
     }
   }
 

@@ -9,14 +9,19 @@
    - a camera solta (cameraLivre.ts, L1 de "Lugares da ilha"): a partir de 900 px e com o controle "Livre", a camera olha um ponto que
      pode sair do pet (o foco); a dobra e a camera centram nele, e a vista publica a cada quadro o que o minimapa e a HUD leem;
    - a viagem ao lugar (viagem.ts, L2 e L3 de "Lugares da ilha"): com Crescer, Lutar ou o Diario aberto, a camera vai ao saco de pancada, ao portao
-     da arena ou a barraca do Tamer (lugares.ts; o portao e a barraca sao marcadores provisorios, marcadoresLugar.ts), deixando-o a esquerda do painel
+     da arena ou a barraca do Tamer (lugares.ts; o portao e a barraca sao os modelos 3D da LUGARES_3D no ponto da grade, com o marcador provisorio de
+     marcadoresLugar.ts ate o modelo carregar e nos estilos sem lugares), deixando-o a esquerda do painel
      (no celular no alto, acima da folha), e o pet desenhado anda ate ele e fica; ao sair, os dois voltam. So o desenho, como a coreografia abaixo;
    - a coreografia (docs/TAREFA_V3_HABITAT_OBJETOS.md): pedido um treino (CENA.treino), o pet desenhado vai ao saco de pancada, bate e
      volta (TREINO_MS); quando o motor rola a bola (uma rolagem nova no Mundo), o pet da um golpe nela. So o desenho: a posicao do motor,
      o ganho do treino e o log nao mudam.
+   - o pet na mao (docs/TAREFA_V3_PEGAR_PET.md, P2; CENA.petNaMao, PegarPet.tsx): a camera e o foco da dobra param onde estavam (o
+     paraMundo nao muda sob o dedo); o pet desenhado fica suspenso sobre o chao sob o dedo (pousoEm), balanca e faz careta (papel.ts,
+     mao.ts), e a sombra fica onde ele vai cair, ja no mapa (noMapa, PP-4). Ao soltar, o desenho comeca onde o motor o pos (sem caminhar
+     de volta: Seguidor.pular), com a queda e o quique, e o foco volta ao pet em ~MAO.focoTauMs.
    Os kits carregam depois do terreno; se um modelo nao carrega, a cena cai na reserva (MundoReserva), com o erro no console. */
 import * as THREE from "three";
-import { TPD, eNoite, type Mundo } from "../../../../motor/index.ts";
+import { TPD, eNoite, noMapa, type Mundo } from "../../../../motor/index.ts";
 import { habitatAtual, voltarParaIlha, type Habitat } from "../../../habitat.ts";
 import { jogoAtual } from "../../../jogo.ts";
 import { CENA, reservaDoPe } from "../cenaEstado.ts";
@@ -24,18 +29,20 @@ import { Seguidor, dentroDoMapa } from "../vistaMundo.ts";
 import { velocidadeAtual } from "../../../tempo.ts";
 import { AFASTAR_MAX, BATER_BOLA_MS, CAMERAS, COBERTO_MS, GOLPE_DIST, GOLPE_MS, KITS_COBERTO_MS, FPS_MIN, LARGURA_MIN, LONGE, NEVOA, PERTO, QUEDA_MS,
   RAZAO_MAX, TEXEL_ALVO, TREINO_MS, type CameraHabitat } from "./constantes.ts";
-import { CURVA, type CenaIlha, type Objetos } from "./cena.ts";
+import { CURVA, type CenaIlha, type Objetos, cobrirFundo } from "./cena.ts";
 import { estiloDe, type Estilo } from "./estilos.ts";
-import { dobrarY, paraMundoCel, paraTelaNdc, type CameraLida, type Dobra } from "./curva.ts";
+import { dobrarY, lugarNoPonto, paraMundoCel, paraTelaNdc, type CameraLida, type Dobra } from "./curva.ts";
 import { ilhaDe, type Ilha } from "./grade.ts";
 import { Itens } from "./itens.ts";
-import { Papel, type Ret } from "./papel.ts";
+import type { NomeLugar } from "./modelos.ts";
+import { Papel, type Ret, type Suspenso } from "./papel.ts";
+import { MAO, Pendulo, alturaDepoisDeSoltar, soltarAcabou, tremorAgora } from "./mao.ts";
 import { ORBITA, aplicarOrbita, ligarControles, recentrar } from "../orbita.ts";
 import { CONSULTA_SOLTA, VISTA, despublicarVista, focoDoQuadro, ligarCameraLivre, publicarVista, type Limites, type MapaDaIlha } from "../cameraLivre.ts";
 import { pixelsDoMapa } from "./minimapa.ts";
 import { PRESETS, Pos } from "./pos.ts";
 import { SACO_NA_TELA, VIAGEM, ZOOM_LUGAR_MOVEL, lugarAberto, progressoViagem, type Lugar } from "../../../viagem.ts";
-import { LUGARES, ORDEM_LUGARES, estadoDoLugar, pontoDoLugar as pontoLugarDe, pontoDoPet } from "./lugares.ts";
+import { LUGARES, ORDEM_LUGARES, chaoDoLugar, estadoDoLugar, gradeDosLugares, pontoDoLugar as pontoLugarDe, pontoDoPet, type BaseDoMundo } from "./lugares.ts";
 import { Apagador, montarMarcadores, type Marcadores } from "./marcadoresLugar.ts";
 import { TRANCAS } from "../../../trancas.ts";
 
@@ -51,8 +58,9 @@ class VistaIlha {
   private readonly lida: CameraLida;
   private readonly papel = new Papel();
   private readonly itens: Itens;
-  /** o ponto de cada lugar da ilha (celulas; lugares.ts) */
+  /** o ponto de cada lugar da ilha (celulas; lugares.ts) e a altura do chao no pe dele (celulas; o portao e a barraca ficam na moldura) */
   private readonly pontos: Record<Lugar, [number, number]>;
+  private readonly chaoLugar: Record<Lugar, number>;
   /** os marcadores provisorios do portao e da barraca (marcadoresLugar.ts), soltos no dispose */
   private readonly marcadores: Marcadores;
   /** os lugares trancados (nivel do Tamer, trancas.ts) saem apagados: a versao da tabela de trancas que a cena ja aplicou */
@@ -79,13 +87,20 @@ class VistaIlha {
   private noite: boolean | null = null;
   private ultimo = performance.now();
   private petCel: [number, number] = [0, 0];
-  /** o ponto que a camera olha (celulas): o pet, ou outro com a camera solta (cameraLivre.ts) */
+  /** o ponto que a camera e a dobra olham (celulas): o pet desenhado; outro com a camera solta (cameraLivre.ts) ou na viagem a um lugar (viagem.ts);
+      com o pet na mao, fica onde estava, e logo depois de soltar volta a ele (focoVoltando) */
   private foco: [number, number] = [0, 0];
+  private focoVoltando = false;
   private readonly dirCam = new THREE.Vector3();
   /** a ilha vista de cima e os limites do foco, para o minimapa (feitos uma vez) */
   private readonly mapa: MapaDaIlha;
   private readonly limites: Limites;
   private readonly consultaSolta = typeof matchMedia === "function" ? matchMedia(CONSULTA_SOLTA) : null;
+  /** o pet na mao: se esta, o pendulo do papel, o ultimo ponto do chao sob o pe (celulas) e quando ele foi solto (para a queda) */
+  private naMao = false;
+  private readonly pendulo = new Pendulo();
+  private chaoMao: [number, number] | null = null;
+  private soltouEm: number | null = null;
   /** o treino na ilha: o pedido (CENA.treino) que esta tocando, quando comecou, o ponto em que o pet para para bater (ao lado do saco
       na tela) e o ultimo golpe que balancou o saco */
   private treino: { pedido: number; desde: number; ponto: [number, number]; golpe: number } | null = null;
@@ -127,9 +142,12 @@ class VistaIlha {
     };
     /* o ninho, o comedouro, a racao, a fruta e a bola (itens.ts) e o pet em papel */
     this.itens = new Itens(mu);
-    const base = { ninho: this.itens.ninhoEm, comedouro: [mu.comedouro[0] / mu.cm.sub, mu.comedouro[1] / mu.cm.sub] as [number, number], area: this.ilha.area };
+    /* o portao e a barraca onde a grade da ilha os poe (grade.ts, porLugares; a LUGARES_3D), o saco a [3, -4] do ninho (lugares.ts) */
+    const base: BaseDoMundo = { ninho: this.itens.ninhoEm, comedouro: [mu.comedouro[0] / mu.cm.sub, mu.comedouro[1] / mu.cm.sub], area: this.ilha.area,
+      grade: gradeDosLugares(this.ilha) };
     this.pontos = Object.fromEntries(ORDEM_LUGARES.map(id => [id, [...pontoLugarDe(id, base)]])) as Record<Lugar, [number, number]>;
-    /* o portao e a barraca: marcadores provisorios no ponto de cada um, ate o modelo chegar (lugares.ts) */
+    this.chaoLugar = Object.fromEntries(ORDEM_LUGARES.map(id => [id, chaoDoLugar(id, base)])) as Record<Lugar, number>;
+    /* o portao e a barraca: marcadores provisorios no ponto de cada um, ate o modelo 3D chegar (carregarObjetos); nos estilos sem lugares, ficam */
     this.marcadores = montarMarcadores(base);
     this.cenaIlha.cena.add(this.itens.raiz, this.papel.raiz, this.marcadores.raiz);
     CURVA.uVento.value = 1;
@@ -144,13 +162,21 @@ class VistaIlha {
   /** os modelos do estilo (na ilha, os kits de public/kits3d) entram depois do terreno */
   async carregarObjetos(): Promise<void> {
     THREE.ColorManagement.enabled = true;
-    const o = await this.estilo.objetos(this.ilha);
+    /* os itens gerados (a bola, public/itens/) entram junto e falham do mesmo jeito: em todos os mapas, porque os itens sao os mesmos */
+    const [o] = await Promise.all([this.estilo.objetos(this.ilha), this.itens.carregar(document.baseURI)]);
     this.objetos = o;
     this.cenaIlha.cena.add(o.grupo);
+    /* os modelos 3D dos lugares (lugares.ts) chegaram: o marcador provisorio de cada um sai, e as trancas se aplicam de novo (aos modelos e ao saco
+       gerado, que entrou agora) */
+    for (const id of o.lugaresRaiz?.keys() ?? []) if (id === "portao" || id === "barraca") this.marcadores.tirar(id);
+    this.versaoTrancas = -1;
+    /* data-objetos: os kits e os itens ja estao na cena (as capturas dos itens esperam por ele, como o data-pronto) */
+    this.renderer.domElement.parentElement?.setAttribute("data-objetos", "1");
     if (this.baixa) this.menosGrama();
   }
 
-  /** a dobra de agora: centrada no ponto olhado (o pet desenhado, ou o foco da camera solta), ao longo da direcao em que a camera olha no chao */
+  /** a dobra de agora: centrada no ponto olhado (o foco: o pet desenhado, o foco da camera solta, o lugar da viagem ou, com o pet na mao, onde estava),
+      ao longo da direcao em que a camera olha no chao */
   private get dobra(): Dobra { return { k: this.estilo.dobra, focoX: this.foco[0], focoZ: this.foco[1], dir: this.dirDobra }; }
   /** a camera com a orbita (orbita.ts): o deslocamento e o ponto olhado em relacao ao pet; a fixa e a do habitat */
   private orbitaVista = { desloc: [0, 0, 0] as [number, number, number], olhar: [0, 0, 0] as [number, number, number], elevacao0: 0 };
@@ -168,7 +194,9 @@ class VistaIlha {
     const [dx, , dz] = this.orbitaVista.desloc, h = Math.hypot(dx, dz);
     this.dirDobra = h > 1e-9 ? [-dx / h, -dz / h] : [0, 1];
     const nevoa = this.cenaIlha.cena.fog as THREE.Fog;
-    nevoa.near = NEVOA[0] * this.afast * ORBITA.zoom; nevoa.far = NEVOA[1] * this.afast * ORBITA.zoom;
+    /* a nevoa do estilo (cena.userData.nevoa, o digital) ou a da ilha */
+    const [perto, longe] = (this.cenaIlha.cena.userData.nevoa as readonly [number, number] | undefined) ?? NEVOA;
+    nevoa.near = perto * this.afast * ORBITA.zoom; nevoa.far = longe * this.afast * ORBITA.zoom;
     /* o pet em papel: na distancia do foco, um texel do sprite vale um numero inteiro de pixels do canvas (regra 8) */
     this.ppu = this.renderer.domElement.height * this.fracEnq / 2 / (this.profundidadeDoPet(this.afast, this.orbitaVista) * Math.tan(THREE.MathUtils.degToRad(this.cam.fov / 2)));
     this.pxPorTexel = Math.max(1, Math.round(TEXEL_ALVO * this.ppu));
@@ -214,6 +242,26 @@ class VistaIlha {
     if (!p) return null;
     const sub = this.mu.cm.sub, x = Math.round(p[0] * sub), y = Math.round(p[1] * sub);
     return dentroDoMapa(this.mu.cm, x, y) ? [x, y] : null;
+  }
+  /** o pet na mao: o ponto do chao dobrado (celulas, sem limitar ao mapa) sob o pe desenhado em (peX, peY) do cliente, que fica
+      MAO.alturaTexels acima do chao; null fora da cena ou fora do chao */
+  private chaoSob(peX: number, peY: number): [number, number] | null {
+    const r = this.canvas.getBoundingClientRect();
+    if (!(r.width > 0 && r.height > 0)) return null;
+    const y = peY + (MAO.alturaTexels * this.pxPorTexel) / this.renderer.getPixelRatio();
+    if (peX < r.left || peX > r.right || y < r.top || y > r.bottom) return null;
+    return paraMundoCel(this.lida, this.dobra, ((peX - r.left) / r.width) * 2 - 1, 1 - ((y - r.top) / r.height) * 2);
+  }
+  /** o mesmo ponto em subunidades inteiras do mapa (o que o "levar pet" grava; o motor o limita ao mapa) */
+  pousoEm(peX: number, peY: number): [number, number] | null {
+    const p = this.chaoSob(peX, peY), sub = this.mu.cm.sub;
+    return p ? [Math.round(p[0] * sub), Math.round(p[1] * sub)] : null;
+  }
+  /** o lugar da ilha (lugares.ts) sob o ponto do cliente (px), pela mesma dobra; null fora da cena, antes dos modelos ou num estilo sem lugares */
+  lugarEm(cx: number, cy: number): NomeLugar | null {
+    const caixas = this.objetos?.lugares, r = this.canvas.getBoundingClientRect();
+    if (!caixas || !(r.width > 0 && r.height > 0) || cx < r.left || cx > r.right || cy < r.top || cy > r.bottom) return null;
+    return lugarNoPonto(caixas, (x, y, z) => paraTelaNdc(this.lida, this.dobra, x, z, y), ((cx - r.left) / r.width) * 2 - 1, 1 - ((cy - r.top) / r.height) * 2);
   }
   /** o modo mundo: o ponto do mapa (subunidades) no cliente (px), pela mesma dobra */
   paraTela(x: number, y: number): [number, number] {
@@ -315,7 +363,7 @@ class VistaIlha {
     cam.lookAt(foco[0] + olhar[0] * afast, olhar[1] * afast, foco[1] + olhar[2] * afast);
     cam.updateMatrixWorld();
     const dobra: Dobra = { k: this.estilo.dobra, focoX: foco[0], focoZ: foco[1], dir: this.dirDobra }, [px, pz] = this.pontos[l];
-    const [bx, by] = this.pxDe(cam, dobra, px, 0, pz), [, ty] = this.pxDe(cam, dobra, px, LUGARES[l].altura, pz);
+    const y0 = this.chaoLugar[l], [bx, by] = this.pxDe(cam, dobra, px, y0, pz), [, ty] = this.pxDe(cam, dobra, px, y0 + LUGARES[l].altura, pz);
     return { x: bx, y: by, h: by - ty };
   }
   /** o enquadramento final dos lugares grandes (o portao e a barraca): o zoom e o ponto olhado que deixam o objeto INTEIRO na tela, com um pouco de ceu
@@ -355,7 +403,7 @@ class VistaIlha {
   private alturaDoLugarNaTela(): number {
     const l = VIAGEM.lugar, alt = LUGARES[l].altura;
     if (l === "saco") return alt * (this.ppu / this.renderer.getPixelRatio());
-    const [px, pz] = this.pontos[l], dobra = this.dobra, [, by] = this.pxDe(this.camera, dobra, px, 0, pz), [, ty] = this.pxDe(this.camera, dobra, px, alt, pz);
+    const [px, pz] = this.pontos[l], y0 = this.chaoLugar[l], dobra = this.dobra, [, by] = this.pxDe(this.camera, dobra, px, y0, pz), [, ty] = this.pxDe(this.camera, dobra, px, y0 + alt, pz);
     return by - ty + 8;
   }
   /** o ponto olhado no lugar `l`: o ponto do lugar deslocado para ele ficar onde o painel deixa (a esquerda dele de 900 px em diante; no alto,
@@ -394,18 +442,53 @@ class VistaIlha {
     CURVA.uCurva.value = this.estilo.dobra;
     const { motor: m } = jogoAtual(), mu = m.mundo ?? this.mu, cm = mu.cm, sub = cm.sub;
     const dtMs = agora - this.ultimo, reduzido = movimentoReduzido(), jg = jogoAtual();
-    const pos = this.seguidor.seguir(mu.pet, dtMs, cm, { velJogo: velocidadeAtual(), acao: m.acao, dorme: jg.nascendo > 0 || m.acao === "dormir", reduzido });
+    /* o pet na mao (CENA.petNaMao): entrou, o pendulo parte do zero; saiu, o desenho comeca onde o motor o pos (o "levar pet" ja foi
+       gravado no pointerup, antes da marca cair), sem caminhar de volta */
+    const mao = CENA.petNaMao ? CENA.maoPet : null;
+    if (mao && !this.naMao) {
+      this.naMao = true; this.pendulo.zerar(); this.soltouEm = null; this.focoVoltando = false; this.chaoMao = null;
+      this.treino = null; this.bateBola = null;
+    }
+    if (!mao && this.naMao) { this.naMao = false; this.seguidor.pular(mu.pet); this.soltouEm = agora; this.focoVoltando = true; }
+    const pos = this.naMao ? (this.seguidor.pos ?? [mu.pet[0], mu.pet[1]])
+      : this.seguidor.seguir(mu.pet, dtMs, cm, { velJogo: velocidadeAtual(), acao: m.acao, dorme: jg.nascendo > 0 || m.acao === "dormir", reduzido });
     this.ultimo = agora;
     const viagem = progressoViagem(agora);
-    const cor = this.coreografia(mu, agora, [pos[0] / sub, pos[1] / sub], reduzido, viagem);
+    const motorCel: [number, number] = [pos[0] / sub, pos[1] / sub];
+    let cor: { cel: [number, number]; golpe: { desde: number; alvo: [number, number] } | null; andando: boolean };
+    let suspenso: Suspenso | null = null;
+    if (mao) {
+      /* suspenso sobre o chao sob o pe; fora do chao, o ultimo ponto dele (ou onde estava) */
+      this.chaoMao = this.chaoSob(mao.x, mao.y) ?? this.chaoMao ?? [this.petCel[0], this.petCel[1]];
+      const [lx, lz] = noMapa(Math.round(this.chaoMao[0] * sub), Math.round(this.chaoMao[1] * sub), cm);
+      cor = { cel: this.chaoMao, golpe: null, andando: false };
+      suspenso = { naMao: true, altura: MAO.alturaTexels, angulo: this.pendulo.passo(dtMs, mao.x, agora, reduzido),
+        tremor: tremorAgora(agora, reduzido), sombra: [lx / sub, lz / sub] };
+    } else {
+      cor = this.coreografia(mu, agora, motorCel, reduzido, viagem);
+      if (this.soltouEm !== null) {
+        const ms = agora - this.soltouEm;
+        if (soltarAcabou(ms, reduzido)) this.soltouEm = null;
+        else suspenso = { naMao: false, altura: alturaDepoisDeSoltar(ms, reduzido), angulo: 0, tremor: 0, sombra: null };
+      }
+    }
     this.petCel = cor.cel;
     /* o zoom do lugar: abaixo de 900 px a camera se aproxima do saco com a viagem (o saco e o pet ficam grandes no terco de cima) e volta ao sair */
     const zoom = viagem > 0 ? this.zoomDaViagem(viagem, reduzido) : 1;
     if (this.afastBase * zoom !== this.afast) { this.afast = this.afastBase * zoom; this.orbitaVersao = -1; }
     this.atualizarOrbita();
     const pode = this.podeSoltar;
-    this.foco = focoDoQuadro(this.petCel, agora, dtMs, this.dirDobra, this.limites, pode);
-    if (viagem > 0) this.foco = this.focoDaViagem(this.foco, viagem, reduzido);
+    /* o foco: preso com o pet na mao (PEGAR_PET; nem a camera solta anda); fora disso, o da camera solta (o pet, ou o ponto solto; cameraLivre.ts), ao
+       qual ele volta suave logo depois de soltar o pet; e, com um lugar aberto, o da viagem (viagem.ts) */
+    if (!this.naMao) {
+      const alvo = focoDoQuadro(this.petCel, agora, dtMs, this.dirDobra, this.limites, pode);
+      const dx = alvo[0] - this.foco[0], dz = alvo[1] - this.foco[1];
+      if (this.focoVoltando && !reduzido && Math.hypot(dx, dz) > 0.01) {
+        const k = 1 - Math.exp(-Math.max(0, dtMs) / MAO.focoTauMs);
+        this.foco = [this.foco[0] + dx * k, this.foco[1] + dz * k];
+      } else { this.foco = [alvo[0], alvo[1]]; this.focoVoltando = false; }
+      if (viagem > 0) this.foco = this.focoDaViagem(this.foco, viagem, reduzido);
+    }
     const [px, pz] = this.foco, a = this.afast;
     const { desloc, olhar } = this.orbitaVista;
     this.camera.position.set(px + desloc[0] * a, desloc[1] * a, pz + desloc[2] * a);
@@ -416,15 +499,19 @@ class VistaIlha {
     CURVA.uTempo.value = reduzido ? 0 : agora / 1000;
     const noite = eNoite(m.e.tick % TPD);
     if (noite !== this.noite) { this.noite = noite; this.cenaIlha.aplicarNoite(noite); }
+    cobrirFundo(this.cenaIlha.cena.background, this.camera.aspect);
+    this.objetos?.noite?.(noite);
+    this.objetos?.quadro?.(this.foco, this.estilo.dobra, this.dirDobra, Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2)) * this.camera.aspect);
     this.aplicarTrancas();
-    this.itens.sincronizar(mu, m.e.tick, noite, agora, dtMs, m.lesionadoDesde !== null, reduzido, m.e.sujeira, this.petCel);
-    /* com a camera solta, o pet fica longe do foco: o chao sob ele desce pela dobra, e o tamanho do papel vale na distancia dele (senao o
-       texel deixa de ser inteiro e o pet cresce ou encolhe com a distancia ao foco) */
-    let ppu = this.ppu, pxPorTexel = this.pxPorTexel, yChao = 0;
-    if (this.petCel[0] !== px || this.petCel[1] !== pz) {
-      yChao = dobrarY(0, this.petCel[1], this.dobra, this.petCel[0]);
+    this.itens.sincronizar(mu, m.e.tick, noite, agora, dtMs, m.lesionadoDesde !== null, reduzido, m.e.sujeira, this.naMao ? motorCel : this.petCel);
+    /* o pet longe do foco (a camera solta, a viagem, a volta depois de soltar o pet): o chao sob ele desce pela dobra (yPe), e o tamanho do papel vale
+       na distancia dele (senao o texel deixa de ser inteiro e o pet cresce ou encolhe com a distancia ao foco). Com o pet na mao o tamanho fica o do
+       foco, como na P2 da PEGAR_PET (o chaoSob conta a altura da mao com ele) */
+    const yPe = dobrarY(0, this.petCel[1], this.dobra, this.petCel[0]);
+    let ppu = this.ppu, pxPorTexel = this.pxPorTexel;
+    if (!this.naMao && (this.petCel[0] !== px || this.petCel[1] !== pz)) {
       const dir = this.camera.getWorldDirection(this.dirCam), prof = (this.petCel[0] - this.camera.position.x) * dir.x
-        + (yChao - this.camera.position.y) * dir.y + (this.petCel[1] - this.camera.position.z) * dir.z;
+        + (yPe - this.camera.position.y) * dir.y + (this.petCel[1] - this.camera.position.z) * dir.z;
       if (prof > 1e-3) {
         ppu = this.renderer.domElement.height / 2 / (prof * Math.tan(THREE.MathUtils.degToRad(this.cam.fov / 2)));
         pxPorTexel = Math.max(1, Math.round(TEXEL_ALVO * ppu));
@@ -432,8 +519,8 @@ class VistaIlha {
     }
     const ret = this.papel.atualizar({
       agora, dt: Math.min(0.05, dtMs / 1000), quadro, cel: this.petCel, motor: mu.pet, camera: this.camera,
-      ppu, pxPorTexel, yChao, canvas: [this.renderer.domElement.width, this.renderer.domElement.height],
-      razao: this.renderer.getPixelRatio(), reduzido, noite, golpe: cor.golpe, andandoVista: cor.andando,
+      ppu, pxPorTexel, yPe, canvas: [this.renderer.domElement.width, this.renderer.domElement.height],
+      razao: this.renderer.getPixelRatio(), reduzido, noite, golpe: cor.golpe, andandoVista: cor.andando, suspenso,
     });
     /* o foco do HD-2D: a altura do pet na tela (0 embaixo, 1 em cima) */
     this.renderer.info.reset();
@@ -448,8 +535,11 @@ class VistaIlha {
     if (this.versaoTrancas === TRANCAS.versao) return;
     this.versaoTrancas = TRANCAS.versao;
     for (const id of ORDEM_LUGARES) {
-      const raiz = id === "saco" ? this.itens.sacoRaiz : this.marcadores.porLugar.get(id);
-      if (raiz) this.apagador.aplicar(raiz, estadoDoLugar(id) === "trancado");
+      const trancado = estadoDoLugar(id) === "trancado";
+      /* o portao e a barraca: o modelo 3D (lugares.ts) quando ja chegou, senao o marcador provisorio; a mascara de luz acende so no aberto */
+      const raiz = id === "saco" ? this.itens.sacoRaiz : this.objetos?.lugaresRaiz?.get(id) ?? this.marcadores.porLugar.get(id);
+      if (raiz) this.apagador.aplicar(raiz, trancado);
+      if (id !== "saco") this.objetos?.abrirLugar?.(id, !trancado);
     }
   }
   /** onde cada lugar cai na tela (o pe, em px de CSS, e a altura dele em px): o cadeado com o "Nv N" (CadeadosDaIlha.tsx) fica sobre ele. Em qualquer largura */
@@ -459,9 +549,14 @@ class VistaIlha {
     const ppc = this.ppu / this.renderer.getPixelRatio(), r = this.rectCanvas, v = this.vLugar, alvo = this.lugaresTela;
     for (const id of ORDEM_LUGARES) {
       const x = this.pontos[id][0], z = this.pontos[id][1];
-      v.set(x, dobrarY(0, z, this.dobra, x), z).project(this.camera);
+      const y0 = this.chaoLugar[id];
+      v.set(x, dobrarY(y0, z, this.dobra, x), z).project(this.camera);
       const a = alvo[id];
-      a[0] = r.left + ((v.x + 1) / 2) * r.width; a[1] = r.top + ((1 - v.y) / 2) * r.height; a[2] = LUGARES[id].altura * ppc;
+      a[0] = r.left + ((v.x + 1) / 2) * r.width; a[1] = r.top + ((1 - v.y) / 2) * r.height;
+      /* a altura na tela: o saco (perto do pet) pela conta da L2, altura x px por celula na distancia do foco; o portao e a barraca (na moldura, longe
+         do foco: a px por celula do foco os aumentava e o cadeado subia acima do modelo) pelo topo projetado, como em alturaDoLugarNaTela */
+      if (id === "saco") a[2] = LUGARES[id].altura * ppc;
+      else { v.set(x, dobrarY(y0 + LUGARES[id].altura, z, this.dobra, x), z).project(this.camera); a[2] = a[1] - (r.top + ((1 - v.y) / 2) * r.height); }
     }
     cb(alvo);
   }
@@ -591,6 +686,8 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
   CENA.mundo = {
     paraMundo: (cx, cy) => vista.paraMundo(cx, cy),
     paraTela: (x, y) => vista.paraTela(x, y),
+    pousoEm: (x, y) => vista.pousoEm(x, y),
+    lugarEm: (x, y) => vista.lugarEm(x, y),
     get pet() { const p = vista.petDesenhado; if (!p) throw new Error("a cena do mundo ainda nao desenhou o pet"); return p; },
     get bola() { return vista.bolaDesenhada ?? undefined; },
   };

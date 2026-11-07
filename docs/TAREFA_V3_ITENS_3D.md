@@ -196,3 +196,150 @@ primeira etapa de item o mesmo cálculo entra no teste da G1 a G5. Os números d
 baixos (12): 155 285 288 326 379 494 615 642 755 880 1690 3216    -> mediana 554,5
 altos  (16): 12 44 48 72 84 900 1368 1646 3182 3505 3648 3947 4066 4964 5648 6265 -> mediana 2414
 ```
+
+## 10. Antes da bola: os termos da Meshy e a referência (2026-11-05, Gerente, Claude Code, Opus 5.5, worktree `v3-itens-3d-bola`)
+
+**Os termos de uso da Meshy** (`meshy.ai/terms-of-use`, atualizados em 2026-09-19, lidos em 2026-11-05). Servem para a ilha, com dois cuidados:
+- **De quem é a malha:** no plano pago, do cliente ("customers on a paid Meshy plan own their Customer Output", §3.2). No plano grátis, a
+  Meshy é a dona e libera em CC BY 4.0 com crédito; por isso nada se gera no plano grátis para o jogo. Postar na comunidade da Meshy põe o
+  item em CC0 (§3.3): não postar.
+- **Uso no jogo:** os termos não falam de jogo nem de uso comercial; a posse no plano pago cobre publicar. A Meshy não garante que o item
+  seja único (§7.2): o revisor confere se ele não copia um item conhecido.
+- **Cuidado 1, a marca de IA:** é proibido tirar ou alterar "AI identifiers such as metadata or watermarks" (§2.4). O remesh e a exportação
+  no Blender podem apagar os metadados do GLB; o pipeline copia o `asset` e os `extras` de origem do GLB da Meshy para o `.gltf` final, e
+  o `License.txt` diz que o item foi gerado pela Meshy (G8 passa a conferir os dois).
+- **Cuidado 2, o treino:** a Meshy pode usar as entradas e as saídas de clientes fora do Enterprise (o Pro incluído) para treinar (§2.9),
+  salvo pedido de exclusão a support@meshy.ai. Recomendação: o Matheus pede a exclusão ao assinar (o concept e a referência da ilha vão
+  como entrada). Custo de não pedir: o concept e a malha podem entrar no treino da Meshy; nada no jogo muda.
+- Também vale: o cliente revisa a saída antes de usar (§2.4) e não usa as saídas para treinar um gerador concorrente (§2.6).
+
+**A referência da bola de hoje** (a bola procedural, para o par lado a lado; seção 7). Roteiro: `web/app/e2e_capturas/itens_bola_referencia.spec.ts`
+(com `DIGILAB_CAPTURAS_ITENS=1`); saves: `web/app/e2e_capturas/saves_bola.json`, de `gerar_saves_bola.mjs` (semente 4242, pet v17
+Gomamon, a bola 2 células a leste do pet, 13:00 e 22:30, o relógio parado). As 12 imagens (tela inteira e recorte em volta da bola, 390 e
+1280, claro, escuro e noite) ficam fora do git, em `D:\Trab\digilab\capturas_itens3d\bola\referencia\`, porque o pet é sprite do UP; os
+sha256 e a M3 de cada uma estão em `docs/itens3d/bola/referencia.json`, e as M3 inteiras em `docs/itens3d/bola/*_m3.json`.
+
+| tela | draw calls (claro / escuro / noite) |
+|---|---|
+| 1280 × 800 | 89 / 89 / 109 |
+| 390 × 844 | 82 / 82 / 98 |
+
+O G9 da bola gerada é ter o mesmo número ou menos em cada uma das seis. O `fps_media` dessas medidas (60) é do Chrome sem janela do
+Playwright e não é o fps do jogo: a medida de fps continua com o Matheus (seção 7).
+
+## 11. A bola na ilha (2026-11-06, Gerente, Claude Code, Opus 5.5, worktree `v3-itens-3d-bola`)
+
+A primeira etapa (D-I1). Em ordem, com o que cada passo deixou em `docs/itens3d/bola/`:
+
+| etapa | o que saiu | créditos (saldo) |
+|---|---|---|
+| 1 concept | quatro concepts pelo Image to Image (nano-banana-2) com dois recortes da ilha sem o pet; o Matheus escolheu o 2, gomos (`concept/`) | 24 (1 100 → 1 076) |
+| 2 multivista | três vistas coerentes do concept 2 (`vistas/`) | 6 (→ 1 070) |
+| 3 malha | Multi-Image to 3D com remesh para 500: 524 triângulos, um material, textura de 2048 px; **facetada, amassada, gomos borrados e sombra embutida** (`malha/`) | 30 (→ 1 040) |
+| 4–6 conserto (decisão do Matheus: no Blender, sem gerar de novo) | uma esfera UV limpa de 440 triângulos recebe a cor da Meshy por bake; a cor é chapada em três tons (`conserto/`, `consertar_bola.py`, `achatar_cores.py`) | 0 |
+| 7 exportação | `web/app/public/itens/bola/` (glTF separado, 1024 px, a marca de IA no `asset.extras`, o `License.txt`) | 0 |
+| 8 render na ilha | seis capturas lado a lado com a bola de hoje, a M3 de cada uma | 0 |
+| 9 revisão | o revisor novo (uma sessão que só viu o concept e as capturas): **aprovado com ressalva**, cores lavadas e o amarelo some à noite; a paleta foi saturada (rodada 2) e as capturas refeitas | 0 |
+
+Gasto total: 60 créditos, ≈ R$ 6,50 (o Pro a R$ 0,108 o crédito), dentro do teto de R$ 120 (D-I6).
+
+**Os gates** (o teste `web/app/test/ilha_itens3d.test.ts` confere G1 a G8):
+- G1 440 triângulos (teto 554); G2 a caixa igual nos três eixos, normalizada para 0,72 célula (o diâmetro da bola de antes);
+- G3 PNG de 1024 px; G4 um material com textura; G5 nenhum mapa extra;
+- G6 o glTF-Validator 2.0.0-dev.3.10 com 0 erros e 0 avisos (`validacao.json`); G7 os arquivos do item somam cerca de 26 KB;
+- G8 o `License.txt` e o `asset.extras` com a Meshy e as três tarefas;
+- G9 os draw calls iguais aos da bola de antes nas seis cenas: 89, 89 e 109 em 1280; 82, 82 e 98 em 390 (`referencia.json`, `gerada.json`).
+
+**A resposta à pergunta da seção 1, para a bola:** a malha do gerador **não** entrou com a qualidade dos kits; entrou depois do conserto no
+Blender, em que só a cor do gerador sobreviveu (a forma é uma esfera do Blender, as cores são a paleta do concept). Com o conserto, o custo
+de render é o mesmo da bola de antes. O risco da D-I1 se confirmou: a esfera é a forma mais fácil de fazer sem gerador, então a bola diz
+pouco sobre os itens de forma livre (o saco, o kit médico, o cocô).
+
+**O código da vista** (D-I4): `ITENS_MODELOS` em `modelos.ts`; em `itens.ts`, a bola procedural sai e o glTF entra pelo
+`carregarVariante` dos kits, com o pivô no centro para o giro; o `vista.ts` carrega os itens junto dos kits (falha alto do mesmo jeito) e
+marca `data-objetos` quando terminam; o crédito em Ajustes › Sobre. A bola nova vale em todos os mapas do habitat, porque os itens são
+os mesmos em todos. O motor, o log e o save não mudam.
+
+**Fora:** o fps de verdade (a M3 no Chrome do desktop, com o Matheus); a aprovação das capturas pelo Matheus.
+
+## 12. O saco de pancada na ilha (2026-11-06, Gerente, Claude Code, Opus 5.5, worktree `v3-itens-3d-saco`)
+
+O segundo item, de forma livre, escolhido pelo Matheus depois da bola. Em ordem, com o que cada passo deixou em `docs/itens3d/saco/`:
+
+| etapa | o que saiu | créditos (saldo) |
+|---|---|---|
+| 1 concept | quatro concepts com dois recortes da ilha sem o pet (o saco procedural e os kits); o Matheus escolheu o 2, bambu (`concept/`) | 24 (1 040 → 1 016) |
+| 2 multivista | três vistas do concept 2; duas quase iguais, todas fiéis ao concept (`vistas/`) | 6 (→ 1 010) |
+| 3 malha | Multi-Image to 3D com remesh para 2 000: **2 082 triângulos, uma peça só, com a forma do concept** (bambu, amarras, corrente, saco de lona, pedra com musgo); textura de 2048 px com sombra embutida (`malha/`) | 30 (→ 980) |
+| 4 corte | no Blender, por script (`consertar_saco.py`): a malha da Meshy fica e é cortada em duas peças pelo vão entre o poste e o saco | 0 |
+| 5 cor | a textura chapada em sete cores do concept (`paleta.json`, `achatar_cores.py`), 1024 px; depois do revisor, a lona e a corda que caíam na pedra viram musgo, só nos triângulos de UV da pedra (`uv_base.py`, `pintar_base.py`) | 0 |
+| 6 exportação | `web/app/public/itens/saco/` (glTF separado com os nós `suporte` e `saco`, a marca de IA, o `License.txt`) | 0 |
+| 7 render na ilha | o saco parado e a M3 (claro e escuro), e uma rajada de capturas do treino, antes e depois (`e2e_capturas/itens_saco.spec.ts`) | 0 |
+| 8 revisão | o revisor visual (um subagente Sonnet que só viu o concept, as prévias e as capturas): **aprovado com ressalva**; conferir o saco contra o poste no fim do balanço (conferido em quadros ampliados: não toca), as manchas marrons e rosadas na pedra (tiradas, etapa 5) e o saco um pouco pequeno perto do pet (levado ao Matheus) | 0 |
+
+Gasto do saco: 60 créditos; com a bola, 120 créditos, ≈ R$ 13, dentro do teto de R$ 120 (D-I6).
+
+**O corte.** As fatias da malha por altura (no glb da Meshy, z para cima, de −0,95 a 0,95) mostram: a pedra da base até z ≈ −0,76; o
+poste em x de 0,14 a 0,26; o saco em x de −0,52 a −0,08 e z de −0,48 a 0,38; a corrente em x ≈ −0,3 até o braço (z ≈ 0,66). Há um vão
+entre o poste e o saco em toda a altura do saco. O `saco` são as faces com o centro em x < 0,05 e −0,7 < z < 0,63 (1 031 triângulos); o
+`suporte`, o resto (1 051). Um primeiro corte sem o limite de baixo levava um pedaço da pedra junto com o saco; as capturas mostraram, e o
+limite entrou. A malha gira 180° para o poste ficar do lado −x, como o saco procedural.
+
+**Os gates:** G1 2 082 triângulos (teto 2 414); G2 os nós sem transformação, mais alto que largo, com os dois nós; G3 PNG de 1024 px;
+G4 um material com textura; G5 nenhum mapa extra, `doubleSided` falso (a malha é fechada); G6 o glTF-Validator com 0 erros e 0 avisos
+(`validacao.json`); G7 cerca de 200 KB; G8 o `License.txt` e o `asset.extras`; G9 os draw calls caem de 86 para 80 com o saco na tela
+(as oito peças do saco procedural viram duas), nas duas cenas (`D:\Trab\digilab\capturas_itens3d\saco\`, fora do git, com o pet). O
+fps do Chrome sem janela (60 e 53,8/59,3) não é o do jogo.
+
+**A animação do golpe** (pedido do Matheus, 2026-11-06), só vista, como o resto do `itens.ts`: o saco já balançava para longe de quem
+bateu (`SACO_BALANCO`). Agora também gira um pouco na corrente (`SACO_GIRO`, o sentido pelo lado do braço de onde o pet bate) e amassa na
+direção do golpe, achatando nela e alargando nas outras, máximo no instante do golpe e voltando como lona cheia (`SACO_AMASSO`). Como o
+pet fica do lado oposto ao do poste, o balanço vai para o poste; o vão é curto, então o balanço para esse lado para em
+`SACO_FOLGA_POSTE` (0,14 rad), antes de tocar o bambu. Com movimento reduzido, o saco fica parado. Os números são PROPOSTOS, SEM FONTE,
+para ajustar jogando. O treino no `vista.ts` não muda: o saco fica pendurado no mesmo ponto do procedural (`SACO_PENDURADO`).
+
+**A resposta à pergunta da seção 1, para o saco:** desta vez **sim**: a malha do gerador entrou na ilha com a forma do concept e abaixo do
+teto, e o pipeline só cortou, girou e chapou a cor. O que o gerador não deu, e o Blender deu: as duas peças para a animação e a cor sem a
+sombra embutida. Com o saco, o gerador responde melhor nos itens de forma livre do que na esfera.
+
+**Fora:** o fps de verdade (a M3 no Chrome do desktop, com o Matheus); a aprovação das capturas pelo Matheus; a referência do treino teve
+poucos quadros na rajada (o Chrome demorou mais nas capturas da referência), mas o balanço de antes é o mesmo código e está nos quadros.
+
+## 13. O kit médico e o cocô na ilha (2026-11-06, Gerente, Claude Code, Opus 5.5, worktree `v3-itens-3d-kit-coco`)
+
+Os dois itens que faltavam, juntos, pelo mesmo pipeline (`docs/itens3d/kit/` e `docs/itens3d/coco/`). Desta vez a referência de estilo
+é o saco gerado na ilha (`ref_ilha_saco_gerado.png`, sem o pet) mais o recorte dos kits, para os itens novos combinarem com ele.
+
+| etapa | kit médico | cocô | créditos (saldo) |
+|---|---|---|---|
+| 1 concept | quatro; o Matheus escolheu o 3, caixote (madeira, tampa branca, cruz, alças de corda) | quatro; o Matheus escolheu o 1, clássico (três voltas em dois marrons) | 48 (980 → 932) |
+| 2 multivista | três vistas; a cruz só numa delas | três vistas coerentes | 12 (→ 920) |
+| 3 malha | 513 triângulos (teto 554), forma do concept, facetada; **a textura não tem nenhum pixel vermelho: a cruz sumiu** | 524 triângulos (teto 554), forma do concept | 60 (→ 860) |
+| 4 conserto | a malha fica; a cruz volta como decalque plano (dois retângulos, 4 triângulos) na metade da frente da tampa, com os UVs num quadrado vermelho de uma faixa aberta na textura (UVs e imagem encolhidos juntos para 96 %) (`consertar_kit.py`, `preparar_textura_kit.py`) | a malha fica (`consertar_coco.py`) | 0 |
+| 5 cor | cinco cores (`paleta.json`); a madeira clara e a corda têm quase a mesma cor na textura e ficam num tom só | dois marrons (`paleta.json`); depois do revisor, uma cor por face (a mais comum no triângulo de UV e depois a dos vizinhos; `uv_faces.py`, `limpar_faces.py`), sem as manchas da sombra embutida | 0 |
+| 6 render e revisão | capturas em 390 e 1280, claro e escuro, com o pet lesionado; o revisor: **aprovado com ressalva** (a cruz pequena em 390, o caixote menor que a maleta); a cruz cresceu, saiu de baixo da alça e o kit passou a 0,58 de altura | capturas com três cocôs; o revisor: **aprovado com ressalva** (manchas escuras nas voltas claras), tiradas na etapa 5 | 0 |
+
+Gasto do kit e do cocô: 120 créditos; os quatro itens, 240 créditos, ≈ R$ 26, dentro do teto de R$ 120 (D-I6). As vistas e as malhas
+dos dois rodaram em paralelo, então o saldo antes e depois em cada JSON delas mistura as duas tarefas; o `consumed_credits` de cada uma
+é o certo (6 e 30).
+
+**Os gates:** G1 517 (kit, com a cruz) e 524 (cocô) triângulos, teto 554; G2 um nó só; G3 PNG de 1024 px; G4 um material com textura;
+G5 nenhum mapa extra, sem face dupla; G6 o glTF-Validator com 0 erros e 0 avisos (`validacao.json` de cada um); G7 cerca de 76 KB e 54 KB;
+G8 o `License.txt` e o `asset.extras`; G9 os draw calls caem com os itens novos: com o kit, de 88 para 83 (390) e de 87 para 82 (1280);
+com três cocôs, de 151 para 142 (390) e de 155 para 146 (1280), porque o kit e cada cocô procedurais tinham várias peças e os gerados têm
+uma (`D:\Trab\digilab\capturas_itens3d\kit_coco\`, fora do git, com o pet).
+
+**O código da vista:** em `itens.ts`, o kit e o cocô procedurais saem; os dois glTF entram pelo `carregarVariante`. Os cocôs podem cair
+antes de o glTF chegar (um save com sujeira): o corpo deles fica vazio até lá e é preenchido na carga. A cor dos cocôs saiu de
+`COCO` em `constantes.ts`, que fica só com o lugar e o pulinho. As alturas na tabela (`modelos.ts`): o kit 0,58, um pouco mais largo
+que a maleta de antes; o cocô 0,42, perto do de antes. PROPOSTO, SEM FONTE.
+
+**Uma captura branca:** numa rodada com dois testes em paralelo, o kit saiu todo branco numa captura e com a textura nas outras; numa
+rodada com um teste por vez, não se repetiu. Fica registrado; se aparecer no jogo, é a textura que não chegou antes do quadro.
+
+**A resposta à pergunta da seção 1, para os dois:** o cocô entrou como o gerador fez, só com a cor limpa. O kit entrou com a forma do
+gerador, mas sem o detalhe que o identifica, a cruz, que o Blender pôs de volta. Com os quatro itens, a leitura é: o gerador dá a forma
+dos itens de forma livre; os detalhes pequenos e a cor chapada precisam do conserto.
+
+**Fora:** o fps de verdade (a M3 no Chrome do desktop, com o Matheus); a aprovação das capturas pelo Matheus.
+
