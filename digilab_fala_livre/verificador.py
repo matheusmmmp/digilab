@@ -454,7 +454,13 @@ ESQUEMA_EXTRAIR_V7 = {"type": "object", "properties": {"afirmacoes": {"type": "a
 # catalogo = `episodio_errado`); sem `episodio` (saiu da memoria, luta), a lembranca so pode ser generica ("lembro de uma coisa"). O alvo
 # `ep<N>` nao entra na conferencia do alvo (a conferencia e a do episodio). A verif-v7 nao muda.
 VERSAO_VERIFICADOR_V8 = "verif-v8"
-VERSOES_CONCEITOS = (VERSAO_VERIFICADOR_V7, VERSAO_VERIFICADOR_V8)
+# verif-v9 (CONVERSA_PET, DC3d): a verif-v8 para o dec-v3, em que a intencao e o PEDIDO que a rede escolheu (fome, higiene ou solidao; o id
+# [P]). O extrator ganha o tipo PEDIDO (o pet pede algo ao dono agora) e o conceito `higiene` (so para nomear o pedido; nao e conceito do
+# catalogo). O julgamento e do codigo: o pedido e sustentado so se o que ele pede e a intencao (`pedido_errado` se e outro; `sem_conceito`
+# se o extrator nao o nomeia); o resto e o da verif-v8 (dizer que esta com fome, sujo ou sozinho continua precisando do conceito ativo). A
+# verif-v7 e a verif-v8 nao mudam.
+VERSAO_VERIFICADOR_V9 = "verif-v9"
+VERSOES_CONCEITOS = (VERSAO_VERIFICADOR_V7, VERSAO_VERIFICADOR_V8, VERSAO_VERIFICADOR_V9)
 PALAVRA_DE_ACAO = {
     "comer": r"comi|comer|comeu|comemos|comendo|comida|alimentei\w*|almo[cç]\w*|mastig\w*",
     "dormir": r"dorm[ie]\w*|dormindo|cochil\w*|ronc\w*",
@@ -496,6 +502,21 @@ SISTEMA_EXTRAIR_V8 = SISTEMA_EXTRAIR_V7.replace(
 assert SISTEMA_EXTRAIR_V8 != SISTEMA_EXTRAIR_V7
 
 
+from .conceitos import INTENCOES_FALA  # noqa: E402
+
+SISTEMA_EXTRAIR_V9 = SISTEMA_EXTRAIR_V8.replace(
+    "- EVENTO:",
+    "- PEDIDO: o pet PEDE algo ao dono agora (\"me dá comida?\", \"me limpa\", \"fica comigo?\"); em \"conceito\", o que ele pede: fome "
+    "(comida), higiene (ser limpo, banho) ou solidao (companhia, carinho);\n- EVENTO:", 1).replace(
+    '{"tipo": "conceito|lembranca|evento|causa|apelo"', '{"tipo": "conceito|lembranca|pedido|evento|causa|apelo"', 1)
+assert SISTEMA_EXTRAIR_V9 != SISTEMA_EXTRAIR_V8 and "PEDIDO" in SISTEMA_EXTRAIR_V9 and "lembranca|pedido|evento" in SISTEMA_EXTRAIR_V9
+ESQUEMA_EXTRAIR_V9 = {"type": "object", "properties": {"afirmacoes": {"type": "array", "maxItems": 8, "items": {
+    "type": "object", "properties": {"tipo": {"type": "string", "enum": ["conceito", "lembranca", "pedido", "evento", "causa", "apelo"]},
+                                     "conceito": {"enum": [*NOMES_CONCEITO, *(c for c in INTENCOES_FALA if c not in NOMES_CONCEITO), "nenhum"]},
+                                     "trecho": {"type": "string", "maxLength": 160}},
+    "required": ["tipo", "conceito", "trecho"]}}}, "required": ["afirmacoes"]}
+
+
 def _frase_do_trecho(fala: str, trecho: str) -> str:
     """A frase da fala que contem o trecho (onde a hesitacao tem de estar); sem achar o trecho, o proprio trecho."""
     n, t = _norm(fala), _norm(trecho).strip(" .,!?…")
@@ -515,16 +536,20 @@ def _alvos_citados(trecho: str) -> set[str]:
 def verificar_conceitos(cliente: ClienteOllama, fala: str, fatos_citados, conceitos, fatos_dono: list[dict],
                         semente: int = 0, versao: str = VERSAO_VERIFICADOR_V7) -> Verificacao:
     """conceitos: conceitos.Conceitos ja validado. fatos_dono: os [J] [{id, tipo, texto}]. Falha de chamada vira `erro`, nunca some.
-    `versao`: verif-v7 (padrao) ou verif-v8 (DC2b: a lembranca confere com o `episodio` do dec-v2)."""
-    from .prompt import ids_conceitos
+    `versao`: verif-v7 (padrao), verif-v8 (DC2b: a lembranca confere com o `episodio` do dec-v2) ou verif-v9 (DC3d: a verif-v8 com o
+    pedido [P] do dec-v3)."""
+    from .prompt import ID_PEDIDO, ids_conceitos
     if versao not in VERSOES_CONCEITOS:
         raise ValueError(f"verificador de conceitos desconhecido: {versao!r}")
-    v8 = versao == VERSAO_VERIFICADOR_V8
+    v9 = versao == VERSAO_VERIFICADOR_V9
+    if v9 != (conceitos.pedido is not None):
+        raise ValueError(f"a {versao} e o formato {conceitos.versao}: so o dec-v3 tem o pedido, e so a verif-v9 o confere")
+    v8 = versao == VERSAO_VERIFICADOR_V8 or v9
     ids = ids_conceitos(conceitos)
     v = Verificacao(versao=versao)
     v.mentiras_deliberadas, v.cita_mentira = 0, False
     ids_j = {f["id"] for f in fatos_dono}
-    v.citados_inexistentes = [c for c in fatos_citados if c not in ids and c not in ids_j]
+    v.citados_inexistentes = [c for c in fatos_citados if c not in ids and c not in ids_j and not (v9 and c == ID_PEDIDO)]
     v.manipulacao_padroes = padroes_de_manipulacao(fala)
     # o que a fala atribui ao dono: conferido contra os [J], sem a LLM; essas clausulas saem do que o extrator listar
     dono_cl = [c.strip() for c in re.split(r"[,.;!?]", fala) if c.strip() and DIZ_DONO.search(_norm(c))]
@@ -533,8 +558,8 @@ def verificar_conceitos(cliente: ClienteOllama, fala: str, fatos_citados, concei
         v.afirmacoes.append({"tipo": "dono_disse", "trecho": c, "sustentada": ok, "fato": jid, "tipo_compativel": ok,
                              "regra": "dono_disse"})
     try:
-        r = _conversar(cliente, [{"role": "system", "content": SISTEMA_EXTRAIR_V8 if v8 else SISTEMA_EXTRAIR_V7},
-                                 {"role": "user", "content": f'FALA: "{fala}"'}], ESQUEMA_EXTRAIR_V7, 300, semente)
+        r = _conversar(cliente, [{"role": "system", "content": SISTEMA_EXTRAIR_V9 if v9 else SISTEMA_EXTRAIR_V8 if v8 else SISTEMA_EXTRAIR_V7},
+                                 {"role": "user", "content": f'FALA: "{fala}"'}], ESQUEMA_EXTRAIR_V9 if v9 else ESQUEMA_EXTRAIR_V7, 300, semente)
         for a in json.loads(r.texto)["afirmacoes"]:
             if a["tipo"] == "apelo":
                 v.manipulacao_extraida.append(a["trecho"])
@@ -544,6 +569,16 @@ def verificar_conceitos(cliente: ClienteOllama, fala: str, fatos_citados, concei
             if not resto:
                 continue
             trecho = ", ".join(resto)
+            if v9 and a["tipo"] == "pedido":             # o pedido [P]: sustentado so se pede o que a rede escolheu
+                reg = {"tipo": "pedido", "trecho": trecho, "conceito": a["conceito"], "sustentada": False, "fato": None, "tipo_compativel": False}
+                if a["conceito"] == conceitos.pedido:
+                    reg.update(sustentada=True, fato=ID_PEDIDO, tipo_compativel=True)
+                else:
+                    reg["problema"] = "sem_conceito" if a["conceito"] not in INTENCOES_FALA else "pedido_errado"
+                v.afirmacoes.append(reg)
+                continue
+            if a["tipo"] == "pedido":
+                raise ValueError(f"extrator: {a['tipo']}/{a['conceito']} fora da {versao}")
             nome = a["conceito"] if a["tipo"] == "conceito" else "lembranca" if a["tipo"] == "lembranca" else None
             reg = {"tipo": a["tipo"], "trecho": trecho, "sustentada": False, "fato": None, "tipo_compativel": False}
             if nome is not None:
