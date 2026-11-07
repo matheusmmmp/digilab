@@ -588,3 +588,17 @@ motor, o save, as rotas e os gabaritos não mudam. O branch é `v3-ux-lugares-l3
 - **Fora:** o botão Mapa no leque do celular (etapa própria), os níveis, as travas e o cartão de tutorial.
 - **As interpretações** estão em `docs/registro/2026-11.md` ("UX_TELA_PET L3"), e o relato inteiro, com as contagens, os portões e os
   achados dos revisores, no corpo do PR.
+
+## 19. Etapa dos níveis do Tamer e das travas, só na vista (2026-11-07)
+
+**O que é.** O código do plano `docs/PLANO_V3_PROGRESSAO_TUTORIAL.md` (as P-1 a P-11 decididas), na opção V: o nível do Tamer é a contagem
+dos marcos (seção 3.3), calculada na vista, com o maior visto numa chave de tela (`-nivel`). O motor, o save, o registro do Tamer, as rotas e
+os gabaritos não mudam. O branch é `v3-ux-lugares-niveis`, sobre a L3 (`v3-ux-lugares-l3`).
+- **A função** (`src/nivel.ts`, pura) e a tela dela (`src/nivelTela.ts`): os marcos, as peças por marco, o piso 4 dos saves de hoje (P-6),
+  o nunca-desce, o "Já conheço o jogo" (P-7) e o "Rever o tutorial".
+- **O trancado:** o lugar apagado na ilha com o cadeado e o "Nv N", o trilho e a coluna do celular apagados, o minimapa, as abas Itens (Nv
+  5) e Fronteira (Nv 8), as Regras e o Forçar (Nv 6). A tecla, a rota e o toque de um lugar trancado abrem o cartão do motivo.
+- **O destrave:** o cartão (ícone, título, frase, Ir e Depois) na fila das dicas, o cadeado que se abre e o brilho de uma vez (sem brilho
+  com reduzir movimento), e o aviso ao leitor de tela.
+- **"Tamer Nv N"** no leque do retrato (celular) e na plaquinha (desktop); o Como jogar com uma página (P-9).
+- **As interpretações** estão em `docs/registro/2026-11.md` ("os níveis do Tamer"), e o relato, no corpo do PR.

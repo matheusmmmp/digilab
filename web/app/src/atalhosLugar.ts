@@ -60,6 +60,8 @@ export function atalhoDaTecla(code: string): "c" | "l" | "d" | "esc" | "1" | "2"
 export function ligarAtalhosLugar(a: AcoesLugar): () => void {
   /* na captura, antes dos componentes: o Esc da viagem nao pode fechar o painel tambem */
   const baixo = (e: KeyboardEvent) => {
+    /* o cartao do motivo de um lugar trancado (CartaoNivel.tsx) e o de cima: o Esc e dele (fecha so ele), nao do balao, da viagem nem do lugar aberto */
+    if (e.code === "Escape" && document.querySelector(".cartao-motivo")) return;
     /* o Esc da viagem so vale com o lugar ativo e sem outro dialogo por cima */
     if (e.code === "Escape" && !e.repeat && viajando() && a.ativo() && !!a.lugarAberto() && !outroDialogo()) { pularViagem(); e.preventDefault(); e.stopPropagation(); return; }
     /* um balao visivel: o Esc fecha so ele */

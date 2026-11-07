@@ -53,6 +53,10 @@ import { fecharHeranca, useHeranca } from "./heranca.ts";
 import { abrirEscolhaBrasao, concluiuJornada, conclusaoVista, useEscolhaBrasao } from "./jornada.ts";
 import { dicasDoMomento, type IdDica } from "./dicas.ts";
 import { CHAVE } from "./save.ts";
+import { AnuncioNivel, CartaoMotivo } from "./componentes/CartaoNivel.tsx";
+import { CadeadosDaIlha } from "./componentes/CadeadosDaIlha.tsx";
+import { abrirMotivo, jaConhecoOJogo, useNivelRaiz } from "./nivelTela.ts";
+import { PECAS, nivelDaPeca, pecaAberta, pecaDaAba, pecaDoDestino, type EstadoNivel, type Peca } from "./nivel.ts";
 
 const armaz = (): Storage => localStorage;
 
@@ -66,9 +70,14 @@ const ICONE_ABA: Partial<Record<Aba, ReactNode>> = {
 const LUGAR_DO_DESTINO: Partial<Record<Destino, { lugar: Lugar; sub: string; icone: LucideIcon }>> = {
   crescer: { lugar: "saco", sub: "saco de pancada", icone: Sprout }, lutar: { lugar: "portao", sub: "portão da arena", icone: Swords }, diario: { lugar: "barraca", sub: "barraca do Tamer", icone: BookOpen },
 };
-/** a Fronteira so aparece trancada (L3): o visual "Nv 8" e o motivo na dica. A trava de verdade (a regra e os niveis) e outra tarefa, e o conteudo segue aberto.
-    PROPOSTO: o texto e o nivel sao da prancha (docs/PLANO_V3_PROGRESSAO_TUTORIAL.md, tabela 3.3, linha 8) */
-const FRONTEIRA_TRANCADA = { nivel: "Nv 8", dica: "Abre com 6 medalhas" } as const;
+/** a peca trancada de um destino (o menu inteiro: Diario, Crescer, Lutar, Conversar) ou null se esta aberto ou nao tem trava (Pet) */
+const destinoTrancado = (n: EstadoNivel, d: Destino): Peca | null => { const p = pecaDoDestino(d); return p && !pecaAberta(n, p) ? p : null; };
+/** a aba trancada (Itens no Nv 5, Fronteira no Nv 8; docs/PLANO_V3_PROGRESSAO_TUTORIAL.md, 3.3): o "Nv N" na ponta e o marco que falta na dica. Abre a aba
+    mesmo assim (o motor segue dono das regras); o corpo traz a linha do motivo */
+const abaTrancada = (n: EstadoNivel, a: Aba): { nivel: string; dica: string } | undefined => {
+  const p = pecaDaAba(a);
+  return p && !pecaAberta(n, p) ? { nivel: `Nv ${nivelDaPeca(p)}`, dica: PECAS[p].motivo } : undefined;
+};
 
 /* slogan so na primeira visita (preferencia de tela, chave propria; a chave do save nao muda) */
 function primeiraVisita(): boolean {
@@ -79,10 +88,22 @@ function primeiraVisita(): boolean {
 function rotaInicial(): Rota {
   return rotaDoEndereco(location.hash) ?? (configDoEndereco(location.hash) ? { destino: "diario", aba: "registro" } : null) ?? lerAbaLembrada(armaz()) ?? ROTA_INICIAL;
 }
+/** a rota de abertura: a de um lugar trancado vira o Pet. Se veio do endereco (quem o digitou quer saber), o cartao do motivo abre; a aba lembrada de uma sessao
+    antiga so volta ao Pet, em silencio */
+function rotaDeAbertura(n: EstadoNivel): Rota {
+  const r = rotaInicial(), p = destinoTrancado(n, r.destino);
+  if (!p) return r;
+  if (rotaDoEndereco(location.hash)) abrirMotivo(p);
+  return ROTA_INICIAL;
+}
 
 export function App() {
-  const jogo = useJogo(), atlas = useAtlas(), deco = useDecoracao();
-  const [rota, setRota] = useState<Rota>(rotaInicial);
+  const jogo = useJogo(), atlas = useAtlas(), deco = useDecoracao(), nivel = useNivelRaiz();
+  const nivelRef = useRef(nivel);
+  nivelRef.current = nivel;
+  const [rota, setRota] = useState<Rota>(() => rotaDeAbertura(nivel));
+  const rotaRef = useRef(rota);
+  rotaRef.current = rota;
   /* Configuracoes: por cima do destino (engrenagem do Diario no celular, da barra lateral no desktop) */
   const [config, setConfig] = useState<ParteConfig | null>(() => configDoEndereco(location.hash));
   /* tutorial contextual (Bit): cada momento da jornada pede a sua dica uma vez */
@@ -143,13 +164,24 @@ export function App() {
         setEmLuta(false);
       }
       const c = configDoEndereco(location.hash); if (c) { setConfig(c); return; }
-      const r = rotaDoEndereco(location.hash); if (r) { setConfig(null); setMeusPets(false); fecharImportar(); fecharHeranca(); setRota(r); }
+      const r = rotaDoEndereco(location.hash);
+      if (r) {
+        /* o endereco de um lugar trancado abre o cartao do motivo, nao o painel; o endereco volta ao da rota de agora */
+        const p = destinoTrancado(nivelRef.current, r.destino);
+        if (p) { abrirMotivo(p); history.replaceState(null, "", enderecoDaRota(rotaRef.current)); return; }
+        setConfig(null); setMeusPets(false); fecharImportar(); fecharHeranca(); setRota(r);
+      }
     };
     addEventListener("hashchange", aoMudar);
     return () => removeEventListener("hashchange", aoMudar);
   }, []);
 
-  const ir = (r: Rota) => { setConfig(null); setMeusPets(false); fecharImportar(); fecharHeranca(); setRota(r); setUltima(u => ({ ...u, [r.destino]: r.aba })); };
+  /* um menu trancado (a tecla, o trilho, a coluna, o minimapa, o endereco) abre o cartao do motivo no lugar do painel (docs/PLANO_V3_PROGRESSAO_TUTORIAL.md, 3.4) */
+  const ir = (r: Rota) => {
+    const p = destinoTrancado(nivel, r.destino);
+    if (p) { abrirMotivo(p); return; }
+    setConfig(null); setMeusPets(false); fecharImportar(); fecharHeranca(); setRota(r); setUltima(u => ({ ...u, [r.destino]: r.aba }));
+  };
   const irDestino = (d: Destino) => { ir({ destino: d, aba: ultima[d] ?? DESTINOS[d][0] }); scrollTo(0, 0); };
   const abrirConfig = (p: ParteConfig) => { setMeusPets(false); setConfig(p); scrollTo(0, 0); };
   const abas = DESTINOS[rota.destino];
@@ -208,14 +240,14 @@ export function App() {
     const L = LUGAR_DO_DESTINO[rota.destino]!, I = L.icone;
     lugar = {
       d: { titulo: NOME_DESTINO[rota.destino], sub: L.sub, icone: <I aria-hidden="true" />, idBase,
-        abas: abas.map((a, i) => ({ id: a, rotulo: NOME_ABA[a], icone: ICONE_ABA[a], atalho: String(i + 1), ...(a === "fronteira" ? { trancada: FRONTEIRA_TRANCADA } : {}) })),
+        abas: abas.map((a, i) => ({ id: a, rotulo: NOME_ABA[a], icone: ICONE_ABA[a], atalho: String(i + 1), ...(abaTrancada(nivel, a) ? { trancada: abaTrancada(nivel, a)! } : {}) })),
         aba: rota.aba, irAba: id => ir({ destino: rota.destino, aba: id as Aba }), fechar: fecharPainel, destino: rota.destino },
-      corpo: <>{rota.aba === "fronteira" && <p className="lg-trava"><Lock aria-hidden="true" />{FRONTEIRA_TRANCADA.dica}</p>}{corpoDestino()}</>,
+      corpo: <>{abaTrancada(nivel, rota.aba) && <p className="lg-trava"><Lock aria-hidden="true" />{abaTrancada(nivel, rota.aba)!.dica}</p>}{corpoDestino()}</>,
     };
   }
   else if (rota.destino !== "pet") painel = {
-    d: { titulo: NOME_DESTINO[rota.destino], abas: abas.map(a => ({ id: a, rotulo: NOME_ABA[a] })), aba: rota.aba, irAba: id => ir({ destino: rota.destino, aba: id as Aba }), fechar: fecharPainel, idBase },
-    corpo: corpoDestino(),
+    d: { titulo: NOME_DESTINO[rota.destino], abas: abas.map(a => ({ id: a, rotulo: NOME_ABA[a], ...(abaTrancada(nivel, a) ? { trancada: abaTrancada(nivel, a)! } : {}) })), aba: rota.aba, irAba: id => ir({ destino: rota.destino, aba: id as Aba }), fechar: fecharPainel, idBase },
+    corpo: <>{abaTrancada(nivel, rota.aba) && <p className="lg-trava"><Lock aria-hidden="true" />{abaTrancada(nivel, rota.aba)!.dica}</p>}{corpoDestino()}</>,
   };
   /* a viagem da camera: entrar no lugar leva a camera e o pet ao saco, ao portao ou a barraca (uma troca direta parte do lugar de antes); sair os traz de volta
      (so vista, viagem.ts). Os Ajustes nao viajam */
@@ -231,6 +263,8 @@ export function App() {
     liberaD: dAbreDiario,
     abrirLugar: l => acoes.current.abrir(l), irAba: i => acoes.current.aba(i), sair: () => acoes.current.sair(),
   }), []);
+  /* o cartao de destrave so aparece com a tela Pet a vista: fora da luta, das boas-vindas e de qualquer outra tela cheia, do painel de um lugar e dos Ajustes */
+  const cartaoLivre = ref.current.ativo && rota.destino === "pet" && jogo.nascendo === 0;
   const acoes = useRef({ abrir: (_l: Lugar) => {}, aba: (_i: number) => {}, sair: () => {} });
   acoes.current = {
     abrir: l => irDestino(l === "saco" ? "crescer" : l === "portao" ? "lutar" : "diario"),
@@ -270,19 +304,26 @@ export function App() {
         </div>
       )}
       </div>
-      <DicaBit />
+      <DicaBit livre={cartaoLivre} ir={r => { ir(r); scrollTo(0, 0); }} />
+      <CartaoMotivo />
+      <AnuncioNivel />
       {/* o habitat (a cena do Pet) e a camada de fundo de toda rota: fica montado, nao sobe nem desce ao trocar de destino */}
       <Habitat escurecer={!!painel} />
       <TopoHabitat lugar={idLugar ? rota.destino : null} abrirMeusPets={abrirMeusPets} irConversar={() => irDestino("conversar")} irDestino={irDestino} abrirConfig={() => abrirConfig("principal")} />
       {!painel && (!lugar || lugar.d.semLugar) && <TelaPet irRegistro={() => ir({ destino: "diario", aba: "registro" })} irEvolucao={() => { ir({ destino: "crescer", aba: "evolucao" }); scrollTo(0, 0); }}
         abrirConfig={() => abrirConfig("principal")} abrirMeusPets={abrirMeusPets} />}
       {idLugar && lado && <MarcasDoLugar lugar={idLugar} />}
+      {!idLugar && !painel && <CadeadosDaIlha abrir={l => acoes.current.abrir(l)} />}
       {lugar && (lado ? <LugarLado d={lugar.d}>{lugar.corpo}</LugarLado> : <LugarFolha d={lugar.d}>{lugar.corpo}</LugarFolha>)}
       {painel && (lado ? <PainelLado d={painel.d}>{painel.corpo}</PainelLado> : <PainelModal d={painel.d}>{painel.corpo}</PainelModal>)}
       {lado && nav}
       <RevelacaoEvolucao continuar={() => { ir({ destino: "crescer", aba: "evolucao" }); scrollTo(0, 0); }} />
       {meusPets && !desk && <MeusPets fechar={() => setMeusPets(false)} irRegistro={() => { setMeusPets(false); ir({ destino: "diario", aba: "registro" }); }} />}
-      {boasVindas && <BoasVindas fechar={() => { setBoasVindas(false); ir({ destino: "pet", aba: "estado" }); if (semPetNoInicio) setComoJogar(true); }} />}
+      {boasVindas && <BoasVindas fechar={jaConheco => {
+        setBoasVindas(false); ir({ destino: "pet", aba: "estado" });
+        /* "Ja conheco o jogo" (P-7): abre os niveis 1 a 4, sem os cartoes, e pula o Como jogar */
+        if (jaConheco) { jaConhecoOJogo(); if (semPetNoInicio) abrirEscolhaBrasao(); } else if (semPetNoInicio) setComoJogar(true);
+      }} />}
       {comoJogar && <ComoJogar fechar={() => { setComoJogar(false); abrirEscolhaBrasao(); }} />}
       {escolhendoBrasao && !boasVindas && !descartados && !avisoTR && <EscolherBrasao podeVoltar={!aindaSemPet} />}
       {descartados > 0 && !boasVindas && <AvisoPetsDescartados n={descartados} fechar={() => setDescartados(0)} />}

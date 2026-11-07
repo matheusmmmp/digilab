@@ -19,6 +19,8 @@ async function semear(page: Page): Promise<void> {
     localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", t);
     localStorage.setItem(chave + "-descarte", "6"); localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
     localStorage.setItem(chave, s);
+    /* as Regras de combate abrem no Champion (Nv 6, docs/PLANO_V3_PROGRESSAO_TUTORIAL.md, P-4); este Rookie as ve porque a chave do nivel ja diz que o marco 6 foi feito */
+    localStorage.setItem(chave + "-nivel", JSON.stringify({ marcos: [1, 2, 3, 4, 5, 6], cartoes: [1, 2, 3, 4, 5, 6] }));
   }, [CHAVE, JSON.stringify(SAVE), JSON.stringify(TAMER)] as const);
 }
 const semRolagem = (page: Page) => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth && document.body.scrollWidth <= innerWidth);

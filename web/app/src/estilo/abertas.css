@@ -159,3 +159,11 @@ dialog.res.ab-hx{
   .ab-hx .bv-tit, .ab-hx .cj-tit{ font-size:32px }
   .res.ab-hx .res-tit{ font-size:32px }
 }
+
+/* "Ja conheco o jogo" nas boas-vindas (P-7, docs/PLANO_V3_PROGRESSAO_TUTORIAL.md): o botao secundario sob o Comecar; no desktop, ao lado dele */
+.ab-hx .bv-pe .bv-conheco{ margin-top:8px }
+@media (min-width:1100px){
+  .boas-vindas-tela.ab-hx .bv-pe{ flex-wrap:wrap; gap:12px }
+  .boas-vindas-tela.ab-hx .bv-pe .bv-conheco{ width:auto; min-width:220px; margin-top:0 }
+  .boas-vindas-tela.ab-hx .bv-pe > span{ flex-basis:100% }
+}

@@ -6,8 +6,9 @@
    cena.ts e ficam).
    A TROCA PELO MODELO e so apontar `modelo` em lugares.ts: a vista carrega o glTF (carregarVariante, cena.ts), redimensiona-o ate `altura`, poe o
    pivo no centro da base e o giro de `giro`. O MARCADOR FICA ATE O MODELO CARREGAR (so entao sai, `porLugar` dá o grupo de cada lugar), e a FALHA DO
-   glTF DEVE SER ALTA (erro no console e na tela, como a dos kits em vista.ts; nunca um lugar sem nada e em silencio). O "trancado" sera o mesmo
-   modelo apagado, com um cadeado (a tarefa dos niveis). So vista: o motor nao sabe dos lugares. */
+   glTF DEVE SER ALTA (erro no console e na tela, como a dos kits em vista.ts; nunca um lugar sem nada e em silencio). O "trancado" e o mesmo desenho
+   apagado (o `Apagador` abaixo escurece as cores dos materiais do lugar; cada lugar tem os seus), e o cadeado com o "Nv N" e DOM (CadeadosDaIlha.tsx); o
+   modelo 3D do cadeado vem depois do ITENS_3D. So vista: o motor nao sabe dos lugares. */
 import * as THREE from "three";
 import { toon, GEO_SOMBRA, materialSombra } from "./cena.ts";
 import { LUGARES, type BaseDoMundo, type IdLugar } from "./lugares.ts";
@@ -17,6 +18,24 @@ export function corDoToken(nome: string): THREE.Color {
   const v = getComputedStyle(document.documentElement).getPropertyValue(nome).trim();
   if (!v) throw new Error("token de pele sem valor: " + nome);
   return new THREE.Color().set(v);
+}
+
+/** quanto as cores escurecem num lugar trancado (1 = sem mudar). PROPOSTO, SEM FONTE (numero de interface, nao de jogo) */
+export const FATOR_APAGADO = 0.4;
+/** apaga (escurece) ou devolve as cores dos materiais toon de um lugar, no lugar mesmo (cada lugar tem os seus materiais: nao se partilham). Guarda a cor de antes */
+export class Apagador {
+  private readonly base = new Map<THREE.MeshToonMaterial, THREE.Color>();
+  aplicar(raiz: THREE.Object3D, apagado: boolean): void {
+    raiz.traverse(o => {
+      if (!(o instanceof THREE.Mesh)) return;
+      const m = o.material;
+      if (Array.isArray(m)) throw new Error("Apagador: material em lista num lugar da ilha (nao esperado: cada malha tem um so)");
+      if (!(m instanceof THREE.MeshToonMaterial)) return;      // a sombra (MeshBasic) fica como esta
+      const antes = this.base.get(m);
+      if (apagado && !antes) { this.base.set(m, m.color.clone()); m.color.multiplyScalar(FATOR_APAGADO); }
+      else if (!apagado && antes) { m.color.copy(antes); this.base.delete(m); }
+    });
+  }
 }
 
 export interface Marcadores {
@@ -31,9 +50,12 @@ export interface Marcadores {
 export function montarMarcadores(base: BaseDoMundo): Marcadores {
   const raiz = new THREE.Group(), porLugar = new Map<IdLugar, THREE.Group>();
   const materiais = new Map<string, THREE.Material>(), geometrias = new Map<string, THREE.BufferGeometry>(), sombras: THREE.Material[] = [];
+  /* os materiais sao por lugar (o trancado escurece os de um lugar so) */
+  let lugarAgora = "";
   const mat = (token: string): THREE.Material => {
-    let m = materiais.get(token);
-    if (!m) { m = toon({ color: corDoToken(token) }); materiais.set(token, m); }
+    const chave = lugarAgora + ":" + token;
+    let m = materiais.get(chave);
+    if (!m) { m = toon({ color: corDoToken(token) }); materiais.set(chave, m); }
     return m;
   };
   const caixa = (l: number, a: number, p: number, token: string, x: number, y: number, z: number): THREE.Mesh => {
@@ -71,6 +93,7 @@ export function montarMarcadores(base: BaseDoMundo): Marcadores {
   for (const id of ["portao", "barraca"] as const satisfies readonly IdLugar[]) {
     const l = LUGARES[id];
     if (l.modelo !== null) continue;                    // o modelo chegou: a vista o carrega (o marcador fica ate la)
+    lugarAgora = id;
     const g = id === "portao" ? portao(l.altura) : barraca(l.altura), [x, z] = l.ponto(base);
     g.position.set(x, 0, z); g.rotation.y = l.giro; g.name = "lugar-" + id;
     raiz.add(g); porLugar.set(id, g);

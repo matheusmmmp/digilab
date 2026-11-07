@@ -15,6 +15,9 @@ import { PainelAprendizado } from "./PainelAprendizado.tsx";
 import { ENDERECO_LUTA } from "../../rotas.ts";
 import { EscolhaCarta } from "../../componentes/EscolhaCarta.tsx";
 import { comoGanhar } from "../../tamer.ts";
+import { PecaTrancada } from "../../componentes/PecaTrancada.tsx";
+import { useNivel } from "../../nivelTela.ts";
+import { pecaAberta } from "../../nivel.ts";
 
 /** um rival (L3): o nome e o estilo, em radio */
 function Rival({ k, adulto = false }: { k: string; adulto?: boolean }) {
@@ -45,7 +48,7 @@ function UltimaLuta({ verReplay }: { verReplay: (idx: number) => void }) {
 
 export function TelaArena({ voltarPet, verReplay }: { voltarPet: () => void; verReplay: (idx: number) => void }) {
   void voltarPet;
-  const { motor: m, nascendo } = useJogo(), luta = useLuta(), [todos, setTodos] = useState(false), a = useAtlas(), t = tamerAtual();
+  const { motor: m, nascendo } = useJogo(), luta = useLuta(), [todos, setTodos] = useState(false), a = useAtlas(), t = tamerAtual(), nivel = useNivel();
   /* "+N adultos" some ao ser tocado: o foco vai para o primeiro rival adulto que acabou de aparecer */
   const grupo = useRef<HTMLDivElement>(null);
   useEffect(() => { if (todos) grupo.current?.querySelector<HTMLElement>('[data-adulto]:not([aria-checked="true"])')?.focus(); }, [todos]);
@@ -101,11 +104,14 @@ export function TelaArena({ voltarPet, verReplay }: { voltarPet: () => void; ver
       {luta.palco?.resultado && luta.palco?.texto && !luta.lutando && <p className="ar2-ultima">{luta.palco.texto}</p>}
       <UltimaLuta verReplay={verReplay} />
       <div className="lg-linha ar2-bts">
-        <details className="lg-como ar2-regras">
-          <summary><Brain aria-hidden="true" />Regras<ChevronRight className="lg-seta" aria-hidden="true" /></summary>
-          <section className="bloco"><h2>Regras de combate do seu pet</h2><EditorRegras /></section>
-          <PainelAprendizado />
-        </details>
+        {/* as Regras de combate abrem no Champion (Nv 6, P-4): antes, o botao trancado com o marco; o pet aprende as regras desde o Rookie e o motor nao muda */}
+        {pecaAberta(nivel, "regras")
+          ? <details className="lg-como ar2-regras">
+            <summary><Brain aria-hidden="true" />Regras<ChevronRight className="lg-seta" aria-hidden="true" /></summary>
+            <section className="bloco"><h2>Regras de combate do seu pet</h2><EditorRegras /></section>
+            <PainelAprendizado />
+          </details>
+          : <PecaTrancada peca="regras" className="ar2-regras" />}
         {proxima && (
           <ComDica className="lg-etq ar2-medalha" papel="img" rotulo={`${proxima.nome}: ${comoGanhar(proxima)}, na Exploração`}
             dica={<><b>{proxima.nome}</b>: {comoGanhar(proxima).replace(/^v/, "V")}, na Exploração.</>}>

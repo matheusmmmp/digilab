@@ -16,6 +16,9 @@ import { mapaDe } from "./TelaCampanha.tsx";
 import { textoRegra } from "./palcoTR/PalcoTR.tsx";
 import { SeloMedalha } from "../../componentes/Medalha.tsx";
 import { pedirDica } from "../../dicas.ts";
+import { PecaTrancada } from "../../componentes/PecaTrancada.tsx";
+import { useNivel } from "../../nivelTela.ts";
+import { pecaAberta } from "../../nivel.ts";
 import { BotaoContinuar, BotaoHx } from "../../componentes/hx/index.ts";
 import "../../estilo/abertas.css";
 
@@ -69,7 +72,7 @@ function Numeros({ itens }: { itens: [string, string][] }) {
 export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continuar: () => void; verReplay: (idx: number) => void }) {
   const ref = useRef<HTMLDialogElement>(null), replay = useRef(false);
   useEffect(() => { abrirModal(ref.current); }, []);
-  const { motor: m } = useJogo(), a = useAtlas(), r = p.resultado!, res = r.res;
+  const { motor: m } = useJogo(), a = useAtlas(), r = p.resultado!, res = r.res, regrasAbertas = pecaAberta(useNivel(), "regras");
   const venceu = res.pontosA === 1, perdeu = res.pontosA === 0, empate = !venceu && !perdeu;
   const npc = r.npc ? NPC[r.npc]! : null, Li = npc ? m.lugarDe(r.npc!) : -1, LUGARES = m.lugares;
   const lugarNovo = !!npc && venceu && !r.lugarJaVencido;
@@ -86,7 +89,7 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
   };
   const gp = m.gp, estadoNova = nova && gp ? (gp.vetos.includes(nova.k) ? "vetada" : nova.k in gp.travas ? "travada" : gp.ativas.includes(nova.k) ? "livre" : "fora") : null;
   /* tutorial (Bit): a primeira derrota na campanha e a primeira regra nova */
-  useEffect(() => { if (npc && perdeu) pedirDica("derrota_campanha"); if (nova) pedirDica("regra_nova"); }, []);
+  useEffect(() => { if (npc && perdeu) pedirDica("derrota_campanha"); if (nova && regrasAbertas) pedirDica("regra_nova"); }, []);
 
   /* a Liga dos Lideres (Fronteira, pets v6): a tentativa inteira; vencer as 6 e o titulo */
   const liga = r.lideres, venceuLiga = !!liga && r.serie.length === r.nLutas && venceu;
@@ -205,6 +208,9 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
           <PorqueLuta res={res} A={p.A} B={p.B} travadas={gp ? gp.travas : null} desafiado={!r.cenario && m.desafiado === 1} />
           {r.cenario
             ? <div className="res-semregra"><span className="dl-num" aria-hidden="true">?</span><span>Contra pet de cenário o seu não aprende.</span></div>
+            : nova && !regrasAbertas
+              /* as Regras abrem no Champion (Nv 6, P-4): antes, o cartao da regra nova trancado; o pet aprende a regra igual (o motor nao muda) */
+              ? <div className="res-semregra"><PecaTrancada peca="regras" /></div>
             : nova
               ? <section className="res-regra dl-malha" aria-label="Regra nova">
                   <span className="res-regra-topo"><span>REGRA NOVA · aprendida lutando</span><span className="res-regra-pos">{nova.pos} de {nova.de}</span></span>

@@ -206,6 +206,8 @@ export class Itens {
   private readonly giro = new THREE.Quaternion();
   /** o ultimo golpe no saco: quando (ms da vista) e o eixo do balanco no chao (o saco vai para longe de quem bateu) */
   private golpeSaco: { em: number; eixo: THREE.Vector3 } | null = null;
+  /** a raiz do desenho do saco (o lugar trancado a apaga; lugares.ts) */
+  get sacoRaiz(): THREE.Object3D { return this.saco.g; }
   /** onde fica o saco de pancada (celulas) */
   readonly sacoEm: [number, number];
   /** onde fica o ninho (celulas), para o minimapa */
