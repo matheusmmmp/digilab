@@ -100,17 +100,15 @@ export function Conclusao({ m, fechar }: { m: Motor; fechar: () => void }) {
   );
 }
 
-/* ------------------------------------------------ como jogar (pranchas PvComoCuidar, PvComoEnsinar, PvComoCrescer) */
+/* ------------------------------------------------ como jogar (pranchas PvComoCuidar, PvComoEnsinar, PvComoCrescer)
+   P-9 (docs/PLANO_V3_PROGRESSAO_TUTORIAL.md, decidido em 2026-11-06): uma pagina so, a "Cuide". A "Ensine" dizia "Elogie ou repreenda", que os pets v11 nao tem
+   (docs/DECISAO_PRODUTO_SEM_ELOGIO_BRONCA.md), e o resto vem com os cartoes dos niveis (CartaoNivel.tsx): o Crescer no Nv 3 e as Regras de luta no Nv 6 */
 const PAGINAS: { tit: string; txt: string; sprites: string[]; chips?: [string, string][]; faixa?: string }[] = [
   { tit: "Cuide", txt: "Ele chama quando tem fome, fica sujo ou quer carinho. Atender logo conta.", sprites: ["brasa_bebe"], chips: [["emoji_carne", ""]] },
-  { tit: "Ensine", txt: "Elogie ou repreenda o que ele acabou de fazer. Ele aprende de verdade, e às vezes vai desobedecer.",
-    sprites: ["brasa_crianca_sereno"], chips: [["emoji_joinha", "Elogiar"], ["emoji_exclam", "Repreender"]] },
-  { tit: "Veja crescer", txt: "Como você cuida decide a criança. O que ele aprende com você decide o adolescente e o adulto. Depois ele luta sozinho.",
-    sprites: ["brasa_bebe", "brasa_crianca_sereno", "brasa_adolescente_brigao", "brasa_adulto_duelista"], faixa: "cuidado → caráter" },
 ];
 const ROTULO_EST = ["bebê", "criança", "adolescente", "adulto"];
 
-/** primeira vez, depois das boas-vindas: tres paginas (Pular a qualquer momento); no fim, a escolha do brasao */
+/** primeira vez, depois das boas-vindas: a pagina Cuide (Pular a qualquer momento); no fim, a escolha do brasao */
 export function ComoJogar({ fechar }: { fechar: () => void }) {
   const ref = useRef<HTMLDialogElement>(null), a = useAtlas(), [i, setI] = useState(0);
   useEffect(() => { abrirModal(ref.current); }, []);
@@ -133,7 +131,7 @@ export function ComoJogar({ fechar }: { fechar: () => void }) {
         </div>
         <h1 className="bv-tit cj-tit" id="cj-tit">{p.tit}</h1>
         <p className="cj-txt">{p.txt}</p>
-        <span className="cj-pontos" aria-label={`página ${i + 1} de ${PAGINAS.length}`}>{PAGINAS.map((_, j) => <i key={j} className={j === i ? "on" : ""} />)}</span>
+        {PAGINAS.length > 1 && <span className="cj-pontos" aria-label={`página ${i + 1} de ${PAGINAS.length}`}>{PAGINAS.map((_, j) => <i key={j} className={j === i ? "on" : ""} />)}</span>}
       </div>
       <div className="cj-pe">
         <BotaoContinuar onClick={() => ultima ? ref.current?.close() : setI(i + 1)}>{ultima ? "Chocar meu ovo" : "Próximo"}</BotaoContinuar>

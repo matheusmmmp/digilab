@@ -14,6 +14,9 @@ import { ComDica, ComoFunciona } from "../../componentes/Dica.tsx";
 import { Seg, blocos, dec } from "../../componentes/Barras.tsx";
 import { abrirModal } from "../../componentes/modal.ts";
 import { mudarMotor, useJogo } from "../../jogo.ts";
+import { PecaTrancada } from "../../componentes/PecaTrancada.tsx";
+import { useNivel } from "../../nivelTela.ts";
+import { pecaAberta } from "../../nivel.ts";
 import { hhmm } from "../pet/TelaPet.tsx";
 import { CENA } from "../pet/cenaEstado.ts";
 
@@ -125,7 +128,7 @@ export function TelaTreinar({ lutando = false }: { lutando?: boolean }) {
   /* o estado numa palavra (L2, regra do texto); o intervalo e a frase do treino vao para o balao */
   const estado = bebe ? "Não treina" : t.pedePausa ? "Pausa" : !pode ? "Descansa" : "Pronto";
   const falta = !bebe && !pode && !t.pedePausa && t.ultimo !== null ? CTR.intervalo - (m.e.tick - t.ultimo) : null;
-  const idForcar = useId(), desabilitaForcar = !t.forcaria || bebe || !pode || lutando || nascendo > 0;
+  const idForcar = useId(), nivel = useNivel(), desabilitaForcar = !t.forcaria || bebe || !pode || lutando || nascendo > 0;
   return (
     <div className="tela dl trn2-tela lg">
       <div className="lg-destaque lg-linha" role="status">
@@ -158,10 +161,13 @@ export function TelaTreinar({ lutando = false }: { lutando?: boolean }) {
         <Medida rot="Sobrecarga" valor={t.sobrecarga} marcas={[[CSO.aviso, "aviso"], [CSO.sombrio, "sombria"]]} sombrio />
       </section>
       <div className="lg-linha">
-        <ComDica foco={false} idBalao={idForcar} dica={t.forcaria ? "Rende mais e gera sobrecarga." : <>Abre com fadiga {CTR.limiteForcar}.</>}>
-          <button type="button" className="dl-btn dl-btn--sec treino-forcar" disabled={desabilitaForcar} aria-describedby={idForcar} onClick={() => setEscolher(true)}>
-            <span className="treino-forcar-faixa" aria-hidden="true" />Forçar</button>
-        </ComDica>
+        {/* o Forcar abre no Champion (Nv 6, P-4): antes, o botao trancado com o marco; o motor nao muda */}
+        {pecaAberta(nivel, "forcar")
+          ? <ComDica foco={false} idBalao={idForcar} dica={t.forcaria ? "Rende mais e gera sobrecarga." : <>Abre com fadiga {CTR.limiteForcar}.</>}>
+            <button type="button" className="dl-btn dl-btn--sec treino-forcar" disabled={desabilitaForcar} aria-describedby={idForcar} onClick={() => setEscolher(true)}>
+              <span className="treino-forcar-faixa" aria-hidden="true" />Forçar</button>
+          </ComDica>
+          : <PecaTrancada peca="forcar" />}
         {tt && <span className="lg-sec" style={{ marginLeft: "auto" }}>estágio <b className="lg-num lg-num--p">{n1(t.pontosEst[tt.est] ?? 0)}/{tt.estagio}</b></span>}
       </div>
       <ComoFunciona>

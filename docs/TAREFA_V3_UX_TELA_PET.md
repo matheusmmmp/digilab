@@ -571,3 +571,34 @@ com o #636).
 - **O token `--hx-sombrio`** (`#D3B6FA`) nas duas peles, com o contraste no `test/hx_pele.test.ts`.
 - **As interpretações** estão em `docs/registro/2026-11.md` ("UX_TELA_PET L2"), e o relato inteiro, com as contagens, os portões e os
   achados dos revisores, no corpo do PR.
+
+## 18. Etapa L3 de "Lugares da ilha": Lutar no portão e Diário na barraca (2026-11-06)
+
+**O que é.** O segundo e o terceiro lugar, pela mesma prancha L2/L3 aprovada, no desktop e no celular, com tudo aberto. É só vista: o
+motor, o save, as rotas e os gabaritos não mudam. O branch é `v3-ux-lugares-l3`, sobre a L2 (`v3-ux-lugares-menus`).
+- **Lutar no portão da arena** (atalho `L`): as abas Arena, Exploração, Fronteira e Medalhas; a Fronteira com "Nv 8" e "Abre com 6
+  medalhas" só no visual. **Diário na barraca do Tamer** (atalho `D`, que divide a tecla com o WASD; ver o registro): Registro, Catálogo,
+  Gerações e Cenários. As telas Arena, Medalhas, Registro e Catálogo foram refeitas pelo corte da prancha; as outras só entraram no painel.
+- **A viagem** (`src/viagem.ts`) vale para os três lugares, com a troca direta entre eles; o painel, a folha, a placa e o conector são os
+  da L2.
+- **O portão e a barraca na ilha** (`src/telas/pet/ilha/lugares.ts` e `marcadoresLugar.ts`): marcadores provisórios com as cores dos
+  tokens, até os modelos do worker ITENS_3D (`public/lugares/<portao|barraca>/<nome>.gltf`); a troca é apontar o campo `modelo`. O
+  minimapa do desktop marca os dois.
+- **Os Ajustes** abrem no mesmo painel, sem viagem; a lista principal só com ícone e nome.
+- **Fora:** o botão Mapa no leque do celular (etapa própria), os níveis, as travas e o cartão de tutorial.
+- **As interpretações** estão em `docs/registro/2026-11.md` ("UX_TELA_PET L3"), e o relato inteiro, com as contagens, os portões e os
+  achados dos revisores, no corpo do PR.
+
+## 19. Etapa dos níveis do Tamer e das travas, só na vista (2026-11-07)
+
+**O que é.** O código do plano `docs/PLANO_V3_PROGRESSAO_TUTORIAL.md` (as P-1 a P-11 decididas), na opção V: o nível do Tamer é a contagem
+dos marcos (seção 3.3), calculada na vista, com o maior visto numa chave de tela (`-nivel`). O motor, o save, o registro do Tamer, as rotas e
+os gabaritos não mudam. O branch é `v3-ux-lugares-niveis`, sobre a L3 (`v3-ux-lugares-l3`).
+- **A função** (`src/nivel.ts`, pura) e a tela dela (`src/nivelTela.ts`): os marcos, as peças por marco, o piso 4 dos saves de hoje (P-6),
+  o nunca-desce, o "Já conheço o jogo" (P-7) e o "Rever o tutorial".
+- **O trancado:** o lugar apagado na ilha com o cadeado e o "Nv N", o trilho e a coluna do celular apagados, o minimapa, as abas Itens (Nv
+  5) e Fronteira (Nv 8), as Regras e o Forçar (Nv 6). A tecla, a rota e o toque de um lugar trancado abrem o cartão do motivo.
+- **O destrave:** o cartão (ícone, título, frase, Ir e Depois) na fila das dicas, o cadeado que se abre e o brilho de uma vez (sem brilho
+  com reduzir movimento), e o aviso ao leitor de tela.
+- **"Tamer Nv N"** no leque do retrato (celular) e na plaquinha (desktop); o Como jogar com uma página (P-9).
+- **As interpretações** estão em `docs/registro/2026-11.md` ("os níveis do Tamer"), e o relato, no corpo do PR.

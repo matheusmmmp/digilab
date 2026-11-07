@@ -3,7 +3,7 @@
    relogio e o visual deles seguiam nos tokens --dl-*; desde o HUD (docs/TAREFA_V3_LAYOUT_HUD.md) a plaquinha e o relogio sao caixas
    escuras chanfradas (estilo/pet_hud.css), no mesmo sistema dos menus. Com a camera solta da ilha (telas/pet/cameraLivre.ts), o retrato
    volta a camera ao pet. */
-import { BookOpen, Cloud, CloudOff, MessageCircle, Moon, Settings, Sprout, Sun, Swords, type LucideIcon } from "lucide-react";
+import { BookOpen, Cloud, CloudOff, Lock, MessageCircle, Moon, Settings, Sprout, Sun, Swords, type LucideIcon } from "lucide-react";
 import { DO_ESP, NOME_ESP, NOME_EST, TPD, eNoite, nomeEstagio, nomeForma } from "../../motor/index.ts";
 import { BRASAO } from "../decoracao.ts";
 import { sairDoLab, useJogo } from "../jogo.ts";
@@ -12,17 +12,22 @@ import { alternarLeque, useLeque } from "../movel.ts";
 import { NOME_DESTINO, type Destino } from "../rotas.ts";
 import { SeloExperimental } from "../telas/config/Laboratorio.tsx";
 import { Retrato, diaDe, hhmm, necessidadeMovel } from "../telas/pet/TelaPet.tsx";
+import { dAbreDiario } from "../atalhosLugar.ts";
 import { BotaoMovel } from "./BotaoMovel.tsx";
 import { Deco } from "./Deco.tsx";
 import { seguirPet, useCameraLivre } from "../telas/pet/cameraLivre.ts";
+import { useNivel } from "../nivelTela.ts";
+import { PECAS, nivelDaPeca, nivelDe, pecaAberta, pecaDoDestino, type Peca } from "../nivel.ts";
 
-/** `lugar`: o lugar de Crescer esta aberto (L2): no celular, o icone de Crescer na coluna fica em destaque */
-interface PropsTopo { abrirMeusPets: () => void; irConversar: () => void; irDestino: (d: Destino) => void; abrirConfig: () => void; lugar?: boolean }
+/** `lugar`: o menu do lugar aberto (L2 e L3): no celular, o icone dele na coluna fica em destaque */
+interface PropsTopo { abrirMeusPets: () => void; irConversar: () => void; irDestino: (d: Destino) => void; abrirConfig: () => void; lugar?: Destino | null }
 
 /** a partir de 900 px o topo de sempre; abaixo, o do mobile minimo (M1): o retrato e a hora, e a coluna dos destinos */
 export function TopoHabitat(p: PropsTopo) { return usePainelLado() ? <TopoLargo {...p} /> : <TopoMovel {...p} />; }
 
 const ICONE_DESTINO: Partial<Record<Destino, LucideIcon>> = { crescer: Sprout, lutar: Swords, diario: BookOpen };
+/** o atalho de cada lugar; o D so vale quando nao e o "direita" do WASD da camera solta (atalhosLugar.ts) */
+const atalhoLugar = (d: Destino): string | undefined => d === "crescer" ? "C" : d === "lutar" ? "L" : d === "diario" && dAbreDiario() ? "D" : undefined;
 const DESTINOS_COLUNA: Destino[] = ["crescer", "lutar", "diario"];
 
 /* O topo do celular (docs/PROPOSTAS_V3_UX_TELA_PET.md, "Mobile mínimo", M1; prancha em docs/pranchas/ux-mobile/): no canto de cima à esquerda o retrato
@@ -30,7 +35,12 @@ const DESTINOS_COLUNA: Destino[] = ["crescer", "lutar", "diario"];
    hora; no canto de cima à direita a coluna Conversar, Crescer, Lutar e Diário, só ícone. Sem barra de abas: a tela Pet é a casa. O nome e o estágio do
    pet ficam no Meus pets e na Evolução; o "salvo" fica escondido e só o erro de gravação aparece (M1-12). */
 function TopoMovel({ irConversar, irDestino, lugar }: PropsTopo) {
-  const { motor: m, nascendo, erroSave } = useJogo(), ovo = nascendo > 0, e = m.e, aberto = useLeque() === "paineis", nec = necessidadeMovel(m, nascendo);
+  const { motor: m, nascendo, erroSave } = useJogo(), ovo = nascendo > 0, e = m.e, aberto = useLeque() === "paineis", nec = necessidadeMovel(m, nascendo), nivel = useNivel();
+  /* o menu trancado (docs/PLANO_V3_PROGRESSAO_TUTORIAL.md, 3.4): o icone apagado, o cadeado com o "Nv N" ao lado e o marco no nome acessivel; o toque abre o cartao do motivo */
+  const trancada = (d: Destino): Peca | null => { const p = pecaDoDestino(d); return p && !pecaAberta(nivel, p) ? p : null; };
+  const rotuloTrancado = (d: Destino, p: Peca): string => `${NOME_DESTINO[d]}, trancado, Nv ${nivelDaPeca(p)}: ${PECAS[p].motivo}`;
+  const nvTrancado = (p: Peca) => <span className="nivel-nv" aria-hidden="true"><Lock />Nv {nivelDaPeca(p)}</span>;
+  const pc = trancada("conversar");
   return (
     <header className="mm-topo">
       <BotaoMovel className="mm-caixa mm-forma mm-bt mm-retrato" rotulo="Painéis do pet" lado="baixo" aria-label="Painéis do pet" aria-haspopup="true" aria-expanded={aberto} aria-controls="leque-pet"
@@ -42,11 +52,21 @@ function TopoMovel({ irConversar, irDestino, lugar }: PropsTopo) {
         {erroSave && <CloudOff className="mm-salvo-erro" aria-hidden="true" />}
       </span>
       <div className="mm-coluna">
-        <BotaoMovel className="mm-caixa mm-forma mm-bt mm-bt48 topo-bt" rotulo="Conversar" lado="esq" aria-label="Conversar" onClick={irConversar}><MessageCircle aria-hidden="true" /></BotaoMovel>
+        <span className="mm-item">
+          <BotaoMovel className={"mm-caixa mm-forma mm-bt mm-bt48 topo-bt" + (pc ? " mm-bt--trancado" : "")} rotulo="Conversar" lado="esq" aria-label={pc ? rotuloTrancado("conversar", pc) : "Conversar"}
+            aria-disabled={pc ? true : undefined} onClick={irConversar}><MessageCircle aria-hidden="true" /></BotaoMovel>
+          {pc && nvTrancado(pc)}
+        </span>
         <nav className="mm-destinos" aria-label="Destinos">
           {DESTINOS_COLUNA.map(d => {
-            const I = ICONE_DESTINO[d]!;
-            return <BotaoMovel key={d} className="mm-caixa mm-forma mm-bt mm-bt48" rotulo={NOME_DESTINO[d]} lado="esq" aria-current={lugar && d === "crescer" ? "page" : undefined} aria-keyshortcuts={d === "crescer" ? "C" : undefined} onClick={() => irDestino(d)}><I aria-hidden="true" /></BotaoMovel>;
+            const I = ICONE_DESTINO[d]!, p = trancada(d);
+            return (
+              <span className="mm-item" key={d}>
+                <BotaoMovel className={"mm-caixa mm-forma mm-bt mm-bt48" + (p ? " mm-bt--trancado" : "")} rotulo={NOME_DESTINO[d]} lado="esq" aria-current={lugar === d ? "page" : undefined}
+                  aria-keyshortcuts={atalhoLugar(d)} {...(p ? { "aria-label": rotuloTrancado(d, p), "aria-disabled": true } : {})} onClick={() => irDestino(d)}><I aria-hidden="true" /></BotaoMovel>
+                {p && nvTrancado(p)}
+              </span>
+            );
           })}
         </nav>
       </div>
@@ -55,7 +75,7 @@ function TopoMovel({ irConversar, irDestino, lugar }: PropsTopo) {
 }
 
 function TopoLargo({ abrirMeusPets, irConversar, abrirConfig }: PropsTopo) {
-  const { motor: m, nascendo, erroSave, emLab } = useJogo(), ovo = nascendo > 0, e = m.e, noite = eNoite(e.tick % TPD), cam = useCameraLivre();
+  const { motor: m, nascendo, erroSave, emLab } = useJogo(), ovo = nascendo > 0, e = m.e, noite = eNoite(e.tick % TPD), cam = useCameraLivre(), nivelTamer = nivelDe(useNivel());
   return (
     <header className="topo-hab">
       <div className="topo-pet">
@@ -66,7 +86,9 @@ function TopoLargo({ abrirMeusPets, irConversar, abrirConfig }: PropsTopo) {
         <span className="topo-pet-txt">
           <span className="topo-pet-nome"><b>{ovo ? "Digi-Egg " + DO_ESP[m.especie] : nomeForma(m.forma)}</b></span>
           <span className="topo-pet-sub"><span className="dl-tag dl-tag--estagio">{ovo ? NOME_EST.ovo : nomeEstagio(m.forma)}</span>
-            <span aria-hidden="true">·</span><Deco nome={BRASAO[m.especie].peca} largura={20} altura={13} alt="" />{NOME_ESP[m.especie]}</span>
+            <span aria-hidden="true">·</span><Deco nome={BRASAO[m.especie].peca} largura={20} altura={13} alt="" />{NOME_ESP[m.especie]}
+            {/* o nivel do Tamer (P-8): no desktop o retrato abre Meus pets direto (sem leque), entao o numero fica na plaquinha */}
+            <span className="tamer-nv tamer-nv--topo" role="img" aria-label={`Tamer, nível ${nivelTamer}`}>Tamer Nv {nivelTamer}</span></span>
           {emLab && <span className="topo-lab"><SeloExperimental /><button type="button" className="topo-lab__volta" onClick={sairDoLab}>voltar ao meu pet</button></span>}
         </span>
       </div>
