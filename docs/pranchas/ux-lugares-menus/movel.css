@@ -1,0 +1,53 @@
+/* O celular da prancha "Lugares da ilha" (rodada 3), por cima do lugares.css: o mobile minimo aprovado (#619,
+   docs/pranchas/ux-mobile/minimo.css na worktree v3-ux-mobile) com os lugares. Do minimo vem o retrato de 56 px no canto de cima a
+   esquerda, a hora numa pilula, a coluna de Conversar, Crescer, Lutar e Diario no canto de cima a direita (48 px, gap 10; minimo.css:91-94),
+   as acoes em circulos de 62 px embaixo (minimo.css:126-132) e o leque no retrato (minimo.css:145-153); nenhuma barra de abas.
+   So tokens --hx-* e --hud-*; nenhuma cor nova. */
+body.cel .nota{max-width:250px}
+.m-retrato{position:absolute;z-index:20;top:14px;left:14px;width:56px;height:56px;padding:0;overflow:hidden}
+.m-retrato[aria-expanded="true"]{border-color:var(--hx-escolhido-borda)}
+.m-retrato i{position:absolute;left:50%;top:50%;width:105px;height:77px;background-image:var(--assets-spr);background-repeat:no-repeat;
+  background-size:741px 467px;background-position:0 0;transform:translate(-50%,-52%) scale(.62);image-rendering:pixelated}
+.m-relogio{--ch:var(--hud-ch-p);position:absolute;z-index:20;top:26px;left:80px;height:32px;display:flex;align-items:baseline;gap:6px;padding:6px 12px 0;white-space:nowrap}
+.m-relogio small{font:600 12px/1 var(--hx-f);color:var(--hx-sec)}
+.m-relogio b{font:700 18px/1 var(--hx-f-num);color:var(--hx-num)}
+.m-coluna{position:absolute;z-index:20;top:14px;right:14px;display:flex;flex-direction:column;gap:10px}
+.bt48{--ch:var(--hud-ch-p);position:relative;width:48px;height:48px;display:grid;place-items:center;padding:0}
+.bt48 .ic{width:22px;height:22px}
+.bt48[aria-current="page"]{background:var(--hx-escolhido);color:var(--hx-escolhido-ink);border-color:var(--hx-escolhido-borda)}
+.bt48.toque{outline:2px solid var(--hx-foco);outline-offset:2px}
+/* trancado: o icone igual, apagado, e o cadeado com o nivel ao lado (plano 3.4) */
+.bt48.trancado{opacity:1}
+.bt48.trancado > .ic{opacity:.4}
+/* o "Nv N" e o losango de "novo" ficam fora do botao (o chanfro do Vidro cortaria) */
+.m-item{position:relative}
+.m-item > .nv{position:absolute;right:56px;top:50%;transform:translateY(-50%);background:var(--hud-fundo-2)}
+.m-item > .novo-selo{right:-4px;top:-4px}
+.m-agora{position:absolute;z-index:15;width:48px;height:48px;transform:translateX(-50%);color:var(--hx-texto)}
+.m-dock{position:absolute;z-index:20;left:0;right:0;bottom:30px;display:flex;justify-content:center;gap:16px}
+.m-dock button{width:62px;height:62px;display:grid;place-items:center;border:1px solid var(--hx-btn-borda);border-radius:50%;background:var(--hx-btn-bg);color:var(--hx-btn-ink)}
+:root[data-pele="xcom"] .m-dock button{border-radius:0}
+.m-dock button .ic{width:26px;height:26px}
+.m-dock.saindo{opacity:.35;transform:translateY(40px)}
+.folha .lp-corpo{flex:1;min-height:0}
+/* a folha subindo (o quadro 2 da transicao) */
+.folha.subindo{top:700px;opacity:.7}
+/* o leque do retrato (M1) com o nivel do Tamer (P-8) e o Mapa (a proposta do minimapa no celular) */
+.m-tamer{position:absolute;z-index:22;top:84px;left:14px}
+.m-vitais{--ch:var(--hud-ch-p);position:absolute;z-index:22;top:136px;left:14px;display:flex;gap:4px;padding:6px 8px}
+.m-vitais .vit{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:44px;font:700 14px/1 var(--hx-f-num);color:var(--hx-num)}
+.m-vitais .vit .ic{width:18px;height:18px;color:var(--hx-texto-2)}
+.m-paineis{position:absolute;z-index:22;top:200px;left:18px;display:flex;flex-direction:column;gap:10px}
+.m-paineis .bt48[aria-pressed="true"]{background:var(--hx-escolhido);color:var(--hx-escolhido-ink);border-color:var(--hx-escolhido-borda)}
+/* o mapa aberto por cima (nada de circulo fixo na tela) */
+.m-mapa{--ch:var(--hud-ch);position:absolute;z-index:24;left:78px;top:200px;width:298px;padding:8px 9px 12px}
+.m-mapa-cab{display:flex;align-items:center;justify-content:space-between;padding:0 0 4px 6px}
+.m-mapa .disco{position:relative;width:280px;height:280px;border-radius:50%;border:1px solid var(--hx-borda);background:var(--hud-fundo-2)}
+.m-mapa .disco svg.mapa{position:absolute;inset:0;width:100%;height:100%}
+/* o balao de demonstracao no celular */
+body.cel .balao{max-width:240px}
+body.cel .cartao-destrave{width:auto}
+
+/* o Registro a 390: os botoes do replay descem para a linha de baixo, em vez de sair da folha */
+.reg-topo{flex-wrap:wrap;gap:10px 16px}
+.reg-topo .linha{margin-left:0 !important;width:100%}

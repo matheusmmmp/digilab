@@ -3,14 +3,17 @@
 import { useId, type ReactNode } from "react";
 import clsx from "clsx";
 
-export function PainelHx({ titulo, onFechar, rotuloFechar = "Fechar", abas, className, children }: {
-  titulo: string; onFechar?: () => void; rotuloFechar?: string; abas?: ReactNode; className?: string; children?: ReactNode;
+export function PainelHx({ titulo, sub, icone, onFechar, rotuloFechar = "Fechar", abas, className, children }: {
+  titulo: string; sub?: string; icone?: ReactNode; onFechar?: () => void; rotuloFechar?: string; abas?: ReactNode; className?: string; children?: ReactNode;
 }) {
   const id = useId();
   return (
     <section className={clsx("hx-painel", className)} aria-labelledby={id}>
       <header className="hx-painel__cab">
-        <h2 id={id} className="hx-painel__titulo">{titulo}</h2>
+        {sub ? (
+          /* o painel de um lugar (L2): o icone e o nome do menu, e o nome do lugar embaixo */
+          <div className="hx-painel__tit">{icone}<div className="hx-painel__tit-txt"><h2 id={id} className="hx-painel__titulo">{titulo}</h2><small>{sub}</small></div></div>
+        ) : <h2 id={id} className="hx-painel__titulo">{titulo}</h2>}
         {abas}
         {onFechar && (
           <button type="button" className="hx-quad" aria-label={rotuloFechar} onClick={onFechar}>

@@ -281,7 +281,7 @@ for (const largura of [390, 899, 900, 1099, 1100, 1280]) {
     await semear(page, SAVES.champion);
     const lateral = largura >= 900, desktop = largura >= 1100;
     /* a Exploracao: o mapa 3D e, no desktop, o lugar na coluna da direita (no celular o lugar abre na folha: o cartao fica no mapa) */
-    for (const [rota, esq, dir] of [["crescer/evolucao", ".evo-arv", ".evo-hist"], ["lutar/campanha", ".mapa-expl", ".expl-cartao"]]) {
+    for (const [rota, esq, dir] of [["crescer/evolucao", ".evl-arv", ".evl-hist"], ["lutar/campanha", ".mapa-expl", ".expl-cartao"]]) {
       await page.goto(APP + "#/" + rota);
       await page.waitForTimeout(500);
       const r = await page.evaluate(([e, d]) => {
@@ -314,7 +314,25 @@ test("monitor 1920x950: o pet fica visível com o painel aberto", async ({ page 
   expect(c.alt, "o habitat tem a altura toda (dock flutuante)").toBe(950);
   const dock = await page.locator(".pet-dock .dock").boundingBox();
   expect(dock!.width, "o dock é uma barra flutuante, não a faixa inteira").toBeLessThan(900);
-  for (const rota of ["crescer/treinar", "lutar/arena", "lutar/campanha", "diario/registro", "conversar/chat", "config"]) {
+  /* Lutar, o Diario e os Ajustes sao lugares da ilha (L3): o painel cabe na tela, sem rolagem lateral, e a ilha a esquerda dele nao fica coberta */
+  for (const rota of ["lutar/arena", "lutar/campanha", "diario/registro", "config"]) {
+    await page.goto(APP + "#/" + rota);
+    await expect(page.locator(".painel-tela--lugar-lado")).toBeVisible();
+    const g = await page.evaluate(rotaAtual => {
+      const p = document.querySelector(".painel-tela--lugar-lado")!.getBoundingClientRect(), h = document.querySelector(".habitat")!.getBoundingClientRect();
+      const alvo = document.elementFromPoint(innerWidth * (rotaAtual === "config" ? 0.6 : 0.2), innerHeight * 0.6);
+      return { esq: p.left, dir: p.right, topo: p.top, base: p.bottom, larg: innerWidth, alt: innerHeight, rolagem: document.documentElement.scrollWidth, noHabitat: !!alvo?.closest(".habitat"), habLarg: h.width };
+    }, rota);
+    expect(g.esq, `${rota}: o painel cabe na tela`).toBeGreaterThanOrEqual(0);
+    expect(g.dir, `${rota}: o painel cabe na tela`).toBeLessThanOrEqual(g.larg);
+    expect(g.topo, `${rota}: o painel cabe na tela`).toBeGreaterThanOrEqual(0);
+    expect(g.base, `${rota}: o painel cabe na tela`).toBeLessThanOrEqual(g.alt);
+    expect(g.rolagem, `${rota}: sem rolagem lateral`).toBeLessThanOrEqual(g.larg);
+    expect(g.habLarg, `${rota}: a ilha ocupa a tela toda`).toBeGreaterThanOrEqual(g.larg - 1);
+    /* os Ajustes ficam sobre a tela Pet (a camada do pet e a pilha da direita seguem la): so os lugares deixam a ilha livre a esquerda do painel */
+    if (rota !== "config") expect(g.noHabitat, `${rota}: a ilha a esquerda do painel nao esta coberta`).toBe(true);
+  }
+  for (const rota of ["conversar/chat"]) {
     await page.goto(APP + "#/" + rota);
     await expect(page.locator(".painel-tela--lado")).toBeVisible();
     c = await centro();
@@ -336,7 +354,7 @@ test("medalhas: vencer o líder dá a medalha e libera a evolução", async ({ p
   await semear(page, SAVE_V6);
   const erros = vigiarErros(page);
   await page.goto(APP + "#/crescer/evolucao");
-  await expect(page.locator(".evo-medalha")).toContainText("Pronto para evoluir. Falta a Medalha da Campina: vença o Gazimon na Campina.");
+  await expect(page.locator(".evo-medalha-txt")).toContainText("Pronto para evoluir. Falta a Medalha da Campina: vença o Gazimon na Campina.");
   await page.goto(APP + "#/lutar/campanha");
   await lugarAberto(page);
   await expect(page.locator(".camp-arena")).toContainText("líder: Gazimon");
@@ -361,13 +379,13 @@ test("medalhas: vencer o líder dá a medalha e libera a evolução", async ({ p
   expect(reg.versao).toBe(13);
   expect(reg.log.filter((e: unknown[]) => e[1] === "u")).toEqual([[expect.any(Number), "u", { n: 1 }]]);
   await page.goto(APP + "#/lutar/medalhas");
-  await expect(page.locator(".med-conta .dl-num")).toHaveText("1");
-  await expect(page.locator(".med-card.ganha")).toHaveCount(1);
-  await expect(page.locator(".med-card.ganha")).toContainText("Medalha da Campina");
-  await expect(page.locator(".med-card").nth(2)).toContainText("Vença o Youkomon na Floresta");
-  await expect(page.locator(".med-card").nth(3)).toContainText("Vença o Myotismon três vezes seguidas na Cidadela");
-  await expect(page.locator(".med-card").nth(4)).toContainText("Vínculo:");
-  await expect(page.locator(".med-tela")).not.toContainText("provisória");
+  await expect(page.locator(".md2-conta .dl-num")).toHaveText("1");
+  await expect(page.locator(".md2-card.ganha")).toHaveCount(1);
+  await expect(page.locator(".md2-card.ganha")).toContainText("Medalha da Campina");
+  await expect(page.locator(".md2-card").nth(2)).toContainText("Vença o Youkomon na Floresta");
+  await expect(page.locator(".md2-card").nth(3)).toContainText("Vença o Myotismon três vezes seguidas na Cidadela");
+  await expect(page.locator(".md2-card").nth(4)).toContainText("Vínculo:");
+  await expect(page.locator(".md2-tela")).not.toContainText("provisória");
   expect(erros).toEqual([]);
 });
 
@@ -453,23 +471,24 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 
     await semear(page, SAVE_V6, undefined, tamer);
     const erros = vigiarErros(page);
     await page.goto(APP + "#/lutar/medalhas");
-    await expect(page.locator(".med-card")).toHaveCount(6);
-    await expect(page.locator(".med-card.ganha")).toContainText("ganha com Armadillomon");
+    await expect(page.locator(".md2-card")).toHaveCount(6);
+    await expect(page.locator(".md2-card.ganha")).toContainText("ganha com Armadillomon");
     await page.waitForTimeout(600);
     /* no desktop, so a tela (as abas em pilula do topo da casca tem 40 px nas pranchas *Desktop; o guia 14 e do celular) */
     const r = await page.evaluate(desk => {
       const visivel = (e: Element) => (e as HTMLElement).offsetParent !== null;
-      const pequenos = [...document.querySelector(desk ? ".med-tela" : "body")!.querySelectorAll("button, select, input, summary, a")].filter(visivel).flatMap(e => {
+      const pequenos = [...document.querySelector(desk ? ".md2-tela" : "body")!.querySelectorAll("button, select, input, summary, a")].filter(visivel).flatMap(e => {
         const b = e.getBoundingClientRect();
         return b.height < 44 || b.width < 44 ? [`${e.tagName}.${(e as HTMLElement).className} ${Math.round(b.width)}x${Math.round(b.height)}`] : [];
       });
-      const lista = document.querySelector(".med-lista")!.getBoundingClientRect(), resumo = document.querySelector(".med-resumo")!.getBoundingClientRect();
-      return { larg: document.documentElement.scrollWidth, janela: innerWidth, pequenos, aoLado: lista.left >= resumo.right - 1 };
+      /* uma coluna so no painel do lugar (L3): o corpo da aba nao rola de lado */
+      const corpo = document.querySelector(".painel-tela--lugar .hx-painel__corpo");
+      return { larg: document.documentElement.scrollWidth, janela: innerWidth, pequenos, aoLado: !!corpo && corpo.scrollWidth > corpo.clientWidth + 1 };
     }, largura >= 1100);
     expect(r.larg, "rolagem lateral").toBeLessThanOrEqual(r.janela);
     expect(r.pequenos, "alvos menores que 44 px").toEqual([]);
-    expect(r.aoLado, "uma coluna só no painel (M4)").toBe(false);
-    await expect(page.locator(".med-regras li.ok")).toHaveCount(1);
+    expect(r.aoLado, "uma coluna so: o corpo do painel nao rola de lado").toBe(false);
+    await expect(page.locator(".md2-regras li.ok")).toHaveCount(1);
     expect(erros).toEqual([]);
   });
 }
@@ -646,16 +665,16 @@ test("itens: o líder dá o chip com a medalha, o chip se equipa e vale na luta"
   await expect(page).toHaveURL(/#\/crescer\/evolucao$/);
   /* Crescer · Itens: o chip e do Tamer, e o Champion tem 1 vaga (1 medalha) */
   await page.getByRole("tab", { name: "Itens" }).click();
-  await expect(page.locator(".itens-vagas")).toContainText("0 de 1 vaga");
-  const chip = page.locator(".item-card", { hasText: "Chip de Força" });
-  await expect(chip).not.toHaveClass(/item-falta/);
-  await expect(page.locator(".item-card", { hasText: "Chip Aparo" })).toContainText("Ainda não é seu: vença o Piedmon");
+  await expect(page.locator(".it2-vagas")).toContainText("0 de 1 vaga");
+  const chip = page.locator(".it2-card", { hasText: "Chip de Força" });
+  await expect(chip).not.toHaveClass(/it2--falta/);
+  await expect(page.locator(".it2-card", { hasText: "Chip Aparo" })).toContainText("Ainda não é seu: vença o Piedmon");
   const i0 = await numLog(page, "i");
   await chip.getByRole("button", { name: "Equipar" }).click();
-  await expect(chip).toHaveClass(/item-eq/);
+  await expect(chip).toHaveClass(/it2--eq/);
   /* o Rookie do save ja esta no teto de treino do estagio: o chip de stat dos pets v13 so ocupa o espaco que falta (as regras dos v9) */
   await expect(chip).toContainText("Agora não soma nada");
-  await expect(page.locator(".itens-vagas")).toContainText("1 de 1 vaga");
+  await expect(page.locator(".it2-vagas")).toContainText("1 de 1 vaga");
   expect(await numLog(page, "i")).toBe(i0 + 1);
   /* sem vaga: o outro chip do Tamer (se houvesse) nao entraria; lutar com o chip na arena */
   const l0 = await numLog(page, "l");
@@ -670,8 +689,8 @@ test("itens: o líder dá o chip com a medalha, o chip se equipa e vale na luta"
   expect(reg.log.find((e: unknown[]) => e[1] === "i")[2]).toEqual({ op: "equipar", id: "chip_forca" });
   /* desequipar volta a vaga */
   await irPara(page, "Crescer", "Itens", "crescer/itens");
-  await page.locator(".item-card", { hasText: "Chip de Força" }).getByRole("button", { name: "Desequipar" }).click();
-  await expect(page.locator(".itens-vagas")).toContainText("0 de 1 vaga");
+  await page.locator(".it2-card", { hasText: "Chip de Força" }).getByRole("button", { name: "Desequipar" }).click();
+  await expect(page.locator(".it2-vagas")).toContainText("0 de 1 vaga");
   expect(erros).toEqual([]);
 });
 
@@ -715,7 +734,7 @@ test("itens: a carta se escolhe antes da luta, entra no registro do pet e sai do
   await expect(page).toHaveURL(/#\/lutar\/campanha$/);
   await expect(page.locator(".carta-escolha")).toHaveCount(0);
   await irPara(page, "Crescer", "Itens", "crescer/itens");
-  await expect(page.locator(".item-card", { hasText: "Carta de Fôlego" })).toContainText("×0");
+  await expect(page.locator(".it2-card", { hasText: "Carta de Fôlego" })).toContainText("×0");
   expect(erros).toEqual([]);
 });
 
@@ -727,10 +746,10 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 
     await semear(page, SAVE_V6, undefined, TAMER_ITENS);
     const erros = vigiarErros(page);
     await page.goto(APP + "#/crescer/itens");
-    await expect(page.locator(".item-card")).toHaveCount(9);
-    await expect(page.locator(".item-card.item-falta")).toHaveCount(7);
-    await page.locator(".item-card", { hasText: "Chip de Força" }).getByRole("button", { name: "Equipar" }).click();
-    await expect(page.locator(".item-card.item-eq")).toHaveCount(1);
+    await expect(page.locator(".it2-card")).toHaveCount(9);
+    await expect(page.locator(".it2-card.it2--falta")).toHaveCount(7);
+    await page.locator(".it2-card", { hasText: "Chip de Força" }).getByRole("button", { name: "Equipar" }).click();
+    await expect(page.locator(".it2-card.it2--eq")).toHaveCount(1);
     await page.waitForTimeout(600);
     const r = await page.evaluate(desk => {
       const visivel = (e: Element) => (e as HTMLElement).offsetParent !== null;
@@ -738,8 +757,10 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 
         const b = e.getBoundingClientRect();
         return b.height < 44 || b.width < 44 ? [`${e.tagName}.${(e as HTMLElement).className} ${Math.round(b.width)}x${Math.round(b.height)}`] : [];
       });
-      const lista = document.querySelector(".itens-col")!.getBoundingClientRect(), resumo = document.querySelector(".itens-resumo")!.getBoundingClientRect();
-      return { larg: document.documentElement.scrollWidth, janela: innerWidth, pequenos, aoLado: lista.left >= resumo.right - 1 };
+      /* uma coluna so no painel (M4; no lugar da L2, a grade de itens fica inteira dentro do corpo do painel, sem rolagem lateral nele) */
+      const corpo = document.querySelector(".painel-tela--lugar .hx-painel__corpo");
+      const aoLado = !!corpo && corpo.scrollWidth > corpo.clientWidth + 1;
+      return { larg: document.documentElement.scrollWidth, janela: innerWidth, pequenos, aoLado };
     }, largura >= 1100);
     expect(r.larg, "rolagem lateral").toBeLessThanOrEqual(r.janela);
     expect(r.pequenos, "alvos menores que 44 px").toEqual([]);
@@ -823,10 +844,10 @@ test("fronteira: com as 6 medalhas a ilha abre; a Liga tem 6 lutas sem cura, dá
   await expect(page.locator(".fr-ultima")).toContainText("venceu os 6");
   await expect(page.locator(".fr-card--vit")).toHaveCount(6);
   await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
-  await expect(page.locator(".med-ouro.ganha")).toContainText("Campeão da Liga dos Líderes com Magnadramon");
+  await expect(page.locator(".md2-ouro.ganha")).toContainText("Campeão da Liga dos Líderes com Magnadramon");
   /* recarregar: a conclusao nao volta */
   await page.reload();
-  await expect(page.locator(".med-tela")).toBeVisible();
+  await expect(page.locator(".md2-tela")).toBeVisible();
   await page.waitForTimeout(800);
   await expect(page.locator("dialog.conclusao-tela")).toHaveCount(0);
   expect(erros).toEqual([]);
@@ -841,8 +862,8 @@ test("fronteira: sem as 6 medalhas a Liga fica trancada e diz o que falta", asyn
   await expect(page.locator(".fr-cab .med-espera")).toContainText("A Fronteira abre com as 6 medalhas.");
   await expect(page.locator(".fr-cab .med-espera")).toContainText("Faltam 3 medalhas");
   await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
-  await expect(page.locator(".med-ouro")).not.toHaveClass(/ganha/);
-  await expect(page.locator(".med-ouro")).toContainText("Ainda não");
+  await expect(page.locator(".md2-ouro")).not.toHaveClass(/ganha/);
+  await expect(page.locator(".md2-ouro")).toContainText("Ainda não");
   expect(erros).toEqual([]);
 });
 
@@ -870,7 +891,7 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 
     expect(r.aoLado, "uma coluna só no painel (M4)").toBe(false);
     /* a medalha de ouro apagada em Medalhas, no mesmo tamanho */
     await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
-    await expect(page.locator(".med-ouro")).toBeVisible();
+    await expect(page.locator(".md2-ouro")).toBeVisible();
     const m = await page.evaluate(() => ({ larg: document.documentElement.scrollWidth, janela: innerWidth }));
     expect(m.larg).toBeLessThanOrEqual(m.janela);
     expect(erros).toEqual([]);
@@ -901,8 +922,8 @@ test("fronteira: antes do título as instalações ficam trancadas", async ({ pa
   await expect(page.locator(".sl-niveis")).toHaveCount(0);
   expect(await numLog(page, "f")).toBe(0);
   await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
-  await expect(page.locator(".med-recordes li")).toHaveCount(4);
-  await expect(page.locator(".med-recordes")).toContainText("Abre depois do título");
+  await expect(page.locator(".md2-recordes li")).toHaveCount(4);
+  await expect(page.locator(".md2-recordes")).toContainText("Abre depois do título");
   expect(erros).toEqual([]);
 });
 
@@ -959,9 +980,9 @@ test("fronteira: com o título, a Torre de Batalha dá 7 vitórias seguidas sem 
   expect(t.log.filter((e: [string]) => e[0] === "recorde").map((e: [string, { inst: string; valor: number }]) => [e[1].inst, e[1].valor])).toEqual([["torre_batalha", 7], ["palacio", 9]]);
   /* os recordes na tela de Medalhas */
   await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
-  await expect(page.locator(".med-recordes li.ganha")).toHaveCount(2);
-  await expect(page.locator(".med-recordes li", { hasText: "Torre de Batalha" })).toContainText("7 vitórias seguidas, com Magnadramon");
-  await expect(page.locator(".med-recordes li", { hasText: "Palácio" })).toContainText("9 vitórias seguidas");
+  await expect(page.locator(".md2-recordes li.ganha")).toHaveCount(2);
+  await expect(page.locator(".md2-recordes li", { hasText: "Torre de Batalha" })).toContainText("7 vitórias seguidas, com Magnadramon");
+  await expect(page.locator(".md2-recordes li", { hasText: "Palácio" })).toContainText("9 vitórias seguidas");
   expect(erros).toEqual([]);
 });
 
@@ -991,7 +1012,7 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 
     expect(r.aoLado, "uma coluna só no painel (M4)").toBe(false);
     await page.screenshot({ path: `test-results/fronteira-instalacoes-${largura}-${tema}.png`, fullPage: true });
     await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
-    await expect(page.locator(".med-recordes li.ganha")).toHaveCount(1);
+    await expect(page.locator(".md2-recordes li.ganha")).toHaveCount(1);
     const m = await page.evaluate(() => ({ larg: document.documentElement.scrollWidth, janela: innerWidth }));
     expect(m.larg).toBeLessThanOrEqual(m.janela);
     await page.screenshot({ path: `test-results/fronteira-medalhas-${largura}-${tema}.png`, fullPage: true });
@@ -1068,7 +1089,7 @@ test("fronteira: a Fábrica aluga 1 de 3 Megas, luta, oferece a troca depois da 
     .toEqual([["fabrica", 1, 0], ["fabrica_luta", 1, 0], ["fabrica_troca", 1, 0], ["fabrica_luta", 1, 1]]);
   expect(await numLog(page, "l")).toBe(l0);
   await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
-  await expect(page.locator(".med-recordes li", { hasText: "Fábrica" })).toContainText("Nenhum ainda");
+  await expect(page.locator(".md2-recordes li", { hasText: "Fábrica" })).toContainText("Nenhum ainda");
   expect(erros).toEqual([]);
 });
 
@@ -1107,7 +1128,7 @@ test("fronteira: o Salão, com um pet de cada nível (o ativo e os guardados), g
   expect(ev[0][1].lutas.map((l: { est: string; forma: string; venceu: boolean }) => [l.est, l.forma, l.venceu]))
     .toEqual([["crianca", "Patamon", true], ["adolescente", "Growlmon", true], ["adulto", "Zudomon", true], ["mega", "Magnadramon", true]]);
   await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
-  await expect(page.locator(".med-recordes li", { hasText: "Salão" })).toContainText("4 de 4 níveis seguidos, na tentativa 1.");
+  await expect(page.locator(".md2-recordes li", { hasText: "Salão" })).toContainText("4 de 4 níveis seguidos, na tentativa 1.");
   expect(erros).toEqual([]);
 });
 
@@ -1665,14 +1686,17 @@ for (const largura of [390, 1280]) {
     await expect(page).toHaveURL(/#\/crescer\/evolucao$/);
     await expect(page.locator("dialog.revelacao[open]")).toHaveCount(0);
     /* a aba: a forma atual em destaque, a proxima evolucao com as medalhas, a arvore, o porque e o historico */
-    await expect(page.locator(".evt-heroi .evt-nome")).toHaveText("Growlmon");
-    await expect(page.locator(".evt-heroi .evt-prazo")).toContainText("até virar Ultimate");
-    await expect(page.locator(".evt-prox .evt-selos")).toContainText("1 de 3 medalhas do Tamer");
-    await expect(page.locator(".evo-arv")).toBeVisible();
-    await expect(page.locator(".evt-porque")).toContainText("Por que Growlmon?");
-    await expect(page.locator(".evo-hist li")).toHaveCount(3);
-    expect(JAPONES.test(await page.locator(".evo-tela").textContent() ?? "")).toBe(false);
+    await expect(page.locator(".evl-nome b")).toHaveText("Growlmon");
+    await expect(page.locator(".evl-prazo")).toContainText("até Ultimate");
+    /* os selos so da conta do Tamer (L2): ele tem 1 de 3 */
+    await expect(page.locator(".evl-reqs")).toContainText("1/3");
+    await expect(page.locator(".evl-arv")).toBeVisible();
+    await expect(page.locator(".evl-porque")).toContainText("decidido pelo caráter");
+    await expect(page.locator(".evl-hist li")).toHaveCount(3);
+    expect(JAPONES.test(await page.locator(".evl").textContent() ?? "")).toBe(false);
     /* o historico reabre o momento de qualquer evolucao */
+    /* o historico fica num details fechado (L2, regra do texto): abre antes */
+    await page.locator(".evl-det", { hasText: "Histórico" }).locator("summary").click();
     await page.getByRole("button", { name: "Ver a revelação de novo: Agumon" }).click();
     await expect(rev).toBeVisible();
     await expect(rev.locator(".revel-de")).toHaveText("In-Training → Rookie");
@@ -1697,7 +1721,7 @@ test("evolução: sem o atlas, o pet de reserva no momento e na aba", async ({ p
   const w = await rev.locator(".evm-pet .evm-spr--reserva").evaluate(e => (e as HTMLImageElement).naturalWidth);
   expect(w).toBeGreaterThan(100);
   await rev.getByRole("button", { name: "Continuar" }).click();
-  await expect(page.locator(".evt-heroi .evm-spr--reserva")).toBeVisible();
+  await expect(page.locator(".evl-palco .evm-spr--reserva")).toBeVisible();
 });
 
 /* a aba Treinar (docs/TAREFA_V2_TREINO.md). save_treino_pausa.json e save_treino_forcar.json (e2e/gerar_save_treino.mjs): um Palmon v11 no
@@ -1706,32 +1730,20 @@ const SAVE_TR_PAUSA = JSON.parse(readFileSync(new URL("./save_treino_pausa.json"
 const SAVE_TR_FORCAR = JSON.parse(readFileSync(new URL("./save_treino_forcar.json", import.meta.url), "utf8"));
 const SEM_JAPONES = /[぀-ヿ㐀-鿿ｦ-ﾟ]/;
 for (const largura of [390, 1280]) {
-  test(`treino: a sala, o stat em foco, o cansaço, os exercícios e a pausa em ${largura} px`, async ({ page }) => {
+  test(`treino: o estado, os exercícios e o cansaço em ${largura} px`, async ({ page }) => {
     await page.setViewportSize({ width: largura, height: largura >= 1100 ? 800 : 844 });
     await semear(page, SAVE_TR_PAUSA);
     const erros = vigiarErros(page);
     await page.goto(APP + "#/crescer/treinar");
-    await expect(page.locator(".trn-sala")).toBeVisible();
-    await expect(page.locator(".trn-estado")).toHaveText("pediu pausa");
-    await expect(page.locator(".trn-balao")).toContainText("pausa?");
-    await expect(page.locator(".trn-pet .evm-spr")).toBeVisible();
-    /* o stat em foco: o principal do ultimo exercicio (Alvo: mira), de 10, e o do estagio e da vida */
-    await expect(page.locator(".trn-foco")).toContainText("stat do último treino · Alvo");
-    await expect(page.locator(".trn-foco")).toContainText(/Mira \+\d+,\d de 10/);
-    await expect(page.locator(".trn-foco")).toContainText(/no estágio [\d,]+ de 10 · na vida [\d,]+ de 36/);
-    await expect(page.locator(".trn-vida li")).toHaveCount(6);
+    /* L2: o estado numa palavra, o último treino sem a frase do intervalo (que fica no balão) e os números do cansaço */
+    await expect(page.locator(".trn2-estado")).toHaveText("Pausa");
+    await expect(page.locator(".trn2-ultimo")).toContainText("Alvo");
     await expect(page.locator(".treino-ex")).toHaveCount(6);
     await expect(page.locator(".treino-ex.forcar")).toHaveCount(0);
-    await expect(page.locator(".trn-ultimo")).toContainText("Alvo · mira e fôlego");
-    const texto = await page.locator(".treino-tela").textContent() ?? "";
+    await expect(page.locator(".trn2-cansaco .trn2-med")).toHaveCount(2);
+    const texto = await page.locator(".trn2-tela").textContent() ?? "";
     expect(SEM_JAPONES.test(texto), "nenhum caractere japonês").toBe(false);
-    expect(/\b(Nv|Lv|XP)\b/.test(texto), "nem nível nem XP").toBe(false);
-    const r = await page.evaluate(() => Object.fromEntries([".trn-sala", ".trn-foco", ".trn-medidores", ".trn-exercicios", ".trn-vida", ".trn-ultimo"]
-      .map(c => { const b = document.querySelector(c)!.getBoundingClientRect(); return [c, [b.left, b.top]]; })));
-    /* uma coluna, nesta ordem, no painel de 760 px e no modal do celular (layout habitat, M4) */
-    const tops = [".trn-sala", ".trn-foco", ".trn-medidores", ".trn-exercicios", ".trn-vida", ".trn-ultimo"].map(c => r[c][1]);
-    expect(tops).toEqual([...tops].sort((a, b) => a - b));
-    expect(new Set([".trn-medidores", ".trn-exercicios"].map(c => Math.round(r[c][0]))).size, "mesma coluna").toBe(1);
+    expect(/(Nv|Lv|XP)/.test(texto), "nem nível nem XP").toBe(false);
     expect(erros).toEqual([]);
   });
 }
@@ -1739,29 +1751,33 @@ test("treino: com fadiga acima de 60 os exercícios viram Forçar, a folha confi
   await page.setViewportSize({ width: 390, height: 844 });
   await semear(page, SAVE_TR_FORCAR);
   const erros = vigiarErros(page);
+  /* o relogio da pagina e falso e, com o app de pe, para: o Forcar so fica habilitado ~3 min de jogo (o intervalo de 10 min passou, a
+     fadiga ainda esta acima de 60), uns 300 ms a 10 min/s, e a espera do Playwright (que tenta de novo em intervalos que crescem ate 1 s)
+     podia pular essa janela; o "Forçar mesmo assim" tambem podia cair depois dela. Com o relogio parado, o teste anda 100 ms por vez */
+  await page.clock.install();
   await page.goto(APP + "#/crescer/treinar");
   await expect(page.locator(".treino-ex.forcar")).toHaveCount(6);
+  await page.clock.pauseAt(new Date(await page.evaluate(() => Date.now()) + 250));
   const l0 = await numLog(page, "tr");
   /* o intervalo de 10 min passa com o relogio do app (10 min/s) */
-  await page.locator(".treino-ex.forcar:not([disabled])").first().click();
+  const habilitado = page.locator(".treino-ex.forcar:not([disabled])");
+  for (let i = 0; i < 40 && await habilitado.count() === 0; i++) await page.clock.runFor(100);
+  await habilitado.first().click();
   const folha = page.locator("dialog.folha[open]");
   await expect(folha).toContainText("Forçar levantar pedra?");
   await folha.getByRole("button", { name: "Forçar mesmo assim" }).click();
-  await expect(page.locator(".trn-msg")).toContainText("Forçado:");
+  await expect(page.locator(".trn2-msg")).toContainText("Forçado:");
   expect(await numLog(page, "tr")).toBe(l0 + 1);
-  await expect(page.locator(".trn-medidores")).toContainText("25 / 100");
-  await expect(page.locator(".trn-ultimo")).toContainText("Levantar pedra");
+  await expect(page.locator(".trn2-cansaco .trn2-barra--sombrio")).toHaveAttribute("aria-label", /^Sobrecarga 25 de 100/);
+  await expect(page.locator(".trn2-ultimo")).toContainText("Levantar pedra");
   expect(erros).toEqual([]);
 });
-/* sem o atlas do UP (o CI, as capturas do repositorio): a sala em CSS, o pet da grade de reserva e os icones do lucide */
-test("treino: sem o atlas, a sala em CSS, o pet de reserva e os ícones de reserva", async ({ page }) => {
+/* sem o atlas do UP (o CI, as capturas do repositorio): os icones do lucide */
+test("treino: sem o atlas, os ícones de reserva", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await semear(page, SAVE_TR_PAUSA);
   await page.route(/\/Assets\/(digilab_atlas_up|digilab_decoracao_up|decoracao_up\/)/, r => r.abort());
   await page.goto(APP + "#/crescer/treinar");
-  await expect(page.locator(".trn-sala .trn-janela")).toBeVisible();
-  await expect(page.locator(".trn-sala.trn-sala--up")).toHaveCount(0);
-  await expect(page.locator(".trn-pet .evm-spr--reserva")).toBeVisible();
   await expect(page.locator(".treino-grade .treino-ic--reserva")).toHaveCount(6);
 });
 
@@ -2149,7 +2165,7 @@ test("pele dos menus: Ajustes › Visual troca na hora e a escolha sobrevive ao 
   const gravada = () => page.evaluate(c => localStorage.getItem(c + "-pele"), CHAVE);
   await page.goto(APP + "#/config");
   await expect(page.locator(".mc-cfg")).toContainText("pele Sci-fi · tema");
-  await page.locator(".mc-cfg .hx-linha", { hasText: "Visual" }).click();
+  await page.locator(".mc-cfg .aj", { hasText: "Visual" }).click();
   const grupo = page.getByRole("radiogroup", { name: "Pele dos menus" });
   const militar = grupo.getByRole("radio", { name: "Militar" }), holo = grupo.getByRole("radio", { name: "Sci-fi" });
   await expect(holo).toHaveAttribute("aria-checked", "true");
