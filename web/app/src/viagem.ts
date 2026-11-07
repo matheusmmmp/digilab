@@ -22,12 +22,14 @@ export const SACO_NA_TELA = { largo: 0.41, movel: 0.26 } as const;
     PROPOSTO, SEM FONTE (numero de interface, nao de jogo) */
 export const ZOOM_LUGAR_MOVEL = 0.55;
 
-export type Lugar = "saco";
+/** os lugares da ilha (ilha/lugares.ts tem o ponto de cada um): Crescer no saco, Lutar no portao, o Diario na barraca */
+export type Lugar = "saco" | "portao" | "barraca";
 /** a chave propria da preferencia (ao lado da do save; nunca no save) */
 export const CHAVE_VIAGEM = CHAVE + "-viagem";
 
-/** o estado da viagem: para onde vai (0 a ilha, 1 o lugar), de onde saiu e quando */
-export const VIAGEM: { alvo: 0 | 1; de: number; desde: number } = { alvo: 0, de: 0, desde: 0 };
+/** o estado da viagem: para onde vai (0 a ilha, 1 o lugar), de onde saiu e quando; `lugar` e o lugar de agora (ou o ultimo) e `origem`, se houver,
+    o lugar de onde a camera parte numa troca direta entre dois lugares (sem passar pela ilha) */
+export const VIAGEM: { alvo: 0 | 1; de: number; desde: number; lugar: Lugar; origem: Lugar | null } = { alvo: 0, de: 0, desde: 0, lugar: "saco", origem: null };
 
 /* ---------- a preferencia "Viagem da camera" (Ajustes) */
 const ouvintes = new Set<() => void>();
@@ -67,7 +69,7 @@ export function progressoViagem(agora: number = performance.now()): number {
 }
 /** a viagem esta andando (nao chegou ao alvo) */
 export const viajando = (agora: number = performance.now()): boolean => progressoViagem(agora) !== VIAGEM.alvo;
-/** o lugar esta aberto (ou indo para la): o painel e a camera estao no saco */
+/** o lugar esta aberto (ou indo para la): o painel e a camera estao nele */
 export const lugarAberto = (): boolean => VIAGEM.alvo === 1;
 
 function irPara(alvo: 0 | 1, agora: number): void {
@@ -75,13 +77,25 @@ function irPara(alvo: 0 | 1, agora: number): void {
   const de = progressoViagem(agora);
   VIAGEM.alvo = alvo; VIAGEM.de = semAnimacao() ? alvo : de; VIAGEM.desde = agora;
 }
-/** abrir o lugar: a camera vai ao saco e o pet anda ate la */
-export const entrarLugar = (agora: number = performance.now()): void => irPara(1, agora);
+/** o lugar de agora (o ultimo, se a camera ja voltou para a ilha) */
+export const lugarAtual = (): Lugar => VIAGEM.lugar;
+/** abrir o lugar (o saco, se nao disser): a camera vai a ele e o pet anda ate la. Com outro lugar ja aberto, a camera parte dele (a `origem`) para o novo */
+export function entrarLugar(agora: number = performance.now(), lugar: Lugar = "saco"): void {
+  if (VIAGEM.alvo === 1 && VIAGEM.lugar !== lugar) {
+    VIAGEM.origem = VIAGEM.lugar; VIAGEM.lugar = lugar;
+    /* nunca 0 exato: a vista trata progresso 0 como a ilha de sempre; 0,001 e "ainda no lugar de origem" */
+    VIAGEM.de = semAnimacao() ? 1 : 0.001; VIAGEM.desde = agora;
+    return;
+  }
+  /* abrindo da ilha: o lugar do alvo muda sem origem (se a camera ainda volta de outro lugar, ela segue o novo dali) */
+  if (VIAGEM.alvo === 0) { VIAGEM.lugar = lugar; VIAGEM.origem = null; }
+  irPara(1, agora);
+}
 /** sair do lugar: a camera e o pet voltam */
-export const sairLugar = (agora: number = performance.now()): void => irPara(0, agora);
+export const sairLugar = (agora: number = performance.now()): void => { VIAGEM.origem = null; irPara(0, agora); };
 /** clicar ou Esc durante a viagem: pula para o fim */
 export function pularViagem(agora: number = performance.now()): void {
   VIAGEM.de = VIAGEM.alvo; VIAGEM.desde = agora;
 }
 /** de volta ao comeco (testes) */
-export function zerarViagem(): void { VIAGEM.alvo = 0; VIAGEM.de = 0; VIAGEM.desde = 0; }
+export function zerarViagem(): void { VIAGEM.alvo = 0; VIAGEM.de = 0; VIAGEM.desde = 0; VIAGEM.lugar = "saco"; VIAGEM.origem = null; }

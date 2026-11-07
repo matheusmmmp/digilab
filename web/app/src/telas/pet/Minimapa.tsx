@@ -7,7 +7,7 @@
      elementos posicionados por estilo direto (sem setState por quadro). So vista: nada do motor, do save nem do replay.
    Nao importa nada de ilha/ nem o three (teste ilha_fronteira). */
 import { useEffect, useId, useRef, type RefObject } from "react";
-import { Bed, Dumbbell, Utensils, Volleyball } from "lucide-react";
+import { Bed, Dumbbell, Swords, Tent, Utensils, Volleyball } from "lucide-react";
 import { VISTA, andar, irPara, seguirPet, useCameraLivre, type Par, type VistaPublicada } from "./cameraLivre.ts";
 import {
   LIMIAR_ARRASTO, MINIMAPA_PX, ZOOM_PASSO, celulaParaPx, corComAlfa, corDoNumero, dentroDoCirculo, janelaDe, limitarZoom, passoDaSeta,
@@ -38,7 +38,7 @@ function lerTokens() {
 
 interface Estado { chama: boolean; solta: boolean; podeSoltar: boolean }
 type Ref = RefObject<HTMLDivElement | null>;
-interface Marcas { ninho: Ref; comedouro: Ref; saco: Ref; bola: Ref; pet: Ref }
+interface Marcas { ninho: Ref; comedouro: Ref; saco: Ref; portao: Ref; barraca: Ref; bola: Ref; pet: Ref }
 
 function desenhar(ctx: CanvasRenderingContext2D, dpr: number, v: VistaPublicada, j: Janela, e: Estado, marcas: Marcas): void {
   const k = lerTokens(), px = (c: Par): Par => celulaParaPx(c, j);
@@ -76,7 +76,7 @@ function desenhar(ctx: CanvasRenderingContext2D, dpr: number, v: VistaPublicada,
     if (!p || !dentroDoCirculo(p, 9)) { el.style.visibility = "hidden"; return; }
     el.style.visibility = "visible"; el.style.transform = `translate(${p[0].toFixed(1)}px, ${p[1].toFixed(1)}px)`;
   };
-  poe(marcas.ninho.current, v.ninho); poe(marcas.comedouro.current, v.comedouro); poe(marcas.saco.current, v.saco); poe(marcas.bola.current, v.bola);
+  poe(marcas.ninho.current, v.ninho); poe(marcas.comedouro.current, v.comedouro); poe(marcas.saco.current, v.saco); poe(marcas.portao.current, v.portao); poe(marcas.barraca.current, v.barraca); poe(marcas.bola.current, v.bola);
   poe(marcas.pet.current, v.pet);
   marcas.pet.current?.classList.toggle("chama", e.chama);
 }
@@ -85,7 +85,7 @@ function desenhar(ctx: CanvasRenderingContext2D, dpr: number, v: VistaPublicada,
 export function Minimapa({ chama = false, soMostra = false }: { chama?: boolean; soMostra?: boolean }) {
   const { ativa, podeSoltar, solta } = useCameraLivre();
   const cv = useRef<HTMLCanvasElement>(null);
-  const marcas: Marcas = { ninho: useRef(null), comedouro: useRef(null), saco: useRef(null), bola: useRef(null), pet: useRef(null) };
+  const marcas: Marcas = { ninho: useRef(null), comedouro: useRef(null), saco: useRef(null), portao: useRef(null), barraca: useRef(null), bola: useRef(null), pet: useRef(null) };
   const estado = useRef<Estado>({ chama, solta, podeSoltar });
   estado.current = { chama, solta, podeSoltar };
   const idDesc = useId();
@@ -184,6 +184,8 @@ export function Minimapa({ chama = false, soMostra = false }: { chama?: boolean;
       <div ref={marcas.ninho} className="minimapa-marca minimapa-ic" aria-hidden="true"><Bed /></div>
       <div ref={marcas.comedouro} className="minimapa-marca minimapa-ic" aria-hidden="true"><Utensils /></div>
       <div ref={marcas.saco} className="minimapa-marca minimapa-ic" aria-hidden="true"><Dumbbell /></div>
+      <div ref={marcas.portao} className="minimapa-marca minimapa-ic" aria-hidden="true"><Swords /></div>
+      <div ref={marcas.barraca} className="minimapa-marca minimapa-ic" aria-hidden="true"><Tent /></div>
       <div ref={marcas.bola} className="minimapa-marca minimapa-ic" aria-hidden="true"><Volleyball /></div>
       <div ref={marcas.pet} className="minimapa-marca minimapa-pet" aria-hidden="true" />
     </div>

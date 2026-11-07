@@ -32,6 +32,9 @@ for (const pele of ["vidro", "xcom"]) for (const [nome, w, h] of TELAS) {
     await semear(page);
     await page.goto(`${APP}?pele=${pele}#/lutar/arena`);
     const painel = page.getByTestId("painel-aprendizado");
+    /* L3: as regras e o que o pet aprendeu ficam no bloco "Regras", fechado ao abrir a Arena */
+    const abrirRegras = async () => { if (!(await painel.isVisible())) await page.locator(".ar2-regras > summary").click(); };
+    await abrirRegras();
     await painel.scrollIntoViewIfNeeded();
     await expect(painel).toBeVisible();
     await expect(page.getByTestId("ap-vazio")).toBeVisible();
@@ -47,6 +50,7 @@ for (const pele of ["vidro", "xcom"]) for (const [nome, w, h] of TELAS) {
     await expect(page.locator("dialog.modal-res[open]")).toBeVisible({ timeout: 120_000 });
     await page.keyboard.press("Escape");
     await expect(page).toHaveURL(/#\/lutar\/arena$/);
+    await abrirRegras();
     await painel.scrollIntoViewIfNeeded();
     await expect(page.getByTestId("ap-vazio")).toHaveCount(0);
     await expect(painel).toContainText("Em 1 luta");

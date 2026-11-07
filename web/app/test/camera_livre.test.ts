@@ -12,7 +12,7 @@ const NORTE: Par = [0, -1];
 const MAPA = { imagem: {} as ImageData, x0: -10, z0: -12, larg: 88, prof: 52, area: { w: 64, h: 30 } };
 function vista(foco: Par, pet: Par, extra: Partial<VistaPublicada> = {}): VistaPublicada {
   return {
-    foco, pet, bola: null, frente: NORTE, meiaAbertura: 0.6, comidas: [], ninho: [4, 15], comedouro: [10.5, 15.5], saco: [7, 11], arvores: [],
+    foco, pet, bola: null, frente: NORTE, meiaAbertura: 0.6, comidas: [], ninho: [4, 15], comedouro: [10.5, 15.5], saco: [7, 11], portao: [15.5, 17], barraca: [1.8, 16.5], arvores: [],
     petFora: false, lado: "direita", pxPorCelula: 40, senoElevacao: 0.5, limites: LIM,
     mapa: MAPA, ...extra,
   };

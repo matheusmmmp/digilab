@@ -4,17 +4,20 @@
    hover) e o `aria-current` marca o destino aberto. */
 import { BookOpen, MessageCircle, PawPrint, Settings, Sprout, Swords, type LucideIcon } from "lucide-react";
 import { NOME_DESTINO, ORDEM_DESTINOS, type Destino } from "../rotas.ts";
+import { dAbreDiario } from "../atalhosLugar.ts";
+import { useHabitat } from "../habitat.ts";
 
 const DESTINOS_BARRA = ORDEM_DESTINOS.filter(d => d !== "conversar");
 const ICONE: Record<Destino, LucideIcon> = { pet: PawPrint, crescer: Sprout, lutar: Swords, diario: BookOpen, conversar: MessageCircle };
 
 export function Nav({ atual, ir, configAberta, abrirConfig }: { atual: Destino | null; ir: (d: Destino) => void; configAberta: boolean; abrirConfig: () => void }) {
+  useHabitat();         // o D so e atalho do Diario com a camera que nao solta (atalhosLugar.ts): a escolha do controle muda a declaracao
   return (
     <nav className="dl-nav hx-nav" aria-label="Destinos">
       {DESTINOS_BARRA.map(d => {
         const I = ICONE[d];
         return (
-          <button type="button" key={d} className="hx-nav__bt" aria-current={d === atual ? "page" : undefined} aria-keyshortcuts={d === "crescer" ? "C" : undefined} onClick={() => ir(d)}>
+          <button type="button" key={d} className="hx-nav__bt" aria-current={d === atual ? "page" : undefined} aria-keyshortcuts={d === "crescer" ? "C" : d === "lutar" ? "L" : d === "diario" && (dAbreDiario() || atual !== null && atual !== "pet") ? "D" : undefined} onClick={() => ir(d)}>
             <I className="hx-nav__ic" aria-hidden="true" /><span className="hx-nav__rot">{NOME_DESTINO[d]}</span>
           </button>
         );

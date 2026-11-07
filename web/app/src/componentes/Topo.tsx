@@ -12,17 +12,20 @@ import { alternarLeque, useLeque } from "../movel.ts";
 import { NOME_DESTINO, type Destino } from "../rotas.ts";
 import { SeloExperimental } from "../telas/config/Laboratorio.tsx";
 import { Retrato, diaDe, hhmm, necessidadeMovel } from "../telas/pet/TelaPet.tsx";
+import { dAbreDiario } from "../atalhosLugar.ts";
 import { BotaoMovel } from "./BotaoMovel.tsx";
 import { Deco } from "./Deco.tsx";
 import { seguirPet, useCameraLivre } from "../telas/pet/cameraLivre.ts";
 
-/** `lugar`: o lugar de Crescer esta aberto (L2): no celular, o icone de Crescer na coluna fica em destaque */
-interface PropsTopo { abrirMeusPets: () => void; irConversar: () => void; irDestino: (d: Destino) => void; abrirConfig: () => void; lugar?: boolean }
+/** `lugar`: o menu do lugar aberto (L2 e L3): no celular, o icone dele na coluna fica em destaque */
+interface PropsTopo { abrirMeusPets: () => void; irConversar: () => void; irDestino: (d: Destino) => void; abrirConfig: () => void; lugar?: Destino | null }
 
 /** a partir de 900 px o topo de sempre; abaixo, o do mobile minimo (M1): o retrato e a hora, e a coluna dos destinos */
 export function TopoHabitat(p: PropsTopo) { return usePainelLado() ? <TopoLargo {...p} /> : <TopoMovel {...p} />; }
 
 const ICONE_DESTINO: Partial<Record<Destino, LucideIcon>> = { crescer: Sprout, lutar: Swords, diario: BookOpen };
+/** o atalho de cada lugar; o D so vale quando nao e o "direita" do WASD da camera solta (atalhosLugar.ts) */
+const atalhoLugar = (d: Destino): string | undefined => d === "crescer" ? "C" : d === "lutar" ? "L" : d === "diario" && dAbreDiario() ? "D" : undefined;
 const DESTINOS_COLUNA: Destino[] = ["crescer", "lutar", "diario"];
 
 /* O topo do celular (docs/PROPOSTAS_V3_UX_TELA_PET.md, "Mobile mínimo", M1; prancha em docs/pranchas/ux-mobile/): no canto de cima à esquerda o retrato
@@ -46,7 +49,7 @@ function TopoMovel({ irConversar, irDestino, lugar }: PropsTopo) {
         <nav className="mm-destinos" aria-label="Destinos">
           {DESTINOS_COLUNA.map(d => {
             const I = ICONE_DESTINO[d]!;
-            return <BotaoMovel key={d} className="mm-caixa mm-forma mm-bt mm-bt48" rotulo={NOME_DESTINO[d]} lado="esq" aria-current={lugar && d === "crescer" ? "page" : undefined} aria-keyshortcuts={d === "crescer" ? "C" : undefined} onClick={() => irDestino(d)}><I aria-hidden="true" /></BotaoMovel>;
+            return <BotaoMovel key={d} className="mm-caixa mm-forma mm-bt mm-bt48" rotulo={NOME_DESTINO[d]} lado="esq" aria-current={lugar === d ? "page" : undefined} aria-keyshortcuts={atalhoLugar(d)} onClick={() => irDestino(d)}><I aria-hidden="true" /></BotaoMovel>;
           })}
         </nav>
       </div>

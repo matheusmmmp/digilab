@@ -1,0 +1,166 @@
+/* ======================================================================================================================================================
+   L3 de "Lugares da ilha": Lutar no portao da arena, o Diario na barraca do Tamer e os Ajustes (prancha docs/pranchas/ux-lugares-menus/lutar_*, diario_*,
+   ajustes_*). So tokens --hx-* e --hud-*; nenhuma cor nova. Carregado junto do lugar.css (PainelLugar.tsx). */
+
+/* ---------- a aba "trancada" (so o visual; a Fronteira, "Nv 8"): apagada e tracejada, com o nivel na ponta; nada fica desabilitado */
+.lugar-abas .hx-aba--trancada{ border-style:dashed; background:transparent; color:var(--hx-sec) }
+.lugar-abas .hx-aba--trancada svg{ opacity:.8 }
+.lugar-abas .hx-aba--trancada[aria-selected="true"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido-borda) }
+.hx-aba__nv{ position:static; flex:none; margin-left:2px; padding:1px 4px; background:var(--hx-miolo-2); border:1px solid var(--hx-sec); color:var(--hx-texto-2);
+  font:700 11px/1.2 var(--hx-f-num); letter-spacing:.04em; white-space:nowrap; pointer-events:none }
+.hx-aba__dica b{ display:block; font:700 13px/1.25 var(--hx-f) }
+.hx-aba__dica small{ display:block; font:500 12px/1.25 var(--hx-f); color:var(--hx-texto-2) }
+
+/* ---------- pecas novas do corpo */
+.lg-etq--apr{ border-style:dashed; border-color:var(--hx-aprendido); color:var(--hx-aprendido) }
+/* so nas telas da L3 (o Crescer da L2 tem a regra propria das etiquetas do treino e nao pode mudar) */
+:is(.ar2-tela, .md2-tela) .lg-etq svg{ width:14px; height:14px; margin-right:4px }
+
+/* ---------- Arena */
+.ar2-tela{ gap:10px }
+.ar2-pet{ justify-content:space-between; flex-wrap:wrap }
+.ar2-palco{ position:relative; width:64px; height:52px; display:flex; align-items:flex-end; justify-content:center; border:1px solid var(--hx-borda); background:var(--hx-tecla); overflow:hidden }
+.ar2-palco img{ max-width:56px; max-height:48px; object-fit:contain }
+.ar2-nome{ font:700 18px/1.1 var(--hx-f) }
+.ar2-treino svg{ width:20px; height:20px; color:var(--hx-rotulo) }
+.ar2-rivais{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px }
+.ar2-rival{ display:flex; align-items:center; gap:10px; min-height:44px; padding:4px 10px; border:1px solid var(--hx-borda); background:var(--hx-tecla); color:var(--hx-texto); text-align:left; min-width:0 }
+.ar2-rival b{ font:700 14px/1.1 var(--hx-f) }
+.ar2-rival small{ display:block; font:500 12px/1.2 var(--hx-f); color:var(--hx-sec) }
+.ar2-rival[aria-checked="true"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido-borda); box-shadow:var(--hx-escolhido-brilho) }
+.ar2-rival[aria-checked="true"] small{ color:inherit }
+.ar2-rival:disabled{ cursor:default }
+.ar2-rival:focus-visible, .ar2-lutar:focus-visible, .ar2-melhor:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:2px }
+.ar2-radio{ width:14px; height:14px; border-radius:50%; border:2px solid currentColor; flex:none }
+.ar2-rival[aria-checked="true"] .ar2-radio{ background:currentColor }
+.ar2-radio--tracejado{ border-style:dashed }
+.ar2-acoes{ align-items:stretch }
+.ar2-lutar{ flex:1; display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:56px; padding:0 18px; background:var(--hx-btn-bg); color:var(--hx-btn-ink);
+  border:1px solid var(--hx-btn-borda); font:700 18px/1 var(--hx-f); letter-spacing:.08em; text-transform:uppercase }
+.ar2-lutar svg{ width:22px; height:22px }
+.ar2-lutar:disabled, .ar2-melhor:disabled{ opacity:.6; cursor:default }
+.ar2-melhor{ min-height:56px; padding:0 16px; background:var(--hx-tecla); color:var(--hx-texto); border:1px solid var(--hx-borda-topo); font:600 14px/1 var(--hx-f) }
+.ar2-ultima{ margin:0; color:var(--hx-texto-2); font:500 14px/1.35 var(--hx-f) }
+.ar2-tela .arena-ult{ min-height:44px; padding:0 4px; border-top:1px solid var(--hx-borda); gap:10px; font:500 14px/1.2 var(--hx-f) }
+.ar2-tela .arena-ult-ver{ margin-left:auto; min-height:44px; padding:0 10px; background:transparent; color:var(--hx-rotulo); border:0; font:600 13px/1 var(--hx-f); text-decoration:underline }
+.ar2-bts{ align-items:flex-start; flex-wrap:wrap; gap:8px }
+.ar2-regras{ flex:1 1 220px; border:1px solid var(--hx-borda); padding:0 10px }
+.ar2-regras[open]{ flex-basis:100%; padding-bottom:10px }
+.ar2-regras > summary{ border-top:0 }
+.ar2-medalha{ min-height:44px; align-self:stretch; display:inline-flex; align-items:center }
+.ar2-tela .carta-escolha{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; font:600 13px/1.2 var(--hx-f); color:var(--hx-texto-2) }
+.ar2-tela .carta-escolha select{ min-height:44px; background:var(--hx-tecla); color:var(--hx-texto); border:1px solid var(--hx-borda) }
+
+/* ---------- Medalhas */
+.md2-tela{ gap:10px }
+.md2-cab{ display:flex; align-items:flex-end; gap:16px; flex-wrap:wrap }
+.md2-conta{ margin:0; display:flex; align-items:baseline; gap:2px }
+.md2-num{ font-size:44px }
+.md2-regras{ list-style:none; display:flex; gap:6px; margin:0 0 0 auto; padding:0 }
+.md2-regras li{ display:flex; flex-direction:column; align-items:center; gap:2px; min-width:76px; padding:6px 8px; border:1px solid var(--hx-borda); font:600 12px/1.2 var(--hx-f); color:var(--hx-texto-2); text-align:center }
+.md2-regras li b{ font:700 18px/1 var(--hx-f-num); color:var(--hx-num) }
+.md2-regras li.ok{ border-color:var(--hx-escolhido-borda); color:var(--hx-texto) }
+.md2-erro{ margin:0; color:var(--hx-perigo); font:600 14px/1.3 var(--hx-f) }
+.md2-espera{ align-self:flex-start; display:inline-flex; align-items:center; gap:6px; min-height:44px; padding:0 10px; border:1px solid var(--hx-ok); color:var(--hx-ok); font:700 13px/1 var(--hx-f) }
+.md2-espera svg{ width:16px; height:16px }
+.md2-lista{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:4px }
+.md2-card{ display:flex; flex-direction:column; gap:8px; border:1px solid var(--hx-borda); background:transparent }
+.md2-linha{ display:flex; align-items:center; gap:10px; min-height:44px; padding:4px 10px; width:100% }
+.md2-card .med-selo{ width:30px; height:auto; flex:none }
+.md2-card:not(.ganha):not(.md2-proxima) .med-selo{ opacity:.5 }
+.md2-nome{ font:600 14px/1.15 var(--hx-f); flex:1; min-width:0 }
+.md2-card.ganha{ border-color:var(--hx-ok) }
+.md2-proxima{ border:1px solid var(--hx-alerta); border-left-width:4px; background:var(--hx-tecla); padding:4px 0 8px }
+.md2-proxima .md2-nome{ font:700 20px/1.15 var(--hx-f) }
+.md2-lider{ margin-left:auto; flex:none }
+.md2-lider img{ display:block; width:46px; height:46px; object-fit:contain; object-position:bottom }
+.md2-premios{ padding:0 10px 0 52px; gap:6px; flex-wrap:wrap }
+.md2-ouro{ display:flex; align-items:center; gap:10px; min-height:44px; padding:4px 10px; border:1px solid var(--hx-borda) }
+.md2-ouro.ganha{ border-color:var(--hx-alerta) }
+.md2-ouro .med-selo{ width:26px; height:auto; opacity:.6 }
+.md2-ouro.ganha .med-selo{ opacity:1 }
+.md2-ouro svg:last-child{ margin-left:auto; width:18px; height:18px; color:var(--hx-sec) }
+.md2-rec{ border:1px solid var(--hx-borda); padding:0 10px }
+.md2-recordes{ list-style:none; margin:0; padding:0 0 10px; display:grid; gap:6px }
+.md2-recordes li{ display:flex; align-items:center; gap:10px; padding:6px 0; color:var(--hx-texto-2); font:500 14px/1.3 var(--hx-f) }
+.md2-recordes li.ganha b{ color:var(--hx-num) }
+.md2-recordes .dl-num{ min-width:32px; text-align:center; font:700 22px/1 var(--hx-f-num); color:var(--hx-num) }
+.md2-recordes li > span:last-child{ display:grid; gap:2px }
+
+/* ---------- Registro */
+.rg2-tela{ gap:10px }
+.rg2-topo{ flex-wrap:wrap; gap:16px }
+.rg2-par{ display:flex; flex-direction:column; gap:2px }
+.rg2-bts{ margin-left:auto; gap:8px }
+.rg2-bt{ display:inline-flex; align-items:center; gap:6px; min-height:44px; padding:0 12px; background:var(--hx-tecla); color:var(--hx-texto); border:1px solid var(--hx-borda-topo); font:600 14px/1 var(--hx-f) }
+.rg2-bt svg{ width:18px; height:18px }
+.rg2-bt--acao{ background:var(--hx-btn-bg); color:var(--hx-btn-ink); border-color:var(--hx-btn-borda) }
+.rg2-bt--perigo{ border-color:var(--hx-perigo); color:var(--hx-perigo) }
+.rg2-filtros{ display:flex; gap:6px; flex-wrap:wrap }
+.rg2-filtro{ min-height:44px; padding:0 14px; border:1px solid var(--hx-borda); background:var(--hx-tecla); color:var(--hx-texto-2); font:600 14px/1 var(--hx-f) }
+.rg2-filtro[aria-pressed="true"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido-borda) }
+.rg2-log{ display:flex; flex-direction:column; border:1px solid var(--hx-borda) }
+.rg2-linha{ display:grid; grid-template-columns:86px 32px minmax(0,1fr) 20px; align-items:center; gap:8px; min-height:44px; padding:0 12px; border:0; border-bottom:1px solid var(--hx-borda);
+  background:transparent; color:var(--hx-texto); text-align:left; font:500 14px/1.2 var(--hx-f) }
+.rg2-linha:last-child{ border-bottom:0 }
+.rg2-t{ font:600 13px/1 var(--hx-f-num); color:var(--hx-num) }
+.rg2-tipo{ display:inline-grid; place-items:center; width:28px; height:28px; color:var(--hx-rotulo) }
+.rg2-tipo svg{ width:18px; height:18px }
+.rg2-tipo--apr{ border:1px dashed var(--hx-aprendido); color:var(--hx-aprendido) }
+.rg2-linha--recusa .rg2-txt{ color:var(--hx-perigo) }
+.rg2-txt{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
+.rg2-seta{ width:16px; height:16px; color:var(--hx-sec) }
+.rg2-tela .zona-risco{ border:1px solid var(--hx-borda); padding:0 10px 8px }
+
+/* ---------- Catalogo */
+.ct2-tela{ gap:10px }
+.ct2-brasoes{ display:flex; gap:6px; flex-wrap:wrap }
+.ct2-brasao{ display:inline-flex; align-items:center; gap:6px; min-height:44px; padding:0 12px; border:1px solid var(--hx-borda); background:var(--hx-tecla); color:var(--hx-texto-2); font:600 14px/1 var(--hx-f) }
+.ct2-brasao[aria-pressed="true"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido-borda) }
+.ct2-niveis{ display:flex; flex-direction:column; gap:8px }
+.ct2-nivel{ display:grid; grid-template-columns:88px minmax(0,1fr); gap:8px; align-items:start }
+.ct2-nivel > .lg-rot{ color:var(--hx-sec); padding-top:6px }
+.ct2-grade{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:6px }
+.ct2-alvo{ display:block; min-width:0 }
+.ct2-tile{ position:relative; width:100%; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; gap:3px; height:70px; min-height:44px; padding:3px 4px 5px;
+  border:1px solid var(--hx-borda); background:var(--hx-tecla); color:var(--hx-texto); text-align:center }
+.ct2-tile.visto{ border-color:var(--hx-texto-2) }
+.ct2-tile.meu{ border:2px solid var(--hx-alerta) }
+.ct2-tile[aria-selected="true"]{ box-shadow:inset 0 0 0 2px var(--hx-foco) }
+.ct2-cx{ flex:1; display:grid; place-items:center; width:100%; min-height:0 }
+.ct2-cx img{ max-height:44px; max-width:100%; object-fit:contain }
+.ct2-sil{ width:28px; height:28px; clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%); background:var(--hx-sec) }
+.ct2-meu{ position:absolute; left:3px; top:3px; width:14px; height:14px; color:var(--hx-alerta); fill:currentColor; stroke-width:1.5 }
+.ct2-nm{ font:600 12px/1.1 var(--hx-f); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100% }
+.ct2-tile.nao-visto img{ opacity:.7 }
+
+/* ---------- Ajustes: a lista so com icone e nome */
+.aj-lista{ display:flex; flex-direction:column; gap:6px; padding:12px 14px 16px }
+.aj-alvo{ display:block }
+.aj{ position:relative; display:grid; grid-template-columns:28px minmax(0,1fr) auto; align-items:center; gap:10px; min-height:48px; padding:4px 12px; width:100%; border:1px solid var(--hx-borda);
+  background:var(--hx-tecla); color:var(--hx-texto); text-align:left; cursor:pointer }
+.aj:hover{ background:var(--hx-tecla-hover) }
+.aj:focus-within, .aj:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:2px }
+.aj--novo{ border-style:dashed }
+.aj-ic{ width:22px; height:22px; color:var(--hx-rotulo) }
+.aj-nome{ display:flex; align-items:center; gap:8px; min-width:0 }
+.aj-nome b{ font:600 15px/1.15 var(--hx-f) }
+.aj-seta{ width:18px; height:18px; color:var(--hx-sec) }
+.aj input[type="checkbox"]{ width:44px; height:44px; flex:none; accent-color:var(--hx-btn-borda); cursor:pointer }
+.aj--volume{ cursor:default; margin-left:28px; width:calc(100% - 28px) }
+.aj--volume input[type="range"]{ min-height:44px; width:100%; accent-color:var(--hx-btn-borda) }
+.aj-lista .balao{ max-width:min(320px,72vw) }
+
+/* o painel dos Ajustes (nao e lugar): a 1920 perto do retrato, a esquerda; a 390 e a folha de sempre */
+.painel-tela--lugar-lado.painel-tela--ajustes{ left:24px; width:min(460px,calc(46vw - 36px)); top:calc(var(--casca-topo) + 20px) }
+
+/* o foco do teclado, depois das regras de selecao (que nao usam outline) */
+.ct2-tile:focus-visible, .ct2-brasao:focus-visible, .rg2-bt:focus-visible, .rg2-filtro:focus-visible, .rg2-linha:focus-visible, .md2-linha:focus-visible, .aj:focus-visible{
+  outline:2px solid var(--hx-foco); outline-offset:2px }
+.lg-trava{ display:flex; align-items:center; gap:8px; padding:10px 16px 0; margin:0; color:var(--hx-texto-2); font:600 13px/1.2 var(--hx-f) }
+.lg-trava svg{ width:16px; height:16px; flex:none; color:var(--hx-rotulo) }
+
+/* o painel do lugar a 1920 tem altura maxima com folga embaixo (a moldura de baixo fica a vista) e o corpo rola dentro dele, como o Itens na L2
+   (so na L3: Lutar, Diario e Ajustes; o Crescer da L2 fica como esta) */
+.painel-tela--lugar-lado:not(.painel-tela--d-crescer){ max-height:calc(100dvh - var(--casca-topo) - 20px - 48px) }
+.painel-tela--lugar-lado:not(.painel-tela--d-crescer) .hx-painel__corpo{ overflow-y:auto }
