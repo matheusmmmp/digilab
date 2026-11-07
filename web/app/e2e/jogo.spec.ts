@@ -1385,6 +1385,35 @@ for (const [largura, altura] of [[390, 844], [1280, 800], [1920, 950]]) {
     expect(erros).toEqual([]);
   });
 }
+/* o zoom de 200% numa janela baixa (rev-a11y da D1b): uma janela de 1920 x 800 ou de 1280 x 720 com 200% vira 960 x 400 ou 640 x 360 em CSS, e
+   uma janela ainda mais baixa, 960 x 300. Em todas, o campo cabe inteiro na janela, e o topo (o icone, o selo e os tres botoes) cabe na largura */
+for (const [l, a] of [[960, 400], [960, 300], [640, 360]] as const) {
+  test(`DigiBrain: com zoom de 200% (${l}x${a} em CSS) o campo cabe na janela`, async ({ page }) => {
+    await page.setViewportSize({ width: l, height: a });
+    await semear(page, SAVE_V11);
+    const erros = vigiarErros(page);
+    await page.goto(APP + "#/pet/estado");
+    await expect(page.locator(".pet-tela")).toBeVisible();
+    if (l < 900) await abrirLeque(page);
+    await page.getByRole("button", { name: "DigiBrain", exact: true }).click();
+    const raiz = page.locator("#pet-painel");
+    await expect(raiz.locator("svg.mp")).toBeVisible();
+    const r = await page.evaluate(() => {
+      const q = (s: string) => document.querySelector(s)!.getBoundingClientRect(), cx = q("#pet-painel .scan-in");
+      const topo = document.querySelector("#pet-painel .scan-topo")!, bts = [...topo.querySelectorAll("button")].map(b => b.getBoundingClientRect());
+      return { cima: cx.top, baixo: cx.bottom, esq: cx.left, dir: cx.right, alto: innerHeight, largo: innerWidth,
+        botoesDentro: bts.every(b => b.left >= cx.left - 0.5 && b.right <= cx.right + 0.5 && b.top >= cx.top - 0.5 && b.bottom <= cx.bottom + 0.5) };
+    });
+    expect(r.cima).toBeGreaterThanOrEqual(0);
+    expect(r.baixo, "o campo passa do fim da janela").toBeLessThanOrEqual(r.alto + 0.5);
+    expect(r.esq).toBeGreaterThanOrEqual(0);
+    expect(r.dir).toBeLessThanOrEqual(r.largo + 0.5);
+    expect(r.botoesDentro, "um botao do topo sai do campo").toBe(true);
+    await raiz.getByRole("button", { name: "Fechar DigiBrain" }).click();
+    await expect(raiz).toHaveCount(0);
+    expect(erros).toEqual([]);
+  });
+}
 /* o mapa em texto troca o desenho, no mesmo tamanho: nao cobre os botoes do topo, e o modal cabe inteiro numa janela baixa */
 test("DigiBrain: o mapa em texto fica no lugar do desenho e o modal cabe a 1280x540", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 540 });

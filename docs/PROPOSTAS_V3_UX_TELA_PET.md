@@ -1415,3 +1415,6 @@ Isso revoga o tamanho da D1b-2. Foram duas opções, tiradas do jogo real com o 
 - **Os rótulos** ficam só no caminho aceso e nas opções; o de outro ponto aparece ao passar o mouse ou ao tocar nele. A legenda fica no "i".
 
 Os tamanhos são PROPOSTO, SEM FONTE.
+
+**Decidida também (Matheus, 2026-11-07, "siga com as recomendações"):** o movimento continua como na D1. A varredura e o pulso só passam
+a 1x ou mais devagar; em avanço rápido, só o destaque troca.
