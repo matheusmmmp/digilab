@@ -1,0 +1,97 @@
+/* Prancha ux-ilha-a ("Objetos que falam"), da UX_TELA_PET. So desenho; nenhum codigo do jogo.
+   Nenhuma cor nova: as cores sao os tokens do app, lidos direto de web/app/src/estilo/tokens.css (as duas peles) e de pele-xcom.css (os cantos
+   em L do Militar), ligados no ilha_a.html. As medidas (a altura das etiquetas, a largura do cartao, o traco do fio, a duracao) sao de layout:
+   PROPOSTO, SEM FONTE. */
+
+*{ box-sizing:border-box }
+html, body{ margin:0; background:var(--hx-chao) }
+body{ font-family:var(--hx-f); color:var(--hx-texto) }
+.tela{ position:relative; overflow:hidden; background-repeat:no-repeat; background-position:0 0 }
+.tela--1920{ width:1920px; height:950px }
+.tela--390{ width:390px; height:844px }
+.erro{ position:absolute; inset:0; display:grid; place-items:center; padding:24px; font:700 20px/1.4 var(--hx-f); color:var(--hx-perigo);
+  background:var(--hx-chao); white-space:pre-wrap }
+svg.fios{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible }
+
+/* ---------- a caixa de HUD comum (etiqueta, cartao, selo): a mesma superficie das caixas da tela Pet */
+.caixa{ position:absolute; background:linear-gradient(180deg, var(--hud-fundo-1), var(--hud-fundo-2)); border:1px solid var(--hx-borda);
+  box-shadow:var(--hud-brilho), var(--hx-sombra); backdrop-filter:var(--hud-desfoque); -webkit-backdrop-filter:var(--hud-desfoque); color:var(--hx-texto) }
+:root[data-pele="vidro"] .caixa{ border-radius:10px }
+:root[data-pele="xcom"] .caixa{ border-radius:0; background:var(--xcom-cantos), linear-gradient(180deg, var(--hud-fundo-1), var(--hud-fundo-2)) }
+.caixa svg.lucide{ flex:none; width:1em; height:1em; stroke-width:2 }
+
+/* a ponta que liga a caixa ao objeto: um traco curto e um ponto no chao do objeto */
+.ponta{ position:absolute; width:2px; background:var(--hx-borda); transform:translateX(-1px) }
+.pe{ position:absolute; width:8px; height:8px; margin:-4px 0 0 -4px; border-radius:50%; background:var(--hx-escolhido-borda); box-shadow:0 0 0 2px var(--hx-chao) }
+
+/* ---------- a etiqueta curta: icone, numero e rotulo curto (hover, toque ou alvo atual) */
+.etq{ display:flex; align-items:center; gap:6px; height:34px; padding:0 10px; font:600 15px/1 var(--hx-f); white-space:nowrap; transform:translate(-50%, -100%) }
+.etq b{ font:700 19px/1 var(--hx-f-num); color:var(--hx-num) }
+.etq .sec{ color:var(--hx-sec); font-weight:500 }
+.etq .ic{ color:var(--hx-rotulo); font-size:18px; display:inline-flex }
+.etq--alvo{ border-color:var(--hx-escolhido-borda); box-shadow:var(--hx-escolhido-brilho), var(--hx-sombra) }
+.tela--390 .etq{ height:28px; padding:0 8px; gap:5px; font-size:13px }
+.tela--390 .etq b{ font-size:16px }
+.tela--390 .etq .ic{ font-size:15px }
+
+/* a chance do cerebro no fim do fio */
+.chance b{ color:var(--hx-escolhido-ink) }
+.chance{ background:var(--hx-escolhido); border-color:var(--hx-escolhido-borda); color:var(--hx-escolhido-ink) }
+:root[data-pele="xcom"] .chance{ background:var(--hx-escolhido) }
+.chance .ic{ color:var(--hx-escolhido-ink) }
+
+/* o aprendido: ciano, como o tracejado do aprendido no Registro */
+.aprendeu{ color:var(--hx-aprendido) }
+.aprendeu .ic{ color:var(--hx-aprendido) }
+
+/* ---------- o selo do lugar: so o progresso (sempre a vista, pequeno) */
+.selo{ display:flex; align-items:center; gap:5px; height:28px; padding:0 8px; font:600 13px/1 var(--hx-f); transform:translate(-50%, -100%); white-space:nowrap }
+.selo b{ font:700 16px/1 var(--hx-f-num); color:var(--hx-num) }
+.selo .ic{ color:var(--hx-rotulo); font-size:15px; display:inline-flex }
+.selo .ok{ color:var(--hx-ok); display:inline-flex; font-size:15px }
+.selo .ponto{ width:9px; height:9px; border-radius:50%; background:var(--hx-necessidade); box-shadow:0 0 0 2px var(--hx-chao) }
+.tela--390 .selo{ height:24px; padding:0 6px; font-size:12px }
+.tela--390 .selo b{ font-size:14px }
+
+/* ---------- o cartao do toque: nome e estado, a linha do que aprendeu e o gesto do motor (a barra de baixo continua) */
+.cartao{ width:300px; padding:12px 12px 12px 14px; font:500 15px/1.25 var(--hx-f) }
+.cartao-topo{ display:flex; align-items:center; gap:8px }
+.cartao-topo .ic{ color:var(--hx-rotulo); font-size:20px; display:inline-flex }
+.cartao-nome{ font:700 var(--hx-titulo-tam)/1 var(--hx-f); letter-spacing:var(--hx-titulo-esp); text-transform:uppercase; color:var(--hx-texto) }
+.cartao-num{ margin-left:auto; display:flex; align-items:baseline; gap:5px; color:var(--hx-sec) }
+.cartao-num b{ font:700 24px/1 var(--hx-f-num); color:var(--hx-num) }
+.fechar{ display:inline-grid; place-items:center; width:32px; height:32px; margin:-6px -6px -6px 2px; color:var(--hx-texto-2); font-size:18px }
+.cartao-linha{ display:flex; align-items:center; gap:7px; margin-top:10px; font-size:15px }
+.cartao-linha .ic{ font-size:17px; display:inline-flex }
+.cartao-linha.sem{ color:var(--hx-sec) }
+.gesto{ display:flex; align-items:center; justify-content:center; gap:8px; width:100%; height:44px; margin-top:12px; font:700 16px/1 var(--hx-f);
+  color:var(--hx-btn-ink); background:var(--hx-btn-bg); border:1px solid var(--hx-btn-borda) }
+:root[data-pele="vidro"] .gesto{ border-radius:8px }
+.gesto .ic{ font-size:19px; display:inline-flex }
+.tela--390 .cartao{ width:220px; padding:10px 10px 10px 12px; font-size:13px }
+.tela--390 .cartao-nome{ font-size:13px }
+.tela--390 .cartao-num b{ font-size:20px }
+.tela--390 .cartao-linha{ font-size:13px; margin-top:8px }
+.tela--390 .gesto{ height:44px; font-size:15px; margin-top:10px }
+
+/* o fio da intencao: tracejado, na cor do escolhido; o anel no alvo */
+.fio{ fill:none; stroke:var(--hx-escolhido-borda); stroke-width:3; stroke-dasharray:10 8; stroke-linecap:round }
+.tela--390 .fio{ stroke-width:2.5; stroke-dasharray:7 6 }
+.fio-sombra{ fill:none; stroke:var(--hx-chao); stroke-opacity:.55; stroke-width:6; stroke-linecap:round }
+.anel{ fill:none; stroke:var(--hx-escolhido-borda); stroke-width:2.5 }
+.toque{ fill:none; stroke:var(--hx-foco); stroke-width:2.5; stroke-opacity:.9 }
+.toque-2{ fill:none; stroke:var(--hx-foco); stroke-width:1.5; stroke-opacity:.45 }
+
+/* ---------- as notas de fonte (?notas): o numero sobre cada elemento e a legenda */
+.nota{ position:absolute; z-index:20; display:grid; place-items:center; width:24px; height:24px; margin:-12px 0 0 -12px; border-radius:50%;
+  font:700 14px/1 var(--hx-f-num); color:var(--hx-escolhido-ink); background:var(--hx-alerta); box-shadow:0 0 0 2px var(--hx-chao) }
+.nota.lacuna{ background:var(--hx-perigo) }
+.legenda{ position:absolute; z-index:19; width:420px; padding:12px 14px; font:500 14px/1.3 var(--hx-f) }
+body.com-notas{ position:relative; min-height:100vh }
+.legenda h2{ margin:0 0 8px; font:700 13px/1 var(--hx-f); letter-spacing:var(--hx-titulo-esp); text-transform:uppercase; color:var(--hx-rotulo) }
+.legenda ol{ margin:0; padding:0; list-style:none; display:grid; gap:6px }
+.legenda li{ display:grid; grid-template-columns:24px 1fr; gap:8px; align-items:start }
+.legenda li .nota{ position:static; margin:0 }
+.legenda li span{ color:var(--hx-texto-2) }
+.legenda li em{ font-style:normal; color:var(--hx-sec) }
+.legenda li.lacuna span{ color:var(--hx-perigo) }

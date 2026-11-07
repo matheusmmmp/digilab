@@ -635,3 +635,24 @@ pendências que o relato do #668 deixou, num PR próprio (branch `v3-ux-digibrai
 
 **Fica com o Matheus:** a M3 num celular de verdade, com `?medir3d=1`. O porquê do cérebro modular no mesmo campo (D1-9) é a próxima etapa,
 com prancha.
+
+## 21. Etapa I1: a prancha da ilha A, "Objetos que falam" (2026-11-07)
+
+O Matheus pediu uma ilha mais interativa, com referências como Animal Crossing. O gerente mostrou três direções: A, "Objetos que falam"; B,
+"Quintal que atrai"; e C, "Ilha que cresce". A resposta dele foi: "Siga com as recomendações". Isso quer dizer a A primeiro, a C depois e a
+B como pesquisa. Também vale para as duas perguntas: tocar no objeto acompanha a barra de ações, e o fio aparece só no toque e quando o pet
+vai até um objeto. Esta etapa faz só a prancha da A, sem código do jogo (branch `v3-ux-ilha-a`, a partir da `v3-ux-integra`).
+
+**O que foi feito:**
+- **A prancha:** `docs/pranchas/ux-ilha-a/`, desenhada sobre capturas reais da Tela Pet. Tem cinco estados (nada tocado, etiqueta aberta, fio
+  ao tocar no pet, pet indo até a tigela, toque na árvore), a 1920 e a 390, nas peles Vidro e Militar, mais uma versão com as notas da
+  fonte. As 30 imagens estão em `D:\Trab\digilab\capturas_ux_ilha_aprovar\prancha_a\`.
+- **Os números:** saem do motor no momento da captura (`window.__digilab`), em `dados.json` (gerado pelo `gerar_dados.py`).
+- **A fonte de cada um dos cinco pontos** está no `LEIA.md` da prancha. Três lacunas:
+  - as frutas na árvore e o gesto de sacudir: o jogo roda o `CMU_MVP`, sem árvores;
+  - o "diário novo": o jogo não guarda o que foi lido;
+  - o paladar, que ainda não existe no TS.
+- **O alvo do fio** pede um getter só de leitura no `Mundo` do TS.
+- **As perguntas I1-1 a I1-10** e a lista do que a direção C vai precisar estão no `PERGUNTAS.md` e no `LEIA.md`.
+
+**Fica com o Matheus:** aprovar as telas e responder as perguntas I1-1 a I1-10. O código da A só começa depois disso.

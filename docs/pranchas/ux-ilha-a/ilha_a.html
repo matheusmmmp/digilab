@@ -1,0 +1,23 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Prancha da direcao A da ilha interativa, "Objetos que falam" (UX_TELA_PET; Matheus, 2026-11-07: "Siga com as recomendacoes").
+     So desenho, sobre capturas reais do jogo; nenhum codigo do jogo. Le dados.json (gerar_dados.py) e o fundo de
+     /capturas_ux_ilha_aprovar/prancha_a/fundo/ (fora do git). Precisa de servidor http na pasta D:\Trab\digilab (capturar.sh).
+     Parametros: ?estado=nada_tocado|etiqueta_aberta|fio_toque_pet|indo_tigela|toque_arvore; ?pele=vidro|xcom; ?largura=1920|390;
+     ?notas (o numero de cada elemento e a fonte no motor, ou LACUNA). -->
+<title>Ilha A · prancha</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Rajdhani:wght@600;700&family=Saira+Condensed:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../../../web/app/src/estilo/tokens.css">
+<link rel="stylesheet" href="../../../web/app/src/estilo/pele-xcom.css">
+<link rel="stylesheet" href="ilha_a.css">
+<script>
+(() => {
+  const p = new URLSearchParams(location.search).get("pele") ?? "vidro";
+  if (p !== "vidro" && p !== "xcom") { window.__erroPele = "pele desconhecida: " + p + " (vidro ou xcom)"; document.documentElement.dataset.pele = "vidro"; }
+  else document.documentElement.dataset.pele = p;
+})();
+</script>
+</head><body>
+<div id="tela" class="tela"></div>
+<script src="https://unpkg.com/lucide@0.441.0/dist/umd/lucide.min.js"></script>
+<script src="ilha_a.js"></script>
+</body></html>
