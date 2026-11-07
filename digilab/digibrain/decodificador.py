@@ -17,10 +17,14 @@ from ..policies.lobos import div_arred
 from ._comum import clamp, mul
 
 VERSAO = "dec-v1"
+VERSAO_V2 = "dec-v2"
 CATALOGO = ("fome", "sono", "bem_estar", "mal_estar", "agitacao", "aversao", "frustracao", "determinacao", "indecisao", "lembranca",
             "solidao", "curiosidade")
 RECEPTORES = ("fome", "higiene", "energia", "humor", "saude", "tedio", "curiosidade", "solidao", "estresse", "dor", "susto")
 COMPORTAMENTOS = ("ocioso", "dormir", "comer", "brincar", "chamar_atencao", "explorar", "emburrar")
+# dec-v2 (DC2b): o conceito `lembranca` ganha `episodio` = {acao, classe, desfecho}, de catalogo fechado, decodificado do episodio recuperado
+CLASSES_EPISODIO = ("racao", "a", "b", "c", "podre", "nao_havia", "bola", "sem_alvo")     # = mem.CLASSES_AUTOBIO
+DESFECHOS = ("bom", "ruim", "neutro")
 SONDAS_DECIDIU = ("afeto_decidiu", "aprendido_decidiu", "habito_decidiu", "incentivo_decidiu", "lembranca_decidiu", "memoria_decidiu",
                   "persistencia_decidiu")
 
@@ -149,3 +153,44 @@ def decodificar(motivo: dict, cfg: ConfigDecodificador = CONFIG_DECODIFICADOR, S
     else:
         intencao = max((n for n in CATALOGO if n != "lembranca"), key=lambda n: (cs[n]["valor"], -CATALOGO.index(n)))
     return {"versao": VERSAO, "k": m["k"], "intencao": intencao, "conceitos": [cs[n] for n in CATALOGO]}
+
+
+def desfecho_do_episodio(ep: dict, cfg: ConfigDecodificador = CONFIG_DECODIFICADOR) -> str:
+    """PROPOSTA (DC2b, SEM FONTE): o desfecho e o sinal da significancia `sigma` do episodio (o r_n da consequencia, ou o do corpo
+    que a visita vazia nao alcancou), com margem `limiar_desfecho`: bom se sigma >= limiar, ruim se sigma <= -limiar, senao neutro"""
+    if ep["sigma"] >= cfg.limiar_desfecho:
+        return "bom"
+    return "ruim" if ep["sigma"] <= -cfg.limiar_desfecho else "neutro"
+
+
+def episodio_dec(ep: dict, cfg: ConfigDecodificador = CONFIG_DECODIFICADOR) -> dict | None:
+    """{acao, classe, desfecho} do episodio autobiografico (`mem.py`), de catalogo fechado, ou None para o episodio de luta (a acao dele
+    nao e um dos 7 comportamentos: a lembranca de luta fica fora desta versao, DC-C). Texto livre do episodio nao entra. Falha alto fora do catalogo"""
+    if ep["origem"] == "luta":
+        return None
+    acao = ep["acao"][0]
+    if acao not in COMPORTAMENTOS:
+        raise ValueError(f"episodio com comportamento desconhecido: {acao!r}")
+    if ep["classe"] not in CLASSES_EPISODIO:
+        raise ValueError(f"episodio com classe desconhecida: {ep['classe']!r}")
+    return {"acao": acao, "classe": ep["classe"], "desfecho": desfecho_do_episodio(ep, cfg)}
+
+
+def decodificar_v2(motivo: dict, episodio: dict | None, cfg: ConfigDecodificador = CONFIG_DECODIFICADOR,
+                   S: int = CONFIG_DIGIBRAIN_INATOS.escala) -> dict:
+    """O `dec-v2`: o `dec-v1` com a versao trocada e, no conceito `lembranca`, o campo `episodio` {acao, classe, desfecho}. `episodio` e o
+    episodio autobiografico recuperado na decisao (o de id `motivo["lembranca"]["recuperado"]`), ou None (sem lembranca, episodio que saiu da
+    memoria ou episodio de luta): sem ele o conceito fica como no v1. Os outros conceitos e a intencao nao mudam (o decodificador so le)"""
+    r = decodificar(motivo, cfg, S)
+    r["versao"] = VERSAO_V2
+    if episodio is None:
+        return r
+    rec = motivo["lembranca"]["recuperado"]
+    if rec is None or episodio.get("id") != rec:
+        raise ValueError(f"o episodio {episodio.get('id')!r} nao e o recuperado na decisao ({rec!r})")
+    dec = episodio_dec(episodio, cfg)
+    if dec is not None:
+        for c in r["conceitos"]:
+            if c["nome"] == "lembranca":
+                c["episodio"] = dec
+    return r

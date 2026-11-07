@@ -526,3 +526,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-06 — MAPA_DIGITAL, D4: a lata gigante (Gerente da frente, Claude Code, Opus 5.5, branch `v3-mapa-digital-d4`)](registro/2026-11.md)
 - [2026-11-06 — CONVERSA_PET, DC2 a voz que recebe só a intenção e os conceitos (worker, Claude Code, Sonnet 5.5, branch `v3-conversa-dc2-voz`)](registro/2026-11.md)
 - [2026-11-07 — LUTA_EFEITOS, E2 os projéteis e os golpes por elemento (worker, Claude Code, Opus 5.5, branch `v3-luta-efeitos-e2`)](registro/2026-11.md)
+- [2026-11-07 — CONVERSA_PET, DC2b ligar a página à voz e dar conteúdo à lembrança (worker, Claude Code, Sonnet 5.5, branch `v3-conversa-dc2b-ligar`)](registro/2026-11.md)
+- [2026-11-07 — LUGARES_3D, a tarefa e o portão da arena (Gerente da frente, Claude Code, Opus 5.5, branch `v3-lugares-3d-portao`)](registro/2026-11.md)
+- [2026-11-07 — LUGARES_3D, a barraca do Tamer (Gerente da frente, Claude Code, Opus 5.5, branch `v3-lugares-3d-barraca`)](registro/2026-11.md)
+- [2026-11-07 — CONVERSA_PET, DC3, o plano de análise da rede escolhendo falar (Gerente da frente, Claude Code, Opus 5.5, branch `v3-conversa-dc3-plano`)](registro/2026-11.md)

@@ -32,7 +32,7 @@ def con(nome, valor=800, confianca=700, **kw):
     return {"nome": nome, "valor": valor, "confianca": confianca, **kw}
 
 
-FOME = dec(con("fome", 870, 610, alvo="racao"), con("solidao", 500, 100), con("sono", 100, 900))
+FOME = dec(con("fome", 870, 610, alvo="racao"), con("solidao", 600, 100), con("sono", 100, 900))
 
 
 # ------------------------------------------------------------------------------------------------------------- o formato
@@ -53,7 +53,7 @@ def test_alvos_de_catalogo():
 
 
 @pytest.mark.parametrize("d", [
-    None, [], "dec-v1", {}, {**dec(), "versao": "dec-v2"}, {**dec(), "extra": 1}, {"versao": "dec-v1", "k": 1, "intencao": "fome"},
+    None, [], "dec-v1", {}, {**dec(), "versao": "dec-v3"}, {**dec(), "extra": 1}, {"versao": "dec-v1", "k": 1, "intencao": "fome"},
     {**dec(), "k": True}, {**dec(), "k": -1}, {**dec(), "k": 1.5}, {**dec(), "intencao": "dormir"}, {**dec(), "intencao": ["fome"]},
     {**dec(), "intencao": None}, {**dec(), "conceitos": None}, {**dec(), "conceitos": {}}, {**dec(), "conceitos": ["fome"]},
     dec(con("raiva")), dec(con("fome", valor=1025)), dec(con("fome", valor=-1)), dec(con("fome", confianca=1025)),

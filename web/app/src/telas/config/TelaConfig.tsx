@@ -13,7 +13,7 @@ import { BotaoHx, ChipHx, LinhaHx } from "../../componentes/hx/index.ts";
 import { Peca } from "../../componentes/Imagens.tsx";
 import { ICONE } from "../../decoracao.ts";
 import { FALA_LLM, ligarFalaLLM, rotuloLLM, useFalaLLM } from "../../fala.ts";
-import { escolherConversaNova, escolherModo, useFalaLivre, type ModoFala } from "../../falaLivre.ts";
+import { escolherConversaNova, escolherFalaRede, escolherModo, useFalaLivre, type ModoFala } from "../../falaLivre.ts";
 import { useJogo } from "../../jogo.ts";
 import { abrirEscolhaBrasao } from "../../jornada.ts";
 import type { ParteConfig } from "../../rotas.ts";
@@ -163,7 +163,8 @@ function Dados({ irPet }: { irPet: () => void }) {
   );
 }
 function Fala() {
-  const llm = useFalaLLM(), fl = useFalaLivre(), r = rotuloLLM();
+  const llm = useFalaLLM(), fl = useFalaLivre(), r = rotuloLLM(), { motor: pet } = useJogo();
+  const redeSemEfeito = fl.falaRede && pet.conceitosDec() === null;      /* DC2b: pet sem decisao do modular, a chave nao muda nada */
   const modos: [ModoFala, string, string, string?][] = [
     ["template", "Frases prontas", "Sempre as mesmas frases do jogo. Nunca erra, mas repete."],
     ["moldura", "Moldura", "O modelo completa uma moldura com os fatos do pet."],
@@ -188,6 +189,11 @@ function Fala() {
       <section className="mc-bloco">
         <label className="mc-interruptor"><span><b>Conversa nova (teste)</b><small>Só no modo Livre: prompt novo da conversa, com a memória só desta sessão e do estágio de agora.</small></span>
           <input type="checkbox" role="switch" checked={fl.conversaNova} disabled={fl.modo !== "livre"} onChange={ev => escolherConversaNova((ev.target as HTMLInputElement).checked)} /></label>
+      </section>
+      <section className="mc-bloco">
+        <label className="mc-interruptor"><span><b>Fala pela rede (teste)</b><small>Só no modo Livre: a fala nasce do que o cérebro modular decidiu por último; o modelo só põe em palavras e não vê o resto do pet.</small></span>
+          <input type="checkbox" role="switch" checked={fl.falaRede} disabled={fl.modo !== "livre"} onChange={ev => escolherFalaRede((ev.target as HTMLInputElement).checked)} /></label>
+        {redeSemEfeito && <p className="mc-apoio" role="status">Este pet não tem uma decisão do cérebro modular: a chave não muda nada e a fala segue como antes.</p>}
       </section>
       <p className="mc-apoio">Em todos os modos, a fala não decide nada e o que você escreve na conversa não ensina o pet.</p>
     </>

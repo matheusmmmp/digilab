@@ -30,7 +30,7 @@ import { MotorCorpoMundo, type PoliticaCorpoMundo } from "./motor_corpo_mundo.ts
 import { eventoDeixarBola, eventoDeixarComida, lerDeixarBola, lerDeixarComida, type Mundo } from "./mundo.ts";
 import { bracoV11 } from "./pet_v11.ts";
 import { leituraLab, type LeituraLab } from "./digibrain/leitura.ts";
-import { decodificar, type ConceitosDec } from "./digibrain/decodificador.ts";
+import { decodificar, decodificarV2, type ConceitosDec } from "./digibrain/decodificador.ts";
 import { DigiBrain } from "./digibrain/adapt.ts";
 import { INATOS_MODULAR } from "./digibrain/constantes.ts";
 import { leituraAprendido, leituraDecisao, mapaDecisao, mapaPesos, type ArestaMapa, type LeituraDecisao, type MapaDecisao } from "./digibrain.ts";
@@ -354,7 +354,15 @@ export class Motor {
       primeira decisao. So le */
   leituraLab(): LeituraLab | null { return this.lab === null ? null : leituraLab(this.lab); }
   /** os conceitos do `dec-v1` sobre o ultimo motivo do modular (DC1); so le, nao muda a vida; null sem modular ou antes da primeira decisao */
-  conceitosDec(): ConceitosDec | null { const l = this.lab, mo = l === null ? null : l.ultimoMotivo; return l === null || mo === null ? null : decodificar(mo, l.S); }
+  conceitosDec(versao: "dec-v1" | "dec-v2" = "dec-v1"): ConceitosDec | null {
+    const l = this.lab, mo = l === null ? null : l.ultimoMotivo;
+    if (l === null || mo === null) return null;
+    if (versao === "dec-v1") return decodificar(mo, l.S);
+    /* dec-v2 (DC2b): o episodio recuperado nesta decisao, lido da memoria agora; se ja saiu dela (consolidacao ou capacidade), o conceito vai sem `episodio` */
+    const rec = (mo["lembranca"] as Record<string, any> | undefined)?.["recuperado"] ?? null;
+    const ep = rec === null ? undefined : l.mem.guardados().find(e => e.id === rec);
+    return decodificarV2(mo, l.S, ep === undefined ? null : (ep as unknown as Record<string, any>));
+  }
   /** v12: o mundo fisico do pet (null nos v1-v11). A tela so le */
   get mundo(): Mundo | null { return this.v11 && this.v11.laco instanceof MotorCorpoMundo ? this.v11.laco.mundo : null; }
   /** a observacao de agora, a que o pet le: nos v11, com os receptores do corpo */

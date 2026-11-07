@@ -4,13 +4,13 @@
 import { describe, expect, test } from "vitest";
 import { readFileSync } from "node:fs";
 import { gunzipSync } from "node:zlib";
-import { CATALOGO_CONCEITOS, decodificar, VERSAO_DECODIFICADOR, type ConceitosDec } from "../motor/index.ts";
+import { CATALOGO_CONCEITOS, CLASSES_EPISODIO_DEC, DESFECHOS, decodificar, decodificarV2, desfechoDoEpisodio, episodioDec, VERSAO_DECODIFICADOR, VERSAO_DECODIFICADOR_V2, type ConceitosDec } from "../motor/index.ts";
 import { CONFIG_DECODIFICADOR } from "../motor/digibrain/constantes.ts";
 import { conferir, vidasModular } from "./digibrain_modular_gabarito.ts";
 
 type Dict = Record<string, any>;
 const lerGz = (rel: string): any => JSON.parse(gunzipSync(readFileSync(new URL(`./gabaritos/${rel}`, import.meta.url))).toString("utf8"));
-const gab = lerGz("decodificador_python.json.gz") as { catalogo: string[]; config: Dict; vidas: { origem: string; dono: string; lugar: string; semente: number; decisoes: ConceitosDec[] }[] };
+const gab = lerGz("decodificador_python.json.gz") as { catalogo: string[]; config: Dict; vidas: { origem: string; dono: string; lugar: string; semente: number; decisoes: ConceitosDec[]; episodios: (Dict | null)[]; decisoes_v2: ConceitosDec[] }[] };
 const S = 1024;
 
 /** os motivos de cada vida do gabarito, lidos dos gabaritos do modular (as mesmas vidas que o exportador decodificou) */
@@ -118,5 +118,52 @@ describe("decodificador dec-v1: so le", () => {
     expect(() => decodificar(c, S)).toThrow(/sonda desconhecida/);
     const d = clone(base); delete d["sondas"]["habito_decidiu"];
     expect(() => decodificar(d, S)).toThrow(/nao tem a sonda/);
+  });
+});
+
+describe("decodificador dec-v2 (DC2b): o episodio da lembranca, paridade com o Python", () => {
+  test("a versao e os catalogos", () => {
+    expect(VERSAO_DECODIFICADOR_V2).toBe("dec-v2");
+    expect([...CLASSES_EPISODIO_DEC]).toEqual(["racao", "a", "b", "c", "podre", "nao_havia", "bola", "sem_alvo"]);
+    expect([...DESFECHOS]).toEqual(["bom", "ruim", "neutro"]);
+  });
+  test("a saida de cada decisao de todas as vidas, com o episodio gravado, e igual bit a bit", () => {
+    let n = 0, comEpisodio = 0;
+    for (const { v, motivos } of todos) {
+      expect(v.episodios.length).toBe(motivos.length);
+      motivos.forEach((m, i) => {
+        const r = decodificarV2(m, S, v.episodios[i] ?? null);
+        conferir(`${v.origem} ${v.dono}/${v.lugar}/${v.semente} k=${i} v2`, r, v.decisoes_v2[i]);
+        if (r.conceitos.some(c => c.episodio !== undefined)) comEpisodio++;
+        n++;
+      });
+    }
+    expect(n).toBeGreaterThan(3000);
+    expect(comEpisodio).toBeGreaterThan(3000);
+  });
+  test("o v2 e o v1 mais o campo episodio (so na lembranca); o v1 nao ganha o campo", () => {
+    for (const { v, motivos } of todos.slice(0, 4)) motivos.forEach((m, i) => {
+      const v1 = decodificar(m, S), v2 = decodificarV2(m, S, v.episodios[i] ?? null);
+      expect(v1.versao).toBe("dec-v1");
+      expect(v1.conceitos.every(c => c.episodio === undefined)).toBe(true);
+      expect(clone({ ...v2, versao: "dec-v1", conceitos: v2.conceitos.map(c => { const { episodio: _e, ...resto } = c; return resto; }) })).toEqual(clone(v1));
+      expect(v2.conceitos.filter(c => c.episodio !== undefined).every(c => c.nome === "lembranca")).toBe(true);
+    });
+  });
+  test("o desfecho e o sinal do sigma com a margem; luta fica fora; fora do catalogo falha alto", () => {
+    const m = CONFIG_DECODIFICADOR.limiar_desfecho, base = { acao: ["comer", "racao", null], classe: "racao", origem: "consumo" };
+    expect(desfechoDoEpisodio({ ...base, sigma: m })).toBe("bom");
+    expect(desfechoDoEpisodio({ ...base, sigma: m - 1 })).toBe("neutro");
+    expect(desfechoDoEpisodio({ ...base, sigma: -(m - 1) })).toBe("neutro");
+    expect(desfechoDoEpisodio({ ...base, sigma: -m })).toBe("ruim");
+    expect(episodioDec({ origem: "luta", acao: ["lutar", "muralha"], classe: "muralha", sigma: -400 })).toBeNull();
+    expect(() => episodioDec({ ...base, acao: ["voar", null, null], sigma: 1 })).toThrow(/comportamento desconhecido/);
+    expect(() => episodioDec({ ...base, classe: "ovni", sigma: 1 })).toThrow(/classe desconhecida/);
+  });
+  test("o episodio tem de ser o recuperado na decisao", () => {
+    const { v, motivos } = todos[0]!;
+    const i = v.episodios.findIndex(e => e !== null);
+    const outro = v.episodios.find(e => e !== null && e["id"] !== v.episodios[i]!["id"])!;
+    expect(() => decodificarV2(motivos[i]!, S, outro)).toThrow(/nao e o recuperado/);
   });
 });
