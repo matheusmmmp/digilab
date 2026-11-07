@@ -3,7 +3,7 @@
    creditado por opcao). Sem rng. A aritmetica e a do Python (`divArred`, `mul`). */
 import { leituraReceptor, sinalCorpo, type PercepcaoCorpoLobos } from "../lobos.ts";
 import { clamp, divArred, mul, raizInteira } from "./_comum.ts";
-import { CARACTERISTICAS_DIGIBRAIN, COMPORTAMENTOS_DIGIBRAIN, INATOS_MODULAR } from "./constantes.ts";
+import { CARACTERISTICAS_DIGIBRAIN, COMPORTAMENTOS_DIGIBRAIN, CONTEUDOS_FALA, INATOS_MODULAR } from "./constantes.ts";
 import type { PlastImpulso } from "./impulso.ts";
 import type { CorpoModular } from "./sens.ts";
 
@@ -11,7 +11,17 @@ export const CLASSES_DESFECHO = ["racao", "a", "b", "c", "podre", "bola"] as con
 
 export type InatosPlast = typeof INATOS_MODULAR;
 /** o que o M-PLAST le da ConfigDigibrain */
-export interface ConfigDigibrainPlast { p1: boolean; p2: boolean }
+export interface ConfigDigibrainPlast { p1: boolean; p2: boolean; fala_unidades: boolean }
+
+/** a linha de H que a opcao credita (`plast.linha_da_opcao`): a do comportamento; com a `fala_unidades` (DC3, 3.1), a opcao de fala credita a
+ *  do conteudo (`chamar_atencao/<c>`) */
+export function linhaDaOpcao(chave: readonly unknown[], falaUnidades: boolean): string {
+  if (falaUnidades && chave[0] === "chamar_atencao") {
+    if (!(CONTEUDOS_FALA as readonly unknown[]).includes(chave[1])) throw new Error(`M-PLAST: a opcao de fala sem conteudo: ${JSON.stringify(chave)}`);
+    return `chamar_atencao/${chave[1] as string}`;
+  }
+  return chave[0] as string;
+}
 
 /** a opcao que acabou (o que o M-ESTADO entrega ao P2): so os campos que o P2 le */
 export interface OpcaoCredito { chave: readonly unknown[]; e: readonly number[]; r: number; g_apr: number }
@@ -46,7 +56,10 @@ export class Plasticidade implements PlastImpulso {
     this.p = inatosOuNulo ?? INATOS_MODULAR;
     this.cd = cfgDigibrain;
     this.S = this.p.escala;
-    this.H = Object.fromEntries(COMPORTAMENTOS_DIGIBRAIN.map(b => [b, new Array<number>(CARACTERISTICAS_DIGIBRAIN.length).fill(0)]));
+    /* com a `fala_unidades`, as tres linhas da fala no lugar da do chamar, na mesma ordem (a do Python) */
+    const linhas: string[] = COMPORTAMENTOS_DIGIBRAIN.flatMap(b =>
+      cfgDigibrain.fala_unidades && b === "chamar_atencao" ? CONTEUDOS_FALA.map(c => `chamar_atencao/${c}`) : [b]);
+    this.H = Object.fromEntries(linhas.map(b => [b, new Array<number>(CARACTERISTICAS_DIGIBRAIN.length).fill(0)]));
     this.consumos = Object.fromEntries(CLASSES_DESFECHO.map(c => [c, 0]));
   }
 
@@ -120,7 +133,7 @@ export class Plasticidade implements PlastImpulso {
   creditar(op: OpcaoCredito): RegistroP2 | null {
     if (!this.cd.p2) return null;
     const p = this.p, S = this.S;
-    const b = op.chave[0] as string;
+    const b = linhaDaOpcao(op.chave, this.cd.fala_unidades);
     const rN = op.r;
     const passo = mul(op.g_apr, p.eta_h, S);
     const linha = this.H[b]!;
