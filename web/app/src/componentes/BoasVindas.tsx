@@ -6,7 +6,7 @@ import { OVO } from "../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../atlas.ts";
 import { useJogo } from "../jogo.ts";
 import { Peca } from "./Imagens.tsx";
-import { BotaoContinuar } from "./hx/index.ts";
+import { BotaoContinuar, BotaoHx } from "./hx/index.ts";
 import { CabAberta } from "./CabAberta.tsx";
 import "../estilo/abertas.css";
 
@@ -14,13 +14,14 @@ const ITENS: [string, string, string][] = [["emoji_carne", "Cuide", "ele chama; 
   ["emoji_feliz", "Veja crescer", "o cuidado e o que ele aprende decidem a forma"]];
 const BRILHOS: [number, number, number, number][] = [[30, 60, 8, .8], [200, 40, 6, .6], [212, 130, 10, .7], [18, 150, 6, .5]];
 
-export function BoasVindas({ fechar }: { fechar: () => void }) {
-  const ref = useRef<HTMLDialogElement>(null), a = useAtlas(), { motor: m } = useJogo();
+/** `fechar(true)`: o jogador clicou "Ja conheco o jogo" (P-7: abre os niveis 1 a 4 e pula o Como jogar e os cartoes) */
+export function BoasVindas({ fechar }: { fechar: (jaConheco: boolean) => void }) {
+  const ref = useRef<HTMLDialogElement>(null), a = useAtlas(), { motor: m } = useJogo(), ja = useRef(false);
   useEffect(() => { abrirModal(ref.current); }, []);
   useEffect(() => rotaDaTelaCheia("#/inicio"), []);
   const ovo = a.tipo === "ok" ? imagemAtlas(a, OVO[m.especie]) : null;
   return (
-    <dialog className="boas-vindas-tela ab-hx dl" ref={ref} aria-labelledby="bv-tit" onClose={fechar}>
+    <dialog className="boas-vindas-tela ab-hx dl" ref={ref} aria-labelledby="bv-tit" onClose={() => fechar(ja.current)}>
       <CabAberta titulo="Boas-vindas" />
       <div className="bv-centro">
         <div className="bv-palco" aria-hidden="true">
@@ -38,6 +39,7 @@ export function BoasVindas({ fechar }: { fechar: () => void }) {
         </ul>
         <div className="bv-pe">
           <BotaoContinuar className="bv-comecar" onClick={() => ref.current?.close()}>Começar</BotaoContinuar>
+          <BotaoHx className="bv-conheco" onClick={() => { ja.current = true; ref.current?.close(); }}>Já conheço o jogo</BotaoHx>
           <span>o progresso fica neste navegador</span>
         </div>
       </div>

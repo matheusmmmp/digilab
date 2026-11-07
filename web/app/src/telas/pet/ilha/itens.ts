@@ -15,7 +15,8 @@ import * as THREE from "three";
 import type { Mundo } from "../../../../motor/index.ts";
 import { ninhoDe } from "../vistaMundo.ts";
 import { CENA } from "../cenaEstado.ts";
-import { BOLA_SALTO, BOLA_TAU_MS, COCO, KIT_DESDE_NINHO, LUZ_NINHO, SACO_AMASSO, SACO_BALANCO, SACO_DESDE_NINHO, SACO_FOLGA_POSTE, SACO_GIRO } from "./constantes.ts";
+import { BOLA_SALTO, BOLA_TAU_MS, COCO, KIT_DESDE_NINHO, LUZ_NINHO, SACO_AMASSO, SACO_BALANCO, SACO_FOLGA_POSTE, SACO_GIRO } from "./constantes.ts";
+import { pontoDoLugar } from "./lugares.ts";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { GEO_SOMBRA, carregarVariante, curvar, materialSombra, toon, type Variante } from "./cena.ts";
 import { Cocos } from "./cocos.ts";
@@ -222,8 +223,12 @@ export class Itens {
   private golpeSaco: { em: number; eixo: THREE.Vector3; angulo: number; lado: number } | null = null;
   private readonly giroSaco = new THREE.Quaternion();
   private readonly amasso = { m: new THREE.Matrix4(), r: new THREE.Matrix4() };
+  /** a raiz do desenho do saco (o lugar trancado a apaga; lugares.ts); o saco gerado entra nela (carregar) */
+  get sacoRaiz(): THREE.Object3D { return this.saco.g; }
   /** onde fica o saco de pancada (celulas) */
   readonly sacoEm: [number, number];
+  /** onde fica o ninho (celulas), para o minimapa */
+  readonly ninhoEm: [number, number];
 
   constructor(mu: Mundo) {
     const sub = (this.sub = mu.cm.sub), [nx, ny] = ninhoDe(mu.cm), n = ninho(), t = tigela();
@@ -231,7 +236,9 @@ export class Itens {
     t.position.set(mu.comedouro[0] / sub, 0, mu.comedouro[1] / sub);
     this.brilho.position.set(nx / sub, 0.05, ny / sub);
     this.brilho.visible = false;
-    this.sacoEm = [nx / sub + SACO_DESDE_NINHO[0], ny / sub + SACO_DESDE_NINHO[1]];
+    this.ninhoEm = [nx / sub, ny / sub];
+    /* o ponto do saco e de lugares.ts (junto com o do portao e o da barraca): o mesmo [3, -4] do ninho de sempre */
+    this.sacoEm = [...pontoDoLugar("saco", { ninho: [nx / sub, ny / sub], comedouro: [mu.comedouro[0] / sub, mu.comedouro[1] / sub], area: { w: mu.cm.celulas_x, h: mu.cm.celulas_y } })];
     this.saco.g.position.set(this.sacoEm[0], 0, this.sacoEm[1]);
     this.kit.g.position.set(nx / sub + KIT_DESDE_NINHO[0], 0, ny / sub + KIT_DESDE_NINHO[1]);
     this.kit.g.rotation.y = -0.4;
@@ -244,6 +251,22 @@ export class Itens {
     await Promise.all([carregarBola(this.bola.esfera, base), carregarSaco(this.saco, base),
       pecasDe("kit", base).then(ps => porPecas(this.kit.corpo, ps)), carregarCoco(base)]);
   }
+
+  /** a comida no chao para o minimapa (L1 de "Lugares da ilha"): onde (celulas) e a cor que a cena pinta (a racao madura ou podre, a fruta
+      pelo tipo); a mesma regra de sincronizar (a situacao do motor; sem situacao, nao esta no chao) */
+  comidasNoMapa(mu: Mundo, tick: number): { x: number; z: number; cor: number }[] {
+    const r: { x: number; z: number; cor: number }[] = [], sub = this.sub;
+    for (const c of mu.comidas.values()) {
+      const sit = mu.situacao(c, tick);
+      if (sit === null) continue;
+      const cor = c.tipo === "racao" ? COR_RACAO[sit === "podre" ? "podre" : "madura"][1] : COR_FRUTA[c.tipo];
+      if (cor === undefined) throw new Error("fruta sem cor no minimapa: " + c.tipo);
+      r.push({ x: c.x / sub, z: c.y / sub, cor });
+    }
+    return r;
+  }
+  /** onde a bola esta desenhada (celulas); null antes do primeiro quadro */
+  get bolaCelula(): [number, number] | null { return this.bolaCel; }
 
   /** onde a bola esta desenhada (subunidades do mapa), para pegar a bola na cena (PorBola.tsx); null antes do primeiro quadro */
   get bolaDesenhada(): [number, number] | null { return this.bolaCel && [this.bolaCel[0] * this.sub, this.bolaCel[1] * this.sub]; }

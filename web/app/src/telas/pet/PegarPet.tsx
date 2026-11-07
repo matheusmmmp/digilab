@@ -3,7 +3,7 @@
    - o gesto (PP-5): um pointerdown no sprite do pet (o retangulo CENA.ret, com a folga do dedo do ToquePet) e um arrasto de mais de
      LIMIAR_ARRASTO px. O toque rapido continua sendo o carinho (ToquePet.tsx: ele larga o toque quando o pet esta na mao);
    - quem pode ser pego: so os pets v19 em diante com o mundo, vivos, fora do ovo e acordados (PP-2), sem painel por cima (CENA.coberto)
-     e sem a bola na mao (CENA.bolaNaMao; a bola tem a vez quando os dois estao sob o dedo);
+     nem lugar aberto (viagem.ts, lugarAberto: com o lugar aberto, clicar na ilha nao grava, como a bola e o toque) e sem a bola na mao (CENA.bolaNaMao; a bola tem a vez quando os dois estao sob o dedo);
    - na mao: CENA.petNaMao e CENA.maoPet (o ponto do cliente em que fica o pe do pet) contam a vista (ilha/vista.ts), que segura a camera,
      desenha o pet suspenso, balancando e com a careta, e a sombra onde ele vai cair;
    - ao soltar: o evento "levar pet" (Motor.levarPet, o "lp" do registro) por mudarMotor(), no ponto do chao sob o pe (CENA.mundo.pousoEm);
@@ -14,6 +14,7 @@
 import { useEffect, type RefObject } from "react";
 import { VERSAO_V19, type Motor } from "../../../motor/index.ts";
 import { jogoAtual, mudarMotor } from "../../jogo.ts";
+import { lugarAberto } from "../../viagem.ts";
 import { CENA } from "./cenaEstado.ts";
 import { LIMIAR_ARRASTO, avisarNoDock } from "./PorRacao.tsx";
 import { noSprite } from "./ToquePet.tsx";
@@ -46,7 +47,7 @@ export function ligarPegarPet(el: AlvoPonteiro): () => void {
   const baixo = (ev: Event) => {
     const e = ev as Ponteiro, { motor: m, nascendo } = jogoAtual(), v = CENA.mundo;
     if ((e.pointerType === "mouse" && e.button !== 0) || mao || !v) return;
-    if (!podePegar(m, nascendo, { coberto: CENA.coberto, bolaNaMao: CENA.bolaNaMao, pousoEm: !!v.pousoEm })) return;
+    if (!podePegar(m, nascendo, { coberto: CENA.coberto || lugarAberto(), bolaNaMao: CENA.bolaNaMao, pousoEm: !!v.pousoEm })) return;
     if (!noSprite(e.clientX, e.clientY, el.getBoundingClientRect(), CENA.ret)) return;
     /* a distancia do pe do pet (onde a vista o desenha) ao ponteiro: na mao, o pe fica a essa distancia do dedo */
     const [fx, fy] = v.paraTela(...v.pet);
@@ -58,7 +59,7 @@ export function ligarPegarPet(el: AlvoPonteiro): () => void {
     if (!pegou) {
       /* a bola tem a vez (o ArrastoBola ja a pegou neste arrasto), e as condicoes podem ter mudado desde o pointerdown */
       const { motor: m, nascendo } = jogoAtual();
-      if (CENA.bolaNaMao || !podePegar(m, nascendo, { coberto: CENA.coberto, bolaNaMao: false, pousoEm: !!CENA.mundo?.pousoEm })) { largar(); return; }
+      if (CENA.bolaNaMao || !podePegar(m, nascendo, { coberto: CENA.coberto || lugarAberto(), bolaNaMao: false, pousoEm: !!CENA.mundo?.pousoEm })) { largar(); return; }
       if (!arrastoPega(e.clientX - mao.x, e.clientY - mao.y)) return;
       pegou = true;
       el.setPointerCapture?.(e.pointerId);

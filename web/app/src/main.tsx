@@ -35,6 +35,7 @@ import "./estilo/mundo.css";
 import "./estilo/hud.css";
 import "./estilo/casca.css";
 import "./estilo/tailwind.css";
+import "./estilo/minimapa.css";
 /* as peles por ultimo: os seletores levam :root[data-pele="xcom|vidro"] e vencem tambem os CSS importados pelas telas */
 import "./estilo/pele-xcom.css";
 import "./estilo/pele-vidro.css";

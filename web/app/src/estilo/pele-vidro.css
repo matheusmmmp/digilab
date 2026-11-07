@@ -163,7 +163,7 @@
 
 /* ---------- HUD da tela Pet, do topo e do trilho (pet_hud.css, casca.css): o mesmo vidro dos paineis, com o reflexo, o contorno interno e o
    brilho por dentro; o trecho de luz e o marcador acesos */
-:root[data-pele="vidro"] :is(.hud-caixa, .pet-hud .hud-painel, .pet-etiqueta-db, .topo-pet, .topo-relogio),
+:root[data-pele="vidro"] :is(.hud-caixa, .pet-hud .hud-painel, .topo-pet, .topo-relogio),
 :root[data-pele="vidro"] body .pet-tela .pet-alerta :is(.pet-prioridade, .chamado.dl-card),
 :root[data-pele="vidro"] body .hx-nav::before{
   background:
@@ -181,7 +181,7 @@
 :root[data-pele="vidro"] .hud-risca{ height:1px; align-self:center; max-width:96px; background:var(--hud-risca) }
 :root[data-pele="vidro"] .hud-painel__ic, :root[data-pele="vidro"] .nec-ic{ filter:drop-shadow(0 0 3px rgba(95,212,255,.55)) }
 /* o pedido aberto e o botao do DigiBrain ligado: o contorno ciano com um brilho leve por dentro */
-:root[data-pele="vidro"] .pet-tela .pet-alerta .chamado.dl-card:not(.chamado--morte), :root[data-pele="vidro"] .pet-etiqueta-db[aria-pressed="true"]{
+:root[data-pele="vidro"] .pet-tela .pet-alerta .chamado.dl-card:not(.chamado--morte){
   box-shadow:inset 0 0 14px rgba(95,212,255,.35) }
 /* os botoes quadrados da borda direita (celular e painel fechado): um vidro cada, por cima da cena */
 :root[data-pele="vidro"] .pet-lado .pet-lado__bt:not([aria-pressed="true"]){ background:linear-gradient(180deg, var(--hud-fundo-1), var(--hud-fundo-2));

@@ -56,7 +56,8 @@ export interface Passo {
   golpe?: { desde: number; alvo: readonly [number, number] } | null;
   /** a vista move o pet desenhado sem o motor (a ida e a volta do treino): conta como andando */
   andandoVista?: boolean;
-  /** a altura do chao dobrado sob o pet desenhado (0 no foco da dobra; o papel nao passa pela dobra do shader) */
+  /** a altura do chao dobrado sob o pet desenhado (curva.ts, dobrarY; 0 no foco da dobra; o papel nao passa pela dobra do shader): com o pet na mao,
+      com a camera solta (cameraLivre.ts) ou numa viagem a um lugar o foco sai do pet, o chao sob ele desce, e o papel desce junto */
   yPe?: number;
   /** o pet suspenso: na mao do dono, ou caindo logo depois de solto; null no chao */
   suspenso?: Suspenso | null;
@@ -374,7 +375,7 @@ export class Papel {
     const pulo = (andando && !p.reduzido && !ovo ? Math.round(Math.abs(Math.sin(p.agora / PULO_MS)) * PULO_TEXELS) * n : 0) + Math.round(gesto.alto) * n
       + (sus ? Math.round(sus.altura) * n : 0);
     const balanco = ovo && !p.reduzido ? balancoOvo(nascendo) * n : 0;
-    /* o pe do papel no chao (o foco: sem dobra), projetado; o canto vai ao pixel inteiro mais perto */
+    /* o pe do papel no chao dobrado sob o pet (no foco, sem dobra), projetado; o canto vai ao pixel inteiro mais perto */
     const yPe = p.yPe ?? 0;
     this.v.set(p.cel[0], yPe, p.cel[1]).project(p.camera);
     const [W, H] = p.canvas, ax = ((this.v.x + 1) / 2) * W, ay = ((1 - this.v.y) / 2) * H;

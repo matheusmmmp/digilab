@@ -386,8 +386,13 @@ export async function carregarVariante(loader: GLTFLoader, url: string, modelo: 
 export interface Objetos {
   grupo: THREE.Group; grama: THREE.InstancedMesh[]; noite?: (noite: boolean) => void;
   quadro?: (foco: readonly [number, number], dobra: number, dir: readonly [number, number], meiaLargura: number) => void;
-  /** os lugares da ilha (lugares.ts), nos estilos que os tem: a caixa de cada um, para o toque */
+  /** os lugares da ilha (lugaresCena.ts), nos estilos que os tem: a caixa de cada um, para o toque */
   lugares?: Map<NomeLugar, THREE.Box3>;
+  /** o grupo do modelo de cada lugar (lugaresCena.ts): a vista apaga o lugar trancado pelo nivel do Tamer (marcadoresLugar.ts, Apagador) e tira o
+      marcador provisorio dos que tem modelo */
+  lugaresRaiz?: Map<NomeLugar, THREE.Group>;
+  /** acende (aberto) ou apaga (trancado) a mascara de luz de um lugar (lugaresCena.ts) */
+  abrirLugar?: (nome: NomeLugar, aberto: boolean) => void;
 }
 
 /** carrega uma variante de um modelo da grade (o arquivo, o modelo da grade e a linha da tabela MODELOS) */
