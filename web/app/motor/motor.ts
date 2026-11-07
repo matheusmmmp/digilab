@@ -7,7 +7,7 @@
    assinatura das vidas v13 nao muda (test/vidas_v13.test.ts). */
 import {
   ACAO_CHAMADO, ACOES_DONO_JOGO_V11, ACOES_PET, CAT, CDJ, CHAMADO_BEBE, CHAMADO_BEBE_CORPO, CHAMADO_FOME_CORPO, CHE, CLE, CMG, EIXOS_TEMP, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
-  TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V14, VERSAO_V15, VERSAO_V17, VERSOES_PET, CEREBROS, ehCerebroTrocavel,
+  TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V14, VERSAO_V15, VERSAO_V17, VERSAO_V19, VERSOES_PET, CEREBROS, ehCerebroTrocavel,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
 import { APRENDIZADO_V14, CHIP_ANTES_V14 } from "./combate_tr/constantes_tr.ts";
@@ -27,7 +27,7 @@ import { CCO_CORPO_V11, CONFIG_LUTA_CORPO_LIGADA } from "./corpo.ts";
 import { desejoLobos, type BracoConsequencia, type CerebroA, type ObservacaoLobos } from "./lobos.ts";
 import { MotorCorpo, estadoNascimentoPy, type PoliticaCorpo } from "./motor_corpo.ts";
 import { MotorCorpoMundo, type PoliticaCorpoMundo } from "./motor_corpo_mundo.ts";
-import { eventoDeixarBola, eventoDeixarComida, lerDeixarBola, lerDeixarComida, type Mundo } from "./mundo.ts";
+import { eventoDeixarBola, eventoDeixarComida, eventoLevarPet, lerDeixarBola, lerDeixarComida, lerLevarPet, type Mundo } from "./mundo.ts";
 import { bracoV11 } from "./pet_v11.ts";
 import { leituraLab, type LeituraLab } from "./digibrain/leitura.ts";
 import { decodificar, decodificarV2, type ConceitosDec } from "./digibrain/decodificador.ts";
@@ -796,6 +796,27 @@ export class Motor {
     this._conferirMorte(); this._vivo();
     (this.v11!.laco as MotorCorpoMundo).bolaDoDono(x, y);
   }
+  /** v19 (docs/TAREFA_V3_PEGAR_PET.md): o dono pega o pet e o solta em (x, y) do mapa do mundo (subunidades inteiras, com sinal; fora do
+      mapa ele cai na borda mais proxima, PP-4). So a posicao muda (PP-1): nao e contato nem cuidado, e nada vai ao cerebro, ao corpo, ao
+      vinculo ou ao historico. O pet dormindo nao e pego (PP-2), e o morto tambem nao. Antes da v19 o evento nao existe: falha alto */
+  levarPet(x: number, y: number): void {
+    lerLevarPet(eventoLevarPet(this.e.tick, x, y));
+    this._conferirLevarPet();
+    this._conferirMorte(); this._vivo();
+    if (this.e.dormindo) throw new Error(`o pet está dormindo (tick ${this.e.tick}): não dá para pegá-lo (PP-2)`);
+    const t = this.e.tick;
+    this._levarPet(x, y);
+    this.log.push([t, "lp", { x, y }]);
+  }
+  private _conferirLevarPet(): void {
+    if (this.versao < VERSAO_V19 || this.mundo === null) throw new Error(`só os pets v${VERSAO_V19} em diante são levados pelo dono (este é v${this.versao})`);
+  }
+  private _levarPet(x: number, y: number): void {
+    lerLevarPet(eventoLevarPet(this.e.tick, x, y));
+    this._conferirLevarPet();
+    this._conferirMorte(); this._vivo();
+    (this.v11!.laco as MotorCorpoMundo).petDoDono(x, y);
+  }
   private _validarComida(tipo: unknown, x: unknown, y: unknown): void {
     if (tipo !== "racao") throw new Error(`só a ração vai ao chão nos pets v12 (MV-3): ${String(tipo)}`);
     lerDeixarComida(eventoDeixarComida(this.e.tick, tipo, x, y));
@@ -1214,6 +1235,14 @@ export class Motor {
         const { x, y } = b as Record<string, unknown>;
         lerDeixarBola(eventoDeixarBola(t, x, y));
         this._deixarBola(x as number, y as number); break;
+      }
+      case "lp": {
+        const l = ev[2] as unknown;
+        if (!l || typeof l !== "object" || Object.keys(l).sort().join() !== "x,y")
+          throw new Error(`evento de levar o pet inválido no registro (tick ${t}): ${JSON.stringify(l)}`);
+        const { x, y } = l as Record<string, unknown>;
+        lerLevarPet(eventoLevarPet(t, x, y));
+        this._levarPet(x as number, y as number); break;
       }
       case "f":
         if (!ev[2] || typeof ev[2] !== "object" || Object.keys(ev[2]).length !== 1 || ev[2].campeao !== true)
