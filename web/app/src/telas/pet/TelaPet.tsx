@@ -43,7 +43,6 @@ import { AvisoRacao, BarraRacao, FaixaRacao, InfoMundo } from "./PorRacao.tsx";
 import "../../estilo/pet_dock.css";
 import "../../estilo/pet_hud.css";
 import "../../estilo/pet_movel.css";
-import { ConteudoDigiBrain, SeloDigiBrain } from "../../componentes/DigiBrain.tsx";
 import { ConteudoDigiBrainLab } from "../../componentes/DigiBrainLab.tsx";
 import { ScanDigiBrain } from "../../componentes/ScanDigiBrain.tsx";
 import { SeloExperimental } from "../config/Laboratorio.tsx";
@@ -618,11 +617,11 @@ function LinhaDigiBrain({ abrir }: { abrir: () => void }) {
   );
 }
 
-/** o painel DigiBrain: o do modular no pet de teste (v16), o do A v11 nos outros */
+/** o painel DigiBrain do modular, no pet de teste (v16); o do A v11 abre no ScanDigiBrain (D1c), e chegar aqui com ele e erro */
 function PainelDigiBrain() {
   const { motor: m } = useJogo();
-  return m.lab ? <div className="pet-painel__folha dl digibrain"><div className="db-folha-selo"><SeloExperimental /><span className="db-selo">cérebro modular</span></div><ConteudoDigiBrainLab /></div>
-    : <div className="pet-painel__folha dl digibrain"><div className="db-folha-selo"><SeloDigiBrain replay={false} /></div><ConteudoDigiBrain /></div>;
+  if (!m.lab) throw new Error("o DigiBrain do A v11 abre no ScanDigiBrain, nao no painel");
+  return <div className="pet-painel__folha dl digibrain"><div className="db-folha-selo"><SeloExperimental /><span className="db-selo">cérebro modular</span></div><ConteudoDigiBrainLab /></div>;
 }
 function ConteudoPainel({ id, v, irRegistro, irEvolucao, detalhes, alternarDetalhes }: {
   id: Painel; v: VistaFala; irRegistro: () => void; irEvolucao: () => void; detalhes: boolean; alternarDetalhes: () => void;
@@ -769,7 +768,7 @@ export function TelaPet({ irRegistro, irEvolucao, abrirConfig, abrirMeusPets }: 
           pet" e o aviso de borda; so a partir de 900 px, e o minimapa sai enquanto um painel flutuante ocupa a direita */}
       {largo && !atual && <Minimapa chama={vivo && petChama(m)} />}
       {largo && <CameraHud />}
-      {/* o DigiBrain do A v11 e o scan (dialogo modal em tela cheia); o do modular (pet v16) continua no painel de hoje (D1-9) */}
+      {/* o DigiBrain do A v11 e o scan (o campo pequeno, um dialogo modal); o do modular (pet v16) continua no painel de hoje (D1-9) */}
       {atual === "digibrain" && !m.lab && <ScanDigiBrain fechar={fechar} movel={!largo} chamado={<ChamadoSobScan />} />}
       {atual && !(atual === "digibrain" && !m.lab) && (
         <div className="pet-painel" id="pet-painel" data-painel-pet={atual} ref={painel} tabIndex={-1} onKeyDown={e => { if (e.key === "Escape") { e.stopPropagation(); fechar(); } }}>
