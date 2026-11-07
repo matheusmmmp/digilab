@@ -48,6 +48,7 @@ import { useNivel } from "../../nivelTela.ts";
 import { nivelDe } from "../../nivel.ts";
 import { ConteudoDigiBrain, SeloDigiBrain } from "../../componentes/DigiBrain.tsx";
 import { ConteudoDigiBrainLab } from "../../componentes/DigiBrainLab.tsx";
+import { ScanDigiBrain } from "../../componentes/ScanDigiBrain.tsx";
 import { SeloExperimental } from "../config/Laboratorio.tsx";
 import { duracao, previsaoEvo } from "../crescer/TelaEvolucao.tsx";
 
@@ -354,6 +355,23 @@ function Prioridade({ abrirDetalhes, movel = false }: { abrirDetalhes?: () => vo
   const corpo = m.morte ? <Morte /> : pedido ? <div className="pet-pedido"><Chamados agir={agir} /></div> : vis ? <Resumo r={r} nascendo={nascendo} abrirDetalhes={abrirDetalhes!} /> : null;
   if (!corpo) return null;
   return <div className="pet-alerta" {...arr}>{corpo}</div>;
+}
+/** o cartao do chamado do pet por cima do scan do DigiBrain (D1-10): o tempo do jogo continua andando com o scan aberto, e o dono nao perde um
+    pedido (nem a morte) enquanto olha o mapa. E o mesmo cartao de Prioridade (Chamados, Morte), no alto ao centro, mas dentro do dialogo modal,
+    que cobre a pagina inteira; o resumo (que abre o Estado) nao entra: o scan e o lugar do porque, nao do resumo */
+function ChamadoSobScan() {
+  const { motor: m, nascendo } = useJogo();
+  const cartao = m.morte ? <Morte /> : nascendo === 0 && temPedido(m) ? <div className="pet-pedido"><Chamados agir={agir} /></div> : null;
+  /* o anuncio: a regiao fica sempre montada e o texto entra so quando o conjunto de chamados muda (a mesma logica do `falado` do celular em Prioridade) */
+  const abertos = chamadosVisiveis(m);
+  const falado = m.morte ? `${nomeForma(m.forma)} se foi` : nascendo !== 0 ? "" : abertos.length ? "Chamado: " + abertos.map(c => NOME_CHAMADO[c]).join(", ")
+    : m.acao === "chamar_atencao" ? "Chamando você" : "";
+  const [anuncio, setAnuncio] = useState("");
+  useEffect(() => { setAnuncio(falado); }, [falado]);
+  return <>
+    <span className="sr-only" role="status" aria-live="polite" aria-atomic="true">{anuncio}</span>
+    {cartao && <div className="pet-alerta">{cartao}</div>}
+  </>;
 }
 /** o aviso da necessidade no celular: o icone e o %, em rosa cheio (a forma, a caixa, nao so a cor); o nome e o texto do resumo de hoje e "Estado"
     (sr-only), o % e so desenho. Com os detalhes do pet desligados nao ha Estado para abrir: um status, nao um botao */
@@ -712,7 +730,16 @@ export function TelaPet({ irRegistro, irEvolucao, abrirConfig, abrirMeusPets }: 
   /* o leque e o Mais so existem abaixo de 900 px: ao largar o celular fecham, e ao sair da tela Pet nao ficam abertos */
   useEffect(() => { if (largo) mudarLeque(null); }, [largo]);
   useEffect(() => () => mudarLeque(null), []);
-  const fechar = () => { setAberto(null); const g = gatilho.current; gatilho.current = null; setTimeout(() => { if (g?.isConnected) g.focus(); }, 0); };
+  /* a pilha desmonta enquanto um painel flutuante esta aberto (so no desktop), entao o botao que abriu pode ter deixado de existir: o foco volta ao
+     mesmo botao remontado, achado pelo painel que ele abre (a 4a linha, ou a linha do Estado, Evolucao, Ultimas acoes) */
+  const fechar = () => {
+    const g = gatilho.current, qual = atual, antes = g?.closest<HTMLElement>("[data-painel-pet]")?.dataset.painelPet;
+    setAberto(null); gatilho.current = null;
+    setTimeout(() => {
+      if (g?.isConnected) g.focus();
+      else if (antes || qual) document.querySelector<HTMLElement>(`.pet-hud [data-painel-pet='${antes ?? qual}'] .hud-painel__bt`)?.focus();
+    }, 0);
+  };
   useEffect(() => { if (atual) painel.current?.focus(); }, [atual]);
   /* o resumo do chamado abre o Estado: na pilha (desktop) ou o painel da borda (celular) */
   const abrirEstado = () => {
@@ -747,7 +774,9 @@ export function TelaPet({ irRegistro, irEvolucao, abrirConfig, abrirMeusPets }: 
           pet" e o aviso de borda; so a partir de 900 px, e o minimapa sai enquanto um painel flutuante ocupa a direita */}
       {largo && !atual && <Minimapa chama={vivo && petChama(m)} />}
       {largo && <CameraHud />}
-      {atual && (
+      {/* o DigiBrain do A v11 e o scan (dialogo modal em tela cheia); o do modular (pet v16) continua no painel de hoje (D1-9) */}
+      {atual === "digibrain" && !m.lab && <ScanDigiBrain fechar={fechar} movel={!largo} chamado={<ChamadoSobScan />} />}
+      {atual && !(atual === "digibrain" && !m.lab) && (
         <div className="pet-painel" id="pet-painel" data-painel-pet={atual} ref={painel} tabIndex={-1} onKeyDown={e => { if (e.key === "Escape") { e.stopPropagation(); fechar(); } }}>
           <PainelHx titulo={TITULO_PAINEL[atual]} onFechar={fechar} rotuloFechar={`Fechar ${TITULO_PAINEL[atual]}`} className="pet-painel__hx">
             {conteudo(atual)}
