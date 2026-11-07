@@ -1,6 +1,6 @@
 # PAINEL V3: onde a V3 está, em uma página
 
-**Atualizado em 2026-11-06** (`main` `86b5596`, depois do #627 da ponte da luta e do #623 da INFRA_AGENTES), pelo Gerente da V3 e pela sessão da INFRA_AGENTES. O plano é o `docs/PLANO_V3.md`; o
+**Atualizado em 2026-11-07** (`main` `da9a3a5`, depois do #677 do e2e da versão), pelo Gerente da V3; antes, em 2026-11-06, com a sessão da INFRA_AGENTES. O plano é o `docs/PLANO_V3.md`; o
 fechamento da V2, o `docs/FECHAMENTO_V2.md` (tag `v2-final`).
 
 - Quem atualiza: o coordenador de cada trilha, uma linha por PR mergeado.
@@ -65,13 +65,14 @@ Cada uma com a recomendação do Gerente e o custo de errar.
 - **O rótulo `livre-v9`** quando a fala de memória for gravada no modo livre. Recomendação: entra junto da primeira fala de memória gravada
   (a LM5b, #551, não ligou a fala; ela fica para uma etapa própria). Custo de errar: uma fala livre gravada sem rótulo de versão não se separa das antigas no log.
 - **O `D:\Trab\digilab\.claude\settings.json` da pasta-mãe** (local, fora do git, de 2026-10-14) liga só o H3, apontado para a worktree `v2-merge-r18`. Recomendação: o Matheus apaga ou atualiza esse arquivo; os hooks de verdade valem nas sessões abertas dentro de uma worktree. Custo de errar: uma sessão aberta na pasta-mãe acha que está protegida e só tem o H3, e ele quebra se a `v2-merge-r18` sair.
-- **As worktrees antigas no `D:`:** seis não foram removidas na limpeza de 2026-11-01 (duas sem merge, `v3-habitat-objetos` e
-  `v3-poc-orgaos-genetica`; duas com mudanças, `v3-habitat-mapas` e `v3-c4-proveniencia`; duas destacadas, `v3-capturas-peles` e
-  `v3-habito-intencao-run`), e duas pastas vazias travadas em `v3\.claude\worktrees\` (`agitated-rubin-b2128e`, `cool-panini-6f93b7`).
-  Recomendação: o Matheus olha as quatro primeiras; as duas destacadas e as pastas vazias saem quando nada as segurar. Custo de errar: apagar
-  uma worktree com mudança perde trabalho que não está no git.
-- **As worktrees das etapas do laboratório** (`v3-lab-modular`, `v3-lab-modular-lm0` a `lm4`, `lm5a`, `lm5a2`, `lm5b`), já na `main`: removíveis com
-  `git worktree remove`, sem força, quando o Matheus disser.
+- **As worktrees antigas no `D:`:** feito (2026-11-07, "Sim, apague" a cada lote). Saíram as seis de 2026-11-01, as do laboratório e mais
+  46 já na `main`, sem mudança e sem arquivo ignorado fora de cache (a lista e a conferência no PR deste painel); o `D:` foi de 14 GB a 96 GB
+  livres. Ficam a `v3-memoria-run` (as vidas e o `medidas.json` da C4, fora do git), as das sessões ativas, as com mudança, e duas pastas
+  vazias travadas em `v3\.claude\worktrees\` (`agitated-rubin-b2128e`, `cool-panini-6f93b7`), mais a pasta `v3-saude-main`, já fora do
+  `git worktree`: as três o Matheus apaga à mão. Pendência fechada.
+- **O e2e da `main` depois dos merges de 2026-11-07:** três testes vermelhos (o ovo novo esperado na v17, a `main` na v18 desde o #661),
+  consertados no #677 (`c37a27c`) pela `VERSAO_PET` importada do motor. Na `main` com a v19, antes do merge: Vitest 109 arquivos e 1 066
+  testes, e2e 143 passando e 4 pulados. A lição do #525 vale de novo: quem sobe a `VERSAO_PET` roda o e2e antes do PR.
 
 ## 3. Riscos
 

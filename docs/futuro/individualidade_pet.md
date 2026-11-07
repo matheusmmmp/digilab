@@ -1,8 +1,8 @@
 # A individualidade do pet: uma medida para o temperamento, o dono, a memória e o hábito
 
-Status (2026-11-07): **PROPOSTO, só papel.** Nenhum código, nenhuma faixa, nenhuma vida, nenhum plano de análise. As decisões IN-1 a
-IN-8 (seção 8) são do Matheus. Este documento não autoriza nada: depois das decisões, vira uma tarefa `docs/TAREFA_V3_INDIVIDUALIDADE.md`
-com etapas, cada uma com o seu sim.
+Status (2026-11-07): **as IN-1 a IN-8 DECIDIDAS pelo Matheus, todas pela recomendação** ("Agora siga com as recomendações", nesta
+sessão, depois do merge do #676). A frente é a `docs/TAREFA_V3_INDIVIDUALIDADE.md`, e cada etapa tem o seu PR. A conferência do I0 trocou
+uma sonda da bateria (3.1, "a conferência do I0"). Nenhum código, nenhuma faixa, nenhuma vida, nenhum plano de análise.
 
 **O pedido (Matheus, 2026-11-07):** a conversa partiu do connectome. A pergunta era se escalar o modular até o tamanho de um conectoma
 real (o da mosca) faria o pet aprender mais e criar personalidade, trejeitos e aprendizado com o dono. A leitura foi que não: o que falta
@@ -25,7 +25,7 @@ hoje não é tamanho (seção 1). O pedido é direcionar a pesquisa para o que p
 
 - **A proposta é uma medida, não um mecanismo.** Hoje cada frente do cérebro se mede por um índice próprio (o episódio no `longe_fixo`, o
   índice do P2, o contraste REL − SEM). Nenhum deles pergunta: **este pet ficou diferente dos outros, de um jeito estável, e por quê?**
-- **A medida:** uma bateria fixa de sondas (comida nova, bola, o dono chamando, um susto, o longe), aplicada a cópias do estado do pet em
+- **A medida:** uma bateria fixa de sondas (comida nova, bola, o dono sumindo, um susto, o longe, o tédio), aplicada a cópias do estado do pet em
   vários momentos da vida, sem tocar na vida real (seção 3). Dela sai a **repetibilidade** de cada traço: quanto das diferenças entre pets
   se repete de uma sonda para outra e de um dia para outro.
 - **O desenho:** pets cruzados por genoma e por dono (clones com donos diferentes, genomas diferentes com o mesmo dono), para dividir a
@@ -90,13 +90,31 @@ A bateria PROPOSTA, cada sonda ligada a um traço:
 |---|---|---|---|
 | **comida nova** | uma classe de comida sem episódio, à vista, com fome média | latência e chance de comer | `cautela_comida` |
 | **o longe** | comida conhecida só num lugar longe, com fome média | ir ou não; a distância até desistir | `ousadia_longe` |
-| **o dono chama** | o evento de chamada do dono, sem necessidade urgente | aproximar-se e a latência | `apego_dono` |
+| **o dono some** (era "o dono chama", trocada no I0) | uma janela sem nenhum gesto do dono, sem necessidade urgente | chamar a atenção e a latência | `apego_dono` |
 | **a bola** | a bola à vista, necessidades satisfeitas | brincar e por quanto tempo | — |
 | **o susto** | um evento de susto perto (com o receptor, se ligado) | afastar-se e o tempo até voltar | — |
 | **o tédio** | nada à vista, necessidades satisfeitas | explorar, ficar parado ou chamar | — |
 
-**Quais dessas situações o motor já produz é conferido no I0**, evento por evento. Este papel não conferiu a chamada do dono nem o susto.
-Uma situação que o motor não tem é mecânica nova: entra atrás de chave desligada ou sai da bateria.
+**A conferência do I0 (2026-11-07, na `main` `da9a3a5`):** cada sonda tem de sair de um gesto ou de um estado que o motor já tem. Uma
+situação que o motor não tem seria mecânica nova.
+
+| sonda | como o motor produz | o que muda |
+|---|---|---|
+| comida nova | `MotorMundo.deixar_fruta(tipo, x, y)` (`digilab/mundo.py`): o mundo do produto (o layout padrão sem árvores, só a ração do dono, `run_v2_digibrain_prototipo.py`) nunca tem fruta, então as frutas a, b e c são classes novas para o pet; a novidade já está no M-SENS (`nov = S − hab[classe]`) | nada |
+| o longe | o gesto `alimentar` vira `deixar_comida` no ponto do dono (`DonoComLugar`); a sonda põe a ração longe da posição do pet | nada |
+| ~~o dono chama~~ → **o dono some** | **não existe ação de chamar do dono** (`AcaoUsuario`, `digilab/events.py`). A troca: uma janela sem nenhum gesto do dono, com as necessidades satisfeitas, lendo o `chamar_atencao`. É a ação em que o termo da faceta `apego_dono` entra (`digilab/digibrain/pers.py`) | **a sonda trocada** (o desvio D-IND-I0-1) |
+| a bola | o gesto `por_bola` vira `deixar_bola(x, y)` | nada |
+| o susto | o `tapa` com o corpo dos gestos (o corpo do braço P1-c-tapa, o mesmo das vidas da C1 e da C4) sobe susto, dor e estresse (`digilab/corpo.py`; o mem lê a subida). **Só na cópia:** a vida real nunca recebe o tapa (a regra "nunca treino pelo toque") | nada |
+| o tédio | nenhum gesto e nada à vista; o tédio é um drive do corpo dos drives novos (`corpo.py`, `drives_novos`), e o `g_exp` do M-AFETO lê a falta dele | o I1 confere se o corpo das vidas da C4 liga os drives novos; se não, a sonda lê só a exploração, sem o drive |
+
+**A cópia:** a vida das runs do modular é um laço simples sobre os passos do dono (`simular_vida_fisico` em
+`experiments/bancada/regras_mundo.py`), e a bancada já rejoga logs (`Bancada.rejogar` em `experiments/bancada/nucleo.py`). As duas
+formas de copiar o pet no fim de um dia (uma cópia profunda do motor com o cérebro, ou o replay do prefixo do log) ficam para o I1
+escolher, pela que passar no G2 (a vida com e sem as sondas sai byte a byte) e custar menos.
+
+**O dono das vidas:** as vidas da C1 e da C4 usam o `CanalSemEnsino` (PMF-3). O dono cuida só pelos gestos do mundo, e o elogio e a bronca
+ficam fora. Isso já cumpre a IN-6 (só sinais naturais, nunca o toque como treino). As personas são os quatro donos de
+`run_v2_digibrain_prototipo.DONOS`: atencioso, relapso, aleatório e incoerente. O incoerente faz o papel do dono inconsistente.
 
 Os momentos PROPOSTOS: o fim de cada dia da vida. Cada sonda roda em réplicas de semente da própria sonda, para separar o pet do acaso
 da sonda.
@@ -180,7 +198,8 @@ O I2 e o I5 não dependem do Gate I, porque não medem o genoma. O I3 e o I4 dep
 
 ## 8. Decisões para o Matheus
 
-Cada uma vem com a recomendação e o custo de errar.
+**DECIDIDAS em 2026-11-07: IN-1 a IN-8, todas como recomendado** (Matheus, "Agora siga com as recomendações"). A coluna da recomendação
+é o que vale.
 
 | | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|
