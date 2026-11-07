@@ -40,7 +40,7 @@ export interface PoliticaCorpo {
 }
 
 /** um evento do log do Python (events.py): o avanco e a acao do dono (e, no laco com o mundo dos v12, a comida deixada pelo dono) */
-export interface EventoCorpo { tick: number; tipo: "avanco" | "acao_usuario" | "deixar_comida" | "lt"; valor: number | string }
+export interface EventoCorpo { tick: number; tipo: "avanco" | "acao_usuario" | "deixar_comida" | "levar_pet" | "lt"; valor: number | string }
 
 /** o resumo pronto de uma luta, em inteiros (docs/TAREFA_V3_PONTE_LUTA.md, 3.4; o `events.resumo_luta` do Python): o valor do evento `lt` e
  *  `rival|resultado|vida_perdida_s`. O rival sem `|` nem quebra de linha, o resultado em -1, 0, +1, a vida perdida inteira >= 0 */

@@ -30,7 +30,7 @@ import { CCO_CORPO_V11 } from "./corpo.ts";
 import { efeitoAcaoPet } from "./estado.ts";
 import { ACOES_DONO_V11, MotorCorpo, estadoNascimentoPy, type EventoCorpo, type PoliticaCorpo } from "./motor_corpo.ts";
 import type { ObservacaoLobos } from "./lobos.ts";
-import { Mundo, eventoDeixarComida, lerDeixarComida, regiaoDe, type PercepcaoMundo } from "./mundo.ts";
+import { Mundo, eventoDeixarComida, eventoLevarPet, lerDeixarComida, lerLevarPet, regiaoDe, type PercepcaoMundo } from "./mundo.ts";
 import type { AcaoPet, EstadoVida } from "./tipos.ts";
 
 /** o que a consequencia do mundo devolve (o `ocorrido` do Python, com os nomes dele) */
@@ -125,7 +125,30 @@ export class MotorCorpoMundo extends MotorCorpo {
     this.mundo.deixarBola(this.estado.tick, x, y);
   }
 
+  /** v19 (MotorMundo.levar_pet do Python): o dono solta o pet em (x, y); o evento valida a posicao e o laco o estado (dormindo falha alto)
+   *  antes do log */
+  levarPet(x: number, y: number): void {
+    const ev = eventoLevarPet(this.estado.tick, x, y);
+    this.petDoDono(...lerLevarPet(ev));
+    this.log.push({ tick: ev.tick, tipo: "levar_pet", valor: ev.valor });
+  }
+
+  /** o levar_pet sem o log do laco (o Motor do jogo grava o registro dele): so a posicao do pet muda, limitada ao mapa (PP-1, PP-4). Como o
+   *  deixar_bola, nao e contato nem cuidado: nao passa pelo estado, pelo corpo nem pelo cerebro. O pet dormindo nao e pego (PP-2) */
+  petDoDono(x: number, y: number): void {
+    lerLevarPet(eventoLevarPet(this.estado.tick, x, y));
+    if (this.estado.dormindo) throw new Error(`levar_pet com o pet dormindo (tick ${this.estado.tick}): o dono pega o pet acordado`);
+    this.conferirSincronia("antes de levar_pet");
+    this.mundo.levarPet(this.estado.tick, x, y);
+  }
+
   override aplicarEvento(e: EventoCorpo): void {
+    if (e.tipo === "levar_pet") {
+      if (e.tick !== this.estado.tick) throw new Error(`evento no tick ${e.tick}, o motor esta no ${this.estado.tick}`);
+      if (typeof e.valor !== "string") throw new Error(`levar_pet malformado: ${JSON.stringify(e)}`);
+      this.levarPet(...lerLevarPet({ tick: e.tick, tipo: "levar_pet", valor: e.valor }));
+      return;
+    }
     if (e.tipo !== "deixar_comida") { super.aplicarEvento(e); return; }
     if (e.tick !== this.estado.tick) throw new Error(`evento no tick ${e.tick}, o motor esta no ${this.estado.tick}`);
     if (typeof e.valor !== "string") throw new Error(`deixar_comida malformado: ${JSON.stringify(e)}`);
