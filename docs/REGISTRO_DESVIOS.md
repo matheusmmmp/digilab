@@ -531,5 +531,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-07 — LUGARES_3D, a barraca do Tamer (Gerente da frente, Claude Code, Opus 5.5, branch `v3-lugares-3d-barraca`)](registro/2026-11.md)
 - [2026-11-07 — LUGARES_3D, o cais (Gerente da frente, Claude Code, Opus 5.5, branch `v3-lugares-3d-cais`)](registro/2026-11.md)
 - [2026-11-07 — CONVERSA_PET, DC3, o plano de análise da rede escolhendo falar (Gerente da frente, Claude Code, Opus 5.5, branch `v3-conversa-dc3-plano`)](registro/2026-11.md)
-- [2026-11-07 — CONVERSA_PET, DC3a, o código da rede escolhendo falar (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc3a-codigo`)](registro/2026-11.md)
 - [2026-11-01 — C4 MEMÓRIA AUTOBIOGRÁFICA, a proveniência das aprovações (Matheus, sessão do Claude Code, Opus 5.5, worktree `v3-c4-proveniencia`): as decisões repassadas pelo Gerente, ratificadas](registro/2026-11.md)
+- [2026-11-07 — CONVERSA_PET, DC3a, o código da rede escolhendo falar (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc3a-codigo`)](registro/2026-11.md)
