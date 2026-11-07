@@ -1,0 +1,281 @@
+/* Prancha D1 da UX_TELA_PET: o DigiBrain "scan holografico" (direcao A). So desenho; nenhum codigo do jogo.
+   Nenhuma cor nova: os valores abaixo sao COPIA dos tokens do app, com o arquivo de origem em cada bloco (como docs/pranchas/ux-mobile/
+   minimo.css). Os unicos literais de cor fora das peles sao os tres do mapa dos pesos de hoje (--mp-*, web/app/src/estilo/digibrain.css:48).
+   As medidas (420 px das colunas, 72 px do topo, 56 px na folha, os raios e as fontes do desenho) sao de layout, PROPOSTO, SEM FONTE.
+   A pele vem de ?pele=vidro|xcom (data-pele no <html>), como nas pranchas anteriores e em pele.ts. */
+
+/* ---------- pele Militar (id xcom): web/app/src/estilo/tokens.css:106-132 (:root) */
+:root[data-pele="xcom"]{
+  --hx-chao:#101214; --hx-miolo:#131518; --hx-miolo-2:#1C1F22;
+  --hx-borda:#3E4442; --hx-borda-topo:#6E7872; --hx-borda-int:transparent;
+  --hx-texto:#E4E7E2; --hx-texto-2:#C9D0C8; --hx-sec:#9DA89F; --hx-rotulo:#B9C3A4;
+  --hx-escolhido:#C5CFB0; --hx-escolhido-ink:#12150D; --hx-escolhido-borda:#C5CFB0;
+  --hx-btn-bg:rgba(14,30,22,.92); --hx-btn-ink:#A6E8BC; --hx-btn-borda:#6CC58A;
+  --hx-medidor:#AEB9A6; --hx-medidor-trilho:rgba(150,160,150,.18); --hx-medidor-alt:12px;
+  --hx-alerta:#FFB020; --hx-perigo:#E07C7C; --hx-ok:#4BE07E; --hx-necessidade:#FF7FC0; --hx-aprendido:#6FE3FF;
+  --hx-foco:#F4F1E4;
+  --hx-f:"Saira Condensed", "Rajdhani", system-ui, sans-serif; --hx-f-num:var(--hx-f); --hx-num:var(--hx-texto);
+  --hx-vidro:none; --hx-sombra:none; --hx-luz:transparent;
+  --hx-titulo-esp:.08em; --hx-rotulo-tam:12px; --hx-tecla:rgba(255,255,255,.035);
+  --hud-fundo-1:rgba(30,33,36,.97); --hud-fundo-2:rgba(19,21,24,.97); --hud-desfoque:none; --hud-brilho:none;
+  /* os cantos em L das caixas da HUD: web/app/src/estilo/pele-xcom.css:9-14 */
+  --xcom-cantos:
+    linear-gradient(var(--hx-rotulo), var(--hx-rotulo)) left 3px top 3px / 9px 1px no-repeat padding-box,
+    linear-gradient(var(--hx-rotulo), var(--hx-rotulo)) left 3px top 3px / 1px 9px no-repeat padding-box,
+    linear-gradient(var(--hx-rotulo), var(--hx-rotulo)) right 3px bottom 3px / 9px 1px no-repeat padding-box,
+    linear-gradient(var(--hx-rotulo), var(--hx-rotulo)) right 3px bottom 3px / 1px 9px no-repeat padding-box;
+  --raio:0px;
+}
+
+/* ---------- pele Vidro (id vidro): web/app/src/estilo/tokens.css:148-170; a semantica (necessidade, aprendido, ok) vem do :root, linha 117 */
+:root[data-pele="vidro"]{
+  --hx-chao:rgba(6,18,38,.82); --hx-miolo:rgba(5,14,30,.86); --hx-miolo-2:rgba(10,26,52,.78);
+  --hx-borda:rgba(110,200,255,.72); --hx-borda-topo:rgba(110,200,255,.72); --hx-borda-int:rgba(95,190,255,.18);
+  --hx-texto:#EAF5FF; --hx-texto-2:#D2E6F7; --hx-sec:#C2D7EA; --hx-rotulo:#8ED8FF;
+  --hx-escolhido:linear-gradient(180deg, rgba(58,168,255,.40), rgba(58,168,255,.16)); --hx-escolhido-ink:#FFFFFF; --hx-escolhido-borda:#5FD4FF;
+  --hx-btn-bg:rgba(58,168,255,.26); --hx-btn-ink:#F2FAFF; --hx-btn-borda:#5FD4FF;
+  --hx-medidor:#5FD4FF; --hx-medidor-trilho:rgba(95,190,255,.16); --hx-medidor-alt:5px;
+  --hx-alerta:#FFBE45; --hx-perigo:#F7B4B4; --hx-ok:#4BE07E; --hx-necessidade:#FF7FC0; --hx-aprendido:#6FE3FF;
+  --hx-foco:#FFFFFF;
+  --hx-f:"Barlow", system-ui, sans-serif; --hx-f-num:"Rajdhani", system-ui, sans-serif; --hx-num:#7FE3FF;
+  --hx-vidro:blur(12px) saturate(140%);
+  --hx-sombra:0 0 16px rgba(58,168,255,.30), 0 10px 24px rgba(0,0,0,.35);
+  --hx-luz:#5FD4FF;
+  --hx-titulo-esp:2px; --hx-rotulo-tam:11px; --hx-tecla:rgba(95,190,255,.08);
+  --hud-fundo-1:var(--hx-miolo-2); --hud-fundo-2:var(--hx-miolo); --hud-desfoque:var(--hx-vidro);
+  --hud-brilho:inset 0 0 18px rgba(58,168,255,.18), inset 0 1px 0 rgba(170,225,255,.20);
+  --xcom-cantos:none;
+  --raio:8px;
+}
+/* transparencia reduzida: o vidro fica opaco, web/app/src/estilo/tokens.css:173-180 */
+@media (prefers-reduced-transparency: reduce){
+  :root[data-pele="vidro"]{ --hx-chao:#081630; --hx-miolo:#050E1E; --hx-miolo-2:#0C1E3A; --hx-vidro:none; --hx-btn-bg:#14385C }
+}
+
+/* ---------- o mapa dos pesos de hoje (web/app/src/estilo/digibrain.css:48): os tres literais que o app ja usa */
+:root{ --mp-mais:#E34948; --mp-menos:#2A78D6; --mp-aceso:#F08A00 }
+/* os nomes do scan (PROPOSTOS como apelidos, sem valor novo): a malha e a grade sao o medidor da pele, o instinto e o texto secundario */
+:root{ --scan-malha:var(--hx-medidor); --scan-grade:var(--hx-medidor-trilho); --scan-prior:var(--hx-sec) }
+
+/* ---------- a pagina */
+*{ box-sizing:border-box }
+html, body{ margin:0 }
+body{ background:var(--hx-miolo); color:var(--hx-texto); font-family:var(--hx-f); -webkit-font-smoothing:antialiased }
+button{ font:inherit; color:inherit; cursor:pointer }
+button:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:2px }                       /* casca.css:54 */
+i[data-lucide], svg.lucide{ display:block; width:20px; height:20px; stroke-width:2 }
+.tela{ position:relative; overflow:hidden }
+.tela--1920{ width:1920px; height:950px }
+.tela--390{ width:390px; height:844px }
+
+/* a ilha por baixo (so a 1920): uma cor neutra, ou a captura de FUNDO_ILHA */
+.ilha{ position:absolute; inset:0; background:color-mix(in srgb, var(--hx-ok) 14%, var(--hx-miolo)) center / cover no-repeat }
+.ilha span{ position:absolute; left:32px; bottom:10px; font:500 12px var(--hx-f); color:var(--hx-sec) }
+.fechado .scan{ display:none }
+
+/* ---------- o modo scan */
+.scan{ position:absolute; inset:0; display:flex; flex-direction:column; background:var(--hx-chao); -webkit-backdrop-filter:var(--hx-vidro); backdrop-filter:var(--hx-vidro) }
+.scan-topo{ position:relative; flex:none; height:72px; display:flex; align-items:center; gap:20px; padding:0 32px; border-bottom:1px solid var(--hx-borda) }
+.scan-tit{ margin:0; font:700 26px/1 var(--hx-f); letter-spacing:.06em; color:var(--hx-texto) }
+.scan-tit small{ margin-left:10px; font:600 var(--hx-rotulo-tam)/1 var(--hx-f); letter-spacing:var(--hx-titulo-esp); text-transform:uppercase; color:var(--hx-rotulo) }
+.hx-btn{ display:inline-flex; align-items:center; gap:8px; min-height:44px; min-width:44px; padding:0 14px; background:var(--hx-btn-bg); color:var(--hx-btn-ink);
+  border:1px solid var(--hx-btn-borda); border-radius:var(--raio); font:600 15px/1 var(--hx-f); letter-spacing:.06em }
+.fechar{ margin-left:auto }
+kbd{ padding:2px 6px; border:1px solid var(--hx-borda); background:var(--hx-tecla); font:600 12px/1 var(--hx-f-num); color:var(--hx-texto-2); border-radius:3px }
+
+/* o selo: a forma diz o estado sem a cor (o ponto, as duas barras, o triangulo) */
+.db-selo{ display:inline-flex; align-items:center; gap:8px; font:600 15px/1 var(--hx-f); letter-spacing:.04em; color:var(--hx-texto-2); white-space:nowrap }
+.db-selo i{ display:inline-block; width:10px; height:10px }
+.db-selo--vivo i{ background:var(--hx-ok); border-radius:50% }
+.db-selo--pausado i{ border-left:3px solid var(--hx-sec); border-right:3px solid var(--hx-sec) }
+.db-selo--replay i{ width:0; height:0; border-left:10px solid var(--hx-rotulo); border-top:6px solid transparent; border-bottom:6px solid transparent }
+
+/* ---------- as tres colunas (1920) */
+.corpo{ flex:1; min-height:0; display:grid; grid-template-columns:420px minmax(0,1fr) 420px; gap:24px; padding:20px 32px 28px }
+.col{ display:flex; flex-direction:column; gap:14px; min-height:0 }
+.centro{ position:relative; display:flex; flex-direction:column; gap:12px; min-height:0 }
+
+/* a caixa da HUD nas duas peles (pet_hud.css; pele-vidro.css:166-174, pele-xcom.css:15-20) */
+.cx{ background:linear-gradient(180deg, var(--hud-fundo-1), var(--hud-fundo-2)); border:1px solid var(--hx-borda); color:var(--hx-texto);
+  -webkit-backdrop-filter:var(--hud-desfoque); backdrop-filter:var(--hud-desfoque); border-radius:var(--raio) }
+:root[data-pele="vidro"] .cx{ box-shadow:var(--hud-brilho), var(--hx-sombra) }
+:root[data-pele="xcom"] .cx{ border-top:2px solid var(--hx-borda-topo); background:var(--xcom-cantos), linear-gradient(180deg, var(--hud-fundo-1), var(--hud-fundo-2)) border-box }
+.ladrilho{ position:relative; padding:14px 16px }
+.db-sec{ margin:0 0 10px; font:600 var(--hx-rotulo-tam)/1.2 var(--hx-f); letter-spacing:var(--hx-titulo-esp); text-transform:uppercase; color:var(--hx-rotulo) }
+.db-vazio{ margin:0; font:500 15px/1.3 var(--hx-f); color:var(--hx-sec) }
+.db-barras, .db-opcoes, .db-chips, .db-aprendeu, .db-ultimas{ list-style:none; margin:0; padding:0 }
+em{ font-style:normal }
+
+/* o agora; com o aprendido mudando a escolha, a marca do aprendido (ciano tracejado, guia 3; hud.css:74) */
+.db-agora b{ display:block; font:700 22px/1.2 var(--hx-f) }
+.db-agora small{ display:block; margin-top:4px; font:500 15px/1.3 var(--hx-f); color:var(--hx-sec) }
+.db-agora--aprendido{ border:1.5px dashed var(--hx-aprendido) }
+:root[data-pele="xcom"] .db-agora--aprendido{ border-top:2px dashed var(--hx-aprendido) }
+.db-agora--aprendido small{ color:var(--hx-aprendido) }
+.tag-aprendido{ position:absolute; top:12px; right:14px; padding:2px 6px; font:600 11px/1.2 var(--hx-f); letter-spacing:.12em; text-transform:uppercase;
+  color:var(--hx-aprendido); border:1px dashed var(--hx-aprendido) }
+
+/* as barras: o trilho do medidor da pele; com sinal, o eixo no zero (o positivo a direita, o negativo a esquerda) */
+.db-barras li{ display:grid; grid-template-columns:150px minmax(0,1fr) 64px; align-items:center; gap:10px; min-height:30px; font:600 15px/1.2 var(--hx-f) }
+.db-trilho{ position:relative; display:block; height:var(--hx-medidor-alt); background:var(--hx-medidor-trilho) }
+.db-trilho b{ position:absolute; top:0; bottom:0; left:0; background:var(--hx-medidor) }
+.db-trilho--sinal::before{ content:""; position:absolute; left:50%; top:-4px; bottom:-4px; width:1px; background:var(--hx-sec) }
+.db-trilho--sinal b{ left:50% }
+.db-trilho--sinal b.neg{ left:auto; right:50% }
+.db-barras [data-lobo="impulsos"] b{ background:var(--hx-alerta) }
+.db-barras [data-lobo="decisao"] b{ background:var(--hx-aprendido) }
+.db-barras [data-lobo="corpo"] b{ background:var(--hx-ok) }
+.db-barras [data-lobo="memoria_emocao"] b, .db-barras [data-lobo="piso"] b{ background:var(--hx-sec) }
+.db-barras em, .db-opcoes em, .db-aprendeu em{ font:700 17px/1 var(--hx-f-num); font-variant-numeric:tabular-nums; color:var(--hx-num); text-align:right; white-space:nowrap }
+.db-emo{ display:inline-block; margin-top:10px; padding:4px 10px; font:500 13px/1.2 var(--hx-f); color:var(--hx-texto-2); border:1px solid var(--hx-borda); border-radius:var(--raio) }
+
+/* o que mais pesou */
+.db-chips{ display:flex; flex-wrap:wrap; gap:8px }
+.db-chips li{ display:inline-flex; align-items:center; gap:6px; min-height:32px; padding:4px 12px; font:600 15px/1.2 var(--hx-f); border:1px solid var(--hx-borda); border-radius:var(--raio) }
+.db-favor{ color:var(--hx-ok) }
+.db-contra{ color:var(--hx-sec) }
+
+/* as opcoes: a escolhida com o "escolhido" da pele, e a barra na cor de "esta decisao" (a mesma do mapa) */
+.db-opcoes li{ display:grid; grid-template-columns:minmax(0,1fr) 120px 56px; align-items:center; gap:10px; min-height:34px; padding:0 8px; margin:0 -8px; font:600 16px/1.2 var(--hx-f) }
+.db-opcoes li.esc{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-radius:var(--raio) }
+.db-opcoes li.esc em{ color:inherit }
+.db-opcoes li.esc .db-trilho b{ background:var(--mp-aceso) }
+.db-opcoes small{ font:inherit; font-weight:500 }
+
+/* o que aprendeu: a marca do aprendido no ladrilho inteiro */
+.sec-apr{ border:1.5px dashed var(--hx-aprendido) }
+:root[data-pele="xcom"] .sec-apr{ border-top:2px dashed var(--hx-aprendido) }
+.sec-apr .db-sec{ color:var(--hx-aprendido) }
+.db-aprendeu li{ display:grid; grid-template-columns:minmax(0,1fr) auto; gap:10px; min-height:30px; align-items:center; font:600 15px/1.2 var(--hx-f) }
+
+/* ultimas acoes */
+.db-ultimas li{ display:grid; grid-template-columns:60px minmax(0,1fr); gap:8px; min-height:28px; align-items:center; font:600 15px/1.2 var(--hx-f) }
+.db-ultimas .hora{ font:600 16px/1 var(--hx-f-num); font-variant-numeric:tabular-nums; color:var(--hx-sec) }
+
+/* ---------- a moldura do scanner: os cantos em L na cor da malha e a grade da pele */
+.moldura{ position:relative; flex:1; min-height:0; border:1px solid var(--hx-borda); border-radius:var(--raio);
+  background-color:color-mix(in srgb, var(--hx-miolo) 55%, transparent);
+  background-image:
+    linear-gradient(var(--scan-malha), var(--scan-malha)), linear-gradient(var(--scan-malha), var(--scan-malha)),
+    linear-gradient(var(--scan-malha), var(--scan-malha)), linear-gradient(var(--scan-malha), var(--scan-malha)),
+    linear-gradient(var(--scan-malha), var(--scan-malha)), linear-gradient(var(--scan-malha), var(--scan-malha)),
+    linear-gradient(var(--scan-malha), var(--scan-malha)), linear-gradient(var(--scan-malha), var(--scan-malha)),
+    linear-gradient(to right, var(--scan-grade) 1px, transparent 1px), linear-gradient(to bottom, var(--scan-grade) 1px, transparent 1px);
+  background-size:28px 2px, 2px 28px, 28px 2px, 2px 28px, 28px 2px, 2px 28px, 28px 2px, 2px 28px, 32px 32px, 32px 32px;
+  background-position:left 6px top 6px, left 6px top 6px, right 6px top 6px, right 6px top 6px, left 6px bottom 6px, left 6px bottom 6px,
+    right 6px bottom 6px, right 6px bottom 6px, 0 0, 0 0;
+  background-repeat:no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat, repeat }
+.moldura-tit{ position:absolute; left:20px; top:12px; z-index:2; margin:0; padding:5px 12px; font:700 14px/1.2 var(--hx-f); letter-spacing:var(--hx-titulo-esp);
+  text-transform:uppercase; color:var(--hx-rotulo); border:1px solid var(--hx-borda); background:var(--hud-fundo-2) }
+.moldura-tit small{ margin-left:8px; font-weight:500; text-transform:none; letter-spacing:.02em; color:var(--hx-sec) }
+.mapa-caixa{ position:absolute; inset:52px 20px 14px }
+.mapa-caixa svg{ display:block; width:100%; height:100% }
+/* a varredura, parada num quadro (so numa decisao nova) */
+.varredura{ position:absolute; left:8px; right:8px; top:41%; height:64px; pointer-events:none;
+  background:linear-gradient(to bottom, transparent, color-mix(in srgb, var(--scan-malha) 26%, transparent)); border-bottom:2px solid var(--scan-malha) }
+
+/* o rodape do mapa: a legenda, a nota honesta e o mapa em texto */
+.rodape-mapa{ flex:none; display:flex; flex-wrap:wrap; align-items:center; gap:8px 20px }
+.mp-leg{ display:flex; flex-wrap:wrap; gap:4px 16px; list-style:none; margin:0; padding:0; font:600 13px/1.2 var(--hx-f); color:var(--hx-texto-2) }
+.mp-leg li{ display:inline-flex; align-items:center; gap:6px }
+.leg{ display:inline-block; width:22px; height:0; border-top:3px solid var(--c) }
+.leg-prior{ --c:var(--scan-prior) } .leg-mais{ --c:var(--mp-mais) } .leg-menos{ --c:var(--mp-menos) } .leg-aceso{ --c:var(--mp-aceso) }
+.leg-neg{ --c:var(--hx-texto-2); border-top-style:dashed }
+.leg-corpo{ width:12px; height:12px; border:2px solid var(--hx-ok); border-radius:50% }
+.mp-nota{ flex:1 1 420px; margin:0; font:500 13px/1.35 var(--hx-f); color:var(--hx-sec) }
+.db-texto-bt{ margin-left:auto }
+
+/* o mapa em texto: a 1920, por cima do lado direito da moldura */
+.db-texto{ position:absolute; top:52px; right:14px; bottom:96px; z-index:4; width:620px; overflow:auto; padding:14px 16px; font:500 14px/1.35 var(--hx-f) }
+.db-texto[hidden]{ display:none }
+.db-texto p{ margin:0 0 8px }
+.db-texto-acesas{ margin:0 0 12px; padding-left:22px }
+.db-texto-acesas em{ font-family:var(--hx-f-num); color:var(--hx-num) }
+.db-texto table{ width:100%; border-collapse:collapse; font-size:13px }
+.db-texto caption{ text-align:left; padding:4px 0 6px; color:var(--hx-rotulo); font-weight:600 }
+.db-texto th{ text-align:left; color:var(--hx-rotulo); font-weight:600 }
+.db-texto th, .db-texto td{ padding:3px 8px 3px 0; border-bottom:1px solid var(--scan-grade) }
+.db-texto td:nth-child(4), .db-texto td:nth-child(5){ font-family:var(--hx-f-num); font-variant-numeric:tabular-nums }
+
+/* ---------- o desenho (SVG). As classes sao as de hoje (MapaPesos.tsx), as que o e2e le */
+.mp text{ font-family:var(--hx-f) }
+.mp *{ transition:none }
+.mp-malha{ fill:none; stroke:var(--scan-malha); stroke-opacity:.12; stroke-width:1 }
+.mp-silhueta{ fill:url(#db-malha); stroke:var(--scan-malha); stroke-opacity:.6; stroke-width:1.5 }
+.mp-tronco{ fill:none; stroke:var(--scan-malha); stroke-opacity:.45; stroke-width:1.5 }
+.mp-divisas path{ fill:none; stroke:var(--hx-borda); stroke-dasharray:4 7; stroke-width:1.2 }
+.mp-reg text, .mp-sub{ font-size:14px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; fill:var(--hx-rotulo) }
+.mp-sub{ fill:var(--hx-ok); letter-spacing:.1em }
+.mp-dest text{ fill:var(--hx-texto); font-weight:700 }
+.mp-dest-caixa{ fill:var(--hud-fundo-2); stroke:var(--hx-foco); stroke-width:1.2 }
+.mp-mais-peso{ text-transform:none; letter-spacing:.02em }
+.mp-pesos path, .mp-acesas path, .mp-pulso path{ fill:none; stroke-linecap:round }
+.mp-prior{ stroke:var(--scan-prior); stroke-opacity:.45 }
+.mp-mais{ stroke:var(--mp-mais) }
+.mp-menos{ stroke:var(--mp-menos) }
+.mp-pesos--fundo{ opacity:.35 }
+.mp-acesas path{ stroke:var(--mp-aceso) }
+:root[data-pele="vidro"] .mp-acesas{ filter:drop-shadow(0 0 3px var(--mp-aceso)) }
+.mp-pulso path{ stroke:var(--hx-foco); stroke-dasharray:.001 .999; stroke-dashoffset:-.6 }
+.mp-no circle{ fill:var(--hx-miolo); stroke:var(--scan-malha); stroke-width:1.5 }
+.mp-no text{ font-size:16px; font-weight:500; fill:var(--hx-sec); paint-order:stroke; stroke:var(--hx-miolo); stroke-width:4px; stroke-linejoin:round }
+.mp-corpo circle{ stroke:var(--hx-ok) }
+.mp-lit circle{ fill:var(--mp-aceso); stroke:var(--mp-aceso) }
+.mp-lit text{ fill:var(--hx-texto); font-weight:700 }
+.mp-cand circle{ stroke:var(--hx-texto); stroke-width:2.5 }
+.mp-cand text{ fill:var(--hx-texto) }
+.mp-esc circle{ fill:var(--mp-aceso); stroke:var(--hx-foco); stroke-width:3 }
+:root[data-pele="vidro"] .mp-esc circle{ filter:drop-shadow(0 0 6px var(--mp-aceso)) }
+.mp-esc text{ font-weight:700 }
+.mp .mp-pct{ font-family:var(--hx-f-num); font-weight:700; fill:var(--hx-num) }
+
+/* ---------- o celular: a folha inteira, uma coluna que rola (a ordem e a do painel de hoje) */
+.tela--390 .scan-topo{ height:56px; gap:10px; padding:0 8px 0 14px }
+.tela--390 .scan-tit{ font-size:20px }
+.tela--390 .scan-tit small{ display:none }
+.tela--390 .db-selo{ font-size:14px }
+.tela--390 .fechar{ padding:0 }
+.tela--390 .fechar i{ margin:auto }
+.tela--390 .fechar kbd{ display:none }
+.tela--390 .corpo{ display:flex; flex-direction:column; gap:12px; overflow-y:auto; padding:12px 14px 24px }
+.tela--390 .col{ display:contents }
+.tela--390 .sec-agora{ order:1 } .tela--390 .centro{ order:2 } .tela--390 .sec-lobos{ order:3 } .tela--390 .sec-perc{ order:4 }
+.tela--390 .sec-opc{ order:5 } .tela--390 .sec-apr{ order:6 } .tela--390 .sec-ult{ order:7 }
+.tela--390 .ladrilho{ padding:12px 14px }
+.tela--390 .db-agora b{ font-size:18px }
+.tela--390 .db-barras li{ grid-template-columns:118px minmax(0,1fr) 56px; gap:8px }
+.tela--390 .db-opcoes li{ grid-template-columns:minmax(0,1fr) 80px 48px; gap:8px }
+.tela--390 .centro{ flex:none; gap:10px }
+.tela--390 .moldura{ flex:none; height:262px }
+.tela--390 .moldura-tit{ left:10px; top:8px; font-size:12px; padding:4px 8px }
+.tela--390 .mapa-caixa{ inset:38px 4px 6px }
+.tela--390 .varredura{ height:40px }
+.tela--390 .rodape-mapa{ gap:8px 12px }
+.tela--390 .mp-leg{ gap:4px 12px; font-size:12px }
+.tela--390 .mp-nota{ flex-basis:100%; font-size:12px }
+.tela--390 .db-texto-bt{ margin-left:0 }
+.tela--390 .db-texto{ position:static; width:auto; max-height:none; overflow:visible }
+/* a 390 so os rotulos acesos e das candidatas; o resto fica no mapa em texto */
+.tela--390 .mp-no text{ font-size:32px; stroke-width:8px }
+.tela--390 .mp-no:not(.mp-lit):not(.mp-cand):not(.mp-esc) text{ display:none }
+.tela--390 .mp-reg text, .tela--390 .mp-sub{ font-size:26px; letter-spacing:.08em }
+.tela--390 .mp-dest-caixa{ stroke-width:2.5 }
+.tela--390 .mp-divisas path{ stroke-width:2.5; stroke-dasharray:8 14 }
+.tela--390 .mp-silhueta, .tela--390 .mp-tronco{ stroke-width:3 }
+.tela--390 .mp-malha{ stroke-width:2 }
+.tela--390 .mp-no circle{ stroke-width:3 }
+.tela--390 .mp-cand circle{ stroke-width:5 }
+.tela--390 .mp-esc circle{ stroke-width:5 }
+
+/* ---------- as notas da prancha (so com ?notas): tracejadas no tom de alerta, sem cor nova */
+.nota{ display:none; position:absolute; z-index:6; max-width:280px; padding:4px 6px; font:500 11px/1.3 var(--hx-f); color:var(--hx-texto);
+  background:var(--hud-fundo-2); border:1px dashed var(--hx-alerta); text-transform:none; letter-spacing:0 }
+.notas .nota{ display:block }
+.ladrilho .nota{ top:6px; right:6px }
+.n-topo{ top:6px; left:360px; max-width:900px }
+.n-tl{ top:52px; left:14px } .n-tr{ top:52px; right:14px } .n-bl{ bottom:14px; left:14px } .n-br{ bottom:14px; right:14px }
+.tela--390 .nota{ max-width:172px; font-size:10px }
+.tela--390 .ladrilho .nota{ max-width:220px }
+.tela--390 .n-topo{ top:56px; left:14px; right:14px; max-width:none }
+.tela--390 .n-tl{ top:38px; left:4px } .tela--390 .n-tr{ top:38px; right:4px } .tela--390 .n-bl{ bottom:4px; left:4px } .tela--390 .n-br{ bottom:4px; right:4px }
+.erro-prancha{ position:fixed; z-index:9; inset:auto 0 0 0; margin:0; padding:8px; background:var(--hx-perigo); color:var(--hx-chao); font:700 14px/1.2 system-ui }
