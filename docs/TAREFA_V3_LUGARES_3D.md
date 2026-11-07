@@ -92,3 +92,18 @@ luz, porque a tela não sobreviveu à malha; a entrada não lê, porque a malha 
 
 **Para a L3:** carregar `LUGARES_MODELOS.barraca` pelo `carregarVariante`, com a frente +z (a porta aberta) para a área. Não há
 `LUGARES_LUZ.barraca`.
+
+## 11. O cais (2026-11-07, Gerente, Claude Code, Opus 5.5, branch `v3-lugares-3d-cais`)
+
+**O que entrou:** `web/app/public/lugares/cais/` (o glTF com 2 019 triângulos, a cor chapada, a máscara do ciano `cais_luz.png` e o
+`License.txt`), as linhas `LUGARES_MODELOS.cais` (altura 2,4, sombra 0, PROPOSTO) e `LUGARES_LUZ.cais` em `modelos.ts`, e o teste da máscara
+em `test/lugares3d.test.ts`, agora para todo `LUGARES_LUZ`. Os passos e os scripts em `docs/lugares3d/cais/` (`consertar_cais.py`,
+`mascara_cais.py`, `faces_tabuas.py`, `pintar_tabuas.py`, `paleta.json`, `validacao.json`). O conserto e os números: D-LG-10 a D-LG-13. Gasto: 36 créditos (saldo 374).
+
+**A prévia:** `D:\Trab\digilab\capturas_lugares3d\cais\previa_cais.png` (quatro lados, no Blender, câmera ortográfica) e
+`docs/lugares3d/cais/conserto/previa.png`. O revisor: no corpo do PR.
+
+**Para a L3:** carregar `LUGARES_MODELOS.cais` pelo `carregarVariante`, com o comprido do píer ao longo da beira; a máscara
+`LUGARES_LUZ.cais` como `emissiveMap` (`flipY = false`), como a do portão. O cais na ilha é futuro (o multiplayer): o modelo entra, a cena não.
+
+Com o cais, os três lugares da tarefa estão entregues.
