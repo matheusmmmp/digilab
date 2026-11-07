@@ -593,3 +593,7 @@ dialog.modal-res::backdrop,dialog.modal-conf::backdrop,dialog.folha::backdrop{ba
 .ap-desce{color:var(--dl-danger,#b3261e)}
 .ap-hist{margin:0;padding-left:18px;display:grid;gap:4px;font-size:.8125rem}
 .ap-sub{margin:0;font-size:.8125rem;font-weight:800}
+/* o icone de postura da luta em tempo real (LUTA_EFEITOS E4): o desenho fica no canvas; este elemento transparente por cima leva o nome
+   no title (ao passar o mouse) e no leitor de tela */
+.luta-arena .luta-postura{position:absolute;z-index:2;display:block;background:none;cursor:help}
+.luta-arena .luta-postura[hidden]{display:none}

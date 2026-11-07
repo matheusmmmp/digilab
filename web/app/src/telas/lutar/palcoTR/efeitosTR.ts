@@ -4,6 +4,7 @@
 import type { EventoTR, LutaTR } from "../../../../motor/index.ts";
 import { VOO, seguirProjeteisTR, type VooTR } from "./projeteisTR.ts";
 import { seguirChaoTR, type MarcaTR } from "./chaoTR.ts";
+import { seguirPosturasTR, type BatidaTR } from "./posturasTR.ts";
 
 /** A forca do impacto (D-LE-2 da tarefa). PROPOSTO, SEM FONTE: ajustar nas capturas da E1.
     - pausaMs: a pausa do desenho no acerto (a luta nao para; so o proximo quadro demora); o pesado pausa o dobro do leve.
@@ -36,8 +37,10 @@ export interface VisualTR {
   voos: VooTR[];
   /** as marcas no piso (E3, chaoTR.ts): a cratera do pesado e o arrasto do empurrao, presas ao chao */
   marcas: MarcaTR[];
+  /** os golpes que bateram numa postura (E4, posturasTR.ts): o escudo que acende e o contra-golpe que devolve */
+  batidas: BatidaTR[];
 }
-export const visualNovoTR = (): VisualTR => ({ numeros: [], impactos: [], ultimoGolpe: ["", ""], pausaMs: 0, extra: 0, voos: [], marcas: [] });
+export const visualNovoTR = (): VisualTR => ({ numeros: [], impactos: [], ultimoGolpe: ["", ""], pausaMs: 0, extra: 0, voos: [], marcas: [], batidas: [] });
 export const VIDA_NUMERO = 45;   /* passos (~0,7 s) */
 
 export const COR_CURA = "#2f9e44", COR_TINTA = "#1d2433", COR_AZUL = "#2c73e0", COR_VERMELHO = "#d6336c", COR_FORTE = "#ffd23f";
@@ -62,6 +65,7 @@ export function aplicarEventosTR(v: VisualTR, sim: LutaTR, ev: readonly EventoTR
   v.impactos = v.impactos.filter(i => sim.S.passo - i.t0 < Math.max(IMPACTO.durMax, VOO.durImpacto));
   seguirProjeteisTR(v, sim);
   seguirChaoTR(v, sim, ev);
+  seguirPosturasTR(v, sim, ev);
 }
 
 /** a pausa pedida desde a ultima chamada (ms), zerando o pedido; 0 com o movimento reduzido */
