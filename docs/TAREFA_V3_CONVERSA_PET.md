@@ -352,3 +352,12 @@ O código da linha DC3a do [plano da DC3](PLANO_ANALISE_V3_CONVERSA_DC3.md) (se�
   adendo, não é o da `origin/main` (D-IA-6). Pelo coordenador, a DC3a sai com a fumaça do orquestrador e os testes. Os artefatos de
   `artifacts_v3_conversa_dc3/varredura/` ficam velhos, do código antes do adendo. A varredura é refeita na DC3b, antes do registro da run,
   com o adendo na `main`, e a estimativa de ~1 h da run vem dela.
+
+## DC3b e DC3c — a run única e o resultado (2026-11-07, Gerente da frente, Claude Code, Opus 5.5)
+
+- **DC3b:** a varredura do adendo e o registro da run foram ao #679. A run única rodou na `main` 9e16832: 3 200 vidas, 4 processos, 42 min.
+- **DC3c:** o resultado está em [RESULTADO_V3_CONVERSA_DC3.md](RESULTADO_V3_CONVERSA_DC3.md). Caiu na **linha 2** da 7.4: G-ESCUTA "> 0" e
+  guarda "≈ 0". O descritivo traz duas ressalvas:
+  - o efeito vem do dono atencioso, cuja célula conta duas vezes;
+  - só a fala de companhia aprende; a de comida não compensa.
+- **O próximo passo** é a DC3d, o porte ao jogo atrás de chave.

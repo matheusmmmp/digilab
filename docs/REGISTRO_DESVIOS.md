@@ -540,3 +540,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-07 — CONVERSA_PET, DC3a, o adendo 1 do plano (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc3a-codigo`)](registro/2026-11.md)
 - [2026-11-07 — CONVERSA_PET, DC3b, a varredura do adendo e o registro da run (Gerente da frente, Claude Code, Opus 5.5, branch `v3-conversa-dc3b-run`)](registro/2026-11.md)
 - [2026-11-07 — LUTA_EFEITOS, E4 as posturas como efeito (worker, Claude Code, Opus 5.5, branch `v3-luta-efeitos-e4`)](registro/2026-11.md)
+- [2026-11-07 — CONVERSA_PET, DC3b e DC3c, a run única e o resultado (Gerente da frente, Claude Code, Opus 5.5, branch `v3-conversa-dc3c-resultado`)](registro/2026-11.md)
