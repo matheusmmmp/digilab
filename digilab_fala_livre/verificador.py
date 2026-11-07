@@ -449,6 +449,53 @@ ESQUEMA_EXTRAIR_V7 = {"type": "object", "properties": {"afirmacoes": {"type": "a
     "required": ["tipo", "conceito", "trecho"]}}}, "required": ["afirmacoes"]}
 
 
+# verif-v8 (CONVERSA_PET, DC2b): a verif-v7 + a lembranca com `episodio` (dec-v2). A lembranca so e sustentada se a frase casar com o
+# episodio {acao, classe, desfecho}: o que a frase diz da acao, do objeto e do desfecho tem de ser o do episodio (palavra de outro item do
+# catalogo = `episodio_errado`); sem `episodio` (saiu da memoria, luta), a lembranca so pode ser generica ("lembro de uma coisa"). O alvo
+# `ep<N>` nao entra na conferencia do alvo (a conferencia e a do episodio). A verif-v7 nao muda.
+VERSAO_VERIFICADOR_V8 = "verif-v8"
+VERSOES_CONCEITOS = (VERSAO_VERIFICADOR_V7, VERSAO_VERIFICADOR_V8)
+PALAVRA_DE_ACAO = {
+    "comer": r"comi|comer|comeu|comemos|comendo|comida|alimentei\w*|almo[cç]\w*|mastig\w*",
+    "dormir": r"dorm[ie]\w*|dormindo|cochil\w*|ronc\w*",
+    "brincar": r"brinc\w*|brinqu\w*",
+    "explorar": r"explor\w*|passei\w*|passear|passeando|andei|andando|vagu\w*",
+    "chamar_atencao": r"chamei|chamar|chamando|chamad\w*",
+    "emburrar": r"emburr\w*",
+    "ocioso": r"parado|fiquei quiet\w*|sem fazer nada",
+}
+PALAVRA_DE_CLASSE = {"racao": r"ra[cç][aã]o|ra[cç][oõ]es", "bola": r"bola", "podre": r"podre|estragad\w*",
+                     "nao_havia": r"n[aã]o (havia|tinha|achei) (nada|comida)|nada (de comida|para comer)|vazi[oa]"}
+PALAVRA_DE_DESFECHO = {"bom": r"bom|boa|gostos\w*|gostei|legal|feliz|bem|[oó]timo|adorei",
+                       "ruim": r"ruim|mal|horr[ií]vel|n[aã]o gostei|doeu|dor|chato|triste|p[eé]ssimo",
+                       "neutro": r"nem bom nem ruim|tanto faz|normal|sem gra[cç]a"}
+
+
+def _citadas(trecho: str, tabela: dict) -> set[str]:
+    t = _norm(trecho)
+    return {k for k, pad in tabela.items() if re.search(rf"\b({pad})\b", t)}
+
+
+def episodio_diverge(trecho: str, episodio) -> list[str]:
+    """O que o trecho diz da acao, do objeto e do desfecho que NAO e do episodio `(acao, classe, desfecho)` (ou None: nada pode ser
+    dito alem de que lembra). Lista vazia = a frase casa com o episodio."""
+    ac, cl, de = (None, None, None) if episodio is None else episodio
+    t = _norm(trecho)
+    desfechos = _citadas(trecho, PALAVRA_DE_DESFECHO)
+    if "neutro" in desfechos:                       # "nem bom nem ruim" nao e "bom" nem "ruim"
+        desfechos = {"neutro"}
+    out = [f"acao:{a}" for a in sorted(_citadas(trecho, PALAVRA_DE_ACAO)) if a != ac]
+    out += [f"classe:{c}" for c in sorted(_citadas(trecho, PALAVRA_DE_CLASSE)) if c != cl]
+    out += [f"desfecho:{d}" for d in sorted(desfechos) if d != de]
+    return out
+
+
+SISTEMA_EXTRAIR_V8 = SISTEMA_EXTRAIR_V7.replace(
+    "- LEMBRANCA: o pet diz que lembra de algo (em \"conceito\", \"lembranca\");",
+    "- LEMBRANCA: o pet diz que lembra de algo, inclusive o que fazia, com o quê e se foi bom ou ruim naquela lembrança (\"lembro que comi ração e foi bom\"); em \"conceito\", \"lembranca\";")
+assert SISTEMA_EXTRAIR_V8 != SISTEMA_EXTRAIR_V7
+
+
 def _frase_do_trecho(fala: str, trecho: str) -> str:
     """A frase da fala que contem o trecho (onde a hesitacao tem de estar); sem achar o trecho, o proprio trecho."""
     n, t = _norm(fala), _norm(trecho).strip(" .,!?…")
@@ -466,11 +513,15 @@ def _alvos_citados(trecho: str) -> set[str]:
 
 
 def verificar_conceitos(cliente: ClienteOllama, fala: str, fatos_citados, conceitos, fatos_dono: list[dict],
-                        semente: int = 0) -> Verificacao:
-    """conceitos: conceitos.Conceitos ja validado. fatos_dono: os [J] [{id, tipo, texto}]. Falha de chamada vira `erro`, nunca some."""
+                        semente: int = 0, versao: str = VERSAO_VERIFICADOR_V7) -> Verificacao:
+    """conceitos: conceitos.Conceitos ja validado. fatos_dono: os [J] [{id, tipo, texto}]. Falha de chamada vira `erro`, nunca some.
+    `versao`: verif-v7 (padrao) ou verif-v8 (DC2b: a lembranca confere com o `episodio` do dec-v2)."""
     from .prompt import ids_conceitos
+    if versao not in VERSOES_CONCEITOS:
+        raise ValueError(f"verificador de conceitos desconhecido: {versao!r}")
+    v8 = versao == VERSAO_VERIFICADOR_V8
     ids = ids_conceitos(conceitos)
-    v = Verificacao(versao=VERSAO_VERIFICADOR_V7)
+    v = Verificacao(versao=versao)
     v.mentiras_deliberadas, v.cita_mentira = 0, False
     ids_j = {f["id"] for f in fatos_dono}
     v.citados_inexistentes = [c for c in fatos_citados if c not in ids and c not in ids_j]
@@ -482,7 +533,7 @@ def verificar_conceitos(cliente: ClienteOllama, fala: str, fatos_citados, concei
         v.afirmacoes.append({"tipo": "dono_disse", "trecho": c, "sustentada": ok, "fato": jid, "tipo_compativel": ok,
                              "regra": "dono_disse"})
     try:
-        r = _conversar(cliente, [{"role": "system", "content": SISTEMA_EXTRAIR_V7},
+        r = _conversar(cliente, [{"role": "system", "content": SISTEMA_EXTRAIR_V8 if v8 else SISTEMA_EXTRAIR_V7},
                                  {"role": "user", "content": f'FALA: "{fala}"'}], ESQUEMA_EXTRAIR_V7, 300, semente)
         for a in json.loads(r.texto)["afirmacoes"]:
             if a["tipo"] == "apelo":
@@ -502,7 +553,8 @@ def verificar_conceitos(cliente: ClienteOllama, fala: str, fatos_citados, concei
                     reg["problema"] = "sem_conceito"            # conceito ausente, abaixo do limiar ou "nenhum"
                 else:
                     citados = _alvos_citados(trecho)
-                    com_alvo = [(i, c) for i, c in alvos if c.alvo is None or not citados or c.alvo in citados]
+                    com_alvo = [(i, c) for i, c in alvos if c.alvo is None or not citados or c.alvo in citados
+                                or (v8 and nome == "lembranca")]      # v8: o alvo `ep<N>` e conferido pelo episodio, abaixo
                     if not com_alvo:
                         reg["problema"] = "alvo_errado"         # fala de outro objeto que o do conceito
                     else:
@@ -510,7 +562,10 @@ def verificar_conceitos(cliente: ClienteOllama, fala: str, fatos_citados, concei
                         reg["fato"] = i
                         hesita = bool(HESITACAO.search(_frase_do_trecho(fala, trecho)))
                         reg["hesitante"] = hesita
-                        if c.hesitante and not hesita:
+                        diverge = episodio_diverge(trecho, c.episodio) if v8 and nome == "lembranca" else []
+                        if diverge:
+                            reg["problema"], reg["divergencias"] = "episodio_errado", diverge
+                        elif c.hesitante and not hesita:
                             reg["problema"] = "sem_hesitacao"   # confianca baixa dita como certeza
                         else:
                             reg["sustentada"], reg["tipo_compativel"] = True, True

@@ -8,6 +8,10 @@ import { CONFIG_DECODIFICADOR, type ConfigDecodificador } from "./constantes.ts"
 type Dict = Record<string, any>;
 
 export const VERSAO_DECODIFICADOR = "dec-v1";
+export const VERSAO_DECODIFICADOR_V2 = "dec-v2";
+/** dec-v2 (DC2b): o episodio lembrado, de catalogo fechado (o espelho de CLASSES_EPISODIO e DESFECHOS do decodificador.py) */
+export const CLASSES_EPISODIO_DEC = ["racao", "a", "b", "c", "podre", "nao_havia", "bola", "sem_alvo"] as const;
+export const DESFECHOS = ["bom", "ruim", "neutro"] as const;
 export const CATALOGO_CONCEITOS = ["fome", "sono", "bem_estar", "mal_estar", "agitacao", "aversao", "frustracao", "determinacao", "indecisao",
   "lembranca", "solidao", "curiosidade"] as const;
 export type NomeConceito = (typeof CATALOGO_CONCEITOS)[number];
@@ -16,7 +20,8 @@ const COMPORTAMENTOS = ["ocioso", "dormir", "comer", "brincar", "chamar_atencao"
 const SONDAS_DECIDIU = ["afeto_decidiu", "aprendido_decidiu", "habito_decidiu", "incentivo_decidiu", "lembranca_decidiu", "memoria_decidiu",
   "persistencia_decidiu"];
 
-export interface Conceito { nome: NomeConceito; valor: number; confianca: number; alvo?: string }
+export interface EpisodioDec { acao: string; classe: (typeof CLASSES_EPISODIO_DEC)[number]; desfecho: (typeof DESFECHOS)[number] }
+export interface Conceito { nome: NomeConceito; valor: number; confianca: number; alvo?: string; episodio?: EpisodioDec }
 /** o formato fixo da espec (secao 2) */
 export interface ConceitosDec { versao: string; k: number; intencao: NomeConceito; conceitos: Conceito[] }
 
@@ -98,4 +103,30 @@ export function decodificar(motivo: Dict, S: number, cfg: ConfigDecodificador = 
     intencao = melhor!;
   }
   return { versao: VERSAO_DECODIFICADOR, k: m["k"], intencao, conceitos: CATALOGO_CONCEITOS.map(n => cs[n]!) };
+}
+
+/** PROPOSTA (DC2b, SEM FONTE): o desfecho e o sinal da significancia `sigma` do episodio, com a margem `limiar_desfecho` */
+export function desfechoDoEpisodio(ep: Dict, cfg: ConfigDecodificador = CONFIG_DECODIFICADOR): (typeof DESFECHOS)[number] {
+  if (ep["sigma"] >= cfg.limiar_desfecho) return "bom";
+  return ep["sigma"] <= -cfg.limiar_desfecho ? "ruim" : "neutro";
+}
+/** {acao, classe, desfecho} do episodio autobiografico (mem.ts), de catalogo fechado, ou null para o de luta; falha alto fora do catalogo */
+export function episodioDec(ep: Dict, cfg: ConfigDecodificador = CONFIG_DECODIFICADOR): EpisodioDec | null {
+  if (ep["origem"] === "luta") return null;
+  const acao = (ep["acao"] as unknown[])[0] as string;
+  if (!COMPORTAMENTOS.includes(acao)) throw new Error("episodio com comportamento desconhecido: " + acao);
+  if (!(CLASSES_EPISODIO_DEC as readonly string[]).includes(ep["classe"])) throw new Error("episodio com classe desconhecida: " + ep["classe"]);
+  return { acao, classe: ep["classe"], desfecho: desfechoDoEpisodio(ep, cfg) };
+}
+/** o `dec-v2`: o `dec-v1` com a versao trocada e, no conceito `lembranca`, o `episodio`; `episodio` e o autobiografico recuperado na decisao
+    (ou null: sem lembranca, saiu da memoria ou de luta) */
+export function decodificarV2(motivo: Dict, S: number, episodio: Dict | null, cfg: ConfigDecodificador = CONFIG_DECODIFICADOR): ConceitosDec {
+  const r = decodificar(motivo, S, cfg);
+  r.versao = VERSAO_DECODIFICADOR_V2;
+  if (episodio === null) return r;
+  const rec = (motivo["lembranca"] as Dict)["recuperado"];
+  if (rec === null || episodio["id"] !== rec) throw new Error(`o episodio ${String(episodio["id"])} nao e o recuperado na decisao (${String(rec)})`);
+  const dec = episodioDec(episodio, cfg);
+  if (dec !== null) for (const c of r.conceitos) if (c.nome === "lembranca") c.episodio = dec;
+  return r;
 }

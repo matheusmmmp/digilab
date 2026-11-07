@@ -35,7 +35,11 @@ fechado dos 12 nomes, inteiros em [0, 1024], alvo so de catalogo), liga o prompt
 da voz NAO tem estado do pet: "estado" so pode ter {"identidade": {"estagio", "forma"?}} (o estagio e o estilo da especie pelo
 corpus); chave a mais e 400. A conversa leva o historico [jogador, pet, estagio] (dele saem os [J] "o dono me disse") e "comando"
 opcional. "conceitos" nao se mistura com "voz", "prompt", "internet" nem "rival". A resposta traz a verificacao verif-v7 (a frase
-contra os conceitos). Qualquer coisa fora do formato e 400. Sem o campo, tudo como antes. A pagina ainda nao manda conceitos.
+contra os conceitos). Qualquer coisa fora do formato e 400. Sem o campo, tudo como antes.
+
+DC2b (2026-11-07): o formato "dec-v2" (alem do "dec-v1", que segue aceito) leva no conceito "lembranca" o campo "episodio" {acao, classe,
+desfecho}, de catalogo fechado (fora dele: 400). O dec-v2 liga o prompt voz-v2 e a verificacao verif-v8 (a lembranca so e sustentada se a
+frase casar com o episodio); o dec-v1 segue com voz-v1 e verif-v7. A pagina manda os conceitos so com a chave "Fala pela rede (teste)".
 
 Conversa nova (CONVERSA_PET, M2, decisao D2 do Matheus, 2026-11-06): o campo "prompt": "conversa-v1" (enum fechado em PROMPTS_CONVERSA;
 qualquer outro valor, inclusive null, e 400) liga o prompt conversa-v1 (M3) na CONVERSA, sem "voz": estilo da especie pelo corpus,
@@ -61,7 +65,8 @@ from digilab_fala_livre.ollama import URL_PADRAO, ClienteOllama
 from digilab_fala_livre.prompt import (VERSAO_CONVERSA_V1, VERSAO_PROMPT, VERSAO_PROMPT_V6, VERSAO_PROMPT_V8,
                                            VERSAO_PROMPT_V9)
 from digilab_fala_livre.revisao import gerar_com_revisao
-from digilab_fala_livre.verificador import (TIPO_DONO_DISSE, VERSAO_VERIFICADOR_V5, VERSAO_VERIFICADOR_V6, verificar,
+from digilab_fala_livre.verificador import (TIPO_DONO_DISSE, VERSAO_VERIFICADOR_V5, VERSAO_VERIFICADOR_V6, VERSAO_VERIFICADOR_V7,
+                                             VERSAO_VERIFICADOR_V8, verificar,
                                              verificar_conceitos)
 from digilab_fala_livre.voz import gerar_voz
 from servidor.fala_llm import ControleGasto
@@ -239,7 +244,7 @@ class ServicoFalaLivre:
                 "almanaque_sha256": self.almanaque_sha}
 
     def _fala_conceitos(self, d: dict, situacao: str, jog, hist: list) -> dict:
-        """A voz-v1 (DC2): so conceitos, estagio, estilo da especie, fala do dono e [J]. Nada do estado do pet."""
+        """A voz-v1 (DC2) ou voz-v2 (DC2b, formato dec-v2 com o episodio da lembranca): so conceitos, estagio, estilo da especie, fala do dono e [J]. Nada do estado do pet."""
         if any(k in d for k in ("voz", "prompt", "internet", "rival")):
             raise PedidoInvalido("conceitos nao se mistura com voz, prompt, internet nem rival")
         comando = d.get("comando", False)
@@ -255,7 +260,8 @@ class ServicoFalaLivre:
             verif = None
             if r.erro is None:                         # fala generica (erro) nao e fala da LLM: nao ha o que conferir
                 dono = [f for f in r.fatos if f["tipo"] == TIPO_DONO_DISSE]
-                verif = verificar_conceitos(self.cliente_verif, r.fala, r.fatos_citados, conceitos, dono, semente + 7919).para_dict()
+                verif = verificar_conceitos(self.cliente_verif, r.fala, r.fatos_citados, conceitos, dono, semente + 7919,
+                                            versao=_verificador_dos_conceitos(conceitos)).para_dict()
         return {"versao_app": VERSAO_APP, "fala": r.fala, "fatos_citados": list(r.fatos_citados), "fatos": list(r.fatos),
                 "estagio": r.estagio, "modelo": r.modelo, "versao_prompt": r.versao_prompt, "latencia_s": r.latencia_s,
                 "erro": r.erro, "comando": r.comando if comando else None, "verificacao": verif, "conceitos_k": conceitos.k,
@@ -289,7 +295,8 @@ class ServicoFalaLivre:
             raise PedidoInvalido("com conceitos, os fatos so podem ser [J] o dono me disse")
         conceitos = self._conceitos(d["conceitos"])
         with self.trava:
-            return verificar_conceitos(self.cliente_verif, fala, cit, conceitos, fatos, _semente(d.get("semente", 0))).para_dict()
+            return verificar_conceitos(self.cliente_verif, fala, cit, conceitos, fatos, _semente(d.get("semente", 0)),
+                                       versao=_verificador_dos_conceitos(conceitos)).para_dict()
 
     def verificar(self, d: dict) -> dict:
         fala = _texto(d.get("fala"), "fala", 400)
@@ -318,6 +325,11 @@ class ServicoFalaLivre:
             if versao is None:
                 return verificar(self.cliente_verif, fala, cit, fatos, _semente(d.get("semente", 0))).para_dict()
             return verificar(self.cliente_verif, fala, cit, fatos, _semente(d.get("semente", 0)), versao=versao).para_dict()
+
+
+def _verificador_dos_conceitos(conceitos: dec.Conceitos) -> str:
+    """DC2b: dec-v1 -> verif-v7 (a de sempre); dec-v2 (a lembranca com `episodio`) -> verif-v8, que confere a frase com o episodio"""
+    return VERSAO_VERIFICADOR_V8 if conceitos.versao == dec.VERSAO_DEC_V2 else VERSAO_VERIFICADOR_V7
 
 
 def _fato_ok(f) -> bool:

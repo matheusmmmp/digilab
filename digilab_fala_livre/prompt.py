@@ -517,6 +517,10 @@ def mensagens(fatos: list[Fato], situacao: str, fala_jogador: str | None = None,
 # vem marcado e a regra 2 manda a hesitacao. Nenhuma versao antiga muda; fica fora de VERSOES (mensagens() nao a monta: so
 # `mensagens_voz`) para nao entrar nos lacos que percorrem os prompts de fatos.
 VERSAO_VOZ_V1 = "voz-v1"
+# voz-v2 (CONVERSA_PET, DC2b): a voz-v1 para o formato dec-v2, em que o conceito `lembranca` traz o EPISODIO {acao, classe, desfecho} (catalogo
+# fechado, decodificado do episodio recuperado). O que muda no texto: a regra 3 (a lembranca agora diz o que o episodio diz) e um exemplo de
+# lembranca. A voz-v1 nao muda e segue valendo para o dec-v1; `versao_voz(conceitos)` escolhe pela versao do formato.
+VERSAO_VOZ_V2 = "voz-v2"
 
 SISTEMA_VOZ_V1 = """Você é um pet virtual do jogo Digilab, um Digimon que vive no Digimundo. Você fala como o próprio pet, em primeira pessoa, em português do Brasil. Você não vê o estado do jogo nem registros: só sabe o que a sua rede neural quer dizer neste instante, e isso vem no pedido como INTENÇÃO e CONCEITOS. O ESTILO DA ESPÉCIE (se houver) é só o tom, não é fato e as frases de exemplo dele não se copiam.
 
@@ -569,6 +573,25 @@ Pet: {"fala": "Disso eu não lembro. Por que você acha que lutei?", "fatos_cita
 FIM DOS EXEMPLOS (os seus CONCEITOS reais vêm no pedido, abaixo)"""
 
 
+REGRA_3_VOZ_V2 = """3. Lembrança só pelo conceito "lembranca". Se ele traz EPISÓDIO (a ação, o objeto e o desfecho), você pode dizer só isso: o que você fazia, com o quê, e se foi bom, ruim ou nem uma coisa nem outra ("lembro que comi ração e foi bom"), sem inventar quando, onde nem por quê. Sem EPISÓDIO, diga só que lembra de uma coisa. O alvo epN é código interno: nunca o diga. Aversão: você não quer aquele alvo (ração, bola...), sem inventar o motivo."""
+_REGRA_3_VOZ_V1 = REGRAS_VOZ_V1.splitlines()[3]
+assert _REGRA_3_VOZ_V1.startswith("3. Lembrança")
+REGRAS_VOZ_V2 = REGRAS_VOZ_V1.replace(_REGRA_3_VOZ_V1, REGRA_3_VOZ_V2)
+assert REGRAS_VOZ_V2 != REGRAS_VOZ_V1
+SISTEMA_VOZ_V2 = SISTEMA_VOZ_V1
+EXEMPLOS_VOZ_V2 = EXEMPLOS_VOZ_V1.replace("""FIM DOS EXEMPLOS""", """CONCEITOS DE EXEMPLO: [C1] lembranca (lembra de algo), valor 800, confiança 300 (CONFIANÇA BAIXA), alvo ep3, episódio: a ação foi brincar, com a bola; o desfecho foi bom
+Dono: "do que você lembra?"
+Pet: {"fala": "Acho que lembro de brincar com a bola... foi bom!", "fatos_citados": ["C1"]}
+FIM DOS EXEMPLOS""", 1)
+assert EXEMPLOS_VOZ_V2 != EXEMPLOS_VOZ_V1
+
+
+def versao_voz(conceitos) -> str:
+    """voz-v1 para o dec-v1, voz-v2 para o dec-v2 (a versao do formato que a pagina mandou)"""
+    from .conceitos import VERSAO_DEC_V2
+    return VERSAO_VOZ_V2 if conceitos.versao == VERSAO_DEC_V2 else VERSAO_VOZ_V1
+
+
 def _faixa_voz(valor: int) -> str:
     from .conceitos import FORTE
     return "forte" if valor >= FORTE else "médio" if valor >= 2 * FORTE // 3 else "fraco"
@@ -583,8 +606,13 @@ def linha_conceito(cid: str, c) -> str:
     from .conceitos import LIMIAR_CONFIANCA, SIGNIFICADO
     marca = "CERTO" if c.confianca >= LIMIAR_CONFIANCA else "CONFIANÇA BAIXA"
     alvo = f", alvo {c.alvo}" if c.alvo is not None else ""
+    ep = ""
+    if c.episodio is not None:                       # dec-v2: so palavras de catalogo (conceitos.ACAO_DITA etc.), nunca texto do episodio
+        from .conceitos import ACAO_DITA, CLASSE_DITA, DESFECHO_DITO
+        acao, classe, desfecho = c.episodio
+        ep = f", episódio: a ação foi {ACAO_DITA[acao]}, com {CLASSE_DITA[classe]}; o desfecho {DESFECHO_DITO[desfecho]}"
     return (f"[{cid}] {c.nome} ({SIGNIFICADO[c.nome]}), valor {c.valor} ({_faixa_voz(c.valor)}), "
-            f"confiança {c.confianca} ({marca}){alvo}")
+            f"confiança {c.confianca} ({marca}){alvo}{ep}")
 
 
 def mensagens_voz(conceitos, estagio: str, situacao: str, fala_jogador: str | None = None, historico=None,
@@ -600,12 +628,13 @@ def mensagens_voz(conceitos, estagio: str, situacao: str, fala_jogador: str | No
     if comando and situacao != "conversa":
         raise ValueError("o comando so existe na conversa")
     ids = ids_conceitos(conceitos)
+    v2 = versao_voz(conceitos) == VERSAO_VOZ_V2
     ditos = _historico_do_estagio(historico, estagio) if situacao == "conversa" else []
     dono = fatos_do_dono([jog for jog, _ in ditos])
-    sistema = (estilo + "\n\n" if estilo else "") + SISTEMA_VOZ_V1
+    sistema = (estilo + "\n\n" if estilo else "") + (SISTEMA_VOZ_V2 if v2 else SISTEMA_VOZ_V1)
     if comando:
         sistema += "\n\n" + COMANDO_NA_VOZ_V1
-    sistema += "\n\n" + EXEMPLOS_VOZ_V1
+    sistema += "\n\n" + (EXEMPLOS_VOZ_V2 if v2 else EXEMPLOS_VOZ_V1)
     msgs = [{"role": "system", "content": sistema}]
     for jog, pet in ditos:
         msgs += [{"role": "user", "content": f"Jogador: {_jogador_em_uma_linha(jog)}"}, {"role": "assistant", "content": pet}]
@@ -618,7 +647,7 @@ def mensagens_voz(conceitos, estagio: str, situacao: str, fala_jogador: str | No
     pedido += f"ESTAGIO: {estagio}\n"
     if comando:
         pedido += BLOCO_COMANDO_V8 + "\n"
-    pedido += "\n" + REGRAS_VOZ_V1 + ("\n" + REGRA_DONO_DISSE_VOZ_V1 if dono else "") + "\n\n"
+    pedido += "\n" + (REGRAS_VOZ_V2 if v2 else REGRAS_VOZ_V1) + ("\n" + REGRA_DONO_DISSE_VOZ_V1 if dono else "") + "\n\n"
     pedido += ("SITUAÇÃO: fala espontânea." if situacao == "espontanea"
                else f'SITUAÇÃO: conversa. Jogador: "{_jogador_em_uma_linha(fala_jogador)}"')
     msgs.append({"role": "user", "content": pedido})
