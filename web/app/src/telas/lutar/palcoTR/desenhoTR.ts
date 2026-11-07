@@ -11,6 +11,7 @@ import { zoomAtual } from "../../../escala.ts";
 import { VISUAL_CENA, prontas, type IdCenaTR } from "./cenasTR.ts";
 import { elementoDoSprite } from "./elementosTR.ts";
 import { GOLPES_RAJADA, VOO, cabecaVisivel, fracaoDaRajada, fracaoDoVoo, geometriaTR, pixelsDaCabeca, pixelsDoEstouro, pixelsDoRastro, pontoDoVoo, xTela, type GeometriaTR, type PixelTR } from "./projeteisTR.ts";
+import { CHAO, alfaDaMarca, pixelsDaCratera, pixelsDaOnda, pixelsDaTelegrafia, pixelsDoArrasto, poeiraDaNuvem, poeiraDoPassoTR, telegrafiaDoPasso } from "./chaoTR.ts";
 import { IMPACTO, COR_FORTE, COR_TINTA, MOVIMENTO, VIDA_NUMERO, clarao, empurraoDoPasso, faiscaDoPasso, pixelsDoTexto, poeiraDoPasso, puloDaQueda, textoDeDano, tremidaDoPasso, type VisualTR } from "./efeitosTR.ts";
 
 /** os efeitos de impacto (so vista) ficam em efeitosTR.ts; estes nomes continuam saindo daqui */
@@ -52,8 +53,8 @@ function ajustar(cv: HTMLCanvasElement): { K: number; W: number; H: number } {
 /** desenha pixels de efeito (projeteisTR.ts) em volta de (x, y) px de CSS, na grade dos pixels do sprite: cada pixel de efeito tem
     VOO.pixel pixels do sprite (e px do canvas cada, inteiro), e pelo menos VOO.pixelMinCss px de CSS (um sprite grande deixa a escala em 1);
     dir -1 espelha */
-function pintar(cx: CanvasRenderingContext2D, px: readonly PixelTR[], x: number, y: number, g: GeometriaTR, dir: number): void {
-  const x0 = Math.round(x * g.K), y0 = Math.round(y * g.K), u = g.e * Math.max(VOO.pixel, Math.ceil(VOO.pixelMinCss * g.K / g.e));
+function pintar(cx: CanvasRenderingContext2D, px: readonly PixelTR[], x: number, y: number, g: GeometriaTR, dir: number, uFixo?: number): void {
+  const x0 = Math.round(x * g.K), y0 = Math.round(y * g.K), u = uFixo ?? g.e * Math.max(VOO.pixel, Math.ceil(VOO.pixelMinCss * g.K / g.e));
   for (const luz of [true, false]) {
     cx.globalCompositeOperation = luz ? "lighter" : "source-over";
     for (const p of px) if (p.luz === luz) {
@@ -95,6 +96,36 @@ export function desenharLutaTR(cv: HTMLCanvasElement, c: CenaDesenho, a: AtlasOk
   /* as sombras */
   cx.fillStyle = "rgba(0,0,0,.35)";
   for (const x of centros) { cx.beginPath(); cx.ellipse(x * K, PES * K, 34 * K, 6 * K, 0, 0, Math.PI * 2); cx.fill(); }
+  /* o chao (E3, chaoTR.ts), por baixo dos lutadores: as marcas no piso, a elipse da telegrafia e a onda de choque do pesado. Pixels de chao
+     na grade do sprite (CHAO.pixel pixels do sprite cada); as marcas ficam no x da luta (presas ao chao, nao ao lutador) */
+  const elementos = [elementoDoSprite(c.A.sprite), elementoDoSprite(c.B.sprite)], uChao = geo.e * CHAO.pixel;
+  const meiaChao = (i: number): number => Math.max(3, Math.round(geo.meias[i] * K / uChao));
+  const xChao = (i: number, x: number): number => centros[i] + xTela(x, W) - xTela(xs[i], W);
+  let marcas = 0, telegrafias = 0, prontas = 0, ondas = 0, preparosMeio = 0, carregarMeio = 0;
+  if (c.sim) {
+    for (const m of c.visual.marcas) {
+      if (alfaDaMarca(m, passo) <= 0) continue;
+      marcas++;
+      if (m.tipo === "cratera") pintar(cx, pixelsDaCratera(m, elementos[1 - m.lado], meiaChao(m.lado), passo), xChao(m.lado, m.x0), PES, geo, 1, uChao);
+      else {
+        const a = xChao(m.lado, m.x0), b = xChao(m.lado, m.x1), comp = Math.round(Math.abs(b - a) * K / uChao);
+        pintar(cx, pixelsDoArrasto(m, comp, passo), a, PES, geo, b >= a ? 1 : -1, uChao);
+      }
+    }
+    c.sim.S.L.forEach((l, i) => {
+      const tg = telegrafiaDoPasso(l, passoLuta); if (!tg) return;
+      telegrafias++; if (tg.pronto) prontas++;
+      if (tg.f >= .35 && tg.f <= .65) { if (tg.tipo === "pesado") preparosMeio++; else carregarMeio++; }
+      pintar(cx, pixelsDaTelegrafia(tg, elementos[i], meiaChao(i), passo, reduzido), centros[i], PES, geo, 1, uChao);
+    });
+    for (const m of c.visual.marcas) if (m.tipo === "cratera") {
+      const px = pixelsDaOnda(elementos[1 - m.lado], passo - m.t0, meiaChao(m.lado), reduzido);
+      if (px.length) { ondas++; pintar(cx, px, xChao(m.lado, m.x0), PES, geo, 1, uChao); }
+    }
+  }
+  cv.dataset.marcas = String(marcas); cv.dataset.telegrafias = String(telegrafias); cv.dataset.telegrafiasProntas = String(prontas); cv.dataset.ondas = String(ondas);
+  /* para as capturas: a elipse no meio do fechamento, no preparo do pesado e no carregar */
+  cv.dataset.preparosMeio = String(preparosMeio); cv.dataset.carregarMeio = String(carregarMeio);
   const topo: number[] = [], empurros: number[] = [0, 0];
   const empAlvo = (i: number): number => reduzido || !c.sim ? 0 : (i ? 1 : -1) * empurraoDoPasso(c.visual, passo, i);
   [c.A, c.B].forEach((L, i) => {
@@ -129,19 +160,28 @@ export function desenharLutaTR(cv: HTMLCanvasElement, c: CenaDesenho, a: AtlasOk
     cx.globalAlpha = 1;
     topo.push(PES - h * e / K);
   });
-  /* a poeira nos pes (a v18 e a investida): na arrancada, atras de quem arranca; no deslize do empurrao, na frente de quem e empurrado (o
-     lado de onde veio o golpe). Pixels inteiros, sem acaso */
-  if (!reduzido && c.sim) c.sim.S.L.forEach((l, i) => {
-    const inv = l.acao?.nome === "investida" && !l.acao.feito ? l.acao : null, desliza = passoLuta < l.deslizeAte;
-    if (!inv && !desliza) return;
-    const idade = inv ? passoLuta - inv.inicio : passoLuta - (l.deslizeAte - c.sim!.S.C.empurraoAlvo!.deslize),
-      atras = i ? 1 : -1, sinal = inv ? atras : -atras, ps = Math.max(1, Math.round(2 * K));
+  /* a poeira nos pes (a v18, a investida e a E3, chaoTR.ts): na corrida e na arrancada, atras de quem corre (na frente, no recuo); no deslize
+     do empurrao, na frente de quem e empurrado (o lado de onde veio o golpe); no pouso da queda e no acerto do pesado, uma nuvem para os dois
+     lados. Pixels inteiros, sem acaso; sem poeira com o movimento reduzido */
+  let poeiras = 0;
+  if (!reduzido && c.sim) {
+    const ps = Math.max(1, Math.round(2 * K));
     cx.fillStyle = "rgba(214,196,160,.8)";
-    for (const p of poeiraDoPasso(idade)) cx.fillRect(Math.round((centros[i] + sinal * (14 + p.dx * 2)) * K), Math.round((PES - 2 - p.dy * 2) * K), ps * p.tam, ps * p.tam);
-  });
+    for (const f of poeiraDoPassoTR(c.sim, c.visual.marcas, passoLuta)) {
+      const i = f.lado, base = f.x === null ? centros[i] : xChao(i, f.x), sinal = f.sentido * (i ? 1 : -1);
+      poeiras++;
+      if (f.sentido === 0) {
+        for (const p of poeiraDaNuvem(f.idade, f.tipo === "pesado")) cx.fillRect(Math.round((base + Math.sign(p.dx) * 10 + p.dx * 2) * K), Math.round((PES - 2 - p.dy * 2) * K), ps * p.tam, ps * p.tam);
+        continue;
+      }
+      /* a corrida levanta menos: duas nuvens menores */
+      const nuvens = f.tipo === "corrida" ? poeiraDoPasso(f.idade).slice(0, 2).map(p => ({ ...p, tam: Math.max(1, p.tam - 1) })) : poeiraDoPasso(f.idade);
+      for (const p of nuvens) cx.fillRect(Math.round((base + sinal * (14 + p.dx * 2)) * K), Math.round((PES - 2 - p.dy * 2) * K), ps * p.tam, ps * p.tam);
+    }
+  }
+  cv.dataset.poeiras = String(poeiras);
   /* os projeteis em voo (E2): da boca de quem atira a frente do alvo, na cor e na forma do elemento, com rastro e halo de luz; a cabeca fica
      na tela pelo menos VOO.minVisivel passos (o voo no motor pode durar so 5) */
-  const elementos = [elementoDoSprite(c.A.sprite), elementoDoSprite(c.B.sprite)];
   let cabecas = 0, meioDoVoo = 0;
   if (c.sim) for (const o of c.visual.voos) {
     const dir = o.de === 0 ? 1 : -1, k = reduzido ? VOO.rastroReduzido : VOO.rastro;
