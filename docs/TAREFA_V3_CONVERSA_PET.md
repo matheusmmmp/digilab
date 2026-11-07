@@ -329,3 +329,22 @@ O código da linha DC3a do [plano da DC3](PLANO_ANALISE_V3_CONVERSA_DC3.md) (se�
   fecha no tick da decisão, e o dono age 15 ticks depois: na varredura, 0 dos 2 059 atendimentos caem dentro do intervalo. O G-ESCUTA só pode
   medir o efeito do cuidado no estado, e a varredura saiu na linha 4 (G-ESCUTA "< 0": quem é atendido fala menos). O plano previu esse nulo;
   aqui ele é certo por construção.
+
+### DC3a, o adendo 1 (APROVADO pelo Matheus em 2026-11-07, DC3-A1 a DC3-A4), no mesmo PR
+
+- **O crédito da fala até a decisão seguinte (A1.1):** com a `fala_unidades` ligada, a opção de fala lê o corpo de depois na percepção da
+  decisão seguinte (`adapt._fechar(p, obs_seguinte)`); as outras opções, e o LAB, seguem com o do tick da ação. A última decisão da vida
+  fica sem fechar, como hoje (D-CP-DC3a-10). Desligada, as vidas de hoje saem byte a byte (o gabarito `e8548ddb` confere).
+- **A medida (A1.2):** a `fala_nas_decisoes` dá, por janela e na vida, as decisões com necessidade (fora do dormir, maior urgência entre
+  fome, higiene e solidão > `urgencia_lambda`, estrito), a **P(fala pertinente | necessidade)** (None sem decisão com necessidade) e a
+  urgência média nelas.
+- **A análise:** o G-ESCUTA é essa medida nos dias 8–14 (atende − ignora no LAB+F, 4 células, IC95 do t sem margem); a P-NECESSIDADE entra nas
+  premissas; o descritivo ganha a fala pertinente por dia, a urgência média e o r_n da fala por dono, janela e conteúdo, e a fração dos
+  cuidados do dono de hoje dentro de intervalos de fala.
+- **A conferência 4.4 (A1.3) falha alto** no LAB+F: todo atendimento dentro do intervalo da fala que o provocou (salvo o da última decisão,
+  contado à parte). A linha 4 da 7.4 tem o texto novo.
+- **Testes:** `tests/test_conversa_dc3a.py`, 23 testes. Ligada, o r_n da fala é o do corpo da decisão seguinte e o das outras opções o do
+  tick, e o atendimento muda o r_n só das falas do LAB+F. A medida condicionada é conferida com casos à mão, e a conferência falha alto
+  quando forçada.
+- **O achado D-CP-DC3a-11:** no comedouro, o `alimentar` do dono vira ração no chão, e o corpo só muda quando o pet come. O cuidado que
+  chega ao r_n da fala é o `limpar` e o `acariciar`.
