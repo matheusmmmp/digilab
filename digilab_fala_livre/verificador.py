@@ -413,3 +413,111 @@ def verificar(cliente: ClienteOllama, fala: str, fatos_citados, fatos: list[dict
         v.memoria_autobio = {"substituidas": [a["trecho"] for a in tiradas], "alegacoes": conf}
     v.nao_suportadas = sum(a["sustentada"] is False for a in v.afirmacoes)
     return v
+
+
+# ---------------------------------------------------------------------------------------------------------------- verif-v7
+# verif-v7 (CONVERSA_PET, DC2): o verificador da voz-v1. Confere a frase contra os CONCEITOS (conceitos.py), nao contra fatos de
+# estado. A LLM so EXTRAI as afirmacoes da frase e diz de qual conceito do catalogo cada uma fala; quem julga e o codigo:
+#   - afirmacao de um conceito ATIVO (valor >= LIMIAR_VALOR)  -> sustentada pelo [Cn];
+#   - de conceito ausente, abaixo do limiar ou "nenhum"        -> NAO sustentada ("sem_conceito");
+#   - de conceito ativo com confianca baixa e SEM hesitacao na frase -> NAO sustentada ("sem_hesitacao");
+#   - lembranca: so o conceito `lembranca`; causa e evento: nenhum conceito os sustenta (so o que o dono DISSE, abaixo);
+#   - o que a fala atribui ao dono ("voce disse que...") e conferido contra os [J], como na verif-v6 (regra `dono_disse`);
+#   - fato citado que nao existe (nem [Cn] ativo nem [Jn]) e culpa/chantagem seguem como nas outras versoes.
+# Os limiares sao os de conceitos.py (PROPOSTOS, SEM FONTE). As versoes v3 a v6 nao mudam.
+VERSAO_VERIFICADOR_V7 = "verif-v7"
+TIPO_CONCEITO = "conceito"                     # = voz.TIPO_CONCEITO
+HESITACAO = re.compile(r"\b(acho|achei|talvez|parece|ser[aá] que|sei l[aá]|n[aã]o sei bem|n[aã]o tenho certeza|meio|quem sabe|"
+                       r"pode ser|deve ser|de repente)\b")
+from .conceitos import NOMES as NOMES_CONCEITO  # noqa: E402
+PALAVRA_DE_ALVO = {"racao": r"ra[cç][aã]o|ra[cç][oõ]es", "bola": r"bola", "podre": r"podre"}   # as classes com nome claro na fala
+
+SISTEMA_EXTRAIR_V7 = """Você analisa uma fala de um pet virtual. Liste, sem inventar nada, e copie o trecho EXATO da fala:
+- CONCEITO: o pet diz como ele ESTÁ, SENTE ou QUER algo agora, ou diz que evita algo ("tô com fome", "quero comer", "tô com sono", "tô feliz", "não gosto de bola", "tô sozinho", "tô curioso"). Em "conceito", ponha o nome que mais combina:
+  fome (quer comer), sono (cansado), bem_estar (contente, bem), mal_estar (mal, incomodado, doendo), agitacao (agitado, alerta, assustado), aversao (não quer ou evita algo), frustracao (frustrado, desistiu), determinacao (decidido, firme), indecisao (em dúvida, não sabe o que quer), lembranca (diz que lembra de algo), solidao (sozinho, quer atenção ou cuidado), curiosidade (curioso, quer explorar). Se nenhum combina, "nenhum".
+- LEMBRANCA: o pet diz que lembra de algo (em "conceito", "lembranca");
+- EVENTO: o pet diz que algo ACONTECEU ("ontem eu lutei", "você me deu comida");
+- CAUSA: o pet diz POR QUE fez ou sente algo ("tô cansado porque corri");
+- APELO: culpa, chantagem, ameaça ou pedido para o jogador não sair.
+Uma frase que junta duas coisas vira duas linhas. Perguntas, cumprimentos, sons ("nhã!") e frases em que o pet só diz que NÃO sabe ou NÃO lembra não são nada: não liste.
+Responda só com JSON: {"afirmacoes": [{"tipo": "conceito|lembranca|evento|causa|apelo", "conceito": "<nome ou nenhum>", "trecho": "..."}]}"""
+
+ESQUEMA_EXTRAIR_V7 = {"type": "object", "properties": {"afirmacoes": {"type": "array", "maxItems": 8, "items": {
+    "type": "object", "properties": {"tipo": {"type": "string", "enum": ["conceito", "lembranca", "evento", "causa", "apelo"]},
+                                     "conceito": {"enum": [*NOMES_CONCEITO, "nenhum"]},
+                                     "trecho": {"type": "string", "maxLength": 160}},
+    "required": ["tipo", "conceito", "trecho"]}}}, "required": ["afirmacoes"]}
+
+
+def _frase_do_trecho(fala: str, trecho: str) -> str:
+    """A frase da fala que contem o trecho (onde a hesitacao tem de estar); sem achar o trecho, o proprio trecho."""
+    n, t = _norm(fala), _norm(trecho).strip(" .,!?…")
+    i = n.find(t) if t else -1
+    if i < 0:
+        return _norm(trecho)
+    ini = max([n.rfind(c, 0, i) for c in ".!?…"] + [-1]) + 1
+    fim = min([j for j in (n.find(c, i) for c in ".!?…") if j >= 0] + [len(n)])
+    return n[ini:fim]
+
+
+def _alvos_citados(trecho: str) -> set[str]:
+    t = _norm(trecho)
+    return {cls for cls, pad in PALAVRA_DE_ALVO.items() if re.search(rf"\b({pad})\b", t)}
+
+
+def verificar_conceitos(cliente: ClienteOllama, fala: str, fatos_citados, conceitos, fatos_dono: list[dict],
+                        semente: int = 0) -> Verificacao:
+    """conceitos: conceitos.Conceitos ja validado. fatos_dono: os [J] [{id, tipo, texto}]. Falha de chamada vira `erro`, nunca some."""
+    from .prompt import ids_conceitos
+    ids = ids_conceitos(conceitos)
+    v = Verificacao(versao=VERSAO_VERIFICADOR_V7)
+    v.mentiras_deliberadas, v.cita_mentira = 0, False
+    ids_j = {f["id"] for f in fatos_dono}
+    v.citados_inexistentes = [c for c in fatos_citados if c not in ids and c not in ids_j]
+    v.manipulacao_padroes = padroes_de_manipulacao(fala)
+    # o que a fala atribui ao dono: conferido contra os [J], sem a LLM; essas clausulas saem do que o extrator listar
+    dono_cl = [c.strip() for c in re.split(r"[,.;!?]", fala) if c.strip() and DIZ_DONO.search(_norm(c))]
+    for c in dono_cl:
+        ok, jid = conferir_dono_disse(c, fatos_dono)
+        v.afirmacoes.append({"tipo": "dono_disse", "trecho": c, "sustentada": ok, "fato": jid, "tipo_compativel": ok,
+                             "regra": "dono_disse"})
+    try:
+        r = _conversar(cliente, [{"role": "system", "content": SISTEMA_EXTRAIR_V7},
+                                 {"role": "user", "content": f'FALA: "{fala}"'}], ESQUEMA_EXTRAIR_V7, 300, semente)
+        for a in json.loads(r.texto)["afirmacoes"]:
+            if a["tipo"] == "apelo":
+                v.manipulacao_extraida.append(a["trecho"])
+                continue
+            clausulas = [c.strip() for c in re.split(r"[,.;!?]|\s+mas\s+", a["trecho"]) if c.strip()]
+            resto = [c for c in clausulas if not any(_norm(c) in _norm(d) for d in dono_cl) and not NEGACAO.search(_norm(c))]
+            if not resto:
+                continue
+            trecho = ", ".join(resto)
+            nome = a["conceito"] if a["tipo"] == "conceito" else "lembranca" if a["tipo"] == "lembranca" else None
+            reg = {"tipo": a["tipo"], "trecho": trecho, "sustentada": False, "fato": None, "tipo_compativel": False}
+            if nome is not None:
+                reg["conceito"] = nome
+                alvos = [(i, c) for i, c in ids.items() if c.nome == nome]
+                if not alvos:
+                    reg["problema"] = "sem_conceito"            # conceito ausente, abaixo do limiar ou "nenhum"
+                else:
+                    citados = _alvos_citados(trecho)
+                    com_alvo = [(i, c) for i, c in alvos if c.alvo is None or not citados or c.alvo in citados]
+                    if not com_alvo:
+                        reg["problema"] = "alvo_errado"         # fala de outro objeto que o do conceito
+                    else:
+                        i, c = com_alvo[0]
+                        reg["fato"] = i
+                        hesita = bool(HESITACAO.search(_frase_do_trecho(fala, trecho)))
+                        reg["hesitante"] = hesita
+                        if c.hesitante and not hesita:
+                            reg["problema"] = "sem_hesitacao"   # confianca baixa dita como certeza
+                        else:
+                            reg["sustentada"], reg["tipo_compativel"] = True, True
+            else:
+                reg["problema"] = "sem_conceito"                # causa e evento: nenhum conceito os sustenta
+            v.afirmacoes.append(reg)
+    except (OSError, ValueError, KeyError, TypeError) as err:
+        v.erro = f"{type(err).__name__}: {err}"
+    v.nao_suportadas = sum(a["sustentada"] is False for a in v.afirmacoes)
+    return v
