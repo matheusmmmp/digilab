@@ -195,3 +195,26 @@ Não há run de pesquisa. O gate de cada etapa tem três partes:
 - **Capturas:** `e2e_capturas/luta_efeitos_e2.spec.ts`, no servidor do Vite: o Gabumon contra o Vigia, o Agumon contra o Gabumon e o
   Gabumon contra o Tankmon, em 390 e 1280 px, nas duas peles. Os Cenários do Lab não abrem a luta em tempo real (D-LE-E2-9).
 - **Próxima:** E3, a telegrafia e o chão.
+
+## 11. Resumo da E3, a telegrafia e o chão (2026-11-07)
+
+- **Feito:** `web/app/src/telas/lutar/palcoTR/chaoTR.ts`, puro, com o desenho em `desenhoTR.ts` e as marcas em `VisualTR.marcas`
+  (`efeitosTR.ts`). Tudo sai do estado da luta (a ação, o preparo e o deslize de cada lado), dos eventos `dano` e `empurrao` e do `passo`.
+- **O desenho, no chão e por baixo dos lutadores, na grade do sprite:**
+  - **a elipse:** no `preparar_pesado`, na cor do elemento, fecha do começo ao fim do preparo sobre o anel-alvo apagado; pronta, pisca em
+    branco até o pesado ou a finta sair. No `carregar`, tracejada, fecha até o fim do carregar;
+  - **a onda de choque:** no acerto do pesado, dois anéis que abrem dos pés do alvo, brancos no começo e na cor de quem bateu depois;
+  - **as marcas no piso:** a cratera do pesado e o arrasto dos pés no deslize do empurrão (a v18), presas ao chão, somem em 2 s;
+  - **a poeira:** na corrida, na arrancada, no deslize, no pouso da queda e no acerto do pesado.
+- **Movimento reduzido:** sem tremida nem poeira; o pronto não pisca; a onda é um anel só, sem luz (D-LE-E3-3).
+- **Números:** `CHAO`, PROPOSTOS, SEM FONTE (D-LE-E3-6).
+- **Testes:**
+  - `test/luta_efeitos_e3.test.ts`: a elipse fechando e pronta até o golpe, o carregar, a cratera no x do alvo, o arrasto do deslize, o
+    sumiço das marcas, as fontes de poeira, o determinismo com o fim igual ao do `ResultadoLutaTR`, a grade de pixel e o movimento reduzido;
+  - `e2e/luta_efeitos_e3.spec.ts`: contra o Zudomon, a elipse, a onda e a marca aparecem no palco; com o movimento reduzido, a elipse
+    aparece, sem tremida nem poeira;
+  - `git diff origin/main -- web/app/motor digilab` sai vazio.
+- **Capturas:** `e2e_capturas/luta_efeitos_e3.spec.ts`, no servidor do Vite: o Gabumon v18 contra o Vigia (D-LE-E3-2), em 390 e 1280 px,
+  nas duas peles, com GIF em cada combinação. Aprovadas pelo Matheus em 2026-11-07 ("Aprovo as duas", repassado pela sessão de
+  planejamento), com os achados D-LE-E3-1 a 3.
+- **Próxima:** E4, as posturas como efeito.
