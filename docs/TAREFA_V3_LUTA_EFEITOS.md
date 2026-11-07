@@ -218,3 +218,31 @@ Não há run de pesquisa. O gate de cada etapa tem três partes:
   nas duas peles, com GIF em cada combinação. Aprovadas pelo Matheus em 2026-11-07 ("Aprovo as duas", repassado pela sessão de
   planejamento), com os achados D-LE-E3-1 a 3.
 - **Próxima:** E4, as posturas como efeito.
+
+## 12. Resumo da E4, as posturas como efeito (2026-11-07)
+
+- **Feito:** `web/app/src/telas/lutar/palcoTR/posturasTR.ts`, puro, com o desenho em `desenhoTR.ts` e as batidas no escudo e no
+  contra-golpe em `VisualTR.batidas` (`efeitosTR.ts`). Tudo sai do estado da luta (a ação, o preparo e o `peleAte` de cada lado), dos
+  eventos `dano` e do `passo`. As posturas não empurram (D-EMP-9/11).
+- **O desenho, na grade do sprite:**
+  - **defender:** um escudo em arco na frente do corpo, que acende quando o golpe bate nele;
+  - **esquiva:** duas cópias do sprite, na cor do elemento e apagadas, que abrem para trás;
+  - **carregar:** faíscas que sobem pelos lados do corpo, sem nada no chão; a elipse tracejada continua só a da E3 (D-LE-E4-1);
+  - **contra-golpe:** em guarda, um brilho pequeno na frente; no golpe devolvido, uma cruz amarela e vermelha com contorno escuro
+    (D-LE-E4-3);
+  - **pele dura:** a cor do metal e uma faixa de luz que corre pelo sprite enquanto a pele vale (D-LE-E4-2);
+  - **o ícone:** a etiqueta de texto virou um ícone 7 × 7 em placa escura, com um elemento transparente por cima que leva o nome no
+    `title` e no leitor de tela ("Gabumon: carregar"); o pesado pronto ganhou o `!!` (D-LE-E4-6).
+- **Movimento reduzido:** o escudo não acende, não há clarão nem faixa, as faíscas e as cópias ficam paradas; os ícones continuam.
+- **Números:** `POSTURA`, PROPOSTOS, SEM FONTE; o pixel mínimo de 2 px de CSS no celular (D-LE-E4-4).
+- **Testes:**
+  - `test/luta_efeitos_e4.test.ts`: o ícone de cada postura e os ícones distintos, o escudo aceso e a batida do contra-golpe, o fantasma, a
+    aura fora do chão e a pele além da ação, o determinismo com o fim igual ao do `ResultadoLutaTR`, nada empurra, a grade de pixel e o
+    movimento reduzido;
+  - `e2e/luta_efeitos_e4.spec.ts`: contra o Zudomon, a aura e a pele aparecem, com o ícone nomeado no `title` e no leitor de tela; com o
+    movimento reduzido, os ícones ficam, sem tremida, escudo aceso nem clarão;
+  - `git diff origin/main -- web/app/motor digilab` sai vazio.
+- **Capturas:** `e2e_capturas/luta_efeitos_e4.spec.ts`, no servidor do Vite: o Gabumon v18 contra a Lillymon (escudo, contra-golpe), o
+  WarGrowlmon (pele dura, preparo, pronto), o Kuramon (esquiva) e o Silphymon (marcar), em 390 e 1280 px, nas duas peles, com GIF nos três
+  primeiros. Aprovadas pelo Matheus em 2026-11-07 ("Faça o merge e siga cm o resto", repassado pela sessão que coordena a frente).
+- **Próxima:** E5.

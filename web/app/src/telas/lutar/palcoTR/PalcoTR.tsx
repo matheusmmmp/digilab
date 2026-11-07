@@ -8,7 +8,7 @@ import { atlasAtual, imagemAtlas, useAtlas } from "../../../atlas.ts";
 import { AvisoSom } from "../../../componentes/AvisoSom.tsx";
 import { LUTA, useLuta, type HudLado, type LutadorTela, type Palco, type RegraTR } from "../../../luta.ts";
 import { arquivosCena, falhasMapa, ouvirMapas } from "./cenasTR.ts";
-import { desenharLutaTR } from "./desenhoTR.ts";
+import { desenharLutaTR, rotulosDoCanvas } from "./desenhoTR.ts";
 import "../../../estilo/abertas.css";
 import "../../../estilo/luta_hud.css";
 
@@ -31,7 +31,7 @@ const QUADRO_PARADO = 120;
 export const relogio = (s: number): string => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 /** o palco desenhado: a tela inteira da luta (`luta`, com as plaquinhas em caixas de HUD) e a previa parada da Arena */
 export function Cena({ p, luta: naLuta = false }: { p: Palco; luta?: boolean }) {
-  const a = useAtlas(), ref = useRef<HTMLCanvasElement>(null), [, redesenhar] = useReducer((x: number) => x + 1, 0);
+  const a = useAtlas(), ref = useRef<HTMLCanvasElement>(null), postRef = [useRef<HTMLSpanElement>(null), useRef<HTMLSpanElement>(null)], [, redesenhar] = useReducer((x: number) => x + 1, 0);
   const arqs = arquivosCena(p.cena), faltam = arqs.filter(x => falhasMapa.has(x));
   useEffect(() => ouvirMapas(redesenhar), []);
   useEffect(() => {
@@ -44,6 +44,17 @@ export function Cena({ p, luta: naLuta = false }: { p: Palco; luta?: boolean }) 
         ult = agora;
         const pp = LUTA.palco ?? p, at = atlasAtual();
         desenharLutaTR(cv, { cena: pp.cena, A: pp.A, B: pp.B, sim: pp.sim, visual: pp.visual, koEm: pp.koEm }, at.tipo === "ok" ? at : null);
+        /* o icone de postura (E4): um elemento transparente sobre o icone do canvas, com o nome no title e no leitor de tela */
+        const rots = rotulosDoCanvas(cv);
+        postRef.forEach((r, i) => {
+          const el = r.current; if (!el) return;
+          const ro = rots.find(x => x.lado === i);
+          if (!ro) { if (!el.hidden) el.hidden = true; return; }
+          const quem = i ? pp.B.nomeTela : pp.A.nomeTela, rot = `${quem}: ${ro.nome}`;
+          el.hidden = false; el.dataset.postura = ro.postura;
+          if (el.title !== rot) { el.title = rot; el.setAttribute("aria-label", rot); }
+          el.style.left = `${ro.x}px`; el.style.top = `${ro.y}px`; el.style.width = `${ro.w}px`; el.style.height = `${ro.h}px`;
+        });
       }
       id = requestAnimationFrame(desenhar);
     };
@@ -54,6 +65,7 @@ export function Cena({ p, luta: naLuta = false }: { p: Palco; luta?: boolean }) 
   return (
     <section className="luta-arena luta-arena--tr" aria-label="Palco da luta" data-cena={p.cena}>
       <canvas ref={ref} className="arena-cv" width={96} height={48} role="img" aria-label={`Luta: ${p.A.nomeTela} contra ${p.B.nomeTela}`} />
+      {[0, 1].map(i => <span key={i} ref={postRef[i]} className="luta-postura" role="img" hidden data-testid={`luta-postura-${i}`} />)}
       <div className="luta-hud">
         <Lado L={p.A} s={p.hud[0]} rot="do seu pet" caixa={naLuta} />
         <div className={`hud-meio${naLuta ? " hud-caixa" : ""}`}>
