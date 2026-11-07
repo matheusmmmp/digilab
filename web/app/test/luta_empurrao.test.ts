@@ -44,7 +44,7 @@ describe("a versao 18 e a chave", () => {
     expect(relogioDe(CV21E_TR).empurraoAlvo).toBeNull(); expect(RELOGIO_V14.empurraoAlvo).toBeNull();
     /* o RELOGIO_V18 e o da v14 com o empurrao: nada mais muda */
     expect({ ...RELOGIO_V18, empurraoAlvo: null }).toEqual(RELOGIO_V14);
-    expect(EMPURRAO_V18).toEqual({ forca: { investida: 40, pesado: 60 }, derruba: ["investida", "pesado"], queda: 62, deslize: 10, guarda: .5, defesa: 0 });
+    expect(EMPURRAO_V18).toEqual({ forca: { investida: 20, pesado: 60 }, derruba: ["investida", "pesado"], queda: 62, deslize: 10, guarda: .5, defesa: 0 });
   });
   test("a v14 nao empurra nem derruba (nenhum evento de empurrao)", () => {
     const r = jogarTR(pesado(), postura("carregar"), 1, { R: CV21E_TR14, eventos: true });
@@ -72,10 +72,10 @@ describe("a forca de cada golpe e a queda (EMP-1, EMP-2, EMP-6)", () => {
     while (S.passo < t0 + 62) passoTR(Lt);
     expect(Lt.acoes.some(a => a.lado === 1 && a.inicio > t0 && a.inicio < t0 + 62)).toBe(false);
   });
-  test("a investida empurra 40 px e derruba", () => {
+  test("a investida empurra pela forca dela e derruba se esta em derruba", () => {
     const r = lutaDe(investida(), postura("carregar"), 100);
     expect(r.acoes.some(a => a.lado === 0 && a.nome === "investida")).toBe(true);
-    expect(empurroes(r, 1)[0]).toMatchObject({ px: 40, queda: true });
+    expect(empurroes(r, 1)[0]).toMatchObject({ px: EMPURRAO_V18.forca.investida, queda: EMPURRAO_V18.derruba.includes("investida") });
   });
   test("o golpe rapido e o disparo nao empurram", () => {
     const r = jogarTR(rapido(), postura("carregar"), 1, { R, eventos: true });

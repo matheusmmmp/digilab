@@ -175,6 +175,22 @@ Cada etapa num PR, com o merge pelo Matheus.
 - **A faixa e o gate:** os da seção 4.2 (72101–72505; F-3, G-2, G-3 e o teto do T-2 nomeados). Se ainda falhar, a etapa para e volta com
   a tabela e uma leitura do que segura o duelista contra a muralha.
 
+### 4.4 A rodada curta do F-3 (registrada em 2026-11-06, antes da primeira luta dela)
+
+- **Por quê:** a terceira medição deixou só o F-3 reprovado (seção 9.3). O Matheus decidiu, nas palavras dele (repassadas pela sessão de
+  planejamento), "Tá, então faz uma rodada aí de equilíbrio só para arrumar essa questão" (desvio D-EMP-13).
+- **O que fica:** as posturas sem empurrão (D-EMP-11), o pesado (60 px, derruba), a pele dura (metade), a queda (62 passos), o deslize.
+- **As medições, em ordem, uma por vez, parando na primeira que fecha** (cada uma num commit próprio, com a constante trocada em
+  `EMPURRAO_V18`; os valores ficam PROPOSTOS e SEM FONTE):
+  - **A:** a investida empurra 20 px (era 40) e continua derrubando — saída `empurrao/r_a_inv20/`;
+  - **B:** a investida empurra 40 px e não derruba — saída `empurrao/r_b_inv40_sem_queda/`;
+  - **C:** a investida empurra 20 px e não derruba — saída `empurrao/r_c_inv20_sem_queda/`.
+- **O comando** (em `web/app`, no máximo 4 processos): `python scripts/equilibrio_tr/medir_tudo.py --faixa calibracao2 --empurrao v18
+  --saida scripts/medicoes/equilibrio_tr/empurrao/<saida>`; a tabela contra o mesmo `empurrao/antes/`, em `resumo_<saida>.txt`.
+- **A faixa:** a calibração, 72101–72505. Tempo estimado: ~7 min por medição.
+- **Fecha quando:** toda meta que passa no "antes" passa (o gate da seção 4). Se as três não fecharem, a rodada para e volta ao Matheus
+  com a tabela. O pesado só entra se a leitura das três mostrar que o F-3 depende dele, e aí com um pedido novo.
+
 ## 5. Entrega
 
 - Testes: em `web/app`, `npm test`, `npm run tipos` e `npm run e2e` (no máximo 4 processos); o e2e `e2e/luta_layout.spec.ts` na etapa 5.
