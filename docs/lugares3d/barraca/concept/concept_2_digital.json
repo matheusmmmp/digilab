@@ -1,0 +1,9 @@
+{
+ "id": "01a1b36d-fffd-7398-8fee-8969b6e080d8",
+ "ai_model": "nano-banana-2",
+ "prompt": "Concept sketch of a single Tamer's camp tent, the place of the trainer's diary and records, as a landmark building for a cozy low-poly 3D island game for children with an anime digital-world look, cute, friendly and inviting, nothing scary, broken or dirty. Match the art style of the reference images: simple chunky rounded shapes, toy-like proportions, flat cel shading with two tones, soft saturated colors, clean flat color areas. Big enough for a small creature to walk in. No text, no letters, no numbers, no logo, no brand, no flags with symbols, no characters, no creatures. Show only the object, full object in frame, three-quarter view from slightly above, on a plain light grey background, no ground, no shadow. A round dome tent in teal and white with a small satellite dish and antenna on top, a glowing cyan screen inside the open door, a folding stool and a stack of books beside it.",
+ "status": "SUCCEEDED",
+ "consumed_credits": 6,
+ "created_at": 1794011694247,
+ "finished_at": 1794011712054
+}
