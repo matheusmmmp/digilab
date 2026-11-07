@@ -1,0 +1,5 @@
+{
+ "fonte": "as regioes do concept 1 (cereja) e as cores dominantes da textura da Meshy (mediana em 14 cores): as quatro faixas pastel (menta, lilas, amarelo, rosa), a cereja, a folha, o contorno branco e o aluminio claro e escuro; PROPOSTO",
+ "paleta": [[172, 242, 206], [206, 150, 236], [250, 234, 128], [250, 164, 176], [210, 52, 62], [92, 166, 72], [248, 248, 240], [198, 200, 200], [158, 160, 164]],
+ "nomes": ["menta", "lilas", "amarelo", "rosa", "cereja", "folha", "contorno", "aluminio", "aluminio escuro"]
+}

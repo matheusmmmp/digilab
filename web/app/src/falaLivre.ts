@@ -143,7 +143,8 @@ async function falar(situacao: "espontanea" | "conversa", gatilho: string | null
     }
     avisar();
     /* a verificacao vem depois: a fala aparece na hora e o icone chega quando ela terminar */
-    if (!reg.erro) post("/api/fala-livre/verificar", { fala: reg.fala, fatos_citados: reg.fatos_citados, fatos: reg.fatos, semente })
+    if (!reg.erro) post("/api/fala-livre/verificar", { fala: reg.fala, fatos_citados: reg.fatos_citados, fatos: reg.fatos, semente,
+      ...(nova ? { prompt: "conversa-v1" } : {}) })
       .then(v => { reg.verificacao = comMemoria(v as Verificacao, reg.fala, reg.fatos); anexar(reg); avisar(); })
       .catch((err: Error) => { reg.verificacao = { erro: String(err.message) }; anexar(reg); avisar(); });
     else anexar(reg);

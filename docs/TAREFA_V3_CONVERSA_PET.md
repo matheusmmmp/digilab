@@ -192,3 +192,72 @@ provedor o da M5. **Página** (`falaLivre.ts`, Ajustes → Fala do pet): chave "
 de apresentação continua na tela e não vai ao prompt; a fala espontânea não muda. O `comando` volta e é validado de novo pelo caminho do botão.
 **Testes:** `tests/test_conversa_m2.py` (23, incluindo resposta igual com a chave desligada e a injeção), `web/app/test/comando_chat.test.ts`
 (2 novos), `web/app/e2e/conversa_nova.spec.ts` (servidor falso). Sem rodada, sem gate do comando, sem chamada à API. Desvios: D-CP-M2-1 a 3.
+
+## M2b — a verificação da conversa nova com o `verif-v6` (worker Claude Code, Sonnet 5.5, branch `v3-conversa-m2b-verif`, 2026-11-06)
+
+Fecha a brecha achada na revisão da M2: a página verificava a conversa nova com o `verif-v3`, que trata o `[J]` como fato comum. **Servidor**
+(`servidor/fala_livre.py`): a rota de verificação aceita o campo `prompt` (enum `PROMPTS_CONVERSA`) e, com `"conversa-v1"`, usa o `verif-v6`;
+fato `[J]` sem o campo é 400; `prompt` inválido ou com `voz` é 400. **Página** (`falaLivre.ts`): com a chave ligada a verificação manda
+`prompt: "conversa-v1"`; desligada, o pedido é o de hoje. **Saneamento do `[J]`:** já estava na M4 (colchetes e chaves viram parênteses); só ganhou teste.
+**Testes:** `tests/test_conversa_m2b.py` (8, com o ponta a ponta: "eu lutei ontem" citando `[J1]` sai sem fato; "você disse que eu lutei ontem" sai
+sustentada), 2 asserções novas em `web/app/test/comando_chat.test.ts`. Passam: 317 testes Python da fala/conversa/comando/corpus/servidor, 942 do vitest,
+`npm run tipos` e os 131 do `e2e`. Sem rodada, sem chamada à API. Desvios: D-CP-M2b-1 a 3.
+
+## 10. Mudança de rumo: a fala que nasce da rede (2026-11-06, Gerente)
+
+- **DR-1 (Matheus, 2026-11-06):** a fala do pet não deve ser "uma LLM lendo os fatos acumulados dos logs". O pet se conecta às redes neurais
+  e elas dizem o que ele quer dizer; a LLM só põe em palavras ("LLM só como voz", escolhida entre três opções; a linguagem própria aprendida
+  sem LLM ficou de fora por ora). Base: a ideia do Matheus de 2026-10-04 em `docs/futuro/decodificador_conceitos.md`.
+- **Achado que motivou:** a fala de hoje não recebe nada do cérebro modular que decide nos pets v17 (os motivos que ela lê são só do treino;
+  a memória é do Bandit; o desejo e o caráter, do cérebro A parado). Mapa em [docs/research/MAPA_ESTADO_MODULAR.md](research/MAPA_ESTADO_MODULAR.md).
+- **A especificação:** [docs/research/ESPEC_DECODIFICADOR_FALA.md](research/ESPEC_DECODIFICADOR_FALA.md): conceitos com confiança a partir
+  dos sinais nomeados do `motivo` do modular, intenção da fala, a voz recebendo só intenção e conceitos, verificador contra os conceitos.
+- **DC-A a DC-E DECIDIDAS pelo Matheus em 2026-11-06, todas pela recomendação:** só sinais do modular na fala (DC-A); intenção por regra na
+  primeira versão e a rede escolhendo falar como pesquisa em seguida (DC-B); a lembrança de luta não muda escolhas nesta frente (DC-C); nada
+  de afeto pelo dono inventado na fala (DC-D); o que já está na `main` fica atrás das chaves como base da voz e da trava, e a M6 e a
+  avaliação antiga ficam pausadas (DC-E).
+- **Próximas missões:** DC1 (o decodificador, Python e TS, com paridade) e DC2 (a voz que recebe só intenção e conceitos), em paralelo pelo
+  formato fixo da espec (seção 2); DC3 (a rede escolhendo falar) depois, com plano de análise; DC4 (a avaliação, plano reescrito).
+
+
+## DC1 — o decodificador de conceitos `dec-v1` (2026-11-06, worker Claude Code, Sonnet 5.5, branch `v3-conversa-dc1-decodificador`)
+
+- **Entregue:** `digilab/digibrain/decodificador.py` (função pura, inteiros na escala S, sem rng, falha alto) com os pesos e limiares em
+  `ConfigDecodificador` (`digilab/config.py`, PROPOSTOS, SEM FONTE); o espelho `web/app/motor/digibrain/decodificador.ts`; `Motor.conceitosDec()`;
+  o bloco "Conceitos lidos do motivo" no painel do DigiBrain (só leitura); o exportador `experiments/exportar_decodificador.py` e o gabarito
+  `web/app/test/gabaritos/decodificador_python.json.gz` (14 vidas curtas do braço REL, sementes dos testes, 5376 decisões); os testes
+  `tests/test_decodificador.py` e `web/app/test/decodificador.test.ts`.
+- **O formato** é o fixo da espec (seção 2): `{versao: "dec-v1", k, intencao, conceitos: [{nome, valor, confianca, alvo?}]}`, os 12 nomes do catálogo
+  sempre, na ordem dela; a DC2 filtra pelos limiares (`limiar_valor`, `limiar_confianca`, também na config). A intenção é a regra I-a: `lembranca`
+  quando a sonda `lembranca_decidiu` é verdadeira; senão o conceito de maior valor (empate: ordem do catálogo), sem contar a `lembranca`.
+- **Fidelidade mínima (testes):** `lembranca` só é a intenção quando a sonda `sem_lembranca` decidiu (e então passa o limiar); a `determinacao` passa
+  o limiar quando a sonda da persistência decidiu, é zero sem intenção em curso, e a média dela é maior com a sonda.
+- **Nada muda na vida:** o decodificador só lê; nenhum módulo da vida o chama (teste); os gabaritos das vidas de hoje não mudaram.
+- **Não feito (DC2, DC3, DC4):** ligar na fala, a rede escolhendo falar, a calibração e a avaliação. Desvios D-CP-DC1-1 a 6 no `docs/registro/2026-11.md`.
+
+## DC2 — a voz que recebe só a intenção e os conceitos (worker, Claude Code, Sonnet 5.5, branch `v3-conversa-dc2-voz`, 2026-11-06)
+
+Decisão DR-1 do Matheus: a fala nasce da rede, a LLM só como voz. Esta missão entrega o lado da voz do formato fixo `dec-v1` (espec,
+seção 2); o decodificador é a DC1, em paralelo, e a página ainda **não** manda conceitos.
+
+- **O formato** (`digilab_fala_livre/conceitos.py`): `{versao: "dec-v1", k, intencao, conceitos: [{nome, valor, confianca, alvo?}]}`,
+  catálogo fechado dos 12 nomes, inteiros em [0, 1024], `alvo` só de catálogo (classe de objeto, `ep<N>` de episódio, rival do corpus),
+  sem repetir `(nome, alvo)`. Qualquer desvio levanta `ConceitosInvalidos`, e o servidor responde 400.
+- **O prompt `voz-v1`** (`prompt.py`, `mensagens_voz`): o pedido tem a intenção, os conceitos com valor ≥ `LIMIAR_VALOR` (cada um com id
+  `[C1]…`, a faixa e a marca CERTO ou CONFIANÇA BAIXA), o estágio, o estilo da espécie e, na conversa, a fala do dono e os `[J]` da M4.
+  Não tem fato de estado, memória, desejo nem log. Regras: dizer só o que os conceitos dizem; confiança baixa vira hesitação; lembrança só
+  pelo conceito `lembranca`; sem culpa nem chantagem; comando pelo catálogo como hoje. Tamanho por estágio como no `conversa-v1`.
+  Nenhuma versão antiga mudou (`voz-v1` fica fora de `VERSOES`).
+- **O servidor** (`servidor/fala_livre.py`): o campo `conceitos` liga a `voz-v1` na conversa e na fala espontânea. Com ele, `estado` só pode
+  ser `{identidade: {estagio, forma?}}`, e `voz`, `prompt`, `internet` e `rival` são 400. A resposta traz a `verificacao` (verif-v7).
+  `/api/fala-livre/verificar` também aceita `conceitos` (os `fatos` só podem ser `[J]`). Sem o campo, o servidor é o de antes.
+- **O verificador `verif-v7`** (`verificador.py`, `verificar_conceitos`): o extrator (LLM) lista as afirmações da frase e o conceito de cada
+  uma; o julgamento é do código: conceito ativo sustenta; conceito ausente, abaixo do limiar ou `nenhum` é `sem_conceito`; confiança
+  baixa sem hesitação na frase é `sem_hesitacao`; objeto diferente do alvo é `alvo_errado`; causa e evento nenhum conceito sustenta;
+  lembrança só pelo conceito `lembranca`; o que a frase atribui ao dono é conferido contra os `[J]` (regra da verif-v6).
+- **Limiares PROPOSTOS, SEM FONTE:** valor mínimo S/4 = 256, confiança mínima S/2 = 512, "forte" 3S/4 (só o rótulo do prompt). A espec
+  chama os dois limiares de PROPOSTOS e não dá o número; se a DC1 fixar outros, os dois lados têm de coincidir antes da ligação.
+- **Testes:** `tests/test_voz_dc2.py` (formato, recusa fora do catálogo e de tipo, injeção nos campos, a voz sem fato de estado, o
+  verificador contra os conceitos, as rotas); os 16 arquivos de fala/conversa/servidor continuam passando.
+- **Falta:** a ligação na página (`web/app/src/falaLivre.ts` manda os conceitos da DC1 no lugar do `estadoDoPet`, atrás de chave desligada),
+  a revisão da fala quando o verif-v7 aponta problema (hoje só se devolve a verificação) e a avaliação (DC4).
