@@ -97,6 +97,8 @@ export function doisTons(o: THREE.Object3D): void {
 export interface PaletaTerreno {
   grama: Readonly<Record<string, readonly number[]>>; caminho: readonly number[]; areia: readonly number[]; fundo: readonly number[];
   borda: number; estrato: readonly number[]; estratoAreia: readonly number[]; margem: readonly number[];
+  /** o chao pintado (pintarTerreno; o estilo digital, D5): a grama com manchas e folhas desenhadas, sem o xadrez, e a pedra em placas */
+  pintado?: boolean;
 }
 const GRAMA: Readonly<Record<string, readonly number[]>> = {
   casa: [0x9cdb72, 0x98d76e], jardim: [0x8fd16a, 0x8bcd66, 0x92d46d], campo: [0xa9d870, 0xa4d36b, 0xaedb74],
@@ -116,22 +118,35 @@ export const PALETA_DIGITAL: PaletaTerreno = {
     mata: [0x55a347, 0x4c9940, 0x5caa4e], [FORA]: [0x6cbf55, 0x60b44b, 0x75c75d],
   },
   caminho: [0xe2ba74, 0xdab26c], areia: [0xf8e5aa, 0xf2dc9e], fundo: [0x8fc7d8], borda: 0x4cb339,
-  estrato: [0xa6adb3, 0x959da5, 0x878f97], estratoAreia: [0xe2cf98, 0xd6c08a], margem: [0x8f969c, 0x7e858b],
+  /* D5: a pedra numa cor so (as placas e as rachaduras vem da pintura), e o chao pintado */
+  estrato: [0x9ea6ad], estratoAreia: [0xe2cf98, 0xd6c08a], margem: [0x8f969c, 0x7e858b], pintado: true,
 };
 /** as florzinhas do chao do estilo digital: brancas, rosa e amarelas, salpicadas na grama (a maquete B); a densidade por celula de grama e
-    o raio (celulas). PROPOSTO, SEM FONTE */
-const FLORES = { cores: [0xffffff, 0xffffff, 0xff9ec8, 0xffe066], porCelula: 1.1, raio: 0.06 } as const;
+    o raio (celulas). D5: menos soltas e mais em manchas, uma cor por mancha (o vermelho e o amarelo da maquete), de pe numa haste.
+    PROPOSTO, SEM FONTE */
+const FLORES = {
+  cores: [0xffffff, 0xffffff, 0xff9ec8, 0xffe066], porCelula: 0.45, raio: 0.06,
+  mancha: { chance: 0.11, flores: [5, 11], raio: 0.75, cores: [0xe8433a, 0xffd23a, 0xffd23a, 0xffffff, 0xff8fc0], tamanho: 0.075, haste: 0.09 },
+} as const;
+/** os tufos de grama do estilo digital (D5; a grama alta da maquete B): por celula de grama, quantos tufos, quantas folhas por tufo, a
+    altura e a largura da folha (celulas), e as cores da base e da ponta. PROPOSTO, SEM FONTE */
+/*  D5, depois do revisor: em moitas (a chance de uma celula ter uma, os tufos por moita e o raio dela), com chao liso entre elas, e mais
+    claros (o capim espalhado virava ruido, sobretudo a noite e no celular) */
+const TUFOS = { moita: 0.42, porMoita: [2, 4], raioMoita: 0.22, folhas: [4, 7], altura: [0.12, 0.28], largura: 0.05, base: 0x5aa847, ponta: 0xb4ea86 } as const;
 const cor = (hex: number) => new THREE.Color(hex);
 
 export class Malha {
   readonly pos: number[] = [];
   readonly nor: number[] = [];
   readonly col: number[] = [];
+  /** a pintura de cada vertice (o chao pintado do estilo digital, pintarTerreno): 0 nada, 1 a grama, 2 a pedra */
+  readonly pin: number[] = [];
+  marca = 0;
   /** um triangulo com a normal da face, virado para `fora` (o lado que tem que ficar de frente) */
   tri(a: THREE.Vector3, b: THREE.Vector3, c: THREE.Vector3, k: THREE.Color, fora: THREE.Vector3): void {
     const n = new THREE.Vector3().subVectors(b, a).cross(new THREE.Vector3().subVectors(c, a)).normalize();
     if (n.dot(fora) < 0) { [b, c] = [c, b]; n.negate(); }
-    for (const v of [a, b, c]) { this.pos.push(v.x, v.y, v.z); this.nor.push(n.x, n.y, n.z); this.col.push(k.r, k.g, k.b); }
+    for (const v of [a, b, c]) { this.pos.push(v.x, v.y, v.z); this.nor.push(n.x, n.y, n.z); this.col.push(k.r, k.g, k.b); this.pin.push(this.marca); }
   }
   quad(a: THREE.Vector3, b: THREE.Vector3, c: THREE.Vector3, d: THREE.Vector3, k: THREE.Color, fora: THREE.Vector3): void {
     this.tri(a, b, c, k, fora);
@@ -142,6 +157,7 @@ export class Malha {
     g.setAttribute("position", new THREE.Float32BufferAttribute(this.pos, 3));
     g.setAttribute("normal", new THREE.Float32BufferAttribute(this.nor, 3));
     g.setAttribute("color", new THREE.Float32BufferAttribute(this.col, 3));
+    g.setAttribute("aPinta", new THREE.Float32BufferAttribute(this.pin, 1));
     return g;
   }
 }
@@ -165,10 +181,73 @@ export function terreno(ilha: Ilha, COR: PaletaTerreno = PALETA_ILHA): THREE.Mes
     const p = (k: number, h = c.cantos[k]) => new THREE.Vector3(x + CANTO_XZ[k][0], h, z + CANTO_XZ[k][1]);
     const paleta = c.tipo === "agua" ? COR.fundo : c.tipo === "grama" ? COR.grama[c.regiao] : COR[c.tipo];
     if (!paleta) throw new Error("regiao da ilha sem cor de grama: " + c.regiao);
-    m.quad(p(0), p(1), p(2), p(3), cor(paleta[Math.floor(r() * paleta.length)]), cima);
+    /* o sorteio sai sempre, para a rng andar igual; no chao pintado a grama fica na primeira cor da regiao (sem o xadrez) */
+    const k = paleta[Math.floor(r() * paleta.length)], grama = COR.pintado && c.tipo === "grama";
+    m.marca = grama ? 1 : 0;
+    m.quad(p(0), p(1), p(2), p(3), cor(grama ? paleta[0] : k), cima);
     for (const e of ARESTAS) parede(m, ilha, c, x, z, e, COR);
   }
-  return new THREE.Mesh(m.geometria(), toon({ vertexColors: true }));
+  const mat = toon({ vertexColors: true });
+  return new THREE.Mesh(m.geometria(), COR.pintado ? pintarTerreno(mat) : mat);
+}
+
+/* a pintura do chao (D5; o cel shading do estilo digital, a maquete B): no fragmento, pelas coordenadas do mundo (antes da dobra):
+   - a grama (aPinta 1): manchas grandes em tres tons chapados (um ruido de valor em degraus) e folhinhas desenhadas (um traco curto por
+     sexto de celula, metade escuro e metade claro), que somem quando ficam menores que um pixel (fwidth);
+   - a pedra (aPinta 2): placas em fileiras desencontradas, cada uma num tom, com a junta e algumas rachaduras no nanquim do contorno.
+   Os numeros sao do desenho: PROPOSTO, SEM FONTE */
+const GLSL_PINTA_VERT = "attribute float aPinta;\nvarying float vPinta;\nvarying vec3 vPPos;\nvarying vec3 vPNor;\n";
+const GLSL_PINTA_FRAG = `varying float vPinta;
+varying vec3 vPPos;
+varying vec3 vPNor;
+float pHash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+float pValor(vec2 p) {
+  vec2 i = floor(p), f = fract(p);
+  f = f * f * (3.0 - 2.0 * f);
+  return mix(mix(pHash(i), pHash(i + vec2(1.0, 0.0)), f.x), mix(pHash(i + vec2(0.0, 1.0)), pHash(i + vec2(1.0, 1.0)), f.x), f.y);
+}
+`;
+const GLSL_PINTA = `
+if (vPinta > 0.5 && vPinta < 1.5) {
+  vec2 p = vPPos.xz;
+  float n = pValor(p * 0.42) * 0.65 + pValor(p * 1.3 + 17.0) * 0.35;
+  float tom = n > 0.6 ? 1.12 : (n < 0.4 ? 0.86 : 1.0);
+  vec2 q = p * 6.0, id = floor(q), f = fract(q) - 0.5;
+  float r = pHash(id);
+  f += (vec2(pHash(id + 3.1), pHash(id + 7.7)) - 0.5) * 0.5;
+  float lam = abs(f.x - f.y * (r - 0.5) * 0.9);
+  float folha = (1.0 - smoothstep(0.03, 0.065, lam)) * (1.0 - smoothstep(0.17, 0.25, abs(f.y))) * step(0.3, r);
+  folha *= 1.0 - smoothstep(0.18, 0.4, fwidth(q.x));
+  diffuseColor.rgb *= tom * mix(1.0, r > 0.68 ? 1.22 : 0.7, folha);
+} else if (vPinta > 1.5) {
+  vec3 nn = normalize(vPNor);
+  float u = abs(nn.x) > abs(nn.z) ? vPPos.z : vPPos.x, v = vPPos.y;
+  float H = 0.7, fila = floor(v / H);
+  float uu = u + pHash(vec2(fila, 3.0)) * 3.0, W = 1.3 + 0.9 * pHash(vec2(fila, 9.0)), col = floor(uu / W);
+  vec2 f = vec2(fract(uu / W) * W, fract(v / H) * H);
+  float bd = min(min(f.x, W - f.x), min(f.y, H - f.y));
+  float w = max(fwidth(uu), fwidth(v)) * 1.1 + 0.012;
+  float junta = 1.0 - smoothstep(w, w * 2.0, bd);
+  float k = pHash(vec2(col, fila) + 5.3), rach = 0.0;
+  if (k > 0.4) {
+    float cx = W * (0.3 + 0.4 * pHash(vec2(col, fila) + 1.7));
+    float dd = abs((f.x - cx) - (f.y - H * 0.5) * (k - 0.75) * 3.0);
+    rach = (1.0 - smoothstep(w * 0.7, w * 1.5, dd)) * step(abs(f.y - H * 0.5), H * 0.36);
+  }
+  diffuseColor.rgb *= (0.86 + 0.22 * pHash(vec2(col, fila))) * (1.0 + 0.1 * smoothstep(H * 0.72, H * 0.95, f.y));
+  diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.106, 0.165, 0.2), max(junta, rach) * 0.8);
+}
+`;
+/** liga a pintura do chao (GLSL_PINTA) num material toon ja curvado (toon), por cima da dobra */
+export function pintarTerreno(m: THREE.MeshToonMaterial): THREE.MeshToonMaterial {
+  const antes = m.onBeforeCompile.bind(m), chave = m.customProgramCacheKey.bind(m);
+  m.onBeforeCompile = (s, r) => {
+    antes(s, r);
+    s.vertexShader = GLSL_PINTA_VERT + s.vertexShader.replace("#include <begin_vertex>", "#include <begin_vertex>\nvPinta = aPinta; vPPos = position; vPNor = normal;");
+    s.fragmentShader = GLSL_PINTA_FRAG + s.fragmentShader.replace("#include <color_fragment>", "#include <color_fragment>" + GLSL_PINTA);
+  };
+  m.customProgramCacheKey = () => chave() + "-pinta";
+  return m;
 }
 
 /** as florzinhas da grama (FLORES): discos de seis triangulos rente ao chao, so nas celulas de grama planas, por uma rng propria (o chao
@@ -187,7 +266,62 @@ export function flores(ilha: Ilha): THREE.Mesh {
       }
     }
   }
-  const malha = new THREE.Mesh(m.geometria(), toon({ vertexColors: true, polygonOffset: true, polygonOffsetFactor: -1 }));
+  /* as manchas (D5): numa rng propria, para as florzinhas soltas sairem como antes */
+  const rm = rng(37), M = FLORES.mancha, haste = cor(TUFOS.base);
+  for (let j = 0; j < ilha.prof; j++) for (let i = 0; i < ilha.larg; i++) {
+    const x = ilha.x0 + i, z = ilha.z0 + j, c = ilha.cel(x, z)!;
+    if (c.tipo !== "grama" || rm() > M.chance) continue;
+    const k = cor(M.cores[Math.floor(rm() * M.cores.length)]), n = M.flores[0] + Math.floor(rm() * (M.flores[1] - M.flores[0] + 1));
+    for (let f = 0; f < n; f++) {
+      const a = rm() * Math.PI * 2, d = Math.sqrt(rm()) * M.raio, fx = x + 0.5 + Math.cos(a) * d, fz = z + 0.5 + Math.sin(a) * d;
+      const dono = ilha.cel(Math.floor(fx), Math.floor(fz));
+      if (!dono || dono.tipo !== "grama") continue;
+      const chao = ilha.altura(fx, fz), h = M.haste * (0.7 + rm() * 0.6), y = chao + h, Rf = M.tamanho * (0.8 + rm() * 0.4);
+      /* a haste: um triangulo fino de pe; a flor: o disco de seis triangulos no alto */
+      m.tri(new THREE.Vector3(fx - 0.012, chao, fz), new THREE.Vector3(fx + 0.012, chao, fz), new THREE.Vector3(fx, y, fz), haste, new THREE.Vector3(0, 0, 1));
+      const centro = new THREE.Vector3(fx, y, fz);
+      for (let b = 0; b < 6; b++) {
+        const p = (e: number) => new THREE.Vector3(fx + Math.cos((e * Math.PI) / 3) * Rf, y, fz + Math.sin((e * Math.PI) / 3) * Rf);
+        m.tri(centro, p(b), p(b + 1), k, cima);
+      }
+    }
+  }
+  const malha = new THREE.Mesh(m.geometria(), toon({ vertexColors: true, polygonOffset: true, polygonOffsetFactor: -1, side: THREE.DoubleSide, depthWrite: false }));
+  malha.frustumCulled = false;
+  return malha;
+}
+
+/** os tufos de grama do estilo digital (TUFOS; D5): folhas finas de pe, da base escura a ponta clara, inclinadas ao acaso, nas celulas de
+    grama, por uma rng propria (o chao sai sempre igual). A normal e a do chao (a folha acende como a grama embaixo dela). Uma malha so, um
+    desenho so */
+export function tufos(ilha: Ilha): THREE.Mesh {
+  const pos: number[] = [], nor: number[] = [], col: number[] = [], r = rng(41), base = cor(TUFOS.base), ponta = cor(TUFOS.ponta);
+  const v = (x: number, y: number, z: number, k: THREE.Color) => { pos.push(x, y, z); nor.push(0, 1, 0); col.push(k.r, k.g, k.b); };
+  for (let j = 0; j < ilha.prof; j++) for (let i = 0; i < ilha.larg; i++) {
+    const x = ilha.x0 + i, z = ilha.z0 + j, c = ilha.cel(x, z)!;
+    if (c.tipo !== "grama") continue;
+    if (r() > TUFOS.moita) continue;
+    const mx = x + 0.25 + r() * 0.5, mz = z + 0.25 + r() * 0.5;
+    for (let t = TUFOS.porMoita[0] + Math.floor(r() * (TUFOS.porMoita[1] - TUFOS.porMoita[0] + 1)); t > 0; t--) {
+      const tx = mx + (r() - 0.5) * 2 * TUFOS.raioMoita, tz = mz + (r() - 0.5) * 2 * TUFOS.raioMoita, chao = ilha.altura(tx, tz) - 0.01;
+      const n = TUFOS.folhas[0] + Math.floor(r() * (TUFOS.folhas[1] - TUFOS.folhas[0] + 1)), giro = r() * Math.PI;
+      for (let f = 0; f < n; f++) {
+        const a = giro + (f / n) * Math.PI + (r() - 0.5) * 0.5, ca = Math.cos(a), sa = Math.sin(a), w = TUFOS.largura * (0.7 + r() * 0.6);
+        const h = TUFOS.altura[0] + r() * (TUFOS.altura[1] - TUFOS.altura[0]), inc = (r() - 0.5) * 0.7 * h, ox = (r() - 0.5) * 0.08, oz = (r() - 0.5) * 0.08;
+        const bx = tx + ox, bz = tz + oz;
+        v(bx - ca * w, chao, bz - sa * w, base);
+        v(bx + ca * w, chao, bz + sa * w, base);
+        v(bx + sa * inc, chao + h, bz - ca * inc, ponta);
+      }
+    }
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+  g.setAttribute("normal", new THREE.Float32BufferAttribute(nor, 3));
+  g.setAttribute("color", new THREE.Float32BufferAttribute(col, 3));
+  /* sem escrever a profundidade: o contorno (pos.ts) nao pega cada folha (viravam pontinhos de nanquim), e a folha continua atras do que
+     esta na frente dela */
+  const malha = new THREE.Mesh(g, toon({ vertexColors: true, side: THREE.DoubleSide, depthWrite: false }));
   malha.frustumCulled = false;
   return malha;
 }
@@ -203,6 +337,7 @@ function parede(m: Malha, ilha: Ilha, c: Celula, x: number, z: number, e: (typeo
   const alta = Math.max(ta - ba, tb - bb), n = Math.max(1, Math.round(alta / FAIXA));
   const grama = c.tipo === "grama" || c.tipo === "caminho", agua = c.tipo === "agua" || viz?.tipo === "agua";
   const paleta = c.tipo === "areia" ? COR.estratoAreia : agua && alta < 0.8 ? COR.margem : COR.estrato;
+  const pedra = COR.pintado && paleta === COR.estrato ? 2 : 0;
   for (let i = 0; i < n; i++) {
     /* as faixas vao de cima para baixo; a de cima e a borda de grama */
     const f0 = i / n, f1 = (i + 1) / n, y = (t: number, f: number, b: number) => t - (t - b) * f;
@@ -210,11 +345,13 @@ function parede(m: Malha, ilha: Ilha, c: Celula, x: number, z: number, e: (typeo
     let g0 = f0;
     if (i === 0 && grama && !agua) {
       const fg = Math.min(BORDA_GRAMA / alta, 0.5);
+      m.marca = 0;
       m.quad(ponto(ax, az, y(ta, 0, ba)), ponto(bx, bz, y(tb, 0, bb)), ponto(bx, bz, y(tb, fg, bb)), ponto(ax, az, y(ta, fg, ba)), cor(COR.borda), e.n);
       g0 = fg;
       if (g0 >= f1) continue;
     }
     if (agua && alta < 0.8) k = cor(COR.margem[i % 2]);
+    m.marca = pedra;
     m.quad(ponto(ax, az, y(ta, g0, ba)), ponto(bx, bz, y(tb, g0, bb)), ponto(bx, bz, y(tb, f1, bb)), ponto(ax, az, y(ta, f1, ba)), k, e.n);
   }
 }
@@ -490,19 +627,65 @@ function nuvens(ilha: Ilha): THREE.Group {
   return grupo;
 }
 
+/** as nuvens de anime do estilo digital (D5; os cumulos grandes da maquete B): o desenho num canvas (os circulos com o contorno de nanquim
+    por fora, a sombra azulada embaixo e o branco em cima) e quantas, de que largura e onde (celulas; atras da mata do norte, sem nevoa).
+    PROPOSTO, SEM FONTE */
+const NUVENS_ANIME = { n: 6, largura: [32, 50], altura: [19, 28], longe: [24, 40], tinta: "#1b2a33", sombra: "#c9d9ee" } as const;
+function nuvensAnime(ilha: Ilha): THREE.Group {
+  const c = document.createElement("canvas");
+  c.width = 512; c.height = 256;
+  const g = c.getContext("2d");
+  if (!g) throw new Error("canvas 2d indisponível");
+  const bolas: [number, number, number][] = [[140, 170, 62], [215, 125, 82], [300, 108, 70], [370, 150, 60], [255, 182, 58], [90, 196, 40], [420, 192, 42]];
+  const pintar = (cor: string, mais: number, dy: number) => {
+    g.fillStyle = cor;
+    for (const [x, y, r] of bolas) { g.beginPath(); g.arc(x, y + dy, r + mais, 0, Math.PI * 2); g.fill(); }
+  };
+  pintar(NUVENS_ANIME.tinta, 5, 0);
+  pintar(NUVENS_ANIME.sombra, 0, 0);
+  g.save(); g.beginPath();
+  for (const [x, y, r] of bolas) { g.moveTo(x + r, y); g.arc(x, y, r, 0, Math.PI * 2); }
+  g.clip();
+  pintar("#ffffff", -4, -14);
+  g.restore();
+  /* o chao da nuvem reto, como a base de um cumulo */
+  g.globalCompositeOperation = "destination-out";
+  g.fillRect(0, 232, c.width, c.height - 232);
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  /* todas num desenho so (D-G1): uma malha de quadros de pe, virados para o sul (a camera do habitat olha para o norte; nao seguem a
+     camera livre, como um painel de fundo). A noite apaga como as outras nuvens (aplicarNoite muda a opacidade do material) */
+  const r = rng(13), N = NUVENS_ANIME, pos: number[] = [], uv: number[] = [], idx: number[] = [];
+  for (let i = 0; i < N.n; i++) {
+    const w = N.largura[0] + r() * (N.largura[1] - N.largura[0]), h = w / 2;
+    const x = ilha.x0 + ((i + 0.2 + r() * 0.6) / N.n) * ilha.larg, y = N.altura[0] + r() * (N.altura[1] - N.altura[0]);
+    const z = ilha.z0 - N.longe[0] - r() * (N.longe[1] - N.longe[0]), b = i * 4;
+    pos.push(x - w / 2, y - h / 2, z, x + w / 2, y - h / 2, z, x + w / 2, y + h / 2, z, x - w / 2, y + h / 2, z);
+    uv.push(0, 0, 1, 0, 1, 1, 0, 1);
+    idx.push(b, b + 1, b + 2, b, b + 2, b + 3);
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+  geo.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2));
+  geo.setIndex(idx);
+  const malha = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: tex, fog: false, depthWrite: false, transparent: true, opacity: DIA.nuvens }));
+  malha.frustumCulled = false;
+  return new THREE.Group().add(malha);
+}
+
 /** a cena estatica da ilha: o ceu, a nevoa, as luzes, o terreno, a agua e as nuvens (os objetos, o pet e os itens entram depois) */
 export interface CenaIlha { cena: THREE.Scene; aplicarNoite(noite: boolean): void }
 /** `chao`: o terreno do estilo (o da ilha, se nada vier); `agua`: false tira a agua por celula e o mar (o estilo desenha a dele);
     `ceuDia`, um ceu pintado no lugar do degrade do dia, com a cor do horizonte (a nevoa) dele; `chaoHemi`, a cor de baixo da luz do ceu
     de dia (o estilo digital a puxa para o azul, a sombra azulada do anime); `nevoa`, o comeco e o fim da nevoa (celulas) */
 export function montarCena(ilha: Ilha, chao: THREE.Object3D = terreno(ilha),
-  opcoes: { agua?: boolean; nuvens?: boolean; ceuDia?: THREE.Texture; horizonteDia?: number; chaoHemi?: number; nevoa?: readonly [number, number] } = {}): CenaIlha {
+  opcoes: { agua?: boolean; nuvens?: boolean | "anime"; ceuDia?: THREE.Texture; horizonteDia?: number; chaoHemi?: number; nevoa?: readonly [number, number] } = {}): CenaIlha {
   const cena = new THREE.Scene(), fundo = { dia: opcoes.ceuDia ?? ceu(DIA.ceu), noite: ceu(NOITE.ceu) };
   cena.fog = new THREE.Fog(DIA.horizonte, opcoes.nevoa?.[0] ?? 26, opcoes.nevoa?.[1] ?? 62);
   if (opcoes.nevoa) cena.userData.nevoa = opcoes.nevoa;    /* a vista recalcula a nevoa com a orbita a partir desta (vista.ts) */
   const hemi = new THREE.HemisphereLight(), sol = new THREE.DirectionalLight();
   sol.position.set(-0.6, 1, 0.75);
-  const ceuNuvens = opcoes.nuvens === false ? new THREE.Group() : nuvens(ilha);
+  const ceuNuvens = opcoes.nuvens === false ? new THREE.Group() : opcoes.nuvens === "anime" ? nuvensAnime(ilha) : nuvens(ilha);
   cena.add(hemi, sol, chao, ceuNuvens);
   if (opcoes.agua !== false) cena.add(agua(ilha));
   const aplicarNoite = (noite: boolean) => {
@@ -512,7 +695,7 @@ export function montarCena(ilha: Ilha, chao: THREE.Object3D = terreno(ilha),
     hemi.color.setHex(p.hemi[0]); hemi.groundColor.setHex(!noite && opcoes.chaoHemi !== undefined ? opcoes.chaoHemi : p.hemi[1]); hemi.intensity = p.hemi[2];
     sol.color.setHex(p.sol[0]); sol.intensity = p.sol[1];
     CURVA.uNoite.value = noite ? 1 : 0;
-    for (const s of ceuNuvens.children) ((s as THREE.Sprite).material as THREE.SpriteMaterial).opacity = p.nuvens;
+    for (const s of ceuNuvens.children) ((s as THREE.Sprite | THREE.Mesh).material as THREE.Material).opacity = p.nuvens;
   };
   aplicarNoite(false);
   return { cena, aplicarNoite };
