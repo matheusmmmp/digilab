@@ -40,6 +40,9 @@ contra os conceitos). Qualquer coisa fora do formato e 400. Sem o campo, tudo co
 DC2b (2026-11-07): o formato "dec-v2" (alem do "dec-v1", que segue aceito) leva no conceito "lembranca" o campo "episodio" {acao, classe,
 desfecho}, de catalogo fechado (fora dele: 400). O dec-v2 liga o prompt voz-v2 e a verificacao verif-v8 (a lembranca so e sustentada se a
 frase casar com o episodio); o dec-v1 segue com voz-v1 e verif-v7. A pagina manda os conceitos so com a chave "Fala pela rede (teste)".
+DC3d (2026-11-07): o formato "dec-v3" leva os conceitos do dec-v2 com a "intencao" vinda da unidade de fala que o modular escolheu (so
+fome, higiene ou solidao, de catalogo fechado; fora dele: 400 sem chamar a LLM). Liga a voz-v3 (a intencao e um pedido [P] ao dono) e a
+verif-v9 (o pedido so e sustentado se pede o que a rede escolheu). So o pet de teste com a fala com conteudo (a marca "fu") manda o dec-v3.
 
 Conversa nova (CONVERSA_PET, M2, decisao D2 do Matheus, 2026-11-06): o campo "prompt": "conversa-v1" (enum fechado em PROMPTS_CONVERSA;
 qualquer outro valor, inclusive null, e 400) liga o prompt conversa-v1 (M3) na CONVERSA, sem "voz": estilo da especie pelo corpus,
@@ -66,7 +69,7 @@ from digilab_fala_livre.prompt import (VERSAO_CONVERSA_V1, VERSAO_PROMPT, VERSAO
                                            VERSAO_PROMPT_V9)
 from digilab_fala_livre.revisao import gerar_com_revisao
 from digilab_fala_livre.verificador import (TIPO_DONO_DISSE, VERSAO_VERIFICADOR_V5, VERSAO_VERIFICADOR_V6, VERSAO_VERIFICADOR_V7,
-                                             VERSAO_VERIFICADOR_V8, verificar,
+                                             VERSAO_VERIFICADOR_V8, VERSAO_VERIFICADOR_V9, verificar,
                                              verificar_conceitos)
 from digilab_fala_livre.voz import gerar_voz
 from servidor.fala_llm import ControleGasto
@@ -328,8 +331,9 @@ class ServicoFalaLivre:
 
 
 def _verificador_dos_conceitos(conceitos: dec.Conceitos) -> str:
-    """DC2b: dec-v1 -> verif-v7 (a de sempre); dec-v2 (a lembranca com `episodio`) -> verif-v8, que confere a frase com o episodio"""
-    return VERSAO_VERIFICADOR_V8 if conceitos.versao == dec.VERSAO_DEC_V2 else VERSAO_VERIFICADOR_V7
+    """DC2b: dec-v1 -> verif-v7 (a de sempre); dec-v2 (a lembranca com `episodio`) -> verif-v8, que confere a frase com o episodio; DC3d:
+    dec-v3 (a intencao da unidade de fala) -> verif-v9, a verif-v8 com o pedido [P]"""
+    return {dec.VERSAO_DEC_V2: VERSAO_VERIFICADOR_V8, dec.VERSAO_DEC_V3: VERSAO_VERIFICADOR_V9}.get(conceitos.versao, VERSAO_VERIFICADOR_V7)
 
 
 def _fato_ok(f) -> bool:
