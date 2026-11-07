@@ -8,20 +8,22 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { GEO_SOMBRA, carregarVariante, materialSombra } from "./cena.ts";
+import { LUGAR_ABERTO } from "../lugaresIlha.ts";
 import { LUGAR_LUZ } from "./constantes.ts";
 import type { Ilha } from "./grade.ts";
 import { LUGARES_LUZ, LUGARES_MODELOS, type NomeLugar } from "./modelos.ts";
 
-/** o estado de cada lugar enquanto nao ha o nivel do Tamer */
-export const LUGAR_ABERTO: Record<NomeLugar, boolean> = { portao: true, barraca: true, cais: false };
-
 /** os lugares prontos: o grupo e o que acende ou apaga um lugar */
-export interface Lugares { grupo: THREE.Group; abrir: (nome: NomeLugar, aberto: boolean) => void }
+export interface Lugares {
+  grupo: THREE.Group; abrir: (nome: NomeLugar, aberto: boolean) => void;
+  /** a caixa de cada lugar no mundo (celulas; sem a dobra, que a vista aplica ao projetar): onde o toque acerta o lugar */
+  caixas: Map<NomeLugar, THREE.Box3>;
+}
 
 /** carrega os modelos e poe os lugares da ilha; falha alto se um arquivo nao carrega (a ilha cai na reserva, como sem os kits) */
 export async function lugares(ilha: Ilha, base: string): Promise<Lugares> {
   const grupo = new THREE.Group(), gltf = new GLTFLoader(), acesos = new Map<NomeLugar, THREE.MeshToonMaterial[]>();
-  const sombras: { x: number; z: number; r: number }[] = [];
+  const sombras: { x: number; z: number; r: number }[] = [], caixas = new Map<NomeLugar, THREE.Box3>();
   for (const l of ilha.lugares) {
     const m = LUGARES_MODELOS[l.nome];
     const { pecas } = await carregarVariante(gltf, new URL("lugares/" + m.arquivos[0], base).href, m);
@@ -31,7 +33,7 @@ export async function lugares(ilha: Ilha, base: string): Promise<Lugares> {
     const t = luz ? await new THREE.TextureLoader().loadAsync(new URL("lugares/" + luz, base).href) : null;
     /* a mascara usa os UVs do glTF: sem virar a imagem, como o GLTFLoader faz com as texturas dele */
     if (t) t.flipY = false;
-    const mats: THREE.MeshToonMaterial[] = [];
+    const mats: THREE.MeshToonMaterial[] = [], caixa = new THREE.Box3();
     for (const p of pecas) {
       if (t) {
         const mat = p.mat as THREE.MeshToonMaterial;
@@ -44,8 +46,11 @@ export async function lugares(ilha: Ilha, base: string): Promise<Lugares> {
       malha.matrix.copy(pos.clone().multiply(p.local));
       malha.frustumCulled = false;     // a dobra muda onde a peca aparece; o volume do three nao sabe disso
       grupo.add(malha);
+      if (!p.geo.boundingBox) p.geo.computeBoundingBox();
+      caixa.union(p.geo.boundingBox!.clone().applyMatrix4(malha.matrix));
     }
     acesos.set(l.nome, mats);
+    caixas.set(l.nome, caixa);
     if (m.sombra > 0) sombras.push({ x: l.x, z: l.z, r: m.sombra });
   }
   if (sombras.length) {
@@ -58,5 +63,6 @@ export async function lugares(ilha: Ilha, base: string): Promise<Lugares> {
   }
   const abrir = (nome: NomeLugar, aberto: boolean) => { for (const m of acesos.get(nome) ?? []) m.emissiveIntensity = aberto ? LUGAR_LUZ.forca : 0; };
   for (const l of ilha.lugares) abrir(l.nome, LUGAR_ABERTO[l.nome]);
-  return { grupo, abrir };
+  return { grupo, abrir, caixas };
 }
+

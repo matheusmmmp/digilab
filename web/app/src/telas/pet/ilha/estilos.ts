@@ -44,7 +44,7 @@ function estiloSemTons(mapa: Mapa, base: string): Estilo {
       objetos: async i => {
         const [o, e, g] = await Promise.all([objetos(i, base), enfeites(i, base), lugares(i, base)]);
         o.grupo.add(e.grupo, g.grupo);
-        return { ...o, noite: e.noite };
+        return { ...o, noite: e.noite, lugares: g.caixas };
       },
     };
     case "digital": {
@@ -75,7 +75,7 @@ function estiloSemTons(mapa: Mapa, base: string): Estilo {
           o.grupo.add(e.grupo, fios(i), l.grupo, g.grupo);
           doisTons(o.grupo);
           o.grupo.add(p.malha);
-          return { ...o, noite: n => { e.noite(n); p.noite(n); }, quadro: l.quadro };
+          return { ...o, noite: n => { e.noite(n); p.noite(n); }, quadro: l.quadro, lugares: g.caixas };
         },
       };
     }

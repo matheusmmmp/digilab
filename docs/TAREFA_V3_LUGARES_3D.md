@@ -135,3 +135,26 @@ texturas, para os modelos se encaixarem no estilo do mapa e ficarem mais bonitos
 - o cais é visto da água pela câmera de trás.
 
 A entrada da barraca lê na ilha (o vão escuro sob o arco), então refazer a malha (D-LG-9) não é necessário.
+
+## 13. A entrada pelos lugares (2026-11-07, Gerente, Claude Code, Opus 5.5, branch `v3-lugares-entrada`)
+
+**Por que aqui:** depois do #678 o Matheus pediu para seguir com as recomendações. A entrada pelos lugares não depende do nível do Tamer,
+porque o portão e a barraca já estão abertos (D-LG-18). O nível do Tamer fica para a tarefa de código dele (o item 3 da seção 9 do
+`docs/PLANO_V3_PROGRESSAO_TUTORIAL.md`).
+
+**O que entrou:**
+- `web/app/src/telas/pet/ToqueLugar.tsx`, ligado no `Habitat.tsx` com o `irDestino` do `App.tsx`:
+  - o toque no portão abre o Lutar, e o toque na barraca abre o Diário;
+  - o cais, trancado, não faz nada;
+  - com o mouse, o cursor vira a mão sobre um lugar que abre (D-LG-19).
+- **Na vista:**
+  - `lugares.ts` devolve a caixa de cada lugar (`caixas`, no `Objetos.lugares`);
+  - `vista.ts` ganha `lugarEm` e o põe no `CENA.mundo`;
+  - `lugarNoPonto`, em `curva.ts`, projeta a caixa com a dobra (D-LG-20).
+- **As tabelas:** `LUGAR_ABERTO`, `LUGAR_DESTINO` e o tipo `NomeLugar` ficam em `web/app/src/telas/pet/lugaresIlha.ts`, fora da `ilha/` e
+  sem three (a fronteira da ilha).
+- **O teste:** o LG-G6 em `web/app/test/ilha_lugares.test.ts` confere o retângulo, os destinos e o gesto.
+
+**Fica para depois:** o nível do Tamer, que traz o cadeado e o "Nv" no lugar trancado, o toque no lugar trancado e o brilho de quando o
+lugar abre.
+

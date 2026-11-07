@@ -7,6 +7,7 @@
    - sombra: o raio da sombra redonda no chao, em celulas (0 = sem sombra);
    - baixo: decoracao que pode entrar na area andavel (regra 5: o pet a atravessa; nada acima de ALTURA_BAIXA).
    Todos os numeros sao do desenho: PROPOSTO, SEM FONTE. */
+import type { NomeLugar } from "../lugaresIlha.ts";
 
 /** a altura maxima da decoracao dentro da area andavel, em celulas (regra 5) */
 export const ALTURA_BAIXA = 0.5;
@@ -76,8 +77,8 @@ export const LUGARES_MODELOS = {
   portao: { arquivos: ["portao/portao.gltf"], altura: 5, vento: 0, sombra: 1.6, baixo: false },
   barraca: { arquivos: ["barraca/barraca.gltf"], altura: 4, vento: 0, sombra: 2.4, baixo: false },
   cais: { arquivos: ["cais/cais.gltf"], altura: 2.4, vento: 0, sombra: 0, baixo: false },
-} as const satisfies Record<string, Modelo>;
-export type NomeLugar = keyof typeof LUGARES_MODELOS;
+} as const satisfies Record<NomeLugar, Modelo>;
+export type { NomeLugar };
 /** a mascara das partes que acendem com o lugar aberto (o emissiveMap; fora do glTF, ao lado dele): o portal do portao; o ciano do cais
     (os cristais e a boia) */
 export const LUGARES_LUZ: Partial<Record<NomeLugar, string>> = { portao: "portao/portao_luz.png", cais: "cais/cais_luz.png" };
