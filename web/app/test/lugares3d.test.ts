@@ -43,8 +43,8 @@ describe("os arquivos dos lugares (G1 a G8, teto dos marcos)", () => {
     expect(g.asset.extras?.gerado_por_ia).toBe(true); expect(g.asset.extras?.gerador).toMatch(/Meshy/);
   });
 
-  test("a mascara do portal existe ao lado e nao esta vazia", () => {
-    const f = join(LUG, LUGARES_LUZ.portao!), b = readFileSync(f);
+  test.each(Object.entries(LUGARES_LUZ))("a mascara de luz do %s existe ao lado e nao esta vazia", (_nome, arq) => {
+    const f = join(LUG, arq!), b = readFileSync(f);
     expect(b.subarray(1, 4).toString()).toBe("PNG");
     expect(statSync(f).size).toBeGreaterThan(1000);
   });
