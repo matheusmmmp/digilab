@@ -428,3 +428,32 @@ seção "Lugares da ilha (L1)", e em `docs/pranchas/ux-lugares/`; as decisões, 
   minimapa só redesenha quando algo muda; nada publicado abaixo de 900 px). Os outros ficam como questões abertas no PR.
 - **As referências de captura a 1920** (`npm run capturas`) mudam nas telas Pet: o minimapa entra e a etiqueta sai. Não foram regravadas;
   isso espera o ok do Matheus.
+
+## 14. Etapa D1: o DigiBrain "scan holográfico" (2026-11-07)
+
+Branch `v3-ux-digibrain`, empilhada sobre a `v3-ux-integra`. A prancha (`docs/pranchas/ux-digibrain/`) e o ok do Matheus às D1-1 a D1-11
+estão na seção 8.1 e em `docs/PROPOSTAS_V3_UX_TELA_PET.md`, seção "DigiBrain scan (D1)".
+
+**O que mudou:**
+- O painel do cérebro A dos pets v11 abre como "modo scan":
+  - no desktop, um `<dialog>` modal em tela cheia por cima da ilha;
+  - no celular, a folha inteira.
+- O mapa dos pesos é o da prancha. Cada ponto é um nó do motor e cada fio é um peso de `Motor.digibrain().mapa`.
+- O movimento:
+  - a varredura e o pulso só aparecem numa decisão nova, e terminam;
+  - o giro lento só existe no desktop;
+  - com "reduzir movimento", nada se move.
+- O `DigiBrainLab` continua no painel de hoje.
+
+**Os arquivos:**
+- novos: `web/app/src/componentes/ScanDigiBrain.tsx`, `web/app/src/estilo/scan_digibrain.css` e `web/app/test/scan_digibrain.test.ts`;
+- mudados: `TelaPet.tsx` (o scan no lugar do painel do A, o chamado sobre o scan e o foco de volta), `DigiBrain.tsx` e `MapaPesos.tsx` (só `export`), `digibrain.css` e `e2e/jogo.spec.ts`.
+
+**Os portões:**
+- `npm run tipos` está limpo e o Vitest deu 95 arquivos e 891 testes.
+- No `npm run e2e` (porta 8831), 131 passaram e 1 falhou: o `camera_livre.spec.ts:74`, que falha igual na base `v3-ux-integra` (procura o `.topo-retrato` "Meus pets", que a M1 trocou). Os 11 testes do DigiBrain passam.
+- O "nada fora do DigiBrain muda": o DOM e a captura com o canvas escondido, nas 21 telas do `telas.spec.ts`, a 1920 e a 390, nas duas peles, base × branch. Dá 84 DOM iguais e 84 capturas com 0 px de diferença. O ruído medido na base contra ela mesma é de no máximo 1 captura com 42 px por rodada.
+- Revisaram o `rev-a11y`, o `rev-cena` e o `rev-replay`. Os achados que bloqueavam foram consertados: a cena coberta pelo scan, o vidro de tela cheia, o foco de volta à pilha, os 11 px do texto do desenho e o mapa em texto que cobria o botão.
+
+**PROPOSTO, SEM FONTE:** a varredura em 1,2 s, o pulso em 0,8 s, o giro de ±8° em 40 s e os números de layout. O desvio está em
+`docs/registro/2026-11.md`.
