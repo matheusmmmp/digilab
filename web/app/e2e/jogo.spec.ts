@@ -8,6 +8,7 @@ import { expect, test, type Page } from "@playwright/test";
 import { readFileSync } from "node:fs";
 import { basename } from "node:path";
 import { fileURLToPath } from "node:url";
+import { VERSAO_PET } from "../motor/constantes";
 
 const SAVES: Record<string, { semente: number; log: unknown[]; versao?: number }> = JSON.parse(readFileSync(new URL("./saves.json", import.meta.url), "utf8"));
 // prefixo = nome da pasta do repositorio (/v1 ou o da worktree), como no servidor_local.py
@@ -397,7 +398,7 @@ test("luta em tempo real: a primeira abertura descarta os pets de antes, avisa, 
   await expect(page.locator("dialog.brasao-tela[open]")).toHaveCount(0);
   const r = await page.evaluate(c => ({ save: JSON.parse(localStorage.getItem(c)!), g: localStorage.getItem(c + "-guardados"), aviso: localStorage.getItem(c + "-aviso-tr"),
     tamer: JSON.parse(localStorage.getItem(c + "-tamer")!), marca: localStorage.getItem(c + "-descarte"), antigos: JSON.parse(localStorage.getItem(c + "-descartados")!) }), CHAVE);
-  expect(r.save.versao).toBe(17);                    /* o ovo novo nasce na versao atual (v17: a v15 com o cerebro trocavel, o modular por padrao) */
+  expect(r.save.versao).toBe(VERSAO_PET);            /* o ovo novo nasce na versao atual (VERSAO_PET; era a v17 ate a v18 do empurrao, #661) */
   expect(r.g).toBe("[]");
   expect(r.aviso).toBeNull();
   expect(r.marca).toBe("6");
@@ -427,7 +428,7 @@ test("luta em tempo real: o pet v6 de antes sai com o aviso, e o Tamer fica com 
   await expect(page.locator("dialog.brasao-tela[open]")).toHaveCount(0);
   const r = await page.evaluate(c => ({ save: JSON.parse(localStorage.getItem(c)!), marca: localStorage.getItem(c + "-descarte"),
     tamer: JSON.parse(localStorage.getItem(c + "-tamer")!) }), CHAVE);
-  expect(r.save.versao).toBe(17);
+  expect(r.save.versao).toBe(VERSAO_PET);
   expect(r.save.semente).not.toBe(SAVE_ANTIGO_V6.semente);
   expect(r.marca).toBe("6");
   /* a medalha fica (a abertura ainda da o item dela ao Tamer, como sempre) */

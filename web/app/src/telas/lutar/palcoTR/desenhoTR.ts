@@ -5,13 +5,14 @@
      ?clipes_up=1), o clipe segue a acao: Run no avanco, no recuo e na arrancada; Attack_1 nos golpes; Stun no atordoamento; Die no
      nocaute; Idle no resto. Sem os clipes, o Idle de sempre. Clipe que falta num sprite com clipes falha alto (atlas.desenharSprite).
    - O tempo do clipe e o da luta (os passos de 16 ms), nao o do relogio: a mesma luta desenha os mesmos quadros. */
-import { CTR_TR, NOME_V2, PASSO_TR_MS, type EventoTR, type LadoTR, type LutaTR } from "../../../../motor/index.ts";
+import { CTR_TR, PASSO_TR_MS, type EventoTR, type LadoTR, type LutaTR } from "../../../../motor/index.ts";
 import { chaveUp, desenharSprite, dimSprite, quadroDoClipe, type AtlasOk, type Clipe } from "../../../atlas.ts";
 import { zoomAtual } from "../../../escala.ts";
 import { VISUAL_CENA, prontas, type IdCenaTR } from "./cenasTR.ts";
-import { elementoDoSprite } from "./elementosTR.ts";
+import { ELEMENTO, elementoDoSprite } from "./elementosTR.ts";
 import { GOLPES_RAJADA, VOO, cabecaVisivel, fracaoDaRajada, fracaoDoVoo, geometriaTR, pixelsDaCabeca, pixelsDoEstouro, pixelsDoRastro, pontoDoVoo, xTela, type GeometriaTR, type PixelTR } from "./projeteisTR.ts";
 import { CHAO, alfaDaMarca, pixelsDaCratera, pixelsDaOnda, pixelsDaTelegrafia, pixelsDoArrasto, poeiraDaNuvem, poeiraDoPassoTR, telegrafiaDoPasso } from "./chaoTR.ts";
+import { COR_PELE, NOME_POSTURA, POSTURA, efeitoDaPostura, pixelsDaAura, pixelsDoContra, pixelsDoEscudo, pixelsDoIcone, posturaDoLado, type PosturaTR } from "./posturasTR.ts";
 import { IMPACTO, COR_FORTE, COR_TINTA, MOVIMENTO, VIDA_NUMERO, clarao, empurraoDoPasso, faiscaDoPasso, pixelsDoTexto, poeiraDoPasso, puloDaQueda, textoDeDano, tremidaDoPasso, type VisualTR } from "./efeitosTR.ts";
 
 /** os efeitos de impacto (so vista) ficam em efeitosTR.ts; estes nomes continuam saindo daqui */
@@ -19,10 +20,15 @@ export { aplicarEventosTR, visualNovoTR, type NumeroTR, type VisualTR } from "./
 
 /** cores do chao liso (o recuo quando o mapa nao carrega) */
 const COR = { ceuA: "#cfe6f5", ceuB: "#eaf5fb", chaoA: "#9fcf7a", chaoB: "#8cc068", tinta: "#1d2433", azul: "#2c73e0", vermelho: "#d6336c", cura: "#2f9e44" };
-/** os golpes (Attack_1), os movimentos (Run) e as posturas (a etiqueta sobre a cabeca) */
+/** os golpes (Attack_1) e os movimentos (Run); as posturas (o icone sobre a cabeca) ficam em posturasTR.ts */
 const GOLPES = ["golpe_rapido", "fintar", "pesado", "disparo", "investida"];
 const MOVIMENTOS = ["avancar", "recuar"];
-const POSTURAS = ["defender", "esquivar", "carregar", "contra_golpe", "preparar_pesado", "marcar", "pele_dura"];
+
+/** o icone de postura desenhado no ultimo quadro de cada canvas (px de CSS, o retangulo do icone com a placa): o PalcoTR poe por cima um
+    elemento transparente com o nome no title e no leitor de tela */
+export interface RotuloTR { lado: number; postura: PosturaTR; nome: string; x: number; y: number; w: number; h: number }
+const rotulos = new WeakMap<HTMLCanvasElement, RotuloTR[]>();
+export const rotulosDoCanvas = (cv: HTMLCanvasElement): readonly RotuloTR[] => rotulos.get(cv) ?? [];
 
 /** o usuario pediu menos movimento: sem tremida, clarao, empurrao nem pausa (os numeros e a faisca ficam) */
 export const movimentoReduzido = (): boolean => typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -127,6 +133,9 @@ export function desenharLutaTR(cv: HTMLCanvasElement, c: CenaDesenho, a: AtlasOk
   /* para as capturas: a elipse no meio do fechamento, no preparo do pesado e no carregar */
   cv.dataset.preparosMeio = String(preparosMeio); cv.dataset.carregarMeio = String(carregarMeio);
   const topo: number[] = [], empurros: number[] = [0, 0];
+  /* as posturas (E4, posturasTR.ts): os efeitos de cada lado neste passo, do estado e das batidas; nada aqui empurra (D-EMP-9/11) */
+  const efs = c.sim ? c.sim.S.L.map((l, i) => efeitoDaPostura(l, i, passoLuta, c.visual.batidas, reduzido)) : [null, null];
+  const nPost = { escudos: 0, escudosAcesos: 0, fantasmas: 0, fantasmasAbertos: 0, auras: 0, contras: 0, claroes: 0, peles: 0 };
   const empAlvo = (i: number): number => reduzido || !c.sim ? 0 : (i ? 1 : -1) * empurraoDoPasso(c.visual, passo, i);
   [c.A, c.B].forEach((L, i) => {
     const x = centros[i], lado = c.sim?.S.L[i] ?? null;
@@ -141,6 +150,19 @@ export function desenharLutaTR(cv: HTMLCanvasElement, c: CenaDesenho, a: AtlasOk
     empurros[i] = dx / K;
     /* a queda (a v18): quem cai sobe num arco enquanto o motor o desliza para tras; o x e sempre o do motor */
     const dy = reduzido || !lado ? 0 : -Math.round(puloDaQueda(passoLuta, lado.quedaDe, lado.deslizeAte) * K);
+    const ef = efs[i], atras = i ? 1 : -1;
+    /* a imagem fantasma da esquiva (E4): copias apagadas para tras, na cor do elemento, por baixo do sprite; com o movimento reduzido ficam
+       paradas */
+    if (ef?.fantasmas.length) {
+      nPost.fantasmas++; if (ef.fantasmas[ef.fantasmas.length - 1].dx === POSTURA.fantasmas.length * POSTURA.fantasmaPx) nPost.fantasmasAbertos++;
+      const m = 2 * e, f = document.createElement("canvas"); f.width = w * e + 2 * m; f.height = h * e + 2 * m;
+      const fx = f.getContext("2d"); if (!fx) throw new Error("canvas 2d indisponível");
+      desenharSprite(fx, a, L.sprite, m, m, e, iq, opc);
+      fx.globalCompositeOperation = "source-atop"; fx.globalAlpha = POSTURA.fantasmaTinta; fx.fillStyle = ELEMENTO[elementos[i]].meio; fx.fillRect(0, 0, f.width, f.height);
+      for (const g of [...ef.fantasmas].reverse()) {
+        cx.globalAlpha = g.alfa; cx.drawImage(f, Math.round(x * K - w * e / 2) - m + atras * g.dx * e + dx, Math.round(PES * K - h * e) - m + dy); cx.globalAlpha = 1;
+      }
+    }
     /* o rastro da investida: copias mais apagadas atras de quem arranca, so no caminho ja feito (desde o x0) */
     const inv = lado?.acao?.nome === "investida" && !lado.acao.feito ? lado.acao : null;
     if (!reduzido && inv && c.sim) MOVIMENTO.rastroAlfa.forEach((alfa, k) => {
@@ -149,16 +171,44 @@ export function desenharLutaTR(cv: HTMLCanvasElement, c: CenaDesenho, a: AtlasOk
       const xr = centros[i] + xTela(lado!.x - rumo * atras, W) - xTela(lado!.x, W);
       cx.globalAlpha = alfa; desenharSprite(cx, a, L.sprite, xr * K - w * e / 2, PES * K - h * e, e, iq, opc); cx.globalAlpha = 1;
     });
-    if (!reduzido && c.sim && clarao(c.visual, passo, i)) {
-      /* o clarao: o sprite vira branco (so onde ha pixel) numa folha a parte, na mesma escala inteira */
+    const branco = !reduzido && !!c.sim && clarao(c.visual, passo, i);
+    if (branco || ef?.pele) {
+      /* o clarao (E1): o sprite vira branco (so onde ha pixel) numa folha a parte, na mesma escala inteira. A pele dura (E4): na mesma
+         folha, a cor do metal por cima do sprite e uma faixa de luz em diagonal que corre por ele (sem a faixa com o movimento reduzido) */
       const m = 4 * e, f = document.createElement("canvas"); f.width = w * e + 2 * m; f.height = h * e + 2 * m;
       const fx = f.getContext("2d"); if (!fx) throw new Error("canvas 2d indisponível");
       desenharSprite(fx, a, L.sprite, m, m, e, iq, opc);
-      fx.globalCompositeOperation = "source-atop"; fx.fillStyle = "#fff"; fx.fillRect(0, 0, f.width, f.height);
+      fx.globalCompositeOperation = "source-atop";
+      if (branco) { fx.fillStyle = "#fff"; fx.fillRect(0, 0, f.width, f.height); }
+      else {
+        const faixa = ef!.pele!.faixa; nPost.peles++;
+        fx.globalAlpha = POSTURA.peleAlfa; fx.fillStyle = COR_PELE.metal; fx.fillRect(0, 0, f.width, f.height);
+        if (faixa !== null) {
+          /* a faixa: em cada linha de pixels do sprite, POSTURA.peleFaixa pixels, um pixel mais para a esquerda a cada linha para baixo */
+          fx.globalAlpha = .85; fx.fillStyle = COR_PELE.faixa;
+          const x0 = Math.round(faixa * (w + h + POSTURA.peleFaixa)) - POSTURA.peleFaixa;
+          for (let ly = 0; ly < h; ly++) fx.fillRect(m + (x0 - ly) * e, m + ly * e, POSTURA.peleFaixa * e, e);
+        }
+        fx.globalAlpha = 1;
+      }
       cx.imageSmoothingEnabled = false; cx.drawImage(f, Math.round(x * K - w * e / 2) - m + dx, Math.round(PES * K - h * e) - m + dy);
     } else desenharSprite(cx, a, L.sprite, x * K - w * e / 2 + dx, PES * K - h * e + dy, e, iq, opc);
     cx.globalAlpha = 1;
     topo.push(PES - h * e / K);
+    if (!ef || !lado) return;
+    /* na frente do corpo (do lado do rival), em pixels do sprite: o escudo do defender e o brilho e o clarao do contra-golpe */
+    /* o pixel de postura: kp pixels do sprite, e pelo menos POSTURA.pixelMinCss px de CSS (o adulto grande deixa a escala em 1 no celular) */
+    const frente = -atras, xc = x + dx / K, yMeio = PES + dy / K - h * e / K / 2, kp = Math.max(1, Math.ceil(POSTURA.pixelMinCss * K / e)), up = e * kp;
+    if (ef.escudo) {
+      nPost.escudos++; if (ef.escudo.aceso > 0) nPost.escudosAcesos++;
+      pintar(cx, pixelsDoEscudo(Math.round(h * POSTURA.escudoAlto / kp), ef.escudo.aceso), xc + frente * geo.meias[i] * POSTURA.escudoFrente, yMeio, geo, frente, up);
+    }
+    if (ef.contra) {
+      nPost.contras++; if (ef.contra.clarao > 0) nPost.claroes++;
+      pintar(cx, pixelsDoContra(ef.contra.guarda, ef.contra.clarao, passoLuta, reduzido), xc + frente * geo.meias[i] * VOO.boca, PES + dy / K - h * e / K * VOO.altura, geo, frente, up);
+    }
+    /* a aura do carregar: faiscas que sobem dos lados do corpo; o anel tracejado no chao e o da E3 (a telegrafia), a aura nao repete */
+    if (ef.aura) { nPost.auras++; pintar(cx, pixelsDaAura(elementos[i], Math.round(w * POSTURA.auraMeia / kp), Math.round(h * .8 / kp), passoLuta, reduzido), xc, PES + dy / K, geo, 1, up); }
   });
   /* a poeira nos pes (a v18, a investida e a E3, chaoTR.ts): na corrida e na arrancada, atras de quem corre (na frente, no recuo); no deslize
      do empurrao, na frente de quem e empurrado (o lado de onde veio o golpe); no pouso da queda e no acerto do pesado, uma nuvem para os dois
@@ -211,15 +261,19 @@ export function desenharLutaTR(cv: HTMLCanvasElement, c: CenaDesenho, a: AtlasOk
   }
   cv.dataset.rajadas = String(rajadas);
   cv.dataset.projeteis = String(cabecas); cv.dataset.projeteisMeio = String(meioDoVoo);
-  /* a postura sobre a cabeca (defende, esquiva, prepara o pesado...) */
-  cx.font = `${Math.round(11 * K)}px system-ui, sans-serif`; cx.textAlign = "center";
+  /* a postura sobre a cabeca (E4): um icone 7 x 7 em grade de pixel, numa placa escura; o nome fica no title e no leitor de tela (PalcoTR) */
+  const rots: RotuloTR[] = [];
   if (c.sim) c.sim.S.L.forEach((l, i) => {
-    const nome = l.prep ? "pesado!" : l.acao && POSTURAS.includes(l.acao.nome) ? NOME_V2[l.acao.nome] ?? l.acao.nome : null;
-    if (!nome || l.hp <= 0) return;
-    const x = centros[i] * K, y = (topo[i] - 6) * K;
-    cx.fillStyle = "rgba(255,255,255,.85)"; const m = cx.measureText(nome).width; cx.fillRect(x - m / 2 - 4 * K, y - 12 * K, m + 8 * K, 16 * K);
-    cx.fillStyle = COR.tinta; cx.fillText(nome, x, y);
+    const p = posturaDoLado(l); if (!p) return;
+    const u = geo.e * Math.max(POSTURA.iconePx, Math.ceil(POSTURA.pixelMinCss * K / geo.e)), lado = (POSTURA.icone + 2) * u / K;
+    const x0 = Math.round((centros[i] + empurros[i] - lado / 2) * K) / K, y0 = Math.round((topo[i] - POSTURA.iconeAcima - lado) * K) / K;
+    /* pintar() conta o deslocamento a partir do canto do pixel (0, 0) do icone; a placa comeca em -1 */
+    pintar(cx, pixelsDoIcone(p, elementos[i], i), x0 + u / K, y0 + u / K, geo, 1, u);
+    rots.push({ lado: i, postura: p, nome: NOME_POSTURA[p], x: x0, y: y0, w: lado, h: lado });
   });
+  rotulos.set(cv, rots);
+  cv.dataset.posturas = [0, 1].map(i => rots.find(r => r.lado === i)?.postura ?? "").join(",");
+  for (const [k, n] of Object.entries(nPost)) cv.dataset[k] = String(n);
   /* a faisca no ponto do golpe: pixels inteiros na frente do alvo (do lado de quem bateu), na altura do peito */
   if (c.sim) for (const im of c.visual.impactos) {
     const ps = Math.max(1, Math.round(3 * K)), dir = im.lado === 0 ? 1 : -1, xc = Math.round((centros[im.lado] + empurros[im.lado] + dir * 14) * K), yc = Math.round((PES - (topo.length ? (PES - topo[im.lado]) / 2 : 20)) * K);
