@@ -68,10 +68,11 @@ export const ENFEITES_LUZ: Partial<Record<NomeEnfeite, string>> = { poste: "post
 /* Os lugares da ilha (docs/TAREFA_V3_LUGARES_3D.md; os "Lugares da ilha" de docs/PLANO_V3_PROGRESSAO_TUTORIAL.md, P-11): outra tabela irma,
    em public/lugares/<nome>/, gerada pela Meshy, com o License.txt ao lado. Quem os poe na cena (o ponto, o giro, o trancado e o aberto) e o
    modulo ilha/lugares.ts da frente UX_TELA_PET, pelo carregarVariante (cena.ts), que normaliza o modelo para a altura daqui. O portao: o arco
-   de pedra com o portal ciano (o lugar do Lutar), um pouco mais alto que um pinheiro baixo, para o pet (~1 celula) passar folgado. PROPOSTO,
-   SEM FONTE */
+   de pedra com o portal ciano (o lugar do Lutar), um pouco mais alto que um pinheiro baixo, para o pet (~1 celula) passar folgado. A barraca:
+   o domo digital com a antena (o lugar do Diario), 4 celulas com a antena, ~5 de largura, a porta com folga para o pet. PROPOSTO, SEM FONTE */
 export const LUGARES_MODELOS = {
   portao: { arquivos: ["portao/portao.gltf"], altura: 5, vento: 0, sombra: 1.6, baixo: false },
+  barraca: { arquivos: ["barraca/barraca.gltf"], altura: 4, vento: 0, sombra: 2.4, baixo: false },
 } as const satisfies Record<string, Modelo>;
 export type NomeLugar = keyof typeof LUGARES_MODELOS;
 /** a mascara das partes que acendem com o lugar aberto (o emissiveMap; fora do glTF, ao lado dele): o portal do portao */

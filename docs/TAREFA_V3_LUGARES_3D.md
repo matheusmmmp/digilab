@@ -77,3 +77,18 @@ O revisor: no corpo do PR.
 
 **Para a L3:** carregar `LUGARES_MODELOS.portao` pelo `carregarVariante`, com a frente +z para a área; a máscara `LUGARES_LUZ.portao` como
 `emissiveMap` (sem virar a imagem, `flipY = false`, como o poste em `enfeites.ts`), com a intensidade 0 trancado e a cor do portal aberto.
+
+## 10. A barraca do Tamer (2026-11-07, Gerente, Claude Code, Opus 5.5, branch `v3-lugares-3d-barraca`)
+
+**O que entrou:** `web/app/public/lugares/barraca/` (o glTF com 2 037 triângulos, a cor chapada e o `License.txt`) e a linha
+`LUGARES_MODELOS.barraca` em `modelos.ts` (altura 4, sombra 2,4, PROPOSTO); o teste `test/lugares3d.test.ts` já percorre a tabela inteira.
+Os passos e os scripts em `docs/lugares3d/barraca/` (`consertar_barraca.py`, `achatar_barraca.py`, `paleta.json`, `conserto/uv_faces.json`,
+`validacao.json`). O conserto
+e os números: D-LG-6 a D-LG-9 (a cor pelo matiz, porque a sombra embutida levava a listra branca ao cinza, e uma cor por face; sem máscara de
+luz, porque a tela não sobreviveu à malha; a entrada não lê, porque a malha não tem vão). Gasto: 36 créditos (saldo 410).
+
+**A prévia:** `D:\Trab\digilab\capturas_lugares3d\barraca\previa_barraca.png` (frente, direita, costas e esquerda, no Blender) e
+`docs/lugares3d/barraca/conserto/previa.png` (3/4). O revisor: no corpo do PR.
+
+**Para a L3:** carregar `LUGARES_MODELOS.barraca` pelo `carregarVariante`, com a frente +z (a porta aberta) para a área. Não há
+`LUGARES_LUZ.barraca`.
