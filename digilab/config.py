@@ -2733,6 +2733,7 @@ class ConfigDecodificador:
     # o que a fala (DC2) le: o conceito so entra acima do limiar de valor; com a confianca abaixo do outro, entra como hesitacao
     limiar_valor: int = _S // 2               # PROPOSTO, SEM FONTE
     limiar_confianca: int = _S // 2           # PROPOSTO, SEM FONTE
+    limiar_desfecho: int = _S // 8            # PROPOSTO, SEM FONTE (DC2b, dec-v2): |sigma| do episodio lembrado a partir do qual o desfecho e `bom` (sigma >= limiar) ou `ruim` (sigma <= -limiar); entre os dois, `neutro`
     piso_sonda: int = 5 * _S // 8             # PROPOSTO, SEM FONTE: o valor minimo de `lembranca` e `determinacao` quando a sonda decidiu (> limiar_valor)
     ganho_v: int = 4                          # PROPOSTO, SEM FONTE: |V| e pequeno (dezenas) contra S; bem_estar e mal_estar = clamp(ganho_v x |V|)
     ganho_sigma: int = 8                      # PROPOSTO, SEM FONTE: aversao = mul(sim, clamp(ganho_sigma x |sigma|)), sigma < 0

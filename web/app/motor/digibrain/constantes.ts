@@ -107,7 +107,7 @@ export const CARACTERISTICAS_DIGIBRAIN = ["vies", ...RECEPTORES_DIGIBRAIN.map(r 
 /** A ConfigDecodificador (digilab/config.py, DC1): os pesos e os limiares do `dec-v1`, PROPOSTOS, SEM FONTE. Conferida folha a folha contra
  *  test/gabaritos/decodificador_python.json por test/decodificador.test.ts. */
 export const CONFIG_DECODIFICADOR = {
-  limiar_valor: 512, limiar_confianca: 512, piso_sonda: 640, ganho_v: 4, ganho_sigma: 8, n_sp_teto: 8,
+  limiar_valor: 512, limiar_confianca: 512, limiar_desfecho: 128, piso_sonda: 640, ganho_v: 4, ganho_sigma: 8, n_sp_teto: 8,
   fins_frustrantes: ["desistiu", "sumiu", "trocou"],
   p_fome_urgencia: 2, p_fome_fracao: 1, p_fome_intencao: 1, p_fome_pista: 1,
   p_sono_urgencia: 2, p_sono_fracao: 1, p_sono_reflexo: 1, p_sono_noite: 1,

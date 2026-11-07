@@ -12,8 +12,8 @@ from .corpus import Especie, bloco_estilo, repete_citacao
 from .fatos import ESTAGIOS
 from .gerar import Resultado
 from .ollama import ClienteOllama
-from .prompt import (MAX_CHARS, MAX_TOKENS, VERSAO_VOZ_V1, esquema, fatos_do_dono_voz, ids_conceitos, linha_conceito,
-                     mensagens_voz)
+from .prompt import (MAX_CHARS, MAX_TOKENS, esquema, fatos_do_dono_voz, ids_conceitos, linha_conceito, mensagens_voz,
+                     versao_voz)
 from .saida import FALA_GENERICA, SaidaInvalida, aparar, ler
 
 TIPO_CONCEITO = "conceito"
@@ -37,7 +37,7 @@ def gerar_voz(cliente: ClienteOllama, conceitos: Conceitos, estagio: str, situac
     estilo = bloco_estilo(especie) if especie is not None else None
     msgs = mensagens_voz(conceitos, estagio, situacao, fala_jogador, historico, estilo=estilo, comando=comando)
     fatos = tuple(fatos_da_voz(conceitos, historico, estagio, situacao))
-    base = dict(fatos=fatos, estagio=estagio, modelo=cliente.modelo, versao_prompt=VERSAO_VOZ_V1,
+    base = dict(fatos=fatos, estagio=estagio, modelo=cliente.modelo, versao_prompt=versao_voz(conceitos),
                 especie=especie.especie if especie is not None else None)
     try:
         r = cliente.conversar(msgs, esquema(estagio, comando), MAX_TOKENS[estagio], semente)

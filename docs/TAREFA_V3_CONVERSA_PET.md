@@ -261,3 +261,32 @@ seção 2); o decodificador é a DC1, em paralelo, e a página ainda **não** ma
   verificador contra os conceitos, as rotas); os 16 arquivos de fala/conversa/servidor continuam passando.
 - **Falta:** a ligação na página (`web/app/src/falaLivre.ts` manda os conceitos da DC1 no lugar do `estadoDoPet`, atrás de chave desligada),
   a revisão da fala quando o verif-v7 aponta problema (hoje só se devolve a verificação) e a avaliação (DC4).
+
+## DC2b — a página ligada à voz e o conteúdo da lembrança (worker, Claude Code, Sonnet 5.5, branch `v3-conversa-dc2b-ligar`, 2026-11-07)
+
+Decisão DR-1 (a fala nasce da rede, a LLM só como voz). Fecha o que a DC2 deixou: a ligação na página e o que a voz diz da lembrança. Sem rodada,
+sem chamada à API nem ao Ollama (cliente falso nos testes). Nada muda na vida do pet: o decodificador só lê, e os gabaritos das vidas de hoje
+não mudaram. Desvios: D-CP-DC2b-1 a 8 em `docs/registro/2026-11.md`.
+
+- **A chave "Fala pela rede (teste)"** (Ajustes → Fala do pet; `src/falaLivre.ts`, `src/falaRede.ts`): desligada por padrão, preferência de tela
+  (`localStorage`), fora do registro do pet. Ligada, na conversa e na fala espontânea o pedido leva `conceitos` (o `dec-v2` da última decisão do
+  modular, `Motor.conceitosDec("dec-v2")`) e `estado` só com `{identidade: {estagio, forma}}`: sem `estadoDoPet`, log, memória do Bandit nem
+  desejo. A verificação manda os mesmos `conceitos` e só os `[J]` (o servidor usa a verif-v8). Pet que não é modular (hoje, tudo menos o ovo de
+  teste v16) ou sem decisão ainda: a chave não muda nada e a tela diz isso. Desligada, o pedido sai como hoje (teste). O `comando` segue pelo
+  caminho do botão. A chave tem prioridade sobre a "Conversa nova".
+- **Os limiares num lugar só (D-CP-DC2b-1):** `limiar_valor` e `limiar_confianca` da `ConfigDecodificador` (S/2 e S/2) são a fonte; a fala os lê;
+  o `S/4` da DC2 saiu (a voz-v1 diz menos conceitos). Teste falha se divergirem (Python, config, TS).
+- **O conteúdo da lembrança (`dec-v2`, D-CP-DC2b-2 e 3):** o conceito `lembranca` ganha `episodio = {acao, classe, desfecho}` de catálogo fechado,
+  decodificado do episódio recuperado (ação: os 7 comportamentos; classe: as 8 classes de episódio; desfecho: sinal do `sigma` com margem
+  `limiar_desfecho = S/8`, PROPOSTA). Python (`digilab/digibrain/decodificador.py`: `decodificar_v2`) e TS (`decodificarV2`) com paridade bit a
+  bit no gabarito regerado (`decodificador_python.json.gz`: `episodios`, `decisoes_v2`; as `decisoes` do `dec-v1` idênticas às de antes). Episódio de
+  luta e episódio que já saiu da memória vão sem `episodio`.
+- **A voz e o verificador (D-CP-DC2b-4):** o servidor valida o `episodio` contra o catálogo (fora dele = 400, sem chamar a LLM); `dec-v2` liga a
+  `voz-v2` e a `verif-v8` (a lembrança só é sustentada se a frase não contradiz ação, objeto e desfecho do episódio); `dec-v1` segue com
+  `voz-v1` e `verif-v7`, sem mudança de texto. Nada do texto livre do episódio chega à LLM.
+- **Achado (D-CP-DC2b-5):** a `fome` do DC1 manda `alvo` `comida`/`cheiro`, fora do catálogo da DC2; a página tira o alvo que não é de catálogo.
+- **Testes:** `tests/test_dc2b.py` (57: limiares, `dec-v2`, validação com injeção, voz-v2, verif-v8, servidor); `tests/test_voz_dc2.py` ajustado ao
+  limiar novo; `web/app/test/decodificador.test.ts` (paridade do `dec-v2`) e `web/app/test/fala_rede.test.ts` (a chave ligada e desligada);
+  `web/app/e2e/fala_rede.spec.ts` (servidor falso: desligada, pet não modular, pet de teste modular).
+- **Falta (DC3, DC4):** a rede escolhendo falar; a avaliação (plano reescrito, taxa de acerto da verif-v8, a voz-v2 com modelo de verdade). A `voz-v2`
+  e o extrator da `verif-v8` só foram vistos com cliente falso.
