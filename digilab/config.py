@@ -2432,12 +2432,18 @@ class ConfigDigibrain:
     facetas_mem: bool = False                # PROPOSTO, SEM FONTE como valor (C4, M5, MA-6; direcao: Ho 2005): as tres facetas adquiridas
     controle_mem: str = "rel"                # PROPOSTO, SEM FONTE como valor (C4, espec 7.2): o braco da memoria (CONTROLES_MEM); "rel" e o de hoje
     passeio: bool = False                    # PROPOSTO, SEM FONTE como valor (AN-2, docs/TAREFA_V3_ACOES_NOVAS.md, 3.1): o vagar que segura o destino
+    fala_unidades: bool = False              # PROPOSTO, SEM FONTE como valor (DC3, docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, 3.1): o chamar com conteudo
 
     def __post_init__(self) -> None:
         for nome in ("ligada", "modula_g_apr", "p2", "m_mem", "persistencia", "p1", "cheiro_inato", "intencao_cheiro",
-                     "intencao_suspensa", "credito_corrida", "redecidir_evento", "memoria_autobio", "facetas_mem", "passeio"):
+                     "intencao_suspensa", "credito_corrida", "redecidir_evento", "memoria_autobio", "facetas_mem", "passeio",
+                     "fala_unidades"):
             if type(getattr(self, nome)) is not bool:
                 raise TypeError(f"ConfigDigibrain.{nome} e bool: {getattr(self, nome)!r}")
+        if self.fala_unidades and (self.passeio or self.credito_corrida or self.intencao_suspensa or self.redecidir_evento
+                                   or self.facetas_mem):
+            raise ValueError("fala_unidades nao se combina com a passeio, a credito_corrida, a intencao_suspensa, a redecidir_evento nem "
+                             "a facetas_mem (docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, secao 9: PROPOSTO, sem teste da combinacao)")
         if self.passeio and (self.credito_corrida or self.intencao_suspensa or self.redecidir_evento):
             raise ValueError("passeio nao se combina com a credito_corrida, a intencao_suspensa nem a redecidir_evento "
                              "(docs/TAREFA_V3_ACOES_NOVAS.md, 3.1: PROPOSTO, sem teste da combinacao)")
@@ -2731,9 +2737,9 @@ PARAMETROS_GENOMA = {
 @dataclass(frozen=True)
 class ConfigDecodificador:
     # o que a fala (DC2) le: o conceito so entra acima do limiar de valor; com a confianca abaixo do outro, entra como hesitacao
-    limiar_valor: int = _S // 2               # PROPOSTO, SEM FONTE
+    limiar_valor: int = _S // 2               # DECIDIDO pelo Matheus em 2026-11-07 (PR #663), SEM FONTE
     limiar_confianca: int = _S // 2           # PROPOSTO, SEM FONTE
-    limiar_desfecho: int = _S // 8            # PROPOSTO, SEM FONTE (DC2b, dec-v2): |sigma| do episodio lembrado a partir do qual o desfecho e `bom` (sigma >= limiar) ou `ruim` (sigma <= -limiar); entre os dois, `neutro`
+    limiar_desfecho: int = _S // 8            # DECIDIDO pelo Matheus em 2026-11-07 (PR #663), SEM FONTE (DC2b, dec-v2): |sigma| do episodio lembrado a partir do qual o desfecho e `bom` (sigma >= limiar) ou `ruim` (sigma <= -limiar); entre os dois, `neutro`
     piso_sonda: int = 5 * _S // 8             # PROPOSTO, SEM FONTE: o valor minimo de `lembranca` e `determinacao` quando a sonda decidiu (> limiar_valor)
     ganho_v: int = 4                          # PROPOSTO, SEM FONTE: |V| e pequeno (dezenas) contra S; bem_estar e mal_estar = clamp(ganho_v x |V|)
     ganho_sigma: int = 8                      # PROPOSTO, SEM FONTE: aversao = mul(sim, clamp(ganho_sigma x |sigma|)), sigma < 0
@@ -2778,3 +2784,29 @@ CONFIG_DECODIFICADOR = ConfigDecodificador()
 # status e fonte de cada campo (CLAUDE.md: nenhum numero sem status); a ideia do gargalo de conceitos e o CBM de Koh et al. 2020 (arXiv:2007.04612,
 # VERIFICADA), mas nenhum numero daqui vem dela
 PARAMETROS_DECODIFICADOR = {f.name: ("PROPOSTO", "SEM FONTE; CBM manual, calibracao na DC4") for f in fields(ConfigDecodificador)}
+PARAMETROS_DECODIFICADOR.update({n: ("DECIDIDO", "SEM FONTE; decidido pelo Matheus em 2026-11-07 (PR #663, a DC2b)")
+                                 for n in ("limiar_valor", "limiar_desfecho")})
+
+
+# As unidades de fala do DigiBrain modular (docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, secao 3.1, APROVADO em 2026-11-07; DC3-4), so com a
+# subchave `fala_unidades` da ConfigDigibrain: o `chamar_atencao` vira tres unidades, (chamar_atencao, c) com c em CONTEUDOS_FALA. O inato de
+# cada uma e o W0[chamar_atencao].z de hoje com o termo do receptor do conteudo (TERMO_DO_CONTEUDO: a fome entra no W0 do chamar pela
+# conjuncao `fome_sem_comida`, a higiene e a solidao pelas urgencias) multiplicado por `ganho_conteudo` e o dos outros dois por zero. Fica
+# fora da ConfigDigibrainInatos para o dump do gabarito do modular (a paridade com a web) nao mudar.
+CONTEUDOS_FALA = ("fome", "higiene", "solidao")
+TERMO_DO_CONTEUDO = (("fome", "fome_sem_comida"), ("higiene", "u_higiene"), ("solidao", "u_solidao"))
+
+
+@dataclass(frozen=True)
+class ConfigFalaUnidades:
+    ganho_conteudo: int = 3 * _S // 2         # PROPOSTO, SEM FONTE: fixado na DC3a pela condicao da secao 3.1 do plano (a fala do dia 1 do
+                                              # LAB+F perto do chamar do dia 1 do LAB), so nas sementes dos testes (101 a 505); o artefato e
+                                              # artifacts_v3_conversa_dc3/ganho_conteudo.json (experiments/calibrar_ganho_conteudo_dc3.py)
+
+    def __post_init__(self) -> None:
+        if type(self.ganho_conteudo) is not int or self.ganho_conteudo < 0:
+            raise ValueError(f"ConfigFalaUnidades.ganho_conteudo e um inteiro >= 0: {self.ganho_conteudo!r}")
+
+
+CONFIG_FALA_UNIDADES = ConfigFalaUnidades()
+PARAMETROS_FALA_UNIDADES = {"ganho_conteudo": ("PROPOSTO", "SEM FONTE; a condicao da secao 3.1 do plano DC3, nas sementes dos testes")}

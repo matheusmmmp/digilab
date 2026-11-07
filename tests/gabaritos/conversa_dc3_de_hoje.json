@@ -1,0 +1,142 @@
+{
+ "LAB|aleatorio|comedouro|101": {
+  "corpo": "8a5d3936320db3da04c0790e960d7351a388abd5291b7c83bab2c01df38d18d2",
+  "decisoes": 288,
+  "estado": "8d35b24fb32e22e3e6a3c6b906e5c73121cffdcd46d49ece4de2f374ba3b9b7e",
+  "log": "991fd07be9add190d483fc75e09dd0d6d7286178369e1ad85139ad53935d4afa",
+  "medidas": "379435c505fc826efbdeb729e2adbd57d427f614157393e1165d3af78dfa1606"
+ },
+ "LAB|aleatorio|comedouro|202": {
+  "corpo": "0353b1e960ccdd95a9e2fed571b7174519d9cd6f3e32103c4dc6779cbb1f5885",
+  "decisoes": 288,
+  "estado": "2eb134a24297db7698f9b688162b06360e8bed5c34c21bc5740cf276efe49645",
+  "log": "72db9e0fca1f75f1b90b9e5e2f059e19b157904944d00c36c496634eb91de09a",
+  "medidas": "c2940d5ca613cc4961f2f7e4713b113e64eeababadf85fed082013f90dbde3f3"
+ },
+ "LAB|aleatorio|comedouro|303": {
+  "corpo": "d1da0a40d6dcf37eabc135a4c47eaa7f78ba856c3787987b1c5274d6cb75e832",
+  "decisoes": 288,
+  "estado": "c1e04da5e3a13308fd230cd326542460981a06f31b9315b3ab2589def37644af",
+  "log": "32e24c61d6ec095ad47b5958a628f7f722213cc8629e06a8fc433880eaa57ec9",
+  "medidas": "d06d0d7bb8053305803174590db4f5607b14efa9b33132730782ee4841cedae0"
+ },
+ "LAB|aleatorio|comedouro|404": {
+  "corpo": "e6087d526d8126eff4ba54b7a2960f2be85bc90e1eedada144d5bbdbed2230b4",
+  "decisoes": 288,
+  "estado": "6395cb81e1b8d4834ca80837057b78d794983b40cd8e0241a11b750aed90874e",
+  "log": "070ed5d502df2e6df14f91ba0fa3d26b10e78d68620a8925782b3223f55268db",
+  "medidas": "ae59aa9dbe768ebb32226cdbe025473390d373debd1b0284947edff2a2371951"
+ },
+ "LAB|aleatorio|comedouro|505": {
+  "corpo": "e5ecf5ae9dbde7bcd001c779391a4205a2ad1c6059d9e7dc4c89e87c291eb9ae",
+  "decisoes": 288,
+  "estado": "c6abcbb5bc3fd75271aac7c38ccdc175d10340737ace536c41e6309950f42444",
+  "log": "451170f64b63836830e789fc7f76c46cc48ad32ddf6a2292bb36a2ddeaa58d20",
+  "medidas": "90d632a3d04d240560dbe384245d4a33bf506f3008ce4d6cfea9730d511ecfc9"
+ },
+ "LAB|atencioso|comedouro|101": {
+  "corpo": "8db1a087eded2a6ee04b3d1a8816417eb1382b2b3198e9b8419688b290900eff",
+  "decisoes": 288,
+  "estado": "e07298bf6ad704aa7fe7cec48487dec80ed09d5370143c9418eab9e05a046141",
+  "log": "c1ee04f557f186a6d7480c45bd3d58508e4d2c1dc53dd6b77f3b9632054e8a75",
+  "medidas": "a09884999fd399345dbdac0e19e5ec976bfc5463fd9dac0c33c5caf2604ff8f7"
+ },
+ "LAB|atencioso|comedouro|202": {
+  "corpo": "7c469b884f946726beb0320f02abddd628a63522413f9e46656bf37dcf230eda",
+  "decisoes": 288,
+  "estado": "69430f2d43fb8c87958d5c02c5643f33c761c40eb32a871c8c5fd59db52f353c",
+  "log": "f11a294cb4f594bef36c28ca606ed494b90f53b362b7f3a1eec6e9286a79701a",
+  "medidas": "1607ffab36548aa52b80c9db1104f44b0facd34d81f891255a42e62c320c3dce"
+ },
+ "LAB|atencioso|comedouro|303": {
+  "corpo": "a20dacaf5307f3b9891c8ce8850af937e4e13c7bf5f601daf94e052d17d0b321",
+  "decisoes": 288,
+  "estado": "e14773e1c2e5c364002be55a170a78b53124c025bd8c7977fadb318a054e13ea",
+  "log": "d18fe940e5e42a35db3db8d39d232071bcfd8865e950f6530c9f689d20d109b7",
+  "medidas": "2122a12f00ee61d1b2e4c65cd6525152dc3900184849ef01d77cdda6aa4847d3"
+ },
+ "LAB|atencioso|comedouro|404": {
+  "corpo": "d960caaa9a7495676e6d728f05fc06db1223f53d8fedfebcc043335fd62d1d6a",
+  "decisoes": 288,
+  "estado": "81a6fc1052c84706014382056943835460af2729a7743b470693076c785923b6",
+  "log": "4b75ca12e606a156ee1c33520eb789dddff9ffade8feb2e3ab2ed8665897347c",
+  "medidas": "e1327ff228ddd8d52e521a68e6af1862300516169f43cf55bbd8e2e080ed9a1d"
+ },
+ "LAB|atencioso|comedouro|505": {
+  "corpo": "a507348f63f701e34c93083dddf264483fe6b3a1aceaacdec11f8879d00705db",
+  "decisoes": 288,
+  "estado": "ab98aa01165aa57819546e106910b58606e9b964b171bf55ca68a8b8078f4d4a",
+  "log": "b5e9ccd7fa1d8d5a76f1e0b07b494d7203345d4c4bdea3ee18372f4f568de3d3",
+  "medidas": "d28ab34de17b00af2479ea85b86f22278627ce8053736ff8ef8688a6995eb18e"
+ },
+ "LAB|incoerente|comedouro|101": {
+  "corpo": "8db1a087eded2a6ee04b3d1a8816417eb1382b2b3198e9b8419688b290900eff",
+  "decisoes": 288,
+  "estado": "e07298bf6ad704aa7fe7cec48487dec80ed09d5370143c9418eab9e05a046141",
+  "log": "c1ee04f557f186a6d7480c45bd3d58508e4d2c1dc53dd6b77f3b9632054e8a75",
+  "medidas": "a09884999fd399345dbdac0e19e5ec976bfc5463fd9dac0c33c5caf2604ff8f7"
+ },
+ "LAB|incoerente|comedouro|202": {
+  "corpo": "7c469b884f946726beb0320f02abddd628a63522413f9e46656bf37dcf230eda",
+  "decisoes": 288,
+  "estado": "69430f2d43fb8c87958d5c02c5643f33c761c40eb32a871c8c5fd59db52f353c",
+  "log": "f11a294cb4f594bef36c28ca606ed494b90f53b362b7f3a1eec6e9286a79701a",
+  "medidas": "1607ffab36548aa52b80c9db1104f44b0facd34d81f891255a42e62c320c3dce"
+ },
+ "LAB|incoerente|comedouro|303": {
+  "corpo": "a20dacaf5307f3b9891c8ce8850af937e4e13c7bf5f601daf94e052d17d0b321",
+  "decisoes": 288,
+  "estado": "e14773e1c2e5c364002be55a170a78b53124c025bd8c7977fadb318a054e13ea",
+  "log": "d18fe940e5e42a35db3db8d39d232071bcfd8865e950f6530c9f689d20d109b7",
+  "medidas": "2122a12f00ee61d1b2e4c65cd6525152dc3900184849ef01d77cdda6aa4847d3"
+ },
+ "LAB|incoerente|comedouro|404": {
+  "corpo": "d960caaa9a7495676e6d728f05fc06db1223f53d8fedfebcc043335fd62d1d6a",
+  "decisoes": 288,
+  "estado": "81a6fc1052c84706014382056943835460af2729a7743b470693076c785923b6",
+  "log": "4b75ca12e606a156ee1c33520eb789dddff9ffade8feb2e3ab2ed8665897347c",
+  "medidas": "e1327ff228ddd8d52e521a68e6af1862300516169f43cf55bbd8e2e080ed9a1d"
+ },
+ "LAB|incoerente|comedouro|505": {
+  "corpo": "a507348f63f701e34c93083dddf264483fe6b3a1aceaacdec11f8879d00705db",
+  "decisoes": 288,
+  "estado": "ab98aa01165aa57819546e106910b58606e9b964b171bf55ca68a8b8078f4d4a",
+  "log": "b5e9ccd7fa1d8d5a76f1e0b07b494d7203345d4c4bdea3ee18372f4f568de3d3",
+  "medidas": "d28ab34de17b00af2479ea85b86f22278627ce8053736ff8ef8688a6995eb18e"
+ },
+ "LAB|relapso|comedouro|101": {
+  "corpo": "ffe8056098e8241e23f0542bfe507a49471a6db201d1a2707b5d8b08dccf79e1",
+  "decisoes": 288,
+  "estado": "d018ad88dcfce03743af526498cd0cf5b08223e2995a3ae17851327ec463bd00",
+  "log": "ee5453bf787e145345361e1bd6b765107df945a411ab9dbdb4b0408d9a87790a",
+  "medidas": "e48ca0365893a2d59517a11d5f9e33245d69dd3a94b693eb79fdef99b0771f6a"
+ },
+ "LAB|relapso|comedouro|202": {
+  "corpo": "54699c03059e6511bc02fca66520ae8075425e8cf346c2d99de679c7fdbf3e50",
+  "decisoes": 288,
+  "estado": "3e7a5c9018beefcd6ecc8550e024b49ebee1e1e2d6090328d6c066e97434b081",
+  "log": "d4df6e0d678e23b3e5da46fffba0ec32d2c37d9931d3cb923e99750fa90161e7",
+  "medidas": "c498ca1da53453b4928a37661e5a473924abcbf879da931060f6df65d08d2f7a"
+ },
+ "LAB|relapso|comedouro|303": {
+  "corpo": "000830c03a71002d53fdd59cb62eac6d2ecc8102cf638e421ecdee757c4ea311",
+  "decisoes": 288,
+  "estado": "fefc91562a613f01a11eafe5f913c7b437e9b8ae0dc3e1df3b72ea07eb3fa26d",
+  "log": "2140b02e94fd7d0016abf65607135bbf7acc9dc1a76fa194310e19d39a7f68ce",
+  "medidas": "75baf9f6b62baee0bb92b957cf42012f414d46310d6344e74768e7881dc1a1af"
+ },
+ "LAB|relapso|comedouro|404": {
+  "corpo": "a7fe7c69c7d8b8b83254c39dee2f390734a66cedcbaa796f4d5ef5ca7112170d",
+  "decisoes": 288,
+  "estado": "d2c7132535e656b663a8c3b2fe7b4245d7968ae1f28964faaf71bee57d7f3b77",
+  "log": "dd821bd3383d4eca8d1586c7613397bbafe1434fd85dc4981dad193bf867500c",
+  "medidas": "a5f3c8d27745c85c7453ecdced0db8c343bd0667f57d9be08a2acc1cdce6d9b3"
+ },
+ "LAB|relapso|comedouro|505": {
+  "corpo": "c8f7a63b092bf6f0b4f827ca8362c773f0d7930c1c0968d772a648de25e88339",
+  "decisoes": 288,
+  "estado": "16169b92dd516aa170065b33494f2d37bad0a78f20badd00efeb931ee191fcd0",
+  "log": "55774bb20166dc3fe33cfebf0fabc6b7289d5fbe6554f45af2d6ae189da5c6f1",
+  "medidas": "0ed352a2ef421f01fdd632f8cd9330ddaec4f32fe9acaa8dc018d77add2c8206"
+ }
+}

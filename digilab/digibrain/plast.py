@@ -17,15 +17,28 @@ opcao acaba (o credito por opcao, PE-3; o M-ESTADO), so na linha do comportament
   `H[b*,j] <- clamp(H[b*,j] + mul(mul(g_apr, eta_h), mul(r_n, e_j)), -H_max, H_max)`,
 com e_j = z_j da decisao que comecou a opcao (a elegibilidade), r_n a soma dos r_n das consequencias dela (cortada em [-S, S]) e o g_apr
 da ultima decisao dela. O termo do habito de cada comportamento e `sum_j mul(H[b,j], z_j)`. Sem o P2, o termo e 0 e H fica em 0.
+Com a subchave `fala_unidades` (docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, 3.1), a linha do `chamar_atencao` da lugar a tres, uma por unidade de
+fala (`chamar_atencao/fome`, `/higiene`, `/solidao`, no lugar dela, na mesma ordem), e a opcao de fala credita a linha do seu conteudo; a
+regra e a mesma. Desligada, as linhas sao as de hoje.
 Sem rng."""
 from __future__ import annotations
 
-from ..config import CARACTERISTICAS_DIGIBRAIN, COMPORTAMENTOS_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, ConfigDigibrain, ConfigDigibrainInatos
+from ..config import (CARACTERISTICAS_DIGIBRAIN, COMPORTAMENTOS_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, CONTEUDOS_FALA, ConfigDigibrain,
+                      ConfigDigibrainInatos)
 from ..modelo_mundo import raiz_inteira
 from ..policies.lobos import div_arred, valor_previsto
 from ._comum import clamp, mul
 
 CLASSES_DESFECHO = ("racao", "a", "b", "c", "podre", "bola")
+
+
+def linha_da_opcao(chave: tuple, fala_unidades: bool) -> str:
+    """a linha de H que a opcao credita: a do comportamento; com a `fala_unidades`, a opcao de fala credita a do conteudo"""
+    if fala_unidades and chave[0] == "chamar_atencao":
+        if chave[1] not in CONTEUDOS_FALA:
+            raise ValueError(f"M-PLAST: a opcao de fala sem conteudo: {chave!r}")
+        return f"chamar_atencao/{chave[1]}"
+    return chave[0]
 
 
 class Plasticidade:
@@ -38,7 +51,11 @@ class Plasticidade:
         self.receptores: tuple | None = None
         self.desfecho: dict | None = None             # classe -> [d_r na ordem dos receptores]
         self.andar = 0
-        self.H = {b: [0] * len(CARACTERISTICAS_DIGIBRAIN) for b in COMPORTAMENTOS_DIGIBRAIN}
+        linhas = [b for b in COMPORTAMENTOS_DIGIBRAIN]
+        if self.cd.fala_unidades:                     # as tres linhas da fala no lugar da do chamar (a ordem fixa)
+            i = linhas.index("chamar_atencao")
+            linhas[i:i + 1] = [f"chamar_atencao/{c}" for c in CONTEUDOS_FALA]
+        self.H = {b: [0] * len(CARACTERISTICAS_DIGIBRAIN) for b in linhas}
         self.consumos = {c: 0 for c in CLASSES_DESFECHO}
         self.amostras_andar = 0
         self.creditos = 0
@@ -112,7 +129,7 @@ class Plasticidade:
         if not self.cd.p2:
             return None
         p, S = self.p, self.S
-        b = op["chave"][0]
+        b = linha_da_opcao(op["chave"], self.cd.fala_unidades)
         r_n = op["r"]
         passo = mul(op["g_apr"], p.eta_h, S)
         linha = self.H[b]
