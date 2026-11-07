@@ -75,7 +75,9 @@ Object.assign(window, { __digilab: { assinatura: () => jogoAtual().motor.assinat
   mundo: lerMundo, cena: () => CENA.mundo && { pet: [...CENA.mundo.pet], bola: CENA.mundo.bola ?? null, modo3d: CENA.modo3d, ret: CENA.ret },
   reacao: () => reacaoAtual(performance.now()),
   /* o que tocou no comer no ultimo quadro da ilha: "clipe", "gesto" ou null (cenaAcao.ts, escolherComer; docs/TAREFA_V3_SPRITES_ACOES.md, M4) */
-  comer: () => comerAgora().tocou, emburrar: () => emburrarAgora(), dormir: () => dormirAgora(), reacaoRosto: () => reacaoRostoAgora(), cenaPara: (x: number, y: number) => CENA.mundo?.paraTela(x, y) ?? null } });
+  comer: () => comerAgora().tocou, emburrar: () => emburrarAgora(), dormir: () => dormirAgora(), reacaoRosto: () => reacaoRostoAgora(), cenaPara: (x: number, y: number) => CENA.mundo?.paraTela(x, y) ?? null,
+  /* o pet na mao (PegarPet.tsx; docs/TAREFA_V3_PEGAR_PET.md, P2) */
+  petNaMao: () => CENA.petNaMao } });
 /* varios pets: no primeiro acesso a esta versao, a escada de pets guardados de exemplo (fraco -> forte), depois da
    primeira pintura para nao atrasar a abertura */
 setTimeout(() => { try { semearGuardados(); } catch (err) { console.error("pets guardados de exemplo:", err); } }, 400);
