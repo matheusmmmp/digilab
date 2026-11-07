@@ -602,3 +602,36 @@ os gabaritos não mudam. O branch é `v3-ux-lugares-niveis`, sobre a L3 (`v3-ux-
   com reduzir movimento), e o aviso ao leitor de tela.
 - **"Tamer Nv N"** no leque do retrato (celular) e na plaquinha (desktop); o Como jogar com uma página (P-9).
 - **As interpretações** estão em `docs/registro/2026-11.md` ("os níveis do Tamer"), e o relato, no corpo do PR.
+
+## 20. Etapa D1d: as pendências do DigiBrain depois do merge (2026-11-07)
+
+O PR #668 (D1, D1b e D1c) foi mergeado na `v3-ux-integra`. Depois disso, o Matheus pediu "siga com as recomendações". Esta etapa fecha as
+pendências que o relato do #668 deixou, num PR próprio (branch `v3-ux-digibrain-d1d`).
+
+**O que foi feito:**
+- **O movimento:** fica como está, só a 1x ou mais devagar, pela recomendação. Está registrado em `docs/PROPOSTAS_V3_UX_TELA_PET.md`, seção D1c.
+- **A medida de quadros (M3, `?medir3d=1`):** feita no Chrome do PC, sem tela, nas duas peles, a 1280 × 800 e a 390 × 844, com o DigiBrain
+  fechado e aberto.
+  - Os oito casos deram 60 fps, com a mediana de 16,7 ms e o p95 de 16,8 ms por quadro.
+  - O JSON de cada medida está em `D:\Trab\digilab\capturas_ux_digibrain_aprovar\m3\`.
+  - Abrir o campo não derruba quadros no PC. Um celular de verdade continua sem medida.
+- **O zoom de 200%:** não pediu código. Um e2e novo confere que o campo cabe inteiro, com os botões do topo dentro, a 960 × 400, 960 × 300 e
+  640 × 360 em CSS.
+- **O código sem uso saiu:**
+  - o `ConteudoDigiBrain`, os selos antigos e o ícone, em `DigiBrain.tsx`;
+  - o `MapaPesos` e a `LegendaMapa`, em `MapaPesos.tsx`;
+  - as regras de `digibrain.css` que mais nada usa.
+
+  O `PainelDigiBrain` só monta o do modular e levanta erro com o A v11.
+
+**Os portões:**
+- `npm run tipos` está limpo. O Vitest dá 95 arquivos e 893 testes.
+- No e2e inteiro (porta 8831), 137 passaram e 1 falhou: o `camera_livre.spec.ts:74`, herdado da base.
+- O portão "nada fora do DigiBrain muda": 21 telas, a 1920 e a 390, nas duas peles, base × branch.
+  - O DOM das 84 telas ficou igual.
+  - Duas capturas tiveram diferenças pequenas: a `crescer-itens` a 390 no Vidro (42 px) e a `lutar-fronteira` a 1920 no Militar (26 px).
+    As duas já tinham variado na D1c, e a primeira varia no mesmo lugar entre duas capturas da própria base.
+- As 6 capturas do DigiBrain aberto (duas peles, 1920 e 390, mais a dica a 1920) saíram iguais às da D1c, pixel a pixel.
+
+**Fica com o Matheus:** a M3 num celular de verdade, com `?medir3d=1`. O porquê do cérebro modular no mesmo campo (D1-9) é a próxima etapa,
+com prancha.

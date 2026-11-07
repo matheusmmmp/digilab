@@ -531,3 +531,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-07 — UX_TELA_PET D1, o código do scan (Gerente da frente, Claude Code, Opus 5.5, branch `v3-ux-digibrain`; código pelo `ux-implementador`)](registro/2026-11.md)
 - [2026-11-07 — UX_TELA_PET D1b, o DigiBrain como modal pequeno (Gerente da frente, Claude Code, Opus 5.5, branch `v3-ux-digibrain`)](registro/2026-11.md)
 - [2026-11-07 — UX_TELA_PET D1c, o DigiBrain como campo pequeno (Gerente da frente, Claude Code, Opus 5.5, branch `v3-ux-digibrain`)](registro/2026-11.md)
+- [2026-11-07 — UX_TELA_PET D1d, as pendências do DigiBrain depois do merge (Gerente da frente, Claude Code, Opus 5.5, branch `v3-ux-digibrain-d1d`)](registro/2026-11.md)
