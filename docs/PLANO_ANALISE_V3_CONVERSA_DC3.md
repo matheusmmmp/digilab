@@ -279,3 +279,41 @@ olhando para ela.
 | **DC3-A2** | o G-ESCUTA vira P(fala pertinente \| necessidade), atende − ignora, dias 8–14 (A1.2) | sim: tira o efeito de o dono já ter resolvido | se a intensidade da necessidade diferir entre os donos, sobra um resto do confundidor (o relato mede) |
 | **DC3-A3** | a premissa P-NECESSIDADE (80 % das unidades com o gate definido) | sim | uma premissa frouxa deixa passar um gate de poucas decisões |
 | **DC3-A4** | a 4.4 vira conferência que falha alto | sim: por A1.1 ela é certa por construção | nenhum |
+
+## 13. O registro da run
+
+(2026-11-07, DC3b, Gerente da CONVERSA_PET, Claude Code, Opus 5.5; gerado por `--registro` sobre a `main` em a8142f6, com o adendo 1 APROVADO. Nenhuma vida da faixa rodou antes deste commit.)
+
+- **A config:** `experiments/configs/v3_conversa_dc3/conversa_dc3.json` (o sha256 na lista abaixo).
+- **As bases:** 79101, 79202, 79303, 79404, 79505; **K = 40 por base**, 200 unidades, o prefixo `digibrain_prototipo`; 3200 vidas de 14 dias, orcamento 16 por dia, so o comedouro.
+- **A primeira unidade:** base 79101, k 0, semente 11707667313928886419, genoma 3017353626837502801.
+- **A ultima unidade:** base 79505, k 39, semente 16095761786308350113, genoma 1724189753960032524.
+- **Os bracos:** LAB = `{"cheiro_inato": true, "controle_mem": "rel", "intencao_cheiro": true, "memoria_autobio": true}` sobre a config ligada do DigiBrain; LAB+F = o mesmo com `fala_unidades: true`.
+- **As celulas:** atencioso/ignora, atencioso/atende, relapso/ignora, relapso/atende, aleatorio/ignora, aleatorio/atende, incoerente/ignora, incoerente/atende.
+- **A saida:** `artifacts_v3_conversa_dc3/run/`, que nao existe antes da run (a run recusa gravar por cima).
+- **O comando:** `python experiments/run_v3_conversa_dc3.py --config experiments/configs/v3_conversa_dc3/conversa_dc3.json --processos 4`.
+- **Os sha256** (a trava confere cada um contra a arvore antes da primeira vida; o plano fica fora, porque guarda o registro):
+
+- `experiments/run_v3_conversa_dc3.py`: `fe661aa83219a6bbdc8dac5b313ea0873746cf7d34b1a0434b0c7f121271d53c`
+- `experiments/run_v2_digibrain_prototipo.py`: `e3071e6729a6a9dade31946c1372606215bc68b10e0c6f72584d1fa3ba45ae63`
+- `experiments/run_v2_longe_regular.py`: `5583a217edd04ad2493c91c23d67d913605adb780699a14a9495e6b58a9a900c`
+- `experiments/run_v2_memoria_autobio.py`: `dcc83a04f88db17e777a66d95b467a3e15ff24e59a5c7ab510db0a7925b30cf0`
+- `experiments/configs/v3_conversa_dc3/conversa_dc3.json`: `b9ee63a71f6d9ebbf72b48754c562b0d47e275e61e183b0ccd4903f74996dcae`
+- `digilab/config.py`: `13ac680575f2fe0fc18281ca590f598260d6ea4b7d3bbee9ed3b2c247de89ea9`
+- `digilab/engine.py`: `48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630`
+- `digilab/metrics.py`: `9cff75ae75e5111ca0459c398126003c4090d85ecef8a8cb7f0a5fa491208e6b`
+- `digilab/mundo.py`: `a759ec186ed9233baa5d6e583ab4cb836ed4b46c2b50df762eb4fd0b58a688a2`
+- `digilab/donos.py`: `282d197c336bf7e9027209a165d6c632570e2c6da7eca41b6d917edc89754b70`
+- `digilab/digibrain/__init__.py`: `3d50ce23bd4001f607018485282fbea22b021d7e4f825c070b9be87197cb2b55`
+- `digilab/digibrain/_comum.py`: `164ef9c3e5781f68a711d50de9a014751073ea7343540e5d6af9feff0a81d160`
+- `digilab/digibrain/adapt.py`: `ea7a3edd0d5ad1dc18788d9b229ab7e49577c906a66f93ca6f44deb55c606ece`
+- `digilab/digibrain/afeto.py`: `4b1b8d9caf8cf5de40048f9689d0b7fc844bba59a58ac044a2bcaed073ee2f99`
+- `digilab/digibrain/arb.py`: `f5465f353366a81da3fd32b84377d40988ff46d60dda17237ad47c3053d3fa64`
+- `digilab/digibrain/decodificador.py`: `743764f0b230862f88d99ea3e997b4b27b1da6604b0f796fbb912cd4577df1f8`
+- `digilab/digibrain/estado.py`: `76a5f54acccdee3ec3305d6127f2f459b67ce615e0970c3e350955150b34b3c6`
+- `digilab/digibrain/ganchos.py`: `595e7f57fddb5e3d06bf2aa939acd59dce379843b503a7f04021821b2328a224`
+- `digilab/digibrain/impulso.py`: `afe1b803726ab72863fdc0f4150e7321f42a90ec63840b60106fb80817031340`
+- `digilab/digibrain/mem.py`: `48588c9a90e9d0e99ee18d1a47105243317995241f95e40dbae4893209f8eec6`
+- `digilab/digibrain/pers.py`: `c0e3ef850d84d12b7263baeba438f5395512f34a05e49fea831c346ab1594528`
+- `digilab/digibrain/plast.py`: `a2b9d426164e98754dadc11d8d4d09dbcde8296a0e66d2ff512859c1dcbcb8e7`
+- `digilab/digibrain/sens.py`: `4b0ab309d86c7bbdef27f9338a715a72e29691df5786c075f4933c1b0d107f77`
