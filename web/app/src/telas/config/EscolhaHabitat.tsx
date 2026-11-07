@@ -31,7 +31,7 @@ const CONTROLES: readonly Controle[] = ["livre", "fixa"];
 const VIAGENS = ["ligada", "desligada"] as const;
 type Viagem = typeof VIAGENS[number];
 const NOME_VIAGEM: Record<Viagem, string> = { ligada: "Ligada", desligada: "Desligada" };
-const DESCRICAO_VIAGEM: Record<Viagem, string> = { ligada: "Crescer leva a câmera até o saco de pancada", desligada: "corte seco, sem viagem" };
+const DESCRICAO_VIAGEM: Record<Viagem, string> = { ligada: "Crescer, Lutar e o Diário levam a câmera ao saco, ao portão e à barraca", desligada: "corte seco, sem viagem" };
 const DESCRICAO_VISUAL: Record<Visual, string> = {
   normal: "a cena como ela é",
   "gba-hd": "pixel grande, cor clara e saturada (o jeito do Cassette Beasts)",

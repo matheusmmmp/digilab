@@ -7,7 +7,7 @@ import { LIVRE, andar, irPara, seguirPet, zerarCamera } from "../src/telas/pet/c
 import { toqueIgnorado } from "../src/telas/pet/ToquePet.tsx";
 import { atalhoDaTecla } from "../src/atalhosLugar.ts";
 import { efeitoCurto, nomeCurto } from "../src/telas/crescer/TelaItens.tsx";
-import { PAINEL_MS, VIAGEM_MS, entrarLugar, escolherViagem, lugarAberto, pularViagem, progressoViagem, sairLugar, viagemLigada, viajando, zerarViagem } from "../src/viagem.ts";
+import { PAINEL_MS, VIAGEM, VIAGEM_MS, entrarLugar, lugarAtual, escolherViagem, lugarAberto, pularViagem, progressoViagem, sairLugar, viagemLigada, viajando, zerarViagem } from "../src/viagem.ts";
 
 describe("viagem da camera", () => {
   beforeEach(() => { zerarViagem(); escolherViagem(true); });
@@ -47,13 +47,59 @@ describe("viagem da camera", () => {
   });
 });
 
+describe("viagem com os tres lugares (L3)", () => {
+  beforeEach(() => { zerarViagem(); escolherViagem(true); });
+  afterEach(() => { zerarViagem(); escolherViagem(true); });
+
+  it("o saco e o padrao e nada muda para ele", () => {
+    entrarLugar(0);
+    expect(lugarAtual()).toBe("saco");
+    expect(progressoViagem(VIAGEM_MS)).toBe(1);
+    expect(VIAGEM.origem).toBeNull();
+  });
+  it.each(["portao", "barraca"] as const)("%s: vai de 0 a 1 em VIAGEM_MS e volta", l => {
+    entrarLugar(1000, l);
+    expect(lugarAberto()).toBe(true);
+    expect(lugarAtual()).toBe(l);
+    expect(progressoViagem(1350)).toBeCloseTo(0.5, 6);
+    expect(progressoViagem(1000 + VIAGEM_MS)).toBe(1);
+    sairLugar(3000);
+    expect(progressoViagem(3000 + VIAGEM_MS)).toBe(0);
+    expect(lugarAberto()).toBe(false);
+  });
+  it("a troca direta parte do lugar de antes (a origem) e nao passa pela ilha", () => {
+    entrarLugar(0, "portao");
+    pularViagem(10);
+    entrarLugar(100, "barraca");
+    expect(lugarAtual()).toBe("barraca");
+    expect(VIAGEM.origem).toBe("portao");
+    expect(progressoViagem(100)).toBeGreaterThan(0);
+    expect(progressoViagem(100 + VIAGEM_MS)).toBe(1);
+    sairLugar(2000);
+    expect(VIAGEM.origem).toBeNull();
+  });
+  it("trocar para o mesmo lugar nao faz nada", () => {
+    entrarLugar(0, "portao"); pularViagem(10);
+    entrarLugar(20, "portao");
+    expect(progressoViagem(20)).toBe(1);
+    expect(VIAGEM.origem).toBeNull();
+  });
+  it("com a viagem desligada, a troca tambem e um corte seco", () => {
+    escolherViagem(false);
+    entrarLugar(0, "portao");
+    entrarLugar(5, "barraca");
+    expect(progressoViagem(5)).toBe(1);
+  });
+});
+
 describe("atalhos do lugar", () => {
-  it("C, 1 a 4 e Esc; L e D nao existem aqui", () => {
+  it("C, L, D, 1 a 4 e Esc (L e D sao da L3)", () => {
     expect(atalhoDaTecla("KeyC")).toBe("c");
+    expect(atalhoDaTecla("KeyL")).toBe("l");
+    expect(atalhoDaTecla("KeyD")).toBe("d");
     expect(atalhoDaTecla("Escape")).toBe("esc");
     expect([1, 2, 3, 4].map(n => atalhoDaTecla("Digit" + n))).toEqual(["1", "2", "3", "4"]);
-    expect(atalhoDaTecla("KeyL")).toBeNull();
-    expect(atalhoDaTecla("KeyD")).toBeNull();
+    expect(atalhoDaTecla("KeyX")).toBeNull();
   });
 });
 

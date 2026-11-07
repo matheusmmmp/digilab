@@ -15,7 +15,8 @@ import * as THREE from "three";
 import type { Mundo } from "../../../../motor/index.ts";
 import { ninhoDe } from "../vistaMundo.ts";
 import { CENA } from "../cenaEstado.ts";
-import { BOLA_SALTO, BOLA_TAU_MS, COCO, KIT_DESDE_NINHO, LUZ_NINHO, SACO_BALANCO, SACO_DESDE_NINHO } from "./constantes.ts";
+import { BOLA_SALTO, BOLA_TAU_MS, COCO, KIT_DESDE_NINHO, LUZ_NINHO, SACO_BALANCO } from "./constantes.ts";
+import { pontoDoLugar } from "./lugares.ts";
 import { GEO_SOMBRA, curvar, materialSombra, toon } from "./cena.ts";
 import { Cocos } from "./cocos.ts";
 
@@ -217,7 +218,8 @@ export class Itens {
     this.brilho.position.set(nx / sub, 0.05, ny / sub);
     this.brilho.visible = false;
     this.ninhoEm = [nx / sub, ny / sub];
-    this.sacoEm = [nx / sub + SACO_DESDE_NINHO[0], ny / sub + SACO_DESDE_NINHO[1]];
+    /* o ponto do saco e de lugares.ts (junto com o do portao e o da barraca): o mesmo [3, -4] do ninho de sempre */
+    this.sacoEm = [...pontoDoLugar("saco", { ninho: [nx / sub, ny / sub], comedouro: [mu.comedouro[0] / sub, mu.comedouro[1] / sub], area: { w: mu.cm.celulas_x, h: mu.cm.celulas_y } })];
     this.saco.g.position.set(this.sacoEm[0], 0, this.sacoEm[1]);
     this.kit.position.set(nx / sub + KIT_DESDE_NINHO[0], 0, ny / sub + KIT_DESDE_NINHO[1]);
     this.kit.rotation.y = -0.4;

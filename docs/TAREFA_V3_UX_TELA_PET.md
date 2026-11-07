@@ -460,3 +460,20 @@ com o #636).
 - **O token `--hx-sombrio`** (`#D3B6FA`) nas duas peles, com o contraste no `test/hx_pele.test.ts`.
 - **As interpretações** estão em `docs/registro/2026-11.md` ("UX_TELA_PET L2"), e o relato inteiro, com as contagens, os portões e os
   achados dos revisores, no corpo do PR.
+
+## 15. Etapa L3 de "Lugares da ilha": Lutar no portão e Diário na barraca (2026-11-06)
+
+**O que é.** O segundo e o terceiro lugar, pela mesma prancha L2/L3 aprovada, no desktop e no celular, com tudo aberto. É só vista: o
+motor, o save, as rotas e os gabaritos não mudam. O branch é `v3-ux-lugares-l3`, sobre a L2 (`v3-ux-lugares-menus`).
+- **Lutar no portão da arena** (atalho `L`): as abas Arena, Exploração, Fronteira e Medalhas; a Fronteira com "Nv 8" e "Abre com 6
+  medalhas" só no visual. **Diário na barraca do Tamer** (atalho `D`, que divide a tecla com o WASD; ver o registro): Registro, Catálogo,
+  Gerações e Cenários. As telas Arena, Medalhas, Registro e Catálogo foram refeitas pelo corte da prancha; as outras só entraram no painel.
+- **A viagem** (`src/viagem.ts`) vale para os três lugares, com a troca direta entre eles; o painel, a folha, a placa e o conector são os
+  da L2.
+- **O portão e a barraca na ilha** (`src/telas/pet/ilha/lugares.ts` e `marcadoresLugar.ts`): marcadores provisórios com as cores dos
+  tokens, até os modelos do worker ITENS_3D (`public/lugares/<portao|barraca>/<nome>.gltf`); a troca é apontar o campo `modelo`. O
+  minimapa do desktop marca os dois.
+- **Os Ajustes** abrem no mesmo painel, sem viagem; a lista principal só com ícone e nome.
+- **Fora:** o botão Mapa no leque do celular (etapa própria), os níveis, as travas e o cartão de tutorial.
+- **As interpretações** estão em `docs/registro/2026-11.md` ("UX_TELA_PET L3"), e o relato inteiro, com as contagens, os portões e os
+  achados dos revisores, no corpo do PR.

@@ -46,16 +46,18 @@ export interface VistaPublicada {
   frente: Par; meiaAbertura: number;
   /** a comida no chao (celulas e cor 0xRRGGBB, a da cena) */
   comidas: { x: number; z: number; cor: number }[];
-  /** os lugares fixos: o ninho, o comedouro e o saco de pancada (celulas) */
-  ninho: Par; comedouro: Par; saco: Par;
+  /** os lugares fixos: o ninho, o comedouro, o saco de pancada, o portao da arena e a barraca do Tamer (celulas; ilha/lugares.ts) */
+  ninho: Par; comedouro: Par; saco: Par; portao: Par; barraca: Par;
   /** as arvores de fruta do layout (celulas) */
   arvores: Par[];
   /** o pet esta fora da tela, e de que lado */
   petFora: boolean; lado: Lado;
   /** px de CSS por celula na distancia do ponto olhado (o arrasto direito) e o seno da elevacao da camera */
   pxPorCelula: number; senoElevacao: number;
-  /** o pe do saco na tela (px do cliente), publicado depois da camera do quadro (a placa do lugar, L2) */
-  sacoTela?: Par;
+  /** o pe do lugar aberto na tela (px do cliente), publicado depois da camera do quadro (a placa do lugar, L2 e L3) */
+  lugarTela?: Par;
+  /** a altura do lugar aberto na tela (px de CSS): a placa fica acima dela */
+  lugarAltPx?: number;
   mapa: MapaDaIlha;
   limites: Limites;
 }
@@ -149,7 +151,7 @@ const mesmoPar = (a: Par | null, b: Par | null) => a === b || (!!a && !!b && per
 /** algo que o minimapa desenha mudou entre duas publicacoes (o ponto olhado, o pet, a bola, a vista, a comida, os lugares) */
 export function mudouVista(a: VistaPublicada, b: VistaPublicada): boolean {
   if (!mesmoPar(a.foco, b.foco) || !mesmoPar(a.pet, b.pet) || !mesmoPar(a.bola, b.bola) || !mesmoPar(a.frente, b.frente)
-    || !perto(a.meiaAbertura, b.meiaAbertura) || a.mapa !== b.mapa || !mesmoPar(a.saco, b.saco) || a.arvores.length !== b.arvores.length
+    || !perto(a.meiaAbertura, b.meiaAbertura) || a.mapa !== b.mapa || !mesmoPar(a.saco, b.saco) || !mesmoPar(a.portao, b.portao) || !mesmoPar(a.barraca, b.barraca) || a.arvores.length !== b.arvores.length
     || a.comidas.length !== b.comidas.length) return true;
   return a.comidas.some((c, i) => { const d = b.comidas[i]; return !perto(c.x, d.x) || !perto(c.z, d.z) || c.cor !== d.cor; });
 }
