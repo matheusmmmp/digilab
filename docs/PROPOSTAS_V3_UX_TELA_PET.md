@@ -1364,3 +1364,35 @@ O e2e de hoje (`e2e/jogo.spec.ts:1166-1260`) usa, e a prancha mantém:
 "Aprovar e codar": valem as recomendações D1-1 a D1-11 da tabela acima, como estão. Os números do movimento (D1-2) e os de layout (D1-11)
 ficam PROPOSTO, SEM FONTE. Antes do código, a prancha corrigiu três defeitos que ela mesma apontava: o rótulo "receptores do corpo" cortado a
 390, o rótulo "sem cuidado" sob a varredura a 1920 (agora a varredura passa por baixo dos rótulos) e os traços do "tronco", que saíram.
+
+### D1b — o modal pequeno (Matheus, 2026-11-07, depois do PR #668)
+
+O Matheus mudou a direção depois de ver o código: "A ideia, na verdade, é a tela do DigiBrain ela ser muito menor. Não ocupar a tela
+inteira. Apenas um modalzinho com o cérebro, sem essa quantidade de texto." **A aprovação da tela cheia fica suspensa** até ele ver a prancha
+nova: `docs/pranchas/ux-digibrain/modal.html` (mesmos dados, `dados.json`), com as capturas em
+`D:\Trab\digilab\capturas_ux_digibrain_aprovar\modal\` (`capturar_modal.sh`; o fundo é a Tela Pet real do mesmo pet, tirada do jogo).
+
+**O que sai do modal:**
+- os cartões Agora, Peso dos lobos, O que mais pesou, Opções, Aprendido e Últimas ações;
+- a legenda do rodapé e o parágrafo;
+- o rótulo "pesou mais" e a região "memória e emoção · sem pesos".
+
+**O que fica:**
+- o título "DigiBrain";
+- o selo só como forma (ponto, barras, triângulo), com a dica;
+- o "i", que abre a dica "a forma é só desenho" com a legenda curta;
+- "O mapa em texto" como botão de ícone, que troca o desenho pela tabela, no mesmo tamanho;
+- o fechar (Esc, e um clique fora);
+- o mapa, com a percepção, os receptores do corpo, as regras, as ações e o caminho aceso.
+
+O movimento é o da D1, sem mudar.
+
+| # | decisão | recomendação | custo de errar |
+|---|---|---|---|
+| D1b-1 | onde o modal fica a 1920 | **à direita, sobre a pilha de painéis** (de onde ele abre), 720 px de largura, a 72 px do alto: o pet fica à vista no meio. A alternativa é no centro (`?lugar=centro`) | no centro, o modal cobre o pet, e o dono não vê a ação que o mapa explica |
+| D1b-2 | o tamanho | 720 px de largura (o desenho, 696 × 437) a 1920; a 390, uma folha baixa de ~320 px (o desenho, 374 × 235). **PROPOSTO, SEM FONTE** | maior, volta a ser tela; menor, os rótulos dos nós caem abaixo de 11 px a 1920 |
+| D1b-3 | o fundo | **um véu leve, sem desfoque**: a ilha continua a pleno ritmo. Saem o `CENA.coberto` e o fundo opaco da D1; o vidro fica só no próprio modal, como num painel da HUD | com o desfoque, a cena inteira paga o vidro a cada quadro (o que a rev-cena barrou); sem o véu, o modal parece solto na tela |
+| D1b-4 | a 390 | **folha baixa presa embaixo**, com o pet visível acima; só os rótulos acesos e das candidatas | o cartão central cobre o pet, e a folha inteira volta ao que o Matheus recusou |
+| D1b-5 | o selo ao vivo, pausado ou replay | **só a forma, ao lado do título**, com a dica e o nome acessível | sem selo, o replay parece ao vivo; com o texto, volta texto que ele tirou |
+| D1b-6 | os rótulos das regiões | **"ações", "regras" e "percepção"** (os nomes que o dono entende), mais "receptores do corpo" | "decisão" e "impulsos" são os nomes dos lobos e confundem quem não leu o motor; o `data-lobo` do e2e continua no código |
+| D1b-7 | a legenda | **vai para a dica do "i"** | sem legenda nenhuma, o vermelho e o azul do aprendido ficam sem explicação |
