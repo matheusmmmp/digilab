@@ -406,6 +406,8 @@ export async function objetos(ilha: Ilha, base: string, carregar?: Carregador, a
   /* agrupa os objetos por (modelo, variante) e monta um InstancedMesh por peca */
   const grupos = new Map<string, Objeto[]>();
   ilha.objetos.forEach((o, i) => {
+    /* a clareira de um lugar (lugares.ts): o objeto nao entra, e os outros mantem a variante (pelo indice de antes) */
+    if (ilha.escondidos.has(i)) return;
     const k = `${o.modelo}|${i % arquivosDe(o.modelo).length}`;
     if (!grupos.has(k)) grupos.set(k, []);
     grupos.get(k)!.push(o);

@@ -14,6 +14,7 @@ import { arquivosCassette, carregadorCassette, terrenoCassette } from "./cassett
 import { CEU_DIGITAL, DOBRA_K } from "./constantes.ts";
 import { ceuComGrade, fios, lata, particulas } from "./digital.ts";
 import { enfeites } from "./enfeites.ts";
+import { lugares } from "./lugares.ts";
 import { PALETA_FLORESTA, arquivosFloresta, carregadorFloresta } from "./floresta.ts";
 import type { Ilha } from "./grade.ts";
 import { objetosVoxel, terrenoVoxel } from "./voxel.ts";
@@ -39,10 +40,10 @@ function estiloSemTons(mapa: Mapa, base: string): Estilo {
   switch (mapa) {
     case "ilha": return {
       id: mapa, dobra: DOBRA_K, montar: i => montarCena(i),
-      /* os enfeites do mundo humano (enfeites.ts) so neste estilo (docs/TAREFA_V3_MUNDO_ENFEITES.md, D-EN-3) */
+      /* os enfeites do mundo humano (enfeites.ts) so neste estilo (docs/TAREFA_V3_MUNDO_ENFEITES.md, D-EN-3), e os lugares (lugares.ts) */
       objetos: async i => {
-        const [o, e] = await Promise.all([objetos(i, base), enfeites(i, base)]);
-        o.grupo.add(e.grupo);
+        const [o, e, g] = await Promise.all([objetos(i, base), enfeites(i, base), lugares(i, base)]);
+        o.grupo.add(e.grupo, g.grupo);
         return { ...o, noite: e.noite };
       },
     };
@@ -68,10 +69,10 @@ function estiloSemTons(mapa: Mapa, base: string): Estilo {
           const gltf = new GLTFLoader();
           const kits = (arq: string, _id: string, modelo: Parameters<typeof carregarVariante>[2]) =>
             carregarVariante(gltf, new URL("kits3d_digital/" + arq, base).href, modelo);
-          const [o, e, l] = await Promise.all([objetos(i, base, kits), enfeites(i, base), lata(i, base)]);
-          /* o toque digital (D3): as particulas e os fios dos postes; e a lata gigante no fundo (D4) */
+          const [o, e, l, g] = await Promise.all([objetos(i, base, kits), enfeites(i, base), lata(i, base), lugares(i, base)]);
+          /* o toque digital (D3): as particulas e os fios dos postes; e a lata gigante no fundo (D4); os lugares (lugares.ts) */
           const p = particulas(i);
-          o.grupo.add(e.grupo, fios(i), l.grupo);
+          o.grupo.add(e.grupo, fios(i), l.grupo, g.grupo);
           doisTons(o.grupo);
           o.grupo.add(p.malha);
           return { ...o, noite: n => { e.noite(n); p.noite(n); }, quadro: l.quadro };

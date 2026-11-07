@@ -2,7 +2,7 @@
  "uri": "barraca.gltf",
  "mimeType": "model/gltf+json",
  "validatorVersion": "2.0.0-dev.3.10",
- "validatedAt": "2026-11-07T10:42:46.097Z",
+ "validatedAt": "2026-11-07T15:03:21.040Z",
  "issues": {
   "numErrors": 0,
   "numWarnings": 0,
@@ -33,7 +33,7 @@
      "format": "rgb",
      "primaries": "srgb",
      "transfer": "srgb",
-     "bits": 8
+     "bits": 4
     }
    }
   ],
