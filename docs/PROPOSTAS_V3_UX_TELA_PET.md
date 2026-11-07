@@ -633,6 +633,262 @@ O sprite é o Gabumon de `D:\Trab\digilab\Assets\arena_up` (fora do git, como na
 
 ---
 
+## Mobile mínimo (M1, 2026-11-06)
+
+Status: **PROPOSTO**. A M1 é só a tela Pet abaixo de 900 px. As folhas (M2) e a luta e o treino no celular (M3) ficam fora. Nada muda no
+motor, no save, no log, nas rotas nem a partir de 900 px.
+
+### A Digivice, reprovada (2026-11-06)
+
+A primeira prancha da M1 (a direção "Digivice", commit `08b3dff8`: paleta `--dl-*`, DotGothic16 e Rubik, cinco cartões de vitais sempre
+visíveis, barra de abas de 78 px) foi reprovada pelo Matheus:
+
+> "ela tá com um estilo completamente anterior, de versões muito antigas. Não tá com as versões atualizadas. E também tem muito botão,
+> muita informação. Tem que tirar todas essas informações. O usuário não precisa de tanta informação assim jogada na tela. Deixa tudo com
+> ícones minimalistas."
+>
+> "o menu ali embaixo, eu não preciso estar ali embaixo, ele pode estar em alguma outra área da interface, e daí embaixo só fica os botões
+> de ações mesmo. Porque a ideia é o jogador interagir com o jogo diretamente."
+
+**O que se aproveita:** nada do visual (a paleta, as fontes, os cartões, a barra, os botões gordos com sombra). Do texto, só a leitura do
+código que continua valendo: a lista dos seletores do e2e a 360 e 390 (refeita abaixo para o mínimo), a regra de "Exibir detalhes do pet"
+desligado (agora M1-11), o "salvo" e o erro de gravação (agora M1-12), o achado do pedido de carinho que o dock não sugere (agora dentro da
+M1-13) e a escolha entre fixo e seguir o pet (agora M1-5). As antigas M1-1 (a cor da aba), M1-2 (o pulso), M1-3 (a coluna de cinco),
+M1-7 (o rótulo "agora"), M1-8 (a cor da saúde no cartão), M1-9 (o rosa do cartão) e M1-11 (o tema claro/escuro) caem com a direção.
+
+### A direção nova e a prancha
+
+A direção que o Matheus aprovou é o desenho `minimo.html` (fora do repositório): as peles de hoje (Vidro e Militar), a cena 3D atrás de
+tudo, quase nada na tela, os destinos num canto de cima e, embaixo, só as ações.
+
+**A prancha** fica em `docs/pranchas/ux-mobile/` e substitui a da Digivice (o designer a escreveu em `docs/pranchas/ux-pet/minimo/`,
+porque o hook H8 só o deixa escrever em `docs/pranchas/ux-pet/`; o gerente a move, e os caminhos já estão escritos para a pasta final):
+- `gerar.py` escreve sete páginas, cada uma o próprio celular: `pet_normal.html`, `pet_fome.html`, `pet_retrato.html`, `pet_mais.html`,
+  `pet_dormindo.html`, `pet_chamado.html` e `pet_segurar.html`; `?pele=vidro|xcom` troca a pele (o `data-pele` do `<html>`, como no app)
+  e `?notas` põe por cima as notas de fonte;
+- `minimo.css` tem só cópias dos tokens `--hx-*` e `--hud-*` de `web/app/src/estilo/tokens.css` (Militar nas linhas 105-133, Vidro nas
+  147-170, a transparência reduzida nas 173-180), os cantos em L de `pele-xcom.css:9-14` e os dois literais que o app já usa (o
+  `#0A1316` sobre o rosa no Vidro, `pele-vidro.css:92`); nenhuma cor nova;
+- o fundo são as capturas reais do jogo, fora do git, em `D:\Trab\digilab\capturas_ux_mobile_aprovar\minimo\_fundo\` (`cena_dia.png`,
+  `cena_noite.png`, `retrato.png`), pelo caminho relativo `../../../../capturas_ux_mobile_aprovar/minimo/_fundo/`; a cena cobre a tela
+  (`cover`), e o corte tira da vista os dois botões do HUD de hoje que a `cena_dia.png` tem gravados no canto de cima à direita;
+- `capturar.sh` (servidor `python -m http.server 8765` com raiz em `D:\Trab\digilab`) grava em
+  `D:\Trab\digilab\capturas_ux_mobile_aprovar\minimo\` os sete estados a 390×844 e o normal, a fome e o retrato a 360×800, nas duas peles
+  (`minimo_<estado>_<largura>_<vidro|militar>.png`), e os sete a 390 no Vidro com as notas (`..._vidro_notas.png`);
+- os ícones são os do lucide (o app usa o `lucide-react`), carregados da rede; as fontes são as das peles (`--hx-f`: Barlow e Rajdhani no
+  Vidro, Saira Condensed no Militar). Sem o lucide a página mostra um erro na tela, não fica muda.
+
+**Limites honestos da prancha:** a `cena_noite.png` é de outro pet, acordado (no jogo o pet que dorme fica achatado e com o "zz",
+`sono.ts`); o chamado usa um ícone de traço no lugar do emote do UP (`emoji_exclam`, `TelaPet.tsx:238`); os números são exemplo de layout.
+
+### O objetivo do jogador
+
+Abrir o celular e ver o pet na ilha, quase sem nada por cima, e mexer nele com o polegar: as ações embaixo, ao alcance do dedo. Saber que
+algo falta só quando falta (um aviso, um ponto e a ação certa crescendo), e ler o resto (os vitais, o porquê, a evolução) com um toque,
+não de olho.
+
+### A hierarquia
+
+1. A cena 3D com o pet (a tela inteira, atrás de tudo).
+2. As ações embaixo: Alimentar, Brincar, Limpar e o Mais, quatro círculos só com ícone.
+3. O que falta, só quando falta: o aviso (o ícone e o %), o ponto rosa no retrato e a ação ligada rosa e maior.
+4. O que ele faz: um ícone sobre o pet (a linha do agora sem texto); o toque abre o porquê no DigiBrain.
+5. Os cantos de cima: à esquerda o retrato e a hora; à direita a coluna Conversar, Crescer, Lutar e Diário.
+6. Por toque: o retrato abre os vitais e os painéis; o Mais abre as ações raras.
+
+### Sempre visível, só quando existe, por gesto
+
+| quando | o quê |
+|---|---|
+| sempre | o retrato (56 px; redondo no Vidro, reto no Militar), a hora ("D3 07:42"), a coluna de quatro ícones (48 px), o ícone do agora (48 px) e as quatro ações (62 px) |
+| só quando existe | o aviso da necessidade (ícone e %, rosa cheio), o ponto rosa no retrato, a ação ligada rosa e com 74 px; o chamado urgente e a morte (os cartões de hoje, com texto); o balão da fala (15 s, como hoje, M1-15) |
+| por gesto | o toque no retrato abre o leque: os cinco vitais (um botão só, o "Estado atual", que abre o painel com os Detalhes) e Evolução, Últimas ações, DigiBrain, Configurações e Meus pets; o toque no Mais abre Carinho, Tapa, Tratar, Pôr ração e Pôr a bola; o toque no ícone do agora abre o DigiBrain; segurar o dedo num botão mostra o nome dele |
+
+Um leque por vez: abrir o retrato fecha o Mais e o contrário. Esc, o toque fora e um segundo toque no mesmo botão fecham, como o Mais de
+hoje (`TelaPet.tsx:359-366`), e o foco volta ao botão que abriu.
+
+### O que muda em cada elemento (hoje → mínimo)
+
+| elemento | hoje (< 900 px) | mínimo | fonte do dado |
+|---|---|---|---|
+| plaquinha | caixa `hx` com o retrato, o nome e o estágio (o estágio some abaixo de 720 px, `casca.css:76`); o retrato abre Meus pets | só o retrato, que abre o leque (M1-1); o nome e o estágio saem da vista (ficam em Meus pets e na Evolução) | `Retrato` (`TelaPet.tsx:50-55`), sprite de `chaveSprite(m.forma)` |
+| relógio | caixa com `hh:mm`; o dia, o sol e o "salvo" somem abaixo de 480 px (`casca.css:77`) | uma pílula com o dia e a hora; sem o sol; o "salvo" escondido e o erro como ícone (M1-12) | `diaDe`, `hhmm` de `m.e.tick` (`TelaPet.tsx:46-47`), o grupo de `Topo.tsx:29`; `erroSave` (`Topo.tsx:32`) |
+| Conversar | `.topo-bt` de 44 px no topo (`Topo.tsx:35`) | o primeiro da coluna da direita, a mesma classe e o mesmo nome | — |
+| Configurações | `.topo-bt` no topo (`Topo.tsx:36`) | no leque do retrato, o mesmo nome | — |
+| barra de abas | `.dl-nav` embaixo com Pet, Crescer, Lutar e Diário, ícone e rótulo (`Nav.tsx`, `casca.css:88-91`) | **sai**; Crescer, Lutar e Diário viram a coluna da direita, só ícone (o rótulo fica para o leitor de tela); sem Pet, porque a tela Pet é a casa | `NOME_DESTINO` (`rotas.ts:12`), ícones de `Nav.tsx:9` |
+| linha do agora | barra de texto no topo, "AGORA · brincando · aprendido ›" (`pet_hud.css:162-166`) | um ícone de 48 px sobre o pet, com um bico; ciano tracejado quando o aprendido mudou a escolha, um "?" quando não há motivo; o mesmo nome acessível e o mesmo toque (abre o DigiBrain) | `vistaAgora`, `rotuloAgora` (`LinhaAgora.tsx:30-51`); a ação de `m.acao` (`NOME_PET`, `motor/nomes.ts:18`); o ícone por ação é PROPOSTO (M1-5) |
+| cartão do alto | `Prioridade`: o resumo de 15 s em texto ("está com fome", "quer brincar", "agora: à toa") ou o pedido com o Atender (`TelaPet.tsx:305-321`) | o ramo da necessidade vira o aviso (ícone e %); o "agora: …" e o desejo saem da vista (o ícone do agora já diz o que ele faz); o pedido urgente e a morte ficam como hoje (M1-6) | `resumoAgora`, `temPedido`, `Chamados`, `Morte` (`TelaPet.tsx:223-302`) |
+| botões do lado | `.pet-lado`: Estado atual, Evolução, Últimas ações e DigiBrain, quadrados de 44 px sempre visíveis (`TelaPet.tsx:566-572`) | **saem**; os quatro vão para o leque do retrato, com os mesmos nomes | `TITULO_PAINEL`, `ICONE_PAINEL` (`TelaPet.tsx:441-442`) |
+| vitais | só no painel Estado, em barras | no leque, cinco ícones com o número; abaixo do limiar, o número numa caixa rosa cheia (a forma e a cor, M1-14) | `Math.round(m.e[k] * 100)` (`TelaPet.tsx:216-217`), ícones de `ICONE_NEC` e `HeartPulse` (`TelaPet.tsx:209`, `:217`) |
+| ações | dock com Alimentar, Brincar, Limpar, Carinho e Mais, ícone de pixel e texto, 52 px (`pet_dock.css:36`); a sugerida em `--hx-escolhido` (`pet_dock.css:43`) | Alimentar, Brincar, Limpar e Mais em círculos de 62 px só com ícone (lucide, M1-4), no `--hx-btn-*` da pele; a sugerida cresce para 74 px e fica rosa (`--hx-necessidade`); o texto fica para o leitor de tela | `ROTULO_DONO` (`acoes.ts:11-14`); a sugerida é `resumoAgora(...).acao` (`TelaPet.tsx:356`); a reserva do Alimentar (`TelaPet.tsx:370-373`) |
+| Mais | coluna de 220 px com texto: Tapa, Tratar, Pôr ração e Pôr a bola (`pet_dock.css:46-49`) | uma fileira de círculos de 52 px acima das ações: Carinho, Tapa, Tratar, Pôr ração e Pôr a bola (M1-2, M1-3); o Mais aberto vira um × | `ORDEM_DOCK` (`TelaPet.tsx:327`); `BarraRacao` e `BarraBola` (`PorRacao.tsx:83`, `PorBola.tsx:132`) |
+| chamado urgente | o cartão com o texto e o Atender, 56 px abaixo do topo | o mesmo cartão, abaixo do retrato e à esquerda da coluna (top 84 px, de 14 px à esquerda até 76 px da direita) | `temPedido` (`TelaPet.tsx:299-302`), `URGENTE_RESTA` (`:298`) |
+| morte | o cartão "… se foi" com o "Chocar um ovo novo", sem o dock (`TelaPet.tsx:223-233`, `:587`) | igual, no mesmo lugar do chamado | `m.morte` |
+| dormindo | o pet achatado e com o "zz" (`sono.ts`) | igual; o ícone do agora é a lua; sem aviso de energia enquanto ele dorme (M1-8) | `m.acao === "dormir"` |
+
+### Os limiares (nenhum número novo)
+
+O aviso, o ponto rosa e a ação rosa seguem **a mesma regra de hoje**, a da ação sugerida (`resumoAgora`, `TelaPet.tsx:284-295`), para que
+os três nunca discordem:
+- a fome abaixo de `FOME_FALA` = 0,15 (`web/app/src/hudPet.ts:14`);
+- a energia, a higiene e o humor abaixo de `LIMIAR_NEC` = 0,5 (`TelaPet.tsx:279`);
+- vence a mais baixa; a ação ligada é `ACAO_NEC` (`TelaPet.tsx:276`): a energia não tem ação (`null`), então o aviso aparece e nada
+  cresce.
+
+Esses dois limiares são da tela, PROPOSTO e SEM FONTE (`hudPet.ts:5`). O limiar do motor para a necessidade é outro,
+`CDJ.limiarNecessidade` = 0,3 (`web/app/motor/constantes.ts:29`), e só entra no desejo (`m.desejoAtual`). A M1 não troca um pelo outro
+(M1-6). O emoji da carne que a cena desenha sobre o pet abaixo de `FOME_EMOTE` = 0,5 (`hudPet.ts:15`, `PalcoPet.tsx:150`) não muda.
+
+### A volta (as folhas, M2)
+
+Sem a barra, cada folha (Crescer, Lutar, Diário, Conversar, Configurações) volta para a casa pelo × que já existe, "Fechar e voltar ao
+Pet" (`PainelTela.tsx:19`), pelo Esc e pelo toque fora do modal (`PainelTela.tsx:45-46`). Trocar de folha passa pela casa (dois toques).
+A M1 tira a barra de dentro do modal (hoje ela vai junto, `App.tsx:188-191`, `PainelTela.tsx:48`); o desenho do cabeçalho da folha é da
+M2 (M1-10).
+
+### Wireframes a 390×844 e a 360×800 (a 1920×950 nada muda)
+
+O normal, a 390 (a 360 é o mesmo desenho, 30 px mais estreito: as quatro ações somam 296 px e cabem):
+
+```
+┌──────────────────────────────────────┐
+│ (◉)•[D3 07:42]                  [Con]│  y 14–70: retrato e hora; o • rosa só com necessidade
+│                                 [Cre]│  a coluna, 48 px, gap 10, até y 236
+│                                 [Lut]│
+│                                 [Diá]│
+│                                      │
+│             [ ali 12 % ]             │  y ~300: o aviso, só quando existe
+│                 (♪)                  │  y ~367: o ícone do agora (toque: DigiBrain)
+│                  ▾                   │
+│                (pet)                 │  a cena 3D atrás de tudo
+│                                      │
+│       (Ali)  (Bri)  (Lim)  (⋯)       │  y ~752–814: as ações; a ligada com 74 px
+└──────────────────────────────────────┘
+```
+
+O retrato aberto e o Mais aberto (um por vez; aqui juntos só para caber):
+
+```
+┌──────────────────────────────────────┐
+│ (◉)[D3 07:42]                   [Con]│
+│ [com 64|ene 41|hig 70|hum 72|saú 95] │  y 84: o botão "Estado atual" (o 41 em caixa rosa)
+│ [Evo]                           [Cre]│  y 156: o leque dos painéis, 48 px
+│ [Últ]                           [Lut]│
+│ [DgB]                           [Diá]│
+│ [Cfg]                                │
+│ [Meu]                                │
+│                 (♪)                  │
+│   (Car) (Tap) (Tra) (Raç) (Bol)      │  o Mais aberto, 52 px, acima das ações
+│       (Ali)  (Bri)  (Lim)  (×)       │
+└──────────────────────────────────────┘
+```
+
+O chamado urgente: o cartão "Chamando você · um carinho atende · ATENDER" ocupa de y 84 até ~200, entre o retrato e a coluna; o resto é
+igual ao normal.
+
+### O que muda na leitura do estado do pet
+
+- **Zero número e zero texto fixos na casa.** Os vitais passam de "um toque no botão da borda" para "um toque no retrato"; o que ele faz
+  passa de uma frase no topo para um ícone sobre o pet (o porquê inteiro continua a um toque, no DigiBrain, e inteiro no leitor de tela).
+- **O que falta se lê por três sinais que concordam:** o aviso (ícone e %), o ponto rosa no retrato e a ação que resolve, rosa e maior.
+  Os três saem da mesma regra (`resumoAgora`), então não há ponto sem ação nem ação sem aviso, salvo a energia, que não tem ação do dono.
+- **O aprendido continua à vista:** o ícone do agora fica ciano e tracejado só quando o aprendido mudou a escolha
+  (`quem_decidiu.mudou`, `LinhaAgora.tsx:36`), a forma do chip aprendido (`hud.css:74`); o neutro é silêncio, como na P1.
+- **O que some da vista** (e fica a um toque): o nome e o estágio do pet, o "agora: …" e o desejo do resumo, o rótulo das ações e dos
+  destinos. O cartão do chamado urgente e o da morte continuam com texto, porque pedem uma decisão.
+
+### Tokens usados
+
+Só cópias dos valores de `web/app/src/estilo/tokens.css`, nas duas peles: `--hx-miolo`, `--hx-miolo-2`, `--hx-borda`, `--hx-borda-topo`,
+`--hx-texto`, `--hx-texto-2`, `--hx-sec`, `--hx-rotulo`, `--hx-escolhido`, `--hx-escolhido-ink`, `--hx-escolhido-borda`,
+`--hx-escolhido-brilho`, `--hx-btn-bg`, `--hx-btn-ink`, `--hx-btn-borda`, `--hx-alerta`, `--hx-perigo`, `--hx-ok`, `--hx-necessidade`,
+`--hx-aprendido`, `--hx-foco`, `--hx-f`, `--hx-f-num`, `--hx-num`, `--hx-vidro`, `--hx-sombra`, `--hx-luz`, `--hud-fundo-1`,
+`--hud-fundo-2`, `--hud-desfoque`, `--hud-brilho`; os cantos em L `--xcom-cantos` (`pele-xcom.css:9-14`). A semântica fixa (guia 3):
+`--hx-necessidade` no aviso, no ponto, na ação ligada e no vital baixo; `--hx-aprendido` no ícone do agora; `--hx-alerta` só no ícone do
+chamado (como `pet_hud.css:70`) e no traço das notas da prancha; `--hx-perigo` no erro de gravação. Os brilhos rosa do Vidro são
+`color-mix` do próprio `--hx-necessidade`, sem valor novo. Nenhum `--dl-*` na tela Pet do celular.
+
+### Os nomes acessíveis (o e2e depende)
+
+Todos os botões que existem hoje ficam com o mesmo nome; o texto que sai da vista fica num `sr-only` dentro do botão (o `hasText` do
+Playwright e o nome acessível continuam casando). A prancha mostra o nome num balão ao segurar o dedo (`pet_segurar.html`); no jogo o
+mesmo balão aparece no foco do teclado, e o `title` fica para o mouse.
+
+| botão | nome de hoje (fonte) | no mínimo |
+|---|---|---|
+| retrato | "Meus pets" (`Topo.tsx:18`) | **muda no celular**: abre o leque, "Painéis do pet" (o nome da nav que ele substitui, `TelaPet.tsx:566`); o "Meus pets" vira um item do leque com o mesmo nome (M1-1). No desktop não muda |
+| Conversar, Configurações | `aria-label` (`Topo.tsx:35-36`) | iguais; o Conversar na coluna, o Configurações no leque |
+| Crescer, Lutar, Diário | o rótulo `NOME_DESTINO` (`Nav.tsx:18`) | iguais, em `sr-only` |
+| Estado atual, Evolução, Últimas ações, DigiBrain | `TITULO_PAINEL` (`TelaPet.tsx:441`, `:569`) | iguais; o "Estado atual" é o botão dos vitais, com os valores em `aria-describedby` ("comida 64 %; energia 41 %, baixa; …") |
+| o agora | `rotuloAgora(v, true)` (`LinhaAgora.tsx:44-51`) | igual |
+| as ações | `ROTULO_DONO` (`acoes.ts:11-14`); o Alimentar com mundo, "Alimentar (reserva: põe a ração no comedouro)" (`TelaPet.tsx:372`); "Mais" (`:378`) | iguais |
+| Pôr ração, Pôr a bola | `PorRacao.tsx:83`, `PorBola.tsx:132` | iguais |
+| o aviso | o texto do resumo, "está com fome" e "Estado" (`TelaPet.tsx:316-318`) | igual, em `sr-only`; o % fica `aria-hidden` |
+
+### O custo em determinismo
+
+Zero. Só CSS, a ordem dos elementos e a visibilidade; o motor, o log, o save e o replay não mudam. O leque e o Mais abertos são estado de
+tela (`useState`), fora do save, como o Mais de hoje.
+
+### O custo em e2e
+
+- **O desktop não muda:** as regras novas ficam em `@media (max-width:899px)`, e o DOM só difere onde a tela já se divide por `useLargo`
+  (`TelaPet.tsx:343-351`). Os testes que rodam no viewport padrão de desktop (`jogo.spec.ts:69`, `:75`, `:84`, `:104`, `:146`, `:195`,
+  `:213`, `:615`, `:1732`, `:1738`, `:1753`; `lab_modular.spec.ts:29`, `:52`; `conferencia_pele.spec.ts:153-184`, `:262`) e as capturas a
+  1280 e 1920 têm de dar diff zero.
+- **O que quebra a 360 e 390 e o que muda no teste:**
+  - `jogo.spec.ts:1172` e `:1203` (o "DigiBrain" pelo nome exato) e `e2e_capturas/lab.spec.ts:92` (a 390): o botão passa a morar no leque;
+    o teste abre o retrato antes (um `abrirLeque` como o `abrirMais` de `:1501`). O ícone do agora não serve: o nome dele não casa com o
+    exato;
+  - `jogo.spec.ts:1303-1308` (Estado atual, Evolução, Últimas ações abaixo de 900): abrir o leque antes de cada um, porque o leque fecha
+    ao escolher; o `#pet-painel .necessidades4` continua (o painel Estado não muda);
+  - `jogo.spec.ts:1504-1516` (`infoMundoNoEstado`, chamado a 390 pelos testes do mundo): abrir o leque antes do "Estado atual"; o
+    fechamento da linha 1515 (um segundo clique no mesmo botão) passa para o "Fechar Estado atual" ou o Esc;
+  - `jogo.spec.ts:1272` e `:1275`: no celular, 3 `.acao-destaque` (eram 4) e 3 `.acao-extra` (eram 2), com o Carinho no Mais;
+  - `vida_pet_cena.spec.ts:70` (o "Carinho" a 390): abrir o Mais antes;
+  - `jogo.spec.ts:285-288` ("layout em 390"): o `.dl-nav` sai de dentro do modal (M1-10), e o `querySelector(".dl-nav")` nas rotas
+    `crescer/evolucao` e `lutar/campanha` dá `null`; o teste passa a esperar nenhuma barra abaixo de 900 (ou a coluna, se M1-10 ficar com
+    ela no modal, que é mais alta que larga e daria `navLateral` errado).
+- **O que precisa continuar valendo (e o desenho já respeita):**
+  - `jogo.spec.ts:1171`: `.topo-bt[aria-label="Conversar"]` visível; o Conversar da coluna fica com a classe;
+  - `jogo.spec.ts:157-178` (o guia 14 a 360 e 390): nenhum botão visível abaixo de 44 px (o menor é 48) e sem rolagem lateral (a fileira
+    do Mais soma 308 px, as ações 296);
+  - `jogo.spec.ts:1268`: a cena com mais que o dobro da área do `.pet-dock` (sem a barra, o dock fica menor);
+  - `jogo.spec.ts:1274-1278`, `:1501`, `:1620`: `.acoes-pet .acao-mais`, `#acoes-mais` e `.racao-bt:not(.bola-bt)` ficam;
+  - `jogo.spec.ts:1280`: nenhum `.pet-retrato` (o retrato continua `.topo-retrato`);
+  - `jogo.spec.ts:1683`: o nome da reserva do Alimentar; `:1315`: `.cena-fala` com 0;
+  - `vida_pet_cena.spec.ts:55`: o toque em (12, 130) da cena cai fora do retrato (14 a 70 px) e do leque fechado; o ícone do agora não
+    pode ficar sobre o pet (o toque no pet é o carinho, `:63`), e por isso fica acima dele (M1-5).
+- **Capturas que mudam:** todas as da tela Pet a 360 e 390 (`e2e_capturas/telas.spec.ts` com 390 na lista, `conferencia_pele.spec.ts:229-236`,
+  `sprites_comer.spec.ts:15`, `vida_pet_cena.spec.ts:13`, e o `digibrain-390.png` de `jogo.spec.ts:1188`). Sem a barra, o `--casca-barra`
+  vai a 0 abaixo de 900 (`casca.css:9`), o que muda a reserva do habitat (`--hab-baixo`, `TelaPet.tsx:513`) e o lugar do modal das
+  folhas (`casca.css:119-120`).
+- **Testes novos:** o leque abre e fecha (Esc, toque fora, foco de volta ao retrato); o aviso, o ponto e a ação rosa aparecem juntos e
+  somem juntos; o vital baixo com a caixa cheia e o "baixa" no nome; o ícone do agora tracejado só no caso "aprendido"; o rótulo ao
+  segurar e no foco; o foco visível nos botões novos nas duas peles (o `jogo.spec.ts:247` só roda no desktop).
+
+### Perguntas ao Matheus
+
+| # | pergunta | recomendação | custo de errar |
+|---|---|---|---|
+| M1-1 | no celular o retrato abre o leque (vitais e painéis), e não mais Meus pets; ele se chama "Painéis do pet", e o Meus pets vira o último item do leque | **sim**: é a direção, e o nome novo diz o que o botão faz; o desktop continua "Meus pets" | manter "Meus pets" no retrato: o nome mente para o leitor de tela; tirar Meus pets do celular: não há outro caminho para trocar de pet |
+| M1-2 | o Carinho sai das fixas e vai para o Mais (a direção) | **sim**: o toque no pet já é o carinho (`vida_pet_cena.spec.ts:63`), e o polegar fica com as três que resolvem uma necessidade | o "Chamando você · um carinho atende" pede uma ação que está escondida (o Atender do cartão resolve); dois testes mudam |
+| M1-3 | o Pôr ração fica no Mais, com a bola (a direção cita só a bola) | **fica**: é a interação planejada da comida (`TelaPet.tsx:369`) e o e2e do mundo a usa (`jogo.spec.ts:1276`, `:1520`, `:1613`) | tirar: o dono do v12 perde o gesto de pôr a ração e cinco testes quebram; ficar: o Mais tem cinco itens (308 px, cabe a 360) |
+| M1-4 | os ícones das ações viram os de traço do lucide (o mesmo das telas), no lugar do pixel art de hoje (`IconeAcao`, `TelaPet.tsx:333-340`) | **lucide**, e o ícone da ação igual ao da necessidade que ela resolve (a coxa da comida no Alimentar, a gota da higiene no Limpar) | pixel art: destoa dos ícones de traço da coluna e do leque; lucide: a tela perde o pixel do UP, que fica só no pet e nos emotes da cena |
+| M1-5 | o ícone do agora: um por ação (à toa = xícara, dormindo = lua, comendo = coxa, brincando = nota, chamando você = megafone, explorando = bússola, emburrado = cara brava), fixo acima do lugar do pet, e não seguindo o pet | **fixo na M1**, com esse mapa (PROPOSTO, desenho meu; a nota e a carne repetem os emotes da cena, `cenaAcao.ts:41-43`) | seguir: ler a posição projetada da cena (`cenaPara`) a cada quadro, o custo maior da etapa; fixo: com o pet na borda da ilha o ícone fica longe dele, e o emote da cena e o ícone dizem a mesma coisa duas vezes |
+| M1-6 | o aviso usa a regra da ação sugerida de hoje (`FOME_FALA` 0,15 na fome, `LIMIAR_NEC` 0,5 nas outras, `TelaPet.tsx:279-291`), e não o limiar do motor (`CDJ.limiarNecessidade` 0,3, `constantes.ts:29`); o "agora: …" e o desejo saem do resumo; o chamado aberto ainda não urgente vira um aviso com o ícone do chamado, sem % | **a regra de hoje**: aviso, ponto e ação concordam, e nenhum número muda | com 35 % de comida o leque mostra o vital rosa (0,5) e não há aviso (0,15): a incoerência da antiga M1-9 continua, só que escondida no leque; trocar pelo 0,3 do motor muda o que o dock sugere hoje |
+| M1-7 | o aviso dura como o resumo de hoje (15 s, `AVISO_MS`, `hudPet.ts:12`; fixo com a fome abaixo de `FOME_FALA`), e o ponto rosa e a ação rosa ficam enquanto a necessidade valer | **sim** | o aviso sempre: volta o texto fixo que a direção tirou; o ponto também por 15 s: depois disso nada diz que falta algo |
+| M1-8 | dormindo, a energia baixa não mostra aviso (o ponto fica); é uma regra de tela nova, sem número | **sim**: dormir já é o pet resolvendo, e a energia não tem ação do dono (`ACAO_NEC.energia` é `null`) | com aviso: toda noite um aviso que o dono não pode atender; sem: quem abre o app de noite só vê o ponto |
+| M1-9 | o tempo do toque longo que mostra o nome: **PROPOSTO 500 ms, SEM FONTE** (o costume dos celulares, não verificado); o balão some ao soltar | decidir o número; o balão também no foco do teclado | curto: o toque normal mostra o balão sem querer; longo: ninguém descobre o nome |
+| M1-10 | as folhas no celular perdem a barra de dentro do modal (`PainelTela.tsx:48`); voltar é o × "Fechar e voltar ao Pet", o Esc ou o toque fora; trocar de folha passa pela casa | **sim na M1**, e o cabeçalho da folha fica para a M2 | manter a barra no modal: a barra que a direção tirou volta em toda folha; tirar: ir de Crescer a Lutar custa dois toques, e o teste "layout em 390" muda |
+| M1-11 | com "Exibir detalhes do pet" desligado (`hudPet.ts:4-5`, `TelaPet.tsx:533`), o leque só tem Configurações e Meus pets, e o ícone do agora vira só desenho, sem toque (`LinhaAgora.tsx:71`) | **sim**, como hoje | os vitais ficam: a opção perde metade do efeito; somem: quem desliga perde os números, como hoje perde o Estado |
+| M1-12 | o "salvo" continua escondido no celular, e o erro "não salva" vira um ícone (`CloudOff`, `Topo.tsx:32`) em `--hx-perigo` ao lado da hora | **mostrar só o erro** | esconder o erro: o dono perde progresso sem saber; mostrar sempre: mais um ícone fixo |
+| M1-13 | a sugerida que não vem de uma necessidade (o desejo aprendido, `TelaPet.tsx:292-293`) e a que mora no Mais (o Carinho): o rosa só vale para a necessidade (a baixa, o chamado, o desejo "necessidade"); a vontade aprendida ganha só o contorno ciano tracejado; se a sugerida está no Mais, o Mais leva a marca | **sim**; e o achado da Digivice segue: com o "Chamando você" o dock sugere a necessidade mais baixa, não o Carinho, e a M1 não mexe no `resumoAgora` | rosa para tudo: o rosa deixa de dizer "vem do corpo" (guia 3); sem marca no Mais: a sugestão do Carinho some |
+| M1-14 | no leque, o vital abaixo do limiar fica rosa (`--hx-necessidade`) e com o número em caixa cheia; o painel Estado continua com o `--hx-alerta` de hoje (`TelaPet.tsx:216`) até a M2 | **sim**: o leque é a necessidade, e a forma (a caixa) não depende da cor | mesma cor do painel: o amarelo de destaque vira necessidade só no celular; trocar o painel agora: a M1 entra na M2 |
+| M1-15 | o balão da fala (15 s depois de cada reação, arrastável, `TelaPet.tsx:137-146`) continua como hoje, com texto | **continua**: é o pet falando e some sozinho; ele fica acima do ícone do agora | tirar: o pet perde a voz no celular; ficar: por 15 s há um texto na tela |
+
+---
+
 ## Lugares da ilha (L1) — a câmera solta e o minimapa, no desktop (2026-11-06)
 
 A direção escolhida pelo Matheus em 2026-11-06 é a **B, "Lugares da ilha"** (página de direção, seção "Minimapa e câmera livre"): cada menu

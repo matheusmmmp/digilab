@@ -16,7 +16,7 @@ import * as THREE from "three";
 import { TPD, eNoite, type Mundo } from "../../../../motor/index.ts";
 import { habitatAtual, voltarParaIlha, type Habitat } from "../../../habitat.ts";
 import { jogoAtual } from "../../../jogo.ts";
-import { CENA } from "../cenaEstado.ts";
+import { CENA, reservaDoPe } from "../cenaEstado.ts";
 import { Seguidor, dentroDoMapa } from "../vistaMundo.ts";
 import { velocidadeAtual } from "../../../tempo.ts";
 import { AFASTAR_MAX, BATER_BOLA_MS, CAMERAS, COBERTO_MS, GOLPE_DIST, GOLPE_MS, KITS_COBERTO_MS, FPS_MIN, LARGURA_MIN, LONGE, NEVOA, PERTO, QUEDA_MS,
@@ -51,6 +51,8 @@ class VistaIlha {
   private pxPorTexel = 1;       // pixels do canvas por texel do sprite (inteiro, regra 8)
   private larguraCss = 1;
   private alturaCss = 1;
+  /** a fracao da altura do canvas em que a camera enquadra a cena (1 de 900 px em diante; no celular, a altura menos o pe reservado, reservaDoPe) */
+  private fracEnq = 1;
   private afast = 1;
   private noite: boolean | null = null;
   private ultimo = performance.now();
@@ -142,7 +144,7 @@ class VistaIlha {
     const nevoa = this.cenaIlha.cena.fog as THREE.Fog;
     nevoa.near = NEVOA[0] * this.afast * ORBITA.zoom; nevoa.far = NEVOA[1] * this.afast * ORBITA.zoom;
     /* o pet em papel: na distancia do foco, um texel do sprite vale um numero inteiro de pixels do canvas (regra 8) */
-    this.ppu = this.renderer.domElement.height / 2 / (this.profundidadeDoPet(this.afast, this.orbitaVista) * Math.tan(THREE.MathUtils.degToRad(this.cam.fov / 2)));
+    this.ppu = this.renderer.domElement.height * this.fracEnq / 2 / (this.profundidadeDoPet(this.afast, this.orbitaVista) * Math.tan(THREE.MathUtils.degToRad(this.cam.fov / 2)));
     this.pxPorTexel = Math.max(1, Math.round(TEXEL_ALVO * this.ppu));
   }
 
@@ -152,7 +154,12 @@ class VistaIlha {
     this.renderer.setPixelRatio(this.baixa ? 1 : Math.min(RAZAO_MAX, devicePixelRatio || 1));
     this.renderer.setSize(this.larguraCss, this.alturaCss, false);
     this.canvas.style.width = `${this.larguraCss}px`; this.canvas.style.height = `${this.alturaCss}px`;
-    this.camera.aspect = this.larguraCss / this.alturaCss;
+    /* o enquadramento como se a caixa tivesse a altura de antes (a de hoje menos o pe que o dock e a barra reservavam): a camera enquadra essa altura e o
+       quadro se estende para baixo (setViewOffset), entao o pet sai do mesmo tamanho em px e a cena segue visivel atras das acoes (so abaixo de 900 px) */
+    const enq = Math.max(1, this.alturaCss - reservaDoPe());
+    this.fracEnq = enq / this.alturaCss;
+    this.camera.aspect = this.larguraCss / enq;
+    if (enq < this.alturaCss) this.camera.setViewOffset(this.larguraCss, enq, 0, 0, this.larguraCss, this.alturaCss); else this.camera.clearViewOffset();
     /* a largura vista na altura do pet, com a camera do POC; em retrato, a camera se afasta ate caber LARGURA_MIN */
     /* o afastamento do retrato e o da camera do habitat (sem a orbita: o zoom nao se desfaz aqui) */
     const fundo = this.profundidadeDoPet(1, this.cam), larg = 2 * fundo * Math.tan(THREE.MathUtils.degToRad(this.cam.fov / 2)) * this.camera.aspect;
