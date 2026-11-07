@@ -44,7 +44,7 @@ describe("a versao 18 e a chave", () => {
     expect(relogioDe(CV21E_TR).empurraoAlvo).toBeNull(); expect(RELOGIO_V14.empurraoAlvo).toBeNull();
     /* o RELOGIO_V18 e o da v14 com o empurrao: nada mais muda */
     expect({ ...RELOGIO_V18, empurraoAlvo: null }).toEqual(RELOGIO_V14);
-    expect(EMPURRAO_V18).toEqual({ forca: { investida: 20, pesado: 60 }, derruba: ["investida", "pesado"], queda: 62, deslize: 10, guarda: .5, defesa: 0 });
+    expect(EMPURRAO_V18).toEqual({ forca: { investida: 40, pesado: 60 }, derruba: ["pesado"], queda: 62, deslize: 10, guarda: .5, defesa: 0 });
   });
   test("a v14 nao empurra nem derruba (nenhum evento de empurrao)", () => {
     const r = jogarTR(pesado(), postura("carregar"), 1, { R: CV21E_TR14, eventos: true });

@@ -304,3 +304,13 @@ Na mesma calibração (72101–72505), contra o mesmo "antes" (seção 4.3). Art
   O que segurava o duelista contra a muralha (o empurrão do contra-golpe, que o tirava do alcance e virava luta por tempo) saiu com esta
   troca. Nada foi ajustado; volta ao Matheus.
 
+### 9.4 A rodada curta do F-3, medição A (a investida 20 px, 2026-11-06): o F-3 passa, o G-2 falha por pouco
+
+Artefatos em `web/app/scripts/medicoes/equilibrio_tr/empurrao/r_a_inv20/`, a tabela em `resumo_r_a_inv20.txt`.
+
+- **F-3 passa:** o duelista vence 2 formas (o emboscador, 0,74, e o vigia, 0,723); o Titã fica em 0,253.
+- **G-2 falha:** no Tortomon (`npc_tier2_sentinela`), os pets sem treino vencem 0,31 (o teto é 0,3; no "antes", 0,265); o "com" (0,94) e
+  o pior (0,89) passam.
+- G-3 passa (0,40 a 0,81); T-2 0,014 no total, pior par duelista × sentinela 0,135; T-1 35,1 s. As outras metas que passam hoje passam.
+- Não fecha; segue a medição B (seção 4.4).
+
