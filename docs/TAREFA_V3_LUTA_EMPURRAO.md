@@ -323,3 +323,22 @@ Artefatos em `web/app/scripts/medicoes/equilibrio_tr/empurrao/r_b_inv40_sem_qued
 - G-3 passa (0,37 a 0,80); T-2 0,016 no total, pior par duelista × sentinela 0,18; T-1 35,2 s.
 - Não fecha; segue a medição C (seção 4.4).
 
+### 9.6 A rodada curta do F-3, medição C (a investida 20 px sem derrubar, 2026-11-06): a rodada não fecha
+
+Artefatos em `web/app/scripts/medicoes/equilibrio_tr/empurrao/r_c_inv20_sem_queda/`, a tabela em `resumo_r_c_inv20_sem_queda.txt`.
+
+| meta | v14 (hoje) | posturas sem empurrão (9.3) | A: investida 20 px | B: 40 px sem derrubar | C: 20 px sem derrubar |
+|---|---|---|---|---|---|
+| F-3 (vitórias do duelista) | passa (3) | falha (1) | **passa (2)** | falha (1) | falha (0) |
+| G-2 (Tortomon sem treino, teto 0,3) | passa (0,265) | passa (0,2975) | falha (0,31) | falha (0,31) | falha (0,31) |
+| G-3 | passa | passa | passa | passa | passa |
+| T-2 total; pior par | 0,012; duelista × sentinela 0,145 | 0,015; 0,13 | 0,014; 0,135 | 0,016; 0,18 | 0,015; 0,18 |
+| T-1 (já falha hoje) | 33,9 s | 34,8 s | 35,1 s | 35,2 s | 34,5 s |
+
+- O duelista contra o emboscador, o vigia e o Titã: hoje 0,74 / 0,805 / 0,838; A 0,74 / 0,723 / 0,253; B 0,685 / 0,233 / 0,208; C 0,045 /
+  0,355 / 0,238. **A queda da investida é o que ainda faz o duelista vencer:** sem ela (B, C), ele perde o vigia, e com 20 px sem queda,
+  também o emboscador.
+- O G-2 falha nas três pelo mesmo número: contra o Tortomon (que recua), os pets sem treino vencem 0,31 (brigão 0,19 e colosso 0,17 sem
+  treino; hoje 0,10 e 0,09). Com as posturas sem empurrão e a investida 40 px, era 0,2975. São ~5 lutas em 400 acima do teto.
+- As três medições combinadas não fecharam; a rodada para e volta ao Matheus (seção 4.4). Nada foi ajustado além do plano.
+
