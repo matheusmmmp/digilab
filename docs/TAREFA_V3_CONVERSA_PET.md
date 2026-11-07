@@ -290,3 +290,11 @@ não mudaram. Desvios: D-CP-DC2b-1 a 8 em `docs/registro/2026-11.md`.
   `web/app/e2e/fala_rede.spec.ts` (servidor falso: desligada, pet não modular, pet de teste modular).
 - **Falta (DC3, DC4):** a rede escolhendo falar; a avaliação (plano reescrito, taxa de acerto da verif-v8, a voz-v2 com modelo de verdade). A `voz-v2`
   e o extrator da `verif-v8` só foram vistos com cliente falso.
+
+## DC3 — o plano de análise da rede escolhendo falar (2026-11-07, Gerente, Claude Code, Opus 5.5, branch `v3-conversa-dc3-plano`)
+
+O plano [PLANO_ANALISE_V3_CONVERSA_DC3.md](PLANO_ANALISE_V3_CONVERSA_DC3.md), PROPOSTO: o `chamar_atencao` do modular dividido em três
+unidades de fala com conteúdo (fome, higiene, solidão), subchave `fala_unidades`, aprendendo pelo P2 de hoje; o LAB contra o LAB+F, cruzados
+com um dono que atende a fala (no mesmo passo e orçamento) e o de hoje, que ignora; o gate G-ESCUTA (a fala pertinente sobe com o dono que
+atende) e a guarda G-COMEDOURO-DC3 (com o dono que ignora, falar não tira o pet da comida). A faixa 79101…79505, reservada no primeiro
+commit. Decisões DC3-1 a DC3-9 esperam o Matheus; nenhuma vida antes da aprovação e do código da DC3a.
