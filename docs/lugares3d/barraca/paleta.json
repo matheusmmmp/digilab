@@ -1,5 +1,142 @@
 {
  "fonte": "as regioes do concept 2 (o domo digital), amostradas no concept_2_digital.png: o verde-azulado e a sua sombra, o branco das listras e a sombra lilas, a tela ciano, o cinza do prato e da antena, a madeira e a lona do banquinho, os livros vermelho, amarelo e azul, e o fundo da entrada; PROPOSTO",
- "paleta": [[92, 173, 168], [67, 132, 138], [240, 237, 240], [196, 190, 220], [109, 254, 251], [184, 191, 195], [150, 100, 70], [216, 202, 177], [220, 90, 95], [240, 205, 80], [110, 150, 210], [60, 50, 50]],
- "nomes": ["verde-azulado", "verde-azulado sombra", "branco", "lilas", "tela", "cinza", "madeira", "lona", "livro vermelho", "livro amarelo", "livro azul", "entrada"]
+ "paleta": [
+  [
+   92,
+   173,
+   168
+  ],
+  [
+   67,
+   132,
+   138
+  ],
+  [
+   240,
+   237,
+   240
+  ],
+  [
+   196,
+   190,
+   220
+  ],
+  [
+   109,
+   254,
+   251
+  ],
+  [
+   184,
+   191,
+   195
+  ],
+  [
+   150,
+   100,
+   70
+  ],
+  [
+   216,
+   202,
+   177
+  ],
+  [
+   220,
+   90,
+   95
+  ],
+  [
+   240,
+   205,
+   80
+  ],
+  [
+   110,
+   150,
+   210
+  ],
+  [
+   60,
+   50,
+   50
+  ]
+ ],
+ "nomes": [
+  "verde-azulado",
+  "verde-azulado sombra",
+  "branco",
+  "lilas",
+  "tela",
+  "cinza",
+  "madeira",
+  "lona",
+  "livro vermelho",
+  "livro amarelo",
+  "livro azul",
+  "entrada"
+ ],
+ "paleta_ilha": [
+  [
+   46,
+   168,
+   160
+  ],
+  [
+   34,
+   120,
+   124
+  ],
+  [
+   246,
+   244,
+   240
+  ],
+  [
+   186,
+   178,
+   222
+  ],
+  [
+   109,
+   254,
+   251
+  ],
+  [
+   160,
+   170,
+   180
+  ],
+  [
+   130,
+   80,
+   48
+  ],
+  [
+   226,
+   196,
+   140
+  ],
+  [
+   222,
+   62,
+   70
+  ],
+  [
+   250,
+   196,
+   40
+  ],
+  [
+   70,
+   130,
+   220
+  ],
+  [
+   48,
+   40,
+   44
+  ]
+ ],
+ "fonte_ilha": "estilo_ilha.py (secao 12 da tarefa): cada cor mais escura e mais saturada, perto dos kits CC0 da Ilha vistos na cena com o toon (o marrom dos troncos, o cinza-azulado das pedras); PROPOSTO, SEM FONTE"
 }

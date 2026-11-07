@@ -22,23 +22,32 @@ comida vale como comida, sem a proximidade). Desligada, o termo e o de hoje (o W
 continua lendo so se ha cheiro (o G-SEM-DIRECAO).
 **O passeio** (docs/TAREFA_V3_ACOES_NOVAS.md, 3.1; a subchave `passeio`): com um passeio em curso (`contexto["I"]`), a unidade dele
 (`explorar`, `passeio`, (x, y)), com o tipo `vagar` e a distancia ao ponto, ocupa o lugar do `explorar/vagar`; o resto da ativacao e o do vagar.
+**As unidades de fala** (docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, 3.1; a subchave `fala_unidades`): o `chamar_atencao` vira tres unidades,
+(`chamar_atencao`, c, None) com c em CONTEUDOS_FALA (fome, higiene, solidao), sem tipo de alvo (o mundo e o corpo sao os do chamar). O inato
+de cada uma e o W0[chamar_atencao].z de hoje termo a termo, com o termo do receptor do conteudo (TERMO_DO_CONTEUDO) multiplicado por
+`ganho_conteudo` (mul) e os dos outros dois conteudos por zero; o habito e o da linha de H da unidade (`plast.linha_da_opcao`, uma por conteudo, no
+M-PLAST). Desligada, a unidade e a de hoje.
 Sem estado e sem rng."""
 from __future__ import annotations
 
-from ..config import (CARACTERISTICAS_DIGIBRAIN, COMPORTAMENTOS_DIGIBRAIN, CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, RECEPTORES_DIGIBRAIN,
-                      ConfigDigibrain, ConfigDigibrainInatos)
+from ..config import (CARACTERISTICAS_DIGIBRAIN, COMPORTAMENTOS_DIGIBRAIN, CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, CONFIG_FALA_UNIDADES,
+                      CONTEUDOS_FALA, RECEPTORES_DIGIBRAIN, TERMO_DO_CONTEUDO, ConfigDigibrain, ConfigDigibrainInatos, ConfigFalaUnidades)
 from ..modelo_mundo import raiz_inteira
 from ._comum import chave_unidade, mul, phi
+from .plast import linha_da_opcao
 
 TERMOS = ("inato", "prox", "nov", "incentivo", "habito", "memoria", "persistencia")
+FALA = "chamar_atencao"                          # o comportamento que vira as unidades de fala (so com a subchave `fala_unidades`)
 
 
 class Impulso:
     """o M-IMPULSO (docstring do modulo)"""
 
-    def __init__(self, inatos: ConfigDigibrainInatos | None = None, cfg_digibrain: ConfigDigibrain | None = None) -> None:
+    def __init__(self, inatos: ConfigDigibrainInatos | None = None, cfg_digibrain: ConfigDigibrain | None = None,
+                 cfg_fala: ConfigFalaUnidades | None = None) -> None:
         self.p = inatos or CONFIG_DIGIBRAIN_INATOS
         self.cd = cfg_digibrain or CONFIG_DIGIBRAIN
+        self.cf = cfg_fala or CONFIG_FALA_UNIDADES
         self.S = self.p.escala
         idx = {c: j for j, c in enumerate(CARACTERISTICAS_DIGIBRAIN)}
         self.w0 = {}
@@ -54,6 +63,17 @@ class Impulso:
             raise ValueError("o tipo `cheiro` do comer fica no w0_tipo_cheiro, atras da subchave `cheiro_inato` (DX-3)")
         if self.cd.cheiro_inato:
             self.w0_tipo["comer"] = {**self.w0_tipo.get("comer", {}), "cheiro": self.p.w0_tipo_cheiro}
+        self.j_conteudo = {c: idx[termo] for c, termo in TERMO_DO_CONTEUDO}   # o indice em z do termo de cada conteudo (3.1)
+        if tuple(self.j_conteudo) != CONTEUDOS_FALA:                            # pragma: no cover - conferido pela config
+            raise RuntimeError("M-IMPULSO: TERMO_DO_CONTEUDO fora de CONTEUDOS_FALA")
+
+    def inato_fala(self, z: list) -> dict:
+        """o inato de cada unidade de fala (3.1): o W0[chamar_atencao].z termo a termo, com o termo do conteudo da unidade vezes o
+        `ganho_conteudo` (mul) e os termos dos outros dois conteudos fora"""
+        S, w = self.S, self.w0[FALA]
+        termo = [mul(wj, zj, S) if wj else 0 for wj, zj in zip(w, z)]
+        comum = sum(t for j, t in enumerate(termo) if j not in self.j_conteudo.values())
+        return {c: comum + mul(self.cf.ganho_conteudo, termo[j], S) for c, j in self.j_conteudo.items()}
 
     def contexto_z(self, sens: dict, afeto: dict, contexto: dict) -> list[int]:
         S = self.S
@@ -68,9 +88,10 @@ class Impulso:
         return z
 
     @staticmethod
-    def alvos(sens: dict, memoria: dict | None, passeio: tuple | None = None) -> list[dict]:
+    def alvos(sens: dict, memoria: dict | None, passeio: tuple | None = None, fala: bool = False) -> list[dict]:
         """as unidades possiveis da decisao, na ordem fixa: {chave, acao, tipo (o tipo do alvo para o W0_tipo), objeto, d}. `passeio` = a chave
-        (explorar, passeio, (x, y)) do passeio em curso (so com a subchave): a unidade dele ocupa o lugar do vagar, com o mesmo tipo"""
+        (explorar, passeio, (x, y)) do passeio em curso (so com a subchave): a unidade dele ocupa o lugar do vagar, com o mesmo tipo. `fala`
+        (so com a `fala_unidades`): o chamar vira as tres unidades de fala, na ordem de CONTEUDOS_FALA, sem tipo de alvo"""
         out = []
         x, y = sens["pos"]
         for b in COMPORTAMENTOS_DIGIBRAIN:
@@ -99,6 +120,9 @@ class Impulso:
                     px, py = memoria["ponto"]
                     d = raiz_inteira((px - x) * (px - x) + (py - y) * (py - y))
                     out.append({"chave": chave_unidade(b, "ponto", (px, py)), "acao": b, "tipo": "ponto", "objeto": None, "d": d})
+            elif b == FALA and fala:
+                for c in CONTEUDOS_FALA:
+                    out.append({"chave": chave_unidade(b, c), "acao": b, "tipo": None, "objeto": None, "d": None})
             else:
                 out.append({"chave": chave_unidade(b), "acao": b, "tipo": None, "objeto": None, "d": None})
         return out
@@ -113,15 +137,21 @@ class Impulso:
         S, a_max = self.S, self.p.a_max
         z = self.contexto_z(sens, afeto, contexto)
         inato_b = {b: sum(mul(w, zj, S) for w, zj in zip(self.w0[b], z) if w) for b in COMPORTAMENTOS_DIGIBRAIN}
-        habito_b = {b: plast.habito(b, z) for b in COMPORTAMENTOS_DIGIBRAIN}
+        habito_b = {b: plast.habito(b, z) for b in COMPORTAMENTOS_DIGIBRAIN if not (self.cd.fala_unidades and b == FALA)}
+        fala = self.cd.fala_unidades
+        if fala:
+            inato_fala = self.inato_fala(z)
+            habito_b.update({f"{FALA}/{c}": plast.habito(f"{FALA}/{c}", z) for c in CONTEUDOS_FALA})
         incentivos: dict = {}
         persist = contexto["persistencia"]
         out = []
         em_passeio = contexto["I"] if self.cd.passeio and contexto["I"] is not None and contexto["I"][:2] == ("explorar", "passeio") else None
-        for u in (self.alvos(sens, memoria, em_passeio) if self.cd.passeio else self.alvos(sens, memoria)):
+        for u in (self.alvos(sens, memoria, em_passeio) if self.cd.passeio else self.alvos(sens, memoria, fala=True) if fala
+                  else self.alvos(sens, memoria)):
             b, o = u["acao"], u["objeto"]
             termos = dict.fromkeys(TERMOS + (("lembranca",) if self.cd.memoria_autobio else ()) + (("faceta",) if self.cd.facetas_mem else ()), 0)
-            termos["inato"] = inato_b[b] + (self.w0_tipo.get(b, {}).get(u["tipo"], 0) if u["tipo"] is not None else 0)
+            inato = inato_fala[u["chave"][1]] if fala and b == FALA else inato_b[b]
+            termos["inato"] = inato + (self.w0_tipo.get(b, {}).get(u["tipo"], 0) if u["tipo"] is not None else 0)
             if o is not None:
                 termos["prox"] = mul(self.w0_prox.get(b, 0), o["prox"], S)
                 termos["nov"] = mul(self.w0_nov.get(b, 0), o["nov"], S)
@@ -130,7 +160,7 @@ class Impulso:
                     if c not in incentivos:
                         incentivos[c] = plast.incentivo(sens["pc"], c, drives)
                     termos["incentivo"] = mul(incentivos[c], o["prox"], S)
-            termos["habito"] = habito_b[b]
+            termos["habito"] = habito_b[linha_da_opcao(u["chave"], fala)]
             if u["tipo"] == "ponto":
                 termos["memoria"] = memoria["M"]
             termos["persistencia"] = persist.get(u["chave"], 0)

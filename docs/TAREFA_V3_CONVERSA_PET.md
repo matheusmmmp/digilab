@@ -298,3 +298,57 @@ unidades de fala com conteúdo (fome, higiene, solidão), subchave `fala_unidade
 com um dono que atende a fala (no mesmo passo e orçamento) e o de hoje, que ignora; o gate G-ESCUTA (a fala pertinente sobe com o dono que
 atende) e a guarda G-COMEDOURO-DC3 (com o dono que ignora, falar não tira o pet da comida). A faixa 79101…79505, reservada no primeiro
 commit. **APROVADO pelo Matheus em 2026-11-07 ("Aprovo todas"), DC3-1 a DC3-9 DECIDIDAS pela recomendação;** nenhuma vida antes do código da DC3a e do registro da run.
+
+## DC3a — o código da rede escolhendo falar (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc3a-codigo`, 2026-11-07)
+
+O código da linha DC3a do [plano da DC3](PLANO_ANALISE_V3_CONVERSA_DC3.md) (seção 10), **sem nenhuma vida da faixa 79101…79505**.
+
+- **O gabarito antes, num commit próprio** (`e8548ddb`): `tests/gabarito_conversa_dc3.py` grava as 20 vidas de hoje do LAB no comedouro
+  (os 4 donos, as sementes 101 a 505, 3 dias, pela vida da AN4: o sha256 do log, do estado interno, das medidas e do corpo);
+  `tests/test_gabarito_conversa_dc3.py` confere byte a byte que, com a subchave desligada e o dono de hoje, nada muda. As 8 vidas do gabarito
+  web do modular também não mudam (`tests/test_passeio_gabarito.py`).
+- **A subchave `fala_unidades`** (`ConfigDigibrain`, desligada): o M-IMPULSO divide o `chamar_atencao` em `(chamar_atencao, fome |
+  higiene | solidao)`, com o inato de hoje termo a termo e o termo do conteúdo vezes o `ganho_conteudo` (os dos outros dois fora); o M-PLAST
+  troca a linha de H do chamar pelas três, e a opção de fala credita a do seu conteúdo pelo P2 de hoje; o mundo e o corpo são os do chamar. O
+  `ganho_conteudo` = **3S/2** (PROPOSTO, SEM FONTE; `ConfigFalaUnidades`), pela condição da 3.1 nas sementes dos testes
+  (`experiments/calibrar_ganho_conteudo_dc3.py` → `artifacts_v3_conversa_dc3/ganho_conteudo.json`: 328 falas no dia 1 contra 317, razão
+  1,035). Só Python; o TS ganhou só o `fala_unidades: false` da paridade da config (D-CP-DC3a-4).
+- **O dono que atende** (`DonoQueAtende`, no orquestrador): no mesmo passo e no mesmo orçamento, o cuidado do conteúdo (ração no comedouro,
+  limpar, carinho), sem rng nova; no LAB, pelo receptor de maior urgência entre fome, higiene e solidão.
+- **A medida:** `fala_nas_decisoes` e `maior_urgencia_da_fala` em `digilab/metrics.py` (4.1 e 4.2).
+- **O orquestrador:** `experiments/run_v3_conversa_dc3.py`, as configs `experiments/configs/v3_conversa_dc3/conversa_dc3.json` (a run) e
+  `varredura.json` (as sementes dos testes); as conferências da seção 11 falhando alto e a do crédito da 4.4; a análise da seção 7 e o
+  descritivo da 8. A run recusa rodar antes do registro (`## 13. O registro da run`, gerado por `--registro`).
+- **DECIDIDO:** o `limiar_desfecho` (S/8) e o `limiar_valor` (S/2) da `ConfigDecodificador` (o Matheus, 2026-11-07, PR #663).
+- **Testes:** `tests/test_conversa_dc3a.py` (a config, o inato, as linhas de H, a vida dos dois braços, o dono que atende, a medida, a análise
+  com dados sintéticos, a trava e a fumaça do orquestrador inteiro) e `tests/test_gabarito_conversa_dc3.py`.
+- **A varredura** (não é dado da DC3; `artifacts_v3_conversa_dc3/varredura/`): as bases 101 a 505, K = 1, os 2 braços, as 8 células, 14 dias
+  (80 vidas), 4 processos, saída 0: **91,1 s de parede para as 80 vidas, ~2,8 s de CPU por vida.** **A estimativa da run** (3 200 vidas, 4
+  processos), pela mesma razão: **cerca de 1 h** (91,1 s × 40) (o plano dizia 1 h 40 min pela AN4).
+- **O achado que o Matheus precisa ver antes da DC3b (D-CP-DC3a-1):** o crédito do P2 nunca alcança o atendimento. A consequência da fala
+  fecha no tick da decisão, e o dono age 15 ticks depois: na varredura, 0 dos 2 059 atendimentos caem dentro do intervalo. O G-ESCUTA só pode
+  medir o efeito do cuidado no estado, e a varredura saiu na linha 4 (G-ESCUTA "< 0": quem é atendido fala menos). O plano previu esse nulo;
+  aqui ele é certo por construção.
+
+### DC3a, o adendo 1 (APROVADO pelo Matheus em 2026-11-07, DC3-A1 a DC3-A4), no mesmo PR
+
+- **O crédito da fala até a decisão seguinte (A1.1):** com a `fala_unidades` ligada, a opção de fala lê o corpo de depois na percepção da
+  decisão seguinte (`adapt._fechar(p, obs_seguinte)`); as outras opções, e o LAB, seguem com o do tick da ação. A última decisão da vida
+  fica sem fechar, como hoje (D-CP-DC3a-10). Desligada, as vidas de hoje saem byte a byte (o gabarito `e8548ddb` confere).
+- **A medida (A1.2):** a `fala_nas_decisoes` dá, por janela e na vida, as decisões com necessidade (fora do dormir, maior urgência entre
+  fome, higiene e solidão > `urgencia_lambda`, estrito), a **P(fala pertinente | necessidade)** (None sem decisão com necessidade) e a
+  urgência média nelas.
+- **A análise:** o G-ESCUTA é essa medida nos dias 8–14 (atende − ignora no LAB+F, 4 células, IC95 do t sem margem); a P-NECESSIDADE entra nas
+  premissas; o descritivo ganha a fala pertinente por dia, a urgência média e o r_n da fala por dono, janela e conteúdo, e a fração dos
+  cuidados do dono de hoje dentro de intervalos de fala.
+- **A conferência 4.4 (A1.3) falha alto** no LAB+F: todo atendimento dentro do intervalo da fala que o provocou (salvo o da última decisão,
+  contado à parte). A linha 4 da 7.4 tem o texto novo.
+- **Testes:** `tests/test_conversa_dc3a.py`, 23 testes. Ligada, o r_n da fala é o do corpo da decisão seguinte e o das outras opções o do
+  tick, e o atendimento muda o r_n só das falas do LAB+F. A medida condicionada é conferida com casos à mão, e a conferência falha alto
+  quando forçada.
+- **O achado D-CP-DC3a-11:** no comedouro, o `alimentar` do dono vira ração no chão, e o corpo só muda quando o pet come. O cuidado que
+  chega ao r_n da fala é o `limpar` e o `acariciar`.
+- **A varredura do adendo ficou para depois do merge (D-CP-DC3a-14):** o hook H10 recusou a varredura, porque o plano do branch, com o
+  adendo, não é o da `origin/main` (D-IA-6). Pelo coordenador, a DC3a sai com a fumaça do orquestrador e os testes. Os artefatos de
+  `artifacts_v3_conversa_dc3/varredura/` ficam velhos, do código antes do adendo. A varredura é refeita na DC3b, antes do registro da run,
+  com o adendo na `main`, e a estimativa de ~1 h da run vem dela.

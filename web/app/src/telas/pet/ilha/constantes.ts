@@ -88,6 +88,21 @@ export const ENFEITES_GRADE = {
   geladeira: { quantos: 1, perto: 1.8, longe: 4, entreSi: 2.5, entreMarcos: 5, deAlto: 1.4, folga: 1, norte: true, casa: 0, faixa: [-14, 16] },
   trilho: { quantos: 1, perto: 2, longe: 5, entreSi: 2.5, entreMarcos: 6, deAlto: 1.2, folga: 1, norte: true, casa: 0, faixa: [-16, 18] },
 } as const;
+/** onde ficam os lugares da ilha (lugares.ts; docs/TAREFA_V3_LUGARES_3D.md, secao 12): depois dos enfeites, com a rng propria (os
+    objetos e os enfeites de hoje nao mudam). O portao e a barraca ao norte da area, no ponto que cabe mais perto do `alvo` (o deslocamento
+    a partir do ninho em x; z ao norte da area), onde a camera da tela Pet mais fica: em grama plana com a folga do modelo, longe dos
+    enfeites e um do outro, com a frente para a area. O cais na beira do mar, ao sul: na ultima linha de areia antes da agua, numa faixa de x da area (fracao da largura), com o
+    comprido ao longo da beira. Cada lugar abre uma `clareira`: a vista nao desenha os objetos da decoracao (nao os do motor) a menos
+    disso do centro (Ilha.escondidos). PROPOSTO, SEM FONTE */
+export const LUGARES_GRADE = {
+  sal: 0x1a6a2e5, tentativas: 4000,
+  barraca: { perto: 2, longe: 3.6, folga: 1, deEnfeite: 3.5, clareira: 3.4, alvo: [-1.4, -2.6] },
+  portao: { perto: 1.8, longe: 3.6, folga: 1, deEnfeite: 3.2, clareira: 3, alvo: [8, -2.4] },
+  cais: { faixa: [0.15, 0.4], clareira: 4.5 },
+} as const;
+/** a luz de um lugar aberto (lugares.ts): a cor da mascara de cada lugar (o ciano do portal e dos cristais, tirado da textura) e a
+    forca (emissiveIntensity). PROPOSTO, SEM FONTE */
+export const LUGAR_LUZ = { cor: { portao: "110,240,230", barraca: "110,240,230", cais: "131,228,218" }, forca: 0.55 } as const;
 /** a luz dos enfeites a noite (enfeites.ts): o halo na lanterna, na fracao `altura` da altura do modelo, com `tamanho` celulas de
     diametro, em cascas (as fracoes do tamanho) de opacidade `forca` cada (aditiva), e o quanto os vidros brilham (emissiveIntensity).
     PROPOSTO, SEM FONTE */
