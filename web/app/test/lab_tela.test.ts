@@ -127,7 +127,7 @@ describe("importar e exportar o save v16", () => {
     expect(lerArquivo(textoSave(m), "a").lab).toBe(false);
     const v14 = new Motor(31, 14); v14.avancar(200);
     expect(lerArquivo(textoSave(v14), "a").lab).toBe(false);
-    expect(() => lerArquivo(JSON.stringify({ semente: 31, log: [], versao: 18 }), "a")).toThrow(/versão 18/);
+    expect(() => lerArquivo(JSON.stringify({ semente: 31, log: [], versao: 19 }), "a")).toThrow(/versão 19/);
   });
   test("o v16 importado vai para o Laboratorio, nunca para o pet ativo nem para os guardados; um por vez", () => {
     const { texto, guardados } = jogoDeHoje();

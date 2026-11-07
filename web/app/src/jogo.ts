@@ -3,7 +3,7 @@
    save. Duas abas no mesmo navegador (o HTML antigo e o app, ou dois apps) nao se sobrescrevem: quando o save
    muda em outra aba, esta relê o save em vez de gravar por cima. */
 import { useEffect, useState } from "react";
-import { Motor, PetMorto, VERSAO_V17 } from "../motor/index.ts";
+import { Motor, PetMorto, ehCerebroTrocavel } from "../motor/index.ts";
 import { ligarProduto } from "./produto.ts";
 import { podeTrocarCerebro, type Cerebro } from "./cerebro.ts";
 import { CHAVE_LAB } from "./lab.ts";
@@ -141,7 +141,7 @@ export function trocarCerebroDoPet(c: Cerebro): void {
   if (j.erroSave) throw new Error("o save não abriu: o cérebro não troca");
   if (!podeTrocarCerebro(j.motor)) throw new Error(`este pet é da versão ${j.motor.versao} e não troca de cérebro`);
   if (j.motor.cerebroAtual === c) throw new Error(`o pet já decide com o cérebro ${c}`);
-  if (j.motor.versao !== VERSAO_V17) { j.motor = Motor.promoverV17(j.motor); j.revisao++; }
+  if (!ehCerebroTrocavel(j.motor.versao)) { j.motor = Motor.promoverV17(j.motor); j.revisao++; }
   mudarMotor(m => m.trocarCerebro(c));
 }
 /** quadros do palco (120 ms cada) com o ovo chocando: ~5 s, para o nascimento ser um momento e nao um corte. PROPOSTO, SEM FONTE */

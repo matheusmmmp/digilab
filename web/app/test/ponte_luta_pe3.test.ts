@@ -18,7 +18,7 @@ function espiar(m: Motor): { v: number; antes: number; depois: number }[] {
   return out;
 }
 const refeito = (v: Variante, s: number, log: readonly EventoRegistro[]): Motor => {
-  const m = v === "v16" ? petDeTeste(s) : new Motor(s);
+  const m = v === "v16" ? petDeTeste(s) : new Motor(s, 17);
   for (const ev of log) m.aplicarEvento(ev);
   return m;
 };
@@ -41,7 +41,7 @@ describe("PE3: a vida com a marca da ponte da luta", () => {
     let comDor = 0, episodiosModular = 0;
     for (const v of VARIANTES) for (const s of SEMENTES) {
       const vida = viverComLutas(v, s, 2, true);
-      const m = v === "v16" ? petDeTeste(s) : new Motor(s);
+      const m = v === "v16" ? petDeTeste(s) : new Motor(s, 17);
       const dores = espiar(m);
       for (const ev of vida.log) m.aplicarEvento(ev);
       const laco = m.v11!.laco as MotorCorpoMundo, C = laco.corpo.C, S = laco.corpo.S;

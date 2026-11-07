@@ -21,6 +21,7 @@ import {
   type ListaGambits, type Lutador, type RegrasLuta, type RelogioTR,
 } from "../../motor/index.ts";
 import { VARIANTES } from "./variantes_fase2.ts";
+import { comEmpurrao } from "./empurrao.ts";
 
 const arg = (k: string): string | null => { const i = process.argv.indexOf("--" + k); return i < 0 ? null : process.argv[i + 1] ?? null; };
 /* as faixas reservadas (experiments/bancada/faixas.py): a primeira rodada e a segunda (calibracao2, conferencia2; DR2-2) */
@@ -29,7 +30,7 @@ const faixa = arg("faixa"), saida = arg("saida");
 if (!faixa || !(faixa in FAIXAS)) throw new Error("--faixa calibracao | conferencia | calibracao2 | conferencia2");
 if (!saida) throw new Error("--saida <arquivo.json>");
 /* --base v14: o relogio candidato da fase 1 (RELOGIO_V14); sem ele, o dos pets v13 */
-const relogio: RelogioTR = { ...(arg("base") === "v14" ? RELOGIO_V14 : RELOGIO_V13), ...JSON.parse(arg("relogio") ?? "{}") };
+const relogio: RelogioTR = comEmpurrao({ ...(arg("base") === "v14" ? RELOGIO_V14 : RELOGIO_V13), ...JSON.parse(arg("relogio") ?? "{}") });   /* --empurrao v18: o empurrao dos pets v18 por cima */
 for (const k of Object.keys(relogio)) if (!(k in RELOGIO_V13)) throw new Error("numero do relogio desconhecido: " + k);
 const R: RegrasLuta = { ...CV21E_TR, relogio };
 const variante = arg("variante");
