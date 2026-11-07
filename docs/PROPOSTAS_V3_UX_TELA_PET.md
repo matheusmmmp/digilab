@@ -1399,3 +1399,19 @@ O movimento é o da D1, sem mudar.
 
 **Decididas (Matheus, 2026-11-07):** "Aprovar e codar". Valem as recomendações D1b-1 a D1b-7 como estão na tabela, e os números de layout
 ficam PROPOSTO, SEM FONTE. No código, o cabeçalho "AGORA" e o mapa vêm do mesmo pet (na prancha divergiam por causa dos dados de teste).
+
+### D1c — o campo pequeno (Matheus, 2026-11-07, depois do código da D1b)
+
+Depois de ver o código da D1b, o Matheus pediu: "Na verdade, faz esse modal menor, ele está muito grande. Ele tem que ser um campo pequeno."
+Isso revoga o tamanho da D1b-2. Foram duas opções, tiradas do jogo real com o CSS de cada uma, em
+`D:\Trab\digilab\capturas_ux_digibrain_aprovar\modal_menor\` (com um `LEIA.md`):
+- **(a):** 420 px a 1920, no canto direito sob o relógio; a 390, um cartão de 264 × 210 px no canto de baixo.
+- **(b):** 520 px a 1920; a 390, uma folha de 210 px com os botões numa coluna à esquerda do desenho.
+
+**Decidida (Matheus, 2026-11-07):** "(a) desk, (b) celular". Fica assim:
+- **Desktop:** o painel de 420 px sob o relógio, com a altura acompanhando o desenho (~306 px).
+- **Celular:** a folha de 210 px na largura toda, com os botões numa coluna à esquerda e sem os nomes das regiões, que não cabem.
+- **O título** é só o ícone do cérebro, ao lado do selo; o nome "DigiBrain" fica para o leitor de tela.
+- **Os rótulos** ficam só no caminho aceso e nas opções; o de outro ponto aparece ao passar o mouse ou ao tocar nele. A legenda fica no "i".
+
+Os tamanhos são PROPOSTO, SEM FONTE.

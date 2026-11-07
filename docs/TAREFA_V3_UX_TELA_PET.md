@@ -495,3 +495,37 @@ a pede antes da aprovação final do vidro na caixa.
 
 **PROPOSTO, SEM FONTE:** os 720 px, a metade da direita com o piso de 560 px, a folha e o véu a 28 %. Os desvios estão em
 `docs/registro/2026-11.md`, seção D1b.
+
+## 16. Etapa D1c: o DigiBrain como campo pequeno (2026-11-07)
+
+O Matheus achou o modal da D1b grande demais ("Ele tem que ser um campo pequeno"). Viu duas opções capturadas no jogo
+(`D:\Trab\digilab\capturas_ux_digibrain_aprovar\modal_menor\`) e escolheu "(a) desk, (b) celular" (`docs/PROPOSTAS_V3_UX_TELA_PET.md`,
+seção D1c). Fica no mesmo PR da D1.
+
+**O que mudou:**
+- **Desktop (900 px ou mais):** um painel de 420 px sob o relógio, no lugar da pilha de painéis. A altura acompanha o desenho (~312 px a
+  1920).
+- **Celular:** uma folha de 210 px na largura toda, com o ícone, o selo e os botões numa coluna à esquerda do desenho. Os nomes das regiões
+  saem.
+- **O título** é só o ícone do cérebro; o nome "DigiBrain" fica num `.sr-only`, e o diálogo continua com esse nome.
+- **Os rótulos:** só o caminho aceso (as entradas das arestas acesas, a regra e a ação) e as candidatas, com a chance. O de outro ponto
+  aparece ao passar o mouse ou ao tocar nele; tocar é só vista e não grava evento. A dica do "i" diz isso e aponta o mapa em texto.
+- Os botões do topo continuam com 44 × 44 px.
+
+**Os arquivos:** `ScanDigiBrain.tsx`, `scan_digibrain.css` e `e2e/jogo.spec.ts` (o tamanho e o lugar, o título só com o ícone e um teste novo
+dos rótulos a 390 e a 1280).
+
+**Os portões:**
+- `npm run tipos` está limpo. O Vitest dá 95 arquivos e 893 testes; depois dos consertos do `rev-a11y`, o `scan_digibrain.test.ts` deu 14/14.
+- No e2e inteiro (porta 8831), 134 passaram e 1 falhou: o `camera_livre.spec.ts:74`, herdado da base. Depois dos consertos, os 14 e2e do
+  DigiBrain e o `lab_modular.spec.ts` passam.
+- O portão "nada fora do DigiBrain muda": 21 telas, a 1920 e a 390, nas duas peles, base × branch.
+  - Nas duas rodadas, o DOM das 84 telas ficou igual.
+  - As capturas tiveram diferenças pequenas que trocam de tela de uma rodada para outra: 4 telas na primeira (26 a 698 px) e 1 na segunda
+    (73 px). Três delas, rodadas de novo, deram 0 px. A que ainda variou, a `crescer-itens` a 390 no Vidro (42 px), varia no mesmo lugar
+    entre duas capturas da própria base. É ruído.
+- O `rev-a11y` barrou os botões de 36 px das capturas das opções. Eles voltaram a 44 px. Das ressalvas, foram aceitas a dica com altura
+  máxima a 390, um alvo de toque maior no celular e a linha da dica sobre o mapa em texto.
+
+**PROPOSTO, SEM FONTE:** os 420 px, a folha de 210 px e o corte em 900 px (o pedido falava em 768). Os desvios estão em
+`docs/registro/2026-11.md`, seção D1c.

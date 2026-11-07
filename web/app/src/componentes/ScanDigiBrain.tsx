@@ -6,9 +6,12 @@
    e a dica do "i" diz isso. O movimento e o da D1: so vista e so numa decisao nova (mapa.acesas.n muda), a varredura passa uma vez e o pulso
    percorre as arestas acesas, os dois terminam; o giro lento do plano (so no desktop) e CSS puro. Com "reduzir movimento" nada se move; no
    replay e com o tempo pausado so o destaque troca. O relogio do navegador aqui e so animacao: nada do que e gravado depende dele.
-   A ilha continua a pleno ritmo por tras (D1b-3: sem CENA.coberto e sem desfoque de tela cheia). */
+   A ilha continua a pleno ritmo por tras (D1b-3: sem CENA.coberto e sem desfoque de tela cheia).
+   O campo pequeno (D1c, escolha do Matheus de 2026-11-07, "(a) desk, (b) celular"): no desktop um painel de 420 px sob o relogio, a 390 uma folha
+   de 210 px com os botoes numa coluna a esquerda; o titulo e so o icone do cerebro (o nome fica para o leitor de tela); os rotulos so no
+   caminho aceso e nas candidatas, e o de qualquer outro ponto aparece ao passar o mouse ou ao tocar nele. */
 import { memo, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type MouseEvent, type ReactNode, type SyntheticEvent } from "react";
-import { Info, List, X } from "lucide-react";
+import { Brain, Info, List, X } from "lucide-react";
 import { ACOES_LOBOS, ENTRADAS_LOBOS, REGRAS_LOBOS, type AcaoPet, type LeituraDecisao, type MapaDecisao, type RegraLobos } from "../../motor/index.ts";
 import { useJogo } from "../jogo.ts";
 import type { EstadoSelo } from "../seloDigiBrain.ts";
@@ -66,6 +69,10 @@ function txt<T extends string>(tabela: Record<string, string>, k: T, onde: strin
 /** o mapa dos pesos em SVG (D1-1). As classes que o e2e le: svg.mp com data-n, .mp-pesos path, .mp-acesas path, .mp-lit, .mp-cand, .mp-esc, .mp-pct,
     .mp-reg[data-lobo]. `movendo`: o pulso (um ponto que percorre cada aresta acesa) esta no DOM; o pai o tira quando termina */
 function MapaScanBruto({ mapa, decisao, movel, movendo }: { mapa: DadosMapa; decisao: LeituraDecisao | null; movel: boolean; movendo: boolean }) {
+  /* o ponto tocado (D1c): o rotulo dele aparece; tocar de novo, ou em outro, troca. So vista */
+  const [tocado, setTocado] = useState<string | null>(null);
+  const tocar = (id: string) => () => setTocado(t => t === id ? null : id);
+  const cls = (id: string, base: string): string => base + (tocado === id ? " mp-toque" : "");
   const { ent, pe, pr, pa } = posicoes(mapa.receptores);
   for (const a of mapa.arestas) {
     if (!pe.has(a.entrada)) throw new Error(`entrada fora do mapa: ${a.entrada}`);
@@ -80,6 +87,8 @@ function MapaScanBruto({ mapa, decisao, movel, movendo }: { mapa: DadosMapa; dec
     return `M${f(x1)} ${f(y1)}C${f(x1 - 110)} ${f(y1)} ${f(x2 + 90)} ${f(y2)} ${f(x2)} ${f(y2)}C${f(x2 - 90)} ${f(y2)} ${f(x3 + 90)} ${f(y3)} ${f(x3)} ${f(y3)}`;
   };
   const top = new Set(decisao ? decisao.percepcao.map(p => p.entrada) : []);
+  /* as entradas das arestas acesas: o rotulo delas fica sempre a vista (D1c), mesmo fora das que mais pesaram */
+  const caminho = new Set(ac ? ac.arestas.map(x => x.entrada) : []);
   const chance = new Map(decisao ? decisao.chances.map(c => [c.acao, c.chance]) : []);
   /* a espessura de hoje (MapaPesos.tsx) vezes a escala do desenho; os raios idem (a 390 o desenho fica menor, entao os tracos crescem) */
   const K = movel ? 2.2 : 1.1, R = movel ? 1.8 : 1;
@@ -117,12 +126,15 @@ function MapaScanBruto({ mapa, decisao, movel, movendo }: { mapa: DadosMapa; dec
       <g className="mp-nos">
         {ent.map((e, i) => {
           const [x, y] = pe.get(e)!, lit = top.has(e);
-          return <g key={e} className={"mp-no" + (i >= ENTRADAS_LOBOS.length ? " mp-corpo" : "") + (lit ? " mp-lit" : "")} data-entrada={e}>
+          return <g key={e} className={cls("e" + e, "mp-no" + (i >= ENTRADAS_LOBOS.length ? " mp-corpo" : "") + (lit ? " mp-lit" : "") + (caminho.has(e) ? " mp-caminho" : ""))}
+            data-entrada={e} onClick={tocar("e" + e)}>
+            <circle className="mp-alvo" cx={f(x)} cy={f(y)} r={f(R * (movel ? 16 : 12))} />
             <circle cx={f(x)} cy={f(y)} r={f(R * (lit ? 7 : 5))} /><text x={f(x + 12 * R)} y={f(y + 5 * R)}>{txt(TXT_ENTRADA, e, "entrada")}</text></g>;
         })}
         {REGRAS_LOBOS.map(r => {
           const [x, y] = pr.get(r)!, lit = ac !== null && r === ac.regra;
-          return <g key={r} className={"mp-no" + (lit ? " mp-lit" : "")} data-regra={r}>
+          return <g key={r} className={cls("r" + r, "mp-no" + (lit ? " mp-lit" : ""))} data-regra={r} onClick={tocar("r" + r)}>
+            <circle className="mp-alvo" cx={f(x)} cy={f(y)} r={f(R * 14)} />
             <circle cx={f(x)} cy={f(y)} r={f(R * (lit ? 9 : 6.5))} />
             {/* a 390 o rotulo da regra vai para a direita do ponto: em cima bate no da acao ao lado, embaixo no ponto da regra seguinte */}
             {movel ? <text x={f(x + 14 * R)} y={f(y + 5 * R)} textAnchor="start">{TXT_REGRA[r]}</text>
@@ -132,10 +144,11 @@ function MapaScanBruto({ mapa, decisao, movel, movendo }: { mapa: DadosMapa; dec
           const [x, y] = pa.get(a)!, c = chance.get(a), esc = ac !== null && a === ac.acao;
           const pc = c === undefined ? null : Math.round(c * 100) + "%";
           /* a 390 o rotulo vai para dentro (a direita do ponto), senao sai da moldura; no desktop a chance fica numa linha embaixo */
-          return <g key={a} className={"mp-no" + (c !== undefined ? " mp-cand" : "") + (esc ? " mp-esc" : "")} data-acao={a}>
+          return <g key={a} className={cls("a" + a, "mp-no" + (c !== undefined ? " mp-cand" : "") + (esc ? " mp-esc" : ""))} data-acao={a} onClick={tocar("a" + a)}>
+            <circle className="mp-alvo" cx={f(x)} cy={f(y)} r={f(R * 14)} />
             <circle cx={f(x)} cy={f(y)} r={f(R * (esc ? 10 : c !== undefined ? 8 : 6.5))} />
             <text x={f(movel ? x + 14 * R : x - 14)} y={f(y + 5 * R)} textAnchor={movel ? "start" : "end"}>{TXT_ACAO[a]}{pc !== null && movel && <tspan className="mp-pct"> {pc}</tspan>}</text>
-            {pc !== null && !movel && <text className="mp-pct" x={f(x - 14)} y={f(y + 22)} textAnchor="end">{pc}</text>}</g>;
+            {pc !== null && !movel && <text className="mp-pct" x={f(x - 14)} y={f(y + 30)} textAnchor="end">{pc}</text>}</g>;
         })}
       </g>
     </svg>
@@ -228,6 +241,7 @@ function Dica({ receptores, aberta }: { receptores: boolean; aberta: boolean }) 
     <div className="scan-dica scan-cx" id="db-dica" hidden={!aberta}>
       <p>A forma de cérebro é só desenho. Cada ponto é o que o pet sente, uma regra ou uma ação; cada fio é um peso.</p>
       <p className="scan-dica-selo">Ao lado do título: o ponto é ao vivo, as duas barras são pausado e o triângulo é um replay.</p>
+      <p className="scan-dica-selo">Só o caminho desta decisão tem nome; passe o mouse ou toque num ponto para ver o dele, ou abra o mapa em texto.</p>
       <ul className="mp-leg">
         <li><span className="scan-leg scan-leg--aceso" />esta decisão</li><li><span className="scan-leg scan-leg--mais" />aprendeu a mais</li>
         <li><span className="scan-leg scan-leg--menos" />aprendeu a menos</li><li><span className="scan-leg scan-leg--neg" />peso negativo</li>
@@ -265,7 +279,7 @@ export function ScanDigiBrain({ fechar, movel, replay = false, chamado }: { fech
       <div className="scan-in scan-cx digibrain">
         {movel && <span className="scan-alca" aria-hidden="true" />}
         <header className="scan-topo">
-          <h2 className="scan-tit" id="db-titulo">DigiBrain</h2>
+          <h2 className="scan-tit" id="db-titulo"><Brain aria-hidden="true" /><span className="sr-only">DigiBrain</span></h2>
           <SeloForma replay={replay} />
           {mapa && <>
             <button type="button" className="scan-ic scan-info" aria-label="O que é este desenho" aria-expanded={verDica} aria-controls="db-dica"

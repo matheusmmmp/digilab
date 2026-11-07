@@ -1,16 +1,16 @@
 /* O DigiBrain como modal pequeno (componentes/ScanDigiBrain.tsx; prancha aprovada em docs/pranchas/ux-digibrain/modal.css, D1b da UX_TELA_PET,
    sobre o desenho da D1). Nenhuma cor nova: so os tokens --hx-*, --hud-* e os tres --mp-* de hoje (declarados em digibrain.css, com o .scan na
-   lista). As medidas sao de layout, PROPOSTO, SEM FONTE (D1b-2): a partir de 900 px o modal tem 720 px de largura (menos numa janela estreita
-   ou baixa) e fica a 72 px do alto e 12 px da direita, sobre a pilha de paineis, com a ilha e o pet a vista; abaixo de 900 px, uma folha baixa
-   presa embaixo. O veu e leve e sem desfoque (D1b-3); o vidro da pele fica so na caixa, como num painel da HUD.
+   lista). As medidas sao de layout, PROPOSTO, SEM FONTE (D1c, o campo pequeno escolhido pelo Matheus em 2026-11-07: "(a) desk, (b) celular"):
+   a partir de 900 px o painel tem 420 px de largura (menos numa janela baixa), a altura acompanha o desenho (~306 px), e fica a 72 px do alto
+   e 12 px da direita, sob o relogio, no lugar da pilha de paineis; abaixo de 900 px, uma folha de 210 px presa embaixo, com os botoes numa
+   coluna a esquerda do desenho. O veu e leve e sem desfoque (D1b-3); o vidro da pele fica so na caixa, como num painel da HUD.
    O movimento (varredura, pulso, giro) so existe sem "reduzir movimento"; o giro so no desktop. */
 
 /* os apelidos do scan (PROPOSTOS, sem valor novo): a malha e a grade sao o medidor da pele, o instinto e o texto secundario */
 .scan{ --scan-malha:var(--hx-medidor); --scan-grade:var(--hx-medidor-trilho); --scan-prior:var(--hx-sec); --scan-raio:0px;
-  /* a largura: 720 px, ou menos se a janela for estreita ou baixa (o desenho guarda a proporcao 880 x 552 do viewBox; 156 px sao o alto, o
-     topo, as bordas e a folga de baixo). Numa janela abaixo de ~1490 px o modal fica na metade da direita, para o pet no meio continuar a vista
-     (D1b-1), com um piso de 560 px para o desenho nao encolher demais. PROPOSTO, SEM FONTE */
-  --scan-larg:min(720px, max(calc(50vw - 24px), 560px), calc(100vw - 24px), calc((100dvh - 156px) * 880 / 552 + 24px)) }
+  /* a largura: 420 px, ou menos se a janela for baixa (o desenho guarda a proporcao 880 x 552 do viewBox; 140 px sao o alto, o topo, as bordas
+     e a folga de baixo). PROPOSTO, SEM FONTE (D1c) */
+  --scan-larg:min(420px, calc(100vw - 24px), calc((100dvh - 140px) * 880 / 552 + 16px)) }
 :root[data-pele="vidro"] .scan{ --scan-raio:8px }
 
 /* ---------- o dialogo: so a caixa; o <dialog> nao tem fundo, borda nem filtro (o cartao do chamado, dentro dele, se posiciona pela tela) */
@@ -27,10 +27,12 @@
   border-radius:var(--scan-raio); -webkit-backdrop-filter:var(--hud-desfoque); backdrop-filter:var(--hud-desfoque) }
 :root[data-pele="vidro"] .scan .scan-cx{ box-shadow:var(--hud-brilho), var(--hx-sombra) }
 :root[data-pele="xcom"] .scan .scan-cx{ border-top:2px solid var(--hx-borda-topo); background:var(--xcom-cantos), linear-gradient(180deg, var(--hud-fundo-1), var(--hud-fundo-2)) border-box }
-.scan-in{ position:relative; display:flex; flex-direction:column; padding:0 12px 12px }
+.scan-in{ position:relative; display:flex; flex-direction:column; padding:0 8px 8px }
 
-.scan-topo{ position:relative; flex:none; height:52px; display:flex; align-items:center; gap:10px }
-.scan-tit{ margin:0; font:700 20px/1 var(--hx-f); letter-spacing:var(--hx-titulo-esp); text-transform:uppercase; color:var(--hx-texto) }
+.scan-topo{ position:relative; flex:none; height:52px; display:flex; align-items:center; gap:4px; padding-left:4px }
+/* o titulo e so o icone do cerebro (D1c); o nome "DigiBrain" fica no .sr-only para o leitor de tela */
+.scan-tit{ display:inline-grid; place-items:center; margin:0; color:var(--hx-texto) }
+.scan .scan-tit svg.lucide{ width:24px; height:24px }
 .scan .scan-ic{ display:inline-grid; place-items:center; width:44px; height:44px; padding:0; background:transparent; color:var(--hx-texto-2);
   border:1px solid transparent; border-radius:var(--scan-raio) }
 .scan .scan-ic:hover, .scan .scan-ic[aria-expanded="true"], .scan .scan-ic[aria-pressed="true"]{ border-color:var(--hx-borda); background:var(--hx-tecla); color:var(--hx-texto) }
@@ -47,7 +49,7 @@
 .scan .db-selo--replay i{ width:0; height:0; border-left:10px solid var(--hx-rotulo); border-top:6px solid transparent; border-bottom:6px solid transparent }
 
 /* a dica do "i" (D1b-7): por cima do desenho, presa ao canto de cima */
-.scan .scan-dica{ position:absolute; z-index:5; top:50px; right:12px; width:min(320px, calc(100% - 24px)); padding:12px 14px; font:500 14px/1.35 var(--hx-f) }
+.scan .scan-dica{ position:absolute; z-index:5; top:50px; right:8px; width:min(320px, calc(100% - 24px)); padding:12px 14px; font:500 14px/1.35 var(--hx-f) }
 .scan .scan-dica[hidden]{ display:none }
 .scan .scan-dica{ -webkit-backdrop-filter:none; backdrop-filter:none }   /* a caixa ja desfoca por baixo; a dica nao soma um segundo vidro */
 .scan .scan-dica .scan-dica-selo{ font-size:13px; color:var(--hx-texto-2) }
@@ -118,6 +120,12 @@
   animation:scan-pulso var(--scan-t-pulso) ease-in-out var(--scan-t-varre) 1 both }
 @keyframes scan-pulso{ 0%{ stroke-dashoffset:0; opacity:0 } 8%{ opacity:1 } 92%{ opacity:1 } 100%{ stroke-dashoffset:-.999; opacity:0 } }
 .scan .mp-no circle{ fill:var(--hx-miolo); stroke:var(--scan-malha); stroke-width:1.5 }
+/* o alvo do toque: um circulo maior e invisivel em volta de cada ponto (D1c) */
+.scan .mp .mp-no .mp-alvo{ fill:transparent; stroke:none; filter:none }
+/* o campo pequeno (D1c): os rotulos so no caminho aceso (as entradas das arestas acesas, a regra, a acao) e nas candidatas; o de qualquer outro
+   ponto aparece ao passar o mouse ou ao tocar nele */
+.scan .mp .mp-no:not(.mp-lit):not(.mp-cand):not(.mp-esc):not(.mp-caminho):not(.mp-toque):not(:hover) text{ display:none }
+.scan .mp .mp-caminho text, .scan .mp .mp-toque text{ fill:var(--hx-texto); font-weight:700 }
 .scan .mp-no text{ font-size:max(16px, calc(var(--scan-txt-min, 11px) / var(--scan-esc, 1))); font-weight:500; fill:var(--hx-sec); paint-order:stroke; stroke:var(--hx-miolo); stroke-width:4px; stroke-linejoin:round }
 .scan .mp-corpo circle{ stroke:var(--hx-ok) }
 .scan .mp-lit circle{ fill:var(--mp-aceso); stroke:var(--mp-aceso) }
@@ -131,19 +139,23 @@
 .scan .mp .mp-no text.mp-pct{ font-size:max(16px, calc(var(--scan-txt-min, 11px) / var(--scan-esc, 1))) }   /* a chance no desktop e um text a parte, nao herda do rotulo */
 
 
-/* ---------- o celular (< 900 px): uma folha baixa presa embaixo (D1b-4); so os rotulos acesos e das candidatas */
+/* ---------- o celular (< 900 px): uma folha de 210 px presa embaixo (D1c), com o topo numa coluna de botoes a esquerda do desenho. Os nomes das
+   regioes saem: com o texto minimo de 11 px eles nao cabem (a dica do "i" diz o que e cada ponto) */
 @media not all and (min-width:900px){
   .scan{ inset:auto 0 0 0; width:100% }
-  .scan .scan-in{ padding:0 8px calc(12px + env(safe-area-inset-bottom, 0px)); border-bottom:0; border-radius:calc(var(--scan-raio) * 2) calc(var(--scan-raio) * 2) 0 0 }
-  .scan-alca{ display:block; width:40px; height:4px; margin:8px auto 0; border-radius:2px; background:var(--hx-borda) }
-  .scan-topo{ height:48px; gap:4px; padding-left:6px }
-  .scan-tit{ font-size:18px; margin-right:6px }
-  .scan .scan-dica{ top:58px; left:8px; right:8px; width:auto }
-  /* numa tela larga e baixa a folha nao passa de 56% da altura: o desenho encolhe e fica no centro */
-  .scan-moldura{ width:min(100%, calc(56dvh * 880 / 552)); margin:0 auto }
+  .scan .scan-in{ flex-direction:row; align-items:stretch; gap:4px; height:calc(210px + env(safe-area-inset-bottom, 0px));
+    padding:8px 8px calc(8px + env(safe-area-inset-bottom, 0px)) 4px; border-bottom:0; border-radius:calc(var(--scan-raio) * 2) calc(var(--scan-raio) * 2) 0 0 }
+  .scan-alca{ display:block; position:absolute; top:0; left:50%; width:40px; height:4px; margin:3px 0 0 -20px; border-radius:2px; background:var(--hx-borda) }
+  .scan-topo{ flex-direction:column; justify-content:flex-start; height:auto; width:44px; gap:0; padding:0 }
+  .scan .scan-tit{ height:36px }
+  .scan .db-selo{ height:14px; justify-content:center }
+  .scan .scan-ic{ width:44px; height:44px }
+  .scan .scan-info{ margin:auto 0 0 }
+  .scan .scan-dica{ position:fixed; top:auto; bottom:calc(222px + env(safe-area-inset-bottom, 0px)); left:8px; right:8px; width:auto;
+    max-height:calc(100dvh - 238px - env(safe-area-inset-bottom, 0px)); overflow:auto }
+  .scan-moldura{ flex:1 1 auto; height:100%; width:auto; max-width:calc(100% - 48px); margin:0 }
   .scan .mp-no text{ font-size:max(32px, calc(var(--scan-txt-min, 11px) / var(--scan-esc, 1))); stroke-width:8px }
-  .scan .mp-no:not(.mp-lit):not(.mp-cand):not(.mp-esc) text{ display:none }
-  .scan .mp-reg, .scan .mp-sub{ font-size:max(26px, calc(var(--scan-txt-min, 11px) / var(--scan-esc, 1))); letter-spacing:.08em }
+  .scan .mp-reg, .scan .mp-sub{ display:none }
   .scan .mp-divisas path{ stroke-width:2.5; stroke-dasharray:8 14 }
   .scan .mp-silhueta{ stroke-width:3 }
   .scan .mp-malha{ stroke-width:2 }

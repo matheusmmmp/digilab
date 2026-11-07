@@ -1198,14 +1198,20 @@ for (const largura of [390, 1280]) {
     await page.keyboard.press("Escape");                                              /* o Esc com a dica aberta fecha so a dica */
     await expect(raiz.locator("#db-dica")).toBeHidden();
     await expect(raiz).toBeVisible();
-    /* o tamanho (D1b-1, D1b-2): no desktop a direita, ate 720 px, com o pet a vista; no celular uma folha baixa presa embaixo */
+    /* o campo pequeno (D1c): o titulo e so o icone, com o nome para o leitor de tela; no desktop um painel de 420 px a direita, sob o relogio,
+       com o pet a vista; no celular uma folha de 210 px presa embaixo, com os botoes numa coluna a esquerda do desenho */
+    await expect(raiz.locator("#db-titulo svg")).toBeVisible();
+    await expect(raiz.locator("#db-titulo")).toHaveText("DigiBrain");
     const caixa = (await raiz.locator(".scan-in").boundingBox())!;
     if (largura >= 900) {
-      expect(caixa.width).toBeLessThanOrEqual(720.5);
+      expect(Math.round(caixa.width)).toBe(420);
+      expect(caixa.y).toBeGreaterThanOrEqual(60);
       expect(caixa.x).toBeGreaterThan(largura / 2);
     } else {
       expect(Math.round(caixa.y + caixa.height)).toBe(800);
-      expect(caixa.height).toBeLessThan(800 / 2);
+      expect(Math.round(caixa.height)).toBe(210);
+      const fechar = (await raiz.getByRole("button", { name: "Fechar DigiBrain" }).boundingBox())!, desenho = (await raiz.locator(".scan-moldura").boundingBox())!;
+      expect(fechar.x + fechar.width).toBeLessThanOrEqual(desenho.x + 0.5);
     }
     /* nada promete mais do que uma soma de pesos */
     expect(await raiz.innerText()).not.toMatch(/pensando|sentindo/i);
@@ -1426,6 +1432,42 @@ test("DigiBrain: um clique fora fecha o modal", async ({ page }) => {
   await expect(abre).toBeFocused();
   expect(erros).toEqual([]);
 });
+/* o campo pequeno (D1c): so os rotulos do caminho aceso e das candidatas ficam a vista; o de outro ponto aparece ao passar o mouse (desktop) ou
+   ao tocar nele (celular), e tocar nao grava evento */
+for (const largura of [390, 1280]) {
+  test(`DigiBrain: os rotulos so no caminho aceso, o resto ao passar o mouse ou tocar (${largura} px)`, async ({ page }) => {
+    await page.setViewportSize({ width: largura, height: 800 });
+    await semear(page, SAVE_V11);
+    const erros = vigiarErros(page);
+    await page.goto(APP + "#/pet/estado");
+    await expect(page.locator(".pet-tela")).toBeVisible();
+    if (largura < 900) await abrirLeque(page);
+    await page.getByRole("button", { name: "DigiBrain", exact: true }).click();
+    const raiz = page.locator("#pet-painel");
+    await expect(raiz.locator("svg.mp")).toBeVisible();
+    const r = await page.evaluate(() => {
+      const ac = (window as any).__digilab.digibrain().mapa.acesas;
+      const vis = (g: Element) => [...g.querySelectorAll("text")].some(t => getComputedStyle(t).display !== "none");
+      const nos = [...document.querySelectorAll("#pet-painel .mp-no")];
+      return {
+        caminho: ac.arestas.map((x: any) => x.entrada).sort(), regra: ac.regra, acao: ac.acao,
+        entradas: nos.filter(g => g.hasAttribute("data-entrada") && vis(g)).map(g => g.getAttribute("data-entrada")).sort(),
+        regras: nos.filter(g => g.hasAttribute("data-regra") && vis(g)).map(g => g.getAttribute("data-regra")),
+        acoesOk: nos.filter(g => g.hasAttribute("data-acao")).every(g => vis(g) === g.classList.contains("mp-cand")),
+        log: JSON.parse((window as any).__digilab.registro()).log.filter((e: unknown[]) => e[1] !== "t").length,
+      };
+    });
+    expect(r.entradas).toEqual(r.caminho);
+    expect(r.regras).toEqual([r.regra]);
+    expect(r.acoesOk).toBe(true);
+    const outro = raiz.locator(".mp-no[data-regra]:not(.mp-lit)").first(), rot = outro.locator("text");
+    await expect(rot).toBeHidden();
+    if (largura >= 900) { await outro.hover(); await expect(rot).toBeVisible(); }
+    else { await outro.locator("circle:not(.mp-alvo)").click(); await expect(outro).toHaveClass(/mp-toque/); await expect(rot).toBeVisible(); }
+    expect(await page.evaluate(() => JSON.parse((window as any).__digilab.registro()).log.filter((e: unknown[]) => e[1] !== "t").length)).toBe(r.log);
+    expect(erros).toEqual([]);
+  });
+}
 /* o "Atender" do cartao do chamado, dentro do scan aberto, grava um unico evento do dono. Um bebe v13 com o chamado de carinho em urgencia (55 min depois
    do inicio, restam 5 min da janela de 15: o cartao so aparece em urgencia, e o de fome so com a comida abaixo de FOME_FALA). O relogio da pagina fica parado (page.clock), senao a janela de
    5 min do pet fecharia em segundos de relogio antes do clique */
