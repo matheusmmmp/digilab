@@ -161,3 +161,37 @@ Não há run de pesquisa. O gate de cada etapa tem três partes:
 - **Testes:** `test/luta_efeitos_e1.test.ts` (mesmo estado visual para a mesma luta, fim igual ao do motor), `e2e/luta_efeitos_e1.spec.ts`
   (tremida aparece; com `prefers-reduced-motion` não aparece). `git diff origin/main -- web/app/motor digilab` vazio.
 - **Próxima:** E2, os projéteis por elemento (depende da D-LE-1).
+
+## 10. Resumo da E2, os projéteis e os golpes por elemento (2026-11-07)
+
+- **O defeito que o Matheus viu.** Na luta do GIF do empurrão ninguém dispara. O "sopro" do Gabumon é o clipe do golpe rápido, corpo a
+  corpo. O sprite largo do Zudomon fica longe na tela, e nada ligava a boca ao rival (registro de 2026-11, D-LE-E2-1).
+  - **O Vigia** só tem golpes corpo a corpo (D-LE-E2-3).
+  - **O projétil de verdade** (o do Tankmon) também quase não aparecia: era um círculo azul ou vermelho de 5 px, perto dos pés. O voo dura
+    de 5 a ~20 passos, e a tela desenha 1 quadro a cada 3 (D-LE-E2-2).
+- **Feito:**
+  - `palcoTR/elementosTR.ts`: o elemento pela linhagem, a tabela dos bots e dos NPCs e a exceção por Digimon, vazia (D-LE-1).
+  - `palcoTR/projeteisTR.ts`, puro: o voo de cada projétil, lido do `S.projeteis` a cada passo; a geometria do palco; os pixels da cabeça,
+    do rastro, da rajada e do estouro de cada elemento.
+  - `desenhoTR.ts`: desenha esses pixels na grade do sprite. O halo, o rastro e o brilho saem com `lighter`; o núcleo e o anel, sólidos.
+- **O desenho:**
+  - **o projétil:** vai da boca do atirador à frente do alvo, na altura do peito, e fica na tela pelo menos 12 passos;
+  - **a rajada:** no golpe rápido, na finta e no pesado que acertam, um feixe curto na cor do elemento vai da boca à frente do alvo
+    (D-LE-E2-4, interpretação, para a aprovação do Matheus);
+  - **as formas:** fogo (bola com língua de chama e brasas que sobem), gelo (lasca), raio (zigue-zague amarelo) e água e planta (gota
+    com respingos que caem);
+  - **o estouro:** sai na cor de quem bateu, por cima da faísca da E1.
+- **Movimento reduzido:** o halo e a chama não piscam, o rastro tem 2 passos e o estouro não clareia. O projétil continua na tela.
+- **Números:** `VOO` e `ELEMENTO_SEM_LINHAGEM` são PROPOSTOS e SEM FONTE (D-LE-E2-5 e D-LE-E2-8).
+- **Testes:**
+  - `test/luta_efeitos_e2.test.ts`:
+    - o projétil desenhado entre o atirador e o alvo em todo passo em que existe;
+    - a rajada entre os dois;
+    - o determinismo, com o fim igual ao do `ResultadoLutaTR`;
+    - o elemento de todo rival;
+    - a grade de pixel e o movimento reduzido.
+  - `e2e/luta_efeitos_e2.spec.ts`: o disparo do Tankmon aparece no palco, também com o movimento reduzido.
+  - `git diff origin/v3-luta-empurrao-motor -- web/app/motor digilab` sai vazio.
+- **Capturas:** `e2e_capturas/luta_efeitos_e2.spec.ts`, no servidor do Vite: o Gabumon contra o Vigia, o Agumon contra o Gabumon e o
+  Gabumon contra o Tankmon, em 390 e 1280 px, nas duas peles. Os Cenários do Lab não abrem a luta em tempo real (D-LE-E2-9).
+- **Próxima:** E3, a telegrafia e o chão.
