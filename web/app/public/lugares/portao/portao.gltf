@@ -1,0 +1,146 @@
+{
+ "asset": {
+  "generator": "Khronos glTF Blender I/O v4.5.51",
+  "version": "2.0",
+  "extras": {
+   "gerado_por_ia": true,
+   "gerador": "Meshy (meshy.ai), plano Pro, conta do Matheus",
+   "tarefas_meshy": {
+    "concept": "01a1b36f-0f5a-7346-bea1-dd5b2513431d",
+    "vistas": "01a1b46a-10ed-765f-9b9a-e49c8aa237e1",
+    "malha": "01a1b46a-daca-76a3-b832-6b8df0d0f489"
+   },
+   "pipeline": "docs/TAREFA_V3_ITENS_3D.md; TAREFA_V3_LUGARES_3D.md (P1); a malha da Meshy 1,5 vez mais funda (o lado fino da multivista); a cor chapada nas sete cores do concept (achatar_cores.py), sem a limpeza por face nem os tracos (quebravam o portal em facetas); a mascara do portal ao lado (portao_luz.png)",
+   "licenca": "License.txt ao lado"
+  }
+ },
+ "scene": 0,
+ "scenes": [
+  {
+   "name": "Scene",
+   "nodes": [
+    0
+   ]
+  }
+ ],
+ "nodes": [
+  {
+   "mesh": 0,
+   "name": "portao"
+  }
+ ],
+ "materials": [
+  {
+   "name": "portao",
+   "pbrMetallicRoughness": {
+    "baseColorTexture": {
+     "index": 0
+    },
+    "metallicFactor": 0
+   }
+  }
+ ],
+ "meshes": [
+  {
+   "name": "portao",
+   "primitives": [
+    {
+     "attributes": {
+      "POSITION": 0,
+      "NORMAL": 1,
+      "TEXCOORD_0": 2
+     },
+     "indices": 3,
+     "material": 0
+    }
+   ]
+  }
+ ],
+ "textures": [
+  {
+   "sampler": 0,
+   "source": 0
+  }
+ ],
+ "images": [
+  {
+   "mimeType": "image/png",
+   "name": "portao_cor",
+   "uri": "portao_cor.png"
+  }
+ ],
+ "accessors": [
+  {
+   "bufferView": 0,
+   "componentType": 5126,
+   "count": 3401,
+   "max": [
+    0.6719310879707336,
+    0.950920045375824,
+    0.39742207527160645
+   ],
+   "min": [
+    -0.6724250316619873,
+    -0.9443880915641785,
+    -0.3976980447769165
+   ],
+   "type": "VEC3"
+  },
+  {
+   "bufferView": 1,
+   "componentType": 5126,
+   "count": 3401,
+   "type": "VEC3"
+  },
+  {
+   "bufferView": 2,
+   "componentType": 5126,
+   "count": 3401,
+   "type": "VEC2"
+  },
+  {
+   "bufferView": 3,
+   "componentType": 5123,
+   "count": 4728,
+   "type": "SCALAR"
+  }
+ ],
+ "bufferViews": [
+  {
+   "buffer": 0,
+   "byteLength": 40812,
+   "byteOffset": 0,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 40812,
+   "byteOffset": 40812,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 27208,
+   "byteOffset": 81624,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 9456,
+   "byteOffset": 108832,
+   "target": 34963
+  }
+ ],
+ "samplers": [
+  {
+   "magFilter": 9729,
+   "minFilter": 9987
+  }
+ ],
+ "buffers": [
+  {
+   "byteLength": 118288,
+   "uri": "portao.bin"
+  }
+ ]
+}
