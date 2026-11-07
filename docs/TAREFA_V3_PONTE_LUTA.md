@@ -333,3 +333,10 @@ D-PE4-3 estão em `docs/registro/2026-11.md`.
   modular; 20 vidas com `eps` — v16, v17 modular, v17 A e v17 com um `"cb"` no meio × 5 sementes — refazem bit a bit; com o A o fator é nulo; a validação da marca). **G2:** o gabarito da
   PE0, o da PE3 e os testes da PE3 (marca `{ luta: true }`) passam sem mudar nenhum arquivo de gabarito.
 - **Limite:** não se mediu se o pet luta melhor; é outra pergunta (PL-8). O A não recebe nada. Fica a PE5 (a lembrança do rival), só se o Matheus decidir (PL-6).
+
+## Decisões depois da PE4 (2026-11-07)
+
+Decididas pelo Matheus no chat em 2026-11-07 ("Sim, as duas"), pela recomendação do Gerente da V3:
+
+- **A D-PE3-3 fica DECIDIDA como está:** a vida perdida em S de uma luta é `Math.round(dano × S / vida máxima)`, cortada em [0, S], com o dano cortado na vida que o pet tinha (`docs/registro/2026-11.md`, D-PE3-3). Custo de errar aceito: o golpe final que passa da vida não dói a mais.
+- **A PE5 (PL-6) espera a rodada de equilíbrio da luta:** o empurrão (v18) e os efeitos da luta estão mudando agora, e a confiança M1 já lê o rival. Custo de errar aceito: até lá, o pet não lembra de um rival em particular.
