@@ -6,7 +6,8 @@
         "hooks": [
           {"type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/h1_engine.py\"", "timeout": 30},
           {"type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/h6_capturas.py\"", "timeout": 30},
-          {"type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/h9_faixas.py\"", "timeout": 30}
+          {"type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/h9_faixas.py\"", "timeout": 30},
+          {"type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/h11_indice.py\"", "timeout": 30}
         ]
       },
       {
@@ -15,7 +16,8 @@
           {"type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/h3_main.py\"", "timeout": 30},
           {"type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/h4_autorizo.py\"", "timeout": 30},
           {"type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/h6_capturas.py\"", "timeout": 30},
-          {"type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/h10_pre_run.py\"", "timeout": 150}
+          {"type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/h10_pre_run.py\"", "timeout": 150},
+          {"type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/h11_indice.py\"", "timeout": 30}
         ]
       }
     ],
