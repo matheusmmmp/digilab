@@ -6,7 +6,7 @@
 import { EMOCAO_TXT, NOME_PET, type AcaoPet, type LoboBarra, type RegraLobos } from "../../motor/index.ts";
 import { useJogo } from "../jogo.ts";
 import { lutaSeguraTempo } from "../luta.ts";
-import { estadoSelo } from "../seloDigiBrain.ts";
+import { estadoSelo, type EstadoSelo } from "../seloDigiBrain.ts";
 import { useTempo } from "../tempo.ts";
 import { hhmm } from "../telas/pet/TelaPet.tsx";
 import { LegendaMapa, MapaPesos } from "./MapaPesos.tsx";
@@ -17,7 +17,7 @@ export const REGRA_TXT: Record<RegraLobos, string> = {
   abandono: "Sem cuidado há muito tempo", fome_moderada: "Com fome", tempo_livre: "Tempo livre",
 };
 /** a acao no infinitivo ("decidiu brincar") */
-const ACAO_INF: Record<AcaoPet, string> = {
+export const ACAO_INF: Record<AcaoPet, string> = {
   ocioso: "ficar à toa", dormir: "dormir", comer: "comer", brincar: "brincar", chamar_atencao: "chamar você", explorar: "explorar", emburrar: "emburrar",
 };
 /** a acao como opcao (curta) */
@@ -25,17 +25,17 @@ export const ACAO_CURTA: Record<AcaoPet, string> = {
   ocioso: "à toa", dormir: "dormir", comer: "comer", brincar: "brincar", chamar_atencao: "chamar você", explorar: "explorar", emburrar: "emburrar",
 };
 /** as entradas da percepcao, com os nomes da tela do Pet (a fome e a barra "comida") */
-const ENTRADA_TXT: Record<string, string> = {
+export const ENTRADA_TXT: Record<string, string> = {
   fome: "comida", higiene: "higiene", energia: "energia", humor: "humor", saude: "saúde", sujeira: "sujeira", dormindo: "dormindo",
   hora: "hora do dia", ticks_sem_cuidado: "tempo sem cuidado", tedio: "tédio", solidao: "solidão", estresse: "estresse", dor: "dor", susto: "susto",
 };
 /** os lobos das barras, com os nomes do codigo em portugues de tela; o piso so aparece quando entra na conta */
-const LOBO_TXT: [LoboBarra, string][] = [["impulsos", "Impulsos"], ["decisao", "Aprendido"], ["corpo", "Corpo"], ["memoria_emocao", "Memória e emoção"], ["piso", "Piso"]];
-const COM_SINAL: ReadonlySet<LoboBarra> = new Set(["decisao", "corpo"]);
+export const LOBO_TXT: [LoboBarra, string][] = [["impulsos", "Impulsos"], ["decisao", "Aprendido"], ["corpo", "Corpo"], ["memoria_emocao", "Memória e emoção"], ["piso", "Piso"]];
+export const COM_SINAL: ReadonlySet<LoboBarra> = new Set(["decisao", "corpo"]);
 
-const pct = (v: number, casas: number, sinal: boolean): string =>
+export const pct = (v: number, casas: number, sinal: boolean): string =>
   (sinal && v > 0 ? "+" : "") + (v * 100).toLocaleString("pt-BR", { minimumFractionDigits: casas, maximumFractionDigits: casas }).replace("-", "−") + "%";
-const num = (v: number): string => (v > 0 ? "+" : "") + v.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace("-", "−");
+export const num = (v: number): string => (v > 0 ? "+" : "") + v.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace("-", "−");
 
 /** o cerebro A, ICONE ESTATICO do botao do celular: uma cor por lobo (impulsos, aprendido, corpo, memoria e emocao). Nada aqui acende
     nem anima; o desenho que acende e o mapa dos pesos, dentro do painel */
@@ -53,14 +53,17 @@ export function IconeCerebro({ largura = 32 }: { largura?: number }) {
 }
 
 /** o selo (seloDigiBrain.ts): "replay" num replay, "ao vivo" so com o tempo do jogo andando, senao "pausado" */
-export function SeloDigiBrain({ replay }: { replay: boolean }) {
+export function useEstadoSelo(replay: boolean): EstadoSelo {
   const { motor: m, nascendo, erroSave } = useJogo(), { velocidade } = useTempo();
-  const estado = estadoSelo({ replay, velocidade, nascendo, erroSave: erroSave !== null, lutaSegura: lutaSeguraTempo(), morto: m.morte !== null });
+  return estadoSelo({ replay, velocidade, nascendo, erroSave: erroSave !== null, lutaSegura: lutaSeguraTempo(), morto: m.morte !== null });
+}
+export function SeloDigiBrain({ replay }: { replay: boolean }) {
+  const estado = useEstadoSelo(replay);
   return <span className={"db-selo db-selo--" + estado}><i aria-hidden="true" />{estado === "vivo" ? "ao vivo" : estado}</span>;
 }
 
 /** a emocao de hoje do pet, como selo a parte com a fonte (PW-6): a ultima emocao da memoria por espacos, a mesma do palco */
-function SeloEmocao() {
+export function SeloEmocao() {
   const { motor: m } = useJogo();
   const em = (m.pol.mem as unknown as { emocoes: { nome: string }[] }).emocoes, ult = em[em.length - 1];
   return <span className="db-emo">{ult ? <>emoção de hoje: {EMOCAO_TXT[ult.nome][0]} · da memória do pet</> : "nenhuma emoção na memória do pet ainda"}</span>;

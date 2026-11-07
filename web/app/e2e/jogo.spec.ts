@@ -1204,16 +1204,36 @@ for (const largura of [390, 1280]) {
     const raiz = page.locator("#pet-painel");
     await expect(raiz.locator(".digibrain")).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-    await expect(raiz.locator(".db-selo")).toHaveText("ao vivo");                    /* o tempo do jogo andando */
-    /* o painel le o motor: uma decisao, as barras dos lobos (o piso so quando entra na conta) e uma escolhida */
+    /* o selo so como forma, com o nome acessivel (D1b-5): o tempo do jogo andando */
+    await expect(raiz.getByRole("img", { name: "ao vivo" })).toBeVisible();
+    /* o modal pequeno (D1b): so o mapa dos pesos do motor, sem os cartoes nem a legenda do rodape */
     const db = await page.evaluate(() => (window as any).__digilab.digibrain());
     expect(db).not.toBeNull();
     expect(db.decisao).not.toBeNull();
-    await expect(raiz.locator(".db-barras li")).toHaveCount(db.decisao.barras.piso === 0 ? 4 : 5);
-    await expect(raiz.locator(".db-barras li[data-lobo='impulsos']")).toBeVisible();
-    await expect(raiz.locator(".db-opcoes li.esc")).toHaveCount(1);
-    await expect(raiz.locator(".db-emo")).toContainText(/memória do pet/);
-    await expect(raiz.locator(".db-ultimas li").first()).toBeVisible();
+    await expect(raiz.locator("svg.mp")).toBeVisible();
+    await expect(raiz.locator(".db-barras, .db-opcoes, .db-ultimas, .db-emo, .mp-nota")).toHaveCount(0);
+    await expect(raiz.locator(".mp-leg")).toBeHidden();                               /* a legenda mora na dica do "i" (D1b-7) */
+    await raiz.getByRole("button", { name: "O que é este desenho" }).click();
+    await expect(raiz.locator("#db-dica")).toContainText("só desenho");
+    await expect(raiz.locator(".mp-leg")).toBeVisible();
+    await page.keyboard.press("Escape");                                              /* o Esc com a dica aberta fecha so a dica */
+    await expect(raiz.locator("#db-dica")).toBeHidden();
+    await expect(raiz).toBeVisible();
+    /* o campo pequeno (D1c): o titulo e so o icone, com o nome para o leitor de tela; no desktop um painel de 420 px a direita, sob o relogio,
+       com o pet a vista; no celular uma folha de 210 px presa embaixo, com os botoes numa coluna a esquerda do desenho */
+    await expect(raiz.locator("#db-titulo svg")).toBeVisible();
+    await expect(raiz.locator("#db-titulo")).toHaveText("DigiBrain");
+    const caixa = (await raiz.locator(".scan-in").boundingBox())!;
+    if (largura >= 900) {
+      expect(Math.round(caixa.width)).toBe(420);
+      expect(caixa.y).toBeGreaterThanOrEqual(60);
+      expect(caixa.x).toBeGreaterThan(largura / 2);
+    } else {
+      expect(Math.round(caixa.y + caixa.height)).toBe(800);
+      expect(Math.round(caixa.height)).toBe(210);
+      const fechar = (await raiz.getByRole("button", { name: "Fechar DigiBrain" }).boundingBox())!, desenho = (await raiz.locator(".scan-moldura").boundingBox())!;
+      expect(fechar.x + fechar.width).toBeLessThanOrEqual(desenho.x + 0.5);
+    }
     /* nada promete mais do que uma soma de pesos */
     expect(await raiz.innerText()).not.toMatch(/pensando|sentindo/i);
     await page.screenshot({ path: test.info().outputPath(`digibrain-${largura}.png`) });     /* a captura do gate da etapa 5 */
@@ -1222,11 +1242,13 @@ for (const largura of [390, 1280]) {
     expect(erros).toEqual([]);
   });
 }
-/* o mapa dos pesos (MapaPesos.tsx), no lugar do icone estatico: cada traco e um peso do motor (Motor.digibrain().mapa), e a cada decisao
-   acendem a regra, os candidatos com a chance, a acao escolhida e o lobo que pesou mais; entre duas decisoes nada anima */
+/* o mapa dos pesos (ScanDigiBrain.tsx, MapaScan), no lugar do icone estatico: cada traco e um peso do motor (Motor.digibrain().mapa), e a cada
+   decisao acendem a regra, os candidatos com a chance e a acao escolhida (o "pesou mais" saiu no modal pequeno, D1b-6). Com "reduzir movimento" (D1-8, o contrato do
+   reduzir: zero animacao) so o destaque troca; o movimento sem o reduzir tem o teste logo abaixo */
 for (const largura of [390, 1280]) {
   test(`DigiBrain: o mapa dos pesos acende a cada decisão em ${largura} px`, async ({ page }) => {
     await page.setViewportSize({ width: largura, height: 800 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
     await semear(page, SAVE_V11);
     const erros = vigiarErros(page);
     await page.goto(APP + "#/pet/estado");
@@ -1247,7 +1269,7 @@ for (const largura of [390, 1280]) {
           esc: [...s.querySelectorAll(".mp-esc")].map(g => g.getAttribute("data-acao")),
           cand: [...s.querySelectorAll(".mp-cand")].map(g => g.getAttribute("data-acao")).sort(),
           pct: s.querySelectorAll(".mp-pct").length, top: [...s.querySelectorAll("[data-entrada].mp-lit")].map(g => g.getAttribute("data-entrada")).sort(),
-          dest: [...s.querySelectorAll(".mp-dest")].map(g => g.getAttribute("data-lobo")), db,
+          dest: s.querySelectorAll(".mp-dest").length, regioes: [...s.querySelectorAll(".mp-reg")].map(t => t.textContent), db,
         };
       });
       const m = r.db.mapa, d = r.db.decisao;
@@ -1259,7 +1281,8 @@ for (const largura of [390, 1280]) {
       expect(r.cand).toEqual(d.chances.map((c: { acao: string }) => c.acao).sort());
       expect(r.pct).toBe(d.chances.length);
       expect(r.top).toEqual(d.percepcao.map((p: { entrada: string }) => p.entrada).sort());
-      expect(r.dest).toEqual([m.acesas.lobo_decisivo]);
+      expect(r.dest).toBe(0);
+      expect(r.regioes).toEqual(["ações", "regras", "percepção"]);
       return r.n;
     };
     const n0 = await conferir();
@@ -1279,6 +1302,220 @@ for (const largura of [390, 1280]) {
     expect(erros).toEqual([]);
   });
 }
+
+/* o movimento do scan (D1-2, D1-8): sem "reduzir movimento", numa decisao NOVA a varredura passa uma vez e o pulso percorre as arestas acesas
+   logo depois, e os dois terminam (saem do DOM e nao deixam animacao); o primeiro quadro ao abrir nao pulsa; o unico movimento que fica e o
+   giro lento do plano (so no desktop). Em 10 min/s do pet as decisoes (uma a cada 15 min dele) chegam mais depressa que a animacao e so o
+   destaque troca, entao o teste poe o tempo em 1x (uma decisao a cada 15 s) */
+test("DigiBrain: sem reduzir o movimento, a varredura e o pulso passam numa decisão nova e terminam", async ({ page }) => {
+  test.setTimeout(120_000);
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await semear(page, SAVE_V11);
+  await page.clock.install({ time: new Date("2026-10-19T12:00:00Z") });   /* o relogio da pagina corre sozinho; a decisao nova vem do runFor abaixo */
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/config");
+  await page.getByRole("button", { name: /^Registro e replay/ }).click();
+  await page.getByRole("button", { name: "1x", exact: true }).click();
+  await page.evaluate(() => { location.hash = "#/pet/estado"; });
+  await expect(page.locator(".pet-tela")).toBeVisible();
+  await page.getByRole("button", { name: "DigiBrain", exact: true }).click();
+  const raiz = page.locator("#pet-painel");
+  await expect(raiz.locator("svg.mp")).toBeVisible();
+  /* o primeiro quadro, ao abrir, nao pulsa */
+  await expect(raiz.locator(".scan-varredura, .mp-pulso")).toHaveCount(0);
+  const animacoes = () => page.evaluate(() => (document.getAnimations() as any[])
+    .filter(a => a.effect?.target?.closest?.("#pet-painel"))
+    .map(a => { const t = a.effect.getTiming(); return { nome: a.animationName as string, duracao: t.duration as number, atraso: t.delay as number, infinita: t.iterations === Infinity }; }));
+  /* uma decisao nova (1x e 1 min do pet por minuto do relogio, uma decisao a cada 15 min dele): o relogio falso salta 16 min (fastForward dispara cada timer uma vez: o passo do tempo cobre os 16 min e o repinte e um so), e o gap
+     desde a decisao anterior e de mais de 2,15 s */
+  await page.clock.fastForward(16 * 60_000);
+  await expect(raiz.locator(".scan-varredura")).toBeAttached({ timeout: 10_000 });
+  const durante = await animacoes();
+  expect(durante.filter(a => a.nome === "scan-varre")).toEqual([{ nome: "scan-varre", duracao: 1200, atraso: 0, infinita: false }]);
+  const acesas = await raiz.locator("svg.mp .mp-acesas path").count();
+  const pulsos = durante.filter(a => a.nome === "scan-pulso");
+  expect(pulsos, "um pulso por aresta acesa").toHaveLength(acesas);
+  expect(pulsos.every(p => p.duracao === 800 && p.atraso === 1200 && !p.infinita)).toBe(true);
+  /* e terminam: o timer do componente (no relogio falso) tira os dois do DOM, e do scan so fica o giro lento do plano */
+  await page.clock.fastForward(3000);
+  await expect(raiz.locator(".scan-varredura")).toHaveCount(0, { timeout: 6000 });
+  await expect(raiz.locator(".mp-pulso")).toHaveCount(0);
+  const depois = await animacoes();
+  expect(depois.map(a => a.nome)).toEqual(["scan-giro"]);
+  expect(depois[0]!.infinita).toBe(true);
+  expect(erros).toEqual([]);
+});
+/* o scan e um dialogo modal: o foco fica preso enquanto aberto, o Esc fecha e o foco volta a quem abriu. A pilha (4a linha) desmonta enquanto o
+   scan esta aberto, entao o foco tem de voltar ao botao remontado; a linha do agora (no topo) continua la */
+test("DigiBrain: o scan prende o foco, o Esc fecha e o foco volta a quem abriu (a pilha e a linha do agora)", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await semear(page, SAVE_V11);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/pet/estado");
+  await expect(page.locator(".pet-tela")).toBeVisible();
+  const raiz = page.locator("#pet-painel");
+  const abridores = [page.locator(".pet-hud [data-painel-pet='digibrain'] .hud-painel__bt"), page.locator("button.pet-agora")];
+  for (const abre of abridores) {
+    await abre.click();
+    await expect(raiz.locator(".digibrain")).toBeVisible();
+    /* o Tab alem do ultimo item de um <dialog> modal sai para a interface do navegador (document.activeElement vira o body): isso nao e vazar para a
+       pagina de tras. O que nao pode acontecer e o foco cair num elemento de fora do dialogo */
+    for (let i = 0; i < 12; i++) {
+      await page.keyboard.press("Tab");
+      expect(await page.evaluate(() => { const a = document.activeElement; return a === document.body || !!a?.closest("#pet-painel"); }), `o foco vazou do scan no Tab ${i + 1}`).toBe(true);
+    }
+    /* e a pagina de tras e inerte: nem por script um botao dela recebe o foco */
+    expect(await page.evaluate(() => { const b = document.querySelector<HTMLElement>("button.pet-agora")!; b.focus(); return document.activeElement === b; })).toBe(false);
+    await page.keyboard.press("Escape");
+    await expect(raiz).toHaveCount(0);
+    await expect(abre).toBeFocused();
+  }
+  expect(erros).toEqual([]);
+});
+/* nenhum texto do desenho abaixo de 11 px na tela (a fonte do SVG e max(base, 11px / escala)); no celular so os rotulos acesos e os das candidatas */
+for (const [largura, altura] of [[390, 844], [1280, 800], [1920, 950]]) {
+  test(`DigiBrain: nenhum texto do mapa fica abaixo de 11 px em ${largura} px`, async ({ page }) => {
+    await page.setViewportSize({ width: largura!, height: altura! });
+    await semear(page, SAVE_V11);
+    const erros = vigiarErros(page);
+    await page.goto(APP + "#/pet/estado");
+    await expect(page.locator(".pet-tela")).toBeVisible();
+    if (largura! < 900) await abrirLeque(page);
+    await page.getByRole("button", { name: "DigiBrain", exact: true }).click();
+    const mapa = page.locator("#pet-painel svg.mp");
+    await expect(mapa).toBeVisible();
+    await page.evaluate(() => document.fonts.ready);
+    const pequenos = await mapa.evaluate(svg => [...svg.querySelectorAll("text")]
+      .filter(t => getComputedStyle(t).display !== "none")
+      .map(t => ({ txt: t.textContent, h: t.getBoundingClientRect().height }))
+      .filter(t => t.h < 11));
+    expect(pequenos, "textos do mapa com menos de 11 px de altura").toEqual([]);
+    /* os rotulos de regiao (.mp-reg, .mp-sub) nao se sobrepoem entre si */
+    const colisoes = await page.evaluate(() => {
+      const c = (e: Element) => { const r = e.getBoundingClientRect(); return { l: r.left, r: r.right, t: r.top, b: r.bottom }; };
+      const cruza = (a: ReturnType<typeof c>, b: ReturnType<typeof c>) => a.l < b.r && b.l < a.r && a.t < b.b && b.t < a.b;
+      const rot = [...document.querySelectorAll("#pet-painel .mp-reg, #pet-painel .mp-sub")].filter(t => getComputedStyle(t).display !== "none");
+      const out: string[] = [];
+      rot.forEach((a, i) => {
+        rot.slice(i + 1).forEach(b => { if (cruza(c(a), c(b))) out.push(`"${a.textContent}" cobre "${b.textContent}"`); });
+      });
+      return out;
+    });
+    expect(colisoes, "rotulos de regiao que se sobrepoem").toEqual([]);
+    expect(erros).toEqual([]);
+  });
+}
+/* o mapa em texto troca o desenho, no mesmo tamanho: nao cobre os botoes do topo, e o modal cabe inteiro numa janela baixa */
+test("DigiBrain: o mapa em texto fica no lugar do desenho e o modal cabe a 1280x540", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 540 });
+  await semear(page, SAVE_V11);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/pet/estado");
+  await expect(page.locator(".pet-tela")).toBeVisible();
+  await page.getByRole("button", { name: "DigiBrain", exact: true }).click();
+  const raiz = page.locator("#pet-painel");
+  const bt = raiz.getByRole("button", { name: "O mapa em texto" });
+  await expect(bt).toHaveAttribute("aria-pressed", "false");
+  await bt.click();
+  await expect(bt).toHaveAttribute("aria-pressed", "true");
+  await expect(raiz.locator(".scan-texto")).toBeVisible();
+  await expect(raiz.locator("svg.mp")).toHaveCount(0);
+  const r = await page.evaluate(() => {
+    const q = (s: string) => document.querySelector(s)!.getBoundingClientRect();
+    const t = q("#pet-painel .scan-texto"), topo = q("#pet-painel .scan-topo"), cx = q("#pet-painel .scan-in");
+    const cruza = (a: DOMRect, b: DOMRect) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
+    return { topo: cruza(t, topo), h: t.height, fundo: cx.bottom, alto: innerHeight };
+  });
+  expect(r.topo, "o texto cobre o topo com os botoes").toBe(false);
+  expect(r.h).toBeGreaterThan(40);
+  expect(r.fundo, "o modal passa do fim da janela").toBeLessThanOrEqual(r.alto);
+  await bt.click();
+  await expect(raiz.locator("svg.mp")).toBeVisible();
+  expect(erros).toEqual([]);
+});
+/* um clique fora do modal (no veu) fecha, e o foco volta a quem abriu; o CENA.coberto saiu (D1b-3), conferido na fonte pelo Vitest */
+test("DigiBrain: um clique fora fecha o modal", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await semear(page, SAVE_V11);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/pet/estado");
+  await expect(page.locator(".pet-tela")).toBeVisible();
+  const abre = page.locator("button.pet-agora");
+  await abre.click();
+  const raiz = page.locator("#pet-painel");
+  await expect(raiz.locator("svg.mp")).toBeVisible();
+  const antes = (await numLog(page, "d")) + (await numLog(page, "dc"));
+  await page.mouse.click(200, 600);
+  await expect(raiz).toHaveCount(0);
+  /* o clique cai no veu, nao na ilha: nenhum carinho nem evento do dono (rev-replay da D1b) */
+  expect((await numLog(page, "d")) + (await numLog(page, "dc"))).toBe(antes);
+  await expect(abre).toBeFocused();
+  expect(erros).toEqual([]);
+});
+/* o campo pequeno (D1c): so os rotulos do caminho aceso e das candidatas ficam a vista; o de outro ponto aparece ao passar o mouse (desktop) ou
+   ao tocar nele (celular), e tocar nao grava evento */
+for (const largura of [390, 1280]) {
+  test(`DigiBrain: os rotulos so no caminho aceso, o resto ao passar o mouse ou tocar (${largura} px)`, async ({ page }) => {
+    await page.setViewportSize({ width: largura, height: 800 });
+    await semear(page, SAVE_V11);
+    const erros = vigiarErros(page);
+    await page.goto(APP + "#/pet/estado");
+    await expect(page.locator(".pet-tela")).toBeVisible();
+    if (largura < 900) await abrirLeque(page);
+    await page.getByRole("button", { name: "DigiBrain", exact: true }).click();
+    const raiz = page.locator("#pet-painel");
+    await expect(raiz.locator("svg.mp")).toBeVisible();
+    const r = await page.evaluate(() => {
+      const ac = (window as any).__digilab.digibrain().mapa.acesas;
+      const vis = (g: Element) => [...g.querySelectorAll("text")].some(t => getComputedStyle(t).display !== "none");
+      const nos = [...document.querySelectorAll("#pet-painel .mp-no")];
+      return {
+        caminho: ac.arestas.map((x: any) => x.entrada).sort(), regra: ac.regra, acao: ac.acao,
+        entradas: nos.filter(g => g.hasAttribute("data-entrada") && vis(g)).map(g => g.getAttribute("data-entrada")).sort(),
+        regras: nos.filter(g => g.hasAttribute("data-regra") && vis(g)).map(g => g.getAttribute("data-regra")),
+        acoesOk: nos.filter(g => g.hasAttribute("data-acao")).every(g => vis(g) === g.classList.contains("mp-cand")),
+        log: JSON.parse((window as any).__digilab.registro()).log.filter((e: unknown[]) => e[1] !== "t").length,
+      };
+    });
+    expect(r.entradas).toEqual(r.caminho);
+    expect(r.regras).toEqual([r.regra]);
+    expect(r.acoesOk).toBe(true);
+    const outro = raiz.locator(".mp-no[data-regra]:not(.mp-lit)").first(), rot = outro.locator("text");
+    await expect(rot).toBeHidden();
+    if (largura >= 900) { await outro.hover(); await expect(rot).toBeVisible(); }
+    else { await outro.locator("circle:not(.mp-alvo)").click(); await expect(outro).toHaveClass(/mp-toque/); await expect(rot).toBeVisible(); }
+    expect(await page.evaluate(() => JSON.parse((window as any).__digilab.registro()).log.filter((e: unknown[]) => e[1] !== "t").length)).toBe(r.log);
+    expect(erros).toEqual([]);
+  });
+}
+/* o "Atender" do cartao do chamado, dentro do scan aberto, grava um unico evento do dono. Um bebe v13 com o chamado de carinho em urgencia (55 min depois
+   do inicio, restam 5 min da janela de 15: o cartao so aparece em urgencia, e o de fome so com a comida abaixo de FOME_FALA). O relogio da pagina fica parado (page.clock), senao a janela de
+   5 min do pet fecharia em segundos de relogio antes do clique */
+test("DigiBrain: o Atender do chamado dentro do scan grava um único evento", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await semear(page, { semente: 4242, versao: 13, log: [[480, "t", 55]] });
+  await page.clock.install({ time: new Date("2026-10-19T12:00:00Z") });
+  await page.clock.pauseAt(new Date("2026-10-19T12:00:01Z"));
+  const erros = vigiarErros(page);
+  const eventos = async () => (await numLog(page, "d")) + (await numLog(page, "dc"));
+  await page.goto(APP + "#/pet/estado");
+  await expect(page.locator(".pet-tela")).toBeVisible();
+  await page.getByRole("button", { name: "DigiBrain", exact: true }).click();
+  const raiz = page.locator("#pet-painel");
+  await expect(raiz.locator(".digibrain")).toBeVisible();
+  const cartao = raiz.locator(".pet-alerta .chamado");
+  await expect(cartao).toBeVisible();
+  /* com um chamado aberto, o foco ao abrir fica no topo do modal (o Fechar), nao num botao do chamado (rev-a11y da D1b) */
+  expect(await page.evaluate(() => !!document.activeElement?.closest("#pet-painel .scan-topo"))).toBe(true);
+  await expect(raiz.locator("[role=status]")).toContainText(/Chamado/);
+  const antes = await eventos();
+  await cartao.getByRole("button", { name: "Atender" }).click();
+  await expect.poll(eventos).toBe(antes + 1);
+  await page.waitForTimeout(500);
+  expect(await eventos(), "o Atender gravou mais de um evento").toBe(antes + 1);
+  expect(erros).toEqual([]);
+});
 
 /* ---------------------------------------------------------------- a tela Pet como a Home da referencia (docs/TAREFA_V2_TELA_PET.md): o cenario
    com a maior area, tres acoes em destaque (as outras em Mais) e os detalhes sob demanda (folha no celular, coluna no desktop) */
