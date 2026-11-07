@@ -23,6 +23,7 @@ import {
   hashSemente, jogarTR, lutadorBot, perfilDe, sementeDe, CAT,
   type Forma, type FormaAdultaNormal, type ListaGambits, type Lutador, type RegrasLuta,
 } from "../../motor/index.ts";
+import { comEmpurrao } from "./empurrao.ts";
 import { VARIANTES } from "./variantes_fase2.ts";
 
 const arg = (k: string): string | null => { const i = process.argv.indexOf("--" + k); return i < 0 ? null : process.argv[i + 1] ?? null; };
@@ -37,7 +38,7 @@ if (variante !== null && !VARIANTES[variante]) throw new Error("variante desconh
 /* --disparo X: o multiplicador do disparo do tempo real (a grade do passo do disparo, depois da fase 3) */
 const disparo = arg("disparo") === null ? {} : { disparo: Number(arg("disparo")) };
 if ("disparo" in disparo && !(disparo.disparo > 0)) throw new Error("--disparo precisa ser um numero > 0");
-const R: RegrasLuta = { ...CV21E_TR, relogio: { ...(arg("relogio") === "v13" ? RELOGIO_V13 : RELOGIO_V14), ...JSON.parse(arg("relogio-diag") ?? "{}"), ...disparo } };
+const R: RegrasLuta = { ...CV21E_TR, relogio: comEmpurrao({ ...(arg("relogio") === "v13" ? RELOGIO_V13 : RELOGIO_V14), ...JSON.parse(arg("relogio-diag") ?? "{}"), ...disparo }) };   /* --empurrao v18 */
 /* as listas da rodada: a semente de hoje, as candidatas (--listas v14) e a variante por cima */
 const LISTAS: Record<string, ListaGambits> = { ...(arg("listas") === "v14" ? LISTAS_V14 : arg("listas") === "v14r1" ? LISTAS_V14_R1 : {}), ...(variante ? VARIANTES[variante]() : {}) };
 const SEMENTES_POR_BASE = 20;

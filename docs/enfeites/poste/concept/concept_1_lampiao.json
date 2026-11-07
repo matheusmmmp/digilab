@@ -1,0 +1,9 @@
+{
+ "id": "01a1b125-a729-7760-899c-30bacfed4a68",
+ "ai_model": "nano-banana-2",
+ "prompt": "Concept art of a single old street lamp post prop, abandoned in nature, for a cozy low-poly 3D island game for children, cute and friendly, nothing dirty or broken. Match exactly the art style of the reference screenshots: simple chunky rounded shapes, slightly thick proportions, flat toon shading with three tones, soft saturated colors, no outlines, no realistic texture. A tall post on a small round base with one lantern head on top, the lantern glass warm yellow. Show only the lamp post, full object in frame, three-quarter view from slightly above, on a plain light grey background, no ground, no shadow, no text, no logo, no characters. A dark green vintage lamp post with a classic four-sided lantern on top, a green vine with small leaves winding around the post and a little patch of moss on the base.",
+ "status": "SUCCEEDED",
+ "consumed_credits": 6,
+ "created_at": 1793973397508,
+ "finished_at": 1793973416096
+}

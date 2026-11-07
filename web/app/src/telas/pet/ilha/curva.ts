@@ -5,6 +5,7 @@
      grau em t, sem iteracao: a t^2 + b t + c = 0, com a = k dz^2, b = dy + 2 k dz (oz - foco), c = oy - yChao + k (oz - foco)^2. Vale a
      menor raiz positiva (o primeiro toque do raio no chao).
    A camera entra pelo que a vista sabe dela (CameraLida), para os testes conferirem com uma camera do three sem DOM. */
+import type { NomeLugar } from "./modelos.ts";
 
 /** a dobra: a forca k (por celula) e o foco (o pet), em celulas. Sem `dir`, ela dobra ao longo de z (a camera que nao gira); com a camera
     livre, ao longo da direcao [x, z] (unitaria, no chao) para onde a camera olha: s = (x - focoX) dir.x + (z - focoZ) dir.z */
@@ -46,4 +47,24 @@ export const paraTelaNdc = (cam: CameraLida, dobra: Dobra, x: number, z: number,
 export function paraMundoCel(cam: CameraLida, dobra: Dobra, nx: number, ny: number, yChao = 0): [number, number] | null {
   const { o, d } = cam.raio(nx, ny);
   return tocarChao(o, d, dobra, yChao);
+}
+
+/** a caixa de um lugar no mundo (a THREE.Box3 de lugaresCena.ts serve) */
+export interface Caixa { min: { x: number; y: number; z: number }; max: { x: number; y: number; z: number } }
+/** o lugar sob o ponto normalizado (nx, ny) da tela: o retangulo que cobre os 8 cantos da caixa de cada lugar, projetados por `ndc` (a
+    vista projeta com a dobra, curva.ts). Dois lugares sob o ponto: o de retangulo menor (o mais longe aparece menor e fica por cima so
+    quando o outro nao o cobre inteiro; os lugares ficam longe um do outro, LG-G2). null fora de todos */
+export function lugarNoPonto(caixas: ReadonlyMap<NomeLugar, Caixa>, ndc: (x: number, y: number, z: number) => [number, number], nx: number, ny: number): NomeLugar | null {
+  let melhor: NomeLugar | null = null, area = Infinity;
+  for (const [nome, c] of caixas) {
+    let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+    for (const x of [c.min.x, c.max.x]) for (const y of [c.min.y, c.max.y]) for (const z of [c.min.z, c.max.z]) {
+      const [a, b] = ndc(x, y, z);
+      x0 = Math.min(x0, a); x1 = Math.max(x1, a); y0 = Math.min(y0, b); y1 = Math.max(y1, b);
+    }
+    if (nx < x0 || nx > x1 || ny < y0 || ny > y1) continue;
+    const ar = (x1 - x0) * (y1 - y0);
+    if (ar < area) { area = ar; melhor = nome; }
+  }
+  return melhor;
 }

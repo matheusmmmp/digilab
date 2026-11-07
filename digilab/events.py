@@ -320,9 +320,73 @@ def ler_deixar_fruta(evento: Evento) -> tuple[str, int, int]:
     return (partes[0],) + _posicao_mundo(_inteiro_do_log(partes[1]), _inteiro_do_log(partes[2]))
 
 
+class LutaSemChave(ValueError):
+    """O resumo da luta (evento `lt`) num motor sem o corpo com ConfigLutaCorpo ligada (luta_corpo; ponte da luta, PE1)."""
+
+
+TIPO_LT = "lt"      # o resumo da luta (docs/TAREFA_V3_PONTE_LUTA.md, 3.4; PE1): so com ConfigLutaCorpo.ligada (luta_corpo)
+
+
+def resumo_luta(tick: int, rival: str, resultado: int, vida_perdida_s: int) -> Evento:
+    """O resumo pronto de uma luta, em inteiros: o rival (o rotulo), o resultado (-1, 0, +1) e a vida perdida em S. O Python nao simula a
+    luta: recebe o que ela deu. O valor e `rival|resultado|vida_perdida_s`."""
+    if not isinstance(rival, str) or not rival or "|" in rival or chr(10) in rival:
+        raise ValueError(f"rival do resumo da luta invalido: {rival!r}")
+    if type(resultado) is not int or resultado not in (-1, 0, 1):
+        raise ValueError(f"resultado do resumo da luta fora de -1, 0, +1: {resultado!r}")
+    if type(vida_perdida_s) is not int or vida_perdida_s < 0:
+        raise ValueError(f"vida perdida do resumo da luta precisa ser inteiro >= 0: {vida_perdida_s!r}")
+    return Evento(tick=tick, tipo=TIPO_LT, valor=f"{rival}|{resultado}|{vida_perdida_s}")
+
+
+def ler_resumo_luta(evento: Evento) -> tuple[str, int, int]:
+    if evento.tipo != TIPO_LT:
+        raise ValueError(f"evento nao e {TIPO_LT}: {evento.tipo!r}")
+    partes = str(evento.valor).split("|")
+    if len(partes) != 3 or not partes[0] or partes[1] not in ("-1", "0", "1") or not partes[2].isdigit():
+        raise ValueError(f"resumo da luta malformado: {evento.valor!r}")
+    return partes[0], int(partes[1]), int(partes[2])
+
+
 def deixar_bola(tick: int, x: int, y: int) -> Evento:
     x, y = _posicao_mundo(x, y)
     return Evento(tick=tick, tipo="deixar_bola", valor=f"{x}|{y}")
+
+
+def _ponto_solto(x, y) -> tuple[int, int]:
+    """o ponto onde o dono soltou o pet (levar_pet, docs/TAREFA_V3_PEGAR_PET.md): inteiro e com sinal; fora do mapa vale, porque quem o
+    limita ao mapa e o MotorMundo (PP-4). So inteiros seguros (|n| <= 2**53 - 1), os que o jogo web representa sem perda"""
+    if type(x) is not int or type(y) is not int:
+        raise ValueError(f"levar_pet com posicao nao inteira: ({x!r}, {y!r})")
+    if abs(x) > _MAIOR_INTEIRO_SEGURO or abs(y) > _MAIOR_INTEIRO_SEGURO:
+        raise ValueError(f"levar_pet com posicao grande demais: ({x}, {y})")
+    return x, y
+
+
+_MAIOR_INTEIRO_SEGURO = 2 ** 53 - 1                 # o Number.MAX_SAFE_INTEGER do TS (paridade do formato, nao um parametro do mundo)
+
+
+def levar_pet(tick: int, x: int, y: int) -> Evento:
+    """o dono pega o pet e o solta em (x, y) do mapa do mundo (subunidades inteiras, com sinal); o jogo web, pets v19"""
+    x, y = _ponto_solto(x, y)
+    return Evento(tick=tick, tipo="levar_pet", valor=f"{x}|{y}")
+
+
+def _inteiro_com_sinal_do_log(texto: str) -> int:
+    """o inteiro com sinal na forma canonica (sem zero a esquerda, sem '+' e sem '-0'): a mesma regra do lerLevarPet do TS"""
+    corpo = texto[1:] if texto.startswith("-") else texto
+    if not corpo.isascii() or not corpo.isdigit() or (len(corpo) > 1 and corpo[0] == "0") or texto == "-0":
+        raise ValueError(f"inteiro malformado no log: {texto!r}")
+    return int(texto)
+
+
+def ler_levar_pet(evento: Evento) -> tuple[int, int]:
+    if evento.tipo != "levar_pet":
+        raise ValueError(f"evento nao e levar_pet: {evento.tipo!r}")
+    partes = str(evento.valor).split("|")
+    if len(partes) != 2:
+        raise ValueError(f"levar_pet malformado: {evento.valor!r}")
+    return _ponto_solto(_inteiro_com_sinal_do_log(partes[0]), _inteiro_com_sinal_do_log(partes[1]))
 
 
 def _inteiro_do_log(texto: str) -> int:

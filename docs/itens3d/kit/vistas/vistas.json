@@ -1,0 +1,14 @@
+{
+ "id": "01a1b0ef-887d-7466-b8e1-d39d83cc3222",
+ "type": "image-to-image",
+ "ai_model": "nano-banana-2",
+ "prompt": "Multiple views of the same first aid crate: front, side and back, same style, same colors, plain light grey background.",
+ "status": "SUCCEEDED",
+ "consumed_credits": 6,
+ "created_at": 1793969850763,
+ "finished_at": 1793969915516,
+ "saldo": {
+  "antes": 932,
+  "depois": 920
+ }
+}

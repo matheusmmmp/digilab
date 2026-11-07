@@ -1,0 +1,17 @@
+DigiLab: o saco de pancada da ilha (saco.gltf, saco.bin, saco_cor.png)
+
+Procedencia: item gerado por IA, com o gerador Meshy (meshy.ai), no plano Pro pago, na conta do Matheus, em 2026-11-06.
+Pelos termos de uso da Meshy (atualizados em 2026-09-19, secao 3.2), a saida de um plano pago e do cliente.
+Os termos proibem tirar a marca de IA (secao 2.4): a marca fica no asset.extras do saco.gltf e neste arquivo.
+
+Como foi feito (docs/TAREFA_V3_ITENS_3D.md e docs/itens3d/saco/ no repositorio):
+- concept: Meshy Image to Image (nano-banana-2), com duas referencias de estilo recortadas da propria ilha do jogo (kits CC0 e o saco
+  procedural de antes, sem o pet); o concept 2 (bambu) escolhido pelo Matheus;
+- vistas: Meshy Image to Image com multivista, a partir do concept;
+- malha: Meshy Multi-Image to 3D (remesh em triangulos, so a cor);
+- conserto no Blender 4.5 LTS, por script: a malha da Meshy fica como veio, cortada em duas pecas pelo vao entre o poste e o saco
+  (o suporte e o saco com a corrente, que balanca no jogo), e a cor e chapada em sete cores do concept (sem a sombra embutida).
+As tarefas da Meshy (concept, vistas, malha) estao no asset.extras do saco.gltf.
+
+Uso: no jogo DigiLab, publicado. Credito: "Saco de pancada gerado com a Meshy (meshy.ai)".
+Aprovacao: o Matheus escolheu o concept em 2026-11-06; a aprovacao da captura na ilha fica no PR do saco.

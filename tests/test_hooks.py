@@ -17,8 +17,8 @@ RAIZ = Path(__file__).resolve().parents[1]
 HOOKS = RAIZ / ".claude" / "hooks"
 
 
-def rodar(script: str, evento: dict, projeto: Path) -> subprocess.CompletedProcess:
-    env = {**__import__("os").environ, "CLAUDE_PROJECT_DIR": str(projeto)}
+def rodar(script: str, evento: dict, projeto: Path, **extra: str) -> subprocess.CompletedProcess:
+    env = {**__import__("os").environ, "CLAUDE_PROJECT_DIR": str(projeto), **extra}
     return subprocess.run([sys.executable, str(HOOKS / script)], input=json.dumps(evento).encode("utf-8"), capture_output=True,
                           env=env, cwd=projeto, timeout=600)
 
@@ -176,17 +176,267 @@ def test_h3_push_sem_refspec_depende_do_branch(projeto):
 
 
 def test_proposta_e_os_hooks_ligados():
-    """A configuração proposta existe e aponta os scripts que existem. Ligados no projeto, só os que o Matheus escolheu (2026-10-14):
-    o H1, o H1b e o H3; o H2 fica desligado."""
+    """A configuração proposta existe e aponta os scripts que existem. Ligados no projeto, os que o Matheus escolheu: o H1, o H1b e o
+    H3 (2026-10-14, religados no #590); o H4, o H6 e o H9 (D-IA-7, 2026-11-06); o H2, depois da medida do Stop, e o H10 (E3), os dois em
+    2026-11-06; o H11 (o índice de desvios), em 2026-11-07. A
+    proposta e o projeto ficam iguais."""
     proposta = json.loads((RAIZ / "docs" / "propostas" / "hooks_settings.json").read_text(encoding="utf-8"))
     comandos = [h["command"] for evento in proposta["hooks"].values() for grupo in evento for h in grupo["hooks"]]
-    assert sorted(Path(c.split("/.claude/hooks/")[1].rstrip('"')).name for c in comandos) == \
-        ["h1_engine.py", "h1b_engine_sha.py", "h2_testes.py", "h3_main.py", "h4_autorizo.py"]  # o H4 (IM-8) só na proposta
+    assert sorted({Path(c.split("/.claude/hooks/")[1].rstrip('"')).name for c in comandos}) == \
+        ["h10_pre_run.py", "h11_indice.py", "h1_engine.py", "h1b_engine_sha.py", "h2_testes.py", "h3_main.py", "h4_autorizo.py",
+         "h6_capturas.py", "h9_faixas.py"]
     assert all((HOOKS / Path(c.split("/.claude/hooks/")[1].rstrip('"')).name).exists() for c in comandos)
     ativo = json.loads((RAIZ / ".claude" / "settings.json").read_text(encoding="utf-8"))
     ligados = [h["command"] for evento in ativo["hooks"].values() for grupo in evento for h in grupo["hooks"]]
-    assert sorted(Path(c.split("/.claude/hooks/")[1].rstrip('"')).name for c in ligados) ==         ["h1_engine.py", "h1b_engine_sha.py", "h3_main.py"]
-    assert set(ligados) <= set(comandos)
+    assert sorted({Path(c.split("/.claude/hooks/")[1].rstrip('"')).name for c in ligados}) == \
+        ["h10_pre_run.py", "h11_indice.py", "h1_engine.py", "h1b_engine_sha.py", "h2_testes.py", "h3_main.py", "h4_autorizo.py",
+         "h6_capturas.py", "h9_faixas.py"]
+    assert ativo == proposta
+
+
+# ------------------------------------------------------------------ INFRA_AGENTES E1 (docs/TAREFA_V3_INFRA_AGENTES.md, seção 3.1)
+
+FAIXAS_TEXTO = (
+    'FAIXAS_QUEIMADAS = ((15101, 15505, "a validacao antiga"),)\n'
+    'FAIXAS_RESERVADAS = (\n    (77101, 77505, "C4"),\n)\n')
+
+
+def commitar(projeto: Path, mensagem: str) -> None:
+    git(projeto, "-c", "user.email=t@t", "-c", "user.name=t", "add", "-A")
+    git(projeto, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", mensagem)
+
+
+@pytest.fixture
+def com_faixas(projeto):
+    """O projeto com um experiments/bancada/faixas.py pequeno, commitado, e o origin/main apontando para esse commit."""
+    (projeto / "experiments" / "bancada").mkdir(parents=True)
+    (projeto / "experiments" / "bancada" / "faixas.py").write_text(FAIXAS_TEXTO, encoding="utf-8")
+    commitar(projeto, "faixas")
+    git(projeto, "update-ref", "refs/remotes/origin/main", "HEAD")
+    return projeto
+
+
+def test_h1b_faixas_queimadas_contra_o_origin_main(com_faixas):
+    p = com_faixas
+    faixas = p / "experiments" / "bancada" / "faixas.py"
+    assert rodar("h1b_engine_sha.py", stop(p), p).returncode == 0
+    faixas.write_text(FAIXAS_TEXTO.replace('"a validacao antiga"', '"outro texto"'), encoding="utf-8")
+    assert rodar("h1b_engine_sha.py", stop(p), p).returncode == 2          # a entrada antiga mudou
+    faixas.write_text(FAIXAS_TEXTO.replace('"a validacao antiga"),)', '"a validacao antiga"), (16101, 16505, "nova"),)'),
+                      encoding="utf-8")
+    assert rodar("h1b_engine_sha.py", stop(p), p).returncode == 0          # só entrou uma no fim
+    faixas.write_text(FAIXAS_TEXTO.replace('(15101, 15505, "a validacao antiga"),', ''), encoding="utf-8")
+    r = rodar("h1b_engine_sha.py", stop(p), p)                             # sumiu, como faria um sed
+    assert r.returncode == 2 and b"FAIXAS_QUEIMADAS" in r.stderr
+
+
+def test_h1b_sem_origin_main_falha_alto(com_faixas):
+    git(com_faixas, "update-ref", "-d", "refs/remotes/origin/main")
+    r = rodar("h1b_engine_sha.py", stop(com_faixas), com_faixas)
+    assert r.returncode == 2 and b"git fetch" in r.stderr
+
+
+def test_h2_replay_so_com_mudanca_em_digilab_ou_bancada(projeto):
+    (projeto / "tests" / "test_engine.py").write_text("def test_replay():\n    assert False\n", encoding="utf-8")
+    commitar(projeto, "replay")
+    conta = projeto / "tests" / "test_conta.py"
+    conta.write_text(conta.read_text(encoding="utf-8") + "\n# so o teste mudou\n", encoding="utf-8")
+    r = rodar("h2_testes.py", stop(projeto), projeto)                      # só tests/ mudou: o replay não entra
+    assert r.returncode == 0, r.stderr
+    (projeto / "digilab" / "conta.py").write_text("def dobro(x):\n    return x + x\n", encoding="utf-8")
+    r = rodar("h2_testes.py", stop(projeto), projeto)
+    assert r.returncode == 2 and b"tests/test_engine.py" in r.stderr
+
+
+def test_h2_testes_da_frente_pelo_branch(projeto):
+    (projeto / "tests" / "test_conta_frente.py").write_text("def test_frente():\n    assert False\n", encoding="utf-8")
+    commitar(projeto, "frente")
+    git(projeto, "checkout", "-q", "-b", "v3-conta-frente-e1")             # o prefixo mais longo que acha: conta_frente
+    conta = projeto / "tests" / "test_conta.py"
+    conta.write_text(conta.read_text(encoding="utf-8") + "\n# mudado\n", encoding="utf-8")
+    r = rodar("h2_testes.py", stop(projeto), projeto)
+    assert r.returncode == 2 and b"tests/test_conta_frente.py" in r.stderr
+
+
+def test_h2_estouro_do_limite_bloqueia_uma_vez(projeto):
+    (projeto / "tests" / "test_conta.py").write_text("import time\n\n\ndef test_lento():\n    time.sleep(30)\n", encoding="utf-8")
+    sessao = f"teste-{uuid.uuid4().hex}"
+    r = rodar("h2_testes.py", stop(projeto, sessao=sessao), projeto, DIGILAB_H2_LIMITE_S="2")
+    assert r.returncode == 2 and b"passaram de 2 s" in r.stderr
+    assert rodar("h2_testes.py", stop(projeto, sessao=sessao), projeto, DIGILAB_H2_LIMITE_S="2").returncode == 0
+
+
+@pytest.mark.parametrize("caminho", [
+    "web/app/e2e/jogo.spec.ts-snapshots/pet-390.png",
+    "web/app/test/algo-snapshots/x.png",
+    "CAPTURAS",
+])
+def test_h6_nega_editar_referencia_infra(projeto, caminho):
+    capturas = projeto.parent / "capturas_fora"
+    alvo = str(capturas / "telas" / "pet.png") if caminho == "CAPTURAS" else caminho
+    for tool in ("Edit", "Write"):
+        r = rodar("h6_capturas.py", pre_tool(tool, {"file_path": alvo}, projeto), projeto, DIGILAB_CAPTURAS=str(capturas))
+        assert r.returncode == 2 and b"H6" in r.stderr
+
+
+def test_h6_pasta_padrao_das_capturas(projeto):
+    alvo = projeto / "artifacts_v2_front_react" / "capturas" / "pet.png"
+    r = rodar("h6_capturas.py", pre_tool("Write", {"file_path": str(alvo)}, projeto), projeto, DIGILAB_CAPTURAS="")
+    assert r.returncode == 2
+
+
+@pytest.mark.parametrize("comando", [
+    "rm -rf web/app/e2e/jogo.spec.ts-snapshots",
+    "cd web/app && mv novo.png e2e/jogo.spec.ts-snapshots/pet.png",
+    "Remove-Item -Recurse web\\app\\e2e\\jogo.spec.ts-snapshots",
+    "echo x > web/app/e2e/a-snapshots/b.png",
+    "git checkout -- web/app/e2e/jogo.spec.ts-snapshots/pet.png",
+])
+def test_h6_nega_o_shell_que_escreve(projeto, comando):
+    for tool in ("Bash", "PowerShell"):
+        r = rodar("h6_capturas.py", pre_tool(tool, {"command": comando}, projeto), projeto)
+        assert r.returncode == 2 and b"H6" in r.stderr, comando
+
+
+@pytest.mark.parametrize("comando", [
+    "npx playwright test -u",
+    "cd web/app && npx playwright test e2e/jogo.spec.ts --update-snapshots",
+    "npm run e2e -- -u",
+    "npm run capturas -- --update-snapshots=all",
+])
+def test_h6_pergunta_no_update_snapshots_infra(projeto, comando):
+    assert decisao(rodar("h6_capturas.py", pre_tool("Bash", {"command": comando}, projeto), projeto)) == "ask"
+
+
+@pytest.mark.parametrize("comando", [
+    "git push -u origin v3-x",
+    "npm run e2e",
+    "npx playwright test e2e/jogo.spec.ts",
+    "ls web/app/e2e/jogo.spec.ts-snapshots",
+    "git diff -- web/app/e2e/jogo.spec.ts-snapshots",
+    "rm web/app/test-results/x.png",
+])
+def test_h6_deixa_o_resto(projeto, comando):
+    assert decisao(rodar("h6_capturas.py", pre_tool("Bash", {"command": comando}, projeto), projeto)) is None
+
+
+def test_h6_deixa_editar_codigo(projeto):
+    r = rodar("h6_capturas.py", pre_tool("Edit", {"file_path": "web/app/src/App.tsx"}, projeto), projeto)
+    assert r.returncode == 0 and r.stdout == b"" and r.stderr == b""
+
+
+def editar_faixas(projeto: Path, velho: str, novo: str) -> dict:
+    return pre_tool("Edit", {"file_path": "experiments/bancada/faixas.py", "old_string": velho, "new_string": novo}, projeto)
+
+
+@pytest.mark.parametrize("velho,novo", [
+    ('(15101, 15505, "a validacao antiga"),', ''),
+    ('(15101, 15505, ', '(15101, 15500, '),
+    ('FAIXAS_QUEIMADAS = (', 'FAIXAS_QUEIMADAS_ANTIGAS = ('),
+])
+def test_h9_remover_ou_mudar_queimada_nega(com_faixas, velho, novo):
+    r = rodar("h9_faixas.py", editar_faixas(com_faixas, velho, novo), com_faixas)
+    assert r.returncode == 2 and b"H9" in r.stderr
+
+
+def test_h9_queimar_faixa_nova_pergunta(com_faixas):
+    r = rodar("h9_faixas.py", editar_faixas(com_faixas, '"a validacao antiga"),)', '"a validacao antiga"), (16101, 16505, "caiu"),)'),
+              com_faixas)
+    assert decisao(r) == "ask" and "16101...16505" in json.loads(r.stdout)["hookSpecificOutput"]["permissionDecisionReason"]
+
+
+def test_h9_reservada_passa_e_outros_arquivos_tambem(com_faixas):
+    p = com_faixas
+    nova = '(77101, 77505, "C4"),\n    (79101, 79505, "nova"),'
+    assert decisao(rodar("h9_faixas.py", editar_faixas(p, '(77101, 77505, "C4"),', nova), p)) is None
+    outro = pre_tool("Edit", {"file_path": "digilab/conta.py", "old_string": "2", "new_string": "3"}, p)
+    assert decisao(rodar("h9_faixas.py", outro, p)) is None
+
+
+def test_h9_write_e_multiedit(com_faixas):
+    p = com_faixas
+    caminho = str(p / "experiments" / "bancada" / "faixas.py")
+    r = rodar("h9_faixas.py", pre_tool("Write", {"file_path": caminho, "content": "FAIXAS_QUEIMADAS = ()\n"}, p), p)
+    assert r.returncode == 2
+    pares = [{"old_string": '"C4"', "new_string": '"C4 da V3"'}, {"old_string": '"a validacao antiga"', "new_string": '"outra"'}]
+    r = rodar("h9_faixas.py", pre_tool("MultiEdit", {"file_path": caminho, "edits": pares}, p), p)
+    assert r.returncode == 2
+    r = rodar("h9_faixas.py", pre_tool("Write", {"file_path": caminho, "content": "FAIXAS_QUEIMADAS = (\n"}, p), p)
+    assert r.returncode == 2 and b"consigo ler" in r.stderr
+
+
+# ------------------------------------------------------------------ H10: o pre_run antes da run (INFRA_AGENTES E3, seção 3.3)
+
+
+@pytest.fixture
+def com_pre_run(com_faixas):
+    """O projeto com as faixas, o tools/pre_run.py de verdade, um plano na main e uma config com a faixa reservada 77101...77505."""
+    p = com_faixas
+    (p / "tools").mkdir()
+    shutil.copyfile(RAIZ / "tools" / "pre_run.py", p / "tools" / "pre_run.py")
+    (p / "docs").mkdir()
+    (p / "docs" / "PLANO_ANALISE_V3_X.md").write_text("# plano\n", encoding="utf-8")
+    (p / "experiments" / "configs").mkdir()
+    (p / "experiments" / "configs" / "x.json").write_text(
+        json.dumps({"plano": "docs/PLANO_ANALISE_V3_X.md", "unidades": {"bases": [77101], "k": 1}}), encoding="utf-8")
+    (p / "experiments" / "configs" / "queimada.json").write_text(
+        json.dumps({"plano": "docs/PLANO_ANALISE_V3_X.md", "unidades": {"bases": [15101], "k": 1}}), encoding="utf-8")
+    commitar(p, "plano e configs")
+    git(p, "update-ref", "refs/remotes/origin/main", "HEAD")
+    return p
+
+
+def h10(p: Path, comando: str, tool: str = "Bash", processos: str = "[]") -> subprocess.CompletedProcess:
+    return rodar("h10_pre_run.py", pre_tool(tool, {"command": comando}, p), p, DIGILAB_PRE_RUN_PROCESSOS=processos)
+
+
+@pytest.mark.parametrize("comando", [
+    "python experiments/run_v3_x.py --config experiments/configs/x.json --processos 4",
+    "cd D:/Trab && python experiments/run_v2_y.py --config=experiments/configs/x.json",
+    "python experiments/run_v3_x.py --help",
+    "python -m pytest tests/test_run_v2_y.py -q",
+    "git log -- experiments/run_v2_y.py",
+])
+def test_h10_deixa_passar(com_pre_run, comando):
+    for tool in ("Bash", "PowerShell"):
+        r = h10(com_pre_run, comando, tool)
+        assert r.returncode == 0, r.stderr.decode("utf-8", "replace")
+
+
+@pytest.mark.parametrize("comando,texto", [
+    ("python experiments/run_v3_x.py --config experiments/configs/x.json --processos 5", "no máximo 4"),
+    (r"python experiments\run_v3_x.py --config experiments/configs/queimada.json", "faixa queimada"),
+    (".venv/Scripts/python.exe experiments/run_v2_y.py --config experiments/configs/nao_existe.json", "não existe"),
+    ("python experiments/run_v3_x.py --processos 2", "sem --config"),
+])
+def test_h10_recusa(com_pre_run, comando, texto):
+    r = h10(com_pre_run, comando)
+    assert r.returncode == 2 and texto in r.stderr.decode("utf-8")
+
+
+def test_h10_outra_run_em_andamento(com_pre_run):
+    r = h10(com_pre_run, "python experiments/run_v3_x.py --config experiments/configs/x.json",
+            processos=json.dumps(["python experiments/run_v3_outra.py --config c.json"]))
+    assert r.returncode == 2 and "outra run" in r.stderr.decode("utf-8")
+
+
+@pytest.mark.parametrize("comando", [
+    "cd web/app && python scripts/equilibrio_tr/medir_tudo.py --faixa calibracao2 --saida scripts/medicoes/equilibrio_tr/r3",
+    "npx tsx scripts/equilibrio_tr/fase1_relogio.ts --faixa calibracao2 --base v14 --saida x.json",
+    "node node_modules/tsx/dist/cli.mjs web/app/scripts/equilibrio_tr/fase3_estagio.ts --parte p1",
+])
+def test_h10_medicao_do_combate(com_pre_run, comando):
+    """E7: a medição do combate passa sozinha e é barrada com outra run em andamento (V3-D8)."""
+    assert h10(com_pre_run, comando).returncode == 0
+    r = h10(com_pre_run, comando, processos=json.dumps(["python experiments/run_v3_outra.py --config c.json"]))
+    assert r.returncode == 2 and "outra run" in r.stderr.decode("utf-8")
+
+
+def test_h10_deixa_ler_a_medicao(com_pre_run):
+    outra = json.dumps(["python experiments/run_v3_outra.py --config c.json"])
+    for comando in ("cat scripts/equilibrio_tr/medir_tudo.py", "git diff -- web/app/scripts/equilibrio_tr/fase2_formas.ts",
+                    "python scripts/equilibrio_tr/medir_tudo.py --help"):
+        assert h10(com_pre_run, comando, processos=outra).returncode == 0, comando
 
 
 # ------------------------------------------------------------------ A1 da UX_TELA_PET (docs/TAREFA_V3_UX_TELA_PET.md, seção 3.3)
@@ -350,6 +600,10 @@ def test_h8_escrita_por_papel(projeto, tmp_path, papel, tool, alvo, passa):
     ("npm run build", True),
     ("npm run e2e", True),
     ("npm run e2e -- e2e/jogo.spec.ts", True),
+    ("npm run tipos", True),                    # INFRA_AGENTES E4 (seção 3.4)
+    ("npm test", True),
+    ("cd web/app && npm run test", True),
+    ("npm test -- --update", False),
     ("DIGILAB_CAPTURAS_LARGURAS=390,1920 npm run capturas", True),
     ("cd web/app && npx playwright test e2e/jogo.spec.ts --project=gpu", True),
     ("git diff --stat", True),
@@ -370,6 +624,38 @@ def test_h8_shell_do_testador(projeto, comando, passa):
         assert (r.returncode == 0) == passa, (comando, r.stderr.decode("utf-8"))
 
 
+@pytest.mark.parametrize("comando,passa", [
+    ("sha256sum artifacts_v3_acoes_novas/run/run.log", True),       # INFRA_AGENTES E6: o hash e o tamanho dos artefatos
+    ("stat -c %s artifacts_v3_acoes_novas/run/medidas.json", True),
+    ("Get-FileHash artifacts_v3_acoes_novas/run/run.log", True),
+    ("du -b artifacts_v3_acoes_novas/run/vidas.tar.gz", True),
+    ("cat docs/RESULTADO_V3_ACOES_NOVAS.md", True),
+    ("python -c \"print(1)\"", False),
+    ("rm artifacts_v3_acoes_novas/run/run.log", False),
+    ("sha256sum x > y.txt", False),
+    ("find . -name x -delete", False),
+    ("npm test", False),
+    ("tar -tzf artifacts_v3_acoes_novas/run/vidas.tar.gz", True),     # E6b: o tar só para listar
+    ("tar tzf artifacts_v3_acoes_novas/run/vidas.tar.gz", True),
+    ("tar --list -zf artifacts_v3_acoes_novas/run/vidas.tar.gz", True),
+    ("tar -xzf artifacts_v3_acoes_novas/run/vidas.tar.gz", False),
+    ("tar -czf x.tar.gz docs", False),
+    ("tar -tzf a.tar.gz --to-command=sh", False),
+    ("tar -t -I zstd -f a.tar", False),
+    ("tar -zf a.tar.gz", False),
+])
+def test_h8_shell_do_auditor(projeto, comando, passa):
+    for tool in ("Bash", "PowerShell"):
+        r = rodar_com("h8_escopo.py", pre_tool(tool, {"command": comando}, projeto), projeto, "auditor")
+        assert (r.returncode == 0) == passa, (comando, r.stderr.decode("utf-8"))
+
+
+def test_h8_auditor_nao_escreve(projeto):
+    for tool in ("Edit", "Write"):
+        r = rodar_com("h8_escopo.py", pre_tool(tool, {"file_path": "docs/RESULTADO_V3_X.md"}, projeto), projeto, "auditor")
+        assert r.returncode == 2 and "auditor" in r.stderr.decode("utf-8")
+
+
 def test_h8_designer_sem_shell_implementador_com_shell(projeto):
     assert rodar_com("h8_escopo.py", pre_tool("Bash", {"command": "ls"}, projeto), projeto, "designer").returncode == 2
     assert rodar_com("h8_escopo.py", pre_tool("Bash", {"command": "npm test"}, projeto), projeto, "implementador").returncode == 0
@@ -382,7 +668,8 @@ def test_h8_papel_desconhecido_bloqueia(projeto, args):
 
 
 def test_proposta_ux_aponta_scripts_que_existem_e_nada_ligado():
-    """A proposta da A1 existe e aponta os scripts que existem; nenhum dos três está ligado no settings.json (SA-5)."""
+    """A proposta da A1 existe e aponta os scripts que existem. Do settings.json, o H5 e o H8 ficam de fora (SA-5); o H6 está ligado
+    desde a INFRA_AGENTES E1 (D-IA-5 e D-IA-7, o mesmo arquivo nas duas frentes; docs/TAREFA_V3_INFRA_AGENTES.md, seção 12)."""
     proposta = json.loads((RAIZ / "docs" / "propostas" / "hooks_ux_settings.json").read_text(encoding="utf-8"))
     comandos = [h["command"] for evento in proposta["hooks"].values() for grupo in evento for h in grupo["hooks"]]
     comandos += [a["command"] for a in proposta["agentes_h8"].values()]
@@ -391,4 +678,76 @@ def test_proposta_ux_aponta_scripts_que_existem_e_nada_ligado():
     assert all((HOOKS / n).exists() for n in nomes)
     assert sorted(proposta["agentes_h8"]) == ["designer", "implementador", "testador"]
     ativo = (RAIZ / ".claude" / "settings.json").read_text(encoding="utf-8")
-    assert not any(n in ativo for n in nomes)
+    assert not any(n in ativo for n in nomes - {"h6_capturas.py"})
+    assert "h6_capturas.py" in ativo
+
+
+# ------------------------------------------------------------------ H11: o índice de desvios é gerado (docs/TAREFA_V3_INFRA_AGENTES.md, seção 17)
+
+
+@pytest.fixture
+def worker(projeto):
+    """O projeto num branch de worker, com o índice e um arquivo do mês."""
+    (projeto / "docs" / "registro").mkdir(parents=True)
+    (projeto / "docs" / "REGISTRO_DESVIOS.md").write_text("# indice\n", encoding="utf-8")
+    (projeto / "docs" / "registro" / "2026-11.md").write_text("# 2026-11\n", encoding="utf-8")
+    commitar(projeto, "indice")
+    git(projeto, "checkout", "-q", "-b", "v3-frente-x")
+    return projeto
+
+
+@pytest.mark.parametrize("ferramenta,entrada", [
+    ("Edit", {"file_path": "docs/REGISTRO_DESVIOS.md", "old_string": "# indice", "new_string": "# indice\n- linha"}),
+    ("Write", {"file_path": "docs/REGISTRO_DESVIOS.md", "content": "x"}),
+    ("MultiEdit", {"file_path": "docs/REGISTRO_DESVIOS.md", "edits": []}),
+])
+def test_h11_edicao_do_indice_nega(worker, ferramenta, entrada):
+    entrada = {**entrada, "file_path": str(worker / entrada["file_path"])}
+    r = rodar("h11_indice.py", pre_tool(ferramenta, entrada, worker), worker)
+    assert r.returncode == 2 and "H11" in r.stderr.decode("utf-8")
+
+
+def test_h11_edicao_no_mes_passa(worker):
+    entrada = {"file_path": str(worker / "docs" / "registro" / "2026-11.md"), "old_string": "# 2026-11", "new_string": "# 2026-11\n## x"}
+    assert decisao(rodar("h11_indice.py", pre_tool("Edit", entrada, worker), worker)) is None
+
+
+@pytest.mark.parametrize("comando", [
+    "python tools/gerar_indice_desvios.py",
+    "cd D:/x && python tools\\gerar_indice_desvios.py --raiz .",
+    "python tools/registro_por_mes.py lote --base abc",
+    "git show origin/main:docs/REGISTRO_DESVIOS.md > docs/REGISTRO_DESVIOS.md",
+    "echo '- linha' >> docs/REGISTRO_DESVIOS.md",
+    "sed -i 's/a/b/' docs/REGISTRO_DESVIOS.md",
+    "cat x | tee docs/REGISTRO_DESVIOS.md",
+    "cp /tmp/indice.md docs/REGISTRO_DESVIOS.md",
+    "Get-Content x | Set-Content docs/REGISTRO_DESVIOS.md",
+])
+def test_h11_shell_que_escreve_no_indice_nega(worker, comando):
+    r = rodar("h11_indice.py", pre_tool("Bash", {"command": comando}, worker), worker)
+    assert r.returncode == 2 and "H11" in r.stderr.decode("utf-8")
+
+
+@pytest.mark.parametrize("comando", [
+    "python tools/gerar_indice_desvios.py --conferir",
+    "python tools/gerar_indice_desvios.py --help",
+    "git checkout origin/main -- docs/REGISTRO_DESVIOS.md",
+    "git restore --source origin/main docs/REGISTRO_DESVIOS.md",
+    "cat docs/REGISTRO_DESVIOS.md | head -5 > /tmp/x",
+    "grep -n abc docs/REGISTRO_DESVIOS.md",
+    "cp docs/REGISTRO_DESVIOS.md /tmp/copia.md",
+    "git diff origin/main -- docs/REGISTRO_DESVIOS.md",
+])
+def test_h11_shell_que_le_passa(worker, comando):
+    assert decisao(rodar("h11_indice.py", pre_tool("Bash", {"command": comando}, worker), worker)) is None
+
+
+@pytest.mark.parametrize("branch", ["main", "v3-indice-2026-11-07"])
+def test_h11_quem_faz_o_merge_regenera(worker, branch):
+    if branch != "main":
+        git(worker, "checkout", "-q", "-b", branch)
+    else:
+        git(worker, "checkout", "-q", "main")
+    assert decisao(rodar("h11_indice.py", pre_tool("Bash", {"command": "python tools/gerar_indice_desvios.py"}, worker), worker)) is None
+    entrada = {"file_path": str(worker / "docs" / "REGISTRO_DESVIOS.md"), "content": "x"}
+    assert rodar("h11_indice.py", pre_tool("Write", entrada, worker), worker).returncode == 2

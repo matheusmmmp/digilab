@@ -593,3 +593,14 @@ dialog.modal-res::backdrop,dialog.modal-conf::backdrop,dialog.folha::backdrop{ba
 .ap-desce{color:var(--dl-danger,#b3261e)}
 .ap-hist{margin:0;padding-left:18px;display:grid;gap:4px;font-size:.8125rem}
 .ap-sub{margin:0;font-size:.8125rem;font-weight:800}
+/* o icone de postura da luta em tempo real (LUTA_EFEITOS E4): o desenho fica no canvas; este elemento transparente por cima leva o nome
+   no title (ao passar o mouse) e no leitor de tela */
+.luta-arena .luta-postura{position:absolute;z-index:2;display:block;background:none;cursor:help}
+.luta-arena .luta-postura[hidden]{display:none}
+/* a barra com o dano atrasado (LUTA_EFEITOS, E5, nocauteTR.ts): o pedaco que saiu fica branco e depois vermelho, por baixo da vida, e esvazia
+   no passo da luta (sem transicao do CSS: o mesmo passo, a mesma barra) */
+.hud-vida{position:relative}
+.hud-vida i{position:relative;z-index:1}
+.hud-vida .hud-vida-atraso{position:absolute;top:0;bottom:0;left:0;background:#ff2d45}
+.hud-lado--rival .hud-vida .hud-vida-atraso{left:auto;right:0}
+.hud-vida .hud-vida-atraso--branco{background:#fff}

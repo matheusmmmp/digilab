@@ -3,7 +3,7 @@
    A regra (docs/futuro/vida_do_pet_referencias.md, 5.1): a cena desenha o verbo que o motor registrou e nada alem. Por isso:
      - comer: mastiga (o corpo achata e estica) e solta migalhas, com a carne sobre a cabeca;
      - brincar: pulinhos, com a nota; chamar_atencao: pulinhos mais curtos e rapidos, com o ponto de exclamacao;
-     - explorar: balanca de um lado ao outro, olhando em volta, com o emote de surpresa; emburrar: treme de leve e encolhe, com a raiva;
+     - explorar: balanca de um lado ao outro, olhando em volta, com o emote de surpresa; emburrar: treme de leve e encolhe, com a raiva (com o clipe Emburrar do atlas, o clipe no lugar do tremor, e a raiva fica);
      - dormir: o sono de sono.ts (achatado, respirando, o "zz"); ocioso: nada alem dos passinhos do Seguidor (vistaMundo.ts), porque e a
        acao que mais tenta a inventar vida na tela;
      - cocô: quando a sujeira do motor SOBE, o pet se agacha e treme por COCO_MS, com a gota do esforco (a vista so ve a sujeira subir).
@@ -120,15 +120,16 @@ function gestoDoCoco(agora: number): Gesto {
 
 /** o gesto de agora: a reacao ao toque, o cocô e, com o pet parado e acordado, o da acao. Com movimento reduzido, nenhum; em Pausa (como o
     Seguidor, vistaMundo.ts) so a reacao ao toque, que e resposta a uma mao do dono, e nao a vida que anda. Com um clipe tocando no corpo
-    (`clipe`, o Comer do atlas: escolherComer), nenhum: o clipe e o corpo, e o gesto e o clipe nunca vao juntos */
-export function gestoAgora(e: EntradaCena, agora: number, reduzido: boolean, parado: boolean, pausa = false, clipe = false): Gesto {
+    (`clipe`, o Comer do atlas: escolherComer), nenhum: o clipe e o corpo, e o gesto e o clipe nunca vao juntos. Com o clipe Emburrar
+    (`emburra`, docs/TAREFA_V3_SPRITES_ACOES.md, 3.2) sai so o tremor da acao: a reacao ao toque e o cocô seguem, e o emote de raiva fica */
+export function gestoAgora(e: EntradaCena, agora: number, reduzido: boolean, parado: boolean, pausa = false, clipe = false, emburra = false): Gesto {
   vigiarCoco(e.chave, e.sujeira, agora);
   if (reduzido || clipe) return SEM_GESTO;
   const r = reacaoAtual(agora);
   if (r) return gestoDaReacao(r, agora);
   if (pausa) return SEM_GESTO;
   if (noCoco(agora)) return gestoDoCoco(agora);
-  return parado ? gestoDaAcao(e.acao, agora) : SEM_GESTO;
+  return parado && !(emburra && e.acao === "emburrar") ? gestoDaAcao(e.acao, agora) : SEM_GESTO;
 }
 
 /** o emote de agora: a reacao ao toque (o coracao de quem relaxou; a gota de quem temeu a mao), o cocô (a gota do esforco) ou o da acao.
@@ -212,6 +213,14 @@ export function escolherComer(e: EntradaComer, agora: number): EscolhaComer {
 }
 /** a ultima escolha do comer (o palco le para tirar a carne e as migalhas; o teste le o `tocou`) */
 export const comerAgora = (): EscolhaComer => ultimaComer;
+/** o clipe Emburrar toca no corpo agora? (a ilha marca a cada quadro; o e2e le por window.__digilab.emburrar) */
+let emburrando = false;
+export const marcarEmburrar = (b: boolean): void => { emburrando = b; };
+export const emburrarAgora = (): boolean => emburrando;
+/** o quadro Dormir do atlas esta no corpo do pet agora? (mesmo caminho do Emburrar; o e2e le por window.__digilab.dormir) */
+let dormindoQ = false;
+export const marcarDormir = (b: boolean): void => { dormindoQ = b; };
+export const dormirAgora = (): boolean => dormindoQ;
 /** so para os testes: esquece o comer visto */
 export function esquecerComer(): void { comerVisto = null; comendo = null; momentoPendente = null; ultimaComer = NADA_COMER; }
 

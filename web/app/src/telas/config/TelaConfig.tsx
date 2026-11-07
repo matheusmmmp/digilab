@@ -15,7 +15,7 @@ import { Deco } from "../../componentes/Deco.tsx";
 import { BotaoHx, ChipHx } from "../../componentes/hx/index.ts";
 import { ICONE } from "../../decoracao.ts";
 import { FALA_LLM, ligarFalaLLM, rotuloLLM, useFalaLLM } from "../../fala.ts";
-import { escolherModo, useFalaLivre, type ModoFala } from "../../falaLivre.ts";
+import { escolherConversaNova, escolherFalaRede, escolherModo, useFalaLivre, type ModoFala } from "../../falaLivre.ts";
 import { useJogo } from "../../jogo.ts";
 import { abrirEscolhaBrasao } from "../../jornada.ts";
 import type { ParteConfig } from "../../rotas.ts";
@@ -159,7 +159,8 @@ function Dados({ irPet }: { irPet: () => void }) {
   );
 }
 function Fala() {
-  const llm = useFalaLLM(), fl = useFalaLivre(), r = rotuloLLM();
+  const llm = useFalaLLM(), fl = useFalaLivre(), r = rotuloLLM(), { motor: pet } = useJogo();
+  const redeSemEfeito = fl.falaRede && pet.conceitosDec() === null;      /* DC2b: pet sem decisao do modular, a chave nao muda nada */
   const modos: [ModoFala, string, string, string?][] = [
     ["template", "Frases prontas", "Sempre as mesmas frases do jogo. Nunca erra, mas repete."],
     ["moldura", "Moldura", "O modelo completa uma moldura com os fatos do pet."],
@@ -181,6 +182,15 @@ function Fala() {
           </button>
         ))}
       </div>
+      <section className="mc-bloco">
+        <label className="mc-interruptor"><span><b>Conversa nova (teste)</b><small>Só no modo Livre: prompt novo da conversa, com a memória só desta sessão e do estágio de agora.</small></span>
+          <input type="checkbox" role="switch" checked={fl.conversaNova} disabled={fl.modo !== "livre"} onChange={ev => escolherConversaNova((ev.target as HTMLInputElement).checked)} /></label>
+      </section>
+      <section className="mc-bloco">
+        <label className="mc-interruptor"><span><b>Fala pela rede (teste)</b><small>Só no modo Livre: a fala nasce do que o cérebro modular decidiu por último; o modelo só põe em palavras e não vê o resto do pet.</small></span>
+          <input type="checkbox" role="switch" checked={fl.falaRede} disabled={fl.modo !== "livre"} onChange={ev => escolherFalaRede((ev.target as HTMLInputElement).checked)} /></label>
+        {redeSemEfeito && <p className="mc-apoio" role="status">Este pet não tem uma decisão do cérebro modular: a chave não muda nada e a fala segue como antes.</p>}
+      </section>
       <p className="mc-apoio">Em todos os modos, a fala não decide nada e o que você escreve na conversa não ensina o pet.</p>
     </>
   );
@@ -201,7 +211,7 @@ function Sobre() {
           fica fora do repositório; sem ele, o jogo usa os sprites de reserva, de arte própria.</p>
         {/* os kits 3D da ilha (docs/TAREFA_V3_HABITAT_ILHA_3D.md, H1 e H-1): CC0, com as licencas em public/kits3d/ */}
         <p className="mc-credito-kits">As árvores, as plantas e as pedras da ilha são dos kits 3D de Quaternius (Stylized Nature MegaKit) e de Kay
-          Lousberg (KayKit Forest Nature Pack), em domínio público (CC0).</p></section>
+          Lousberg (KayKit Forest Nature Pack), em domínio público (CC0). A bola, o saco de pancada, o kit médico, o cocô, os postes de luz, o carro, a geladeira e o trilho foram gerados com a Meshy (meshy.ai) e consertados no Blender; o céu do mapa Digital também é da Meshy.</p></section>
     </>
   );
 }

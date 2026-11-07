@@ -63,13 +63,28 @@ export const CDJ = { limiarNecessidade: .3, limiarVontade: .1, limiarTom: .2, kC
    DigiBrain modular (o do laboratorio, motor/digibrain/) ou o cerebro A a decidir dali em diante. Cada cerebro guarda o que aprendeu e fica
    parado enquanto o outro decide; o A segue dando o desejo e o carater, como no pet de teste. Sem "cb", a v17 e a v15 (o replay e o mesmo),
    e por isso um pet v15 vivo passa a v17 quando o jogador troca o cerebro dele (Motor.promoverV17). Os ovos novos nascem v17, com o "cb"
-   do cerebro que os Ajustes escolhem (o modular por padrao). A v16 (o pet de teste) nao muda */
-export const VERSAO_PET = 17;
-/** as versoes de pet que abrem: a v13 (o tempo real de antes da rodada de equilibrio), a v14 (CV14-1), a v15 (a bola no golpe) e a v17
-    (o cerebro trocavel). A v16 e so a do laboratorio */
-export const VERSOES_PET: readonly number[] = [13, 14, 15, 17];
+   do cerebro que os Ajustes escolhem (o modular por padrao). A v16 (o pet de teste) nao muda;
+   18 = o v17 com o empurrao de verdade na luta em tempo real (docs/TAREFA_V3_LUTA_EMPURRAO.md; EMP-1 a EMP-8, decididas pelo Matheus em
+   2026-11-06): quem leva o golpe desliza para tras pela forca dele, e o pesado e a investida derrubam (o relogio RELOGIO_V18,
+   combate_tr/constantes_tr.ts; as regras CV21E_TR18). O resto e o v17 (o cerebro trocavel, a ponte da luta, a bola no golpe). Os v13 a v17
+   seguem vivos, lutando como antes; so os ovos novos nascem v18;
+   19 = o v18 com o "levar pet" (docs/TAREFA_V3_PEGAR_PET.md; PP-1 a PP-5, decididas pelo Matheus em 2026-11-07): o evento "lp" do
+   registro poe o pet onde o dono o soltou (limitado ao mapa, PP-4), sem mexer no humor, no corpo nem no aprendizado (PP-1); com o pet
+   dormindo, falha alto (PP-2). O resto e o v18 (a luta, o cerebro trocavel). Os v13 a v18 seguem vivos, sem o "lp"; so os ovos novos
+   nascem v19 */
+export const VERSAO_PET = 19;
+/** as versoes de pet que abrem: a v13 (o tempo real de antes da rodada de equilibrio), a v14 (CV14-1), a v15 (a bola no golpe), a v17
+    (o cerebro trocavel), a v18 (o empurrao) e a v19 (o levar pet). A v16 e so a do laboratorio */
+export const VERSOES_PET: readonly number[] = [13, 14, 15, 17, 18, 19];
 /** a versao de pet do cerebro trocavel (o evento "cb") */
 export const VERSAO_V17 = 17;
+/** a versao de pet do empurrao de verdade na luta (a v17 com o RELOGIO_V18) */
+export const VERSAO_V18 = 18;
+/** a versao de pet do levar pet (o evento "lp"; a v18 com o dono que pega o pet e o solta noutro lugar) */
+export const VERSAO_V19 = 19;
+/** a versao tem o cerebro trocavel, a ponte da luta e a bola no golpe da v17: a v17, a v18 (a v17 com o empurrao) e a v19 (a v18 com o
+    levar pet) */
+export const ehCerebroTrocavel = (versao: number): boolean => versao === VERSAO_V17 || versao === VERSAO_V18 || versao === VERSAO_V19;
 /** os cerebros que o evento "cb" escolhe: o DigiBrain modular e o cerebro A (os lobos, a linha de base) */
 export const CEREBROS = ["modular", "a"] as const;
 /** a versao de pet da bola no golpe (a chave bolaNoGolpe do Mundo) */
@@ -241,6 +256,9 @@ export const CV21E_TR = { ...CV21E, versaoPet: 13, tempoReal: true } as const;
 /** as regras dos pets v14: as da v13 com o candidato da rodada de equilibrio (o relogio RELOGIO_V14, combate_tr/constantes_tr.ts, vem pela
     versao: combate_tr/luta.ts, relogioDe; os fatores, as listas e o resto, pelo R.versaoPet >= VERSAO_V14 em cada modulo) */
 export const CV21E_TR14 = { ...CV21E_TR, versaoPet: 14 } as const;
+/** as regras dos pets v18: as da v14 com o empurrao (o relogio RELOGIO_V18 vem pela versao: combate_tr/luta.ts, relogioDe; o resto, pelo
+    R.versaoPet >= VERSAO_V14, como na v14) */
+export const CV21E_TR18 = { ...CV21E_TR, versaoPet: 18 } as const;
 /** a versao de pet do candidato da rodada de equilibrio do tempo real (DE-1) */
 export const VERSAO_V14 = 14;
 

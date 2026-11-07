@@ -7,7 +7,7 @@
    assinatura das vidas v13 nao muda (test/vidas_v13.test.ts). */
 import {
   ACAO_CHAMADO, ACOES_DONO_JOGO_V11, ACOES_PET, CAT, CDJ, CHAMADO_BEBE, CHAMADO_BEBE_CORPO, CHAMADO_FOME_CORPO, CHE, CLE, CMG, EIXOS_TEMP, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
-  TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V14, VERSAO_V15, VERSAO_V17, VERSOES_PET, CEREBROS,
+  TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V14, VERSAO_V15, VERSAO_V17, VERSAO_V19, VERSOES_PET, CEREBROS, ehCerebroTrocavel,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
 import { APRENDIZADO_V14, CHIP_ANTES_V14 } from "./combate_tr/constantes_tr.ts";
@@ -23,14 +23,16 @@ import { ESTAGIOS_SALAO, RIVAL_SALAO, formaRivalSalao, rivalSalao, sementeSalao 
 import { CIT_V9, CMU_MVP } from "./constantes.ts";
 import { cartaDe, chipDe, chipServe, estagioMinimo, itensValem, porqueItensNaoValem, pontosComChips, vagasDeChip } from "./itens.ts";
 import { caraterV11, formaAdultaDe, linhaDoCarater, type QuandoCarater } from "./carater.ts";
-import { CCO_CORPO_V11 } from "./corpo.ts";
+import { CCO_CORPO_V11, CONFIG_LUTA_CORPO_LIGADA } from "./corpo.ts";
 import { desejoLobos, type BracoConsequencia, type CerebroA, type ObservacaoLobos } from "./lobos.ts";
 import { MotorCorpo, estadoNascimentoPy, type PoliticaCorpo } from "./motor_corpo.ts";
 import { MotorCorpoMundo, type PoliticaCorpoMundo } from "./motor_corpo_mundo.ts";
-import { eventoDeixarBola, eventoDeixarComida, lerDeixarBola, lerDeixarComida, type Mundo } from "./mundo.ts";
+import { eventoDeixarBola, eventoDeixarComida, eventoLevarPet, lerDeixarBola, lerDeixarComida, lerLevarPet, type Mundo } from "./mundo.ts";
 import { bracoV11 } from "./pet_v11.ts";
 import { leituraLab, type LeituraLab } from "./digibrain/leitura.ts";
+import { decodificar, decodificarV2, type ConceitosDec } from "./digibrain/decodificador.ts";
 import { DigiBrain } from "./digibrain/adapt.ts";
+import { CONFIG_DIGIBRAIN_LAB_FALA, CONTEUDOS_FALA, INATOS_MODULAR, type ConteudoFala } from "./digibrain/constantes.ts";
 import { leituraAprendido, leituraDecisao, mapaDecisao, mapaPesos, type ArestaMapa, type LeituraDecisao, type MapaDecisao } from "./digibrain.ts";
 import { desafiadoDaVersao, regrasDaVersao, type Lutador, type RegrasLuta, type ResultadoLuta, type Desafiado } from "./combate.ts";
 import { ConfiancaCombate } from "./confianca.ts";
@@ -158,6 +160,22 @@ export class Motor {
       assinatura) */
   private ultimoChamado: Partial<Record<Chamado, number>> = {};
   private produtoLido = false;
+  /** a ponte da luta (PE3): o registro tem a marca "pl" (ovo novo v16/v17); sem ela, a luta passa ao lado do corpo e do cerebro, como hoje */
+  ponteLuta = false;
+  /** DC3d da CONVERSA_PET: o registro tem a marca "fu" (so o pet de teste v16): o modular decide com a subchave `fala_unidades` (o
+      `chamar_atencao` em tres unidades de fala com conteudo, docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, 3.1 e A1.1); sem ela, o modular de hoje */
+  falaUnidades = false;
+  /** PE4: a marca "pl" tem eps; o epsilon da luta le o g_exp da ultima decisao do modular (so com o modular ativo) */
+  epsLuta = false;
+  /** PE4 (docs/TAREFA_V3_PONTE_LUTA.md, 3.3 e 3.7): o fator g_exp / e0 do epsilon da luta, lido da ultima decisao do modular (sem decisao nova
+      nem rng; e0 = 512 e S = 1024 sao potencias de 2, a divisao e exata). null: o epsilon e o de hoje (sem a marca eps, com o A ativo, ou
+      antes da primeira decisao do modular) */
+  fatorEpsLuta(): number | null {
+    if (!this.epsLuta || this.lab === null) return null;
+    const m = this.lab.ultimoMotivo;
+    if (m === null) return null;
+    return (m["afeto"] as { g_exp: number }).g_exp / INATOS_MODULAR.e0;
+  }
   sparring = 0;
   motivos: MotivoVida[] = [];
   motivo: MotivoVida | null = null;
@@ -272,24 +290,26 @@ export class Motor {
         b.consequenciaMundo(a, oc, depois);
       },
     };
-    const politica: PoliticaCorpoMundo = versao === VERSAO_V17 ? politicaTrocavel : lab === null ? politicaA : {
+    /* o modular do pet de teste e lido a cada gancho: a marca "fu" (DC3d) o troca, antes da primeira decisao, pelo da `fala_unidades` */
+    const doLab = (): DigiBrain => m.modular!;
+    const politica: PoliticaCorpoMundo = ehCerebroTrocavel(versao) ? politicaTrocavel : lab === null ? politicaA : {
       agir(o, rng) {
-        const t = m.v11!.laco.estado.tick, d = m.desejoAtual(o, t), a = lab.agir(o, rng);
+        const t = m.v11!.laco.estado.tick, d = m.desejoAtual(o, t), a = doLab().agir(o, rng);
         m._decisaoV11(o, a, t, d);
         return a;
       },
-      observar: tr => lab.observar(tr),
-      consequenciaCorpo: (a, oc, depois) => lab.consequenciaCorpo(a, oc, depois),
-      receberAcaoDono: (a, tick) => lab.receberAcaoDono(a, tick),
-      mudancaNoCorpo: () => lab.mudancaNoCorpo(),
-      escolherAlvo: lab.escolherAlvo,
-      consequenciaMundo: (a, oc, depois) => lab.consequenciaMundo(a, oc, depois),
+      observar: tr => doLab().observar(tr),
+      consequenciaCorpo: (a, oc, depois) => doLab().consequenciaCorpo(a, oc, depois),
+      receberAcaoDono: (a, tick) => doLab().receberAcaoDono(a, tick),
+      mudancaNoCorpo: () => doLab().mudancaNoCorpo(),
+      escolherAlvo: (acao, candidatos, percepcao, u) => doLab().escolherAlvo(acao, candidatos, percepcao, u),
+      consequenciaMundo: (a, oc, depois) => doLab().consequenciaMundo(a, oc, depois),
     };
     /* o laco com o mundo fisico (MV-1), o do produto (CMU_MVP: sem arvores, so a racao do jogador; a opcao 1 do Matheus de 2026-10-24);
        a regra de cada decisao vai ao registro do mundo, como o ultima_regra do Python */
     const laco = new MotorCorpoMundo(politica, semente, CCO_CORPO_V11, estadoNascimentoPy(TICK_INICIAL),
                                      { regra: () => braco.cerebro.ultimaRegra, cfgMundo: CMU_MVP, digibrain: lab !== null,
-                                       bolaNoGolpe: versao === VERSAO_V15 || versao === VERSAO_V17 });     // o pet de teste (v16) e a v14 com o modular: a bola de antes; a v17 e a v15
+                                       bolaNoGolpe: versao === VERSAO_V15 || ehCerebroTrocavel(versao) });     // o pet de teste (v16) e a v14 com o modular: a bola de antes; a v17 e a v15
     this.v11 = { braco, laco };
     this.e = laco.estado;
     /* o vinculo B (coerencia por situacao, sem pedido), sem obediencia */
@@ -338,6 +358,25 @@ export class Motor {
   /** o laboratorio (v16): a leitura do ultimo motivo do DigiBrain modular para o painel (digibrain/leitura.ts); null nos outros pets e antes da
       primeira decisao. So le */
   leituraLab(): LeituraLab | null { return this.lab === null ? null : leituraLab(this.lab); }
+  /** os conceitos do `dec-v1` sobre o ultimo motivo do modular (DC1); so le, nao muda a vida; null sem modular ou antes da primeira decisao */
+  conceitosDec(versao: "dec-v1" | "dec-v2" = "dec-v1"): ConceitosDec | null {
+    const l = this.lab, mo = l === null ? null : l.ultimoMotivo;
+    if (l === null || mo === null) return null;
+    if (versao === "dec-v1") return decodificar(mo, l.S);
+    /* dec-v2 (DC2b): o episodio recuperado nesta decisao, lido da memoria agora; se ja saiu dela (consolidacao ou capacidade), o conceito vai sem `episodio` */
+    const rec = (mo["lembranca"] as Record<string, any> | undefined)?.["recuperado"] ?? null;
+    const ep = rec === null ? undefined : l.mem.guardados().find(e => e.id === rec);
+    return decodificarV2(mo, l.S, ep === undefined ? null : (ep as unknown as Record<string, any>));
+  }
+  /** DC3d da CONVERSA_PET: o conteudo da unidade de fala que o modular escolheu na ultima decisao (fome, higiene ou solidao), so com a
+      marca "fu"; null sem ela, sem decisao ainda ou quando a ultima decisao nao foi uma fala. So le */
+  conteudoDaFala(): ConteudoFala | null {
+    const l = this.lab, mo = l === null ? null : l.ultimoMotivo;
+    if (!this.falaUnidades || l === null || mo === null || mo["acao"] !== "chamar_atencao") return null;
+    const c = (mo["escolha"] as unknown[])[1];
+    if (!(CONTEUDOS_FALA as readonly unknown[]).includes(c)) throw new Error(`a fala da decisao ${String(mo["k"])} sem conteudo com a marca "fu"`);
+    return c as ConteudoFala;
+  }
   /** v12: o mundo fisico do pet (null nos v1-v11). A tela so le */
   get mundo(): Mundo | null { return this.v11 && this.v11.laco instanceof MotorCorpoMundo ? this.v11.laco.mundo : null; }
   /** a observacao de agora, a que o pet le: nos v11, com os receptores do corpo */
@@ -386,8 +425,46 @@ export class Motor {
     this.produto = { chamadosPeloCorpo: false, ...(ch as ChavesProduto) }; this.produtoLido = true;
     (this.v11!.laco as MotorCorpoMundo).decidirNaComida = this.produto.decisaoNaComida;
   }
+  /** a ponte da luta (PE3), uma vez, no comeco do registro de um ovo v16 ou v17 (depois das chaves do produto e do "cb" do ovo): a luta passa a
+      entregar o resumo ao corpo e, com o modular ativo, ao DigiBrain. O jogo grava nos ovos novos (src/produto.ts); a pesquisa e os gabaritos
+      nunca chamam */
+  ligarPonteLuta(eps = false): void {
+    /* PE4: com `eps`, a marca e { luta: true, eps: true } e o epsilon da luta passa a ler o g_exp do modular; sem ela ({ luta: true }, os
+       saves da PE3) o epsilon e o de hoje, byte a byte */
+    const v = eps ? { luta: true as const, eps: true as const } : { luta: true as const };
+    this._ponteLuta(v);
+    this.log.push([this.e.tick, "pl", v]);
+  }
+  private _ponteLuta(v: unknown): void {
+    const chaves = v && typeof v === "object" ? Object.keys(v).join() : "";
+    if (!v || typeof v !== "object" || (chaves !== "luta" && chaves !== "luta,eps") || (v as { luta: unknown }).luta !== true
+      || (chaves === "luta,eps" && (v as { eps: unknown }).eps !== true))
+      throw new Error(`marca da ponte da luta inválida: ${JSON.stringify(v)}`);
+    if (!ehCerebroTrocavel(this.versao) && this.versao !== VERSAO_PET_LAB) throw new Error(`só os pets v${VERSAO_PET_LAB} e v${VERSAO_V17} (e a v18, a v17 com o empurrão) têm a ponte da luta (este é v${this.versao})`);
+    if (this.ponteLuta || this.nDecisoes || this.nDono || this.e.tick !== TICK_INICIAL)
+      throw new Error("a marca da ponte da luta vai uma vez, no começo do registro");
+    this.ponteLuta = true; this.epsLuta = chaves === "luta,eps";
+    (this.v11!.laco as MotorCorpoMundo).corpo.luta = CONFIG_LUTA_CORPO_LIGADA;
+    this.modular?.ligarLutaMemoria();                    // o modular da v16 e o da v17 com o "cb" do ovo (o "cb" de depois liga em _trocarCerebro)
+  }
+  /** DC3d da CONVERSA_PET: a fala com conteudo, uma vez, no comeco do registro de um pet de teste v16 (depois das chaves do produto e da ponte
+      da luta). O jogo grava no ovo de teste novo so com a preferencia de tela ligada (src/lab.ts); a pesquisa e os gabaritos nunca chamam */
+  ligarFalaUnidades(): void {
+    const v = { fala: true as const };
+    this._falaUnidades(v);
+    this.log.push([this.e.tick, "fu", v]);
+  }
+  private _falaUnidades(v: unknown): void {
+    if (!v || typeof v !== "object" || Object.keys(v).join() !== "fala" || (v as { fala: unknown }).fala !== true)
+      throw new Error(`marca da fala com conteúdo inválida: ${JSON.stringify(v)}`);
+    if (this.versao !== VERSAO_PET_LAB) throw new Error(`só o pet de teste (v${VERSAO_PET_LAB}) tem a fala com conteúdo (este é v${this.versao})`);
+    if (this.falaUnidades || this.nDecisoes || this.nDono || this.e.tick !== TICK_INICIAL || this.modular === null || this.modular.k !== 0)
+      throw new Error("a marca da fala com conteúdo vai uma vez, no começo do registro");
+    this.falaUnidades = true;
+    this.modular = new DigiBrain(CONFIG_DIGIBRAIN_LAB_FALA, INATOS_MODULAR, this.ponteLuta);   // o modular de hoje sai sem ter decidido
+  }
   registrarOrigem(o: Origem): void {
-    if (this.log.some(ev => ev[1] !== "c" && ev[1] !== "p")) throw new Error("a origem precisa ser o primeiro evento do registro");
+    if (this.log.some(ev => ev[1] !== "c" && ev[1] !== "p" && ev[1] !== "pl" && ev[1] !== "fu")) throw new Error("a origem precisa ser o primeiro evento do registro");
     this.log.push([this.e.tick, "o", o]);
     this._origem(o);
   }
@@ -592,6 +669,7 @@ export class Motor {
         res.pontosA === 1 ? 1 : res.pontosA === 0 ? -1 : 0, this.temp.sensibilidade) : null;
       if (rc) this.confEvento.push(ordemL);
       if (this.gp) this.gp.aprender(res, s, M.usadas!, rc ? rc.novidade : 1);
+      if (this.ponteLuta) this._resumoDaLuta(rivalDaConfianca(rival, semente, k, estSalao), res);   // a ponte da luta (PE3): so com a marca "pl"
       if (this.estagioAtual === "adolescente") this.sparring++;
       const contra = liga ? `na Liga dos Líderes, contra ${nomeMegaLiga(k)} de ${NOME_BOT[LIGA[k].lider]}`
         : inst ? `${inst.id === "palacio" ? "no" : "na"} ${inst.nome}, contra ${nomeForma(formaRivalInstalacao(semente, k))}`
@@ -625,6 +703,22 @@ export class Motor {
     this.vida5.lutas.push({ tick: this.e.tick, rival, lesao,
       resultado: res.pontosA === 1 ? "vitoria" : res.pontosA === 0 ? "derrota" : "empate" });
     return { ...M, res, venceu, lesao };
+  }
+  /** a ponte da luta (PE3; docs/TAREFA_V3_PONTE_LUTA.md, 3.2 e 3.7): o resumo de uma luta da serie, em inteiros (o rival, o resultado, a vida
+      perdida em S), vai ao corpo (a dor, com qualquer cerebro) e, so com o modular ativo, ao DigiBrain. Com o A ativo o modular esta parado e
+      nao recebe nada (a regra do #562); o A nunca recebe o resumo. Sem rng */
+  private _resumoDaLuta(rival: string, res: ResultadoLuta): void {
+    const resultado = res.pontosA === 1 ? 1 : res.pontosA === 0 ? -1 : 0;
+    /* a vida da luta e float (hp em decimos de ponto): a vida perdida em S e o arredondamento (meio para cima; o dano e >= 0) de dano x S / vida
+       maxima, com o dano da vida do comeco da luta ate a do fim (cortada em 0: o golpe que passa da vida nao conta a mais), e cortada em [0, S] */
+    const lado = res.E0.L[0], depois = res.E.L[0];
+    if (!(lado.hpMax > 0)) throw new Error(`vida maxima da luta invalida: ${lado.hpMax}`);
+    const dano = Math.max(0, lado.hp - Math.max(0, depois.hp));
+    const s = (this.v11!.laco as MotorCorpoMundo).corpo.S;
+    const vidaPerdidaS = Math.min(s, Math.max(0, Math.round(dano * s / lado.hpMax)));
+    const laco = this.v11!.laco as MotorCorpoMundo;
+    laco.aplicarResumoLuta(rival, resultado, vidaPerdidaS);
+    if (this.lab !== null) this.lab.receberLuta(rival, resultado, vidaPerdidaS, laco.estado.tick);
   }
   /** intervencao do dono nos gambits: travar, destravar, vetar, liberar */
   intervirGambit(op: OpGambit, k: string): void {
@@ -731,6 +825,27 @@ export class Motor {
     lerDeixarBola(eventoDeixarBola(this.e.tick, x, y));
     this._conferirMorte(); this._vivo();
     (this.v11!.laco as MotorCorpoMundo).bolaDoDono(x, y);
+  }
+  /** v19 (docs/TAREFA_V3_PEGAR_PET.md): o dono pega o pet e o solta em (x, y) do mapa do mundo (subunidades inteiras, com sinal; fora do
+      mapa ele cai na borda mais proxima, PP-4). So a posicao muda (PP-1): nao e contato nem cuidado, e nada vai ao cerebro, ao corpo, ao
+      vinculo ou ao historico. O pet dormindo nao e pego (PP-2), e o morto tambem nao. Antes da v19 o evento nao existe: falha alto */
+  levarPet(x: number, y: number): void {
+    lerLevarPet(eventoLevarPet(this.e.tick, x, y));
+    this._conferirLevarPet();
+    this._conferirMorte(); this._vivo();
+    if (this.e.dormindo) throw new Error(`o pet está dormindo (tick ${this.e.tick}): não dá para pegá-lo (PP-2)`);
+    const t = this.e.tick;
+    this._levarPet(x, y);
+    this.log.push([t, "lp", { x, y }]);
+  }
+  private _conferirLevarPet(): void {
+    if (this.versao < VERSAO_V19 || this.mundo === null) throw new Error(`só os pets v${VERSAO_V19} em diante são levados pelo dono (este é v${this.versao})`);
+  }
+  private _levarPet(x: number, y: number): void {
+    lerLevarPet(eventoLevarPet(this.e.tick, x, y));
+    this._conferirLevarPet();
+    this._conferirMorte(); this._vivo();
+    (this.v11!.laco as MotorCorpoMundo).petDoDono(x, y);
   }
   private _validarComida(tipo: unknown, x: unknown, y: unknown): void {
     if (tipo !== "racao") throw new Error(`só a ração vai ao chão nos pets v12 (MV-3): ${String(tipo)}`);
@@ -1043,7 +1158,7 @@ export class Motor {
     this._trocarCerebro(v);
   }
   private _validarCerebro(v: unknown): asserts v is { cerebro: "modular" | "a" } {
-    if (this.versao !== VERSAO_V17) throw new Error(`só os pets v${VERSAO_V17} trocam de cérebro (este é v${this.versao})`);
+    if (!ehCerebroTrocavel(this.versao)) throw new Error(`só os pets v${VERSAO_V17} (e a v18, a v17 com o empurrão) trocam de cérebro (este é v${this.versao})`);
     if (!v || typeof v !== "object" || Object.keys(v).join() !== "cerebro" || !(CEREBROS as readonly unknown[]).includes((v as { cerebro: unknown }).cerebro))
       throw new Error(`troca de cérebro inválida: ${JSON.stringify(v)}`);
     const c = (v as { cerebro: string }).cerebro, noOvo = !this.cerebroEscolhido && !this.nDecisoes && this.e.tick === TICK_INICIAL;
@@ -1052,7 +1167,7 @@ export class Motor {
   private _trocarCerebro(v: unknown): void {
     this._validarCerebro(v);
     this._conferirMorte(); this._vivo();
-    if (v.cerebro === "modular") this.modular ??= new DigiBrain();
+    if (v.cerebro === "modular") { this.modular ??= new DigiBrain(); if (this.ponteLuta) this.modular.ligarLutaMemoria(); }
     this.modularAtivo = v.cerebro === "modular";
     this.cerebroEscolhido = true;
     (this.v11!.laco as MotorCorpoMundo).digibrain = this.modularAtivo;   // o modular ve o mundo, escolhe o alvo e recebe a consequencia dele
@@ -1110,6 +1225,8 @@ export class Motor {
       ...(this.versao === VERSAO_PET_LAB ? [["lab", { ...this.modular!.estadoInterno(), motivos: undefined }]] : []),
       /* a v17 depois do primeiro "cb": o cerebro que decide e o modular (a v17 sem "cb" assina como a v15) */
       ...(this.cerebroEscolhido ? [["cb", this.modularAtivo ? "modular" : "a", this.modular ? { ...this.modular.estadoInterno(), motivos: undefined } : null]] : []),
+      ...(this.ponteLuta ? [this.epsLuta ? ["pl", "eps"] : ["pl", true]] : []),   /* a ponte da luta: so com a marca (a assinatura dos pets sem ela nao muda) */
+      ...(this.falaUnidades ? [["fu", true]] : []),   /* DC3d: a fala com conteudo, so com a marca (a assinatura dos pets sem ela nao muda) */
       ["v11", this.v11!.braco.cerebro.estadoInterno(), this.v11!.laco.estadoDict(), this.v11!.laco.proximaDecisao],
       ["mundo", this.mundo!.resumo(), [...(this.v11!.laco as MotorCorpoMundo).vistosEm]]]);
   }
@@ -1130,6 +1247,8 @@ export class Motor {
       case "c": this._config(ev[2].dur); break;
       case "p": this._produto(ev[2]); break;
       case "cb": this._trocarCerebro(ev[2]); break;
+      case "pl": this._ponteLuta(ev[2]); break;
+      case "fu": this._falaUnidades(ev[2]); break;
       case "u": this._liberar(ev[2].n); break;
       case "i": this._item(ev[2].op, ev[2].id); break;
       case "k": this._armarCarta(ev[2].id); break;
@@ -1148,6 +1267,14 @@ export class Motor {
         const { x, y } = b as Record<string, unknown>;
         lerDeixarBola(eventoDeixarBola(t, x, y));
         this._deixarBola(x as number, y as number); break;
+      }
+      case "lp": {
+        const l = ev[2] as unknown;
+        if (!l || typeof l !== "object" || Object.keys(l).sort().join() !== "x,y")
+          throw new Error(`evento de levar o pet inválido no registro (tick ${t}): ${JSON.stringify(l)}`);
+        const { x, y } = l as Record<string, unknown>;
+        lerLevarPet(eventoLevarPet(t, x, y));
+        this._levarPet(x as number, y as number); break;
       }
       case "f":
         if (!ev[2] || typeof ev[2] !== "object" || Object.keys(ev[2]).length !== 1 || ev[2].campeao !== true)

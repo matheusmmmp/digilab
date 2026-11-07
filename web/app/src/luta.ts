@@ -11,6 +11,8 @@ import {
 } from "../motor/index.ts";
 import { cenaDaLuta, type IdCenaTR } from "./telas/lutar/palcoTR/cenasTR.ts";
 import { aplicarEventosTR, visualNovoTR, type VisualTR } from "./telas/lutar/palcoTR/desenhoTR.ts";
+import { passosDaEspera, passosDoQuadro } from "./telas/lutar/palcoTR/nocauteTR.ts";
+import { consumirPausa } from "./telas/lutar/palcoTR/efeitosTR.ts";
 import { gradeDe } from "./grades.ts";
 import { jogoAtual, mudarMotor, mudarTamer, tamerAtual } from "./jogo.ts";
 import { ehLuta } from "./rotas.ts";
@@ -322,8 +324,9 @@ const hudDe = (S: EstadoTR): HudLado[] => S.L.map(l => ({ hp: l.hp, hpMax: l.hpM
 /** passos da luta por quadro da tela (um quadro a cada QUADRO_MS): o tempo real (3 x 16 ms = 48 ms); x2 o dobro; com o movimento reduzido,
     4x (menos tempo de movimento na tela). PROPOSTO, SEM FONTE */
 const QUADRO_MS = 48, PASSOS_QUADRO = 3, PASSOS_RAPIDO = 6, PASSOS_REDUZ = 12;
-/** a pausa no fim de cada luta (o nocaute fica na tela) e entre as lutas de uma serie (ms). PROPOSTO, SEM FONTE */
-const PAUSA_FIM = 900, PAUSA_SERIE = 1500;
+/** a pausa no fim de cada luta (o nocaute fica na tela) e entre as lutas de uma serie (ms); no fim por nocaute, PAUSA_FIM_KO, para o "K.O."
+    da E5 ficar na tela (LUTA_EFEITOS). PROPOSTO, SEM FONTE */
+const PAUSA_FIM = 900, PAUSA_FIM_KO = 1800, PAUSA_SERIE = 1500;
 /** a animacao de uma luta ja decidida (ou das lutas seguidas, uma depois da outra, com "luta k de n" no palco): o palco refaz cada luta
     da entrada guardada no resultado (res.tr.entrada), passo a passo, e confere que ela acaba como a do motor (falha alto se nao). Pausa
     e x2 so mudam a velocidade de mostrar; no fim chama fim(palco) e para. nLutas: quantas lutas a serie tem (as jogadas podem ser
@@ -377,24 +380,38 @@ function animar(serie: ResultadoLuta[], nLutas: number, As: LutadorTela | Lutado
     p.hud = hudDe(sim.S); p.segundos = Math.floor(sim.S.passo * PASSO_TR_MS / 1000); p.morteSubita = sim.S.passo >= CTR_TR.morteSubita;
     return acabou;
   };
+  /* a espera depois do fim (o nocaute fica na tela): quadros de QUADRO_MS que tambem deixam os efeitos do ultimo golpe acabarem (visual.extra) */
+  const esperar = (ms: number, depois: () => void) => {
+    let falta = Math.ceil(ms / QUADRO_MS), k = 0;
+    /* a camera lenta do nocaute (E5) continua nos primeiros quadros da espera: o Die e os ultimos efeitos andam devagar (so o desenho) */
+    const ko = serie[j].tr!.fim === "ko";
+    const tic = () => {
+      /* pausar tambem segura a espera do fim (o nocaute fica parado na tela) */
+      if (LUTA.pausado) { timer = setTimeout(tic, QUADRO_MS); return; }
+      LUTA.palco!.visual.extra += passosDaEspera(k++, PASSOS_QUADRO, ko, reduz); avisarLuta(); if (--falta <= 0) depois(); else timer = setTimeout(tic, QUADRO_MS);
+    };
+    timer = setTimeout(tic, QUADRO_MS);
+  };
   const terminar = (pausa: boolean) => {
     /* a proxima luta da serie: o palco recomeca com a vida que sobrou (uma pausa maior entre elas) */
     if (j < serie.length - 1) {
       const seguir = () => { j++; abrir(); avisarLuta(); agendar(); };
-      if (pausa) timer = setTimeout(seguir, PAUSA_SERIE); else seguir();
+      if (pausa) esperar(PAUSA_SERIE, seguir); else seguir();
       return;
     }
     const fechar = () => { fim(LUTA.palco!); LUTA.lutando = false; avisarLuta(); };
-    if (pausa) timer = setTimeout(fechar, PAUSA_FIM); else fechar();
+    if (pausa) esperar(serie[j].tr!.fim === "ko" ? PAUSA_FIM_KO : PAUSA_FIM, fechar); else fechar();
   };
   const reduz = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const quadro = () => {
     if (LUTA.pausado) { agendar(); return; }
-    const feito = avancar(reduz ? PASSOS_REDUZ : LUTA.rapido ? PASSOS_RAPIDO : PASSOS_QUADRO, true);
+    /* a camera lenta do nocaute (E5) e so do desenho: menos passos por quadro no fim de uma luta que acaba em nocaute; os passos sao os mesmos */
+    const feito = avancar(passosDoQuadro(sim.S.passo, reduz ? PASSOS_REDUZ : LUTA.rapido ? PASSOS_RAPIDO : PASSOS_QUADRO, serie[j].tr!, reduz), true);
     avisarLuta();
-    if (feito) terminar(true); else agendar();
+    if (feito) terminar(true); else agendar(consumirPausa(LUTA.palco!.visual, reduz));
   };
-  const agendar = () => { timer = setTimeout(quadro, QUADRO_MS); };
+  /* a pausa do acerto (E1) e so do desenho: o proximo quadro demora, os passos da luta e o resultado nao mudam */
+  const agendar = (pausaMs = 0) => { timer = setTimeout(quadro, QUADRO_MS + pausaMs); };
   let timer: ReturnType<typeof setTimeout> | undefined;
   /* pular: refaz o resto sem desenhar e vai para o fim da ultima luta jogada */
   pularParaOFim = () => {

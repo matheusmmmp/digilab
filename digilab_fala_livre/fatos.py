@@ -12,12 +12,16 @@ tamanho, e falha alto (FatosInvalidos) em qualquer outra coisa. Cada fato ganha 
     W coisa que ouvi no Digimundo (uma entrada do almanaque, pelo id: a web nunca manda o texto)
     Q lembranca autobiografica (Q1, Q2) e Z mudanca de faceta (C4, M6; chave "memoria_autobio"; digilab_fala_livre/memoria_fala.py)
     A arvore da minha especie (com "arvore": true, so o servidor liga; o texto vem de arvore.py pela especie)
+  conversa-v1 (CONVERSA_PET, M4, decisao D3):
+    J o que o dono me disse nesta conversa (so o que ele DISSE, nunca o que aconteceu; montado de `fatos_do_dono`
+      a partir do historico validado, nunca de `fatos_de_estado`; so o conversa-v1 aceita)
 
 Temperamento e carater entram so nos eixos extremos (|valor| >= LIMIAR_EXTREMO); o vinculo so em faixa.
 """
 
 from __future__ import annotations
 
+import unicodedata
 from dataclasses import dataclass
 
 LIMIAR_EXTREMO = 0.2
@@ -35,6 +39,9 @@ MAX_HISTORIA = 12
 TIPO_HISTORIA = {"H": "habito meu", "O": "habito do dono", "P": "gosto", "L": "marco"}
 TIPO_MENTIRA = "dizer agora"
 TIPO_MUNDO = "coisa que ouvi no Digimundo"
+TIPO_DONO_DISSE = "o dono me disse"
+MAX_FATOS_DONO = 4        # PROPOSTO (M4, D3, SEM FONTE): os 4 ditos mais recentes do dono; mais que isso e historia, nao fato
+MAX_TEXTO_DONO = 120      # PROPOSTO (M4, SEM FONTE): o dito entra cortado; a fala inteira (300) segue so na SITUACAO
 REGRAS_HISTORIA = ("sequencia", "periodo", "periodo_dono", "cuidado_dono", "cede_manha", "demora", "gosto",
                    "desgosto", "treino_favorito", "revanche", "evolucao", "primeira_vitoria", "primeira_derrota",
                    "venceu_depois", "lesao", "ausencia", "sombria", "cruzamento")
@@ -229,6 +236,31 @@ def _dados(d) -> dict:
             out[k] = _txt(v, k)
         else:
             raise FatosInvalidos(f"{k}: valor de dados invalido")
+    return out
+
+
+def _dito_em_uma_linha(t: str) -> str:
+    """O que o dono disse, saneado para virar a parte de um fato: UMA linha (qualquer espaco ou quebra, inclusive unicode, vira
+    espaco; caractere de controle some), aspas duplas viram simples, colchetes e chaves viram parenteses (nao imitam um
+    identificador [E1] nem um JSON), cortado em MAX_TEXTO_DONO."""
+    t = "".join(c for c in t if unicodedata.category(c) not in ("Cc", "Cf") or c.isspace())
+    t = " ".join(t.split())[:MAX_TEXTO_DONO].strip()
+    return t.replace('"', "'").translate(str.maketrans("[]{}", "()()"))
+
+
+def fatos_do_dono(ditos: list[str]) -> list[Fato]:
+    """Fatos [J] "o dono me disse" (D3): `ditos` = as falas do dono nas trocas ACEITAS pelo conversa-v1 (sessao e estagio
+    atuais), da mais antiga para a mais nova. Saem no maximo MAX_FATOS_DONO, a mais recente primeiro (J1). Fala vazia depois do
+    saneamento nao vira fato. O texto vai entre aspas: o fato diz o que foi dito, nunca que e verdade."""
+    out: list[Fato] = []
+    for d in reversed(ditos):
+        if not isinstance(d, str):
+            raise FatosInvalidos("dito do dono precisa ser texto")
+        t = _dito_em_uma_linha(d)
+        if t:
+            out.append(Fato(f"J{len(out) + 1}", TIPO_DONO_DISSE, f'"{t}"'))
+        if len(out) == MAX_FATOS_DONO:
+            break
     return out
 
 

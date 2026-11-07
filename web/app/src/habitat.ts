@@ -15,20 +15,20 @@
 import { useEffect, useState } from "react";
 import { CHAVE } from "./save.ts";
 
-export type Mapa = "ilha" | "voxel" | "floresta" | "cassette";
+export type Mapa = "ilha" | "digital" | "voxel" | "floresta" | "cassette";
 export type Camera = "atras" | "lateral";
 export type Visual = "normal" | "gba-hd" | "hd-2d";
 export type Controle = "livre" | "fixa";
 export const CHAVE_HABITAT = CHAVE + "-habitat";
 export const MAPA_PADRAO: Mapa = "ilha", CAMERA_PADRAO: Camera = "atras", VISUAL_PADRAO: Visual = "normal", CONTROLE_PADRAO: Controle = "livre";
-export const NOME_MAPA: Record<Mapa, string> = { ilha: "Ilha", voxel: "Voxel", floresta: "Floresta", cassette: "Cassette" };
+export const NOME_MAPA: Record<Mapa, string> = { ilha: "Ilha", digital: "Digital", voxel: "Voxel", floresta: "Floresta", cassette: "Cassette" };
 export const NOME_CAMERA: Record<Camera, string> = { atras: "Atrás", lateral: "Lateral" };
 export const NOME_CONTROLE: Record<Controle, string> = { livre: "Livre", fixa: "Fixa" };
 export const NOME_VISUAL: Record<Visual, string> = { normal: "Normal", "gba-hd": "GBA HD", "hd-2d": "HD-2D" };
 export const VISUAIS: readonly Visual[] = ["normal", "gba-hd", "hd-2d"];
 /** os mapas com assets fora do repositorio: so no modo dev */
 export const MAPAS_DEV: readonly Mapa[] = ["floresta", "cassette"];
-const MAPAS: readonly Mapa[] = ["ilha", "voxel", "floresta", "cassette"];
+const MAPAS: readonly Mapa[] = ["ilha", "digital", "voxel", "floresta", "cassette"];
 /** modo dev do Vite (import.meta.env nao existe no vitest em node puro sem o Vite: conta como build) */
 const DEV = (() => { try { return !!import.meta.env?.DEV; } catch { return false; } })();
 /** os mapas que esta pagina oferece, na ordem da tela */

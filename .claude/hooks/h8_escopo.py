@@ -14,9 +14,13 @@ Os papéis:
 
   O shell dele não passa por aqui: quem o cobre é o H6.
 - **testador:** nenhuma escrita. No shell, só estes comandos:
+  - `npm run tipos`, `npm test` e `npm run test` (INFRA_AGENTES E4);
   - `npm run build`, `npm run e2e`, `npm run capturas` e `npx playwright test`, sempre sem `--update-snapshots`/`-u`;
   - leitura (`ls`, `cat`, `git diff`…);
   - nenhum redirecionamento `>`.
+- **auditor** (o `auditor-numeros` da INFRA_AGENTES, E6): nenhuma escrita. No shell, só leitura (a lista do H6, que tem o `sha256sum`, o
+  `Get-FileHash`, o `stat` e o `du`, para o hash e o tamanho dos artefatos), e o `tar` só para listar (`tar -tzf`, E6b), sem `find` e
+  sem redirecionamento `>`.
 
 Um papel desconhecido bloqueia: um agente com o hook mal configurado não ganha escopo livre.
 """
@@ -33,12 +37,12 @@ from h3_main import segmentos  # noqa: E402
 from h6_capturas import (FERRAMENTAS_DE_EDICAO, FERRAMENTAS_DE_SHELL, atualiza_referencia, protegido,  # noqa: E402
                          so_leitura)
 
-PAPEIS = ("designer", "implementador", "testador")
+PAPEIS = ("designer", "implementador", "testador", "auditor")
 DESIGNER_PASTAS = ("docs/pranchas/ux-pet/",)
 DESIGNER_ARQUIVOS = ("docs/PROPOSTAS_V3_UX_TELA_PET.md",)
 IMPLEMENTADOR_NEGADOS = ("web/app/motor/", "web/app/test/gabaritos/", "web/app/src/save.ts", "web/app/src/rotas.ts", "digilab/",
                          "experiments/", "servidor/")
-TESTADOR_NPM = {"build", "e2e", "capturas"}
+TESTADOR_NPM = {"build", "e2e", "capturas", "tipos", "test", "teste"}   # tipos e test: INFRA_AGENTES E4, seção 3.4
 REDIRECIONAMENTO = re.compile(r"(?<![0-9&])>{1,2}(?!&)")
 
 
@@ -63,6 +67,8 @@ def casa(rel: str, prefixos: tuple[str, ...]) -> bool:
 def checar_edicao(papel: str, alvo: str, raiz: Path, cwd: Path) -> str | None:
     if papel == "testador":
         return "H8: o testador não escreve arquivos; devolve as falhas e os diffs ao Gerente."
+    if papel == "auditor":
+        return "H8: o auditor não escreve arquivos; devolve a tabela dos números ao coordenador."
     rel = relativo(alvo, raiz, cwd)
     if rel is None:
         return f"H8: o {papel} só escreve dentro do projeto ({alvo} está fora)."
@@ -90,10 +96,33 @@ def comando_do_testador(tokens: list[str]) -> bool:
         return False
     nome = Path(resto[0]).stem.lower()
     if nome == "npm":
-        return len(resto) >= 3 and resto[1] == "run" and resto[2] in TESTADOR_NPM
+        return (len(resto) >= 3 and resto[1] == "run" and resto[2] in TESTADOR_NPM) or (len(resto) == 2 and resto[1] == "test")
     if nome == "npx":
         return len(resto) >= 3 and resto[1] == "playwright" and resto[2] == "test"
     return so_leitura(resto) and nome not in ("find",)   # o find tem -delete e -exec
+
+
+TAR_ESCRITA_CURTA = set("xcruA")                 # extrair, criar, acrescentar, atualizar, concatenar
+TAR_ESCRITA_LONGA = ("--extract", "--get", "--create", "--append", "--update", "--catenate", "--concatenate", "--delete",
+                     "--to-command", "--use-compress-program", "--checkpoint-action", "--info-script", "--new-volume-script")
+
+
+def tar_so_lista(argumentos: list[str]) -> bool:
+    """O tar só no modo de listar: um `-t`/`--list` (ou o `t` no grupo de letras do começo, `tzf`), nada que extraia, crie ou rode
+    programa (o auditor, INFRA_AGENTES E6b)."""
+    lista = False
+    for i, a in enumerate(argumentos):
+        if a.startswith("--"):
+            nome = a.split("=", 1)[0]
+            if nome in TAR_ESCRITA_LONGA:
+                return False
+            lista = lista or nome == "--list"
+        elif a.startswith("-") or (i == 0 and a.isalpha()):
+            letras = a.lstrip("-")
+            if set(letras) & TAR_ESCRITA_CURTA or "I" in letras:
+                return False
+            lista = lista or "t" in letras
+    return lista
 
 
 def checar_shell(papel: str, comando: str) -> str | None:
@@ -102,7 +131,17 @@ def checar_shell(papel: str, comando: str) -> str | None:
     if papel == "implementador":
         return None                            # o shell do implementador é coberto pelo H6 (e pelo H1/H3 da sessão)
     if REDIRECIONAMENTO.search(comando):
-        return "H8: o testador não redireciona saída para arquivo."
+        return f"H8: o {papel} não redireciona saída para arquivo."
+    if papel == "auditor":
+        for tokens in segmentos(comando):
+            resto = [t for t in tokens if not re.match(r"^[A-Za-z_][A-Za-z0-9_]*=", t)]
+            if resto and Path(resto[0]).stem.lower() == "tar":
+                if not tar_so_lista(resto[1:]):
+                    return f"H8: o auditor só usa o tar para listar (-t, --list), sem extrair nem criar; não: {' '.join(tokens)}"
+                continue
+            if resto and not (so_leitura(resto) and Path(resto[0]).stem.lower() != "find"):
+                return f"H8: o auditor só roda comandos de leitura (sha256sum, Get-FileHash, stat, du, cat, ls…); não: {' '.join(tokens)}"
+        return None
     for tokens in segmentos(comando):
         if not comando_do_testador(tokens):
             return ("H8: o testador só roda npm run build/e2e/capturas, npx playwright test (sem --update-snapshots/-u) e leitura; "

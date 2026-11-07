@@ -16,6 +16,7 @@ import { resumoAparencia } from "./EscolhaPele.tsx";
 
 const DESCRICAO: Record<Mapa, string> = {
   ilha: "o estilo Animal Crossing, com o mundo curvo",
+  digital: "a ilha num fundo de anime: o céu pintado, a grama chapada com flores e o barranco de pedra",
   voxel: "a mesma ilha em cubos, feita por código",
   floresta: "o kit Tiny Fantasy Forest",
   cassette: "as texturas e as árvores do Cassette Beasts",
