@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react";
 import { OVO, chaveSprite, corDominante } from "../../../motor/index.ts";
 import { zoomAtual } from "../../escala.ts";
 import { atlasAtual, desenharSprite, dimSprite, escalaSprite, quadroAgora, type AtlasOk } from "../../atlas.ts";
-import { S, desenharGrade, gradeDe, paleta } from "../../grades.ts";
+import { S, contornoGrade, desenharGrade, gradeDe, paleta } from "../../grades.ts";
 import { velocidadeAtual } from "../../tempo.ts";
 import { flashAtual } from "../../flash.ts";
 import { balancoOvo, jogoAtual, passarQuadroOvo } from "../../jogo.ts";
@@ -167,7 +167,7 @@ function desenharIcone(cx: CanvasRenderingContext2D, a: AtlasOk, g: Geo, x: numb
   const cab = icone === emoteDaReacaoAgora() ? CENA.cabeca : null, larg = Math.max(...ic.map(l => l.length));
   const bx = cab ? Math.min(g.W - 30, Math.max(2, cab[0] - (larg * 3) / 2)) : Math.min(g.W - 30, x + w - 4), by = cab ? Math.max(TOPO_LIVRE, cab[1] - ic.length * 3 - 6) : Math.max(TOPO_LIVRE, y - 30);
   cx.setTransform(3 * K, 0, 0, 3 * K, 0, 0);
-  cx.fillStyle = "#FFFFFF"; cx.fillRect(Math.round(bx / 3) - 1, Math.round(by / 3) - 1, larg + 2, ic.length + 2);
+  contornoGrade(cx, ic, Math.round(bx / 3), Math.round(by / 3));
   desenharGrade(cx, ic, Math.round(bx / 3), Math.round(by / 3), pal);
   cx.setTransform(1, 0, 0, 1, 0, 0);
 }
@@ -180,7 +180,7 @@ function desenharIconeGrade(cx: CanvasRenderingContext2D, g: Geo, x: number, y: 
   const ic = S[GRADE_DO_EMOTE[icone] ?? icone]; if (!ic) throw new Error("icone desconhecido: " + icone);
   const bx = Math.min(g.W - 30, x + w - 4), by = Math.max(TOPO_LIVRE, y - 30);
   cx.setTransform(3 * K, 0, 0, 3 * K, 0, 0);
-  cx.fillStyle = "#FFFFFF"; cx.fillRect(Math.round(bx / 3) - 1, Math.round(by / 3) - 1, 9, ic.length + 2);
+  contornoGrade(cx, ic, Math.round(bx / 3), Math.round(by / 3));
   desenharGrade(cx, ic, Math.round(bx / 3), Math.round(by / 3), pal);
   cx.setTransform(1, 0, 0, 1, 0, 0);
 }
