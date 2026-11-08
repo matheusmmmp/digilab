@@ -60,7 +60,9 @@ export const ENFEITES_MODELOS = {
   carro: { arquivos: ["carro/carro.gltf"], altura: 3.4, vento: 0, sombra: 2.3, baixo: false },
   /* a geladeira com o vaso e o trilho com o vagao (E3), com os tracos de nanquim na textura; na escala de brinquedo do carro */
   geladeira: { arquivos: ["geladeira/geladeira.gltf"], altura: 3.0, vento: 0, sombra: 1.4, baixo: false },
-  trilho: { arquivos: ["trilho/trilho.gltf"], altura: 2.0, vento: 0, sombra: 2.6, baixo: false },
+  /* o trilho refeito (docs/objetos3d/REFERENCIAS.md, 2026-11-07): o vagao de madeira do esboco, com a textura pintada e as normais
+     suavizadas; a altura fica (o alto do vagao, como antes), mas o trecho de trilho e mais curto (~2,5 x 1,4), e a sombra encolhe junto */
+  trilho: { arquivos: ["trilho/trilho.gltf"], altura: 2.0, vento: 0, sombra: 1.6, baixo: false },
 } as const satisfies Record<string, Modelo>;
 export type NomeEnfeite = keyof typeof ENFEITES_MODELOS;
 /** a mascara das partes que acendem a noite (o emissiveMap; fora do glTF, ao lado dele), por enfeite que tem luz */

@@ -60,7 +60,7 @@ describe("onde ficam os lugares (LG-G1 a LG-G4)", () => {
 
 /** os lugares retrabalhados com a textura pintada da Meshy (sem achatar; docs/TAREFA_V3_LUGARES_3D.md, secoes 14 e 16). Quem retrabalhar outro lugar
     junta o nome aqui */
-const TEXTURA_PINTADA: readonly NomeLugar[] = ["cais"];
+const TEXTURA_PINTADA: readonly NomeLugar[] = ["portao", "cais"];
 
 describe("a paleta da Ilha (LG-G5)", () => {
   const DOCS = join(__dirname, "..", "..", "..", "docs", "lugares3d");
