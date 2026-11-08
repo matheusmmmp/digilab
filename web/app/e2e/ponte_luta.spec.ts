@@ -74,7 +74,17 @@ for (const chave of Object.keys(SAVES)) {
     await page.waitForTimeout(500);                      // o app grava o save
     await abrir(page, chave, "#/pet/estado");
     const depois = JSON.parse(await registro(page)).log as unknown[][];
-    expect(depois.slice(0, regAntes.length)).toEqual(regAntes);
+    /* o ultimo evento de regAntes e um avanco de tempo [tick, "t", n]; o app estica esse n depois que o registro e lido (o relogio segue
+       andando), entao ele nao entra na igualdade: o prefixo sem ele e igual e, no lugar dele, o de agora tem um "t" no mesmo tick, n >= */
+    const ultimoAntes = regAntes[regAntes.length - 1];
+    const prefixo = ultimoAntes[1] === "t" ? regAntes.length - 1 : regAntes.length;
+    expect(depois.slice(0, prefixo)).toEqual(regAntes.slice(0, prefixo));
+    if (prefixo < regAntes.length) {
+      const esticado = depois[prefixo];
+      expect(esticado[0]).toBe(ultimoAntes[0]);
+      expect(esticado[1]).toBe("t");
+      expect(esticado[2] as number).toBeGreaterThanOrEqual(ultimoAntes[2] as number);
+    }
     expect(depois.filter(e => e[1] === "l")).toEqual(regAntes.filter(e => e[1] === "l"));
     expect(await page.evaluate(() => (window as any).__digilab.assinatura() as string)).toContain(chave.startsWith("v16") ? '"lab"' : '"cb"');
     expect(erros).toEqual([]);
