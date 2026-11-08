@@ -44,7 +44,7 @@ import { CAMERA_DEV, ligarCameraDev } from "../cameraDev.ts";
 import { pixelsDoMapa } from "./minimapa.ts";
 import { PRESETS, Pos, SEM_CONTORNO } from "./pos.ts";
 import { SACO_NA_TELA, VIAGEM, ZOOM_LUGAR_MOVEL, lugarAberto, progressoViagem, type Lugar } from "../../../viagem.ts";
-import { LUGARES, ORDEM_LUGARES, chaoDoLugar, estadoDoLugar, gradeDosLugares, pontoDoLugar as pontoLugarDe, pontoDoPet, type BaseDoMundo } from "./lugares.ts";
+import { LUGARES, ORDEM_LUGARES, chaoDoLugar, estadoDoLugar, gradeDosLugares, idaDoTreino, pontoDoLugar as pontoLugarDe, pontoDoPet, type BaseDoMundo } from "./lugares.ts";
 import { Apagador, montarMarcadores, type Marcadores } from "./marcadoresLugar.ts";
 import { TRANCAS } from "../../../trancas.ts";
 
@@ -108,7 +108,7 @@ class VistaIlha {
   private soltouEm: number | null = null;
   /** o treino na ilha: o pedido (CENA.treino) que esta tocando, quando comecou, o ponto em que o pet para para bater (ao lado do saco
       na tela) e o ultimo golpe que balancou o saco */
-  private treino: { pedido: number; desde: number; ponto: [number, number]; golpe: number } | null = null;
+  private treino: { pedido: number; desde: number; ponto: [number, number]; golpe: number; ida: number } | null = null;
   private treinoVisto: number | null = CENA.treino;
   /** a batida na bola: quantas rolagens o motor ja tinha (null antes do primeiro quadro: as de antes de abrir a ilha nao contam) */
   private rolagens: number | null = null;
@@ -150,7 +150,7 @@ class VistaIlha {
     };
     /* o ninho, o comedouro, a racao, a fruta e a bola (itens.ts) e o pet em papel */
     this.itens = new Itens(mu);
-    /* o portao e a barraca onde a grade da ilha os poe (grade.ts, porLugares; a LUGARES_3D), o saco a [3, -4] do ninho (lugares.ts) */
+    /* o portao e a barraca onde a grade da ilha os poe (grade.ts, porLugares; a planta A), o saco perto da praca (lugares.ts) */
     const base: BaseDoMundo = { ninho: this.itens.ninhoEm, comedouro: [mu.comedouro[0] / mu.cm.sub, mu.comedouro[1] / mu.cm.sub], area: this.ilha.area,
       grade: gradeDosLugares(this.ilha) };
     this.pontos = Object.fromEntries(ORDEM_LUGARES.map(id => [id, [...pontoLugarDe(id, base)]])) as Record<Lugar, [number, number]>;
@@ -324,12 +324,14 @@ class VistaIlha {
       this.treinoVisto = CENA.treino;
       const dir = new THREE.Vector3(1, 0, 0).applyQuaternion(this.camera.quaternion), h = Math.hypot(dir.x, dir.z) || 1;
       const [rx, rz] = [dir.x / h, dir.z / h], lado = viagem > 0 ? -1 : (motorCel[0] - sx) * rx + (motorCel[1] - sz) * rz >= 0 ? 1 : -1;
-      this.treino = { pedido: CENA.treino, desde: agora, ponto: [sx + lado * rx * GOLPE_DIST, sz + lado * rz * GOLPE_DIST], golpe: -1 };
+      const ponto: [number, number] = [sx + lado * rx * GOLPE_DIST, sz + lado * rz * GOLPE_DIST];
+      this.treino = { pedido: CENA.treino, desde: agora, ponto, golpe: -1, ida: idaDoTreino(Math.hypot(ponto[0] - motorCel[0], ponto[1] - motorCel[1])) };
     }
     const t = this.treino;
     const caminhando = viagem <= 0 && this.seguidor.caminhando;
     if (!t) return { cel: motorCel, golpe: this.bateBola, andando: emViagem || caminhando };
-    const dt = agora - t.desde, { ida, golpes, volta } = TREINO_MS, ponto = t.ponto;
+    /* a ida e a volta pela distancia (PA-3; idaDoTreino), os golpes pelo TREINO_MS */
+    const dt = agora - t.desde, { golpes } = TREINO_MS, ida = t.ida, volta = t.ida, ponto = t.ponto;
     const suave = (f: number) => (reduzido ? 1 : this.suave(f)), entre = (a: [number, number], b: [number, number], f: number) => this.entre(a, b, f);
     if (dt < ida) return { cel: entre(motorCel, ponto, suave(dt / ida)), golpe: null, andando: !reduzido };
     if (dt < ida + golpes) {

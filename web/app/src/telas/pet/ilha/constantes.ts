@@ -56,6 +56,9 @@ export const LUZ_NINHO = { raio: 2.2, cor: "255,214,140" } as const;
 export const KIT_DESDE_NINHO: readonly [number, number] = [1.3, -1];
 /** o treino na ilha: a ida ate o saco, os golpes e a volta (ms); um golpe a cada GOLPE_MS; o pet para a GOLPE_DIST celulas do saco */
 export const TREINO_MS = { ida: 900, golpes: 2400, volta: 900 } as const, GOLPE_MS = 600, GOLPE_DIST = 1.35;
+/** a velocidade da ida e da volta do treino (celulas por segundo; lugares.ts, idaDoTreino): a ida e a volta duram a distancia sobre ela, com
+    TREINO_MS.ida no minimo (a PA-3 da prancha da planta A, aprovada em 2026-11-08). PROPOSTO, SEM FONTE */
+export const TREINO_VEL = 7;
 /** a batida na bola: quanto dura o golpe (ms) */
 export const BATER_BOLA_MS = 450;
 /** a bola desenhada vai ate a do motor com esta constante de tempo (ms); salta quando a distancia passa de BOLA_SALTO celulas */
@@ -136,7 +139,7 @@ export const PLANTA_ILHA = {
       `altura` e a altura da faixa e `alto`, a fracao dela que a silhueta mais alta ocupa; `ilhas` e `morros`, quantos picos por volta.
     PROPOSTO, SEM FONTE */
 export const FIM_ILHA = {
-  degraus: [5, 9], ondula: 2,
+  degraus: [4, 7], ondula: 2,
   mar: 1200,
   silhuetas: {
     sal: 0xf1a17e, fundo: -5, altura: 18,

@@ -18,7 +18,7 @@
    Sem three e sem DOM (o teste le este modulo sozinho). A CENA (`lugares`, da frente LUGARES_3D) mora em lugaresCena.ts: cada modelo de LUGARES_MODELOS (public/lugares/<nome>/) entra pelo carregarVariante, como os enfeites
    (enfeites.ts), com a sombra redonda quando o modelo tem. Aberto e trancado sao o mesmo modelo: aberto, as partes da mascara (LUGARES_LUZ, o
    emissiveMap) acendem na cor do lugar; trancado, apagam. O cais (o multiplayer e futuro) fica trancado por LUGAR_ABERTO (lugaresIlha.ts) e sem menu. */
-import { PLANTA_ILHA } from "./constantes.ts";
+import { PLANTA_ILHA, TREINO_MS, TREINO_VEL } from "./constantes.ts";
 import { LUGARES_LUZ, LUGARES_MODELOS, type NomeLugar } from "./modelos.ts";
 import { lugarTrancado } from "../../../trancas.ts";
 
@@ -107,3 +107,7 @@ export function pontoDoPet(ponto: Ponto, raio: number, frente: Ponto, direita: P
   const f = raio + PET_MARGEM;
   return [ponto[0] - frente[0] * f - direita[0] * PET_LADO, ponto[1] - frente[1] * f - direita[1] * PET_LADO];
 }
+
+/** quanto dura a ida do pet ate o saco no treino (e a volta), em ms, para `dist` celulas (a PA-3, aprovada em 2026-11-08: com o saco perto da
+    praca, a ida fixa de 0,9 s fazia o pet cruzar ~19 celulas): TREINO_VEL celulas por segundo, nunca menos que TREINO_MS.ida */
+export const idaDoTreino = (dist: number): number => Math.max(TREINO_MS.ida, (Math.max(0, dist) / TREINO_VEL) * 1000);
