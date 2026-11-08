@@ -578,3 +578,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-08 — CONVERSA_PET, DC4a, o código da avaliação da voz da rede (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc4a`)](registro/2026-11.md)
 - [2026-11-08 — LUGARES_3D, o cais retrabalhado com a textura pintada (worker, Claude Code, Opus 5.5, branch `v3-objeto-cais`)](registro/2026-11.md)
 - [2026-11-08 — LUTA_POC, LP1: o núcleo da luta da POC no motor (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp1`)](registro/2026-11.md)
+- [2026-11-08 — LUGARES_3D, o cais em voxel (worker, Claude Code, Opus 5.5, branch `v3-objeto-cais-voxel`)](registro/2026-11.md)

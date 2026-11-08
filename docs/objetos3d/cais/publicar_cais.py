@@ -5,7 +5,9 @@ termos da Meshy, secao 2.4), troca os arquivos de web/app/public/lugares/cais/ (
 parte que acende) e roda o glTF-Validator (docs/itens3d/validar.cjs) para docs/lugares3d/cais/validacao.json, lido pelo
 test/lugares3d.test.ts.
 
-uso (da raiz): python -I docs/objetos3d/cais/publicar_cais.py <pasta com cais.gltf e cais.bin> <cais_cor.png> <pasta node_modules com o gltf-validator>
+uso (da raiz): python -I docs/objetos3d/cais/publicar_cais.py <pasta com cais.gltf e cais.bin> <cais_cor.png> <pasta node_modules com o gltf-validator> [voxel]
+  voxel: o cais em blocos da secao 17 (voxel_cais.py): o texto do pipeline e o sampler NEAREST nos dois filtros (o pixel duro na tela, sem
+  mipmap, que misturaria os blocos vizinhos do atlas)
 """
 import json, os, shutil, subprocess, sys
 from pathlib import Path
@@ -15,7 +17,12 @@ AQUI = Path(__file__).parent
 PUB = RAIZ / "web" / "app" / "public" / "lugares" / "cais"
 
 
-def main(gl: str, cor: str, node_modules: str) -> None:
+PIPELINE_VOXEL = ("docs/TAREFA_V3_LUGARES_3D.md, secao 17: o cais em voxel, a partir da malha da Meshy e da textura pintada com o realce da "
+                  "secao 16 (textura_cais.py, sem paleta): 48 blocos no comprido, a cor de cada bloco pela media de 7 pontos da malha, as faces "
+                  "expostas juntadas em retangulos e um texel por face de bloco num atlas de 256 px com o filtro NEAREST (voxel_cais.py)")
+
+
+def main(gl: str, cor: str, node_modules: str, modo: str = "") -> None:
     tarefas = {
         "esboco": json.loads((AQUI / "esbocos" / "esboco_1_pier_barco.json").read_text(encoding="utf-8"))["id"],
         "vistas": json.loads((AQUI / "vistas" / "vistas.json").read_text(encoding="utf-8"))["id"],
@@ -31,6 +38,13 @@ def main(gl: str, cor: str, node_modules: str) -> None:
                      "azul, do amarelo e do musgo, 512 px em paleta de 192 cores com pontilhado (textura_cais.py)"),
         "licenca": "License.txt ao lado",
     }
+    if modo == "voxel":
+        g["asset"]["extras"]["pipeline"] = PIPELINE_VOXEL
+        if len(g.get("samplers", [])) != 1:
+            raise SystemExit("o voxel devia ter 1 sampler: " + str(g.get("samplers")))
+        g["samplers"][0].update({"magFilter": 9728, "minFilter": 9728})
+    elif modo:
+        raise SystemExit("modo desconhecido: " + modo)
     if [i["uri"] for i in g.get("images", [])] != ["cais_cor.png"]:
         raise SystemExit("o glTF devia usar so cais_cor.png: " + str(g.get("images")))
     for a in PUB.glob("*"):
@@ -47,4 +61,4 @@ def main(gl: str, cor: str, node_modules: str) -> None:
 
 
 if __name__ == "__main__":
-    main(*sys.argv[1:4])
+    main(*sys.argv[1:5])
