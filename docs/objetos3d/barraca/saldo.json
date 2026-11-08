@@ -1,0 +1,6 @@
+{
+ "teto_da_sessao": 36,
+ "gasto": {"vistas": 6, "malha": 30, "total": 36},
+ "saldo_visto": {"antes_das_vistas": 224, "depois_das_vistas": 212, "depois_da_malha": 122},
+ "nota": "o saldo caiu mais que o gasto daqui porque as sessoes do portao, do carro e do trem gastaram ao mesmo tempo (36 + 36 + 30 = 102 de 224 a 122); o gasto desta tarefa e o consumed_credits de vistas.json e malha.json"
+}
