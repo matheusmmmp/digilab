@@ -30,6 +30,18 @@ describe("a gota em lagrima", () => {
   });
 });
 
+describe("a marca de raiva", () => {
+  it("e quadrada, simetrica nos dois eixos e vazia no centro", () => {
+    const g = S.raiva, n = g.length;
+    expect(g.every(l => l.length === n)).toBe(true);
+    g.forEach((l, y) => {
+      expect(l).toBe([...l].reverse().join(""));
+      expect(l).toBe(g[n - 1 - y]);
+    });
+    expect(g[(n - 1) / 2][(n - 1) / 2]).toBe(".");
+  });
+});
+
 describe("o contorno de adesivo", () => {
   it("segue o desenho: os cantos da caixa ficam vazios, em volta de cada pixel fica pintado", () => {
     const { ctx, pintados, cores } = ctxFalso();

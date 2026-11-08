@@ -651,5 +651,7 @@ medo da mão e do esforço do cocô. Ela é só vista; o motor, o save e os gaba
 - o retângulo dá lugar ao `contornoGrade`, um contorno branco de 1 unidade que segue o desenho, como o contorno do sprite do pet. O
   contorno vale para todos os emotes de grade (gota, interrogação, raiva, lágrima, x, espiral).
 
+Depois, o Matheus disse que "o da raiva ainda tá feio", e a grade `raiva` virou a marca de raiva dos animes: quatro cantos vermelhos de 9 × 9 com a quina virada para o centro.
+
 O antes e o depois estão em `docs/pranchas/ux-gota/gota_antes_depois.png`. As medidas (7 × 8 e o contorno de 1 unidade) são PROPOSTO,
 SEM FONTE.

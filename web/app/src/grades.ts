@@ -18,7 +18,8 @@ export const S: Record<string, string[]> = {
   zz: ["kkkk...", "...k...", "..k....", ".k..kkk", "kkkk.k.", "....k..", "....kkk"],
   exclam: ["..kkk..", "..kyk..", "..kyk..", "..kyk..", "..kkk..", "..kyk..", "..kkk.."],
   pergunta: [".kkkk..", "kk..kk.", "....kk.", "...kk..", "..kk...", ".......", "..kk..."],
-  raiva: ["k.k.k..", ".krk...", "kr.rk..", ".krk...", "k.k.k.."],
+  /* a marca de raiva dos animes: quatro cantos vermelhos com a quina virada para o centro (antes era um borrao 7x5 descentrado) */
+  raiva: ["..r...r..", "..r...r..", "rrr...rrr", ".........", ".........", ".........", "rrr...rrr", "..r...r..", "..r...r.."],
   nota: ["...kkk.", "...k.k.", "...k...", "...k...", ".kkk...", "kkkk...", ".kk...."],
   carne: ["....kk.", "...kwwk", ".kkkkk.", "kddddk.", "kddddk.", ".kkkk.."],
   brilho: ["...k...", "...y...", ".k.y.k.", "kyyyyyk", ".k.y.k.", "...y...", "...k..."],
