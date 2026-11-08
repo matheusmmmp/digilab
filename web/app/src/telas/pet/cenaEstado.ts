@@ -13,7 +13,9 @@
    dobra param de seguir o pet (o paraMundo nao muda sob o dedo). `maoPet`: com ele na mao, o ponto do cliente (px) onde fica o pe do pet
    (o ponteiro mais a distancia do pe ao ponteiro quando ele foi pego); a vista desenha o pet ali, suspenso, e a sombra onde ele vai cair.
    `zzX`: com o quadro Dormir, o x (px de CSS da cena) do topo da cabeca, de onde sai o "zz" (papel.ts); null fora dele.
-   `aoLugares`: o retorno da posicao dos lugares na tela, para o cadeado e o brilho (CadeadosDaIlha.tsx). */
+   `aoLugares`: o retorno da posicao dos lugares na tela, para o cadeado e o brilho (CadeadosDaIlha.tsx).
+   `aoObjetos`: o mesmo retorno para os objetos que falam (ObjetosDaIlha.tsx, direcao A da ilha), com os px por celula na distancia do foco
+   (a escala da tigela e da bola na tela). Os dois podem estar ligados juntos; sem nenhum, a vista nem calcula. */
 import type { NomeLugar } from "./lugaresIlha.ts";
 export interface VistaDoMundo {
   /** o ponto do cliente (px) no chao, em subunidades inteiras do mapa; null fora do mapa ou fora do chao */
@@ -47,7 +49,9 @@ export const CENA: {
   /** o consumidor da posicao dos lugares (CadeadosDaIlha.tsx, so quando ha cadeado ou brilho na tela): a vista o chama no fim de cada quadro com [x, y do pe, altura]
       de cada lugar, em px de CSS. null: ninguem quer, e a vista nem calcula */
   aoLugares: ((p: Readonly<Record<"saco" | "portao" | "barraca", readonly [number, number, number]>>) => void) | null;
-} = { modo3d: false, modoMundo: false, ret: null, medir: null, mundo: null, coberto: false, bolaNaMao: false, petNaMao: false, maoPet: null, treino: null, cocoNoChao: false, zzX: null, cabeca: null, aoLugares: null };
+  /** o consumidor dos objetos que falam (ObjetosDaIlha.tsx): os mesmos lugares e os px por celula na distancia do foco. null: ninguem quer */
+  aoObjetos: ((p: Readonly<Record<"saco" | "portao" | "barraca", readonly [number, number, number]>>, pxPorCelula: number) => void) | null;
+} = { modo3d: false, modoMundo: false, ret: null, medir: null, mundo: null, coberto: false, bolaNaMao: false, petNaMao: false, maoPet: null, treino: null, cocoNoChao: false, zzX: null, cabeca: null, aoLugares: null, aoObjetos: null };
 
 /** o pe que a caixa do habitat reservava no celular antes do mobile minimo (M1): a altura do dock de entao (69 px) + a folga de 24 px + a barra de abas
     (--casca-barra, 64 px), medido em 390x844 e 360x800 (caixa de 687 e 643 px). Sem a barra a caixa ocupa a tela inteira por tras das acoes, mas a camera

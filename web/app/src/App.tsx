@@ -55,6 +55,8 @@ import { dicasDoMomento, type IdDica } from "./dicas.ts";
 import { CHAVE } from "./save.ts";
 import { AnuncioNivel, CartaoMotivo } from "./componentes/CartaoNivel.tsx";
 import { CadeadosDaIlha } from "./componentes/CadeadosDaIlha.tsx";
+import { ObjetosDaIlha } from "./componentes/ObjetosDaIlha.tsx";
+import { marcarDiarioVisto } from "./telas/pet/objetosIlha.ts";
 import { abrirMotivo, jaConhecoOJogo, useNivelRaiz } from "./nivelTela.ts";
 import { PECAS, nivelDaPeca, pecaAberta, pecaDaAba, pecaDoDestino, type EstadoNivel, type Peca } from "./nivel.ts";
 
@@ -152,6 +154,9 @@ export function App() {
     document.body.dataset.destino = rota.destino;
     document.title = `${config ? "Configurações" : NOME_DESTINO[rota.destino]} · Digilab Pet`;
   }, [rota, config, emLuta, boasVindas]);
+  /* o Diario aberto marca o que o dono ja viu (o ponto de "diario novo" na barraca, ObjetosDaIlha.tsx; I1-5): so a tela, fora do save */
+  const diarioAberto = rota.destino === "diario" && !config, tickAgora = jogo.motor.e.tick, sementeAgora = jogo.motor.semente;
+  useEffect(() => { if (diarioAberto) marcarDiarioVisto(sementeAgora, tickAgora); }, [diarioAberto, sementeAgora, tickAgora]);
   useEffect(() => {
     const aoMudar = () => {
       if (ehLuta(location.hash)) { setEmLuta(true); return; }
@@ -314,6 +319,7 @@ export function App() {
         abrirConfig={() => abrirConfig("principal")} abrirMeusPets={abrirMeusPets} />}
       {idLugar && lado && <MarcasDoLugar lugar={idLugar} />}
       {!idLugar && !painel && <CadeadosDaIlha abrir={l => acoes.current.abrir(l)} />}
+      {!idLugar && !painel && <ObjetosDaIlha />}
       {lugar && (lado ? <LugarLado d={lugar.d}>{lugar.corpo}</LugarLado> : <LugarFolha d={lugar.d}>{lugar.corpo}</LugarFolha>)}
       {painel && (lado ? <PainelLado d={painel.d}>{painel.corpo}</PainelLado> : <PainelModal d={painel.d}>{painel.corpo}</PainelModal>)}
       {lado && nav}

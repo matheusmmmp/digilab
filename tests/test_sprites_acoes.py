@@ -1,8 +1,10 @@
-"""SPRITES_ACOES, missao M1 (docs/TAREFA_V3_SPRITES_ACOES.md, secao 3.4): o export do clipe Comer.
+"""SPRITES_ACOES, missao M1 (docs/TAREFA_V3_SPRITES_ACOES.md, secao 3.4): o export dos clipes Comer e do lote 1 (Feliz, Sacudir,
+Chamar e Emburrar).
 
-- O ancoras.json (versionado) e conferido sempre: os 60, os modos, as sequencias e os ms.
-- O export gerado (remaster/acoes/export, fora do git) e conferido quando existe: a caixa igual a do export do UP, o pe, os ms inteiros
-  maiores que 0, e o Comer e o Comer_objeto casando em quadros e em ms. Sem o remaster/, esses testes pulam com aviso.
+- O ancoras.json e o lote1.json (versionados) sao conferidos sempre: os 60, os modos, as sequencias, as poses e os ms.
+- O export gerado (remaster/acoes/export, fora do git) e conferido quando existe: as 5 tags, a caixa igual a do export do UP, o pe em
+  todas as tags, os ms inteiros maiores que 0, e o Comer e o Comer_objeto casando em quadros e em ms. Sem o remaster/, esses testes
+  pulam com aviso.
 So biblioteca padrao (o PNG e lido aqui mesmo).
 """
 from __future__ import annotations
@@ -16,6 +18,8 @@ import pytest
 
 RAIZ = Path(__file__).resolve().parents[1]
 ANCORAS = RAIZ / "tools" / "sprites_acoes" / "ancoras.json"
+LOTE1 = RAIZ / "tools" / "sprites_acoes" / "lote1.json"
+TAGS = ["Comer", "Feliz", "Sacudir", "Chamar", "Emburrar"]
 REMASTER = RAIZ.parent / "remaster"
 EXPORT_UP = REMASTER / "export"
 EXPORT_ACOES = REMASTER / "acoes" / "export"
@@ -128,6 +132,28 @@ def test_ancoras_60_e_modos():
     assert all(len(v) == 2 and all(isinstance(c, int) for c in v) for v in desl.values())
 
 
+def test_lote1_poses_e_ms():
+    """O lote1.json: as 4 acoes com ms inteiros > 0 e quadros de 9 campos; as poses dos 60, todo papel, quadro inteiro >= 1,
+    o espelho por papel 0 ou 1 e as duvidas em lista de texto."""
+    lote = json.loads(LOTE1.read_text(encoding="utf-8"))
+    assert lote["status"] == "PROPOSTO"
+    assert list(lote["acoes"]) == TAGS[1:]
+    for nome, a in lote["acoes"].items():
+        assert isinstance(a["loop"], bool) and a["quadros"], nome
+        for q in a["quadros"]:
+            assert len(q) == 9 and isinstance(q[6], int) and q[6] > 0 and q[8] in (0, 1), (nome, q)
+            assert isinstance(q[0], int) or (isinstance(q[0], str) and q[0][5:] in lote["papeis"]), (nome, q)
+    papeis = set(lote["papeis"])
+    assert set(lote["poses"]) == set(ancoras()["digimon"])
+    for n, p in lote["poses"].items():
+        assert papeis <= set(p), n
+        assert set(p) <= papeis | {k + "_espelho" for k in papeis} | {"duvidas"}, n
+        for k in papeis:
+            assert isinstance(p[k], int) and p[k] >= 1, (n, k)
+            assert p.get(k + "_espelho", 0) in (0, 1), (n, k)
+        assert all(isinstance(d, str) and d for d in p.get("duvidas", [])), n
+
+
 # ---- o export gerado, quando existe ----
 
 def exige_export():
@@ -155,10 +181,11 @@ def test_caixa_ms_e_objeto(nomes):
         acao = json.loads((EXPORT_ACOES / f"{n}.json").read_text())
         obj = json.loads((EXPORT_ACOES / f"{n}_objeto.json").read_text())
         # a caixa das acoes cresceu depois da M1 (os lotes de Feliz a Dormir e as reacoes de rosto entram no mesmo json); o Comer
-        # continua o primeiro, e o _objeto continua so com o Comer
+        # continua o primeiro, os clipes do lote 1 estao nela, e o _objeto continua so com o Comer
         tags_acao = [t["name"] for t in acao["meta"]["frameTags"]]
         assert tags_acao[0] == "Comer" and len(set(tags_acao)) == len(tags_acao), n
         assert set(tags_acao) <= TAGS_ACOES_CONHECIDAS, (n, sorted(set(tags_acao) - TAGS_ACOES_CONHECIDAS))
+        assert set(TAGS) <= set(tags_acao), (n, sorted(set(TAGS) - set(tags_acao)))
         assert [t["name"] for t in obj["meta"]["frameTags"]] == ["Comer"], n
         for j in (acao, obj):
             for f in j["frames"]:
@@ -172,7 +199,8 @@ def test_caixa_ms_e_objeto(nomes):
 
 
 def test_pe_e_carne(nomes):
-    """Nenhum quadro do Comer desce abaixo do pe do Idle do UP (sombra e personagem, como no export), e a carne aparece em todos."""
+    """Nenhum quadro de nenhuma tag desce abaixo do pe do Idle do UP (sombra e personagem, como no export), todo quadro tem pixel
+    opaco, e a carne aparece em todos os do Comer."""
     exige_export()
     for n in nomes:
         up = json.loads((EXPORT_UP / f"{n}.json").read_text())
@@ -181,7 +209,7 @@ def test_pe_e_carne(nomes):
                  for f in quadros_tag(up, "Idle"))
         acao = json.loads((EXPORT_ACOES / f"{n}.json").read_text())
         _, _, la = ler_png(EXPORT_ACOES / f"{n}.png")
-        for f in quadros_tag(acao, "Comer"):
+        for f in (f for t in TAGS for f in quadros_tag(acao, t)):
             r = f["frame"]
             assert 0 <= ultima_linha_opaca(la, r["x"], r["y"], r["w"], r["h"]) <= pe, (n, f["filename"])
         obj = json.loads((EXPORT_ACOES / f"{n}_objeto.json").read_text())

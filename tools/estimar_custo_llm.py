@@ -48,6 +48,40 @@ TOKENS_TURNO_LIVRE = (2600, 100)
 MODELOS_LIVRE = ("claude-haiku-5-5", "claude-sonnet-5-5")
 
 
+# CONVERSA_PET DC4a (docs/PLANO_ANALISE_V3_CONVERSA_DC4.md, secao 8, DC4-5 e DC4-6): a voz da rede com o Haiku 5.5 e o Sonnet 5.5. 81 chamadas da voz por
+# braco na calibracao (30 + 15 espontaneas e 36 turnos) e 162 na validacao (60 + 30 e 72), 243 no total; o verificador e local. O pedido e o maior que a
+# DC4 pode mandar, medido pelo `prompt.mensagens_voz` de hoje (pedido_dc4_pior_caso); a saida, os ~100 tokens do plano (PROPOSTO, sem medida).
+CHAMADAS_DC4_POR_BRACO = {"calibracao": 30 + 15 + 2 * 3 * 6, "validacao": 60 + 30 + 4 * 3 * 6}
+SAIDA_DC4 = 100
+
+
+def pedido_dc4_pior_caso() -> dict:
+    """os caracteres do maior pedido da voz na DC4: o dec-v3 com os 12 conceitos ativos (metade com confianca baixa, a lembranca com episodio),
+    o adulto, a conversa com o comando e 5 trocas antes (o 6.o turno do roteiro), cada fala do dono com 300 caracteres e cada do pet com 320,
+    sem o estilo da especie (o pet do Python nao tem forma). Os tokens por cima: 1 a cada 3 caracteres (a regra deste arquivo) e a reserva do
+    `ClienteClaude.custo_maximo` (1 a cada 2, mais 400)."""
+    from digilab_fala_livre import conceitos as dec
+    from digilab_fala_livre.prompt import mensagens_voz
+    cs = [{"nome": n, "valor": 900, "confianca": 300 if i % 2 else 900} for i, n in enumerate(dec.NOMES) if n != "lembranca"]
+    cs.append({"nome": "lembranca", "valor": 900, "confianca": 900, "alvo": "ep123456",
+               "episodio": {"acao": "chamar_atencao", "classe": "nao_havia", "desfecho": "neutro"}})
+    c = dec.validar({"versao": "dec-v3", "k": 99999, "intencao": "solidao", "conceitos": cs})
+    hist = [("d" * 300, "p" * 320, "adulto")] * 5
+    msgs = mensagens_voz(c, "adulto", "conversa", "j" * 300, hist, estilo=None, comando=True)
+    chars = sum(len(m["content"]) for m in msgs)
+    return {"caracteres": chars, "tokens_por_3_chars": -(-chars // 3), "tokens_reserva_claude": -(-(chars + 400) // 2)}
+
+
+def custo_dc4() -> dict:
+    ped = pedido_dc4_pior_caso()
+    total = sum(CHAMADAS_DC4_POR_BRACO.values())
+    usd = {m: round(total * (ped["tokens_por_3_chars"] * PRECOS_USD_POR_MTOK[m][0] + SAIDA_DC4 * PRECOS_USD_POR_MTOK[m][1]) / 1e6, 4)
+           for m in MODELOS_LIVRE}
+    return {"chamadas_por_braco": {**CHAMADAS_DC4_POR_BRACO, "total": total}, "pedido_pior_caso": ped, "tokens_saida": SAIDA_DC4,
+            "usd_por_braco": usd, "usd_total_dois_bracos": round(sum(usd.values()), 4), "teto_usd": LIMITE_USD_LIVRE_PADRAO,
+            "status": "PROPOSTO: o pedido medido pelo prompt de hoje no pior caso; a saida do plano, sem medida (a DC4b mede pelo usage)"}
+
+
 def tokens_pedido() -> tuple[int, int]:
     falas = RAIZ / "artifacts_fala_livre" / "rodada2" / "falas_qwen2.5-3b.jsonl"
     linhas = [json.loads(x) for x in falas.read_text(encoding="utf-8").splitlines() if x.strip()]
@@ -95,7 +129,7 @@ def main() -> int:
                                for m in MODELOS_LIVRE},
              "teto_usd_proposto": LIMITE_USD_LIVRE_PADRAO, "status": "PROPOSTO, sem medida: tokens do plano, secao 7"}
     livre["usd_total_dois_bracos"] = round(sum(livre["usd_por_braco"].values()), 4)
-    res = {"fala_livre_comparacao_d5": livre, "tokens_por_chamada": {"entrada": ent, "saida": sai},
+    res = {"fala_livre_comparacao_d5": livre, "voz_da_rede_dc4": custo_dc4(), "tokens_por_chamada": {"entrada": ent, "saida": sai},
            "usd_por_chamada": {m: round(v, 6) for m, v in custo_chamada.items()},
            "cenarios": CENARIOS, "custo_api_usd_mes_por_usuarios_simultaneos": api,
            "latencia_local_medida": lat, "capacidade_uma_gpu_usuarios_simultaneos": capacidade,
@@ -110,7 +144,7 @@ def main() -> int:
         for m in api[c]:
             ln.append(f"| {c} | {m} | " + " | ".join(f"{api[c][m][str(n)]:,.0f}" for n in USUARIOS) + " |")
     (SAIDA / "tabela.md").write_text("\n".join(ln) + "\n", encoding="utf-8")
-    print(json.dumps({k: res[k] for k in ("fala_livre_comparacao_d5", "tokens_por_chamada", "usd_por_chamada", "latencia_local_medida",
+    print(json.dumps({k: res[k] for k in ("fala_livre_comparacao_d5", "voz_da_rede_dc4", "tokens_por_chamada", "usd_por_chamada", "latencia_local_medida",
                                           "capacidade_uma_gpu_usuarios_simultaneos", "pesquisa_vidas_da_confirmatoria")},
                      indent=1))
     print("\n".join(ln))

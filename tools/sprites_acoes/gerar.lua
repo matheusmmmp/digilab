@@ -1,10 +1,11 @@
--- SPRITES_ACOES, missao M1 (docs/TAREFA_V3_SPRITES_ACOES.md, secoes 3.3 e 3.4): a receita do clipe Comer de um Digimon.
+-- SPRITES_ACOES, missao M1 (docs/TAREFA_V3_SPRITES_ACOES.md, secoes 3.3 e 3.4): as receitas do lote 1 de um Digimon: o Comer e,
+-- depois dele, Feliz, Sacudir, Chamar e Emburrar (M1 do lote 1, 2026-11-05).
 -- Roda no Aseprite em linha de comando, chamada pelo tools/sprites_acoes/gerar_acoes.py, que le o tools/sprites_acoes/ancoras.json e
 -- passa os numeros como --script-param. Parte do .aseprite do UP (camadas sombra e personagem; o arquivo do UP nao e alterado) e grava:
---   out_ase:              o .aseprite derivado, com as camadas sombra, personagem e comida e a tag Comer;
---   out_png / out_json:   o export da acao (sombra e personagem), json_array, frameTags, sem corte, na caixa do UP;
---   obj_png / obj_json:   o export so da camada comida (a carne e o farelo), nas mesmas tags e ms.
--- Dois modos:
+--   out_ase:              o .aseprite derivado, com as camadas sombra, personagem e comida e as tags Comer, Feliz, Sacudir, Chamar e Emburrar;
+--   out_png / out_json:   o export das acoes (sombra e personagem), as 5 tags, json_array, frameTags, sem corte, na caixa do UP;
+--   obj_png / obj_json:   o export so da camada comida (a carne e o farelo), so a tag Comer, nos mesmos ms.
+-- Dois modos do Comer:
 --   par:    alterna quadros do proprio UP com a boca aberta e fechada (a prova 2); a carne fica parada onde a boca a morde;
 --   prova1: o Idle inclinado (cisalhamento: o topo anda, o pe fica) e achatado no pe, sem abrir a boca (a prova 1).
 -- A carne e arte propria. Falha alto (error) se um pixel opaco cairia fora da caixa ou se o personagem passa do pe do Idle.
@@ -131,6 +132,73 @@ else
 end
 if #Q == 0 then error("sequencia vazia") end
 
+-- as acoes do lote 1 (Feliz, Sacudir, Chamar, Emburrar): transformacoes de um quadro do UP (do Idle ou uma pose de outra tag, que o
+-- gerar_acoes.py resolve pelo lote1.json), ancoradas no pe dele (a ultima linha opaca do quadro), vizinho mais proximo, sem desenho.
+-- Cada quadro: { quadro do UP, dx, dy, sx, sy, k, ms, abaixar, espelho, quadro da sombra }:
+--   dx, dy:  translacao em px (dy < 0 sobe; nunca desce abaixo do pe, o conferir_pe falha);
+--   sx, sy:  escala em x (pelo meio da caixa do personagem) e em y (pelo pe); sy < 1 amassa;
+--   k:       cisalhamento, o topo anda k px e o pe fica;
+--   abaixar: px tirados da altura pelo pe (o Emburrar), somados ao sy;
+--   espelho: 1 espelha o personagem pelo meio dele (o lado oposto), antes do resto;
+--   sombra:  o quadro do UP de onde vem a sombra, sem mudanca (secao 3.4): o do Idle de origem, ou o 1o do Idle para as poses.
+-- Falha alto se um pixel opaco cairia fora da caixa.
+local function transformar(img, dx, dy, sx, sy, k, abaixar, espelho, onde)
+  local top, foot = caixa(img)
+  -- uma pose de outra tag do UP com o pe abaixo do pe do Idle (o Stun encolhido, por exemplo) sobe ate ele: assenta no chao do Idle
+  -- (lote 1, 2026-11-05; o Agumon nao tem pose assim, e as acoes dele saem iguais)
+  dy = dy - math.max(0, foot - PE)
+  local left, right = W, -1
+  for y = top, foot do for x = 0, W - 1 do
+    if A(img:getPixel(x, y)) > 0 then if x < left then left = x end; if x > right then right = x end end
+  end end
+  local alt = math.max(1, foot - top)
+  local syf = sy * (alt - abaixar) / alt
+  if syf <= 0 or sx <= 0 then error(onde .. ": escala invalida") end
+  local cx = (left + right) / 2
+  local function cis(ys) return k * (foot - ys) / alt end
+  -- ida: todo pixel opaco tem de cair dentro da caixa
+  for ys = top, foot do for xs = left, right do
+    if A(img:getPixel(xs, ys)) > 0 then
+      local xe = espelho == 1 and (left + right - xs) or xs
+      local x = math.floor(cx + (xe - cx) * sx + cis(ys) + dx + 0.5)
+      local y = math.floor(foot - (foot - ys) * syf + dy + 0.5)
+      if x < 0 or y < 0 or x >= W or y >= H then error(("%s: pixel opaco fora da caixa em (%d,%d)"):format(onde, x, y)) end
+    end
+  end end
+  -- volta: cada pixel de saida pega o vizinho mais proximo da origem
+  local out = Image(W, H, ColorMode.RGB)
+  for y = 0, H - 1 do
+    local ys = math.floor(foot - (foot - (y - dy)) / syf + 0.5)
+    if ys >= top and ys <= foot then
+      for x = 0, W - 1 do
+        local xs = math.floor(cx + (x - dx - cis(ys) - cx) / sx + 0.5)
+        if espelho == 1 then xs = left + right - xs end
+        if xs >= left and xs <= right then
+          local px = img:getPixel(xs, ys)
+          if A(px) > 0 then out:drawPixel(x, y, px) end
+        end
+      end
+    end
+  end
+  return out
+end
+
+local LOTE1 = { "Feliz", "Sacudir", "Chamar", "Emburrar" }
+local tags = { { nome = "Comer", de = 1, ate = #Q } }
+for _, nome in ipairs(LOTE1) do
+  local spec = req("acao_" .. nome)
+  local de = #Q + 1
+  for item in spec:gmatch("[^;]+") do
+    local q, dx, dy, sx, sy, k, ms, abx, esp, qs = table.unpack(nums(item))
+    if qs == nil then error(nome .. ": quadro sem os 10 campos: " .. item) end
+    if esp ~= 0 and esp ~= 1 then error(nome .. ": espelho tem de ser 0 ou 1: " .. item) end
+    local onde = ("%s quadro %d (UP %d)"):format(nome, #Q - de + 2, q)
+    Q[#Q + 1] = { q = q, ms = ms, img = transformar(plano(pers, q), dx, dy, sx, sy, k, abx, esp, onde), sombra = qs, onde = onde }
+  end
+  if #Q < de then error(nome .. ": sem quadros") end
+  tags[#tags + 1] = { nome = nome, de = de, ate = #Q }
+end
+
 local s = Sprite(W, H, ColorMode.RGB)
 s.layers[1].name = "sombra"
 local lp = s:newLayer(); lp.name = "personagem"
@@ -138,32 +206,39 @@ local lc = s:newLayer(); lc.name = "comida"
 for _ = 2, #Q do s:newEmptyFrame() end
 for i, f in ipairs(Q) do
   if f.ms ~= math.floor(f.ms) or f.ms <= 0 then error("ms invalido no quadro " .. i) end
-  local onde = ("Comer quadro %d (UP %d)"):format(i, f.q)
+  local onde = f.onde or ("Comer quadro %d (UP %d)"):format(i, f.q)
   conferir_pe(f.img, onde)
   local fr = s.frames[i]; fr.duration = f.ms / 1000
   s:newCel(s.layers[1], fr, plano(somb, f.sombra), Point(0, 0))
   s:newCel(lp, fr, f.img, Point(0, 0))
-  local c = Image(W, H, ColorMode.RGB)
-  carne(c, f.mordidas, f.x, f.y, onde)
-  if f.farelo then farelo(c, f.x, f.y, onde) end
-  s:newCel(lc, fr, c, Point(0, 0))
+  if f.mordidas then   -- so o Comer tem objeto
+    local c = Image(W, H, ColorMode.RGB)
+    carne(c, f.mordidas, f.x, f.y, onde)
+    if f.farelo then farelo(c, f.x, f.y, onde) end
+    s:newCel(lc, fr, c, Point(0, 0))
+  end
 end
-s:newTag(1, #Q).name = "Comer"
+for _, t in ipairs(tags) do s:newTag(t.de, t.ate).name = t.nome end
 s:saveAs(req("out_ase"))
 src:close()
 
+-- a acao: todas as tags; o objeto: so a tag Comer (as acoes do lote 1 nao tem objeto; o coracao, a nota e o tom ficam na vista)
+local COLUNAS = 8
 local function exportar(png, js, so_comida)
   s.layers[1].isVisible = not so_comida
   lp.isVisible = not so_comida
   lc.isVisible = so_comida
   app.command.ExportSpriteSheet {
-    ui = false, askOverwrite = false, type = SpriteSheetType.ROWS, columns = #Q,
+    ui = false, askOverwrite = false, type = SpriteSheetType.ROWS, columns = COLUNAS,
     textureFilename = png, dataFilename = js, dataFormat = SpriteSheetDataFormat.JSON_ARRAY,
     filenameFormat = "{tag}_{tagframe00}", borderPadding = 0, shapePadding = 0, innerPadding = 0,
     trim = false, trimSprite = false, extrude = false, listLayers = false, listTags = true, listSlices = false,
+    tag = so_comida and "Comer" or "",
   }
 end
 exportar(req("out_png"), req("out_json"), false)
+-- o json do objeto listaria as 5 tags sobre so os quadros do Comer: tiram-se as outras (o .aseprite ja foi gravado com todas)
+for i = #s.tags, 1, -1 do if s.tags[i].name ~= "Comer" then s:deleteTag(s.tags[i]) end end
 exportar(req("obj_png"), req("obj_json"), true)
 s:close()
-print(("ok %s quadros=%d"):format(modo, #Q))
+print(("ok %s quadros=%d tags=%d"):format(modo, #Q, #tags))

@@ -19,7 +19,8 @@ async function abrirLuta(page: Page): Promise<void> {
     localStorage.setItem(chave, s);
   }, [CHAVE, JSON.stringify(SAVE), JSON.stringify(TAMER)] as const);
   await page.goto(`${APP}?clipes_up=1#/lutar/arena`);
-  await page.locator(".rival-card:not(.rival-card--adulto)").nth(3).click();
+  /* o Atirador, o 4.º dos rivais classicos (a Arena da L3, #689: os rivais sao radios .ar2-rival; os adultos tem data-adulto) */
+  await page.locator(".ar2-rival[role=radio]:not([data-adulto])").nth(3).click();
   await page.locator(".lutar-grande").click();
   await expect(page).toHaveURL(/#\/lutar\/luta$/);
 }
