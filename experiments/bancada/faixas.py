@@ -123,6 +123,10 @@ FAIXAS_RESERVADAS = (
                    "decidida pelo Matheus em 2026-11-01; PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO, adendo 9)"),
     (78101, 78505, "o passeio, ligado contra desligado (AN4, a run unica; TAREFA_V3_ACOES_NOVAS, AN-1; PLANO_ANALISE_V3_ACOES_NOVAS, "
                    "secao 5, PROPOSTO; conferida livre em 2026-11-05; nenhuma vida antes da aprovacao do Matheus)"),
+    (83101, 83505, "equilibrio do combate em tempo real (jogo web), terceira rodada: a calibracao (docs/PLANO_EQUILIBRIO_COMBATE_TR_R3.md, "
+                   "secao 4.1; D-R3-5, decidida pelo Matheus em 2026-11-08)"),
+    (84101, 84505, "equilibrio do combate em tempo real (jogo web), terceira rodada: a conferencia, a validacao unica "
+                   "(docs/PLANO_EQUILIBRIO_COMBATE_TR_R3.md, secao 4.1; D-R3-5, decidida pelo Matheus em 2026-11-08; roda uma vez, nao volta)"),
     (50001, 50020, "analise de poder, piloto"), (60001, 60160, "confirmatoria"), (69001, 69001, "M1, gate G1"),
     (80001, 82004, "linhagem E1 (piloto, genomas e ambientes)"),
     (20260900, 20261800, "fala, voz, comando e bootstraps (sementes de 2026-09/10 e semente + i)"),
