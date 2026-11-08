@@ -9,9 +9,9 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { carregarVariante, curvar } from "./cena.ts";
-import { DIGITAL } from "./constantes.ts";
+import { DIGITAL, NUVENS_PINTADAS } from "./constantes.ts";
 import { lugarDaLata, lugaresDasParticulas, segmentosDosFios } from "./digitalConta.ts";
-import type { Ilha } from "./grade.ts";
+import { rng, type Ilha } from "./grade.ts";
 
 /** as particulas, e o que a vista chama quando a noite muda */
 export function particulas(ilha: Ilha): { malha: THREE.InstancedMesh; noite: (n: boolean) => void } {
@@ -73,6 +73,91 @@ export function suavizarPintura(img: HTMLImageElement | ImageBitmap | HTMLCanvas
   }
   g.putImageData(dados, 0, 0);
   return c;
+}
+
+/** o ceu pintado em duas partes (NUVENS_PINTADAS): `ceu`, o degrade sem nuvens (cada linha com a cor do ceu dela: a do pixel mais saturado da linha,
+    suavizada entre as linhas), e `nuvens`, so as nuvens, com o alfa pela saturacao (a nuvem e branca, o ceu e azul) e a cor sem o ceu misturado na
+    borda */
+export function separarNuvens(img: HTMLImageElement | ImageBitmap | HTMLCanvasElement): { ceu: HTMLCanvasElement; nuvens: HTMLCanvasElement } {
+  const w = img.width, h = img.height, N = NUVENS_PINTADAS;
+  const fonte = document.createElement("canvas");
+  fonte.width = w; fonte.height = h;
+  const gf = fonte.getContext("2d");
+  if (!gf) throw new Error("canvas 2d indisponível");
+  gf.drawImage(img, 0, 0);
+  const d = gf.getImageData(0, 0, w, h).data, sat = (k: number) => { const mx = Math.max(d[k], d[k + 1], d[k + 2]); return mx ? (mx - Math.min(d[k], d[k + 1], d[k + 2])) / mx : 0; };
+  /* a cor do ceu de cada linha: o pixel mais saturado; depois a media de 31 linhas, para nenhuma linha toda de nuvem estragar o degrade */
+  const bruta: [number, number, number][] = [];
+  for (let y = 0; y < h; y++) {
+    let melhor = -1, km = 0;
+    for (let x = 0; x < w; x++) { const k = (y * w + x) * 4, s = sat(k); if (s > melhor) { melhor = s; km = k; } }
+    bruta.push([d[km], d[km + 1], d[km + 2]]);
+  }
+  const linha = bruta.map((_, y) => {
+    const a = Math.max(0, y - 15), b = Math.min(h - 1, y + 15), soma = [0, 0, 0];
+    for (let i = a; i <= b; i++) for (let c = 0; c < 3; c++) soma[c] += bruta[i][c];
+    return soma.map(v => v / (b - a + 1));
+  });
+  const ceu = document.createElement("canvas"), nuvens = document.createElement("canvas");
+  ceu.width = nuvens.width = w; ceu.height = nuvens.height = h;
+  const gc = ceu.getContext("2d"), gn = nuvens.getContext("2d");
+  if (!gc || !gn) throw new Error("canvas 2d indisponível");
+  for (let y = 0; y < h; y++) { const [r, g, b] = linha[y]; gc.fillStyle = `rgb(${r | 0},${g | 0},${b | 0})`; gc.fillRect(0, y, w, 1); }
+  const saida = gn.createImageData(w, h), o = saida.data;
+  for (let y = 0; y < h; y++) {
+    const [r, g, b] = linha[y], mx = Math.max(r, g, b), sCeu = mx ? (mx - Math.min(r, g, b)) / mx : 1;
+    for (let x = 0; x < w; x++) {
+      const k = (y * w + x) * 4, f = sat(k) / (sCeu || 1);
+      const a = Math.min(1, Math.max(0, (1 - f - N.nuvem) / N.borda + 1));
+      if (a <= 0) continue;
+      /* tira o ceu da cor da borda: c = (p - (1 - a) ceu) / a */
+      const cor = [r, g, b];
+      for (let c = 0; c < 3; c++) o[k + c] = Math.min(255, Math.max(0, Math.round((d[k + c] - (1 - a) * cor[c]) / a)));
+      o[k + 3] = Math.round(a * 255);
+    }
+  }
+  gn.putImageData(saida, 0, 0);
+  return { ceu, nuvens };
+}
+
+/** as nuvens da pintura no mundo (NUVENS_PINTADAS): os pedacos recortados num anel em volta da ilha, virados para o centro, sem nevoa; o anel gira
+    devagar. Entram no `grupo` (o da cena, que a noite apaga como as outras nuvens) quando a imagem chega */
+export function nuvensDaPintura(grupo: THREE.Group, nuvens: HTMLCanvasElement, ilha: Ilha, parado: boolean): void {
+  const N = NUVENS_PINTADAS, r = rng(23), cx = ilha.x0 + ilha.larg / 2, cz = ilha.z0 + ilha.prof / 2;
+  const anel = new THREE.Group();
+  anel.position.set(cx, 0, cz);
+  const texturas = N.pedacos.map(([x, y, w, h]) => {
+    const c = document.createElement("canvas");
+    c.width = w; c.height = h;
+    const g = c.getContext("2d");
+    if (!g) throw new Error("canvas 2d indisponível");
+    g.drawImage(nuvens, x, y, w, h, 0, 0, w, h);
+    /* as bordas do recorte somem aos poucos (`esfumar`, a fracao do lado), para o pedaco nao ficar com cara de retangulo */
+    g.globalCompositeOperation = "destination-in";
+    for (const [x0, y0, x1, y1] of [[0, 0, w, 0], [0, 0, 0, h]] as const) {
+      const m = g.createLinearGradient(x0, y0, x1, y1), f = N.esfumar;
+      m.addColorStop(0, "rgba(0,0,0,0)"); m.addColorStop(f, "rgba(0,0,0,1)"); m.addColorStop(1 - f, "rgba(0,0,0,1)"); m.addColorStop(1, "rgba(0,0,0,0)");
+      g.fillStyle = m; g.fillRect(0, 0, w, h);
+    }
+    const t = new THREE.CanvasTexture(c);
+    t.colorSpace = THREE.SRGBColorSpace;
+    return { t, w, h };
+  });
+  for (let i = 0; i < N.n; i++) {
+    const { t, w, h } = texturas[i % texturas.length], e = N.escala * (0.8 + r() * 0.4);
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(w * e, h * e), new THREE.MeshBasicMaterial({ map: t, fog: false, depthWrite: false, transparent: true, opacity: grupo.userData.opacidade ?? 1 }));
+    const ang = (i / N.n) * Math.PI * 2 + (r() - 0.5) * 0.4, raio = N.raio[0] + r() * (N.raio[1] - N.raio[0]);
+    m.position.set(Math.sin(ang) * raio, N.altura[0] + r() * (N.altura[1] - N.altura[0]), -Math.cos(ang) * raio);
+    m.lookAt(0, m.position.y, 0);
+    if (r() < 0.5) m.scale.x = -1;
+    m.frustumCulled = false;
+    anel.add(m);
+  }
+  grupo.add(anel);
+  if (!parado) {
+    let antes = performance.now();
+    anel.children[0].onBeforeRender = () => { const agora = performance.now(); anel.rotation.y += ((agora - antes) / 1000) * (Math.PI * 2 / N.volta); antes = agora; };
+  }
 }
 
 /** o ceu com a grade digital por cima: um canvas desenhado sobre a imagem (a pintada ou a das faixas), que vira a imagem da textura do ceu.

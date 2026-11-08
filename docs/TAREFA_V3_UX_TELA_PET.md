@@ -735,3 +735,15 @@ Os números são de desenho: PROPOSTO, SEM FONTE. A cor por hora do dia, o halo 
   (`topo`, 55 %).
 - **O pixel e o suave** continuam só no `?ceu=`.
 
+**As nuvens numa camada só e no mundo (o Matheus, no mesmo dia):**
+> "não tá tendo duas nuvens, uma em cima da outra, né? [...] as nuvens não sejam uma arte fixa. Ela tem que acompanhar [...] naquele estilo que
+> tava no desenho."
+
+- **Eram duas camadas:** as nuvens pintadas no `ceu.jpg`, fixas na tela, e as nuvens de anime com contorno, no mundo.
+- **A pintura agora vira duas partes** (`separarNuvens`, `digital.ts`):
+  - o fundo é só o degradê do céu, com a cor de cada linha;
+  - as nuvens são recortadas da própria pintura, em três pedaços com as bordas esfumadas.
+- **Os pedaços ficam num anel em volta da ilha** (`nuvensDaPintura`, `NUVENS_PINTADAS`), virados para o centro. Eles acompanham a câmera quando
+  ela gira, e o anel dá uma volta a cada 25 min. Com "reduzir movimento", fica parado.
+- **As nuvens de anime saíram** do modo pintado, e a noite apaga as nuvens do anel como as outras.
+

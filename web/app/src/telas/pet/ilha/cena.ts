@@ -720,13 +720,15 @@ export interface CenaIlha { cena: THREE.Scene; aplicarNoite(noite: boolean): voi
     `ceuDia`, um ceu pintado no lugar do degrade do dia, com a cor do horizonte (a nevoa) dele; `chaoHemi`, a cor de baixo da luz do ceu
     de dia (o estilo digital a puxa para o azul, a sombra azulada do anime); `nevoa`, o comeco e o fim da nevoa (celulas) */
 export function montarCena(ilha: Ilha, chao: THREE.Object3D = terreno(ilha),
-  opcoes: { agua?: boolean; nuvens?: boolean | "anime" | "pixel"; ceuDia?: THREE.Texture; horizonteDia?: number; chaoHemi?: number; nevoa?: readonly [number, number] } = {}): CenaIlha {
+  opcoes: { agua?: boolean; nuvens?: boolean | "anime" | "pixel" | THREE.Group; ceuDia?: THREE.Texture; horizonteDia?: number; chaoHemi?: number; nevoa?: readonly [number, number] } = {}): CenaIlha {
   const cena = new THREE.Scene(), fundo = { dia: opcoes.ceuDia ?? ceu(DIA.ceu), noite: ceu(NOITE.ceu) };
   cena.fog = new THREE.Fog(DIA.horizonte, opcoes.nevoa?.[0] ?? 26, opcoes.nevoa?.[1] ?? 62);
   if (opcoes.nevoa) cena.userData.nevoa = opcoes.nevoa;    /* a vista recalcula a nevoa com a orbita a partir desta (vista.ts) */
   const hemi = new THREE.HemisphereLight(), sol = new THREE.DirectionalLight();
   sol.position.set(-0.6, 1, 0.75);
-  const ceuNuvens = opcoes.nuvens === false ? new THREE.Group() : opcoes.nuvens === "anime" ? nuvensAnime(ilha) : opcoes.nuvens === "pixel" ? nuvensPixel(ilha) : nuvens(ilha);
+  /* `nuvens` um grupo: o estilo poe as nuvens dele depois (as da pintura, que chegam com a imagem; digital.ts, nuvensDaPintura) */
+  const ceuNuvens = opcoes.nuvens instanceof THREE.Group ? opcoes.nuvens : opcoes.nuvens === false ? new THREE.Group()
+    : opcoes.nuvens === "anime" ? nuvensAnime(ilha) : opcoes.nuvens === "pixel" ? nuvensPixel(ilha) : nuvens(ilha);
   cena.add(hemi, sol, chao, ceuNuvens);
   if (opcoes.agua !== false) cena.add(agua(ilha));
   const aplicarNoite = (noite: boolean) => {
@@ -736,7 +738,9 @@ export function montarCena(ilha: Ilha, chao: THREE.Object3D = terreno(ilha),
     hemi.color.setHex(p.hemi[0]); hemi.groundColor.setHex(!noite && opcoes.chaoHemi !== undefined ? opcoes.chaoHemi : p.hemi[1]); hemi.intensity = p.hemi[2];
     sol.color.setHex(p.sol[0]); sol.intensity = p.sol[1];
     CURVA.uNoite.value = noite ? 1 : 0;
-    for (const s of ceuNuvens.children) ((s as THREE.Sprite | THREE.Mesh).material as THREE.Material).opacity = p.nuvens;
+    /* todas as nuvens, mesmo dentro de um grupo (o anel das da pintura); as que ainda vao chegar leem a opacidade daqui */
+    ceuNuvens.userData.opacidade = p.nuvens;
+    ceuNuvens.traverse(o => { const m = (o as THREE.Mesh).material as THREE.Material | undefined; if (m) m.opacity = p.nuvens; });
   };
   aplicarNoite(false);
   return { cena, aplicarNoite };

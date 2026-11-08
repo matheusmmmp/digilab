@@ -13,7 +13,7 @@ import { PALETA_DIGITAL, PALETA_ILHA, carregarVariante, doisTons, flores, montar
   type PaletaTerreno } from "./cena.ts";
 import { arquivosCassette, carregadorCassette, terrenoCassette } from "./cassette.ts";
 import { CEU_DIGITAL, CEU_SEM_PINTURA, CONTORNO_DIGITAL, DOBRA_K } from "./constantes.ts";
-import { ceuComGrade, ceuEmFaixas, fios, lata, particulas, suavizarPintura } from "./digital.ts";
+import { ceuComGrade, ceuEmFaixas, fios, lata, nuvensDaPintura, particulas, separarNuvens, suavizarPintura } from "./digital.ts";
 import { enfeites } from "./enfeites.ts";
 import { lugares } from "./lugaresCena.ts";
 import { PALETA_FLORESTA, arquivosFloresta, carregadorFloresta } from "./floresta.ts";
@@ -69,10 +69,15 @@ function estiloSemTons(mapa: Mapa, base: string): Estilo {
          em tudo, os itens inclusive (usarDoisTons) */
       /* o ceu (CEU_SEM_PINTURA, 2026-11-08): em pixel (o padrao), suave ou o pintado de antes, com a grade digital por cima (D3, digital.ts) */
       const modo = modoDoCeu(), S = CEU_SEM_PINTURA, ceuDia = new THREE.Texture();
-      if (modo === "pintado") {
+      /* no pintado, as nuvens saem da imagem e vao para o mundo (NUVENS_PINTADAS): o fundo fica so o degrade, e uma camada de nuvens so */
+      const pintura = modo !== "pintado" ? null : new Promise<{ ceu: HTMLCanvasElement; nuvens: HTMLCanvasElement }>((ok, falha) => {
         new THREE.TextureLoader().load(new URL("mapa_digital/ceu.jpg", base).href, t => {
-          ceuDia.image = ceuComGrade(suavizarPintura(t.image, S.pintura.saturacao, S.pintura.clarear)); ceuDia.needsUpdate = true;
-        });
+          const partes = separarNuvens(suavizarPintura(t.image, S.pintura.saturacao, S.pintura.clarear));
+          ceuDia.image = ceuComGrade(partes.ceu); ceuDia.needsUpdate = true;
+          ok(partes);
+        }, undefined, falha);
+      });
+      if (pintura) {
       } else {
         const [w, h] = S.tela;
         ceuDia.image = ceuComGrade(ceuEmFaixas(S.cores, modo === "pixel" ? S.faixas : h, w, h));
@@ -86,7 +91,12 @@ function estiloSemTons(mapa: Mapa, base: string): Estilo {
         id: mapa, dobra: DOBRA_K, paleta: PALETA_DIGITAL, contorno: CONTORNO_DIGITAL,
         montar: i => {
           const chao = new THREE.Group().add(terreno(i, PALETA_DIGITAL), flores(i), tufos(i));
-          const c = montarCena(i, chao, { nuvens: modo === "pintado" ? "anime" : modo === "pixel" ? "pixel" : true, ceuDia, horizonteDia: horizonte, chaoHemi: CEU_DIGITAL.chaoHemi, nevoa: CEU_DIGITAL.nevoa });
+          const nuvensPintura = new THREE.Group();
+          if (pintura) {
+            const parado = typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
+            pintura.then(p => nuvensDaPintura(nuvensPintura, p.nuvens, i, parado), e => { throw e; });
+          }
+          const c = montarCena(i, chao, { nuvens: pintura ? nuvensPintura : modo === "pixel" ? "pixel" : true, ceuDia, horizonteDia: horizonte, chaoHemi: CEU_DIGITAL.chaoHemi, nevoa: CEU_DIGITAL.nevoa });
           doisTons(c.cena);
           return c;
         },

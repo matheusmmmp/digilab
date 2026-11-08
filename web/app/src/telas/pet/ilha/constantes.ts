@@ -123,6 +123,15 @@ export const CEU_SEM_PINTURA = {
   modo: "pintado" as "pixel" | "suave" | "pintado", pintura: { saturacao: 0.8, clarear: 0.05 }, cores: ["#5f9fd6", "#9ec8e9", "#e3f1f6"], horizonte: 0xe3f1f6, faixas: 11, tela: [480, 270],
   nuvens: { n: 12, px: [40, 16], largura: [16, 28], altura: [11, 19], longe: [22, 40], sombra: "#cfe0ee" },
 } as const;
+/** as nuvens da pintura no mundo (o Matheus, 2026-11-08: "não tá tendo duas nuvens, uma em cima da outra, né? [...] as nuvens não sejam uma arte
+    fixa. Ela tem que acompanhar [...] naquele estilo que tava no desenho"): o ceu.jpg vira o degrade do ceu sem nuvens (a cor do ceu de cada linha)
+    e as nuvens recortadas dele, em `pedacos` (x, y, largura e altura em px da imagem); elas ficam num anel em volta da ilha (`raio` e `altura` em
+    celulas, `escala` celulas por px), viradas para o centro, e o anel gira devagar (`volta`, segundos por volta; parado com "reduzir movimento").
+    `esfumar`: a fracao de cada lado do recorte em que a borda some. `nuvem` e `borda`: a saturacao abaixo da qual (em fracao da do ceu da linha) o pixel e nuvem inteira, e a faixa da borda. PROPOSTO, SEM FONTE */
+export const NUVENS_PINTADAS = {
+  pedacos: [[0, 250, 760, 360], [540, 15, 836, 515], [680, 560, 340, 92]] as const,
+  n: 9, raio: [58, 72], altura: [14, 26], escala: 0.05, volta: 1500, nuvem: 0.35, borda: 0.45, esfumar: 0.18,
+} as const;
 /** o traco de nanquim do estilo digital (pos.ts, Contorno; D5, o cel shading que o Matheus pediu): um azul-petroleo quase preto, a
     largura de ~3 px (o revisor pediu o traco mais grosso), e some entre 34 e 76 celulas da camera (perto do fim da nevoa). PROPOSTO, SEM FONTE */
 export const CONTORNO_DIGITAL = { tinta: 0x15222a, forca: 1, largura: 3, limiar: 0.012, some: [34, 76] as const };
