@@ -4,7 +4,8 @@
    arvore do motor) e so dentro do raio; os objetos em si nao mudam (o E-G0 de test/ilha_enfeites.test.ts confere contra o gabarito).
    LG-G5: a paleta da Ilha (docs/lugares3d/estilo_ilha.py) e a da textura publicada, nos lugares de cor chapada; os de textura pintada
    (TEXTURA_PINTADA, o retrabalho de docs/objetos3d/REFERENCIAS.md, secao 5) saem dele e passam pelo LG-G5b: a cor e um PNG de 512 a 1024 px,
-   quadrado e com cor de verdade (nao as poucas cores lisas de antes), e a mascara de luz e quadrada, branca so numa parte e cobre o mesmo UV.
+   quadrado e com cor de verdade (nao as poucas cores lisas de antes), e a mascara de luz e quadrada, branca so numa parte e cobre o mesmo UV;
+   na barraca, o chao de dentro, visto pela porta, e escuro (docs/objetos3d/barraca/retrabalho/chao_uv.json; D-LG-9).
    LG-G6: o toque nos lugares (ToqueLugar.tsx; secao 13): o retangulo projetado da caixa de cada lugar (lugarNoPonto) e o gesto, que abre
    o destino do lugar aberto e nada mais (o cais trancado, o arrasto, o toque longo, o sprite do pet, o painel por cima). */
 import { readFileSync } from "node:fs";
@@ -58,13 +59,18 @@ describe("onde ficam os lugares (LG-G1 a LG-G4)", () => {
   });
 });
 
-/** os lugares retrabalhados com a textura pintada da Meshy (sem achatar; docs/TAREFA_V3_LUGARES_3D.md, secoes 14 e 16). Quem retrabalhar outro lugar
+/** os lugares retrabalhados com a textura pintada da Meshy (sem achatar; docs/TAREFA_V3_LUGARES_3D.md, secoes 14 a 16). Quem retrabalhar outro lugar
     junta o nome aqui */
-const TEXTURA_PINTADA: readonly NomeLugar[] = ["portao", "cais"];
+const TEXTURA_PINTADA: readonly NomeLugar[] = ["portao", "barraca", "cais"];
 
 describe("a paleta da Ilha (LG-G5)", () => {
   const DOCS = join(__dirname, "..", "..", "..", "docs", "lugares3d");
-  for (const n of (Object.keys(LUGARES_MODELOS) as NomeLugar[]).filter(l => !TEXTURA_PINTADA.includes(l))) test(n, () => {
+  const chapados = (Object.keys(LUGARES_MODELOS) as NomeLugar[]).filter(l => !TEXTURA_PINTADA.includes(l));
+  /* com o cais (secao 16), os tres lugares sairam para a textura pintada: o LG-G5 fica sem lugar, e o teste diz isso em vez de sumir */
+  if (chapados.length === 0) test("nenhum lugar de cor chapada: todos no LG-G5b", () => {
+    expect([...TEXTURA_PINTADA].sort()).toEqual((Object.keys(LUGARES_MODELOS) as NomeLugar[]).sort());
+  });
+  for (const n of chapados) test(n, () => {
     const p = JSON.parse(readFileSync(join(DOCS, n, "paleta.json"), "utf8")) as { paleta: number[][]; paleta_ilha: number[][] };
     expect(p.paleta_ilha.length).toBe(p.paleta.length);
     /* o PNG de paleta publicado: as cores do PLTE estao todas na paleta da Ilha */
@@ -119,6 +125,17 @@ describe("a textura pintada (LG-G5b)", () => {
     }
     expect(branco / (luz.w * luz.h)).toBeGreaterThan(0.01); expect(branco / (luz.w * luz.h)).toBeLessThan(0.5);
     expect(certo / branco, "o branco da mascara cai no ciano da textura").toBeGreaterThan(0.8);
+  });
+  /* a barraca: o chao de dentro, visto pela porta, e escuro. A Meshy nao fez chao e deixou o fundo claro (D-LG-9): o pixel publicado no
+     centro das UVs dele (docs/objetos3d/barraca/retrabalho/chao_uv.json; u, v do Blender, a linha da imagem e 1 - v) fica abaixo de 45 %
+     de luminancia */
+  test("barraca: o chao de dentro escuro", () => {
+    const chao = JSON.parse(readFileSync(join(__dirname, "..", "..", "..", "docs", "objetos3d", "barraca", "retrabalho", "chao_uv.json"), "utf8")) as { cantos: number[][] };
+    expect(chao.cantos.length).toBe(4);
+    const cor = png(join(__dirname, "..", "public", "lugares", "barraca", "barraca_cor.png"));
+    const u = chao.cantos.reduce((s, c) => s + c[0], 0) / 4, v = chao.cantos.reduce((s, c) => s + c[1], 0) / 4;
+    const [r, g, b] = cor.px(Math.floor(u * cor.w), Math.floor((1 - v) * cor.h));
+    expect((0.2126 * r + 0.7152 * g + 0.0722 * b) / 255).toBeLessThan(0.45);
   });
 });
 

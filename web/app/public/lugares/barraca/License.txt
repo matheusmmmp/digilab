@@ -1,18 +1,20 @@
 DigiLab: a barraca do Tamer, o lugar do Diario (barraca.gltf, barraca.bin, barraca_cor.png)
 
-Procedencia: item gerado por IA, com o gerador Meshy (meshy.ai), no plano Pro pago, na conta do Matheus, em 2026-11-07.
+Procedencia: item gerado por IA, com o gerador Meshy (meshy.ai), no plano Pro pago, na conta do Matheus. Primeira versao em 2026-11-07;
+refeita em 2026-11-07/08 (o retrabalho dos objetos, docs/objetos3d/REFERENCIAS.md).
 Pelos termos de uso da Meshy (atualizados em 2026-09-19, secao 3.2), a saida de um plano pago e do cliente.
 Os termos proibem tirar a marca de IA (secao 2.4): a marca fica no asset.extras do barraca.gltf e neste arquivo.
 
-Como foi feito (docs/TAREFA_V3_LUGARES_3D.md e docs/lugares3d/barraca/ no repositorio):
-- concept: Meshy Image to Image (nano-banana-2), com duas referencias de estilo geradas pela propria Meshy para o DigiLab (a maquete B do
-  mapa digital e o concept da geladeira), sem o pet e sem imagem de terceiros; sem texto, sem marca, sem simbolo; o concept 2 (o domo
-  digital) escolhido pelo Matheus;
-- vistas: Meshy Image to Image com multivista, a partir do concept;
+Como foi feito (docs/TAREFA_V3_LUGARES_3D.md, secao 14, e docs/objetos3d/barraca/ no repositorio):
+- esboco: Meshy Image to Image (nano-banana-2), so com o prompt e a referencia de estilo gerada pela propria Meshy para o DigiLab (a
+  maquete B do mapa digital), sem o pet e sem imagem de terceiros; sem texto, sem marca, sem simbolo; o esboco 1 (o domo com costuras)
+  escolhido pelo Matheus;
+- vistas: Meshy Image to Image com multivista, a partir do esboco;
 - malha: Meshy Multi-Image to 3D (remesh em triangulos, so a cor);
-- conserto no Blender 4.5 LTS e em Python, por script: a malha da Meshy fica como veio; a cor e chapada nas cores do concept, pelo matiz, com uma
-  cor por face.
-As tarefas da Meshy (concept, vistas, malha) estao no asset.extras do barraca.gltf.
+- acabamento no Blender 4.5 LTS e em Python, por script: a malha e a textura pintada da Meshy como vieram, sem achatar as cores; o escuro
+  de dentro pintado nas faces vistas pela porta, as cordas tingidas de laranja, um chao e um forro escuros por dentro (18 triangulos),
+  as normais suavizadas e a textura reduzida a 512 px com 256 cores para caber no orcamento de 300 KB.
+As tarefas da Meshy (esboco, vistas, malha) estao no asset.extras do barraca.gltf.
 
 Uso: no jogo DigiLab, publicado. Credito: "Barraca do Tamer gerada com a Meshy (meshy.ai)".
-Aprovacao: o Matheus escolheu o concept em 2026-11-07; a aprovacao da previa fica no PR da barraca.
+Aprovacao: o Matheus escolheu o esboco em 2026-11-07; a aprovacao do modelo fica no PR do retrabalho da barraca.
