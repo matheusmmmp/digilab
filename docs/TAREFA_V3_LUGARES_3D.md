@@ -158,3 +158,117 @@ porque o portão e a barraca já estão abertos (D-LG-18). O nível do Tamer fic
 **Fica para depois:** o nível do Tamer, que traz o cadeado e o "Nv" no lugar trancado, o toque no lugar trancado e o brilho de quando o
 lugar abre.
 
+
+## 14. O portão retrabalhado com a textura pintada (2026-11-07, worker, Claude Code, Opus 5.5, branch `v3-objeto-portao`)
+
+**Por que aqui:** o Matheus achou os objetos 3D feios e "sem textura" e pediu que cada um fosse refeito numa sessão própria, o mais perto
+possível do esboço escolhido (`docs/objetos3d/REFERENCIAS.md`, seção 5). O portão segue o esboço 1, o arco de blocos de pedra
+(`docs/objetos3d/portao/esbocos/esboco_1_pedra_blocos.png`).
+
+**O que entrou:**
+- **A malha nova pela Meshy:** a multivista a partir da tarefa do esboço (6 créditos) e a malha (30), uma tentativa só, dentro do teto de 36. Os
+  arquivos e os JSON das tarefas estão em `docs/objetos3d/portao/vistas/` e `malha/`, e o gasto em `docs/objetos3d/portao/saldo.json`.
+- **O acabamento** (`docs/objetos3d/portao/acabar_portao.py`, no Blender 4.5 pela linha de comando):
+  - a malha 1,5 vez mais funda, como o D-LG-4, e os vértices repetidos soldados;
+  - a folha do portal aplainada, com a normal do plano (D-OBJ-PO-2);
+  - a ilha única de UV do portal (D-OBJ-PO-3);
+  - as normais ponderadas, com as quinas acima de 60° vivas;
+  - 2 012 triângulos (teto 2 414), a frente em +z e a base no chão.
+- **A textura** (`textura_portao.py`): a pintada da Meshy fica, sem achatar. Só as manchas brancas saem, e entram os retoques do revisor:
+  o dourado e o vermelho dos estandartes mais vivos e um realce leve das juntas. O portal vem da vista de frente da multivista, com a grade
+  e a espiral. A textura vai a 512 px numa paleta de 240 cores com pontilhado, para caber nos 300 KB (D-OBJ-PO-1). A máscara do portal
+  (`portao_luz.png`, 512 px) sai dos triângulos de UV do portal, então fica alinhada com os UVs novos por construção.
+- **A publicação** (`publicar_portao.py`): a marca de IA no `asset.extras`, os arquivos em `web/app/public/lugares/portao/` (268 449 bytes)
+  e o glTF-Validator (`validar_gltf.cjs`; 0 erros, 0 avisos em `docs/lugares3d/portao/validacao.json`). A altura (5 células), a grade e
+  as posições não mudam.
+- **Os testes:** o LG-G5 (a paleta da Ilha) deixa de valer para o portão e continua valendo para os outros lugares. O LG-G5b, novo, confere
+  a textura pintada: a cor é um PNG quadrado de 512 a 1 024 px com mais de 64 cores, e a máscara de luz cai no ciano da textura. Os dois
+  estão em `web/app/test/ilha_lugares.test.ts`, lista `TEXTURA_PINTADA` (D-OBJ-PO-1). Os gates G1 a G8 de `web/app/test/lugares3d.test.ts`
+  ficam como estavam e passam.
+
+**As capturas** ficam fora do git, em `D:\Trab\digilab\capturas_objetos3d\portao\`:
+- a prancha `prancha_portao.png`: o esboço, o antes e o depois na vitrine, e o antes e o depois no jogo nos mapas Digital e Ilha;
+- as imagens soltas `vitrine_*`, `antes_*` e `depois_*` (`*_cena` é a cena sem o menu; `*_lugar` é a viagem ao portão, com o Lutar aberto).
+
+Para o estilo Digital, a vitrine e o jogo rodaram numa worktree só de captura, montada do branch do #692 (`v3-mapa-digital-d5`).
+
+**O revisor** (um subagente que não fez o trabalho) deu três pareceres:
+1. **APROVA COM RESSALVA:** o portal manchado e apagado, o dourado sumindo e as juntas fracas.
+2. **APROVA COM RESSALVA:** o portal ficou liso e o ciano vazou para as ilhas vizinhas, os dois efeitos do primeiro conserto.
+3. **APROVA,** depois da ilha única do portal.
+
+Ficam como estão:
+- o estandarte esquerdo meio torto, a proporção mais atarracada que no esboço e a barra que, de lado, parece uma lança. São da malha e
+  pediriam outra geração;
+- uma névoa clara na emenda esquerda do portal, que quase não aparece no jogo.
+
+**Fica para depois:** o portal no jogo é um ciano mais apagado que na vitrine. A força da luz é `LUGAR_LUZ.forca`, em `constantes.ts`,
+fora deste trabalho. A grade do esboço é pintada e parada, não gira.
+
+## 15. O retrabalho da barraca (2026-11-08, worker, Claude Code, Opus 5.5, branch `v3-objeto-barraca`)
+
+**O pedido:** refazer a barraca o mais perto possível do esboço 1 do retrabalho (`docs/objetos3d/barraca/esbocos/esboco_1_domo_costuras.png`,
+o domo turquesa com costuras e remendos, a entrada enrolada, as cordas laranja, a lona, a antena e o banquinho com livros), com a regra
+nova da textura (`docs/objetos3d/REFERENCIAS.md`, seção 5: não achatar, normais suavizadas) e a entrada lendo como vão de verdade.
+
+**O que entrou:**
+- `web/app/public/lugares/barraca/`: o glTF novo (1 847 triângulos, 1 nó, 1 material só de cor), a textura pintada em 512 px com 256
+  cores e o `License.txt`; 223 KB no total. A marca de IA e as tarefas da Meshy no `asset.extras`.
+- `LUGARES_MODELOS.barraca` em `modelos.ts`: altura 3,6 e sombra 2,2 (PROPOSTO; D-LG-OB-4).
+- `web/app/test/ilha_lugares.test.ts`: a lista `TEXTURA_PINTADA` tira a barraca do LG-G5, e o LG-G5b confere o detalhe guardado e o chão
+  de dentro escuro (D-LG-OB-1).
+- `docs/objetos3d/barraca/`: a multivista e a malha da Meshy (`vistas/`, `malha/`), o `saldo.json` e os scripts, na ordem do
+  `publicar_barraca.py`: `faces.py` e `interior.py` (Blender, as faces e as de dentro), `textura_barraca.py` (o escuro de dentro, as cordas
+  laranja e o chão), `acabar_barraca.py` (Blender: os vértices fundidos, as normais a 60°, o pivô na base, a frente em +z, o chão e o forro)
+  e `publicar_barraca.py` (a redução da textura e a marca de IA). O validador em `docs/lugares3d/barraca/validacao.json` (0 erros, 0 avisos).
+
+**Os números e os achados:** D-LG-OB-1 a D-LG-OB-6 no `docs/registro/2026-11.md`. O principal: a lona nova, mais funda, entra no degrau do
+barranco atrás do ponto da barraca; o forro de dentro esconde as pedras, e a altura desceu de 4 para 3,6.
+
+**A prancha e as capturas** (fora do git): `D:\Trab\digilab\capturas_objetos3d\barraca\` — `prancha_barraca.png` (o esboço, o antes e o
+depois na vitrine, o antes e o depois no jogo, nos mapas Ilha e Digital), `vitrine_antes_*.png`, `vitrine_depois_*.png`,
+`visao_ilha.png`, `visao_digital.png`.
+
+**O revisor:** APROVA COM RESSALVA (a porta lê como abertura escura nos dois mapas; as cordas só leem laranja no mapa Ilha, por causa do
+traço). O que fica sem conserto está no D-LG-OB-6.
+
+**A Meshy:** 36 créditos (multivista 6 + malha 30), no teto da sessão.
+
+**Ao mesclar com o portão (seção 14, Gerente, 2026-11-08):** os dois trouxeram um LG-G5b. Em `web/app/test/ilha_lugares.test.ts` fica o do portão (512 a 1024 px, quadrado, mais de 64 cores, a máscara de luz no mesmo UV) para os dois, com a barraca em `TEXTURA_PINTADA`, e o chão escuro da barraca vira um teste próprio no mesmo bloco.
+
+## 16. O cais retrabalhado com a textura pintada (2026-11-08, worker, Claude Code, Opus 5.5, branch `v3-objeto-cais`)
+
+**Por que aqui:** o Matheus achou os objetos 3D feios e "sem textura" e pediu que cada um fosse refeito numa sessão própria, o mais perto
+possível do esboço escolhido (`docs/objetos3d/REFERENCIAS.md`, seção 5). O cais segue o esboço 1: o píer curto de tábuas com os postes
+enrolados em corda e o barquinho de pesca azul e amarelo com a cabine (`docs/objetos3d/cais/esbocos/esboco_1_pier_barco.png`).
+
+**O que entrou:**
+- **A malha nova pela Meshy:** a multivista a partir da tarefa do esboço (6 créditos) e a malha (30), uma tentativa só, no teto de 36. O
+  prompt da multivista tira a água do esboço (o mar é o da ilha). Os arquivos e os JSON das tarefas estão em `docs/objetos3d/cais/vistas/` e
+  `malha/`, e o gasto em `docs/objetos3d/cais/saldo.json` (86 → 80 → 50).
+- **O acabamento** (`docs/objetos3d/cais/acabar_cais.py`, no Blender 4.5 pela linha de comando): a malha como a Meshy deu, com a frente em
+  +z como o cais de antes (o píer ao longo de x, o barco atrás, do lado do mar); a base no chão e o centro no meio; os vértices repetidos
+  soldados e as faces degeneradas tiradas; tudo liso com normais ponderadas e as quinas acima de 60° vivas. São 2 159 triângulos (teto 2 414).
+- **A textura** (`textura_cais.py`, o mesmo caminho do vagão, #710): a pintada da Meshy fica, sem achatar. O azul, o amarelo e o musgo ganham
+  um pouco de saturação, e a madeira vai para o brilho medido no esboço (D-OBJ-CAIS-2). Fica em 512 px, numa paleta de 192 cores com
+  pontilhado, para caber nos 300 KB.
+- **A publicação** (`publicar_cais.py`): a marca de IA no `asset.extras`, os arquivos em `web/app/public/lugares/cais/` (291 797 bytes) e o
+  glTF-Validator (`docs/itens3d/validar.cjs`; 0 erros, 0 avisos em `docs/lugares3d/cais/validacao.json`). A máscara `cais_luz.png` sai
+  (D-OBJ-CAIS-3). A altura em `LUGARES_MODELOS.cais` vai de 2,4 para 1,8 (D-OBJ-CAIS-1). A grade e as posições não mudam.
+- **Os testes:** o cais sai do LG-G5 (a paleta da Ilha) e entra no LG-G5b (a textura pintada: PNG quadrado de 512 a 1 024 px com mais de
+  64 cores), pela lista `TEXTURA_PINTADA` de `web/app/test/ilha_lugares.test.ts`, a mesma do portão (#713). Os gates G1 a G8 de
+  `web/app/test/lugares3d.test.ts` ficam como estavam e passam.
+
+**As capturas** ficam fora do git, em `D:\Trab\digilab\capturas_objetos3d\cais\`: a prancha `prancha_cais_final.png` (o esboço, as prévias do
+Blender, o antes e o depois no jogo nos mapas Digital e Ilha; o depois do Digital já com o traço de nanquim do #692, mesclado na `main`
+durante o trabalho) e as imagens soltas `antes_*`, `depois_*` (antes da mescla) e `depois_d5_*` (depois dela). Uma cópia da prancha está
+em `docs/objetos3d/cais/conserto/prancha.jpg`. As capturas no jogo usam a câmera de desenvolvimento (`?cameradev=1`, `__camera.ir("cais")`)
+num Vite próprio.
+
+**O revisor** (um subagente que não fez o trabalho) deu dois pareceres:
+1. **APROVA COM RESSALVA:** a madeira escura e lisa demais, a corda sem o bege, a corda de amarração como fita, o píer na areia sem água,
+   o barco grande e a silhueta mais longa e fina que a do esboço.
+2. **APROVA COM RESSALVA,** depois do brilho da madeira: sem problema novo; ficam as ressalvas da malha.
+
+**Ficam como estão:** a corda de amarração em fita, a silhueta longa, o tamanho do barco e o musgo que a Meshy não pintou (só uma malha nova
+resolve, e o teto era de uma tentativa); a água sob o píer (o modelo não leva água, e a posição não muda).
