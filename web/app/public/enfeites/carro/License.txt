@@ -11,7 +11,8 @@ Como foi feito (docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 12, e docs/objetos3d/car
 - vistas: Meshy Image to Image com multivista, a partir do esboco;
 - malha: Meshy Multi-Image to 3D (remesh em triangulos, so a cor);
 - acabamento no Blender 4.5 LTS e em Python, por script: a malha girada com a frente em +z, os vertices repetidos soldados, as normais
-  suavizadas; a textura pintada da Meshy fica (sem achatar cores), reduzida a 512 px em paleta de 256 cores.
+  suavizadas; a textura pintada da Meshy fica (sem achatar cores), com um retoque leve por regiao (o musgo e a grama mais vivos, flores
+  rosa pequenas na grama do teto, os farois mais amarelos), reduzida a 512 px em paleta de 256 cores.
 As tarefas da Meshy (esboco, vistas, malha) estao no asset.extras do carro.gltf.
 
 Uso: no jogo DigiLab, publicado. Credito: "Carro abandonado gerado com a Meshy (meshy.ai)".

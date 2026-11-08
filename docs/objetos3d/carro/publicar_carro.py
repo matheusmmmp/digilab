@@ -25,7 +25,8 @@ def main(gl: str, cor: str, lib: str) -> None:
         "tarefas_meshy": {"esboco": ESBOCO["id"], "vistas": SALDO["vistas"]["tarefa"], "malha": SALDO["malha"]["tarefa"]},
         "pipeline": ("docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 12; docs/objetos3d/REFERENCIAS.md, secao 5: a malha da Meshy girada com a "
                      "frente em +z, os vertices repetidos soldados e as normais ponderadas (acabar_carro.py); a textura pintada da Meshy sem "
-                     "achatar, 512 px em paleta de 256 cores com difusao (textura_carro.py)"),
+                     "achatar, com o retoque leve do revisor nas mascaras do mascaras_carro.py (verdes mais vivos, flores rosa no teto, farois "
+                     "amarelos) e 512 px em paleta de 256 cores com difusao (textura_carro.py)"),
         "licenca": "License.txt ao lado",
     }
     if [i["uri"] for i in g.get("images", [])] != ["carro_cor.png"]:

@@ -56,9 +56,10 @@ export type NomeItem = keyof typeof ITENS_MODELOS;
 export const ENFEITES_MODELOS = {
   poste: { arquivos: ["poste/poste.gltf"], altura: 4.5, vento: 0, sombra: 0.4, baixo: false },
   /* o carro: o hatch retro azul com ferrugem e o jardim no teto, gerado pela Meshy (retrabalho de 2026-11-07, secao 12; a caminhonete da
-     E2 saiu); maior que um carro na escala do pet, como um brinquedo, para ser visto na beira do plato. A altura sobe de 3,4 para 4,5 para o
-     comprimento ficar o da caminhonete (~5,8): o hatch e mais alto que comprido (PROPOSTO, SEM FONTE) */
-  carro: { arquivos: ["carro/carro.gltf"], altura: 4.5, vento: 0, sombra: 2.3, baixo: false },
+     E2 saiu); maior que um carro na escala do pet, como um brinquedo, para ser visto na beira do plato. A altura sobe de 3,4 para 4,8: 4,5
+     deixa o comprimento o da caminhonete (~5,8; o hatch e mais alto que comprido) e o revisor pediu 5 a 10 % a mais, para as rodas lerem
+     por cima da barraca (PROPOSTO, SEM FONTE) */
+  carro: { arquivos: ["carro/carro.gltf"], altura: 4.8, vento: 0, sombra: 2.3, baixo: false },
   /* a geladeira com o vaso e o trilho com o vagao (E3), com os tracos de nanquim na textura; na escala de brinquedo do carro */
   geladeira: { arquivos: ["geladeira/geladeira.gltf"], altura: 3.0, vento: 0, sombra: 1.4, baixo: false },
   trilho: { arquivos: ["trilho/trilho.gltf"], altura: 2.0, vento: 0, sombra: 2.6, baixo: false },
