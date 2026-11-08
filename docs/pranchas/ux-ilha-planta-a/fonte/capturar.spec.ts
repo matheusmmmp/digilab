@@ -20,9 +20,19 @@ const CENAS: { nome: string; alvo: [number, number] | null; orbita?: { zoom?: nu
   { nome: "4_barraca", alvo: [45, 12], orbita: { zoom: 1.2 } },
   { nome: "5_cais", alvo: [36, 26], orbita: { zoom: 1.2 } },
   { nome: "6_nordeste", alvo: [57, 2], orbita: { zoom: 1.3 } },
+  { nome: "6a_carro_oeste", alvo: [-2, 22], orbita: { zoom: 1.3, giro: Math.PI / 2 } },
+  { nome: "6b_geladeira_cais", alvo: [42, 27], orbita: { zoom: 1.3 } },
+  { nome: "6c_trilho_leste", alvo: [62, 23], orbita: { zoom: 1.3, giro: -Math.PI / 2 } },
   { nome: "7_lar", alvo: [9, 14], orbita: { zoom: 1.4 } },
   { nome: "8_alto", alvo: [31, 12], orbita: { zoom: 2.4, inclina: 0.45 } },
+  /* o fim da ilha: o zoom mais longe (ZOOM_MAX, orbita.ts) e a camera girada para cada lado, rente ao chao e de cima */
+  { nome: "9_longe", alvo: [31, 15], orbita: { zoom: 2.4, giro: 0, inclina: 0 } },
+  { nome: "10_girada_oeste", alvo: [6, 14], orbita: { zoom: 2.4, giro: Math.PI / 2, inclina: -0.25 } },
+  { nome: "11_girada_sul", alvo: [31, 4], orbita: { zoom: 2.4, giro: Math.PI, inclina: -0.25 } },
+  { nome: "12_girada_leste", alvo: [58, 15], orbita: { zoom: 2.4, giro: -Math.PI / 2, inclina: -0.25 } },
+  { nome: "13_quina_alta", alvo: [62, -6], orbita: { zoom: 2.4, giro: -Math.PI * 0.75, inclina: 0.6 } },
 ];
+const SO = process.env.CAP_CENAS?.split(",");
 
 for (const pele of ["vidro", "xcom"]) for (const [w, h] of [[1920, 950], [390, 844]] as const) {
   const nomePele = pele === "xcom" ? "militar" : "vidro";
@@ -43,12 +53,14 @@ for (const pele of ["vidro", "xcom"]) for (const [w, h] of [[1920, 950], [390, 8
       localStorage.setItem(chave, s);
     }, [CHAVE, JSON.stringify(SAVES.dia)] as const);
     await page.goto(APP + `?cameradev=1&pele=${pele}#/pet`);
+    const PELES = process.env.CAP_PELES?.split(",");
+    if (PELES && !PELES.includes(nomePele)) { await ctx.close(); return; }
     await expect(page.locator(".pet-cena .cena3d")).toBeVisible();
     await expect(page.locator("[data-pronto='1']")).toHaveCount(1, { timeout: 30_000 });
     await expect(page.locator("[data-objetos='1']")).toHaveCount(1, { timeout: 30_000 });
     await page.waitForTimeout(1500);
     mkdirSync(SAIDA, { recursive: true });
-    for (const c of CENAS) {
+    for (const c of CENAS.filter(c => !SO || SO.includes(c.nome))) {
       if (c.alvo) await page.evaluate(([a, o]) => (window as any).__camera.ir(a, o), [c.alvo, c.orbita ?? {}] as const);
       await page.mouse.move(2, h - 2);
       await page.waitForTimeout(900);

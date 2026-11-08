@@ -32,6 +32,7 @@ import { AFASTAR_MAX, BATER_BOLA_MS, CAMERAS, COBERTO_MS, GOLPE_DIST, GOLPE_MS, 
 import { CURVA, type CenaIlha, type Objetos, cobrirFundo } from "./cena.ts";
 import { estiloDe, type Estilo } from "./estilos.ts";
 import { dobrarY, lugarNoPonto, paraMundoCel, paraTelaNdc, type CameraLida, type Dobra } from "./curva.ts";
+import { fimDaIlha, type FimDaIlha } from "./fimDaIlha.ts";
 import { ilhaDe, type Ilha } from "./grade.ts";
 import { Itens } from "./itens.ts";
 import type { NomeLugar } from "./modelos.ts";
@@ -54,6 +55,9 @@ class VistaIlha {
   readonly camera: THREE.PerspectiveCamera;
   private readonly ilha: Ilha;
   private readonly cenaIlha: CenaIlha;
+  /** o fim da ilha (fimDaIlha.ts): o mar em volta e as silhuetas ao longe; a cor de baixo da luz do ceu, lida da cena */
+  private readonly fim: FimDaIlha;
+  private readonly sombraCeu = new THREE.Color();
   private readonly seguidor = new Seguidor();
   private readonly raio = new THREE.Raycaster();
   private readonly lida: CameraLida;
@@ -133,6 +137,8 @@ class VistaIlha {
     this.pos = new Pos(this.renderer);
     this.ilha = ilhaDe(mu.cm);
     this.cenaIlha = this.estilo.montar(this.ilha);
+    this.fim = fimDaIlha(this.ilha);
+    this.cenaIlha.cena.add(this.fim.grupo);
     const v = new THREE.Vector3();
     this.lida = {
       projetar: (x, y, z) => { v.set(x, y, z).project(this.camera); return [v.x, v.y]; },
@@ -523,6 +529,10 @@ class VistaIlha {
     cobrirFundo(this.cenaIlha.cena.background, this.camera.aspect);
     this.objetos?.noite?.(noite);
     this.objetos?.quadro?.(this.foco, this.estilo.dobra, this.dirDobra, Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2)) * this.camera.aspect);
+    const hemi = this.cenaIlha.cena.children.find((o): o is THREE.HemisphereLight => o instanceof THREE.HemisphereLight);
+    if (hemi) this.sombraCeu.copy(hemi.groundColor);
+    const nevoa = (this.cenaIlha.cena.fog as THREE.Fog | null)?.color;
+    if (nevoa) this.fim.quadro(this.foco, this.estilo.dobra, this.dirDobra, this.camera, this.ilha.altura(this.foco[0], this.foco[1]), nevoa, this.sombraCeu);
     this.aplicarTrancas();
     this.itens.sincronizar(mu, m.e.tick, noite, agora, dtMs, m.lesionadoDesde !== null, reduzido, m.e.sujeira, this.naMao ? motorCel : this.petCel);
     /* o pet longe do foco (a camera solta, a viagem, a volta depois de soltar o pet): o chao sob ele desce pela dobra (yPe), e o tamanho do papel vale

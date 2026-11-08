@@ -75,13 +75,13 @@ export const SACO_FOLGA_POSTE = 0.14;
 export const COCO = { raio: 0.85, passo: 0.25, surgirMs: 380 } as const;
 
 /** os enfeites do mundo humano (docs/TAREFA_V3_MUNDO_ENFEITES.md; grade.ts, porEnfeites), desde a planta A (PLANTA_ILHA) em pontos fixos:
-    por enfeite, quantos por mapa, a folga de chao plano em volta (celulas); dos marcos do ferro-velho, a distancia minima entre eles (o
-    carro e o trilho tem ~5 celulas de comprimento) e a clareira que cada um abre na decoracao. PROPOSTO, SEM FONTE */
+    por enfeite, quantos por mapa e a folga de chao plano em volta (celulas); dos marcos (o carro, a geladeira e o trilho), o chao em que
+    cada um pode ficar e a clareira que ele abre na decoracao. PROPOSTO, SEM FONTE */
 export const ENFEITES_GRADE = {
   poste: { quantos: 6, folga: 0 },
-  carro: { quantos: 1, folga: 1, entreMarcos: 4.5, clareira: 2.2 },
-  geladeira: { quantos: 1, folga: 1, entreMarcos: 4.5, clareira: 1.4 },
-  trilho: { quantos: 1, folga: 1, entreMarcos: 4.5, clareira: 2.2 },
+  carro: { quantos: 1, folga: 1, chao: ["grama"], clareira: 2.2 },
+  geladeira: { quantos: 1, folga: 1, chao: ["areia"], clareira: 1.4 },
+  trilho: { quantos: 1, folga: 1, chao: ["grama"], clareira: 2.2 },
 } as const;
 /** a planta A da ilha inicial (docs/pranchas/ux-ilha-layout/, IL-1 a IL-4 DECIDIDAS em 2026-11-08; a vista em docs/pranchas/ux-ilha-planta-a/):
     so a parte da vista, em celulas do mundo (x leste, z sul), a mesma em todo mapa de 64 x 30. O ninho, a tigela, a bola e as frutiferas sao
@@ -92,7 +92,9 @@ export const ENFEITES_GRADE = {
     - os lugares: o `alvo` de cada um (a grade poe no ponto que cabe mais perto dele, em `busca` celulas, com a `folga` de chao plano), a
       `clareira` que ele abre na decoracao e o raio da `base` onde o caminho para; o cais na coluna `x`; o saco perto da praca;
     - os postes (IL-3), cerca de 6, so na praca e no caminho do cais, em grama ou areia; a lampada para o ponto mais perto do caminho;
-    - o ferro-velho (IL-4): o carro, a geladeira e o trilho juntos no canto nordeste, com as pedras (`pedras`: x, z e escala);
+    - os marcos (a IL-4 de 2026-11-08, revista: "espalha eles tambem pelo mapa"), cada um num canto da moldura, no ponto que cabe mais perto
+      do da planta (`busca` celulas), com o entorno dele (extras, a rng propria): o carro meio coberto pelo mato no oeste, a geladeira na
+      areia perto do cais e o trilho saindo da mata do leste; `entorno`: quantos arbustos, tufos de grama alta e pedras, ate `raio` celulas;
     - a moldura em bosques e vaos (regras 7 e 8 do levantamento): a arvore e o arbusto da moldura so ficam dentro de um bosque (elipses
       `bosques`: x, z, raio x, raio z) ou na mata a leste do rio; nos `vaos` (o de tras do portao) nada alto fica. Cada bosque ganha as
       arvores e os arbustos dele, com a rng propria (`sal`): `porCelula` arvores por celula da elipse, a distancia minima entre as coisas
@@ -115,14 +117,37 @@ export const PLANTA_ILHA = {
     saco: [22, 9],
   },
   postes: [[27.5, 13], [34.5, 13], [27.5, 19.5], [34.5, 19.5], [33.5, 26], [37, 30]],
-  ferroVelho: {
-    carro: [56.5, -3], geladeira: [61.5, -3.5], trilho: [51, -4.5], busca: 2.5,
-    pedras: [[54, -1.4, 0.9], [59.4, -1.2, 0.7], [62.8, -1.6, 0.6], [48.6, -2, 0.8], [58.6, -5.6, 0.6]],
+  marcos: {
+    busca: 2.5,
+    carro: { ponto: [-6.5, 19.5], entorno: { arbusto: 6, grama_alta: 8, pedra: 1, raio: 2.8 } },
+    geladeira: { ponto: [50, 31.2], entorno: { arbusto: 0, grama_alta: 0, pedra: 3, raio: 2 } },
+    trilho: { ponto: [69, 21], entorno: { arbusto: 4, grama_alta: 6, pedra: 2, raio: 2.8 } },
   },
-  bosques: [[8, -6, 8, 4.2], [-6, 4, 3.4, 4.6], [-6, 22, 3.4, 5], [19, -8, 4, 3.4], [44, -6, 6, 3.6], [-5, -6, 4, 3.4]],
+  bosques: [[8, -6, 8, 4.2], [-6, 4, 3.4, 4.6], [-6, 25.6, 3.2, 2.6], [19, -8, 4, 3.4], [44, -6, 6, 3.6], [-5, -6, 4, 3.4], [56, -6, 6, 3.6]],
   vaos: [[31, -6, 5, 5]],
   sal: 0xb05c0e5, bosque: { porCelula: 0.16, entreArvores: 2.2, escalaArvore: [0.9, 1.2], arbustos: 0.5, entreArbustos: 1.2, escalaArbusto: [0.85, 1.15] },
 } as const;
+/** o fim da ilha (o Matheus, 2026-11-08: "adicionar um final [...] para ela nao acabar no meio do nada"; fimDaIlha.ts e grade.ts, porBordas):
+    - a leste do rio, a mata sobe em `degraus` ate o morro: a coluna (a partir da margem leste do rio) onde comeca cada nivel, com a borda
+      ondulando ate `ondula` celulas; a decoracao rente a um degrau novo some (a lista `objetos` nao muda, E-G0);
+    - o mar em volta da grade inteira, ate o horizonte (`mar`, o lado do quadrado, em celulas);
+    - as silhuetas ao longe: duas faixas em volta do ponto olhado (as ilhas perto e os morros longe), a `raio` celulas dele, com a cor da
+      nevoa puxada para a sombra (`sombra`, a fracao) e o pe `fundo` celulas abaixo da linha do horizonte do mar curvo, para o mar o cobrir;
+      `altura` e a altura da faixa e `alto`, a fracao dela que a silhueta mais alta ocupa; `ilhas` e `morros`, quantos picos por volta.
+    PROPOSTO, SEM FONTE */
+export const FIM_ILHA = {
+  degraus: [5, 9], ondula: 2,
+  mar: 1200,
+  silhuetas: {
+    sal: 0xf1a17e, fundo: -5, altura: 18,
+    longe: { raio: 60, sombra: 0.3, alto: 0.72, morros: 7 },
+    perto: { raio: 52, sombra: 0.55, alto: 0.42, ilhas: 9 },
+  },
+} as const;
+/** o sinal so (a regra 3 de "guiar o olhar sem texto"): o que se toca (a tigela, a bola e o saco) da um pulinho quando o pet chega a `raio`
+    celulas dele; de novo so depois que o pet sair de `sai` celulas. O pulinho: achata e estica `amplitude`, com o periodo e o amortecimento
+    em ms. A decoracao nao pula. PROPOSTO, SEM FONTE */
+export const CHAMADO = { raio: 1.9, sai: 3, amplitude: 0.12, periodo: 260, tau: 260 } as const;
 /** a luz de um lugar aberto (lugaresCena.ts): a cor da mascara de cada lugar (o ciano do portal e dos cristais, tirado da textura) e a
     forca (emissiveIntensity). PROPOSTO, SEM FONTE */
 export const LUGAR_LUZ = { cor: { portao: "110,240,230", barraca: "110,240,230", cais: "131,228,218" }, forca: 0.55 } as const;

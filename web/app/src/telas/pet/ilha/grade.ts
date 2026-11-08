@@ -8,7 +8,7 @@
      (norte e oeste), o rio (leste) ou a areia (sul): o pet para ali porque o motor o prende, e a vista mostra um limite.
    A vista (cena.ts) so desenha o que esta aqui. Todos os numeros sao do desenho: PROPOSTO, SEM FONTE. */
 import type { ConfigMundo } from "../../../../motor/index.ts";
-import { ENFEITES_GRADE, PLANTA_ILHA } from "./constantes.ts";
+import { ENFEITES_GRADE, FIM_ILHA, PLANTA_ILHA } from "./constantes.ts";
 import { ENFEITES_MODELOS, MODELOS, MODELO_ARVORE_DO_MOTOR, type NomeEnfeite, type NomeLugar, type NomeModelo } from "./modelos.ts";
 
 /** a moldura em volta da area andavel, em celulas (pelo menos 8 de cada lado, secao 5) */
@@ -147,9 +147,10 @@ export class Ilha {
       this.celulas.push({ tipo, nivel, cantos: [h, h, h, h], regiao });
     }
     this.porObjetos(semente, ninho, comedouro);
+    this.porBordas(semente);
     this.porLugares();
     this.porPlanta(semente, comedouro);
-    this.porEnfeites();
+    this.porEnfeites(semente);
   }
 
   /** a celula (x, z) em celulas do motor, ou undefined fora da grade */
@@ -339,10 +340,9 @@ export class Ilha {
   }
 
   /* os enfeites da planta A: os postes nos pontos de PLANTA_ILHA.postes (na grama, no caminho ou na areia), com a lampada para o ponto mais
-     perto de um caminho; o carro, a geladeira e o trilho do ferro-velho, cada um no ponto que cabe mais perto do da planta, em grama plana
-     com a folga do enfeite e longe dos outros marcos, com a frente para o ponto mais perto da area; e as pedras dele (extras). Cada marco
-     abre a clareira dele. Falha alto se faltar lugar */
-  private porEnfeites(): void {
+     perto de um caminho; o carro, a geladeira e o trilho, cada um num canto da moldura, no ponto que cabe mais perto do da planta, no chao
+     plano dele, fora dos caminhos e das clareiras dos lugares, com o entorno dele. Cada marco abre a clareira dele. Falha alto se faltar lugar */
+  private porEnfeites(semente: number): void {
     const P = PLANTA_ILHA;
     for (const [x, z] of P.postes) {
       if (!this.plana(x, z, ENFEITES_GRADE.poste.folga, ["grama", "caminho", "areia"])) throw new Error(`o poste em ${x}, ${z} nao fica em chao plano na ilha ${this.cm.layout.nome}`);
@@ -354,19 +354,52 @@ export class Ilha {
       }
       this.enfeites.push({ nome: "poste", x, z, giro: Math.atan2(melhor[0] - x, melhor[1] - z) });
     }
-    const F = P.ferroVelho;
+    /* os marcos espalhados pela moldura (IL-4 revista), cada um com o entorno dele (extras): arbustos e grama alta em grama, pedras em
+       qualquer chao plano, ate o raio, longe do marco e uns dos outros; a frente do marco para o ponto mais perto da area */
+    const M = P.marcos, r = rng(semente ^ P.sal ^ 0x3a7c05);
     for (const nome of ["carro", "geladeira", "trilho"] as const) {
-      const G = ENFEITES_GRADE[nome];
-      const [x, z] = this.pertoDe(F[nome], F.busca, (x, z) => !this.naArea(Math.floor(x), Math.floor(z)) && this.plana(x, z, G.folga)
-        && !this.enfeites.some(e => e.nome !== "poste" && Math.hypot(e.x - x, e.z - z) < G.entreMarcos), "o enfeite " + nome);
+      const G = ENFEITES_GRADE[nome], D = M[nome];
+      const [x, z] = this.pertoDe(D.ponto, M.busca, (x, z) => !this.naArea(Math.floor(x), Math.floor(z)) && this.plana(x, z, G.folga, G.chao)
+        && !this.caminhos.some(l => pertoDaLinha(x, z, l, P.raioCaminho + G.clareira))
+        && !this.lugares.some(l => Math.hypot(l.x - x, l.z - z) < P.lugares[l.nome].clareira + G.clareira), "o enfeite " + nome);
       const ax = Math.min(Math.max(x, 0), this.area.w), az = Math.min(Math.max(z, 0), this.area.h);
       this.enfeites.push({ nome, x, z, giro: Math.atan2(ax - x, az - z) });
       this.abrir(x, z, G.clareira);
+      const E = D.entorno;
+      for (const [modelo, quantos, escala] of [["arbusto", E.arbusto, [0.8, 1.15]], ["grama_alta", E.grama_alta, [0.9, 1.3]], ["pedra", E.pedra, [0.6, 0.95]]] as const) {
+        for (let k = 0, tent = 0; k < quantos && tent < quantos * 60; tent++) {
+          const a = r() * Math.PI * 2, d = G.clareira * 0.55 + r() * (E.raio - G.clareira * 0.55), ox = x + Math.cos(a) * d, oz = z + Math.sin(a) * d;
+          if (this.naArea(Math.floor(ox), Math.floor(oz)) || !this.plana(ox, oz, 0, modelo === "pedra" ? ["grama", "areia"] : ["grama"])) continue;
+          if (this.extras.some(o => Math.hypot(o.x - ox, o.z - oz) < (modelo === "grama_alta" ? 0.5 : 1))) continue;
+          this.extras.push({ modelo, x: ox, z: oz, giro: r() * Math.PI * 2, escala: escala[0] + r() * (escala[1] - escala[0]), doMotor: null });
+          k++;
+        }
+      }
     }
-    for (const [x, z, e] of F.pedras) {
-      if (!this.plana(x, z, 0)) throw new Error(`a pedra do ferro-velho em ${x}, ${z} nao fica em grama na ilha ${this.cm.layout.nome}`);
-      this.extras.push({ modelo: "pedra", x, z, giro: (sementeDoLayout(`pedra ${x} ${z}`) % 628) / 100, escala: e, doMotor: null });
+  }
+
+  /* o fim da ilha a leste (FIM_ILHA.degraus): depois do rio, a mata sobe em degraus ate o morro, como o norte. So a grama da moldura ao norte
+     da areia muda de nivel; a decoracao alta que fica rente a um degrau novo some da vista (escondidos; a lista `objetos` nao muda, E-G0) */
+  private porBordas(semente: number): void {
+    const F = FIM_ILHA, x0 = this.rioX + RIO.largura, onda = ruido1(semente ^ 0x4d, 6), mudou = new Set<Celula>();
+    for (let z = this.z0; z < this.area.h; z++) for (let x = x0; x < this.x0 + this.larg; x++) {
+      const c = this.cel(x, z)!;
+      if (c.tipo !== "grama" || c.nivel < 0) continue;
+      const passo = x - x0 - onda((z + 0.5) / 4) * F.ondula;
+      let n = c.nivel;
+      F.degraus.forEach((d, k) => { if (passo >= d) n = Math.max(n, k + 1); });
+      if (n === c.nivel) continue;
+      const h = n * ALTURA_NIVEL;
+      c.nivel = n; c.cantos = [h, h, h, h];
+      mudou.add(c);
     }
+    const todos: readonly Tipo[] = ["grama", "caminho", "areia", "agua"];
+    this.objetos.forEach((o, i) => {
+      if (o.doMotor !== null || o.x < x0 - 1.5) return;
+      const perto: Celula[] = [];
+      for (let dz = -1; dz <= 1; dz++) for (let dx = -1; dx <= 1; dx++) { const c = this.cel(Math.floor(o.x) + dx, Math.floor(o.z) + dz); if (c) perto.push(c); }
+      if (perto.some(c => mudou.has(c)) && !this.plana(o.x, o.z, MODELOS[o.modelo].baixo ? 0 : 1, todos)) this.escondidos.add(i);
+    });
   }
 
   /** a distancia (em celulas) de um ponto ate o retangulo da area andavel (0 dentro dele) */

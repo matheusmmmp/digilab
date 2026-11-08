@@ -371,7 +371,7 @@ void main() {
   ${GLSL_PROJETAR}
   #include <fog_vertex>
 }`;
-const AGUA_FRAG = `
+export const AGUA_FRAG = `
 uniform float uTempo;
 uniform float uNoite;
 varying float vMargem;
@@ -405,7 +405,7 @@ void main() {
   #include <fog_fragment>
 }`;
 
-function materialAgua(frag: string): THREE.ShaderMaterial {
+export function materialAgua(frag: string): THREE.ShaderMaterial {
   const mat = new THREE.ShaderMaterial({
     vertexShader: AGUA_VERT, fragmentShader: frag, fog: true, side: THREE.DoubleSide,
     uniforms: THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {}]),
