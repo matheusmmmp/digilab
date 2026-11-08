@@ -502,3 +502,21 @@ def test_estimativa_da_dc4_pelo_prompt_de_hoje():
     assert d["pedido_pior_caso"]["caracteres"] > 4700 and d["usd_total_dois_bracos"] < d["teto_usd"]
     gravado = json.loads((RAIZ / "artifacts_custo_llm" / "estimativa.json").read_text(encoding="utf-8"))["voz_da_rede_dc4"]
     assert gravado == json.loads(json.dumps(d))
+
+
+# ================================================================== 10. DC4b: o piso do gasto entre as worktrees
+def test_piso_do_gasto_na_validacao_vem_do_meta_da_calibracao(tmp_path, monkeypatch):
+    assert dc4.piso_do_gasto("calibracao") == 0.0 and dc4.piso_do_gasto("fumaca") == 0.0
+    monkeypatch.setattr(dc4, "META_CALIBRACAO", str(tmp_path / "nao_existe.json"))
+    with pytest.raises(RuntimeError, match="gasto acumulado"):
+        dc4.piso_do_gasto("validacao")
+    (tmp_path / "meta.json").write_text(json.dumps({"gasto": {"fim_usd": 0.75}}), encoding="utf-8")
+    monkeypatch.setattr(dc4, "META_CALIBRACAO", str(tmp_path / "meta.json"))
+    assert dc4.piso_do_gasto("validacao") == 0.75
+
+
+def test_gasto_com_piso_nunca_desce(tmp_path):
+    g = dc4.gasto_com_piso(ControleGasto(3.0, tmp_path / "g.json"), 0.75)
+    assert g.gasto == 0.75 and json.loads((tmp_path / "g.json").read_text(encoding="utf-8"))["gasto_usd"] == 0.75
+    g.gasto = 1.0
+    assert dc4.gasto_com_piso(g, 0.75).gasto == 1.0

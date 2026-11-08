@@ -308,9 +308,32 @@ class SdkFalso:
                                usage=SimpleNamespace(input_tokens=1500, output_tokens=30))
 
 
+META_CALIBRACAO = "artifacts_v3_conversa_dc4/calibracao/meta.json"
+
+
+def piso_do_gasto(fase: str) -> float:
+    """O gasto que ja aconteceu antes da fase (DC4b, D-CP-DC4b): o arquivo de gasto da fala livre fica fora do git, um por pasta, e a
+    validacao roda noutra worktree. Na validacao o piso e o gasto do fim da calibracao (o `meta.json` dela, no repo); sem ele, falha alto."""
+    if fase != "validacao":
+        return 0.0
+    arq = RAIZ / META_CALIBRACAO
+    if not arq.exists():
+        raise RuntimeError(f"a validacao sem o {META_CALIBRACAO}: o gasto acumulado da calibracao e o piso do teto (DC4-6)")
+    return float(json.loads(arq.read_text(encoding="utf-8"))["gasto"]["fim_usd"])
+
+
+def gasto_com_piso(gasto: ControleGasto, piso: float) -> ControleGasto:
+    """o gasto do arquivo, nunca abaixo do piso: um arquivo novo (outra worktree) comeca do que a calibracao ja gastou"""
+    if gasto.gasto < piso:
+        gasto.gasto = piso
+        gasto._salvar()
+    return gasto
+
+
 def clientes_reais(cfg: dict) -> dict:
-    """os clientes de verdade (calibracao e validacao): construir nao chama nada (o SDK so e importado na primeira chamada)"""
-    gasto = ControleGasto(cfg["teto_usd"], ARQUIVO_GASTO_LIVRE)
+    """os clientes de verdade (calibracao e validacao): construir nao chama nada (o SDK so e importado na primeira chamada). O gasto e o da
+    fala livre, com o piso do que as fases anteriores gastaram (`piso_do_gasto`)."""
+    gasto = gasto_com_piso(ControleGasto(cfg["teto_usd"], ARQUIVO_GASTO_LIVRE), piso_do_gasto(cfg["fase"]))
     voz = {b: ClienteOllama(m) if p == "ollama" else ClienteClaude(m, gasto) for b, (p, m) in BRACOS.items()}
     return {"voz": voz, "verif": ClienteOllama(MODELO_VERIF), "gasto": gasto, "falso": False}
 
