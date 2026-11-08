@@ -214,7 +214,31 @@ E-G9: dois draw calls a mais, de dia e de noite (80 → 81 e 101 → 103 em 390;
 rodada 1 (traços sujos, o trilho atrás do HUD); a rodada 2 está no corpo do PR. Os postes e o carro ficam sem traços nesta etapa.
 
 
-## 12. O carro retrabalhado (2026-11-08, worker, Claude Code, Opus 5.5, branch `v3-objeto-carro`)
+## 12. O trem refeito no retrabalho dos objetos (2026-11-07, worker, Claude Code, Opus 5.5, branch `v3-objeto-trem`)
+
+**O pedido:** o Matheus achou o trilho da E3 "muito feio, com o cel shading esquisito". As causas estão em `docs/objetos3d/REFERENCIAS.md`
+(seções 1 e 5): a textura achatada em 7 cores e as normais facetadas, que fazem o toon de dois tons manchar cada face.
+
+**A malha:** pela Meshy, a partir do esboço 1 (o vagão de madeira vermelho, o teto creme curvo, as escotilhas de latão, as rodas de ferro e o
+trilho com dormentes e grama): a multivista (6 créditos) e a malha (30), uma tentativa, dentro do teto de 36 da sessão
+(`docs/objetos3d/trem/saldo.json`). A malha tem 2 157 triângulos (teto 2 414 dos marcos).
+
+**O acabamento** (`docs/objetos3d/trem/acabar_trem.py`, Blender 4.5 pela linha de comando, e `textura_trem.py`):
+- a textura pintada da Meshy fica: as tábuas, a tinta descascada, a ferrugem, o latão, o musgo e a grama; só um realce leve de saturação no
+  latão, no vidro, nos verdes e no metal (D-OB-TREM-3);
+- as normais vêm de uma cópia suavizada da malha, sem quinas duras (D-OB-TREM-1): é o que tira as manchas do toon;
+- a textura fica em 512 px com 256 cores, para caber nos 300 KB do teste (D-OB-TREM-2); o enfeite tem ~294 KB.
+
+**No jogo:** os três arquivos de `web/app/public/enfeites/trilho/` trocados; a altura fica em 2,0 e a sombra cai para 1,6 (D-OB-TREM-4). A
+grade e as posições não mudam: o E-G0 e o E-G10 passam, e o E-G1 a E-G8 também, sem trocar teste nenhum.
+
+**A revisão:** um revisor que não fez o trabalho comparou a prancha (o esboço, o antes, o depois e o vagão no jogo nos mapas Digital e
+Ilha; `D:\Trab\digilab\capturas_objetos3d\trem\prancha_trem.png`) e deu APROVA COM RESSALVA nas duas rodadas. Na primeira, apontou o latão
+desbotado, o musgo e a grama apagados, o vidro escuro e o teto facetado de frente; a rodada 2 consertou os quatro pela textura e pelas
+normais. Ficam como ressalva o que pede malha nova: os para-choques e o engate, o chassi de frente, os degraus na borda do teto e os
+trilhos pintados de marrom.
+
+## 13. O carro retrabalhado (2026-11-08, worker, Claude Code, Opus 5.5, branch `v3-objeto-carro`)
 
 **O pedido:** o Matheus achou os objetos feios e "sem textura", e o carro "completamente sem detalhe" (a caminhonete da E2, achatada em 7
 cores). O retrabalho segue `docs/objetos3d/REFERENCIAS.md` (seção 5) e o esboço `docs/objetos3d/carro/esbocos/esboco_1_hatch_retro.png`: o

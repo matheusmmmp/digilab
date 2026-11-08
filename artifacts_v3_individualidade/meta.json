@@ -1,0 +1,438 @@
+{
+  "artefatos_sha256": {
+    "analise.json": "43cba13a8fb2f90526af650fe31177042b0772707285db9a3e1509d3415133f3",
+    "custo.json": "f327888ee73cee1aa51781a3049e1be3455d57c89610cd93146d1e06ae1aac46",
+    "medidas.json": "28c70b1c4961cd42154c805cc77133383a8f843a724baa52568da768dc402a60",
+    "tracos.jsonl": "60b0a98150b8f0a18c10408e044e70c361bd9ce3f584c1c90f7dcb2f54a60f31"
+  },
+  "bateria_sha256": "569088c5ce135d97f961ea2e9c71ba9acb1b925a7d95840ada4da69f3e10f621",
+  "bootstrap": 2000,
+  "bracos": [
+    "REL",
+    "REL+F"
+  ],
+  "config": {
+    "descricao": "INDIVIDUALIDADE, I2: a linha de base descritiva, a run unica (docs/PLANO_ANALISE_V3_INDIVIDUALIDADE.md; a faixa 85101...85505, IP-9)",
+    "dias": 14,
+    "fase": "individualidade",
+    "orcamento_por_dia": 16,
+    "plano": "docs/PLANO_ANALISE_V3_INDIVIDUALIDADE.md",
+    "unidades": {
+      "bases": [
+        85101,
+        85202,
+        85303,
+        85404,
+        85505
+      ],
+      "k": 12,
+      "prefixo": "digibrain_prototipo"
+    }
+  },
+  "config_arquivo": "experiments/configs/v3_individualidade/individualidade.json",
+  "config_sha256": "c82081abde15e771976483a8a4c5a3818501874ae443de7c9e8e972860eb0958",
+  "donos": [
+    "atencioso",
+    "relapso",
+    "aleatorio",
+    "incoerente"
+  ],
+  "duracao_s": 9737.84013414383,
+  "fase": "individualidade",
+  "fim": "2026-11-08T08:30:40",
+  "git_head": "0b3901f9a24d7bf1a5dcb1822dc6bfc9dde1ce42",
+  "git_limpo": true,
+  "inicio": "2026-11-08T05:48:23",
+  "lugar": "comedouro",
+  "memoria_autobio_sha256": "dcc83a04f88db17e777a66d95b467a3e15ff24e59a5c7ab510db0a7925b30cf0",
+  "modo": "individualidade",
+  "orquestrador_sha256": "b702ee2c7aaae7bfef3c0d76d04d2254ef5f8db9aee0de57f17407b4aa5b04d8",
+  "plano": "docs/PLANO_ANALISE_V3_INDIVIDUALIDADE.md",
+  "plano_sha256": "83eef0964d943c5aad69ef69e1584c85460b02beb570a689c00f940e7a29b66e",
+  "processos": 4,
+  "prototipo_sha256": "e3071e6729a6a9dade31946c1372606215bc68b10e0c6f72584d1fa3ba45ae63",
+  "python": "3.13.0",
+  "replicas": 3,
+  "sha256": {
+    "config.py": "13ac680575f2fe0fc18281ca590f598260d6ea4b7d3bbee9ed3b2c247de89ea9",
+    "digibrain/__init__.py": "3d50ce23bd4001f607018485282fbea22b021d7e4f825c070b9be87197cb2b55",
+    "digibrain/_comum.py": "164ef9c3e5781f68a711d50de9a014751073ea7343540e5d6af9feff0a81d160",
+    "digibrain/adapt.py": "ea7a3edd0d5ad1dc18788d9b229ab7e49577c906a66f93ca6f44deb55c606ece",
+    "digibrain/afeto.py": "4b1b8d9caf8cf5de40048f9689d0b7fc844bba59a58ac044a2bcaed073ee2f99",
+    "digibrain/arb.py": "f5465f353366a81da3fd32b84377d40988ff46d60dda17237ad47c3053d3fa64",
+    "digibrain/decodificador.py": "743764f0b230862f88d99ea3e997b4b27b1da6604b0f796fbb912cd4577df1f8",
+    "digibrain/estado.py": "76a5f54acccdee3ec3305d6127f2f459b67ce615e0970c3e350955150b34b3c6",
+    "digibrain/ganchos.py": "595e7f57fddb5e3d06bf2aa939acd59dce379843b503a7f04021821b2328a224",
+    "digibrain/impulso.py": "afe1b803726ab72863fdc0f4150e7321f42a90ec63840b60106fb80817031340",
+    "digibrain/mem.py": "48588c9a90e9d0e99ee18d1a47105243317995241f95e40dbae4893209f8eec6",
+    "digibrain/pers.py": "c0e3ef850d84d12b7263baeba438f5395512f34a05e49fea831c346ab1594528",
+    "digibrain/plast.py": "a2b9d426164e98754dadc11d8d4d09dbcde8296a0e66d2ff512859c1dcbcb8e7",
+    "digibrain/sens.py": "4b0ab309d86c7bbdef27f9338a715a72e29691df5786c075f4933c1b0d107f77",
+    "engine.py": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+    "metrics.py": "46d0022ae6dd6c2f58346d1b8425fdb1441c065540668fe9ea767021a509ac54",
+    "mundo.py": "a759ec186ed9233baa5d6e583ab4cb836ed4b46c2b50df762eb4fd0b58a688a2"
+  },
+  "unidades": [
+    {
+      "base": 85101,
+      "genoma": 5443344696996126338,
+      "k": 0,
+      "semente": 18389679083923624802
+    },
+    {
+      "base": 85101,
+      "genoma": 7582817144822505293,
+      "k": 1,
+      "semente": 8746665391858503784
+    },
+    {
+      "base": 85101,
+      "genoma": 12003090298793058597,
+      "k": 2,
+      "semente": 10029114052883474834
+    },
+    {
+      "base": 85101,
+      "genoma": 242789102797576335,
+      "k": 3,
+      "semente": 6069286513978439832
+    },
+    {
+      "base": 85101,
+      "genoma": 2928303529335120363,
+      "k": 4,
+      "semente": 13594261772260042872
+    },
+    {
+      "base": 85101,
+      "genoma": 6402221191600476350,
+      "k": 5,
+      "semente": 18028332907124804415
+    },
+    {
+      "base": 85101,
+      "genoma": 4775522586747055818,
+      "k": 6,
+      "semente": 10602482075524418435
+    },
+    {
+      "base": 85101,
+      "genoma": 6936621429181329650,
+      "k": 7,
+      "semente": 7810885596556288808
+    },
+    {
+      "base": 85101,
+      "genoma": 1683242154161393834,
+      "k": 8,
+      "semente": 15583045911206549079
+    },
+    {
+      "base": 85101,
+      "genoma": 18179002505704840465,
+      "k": 9,
+      "semente": 14666975204059293659
+    },
+    {
+      "base": 85101,
+      "genoma": 3253479882174326027,
+      "k": 10,
+      "semente": 13299175595620773995
+    },
+    {
+      "base": 85101,
+      "genoma": 936105121463256646,
+      "k": 11,
+      "semente": 16733307499894199073
+    },
+    {
+      "base": 85202,
+      "genoma": 15548280431827257727,
+      "k": 0,
+      "semente": 8831596328011801499
+    },
+    {
+      "base": 85202,
+      "genoma": 9134334192982636774,
+      "k": 1,
+      "semente": 7193752817607994974
+    },
+    {
+      "base": 85202,
+      "genoma": 8311315994212661832,
+      "k": 2,
+      "semente": 5966790934729250508
+    },
+    {
+      "base": 85202,
+      "genoma": 7995778753066672636,
+      "k": 3,
+      "semente": 1334581701733091037
+    },
+    {
+      "base": 85202,
+      "genoma": 15265541060459389161,
+      "k": 4,
+      "semente": 16495491951379207604
+    },
+    {
+      "base": 85202,
+      "genoma": 9023195700318853677,
+      "k": 5,
+      "semente": 5691665509250155742
+    },
+    {
+      "base": 85202,
+      "genoma": 407472577980234461,
+      "k": 6,
+      "semente": 14085900677092483392
+    },
+    {
+      "base": 85202,
+      "genoma": 14356599622578234354,
+      "k": 7,
+      "semente": 477789829038472627
+    },
+    {
+      "base": 85202,
+      "genoma": 9552621991499475305,
+      "k": 8,
+      "semente": 7023195305997902251
+    },
+    {
+      "base": 85202,
+      "genoma": 6187039510773055688,
+      "k": 9,
+      "semente": 10023494652575530046
+    },
+    {
+      "base": 85202,
+      "genoma": 2668413463870135140,
+      "k": 10,
+      "semente": 12145687366916857396
+    },
+    {
+      "base": 85202,
+      "genoma": 3617069447200118550,
+      "k": 11,
+      "semente": 10413043828003238745
+    },
+    {
+      "base": 85303,
+      "genoma": 6166264812072431097,
+      "k": 0,
+      "semente": 4780638907648387007
+    },
+    {
+      "base": 85303,
+      "genoma": 7913308680298988075,
+      "k": 1,
+      "semente": 3470632036582488288
+    },
+    {
+      "base": 85303,
+      "genoma": 9887189959820490941,
+      "k": 2,
+      "semente": 14059246249872765755
+    },
+    {
+      "base": 85303,
+      "genoma": 7671800592370770688,
+      "k": 3,
+      "semente": 2442387542831272013
+    },
+    {
+      "base": 85303,
+      "genoma": 13487338677955541161,
+      "k": 4,
+      "semente": 7125934525831456264
+    },
+    {
+      "base": 85303,
+      "genoma": 16682356358189640484,
+      "k": 5,
+      "semente": 17282125977909577431
+    },
+    {
+      "base": 85303,
+      "genoma": 17280510404776464103,
+      "k": 6,
+      "semente": 12296908816132391343
+    },
+    {
+      "base": 85303,
+      "genoma": 9870717502700541999,
+      "k": 7,
+      "semente": 5830139932558230304
+    },
+    {
+      "base": 85303,
+      "genoma": 319043920543622090,
+      "k": 8,
+      "semente": 2503262671544707610
+    },
+    {
+      "base": 85303,
+      "genoma": 18396167158067383372,
+      "k": 9,
+      "semente": 7204943003816303333
+    },
+    {
+      "base": 85303,
+      "genoma": 9043261660863999482,
+      "k": 10,
+      "semente": 1924234841316480295
+    },
+    {
+      "base": 85303,
+      "genoma": 5936853280931846632,
+      "k": 11,
+      "semente": 15513440501855317740
+    },
+    {
+      "base": 85404,
+      "genoma": 13038310158008197747,
+      "k": 0,
+      "semente": 2063933650120770138
+    },
+    {
+      "base": 85404,
+      "genoma": 1025045640751561644,
+      "k": 1,
+      "semente": 12479153556387458291
+    },
+    {
+      "base": 85404,
+      "genoma": 17026945181597794584,
+      "k": 2,
+      "semente": 11131920144661109904
+    },
+    {
+      "base": 85404,
+      "genoma": 790979115747434541,
+      "k": 3,
+      "semente": 15558113083696760186
+    },
+    {
+      "base": 85404,
+      "genoma": 12393330901279883585,
+      "k": 4,
+      "semente": 13335112921822478024
+    },
+    {
+      "base": 85404,
+      "genoma": 2015459463992995902,
+      "k": 5,
+      "semente": 10250047666166838707
+    },
+    {
+      "base": 85404,
+      "genoma": 10948938470164379299,
+      "k": 6,
+      "semente": 5824535661522355080
+    },
+    {
+      "base": 85404,
+      "genoma": 10964660972604281747,
+      "k": 7,
+      "semente": 5026805751170014438
+    },
+    {
+      "base": 85404,
+      "genoma": 1183193564296343797,
+      "k": 8,
+      "semente": 14854684814568388078
+    },
+    {
+      "base": 85404,
+      "genoma": 9895251239825586237,
+      "k": 9,
+      "semente": 6595030787049486273
+    },
+    {
+      "base": 85404,
+      "genoma": 12110552984007905418,
+      "k": 10,
+      "semente": 14253661426073946090
+    },
+    {
+      "base": 85404,
+      "genoma": 5293808987587954224,
+      "k": 11,
+      "semente": 6112611720818808825
+    },
+    {
+      "base": 85505,
+      "genoma": 12321546014450964330,
+      "k": 0,
+      "semente": 12129396838084594470
+    },
+    {
+      "base": 85505,
+      "genoma": 158178418863501837,
+      "k": 1,
+      "semente": 6093019074582786081
+    },
+    {
+      "base": 85505,
+      "genoma": 6676420535855851455,
+      "k": 2,
+      "semente": 11768387965864002183
+    },
+    {
+      "base": 85505,
+      "genoma": 16306681595996410583,
+      "k": 3,
+      "semente": 4624765253591932272
+    },
+    {
+      "base": 85505,
+      "genoma": 14920962127729687298,
+      "k": 4,
+      "semente": 3576408087754197261
+    },
+    {
+      "base": 85505,
+      "genoma": 12677181964620695808,
+      "k": 5,
+      "semente": 11005608879252610466
+    },
+    {
+      "base": 85505,
+      "genoma": 1203392263154322576,
+      "k": 6,
+      "semente": 16133403036365511745
+    },
+    {
+      "base": 85505,
+      "genoma": 16386064417514709696,
+      "k": 7,
+      "semente": 3268808148248043373
+    },
+    {
+      "base": 85505,
+      "genoma": 138840126200860074,
+      "k": 8,
+      "semente": 121984760870325732
+    },
+    {
+      "base": 85505,
+      "genoma": 11482867327821080203,
+      "k": 9,
+      "semente": 8905519482602123978
+    },
+    {
+      "base": 85505,
+      "genoma": 8885154626567908023,
+      "k": 10,
+      "semente": 3229248645640365612
+    },
+    {
+      "base": 85505,
+      "genoma": 3137097775508518577,
+      "k": 11,
+      "semente": 6570266977548286170
+    }
+  ],
+  "vidas_parede_s": 9701.907995299998
+}

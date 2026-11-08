@@ -127,5 +127,7 @@ artifacts_v2_v3_competicao/**/vidas/
 !artifacts_v3_acoes_novas/
 # AN4, a run: as vidas soltas ficam fora do git (no git so o vidas.tar.gz)
 artifacts_v3_acoes_novas/**/vidas/
+# PET_VIVO (docs/PLANO_ANALISE_V3_PET_VIVO.md): o tempo do A-4 e, depois, a auditoria (so leitura, sem vidas novas)
+!artifacts_v3_pet_vivo/
 # contabilidade local do gasto da fala livre com o Claude (CONVERSA_PET M5; nao versionar)
 servidor/gasto_fala_livre.json
