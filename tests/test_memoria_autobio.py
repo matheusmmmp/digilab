@@ -689,7 +689,11 @@ def test_g2_separado_nada_fora_do_pacote_le_a_chave():
                       "experiments/plano_an3_poder_acoes_novas.py",
                       # o orquestrador da AN4: importa o da C4 so pela conferir_memoria (o papel REL nos dois bracos); a config passa pelo
                       # orquestrador do prototipo
-                      "experiments/run_v3_acoes_novas.py"}
+                      "experiments/run_v3_acoes_novas.py",
+                      # o descritivo da D-C1-3 no REL (adendo 11, #646): so le os artefatos da run da C4 e importa o orquestrador dela; nenhuma vida
+                      "experiments/descritivo_dc13_rel.py",
+                      # o orquestrador da DC3 (#672): monta o LAB (o REL da C4) e o LAB+F pela config do orquestrador da C4
+                      "experiments/run_v3_conversa_dc3.py"}
     achados = set()
     for pasta in ("digilab", "experiments", "web", "tools", "servidor", "digilab_fala_livre"):
         if not (RAIZ / pasta).exists():
@@ -962,7 +966,9 @@ def test_g2_separado_nada_fora_do_pacote_le_a_chave_das_facetas():
                     "web/app/motor/digibrain/adapt.ts", "web/app/motor/digibrain/arb.ts", "web/app/motor/digibrain/constantes.ts",
                     "web/app/motor/digibrain/impulso.ts", "web/app/motor/digibrain/mem.ts", "web/app/test/digibrain_modular_arb.test.ts",
                     "web/app/test/digibrain_modular_impulso.test.ts", "web/app/test/digibrain_modular_mem.test.ts",
-                    "experiments/exportar_gabarito_digibrain_modular.py", "tests/test_gabarito_digibrain_modular_web.py"}
+                    "experiments/exportar_gabarito_digibrain_modular.py", "tests/test_gabarito_digibrain_modular_web.py",
+                    # o teste da DC3a (#672): confere que o LAB+F e o REL da C4 com a fala_unidades ligada e nada mais
+                    "tests/test_conversa_dc3a.py"}
     achados = set()
     for pasta in ("digilab", "experiments", "web", "tools", "servidor", "digilab_fala_livre", "tests"):
         if not (RAIZ / pasta).exists():
