@@ -3,7 +3,8 @@
 Coordenador: Matheus (sessão direta). Worker da etapa I0: Claude Code, Opus 5.5, worktree `v3-individualidade`. Worktree e branch:
 `v3-individualidade` (as etapas seguintes com sufixo, como `v3-individualidade-i0`). Status: **ABERTA; a proposta na `main` (#676);
 as IN-1 a IN-8 DECIDIDAS em 2026-11-07, pela recomendação; o I0 (a conferência) na `main` (#684); o I1 (a bateria como ferramenta)
-ENTREGUE.** Nenhuma faixa, nenhuma vida de pesquisa.
+na `main` (#695); o plano do I2 APROVADO (#700); o I2a na `main` (#707); o I2b (a run da linha de base, faixa 85101…85505)
+ENTREGUE.**
 
 Categoria: documentacao. Origem: Matheus, 2026-11-07: depois da conversa sobre o connectome e a escala, direcionar a pesquisa para o
 temperamento herdado, o sinal do dono, a memória de episódios e o hábito, com uma medida comum de individualidade.
@@ -98,6 +99,47 @@ A proposta e esta tarefa estão na `main` (#676, `df04915`).
   - as cinco janelas e as réplicas em todo dia com sonda; o momento cai numa decisão acordada;
   - a sonda desconhecida falha alto;
   - o gabarito (o sha256 da bateria de uma vida de teste, em `tests/gabaritos/sondas_individualidade.json`).
+
+## O plano do I2 (2026-11-07, Claude Code, Opus 5.5, branch `v3-individualidade-i2-plano`)
+
+O `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE.md` está APROVADO pelo Matheus (2026-11-07, "Aprovo todas"), com as IP-1 a IP-9 decididas pela
+recomendação.
+- O desenho: o REL e o REL+F, os quatro donos, o `comedouro`, 14 dias e 60 sementes pareadas, num total de 480 vidas.
+- As medidas: seis traços e, por traço, o R_pet, o R_dia e o R_rep, o η² do dono, as facetas, a síndrome e a norma de reação.
+- A regra escrita antes para os traços que entram no I3.
+- O longe passa a 16 células do pet, fora da visão e dentro do cheiro.
+- A faixa foi pedida ao Gerente. Nenhuma vida roda antes do APROVADO, da faixa, do I2a e do registro.
+
+## Resultado da etapa I2a (2026-11-07, Claude Code, Opus 5.5, branch `v3-individualidade-i2a`)
+
+O plano (#700) e a faixa 85101…85505 estão APROVADOS. O I2a é o código antes da run. Nenhuma vida da faixa rodou.
+- **A bateria** (`experiments/sondas_individualidade.py`), num commit próprio:
+  - o longe passou a 16 células do pet (`DIST_LONGE`, IP-3), e a janela grava a `dist0`;
+  - o gabarito do I1 passava na `main` antes da troca, e o novo foi regravado no mesmo commit, com os dois sha256 na mensagem;
+  - na fumaça (semente de teste 101), o `comer` do longe sobe de 0 para 5 em 42 janelas.
+- **As métricas** (`digilab/metrics.py`, seção 4.6 do plano), com `tests/test_metrics_individualidade.py` (10 testes feitos à mão):
+  - `tracos_individualidade` (os seis traços de uma réplica);
+  - `icc1_grupos` e `icc1_estatisticas` (o ICC(1) com grupos desiguais, o n₀ e o truncamento), com `estatisticas_grupo`;
+  - `eta2_grupos`, `spearman` e `reta_mmq`.
+- **O orquestrador** `experiments/run_v3_individualidade.py`, com a config em `experiments/configs/v3_individualidade/individualidade.json`:
+  - toda vida passa pelo G1, o cenário, o mecanismo, a memória do braço e o G2 da bateria;
+  - a análise da seção 4 do plano tem o bootstrap sobre os pets (e sobre as sementes no η²), e a regra 7.4 roda no REL;
+  - a trava: o cabeçalho APROVADO, a seção `## 12. O registro da run` (que só entra no I2b), a faixa, as bases, o K e os dias, no máximo
+    4 processos e nada por cima de uma pasta;
+  - testes: `tests/test_run_v3_individualidade.py`, 8 testes (a trava nos dois sentidos, a recusa de hoje sem o registro, a análise num
+    caso sintético, a regra 7.4 e a fumaça de ponta a ponta com as sementes dos testes).
+- **A lista do G2 separado da memória** (`tests/test_memoria_autobio.py`) ganhou o orquestrador, com o motivo.
+
+## Resultado da etapa I2b (2026-11-08, Claude Code, Opus 5.5, branch `v3-individualidade-i2b`)
+
+- **O registro:** a seção 12 do plano entrou antes da primeira vida (`0b3901f`). A suíte do dia deu 5108 passed e 7 skipped.
+- **A run:** única, 480 vidas na faixa 85101…85505, com 4 processos e 2 h 42 min. O resultado está em
+  `docs/RESULTADO_V3_INDIVIDUALIDADE.md`:
+  - o R_pet é baixo (0,02 a 0,28); o R_dia exclui 0 em cinco traços, mas não no susto;
+  - o η²_dono é alto na neofilia, na ousadia e no apego;
+  - as três facetas acompanham o traço no sentido contrário ao esperado;
+  - os seis traços ficam para o I3 pela regra 7.4.
+- **Os desvios:** D-IND-I2b-1 (o incoerente idêntico ao atencioso no `comedouro`) e D-IND-I2b-2 (o custo dobrado).
 
 ## As etapas seguintes
 
