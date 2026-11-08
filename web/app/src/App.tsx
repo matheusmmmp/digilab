@@ -26,6 +26,9 @@ import { TelaFronteira } from "./telas/lutar/TelaFronteira.tsx";
 import { AvisoSom } from "./componentes/AvisoSom.tsx";
 import { AvisoPetsDescartados } from "./componentes/Medalha.tsx";
 import { AvisoCombateTR, avisoTRPendente } from "./componentes/AvisoCombateTR.tsx";
+import { AvisoLutaPoc, avisoPocPendente } from "./componentes/AvisoLutaPoc.tsx";
+import { LutaPocSemTela } from "./componentes/LutaPocSemTela.tsx";
+import { VERSAO_V21 } from "../motor/index.ts";
 import { CHAVE_AVISO_V6 } from "./tamer.ts";
 import { TelaConversar } from "./telas/conversar/TelaConversar.tsx";
 import { TelaLuta } from "./telas/lutar/TelaLuta.tsx";
@@ -133,11 +136,13 @@ export function App() {
   const [descartados, setDescartados] = useState(() => { try { return Number(localStorage.getItem(CHAVE_AVISO_V6) ?? 0); } catch { return 0; } });
   /* o descarte 6 (a luta em tempo real, pets v13): o aviso fica ate o jogador ler */
   const [avisoTR, setAvisoTR] = useState(avisoTRPendente);
+  /* o descarte 7 (a luta da POC, LP2): so aparece com a chave ligada; entra como o avisoTR nas mesmas condicoes */
+  const [avisoPoc, setAvisoPoc] = useState(avisoPocPendente);
   const [conclusao, setConclusao] = useState(false), desk = useDesktop(), lado = usePainelLado(), [comoJogar, setComoJogar] = useState(false), importando = useImportar(), her = useHeranca();
   /* a jornada acabou (pets v6: a Liga dos Lideres; v1-v5: o chefe da campanha): a mensagem de conclusao, uma vez por pet, fora da luta
      e sem outra tela cheia */
   useEffect(() => {
-    if (!conclusao && !emLuta && !boasVindas && !comoJogar && !escolhendoBrasao && !descartados && !avisoTR && concluiuJornada(jogo.motor) && !conclusaoVista(jogo.motor)) setConclusao(true);
+    if (!conclusao && !emLuta && !boasVindas && !comoJogar && !escolhendoBrasao && !descartados && !avisoTR && !avisoPoc && concluiuJornada(jogo.motor) && !conclusaoVista(jogo.motor)) setConclusao(true);
   });
   /* luta em tela cheia (#/lutar/luta); o Voltar do navegador durante a animacao vira pedido de Desistir */
   const [emLuta, setEmLuta] = useState(() => ehLuta(location.hash)), emLutaRef = useRef(emLuta), [pedidoDesistir, setPedidoDesistir] = useState(false);
@@ -224,7 +229,10 @@ export function App() {
       if (barra) barra.focus(); else if (document.activeElement === document.body) document.querySelector<HTMLElement>(".mm-retrato")?.focus();
     }, 60);
   };
+  /* um pet v21 (a luta da POC, LP2) ainda nao tem a tela da luta (LP3) */
+  const pocSemTela = jogo.motor.versao === VERSAO_V21;
   const corpoDestino = (): ReactNode => rota.aba === "treinar" ? <TelaTreinar /> : rota.aba === "aprend" ? <TelaAprend /> : rota.aba === "evolucao" ? <TelaEvolucao /> : rota.aba === "itens" ? <TelaItens />
+    : pocSemTela && (rota.aba === "arena" || rota.aba === "campanha" || rota.aba === "fronteira") ? <LutaPocSemTela lugar={rota.aba === "arena" ? "Arena" : rota.aba === "campanha" ? "Campanha" : "Fronteira"} />
     : rota.aba === "arena" ? <TelaArena voltarPet={irPet} verReplay={abrirReplay} />
     : rota.aba === "campanha" ? <TelaCampanha voltarPet={irPet} irTreinar={() => { ir({ destino: "crescer", aba: "treinar" }); scrollTo(0, 0); }} />
     : rota.aba === "medalhas" ? <TelaMedalhas />
@@ -260,7 +268,7 @@ export function App() {
   useEffect(() => { if (idLugar) { soltarTeclas(); entrarLugar(performance.now(), idLugar); } else sairLugar(); }, [idLugar]);
   /* os atalhos diretos (atalhosLugar.ts): C, 1 a 4 e Esc; valem so com a casca livre (sem luta, boas-vindas, aviso ou tela por cima) */
   const ref = useRef({ ativo: false, lugar: null as Lugar | null, aba: "" });
-  ref.current = { ativo: !emLuta && !boasVindas && !comoJogar && !escolhendoBrasao && !descartados && !avisoTR && !conclusao && !config && !meusPets && !importando && !her,
+  ref.current = { ativo: !emLuta && !boasVindas && !comoJogar && !escolhendoBrasao && !descartados && !avisoTR && !avisoPoc && !conclusao && !config && !meusPets && !importando && !her,
     lugar: idLugar, aba: rota.aba };
   useEffect(() => ligarAtalhosLugar({
     ativo: () => ref.current.ativo, lugarAberto: () => ref.current.lugar,
@@ -331,9 +339,10 @@ export function App() {
         if (jaConheco) { jaConhecoOJogo(); if (semPetNoInicio) abrirEscolhaBrasao(); } else if (semPetNoInicio) setComoJogar(true);
       }} />}
       {comoJogar && <ComoJogar fechar={() => { setComoJogar(false); abrirEscolhaBrasao(); }} />}
-      {escolhendoBrasao && !boasVindas && !descartados && !avisoTR && <EscolherBrasao podeVoltar={!aindaSemPet} />}
+      {escolhendoBrasao && !boasVindas && !descartados && !avisoTR && !avisoPoc && <EscolherBrasao podeVoltar={!aindaSemPet} />}
       {descartados > 0 && !boasVindas && <AvisoPetsDescartados n={descartados} fechar={() => setDescartados(0)} />}
       {avisoTR && !boasVindas && !descartados && <AvisoCombateTR aviso={avisoTR} fechar={() => setAvisoTR(null)} />}
+      {avisoPoc && !avisoTR && !boasVindas && !descartados && <AvisoLutaPoc aviso={avisoPoc} fechar={() => setAvisoPoc(null)} />}
       {her && !desk && <Heranca pai2={her.pai2} fim={irPet} />}
       {importando && !desk && <ImportarPet fechar={fecharImportar} />}
       {conclusao && <Conclusao m={jogo.motor} fechar={() => setConclusao(false)} />}

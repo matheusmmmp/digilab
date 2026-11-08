@@ -43,7 +43,7 @@ export type Chamado = "fome" | "higiene" | "carinho";
 /** evento do registro: [tick, tipo, valor]. So isto e salvo; o estado vem do replay. */
 export type EventoTempo = [tick: number, tipo: "t", n: number];
 export type EventoDono = [tick: number, tipo: "d", acao: AcaoDono];
-export type EventoLuta = [tick: number, tipo: "l", luta: { r: string; s: number }];
+export type EventoLuta = [tick: number, tipo: "l", luta: { r: string; s: number; m?: string }];   /* m: o mapa, so nos pets v21 (a luta da POC) */
 export type EventoGambit = [tick: number, tipo: "g", gambit: { op: OpGambit; k: string }];
 export type EventoTreino = [tick: number, tipo: "tr", exercicio: Exercicio];
 /** heranca (pets v4): um genitor visto no cruzamento. h = impressao do registro dele (hashSemente do JSON) */
@@ -93,7 +93,7 @@ export type EventoFalaUnidades = [tick: number, tipo: "fu", marca: { fala: true 
 export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem | EventoConfig | EventoLiberacao
   | EventoItem | EventoCarta | EventoFronteira | EventoFala | EventoComida | EventoBola | EventoLevarPet | EventoProduto | EventoCerebro | EventoPonteLuta | EventoFalaUnidades;
 
-export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19;
+export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 21;
 
 /** estado de vida (camada 1) */
 export interface EstadoVida {
