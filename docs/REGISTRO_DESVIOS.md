@@ -561,3 +561,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-07 — LAB_CENARIOS, os Cenários do Laboratório na versão de hoje (worker, Claude Code, Opus 5.5, branch `v3-lab-cenarios`)](registro/2026-11.md)
 - [2026-11-07 — LUTA_E2E_ARENA, os e2e da E2 à E4 na Arena da L3 (worker, Claude Code, Opus 5.5, branch `v3-luta-e2e-arena`)](registro/2026-11.md)
 - [2026-11-07 — LUTA_CARTAO_390, a faixa "O que [pet] faz" no celular (worker, Claude Code, Opus 5.5, branch `v3-luta-cartao-390`)](registro/2026-11.md)
+- [2026-11-07 — PET_VIVO, etapa 0: os planos da auditoria da escolha (0b) e da medida de "age pelo estado" (0c) (worker, Claude Code, Opus 5.5, branch `v3-pet-vivo`)](registro/2026-11.md)
