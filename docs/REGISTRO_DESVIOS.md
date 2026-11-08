@@ -577,4 +577,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-08 — INDIVIDUALIDADE, I2b: a run da linha de base (worker, Claude Code, Opus 5.5, branch `v3-individualidade-i2b`)](registro/2026-11.md)
 - [2026-11-08 — LUTA_POC, LP0: a luta em tempo real pela POC da arena (Gerente de sprites e luta, Claude Code, Opus 5.5, branch `v3-luta-poc`)](registro/2026-11.md)
 - [2026-11-08 — CONVERSA_PET, DC4a, o código da avaliação da voz da rede (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc4a`)](registro/2026-11.md)
+- [2026-11-08 — OBJETOS_3D, a bola refeita no Blender sem Meshy (worker, Claude Code, Opus 5.5, branch `v3-objeto-bola`)](registro/2026-11.md)
 - [2026-11-08 — LUTA_POC, LP1: o núcleo da luta da POC no motor (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp1`)](registro/2026-11.md)
