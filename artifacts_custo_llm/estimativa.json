@@ -13,6 +13,26 @@
     "status": "PROPOSTO, sem medida: tokens do plano, secao 7",
     "usd_total_dois_bracos": 1.2499
   },
+  "voz_da_rede_dc4": {
+    "chamadas_por_braco": {
+      "calibracao": 81,
+      "validacao": 162,
+      "total": 243
+    },
+    "pedido_pior_caso": {
+      "caracteres": 11375,
+      "tokens_por_3_chars": 3792,
+      "tokens_reserva_claude": 5888
+    },
+    "tokens_saida": 100,
+    "usd_por_braco": {
+      "claude-haiku-5-5": 0.1043,
+      "claude-sonnet-5-5": 2.0859
+    },
+    "usd_total_dois_bracos": 2.1902,
+    "teto_usd": 3.0,
+    "status": "PROPOSTO: o pedido medido pelo prompt de hoje no pior caso; a saida do plano, sem medida (a DC4b mede pelo usage)"
+  },
   "tokens_por_chamada": {
     "entrada": 941,
     "saida": 300

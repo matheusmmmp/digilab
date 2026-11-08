@@ -1,0 +1,24 @@
+{
+  "descricao": "A calibracao da DC4 (DC4b; docs/PLANO_ANALISE_V3_CONVERSA_DC4.md, secoes 3, 7 e 10): metade do tamanho da validacao (DC4-5), a base 20262200 da subfaixa da calibracao (DC4-1), os 2 roteiros da calibracao.",
+  "fase": "calibracao",
+  "unidades": {
+    "bases": [
+      20262200
+    ]
+  },
+  "plano": "docs/PLANO_ANALISE_V3_CONVERSA_DC4.md",
+  "dias": 14,
+  "orcamento_por_dia": 16,
+  "bracos": [
+    "G",
+    "H",
+    "S"
+  ],
+  "teto_usd": 3.0,
+  "n_e3_por_pedido": 10,
+  "n_e2": 15,
+  "min_ep_e2": 5,
+  "n_sequencias": 3,
+  "roteiros": "experiments/configs/v3_conversa_dc4/roteiros_calibracao.json",
+  "saida": "artifacts_v3_conversa_dc4/calibracao"
+}
