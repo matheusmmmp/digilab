@@ -12,7 +12,9 @@
    --listas v14: as listas candidatas da fase 2 (LISTAS_V14, LISTAS_V14_R1, bots.ts) nas formas que as tem; a fase 2 confere com isto que as metas do
    relogio continuam.
    --variante <nome>: uma variante das listas por cima (variantes_fase2.ts, as mesmas da bancada das formas; a rodada 2 confere o T-2 com ela).
-   uso (em web/app): npx tsx scripts/equilibrio_tr/fase1_relogio.ts --faixa calibracao [--base v14] [--listas v14] [--variante <nome>] [--relogio '{"ritmo":12}'] --saida <arquivo.json> */
+   --tela: o T-3 ganha a coluna do tempo de tela da serie (a D-R3-6 da rodada 3, tela_tr.ts): a pausa do acerto, a camera lenta do nocaute e
+   as esperas do palco somadas ao tempo da luta. A meta e a mesma (p90 <= 180 s); sem a opcao, a saida fica como era.
+   uso (em web/app): npx tsx scripts/equilibrio_tr/fase1_relogio.ts --faixa calibracao [--base v14] [--listas v14] [--variante <nome>] [--relogio '{"ritmo":12}'] [--tela] --saida <arquivo.json> */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { execSync } from "node:child_process";
@@ -22,6 +24,7 @@ import {
 } from "../../motor/index.ts";
 import { VARIANTES } from "./variantes_fase2.ts";
 import { comEmpurrao } from "./empurrao.ts";
+import { telaDaSerie } from "./tela_tr.ts";
 
 const arg = (k: string): string | null => { const i = process.argv.indexOf("--" + k); return i < 0 ? null : process.argv[i + 1] ?? null; };
 /* as faixas reservadas (experiments/bancada/faixas.py): a primeira rodada, a segunda (calibracao2, conferencia2; DR2-2) e a terceira (calibracao3, conferencia3; D-R3-5) */
@@ -101,10 +104,12 @@ for (let i = 0; i < FORMAS_AD.length; i++) for (let j = i; j < FORMAS_AD.length;
   if (i === j) espelho.push({ forma: fa, vitorias_a: eV, derrotas_a: eD, empates: eE });
 }
 /* T-3: a Cidadela, cada forma como o pet contra o lider (3 lutas sem cura; o limite fica com o desafiado, o lider) */
-const cid = ARENA_POR_ID.cidadela, lider = lutadorBot(cid.lider, R, cid), series: number[] = [];
+const cid = ARENA_POR_ID.cidadela, lider = lutadorBot(cid.lider, R, cid), series: number[] = [], telas: number[] = [];
+const comTela = process.argv.includes("--tela");
 for (const f of FORMAS_AD) for (const s of sementes) {
   const serie = jogarArena(bot(f), lider, s, R, cid.lutas ?? 1, 1);
   series.push(serie.reduce((a, x) => a + seg(x.tr.passos), 0));
+  if (comTela) telas.push(telaDaSerie(serie) / 1000);
 }
 const decididasEsp = espelho.reduce((a, e) => a + e.vitorias_a + e.derrotas_a, 0), vEsp = espelho.reduce((a, e) => a + e.vitorias_a, 0);
 const out = {
@@ -115,7 +120,8 @@ const out = {
     "T-1": { duracao_media_s: r3(media(todas)), duracao_mediana_s: r3(quantil(todas, .5)), p90_s: r3(quantil(todas, .9)),
       passa: media(todas) >= 40 && media(todas) <= 60 && quantil(todas, .5) >= 35 && quantil(todas, .5) <= 55 },
     "T-2": { no_limite_total: r3(noLimite / total), no_limite_pior_par: Math.max(...pares.map(p => p.no_limite)), passa: Math.max(...pares.map(p => p.no_limite)) <= .05 },
-    "T-3": { cidadela_media_s: r3(media(series)), cidadela_p90_s: r3(quantil(series, .9)), passa: quantil(series, .9) <= 180 },
+    "T-3": { cidadela_media_s: r3(media(series)), cidadela_p90_s: r3(quantil(series, .9)), passa: quantil(series, .9) <= 180,
+      ...(comTela ? { tela_media_s: r3(media(telas)), tela_p90_s: r3(quantil(telas, .9)), tela_passa: quantil(telas, .9) <= 180 } : {}) },
     "T-4": { espelho_vitorias_a_entre_decididas: r3(vEsp / decididasEsp), passa: vEsp / decididasEsp >= .45 && vEsp / decididasEsp <= .55 },
     "T-5": { reagiu_quando_livre_com_regra: r3(reacoesComRegra / Math.max(1, livresComRegra)), livres_com_regra: livresComRegra,
       preparos_com_alguma_decisao_livre: r3(comChance / Math.max(1, preparosTot)), preparos: preparosTot, passa: reacoesComRegra / Math.max(1, livresComRegra) >= .5 },

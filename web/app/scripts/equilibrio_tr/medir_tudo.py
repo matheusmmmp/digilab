@@ -2,7 +2,8 @@
 reconferencia da fase 4 e da conferencia unica), em no maximo 4 processos. Cada bancada grava o JSON dela em <saida>/.
 uso (em web/app): python scripts/equilibrio_tr/medir_tudo.py --faixa calibracao2 --saida scripts/medicoes/equilibrio_tr/r2_0
   [--extra-fase2 "--variante x"] (opcoes a mais para a bancada da fase 2, por exemplo uma variante das listas)
-  [--empurrao v18] (o empurrao de quem leva o golpe dos pets v18 em todas as bancadas; docs/TAREFA_V3_LUTA_EMPURRAO.md, etapa 4)"""
+  [--empurrao v18] (o empurrao de quem leva o golpe dos pets v18 em todas as bancadas; docs/TAREFA_V3_LUTA_EMPURRAO.md, etapa 4)
+  [--tela] (a coluna do tempo de tela do T-3 na bancada da fase 1; a D-R3-6, docs/PLANO_EQUILIBRIO_COMBATE_TR_R3.md)"""
 import argparse, os, shlex, subprocess
 from concurrent.futures import ThreadPoolExecutor
 
@@ -11,10 +12,11 @@ ap.add_argument("--faixa", required=True)
 ap.add_argument("--saida", required=True)
 ap.add_argument("--extra-fase2", default="")
 ap.add_argument("--empurrao", choices=["v18"], default=None)
+ap.add_argument("--tela", action="store_true")
 a = ap.parse_args()
 os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 B, F, D = "scripts/equilibrio_tr/", ["--faixa", a.faixa], a.saida
-cmds = [[B + "fase1_relogio.ts", *F, "--base", "v14", "--listas", "v14", "--saida", D + "/relogio.json"],
+cmds = [[B + "fase1_relogio.ts", *F, "--base", "v14", "--listas", "v14", *(["--tela"] if a.tela else []), "--saida", D + "/relogio.json"],
         [B + "fase2_formas.ts", *F, "--listas", "v14", *shlex.split(a.extra_fase2), "--saida", D + "/formas.json"]]
 cmds += [[B + "fase3_estagio.ts", *F, "--parte", p, "--saida", f"{D}/estagio_{p}.json"] for p in ["p1", "p2", "p34"]]
 cmds += [[B + "fase4_progressao.ts", *F, "--parte", p, "--saida", f"{D}/{p}.json"] for p in ["g1", "g2", "g3", "g4", "g5", "g6", "i2", "i3", "i4", "i5"]]
