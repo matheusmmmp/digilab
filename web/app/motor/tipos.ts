@@ -88,8 +88,10 @@ export type EventoCerebro = [tick: number, tipo: "cb", troca: { cerebro: "modula
 /** a ponte da luta (PE3; docs/TAREFA_V3_PONTE_LUTA.md, 3.5): a marca gravada no ovo novo, como o "cb"; so nos v16 e v17. Com ela, a luta entrega o
     resumo ao corpo (a dor) e, com o modular ativo, ao DigiBrain (a memoria). Sem ela, a vida de hoje, byte a byte */
 export type EventoPonteLuta = [tick: number, tipo: "pl", marca: { luta: true; eps?: true }];
+/** DC3d da CONVERSA_PET: a fala com conteudo (a subchave `fala_unidades` do modular), uma vez, no comeco do registro de um pet de teste v16 */
+export type EventoFalaUnidades = [tick: number, tipo: "fu", marca: { fala: true }];
 export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem | EventoConfig | EventoLiberacao
-  | EventoItem | EventoCarta | EventoFronteira | EventoFala | EventoComida | EventoBola | EventoLevarPet | EventoProduto | EventoCerebro | EventoPonteLuta;
+  | EventoItem | EventoCarta | EventoFronteira | EventoFala | EventoComida | EventoBola | EventoLevarPet | EventoProduto | EventoCerebro | EventoPonteLuta | EventoFalaUnidades;
 
 export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19;
 

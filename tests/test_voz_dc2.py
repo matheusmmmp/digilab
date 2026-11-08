@@ -53,7 +53,7 @@ def test_alvos_de_catalogo():
 
 
 @pytest.mark.parametrize("d", [
-    None, [], "dec-v1", {}, {**dec(), "versao": "dec-v3"}, {**dec(), "extra": 1}, {"versao": "dec-v1", "k": 1, "intencao": "fome"},
+    None, [], "dec-v1", {}, {**dec(), "versao": "dec-v9"}, {**dec(), "extra": 1}, {"versao": "dec-v1", "k": 1, "intencao": "fome"},
     {**dec(), "k": True}, {**dec(), "k": -1}, {**dec(), "k": 1.5}, {**dec(), "intencao": "dormir"}, {**dec(), "intencao": ["fome"]},
     {**dec(), "intencao": None}, {**dec(), "conceitos": None}, {**dec(), "conceitos": {}}, {**dec(), "conceitos": ["fome"]},
     dec(con("raiva")), dec(con("fome", valor=1025)), dec(con("fome", valor=-1)), dec(con("fome", confianca=1025)),

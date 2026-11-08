@@ -178,19 +178,19 @@ def test_h3_push_sem_refspec_depende_do_branch(projeto):
 def test_proposta_e_os_hooks_ligados():
     """A configuração proposta existe e aponta os scripts que existem. Ligados no projeto, os que o Matheus escolheu: o H1, o H1b e o
     H3 (2026-10-14, religados no #590); o H4, o H6 e o H9 (D-IA-7, 2026-11-06); o H2, depois da medida do Stop, e o H10 (E3), os dois em
-    2026-11-06. A
+    2026-11-06; o H11 (o índice de desvios), em 2026-11-07. A
     proposta e o projeto ficam iguais."""
     proposta = json.loads((RAIZ / "docs" / "propostas" / "hooks_settings.json").read_text(encoding="utf-8"))
     comandos = [h["command"] for evento in proposta["hooks"].values() for grupo in evento for h in grupo["hooks"]]
     assert sorted({Path(c.split("/.claude/hooks/")[1].rstrip('"')).name for c in comandos}) == \
-        ["h10_pre_run.py", "h1_engine.py", "h1b_engine_sha.py", "h2_testes.py", "h3_main.py", "h4_autorizo.py", "h6_capturas.py",
-         "h9_faixas.py"]
+        ["h10_pre_run.py", "h11_indice.py", "h1_engine.py", "h1b_engine_sha.py", "h2_testes.py", "h3_main.py", "h4_autorizo.py",
+         "h6_capturas.py", "h9_faixas.py"]
     assert all((HOOKS / Path(c.split("/.claude/hooks/")[1].rstrip('"')).name).exists() for c in comandos)
     ativo = json.loads((RAIZ / ".claude" / "settings.json").read_text(encoding="utf-8"))
     ligados = [h["command"] for evento in ativo["hooks"].values() for grupo in evento for h in grupo["hooks"]]
     assert sorted({Path(c.split("/.claude/hooks/")[1].rstrip('"')).name for c in ligados}) == \
-        ["h10_pre_run.py", "h1_engine.py", "h1b_engine_sha.py", "h2_testes.py", "h3_main.py", "h4_autorizo.py", "h6_capturas.py",
-         "h9_faixas.py"]
+        ["h10_pre_run.py", "h11_indice.py", "h1_engine.py", "h1b_engine_sha.py", "h2_testes.py", "h3_main.py", "h4_autorizo.py",
+         "h6_capturas.py", "h9_faixas.py"]
     assert ativo == proposta
 
 
@@ -680,3 +680,74 @@ def test_proposta_ux_aponta_scripts_que_existem_e_nada_ligado():
     ativo = (RAIZ / ".claude" / "settings.json").read_text(encoding="utf-8")
     assert not any(n in ativo for n in nomes - {"h6_capturas.py"})
     assert "h6_capturas.py" in ativo
+
+
+# ------------------------------------------------------------------ H11: o índice de desvios é gerado (docs/TAREFA_V3_INFRA_AGENTES.md, seção 17)
+
+
+@pytest.fixture
+def worker(projeto):
+    """O projeto num branch de worker, com o índice e um arquivo do mês."""
+    (projeto / "docs" / "registro").mkdir(parents=True)
+    (projeto / "docs" / "REGISTRO_DESVIOS.md").write_text("# indice\n", encoding="utf-8")
+    (projeto / "docs" / "registro" / "2026-11.md").write_text("# 2026-11\n", encoding="utf-8")
+    commitar(projeto, "indice")
+    git(projeto, "checkout", "-q", "-b", "v3-frente-x")
+    return projeto
+
+
+@pytest.mark.parametrize("ferramenta,entrada", [
+    ("Edit", {"file_path": "docs/REGISTRO_DESVIOS.md", "old_string": "# indice", "new_string": "# indice\n- linha"}),
+    ("Write", {"file_path": "docs/REGISTRO_DESVIOS.md", "content": "x"}),
+    ("MultiEdit", {"file_path": "docs/REGISTRO_DESVIOS.md", "edits": []}),
+])
+def test_h11_edicao_do_indice_nega(worker, ferramenta, entrada):
+    entrada = {**entrada, "file_path": str(worker / entrada["file_path"])}
+    r = rodar("h11_indice.py", pre_tool(ferramenta, entrada, worker), worker)
+    assert r.returncode == 2 and "H11" in r.stderr.decode("utf-8")
+
+
+def test_h11_edicao_no_mes_passa(worker):
+    entrada = {"file_path": str(worker / "docs" / "registro" / "2026-11.md"), "old_string": "# 2026-11", "new_string": "# 2026-11\n## x"}
+    assert decisao(rodar("h11_indice.py", pre_tool("Edit", entrada, worker), worker)) is None
+
+
+@pytest.mark.parametrize("comando", [
+    "python tools/gerar_indice_desvios.py",
+    "cd D:/x && python tools\\gerar_indice_desvios.py --raiz .",
+    "python tools/registro_por_mes.py lote --base abc",
+    "git show origin/main:docs/REGISTRO_DESVIOS.md > docs/REGISTRO_DESVIOS.md",
+    "echo '- linha' >> docs/REGISTRO_DESVIOS.md",
+    "sed -i 's/a/b/' docs/REGISTRO_DESVIOS.md",
+    "cat x | tee docs/REGISTRO_DESVIOS.md",
+    "cp /tmp/indice.md docs/REGISTRO_DESVIOS.md",
+    "Get-Content x | Set-Content docs/REGISTRO_DESVIOS.md",
+])
+def test_h11_shell_que_escreve_no_indice_nega(worker, comando):
+    r = rodar("h11_indice.py", pre_tool("Bash", {"command": comando}, worker), worker)
+    assert r.returncode == 2 and "H11" in r.stderr.decode("utf-8")
+
+
+@pytest.mark.parametrize("comando", [
+    "python tools/gerar_indice_desvios.py --conferir",
+    "python tools/gerar_indice_desvios.py --help",
+    "git checkout origin/main -- docs/REGISTRO_DESVIOS.md",
+    "git restore --source origin/main docs/REGISTRO_DESVIOS.md",
+    "cat docs/REGISTRO_DESVIOS.md | head -5 > /tmp/x",
+    "grep -n abc docs/REGISTRO_DESVIOS.md",
+    "cp docs/REGISTRO_DESVIOS.md /tmp/copia.md",
+    "git diff origin/main -- docs/REGISTRO_DESVIOS.md",
+])
+def test_h11_shell_que_le_passa(worker, comando):
+    assert decisao(rodar("h11_indice.py", pre_tool("Bash", {"command": comando}, worker), worker)) is None
+
+
+@pytest.mark.parametrize("branch", ["main", "v3-indice-2026-11-07"])
+def test_h11_quem_faz_o_merge_regenera(worker, branch):
+    if branch != "main":
+        git(worker, "checkout", "-q", "-b", branch)
+    else:
+        git(worker, "checkout", "-q", "main")
+    assert decisao(rodar("h11_indice.py", pre_tool("Bash", {"command": "python tools/gerar_indice_desvios.py"}, worker), worker)) is None
+    entrada = {"file_path": str(worker / "docs" / "REGISTRO_DESVIOS.md"), "content": "x"}
+    assert rodar("h11_indice.py", pre_tool("Write", entrada, worker), worker).returncode == 2

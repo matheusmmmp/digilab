@@ -12,7 +12,8 @@
    `petNaMao`: o dono esta segurando o pet (PegarPet.tsx; docs/TAREFA_V3_PEGAR_PET.md, P2): a camera livre nao gira, e a camera e o foco da
    dobra param de seguir o pet (o paraMundo nao muda sob o dedo). `maoPet`: com ele na mao, o ponto do cliente (px) onde fica o pe do pet
    (o ponteiro mais a distancia do pe ao ponteiro quando ele foi pego); a vista desenha o pet ali, suspenso, e a sombra onde ele vai cair.
-   `zzX`: com o quadro Dormir, o x (px de CSS da cena) do topo da cabeca, de onde sai o "zz" (papel.ts); null fora dele. */
+   `zzX`: com o quadro Dormir, o x (px de CSS da cena) do topo da cabeca, de onde sai o "zz" (papel.ts); null fora dele.
+   `aoLugares`: o retorno da posicao dos lugares na tela, para o cadeado e o brilho (CadeadosDaIlha.tsx). */
 import type { NomeLugar } from "./lugaresIlha.ts";
 export interface VistaDoMundo {
   /** o ponto do cliente (px) no chao, em subunidades inteiras do mapa; null fora do mapa ou fora do chao */
@@ -26,7 +27,7 @@ export interface VistaDoMundo {
   /** o pet na mao (a ilha 3D; a reserva nao tem): o ponto do chao (subunidades inteiras, SEM limitar ao mapa) em que cai o pe do pet
       desenhado no ponto do cliente (px) `pe`, ja descontada a altura em que a mao o segura; null fora do chao (o ceu, fora da cena) */
   pousoEm?: (peX: number, peY: number) => [number, number] | null;
-  /** os lugares da ilha (ilha/lugares.ts; a ilha 3D nos estilos que os tem): o lugar sob o ponto do cliente (px), ou null */
+  /** os lugares da ilha (ilha/lugaresCena.ts; a ilha 3D nos estilos que os tem): o lugar sob o ponto do cliente (px), ou null */
   lugarEm?: (cx: number, cy: number) => NomeLugar | null;
 }
 export const CENA: {
@@ -43,4 +44,14 @@ export const CENA: {
   cocoNoChao: boolean;
   zzX: number | null;
   cabeca: [number, number] | null;
-} = { modo3d: false, modoMundo: false, ret: null, medir: null, mundo: null, coberto: false, bolaNaMao: false, petNaMao: false, maoPet: null, treino: null, cocoNoChao: false, zzX: null, cabeca: null };
+  /** o consumidor da posicao dos lugares (CadeadosDaIlha.tsx, so quando ha cadeado ou brilho na tela): a vista o chama no fim de cada quadro com [x, y do pe, altura]
+      de cada lugar, em px de CSS. null: ninguem quer, e a vista nem calcula */
+  aoLugares: ((p: Readonly<Record<"saco" | "portao" | "barraca", readonly [number, number, number]>>) => void) | null;
+} = { modo3d: false, modoMundo: false, ret: null, medir: null, mundo: null, coberto: false, bolaNaMao: false, petNaMao: false, maoPet: null, treino: null, cocoNoChao: false, zzX: null, cabeca: null, aoLugares: null };
+
+/** o pe que a caixa do habitat reservava no celular antes do mobile minimo (M1): a altura do dock de entao (69 px) + a folga de 24 px + a barra de abas
+    (--casca-barra, 64 px), medido em 390x844 e 360x800 (caixa de 687 e 643 px). Sem a barra a caixa ocupa a tela inteira por tras das acoes, mas a camera
+    segue enquadrando como se a caixa tivesse a altura de antes (a altura menos esta reserva), e o quadro se estende para baixo: o pet sai do mesmo tamanho
+    em px. So abaixo de 900 px; de 900 px em diante e 0, e a cena nao muda. PROPOSTO, SEM FONTE (numero de interface, nao de jogo) */
+const RESERVA_MOVEL_PX = 157;
+export const reservaDoPe = (): number => (typeof matchMedia === "function" && matchMedia("(max-width: 899px)").matches ? RESERVA_MOVEL_PX : 0);

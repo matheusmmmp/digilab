@@ -9,7 +9,7 @@ import { BotaoContinuar, BotaoHx } from "../../componentes/hx/index.ts";
 import { abrirModal } from "../../componentes/modal.ts";
 import { abrirLab, sairDoLab, trocarCerebroDoPet, useJogo } from "../../jogo.ts";
 import { CEREBRO_PADRAO, NOME_CEREBRO, escolherCerebroDosOvos, podeTrocarCerebro, useCerebroDosOvos, type Cerebro } from "../../cerebro.ts";
-import { chocarOvoLab, descartarPetLab, labLigado, lerPetLab, ligarLab, useLab } from "../../lab.ts";
+import { chocarOvoLab, descartarPetLab, falaComConteudo, labLigado, lerPetLab, ligarFalaComConteudo, ligarLab, useLab } from "../../lab.ts";
 import { Retrato, diaDe } from "../pet/TelaPet.tsx";
 
 export function SeloExperimental({ className = "" }: { className?: string }) {
@@ -94,13 +94,15 @@ export function Laboratorio({ irPet }: { irPet: () => void }) {
           {lido.tipo === "erro" && <p className="mc-erro" role="alert">{lido.erro}. Nada foi apagado.</p>}
           {lido.tipo === "vazio" && <>
             <p>Nenhum pet de teste ainda. O ovo de teste nasce com o cérebro modular, no espaço próprio do save.</p>
+            <label className="mc-interruptor"><span><b>Fala com conteúdo (teste) · {falaComConteudo() ? "ligada" : "desligada"}</b><small>ligada, o ovo de teste nasce com o chamar dividido em pedir comida, limpeza ou companhia, e a fala pela rede diz o pedido</small></span>
+              <input type="checkbox" role="switch" checked={falaComConteudo()} onChange={e => ligarFalaComConteudo((e.target as HTMLInputElement).checked)} /></label>
             <BotaoContinuar onClick={chocar}>Chocar o ovo de teste</BotaoContinuar>
           </>}
           {m && <>
             <div className="lab-pet">
               <span className="lab-pet__ret"><Retrato m={m} ovo={false} /></span>
               <span className="lab-pet__txt"><b>{nomeForma(m.forma)}</b><SeloExperimental />
-                <small>{nomeEstagio(m.forma)} · dia {diaDe(m.e.tick)}</small><small>cérebro modular · versão {VERSAO_PET_LAB}</small></span>
+                <small>{nomeEstagio(m.forma)} · dia {diaDe(m.e.tick)}</small><small>cérebro modular · versão {VERSAO_PET_LAB}{m.falaUnidades ? " · fala com conteúdo" : ""}</small></span>
             </div>
             <div className="mc-linha">
               <BotaoContinuar onClick={abrir}>Abrir</BotaoContinuar>

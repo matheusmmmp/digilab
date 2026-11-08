@@ -9,12 +9,13 @@
 import type { Mapa } from "../../../habitat.ts";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { PALETA_DIGITAL, carregarVariante, doisTons, flores, montarCena, objetos, terreno, usarDoisTons, type CenaIlha, type Objetos } from "./cena.ts";
+import { PALETA_DIGITAL, PALETA_ILHA, carregarVariante, doisTons, flores, montarCena, objetos, terreno, usarDoisTons, type CenaIlha, type Objetos,
+  type PaletaTerreno } from "./cena.ts";
 import { arquivosCassette, carregadorCassette, terrenoCassette } from "./cassette.ts";
 import { CEU_DIGITAL, DOBRA_K } from "./constantes.ts";
 import { ceuComGrade, fios, lata, particulas } from "./digital.ts";
 import { enfeites } from "./enfeites.ts";
-import { lugares } from "./lugares.ts";
+import { lugares } from "./lugaresCena.ts";
 import { PALETA_FLORESTA, arquivosFloresta, carregadorFloresta } from "./floresta.ts";
 import type { Ilha } from "./grade.ts";
 import { objetosVoxel, terrenoVoxel } from "./voxel.ts";
@@ -27,6 +28,9 @@ export interface Estilo {
   montar(ilha: Ilha): CenaIlha;
   /** os objetos da grade (podem baixar arquivos; falham alto se faltar um) */
   objetos(ilha: Ilha): Promise<Objetos>;
+  /** as cores do minimapa (ilha/minimapa.ts): a paleta do terreno do estilo; o Voxel e o Cassette, que pintam o terreno por outro
+      caminho, usam a da ilha (o mesmo layout, as mesmas regioes) */
+  readonly paleta: PaletaTerreno;
 }
 
 /** o estilo de um mapa; `base` e a URL da pagina (document.baseURI), de onde saem os caminhos dos kits */
@@ -39,12 +43,12 @@ export function estiloDe(mapa: Mapa, base: string): Estilo {
 function estiloSemTons(mapa: Mapa, base: string): Estilo {
   switch (mapa) {
     case "ilha": return {
-      id: mapa, dobra: DOBRA_K, montar: i => montarCena(i),
-      /* os enfeites do mundo humano (enfeites.ts) so neste estilo (docs/TAREFA_V3_MUNDO_ENFEITES.md, D-EN-3), e os lugares (lugares.ts) */
+      id: mapa, dobra: DOBRA_K, paleta: PALETA_ILHA, montar: i => montarCena(i),
+      /* os enfeites do mundo humano (enfeites.ts) so neste estilo (docs/TAREFA_V3_MUNDO_ENFEITES.md, D-EN-3), e os lugares (lugaresCena.ts) */
       objetos: async i => {
         const [o, e, g] = await Promise.all([objetos(i, base), enfeites(i, base), lugares(i, base)]);
         o.grupo.add(e.grupo, g.grupo);
-        return { ...o, noite: e.noite, lugares: g.caixas };
+        return { ...o, noite: e.noite, lugares: g.caixas, lugaresRaiz: g.raizes, abrirLugar: g.abrir };
       },
     };
     case "digital": {
@@ -57,7 +61,7 @@ function estiloSemTons(mapa: Mapa, base: string): Estilo {
       ceuDia.colorSpace = THREE.SRGBColorSpace;
       ceuDia.userData.cobrir = true;    /* cobre a tela sem esticar (cena.ts, cobrirFundo) */
       return {
-        id: mapa, dobra: DOBRA_K,
+        id: mapa, dobra: DOBRA_K, paleta: PALETA_DIGITAL,
         montar: i => {
           const chao = new THREE.Group().add(terreno(i, PALETA_DIGITAL), flores(i));
           const c = montarCena(i, chao, { nuvens: false, ceuDia, horizonteDia: CEU_DIGITAL.horizonte, chaoHemi: CEU_DIGITAL.chaoHemi, nevoa: CEU_DIGITAL.nevoa });
@@ -70,22 +74,22 @@ function estiloSemTons(mapa: Mapa, base: string): Estilo {
           const kits = (arq: string, _id: string, modelo: Parameters<typeof carregarVariante>[2]) =>
             carregarVariante(gltf, new URL("kits3d_digital/" + arq, base).href, modelo);
           const [o, e, l, g] = await Promise.all([objetos(i, base, kits), enfeites(i, base), lata(i, base), lugares(i, base)]);
-          /* o toque digital (D3): as particulas e os fios dos postes; e a lata gigante no fundo (D4); os lugares (lugares.ts) */
+          /* o toque digital (D3): as particulas e os fios dos postes; e a lata gigante no fundo (D4); os lugares (lugaresCena.ts) */
           const p = particulas(i);
           o.grupo.add(e.grupo, fios(i), l.grupo, g.grupo);
           doisTons(o.grupo);
           o.grupo.add(p.malha);
-          return { ...o, noite: n => { e.noite(n); p.noite(n); }, quadro: l.quadro, lugares: g.caixas };
+          return { ...o, noite: n => { e.noite(n); p.noite(n); }, quadro: l.quadro, lugares: g.caixas, lugaresRaiz: g.raizes, abrirLugar: g.abrir };
         },
       };
     }
-    case "voxel": return { id: mapa, dobra: 0, montar: i => montarCena(i, terrenoVoxel(i)), objetos: async i => objetosVoxel(i) };
+    case "voxel": return { id: mapa, dobra: 0, paleta: PALETA_ILHA, montar: i => montarCena(i, terrenoVoxel(i)), objetos: async i => objetosVoxel(i) };
     case "floresta": return {
-      id: mapa, dobra: 0, montar: i => montarCena(i, terreno(i, PALETA_FLORESTA)),
+      id: mapa, dobra: 0, paleta: PALETA_FLORESTA, montar: i => montarCena(i, terreno(i, PALETA_FLORESTA)),
       objetos: async i => objetos(i, base, await carregadorFloresta(base), arquivosFloresta),
     };
     case "cassette": return {
-      id: mapa, dobra: 0, montar: i => montarCena(i, terrenoCassette(i, base)),
+      id: mapa, dobra: 0, paleta: PALETA_ILHA, montar: i => montarCena(i, terrenoCassette(i, base)),
       objetos: async i => objetos(i, base, await carregadorCassette(base), arquivosCassette, false),
     };
   }

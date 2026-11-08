@@ -6,6 +6,12 @@
    - o contrato CENA (cenaEstado.ts) fica igual: ret (o retangulo do pet em px de CSS, para o PalcoPet), medir (a M3), e mundo.paraMundo,
      paraTela e pet, que passam pela mesma dobra do shader (curva.ts, regra 6);
    - o dia e a noite do motor (eNoite) escurecem o ceu, a nevoa, a luz e a agua;
+   - a camera solta (cameraLivre.ts, L1 de "Lugares da ilha"): a partir de 900 px e com o controle "Livre", a camera olha um ponto que
+     pode sair do pet (o foco); a dobra e a camera centram nele, e a vista publica a cada quadro o que o minimapa e a HUD leem;
+   - a viagem ao lugar (viagem.ts, L2 e L3 de "Lugares da ilha"): com Crescer, Lutar ou o Diario aberto, a camera vai ao saco de pancada, ao portao
+     da arena ou a barraca do Tamer (lugares.ts; o portao e a barraca sao os modelos 3D da LUGARES_3D no ponto da grade, com o marcador provisorio de
+     marcadoresLugar.ts ate o modelo carregar e nos estilos sem lugares), deixando-o a esquerda do painel
+     (no celular no alto, acima da folha), e o pet desenhado anda ate ele e fica; ao sair, os dois voltam. So o desenho, como a coreografia abaixo;
    - a coreografia (docs/TAREFA_V3_HABITAT_OBJETOS.md): pedido um treino (CENA.treino), o pet desenhado vai ao saco de pancada, bate e
      volta (TREINO_MS); quando o motor rola a bola (uma rolagem nova no Mundo), o pet da um golpe nela. So o desenho: a posicao do motor,
      o ganho do treino e o log nao mudam.
@@ -18,7 +24,7 @@ import * as THREE from "three";
 import { TPD, eNoite, noMapa, type Mundo } from "../../../../motor/index.ts";
 import { habitatAtual, voltarParaIlha, type Habitat } from "../../../habitat.ts";
 import { jogoAtual } from "../../../jogo.ts";
-import { CENA } from "../cenaEstado.ts";
+import { CENA, reservaDoPe } from "../cenaEstado.ts";
 import { Seguidor, dentroDoMapa } from "../vistaMundo.ts";
 import { velocidadeAtual } from "../../../tempo.ts";
 import { AFASTAR_MAX, BATER_BOLA_MS, CAMERAS, COBERTO_MS, GOLPE_DIST, GOLPE_MS, KITS_COBERTO_MS, FPS_MIN, LARGURA_MIN, LONGE, NEVOA, PERTO, QUEDA_MS,
@@ -32,7 +38,13 @@ import type { NomeLugar } from "./modelos.ts";
 import { Papel, type Ret, type Suspenso } from "./papel.ts";
 import { MAO, Pendulo, alturaDepoisDeSoltar, soltarAcabou, tremorAgora } from "./mao.ts";
 import { ORBITA, aplicarOrbita, ligarControles, recentrar } from "../orbita.ts";
+import { CONSULTA_SOLTA, VISTA, despublicarVista, focoDoQuadro, ligarCameraLivre, publicarVista, type Limites, type MapaDaIlha } from "../cameraLivre.ts";
+import { pixelsDoMapa } from "./minimapa.ts";
 import { PRESETS, Pos } from "./pos.ts";
+import { SACO_NA_TELA, VIAGEM, ZOOM_LUGAR_MOVEL, lugarAberto, progressoViagem, type Lugar } from "../../../viagem.ts";
+import { LUGARES, ORDEM_LUGARES, chaoDoLugar, estadoDoLugar, gradeDosLugares, pontoDoLugar as pontoLugarDe, pontoDoPet, type BaseDoMundo } from "./lugares.ts";
+import { Apagador, montarMarcadores, type Marcadores } from "./marcadoresLugar.ts";
+import { TRANCAS } from "../../../trancas.ts";
 
 const movimentoReduzido = (): boolean => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -46,6 +58,18 @@ class VistaIlha {
   private readonly lida: CameraLida;
   private readonly papel = new Papel();
   private readonly itens: Itens;
+  /** o ponto de cada lugar da ilha (celulas; lugares.ts) e a altura do chao no pe dele (celulas; o portao e a barraca ficam na moldura) */
+  private readonly pontos: Record<Lugar, [number, number]>;
+  private readonly chaoLugar: Record<Lugar, number>;
+  /** os marcadores provisorios do portao e da barraca (marcadoresLugar.ts), soltos no dispose */
+  private readonly marcadores: Marcadores;
+  /** os lugares trancados (nivel do Tamer, trancas.ts) saem apagados: a versao da tabela de trancas que a cena ja aplicou */
+  private readonly apagador = new Apagador();
+  private versaoTrancas = -1;
+  /** onde cada lugar cai na tela (o pe em px de CSS e a altura em px), reaproveitado a cada quadro; o retangulo do canvas e lido so em `ajustar` */
+  private readonly lugaresTela: Record<Lugar, [number, number, number]> = { saco: [0, 0, 0], portao: [0, 0, 0], barraca: [0, 0, 0] };
+  private readonly vLugar = new THREE.Vector3();
+  private rectCanvas = { left: 0, top: 0, width: 1, height: 1 };
   private objetos: Objetos | null = null;
   /** a qualidade caiu (regra 10): sem vento, metade da grama e pixelRatio 1 */
   private baixa = false;
@@ -53,13 +77,25 @@ class VistaIlha {
   private pxPorTexel = 1;       // pixels do canvas por texel do sprite (inteiro, regra 8)
   private larguraCss = 1;
   private alturaCss = 1;
+  /** a fracao da altura do canvas em que a camera enquadra a cena (1 de 900 px em diante; no celular, a altura menos o pe reservado, reservaDoPe) */
+  private fracEnq = 1;
   private afast = 1;
+  /** o afastamento do retrato sem o zoom do lugar (ajustar); `afast` e ele vezes o zoom da viagem (so abaixo de 900 px) */
+  private afastBase = 1;
+  /** a largura de 900 px em diante (lida em ajustar, nao a cada quadro) */
+  private largo = true;
   private noite: boolean | null = null;
   private ultimo = performance.now();
   private petCel: [number, number] = [0, 0];
-  /** o foco da camera e da dobra (celulas): o pet desenhado, menos com o pet na mao (fica onde estava) e logo depois (volta ao pet) */
+  /** o ponto que a camera e a dobra olham (celulas): o pet desenhado; outro com a camera solta (cameraLivre.ts) ou na viagem a um lugar (viagem.ts);
+      com o pet na mao, fica onde estava, e logo depois de soltar volta a ele (focoVoltando) */
   private foco: [number, number] = [0, 0];
   private focoVoltando = false;
+  private readonly dirCam = new THREE.Vector3();
+  /** a ilha vista de cima e os limites do foco, para o minimapa (feitos uma vez) */
+  private readonly mapa: MapaDaIlha;
+  private readonly limites: Limites;
+  private readonly consultaSolta = typeof matchMedia === "function" ? matchMedia(CONSULTA_SOLTA) : null;
   /** o pet na mao: se esta, o pendulo do papel, o ultimo ponto do chao sob o pe (celulas) e quando ele foi solto (para a queda) */
   private naMao = false;
   private readonly pendulo = new Pendulo();
@@ -106,9 +142,22 @@ class VistaIlha {
     };
     /* o ninho, o comedouro, a racao, a fruta e a bola (itens.ts) e o pet em papel */
     this.itens = new Itens(mu);
-    this.cenaIlha.cena.add(this.itens.raiz, this.papel.raiz);
+    /* o portao e a barraca onde a grade da ilha os poe (grade.ts, porLugares; a LUGARES_3D), o saco a [3, -4] do ninho (lugares.ts) */
+    const base: BaseDoMundo = { ninho: this.itens.ninhoEm, comedouro: [mu.comedouro[0] / mu.cm.sub, mu.comedouro[1] / mu.cm.sub], area: this.ilha.area,
+      grade: gradeDosLugares(this.ilha) };
+    this.pontos = Object.fromEntries(ORDEM_LUGARES.map(id => [id, [...pontoLugarDe(id, base)]])) as Record<Lugar, [number, number]>;
+    this.chaoLugar = Object.fromEntries(ORDEM_LUGARES.map(id => [id, chaoDoLugar(id, base)])) as Record<Lugar, number>;
+    /* o portao e a barraca: marcadores provisorios no ponto de cada um, ate o modelo 3D chegar (carregarObjetos); nos estilos sem lugares, ficam */
+    this.marcadores = montarMarcadores(base);
+    this.cenaIlha.cena.add(this.itens.raiz, this.papel.raiz, this.marcadores.raiz);
     CURVA.uVento.value = 1;
+    const il = this.ilha;
+    this.mapa = { imagem: new ImageData(pixelsDoMapa(il, this.estilo.paleta), il.larg, il.prof), x0: il.x0, z0: il.z0, larg: il.larg, prof: il.prof, area: il.area };
+    this.limites = { x0: il.x0, z0: il.z0, x1: il.x0 + il.larg, z1: il.z0 + il.prof };
   }
+
+  /** a camera pode soltar agora: o controle "Livre" e a largura do desktop */
+  get podeSoltar(): boolean { return habitatAtual().controle === "livre" && !!this.consultaSolta?.matches; }
 
   /** os modelos do estilo (na ilha, os kits de public/kits3d) entram depois do terreno */
   async carregarObjetos(): Promise<void> {
@@ -117,12 +166,17 @@ class VistaIlha {
     const [o] = await Promise.all([this.estilo.objetos(this.ilha), this.itens.carregar(document.baseURI)]);
     this.objetos = o;
     this.cenaIlha.cena.add(o.grupo);
+    /* os modelos 3D dos lugares (lugares.ts) chegaram: o marcador provisorio de cada um sai, e as trancas se aplicam de novo (aos modelos e ao saco
+       gerado, que entrou agora) */
+    for (const id of o.lugaresRaiz?.keys() ?? []) if (id === "portao" || id === "barraca") this.marcadores.tirar(id);
+    this.versaoTrancas = -1;
     /* data-objetos: os kits e os itens ja estao na cena (as capturas dos itens esperam por ele, como o data-pronto) */
     this.renderer.domElement.parentElement?.setAttribute("data-objetos", "1");
     if (this.baixa) this.menosGrama();
   }
 
-  /** a dobra de agora: centrada no pet desenhado, ao longo da direcao em que a camera olha no chao */
+  /** a dobra de agora: centrada no ponto olhado (o foco: o pet desenhado, o foco da camera solta, o lugar da viagem ou, com o pet na mao, onde estava),
+      ao longo da direcao em que a camera olha no chao */
   private get dobra(): Dobra { return { k: this.estilo.dobra, focoX: this.foco[0], focoZ: this.foco[1], dir: this.dirDobra }; }
   /** a camera com a orbita (orbita.ts): o deslocamento e o ponto olhado em relacao ao pet; a fixa e a do habitat */
   private orbitaVista = { desloc: [0, 0, 0] as [number, number, number], olhar: [0, 0, 0] as [number, number, number], elevacao0: 0 };
@@ -144,21 +198,29 @@ class VistaIlha {
     const [perto, longe] = (this.cenaIlha.cena.userData.nevoa as readonly [number, number] | undefined) ?? NEVOA;
     nevoa.near = perto * this.afast * ORBITA.zoom; nevoa.far = longe * this.afast * ORBITA.zoom;
     /* o pet em papel: na distancia do foco, um texel do sprite vale um numero inteiro de pixels do canvas (regra 8) */
-    this.ppu = this.renderer.domElement.height / 2 / (this.profundidadeDoPet(this.afast, this.orbitaVista) * Math.tan(THREE.MathUtils.degToRad(this.cam.fov / 2)));
+    this.ppu = this.renderer.domElement.height * this.fracEnq / 2 / (this.profundidadeDoPet(this.afast, this.orbitaVista) * Math.tan(THREE.MathUtils.degToRad(this.cam.fov / 2)));
     this.pxPorTexel = Math.max(1, Math.round(TEXEL_ALVO * this.ppu));
   }
 
   /** ajusta o canvas a caixa (px de CSS): a resolucao, a proporcao e o afastamento da camera em retrato */
   ajustar(larguraCss: number, alturaCss: number): void {
     this.larguraCss = Math.max(1, larguraCss); this.alturaCss = Math.max(1, alturaCss);
+    { const r = this.canvas.getBoundingClientRect(); this.rectCanvas = { left: r.left, top: r.top, width: r.width || this.larguraCss, height: r.height || this.alturaCss }; }
+    this.largo = typeof matchMedia === "function" && matchMedia("(min-width: 900px)").matches;
     this.renderer.setPixelRatio(this.baixa ? 1 : Math.min(RAZAO_MAX, devicePixelRatio || 1));
     this.renderer.setSize(this.larguraCss, this.alturaCss, false);
     this.canvas.style.width = `${this.larguraCss}px`; this.canvas.style.height = `${this.alturaCss}px`;
-    this.camera.aspect = this.larguraCss / this.alturaCss;
+    /* o enquadramento como se a caixa tivesse a altura de antes (a de hoje menos o pe que o dock e a barra reservavam): a camera enquadra essa altura e o
+       quadro se estende para baixo (setViewOffset), entao o pet sai do mesmo tamanho em px e a cena segue visivel atras das acoes (so abaixo de 900 px) */
+    const enq = Math.max(1, this.alturaCss - reservaDoPe());
+    this.fracEnq = enq / this.alturaCss;
+    this.camera.aspect = this.larguraCss / enq;
+    if (enq < this.alturaCss) this.camera.setViewOffset(this.larguraCss, enq, 0, 0, this.larguraCss, this.alturaCss); else this.camera.clearViewOffset();
     /* a largura vista na altura do pet, com a camera do POC; em retrato, a camera se afasta ate caber LARGURA_MIN */
     /* o afastamento do retrato e o da camera do habitat (sem a orbita: o zoom nao se desfaz aqui) */
     const fundo = this.profundidadeDoPet(1, this.cam), larg = 2 * fundo * Math.tan(THREE.MathUtils.degToRad(this.cam.fov / 2)) * this.camera.aspect;
-    this.afast = Math.min(AFASTAR_MAX, Math.max(1, LARGURA_MIN / larg));
+    this.afastBase = Math.min(AFASTAR_MAX, Math.max(1, LARGURA_MIN / larg));
+    this.afast = this.afastBase;
     this.camera.updateProjectionMatrix();
     /* a nevoa e o texel dependem tambem da orbita */
     this.orbitaVersao = -1;
@@ -213,7 +275,7 @@ class VistaIlha {
 
   /** a coreografia sobre a posicao do motor (`motorCel`, celulas): o treino no saco e a batida na bola. Devolve onde desenhar o pet, o
       golpe e se a vista o esta movendo */
-  private coreografia(mu: Mundo, agora: number, motorCel: [number, number], reduzido: boolean)
+  private coreografia(mu: Mundo, agora: number, motorCel0: [number, number], reduzido: boolean, viagem: number)
       : { cel: [number, number]; golpe: { desde: number; alvo: [number, number] } | null; andando: boolean } {
     /* a batida na bola: uma rolagem nova; o pet olha para onde a bola vai (parada, para onde ela esta) */
     const n = mu.rolagens.length, sub = mu.cm.sub;
@@ -226,17 +288,22 @@ class VistaIlha {
     /* o treino: um pedido novo comeca do lugar em que o pet esta; ele para a GOLPE_DIST do saco, ao lado dele na tela (ao longo da
        direita da camera no chao, que gira com a camera livre), do lado em que o pet ja esta: nem na frente do saco, nem atras */
     const [sx, sz] = this.itens.sacoEm;
+    /* a viagem ao lugar: o pet anda do que o motor diz ate o lado esquerdo do saco na tela (o painel abre a direita) e fica; o treino parte
+       dai e volta para ca. `motorCel` e, daqui para baixo, onde o pet estaria sem o treino */
+    const motorCel: [number, number] = viagem > 0
+      ? this.entre(VIAGEM.origem ? this.pontoDoPetNo(VIAGEM.origem) : motorCel0, this.pontoDoPetNo(VIAGEM.lugar), reduzido ? 1 : this.suave(viagem)) : motorCel0;
+    const emViagem = viagem > 0 && viagem < 1 && !reduzido;
     if (CENA.treino !== null && CENA.treino !== this.treinoVisto) {
       this.treinoVisto = CENA.treino;
       const dir = new THREE.Vector3(1, 0, 0).applyQuaternion(this.camera.quaternion), h = Math.hypot(dir.x, dir.z) || 1;
-      const [rx, rz] = [dir.x / h, dir.z / h], lado = (motorCel[0] - sx) * rx + (motorCel[1] - sz) * rz >= 0 ? 1 : -1;
+      const [rx, rz] = [dir.x / h, dir.z / h], lado = viagem > 0 ? -1 : (motorCel[0] - sx) * rx + (motorCel[1] - sz) * rz >= 0 ? 1 : -1;
       this.treino = { pedido: CENA.treino, desde: agora, ponto: [sx + lado * rx * GOLPE_DIST, sz + lado * rz * GOLPE_DIST], golpe: -1 };
     }
     const t = this.treino;
-    if (!t) return { cel: motorCel, golpe: this.bateBola, andando: this.seguidor.caminhando };
+    const caminhando = viagem <= 0 && this.seguidor.caminhando;
+    if (!t) return { cel: motorCel, golpe: this.bateBola, andando: emViagem || caminhando };
     const dt = agora - t.desde, { ida, golpes, volta } = TREINO_MS, ponto = t.ponto;
-    const suave = (f: number) => (reduzido ? 1 : f * f * (3 - 2 * f)), entre = (a: [number, number], b: [number, number], f: number): [number, number] =>
-      [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f];
+    const suave = (f: number) => (reduzido ? 1 : this.suave(f)), entre = (a: [number, number], b: [number, number], f: number) => this.entre(a, b, f);
     if (dt < ida) return { cel: entre(motorCel, ponto, suave(dt / ida)), golpe: null, andando: !reduzido };
     if (dt < ida + golpes) {
       const k = Math.floor((dt - ida) / GOLPE_MS), desde = t.desde + ida + k * GOLPE_MS;
@@ -246,7 +313,125 @@ class VistaIlha {
     }
     if (dt < ida + golpes + volta) return { cel: entre(ponto, motorCel, suave((dt - ida - golpes) / volta)), golpe: null, andando: !reduzido };
     this.treino = null;
-    return { cel: motorCel, golpe: this.bateBola, andando: this.seguidor.caminhando };
+    return { cel: motorCel, golpe: this.bateBola, andando: emViagem || caminhando };
+  }
+
+  private suave(f: number): number { return f * f * (3 - 2 * f); }
+  private entre(a: [number, number], b: [number, number], f: number): [number, number] { return [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f]; }
+  /** a direita da camera no chao (unitaria): a direita da direcao em que ela olha */
+  private get direita(): [number, number] { return [-this.dirDobra[1], this.dirDobra[0]]; }
+  /** onde o pet fica no lugar `l`: o saco, a esquerda dele na tela a GOLPE_DIST (a conta da L2); os grandes, na frente deles, do lado da camera,
+      alem do raio da base (lugares.ts, pontoDoPet) */
+  private pontoDoPetNo(l: Lugar): [number, number] {
+    const [sx, sz] = this.pontos[l], [rx, rz] = this.direita;
+    if (l === "saco") return [sx - rx * GOLPE_DIST, sz - rz * GOLPE_DIST];
+    return pontoDoPet([sx, sz], LUGARES[l].raio, this.dirDobra, [rx, rz]);
+  }
+  /** o cos da elevacao da camera: quanto de uma altura vertical aparece na tela (a conta de um objeto de pe) */
+  private get cosElevacao(): number {
+    const [dx, dy, dz] = this.orbitaVista.desloc, h = Math.hypot(dx, dy, dz) || 1;
+    return Math.sqrt(Math.max(0, 1 - (dy / h) ** 2));
+  }
+  /** onde o lugar `l` fica na tela com o painel aberto: a fracao da largura (de 900 px em diante) e da altura (do pe do lugar, a partir do alto; so nos
+      grandes a 1920, que se enquadram inteiros; o saco nao mexe na vertical, como na L2). O saco fica a 0,41 da largura (a esquerda do painel); os
+      grandes mais a esquerda, para a largura deles caber antes do painel, e a 0,26 (saco) ou 0,40 (grandes) da altura abaixo de 900 px, para o objeto
+      todo ficar acima da folha. PROPOSTO, SEM FONTE (numero de interface, nao de jogo) */
+  private naTela(l: Lugar): { largo: number; movel: number; vLargo: number | null } {
+    if (l === "saco") return { largo: SACO_NA_TELA.largo, movel: SACO_NA_TELA.movel, vLargo: null };
+    return { largo: 0.3, movel: 0.4, vLargo: 0.62 };
+  }
+  /** o zoom final do lugar `l` (a distancia da camera vira esta fracao da de antes; < 1 aproxima): o saco, o de sempre (1 de 900 px em diante); os
+      grandes, o que faz o objeto inteiro ocupar a fracao da altura da tela (43 % a 1920, 30 % no celular, onde sobra o alto acima da folha) */
+  private zoomFinal(l: Lugar): number {
+    if (l === "saco") return this.largo ? 1 : ZOOM_LUGAR_MOVEL;
+    return this.resolverLugar(l).zoom;
+  }
+  /** a camera de teste: a mesma lente da principal, para simular um enquadramento sem mexer nela */
+  private camTeste: THREE.PerspectiveCamera | null = null;
+  private readonly vTeste = new THREE.Vector3();
+  /** o ponto (x, y, z) do mundo em px de CSS na tela, vista de `cam` com a dobra `dobra` */
+  private pxDe(cam: THREE.Camera, dobra: Dobra, x: number, y: number, z: number): [number, number] {
+    this.vTeste.set(x, dobrarY(y, z, dobra, x), z).project(cam);
+    return [(this.vTeste.x + 1) / 2 * this.larguraCss, (1 - this.vTeste.y) / 2 * this.alturaCss];
+  }
+  /** onde o lugar `l` (o pe e o topo) cai na tela com a camera a `afast` olhando `foco`: o pe (x, y) e a altura (px) */
+  private medirLugar(l: Lugar, afast: number, foco: [number, number]): { x: number; y: number; h: number } {
+    const cam = this.camTeste ??= new THREE.PerspectiveCamera();
+    cam.copy(this.camera, false); cam.updateProjectionMatrix();
+    const { desloc, olhar } = this.orbitaVista;
+    cam.position.set(foco[0] + desloc[0] * afast, desloc[1] * afast, foco[1] + desloc[2] * afast);
+    cam.lookAt(foco[0] + olhar[0] * afast, olhar[1] * afast, foco[1] + olhar[2] * afast);
+    cam.updateMatrixWorld();
+    const dobra: Dobra = { k: this.estilo.dobra, focoX: foco[0], focoZ: foco[1], dir: this.dirDobra }, [px, pz] = this.pontos[l];
+    const y0 = this.chaoLugar[l], [bx, by] = this.pxDe(cam, dobra, px, y0, pz), [, ty] = this.pxDe(cam, dobra, px, y0 + LUGARES[l].altura, pz);
+    return { x: bx, y: by, h: by - ty };
+  }
+  /** o enquadramento final dos lugares grandes (o portao e a barraca): o zoom e o ponto olhado que deixam o objeto INTEIRO na tela, com um pouco de ceu
+      acima, de 37 % da altura medida no eixo a 1920 (cerca de 45 % na tela, pela perspectiva) (o pe a 62 % da altura e a 30 % da largura, a esquerda do painel) e de 30 % no celular (o pe a 40 % da altura,
+      centrado, acima da folha). Resolvido por simulacao (perspectiva e dobra incluidas): a cada passo o afastamento muda pela razao entre a altura medida
+      e a desejada, e o ponto olhado anda pelo erro do pe na tela. Guardado ate a janela, a orbita ou o lugar mudarem. PROPOSTO, SEM FONTE (numero de
+      interface, nao de jogo) */
+  private enquadrados = new Map<string, { zoom: number; foco: [number, number] }>();
+  private resolverLugar(l: Lugar): { zoom: number; foco: [number, number] } {
+    if (this.enquadrados.size > 24) this.enquadrados.clear();
+    const chave = `${l}|${this.larguraCss}|${this.alturaCss}|${ORBITA.versao}|${this.afastBase}|${this.largo}|${this.fracEnq}`, guardado = this.enquadrados.get(chave);
+    if (guardado) return guardado;
+    const W = this.larguraCss, H = this.alturaCss, alvoH = (this.largo ? 0.37 : 0.3) * H, alvoX = (this.largo ? 0.3 : 0.5) * W, alvoY = (this.largo ? 0.62 : 0.4) * H;
+    const [rx, rz] = this.direita, [fx, fz] = this.dirDobra, [dx, dy, dz] = this.orbitaVista.desloc, hip = Math.hypot(dx, dy, dz) || 1, seno = Math.max(0.2, Math.abs(dy) / hip);
+    const cos = Math.sqrt(Math.max(0.04, 1 - seno * seno));
+    let afast = this.afastBase, foco: [number, number] = [...this.pontos[l]];
+    for (let i = 0; i < 10; i++) {
+      const m = this.medirLugar(l, afast, foco);
+      if (!(m.h > 1e-3)) break;
+      const ppc = m.h / (LUGARES[l].altura * cos);
+      afast = Math.min(this.afastBase * 6, Math.max(this.afastBase * 0.3, afast * (m.h / alvoH)));
+      /* o pe a direita do alvo: o foco anda para a direita; o pe abaixo do alvo: o foco anda para tras (o objeto sobe na tela) */
+      const ex = (m.x - alvoX) / ppc, ey = (m.y - alvoY) / (ppc * seno);
+      foco = [foco[0] + rx * ex - fx * ey, foco[1] + rz * ex - fz * ey];
+    }
+    const r = { zoom: afast / this.afastBase, foco };
+    this.enquadrados.set(chave, r);
+    return r;
+  }
+  /** o zoom da viagem: de 1 (ou do zoom do lugar de origem, numa troca direta) ate o zoom final do lugar */
+  private zoomDaViagem(p: number, reduzido: boolean): number {
+    const s = reduzido ? 1 : this.suave(p), z0 = VIAGEM.origem ? this.zoomFinal(VIAGEM.origem) : 1;
+    return z0 + (this.zoomFinal(VIAGEM.lugar) - z0) * s;
+  }
+  /** a altura do lugar aberto na tela (px): a placa fica acima dela. O saco mantem a conta da L2 (altura x px por celula); os grandes, a medida com a
+      camera de agora (o topo projetado) mais uma folga */
+  private alturaDoLugarNaTela(): number {
+    const l = VIAGEM.lugar, alt = LUGARES[l].altura;
+    if (l === "saco") return alt * (this.ppu / this.renderer.getPixelRatio());
+    const [px, pz] = this.pontos[l], y0 = this.chaoLugar[l], dobra = this.dobra, [, by] = this.pxDe(this.camera, dobra, px, y0, pz), [, ty] = this.pxDe(this.camera, dobra, px, y0 + alt, pz);
+    return by - ty + 8;
+  }
+  /** o ponto olhado no lugar `l`: o ponto do lugar deslocado para ele ficar onde o painel deixa (a esquerda dele de 900 px em diante; no alto,
+      acima da folha, abaixo) */
+  private ancoraDoLugar(l: Lugar): [number, number] {
+    if (l !== "saco") return this.resolverLugar(l).foco;
+    const [sx, sz] = this.pontos[l], [rx, rz] = this.direita, [fx, fz] = this.dirDobra, t = this.naTela(l);
+    const ppc = Math.max(1e-6, this.ppu / this.renderer.getPixelRatio());      // px de CSS por celula na distancia do ponto olhado
+    const seno = Math.max(0.2, Math.abs(this.orbitaVista.desloc[1]) / (Math.hypot(...this.orbitaVista.desloc) || 1));
+    let ax = sx, az = sz;
+    /* o pe do lugar acima do centro do quadro da camera (fracao < 0,5): o foco fica antes dele, no chao (a distancia na tela encurta pelo seno da
+       elevacao); abaixo do centro, depois dele */
+    const vertical = (frac: number) => {
+      const k = (this.alturaCss * this.fracEnq / 2 - frac * this.alturaCss) / ppc / seno;
+      ax -= fx * k; az -= fz * k;
+    };
+    if (this.largo) {
+      /* o lugar a esquerda do centro: o foco fica a direita dele */
+      const k = (0.5 - t.largo) * this.larguraCss / ppc;
+      ax += rx * k; az += rz * k;
+      if (t.vLargo !== null) vertical(t.vLargo);
+    } else vertical(t.movel);
+    return [ax, az];
+  }
+  /** o ponto olhado com a viagem: do que a camera olharia sem ela (ou do lugar de onde veio, numa troca direta) ate o lugar. `p` e o progresso (0 a 1) */
+  private focoDaViagem(base: [number, number], p: number, reduzido: boolean): [number, number] {
+    const s = reduzido ? 1 : this.suave(p);
+    return this.entre(VIAGEM.origem ? this.ancoraDoLugar(VIAGEM.origem) : base, this.ancoraDoLugar(VIAGEM.lugar), s);
   }
 
   /** um quadro: o pet onde o motor diz (interpolado), a camera atras dele, a racao e a bola, o dia ou a noite; devolve o retangulo do pet */
@@ -268,6 +453,7 @@ class VistaIlha {
     const pos = this.naMao ? (this.seguidor.pos ?? [mu.pet[0], mu.pet[1]])
       : this.seguidor.seguir(mu.pet, dtMs, cm, { velJogo: velocidadeAtual(), acao: m.acao, dorme: jg.nascendo > 0 || m.acao === "dormir", reduzido });
     this.ultimo = agora;
+    const viagem = progressoViagem(agora);
     const motorCel: [number, number] = [pos[0] / sub, pos[1] / sub];
     let cor: { cel: [number, number]; golpe: { desde: number; alvo: [number, number] } | null; andando: boolean };
     let suspenso: Suspenso | null = null;
@@ -279,7 +465,7 @@ class VistaIlha {
       suspenso = { naMao: true, altura: MAO.alturaTexels, angulo: this.pendulo.passo(dtMs, mao.x, agora, reduzido),
         tremor: tremorAgora(agora, reduzido), sombra: [lx / sub, lz / sub] };
     } else {
-      cor = this.coreografia(mu, agora, motorCel, reduzido);
+      cor = this.coreografia(mu, agora, motorCel, reduzido, viagem);
       if (this.soltouEm !== null) {
         const ms = agora - this.soltouEm;
         if (soltarAcabou(ms, reduzido)) this.soltouEm = null;
@@ -287,15 +473,22 @@ class VistaIlha {
       }
     }
     this.petCel = cor.cel;
-    /* o foco: preso com o pet na mao; depois de soltar, volta ao pet; fora disso, e o pet */
+    /* o zoom do lugar: abaixo de 900 px a camera se aproxima do saco com a viagem (o saco e o pet ficam grandes no terco de cima) e volta ao sair */
+    const zoom = viagem > 0 ? this.zoomDaViagem(viagem, reduzido) : 1;
+    if (this.afastBase * zoom !== this.afast) { this.afast = this.afastBase * zoom; this.orbitaVersao = -1; }
+    this.atualizarOrbita();
+    const pode = this.podeSoltar;
+    /* o foco: preso com o pet na mao (PEGAR_PET; nem a camera solta anda); fora disso, o da camera solta (o pet, ou o ponto solto; cameraLivre.ts), ao
+       qual ele volta suave logo depois de soltar o pet; e, com um lugar aberto, o da viagem (viagem.ts) */
     if (!this.naMao) {
-      const dx = this.petCel[0] - this.foco[0], dz = this.petCel[1] - this.foco[1];
+      const alvo = focoDoQuadro(this.petCel, agora, dtMs, this.dirDobra, this.limites, pode);
+      const dx = alvo[0] - this.foco[0], dz = alvo[1] - this.foco[1];
       if (this.focoVoltando && !reduzido && Math.hypot(dx, dz) > 0.01) {
         const k = 1 - Math.exp(-Math.max(0, dtMs) / MAO.focoTauMs);
         this.foco = [this.foco[0] + dx * k, this.foco[1] + dz * k];
-      } else { this.foco = [this.petCel[0], this.petCel[1]]; this.focoVoltando = false; }
+      } else { this.foco = [alvo[0], alvo[1]]; this.focoVoltando = false; }
+      if (viagem > 0) this.foco = this.focoDaViagem(this.foco, viagem, reduzido);
     }
-    this.atualizarOrbita();
     const [px, pz] = this.foco, a = this.afast;
     const { desloc, olhar } = this.orbitaVista;
     this.camera.position.set(px + desloc[0] * a, desloc[1] * a, pz + desloc[2] * a);
@@ -309,20 +502,93 @@ class VistaIlha {
     cobrirFundo(this.cenaIlha.cena.background, this.camera.aspect);
     this.objetos?.noite?.(noite);
     this.objetos?.quadro?.(this.foco, this.estilo.dobra, this.dirDobra, Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2)) * this.camera.aspect);
+    this.aplicarTrancas();
     this.itens.sincronizar(mu, m.e.tick, noite, agora, dtMs, m.lesionadoDesde !== null, reduzido, m.e.sujeira, this.naMao ? motorCel : this.petCel);
+    /* o pet longe do foco (a camera solta, a viagem, a volta depois de soltar o pet): o chao sob ele desce pela dobra (yPe), e o tamanho do papel vale
+       na distancia dele (senao o texel deixa de ser inteiro e o pet cresce ou encolhe com a distancia ao foco). Com o pet na mao o tamanho fica o do
+       foco, como na P2 da PEGAR_PET (o chaoSob conta a altura da mao com ele) */
+    const yPe = dobrarY(0, this.petCel[1], this.dobra, this.petCel[0]);
+    let ppu = this.ppu, pxPorTexel = this.pxPorTexel;
+    if (!this.naMao && (this.petCel[0] !== px || this.petCel[1] !== pz)) {
+      const dir = this.camera.getWorldDirection(this.dirCam), prof = (this.petCel[0] - this.camera.position.x) * dir.x
+        + (yPe - this.camera.position.y) * dir.y + (this.petCel[1] - this.camera.position.z) * dir.z;
+      if (prof > 1e-3) {
+        ppu = this.renderer.domElement.height / 2 / (prof * Math.tan(THREE.MathUtils.degToRad(this.cam.fov / 2)));
+        pxPorTexel = Math.max(1, Math.round(TEXEL_ALVO * ppu));
+      }
+    }
     const ret = this.papel.atualizar({
       agora, dt: Math.min(0.05, dtMs / 1000), quadro, cel: this.petCel, motor: mu.pet, camera: this.camera,
-      ppu: this.ppu, pxPorTexel: this.pxPorTexel, canvas: [this.renderer.domElement.width, this.renderer.domElement.height],
-      razao: this.renderer.getPixelRatio(), reduzido, noite, golpe: cor.golpe, andandoVista: cor.andando,
-      yPe: dobrarY(0, this.petCel[1], this.dobra, this.petCel[0]), suspenso,
+      ppu, pxPorTexel, yPe, canvas: [this.renderer.domElement.width, this.renderer.domElement.height],
+      razao: this.renderer.getPixelRatio(), reduzido, noite, golpe: cor.golpe, andandoVista: cor.andando, suspenso,
     });
     /* o foco do HD-2D: a altura do pet na tela (0 embaixo, 1 em cima) */
     this.renderer.info.reset();
     this.pos.desenhar(this.cenaIlha.cena, this.camera, PRESETS[habitatAtual().visual], 1 - (ret.y + ret.h * 0.6) / this.alturaCss);
+    this.publicar(mu, m.e.tick, ret, pode);
+    this.publicarLugaresTela();
     return ret;
   }
 
-  dispose(): void { this.papel.dispose(); this.pos.dispose(); this.renderer.dispose(); }
+  /** o lugar trancado fica apagado e o destrancado volta ao normal; so quando a tabela de trancas mudou (trancas.ts, escrita pelo nivel do Tamer) */
+  private aplicarTrancas(): void {
+    if (this.versaoTrancas === TRANCAS.versao) return;
+    this.versaoTrancas = TRANCAS.versao;
+    for (const id of ORDEM_LUGARES) {
+      const trancado = estadoDoLugar(id) === "trancado";
+      /* o portao e a barraca: o modelo 3D (lugares.ts) quando ja chegou, senao o marcador provisorio; a mascara de luz acende so no aberto */
+      const raiz = id === "saco" ? this.itens.sacoRaiz : this.objetos?.lugaresRaiz?.get(id) ?? this.marcadores.porLugar.get(id);
+      if (raiz) this.apagador.aplicar(raiz, trancado);
+      if (id !== "saco") this.objetos?.abrirLugar?.(id, !trancado);
+    }
+  }
+  /** onde cada lugar cai na tela (o pe, em px de CSS, e a altura dele em px): o cadeado com o "Nv N" (CadeadosDaIlha.tsx) fica sobre ele. Em qualquer largura */
+  private publicarLugaresTela(): void {
+    const cb = CENA.aoLugares;
+    if (!cb) return;                                    // sem consumidor (nenhum cadeado nem brilho na tela): nao calcula
+    const ppc = this.ppu / this.renderer.getPixelRatio(), r = this.rectCanvas, v = this.vLugar, alvo = this.lugaresTela;
+    for (const id of ORDEM_LUGARES) {
+      const x = this.pontos[id][0], z = this.pontos[id][1];
+      const y0 = this.chaoLugar[id];
+      v.set(x, dobrarY(y0, z, this.dobra, x), z).project(this.camera);
+      const a = alvo[id];
+      a[0] = r.left + ((v.x + 1) / 2) * r.width; a[1] = r.top + ((1 - v.y) / 2) * r.height;
+      /* a altura na tela: o saco (perto do pet) pela conta da L2, altura x px por celula na distancia do foco; o portao e a barraca (na moldura, longe
+         do foco: a px por celula do foco os aumentava e o cadeado subia acima do modelo) pelo topo projetado, como em alturaDoLugarNaTela */
+      if (id === "saco") a[2] = LUGARES[id].altura * ppc;
+      else { v.set(x, dobrarY(y0 + LUGARES[id].altura, z, this.dobra, x), z).project(this.camera); a[2] = a[1] - (r.top + ((1 - v.y) / 2) * r.height); }
+    }
+    cb(alvo);
+  }
+
+  /** o que o minimapa e a HUD leem (cameraLivre.ts): o foco, o pet, a vista, os lugares, a comida, e se o pet saiu da tela e para que lado */
+  private publicar(mu: Mundo, tick: number, ret: Ret, pode: boolean): void {
+    /* abaixo de 900 px nada le o minimapa nem o resumo: sem alocar por quadro (o celular), e o que estava publicado sai uma vez */
+    if (!this.consultaSolta?.matches) { if (VISTA.atual) despublicarVista(); return; }
+    const [fx, fz] = this.dirDobra, [ox, oz] = this.foco, [px, pz] = this.petCel, sub = mu.cm.sub;
+    const { desloc } = this.orbitaVista, a = this.afast;
+    /* o pet atras da camera (no chao) ou com o desenho fora do canvas: fora da tela */
+    const atras = (px - (ox + desloc[0] * a)) * fx + (pz - (oz + desloc[2] * a)) * fz < 0;
+    const cx = ret.x + ret.w / 2, cy = ret.y + ret.h / 2;
+    const fora = atras || cx < 0 || cx > this.larguraCss || cy < 0 || cy > this.alturaCss;
+    /* o lado: o pet no plano da vista (a direita e a frente girada 90 graus) */
+    const dx = px - ox, dz = pz - oz, lado = dx * -fz + dz * fx, frente = dx * fx + dz * fz;
+    const meia = Math.atan(Math.tan(THREE.MathUtils.degToRad(this.cam.fov / 2)) * this.camera.aspect);
+    publicarVista({
+      foco: [ox, oz], pet: [px, pz], bola: this.itens.bolaCelula, frente: [fx, fz], meiaAbertura: meia,
+      comidas: this.itens.comidasNoMapa(mu, tick), ninho: this.itens.ninhoEm, comedouro: [mu.comedouro[0] / sub, mu.comedouro[1] / sub], saco: this.itens.sacoEm, portao: this.pontos.portao, barraca: this.pontos.barraca,
+      /* as arvores de fruta do motor (o layout MVP dos pets v13+ nao tem nenhuma; as arvores da ilha sao enfeite da vista) */
+      arvores: mu.arvores.map(t => [t.x / sub, t.y / sub] as [number, number]),
+      petFora: fora, lado: Math.abs(lado) >= Math.abs(frente) ? (lado > 0 ? "direita" : "esquerda") : (frente > 0 ? "cima" : "baixo"),
+      pxPorCelula: this.ppu / this.renderer.getPixelRatio(), senoElevacao: Math.abs(desloc[1]) / (Math.hypot(desloc[0], desloc[1], desloc[2]) || 1),
+      mapa: this.mapa, limites: this.limites,
+      /* a altura do lugar aberto na tela (px): a placa fica acima dela. O saco mantem a conta da L2 (altura x px por celula); os grandes contam o cos da elevacao */
+      lugarAltPx: lugarAberto() ? this.alturaDoLugarNaTela() : undefined,
+      lugarTela: lugarAberto() ? this.paraTela(this.pontos[VIAGEM.lugar][0] * sub, this.pontos[VIAGEM.lugar][1] * sub) : undefined,
+    }, true, pode);
+  }
+
+  dispose(): void { this.marcadores.dispose(); this.papel.dispose(); this.pos.dispose(); this.renderer.dispose(); }
 
   /** a queda de qualidade (regra 10, PROPOSTO): sem vento, metade da grama e pixelRatio 1; so uma vez */
   baixarQualidade(): void {
@@ -349,6 +615,8 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
   canvas.addEventListener("webglcontextlost", perdeu);
   /* a camera livre (orbita.ts): a roda, o arrasto e a pinca na cena, com a opcao ligada em Ajustes */
   const soltarControles = ligarControles(() => habitatAtual().controle === "livre", () => vista.elevacao0);
+  /* a camera solta (cameraLivre.ts): o teclado e o arrasto direito/do meio, so no desktop com o controle "Livre" */
+  const soltarLivre = ligarCameraLivre(() => vista.podeSoltar, () => vista.elevacao0);
   let vivo = true, quadro = 0, pedido = 0;
   /* os kits: na hora, ou, se a ilha abriu coberta pelo veu, quando ela ficar a vista (no maximo KITS_COBERTO_MS) */
   let kitsPedidos = false;
@@ -381,6 +649,8 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
     if (medida) medida.push(agora - ultimoQuadro);
     if (agora - ultimoQuadro > 500) janela = { inicio: agora, quadros: 0 };
     ultimoQuadro = agora;
+    /* com um lugar aberto (Crescer) o tempo nao conta: o painel de vidro sobre a cena nao pode degradar a ilha de vez */
+    if (lugarAberto()) janela = { inicio: agora, quadros: 0 };
     janela.quadros++;
     if (agora - janela.inicio >= QUEDA_MS) {
       if (!vista.qualidadeBaixa && (janela.quadros * 1000) / (agora - janela.inicio) < FPS_MIN) { vista.baixarQualidade(); ajustar(); }
@@ -424,7 +694,7 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
   return () => {
     vivo = false;
     cancelAnimationFrame(pedido); obs.disconnect(); if (esperaKits) clearTimeout(esperaKits); canvas.removeEventListener("webglcontextlost", perdeu);
-    soltarControles();
+    soltarControles(); soltarLivre(); despublicarVista();
     CENA.modo3d = false; CENA.cocoNoChao = false; CENA.ret = null; CENA.medir = null; CENA.mundo = null;
     vista.dispose();
   };

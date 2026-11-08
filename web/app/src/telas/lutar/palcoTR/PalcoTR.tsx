@@ -9,18 +9,23 @@ import { AvisoSom } from "../../../componentes/AvisoSom.tsx";
 import { LUTA, useLuta, type HudLado, type LutadorTela, type Palco, type RegraTR } from "../../../luta.ts";
 import { arquivosCena, falhasMapa, ouvirMapas } from "./cenasTR.ts";
 import { desenharLutaTR, rotulosDoCanvas } from "./desenhoTR.ts";
+import { barraDoPasso } from "./nocauteTR.ts";
 import "../../../estilo/abertas.css";
 import "../../../estilo/luta_hud.css";
 
 /** um lado do HUD (prancha UpLuta): retrato, nome, vida e guts */
-function Lado({ L, s, rot, rival, caixa }: { L: LutadorTela; s: HudLado; rot: string; rival?: boolean; caixa?: boolean }) {
+/** atraso: o pedaco da vida que acabou de sair (E5, nocauteTR.ts), na unidade da vida; null sem pedaco */
+function Lado({ L, s, rot, rival, caixa, atraso }: { L: LutadorTela; s: HudLado; rot: string; rival?: boolean; caixa?: boolean; atraso?: { rastro: number; branco: boolean } | null }) {
   const a = useAtlas(), img = a.tipo === "ok" ? imagemAtlas(a, L.sprite) : null;
   return (
     <div className={`hud-lado${rival ? " hud-lado--rival" : ""}${caixa ? " hud-caixa" : ""}`} title={L.estiloTela ? `${L.nomeTela} (${L.estiloTela})` : L.nomeTela}>
       <span className="hud-ret">{img && <img className="dl-pix" src={img.url} width={img.w} height={img.h} alt="" />}</span>
       <span className="hud-txt">
         <span className="hud-nome">{L.nomeTela}<span className="sr-only"> {Math.max(0, s.hp).toFixed(0)} de vida, guts {Math.round(s.guts)}</span></span>
-        <span className="hud-vida" role="img" aria-label={`vida ${rot}`}><i style={{ width: `${Math.max(0, s.hp / s.hpMax * 100)}%` }} /></span>
+        <span className="hud-vida" role="img" aria-label={`vida ${rot}`}>
+          {atraso && atraso.rastro > s.hp && <b className={`hud-vida-atraso${atraso.branco ? " hud-vida-atraso--branco" : ""}`} data-testid={`luta-atraso-${rival ? 1 : 0}`}
+            style={{ width: `${Math.max(0, Math.min(1, atraso.rastro / s.hpMax)) * 100}%` }} />}
+          <i style={{ width: `${Math.max(0, s.hp / s.hpMax * 100)}%` }} /></span>
         <span className="hud-guts" role="img" aria-label={`guts ${rot}`}><i style={{ width: `${Math.max(0, s.guts / s.gutsMax * 100)}%` }} /></span>
       </span>
     </div>
@@ -62,19 +67,23 @@ export function Cena({ p, luta: naLuta = false }: { p: Palco; luta?: boolean }) 
     return () => cancelAnimationFrame(id);
   }, [p, a.tipo]);
   const fimTempo = Math.round(CTR_TR.limite * PASSO_TR_MS / 1000);
+  /* a barra com o dano atrasado (E5): do passo da luta mais a espera do fim, como os efeitos do canvas */
+  const passoV = (p.sim?.S.passo ?? 0) + p.visual.extra, atrasos = p.sim ? p.visual.vidas.map(v => barraDoPasso(v, passoV)) : [null, null];
+  /* o nocaute: o "K.O." e desenhado no canvas; o texto fica para o leitor de tela */
+  const ko = p.callout === "NOCAUTE!";
   return (
     <section className="luta-arena luta-arena--tr" aria-label="Palco da luta" data-cena={p.cena}>
       <canvas ref={ref} className="arena-cv" width={96} height={48} role="img" aria-label={`Luta: ${p.A.nomeTela} contra ${p.B.nomeTela}`} />
       {[0, 1].map(i => <span key={i} ref={postRef[i]} className="luta-postura" role="img" hidden data-testid={`luta-postura-${i}`} />)}
       <div className="luta-hud">
-        <Lado L={p.A} s={p.hud[0]} rot="do seu pet" caixa={naLuta} />
+        <Lado L={p.A} s={p.hud[0]} rot="do seu pet" caixa={naLuta} atraso={atrasos[0]} />
         <div className={`hud-meio${naLuta ? " hud-caixa" : ""}`}>
           <div className="turno-hex" aria-label="tempo da luta"><small>TEMPO</small><b className="dl-num" data-testid="luta-relogio">{p.segundos === null ? "–" : relogio(p.segundos)}</b></div>
           <span className="luta-dist">{p.morteSubita ? "morte súbita" : `até ${relogio(fimTempo)}`}</span>
         </div>
-        <Lado L={p.B} s={p.hud[1]} rot="do rival" rival caixa={naLuta} />
+        <Lado L={p.B} s={p.hud[1]} rot="do rival" rival caixa={naLuta} atraso={atrasos[1]} />
       </div>
-      {p.callout && <span className="luta-callout dl-num dl-num--amarelo">{p.callout}</span>}
+      {p.callout && <span className={ko ? "sr-only" : "luta-callout dl-num dl-num--amarelo"} role={ko ? "status" : undefined}>{p.callout}</span>}
       {a.tipo === "erro" && <p className="luta-aviso-asset" role="alert">O atlas dos sprites não carregou ({a.erro}): a luta aparece com marcadores no lugar dos Digimon.</p>}
       {faltam.length > 0 && <p className="luta-aviso-asset" role="alert">O mapa do cenário não carregou ({faltam.join(", ")}): a luta aparece no chão liso.</p>}
       {!naLuta && <span className="luta-previa-rot">prévia · escolha um rival e aperte Lutar</span>}

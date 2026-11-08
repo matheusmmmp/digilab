@@ -6,8 +6,13 @@ import { useEffect, type RefObject } from "react";
 import type { Motor } from "../../../motor/index.ts";
 import { agir } from "../../acoes.ts";
 import { jogoAtual } from "../../jogo.ts";
+import { lugarAberto } from "../../viagem.ts";
 import { CENA } from "./cenaEstado.ts";
 import { mostrarReacao, reacaoDoCorpo, type LeituraCorpo } from "./cenaAcao.ts";
+
+/** o toque no pet nao vale: um painel cobre a cena, a bola ou o pet esta na mao (PegarPet.tsx) ou um lugar esta aberto (Crescer, L2: a
+    ilha fica viva, mas clicar nela nao grava) */
+export const toqueIgnorado = (): boolean => CENA.coberto || CENA.bolaNaMao || CENA.petNaMao || lugarAberto();
 
 /** o toque: quanto o ponteiro pode andar (px) e quanto pode demorar (ms) para ainda ser um toque; a folga em volta do sprite (px, para o dedo).
     PROPOSTO, SEM FONTE */
@@ -44,7 +49,7 @@ export function ligarToquePet(el: EventTarget & { getBoundingClientRect(): { lef
   let mao: { id: number; x: number; y: number; t: number } | null = null;
   const baixo = (ev: Event) => {
     const e = ev as P;
-    if ((e.pointerType === "mouse" && e.button !== 0) || CENA.coberto || CENA.bolaNaMao || CENA.petNaMao) return;
+    if ((e.pointerType === "mouse" && e.button !== 0) || toqueIgnorado()) return;
     if (!noSprite(e.clientX, e.clientY, el.getBoundingClientRect(), CENA.ret)) return;
     mao = { id: e.pointerId, x: e.clientX, y: e.clientY, t: performance.now() };
   };
@@ -54,7 +59,7 @@ export function ligarToquePet(el: EventTarget & { getBoundingClientRect(): { lef
   };
   const cima = (ev: Event) => {
     const e = ev as P, m = mao; mao = null;
-    if (!m || m.id !== e.pointerId || CENA.coberto || CENA.bolaNaMao || CENA.petNaMao) return;
+    if (!m || m.id !== e.pointerId || toqueIgnorado()) return;
     const agora = performance.now();
     if (agora - m.t <= TOQUE.duraMax && Math.hypot(e.clientX - m.x, e.clientY - m.y) <= TOQUE.andaMax) tocarNoPet(agora);
   };

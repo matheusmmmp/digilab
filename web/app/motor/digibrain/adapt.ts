@@ -10,7 +10,12 @@
 
    Fora do laboratorio (LAB-1; os modulos falham alto se vierem ligados): `facetas_mem` (o M-PERS), `redecidir_evento` (C3), `credito_corrida`
    (C2), `intencao_suspensa` (L-2) e os controles. A rng do EMB nao entra (so o REL e aceito). A rng de politica e a do motor
-   (`semente + 1_000_003`), passada ao `agir` e entregue so ao M-ARB. Aritmetica so inteira. */
+   (`semente + 1_000_003`), passada ao `agir` e entregue so ao M-ARB. Aritmetica so inteira.
+
+   A subchave `fala_unidades` (DC3d; docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, 3.1 e o adendo 1, A1.1): o M-IMPULSO divide o `chamar_atencao` nas
+   tres unidades de fala (o conteudo so na chave da escolha, [chamar_atencao, c, null]); a acao entregue ao motor e o chamar de hoje, e a
+   opcao de fala credita a linha de H do conteudo. A consequencia da opcao de fala le o corpo de depois na percepcao da decisao seguinte (o
+   `obs` do `agir` seguinte, antes da acao seguinte); o mundo de depois e o de hoje. Desligada (todo pet de hoje), nada muda. */
 import { leituraReceptor, type PercepcaoCorpoLobos } from "../lobos.ts";
 import type { OcorridoMundo, PoliticaCorpoMundo } from "../motor_corpo_mundo.ts";
 import type { OcorridoCorpo, ObservacaoLobos, TransicaoLobos } from "../lobos.ts";
@@ -19,7 +24,7 @@ import type { AcaoPet } from "../tipos.ts";
 import { chaveJson, raizInteira, type ChaveUnidade } from "./_comum.ts";
 import { Afeto } from "./afeto.ts";
 import { Arbitragem, type RngPolitica } from "./arb.ts";
-import { CONFIG_DIGIBRAIN_LAB, CONFIG_MODULAR_MUNDO, INATOS_MODULAR } from "./constantes.ts";
+import { CONFIG_DIGIBRAIN_LAB, CONFIG_MODULAR_MUNDO, CONTEUDOS_FALA, INATOS_MODULAR, type ConfigDigibrainModular } from "./constantes.ts";
 import { EstadoDinamico, type OpcaoFim } from "./estado.ts";
 import { Impulso, type UnidadeImpulso } from "./impulso.ts";
 import { Memoria, episodioAutobio, episodioLuta } from "./mem.ts";
@@ -39,6 +44,8 @@ export interface Intencao { acao: AcaoPet; tipo_alvo: string | null; id_alvo: nu
 export function intencaoDaUnidade(unidade: UnidadeImpulso): Intencao {
   const [acao, tipo, ident] = unidade.chave;
   if (tipo === "ponto") return { acao: acao as AcaoPet, tipo_alvo: "ponto", id_alvo: null, ponto: ident as readonly [number, number] };
+  /* a unidade de fala (DC3, 3.1): o conteudo fica so na chave; o mundo e o do chamar */
+  if (acao === "chamar_atencao") return { acao: acao as AcaoPet, tipo_alvo: null, id_alvo: null, ponto: null };
   return { acao: acao as AcaoPet, tipo_alvo: tipo, id_alvo: tipo === "comida" || tipo === "bola" ? (ident as number) : null, ponto: null };
 }
 
@@ -48,8 +55,8 @@ export class LutaSemChave extends Error {}
 
 const ACOES_COM_ALVO: readonly string[] = ["explorar", "comer", "brincar"];
 
-/** a configuracao do laboratorio como o M-ADAPT a recebe (a ConfigDigibrain do braco REL) */
-export type ConfigLab = typeof CONFIG_DIGIBRAIN_LAB;
+/** a configuracao do laboratorio como o M-ADAPT a recebe (a ConfigDigibrain do braco REL, com a `fala_unidades` ligada ou nao) */
+export type ConfigLab = ConfigDigibrainModular;
 
 export interface Pendencia {
   k: number; intencao: Intencao; unidade: UnidadeImpulso; sens: Dict; g_apr: number; pediu: boolean; alvo: AlvoMundo | null;
@@ -106,7 +113,7 @@ export class DigiBrain implements PoliticaCorpoMundo {
       throw new Error("o DigiBrain modular decide com o corpo e o mundo na Observacao (obs.corpo e obs.mundo)");
     }
     if (this.pendencia !== null) {
-      this.fechar(this.pendencia);
+      this.fechar(this.pendencia, obs);
       this.pendencia = null;
     }
     const cd = this.cd, k = this.k;
@@ -283,17 +290,25 @@ export class DigiBrain implements PoliticaCorpoMundo {
     if (!cd.p1 && !this.plast.desfechoZero()) throw new Error("sem o P1, o desfecho e o andar ficam em 0");
     if (!cd.p2 && !this.plast.habitoZero()) throw new Error("sem o P2, o habito fica em 0");
     if (!cd.m_mem && this.mem.episodios.length) throw new Error("sem o M-MEM, a memoria fica vazia");
+    const fala = unidades.filter(x => x.acao === "chamar_atencao").map(x => x.chave[1]);
+    if (JSON.stringify(fala) !== JSON.stringify(cd.fala_unidades ? [...CONTEUDOS_FALA] : [null]))
+      throw new Error(`as unidades do chamar ${JSON.stringify(fala)} nao sao as da fala_unidades ${cd.fala_unidades ? "ligada" : "desligada"}`);
   }
 
-  /** a consequencia da decisao anterior aos modulos */
-  private fechar(p: Pendencia): void {
+  /** a consequencia da decisao anterior aos modulos. Com a `fala_unidades` (A1.1), a opcao de fala le o corpo de depois na percepcao da
+   *  decisao seguinte (`obsSeguinte`, antes da acao seguinte); as outras opcoes, e o chamar desligada a subchave, leem o corpo do tick da acao */
+  private fechar(p: Pendencia, obsSeguinte: ObservacaoMundoLobos): void {
     const it = p.intencao, S = this.S, acao = it.acao;
     if (p.corpo === null || p.transicao === null) throw new Error(`a decisao de ${acao} ficou sem o gancho de consequencia (o corpo e o observar)`);
     const comAlvo = ACOES_COM_ALVO.includes(acao);
     if (comAlvo && !p.pediu) throw new Error(`a decisao de ${acao} tinha alvo, e o motor nao pediu o alvo`);
     if (comAlvo && p.mundo === null) throw new Error(`a decisao de ${acao} ficou sem o consequencia_mundo`);
     const pc0 = p.sens["pc"];
-    const pc1 = p.corpo[1].corpo;
+    let pc1 = p.corpo[1].corpo;
+    if (this.cd.fala_unidades && acao === "chamar_atencao") {           // A1.1: a fala ate a decisao seguinte
+      if (!(CONTEUDOS_FALA as readonly unknown[]).includes(p.unidade.chave[1])) throw new Error(`a fala da decisao ${p.k} sem conteudo com a fala_unidades ligada`);
+      pc1 = obsSeguinte.corpo;
+    }
     const pm1 = (p.transicao.observacaoSeguinte as ObservacaoMundoLobos).mundo;
     if (pc1 === undefined || pm1 === undefined) throw new Error("a consequencia sem o corpo ou sem o mundo de depois");
     const ocorrido: OcorridoMundo | null = p.mundo === null ? null : p.mundo[0];

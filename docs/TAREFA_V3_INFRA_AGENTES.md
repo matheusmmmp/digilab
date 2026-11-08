@@ -402,3 +402,19 @@ aberta da E3 (seção 11), seguida pelo Matheus em 2026-11-06 ("siga com as reco
   grupo de letras do começo). Nega o `-x`, o `-c`, o `-r`, o `-u`, o `-A`, o `-I`, o `--delete`, o `--to-command` e as outras opções que
   extraem, criam ou rodam programa, e o `tar` sem `-t`. O `auditor-numeros.md` diz como usar.
 - **Testes:** oito casos novos do `tar` no `test_h8_shell_do_auditor`; o conjunto de hooks, agentes, `pre_run` e infra passa inteiro.
+
+## 17. O H11: o índice de desvios fica com quem faz o merge (2026-11-07)
+
+- **O motivo:** depois do #638, o `CLAUDE.md` diz que o worker não edita o `docs/REGISTRO_DESVIOS.md`, mas a regra ficou só no texto.
+  Entre o #638 e o #682, 30 commits de PRs mexeram no índice ("o índice regenerado"), e o #636, o #657 e o #660 voltaram a conflitar nele.
+  O Matheus pediu o hook ("Sim, criar o hook", 2026-11-07).
+- **O que o H11 (`.claude/hooks/h11_indice.py`) bloqueia, com o código 2:**
+  - o Edit, o Write, o MultiEdit e o NotebookEdit no índice, em qualquer branch: o índice é gerado;
+  - no shell, `tools/gerar_indice_desvios.py` ou `tools/registro_por_mes.py` sem `--conferir` nem `--help`, fora da `main` e dos branches
+    `v3-indice-*` (o PR só do índice, D-ID2);
+  - no shell, a escrita no índice por `>`, `>>`, `tee`, `sed -i`, `cp`, `mv`, `Set-Content`, `Out-File` ou `Add-Content`.
+- **O que passa:** ler o índice, o gerador com `--conferir`, e trazer o índice da `main` num conflito
+  (`git checkout origin/main -- docs/REGISTRO_DESVIOS.md`). Um índice atrasado no PR continua aceito (D-ID3).
+- **O limite:** o hook lê o texto do comando. Um script que escreva o arquivo por dentro não passa por ele; o aviso do CI (D-ID2) continua.
+- **Ligado** no `.claude/settings.json` e no `docs/propostas/hooks_settings.json`, nos dois matchers do PreToolUse.
+- **Testes:** 23 casos novos no `tests/test_hooks.py` (`test_h11_*`); o conjunto de hooks, agentes, `pre_run` e infra passa inteiro (300).

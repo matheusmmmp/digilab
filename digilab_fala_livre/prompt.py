@@ -521,6 +521,12 @@ VERSAO_VOZ_V1 = "voz-v1"
 # fechado, decodificado do episodio recuperado). O que muda no texto: a regra 3 (a lembranca agora diz o que o episodio diz) e um exemplo de
 # lembranca. A voz-v1 nao muda e segue valendo para o dec-v1; `versao_voz(conceitos)` escolhe pela versao do formato.
 VERSAO_VOZ_V2 = "voz-v2"
+# voz-v3 (CONVERSA_PET, DC3d): a voz-v2 para o formato dec-v3, em que a INTENCAO vem da unidade de fala que a rede escolheu (fome, higiene ou
+# solidao): e um PEDIDO ao dono, com o id [P], dito sempre (na voz-v2 a intencao so aparece se um conceito ativo tem o mesmo nome). O que muda
+# no texto: a linha da INTENCAO, a regra 10 (fazer o pedido; o estado so pelos conceitos) e um exemplo. A voz-v1 e a voz-v2 nao mudam.
+VERSAO_VOZ_V3 = "voz-v3"
+ID_PEDIDO = "P"
+TIPO_PEDIDO = "pedido"
 
 SISTEMA_VOZ_V1 = """Você é um pet virtual do jogo Digilab, um Digimon que vive no Digimundo. Você fala como o próprio pet, em primeira pessoa, em português do Brasil. Você não vê o estado do jogo nem registros: só sabe o que a sua rede neural quer dizer neste instante, e isso vem no pedido como INTENÇÃO e CONCEITOS. O ESTILO DA ESPÉCIE (se houver) é só o tom, não é fato e as frases de exemplo dele não se copiam.
 
@@ -586,10 +592,24 @@ FIM DOS EXEMPLOS""", 1)
 assert EXEMPLOS_VOZ_V2 != EXEMPLOS_VOZ_V1
 
 
+REGRA_PEDIDO_VOZ_V3 = """10. A INTENÇÃO é um PEDIDO que você escolheu fazer ao dono agora ([P]). A fala faz esse pedido, curto e direto, e cita "P" em fatos_citados. Peça só isso: sem culpa, chantagem nem cobrança. Como você está (com fome, sujo, sozinho) só se um CONCEITO diz; sem o conceito, só peça."""
+EXEMPLOS_VOZ_V3 = EXEMPLOS_VOZ_V2.replace("""FIM DOS EXEMPLOS""", """INTENÇÃO DE EXEMPLO: [P] higiene (pedir ao dono para te limpar); CONCEITOS DE EXEMPLO: nenhum
+Dono: "oi!"
+Pet: {"fala": "Oi! Me dá um banho?", "fatos_citados": ["P"]}
+FIM DOS EXEMPLOS""", 1)
+assert EXEMPLOS_VOZ_V3 != EXEMPLOS_VOZ_V2
+
+
+def linha_pedido(intencao: str) -> str:
+    """A linha do pedido da voz-v3 (so palavras de catalogo: conceitos.PEDIDO_DITO)"""
+    from .conceitos import PEDIDO_DITO
+    return f"[{ID_PEDIDO}] {intencao} ({PEDIDO_DITO[intencao]})"
+
+
 def versao_voz(conceitos) -> str:
-    """voz-v1 para o dec-v1, voz-v2 para o dec-v2 (a versao do formato que a pagina mandou)"""
-    from .conceitos import VERSAO_DEC_V2
-    return VERSAO_VOZ_V2 if conceitos.versao == VERSAO_DEC_V2 else VERSAO_VOZ_V1
+    """voz-v1 para o dec-v1, voz-v2 para o dec-v2, voz-v3 para o dec-v3 (a versao do formato que a pagina mandou)"""
+    from .conceitos import VERSAO_DEC_V2, VERSAO_DEC_V3
+    return {VERSAO_DEC_V2: VERSAO_VOZ_V2, VERSAO_DEC_V3: VERSAO_VOZ_V3}.get(conceitos.versao, VERSAO_VOZ_V1)
 
 
 def _faixa_voz(valor: int) -> str:
@@ -628,18 +648,22 @@ def mensagens_voz(conceitos, estagio: str, situacao: str, fala_jogador: str | No
     if comando and situacao != "conversa":
         raise ValueError("o comando so existe na conversa")
     ids = ids_conceitos(conceitos)
-    v2 = versao_voz(conceitos) == VERSAO_VOZ_V2
+    v3 = versao_voz(conceitos) == VERSAO_VOZ_V3
+    v2 = v3 or versao_voz(conceitos) == VERSAO_VOZ_V2          # a voz-v3 e a voz-v2 com o pedido
     ditos = _historico_do_estagio(historico, estagio) if situacao == "conversa" else []
     dono = fatos_do_dono([jog for jog, _ in ditos])
     sistema = (estilo + "\n\n" if estilo else "") + (SISTEMA_VOZ_V2 if v2 else SISTEMA_VOZ_V1)
     if comando:
         sistema += "\n\n" + COMANDO_NA_VOZ_V1
-    sistema += "\n\n" + (EXEMPLOS_VOZ_V2 if v2 else EXEMPLOS_VOZ_V1)
+    sistema += "\n\n" + (EXEMPLOS_VOZ_V3 if v3 else EXEMPLOS_VOZ_V2 if v2 else EXEMPLOS_VOZ_V1)
     msgs = [{"role": "system", "content": sistema}]
     for jog, pet in ditos:
         msgs += [{"role": "user", "content": f"Jogador: {_jogador_em_uma_linha(jog)}"}, {"role": "assistant", "content": pet}]
-    intencao = conceitos.intencao if any(c.nome == conceitos.intencao for c in ids.values()) else "nenhuma"
-    pedido = f"INTENÇÃO: {intencao}\n" + BLOCO_CONCEITOS_VOZ_V1 + "\n"
+    if v3:                                     # o pedido da rede, dito sempre
+        pedido = f"INTENÇÃO (um pedido ao dono): {linha_pedido(conceitos.pedido)}\n" + BLOCO_CONCEITOS_VOZ_V1 + "\n"
+    else:
+        intencao = conceitos.intencao if any(c.nome == conceitos.intencao for c in ids.values()) else "nenhuma"
+        pedido = f"INTENÇÃO: {intencao}\n" + BLOCO_CONCEITOS_VOZ_V1 + "\n"
     pedido += "\n".join(linha_conceito(i, c) for i, c in ids.items()) if ids else "nenhum conceito forte o bastante agora"
     pedido += "\n"
     if dono:
@@ -647,7 +671,8 @@ def mensagens_voz(conceitos, estagio: str, situacao: str, fala_jogador: str | No
     pedido += f"ESTAGIO: {estagio}\n"
     if comando:
         pedido += BLOCO_COMANDO_V8 + "\n"
-    pedido += "\n" + (REGRAS_VOZ_V2 if v2 else REGRAS_VOZ_V1) + ("\n" + REGRA_DONO_DISSE_VOZ_V1 if dono else "") + "\n\n"
+    pedido += "\n" + (REGRAS_VOZ_V2 if v2 else REGRAS_VOZ_V1) + ("\n" + REGRA_DONO_DISSE_VOZ_V1 if dono else "") \
+        + ("\n" + REGRA_PEDIDO_VOZ_V3 if v3 else "") + "\n\n"
     pedido += ("SITUAÇÃO: fala espontânea." if situacao == "espontanea"
                else f'SITUAÇÃO: conversa. Jogador: "{_jogador_em_uma_linha(fala_jogador)}"')
     msgs.append({"role": "user", "content": pedido})

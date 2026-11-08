@@ -9,6 +9,7 @@
 import { useEffect, useRef, useSyncExternalStore, type PointerEvent as ReactPointerEvent, type RefObject } from "react";
 import { jogoAtual, mudarMotor } from "../../jogo.ts";
 import { CENA } from "./cenaEstado.ts";
+import { lugarAberto } from "../../viagem.ts";
 import { LIMIAR_ARRASTO, avisarNoDock } from "./PorRacao.tsx";
 import { dentroDoMapa, lugaresNomeados, naRegiao } from "./vistaMundo.ts";
 
@@ -75,7 +76,7 @@ export function ArrastoBola({ alvo }: { alvo: RefObject<HTMLElement | null> }) {
     const solta = () => { mao = null; CENA.bolaNaMao = false; mudar(() => { ESTADO.arrasto = null; }); };
     const baixo = (e: PointerEvent) => {
       const { motor: m, nascendo } = jogoAtual();
-      if (e.button !== 0 || !m.mundo || nascendo > 0 || m.morte || !naBola(e.clientX, e.clientY)) return;
+      if (e.button !== 0 || lugarAberto() || !m.mundo || nascendo > 0 || m.morte || !naBola(e.clientX, e.clientY)) return;
       mao = { id: e.pointerId, x: e.clientX, y: e.clientY };
       el.setPointerCapture(e.pointerId);
       e.preventDefault();

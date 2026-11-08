@@ -19,6 +19,8 @@ async function semear(page: Page): Promise<void> {
     localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", t);
     localStorage.setItem(chave + "-descarte", "6"); localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
     localStorage.setItem(chave, s);
+    /* as Regras de combate abrem no Champion (Nv 6, docs/PLANO_V3_PROGRESSAO_TUTORIAL.md, P-4); este Rookie as ve porque a chave do nivel ja diz que o marco 6 foi feito */
+    localStorage.setItem(chave + "-nivel", JSON.stringify({ marcos: [1, 2, 3, 4, 5, 6], cartoes: [1, 2, 3, 4, 5, 6] }));
   }, [CHAVE, JSON.stringify(SAVE), JSON.stringify(TAMER)] as const);
 }
 const semRolagem = (page: Page) => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth && document.body.scrollWidth <= innerWidth);
@@ -32,6 +34,9 @@ for (const pele of ["vidro", "xcom"]) for (const [nome, w, h] of TELAS) {
     await semear(page);
     await page.goto(`${APP}?pele=${pele}#/lutar/arena`);
     const painel = page.getByTestId("painel-aprendizado");
+    /* L3: as regras e o que o pet aprendeu ficam no bloco "Regras", fechado ao abrir a Arena */
+    const abrirRegras = async () => { if (!(await painel.isVisible())) await page.locator(".ar2-regras > summary").click(); };
+    await abrirRegras();
     await painel.scrollIntoViewIfNeeded();
     await expect(painel).toBeVisible();
     await expect(page.getByTestId("ap-vazio")).toBeVisible();
@@ -47,6 +52,7 @@ for (const pele of ["vidro", "xcom"]) for (const [nome, w, h] of TELAS) {
     await expect(page.locator("dialog.modal-res[open]")).toBeVisible({ timeout: 120_000 });
     await page.keyboard.press("Escape");
     await expect(page).toHaveURL(/#\/lutar\/arena$/);
+    await abrirRegras();
     await painel.scrollIntoViewIfNeeded();
     await expect(page.getByTestId("ap-vazio")).toHaveCount(0);
     await expect(painel).toContainText("Em 1 luta");
