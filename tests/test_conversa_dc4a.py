@@ -480,7 +480,10 @@ def test_pagina_recusa_o_que_nao_e_da_propria_pagina(pagina):
     assert _pedir(porta, "POST", "/api/resposta", bom | {"resposta": {"resposta": "<script>"}}, ok)[0] == 400
     assert _pedir(porta, "POST", "/api/resposta", bom | {"id": "../chave"}, ok)[0] == 400
     assert _pedir(porta, "POST", "/api/resposta", bom | {"tarefa": "chave"}, ok)[0] == 400
-    assert _pedir(porta, "POST", "/api/resposta", {"x": "y" * 3000}, ok)[0] == 413
+    try:                                    # o corpo grande: 413 antes de ler, e o Windows pode abortar o envio do cliente (os dois recusam)
+        assert _pedir(porta, "POST", "/api/resposta", {"x": "y" * 3000}, ok)[0] == 413
+    except (ConnectionAbortedError, ConnectionResetError, BrokenPipeError):
+        pass
     assert mc.respostas(pasta, "legibilidade") == {}
 
 
@@ -556,7 +559,7 @@ def test_estimativa_medida_pela_calibracao_cabe_no_teto():
     assert d is not None and set(d["bracos"]) == {"H", "S"}
     assert all(b["chamadas_com_usage"] == b["chamadas"] == 81 for b in d["bracos"].values())
     assert d["folga_pela_maior_usd"] > 0 and d["validacao_pela_maior_usd"] >= d["validacao_pela_media_usd"]
-    gravado = json.loads((RAIZ / "artifacts_custo_llm" / "estimativa.json").read_text(encoding="utf-8"))["voz_da_rede_dc4_medido"]
+    gravado = json.loads((ec.CALIBRACAO_DC4 / "custo_medido.json").read_text(encoding="utf-8"))
     assert gravado == json.loads(json.dumps(d))
     meta = json.loads((RAIZ / dc4.META_CALIBRACAO).read_text(encoding="utf-8"))
     assert meta["falas"] == 243 and meta["parada_no_teto"] is None and d["gasto_acumulado_usd"] == meta["gasto"]["fim_usd"]

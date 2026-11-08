@@ -161,12 +161,16 @@ def main() -> int:
                                for m in MODELOS_LIVRE},
              "teto_usd_proposto": LIMITE_USD_LIVRE_PADRAO, "status": "PROPOSTO, sem medida: tokens do plano, secao 7"}
     livre["usd_total_dois_bracos"] = round(sum(livre["usd_por_braco"].values()), 4)
-    res = {"fala_livre_comparacao_d5": livre, "voz_da_rede_dc4": custo_dc4(), "voz_da_rede_dc4_medido": custo_dc4_medido(), "tokens_por_chamada": {"entrada": ent, "saida": sai},
+    res = {"fala_livre_comparacao_d5": livre, "voz_da_rede_dc4": custo_dc4(), "tokens_por_chamada": {"entrada": ent, "saida": sai},
            "usd_por_chamada": {m: round(v, 6) for m, v in custo_chamada.items()},
            "cenarios": CENARIOS, "custo_api_usd_mes_por_usuarios_simultaneos": api,
            "latencia_local_medida": lat, "capacidade_uma_gpu_usuarios_simultaneos": capacidade,
            "pesquisa_vidas_da_confirmatoria": pesquisa,
            "premissas": {"horas_mes": HORAS_MES, "usuarios_simultaneos": "media 24h; custo escala com horas-usuario"}}
+    medido = custo_dc4_medido()                     # DC4b: num artefato proprio da calibracao (posterior ao plano da DC4), fora da estimativa
+    if medido is not None:
+        (CALIBRACAO_DC4 / "custo_medido.json").write_text(json.dumps(medido, indent=2, ensure_ascii=False) + chr(10), encoding="utf-8")
+        print(json.dumps({"voz_da_rede_dc4_medido": medido}, indent=1))
     SAIDA.mkdir(exist_ok=True)
     (SAIDA / "estimativa.json").write_text(json.dumps(res, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     ln = [f"tokens/chamada: {ent} entrada, {sai} saida (pior caso)", "",
@@ -176,7 +180,7 @@ def main() -> int:
         for m in api[c]:
             ln.append(f"| {c} | {m} | " + " | ".join(f"{api[c][m][str(n)]:,.0f}" for n in USUARIOS) + " |")
     (SAIDA / "tabela.md").write_text("\n".join(ln) + "\n", encoding="utf-8")
-    print(json.dumps({k: res[k] for k in ("fala_livre_comparacao_d5", "voz_da_rede_dc4", "voz_da_rede_dc4_medido", "tokens_por_chamada", "usd_por_chamada", "latencia_local_medida",
+    print(json.dumps({k: res[k] for k in ("fala_livre_comparacao_d5", "voz_da_rede_dc4", "tokens_por_chamada", "usd_por_chamada", "latencia_local_medida",
                                           "capacidade_uma_gpu_usuarios_simultaneos", "pesquisa_vidas_da_confirmatoria")},
                      indent=1))
     print("\n".join(ln))

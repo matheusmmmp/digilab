@@ -296,7 +296,7 @@ A validação parte desse piso, mesmo noutra worktree (`piso_do_gasto`, D-CP-DC4
 - `experiments/run_v3_conversa_dc4.py`: `f019eedaeb6bbd016bc71694d9b63f66e4be0c9f2e0778cc7662b0644fb98075`
 - `experiments/entradas_dc4.py`: `ba9414fd3cefbf9da412d03d03b09eacaa3c7964d128679bc004db624622d64b`
 - `experiments/montador_voz_rede.py`: `5fd33d8899d1877cfdadabe62f1a3819da6f1a948043317beef7363c5639fc74`
-- `experiments/marcacao_dc4.py`: `c0fec785c8402b495ce0aae37f1aa48d0efdb165e0df8c497c0a22837b07900f`
+- `experiments/marcacao_dc4.py`: `6eef3bb3d3bd8ffa502fef613bad8fa4e3b26d57ff7aa74be01c5898c5813e22`
 - `experiments/run_v3_conversa_dc3.py`: `fe661aa83219a6bbdc8dac5b313ea0873746cf7d34b1a0434b0c7f121271d53c`
 - `experiments/configs/v3_conversa_dc4/calibracao.json`: `039f17bcc0c1586f62615c4484719666772f2b963d93ba5b4b9f6cca78028065`
 - `experiments/configs/v3_conversa_dc4/validacao.json`: `3f613c4a2ca264e70206dde3d53d7982d7ede8684e72d692636119b70407b9d1`

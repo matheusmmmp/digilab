@@ -442,14 +442,14 @@ mudaram. Desvios D-CP-DC4a-1 a 12 em `docs/registro/2026-11.md`.
 ## DC4b — a calibração da voz da rede (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc4b`, 2026-11-08)
 
 A linha DC4b do [plano da DC4](PLANO_ANALISE_V3_CONVERSA_DC4.md) (seção 10): a calibração com os três modelos de verdade, na base 20262200.
-A validação não rodou, e os roteiros dela não foram abertos. A voz-v3 não mudou. Desvios D-CP-DC4b-1 a 8 em `docs/registro/2026-11.md`.
+A validação não rodou, e os roteiros dela não foram abertos. A voz-v3 não mudou. Desvios D-CP-DC4b-1 a 10 em `docs/registro/2026-11.md`.
 
 - **A rodada:** `artifacts_v3_conversa_dc4/calibracao/`, com 243 falas (81 por braço), o material da marcação, os pares e o `meta.json`.
   - Os modelos devolvidos são os pedidos, sem sufixo de data, e não houve parada no teto.
   - A primeira tentativa parou quando o Ollama caiu e fica em `calibracao_tentativa1/` (D-CP-DC4b-2).
 - **O formato da API** (o "não verificado" da M5): aceito pelos dois modelos Claude, sem recusa nem corte.
 - **O gasto real:** US$ 0,588 nesta rodada (Haiku US$ 0,027, Sonnet US$ 0,560), US$ 0,606 acumulados com a sonda e a primeira tentativa.
-- **A estimativa pelo `usage` real** (`artifacts_custo_llm/estimativa.json`, bloco `voz_da_rede_dc4_medido`):
+- **A estimativa pelo `usage` real** (`artifacts_v3_conversa_dc4/calibracao/custo_medido.json`):
   - os pedidos têm cerca de 3 000 tokens de entrada em média (o máximo, cerca de 4 000) e 70 a 90 de saída;
   - a validação projeta US$ 1,18 pela média e US$ 1,55 pela chamada mais cara;
   - a folga no teto de US$ 3 fica em US$ 1,22 ou US$ 0,84.

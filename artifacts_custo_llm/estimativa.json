@@ -33,41 +33,6 @@
     "teto_usd": 3.0,
     "status": "PROPOSTO: o pedido medido pelo prompt de hoje no pior caso; a saida do plano, sem medida (a DC4b mede pelo usage)"
   },
-  "voz_da_rede_dc4_medido": {
-    "bracos": {
-      "H": {
-        "modelo": "claude-haiku-5-5",
-        "chamadas_com_usage": 81,
-        "chamadas": 81,
-        "entrada_media": 3004.8,
-        "entrada_max": 3888,
-        "saida_media": 69.3,
-        "saida_max": 115,
-        "usd_calibracao": 0.027147,
-        "usd_validacao_pela_media": 0.0543,
-        "usd_validacao_pela_maior": 0.071
-      },
-      "S": {
-        "modelo": "claude-sonnet-5-5",
-        "chamadas_com_usage": 81,
-        "chamadas": 81,
-        "entrada_media": 3014.5,
-        "entrada_max": 4004,
-        "saida_media": 89.0,
-        "saida_max": 135,
-        "usd_calibracao": 0.560422,
-        "usd_validacao_pela_media": 1.1208,
-        "usd_validacao_pela_maior": 1.4836
-      }
-    },
-    "gasto_acumulado_usd": 0.605999,
-    "teto_usd": 3.0,
-    "validacao_pela_media_usd": 1.1751,
-    "validacao_pela_maior_usd": 1.5546,
-    "folga_pela_media_usd": 1.2189,
-    "folga_pela_maior_usd": 0.8394,
-    "fonte": "artifacts_v3_conversa_dc4/calibracao/falas.jsonl (usage) e meta.json (gasto acumulado)"
-  },
   "tokens_por_chamada": {
     "entrada": 941,
     "saida": 300
