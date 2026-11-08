@@ -2554,6 +2554,128 @@ def fala_nas_decisoes(decisoes: Sequence[tuple[int, str, str | None, Mapping[str
     return out
 
 
+# ------------------------------------------------------------ V3, INDIVIDUALIDADE (o I2a)
+# docs/PLANO_ANALISE_V3_INDIVIDUALIDADE.md, secoes 4.1 a 4.6 (APROVADO, 2026-11-07). Os tracos de uma janela da bateria
+# (experiments/sondas_individualidade.py), o ICC(1) com grupos desiguais, o eta2, o Spearman e a reta. SEM FONTE como escolha do plano;
+# o formalismo da repetibilidade e da norma de reacao e o de Dingemanse et al. (2010), 10.1016/j.tree.2009.07.013.
+
+TRACOS_INDIVIDUALIDADE = ("apego", "tedio", "neofilia", "ousadia", "brincar", "susto")
+JANELAS_INDIVIDUALIDADE = ("nula", "comida_nova", "longe", "bola", "susto")
+
+
+def _fracao_acordada(janela: Mapping, acao: str) -> float | None:
+    """a fracao da acao entre as decisoes acordadas da janela (n menos `dormir`); None se a janela dormiu inteira"""
+    acordadas = janela["n"] - janela["contagem"].get("dormir", 0)
+    if acordadas < 0 or janela["n"] < 1:
+        raise ValueError(f"janela incoerente: n {janela['n']}, contagem {janela['contagem']}")
+    return None if acordadas == 0 else janela["contagem"].get(acao, 0) / acordadas
+
+
+def tracos_individualidade(janelas: Mapping[str, Mapping]) -> dict[str, float | None]:
+    """Secao 4.1: os seis tracos de uma replica de um dia, das cinco janelas da mesma replica. None = janela invalida (dormiu inteira).
+    T-NEOFILIA e T-OUSADIA: 1.0 se comeu a comida posta (a latencia nao e None), 0.0 se nao; T-BRINCAR e T-SUSTO: a fracao na sonda menos
+    a da `nula`. Falha alto sem as cinco janelas exatas."""
+    if set(janelas) != set(JANELAS_INDIVIDUALIDADE):
+        raise ValueError(f"as janelas precisam ser {JANELAS_INDIVIDUALIDADE}, vieram {sorted(janelas)}")
+    nula = janelas["nula"]
+
+    def comeu(j: Mapping) -> float | None:
+        return None if _fracao_acordada(j, "comer") is None else (0.0 if j["latencia"] is None else 1.0)
+
+    def contra_nula(j: Mapping, acao: str) -> float | None:
+        a, b = _fracao_acordada(j, acao), _fracao_acordada(nula, acao)
+        return None if a is None or b is None else a - b
+
+    return {"apego": _fracao_acordada(nula, "chamar_atencao"), "tedio": _fracao_acordada(nula, "explorar"),
+            "neofilia": comeu(janelas["comida_nova"]), "ousadia": comeu(janelas["longe"]),
+            "brincar": contra_nula(janelas["bola"], "brincar"), "susto": contra_nula(janelas["susto"], "emburrar")}
+
+
+def icc1_grupos(grupos: Sequence[Sequence[float]]) -> dict:
+    """Secao 4.2: o ICC(1) de uma ANOVA de um fator com grupos desiguais. QM_entre e QM_dentro; n0 = (N - soma n_i^2 / N) / (k - 1);
+    s2_entre = max(0, (QM_entre - QM_dentro) / n0) (o componente negativo truncado em 0), s2_dentro = QM_dentro, R = s2_entre / (s2_entre +
+    s2_dentro). Com grupos iguais e sem truncar, e o icc_um_fator. Falha alto com menos de 2 grupos, grupo vazio, N - k < 1 ou sem variancia."""
+    if any(len(g) == 0 for g in grupos):
+        raise ValueError("icc1_grupos: nenhum grupo vazio")
+    return icc1_estatisticas([estatisticas_grupo(g) for g in grupos])
+
+
+def estatisticas_grupo(valores: Sequence[float]) -> tuple[int, float, float]:
+    """(n, media, soma dos quadrados dos desvios) de um grupo: o bastante para o ICC(1) e para reamostrar grupos inteiros no bootstrap"""
+    n = len(valores)
+    if n == 0:
+        raise ValueError("estatisticas_grupo: grupo vazio")
+    m = sum(valores) / n
+    return n, m, sum((v - m) ** 2 for v in valores)
+
+
+def icc1_estatisticas(estat: Sequence[tuple[int, float, float]]) -> dict:
+    """o icc1_grupos a partir das estatisticas de cada grupo (estatisticas_grupo); a mesma conta, uma vez so"""
+    k = len(estat)
+    if k < 2:
+        raise ValueError("icc1_grupos: pelo menos 2 grupos")
+    ns = [e[0] for e in estat]
+    n = sum(ns)
+    if n - k < 1:
+        raise ValueError("icc1_grupos: sem graus de liberdade dentro dos grupos (N - k < 1)")
+    gm = sum(e[0] * e[1] for e in estat) / n
+    qm_entre = sum(e[0] * (e[1] - gm) ** 2 for e in estat) / (k - 1)
+    qm_dentro = sum(e[2] for e in estat) / (n - k)
+    n0 = (n - sum(ni * ni for ni in ns) / n) / (k - 1)
+    s2_entre = max(0.0, (qm_entre - qm_dentro) / n0)
+    if s2_entre + qm_dentro <= 0.0:
+        raise ValueError("icc1_grupos indefinido: sem variancia")
+    return {"r": s2_entre / (s2_entre + qm_dentro), "s2_entre": s2_entre, "s2_dentro": qm_dentro, "n0": n0, "k": k, "n": n,
+            "truncado": qm_entre < qm_dentro}
+
+
+def eta2_grupos(grupos: Sequence[Sequence[float]]) -> float:
+    """Secao 4.3: a soma dos quadrados entre os grupos sobre a total. Falha alto com menos de 2 grupos, grupo vazio ou sem variancia."""
+    if len(grupos) < 2 or any(len(g) == 0 for g in grupos):
+        raise ValueError("eta2_grupos: pelo menos 2 grupos, nenhum vazio")
+    todos = [v for g in grupos for v in g]
+    gm = sum(todos) / len(todos)
+    sq_total = sum((v - gm) ** 2 for v in todos)
+    if sq_total <= 0.0:
+        raise ValueError("eta2_grupos indefinido: sem variancia")
+    return sum(len(g) * (sum(g) / len(g) - gm) ** 2 for g in grupos) / sq_total
+
+
+def _postos(xs: Sequence[float]) -> list[float]:
+    """os postos 1..n, com a media nos empates"""
+    ordem = sorted(range(len(xs)), key=lambda i: xs[i])
+    postos = [0.0] * len(xs)
+    i = 0
+    while i < len(ordem):
+        j = i
+        while j + 1 < len(ordem) and xs[ordem[j + 1]] == xs[ordem[i]]:
+            j += 1
+        for t in range(i, j + 1):
+            postos[ordem[t]] = (i + j) / 2.0 + 1.0
+        i = j + 1
+    return postos
+
+
+def spearman(xs: Sequence[float], ys: Sequence[float]) -> float:
+    """Secoes 4.4 e 4.5: a correlacao de Pearson dos postos (media nos empates). Falha alto com menos de 3 pares ou um lado constante."""
+    if len(xs) != len(ys) or len(xs) < 3:
+        raise ValueError("spearman: pelo menos 3 pares, listas do mesmo tamanho")
+    rx, ry = _postos(xs), _postos(ys)
+    mx, my = sum(rx) / len(rx), sum(ry) / len(ry)
+    sxx = sum((a - mx) ** 2 for a in rx)
+    syy = sum((b - my) ** 2 for b in ry)
+    if sxx == 0.0 or syy == 0.0:
+        raise ValueError("spearman indefinido: um dos lados e constante")
+    return sum((a - mx) * (b - my) for a, b in zip(rx, ry)) / math.sqrt(sxx * syy)
+
+
+def reta_mmq(xs: Sequence[float], ys: Sequence[float]) -> tuple[float, float]:
+    """Secao 4.5: (intercepto, inclinacao) de minimos quadrados de y em x, pela inclinacao_mmq"""
+    b = inclinacao_mmq(xs, ys)
+    return sum(ys) / len(ys) - b * sum(xs) / len(xs), b
+
+
+# ======================================================================================================================================
 # PET_VIVO, etapa 0 (docs/PLANO_ANALISE_V3_PET_VIVO.md, secoes 4 e 7; APROVADO em 2026-11-08, repassado pelo Gerente da V3): a auditoria da
 # escolha (A-1 a A-4) e a medida de "age pelo estado" (a SE-C). Uma distribuicao de comportamentos e um vetor de pesos inteiros, um por
 # comportamento na ordem fixa: P_b = W_b / T, com T = soma(W). O reflexo do sono e o "nada a fazer" sao o vetor de um so peso (o dormir, o
@@ -2717,126 +2839,3 @@ def quantis(valores: Sequence[float], qs: Sequence[float]) -> list[float]:
     if not n:
         raise ValueError("PET_VIVO: quantis de uma lista vazia")
     return [xs[min(n, max(1, math.ceil(q * n))) - 1] for q in qs]
-=======
-# ------------------------------------------------------------ V3, INDIVIDUALIDADE (o I2a)
-# docs/PLANO_ANALISE_V3_INDIVIDUALIDADE.md, secoes 4.1 a 4.6 (APROVADO, 2026-11-07). Os tracos de uma janela da bateria
-# (experiments/sondas_individualidade.py), o ICC(1) com grupos desiguais, o eta2, o Spearman e a reta. SEM FONTE como escolha do plano;
-# o formalismo da repetibilidade e da norma de reacao e o de Dingemanse et al. (2010), 10.1016/j.tree.2009.07.013.
-
-TRACOS_INDIVIDUALIDADE = ("apego", "tedio", "neofilia", "ousadia", "brincar", "susto")
-JANELAS_INDIVIDUALIDADE = ("nula", "comida_nova", "longe", "bola", "susto")
-
-
-def _fracao_acordada(janela: Mapping, acao: str) -> float | None:
-    """a fracao da acao entre as decisoes acordadas da janela (n menos `dormir`); None se a janela dormiu inteira"""
-    acordadas = janela["n"] - janela["contagem"].get("dormir", 0)
-    if acordadas < 0 or janela["n"] < 1:
-        raise ValueError(f"janela incoerente: n {janela['n']}, contagem {janela['contagem']}")
-    return None if acordadas == 0 else janela["contagem"].get(acao, 0) / acordadas
-
-
-def tracos_individualidade(janelas: Mapping[str, Mapping]) -> dict[str, float | None]:
-    """Secao 4.1: os seis tracos de uma replica de um dia, das cinco janelas da mesma replica. None = janela invalida (dormiu inteira).
-    T-NEOFILIA e T-OUSADIA: 1.0 se comeu a comida posta (a latencia nao e None), 0.0 se nao; T-BRINCAR e T-SUSTO: a fracao na sonda menos
-    a da `nula`. Falha alto sem as cinco janelas exatas."""
-    if set(janelas) != set(JANELAS_INDIVIDUALIDADE):
-        raise ValueError(f"as janelas precisam ser {JANELAS_INDIVIDUALIDADE}, vieram {sorted(janelas)}")
-    nula = janelas["nula"]
-
-    def comeu(j: Mapping) -> float | None:
-        return None if _fracao_acordada(j, "comer") is None else (0.0 if j["latencia"] is None else 1.0)
-
-    def contra_nula(j: Mapping, acao: str) -> float | None:
-        a, b = _fracao_acordada(j, acao), _fracao_acordada(nula, acao)
-        return None if a is None or b is None else a - b
-
-    return {"apego": _fracao_acordada(nula, "chamar_atencao"), "tedio": _fracao_acordada(nula, "explorar"),
-            "neofilia": comeu(janelas["comida_nova"]), "ousadia": comeu(janelas["longe"]),
-            "brincar": contra_nula(janelas["bola"], "brincar"), "susto": contra_nula(janelas["susto"], "emburrar")}
-
-
-def icc1_grupos(grupos: Sequence[Sequence[float]]) -> dict:
-    """Secao 4.2: o ICC(1) de uma ANOVA de um fator com grupos desiguais. QM_entre e QM_dentro; n0 = (N - soma n_i^2 / N) / (k - 1);
-    s2_entre = max(0, (QM_entre - QM_dentro) / n0) (o componente negativo truncado em 0), s2_dentro = QM_dentro, R = s2_entre / (s2_entre +
-    s2_dentro). Com grupos iguais e sem truncar, e o icc_um_fator. Falha alto com menos de 2 grupos, grupo vazio, N - k < 1 ou sem variancia."""
-    if any(len(g) == 0 for g in grupos):
-        raise ValueError("icc1_grupos: nenhum grupo vazio")
-    return icc1_estatisticas([estatisticas_grupo(g) for g in grupos])
-
-
-def estatisticas_grupo(valores: Sequence[float]) -> tuple[int, float, float]:
-    """(n, media, soma dos quadrados dos desvios) de um grupo: o bastante para o ICC(1) e para reamostrar grupos inteiros no bootstrap"""
-    n = len(valores)
-    if n == 0:
-        raise ValueError("estatisticas_grupo: grupo vazio")
-    m = sum(valores) / n
-    return n, m, sum((v - m) ** 2 for v in valores)
-
-
-def icc1_estatisticas(estat: Sequence[tuple[int, float, float]]) -> dict:
-    """o icc1_grupos a partir das estatisticas de cada grupo (estatisticas_grupo); a mesma conta, uma vez so"""
-    k = len(estat)
-    if k < 2:
-        raise ValueError("icc1_grupos: pelo menos 2 grupos")
-    ns = [e[0] for e in estat]
-    n = sum(ns)
-    if n - k < 1:
-        raise ValueError("icc1_grupos: sem graus de liberdade dentro dos grupos (N - k < 1)")
-    gm = sum(e[0] * e[1] for e in estat) / n
-    qm_entre = sum(e[0] * (e[1] - gm) ** 2 for e in estat) / (k - 1)
-    qm_dentro = sum(e[2] for e in estat) / (n - k)
-    n0 = (n - sum(ni * ni for ni in ns) / n) / (k - 1)
-    s2_entre = max(0.0, (qm_entre - qm_dentro) / n0)
-    if s2_entre + qm_dentro <= 0.0:
-        raise ValueError("icc1_grupos indefinido: sem variancia")
-    return {"r": s2_entre / (s2_entre + qm_dentro), "s2_entre": s2_entre, "s2_dentro": qm_dentro, "n0": n0, "k": k, "n": n,
-            "truncado": qm_entre < qm_dentro}
-
-
-def eta2_grupos(grupos: Sequence[Sequence[float]]) -> float:
-    """Secao 4.3: a soma dos quadrados entre os grupos sobre a total. Falha alto com menos de 2 grupos, grupo vazio ou sem variancia."""
-    if len(grupos) < 2 or any(len(g) == 0 for g in grupos):
-        raise ValueError("eta2_grupos: pelo menos 2 grupos, nenhum vazio")
-    todos = [v for g in grupos for v in g]
-    gm = sum(todos) / len(todos)
-    sq_total = sum((v - gm) ** 2 for v in todos)
-    if sq_total <= 0.0:
-        raise ValueError("eta2_grupos indefinido: sem variancia")
-    return sum(len(g) * (sum(g) / len(g) - gm) ** 2 for g in grupos) / sq_total
-
-
-def _postos(xs: Sequence[float]) -> list[float]:
-    """os postos 1..n, com a media nos empates"""
-    ordem = sorted(range(len(xs)), key=lambda i: xs[i])
-    postos = [0.0] * len(xs)
-    i = 0
-    while i < len(ordem):
-        j = i
-        while j + 1 < len(ordem) and xs[ordem[j + 1]] == xs[ordem[i]]:
-            j += 1
-        for t in range(i, j + 1):
-            postos[ordem[t]] = (i + j) / 2.0 + 1.0
-        i = j + 1
-    return postos
-
-
-def spearman(xs: Sequence[float], ys: Sequence[float]) -> float:
-    """Secoes 4.4 e 4.5: a correlacao de Pearson dos postos (media nos empates). Falha alto com menos de 3 pares ou um lado constante."""
-    if len(xs) != len(ys) or len(xs) < 3:
-        raise ValueError("spearman: pelo menos 3 pares, listas do mesmo tamanho")
-    rx, ry = _postos(xs), _postos(ys)
-    mx, my = sum(rx) / len(rx), sum(ry) / len(ry)
-    sxx = sum((a - mx) ** 2 for a in rx)
-    syy = sum((b - my) ** 2 for b in ry)
-    if sxx == 0.0 or syy == 0.0:
-        raise ValueError("spearman indefinido: um dos lados e constante")
-    return sum((a - mx) * (b - my) for a, b in zip(rx, ry)) / math.sqrt(sxx * syy)
-
-
-def reta_mmq(xs: Sequence[float], ys: Sequence[float]) -> tuple[float, float]:
-    """Secao 4.5: (intercepto, inclinacao) de minimos quadrados de y em x, pela inclinacao_mmq"""
-    b = inclinacao_mmq(xs, ys)
-    return sum(ys) / len(ys) - b * sum(xs) / len(xs), b
-
-
-# ===============================================================================================================================
