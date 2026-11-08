@@ -558,3 +558,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-07 — LUTA_EFEITOS, E5 o nocaute e a câmera (worker, Claude Code, Opus 5.5, branch `v3-luta-efeitos-e5`)](registro/2026-11.md)
 - [2026-11-07 — CONVERSA_PET, DC3d, o porte da fala com conteúdo ao jogo (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc3d-porte`)](registro/2026-11.md)
 - [2026-11-07 — LAB_CENARIOS, os Cenários do Laboratório na versão de hoje (worker, Claude Code, Opus 5.5, branch `v3-lab-cenarios`)](registro/2026-11.md)
+- [2026-11-07 — LUTA_EQUILIBRIO_R3, o plano da terceira rodada de equilíbrio do combate (worker, Claude Code, Opus 5.5, branch `v3-luta-equilibrio-r3`)](registro/2026-11.md)
