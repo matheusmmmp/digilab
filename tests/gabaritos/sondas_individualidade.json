@@ -1,0 +1,12 @@
+{
+  "vida": [
+    "REL+F",
+    "atencioso",
+    "comedouro",
+    101,
+    2,
+    16
+  ],
+  "sha256": "8e7222f6e380080c5fb01f3ca1d3a10ae17b8433aa453892e0a65953d122761e",
+  "fonte": "experiments/sondas_individualidade.py, I1 (docs/TAREFA_V3_INDIVIDUALIDADE.md)"
+}
