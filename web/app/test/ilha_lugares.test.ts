@@ -59,13 +59,18 @@ describe("onde ficam os lugares (LG-G1 a LG-G4)", () => {
   });
 });
 
-/** os lugares retrabalhados com a textura pintada da Meshy (sem achatar; docs/TAREFA_V3_LUGARES_3D.md, secao 14). Quem retrabalhar outro lugar
+/** os lugares retrabalhados com a textura pintada da Meshy (sem achatar; docs/TAREFA_V3_LUGARES_3D.md, secoes 14 a 16). Quem retrabalhar outro lugar
     junta o nome aqui */
-const TEXTURA_PINTADA: readonly NomeLugar[] = ["portao", "barraca"];
+const TEXTURA_PINTADA: readonly NomeLugar[] = ["portao", "barraca", "cais"];
 
 describe("a paleta da Ilha (LG-G5)", () => {
   const DOCS = join(__dirname, "..", "..", "..", "docs", "lugares3d");
-  for (const n of (Object.keys(LUGARES_MODELOS) as NomeLugar[]).filter(l => !TEXTURA_PINTADA.includes(l))) test(n, () => {
+  const chapados = (Object.keys(LUGARES_MODELOS) as NomeLugar[]).filter(l => !TEXTURA_PINTADA.includes(l));
+  /* com o cais (secao 16), os tres lugares sairam para a textura pintada: o LG-G5 fica sem lugar, e o teste diz isso em vez de sumir */
+  if (chapados.length === 0) test("nenhum lugar de cor chapada: todos no LG-G5b", () => {
+    expect([...TEXTURA_PINTADA].sort()).toEqual((Object.keys(LUGARES_MODELOS) as NomeLugar[]).sort());
+  });
+  for (const n of chapados) test(n, () => {
     const p = JSON.parse(readFileSync(join(DOCS, n, "paleta.json"), "utf8")) as { paleta: number[][]; paleta_ilha: number[][] };
     expect(p.paleta_ilha.length).toBe(p.paleta.length);
     /* o PNG de paleta publicado: as cores do PLTE estao todas na paleta da Ilha */
