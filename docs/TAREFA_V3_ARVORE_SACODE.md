@@ -97,6 +97,12 @@ O plano, com as recomendações das perguntas da seção 8 já aplicadas. Onde a
 - **Como o pet come:** nada novo. O cérebro escolhe `comer` (ou acha no `explorar`), anda até a fruta e come: +0,15 de fome
   (`nutricao_fruta`) e o efeito de humor da fruta. No produto, o efeito de humor fica 0 para as três (`efeitoFrutas` padrão) e não há
   paladar: as três frutas só diferem na cor (AS-6). O consumo vai ao `consumos_mundo` como hoje.
+- **O cérebro A e a fruta do mundo (AS-11):** o A v11 com o corpo falha alto ao comer uma fruta do mundo, no Python
+  (`digilab/policies/lobos.py`, `fruta_comida` e `consequencia_corpo`) e no TS (`motor/lobos.ts`, "a fruta (E2) não existe no cérebro A
+  em TS"); é o achado do MV-10 de 2026-10-24. Medido em 2026-11-08 no `CMU_MVP` com J1, J2 e J3, só com a queda natural, 3 dias, sementes
+  101 a 505: 3 de 10 vidas quebram. A saída é uma subchave do A no produto, **a fruta do mundo como comida**: com ela, a fruta comida no
+  mundo entra no A como a ração, sem a E2 do humor e sem a sub-decisão de fruta. Desligada, o A sai byte a byte. Entra no Python na S1 e
+  no TS na S2.
 
 ### 3.4 Como o jogo passa a ter árvores com fruta (AS-7)
 
@@ -196,6 +202,8 @@ Das etapas seguintes (para quem as fizer):
 
 ## 8. Precisa do Matheus
 
+**AS-11 APROVADA (Matheus, 2026-11-08), a opção 1:** "Fruta como ração". Repassada pela mesma sessão.
+
 **AS-1 a AS-10 APROVADAS (Matheus, 2026-11-08), todas pela recomendação:** "segue com a recomendação ali". A frase chegou repassada pela
 sessão da frente UX_TELA_PET (a coordenadora desta tarefa). O que ficou decidido: sacudir não é cuidado; cai uma fruta por sacudida; o
 limite é pelo galho (3 frutas, uma reposta a cada 4 h, até 9 por árvore por dia); a queda natural continua; a fruta cai a até 2 células
@@ -270,3 +278,12 @@ Cada pergunta traz a recomendação (que o plano da seção 3 já usa), a altern
 - **Alternativa:** o toque na árvore já sacode, sem cartão; o número fica nas frutas da copa.
 - **Custo de errar:** o toque direto é mais rápido, mas sacode sem querer quando o dono só queria ver. Sem a prancha antes, a S3 pode
   precisar de uma segunda rodada de vista.
+
+**AS-11 (APROVADA, opção 1). O cérebro A quebra ao comer uma fruta do mundo. O que fazer?** (achada em 2026-11-08, no começo da S1)
+- **Opção 1 (a recomendada, aprovada):** uma subchave do A no produto, "a fruta do mundo como comida": a fruta entra no A como a ração,
+  sem a E2 do humor e sem a sub-decisão. Desligada, o A sai byte a byte. Python e TS juntos (S1 e S2).
+- **Opção 2:** portar a E2 (o `fruta_comida` e o sinal do humor) para o A do TS e ligar as chaves do mundo do A.
+- **Opção 3:** só os pets com o modular têm árvores.
+- **Opção 4:** parar a frente.
+- **Custo de errar:** a opção 1 mexe no código do A (a linha de base), mas atrás de uma chave, e para o A as frutas ficam iguais, o que já
+  é a AS-6. A opção 2 muda o A do jogo e custa mais. A 3 deixa o A trocável sem a ilha com frutas.
