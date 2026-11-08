@@ -1,7 +1,7 @@
 # TAREFA V3 — LUTA_POC (2026-11-08)
 
 Coordenador: o Gerente de sprites e luta (Claude Code, Opus 5.5). Worker da LP0: o próprio Gerente, a pedido do Matheus ("Sim, faz
-aqui"). Worktree e branch: `v3-luta-poc`. Status: PROPOSTA (a seção 8 fica com o Matheus).
+aqui"). Worktree e branch: `v3-luta-poc`. Status: LP0 entregue; as decisões LP-1 a LP-10 DECIDIDAS (Matheus, 2026-11-08: "Aprovo as 10").
 
 Categoria: arquitetura. Origem: Matheus, 2026-11-08. Ele olhou a luta do jogo e escreveu:
 - "ele não tá como se fosse um sistema de batalha em tempo real, ele parece um por turno camuflado";
@@ -220,7 +220,8 @@ A LP3 pode correr ao lado da LP2 numa worktree própria, porque só toca a tela;
 
 ## 8. Precisa do Matheus
 
-Tudo PROPOSTO. Cada linha tem a recomendação e o custo de errar.
+**DECIDIDAS em 2026-11-08** (Matheus, "Aprovo as 10"): as dez valem como recomendadas abaixo. Os números da POC continuam
+PROPOSTOS até a LP5.
 
 | # | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|
@@ -239,3 +240,4 @@ Tudo PROPOSTO. Cada linha tem a recomendação e o custo de errar.
 
 - Matheus, 2026-11-08: o combate por turnos sai, e a luta é em tempo real, como a da POC; os lugares por cima dela (ligas, fábricas)
   podem sair; os mapas da POC entram. A R3 do equilíbrio fica pausada.
+- Matheus, 2026-11-08, "Aprovo as 10": a LP-1 a LP-10 como recomendadas na seção 8. A LP1 pode começar.
