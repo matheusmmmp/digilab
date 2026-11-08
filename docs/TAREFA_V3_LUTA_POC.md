@@ -269,6 +269,20 @@ PROPOSTOS até a LP5.
 - Matheus, 2026-11-08, "Aprovo as 10": a LP-1 a LP-10 como recomendadas na seção 8. A LP1 pode começar.
 - Matheus, 2026-11-08, depois do "Aprovo as 10": a LP-3 e a LP-5 revistas (os stats do pet e o treino no lugar do "nível de luta";
   a Liga, a Torre, a Fábrica e o Salão reaproveitados). Aprovadas na forma revista ("Aprovo as duas", 2026-11-08).
+- Matheus, 2026-11-08, "Aprovo as 6" (repassado pelo Gerente de sprites e luta): as seis decisões da LP2 (LP2-1 a LP2-6), DECIDIDAS como
+  recomendadas pelo worker:
+  - **LP2-1:** a versão do pet da luta nova é a **v21**; a v20 fica para o #694 (a árvore);
+  - **LP2-2:** o mapeamento dos 6 stats: o pet neutro (10 em cada stat) recebe os STATS_PADRAO da POC (vida 900, ataque 100, defesa 50,
+    movimento 70, ciclo 2 000 ms, recarga 8 s, crítico 10 %, erro de mira 18 px), e cada número escala na razão do stat (vigor, força,
+    guarda, fôlego, mira) ou na razão inversa (recuperação no ciclo e na recarga, mira no erro); a vida leva também o multiplicador do
+    estágio e a condição. O erro de mira passa a ser de cada lutador. PROPOSTO, SEM FONTE, até a LP5;
+  - **LP2-3:** os 10 NPCs da Campanha entram na tabela pelo mesmo gerador, com os números pelo perfilNPC e o mesmo mapeamento;
+  - **LP2-4:** o rival da Arena é uma das 60 formas, do estágio do pet, com o perfil canônico e sem treino; o evento "l" guarda a forma, a
+    semente e o mapa; os bots clássicos saem da v21;
+  - **LP2-5:** das regras das arenas dos líderes, fica só a série da Cidadela (3 lutas sem cura para o pet); o mapa fixo da LP-4 vira a regra
+    do lugar;
+  - **LP2-6:** na v21 saem os gambits (o gp, o aprender e o "g"), as cartas ("k") e os chips de regra; ficam os chips de stat, a confiança,
+    a lesão, o sparring, as contagens e as medalhas.
 
 ## Resultado da LP1 (2026-11-08)
 
@@ -312,3 +326,49 @@ LP2 mede o replay).
 aparecendo, os fluxos, a entrada que falha alto, a fidelidade), `arena_sem_dom.test.mjs` (sem DOM, só importa do motor, a chave
 desligada e ninguém importando o núcleo) e `arena_aritmetica.test.mjs` (a aritmética pela fonte, o seno perto do `Math.sin`, o `fr`
 igual ao `fatorRitmo` com o `EQ` e o gerador com as mesmas constantes).
+
+## Resultado da LP2 (2026-11-08)
+
+Worker: Claude Code (Opus 5.5), worktree e branch `v3-luta-poc-lp2`, a pedido do Gerente de sprites e luta. As decisões LP2-1 a LP2-6 estão na
+seção 9; os desvios e as interpretações, em `docs/registro/2026-11.md`, seção "LUTA_POC, LP2".
+
+**A chave.** Tudo fica atrás da `LUTA_POC_LIGADA` (desligada). Desligada, o jogo de hoje sai byte a byte: os ovos nascem v19, a
+`VERSOES_PET` não muda, e as vidas de hoje com lutas (`test/gabaritos/lp2_vidas_hoje.json`, gravado num commit próprio antes da mudança:
+40 vidas de v13 a v19 e do pet de teste v16, 800 lutas) saem iguais, com o replay também. No app, `?luta_poc=1` liga a chave só naquela
+aba (`src/lutaPoc.ts`).
+
+**A v21 no motor** (`motor/luta_poc.ts`, `Motor.lutarPoc`):
+- **A luta:** a simulação de `motor/arena/`, 1 contra 1, os dois lados pela IA "normal". O evento `"l"` guarda o rival, a semente e o mapa
+  (`{r, s, m}`), e o replay refaz a luta.
+- **Os números do pet:** saem dos 6 stats do `statsDe` (espécie, caráter e forma), mais o treino e os chips de stat (os `pontosDeLuta`) com o
+  peso de combate de sempre, e da condição do cuidado, pelo mapeamento da LP2-2. Os do rival saem do perfil canônico da forma (Arena) ou do
+  perfilNPC no estágio do lugar (Campanha). O golpe, o tempo, o projétil e o atributo vêm da tabela das formas (agora com os 10 NPCs).
+- **Os lugares:**
+  - a Arena: uma forma do estágio do pet, num dos 8 mapas, à escolha;
+  - a Campanha: o NPC, no mapa fixo do lugar (LP-4), com a série de 3 lutas sem cura na Cidadela;
+  - a Liga, a Torre, a Fábrica e o Salão respondem "fechado até a LP2b".
+- **O que conta:** a luta conta como as de sempre (as contagens, a lesão, a confiança, o sparring, a campanha e o histórico).
+- **O que sai:** os gambits (o pet v21 não tem `gp`), as cartas e os chips de regra. Os eventos `"g"` e `"k"` num pet v21 levantam erro.
+- **A ponte com o DigiBrain:** lê o resultado novo. O dano é a vida do começo da luta menos a do fim, a vida máxima é a dos stats, e o
+  resultado é a vitória, a derrota ou o empate. O formato do resumo (rival, resultado, vida perdida em S) não muda.
+- **O núcleo:** ganhou o erro de mira por lutador e a vida inicial de um lado (a série sem cura). A fidelidade da LP1 continua: 3 276 de
+  3 276 lutas com o mesmo resultado, as tabelas iguais.
+
+**O app com a chave ligada:**
+- **O descarte 7:** tira os pets v13 a v19 (o ativo e os guardados) com o aviso da luta nova (LP-6). Os saves descartados ficam para baixar,
+  e o Tamer fica inteiro.
+- **Os ovos:** os ovos novos e o pet de exemplo nascem v21, e a escada de exemplo não é semeada.
+- **O Importar:** abre só a v21.
+- **As telas:** a Arena, a Campanha e a Fronteira dizem que a tela da luta nova ainda vem (a LP3), em vez de abrir as telas do combate de
+  antes. O registro de lutas lê as lutas v21.
+
+**O custo do replay** (`web/app/scripts/medir_replay_lp2.ts` → `web/app/scripts/medicoes/replay_lp2.json`): ~0,3 ms por luta acrescentados
+ao replay (Node 24, i7-14700KF, um processo), com vidas de 166 a 234 lutas. Uma vida assim refaz em ~70 ms, e 1 000 lutas somariam ~0,3 s no
+Node. As vidas que lutam sem parar morrem por lesão (20 num estágio) antes das 1 000 lutas. O celular segue SEM FONTE.
+
+**Os testes novos:**
+- `lp2_vidas_hoje.test.ts`: as vidas de hoje com a chave desligada;
+- `luta_poc_pet.test.ts`: a chave e a versão, o mapeamento, os rivais e os mapas, a luta, o que sai, os lugares fechados, a ponte e o gabarito
+  da vida nova (`test/gabaritos/lp2_vidas_v21.json`, 10 vidas v21, 200 lutas) com o replay bit a bit;
+- `tamer.test.ts`: o descarte 7;
+- `e2e/luta_poc_lp2.spec.ts`: a chave no app.
