@@ -292,7 +292,7 @@ não funciona no atlas picotado da Meshy, e que o voxel funciona. O Matheus esco
   São 2 156 triângulos (teto 2 414): com 64 blocos no comprido seriam 3 408. A textura do realce sai do `textura_cais.py` com `cores 0`,
   que tira a paleta.
 - **A publicação** (`publicar_cais.py ... voxel`): o sampler NEAREST nos dois filtros, para o pixel duro sem mipmap (o mipmap misturaria
-  os blocos vizinhos do atlas). São 174 949 bytes, e o glTF-Validator deu 0 erros e 0 avisos.
+  os blocos vizinhos do atlas). São 174 953 bytes, e o glTF-Validator deu 0 erros e 0 avisos.
 - **A altura** vai de 1,8 para 1,9, para manter os ~7,6 células de comprimento (o voxel é um pouco mais alto que a malha).
 - **Os testes:** o cais fica no LG-G5b, na lista `TEXTURA_PINTADA` de `web/app/test/ilha_lugares.test.ts`, como pediu o Gerente: o atlas
   é um PNG quadrado de 512 px com mais de 64 cores. O sampler NEAREST não tem teste próprio (D-OBJ-CAIS-V4).
