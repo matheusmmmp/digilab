@@ -158,3 +158,39 @@ porque o portão e a barraca já estão abertos (D-LG-18). O nível do Tamer fic
 **Fica para depois:** o nível do Tamer, que traz o cadeado e o "Nv" no lugar trancado, o toque no lugar trancado e o brilho de quando o
 lugar abre.
 
+
+## 16. O cais retrabalhado com a textura pintada (2026-11-08, worker, Claude Code, Opus 5.5, branch `v3-objeto-cais`)
+
+**Por que aqui:** o Matheus achou os objetos 3D feios e "sem textura" e pediu que cada um fosse refeito numa sessão própria, o mais perto
+possível do esboço escolhido (`docs/objetos3d/REFERENCIAS.md`, seção 5). O cais segue o esboço 1: o píer curto de tábuas com os postes
+enrolados em corda e o barquinho de pesca azul e amarelo com a cabine (`docs/objetos3d/cais/esbocos/esboco_1_pier_barco.png`).
+
+**O que entrou:**
+- **A malha nova pela Meshy:** a multivista a partir da tarefa do esboço (6 créditos) e a malha (30), uma tentativa só, no teto de 36. O
+  prompt da multivista tira a água do esboço (o mar é o da ilha). Os arquivos e os JSON das tarefas estão em `docs/objetos3d/cais/vistas/` e
+  `malha/`, e o gasto em `docs/objetos3d/cais/saldo.json` (86 → 80 → 50).
+- **O acabamento** (`docs/objetos3d/cais/acabar_cais.py`, no Blender 4.5 pela linha de comando): a malha como a Meshy deu, com a frente em
+  +z como o cais de antes (o píer ao longo de x, o barco atrás, do lado do mar); a base no chão e o centro no meio; os vértices repetidos
+  soldados e as faces degeneradas tiradas; tudo liso com normais ponderadas e as quinas acima de 60° vivas. São 2 159 triângulos (teto 2 414).
+- **A textura** (`textura_cais.py`, o mesmo caminho do vagão, #710): a pintada da Meshy fica, sem achatar. O azul, o amarelo e o musgo ganham
+  um pouco de saturação, e a madeira vai para o brilho medido no esboço (D-OBJ-CAIS-2). Fica em 512 px, numa paleta de 192 cores com
+  pontilhado, para caber nos 300 KB.
+- **A publicação** (`publicar_cais.py`): a marca de IA no `asset.extras`, os arquivos em `web/app/public/lugares/cais/` (291 797 bytes) e o
+  glTF-Validator (`docs/itens3d/validar.cjs`; 0 erros, 0 avisos em `docs/lugares3d/cais/validacao.json`). A máscara `cais_luz.png` sai
+  (D-OBJ-CAIS-3). A altura em `LUGARES_MODELOS.cais` vai de 2,4 para 1,8 (D-OBJ-CAIS-1). A grade e as posições não mudam.
+- **Os testes:** o cais sai do LG-G5 (a paleta da Ilha) e entra no LG-G5b (a textura pintada: PNG quadrado de 512 a 1 024 px com mais de
+  64 cores), pela lista `TEXTURA_PINTADA` de `web/app/test/ilha_lugares.test.ts`, a mesma do portão (#713). Os gates G1 a G8 de
+  `web/app/test/lugares3d.test.ts` ficam como estavam e passam.
+
+**As capturas** ficam fora do git, em `D:\Trab\digilab\capturas_objetos3d\cais\`: a prancha `prancha_cais_r2.png` (o esboço, as prévias do
+Blender, o antes e o depois no jogo nos mapas Digital e Ilha) e as imagens soltas `antes_*` e `depois_*`. Uma cópia da prancha está em
+`docs/objetos3d/cais/conserto/prancha.jpg`. As capturas no jogo usam a câmera de desenvolvimento (`?cameradev=1`, `__camera.ir("cais")`) num
+Vite próprio; o Digital da `main` ainda não tem o traço de nanquim (#692).
+
+**O revisor** (um subagente que não fez o trabalho) deu dois pareceres:
+1. **APROVA COM RESSALVA:** a madeira escura e lisa demais, a corda sem o bege, a corda de amarração como fita, o píer na areia sem água,
+   o barco grande e a silhueta mais longa e fina que a do esboço.
+2. **APROVA COM RESSALVA,** depois do brilho da madeira: sem problema novo; ficam as ressalvas da malha.
+
+**Ficam como estão:** a corda de amarração em fita, a silhueta longa, o tamanho do barco e o musgo que a Meshy não pintou (só uma malha nova
+resolve, e o teto era de uma tentativa); a água sob o píer (o modelo não leva água, e a posição não muda).
