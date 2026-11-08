@@ -32,7 +32,7 @@ import { useJogo } from "../../jogo.ts";
 import { abrirEscolhaBrasao } from "../../jornada.ts";
 import { useTempo } from "../../tempo.ts";
 import { CHAVE } from "../../save.ts";
-import { FOME_FALA, chamadosVisiveis, useArrastavel, useAviso, useDetalhesPet } from "../../hudPet.ts";
+import { FOME_FALA, NOTIFICA_MS, chamadosVisiveis, useArrastavel, useAviso, useDetalhesPet } from "../../hudPet.ts";
 import { BotaoMovel, Segura } from "../../componentes/BotaoMovel.tsx";
 import { alternarLeque, fecharLeque, mudarLeque, useLeque } from "../../movel.ts";
 import { AgoraIcone, ChipCausa, LinhaAgora } from "./LinhaAgora.tsx";
@@ -335,8 +335,9 @@ function temPedido(m: Motor): boolean {
     Sem o nome do pet (ele esta na plaquinha do topo) */
 function Prioridade({ abrirDetalhes, movel = false }: { abrirDetalhes?: () => void; movel?: boolean }) {
   const { motor: m, nascendo } = useJogo(), r = resumoAgora(m, nascendo), pedido = !m.morte && nascendo === 0 && temPedido(m), nec = movel ? necessidadeMovel(m, nascendo) : null;
-  /* o resumo so aparece por AVISO_MS quando muda (hudPet.ts); a fome critica, o pedido e a morte ficam. No celular o aviso da necessidade segue o mesmo tempo */
-  const vis = useAviso(movel ? nec?.texto ?? "" : r.texto, nascendo === 0 && m.e.fome < FOME_FALA), arr = useArrastavel<HTMLDivElement>("alerta");
+  /* o resumo so aparece por NOTIFICA_MS quando muda (hudPet.ts), inclusive a fome critica (2026-11-08; antes ela ficava); o pedido e a morte ficam. No celular
+     o aviso da necessidade segue o mesmo tempo */
+  const vis = useAviso(movel ? nec?.texto ?? "" : r.texto, false, NOTIFICA_MS), arr = useArrastavel<HTMLDivElement>("alerta");
   /* o celular anuncia a necessidade uma vez a cada mudanca do texto (nao a cada tick que muda o %): a regiao fica sempre montada e o % entra no texto
      no momento da mudanca */
   const falado = movel && nec?.aviso ? nec.texto : "", [anuncio, setAnuncio] = useState("");

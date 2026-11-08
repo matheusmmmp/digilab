@@ -10,6 +10,9 @@ import { CHAVE } from "./save.ts";
 
 /** quanto tempo o aviso fica na tela depois de mudar (o Matheus, 2026-11-04: 15 s) */
 export const AVISO_MS = 15_000;
+/** quanto tempo a faixa do resumo (a fome, o Estado) e a linha do agora ficam na tela depois de mudar; depois saem, mesmo com a fome critica
+    (o Matheus, 2026-11-08: "quando notifica, deixa eles durante 5 segundos e daí eles saem"). PROPOSTO, SEM FONTE (numero de interface) */
+export const NOTIFICA_MS = 5_000;
 /** abaixo disso o pet diz que está com fome (texto); abaixo de FOME_EMOTE, só o emoji sobre a cabeça (o Matheus, 2026-11-04) */
 export const FOME_FALA = 0.15;
 export const FOME_EMOTE = 0.5;
@@ -21,14 +24,14 @@ export function chamadosVisiveis(m: Motor): Chamado[] {
 /** o emoji da fome sobre a cabeça do pet: comida abaixo de FOME_EMOTE */
 export const fomeNoEmote = (m: Motor): boolean => m.e.fome < FOME_EMOTE;
 
-/** visível por AVISO_MS a cada mudança de `chave` (e ao montar); `fixo` deixa visível enquanto valer */
-export function useAviso(chave: string, fixo = false): boolean {
+/** visível por `ms` (AVISO_MS) a cada mudança de `chave` (e ao montar); `fixo` deixa visível enquanto valer */
+export function useAviso(chave: string, fixo = false, ms = AVISO_MS): boolean {
   const [vis, setVis] = useState(true);
   useEffect(() => {
     setVis(true);
-    const t = setTimeout(() => setVis(false), AVISO_MS);
+    const t = setTimeout(() => setVis(false), ms);
     return () => clearTimeout(t);
-  }, [chave]);
+  }, [chave, ms]);
   return vis || fixo;
 }
 

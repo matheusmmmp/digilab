@@ -27,7 +27,7 @@ import { jogoAtual } from "../../../jogo.ts";
 import { CENA, reservaDoPe } from "../cenaEstado.ts";
 import { Seguidor, dentroDoMapa } from "../vistaMundo.ts";
 import { velocidadeAtual } from "../../../tempo.ts";
-import { AFASTAR_MAX, BATER_BOLA_MS, CAMERAS, COBERTO_MS, GOLPE_DIST, GOLPE_MS, KITS_COBERTO_MS, FPS_MIN, LARGURA_MIN, LONGE, NEVOA, PERTO, QUEDA_MS,
+import { AFASTAR_MAX, BATER_BOLA_MS, duracaoPetViagem, CAMERAS, COBERTO_MS, GOLPE_DIST, GOLPE_MS, KITS_COBERTO_MS, FPS_MIN, LARGURA_MIN, LONGE, NEVOA, PERTO, QUEDA_MS,
   RAZAO_MAX, TEXEL_ALVO, TREINO_MS, type CameraHabitat } from "./constantes.ts";
 import { CURVA, type CenaIlha, type Objetos, cobrirFundo } from "./cena.ts";
 import { estiloDe, type Estilo } from "./estilos.ts";
@@ -109,6 +109,9 @@ class VistaIlha {
   /** a batida na bola: quantas rolagens o motor ja tinha (null antes do primeiro quadro: as de antes de abrir a ilha nao contam) */
   private rolagens: number | null = null;
   private bateBola: { desde: number; alvo: [number, number] } | null = null;
+  /** a ida do pet ao lugar aberto (ou a volta), separada da camera: a chave da viagem ("1:<lugar>" ou "0"), de onde partiu, quando e quanto dura;
+      null fora da viagem (constantes.ts, PET_VIAGEM_CEL_MS) */
+  private andaPet: { chave: string; de: [number, number]; desde: number; dur: number } | null = null;
 
   readonly canvas: HTMLCanvasElement;
   private readonly mu: Mundo;
@@ -310,9 +313,7 @@ class VistaIlha {
     const [sx, sz] = this.itens.sacoEm;
     /* a viagem ao lugar: o pet anda do que o motor diz ate o lado esquerdo do saco na tela (o painel abre a direita) e fica; o treino parte
        dai e volta para ca. `motorCel` e, daqui para baixo, onde o pet estaria sem o treino */
-    const motorCel: [number, number] = viagem > 0
-      ? this.entre(VIAGEM.origem ? this.pontoDoPetNo(VIAGEM.origem) : motorCel0, this.pontoDoPetNo(VIAGEM.lugar), reduzido ? 1 : this.suave(viagem)) : motorCel0;
-    const emViagem = viagem > 0 && viagem < 1 && !reduzido;
+    const { cel: motorCel, andando: emViagem } = this.petNaViagem(agora, motorCel0, reduzido);
     if (CENA.treino !== null && CENA.treino !== this.treinoVisto) {
       this.treinoVisto = CENA.treino;
       const dir = new THREE.Vector3(1, 0, 0).applyQuaternion(this.camera.quaternion), h = Math.hypot(dir.x, dir.z) || 1;
@@ -320,7 +321,7 @@ class VistaIlha {
       this.treino = { pedido: CENA.treino, desde: agora, ponto: [sx + lado * rx * GOLPE_DIST, sz + lado * rz * GOLPE_DIST], golpe: -1 };
     }
     const t = this.treino;
-    const caminhando = viagem <= 0 && this.seguidor.caminhando;
+    const caminhando = this.andaPet === null && this.seguidor.caminhando;
     if (!t) return { cel: motorCel, golpe: this.bateBola, andando: emViagem || caminhando };
     const dt = agora - t.desde, { ida, golpes, volta } = TREINO_MS, ponto = t.ponto;
     const suave = (f: number) => (reduzido ? 1 : this.suave(f)), entre = (a: [number, number], b: [number, number], f: number) => this.entre(a, b, f);
@@ -336,6 +337,23 @@ class VistaIlha {
     return { cel: motorCel, golpe: this.bateBola, andando: emViagem || caminhando };
   }
 
+  /** onde o pet esta na ida ao lugar aberto (ou na volta): ele anda do ponto em que estava desenhado ate o lugar (ou de volta ate o motor) em
+      velocidade constante, PET_VIAGEM_CEL_MS, sem passar de PET_VIAGEM_MAX_MS; a camera e o painel seguem o tempo da viagem (VIAGEM_MS) e chegam antes.
+      Com "reduzir movimento", chega na hora. Fora da viagem, o que o motor diz */
+  private petNaViagem(agora: number, motorCel0: [number, number], reduzido: boolean): { cel: [number, number]; andando: boolean } {
+    const chave = VIAGEM.alvo === 1 ? "1:" + VIAGEM.lugar : "0";
+    if (chave !== (this.andaPet?.chave ?? "0")) {
+      const de: [number, number] = [this.petCel[0], this.petCel[1]], para = chave === "0" ? motorCel0 : this.pontoDoPetNo(VIAGEM.lugar);
+      const dur = duracaoPetViagem(Math.hypot(para[0] - de[0], para[1] - de[1]), reduzido);
+      this.andaPet = { chave, de, desde: agora, dur };
+    }
+    const a = this.andaPet;
+    if (!a) return { cel: motorCel0, andando: false };
+    const para = a.chave === "0" ? motorCel0 : this.pontoDoPetNo(VIAGEM.lugar);
+    const f = a.dur > 0 ? Math.min(1, (agora - a.desde) / a.dur) : 1;
+    if (f >= 1 && a.chave === "0") { this.andaPet = null; return { cel: motorCel0, andando: false }; }
+    return { cel: f >= 1 ? para : this.entre(a.de, para, f), andando: f < 1 };
+  }
   private suave(f: number): number { return f * f * (3 - 2 * f); }
   private entre(a: [number, number], b: [number, number], f: number): [number, number] { return [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f]; }
   /** a direita da camera no chao (unitaria): a direita da direcao em que ela olha */

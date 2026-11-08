@@ -152,7 +152,8 @@
 .aj-lista .balao{ max-width:min(320px,72vw) }
 
 /* o painel dos Ajustes (nao e lugar): a 1920 perto do retrato, a esquerda; a 390 e a folha de sempre */
-.painel-tela--lugar-lado.painel-tela--ajustes{ left:24px; width:min(460px,calc(46vw - 36px)); top:calc(var(--casca-topo) + 20px) }
+/* o painel de Ajustes abre a direita do trilho de icones (12 px da borda, a largura do trilho e 12 px de folga), nao por baixo dele (2026-11-08) */
+.painel-tela--lugar-lado.painel-tela--ajustes{ left:calc(12px + var(--nav-larg, 0px) + 12px); width:min(460px,calc(46vw - 36px - var(--nav-larg, 0px))); top:calc(var(--casca-topo) + 20px) }
 
 /* o foco do teclado, depois das regras de selecao (que nao usam outline) */
 .ct2-tile:focus-visible, .ct2-brasao:focus-visible, .rg2-bt:focus-visible, .rg2-filtro:focus-visible, .rg2-linha:focus-visible, .md2-linha:focus-visible, .aj:focus-visible{
