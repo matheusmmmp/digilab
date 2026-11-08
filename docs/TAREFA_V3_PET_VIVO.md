@@ -2,7 +2,7 @@
 
 Coordenador: o Gerente da V3 (Claude Code, Opus 5.5). Worker da etapa 0 (os planos da 0b e da 0c): Claude Code, Opus 5.5. Worktree e
 branch: `v3-pet-vivo` (as etapas seguintes com sufixo, como `v3-pet-vivo-0b-codigo`). Status: **ABERTA; o plano da 0b e da 0c
-PROPOSTO, as PV-0-1 a PV-0-11 com o Matheus.** Nenhuma vida nova, nenhuma faixa.
+APROVADO, e as PV-0-1 a PV-0-11 DECIDIDAS pela recomendação (2026-11-08, repassado pelo Gerente da V3; seção 8).** Nenhuma vida nova, nenhuma faixa.
 
 Categoria: documentacao. Origem: Matheus, 2026-11-07: "Sim, a etapa 0", em resposta a "Aprovo a etapa 0 da PET_VIVO e despacho a
 verificação e a auditoria?". A rodada está no vault DigiLab Research, `20 Temas/Pet vivo.md`, seção 5. A nota substitui o antigo
@@ -57,7 +57,7 @@ arquivos da INDIVIDUALIDADE. A pasta `D:\Trab\digilab\v3-memoria-run` só é lid
 ## 5. Entrega
 
 - **Testes:** não se aplicam nesta etapa, que só tem documentos. O PR do código (seção 7) terá os testes dele.
-- **Registro:** os desvios D-PV0-1 a D-PV0-6, em `docs/registro/2026-11.md`.
+- **Registro:** os desvios D-PV0-1 a D-PV0-7, em `docs/registro/2026-11.md`.
 - **PR** contra a `main`, com o relato no modelo. Merge só pelo Matheus.
 
 ## 6. Fora desta tarefa
@@ -85,7 +85,14 @@ arquivos da INDIVIDUALIDADE. A pasta `D:\Trab\digilab\v3-memoria-run` só é lid
 
 ## 8. Precisa do Matheus
 
-Cada decisão vem com a recomendação e o custo de errar. As seções citadas são as do plano.
+**As PV-0-1 a PV-0-11 estão DECIDIDAS pela recomendação, em 2026-11-08.** O Matheus respondeu "Aprovo todas" à pergunta "Aprova o
+plano do #704 e as PV-0-1 a PV-0-11 pela recomendação?". Depois de ler as decisões explicadas no vault (DigiLab Research,
+`30 Decisões e protocolo/PET_VIVO — decisões PV-0.md`), ele respondeu "Continua valendo". As duas respostas foram dadas no chat do
+Gerente da V3. O registro está nos dois comentários do PR #704 de 2026-11-08 (05:05 e 05:07 UTC). Eles foram escritos pela sessão do Gerente com a
+conta `matheusmmmp`, sem app. **Esta sessão não ouviu o Matheus diretamente:** a confirmação dele vale no merge (a regra da memória das
+aprovações repassadas da C4, 2026-11-01).
+
+Cada decisão vem com a recomendação, que é a decidida, e o custo de errar. As seções citadas são as do plano.
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
@@ -93,7 +100,7 @@ Cada decisão vem com a recomendação e o custo de errar. As seções citadas s
 | **PV-0-2** | as vidas | **a C4 (o REL e o SEM, nas 12 células: 4 800 vidas) e a AN0 (os gabaritos da LM0 e os `fins` da LM4)** (seção 2) | só a C4: tudo fica no código do `a287ba2`, de antes do jogo v17 a v19. Só a AN0: são cerca de 5 400 decisões, poucas para separar dono e lugar. Os outros braços da C4 (o REC, o EMB, o RELsN e o REL+F) somariam 9 600 vidas sem pergunta própria |
 | **PV-0-3** | a fonte da C4 | **a pasta `D:\Trab\digilab\v3-memoria-run\...\memoria_autobio\run\`, só lida, com o sha256 de cada arquivo conferido contra o `meta.json`.** A cópia no git tem os mesmos sha256 e serve de reserva (D-PV0-1) | ler da pasta sem conferir: um arquivo trocado passaria. Ler só do git contraria o pedido do coordenador, mas dá o mesmo dado |
 | **PV-0-4** | o código do replay | **o da C4 numa worktree destacada no `a287ba2`, como na D-C1-3; o da AN0 na `main` do PR do código, porque os gabaritos são de hoje** | com o código de hoje, a C4 refaria outra vida (9 módulos mudaram, A11.2). O G1 pegaria, mas o estágio 2 seria perdido |
-| **PV-0-5** | o tamanho do contrafactual | **as medidas A-1 a A-3 nas 4 800 vidas; o contrafactual A-4 numa subamostra fixada antes: os k de 0 a 7 de cada base (40 unidades), nas 12 células e nos dois braços (960 vidas), mais a AN0** (seção 8) | todas as vidas no A-4: cerca de 22 refeitas por decisão em 6,5 milhões de decisões, um custo SEM MEDIDA que pode passar de um dia de máquina. Uma subamostra menor: o IC por célula fica largo demais para separar os donos |
+| **PV-0-5** | o tamanho do contrafactual (com a regra do tempo: medido nas sementes dos testes no PR do código e declarado; acima de umas 8 h para as 960 vidas, uma subamostra menor antes da run) | **as medidas A-1 a A-3 nas 4 800 vidas; o contrafactual A-4 numa subamostra fixada antes: os k de 0 a 7 de cada base (40 unidades), nas 12 células e nos dois braços (960 vidas), mais a AN0** (seção 8) | todas as vidas no A-4: cerca de 22 refeitas por decisão em 6,5 milhões de decisões, um custo SEM MEDIDA que pode passar de um dia de máquina. Uma subamostra menor: o IC por célula fica largo demais para separar os donos |
 | **PV-0-6** | o passo do contrafactual | **Δ = S/4 (256) para cima e para baixo na falta de cada receptor, com o corte em [0, S], e tudo o que sai dela refeito** (a urgência, o `g_exp`, o reflexo e o incentivo) (seção 4.4) | um Δ pequeno mede só a derivada local e pode dar ≈ 0 por arredondamento inteiro. Um Δ grande, como de 0 a S, mistura estados que o pet quase nunca vive |
 | **PV-0-7** | a tabela do alívio (a coerência) | **empírica e fixada antes de medir: o canal de cada receptor no `r` das consequências de cada comportamento, nas mesmas vidas, e um alívio só conta com média > 0 e IC95 acima de 0** (seção 4.4) | uma tabela escrita à mão poria a opinião de quem escreve no lugar do corpo. A empírica mistura o contexto (come-se quando há comida), e isso fica escrito como limitação |
 | **PV-0-8** | os cortes da regra de leitura | **os da seção 5: 0,10 na TV do número de alvos, 1,25 na inflação, 0,05 na sensibilidade, 1/2 na coerência e 1/3 na parte do corpo**, todos PROPOSTOS e SEM FONTE | os cortes fixados depois de ver os números convidam a escolher a hipótese. Cortes ruins dão uma leitura errada, mas registrada e conferível |
@@ -109,4 +116,7 @@ Cada decisão vem com a recomendação e o custo de errar. As seções citadas s
 - **Achado (D-PV0-1):** os artefatos da C4 também estão no git, com os mesmos sha256 da pasta de fora.
 - **O ajuste de 2026-11-08 (D-PV0-6):** as citações do PR #703, fechado, passam para o vault DigiLab Research. O plano ganha
   três notas da nota `20 Temas/Pet vivo.md`: o reflexo, o Dulberg et al. 2023 e a posta por lugar. As PV-0 não mudaram.
-- **Próximo:** o APROVADO do plano e as PV-0-n; depois, o PR do código (o plano, seção 9), e só então o replay.
+- **A aprovação (2026-11-08):** o plano está APROVADO, e as PV-0 estão DECIDIDAS pela recomendação, por repasse do Gerente (D-PV0-7).
+- **Próximo:** o merge pelo Matheus, depois o PR do código (o plano, seção 9), com o tempo do A-4 medido nas sementes dos testes.
+  O replay só roda quando o Gerente liberar a vez da máquina. A fila é o I2, depois esta auditoria, depois a calibração da rodada 3
+  da luta.

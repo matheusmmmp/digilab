@@ -1,8 +1,15 @@
 # PLANO DE ANÁLISE V3 — PET_VIVO, etapa 0: a auditoria da escolha (0b) e a medida de "age pelo estado" (0c) (2026-11-07, Claude Code, Opus 5.5)
 
-**Status: PROPOSTO, para o Matheus decidir.** As decisões PV-0-1 a PV-0-11 estão em `docs/TAREFA_V3_PET_VIVO.md`, seção 8, cada uma com
-a recomendação e o custo de errar. **Nenhum replay e nenhuma conta deste plano rodam antes de três coisas:**
-1. a marca "APROVADO pelo Matheus" neste cabeçalho;
+**Status: APROVADO pelo Matheus em 2026-11-08, repassado pelo Gerente da V3.** À pergunta "Aprova o plano do #704 e as PV-0-1 a
+PV-0-11 pela recomendação?", no chat do Gerente, a resposta foi "Aprovo todas". Depois de ler as decisões explicadas no vault
+(DigiLab Research, `30 Decisões e protocolo/PET_VIVO — decisões PV-0.md`), à pergunta "Depois de ler, a aprovação das PV-0 continua
+valendo?", a resposta foi "Continua valendo". O registro está nos dois comentários do PR #704 de 2026-11-08 (05:05 e 05:07 UTC). Eles foram escritos pela sessão do Gerente com a
+conta `matheusmmmp`, sem app. **Esta sessão não ouviu o Matheus diretamente:** a confirmação dele vale no merge (a regra da memória das
+aprovações repassadas da C4, 2026-11-01).
+
+As decisões PV-0-1 a PV-0-11 estão DECIDIDAS pela recomendação, em `docs/TAREFA_V3_PET_VIVO.md`, seção 8. **Nenhum replay e nenhuma
+conta deste plano rodam antes de três coisas:**
+1. a marca "APROVADO pelo Matheus" neste cabeçalho (feita acima);
 2. o código da seção 9 na `main`, com os testes dele;
 3. as três conferências da seção 2.3, que falham alto antes de qualquer medida.
 
@@ -332,8 +339,9 @@ Cada plano de mecanismo da etapa 2 traz, escritos antes da run:
 - **O custo é estimado e SEM MEDIDA.** Na D-C1-3, o replay custou cerca de metade do CPU da vida. A C4 gastou 3,15 s de CPU por vida.
   - Para as 4 800 vidas sem o contrafactual: de 1 a 2 h de parede com 4 processos.
   - Para o contrafactual: um múltiplo desconhecido.
-  - **A regra:** o PR do código mede o tempo de 2 vidas das sementes dos testes (uma fumaça, sem leitura). Se a estimativa total passar
-    de 6 h com 4 processos, o PR propõe uma subamostra menor num adendo, **antes** do replay.
+  - **A regra:** o PR do código mede o tempo de 2 vidas das sementes dos testes (uma fumaça, sem leitura). O tempo medido vai declarado no
+    relato. Se a projeção para as 960 vidas passar de umas 8 h com 4 processos (o corte que veio junto com a aprovação), o PR propõe
+    uma subamostra menor num adendo, **antes** do replay, nunca depois.
 - **A máquina (V3-D8):** no máximo 4 processos, e o replay conta como a run de pesquisa do momento.
 
 ## 9. O que falta antes do replay (o PR do código, depois do APROVADO)
