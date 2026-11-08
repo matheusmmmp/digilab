@@ -636,7 +636,27 @@ pendências que o relato do #668 deixou, num PR próprio (branch `v3-ux-digibrai
 **Fica com o Matheus:** a M3 num celular de verdade, com `?medir3d=1`. O porquê do cérebro modular no mesmo campo (D1-9) é a próxima etapa,
 com prancha.
 
-## 21. Etapa I1: a prancha da ilha A, "Objetos que falam" (2026-11-07)
+## 21. A gota sobre a cabeça do pet (2026-11-08)
+
+**O pedido:** o Matheus disse que "a gotinha que tá na cabeça do pet, ele tá bem esquisita, ela tá fora do formato". Essa gota é o emote do
+medo da mão e do esforço do cocô. Ela é só vista; o motor, o save e os gabaritos não mudam.
+
+**Duas causas:**
+- a grade `gota` (`src/grades.ts`) era um losango de 7 × 5;
+- todo emote desenhado em grade, e não pelo atlas, ganhava um retângulo branco por trás (`src/telas/pet/PalcoPet.tsx`), e a gota aparecia
+  dentro de uma caixa.
+
+**O conserto:**
+- a gota passa a ter forma de lágrima, 7 × 8, com o brilho em `w`;
+- o retângulo dá lugar ao `contornoGrade`, um contorno branco de 1 unidade que segue o desenho, como o contorno do sprite do pet. O
+  contorno vale para todos os emotes de grade (gota, interrogação, raiva, lágrima, x, espiral).
+
+Depois, o Matheus disse que "o da raiva ainda tá feio", e a grade `raiva` virou a marca de raiva dos animes: quatro cantos vermelhos de 9 × 9 com a quina virada para o centro.
+
+O antes e o depois estão em `docs/pranchas/ux-gota/gota_antes_depois.png`. As medidas (7 × 8 e o contorno de 1 unidade) são PROPOSTO,
+SEM FONTE.
+
+## 22. Etapa I1: a prancha da ilha A, "Objetos que falam" (2026-11-07)
 
 O Matheus pediu uma ilha mais interativa, com referências como Animal Crossing. O gerente mostrou três direções: A, "Objetos que falam"; B,
 "Quintal que atrai"; e C, "Ilha que cresce". A resposta dele foi: "Siga com as recomendações". Isso quer dizer a A primeiro, a C depois e a
