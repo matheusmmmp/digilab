@@ -65,8 +65,10 @@ LP-1), com quatro mudanças e nada mais:
 2. **Os dados que a luta lê entram no git como números** (a LP-2): o replay não pode depender da pasta `Assets/`.
 3. **O pet é o lado azul, sozinho, 1 contra 1**, pela IA da arena (como no #448), sem botão durante a luta. O modo "Você × CPU", o
    teclado, o mouse e as equipes de 3 não voltam.
-4. **A entrada do DigiLab** (a LP-3): a dificuldade da IA de cada lado deixa de ser um botão e passa a sair do pet (o treino, a
-   experiência de luta, o estágio).
+4. **A entrada do DigiLab** (a LP-3, revista): a IA é a mesma para os dois lados (a dificuldade "normal" da POC); o que muda de um
+   lutador para o outro são os stats e o golpe. Os números da luta saem dos 6 stats do pet (vigor, fôlego, recuperação, força,
+   mira e guarda: a espécie, o caráter, a forma, o treino, os chips de stat e a condição do cuidado, pelo `perfilDe`), e o golpe, o
+   tempo e o projétil saem do Digimon da forma (a LP-2).
 
 **O que vem da POC sem mudar a regra:**
 - o golpe e o tempo próprios de cada Digimon (o `t` do golpe, a duração do clipe `Attack_1`, a habilidade com recarga `hcd` e força
@@ -79,7 +81,7 @@ LP-1), com quatro mudanças e nada mais:
 
 **O determinismo e o replay.** A POC já foi portada com passo fixo de 16 ms, um fluxo de RNG por uso e o resultado igual para a mesma
 semente (o #446 reproduziu exatamente todas as tabelas do harness). O log do pet guarda a entrada da luta (o pet, o rival, o mapa, a
-semente e o "nível de luta" de cada lado), e o replay refaz a luta. A troca de `hypot` e `sin` pode mudar os últimos dígitos; por isso o
+semente e os stats de cada lado na hora da luta), e o replay refaz a luta. A troca de `hypot` e `sin` pode mudar os últimos dígitos; por isso o
 teste de fidelidade da LP1 compara o núcleo novo com o gabarito do harness em distribuição (as mesmas tabelas, com a diferença
 registrada), e o teste de replay passa a ser bit a bit sobre o núcleo novo.
 
@@ -116,7 +118,7 @@ O levantamento foi feito em 2026-11-08 na `origin/main` (`e654891`), por nome de
 |---|---|---|
 | `motor/combate_tr/` (`luta.ts`, `controlador.ts`, `adaptador.ts`, `constantes_tr.ts`, `index.ts`, 652 linhas) | o núcleo de 2 s por ação: `criarLutaTR`, `passoTR`, `jogarTR`, `decidirTR`, `jogarLuta`, `RELOGIO_V13/14/18`, `FATORES_V14`, `APRENDIZADO_V14`, `LISTAS_LIDER_V14`, `CARTAS_V14`, `CHIP_ANTES_V14` | **apagar**, trocado pelo `motor/arena/` |
 | `motor/combate.ts` (130) | `ACOES_V2`, `regrasDaVersao`, `ehV14`, `Lutador`, `ResultadoLuta`, `comCarta`, `CONDICOES_ESTAGIO`, `Desafiado` | **apagar** as regras; o `ResultadoLuta` vira o resultado da luta nova |
-| `motor/gambits_pet.ts` (447) | o `GambitsPet` (as notas por regra, os disparos, as travas, os vetos, os chips, a reserva, o `aprendizadoTR`), o `lutadorPet`, o `estiloDoPet` | **apagar** (LP-3); o "nível de luta" do pet entra no lugar |
+| `motor/gambits_pet.ts` (447) | o `GambitsPet` (as notas por regra, os disparos, as travas, os vetos, os chips, a reserva, o `aprendizadoTR`), o `lutadorPet`, o `estiloDoPet` | **apagar** as regras (LP-3); os stats do pet (`perfilDe`) entram no lugar |
 | `motor/bots.ts` (327) | as listas de regras dos rivais (`BOTS_V2/V21/V21D/V21E`, `LISTAS_V14`, `GAMBITS_ARENA/SOMBRIA`), os NPCs, a `CAMPANHA*` e os `LUGARES*` | **adaptar**: os rivais passam a ser um Digimon, um nível e um mapa; as listas de regras saem |
 | `motor/constantes.ts` (532), `catalogo.ts` (125), `tipos.ts` (122) | `CV`, `CV21`, `CV21E_TR*` e as `VERSAO_V14…V19`; o `CATALOGO_V2` das formas; os eventos `"l"` e `"pl"` | **adaptar**: saem os números das regras por turnos; ficam o catálogo das formas (a evolução lê dele) e os eventos |
 
@@ -127,7 +129,8 @@ O levantamento foi feito em 2026-11-08 na `origin/main` (`e654891`), por nome de
 | `motor/motor.ts` (1 292) | `lutar`, `_lutar`, `montarLuta`, o `gp.aprender`, os chips, as cartas, o resumo da luta para a ponte; o evento `"l"` (linha 525) e o replay (linha 1243) | **adaptar** na LP2: a luta do pet chama o núcleo novo; saem os chips, as cartas e o `gp` |
 | `motor/arenas.ts` (138) | `jogarLuta`, `GAMBITS_ARENA`, `comCarta`, `FATORES_V14` | **adaptar** (a Campanha e os líderes, LP-5) |
 | `motor/medalhas.ts`, `nomes.ts`, `expressao.ts`, `motivo.ts` | a `CAMPANHA_V6`, os NPCs, o `NOME_V2` e o `CATALOGO_V2` | **adaptar** só o que cita as regras; os nomes e o catálogo ficam |
-| `motor/liga.ts`, `fabrica.ts`, `salao.ts`, `instalacoes.ts`, `itens.ts` | `jogarLiga`, `jogarLuta`, `gambitsAdulto`, as cartas e os chips | **apagar** na LP4 (LP-5) |
+| `motor/liga.ts`, `fabrica.ts`, `salao.ts`, `instalacoes.ts` | `jogarLiga`, `jogarLuta`, `gambitsAdulto` | **portar** na LP2b: a sequência de lutas fica, as regras por turnos saem; o Palácio junta-se à Torre (LP-5) |
+| `motor/itens.ts` | os chips de stat, os chips de regra e as cartas | **adaptar**: os chips de stat ficam (são treino); os chips de regra e as cartas saem (LP-5) |
 | `motor/corpo.ts`, `motor_corpo.ts`, `digibrain/adapt.ts`, `digibrain/mem.ts` | a dor da luta (`ConfigLutaCorpo`, `aplicarResumoLuta`), o `receber_luta` e os episódios da luta (PONTE_LUTA) | **adaptar** na LP2: o resumo passa a sair do resultado novo (o dano recebido, o fim, a duração) |
 
 **As telas (web, ~40 arquivos).**
@@ -135,10 +138,10 @@ O levantamento foi feito em 2026-11-08 na `origin/main` (`e654891`), por nome de
   portado.
 - `src/luta.ts` (551), o motor das telas de luta (`lutarAnimado`, o replay pelo `res.tr.entrada`): **adaptar**.
 - `src/telas/lutar/` (`TelaLuta`, `TelaArena`, `TelaCampanha`, `TelaMedalhas`, `ModalResultado`): **adaptar**. `EditorRegras`,
-  `PainelAprendizado`, `TelaFronteira`, `FabricaSalao` e `src/aprendizadoLuta.ts`: **apagar** (LP-3, LP-5).
-- `src/fronteira.ts`, `src/tamer.ts` (os eventos `fabrica`, `fabrica_luta`, `fabrica_troca` e `salao` do Tamer): **apagar** a Fábrica e
-  o Salão; o Tamer guarda as medalhas e os recordes (LP-6).
-- Os outros que citam a luta: `TelaItens` e `EscolhaCarta` (os chips e as cartas: **apagar**); `TelaEvolucao`, `TelaCatalogo`,
+  `PainelAprendizado` e `src/aprendizadoLuta.ts`: **apagar** (LP-3). `TelaFronteira` e `FabricaSalao`: **adaptar** na LP2b (LP-5).
+- `src/fronteira.ts`, `src/tamer.ts` (os eventos `fabrica`, `fabrica_luta`, `fabrica_troca` e `salao` do Tamer): **adaptar** na LP2b; o
+  Tamer guarda as medalhas e os recordes (LP-6).
+- Os outros que citam a luta: `EscolhaCarta` (as cartas: **apagar**); `TelaItens` (só os chips de stat ficam: **adaptar**); `TelaEvolucao`, `TelaCatalogo`,
   `TelaRegistro`, `MeusPets`, `TelaPet`, `LinhaAgora`, `Jornada`, `DigiBrainLab`, `TelaCenarios` e os lugares da ilha (`lugares`,
   `marcadoresLugar`, `vista`, `CadeadosDaIlha`, `ObjetosDaIlha`): **adaptar** o que lê as regras ou a duração da luta.
 
@@ -196,12 +199,13 @@ medições de engenharia, com os testes de 101…505. O equilíbrio fica para o 
 | etapa | o que entra | o que sai |
 |---|---|---|
 | **LP1: o núcleo** | `web/app/motor/arena/`, de volta do `efb2ded`, sem DOM, com a aritmética da D-7 e a tabela de números da LP-2 (o script que a gera fica em `Assets/` ou `tools/`); o teste de fidelidade contra o gabarito do harness, o teste pela fonte da aritmética, o replay bit a bit. Atrás de chave desligada: o jogo não muda | nada |
-| **LP2: o pet luta no núcleo novo** | uma `VERSAO_PET` nova; a entrada da luta no log; o "nível de luta" do pet (LP-3); a Arena e a Campanha lutam no núcleo novo; a ponte com o DigiBrain (a dor e o episódio da luta, PONTE_LUTA) lê o resultado novo; o aviso dos pets antigos (LP-6); a medida do custo do replay | o caminho do `combate_tr` para a versão nova; os lugares cortados pela LP-5 somem da navegação |
+| **LP2: o pet luta no núcleo novo** | uma `VERSAO_PET` nova; a entrada da luta no log; os stats do pet na luta (LP-3); a Arena e a Campanha lutam no núcleo novo; a ponte com o DigiBrain (a dor e o episódio da luta, PONTE_LUTA) lê o resultado novo; o aviso dos pets antigos (LP-6); a medida do custo do replay | o caminho do `combate_tr` para a versão nova; a Liga, a Torre, a Fábrica e o Salão ficam fechados até a LP2b |
+| **LP2b: o torneio no núcleo novo** | a Liga, a Torre (com o Palácio junto), a Fábrica e o Salão, com as regras de sequência deles, sobre o núcleo novo; os chips de stat no `perfilDe` | as cartas e os chips de regra |
 | **LP3: a tela** | o palco novo em 2D, a partir do desenho do #446/#448 (`web/app/src/telas/lutar/arena_tr/desenho.ts` em `efb2ded`): os 8 mapas, os projéteis com o desenho do jogo (os prefabs de `Assets/arena_up/efeitos`), o projétil do Gabumon e dos outros sem projétil (LP-8), o que couber da LUTA_EFEITOS (o impacto da E1, o nocaute e a câmera da E5); capturas no desktop e no celular, para aprovação | o `palcoTR/` (o palco 1D) |
-| **LP4: a limpeza** | os documentos de cada coisa que saiu marcados como SUBSTITUÍDOS, com o link para esta tarefa | o `combate_tr/`, as regras por turnos e o que só servia a elas (o inventário da seção 3.4), os testes e os scripts de equilíbrio delas, os lugares cortados pela LP-5 |
+| **LP4: a limpeza** | os documentos de cada coisa que saiu marcados como SUBSTITUÍDOS, com o link para esta tarefa | o `combate_tr/`, as regras por turnos e o que só servia a elas (o inventário da seção 3.4), os testes e os scripts de equilíbrio delas |
 | **LP5: o equilíbrio** | uma rodada só, no fim, com plano de análise e faixas novas (a regra "equilíbrio só no fim") | as metas R2 e R3 |
 
-A LP3 pode correr ao lado da LP2 numa worktree própria, porque só toca a tela; a LP4 espera as duas.
+A LP3 pode correr ao lado da LP2 numa worktree própria, porque só toca a tela; a LP4 espera a LP2, a LP2b e a LP3.
 
 ## 6. Fora desta tarefa
 
@@ -220,16 +224,17 @@ A LP3 pode correr ao lado da LP2 numa worktree própria, porque só toca a tela;
 
 ## 8. Precisa do Matheus
 
-**DECIDIDAS em 2026-11-08** (Matheus, "Aprovo as 10"): as dez valem como recomendadas abaixo. Os números da POC continuam
+**DECIDIDAS em 2026-11-08** (Matheus, "Aprovo as 10"): as dez valem como recomendadas abaixo, menos a LP-3 e a LP-5, que ele revisou
+em seguida e estão PROPOSTAS na forma revista. Os números da POC continuam
 PROPOSTOS até a LP5.
 
 | # | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|
 | **LP-1** | O núcleo da luta passa a ser a simulação da POC, de volta do `efb2ded` para o motor, e o `combate_tr` sai | **Sim.** Volta o `web/app/arena/` como `web/app/motor/arena/`, com só as quatro mudanças da seção 3.2 | Reescrever do zero perde a paridade com o harness, que é a prova de que é a POC; manter os dois núcleos dobra os testes e o equilíbrio |
 | **LP-2** | Os dados que a luta lê (o status, o golpe, o tempo do clipe, o projétil, o atributo) entram no git | **Como números, para as formas do jogo** (as 60 do atlas): uma tabela gerada por script a partir de `Assets/arena_up/dados`, com a procedência no cabeçalho, como na regra 5.1 das UI_GUIDELINES. Os desenhos (sprites e efeitos) continuam fora do git | Sem os números no git, o replay depende de uma pasta fora do repositório, e um pet abre diferente em outra máquina; com a tabela, uma troca nos dados do jogo exige gerar de novo e mudar a versão |
-| **LP-3** | Quem decide a luta do pet, e o que ele aprende | **A IA da arena decide os dois lados.** O que o pet traz é um "nível de luta" contínuo, que interpola entre o "fácil" e o "difícil" da POC (a chance de desviar, o tempo de reação, o erro de mira) e sobe com o treino e com as lutas. Os gambits, o editor de regras e o "o que o pet aprendeu" por regra saem | Sem o nível, o pet não melhora lutando, e o treino perde sentido na luta; com regras escritas pelo dono, voltaria o combate por ações genéricas que o Matheus rejeitou. Um aprendizado mais rico (o pet preferir distância ou corpo a corpo, usar a habilidade cedo ou tarde) pode vir depois, pelo DigiBrain |
+| **LP-3** (revista) | Quem decide a luta do pet, e o que ele traz para ela | **A IA da arena é a mesma para os dois lados; o que o pet traz são os stats dele.** Revista pelo Matheus em 2026-11-08: "A ideia é cada pet ter os stats, o treinamento. Evoluir isso, não o nível de luta em si." Os 6 stats do pet (vigor, fôlego, recuperação, força, mira e guarda), que já saem da espécie, do caráter, da forma, do treino, dos chips de stat e da condição do cuidado (`perfilDe` em `motor/catalogo.ts`), viram os números da luta da POC. A proposta: vigor → vida; força → ataque; guarda → defesa; fôlego → movimento; recuperação → o ciclo do ataque e a recarga da habilidade; mira → o crítico e o erro de mira. Do Digimon da forma vêm só o golpe, o tempo, o projétil e o atributo (LP-2), e não os status do UP, para não contar a espécie duas vezes. O treino e a evolução sobem os stats, e a luta sobe com eles. Os gambits, o editor de regras e o "o que o pet aprendeu" por regra saem | Usar os status do UP por cima dos stats do pet conta a espécie duas vezes e tira o peso do treino; sem os stats, o treino não muda a luta. O mapeamento é PROPOSTO, SEM FONTE, e se acerta na LP5 |
 | **LP-4** | Que mapa cada lugar de luta usa | **A Arena do portão deixa escolher entre os 8; cada lugar da Campanha e de medalha tem um mapa fixo**, numa tabela da LP2. A proposta: Campina → Campo de treino; Torre de pedra → Coliseu; Cidadela → Castelo Midnight; Montanha Espiral → Caverna Blackheart; Floresta → Floresta Green Shade; Lago → Praia Shellfish. O Deserto e o Ringue ficam para a Arena | Um mapa sorteado esconde a regra dele do jogador; um mapa só deixa as 7 regras sem uso |
-| **LP-5** | O que fica dos lugares de luta | **Ficam a Arena (o rival do estágio, como no #448) e a Campanha com os líderes e as medalhas.** Saem na LP4 a Liga, a Torre, o Palácio, a Fábrica, o Salão, as cartas, os chips e os itens de luta, que eram regras por cima do combate por turnos ("qualquer coisa a gente tira essas questões") | Tirar demais deixa pouco a fazer depois do estágio adulto; manter exige portar cada regra para o núcleo novo antes de ter jogado a luta nova. Qualquer um volta depois, como tarefa própria |
+| **LP-5** (revista) | O que fica dos lugares de luta | **Fica tudo o que é uma sequência de lutas, portado para o núcleo novo numa etapa própria (LP2b):** a Arena, a Campanha com os líderes e as medalhas, a Liga (os 6 líderes em sequência, sem cura), a Torre (a sequência contra Megas, sem cura), a Fábrica (os 3 alugados e a troca pelo derrotado) e o Salão (um pet de cada estágio). Revista pelo Matheus em 2026-11-08, que perguntou se nada disso podia ser reaproveitado: pode, porque essas regras são do torneio, não do turno. **O Palácio se junta à Torre:** a única diferença dele era o pet decidir sem as regras do dono, e na luta nova todo pet decide sozinho. **Os chips de stat ficam** (são treino). **Saem as cartas e os chips de regra:** eles mudam regras e escolhas que deixam de existir | Portar tudo de uma vez atrasa a primeira luta jogável; por isso a LP2 entrega a Arena e a Campanha, e a LP2b o resto. As cartas podem voltar depois como efeito de uma luta (um bônus de stat), se o Matheus quiser |
 | **LP-6** | Os pets das versões de hoje (v14 a v19) | **Saem com aviso na tela**, como no descarte 6 da COMBATE_TR: o ovo novo nasce na versão nova; o Tamer guarda medalhas e recordes | Manter os antigos obriga a guardar o `combate_tr` inteiro só para o replay deles, o contrário de "apaga"; o custo é perder os pets salvos hoje |
 | **LP-7** | O combate do Python | **Fica congelado, sem paridade com a luta nova**; os testes de paridade da luta saem da web | Apagar o Python quebra a reprodução dos resultados da v1 e da V2 que dependem dele; manter a paridade obrigaria a portar a POC para o Python, sem uso na pesquisa de hoje |
 | **LP-8** | Os golpes de longe sem projétil nos dados do UP (o Gabumon e outros) | **Uma lista curta, no git, dos golpes que são de longe na série** (a rajada do Gabumon é o primeiro), com um projétil nosso: o próprio efeito de acerto do Digimon voando como projétil, e um procedural (como a bola de fogo do Agumon no mapa AC) quando ele não ler. A regra da luta passa a ser a de um golpe de longe | Sem a lista, o Gabumon continua corpo a corpo, que é o que o Matheus apontou; inventar projétil para todos os 95 sem projétil muda a luta de quem é corpo a corpo de verdade |
@@ -241,3 +246,5 @@ PROPOSTOS até a LP5.
 - Matheus, 2026-11-08: o combate por turnos sai, e a luta é em tempo real, como a da POC; os lugares por cima dela (ligas, fábricas)
   podem sair; os mapas da POC entram. A R3 do equilíbrio fica pausada.
 - Matheus, 2026-11-08, "Aprovo as 10": a LP-1 a LP-10 como recomendadas na seção 8. A LP1 pode começar.
+- Matheus, 2026-11-08, depois do "Aprovo as 10": a LP-3 e a LP-5 revistas (os stats do pet e o treino no lugar do "nível de luta";
+  a Liga, a Torre, a Fábrica e o Salão reaproveitados). As duas revistas estão PROPOSTAS até o ok dele.
