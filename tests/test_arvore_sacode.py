@@ -285,6 +285,11 @@ def test_o_a_do_v11_come_a_fruta_sem_quebrar(semente):
     m = e0.simular_vida_mundo("aleatorio", d, b.politica(espec, CONFIG_PADRAO), semente, e0.DIAS, 16 * e0.DIAS, fm,
                               rotulo_dono="aleatorio").motor
     assert any(c["tipo"] in FRUTAS for c in m.consumos_mundo)
+    # como a racao (AS-11, opcao 1): sem a E2 (nenhuma consequencia de fruta, o humor fora dos drives do sinal do corpo)
+    pm = m.politica
+    assert pm._n_recompensas.get("consequencia_fruta", 0) == 0
+    sinais = [mt["sinal_corpo"] for mt in pm.motivos if "sinal_corpo" in mt]
+    assert sinais and not any("humor" in s["drives"] for s in sinais)
 
 
 # ------------------------------------------------------------------ o gabarito do G-PAR do TS
