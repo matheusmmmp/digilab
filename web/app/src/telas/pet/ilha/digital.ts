@@ -58,8 +58,25 @@ export function ceuEmFaixas(cores: readonly string[], faixas: number, w: number,
   return c;
 }
 
+/** o ceu pintado com o azul suavizado (CEU_SEM_PINTURA.pintura): cada pixel perde parte da saturacao (vai para o cinza da propria luminancia) e
+    puxa um pouco para o branco */
+export function suavizarPintura(img: HTMLImageElement | ImageBitmap | HTMLCanvasElement, saturacao: number, clarear: number): HTMLCanvasElement {
+  const c = document.createElement("canvas");
+  c.width = img.width; c.height = img.height;
+  const g = c.getContext("2d");
+  if (!g) throw new Error("canvas 2d indisponível");
+  g.drawImage(img, 0, 0);
+  const dados = g.getImageData(0, 0, c.width, c.height), d = dados.data;
+  for (let k = 0; k < d.length; k += 4) {
+    const l = 0.2126 * d[k] + 0.7152 * d[k + 1] + 0.0722 * d[k + 2];
+    for (let i = 0; i < 3; i++) d[k + i] = Math.round((l + (d[k + i] - l) * saturacao) * (1 - clarear) + 255 * clarear);
+  }
+  g.putImageData(dados, 0, 0);
+  return c;
+}
+
 /** o ceu com a grade digital por cima: um canvas desenhado sobre a imagem (a pintada ou a das faixas), que vira a imagem da textura do ceu.
-    A grade fica so na faixa de baixo e some para cima (DIGITAL.grade.desde) */
+    A grade cobre o ceu todo e fica mais fraca no alto (DIGITAL.grade.topo) */
 export function ceuComGrade(img: HTMLImageElement | ImageBitmap | HTMLCanvasElement): HTMLCanvasElement {
   const G = DIGITAL.grade, c = document.createElement("canvas");
   c.width = img.width; c.height = img.height;
@@ -84,8 +101,8 @@ export function ceuComGrade(img: HTMLImageElement | ImageBitmap | HTMLCanvasElem
     const raio = (h - cy) * Math.pow(k / G.paralelos, 1.6);
     gl.beginPath(); gl.arc(cx, cy, raio, 0, Math.PI); gl.stroke();
   }
-  const mascara = gl.createLinearGradient(0, h * G.desde, 0, h);
-  mascara.addColorStop(0, "rgba(0,0,0,0)"); mascara.addColorStop(1, "rgba(0,0,0,1)");
+  const mascara = gl.createLinearGradient(0, 0, 0, h);
+  mascara.addColorStop(0, `rgba(0,0,0,${G.topo})`); mascara.addColorStop(1, "rgba(0,0,0,1)");
   gl.globalCompositeOperation = "destination-in"; gl.fillStyle = mascara; gl.fillRect(0, 0, w, h);
   g.globalAlpha = G.alfa; g.drawImage(l, 0, 0);
   return c;

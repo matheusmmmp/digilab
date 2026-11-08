@@ -7,8 +7,11 @@ const rgb = (h: string) => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
 const saturacao = (h: string) => { const c = rgb(h), mx = Math.max(...c), mn = Math.min(...c); return mx === 0 ? 0 : (mx - mn) / mx; };
 
 describe("o ceu sem pintura", () => {
-  test("o padrao e o pixel, em faixas, e a nevoa tem a cor do horizonte", () => {
-    expect(CEU_SEM_PINTURA.modo).toBe("pixel");
+  test("o padrao volta a ser o pintado, com o azul suavizado um pouco (nao tanto); o pixel fica em faixas e a nevoa dele tem a cor do horizonte", () => {
+    expect(CEU_SEM_PINTURA.modo).toBe("pintado");
+    expect(CEU_SEM_PINTURA.pintura.saturacao).toBeGreaterThanOrEqual(0.7);
+    expect(CEU_SEM_PINTURA.pintura.saturacao).toBeLessThan(1);
+    expect(CEU_SEM_PINTURA.pintura.clarear).toBeLessThanOrEqual(0.1);
     expect(CEU_SEM_PINTURA.faixas).toBeGreaterThanOrEqual(6);
     expect(CEU_SEM_PINTURA.horizonte).toBe(parseInt(CEU_SEM_PINTURA.cores[2].slice(1), 16));
   });
@@ -21,9 +24,11 @@ describe("o ceu sem pintura", () => {
 });
 
 describe("a grade digital mais discreta", () => {
-  test("fraca, menos saturada que a de antes e so na faixa de baixo", () => {
-    expect(DIGITAL.grade.alfa).toBeLessThanOrEqual(0.2);
+  test("visivel no ceu todo, mais fraca que a de antes (0,5) e mais fraca no alto", () => {
+    expect(DIGITAL.grade.alfa).toBeGreaterThan(0.2);
+    expect(DIGITAL.grade.alfa).toBeLessThan(0.5);
     expect(saturacao(DIGITAL.grade.cor)).toBeLessThan(saturacao("#b8faff"));
-    expect(DIGITAL.grade.desde).toBeGreaterThan(0);
+    expect(DIGITAL.grade.topo).toBeGreaterThan(0);
+    expect(DIGITAL.grade.topo).toBeLessThan(1);
   });
 });

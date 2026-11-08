@@ -117,7 +117,10 @@ export const CEU_DIGITAL = { horizonte: 0xabe9fe, chaoHemi: 0x6f8fc8, nevoa: [34
     anime de antes); `?ceu=` no endereco troca so na pagina, para comparar. As cores em tons medios, menos saturadas que as de antes, com o
     horizonte mais claro (o levantamento do ceu, no Obsidian: 20 Temas/Ceu do jogo), e a nevoa da cor do horizonte. PROPOSTO, SEM FONTE */
 export const CEU_SEM_PINTURA = {
-  modo: "pixel" as "pixel" | "suave" | "pintado", cores: ["#5f9fd6", "#9ec8e9", "#e3f1f6"], horizonte: 0xe3f1f6, faixas: 11, tela: [480, 270],
+  /* o Matheus voltou para o pintado no mesmo dia ("A arte anterior estava um pouco melhor. Só que não deixa ela tão forte [...] Diminui um pouco a
+     tonalidade do azul dela. Um pouco, não tanto"): o padrao e o pintado, com o azul suavizado por `pintura` (a saturacao que fica e quanto puxa
+     para o branco); o pixel e o suave ficam no ?ceu= */
+  modo: "pintado" as "pixel" | "suave" | "pintado", pintura: { saturacao: 0.8, clarear: 0.05 }, cores: ["#5f9fd6", "#9ec8e9", "#e3f1f6"], horizonte: 0xe3f1f6, faixas: 11, tela: [480, 270],
   nuvens: { n: 12, px: [40, 16], largura: [16, 28], altura: [11, 19], longe: [22, 40], sombra: "#cfe0ee" },
 } as const;
 /** o traco de nanquim do estilo digital (pos.ts, Contorno; D5, o cel shading que o Matheus pediu): um azul-petroleo quase preto, a
@@ -134,7 +137,9 @@ export const DIGITAL = {
     sobe: 0.25, vel: 0.8, giro: 0.9 },
   /* a grade mais discreta (2026-11-08: "tá muito saturada [...] Deixa ela um pouco mais opaca"): o ciano dessaturado, fraca e so na faixa de baixo do
      ceu, sumindo para cima a partir de `desde` (a fracao da altura da imagem) */
-  grade: { cor: "#a9d3db", alfa: 0.16, espessura: 2, meridianos: 9, paralelos: 8, fuga: 0.25, desde: 0.5 },
+  /* e de novo no mesmo dia: "cadê aquelas linhas no céu? Eu quero aquelas linhas no céu, só que não tão forte": no ceu todo outra vez, mais fracas
+     no alto (`topo`, a fracao da forca la em cima) */
+  grade: { cor: "#b0e8f0", alfa: 0.3, espessura: 2.5, meridianos: 9, paralelos: 8, fuga: 0.25, topo: 0.55 },
   fios: { alto: 0.93, alcance: 10, porPoste: 2, queda: 0.06, segmentos: 12, cor: 0x2b2a33 },
   /* a lata gigante (D4, o marco), no horizonte como na maquete B: a grade tem 64 celulas de largura e a camera segue o pet, entao um
      marco parado num ponto so apareceria perto dele, e o mundo curvo o afundaria. Ela fica a `longe` celulas ao norte do pet e anda com

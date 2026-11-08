@@ -724,3 +724,14 @@ E depois:
   `20 Temas/Céu do jogo.md`.
 
 Os números são de desenho: PROPOSTO, SEM FONTE. A cor por hora do dia, o halo do sol e a sombra de nuvem ficam para depois.
+
+**A volta para o pintado (o Matheus, no mesmo dia):**
+> "Não, volta para aquela arte anterior. A arte anterior estava um pouco melhor. Só que não deixa ela tão forte. [...] Diminui um pouco a
+> tonalidade do azul dela. Um pouco, não tanto. [...] E cadê aquelas linhas no céu? Eu quero aquelas linhas no céu, só que não tão forte."
+
+- **O padrão voltou a ser o pintado,** com o `ceu.jpg` e as nuvens de anime. O azul ficou suavizado por `suavizarPintura`: a saturação fica
+  em 80 % e a imagem puxa 5 % para o branco.
+- **As linhas voltaram ao céu todo:** alfa de 0,3 (era 0,5), um ciano um pouco apagado, espessura de 2,5 (era 3) e mais fracas no alto
+  (`topo`, 55 %).
+- **O pixel e o suave** continuam só no `?ceu=`.
+

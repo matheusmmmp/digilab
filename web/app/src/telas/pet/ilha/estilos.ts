@@ -13,7 +13,7 @@ import { PALETA_DIGITAL, PALETA_ILHA, carregarVariante, doisTons, flores, montar
   type PaletaTerreno } from "./cena.ts";
 import { arquivosCassette, carregadorCassette, terrenoCassette } from "./cassette.ts";
 import { CEU_DIGITAL, CEU_SEM_PINTURA, CONTORNO_DIGITAL, DOBRA_K } from "./constantes.ts";
-import { ceuComGrade, ceuEmFaixas, fios, lata, particulas } from "./digital.ts";
+import { ceuComGrade, ceuEmFaixas, fios, lata, particulas, suavizarPintura } from "./digital.ts";
 import { enfeites } from "./enfeites.ts";
 import { lugares } from "./lugaresCena.ts";
 import { PALETA_FLORESTA, arquivosFloresta, carregadorFloresta } from "./floresta.ts";
@@ -70,7 +70,9 @@ function estiloSemTons(mapa: Mapa, base: string): Estilo {
       /* o ceu (CEU_SEM_PINTURA, 2026-11-08): em pixel (o padrao), suave ou o pintado de antes, com a grade digital por cima (D3, digital.ts) */
       const modo = modoDoCeu(), S = CEU_SEM_PINTURA, ceuDia = new THREE.Texture();
       if (modo === "pintado") {
-        new THREE.TextureLoader().load(new URL("mapa_digital/ceu.jpg", base).href, t => { ceuDia.image = ceuComGrade(t.image); ceuDia.needsUpdate = true; });
+        new THREE.TextureLoader().load(new URL("mapa_digital/ceu.jpg", base).href, t => {
+          ceuDia.image = ceuComGrade(suavizarPintura(t.image, S.pintura.saturacao, S.pintura.clarear)); ceuDia.needsUpdate = true;
+        });
       } else {
         const [w, h] = S.tela;
         ceuDia.image = ceuComGrade(ceuEmFaixas(S.cores, modo === "pixel" ? S.faixas : h, w, h));
