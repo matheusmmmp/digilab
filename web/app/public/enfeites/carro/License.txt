@@ -1,17 +1,18 @@
 DigiLab: o carro abandonado da ilha (carro.gltf, carro.bin, carro_cor.png)
 
-Procedencia: item gerado por IA, com o gerador Meshy (meshy.ai), no plano Pro pago, na conta do Matheus, em 2026-11-06.
+Procedencia: item gerado por IA, com o gerador Meshy (meshy.ai), no plano Pro pago, na conta do Matheus, em 2026-11-07 (o retrabalho dos
+objetos; o carro de 2026-11-06, a caminhonete, saiu).
 Pelos termos de uso da Meshy (atualizados em 2026-09-19, secao 3.2), a saida de um plano pago e do cliente.
 Os termos proibem tirar a marca de IA (secao 2.4): a marca fica no asset.extras do carro.gltf e neste arquivo.
 
-Como foi feito (docs/TAREFA_V3_MUNDO_ENFEITES.md e docs/enfeites/carro/ no repositorio):
-- concept: Meshy Image to Image (nano-banana-2), com duas referencias de estilo recortadas da propria ilha do jogo (o saco gerado e os
-  kits CC0, sem o pet); o concept 3 (caminhonete) escolhido pelo Matheus;
-- vistas: Meshy Image to Image com multivista, a partir do concept;
+Como foi feito (docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 12, e docs/objetos3d/carro/ no repositorio):
+- esboco: Meshy Image to Image (nano-banana-2), so com prompt de estilo em palavras; o esboco 1 (hatch retro azul) escolhido para o
+  retrabalho (docs/objetos3d/REFERENCIAS.md);
+- vistas: Meshy Image to Image com multivista, a partir do esboco;
 - malha: Meshy Multi-Image to 3D (remesh em triangulos, so a cor);
-- conserto no Blender 4.5 LTS e em Python, por script: a malha da Meshy fica como veio; a cor e chapada em oito cores do concept, uma
-  por face (sem a sombra embutida).
-As tarefas da Meshy (concept, vistas, malha) estao no asset.extras do carro.gltf.
+- acabamento no Blender 4.5 LTS e em Python, por script: a malha girada com a frente em +z, os vertices repetidos soldados, as normais
+  suavizadas; a textura pintada da Meshy fica (sem achatar cores), reduzida a 512 px em paleta de 256 cores.
+As tarefas da Meshy (esboco, vistas, malha) estao no asset.extras do carro.gltf.
 
 Uso: no jogo DigiLab, publicado. Credito: "Carro abandonado gerado com a Meshy (meshy.ai)".
-Aprovacao: o Matheus escolheu o concept em 2026-11-06; a aprovacao da captura na ilha fica no PR da E2 dos enfeites.
+Aprovacao: o retrabalho foi pedido pelo Matheus em 2026-11-07; a aprovacao da captura na ilha fica no PR do retrabalho do carro.
