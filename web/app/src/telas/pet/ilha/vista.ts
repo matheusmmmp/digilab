@@ -38,9 +38,10 @@ import type { NomeLugar } from "./modelos.ts";
 import { Papel, type Ret, type Suspenso } from "./papel.ts";
 import { MAO, Pendulo, alturaDepoisDeSoltar, soltarAcabou, tremorAgora } from "./mao.ts";
 import { ORBITA, aplicarOrbita, ligarControles, recentrar } from "../orbita.ts";
-import { CONSULTA_SOLTA, VISTA, despublicarVista, focoDoQuadro, ligarCameraLivre, publicarVista, type Limites, type MapaDaIlha } from "../cameraLivre.ts";
+import { CONSULTA_SOLTA, VISTA, despublicarVista, focoDoQuadro, ligarCameraLivre, publicarVista, type Limites, type MapaDaIlha, type Par } from "../cameraLivre.ts";
+import { CAMERA_DEV, ligarCameraDev } from "../cameraDev.ts";
 import { pixelsDoMapa } from "./minimapa.ts";
-import { PRESETS, Pos } from "./pos.ts";
+import { PRESETS, Pos, SEM_CONTORNO } from "./pos.ts";
 import { SACO_NA_TELA, VIAGEM, ZOOM_LUGAR_MOVEL, lugarAberto, progressoViagem, type Lugar } from "../../../viagem.ts";
 import { LUGARES, ORDEM_LUGARES, chaoDoLugar, estadoDoLugar, gradeDosLugares, pontoDoLugar as pontoLugarDe, pontoDoPet, type BaseDoMundo } from "./lugares.ts";
 import { Apagador, montarMarcadores, type Marcadores } from "./marcadoresLugar.ts";
@@ -122,6 +123,7 @@ class VistaIlha {
     this.estilo = estiloDe(habitat.mapa, document.baseURI);
     this.cam = CAMERAS[habitat.camera];
     this.camera = new THREE.PerspectiveCamera(this.cam.fov, 1, PERTO, LONGE);
+    this.camera.layers.enable(SEM_CONTORNO);
     CURVA.uCurva.value = this.estilo.dobra;
     THREE.ColorManagement.enabled = true;
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
@@ -157,7 +159,26 @@ class VistaIlha {
   }
 
   /** a camera pode soltar agora: o controle "Livre" e a largura do desktop */
-  get podeSoltar(): boolean { return habitatAtual().controle === "livre" && !!this.consultaSolta?.matches; }
+  /* com a camera de desenvolvimento (cameraDev.ts) a camera solta vale em qualquer largura e controle */
+  get podeSoltar(): boolean { return CAMERA_DEV || (habitatAtual().controle === "livre" && !!this.consultaSolta?.matches); }
+  /** os alvos da camera de desenvolvimento (cameraDev.ts), em celulas: os lugares da viagem, os modelos dos lugares, cada enfeite (o nome,
+      e o numero a partir do segundo do mesmo nome), o ninho, o comedouro e o pet */
+  alvosDev(): Record<string, Par> {
+    const a: Record<string, Par> = {};
+    for (const [id, p] of Object.entries(this.pontos)) a[id] = [p[0], p[1]];
+    for (const l of this.ilha.lugares) a[l.nome] = [l.x, l.z];
+    const vistos = new Map<string, number>();
+    for (const e of this.ilha.enfeites) {
+      const n = (vistos.get(e.nome) ?? 0) + 1;
+      vistos.set(e.nome, n);
+      a[n === 1 ? e.nome : `${e.nome}_${n}`] = [e.x, e.z];
+    }
+    const sub = this.mu.cm.sub;
+    a.ninho = [...this.itens.ninhoEm] as Par;
+    a.comedouro = [this.mu.comedouro[0] / sub, this.mu.comedouro[1] / sub];
+    a.pet = [this.petCel[0], this.petCel[1]];
+    return a;
+  }
 
   /** os modelos do estilo (na ilha, os kits de public/kits3d) entram depois do terreno */
   async carregarObjetos(): Promise<void> {
@@ -524,7 +545,9 @@ class VistaIlha {
     });
     /* o foco do HD-2D: a altura do pet na tela (0 embaixo, 1 em cima) */
     this.renderer.info.reset();
-    this.pos.desenhar(this.cenaIlha.cena, this.camera, PRESETS[habitatAtual().visual], 1 - (ret.y + ret.h * 0.6) / this.alturaCss);
+    /* o pet em papel fica sem o traco do estilo (pos.ts, SEM_CONTORNO): os filhos dele mudam, entao a camada e posta a cada quadro */
+    if (this.estilo.contorno) this.papel.raiz.traverse(o => o.layers.set(SEM_CONTORNO));
+    this.pos.desenhar(this.cenaIlha.cena, this.camera, PRESETS[habitatAtual().visual], 1 - (ret.y + ret.h * 0.6) / this.alturaCss, this.estilo.contorno ?? null);
     this.publicar(mu, m.e.tick, ret, pode);
     this.publicarLugaresTela();
     return ret;
@@ -542,10 +565,11 @@ class VistaIlha {
       if (id !== "saco") this.objetos?.abrirLugar?.(id, !trancado);
     }
   }
-  /** onde cada lugar cai na tela (o pe, em px de CSS, e a altura dele em px): o cadeado com o "Nv N" (CadeadosDaIlha.tsx) fica sobre ele. Em qualquer largura */
+  /** onde cada lugar cai na tela (o pe, em px de CSS, e a altura dele em px): o cadeado com o "Nv N" (CadeadosDaIlha.tsx) fica sobre ele, e os selos e as
+      etiquetas dos objetos que falam (ObjetosDaIlha.tsx) tambem. Em qualquer largura */
   private publicarLugaresTela(): void {
-    const cb = CENA.aoLugares;
-    if (!cb) return;                                    // sem consumidor (nenhum cadeado nem brilho na tela): nao calcula
+    const cb = CENA.aoLugares, cbObjetos = CENA.aoObjetos;
+    if (!cb && !cbObjetos) return;                      // sem consumidor (nenhum cadeado, brilho ou objeto que fala na tela): nao calcula
     const ppc = this.ppu / this.renderer.getPixelRatio(), r = this.rectCanvas, v = this.vLugar, alvo = this.lugaresTela;
     for (const id of ORDEM_LUGARES) {
       const x = this.pontos[id][0], z = this.pontos[id][1];
@@ -558,13 +582,14 @@ class VistaIlha {
       if (id === "saco") a[2] = LUGARES[id].altura * ppc;
       else { v.set(x, dobrarY(y0 + LUGARES[id].altura, z, this.dobra, x), z).project(this.camera); a[2] = a[1] - (r.top + ((1 - v.y) / 2) * r.height); }
     }
-    cb(alvo);
+    cb?.(alvo);
+    cbObjetos?.(alvo, ppc);
   }
 
   /** o que o minimapa e a HUD leem (cameraLivre.ts): o foco, o pet, a vista, os lugares, a comida, e se o pet saiu da tela e para que lado */
   private publicar(mu: Mundo, tick: number, ret: Ret, pode: boolean): void {
     /* abaixo de 900 px nada le o minimapa nem o resumo: sem alocar por quadro (o celular), e o que estava publicado sai uma vez */
-    if (!this.consultaSolta?.matches) { if (VISTA.atual) despublicarVista(); return; }
+    if (!CAMERA_DEV && !this.consultaSolta?.matches) { if (VISTA.atual) despublicarVista(); return; }
     const [fx, fz] = this.dirDobra, [ox, oz] = this.foco, [px, pz] = this.petCel, sub = mu.cm.sub;
     const { desloc } = this.orbitaVista, a = this.afast;
     /* o pet atras da camera (no chao) ou com o desenho fora do canvas: fora da tela */
@@ -617,6 +642,8 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
   const soltarControles = ligarControles(() => habitatAtual().controle === "livre", () => vista.elevacao0);
   /* a camera solta (cameraLivre.ts): o teclado e o arrasto direito/do meio, so no desktop com o controle "Livre" */
   const soltarLivre = ligarCameraLivre(() => vista.podeSoltar, () => vista.elevacao0);
+  /* a camera de desenvolvimento (?cameradev=1): window.__camera para as ferramentas */
+  const soltarDev = ligarCameraDev(() => vista.alvosDev());
   let vivo = true, quadro = 0, pedido = 0;
   /* os kits: na hora, ou, se a ilha abriu coberta pelo veu, quando ela ficar a vista (no maximo KITS_COBERTO_MS) */
   let kitsPedidos = false;
@@ -694,7 +721,7 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
   return () => {
     vivo = false;
     cancelAnimationFrame(pedido); obs.disconnect(); if (esperaKits) clearTimeout(esperaKits); canvas.removeEventListener("webglcontextlost", perdeu);
-    soltarControles(); soltarLivre(); despublicarVista();
+    soltarControles(); soltarDev(); soltarLivre(); despublicarVista();
     CENA.modo3d = false; CENA.cocoNoChao = false; CENA.ret = null; CENA.medir = null; CENA.mundo = null;
     vista.dispose();
   };
