@@ -2552,3 +2552,169 @@ def fala_nas_decisoes(decisoes: Sequence[tuple[int, str, str | None, Mapping[str
     out["por_conteudo"] = {n: sum(1 for x in linhas if x[2] and x[3] == c) for n, c in rotulos}
     out["abaixo_do_limiar"] = {n: sum(1 for x in linhas if x[2] and not x[5] and x[3] == c) for n, c in rotulos}
     return out
+
+
+# ======================================================================================================================================
+# PET_VIVO, etapa 0 (docs/PLANO_ANALISE_V3_PET_VIVO.md, secoes 4 e 7; APROVADO em 2026-11-08, repassado pelo Gerente da V3): a auditoria da
+# escolha (A-1 a A-4) e a medida de "age pelo estado" (a SE-C). Uma distribuicao de comportamentos e um vetor de pesos inteiros, um por
+# comportamento na ordem fixa: P_b = W_b / T, com T = soma(W). O reflexo do sono e o "nada a fazer" sao o vetor de um so peso (o dormir, o
+# ocioso). As contas sao feitas em inteiros e viram float so no fim, por uma divisao de inteiros (o float mais proximo, igual em qualquer
+# maquina). Os cortes da regra de leitura (secao 5) ficam no script, nao aqui: aqui so as contas.
+
+def _total_positivo(pesos: Sequence[int]) -> int:
+    """a soma dos pesos, conferida: inteiros >= 0 (a soma de inteiros e int; um float a faria float) e soma positiva"""
+    t = sum(pesos)
+    if type(t) is not int or (pesos and min(pesos) < 0):
+        raise ValueError(f"PET_VIVO: os pesos sao inteiros >= 0: {list(pesos)}")
+    if t <= 0:
+        raise ValueError(f"PET_VIVO: a soma dos pesos nao e positiva: {list(pesos)}")
+    return t
+
+
+def pesos_por_comportamento(unidades: Sequence[tuple[int, int]], n: int) -> list[int]:
+    """W_b = a soma dos pesos das unidades (b, w) de cada comportamento b em [0, n): a distribuicao do sorteio proporcional (secao 0)"""
+    out = [0] * n
+    for b, w in unidades:
+        out[b] += w
+    return out
+
+
+def maximo_por_comportamento(unidades: Sequence[tuple[int, int]], n: int) -> list[int]:
+    """o peso da melhor unidade de cada comportamento: a distribuicao P1, "um alvo so por comportamento, com o mesmo maximo" (A-2)"""
+    out = [0] * n
+    for b, w in unidades:
+        if w > out[b]:
+            out[b] = w
+    return out
+
+
+def unidades_ativas_por_comportamento(unidades: Sequence[tuple[int, int]], n: int) -> list[int]:
+    """quantas unidades com w > 0 cada comportamento tem (A-2)"""
+    out = [0] * n
+    for b, w in unidades:
+        if w > 0:
+            out[b] += 1
+    return out
+
+
+def distribuicao(pesos: Sequence[int]) -> list[float]:
+    """P_b = W_b / T"""
+    t = _total_positivo(pesos)
+    return [w / t for w in pesos]
+
+
+def distancia_tv(p: Sequence[int], q: Sequence[int]) -> float:
+    """a distancia de variacao total entre P = p / soma(p) e Q = q / soma(q): soma |p_b Tq - q_b Tp| / (2 Tp Tq), em inteiros ate o fim"""
+    if len(p) != len(q):
+        raise ValueError("PET_VIVO: as duas distribuicoes tem tamanhos diferentes")
+    tp, tq = _total_positivo(p), _total_positivo(q)
+    return sum(abs(a * tq - b * tp) for a, b in zip(p, q)) / (2 * tp * tq)
+
+
+def diferenca_de_distribuicao(p: Sequence[int], q: Sequence[int]) -> list[float]:
+    """P_b - Q_b de cada comportamento (o Delta P da A-4), em inteiros ate o fim"""
+    if len(p) != len(q):
+        raise ValueError("PET_VIVO: as duas distribuicoes tem tamanhos diferentes")
+    tp, tq = _total_positivo(p), _total_positivo(q)
+    return [(a * tq - b * tp) / (tp * tq) for a, b in zip(p, q)]
+
+
+def diferenca_e_tv(p: Sequence[int], q: Sequence[int]) -> tuple[list[float], float]:
+    """(o Delta P de cada comportamento, a TV) numa conta so, com as somas conferidas uma vez: os mesmos valores de
+    `diferenca_de_distribuicao` e de `distancia_tv`"""
+    if len(p) != len(q):
+        raise ValueError("PET_VIVO: as duas distribuicoes tem tamanhos diferentes")
+    tp, tq = _total_positivo(p), _total_positivo(q)
+    nums = [a * tq - b * tp for a, b in zip(p, q)]
+    den = tp * tq
+    return [x / den for x in nums], sum(abs(x) for x in nums) / (2 * den)
+
+
+def entropia_bits(pesos: Sequence[int]) -> float:
+    """H(P) em bits (descritiva, secao 7.1: o pet que so reage tem H perto de 0)"""
+    t = _total_positivo(pesos)
+    return -sum((w / t) * math.log2(w / t) for w in pesos if w > 0)
+
+
+def partes_absolutas(partes: Mapping[str, int]) -> dict[str, float]:
+    """a parte de cada termo, |t| / soma |t| (A-1); com todos os termos 0, todas as partes 0"""
+    total = sum(abs(v) for v in partes.values())
+    return {k: (abs(v) / total if total else 0.0) for k, v in partes.items()}
+
+
+def inflacao(soma_p: Sequence[float], soma_p1: Sequence[float]) -> list[float | None]:
+    """rho_b = soma_k P_b / soma_k P1_b (A-2): rho > 1, o comportamento ganha pela multiplicidade; None se P1_b nunca foi positivo"""
+    if len(soma_p) != len(soma_p1):
+        raise ValueError("PET_VIVO: tamanhos diferentes")
+    return [(a / b if b > 0 else None) for a, b in zip(soma_p, soma_p1)]
+
+
+def mediana(valores: Sequence[float]) -> float | None:
+    """a mediana (a media dos dois do meio num numero par); None sem valores"""
+    xs = sorted(valores)
+    n = len(xs)
+    if not n:
+        return None
+    return xs[n // 2] if n % 2 else (xs[n // 2 - 1] + xs[n // 2]) / 2
+
+
+def tabela_do_alivio(canais: Mapping[tuple[str, str], Sequence[float]], nivel: float = 0.95) -> dict[tuple[str, str], dict]:
+    """a tabela do alivio A_r (A-4, PV-0-7): para cada (comportamento, receptor), a media por vida do canal do receptor no r das
+    consequencias do comportamento; o comportamento alivia o receptor se a media e > 0 e o limite de baixo do IC95 pelo t (sobre as vidas)
+    tambem. Com menos de duas vidas, nao alivia (o IC nao existe)."""
+    out = {}
+    for chave in sorted(canais):
+        ic = ic_t(list(canais[chave]), nivel)
+        alivia = ic["n"] >= 2 and ic["media"] is not None and ic["media"] > 0 and ic["ic_inferior"] is not None and ic["ic_inferior"] > 0
+        out[chave] = {"n": ic["n"], "media": ic["media"], "ic_inferior": ic["ic_inferior"], "ic_superior": ic["ic_superior"],
+                      "alivia": alivia}
+    return out
+
+
+def coerencia(movido_para: Mapping[str, float], alivio: Iterable[str], soma_tv: float) -> float | None:
+    """C_r = soma_k soma_{b em A_r} max(0, Delta P_b) / soma_k TV_k (A-4): a parte da massa movida que vai para quem alivia r. `movido_para`
+    = soma_k max(0, Delta P_b) por comportamento. None sem massa movida ou sem comportamento que alivie"""
+    alivio = tuple(alivio)
+    if not alivio or soma_tv <= 0:
+        return None
+    return sum(movido_para.get(b, 0.0) for b in alivio) / soma_tv
+
+
+def sensibilidade_coerente(movido_para: Mapping[str, float], alivio: Iterable[str], n: int) -> float | None:
+    """S_r x C_r = soma_k soma_{b em A_r} max(0, Delta P_b) / n (secao 7.1): a massa media, por decisao, movida para quem alivia r quando
+    a falta de r sobe de (falta - Delta) para (falta + Delta). None sem decisoes ou sem comportamento que alivie"""
+    alivio = tuple(alivio)
+    if not alivio or n <= 0:
+        return None
+    return sum(movido_para.get(b, 0.0) for b in alivio) / n
+
+
+def se_c(por_receptor: Mapping[str, float | None]) -> float | None:
+    """a SE-C de uma vida (secao 7.1): a media de S_r x C_r sobre os receptores com A_r nao vazia (os None ficam fora)"""
+    vals = [v for _, v in sorted(por_receptor.items()) if v is not None]
+    return sum(vals) / len(vals) if vals else None
+
+
+def media_inteira_por_comportamento(unidades: Sequence[tuple[int, int]], n: int) -> list[int]:
+    """um vetor inteiro proporcional a media dos w das unidades ativas de cada comportamento (a P^mu da A-2, so descritiva): W_b x (L / n_b),
+    com L o mmc dos n_b"""
+    soma = [0] * n
+    conta = [0] * n
+    for b, w in unidades:
+        if w > 0:
+            soma[b] += w
+            conta[b] += 1
+    L = 1
+    for c in conta:
+        if c:
+            L = L * c // math.gcd(L, c)
+    return [s * (L // c) if c else 0 for s, c in zip(soma, conta)]
+
+
+def quantis(valores: Sequence[float], qs: Sequence[float]) -> list[float]:
+    """os quantis pelo posto mais proximo (o valor de posto ceil(q x n), 1 <= posto <= n), sem interpolacao"""
+    xs = sorted(valores)
+    n = len(xs)
+    if not n:
+        raise ValueError("PET_VIVO: quantis de uma lista vazia")
+    return [xs[min(n, max(1, math.ceil(q * n))) - 1] for q in qs]

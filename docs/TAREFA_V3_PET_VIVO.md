@@ -120,3 +120,23 @@ Cada decisão vem com a recomendação, que é a decidida, e o custo de errar. A
 - **Próximo:** o merge pelo Matheus, depois o PR do código (o plano, seção 9), com o tempo do A-4 medido nas sementes dos testes.
   O replay só roda quando o Gerente liberar a vez da máquina. A fila é o I2, depois esta auditoria, depois a calibração da rodada 3
   da luta.
+
+## Resultado da etapa do código da auditoria (2026-11-08, Claude Code, Opus 5.5, branch `v3-pet-vivo-codigo`)
+
+O Matheus mandou seguir com as recomendações do cérebro ("E também já segue com as recomendações da parte do cérebro", 2026-11-08), por
+repasse do Gerente da V3.
+
+- **Entregue:** o código da seção 9 do plano.
+  - **As contas da A-1 à A-4 e a SE-C,** no `digilab/metrics.py`, uma vez só.
+  - **O script `experiments/auditoria_pet_vivo.py`,** com:
+    - o replay da C4 no `a287ba2` e o da AN0 no código de hoje;
+    - as conferências que falham alto;
+    - o contrafactual pelo embrulho do `Impulso.unidades`, sem mudar o cérebro;
+    - a regra de leitura da seção 5.
+  - **Os testes:** `tests/test_metrics_pet_vivo.py` e `tests/test_auditoria_pet_vivo.py`.
+- **O G1:** passa com e sem o contrafactual numa vida da AN0 (o gabarito) e numa vida da C4 (as medidas gravadas).
+- **O tempo do A-4** (`artifacts_v3_pet_vivo/auditoria/tempo_a4.json`): a projeção da auditoria inteira fica entre cerca de 2,3 h e 2,9 h
+  com 4 processos, abaixo do corte de umas 8 h. A subamostra não muda. O tempo de parede da máquina oscila (D-PV0C-9).
+- **Os desvios:** D-PV0C-1 a D-PV0C-10.
+- **Nenhum replay das 4 800 vidas.** Ele espera a vez da máquina, que o Gerente libera depois do I2.
+
