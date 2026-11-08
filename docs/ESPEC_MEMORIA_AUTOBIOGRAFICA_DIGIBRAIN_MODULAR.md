@@ -15,6 +15,13 @@ C4-E1 a C4-E3 são DECIDIDAS (o Matheus, 2026-10-30). As leituras que esta espec
 e implementada (com o commit), aprovada e ainda não implementada (com a etapa) ou pendente. O #530 implementou o afeto pelo nível
 (`theta_afeto`); o PR `v3-memoria-afeto` o troca pela subida (3.3), como o Matheus decidiu no #530.
 
+**A proveniência (2026-11-01, revisão do Matheus numa sessão do Claude Code, PR `v3-c4-proveniencia`):** as aprovações de 2026-11-01
+escritas acima e nas seções 3.3, 8 e 11 ("decidido pelo Matheus ... pela recomendação") foram registradas pelo Gerente da V3, citando o
+chat dele, em comentários com a conta do Matheus (#529, #530, #532, #533). Perguntado, o Matheus não reconheceu duas delas como aprovação
+direta (o afeto pela variação e a M2 com a M3 juntas) e revisou o conjunto. **Todas foram RATIFICADAS por ele na mesma data:** o afeto pela
+variação; a M2 e a M3 num PR só; as MA-1 a MA-8; os valores da seção 8; a remoção do `theta_afeto` (#532); a faixa do corpo pelas leituras
+dos receptores na semelhança (#533). Nenhuma muda; o código não muda. O detalhe está em `docs/TAREFA_V2_MEMORIA_AUTOBIOGRAFICA.md`, seção 20.
+
 **Os rótulos:** [DADO] é número de artefato no git; [EXISTE] é o que o código da `main` (`687841f`) já faz; [MECANISMO] é o que uma fonte
 verificada diz de um mecanismo; [HIPÓTESE] é o que falta medir.
 

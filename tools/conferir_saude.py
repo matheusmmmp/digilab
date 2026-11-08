@@ -14,8 +14,10 @@ seções da cópia, iguais, e as seções do lote, cada uma inteira no destino.
 Etapa 2 (G-CONCAT): o registro de desvios por mês (tools/registro_por_mes.py).
 Os arquivos de docs/registro/, concatenados na ordem dos meses, começam pelo
 REGISTRO_DESVIOS.md antigo do commit de base (docs/historico/registro_lotes.json),
-byte a byte, e pela cópia da etapa 0. O índice (docs/REGISTRO_DESVIOS.md) tem uma
-linha por seção, na ordem, e nenhuma seção datada. Cada seção está no arquivo do
+byte a byte, e pela cópia da etapa 0. O índice (docs/REGISTRO_DESVIOS.md), gerado por
+tools/gerar_indice_desvios.py, segue as seções na ordem, sem seção datada; no PR ele
+pode estar atrasado (D-ID3, docs/TAREFA_V3_INDICE_DESVIOS.md): a falta de linha só
+avisa, e linha sem seção, no arquivo errado ou fora da ordem reprova. Cada seção está no arquivo do
 mês da data dela. As seções que vieram depois pelo formato antigo (os lotes) são
 iguais às do REGISTRO_DESVIOS.md do commit do lote.
 
@@ -29,6 +31,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import gerar_indice_desvios  # noqa: E402
 import registro_por_mes as rpm  # noqa: E402
 
 COPIA = "docs/historico/CLAUDE_pre_saude.md"
@@ -156,12 +159,18 @@ def conferir_registro(raiz: Path) -> tuple[list[str], int]:
                 falhas.append(f"seção repetida: {titulo[:80]}")
             secoes[titulo] = trecho.rstrip()
             achadas.append((titulo, rel))
-    if achadas != indice:
-        falta = [t for t, _ in achadas if t not in {i for i, _ in indice}]
-        sobra = [t for t, _ in indice if t not in secoes]
-        falhas.append(f"o índice não lista as seções dos arquivos do mês, na ordem (sem linha: {len(falta)}"
-                      + (f", a primeira: {falta[0][:60]}" if falta else "") + f"; linha sem seção: {len(sobra)}"
-                      + (f", a primeira: {sobra[0][:60]}" if sobra else "") + ")")
+    # O índice pode estar atrasado (D-ID3, docs/TAREFA_V3_INDICE_DESVIOS.md): falta de linha não reprova, porque quem faz o merge
+    # regenera (tools/gerar_indice_desvios.py). Reprova linha sem seção, linha no arquivo errado e linha fora da ordem dos arquivos.
+    posicao = {t: (k, rel) for k, (t, rel) in enumerate(achadas)}
+    sobra = [t for t, _ in indice if t not in posicao]
+    errado = [t for t, rel in indice if t in posicao and posicao[t][1] != rel]
+    listadas = [(t, posicao[t][0]) for t, _ in indice if t in posicao]
+    fora = [b[0] for a, b in zip(listadas, listadas[1:]) if b[1] <= a[1]]
+    if sobra or errado or fora:
+        falhas.append(f"o índice não segue as seções dos arquivos do mês (linha sem seção: {len(sobra)}"
+                      + (f", a primeira: {sobra[0][:60]}" if sobra else "") + f"; no arquivo errado: {len(errado)}"
+                      + (f", a primeira: {errado[0][:60]}" if errado else "") + f"; fora da ordem: {len(fora)}"
+                      + (f", a primeira: {fora[0][:60]}" if fora else "") + "); rode python tools/gerar_indice_desvios.py")
     concat = "".join(textos.values())
     copia = raiz / rpm.COPIA
     if copia.exists() and not concat.startswith(rpm.ler(copia)):
@@ -221,7 +230,10 @@ def main() -> int:
             print("  -", f)
         return 1
     lotes = json.loads(rpm.ler(raiz / rpm.LOTES))
-    print(f"G-CONCAT passa: {n_reg} seções nos arquivos do mês, o índice na ordem; a concatenação começa pelo registro do commit "
+    atraso = len(gerar_indice_desvios.atrasadas(raiz))
+    print(f"G-CONCAT passa: {n_reg} seções nos arquivos do mês, o índice na ordem"
+          + (f" e {atraso} seção(ões) ainda sem linha (rode python tools/gerar_indice_desvios.py)" if atraso else "")
+          + "; a concatenação começa pelo registro do commit "
           f"{lotes['base']['commit'][:12]} (sha256 {lotes['base']['sha256'][:16]}…) e pela cópia da etapa 0; "
           f"{sum(len(l['secoes']) for l in lotes['lotes'])} seções de lotes conferidas.")
     return rc

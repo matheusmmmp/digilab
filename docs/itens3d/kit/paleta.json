@@ -1,0 +1,5 @@
+{
+ "fonte": "as cores dominantes da textura da Meshy (mediana em 8 cores), puxadas para a madeira laranja do concept 3 (caixote); a corda e a madeira clara tem quase a mesma cor na textura e ficam num tom so; o vermelho e o da cruz do concept (a Meshy nao o trouxe); PROPOSTO",
+ "paleta": [[228, 172, 106], [184, 122, 72], [246, 244, 238], [92, 94, 100], [214, 52, 46]],
+ "nomes": ["madeira", "madeira escura", "tampa", "cantoneira", "cruz"]
+}

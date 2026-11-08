@@ -1,6 +1,6 @@
-/* O painel DigiBrain dos pets v11 (componentes/DigiBrain.tsx; pranchas DigiBrainDesktop e DigiBrain390). No celular: o botao no canto do
-   palco e o conteudo numa folha (tokens --dl-*). No desktop (>= 1100 px): uma coluna de 296 px entre o habitat e a coluna de sempre (320 px,
-   como nos outros pets); a coluna rola sozinha (tokens --ui-* da casca). Nada anima. */
+/* O DigiBrain na pele dos menus antigos: o conteudo do painel do cerebro modular (componentes/DigiBrainLab.tsx, as classes db-*) e os tres
+   --mp-* do mapa dos pesos, que o scan do A v11 (scan_digibrain.css) le. O painel de cartoes do A v11 e o mapa de colunas sairam com o campo
+   pequeno (D1c da UX_TELA_PET); as regras deles que mais ninguem usava sairam junto. Nada anima. */
 
 /* ---------- o conteudo (os dois tamanhos) */
 .db-conteudo{display:flex;flex-direction:column;gap:14px;font-size:13px}
@@ -19,7 +19,6 @@
 .db-barras [data-lobo="memoria_emocao"] .db-trilho b{background:var(--dl-dark)}
 .db-barras .db-trilho b.neg{background:var(--dl-need)}
 .db-barras em,.db-opcoes em,.db-aprendeu em{font-style:normal;font-family:var(--dl-f-lcd);font-weight:400;text-align:right;white-space:nowrap}
-.db-emo{display:inline-block;margin-top:6px;font-size:12px;font-weight:800;padding:2px 10px;border-radius:999px;background:#F3EAFB;color:#5A2A8C}
 .db-chips{display:flex;flex-wrap:wrap;gap:6px}
 .db-chips li{display:inline-flex;align-items:center;gap:4px;font-weight:800;padding:4px 10px;border-radius:999px;box-shadow:0 0 0 2px var(--dl-border);background:var(--dl-surface)}
 .db-favor{color:var(--dl-ok-edge)}
@@ -36,28 +35,16 @@
 .db-selo i{width:8px;height:8px;border-radius:50%;background:var(--dl-muted)}
 .db-selo--vivo i{background:var(--dl-ok)}
 .db-selo--replay i{background:var(--dl-action)}
-.db-icone{display:block;flex:none}
 :root[data-tema="escuro"] .db-trilho{background:#1C335C}
-:root[data-tema="escuro"] .db-emo{background:var(--dl-dark-bg);color:var(--dl-dark-ink)}
 @media (prefers-color-scheme:dark){
   :root:not([data-tema="claro"]) .db-trilho{background:#1C335C}
-  :root:not([data-tema="claro"]) .db-emo{background:var(--dl-dark-bg);color:var(--dl-dark-ink)}
 }
 
 /* ---------- o mapa dos pesos (MapaPesos.tsx; pranchas DigiBrainDesktop e DigiBrain390): sem transicao nem animacao, acende so na decisao */
-.mp,.mp-leg{--mp-fundo:var(--dl-surface);--mp-mais:#E34948;--mp-menos:#2A78D6;--mp-aceso:#F08A00}
+.mp,.mp-leg,.scan{--mp-fundo:var(--dl-surface);--mp-mais:#E34948;--mp-menos:#2A78D6;--mp-aceso:#F08A00}
 .mp{display:block;width:100%;height:auto;font-family:var(--dl-f-texto)}
 .folha .mp{--mp-fundo:var(--dl-bg)}
 .mp *{transition:none;animation:none}
-.mp-reg rect{fill:var(--c);fill-opacity:.10;stroke:var(--c);stroke-opacity:.45;stroke-width:1}
-.mp-reg text{font-size:8px;font-weight:900;letter-spacing:.3px;text-transform:uppercase;fill:var(--dl-text-2)}
-.mp-reg--percepcao{--c:var(--dl-action)}
-.mp-reg--impulsos{--c:var(--dl-highlight-press)}
-.mp-reg--decisao{--c:#1AA7C9}
-.mp-reg--memoria_emocao{--c:var(--dl-dark)}
-.mp-dest rect{fill-opacity:.22;stroke-opacity:1;stroke-width:2}
-.mp-dest text{fill:var(--dl-text)}
-.mp-reg .mp-mais-peso{font-size:8px;text-transform:none;letter-spacing:0;fill:var(--dl-text)}
 .mp-pesos path,.mp-acesas path{fill:none;stroke-linecap:round}
 .mp-prior{stroke:var(--dl-muted);stroke-opacity:.5}
 .mp-mais{stroke:var(--mp-mais)}
@@ -76,25 +63,20 @@
 .mp-esc text{font-weight:900}
 .mp .mp-no .mp-pct{font-family:var(--dl-f-lcd);font-weight:400;font-size:9px}
 .mp-leg{display:flex;flex-wrap:wrap;gap:2px 10px;list-style:none;margin:6px 0 0;padding:0;font-size:11px;font-weight:700;color:var(--dl-text-2)}
-.mp-leg i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:4px;background:var(--c)}
-.mp-nota{margin:4px 0 0;font-size:11px;font-weight:700;color:var(--dl-text-2)}
 .db-folha-selo{display:flex;align-items:center;gap:10px}
 .folha .db-trilho{background:var(--dl-surface)}      /* a folha tem o fundo --dl-bg, que some com o trilho de sempre */
 
 /* ---------- desktop: a coluna do painel */
 @media (min-width:1100px){
-  .digibrain .db-conteudo{font-size:12px;gap:12px}
-  .digibrain .db-sec,.digibrain .db-selo,.digibrain .db-agora small,.digibrain .db-vazio,.digibrain .db-ultimas .dl-lcd{color:var(--ui-text-2)}
-  .digibrain .db-agora{background:var(--ui-surface-2);box-shadow:none;border:1px solid var(--ui-border);border-radius:10px}
-  .digibrain .db-agora b{font-size:14px}
-  .digibrain .db-barras li{grid-template-columns:112px minmax(0,1fr) 50px;margin:3px 0}
-  .digibrain .db-trilho{height:8px;background:var(--ui-bar-track)}
-  .digibrain .db-opcoes li{grid-template-columns:minmax(0,1fr) 60px 40px;margin:3px 0}
-  .digibrain .db-opcoes .db-trilho{height:6px}
-  .digibrain .db-opcoes li.esc .db-trilho b{background:var(--ui-primary)}
-  .digibrain .db-opcoes small{color:var(--ui-primary-forte)}
-  .digibrain .db-chips li{box-shadow:none;border:1px solid var(--ui-border);background:var(--ui-surface);padding:3px 10px}
-  .digibrain .db-emo{font-size:11px}
-  .digibrain .mp{--mp-fundo:var(--ui-surface)}
-  .digibrain .mp-leg,.digibrain .mp-nota{color:var(--ui-text-2)}
+  .digibrain:not(.scan-in) .db-conteudo{font-size:12px;gap:12px}
+  .digibrain:not(.scan-in) .db-sec,.digibrain:not(.scan-in) .db-selo,.digibrain:not(.scan-in) .db-agora small,.digibrain:not(.scan-in) .db-vazio,.digibrain:not(.scan-in) .db-ultimas .dl-lcd{color:var(--ui-text-2)}
+  .digibrain:not(.scan-in) .db-agora{background:var(--ui-surface-2);box-shadow:none;border:1px solid var(--ui-border);border-radius:10px}
+  .digibrain:not(.scan-in) .db-agora b{font-size:14px}
+  .digibrain:not(.scan-in) .db-barras li{grid-template-columns:112px minmax(0,1fr) 50px;margin:3px 0}
+  .digibrain:not(.scan-in) .db-trilho{height:8px;background:var(--ui-bar-track)}
+  .digibrain:not(.scan-in) .db-opcoes li{grid-template-columns:minmax(0,1fr) 60px 40px;margin:3px 0}
+  .digibrain:not(.scan-in) .db-opcoes .db-trilho{height:6px}
+  .digibrain:not(.scan-in) .db-opcoes li.esc .db-trilho b{background:var(--ui-primary)}
+  .digibrain:not(.scan-in) .db-opcoes small{color:var(--ui-primary-forte)}
+  .digibrain:not(.scan-in) .db-chips li{box-shadow:none;border:1px solid var(--ui-border);background:var(--ui-surface);padding:3px 10px}
 }

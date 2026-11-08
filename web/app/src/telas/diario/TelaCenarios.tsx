@@ -1,21 +1,24 @@
 /* Cenarios (Lab; porte do HTML): monta dois pets com donos simulados (mesmo codigo do rival da arena). O pet A
    vira o pet do jogador (o anterior fica guardado para voltar) e o B vira o rival fixo da arena. Mostra lado a
    lado estado, sinal de aprendizado e JSD da politica media ao prior; 100 lutas A x B. Ferramenta de inspecao
-   do porte, nao resultado de pesquisa: uma semente, outro RNG, sem IC. */
+   do porte, nao resultado de pesquisa: uma semente, outro RNG, sem IC.
+   Desde 2026-11-07 os dois pets sao da versao de hoje (VERSAO_PET), pelo mesmo laco da escada de exemplo (petDaReceita, src/pets.ts):
+   o treinarPet do motor cria pets v5, que nao abrem mais desde o descarte dos pets do combate por turnos. */
 import { useState } from "react";
 import {
   ACOES_PET, ACOES_V2_OBS, CA, NOME_BOT, NOME_COMB, NOME_DONO, NOME_V2, afinidades, corDominante, hashSemente, jogarLuta, lutadorPet, tamanhoLuta,
-  nomeForma, observacao, treinarPet, type Motor, type Observacao, type TipoDono,
+  CD, TPD, nomeForma, observacao, type Motor, type Observacao, type TipoDono,
 } from "../../../motor/index.ts";
 import { comSinal, dec } from "../../componentes/Barras.tsx";
-import { jogoAtual, trocarMotor, useJogo } from "../../jogo.ts";
+import { jogoAtual, motorReal, trocarMotor, useJogo } from "../../jogo.ts";
 import { LUTA, previa, useLuta } from "../../luta.ts";
 import { CHAVE_ANTERIOR, voltarAoAnterior } from "../pet/MeusPets.tsx";
 import { textoSave } from "../../save.ts";
+import { petDaReceita } from "../../pets.ts";
 
-interface Lado { dono: TipoDono; dias: number; porDia: number }
-interface Cenario { id: string; titulo: string; desc?: string; a: Lado; b: Lado }
-const CENARIOS: Cenario[] = [
+export interface Lado { dono: TipoDono; dias: number; porDia: number }
+export interface Cenario { id: string; titulo: string; desc?: string; a: Lado; b: Lado }
+export const CENARIOS: Cenario[] = [
   { id: "adulto-bebe", titulo: "Ultimate bem cuidado × In-Training aleatório", desc: "A: atencioso, 6 dias, 40 interações/dia. B: aleatório, 2 horas (ainda In-Training), 8/dia.",
     a: { dono: "atencioso", dias: 6, porDia: 40 }, b: { dono: "aleatorio", dias: .1, porDia: 8 } },
   { id: "controle", titulo: "Controle da pesquisa", desc: "Atencioso × aleatório, 5 dias, 16/dia nos dois. É a comparação do portão.",
@@ -38,7 +41,7 @@ function jsdBits(p: Record<string, number>, q: Record<string, number>): number {
   }
   return s;
 }
-function resumoPet(m: Motor, spec: Lado): Record<string, string | number> {
+export function resumoPet(m: Motor, spec: Lado): Record<string, string | number> {
   const e = m.e, r = m.pol.rec, af = afinidades(m.tracos), dom = corDominante(m.tracos), pm = m.pol.media(OBS_ARENA);
   return {
     dono: NOME_DONO[spec.dono], idade: `${spec.dias} d · ${nomeForma(m.forma)}`, porDia: spec.porDia, total: m.log.filter(x => x[1] === "d").length,
@@ -53,6 +56,25 @@ function resumoPet(m: Motor, spec: Lado): Record<string, string | number> {
 let atual: { cen: Cenario; semente: number; ra: Record<string, string | number>; rb: Record<string, string | number> } | null = null;
 let lutasTxt: { resumo: string; nota: string; linhas: [string, string, string][] } | null = null;
 
+/** o pet de um lado do cenario: a versao de hoje, as medalhas das evolucoes, o dono simulado tratando a lesao do sparring, sem treino.
+    Os limites do orcamento sao os do treinarPet de antes (falha alto em vez de um pet que nao viveu) */
+function petDoLado(l: Lado, semente: number): Motor {
+  const passos = Math.round(l.dias * TPD / CD.passo), orc = Math.round(l.porDia * l.dias);
+  if (passos < 1) throw new Error("dias de vida precisa ser positivo");
+  if (orc < 1) throw new Error("o orçamento precisa ter pelo menos 1 interação");
+  if (orc > passos * CD.maxPasso) throw new Error(`orçamento de ${orc} interações não cabe em ${passos} passos (máximo ${CD.maxPasso} por passo)`);
+  return petDaReceita({ dono: l.dono, dias: l.dias, porDia: l.porDia, treinoDia: 0, semente }, true);
+}
+/** monta o cenario: o pet A vira o seu (o atual fica guardado para voltar; so o registro e salvo, como sempre), o B vira o rival fixo */
+export function montarCenario(cen: Cenario, semente: number): { A: Motor; B: Motor } {
+  const sa = hashSemente("cenario", cen.id, semente, "a"), sb = hashSemente("cenario", cen.id, semente, "b");
+  const A = petDoLado(cen.a, sa), B = petDoLado(cen.b, sb);
+  try { if (!localStorage.getItem(CHAVE_ANTERIOR)) localStorage.setItem(CHAVE_ANTERIOR, textoSave(motorReal())); } catch { /* sem armazenamento */ }
+  trocarMotor(A, "save");
+  LUTA.rivalFixo = { rival: B, dias: cen.b.dias, tipo: cen.b.dono };
+  previa("arena");
+  return { A, B };
+}
 const pct = (v: string | number): string => ((v as number) * 100).toFixed(0) + "%";
 const temAnterior = (): boolean => { try { return !!localStorage.getItem(CHAVE_ANTERIOR); } catch { return false; } };
 
@@ -66,13 +88,7 @@ export function TelaCenarios() {
     setTimeout(() => { try { fn(); } catch (err) { setMsg({ txt: err instanceof Error ? err.message : String(err), erro: true }); } }, 30);
   };
   const montar = (cen: Cenario, semente: number) => {
-    const sa = hashSemente("cenario", cen.id, semente, "a"), sb = hashSemente("cenario", cen.id, semente, "b");
-    const A = treinarPet(cen.a.dono, cen.a.dias, cen.a.porDia, sa), B = treinarPet(cen.b.dono, cen.b.dias, cen.b.porDia, sb);
-    /* o pet atual fica guardado para o botao de voltar; so o registro e salvo, como sempre */
-    try { if (!localStorage.getItem(CHAVE_ANTERIOR)) localStorage.setItem(CHAVE_ANTERIOR, textoSave(jogoAtual().motor)); } catch { /* sem armazenamento */ }
-    trocarMotor(A, "save");
-    LUTA.rivalFixo = { rival: B, dias: cen.b.dias, tipo: cen.b.dono };
-    previa("arena");
+    const { A, B } = montarCenario(cen, semente);
     atual = { cen, semente, ra: resumoPet(A, cen.a), rb: resumoPet(B, cen.b) };
     lutasTxt = null;
     setMsg({ txt: `${cen.titulo} · semente ${semente}. O pet A agora é o seu.` });
@@ -128,7 +144,7 @@ export function TelaCenarios() {
       <fieldset className="lab-pet lab-pet--a"><legend>Pet A · vira o seu</legend>{dono("ca")}{campo("ca", "dias", "Dias de vida", "0.5", "14", "0.5")}{campo("ca", "pd", "Interações por dia", "1", "200", "1")}</fieldset>
       <fieldset className="lab-pet lab-pet--b"><legend>Pet B · rival fixo</legend>{dono("cb")}{campo("cb", "dias", "Dias de vida", "0.5", "14", "0.5")}{campo("cb", "pd", "Interações por dia", "1", "200", "1")}</fieldset>
       <label className="lab-semente">Semente <input id="c-semente" className="campo-num" type="number" min="1" step="1" value={form.semente} onChange={ev => setForm({ ...form, semente: (ev.target as HTMLInputElement).value })} /></label>
-      <p className="lab-nota">Simular troca o seu pet atual. Dá para voltar ao anterior em Meus pets. Os pets simulados são da versão sem medalhas: evoluem sem o Tamer e não ganham medalhas.</p>
+      <p className="lab-nota">Simular troca o seu pet atual. Dá para voltar ao anterior em Meus pets. Os pets simulados são da versão de hoje e já têm as medalhas das evoluções; o dono simulado trata as lesões do sparring.</p>
       <button type="button" className="dl-btn dl-btn--largo" onClick={montarAMao}>Simular e comparar</button>
       <details className="dl-apoio"><summary>Cenários prontos</summary>
         <div className="cenarios">

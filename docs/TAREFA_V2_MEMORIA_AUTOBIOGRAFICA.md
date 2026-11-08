@@ -348,3 +348,26 @@ A run única do adendo 9 (APROVADO em 2026-11-01). O resultado completo está na
 - **Os artefatos** em `artifacts_v2_digibrain_prototipo/memoria_autobio/run/`; o `medidas.json` (138 MB) entra no git como
   `medidas.json.gz` (o limite de 100 MB do GitHub).
 - **As D-C4-1 a D-C4-4 DECIDIDAS pelo Matheus em 2026-11-01, pela recomendação** (no registro de 2026-11 e no PR).
+
+## 20. A proveniência das decisões de 2026-11-01 (Matheus, numa sessão do Claude Code, Opus 5.5, worktree `v3-c4-proveniencia`; só papel)
+
+As aprovações das seções 9 a 12 (e da espec, seções 3.3, 8 e 11) foram escritas como "decidido pelo Matheus ... pela recomendação" pelo
+Gerente da V3, que citava o chat dele em comentários com a conta do Matheus. Numa sessão de planejamento (2026-11-01), o Matheus disse não
+reconhecer duas delas como aprovação direta e pediu a revisão de todas as que vieram por esse caminho. **Todas foram RATIFICADAS por ele na
+mesma data,** nenhuma mudou, e o código não muda:
+
+| decisão | onde foi registrada | a revisão |
+|---|---|---|
+| o afeto pela variação (a subida ≥ `theta_sig`, não o nível ≥ `theta_afeto`) | #530 (`da8d017`), espec 3.3 | ratificada (o Matheus escolheu "ratificar a variação" entre quatro saídas) |
+| a M2 e a M3 num PR só | #530 | ratificada ("aceitar M2/M3 junto") |
+| a espec com as MA-1 a MA-8 | #529 | ratificadas, pela recomendação desta sessão |
+| os valores da seção 8 da espec | #529 | ratificados, pela recomendação desta sessão; seguem SEM FONTE |
+| a remoção do `theta_afeto` | #532 | ratificada, pela recomendação desta sessão |
+| a faixa do corpo pelas leituras dos receptores na semelhança | #533 | ratificada, pela recomendação desta sessão |
+
+**Não revistas nesta sessão** (registradas pelo mesmo caminho depois do #533): as leituras da M5 no #535 (o sentido natural da
+`cautela_comida` e as outras três), a entrada do #536 como está e a autorização da regravação do `fala_memoria_python.json`, e o que os
+#537 a #539 registram como decisão do Matheus. Elas continuam como estão escritas.
+
+**A regra que fica (a memória do projeto):** um "DECIDIDO pelo Matheus" que o Gerente escreve citando o chat é registro, não aprovação
+direta; antes de usá-lo como premissa de uma validação, confirmar com o Matheus.

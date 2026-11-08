@@ -24,6 +24,12 @@ as urgencias, o reflexo e o gesto do dono desde a decisao anterior); o `explorar
 `escolher_alvo` (o ponto que o motor sorteou), e nas decisoes seguintes o passeio e entregue como `Alvo.ponto`. O motivo ganha `do_passeio`
 no alvo, e o fim do passeio sem credito pelo gesto traz `credito: "gesto"`. Desligada, nenhum campo novo.
 
+Com a subchave `fala_unidades` (docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, 3.1), o M-IMPULSO divide o `chamar_atencao` nas tres unidades de
+fala (o conteudo so na chave da escolha, `[chamar_atencao, c, None]`); a acao entregue ao motor e o chamar de hoje, e a opcao de fala credita
+a linha de H do conteudo. A consequencia da opcao de fala (o r_n que o P2 credita, o V e o E, o episodio) le o corpo de depois na
+decisao seguinte, antes da acao seguinte (o adendo 1 do plano, A1.1: o intervalo contem o cuidado do dono); o mundo de depois e o de
+hoje. Desligada, nenhum campo novo; ligada, nenhum campo novo no motivo (o conteudo esta na `escolha`).
+
 **O alvo** (`escolher_alvo`): o candidato do motor do tipo (e do id) da unidade escolhida; o `u` do motor e ignorado. **A excecao unica**
 (a PE-14 revista): em EXPLORAR, o lugar lembrado do M-MEM e entregue como `Alvo.ponto(x, y)`, fora da lista do motor, que o valida por
 conta propria (`MotorMundo._validar_alvo`: so em EXPLORAR, coordenadas inteiras dentro do mapa). Brincar sem bola a vista nao tem alvo
@@ -43,6 +49,12 @@ nas acoes com alvo) e `consequencia_corpo`. A decisao guarda tudo numa pendencia
 decisao seguinte. Nenhum modulo os recebe como sinal: o corpo os sente pelos receptores e o dono pesa pela consequencia no mundo, nunca
 como recompensa direta (a D-B do PLANO_V2_PESQUISA, secao 3; escolha PROPOSTA da etapa 1a).
 
+**A luta** (`receber_luta`, a ponte da luta, PE2, docs/TAREFA_V3_PONTE_LUTA.md, secoes 3.1 e 3.2; so com a `ConfigLutaMemoria` ligada e a
+`memoria_autobio`): irma do `receber_acao_dono`, guarda o resumo pronto (rival, resultado, vida perdida em S, tick); na decisao seguinte o
+M-SENS o entrega na Observacao (`sens["lutas"]`) e, depois da consolidacao e da lembranca, o M-MEM o guarda como episodio de origem `luta`
+(rival em `outro`), se a regra de hoje o aceita. Nenhum modulo o recebe como recompensa: o V, o E, o g_apr e o M-PLAST nao andam; a
+variacao do corpo (o corpo da consequencia anterior contra o da Observacao) e quem da o sigma. Desligada, nenhum campo, estado nem gancho.
+
 **O registro** (secao 7): cada decisao guarda o seu motivo em `motivos` (derivado, nunca no log): as unidades com os termos, os pesos, o
 u, a escolha, o afeto, o estado, a memoria, as sondas e, no fechamento, a consequencia."""
 from __future__ import annotations
@@ -50,9 +62,10 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass
 
-from ..config import (CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, VERSAO_PET_DIGIBRAIN, Config,
-                      ConfigDigibrain, ConfigDigibrainInatos, ConfigMundo)
-from ..events import AcaoPet, AcaoUsuario
+from ..config import (CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, CONFIG_LUTA_MEMORIA, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, CONTEUDOS_FALA,
+                      VERSAO_PET_DIGIBRAIN, Config, ConfigDigibrain, ConfigDigibrainInatos, ConfigFalaUnidades, ConfigLutaMemoria,
+                      ConfigMundo)
+from ..events import AcaoPet, AcaoUsuario, LutaSemChave, resumo_luta
 from ..modelo_mundo import raiz_inteira
 from ..mundo import ACOES_COM_ALVO, Alvo
 from ..policies.lobos import leitura_receptor
@@ -63,7 +76,7 @@ from .afeto import Afeto
 from .arb import Arbitragem
 from .estado import GESTOS_DO_DONO, EstadoDinamico
 from .impulso import Impulso
-from .mem import Memoria, episodio_autobio
+from .mem import Memoria, episodio_autobio, episodio_luta
 from .pers import FACETAS, SENTIDO, Personalidade
 from .plast import Plasticidade
 from .sens import COMIDAS_BOAS, Sens, classe_do_tipo
@@ -105,10 +118,12 @@ class Modulos:
 
 
 def montar_modulos(cfg: Config, cd: ConfigDigibrain, cm: ConfigMundo, inatos: ConfigDigibrainInatos,
-                   serie_e_doadora: tuple | None, semente: int | None = None) -> Modulos:
+                   serie_e_doadora: tuple | None, semente: int | None = None, luta: bool = False,
+                   cfg_fala: ConfigFalaUnidades | None = None) -> Modulos:
     return Modulos(sens=Sens(cfg, cm, inatos), afeto=Afeto(cfg, cd, inatos, serie_e_doadora), estado=EstadoDinamico(cfg, cd, inatos),
-                   impulso=Impulso(inatos, cd), mem=Memoria(cm, inatos, cd.memoria_autobio, cd.controle_mem,
-                                 None if semente is None else random.Random(derivar_semente(semente, "mem_emb"))), arb=Arbitragem(inatos, cd.memoria_autobio, cd.facetas_mem), plast=Plasticidade(cd, inatos),
+                   impulso=Impulso(inatos, cd, cfg_fala), mem=Memoria(cm, inatos, cd.memoria_autobio, cd.controle_mem,
+                                 None if semente is None else random.Random(derivar_semente(semente, "mem_emb")),
+                                 luta), arb=Arbitragem(inatos, cd.memoria_autobio, cd.facetas_mem), plast=Plasticidade(cd, inatos),
                    pers=Personalidade(inatos.eta_faceta, inatos.teto_faceta, True) if cd.facetas_mem else None)
 
 
@@ -119,6 +134,8 @@ def intencao_da_unidade(unidade: dict) -> Intencao:
         return Intencao(a, "ponto", None, tuple(ident))
     if tipo == "passeio":                             # o passeio (AN-2): o ponto fixo, entregue ao motor como o lugar lembrado
         return Intencao(a, "ponto", None, tuple(ident), True)
+    if a is AcaoPet.CHAMAR_ATENCAO:                   # a unidade de fala (DC3, 3.1): o conteudo fica so na chave; o mundo e o do chamar
+        return Intencao(a, None, None)
     return Intencao(a, tipo, ident if tipo in ("comida", "bola") else None)
 
 
@@ -130,7 +147,8 @@ class DigiBrain:
 
     def __init__(self, cfg: Config | None = None, cfg_digibrain: ConfigDigibrain | None = None, cfg_mundo: ConfigMundo | None = None,
                  inatos: ConfigDigibrainInatos | None = None, serie_e_doadora: tuple | None = None,
-                 semente: int | None = None) -> None:
+                 semente: int | None = None, cfg_luta_memoria: ConfigLutaMemoria | None = None,
+                 cfg_fala: ConfigFalaUnidades | None = None) -> None:
         self.cd = cfg_digibrain or CONFIG_DIGIBRAIN
         if not self.cd.ligada:
             raise DigibrainDesligado("o DigiBrain modular so existe com a ConfigDigibrain ligada")
@@ -138,7 +156,12 @@ class DigiBrain:
         self.cm = cfg_mundo or CONFIG_MUNDO_LIGADA      # so a geometria (o raio da visao, a celula): a mesma no layout do MVP
         self.inatos = inatos or CONFIG_DIGIBRAIN_INATOS
         self.S = self.inatos.escala
-        self.m = montar_modulos(self.cfg, self.cd, self.cm, self.inatos, serie_e_doadora, semente)
+        self.luta_memoria = (cfg_luta_memoria or CONFIG_LUTA_MEMORIA).ligada     # a ponte da luta (PE2)
+        if self.luta_memoria and not self.cd.memoria_autobio:
+            raise ValueError("luta_memoria so com a memoria_autobio (docs/TAREFA_V3_PONTE_LUTA.md, 3.2)")
+        self.m = montar_modulos(self.cfg, self.cd, self.cm, self.inatos, serie_e_doadora, semente, self.luta_memoria, cfg_fala)
+        self._lutas: list[dict] = []                  # os resumos desde a decisao anterior (so com a luta_memoria)
+        self._pc_antes_luta = None                    # o corpo da ultima consequencia fechada (so com a luta_memoria)
         self.k = 0
         self.motivos: list[dict] = []
         self._pendencia: dict | None = None
@@ -154,11 +177,12 @@ class DigiBrain:
         if obs.corpo is None or obs.mundo is None:
             raise ValueError("o DigiBrain modular decide com o corpo e o mundo na Observacao (obs.corpo e obs.mundo)")
         if self._pendencia is not None:
-            self._fechar(self._pendencia)
+            self._fechar(self._pendencia, obs)
             self._pendencia = None
         m, cd = self.m, self.cd
         k = self.k
-        sens = m.sens.codificar(obs)
+        lutas, self._lutas = (self._lutas, []) if self.luta_memoria else (None, [])
+        sens = m.sens.codificar(obs, lutas) if self.luta_memoria else m.sens.codificar(obs)
         receptores = m.sens.receptores
         m.plast.montar(receptores)
         afeto = m.afeto.ler(sens)
@@ -174,6 +198,7 @@ class DigiBrain:
             mudancas = self._mudar_facetas(consolidacao) if cd.facetas_mem and consolidacao is not None else []
             lembranca = m.mem.lembrar(sens)
             termo_lem = m.mem.termo_lembranca(lembranca)
+            episodios_luta = self._episodios_luta(sens, afeto, tick) if self.luta_memoria else None
         memoria = m.mem.recuperar(sens, afeto) if cd.m_mem else None
         unidades, z = m.impulso.unidades(
             sens, afeto, ctx, m.plast, memoria, m.afeto.drives(receptores),
@@ -218,6 +243,8 @@ class DigiBrain:
                                              "unidades": [] if termo_lem is None else
                                              [chave_json(x["chave"]) for x in unidades if m.mem.casa(termo_lem, x)]}
             self.motivos[-1]["consolidacao"] = consolidacao
+        if self.luta_memoria:                         # a ponte da luta (PE2): desligada, nenhum campo novo
+            self.motivos[-1]["lutas"] = episodios_luta
         if cd.facetas_mem:                            # a C4, M5: desligada, nenhum campo novo
             self.motivos[-1]["faceta"] = {"valores": dict(m.pers.valores), "mudancas": mudancas}
         if cd.credito_corrida:                        # a C2: desligada, nenhum campo novo
@@ -236,6 +263,21 @@ class DigiBrain:
         self._gestos = []
         self.k += 1
         return intencao.acao
+
+    def _episodios_luta(self, sens: dict, afeto: dict, tick: int) -> list[dict]:
+        """a ponte da luta (PE2): cada resumo da Observacao vira, se a regra de hoje o aceita, um episodio de origem `luta`. O corpo de antes
+        e o da ultima consequencia fechada (sem ela, a luta nao tem antes e o corpo de depois e o de antes); o V e o E nao andam. Devolve
+        os resumos com o id do episodio (ou None)"""
+        m, out = self.m, []
+        for resumo in sens["lutas"]:
+            recs = m.sens.receptores
+            antes = self._pc_antes_luta if self._pc_antes_luta is not None else sens["pc"]
+            cons = m.afeto.sigma_luta(antes, sens["pc"], recs)
+            l0 = [leitura_receptor(antes, r, self.S) for r in recs]
+            l1 = [sens["leitura"][r] for r in recs]
+            ep = episodio_luta(sens, recs, l0, l1, {"V": afeto["V"], "E": afeto["E"]}, cons, resumo, self.k, tick, self.inatos)
+            out.append({**resumo, "episodio": None if ep is None else m.mem.codificar_autobio(ep)})
+        return out
 
     def _mudar_facetas(self, consolidacao: dict) -> list[dict]:
         """a M5 (6.2): na consolidacao diaria, cada faceta anda um passo `eta_faceta` no sentido da soma dos sigma da evidencia (zero se a
@@ -311,6 +353,13 @@ class DigiBrain:
         self._gestos.append([acao.value, tick])
         self.gestos[acao.value] = self.gestos.get(acao.value, 0) + 1
 
+    def receber_luta(self, rival: str, resultado: int, vida_perdida_s: int, tick: int) -> None:
+        """o resumo pronto da luta (ponte da luta, PE2), so guardado ate a decisao seguinte (a docstring do modulo). Sem a chave, falha alto"""
+        if not self.luta_memoria:
+            raise LutaSemChave("receber_luta exige a ConfigLutaMemoria ligada (luta_memoria; ponte da luta, PE2)")
+        resumo_luta(tick, rival, resultado, vida_perdida_s)       # a validacao do evento (rival, resultado, vida perdida)
+        self._lutas.append({"rival": rival, "resultado": resultado, "vida_perdida_s": vida_perdida_s, "tick": tick})
+
     def estado_interno(self) -> dict:
         return {"nome": self.nome, "versao_pet": self.versao_pet, "k": self.k, "pendente": self._pendencia is not None,
                 "gestos": dict(sorted(self.gestos.items())), "modulos": {nome: mod.estado_interno() for nome, mod in self.m.itens()
@@ -342,9 +391,15 @@ class DigiBrain:
             raise RuntimeError("sem a memoria_autobio, o M-MEM nao tem a recente")
         if not cd.passeio and (m.estado.passeios or any(x["chave"][1] == "passeio" for x in unidades)):
             raise RuntimeError("sem o passeio, o M-ESTADO nao abre passeio")
+        fala = [x["chave"][1] for x in unidades if x["acao"] == "chamar_atencao"]
+        if fala != (list(CONTEUDOS_FALA) if cd.fala_unidades else [None]):
+            raise RuntimeError(f"as unidades do chamar {fala} nao sao as da fala_unidades {'ligada' if cd.fala_unidades else 'desligada'}")
 
-    def _fechar(self, p: dict) -> None:
-        """a consequencia da decisao anterior aos modulos"""
+    def _fechar(self, p: dict, obs_seguinte: Observacao) -> None:
+        """a consequencia da decisao anterior aos modulos. Com a `fala_unidades` (o adendo 1 do plano da DC3, A1.1), a opcao de fala (as
+        tres unidades do chamar) le o corpo de depois na percepcao da decisao seguinte (`obs_seguinte`, antes da acao seguinte): o
+        intervalo contem o passo inteiro, com o cuidado do dono. As outras opcoes, e o chamar desligada a subchave, leem o corpo do tick
+        da acao, como hoje. A ultima decisao da vida nao tem decisao seguinte e fica sem fechar, como toda ultima decisao de hoje."""
         it, m, S = p["intencao"], self.m, self.S
         acao = it.acao
         if p["corpo"] is None or p["transicao"] is None:
@@ -356,6 +411,10 @@ class DigiBrain:
             raise RuntimeError(f"a decisao de {acao.value} ficou sem o consequencia_mundo")
         pc0 = p["sens"]["pc"]
         pc1 = p["corpo"][1].corpo
+        if self.cd.fala_unidades and acao is AcaoPet.CHAMAR_ATENCAO:     # A1.1: a fala ate a decisao seguinte
+            if p["unidade"]["chave"][1] not in CONTEUDOS_FALA:
+                raise RuntimeError(f"a fala da decisao {p['k']} sem conteudo com a fala_unidades ligada")
+            pc1 = obs_seguinte.corpo
         pm1 = p["transicao"].observacao_seguinte.mundo
         if pc1 is None or pm1 is None:
             raise RuntimeError("a consequencia sem o corpo ou sem o mundo de depois")
@@ -394,6 +453,8 @@ class DigiBrain:
             elif chave[1] == "ponto" and ocorrido["chegou"]:
                 episodio = m.mem.codificar({**base, "ponto": chave[2], "classe": "nao_havia", "origem": "visita", "r": 0,
                                                  "r_n": 0})
+        if self.luta_memoria:                         # o corpo de antes da proxima luta (nenhum efeito nos modulos)
+            self._pc_antes_luta = pc1
         autobio = None
         if self.cd.memoria_autobio:                   # a C4, M0 e M1: o episodio completo, que nenhuma decisao le ainda
             ida = next((f["r"] for f in fins if f["chave"] == chave), None) if chave[1] == "ponto" else None

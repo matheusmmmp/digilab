@@ -5,7 +5,7 @@
      - DECISAO_NA_COMIDA: a racao no chao faz o pet decidir ja no proximo passo, sem esperar o fim do intervalo de 15 min;
      - CHAMADOS_PELO_CORPO (docs/TAREFA_V2_PRODUTO_CUIDADO.md): os tres chamados do bebe abrem pelo corpo, com os limiares do bebe
        (CHAMADO_BEBE_CORPO; no bebe, o da fome no lugar do CHAMADO_FOME_CORPO). */
-import type { Motor } from "../motor/index.ts";
+import { VERSAO_PET_LAB, ehCerebroTrocavel, type Motor } from "../motor/index.ts";
 import { nascerComCerebro } from "./cerebro.ts";
 
 export const CHAMADO_PELA_FOME = true;
@@ -16,5 +16,7 @@ export const CHAMADOS_PELO_CORPO = true;
     o modular por padrao). Devolve o mesmo motor */
 export function ligarProduto(m: Motor): Motor {
   m.ligarProduto({ chamadoPelaFome: CHAMADO_PELA_FOME, decisaoNaComida: DECISAO_NA_COMIDA, chamadosPeloCorpo: CHAMADOS_PELO_CORPO });
-  return nascerComCerebro(m);
+  nascerComCerebro(m);
+  if (ehCerebroTrocavel(m.versao) || m.versao === VERSAO_PET_LAB) m.ligarPonteLuta(true);   // a ponte da luta (PONTE_LUTA, PE3) com o epsilon pelo g_exp (PE4: { luta, eps }), como o "cb": so no ovo novo, depois dele
+  return m;
 }

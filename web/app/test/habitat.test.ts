@@ -27,8 +27,8 @@ describe("habitat.ts", () => {
   });
   it("os mapas com assets fora do repositorio so aparecem no dev", async () => {
     const { m } = await carregar("", {});
-    expect(m.mapasDisponiveis(false)).toEqual(["ilha", "voxel"]);
-    expect(m.mapasDisponiveis(true)).toEqual(["ilha", "voxel", "floresta", "cassette"]);
+    expect(m.mapasDisponiveis(false)).toEqual(["ilha", "digital", "voxel"]);
+    expect(m.mapasDisponiveis(true)).toEqual(["ilha", "digital", "voxel", "floresta", "cassette"]);
     /* no build, um floresta gravado (de uma sessao do dev) ou no endereco cai na ilha */
     const b = await carregar("?mapa=cassette", { [CHAVE]: JSON.stringify({ mapa: "floresta", camera: "lateral", visual: "normal" }) });
     b.m.iniciarHabitat(false);
@@ -99,14 +99,15 @@ describe("EscolhaHabitat", () => {
     expect(s).toContain('role="radiogroup" aria-labelledby="cfg-mapa"');
     expect(s).toContain('role="radiogroup" aria-labelledby="cfg-camera"');
     expect(s).toContain('role="radiogroup" aria-labelledby="cfg-controle"');
+    expect(s).toContain('role="radiogroup" aria-labelledby="cfg-viagem"');   // a opcao nova da L2: "Viagem da câmera"
     expect(s).toContain('class="mc-opcoes mc-opcoes--3" role="radiogroup" aria-labelledby="cfg-visual"');
-    expect(s.match(/role="radio"/g)).toHaveLength(m.mapasDisponiveis().length + 2 + 2 + 3);
+    expect(s.match(/role="radio"/g)).toHaveLength(m.mapasDisponiveis().length + 2 + 2 + 2 + 3);
     expect(s).toMatch(/role="radio" aria-checked="true" tabindex="0" class="mc-opcao"><b>Normal<\/b>/);
     expect(s).toMatch(/role="radio" aria-checked="true" tabindex="0" class="mc-opcao"><b>Voxel<\/b>/);
     expect(s).toMatch(/role="radio" aria-checked="true" tabindex="0" class="mc-opcao"><b>Atrás<\/b>/);
     expect(s).not.toContain("disabled");
     const sala = renderToStaticMarkup(h(EscolhaHabitat, { temMundo: false }));
-    expect(sala.match(/disabled=""/g)).toHaveLength(m.mapasDisponiveis().length + 2 + 2 + 3);
+    expect(sala.match(/disabled=""/g)).toHaveLength(m.mapasDisponiveis().length + 2 + 2 + 2 + 3);
     expect(sala).toContain("fica na sala");
   });
 });

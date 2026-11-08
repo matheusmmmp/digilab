@@ -254,3 +254,89 @@ Cada uma com a recomendação e o custo de errar.
 | **PL-7** | em que pets a ponte liga | **no v16 do laboratório e no v17, pelo evento da ponte no registro, gravado no ovo novo** (como o `"cb"`); um v16 ou v17 já vivo, sem o evento, fica como hoje. Com o #562, o modular já é o cérebro do pet de verdade: a ponte não fica restrita ao pet de teste (pedido do Gerente, 2026-11-04). A pergunta "até a D-C1-3?" perdeu o objeto | sem o evento, isto é, a ponte em todo v17: o replay de todo v17 vivo muda e o save não abre igual. Ligar num pet vivo: a dor SEM FONTE e a memória de luta entram num pet que não volta atrás; se o Matheus quiser, é um evento a mais, como o `"cb"` do pet ativo (CP-1) |
 | **PL-8** | medir se o pet luta melhor com a ponte | **não nesta tarefa:** o laboratório serve para ver o pet; uma medida pede plano de análise e faixa de sementes próprios, e a bancada da luta (`web/app/scripts/equilibrio_tr/`) não roda o modular | medir sem plano: um número do jogo vira resultado sem gate, contra a regra do `CLAUDE.md` |
 | **PL-9** | o que a ponte faz com o A ativo | **só o corpo:** a dor da luta vale com qualquer cérebro; o episódio e o ε pelo `g_exp` só com o modular ativo; com o A, nada fica guardado para o modular (3.7) | a dor só com o modular: o corpo passa a depender de qual cérebro decide, e um pet que perde uma luta sob o A não sente nada. Guardar as lutas para o modular: o cérebro parado passa a receber, contra a regra do #562 |
+
+## 9. PE0, o resumo da etapa (2026-11-06, Sonnet 5.5, branch `v3-ponte-luta-pe0`)
+
+**Resposta: o pet de teste v16 e o v17 lutam** (com o modular, com o A e com um `"cb"` entre duas lutas), e o replay refaz as lutas bit a bit.
+Nenhum conserto foi preciso: a PE1 pode seguir. Os desvios D-PE0-1 a D-PE0-5 estão em `docs/registro/2026-11.md`.
+
+- **O dono e o resumo da luta:** `web/app/test/ponte_luta_pe0.ts` (a vida curta com lutas, 2 dias, e o resumo por luta).
+- **O gabarito das lutas de hoje:** `web/app/test/gabaritos/ponte_luta_pe0.json.gz`, 20 vidas (v16, v17 modular, v17 A e v17 `"cb"` × sementes 101…505) e
+  512 lutas; por luta, o `ResultadoLuta` resumido e o sha256 da assinatura do `GambitsPet`, da confiança e do `estadoInterno` do modular.
+  Gravado por `web/app/test/gerar_gabarito_pe0.ts` (Node), num commit antes do e2e e dos documentos. Daqui em diante é o gabarito G2 das PE1 a PE4:
+  com as chaves da ponte desligadas, tem de sair byte a byte.
+- **O teste do motor:** `web/app/test/ponte_luta_pe0.test.ts` (43 testes): cada vida nasce, passa do In-Training, luta contra bots e na Liga, o
+  cérebro que decidia em cada luta é o esperado (o A parado e o modular continuando dali no `"cb"`), o replay evento a evento e por
+  `Motor.reproduzir` fecha, e a vida de hoje sai igual ao gabarito luta a luta.
+- **O e2e:** `web/app/e2e/ponte_luta.spec.ts` (saves de `e2e/gerar_save_ponte_luta.mjs`): v16 (pelo laboratório), v17 modular e v17 A lutam na Arena e na
+  Liga e o app reabre o save com as mesmas lutas.
+- **Limite:** a série do gabarito é a Liga, que o pet de vida curta quase sempre perde na primeira luta (1 série de 2 lutas em 20; D-PE0-2).
+
+## 10. PE1, o resumo da etapa (2026-11-06, Sonnet 5.5, branch `v3-ponte-luta-pe1`)
+
+**Resposta: o resumo de uma luta já sobe a dor do corpo e entra no replay do mundo do Python, atrás de uma chave desligada.** Os desvios D-PE1-1 a
+D-PE1-5 estão em `docs/registro/2026-11.md`.
+
+- **A chave:** `ConfigLutaCorpo(ligada=False)` em `digilab/config.py` (`CONFIG_LUTA_CORPO`, `CONFIG_LUTA_CORPO_LIGADA`, status em
+  `PARAMETROS_LUTA_CORPO`: PROPOSTO, sem número livre). Fica fora de `ConfigCorpo` para o dump do gabarito de paridade do corpo e o `corpo.test.ts` não mudarem (D-PE1-1).
+- **A dor:** `Corpo.estimulo_luta(vida_perdida_s)` em `digilab/corpo.py`: a dor sobe exatamente `div_arred(p × C, S)`, com `p` cortado em [0, S], sem rng
+  (D-PE1-2). Exige `gestos`.
+- **O evento:** `lt` (renomeado do `pl` a pedido do Matheus na revisão: o `"pl"` fica livre para a marca do ovo da PE3) com valor `rival|resultado|vida_perdida_s` (`digilab/events.py`: `resumo_luta`, `ler_resumo_luta`, `LutaSemChave`);
+  `MotorMundo.resumo_luta` e o `reproduzir_mundo` (`digilab/mundo.py`) o entendem; o `MotorCorpo` (`digilab/motor_corpo.py`) o aplica. Com a chave
+  desligada, ou sem o corpo, levanta `LutaSemChave`.
+- **Testes:** `tests/test_ponte_luta_pe1.py` (T-PL-1: a dor exata, o corte, o erro com a chave desligada, o replay refaz o corpo). **G2:** os
+  gabaritos da LM0 (`digibrain_modular_*`), do G0 (`genoma_g0_vidas_de_hoje.json`), do corpo, do corpo no mundo e do passeio seguem byte a byte; nenhum
+  arquivo de gabarito foi tocado.
+- **Limite:** o rival e o resultado só são validados; entram em módulo na PE2. Nada na web (o espelho TS é a PE3).
+
+## 11. PE2, o resumo da etapa (2026-11-06, Sonnet 5.5, branch `v3-ponte-luta-pe2`)
+
+**Resposta: o resumo de uma luta já chega ao DigiBrain modular, vira (ou não) um episódio `luta` no M-MEM com o rival em `outro`, atrás de uma chave
+desligada.** Os desvios D-PE2-1 a D-PE2-3 estão em `docs/registro/2026-11.md`.
+
+- **A chave:** `ConfigLutaMemoria(ligada=False)` em `digilab/config.py` (`CONFIG_LUTA_MEMORIA`, `CONFIG_LUTA_MEMORIA_LIGADA`, `PARAMETROS_LUTA_MEMORIA`:
+  PROPOSTO, sem número livre), fora de `ConfigDigibrain` (D-PE2-1). Só com a `memoria_autobio`.
+- **O gancho e a Observação:** `DigiBrain.receber_luta(rival, resultado, vida_perdida_s, tick)` (`adapt.py`), entregue pelo `MotorCorpo` ao aplicar o evento `lt`
+  da PE1; o M-SENS o põe em `sens["lutas"]` na decisão seguinte (`Sens.resumir_lutas`). O `"pl"` não é usado.
+- **O episódio:** `episodio_luta` e a origem `luta` em `mem.py` (a regra de hoje, `theta_sig`; σ pela variação do corpo, sem mexer em V, E, g_apr nem M-PLAST: `Afeto.sigma_luta`).
+- **Testes:** `tests/test_ponte_luta_pe2.py` (T-PL-2: derrota com dor vira episódio com o rival em `outro`; empate sem dor não; o mesmo log dá os mesmos
+  episódios, no replay do mundo; a consolidação guarda um por categoria `("lutar", rival, sinal)`; a seção 7: com a dor zerada nenhum módulo anda). **G2:** os gabaritos da C4
+  (`test_gabarito_memoria_autobio`), da LM0 (`test_gabarito_digibrain_modular*`), do G0 e do corpo seguem byte a byte; nenhum arquivo de gabarito foi tocado.
+- **Limite:** nada na web (o espelho TS e o `"pl"` do ovo são a PE3). O A não recebe nada (3.7): o gancho só existe no DigiBrain.
+
+## 12. PE3, o resumo da etapa (2026-11-06, Sonnet 5.5, branch `v3-ponte-luta-pe3`)
+
+**Resposta: a dor da luta e o episódio `luta` já chegam ao jogo (v16 e v17 com a marca `"pl"`), com o corpo e o M-MEM conferidos contra o Python.** Os desvios D-PE3-1 a
+D-PE3-7 estão em `docs/registro/2026-11.md`.
+
+- **O espelho TS:** `Corpo.estimuloLuta` e `CONFIG_LUTA_CORPO` (`motor/corpo.ts`), o evento `lt` do `MotorCorpo` (`motor/motor_corpo.ts`: `resumoLuta`, `aplicarResumoLuta`,
+  `lerResumoLuta`), `DigiBrain.receberLuta`/`ligarLutaMemoria`, `Sens.resumirLutas`, `Afeto.sigmaLuta`, `episodioLuta` e a origem `luta` (`motor/digibrain/`).
+- **A marca e o `_lutar`:** `Motor.ligarPonteLuta()` grava `"pl"` (`{ luta: true }`, depois do `"cb"`) no ovo novo pelo `ligarProduto` (`src/produto.ts`, que também cobre o ovo
+  de teste do laboratório); `Motor._lutar` calcula a vida perdida em S de cada luta da série (D-PE3-3) e entrega o resumo ao corpo (qualquer cérebro) e, só com o modular
+  ativo, ao `DigiBrain` (3.7). Sem a marca, o `_lutar` é o de hoje.
+- **G-PAR:** `experiments/exportar_gabarito_digibrain_modular.py --luta` grava `web/app/test/gabaritos/digibrain_modular_luta.json.gz` (3 vidas, 6 resumos cada); o
+  `test/digibrain_modular_vida.test.ts` confere a dor de cada resumo, cada decisão (ação, motivo com as lutas, assinatura) e o estado interno no fim; o pytest
+  (`tests/test_gabarito_digibrain_modular_web.py`) confere que o arquivo bate com uma execução nova.
+- **G2:** o gabarito da PE0 e todos os de hoje passam sem mudar nenhum arquivo deles; **G1:** `test/ponte_luta_pe3.test.ts` (20 vidas com a marca: v16, v17 modular, v17 A e v17 com um
+  `"cb"` no meio × 5 sementes; replay bit a bit; a dor exata; o A ativo não entrega nada ao modular; a marca só nos v16/v17, uma vez) e o e2e (`e2e/ponte_luta.spec.ts` com os saves `_ponte`).
+- **Limite:** nada do ε (PE4). Os v16/v17 vivos sem a marca seguem como hoje (PL-7); nenhum save de hoje ganha a marca.
+
+## 13. PE4, o resumo da etapa (2026-11-06, Sonnet 5.5, branch `v3-ponte-luta-pe4`)
+
+**Resposta: o cérebro já muda a luta por um parâmetro só, o ε, pelo `g_exp` da última decisão do modular, nos ovos novos (marca `{ luta: true, eps: true }`).** Os desvios D-PE4-1 a
+D-PE4-3 estão em `docs/registro/2026-11.md`.
+
+- **A conta:** `ε da luta = min(1, ε de hoje × g_exp / e0)` em `estiloDoPet` (`motor/gambits_pet.ts`), com o fator `Motor.fatorEpsLuta()` (`motor/motor.ts`): lê o `afeto.g_exp`
+  do `ultimoMotivo` do modular no começo da luta (a série inteira usa a mesma leitura), sem decisão nova nem rng. Com o A ativo, ou antes da primeira decisão, o ε é o de hoje (3.7).
+- **A marca (D-PE4-1):** só `{ luta: true, eps: true }` liga; os saves com `{ luta: true }` (PE3) e os sem marca seguem com o ε de hoje, byte a byte. O `ligarProduto` grava `eps`.
+- **Testes:** `test/ponte_luta_pe4.test.ts` (T-PL-4: `g_exp = e0` dá o ε de hoje, `256` metade, `1024` o dobro cortado em 1; o ε lido é o da última decisão e a leitura não mexe no
+  modular; 20 vidas com `eps` — v16, v17 modular, v17 A e v17 com um `"cb"` no meio × 5 sementes — refazem bit a bit; com o A o fator é nulo; a validação da marca). **G2:** o gabarito da
+  PE0, o da PE3 e os testes da PE3 (marca `{ luta: true }`) passam sem mudar nenhum arquivo de gabarito.
+- **Limite:** não se mediu se o pet luta melhor; é outra pergunta (PL-8). O A não recebe nada. Fica a PE5 (a lembrança do rival), só se o Matheus decidir (PL-6).
+
+## Decisões depois da PE4 (2026-11-07)
+
+Decididas pelo Matheus no chat em 2026-11-07 ("Sim, as duas"), pela recomendação do Gerente da V3:
+
+- **A D-PE3-3 fica DECIDIDA como está:** a vida perdida em S de uma luta é `Math.round(dano × S / vida máxima)`, cortada em [0, S], com o dano cortado na vida que o pet tinha (`docs/registro/2026-11.md`, D-PE3-3). Custo de errar aceito: o golpe final que passa da vida não dói a mais.
+- **A PE5 (PL-6) espera a rodada de equilíbrio da luta:** o empurrão (v18) e os efeitos da luta estão mudando agora, e a confiança M1 já lê o rival. Custo de errar aceito: até lá, o pet não lembra de um rival em particular.

@@ -8,6 +8,7 @@ import { expect, test, type Page } from "@playwright/test";
 import { readFileSync } from "node:fs";
 import { basename } from "node:path";
 import { fileURLToPath } from "node:url";
+import { VERSAO_PET } from "../motor/constantes";
 
 const SAVES: Record<string, { semente: number; log: unknown[]; versao?: number }> = JSON.parse(readFileSync(new URL("./saves.json", import.meta.url), "utf8"));
 // prefixo = nome da pasta do repositorio (/v1 ou o da worktree), como no servidor_local.py
@@ -35,6 +36,9 @@ async function semear(page: Page, save: object | null, tema?: string, tamer: obj
     if (t) localStorage.setItem(chave + "-tema", t);
   }, [CHAVE, save ? JSON.stringify(save) : null, tema ?? null, JSON.stringify(tamer)] as const);
 }
+/** abaixo de 900 px (mobile minimo, M1) o retrato abre o leque dos vitais e dos paineis (Estado atual, Evolucao, Ultimas acoes, DigiBrain, Configuracoes, Meus
+    pets); o leque fecha ao escolher um item, entao cada painel pede o leque aberto de novo. Um so leque por vez: nao abre se ja esta aberto */
+const abrirLeque = async (page: Page) => { if (!await page.locator("#leque-pet").count()) await page.getByRole("button", { name: "Painéis do pet", exact: true }).click(); };
 /** a Exploracao no painel (no maximo 760 px) e a do celular: o detalhe do lugar (.camp-arena, .camp-lutar) abre na folha ao tocar no cartao do lugar escolhido (layout habitat, M4) */
 async function lugarAberto(page: Page): Promise<void> {
   await expect(page.locator(".expl-cartao.sel").first()).toBeVisible();
@@ -270,7 +274,7 @@ for (const pele of ["vidro", "xcom"]) test(`foco visível pelo teclado (pele ${p
   expect(semFoco, "elementos sem indicação de foco").toEqual([]);
 });
 
-/* layouts (tokens.css): abaixo de 900 px o das pranchas de celular (barra embaixo, uma coluna); de 900 a 1099 barra
+/* layouts (tokens.css): abaixo de 900 px o das pranchas de celular (sem barra: os destinos na coluna do topo da tela Pet, uma coluna); de 900 a 1099 barra
    lateral e uma coluna; de 1100 em diante o das pranchas *Desktop (conteudo + painel ao lado) */
 for (const largura of [390, 899, 900, 1099, 1100, 1280]) {
   test(`layout em ${largura} px`, async ({ page }) => {
@@ -278,14 +282,14 @@ for (const largura of [390, 899, 900, 1099, 1100, 1280]) {
     await semear(page, SAVES.champion);
     const lateral = largura >= 900, desktop = largura >= 1100;
     /* a Exploracao: o mapa 3D e, no desktop, o lugar na coluna da direita (no celular o lugar abre na folha: o cartao fica no mapa) */
-    for (const [rota, esq, dir] of [["crescer/evolucao", ".evo-arv", ".evo-hist"], ["lutar/campanha", ".mapa-expl", ".expl-cartao"]]) {
+    for (const [rota, esq, dir] of [["crescer/evolucao", ".evl-arv", ".evl-hist"], ["lutar/campanha", ".mapa-expl", ".expl-cartao"]]) {
       await page.goto(APP + "#/" + rota);
       await page.waitForTimeout(500);
       const r = await page.evaluate(([e, d]) => {
-        const nav = document.querySelector(".dl-nav")!.getBoundingClientRect(), a = document.querySelector(e)!.getBoundingClientRect(), b = document.querySelector(d)!.getBoundingClientRect();
-        return { navLateral: nav.height > nav.width, aoLado: b.left >= a.right - 1, larg: document.documentElement.scrollWidth, janela: innerWidth };
+        const nav = document.querySelector(".dl-nav")?.getBoundingClientRect(), a = document.querySelector(e)!.getBoundingClientRect(), b = document.querySelector(d)!.getBoundingClientRect();
+        return { navLateral: nav ? nav.height > nav.width : null, aoLado: b.left >= a.right - 1, larg: document.documentElement.scrollWidth, janela: innerWidth };
       }, [esq, dir] as const);
-      expect(r.navLateral, `${rota}: barra lateral`).toBe(lateral);
+      expect(r.navLateral, `${rota}: barra lateral (abaixo de 900 px nao ha barra: os destinos sao a coluna do topo da tela Pet)`).toBe(lateral ? true : null);
       /* as telas do painel (Crescer, Lutar) ficam numa coluna so (M4); a Conversar e da M5 */
       expect(r.aoLado, `${rota}: painel ao lado do conteúdo`).toBe(rota.startsWith("conversar") && desktop);
       expect(r.larg, `${rota}: rolagem lateral`).toBeLessThanOrEqual(r.janela);
@@ -311,7 +315,25 @@ test("monitor 1920x950: o pet fica visível com o painel aberto", async ({ page 
   expect(c.alt, "o habitat tem a altura toda (dock flutuante)").toBe(950);
   const dock = await page.locator(".pet-dock .dock").boundingBox();
   expect(dock!.width, "o dock é uma barra flutuante, não a faixa inteira").toBeLessThan(900);
-  for (const rota of ["crescer/treinar", "lutar/arena", "lutar/campanha", "diario/registro", "conversar/chat", "config"]) {
+  /* Lutar, o Diario e os Ajustes sao lugares da ilha (L3): o painel cabe na tela, sem rolagem lateral, e a ilha a esquerda dele nao fica coberta */
+  for (const rota of ["lutar/arena", "lutar/campanha", "diario/registro", "config"]) {
+    await page.goto(APP + "#/" + rota);
+    await expect(page.locator(".painel-tela--lugar-lado")).toBeVisible();
+    const g = await page.evaluate(rotaAtual => {
+      const p = document.querySelector(".painel-tela--lugar-lado")!.getBoundingClientRect(), h = document.querySelector(".habitat")!.getBoundingClientRect();
+      const alvo = document.elementFromPoint(innerWidth * (rotaAtual === "config" ? 0.6 : 0.2), innerHeight * 0.6);
+      return { esq: p.left, dir: p.right, topo: p.top, base: p.bottom, larg: innerWidth, alt: innerHeight, rolagem: document.documentElement.scrollWidth, noHabitat: !!alvo?.closest(".habitat"), habLarg: h.width };
+    }, rota);
+    expect(g.esq, `${rota}: o painel cabe na tela`).toBeGreaterThanOrEqual(0);
+    expect(g.dir, `${rota}: o painel cabe na tela`).toBeLessThanOrEqual(g.larg);
+    expect(g.topo, `${rota}: o painel cabe na tela`).toBeGreaterThanOrEqual(0);
+    expect(g.base, `${rota}: o painel cabe na tela`).toBeLessThanOrEqual(g.alt);
+    expect(g.rolagem, `${rota}: sem rolagem lateral`).toBeLessThanOrEqual(g.larg);
+    expect(g.habLarg, `${rota}: a ilha ocupa a tela toda`).toBeGreaterThanOrEqual(g.larg - 1);
+    /* os Ajustes ficam sobre a tela Pet (a camada do pet e a pilha da direita seguem la): so os lugares deixam a ilha livre a esquerda do painel */
+    if (rota !== "config") expect(g.noHabitat, `${rota}: a ilha a esquerda do painel nao esta coberta`).toBe(true);
+  }
+  for (const rota of ["conversar/chat"]) {
     await page.goto(APP + "#/" + rota);
     await expect(page.locator(".painel-tela--lado")).toBeVisible();
     c = await centro();
@@ -333,7 +355,7 @@ test("medalhas: vencer o líder dá a medalha e libera a evolução", async ({ p
   await semear(page, SAVE_V6);
   const erros = vigiarErros(page);
   await page.goto(APP + "#/crescer/evolucao");
-  await expect(page.locator(".evo-medalha")).toContainText("Pronto para evoluir. Falta a Medalha da Campina: vença o Gazimon na Campina.");
+  await expect(page.locator(".evo-medalha-txt")).toContainText("Pronto para evoluir. Falta a Medalha da Campina: vença o Gazimon na Campina.");
   await page.goto(APP + "#/lutar/campanha");
   await lugarAberto(page);
   await expect(page.locator(".camp-arena")).toContainText("líder: Gazimon");
@@ -358,13 +380,13 @@ test("medalhas: vencer o líder dá a medalha e libera a evolução", async ({ p
   expect(reg.versao).toBe(13);
   expect(reg.log.filter((e: unknown[]) => e[1] === "u")).toEqual([[expect.any(Number), "u", { n: 1 }]]);
   await page.goto(APP + "#/lutar/medalhas");
-  await expect(page.locator(".med-conta .dl-num")).toHaveText("1");
-  await expect(page.locator(".med-card.ganha")).toHaveCount(1);
-  await expect(page.locator(".med-card.ganha")).toContainText("Medalha da Campina");
-  await expect(page.locator(".med-card").nth(2)).toContainText("Vença o Youkomon na Floresta");
-  await expect(page.locator(".med-card").nth(3)).toContainText("Vença o Myotismon três vezes seguidas na Cidadela");
-  await expect(page.locator(".med-card").nth(4)).toContainText("Vínculo:");
-  await expect(page.locator(".med-tela")).not.toContainText("provisória");
+  await expect(page.locator(".md2-conta .dl-num")).toHaveText("1");
+  await expect(page.locator(".md2-card.ganha")).toHaveCount(1);
+  await expect(page.locator(".md2-card.ganha")).toContainText("Medalha da Campina");
+  await expect(page.locator(".md2-card").nth(2)).toContainText("Vença o Youkomon na Floresta");
+  await expect(page.locator(".md2-card").nth(3)).toContainText("Vença o Myotismon três vezes seguidas na Cidadela");
+  await expect(page.locator(".md2-card").nth(4)).toContainText("Vínculo:");
+  await expect(page.locator(".md2-tela")).not.toContainText("provisória");
   expect(erros).toEqual([]);
 });
 
@@ -397,7 +419,7 @@ test("luta em tempo real: a primeira abertura descarta os pets de antes, avisa, 
   await expect(page.locator("dialog.brasao-tela[open]")).toHaveCount(0);
   const r = await page.evaluate(c => ({ save: JSON.parse(localStorage.getItem(c)!), g: localStorage.getItem(c + "-guardados"), aviso: localStorage.getItem(c + "-aviso-tr"),
     tamer: JSON.parse(localStorage.getItem(c + "-tamer")!), marca: localStorage.getItem(c + "-descarte"), antigos: JSON.parse(localStorage.getItem(c + "-descartados")!) }), CHAVE);
-  expect(r.save.versao).toBe(17);                    /* o ovo novo nasce na versao atual (v17: a v15 com o cerebro trocavel, o modular por padrao) */
+  expect(r.save.versao).toBe(VERSAO_PET);            /* o ovo novo nasce na versao atual (VERSAO_PET; era a v17 ate a v18 do empurrao, #661) */
   expect(r.g).toBe("[]");
   expect(r.aviso).toBeNull();
   expect(r.marca).toBe("6");
@@ -427,7 +449,7 @@ test("luta em tempo real: o pet v6 de antes sai com o aviso, e o Tamer fica com 
   await expect(page.locator("dialog.brasao-tela[open]")).toHaveCount(0);
   const r = await page.evaluate(c => ({ save: JSON.parse(localStorage.getItem(c)!), marca: localStorage.getItem(c + "-descarte"),
     tamer: JSON.parse(localStorage.getItem(c + "-tamer")!) }), CHAVE);
-  expect(r.save.versao).toBe(17);
+  expect(r.save.versao).toBe(VERSAO_PET);
   expect(r.save.semente).not.toBe(SAVE_ANTIGO_V6.semente);
   expect(r.marca).toBe("6");
   /* a medalha fica (a abertura ainda da o item dela ao Tamer, como sempre) */
@@ -450,23 +472,24 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 
     await semear(page, SAVE_V6, undefined, tamer);
     const erros = vigiarErros(page);
     await page.goto(APP + "#/lutar/medalhas");
-    await expect(page.locator(".med-card")).toHaveCount(6);
-    await expect(page.locator(".med-card.ganha")).toContainText("ganha com Armadillomon");
+    await expect(page.locator(".md2-card")).toHaveCount(6);
+    await expect(page.locator(".md2-card.ganha")).toContainText("ganha com Armadillomon");
     await page.waitForTimeout(600);
     /* no desktop, so a tela (as abas em pilula do topo da casca tem 40 px nas pranchas *Desktop; o guia 14 e do celular) */
     const r = await page.evaluate(desk => {
       const visivel = (e: Element) => (e as HTMLElement).offsetParent !== null;
-      const pequenos = [...document.querySelector(desk ? ".med-tela" : "body")!.querySelectorAll("button, select, input, summary, a")].filter(visivel).flatMap(e => {
+      const pequenos = [...document.querySelector(desk ? ".md2-tela" : "body")!.querySelectorAll("button, select, input, summary, a")].filter(visivel).flatMap(e => {
         const b = e.getBoundingClientRect();
         return b.height < 44 || b.width < 44 ? [`${e.tagName}.${(e as HTMLElement).className} ${Math.round(b.width)}x${Math.round(b.height)}`] : [];
       });
-      const lista = document.querySelector(".med-lista")!.getBoundingClientRect(), resumo = document.querySelector(".med-resumo")!.getBoundingClientRect();
-      return { larg: document.documentElement.scrollWidth, janela: innerWidth, pequenos, aoLado: lista.left >= resumo.right - 1 };
+      /* uma coluna so no painel do lugar (L3): o corpo da aba nao rola de lado */
+      const corpo = document.querySelector(".painel-tela--lugar .hx-painel__corpo");
+      return { larg: document.documentElement.scrollWidth, janela: innerWidth, pequenos, aoLado: !!corpo && corpo.scrollWidth > corpo.clientWidth + 1 };
     }, largura >= 1100);
     expect(r.larg, "rolagem lateral").toBeLessThanOrEqual(r.janela);
     expect(r.pequenos, "alvos menores que 44 px").toEqual([]);
-    expect(r.aoLado, "uma coluna só no painel (M4)").toBe(false);
-    await expect(page.locator(".med-regras li.ok")).toHaveCount(1);
+    expect(r.aoLado, "uma coluna so: o corpo do painel nao rola de lado").toBe(false);
+    await expect(page.locator(".md2-regras li.ok")).toHaveCount(1);
     expect(erros).toEqual([]);
   });
 }
@@ -612,7 +635,13 @@ test("exploração: sem WebGL, o mapa 2D de antes", async ({ browser }) => {
 const numTamer = (page: Page, tipo: string) => page.evaluate(([c, t]) => JSON.parse(localStorage.getItem(c + "-tamer")!).log.filter((e: unknown[]) => e[0] === t).length, [CHAVE, tipo] as const);
 /** vai para a aba pela barra e pelas abas (dentro do app, sem recarregar) */
 async function irPara(page: Page, destino: string, aba: string, rota: string): Promise<void> {
-  await page.locator(".dl-nav").getByRole("button", { name: destino, exact: true }).click();
+  /* abaixo de 900 px não há barra de abas (M1 do mobile mínimo, 2026-11-06): o destino fica na coluna de ícones da tela Pet, e de
+     dentro de uma folha volta-se ao Pet pelo × antes */
+  if ((page.viewportSize()?.width ?? 1280) < 900) {
+    const fechar = page.getByRole("button", { name: "Fechar e voltar ao Pet" });
+    if (await fechar.count() > 0) await fechar.first().click();
+    await page.locator(".mm-destinos").getByRole("button", { name: destino, exact: true }).click();
+  } else await page.locator(".dl-nav").getByRole("button", { name: destino, exact: true }).click();
   await page.getByRole("tab", { name: aba }).click();
   await expect(page).toHaveURL(new RegExp("#/" + rota + "$"));
 }
@@ -637,16 +666,16 @@ test("itens: o líder dá o chip com a medalha, o chip se equipa e vale na luta"
   await expect(page).toHaveURL(/#\/crescer\/evolucao$/);
   /* Crescer · Itens: o chip e do Tamer, e o Champion tem 1 vaga (1 medalha) */
   await page.getByRole("tab", { name: "Itens" }).click();
-  await expect(page.locator(".itens-vagas")).toContainText("0 de 1 vaga");
-  const chip = page.locator(".item-card", { hasText: "Chip de Força" });
-  await expect(chip).not.toHaveClass(/item-falta/);
-  await expect(page.locator(".item-card", { hasText: "Chip Aparo" })).toContainText("Ainda não é seu: vença o Piedmon");
+  await expect(page.locator(".it2-vagas")).toContainText("0 de 1 vaga");
+  const chip = page.locator(".it2-card", { hasText: "Chip de Força" });
+  await expect(chip).not.toHaveClass(/it2--falta/);
+  await expect(page.locator(".it2-card", { hasText: "Chip Aparo" })).toContainText("Ainda não é seu: vença o Piedmon");
   const i0 = await numLog(page, "i");
   await chip.getByRole("button", { name: "Equipar" }).click();
-  await expect(chip).toHaveClass(/item-eq/);
+  await expect(chip).toHaveClass(/it2--eq/);
   /* o Rookie do save ja esta no teto de treino do estagio: o chip de stat dos pets v13 so ocupa o espaco que falta (as regras dos v9) */
   await expect(chip).toContainText("Agora não soma nada");
-  await expect(page.locator(".itens-vagas")).toContainText("1 de 1 vaga");
+  await expect(page.locator(".it2-vagas")).toContainText("1 de 1 vaga");
   expect(await numLog(page, "i")).toBe(i0 + 1);
   /* sem vaga: o outro chip do Tamer (se houvesse) nao entraria; lutar com o chip na arena */
   const l0 = await numLog(page, "l");
@@ -661,8 +690,8 @@ test("itens: o líder dá o chip com a medalha, o chip se equipa e vale na luta"
   expect(reg.log.find((e: unknown[]) => e[1] === "i")[2]).toEqual({ op: "equipar", id: "chip_forca" });
   /* desequipar volta a vaga */
   await irPara(page, "Crescer", "Itens", "crescer/itens");
-  await page.locator(".item-card", { hasText: "Chip de Força" }).getByRole("button", { name: "Desequipar" }).click();
-  await expect(page.locator(".itens-vagas")).toContainText("0 de 1 vaga");
+  await page.locator(".it2-card", { hasText: "Chip de Força" }).getByRole("button", { name: "Desequipar" }).click();
+  await expect(page.locator(".it2-vagas")).toContainText("0 de 1 vaga");
   expect(erros).toEqual([]);
 });
 
@@ -706,7 +735,7 @@ test("itens: a carta se escolhe antes da luta, entra no registro do pet e sai do
   await expect(page).toHaveURL(/#\/lutar\/campanha$/);
   await expect(page.locator(".carta-escolha")).toHaveCount(0);
   await irPara(page, "Crescer", "Itens", "crescer/itens");
-  await expect(page.locator(".item-card", { hasText: "Carta de Fôlego" })).toContainText("×0");
+  await expect(page.locator(".it2-card", { hasText: "Carta de Fôlego" })).toContainText("×0");
   expect(erros).toEqual([]);
 });
 
@@ -718,10 +747,10 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 
     await semear(page, SAVE_V6, undefined, TAMER_ITENS);
     const erros = vigiarErros(page);
     await page.goto(APP + "#/crescer/itens");
-    await expect(page.locator(".item-card")).toHaveCount(9);
-    await expect(page.locator(".item-card.item-falta")).toHaveCount(7);
-    await page.locator(".item-card", { hasText: "Chip de Força" }).getByRole("button", { name: "Equipar" }).click();
-    await expect(page.locator(".item-card.item-eq")).toHaveCount(1);
+    await expect(page.locator(".it2-card")).toHaveCount(9);
+    await expect(page.locator(".it2-card.it2--falta")).toHaveCount(7);
+    await page.locator(".it2-card", { hasText: "Chip de Força" }).getByRole("button", { name: "Equipar" }).click();
+    await expect(page.locator(".it2-card.it2--eq")).toHaveCount(1);
     await page.waitForTimeout(600);
     const r = await page.evaluate(desk => {
       const visivel = (e: Element) => (e as HTMLElement).offsetParent !== null;
@@ -729,8 +758,10 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 
         const b = e.getBoundingClientRect();
         return b.height < 44 || b.width < 44 ? [`${e.tagName}.${(e as HTMLElement).className} ${Math.round(b.width)}x${Math.round(b.height)}`] : [];
       });
-      const lista = document.querySelector(".itens-col")!.getBoundingClientRect(), resumo = document.querySelector(".itens-resumo")!.getBoundingClientRect();
-      return { larg: document.documentElement.scrollWidth, janela: innerWidth, pequenos, aoLado: lista.left >= resumo.right - 1 };
+      /* uma coluna so no painel (M4; no lugar da L2, a grade de itens fica inteira dentro do corpo do painel, sem rolagem lateral nele) */
+      const corpo = document.querySelector(".painel-tela--lugar .hx-painel__corpo");
+      const aoLado = !!corpo && corpo.scrollWidth > corpo.clientWidth + 1;
+      return { larg: document.documentElement.scrollWidth, janela: innerWidth, pequenos, aoLado };
     }, largura >= 1100);
     expect(r.larg, "rolagem lateral").toBeLessThanOrEqual(r.janela);
     expect(r.pequenos, "alvos menores que 44 px").toEqual([]);
@@ -814,10 +845,10 @@ test("fronteira: com as 6 medalhas a ilha abre; a Liga tem 6 lutas sem cura, dá
   await expect(page.locator(".fr-ultima")).toContainText("venceu os 6");
   await expect(page.locator(".fr-card--vit")).toHaveCount(6);
   await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
-  await expect(page.locator(".med-ouro.ganha")).toContainText("Campeão da Liga dos Líderes com Magnadramon");
+  await expect(page.locator(".md2-ouro.ganha")).toContainText("Campeão da Liga dos Líderes com Magnadramon");
   /* recarregar: a conclusao nao volta */
   await page.reload();
-  await expect(page.locator(".med-tela")).toBeVisible();
+  await expect(page.locator(".md2-tela")).toBeVisible();
   await page.waitForTimeout(800);
   await expect(page.locator("dialog.conclusao-tela")).toHaveCount(0);
   expect(erros).toEqual([]);
@@ -832,8 +863,8 @@ test("fronteira: sem as 6 medalhas a Liga fica trancada e diz o que falta", asyn
   await expect(page.locator(".fr-cab .med-espera")).toContainText("A Fronteira abre com as 6 medalhas.");
   await expect(page.locator(".fr-cab .med-espera")).toContainText("Faltam 3 medalhas");
   await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
-  await expect(page.locator(".med-ouro")).not.toHaveClass(/ganha/);
-  await expect(page.locator(".med-ouro")).toContainText("Ainda não");
+  await expect(page.locator(".md2-ouro")).not.toHaveClass(/ganha/);
+  await expect(page.locator(".md2-ouro")).toContainText("Ainda não");
   expect(erros).toEqual([]);
 });
 
@@ -861,7 +892,7 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 
     expect(r.aoLado, "uma coluna só no painel (M4)").toBe(false);
     /* a medalha de ouro apagada em Medalhas, no mesmo tamanho */
     await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
-    await expect(page.locator(".med-ouro")).toBeVisible();
+    await expect(page.locator(".md2-ouro")).toBeVisible();
     const m = await page.evaluate(() => ({ larg: document.documentElement.scrollWidth, janela: innerWidth }));
     expect(m.larg).toBeLessThanOrEqual(m.janela);
     expect(erros).toEqual([]);
@@ -892,8 +923,8 @@ test("fronteira: antes do título as instalações ficam trancadas", async ({ pa
   await expect(page.locator(".sl-niveis")).toHaveCount(0);
   expect(await numLog(page, "f")).toBe(0);
   await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
-  await expect(page.locator(".med-recordes li")).toHaveCount(4);
-  await expect(page.locator(".med-recordes")).toContainText("Abre depois do título");
+  await expect(page.locator(".md2-recordes li")).toHaveCount(4);
+  await expect(page.locator(".md2-recordes")).toContainText("Abre depois do título");
   expect(erros).toEqual([]);
 });
 
@@ -950,9 +981,9 @@ test("fronteira: com o título, a Torre de Batalha dá 7 vitórias seguidas sem 
   expect(t.log.filter((e: [string]) => e[0] === "recorde").map((e: [string, { inst: string; valor: number }]) => [e[1].inst, e[1].valor])).toEqual([["torre_batalha", 7], ["palacio", 9]]);
   /* os recordes na tela de Medalhas */
   await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
-  await expect(page.locator(".med-recordes li.ganha")).toHaveCount(2);
-  await expect(page.locator(".med-recordes li", { hasText: "Torre de Batalha" })).toContainText("7 vitórias seguidas, com Magnadramon");
-  await expect(page.locator(".med-recordes li", { hasText: "Palácio" })).toContainText("9 vitórias seguidas");
+  await expect(page.locator(".md2-recordes li.ganha")).toHaveCount(2);
+  await expect(page.locator(".md2-recordes li", { hasText: "Torre de Batalha" })).toContainText("7 vitórias seguidas, com Magnadramon");
+  await expect(page.locator(".md2-recordes li", { hasText: "Palácio" })).toContainText("9 vitórias seguidas");
   expect(erros).toEqual([]);
 });
 
@@ -982,7 +1013,7 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 
     expect(r.aoLado, "uma coluna só no painel (M4)").toBe(false);
     await page.screenshot({ path: `test-results/fronteira-instalacoes-${largura}-${tema}.png`, fullPage: true });
     await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
-    await expect(page.locator(".med-recordes li.ganha")).toHaveCount(1);
+    await expect(page.locator(".md2-recordes li.ganha")).toHaveCount(1);
     const m = await page.evaluate(() => ({ larg: document.documentElement.scrollWidth, janela: innerWidth }));
     expect(m.larg).toBeLessThanOrEqual(m.janela);
     await page.screenshot({ path: `test-results/fronteira-medalhas-${largura}-${tema}.png`, fullPage: true });
@@ -1059,7 +1090,7 @@ test("fronteira: a Fábrica aluga 1 de 3 Megas, luta, oferece a troca depois da 
     .toEqual([["fabrica", 1, 0], ["fabrica_luta", 1, 0], ["fabrica_troca", 1, 0], ["fabrica_luta", 1, 1]]);
   expect(await numLog(page, "l")).toBe(l0);
   await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
-  await expect(page.locator(".med-recordes li", { hasText: "Fábrica" })).toContainText("Nenhum ainda");
+  await expect(page.locator(".md2-recordes li", { hasText: "Fábrica" })).toContainText("Nenhum ainda");
   expect(erros).toEqual([]);
 });
 
@@ -1098,7 +1129,7 @@ test("fronteira: o Salão, com um pet de cada nível (o ativo e os guardados), g
   expect(ev[0][1].lutas.map((l: { est: string; forma: string; venceu: boolean }) => [l.est, l.forma, l.venceu]))
     .toEqual([["crianca", "Patamon", true], ["adolescente", "Growlmon", true], ["adulto", "Zudomon", true], ["mega", "Magnadramon", true]]);
   await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
-  await expect(page.locator(".med-recordes li", { hasText: "Salão" })).toContainText("4 de 4 níveis seguidos, na tentativa 1.");
+  await expect(page.locator(".md2-recordes li", { hasText: "Salão" })).toContainText("4 de 4 níveis seguidos, na tentativa 1.");
   expect(erros).toEqual([]);
 });
 
@@ -1169,20 +1200,41 @@ for (const largura of [390, 1280]) {
     await expect(page.locator(".pet-tela")).toBeVisible();
     await expect(page.locator(".digibrain")).toBeHidden();
     if (largura < 900) await expect(page.locator(".topo-bt[aria-label=\"Conversar\"]")).toBeVisible();          /* o Conversar fica no topo flutuante (< 900 px) */
-    await page.getByRole("button", { name: "DigiBrain", exact: true }).click();       /* o botao quadrado da borda direita abre o painel */
+    if (largura < 900) await abrirLeque(page);                                         /* o DigiBrain mora no leque do retrato (< 900 px) */
+    await page.getByRole("button", { name: "DigiBrain", exact: true }).click();       /* o botao do leque (celular) ou a etiqueta do cenario (desktop) abre o painel */
     const raiz = page.locator("#pet-painel");
     await expect(raiz.locator(".digibrain")).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-    await expect(raiz.locator(".db-selo")).toHaveText("ao vivo");                    /* o tempo do jogo andando */
-    /* o painel le o motor: uma decisao, as barras dos lobos (o piso so quando entra na conta) e uma escolhida */
+    /* o selo so como forma, com o nome acessivel (D1b-5): o tempo do jogo andando */
+    await expect(raiz.getByRole("img", { name: "ao vivo" })).toBeVisible();
+    /* o modal pequeno (D1b): so o mapa dos pesos do motor, sem os cartoes nem a legenda do rodape */
     const db = await page.evaluate(() => (window as any).__digilab.digibrain());
     expect(db).not.toBeNull();
     expect(db.decisao).not.toBeNull();
-    await expect(raiz.locator(".db-barras li")).toHaveCount(db.decisao.barras.piso === 0 ? 4 : 5);
-    await expect(raiz.locator(".db-barras li[data-lobo='impulsos']")).toBeVisible();
-    await expect(raiz.locator(".db-opcoes li.esc")).toHaveCount(1);
-    await expect(raiz.locator(".db-emo")).toContainText(/memória do pet/);
-    await expect(raiz.locator(".db-ultimas li").first()).toBeVisible();
+    await expect(raiz.locator("svg.mp")).toBeVisible();
+    await expect(raiz.locator(".db-barras, .db-opcoes, .db-ultimas, .db-emo, .mp-nota")).toHaveCount(0);
+    await expect(raiz.locator(".mp-leg")).toBeHidden();                               /* a legenda mora na dica do "i" (D1b-7) */
+    await raiz.getByRole("button", { name: "O que é este desenho" }).click();
+    await expect(raiz.locator("#db-dica")).toContainText("só desenho");
+    await expect(raiz.locator(".mp-leg")).toBeVisible();
+    await page.keyboard.press("Escape");                                              /* o Esc com a dica aberta fecha so a dica */
+    await expect(raiz.locator("#db-dica")).toBeHidden();
+    await expect(raiz).toBeVisible();
+    /* o campo pequeno (D1c): o titulo e so o icone, com o nome para o leitor de tela; no desktop um painel de 420 px a direita, sob o relogio,
+       com o pet a vista; no celular uma folha de 210 px presa embaixo, com os botoes numa coluna a esquerda do desenho */
+    await expect(raiz.locator("#db-titulo svg")).toBeVisible();
+    await expect(raiz.locator("#db-titulo")).toHaveText("DigiBrain");
+    const caixa = (await raiz.locator(".scan-in").boundingBox())!;
+    if (largura >= 900) {
+      expect(Math.round(caixa.width)).toBe(420);
+      expect(caixa.y).toBeGreaterThanOrEqual(60);
+      expect(caixa.x).toBeGreaterThan(largura / 2);
+    } else {
+      expect(Math.round(caixa.y + caixa.height)).toBe(800);
+      expect(Math.round(caixa.height)).toBe(210);
+      const fechar = (await raiz.getByRole("button", { name: "Fechar DigiBrain" }).boundingBox())!, desenho = (await raiz.locator(".scan-moldura").boundingBox())!;
+      expect(fechar.x + fechar.width).toBeLessThanOrEqual(desenho.x + 0.5);
+    }
     /* nada promete mais do que uma soma de pesos */
     expect(await raiz.innerText()).not.toMatch(/pensando|sentindo/i);
     await page.screenshot({ path: test.info().outputPath(`digibrain-${largura}.png`) });     /* a captura do gate da etapa 5 */
@@ -1191,15 +1243,18 @@ for (const largura of [390, 1280]) {
     expect(erros).toEqual([]);
   });
 }
-/* o mapa dos pesos (MapaPesos.tsx), no lugar do icone estatico: cada traco e um peso do motor (Motor.digibrain().mapa), e a cada decisao
-   acendem a regra, os candidatos com a chance, a acao escolhida e o lobo que pesou mais; entre duas decisoes nada anima */
+/* o mapa dos pesos (ScanDigiBrain.tsx, MapaScan), no lugar do icone estatico: cada traco e um peso do motor (Motor.digibrain().mapa), e a cada
+   decisao acendem a regra, os candidatos com a chance e a acao escolhida (o "pesou mais" saiu no modal pequeno, D1b-6). Com "reduzir movimento" (D1-8, o contrato do
+   reduzir: zero animacao) so o destaque troca; o movimento sem o reduzir tem o teste logo abaixo */
 for (const largura of [390, 1280]) {
   test(`DigiBrain: o mapa dos pesos acende a cada decisão em ${largura} px`, async ({ page }) => {
     await page.setViewportSize({ width: largura, height: 800 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
     await semear(page, SAVE_V11);
     const erros = vigiarErros(page);
     await page.goto(APP + "#/pet/estado");
     await expect(page.locator(".pet-tela")).toBeVisible();
+    if (largura < 900) await abrirLeque(page);
     await page.getByRole("button", { name: "DigiBrain", exact: true }).click();
     const raiz = page.locator("#pet-painel");
     const mapa = raiz.locator("svg.mp");
@@ -1215,7 +1270,7 @@ for (const largura of [390, 1280]) {
           esc: [...s.querySelectorAll(".mp-esc")].map(g => g.getAttribute("data-acao")),
           cand: [...s.querySelectorAll(".mp-cand")].map(g => g.getAttribute("data-acao")).sort(),
           pct: s.querySelectorAll(".mp-pct").length, top: [...s.querySelectorAll("[data-entrada].mp-lit")].map(g => g.getAttribute("data-entrada")).sort(),
-          dest: [...s.querySelectorAll(".mp-dest")].map(g => g.getAttribute("data-lobo")), db,
+          dest: s.querySelectorAll(".mp-dest").length, regioes: [...s.querySelectorAll(".mp-reg")].map(t => t.textContent), db,
         };
       });
       const m = r.db.mapa, d = r.db.decisao;
@@ -1227,7 +1282,8 @@ for (const largura of [390, 1280]) {
       expect(r.cand).toEqual(d.chances.map((c: { acao: string }) => c.acao).sort());
       expect(r.pct).toBe(d.chances.length);
       expect(r.top).toEqual(d.percepcao.map((p: { entrada: string }) => p.entrada).sort());
-      expect(r.dest).toEqual([m.acesas.lobo_decisivo]);
+      expect(r.dest).toBe(0);
+      expect(r.regioes).toEqual(["ações", "regras", "percepção"]);
       return r.n;
     };
     const n0 = await conferir();
@@ -1247,6 +1303,249 @@ for (const largura of [390, 1280]) {
     expect(erros).toEqual([]);
   });
 }
+
+/* o movimento do scan (D1-2, D1-8): sem "reduzir movimento", numa decisao NOVA a varredura passa uma vez e o pulso percorre as arestas acesas
+   logo depois, e os dois terminam (saem do DOM e nao deixam animacao); o primeiro quadro ao abrir nao pulsa; o unico movimento que fica e o
+   giro lento do plano (so no desktop). Em 10 min/s do pet as decisoes (uma a cada 15 min dele) chegam mais depressa que a animacao e so o
+   destaque troca, entao o teste poe o tempo em 1x (uma decisao a cada 15 s) */
+test("DigiBrain: sem reduzir o movimento, a varredura e o pulso passam numa decisão nova e terminam", async ({ page }) => {
+  test.setTimeout(120_000);
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await semear(page, SAVE_V11);
+  await page.clock.install({ time: new Date("2026-10-19T12:00:00Z") });   /* o relogio da pagina corre sozinho; a decisao nova vem do runFor abaixo */
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/config");
+  await page.getByRole("button", { name: /^Registro e replay/ }).click();
+  await page.getByRole("button", { name: "1x", exact: true }).click();
+  await page.evaluate(() => { location.hash = "#/pet/estado"; });
+  await expect(page.locator(".pet-tela")).toBeVisible();
+  await page.getByRole("button", { name: "DigiBrain", exact: true }).click();
+  const raiz = page.locator("#pet-painel");
+  await expect(raiz.locator("svg.mp")).toBeVisible();
+  /* o primeiro quadro, ao abrir, nao pulsa */
+  await expect(raiz.locator(".scan-varredura, .mp-pulso")).toHaveCount(0);
+  const animacoes = () => page.evaluate(() => (document.getAnimations() as any[])
+    .filter(a => a.effect?.target?.closest?.("#pet-painel"))
+    .map(a => { const t = a.effect.getTiming(); return { nome: a.animationName as string, duracao: t.duration as number, atraso: t.delay as number, infinita: t.iterations === Infinity }; }));
+  /* uma decisao nova (1x e 1 min do pet por minuto do relogio, uma decisao a cada 15 min dele): o relogio falso salta 16 min (fastForward dispara cada timer uma vez: o passo do tempo cobre os 16 min e o repinte e um so), e o gap
+     desde a decisao anterior e de mais de 2,15 s */
+  await page.clock.fastForward(16 * 60_000);
+  await expect(raiz.locator(".scan-varredura")).toBeAttached({ timeout: 10_000 });
+  const durante = await animacoes();
+  expect(durante.filter(a => a.nome === "scan-varre")).toEqual([{ nome: "scan-varre", duracao: 1200, atraso: 0, infinita: false }]);
+  const acesas = await raiz.locator("svg.mp .mp-acesas path").count();
+  const pulsos = durante.filter(a => a.nome === "scan-pulso");
+  expect(pulsos, "um pulso por aresta acesa").toHaveLength(acesas);
+  expect(pulsos.every(p => p.duracao === 800 && p.atraso === 1200 && !p.infinita)).toBe(true);
+  /* e terminam: o timer do componente (no relogio falso) tira os dois do DOM, e do scan so fica o giro lento do plano */
+  await page.clock.fastForward(3000);
+  await expect(raiz.locator(".scan-varredura")).toHaveCount(0, { timeout: 6000 });
+  await expect(raiz.locator(".mp-pulso")).toHaveCount(0);
+  const depois = await animacoes();
+  expect(depois.map(a => a.nome)).toEqual(["scan-giro"]);
+  expect(depois[0]!.infinita).toBe(true);
+  expect(erros).toEqual([]);
+});
+/* o scan e um dialogo modal: o foco fica preso enquanto aberto, o Esc fecha e o foco volta a quem abriu. A pilha (4a linha) desmonta enquanto o
+   scan esta aberto, entao o foco tem de voltar ao botao remontado; a linha do agora (no topo) continua la */
+test("DigiBrain: o scan prende o foco, o Esc fecha e o foco volta a quem abriu (a pilha e a linha do agora)", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await semear(page, SAVE_V11);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/pet/estado");
+  await expect(page.locator(".pet-tela")).toBeVisible();
+  const raiz = page.locator("#pet-painel");
+  const abridores = [page.locator(".pet-hud [data-painel-pet='digibrain'] .hud-painel__bt"), page.locator("button.pet-agora")];
+  for (const abre of abridores) {
+    await abre.click();
+    await expect(raiz.locator(".digibrain")).toBeVisible();
+    /* o Tab alem do ultimo item de um <dialog> modal sai para a interface do navegador (document.activeElement vira o body): isso nao e vazar para a
+       pagina de tras. O que nao pode acontecer e o foco cair num elemento de fora do dialogo */
+    for (let i = 0; i < 12; i++) {
+      await page.keyboard.press("Tab");
+      expect(await page.evaluate(() => { const a = document.activeElement; return a === document.body || !!a?.closest("#pet-painel"); }), `o foco vazou do scan no Tab ${i + 1}`).toBe(true);
+    }
+    /* e a pagina de tras e inerte: nem por script um botao dela recebe o foco */
+    expect(await page.evaluate(() => { const b = document.querySelector<HTMLElement>("button.pet-agora")!; b.focus(); return document.activeElement === b; })).toBe(false);
+    await page.keyboard.press("Escape");
+    await expect(raiz).toHaveCount(0);
+    await expect(abre).toBeFocused();
+  }
+  expect(erros).toEqual([]);
+});
+/* nenhum texto do desenho abaixo de 11 px na tela (a fonte do SVG e max(base, 11px / escala)); no celular so os rotulos acesos e os das candidatas */
+for (const [largura, altura] of [[390, 844], [1280, 800], [1920, 950]]) {
+  test(`DigiBrain: nenhum texto do mapa fica abaixo de 11 px em ${largura} px`, async ({ page }) => {
+    await page.setViewportSize({ width: largura!, height: altura! });
+    await semear(page, SAVE_V11);
+    const erros = vigiarErros(page);
+    await page.goto(APP + "#/pet/estado");
+    await expect(page.locator(".pet-tela")).toBeVisible();
+    if (largura! < 900) await abrirLeque(page);
+    await page.getByRole("button", { name: "DigiBrain", exact: true }).click();
+    const mapa = page.locator("#pet-painel svg.mp");
+    await expect(mapa).toBeVisible();
+    await page.evaluate(() => document.fonts.ready);
+    const pequenos = await mapa.evaluate(svg => [...svg.querySelectorAll("text")]
+      .filter(t => getComputedStyle(t).display !== "none")
+      .map(t => ({ txt: t.textContent, h: t.getBoundingClientRect().height }))
+      .filter(t => t.h < 11));
+    expect(pequenos, "textos do mapa com menos de 11 px de altura").toEqual([]);
+    /* os rotulos de regiao (.mp-reg, .mp-sub) nao se sobrepoem entre si */
+    const colisoes = await page.evaluate(() => {
+      const c = (e: Element) => { const r = e.getBoundingClientRect(); return { l: r.left, r: r.right, t: r.top, b: r.bottom }; };
+      const cruza = (a: ReturnType<typeof c>, b: ReturnType<typeof c>) => a.l < b.r && b.l < a.r && a.t < b.b && b.t < a.b;
+      const rot = [...document.querySelectorAll("#pet-painel .mp-reg, #pet-painel .mp-sub")].filter(t => getComputedStyle(t).display !== "none");
+      const out: string[] = [];
+      rot.forEach((a, i) => {
+        rot.slice(i + 1).forEach(b => { if (cruza(c(a), c(b))) out.push(`"${a.textContent}" cobre "${b.textContent}"`); });
+      });
+      return out;
+    });
+    expect(colisoes, "rotulos de regiao que se sobrepoem").toEqual([]);
+    expect(erros).toEqual([]);
+  });
+}
+/* o zoom de 200% numa janela baixa (rev-a11y da D1b): uma janela de 1920 x 800 ou de 1280 x 720 com 200% vira 960 x 400 ou 640 x 360 em CSS, e
+   uma janela ainda mais baixa, 960 x 300. Em todas, o campo cabe inteiro na janela, e o topo (o icone, o selo e os tres botoes) cabe na largura */
+for (const [l, a] of [[960, 400], [960, 300], [640, 360]] as const) {
+  test(`DigiBrain: com zoom de 200% (${l}x${a} em CSS) o campo cabe na janela`, async ({ page }) => {
+    await page.setViewportSize({ width: l, height: a });
+    await semear(page, SAVE_V11);
+    const erros = vigiarErros(page);
+    await page.goto(APP + "#/pet/estado");
+    await expect(page.locator(".pet-tela")).toBeVisible();
+    if (l < 900) await abrirLeque(page);
+    await page.getByRole("button", { name: "DigiBrain", exact: true }).click();
+    const raiz = page.locator("#pet-painel");
+    await expect(raiz.locator("svg.mp")).toBeVisible();
+    const r = await page.evaluate(() => {
+      const q = (s: string) => document.querySelector(s)!.getBoundingClientRect(), cx = q("#pet-painel .scan-in");
+      const topo = document.querySelector("#pet-painel .scan-topo")!, bts = [...topo.querySelectorAll("button")].map(b => b.getBoundingClientRect());
+      return { cima: cx.top, baixo: cx.bottom, esq: cx.left, dir: cx.right, alto: innerHeight, largo: innerWidth,
+        botoesDentro: bts.every(b => b.left >= cx.left - 0.5 && b.right <= cx.right + 0.5 && b.top >= cx.top - 0.5 && b.bottom <= cx.bottom + 0.5) };
+    });
+    expect(r.cima).toBeGreaterThanOrEqual(0);
+    expect(r.baixo, "o campo passa do fim da janela").toBeLessThanOrEqual(r.alto + 0.5);
+    expect(r.esq).toBeGreaterThanOrEqual(0);
+    expect(r.dir).toBeLessThanOrEqual(r.largo + 0.5);
+    expect(r.botoesDentro, "um botao do topo sai do campo").toBe(true);
+    await raiz.getByRole("button", { name: "Fechar DigiBrain" }).click();
+    await expect(raiz).toHaveCount(0);
+    expect(erros).toEqual([]);
+  });
+}
+/* o mapa em texto troca o desenho, no mesmo tamanho: nao cobre os botoes do topo, e o modal cabe inteiro numa janela baixa */
+test("DigiBrain: o mapa em texto fica no lugar do desenho e o modal cabe a 1280x540", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 540 });
+  await semear(page, SAVE_V11);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/pet/estado");
+  await expect(page.locator(".pet-tela")).toBeVisible();
+  await page.getByRole("button", { name: "DigiBrain", exact: true }).click();
+  const raiz = page.locator("#pet-painel");
+  const bt = raiz.getByRole("button", { name: "O mapa em texto" });
+  await expect(bt).toHaveAttribute("aria-pressed", "false");
+  await bt.click();
+  await expect(bt).toHaveAttribute("aria-pressed", "true");
+  await expect(raiz.locator(".scan-texto")).toBeVisible();
+  await expect(raiz.locator("svg.mp")).toHaveCount(0);
+  const r = await page.evaluate(() => {
+    const q = (s: string) => document.querySelector(s)!.getBoundingClientRect();
+    const t = q("#pet-painel .scan-texto"), topo = q("#pet-painel .scan-topo"), cx = q("#pet-painel .scan-in");
+    const cruza = (a: DOMRect, b: DOMRect) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
+    return { topo: cruza(t, topo), h: t.height, fundo: cx.bottom, alto: innerHeight };
+  });
+  expect(r.topo, "o texto cobre o topo com os botoes").toBe(false);
+  expect(r.h).toBeGreaterThan(40);
+  expect(r.fundo, "o modal passa do fim da janela").toBeLessThanOrEqual(r.alto);
+  await bt.click();
+  await expect(raiz.locator("svg.mp")).toBeVisible();
+  expect(erros).toEqual([]);
+});
+/* um clique fora do modal (no veu) fecha, e o foco volta a quem abriu; o CENA.coberto saiu (D1b-3), conferido na fonte pelo Vitest */
+test("DigiBrain: um clique fora fecha o modal", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await semear(page, SAVE_V11);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/pet/estado");
+  await expect(page.locator(".pet-tela")).toBeVisible();
+  const abre = page.locator("button.pet-agora");
+  await abre.click();
+  const raiz = page.locator("#pet-painel");
+  await expect(raiz.locator("svg.mp")).toBeVisible();
+  const antes = (await numLog(page, "d")) + (await numLog(page, "dc"));
+  await page.mouse.click(200, 600);
+  await expect(raiz).toHaveCount(0);
+  /* o clique cai no veu, nao na ilha: nenhum carinho nem evento do dono (rev-replay da D1b) */
+  expect((await numLog(page, "d")) + (await numLog(page, "dc"))).toBe(antes);
+  await expect(abre).toBeFocused();
+  expect(erros).toEqual([]);
+});
+/* o campo pequeno (D1c): so os rotulos do caminho aceso e das candidatas ficam a vista; o de outro ponto aparece ao passar o mouse (desktop) ou
+   ao tocar nele (celular), e tocar nao grava evento */
+for (const largura of [390, 1280]) {
+  test(`DigiBrain: os rotulos so no caminho aceso, o resto ao passar o mouse ou tocar (${largura} px)`, async ({ page }) => {
+    await page.setViewportSize({ width: largura, height: 800 });
+    await semear(page, SAVE_V11);
+    const erros = vigiarErros(page);
+    await page.goto(APP + "#/pet/estado");
+    await expect(page.locator(".pet-tela")).toBeVisible();
+    if (largura < 900) await abrirLeque(page);
+    await page.getByRole("button", { name: "DigiBrain", exact: true }).click();
+    const raiz = page.locator("#pet-painel");
+    await expect(raiz.locator("svg.mp")).toBeVisible();
+    const r = await page.evaluate(() => {
+      const ac = (window as any).__digilab.digibrain().mapa.acesas;
+      const vis = (g: Element) => [...g.querySelectorAll("text")].some(t => getComputedStyle(t).display !== "none");
+      const nos = [...document.querySelectorAll("#pet-painel .mp-no")];
+      return {
+        caminho: ac.arestas.map((x: any) => x.entrada).sort(), regra: ac.regra, acao: ac.acao,
+        entradas: nos.filter(g => g.hasAttribute("data-entrada") && vis(g)).map(g => g.getAttribute("data-entrada")).sort(),
+        regras: nos.filter(g => g.hasAttribute("data-regra") && vis(g)).map(g => g.getAttribute("data-regra")),
+        acoesOk: nos.filter(g => g.hasAttribute("data-acao")).every(g => vis(g) === g.classList.contains("mp-cand")),
+        log: JSON.parse((window as any).__digilab.registro()).log.filter((e: unknown[]) => e[1] !== "t").length,
+      };
+    });
+    expect(r.entradas).toEqual(r.caminho);
+    expect(r.regras).toEqual([r.regra]);
+    expect(r.acoesOk).toBe(true);
+    const outro = raiz.locator(".mp-no[data-regra]:not(.mp-lit)").first(), rot = outro.locator("text");
+    await expect(rot).toBeHidden();
+    if (largura >= 900) { await outro.hover(); await expect(rot).toBeVisible(); }
+    else { await outro.locator("circle:not(.mp-alvo)").click(); await expect(outro).toHaveClass(/mp-toque/); await expect(rot).toBeVisible(); }
+    expect(await page.evaluate(() => JSON.parse((window as any).__digilab.registro()).log.filter((e: unknown[]) => e[1] !== "t").length)).toBe(r.log);
+    expect(erros).toEqual([]);
+  });
+}
+/* o "Atender" do cartao do chamado, dentro do scan aberto, grava um unico evento do dono. Um bebe v13 com o chamado de carinho em urgencia (55 min depois
+   do inicio, restam 5 min da janela de 15: o cartao so aparece em urgencia, e o de fome so com a comida abaixo de FOME_FALA). O relogio da pagina fica parado (page.clock), senao a janela de
+   5 min do pet fecharia em segundos de relogio antes do clique */
+test("DigiBrain: o Atender do chamado dentro do scan grava um único evento", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await semear(page, { semente: 4242, versao: 13, log: [[480, "t", 55]] });
+  await page.clock.install({ time: new Date("2026-10-19T12:00:00Z") });
+  await page.clock.pauseAt(new Date("2026-10-19T12:00:01Z"));
+  const erros = vigiarErros(page);
+  const eventos = async () => (await numLog(page, "d")) + (await numLog(page, "dc"));
+  await page.goto(APP + "#/pet/estado");
+  await expect(page.locator(".pet-tela")).toBeVisible();
+  await page.getByRole("button", { name: "DigiBrain", exact: true }).click();
+  const raiz = page.locator("#pet-painel");
+  await expect(raiz.locator(".digibrain")).toBeVisible();
+  const cartao = raiz.locator(".pet-alerta .chamado");
+  await expect(cartao).toBeVisible();
+  /* com um chamado aberto, o foco ao abrir fica no topo do modal (o Fechar), nao num botao do chamado (rev-a11y da D1b) */
+  expect(await page.evaluate(() => !!document.activeElement?.closest("#pet-painel .scan-topo"))).toBe(true);
+  await expect(raiz.locator("[role=status]")).toContainText(/Chamado/);
+  const antes = await eventos();
+  await cartao.getByRole("button", { name: "Atender" }).click();
+  await expect.poll(eventos).toBe(antes + 1);
+  await page.waitForTimeout(500);
+  expect(await eventos(), "o Atender gravou mais de um evento").toBe(antes + 1);
+  expect(erros).toEqual([]);
+});
 
 /* ---------------------------------------------------------------- a tela Pet como a Home da referencia (docs/TAREFA_V2_TELA_PET.md): o cenario
    com a maior area, tres acoes em destaque (as outras em Mais) e os detalhes sob demanda (folha no celular, coluna no desktop) */
@@ -1268,11 +1567,11 @@ for (const [largura, altura] of [[360, 800], [390, 844], [1280, 800]]) {
     expect(g.cena, "o cenario e a maior area").toBeGreaterThan(g.doca * 2);
     expect(g.pix).toBe("pixelated");
     expect(g.larg).toBeLessThanOrEqual(g.janela);
-    /* o dock: seis acoes no desktop; no celular quatro e o Mais, com o Tapa, o Tratar e o Por racao (so pets com mundo) */
-    await expect(page.locator(".acoes-pet .acao-destaque")).toHaveCount(largura >= 900 ? 6 : 4);
+    /* o dock: seis acoes no desktop; no celular tres (Alimentar, Brincar, Limpar) e o Mais, com o Carinho, o Tapa, o Tratar e o Por racao (so pets com mundo) */
+    await expect(page.locator(".acoes-pet .acao-destaque")).toHaveCount(largura >= 900 ? 6 : 3);
     await expect(page.locator(".acoes-pet .acao-extra")).toHaveCount(0);
     await page.locator(".acoes-pet .acao-mais").click();
-    await expect(page.locator(".acoes-pet .acao-extra")).toHaveCount(largura >= 900 ? 0 : 2);
+    await expect(page.locator(".acoes-pet .acao-extra")).toHaveCount(largura >= 900 ? 0 : 3);
     await expect(page.locator(".acoes-pet .racao-bt:not(.bola-bt)")).toBeVisible();
     await page.keyboard.press("Escape");
     await expect(page.locator("#acoes-mais")).toHaveCount(0);
@@ -1300,11 +1599,15 @@ for (const [largura, altura] of [[360, 800], [390, 844], [1280, 800]]) {
       await expect(page.getByRole("button", { name: "Evolução", exact: true })).toHaveAttribute("aria-expanded", "true");
       await expect(page.getByRole("button", { name: "Estado atual", exact: true })).toHaveAttribute("aria-expanded", "false");
     } else {
+      /* celular (M1): os vitais e os paineis moram no leque do retrato, que fecha ao escolher um deles */
+      await abrirLeque(page);
       await page.getByRole("button", { name: "Estado atual", exact: true }).click();
       await expect(page.locator("#pet-painel .necessidades4")).toBeVisible();
+      await abrirLeque(page);
       await page.getByRole("button", { name: "Evolução", exact: true }).click();
       await expect(page.locator("#pet-painel")).toHaveCount(1);
       await expect(page.locator("#pet-painel")).toContainText("até virar");
+      await abrirLeque(page);
       await page.getByRole("button", { name: "Últimas ações", exact: true }).click();
       await expect(page.locator("#pet-painel .mod-registro li").first()).toBeVisible();
       await page.keyboard.press("Escape");
@@ -1384,14 +1687,17 @@ for (const largura of [390, 1280]) {
     await expect(page).toHaveURL(/#\/crescer\/evolucao$/);
     await expect(page.locator("dialog.revelacao[open]")).toHaveCount(0);
     /* a aba: a forma atual em destaque, a proxima evolucao com as medalhas, a arvore, o porque e o historico */
-    await expect(page.locator(".evt-heroi .evt-nome")).toHaveText("Growlmon");
-    await expect(page.locator(".evt-heroi .evt-prazo")).toContainText("até virar Ultimate");
-    await expect(page.locator(".evt-prox .evt-selos")).toContainText("1 de 3 medalhas do Tamer");
-    await expect(page.locator(".evo-arv")).toBeVisible();
-    await expect(page.locator(".evt-porque")).toContainText("Por que Growlmon?");
-    await expect(page.locator(".evo-hist li")).toHaveCount(3);
-    expect(JAPONES.test(await page.locator(".evo-tela").textContent() ?? "")).toBe(false);
+    await expect(page.locator(".evl-nome b")).toHaveText("Growlmon");
+    await expect(page.locator(".evl-prazo")).toContainText("até Ultimate");
+    /* os selos so da conta do Tamer (L2): ele tem 1 de 3 */
+    await expect(page.locator(".evl-reqs")).toContainText("1/3");
+    await expect(page.locator(".evl-arv")).toBeVisible();
+    await expect(page.locator(".evl-porque")).toContainText("decidido pelo caráter");
+    await expect(page.locator(".evl-hist li")).toHaveCount(3);
+    expect(JAPONES.test(await page.locator(".evl").textContent() ?? "")).toBe(false);
     /* o historico reabre o momento de qualquer evolucao */
+    /* o historico fica num details fechado (L2, regra do texto): abre antes */
+    await page.locator(".evl-det", { hasText: "Histórico" }).locator("summary").click();
     await page.getByRole("button", { name: "Ver a revelação de novo: Agumon" }).click();
     await expect(rev).toBeVisible();
     await expect(rev.locator(".revel-de")).toHaveText("In-Training → Rookie");
@@ -1416,7 +1722,7 @@ test("evolução: sem o atlas, o pet de reserva no momento e na aba", async ({ p
   const w = await rev.locator(".evm-pet .evm-spr--reserva").evaluate(e => (e as HTMLImageElement).naturalWidth);
   expect(w).toBeGreaterThan(100);
   await rev.getByRole("button", { name: "Continuar" }).click();
-  await expect(page.locator(".evt-heroi .evm-spr--reserva")).toBeVisible();
+  await expect(page.locator(".evl-palco .evm-spr--reserva")).toBeVisible();
 });
 
 /* a aba Treinar (docs/TAREFA_V2_TREINO.md). save_treino_pausa.json e save_treino_forcar.json (e2e/gerar_save_treino.mjs): um Palmon v11 no
@@ -1425,32 +1731,20 @@ const SAVE_TR_PAUSA = JSON.parse(readFileSync(new URL("./save_treino_pausa.json"
 const SAVE_TR_FORCAR = JSON.parse(readFileSync(new URL("./save_treino_forcar.json", import.meta.url), "utf8"));
 const SEM_JAPONES = /[぀-ヿ㐀-鿿ｦ-ﾟ]/;
 for (const largura of [390, 1280]) {
-  test(`treino: a sala, o stat em foco, o cansaço, os exercícios e a pausa em ${largura} px`, async ({ page }) => {
+  test(`treino: o estado, os exercícios e o cansaço em ${largura} px`, async ({ page }) => {
     await page.setViewportSize({ width: largura, height: largura >= 1100 ? 800 : 844 });
     await semear(page, SAVE_TR_PAUSA);
     const erros = vigiarErros(page);
     await page.goto(APP + "#/crescer/treinar");
-    await expect(page.locator(".trn-sala")).toBeVisible();
-    await expect(page.locator(".trn-estado")).toHaveText("pediu pausa");
-    await expect(page.locator(".trn-balao")).toContainText("pausa?");
-    await expect(page.locator(".trn-pet .evm-spr")).toBeVisible();
-    /* o stat em foco: o principal do ultimo exercicio (Alvo: mira), de 10, e o do estagio e da vida */
-    await expect(page.locator(".trn-foco")).toContainText("stat do último treino · Alvo");
-    await expect(page.locator(".trn-foco")).toContainText(/Mira \+\d+,\d de 10/);
-    await expect(page.locator(".trn-foco")).toContainText(/no estágio [\d,]+ de 10 · na vida [\d,]+ de 36/);
-    await expect(page.locator(".trn-vida li")).toHaveCount(6);
+    /* L2: o estado numa palavra, o último treino sem a frase do intervalo (que fica no balão) e os números do cansaço */
+    await expect(page.locator(".trn2-estado")).toHaveText("Pausa");
+    await expect(page.locator(".trn2-ultimo")).toContainText("Alvo");
     await expect(page.locator(".treino-ex")).toHaveCount(6);
     await expect(page.locator(".treino-ex.forcar")).toHaveCount(0);
-    await expect(page.locator(".trn-ultimo")).toContainText("Alvo · mira e fôlego");
-    const texto = await page.locator(".treino-tela").textContent() ?? "";
+    await expect(page.locator(".trn2-cansaco .trn2-med")).toHaveCount(2);
+    const texto = await page.locator(".trn2-tela").textContent() ?? "";
     expect(SEM_JAPONES.test(texto), "nenhum caractere japonês").toBe(false);
-    expect(/\b(Nv|Lv|XP)\b/.test(texto), "nem nível nem XP").toBe(false);
-    const r = await page.evaluate(() => Object.fromEntries([".trn-sala", ".trn-foco", ".trn-medidores", ".trn-exercicios", ".trn-vida", ".trn-ultimo"]
-      .map(c => { const b = document.querySelector(c)!.getBoundingClientRect(); return [c, [b.left, b.top]]; })));
-    /* uma coluna, nesta ordem, no painel de 760 px e no modal do celular (layout habitat, M4) */
-    const tops = [".trn-sala", ".trn-foco", ".trn-medidores", ".trn-exercicios", ".trn-vida", ".trn-ultimo"].map(c => r[c][1]);
-    expect(tops).toEqual([...tops].sort((a, b) => a - b));
-    expect(new Set([".trn-medidores", ".trn-exercicios"].map(c => Math.round(r[c][0]))).size, "mesma coluna").toBe(1);
+    expect(/(Nv|Lv|XP)/.test(texto), "nem nível nem XP").toBe(false);
     expect(erros).toEqual([]);
   });
 }
@@ -1458,29 +1752,33 @@ test("treino: com fadiga acima de 60 os exercícios viram Forçar, a folha confi
   await page.setViewportSize({ width: 390, height: 844 });
   await semear(page, SAVE_TR_FORCAR);
   const erros = vigiarErros(page);
+  /* o relogio da pagina e falso e, com o app de pe, para: o Forcar so fica habilitado ~3 min de jogo (o intervalo de 10 min passou, a
+     fadiga ainda esta acima de 60), uns 300 ms a 10 min/s, e a espera do Playwright (que tenta de novo em intervalos que crescem ate 1 s)
+     podia pular essa janela; o "Forçar mesmo assim" tambem podia cair depois dela. Com o relogio parado, o teste anda 100 ms por vez */
+  await page.clock.install();
   await page.goto(APP + "#/crescer/treinar");
   await expect(page.locator(".treino-ex.forcar")).toHaveCount(6);
+  await page.clock.pauseAt(new Date(await page.evaluate(() => Date.now()) + 250));
   const l0 = await numLog(page, "tr");
   /* o intervalo de 10 min passa com o relogio do app (10 min/s) */
-  await page.locator(".treino-ex.forcar:not([disabled])").first().click();
+  const habilitado = page.locator(".treino-ex.forcar:not([disabled])");
+  for (let i = 0; i < 40 && await habilitado.count() === 0; i++) await page.clock.runFor(100);
+  await habilitado.first().click();
   const folha = page.locator("dialog.folha[open]");
   await expect(folha).toContainText("Forçar levantar pedra?");
   await folha.getByRole("button", { name: "Forçar mesmo assim" }).click();
-  await expect(page.locator(".trn-msg")).toContainText("Forçado:");
+  await expect(page.locator(".trn2-msg")).toContainText("Forçado:");
   expect(await numLog(page, "tr")).toBe(l0 + 1);
-  await expect(page.locator(".trn-medidores")).toContainText("25 / 100");
-  await expect(page.locator(".trn-ultimo")).toContainText("Levantar pedra");
+  await expect(page.locator(".trn2-cansaco .trn2-barra--sombrio")).toHaveAttribute("aria-label", /^Sobrecarga 25 de 100/);
+  await expect(page.locator(".trn2-ultimo")).toContainText("Levantar pedra");
   expect(erros).toEqual([]);
 });
-/* sem o atlas do UP (o CI, as capturas do repositorio): a sala em CSS, o pet da grade de reserva e os icones do lucide */
-test("treino: sem o atlas, a sala em CSS, o pet de reserva e os ícones de reserva", async ({ page }) => {
+/* sem o atlas do UP (o CI, as capturas do repositorio): os icones do lucide */
+test("treino: sem o atlas, os ícones de reserva", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await semear(page, SAVE_TR_PAUSA);
   await page.route(/\/Assets\/(digilab_atlas_up|digilab_decoracao_up|decoracao_up\/)/, r => r.abort());
   await page.goto(APP + "#/crescer/treinar");
-  await expect(page.locator(".trn-sala .trn-janela")).toBeVisible();
-  await expect(page.locator(".trn-sala.trn-sala--up")).toHaveCount(0);
-  await expect(page.locator(".trn-pet .evm-spr--reserva")).toBeVisible();
   await expect(page.locator(".treino-grade .treino-ic--reserva")).toHaveCount(6);
 });
 
@@ -1504,6 +1802,7 @@ const abrirMais = async (page: Page) => { if (!await page.locator("#acoes-mais")
 async function infoMundoNoEstado(page: Page, texto: string | null): Promise<void> {
   const pilha = await page.locator(".pet-hud").count() > 0;
   const bt = page.getByRole("button", { name: "Estado atual", exact: true });
+  if (!pilha) await abrirLeque(page);                  /* celular: o "Estado atual" mora no leque do retrato */
   if (!pilha || await bt.getAttribute("aria-expanded") === "false") await bt.click();
   const raiz = page.locator(pilha ? ".pet-hud [data-painel-pet='estado']" : ".pet-painel"), det = raiz.getByRole("button", { name: "Detalhes" });
   if (await det.getAttribute("aria-expanded") === "false") await det.click();
@@ -1512,7 +1811,7 @@ async function infoMundoNoEstado(page: Page, texto: string | null): Promise<void
   await expect(page.locator(".pet-balcao .mundo-info")).toHaveCount(0);
   await det.click();
   await expect(info).toHaveCount(0);
-  if (!pilha) { await bt.click(); await expect(page.locator(".pet-painel")).toHaveCount(0); }
+  if (!pilha) { await page.getByRole("button", { name: "Fechar Estado atual" }).click(); await expect(page.locator(".pet-painel")).toHaveCount(0); }
 }
 /** arrasta "Por racao" ate o ponto do cliente, com o mouse (o gesto) */
 async function arrastarRacao(page: Page, alvo: [number, number]): Promise<void> {
@@ -1867,7 +2166,7 @@ test("pele dos menus: Ajustes › Visual troca na hora e a escolha sobrevive ao 
   const gravada = () => page.evaluate(c => localStorage.getItem(c + "-pele"), CHAVE);
   await page.goto(APP + "#/config");
   await expect(page.locator(".mc-cfg")).toContainText("pele Sci-fi · tema");
-  await page.locator(".mc-cfg .hx-linha", { hasText: "Visual" }).click();
+  await page.locator(".mc-cfg .aj", { hasText: "Visual" }).click();
   const grupo = page.getByRole("radiogroup", { name: "Pele dos menus" });
   const militar = grupo.getByRole("radio", { name: "Militar" }), holo = grupo.getByRole("radio", { name: "Sci-fi" });
   await expect(holo).toHaveAttribute("aria-checked", "true");

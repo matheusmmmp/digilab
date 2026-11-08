@@ -1,0 +1,146 @@
+{
+ "asset": {
+  "generator": "Khronos glTF Blender I/O v4.5.51",
+  "version": "2.0",
+  "extras": {
+   "gerado_por_ia": true,
+   "gerador": "Meshy (meshy.ai), plano Pro, conta do Matheus",
+   "tarefas_meshy": {
+    "concept": "01a1b333-2715-7241-a197-60befe5695bf",
+    "vistas": "01a1b335-260d-7539-b583-dbe088ec707a",
+    "malha": "01a1b335-ea12-716a-b2d7-fe374e8c6f55"
+   },
+   "pipeline": "docs/TAREFA_V3_ITENS_3D.md; TAREFA_V3_MAPA_DIGITAL.md (D4); a malha da Meshy como veio; a cor chapada nas nove cores do concept, com o corpo repintado sem o aluminio (pintar_corpo.py), sem tracos",
+   "licenca": "License.txt ao lado"
+  }
+ },
+ "scene": 0,
+ "scenes": [
+  {
+   "name": "Scene",
+   "nodes": [
+    0
+   ]
+  }
+ ],
+ "nodes": [
+  {
+   "mesh": 0,
+   "name": "lata"
+  }
+ ],
+ "materials": [
+  {
+   "name": "lata",
+   "pbrMetallicRoughness": {
+    "baseColorTexture": {
+     "index": 0
+    },
+    "metallicFactor": 0
+   }
+  }
+ ],
+ "meshes": [
+  {
+   "name": "lata",
+   "primitives": [
+    {
+     "attributes": {
+      "POSITION": 0,
+      "NORMAL": 1,
+      "TEXCOORD_0": 2
+     },
+     "indices": 3,
+     "material": 0
+    }
+   ]
+  }
+ ],
+ "textures": [
+  {
+   "sampler": 0,
+   "source": 0
+  }
+ ],
+ "images": [
+  {
+   "mimeType": "image/png",
+   "name": "lata_cor",
+   "uri": "lata_cor.png"
+  }
+ ],
+ "accessors": [
+  {
+   "bufferView": 0,
+   "componentType": 5126,
+   "count": 3738,
+   "max": [
+    0.547577977180481,
+    0.9508119821548462,
+    0.5591959953308105
+   ],
+   "min": [
+    -0.5604040026664734,
+    -0.9523160457611084,
+    -0.5615980625152588
+   ],
+   "type": "VEC3"
+  },
+  {
+   "bufferView": 1,
+   "componentType": 5126,
+   "count": 3738,
+   "type": "VEC3"
+  },
+  {
+   "bufferView": 2,
+   "componentType": 5126,
+   "count": 3738,
+   "type": "VEC2"
+  },
+  {
+   "bufferView": 3,
+   "componentType": 5123,
+   "count": 5934,
+   "type": "SCALAR"
+  }
+ ],
+ "bufferViews": [
+  {
+   "buffer": 0,
+   "byteLength": 44856,
+   "byteOffset": 0,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 44856,
+   "byteOffset": 44856,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 29904,
+   "byteOffset": 89712,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 11868,
+   "byteOffset": 119616,
+   "target": 34963
+  }
+ ],
+ "samplers": [
+  {
+   "magFilter": 9729,
+   "minFilter": 9987
+  }
+ ],
+ "buffers": [
+  {
+   "byteLength": 131484,
+   "uri": "lata.bin"
+  }
+ ]
+}

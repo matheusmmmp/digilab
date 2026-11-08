@@ -266,3 +266,40 @@ A pasta foi movida para `artifacts_v2_digibrain_prototipo/longe_regular/caido_1/
   nenhuma combinação sem hipótese e plano próprios.
 - **D-C1-3, DECIDIDA:** de onde vem o ganho do M3\* no `longe_fixo` fica como questão aberta no RESULTADO, sem run agora; um descritivo
   com plano próprio antes da L3.
+
+## O plano do descritivo da D-C1-3 (2026-11-06, worker Claude Code, Opus 5.5, worktree `v3-dc13-plano`)
+
+- **O plano, PROPOSTO:** o adendo 10 do `docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`. É só o papel: nenhuma vida, nenhum replay
+  e nenhum número de resultado.
+- **A fonte:**
+  - os artefatos da C1 no git, com os sha256 conferidos iguais aos registrados;
+  - o replay das 1 800 vidas do `longe_fixo` (M0, M2 e M3\*), com o código do `7683c0e`. **O código de hoje difere do da run em 11 dos
+    15 módulos.**
+
+  Nenhuma vida nova e nenhuma faixa.
+- **As hipóteses:**
+  - H1, a posição na queda;
+  - H1′, a patrulha;
+  - H2, outra unidade;
+  - H3, a queda de um custo;
+  - H4, a medida.
+
+  Elas se separam pela decomposição exata do ganho em caminhos de fechamento e em causas de perda, com a classe de A6.6.
+- **As decisões do Matheus:** as AD10-1 a AD10-7 (A10.9).
+- **O que vem depois da aprovação:** o código de leitura num PR próprio; depois, o replay, uma vez.
+
+## O plano da D-C1-3 no REL, o adendo 11 (2026-11-06, worker Claude Code, Opus 5.5, worktree `v3-dc13-plano`, branch `v3-dc13-rel-plano`)
+
+- **De onde vem:** a 13.6 apontou para H3, e o Matheus seguiu a recomendação dela ("Sim, mescle e siga", a AD10-6): estender a
+  decomposição ao cérebro padrão, o REL − SEM da C4.
+- **O plano, PROPOSTO:** o adendo 11 do `docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`. É só o papel: nenhuma vida, nenhum replay
+  e nenhum número de resultado.
+- **A fonte:** os artefatos da C4 no git, com os sha256 conferidos iguais aos registrados, e o replay das 1 600 vidas do `longe_fixo` do
+  REL e do SEM, com o código do `a287ba2`. **O código de hoje difere do da run em 9 dos 16 módulos de `digilab/` e no protótipo.**
+  Nenhuma vida nova e nenhuma faixa.
+- **O que muda do adendo 10:**
+  - o contraste é REL − SEM, com o δ = 0,032 da C4;
+  - entra o H5, a lembrança, com a memória separada em lembrança e lugar no cruzamento com o módulo;
+  - o registro das visitas ganha o alvo da ida e o episódio que ela codificou;
+  - a leitura compara a linha com a da 13.6, sem teste entre as runs.
+- **As decisões do Matheus:** as AD11-1 a AD11-7 (A11.9). O teste causal da H3 fica fora, com plano e faixa próprios.

@@ -103,6 +103,7 @@ def test_copia_sem_secao_levanta():
 
 
 # ---------------------------------------------------------------- etapa 2: o registro por mês (G-CONCAT)
+import gerar_indice_desvios  # noqa: E402
 import registro_por_mes as rpm  # noqa: E402
 
 BASE = json.loads((RAIZ / rpm.LOTES).read_text(encoding="utf-8"))["base"]["commit"]
@@ -184,14 +185,66 @@ def test_registro_secao_no_indice_falha(tmp_path, git_registro):
     assert any("seção datada no índice" in f for f in falhas)
 
 
-def test_registro_secao_nova_sem_linha_no_indice_falha(tmp_path, git_registro):
+def test_registro_secao_nova_sem_linha_no_indice_passa_atrasado(tmp_path, git_registro):
+    # D-ID3 (docs/TAREFA_V3_INDICE_DESVIOS.md): o worker não edita o índice; no PR ele fica atrasado, e só o gerador avisa
     _registro_minimo(tmp_path)
     alvo = tmp_path / rpm.PASTA / "2026-10.md"
-    rpm.escrever(alvo, rpm.ler(alvo) + "\n## 2026-10-14 — NOVA (worker X): sem índice\n\ntexto\n")
-    falhas, _ = conferir_saude.conferir_registro(tmp_path)
-    assert any("índice" in f for f in falhas)
-    rpm.escrever(tmp_path / rpm.REGISTRO, rpm.ler(tmp_path / rpm.REGISTRO) + rpm.linha_indice("2026-10-14 — NOVA (worker X): sem índice"))
+    titulo = "2026-10-14 — NOVA (worker X): sem índice"
+    rpm.escrever(alvo, rpm.ler(alvo) + f"\n## {titulo}\n\ntexto\n")
     assert conferir_saude.conferir_registro(tmp_path)[0] == []
+    assert gerar_indice_desvios.atrasadas(tmp_path) == [titulo]
+    assert gerar_indice_desvios.principal(["--raiz", str(tmp_path), "--conferir"]) == 1
+    rpm.escrever(tmp_path / rpm.REGISTRO, rpm.ler(tmp_path / rpm.REGISTRO) + rpm.linha_indice(titulo))
+    assert conferir_saude.conferir_registro(tmp_path)[0] == []    # a linha à mão, como hoje, também passa
+    assert gerar_indice_desvios.principal(["--raiz", str(tmp_path)]) == 0
+    assert gerar_indice_desvios.principal(["--raiz", str(tmp_path), "--conferir"]) == 0
+    assert conferir_saude.conferir_registro(tmp_path)[0] == [] and gerar_indice_desvios.atrasadas(tmp_path) == []
+
+
+def test_registro_indice_fora_da_ordem_falha(tmp_path, git_registro):
+    _registro_minimo(tmp_path)
+    alvo = tmp_path / rpm.REGISTRO
+    cabeca, corpo = rpm.ler(alvo).split(rpm.MARCA_INDICE + "\n", 1)
+    linhas = [l for l in corpo.splitlines(keepends=True) if l.strip()]
+    linhas[3], linhas[4] = linhas[4], linhas[3]
+    rpm.escrever(alvo, cabeca + rpm.MARCA_INDICE + "\n\n" + "".join(linhas))
+    falhas, _ = conferir_saude.conferir_registro(tmp_path)
+    assert any("fora da ordem: 1" in f for f in falhas)
+
+
+def test_registro_indice_linha_repetida_falha(tmp_path, git_registro):
+    _registro_minimo(tmp_path)
+    alvo = tmp_path / rpm.REGISTRO
+    linha = next(l for l in rpm.ler(alvo).splitlines(keepends=True) if l.startswith("- ["))
+    rpm.escrever(alvo, rpm.ler(alvo) + linha)
+    assert any("fora da ordem" in f for f in conferir_saude.conferir_registro(tmp_path)[0])
+
+
+def test_registro_indice_no_arquivo_errado_falha(tmp_path, git_registro):
+    _registro_minimo(tmp_path)
+    alvo = tmp_path / rpm.REGISTRO
+    texto = rpm.ler(alvo)
+    primeira = next(l for l in texto.splitlines(keepends=True) if "(registro/2026-10.md)" in l)
+    rpm.escrever(alvo, texto.replace(primeira, primeira.replace("2026-10.md", "2026-09.md"), 1))
+    assert any("no arquivo errado: 1" in f for f in conferir_saude.conferir_registro(tmp_path)[0])
+
+
+def test_registro_virada_do_mes_a_linha_no_fim_falha_e_o_gerador_acerta(tmp_path, git_registro):
+    # o caso T3 da tarefa: a main já tem novembro; um PR de outubro chega depois e põe a linha no fim do índice
+    _registro_minimo(tmp_path)
+    novembro = "2026-11-01 — NOVEMBRO (worker X): já na main"
+    rpm.escrever(tmp_path / rpm.PASTA / "2026-11.md", f"## {novembro}\n\ntexto\n")
+    rpm.escrever(tmp_path / rpm.REGISTRO, rpm.ler(tmp_path / rpm.REGISTRO) + rpm.linha_indice(novembro))
+    assert conferir_saude.conferir_registro(tmp_path)[0] == []
+    outubro = "2026-10-31 — OUTUBRO (worker Y): chegou depois"
+    alvo = tmp_path / rpm.PASTA / "2026-10.md"
+    rpm.escrever(alvo, rpm.ler(alvo) + f"\n## {outubro}\n\ntexto\n")
+    rpm.escrever(tmp_path / rpm.REGISTRO, rpm.ler(tmp_path / rpm.REGISTRO) + rpm.linha_indice(outubro))
+    assert any("fora da ordem: 1" in f for f in conferir_saude.conferir_registro(tmp_path)[0])
+    gerar_indice_desvios.principal(["--raiz", str(tmp_path)])
+    assert conferir_saude.conferir_registro(tmp_path)[0] == []
+    linhas = rpm.ler(tmp_path / rpm.REGISTRO).splitlines()
+    assert linhas[-2:] == [rpm.linha_indice(outubro).rstrip("\n"), rpm.linha_indice(novembro).rstrip("\n")]
 
 
 def test_registro_secao_no_mes_errado_falha(tmp_path, git_registro):

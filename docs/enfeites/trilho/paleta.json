@@ -1,0 +1,5 @@
+{
+ "fonte": "as regioes do concept 1 (vagao) e as cores dominantes da textura da Meshy (mediana em 10 cores): o vermelho do vagao, o creme do teto e das janelas, a madeira dos dormentes em dois tons, o cinza dos trilhos e o musgo; PROPOSTO",
+ "paleta": [[200, 90, 80], [236, 206, 156], [170, 126, 96], [132, 96, 72], [168, 168, 160], [120, 160, 70]],
+ "nomes": ["vagao", "creme", "madeira", "madeira escura", "trilho", "musgo"]
+}
