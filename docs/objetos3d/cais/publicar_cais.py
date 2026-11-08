@@ -19,7 +19,7 @@ PUB = RAIZ / "web" / "app" / "public" / "lugares" / "cais"
 
 PIPELINE_VOXEL = ("docs/TAREFA_V3_LUGARES_3D.md, secao 17: o cais em voxel, a partir da malha da Meshy e da textura pintada com o realce da "
                   "secao 16 (textura_cais.py, sem paleta): 48 blocos no comprido, a cor de cada bloco pela media de 7 pontos da malha, as faces "
-                  "expostas juntadas em retangulos e um texel por face de bloco num atlas de 256 px com o filtro NEAREST (voxel_cais.py)")
+                  "expostas juntadas em retangulos e 2 x 2 texels por face de bloco num atlas de 512 px com o filtro NEAREST (voxel_cais.py)")
 
 
 def main(gl: str, cor: str, node_modules: str, modo: str = "") -> None:

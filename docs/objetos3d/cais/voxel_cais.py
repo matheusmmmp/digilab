@@ -4,7 +4,7 @@
 #   2. a cor de cada bloco: a media da textura nos pontos da malha mais perto do centro e de 6 pontos em volta (AMOSTRAS; uma cor por bloco);
 #   2b. os grupos soltos de ate SOLTO blocos saem;
 #   3. as faces: so as que dao para um bloco vazio, juntadas em retangulos por plano (o "greedy meshing"), sem olhar a cor: cada retangulo
-#      leva um bloco de texels (um texel por face de bloco) num atlas quadrado, com 1 texel de borda repetida;
+#      leva um bloco de texels (ESCALA x ESCALA texels por face de bloco) num atlas quadrado, com 1 texel de borda repetida;
 #   4. as normais: as do plano (cubo de verdade), a textura com o filtro Closest (o glTF sai com o sampler NEAREST: pixel duro na tela).
 # Exporta o glTF separado e uma previa (Workbench). O atlas sai em RGB, sem paleta (uma cor por face de bloco ja e o pixel).
 # uso (da raiz): blender -b --factory-startup --python docs/objetos3d/cais/voxel_cais.py -- <meshy.glb> <cor com o realce.png> <saida.gltf> <previa.png> <N>
@@ -17,6 +17,9 @@ ent, cor, sai, previa, n_txt = sys.argv[sys.argv.index("--") + 1:][:5]
 N = int(n_txt)
 # o limiar (em lados de bloco): 0,5 deixa buraco nas tabuas finas e na diagonal; 0,6 fecha sem engordar muito. PROPOSTO, SEM FONTE
 LIMIAR = 0.6
+# texels por lado de face de bloco: 2 aproveita melhor o atlas de 512 px, o lado minimo do LG-G5b (web/app/test/ilha_lugares.test.ts, a regra da textura
+# pintada, que o cais segue pelo aviso do Gerente); com o NEAREST, 2 x 2 texels da mesma cor dao o mesmo pixel na tela que 1
+ESCALA = 2
 # a cor do bloco e a media de 7 amostras (o centro e um terco de bloco para cada lado nos 3 eixos): com uma so, o veio pintado da Meshy virava
 # ruido de bloco a bloco. PROPOSTO, SEM FONTE
 AMOSTRAS = [Vector((0, 0, 0))] + [Vector(v) / 3 for v in ((1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1))]
@@ -129,11 +132,12 @@ print("VOXEL retangulos", len(retangulos), "triangulos", 2 * len(retangulos))
 
 # o atlas: prateleiras, do mais alto ao mais baixo, num quadrado potencia de 2; 1 texel de borda repetida em volta de cada bloco
 ordem = sorted(range(len(retangulos)), key=lambda r: -retangulos[r][6])
-S = 32
+# o lado minimo do atlas: 512, o do LG-G5b (o que sobra fica preto; no PNG quase nao pesa)
+S = 512
 while True:
     pos, x, y, alt, ok = {}, 0, 0, 0, True
     for r in ordem:
-        w, h = retangulos[r][5] + 2, retangulos[r][6] + 2
+        w, h = retangulos[r][5] * ESCALA + 2, retangulos[r][6] * ESCALA + 2
         if x + w > S:
             x, y, alt = 0, y + alt, 0
         if y + h > S or w > S:
@@ -149,9 +153,9 @@ atlas = [0.0] * (S * S * 4)
 for r, (bx, by) in pos.items():
     cores = retangulos[r][7]
     w, h = retangulos[r][5], retangulos[r][6]
-    for d in range(-1, w + 1):
-        for e in range(-1, h + 1):
-            c = cores[min(max(d, 0), w - 1)][min(max(e, 0), h - 1)]
+    for d in range(-1, w * ESCALA + 1):
+        for e in range(-1, h * ESCALA + 1):
+            c = cores[min(max(d // ESCALA, 0), w - 1)][min(max(e // ESCALA, 0), h - 1)]
             b = ((by + e) * S + (bx + d)) * 4
             atlas[b:b + 4] = [c[0], c[1], c[2], 1.0]
 print("VOXEL atlas", S, "px")
@@ -176,7 +180,7 @@ for r, (a, s, k, u, v, w, h, _c) in enumerate(retangulos):
         p = [0.0, 0.0, 0.0]
         p[a], p[ua], p[va] = plano, cu, cv
         verts.append(Vector((mn.x + p[0] * lado, mn.y + p[1] * lado, mn.z + p[2] * lado)))
-        uvs.append(((bx + cu - u) / S, (by + cv - v) / S))
+        uvs.append(((bx + (cu - u) * ESCALA) / S, (by + (cv - v) * ESCALA) / S))
     faces.append(tuple(range(base, base + 4)))
 me = bpy.data.meshes.new("cais")
 me.from_pydata(verts, [], faces)

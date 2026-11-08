@@ -13,7 +13,7 @@ Como foi feito (docs/TAREFA_V3_LUGARES_3D.md, secoes 16 e 17, e docs/objetos3d/c
 - malha: Meshy Multi-Image to 3D (remesh em triangulos, so a cor);
 - voxel no Blender 4.5 LTS e em Python, por script (secao 17, o pedido do Matheus de 2026-11-08, "mais digital, mais pixelado"): a forma
   e a cor vem da malha da Meshy e da textura pintada dela, com um realce leve do azul, do amarelo, do musgo e da madeira; o modelo vira
-  48 blocos no comprido, um texel por face de bloco, com o filtro NEAREST.
+  48 blocos no comprido, 2 x 2 texels por face de bloco, com o filtro NEAREST.
 As tarefas da Meshy (esboco, vistas, malha) estao no asset.extras do cais.gltf.
 
 Uso: no jogo DigiLab, publicado. Credito: "Cais gerado com a Meshy (meshy.ai)".

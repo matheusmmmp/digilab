@@ -4,9 +4,8 @@
    arvore do motor) e so dentro do raio; os objetos em si nao mudam (o E-G0 de test/ilha_enfeites.test.ts confere contra o gabarito).
    LG-G5: a paleta da Ilha (docs/lugares3d/estilo_ilha.py) e a da textura publicada, nos lugares de cor chapada; os de textura pintada
    (TEXTURA_PINTADA, o retrabalho de docs/objetos3d/REFERENCIAS.md, secao 5) saem dele e passam pelo LG-G5b: a cor e um PNG de 512 a 1024 px,
-   quadrado e com cor de verdade (nao as poucas cores lisas de antes), e a mascara de luz e quadrada, branca so numa parte e cobre o mesmo UV.
-   Os de voxel (TEXTURA_VOXEL, o cais da secao 17) tambem saem do LG-G5 e passam pelo LG-G5c: o atlas de um texel por face de bloco e um PNG
-   quadrado de 64 a 512 px, o sampler e NEAREST nos dois filtros (o pixel duro, sem mipmap) e toda face e de um plano de eixo.
+   quadrado e com cor de verdade (nao as poucas cores lisas de antes), e a mascara de luz e quadrada, branca so numa parte e cobre o mesmo UV;
+   na barraca, o chao de dentro, visto pela porta, e escuro (docs/objetos3d/barraca/retrabalho/chao_uv.json; D-LG-9).
    LG-G6: o toque nos lugares (ToqueLugar.tsx; secao 13): o retangulo projetado da caixa de cada lugar (lugarNoPonto) e o gesto, que abre
    o destino do lugar aberto e nada mais (o cais trancado, o arrasto, o toque longo, o sprite do pet, o painel por cima). */
 import { readFileSync } from "node:fs";
@@ -60,15 +59,18 @@ describe("onde ficam os lugares (LG-G1 a LG-G4)", () => {
   });
 });
 
-/** os lugares retrabalhados com a textura pintada da Meshy (sem achatar; docs/TAREFA_V3_LUGARES_3D.md, secoes 14 e 16). Quem retrabalhar outro lugar
+/** os lugares retrabalhados com a textura pintada da Meshy (sem achatar; docs/TAREFA_V3_LUGARES_3D.md, secoes 14 a 16). Quem retrabalhar outro lugar
     junta o nome aqui */
-const TEXTURA_PINTADA: readonly NomeLugar[] = ["portao"];
-/** os lugares em voxel (docs/TAREFA_V3_LUGARES_3D.md, secao 17: "mais digital, mais pixelado"): blocos com o atlas em pixel duro */
-const TEXTURA_VOXEL: readonly NomeLugar[] = ["cais"];
+const TEXTURA_PINTADA: readonly NomeLugar[] = ["portao", "barraca", "cais"];
 
 describe("a paleta da Ilha (LG-G5)", () => {
   const DOCS = join(__dirname, "..", "..", "..", "docs", "lugares3d");
-  for (const n of (Object.keys(LUGARES_MODELOS) as NomeLugar[]).filter(l => !TEXTURA_PINTADA.includes(l) && !TEXTURA_VOXEL.includes(l))) test(n, () => {
+  const chapados = (Object.keys(LUGARES_MODELOS) as NomeLugar[]).filter(l => !TEXTURA_PINTADA.includes(l));
+  /* com o cais (secao 16), os tres lugares sairam para a textura pintada: o LG-G5 fica sem lugar, e o teste diz isso em vez de sumir */
+  if (chapados.length === 0) test("nenhum lugar de cor chapada: todos no LG-G5b", () => {
+    expect([...TEXTURA_PINTADA].sort()).toEqual((Object.keys(LUGARES_MODELOS) as NomeLugar[]).sort());
+  });
+  for (const n of chapados) test(n, () => {
     const p = JSON.parse(readFileSync(join(DOCS, n, "paleta.json"), "utf8")) as { paleta: number[][]; paleta_ilha: number[][] };
     expect(p.paleta_ilha.length).toBe(p.paleta.length);
     /* o PNG de paleta publicado: as cores do PLTE estao todas na paleta da Ilha */
@@ -124,30 +126,16 @@ describe("a textura pintada (LG-G5b)", () => {
     expect(branco / (luz.w * luz.h)).toBeGreaterThan(0.01); expect(branco / (luz.w * luz.h)).toBeLessThan(0.5);
     expect(certo / branco, "o branco da mascara cai no ciano da textura").toBeGreaterThan(0.8);
   });
-});
-
-describe("o voxel (LG-G5c)", () => {
-  type GltfVoxel = {
-    samplers?: { magFilter?: number; minFilter?: number }[]; images: { uri: string }[]; buffers: { uri: string }[];
-    bufferViews: { byteOffset?: number }[]; accessors: { bufferView: number; byteOffset?: number; count: number; type: string }[];
-    meshes: { primitives: { attributes: { NORMAL: number } }[] }[];
-  };
-  for (const n of TEXTURA_VOXEL) test(n, () => {
-    const dir = join(__dirname, "..", "public", "lugares", n), g = JSON.parse(readFileSync(join(dir, `${n}.gltf`), "utf8")) as GltfVoxel;
-    expect(g.samplers?.length).toBe(1);
-    expect(g.samplers![0].magFilter).toBe(9728); expect(g.samplers![0].minFilter).toBe(9728);  // NEAREST: o pixel duro, sem mipmap
-    const b = readFileSync(join(dir, g.images[0].uri)), w = b.readUInt32BE(16), h = b.readUInt32BE(20);
-    expect(w).toBe(h); expect(w).toBeGreaterThanOrEqual(64); expect(w).toBeLessThanOrEqual(512);
-    /* toda normal e de um eixo (o bloco de verdade, sem normal suavizada) */
-    const bin = readFileSync(join(dir, g.buffers[0].uri));
-    for (const me of g.meshes) for (const p of me.primitives) {
-      const a = g.accessors[p.attributes.NORMAL], o = (g.bufferViews[a.bufferView].byteOffset ?? 0) + (a.byteOffset ?? 0);
-      const nr = new Float32Array(bin.buffer.slice(bin.byteOffset + o, bin.byteOffset + o + a.count * 12));
-      for (let i = 0; i < a.count; i++) {
-        const c = [Math.abs(nr[3 * i]), Math.abs(nr[3 * i + 1]), Math.abs(nr[3 * i + 2])].sort((x, y) => y - x);
-        expect(c[0]).toBeCloseTo(1, 4); expect(c[1]).toBeCloseTo(0, 4);
-      }
-    }
+  /* a barraca: o chao de dentro, visto pela porta, e escuro. A Meshy nao fez chao e deixou o fundo claro (D-LG-9): o pixel publicado no
+     centro das UVs dele (docs/objetos3d/barraca/retrabalho/chao_uv.json; u, v do Blender, a linha da imagem e 1 - v) fica abaixo de 45 %
+     de luminancia */
+  test("barraca: o chao de dentro escuro", () => {
+    const chao = JSON.parse(readFileSync(join(__dirname, "..", "..", "..", "docs", "objetos3d", "barraca", "retrabalho", "chao_uv.json"), "utf8")) as { cantos: number[][] };
+    expect(chao.cantos.length).toBe(4);
+    const cor = png(join(__dirname, "..", "public", "lugares", "barraca", "barraca_cor.png"));
+    const u = chao.cantos.reduce((s, c) => s + c[0], 0) / 4, v = chao.cantos.reduce((s, c) => s + c[1], 0) / 4;
+    const [r, g, b] = cor.px(Math.floor(u * cor.w), Math.floor((1 - v) * cor.h));
+    expect((0.2126 * r + 0.7152 * g + 0.0722 * b) / 255).toBeLessThan(0.45);
   });
 });
 

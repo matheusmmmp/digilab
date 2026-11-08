@@ -2,7 +2,7 @@
  "uri": "cais.gltf",
  "mimeType": "model/gltf+json",
  "validatorVersion": "2.0.0-dev.3.10",
- "validatedAt": "2026-11-08T16:09:53.732Z",
+ "validatedAt": "2026-11-08T16:17:59.936Z",
  "issues": {
   "numErrors": 0,
   "numWarnings": 0,
@@ -28,8 +28,8 @@
     "storage": "external",
     "uri": "cais_cor.png",
     "image": {
-     "width": 256,
-     "height": 256,
+     "width": 512,
+     "height": 512,
      "format": "rgb",
      "primaries": "srgb",
      "transfer": "srgb",
