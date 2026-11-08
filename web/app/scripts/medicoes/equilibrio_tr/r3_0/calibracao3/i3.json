@@ -1,0 +1,153 @@
+{
+ "gerado_por": "web/app/scripts/equilibrio_tr/fase4_progressao.ts",
+ "data": "2026-11-08",
+ "commit": "b447d61e",
+ "node": "v24.19.0",
+ "faixa": "calibracao3",
+ "bases": [
+  83101,
+  83202,
+  83303,
+  83404,
+  83505
+ ],
+ "sementes_por_base": 20,
+ "relogio": {
+  "ritmo": 16,
+  "atordoaInterrupcao": 31,
+  "andar": 1.12,
+  "recuo": 0.6,
+  "arrancada": 8,
+  "projetil": 4.8,
+  "perto": 62,
+  "medio": 120,
+  "contato": 44,
+  "empurrao": 0,
+  "disparo": 6,
+  "empurraoAlvo": {
+   "forca": {
+    "investida": 20,
+    "pesado": 60
+   },
+   "derruba": [
+    "investida",
+    "pesado"
+   ],
+   "queda": 62,
+   "deslize": 10,
+   "guarda": 0.5,
+   "defesa": 0
+  }
+ },
+ "listas": "v14",
+ "reserva_no_fim": true,
+ "chip_antes": true,
+ "fatores": {
+  "lider": {
+   "campina": 1.3,
+   "torre": 1.8,
+   "floresta": 1.4,
+   "cidadela": 0.9,
+   "lago": 1.5,
+   "espiral": 1.4
+  },
+  "npc": {
+   "npc_tier2_sentinela": 1.4,
+   "npc_tier2_porteiro": 1.1,
+   "npc_v5_puppetmon": 1.8,
+   "npc_v5_machinedramon": 2.3
+  },
+  "liga": {
+   "campina": 0.2,
+   "torre": 0.8,
+   "floresta": 0.1,
+   "cidadela": 1,
+   "lago": 1.7,
+   "espiral": 0.9
+  },
+  "instalacao": 1,
+  "fabrica": 0.6,
+  "salao": {
+   "crianca": 1.2,
+   "adolescente": 1.6,
+   "adulto": 1.05,
+   "mega": 1.05
+  }
+ },
+ "cartas": {},
+ "variante_lider": null,
+ "listas_lider": [
+  "floresta"
+ ],
+ "parte": "i3",
+ "metas": {
+  "I-3": {
+   "formas": {
+    "duelista": {
+     "sem_item": 0.2714,
+     "com_item": 0.2807,
+     "combinacao": [
+      "chip_forca",
+      "chip_recuo"
+     ]
+    },
+    "furioso": {
+     "sem_item": 0.5925,
+     "com_item": 0.6193,
+     "combinacao": [
+      "chip_forca",
+      "chip_recuo"
+     ]
+    },
+    "espelho": {
+     "sem_item": 0.4407,
+     "com_item": 0.4407,
+     "combinacao": []
+    },
+    "muralha": {
+     "sem_item": 0.5107,
+     "com_item": 0.5514,
+     "combinacao": [
+      "chip_forca",
+      "chip_guarda",
+      "chip_perseguidor"
+     ]
+    },
+    "sentinela": {
+     "sem_item": 0.4325,
+     "com_item": 0.5329,
+     "combinacao": [
+      "chip_forca",
+      "chip_recuo",
+      "chip_oportunista"
+     ]
+    },
+    "emboscador": {
+     "sem_item": 0.5232,
+     "com_item": 0.64,
+     "combinacao": [
+      "chip_recuo",
+      "chip_oportunista"
+     ]
+    },
+    "vigia": {
+     "sem_item": 0.505,
+     "com_item": 0.505,
+     "combinacao": []
+    },
+    "tita": {
+     "sem_item": 0.7239,
+     "com_item": 0.7357,
+     "combinacao": [
+      "chip_forca",
+      "chip_guarda",
+      "chip_aparo"
+     ]
+    }
+   },
+   "max": 0.7357,
+   "passa": false
+  }
+ },
+ "custo_s": 39.6021
+}

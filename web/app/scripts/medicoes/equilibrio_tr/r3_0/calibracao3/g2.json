@@ -1,0 +1,235 @@
+{
+ "gerado_por": "web/app/scripts/equilibrio_tr/fase4_progressao.ts",
+ "data": "2026-11-08",
+ "commit": "b447d61e",
+ "node": "v24.19.0",
+ "faixa": "calibracao3",
+ "bases": [
+  83101,
+  83202,
+  83303,
+  83404,
+  83505
+ ],
+ "sementes_por_base": 20,
+ "relogio": {
+  "ritmo": 16,
+  "atordoaInterrupcao": 31,
+  "andar": 1.12,
+  "recuo": 0.6,
+  "arrancada": 8,
+  "projetil": 4.8,
+  "perto": 62,
+  "medio": 120,
+  "contato": 44,
+  "empurrao": 0,
+  "disparo": 6,
+  "empurraoAlvo": {
+   "forca": {
+    "investida": 20,
+    "pesado": 60
+   },
+   "derruba": [
+    "investida",
+    "pesado"
+   ],
+   "queda": 62,
+   "deslize": 10,
+   "guarda": 0.5,
+   "defesa": 0
+  }
+ },
+ "listas": "v14",
+ "reserva_no_fim": true,
+ "chip_antes": true,
+ "fatores": {
+  "lider": {
+   "campina": 1.3,
+   "torre": 1.8,
+   "floresta": 1.4,
+   "cidadela": 0.9,
+   "lago": 1.5,
+   "espiral": 1.4
+  },
+  "npc": {
+   "npc_tier2_sentinela": 1.4,
+   "npc_tier2_porteiro": 1.1,
+   "npc_v5_puppetmon": 1.8,
+   "npc_v5_machinedramon": 2.3
+  },
+  "liga": {
+   "campina": 0.2,
+   "torre": 0.8,
+   "floresta": 0.1,
+   "cidadela": 1,
+   "lago": 1.7,
+   "espiral": 0.9
+  },
+  "instalacao": 1,
+  "fabrica": 0.6,
+  "salao": {
+   "crianca": 1.2,
+   "adolescente": 1.6,
+   "adulto": 1.05,
+   "mega": 1.05
+  }
+ },
+ "cartas": {},
+ "variante_lider": null,
+ "listas_lider": [
+  "floresta"
+ ],
+ "parte": "g2",
+ "metas": {
+  "G-2": {
+   "desafiantes": {
+    "npc_tier2_sentinela": {
+     "nome": "Tortomon",
+     "estagio": "adolescente",
+     "fator": 1.4,
+     "sem": 0.3375,
+     "com": 0.9225,
+     "pior": 0.86,
+     "pior_forma": "colosso",
+     "passa": false,
+     "formas": {
+      "brigao": {
+       "sem": 0.2,
+       "com": 0.91
+      },
+      "guardiao": {
+       "sem": 0,
+       "com": 0.92
+      },
+      "cacador": {
+       "sem": 0.9,
+       "com": 1
+      },
+      "colosso": {
+       "sem": 0.25,
+       "com": 0.86
+      }
+     }
+    },
+    "npc_tier2_porteiro": {
+     "nome": "Devidramon",
+     "estagio": "adolescente",
+     "fator": 1.1,
+     "sem": 0.195,
+     "com": 0.9525,
+     "pior": 0.81,
+     "pior_forma": "colosso",
+     "passa": true,
+     "formas": {
+      "brigao": {
+       "sem": 0.13,
+       "com": 1
+      },
+      "guardiao": {
+       "sem": 0.02,
+       "com": 1
+      },
+      "cacador": {
+       "sem": 0.48,
+       "com": 1
+      },
+      "colosso": {
+       "sem": 0.15,
+       "com": 0.81
+      }
+     }
+    },
+    "npc_v5_puppetmon": {
+     "nome": "Puppetmon",
+     "estagio": "mega",
+     "fator": 1.8,
+     "sem": 0.1888,
+     "com": 0.9538,
+     "pior": 0.73,
+     "pior_forma": "vigia",
+     "passa": true,
+     "formas": {
+      "duelista": {
+       "sem": 0,
+       "com": 0.93
+      },
+      "furioso": {
+       "sem": 0,
+       "com": 1
+      },
+      "espelho": {
+       "sem": 0,
+       "com": 0.99
+      },
+      "muralha": {
+       "sem": 0,
+       "com": 1
+      },
+      "sentinela": {
+       "sem": 0.73,
+       "com": 0.98
+      },
+      "emboscador": {
+       "sem": 0.78,
+       "com": 1
+      },
+      "vigia": {
+       "sem": 0,
+       "com": 0.73
+      },
+      "tita": {
+       "sem": 0,
+       "com": 1
+      }
+     }
+    },
+    "npc_v5_machinedramon": {
+     "nome": "Machinedramon",
+     "estagio": "mega",
+     "fator": 2.3,
+     "sem": 0.2288,
+     "com": 0.9038,
+     "pior": 0.71,
+     "pior_forma": "duelista",
+     "passa": true,
+     "formas": {
+      "duelista": {
+       "sem": 0.01,
+       "com": 0.71
+      },
+      "furioso": {
+       "sem": 0,
+       "com": 0.78
+      },
+      "espelho": {
+       "sem": 0,
+       "com": 0.9
+      },
+      "muralha": {
+       "sem": 0,
+       "com": 0.92
+      },
+      "sentinela": {
+       "sem": 0.91,
+       "com": 1
+      },
+      "emboscador": {
+       "sem": 0.9,
+       "com": 1
+      },
+      "vigia": {
+       "sem": 0,
+       "com": 0.93
+      },
+      "tita": {
+       "sem": 0.01,
+       "com": 0.99
+      }
+     }
+    }
+   },
+   "passa": false
+  }
+ },
+ "custo_s": 5.0348
+}

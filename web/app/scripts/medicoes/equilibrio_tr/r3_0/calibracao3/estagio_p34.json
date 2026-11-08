@@ -1,0 +1,138 @@
+{
+ "gerado_por": "web/app/scripts/equilibrio_tr/fase3_estagio.ts",
+ "data": "2026-11-08",
+ "commit": "b447d61e",
+ "node": "v24.19.0",
+ "faixa": "calibracao3",
+ "bases": [
+  83101,
+  83202,
+  83303,
+  83404,
+  83505
+ ],
+ "sementes_por_base": 20,
+ "relogio": {
+  "ritmo": 16,
+  "atordoaInterrupcao": 31,
+  "andar": 1.12,
+  "recuo": 0.6,
+  "arrancada": 8,
+  "projetil": 4.8,
+  "perto": 62,
+  "medio": 120,
+  "contato": 44,
+  "empurrao": 0,
+  "disparo": 6,
+  "empurraoAlvo": {
+   "forca": {
+    "investida": 20,
+    "pesado": 60
+   },
+   "derruba": [
+    "investida",
+    "pesado"
+   ],
+   "queda": 62,
+   "deslize": 10,
+   "guarda": 0.5,
+   "defesa": 0
+  }
+ },
+ "listas": "v14",
+ "reserva_no_fim": true,
+ "aprendizado": {
+  "alfa": 0.2,
+  "prior": 0.1,
+  "bonus": 0.1,
+  "limiar": 0.05
+ },
+ "escala": {
+  "vida": {
+   "bebe": 50,
+   "crianca": 200,
+   "adolescente": 700,
+   "adulto": 2500,
+   "mega": 23000
+  },
+  "beta": 0.045
+ },
+ "parte": "p34",
+ "metas": {
+  "P-3": {
+   "champion": {
+    "media": 0.635,
+    "formas": {
+     "brigao": 0.6475,
+     "guardiao": 0.8825,
+     "cacador": 0.3975,
+     "colosso": 0.6125
+    },
+    "trocas_por_pet": {
+     "brigao": 9.95,
+     "guardiao": 10,
+     "cacador": 9.85,
+     "colosso": 10
+    }
+   },
+   "ultimate": {
+    "media": 0.4894,
+    "formas": {
+     "duelista": 0.5875,
+     "furioso": 0.84,
+     "espelho": 0.1075,
+     "muralha": 0.205,
+     "sentinela": 0.5875,
+     "emboscador": 0.49,
+     "vigia": 0.7325,
+     "tita": 0.365
+    },
+    "trocas_por_pet": {
+     "duelista": 10,
+     "furioso": 10,
+     "espelho": 10,
+     "muralha": 10,
+     "sentinela": 10,
+     "emboscador": 10,
+     "vigia": 10,
+     "tita": 10
+    }
+   },
+   "passa": false
+  },
+  "P-4": {
+   "champion": {
+    "rival": "npc_tier2_sentinela",
+    "fator": 1.4,
+    "lutas_por_serie": 1,
+    "qualificados": 0.88,
+    "taxa_media": 0.9057,
+    "formas": {
+     "brigao": 0.74,
+     "guardiao": 0.97,
+     "cacador": 0.98,
+     "colosso": 0.83
+    }
+   },
+   "ultimate": {
+    "rival": "npc_v5_myotismon",
+    "fator": 0.9,
+    "lutas_por_serie": 3,
+    "qualificados": 0.9563,
+    "taxa_media": 0.9457,
+    "formas": {
+     "duelista": 0.72,
+     "furioso": 1,
+     "espelho": 1,
+     "muralha": 1,
+     "sentinela": 0.96,
+     "emboscador": 0.98,
+     "vigia": 0.99,
+     "tita": 1
+    }
+   },
+   "passa": true
+  }
+ },
+ "custo_s": 11.6449
+}

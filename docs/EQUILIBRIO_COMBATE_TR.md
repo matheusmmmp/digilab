@@ -721,3 +721,56 @@ pesquisa na máquina (V3-D8). O tempo estimado é de cerca de 7 min por medida (
 | **2, o ponto de partida** | `python scripts/equilibrio_tr/medir_tudo.py --faixa calibracao3 --empurrao v18 --tela --saida scripts/medicoes/equilibrio_tr/r3_0/calibracao3` | `83101…83505` (a calibração da rodada 3; a conferência `84101…84505` não roda) | todas as 27, mais a coluna de tela do T-3 (D-R3-6) | a lista das metas protegidas da rodada: as que passam aqui (seção 3 do plano) |
 
 A conferência campo a campo sai de `scripts/equilibrio_tr/comparar_medidas.py`. A medida 2 só roda se a 1 sair igual.
+
+### A medida 1, a reprodução (`r3_0/reproducao/`): igual à medição A
+
+Rodou às 10:23 de 2026-11-08, no commit `b447d61e`. Os 15 JSON saíram iguais aos de `empurrao/r_a_inv20/` campo a campo, menos a data, o
+commit, o Node e o custo: 0 diferenças (`r3_0/reproducao.txt`). A `main` de hoje, com os efeitos E1 a E5, a v19 e a ponte, luta como a
+medição A. A medida 2 pôde rodar.
+
+### A medida 2, o ponto de partida na calibração da rodada 3 (`r3_0/calibracao3/`)
+
+Rodou às 10:25 de 2026-11-08, no commit `b447d61e`, nas sementes `83101…83505`. A tabela inteira, ao lado da medição A, está em
+`r3_0/resumo_calibracao3.txt`.
+
+| meta | 83101 (R3-0) | 72101 (medição A) | passa na 83101 |
+|---|---|---|---|
+| T-1 | 35,2 s de média, 35,2 s de mediana | 35,1 s, 35,0 s | não (a exceção da DE-9) |
+| T-2 | limite 0,012; pior par 0,11 | 0,014; 0,135 | não |
+| T-3 | p90 66,3 s; **na tela, p90 72,7 s** (média 49,7 s) | p90 64,1 s | sim (também na tela) |
+| T-4 | 0,494 | 0,5 | sim |
+| T-5 | 0,681 | 0,681 | sim |
+| F-1 | fora: duelista 0,342, espelho 0,369, tita 0,826 | fora: duelista, espelho, emboscador 0,39, tita 0,86 | não |
+| F-2 | 0,484 | 0,528 | não |
+| F-3 | — | — | sim |
+| F-4 | brigão 0,385, guardião 0,359, caçador 0,765, colosso 0,491; rookie 0,518 | 0,387, 0,381, 0,705, 0,528; 0,495 | não |
+| F-5 | champion 0,658; ultimate 0,249 | 0,589; 0,238 | não |
+| F-6 | espelho 0,117, sentinela 0,111, tita 0,173 | 0,115, 0,129, 0,181 | não |
+| F-7 | devastador 0,629, bastião 0,663, predador 0,676, colosso partido 0,638 | 0,595, 0,649, 0,652, 0,662 | não |
+| P-1, P-2 | — | — | sim |
+| P-3 | champion 0,635; ultimate 0,489 | 0,667; 0,480 | não |
+| P-4 | champion 0,88; ultimate 0,956 | 0,9125; 0,971 | sim |
+| G-1 | fora: Cidadela (sem 0,006, pior 0,24 sentinela), Lago (0,054; 0,44), Espiral (0,066; 0,48) | os mesmos três | não |
+| I-1 | 0,066 | 0,074 | não |
+| G-2 | fora: Tortomon (`npc_tier2_sentinela`) | o mesmo | não |
+| **G-3** | **0,44 a 0,88; fora o tita** | 0,40 a 0,81 | **não** (passava na 72101) |
+| G-4 | 1 e 0,74 | 1 e 0,74 | sim |
+| G-5 | 0,35 | 0,35 | sim |
+| G-6 | criança 0,895, adolescente 0,77, adulto 0,915, Mega 0,889 | 0,91, 0,798, 0,884, 0,883 | sim |
+| I-2 | — | — | sim |
+| I-3 | 0,736 | 0,778 | não |
+| I-4 | fôlego 0,012, cura 0,051, foco 0,011 | 0,010, 0,052, 0,010 | não |
+| I-5 | recuo 0,308, oportunista 0,243, perseguidor 0,384, aparo 0,083 | 0,31, 0,25, 0,354, 0,078 | não |
+
+**As metas protegidas da rodada 3** (a regra da seção 3 do plano: as que passam na R3-0) são 11: T-3, T-4, T-5, F-3, P-1, P-2, P-4,
+G-4, G-5, G-6 e I-2. Na medição A eram 12. A diferença é o **G-3**: nas sementes novas, o tita leva o título da Liga em 0,88 das
+séries, acima do teto de 0,85 (na 72101 era 0,81). O G-2 continua reprovado e não entra.
+
+**Uma leitura, sem medida nova:** o G-3 cai pelo mesmo lado que já reprova o F-1, o F-6 e o I-3, o tita forte demais, e é a forma que a
+R3-1 já mira (a pele dura com o `guarda`; D-R3-7). O plano diz "o G-3 protegido" na R3-3; pela regra da R3-0 ele passa a ser uma meta a
+fechar, lida ao lado da R3-1 (desvio D-R3-0-2).
+
+**A coluna de tela do T-3** (D-R3-6): o palco leva, em média, 5 s a mais que a luta por série da Cidadela (49,7 s contra 44,7 s), e o p90
+vai de 66,3 s a 72,7 s. A folga contra os 180 s continua grande. Os números da vista são PROPOSTOS, SEM FONTE (D-R3-9).
+
+**O custo:** cada medida inteira levou cerca de 1,5 min na máquina, não os ~7 min que o plano estimou (desvio D-R3-0-1).

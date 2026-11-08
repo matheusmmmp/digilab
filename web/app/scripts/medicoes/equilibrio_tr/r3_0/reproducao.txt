@@ -1,0 +1,17 @@
+comparar_medidas: scripts/medicoes/equilibrio_tr/empurrao/r_a_inv20 x scripts/medicoes/equilibrio_tr/r3_0/reproducao (ignorados: commit, custo_s, data, node)
+estagio_p1.json: igual
+estagio_p2.json: igual
+estagio_p34.json: igual
+formas.json: igual
+g1.json: igual
+g2.json: igual
+g3.json: igual
+g4.json: igual
+g5.json: igual
+g6.json: igual
+i2.json: igual
+i3.json: igual
+i4.json: igual
+i5.json: igual
+relogio.json: igual
+total: 15 arquivos, 0 diferencas
