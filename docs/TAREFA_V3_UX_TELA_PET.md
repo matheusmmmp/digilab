@@ -735,5 +735,9 @@ O Matheus, sobre a tela Pet já com a ilha A (#691):
 **Os números** (0,55, 176 px, 5 s, 3,5 células por segundo, 6 s) são de interface: PROPOSTO, SEM FONTE. As interpretações estão em D-TP23-1 a
 D-TP23-3, em `docs/registro/2026-11.md`.
 
-**Fica para depois:** o Matheus falou em deixar o jogador arrastar e arrumar os menus. Hoje só o balão da fala e o alerta se arrastam
-(`useArrastavel`); arrastar os painéis fica como proposta.
+**Os painéis arrastáveis** (o Matheus: "Sim, arrastáveis", 2026-11-08):
+- **O que se arrasta:** a pilha da direita (Estado, Evolução, Últimas ações e DigiBrain) e o painel ao lado (os Ajustes e cada lugar). Eles se
+  arrastam pelo cabeçalho (`useArrastavelPorAlca`, `hudPet.ts`). O resto do painel continua a clicar e a rolar, e um arraste não vira clique.
+- **A posição** fica no navegador, como a do balão e a do alerta, e nunca no save.
+- **Voltar ao lugar:** o botão "Voltar os painéis ao lugar" fica em Ajustes > Visual > Painéis.
+- **Celular:** a folha de baixo não se arrasta.

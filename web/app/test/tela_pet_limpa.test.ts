@@ -28,3 +28,21 @@ describe("as faixas e o minimapa", () => {
     expect(MINIMAPA_PX).toBeLessThan(232);
   });
 });
+
+describe("os paineis arrastaveis", () => {
+  test("voltar os paineis ao lugar apaga as posicoes gravadas e so mexe nelas", async () => {
+    const dados: Record<string, string> = {};
+    (globalThis as unknown as { localStorage: unknown }).localStorage = {
+      getItem: (k: string) => (k in dados ? dados[k] : null), setItem: (k: string, v: string) => { dados[k] = v; }, removeItem: (k: string) => { delete dados[k]; },
+    };
+    const { CHAVE } = await import("../src/save.ts");
+    const { temPainelMovido, voltarPaineis } = await import("../src/hudPet.ts");
+    expect(temPainelMovido()).toBe(false);
+    dados[CHAVE + "-hud-arraste"] = JSON.stringify({ pilha: { dx: -300, dy: 120 }, fala: { dx: 0, dy: 0 } });
+    dados[CHAVE] = "o save";
+    expect(temPainelMovido()).toBe(true);
+    voltarPaineis();
+    expect(temPainelMovido()).toBe(false);
+    expect(dados[CHAVE]).toBe("o save");
+  });
+});

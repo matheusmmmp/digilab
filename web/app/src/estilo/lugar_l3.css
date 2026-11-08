@@ -165,3 +165,6 @@
    (so na L3: Lutar, Diario e Ajustes; o Crescer da L2 fica como esta) */
 .painel-tela--lugar-lado:not(.painel-tela--d-crescer){ max-height:calc(100dvh - var(--casca-topo) - 20px - 48px) }
 .painel-tela--lugar-lado:not(.painel-tela--d-crescer) .hx-painel__corpo{ overflow-y:auto }
+/* o painel ao lado se arrasta pelo cabecalho (hudPet.ts, useArrastavelPorAlca; 2026-11-08) */
+.painel-tela--lugar-lado .hx-painel__cab{ cursor:grab; touch-action:none }
+.painel-tela--lugar-lado .hx-painel__cab :is(button, [role="tab"]){ cursor:pointer }
