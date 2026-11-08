@@ -1,17 +1,18 @@
 DigiLab: o trilho com o vagao da ilha (trilho.gltf, trilho.bin, trilho_cor.png)
 
-Procedencia: item gerado por IA, com o gerador Meshy (meshy.ai), no plano Pro pago, na conta do Matheus, em 2026-11-06.
+Procedencia: item gerado por IA, com o gerador Meshy (meshy.ai), no plano Pro pago, na conta do Matheus; refeito em 2026-11-07 (o
+retrabalho dos objetos, docs/objetos3d/REFERENCIAS.md), no lugar do modelo de 2026-11-06.
 Pelos termos de uso da Meshy (atualizados em 2026-09-19, secao 3.2), a saida de um plano pago e do cliente.
 Os termos proibem tirar a marca de IA (secao 2.4): a marca fica no asset.extras do trilho.gltf e neste arquivo.
 
-Como foi feito (docs/TAREFA_V3_MUNDO_ENFEITES.md e docs/enfeites/trilho/ no repositorio):
-- concept: Meshy Image to Image (nano-banana-2), com duas referencias de estilo recortadas da propria ilha do jogo (o saco gerado e os
-  kits CC0, sem o pet); o concept 1 (vagao) escolhido pelo Matheus;
-- vistas: Meshy Image to Image com multivista, a partir do concept;
+Como foi feito (docs/objetos3d/trem/ no repositorio):
+- esboco: Meshy Image to Image (nano-banana-2), so com prompt de estilo e a maquete B do proprio jogo; o esboco 1 (vagao de madeira)
+  escolhido pelo Matheus;
+- vistas: Meshy Image to Image com multivista, a partir do esboco;
 - malha: Meshy Multi-Image to 3D (remesh em triangulos, so a cor);
-- conserto no Blender 4.5 LTS e em Python, por script: a malha da Meshy fica como veio; a cor e chapada em seis cores do concept, uma
-  por face (sem a sombra embutida), com tracos de nanquim nas quinas e nas divisas de cor.
-As tarefas da Meshy (concept, vistas, malha) estao no asset.extras do trilho.gltf.
+- acabamento no Blender 4.5 LTS e em Python, por script: a malha da Meshy fica como veio; a textura pintada fica (sem achatar cores),
+  reduzida a 512 px e 256 cores; as normais vem de uma copia suavizada da malha, para o cel shading dar areas grandes de luz e sombra.
+As tarefas da Meshy (esboco, vistas, malha) estao no asset.extras do trilho.gltf.
 
 Uso: no jogo DigiLab, publicado. Credito: "Trilho com vagao gerado com a Meshy (meshy.ai)".
-Aprovacao: o Matheus escolheu o concept em 2026-11-06; a aprovacao da captura na ilha fica no PR da E3 dos enfeites.
+Aprovacao: o Matheus escolheu o esboco em 2026-11-07; a aprovacao da captura na ilha fica no PR do retrabalho do trem.
