@@ -2,7 +2,8 @@
 
 Coordenador: Matheus (sessão direta). Worker da etapa I0: Claude Code, Opus 5.5, worktree `v3-individualidade`. Worktree e branch:
 `v3-individualidade` (as etapas seguintes com sufixo, como `v3-individualidade-i0`). Status: **ABERTA; a proposta na `main` (#676);
-as IN-1 a IN-8 DECIDIDAS em 2026-11-07, pela recomendação; o I0 (a conferência) ENTREGUE.** Nenhum código, nenhuma faixa, nenhuma vida.
+as IN-1 a IN-8 DECIDIDAS em 2026-11-07, pela recomendação; o I0 (a conferência) na `main` (#684); o I1 (a bateria como ferramenta)
+ENTREGUE.** Nenhuma faixa, nenhuma vida de pesquisa.
 
 Categoria: documentacao. Origem: Matheus, 2026-11-07: depois da conversa sobre o connectome e a escala, direcionar a pesquisa para o
 temperamento herdado, o sinal do dono, a memória de episódios e o hábito, com uma medida comum de individualidade.
@@ -67,6 +68,46 @@ A proposta e esta tarefa estão na `main` (#676, `df04915`).
 - **Ficam para o I1:**
   - a forma da cópia: a cópia profunda ou o replay do prefixo, pela que passar no G2 e custar menos;
   - se o corpo das vidas da C4 liga os drives novos, porque o tédio depende disso.
+
+## Resultado da etapa I1 (2026-11-07, Claude Code, Opus 5.5, branch `v3-individualidade-i1`)
+
+- **A ferramenta:** `experiments/sondas_individualidade.py`, fora do `digilab/`. O `engine.py`, o cérebro e a web não mudam.
+  - A vida é a da C4 (`run_v2_memoria_autobio.viver`), com o braço, o dono, o lugar, a semente e os dias como argumentos.
+  - Por dia, o momento é o passo do dono em que cai a primeira decisão acordada da vida real a partir das 10 h, até as 18 h.
+  - A cópia sai do replay do log até esse tick (`reproduzir_mundo(..., ate_tick=T)`). Cada réplica é uma cópia profunda dela, com a rng
+    de política e a da posição derivadas por `derivar_semente`.
+  - As decisões da janela (240 ticks) saem do registro do cérebro: as ações, a contagem, a latência da ação-chave (o `comer` da comida
+    posta, pelo id) e as posições.
+- **As janelas:** cinco, e não seis. O "dono some" e o "tédio" são a mesma janela sem estímulo, a `nula`, lida por dois traços
+  (D-IND-I1-1). A `nula` também é o controle das outras.
+- **O que o I0 deixou aberto, resolvido:**
+  - a cópia é o replay do prefixo mais a cópia profunda por réplica (D-IND-I1-3);
+  - o corpo das vidas da C4 liga os drives novos e os gestos (`drives_novos=True`, `gestos=True`), então o tédio e o susto existem.
+- **O contato:** a comida nova e o longe usam o `deixar_comida` do motor, que é contato do dono, como no jogo (D-IND-I1-2). A bola não é
+  contato.
+- **Os números da ferramenta** (a hora, as janelas, as réplicas e as distâncias) são PROPOSTOS, SEM FONTE, no topo do módulo. Ela mede,
+  não é mecânica do pet, e por isso eles não entram no `config.py`. O plano do I2 pode trocá-los antes da run.
+- **O que o I1 não calcula:** nenhuma métrica. A bateria só grava as decisões de cada janela. A repetibilidade de cada traço, a divisão
+  da variância e a norma de reação são do I2 e vão para o `digilab/metrics.py` ("métricas existem uma vez só"), com o plano registrado
+  antes.
+- **O gabarito:** nenhuma vida de hoje muda (o G2 prova isso por teste), então não há gabarito "antes" para gravar num commit próprio. O
+  gabarito novo é o da própria bateria e nasce com ela.
+- **Testes:** `tests/test_sondas_individualidade.py`, 8 testes.
+  - o G2: a vida com e sem a bateria sai com o mesmo log e o mesmo resumo;
+  - o tapa só na cópia; o determinismo; a cópia para no tick;
+  - as cinco janelas e as réplicas em todo dia com sonda; o momento cai numa decisão acordada;
+  - a sonda desconhecida falha alto;
+  - o gabarito (o sha256 da bateria de uma vida de teste, em `tests/gabaritos/sondas_individualidade.json`).
+
+## O plano do I2 (2026-11-07, Claude Code, Opus 5.5, branch `v3-individualidade-i2-plano`)
+
+O `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE.md` está APROVADO pelo Matheus (2026-11-07, "Aprovo todas"), com as IP-1 a IP-9 decididas pela
+recomendação.
+- O desenho: o REL e o REL+F, os quatro donos, o `comedouro`, 14 dias e 60 sementes pareadas, num total de 480 vidas.
+- As medidas: seis traços e, por traço, o R_pet, o R_dia e o R_rep, o η² do dono, as facetas, a síndrome e a norma de reação.
+- A regra escrita antes para os traços que entram no I3.
+- O longe passa a 16 células do pet, fora da visão e dentro do cheiro.
+- A faixa foi pedida ao Gerente. Nenhuma vida roda antes do APROVADO, da faixa, do I2a e do registro.
 
 ## As etapas seguintes
 
