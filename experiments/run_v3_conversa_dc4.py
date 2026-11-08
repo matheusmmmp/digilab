@@ -96,6 +96,11 @@ class ModeloTrocado(RuntimeError):
     """O cliente devolveu outro modelo que o pedido (secao 9)."""
 
 
+class RespostaSemModelo(OSError):
+    """A resposta veio sem o nome do modelo (o servidor do Ollama caiu no meio, D-CP-DC4b-2): e falha de chamada, como a de rede. A voz cai
+    na fala generica, e o verificador registra o erro (conta como "marcou", 4.3). Um modelo com outro nome continua sendo `ModeloTrocado`."""
+
+
 # ================================================================== a config e as travas
 def _plano() -> str:
     return (RAIZ / PLANO).read_text(encoding="utf-8")
@@ -257,6 +262,11 @@ class ClienteRegistrado:
                        completa=None)
             self.chamadas.append(reg)
             raise
+        if not r.modelo:
+            reg.update(erro=f"RespostaSemModelo: {r.modelo!r}", modelo_devolvido=None, tokens_entrada=r.tokens_entrada,
+                       tokens_saida=r.tokens_saida, latencia_s=r.latencia_s, completa=r.completa)
+            self.chamadas.append(reg)
+            raise RespostaSemModelo(f"a resposta de {self.modelo} veio sem o modelo")
         reg.update(erro=None, modelo_devolvido=r.modelo, tokens_entrada=r.tokens_entrada, tokens_saida=r.tokens_saida,
                    latencia_s=r.latencia_s, completa=r.completa)
         self.chamadas.append(reg)
@@ -491,13 +501,14 @@ def rodar(cfg: dict, roteiros: list[dict], pasta: Path, clientes: dict, exportar
     arq = (pasta / "falas.jsonl").open("w", encoding="utf-8", newline="\n")
     chamadas = {"voz": [], "verif": []}
     verif = ClienteRegistrado(clientes["verif"], "verif", chamadas["verif"])
-    regs, parada = [], None
+    regs, parada, gravadas = [], None, []
     meta = {"fase": cfg["fase"], "base": base, "plano": PLANO, "plano_sha256": sha_arquivo(RAIZ / PLANO), "arquivos": sha_dos_arquivos(),
             "clientes_falsos": clientes["falso"], "ollama": tags, "python": platform.python_version()}
 
     def gravar(reg: dict) -> None:
         arq.write(json.dumps(reg, ensure_ascii=False, sort_keys=True) + "\n")
         arq.flush()
+        gravadas.append(reg)
 
     try:
         for b in cfg["bracos"]:
@@ -511,14 +522,14 @@ def rodar(cfg: dict, roteiros: list[dict], pasta: Path, clientes: dict, exportar
         arq.close()
         meta["gasto"] = {"limite_usd": gasto.limite, "inicio_usd": round(gasto_inicio, 6), "fim_usd": round(gasto.gasto, 6),
                          "da_rodada_usd": round(gasto.gasto - gasto_inicio, 6),
-                         "pelo_usage_usd": {b: round(sum(custo_usd(BRACOS[b][1], r["usage"]["entrada"], r["usage"]["saida"]) for r in regs
+                         "pelo_usage_usd": {b: round(sum(custo_usd(BRACOS[b][1], r["usage"]["entrada"], r["usage"]["saida"]) for r in gravadas
                                                          if r["braco"] == b and r["usage"]["entrada"] is not None), 6)
                                             for b in cfg["bracos"] if BRACOS[b][0] == "claude"}}
         meta["parada_no_teto"] = parada
         meta["modelos_devolvidos"] = {b: sorted({c["modelo_devolvido"] for c in chamadas["voz"] if c["papel"] == f"voz/{b}" and c["modelo_devolvido"]})
                                       for b in cfg["bracos"]}
         meta["verificador_devolvido"] = sorted({c["modelo_devolvido"] for c in chamadas["verif"] if c["modelo_devolvido"]})
-        meta["falas"] = len(regs)
+        meta["falas"] = len(gravadas)                  # as gravadas no disco, inclusive as de um braco que nao terminou
         _json(pasta / "meta.json", meta)
     if parada is not None:
         raise ParadaNoTeto(parada + f" (a rodada parou com {len(regs)} falas no disco)")

@@ -520,3 +520,28 @@ def test_gasto_com_piso_nunca_desce(tmp_path):
     assert g.gasto == 0.75 and json.loads((tmp_path / "g.json").read_text(encoding="utf-8"))["gasto_usd"] == 0.75
     g.gasto = 1.0
     assert dc4.gasto_com_piso(g, 0.75).gasto == 1.0
+
+
+class _SemModelo(dc4.ClienteFalso):
+    """o Ollama que caiu no meio: a resposta sem o nome do modelo"""
+
+    def conversar(self, mensagens, esquema, max_tokens, semente):
+        r = super().conversar(mensagens, esquema, max_tokens, semente)
+        return Resposta(r.texto, "", r.latencia_s, None, None, False)
+
+
+def test_resposta_sem_modelo_e_falha_de_chamada_e_nao_para_a_rodada():
+    ent = {"id": "E3-000", "conjunto": "E3", "estagio": "adulto", "pedido_rede": "fome", "estado": {"identidade": {"estagio": "adulto"}},
+           "conceitos": mv.conceitos_da_voz(D2, "fome")}
+    chamadas = {"voz": [], "verif": []}
+    voz = dc4.ClienteRegistrado(dc4.ClienteFalso("gemma2:9b", "voz"), "voz/G", chamadas["voz"])
+    verif = dc4.ClienteRegistrado(_SemModelo("gemma2:9b", "verif"), "verif", chamadas["verif"])
+    reg = dc4.falar(dc4.ServicoDC4(voz, verif), chamadas, "G", "G/E3-000", ent, "espontanea", 5)
+    assert reg["verificacao"]["erro"].startswith("RespostaSemModelo") and reg["marcou"] is True
+    assert all(c["erro"].startswith("RespostaSemModelo") for c in reg["chamadas_verif"])
+    chamadas = {"voz": [], "verif": []}
+    voz = dc4.ClienteRegistrado(_SemModelo("gemma2:9b", "voz"), "voz/G", chamadas["voz"])
+    verif = dc4.ClienteRegistrado(dc4.ClienteFalso("gemma2:9b", "verif"), "verif", chamadas["verif"])
+    reg = dc4.falar(dc4.ServicoDC4(voz, verif), chamadas, "G", "G/E3-000", ent, "espontanea", 5)
+    assert reg["fala"] == "…" and reg["erro"] and reg["usage"] == {"entrada": None, "saida": None}
+    assert issubclass(dc4.RespostaSemModelo, OSError) and not issubclass(dc4.ModeloTrocado, OSError)
