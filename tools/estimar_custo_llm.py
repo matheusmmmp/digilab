@@ -82,6 +82,38 @@ def custo_dc4() -> dict:
             "status": "PROPOSTO: o pedido medido pelo prompt de hoje no pior caso; a saida do plano, sem medida (a DC4b mede pelo usage)"}
 
 
+CALIBRACAO_DC4 = RAIZ / "artifacts_v3_conversa_dc4" / "calibracao"
+
+
+def custo_dc4_medido() -> dict | None:
+    """DC4b: o custo pelo `usage` real da calibracao (falas.jsonl e meta.json) e a projecao da validacao (162 chamadas por braco), pela media
+    por chamada e pela chamada mais cara de cada braco, contra o teto e o gasto ja acumulado. None sem a calibracao no disco."""
+    if not (CALIBRACAO_DC4 / "meta.json").exists():
+        return None
+    meta = json.loads((CALIBRACAO_DC4 / "meta.json").read_text(encoding="utf-8"))
+    regs = [json.loads(x) for x in (CALIBRACAO_DC4 / "falas.jsonl").read_text(encoding="utf-8").splitlines() if x.strip()]
+    bracos, proj_media, proj_max = {}, 0.0, 0.0
+    for b, m in (("H", "claude-haiku-5-5"), ("S", "claude-sonnet-5-5")):
+        us = [r["usage"] for r in regs if r["braco"] == b and r["usage"]["entrada"] is not None]
+        if not us:
+            raise ValueError(f"a calibracao sem usage no braco {b}")
+        cs = [(u["entrada"] * PRECOS_USD_POR_MTOK[m][0] + u["saida"] * PRECOS_USD_POR_MTOK[m][1]) / 1e6 for u in us]
+        n_val = CHAMADAS_DC4_POR_BRACO["validacao"]
+        bracos[b] = {"modelo": m, "chamadas_com_usage": len(us), "chamadas": sum(r["braco"] == b for r in regs),
+                     "entrada_media": round(statistics.mean(u["entrada"] for u in us), 1), "entrada_max": max(u["entrada"] for u in us),
+                     "saida_media": round(statistics.mean(u["saida"] for u in us), 1), "saida_max": max(u["saida"] for u in us),
+                     "usd_calibracao": round(sum(cs), 6), "usd_validacao_pela_media": round(n_val * statistics.mean(cs), 4),
+                     "usd_validacao_pela_maior": round(n_val * max(cs), 4)}
+        proj_media += n_val * statistics.mean(cs)
+        proj_max += n_val * max(cs)
+    acumulado = meta["gasto"]["fim_usd"]
+    return {"bracos": bracos, "gasto_acumulado_usd": acumulado, "teto_usd": meta["gasto"]["limite_usd"],
+            "validacao_pela_media_usd": round(proj_media, 4), "validacao_pela_maior_usd": round(proj_max, 4),
+            "folga_pela_media_usd": round(meta["gasto"]["limite_usd"] - acumulado - proj_media, 4),
+            "folga_pela_maior_usd": round(meta["gasto"]["limite_usd"] - acumulado - proj_max, 4),
+            "fonte": "artifacts_v3_conversa_dc4/calibracao/falas.jsonl (usage) e meta.json (gasto acumulado)"}
+
+
 def tokens_pedido() -> tuple[int, int]:
     falas = RAIZ / "artifacts_fala_livre" / "rodada2" / "falas_qwen2.5-3b.jsonl"
     linhas = [json.loads(x) for x in falas.read_text(encoding="utf-8").splitlines() if x.strip()]
@@ -129,7 +161,7 @@ def main() -> int:
                                for m in MODELOS_LIVRE},
              "teto_usd_proposto": LIMITE_USD_LIVRE_PADRAO, "status": "PROPOSTO, sem medida: tokens do plano, secao 7"}
     livre["usd_total_dois_bracos"] = round(sum(livre["usd_por_braco"].values()), 4)
-    res = {"fala_livre_comparacao_d5": livre, "voz_da_rede_dc4": custo_dc4(), "tokens_por_chamada": {"entrada": ent, "saida": sai},
+    res = {"fala_livre_comparacao_d5": livre, "voz_da_rede_dc4": custo_dc4(), "voz_da_rede_dc4_medido": custo_dc4_medido(), "tokens_por_chamada": {"entrada": ent, "saida": sai},
            "usd_por_chamada": {m: round(v, 6) for m, v in custo_chamada.items()},
            "cenarios": CENARIOS, "custo_api_usd_mes_por_usuarios_simultaneos": api,
            "latencia_local_medida": lat, "capacidade_uma_gpu_usuarios_simultaneos": capacidade,
@@ -144,7 +176,7 @@ def main() -> int:
         for m in api[c]:
             ln.append(f"| {c} | {m} | " + " | ".join(f"{api[c][m][str(n)]:,.0f}" for n in USUARIOS) + " |")
     (SAIDA / "tabela.md").write_text("\n".join(ln) + "\n", encoding="utf-8")
-    print(json.dumps({k: res[k] for k in ("fala_livre_comparacao_d5", "voz_da_rede_dc4", "tokens_por_chamada", "usd_por_chamada", "latencia_local_medida",
+    print(json.dumps({k: res[k] for k in ("fala_livre_comparacao_d5", "voz_da_rede_dc4", "voz_da_rede_dc4_medido", "tokens_por_chamada", "usd_por_chamada", "latencia_local_medida",
                                           "capacidade_uma_gpu_usuarios_simultaneos", "pesquisa_vidas_da_confirmatoria")},
                      indent=1))
     print("\n".join(ln))

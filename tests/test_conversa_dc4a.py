@@ -404,6 +404,8 @@ def test_main_falsos_so_na_fumaca_e_a_fumaca_so_com_eles(monkeypatch, argv, erro
 
 
 def test_main_validacao_sem_registro_nao_roda(monkeypatch):
+    plano = dc4._plano()
+    monkeypatch.setattr(dc4, "_plano", lambda: plano.split(chr(10) + dc4.REGISTRO_TITULO)[0])      # o plano sem a secao 13
     monkeypatch.setattr(dc4.pre_run, "exigir", lambda *a, **k: None)
     monkeypatch.setattr(dc4, "clientes_reais", lambda *a, **k: pytest.fail("montou os clientes de verdade"))
     with pytest.raises(RuntimeError, match="registro da rodada"):
@@ -545,3 +547,22 @@ def test_resposta_sem_modelo_e_falha_de_chamada_e_nao_para_a_rodada():
     reg = dc4.falar(dc4.ServicoDC4(voz, verif), chamadas, "G", "G/E3-000", ent, "espontanea", 5)
     assert reg["fala"] == "…" and reg["erro"] and reg["usage"] == {"entrada": None, "saida": None}
     assert issubclass(dc4.RespostaSemModelo, OSError) and not issubclass(dc4.ModeloTrocado, OSError)
+
+
+def test_estimativa_medida_pela_calibracao_cabe_no_teto():
+    """DC4b: o custo pelo usage real da calibracao e a projecao da validacao (162 chamadas por braco) dentro do teto, com o gasto acumulado"""
+    import estimar_custo_llm as ec
+    d = ec.custo_dc4_medido()
+    assert d is not None and set(d["bracos"]) == {"H", "S"}
+    assert all(b["chamadas_com_usage"] == b["chamadas"] == 81 for b in d["bracos"].values())
+    assert d["folga_pela_maior_usd"] > 0 and d["validacao_pela_maior_usd"] >= d["validacao_pela_media_usd"]
+    gravado = json.loads((RAIZ / "artifacts_custo_llm" / "estimativa.json").read_text(encoding="utf-8"))["voz_da_rede_dc4_medido"]
+    assert gravado == json.loads(json.dumps(d))
+    meta = json.loads((RAIZ / dc4.META_CALIBRACAO).read_text(encoding="utf-8"))
+    assert meta["falas"] == 243 and meta["parada_no_teto"] is None and d["gasto_acumulado_usd"] == meta["gasto"]["fim_usd"]
+    assert meta["modelos_devolvidos"] == {"G": ["gemma2:9b"], "H": ["claude-haiku-5-5"], "S": ["claude-sonnet-5-5"]}
+
+
+def test_o_registro_da_rodada_no_plano_confere_com_os_arquivos_de_hoje():
+    """DC4b: a secao 13 do plano (o registro da rodada) existe e casa com os sha256 de hoje; a validacao depende disso"""
+    dc4.exigir_registro(dc4._plano())

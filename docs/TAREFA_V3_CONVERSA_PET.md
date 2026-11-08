@@ -438,3 +438,34 @@ mudaram. Desvios D-CP-DC4a-1 a 12 em `docs/registro/2026-11.md`.
 - **Testes:** `tests/test_conversa_dc4a.py` (50) e `web/app/test/fala_rede_montador.test.ts` (3).
 - **Falta (DC4b):** a calibração com os modelos de verdade, o formato real da API, o registro da rodada com as versões dos modelos e a tag do
   Ollama, e o ensaio da marcação.
+
+## DC4b — a calibração da voz da rede (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc4b`, 2026-11-08)
+
+A linha DC4b do [plano da DC4](PLANO_ANALISE_V3_CONVERSA_DC4.md) (seção 10): a calibração com os três modelos de verdade, na base 20262200.
+A validação não rodou, e os roteiros dela não foram abertos. A voz-v3 não mudou. Desvios D-CP-DC4b-1 a 8 em `docs/registro/2026-11.md`.
+
+- **A rodada:** `artifacts_v3_conversa_dc4/calibracao/`, com 243 falas (81 por braço), o material da marcação, os pares e o `meta.json`.
+  - Os modelos devolvidos são os pedidos, sem sufixo de data, e não houve parada no teto.
+  - A primeira tentativa parou quando o Ollama caiu e fica em `calibracao_tentativa1/` (D-CP-DC4b-2).
+- **O formato da API** (o "não verificado" da M5): aceito pelos dois modelos Claude, sem recusa nem corte.
+- **O gasto real:** US$ 0,588 nesta rodada (Haiku US$ 0,027, Sonnet US$ 0,560), US$ 0,606 acumulados com a sonda e a primeira tentativa.
+- **A estimativa pelo `usage` real** (`artifacts_custo_llm/estimativa.json`, bloco `voz_da_rede_dc4_medido`):
+  - os pedidos têm cerca de 3 000 tokens de entrada em média (o máximo, cerca de 4 000) e 70 a 90 de saída;
+  - a validação projeta US$ 1,18 pela média e US$ 1,55 pela chamada mais cara;
+  - a folga no teto de US$ 3 fica em US$ 1,22 ou US$ 0,84.
+- **A latência** (`falas.jsonl`):
+  - a voz sozinha tem p50/p90 de G 8,4/30,0 s, H 1,2/1,5 s e S 2,0/2,3 s;
+  - o turno com o verificador tem G 15,5/151 s, H 9,8/29,8 s e S 12,5/19,6 s;
+  - a do G não é limpa, porque a máquina tinha outra carga (D-CP-DC4b-4).
+- **O verificador marcou** 38 falas do G, 63 do H e 44 do S, de 81 cada. Não é resultado: a referência é a marcação (4.1).
+- **Os consertos:**
+  - o piso do gasto entre as worktrees (D-CP-DC4b-1);
+  - a resposta sem modelo como falha de chamada (D-CP-DC4b-2);
+  - a estimativa medida no `tools/estimar_custo_llm.py`.
+- **O ensaio da marcação:** a página abriu numa cópia do material (fora do repo), com as quatro tarefas. Uma resposta de ensaio foi gravada
+  na cópia, e a pasta `respostas/` da calibração continua vazia.
+- **O registro da rodada:** a seção 13 do plano, com as versões, o digest do `gemma2:9b` e os 31 sha256.
+- **Para o Gerente decidir antes da DC4c:**
+  - a voz que enfeita o pedido de comida (D-CP-DC4b-5) e o `P` na fala do G (D-CP-DC4b-6): mudar só com uma `voz-v3b`, que muda o que a
+    validação mede;
+  - a máquina livre durante a validação (D-CP-DC4b-4).
