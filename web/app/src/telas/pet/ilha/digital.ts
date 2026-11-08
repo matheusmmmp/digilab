@@ -39,24 +39,55 @@ transformed.y += sin(uTempo * ${P.vel.toFixed(2)} + faseP) * ${P.sobe.toFixed(2)
   return { malha, noite: noite => { mat.opacity = P.opacidade[noite ? 1 : 0]; } };
 }
 
-/** o ceu pintado com a grade digital por cima: um canvas desenhado sobre a imagem ja carregada, que vira a imagem da textura do ceu */
-export function ceuComGrade(img: HTMLImageElement | ImageBitmap): HTMLCanvasElement {
+/** o ceu em pixel (CEU_SEM_PINTURA, modo "pixel"): o degrade das tres cores em faixas chapadas, como o ceu de um jogo em pixel; o canvas e
+    pequeno e a textura amplia sem filtro */
+export function ceuEmFaixas(cores: readonly string[], faixas: number, w: number, h: number): HTMLCanvasElement {
+  const c = document.createElement("canvas");
+  c.width = w; c.height = h;
+  const g = c.getContext("2d");
+  if (!g) throw new Error("canvas 2d indisponível");
+  const liso = g.createLinearGradient(0, 0, 0, h);
+  liso.addColorStop(0, cores[0]); liso.addColorStop(0.55, cores[1]); liso.addColorStop(1, cores[2]);
+  g.fillStyle = liso; g.fillRect(0, 0, w, h);
+  /* cada faixa pega a cor do meio dela: o degrade vira degraus */
+  const px = g.getImageData(0, 0, 1, h).data;
+  for (let k = 0; k < faixas; k++) {
+    const y0 = Math.round((k / faixas) * h), y1 = Math.round(((k + 1) / faixas) * h), m = Math.min(h - 1, Math.floor((y0 + y1) / 2)) * 4;
+    g.fillStyle = `rgb(${px[m]},${px[m + 1]},${px[m + 2]})`; g.fillRect(0, y0, w, y1 - y0);
+  }
+  return c;
+}
+
+/** o ceu com a grade digital por cima: um canvas desenhado sobre a imagem (a pintada ou a das faixas), que vira a imagem da textura do ceu.
+    A grade fica so na faixa de baixo e some para cima (DIGITAL.grade.desde) */
+export function ceuComGrade(img: HTMLImageElement | ImageBitmap | HTMLCanvasElement): HTMLCanvasElement {
   const G = DIGITAL.grade, c = document.createElement("canvas");
   c.width = img.width; c.height = img.height;
   const g = c.getContext("2d");
   if (!g) throw new Error("canvas 2d indisponível");
+  g.imageSmoothingEnabled = false;
   g.drawImage(img, 0, 0);
+  /* as linhas num canvas a parte, apagadas para cima por uma mascara, e so depois sobre o ceu */
+  const l = document.createElement("canvas");
+  l.width = c.width; l.height = c.height;
+  const gl = l.getContext("2d");
+  if (!gl) throw new Error("canvas 2d indisponível");
   const w = c.width, h = c.height, cx = w / 2, cy = -h * G.fuga;
-  g.strokeStyle = G.cor; g.lineWidth = G.espessura; g.globalAlpha = G.alfa;
+  /* a espessura vale para a imagem pintada (1376 px de largura); num ceu menor, proporcional, com pelo menos 1 px */
+  gl.strokeStyle = G.cor; gl.lineWidth = Math.max(1, G.espessura * (w / 1376));
   /* os meridianos: do ponto de fuga (acima da imagem) para baixo, em leque */
   for (let k = -G.meridianos; k <= G.meridianos; k++) {
-    g.beginPath(); g.moveTo(cx, cy); g.lineTo(cx + k * (w / G.meridianos) * 1.4, h); g.stroke();
+    gl.beginPath(); gl.moveTo(cx, cy); gl.lineTo(cx + k * (w / G.meridianos) * 1.4, h); gl.stroke();
   }
   /* os paralelos: arcos em volta do ponto de fuga, mais juntos perto dele */
   for (let k = 1; k <= G.paralelos; k++) {
     const raio = (h - cy) * Math.pow(k / G.paralelos, 1.6);
-    g.beginPath(); g.arc(cx, cy, raio, 0, Math.PI); g.stroke();
+    gl.beginPath(); gl.arc(cx, cy, raio, 0, Math.PI); gl.stroke();
   }
+  const mascara = gl.createLinearGradient(0, h * G.desde, 0, h);
+  mascara.addColorStop(0, "rgba(0,0,0,0)"); mascara.addColorStop(1, "rgba(0,0,0,1)");
+  gl.globalCompositeOperation = "destination-in"; gl.fillStyle = mascara; gl.fillRect(0, 0, w, h);
+  g.globalAlpha = G.alfa; g.drawImage(l, 0, 0);
   return c;
 }
 

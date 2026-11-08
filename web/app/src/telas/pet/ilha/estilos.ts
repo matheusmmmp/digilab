@@ -12,14 +12,23 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { PALETA_DIGITAL, PALETA_ILHA, carregarVariante, doisTons, flores, montarCena, objetos, terreno, tufos, usarDoisTons, type CenaIlha, type Objetos,
   type PaletaTerreno } from "./cena.ts";
 import { arquivosCassette, carregadorCassette, terrenoCassette } from "./cassette.ts";
-import { CEU_DIGITAL, CONTORNO_DIGITAL, DOBRA_K } from "./constantes.ts";
-import { ceuComGrade, fios, lata, particulas } from "./digital.ts";
+import { CEU_DIGITAL, CEU_SEM_PINTURA, CONTORNO_DIGITAL, DOBRA_K } from "./constantes.ts";
+import { ceuComGrade, ceuEmFaixas, fios, lata, particulas } from "./digital.ts";
 import { enfeites } from "./enfeites.ts";
 import { lugares } from "./lugaresCena.ts";
 import { PALETA_FLORESTA, arquivosFloresta, carregadorFloresta } from "./floresta.ts";
 import type { Ilha } from "./grade.ts";
 import type { Contorno } from "./pos.ts";
 import { objetosVoxel, terrenoVoxel } from "./voxel.ts";
+
+/** o ceu do estilo digital: o de CEU_SEM_PINTURA, ou o de `?ceu=pixel|suave|pintado` no endereco (so a pagina, para comparar; nao grava) */
+function modoDoCeu(): "pixel" | "suave" | "pintado" {
+  try {
+    const q = new URLSearchParams(location.search).get("ceu");
+    if (q === "pixel" || q === "suave" || q === "pintado") return q;
+  } catch { /* sem endereco */ }
+  return CEU_SEM_PINTURA.modo;
+}
 
 export interface Estilo {
   readonly id: Mapa;
@@ -58,16 +67,24 @@ function estiloSemTons(mapa: Mapa, base: string): Estilo {
       /* o estilo digital (docs/TAREFA_V3_MAPA_DIGITAL.md, D1 e D2): a mesma ilha e os mesmos objetos, no fundo de anime: o ceu pintado
          (public/mapa_digital/ceu.jpg), a paleta chapada com as flores, o barranco de pedra, os kits recoloridos e o toon de dois tons
          em tudo, os itens inclusive (usarDoisTons) */
-      /* o ceu pintado, com a grade digital desenhada por cima quando a imagem chega (D3, digital.ts) */
-      const ceuDia = new THREE.Texture();
-      new THREE.TextureLoader().load(new URL("mapa_digital/ceu.jpg", base).href, t => { ceuDia.image = ceuComGrade(t.image); ceuDia.needsUpdate = true; });
+      /* o ceu (CEU_SEM_PINTURA, 2026-11-08): em pixel (o padrao), suave ou o pintado de antes, com a grade digital por cima (D3, digital.ts) */
+      const modo = modoDoCeu(), S = CEU_SEM_PINTURA, ceuDia = new THREE.Texture();
+      if (modo === "pintado") {
+        new THREE.TextureLoader().load(new URL("mapa_digital/ceu.jpg", base).href, t => { ceuDia.image = ceuComGrade(t.image); ceuDia.needsUpdate = true; });
+      } else {
+        const [w, h] = S.tela;
+        ceuDia.image = ceuComGrade(ceuEmFaixas(S.cores, modo === "pixel" ? S.faixas : h, w, h));
+        if (modo === "pixel") { ceuDia.magFilter = THREE.NearestFilter; ceuDia.minFilter = THREE.NearestFilter; ceuDia.generateMipmaps = false; }
+        ceuDia.needsUpdate = true;
+      }
       ceuDia.colorSpace = THREE.SRGBColorSpace;
       ceuDia.userData.cobrir = true;    /* cobre a tela sem esticar (cena.ts, cobrirFundo) */
+      const horizonte = modo === "pintado" ? CEU_DIGITAL.horizonte : S.horizonte;
       return {
         id: mapa, dobra: DOBRA_K, paleta: PALETA_DIGITAL, contorno: CONTORNO_DIGITAL,
         montar: i => {
           const chao = new THREE.Group().add(terreno(i, PALETA_DIGITAL), flores(i), tufos(i));
-          const c = montarCena(i, chao, { nuvens: "anime", ceuDia, horizonteDia: CEU_DIGITAL.horizonte, chaoHemi: CEU_DIGITAL.chaoHemi, nevoa: CEU_DIGITAL.nevoa });
+          const c = montarCena(i, chao, { nuvens: modo === "pintado" ? "anime" : modo === "pixel" ? "pixel" : true, ceuDia, horizonteDia: horizonte, chaoHemi: CEU_DIGITAL.chaoHemi, nevoa: CEU_DIGITAL.nevoa });
           doisTons(c.cena);
           return c;
         },

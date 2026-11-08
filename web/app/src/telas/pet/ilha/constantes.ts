@@ -111,6 +111,15 @@ export const ENFEITE_HALO = { altura: 0.86, tamanho: 1.1, cascas: [0.55, 0.78, 1
     da imagem), para a nevoa, a cor de baixo da luz do ceu de dia, azulada (a sombra do anime), e a nevoa mais longe que a da ilha (o fundo
     de anime tem as arvores de tras nitidas; a de 26 a 62 desbotava tudo, e a de 42 a 95 as deixava pesadas; D2). PROPOSTO, SEM FONTE */
 export const CEU_DIGITAL = { horizonte: 0xabe9fe, chaoHemi: 0x6f8fc8, nevoa: [34, 85] } as const;
+/** o ceu do estilo digital sem a pintura de anime (o Matheus, 2026-11-08: "Não precisa ser um céu tão cartunesco assim. Ele tá destoando muito
+    da arte do jogo. Se for alguma coisa mais pixelada"): `modo` "pixel" (o degrade em `faixas` de cor chapada e as nuvens em pixel, do tamanho
+    `px` da grade de cada uma, ampliada sem filtro), "suave" (o degrade liso e as nuvens fofas da ilha) ou "pintado" (o ceu.jpg e as nuvens de
+    anime de antes); `?ceu=` no endereco troca so na pagina, para comparar. As cores em tons medios, menos saturadas que as de antes, com o
+    horizonte mais claro (o levantamento do ceu, no Obsidian: 20 Temas/Ceu do jogo), e a nevoa da cor do horizonte. PROPOSTO, SEM FONTE */
+export const CEU_SEM_PINTURA = {
+  modo: "pixel" as "pixel" | "suave" | "pintado", cores: ["#5f9fd6", "#9ec8e9", "#e3f1f6"], horizonte: 0xe3f1f6, faixas: 11, tela: [480, 270],
+  nuvens: { n: 12, px: [40, 16], largura: [16, 28], altura: [11, 19], longe: [22, 40], sombra: "#cfe0ee" },
+} as const;
 /** o traco de nanquim do estilo digital (pos.ts, Contorno; D5, o cel shading que o Matheus pediu): um azul-petroleo quase preto, a
     largura de ~3 px (o revisor pediu o traco mais grosso), e some entre 34 e 76 celulas da camera (perto do fim da nevoa). PROPOSTO, SEM FONTE */
 export const CONTORNO_DIGITAL = { tinta: 0x15222a, forca: 1, largura: 3, limiar: 0.012, some: [34, 76] as const };
@@ -123,7 +132,9 @@ export const CONTORNO_DIGITAL = { tinta: 0x15222a, forca: 1, largura: 3, limiar:
 export const DIGITAL = {
   particulas: { quantas: 140, sal: 0xd161a1, margem: 3, altura: [0.6, 3.2], tamanho: 0.06, cor: 0x7ff3ff, opacidade: [0.55, 0.95],
     sobe: 0.25, vel: 0.8, giro: 0.9 },
-  grade: { cor: "#b8faff", alfa: 0.5, espessura: 3, meridianos: 9, paralelos: 8, fuga: 0.25 },
+  /* a grade mais discreta (2026-11-08: "tá muito saturada [...] Deixa ela um pouco mais opaca"): o ciano dessaturado, fraca e so na faixa de baixo do
+     ceu, sumindo para cima a partir de `desde` (a fracao da altura da imagem) */
+  grade: { cor: "#a9d3db", alfa: 0.16, espessura: 2, meridianos: 9, paralelos: 8, fuga: 0.25, desde: 0.5 },
   fios: { alto: 0.93, alcance: 10, porPoste: 2, queda: 0.06, segmentos: 12, cor: 0x2b2a33 },
   /* a lata gigante (D4, o marco), no horizonte como na maquete B: a grade tem 64 celulas de largura e a camera segue o pet, entao um
      marco parado num ponto so apareceria perto dele, e o mundo curvo o afundaria. Ela fica a `longe` celulas ao norte do pet e anda com

@@ -702,3 +702,25 @@ vai até um objeto. Esta etapa faz só a prancha da A, sem código do jogo (bran
 - **As contas** ficam em `src/telas/pet/objetosIlha.ts`, e os testes em `test/objetos_ilha.test.ts`.
 - **Interpretações:** D-I1-1 a D-I1-4, em `docs/registro/2026-11.md`.
 - **Pendente do #694:** a árvore que dá fruta.
+
+## 25. O céu do estilo Digital sem a pintura de anime (2026-11-08)
+
+O Matheus pediu:
+> "busque referências para otimizar esse céu. Ele tá bem feio. Não é nada natural. E essa faixa digital que tá cobrindo ele, ela tá meio
+> esquisita, tá muito saturada, talvez. Deixa ela um pouco mais opaca."
+
+E depois:
+> "Não precisa ser um céu tão cartunesco assim. Ele tá destoando muito da arte do jogo. Se for alguma coisa mais pixelada [...]"
+
+**O que foi feito (só vista; o motor, o save e o registro não mudam):**
+- **O céu em pixel** (`CEU_SEM_PINTURA`, modo `"pixel"`, o padrão novo): o degradê em 11 faixas chapadas, em tons médios e com o horizonte
+  mais claro (`ceuEmFaixas`, `digital.ts`). As nuvens são em pixel, grades pequenas ampliadas sem filtro (`nuvensPixel`, `cena.ts`).
+- **As outras versões** ficam no `?ceu=`, só na página, para comparar:
+  - o modo `"suave"`, com o degradê liso e as nuvens fofas da ilha;
+  - o `"pintado"`, com o `ceu.jpg` e as nuvens de anime de antes.
+- **A grade digital** ficou com alfa de 0,5 para 0,16, num ciano apagado, só na metade de baixo do céu e sumindo para cima (`DIGITAL.grade`).
+- **A névoa** tem a cor do horizonte novo.
+- **Páginas:** a comparação está em https://claude.ai/artifact/UUbqNxNS1PHTntVhA93NUP. As referências estão no Obsidian, em
+  `20 Temas/Céu do jogo.md`.
+
+Os números são de desenho: PROPOSTO, SEM FONTE. A cor por hora do dia, o halo do sol e a sombra de nuvem ficam para depois.
