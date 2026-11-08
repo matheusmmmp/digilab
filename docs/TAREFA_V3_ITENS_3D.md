@@ -343,3 +343,39 @@ dos itens de forma livre; os detalhes pequenos e a cor chapada precisam do conse
 
 **Fora:** o fps de verdade (a M3 no Chrome do desktop, com o Matheus); a aprovação das capturas pelo Matheus.
 
+
+## 14. A bola refeita no Blender, sem Meshy (2026-11-08, worker, Claude Code, Opus 5.5, worktree `v3-objeto-bola`)
+
+**Por quê:** o Matheus achou a bola da seção 11 "faltando parte, mal desenhada em certas partes". A causa estava na textura de 3 cores
+da Meshy, que não batia com a malha nas emendas e deixava manchas brancas (`docs/objetos3d/REFERENCIAS.md`, seção 1). O alvo é o
+esboço 1 do retrabalho (`docs/objetos3d/bola/esbocos/esboco_1_praia_gomos.png`): uma bola de praia com seis gomos que se encontram em
+tampas brancas, com um brilho pintado.
+
+**Como:** um script só, `docs/itens3d/bola/fazer_bola.py`, refaz a bola do zero, com 0 crédito e sem IA:
+
+```bash
+blender -b --factory-startup --python docs/itens3d/bola/fazer_bola.py -- web/app/public/itens/bola/bola.gltf docs/itens3d/bola/refeita/previa.png
+```
+
+- **A malha:** uma esfera UV de 24 × 12 (528 triângulos) com o sombreado suave e o raio de antes. Os polos estão inclinados 32°, para a
+  tampa aparecer na bola parada.
+- **Os UVs:** a faixa dos gomos em equirretangular e um disco plano por polo, para a tampa sair um círculo liso.
+- **A textura:** pintada por numpy em 1024 × 512 (93 KB). Tem seis gomos em 4 tons, pinceladas leves, um brilho grande, as linhas das
+  emendas e as tampas com o contorno.
+- **No jogo:** só os arquivos de `web/app/public/itens/bola/` mudam, com o `License.txt` da procedência própria. A vista, o tamanho na
+  tela e o giro da bola não mudam: os gomos inclinados aparecem girando quando ela rola.
+
+**Os gates** (o teste `web/app/test/ilha_itens3d.test.ts`):
+- G1: 528 triângulos, teto 554. G2: a caixa igual nos três eixos (±1 %). G3: PNG de 1024 × 512.
+- G4 e G5: um material com textura e nenhum mapa extra.
+- G6: o glTF-Validator com 0 erros e 0 avisos (`validacao.json`). G7: cerca de 110 KB.
+- G8 muda para a bola (D-OBJ-BOLA-1): procedência própria, sem IA.
+
+**A revisão:** um revisor subagente deu REPROVA na rodada 1, pela tampa felpuda e pelo contorno facetado. Na rodada 2, deu APROVA COM
+RESSALVA, e o anel claro em volta da tampa foi consertado em seguida. Os desvios estão de D-OBJ-BOLA-1 a 7, em
+`docs/registro/2026-11.md`. As capturas e a prancha estão em `D:\Trab\digilab\capturas_objetos3d\bola\`, fora do git.
+
+**Fora:**
+- o contorno mais redondo, que exige passar do teto de 554 triângulos da D-I3;
+- o musgo do esboço;
+- a aprovação das capturas pelo Matheus.
