@@ -22,8 +22,8 @@ O lar da planta (o ninho em (11, 13), a tigela, a bola e as frutíferas) é do m
 
 ## Como fica no código
 
-- `constantes.ts`: a tabela `PLANTA_ILHA`. O `LUGARES_GRADE` e o `SACO_DESDE_NINHO` saem; o `ENFEITES_GRADE` fica com quantos, a folga e o
-  espaço entre os marcos.
+- `constantes.ts`: a tabela `PLANTA_ILHA`. O `LUGARES_GRADE` e o `SACO_DESDE_NINHO` saem; o `ENFEITES_GRADE` fica com quantos, a folga, o
+  chão de cada marco e a clareira dele.
 - `grade.ts`: os lugares e os enfeites nos pontos da planta (o mais perto que cabe), a praça e os caminhos pintados depois da decoração e a
   moldura em bosques e vãos. A decoração que cai num caminho, num vão ou fora de um bosque só some da vista (`escondidos`): a lista `objetos`
   não muda, e o gabarito E-G0 (`test/gabaritos/ilha_objetos.json`) continua passando. As árvores novas dos bosques e as pedras do ferro-velho
@@ -55,14 +55,13 @@ O lar da planta (o ninho em (11, 13), a tigela, a bola e as frutíferas) é do m
 5. **Pássaros:** proposta; não é barato (modelo, animação e a árvore madura do motor).
 6. **A câmera do primeiro dia:** proposta descrita na página, sem código.
 
-## As perguntas (PA-1 a PA-3), PROPOSTAS
+## As perguntas (PA-1 a PA-5), PROPOSTAS
 
 - **PA-1.** A vista da planta A vira código assim? Recomendação: sim; custo de errar baixo (só vista).
 - **PA-2.** A barraca fica dentro da área, como na planta? Recomendação: sim; o pet pode passar por ela, como já passa pelo saco. A
   alternativa é a borda norte, perto do portão.
 - **PA-3.** A ida e a volta do treino passam a durar conforme a distância (cerca de 7 células por segundo, 0,9 s no mínimo)? Hoje duram
   0,9 s; com o saco em (22, 9), o pet de hoje cruza ~19 células nesse tempo. Recomendação: sim, só em `vista.ts`.
-
 - **PA-4.** O vento continua mexendo a grama e as flores? Recomendação: sim; o pulinho é uma batida curta e se distingue dele.
 - **PA-5.** As silhuetas ficam como estão (duas faixas em tons de névoa, com vãos de mar)? Recomendação: sim.
 
