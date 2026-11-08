@@ -1865,12 +1865,13 @@ CONFIG_MUNDO_LIGADA = ConfigMundo(ligada=True)
 LAYOUT_MUNDO_MVP = replace(LAYOUT_MUNDO_PADRAO, nome="mvp", arvores=())                  # PROPOSTO, SEM FONTE
 CONFIG_MUNDO_MVP = replace(CONFIG_MUNDO_LIGADA, layout=LAYOUT_MUNDO_MVP)                  # PROPOSTO, SEM FONTE
 
-# O mundo da ilha (docs/TAREFA_V3_ARVORE_SACODE.md, AS-7 APROVADA em 2026-11-08): o layout do MVP com as tres arvores do jardim do layout
-# padrao (J1 a, J2 b, J3 c), so para os pets v20 do jogo. O CONFIG_MUNDO_MVP nao muda (a vida gravada dos pets v12 a v19). O mundo novo e
-# DECIDIDO; quais arvores, PROPOSTO, SEM FONTE. As posicoes sao PROVISORIAS: o layout novo da ilha (PR #724, a IL-2 com o Matheus)
-# pode leva-las ao bosque do lar. Os pontos ficam so aqui; trocar aqui e regravar o gabarito do G-PAR (exportar_gabarito_arvore_sacode).
-LAYOUT_MUNDO_ILHA = replace(LAYOUT_MUNDO_MVP, nome="ilha",
-                            arvores=tuple(a for a in LAYOUT_MUNDO_PADRAO.arvores if a[0] in ("J1", "J2", "J3")))  # PROPOSTO, SEM FONTE
+# O mundo da ilha (docs/TAREFA_V3_ARVORE_SACODE.md, AS-7 APROVADA em 2026-11-08): o layout do MVP com tres frutiferas, so para os pets v20
+# do jogo. O CONFIG_MUNDO_MVP nao muda (a vida gravada dos pets v12 a v19). O mundo novo e DECIDIDO. Os pontos sao os da planta A da ilha
+# inicial (docs/pranchas/ux-ilha-layout/, PR #724; o Matheus em 2026-11-08: "A, com IL-2 a IL-4"), em celulas inteiras: o ninho, a tigela
+# (o comedouro; os 15,5 da planta em 15), a bola e as frutiferas no bosque atras do ninho (IL-2). As regioes sao as de hoje, e as tres
+# arvores caem na casa: o Mundo so as aceita com o sacudir ligado (D-AS-S1-7). Os pontos sao PROPOSTO, SEM FONTE, e ficam so aqui.
+LAYOUT_MUNDO_ILHA = replace(LAYOUT_MUNDO_MVP, nome="ilha", ninho=(11, 13), comedouro=(16, 15), bola_inicio=(21, 19),  # PROPOSTO, SEM FONTE
+                            arvores=(("J1", 9, 9, "a"), ("J2", 14, 7, "b"), ("J3", 6, 14, "c")))                   # PROPOSTO, SEM FONTE
 CONFIG_MUNDO_ILHA = replace(CONFIG_MUNDO_MVP, layout=LAYOUT_MUNDO_ILHA)
 
 

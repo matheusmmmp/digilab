@@ -1,5 +1,5 @@
 """Gabarito do sacudir a arvore (docs/TAREFA_V3_ARVORE_SACODE.md, S1; os pets v20 do jogo web): vidas do pet no mundo da ilha (o
-`CONFIG_MUNDO_ILHA`, o MVP com J1, J2 e J3), com o corpo e o A do v11 das vidas do gabarito do produto
+`CONFIG_MUNDO_ILHA`, a planta A: o MVP com J1, J2 e J3 no bosque do lar), com o corpo e o A do v11 das vidas do gabarito do produto
 (experiments/exportar_gabarito_mvp_mundo.py) e as chaves dos ovos v20: a `ConfigDecisaoNaComida`, a `ConfigBolaNoGolpe`, a `ConfigSacudir`
 e a `ConfigFrutaComoComida` (AS-11) ligadas.
 
@@ -42,7 +42,7 @@ ROTEIRO_SACODE = 53          # as rajadas: tambem fora do passo das decisoes (53
 RAJADAS = (1, 4, 2)          # o tamanho de cada rajada, em ciclo: a de 4 esvazia o galho cheio (3)
 PERTO = 48                   # a racao a 3 celulas do pet, para o lado de dentro do mapa
 # (o nome, a semente): so as sementes dos testes; o dono "atencioso" so da o rotulo da EspecVida (a ConfigCorpo do v11)
-VIDAS = (("a_v11_sacode_101", 101), ("a_v11_sacode_505", 505))   # as que comem fruta em 2 dias (202 e 404 nao comem)
+VIDAS = (("a_v11_sacode_202", 202), ("a_v11_sacode_505", 505))   # as que comem fruta em 2 dias na planta A (a 101 nao come)
 MOTIVOS = ("caiu", "galho_vazio", "chao_cheio")
 
 

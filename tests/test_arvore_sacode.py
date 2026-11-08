@@ -34,13 +34,14 @@ import gabarito_arvore_sacode as H  # noqa: E402
 from digilab.config import (CONFIG_FRUTA_COMO_COMIDA_LIGADA, CONFIG_MUNDO_ILHA, CONFIG_MUNDO_MVP, CONFIG_PADRAO,  # noqa: E402
                             CONFIG_SACUDIR, CONFIG_SACUDIR_LIGADA, LAYOUT_MUNDO_PADRAO, ConfigSacudir)
 from digilab.events import FRUTAS, Evento, ler_sacudir_arvore, sacudir_arvore  # noqa: E402
-from digilab.mundo import (MotorMundo, Mundo, SacudirSemChave, distancia, fabricas_mundo, reproduzir_mundo)  # noqa: E402
+from digilab.mundo import (MotorMundo, Mundo, SacudirSemChave, deslocar, distancia, fabricas_mundo, reproduzir_mundo)  # noqa: E402
 from digilab.instinto_mundo import PoliticaInstintoMundo  # noqa: E402
 from digilab.policy import PoliticaInstinto  # noqa: E402
 
 TEXTO = G.ARQUIVO.read_text(encoding="utf-8")
 GRAVADO = json.loads(TEXTO)
 CM = CONFIG_MUNDO_ILHA
+CM_HOJE = H.mundo_ilha_de_hoje()          # as arvores no jardim: o mundo das chaves desligadas (a planta A so existe com o sacudir)
 CS = CONFIG_SACUDIR_LIGADA
 RAIO = CM.raio_queda_celulas * CM.sub
 SEMENTES = (101, 202)                     # so dos testes
@@ -79,7 +80,7 @@ def _motor(semente: int, **kw):
 
 
 def _mundo(semente: int = 101, cs: ConfigSacudir = CS) -> Mundo:
-    m = Mundo(CM, semente)
+    m = Mundo(CM, semente, arvores_na_casa=True)
     m.ligar_sacudir(cs)
     return m
 
@@ -106,9 +107,12 @@ def test_o_formato_do_log():
 
 # ------------------------------------------------------------------ o mundo da ilha
 def test_o_mundo_da_ilha():
-    assert CM == H.mundo_ilha_de_hoje()
-    assert CM.layout.nome == "ilha" and CM.layout.arvores == tuple(a for a in LAYOUT_MUNDO_PADRAO.arvores if a[0] in ("J1", "J2", "J3"))
+    """a planta A da ilha (PR #724, IL-1 a IL-4): o ninho, a tigela, a bola e as frutiferas no bosque atras do ninho; o resto e o MVP"""
+    L = CM.layout
+    assert (L.nome, L.ninho, L.comedouro, L.bola_inicio) == ("ilha", (11, 13), (16, 15), (21, 19))
+    assert L.arvores == (("J1", 9, 9, "a"), ("J2", 14, 7, "b"), ("J3", 6, 14, "c")) and L.regioes == CONFIG_MUNDO_MVP.layout.regioes
     assert replace(CM, layout=CONFIG_MUNDO_MVP.layout) == CONFIG_MUNDO_MVP
+    assert all(L.regioes[0][1] <= x <= L.regioes[0][2] for _, x, _, _ in L.arvores)   # as tres na casa (D-AS-S1-7)
     assert sorted(a[3] for a in CM.layout.arvores) == list(FRUTAS)          # uma arvore de cada fruta
     assert CONFIG_MUNDO_MVP.layout.arvores == ()                           # o mundo dos pets v12 a v19 nao muda
 
@@ -174,8 +178,34 @@ def test_a_queda_natural_nao_muda():
     assert sem.rng_arvores.getstate() == com.rng_arvores.getstate() and sem.rng_bola.getstate() == com.rng_bola.getstate()
 
 
+def test_a_arvore_na_casa_so_com_o_sacudir():
+    """D-AS-S1-7: sem o sacudir, a arvore na casa falha alto, como hoje; com ele, cai como a do jardim"""
+    with pytest.raises(ValueError, match="fora do jardim e da mata"):
+        Mundo(CM, 101)
+    with pytest.raises(ValueError, match="fora do jardim e da mata"):
+        fabricas_mundo(CM, politica_fabrica=lambda cfg=None: Espiao(cfg))[1](Espiao(), CONFIG_PADRAO, 101)
+    with pytest.raises(TypeError):
+        Mundo(CM, 101, arvores_na_casa=1)
+    m = _mundo()
+    assert [(a["regiao"], a["p"]) for a in m.arvores] == [("casa", CM.p_queda_jardim * CM.mult_queda)] * 3
+    assert Mundo(CM_HOJE, 101, arvores_na_casa=True).arvores == Mundo(CM_HOJE, 101).arvores   # sem arvore na casa, nada muda
+
+
+def test_a_fruta_cai_longe_do_ninho_e_dentro_do_mapa():
+    """todo ponto de queda possivel (as 16 direcoes, 0 a raio subunidades) fica no mapa sem corte e fora da celula do ninho e da tigela"""
+    m, sub = _mundo(), CM.sub
+    celula = lambda x, y: (x // sub, y // sub)  # noqa: E731
+    for a in m.arvores:
+        for d in range(16):
+            for c in range(RAIO + 1):
+                x, y = deslocar(a["x"], a["y"], d, c, CM)
+                assert 0 < x < CM.celulas_x * sub - 1 and 0 < y < CM.celulas_y * sub - 1
+                assert celula(x, y) not in (CM.layout.ninho, CM.layout.comedouro)
+                assert distancia(x - m.ninho[0], y - m.ninho[1]) > 2 * sub
+
+
 def test_o_mundo_falha_alto():
-    m = Mundo(CM, 101)
+    m = Mundo(CM, 101, arvores_na_casa=True)
     m.atualizar(0)
     with pytest.raises(SacudirSemChave):
         m.sacudir("J1", 0)
@@ -194,7 +224,7 @@ def test_o_mundo_falha_alto():
 def test_sem_o_mundo_ou_sem_a_chave_falha_alto():
     with pytest.raises(SacudirSemChave):
         MotorMundo(PoliticaInstinto(CONFIG_PADRAO), CONFIG_PADRAO, 101, cfg_sacudir=CS)
-    fp, fm = fabricas_mundo(CM, politica_fabrica=lambda cfg=None: Espiao(cfg))
+    fp, fm = fabricas_mundo(CM_HOJE, politica_fabrica=lambda cfg=None: Espiao(cfg))
     m = fm(fp(CONFIG_PADRAO), CONFIG_PADRAO, 101)
     with pytest.raises(SacudirSemChave):
         m.sacudir_arvore("J1")
@@ -202,7 +232,7 @@ def test_sem_o_mundo_ou_sem_a_chave_falha_alto():
         m.no_galho()
     assert len(m.log) == 0
     with pytest.raises(SacudirSemChave, match="fora do grupo"):
-        MotorMundo(PoliticaInstinto(CONFIG_PADRAO), CONFIG_PADRAO, 101, cfg_mundo=CM, cfg_sacudir=CS, mundo=Mundo(CM, 101))
+        MotorMundo(PoliticaInstinto(CONFIG_PADRAO), CONFIG_PADRAO, 101, cfg_mundo=CM, cfg_sacudir=CS, mundo=Mundo(CM, 101, arvores_na_casa=True))
 
 
 def test_a_arvore_que_nao_existe_falha_antes_do_log():
@@ -253,7 +283,7 @@ def test_o_replay_refaz_a_vida(semente):
 
 
 def test_desligada_nenhuma_chave_nova():
-    fp, fm = fabricas_mundo(CM, politica_fabrica=lambda cfg=None: Espiao(cfg))
+    fp, fm = fabricas_mundo(CM_HOJE, politica_fabrica=lambda cfg=None: Espiao(cfg))
     m = fm(fp(CONFIG_PADRAO), CONFIG_PADRAO, 101)
     m.avancar(200)
     assert not {"galhos", "sacudidas", "rng_sacode"} & set(m.resumo_mundo_fisico()) and "sacudir" not in m.estado()
@@ -280,7 +310,7 @@ def test_o_a_do_v11_come_a_fruta_sem_quebrar(semente):
     espec = bv.EspecVida("aleatorio", e0.gl.BRACO_V11, semente)
     cc = b.cfg_corpo_de(espec)
     fm = (lambda p, cfg, s: e0.MotorMundoCorpoGravado(p, cfg, s, obediencia_desligada=True, cfg_mundo=CM, cfg_corpo=cc,  # noqa: E731
-                                                      cfg_fruta_comida=CONFIG_FRUTA_COMO_COMIDA_LIGADA))
+                                                      cfg_sacudir=CS, cfg_fruta_comida=CONFIG_FRUTA_COMO_COMIDA_LIGADA))
     d = e0.DonoComLugar(e0.criar_dono("aleatorio"), "perto", semente, "aleatorio", CM)
     m = e0.simular_vida_mundo("aleatorio", d, b.politica(espec, CONFIG_PADRAO), semente, e0.DIAS, 16 * e0.DIAS, fm,
                               rotulo_dono="aleatorio").motor

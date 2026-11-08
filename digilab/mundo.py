@@ -703,7 +703,11 @@ class Mundo:
     A atualizacao (quedas, apodrecer, sumir) e idempotente por tick (`atualizar`): a segunda chamada no mesmo tick nao faz nada, e um tick
     para tras falha alto. Com dois pets, quem decide primeiro no tick a dispara, e o resultado so le o tick e o fluxo `mundo-arvores`."""
 
-    def __init__(self, cfg_mundo: ConfigMundo, semente: int) -> None:
+    def __init__(self, cfg_mundo: ConfigMundo, semente: int, arvores_na_casa: bool = False) -> None:
+        # `arvores_na_casa` (TAREFA_V3_ARVORE_SACODE, D-AS-S1-7): so o motor com a ConfigSacudir ligada; a arvore na casa (o bosque do lar
+        # da planta A da ilha) cai como a do jardim. Sem ele, a arvore na casa falha alto, como hoje
+        if type(arvores_na_casa) is not bool:
+            raise TypeError(f"arvores_na_casa e bool: {arvores_na_casa!r}")
         if not cfg_mundo.ligada:
             raise MundoSemChave("o Mundo so existe com a ConfigMundo ligada")
         cm = self.cmf = cfg_mundo
@@ -722,7 +726,7 @@ class Mundo:
                 raise ValueError(f"arvore {ident} com fruta desconhecida: {fruta!r}")
             ax, ay = centro_da_celula((x, y), cm)
             nome = nomes[regiao_de(ax, cm)]
-            if nome == "jardim":
+            if nome == "jardim" or (nome == "casa" and arvores_na_casa):
                 p = cm.p_queda_jardim * cm.mult_queda
             elif nome == "mata":
                 p = cm.p_queda_mata * cm.mult_queda
@@ -1172,7 +1176,7 @@ class MotorMundo(MotorFrutas):
         if mundo is None:
             if entrada_mundo:
                 raise ValueError("entrada_mundo so com um Mundo dado (o do grupo)")
-            self.mundo = Mundo(cm, semente)           # com um pet, o motor e dono do proprio mundo (a semente do mundo e a do pet)
+            self.mundo = Mundo(cm, semente, arvores_na_casa=True) if self.csa.ligada else Mundo(cm, semente)   # com um pet, o motor e dono do proprio mundo (a semente do mundo e a do pet)
         else:                                         # no grupo (digilab/grupo.py): o mundo e de todos, e o pet entra num tick dele
             if not isinstance(mundo, Mundo) or mundo.cmf != cm:
                 raise ValueError("o Mundo dado tem de ser um Mundo com a mesma ConfigMundo do motor")
