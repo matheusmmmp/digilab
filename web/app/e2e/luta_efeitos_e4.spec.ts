@@ -19,8 +19,8 @@ async function abrirLuta(page: Page): Promise<void> {
     localStorage.setItem(chave, s);
   }, [CHAVE, JSON.stringify(SAVE), JSON.stringify(TAMER)] as const);
   await page.goto(`${APP}?clipes_up=1#/lutar/arena`);
-  await page.locator(".rivais-mais").click();
-  await page.locator(".rival-card--adulto", { hasText: "Zudomon" }).click();
+  await page.getByRole("button", { name: /^Mostrar as \d+ formas adultas$/ }).click();
+  await page.locator(".ar2-rival[data-adulto]", { hasText: "Zudomon" }).click();
   await page.locator(".lutar-grande").click();
   await expect(page).toHaveURL(/#\/lutar\/luta$/);
 }
