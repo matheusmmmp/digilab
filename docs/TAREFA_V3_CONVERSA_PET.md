@@ -401,3 +401,40 @@ do decodificador tiradas de vidas novas do pet de teste; os gates por modelo G-F
 Matheus, cego, recupera o pedido da rede) e G-INJ, o gate do verificador G-VERIF, e a escolha do modelo pela preferência cega pareada, sem
 gate. O descritivo D-COMIDA refaz pelo replay as vidas da run da DC3 para ver se o crédito até o pet comer mudaria o sinal do pedido de
 comida. Decisões DC4-1 a DC4-8 aprovadas. Nenhuma chamada a modelo de verdade antes da aprovação, do código da DC4a e do registro da rodada.
+
+## DC4a — o código da avaliação da voz da rede (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc4a`, 2026-11-08)
+
+A linha DC4a do [plano da DC4](PLANO_ANALISE_V3_CONVERSA_DC4.md) (seção 10). **Nenhuma chamada a modelo de verdade e nenhuma vida das
+subfaixas da DC4**: só testes com clientes falsos e a fumaça nas sementes dos testes. A voz-v3, a verif-v9, o `engine.py` e o jogo não
+mudaram. Desvios D-CP-DC4a-1 a 12 em `docs/registro/2026-11.md`.
+
+- **O montador:** `experiments/montador_voz_rede.py` é o espelho Python do `conceitosDaVoz` e do `estadoDaVoz` de `web/app/src/falaRede.ts`.
+  - O gabarito `web/app/test/gabaritos/fala_rede_montador.json.gz` (`experiments/exportar_gabarito_fala_rede.py`) traz duas vidas do LAB+F
+    com 3 dias e casos feitos à mão do alvo.
+  - `web/app/test/fala_rede_montador.test.ts` confere que o TS monta o mesmo pedido. A mutação conferida: tirar `bola` das classes do
+    Python quebra a paridade.
+- **As entradas:** `experiments/entradas_dc4.py` vive o LAB+F da DC3 no comedouro (14 dias, orçamento 16, o dono que atende), lê por
+  decisão o `dec-v2`, o conteúdo da fala, o tick e o estágio, monta o pedido como a página e o valida como o servidor.
+  - O sorteio é estratificado: E3 por pedido, E2 pela intenção da I-a com as lembranças com `episodio`, e as sequências da conversa.
+  - Ele falha alto e roda mais vidas da mesma base, em ordem, até fechar.
+- **O orquestrador:** `experiments/run_v3_conversa_dc4.py` leva cada fala pelo `ServicoFalaLivre` do jogo, com o cliente da voz do braço
+  (G `gemma2:9b` no Ollama, H e S pelo `ClienteClaude`) e o verificador `gemma2:9b` igual em todos.
+  - As conferências da seção 9 falham alto: o modelo devolvido, a entrada/braço/semente/`usage` de cada fala, a ordem dos pares e a parada
+    antes do teto.
+  - As travas: o `pre_run` (H10), o plano APROVADO, a faixa, a config igual à do plano, os roteiros da validação só na validação, e o
+    registro da rodada na validação (`--registro` imprime a seção 13).
+  - Os clientes falsos só na fumaça, e a fumaça só com eles.
+  - As configs e os roteiros ficam em `experiments/configs/v3_conversa_dc4/` (2 roteiros de calibração e 4 de validação, na ordem fixa).
+- **A marcação cega:** `experiments/marcacao_dc4.py` monta o material e abre a página local em `127.0.0.1:8790`.
+  - O material: a legibilidade, a amostra da referência, a injeção, os pares e o pacote do marcador Opus. A chave dos braços fica num
+    arquivo que a página nunca lê.
+  - Cada resposta vai ao disco na hora.
+  - A entrada é tratada como não confiável: só `textContent`, CSP sem script inline, Host e Origin conferidos e respostas de catálogo fechado.
+- **A rubrica:** `docs/RUBRICA_DC4_FIDELIDADE.md`, as regras do julgamento da verif-v7 a verif-v9 em palavras, regra a regra.
+- **A faixa (DC4-1):** a linha da CONVERSA_PET em `FAIXAS_RESERVADAS` diz que 20262200–20262499 é a calibração da DC4 e 20262500–20262899 a
+  validação.
+- **A estimativa:** `tools/estimar_custo_llm.py` ganhou o bloco `voz_da_rede_dc4`. O pior caso medido do pedido dá US$ 2,19 nos dois braços
+  para as 243 chamadas (D-CP-DC4a-10).
+- **Testes:** `tests/test_conversa_dc4a.py` (50) e `web/app/test/fala_rede_montador.test.ts` (3).
+- **Falta (DC4b):** a calibração com os modelos de verdade, o formato real da API, o registro da rodada com as versões dos modelos e a tag do
+  Ollama, e o ensaio da marcação.

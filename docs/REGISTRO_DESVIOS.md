@@ -566,3 +566,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-07 — LUTA_CARTAO_390, a faixa "O que [pet] faz" no celular (worker, Claude Code, Opus 5.5, branch `v3-luta-cartao-390`)](registro/2026-11.md)
 - [2026-11-08 — LUTA_EQUILIBRIO_R3, as decisões D-R3-1 a D-R3-9 DECIDIDAS (worker, Claude Code, Opus 5.5, branch `v3-luta-equilibrio-r3`)](registro/2026-11.md)
 - [2026-11-08 — INDIVIDUALIDADE, I2b: a run da linha de base (worker, Claude Code, Opus 5.5, branch `v3-individualidade-i2b`)](registro/2026-11.md)
+- [2026-11-08 — CONVERSA_PET, DC4a, o código da avaliação da voz da rede (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc4a`)](registro/2026-11.md)
