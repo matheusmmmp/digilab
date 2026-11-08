@@ -269,3 +269,46 @@ PROPOSTOS até a LP5.
 - Matheus, 2026-11-08, "Aprovo as 10": a LP-1 a LP-10 como recomendadas na seção 8. A LP1 pode começar.
 - Matheus, 2026-11-08, depois do "Aprovo as 10": a LP-3 e a LP-5 revistas (os stats do pet e o treino no lugar do "nível de luta";
   a Liga, a Torre, a Fábrica e o Salão reaproveitados). Aprovadas na forma revista ("Aprovo as duas", 2026-11-08).
+
+## Resultado da LP1 (2026-11-08)
+
+Worker: Claude Code (Opus 5.5), worktree e branch `v3-luta-poc-lp1`, a pedido do Gerente de sprites e luta. Os desvios e as interpretações
+estão em `docs/registro/2026-11.md`, seção "LUTA_POC, LP1".
+
+**O que entrou.** O núcleo da luta da POC voltou do `efb2ded` para `web/app/motor/arena/`, sem DOM, atrás da chave `LUTA_POC_LIGADA`
+(desligada). Nada do jogo importa dele: o `combate_tr`, as telas e os gabaritos de hoje não mudaram (o diff só tem arquivos novos). As
+quatro mudanças da seção 3.2:
+1. **A aritmética da D-7.** Todo `Math.hypot` virou `dist(dx, dy) = Math.sqrt(dx*dx + dy*dy)`; o `Math.sin` virou `seno`, um polinômio
+   fixo (Taylor de grau 19 depois de reduzir por 2π em três partes); o `x ** 2` virou `x * x`; o `Math.pow` do `fatorRitmo` saiu do
+   núcleo (o `fr` vem pronto na tabela). O teste `arena_aritmetica` confere pela fonte que só há `sqrt`, `min`, `max`, `floor`, `ceil`,
+   `round` e `abs`, sem `**`.
+2. **A tabela das 60 formas no git** (`motor/arena/formas.ts`, LP-2), gerada por `tools/gerar_tabela_arena.py` a partir de
+   `Assets/arena_up/dados` (o sha256 de cada JSON está no cabeçalho; `--conferir` refaz e compara). Por forma: o Digimon no atlas, o
+   atributo, o golpe e a habilidade (a animação, o `t`, o projétil com prefab, tipo e velocidade, os impactos e o `fr`) e a duração dos
+   clipes. Os status do Digimon UP não entram (LP-3): a entrada aceita os `Stats` prontos (hp, atk, def, vel, cad, crit, hcd, hpot,
+   esquiva, atordoa). Os desenhos continuam fora do git.
+3. **Só 1 contra 1, os dois pela IA "normal".** Saíram o modo jogador, a entrada, as equipes e as trocas.
+4. **Nenhuma ligação com o pet** (a LP2).
+
+**A fidelidade** (`web/app/scripts/arena_fidelidade.ts` → `web/app/scripts/medicoes/arena_fidelidade_lp1.json`):
+- **A âncora:** a POC do `efb2ded`, com as equipes de 3 e a sequência única, reproduz o gabarito do harness
+  (`arena_gabarito_prototipo.json`) sem nenhuma diferença.
+- **O controle:** o núcleo novo com a aritmética da POC de volta (`hypot` e `sin`) dá a mesma luta que a POC 1 contra 1 em **3 276 de
+  3 276** lutas, em todos os bits (vencedor, relógio, vidas e posições finais). O porte só mudou a aritmética.
+- **A diferença da aritmética:** o núcleo novo contra a POC 1 contra 1, nas tabelas do harness (arenas nas sementes 7 e 42, rodízio dos 5
+  estágios, estágios cruzados, níveis): **o mesmo resultado (vencedor, relógio e vidas) em 3 276 de 3 276 lutas**; as posições finais
+  são iguais em todos os bits em 184. **Todas as tabelas saem iguais** (diferença 0 em todas as células); nenhum alerta pelo critério
+  de ±5 pp ou ±5 % (PROPOSTO, SEM FONTE).
+- **No CI:** `test/gabaritos/arena_poc_1x1.json` (480 lutas da POC 1 contra 1: as 60 formas nos 8 mapas, stats genéricos da POC) e o
+  teste `arena_luta` (o núcleo novo dá o mesmo resultado nas 480).
+- O harness compara no 1 contra 1, porque as equipes de 3 não são do jogo; o gabarito de 3 contra 3 serve de âncora da POC.
+
+**O custo** (`web/app/scripts/medir_arena_lp1.ts` → `web/app/scripts/medicoes/arena_custo_lp1.json`): ~0,6–0,7 ms por luta no Node
+(Node 24, i7-14700KF, um processo; a mediana de 5 repetições das 480 lutas do gabarito), 19,1 s de jogo e 1 192 passos em média, ~0,55 µs
+por passo. Uma vida com 1 000 lutas refaria em ~0,7 s no Node. O valor exato de cada rodada está no JSON. O celular segue SEM FONTE (a
+LP2 mede o replay).
+
+**Os testes novos:** `arena_luta.test.ts` (a tabela, o replay bit a bit nos 8 mapas, os 8 mapas até o fim com a regra de cada um
+aparecendo, os fluxos, a entrada que falha alto, a fidelidade), `arena_sem_dom.test.mjs` (sem DOM, só importa do motor, a chave
+desligada e ninguém importando o núcleo) e `arena_aritmetica.test.mjs` (a aritmética pela fonte, o seno perto do `Math.sin`, o `fr`
+igual ao `fatorRitmo` com o `EQ` e o gerador com as mesmas constantes).
