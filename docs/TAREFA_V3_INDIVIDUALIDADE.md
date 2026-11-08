@@ -3,7 +3,8 @@
 Coordenador: Matheus (sessão direta). Worker da etapa I0: Claude Code, Opus 5.5, worktree `v3-individualidade`. Worktree e branch:
 `v3-individualidade` (as etapas seguintes com sufixo, como `v3-individualidade-i0`). Status: **ABERTA; a proposta na `main` (#676);
 as IN-1 a IN-8 DECIDIDAS em 2026-11-07, pela recomendação; o I0 (a conferência) na `main` (#684); o I1 (a bateria como ferramenta)
-ENTREGUE.** Nenhuma faixa, nenhuma vida de pesquisa.
+na `main` (#695); o plano do I2 APROVADO (#700); o I2a na `main` (#707); o I2b (a run da linha de base, faixa 85101…85505)
+ENTREGUE.**
 
 Categoria: documentacao. Origem: Matheus, 2026-11-07: depois da conversa sobre o connectome e a escala, direcionar a pesquisa para o
 temperamento herdado, o sinal do dono, a memória de episódios e o hábito, com uma medida comum de individualidade.
@@ -128,6 +129,17 @@ O plano (#700) e a faixa 85101…85505 estão APROVADOS. O I2a é o código ante
   - testes: `tests/test_run_v3_individualidade.py`, 8 testes (a trava nos dois sentidos, a recusa de hoje sem o registro, a análise num
     caso sintético, a regra 7.4 e a fumaça de ponta a ponta com as sementes dos testes).
 - **A lista do G2 separado da memória** (`tests/test_memoria_autobio.py`) ganhou o orquestrador, com o motivo.
+
+## Resultado da etapa I2b (2026-11-08, Claude Code, Opus 5.5, branch `v3-individualidade-i2b`)
+
+- **O registro:** a seção 12 do plano entrou antes da primeira vida (`0b3901f`). A suíte do dia deu 5108 passed e 7 skipped.
+- **A run:** única, 480 vidas na faixa 85101…85505, com 4 processos e 2 h 42 min. O resultado está em
+  `docs/RESULTADO_V3_INDIVIDUALIDADE.md`:
+  - o R_pet é baixo (0,02 a 0,28); o R_dia exclui 0 em cinco traços, mas não no susto;
+  - o η²_dono é alto na neofilia, na ousadia e no apego;
+  - as três facetas acompanham o traço no sentido contrário ao esperado;
+  - os seis traços ficam para o I3 pela regra 7.4.
+- **Os desvios:** D-IND-I2b-1 (o incoerente idêntico ao atencioso no `comedouro`) e D-IND-I2b-2 (o custo dobrado).
 
 ## As etapas seguintes
 
