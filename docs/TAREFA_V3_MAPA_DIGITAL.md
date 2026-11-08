@@ -206,3 +206,49 @@ foi o dele (subir e trazer para a esquerda), e as capturas foram refeitas (`D:\T
 Ficam: à noite ela fica escura e quase ilegível (o revisor sugere um leve brilho; não feito, fica para o Matheus), e o fps de verdade (D-G5).
 
 **Com a D4, as etapas da tarefa estão feitas.** Falta o Matheus aprovar o Digital como padrão (D-MD1) e medir o fps (D-G5).
+
+## 13. D5: o cel shading (2026-11-07, Gerente, Claude Code, Opus 5.5, branch `v3-mapa-digital-d5`)
+
+**Por que:**
+- **A recomendação era o chão e o barranco pintados.** Ao vê-la começar, o Matheus disse que o mundo ainda parecia "sem textura" e pediu
+  uma pele mais cel shading.
+- **A etapa cobriu o estilo Digital inteiro** (D-MD-18).
+- **Fica igual:** a grade, o motor e os outros estilos.
+
+**O que entrou:**
+- **O traço de nanquim** (`pos.ts`, `Contorno`; `CONTORNO_DIGITAL` em `constantes.ts`; `Estilo.contorno`):
+  - um contorno de tela, pela profundidade, que pega as árvores, os kits, os lugares, os itens e o terreno;
+  - só o Digital o pede (D-MD-19).
+- **O chão pintado** (`cena.ts`, `pintarTerreno`, `aPinta`):
+  - a grama sem o xadrez, com manchas e folhinhas desenhadas;
+  - o barranco em placas de pedra com juntas e rachaduras (D-MD-20).
+- **Os tufos de capim em moitas** (`tufos`):
+  - a grama alta da maquete, num desenho só;
+  - fora do contorno.
+- **As flores:** menos soltas, mais em manchas de uma cor, cada flor numa haste.
+- **As nuvens de anime** (`nuvensAnime`): o cúmulo com o contorno e a sombra azulada, todas num desenho só.
+
+**Os gates:**
+- **D-G0:** a grade não muda; o E-G0 passa.
+- **D-G1:** a M3 das capturas, em draw calls por quadro:
+
+  | tela | Digital | Ilha | diferença |
+  |---|---|---|---|
+  | 1280, dia | 98 | 92 | +6,5 % |
+  | 1280, noite | 119 | 113 | +5,3 % |
+  | 390, dia | 89 | 85 | +4,7 % |
+  | 390, noite | 111 | 107 | +3,7 % |
+
+  O limite é +10 %. As capturas do Digital estão em `D:\Trab\digilab\capturas_mapa_digital\d5\`, e as da Ilha em `d5\ilha\`.
+- **D-G2:** nenhum arquivo novo; o chão e o céu saem do código.
+- **D-G3:** o pet e o HUD continuam legíveis de dia e de noite, segundo o revisor.
+- **D-G4:** o revisor (um subagente Sonnet que só viu as capturas e a maquete) aprovou com ressalva duas vezes. As correções da primeira
+  leitura entraram (D-MD-21).
+- **O teste:** `web/app/test/mapa_digital_d5.test.ts` (D5-G1 a D5-G4).
+- **A comparação:** `comparacao_d5.png`, a maquete, a D4 e a D5 lado a lado.
+
+**Ficam:**
+- as nuvens, que quase não aparecem na câmera do habitat (D-MD-22);
+- uma granulação fina no capim à noite, no celular;
+- o barranco, que ainda lê um pouco como muro de tijolo;
+- o fps de verdade (D-G5) e o Digital como padrão (D-MD1), com o Matheus.
