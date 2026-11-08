@@ -175,7 +175,9 @@ def test_t_ponto_3_so_o_orquestrador_do_prototipo_monta_o_digibrain():
                                                                              # o exportador do gabarito do modular (LM0, #543) monta o braco REL pelo orquestrador
                                                                              "experiments/exportar_gabarito_digibrain_modular.py",
                                                                              # o gabarito do decodificador de conceitos (DC1) so le o motivo; nenhuma vida
-                                                                             "experiments/exportar_decodificador.py"}
+                                                                             "experiments/exportar_decodificador.py",
+                                                                             # a DC3 (#672, #686): o orquestrador da run unica e o exportador do gabarito da fala_unidades
+                                                                             "experiments/run_v3_conversa_dc3.py", "experiments/exportar_gabarito_fala_unidades.py"}
     assert "lembranca" not in (RAIZ / "digilab" / "mundo.py").read_text(encoding="utf-8")
 
 

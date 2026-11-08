@@ -69,7 +69,11 @@ def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
                                                                              # a AN0 (#575): so le as constantes (CONFIG_DIGIBRAIN_INATOS, RECEPTORES_DIGIBRAIN); nenhuma vida
                                                                              "experiments/medir_v3_acoes_novas_hoje.py",
                                                                              # a DC1 (2026-11-06): o gabarito do decodificador de conceitos le o motivo; nenhuma vida
-                                                                             "experiments/exportar_decodificador.py"}
+                                                                             "experiments/exportar_decodificador.py",
+                                                                             # a DC3 (#672, #679, #686): o orquestrador da run unica monta o LAB e o LAB+F; a calibracao
+                                                                             # do ganho_conteudo so le as constantes; o exportador do gabarito da fala_unidades para a web
+                                                                             "experiments/run_v3_conversa_dc3.py", "experiments/calibrar_ganho_conteudo_dc3.py",
+                                                                             "experiments/exportar_gabarito_fala_unidades.py"}
 
 
 def test_o_digibrain_so_existe_com_a_chave_ligada_e_e_a_v13():
