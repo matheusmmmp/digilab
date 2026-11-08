@@ -20,6 +20,9 @@ REMASTER = RAIZ.parent / "remaster"
 EXPORT_UP = REMASTER / "export"
 EXPORT_ACOES = REMASTER / "acoes" / "export"
 MODOS = {"par", "prova1", "desenhar"}
+# os clipes que podem estar na caixa das acoes: os CLIPES_ACOES e os CLIPES_REACOES de web/app/src/atlas.ts (o Comer_objeto mora no _objeto)
+TAGS_ACOES_CONHECIDAS = {"Comer", "Feliz", "Sacudir", "Chamar", "Emburrar", "Dormir",
+                         "Triste", "Cansado", "Carinho", "Medo", "Envergonhado", "Recusa", "Doente"}
 
 
 def ancoras() -> dict:
@@ -151,8 +154,13 @@ def test_caixa_ms_e_objeto(nomes):
         caixa = (up["frames"][0]["sourceSize"]["w"], up["frames"][0]["sourceSize"]["h"])
         acao = json.loads((EXPORT_ACOES / f"{n}.json").read_text())
         obj = json.loads((EXPORT_ACOES / f"{n}_objeto.json").read_text())
+        # a caixa das acoes cresceu depois da M1 (os lotes de Feliz a Dormir e as reacoes de rosto entram no mesmo json); o Comer
+        # continua o primeiro, e o _objeto continua so com o Comer
+        tags_acao = [t["name"] for t in acao["meta"]["frameTags"]]
+        assert tags_acao[0] == "Comer" and len(set(tags_acao)) == len(tags_acao), n
+        assert set(tags_acao) <= TAGS_ACOES_CONHECIDAS, (n, sorted(set(tags_acao) - TAGS_ACOES_CONHECIDAS))
+        assert [t["name"] for t in obj["meta"]["frameTags"]] == ["Comer"], n
         for j in (acao, obj):
-            assert [t["name"] for t in j["meta"]["frameTags"]] == ["Comer"], n
             for f in j["frames"]:
                 assert not f["trimmed"] and not f["rotated"], n
                 assert (f["sourceSize"]["w"], f["sourceSize"]["h"]) == caixa, n
