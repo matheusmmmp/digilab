@@ -22,7 +22,8 @@ export const S: Record<string, string[]> = {
   nota: ["...kkk.", "...k.k.", "...k...", "...k...", ".kkk...", "kkkk...", ".kk...."],
   carne: ["....kk.", "...kwwk", ".kkkkk.", "kddddk.", "kddddk.", ".kkkk.."],
   brilho: ["...k...", "...y...", ".k.y.k.", "kyyyyyk", ".k.y.k.", "...y...", "...k..."],
-  gota: ["...k...", "..kck..", ".kccck.", ".kccck.", "..kkk.."],
+  /* a gota em lagrima: ponta em cima, bojo embaixo, com o brilho (antes era um losango de 5 linhas) */
+  gota: ["...k...", "..kck..", "..kck..", ".kccck.", "kcwccck", "kcwccck", ".kccck.", "..kkk.."],
   /* as reacoes de rosto (docs/TAREFA_V3_SPRITES_REACOES.md, R-rosto-jogo; arte propria, rascunhos de remaster/geracao/reacoes_crianca.html) */
   lagrima: ["...k...", "..kck..", ".kcccck", ".kcwck.", "kccccck", "kccccck", ".kcccck", "..kkk.."],
   reticencias: ["kk.kk.kk", "kw.kw.kw", "kk.kk.kk"],
@@ -50,6 +51,15 @@ export function desenharGrade(ctx: CanvasRenderingContext2D, grade: string[], x0
     if (opts.olhosFechados && ch === "w") ch = "b";
     const px = opts.espelho ? x0 + (larg - 1 - x) : x0 + x;
     ctx.fillStyle = pal[ch] || "#FF00FF"; ctx.fillRect(px, y0 + y, 1, 1);
+  }
+}
+/** o contorno branco de adesivo em volta do desenho da grade (1 unidade da grade em cada direcao, inclusive na diagonal), como o
+    contorno do sprite do pet; substitui o retangulo branco que deixava os emotes da grade numa caixa */
+export function contornoGrade(ctx: CanvasRenderingContext2D, grade: string[], x0: number, y0: number, cor = "#FFFFFF"): void {
+  ctx.fillStyle = cor;
+  for (let y = 0; y < grade.length; y++) for (let x = 0; x < grade[y].length; x++) {
+    if (grade[y][x] === ".") continue;
+    ctx.fillRect(x0 + x - 1, y0 + y - 1, 3, 3);
   }
 }
 /** grade como imagem (data URL) em escala inteira; cor fora da tabela falha alto */
