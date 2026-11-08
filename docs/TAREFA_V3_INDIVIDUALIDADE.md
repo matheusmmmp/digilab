@@ -109,6 +109,26 @@ recomendação.
 - O longe passa a 16 células do pet, fora da visão e dentro do cheiro.
 - A faixa foi pedida ao Gerente. Nenhuma vida roda antes do APROVADO, da faixa, do I2a e do registro.
 
+## Resultado da etapa I2a (2026-11-07, Claude Code, Opus 5.5, branch `v3-individualidade-i2a`)
+
+O plano (#700) e a faixa 85101…85505 estão APROVADOS. O I2a é o código antes da run. Nenhuma vida da faixa rodou.
+- **A bateria** (`experiments/sondas_individualidade.py`), num commit próprio:
+  - o longe passou a 16 células do pet (`DIST_LONGE`, IP-3), e a janela grava a `dist0`;
+  - o gabarito do I1 passava na `main` antes da troca, e o novo foi regravado no mesmo commit, com os dois sha256 na mensagem;
+  - na fumaça (semente de teste 101), o `comer` do longe sobe de 0 para 5 em 42 janelas.
+- **As métricas** (`digilab/metrics.py`, seção 4.6 do plano), com `tests/test_metrics_individualidade.py` (10 testes feitos à mão):
+  - `tracos_individualidade` (os seis traços de uma réplica);
+  - `icc1_grupos` e `icc1_estatisticas` (o ICC(1) com grupos desiguais, o n₀ e o truncamento), com `estatisticas_grupo`;
+  - `eta2_grupos`, `spearman` e `reta_mmq`.
+- **O orquestrador** `experiments/run_v3_individualidade.py`, com a config em `experiments/configs/v3_individualidade/individualidade.json`:
+  - toda vida passa pelo G1, o cenário, o mecanismo, a memória do braço e o G2 da bateria;
+  - a análise da seção 4 do plano tem o bootstrap sobre os pets (e sobre as sementes no η²), e a regra 7.4 roda no REL;
+  - a trava: o cabeçalho APROVADO, a seção `## 12. O registro da run` (que só entra no I2b), a faixa, as bases, o K e os dias, no máximo
+    4 processos e nada por cima de uma pasta;
+  - testes: `tests/test_run_v3_individualidade.py`, 8 testes (a trava nos dois sentidos, a recusa de hoje sem o registro, a análise num
+    caso sintético, a regra 7.4 e a fumaça de ponta a ponta com as sementes dos testes).
+- **A lista do G2 separado da memória** (`tests/test_memoria_autobio.py`) ganhou o orquestrador, com o motivo.
+
 ## As etapas seguintes
 
 | etapa | o quê | entrega |
