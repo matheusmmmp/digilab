@@ -204,3 +204,34 @@ Ficam como estão:
 
 **Fica para depois:** o portal no jogo é um ciano mais apagado que na vitrine. A força da luz é `LUGAR_LUZ.forca`, em `constantes.ts`,
 fora deste trabalho. A grade do esboço é pintada e parada, não gira.
+
+## 15. O retrabalho da barraca (2026-11-08, worker, Claude Code, Opus 5.5, branch `v3-objeto-barraca`)
+
+**O pedido:** refazer a barraca o mais perto possível do esboço 1 do retrabalho (`docs/objetos3d/barraca/esbocos/esboco_1_domo_costuras.png`,
+o domo turquesa com costuras e remendos, a entrada enrolada, as cordas laranja, a lona, a antena e o banquinho com livros), com a regra
+nova da textura (`docs/objetos3d/REFERENCIAS.md`, seção 5: não achatar, normais suavizadas) e a entrada lendo como vão de verdade.
+
+**O que entrou:**
+- `web/app/public/lugares/barraca/`: o glTF novo (1 847 triângulos, 1 nó, 1 material só de cor), a textura pintada em 512 px com 256
+  cores e o `License.txt`; 223 KB no total. A marca de IA e as tarefas da Meshy no `asset.extras`.
+- `LUGARES_MODELOS.barraca` em `modelos.ts`: altura 3,6 e sombra 2,2 (PROPOSTO; D-LG-OB-4).
+- `web/app/test/ilha_lugares.test.ts`: a lista `TEXTURA_PINTADA` tira a barraca do LG-G5, e o LG-G5b confere o detalhe guardado e o chão
+  de dentro escuro (D-LG-OB-1).
+- `docs/objetos3d/barraca/`: a multivista e a malha da Meshy (`vistas/`, `malha/`), o `saldo.json` e os scripts, na ordem do
+  `publicar_barraca.py`: `faces.py` e `interior.py` (Blender, as faces e as de dentro), `textura_barraca.py` (o escuro de dentro, as cordas
+  laranja e o chão), `acabar_barraca.py` (Blender: os vértices fundidos, as normais a 60°, o pivô na base, a frente em +z, o chão e o forro)
+  e `publicar_barraca.py` (a redução da textura e a marca de IA). O validador em `docs/lugares3d/barraca/validacao.json` (0 erros, 0 avisos).
+
+**Os números e os achados:** D-LG-OB-1 a D-LG-OB-6 no `docs/registro/2026-11.md`. O principal: a lona nova, mais funda, entra no degrau do
+barranco atrás do ponto da barraca; o forro de dentro esconde as pedras, e a altura desceu de 4 para 3,6.
+
+**A prancha e as capturas** (fora do git): `D:\Trab\digilab\capturas_objetos3d\barraca\` — `prancha_barraca.png` (o esboço, o antes e o
+depois na vitrine, o antes e o depois no jogo, nos mapas Ilha e Digital), `vitrine_antes_*.png`, `vitrine_depois_*.png`,
+`visao_ilha.png`, `visao_digital.png`.
+
+**O revisor:** APROVA COM RESSALVA (a porta lê como abertura escura nos dois mapas; as cordas só leem laranja no mapa Ilha, por causa do
+traço). O que fica sem conserto está no D-LG-OB-6.
+
+**A Meshy:** 36 créditos (multivista 6 + malha 30), no teto da sessão.
+
+**Ao mesclar com o portão (seção 14, Gerente, 2026-11-08):** os dois trouxeram um LG-G5b. Em `web/app/test/ilha_lugares.test.ts` fica o do portão (512 a 1024 px, quadrado, mais de 64 cores, a máscara de luz no mesmo UV) para os dois, com a barraca em `TEXTURA_PINTADA`, e o chão escuro da barraca vira um teste próprio no mesmo bloco.
