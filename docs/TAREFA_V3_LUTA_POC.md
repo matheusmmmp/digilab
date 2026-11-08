@@ -107,6 +107,27 @@ A POC tem 8 mapas (`web/app/arena/cenas.ts` em `efb2ded`), cada um com uma regra
 Cada lugar de luta do jogo usa um desses mapas (a LP-4). Os números são os da POC, PROPOSTOS, SEM FONTE de medição além do
 `arena_equilibrio.md`.
 
+### 3.3a Os efeitos visuais que ficam
+
+O Matheus, em 2026-11-08: "aquelas questões visuais que tem em batalha agora, quero que mantenham: quando dá um hit, ele brilha, dá uma
+numeração, quando ele solta uma investida e é empurrado para trás … ainda quero que permaneça todas as questões que foram implementadas e
+que podem ser reaproveitadas em tempo real". Os efeitos da LUTA_EFEITOS (E1 a E5) são só vista e vão para o palco 2D na LP3, cada um
+ligado ao evento equivalente da simulação da POC:
+
+| efeito de hoje | etapa | na luta nova, disparado por |
+|---|---|---|
+| a pausa curta no acerto, o clarão branco no alvo, a tremida do palco, a faísca no ponto do golpe | E1 | cada acerto da POC (corpo a corpo ou projétil) |
+| o empurrão visual do alvo e o recuo de quem leva a investida | E1 e a v18 | o empurrão da própria POC (`ACAO.empurrao`, o dobro no Ringue), que já move o lutador na simulação; o desenho do recuo da v18 é portado para ele |
+| os números de dano em fonte de pixel; o golpe forte maior e amarelo | E1 | o dano de cada acerto; o maior e amarelo passa a ser o crítico e a habilidade |
+| a cor, a forma, o rastro e o brilho do projétil por elemento | E2 | os projéteis da POC em voo, por cima do desenho do jogo quando há prefab, e sozinho quando não há (LP-8) |
+| a elipse que se fecha antes do golpe forte, a onda de choque, a poeira nos pés, a marca no piso | E3 | a preparação da habilidade (do início do ataque até o instante do golpe), o acerto da habilidade e a corrida |
+| o escudo, a imagem fantasma, a aura, o clarão do contra-golpe, o brilho da pele dura | E4 | a imagem fantasma no desvio (o dash da POC); a aura com a habilidade pronta e na runa do Castelo; o escudo, o contra-golpe e a pele dura não têm ação equivalente na POC e ficam fora, a menos que voltem como regra |
+| a barra de vida com o dano atrasado, a câmera lenta e o "K.O." no nocaute, a câmera que acompanha os dois | E5 | o fim da luta da POC; a câmera passa a acompanhar os dois no chão 2D |
+
+O código vem do `palcoTR/` (`efeitosTR.ts`, `elementosTR.ts`, `projeteisTR.ts`, `chaoTR.ts`, `desenhoTR.ts`): o que é desenho se
+reaproveita, e só a leitura do estado muda (do `EstadoTR` para o estado da POC). Os testes `luta_efeitos_e1…e5` são portados junto, no
+lugar de apagados.
+
 ### 3.4 O inventário: onde o combate por turnos vive
 
 O levantamento foi feito em 2026-11-08 na `origin/main` (`e654891`), por nome de símbolo, porque tudo fora do motor importa pelo
@@ -134,8 +155,8 @@ O levantamento foi feito em 2026-11-08 na `origin/main` (`e654891`), por nome de
 | `motor/corpo.ts`, `motor_corpo.ts`, `digibrain/adapt.ts`, `digibrain/mem.ts` | a dor da luta (`ConfigLutaCorpo`, `aplicarResumoLuta`), o `receber_luta` e os episódios da luta (PONTE_LUTA) | **adaptar** na LP2: o resumo passa a sair do resultado novo (o dano recebido, o fim, a duração) |
 
 **As telas (web, ~40 arquivos).**
-- `src/telas/lutar/palcoTR/` (10 arquivos, o palco 1D com os efeitos E1–E5): **trocar** na LP3 pelo palco 2D; o que couber dos efeitos é
-  portado.
+- `src/telas/lutar/palcoTR/` (10 arquivos, o palco 1D com os efeitos E1–E5): **portar** na LP3 para o palco 2D; os efeitos ficam
+  (seção 3.3a).
 - `src/luta.ts` (551), o motor das telas de luta (`lutarAnimado`, o replay pelo `res.tr.entrada`): **adaptar**.
 - `src/telas/lutar/` (`TelaLuta`, `TelaArena`, `TelaCampanha`, `TelaMedalhas`, `ModalResultado`): **adaptar**. `EditorRegras`,
   `PainelAprendizado` e `src/aprendizadoLuta.ts`: **apagar** (LP-3). `TelaFronteira` e `FabricaSalao`: **adaptar** na LP2b (LP-5).
@@ -146,9 +167,9 @@ O levantamento foi feito em 2026-11-08 na `origin/main` (`e654891`), por nome de
   `marcadoresLugar`, `vista`, `CadeadosDaIlha`, `ObjetosDaIlha`): **adaptar** o que lê as regras ou a duração da luta.
 
 **Os testes e os scripts (web).**
-- Unidade (~45): `combate_tr*`, `luta_efeitos_e1…e5`, `luta_empurrao*`, `luta_tela`, `luta_tr_hoje`, `limite_desafiado`, `listas_v14`,
+- Unidade (~45): `combate_tr*`, `luta_empurrao*` (a regra), `luta_tela`, `luta_tr_hoje`, `limite_desafiado`, `listas_v14`,
   `pet_v14`, `aprendizado_luta`, `vigia_candidatas`, `progressao_v9`, `liga`, `fabrica_salao`, `fronteira_itens_v9`, `instalacoes`,
-  `itens`: **apagar** com o que testam. `arenas`, `lab_cenarios`, `confianca`, `lobos_v11`, `evolucao_canonica`, `pet_lab`, os
+  `itens`: **apagar** com o que testam. Os `luta_efeitos_e1…e5`: **portar** na LP3. `arenas`, `lab_cenarios`, `confianca`, `lobos_v11`, `evolucao_canonica`, `pet_lab`, os
   `ponte_luta_pe0/pe3/pe4` e o `digibrain_modular_vida`: **adaptar** e **regravar o gabarito na versão nova**; os gabaritos das versões
   antigas saem com elas (LP-6).
 - A paridade com o Python: o `constantes.test.mjs` deixa de comparar `CV` e `CV21` (LP-7); os gabaritos `combate_v21d_python.json` e
@@ -201,7 +222,7 @@ medições de engenharia, com os testes de 101…505. O equilíbrio fica para o 
 | **LP1: o núcleo** | `web/app/motor/arena/`, de volta do `efb2ded`, sem DOM, com a aritmética da D-7 e a tabela de números da LP-2 (o script que a gera fica em `Assets/` ou `tools/`); o teste de fidelidade contra o gabarito do harness, o teste pela fonte da aritmética, o replay bit a bit. Atrás de chave desligada: o jogo não muda | nada |
 | **LP2: o pet luta no núcleo novo** | uma `VERSAO_PET` nova; a entrada da luta no log; os stats do pet na luta (LP-3); a Arena e a Campanha lutam no núcleo novo; a ponte com o DigiBrain (a dor e o episódio da luta, PONTE_LUTA) lê o resultado novo; o aviso dos pets antigos (LP-6); a medida do custo do replay | o caminho do `combate_tr` para a versão nova; a Liga, a Torre, a Fábrica e o Salão ficam fechados até a LP2b |
 | **LP2b: o torneio no núcleo novo** | a Liga, a Torre (com o Palácio junto), a Fábrica e o Salão, com as regras de sequência deles, sobre o núcleo novo; os chips de stat no `perfilDe` | as cartas e os chips de regra |
-| **LP3: a tela** | o palco novo em 2D, a partir do desenho do #446/#448 (`web/app/src/telas/lutar/arena_tr/desenho.ts` em `efb2ded`): os 8 mapas, os projéteis com o desenho do jogo (os prefabs de `Assets/arena_up/efeitos`), o projétil do Gabumon e dos outros sem projétil (LP-8), o que couber da LUTA_EFEITOS (o impacto da E1, o nocaute e a câmera da E5); capturas no desktop e no celular, para aprovação | o `palcoTR/` (o palco 1D) |
+| **LP3: a tela** | o palco novo em 2D, a partir do desenho do #446/#448 (`web/app/src/telas/lutar/arena_tr/desenho.ts` em `efb2ded`): os 8 mapas, os projéteis com o desenho do jogo (os prefabs de `Assets/arena_up/efeitos`), o projétil do Gabumon e dos outros sem projétil (LP-8), todos os efeitos da LUTA_EFEITOS que têm evento equivalente (seção 3.3a), com os testes deles; capturas no desktop e no celular, para aprovação | o palco 1D do `palcoTR/` (os efeitos e o desenho são portados, não apagados) |
 | **LP4: a limpeza** | os documentos de cada coisa que saiu marcados como SUBSTITUÍDOS, com o link para esta tarefa | o `combate_tr/`, as regras por turnos e o que só servia a elas (o inventário da seção 3.4), os testes e os scripts de equilíbrio delas |
 | **LP5: o equilíbrio** | uma rodada só, no fim, com plano de análise e faixas novas (a regra "equilíbrio só no fim") | as metas R2 e R3 |
 
@@ -239,7 +260,7 @@ PROPOSTOS até a LP5.
 | **LP-7** | O combate do Python | **Fica congelado, sem paridade com a luta nova**; os testes de paridade da luta saem da web | Apagar o Python quebra a reprodução dos resultados da v1 e da V2 que dependem dele; manter a paridade obrigaria a portar a POC para o Python, sem uso na pesquisa de hoje |
 | **LP-8** | Os golpes de longe sem projétil nos dados do UP (o Gabumon e outros) | **Uma lista curta, no git, dos golpes que são de longe na série** (a rajada do Gabumon é o primeiro), com um projétil nosso: o próprio efeito de acerto do Digimon voando como projétil, e um procedural (como a bola de fogo do Agumon no mapa AC) quando ele não ler. A regra da luta passa a ser a de um golpe de longe | Sem a lista, o Gabumon continua corpo a corpo, que é o que o Matheus apontou; inventar projétil para todos os 95 sem projétil muda a luta de quem é corpo a corpo de verdade |
 | **LP-9** | O equilíbrio | **Só na LP5**, uma rodada, com faixas novas; a R3 (#720) fecha sem merge, e as metas R2 e R3 deixam de valer | Equilibrar antes de o Matheus jogar a luta nova repete o que aconteceu com a R2 e a R3: calibrar um núcleo que depois sai |
-| **LP-10** | As decisões antigas que caem | **Caem:** a D-1 (o tempo do DigiLab), a D-3 (a `arena/` sai), a D-5 (T = 2 s), a D-8 (o recuo a 80 %), as DE e DR2 do equilíbrio, as D-R3-1 a D-R3-9, a v18 do empurrão (a POC tem o empurrão dela) e a parte da LUTA_EFEITOS presa ao palco 1D. **Ficam:** a D-2 (o replay refaz sempre), a D-7 (a aritmética), a D-9 (as versões antigas não abrem) e o "nenhum botão durante a luta" | Deixar uma decisão antiga valendo sem dizer faz um worker futuro reconstruir o turno |
+| **LP-10** | As decisões antigas que caem | **Caem:** a D-1 (o tempo do DigiLab), a D-3 (a `arena/` sai), a D-5 (T = 2 s), a D-8 (o recuo a 80 %), as DE e DR2 do equilíbrio, as D-R3-1 a D-R3-9, a regra do empurrão da v18 no motor (a POC tem o empurrão dela; o desenho do recuo fica) e, da E4, o escudo, o contra-golpe e a pele dura, que não têm ação na POC. **Ficam:** os efeitos da LUTA_EFEITOS que têm evento equivalente (seção 3.3a), a D-2 (o replay refaz sempre), a D-7 (a aritmética), a D-9 (as versões antigas não abrem) e o "nenhum botão durante a luta" | Deixar uma decisão antiga valendo sem dizer faz um worker futuro reconstruir o turno |
 
 ## 9. Decisões tomadas
 
