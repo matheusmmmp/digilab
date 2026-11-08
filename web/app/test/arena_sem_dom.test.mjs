@@ -38,7 +38,7 @@ test("o nucleo so importa de motor/arena/ e da RNG do motor", () => {
   assert.deepEqual(fora, []);
 });
 
-test("chave desligada: LUTA_POC_LIGADA e false; no motor, so o Motor (a luta dos pets v21), o luta_poc e o index leem o nucleo (LP2); nenhuma tela o importa direto", async () => {
+test("chave desligada: LUTA_POC_LIGADA e false; no motor, so o Motor (a luta dos pets v21), a Fabrica (LP2b), o luta_poc e o index leem o nucleo; nenhuma tela o importa direto", async () => {
   const A = await import("../motor/arena/index.ts");
   assert.equal(A.LUTA_POC_LIGADA, false);
   const APP = fileURLToPath(new URL("../", import.meta.url));
@@ -51,7 +51,7 @@ test("chave desligada: LUTA_POC_LIGADA e false; no motor, so o Motor (a luta dos
     }
   };
   for (const d of ["motor", "src"]) varrer(join(APP, d));
-  assert.deepEqual(quem.map(p => p.split("\\").join("/")).sort(), ["motor/index.ts", "motor/luta_poc.ts", "motor/motor.ts"]);
+  assert.deepEqual(quem.map(p => p.split("\\").join("/")).sort(), ["motor/fabrica.ts", "motor/index.ts", "motor/luta_poc.ts", "motor/motor.ts"]);
 });
 
 test("o nucleo carrega e luta num contexto sem nada de navegador", async () => {

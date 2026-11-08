@@ -4,7 +4,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
 import {
-  DIGIMON_DA_FORMA, FECHADO_LP2B, FORMAS_ARENA, IDS_CENA, LUGARES_V6, LUTA_POC_LIGADA, MAPA_DO_LUGAR, MAPA_STATS, Motor, NPC, STATS,
+  DIGIMON_DA_FORMA, PALACIO_NA_TORRE, FORMAS_ARENA, IDS_CENA, LUGARES_V6, LUTA_POC_LIGADA, MAPA_DO_LUGAR, MAPA_STATS, Motor, NPC, STATS,
   VERSAO_PET, VERSAO_V21, VERSOES_PET, VERSOES_PET_POC, chaveSprite, formaDaChave, hashSemente, rivaisArena, statsDaLuta, statsDoPet, statsNpc,
   statsRivalArena, type EventoRegistro, type Stats,
 } from "../motor/index.ts";
@@ -101,14 +101,15 @@ describe("a luta do pet v21", () => {
     expect(() => m.lutarPoc(m.lugares[1].rivais[0], 1, "coliseu")).toThrow(/bloqueado/);
     expect(() => m.lutarPoc("agressivo", 1, "campo")).toThrow(/rival desconhecido/);
   });
-  test("sai da v21: o combate de antes, os gambits, as cartas e os chips de regra; a Liga, a Torre, a Fabrica e o Salao fecham", () => {
+  test("sai da v21: o combate de antes, os gambits, as cartas e os chips de regra; os torneios pedem as entradas de sempre (LP2b) e o Palacio foi para a Torre", () => {
     const m = rookie();
     expect(m.gp).toBeNull();
     expect(() => m.lutar("agressivo", 1)).toThrow(/lutarPoc/);
     expect(() => m.intervirGambit("travar", "x")).toThrow(/regras de combate/);
-    expect(m.porqueNaoLiga()).toBe(FECHADO_LP2B);
-    expect(m.porqueNaoSalao()).toBe(FECHADO_LP2B);
-    expect(m.porqueNaoInstalacao("torre_batalha")).toContain(FECHADO_LP2B);
+    expect(m.porqueNaoLiga()).toMatch(/6 medalhas/);
+    expect(m.porqueNaoSalao()).toMatch(/título da Liga/);
+    expect(m.porqueNaoInstalacao("torre_batalha")).toMatch(/título da Liga/);
+    expect(m.porqueNaoInstalacao("palacio")).toBe(PALACIO_NA_TORRE);
     m.liberar(1);   /* a primeira medalha abre a primeira vaga de chip */
     expect(m.porqueNaoEquipa("chip_recuo")).toMatch(/chip de regra/);
     expect(() => m.equipar("chip_recuo")).toThrow(/chip de regra/);
