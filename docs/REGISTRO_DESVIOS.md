@@ -570,3 +570,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-08 — A câmera de desenvolvimento (Gerente das frentes ITENS_3D, MUNDO_ENFEITES, MAPA_DIGITAL e LUGARES_3D, Claude Code, Opus 5.5, branch `v3-camera-dev`)](registro/2026-11.md)
 - [2026-11-08 — LUTA_EQUILIBRIO_R3, as decisões D-R3-1 a D-R3-9 DECIDIDAS (worker, Claude Code, Opus 5.5, branch `v3-luta-equilibrio-r3`)](registro/2026-11.md)
 - [2026-11-08 — INDIVIDUALIDADE, I2b: a run da linha de base (worker, Claude Code, Opus 5.5, branch `v3-individualidade-i2b`)](registro/2026-11.md)
+- [2026-11-08 — PET_VIVO, etapa 0b/0c: a run da auditoria caiu por falta de memória (worker, Claude Code, Opus 5.5, branch `v3-pet-vivo-run`)](registro/2026-11.md)
