@@ -1,18 +1,20 @@
 DigiLab: o portao da arena, o lugar do Lutar (portao.gltf, portao.bin, portao_cor.png, portao_luz.png)
 
-Procedencia: item gerado por IA, com o gerador Meshy (meshy.ai), no plano Pro pago, na conta do Matheus, em 2026-11-06 e 2026-11-07.
+Procedencia: item gerado por IA, com o gerador Meshy (meshy.ai), no plano Pro pago, na conta do Matheus, em 2026-11-06 e 2026-11-07 (o modelo de hoje: o retrabalho de 2026-11-07).
 Pelos termos de uso da Meshy (atualizados em 2026-09-19, secao 3.2), a saida de um plano pago e do cliente.
 Os termos proibem tirar a marca de IA (secao 2.4): a marca fica no asset.extras do portao.gltf e neste arquivo.
 
 Como foi feito (docs/TAREFA_V3_LUGARES_3D.md e docs/lugares3d/portao/ no repositorio):
-- concept: Meshy Image to Image (nano-banana-2), com duas referencias de estilo geradas pela propria Meshy para o DigiLab (a maquete B do
-  mapa digital e o concept da geladeira), sem o pet e sem imagem de terceiros; sem texto, sem marca, sem simbolo nos estandartes; o concept
-  1 (pedra) escolhido pelo Matheus;
-- vistas: Meshy Image to Image com multivista, a partir do concept;
+- esboco: Meshy Image to Image (nano-banana-2), com a referencia de estilo gerada pela propria Meshy para o DigiLab (a maquete B do mapa
+  digital), sem o pet e sem imagem de terceiros; sem texto, sem marca, sem simbolo nos estandartes; o esboco 1 (pedra, blocos) de
+  docs/objetos3d/portao/esbocos/;
+- vistas: Meshy Image to Image com multivista, a partir do esboco;
 - malha: Meshy Multi-Image to 3D (remesh em triangulos, so a cor);
-- conserto no Blender 4.5 LTS e em Python, por script: a malha da Meshy fica como veio; a cor e chapada em sete cores do concept; a
-  mascara do portal (portao_luz.png) marca as cores do portal, para a vista acender o portal com o lugar aberto.
-As tarefas da Meshy (concept, vistas, malha) estao no asset.extras do portao.gltf.
+- acabamento no Blender 4.5 LTS e em Python, por script (docs/objetos3d/portao/): a malha 1,5 vez mais funda, os vertices repetidos
+  soldados, a folha do portal aplainada e as normais ponderadas; a textura pintada da Meshy fica (so as manchas brancas tiradas, 512 px
+  em paleta de 240 cores); o portal ganha uma ilha so de UV, pintada com o portal da vista de frente da multivista da Meshy; a mascara
+  do portal (portao_luz.png) marca essa ilha, para a vista acender o portal com o lugar aberto.
+As tarefas da Meshy (esboco, vistas, malha) estao no asset.extras do portao.gltf.
 
 Uso: no jogo DigiLab, publicado. Credito: "Portao da arena gerado com a Meshy (meshy.ai)".
-Aprovacao: o Matheus escolheu o concept em 2026-11-07; a aprovacao da previa fica no PR do portao.
+Aprovacao: o retrabalho foi pedido pelo Matheus em 2026-11-07; a aprovacao do modelo fica no PR do retrabalho do portao.

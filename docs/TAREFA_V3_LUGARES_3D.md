@@ -158,3 +158,49 @@ porque o portão e a barraca já estão abertos (D-LG-18). O nível do Tamer fic
 **Fica para depois:** o nível do Tamer, que traz o cadeado e o "Nv" no lugar trancado, o toque no lugar trancado e o brilho de quando o
 lugar abre.
 
+
+## 14. O portão retrabalhado com a textura pintada (2026-11-07, worker, Claude Code, Opus 5.5, branch `v3-objeto-portao`)
+
+**Por que aqui:** o Matheus achou os objetos 3D feios e "sem textura" e pediu que cada um fosse refeito numa sessão própria, o mais perto
+possível do esboço escolhido (`docs/objetos3d/REFERENCIAS.md`, seção 5). O portão segue o esboço 1, o arco de blocos de pedra
+(`docs/objetos3d/portao/esbocos/esboco_1_pedra_blocos.png`).
+
+**O que entrou:**
+- **A malha nova pela Meshy:** a multivista a partir da tarefa do esboço (6 créditos) e a malha (30), uma tentativa só, dentro do teto de 36. Os
+  arquivos e os JSON das tarefas estão em `docs/objetos3d/portao/vistas/` e `malha/`, e o gasto em `docs/objetos3d/portao/saldo.json`.
+- **O acabamento** (`docs/objetos3d/portao/acabar_portao.py`, no Blender 4.5 pela linha de comando):
+  - a malha 1,5 vez mais funda, como o D-LG-4, e os vértices repetidos soldados;
+  - a folha do portal aplainada, com a normal do plano (D-OBJ-PO-2);
+  - a ilha única de UV do portal (D-OBJ-PO-3);
+  - as normais ponderadas, com as quinas acima de 60° vivas;
+  - 2 012 triângulos (teto 2 414), a frente em +z e a base no chão.
+- **A textura** (`textura_portao.py`): a pintada da Meshy fica, sem achatar. Só as manchas brancas saem, e entram os retoques do revisor:
+  o dourado e o vermelho dos estandartes mais vivos e um realce leve das juntas. O portal vem da vista de frente da multivista, com a grade
+  e a espiral. A textura vai a 512 px numa paleta de 240 cores com pontilhado, para caber nos 300 KB (D-OBJ-PO-1). A máscara do portal
+  (`portao_luz.png`, 512 px) sai dos triângulos de UV do portal, então fica alinhada com os UVs novos por construção.
+- **A publicação** (`publicar_portao.py`): a marca de IA no `asset.extras`, os arquivos em `web/app/public/lugares/portao/` (268 449 bytes)
+  e o glTF-Validator (`validar_gltf.cjs`; 0 erros, 0 avisos em `docs/lugares3d/portao/validacao.json`). A altura (5 células), a grade e
+  as posições não mudam.
+- **Os testes:** o LG-G5 (a paleta da Ilha) deixa de valer para o portão e continua valendo para os outros lugares. O LG-G5b, novo, confere
+  a textura pintada: a cor é um PNG quadrado de 512 a 1 024 px com mais de 64 cores, e a máscara de luz cai no ciano da textura. Os dois
+  estão em `web/app/test/ilha_lugares.test.ts`, lista `TEXTURA_PINTADA` (D-OBJ-PO-1). Os gates G1 a G8 de `web/app/test/lugares3d.test.ts`
+  ficam como estavam e passam.
+
+**As capturas** ficam fora do git, em `D:\Trab\digilab\capturas_objetos3d\portao\`:
+- a prancha `prancha_portao.png`: o esboço, o antes e o depois na vitrine, e o antes e o depois no jogo nos mapas Digital e Ilha;
+- as imagens soltas `vitrine_*`, `antes_*` e `depois_*` (`*_cena` é a cena sem o menu; `*_lugar` é a viagem ao portão, com o Lutar aberto).
+
+Para o estilo Digital, a vitrine e o jogo rodaram numa worktree só de captura, montada do branch do #692 (`v3-mapa-digital-d5`).
+
+**O revisor** (um subagente que não fez o trabalho) deu três pareceres:
+1. **APROVA COM RESSALVA:** o portal manchado e apagado, o dourado sumindo e as juntas fracas.
+2. **APROVA COM RESSALVA:** o portal ficou liso e o ciano vazou para as ilhas vizinhas, os dois efeitos do primeiro conserto.
+3. **APROVA,** depois da ilha única do portal.
+
+Ficam como estão:
+- o estandarte esquerdo meio torto, a proporção mais atarracada que no esboço e a barra que, de lado, parece uma lança. São da malha e
+  pediriam outra geração;
+- uma névoa clara na emenda esquerda do portal, que quase não aparece no jogo.
+
+**Fica para depois:** o portal no jogo é um ciano mais apagado que na vitrine. A força da luz é `LUGAR_LUZ.forca`, em `constantes.ts`,
+fora deste trabalho. A grade do esboço é pintada e parada, não gira.
