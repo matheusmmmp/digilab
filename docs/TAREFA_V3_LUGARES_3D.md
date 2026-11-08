@@ -228,10 +228,11 @@ enrolados em corda e o barquinho de pesca azul e amarelo com a cabine (`docs/obj
   64 cores), pela lista `TEXTURA_PINTADA` de `web/app/test/ilha_lugares.test.ts`, a mesma do portão (#713). Os gates G1 a G8 de
   `web/app/test/lugares3d.test.ts` ficam como estavam e passam.
 
-**As capturas** ficam fora do git, em `D:\Trab\digilab\capturas_objetos3d\cais\`: a prancha `prancha_cais_r2.png` (o esboço, as prévias do
-Blender, o antes e o depois no jogo nos mapas Digital e Ilha) e as imagens soltas `antes_*` e `depois_*`. Uma cópia da prancha está em
-`docs/objetos3d/cais/conserto/prancha.jpg`. As capturas no jogo usam a câmera de desenvolvimento (`?cameradev=1`, `__camera.ir("cais")`) num
-Vite próprio; o Digital da `main` ainda não tem o traço de nanquim (#692).
+**As capturas** ficam fora do git, em `D:\Trab\digilab\capturas_objetos3d\cais\`: a prancha `prancha_cais_final.png` (o esboço, as prévias do
+Blender, o antes e o depois no jogo nos mapas Digital e Ilha; o depois do Digital já com o traço de nanquim do #692, mesclado na `main`
+durante o trabalho) e as imagens soltas `antes_*`, `depois_*` (antes da mescla) e `depois_d5_*` (depois dela). Uma cópia da prancha está
+em `docs/objetos3d/cais/conserto/prancha.jpg`. As capturas no jogo usam a câmera de desenvolvimento (`?cameradev=1`, `__camera.ir("cais")`)
+num Vite próprio.
 
 **O revisor** (um subagente que não fez o trabalho) deu dois pareceres:
 1. **APROVA COM RESSALVA:** a madeira escura e lisa demais, a corda sem o bege, a corda de amarração como fita, o píer na areia sem água,
