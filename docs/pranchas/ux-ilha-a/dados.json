@@ -1,0 +1,1609 @@
+{
+ "fonte": "gerar_dados.py, dos quadros em capturas_ux_ilha_aprovar/prancha_a/fundo",
+ "estados": {
+  "nada_tocado|vidro|1920": {
+   "fundo": "d03_vidro_1920.png",
+   "semente": 6503,
+   "tick": 937,
+   "hora": "15:37",
+   "acao": "dormir",
+   "regra": "sono_continuar",
+   "chance": 1,
+   "chances": [
+    {
+     "acao": "dormir",
+     "chance": 1
+    }
+   ],
+   "pet": [
+    960,
+    658
+   ],
+   "pet_ret": {
+    "x": 852,
+    "y": 520,
+    "w": 216,
+    "h": 138
+   },
+   "tigela": [
+    1030,
+    674
+   ],
+   "bola": [
+    1179,
+    508
+   ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
+   "racao_madura": 1,
+   "racao_podre": 0,
+   "aprendido": {
+    "ocioso": 0.1148660117255317,
+    "brincar": -0.0780934354994032,
+    "explorar": -0.05660855611165365
+   },
+   "aprendido_top": [
+    {
+     "acao": "ocioso",
+     "desvio": 0.1148660117255317
+    },
+    {
+     "acao": "brincar",
+     "desvio": -0.0780934354994032
+    },
+    {
+     "acao": "explorar",
+     "desvio": -0.05660855611165365
+    }
+   ],
+   "treinos_hoje": 0,
+   "treinou_alguma_vez": false,
+   "mao": {
+    "saco": [
+     752,
+     312
+    ],
+    "barraca": [
+     605,
+     135
+    ],
+    "ninho": [
+     415,
+     660
+    ],
+    "arvore": [
+     172,
+     150
+    ],
+    "fruta": [
+     196,
+     318
+    ]
+   }
+  },
+  "nada_tocado|vidro|390": {
+   "fundo": "d03_vidro_390.png",
+   "semente": 6503,
+   "tick": 897,
+   "hora": "14:57",
+   "acao": "dormir",
+   "regra": "sono_continuar",
+   "chance": 1,
+   "chances": [
+    {
+     "acao": "dormir",
+     "chance": 1
+    }
+   ],
+   "pet": [
+    195,
+    476
+   ],
+   "pet_ret": {
+    "x": 159,
+    "y": 430,
+    "w": 72,
+    "h": 46
+   },
+   "tigela": [
+    220,
+    481
+   ],
+   "bola": [
+    281,
+    417
+   ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
+   "racao_madura": 1,
+   "racao_podre": 0,
+   "aprendido": {
+    "ocioso": 0.11445802561442057,
+    "brincar": -0.077179807027181,
+    "explorar": -0.05730842590332032
+   },
+   "aprendido_top": [
+    {
+     "acao": "ocioso",
+     "desvio": 0.11445802561442057
+    },
+    {
+     "acao": "brincar",
+     "desvio": -0.077179807027181
+    },
+    {
+     "acao": "explorar",
+     "desvio": -0.05730842590332032
+    }
+   ],
+   "treinos_hoje": 0,
+   "treinou_alguma_vez": false,
+   "mao": {
+    "saco": [
+     112,
+     345
+    ],
+    "barraca": [
+     24,
+     240
+    ],
+    "ninho": [
+     15,
+     470
+    ],
+    "arvore": [
+     128,
+     180
+    ],
+    "fruta": [
+     130,
+     292
+    ]
+   }
+  },
+  "nada_tocado|xcom|1920": {
+   "fundo": "d03_xcom_1920.png",
+   "semente": 6503,
+   "tick": 939,
+   "hora": "15:39",
+   "acao": "dormir",
+   "regra": "sono_continuar",
+   "chance": 1,
+   "chances": [
+    {
+     "acao": "dormir",
+     "chance": 1
+    }
+   ],
+   "pet": [
+    960,
+    658
+   ],
+   "pet_ret": {
+    "x": 852,
+    "y": 520,
+    "w": 216,
+    "h": 138
+   },
+   "tigela": [
+    1030,
+    674
+   ],
+   "bola": [
+    1179,
+    508
+   ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
+   "racao_madura": 1,
+   "racao_podre": 0,
+   "aprendido": {
+    "ocioso": 0.11488641103108724,
+    "brincar": -0.07813911692301431,
+    "explorar": -0.05657356262207031
+   },
+   "aprendido_top": [
+    {
+     "acao": "ocioso",
+     "desvio": 0.11488641103108724
+    },
+    {
+     "acao": "brincar",
+     "desvio": -0.07813911692301431
+    },
+    {
+     "acao": "explorar",
+     "desvio": -0.05657356262207031
+    }
+   ],
+   "treinos_hoje": 0,
+   "treinou_alguma_vez": false,
+   "mao": {
+    "saco": [
+     752,
+     312
+    ],
+    "barraca": [
+     605,
+     135
+    ],
+    "ninho": [
+     415,
+     660
+    ],
+    "arvore": [
+     172,
+     150
+    ],
+    "fruta": [
+     196,
+     318
+    ]
+   }
+  },
+  "nada_tocado|xcom|390": {
+   "fundo": "d03_xcom_390.png",
+   "semente": 6503,
+   "tick": 935,
+   "hora": "15:35",
+   "acao": "dormir",
+   "regra": "sono_continuar",
+   "chance": 1,
+   "chances": [
+    {
+     "acao": "dormir",
+     "chance": 1
+    }
+   ],
+   "pet": [
+    195,
+    476
+   ],
+   "pet_ret": {
+    "x": 159,
+    "y": 430,
+    "w": 72,
+    "h": 46
+   },
+   "tigela": [
+    220,
+    481
+   ],
+   "bola": [
+    281,
+    417
+   ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
+   "racao_madura": 1,
+   "racao_podre": 0,
+   "aprendido": {
+    "ocioso": 0.11484561241997614,
+    "brincar": -0.07804775407579209,
+    "explorar": -0.05664354960123698
+   },
+   "aprendido_top": [
+    {
+     "acao": "ocioso",
+     "desvio": 0.11484561241997614
+    },
+    {
+     "acao": "brincar",
+     "desvio": -0.07804775407579209
+    },
+    {
+     "acao": "explorar",
+     "desvio": -0.05664354960123698
+    }
+   ],
+   "treinos_hoje": 0,
+   "treinou_alguma_vez": false,
+   "mao": {
+    "saco": [
+     112,
+     345
+    ],
+    "barraca": [
+     24,
+     240
+    ],
+    "ninho": [
+     15,
+     470
+    ],
+    "arvore": [
+     128,
+     180
+    ],
+    "fruta": [
+     130,
+     292
+    ]
+   }
+  },
+  "etiqueta_aberta|vidro|1920": {
+   "fundo": "d03_vidro_1920.png",
+   "semente": 6503,
+   "tick": 937,
+   "hora": "15:37",
+   "acao": "dormir",
+   "regra": "sono_continuar",
+   "chance": 1,
+   "chances": [
+    {
+     "acao": "dormir",
+     "chance": 1
+    }
+   ],
+   "pet": [
+    960,
+    658
+   ],
+   "pet_ret": {
+    "x": 852,
+    "y": 520,
+    "w": 216,
+    "h": 138
+   },
+   "tigela": [
+    1030,
+    674
+   ],
+   "bola": [
+    1179,
+    508
+   ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
+   "racao_madura": 1,
+   "racao_podre": 0,
+   "aprendido": {
+    "ocioso": 0.1148660117255317,
+    "brincar": -0.0780934354994032,
+    "explorar": -0.05660855611165365
+   },
+   "aprendido_top": [
+    {
+     "acao": "ocioso",
+     "desvio": 0.1148660117255317
+    },
+    {
+     "acao": "brincar",
+     "desvio": -0.0780934354994032
+    },
+    {
+     "acao": "explorar",
+     "desvio": -0.05660855611165365
+    }
+   ],
+   "treinos_hoje": 0,
+   "treinou_alguma_vez": false,
+   "mao": {
+    "saco": [
+     752,
+     312
+    ],
+    "barraca": [
+     605,
+     135
+    ],
+    "ninho": [
+     415,
+     660
+    ],
+    "arvore": [
+     172,
+     150
+    ],
+    "fruta": [
+     196,
+     318
+    ]
+   }
+  },
+  "etiqueta_aberta|vidro|390": {
+   "fundo": "d03_vidro_390.png",
+   "semente": 6503,
+   "tick": 897,
+   "hora": "14:57",
+   "acao": "dormir",
+   "regra": "sono_continuar",
+   "chance": 1,
+   "chances": [
+    {
+     "acao": "dormir",
+     "chance": 1
+    }
+   ],
+   "pet": [
+    195,
+    476
+   ],
+   "pet_ret": {
+    "x": 159,
+    "y": 430,
+    "w": 72,
+    "h": 46
+   },
+   "tigela": [
+    220,
+    481
+   ],
+   "bola": [
+    281,
+    417
+   ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
+   "racao_madura": 1,
+   "racao_podre": 0,
+   "aprendido": {
+    "ocioso": 0.11445802561442057,
+    "brincar": -0.077179807027181,
+    "explorar": -0.05730842590332032
+   },
+   "aprendido_top": [
+    {
+     "acao": "ocioso",
+     "desvio": 0.11445802561442057
+    },
+    {
+     "acao": "brincar",
+     "desvio": -0.077179807027181
+    },
+    {
+     "acao": "explorar",
+     "desvio": -0.05730842590332032
+    }
+   ],
+   "treinos_hoje": 0,
+   "treinou_alguma_vez": false,
+   "mao": {
+    "saco": [
+     112,
+     345
+    ],
+    "barraca": [
+     24,
+     240
+    ],
+    "ninho": [
+     15,
+     470
+    ],
+    "arvore": [
+     128,
+     180
+    ],
+    "fruta": [
+     130,
+     292
+    ]
+   }
+  },
+  "etiqueta_aberta|xcom|1920": {
+   "fundo": "d03_xcom_1920.png",
+   "semente": 6503,
+   "tick": 939,
+   "hora": "15:39",
+   "acao": "dormir",
+   "regra": "sono_continuar",
+   "chance": 1,
+   "chances": [
+    {
+     "acao": "dormir",
+     "chance": 1
+    }
+   ],
+   "pet": [
+    960,
+    658
+   ],
+   "pet_ret": {
+    "x": 852,
+    "y": 520,
+    "w": 216,
+    "h": 138
+   },
+   "tigela": [
+    1030,
+    674
+   ],
+   "bola": [
+    1179,
+    508
+   ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
+   "racao_madura": 1,
+   "racao_podre": 0,
+   "aprendido": {
+    "ocioso": 0.11488641103108724,
+    "brincar": -0.07813911692301431,
+    "explorar": -0.05657356262207031
+   },
+   "aprendido_top": [
+    {
+     "acao": "ocioso",
+     "desvio": 0.11488641103108724
+    },
+    {
+     "acao": "brincar",
+     "desvio": -0.07813911692301431
+    },
+    {
+     "acao": "explorar",
+     "desvio": -0.05657356262207031
+    }
+   ],
+   "treinos_hoje": 0,
+   "treinou_alguma_vez": false,
+   "mao": {
+    "saco": [
+     752,
+     312
+    ],
+    "barraca": [
+     605,
+     135
+    ],
+    "ninho": [
+     415,
+     660
+    ],
+    "arvore": [
+     172,
+     150
+    ],
+    "fruta": [
+     196,
+     318
+    ]
+   }
+  },
+  "etiqueta_aberta|xcom|390": {
+   "fundo": "d03_xcom_390.png",
+   "semente": 6503,
+   "tick": 935,
+   "hora": "15:35",
+   "acao": "dormir",
+   "regra": "sono_continuar",
+   "chance": 1,
+   "chances": [
+    {
+     "acao": "dormir",
+     "chance": 1
+    }
+   ],
+   "pet": [
+    195,
+    476
+   ],
+   "pet_ret": {
+    "x": 159,
+    "y": 430,
+    "w": 72,
+    "h": 46
+   },
+   "tigela": [
+    220,
+    481
+   ],
+   "bola": [
+    281,
+    417
+   ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
+   "racao_madura": 1,
+   "racao_podre": 0,
+   "aprendido": {
+    "ocioso": 0.11484561241997614,
+    "brincar": -0.07804775407579209,
+    "explorar": -0.05664354960123698
+   },
+   "aprendido_top": [
+    {
+     "acao": "ocioso",
+     "desvio": 0.11484561241997614
+    },
+    {
+     "acao": "brincar",
+     "desvio": -0.07804775407579209
+    },
+    {
+     "acao": "explorar",
+     "desvio": -0.05664354960123698
+    }
+   ],
+   "treinos_hoje": 0,
+   "treinou_alguma_vez": false,
+   "mao": {
+    "saco": [
+     112,
+     345
+    ],
+    "barraca": [
+     24,
+     240
+    ],
+    "ninho": [
+     15,
+     470
+    ],
+    "arvore": [
+     128,
+     180
+    ],
+    "fruta": [
+     130,
+     292
+    ]
+   }
+  },
+  "segurar_pet|vidro|1920": {
+   "fundo": "p00_vidro_1920.png",
+   "semente": 6503,
+   "tick": 817,
+   "hora": "13:37",
+   "acao": "brincar",
+   "regra": "tempo_livre",
+   "chance": 0.3628664286247097,
+   "chances": [
+    {
+     "acao": "ocioso",
+     "chance": 0.2924482667138963
+    },
+    {
+     "acao": "explorar",
+     "chance": 0.2518612730173461
+    },
+    {
+     "acao": "brincar",
+     "chance": 0.3628664286247097
+    },
+    {
+     "acao": "chamar_atencao",
+     "chance": 0.09282403164404786
+    }
+   ],
+   "pet": [
+    960,
+    658
+   ],
+   "pet_ret": {
+    "x": 1094,
+    "y": 205,
+    "w": 192,
+    "h": 303
+   },
+   "tigela": [
+    780,
+    575
+   ],
+   "bola": [
+    960,
+    456
+   ],
+   "mao_ponteiro": [
+    1190,
+    482
+   ],
+   "pet_na_mao": true,
+   "racao_madura": 1,
+   "racao_podre": 0,
+   "aprendido": {
+    "brincar": -0.10624056837293837,
+    "ocioso": 0.0853482666015625,
+    "explorar": 0.03278526306152344
+   },
+   "aprendido_top": [
+    {
+     "acao": "brincar",
+     "desvio": -0.10624056837293837
+    },
+    {
+     "acao": "ocioso",
+     "desvio": 0.0853482666015625
+    },
+    {
+     "acao": "explorar",
+     "desvio": 0.03278526306152344
+    }
+   ],
+   "treinos_hoje": 0,
+   "treinou_alguma_vez": false,
+   "mao": {
+    "saco": [
+     572,
+     305
+    ],
+    "barraca": [
+     490,
+     185
+    ],
+    "ninho": null,
+    "arvore": null
+   }
+  },
+  "segurar_pet|vidro|390": {
+   "fundo": "p00_vidro_390.png",
+   "semente": 6503,
+   "tick": 814,
+   "hora": "13:34",
+   "acao": "brincar",
+   "regra": "tempo_livre",
+   "chance": 0.3628664286247097,
+   "chances": [
+    {
+     "acao": "ocioso",
+     "chance": 0.2924482667138963
+    },
+    {
+     "acao": "explorar",
+     "chance": 0.2518612730173461
+    },
+    {
+     "acao": "brincar",
+     "chance": 0.3628664286247097
+    },
+    {
+     "acao": "chamar_atencao",
+     "chance": 0.09282403164404786
+    }
+   ],
+   "pet": [
+    195,
+    476
+   ],
+   "pet_ret": {
+    "x": 232,
+    "y": 295,
+    "w": 64,
+    "h": 101
+   },
+   "tigela": [
+    130,
+    418
+   ],
+   "bola": [
+    194,
+    376
+   ],
+   "mao_ponteiro": [
+    265,
+    389
+   ],
+   "pet_na_mao": true,
+   "racao_madura": 1,
+   "racao_podre": 0,
+   "aprendido": {
+    "brincar": -0.10634241061740451,
+    "ocioso": 0.08546744537353516,
+    "explorar": 0.03279840087890625
+   },
+   "aprendido_top": [
+    {
+     "acao": "brincar",
+     "desvio": -0.10634241061740451
+    },
+    {
+     "acao": "ocioso",
+     "desvio": 0.08546744537353516
+    },
+    {
+     "acao": "explorar",
+     "desvio": 0.03279840087890625
+    }
+   ],
+   "treinos_hoje": 0,
+   "treinou_alguma_vez": false,
+   "mao": {
+    "saco": [
+     40,
+     312
+    ],
+    "barraca": null,
+    "ninho": null,
+    "arvore": null
+   }
+  },
+  "segurar_pet|xcom|1920": {
+   "fundo": "p00_xcom_1920.png",
+   "semente": 6503,
+   "tick": 813,
+   "hora": "13:33",
+   "acao": "brincar",
+   "regra": "tempo_livre",
+   "chance": 0.3628664286247097,
+   "chances": [
+    {
+     "acao": "ocioso",
+     "chance": 0.2924482667138963
+    },
+    {
+     "acao": "explorar",
+     "chance": 0.2518612730173461
+    },
+    {
+     "acao": "brincar",
+     "chance": 0.3628664286247097
+    },
+    {
+     "acao": "chamar_atencao",
+     "chance": 0.09282403164404786
+    }
+   ],
+   "pet": [
+    960,
+    658
+   ],
+   "pet_ret": {
+    "x": 1091,
+    "y": 205,
+    "w": 192,
+    "h": 303
+   },
+   "tigela": [
+    793,
+    512
+   ],
+   "bola": [
+    957,
+    424
+   ],
+   "mao_ponteiro": [
+    1190,
+    488
+   ],
+   "pet_na_mao": true,
+   "racao_madura": 1,
+   "racao_podre": 0,
+   "aprendido": {
+    "brincar": -0.10637635803222657,
+    "ocioso": 0.08550717163085939,
+    "explorar": 0.03280278015136719
+   },
+   "aprendido_top": [
+    {
+     "acao": "brincar",
+     "desvio": -0.10637635803222657
+    },
+    {
+     "acao": "ocioso",
+     "desvio": 0.08550717163085939
+    },
+    {
+     "acao": "explorar",
+     "desvio": 0.03280278015136719
+    }
+   ],
+   "treinos_hoje": 0,
+   "treinou_alguma_vez": false,
+   "mao": {
+    "saco": [
+     580,
+     268
+    ],
+    "barraca": [
+     505,
+     172
+    ],
+    "ninho": null,
+    "arvore": null
+   }
+  },
+  "segurar_pet|xcom|390": {
+   "fundo": "p00_xcom_390.png",
+   "semente": 6503,
+   "tick": 813,
+   "hora": "13:33",
+   "acao": "brincar",
+   "regra": "tempo_livre",
+   "chance": 0.3628664286247097,
+   "chances": [
+    {
+     "acao": "ocioso",
+     "chance": 0.2924482667138963
+    },
+    {
+     "acao": "explorar",
+     "chance": 0.2518612730173461
+    },
+    {
+     "acao": "brincar",
+     "chance": 0.3628664286247097
+    },
+    {
+     "acao": "chamar_atencao",
+     "chance": 0.09282403164404786
+    }
+   ],
+   "pet": [
+    195,
+    476
+   ],
+   "pet_ret": {
+    "x": 233,
+    "y": 295,
+    "w": 64,
+    "h": 101
+   },
+   "tigela": [
+    127,
+    410
+   ],
+   "bola": [
+    190,
+    371
+   ],
+   "mao_ponteiro": [
+    265,
+    389
+   ],
+   "pet_na_mao": true,
+   "racao_madura": 1,
+   "racao_podre": 0,
+   "aprendido": {
+    "brincar": -0.10637635803222657,
+    "ocioso": 0.08550717163085939,
+    "explorar": 0.03280278015136719
+   },
+   "aprendido_top": [
+    {
+     "acao": "brincar",
+     "desvio": -0.10637635803222657
+    },
+    {
+     "acao": "ocioso",
+     "desvio": 0.08550717163085939
+    },
+    {
+     "acao": "explorar",
+     "desvio": 0.03280278015136719
+    }
+   ],
+   "treinos_hoje": 0,
+   "treinou_alguma_vez": false,
+   "mao": {
+    "saco": [
+     40,
+     312
+    ],
+    "barraca": null,
+    "ninho": null,
+    "arvore": null
+   }
+  },
+  "indo_tigela|vidro|1920": {
+   "fundo": "q01_vidro_1920.png",
+   "semente": 6521,
+   "tick": 1479,
+   "hora": "00:39",
+   "acao": "comer",
+   "regra": "fome_moderada",
+   "chance": 0.9746682192444726,
+   "chances": [
+    {
+     "acao": "comer",
+     "chance": 0.9746682192444726
+    },
+    {
+     "acao": "chamar_atencao",
+     "chance": 0.025331780755527427
+    }
+   ],
+   "pet": [
+    960,
+    658
+   ],
+   "pet_ret": {
+    "x": 864,
+    "y": 355,
+    "w": 192,
+    "h": 303
+   },
+   "tigela": [
+    1165,
+    572
+   ],
+   "bola": [
+    3810,
+    540
+   ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
+   "racao_madura": 7,
+   "racao_podre": 0,
+   "aprendido": {
+    "ocioso": 0.1607952341715495,
+    "chamar_atencao": 0.16076878560384117,
+    "explorar": -0.15066732482910156
+   },
+   "aprendido_top": [
+    {
+     "acao": "ocioso",
+     "desvio": 0.1607952341715495
+    },
+    {
+     "acao": "chamar_atencao",
+     "desvio": 0.16076878560384117
+    },
+    {
+     "acao": "explorar",
+     "desvio": -0.15066732482910156
+    }
+   ],
+   "treinos_hoje": 0,
+   "treinou_alguma_vez": false,
+   "mao": {
+    "saco": [
+     878,
+     290
+    ],
+    "barraca": [
+     690,
+     185
+    ],
+    "ninho": [
+     625,
+     560
+    ],
+    "arvore": null,
+    "tigela": [
+     1165,
+     572
+    ]
+   }
+  },
+  "indo_tigela|xcom|1920": {
+   "fundo": "q13_xcom_1920.png",
+   "semente": 6521,
+   "tick": 1479,
+   "hora": "00:39",
+   "acao": "comer",
+   "regra": "fome_moderada",
+   "chance": 0.9746682192444726,
+   "chances": [
+    {
+     "acao": "comer",
+     "chance": 0.9746682192444726
+    },
+    {
+     "acao": "chamar_atencao",
+     "chance": 0.025331780755527427
+    }
+   ],
+   "pet": [
+    960,
+    658
+   ],
+   "pet_ret": {
+    "x": 864,
+    "y": 352,
+    "w": 192,
+    "h": 303
+   },
+   "tigela": [
+    1366,
+    540
+   ],
+   "bola": [
+    3937,
+    540
+   ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
+   "racao_madura": 7,
+   "racao_podre": 0,
+   "aprendido": {
+    "ocioso": 0.1607952341715495,
+    "chamar_atencao": 0.16076878560384117,
+    "explorar": -0.15066732482910156
+   },
+   "aprendido_top": [
+    {
+     "acao": "ocioso",
+     "desvio": 0.1607952341715495
+    },
+    {
+     "acao": "chamar_atencao",
+     "desvio": 0.16076878560384117
+    },
+    {
+     "acao": "explorar",
+     "desvio": -0.15066732482910156
+    }
+   ],
+   "treinos_hoje": 0,
+   "treinou_alguma_vez": false,
+   "mao": {
+    "saco": [
+     1060,
+     268
+    ],
+    "barraca": [
+     790,
+     170
+    ],
+    "ninho": [
+     845,
+     520
+    ],
+    "arvore": null
+   }
+  },
+  "indo_tigela|xcom|390": {
+   "fundo": "q07_xcom_390.png",
+   "semente": 6521,
+   "tick": 1483,
+   "hora": "00:43",
+   "acao": "comer",
+   "regra": "fome_moderada",
+   "chance": 0.9746682192444726,
+   "chances": [
+    {
+     "acao": "comer",
+     "chance": 0.9746682192444726
+    },
+    {
+     "acao": "chamar_atencao",
+     "chance": 0.025331780755527427
+    }
+   ],
+   "pet": [
+    195,
+    476
+   ],
+   "pet_ret": {
+    "x": 163,
+    "y": 375,
+    "w": 64,
+    "h": 101
+   },
+   "tigela": [
+    285,
+    440
+   ],
+   "bola": [
+    1288,
+    431
+   ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
+   "racao_madura": 7,
+   "racao_podre": 0,
+   "aprendido": {
+    "ocioso": 0.16042814676920575,
+    "chamar_atencao": 0.1603989855278863,
+    "explorar": -0.1504211582438151
+   },
+   "aprendido_top": [
+    {
+     "acao": "ocioso",
+     "desvio": 0.16042814676920575
+    },
+    {
+     "acao": "chamar_atencao",
+     "desvio": 0.1603989855278863
+    },
+    {
+     "acao": "explorar",
+     "desvio": -0.1504211582438151
+    }
+   ],
+   "treinos_hoje": 0,
+   "treinou_alguma_vez": false,
+   "mao": {
+    "saco": null,
+    "barraca": [
+     88,
+     262
+    ],
+    "ninho": [
+     85,
+     432
+    ],
+    "arvore": null,
+    "tigela": [
+     285,
+     440
+    ]
+   }
+  },
+  "indo_tigela|vidro|390": {
+   "fundo": "r19_vidro_390.png",
+   "semente": 6521,
+   "tick": 1483,
+   "hora": "00:43",
+   "acao": "comer",
+   "regra": "fome_moderada",
+   "chance": 0.9746682192444726,
+   "chances": [
+    {
+     "acao": "comer",
+     "chance": 0.9746682192444726
+    },
+    {
+     "acao": "chamar_atencao",
+     "chance": 0.025331780755527427
+    }
+   ],
+   "pet": [
+    195,
+    476
+   ],
+   "pet_ret": {
+    "x": 163,
+    "y": 374,
+    "w": 64,
+    "h": 101
+   },
+   "tigela": [
+    311,
+    431
+   ],
+   "bola": [
+    1297,
+    431
+   ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
+   "racao_madura": 7,
+   "racao_podre": 0,
+   "aprendido": {
+    "ocioso": 0.16042814676920575,
+    "chamar_atencao": 0.1603989855278863,
+    "explorar": -0.1504211582438151
+   },
+   "aprendido_top": [
+    {
+     "acao": "ocioso",
+     "desvio": 0.16042814676920575
+    },
+    {
+     "acao": "chamar_atencao",
+     "desvio": 0.1603989855278863
+    },
+    {
+     "acao": "explorar",
+     "desvio": -0.1504211582438151
+    }
+   ],
+   "treinos_hoje": 0,
+   "treinou_alguma_vez": false,
+   "mao": {
+    "saco": null,
+    "barraca": [
+     85,
+     262
+    ],
+    "ninho": [
+     110,
+     430
+    ],
+    "arvore": null
+   }
+  },
+  "toque_arvore|vidro|1920": {
+   "fundo": "d03_vidro_1920.png",
+   "semente": 6503,
+   "tick": 937,
+   "hora": "15:37",
+   "acao": "dormir",
+   "regra": "sono_continuar",
+   "chance": 1,
+   "chances": [
+    {
+     "acao": "dormir",
+     "chance": 1
+    }
+   ],
+   "pet": [
+    960,
+    658
+   ],
+   "pet_ret": {
+    "x": 852,
+    "y": 520,
+    "w": 216,
+    "h": 138
+   },
+   "tigela": [
+    1030,
+    674
+   ],
+   "bola": [
+    1179,
+    508
+   ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
+   "racao_madura": 1,
+   "racao_podre": 0,
+   "aprendido": {
+    "ocioso": 0.1148660117255317,
+    "brincar": -0.0780934354994032,
+    "explorar": -0.05660855611165365
+   },
+   "aprendido_top": [
+    {
+     "acao": "ocioso",
+     "desvio": 0.1148660117255317
+    },
+    {
+     "acao": "brincar",
+     "desvio": -0.0780934354994032
+    },
+    {
+     "acao": "explorar",
+     "desvio": -0.05660855611165365
+    }
+   ],
+   "treinos_hoje": 0,
+   "treinou_alguma_vez": false,
+   "mao": {
+    "saco": [
+     752,
+     312
+    ],
+    "barraca": [
+     605,
+     135
+    ],
+    "ninho": [
+     415,
+     660
+    ],
+    "arvore": [
+     172,
+     150
+    ],
+    "fruta": [
+     196,
+     318
+    ]
+   }
+  },
+  "toque_arvore|vidro|390": {
+   "fundo": "d03_vidro_390.png",
+   "semente": 6503,
+   "tick": 897,
+   "hora": "14:57",
+   "acao": "dormir",
+   "regra": "sono_continuar",
+   "chance": 1,
+   "chances": [
+    {
+     "acao": "dormir",
+     "chance": 1
+    }
+   ],
+   "pet": [
+    195,
+    476
+   ],
+   "pet_ret": {
+    "x": 159,
+    "y": 430,
+    "w": 72,
+    "h": 46
+   },
+   "tigela": [
+    220,
+    481
+   ],
+   "bola": [
+    281,
+    417
+   ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
+   "racao_madura": 1,
+   "racao_podre": 0,
+   "aprendido": {
+    "ocioso": 0.11445802561442057,
+    "brincar": -0.077179807027181,
+    "explorar": -0.05730842590332032
+   },
+   "aprendido_top": [
+    {
+     "acao": "ocioso",
+     "desvio": 0.11445802561442057
+    },
+    {
+     "acao": "brincar",
+     "desvio": -0.077179807027181
+    },
+    {
+     "acao": "explorar",
+     "desvio": -0.05730842590332032
+    }
+   ],
+   "treinos_hoje": 0,
+   "treinou_alguma_vez": false,
+   "mao": {
+    "saco": [
+     112,
+     345
+    ],
+    "barraca": [
+     24,
+     240
+    ],
+    "ninho": [
+     15,
+     470
+    ],
+    "arvore": [
+     128,
+     180
+    ],
+    "fruta": [
+     130,
+     292
+    ]
+   }
+  },
+  "toque_arvore|xcom|1920": {
+   "fundo": "d03_xcom_1920.png",
+   "semente": 6503,
+   "tick": 939,
+   "hora": "15:39",
+   "acao": "dormir",
+   "regra": "sono_continuar",
+   "chance": 1,
+   "chances": [
+    {
+     "acao": "dormir",
+     "chance": 1
+    }
+   ],
+   "pet": [
+    960,
+    658
+   ],
+   "pet_ret": {
+    "x": 852,
+    "y": 520,
+    "w": 216,
+    "h": 138
+   },
+   "tigela": [
+    1030,
+    674
+   ],
+   "bola": [
+    1179,
+    508
+   ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
+   "racao_madura": 1,
+   "racao_podre": 0,
+   "aprendido": {
+    "ocioso": 0.11488641103108724,
+    "brincar": -0.07813911692301431,
+    "explorar": -0.05657356262207031
+   },
+   "aprendido_top": [
+    {
+     "acao": "ocioso",
+     "desvio": 0.11488641103108724
+    },
+    {
+     "acao": "brincar",
+     "desvio": -0.07813911692301431
+    },
+    {
+     "acao": "explorar",
+     "desvio": -0.05657356262207031
+    }
+   ],
+   "treinos_hoje": 0,
+   "treinou_alguma_vez": false,
+   "mao": {
+    "saco": [
+     752,
+     312
+    ],
+    "barraca": [
+     605,
+     135
+    ],
+    "ninho": [
+     415,
+     660
+    ],
+    "arvore": [
+     172,
+     150
+    ],
+    "fruta": [
+     196,
+     318
+    ]
+   }
+  },
+  "toque_arvore|xcom|390": {
+   "fundo": "d03_xcom_390.png",
+   "semente": 6503,
+   "tick": 935,
+   "hora": "15:35",
+   "acao": "dormir",
+   "regra": "sono_continuar",
+   "chance": 1,
+   "chances": [
+    {
+     "acao": "dormir",
+     "chance": 1
+    }
+   ],
+   "pet": [
+    195,
+    476
+   ],
+   "pet_ret": {
+    "x": 159,
+    "y": 430,
+    "w": 72,
+    "h": 46
+   },
+   "tigela": [
+    220,
+    481
+   ],
+   "bola": [
+    281,
+    417
+   ],
+   "mao_ponteiro": null,
+   "pet_na_mao": false,
+   "racao_madura": 1,
+   "racao_podre": 0,
+   "aprendido": {
+    "ocioso": 0.11484561241997614,
+    "brincar": -0.07804775407579209,
+    "explorar": -0.05664354960123698
+   },
+   "aprendido_top": [
+    {
+     "acao": "ocioso",
+     "desvio": 0.11484561241997614
+    },
+    {
+     "acao": "brincar",
+     "desvio": -0.07804775407579209
+    },
+    {
+     "acao": "explorar",
+     "desvio": -0.05664354960123698
+    }
+   ],
+   "treinos_hoje": 0,
+   "treinou_alguma_vez": false,
+   "mao": {
+    "saco": [
+     112,
+     345
+    ],
+    "barraca": [
+     24,
+     240
+    ],
+    "ninho": [
+     15,
+     470
+    ],
+    "arvore": [
+     128,
+     180
+    ],
+    "fruta": [
+     130,
+     292
+    ]
+   }
+  }
+ }
+}

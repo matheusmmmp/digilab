@@ -433,3 +433,11 @@ Registro das propostas, como foram levadas ao Matheus:
     `D:\Trab\digilab\remaster\acoes\capturas\m4\`: Gabumon, Agumon, Greymon e WereGarurumon, a tela e oito recortes seguidos;
   - o achado: o Comer do WereGarurumon pula a cada mordida (quadro de salto do UP na âncora); as interpretações em
     `docs/registro/2026-11.md`.
+- **2026-11-05, a M1 do lote 1 (worker, `v3-sprites-lote1`):**
+  - as receitas de Feliz, Sacudir, Chamar e Emburrar no `tools/sprites_acoes/lote1.json` (poses do UP por papel, espelho, squash and
+    stretch), aprovadas pelo Matheus no Agumon (o Emburrar na v4, de costas); o catálogo de poses dos outros 59, com as dúvidas por
+    Digimon, e os ajustes para caber na caixa do UP;
+  - o export dos 60 com as 5 tags, fora do git em `D:\Trab\digilab\remaster\acoes\export\`; o visualizador com as tags e as prévias
+    `+vista`; as folhas de contato `remaster\acoes\contato\lote1_60_<Acao>.png`;
+  - o `tests/test_sprites_acoes.py` confere o `lote1.json`, as 5 tags, o pé em todas as tags, a caixa e os ms; as interpretações em
+    `docs/registro/2026-11.md`. O atlas do jogo fica para a M2.
