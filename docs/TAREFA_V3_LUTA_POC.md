@@ -224,8 +224,8 @@ A LP3 pode correr ao lado da LP2 numa worktree própria, porque só toca a tela;
 
 ## 8. Precisa do Matheus
 
-**DECIDIDAS em 2026-11-08** (Matheus, "Aprovo as 10"): as dez valem como recomendadas abaixo, menos a LP-3 e a LP-5, que ele revisou
-em seguida e estão PROPOSTAS na forma revista. Os números da POC continuam
+**DECIDIDAS em 2026-11-08** (Matheus, "Aprovo as 10"): as dez valem como recomendadas abaixo, a LP-3 e a LP-5 na forma revista,
+aprovada em seguida ("Aprovo as duas"). Os números da POC continuam
 PROPOSTOS até a LP5.
 
 | # | a decisão | a recomendação | o custo de errar |
@@ -247,4 +247,4 @@ PROPOSTOS até a LP5.
   podem sair; os mapas da POC entram. A R3 do equilíbrio fica pausada.
 - Matheus, 2026-11-08, "Aprovo as 10": a LP-1 a LP-10 como recomendadas na seção 8. A LP1 pode começar.
 - Matheus, 2026-11-08, depois do "Aprovo as 10": a LP-3 e a LP-5 revistas (os stats do pet e o treino no lugar do "nível de luta";
-  a Liga, a Torre, a Fábrica e o Salão reaproveitados). As duas revistas estão PROPOSTAS até o ok dele.
+  a Liga, a Torre, a Fábrica e o Salão reaproveitados). Aprovadas na forma revista ("Aprovo as duas", 2026-11-08).
