@@ -213,3 +213,36 @@ E-G9: dois draw calls a mais, de dia e de noite (80 → 81 e 101 → 103 em 390;
 `D:\Trab\digilab\capturas_enfeites\referencia_e3\` e `\e3\`). E-G11: o revisor reprovou o trilho e aprovou a geladeira com ressalva na
 rodada 1 (traços sujos, o trilho atrás do HUD); a rodada 2 está no corpo do PR. Os postes e o carro ficam sem traços nesta etapa.
 
+
+## 13. O poste retrabalhado (2026-11-08, worker, Claude Code, Opus 5.5, branch `v3-objeto-poste`)
+
+**O pedido:** o Matheus achou os objetos feios e "sem textura"; o poste da E1 era o lampião achatado em quatro cores. O retrabalho segue
+`docs/objetos3d/REFERENCIAS.md` (seção 5) e o esboço `docs/objetos3d/poste/esbocos/esboco_1_ferro_hera.png`: o poste antigo de ferro
+fundido verde, a lanterna de vidro amarelo quente, a hera subindo e a base de pedra com musgo.
+
+**Pela Meshy:** a multivista a partir do esboço (6 créditos) e a malha (30), uma tentativa só: 460 triângulos (teto 554 dos repetidos).
+Saldo 50 → 14 (`docs/objetos3d/poste/saldo.json`).
+
+**O acabamento, por script (`docs/objetos3d/poste/`):**
+- `acabar_poste.py` (Blender 4.5 pela linha de comando, do `acabar_carro.py`): os vértices repetidos soldados, as normais suavizadas e
+  ponderadas, a base no y = 0 e o pivô no centro; a frente fica a da Meshy (a vista acha a lanterna pelo ponto mais alto, como antes);
+- `textura_poste.py`: a textura pintada da Meshy sem achatar, 512 px em paleta de 256 cores, com retoques feitos no espaço 3D da malha
+  (cada texel ganha a posição dele, rasterizando os triângulos no UV, e a pintura atravessa as emendas sem corte): os vidros no amarelo
+  quente do esboço, com uma chama clara no meio de cada um; a hera pintada em espiral no poste (a malha leve não guarda as folhas soltas);
+  as abas de hera da Meshy em verde de folha; a moldura de ferro mais grossa; o ferro, a pedra e o colar de latão mais claros. A máscara
+  da luz (`poste_luz.png`) sai dos mesmos texels do vidro;
+- `publicar_poste.py`: a marca de IA no `asset.extras`, a troca em `web/app/public/enfeites/poste/` e o validador (0 erros, 0 avisos).
+
+**No jogo:** a altura fica 4,5 (`ENFEITES_MODELOS`); a grade e as posições não mudam (E-G0, E-G10). São 199 972 bytes, de 307 200. O halo
+(`ENFEITE_HALO`) desce para o meio dos vidros novos (0,86 → 0,72) e fica mais fraco (0,08 → 0,06). Os fios do mapa Digital, a 0,93 da
+altura, caem na base do pináculo do teto novo, sem mudar.
+
+**O revisor** (um subagente Sonnet que não fez o trabalho e viu só o esboço e as capturas) deu **APROVA COM RESSALVA** nas três rodadas.
+A rodada 1 pediu a moldura, os vidros, o braço e o latão, a hera mais legível, a pedra mais clara e o halo mais fraco; a rodada 2, os riscos
+escuros nos vidros e a chama; a rodada 3 aprovou "assim mesmo" o que fica:
+- a aba de hera da Meshy na frente de um vidro: de dia é folha, à noite vira uma silhueta escura sobre o vidro aceso (é malha);
+- o braço lateral lê pouco no ângulo da câmera do jogo;
+- a poça de luz no chão, larga e esbranquiçada na Ilha: é a `LUZ_NINHO`, compartilhada com o ninho, fora deste escopo.
+
+A prancha está em `docs/objetos3d/poste/prancha_poste.jpg`; as capturas (antes e depois, Ilha e Digital, dia e noite) estão fora do git,
+em `D:\Trab\digilab\capturas_objetos3d\poste\`. Os desvios estão em `docs/registro/2026-11.md`, D-OBJ-POSTE-1 a 6.

@@ -1,18 +1,19 @@
 DigiLab: o poste de luz da ilha (poste.gltf, poste.bin, poste_cor.png, poste_luz.png)
 
-Procedencia: item gerado por IA, com o gerador Meshy (meshy.ai), no plano Pro pago, na conta do Matheus, em 2026-11-06.
+Procedencia: item gerado por IA, com o gerador Meshy (meshy.ai), no plano Pro pago, na conta do Matheus, em 2026-11-08 (o retrabalho;
+o primeiro poste, de 2026-11-06, tambem da Meshy, fica no historico do git).
 Pelos termos de uso da Meshy (atualizados em 2026-09-19, secao 3.2), a saida de um plano pago e do cliente.
 Os termos proibem tirar a marca de IA (secao 2.4): a marca fica no asset.extras do poste.gltf e neste arquivo.
 
-Como foi feito (docs/TAREFA_V3_MUNDO_ENFEITES.md e docs/enfeites/poste/ no repositorio):
-- concept: Meshy Image to Image (nano-banana-2), com duas referencias de estilo recortadas da propria ilha do jogo (o saco gerado e os
-  kits CC0, sem o pet); o concept 1 (lampiao) escolhido pelo Matheus;
-- vistas: Meshy Image to Image com multivista, a partir do concept;
+Como foi feito (docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 13, e docs/objetos3d/poste/ no repositorio):
+- esboco: Meshy Image to Image (nano-banana-2), com a referencia de estilo da maquete B do proprio jogo; o esboco 1 (ferro e hera)
+  escolhido para o retrabalho dos objetos (docs/objetos3d/REFERENCIAS.md);
+- vistas: Meshy Image to Image com multivista, a partir do esboco;
 - malha: Meshy Multi-Image to 3D (remesh em triangulos, so a cor);
-- conserto no Blender 4.5 LTS e em Python, por script: a malha da Meshy fica como veio; a cor e chapada em quatro cores do concept, uma
-  por face (sem a sombra embutida), com tracos de nanquim nas divisas de cor e nas quinas grandes (2026-11-06, a D2 do mapa Digital);
+- acabamento no Blender 4.5 LTS e em Python, por script: a malha da Meshy com os vertices repetidos soldados e as normais ponderadas;
+  a textura pintada da Meshy fica (sem achatar cores), com os vidros no amarelo quente do esboco e a hera pintada subindo pelo poste;
   poste_luz.png e a mascara dos vidros, que acendem a noite no jogo.
-As tarefas da Meshy (concept, vistas, malha) estao no asset.extras do poste.gltf.
+As tarefas da Meshy (esboco, vistas, malha) estao no asset.extras do poste.gltf.
 
 Uso: no jogo DigiLab, publicado. Credito: "Poste de luz gerado com a Meshy (meshy.ai)".
-Aprovacao: o Matheus escolheu o concept em 2026-11-06; a aprovacao da captura na ilha fica no PR da E1 dos enfeites.
+Aprovacao: o retrabalho foi pedido pelo Matheus (2026-11-07); a aprovacao da captura na ilha fica no PR do retrabalho do poste.
