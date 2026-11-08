@@ -13,6 +13,8 @@ import { ITENS_MODELOS, MODELOS } from "../src/telas/pet/ilha/modelos.ts";
 const APP = join(__dirname, ".."), ITENS = join(APP, "public", "itens"), DOCS = join(APP, "..", "..", "docs", "itens3d");
 /** o teto de triangulos por item (D-I3): os pequenos, a mediana dos kits baixos; o saco, a dos altos */
 const TETO: Record<string, number> = { bola: 554, saco: 2414, kit: 554, coco: 554 };
+/** os itens feitos pelo projeto sem IA (G8 com a procedencia propria): a bola, refeita no Blender por script em 2026-11-08 */
+const FEITOS_SEM_IA = new Set(["bola"]);
 const LADO_MAX = 1024, BYTES_ITEM = 300 * 1024, BYTES_PASTA = 2 * 1024 * 1024;
 
 type Gltf = {
@@ -99,8 +101,15 @@ describe("os itens gerados da ilha", () => {
       /* a pasta do item so tem o que o glTF usa e a licenca */
       expect(arquivosDe(dir).filter(a => !usados.includes(a) && !/License\.txt$/.test(a))).toEqual([]);
       const lic = readFileSync(join(dir, "License.txt"), "utf8");
-      expect(lic).toMatch(/Meshy/); expect(lic).toMatch(/gerado por IA/);
-      expect(g.asset.extras?.gerado_por_ia).toBe(true); expect(g.asset.extras?.gerador).toMatch(/Meshy/);
+      if (FEITOS_SEM_IA.has(n)) {
+        /* feito pelo projeto por script, sem IA (a bola refeita no Blender, D-OBJ-BOLA-1): o License.txt diz de onde veio e o script */
+        expect(lic).toMatch(/sem IA/); expect(lic).toMatch(/fazer_bola\.py/);
+        expect(g.asset.extras?.gerado_por_ia).toBe(false); expect(g.asset.extras?.gerador).toMatch(/Blender/);
+        expect(existsSync(join(DOCS, n, "fazer_bola.py"))).toBe(true);
+      } else {
+        expect(lic).toMatch(/Meshy/); expect(lic).toMatch(/gerado por IA/);
+        expect(g.asset.extras?.gerado_por_ia).toBe(true); expect(g.asset.extras?.gerador).toMatch(/Meshy/);
+      }
     });
   }
 
