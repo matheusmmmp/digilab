@@ -10,7 +10,9 @@ As janelas (D-IND-I1-1: o "dono some" e o "tedio" sao a mesma janela, a nula, li
                   some, a faceta `apego_dono`) e do `explorar` (o tedio; o drive do tedio esta ligado no corpo das vidas da C4);
   - `comida_nova` uma fruta `a` perto do pet (o mundo do produto nunca tem fruta: a classe e nova); pelo `deixar_comida` do motor, que
                   e contato do dono, como no jogo (D-IND-I1-2);
-  - `longe`       a racao no canto do mapa mais longe do pet, tambem pelo `deixar_comida` (contato);
+  - `longe`       a racao a DIST_LONGE do pet, na direcao sorteada: fora da visao (6 celulas) e dentro do cheiro (24), onde a faceta
+                  `ousadia_longe` age; tambem pelo `deixar_comida` (contato). No I1 era o canto do mapa mais longe do pet, fora do cheiro
+                  (o I2a, IP-3 do docs/PLANO_ANALISE_V3_INDIVIDUALIDADE.md);
   - `bola`        a bola parada perto do pet (`deixar_bola`, nao e contato);
   - `susto`       o `tapa` (o corpo dos gestos sobe susto, dor e estresse), SO NA COPIA: a vida real nunca recebe o tapa.
 
@@ -63,7 +65,7 @@ JANELA_BUSCA = 480              # PROPOSTO, SEM FONTE: a primeira decisao acorda
 JANELA_TICKS = 240              # PROPOSTO, SEM FONTE: 4 h, 16 decisoes de 15 ticks (o longe precisa de tempo para andar)
 REPLICAS = 3                    # PROPOSTO, SEM FONTE
 DIST_PERTO = 64                 # PROPOSTO, SEM FONTE: 4 celulas de 16 subunidades (dentro da visao)
-MARGEM_CANTO = 16               # PROPOSTO, SEM FONTE: uma celula de folga da parede
+DIST_LONGE = 256                # DECIDIDO (IP-3, 2026-11-07): 16 celulas, fora da visao (6) e dentro do cheiro (24); SEM FONTE
 FRUTA_NOVA = "a"
 
 JANELAS = ("nula", "comida_nova", "longe", "bola", "susto")
@@ -99,19 +101,6 @@ def copia_em(motor, fabricas_vida: tuple, semente: int, tick: int):
     return m
 
 
-def _limites(m) -> tuple[int, int]:
-    cm = m.cmf
-    return cm.celulas_x * cm.sub - 1, cm.celulas_y * cm.sub - 1
-
-
-def _canto_longe(m) -> tuple[int, int]:
-    xm, ym = _limites(m)
-    px, py = m.pet
-    cantos = [(MARGEM_CANTO, MARGEM_CANTO), (xm - MARGEM_CANTO, MARGEM_CANTO), (MARGEM_CANTO, ym - MARGEM_CANTO),
-              (xm - MARGEM_CANTO, ym - MARGEM_CANTO)]
-    return max(cantos, key=lambda c: ((c[0] - px) ** 2 + (c[1] - py) ** 2, c))
-
-
 def aplicar(janela: str, m, rng: random.Random) -> int | None:
     """poe a situacao na copia; devolve o id da comida posta (comida_nova e longe) ou None"""
     if janela not in JANELAS:
@@ -121,7 +110,7 @@ def aplicar(janela: str, m, rng: random.Random) -> int | None:
         m.deixar_comida(FRUTA_NOVA, x, y)
         return m.deixadas[-1]["id"]
     if janela == "longe":
-        m.deixar_comida("racao", *_canto_longe(m))
+        m.deixar_comida("racao", *deslocar(*m.pet, rng.randrange(16), DIST_LONGE, m.cmf))
         return m.deixadas[-1]["id"]
     if janela == "bola":
         m.deixar_bola(*deslocar(*m.pet, rng.randrange(16), DIST_PERTO, m.cmf))
@@ -134,6 +123,10 @@ def ler_janela(janela: str, m, alvo: int | None) -> dict:
     """avanca a copia JANELA_TICKS e le as decisoes da janela, pelo registro do cerebro"""
     c = orq.cerebro_de(m.politica)
     n0, pos0 = len(c.motivos), m.pet
+    dist0 = None
+    if alvo is not None:                          # a distancia (em subunidades, arredondada) do pet a comida posta (o I2a)
+        d = next(x for x in reversed(m.deixadas) if x["id"] == alvo)
+        dist0 = round(((d["x"] - pos0[0]) ** 2 + (d["y"] - pos0[1]) ** 2) ** 0.5)
     m.avancar(JANELA_TICKS)
     decisoes = c.motivos[n0:]
     if not decisoes:
@@ -148,7 +141,7 @@ def ler_janela(janela: str, m, alvo: int | None) -> dict:
     for a in acoes:
         contagem[a] = contagem.get(a, 0) + 1
     return {"acoes": acoes, "contagem": dict(sorted(contagem.items())), "latencia": lat, "n": len(decisoes),
-            "pos0": list(pos0), "pos1": list(m.pet), "corpo_fim": m.estado()["corpo"]}
+            "pos0": list(pos0), "pos1": list(m.pet), "dist0": dist0, "corpo_fim": m.estado()["corpo"]}
 
 
 def bateria(motor, fabricas_vida: tuple, semente: int, dias: int, replicas: int = REPLICAS) -> dict:

@@ -78,6 +78,19 @@ def test_momento_e_decisao_acordada(vida):
             assert d["tick"] >= d["dia"] * si.TICKS_POR_DIA + si.HORA_SONDA - si.PASSO_DONO
 
 
+def test_o_longe_fora_da_visao_e_dentro_do_cheiro(vida):
+    """IP-3: a racao do longe a 16 celulas (cortada pela parede, nunca mais longe); a comida nova perto. dist0 so nas janelas com comida."""
+    _, _, _, b = vida
+    sub, visao, cheiro = 16, 6, 24                # o mapa e os raios de digilab/config.py (raio_visao_celulas, raio_cheiro_celulas)
+    longes = [r["dist0"] for d in b["por_dia"] if d["tick"] is not None for r in d["janelas"]["longe"]]
+    assert longes and all(0 < x <= si.DIST_LONGE + 1 < cheiro * sub for x in longes)
+    assert any(x > visao * sub for x in longes)
+    for d in b["por_dia"]:
+        if d["tick"] is not None:
+            assert all(r["dist0"] is None for j in ("nula", "bola", "susto") for r in d["janelas"][j])
+            assert all(r["dist0"] <= si.DIST_PERTO + 1 for r in d["janelas"]["comida_nova"])
+
+
 def test_sonda_desconhecida_falha_alto(vida):
     motor, _, fab, b = vida
     tick = next(d["tick"] for d in b["por_dia"] if d["tick"] is not None)
