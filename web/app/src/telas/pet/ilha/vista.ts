@@ -542,10 +542,11 @@ class VistaIlha {
       if (id !== "saco") this.objetos?.abrirLugar?.(id, !trancado);
     }
   }
-  /** onde cada lugar cai na tela (o pe, em px de CSS, e a altura dele em px): o cadeado com o "Nv N" (CadeadosDaIlha.tsx) fica sobre ele. Em qualquer largura */
+  /** onde cada lugar cai na tela (o pe, em px de CSS, e a altura dele em px): o cadeado com o "Nv N" (CadeadosDaIlha.tsx) fica sobre ele, e os selos e as
+      etiquetas dos objetos que falam (ObjetosDaIlha.tsx) tambem. Em qualquer largura */
   private publicarLugaresTela(): void {
-    const cb = CENA.aoLugares;
-    if (!cb) return;                                    // sem consumidor (nenhum cadeado nem brilho na tela): nao calcula
+    const cb = CENA.aoLugares, cbObjetos = CENA.aoObjetos;
+    if (!cb && !cbObjetos) return;                      // sem consumidor (nenhum cadeado, brilho ou objeto que fala na tela): nao calcula
     const ppc = this.ppu / this.renderer.getPixelRatio(), r = this.rectCanvas, v = this.vLugar, alvo = this.lugaresTela;
     for (const id of ORDEM_LUGARES) {
       const x = this.pontos[id][0], z = this.pontos[id][1];
@@ -558,7 +559,8 @@ class VistaIlha {
       if (id === "saco") a[2] = LUGARES[id].altura * ppc;
       else { v.set(x, dobrarY(y0 + LUGARES[id].altura, z, this.dobra, x), z).project(this.camera); a[2] = a[1] - (r.top + ((1 - v.y) / 2) * r.height); }
     }
-    cb(alvo);
+    cb?.(alvo);
+    cbObjetos?.(alvo, ppc);
   }
 
   /** o que o minimapa e a HUD leem (cameraLivre.ts): o foco, o pet, a vista, os lugares, a comida, e se o pet saiu da tela e para que lado */

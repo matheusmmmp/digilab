@@ -669,3 +669,16 @@ vai até um objeto. Esta etapa faz só a prancha da A, sem código do jogo (bran
   primeiro, depois o TS com paridade, numa versão de pet nova e atrás de uma chave desligada. Nenhum motor mudou aqui.
 - **As I1-4 a I1-9 ficaram DECIDIDAS** pela recomendação.
 - **As capturas foram refeitas** sobre a main com o #689, com pets v19. As da rodada 1 estão em `prancha_a\antes\`.
+
+**O código da A (o Matheus: "Aprovar e codar", 2026-11-07):** só a vista, no mesmo PR #691.
+- **Os selos dos lugares** (`src/componentes/ObjetosDaIlha.tsx`):
+  - no saco, os treinos de hoje e o ✓, ou a hora da próxima vez;
+  - na barraca, o ponto de diário novo. A marca da última abertura do Diário fica no `localStorage` (`<CHAVE>-diario-visto`), fora do save;
+  - o selo cede ao aviso da necessidade do pet (I1-6).
+- **As etiquetas curtas** aparecem no hover da tigela, da bola e dos três lugares, e no objeto que é o alvo atual (I1-4).
+- **O cartão da tigela e da bola** traz o número, a linha "come/brinca mais ou menos" (I1-8) e o gesto pelo caminho da barra:
+  `agir("alimentar")` e o `porBolaEm` do "Pôr bola" (I1-9).
+- **O clique e o segurar no pet** continuam os da PEGAR_PET (I1-1).
+- **As contas** ficam em `src/telas/pet/objetosIlha.ts`, e os testes em `test/objetos_ilha.test.ts`.
+- **Interpretações:** D-I1-1 a D-I1-4, em `docs/registro/2026-11.md`.
+- **Pendente do #694:** a árvore que dá fruta.

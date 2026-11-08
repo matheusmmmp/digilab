@@ -12,6 +12,7 @@ import { PalcoPet } from "../telas/pet/PalcoPet.tsx";
 import { ArrastoBola } from "../telas/pet/PorBola.tsx";
 import { PegarPet } from "../telas/pet/PegarPet.tsx";
 import { ToqueLugar } from "../telas/pet/ToqueLugar.tsx";
+import { ToqueObjetos } from "./ObjetosDaIlha.tsx";
 import { ToquePet } from "../telas/pet/ToquePet.tsx";
 import { Deco } from "./Deco.tsx";
 
@@ -33,6 +34,8 @@ export function Habitat({ escurecer, irLugar }: { escurecer: boolean; irLugar: (
         {m.mundo && <PegarPet alvo={cena} />}
         {/* o portao abre o Lutar e a barraca o Diario (ToqueLugar.tsx; so na ilha 3D, que conta onde os lugares estao) */}
         {m.mundo && <ToqueLugar alvo={cena} ir={irLugar} />}
+        {/* tocar na tigela ou na bola abre o cartao dela, e o mouse sobre um objeto mostra a etiqueta (ObjetosDaIlha.tsx, a direcao A da ilha) */}
+        {m.mundo && <ToqueObjetos alvo={cena} />}
       </section>
       <div className={"habitat-veu" + (escurecer ? " habitat-veu--ligado" : "")} aria-hidden="true" />
     </div>
