@@ -66,3 +66,25 @@ O Matheus respondeu "A, com IL-2 a IL-4" em 2026-11-08, nesta sessão. As quatro
 - **IL-4:** o carro, a geladeira e o trilho ficam juntos no canto nordeste.
 
 Os pontos seguem PROPOSTO, SEM FONTE. A escolha é a da planta, não a de cada número.
+
+## O fim da ilha e guiar o olhar (2026-11-08, pedidos depois da escolha da A)
+
+- **O fim da ilha** (o Matheus: "adicionar um final, né, para a ilha, para ela não acabar no meio do nada"): em volta da moldura, o mar até o
+  horizonte, com ilhas e morros ao longe, e a mata em degraus até o morro no norte e no leste. Nenhum canto da câmera mostra o vazio. Isso foi
+  para a sessão "Ilha A em 3D".
+- **Guiar o olhar sem texto** (o Matheus: "regras de game design para instruir o player a observar o mundo [...] Tem que ser algo mais
+  natural"). O levantamento está no Obsidian, em `20 Temas/Ensinar a olhar.md`. As regras, PROPOSTAS:
+  - **só vista, para a prancha 3D:**
+    - a câmera abre devagar no primeiro dia, do ninho até a árvore e a praça;
+    - a luz em hierarquia: os destinos com luz quente, a decoração mais apagada;
+    - a ilha limpa, sem contorno nem seta;
+    - um sinal só: o que é tocável balança de leve quando o pet passa, e a decoração nunca balança;
+    - a barraca tapa parte do cais, que aparece ao contornar;
+    - todo toque responde no mundo;
+    - pássaros pousam na árvore madura, e também onde não há nada;
+  - **pedem o pet ou o motor (uma frente própria, depois):**
+    - o pet olha para o alvo antes de ir;
+    - o interesse dele se gasta e volta;
+    - a primeira fruta rola até ele;
+    - o pet ajuda só depois de uns 2 minutos, com uma opção para reduzir;
+    - a recompensa incerta ao sacudir, que conflita com a AS-6 (frutas iguais) e fica para quando ela for revista.
