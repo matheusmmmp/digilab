@@ -101,7 +101,8 @@ A proposta e esta tarefa estão na `main` (#676, `df04915`).
 
 ## O plano do I2 (2026-11-07, Claude Code, Opus 5.5, branch `v3-individualidade-i2-plano`)
 
-O `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE.md` está PROPOSTO, com as IP-1 a IP-9 para o Matheus.
+O `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE.md` está APROVADO pelo Matheus (2026-11-07, "Aprovo todas"), com as IP-1 a IP-9 decididas pela
+recomendação.
 - O desenho: o REL e o REL+F, os quatro donos, o `comedouro`, 14 dias e 60 sementes pareadas, num total de 480 vidas.
 - As medidas: seis traços e, por traço, o R_pet, o R_dia e o R_rep, o η² do dono, as facetas, a síndrome e a norma de reação.
 - A regra escrita antes para os traços que entram no I3.

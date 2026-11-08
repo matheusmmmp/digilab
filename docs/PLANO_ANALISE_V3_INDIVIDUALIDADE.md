@@ -1,6 +1,7 @@
 # PLANO DE ANÁLISE V3 — INDIVIDUALIDADE, I2: a linha de base descritiva (2026-11-07, Claude Code, Opus 5.5)
 
-**Status: PROPOSTO.** As decisões IP-1 a IP-9 (seção 11) são do Matheus. **Nenhuma vida da faixa roda antes de cinco coisas:**
+**Status: APROVADO pelo Matheus em 2026-11-07 ("Aprovo todas").** As decisões IP-1 a IP-9 (seção 11) estão DECIDIDAS, todas pela
+recomendação. **Nenhuma vida da faixa roda antes de cinco coisas:**
 1. este cabeçalho com a marca "APROVADO pelo Matheus";
 2. a faixa reservada em `experiments/bancada/faixas.py`, pedida ao Gerente da V3, num commit próprio;
 3. o código do I2a na `main` (seção 9): as métricas em `digilab/metrics.py` com os testes delas, a sonda do longe trocada (IP-3) com o
@@ -211,7 +212,7 @@ Antes da primeira vida, numa seção nova no fim deste plano, ficam:
 - o commit, os sha256 do orquestrador, da bateria e do `metrics.py`;
 - a config, o comando, a faixa e a contagem da suíte do dia.
 
-## 11. As decisões (cada uma com a recomendação e o custo de errar)
+## 11. As decisões (DECIDIDAS pelo Matheus em 2026-11-07, todas pela recomendação; cada uma com o custo de errar)
 
 | | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|
