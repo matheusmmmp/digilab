@@ -717,5 +717,6 @@ O Matheus pediu de novo uma análise do layout da ilha, com referências de outr
   Plaza, Cult of the Lamb, Slime Rancher, Digimon World, Pokémon Sleep, Lynch e Upton, os weenies, o prospect-refuge e a arte de florestas.
 - **A página para escolher:** https://claude.ai/artifact/Tq149bn7Jmaq9btokYVavK.
 
-**Fica com o Matheus:** as decisões IL-1 a IL-4, no `LEIA.md` da prancha. A recomendação é a A, com as frutíferas do sacudir no bosque do lar.
-O ponto que pesa no tempo é o `CMU_ILHA` do #694: se ele fechar a v20 com as árvores no jardim, mudar depois pede uma v21.
+**As decisões:** IL-1 a IL-4 foram DECIDIDAS pela recomendação, na resposta do Matheus "A, com IL-2 a IL-4" (2026-11-08). Fica a planta A,
+com as frutíferas do sacudir no bosque do lar, os postes nos caminhos e o ferro-velho num canto. A parte do motor (o ninho, a tigela, a bola e
+as três frutíferas) vai para o `CMU_ILHA` do #694, e a parte da vista vai para uma etapa própria: uma prancha 3D e depois o código.

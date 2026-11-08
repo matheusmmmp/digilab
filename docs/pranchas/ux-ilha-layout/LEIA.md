@@ -57,9 +57,12 @@ Todos os pontos são de desenho: PROPOSTO, SEM FONTE.
 - **Só na vista:** os lugares, os postes, o ferro-velho, os bosques da moldura e as pedras.
 - **Os pets de hoje** (v12 a v19) continuam no `CMU_MVP`.
 
-## As decisões (IL-1 a IL-4)
+## As decisões (IL-1 a IL-4), DECIDIDAS
 
-- **IL-1, qual planta:** a recomendação é a A.
-- **IL-2, as frutíferas do sacudir no bosque do lar:** a recomendação é sim, com o `CMU_ILHA` usando os pontos da planta escolhida.
-- **IL-3, os postes nos caminhos e na praça:** a recomendação é sim, cerca de 6 no lugar de 14.
-- **IL-4, o ferro-velho num canto:** a recomendação é sim.
+O Matheus respondeu "A, com IL-2 a IL-4" em 2026-11-08, nesta sessão. As quatro ficam pela recomendação:
+- **IL-1:** a planta A, o lar no bosque e a praça.
+- **IL-2:** as frutíferas do sacudir vão para o bosque do lar. O `CMU_ILHA` do #694 usa os pontos da A.
+- **IL-3:** os postes ficam nos caminhos e na praça, cerca de 6 no lugar de 14.
+- **IL-4:** o carro, a geladeira e o trilho ficam juntos no canto nordeste.
+
+Os pontos seguem PROPOSTO, SEM FONTE. A escolha é a da planta, não a de cada número.
