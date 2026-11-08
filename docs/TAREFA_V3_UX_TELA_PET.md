@@ -702,3 +702,51 @@ vai até um objeto. Esta etapa faz só a prancha da A, sem código do jogo (bran
 - **As contas** ficam em `src/telas/pet/objetosIlha.ts`, e os testes em `test/objetos_ilha.test.ts`.
 - **Interpretações:** D-I1-1 a D-I1-4, em `docs/registro/2026-11.md`.
 - **Pendente do #694:** a árvore que dá fruta.
+
+## 23. Etapa IL: a planta A na ilha 3D, só a vista (2026-11-08)
+
+O Matheus escolheu a planta A do layout da ilha inicial, com IL-1 a IL-4 ("A, com IL-2 a IL-4", 2026-11-08; a prancha do layout no PR #724).
+Esta etapa leva a parte da vista dessa planta ao 3D da ilha, sem mudar o motor (branch `v3-ux-ilha-planta-a`). A parte do motor (o ninho, a
+tigela, a bola e as frutíferas no `CMU_ILHA`, v20) é do #694.
+
+**A prancha:** `docs/pranchas/ux-ilha-planta-a/` e a página https://claude.ai/artifact/PUJBByRmETT758SSY7XCWv, com 16 cenas antes e depois a
+1920 × 950 e a 390 × 844, nas peles Vidro e Militar. As capturas (PNG) ficam fora do git, em `D:\Trab\digilab\capturas_ux_ilha_planta_a\`.
+- **Rodada 1:** a praça, os caminhos, os lugares, os postes, o ferro-velho e a moldura em bosques e vãos.
+- **Rodada 2,** com três pedidos novos do Matheus, todos de 2026-11-08:
+  - o fim da ilha: "adicionar um final [...] para ela não acabar no meio do nada";
+  - a IL-4 revista: "Espalha eles também pelo mapa";
+  - as regras de guiar o olhar sem texto.
+- **A aprovação:** "Aprovar todas" (2026-11-08), as PA-1 a PA-5 pela recomendação.
+
+**O que foi feito (só vista):**
+- **A planta** (`constantes.ts`, `PLANTA_ILHA`; `grade.ts`):
+  - a praça em (31, 16) e os caminhos de terra dela ao lar (até o comedouro do layout), ao portão, à barraca e ao cais;
+  - o portão no fim do caminho reto ao norte, com um vão na mata atrás; a barraca a leste, dentro da área (PA-2); o cais ao sul; o saco
+    em (22, 9), perto da praça (`lugares.ts`);
+  - 6 postes, só na praça e no caminho do cais (IL-3);
+  - o carro, a geladeira e o trilho espalhados, cada um com o seu entorno (a IL-4 revista): o carro meio coberto pelo mato no platô do
+    oeste, a geladeira na areia a leste do cais e o trilho na beira leste do rio;
+  - a moldura em bosques e vãos.
+  - Tudo o que a planta tira da vista só some (`escondidos`): a lista `objetos` não muda, e o gabarito E-G0 continua passando. O que ela
+    acrescenta (as árvores dos bosques, o entorno dos marcos) fica numa lista própria, `extras`, que a `cena.ts` desenha.
+- **O fim da ilha** (`fimDaIlha.ts`, `fimConta.ts`; `grade.ts`, `porBordas`; `FIM_ILHA`):
+  - o mar em volta da grade inteira, até o horizonte;
+  - a leste do rio, a mata sobe em dois degraus até o morro;
+  - duas faixas de silhuetas (ilhas perto, morros longe) seguem o ponto olhado. O pé delas vai a cada quadro para o horizonte do mar
+    curvo, e a cor é a da névoa puxada para a sombra do céu, sem cor nova (PA-5).
+- **O sinal só** (a regra 3; `itens.ts`, `CHAMADO`): a tigela, a bola e o saco dão um pulinho quando o pet chega perto. Com movimento
+  reduzido, nada. O vento na decoração fica (PA-4).
+- **A ida ao saco pela distância** (PA-3; `lugares.ts`, `idaDoTreino`; `TREINO_VEL` = 7 células por segundo, 0,9 s no mínimo): com o
+  saco perto da praça, a ida fixa de 0,9 s fazia o pet cruzar ~19 células.
+- **Os testes:**
+  - `test/ilha_planta.test.ts` (novo), PL-1 a PL-6: a praça e os caminhos, nenhum lugar sobre o caminho, a decoração do caminho escondida,
+    os bosques e os vãos, os degraus, e as contas do horizonte e das silhuetas;
+  - reescritos para a planta: o E-G10 de `test/ilha_enfeites.test.ts`, o LG-G1 a LG-G4 de `test/ilha_lugares.test.ts` e o saco e a ida
+    do treino em `test/lugares_ilha.test.ts`.
+- **Os desvios:** D-IL-1 a D-IL-6, em `docs/registro/2026-11.md`.
+
+**Fica como proposta, sem código:**
+- a regra 1, a luz em hierarquia: a paleta fica em `cena.ts` e `estilos.ts`, para depois do #728 (o céu);
+- a regra 4, esconder e revelar;
+- a regra 5, os pássaros, que precisam da árvore madura do #694;
+- a regra 6, a câmera do primeiro dia.
