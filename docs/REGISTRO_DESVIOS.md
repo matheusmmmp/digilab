@@ -555,6 +555,8 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-07 — UX_TELA_PET × LUGARES_3D, a mescla da `main` na `v3-ux-integra` (worker da mescla, Claude Code, Opus 5.5, branch `v3-ux-para-main`)](registro/2026-11.md)
 - [2026-11-07 — INFRA_AGENTES, o H11 do índice de desvios (especificador da frente, Claude Code, Opus 5.5, branch `v3-infra-agentes-h11`)](registro/2026-11.md)
 - [2026-11-07 — INDIVIDUALIDADE, I0: as decisões e a conferência das sondas (Claude Code, Opus 5.5, branch `v3-individualidade-i0`)](registro/2026-11.md)
+- [2026-11-07 — INDIVIDUALIDADE, I1: a bateria como ferramenta (Claude Code, Opus 5.5, branch `v3-individualidade-i1`)](registro/2026-11.md)
 - [2026-11-07 — LUTA_EFEITOS, E5 o nocaute e a câmera (worker, Claude Code, Opus 5.5, branch `v3-luta-efeitos-e5`)](registro/2026-11.md)
 - [2026-11-07 — CONVERSA_PET, DC3d, o porte da fala com conteúdo ao jogo (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc3d-porte`)](registro/2026-11.md)
 - [2026-11-07 — LAB_CENARIOS, os Cenários do Laboratório na versão de hoje (worker, Claude Code, Opus 5.5, branch `v3-lab-cenarios`)](registro/2026-11.md)
+- [2026-11-07 — OBJETOS_3D, o trem refeito: o vagão de madeira do esboço, sem achatar a textura (worker, Claude Code, Opus 5.5, branch `v3-objeto-trem`)](registro/2026-11.md)
