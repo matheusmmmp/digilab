@@ -704,3 +704,20 @@ Worker: Claude Code, Opus 5.5, worktree `v2-combate-tr`, 2026-10-30.
 **O próximo passo** é decidir se a v14 é ligada no jogo com as 13 metas que passam (DE-1; a B2 do `docs/PLANO_V3.md`) ou se espera a rodada
 dos itens acima. A decisão é do Matheus.
 
+
+## Rodada 3, fase R3-0 — o ponto de partida (a luta v18 nas sementes novas)
+
+Worker: Claude Code, Opus 5.5, worktree `D:\Trab\digilab\v3-luta-r3-0`, branch `v3-luta-r3-0`, 2026-11-08. O plano é o
+`docs/PLANO_EQUILIBRIO_COMBATE_TR_R3.md` (aprovado em 2026-11-08), seção 3. A R3-0 não muda nenhum número: ela mede.
+
+### O plano das medidas (registrado antes da primeira luta)
+
+As duas medidas rodam uma depois da outra, cada uma pelo gate H10 e pelo `tools/pre_run.py --medicao`, em 4 processos, sem outra run de
+pesquisa na máquina (V3-D8). O tempo estimado é de cerca de 7 min por medida (a medição A do empurrão).
+
+| medida | o comando (em `web/app`) | as sementes | as metas | o que decide |
+|---|---|---|---|---|
+| **1, a reprodução** | `python scripts/equilibrio_tr/medir_tudo.py --faixa calibracao2 --empurrao v18 --saida scripts/medicoes/equilibrio_tr/r3_0/reproducao` | `72101…72505` (a calibração da rodada 2, só para esta prova; D-R3-5) | todas as 27 | os 15 JSON conferidos campo a campo contra `empurrao/r_a_inv20/`, menos `data`, `commit`, `node` e `custo_s`. Igual: a `main` de hoje luta como a medição A. Diferente: a fase para e volta com a diferença |
+| **2, o ponto de partida** | `python scripts/equilibrio_tr/medir_tudo.py --faixa calibracao3 --empurrao v18 --tela --saida scripts/medicoes/equilibrio_tr/r3_0/calibracao3` | `83101…83505` (a calibração da rodada 3; a conferência `84101…84505` não roda) | todas as 27, mais a coluna de tela do T-3 (D-R3-6) | a lista das metas protegidas da rodada: as que passam aqui (seção 3 do plano) |
+
+A conferência campo a campo sai de `scripts/equilibrio_tr/comparar_medidas.py`. A medida 2 só roda se a 1 sair igual.
