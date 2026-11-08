@@ -63,7 +63,10 @@ O Matheus respondeu "A, com IL-2 a IL-4" em 2026-11-08, nesta sessão. As quatro
 - **IL-1:** a planta A, o lar no bosque e a praça.
 - **IL-2:** as frutíferas do sacudir vão para o bosque do lar. O `CMU_ILHA` do #694 usa os pontos da A.
 - **IL-3:** os postes ficam nos caminhos e na praça, cerca de 6 no lugar de 14.
-- **IL-4:** o carro, a geladeira e o trilho ficam juntos no canto nordeste.
+- **IL-4:** ~~o carro, a geladeira e o trilho ficam juntos no canto nordeste~~. **Revista pelo Matheus no mesmo dia:** "eu não quero que deixe o
+  trilho o carro e a geladeira um do lado do outro. Espalha eles também pelo mapa." Os três ficam em pontos diferentes da moldura, cada um
+  com o seu entorno: por exemplo, o carro meio coberto pelo mato no oeste, a geladeira na areia perto do cais e o trilho saindo da mata do
+  leste. Nenhum deles fica no caminho.
 
 Os pontos seguem PROPOSTO, SEM FONTE. A escolha é a da planta, não a de cada número.
 
