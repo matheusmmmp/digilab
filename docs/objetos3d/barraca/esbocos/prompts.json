@@ -1,0 +1,21 @@
+{
+ "ai_model": "nano-banana-2",
+ "referencias": [
+  "ref_maquete_b.png"
+ ],
+ "prompt_base": "Concept art of a single prop for a cozy 3D island game for children with an anime digital-world look. Match the art style of the reference image: anime background art, bright saturated colors, cel shading with crisp dark ink outlines. Unlike a flat toy, show rich hand-painted detail: painted texture variation inside every color area, visible materials (stone blocks, wood grain, canvas seams, chipped paint), small wear, moss and little plants where it fits, soft gradients and highlights. Painterly anime background-art finish: soft brush strokes inside each color area, believable materials rather than plastic, a thin light rim highlight on the edges facing the sky, and most of the detail on the main feature of the object. Chunky readable silhouette, slightly toy-like proportions, friendly and inviting, nothing scary. No text, no letters, no numbers, no logo, no brand, no symbols, no characters, no creatures. Show only the object, the full object in frame, three-quarter view from slightly above, on a plain light grey background, no ground, no shadow.",
+ "variantes": [
+  {
+   "nome": "esboco_1_domo_costuras",
+   "prompt": "A teal canvas dome camping tent with visible stitched seams and a few sewn patches, a rolled-up entrance flap showing a dark inside, orange guy ropes with wooden stakes, a ground tarp, a small satellite dish antenna on top, and a folding stool with a stack of books outside."
+  },
+  {
+   "nome": "esboco_2_canadense",
+   "prompt": "A classic A-frame canvas tent in cream and teal with wooden poles, little triangular bunting flags, a hanging lantern at the entrance, guy ropes with stakes, and a wooden crate with books beside it."
+  },
+  {
+   "nome": "esboco_3_iurta",
+   "prompt": "A small round yurt-like tent with teal canvas walls and a patterned trim band, a short metal chimney pipe and a small satellite dish on the roof, a wooden door frame, and a doormat."
+  }
+ ]
+}

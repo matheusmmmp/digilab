@@ -9,15 +9,16 @@
 import type { Mapa } from "../../../habitat.ts";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { PALETA_DIGITAL, PALETA_ILHA, carregarVariante, doisTons, flores, montarCena, objetos, terreno, usarDoisTons, type CenaIlha, type Objetos,
+import { PALETA_DIGITAL, PALETA_ILHA, carregarVariante, doisTons, flores, montarCena, objetos, terreno, tufos, usarDoisTons, type CenaIlha, type Objetos,
   type PaletaTerreno } from "./cena.ts";
 import { arquivosCassette, carregadorCassette, terrenoCassette } from "./cassette.ts";
-import { CEU_DIGITAL, DOBRA_K } from "./constantes.ts";
+import { CEU_DIGITAL, CONTORNO_DIGITAL, DOBRA_K } from "./constantes.ts";
 import { ceuComGrade, fios, lata, particulas } from "./digital.ts";
 import { enfeites } from "./enfeites.ts";
 import { lugares } from "./lugaresCena.ts";
 import { PALETA_FLORESTA, arquivosFloresta, carregadorFloresta } from "./floresta.ts";
 import type { Ilha } from "./grade.ts";
+import type { Contorno } from "./pos.ts";
 import { objetosVoxel, terrenoVoxel } from "./voxel.ts";
 
 export interface Estilo {
@@ -28,6 +29,8 @@ export interface Estilo {
   montar(ilha: Ilha): CenaIlha;
   /** os objetos da grade (podem baixar arquivos; falham alto se faltar um) */
   objetos(ilha: Ilha): Promise<Objetos>;
+  /** o traco de nanquim em tudo (pos.ts; o estilo digital, D5) */
+  readonly contorno?: Contorno;
   /** as cores do minimapa (ilha/minimapa.ts): a paleta do terreno do estilo; o Voxel e o Cassette, que pintam o terreno por outro
       caminho, usam a da ilha (o mesmo layout, as mesmas regioes) */
   readonly paleta: PaletaTerreno;
@@ -61,10 +64,10 @@ function estiloSemTons(mapa: Mapa, base: string): Estilo {
       ceuDia.colorSpace = THREE.SRGBColorSpace;
       ceuDia.userData.cobrir = true;    /* cobre a tela sem esticar (cena.ts, cobrirFundo) */
       return {
-        id: mapa, dobra: DOBRA_K, paleta: PALETA_DIGITAL,
+        id: mapa, dobra: DOBRA_K, paleta: PALETA_DIGITAL, contorno: CONTORNO_DIGITAL,
         montar: i => {
-          const chao = new THREE.Group().add(terreno(i, PALETA_DIGITAL), flores(i));
-          const c = montarCena(i, chao, { nuvens: false, ceuDia, horizonteDia: CEU_DIGITAL.horizonte, chaoHemi: CEU_DIGITAL.chaoHemi, nevoa: CEU_DIGITAL.nevoa });
+          const chao = new THREE.Group().add(terreno(i, PALETA_DIGITAL), flores(i), tufos(i));
+          const c = montarCena(i, chao, { nuvens: "anime", ceuDia, horizonteDia: CEU_DIGITAL.horizonte, chaoHemi: CEU_DIGITAL.chaoHemi, nevoa: CEU_DIGITAL.nevoa });
           doisTons(c.cena);
           return c;
         },

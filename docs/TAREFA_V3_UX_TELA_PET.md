@@ -655,3 +655,50 @@ Depois, o Matheus disse que "o da raiva ainda tá feio", e a grade `raiva` virou
 
 O antes e o depois estão em `docs/pranchas/ux-gota/gota_antes_depois.png`. As medidas (7 × 8 e o contorno de 1 unidade) são PROPOSTO,
 SEM FONTE.
+
+## 22. Etapa I1: a prancha da ilha A, "Objetos que falam" (2026-11-07)
+
+O Matheus pediu uma ilha mais interativa, com referências como Animal Crossing. O gerente mostrou três direções: A, "Objetos que falam"; B,
+"Quintal que atrai"; e C, "Ilha que cresce". A resposta dele foi: "Siga com as recomendações". Isso quer dizer a A primeiro, a C depois e a
+B como pesquisa. Também vale para as duas perguntas: tocar no objeto acompanha a barra de ações, e o fio aparece só no toque e quando o pet
+vai até um objeto. Esta etapa faz só a prancha da A, sem código do jogo (branch `v3-ux-ilha-a`, a partir da `v3-ux-integra`).
+
+**O que foi feito:**
+- **A prancha:** `docs/pranchas/ux-ilha-a/`, desenhada sobre capturas reais da Tela Pet. Tem cinco estados (nada tocado, etiqueta aberta, fio
+  ao tocar no pet, pet indo até a tigela, toque na árvore), a 1920 e a 390, nas peles Vidro e Militar, mais uma versão com as notas da
+  fonte. As 30 imagens estão em `D:\Trab\digilab\capturas_ux_ilha_aprovar\prancha_a\`.
+- **Os números:** saem do motor no momento da captura (`window.__digilab`), em `dados.json` (gerado pelo `gerar_dados.py`).
+- **A fonte de cada um dos cinco pontos** está no `LEIA.md` da prancha. Três lacunas:
+  - as frutas na árvore e o gesto de sacudir: o jogo roda o `CMU_MVP`, sem árvores;
+  - o "diário novo": o jogo não guarda o que foi lido;
+  - o paladar, que ainda não existe no TS.
+- **O alvo do fio** pede um getter só de leitura no `Mundo` do TS.
+- **As perguntas I1-1 a I1-10** e a lista do que a direção C vai precisar estão no `PERGUNTAS.md` e no `LEIA.md`.
+
+**Fica com o Matheus:** aprovar as telas e responder as perguntas I1-1 a I1-10. O código da A só começa depois disso.
+
+**Rodada 2 (o Matheus respondeu, 2026-11-07):**
+
+> "Que fio, eu pedi pra ser drag and drop. [...] Não tem fio nenhum. Acredito que a ideia de clicar na árvore, ela sacudir, é interessante
+> para cair a flor, né? A fruta. Daí segue a recomendação para as outras opções."
+
+- **O fio saiu por inteiro,** e a I1-2 (o getter do alvo) e a I1-10 caíram com ele.
+- **Clicar no pet é carinho, e segurar o leva** (I1-1). Isso já existe no jogo (PEGAR_PET, #673 e #674). O estado "fio ao tocar no pet"
+  virou "segurar e arrastar o pet", desenhado como o jogo já faz.
+- **Tocar na árvore a sacode e faz cair uma fruta** (I1-3). Isso pede motor novo, e o PERGUNTAS.md descreve a tarefa própria: Python
+  primeiro, depois o TS com paridade, numa versão de pet nova e atrás de uma chave desligada. Nenhum motor mudou aqui.
+- **As I1-4 a I1-9 ficaram DECIDIDAS** pela recomendação.
+- **As capturas foram refeitas** sobre a main com o #689, com pets v19. As da rodada 1 estão em `prancha_a\antes\`.
+
+**O código da A (o Matheus: "Aprovar e codar", 2026-11-07):** só a vista, no mesmo PR #691.
+- **Os selos dos lugares** (`src/componentes/ObjetosDaIlha.tsx`):
+  - no saco, os treinos de hoje e o ✓, ou a hora da próxima vez;
+  - na barraca, o ponto de diário novo. A marca da última abertura do Diário fica no `localStorage` (`<CHAVE>-diario-visto`), fora do save;
+  - o selo cede ao aviso da necessidade do pet (I1-6).
+- **As etiquetas curtas** aparecem no hover da tigela, da bola e dos três lugares, e no objeto que é o alvo atual (I1-4).
+- **O cartão da tigela e da bola** traz o número, a linha "come/brinca mais ou menos" (I1-8) e o gesto pelo caminho da barra:
+  `agir("alimentar")` e o `porBolaEm` do "Pôr bola" (I1-9).
+- **O clique e o segurar no pet** continuam os da PEGAR_PET (I1-1).
+- **As contas** ficam em `src/telas/pet/objetosIlha.ts`, e os testes em `test/objetos_ilha.test.ts`.
+- **Interpretações:** D-I1-1 a D-I1-4, em `docs/registro/2026-11.md`.
+- **Pendente do #694:** a árvore que dá fruta.
