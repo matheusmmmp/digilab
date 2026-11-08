@@ -100,7 +100,7 @@ export const LUGARES_GRADE = {
   portao: { perto: 1.8, longe: 3.6, folga: 1, deEnfeite: 3.2, clareira: 3, alvo: [8, -2.4] },
   cais: { faixa: [0.15, 0.4], clareira: 4.5 },
 } as const;
-/** a luz de um lugar aberto (lugares.ts): a cor da mascara de cada lugar (o ciano do portal e dos cristais, tirado da textura) e a
+/** a luz de um lugar aberto (lugaresCena.ts): a cor da mascara de cada lugar (o ciano do portal e dos cristais, tirado da textura) e a
     forca (emissiveIntensity). PROPOSTO, SEM FONTE */
 export const LUGAR_LUZ = { cor: { portao: "110,240,230", barraca: "110,240,230", cais: "131,228,218" }, forca: 0.55 } as const;
 /** a luz dos enfeites a noite (enfeites.ts): o halo na lanterna, na fracao `altura` da altura do modelo, com `tamanho` celulas de

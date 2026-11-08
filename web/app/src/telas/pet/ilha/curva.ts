@@ -49,7 +49,7 @@ export function paraMundoCel(cam: CameraLida, dobra: Dobra, nx: number, ny: numb
   return tocarChao(o, d, dobra, yChao);
 }
 
-/** a caixa de um lugar no mundo (a THREE.Box3 de lugares.ts serve) */
+/** a caixa de um lugar no mundo (a THREE.Box3 de lugaresCena.ts serve) */
 export interface Caixa { min: { x: number; y: number; z: number }; max: { x: number; y: number; z: number } }
 /** o lugar sob o ponto normalizado (nx, ny) da tela: o retangulo que cobre os 8 cantos da caixa de cada lugar, projetados por `ndc` (a
     vista projeta com a dobra, curva.ts). Dois lugares sob o ponto: o de retangulo menor (o mais longe aparece menor e fica por cima so

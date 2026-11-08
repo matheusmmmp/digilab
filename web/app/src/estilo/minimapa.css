@@ -1,0 +1,22 @@
+/* O minimapa da tela Pet (L1 de "Lugares da ilha", docs/PROPOSTAS_V3_UX_TELA_PET.md; so a partir de 900 px, o componente decide). Um circulo de
+   232 px (PROPOSTO, SEM FONTE) a 16 px da direita e de baixo. Nenhuma cor nova: so tokens. */
+.minimapa-caixa{ position:absolute; z-index:6; right:16px; bottom:16px; width:232px; height:232px; border-radius:50%; overflow:hidden;
+  border:2px solid var(--hx-borda); box-shadow:var(--hud-brilho); background:var(--hud-fundo-2); box-sizing:border-box;
+  pointer-events:auto }  /* a camada da tela Pet nao recebe ponteiro (so os controles dela) */
+:root[data-pele="vidro"] .minimapa-caixa{ box-shadow:var(--hud-brilho), 0 0 12px var(--hx-luz) }
+:root[data-pele="xcom"] .minimapa-caixa{ border-top-color:var(--hx-borda-topo) }
+/* o elemento focavel: o canvas inteiro; o foco visivel como na HUD */
+.minimapa{ position:absolute; inset:0; width:100%; height:100%; display:block; cursor:crosshair; touch-action:none; outline-offset:-4px }
+.minimapa:focus-visible{ outline:2px solid var(--hx-foco) }
+.minimapa-caixa.fixa .minimapa{ cursor:default }
+/* as marcas sobre o canvas: posicionadas por estilo direto a cada quadro */
+.minimapa-marca{ position:absolute; left:0; top:0; display:grid; place-items:center; pointer-events:none; will-change:transform }
+.minimapa-ic{ width:18px; height:18px; margin:-9px 0 0 -9px; background:var(--hx-miolo); border:1px solid var(--hx-borda); color:var(--hx-texto) }
+.minimapa-ic svg{ width:12px; height:12px; stroke-width:2.4 }
+.minimapa-n{ position:absolute; left:50%; top:6px; transform:translateX(-50%); font:700 11px/1 var(--hx-f); letter-spacing:.06em; color:var(--hx-rotulo);
+  padding:2px 5px; background:var(--hud-fundo-2); border:1px solid var(--hx-borda); pointer-events:none }
+/* o texto dos atalhos, so para leitor de tela */
+.minimapa-desc{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0 }
+/* o pet por cima de tudo: o rosa com o anel claro (L1-2); chamando, um halo a mais */
+.minimapa-pet{ width:12px; height:12px; margin:-6px 0 0 -6px; border-radius:50%; background:var(--hx-necessidade); border:2px solid var(--hx-foco); box-sizing:border-box }
+.minimapa-pet.chama{ box-shadow:0 0 0 4px color-mix(in srgb, var(--hx-necessidade) 45%, transparent) }

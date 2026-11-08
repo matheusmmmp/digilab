@@ -68,7 +68,7 @@ export const ENFEITES_LUZ: Partial<Record<NomeEnfeite, string>> = { poste: "post
 
 /* Os lugares da ilha (docs/TAREFA_V3_LUGARES_3D.md; os "Lugares da ilha" de docs/PLANO_V3_PROGRESSAO_TUTORIAL.md, P-11): outra tabela irma,
    em public/lugares/<nome>/, gerada pela Meshy, com o License.txt ao lado. Quem os poe na cena (o ponto, o giro, o trancado e o aberto) e o
-   modulo ilha/lugares.ts da frente UX_TELA_PET, pelo carregarVariante (cena.ts), que normaliza o modelo para a altura daqui. O portao: o arco
+   modulo ilha/lugaresCena.ts (a tabela da UX_TELA_PET em ilha/lugares.ts), pelo carregarVariante (cena.ts), que normaliza o modelo para a altura daqui. O portao: o arco
    de pedra com o portal ciano (o lugar do Lutar), um pouco mais alto que um pinheiro baixo, para o pet (~1 celula) passar folgado. A barraca:
    o domo digital com a antena (o lugar do Diario), 4 celulas com a antena, ~5 de largura, a porta com folga para o pet. O cais: o pier
    com a balsa e a boia de dados (o multiplayer, futuro), 2,4 celulas ate a luz da balsa, ~7,6 de comprimento; sem sombra redonda (fica na

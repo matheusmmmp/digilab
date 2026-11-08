@@ -1,6 +1,8 @@
 /* O toque nos lugares da ilha (direcao B, "Lugares da ilha"; docs/TAREFA_V3_LUGARES_3D.md, secao 13): um clique ou tap no portao abre o
-   Lutar e na barraca abre o Diario, como o trilho de icones (lugaresIlha.ts, LUGAR_DESTINO). So o lugar aberto (LUGAR_ABERTO) abre; o
-   cais, trancado e ainda sem menu, nao faz nada (o cadeado e o "Nv" ficam para o nivel do Tamer, plano V da progressao). O mesmo gesto do
+   Lutar e na barraca abre o Diario, como o trilho de icones (lugaresIlha.ts, LUGAR_DESTINO). So o lugar com menu (LUGAR_ABERTO) responde; o
+   cais, ainda sem menu, nao faz nada. O `ir` e o irDestino do App.tsx, o mesmo do trilho, da tecla e do minimapa (UX_TELA_PET): ele abre o lugar
+   no PainelLugar com a viagem da camera e respeita o nivel do Tamer, entao o toque num lugar trancado abre o cartao do motivo (o cadeado e o
+   "Nv N" sobre o modelo sao do CadeadosDaIlha.tsx, e o apagado da vista, aplicarTrancas). O mesmo gesto do
    toque no pet (ToquePet.tsx, TOQUE): um arrasto (a camera livre, a bola, pegar o pet) ou um toque longo nao conta, e o toque no sprite do
    pet e do pet. Com o mouse, o cursor vira a mao sobre um lugar que abre. */
 import { useEffect, useRef, type RefObject } from "react";

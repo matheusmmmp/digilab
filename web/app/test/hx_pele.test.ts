@@ -25,7 +25,7 @@ describe("tokens --hx-*", () => {
   });
   it("todo texto passa 4,5:1 contra o pior fundo dos menus, e as bordas 3:1", () => {
     const fundos = [token("hx-chao"), token("hx-miolo"), token("hx-miolo-2"), "#0E1E16"];
-    for (const t of ["hx-texto", "hx-texto-2", "hx-sec", "hx-rotulo", "hx-btn-ink", "hx-alerta", "hx-perigo", "hx-ok", "hx-necessidade", "hx-aprendido"]) {
+    for (const t of ["hx-texto", "hx-texto-2", "hx-sec", "hx-rotulo", "hx-btn-ink", "hx-alerta", "hx-perigo", "hx-ok", "hx-necessidade", "hx-aprendido", "hx-sombrio"]) {
       for (const f of fundos) expect(contraste(token(t), f), `${t} sobre ${f}`).toBeGreaterThanOrEqual(4.5);
     }
     expect(contraste(token("hx-escolhido-ink"), token("hx-escolhido"))).toBeGreaterThanOrEqual(4.5);
@@ -55,7 +55,7 @@ describe("pele Sci-fi (vidro)", () => {
   const grama: Rgb = [161, 225, 113];
   const pior = sobre("rgba(170,225,255,.10)", sobre(tokenVidro("hx-miolo-2"), grama));
   it("todo texto passa 4,5:1 sobre o vidro com o habitat mais claro atras; bordas e foco 3:1", () => {
-    for (const t of ["hx-texto", "hx-texto-2", "hx-sec", "hx-rotulo", "hx-num", "hx-alerta", "hx-perigo", "hx-ok", "hx-aprendido", "hx-foco"]) {
+    for (const t of ["hx-texto", "hx-texto-2", "hx-sec", "hx-rotulo", "hx-num", "hx-alerta", "hx-perigo", "hx-ok", "hx-aprendido", "hx-foco", "hx-sombrio"]) {
       expect(contraste(tokenVidro(t).replace(/^var\(--hx-texto\)$/, token("hx-texto")), hex(pior)), t).toBeGreaterThanOrEqual(4.5);
     }
     const escolhido = sobre("rgba(58,168,255,.40)", pior), botao = sobre(tokenVidro("hx-btn-bg"), pior);
@@ -80,7 +80,7 @@ describe("pele Sci-fi (vidro)", () => {
       ["hud-brilho", "none"], ["hud-fundo-1", "rgba(30,33,36,.97)"]]) expect(tokens).toContain(`--${t}:${v};`);
     /* o pior fundo da HUD: a caixa de alfa .97 sobre branco puro */
     const hud = hex(sobre("rgba(30,33,36,.97)", [255, 255, 255]));
-    for (const t of ["hx-texto", "hx-texto-2", "hx-sec", "hx-rotulo", "hx-btn-ink", "hx-alerta", "hx-perigo", "hx-foco"]) {
+    for (const t of ["hx-texto", "hx-texto-2", "hx-sec", "hx-rotulo", "hx-btn-ink", "hx-alerta", "hx-perigo", "hx-foco", "hx-sombrio"]) {
       expect(contraste(token(t), hud), t).toBeGreaterThanOrEqual(4.5);
     }
   });
@@ -122,7 +122,7 @@ describe("caixas da luta nas duas peles", () => {
   const tVidro = (t: string) => tokenVidro(t).replace(/^var\(--hx-texto\)$/, token("hx-texto"));
   it("Vidro, no alto: todo texto das caixas passa 4,5:1 sobre o vidro com o mapa mais claro atras; no cartao da regra tambem", () => {
     const pior = vidroSobre(ALTO), regra = sobre(tokenVidro("hx-miolo-2"), pior);
-    for (const t of ["hx-texto", "hx-texto-2", "hx-sec", "hx-rotulo", "hx-num", "hx-aprendido", "hx-perigo", "hx-ok", "hx-alerta"]) {
+    for (const t of ["hx-texto", "hx-texto-2", "hx-sec", "hx-rotulo", "hx-num", "hx-aprendido", "hx-perigo", "hx-ok", "hx-alerta", "hx-sombrio"]) {
       expect(contraste(tVidro(t), hex(pior)), `alto ${t}`).toBeGreaterThanOrEqual(4.5);
     }
     for (const t of ["hx-texto", "hx-aprendido", "hx-sec", "hx-rotulo"]) expect(contraste(tVidro(t), hex(regra)), `regra ${t}`).toBeGreaterThanOrEqual(4.5);
@@ -136,7 +136,7 @@ describe("caixas da luta nas duas peles", () => {
   it("Militar: a caixa quase opaca sobre o mapa mais claro; texto 4,5:1, o cartao da regra e o escolhido do dock tambem", () => {
     for (const fundo of [ALTO, PE]) {
       const caixa = hex(sobre("rgba(30,33,36,.97)", fundo));
-      for (const t of ["hx-texto", "hx-texto-2", "hx-sec", "hx-rotulo", "hx-aprendido", "hx-perigo", "hx-ok", "hx-alerta"]) expect(contraste(token(t), caixa), `militar ${t}`).toBeGreaterThanOrEqual(4.5);
+      for (const t of ["hx-texto", "hx-texto-2", "hx-sec", "hx-rotulo", "hx-aprendido", "hx-perigo", "hx-ok", "hx-alerta", "hx-sombrio"]) expect(contraste(token(t), caixa), `militar ${t}`).toBeGreaterThanOrEqual(4.5);
     }
     for (const t of ["hx-texto", "hx-aprendido", "hx-sec"]) expect(contraste(token(t), token("hx-miolo-2")), `regra ${t}`).toBeGreaterThanOrEqual(4.5);
     expect(contraste(token("hx-escolhido-ink"), token("hx-escolhido"))).toBeGreaterThanOrEqual(4.5);
@@ -227,5 +227,59 @@ describe("MedidorHx", () => {
     expect(s).toContain('aria-valuetext="42%"');
     expect(s).toContain(">42%<");
     expect(() => renderToStaticMarkup(h(MedidorHx, { valor: 2, max: 5, rotulo: "x", porcento: true }))).toThrow();
+  });
+});
+
+/* M1 do mobile minimo (pet_movel.css): os circulos de acao e o icone do agora, no celular, levam um fundo proprio quase opaco (--hx-miolo por baixo) e
+   nao usam desfoque. O icone passa de 3:1 sobre o pior pixel da cena (a grama clara e o branco puro) nas duas peles. */
+describe("o celular (mobile minimo): acoes e icone do agora", () => {
+  const movelCss = readFileSync(new URL("../src/estilo/pet_movel.css", import.meta.url), "utf8");
+  const clara = [[161, 225, 113], [255, 255, 255]] as Rgb[];
+  const acaoVidro = (f: Rgb) => sobre(tokenVidro("hx-btn-bg"), sobre(tokenVidro("hx-miolo"), f));
+  it("Vidro: o icone da acao e o do agora (--hx-btn-ink, --hx-texto) passam 3:1 sobre o pior pixel", () => {
+    for (const f of clara) {
+      expect(contraste(tokenVidro("hx-btn-ink"), hex(acaoVidro(f))), `acao ${f}`).toBeGreaterThanOrEqual(3);
+      const agora = sobre(tokenVidro("hud-fundo-1").replace("var(--hx-miolo-2)", tokenVidro("hx-miolo-2")), sobre(tokenVidro("hx-miolo"), f));
+      expect(contraste(token("hx-texto"), hex(agora)), `agora ${f}`).toBeGreaterThanOrEqual(3);
+    }
+  });
+  it("Militar: o mesmo, com o --hx-btn-bg quase opaco sobre o --hx-miolo", () => {
+    for (const f of clara) {
+      expect(contraste(token("hx-btn-ink"), hex(sobre("rgba(14,30,22,.92)", sobre(token("hx-miolo"), f))))).toBeGreaterThanOrEqual(3);
+      expect(contraste(token("hx-texto"), hex(sobre("rgba(30,33,36,.97)", sobre(token("hx-miolo"), f))))).toBeGreaterThanOrEqual(3);
+    }
+  });
+  it("o CSS poe o --hx-miolo por baixo do --hx-btn-bg, tira o desfoque dos circulos e do agora, e o anel de foco leva o halo escuro", () => {
+    expect(movelCss).toMatch(/background:linear-gradient\(var\(--hx-btn-bg\), var\(--hx-btn-bg\)\), linear-gradient\(var\(--hx-miolo\), var\(--hx-miolo\)\)/);
+    expect(movelCss).toMatch(/\.mm-acao, \.mm-extra, \.mm-mais \.racao-bt\)\{[^}]*backdrop-filter:none/);
+    expect(movelCss).toMatch(/\.mm-agora\{[^}]*backdrop-filter:none/);
+    expect(movelCss).toMatch(/:root\[data-pele\] body \.mm-bt:focus-visible\{[^}]*box-shadow:0 0 0 5px var\(--hx-miolo\) !important/);
+  });
+});
+
+/* os itens trancados do nivel do Tamer (nivel.css; trilho, coluna do celular, minimapa e pecas): apagados por cor de token (--hx-sec), borda tracejada e cadeado, sem opacity no
+   conjunto. O texto passa 4,5:1 e o icone 3:1 nas duas peles (o vidro no pior caso, a grama de dia atras) */
+describe("itens trancados do nivel do Tamer", () => {
+  const nivelCss = readFileSync(new URL("../src/estilo/nivel.css", import.meta.url), "utf8");
+  const bloco = (sel: string) => { const i = nivelCss.indexOf(sel); if (i < 0) throw new Error("sem " + sel); return nivelCss.slice(i, nivelCss.indexOf("}", i)); };
+  it("o apagado e cor de token, sem opacity, com a borda tracejada", () => {
+    for (const sel of [".hx-nav__bt--trancado{", ":root[data-pele] body .mm-coluna .mm-bt--trancado{", ".minimapa-ic.minimapa-marca--trancado{", ".fechado-trancado{"]) {
+      const b = bloco(sel);
+      expect(b, sel).toContain("color:var(--hx-sec)");
+      expect(b, sel).toMatch(/dashed/);
+      expect(b, sel).not.toContain("opacity");
+    }
+  });
+  it("Militar: o --hx-sec passa 4,5:1 (texto) e 3:1 (icone) sobre os fundos dos menus", () => {
+    for (const f of [token("hx-chao"), token("hx-miolo"), token("hx-miolo-2"), "#0E1E16"]) {
+      expect(contraste(token("hx-sec"), f), f).toBeGreaterThanOrEqual(4.5);
+      expect(contraste(token("hx-sec"), f), f).toBeGreaterThanOrEqual(3);
+    }
+    expect(contraste(token("hx-texto-2"), token("hx-miolo"))).toBeGreaterThanOrEqual(4.5);   // o "Nv N" do minimapa
+  });
+  it("Vidro: o --hx-sec passa 4,5:1 e 3:1 no pior caso do habitat", () => {
+    const pior = sobre("rgba(170,225,255,.10)", sobre(tokenVidro("hx-miolo-2"), [161, 225, 113]));
+    expect(contraste(tokenVidro("hx-sec"), hex(pior))).toBeGreaterThanOrEqual(4.5);
+    expect(contraste(tokenVidro("hx-sec"), hex(pior))).toBeGreaterThanOrEqual(3);
   });
 });
