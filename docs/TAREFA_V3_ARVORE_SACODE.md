@@ -287,3 +287,36 @@ Cada pergunta traz a recomendação (que o plano da seção 3 já usa), a altern
 - **Opção 4:** parar a frente.
 - **Custo de errar:** a opção 1 mexe no código do A (a linha de base), mas atrás de uma chave, e para o A as frutas ficam iguais, o que já
   é a AS-6. A opção 2 muda o A do jogo e custa mais. A 3 deixa o A trocável sem a ilha com frutas.
+
+## 9. S1 entregue (2026-11-08, branch `v3-arvore-sacode-s1`)
+
+O Python, atrás de duas chaves desligadas. Os desvios D-AS-S1-1 a 6 estão em `docs/registro/2026-11.md`, na seção "ARVORE_SACODE, S1".
+
+- **O gabarito de hoje, num commit próprio antes da mudança:** são 30 vidas, o A do v11 com o corpo e o instinto, sementes 101 a 505,
+  3 dias, no `CONFIG_MUNDO_MVP` e no MVP com J1, J2 e J3 montado com o código de hoje. Três delas quebram (a AS-11). O gerador está em
+  `tests/gabarito_arvore_sacode.py`, a conferência em `tests/test_gabarito_arvore_sacode.py` e o arquivo em
+  `tests/gabaritos/arvore_sacode_de_hoje.json`. Com as chaves desligadas, as 30 saem iguais, inclusive as quebras.
+- **Na `digilab/config.py`:**
+  - a `ConfigSacudir`, com `galho_max` = 3 e `recarga_galho_min` = 240, PROPOSTOS, SEM FONTE;
+  - a `ConfigFrutaComoComida`;
+  - o `LAYOUT_MUNDO_ILHA` e o `CONFIG_MUNDO_ILHA`.
+- **Na `digilab/events.py`:** o `sacudir_arvore(tick, arvore)` e o `ler_sacudir_arvore`, com o id em letras e dígitos ASCII, de 1 a 16.
+- **Na `digilab/mundo.py`:**
+  - o `Mundo` ganha `ligar_sacudir`, `galho_em` e `sacudir`, com o fluxo `arvore-sacode` e o registro `sacudidas`, cujos motivos são
+    `caiu`, `galho_vazio`, `chao_cheio` e `parada`;
+  - o `MotorMundo` ganha `cfg_sacudir`, `cfg_fruta_comida`, `sacudir_arvore` e `no_galho`, e o `estado()["sacudir"]` com a chave
+    ligada;
+  - o `reproduzir_mundo` refaz o evento;
+  - com a fruta como comida, o laço não entrega o `fruta_comida`. Isso fica no laço, não no A (D-AS-S1-2).
+- **O gabarito do G-PAR para a S2:** o gerador é `experiments/exportar_gabarito_arvore_sacode.py`, e o arquivo,
+  `web/app/test/gabaritos/arvore_sacode_python.json`.
+  - São duas vidas de 2 dias, sementes 101 e 505, no `CONFIG_MUNDO_ILHA`, com as chaves dos ovos v20 ligadas.
+  - Cada vida tem 126 sacudidas, todas as que caem, as que acham o galho vazio e o chão cheio, as sacudidas com o pet dormindo, as
+    reposições do galho e as frutas comidas.
+- **Os testes:** `tests/test_arvore_sacode.py`, com 21 testes.
+- **Para a S2 (TS):**
+  - o porte do `Mundo.sacudir` e do `galho_em`, com o `RandomPy` no fluxo `arvore-sacode`;
+  - o `CMU_ILHA` e o `ConfigSacudir` em `constantes.ts`;
+  - o `[tick, "sa", { arvore }]` no registro;
+  - a v20;
+  - o laço sem o `fruta_comida`, que ele já não tem: conferir que o A do TS com o corpo aceita o estímulo `comida` de uma fruta.

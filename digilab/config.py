@@ -1865,6 +1865,13 @@ CONFIG_MUNDO_LIGADA = ConfigMundo(ligada=True)
 LAYOUT_MUNDO_MVP = replace(LAYOUT_MUNDO_PADRAO, nome="mvp", arvores=())                  # PROPOSTO, SEM FONTE
 CONFIG_MUNDO_MVP = replace(CONFIG_MUNDO_LIGADA, layout=LAYOUT_MUNDO_MVP)                  # PROPOSTO, SEM FONTE
 
+# O mundo da ilha (docs/TAREFA_V3_ARVORE_SACODE.md, AS-7 APROVADA em 2026-11-08): o layout do MVP com as tres arvores do jardim do layout
+# padrao (J1 a, J2 b, J3 c), so para os pets v20 do jogo. O CONFIG_MUNDO_MVP nao muda (a vida gravada dos pets v12 a v19). O mundo novo e
+# DECIDIDO; quais arvores, PROPOSTO, SEM FONTE.
+LAYOUT_MUNDO_ILHA = replace(LAYOUT_MUNDO_MVP, nome="ilha",
+                            arvores=tuple(a for a in LAYOUT_MUNDO_PADRAO.arvores if a[0] in ("J1", "J2", "J3")))  # PROPOSTO, SEM FONTE
+CONFIG_MUNDO_ILHA = replace(CONFIG_MUNDO_MVP, layout=LAYOUT_MUNDO_ILHA)
+
 
 # =====================================================================
 # V2, o banheiro (docs/TAREFA_V2_BANHEIRO.md; BN-1 a BN-6 decididas em 2026-10-07). Desligado por padrao: a vida de hoje byte a byte.
@@ -2708,6 +2715,47 @@ class ConfigBolaNoGolpe:
 
 CONFIG_BOLA_NO_GOLPE = ConfigBolaNoGolpe()
 CONFIG_BOLA_NO_GOLPE_LIGADA = ConfigBolaNoGolpe(ligada=True)
+
+
+# O sacudir a arvore (docs/TAREFA_V3_ARVORE_SACODE.md, S1; AS-1 a AS-10 APROVADAS pelo Matheus em 2026-11-08): o dono sacode a arvore X e,
+# com fruta no galho e lugar no chao, cai uma fruta a ate `raio_queda_celulas` do tronco. O galho guarda ate `galho_max` frutas, nasce
+# cheio e repoe uma a cada `recarga_galho_min` ticks, num relogio por arvore que so anda com o galho abaixo do maximo (AS-3). A queda
+# natural nao muda (AS-4). Desligada, a vida de hoje sai byte a byte (tests/gabaritos/arvore_sacode_de_hoje.json). So os pets v20 do jogo
+# web a ligam. O modelo do galho e DECIDIDO (AS-3); os dois numeros sao PROPOSTOS, SEM FONTE, para a rodada de equilibrio do fim.
+@dataclass(frozen=True)
+class ConfigSacudir:
+    ligada: bool = False                     # DECIDIDO (AS-1 a AS-10): a chave
+    galho_max: int = 3                       # PROPOSTO, SEM FONTE: as frutas no galho, no maximo (o galho nasce cheio)
+    recarga_galho_min: int = 240             # PROPOSTO, SEM FONTE: os ticks para o galho repor uma fruta (4 h de jogo)
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigSacudir.ligada e bool: {self.ligada!r}")
+        if type(self.galho_max) is not int or self.galho_max < 1:
+            raise ValueError(f"ConfigSacudir.galho_max e inteiro >= 1: {self.galho_max!r}")
+        if type(self.recarga_galho_min) is not int or self.recarga_galho_min < 1:
+            raise ValueError(f"ConfigSacudir.recarga_galho_min e inteiro >= 1: {self.recarga_galho_min!r}")
+
+
+CONFIG_SACUDIR = ConfigSacudir()
+CONFIG_SACUDIR_LIGADA = ConfigSacudir(ligada=True)
+
+
+# A fruta do mundo como comida (docs/TAREFA_V3_ARVORE_SACODE.md, AS-11 APROVADA pelo Matheus em 2026-11-08, "Fruta como racao"): o A do
+# v11 com o corpo quebra ao receber o aviso `fruta_comida` de uma fruta do mundo (o MV-10). Ligada, o laco do mundo nao entrega o aviso:
+# a fruta chega ao cerebro como a racao chega, pelo `ocorrido` do mundo e pelo estimulo `comida` do corpo, sem a E2 do humor e sem a
+# sub-decisao de fruta. E o que o laco do TS ja faz (motor_corpo_mundo.ts nao tem o fruta_comida). Desligada, a vida de hoje byte a byte.
+@dataclass(frozen=True)
+class ConfigFrutaComoComida:
+    ligada: bool = False                     # DECIDIDO (AS-11): a chave
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigFrutaComoComida.ligada e bool: {self.ligada!r}")
+
+
+CONFIG_FRUTA_COMO_COMIDA = ConfigFrutaComoComida()
+CONFIG_FRUTA_COMO_COMIDA_LIGADA = ConfigFrutaComoComida(ligada=True)
 
 
 # O genoma no log (docs/TAREFA_V3_GENOMA_G0.md, G0-1 a G0-7 DECIDIDAS em 2026-11-04; digilab/genoma.py): o evento `genoma` no tick 0 do log
