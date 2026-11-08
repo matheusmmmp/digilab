@@ -117,6 +117,9 @@ export const ENFEITE_HALO = { altura: 0.86, tamanho: 1.1, cascas: [0.55, 0.78, 1
     da imagem), para a nevoa, a cor de baixo da luz do ceu de dia, azulada (a sombra do anime), e a nevoa mais longe que a da ilha (o fundo
     de anime tem as arvores de tras nitidas; a de 26 a 62 desbotava tudo, e a de 42 a 95 as deixava pesadas; D2). PROPOSTO, SEM FONTE */
 export const CEU_DIGITAL = { horizonte: 0xabe9fe, chaoHemi: 0x6f8fc8, nevoa: [34, 85] } as const;
+/** o traco de nanquim do estilo digital (pos.ts, Contorno; D5, o cel shading que o Matheus pediu): um azul-petroleo quase preto, a
+    largura de ~3 px (o revisor pediu o traco mais grosso), e some entre 34 e 76 celulas da camera (perto do fim da nevoa). PROPOSTO, SEM FONTE */
+export const CONTORNO_DIGITAL = { tinta: 0x15222a, forca: 1, largura: 3, limiar: 0.012, some: [34, 76] as const };
 
 /** o toque digital do estilo Digital (digital.ts; docs/TAREFA_V3_MAPA_DIGITAL.md, D3): as particulas (quantas, o sal da rng, a margem
     alem da area, a altura acima do chao, o tamanho, a cor, a opacidade de dia e de noite, o sobe e desce, a velocidade e o giro), a
