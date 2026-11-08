@@ -74,8 +74,16 @@ describe("os arquivos dos enfeites (E-G1 a E-G8)", () => {
     for (const u of usados) expect(existsSync(u), u).toBe(true);
     expect(usados.reduce((s, u) => s + statSync(u).size, 0)).toBeLessThanOrEqual(BYTES);
     expect(readdirSync(dir).map(a => join(dir, a)).filter(a => !usados.includes(a) && !/License\.txt$/.test(a))).toEqual([]);
-    const lic = readFileSync(join(dir, "License.txt"), "utf8");
-    expect(lic).toMatch(/Meshy/); expect(lic).toMatch(/gerado por IA/);
-    expect(g.asset.extras?.gerado_por_ia).toBe(true); expect(g.asset.extras?.gerador).toMatch(/Meshy/);
+    /* a procedencia: o gerado pela Meshy leva a marca de IA (os termos dela, secao 2.4); o feito a mao por script (o poste em blocos,
+       docs/TAREFA_V3_MUNDO_ENFEITES.md secao 14) diz que nao e IA e aponta o script que o gera, no License e no asset.extras */
+    const lic = readFileSync(join(dir, "License.txt"), "utf8"), ex = g.asset.extras;
+    expect(typeof ex?.gerado_por_ia).toBe("boolean");
+    if (ex?.gerado_por_ia) { expect(lic).toMatch(/Meshy/); expect(lic).toMatch(/gerado por IA/); expect(ex.gerador).toMatch(/Meshy/); }
+    else {
+      expect(lic).toMatch(/feito a mao por script/);
+      const script = ex?.gerador?.match(/docs\/[\w/]+\.py/)?.[0];
+      expect(script, "o gerador aponta o script").toBeDefined();
+      expect(existsSync(join(APP, "..", "..", script!)), script).toBe(true);
+    }
   });
 });

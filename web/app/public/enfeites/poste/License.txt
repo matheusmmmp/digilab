@@ -1,19 +1,13 @@
 DigiLab: o poste de luz da ilha (poste.gltf, poste.bin, poste_cor.png, poste_luz.png)
 
-Procedencia: item gerado por IA, com o gerador Meshy (meshy.ai), no plano Pro pago, na conta do Matheus, em 2026-11-08 (o retrabalho;
-o primeiro poste, de 2026-11-06, tambem da Meshy, fica no historico do git).
-Pelos termos de uso da Meshy (atualizados em 2026-09-19, secao 3.2), a saida de um plano pago e do cliente.
-Os termos proibem tirar a marca de IA (secao 2.4): a marca fica no asset.extras do poste.gltf e neste arquivo.
+Procedencia: feito a mao por script, sem IA, em 2026-11-08, no repositorio do DigiLab (licenca do projeto).
+O modelo e a textura saem de docs/objetos3d/poste/blocos/poste_blocos.py: as caixas (o poste em blocos) e a pintura em pixel art de cada
+material estao no codigo; o mesmo script gera sempre os mesmos arquivos. Nada vem de modelo, textura ou imagem de terceiros.
 
-Como foi feito (docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 13, e docs/objetos3d/poste/ no repositorio):
-- esboco: Meshy Image to Image (nano-banana-2), com a referencia de estilo da maquete B do proprio jogo; o esboco 1 (ferro e hera)
-  escolhido para o retrabalho dos objetos (docs/objetos3d/REFERENCIAS.md);
-- vistas: Meshy Image to Image com multivista, a partir do esboco;
-- malha: Meshy Multi-Image to 3D (remesh em triangulos, so a cor);
-- acabamento no Blender 4.5 LTS e em Python, por script: a malha da Meshy com os vertices repetidos soldados e as normais ponderadas;
-  a textura pintada da Meshy fica (sem achatar cores), com os vidros no amarelo quente do esboco e a hera pintada subindo pelo poste;
-  poste_luz.png e a mascara dos vidros, que acendem a noite no jogo.
-As tarefas da Meshy (esboco, vistas, malha) estao no asset.extras do poste.gltf.
+Referencia de desenho: o esboco 1 do retrabalho dos objetos (docs/objetos3d/poste/esbocos/esboco_1_ferro_hera.png), gerado pela Meshy
+(meshy.ai, plano Pro, conta do Matheus) como imagem de conceito; ele so guiou a forma e as cores, e nao entra nos arquivos.
+A direcao em blocos e pixel art foi escolhida pelo Matheus em 2026-11-08 (docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 14).
 
-Uso: no jogo DigiLab, publicado. Credito: "Poste de luz gerado com a Meshy (meshy.ai)".
-Aprovacao: o retrabalho foi pedido pelo Matheus (2026-11-07); a aprovacao da captura na ilha fica no PR do retrabalho do poste.
+poste_luz.png e a mascara dos vidros, que acendem a noite no jogo.
+
+Uso: no jogo DigiLab, publicado.
