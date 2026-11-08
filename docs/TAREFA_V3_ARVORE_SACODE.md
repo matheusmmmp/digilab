@@ -1,15 +1,15 @@
 # TAREFA V3 — ARVORE_SACODE (2026-11-07)
 
 Coordenador: a sessão da frente UX_TELA_PET (ilha interativa) do Claude Code. Worker: Claude Code (Opus 5.5), uma sessão por etapa.
-Worktree e branch: `v3-arvore-sacode` (as etapas em `v3-arvore-sacode-s1`, `-s2`, `-s3`). Status: ABERTA (só o plano; nenhuma etapa
-começou).
+Worktree e branch: `v3-arvore-sacode` (as etapas em `v3-arvore-sacode-s1`, `-s2`, `-s3`). Status: EM ANDAMENTO (o plano
+aprovado em 2026-11-08; a S1 começa).
 
 Categoria: arquitetura. Origem: Matheus, 2026-11-07, na prancha A da ilha (PR #691, a pergunta I1-3):
 
 > Acredito que a ideia de clicar na árvore, ela sacudir, é interessante para cair a flor, né? A fruta
 
-Esta etapa (S0) é só o plano. Não tem código, run nem gabarito. As perguntas AS-1 a AS-10 (seção 8) são do Matheus; as etapas S1 a S3
-começam depois das respostas.
+Esta etapa (S0) é só o plano. Não tem código, run nem gabarito. As perguntas AS-1 a AS-10 (seção 8) foram APROVADAS pelo Matheus em
+2026-11-08, todas pela recomendação; as etapas S1 a S3 seguem o plano da seção 3 como está.
 
 ## 1. Pergunta
 
@@ -196,22 +196,28 @@ Das etapas seguintes (para quem as fizer):
 
 ## 8. Precisa do Matheus
 
-Cada pergunta traz a recomendação (que o plano da seção 3 já usa), a alternativa e o custo de errar. "Aprovo as recomendações" responde
-todas.
+**AS-1 a AS-10 APROVADAS (Matheus, 2026-11-08), todas pela recomendação:** "segue com a recomendação ali". A frase chegou repassada pela
+sessão da frente UX_TELA_PET (a coordenadora desta tarefa). O que ficou decidido: sacudir não é cuidado; cai uma fruta por sacudida; o
+limite é pelo galho (3 frutas, uma reposta a cada 4 h, até 9 por árvore por dia); a queda natural continua; a fruta cai a até 2 células
+do tronco; por enquanto as frutas são iguais para o pet; o mundo novo é o `CMU_ILHA`; só os ovos v20, com tudo na v20; e tocar na árvore
+abre o cartão com o botão Sacudir. Os números novos (`galho_max`, `recarga_galho_min`) continuam PROPOSTOS, SEM FONTE: a aprovação é do
+modelo, e os valores vão para o equilíbrio do fim.
 
-**AS-1. Sacudir a árvore é cuidado?**
+Cada pergunta traz a recomendação (que o plano da seção 3 já usa), a alternativa e o custo de errar.
+
+**AS-1 (APROVADA, recomendação). Sacudir a árvore é cuidado?**
 - **Recomendação:** não. É um gesto sobre o mundo, como levar o pet e deixar a bola: não conta como contato nem cuidado, não chega ao
   cérebro e não atende o chamado de fome do bebê. O pet se alimenta porque escolhe comer a fruta.
 - **Alternativa:** conta como o `alimentar` (contato, cuidado, o chamado atendido), como deixar a ração.
 - **Custo de errar:** se for cuidado, o dono pode cuidar só sacudindo árvores e a ração perde a função. Se não for e o Matheus quisesse que
   fosse, trocar depois é uma versão de pet nova (o evento muda de efeito).
 
-**AS-2. Quantas frutas caem por sacudida?**
+**AS-2 (APROVADA, recomendação). Quantas frutas caem por sacudida?**
 - **Recomendação:** uma, se houver fruta no galho e lugar no chão. Sem fruta, a árvore só balança.
 - **Alternativa:** de 1 a 3, como na queda natural (`frutas_por_queda_min` e `_max`).
 - **Custo de errar:** baixo. É um número da `ConfigSacudir` atrás da chave. Uma por toque é o gesto mais legível: cada toque, uma fruta.
 
-**AS-3. Como fica o limite por dia?**
+**AS-3 (APROVADA, recomendação). Como fica o limite por dia?**
 - **Recomendação:** pelo galho. Cada árvore guarda até `galho_max` = 3 frutas e repõe uma a cada `recarga_galho_min` = 240 ticks (4 h de
   jogo): até 9 frutas por árvore por dia, sacudindo sem parar. O cartão mostra quantas há no galho. PROPOSTOS, SEM FONTE.
 - **Alternativa:** um limite fixo por dia de jogo (por exemplo, 2 sacudidas com fruta por árvore entre 0 h e 24 h), sem galho.
@@ -219,46 +225,46 @@ todas.
   sabe por que a árvore parou de dar. Os números vão ao equilíbrio do fim, então errar o valor custa pouco; errar o modelo custa a S1 de
   novo.
 
-**AS-4. A queda natural das árvores continua no jogo?**
+**AS-4 (APROVADA, recomendação). A queda natural das árvores continua no jogo?**
 - **Recomendação:** sim, como no Python (de 1 a 3 frutas cerca de uma vez por dia por árvore, com a recarga de 12 h), independente do
   galho. A ilha tem fruta mesmo sem o dono, e o pet que explora a acha.
 - **Alternativa:** desligada no produto (`mult_queda` = 0): só cai fruta quando o dono sacode.
 - **Custo de errar:** com a queda natural, o pet acha comida sozinho e sente menos fome entre as rações; isso mexe no equilíbrio da fome,
   que fica para o fim. Sem ela, a árvore é só um botão do dono. Trocar depois é uma versão de pet nova.
 
-**AS-5. Onde a fruta cai?**
+**AS-5 (APROVADA, recomendação). Onde a fruta cai?**
 - **Recomendação:** num ponto sorteado a até 2 células do tronco (`raio_queda_celulas`), como a natural, com uma rng própria
   (`arvore-sacode`) que não toca nenhuma outra.
 - **Alternativa:** sempre no pé da árvore, num ponto fixo, sem sorteio.
 - **Custo de errar:** baixo. O ponto fixo empilha as frutas no mesmo lugar e fica estranho na vista; o sorteio custa dois números por
   fruta, gravados no gabarito.
 
-**AS-6. As três frutas são diferentes para o pet no jogo?**
+**AS-6 (APROVADA, recomendação). As três frutas são diferentes para o pet no jogo?**
 - **Recomendação:** não, por enquanto. Todas dão 0,15 de fome e nenhum efeito no humor; só a cor muda. O paladar (os gostos e a preferência
   de cada pet) entra quando o órgão do paladar existir no TS.
 - **Alternativa:** um efeito de humor por fruta (`efeitoFrutas`) já nesta versão.
 - **Custo de errar:** com efeito no humor sem paladar, a fruta "boa" seria a mesma para todo pet, o contrário do J5 (cada pet tem a sua).
   Esperar custa só que as frutas pareçam iguais por um tempo.
 
-**AS-7. As árvores entram num mundo novo ou no `CMU_MVP`?**
+**AS-7 (APROVADA, recomendação). As árvores entram num mundo novo ou no `CMU_MVP`?**
 - **Recomendação:** num mundo novo, `CMU_ILHA` = o `CMU_MVP` com as três árvores do jardim do layout padrão (J1, J2 e J3, uma de cada fruta).
 - **Alternativa:** mudar o `CMU_MVP`.
 - **Custo de errar:** mudar o `CMU_MVP` quebra o replay de todo pet v12 a v19 salvo, porque a vida gravada é com o mundo sem árvores. É o
   pior caso. Quais e quantas árvores é barato de mudar até a S1.
 
-**AS-8. O pet de hoje ganha as árvores?**
+**AS-8 (APROVADA, recomendação). O pet de hoje ganha as árvores?**
 - **Recomendação:** não. Só os pets v20 (um ovo novo) nascem na ilha com árvores. Os v19 seguem sem árvores e abrem como hoje.
 - **Alternativa:** migrar o pet v19 para v20 a partir de um tick, com o mundo trocando no meio da vida.
 - **Custo de errar:** a migração é uma mecânica nova de motor (trocar o mundo no meio da vida com replay), com risco na paridade; fica para
   uma tarefa própria se o Matheus quiser.
 
-**AS-9. A versão nova é a v20, com tudo junto?**
+**AS-9 (APROVADA, recomendação). A versão nova é a v20, com tudo junto?**
 - **Recomendação:** sim. A v20 = a v19 com o `CMU_ILHA` e o sacudir, numa versão só, na S2. A S1 é só o Python, sem versão.
 - **Alternativa:** duas versões (v20 com o mundo da ilha, v21 com o sacudir).
 - **Custo de errar:** baixo. Duas versões só servem se o mundo da ilha for ao jogo antes do gesto, e sem o gesto a árvore só dá fruta pela
   queda natural.
 
-**AS-10. A vista: o toque abre o cartão ou já sacode?**
+**AS-10 (APROVADA, recomendação). A vista: o toque abre o cartão ou já sacode?**
 - **Recomendação:** abre o cartão, com o número de frutas no galho e o botão Sacudir, como a tigela na prancha A. A S3 começa por uma prancha
   curta (o cartão e três quadros do balanço) para o ok antes do código.
 - **Alternativa:** o toque na árvore já sacode, sem cartão; o número fica nas frutas da copa.
