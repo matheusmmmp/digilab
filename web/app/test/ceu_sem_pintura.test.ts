@@ -42,5 +42,9 @@ describe("as nuvens da pintura no mundo", () => {
     expect(NUVENS_PINTADAS.esfumar).toBeGreaterThan(0); expect(NUVENS_PINTADAS.esfumar).toBeLessThan(0.5);
     expect(NUVENS_PINTADAS.volta).toBeGreaterThanOrEqual(300);
     expect(NUVENS_PINTADAS.n).toBeGreaterThanOrEqual(NUVENS_PINTADAS.pedacos.length);
+    /* o Matheus escolheu as nuvens 3D de pouco poligono (2026-11-08: "3D de polígonos"), com a base em sombra e mais de uma bolha */
+    expect(NUVENS_PINTADAS.desenho).toBe("3d");
+    expect(NUVENS_PINTADAS.bolhas[0]).toBeGreaterThanOrEqual(3);
+    expect(NUVENS_PINTADAS.faixa).toBeGreaterThan(0); expect(NUVENS_PINTADAS.faixa).toBeLessThan(0.5);
   });
 });

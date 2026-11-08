@@ -747,3 +747,17 @@ Os números são de desenho: PROPOSTO, SEM FONTE. A cor por hora do dia, o halo 
   ela gira, e o anel dá uma volta a cada 25 min. Com "reduzir movimento", fica parado.
 - **As nuvens de anime saíram** do modo pintado, e a noite apaga as nuvens do anel como as outras.
 
+**As nuvens com desenho de jogo (o Matheus, no mesmo dia):**
+> "tem uma nuvem que ela se perde ali, ela parece uma nuvem gerada por inteligência artificial mesmo. Não tem como tu pegar uma referência de
+> nuvem em jogos assim?"
+
+- **Três desenhos no mesmo anel,** comparados em https://claude.ai/artifact/K6kaEGYj7D58u8aUG2jRbg:
+  - o recorte da pintura;
+  - a chapada desenhada;
+  - o 3D de pouco polígono.
+- **Ficou o 3D** (o Matheus: "3D de polígonos"): de 4 a 7 bolhas facetadas juntas numa malha só, com a base reta e dois tons chapados pela
+  altura (branco em cima, a faixa azulada embaixo), sem luz e sem textura (`nuvem3d` e `nuvensDesenhadas`, em `digital.ts`).
+- **Os outros dois** ficam no `?nuvens=`.
+- **As referências:** as nuvens de Animal Crossing estão sempre em movimento, segundo uma recriação de fã. Nas cenas low-poly e toon, o comum
+  são tons chapados. A forma (a base reta, os dois tons, as bolhas) é escolha de desenho: PROPOSTO, SEM FONTE.
+
