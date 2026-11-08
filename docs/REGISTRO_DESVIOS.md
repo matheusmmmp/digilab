@@ -562,6 +562,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-07 — CONVERSA_PET, DC3d, o porte da fala com conteúdo ao jogo (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc3d-porte`)](registro/2026-11.md)
 - [2026-11-07 — LAB_CENARIOS, os Cenários do Laboratório na versão de hoje (worker, Claude Code, Opus 5.5, branch `v3-lab-cenarios`)](registro/2026-11.md)
 - [2026-11-07 — UX_TELA_PET, I1 o código da ilha A, "Objetos que falam" (worker, Claude Code, Opus 5.5, branch `v3-ux-ilha-a`)](registro/2026-11.md)
+- [2026-11-08 — LUGARES_3D, o retrabalho da barraca do Tamer (worker, Claude Code, Opus 5.5, branch `v3-objeto-barraca`)](registro/2026-11.md)
 - [2026-11-08 — OBJETOS_3D, o carro retrabalhado (worker, Claude Code, Opus 5.5, branch `v3-objeto-carro`)](registro/2026-11.md)
 - [2026-11-07 — OBJETOS_3D, o trem refeito: o vagão de madeira do esboço, sem achatar a textura (worker, Claude Code, Opus 5.5, branch `v3-objeto-trem`)](registro/2026-11.md)
 - [2026-11-07 — INDIVIDUALIDADE, I2a: o código antes da run (Claude Code, Opus 5.5, branch `v3-individualidade-i2a`)](registro/2026-11.md)
