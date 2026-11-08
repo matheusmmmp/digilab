@@ -689,7 +689,9 @@ def test_g2_separado_nada_fora_do_pacote_le_a_chave():
                       "experiments/plano_an3_poder_acoes_novas.py",
                       # o orquestrador da AN4: importa o da C4 so pela conferir_memoria (o papel REL nos dois bracos); a config passa pelo
                       # orquestrador do prototipo
-                      "experiments/run_v3_acoes_novas.py"}
+                      "experiments/run_v3_acoes_novas.py",
+                      # a bateria da INDIVIDUALIDADE (I1): importa o orquestrador da C4 so pela vida (`viver`); nao le a chave
+                      "experiments/sondas_individualidade.py"}
     achados = set()
     for pasta in ("digilab", "experiments", "web", "tools", "servidor", "digilab_fala_livre"):
         if not (RAIZ / pasta).exists():
