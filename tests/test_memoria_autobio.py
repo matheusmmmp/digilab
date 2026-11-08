@@ -695,7 +695,9 @@ def test_g2_separado_nada_fora_do_pacote_le_a_chave():
                       # o orquestrador da DC3 (#672): monta o LAB (o REL da C4) e o LAB+F pela config do orquestrador da C4
                       "experiments/run_v3_conversa_dc3.py",
                       # a bateria da INDIVIDUALIDADE (I1): importa o orquestrador da C4 so pela vida (`viver`); nao le a chave
-                      "experiments/sondas_individualidade.py"}
+                      "experiments/sondas_individualidade.py",
+                      # o orquestrador do I2 da INDIVIDUALIDADE: importa o da C4 pela vida, pela conferir_memoria e pelo COM_FACETAS; nao le a chave
+                      "experiments/run_v3_individualidade.py"}
     achados = set()
     for pasta in ("digilab", "experiments", "web", "tools", "servidor", "digilab_fala_livre"):
         if not (RAIZ / pasta).exists():

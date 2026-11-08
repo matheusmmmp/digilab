@@ -1,6 +1,6 @@
 /* A luta no layout habitat (B3; docs/TAREFA_V3_LUTA_LAYOUT.md e as pranchas de docs/pranchas/b3/): a cena a tela inteira atras de tudo, o HUD em
    caixas da mesma linguagem da tela Pet (.hud-caixa de pet_hud.css; o vidro e o Militar vem das duas peles, nenhum token novo), a etiqueta
-   do modo e o cartao de contexto no alto, o cartao da regra em uso (a direita no desktop, uma faixa acima do dock no celular) e o dock
+   do modo e o cartao de contexto no alto, o cartao da regra em uso (a direita no desktop, uma faixa sob o contexto no celular) e o dock
    no rodape. Tudo sob .luta-tela para vencer as regras antigas de lutar.css (a previa da Arena segue com elas). Sem animacao nova. */
 .luta-tela{
   --g:10px; --gap:6px; --ret:36px; --modo-y:80px; --dk-b:10px; --rt:24px;
@@ -51,7 +51,7 @@
 .luta-tela .luta-contexto .luta-arena-aviso{ margin:0; padding:0; background:none; border:0; border-radius:0; box-shadow:none; color:var(--hx-texto-2); font:500 14px/1.3 var(--hx-f); text-align:center }
 .luta-tela .luta-contexto .luta-arena-aviso b{ color:var(--hx-texto) }
 
-/* ---- a regra em uso (so leitura): faixa de uma ou duas linhas acima do dock no celular, cartao a direita sob o HUD no desktop */
+/* ---- a regra em uso (so leitura): faixa de uma ou duas linhas sob o contexto no celular, cartao a direita sob o HUD no desktop */
 .luta-tela .palco-luta-baixo{ position:absolute; z-index:4; left:var(--g); right:var(--g); bottom:84px; padding:0 }
 .luta-tela .luta-card{ display:block; padding:0; margin:0; color:var(--hx-texto); font-family:var(--hx-f) }
 .luta-tela .luta-card h2{ position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap }
@@ -59,6 +59,17 @@
 .luta-tela .luta-regra-cab{ background:none; padding:0; color:var(--hx-aprendido); font:600 11px/1.2 var(--hx-f); letter-spacing:.1em }
 .luta-tela .luta-regra-txt{ font:600 16px/20px var(--hx-f); color:var(--hx-texto) }
 .luta-tela .luta-card .luta-turno{ margin:0; padding:0 9px 6px; color:var(--hx-sec); font:500 14px/1.25 var(--hx-f); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden }
+/* no celular (abaixo de 900 px) a faixa sobe para logo abaixo do contexto (D-LE-E3-1: embaixo ela cobria os pes e a elipse do chao; decisao
+   do Matheus de 2026-11-07, que muda a B3-3 de "faixa embaixo" para "faixa no alto"). O contexto muda de altura (serie, Liga, carta, Lago),
+   entao os dois entram no fluxo de uma coluna no alto da tela: o palco vira display:contents (o canvas continua cobrindo a tela inteira, o
+   mesmo retangulo da .luta-tela), e o contexto e a faixa se empilham sob o HUD, sempre visiveis */
+@media (max-width:899.98px){
+  .luta-tela{ display:flex; flex-direction:column; align-items:center; gap:4px; padding-top:var(--modo-y); box-sizing:border-box }
+  .luta-tela .palco-luta{ display:contents }
+  .luta-tela .luta-contexto{ position:relative; order:1; top:auto; left:auto; translate:none; flex:none }
+  .luta-tela .palco-luta-baixo{ position:relative; order:2; left:auto; right:auto; bottom:auto; flex:none; width:calc(100% - 2 * var(--g)); box-sizing:border-box }
+  .luta-tela .palco-luta > .aviso{ order:3 }
+}
 @media (min-width:900px){
   .luta-tela .palco-luta-baixo{ left:auto; right:var(--g); top:96px; bottom:auto; width:300px }
   .luta-tela .luta-card h2{ position:static; width:auto; height:auto; overflow:visible; clip-path:none; padding:9px 12px 0; margin:0; font:700 14px/1.1 var(--hx-f); letter-spacing:.1em; text-transform:uppercase; color:var(--hx-rotulo) }
