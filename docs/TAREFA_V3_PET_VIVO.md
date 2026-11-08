@@ -5,26 +5,29 @@ branch: `v3-pet-vivo` (as etapas seguintes com sufixo, como `v3-pet-vivo-0b-codi
 PROPOSTO, as PV-0-1 a PV-0-11 com o Matheus.** Nenhuma vida nova, nenhuma faixa.
 
 Categoria: documentacao. Origem: Matheus, 2026-11-07: "Sim, a etapa 0", em resposta a "Aprovo a etapa 0 da PET_VIVO e despacho a
-verificação e a auditoria?". A rodada está em `docs/futuro/rodada_pet_vivo.md`, ainda no PR #703, na seção 3.
+verificação e a auditoria?". A rodada está no vault DigiLab Research, `20 Temas/Pet vivo.md`, seção 5. A nota substitui o antigo
+`rodada_pet_vivo.md` do PR #703, que foi fechado em 2026-11-08, porque os documentos de pesquisa ficam no vault (decisão do Matheus).
 
 ## 1. Pergunta
 
 **O pet modular escolhe pelo que sente por dentro? Se não, a culpa é dos pesos, do número de alvos por comportamento ou de um sinal do
 corpo fraco demais?**
 
-- A pergunta vem do incômodo do Matheus: o pet "não parece agir pelo estado interno" e "não parece vida artificial"
-  (`docs/futuro/levantamento_cerebro_modular.md`, no PR #703, seção 4).
-- Ela vem também da crítica da rodada (`docs/futuro/rodada_pet_vivo.md`, seção 2.5): o sorteio proporcional favorece quem tem mais
+- A pergunta vem do incômodo do Matheus: "não sinto que é um pet que está realmente pensando e agindo conforme os estímulos que ele tem
+  dentro da rede neural dele" e "não representa ainda artificial life" (vault DigiLab Research, `20 Temas/Pet vivo.md`, seção 1; o levantamento em
+  `DigiLab — Revisão de escopo/LEVANTAMENTO_CEREBRO_MODULAR_2026-11-07.md`, seção 4).
+- Ela vem também da crítica às análises (vault DigiLab Research, `20 Temas/Pet vivo.md`, seção 4): o sorteio proporcional favorece quem tem mais
   unidades, e nenhum gate de hoje mede "age pelo estado". Todo gate de hoje é de forrageio.
 - É a etapa 0 da rodada, só papel e vidas já gravadas:
-  - **0a**, a verificação das referências da revisão I: é de outra sessão (`v3-pet-vivo-referencias`), na tabela `v3c5`;
+  - **0a**, a verificação das referências da revisão I (vault DigiLab Research, `DigiLab — Revisão de escopo/REVISAO_I_PET_VIVO_2026-11-07.md`): é de
+    outra sessão (`v3-pet-vivo-referencias`), na tabela `v3c5`, no PR #705;
   - **0b**, a auditoria da escolha: o plano está neste PR;
   - **0c**, a medida de "age pelo estado": o plano está neste PR.
 
 ## 2. Depende de
 
-- **Na `main`:** nada além do que já está. O PR #703 (a rodada, o levantamento e a revisão I) ainda está aberto. Este PR cita esses
-  arquivos só pelo caminho, sem link, até o merge dele.
+- **Na `main`:** nada além do que já está. A rodada, o levantamento e a revisão I estão no vault DigiLab Research, fora do repositório
+  (o PR #703 foi fechado em 2026-11-08). Este PR os cita pelo caminho no vault, sem link.
 - **Do Matheus:**
   - o APROVADO do `docs/PLANO_ANALISE_V3_PET_VIVO.md`;
   - as PV-0-1 a PV-0-11 (seção 8), antes do PR do código.
@@ -38,7 +41,7 @@ corpo fraco demais?**
 - o plano `docs/PLANO_ANALISE_V3_PET_VIVO.md`;
 - os desvios, numa seção no fim de `docs/registro/2026-11.md`, e o índice gerado.
 
-**Não mudam:** o `engine.py`, o modular, o corpo, o mundo, a web, as medidas por vida de nenhuma run, os documentos do PR #703 e os
+**Não mudam:** o `engine.py`, o modular, o corpo, o mundo, a web, as medidas por vida de nenhuma run, os documentos do vault e os
 arquivos da INDIVIDUALIDADE. A pasta `D:\Trab\digilab\v3-memoria-run` só é lida.
 
 ## 4. Experimento e gate (se houver run)
@@ -54,7 +57,7 @@ arquivos da INDIVIDUALIDADE. A pasta `D:\Trab\digilab\v3-memoria-run` só é lid
 ## 5. Entrega
 
 - **Testes:** não se aplicam nesta etapa, que só tem documentos. O PR do código (seção 7) terá os testes dele.
-- **Registro:** os desvios D-PV0-1 a D-PV0-5, em `docs/registro/2026-11.md`.
+- **Registro:** os desvios D-PV0-1 a D-PV0-6, em `docs/registro/2026-11.md`.
 - **PR** contra a `main`, com o relato no modelo. Merge só pelo Matheus.
 
 ## 6. Fora desta tarefa
@@ -104,4 +107,6 @@ Cada decisão vem com a recomendação e o custo de errar. As seções citadas s
 - **Nenhuma vida, nenhum replay e nenhuma conta nova.** Os números citados no plano vêm de artefatos já no git, ou de fatos do código,
   com o arquivo.
 - **Achado (D-PV0-1):** os artefatos da C4 também estão no git, com os mesmos sha256 da pasta de fora.
+- **O ajuste de 2026-11-08 (D-PV0-6):** as citações do PR #703, fechado, passam para o vault DigiLab Research. O plano ganha
+  três notas da nota `20 Temas/Pet vivo.md`: o reflexo, o Dulberg et al. 2023 e a posta por lugar. As PV-0 não mudaram.
 - **Próximo:** o APROVADO do plano e as PV-0-n; depois, o PR do código (o plano, seção 9), e só então o replay.

@@ -10,8 +10,9 @@ a recomendação e o custo de errar. **Nenhum replay e nenhuma conta deste plano
 arquivo. Os cortes e o Δ são PROPOSTOS e SEM FONTE.
 
 **De onde vem:**
-- a rodada PET_VIVO (`docs/futuro/rodada_pet_vivo.md`, ainda no PR #703), seção 3, etapa 0, itens 2 e 3;
-- a crítica dessa rodada, seção 2.5: o sorteio proporcional favorece quem tem mais unidades, e nenhum gate de hoje mede "age pelo
+- a rodada PET_VIVO (vault DigiLab Research, `20 Temas/Pet vivo.md`, seção 5, a etapa 0, itens 0b e 0c). Os documentos de pesquisa ficam no vault, e não
+  no repositório (decisão do Matheus, 2026-11-08; o PR #703 foi fechado). A nota substitui o antigo `rodada_pet_vivo.md`;
+- a crítica às análises, na mesma nota, seção 4: o sorteio proporcional favorece quem tem mais unidades, e nenhum gate de hoje mede "age pelo
   estado";
 - **a autorização do Matheus (2026-11-07): "Sim, a etapa 0"**, em resposta a "Aprovo a etapa 0 da PET_VIVO e despacho a verificação e a
   auditoria?". Ela libera o papel e as vidas já gravadas. Ela não aprova este plano e não libera vida nova.
@@ -68,7 +69,8 @@ Conferidos na `main` (`origin/main` de 2026-11-07).
   unidades, quanto do reflexo do sono, e quanto ela muda quando o corpo muda?
 - **Q-0c:** qual medida diz, numa vida, quanto o pet "age pelo estado"? E como ela vira gate ao lado do forrageio?
 
-**As três hipóteses da rodada** (a busca colada de 2026-11-07, pela crítica da seção 2.5 da rodada) são HIPÓTESES e SEM FONTE:
+**As três hipóteses da rodada** (a busca colada de 2026-11-07, pela crítica do vault DigiLab Research, `20 Temas/Pet vivo.md`, seção 4) são HIPÓTESES.
+A HA tem uma pista na literatura (a nota da seção 4.2); as outras duas são SEM FONTE:
 
 | | a hipótese | em uma frase |
 |---|---|---|
@@ -124,6 +126,13 @@ Os nomes HP, HA e HC são deste plano. Eles evitam a colisão com os M1 a M5, os
   (base, semente), com a média dos 4 donos, como na C4 (A4.4.6). Os donos saem também separados, sem IC.
 - **As decisões que entram:** todas, com o reflexo marcado. As medidas da distribuição (A-1, A-2 e A-4) usam só as decisões **com
   sorteio ou com um candidato só** (fora do reflexo e da escolha segurada). O reflexo tem a medida própria (A-3).
+- **Os lugares saem separados, porque a posta da ração é diferente em cada um** (a nota do vault, `20 Temas/Pet vivo.md`, seção 2, lida
+  em `fa09444`; conferido na `main` `f3f717e0`, em `DonoComLugar.lugar`, `digilab/mundo.py`):
+  - no `comedouro`, a ração vai sempre ao centro do comedouro;
+  - no `longe_fixo`, ela vai a um dos pontos fixos, sorteado entre eles a cada vez;
+  - no `longe`, a direção (uma de 16) e a distância saem do sorteio a cada vez, a partir da posição do pet.
+  Então, no `longe`, o lugar lembrado não prevê onde a próxima ração cai, e os termos `memoria` e `lembranca` da A-1 se leem de outro
+  jeito nos três lugares. Juntar os lugares misturaria isso.
 - **Os dias:** os 14, e também só os dias 8 a 14, como na C4 (depois que o hábito e a memória se formam).
 
 ## 4. As medidas da 0b, em cada decisão
@@ -156,11 +165,16 @@ As contas são todas inteiras ou em razão exata (`fractions`), a partir do `w`.
     ganha pela multiplicidade;
   - a parte da exploração no efeito: a mesma conta com `w` sem a exploração (`a` só), para separar quanto do efeito vem do inato
     repetido e quanto da exploração somada k vezes.
+- **A pista da literatura para a HA:** Dulberg et al. 2023 (PNAS, `10.1073/pnas.2221180120`), lido no texto completo no vault
+  (vault DigiLab Research, `20 Temas/Pet vivo.md`, seção 4). **Pista, a verificar no repositório:** ele não está em nenhum CSV. Pelo que a nota registra,
+  um subagente por necessidade escolhe pela ação de maior valor (argmax, e não sorteio), e a vantagem modular aparece já com 4 objetivos
+  estacionários. Ele não mede o número de alvos do Digilab, e a A-2 não depende dele: ele só é o motivo para a `P¹` ser a referência
+  certa, um alvo por comportamento;
 - **Uma segunda referência, só descritiva:** `P^μ`, com a média dos `w` de cada comportamento no lugar do máximo.
 - **A troca instantânea:** a chance de sair da intenção em curso, `1 − P(unidade da intenção)`, sob P e sob P¹ (no nível do
   comportamento). Ela não é a medida das trocas de meta da R§13.4, só a chance por decisão.
 - **O tempo em cada comportamento:** a fração observada (a escolha) ao lado de `E[P_b]` e de `E[P¹_b]`. Ela responde se o `explorar` em
-  cerca de 29 % do tempo (a conta do levantamento, seção 1.4) cai sob P¹.
+  cerca de 29 % do tempo (a conta do levantamento, vault DigiLab Research, `DigiLab — Revisão de escopo/LEVANTAMENTO_CEREBRO_MODULAR_2026-11-07.md`, seção 1.4) cai sob P¹.
 
 ### 4.3 A-3: o reflexo do sono
 
@@ -169,6 +183,15 @@ As contas são todas inteiras ou em razão exata (`fractions`), a partir do `w`.
 - nas decisões com sorteio, a `P_dormir` média;
 - **a margem do reflexo:** a leitura da energia menos o `lambda_sono` nas decisões perto do corte (a menos de S/16), para ver quantas
   decisões o reflexo decide por pouco;
+- **A nota do vault** (vault DigiLab Research, `20 Temas/Pet vivo.md`, seção 2): o reflexo passa por cima de tudo, e o dormir dá r = 0. Conferido na
+  `main` (`f3f717e0`): em `Arbitragem.escolher`, o ramo `elif reflexo` escolhe o `dormir` antes do sorteio e sem sonda, e o `lambda_sono`
+  é S/4 (`ConfigDigibrainInatos`, PROPOSTO). O r = 0 do dormir é da nota, lido em outro commit. **O PR do código o confere** pelo canal
+  do `r` nas consequências do `dormir` (o mesmo da tabela do alívio, 4.4) e registra o que achar. Duas consequências para a leitura:
+  - o reflexo não passa pelo `w`, então as sondas não o veem, e a A-1 subestima o corpo se ele ficar de fora. Por isso a A-3 sai antes
+    da regra de leitura (seção 5);
+  - se o dormir dá r = 0, o hábito e o P1 nunca aprendem o dormir pelo corpo, e o conflito entre a fome e o sono fica só com o
+    reflexo. A nota marca isso como HIPÓTESE. A auditoria só o descreve: a fração das decisões com o reflexo e a fome urgente (u_fome
+    ≥ S/2) ao mesmo tempo;
 - **a parte do sono que o corpo decide:** o reflexo é o corpo (a energia) decidindo sem sorteio. Ele entra na A-4 como uma porta própria,
   e não fica escondido no `dormir`.
 
@@ -200,6 +223,8 @@ As contas são todas inteiras ou em razão exata (`fractions`), a partir do `w`.
 - b alivia r se a média do canal é > 0 e o IC95 (sobre as vidas) fica acima de 0;
 - **a limitação, escrita antes:** o alívio empírico mistura o contexto (o `comer` só acontece com comida). Ele diz o que o comportamento
   fez no corpo nessas vidas, e não o que faria em qualquer contexto;
+- **a posta sorteada** (seção 3) também entra no alívio empírico: o `comer` alivia a fome onde a ração está, e a ração está onde o dono
+  a pôs. O alívio sai por lugar, como o resto;
 - o susto fica fora, como no `r` (`fora_do_r`). Um receptor sem nenhum comportamento que o alivie fica sem C_r, e isso é contado.
 
 ## 5. A regra de leitura, escrita antes (PV-0-8)
@@ -221,11 +246,11 @@ Os cortes são PROPOSTOS e SEM FONTE. Cada hipótese é lida por (fonte, braço)
 - **O reflexo (A-3)** não é uma hipótese. Ele entra como contexto. Se ele decide mais de 1/3 das decisões, o relato diz isso antes da
   leitura, porque a escolha que as três hipóteses discutem fica com menos de 2/3 do tempo.
 
-**O que cada leitura sugere para a etapa 1** (a rodada, seção 3; a escolha é do Matheus):
+**O que cada leitura sugere para a etapa 1** (vault DigiLab Research, `20 Temas/Pet vivo.md`, seção 5; a escolha é do Matheus):
 
 | a leitura | o que a auditoria sugere testar primeiro |
 |---|---|
-| HA | normalizar o sorteio por comportamento: sortear o comportamento antes do alvo, ou o posto do Dill 2015 (pista, a verificar). É o conserto mais barato |
+| HA | normalizar o sorteio por comportamento: sortear o comportamento antes do alvo, ou o posto do Dill 2015 (pista, a verificar). É o conserto mais barato. A escolha por argmax entre subagentes do Dulberg et al. 2023 (pista, a verificar) é a alternativa maior |
 | HC | o corpo como modulador (a frente 2 da rodada: a tabela de receptores químico → parâmetro e os dois estados persistentes; Flavell et al. 2013, pista, a verificar), ou a curva da urgência |
 | HP | a revisão dos pesos inatos. **Ela esbarra na regra "calibração no fim"**, e quem decide se ela abre agora é o Matheus |
 | indeterminado | a auditoria não escolhe a frente. A recomendação da rodada (PV-2 primeiro) fica como está |
@@ -252,7 +277,7 @@ duas fontes diz que a regra aponta para o mesmo lugar no código de antes e no d
 | **RV** (parte da SE-C) | **a revalorização no ato**, pela pista do Zhang et al. 2009 (PLoS Comput Biol 5(7):e1000437, `10.1371/journal.pcbi.1000437`; pista, a verificar na `v3c5`): a necessidade muda o "querer" da deixa sem reaprender | nas decisões com comida à vista, `P^{fome+}_comer − P^{fome−}_comer`, com a plasticidade parada (o contrafactual não aprende, por construção) | a revalorização sem aprendizado, que a C4 e o J5 já tocaram por outro caminho | as outras necessidades. Uma versão por par (receptor, comportamento) seria a SE-C de novo |
 | a informação mútua (só descritiva) | `I(comportamento; urgência mais alta)`, das escolhas observadas, sem contrafactual | sai de qualquer log, também no jogo | a associação entre o estado e a ação | confunde o estado com o contexto (com fome, há comida perto porque o dono põe), então não serve de gate |
 
-**O teste de desvalorização da revisão I** (trocar a comida por uma que não alivia e contar as escolhas depois) pede vidas novas e fica
+**O teste de desvalorização da revisão I** (vault DigiLab Research, `DigiLab — Revisão de escopo/REVISAO_I_PET_VIVO_2026-11-07.md`) (trocar a comida por uma que não alivia e contar as escolhas depois) pede vidas novas e fica
 para os planos da etapa 2. A RV é a versão dele que cabe nos logs: ela muda a necessidade, e não o valor da comida.
 
 **A SE-C não pode subir só por deixar o pet um autômato.** Um ganho na urgência ou um ε menor aumentam a SE-C e zeram a entropia. Por
@@ -344,6 +369,6 @@ Cada plano de mecanismo da etapa 2 traz, escritos antes da run:
 - **O AN4:** o passeio muda as unidades do `explorar`.
 - **O teste de desvalorização com vida nova:** é da etapa 2 (7.1).
 - **A fala** (as unidades de fala da DC3): elas mudam o número de unidades do `chamar_atencao`. Ficam para um adendo, se a HA apontar.
-- **A verificação das referências:** é a 0a, a tabela `v3c5`. Toda referência nova deste plano (Zhang et al. 2009, Dill 2015 e Flavell
-  et al. 2013) fica como **pista, a verificar**, até lá. Luce 1977 e Usher e McClelland 2001 são as da espec, com o estado que a espec
+- **A verificação das referências:** é a 0a, a tabela `v3c5`. Toda referência nova deste plano (Zhang et al. 2009, Dill 2015, Flavell
+  et al. 2013 e Dulberg et al. 2023) fica como **pista, a verificar**, até entrar numa tabela do repositório. Luce 1977 e Usher e McClelland 2001 são as da espec, com o estado que a espec
   registra.
