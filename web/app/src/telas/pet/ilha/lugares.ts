@@ -4,8 +4,9 @@
 
    A TABELA (LUGARES, da frente UX_TELA_PET): o saco de pancada (Crescer), o portao da arena (Lutar) e a barraca do Tamer (Diario). Cada lugar tem o nome,
    o destino, o ponto na cena, a altura alvo, o raio da base, o estado e o caminho do modelo 3D.
-   - o ponto e o centro da base, em celulas do mundo (x leste, z sul): o saco a [3, -4] do ninho (como desde a L2); o portao e a barraca onde a grade os
-     poe (grade.ts, porLugares, LUGARES_GRADE: ao norte da area andavel, em grama plana, com a clareira), que chegam em `BaseDoMundo.grade`. Na mescla
+   - o ponto e o centro da base, em celulas do mundo (x leste, z sul): o saco perto da praca, no ponto da planta A (PLANTA_ILHA; ate a planta, a
+     [3, -4] do ninho, desde a L2); o portao e a barraca onde a grade os
+     poe (grade.ts, porLugares, PLANTA_ILHA: o portao ao norte, a barraca a leste da praca, em grama plana, com a clareira), que chegam em `BaseDoMundo.grade`. Na mescla
      da UX_TELA_PET com a LUGARES_3D (2026-11-07) os pontos provisorios da L3 (o portao a leste do comedouro, a barraca a oeste do ninho) e o giro
      deles sairam: a posicao, o giro e o estilo sao os da LUGARES_3D;
    - o modelo e a luz vem de LUGARES_MODELOS e LUGARES_LUZ (modelos.ts), a mesma tabela que a cena carrega abaixo; a altura alvo e a do modelo;
@@ -17,7 +18,7 @@
    Sem three e sem DOM (o teste le este modulo sozinho). A CENA (`lugares`, da frente LUGARES_3D) mora em lugaresCena.ts: cada modelo de LUGARES_MODELOS (public/lugares/<nome>/) entra pelo carregarVariante, como os enfeites
    (enfeites.ts), com a sombra redonda quando o modelo tem. Aberto e trancado sao o mesmo modelo: aberto, as partes da mascara (LUGARES_LUZ, o
    emissiveMap) acendem na cor do lugar; trancado, apagam. O cais (o multiplayer e futuro) fica trancado por LUGAR_ABERTO (lugaresIlha.ts) e sem menu. */
-import { SACO_DESDE_NINHO } from "./constantes.ts";
+import { PLANTA_ILHA } from "./constantes.ts";
 import { LUGARES_LUZ, LUGARES_MODELOS, type NomeLugar } from "./modelos.ts";
 import { lugarTrancado } from "../../../trancas.ts";
 
@@ -74,7 +75,7 @@ const luzDe = (n: NomeLugar): string | null => (LUGARES_LUZ[n] ? "lugares/" + LU
 export const LUGARES: Readonly<Record<IdLugar, LugarIlha>> = {
   saco: {
     id: "saco", nome: "Saco de pancada", destino: "crescer", altura: 2.5, raio: 0.5, estado: "aberto", modelo: null, luz: null, cadeado: null,
-    ponto: b => [b.ninho[0] + SACO_DESDE_NINHO[0], b.ninho[1] + SACO_DESDE_NINHO[1]],
+    ponto: () => [PLANTA_ILHA.lugares.saco[0], PLANTA_ILHA.lugares.saco[1]],
   },
   portao: {
     id: "portao", nome: "Portão da arena", destino: "lutar", altura: LUGARES_MODELOS.portao.altura, raio: 0.5, estado: "aberto",

@@ -539,7 +539,7 @@ export type Carregador = (arquivo: string, id: NomeModelo, modelo: Modelo) => Pr
  *  ilha (public/kits3d, MODELOS); os outros estilos do habitat (estilos.ts) dao o carregador e os arquivos deles */
 export async function objetos(ilha: Ilha, base: string, carregar?: Carregador, arquivosDe: (id: NomeModelo) => readonly string[] = id => MODELOS[id].arquivos,
   girar = true): Promise<Objetos> {
-  const gltf = new GLTFLoader(), usados = new Set(ilha.objetos.map(o => o.modelo));
+  const gltf = new GLTFLoader(), usados = new Set([...ilha.objetos, ...ilha.extras].map(o => o.modelo));
   const carregador: Carregador = carregar ?? ((arq, _id, modelo) => carregarVariante(gltf, new URL("kits3d/" + arq, base).href, modelo));
   const variantes = new Map<NomeModelo, Variante[]>();
   await Promise.all([...usados].flatMap(id => arquivosDe(id).map(async (arq, i) => {
@@ -553,6 +553,12 @@ export async function objetos(ilha: Ilha, base: string, carregar?: Carregador, a
     /* a clareira de um lugar (lugares.ts): o objeto nao entra, e os outros mantem a variante (pelo indice de antes) */
     if (ilha.escondidos.has(i)) return;
     const k = `${o.modelo}|${i % arquivosDe(o.modelo).length}`;
+    if (!grupos.has(k)) grupos.set(k, []);
+    grupos.get(k)!.push(o);
+  });
+  /* os extras da planta (as pedras do ferro-velho), depois, com a variante pelo indice seguinte */
+  ilha.extras.forEach((o, i) => {
+    const k = `${o.modelo}|${(ilha.objetos.length + i) % arquivosDe(o.modelo).length}`;
     if (!grupos.has(k)) grupos.set(k, []);
     grupos.get(k)!.push(o);
   });

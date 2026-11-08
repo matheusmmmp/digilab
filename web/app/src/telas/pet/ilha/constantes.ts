@@ -51,9 +51,9 @@ export const NOITE = {
 export const LUZ_NINHO = { raio: 2.2, cor: "255,214,140" } as const;
 
 /* os objetos do cuidado e a coreografia (docs/TAREFA_V3_HABITAT_OBJETOS.md): so vista, como o resto deste arquivo */
-/** o saco de pancada do treino, em celulas a partir do ninho do layout (no MVP: o ninho em (4, 15), o saco em (7, 11), ao norte entre
-    o ninho e o comedouro), e o kit medico da lesao, ao lado do ninho */
-export const SACO_DESDE_NINHO: readonly [number, number] = [3, -4], KIT_DESDE_NINHO: readonly [number, number] = [1.3, -1];
+/** o kit medico da lesao, ao lado do ninho, em celulas a partir do ninho do layout (o saco de pancada, desde a planta A, fica perto da
+    praca: PLANTA_ILHA.lugares.saco) */
+export const KIT_DESDE_NINHO: readonly [number, number] = [1.3, -1];
 /** o treino na ilha: a ida ate o saco, os golpes e a volta (ms); um golpe a cada GOLPE_MS; o pet para a GOLPE_DIST celulas do saco */
 export const TREINO_MS = { ida: 900, golpes: 2400, volta: 900 } as const, GOLPE_MS = 600, GOLPE_DIST = 1.35;
 /** a batida na bola: quanto dura o golpe (ms) */
@@ -74,31 +74,54 @@ export const SACO_FOLGA_POSTE = 0.14;
     surgir (ms); o desenho e o item gerado (itens.ts, public/itens/coco/); PROPOSTO, SEM FONTE */
 export const COCO = { raio: 0.85, passo: 0.25, surgirMs: 380 } as const;
 
-/** os enfeites do mundo humano na moldura (docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 4.3; grade.ts, porEnfeites): o sal da rng propria
-    (os objetos de hoje nao mudam, E-G0) e as tentativas por enfeite antes de falhar alto; e, por enfeite, quantos por mapa, a faixa de
-    distancia da area andavel (nada alto rente a ela, como as arvores; perto o bastante para a camera ver), a distancia minima dos enfeites ja
-    postos (os postes vem antes, e a distancia e a de quem chega) e das coisas altas de hoje, a folga de chao plano em volta (celulas) e se fica so ao norte da area (o lado que a camera da tela
-    Pet ve, atras do pet), e entao a ate `casa` celulas do ninho em x. Os repetidos (o poste) e os marcos (o carro). PROPOSTO, SEM FONTE */
+/** os enfeites do mundo humano (docs/TAREFA_V3_MUNDO_ENFEITES.md; grade.ts, porEnfeites), desde a planta A (PLANTA_ILHA) em pontos fixos:
+    por enfeite, quantos por mapa, a folga de chao plano em volta (celulas); dos marcos do ferro-velho, a distancia minima entre eles (o
+    carro e o trilho tem ~5 celulas de comprimento) e a clareira que cada um abre na decoracao. PROPOSTO, SEM FONTE */
 export const ENFEITES_GRADE = {
-  sal: 0x5e7e17e5, tentativas: 4000,
-  poste: { quantos: 14, perto: 1.5, longe: 4, entreSi: 4, deAlto: 2, folga: 0, norte: false, casa: 0 },
-  carro: { quantos: 1, perto: 2.4, longe: 4, entreSi: 2.5, entreMarcos: 6.5, deAlto: 2, folga: 1, norte: true, casa: 12 },
-  /* a geladeira e o trilho numa faixa de x a partir do ninho que a camera ve sem o painel Estado na frente (o revisor achou o trilho
-     atras dele, em x = 20 no mvp) */
-  geladeira: { quantos: 1, perto: 1.8, longe: 4, entreSi: 2.5, entreMarcos: 5, deAlto: 1.4, folga: 1, norte: true, casa: 0, faixa: [-14, 16] },
-  trilho: { quantos: 1, perto: 2, longe: 5, entreSi: 2.5, entreMarcos: 6, deAlto: 1.2, folga: 1, norte: true, casa: 0, faixa: [-16, 18] },
+  poste: { quantos: 6, folga: 0 },
+  carro: { quantos: 1, folga: 1, entreMarcos: 4.5, clareira: 2.2 },
+  geladeira: { quantos: 1, folga: 1, entreMarcos: 4.5, clareira: 1.4 },
+  trilho: { quantos: 1, folga: 1, entreMarcos: 4.5, clareira: 2.2 },
 } as const;
-/** onde ficam os lugares da ilha (lugares.ts; docs/TAREFA_V3_LUGARES_3D.md, secao 12): depois dos enfeites, com a rng propria (os
-    objetos e os enfeites de hoje nao mudam). O portao e a barraca ao norte da area, no ponto que cabe mais perto do `alvo` (o deslocamento
-    a partir do ninho em x; z ao norte da area), onde a camera da tela Pet mais fica: em grama plana com a folga do modelo, longe dos
-    enfeites e um do outro, com a frente para a area. O cais na beira do mar, ao sul: na ultima linha de areia antes da agua, numa faixa de x da area (fracao da largura), com o
-    comprido ao longo da beira. Cada lugar abre uma `clareira`: a vista nao desenha os objetos da decoracao (nao os do motor) a menos
-    disso do centro (Ilha.escondidos). PROPOSTO, SEM FONTE */
-export const LUGARES_GRADE = {
-  sal: 0x1a6a2e5, tentativas: 4000,
-  barraca: { perto: 2, longe: 3.6, folga: 1, deEnfeite: 3.5, clareira: 3.4, alvo: [-1.4, -2.6] },
-  portao: { perto: 1.8, longe: 3.6, folga: 1, deEnfeite: 3.2, clareira: 3, alvo: [8, -2.4] },
-  cais: { faixa: [0.15, 0.4], clareira: 4.5 },
+/** a planta A da ilha inicial (docs/pranchas/ux-ilha-layout/, IL-1 a IL-4 DECIDIDAS em 2026-11-08; a vista em docs/pranchas/ux-ilha-planta-a/):
+    so a parte da vista, em celulas do mundo (x leste, z sul), a mesma em todo mapa de 64 x 30. O ninho, a tigela, a bola e as frutiferas sao
+    do motor (o LayoutMundo) e nao entram aqui.
+    - a praca, o no: um disco de terra (`praca`, o centro e o raio);
+    - os caminhos de terra (`raioCaminho`) da praca ao lar (ate o comedouro do layout), ao portao, a barraca e ao cais, pelos pontos de
+      `caminhos`; cada um para antes da base do lugar (`folgaLugar` alem do raio dele) e so pinta grama da area andavel;
+    - os lugares: o `alvo` de cada um (a grade poe no ponto que cabe mais perto dele, em `busca` celulas, com a `folga` de chao plano), a
+      `clareira` que ele abre na decoracao e o raio da `base` onde o caminho para; o cais na coluna `x`; o saco perto da praca;
+    - os postes (IL-3), cerca de 6, so na praca e no caminho do cais, em grama ou areia; a lampada para o ponto mais perto do caminho;
+    - o ferro-velho (IL-4): o carro, a geladeira e o trilho juntos no canto nordeste, com as pedras (`pedras`: x, z e escala);
+    - a moldura em bosques e vaos (regras 7 e 8 do levantamento): a arvore e o arbusto da moldura so ficam dentro de um bosque (elipses
+      `bosques`: x, z, raio x, raio z) ou na mata a leste do rio; nos `vaos` (o de tras do portao) nada alto fica. Cada bosque ganha as
+      arvores e os arbustos dele, com a rng propria (`sal`): `porCelula` arvores por celula da elipse, a distancia minima entre as coisas
+      altas, a escala e os arbustos (fracao das arvores) na base, na elipse 1,3 vez maior. Os bosques que a planta
+      punha dentro da area do pet ficaram na moldura, encostados nela: o LayoutMundo so aceita arvore com fruta (o desvio da prancha).
+    PROPOSTO, SEM FONTE */
+export const PLANTA_ILHA = {
+  praca: { x: 31, z: 16, raio: 4.2 },
+  raioCaminho: 0.8, folgaLugar: 0.6,
+  caminhos: {
+    lar: [[22, 16], [31, 16]],
+    portao: [[31, 16], [31, -1]],
+    barraca: [[31, 16], [40, 13], [47, 10]],
+    cais: [[31, 16], [36, 24], [38, 31]],
+  },
+  lugares: {
+    portao: { alvo: [31, -2.5], busca: 3, folga: 1, clareira: 3, base: 1.6 },
+    barraca: { alvo: [48.5, 8.5], busca: 3, folga: 1, clareira: 3.4, base: 2.4 },
+    cais: { x: 38, clareira: 4.5 },
+    saco: [22, 9],
+  },
+  postes: [[27.5, 13], [34.5, 13], [27.5, 19.5], [34.5, 19.5], [33.5, 26], [37, 30]],
+  ferroVelho: {
+    carro: [56.5, -3], geladeira: [61.5, -3.5], trilho: [51, -4.5], busca: 2.5,
+    pedras: [[54, -1.4, 0.9], [59.4, -1.2, 0.7], [62.8, -1.6, 0.6], [48.6, -2, 0.8], [58.6, -5.6, 0.6]],
+  },
+  bosques: [[8, -6, 8, 4.2], [-6, 4, 3.4, 4.6], [-6, 22, 3.4, 5], [19, -8, 4, 3.4], [44, -6, 6, 3.6], [-5, -6, 4, 3.4]],
+  vaos: [[31, -6, 5, 5]],
+  sal: 0xb05c0e5, bosque: { porCelula: 0.16, entreArvores: 2.2, escalaArvore: [0.9, 1.2], arbustos: 0.5, entreArbustos: 1.2, escalaArbusto: [0.85, 1.15] },
 } as const;
 /** a luz de um lugar aberto (lugaresCena.ts): a cor da mascara de cada lugar (o ciano do portal e dos cristais, tirado da textura) e a
     forca (emissiveIntensity). PROPOSTO, SEM FONTE */
