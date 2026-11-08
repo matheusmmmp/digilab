@@ -1867,7 +1867,8 @@ CONFIG_MUNDO_MVP = replace(CONFIG_MUNDO_LIGADA, layout=LAYOUT_MUNDO_MVP)        
 
 # O mundo da ilha (docs/TAREFA_V3_ARVORE_SACODE.md, AS-7 APROVADA em 2026-11-08): o layout do MVP com as tres arvores do jardim do layout
 # padrao (J1 a, J2 b, J3 c), so para os pets v20 do jogo. O CONFIG_MUNDO_MVP nao muda (a vida gravada dos pets v12 a v19). O mundo novo e
-# DECIDIDO; quais arvores, PROPOSTO, SEM FONTE.
+# DECIDIDO; quais arvores, PROPOSTO, SEM FONTE. As posicoes sao PROVISORIAS: o layout novo da ilha (PR #724, a IL-2 com o Matheus)
+# pode leva-las ao bosque do lar. Os pontos ficam so aqui; trocar aqui e regravar o gabarito do G-PAR (exportar_gabarito_arvore_sacode).
 LAYOUT_MUNDO_ILHA = replace(LAYOUT_MUNDO_MVP, nome="ilha",
                             arvores=tuple(a for a in LAYOUT_MUNDO_PADRAO.arvores if a[0] in ("J1", "J2", "J3")))  # PROPOSTO, SEM FONTE
 CONFIG_MUNDO_ILHA = replace(CONFIG_MUNDO_MVP, layout=LAYOUT_MUNDO_ILHA)
