@@ -8,6 +8,7 @@
    Tudo deterministico (a rng da grade com um sal proprio); as contas ficam em digitalConta.ts, sem DOM. Os numeros sao do desenho: PROPOSTO, SEM FONTE. */
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { carregarVariante, curvar } from "./cena.ts";
 import { DIGITAL, NUVENS_PINTADAS } from "./constantes.ts";
 import { lugarDaLata, lugaresDasParticulas, segmentosDosFios } from "./digitalConta.ts";
@@ -150,6 +151,91 @@ export function nuvensDaPintura(grupo: THREE.Group, nuvens: HTMLCanvasElement, i
     m.position.set(Math.sin(ang) * raio, N.altura[0] + r() * (N.altura[1] - N.altura[0]), -Math.cos(ang) * raio);
     m.lookAt(0, m.position.y, 0);
     if (r() < 0.5) m.scale.x = -1;
+    m.frustumCulled = false;
+    anel.add(m);
+  }
+  grupo.add(anel);
+  if (!parado) {
+    let antes = performance.now();
+    anel.children[0].onBeforeRender = () => { const agora = performance.now(); anel.rotation.y += ((agora - antes) / 1000) * (Math.PI * 2 / N.volta); antes = agora; };
+  }
+}
+
+/** uma nuvem de bolhas (o desenho "3d" e o "chapada"): os centros e os raios de `n` bolhas lado a lado, a maior no meio, com a base em y = 0 */
+function bolhasDaNuvem(r: () => number, n: number): [number, number, number][] {
+  const b: [number, number, number][] = [];
+  for (let k = 0; k < n; k++) {
+    const t = n === 1 ? 0 : (k / (n - 1)) * 2 - 1, raio = 0.55 + (1 - Math.abs(t)) * 0.55 + r() * 0.15;
+    b.push([t * 1.6 + (r() - 0.5) * 0.3, raio * 0.55, raio]);
+  }
+  return b;
+}
+
+/** as nuvens "3d" (NUVENS_PINTADAS.desenho): bolhas de pouco poligono juntas numa malha, com a base cortada reta e dois tons chapados pela altura
+    (branco em cima, a sombra azulada na faixa de baixo), sem luz e sem nevoa; o contorno do estilo as desenha como o resto da ilha */
+function nuvem3d(r: () => number): THREE.BufferGeometry {
+  const N = NUVENS_PINTADAS, n = N.bolhas[0] + Math.floor(r() * (N.bolhas[1] - N.bolhas[0] + 1)), partes: THREE.BufferGeometry[] = [];
+  for (const [x, y, raio] of bolhasDaNuvem(r, n)) {
+    const g = new THREE.IcosahedronGeometry(raio, 1);
+    g.translate(x, y, (r() - 0.5) * 0.4);
+    partes.push(g.index ? g.toNonIndexed() : g);
+  }
+  const geo = mergeGeometries(partes);
+  if (!geo) throw new Error("nuvem 3d: as bolhas nao juntaram");
+  const pos = geo.getAttribute("position"), cores: number[] = [], branco = new THREE.Color("#ffffff"), sombra = new THREE.Color(N.sombra);
+  let topo = 0;
+  for (let i = 0; i < pos.count; i++) topo = Math.max(topo, pos.getY(i));
+  for (let i = 0; i < pos.count; i += 3) {
+    /* a base reta: o que desce abaixo de 0 fica em 0; e o tom do triangulo inteiro pela altura do meio dele (chapado, sem degrade) */
+    let ym = 0;
+    for (let j = 0; j < 3; j++) { const y = Math.max(0, pos.getY(i + j)); pos.setY(i + j, y); ym += y / 3; }
+    const c = ym < topo * N.faixa ? sombra : branco;
+    for (let j = 0; j < 3; j++) cores.push(c.r, c.g, c.b);
+  }
+  geo.setAttribute("color", new THREE.Float32BufferAttribute(cores, 3));
+  geo.computeVertexNormals();
+  return geo;
+}
+
+/** as nuvens "chapada": o mesmo desenho de bolhas num canvas, branco com a faixa de sombra embaixo e a borda limpa (sem pintura), num quadro */
+function nuvemChapada(r: () => number): THREE.CanvasTexture {
+  const N = NUVENS_PINTADAS, n = N.bolhas[0] + Math.floor(r() * (N.bolhas[1] - N.bolhas[0] + 1)), b = bolhasDaNuvem(r, n);
+  const c = document.createElement("canvas"), W = 512, H = 256, esc = W / 5.2, x0 = W / 2, y0 = H - 24;
+  c.width = W; c.height = H;
+  const g = c.getContext("2d");
+  if (!g) throw new Error("canvas 2d indisponível");
+  const forma = () => { g.beginPath(); for (const [x, y, raio] of b) { g.moveTo(x0 + x * esc + raio * esc, y0 - y * esc); g.arc(x0 + x * esc, y0 - y * esc, raio * esc, 0, Math.PI * 2); } };
+  g.fillStyle = "#ffffff"; forma(); g.fill();
+  /* a sombra: a faixa de baixo, recortada pela forma; a base reta */
+  let topo = H;
+  for (const [, y, raio] of b) topo = Math.min(topo, y0 - (y + raio) * esc);
+  g.save(); forma(); g.clip();
+  g.fillStyle = N.sombra; g.fillRect(0, y0 - (y0 - topo) * N.faixa, W, H);
+  g.restore();
+  g.clearRect(0, y0, W, H - y0);
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
+/** as nuvens do anel no desenho "3d" ou "chapada" (o recorte da pintura fica em nuvensDaPintura): as mesmas posicoes, o mesmo giro */
+export function nuvensDesenhadas(grupo: THREE.Group, ilha: Ilha, desenho: "3d" | "chapada", parado: boolean): void {
+  const N = NUVENS_PINTADAS, r = rng(29), cx = ilha.x0 + ilha.larg / 2, cz = ilha.z0 + ilha.prof / 2, anel = new THREE.Group();
+  anel.position.set(cx, 0, cz);
+  for (let i = 0; i < N.n; i++) {
+    const tam = N.tam[0] + r() * (N.tam[1] - N.tam[0]);
+    let m: THREE.Mesh;
+    if (desenho === "3d") {
+      m = new THREE.Mesh(nuvem3d(r), new THREE.MeshBasicMaterial({ vertexColors: true, fog: false, transparent: true, opacity: grupo.userData.opacidade ?? 1 }));
+      m.scale.setScalar(tam / 5.2);
+    } else {
+      const geo = new THREE.PlaneGeometry(tam, tam / 2);
+      geo.translate(0, tam / 4, 0);
+      m = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: nuvemChapada(r), fog: false, depthWrite: false, transparent: true, opacity: grupo.userData.opacidade ?? 1 }));
+    }
+    const ang = (i / N.n) * Math.PI * 2 + (r() - 0.5) * 0.4, raio = N.raio[0] + r() * (N.raio[1] - N.raio[0]);
+    m.position.set(Math.sin(ang) * raio, N.altura[0] - N.baixa + r() * (N.altura[1] - N.altura[0]), -Math.cos(ang) * raio);
+    m.lookAt(0, m.position.y, 0);
     m.frustumCulled = false;
     anel.add(m);
   }

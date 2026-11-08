@@ -131,6 +131,12 @@ export const CEU_SEM_PINTURA = {
 export const NUVENS_PINTADAS = {
   pedacos: [[0, 250, 760, 360], [540, 15, 836, 515], [680, 560, 340, 92]] as const,
   n: 9, raio: [58, 72], altura: [14, 26], escala: 0.05, volta: 1500, nuvem: 0.35, borda: 0.45, esfumar: 0.18,
+  /* o desenho das nuvens do anel (o Matheus, 2026-11-08: o recorte "parece uma nuvem gerada por inteligência artificial [...] pegar uma referência
+     de nuvem em jogos"): "recorte" (os pedacos da pintura), "3d" (bolhas de pouco poligono com a base reta e dois tons, como as de jogos de ilha)
+     ou "chapada" (o desenho limpo de bolhas, com a faixa de sombra embaixo); `?nuvens=` troca so na pagina. `bolhas` quantas por nuvem, `tam` a
+     largura de uma nuvem (celulas), `baixa` quanto as desenhadas ficam abaixo da `altura` (sao menores que os recortes), `sombra` a cor de baixo e
+     `faixa` a fracao da altura em sombra */
+  desenho: "3d" as "recorte" | "3d" | "chapada", bolhas: [4, 7], tam: [22, 38], baixa: 8, sombra: "#c4d6ec", faixa: 0.32,
 } as const;
 /** o traco de nanquim do estilo digital (pos.ts, Contorno; D5, o cel shading que o Matheus pediu): um azul-petroleo quase preto, a
     largura de ~3 px (o revisor pediu o traco mais grosso), e some entre 34 e 76 celulas da camera (perto do fim da nevoa). PROPOSTO, SEM FONTE */

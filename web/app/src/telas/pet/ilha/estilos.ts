@@ -12,8 +12,8 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { PALETA_DIGITAL, PALETA_ILHA, carregarVariante, doisTons, flores, montarCena, objetos, terreno, tufos, usarDoisTons, type CenaIlha, type Objetos,
   type PaletaTerreno } from "./cena.ts";
 import { arquivosCassette, carregadorCassette, terrenoCassette } from "./cassette.ts";
-import { CEU_DIGITAL, CEU_SEM_PINTURA, CONTORNO_DIGITAL, DOBRA_K } from "./constantes.ts";
-import { ceuComGrade, ceuEmFaixas, fios, lata, nuvensDaPintura, particulas, separarNuvens, suavizarPintura } from "./digital.ts";
+import { CEU_DIGITAL, CEU_SEM_PINTURA, CONTORNO_DIGITAL, DOBRA_K, NUVENS_PINTADAS } from "./constantes.ts";
+import { ceuComGrade, ceuEmFaixas, fios, lata, nuvensDaPintura, nuvensDesenhadas, particulas, separarNuvens, suavizarPintura } from "./digital.ts";
 import { enfeites } from "./enfeites.ts";
 import { lugares } from "./lugaresCena.ts";
 import { PALETA_FLORESTA, arquivosFloresta, carregadorFloresta } from "./floresta.ts";
@@ -28,6 +28,14 @@ function modoDoCeu(): "pixel" | "suave" | "pintado" {
     if (q === "pixel" || q === "suave" || q === "pintado") return q;
   } catch { /* sem endereco */ }
   return CEU_SEM_PINTURA.modo;
+}
+/** o desenho das nuvens do anel: o de NUVENS_PINTADAS, ou o de `?nuvens=recorte|3d|chapada` (so a pagina, para comparar) */
+function desenhoDasNuvens(): "recorte" | "3d" | "chapada" {
+  try {
+    const q = new URLSearchParams(location.search).get("nuvens");
+    if (q === "recorte" || q === "3d" || q === "chapada") return q;
+  } catch { /* sem endereco */ }
+  return NUVENS_PINTADAS.desenho;
 }
 
 export interface Estilo {
@@ -94,7 +102,9 @@ function estiloSemTons(mapa: Mapa, base: string): Estilo {
           const nuvensPintura = new THREE.Group();
           if (pintura) {
             const parado = typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
-            pintura.then(p => nuvensDaPintura(nuvensPintura, p.nuvens, i, parado), e => { throw e; });
+            const desenho = desenhoDasNuvens();
+            if (desenho === "recorte") pintura.then(p => nuvensDaPintura(nuvensPintura, p.nuvens, i, parado), e => { throw e; });
+            else nuvensDesenhadas(nuvensPintura, i, desenho, parado);
           }
           const c = montarCena(i, chao, { nuvens: pintura ? nuvensPintura : modo === "pixel" ? "pixel" : true, ceuDia, horizonteDia: horizonte, chaoHemi: CEU_DIGITAL.chaoHemi, nevoa: CEU_DIGITAL.nevoa });
           doisTons(c.cena);
