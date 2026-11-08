@@ -32,7 +32,7 @@ import type { NomeLugar } from "./modelos.ts";
 import { Papel, type Ret, type Suspenso } from "./papel.ts";
 import { MAO, Pendulo, alturaDepoisDeSoltar, soltarAcabou, tremorAgora } from "./mao.ts";
 import { ORBITA, aplicarOrbita, ligarControles, recentrar } from "../orbita.ts";
-import { PRESETS, Pos } from "./pos.ts";
+import { PRESETS, Pos, SEM_CONTORNO } from "./pos.ts";
 
 const movimentoReduzido = (): boolean => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -86,6 +86,7 @@ class VistaIlha {
     this.estilo = estiloDe(habitat.mapa, document.baseURI);
     this.cam = CAMERAS[habitat.camera];
     this.camera = new THREE.PerspectiveCamera(this.cam.fov, 1, PERTO, LONGE);
+    this.camera.layers.enable(SEM_CONTORNO);
     CURVA.uCurva.value = this.estilo.dobra;
     THREE.ColorManagement.enabled = true;
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
@@ -318,6 +319,8 @@ class VistaIlha {
     });
     /* o foco do HD-2D: a altura do pet na tela (0 embaixo, 1 em cima) */
     this.renderer.info.reset();
+    /* o pet em papel fica sem o traco do estilo (pos.ts, SEM_CONTORNO): os filhos dele mudam, entao a camada e posta a cada quadro */
+    if (this.estilo.contorno) this.papel.raiz.traverse(o => o.layers.set(SEM_CONTORNO));
     this.pos.desenhar(this.cenaIlha.cena, this.camera, PRESETS[habitatAtual().visual], 1 - (ret.y + ret.h * 0.6) / this.alturaCss, this.estilo.contorno ?? null);
     return ret;
   }

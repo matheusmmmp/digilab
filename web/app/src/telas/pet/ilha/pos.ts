@@ -7,7 +7,7 @@
    O contorno (o cel shading do estilo digital, docs/TAREFA_V3_MAPA_DIGITAL.md, D5): o estilo que o pede (Estilo.contorno) desenha a cena
    num alvo com a profundidade, e o quadro passa o traco de nanquim onde a profundidade quebra (o laplaciano da profundidade linear: zero
    num plano inclinado, grande na silhueta). Pega tudo de uma vez: as arvores, os kits, os lugares, os itens e o terreno; o traco some com
-   a distancia, como a nevoa. Um desenho a mais (o quadro). */
+   a distancia, como a nevoa. Um desenho a mais (o quadro). O pet fica fora (SEM_CONTORNO). */
 import * as THREE from "three";
 import type { Visual } from "../../../habitat.ts";
 
@@ -21,6 +21,9 @@ export const PRESETS: Readonly<Record<Visual, AjustePos>> = {
 /** o traco de nanquim (Pos, o contorno): a cor, a forca, a largura (px de CSS), o limiar (fracao da profundidade do ponto) e onde ele some
     (celulas da camera). PROPOSTO, SEM FONTE */
 export interface Contorno { tinta: number; forca: number; largura: number; limiar: number; some: readonly [number, number] }
+/** a camada do three das coisas que ficam sem o traco (o pet em papel: so o mapa e cel shading, pedido do Matheus): desenhadas numa
+    passada propria, depois do quadro, contra a profundidade da cena */
+export const SEM_CONTORNO = 1;
 
 const VERT = `varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`;
 const FRAG = `
@@ -61,6 +64,9 @@ void main() {
   vec2 d = vUv - 0.5;
   c *= 1.0 - uVinheta * dot(d, d) * 2.0;
   gl_FragColor = vec4(clamp(c, 0.0, 1.0), 1.0);
+  /* com o contorno, o quadro deixa na tela a profundidade da cena: o pet (a camada SEM_CONTORNO) e desenhado depois, por cima, atras do
+     que esta na frente dele */
+  gl_FragDepth = uContorno > 0.0 ? texture2D(tProf, vUv).x : 1.0;
   #include <colorspace_fragment>
 }`;
 
@@ -75,7 +81,7 @@ export class Pos {
   constructor(renderer: THREE.WebGLRenderer) {
     this.renderer = renderer;
     this.quadro = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), new THREE.ShaderMaterial({
-      vertexShader: VERT, fragmentShader: FRAG, depthTest: false, depthWrite: false,
+      vertexShader: VERT, fragmentShader: FRAG, depthTest: true, depthWrite: true, depthFunc: THREE.AlwaysDepth,
       uniforms: { tCena: { value: null }, uTexel: { value: new THREE.Vector2() }, uTilt: { value: 0 }, uFoco: { value: 0.44 },
         uSat: { value: 1 }, uBrilho: { value: 1 }, uVinheta: { value: 0 },
         tProf: { value: null }, uContorno: { value: 0 }, uPerto: { value: 0.1 }, uLonge: { value: 100 }, uForca: { value: 0 }, uLargura: { value: 1 },
@@ -106,7 +112,9 @@ export class Pos {
         depthTexture: prof ? new THREE.DepthTexture(w, h) : undefined });
     }
     this.renderer.setRenderTarget(this.alvo);
+    if (contorno) camera.layers.disable(SEM_CONTORNO);
     this.renderer.render(cena, camera);
+    camera.layers.enable(SEM_CONTORNO);
     this.renderer.setRenderTarget(null);
     const u = this.quadro.material.uniforms;
     u.tCena.value = this.alvo.texture;
@@ -126,6 +134,15 @@ export class Pos {
       u.uLimiar.value = contorno.limiar; u.uSome.value.set(contorno.some[0], contorno.some[1]);
     }
     this.renderer.render(this.cenaQuadro, this.camQuadro);
+    if (contorno) {
+      /* a segunda passada: so a camada sem traco, sem o fundo e sem limpar a tela */
+      const fundo = cena.background, limpa = this.renderer.autoClear;
+      cena.background = null; this.renderer.autoClear = false;
+      camera.layers.set(SEM_CONTORNO);
+      this.renderer.render(cena, camera);
+      camera.layers.set(0); camera.layers.enable(SEM_CONTORNO);
+      cena.background = fundo; this.renderer.autoClear = limpa;
+    }
   }
 
   dispose(): void { this.alvo?.depthTexture?.dispose(); this.alvo?.dispose(); this.quadro.geometry.dispose(); this.quadro.material.dispose(); }
