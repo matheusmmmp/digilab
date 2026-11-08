@@ -2,11 +2,13 @@
    LG-G2: o portao e a barraca em grama plana ao norte, a distancia combinada da area, longe dos enfeites e um do outro, com a frente para a
    area. LG-G3: o cais na ultima linha de areia antes do mar, de frente para o norte. LG-G4: a clareira so esconde a decoracao (nunca uma
    arvore do motor) e so dentro do raio; os objetos em si nao mudam (o E-G0 de test/ilha_enfeites.test.ts confere contra o gabarito).
-   LG-G5: a paleta da Ilha (docs/lugares3d/estilo_ilha.py) e a da textura publicada.
+   LG-G5: a paleta da Ilha (docs/lugares3d/estilo_ilha.py) e a da textura publicada; LG-G5b, no lugar dele para os lugares com a textura
+   pintada (TEXTURA_PINTADA): o detalhe guardado e o chao de dentro escuro.
    LG-G6: o toque nos lugares (ToqueLugar.tsx; secao 13): o retangulo projetado da caixa de cada lugar (lugarNoPonto) e o gesto, que abre
    o destino do lugar aberto e nada mais (o cais trancado, o arrasto, o toque longo, o sprite do pet, o painel por cima). */
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { inflateSync } from "node:zlib";
 import * as THREE from "three";
 import { afterEach, beforeEach, describe, expect, test } from "vitest";
 import { CMU, CMU_MVP } from "../motor/index.ts";
@@ -55,9 +57,13 @@ describe("onde ficam os lugares (LG-G1 a LG-G4)", () => {
   });
 });
 
+/* os lugares refeitos com a textura pintada da Meshy (docs/objetos3d/REFERENCIAS.md, secao 5: nao achatar), fora do LG-G5; o desvio no
+   docs/registro/2026-11.md. Quem mesclar o retrabalho de outro lugar junta os nomes. */
+const TEXTURA_PINTADA: NomeLugar[] = ["barraca"];
+
 describe("a paleta da Ilha (LG-G5)", () => {
   const DOCS = join(__dirname, "..", "..", "..", "docs", "lugares3d");
-  for (const n of Object.keys(LUGARES_MODELOS) as NomeLugar[]) test(n, () => {
+  for (const n of (Object.keys(LUGARES_MODELOS) as NomeLugar[]).filter(n => !TEXTURA_PINTADA.includes(n))) test(n, () => {
     const p = JSON.parse(readFileSync(join(DOCS, n, "paleta.json"), "utf8")) as { paleta: number[][]; paleta_ilha: number[][] };
     expect(p.paleta_ilha.length).toBe(p.paleta.length);
     /* o PNG de paleta publicado: as cores do PLTE estao todas na paleta da Ilha */
@@ -65,6 +71,56 @@ describe("a paleta da Ilha (LG-G5)", () => {
     expect(b[25]).toBe(3);    // tipo de cor 3: paleta
     const i = b.indexOf("PLTE"), len = b.readUInt32BE(i - 4), ilha = p.paleta_ilha.map(c => c.join(","));
     for (let k = 0; k < len; k += 3) expect(ilha, n).toContain([b[i + 4 + k], b[i + 5 + k], b[i + 6 + k]].join(","));
+  });
+});
+
+/* LG-G5b, a textura pintada (no lugar do LG-G5 para os de TEXTURA_PINTADA): o PNG publicado guarda o detalhe, isto e, nao foi achatado
+   em poucas cores lisas (o achatamento antigo deixava de 3 a 12; aqui sao pelo menos 64 cores distintas), e o chao de dentro, visto pela
+   porta, e escuro: o pixel publicado no centro das UVs dele (docs/objetos3d/<lugar>/retrabalho/chao_uv.json) fica abaixo de 45 % de
+   luminancia (a Meshy nao fez chao e deixou o fundo claro; D-LG-9). */
+describe("a textura pintada (LG-G5b)", () => {
+  const OBJ = join(__dirname, "..", "..", "..", "docs", "objetos3d");
+  const plte = (b: Buffer): number[][] => {
+    const i = b.indexOf("PLTE"), len = b.readUInt32BE(i - 4), cores: number[][] = [];
+    for (let k = 0; k < len; k += 3) cores.push([b[i + 4 + k], b[i + 5 + k], b[i + 6 + k]]);
+    return cores;
+  };
+  /** os indices de um PNG de paleta de 8 bits sem entrelacamento (o que publicar_barraca.py grava): junta os IDAT, infla e desfaz os filtros */
+  const indices = (b: Buffer): { w: number; h: number; px: Uint8Array } => {
+    const w = b.readUInt32BE(16), h = b.readUInt32BE(20);
+    expect(b[24]).toBe(8); expect(b[28]).toBe(0);
+    const partes: Buffer[] = [];
+    for (let o = 8; o < b.length;) {
+      const len = b.readUInt32BE(o), tipo = b.subarray(o + 4, o + 8).toString();
+      if (tipo === "IDAT") partes.push(b.subarray(o + 8, o + 8 + len));
+      o += 12 + len;
+    }
+    const z = inflateSync(Buffer.concat(partes)), px = new Uint8Array(w * h);
+    for (let y = 0; y < h; y++) {
+      const f = z[y * (w + 1)], lin = z.subarray(y * (w + 1) + 1, (y + 1) * (w + 1));
+      for (let x = 0; x < w; x++) {
+        const a = x > 0 ? px[y * w + x - 1] : 0, c = y > 0 ? px[(y - 1) * w + x] : 0, d = x > 0 && y > 0 ? px[(y - 1) * w + x - 1] : 0;
+        const pa = Math.abs(c - d), pb = Math.abs(a - d), pc = Math.abs(a + c - 2 * d);
+        const pred = [0, a, c, (a + c) >> 1, pa <= pb && pa <= pc ? a : pb <= pc ? c : d][f];
+        if (pred === undefined) throw new Error("filtro PNG desconhecido: " + f);
+        px[y * w + x] = (lin[x] + pred) & 255;
+      }
+    }
+    return { w, h, px };
+  };
+  for (const n of TEXTURA_PINTADA) test(n, () => {
+    const b = readFileSync(join(__dirname, "..", "public", "lugares", n, `${n}_cor.png`));
+    expect(b.subarray(1, 4).toString()).toBe("PNG");
+    expect(b[25]).toBe(3);                                   // paleta (para caber nos 300 KB de test/lugares3d.test.ts)
+    const cores = plte(b);
+    expect(new Set(cores.map(c => c.join(","))).size).toBeGreaterThanOrEqual(64);
+    /* o chao de dentro: o pixel publicado no centro dos quatro cantos (u, v do Blender: a linha da imagem e 1 - v) e escuro */
+    const chao = JSON.parse(readFileSync(join(OBJ, n, "retrabalho", "chao_uv.json"), "utf8")) as { cantos: number[][] };
+    expect(chao.cantos.length).toBe(4);
+    const { w, h, px } = indices(b);
+    const u = chao.cantos.reduce((s, c) => s + c[0], 0) / 4, v = chao.cantos.reduce((s, c) => s + c[1], 0) / 4;
+    const [r, g, bl] = cores[px[Math.floor((1 - v) * h) * w + Math.floor(u * w)]];
+    expect((0.2126 * r + 0.7152 * g + 0.0722 * bl) / 255).toBeLessThan(0.45);
   });
 });
 

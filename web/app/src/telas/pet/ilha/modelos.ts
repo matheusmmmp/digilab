@@ -70,12 +70,14 @@ export const ENFEITES_LUZ: Partial<Record<NomeEnfeite, string>> = { poste: "post
    em public/lugares/<nome>/, gerada pela Meshy, com o License.txt ao lado. Quem os poe na cena (o ponto, o giro, o trancado e o aberto) e o
    modulo ilha/lugaresCena.ts (a tabela da UX_TELA_PET em ilha/lugares.ts), pelo carregarVariante (cena.ts), que normaliza o modelo para a altura daqui. O portao: o arco
    de pedra com o portal ciano (o lugar do Lutar), um pouco mais alto que um pinheiro baixo, para o pet (~1 celula) passar folgado. A barraca:
-   o domo digital com a antena (o lugar do Diario), 4 celulas com a antena, ~5 de largura, a porta com folga para o pet. O cais: o pier
+   o domo de lona com a antena (o lugar do Diario; refeita em 2026-11-08, docs/TAREFA_V3_LUGARES_3D.md, secao 14), 3,6 celulas com a
+   antena, ~3,4 de largura no corpo e ~5,4 ate as estacas, a porta com ~1,6 celula; um pouco menor que o domo de antes porque a lona, mais
+   funda, entra no degrau do barranco atras do ponto dela (o forro de dentro esconde o canto). O cais: o pier
    com a balsa e a boia de dados (o multiplayer, futuro), 2,4 celulas ate a luz da balsa, ~7,6 de comprimento; sem sombra redonda (fica na
    beira da agua). PROPOSTO, SEM FONTE */
 export const LUGARES_MODELOS = {
   portao: { arquivos: ["portao/portao.gltf"], altura: 5, vento: 0, sombra: 1.6, baixo: false },
-  barraca: { arquivos: ["barraca/barraca.gltf"], altura: 4, vento: 0, sombra: 2.4, baixo: false },
+  barraca: { arquivos: ["barraca/barraca.gltf"], altura: 3.6, vento: 0, sombra: 2.2, baixo: false },
   cais: { arquivos: ["cais/cais.gltf"], altura: 2.4, vento: 0, sombra: 0, baixo: false },
 } as const satisfies Record<NomeLugar, Modelo>;
 export type { NomeLugar };

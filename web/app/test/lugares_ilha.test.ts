@@ -53,9 +53,9 @@ describe("lugares da ilha", () => {
     expect(() => pontoDoLugar("barraca", sem)).toThrow(/grade/);
     expect(pontoDoLugar("saco", sem)).toEqual(pontoDoLugar("saco", base));
   });
-  it("as alturas alvo sao as do ITENS_3D: 5 para o portao e 4 para a barraca", () => {
+  it("as alturas alvo: 5 para o portao (ITENS_3D) e 3,6 para a barraca refeita (D-LG-OB-4, o barranco atras dela)", () => {
     expect(LUGARES.portao.altura).toBe(5);
-    expect(LUGARES.barraca.altura).toBe(4);
+    expect(LUGARES.barraca.altura).toBe(3.6);
   });
   it("em outro layout (o afastado) o saco fica na area andavel, e os tres ficam distantes entre si", () => {
     const cm = { ...CMU, layout: LAYOUT_MUNDO_AFASTADO }, b = baseDe(cm);
