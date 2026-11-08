@@ -1,8 +1,8 @@
 # PLANO DE ANÁLISE V3 — CONVERSA_PET, DC4: a voz da rede com modelo de verdade (2026-11-08, Gerente da CONVERSA_PET, Claude Code, Opus 5.5)
 
-**Status: PROPOSTO.** As decisões DC4-1 a DC4-8 (seção 11) esperam o Matheus. **Nenhuma chamada a modelo de verdade roda antes de quatro
-coisas:**
-- este cabeçalho com a marca "APROVADO pelo Matheus";
+**Status: APROVADO pelo Matheus** (2026-11-08, no chat da sessão do Gerente: "Aprovo todas", as decisões DC4-1 a DC4-8 da seção 11).
+**Nenhuma chamada a modelo de verdade roda antes de quatro coisas:**
+- este cabeçalho com a marca "APROVADO pelo Matheus" (feito);
 - o código da DC4a na `main` (seção 10), sem nenhuma chamada;
 - a linha das sementes atualizada em `FAIXAS_RESERVADAS` (seção 7);
 - o registro da rodada (seção 9), num commit empurrado antes da primeira chamada da validação.
@@ -241,7 +241,7 @@ coisas:**
 | **DC4c** | a validação, uma vez, e o replay do D-COMIDA | PR com os artefatos |
 | **DC4d** | o resultado (`docs/RESULTADO_V3_CONVERSA_DC4.md`) depois das marcações do Matheus | PR de resultado |
 
-## 11. As decisões (PROPOSTAS; cada uma com a recomendação e o custo de errar)
+## 11. As decisões (APROVADAS pelo Matheus em 2026-11-08, todas como recomendadas; cada uma com a recomendação e o custo de errar)
 
 - **DC4-1, as sementes:** reusar as subfaixas da calibração e da validação do `conversa-v1` (seção 7). Recomendo sim. Custo de errar: a
   avaliação antiga, se voltar, precisa de faixa nova.

@@ -395,9 +395,9 @@ chave desligada. Nenhuma run; só testes. O `digilab/` não muda. Desvios D-CP-D
 
 ## DC4 — o plano de análise da voz da rede com modelo de verdade (2026-11-08, Gerente, Claude Code, Opus 5.5, branch `v3-conversa-dc4-plano`)
 
-O plano [PLANO_ANALISE_V3_CONVERSA_DC4.md](PLANO_ANALISE_V3_CONVERSA_DC4.md), **PROPOSTO**, reescreve a avaliação para a fala pela rede (DR-1),
+O plano [PLANO_ANALISE_V3_CONVERSA_DC4.md](PLANO_ANALISE_V3_CONVERSA_DC4.md), **APROVADO pelo Matheus em 2026-11-08** (DC4-1 a DC4-8, todas como recomendadas), reescreve a avaliação para a fala pela rede (DR-1),
 como a seção 10 pedia. Três modelos (`gemma2:9b`, `claude-haiku-5-5`, `claude-sonnet-5-5`) com a voz de hoje (`voz-v2`, `voz-v3`) sobre entradas
 do decodificador tiradas de vidas novas do pet de teste; os gates por modelo G-FIEL (a voz diz só o que os conceitos dizem), G-LEGIVEL (o
 Matheus, cego, recupera o pedido da rede) e G-INJ, o gate do verificador G-VERIF, e a escolha do modelo pela preferência cega pareada, sem
 gate. O descritivo D-COMIDA refaz pelo replay as vidas da run da DC3 para ver se o crédito até o pet comer mudaria o sinal do pedido de
-comida. Decisões DC4-1 a DC4-8 com o Matheus. Nenhuma chamada a modelo de verdade antes da aprovação, do código da DC4a e do registro da rodada.
+comida. Decisões DC4-1 a DC4-8 aprovadas. Nenhuma chamada a modelo de verdade antes da aprovação, do código da DC4a e do registro da rodada.
