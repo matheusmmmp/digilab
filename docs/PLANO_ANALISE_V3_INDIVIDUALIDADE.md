@@ -75,8 +75,8 @@ As expectativas abaixo não são previsões com gate. Ficam escritas para a leit
   perto de 80 min (seção 6).
 - **A bateria:** 3 réplicas por janela por dia. A sonda do longe vem trocada (IP-3, seção 3).
 - **A faixa (IP-9):** a **85101…85505**, com as bases 85101, 85202, 85303, 85404 e 85505 e K = 12, no esquema (base, k) da C4. Ela foi
-  conferida livre e proposta pelo Gerente da V3 em 2026-11-07 e está em `FAIXAS_RESERVADAS` como **PROPOSTA**. Nenhuma vida roda antes
-  do APROVADO do Matheus nesta faixa. As 81101…81505 caem na reserva da linhagem E1, e as 83xxx e 84xxx são da rodada 3 da luta (#697).
+  conferida livre e proposta pelo Gerente da V3 em 2026-11-07 e **aprovada pelo Matheus em 2026-11-07 ("Aprovo a faixa")**, em
+  `FAIXAS_RESERVADAS`. As 81101…81505 caem na reserva da linhagem E1, e as 83xxx e 84xxx são da rodada 3 da luta (#697).
 
 ## 3. A mudança na bateria antes da run (o I2a)
 
