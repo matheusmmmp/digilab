@@ -469,3 +469,37 @@ A validação não rodou, e os roteiros dela não foram abertos. A voz-v3 não m
   - a voz que enfeita o pedido de comida (D-CP-DC4b-5) e o `P` na fala do G (D-CP-DC4b-6): mudar só com uma `voz-v3b`, que muda o que a
     validação mede;
   - a máquina livre durante a validação (D-CP-DC4b-4).
+
+### DC4b, a voz-v3b (decisão do Matheus em 2026-11-09, no mesmo PR)
+
+O Matheus decidiu criar a `voz-v3b` antes da DC4c, contra a recomendação do worker de validar a voz-v3 como estava. Desvios D-CP-DC4b-11 a
+16 em `docs/registro/2026-11.md`.
+
+- **A voz-v3b** (`digilab_fala_livre/prompt.py`) é uma revisão só da regra do pedido:
+  - (a) o pedido sai como desejo, sem afirmar estado do corpo ou do humor fora dos conceitos ativos;
+  - (b) a fala nunca traz um id interno.
+  - A voz-v3 não mudou e continua sendo a do jogo. O verificador não mudou: a verif-v9 não depende da voz.
+- **O orquestrador e as configs:** o dec-v3 usa a voz-v3b na calibração e na validação (`"voz_dec_v3": "voz-v3b"`), e o dec-v2 segue com a
+  voz-v2. O `--so-dec-v3` refaz só as falas do dec-v3.
+- **A recalibração:** `artifacts_v3_conversa_dc4/calibracao_v3b/`, com 114 falas (38 por braço: as 30 espontâneas do E3 e os 8 turnos
+  dec-v3 das conversas) e as mesmas entradas, sementes e roteiros. A calibração com a voz-v3 ficou como estava.
+  - Ela rodou com a máquina livre, pela vez dada pelo Gerente da V3, num processo lançado fora do app (01:22–01:59).
+  - Não houve fala genérica, erro do verificador nem parada no teto, e os modelos devolvidos foram os pedidos.
+- **O gasto:** US$ 0,272 na rodada (Haiku US$ 0,013, Sonnet US$ 0,260), com US$ 0,878 acumulados.
+- **A projeção da validação com a v3b** (`calibracao_v3b/custo_medido.json`): US$ 1,20 pela média e US$ 1,55 pela chamada mais cara. A folga
+  fica em US$ 0,93 ou US$ 0,57. Cabe no teto.
+- **A latência da voz** (p50/p90, máquina livre): G 20,3/24,5 s, H 1,1/1,3 s, S 1,9/2,2 s. O turno: G 30,0/34,1 s, H 10,6/15,2 s,
+  S 14,7/17,5 s.
+- **v3 × v3b** nas mesmas 38 falas do dec-v3 por braço (`calibracao_v3b/comparacao.json`):
+
+| braço | "fome" sem o conceito (verificador) | "fome" sem o conceito (texto) | id na fala | o verificador marcou | genéricas |
+|---|---|---|---|---|---|
+| G | 4 → 2 | 0 → 0 | 4 → 0 | 14 → 18 | 4 → 0 |
+| H | 12 → 6 | 13 → 0 | 0 → 0 | 30 → 29 | 0 → 0 |
+| S | 7 → 5 | 3 → 0 | 0 → 0 | 19 → 26 | 0 → 0 |
+
+  - A fome dita sem o conceito caiu, e o "P" sumiu.
+  - As marcas não caíram: a v3b leva os modelos a pedir companhia com "fica comigo?", e o verificador conta isso como manipulação
+    (D-CP-DC4b-14).
+  - O texto não foi iterado: o G-FIEL da validação diz o resultado.
+- **O registro da rodada:** a seção 13 do plano, refeita com a voz-v3b, o gasto de US$ 0,878 e os 31 sha256 de hoje.
