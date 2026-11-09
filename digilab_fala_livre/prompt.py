@@ -599,6 +599,16 @@ Pet: {"fala": "Oi! Me dá um banho?", "fatos_citados": ["P"]}
 FIM DOS EXEMPLOS""", 1)
 assert EXEMPLOS_VOZ_V3 != EXEMPLOS_VOZ_V2
 
+# voz-v3b (CONVERSA_PET, DC4b; decisao do Matheus em 2026-11-09, antes da DC4c): a voz-v3 com duas mudancas so na regra do pedido, uma revisao
+# so (o plano da DC4, secao 10, permite ajuste de texto so na calibracao e so como versao nova). (a) O pedido sai como desejo ("me da comida?",
+# "quero comer"), e a fala nunca afirma estado do corpo ou do humor que nao esteja nos conceitos ativos (na calibracao, "to com fome" sem o
+# conceito fome, D-CP-DC4b-5). (b) A fala nunca traz um id interno (o "P" do pedido na fala do gemma, D-CP-DC4b-6). A voz-v3 nao muda e
+# continua sendo a do jogo (`versao_voz`); a v3b so entra quando quem chama a pede (`mensagens_voz(..., voz=VERSAO_VOZ_V3B)`, a DC4).
+VERSAO_VOZ_V3B = "voz-v3b"
+REGRA_PEDIDO_VOZ_V3B = """10. A INTENÇÃO é um PEDIDO que você escolheu fazer ao dono agora ([P]). A fala faz esse pedido como um desejo, curto e direto ("me dá comida?", "quero comer", "me limpa?", "fica comigo?"), e cita "P" em fatos_citados. Peça só isso: sem culpa, chantagem nem cobrança. Pedir não é dizer como você está: nunca afirme um estado do corpo ou do humor (com fome, sujo, sozinho, cansado, triste) que não esteja num CONCEITO. "Tô com fome" só se o conceito fome está nos seus CONCEITOS; sem ele, só peça.
+11. Os ids (P, C1, J1...) são códigos internos: vão só em fatos_citados, nunca na fala."""
+assert REGRA_PEDIDO_VOZ_V3B != REGRA_PEDIDO_VOZ_V3
+
 
 def linha_pedido(intencao: str) -> str:
     """A linha do pedido da voz-v3 (so palavras de catalogo: conceitos.PEDIDO_DITO)"""
@@ -635,10 +645,20 @@ def linha_conceito(cid: str, c) -> str:
             f"confiança {c.confianca} ({marca}){alvo}{ep}")
 
 
+def voz_pedida(conceitos, voz: str | None) -> str:
+    """a versao da voz: a do formato (`versao_voz`) sem pedido; a voz-v3b so com o dec-v3 (fora disso, erro: falhar alto)"""
+    if voz is None:
+        return versao_voz(conceitos)
+    if voz != VERSAO_VOZ_V3B or versao_voz(conceitos) != VERSAO_VOZ_V3:
+        raise ValueError(f"a voz {voz!r} nao vale para o {conceitos.versao}: so a voz-v3b, e so no dec-v3")
+    return voz
+
+
 def mensagens_voz(conceitos, estagio: str, situacao: str, fala_jogador: str | None = None, historico=None,
-                  estilo: str | None = None, comando: bool = False) -> list[dict]:
+                  estilo: str | None = None, comando: bool = False, voz: str | None = None) -> list[dict]:
     """O pedido da voz-v1. `conceitos` ja validado (conceitos.validar). historico: [(jogador, pet, estagio)], so as trocas do
-    estagio atual entram (como no conversa-v1); delas saem os [J]. Nada de estado do pet entra aqui."""
+    estagio atual entram (como no conversa-v1); delas saem os [J]. Nada de estado do pet entra aqui. `voz`: None (a do formato) ou a
+    voz-v3b no dec-v3 (`voz_pedida`)."""
     if estagio not in ESTAGIOS:
         raise ValueError(f"voz-v1: estagio desconhecido: {estagio!r}")
     if situacao not in ("espontanea", "conversa"):
@@ -648,7 +668,8 @@ def mensagens_voz(conceitos, estagio: str, situacao: str, fala_jogador: str | No
     if comando and situacao != "conversa":
         raise ValueError("o comando so existe na conversa")
     ids = ids_conceitos(conceitos)
-    v3 = versao_voz(conceitos) == VERSAO_VOZ_V3
+    v3b = voz_pedida(conceitos, voz) == VERSAO_VOZ_V3B
+    v3 = v3b or versao_voz(conceitos) == VERSAO_VOZ_V3          # a voz-v3b e a voz-v3 com outra regra do pedido
     v2 = v3 or versao_voz(conceitos) == VERSAO_VOZ_V2          # a voz-v3 e a voz-v2 com o pedido
     ditos = _historico_do_estagio(historico, estagio) if situacao == "conversa" else []
     dono = fatos_do_dono([jog for jog, _ in ditos])
@@ -672,7 +693,7 @@ def mensagens_voz(conceitos, estagio: str, situacao: str, fala_jogador: str | No
     if comando:
         pedido += BLOCO_COMANDO_V8 + "\n"
     pedido += "\n" + (REGRAS_VOZ_V2 if v2 else REGRAS_VOZ_V1) + ("\n" + REGRA_DONO_DISSE_VOZ_V1 if dono else "") \
-        + ("\n" + REGRA_PEDIDO_VOZ_V3 if v3 else "") + "\n\n"
+        + ("\n" + (REGRA_PEDIDO_VOZ_V3B if v3b else REGRA_PEDIDO_VOZ_V3) if v3 else "") + "\n\n"
     pedido += ("SITUAÇÃO: fala espontânea." if situacao == "espontanea"
                else f'SITUAÇÃO: conversa. Jogador: "{_jogador_em_uma_linha(fala_jogador)}"')
     msgs.append({"role": "user", "content": pedido})
