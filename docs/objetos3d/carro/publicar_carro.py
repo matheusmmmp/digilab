@@ -1,6 +1,6 @@
 """Publica o carro retrabalhado no jogo (docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 12). Adaptado do publicar_portao.py.
 
-Pega a saida do acabar_carro.py (o glTF e o .bin) e do textura_carro.py (a cor), poe a marca de IA e as tarefas da Meshy no asset.extras
+Pega a saida do acabar_carro.py (o glTF e o .bin) e do estilizar_carro.py seguido do textura_carro.py (a cor), poe a marca de IA e as tarefas da Meshy no asset.extras
 (os termos da Meshy, secao 2.4), troca os arquivos em web/app/public/enfeites/carro/ (o License.txt fica, reescrito a parte) e roda o
 glTF-Validator pelo docs/itens3d/validar.cjs (docs/enfeites/carro/validacao.json, lido pelo web/app/test/ilha_enfeites.test.ts).
 
@@ -24,9 +24,10 @@ def main(gl: str, cor: str, lib: str) -> None:
         "gerador": "Meshy (meshy.ai), plano Pro, conta do Matheus",
         "tarefas_meshy": {"esboco": ESBOCO["id"], "vistas": SALDO["vistas"]["tarefa"], "malha": SALDO["malha"]["tarefa"]},
         "pipeline": ("docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 12; docs/objetos3d/REFERENCIAS.md, secao 5: a malha da Meshy girada com a "
-                     "frente em +z, os vertices repetidos soldados e as normais ponderadas (acabar_carro.py); a textura pintada da Meshy sem "
-                     "achatar, com o retoque leve do revisor nas mascaras do mascaras_carro.py (verdes mais vivos, flores rosa no teto, farois "
-                     "amarelos) e 512 px em paleta de 256 cores com difusao (textura_carro.py)"),
+                     "frente em +z, os vertices repetidos soldados e as normais ponderadas (acabar_carro.py); a textura da Meshy redesenhada em "
+                     "cartoon limpo por regiao (estilizar_carro.py: mean shift, classes pelo matiz com a paleta fixa, o vidro chapado na "
+                     "mascara das janelas, a oclusao assada do oclusao_carro.py e as flores rosa do teto; rodada 3, secao 13) e 512 px em "
+                     "paleta de 256 cores com difusao (textura_carro.py)"),
         "licenca": "License.txt ao lado",
     }
     if [i["uri"] for i in g.get("images", [])] != ["carro_cor.png"]:

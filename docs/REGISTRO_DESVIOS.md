@@ -589,5 +589,6 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-08 — LUTA_POC, LP2: o pet luta no núcleo da POC, atrás da chave (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp2`)](registro/2026-11.md)
 - [2026-11-08 — DESEMPENHO: o perfil das runs e o PyPy (worker, Claude Code, Opus 5.5, branch `v3-desempenho-perfil`)](registro/2026-11.md)
 - [2026-11-08 — LUTA_POC, LP2b: os torneios no núcleo da POC (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp2b`)](registro/2026-11.md)
+- [2026-11-09 — OBJETOS_3D, o carro em cartoon limpo (worker, Claude Code, Opus 5.5, branch `v3-objeto-carro-cartoon`)](registro/2026-11.md)
 - [2026-11-08 — OBJETOS_3D, o poste em blocos (worker, Claude Code, Opus 5.5, branch `v3-objeto-poste`)](registro/2026-11.md)
 - [2026-11-09 — CONVERSA_PET, DC4b, a voz-v3b e a recalibração do dec-v3 (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc4b`)](registro/2026-11.md)
