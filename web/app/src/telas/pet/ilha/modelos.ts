@@ -60,7 +60,7 @@ export const ENFEITES_MODELOS = {
      deixa o comprimento o da caminhonete (~5,8; o hatch e mais alto que comprido) e o revisor pediu 5 a 10 % a mais, para as rodas lerem
      por cima da barraca (PROPOSTO, SEM FONTE) */
   carro: { arquivos: ["carro/carro.gltf"], altura: 4.8, vento: 0, sombra: 2.3, baixo: false },
-  /* a geladeira com o vaso e o trilho com o vagao (E3), com os tracos de nanquim na textura; na escala de brinquedo do carro */
+  /* a geladeira com o vaso (feita a mao por script desde 2026-11-09, secao 16) e o trilho com o vagao (E3); na escala de brinquedo do carro */
   geladeira: { arquivos: ["geladeira/geladeira.gltf"], altura: 3.0, vento: 0, sombra: 1.4, baixo: false },
   /* o trilho refeito (docs/objetos3d/REFERENCIAS.md, 2026-11-07): o vagao de madeira do esboco, com a textura pintada e as normais
      suavizadas; a altura fica (o alto do vagao, como antes), mas o trecho de trilho e mais curto (~2,5 x 1,4), e a sombra encolhe junto */

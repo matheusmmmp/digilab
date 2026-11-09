@@ -339,3 +339,24 @@ procedência. Os scripts do carro da Meshy ficam em `docs/objetos3d/carro/` como
 
 **Não feito:** não houve revisor separado nem prancha de capturas no git; a conferência foi na vitrine (`poc/vitrine.html`) e no jogo, no
 estilo da Ilha. O estilo Digital e o celular não foram conferidos. Os desvios estão em `docs/registro/2026-11.md`, D-OBJ-CARRO-10 a 12.
+
+## 16. A geladeira feita à mão por script (2026-11-09, Gerente, Claude Code, Fable 5.2, branch `v3-objeto-geladeira-mao`)
+
+**O pedido:** depois do carro da seção 15, o Matheus pediu: "agora arrume essa geladeira também". A geladeira da Meshy tinha o mesmo
+defeito do carro (a malha amassada) e esperava créditos para ser refeita; pelo script ela não gasta crédito.
+
+**A geladeira (`docs/objetos3d/geladeira/mao/`):**
+- `geladeira_mao.py`: o corpo e as duas portas são seções de cantos redondos, como no esboço 1 (a geladeira retrô verde-menta); as peças
+  são sólidos simples (dois puxadores cromados, quatro dobradiças, o vaso de barro com o broto, as folhas da hera e cinco tufos de musgo
+  no pé). A pintura é uma função da posição no espaço, só com cores chapadas: os reflexos na diagonal, o emblema, as lascas de tinta com
+  ferrugem que escorre, a ferrugem do pé, a grade do motor atrás e os ramos da hera. A geladeira fica tombada 3,5 graus para o lado. Os
+  sólidos, o atlas e a escrita do glTF são os do `carro_mao.py`, que ganhou a função `exportar` (o carro sai byte a byte igual);
+- `publicar_mao.py`: a procedência no `asset.extras`, a troca em `web/app/public/enfeites/geladeira/` e o validador (0 erros, 0 avisos).
+
+**No jogo:** 1 880 triângulos (teto 2 414), 158 352 bytes com o `License.txt` (teto 307 200), um nó, uma malha, uma textura. A altura
+(3,0), a sombra, a grade e o lugar não mudam (E-G0, E-G10). O jogo vira a frente dos marcos para a área, então na praia do sul o jogador
+vê a geladeira de costas; por isso a hera também sobe por trás, ao lado da grade do motor. O `web/app/test/ilha_enfeites.test.ts` ganha o
+teste da procedência. Os arquivos da geladeira da Meshy ficam em `docs/enfeites/geladeira/` como histórico.
+
+**Não feito:** não houve revisor separado nem prancha de capturas no git; a conferência foi na vitrine e no jogo, no estilo da Ilha. O
+estilo Digital dentro do jogo e o celular não foram conferidos. Os desvios estão em `docs/registro/2026-11.md`, D-OBJ-GEL-1 a 3.

@@ -513,18 +513,18 @@ def sangrar(img, feito, passos):
     return img, feito
 
 
-def main(saida: str) -> None:
+def exportar(ps: list[Peca], saida: str, nome: str, fundo, gerador: str) -> dict:
+    """pinta o atlas e escreve <nome>.gltf, <nome>.bin e <nome>_cor.png na pasta de saida; devolve as contas (a geladeira feita a mao usa a mesma)"""
     s = Path(saida); s.mkdir(parents=True, exist_ok=True)
-    ps = pecas()
     cs = cartas(ps)
     G = LADO * SUPER
     d, pos = empacotar(cs, G, MARGEM * SUPER)
     img, feito = pintar(pos, d, G)
     img, feito = sangrar(img, feito, MARGEM * SUPER)
-    img[~feito] = AZUL
+    img[~feito] = fundo
     im = Image.fromarray(np.clip(img + 0.5, 0, 255).astype(np.uint8), "RGB").resize((LADO, LADO), Image.LANCZOS)
     im = im.quantize(colors=128, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE)
-    im.save(s / "carro_cor.png", optimize=True)
+    im.save(s / f"{nome}_cor.png", optimize=True)
 
     Vs, Ns, Ts, Is, base = [], [], [], [], 0
     for c, ox, oy in pos:
@@ -543,25 +543,29 @@ def main(saida: str) -> None:
     for b, alvo in zip(partes, (34962, 34962, 34962, 34963)):
         vistas.append({"buffer": 0, "byteLength": len(b), "byteOffset": off, "target": alvo}); off += len(b)
     vistas[3]["byteLength"] = len(I) * 2
-    (s / "carro.bin").write_bytes(b"".join(partes))
+    (s / f"{nome}.bin").write_bytes(b"".join(partes))
     g = {
-        "asset": {"generator": "carro_mao.py (DigiLab)", "version": "2.0"},
-        "scene": 0, "scenes": [{"name": "Scene", "nodes": [0]}], "nodes": [{"mesh": 0, "name": "carro"}],
-        "materials": [{"name": "carro", "pbrMetallicRoughness": {"baseColorTexture": {"index": 0}, "metallicFactor": 0}}],
-        "meshes": [{"name": "carro", "primitives": [{"attributes": {"POSITION": 0, "NORMAL": 1, "TEXCOORD_0": 2}, "indices": 3, "material": 0}]}],
-        "textures": [{"sampler": 0, "source": 0}], "images": [{"mimeType": "image/png", "name": "carro_cor", "uri": "carro_cor.png"}],
+        "asset": {"generator": gerador, "version": "2.0"},
+        "scene": 0, "scenes": [{"name": "Scene", "nodes": [0]}], "nodes": [{"mesh": 0, "name": nome}],
+        "materials": [{"name": nome, "pbrMetallicRoughness": {"baseColorTexture": {"index": 0}, "metallicFactor": 0}}],
+        "meshes": [{"name": nome, "primitives": [{"attributes": {"POSITION": 0, "NORMAL": 1, "TEXCOORD_0": 2}, "indices": 3, "material": 0}]}],
+        "textures": [{"sampler": 0, "source": 0}], "images": [{"mimeType": "image/png", "name": f"{nome}_cor", "uri": f"{nome}_cor.png"}],
         "accessors": [
             {"bufferView": 0, "componentType": 5126, "count": len(V), "type": "VEC3", "max": [float(v) for v in V.max(axis=0)], "min": [float(v) for v in V.min(axis=0)]},
             {"bufferView": 1, "componentType": 5126, "count": len(V), "type": "VEC3"},
             {"bufferView": 2, "componentType": 5126, "count": len(V), "type": "VEC2"},
             {"bufferView": 3, "componentType": 5123, "count": len(I), "type": "SCALAR"}],
         "bufferViews": vistas, "samplers": [{"magFilter": 9729, "minFilter": 9987}],
-        "buffers": [{"byteLength": off, "uri": "carro.bin"}],
+        "buffers": [{"byteLength": off, "uri": f"{nome}.bin"}],
     }
-    (s / "carro.gltf").write_text(json.dumps(g, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
-    print("CARRO", {"triangulos": len(I) // 3, "vertices": len(V), "texels_por_unidade": round(d / SUPER, 1),
+    (s / f"{nome}.gltf").write_text(json.dumps(g, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    return {"triangulos": len(I) // 3, "vertices": len(V), "texels_por_unidade": round(d / SUPER, 1),
                     "caixa": [[round(float(v), 3) for v in V.min(axis=0)], [round(float(v), 3) for v in V.max(axis=0)]],
-                    "bytes": {a.name: a.stat().st_size for a in sorted(s.glob("carro*"))}})
+                    "bytes": {a.name: a.stat().st_size for a in sorted(s.glob(f"{nome}*"))}}
+
+
+def main(saida: str) -> None:
+    print("CARRO", exportar(pecas(), saida, "carro", AZUL, "carro_mao.py (DigiLab)"))
 
 
 if __name__ == "__main__":

@@ -106,3 +106,14 @@ describe("o carro feito a mao por script", () => {
     expect(ENFEITES_LUZ.carro).toBeUndefined();
   });
 });
+
+/* a geladeira feita a mao (docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 16): sai do script, sem IA, com os solidos e o atlas do carro */
+describe("a geladeira feita a mao por script", () => {
+  test("a procedencia aponta o geladeira_mao.py e a malha e uma so, com uma textura", () => {
+    const g = JSON.parse(readFileSync(join(ENF, ENFEITES_MODELOS.geladeira.arquivos[0]), "utf8")) as Gltf;
+    expect(g.asset.extras?.gerado_por_ia).toBe(false);
+    expect(g.asset.extras?.gerador).toMatch(/docs\/objetos3d\/geladeira\/mao\/geladeira_mao\.py/);
+    expect(g.meshes.length).toBe(1); expect(g.meshes[0].primitives.length).toBe(1); expect(g.images?.length).toBe(1);
+    expect(ENFEITES_LUZ.geladeira).toBeUndefined();
+  });
+});
