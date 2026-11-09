@@ -641,3 +641,20 @@ def test_recalibracao_so_refaz_as_falas_do_dec_v3(fumaca, tmp_path):
         dc4.recalibrar_dec_v3(cfg, roteiros, origem, pasta, dc4.clientes_falsos())
     with pytest.raises(RuntimeError, match="so da calibracao"):
         dc4.recalibrar_dec_v3(cfg | {"fase": "validacao"}, roteiros, origem, tmp_path / "outra", dc4.clientes_falsos())
+
+
+def test_estimativa_e_comparacao_da_voz_v3b():
+    """DC4b, a voz-v3b: a recalibracao so do dec-v3, a projecao da validacao com ela (cabe no teto com o gasto acumulado) e a comparacao
+    v3 x v3b gravada, refeitas dos artefatos"""
+    import comparar_voz_v3b_dc4 as cv
+    import estimar_custo_llm as ec
+    meta = json.loads((RAIZ / dc4.META_CALIBRACAO_V3B).read_text(encoding="utf-8"))
+    assert meta["falas"] == 114 and meta["parada_no_teto"] is None and meta["voz_dec_v3"] == "voz-v3b"
+    assert meta["modelos_devolvidos"] == {"G": ["gemma2:9b"], "H": ["claude-haiku-5-5"], "S": ["claude-sonnet-5-5"]}
+    calib = json.loads((RAIZ / dc4.META_CALIBRACAO).read_text(encoding="utf-8"))
+    assert meta["gasto"]["inicio_usd"] >= calib["gasto"]["fim_usd"]
+    d = ec.custo_dc4_medido_v3b()
+    assert d["gasto_acumulado_usd"] == meta["gasto"]["fim_usd"] and d["folga_pela_maior_usd"] > 0
+    assert all(b["chamadas"] == 81 for b in d["bracos"].values())
+    assert json.loads((ec.CALIBRACAO_DC4_V3B / "custo_medido.json").read_text(encoding="utf-8")) == json.loads(json.dumps(d))
+    assert json.loads((cv.CALIBRACAO_V3B / "comparacao.json").read_text(encoding="utf-8")) == json.loads(json.dumps(cv.comparar()))
