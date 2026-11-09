@@ -264,6 +264,27 @@ rodada 1, pediu o teto, o musgo, os faróis e a escala; a rodada 2 fez o retoque
 As capturas (a prancha, a vitrine no D5, a Ilha e o Digital, antes e depois) estão fora do git, em `D:\Trab\digilab\capturas_objetos3d\carro\`.
 Os desvios estão em `docs/registro/2026-11.md`, D-OBJ-CARRO-1 a 6.
 
+### 13.1. A rodada 3: o carro em cartoon limpo (2026-11-08 e 09, worker, Claude Code, Opus 5.5, branch `v3-objeto-carro-cartoon`)
+
+**O pedido:** com o #715 no jogo, o Matheus achou o carro "um cartoon bem no feio": a malha está boa, mas a pintura da Meshy é quase foto
+(a ferrugem em degradê, o vidro sujo com o banco por dentro, o musgo de esponja) num mundo de cores chapadas com toon de dois tons. A
+textura cartoon foi aprovada pelo Matheus, pelo Gerente, depois da prancha. A malha, a altura e a grade não mudam; não houve Meshy.
+
+**O que mudou (`docs/objetos3d/carro/`):**
+- `oclusao_carro.py` (Blender pela linha de comando): a oclusão ambiente assada da própria malha na UV (`conserto/oclusao.png`), para as
+  caixas de roda, as frestas e as molduras escurecerem;
+- `mascaras_carro.py`: a máscara opcional da faixa das janelas (`conserto/janelas.png`), pela altura dos triângulos;
+- `estilizar_carro.py`: a textura redesenhada por região. O mean shift junta o ruído pintado em manchas; cada pixel cai numa classe pelo
+  matiz (a tinta azul, a ferrugem, o musgo, o pneu, o metal, o farol, a lanterna, o vidro na faixa das janelas, as lascas cinza pequenas)
+  e recebe uma cor de uma paleta fixa por faixa de brilho; a mediana tira os pontinhos; a oclusão escurece; as flores rosa voltam no
+  teto. O farol cresce sobre a ferrugem pintada em volta da lente;
+- `textura_carro.py` (sem as máscaras) reduz a 512 px em paleta de 256 cores, e o `publicar_carro.py` troca a textura e roda o validador
+  (0 erros, 0 avisos). São 261 002 bytes, de um teto de 307 200.
+
+**Ficam:** as rodas encaixadas no corpo (da malha) e alguns pontos amarelos no para-choque, onde a ferrugem encosta no farol. As capturas
+(`prancha_carro_r3.png`, `r3_ilha_carro_1280.png`, `r3_digital_carro_1280.png`) estão em `D:\Trab\digilab\capturas_objetos3d\carro\`.
+Os desvios estão em `docs/registro/2026-11.md`, D-OBJ-CARRO-7 a 9.
+
 ## 14. O poste em blocos (2026-11-08, worker, Claude Code, Opus 5.5, branch `v3-objeto-poste`)
 
 **O pedido:** o Matheus achou os objetos feios e "sem textura"; o poste da E1 era o lampião achatado em quatro cores. O retrabalho parte do
