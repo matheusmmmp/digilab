@@ -285,7 +285,7 @@ def test_conferir_registro_falha_sem_usage_ou_sem_entrada():
     voz = dc4.ClienteRegistrado(dc4.ClienteFalso("gemma2:9b", "voz"), "voz/G", chamadas["voz"])
     verif = dc4.ClienteRegistrado(dc4.ClienteFalso("gemma2:9b", "verif"), "verif", chamadas["verif"])
     reg = dc4.falar(dc4.ServicoDC4(voz, verif), chamadas, "G", "G/E3-000", ent, "espontanea", 5)
-    assert reg["versao_prompt"] == "voz-v3" and reg["versao_verificador"] == "verif-v9" and reg["marcou"] is False
+    assert reg["versao_prompt"] == "voz-v3b" and reg["versao_verificador"] == "verif-v9" and reg["marcou"] is False
     for mudar in ({"usage": {"entrada": None, "saida": 3}}, {"entrada": None}, {"semente": None}):
         with pytest.raises(RuntimeError):
             dc4.conferir_registro(reg | mudar)
@@ -340,9 +340,9 @@ def test_fumaca_a_rodada_inteira(fumaca):
     for r in regs:
         por.setdefault(r["id"].split("/", 1)[1], []).append(r)
     assert all(len(v) == 3 and len({(x["entrada"], x["semente"], x["estagio"], x["fala_jogador"]) for x in v}) == 1 for v in por.values())
-    # o caminho do jogo: dec-v3 -> voz-v3/verif-v9; dec-v2 -> voz-v2/verif-v8; a conversa com o comando e o historico do estagio
+    # o caminho do jogo: dec-v3 -> voz-v3b (decisao de 2026-11-09)/verif-v9; dec-v2 -> voz-v2/verif-v8; a conversa com o comando e o historico
     for r in regs:
-        assert (r["versao_prompt"], r["versao_verificador"]) == (("voz-v3", "verif-v9") if r["versao_dec"] == "dec-v3" else ("voz-v2", "verif-v8"))
+        assert (r["versao_prompt"], r["versao_verificador"]) == (("voz-v3b", "verif-v9") if r["versao_dec"] == "dec-v3" else ("voz-v2", "verif-v8"))
     conv = [r for r in regs if r["situacao"] == "conversa"]
     assert all(len(r["historico"]) == r["turno"] for r in conv) and all(r["comando"] is None for r in conv)
     e = json.loads((pasta / "entradas.json").read_text(encoding="utf-8"))
@@ -512,12 +512,18 @@ def test_estimativa_da_dc4_pelo_prompt_de_hoje():
 # ================================================================== 10. DC4b: o piso do gasto entre as worktrees
 def test_piso_do_gasto_na_validacao_vem_do_meta_da_calibracao(tmp_path, monkeypatch):
     assert dc4.piso_do_gasto("calibracao") == 0.0 and dc4.piso_do_gasto("fumaca") == 0.0
+    (tmp_path / "meta.json").write_text(json.dumps({"gasto": {"fim_usd": 0.75}}), encoding="utf-8")
+    (tmp_path / "meta_v3b.json").write_text(json.dumps({"gasto": {"fim_usd": 0.9}}), encoding="utf-8")
     monkeypatch.setattr(dc4, "META_CALIBRACAO", str(tmp_path / "nao_existe.json"))
+    monkeypatch.setattr(dc4, "META_CALIBRACAO_V3B", str(tmp_path / "meta_v3b.json"))
     with pytest.raises(RuntimeError, match="gasto acumulado"):
         dc4.piso_do_gasto("validacao")
-    (tmp_path / "meta.json").write_text(json.dumps({"gasto": {"fim_usd": 0.75}}), encoding="utf-8")
     monkeypatch.setattr(dc4, "META_CALIBRACAO", str(tmp_path / "meta.json"))
-    assert dc4.piso_do_gasto("validacao") == 0.75
+    monkeypatch.setattr(dc4, "META_CALIBRACAO_V3B", str(tmp_path / "nao_existe.json"))
+    with pytest.raises(RuntimeError, match="gasto acumulado"):
+        dc4.piso_do_gasto("validacao")
+    monkeypatch.setattr(dc4, "META_CALIBRACAO_V3B", str(tmp_path / "meta_v3b.json"))
+    assert dc4.piso_do_gasto("validacao") == 0.9           # o maior: a recalibracao da voz-v3b veio depois
 
 
 def test_gasto_com_piso_nunca_desce(tmp_path):
@@ -569,3 +575,69 @@ def test_estimativa_medida_pela_calibracao_cabe_no_teto():
 def test_o_registro_da_rodada_no_plano_confere_com_os_arquivos_de_hoje():
     """DC4b: a secao 13 do plano (o registro da rodada) existe e casa com os sha256 de hoje; a validacao depende disso"""
     dc4.exigir_registro(dc4._plano())
+
+
+# ================================================================== 11. DC4b: a voz-v3b (decisao do Matheus em 2026-11-09)
+from digilab_fala_livre import prompt as pr  # noqa: E402
+from servidor.fala_livre import ServicoFalaLivre  # noqa: E402
+
+D3 = mv.conceitos_da_voz(D2, "fome")
+
+
+def test_voz_v3b_so_troca_a_regra_do_pedido():
+    c = dec.validar(D3)
+    v3 = pr.mensagens_voz(c, "adulto", "conversa", "oi", [], comando=True)
+    v3b = pr.mensagens_voz(c, "adulto", "conversa", "oi", [], comando=True, voz=pr.VERSAO_VOZ_V3B)
+    assert pr.REGRA_PEDIDO_VOZ_V3 in v3[-1]["content"] and pr.REGRA_PEDIDO_VOZ_V3B not in v3[-1]["content"]
+    assert pr.REGRA_PEDIDO_VOZ_V3B in v3b[-1]["content"] and pr.REGRA_PEDIDO_VOZ_V3 not in v3b[-1]["content"]
+    assert v3[:-1] == v3b[:-1]                                                    # o sistema e os exemplos iguais
+    assert v3b[-1]["content"].replace(pr.REGRA_PEDIDO_VOZ_V3B, pr.REGRA_PEDIDO_VOZ_V3) == v3[-1]["content"]
+    # (a) o pedido como desejo, sem estado fora dos conceitos; (b) nenhum id na fala
+    assert "como um desejo" in pr.REGRA_PEDIDO_VOZ_V3B and "nunca afirme um estado do corpo ou do humor" in pr.REGRA_PEDIDO_VOZ_V3B
+    assert "nunca na fala" in pr.REGRA_PEDIDO_VOZ_V3B
+
+
+def test_voz_v3b_so_no_dec_v3_e_o_jogo_segue_com_a_v3():
+    c3, c2 = dec.validar(D3), dec.validar(mv.conceitos_da_voz(D2, None))
+    assert pr.voz_pedida(c3, None) == "voz-v3" and pr.voz_pedida(c3, "voz-v3b") == "voz-v3b" and pr.voz_pedida(c2, None) == "voz-v2"
+    for c, voz in ((c2, "voz-v3b"), (c3, "voz-v3"), (c3, "voz-v9")):
+        with pytest.raises(ValueError):
+            pr.voz_pedida(c, voz)
+    assert ServicoFalaLivre.voz_dos_conceitos(None, c3) is None                  # o servidor do jogo: a voz do formato
+    servico = dc4.ServicoDC4(dc4.ClienteFalso("gemma2:9b", "voz"), dc4.ClienteFalso("gemma2:9b", "verif"))
+    assert servico.voz_dos_conceitos(c3) == "voz-v3b" and servico.voz_dos_conceitos(c2) is None
+
+
+def test_config_sem_a_voz_v3b_falha():
+    for nome in ("calibracao", "validacao", "fumaca"):
+        cfg = _cfg(nome)
+        assert cfg["voz_dec_v3"] == "voz-v3b"
+        for v in (None, "voz-v3"):
+            with pytest.raises(ValueError, match="voz do dec-v3"):
+                dc4.conferir_config(cfg | {"voz_dec_v3": v})
+
+
+def test_recalibracao_so_refaz_as_falas_do_dec_v3(fumaca, tmp_path):
+    cfg, origem, _ = fumaca
+    cfg = cfg | {"fase": "calibracao"}
+    roteiros = dc4.carregar_roteiros(_cfg("fumaca"))
+    entradas = json.loads((origem / "entradas.json").read_text(encoding="utf-8"))
+    cfg["unidades"] = {"bases": [entradas["base"]]}
+    pasta = tmp_path / "fumaca_v3b"
+    meta = dc4.recalibrar_dec_v3(cfg, roteiros, origem, pasta, dc4.clientes_falsos())
+    regs = [json.loads(x) for x in (pasta / "falas.jsonl").read_text(encoding="utf-8").splitlines()]
+    orig = dc4.ler_falas(origem)
+    n_conv = sum(s["entradas"][t]["conceitos"]["versao"] == "dec-v3" for s in entradas["sequencias"] for t in range(6)) * len(roteiros)
+    assert len(regs) == meta["falas"] == 3 * (len(entradas["E3"]) + n_conv) and meta["parada_no_teto"] is None
+    assert meta["reaproveitadas_no_historico"] == 3 * (len(roteiros) * len(entradas["sequencias"]) * 6 - n_conv)
+    assert all(r["versao_dec"] == "dec-v3" and r["versao_prompt"] == "voz-v3b" and r["versao_verificador"] == "verif-v9" for r in regs)
+    for r in regs:                        # a mesma entrada, semente e fala do dono da calibracao
+        o = orig[r["id"]]
+        assert (r["entrada"], r["semente"], r["estagio"], r["fala_jogador"]) == (o["entrada"], o["semente"], o["estagio"], o["fala_jogador"])
+        if r["situacao"] == "conversa":   # o historico: as falas dec-v2 da calibracao e as dec-v3 refeitas
+            assert len(r["historico"]) == r["turno"]
+    assert meta["voz_dec_v3"] == "voz-v3b" and meta["origem_sha256"]["falas.jsonl"] == dc4.sha_arquivo(origem / "falas.jsonl")
+    with pytest.raises(RuntimeError, match="ja existe"):
+        dc4.recalibrar_dec_v3(cfg, roteiros, origem, pasta, dc4.clientes_falsos())
+    with pytest.raises(RuntimeError, match="so da calibracao"):
+        dc4.recalibrar_dec_v3(cfg | {"fase": "validacao"}, roteiros, origem, tmp_path / "outra", dc4.clientes_falsos())

@@ -259,7 +259,8 @@ class ServicoFalaLivre:
         hist = self._historico(hist, com_estagio=True)
         especie = self.especies.get(forma.removesuffix(" sombrio")) if forma is not None else None
         with self.trava:
-            r = gerar_voz(self.cliente, conceitos, estagio, situacao, jog, hist, semente, especie=especie, comando=comando)
+            r = gerar_voz(self.cliente, conceitos, estagio, situacao, jog, hist, semente, especie=especie, comando=comando,
+                          voz=self.voz_dos_conceitos(conceitos))
             verif = None
             if r.erro is None:                         # fala generica (erro) nao e fala da LLM: nao ha o que conferir
                 dono = [f for f in r.fatos if f["tipo"] == TIPO_DONO_DISSE]
@@ -269,6 +270,11 @@ class ServicoFalaLivre:
                 "estagio": r.estagio, "modelo": r.modelo, "versao_prompt": r.versao_prompt, "latencia_s": r.latencia_s,
                 "erro": r.erro, "comando": r.comando if comando else None, "verificacao": verif, "conceitos_k": conceitos.k,
                 "especie_corpus": r.especie, "corpus_sha256": self.corpus_sha}
+
+    def voz_dos_conceitos(self, conceitos: dec.Conceitos) -> str | None:
+        """a voz da rede pedida ao `gerar_voz`: None, a do formato (o jogo: voz-v1/v2/v3). A DC4 (o `ServicoDC4` do orquestrador) pede a
+        voz-v3b no dec-v3 (decisao do Matheus em 2026-11-09); o verificador nao muda (`_verificador_dos_conceitos`)."""
+        return None
 
     @staticmethod
     def _identidade_da_voz(estado) -> tuple[str, str | None]:
