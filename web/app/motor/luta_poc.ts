@@ -92,3 +92,17 @@ export function mapaDoLugar(L: Lugar): IdCena {
 export const ehMapa = (m: unknown): m is IdCena => typeof m === "string" && (IDS_CENA as readonly string[]).includes(m);
 /** a chave e de um rival da tabela (uma forma ou um NPC)? */
 export const naTabela = (k: string): boolean => k in FORMAS_ARENA;
+
+/* ---------------------------------------------------------------- os torneios (LUTA_POC, LP2b; LP-5 revista) */
+/** os numeros de um rival de torneio pela forma sorteada (o Mega da Liga, da Torre e da Fabrica; o rival do Salao): o perfil canonico dela
+    (o carater canonico que o torneio de antes ja usava), sem treino, condicao 1, pelo mesmo mapeamento (LP2-2) */
+export function statsRivalForma(f: Forma, car: Partial<Carater> | null): StatsArena {
+  return statsDaLuta(statsDe(f, car), f.est, 1);
+}
+/** os mapas dos torneios sem lugar na Campanha. PROPOSTOS pelo worker da LP2b, SEM FONTE (o Gerente pediu um mapa onde a LP-4 nao tem):
+    a Torre de Batalha no Ringue D-1 Grand Prix (o ringue de torneio; a LP-4 deixou o Ringue para a Arena, e a Torre e uma sequencia de
+    lutas de torneio), o Salao no Coliseu (o salao dos campeoes) e a Fabrica no Campo de treino (os alugados lutam sem regra de mapa). A
+    Liga usa o mapa do lugar de cada lider (LP-4) */
+export const MAPA_TORRE: IdCena = "ringue";
+export const MAPA_SALAO: IdCena = "coliseu";
+export const MAPA_FABRICA: IdCena = "campo";
