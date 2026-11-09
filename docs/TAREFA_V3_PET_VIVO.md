@@ -140,3 +140,23 @@ repasse do Gerente da V3.
 - **Os desvios:** D-PV0C-1 a D-PV0C-10.
 - **Nenhum replay das 4 800 vidas.** Ele espera a vez da máquina, que o Gerente libera depois do I2.
 
+
+## Etapa 1: o plano do PV-2 e as seis lacunas (2026-11-09, Claude Code, Opus 5.5, branch `v3-pet-vivo-pv2`)
+
+**A origem:** duas decisões do Matheus em 2026-11-09, repassadas pelo Gerente da V3. Esta sessão não ouviu o Matheus diretamente.
+- **A frente:** o PV-2 primeiro, a D-PV0R-7 ("Faça as recomendações").
+- **As seis lacunas:** levadas ao plano ("Sim, leve ao plano").
+
+**Entregue:** o [plano do PV-2](PLANO_ANALISE_V3_PET_VIVO_PV2.md), PROPOSTO. Ele traz:
+- o mapa das seis lacunas: coberta, em parte ou depois;
+- a quimiotaxia pelo dC/dt sobre o órgão do Olfato, com o placebo da hora certa e o braço separável do ganho pela fome;
+- os gates, entre eles o G-ESTADO com o δ_E do σ da 0b e a guarda de forrageio;
+- a lista ordenada das etapas seguintes;
+- as decisões PV2-1 a PV2-10.
+
+**O que não houve:** nenhuma vida, nenhuma faixa e nenhum código.
+
+**Os desvios:** D-PV2P-1 a D-PV2P-4.
+
+**Próximo:** as PV2-1 a PV2-10 com o Matheus. Depois, o PR do código, com o gabarito, a chave desligada e o custo medido nas sementes
+dos testes.
