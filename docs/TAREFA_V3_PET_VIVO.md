@@ -158,5 +158,5 @@ repasse do Gerente da V3.
 
 **Os desvios:** D-PV2P-1 a D-PV2P-4.
 
-**Próximo:** as PV2-1 a PV2-10 com o Matheus. Depois, o PR do código, com o gabarito, a chave desligada e o custo medido nas sementes
+**Próximo (as PV2-1 a PV2-10 DECIDIDAS em 2026-11-09, D-PV2P-6):** o merge pelo Matheus. Depois, o PR do código, com o gabarito, a chave desligada e o custo medido nas sementes
 dos testes.

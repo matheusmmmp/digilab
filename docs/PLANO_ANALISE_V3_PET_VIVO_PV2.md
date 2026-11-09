@@ -1,7 +1,12 @@
 # PLANO DE ANÁLISE V3 — PET_VIVO, etapa 1: o PV-2, a quimiotaxia pela variação do cheiro, e as seis lacunas (2026-11-09, Claude Code, Opus 5.5)
 
-**Status: PROPOSTO.** Nenhuma vida, nenhuma faixa de sementes e nenhum código nesta etapa. Todo número novo é PROPOSTO, e as decisões
-PV2-1 a PV2-10 (seção 10) ficam com o Matheus.
+**Status: APROVADO.** As PV2-1 a PV2-10 (seção 10) estão DECIDIDAS pela recomendação, em 2026-11-09. O Matheus respondeu "Aprovo
+todas" à pergunta "Aprova as PV2-1 a PV2-10 pela recomendação?", no chat do Gerente da V3, que repassou a resposta. O registro está no
+comentário do #741 de 2026-11-09, às 14:14 UTC. Esta sessão não ouviu o Matheus diretamente (D-PV2P-6).
+- **Os números decididos com elas:** o G0 = 64 (PV2-5), o tamanho (PV2-6) e a regra do δ_E (PV2-7).
+- **Os números que seguem PROPOSTOS:** o L da pirueta, as decisões da varredura e a taxa do placebo. O PR do código os mede e os propõe
+  por adendo, antes da run (PV2-9).
+- **Nenhuma vida, nenhuma faixa de sementes e nenhum código nesta etapa.**
 
 **De onde vem:**
 - **A frente:** o PV-2 primeiro, pela regra da auditoria. É a D-PV0R-7, DECIDIDA pelo Matheus em 2026-11-09 com "Faça as
@@ -267,7 +272,7 @@ Nenhuma delas mede um pet como o do Digilab. Elas só são o motivo do desenho.
      receptores com a A_r não vazia (D-PV0R-6).
 6. **A web:** depois de cada mecanismo aprovado, por tarefa própria, com a paridade (a regra "sempre aplicar na web").
 
-## 10. As decisões com o Matheus
+## 10. As decisões com o Matheus (DECIDIDAS pela recomendação em 2026-11-09, "Aprovo todas"; D-PV2P-6)
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
