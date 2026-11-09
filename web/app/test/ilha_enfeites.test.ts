@@ -5,9 +5,9 @@ import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, test } from "vitest";
 import { CMU, CMU_MVP } from "../motor/index.ts";
-import { ilhaDe } from "../src/telas/pet/ilha/grade.ts";
-import { ENFEITES_GRADE } from "../src/telas/pet/ilha/constantes.ts";
-import { ENFEITES_LUZ, ENFEITES_MODELOS, MODELOS } from "../src/telas/pet/ilha/modelos.ts";
+import { RIO, ilhaDe } from "../src/telas/pet/ilha/grade.ts";
+import { ENFEITES_GRADE, PLANTA_ILHA } from "../src/telas/pet/ilha/constantes.ts";
+import { ENFEITES_LUZ, ENFEITES_MODELOS } from "../src/telas/pet/ilha/modelos.ts";
 
 const GABARITO: Record<string, unknown[]> = JSON.parse(readFileSync(join(__dirname, "gabaritos", "ilha_objetos.json"), "utf8"));
 
@@ -17,27 +17,35 @@ describe("os enfeites da ilha", () => {
   });
 });
 
-describe("onde ficam os enfeites (E-G10)", () => {
-  for (const cm of [CMU_MVP, CMU]) test(`na moldura, em grama plana, longe da area, das coisas altas e uns dos outros (layout ${cm.layout.nome})`, () => {
-    const ilha = ilhaDe(cm);
+describe("onde ficam os enfeites (E-G10, desde a planta A)", () => {
+  for (const cm of [CMU_MVP, CMU]) test(`os postes nos pontos da planta e os marcos espalhados pela moldura (layout ${cm.layout.nome})`, () => {
+    const ilha = ilhaDe(cm), P = PLANTA_ILHA;
     for (const nome of Object.keys(ENFEITES_MODELOS) as (keyof typeof ENFEITES_MODELOS)[])
       expect(ilha.enfeites.filter(e => e.nome === nome).length, nome).toBe(ENFEITES_GRADE[nome].quantos);
-    const altos = ilha.objetos.filter(o => !MODELOS[o.modelo].baixo);
-    for (const e of ilha.enfeites) {
-      const G = ENFEITES_GRADE[e.nome], c = ilha.cel(Math.floor(e.x), Math.floor(e.z))!, d = ilha.distanciaDaArea(e.x, e.z);
-      expect(ilha.naArea(Math.floor(e.x), Math.floor(e.z))).toBe(false);
-      expect(c.tipo).toBe("grama");
-      expect(d).toBeGreaterThanOrEqual(G.perto); expect(d).toBeLessThanOrEqual(G.longe);
-      if (G.norte) {
-        const dx = e.x - (cm.layout.ninho[0] + 0.5);
-        expect(e.z).toBeLessThan(0);
-        if ("faixa" in G) { expect(dx).toBeGreaterThanOrEqual(G.faixa[0]); expect(dx).toBeLessThanOrEqual(G.faixa[1]); }
-        else expect(Math.abs(dx)).toBeLessThanOrEqual(G.casa);
+    /* IL-3: os postes so na praca e no caminho do cais, em chao plano */
+    const postes = ilha.enfeites.filter(e => e.nome === "poste");
+    expect(postes.map(e => [e.x, e.z])).toEqual(P.postes.map(p => [p[0], p[1]]));
+    for (const e of postes) expect(["grama", "caminho", "areia"]).toContain(ilha.cel(Math.floor(e.x), Math.floor(e.z))!.tipo);
+    /* IL-4 revista: cada marco num canto da moldura (o carro a oeste, a geladeira na areia do sul, o trilho a leste do rio), no chao dele,
+       perto do ponto da planta, fora dos caminhos e das clareiras dos lugares, e longe uns dos outros */
+    const marcos = ilha.enfeites.filter(e => e.nome !== "poste"), marco = (n: string) => marcos.find(e => e.nome === n)!;
+    expect(marco("carro").x).toBeLessThan(0);
+    expect(marco("geladeira").z).toBeGreaterThanOrEqual(ilha.area.h);
+    expect(marco("trilho").x).toBeGreaterThanOrEqual(ilha.rioX + RIO.largura);
+    for (const n of ["carro", "geladeira", "trilho"] as const) {
+      const e = marco(n), G = ENFEITES_GRADE[n], c = ilha.cel(Math.floor(e.x), Math.floor(e.z))!;
+      expect(ilha.naArea(Math.floor(e.x), Math.floor(e.z)), n).toBe(false);
+      expect(G.chao as readonly string[], n).toContain(c.tipo);
+      expect(Math.hypot(e.x - P.marcos[n].ponto[0], e.z - P.marcos[n].ponto[1]), n).toBeLessThanOrEqual(P.marcos.busca);
+      for (const l of ilha.lugares) expect(Math.hypot(l.x - e.x, l.z - e.z), `${n} e ${l.nome}`).toBeGreaterThanOrEqual(P.lugares[l.nome].clareira + G.clareira);
+      for (const l of ilha.caminhos) for (let k = 1; k < l.length; k++) {
+        const [ax, az] = l[k - 1], [bx, bz] = l[k], dx = bx - ax, dz = bz - az, q = dx * dx + dz * dz;
+        const t = Math.max(0, Math.min(1, ((e.x - ax) * dx + (e.z - az) * dz) / q));
+        expect(Math.hypot(ax + t * dx - e.x, az + t * dz - e.z), n).toBeGreaterThan(P.raioCaminho + G.clareira);
       }
-      for (const o of altos) expect(Math.hypot(o.x - e.x, o.z - e.z)).toBeGreaterThanOrEqual(G.deAlto);
-      /* a distancia de quem chega depois (a ordem da lista) */
-      for (const f of ilha.enfeites.slice(0, ilha.enfeites.indexOf(e))) expect(Math.hypot(f.x - e.x, f.z - e.z)).toBeGreaterThanOrEqual(G.entreSi);
     }
+    for (let i = 0; i < marcos.length; i++) for (let j = i + 1; j < marcos.length; j++)
+      expect(Math.hypot(marcos[i].x - marcos[j].x, marcos[i].z - marcos[j].z), `${marcos[i].nome} e ${marcos[j].nome}`).toBeGreaterThan(20);
   });
 });
 

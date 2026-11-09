@@ -20,9 +20,11 @@ export interface DadosForma {
 
 // ---------- configuracao de uma luta ----------
 /** os numeros do lutador (os Stats da POC): vida, ataque, defesa, movimento (px/s), ciclo do ataque (ms), critico (%), recarga da
-    habilidade (s), forca da habilidade (x), esquiva (%) e atordoamento (%) */
-export interface Stats { hp: number; atk: number; def: number; vel: number; cad: number; crit: number; hcd: number; hpot: number; esquiva: number; atordoa: number }
-export interface LadoLuta { forma: DadosForma; stats: Stats }
+    habilidade (s), forca da habilidade (x), esquiva (%), atordoamento (%) e o erro de mira (px; era da dificuldade na POC, e do lutador
+    desde a LP2, decisao 2) */
+export interface Stats { hp: number; atk: number; def: number; vel: number; cad: number; crit: number; hcd: number; hpot: number; esquiva: number; atordoa: number; erro: number }
+/** um lado: o Digimon, os numeros e, numa serie sem cura (a Cidadela, LP2), a vida com que ele entra (sem ela, a vida cheia) */
+export interface LadoLuta { forma: DadosForma; stats: Stats; vida0?: number }
 export interface ConfigLuta {
   cena: IdCena;
   dific: Dificuldade;

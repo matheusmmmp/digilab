@@ -51,11 +51,20 @@ export const NOITE = {
 export const LUZ_NINHO = { raio: 2.2, cor: "255,214,140" } as const;
 
 /* os objetos do cuidado e a coreografia (docs/TAREFA_V3_HABITAT_OBJETOS.md): so vista, como o resto deste arquivo */
-/** o saco de pancada do treino, em celulas a partir do ninho do layout (no MVP: o ninho em (4, 15), o saco em (7, 11), ao norte entre
-    o ninho e o comedouro), e o kit medico da lesao, ao lado do ninho */
-export const SACO_DESDE_NINHO: readonly [number, number] = [3, -4], KIT_DESDE_NINHO: readonly [number, number] = [1.3, -1];
+/** o kit medico da lesao, ao lado do ninho, em celulas a partir do ninho do layout (o saco de pancada, desde a planta A, fica perto da
+    praca: PLANTA_ILHA.lugares.saco) */
+export const KIT_DESDE_NINHO: readonly [number, number] = [1.3, -1];
 /** o treino na ilha: a ida ate o saco, os golpes e a volta (ms); um golpe a cada GOLPE_MS; o pet para a GOLPE_DIST celulas do saco */
 export const TREINO_MS = { ida: 900, golpes: 2400, volta: 900 } as const, GOLPE_MS = 600, GOLPE_DIST = 1.35;
+/** a velocidade da ida e da volta do treino (celulas por segundo; lugares.ts, idaDoTreino): a ida e a volta duram a distancia sobre ela, com
+    TREINO_MS.ida no minimo (a PA-3 da prancha da planta A, aprovada em 2026-11-08). PROPOSTO, SEM FONTE */
+export const TREINO_VEL = 7;
+/** a ida do pet ate o lugar aberto (e a volta), separada da camera: ele anda na velocidade dele (celulas por ms) e a camera e o painel chegam antes
+    (o Matheus, 2026-11-08: "ele não teleporta até lá, ele vai correndo na velocidade dele mesmo"); a caminhada nunca passa de PET_VIAGEM_MAX_MS.
+    PROPOSTO, SEM FONTE (numero de interface, nao de jogo) */
+export const PET_VIAGEM_CEL_MS = 3.5 / 1000, PET_VIAGEM_MAX_MS = 6000;
+/** quanto a ida do pet ao lugar dura (ms) para `dist` celulas: a velocidade dele, com o teto; "reduzir movimento" chega na hora */
+export const duracaoPetViagem = (dist: number, reduzido: boolean): number => (reduzido ? 0 : Math.min(PET_VIAGEM_MAX_MS, dist / PET_VIAGEM_CEL_MS));
 /** a batida na bola: quanto dura o golpe (ms) */
 export const BATER_BOLA_MS = 450;
 /** a bola desenhada vai ate a do motor com esta constante de tempo (ms); salta quando a distancia passa de BOLA_SALTO celulas */
@@ -74,32 +83,80 @@ export const SACO_FOLGA_POSTE = 0.14;
     surgir (ms); o desenho e o item gerado (itens.ts, public/itens/coco/); PROPOSTO, SEM FONTE */
 export const COCO = { raio: 0.85, passo: 0.25, surgirMs: 380 } as const;
 
-/** os enfeites do mundo humano na moldura (docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 4.3; grade.ts, porEnfeites): o sal da rng propria
-    (os objetos de hoje nao mudam, E-G0) e as tentativas por enfeite antes de falhar alto; e, por enfeite, quantos por mapa, a faixa de
-    distancia da area andavel (nada alto rente a ela, como as arvores; perto o bastante para a camera ver), a distancia minima dos enfeites ja
-    postos (os postes vem antes, e a distancia e a de quem chega) e das coisas altas de hoje, a folga de chao plano em volta (celulas) e se fica so ao norte da area (o lado que a camera da tela
-    Pet ve, atras do pet), e entao a ate `casa` celulas do ninho em x. Os repetidos (o poste) e os marcos (o carro). PROPOSTO, SEM FONTE */
+/** os enfeites do mundo humano (docs/TAREFA_V3_MUNDO_ENFEITES.md; grade.ts, porEnfeites), desde a planta A (PLANTA_ILHA) em pontos fixos:
+    por enfeite, quantos por mapa e a folga de chao plano em volta (celulas); dos marcos (o carro, a geladeira e o trilho), o chao em que
+    cada um pode ficar e a clareira que ele abre na decoracao. PROPOSTO, SEM FONTE */
 export const ENFEITES_GRADE = {
-  sal: 0x5e7e17e5, tentativas: 4000,
-  poste: { quantos: 14, perto: 1.5, longe: 4, entreSi: 4, deAlto: 2, folga: 0, norte: false, casa: 0 },
-  carro: { quantos: 1, perto: 2.4, longe: 4, entreSi: 2.5, entreMarcos: 6.5, deAlto: 2, folga: 1, norte: true, casa: 12 },
-  /* a geladeira e o trilho numa faixa de x a partir do ninho que a camera ve sem o painel Estado na frente (o revisor achou o trilho
-     atras dele, em x = 20 no mvp) */
-  geladeira: { quantos: 1, perto: 1.8, longe: 4, entreSi: 2.5, entreMarcos: 5, deAlto: 1.4, folga: 1, norte: true, casa: 0, faixa: [-14, 16] },
-  trilho: { quantos: 1, perto: 2, longe: 5, entreSi: 2.5, entreMarcos: 6, deAlto: 1.2, folga: 1, norte: true, casa: 0, faixa: [-16, 18] },
+  poste: { quantos: 6, folga: 0 },
+  carro: { quantos: 1, folga: 1, chao: ["grama"], clareira: 2.2 },
+  geladeira: { quantos: 1, folga: 1, chao: ["areia"], clareira: 1.4 },
+  trilho: { quantos: 1, folga: 1, chao: ["grama"], clareira: 2.2 },
 } as const;
-/** onde ficam os lugares da ilha (lugares.ts; docs/TAREFA_V3_LUGARES_3D.md, secao 12): depois dos enfeites, com a rng propria (os
-    objetos e os enfeites de hoje nao mudam). O portao e a barraca ao norte da area, no ponto que cabe mais perto do `alvo` (o deslocamento
-    a partir do ninho em x; z ao norte da area), onde a camera da tela Pet mais fica: em grama plana com a folga do modelo, longe dos
-    enfeites e um do outro, com a frente para a area. O cais na beira do mar, ao sul: na ultima linha de areia antes da agua, numa faixa de x da area (fracao da largura), com o
-    comprido ao longo da beira. Cada lugar abre uma `clareira`: a vista nao desenha os objetos da decoracao (nao os do motor) a menos
-    disso do centro (Ilha.escondidos). PROPOSTO, SEM FONTE */
-export const LUGARES_GRADE = {
-  sal: 0x1a6a2e5, tentativas: 4000,
-  barraca: { perto: 2, longe: 3.6, folga: 1, deEnfeite: 3.5, clareira: 3.4, alvo: [-1.4, -2.6] },
-  portao: { perto: 1.8, longe: 3.6, folga: 1, deEnfeite: 3.2, clareira: 3, alvo: [8, -2.4] },
-  cais: { faixa: [0.15, 0.4], clareira: 4.5 },
+/** a planta A da ilha inicial (docs/pranchas/ux-ilha-layout/, IL-1 a IL-4 DECIDIDAS em 2026-11-08; a vista em docs/pranchas/ux-ilha-planta-a/):
+    so a parte da vista, em celulas do mundo (x leste, z sul), a mesma em todo mapa de 64 x 30. O ninho, a tigela, a bola e as frutiferas sao
+    do motor (o LayoutMundo) e nao entram aqui.
+    - a praca, o no: um disco de terra (`praca`, o centro e o raio);
+    - os caminhos de terra (`raioCaminho`) da praca ao lar (ate o comedouro do layout), ao portao, a barraca e ao cais, pelos pontos de
+      `caminhos`; cada um para antes da base do lugar (`folgaLugar` alem do raio dele) e so pinta grama da area andavel;
+    - os lugares: o `alvo` de cada um (a grade poe no ponto que cabe mais perto dele, em `busca` celulas, com a `folga` de chao plano), a
+      `clareira` que ele abre na decoracao e o raio da `base` onde o caminho para; o cais na coluna `x`; o saco perto da praca;
+    - os postes (IL-3), cerca de 6, so na praca e no caminho do cais, em grama ou areia; a lampada para o ponto mais perto do caminho;
+    - os marcos (a IL-4 de 2026-11-08, revista: "espalha eles tambem pelo mapa"), cada um num canto da moldura, no ponto que cabe mais perto
+      do da planta (`busca` celulas), com o entorno dele (extras, a rng propria): o carro meio coberto pelo mato no oeste, a geladeira na
+      areia perto do cais e o trilho saindo da mata do leste; `entorno`: quantos arbustos, tufos de grama alta e pedras, ate `raio` celulas;
+    - a moldura em bosques e vaos (regras 7 e 8 do levantamento): a arvore e o arbusto da moldura so ficam dentro de um bosque (elipses
+      `bosques`: x, z, raio x, raio z) ou na mata a leste do rio; nos `vaos` (o de tras do portao) nada alto fica. Cada bosque ganha as
+      arvores e os arbustos dele, com a rng propria (`sal`): `porCelula` arvores por celula da elipse, a distancia minima entre as coisas
+      altas, a escala e os arbustos (fracao das arvores) na base, na elipse 1,3 vez maior. Os bosques que a planta
+      punha dentro da area do pet ficaram na moldura, encostados nela: o LayoutMundo so aceita arvore com fruta (o desvio da prancha).
+    PROPOSTO, SEM FONTE */
+export const PLANTA_ILHA = {
+  praca: { x: 31, z: 16, raio: 4.2 },
+  raioCaminho: 0.8, folgaLugar: 0.6,
+  caminhos: {
+    lar: [[22, 16], [31, 16]],
+    portao: [[31, 16], [31, -1]],
+    barraca: [[31, 16], [40, 13], [47, 10]],
+    cais: [[31, 16], [36, 24], [38, 31]],
+  },
+  lugares: {
+    portao: { alvo: [31, -2.5], busca: 3, folga: 1, clareira: 3, base: 1.6 },
+    barraca: { alvo: [48.5, 8.5], busca: 3, folga: 1, clareira: 3.4, base: 2.4 },
+    cais: { x: 38, clareira: 4.5 },
+    saco: [22, 9],
+  },
+  postes: [[27.5, 13], [34.5, 13], [27.5, 19.5], [34.5, 19.5], [33.5, 26], [37, 30]],
+  marcos: {
+    busca: 2.5,
+    carro: { ponto: [-6.5, 19.5], entorno: { arbusto: 6, grama_alta: 8, pedra: 1, raio: 2.8 } },
+    geladeira: { ponto: [50, 31.2], entorno: { arbusto: 0, grama_alta: 0, pedra: 3, raio: 2 } },
+    trilho: { ponto: [69, 21], entorno: { arbusto: 4, grama_alta: 6, pedra: 2, raio: 2.8 } },
+  },
+  bosques: [[8, -6, 8, 4.2], [-6, 4, 3.4, 4.6], [-6, 25.6, 3.2, 2.6], [19, -8, 4, 3.4], [44, -6, 6, 3.6], [-5, -6, 4, 3.4], [56, -6, 6, 3.6]],
+  vaos: [[31, -6, 5, 5]],
+  sal: 0xb05c0e5, bosque: { porCelula: 0.16, entreArvores: 2.2, escalaArvore: [0.9, 1.2], arbustos: 0.5, entreArbustos: 1.2, escalaArbusto: [0.85, 1.15] },
 } as const;
+/** o fim da ilha (o Matheus, 2026-11-08: "adicionar um final [...] para ela nao acabar no meio do nada"; fimDaIlha.ts e grade.ts, porBordas):
+    - a leste do rio, a mata sobe em `degraus` ate o morro: a coluna (a partir da margem leste do rio) onde comeca cada nivel, com a borda
+      ondulando ate `ondula` celulas; a decoracao rente a um degrau novo some (a lista `objetos` nao muda, E-G0);
+    - o mar em volta da grade inteira, ate o horizonte (`mar`, o lado do quadrado, em celulas);
+    - as silhuetas ao longe: duas faixas em volta do ponto olhado (as ilhas perto e os morros longe), a `raio` celulas dele, com a cor da
+      nevoa puxada para a sombra (`sombra`, a fracao) e o pe `fundo` celulas abaixo da linha do horizonte do mar curvo, para o mar o cobrir;
+      `altura` e a altura da faixa e `alto`, a fracao dela que a silhueta mais alta ocupa; `ilhas` e `morros`, quantos picos por volta.
+    PROPOSTO, SEM FONTE */
+export const FIM_ILHA = {
+  degraus: [4, 7], ondula: 2,
+  mar: 1200,
+  silhuetas: {
+    sal: 0xf1a17e, fundo: -5, altura: 18,
+    longe: { raio: 60, sombra: 0.3, alto: 0.72, morros: 7 },
+    perto: { raio: 52, sombra: 0.55, alto: 0.42, ilhas: 9 },
+  },
+} as const;
+/** o sinal so (a regra 3 de "guiar o olhar sem texto"): o que se toca (a tigela, a bola e o saco) da um pulinho quando o pet chega a `raio`
+    celulas dele; de novo so depois que o pet sair de `sai` celulas. O pulinho: achata e estica `amplitude`, com o periodo e o amortecimento
+    em ms. A decoracao nao pula. PROPOSTO, SEM FONTE */
+export const CHAMADO = { raio: 1.9, sai: 3, amplitude: 0.12, periodo: 260, tau: 260 } as const;
 /** a luz de um lugar aberto (lugaresCena.ts): a cor da mascara de cada lugar (o ciano do portal e dos cristais, tirado da textura) e a
     forca (emissiveIntensity). PROPOSTO, SEM FONTE */
 export const LUGAR_LUZ = { cor: { portao: "110,240,230", barraca: "110,240,230", cais: "131,228,218" }, forca: 0.55 } as const;
@@ -113,6 +170,33 @@ export const ENFEITE_HALO = { altura: 0.77, tamanho: 1.1, cascas: [0.55, 0.78, 1
     da imagem), para a nevoa, a cor de baixo da luz do ceu de dia, azulada (a sombra do anime), e a nevoa mais longe que a da ilha (o fundo
     de anime tem as arvores de tras nitidas; a de 26 a 62 desbotava tudo, e a de 42 a 95 as deixava pesadas; D2). PROPOSTO, SEM FONTE */
 export const CEU_DIGITAL = { horizonte: 0xabe9fe, chaoHemi: 0x6f8fc8, nevoa: [34, 85] } as const;
+/** o ceu do estilo digital sem a pintura de anime (o Matheus, 2026-11-08: "Não precisa ser um céu tão cartunesco assim. Ele tá destoando muito
+    da arte do jogo. Se for alguma coisa mais pixelada"): `modo` "pixel" (o degrade em `faixas` de cor chapada e as nuvens em pixel, do tamanho
+    `px` da grade de cada uma, ampliada sem filtro), "suave" (o degrade liso e as nuvens fofas da ilha) ou "pintado" (o ceu.jpg e as nuvens de
+    anime de antes); `?ceu=` no endereco troca so na pagina, para comparar. As cores em tons medios, menos saturadas que as de antes, com o
+    horizonte mais claro (o levantamento do ceu, no Obsidian: 20 Temas/Ceu do jogo), e a nevoa da cor do horizonte. PROPOSTO, SEM FONTE */
+export const CEU_SEM_PINTURA = {
+  /* o Matheus voltou para o pintado no mesmo dia ("A arte anterior estava um pouco melhor. Só que não deixa ela tão forte [...] Diminui um pouco a
+     tonalidade do azul dela. Um pouco, não tanto"): o padrao e o pintado, com o azul suavizado por `pintura` (a saturacao que fica e quanto puxa
+     para o branco); o pixel e o suave ficam no ?ceu= */
+  modo: "pintado" as "pixel" | "suave" | "pintado", pintura: { saturacao: 0.8, clarear: 0.05 }, cores: ["#5f9fd6", "#9ec8e9", "#e3f1f6"], horizonte: 0xe3f1f6, faixas: 11, tela: [480, 270],
+  nuvens: { n: 12, px: [40, 16], largura: [16, 28], altura: [11, 19], longe: [22, 40], sombra: "#cfe0ee" },
+} as const;
+/** as nuvens da pintura no mundo (o Matheus, 2026-11-08: "não tá tendo duas nuvens, uma em cima da outra, né? [...] as nuvens não sejam uma arte
+    fixa. Ela tem que acompanhar [...] naquele estilo que tava no desenho"): o ceu.jpg vira o degrade do ceu sem nuvens (a cor do ceu de cada linha)
+    e as nuvens recortadas dele, em `pedacos` (x, y, largura e altura em px da imagem); elas ficam num anel em volta da ilha (`raio` e `altura` em
+    celulas, `escala` celulas por px), viradas para o centro, e o anel gira devagar (`volta`, segundos por volta; parado com "reduzir movimento").
+    `esfumar`: a fracao de cada lado do recorte em que a borda some. `nuvem` e `borda`: a saturacao abaixo da qual (em fracao da do ceu da linha) o pixel e nuvem inteira, e a faixa da borda. PROPOSTO, SEM FONTE */
+export const NUVENS_PINTADAS = {
+  pedacos: [[0, 250, 760, 360], [540, 15, 836, 515], [680, 560, 340, 92]] as const,
+  n: 9, raio: [58, 72], altura: [14, 26], escala: 0.05, volta: 1500, nuvem: 0.35, borda: 0.45, esfumar: 0.18,
+  /* o desenho das nuvens do anel (o Matheus, 2026-11-08: o recorte "parece uma nuvem gerada por inteligência artificial [...] pegar uma referência
+     de nuvem em jogos"): "recorte" (os pedacos da pintura), "3d" (bolhas de pouco poligono com a base reta e dois tons, como as de jogos de ilha)
+     ou "chapada" (o desenho limpo de bolhas, com a faixa de sombra embaixo); o Matheus escolheu o "3d" ("3D de polígonos", 2026-11-08); `?nuvens=` troca so na pagina. `bolhas` quantas por nuvem, `tam` a
+     largura de uma nuvem (celulas), `baixa` quanto as desenhadas ficam abaixo da `altura` (sao menores que os recortes), `sombra` a cor de baixo e
+     `faixa` a fracao da altura em sombra */
+  desenho: "3d" as "recorte" | "3d" | "chapada", bolhas: [4, 7], tam: [22, 38], baixa: 8, sombra: "#c4d6ec", faixa: 0.32,
+} as const;
 /** o traco de nanquim do estilo digital (pos.ts, Contorno; D5, o cel shading que o Matheus pediu): um azul-petroleo quase preto, a
     largura de ~3 px (o revisor pediu o traco mais grosso), e some entre 34 e 76 celulas da camera (perto do fim da nevoa). PROPOSTO, SEM FONTE */
 export const CONTORNO_DIGITAL = { tinta: 0x15222a, forca: 1, largura: 3, limiar: 0.012, some: [34, 76] as const };
@@ -125,7 +209,11 @@ export const CONTORNO_DIGITAL = { tinta: 0x15222a, forca: 1, largura: 3, limiar:
 export const DIGITAL = {
   particulas: { quantas: 140, sal: 0xd161a1, margem: 3, altura: [0.6, 3.2], tamanho: 0.06, cor: 0x7ff3ff, opacidade: [0.55, 0.95],
     sobe: 0.25, vel: 0.8, giro: 0.9 },
-  grade: { cor: "#b8faff", alfa: 0.5, espessura: 3, meridianos: 9, paralelos: 8, fuga: 0.25 },
+  /* a grade mais discreta (2026-11-08: "tá muito saturada [...] Deixa ela um pouco mais opaca"): o ciano dessaturado, fraca e so na faixa de baixo do
+     ceu, sumindo para cima a partir de `desde` (a fracao da altura da imagem) */
+  /* e de novo no mesmo dia: "cadê aquelas linhas no céu? Eu quero aquelas linhas no céu, só que não tão forte": no ceu todo outra vez, mais fracas
+     no alto (`topo`, a fracao da forca la em cima) */
+  grade: { cor: "#b0e8f0", alfa: 0.3, espessura: 2.5, meridianos: 9, paralelos: 8, fuga: 0.25, topo: 0.55 },
   fios: { alto: 0.93, alcance: 10, porPoste: 2, queda: 0.06, segmentos: 12, cor: 0x2b2a33 },
   /* a lata gigante (D4, o marco), no horizonte como na maquete B: a grade tem 64 celulas de largura e a camera segue o pet, entao um
      marco parado num ponto so apareceria perto dele, e o mundo curvo o afundaria. Ela fica a `longe` celulas ao norte do pet e anda com

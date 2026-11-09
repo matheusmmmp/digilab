@@ -1,8 +1,10 @@
 /* Os objetos que falam (direcao A da ilha interativa; prancha docs/pranchas/ux-ilha-a/, aprovada pelo Matheus em 2026-11-07 com "Aprovar e codar";
    decisoes I1-1 e I1-4 a I1-9 do PERGUNTAS.md). So vista: nada aqui muda o motor, a rng, o registro ou o save.
-   - os selos dos lugares, sempre a vista (I1-7, I1-5): o saco com os treinos de hoje e o visto (ou a hora da proxima vez); a barraca com o ponto de
+   - desde 2026-11-08 (o Matheus: "eu quero que eles só fiquem aparentes se o jogador passar o mouse por cima [...] E daí fique bem translúcido"), as
+     etiquetas e os selos so aparecem com o mouse sobre o objeto, translucidos (objetos_ilha.css); o alvo atual do pet nao mostra mais a etiqueta;
+   - os selos dos lugares, com o mouse sobre eles (I1-7, I1-5): o saco com os treinos de hoje e o visto (ou a hora da proxima vez); a barraca com o ponto de
      diario novo. Com o mouse sobre eles, o selo ganha o nome do menu. O lugar trancado fica com o cadeado (CadeadosDaIlha.tsx), sem selo;
-   - a etiqueta curta (I1-4): no hover (so com o mouse) da tigela, da bola e dos lugares, e no objeto que e o alvo atual do pet (objetosIlha.ts, alvoAtual);
+   - a etiqueta curta (I1-4): no hover (so com o mouse) da tigela, da bola e dos lugares; o alvo atual do pet (objetosIlha.ts, alvoAtual) so ganha o destaque;
    - o cartao do toque (I1-4, I1-8, I1-9): tocar na tigela ou na bola abre o cartao, com o numero, a linha do que o pet aprendeu e o gesto, pelo mesmo
      caminho da barra (acoes.ts, agir("alimentar"); o "Por perto" da bola e o porBolaEm do BarraBola). A barra de baixo continua igual. Fecha no x, no Esc,
      num toque fora ou depois de FECHA_MS sem mexer;
@@ -48,6 +50,8 @@ function useToqueObj(): typeof TOQUE_OBJ {
   useSyncExternalStore(o => { ouvintes.add(o); return () => { ouvintes.delete(o); }; }, () => versao);
   return TOQUE_OBJ;
 }
+/** o objeto sob o mouse agora (null fora deles): o CadeadosDaIlha so mostra o cadeado do lugar sob o mouse */
+export function useObjetoSobre(): Objeto | null { return useToqueObj().sobre; }
 /** fecha o cartao (o x, o Esc, o toque fora, o tempo) */
 export const fecharCartao = (): void => { if (TOQUE_OBJ.aberto) mudar(() => { TOQUE_OBJ.aberto = null; TOQUE_OBJ.foco = false; }); };
 /** o dono mexeu no cartao (o ponteiro, o teclado): o tempo de fechar recomeca */
@@ -210,13 +214,13 @@ export function ObjetosDaIlha() {
   }, [vivo]);
 
   if (!vivo || !mu) return null;
-  const mostra = (o: Objeto) => toque.aberto !== o && (toque.sobre === o || alvo === o);
+  const mostra = (o: Objeto) => toque.aberto !== o && toque.sobre === o;
   const linha = toque.aberto ? linhaAprendeu(aprendido, toque.aberto) : null;
   const IconeLinha = linha ? (linha.sinal < 0 ? TrendingDown : linha.sinal > 0 ? TrendingUp : Minus) : Minus;
   const rotRacao = racoes === 0 ? "vazia" : racoes === 1 ? "ração" : "rações";
   return (
     <div className="objetos-ilha" data-objetos-ilha="">
-      {/* as etiquetas curtas (hover, alvo atual) */}
+      {/* as etiquetas curtas (so no hover) */}
       {mostra("tigela") && <span className={"obj-etq" + (alvo === "tigela" ? " obj-etq--alvo" : "")} ref={el => { etq.current.tigela = el; }} style={{ visibility: "hidden" }}
         data-objeto="tigela" role="img" aria-label={`Tigela: ${racoes === 0 ? "vazia" : `${racoes} ${rotRacao}`}`}>
         <Soup aria-hidden="true" />{racoes > 0 && <b aria-hidden="true">{racoes}</b>}<span aria-hidden="true">{rotRacao}</span>
@@ -225,14 +229,14 @@ export function ObjetosDaIlha() {
         data-objeto="bola" role="img" aria-label="Bola"><CircleDot aria-hidden="true" /><span aria-hidden="true">Bola</span></span>}
       {mostra("portao") && aberto("portao") && <span className="obj-etq" ref={el => { etq.current.portao = el; }} style={{ visibility: "hidden" }} data-objeto="portao"
         role="img" aria-label={PECAS.lutar.nome}><Swords aria-hidden="true" /><span aria-hidden="true">{PECAS.lutar.nome}</span></span>}
-      {/* os selos dos lugares (sempre; com o mouse sobre eles, o nome do menu) */}
-      {saco && aberto("saco") && <span className="obj-selo" ref={el => { selo.current.saco = el; }} style={{ visibility: "hidden" }} data-objeto="saco" role="img"
+      {/* os selos dos lugares (so com o mouse sobre eles, com o nome do menu) */}
+      {saco && aberto("saco") && toque.sobre === "saco" && <span className="obj-selo" ref={el => { selo.current.saco = el; }} style={{ visibility: "hidden" }} data-objeto="saco" role="img"
         aria-label={`${PECAS.crescer.nome}: ${saco.hoje} ${saco.hoje === 1 ? "treino" : "treinos"} hoje, ${saco.proxima === null ? "pode treinar" : `próximo às ${hhmm(saco.proxima)}`}`}>
         <Dumbbell aria-hidden="true" />{toque.sobre === "saco" && <span aria-hidden="true">{PECAS.crescer.nome}</span>}
         <b aria-hidden="true">{saco.hoje}</b><span aria-hidden="true">hoje</span>
         {saco.proxima === null ? <Check className="obj-ok" aria-hidden="true" /> : <span className="obj-hora" aria-hidden="true"><Clock aria-hidden="true" />{hhmm(saco.proxima)}</span>}
       </span>}
-      {aberto("barraca") && (novo || toque.sobre === "barraca") && <span className="obj-selo" ref={el => { selo.current.barraca = el; }} style={{ visibility: "hidden" }}
+      {aberto("barraca") && toque.sobre === "barraca" && <span className="obj-selo" ref={el => { selo.current.barraca = el; }} style={{ visibility: "hidden" }}
         data-objeto="barraca" role="img" aria-label={`${PECAS.diario.nome}${novo ? ": novidade" : ""}`}>
         <BookOpen aria-hidden="true" />{toque.sobre === "barraca" && <span aria-hidden="true">{PECAS.diario.nome}</span>}{novo && <span className="obj-ponto" aria-hidden="true" />}
       </span>}

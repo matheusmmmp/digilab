@@ -28,6 +28,12 @@ body:has(dialog[open]) dialog .dica-bit.cartao-motivo{ display:flex }
 .cadeado-ilha b{ font:700 14px/1 var(--hx-f-num) }
 .cadeado-ilha:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:2px }
 .cadeado-ilha.aberto{ border-color:var(--hx-alerta); color:var(--hx-alerta); pointer-events:none }
+/* o cadeado fechado so aparece, translucido, com o mouse sobre o lugar (data-sobre), sobre ele ou com o foco do teclado (o Matheus, 2026-11-08); continua
+   clicavel. As opacidades sao de layout: PROPOSTO, SEM FONTE */
+.cadeado-ilha:not(.aberto){ opacity:0; transition:opacity .15s }
+.cadeado-ilha:not(.aberto):is([data-sobre], :hover){ opacity:.55 }
+.cadeado-ilha:not(.aberto):focus-visible{ opacity:1 }
+@media (prefers-reduced-motion: reduce){ .cadeado-ilha:not(.aberto){ transition:none } }
 /* o brilho de uma vez quando o lugar acaba de abrir (--hx-alerta, o "amarelo = momento de destaque"); sem animacao com "reduzir movimento" */
 .brilho-ilha{ position:absolute; left:0; top:0; width:150px; height:150px; border-radius:50%; pointer-events:none; animation:brilho-ilha 1.6s ease-out 1 both; will-change:transform;
   background:radial-gradient(circle, transparent 46%, color-mix(in srgb, var(--hx-alerta) 55%, transparent) 60%, color-mix(in srgb, var(--hx-alerta) 25%, transparent) 70%, transparent 76%) }

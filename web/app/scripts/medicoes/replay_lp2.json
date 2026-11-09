@@ -1,0 +1,47 @@
+{
+ "gerado_por": "web/app/scripts/medir_replay_lp2.ts",
+ "commit": "361e83b2",
+ "data": "2026-11-08",
+ "maquina": {
+  "cpu": "Intel(R) Core(TM) i7-14700KF",
+  "nucleos": 20,
+  "plataforma": "win32 10.0.26300"
+ },
+ "node": "v24.19.0",
+ "maxLutas": 1000,
+ "repeticoes": 3,
+ "vidas": [
+  {
+   "semente": 101,
+   "lutas": 166,
+   "passos": 182,
+   "morreu": true,
+   "eventos": 362,
+   "msReplayComLutas": 66.7,
+   "msReplaySemLutas": 10.3,
+   "msPorLuta": 0.34
+  },
+  {
+   "semente": 202,
+   "lutas": 197,
+   "passos": 213,
+   "morreu": true,
+   "eventos": 430,
+   "msReplayComLutas": 67.8,
+   "msReplaySemLutas": 12,
+   "msPorLuta": 0.283
+  },
+  {
+   "semente": 303,
+   "lutas": 234,
+   "passos": 250,
+   "morreu": true,
+   "eventos": 505,
+   "msReplayComLutas": 76.4,
+   "msReplaySemLutas": 11.3,
+   "msPorLuta": 0.278
+  }
+ ],
+ "msPorLutaMedia": 0.3,
+ "nota": "a mediana de 3 replays; msPorLuta = (replay com as lutas - replay da mesma vida sem elas) / lutas, o custo que a luta acrescenta ao replay (o nucleo, os numeros e a ponte). O celular segue SEM FONTE"
+}

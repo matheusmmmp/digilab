@@ -77,17 +77,17 @@ export const ENFEITES_LUZ: Partial<Record<NomeEnfeite, string>> = { poste: "post
    o domo de lona com a antena (o lugar do Diario; refeita em 2026-11-08, docs/TAREFA_V3_LUGARES_3D.md, secao 14), 3,6 celulas com a
    antena, ~3,4 de largura no corpo e ~5,4 ate as estacas, a porta com ~1,6 celula; um pouco menor que o domo de antes porque a lona, mais
    funda, entra no degrau do barranco atras do ponto dela (o forro de dentro esconde o canto). O cais: o pier
-   com a balsa e a boia de dados (o multiplayer, futuro), 2,4 celulas ate a luz da balsa, ~7,6 de comprimento; sem sombra redonda (fica na
-   beira da agua). PROPOSTO, SEM FONTE */
+   de tabuas com o barquinho de pesca azul e amarelo (o multiplayer, futuro; o retrabalho da secao 16), 1,8 celula ate o teto da cabine, o
+   que mantem os ~7,6 de comprimento do cais de antes; sem sombra redonda (fica na beira da agua). PROPOSTO, SEM FONTE */
 export const LUGARES_MODELOS = {
   portao: { arquivos: ["portao/portao.gltf"], altura: 5, vento: 0, sombra: 1.6, baixo: false },
   barraca: { arquivos: ["barraca/barraca.gltf"], altura: 3.6, vento: 0, sombra: 2.2, baixo: false },
-  cais: { arquivos: ["cais/cais.gltf"], altura: 2.4, vento: 0, sombra: 0, baixo: false },
+  cais: { arquivos: ["cais/cais.gltf"], altura: 1.8, vento: 0, sombra: 0, baixo: false },
 } as const satisfies Record<NomeLugar, Modelo>;
 export type { NomeLugar };
-/** a mascara das partes que acendem com o lugar aberto (o emissiveMap; fora do glTF, ao lado dele): o portal do portao; o ciano do cais
-    (os cristais e a boia) */
-export const LUGARES_LUZ: Partial<Record<NomeLugar, string>> = { portao: "portao/portao_luz.png", cais: "cais/cais_luz.png" };
+/** a mascara das partes que acendem com o lugar aberto (o emissiveMap; fora do glTF, ao lado dele): o portal do portao. O cais
+    retrabalhado (secao 16) nao tem parte que acende: o barco do esboco 1 nao tem os cristais nem a boia do cais de antes */
+export const LUGARES_LUZ: Partial<Record<NomeLugar, string>> = { portao: "portao/portao_luz.png" };
 /** os modelos que podem entrar na area andavel sem um objeto do motor (regra 5) */
 export const MODELOS_BAIXOS = (Object.keys(MODELOS) as NomeModelo[]).filter(n => MODELOS[n].baixo);
 /** o modelo das arvores do layout do motor (as `arvores`, J* e M*), as unicas coisas altas dentro da area andavel */

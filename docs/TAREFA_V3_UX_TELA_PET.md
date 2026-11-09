@@ -702,3 +702,166 @@ vai até um objeto. Esta etapa faz só a prancha da A, sem código do jogo (bran
 - **As contas** ficam em `src/telas/pet/objetosIlha.ts`, e os testes em `test/objetos_ilha.test.ts`.
 - **Interpretações:** D-I1-1 a D-I1-4, em `docs/registro/2026-11.md`.
 - **Pendente do #694:** a árvore que dá fruta.
+
+## 23. A tela Pet mais limpa: os ícones no hover, o minimapa menor, as faixas por 5 s e o pet que anda até o lugar (2026-11-08)
+
+O Matheus, sobre a tela Pet já com a ilha A (#691):
+> "Eu não quero que fique aparecendo esses ícones o tempo todo na tela. Eu quero que eles só fiquem aparentes se o jogador passar o mouse por cima,
+> sabe? E daí fique bem translúcido. O minimapa tá muito grande, diminui um pouco o minimapa também."
+
+> "[...] na batalha, o Pet vai até o portal, ele não teleporta até lá, ele vai correndo na velocidade dele mesmo, sabe? [...] o modal vai até o local
+> preparado já, mas o Pet ele demora um pouquinho para chegar."
+
+> "[...] o menu à esquerda, um sobreposto ao outro. [...] aquele menu do estado da fome e o agora dormindo, eles não precisam estar ali, eles estão
+> ocupando muito, muito espaço. Então, tira eles, ou quando notifica, deixa eles durante 5 segundos e daí eles saem."
+
+**O que foi feito (só vista; o motor, o save, o registro e o replay não mudam):**
+- **Os ícones da ilha só aparecem com o mouse sobre o objeto, translúcidos** (opacidade 0,55):
+  - os selos do saco e da barraca (`ObjetosDaIlha.tsx`) e as etiquetas da tigela, da bola e dos lugares;
+  - a etiqueta do alvo atual do pet não aparece mais sozinha; ela só ganha o destaque quando o mouse está sobre ela;
+  - o cadeado do lugar trancado (`CadeadosDaIlha.tsx`, `nivel.css`) fica invisível e continua clicável. Ele aparece com o mouse sobre o lugar ou
+    sobre ele, e inteiro com o foco do teclado. O toque no lugar trancado continua abrindo o motivo.
+- **O minimapa** passou de 232 para 176 px (`MINIMAPA_PX`, `minimapa.css`). O "seguir o pet" e a altura da pilha da direita acompanham.
+- **As faixas "Agora" e do resumo** (a fome, "quer carinho", o Estado) aparecem por 5 s quando mudam e depois saem (`NOTIFICA_MS`, `hudPet.ts`).
+  A fome crítica, que antes ficava, também sai. Com o DigiBrain aberto, a linha do agora fica, e ao fechá-lo ela volta por 5 s, para o foco voltar a
+  ela. O cartão do chamado e a morte continuam como antes, e o balão da fala continua com os 15 s.
+- **O pet anda até o lugar no ritmo dele** (`ilha/vista.ts`, `petNaViagem`): a câmera e o painel chegam em 0,7 s, como antes, e o pet vai do ponto
+  em que estava desenhado até o lugar a 3,5 células por segundo, no máximo 6 s (`PET_VIAGEM_CEL_MS`, `PET_VIAGEM_MAX_MS`). A volta é igual. Com
+  "reduzir movimento", chega na hora.
+- **O painel de Ajustes** abre à direita do trilho de ícones, não por baixo dele (`lugar_l3.css`).
+- **O Estado com outro painel aberto:** com os Ajustes ou um lugar aberto, a lista das necessidades da pilha da direita virava duas colunas e o
+  texto se sobrepunha (`pet.css`, sem o `.app--pet`). Agora continua uma coluna (`pet_hud.css`).
+
+**Os números** (0,55, 176 px, 5 s, 3,5 células por segundo, 6 s) são de interface: PROPOSTO, SEM FONTE. As interpretações estão em D-TP23-1 a
+D-TP23-3, em `docs/registro/2026-11.md`.
+
+**Os painéis arrastáveis** (o Matheus: "Sim, arrastáveis", 2026-11-08):
+- **O que se arrasta:** a pilha da direita (Estado, Evolução, Últimas ações e DigiBrain) e o painel ao lado (os Ajustes e cada lugar). Eles se
+  arrastam pelo cabeçalho (`useArrastavelPorAlca`, `hudPet.ts`). O resto do painel continua a clicar e a rolar, e um arraste não vira clique.
+- **A posição** fica no navegador, como a do balão e a do alerta, e nunca no save.
+- **Voltar ao lugar:** o botão "Voltar os painéis ao lugar" fica em Ajustes > Visual > Painéis.
+- **Celular:** a folha de baixo não se arrasta.
+
+## 24. A prancha do layout da ilha inicial (2026-11-08)
+
+O Matheus pediu de novo uma análise do layout da ilha, com referências de outros jogos:
+> "As árvores estão longe do patch, não tem nenhuma árvore perto do ninho dele. [...] qual que seria o melhor layout dessa ilha inicial? Para a
+> gente modelar e deixar bem interessante, não apenas vários postes aleatórios, um monte de árvore aleatória e os outros objetos um do lado do
+> outro."
+
+**O que foi feito (só a prancha; nenhum código do jogo mudou):**
+- **A prancha:** `docs/pranchas/ux-ilha-layout/`, com a planta de hoje (tirada dos dados do jogo) e três propostas: A, o lar no bosque e a
+  praça; B, a vila em roda; e C, a trilha.
+- **O levantamento** das referências fica no Obsidian (`20 Temas/Layout da ilha inicial.md`). Ele cobre Animal Crossing, Stardew, Tamagotchi
+  Plaza, Cult of the Lamb, Slime Rancher, Digimon World, Pokémon Sleep, Lynch e Upton, os weenies, o prospect-refuge e a arte de florestas.
+- **A página para escolher:** https://claude.ai/artifact/Tq149bn7Jmaq9btokYVavK.
+
+**As decisões:** IL-1 a IL-4 foram DECIDIDAS pela recomendação, na resposta do Matheus "A, com IL-2 a IL-4" (2026-11-08). Fica a planta A,
+com as frutíferas do sacudir no bosque do lar, os postes nos caminhos e o ferro-velho num canto. A parte do motor (o ninho, a tigela, a bola e
+as três frutíferas) vai para o `CMU_ILHA` do #694, e a parte da vista vai para uma etapa própria: uma prancha 3D e depois o código.
+
+## 25. O céu do estilo Digital sem a pintura de anime (2026-11-08)
+
+O Matheus pediu:
+> "busque referências para otimizar esse céu. Ele tá bem feio. Não é nada natural. E essa faixa digital que tá cobrindo ele, ela tá meio
+> esquisita, tá muito saturada, talvez. Deixa ela um pouco mais opaca."
+
+E depois:
+> "Não precisa ser um céu tão cartunesco assim. Ele tá destoando muito da arte do jogo. Se for alguma coisa mais pixelada [...]"
+
+**O que foi feito (só vista; o motor, o save e o registro não mudam):**
+- **O céu em pixel** (`CEU_SEM_PINTURA`, modo `"pixel"`, o padrão novo): o degradê em 11 faixas chapadas, em tons médios e com o horizonte
+  mais claro (`ceuEmFaixas`, `digital.ts`). As nuvens são em pixel, grades pequenas ampliadas sem filtro (`nuvensPixel`, `cena.ts`).
+- **As outras versões** ficam no `?ceu=`, só na página, para comparar:
+  - o modo `"suave"`, com o degradê liso e as nuvens fofas da ilha;
+  - o `"pintado"`, com o `ceu.jpg` e as nuvens de anime de antes.
+- **A grade digital** ficou com alfa de 0,5 para 0,16, num ciano apagado, só na metade de baixo do céu e sumindo para cima (`DIGITAL.grade`).
+- **A névoa** tem a cor do horizonte novo.
+- **Páginas:** a comparação está em https://claude.ai/artifact/UUbqNxNS1PHTntVhA93NUP. As referências estão no Obsidian, em
+  `20 Temas/Céu do jogo.md`.
+
+Os números são de desenho: PROPOSTO, SEM FONTE. A cor por hora do dia, o halo do sol e a sombra de nuvem ficam para depois.
+
+**A volta para o pintado (o Matheus, no mesmo dia):**
+> "Não, volta para aquela arte anterior. A arte anterior estava um pouco melhor. Só que não deixa ela tão forte. [...] Diminui um pouco a
+> tonalidade do azul dela. Um pouco, não tanto. [...] E cadê aquelas linhas no céu? Eu quero aquelas linhas no céu, só que não tão forte."
+
+- **O padrão voltou a ser o pintado,** com o `ceu.jpg` e as nuvens de anime. O azul ficou suavizado por `suavizarPintura`: a saturação fica
+  em 80 % e a imagem puxa 5 % para o branco.
+- **As linhas voltaram ao céu todo:** alfa de 0,3 (era 0,5), um ciano um pouco apagado, espessura de 2,5 (era 3) e mais fracas no alto
+  (`topo`, 55 %).
+- **O pixel e o suave** continuam só no `?ceu=`.
+
+**As nuvens numa camada só e no mundo (o Matheus, no mesmo dia):**
+> "não tá tendo duas nuvens, uma em cima da outra, né? [...] as nuvens não sejam uma arte fixa. Ela tem que acompanhar [...] naquele estilo que
+> tava no desenho."
+
+- **Eram duas camadas:** as nuvens pintadas no `ceu.jpg`, fixas na tela, e as nuvens de anime com contorno, no mundo.
+- **A pintura agora vira duas partes** (`separarNuvens`, `digital.ts`):
+  - o fundo é só o degradê do céu, com a cor de cada linha;
+  - as nuvens são recortadas da própria pintura, em três pedaços com as bordas esfumadas.
+- **Os pedaços ficam num anel em volta da ilha** (`nuvensDaPintura`, `NUVENS_PINTADAS`), virados para o centro. Eles acompanham a câmera quando
+  ela gira, e o anel dá uma volta a cada 25 min. Com "reduzir movimento", fica parado.
+- **As nuvens de anime saíram** do modo pintado, e a noite apaga as nuvens do anel como as outras.
+
+**As nuvens com desenho de jogo (o Matheus, no mesmo dia):**
+> "tem uma nuvem que ela se perde ali, ela parece uma nuvem gerada por inteligência artificial mesmo. Não tem como tu pegar uma referência de
+> nuvem em jogos assim?"
+
+- **Três desenhos no mesmo anel,** comparados em https://claude.ai/artifact/K6kaEGYj7D58u8aUG2jRbg:
+  - o recorte da pintura;
+  - a chapada desenhada;
+  - o 3D de pouco polígono.
+- **Ficou o 3D** (o Matheus: "3D de polígonos"): de 4 a 7 bolhas facetadas juntas numa malha só, com a base reta e dois tons chapados pela
+  altura (branco em cima, a faixa azulada embaixo), sem luz e sem textura (`nuvem3d` e `nuvensDesenhadas`, em `digital.ts`).
+- **Os outros dois** ficam no `?nuvens=`.
+- **As referências:** as nuvens de Animal Crossing estão sempre em movimento, segundo uma recriação de fã. Nas cenas low-poly e toon, o comum
+  são tons chapados. A forma (a base reta, os dois tons, as bolhas) é escolha de desenho: PROPOSTO, SEM FONTE.
+
+## 26. Etapa IL: a planta A na ilha 3D, só a vista (2026-11-08)
+
+O Matheus escolheu a planta A do layout da ilha inicial, com IL-1 a IL-4 ("A, com IL-2 a IL-4", 2026-11-08; a prancha do layout no PR #724).
+Esta etapa leva a parte da vista dessa planta ao 3D da ilha, sem mudar o motor (branch `v3-ux-ilha-planta-a`). A parte do motor (o ninho, a
+tigela, a bola e as frutíferas no `CMU_ILHA`, v20) é do #694.
+
+**A prancha:** `docs/pranchas/ux-ilha-planta-a/` e a página https://claude.ai/artifact/PUJBByRmETT758SSY7XCWv, com 16 cenas antes e depois a
+1920 × 950 e a 390 × 844, nas peles Vidro e Militar. As capturas (PNG) ficam fora do git, em `D:\Trab\digilab\capturas_ux_ilha_planta_a\`.
+- **Rodada 1:** a praça, os caminhos, os lugares, os postes, o ferro-velho e a moldura em bosques e vãos.
+- **Rodada 2,** com três pedidos novos do Matheus, todos de 2026-11-08:
+  - o fim da ilha: "adicionar um final [...] para ela não acabar no meio do nada";
+  - a IL-4 revista: "Espalha eles também pelo mapa";
+  - as regras de guiar o olhar sem texto.
+- **A aprovação:** "Aprovar todas" (2026-11-08), as PA-1 a PA-5 pela recomendação.
+
+**O que foi feito (só vista):**
+- **A planta** (`constantes.ts`, `PLANTA_ILHA`; `grade.ts`):
+  - a praça em (31, 16) e os caminhos de terra dela ao lar (até o comedouro do layout), ao portão, à barraca e ao cais;
+  - o portão no fim do caminho reto ao norte, com um vão na mata atrás; a barraca a leste, dentro da área (PA-2); o cais ao sul; o saco
+    em (22, 9), perto da praça (`lugares.ts`);
+  - 6 postes, só na praça e no caminho do cais (IL-3);
+  - o carro, a geladeira e o trilho espalhados, cada um com o seu entorno (a IL-4 revista): o carro meio coberto pelo mato no platô do
+    oeste, a geladeira na areia a leste do cais e o trilho na beira leste do rio;
+  - a moldura em bosques e vãos.
+  - Tudo o que a planta tira da vista só some (`escondidos`): a lista `objetos` não muda, e o gabarito E-G0 continua passando. O que ela
+    acrescenta (as árvores dos bosques, o entorno dos marcos) fica numa lista própria, `extras`, que a `cena.ts` desenha.
+- **O fim da ilha** (`fimDaIlha.ts`, `fimConta.ts`; `grade.ts`, `porBordas`; `FIM_ILHA`):
+  - o mar em volta da grade inteira, até o horizonte;
+  - a leste do rio, a mata sobe em dois degraus até o morro;
+  - duas faixas de silhuetas (ilhas perto, morros longe) seguem o ponto olhado. O pé delas vai a cada quadro para o horizonte do mar
+    curvo, e a cor é a da névoa puxada para a sombra do céu, sem cor nova (PA-5).
+- **O sinal só** (a regra 3; `itens.ts`, `CHAMADO`): a tigela, a bola e o saco dão um pulinho quando o pet chega perto. Com movimento
+  reduzido, nada. O vento na decoração fica (PA-4).
+- **A ida ao saco pela distância** (PA-3; `lugares.ts`, `idaDoTreino`; `TREINO_VEL` = 7 células por segundo, 0,9 s no mínimo): com o
+  saco perto da praça, a ida fixa de 0,9 s fazia o pet cruzar ~19 células.
+- **Os testes:**
+  - `test/ilha_planta.test.ts` (novo), PL-1 a PL-6: a praça e os caminhos, nenhum lugar sobre o caminho, a decoração do caminho escondida,
+    os bosques e os vãos, os degraus, e as contas do horizonte e das silhuetas;
+  - reescritos para a planta: o E-G10 de `test/ilha_enfeites.test.ts`, o LG-G1 a LG-G4 de `test/ilha_lugares.test.ts` e o saco e a ida
+    do treino em `test/lugares_ilha.test.ts`.
+- **Os desvios:** D-IL-1 a D-IL-6, em `docs/registro/2026-11.md`.
+
+**Fica como proposta, sem código:**
+- a regra 1, a luz em hierarquia: a paleta fica em `cena.ts` e `estilos.ts`, para depois do #728 (o céu);
+- a regra 4, esconder e revelar;
+- a regra 5, os pássaros, que precisam da árvore madura do #694;
+- a regra 6, a câmera do primeiro dia.

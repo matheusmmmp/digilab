@@ -12,7 +12,7 @@
    O vento e a agua andam por uTempo; com movimento reduzido, a vista o deixa parado. Todos os numeros sao do desenho: PROPOSTO, SEM FONTE. */
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { DIA, DOBRA_K, NOITE } from "./constantes.ts";
+import { CEU_SEM_PINTURA, DIA, DOBRA_K, NOITE } from "./constantes.ts";
 import { ALTURA_NIVEL, FORA, NIVEL_AGUA, rng, type Celula, type Ilha, type Objeto } from "./grade.ts";
 import { MODELOS, type Modelo, type NomeLugar, type NomeModelo } from "./modelos.ts";
 
@@ -371,7 +371,7 @@ void main() {
   ${GLSL_PROJETAR}
   #include <fog_vertex>
 }`;
-const AGUA_FRAG = `
+export const AGUA_FRAG = `
 uniform float uTempo;
 uniform float uNoite;
 varying float vMargem;
@@ -405,7 +405,7 @@ void main() {
   #include <fog_fragment>
 }`;
 
-function materialAgua(frag: string): THREE.ShaderMaterial {
+export function materialAgua(frag: string): THREE.ShaderMaterial {
   const mat = new THREE.ShaderMaterial({
     vertexShader: AGUA_VERT, fragmentShader: frag, fog: true, side: THREE.DoubleSide,
     uniforms: THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {}]),
@@ -539,7 +539,7 @@ export type Carregador = (arquivo: string, id: NomeModelo, modelo: Modelo) => Pr
  *  ilha (public/kits3d, MODELOS); os outros estilos do habitat (estilos.ts) dao o carregador e os arquivos deles */
 export async function objetos(ilha: Ilha, base: string, carregar?: Carregador, arquivosDe: (id: NomeModelo) => readonly string[] = id => MODELOS[id].arquivos,
   girar = true): Promise<Objetos> {
-  const gltf = new GLTFLoader(), usados = new Set(ilha.objetos.map(o => o.modelo));
+  const gltf = new GLTFLoader(), usados = new Set([...ilha.objetos, ...ilha.extras].map(o => o.modelo));
   const carregador: Carregador = carregar ?? ((arq, _id, modelo) => carregarVariante(gltf, new URL("kits3d/" + arq, base).href, modelo));
   const variantes = new Map<NomeModelo, Variante[]>();
   await Promise.all([...usados].flatMap(id => arquivosDe(id).map(async (arq, i) => {
@@ -553,6 +553,12 @@ export async function objetos(ilha: Ilha, base: string, carregar?: Carregador, a
     /* a clareira de um lugar (lugares.ts): o objeto nao entra, e os outros mantem a variante (pelo indice de antes) */
     if (ilha.escondidos.has(i)) return;
     const k = `${o.modelo}|${i % arquivosDe(o.modelo).length}`;
+    if (!grupos.has(k)) grupos.set(k, []);
+    grupos.get(k)!.push(o);
+  });
+  /* os extras da planta (as pedras do ferro-velho), depois, com a variante pelo indice seguinte */
+  ilha.extras.forEach((o, i) => {
+    const k = `${o.modelo}|${(ilha.objetos.length + i) % arquivosDe(o.modelo).length}`;
     if (!grupos.has(k)) grupos.set(k, []);
     grupos.get(k)!.push(o);
   });
@@ -678,19 +684,57 @@ function nuvensAnime(ilha: Ilha): THREE.Group {
   return new THREE.Group().add(malha);
 }
 
+/** as nuvens em pixel do ceu sem pintura (CEU_SEM_PINTURA, 2026-11-08): cada nuvem e uma grade pequena (px) de bolhas sorteadas, so branco em cima
+    e a sombra embaixo, ampliada sem filtro; quadros de pe atras da mata do norte, como as de anime, sem nevoa */
+function nuvensPixel(ilha: Ilha): THREE.Group {
+  const N = CEU_SEM_PINTURA.nuvens, [pw, ph] = N.px, r = rng(17), grupo = new THREE.Group();
+  for (let i = 0; i < N.n; i++) {
+    const c = document.createElement("canvas");
+    c.width = pw; c.height = ph;
+    const g = c.getContext("2d");
+    if (!g) throw new Error("canvas 2d indisponível");
+    /* as bolhas lado a lado, com a base reta; depois o alfa vira 0 ou 1 (bordas em degrau) */
+    const bolhas = 3 + Math.floor(r() * 3);
+    g.fillStyle = "#ffffff";
+    for (let k = 0; k < bolhas; k++) {
+      const x = pw * (0.2 + 0.6 * (k + 0.5) / bolhas) + (r() - 0.5) * 3, raio = ph * (0.32 + r() * 0.22);
+      g.beginPath(); g.arc(x, ph - raio * 0.9, raio, 0, Math.PI * 2); g.fill();
+    }
+    const img = g.getImageData(0, 0, pw, ph), d = img.data, sombra = new THREE.Color(N.sombra);
+    for (let y = 0; y < ph; y++) for (let x = 0; x < pw; x++) {
+      const k = (y * pw + x) * 4, cheio = d[k + 3] > 110 && y < ph - 1;
+      const embaixo = cheio && (y >= ph - 3 || d[((y + 2) * pw + x) * 4 + 3] <= 110);
+      d[k] = embaixo ? Math.round(sombra.r * 255) : 255; d[k + 1] = embaixo ? Math.round(sombra.g * 255) : 255;
+      d[k + 2] = embaixo ? Math.round(sombra.b * 255) : 255; d[k + 3] = cheio ? 255 : 0;
+    }
+    g.putImageData(img, 0, 0);
+    const tex = new THREE.CanvasTexture(c);
+    tex.colorSpace = THREE.SRGBColorSpace; tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.NearestFilter; tex.generateMipmaps = false;
+    const w = N.largura[0] + r() * (N.largura[1] - N.largura[0]), h = w * ph / pw;
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map: tex, fog: false, depthWrite: false, transparent: true, opacity: DIA.nuvens }));
+    m.position.set(ilha.x0 + ((i + 0.15 + r() * 0.7) / N.n) * ilha.larg, N.altura[0] + r() * (N.altura[1] - N.altura[0]),
+      ilha.z0 - N.longe[0] - r() * (N.longe[1] - N.longe[0]));
+    m.frustumCulled = false;
+    grupo.add(m);
+  }
+  return grupo;
+}
+
 /** a cena estatica da ilha: o ceu, a nevoa, as luzes, o terreno, a agua e as nuvens (os objetos, o pet e os itens entram depois) */
 export interface CenaIlha { cena: THREE.Scene; aplicarNoite(noite: boolean): void }
 /** `chao`: o terreno do estilo (o da ilha, se nada vier); `agua`: false tira a agua por celula e o mar (o estilo desenha a dele);
     `ceuDia`, um ceu pintado no lugar do degrade do dia, com a cor do horizonte (a nevoa) dele; `chaoHemi`, a cor de baixo da luz do ceu
     de dia (o estilo digital a puxa para o azul, a sombra azulada do anime); `nevoa`, o comeco e o fim da nevoa (celulas) */
 export function montarCena(ilha: Ilha, chao: THREE.Object3D = terreno(ilha),
-  opcoes: { agua?: boolean; nuvens?: boolean | "anime"; ceuDia?: THREE.Texture; horizonteDia?: number; chaoHemi?: number; nevoa?: readonly [number, number] } = {}): CenaIlha {
+  opcoes: { agua?: boolean; nuvens?: boolean | "anime" | "pixel" | THREE.Group; ceuDia?: THREE.Texture; horizonteDia?: number; chaoHemi?: number; nevoa?: readonly [number, number] } = {}): CenaIlha {
   const cena = new THREE.Scene(), fundo = { dia: opcoes.ceuDia ?? ceu(DIA.ceu), noite: ceu(NOITE.ceu) };
   cena.fog = new THREE.Fog(DIA.horizonte, opcoes.nevoa?.[0] ?? 26, opcoes.nevoa?.[1] ?? 62);
   if (opcoes.nevoa) cena.userData.nevoa = opcoes.nevoa;    /* a vista recalcula a nevoa com a orbita a partir desta (vista.ts) */
   const hemi = new THREE.HemisphereLight(), sol = new THREE.DirectionalLight();
   sol.position.set(-0.6, 1, 0.75);
-  const ceuNuvens = opcoes.nuvens === false ? new THREE.Group() : opcoes.nuvens === "anime" ? nuvensAnime(ilha) : nuvens(ilha);
+  /* `nuvens` um grupo: o estilo poe as nuvens dele depois (as da pintura, que chegam com a imagem; digital.ts, nuvensDaPintura) */
+  const ceuNuvens = opcoes.nuvens instanceof THREE.Group ? opcoes.nuvens : opcoes.nuvens === false ? new THREE.Group()
+    : opcoes.nuvens === "anime" ? nuvensAnime(ilha) : opcoes.nuvens === "pixel" ? nuvensPixel(ilha) : nuvens(ilha);
   cena.add(hemi, sol, chao, ceuNuvens);
   if (opcoes.agua !== false) cena.add(agua(ilha));
   const aplicarNoite = (noite: boolean) => {
@@ -700,7 +744,9 @@ export function montarCena(ilha: Ilha, chao: THREE.Object3D = terreno(ilha),
     hemi.color.setHex(p.hemi[0]); hemi.groundColor.setHex(!noite && opcoes.chaoHemi !== undefined ? opcoes.chaoHemi : p.hemi[1]); hemi.intensity = p.hemi[2];
     sol.color.setHex(p.sol[0]); sol.intensity = p.sol[1];
     CURVA.uNoite.value = noite ? 1 : 0;
-    for (const s of ceuNuvens.children) ((s as THREE.Sprite | THREE.Mesh).material as THREE.Material).opacity = p.nuvens;
+    /* todas as nuvens, mesmo dentro de um grupo (o anel das da pintura); as que ainda vao chegar leem a opacidade daqui */
+    ceuNuvens.userData.opacidade = p.nuvens;
+    ceuNuvens.traverse(o => { const m = (o as THREE.Mesh).material as THREE.Material | undefined; if (m) m.opacity = p.nuvens; });
   };
   aplicarNoite(false);
   return { cena, aplicarNoite };

@@ -1,5 +1,5 @@
 """Gera web/app/motor/arena/formas.ts: a tabela de numeros da luta da POC para as 60 formas do jogo (LUTA_POC, LP1; a LP-2 de
-docs/TAREFA_V3_LUTA_POC.md). O replay nao pode depender da pasta Assets/ (fora do git): a simulacao le so esta tabela.
+docs/TAREFA_V3_LUTA_POC.md) e os 10 rivais da Campanha (LP2, decisao 3). O replay nao pode depender da pasta Assets/ (fora do git): a simulacao le so esta tabela.
 
 Entrada (fora do git): D:/Trab/digilab/Assets/arena_up/dados/{golpes,atributos,atlas}.json, gerados por Assets/gerar_arena_up.py a
 partir do prototipo remaster/fonte/site (Digimon UP, Bandai; com o credito, docs/UI_GUIDELINES.md, secao 5.1). As formas do jogo vem do
@@ -33,6 +33,20 @@ K_GOLPE = 0.06
 K_PROJ = 0.05
 # o golpe de quem nao tem script de ataque no jogo: a regra do prototipo (GOLPE_GENERICO), PROPOSTO, PROTOTIPO
 GOLPE_GENERICO = {"anim": "Attack_1", "t": 0.4, "proj": None, "hits": [], "skill": None}
+# os 10 rivais da Campanha (LUGARES_V6 de web/app/motor/bots.ts), pela chave do NPC: o Digimon e o nivel do lugar dele. Entram na tabela
+# pela decisao 3 da LP2 (Matheus, "Aprovo as 6", 2026-11-08); o teste arena_poc_pet confere a lista contra o motor
+NPCS = {
+    "npc_tier1_brutamontes": ["Gazimon", "Rookie"],
+    "npc_tier2_sentinela": ["Tortomon", "Champion"],
+    "npc_tier2_carcereiro": ["Guardromon", "Champion"],
+    "npc_tier2_porteiro": ["Devidramon", "Champion"],
+    "npc_v6_youkomon": ["Youkomon", "Champion"],
+    "npc_v5_myotismon": ["Myotismon", "Ultimate"],
+    "npc_v6_marinbullmon": ["MarinBullmon", "Ultimate"],
+    "npc_v5_puppetmon": ["Puppetmon", "Mega"],
+    "npc_v5_machinedramon": ["Machinedramon", "Mega"],
+    "npc_v5_piedmon": ["Piedmon", "Mega"],
+}
 # nomes do catalogo do DigiLab que o atlas da arena escreve de outro jeito (alem de espaco e caixa): o APELIDO_ATLAS do #448
 APELIDO_ATLAS = {"Ankylomon": "Ankiromon"}
 ATRIBUTOS = ("Vaccine", "Virus", "Data", "Free", "None", "Unknown")
@@ -117,7 +131,7 @@ def gerar(dados: Path) -> str:
     idx = {norma(n): n for n in atlas}
     linhas = []
     recuos = []
-    for chave, (nome, estagio) in ler_formas().items():
+    for chave, (nome, estagio) in {**ler_formas(), **NPCS}.items():
         dig = idx.get(norma(APELIDO_ATLAS.get(nome, nome)))
         if not dig:
             falha(f"{chave} ({nome}) nao esta no atlas da arena")
@@ -144,11 +158,11 @@ def gerar(dados: Path) -> str:
     shas = "\n".join(f"   - {n}.json sha256 {sha(p)}" for n, p in arqs.items())
     rec = "\n".join(f"   - {r}" for r in recuos) or "   - nenhum"
     return f"""/* GERADO por tools/gerar_tabela_arena.py; nao editar a mao (python tools/gerar_tabela_arena.py --conferir confere).
-   A tabela de numeros da luta da POC para as 60 formas do jogo (LUTA_POC, LP1; a LP-2 de docs/TAREFA_V3_LUTA_POC.md).
-   Procedencia: os dados de jogo do Digimon UP (Bandai; com o credito, docs/UI_GUIDELINES.md, secao 5.1), copiados do prototipo
+   A tabela de numeros da luta da POC para as 60 formas do jogo (LUTA_POC, LP1; a LP-2 de docs/TAREFA_V3_LUTA_POC.md) e os 10 rivais da
+   Campanha (LP2, decisao 3), pela chave do NPC. Procedencia: os dados de jogo do Digimon UP (Bandai; com o credito, docs/UI_GUIDELINES.md, secao 5.1), copiados do prototipo
    remaster/fonte/site por Assets/gerar_arena_up.py para D:/Trab/digilab/Assets/arena_up/dados (fora do git):
 {shas}
-   As formas: o DIGIMON_DA_FORMA de web/app/motor/nomes.ts. So numeros e nomes: os desenhos ficam fora do git. Os status do Digimon UP nao
+   As formas: o DIGIMON_DA_FORMA de web/app/motor/nomes.ts; os NPCs: a lista NPCS do gerador. So numeros e nomes: os desenhos ficam fora do git. Os status do Digimon UP nao
    entram (LP-3). `fr` e o fatorRitmo da POC ja calculado (kGolpe = {K_GOLPE}, kProj = {K_PROJ}); msGolpe e msHabilidade sao a duracao (ms) dos
    clipes no atlas. Os recuos do prototipo (explicitos, como a P4 da UP-ARENA):
 {rec}

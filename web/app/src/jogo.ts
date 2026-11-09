@@ -9,6 +9,7 @@ import { podeTrocarCerebro, type Cerebro } from "./cerebro.ts";
 import { CHAVE_LAB } from "./lab.ts";
 import { CHAVE, gravarSave, lerSave, petExemplo, textoSave, type Armazenamento } from "./save.ts";
 import { CHAVE_TAMER, Tamer, conferirCampeao, conferirItensDasMedalhas, conferirMedalhas, conferirRecordes, gravarTamer, lerTamer, sincronizarPet, type MedalhaGanha } from "./tamer.ts";
+import { versaoDoOvo } from "./lutaPoc.ts";
 
 export type Origem = "save" | "exemplo" | "novo";
 export interface Jogo {
@@ -149,7 +150,7 @@ export const QUADROS_CHOCANDO = 40;
 /** um ovo novo: semente do relogio (como o HTML) e o ovo chocando */
 export function novoPet(): void {
   const s = (Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0;
-  trocarMotor(ligarProduto(new Motor(s)), "novo", QUADROS_CHOCANDO);
+  trocarMotor(ligarProduto(new Motor(s, versaoDoOvo())), "novo", QUADROS_CHOCANDO);
 }
 /** o balanco do ovo de lado, em unidades (texel ou px), pelos quadros que faltam: parado no comeco, tremidas curtas no meio, e cada
     vez mais forte no fim (o ovo nao "anda": so treme no lugar). PROPOSTO, SEM FONTE */
