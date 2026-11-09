@@ -65,4 +65,9 @@ O tempo está na simulação e no replay G1. O log e as métricas pesam menos de
 
 - **O PyPy:** 1,72× mais rápido, com o log e o estado iguais nas 5 sementes; só as medidas mudam no último dígito, por causa do
   `sum()`. 36 testes falham só no PyPy.
-- **A recomendação:** não adotar nenhuma das três agora (PROPOSTO). Detalhes e números em `docs/DESEMPENHO_PERFIL_2026-11.md`.
+- **A recomendação:** não adotar nenhuma das três agora. Detalhes e números em `docs/DESEMPENHO_PERFIL_2026-11.md`.
+- **DECIDIDO (2026-11-09):** o Matheus disse "Faça as recomendações" no chat, repassado pelo Gerente da V3.
+  - Nenhuma das três é adotada agora.
+  - O CPython ≥ 3.12 fica fixado: no `docs/MAPA_REPOSITORIO.md` neste PR; no `CLAUDE.md`, com o ok direto do Matheus.
+  - A lista de donos do `tests/test_memoria_autobio.py` também ganhou o `experiments/auditoria_pet_vivo.py`, a sobra que já fazia o
+    teste falhar na `main`.

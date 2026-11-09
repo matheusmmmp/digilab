@@ -201,7 +201,12 @@ O log é o da semente 101, e cada tempo é o melhor de 5.
   para ganhar 0,04 %.
 - **Se não adotar:** nada se perde.
 
-## 7. Recomendações (PROPOSTAS; a decisão é do Matheus)
+## 7. Recomendações (DECIDIDAS)
+
+**Decisão:** o Matheus aprovou as recomendações em 2026-11-09, com as palavras "Faça as recomendações". A decisão foi dada no chat e
+repassada pelo Gerente da V3, com um comentário no PR #737. Ficou assim:
+- o PyPy, o NumPy/Polars e o orjson/msgspec não são adotados agora;
+- o achado do `sum()` (seção 8) se resolve fixando o CPython ≥ 3.12.
 
 | opção | recomendação | ganho medido | custo de errar |
 |---|---|---|---|
@@ -218,10 +223,13 @@ O CPython 3.12 mudou o `sum()` de floats para uma soma compensada (Neumaier). O 
 CLAUDE.md diz "Python 3.10 ou mais novo". Daí, num CPython 3.11, as medidas e os gabaritos byte a byte deveriam falhar como no PyPy.
 Isso é inferido do PyPy e da sonda, não foi rodado num 3.11. Já os runs gravam o `python: 3.13.0` no `meta.json`.
 
-Há duas saídas, e as duas são decisões do Matheus:
+Havia duas saídas:
 - **fixar o CPython ≥ 3.12 na regra;** é o mais barato;
 - **trocar o `sum()` de floats do `metrics.py`** pelo `math.fsum`, que é exato e igual em todo interpretador. Muda o último dígito de
   parte das métricas no CPython de hoje e obriga a regerar os gabaritos.
+
+**DECIDIDO (2026-11-09):** fixar o CPython ≥ 3.12. O `docs/MAPA_REPOSITORIO.md` já diz isso. A linha "Python 3.10 ou mais novo" do
+`CLAUDE.md` muda à parte, com o ok direto do Matheus, porque esse arquivo só muda assim.
 
 O registro está em `docs/registro/2026-11.md`.
 
