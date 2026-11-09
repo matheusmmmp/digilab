@@ -28,6 +28,9 @@ import { AvisoPetsDescartados } from "./componentes/Medalha.tsx";
 import { AvisoCombateTR, avisoTRPendente } from "./componentes/AvisoCombateTR.tsx";
 import { AvisoLutaPoc, avisoPocPendente } from "./componentes/AvisoLutaPoc.tsx";
 import { LutaPocSemTela } from "./componentes/LutaPocSemTela.tsx";
+import { TelaLutaPoc } from "./telas/lutar/palcoPoc/TelaLutaPoc.tsx";
+import { TelaArenaPoc, TelaCampanhaPoc } from "./telas/lutar/palcoPoc/TelaLugaresPoc.tsx";
+import { assistirPoc, fimDoPet, lutaMontadaDoEndereco, useLutaPoc } from "./lutaPocTela.ts";
 import { VERSAO_V21 } from "../motor/index.ts";
 import { CHAVE_AVISO_V6 } from "./tamer.ts";
 import { TelaConversar } from "./telas/conversar/TelaConversar.tsx";
@@ -104,6 +107,12 @@ function rotaDeAbertura(n: EstadoNivel): Rota {
 
 export function App() {
   const jogo = useJogo(), atlas = useAtlas(), deco = useDecoracao(), nivel = useNivelRaiz();
+  /* a luta da POC (LP3): o palco a tela inteira enquanto ha luta para mostrar; ?luta_poc=1&palco_poc=... monta uma luta direto no nucleo */
+  const lutaPoc = useLutaPoc();
+  useEffect(() => {
+    const l = lutaMontadaDoEndereco(); if (!l) return;
+    assistirPoc([l], "Luta montada · conferência", L => fimDoPet(L, l.A, l.B, "Luta montada no núcleo: nada foi gravado."));
+  }, []);
   const nivelRef = useRef(nivel);
   nivelRef.current = nivel;
   const [rota, setRota] = useState<Rota>(() => rotaDeAbertura(nivel));
@@ -229,10 +238,12 @@ export function App() {
       if (barra) barra.focus(); else if (document.activeElement === document.body) document.querySelector<HTMLElement>(".mm-retrato")?.focus();
     }, 60);
   };
-  /* um pet v21 (a luta da POC, LP2) ainda nao tem a tela da luta (LP3) */
+  /* um pet v21 (a luta da POC): a Arena e a Campanha no palco novo (LP3); a Fronteira ainda sem tela */
   const pocSemTela = jogo.motor.versao === VERSAO_V21;
   const corpoDestino = (): ReactNode => rota.aba === "treinar" ? <TelaTreinar /> : rota.aba === "aprend" ? <TelaAprend /> : rota.aba === "evolucao" ? <TelaEvolucao /> : rota.aba === "itens" ? <TelaItens />
-    : pocSemTela && (rota.aba === "arena" || rota.aba === "campanha" || rota.aba === "fronteira") ? <LutaPocSemTela lugar={rota.aba === "arena" ? "Arena" : rota.aba === "campanha" ? "Campanha" : "Fronteira"} />
+    : pocSemTela && rota.aba === "arena" ? <TelaArenaPoc />
+    : pocSemTela && rota.aba === "campanha" ? <TelaCampanhaPoc />
+    : pocSemTela && rota.aba === "fronteira" ? <LutaPocSemTela lugar="Fronteira" />
     : rota.aba === "arena" ? <TelaArena voltarPet={irPet} verReplay={abrirReplay} />
     : rota.aba === "campanha" ? <TelaCampanha voltarPet={irPet} irTreinar={() => { ir({ destino: "crescer", aba: "treinar" }); scrollTo(0, 0); }} />
     : rota.aba === "medalhas" ? <TelaMedalhas />
@@ -283,6 +294,11 @@ export function App() {
     abrir: l => irDestino(l === "saco" ? "crescer" : l === "portao" ? "lutar" : "diario"),
     aba: i => { const d = rota.destino, a = DESTINOS[d][i]; if (idLugar && a) ir({ destino: d, aba: a }); }, sair: fecharPainel,
   };
+  if (lutaPoc.palco) return (
+    <div className="app app--tela-cheia">
+      <TelaLutaPoc sair={() => scrollTo(0, 0)} />
+    </div>
+  );
   if (emLuta) return (
     <div className="app app--tela-cheia">
       <TelaLuta sair={sairDaLuta} verReplay={verReplay} sairReplay={sairReplay} pedidoDesistir={pedidoDesistir} fecharPedido={() => setPedidoDesistir(false)} />

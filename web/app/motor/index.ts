@@ -42,3 +42,11 @@ export { ORDEM_TERMOS, type BarraLab, type ChanceLab, type LeituraLab, type Sond
    Stats e ResultadoLuta, sao de motor/arena/ e colidiriam com os do motor) */
 export * from "./luta_poc.ts";
 export { CENAS, ERRO_MIRA_POC, FORMAS_ARENA, IDS_CENA, LUTA_POC_LIGADA, type IdCena } from "./arena/index.ts";
+/* a tela da luta da POC (LUTA_POC, LP3): o palco refaz a luta passo a passo com a mesma entrada e so le o estado; com nomes proprios, para
+   nao colidir com os do motor */
+export {
+  ACAO as ACAO_POC, ELIPSE as ELIPSE_POC, EQ as EQ_POC, LIMITE_MS as LIMITE_POC_MS, MUNDO as MUNDO_POC, PASSO_MS as PASSO_POC_MS,
+  configLuta as configLutaPoc, criarLuta as criarLutaPoc, passo as passoPoc, sorteiosPorFluxo as sorteiosPoc,
+  type DadosForma as DadosFormaPoc, type EntradaLuta as EntradaLutaPoc, type Evento as EventoPoc, type Luta as LutaPoc,
+  type Lutador as LutadorPoc, type ProjetilVoo as ProjetilPoc, type Stats as StatsPoc,
+} from "./arena/index.ts";
