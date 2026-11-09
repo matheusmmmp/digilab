@@ -131,3 +131,5 @@ artifacts_v3_acoes_novas/**/vidas/
 !artifacts_v3_pet_vivo/
 # contabilidade local do gasto da fala livre com o Claude (CONVERSA_PET M5; nao versionar)
 servidor/gasto_fala_livre.json
+# CONVERSA_PET DC4 (docs/PLANO_ANALISE_V3_CONVERSA_DC4.md): a calibracao e a validacao da voz da rede (falas, entradas, meta e o material da marcacao)
+!artifacts_v3_conversa_dc4/
