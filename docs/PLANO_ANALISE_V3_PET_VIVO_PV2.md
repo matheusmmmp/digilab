@@ -43,6 +43,11 @@ Conferidos na `main` `cf13206b`.
   - O gabarito do REL liga as duas (`experiments/exportar_gabarito_digibrain_modular.py`, linha 6).
 - **A unidade do cheiro é uma só por comportamento, qualquer que seja o candidato do motor** (`digilab/digibrain/impulso.py`, linhas 102
   e 117). Então trocar a direção do motor não muda o número de unidades. **A conferir no PR do código** com o órgão ligado.
+- **O cérebro já escolhe o alvo entre os candidatos do motor.** O motor pergunta ao gancho `escolher_alvo` do cérebro
+  (`digilab/digibrain/adapt.py`, linha 296; `digilab/mundo.py`, linhas 1616 e 1724).
+  - **O que o gancho recebe:** a ação, os candidatos e o `u` da rng `alvo` do motor, que é sorteado sempre (os "números comuns").
+  - **O que ele devolve:** um dos candidatos. No `explorar`, pode devolver também um ponto, o lugar lembrado.
+  - **O que isso permite:** a pirueta pode morar no cérebro, sem mudar o motor (seção 1.1).
 
 **O que a 0b mediu e o PV-2 herda** (`artifacts_v3_pet_vivo/auditoria/auditoria.json`):
 - **A leitura da C4:** indeterminado nos seis grupos.
@@ -50,7 +55,45 @@ Conferidos na `main` `cf13206b`.
 - **A RV:** de 0,32 a 0,41.
 - **O reflexo do sono:** decide de 0,15 a 0,24 das decisões.
 
-## 1. As seis lacunas: o que este plano cobre
+## 1. A arquitetura-alvo e as seis lacunas
+
+### 1.1 A arquitetura-alvo (o norte do mapa)
+
+**A cadeia** (o Matheus, 2026-11-09, repassada pelo Gerente da V3): **órgãos e química → sinais internos → estado recorrente do cérebro
+→ intenção → ação ou sequência → efeito no corpo**, e de volta aos órgãos.
+
+**A leitura dele dos módulos:**
+- o M-SENS faz a ponte da observação ao cérebro;
+- o M-AFETO calcula a valência e a excitação;
+- o M-IMPULSO pontua as opções;
+- o M-ARB escolhe uma delas.
+
+O trabalho é essas partes trocarem informação mais rica e coerente, com o replay determinístico.
+
+| elo | o que existe hoje | o que falta | lacunas | o PV-2 |
+|---|---|---|---|---|
+| **órgãos e química → sinais internos** | o corpo químico (`digilab/corpo.py`): os químicos com meia-vida, a digestão, os órgãos do Olfato e da Audição com adaptação, e os 11 receptores da `PercepcaoCorpo` | os órgãos estão fora do protótipo; não há hormônio nem receptor da saciedade | 1, 3 | **entra:** liga o Olfato da comida (2 narinas), e o receptor das narinas vira um sinal interno |
+| **sinais internos → estado recorrente** | o **M-SENS** (a falta de cada receptor e a habituação por classe, um integrador); o **M-AFETO** (as urgências, a valência V, a excitação E e o `g_apr`); o **M-ESTADO** (os integradores com vazamento: a intenção em curso e a frustração F), o candidato natural ao "estado recorrente" | a mudança recente de cada sinal (só o nível entra hoje) e os estados duradouros que mudam a resposta da rede | 1, 2 | **entra, e é o elo principal do PV-2:** a variação do cheiro (dC/dt) e o acumulador da queda viram estado; no OLF-G, a fome muda o ganho do cheiro |
+| **estado → intenção** | o **M-IMPULSO** (o contexto `z` × o W0, o hábito, o incentivo do P1, a memória e a persistência) e o **M-ARB** (o reflexo do sono e o sorteio proporcional); o M-MEM e o M-PERS somam termos | separar o comportamento do alvo (a HA da 0b); a interrupção pela dor; uma regra de estado → parâmetro em vez de pesos fixos somados | 2, 4 | não muda: a unidade do cheiro continua uma só (o G-UNIDADES) |
+| **intenção → ação ou sequência** | a intenção do **M-ESTADO** (a busca pelo cheiro da DX-4) e o `escolher_alvo` do **M-ADAPT**, que escolhe entre os candidatos do motor; o motor executa | as ações compostas curtas (procurar, aproximar, comer) com término | 5 | **entra:** a pirueta, a varredura e o placebo são a forma como a busca pelo cheiro escolhe o candidato (`cheiro_seguir` ou `cheiro_virar`) |
+| **ação → efeito no corpo** (e de volta) | o motor e o corpo (o consumo, a digestão); as consequências voltam ao **M-AFETO** (o `r`), ao **M-PLAST** (o P1 e o P2, com o crédito pela opção) e ao **M-MEM** | o crédito aos sinais certos, com estados moduladores e atrasos longos; o `r` do dormir é 0 | 6 | não muda |
+
+**As restrições, que valem para todo elo:**
+- **Inteiros:** a escala S = 1024, com o `div_arred`, o `mul` e o `clamp`; nenhum float no estado.
+- **Nenhuma rng nova:**
+  - o cérebro só chama a rng de política, no M-ARB;
+  - o placebo usa os bits baixos (`u & 0xFF`) do `u` da rng `alvo`, que o motor já sorteia em toda decisão e já entrega ao
+    `escolher_alvo`. A conta de chamadas não muda;
+  - **a conferir no PR do código:** esses bits não colidem com os que o `alvos_do_olfato` usa (o bit 8 e o `u >> 8`).
+- **O motor sem mudança:**
+  - o `engine.py` fica congelado, e o `MotorMundo` e o corpo também ficam como estão;
+  - o PV-2 só liga o órgão pela config que já existe (`ConfigOlfato`), e muda o cérebro atrás de subchave;
+  - se um braço pedir ao motor um candidato que ele não oferece, isso vira desvio e vai ao Matheus antes do código.
+- **O replay byte a byte:**
+  - com a chave desligada, a vida de hoje sai igual, conferida contra o gabarito num commit próprio;
+  - com a chave ligada, o G1 confere o replay de cada vida.
+
+### 1.2 As seis lacunas: o que este plano cobre
 
 | # | a lacuna (nas palavras do Matheus, resumidas) | aqui | o mecanismo e a etapa propostos |
 |---|---|---|---|
@@ -62,7 +105,8 @@ Conferidos na `main` `cf13206b`.
 | **6** | **aprendizado:** os sinais certos recebem o crédito, com estados moduladores e resultados atrasados | **fica para depois** | O P2 já credita pela opção. A HC não pôde ser testada (D-PV0R-6), e uma regra nova entra só por adendo. Ficam para depois o PV-3 (o terceiro fator com a linha de base) e o teste "o sinal certo recebe o crédito" (seção 9, item 5) |
 
 **O G-SEM-DIRECAO continua valendo,** com uma leitura escrita aqui (PV2-3). O cérebro passa a ler o nível e a variação no tempo do
-cheiro que sente, e nunca a direção. Quem vira para um lado é o sistema de ações, pela regra da seção 3, com o que as narinas sentem.
+cheiro que sente, e nunca a direção. Quem vira para um lado é o motor, que já oferece o `cheiro_virar` para o lado da narina mais forte.
+O cérebro, no `escolher_alvo`, só decide **quando** virar (seção 3).
 
 ## 2. A pergunta e as hipóteses, escritas antes
 
@@ -93,15 +137,21 @@ próprio antes da mudança, como manda o CLAUDE.md).
 | **OLF-PLA** | ligado | igual | as viradas do OLF-DCV na mesma taxa, mas em hora sorteada, sem ligação com a queda | **o placebo** da hora certa |
 | **OLF-G** | ligado | OLF-DCV, com o nível do cheiro multiplicado pelo ganho da fome: `div_arred(c × (G0 + u_fome), G0)` | igual ao OLF-DCV | **o braço separável** do ganho |
 
-- **Onde a conta mora:** a variação e o acumulador ficam no estado do M-SENS. A pirueta, a varredura e o placebo ficam na escolha do
-  alvo do motor, ao lado do `alvos_do_olfato`. O cérebro escolhe a unidade, e o sistema de ações escolhe a direção (lacunas 4 e 5).
+- **Onde a conta mora:** tudo no cérebro, e o motor não muda (seção 1.1).
+  - **O estado:** a variação e o acumulador ficam no estado do M-SENS.
+  - **A escolha:** a pirueta, a varredura e o placebo ficam no `escolher_alvo` do M-ADAPT, que escolhe entre os dois candidatos que o
+    motor já oferece com o órgão ligado. O `cheiro_seguir` segue em frente; o `cheiro_virar` vira para a narina mais forte.
+  - **A divisão:** o M-IMPULSO e o M-ARB escolhem a unidade, isto é, a intenção. O executor da busca escolhe quando virar (lacunas 4 e 5).
+  - **Fica para o PR do código:** a forma exata de cada braço dentro desses candidatos. O OLF-0 toma o primeiro, que é o preferido do
+    motor.
 - **A variação no M-SENS** entra como uma característica nova do `z`, `dC = clamp(c_t − c_{t−1}, −S, S)`. Ela leva um peso inato
   PROPOSTO só na unidade do cheiro (seguir quando sobe), e o P1 e o P2 a leem como qualquer característica.
   - **Ela não entra no HOJE:** lá não há receptor.
   - **Um braço sem ela está fora do desenho.** Ele separaria "o cérebro lê a variação" de "o sistema de ações vira pela variação", mas
     custaria um braço. Fica como alternativa na PV2-4.
-- **O placebo** sorteia a hora de virar numa rng própria, derivada por `derivar_semente`. Isso segue a regra da rng separada: o placebo
-  não pode mudar o mundo nem a política dos outros braços.
+- **O placebo** decide a hora de virar pelos bits baixos do `u` que o motor já entrega (seção 1.1), sem rng nova e sem chamada a mais.
+  Assim ele não muda o mundo nem a política dos outros braços.
+  - **A taxa:** a das viradas do OLF-DCV, medida nas sementes dos testes (PV2-9).
 - **O ganho do OLF-G** é a forma da revisão I (`cheiro*(64+fome)>>6`), escrita com a urgência da fome do M-AFETO (`u_fome`, em [0, S]).
   - **O G0** é PROPOSTO: S/16 = 64, pela forma da revisão.
   - **O freio pela saciedade fica de fora:** o protótipo não tem o receptor da saciedade (lacuna 3, seção 9).
@@ -222,7 +272,7 @@ Nenhuma delas mede um pet como o do Digilab. Elas só são o motivo do desenho.
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
 | **PV2-1** | o lugar do plano | **este arquivo novo**, ao lado do plano da etapa 0 | um adendo ao plano da 0b misturaria a auditoria, que é só leitura, com uma run de mecanismo |
-| **PV2-2** | onde mora a quimiotaxia | **no sistema de ações** (a escolha do alvo do motor, ao lado do `alvos_do_olfato`), com o cérebro lendo o nível e a variação | no cérebro: ele teria de representar a direção, o que quebra o G-SEM-DIRECAO e cria unidades (lacuna 4) |
+| **PV2-2** | onde mora a quimiotaxia | **no executor da busca do cérebro** (o `escolher_alvo` do M-ADAPT), entre os candidatos que o motor já oferece. O motor não muda, e o cérebro lê o nível e a variação | no motor: muda o `MotorMundo`, contra a restrição da arquitetura-alvo. Nas unidades do M-IMPULSO: o cérebro teria de representar a direção, o que quebra o G-SEM-DIRECAO e cria unidades (lacuna 4) |
 | **PV2-3** | a leitura do G-SEM-DIRECAO | **o cérebro lê o nível e a variação no tempo do cheiro que as narinas sentem, nunca a direção** | ler a diferença entre as narinas no cérebro daria a direção por outra porta |
 | **PV2-4** | os braços | **HOJE, OLF-0, OLF-DC, OLF-DCV, OLF-PLA e OLF-G** (seção 3) | sem o placebo, girar mais e girar na hora certa se confundem. Sem o OLF-0, o ganho se mede contra o oráculo e mistura o órgão com o mecanismo. A alternativa é um braço sem a leitura da variação no cérebro: separa as duas portas, ao custo de mais 2 400 vidas |
 | **PV2-5** | o ganho da fome | **`div_arred(c × (G0 + u_fome), G0)`, G0 = 64, sem o freio da saciedade** | um ganho alto pode transformar o pet num autômato do cheiro: a entropia e o G-FORR mostram isso |
