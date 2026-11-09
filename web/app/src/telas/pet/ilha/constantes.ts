@@ -117,6 +117,33 @@ export const ENFEITE_HALO = { altura: 0.86, tamanho: 1.1, cascas: [0.55, 0.78, 1
     da imagem), para a nevoa, a cor de baixo da luz do ceu de dia, azulada (a sombra do anime), e a nevoa mais longe que a da ilha (o fundo
     de anime tem as arvores de tras nitidas; a de 26 a 62 desbotava tudo, e a de 42 a 95 as deixava pesadas; D2). PROPOSTO, SEM FONTE */
 export const CEU_DIGITAL = { horizonte: 0xabe9fe, chaoHemi: 0x6f8fc8, nevoa: [34, 85] } as const;
+/** o ceu do estilo digital sem a pintura de anime (o Matheus, 2026-11-08: "Não precisa ser um céu tão cartunesco assim. Ele tá destoando muito
+    da arte do jogo. Se for alguma coisa mais pixelada"): `modo` "pixel" (o degrade em `faixas` de cor chapada e as nuvens em pixel, do tamanho
+    `px` da grade de cada uma, ampliada sem filtro), "suave" (o degrade liso e as nuvens fofas da ilha) ou "pintado" (o ceu.jpg e as nuvens de
+    anime de antes); `?ceu=` no endereco troca so na pagina, para comparar. As cores em tons medios, menos saturadas que as de antes, com o
+    horizonte mais claro (o levantamento do ceu, no Obsidian: 20 Temas/Ceu do jogo), e a nevoa da cor do horizonte. PROPOSTO, SEM FONTE */
+export const CEU_SEM_PINTURA = {
+  /* o Matheus voltou para o pintado no mesmo dia ("A arte anterior estava um pouco melhor. Só que não deixa ela tão forte [...] Diminui um pouco a
+     tonalidade do azul dela. Um pouco, não tanto"): o padrao e o pintado, com o azul suavizado por `pintura` (a saturacao que fica e quanto puxa
+     para o branco); o pixel e o suave ficam no ?ceu= */
+  modo: "pintado" as "pixel" | "suave" | "pintado", pintura: { saturacao: 0.8, clarear: 0.05 }, cores: ["#5f9fd6", "#9ec8e9", "#e3f1f6"], horizonte: 0xe3f1f6, faixas: 11, tela: [480, 270],
+  nuvens: { n: 12, px: [40, 16], largura: [16, 28], altura: [11, 19], longe: [22, 40], sombra: "#cfe0ee" },
+} as const;
+/** as nuvens da pintura no mundo (o Matheus, 2026-11-08: "não tá tendo duas nuvens, uma em cima da outra, né? [...] as nuvens não sejam uma arte
+    fixa. Ela tem que acompanhar [...] naquele estilo que tava no desenho"): o ceu.jpg vira o degrade do ceu sem nuvens (a cor do ceu de cada linha)
+    e as nuvens recortadas dele, em `pedacos` (x, y, largura e altura em px da imagem); elas ficam num anel em volta da ilha (`raio` e `altura` em
+    celulas, `escala` celulas por px), viradas para o centro, e o anel gira devagar (`volta`, segundos por volta; parado com "reduzir movimento").
+    `esfumar`: a fracao de cada lado do recorte em que a borda some. `nuvem` e `borda`: a saturacao abaixo da qual (em fracao da do ceu da linha) o pixel e nuvem inteira, e a faixa da borda. PROPOSTO, SEM FONTE */
+export const NUVENS_PINTADAS = {
+  pedacos: [[0, 250, 760, 360], [540, 15, 836, 515], [680, 560, 340, 92]] as const,
+  n: 9, raio: [58, 72], altura: [14, 26], escala: 0.05, volta: 1500, nuvem: 0.35, borda: 0.45, esfumar: 0.18,
+  /* o desenho das nuvens do anel (o Matheus, 2026-11-08: o recorte "parece uma nuvem gerada por inteligência artificial [...] pegar uma referência
+     de nuvem em jogos"): "recorte" (os pedacos da pintura), "3d" (bolhas de pouco poligono com a base reta e dois tons, como as de jogos de ilha)
+     ou "chapada" (o desenho limpo de bolhas, com a faixa de sombra embaixo); o Matheus escolheu o "3d" ("3D de polígonos", 2026-11-08); `?nuvens=` troca so na pagina. `bolhas` quantas por nuvem, `tam` a
+     largura de uma nuvem (celulas), `baixa` quanto as desenhadas ficam abaixo da `altura` (sao menores que os recortes), `sombra` a cor de baixo e
+     `faixa` a fracao da altura em sombra */
+  desenho: "3d" as "recorte" | "3d" | "chapada", bolhas: [4, 7], tam: [22, 38], baixa: 8, sombra: "#c4d6ec", faixa: 0.32,
+} as const;
 /** o traco de nanquim do estilo digital (pos.ts, Contorno; D5, o cel shading que o Matheus pediu): um azul-petroleo quase preto, a
     largura de ~3 px (o revisor pediu o traco mais grosso), e some entre 34 e 76 celulas da camera (perto do fim da nevoa). PROPOSTO, SEM FONTE */
 export const CONTORNO_DIGITAL = { tinta: 0x15222a, forca: 1, largura: 3, limiar: 0.012, some: [34, 76] as const };
@@ -129,7 +156,11 @@ export const CONTORNO_DIGITAL = { tinta: 0x15222a, forca: 1, largura: 3, limiar:
 export const DIGITAL = {
   particulas: { quantas: 140, sal: 0xd161a1, margem: 3, altura: [0.6, 3.2], tamanho: 0.06, cor: 0x7ff3ff, opacidade: [0.55, 0.95],
     sobe: 0.25, vel: 0.8, giro: 0.9 },
-  grade: { cor: "#b8faff", alfa: 0.5, espessura: 3, meridianos: 9, paralelos: 8, fuga: 0.25 },
+  /* a grade mais discreta (2026-11-08: "tá muito saturada [...] Deixa ela um pouco mais opaca"): o ciano dessaturado, fraca e so na faixa de baixo do
+     ceu, sumindo para cima a partir de `desde` (a fracao da altura da imagem) */
+  /* e de novo no mesmo dia: "cadê aquelas linhas no céu? Eu quero aquelas linhas no céu, só que não tão forte": no ceu todo outra vez, mais fracas
+     no alto (`topo`, a fracao da forca la em cima) */
+  grade: { cor: "#b0e8f0", alfa: 0.3, espessura: 2.5, meridianos: 9, paralelos: 8, fuga: 0.25, topo: 0.55 },
   fios: { alto: 0.93, alcance: 10, porPoste: 2, queda: 0.06, segmentos: 12, cor: 0x2b2a33 },
   /* a lata gigante (D4, o marco), no horizonte como na maquete B: a grade tem 64 celulas de largura e a camera segue o pet, entao um
      marco parado num ponto so apareceria perto dele, e o mundo curvo o afundaria. Ela fica a `longe` celulas ao norte do pet e anda com

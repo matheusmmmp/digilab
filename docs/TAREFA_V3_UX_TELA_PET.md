@@ -759,3 +759,62 @@ O Matheus pediu de novo uma análise do layout da ilha, com referências de outr
 **As decisões:** IL-1 a IL-4 foram DECIDIDAS pela recomendação, na resposta do Matheus "A, com IL-2 a IL-4" (2026-11-08). Fica a planta A,
 com as frutíferas do sacudir no bosque do lar, os postes nos caminhos e o ferro-velho num canto. A parte do motor (o ninho, a tigela, a bola e
 as três frutíferas) vai para o `CMU_ILHA` do #694, e a parte da vista vai para uma etapa própria: uma prancha 3D e depois o código.
+
+## 25. O céu do estilo Digital sem a pintura de anime (2026-11-08)
+
+O Matheus pediu:
+> "busque referências para otimizar esse céu. Ele tá bem feio. Não é nada natural. E essa faixa digital que tá cobrindo ele, ela tá meio
+> esquisita, tá muito saturada, talvez. Deixa ela um pouco mais opaca."
+
+E depois:
+> "Não precisa ser um céu tão cartunesco assim. Ele tá destoando muito da arte do jogo. Se for alguma coisa mais pixelada [...]"
+
+**O que foi feito (só vista; o motor, o save e o registro não mudam):**
+- **O céu em pixel** (`CEU_SEM_PINTURA`, modo `"pixel"`, o padrão novo): o degradê em 11 faixas chapadas, em tons médios e com o horizonte
+  mais claro (`ceuEmFaixas`, `digital.ts`). As nuvens são em pixel, grades pequenas ampliadas sem filtro (`nuvensPixel`, `cena.ts`).
+- **As outras versões** ficam no `?ceu=`, só na página, para comparar:
+  - o modo `"suave"`, com o degradê liso e as nuvens fofas da ilha;
+  - o `"pintado"`, com o `ceu.jpg` e as nuvens de anime de antes.
+- **A grade digital** ficou com alfa de 0,5 para 0,16, num ciano apagado, só na metade de baixo do céu e sumindo para cima (`DIGITAL.grade`).
+- **A névoa** tem a cor do horizonte novo.
+- **Páginas:** a comparação está em https://claude.ai/artifact/UUbqNxNS1PHTntVhA93NUP. As referências estão no Obsidian, em
+  `20 Temas/Céu do jogo.md`.
+
+Os números são de desenho: PROPOSTO, SEM FONTE. A cor por hora do dia, o halo do sol e a sombra de nuvem ficam para depois.
+
+**A volta para o pintado (o Matheus, no mesmo dia):**
+> "Não, volta para aquela arte anterior. A arte anterior estava um pouco melhor. Só que não deixa ela tão forte. [...] Diminui um pouco a
+> tonalidade do azul dela. Um pouco, não tanto. [...] E cadê aquelas linhas no céu? Eu quero aquelas linhas no céu, só que não tão forte."
+
+- **O padrão voltou a ser o pintado,** com o `ceu.jpg` e as nuvens de anime. O azul ficou suavizado por `suavizarPintura`: a saturação fica
+  em 80 % e a imagem puxa 5 % para o branco.
+- **As linhas voltaram ao céu todo:** alfa de 0,3 (era 0,5), um ciano um pouco apagado, espessura de 2,5 (era 3) e mais fracas no alto
+  (`topo`, 55 %).
+- **O pixel e o suave** continuam só no `?ceu=`.
+
+**As nuvens numa camada só e no mundo (o Matheus, no mesmo dia):**
+> "não tá tendo duas nuvens, uma em cima da outra, né? [...] as nuvens não sejam uma arte fixa. Ela tem que acompanhar [...] naquele estilo que
+> tava no desenho."
+
+- **Eram duas camadas:** as nuvens pintadas no `ceu.jpg`, fixas na tela, e as nuvens de anime com contorno, no mundo.
+- **A pintura agora vira duas partes** (`separarNuvens`, `digital.ts`):
+  - o fundo é só o degradê do céu, com a cor de cada linha;
+  - as nuvens são recortadas da própria pintura, em três pedaços com as bordas esfumadas.
+- **Os pedaços ficam num anel em volta da ilha** (`nuvensDaPintura`, `NUVENS_PINTADAS`), virados para o centro. Eles acompanham a câmera quando
+  ela gira, e o anel dá uma volta a cada 25 min. Com "reduzir movimento", fica parado.
+- **As nuvens de anime saíram** do modo pintado, e a noite apaga as nuvens do anel como as outras.
+
+**As nuvens com desenho de jogo (o Matheus, no mesmo dia):**
+> "tem uma nuvem que ela se perde ali, ela parece uma nuvem gerada por inteligência artificial mesmo. Não tem como tu pegar uma referência de
+> nuvem em jogos assim?"
+
+- **Três desenhos no mesmo anel,** comparados em https://claude.ai/artifact/K6kaEGYj7D58u8aUG2jRbg:
+  - o recorte da pintura;
+  - a chapada desenhada;
+  - o 3D de pouco polígono.
+- **Ficou o 3D** (o Matheus: "3D de polígonos"): de 4 a 7 bolhas facetadas juntas numa malha só, com a base reta e dois tons chapados pela
+  altura (branco em cima, a faixa azulada embaixo), sem luz e sem textura (`nuvem3d` e `nuvensDesenhadas`, em `digital.ts`).
+- **Os outros dois** ficam no `?nuvens=`.
+- **As referências:** as nuvens de Animal Crossing estão sempre em movimento, segundo uma recriação de fã. Nas cenas low-poly e toon, o comum
+  são tons chapados. A forma (a base reta, os dois tons, as bolhas) é escolha de desenho: PROPOSTO, SEM FONTE.
+
