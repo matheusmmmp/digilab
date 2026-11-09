@@ -103,7 +103,7 @@ const formaDe = (n: string) => {
     golpe: base(g), habilidade: g.skill ? base(g.skill) : null, msGolpe: POC.duracaoTag(A, g.anim), msHabilidade: POC.duracaoTag(A, (g.skill || g).anim) };
 };
 /** os stats que a POC daria ao Digimon (o statsDoMembro dela, com a fonte "jogo"): o nucleo novo recebe prontos (LP-3) */
-const statsDe = (cfgPoc: any, l: "a" | "b", n: string) => { const { origem: _o, ...s } = POC.statsDoMembro(cfgPoc, dados, l, n); return s; };
+const statsDe = (cfgPoc: any, l: "a" | "b", n: string) => { const { origem: _o, ...s } = POC.statsDoMembro(cfgPoc, dados, l, n); return { ...s, erro: POC.DIFIC[cfgPoc.dific].erro }; };
 const lutaNucleo = (M: any): Luta1 => (cena, na, nb, o, semente) => {
   const cp = POC.configCpu(cena, [na], [nb], o);
   const cfg = { cena, dific: cp.dific, forca: cp.forca, pvel: cp.pvel, a: { forma: formaDe(na), stats: statsDe(cp, "a", na) }, b: { forma: formaDe(nb), stats: statsDe(cp, "b", nb) } };
@@ -223,7 +223,8 @@ console.log(alertas.length ? `ALERTAS (${alertas.length}):\n  ` + alertas.join("
 
 /* ------------------------------------------------------------ o gabarito do CI: a POC 1x1 nas 60 formas, stats genericos, 8 mapas */
 const FORMAS = NOVO.FORMAS_ARENA as Record<string, { digimon: string }>;
-const chaves = Object.keys(FORMAS);
+/* so as 60 formas do jogo: desde a LP2 a tabela tem tambem os 10 NPCs da Campanha, que nao entram no gabarito da LP1 */
+const chaves = Object.keys(FORMAS).filter(k => !k.startsWith("npc_"));
 const sorteioGab = criarRng(101), lutasGab: unknown[] = [];
 for (const cena of POC.IDS_CENA) for (const ka of chaves) {
   const kb = chaves[Math.floor(sorteioGab.random() * chaves.length)], semente = 101 + lutasGab.length;
