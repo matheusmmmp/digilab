@@ -316,3 +316,26 @@ pináculo.
 **O revisor** (um subagente Sonnet novo, que não fez o trabalho nem viu a tentativa 1): **APROVA COM RESSALVA** nas duas rodadas. A rodada 1 pediu o vidro âmbar à noite, o fuste mais claro, menos peso em cima, os braços curtos (compridos pareciam placa) e a hera mais limpa; a rodada 2 deu tudo por resolvido, menos o contraste do fuste e da hera à noite no Digital (ainda escuros), que não bloqueia. A prancha está em
 `docs/objetos3d/poste/blocos/prancha_poste_blocos.jpg`; as capturas (antes e blocos, Ilha e Digital, dia e noite) estão fora do git, em
 `D:\Trab\digilab\capturas_objetos3d\poste\blocos\`. Os desvios estão em `docs/registro/2026-11.md`, D-OBJ-POSTE-1 a 9.
+
+## 15. O carro feito à mão por script (2026-11-09, Gerente, Claude Code, Fable 5.2, branch `v3-objeto-carro-mao`)
+
+**O pedido:** com o carro em cartoon (#739) no jogo, o Matheus achou que ele continuava "muito feio" e pediu uma revisão dos modelos 3D,
+a começar por ele. O defeito era da malha, não da pintura: a malha da Meshy é amassada e facetada, e a textura dela vem em ilhas
+pequenas, que viram cacos triangulares quando a cor é chapada. O carro foi refeito do zero, como o poste da seção 14.
+
+**O carro (`docs/objetos3d/carro/mao/`):**
+- `carro_mao.py`: a carroceria é uma superfície por seções (23 estações, 19 pontos cada: a soleira, a lateral, o ombro, a coluna e o
+  teto), com a linha de cima do esboço 1 (o capô, o para-brisa, o teto, o vidro de trás); as peças são sólidos simples (quatro rodas,
+  as molduras das caixas de roda, dois para-choques, dois faróis, os retrovisores, seis tufos de musgo, doze folhas de capim e quatro
+  flores). A pintura é uma função da posição no espaço: os vidros com a moldura e os riscos de brilho, a porta, a maçaneta, o corte do
+  capô, a grade, os piscas, as lanternas, a placa, a ferrugem (a barra de baixo, as manchas que escorrem, a volta das rodas), o musgo e o
+  buraco do teto com a terra. Só cores chapadas, sem degradê. O atlas é pintado a 2 048 px e reduzido a 1 024 px, em 128 cores. Sem IA,
+  sem Blender, determinístico;
+- `publicar_mao.py`: a procedência no `asset.extras`, a troca em `web/app/public/enfeites/carro/` e o validador (0 erros, 0 avisos).
+
+**No jogo:** 2 166 triângulos (teto 2 414), 177 821 bytes com o `License.txt` (teto 307 200), um nó, uma malha, uma textura. A altura
+(4,8), a sombra, a grade e o lugar do carro não mudam (E-G0, E-G10). O `web/app/test/ilha_enfeites.test.ts` ganha o teste da
+procedência. Os scripts do carro da Meshy ficam em `docs/objetos3d/carro/` como histórico.
+
+**Não feito:** não houve revisor separado nem prancha de capturas no git; a conferência foi na vitrine (`poc/vitrine.html`) e no jogo, no
+estilo da Ilha. O estilo Digital e o celular não foram conferidos. Os desvios estão em `docs/registro/2026-11.md`, D-OBJ-CARRO-10 a 12.

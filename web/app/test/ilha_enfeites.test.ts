@@ -95,3 +95,14 @@ describe("os arquivos dos enfeites (E-G1 a E-G8)", () => {
     }
   });
 });
+
+/* o carro feito a mao (docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 15): sai do script, sem IA, e continua um marco de um draw call so */
+describe("o carro feito a mao por script", () => {
+  test("a procedencia aponta o carro_mao.py e a malha e uma so, com uma textura", () => {
+    const g = JSON.parse(readFileSync(join(ENF, ENFEITES_MODELOS.carro.arquivos[0]), "utf8")) as Gltf;
+    expect(g.asset.extras?.gerado_por_ia).toBe(false);
+    expect(g.asset.extras?.gerador).toMatch(/docs\/objetos3d\/carro\/mao\/carro_mao\.py/);
+    expect(g.meshes.length).toBe(1); expect(g.meshes[0].primitives.length).toBe(1); expect(g.images?.length).toBe(1);
+    expect(ENFEITES_LUZ.carro).toBeUndefined();
+  });
+});
