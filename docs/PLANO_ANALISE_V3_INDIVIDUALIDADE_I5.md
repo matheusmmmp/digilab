@@ -1,7 +1,7 @@
 # PLANO DE ANÁLISE V3 — INDIVIDUALIDADE, I5: o hábito como trejeito (2026-11-09, Claude Code, Opus 5.5)
 
-**Status: PROPOSTO.** As decisões IH-1 a IH-7 (seção 10) esperam o Matheus. **Nenhuma conta do I5 roda antes de quatro coisas:**
-1. este cabeçalho com a marca "APROVADO pelo Matheus";
+**Status: APROVADO pelo Matheus em 2026-11-09 ("Aprovo todas").** As decisões IH-1 a IH-7 (seção 10) estão DECIDIDAS, todas pela recomendação. **Nenhuma conta do I5 roda antes de quatro coisas:**
+1. este cabeçalho com a marca "APROVADO pelo Matheus" (feito);
 2. o código do I5a na `main` (seção 8): as medidas em `digilab/metrics.py` com os testes delas e o orquestrador
    `experiments/run_v3_individualidade_i5.py` com a trava;
 3. a fumaça do orquestrador com as sementes dos testes (101…505);
@@ -149,7 +149,7 @@ Antes da primeira vida rejogada, numa seção nova no fim deste plano, ficam:
 - o commit e os sha256 do orquestrador, do `metrics.py` e do `vidas.tar.gz`;
 - o comando e a contagem da suíte do dia.
 
-## 10. As decisões (PROPOSTAS; cada uma com a recomendação e o custo de errar)
+## 10. As decisões (DECIDIDAS pelo Matheus em 2026-11-09, todas pela recomendação; cada uma com a recomendação e o custo de errar)
 
 | | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|

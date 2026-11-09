@@ -4,7 +4,7 @@ Coordenador: Matheus (sessão direta). Worker da etapa I0: Claude Code, Opus 5.5
 `v3-individualidade` (as etapas seguintes com sufixo, como `v3-individualidade-i0`). Status: **ABERTA; a proposta na `main` (#676);
 as IN-1 a IN-8 DECIDIDAS em 2026-11-07, pela recomendação; o I0 (a conferência) na `main` (#684); o I1 (a bateria como ferramenta)
 na `main` (#695); o plano do I2 APROVADO (#700); o I2a na `main` (#707); o I2b (a run da linha de base, faixa 85101…85505)
-na `main` (#718); o adendo 1 entregue (#746); o plano do I5 PROPOSTO.**
+na `main` (#718); o adendo 1 entregue (#746); o plano do I5 APROVADO (#747).**
 
 Categoria: documentacao. Origem: Matheus, 2026-11-07: depois da conversa sobre o connectome e a escala, direcionar a pesquisa para o
 temperamento herdado, o sinal do dono, a memória de episódios e o hábito, com uma medida comum de individualidade.
@@ -149,7 +149,7 @@ O plano (#700) e a faixa 85101…85505 estão APROVADOS. O I2a é o código ante
   - as facetas invertidas, dentro do dono, só descritivo.
 - **O adendo 1 do plano do I2** (seção 13; o resultado na seção 7 do `RESULTADO_V3_INDIVIDUALIDADE.md`, #746): dentro do dono, nenhuma
   faceta acompanha o traço, e as facetas ficam no teto (192). A inversão do I2 vem da diferença entre os donos.
-- **O plano do I5:** `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I5.md`, PROPOSTO, com as IH-1 a IH-7. É o hábito como medida, sobre as
+- **O plano do I5:** `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I5.md`, APROVADO pelo Matheus em 2026-11-09 ("Aprovo todas"), com as IH-1 a IH-7 decididas pela recomendação. É o hábito como medida, sobre as
   vidas do I2 rejogadas do log: três perfis por dia (SEQ, LUGAR e HORA) e a distintividade de cada pet contra o dono e o mundo da
   semente.
 
