@@ -457,3 +457,26 @@ O motor grava a luta, e o palco a refaz da mesma entrada e confere o fim (D-LP3-
 - a regra da LP-8 (a LP3b);
 - ligar a chave por padrão, proposto para o PR da LP4 (o descarte 7 é de mão única);
 - os achados D-LP3-7 a D-LP3-9.
+
+## Resultado da LP3b (2026-11-09)
+
+Worker: Claude Code (Opus 5.5), worktree e branch `v3-luta-poc-lp3b`, a pedido do Gerente de sprites e luta, com a liberação do Matheus
+("Aprovo, abre a LP3b", 2026-11-09, repassado). Os desvios estão em `docs/registro/2026-11.md`, seção "LUTA_POC, LP3b".
+
+**A regra da LP-8 no núcleo** (`tools/gerar_tabela_arena.py` → `web/app/motor/arena/formas.ts`):
+- o Gabumon, o Garurumon, o MetalGarurumon, o Angemon e o Gargomon atiram o próprio efeito de acerto, com a velocidade 30 e o tipo
+  "Guide" (PROPOSTOS, SEM FONTE);
+- a simulação não mudou: com projétil na tabela, a forma passa a ter o alcance de quem atira (150 px) e o voo de verdade, que acerta o
+  primeiro inimigo que cruza, some fora do alcance, bate nas árvores, nas rochas e nos pilares e pode ser desviado;
+- o golpe da POC fica no git (`GOLPES_DA_POC`, `FORMAS_ARENA_POC`) para a fidelidade da LP1, que continua com 480 de 480 lutas iguais
+  ao gabarito do harness.
+
+**Os gabaritos:** os v21 foram regravados num commit próprio, com o motivo (D-LP3b-4). As vidas de hoje não mudam, e a chave segue
+desligada.
+
+**O efeito** (`scripts/medicoes/lp3b_lp8.json`): as vitórias das cinco formas mudam de −0,4 a +3,5 pontos e as lutas ficam de 0,2 a 1,3 s
+mais longas. O equilíbrio é da LP5.
+
+**A tela:** o desenho da LP3 não muda. O voo das cinco formas passa a ser o da simulação; o projétil só desenhado da LP3 saiu neste PR,
+depois do merge da LP3 na `main` (D-LP3b-6).
+

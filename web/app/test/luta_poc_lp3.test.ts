@@ -1,10 +1,10 @@
 /* LUTA_POC, LP3 (docs/TAREFA_V3_LUTA_POC.md, secoes 3.3a e 5.1): a tela da luta da POC e so vista. Os testes da LUTA_EFEITOS (E1 a E5),
    portados do palco 1D para o palco 2D: o estado visual e o mesmo para a mesma luta, passo a passo; cada efeito sai do evento equivalente da
    simulacao da POC; e a tela nao muda o resultado. Mais: o palco refaz as lutas do motor (Arena, Campanha com a serie da Cidadela, Liga,
-   Torre e Salao) com a mesma entrada e chega ao mesmo fim; o projetil nosso da LP-8. */
+   Torre e Salao) com a mesma entrada e chega ao mesmo fim; o projetil nosso da LP-8 (desde a LP3b, o tiro de verdade da simulacao). */
 import { describe, expect, test } from "vitest";
 import {
-  ACAO_POC, IDS_CENA, LIMITE_POC_MS, Motor, RIVAL_LIGA, RIVAL_SALAO, configLutaPoc, criarLutaPoc, passoPoc, sorteiosPoc, statsRivalArena,
+  ACAO_POC, FORMAS_ARENA, GOLPES_DA_POC, IDS_CENA, LIMITE_POC_MS, Motor, RIVAL_LIGA, RIVAL_SALAO, configLutaPoc, criarLutaPoc, passoPoc, sorteiosPoc, statsRivalArena,
   type EntradaLutaPoc, type LutaPoc,
 } from "../motor/index.ts";
 import { lutar as lutarArena } from "../motor/arena/luta.ts";
@@ -12,9 +12,8 @@ import { IMPACTO } from "../src/telas/lutar/palcoTR/efeitosTR.ts";
 import { CHAO } from "../src/telas/lutar/palcoTR/chaoTR.ts";
 import {
   CAMERA_POC, aplicarEventosPoc, barraDoPasso, claraoPoc, consumirPausaPoc, nivelDaDistanciaPoc, passoDe, preparoDaHabilidade, puloDoEmpurrao,
-  tremidaPoc, visualNovoPoc, type VisualPoc,
+  tremidaPoc, visualNovoPoc, PREFABS_LP8, type VisualPoc,
 } from "../src/telas/lutar/palcoPoc/visualPoc.ts";
-import { PROJETEIS_NOSSOS, projetilNosso } from "../src/telas/lutar/palcoPoc/projetilNosso.ts";
 import { ladoDesenho, lutasDoResultado } from "../src/lutaPocTela.ts";
 import { petDosTorneios, treinarMuito } from "./lp2b_torneios.ts";
 
@@ -93,26 +92,34 @@ describe("E2, os projeteis e a LP-8", () => {
     });
     expect(vistos).toBeGreaterThan(0);
   });
-  test("o projetil nosso (o Gabumon): sai da boca na preparacao do golpe e chega ao peito do alvo no instante do dano", () => {
-    expect(projetilNosso("Gabumon")?.prefab).toBe("Fx_Gabumon_Attack_Hit");
-    for (const p of Object.values(PROJETEIS_NOSSOS)) expect(p.prefab).toMatch(/^Fx_/);
-    let acertos = 0;
-    assistir(ent(...LUTAS[0]), true, (v, L) => {
-      const p = passoDe(L);
-      for (const o of v.voos.filter(x => x.nosso && x.acertou && x.tFim === p)) {
-        acertos++;
-        const alvo = L.b, fim = o.pts[o.pts.length - 1];
-        expect(o.de).toBe(0);
-        expect(Math.abs(fim.x - alvo.x)).toBeLessThan(ACAO_POC.empurrao * 2 + 1);
-        expect(v.impactos.some(i => i.t0 === p && i.de === 0)).toBe(true);
+  test("o projetil nosso (LP-8, no nucleo desde a LP3b): as cinco formas atiram o proprio efeito de acerto, e o voo e o da simulacao", () => {
+    expect([...PREFABS_LP8].sort()).toEqual(Object.values(GOLPES_DA_POC).flatMap(g => g.hits.map(h => h.prefab)).sort());
+    expect(PREFABS_LP8.size).toBe(5);
+    for (const [forma, g] of Object.entries(GOLPES_DA_POC)) {
+      const prefab = g.hits[0].prefab;
+      let vistos = 0, acertos = 0;
+      for (const s of [101, 102, 103]) {
+        assistir(ent("campo", forma, "brasa_crianca_sereno", s), true, (v, L) => {
+          const p = passoDe(L);
+          /* cada tiro do lado azul na simulacao e um voo nosso, com a cabeca no projetil */
+          for (const pr of L.projeteis.filter(x => x.de.lado === "a")) {
+            const o = v.voos.find(x => x.tFim === null && x.de === 0 && x.pts[x.pts.length - 1].x === pr.x && x.pts[x.pts.length - 1].y === pr.y);
+            expect(o?.nosso).toBe(true); expect(o?.prefab).toBe(prefab); vistos++;
+          }
+          /* o acerto: o voo fecha no passo do dano */
+          for (const o of v.voos.filter(x => x.nosso && x.acertou && x.tFim === p)) { acertos++; expect(v.impactos.some(i => i.t0 === p && i.de === 0)).toBe(true); }
+        });
+        if (acertos) break;
       }
-    });
-    expect(acertos).toBeGreaterThan(0);
+      expect(vistos, forma).toBeGreaterThan(0);
+      expect(acertos, forma).toBeGreaterThan(0);
+    }
   });
   test("so os Digimon da lista ganham o projetil nosso (o Agumon tem o do jogo)", () => {
-    const x = assistir(ent(...LUTAS[0]));
-    expect(x.v.voos.every(o => !o.nosso || o.de === 0)).toBe(true);
-    expect(projetilNosso("Agumon")).toBeNull();
+    const x = assistir(ent("campo", "brasa_crianca_sereno", "limo_crianca_arisco", 303));
+    expect(x.v.voos.length).toBeGreaterThan(0);
+    expect(x.v.voos.every(o => !o.nosso)).toBe(true);
+    expect(FORMAS_ARENA.brasa_crianca_sereno.golpe.proj?.prefab).not.toMatch(/_Hit$/);
   });
 });
 

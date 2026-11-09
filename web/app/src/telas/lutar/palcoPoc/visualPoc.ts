@@ -7,16 +7,15 @@
    - E1: a pausa curta, o clarao branco, a tremida, a faisca e os numeros de dano (o maior e amarelo e o critico e a habilidade): cada `dano`,
      corpo a corpo ou projetil; o empurrao e o da propria simulacao (ACAO.empurrao), que ja move o alvo: o desenho do recuo (a poeira, o
      arrasto e, no empurrao grande do Ringue, o pulo) vem por cima dele;
-   - E2: os projeteis em voo (L.projeteis), com o rastro e o brilho do elemento por baixo do desenho do jogo; o projetil nosso (LP-8);
+   - E2: os projeteis em voo (L.projeteis), com o rastro e o brilho do elemento por baixo do desenho do jogo; o projetil nosso (LP-8, que a LP3b pos no nucleo) voa do mesmo jeito e so fica marcado;
    - E3: a elipse que se fecha na preparacao da habilidade, a onda de choque e a marca no acerto dela, a poeira na corrida;
    - E4: a imagem fantasma no desvio (o dash da POC) e a aura com a habilidade pronta e na runa do Castelo;
    - E5: a barra com o dano atrasado, a camera lenta e o "K.O." no nocaute, a camera que acompanha os dois no chao 2D. */
-import { EQ_POC, PASSO_POC_MS, type DadosFormaPoc, type EventoPoc, type LutaPoc, type LutadorPoc } from "../../../../motor/index.ts";
+import { EQ_POC, GOLPES_DA_POC, PASSO_POC_MS, type DadosFormaPoc, type EventoPoc, type LutaPoc, type LutadorPoc } from "../../../../motor/index.ts";
 import { IMPACTO, COR_AZUL, COR_CURA, COR_TINTA, COR_VERMELHO } from "../palcoTR/efeitosTR.ts";
 import { anotarVidaTR, vidasNovasTR, type VidaTR } from "../palcoTR/nocauteTR.ts";
 import { VOO } from "../palcoTR/projeteisTR.ts";
 import { CHAO, type MarcaTR } from "../palcoTR/chaoTR.ts";
-import { VOO_NOSSO, projetilNosso } from "./projetilNosso.ts";
 
 export type LadoN = 0 | 1;
 export const passoDe = (L: LutaPoc): number => Math.round(L.relogio / PASSO_POC_MS);
@@ -30,7 +29,7 @@ export interface ImpactoPoc { lado: LadoN; t0: number; frac: number; forte: bool
 export interface NumeroPoc { txt: string; cor: string; t0: number; lado: LadoN; x: number; y: number; forte: boolean; pixel: boolean }
 /** um efeito de acerto do jogo (o prefab do `hits`, dos dados do Digimon UP), no ponto do alvo; t0 ja com o atraso dele */
 export interface EfeitoJogoPoc { prefab: string; t0: number; lado: LadoN; x: number; y: number; espelho: boolean }
-/** um voo: o projetil da simulacao (nosso: false) ou o projetil nosso da LP-8, com a cabeca a cada passo desde t0 (no mundo, ja na altura
+/** um voo: o projetil da simulacao (nosso: o tiro da LP-8), com a cabeca a cada passo desde t0 (no mundo, ja na altura
     do peito), o prefab que voa e o fim (o passo em que acertou, foi bloqueado ou saiu do alcance) */
 export interface VooPoc { de: LadoN; t0: number; pts: { x: number; y: number }[]; prefab: string | null; esq: boolean; tFim: number | null; nosso: boolean; acertou: boolean }
 /** uma marca no piso (E3): a cratera da habilidade e o arrasto do empurrao grande, no mundo; o MarcaTR (lado, t0, ate) da a opacidade */
@@ -51,12 +50,10 @@ export interface VisualPoc {
   /** passos de efeito depois do fim (a espera do fim conta quadros): os efeitos usam passo + extra e acabam de sumir */
   extra: number;
   vidas: VidaTR[]; cam: CameraPoc | null; koEm: (number | null)[]; avisos: AvisoPoc[];
-  /** o ataque em curso de cada lado (o passo em que comecou), para abrir o projetil nosso uma vez por golpe */
-  ataqueDe: (number | null)[];
 }
 export const visualNovoPoc = (): VisualPoc => ({
   numeros: [], impactos: [], efeitos: [], voos: [], marcas: [], hist: [[], []], correndoDe: [null, null], empurradoEm: [-1e9, -1e9], pausaMs: 0, extra: 0,
-  vidas: vidasNovasTR(), cam: null, koEm: [null, null], avisos: [], ataqueDe: [null, null],
+  vidas: vidasNovasTR(), cam: null, koEm: [null, null], avisos: [],
 });
 
 /** Os numeros desta tela. PROPOSTOS, SEM FONTE: ajustar nas capturas.
@@ -70,10 +67,8 @@ export const TELA_POC = { vidaNumero: 45, vidaAviso: 150, hist: 12, dashMin: 2.2
     passo e os passos da passagem de um nivel para o outro */
 export const CAMERA_POC = { limiares: [210, 120], histerese: 18, suave: .08, troca: 18 } as const;
 
-const golpeDe = (u: LutadorPoc) => (u.usandoHab ? u.sk : u.g);
 /** a boca (o peito, na frente do corpo) de um lutador, no mundo */
 export const bocaDe = (u: LutadorPoc): { x: number; y: number } => ({ x: u.x + (u.viraEsq ? -1 : 1) * EQ_POC.raio, y: u.y - EQ_POC.peito });
-const peitoDe = (u: LutadorPoc): { x: number; y: number } => ({ x: u.x, y: u.y - EQ_POC.peito });
 
 /** o nivel de zoom para a distancia d (no mundo) entre os dois, com histerese em volta do nivel atual */
 export function nivelDaDistanciaPoc(d: number, atual: number): number {
@@ -105,9 +100,6 @@ export function aplicarEventosPoc(v: VisualPoc, L: LutaPoc, ev: readonly EventoP
         v.marcas.push({ m: { tipo: "arrasto", lado: i, t0: t, x0: e.x, x1: alvo.x, ate: t + TELA_POC.durDeslize }, x: e.x, y: e.y, x1: alvo.x, y1: alvo.y });
       /* a habilidade que acerta: a cratera e a onda de choque (E3) */
       if (e.hab) v.marcas.push({ m: { tipo: "cratera", lado: i, t0: t, x0: e.x, x1: e.x, ate: t }, x: e.x, y: e.y, x1: e.x, y1: e.y });
-      /* o projetil nosso que chegou: acertou */
-      const nosso = v.voos.find(o => o.nosso && o.de === ladoN(e.at.lado) && o.tFim === null);
-      if (nosso && !golpeDe(lutadorN(L, nosso.de)).proj) { nosso.tFim = t; nosso.acertou = true; }
     } else if (e.tipo === "esquiva") {
       const i = ladoN(e.alvo.lado);
       v.numeros.push({ txt: "esquivou", cor: COR_TINTA, t0: t, lado: i, x: e.x, y: e.y, forte: false, pixel: false });
@@ -125,15 +117,11 @@ export function aplicarEventosPoc(v: VisualPoc, L: LutaPoc, ev: readonly EventoP
     } else if (e.tipo === "arena_fecha") v.avisos.push({ txt: "A arena fecha: fora da área segura, a vida cai", t0: t });
     else if (e.tipo === "tempestade") v.avisos.push({ txt: "Tempestade: os tiros ficam lentos e a mira piora", t0: t });
     else if (e.tipo === "pilar" && e.quebrou) v.avisos.push({ txt: "Um pilar quebrou", t0: t });
-    else if (e.tipo === "golpe_ar") {
-      const i = ladoN(e.u.lado), nosso = v.voos.find(o => o.nosso && o.de === i && o.tFim === null);
-      if (nosso) nosso.tFim = t + VOO_NOSSO.passaPassos;
-    } else if (e.tipo === "queda") {
+    else if (e.tipo === "queda") {
       const i = ladoN(e.u.lado); if (v.koEm[i] === null) v.koEm[i] = t;
     }
   }
   seguirProjeteis(v, L, t);
-  seguirNossos(v, L, t, formas);
   for (const i of [0, 1] as const) {
     const u = lutadorN(L, i), h = v.hist[i];
     h.unshift({ x: u.x, y: u.y }); if (h.length > TELA_POC.hist) h.pop();
@@ -144,13 +132,16 @@ export function aplicarEventosPoc(v: VisualPoc, L: LutaPoc, ev: readonly EventoP
   v.impactos = v.impactos.filter(i => t - i.t0 < Math.max(IMPACTO.durMax, VOO.durImpacto, CHAO.durOnda + CHAO.ondaAtraso));
   v.efeitos = v.efeitos.filter(x => t - x.t0 < TELA_POC.durEfeitoMax);
   v.marcas = v.marcas.filter(x => t - x.m.ate < CHAO.durMarca);
-  v.voos = v.voos.filter(o => o.tFim === null || t - o.tFim < VOO.rastroFica + VOO_NOSSO.passaPassos);
+  v.voos = v.voos.filter(o => o.tFim === null || t - o.tFim < VOO.rastroFica);
   v.avisos = v.avisos.filter(a => t - a.t0 < TELA_POC.vidaAviso);
 }
 
 /** os projeteis da simulacao: abre o voo de quem apareceu, anota a cabeca de quem segue e fecha o de quem saiu (acertou, bateu num obstaculo
     ou passou do alcance). Os objetos de projetil da simulacao so servem de chave, num mapa fora do estado visual */
 const seguidos = new WeakMap<VisualPoc, Map<object, VooPoc>>();
+/** o projetil nosso (LP-8, a LP3b no nucleo): o tiro das formas que atiram o proprio efeito de acerto. Voa como os outros, pela simulacao;
+    so fica marcado (o data-nossos do canvas) */
+export const PREFABS_LP8: ReadonlySet<string> = new Set(Object.values(GOLPES_DA_POC).flatMap(g => g.hits.map(h => h.prefab)));
 function seguirProjeteis(v: VisualPoc, L: LutaPoc, t: number): void {
   let m = seguidos.get(v); if (!m) { m = new Map(); seguidos.set(v, m); }
   const vivos = new Set<object>(L.projeteis);
@@ -159,7 +150,8 @@ function seguirProjeteis(v: VisualPoc, L: LutaPoc, t: number): void {
     if (!o) {
       /* a simulacao ja moveu o projetil no passo em que nasceu: o voo comeca na boca de quem atirou */
       const de = ladoN(pr.de.lado), b = bocaDe(pr.de);
-      o = { de, t0: t - 1, pts: [b], prefab: pr.dados.proj?.prefab ?? null, esq: pr.esq, tFim: null, nosso: false, acertou: false };
+      const prefab = pr.dados.proj?.prefab ?? null;
+      o = { de, t0: t - 1, pts: [b], prefab, esq: pr.esq, tFim: null, nosso: prefab !== null && PREFABS_LP8.has(prefab), acertou: false };
       m.set(pr, o); v.voos.push(o);
     }
     o.pts.push({ x: pr.x, y: pr.y });
@@ -168,37 +160,6 @@ function seguirProjeteis(v: VisualPoc, L: LutaPoc, t: number): void {
     /* saiu no passo de agora: acertou se o alvo levou dano neste passo (o impacto acabou de entrar) */
     o.tFim = t; o.acertou = v.impactos.some(i => i.t0 === t && i.de === o.de);
     m.delete(pr);
-  }
-}
-
-/** o projetil nosso (LP-8): no golpe corpo a corpo de um Digimon da lista, abre no inicio do ataque; a cabeca sai da boca na fracao
-    VOO_NOSSO.saida da preparacao e chega ao peito do alvo no instante do golpe. So desenho: o dano e o da simulacao */
-function seguirNossos(v: VisualPoc, L: LutaPoc, t: number, formas: readonly [DadosFormaPoc, DadosFormaPoc]): void {
-  for (const i of [0, 1] as const) {
-    const u = lutadorN(L, i), g = golpeDe(u), pn = projetilNosso(formas[i].digimon);
-    const atacando = u.estado === "attack" && !g.proj;
-    if (!atacando) { v.ataqueDe[i] = null; continue; }
-    const inicio = t - Math.round(u.t / PASSO_POC_MS);
-    if (v.ataqueDe[i] === inicio || !pn) { v.ataqueDe[i] = inicio; continue; }
-    v.ataqueDe[i] = inicio;
-    v.voos.push({ de: i, t0: inicio, pts: [], prefab: pn.prefab, esq: u.viraEsq, tFim: null, nosso: true, acertou: false });
-  }
-  for (const o of v.voos) {
-    if (!o.nosso) continue;
-    const u = lutadorN(L, o.de), alvo = lutadorN(L, o.de === 0 ? 1 : 0), g = golpeDe(u);
-    const golpe = o.t0 + Math.round(g.t * 1000 / PASSO_POC_MS), sai = o.t0 + Math.round((golpe - o.t0) * VOO_NOSSO.saida);
-    if (o.tFim !== null && t > o.tFim) continue;
-    /* o golpe nao saiu (quem atacava foi atordoado no meio): o voo some */
-    if (o.tFim === null && u.estado !== "attack") { o.tFim = t; continue; }
-    if (t < sai) { o.pts = []; continue; }
-    /* a partida fica na boca de quando saiu; o destino e o peito do alvo agora; depois do golpe no ar, segue reto */
-    if (!o.pts.length) { o.pts.push(bocaDe(u)); continue; }
-    const p0 = o.pts[0], dest = peitoDe(alvo), f = Math.min(1, (t - sai) / Math.max(1, golpe - sai));
-    if (t <= golpe) o.pts.push({ x: p0.x + (dest.x - p0.x) * f, y: p0.y + (dest.y - p0.y) * f });
-    else {
-      const a = o.pts[o.pts.length - 1], b = o.pts[Math.max(0, o.pts.length - 2)];
-      o.pts.push({ x: a.x + (a.x - b.x), y: a.y + (a.y - b.y) });
-    }
   }
 }
 
