@@ -272,3 +272,34 @@ num Vite próprio.
 
 **Ficam como estão:** a corda de amarração em fita, a silhueta longa, o tamanho do barco e o musgo que a Meshy não pintou (só uma malha nova
 resolve, e o teto era de uma tentativa); a água sob o píer (o modelo não leva água, e a posição não muda).
+
+## 17. O cais em voxel (2026-11-08, worker, Claude Code, Opus 5.5, branch `v3-objeto-cais-voxel`)
+
+**Por que aqui:** com o cais da seção 16 pronto (#729), o Matheus pediu referências para deixar o barco "mais digital, mais pixelado". Três
+caminhos foram mostrados: voxel, textura em pixel grande e detalhes digitais em ciano. Um teste local mostrou que a textura em pixel grande
+não funciona no atlas picotado da Meshy, e que o voxel funciona. O Matheus escolheu o voxel.
+
+**O que entrou:**
+- **O voxel** (`docs/objetos3d/cais/voxel_cais.py`, no Blender 4.5 pela linha de comando). Nenhum crédito da Meshy: a forma e a cor vêm da
+  malha e da textura pintada da seção 16. Os passos:
+  - a grade tem 48 blocos no comprido (48 × 22 × 12);
+  - o bloco é cheio quando a superfície passa a menos de 0,6 lado de bloco do centro dele;
+  - a cor do bloco é a média da textura em 7 pontos da malha (o centro e 6 em volta);
+  - as faces que dão para um bloco vazio são juntadas em retângulos por plano, e cada retângulo leva 2 × 2 texels por face de bloco num
+    atlas de 512 px, com 1 texel de borda repetida;
+  - as normais são as dos planos (cubo de verdade).
+
+  São 2 156 triângulos (teto 2 414): com 64 blocos no comprido seriam 3 408. A textura do realce sai do `textura_cais.py` com `cores 0`,
+  que tira a paleta.
+- **A publicação** (`publicar_cais.py ... voxel`): o sampler NEAREST nos dois filtros, para o pixel duro sem mipmap (o mipmap misturaria
+  os blocos vizinhos do atlas). São 174 953 bytes, e o glTF-Validator deu 0 erros e 0 avisos.
+- **A altura** vai de 1,8 para 1,9, para manter os ~7,6 células de comprimento (o voxel é um pouco mais alto que a malha).
+- **Os testes:** o cais fica no LG-G5b, na lista `TEXTURA_PINTADA` de `web/app/test/ilha_lugares.test.ts`, como pediu o Gerente: o atlas
+  é um PNG quadrado de 512 px com mais de 64 cores. O sampler NEAREST não tem teste próprio (D-OBJ-CAIS-V4).
+
+**As capturas** ficam fora do git, em `D:\Trab\digilab\capturas_objetos3d\cais\`: a prancha `prancha_voxel.png`, com o esboço, as prévias,
+o cais pintado do #729 e o voxel no jogo, e as imagens soltas `voxel_*`. O teste dos três caminhos fica em `teste_digital\`. Uma cópia da
+prancha está em `docs/objetos3d/cais/voxel/prancha.jpg`.
+
+**O revisor** (um subagente que não fez o trabalho) deu APROVA COM RESSALVA: lê-se como voxel de verdade, e o barco é reconhecível. Ficam de
+fora os anéis de corda nos postes, a janela da cabine e os tons por tábua, que seriam pintura nova (D-OBJ-CAIS-V8).
