@@ -15,7 +15,7 @@ import * as THREE from "three";
 import type { Mundo } from "../../../../motor/index.ts";
 import { ninhoDe } from "../vistaMundo.ts";
 import { CENA } from "../cenaEstado.ts";
-import { BOLA_SALTO, BOLA_TAU_MS, COCO, KIT_DESDE_NINHO, LUZ_NINHO, SACO_AMASSO, SACO_BALANCO, SACO_FOLGA_POSTE, SACO_GIRO } from "./constantes.ts";
+import { BOLA_SALTO, BOLA_TAU_MS, CHAMADO, COCO, KIT_DESDE_NINHO, LUZ_NINHO, SACO_AMASSO, SACO_BALANCO, SACO_FOLGA_POSTE, SACO_GIRO } from "./constantes.ts";
 import { pontoDoLugar } from "./lugares.ts";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { GEO_SOMBRA, carregarVariante, curvar, materialSombra, toon, type Variante } from "./cena.ts";
@@ -217,6 +217,9 @@ export class Itens {
   private bolaCel: [number, number] | null = null;
   /** a bola estava na mao do dono no quadro anterior: ao cair, ela aparece onde caiu (sem rolar do lugar antigo) */
   private naMaoAntes = false;
+  /** o sinal so (CHAMADO): a tigela, a bola e o saco dao um pulinho quando o pet chega perto; `em`, quando comecou, e `perto`, se o pet
+      ainda nao saiu (so pula de novo depois de sair) */
+  private readonly chamados: { g: THREE.Object3D; centro: () => readonly [number, number]; em: number; perto: boolean }[] = [];
   private readonly giro = new THREE.Quaternion();
   /** o ultimo golpe no saco: quando (ms da vista), o eixo do balanco no chao (o saco vai para longe de quem bateu), o angulo da direcao
       do golpe no chao (o amassado) e o sentido do giro na corrente (+1 ou -1) */
@@ -244,6 +247,10 @@ export class Itens {
     this.kit.g.rotation.y = -0.4;
     this.kit.g.visible = false;
     this.raiz.add(n, t, this.bola.g, this.brilho, this.saco.g, this.kit.g, this.cocos.raiz);
+    const tigelaEm: [number, number] = [t.position.x, t.position.z];
+    this.chamados.push({ g: t, centro: () => tigelaEm, em: -Infinity, perto: false },
+      { g: this.bola.g, centro: () => this.bolaCel ?? tigelaEm, em: -Infinity, perto: false },
+      { g: this.saco.g, centro: () => this.sacoEm, em: -Infinity, perto: false });
   }
 
   /** os itens gerados (public/itens/): a bola, o saco, o kit e o coco; `base` e a URL da pagina */
@@ -313,6 +320,19 @@ export class Itens {
     this.kit.g.visible = lesionado;
     this.brilho.visible = noite;
     this.cocos.sincronizar(sujeira, pet, agora, reduzido);
+    this.chamar(pet, agora, reduzido);
+  }
+
+  /** o pulinho do que se toca (CHAMADO): quando o pet entra no raio, a coisa achata e estica e volta, amortecida; com movimento reduzido, nada */
+  private chamar(pet: readonly [number, number], agora: number, reduzido: boolean): void {
+    for (const c of this.chamados) {
+      const [x, z] = c.centro(), d = Math.hypot(pet[0] - x, pet[1] - z);
+      if (!c.perto && d < CHAMADO.raio) { c.perto = true; c.em = agora; }
+      else if (c.perto && d > CHAMADO.sai) c.perto = false;
+      const t = agora - c.em;
+      const k = reduzido || t > 6 * CHAMADO.tau ? 0 : CHAMADO.amplitude * Math.exp(-t / CHAMADO.tau) * Math.sin((2 * Math.PI * t) / CHAMADO.periodo);
+      c.g.scale.set(1 - k / 2, 1 + k, 1 - k / 2);
+    }
   }
 
   /** a bola desenhada vai ate a do motor (constante BOLA_TAU_MS; salta longe ou com movimento reduzido) e gira em volta do eixo do chao
