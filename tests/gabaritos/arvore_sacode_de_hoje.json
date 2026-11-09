@@ -1,0 +1,122 @@
+{
+ "ilha|a_v11|aleatorio|perto|101": {
+  "decisoes": 288,
+  "retrato": "a78aac75d56e0014095b47d203ef6e9924ec2f593ca1260da402a314dc6db468"
+ },
+ "ilha|a_v11|aleatorio|perto|202": {
+  "erro": "RuntimeError",
+  "mensagem": "corpo: fruta comida 'a' nao e a da sub-decisao registrada (ou veio duas vezes)"
+ },
+ "ilha|a_v11|aleatorio|perto|303": {
+  "decisoes": 288,
+  "retrato": "234e1ca804fb9ccd88238ba58116a2da768da65097f1328ae5404ec3f5b13e80"
+ },
+ "ilha|a_v11|aleatorio|perto|404": {
+  "erro": "RuntimeError",
+  "mensagem": "corpo: fruta comida 'b' nao e a da sub-decisao registrada (ou veio duas vezes)"
+ },
+ "ilha|a_v11|aleatorio|perto|505": {
+  "erro": "RuntimeError",
+  "mensagem": "corpo: fruta comida 'c' nao e a da sub-decisao registrada (ou veio duas vezes)"
+ },
+ "ilha|a_v11|atencioso|comedouro|101": {
+  "decisoes": 288,
+  "retrato": "80876e21a14df26e5e2ec5e6b5372fe024e13352550b12ca1c0a07c9d6c49004"
+ },
+ "ilha|a_v11|atencioso|comedouro|202": {
+  "decisoes": 288,
+  "retrato": "76b93f693d4a47fe69cc749b77b4f2560baafbb80c0bdd4fc143c14810114d3f"
+ },
+ "ilha|a_v11|atencioso|comedouro|303": {
+  "decisoes": 288,
+  "retrato": "19bb8274b33086834e63b30796e094a324859a3109ef8afd526cb4a9a1ac678e"
+ },
+ "ilha|a_v11|atencioso|comedouro|404": {
+  "decisoes": 288,
+  "retrato": "b98ed24cd6b983731d50d34f0a4fcb3fe7e595fd008a3a6bc7f14824a3da8564"
+ },
+ "ilha|a_v11|atencioso|comedouro|505": {
+  "decisoes": 288,
+  "retrato": "59e96a5852585c4bc7d000e8be9be57eae3f199b7ae76882728c826c1a556e54"
+ },
+ "ilha|instinto|atencioso|comedouro|101": {
+  "decisoes": 288,
+  "retrato": "49fc2a12c8353c9f8aea3063441fde2572b8de35759ac128b5f11e1fd65fb7a5"
+ },
+ "ilha|instinto|atencioso|comedouro|202": {
+  "decisoes": 288,
+  "retrato": "ff00446a086965d3ba7a937f5a7c91c36fa1bcad705c35b20a4d68fc3476367f"
+ },
+ "ilha|instinto|atencioso|comedouro|303": {
+  "decisoes": 288,
+  "retrato": "399340a5e89fdea23c3cca6b468dcf015e231f904098be63f65e7961b390f350"
+ },
+ "ilha|instinto|atencioso|comedouro|404": {
+  "decisoes": 288,
+  "retrato": "ca2220c474efc0991342868bb28103bbf8a7e1e2cd8d80cb72abc14ad598135b"
+ },
+ "ilha|instinto|atencioso|comedouro|505": {
+  "decisoes": 288,
+  "retrato": "57385975fb73ec9efde852813b9fb3991fa2c79aef31e1dbf9411798aae4415c"
+ },
+ "mvp|a_v11|aleatorio|perto|101": {
+  "decisoes": 288,
+  "retrato": "dea014d171ecdc64073dbe7e558ab8ccc5c0b47e5fb37a991fe61c1d4c220e99"
+ },
+ "mvp|a_v11|aleatorio|perto|202": {
+  "decisoes": 288,
+  "retrato": "b39cebbdb37150de16dcdbb2604aa4b3342a3bfcf4440bfadc2e3af7a303ac01"
+ },
+ "mvp|a_v11|aleatorio|perto|303": {
+  "decisoes": 288,
+  "retrato": "ee12489a974203bd987a52b4f23a632d9834ba1a633854ae64a4bda409a5fe8e"
+ },
+ "mvp|a_v11|aleatorio|perto|404": {
+  "decisoes": 288,
+  "retrato": "435209faf2e36a262f882cd81cebe26c5713347961e09fd5bdb9403562d5f599"
+ },
+ "mvp|a_v11|aleatorio|perto|505": {
+  "decisoes": 288,
+  "retrato": "3518764fa7726d6f773d81ea14071b8e210d60a983921db5400ca5ca31f7605e"
+ },
+ "mvp|a_v11|atencioso|comedouro|101": {
+  "decisoes": 288,
+  "retrato": "2cfb51fd209584be596d3519f9f0f0944b167db20ec96464e153c4bc001aca91"
+ },
+ "mvp|a_v11|atencioso|comedouro|202": {
+  "decisoes": 288,
+  "retrato": "b9b69eb486cc58fde63e4156d237a65007f6bf7016423a49287da88d5fb05b60"
+ },
+ "mvp|a_v11|atencioso|comedouro|303": {
+  "decisoes": 288,
+  "retrato": "32ac8ec2b8f4a2e0885122eabaf71cb2e004bd25303a0f500cd04f5949f6a174"
+ },
+ "mvp|a_v11|atencioso|comedouro|404": {
+  "decisoes": 288,
+  "retrato": "22daf57c9f213d8dda4467407fd74bed91b6983cd5bf293aae59980bbe089181"
+ },
+ "mvp|a_v11|atencioso|comedouro|505": {
+  "decisoes": 288,
+  "retrato": "0152047e5705ebb8c723471f21a3f48a0e72c225f7e59318b3601781180327d2"
+ },
+ "mvp|instinto|atencioso|comedouro|101": {
+  "decisoes": 288,
+  "retrato": "61e3e53d6bfb950c093c777dc7219b798626cf2f44f5a768e9929c9dcd2991a3"
+ },
+ "mvp|instinto|atencioso|comedouro|202": {
+  "decisoes": 288,
+  "retrato": "0037b94e38fd664cf95211b529f79196dc100f013b53d1ec4e14e1e0f587dba6"
+ },
+ "mvp|instinto|atencioso|comedouro|303": {
+  "decisoes": 288,
+  "retrato": "ffcff360612a9fb453d458867a102cd55ccb37559562427756754b3ce1ec01b2"
+ },
+ "mvp|instinto|atencioso|comedouro|404": {
+  "decisoes": 288,
+  "retrato": "02d132080f20150506e03e1f3a7877c97bf766fc070d4ef091fa58200906a9ec"
+ },
+ "mvp|instinto|atencioso|comedouro|505": {
+  "decisoes": 288,
+  "retrato": "d7e53644b8b378d71468d25db7b9752924973f0a19338ff146fd31952579f379"
+ }
+}

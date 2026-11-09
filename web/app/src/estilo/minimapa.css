@@ -1,6 +1,6 @@
 /* O minimapa da tela Pet (L1 de "Lugares da ilha", docs/PROPOSTAS_V3_UX_TELA_PET.md; so a partir de 900 px, o componente decide). Um circulo de
-   232 px (PROPOSTO, SEM FONTE) a 16 px da direita e de baixo. Nenhuma cor nova: so tokens. */
-.minimapa-caixa{ position:absolute; z-index:6; right:16px; bottom:16px; width:232px; height:232px; border-radius:50%; overflow:hidden;
+   176 px (PROPOSTO, SEM FONTE; era 232, o Matheus pediu menor em 2026-11-08) a 16 px da direita e de baixo. Nenhuma cor nova: so tokens. */
+.minimapa-caixa{ position:absolute; z-index:6; right:16px; bottom:16px; width:176px; height:176px; border-radius:50%; overflow:hidden;
   border:2px solid var(--hx-borda); box-shadow:var(--hud-brilho); background:var(--hud-fundo-2); box-sizing:border-box;
   pointer-events:auto }  /* a camada da tela Pet nao recebe ponteiro (so os controles dela) */
 :root[data-pele="vidro"] .minimapa-caixa{ box-shadow:var(--hud-brilho), 0 0 12px var(--hx-luz) }
