@@ -6,7 +6,7 @@ import { DUR_EVO, MEDALHAS, Motor, hashSemente } from "../motor/index.ts";
 import { CHAVE, textoSave, type Armazenamento } from "../src/save.ts";
 import { iniciarJogo, jogoAtual, mudarMotor, tamerAtual, trocarMotor } from "../src/jogo.ts";
 import {
-  CHAVE_AVISO_TR, CHAVE_AVISO_V6, CHAVE_DESCARTADOS, CHAVE_DESCARTE, CHAVE_TAMER, Tamer, VERSAO_DESCARTE, conferirMedalhas, descartarPetsAntigos,
+  CHAVE_AVISO_POC, CHAVE_AVISO_TR, CHAVE_AVISO_V6, CHAVE_DESCARTADOS, CHAVE_DESCARTE, CHAVE_TAMER, Tamer, VERSAO_DESCARTE, VERSAO_DESCARTE_POC, conferirMedalhas, descartarPetsAntigos,
   gravarTamer, lerTamer, semFabricaAntiga, sincronizarPet, textoFalta, type EventoTamer,
 } from "../src/tamer.ts";
 
@@ -64,6 +64,35 @@ describe("registro do Tamer", () => {
     expect(sincronizarPet(t, m)).toBe(true);
     expect(m.log).toEqual([[m.e.tick, "u", { n: 2 }]]);
     expect(sincronizarPet(t, m)).toBe(false);
+  });
+});
+
+describe("o descarte 7 (LUTA_POC, LP2 e LP-6): so com a chave da luta da POC ligada", () => {
+  const v = (versao: number, semente = 1) => JSON.stringify({ semente, log: [], versao });
+  test("com a chave: os v13 a v19 saem (ativo e guardados), a v21 fica, o Tamer fica inteiro e o aviso e o da luta da POC", () => {
+    const t = new Tamer(); t.ganhar("campina", new Motor(9), 1);
+    const guardados = [{ semente: 2, log: [], versao: 13 }, { semente: 3, log: [], versao: 19 }, { semente: 4, log: [], versao: 21 }];
+    const a = armaz({ [CHAVE]: v(19), [GUARDADOS]: JSON.stringify(guardados), [CHAVE_DESCARTE]: "6" });
+    gravarTamer(a, t);
+    const tamerAntes = a.dados[CHAVE_TAMER];
+    expect(descartarPetsAntigos(a, GUARDADOS, true)).toBe(3);
+    expect(a.dados[CHAVE]).toBeUndefined();
+    expect(JSON.parse(a.dados[GUARDADOS])).toEqual([guardados[2]]);
+    expect(JSON.parse(a.dados[CHAVE_AVISO_POC])).toEqual({ pets: 3, fabrica: 0 });
+    expect(a.dados[CHAVE_AVISO_TR]).toBeUndefined();
+    expect(a.dados[CHAVE_DESCARTE]).toBe(String(VERSAO_DESCARTE_POC));
+    expect(a.dados[CHAVE_TAMER]).toBe(tamerAntes);
+    expect(descartarPetsAntigos(a, GUARDADOS, true)).toBeNull();
+    /* a chave desligada de novo: o 6 ja rodou, nada sai, e o marcador 7 vale */
+    a.dados[CHAVE] = v(19);
+    expect(descartarPetsAntigos(a, GUARDADOS)).toBeNull();
+    expect(a.dados[CHAVE]).toBe(v(19));
+  });
+  test("sem a chave: o descarte 7 nao roda (o jogo de hoje)", () => {
+    const a = armaz({ [CHAVE]: v(19), [CHAVE_DESCARTE]: "6" });
+    expect(descartarPetsAntigos(a, GUARDADOS)).toBeNull();
+    expect(a.dados[CHAVE]).toBe(v(19));
+    expect(a.dados[CHAVE_AVISO_POC]).toBeUndefined();
   });
 });
 

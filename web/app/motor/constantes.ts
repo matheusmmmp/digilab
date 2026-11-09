@@ -84,7 +84,15 @@ export const VERSAO_V18 = 18;
 export const VERSAO_V19 = 19;
 /** a versao tem o cerebro trocavel, a ponte da luta e a bola no golpe da v17: a v17, a v18 (a v17 com o empurrao) e a v19 (a v18 com o
     levar pet) */
-export const ehCerebroTrocavel = (versao: number): boolean => versao === VERSAO_V17 || versao === VERSAO_V18 || versao === VERSAO_V19;
+export const ehCerebroTrocavel = (versao: number): boolean => versao === VERSAO_V17 || versao === VERSAO_V18 || versao === VERSAO_V19 || versao === VERSAO_V21;
+/** 21 = a v19 com a luta da POC (docs/TAREFA_V3_LUTA_POC.md, LP2; as seis decisoes da LP2, Matheus, "Aprovo as 6", 2026-11-08): a luta do pet
+    e a simulacao em tempo real de motor/arena/, 1 contra 1, com os numeros saidos dos 6 stats do pet (motor/luta_poc.ts); o evento "l" guarda
+    o rival (uma forma do estagio do pet, na Arena, ou o NPC da Campanha), a semente e o mapa; sem gambits ("g"), cartas ("k") nem chips de
+    regra; a Liga, a Torre, a Fabrica e o Salao fechados ate a LP2b. O resto e a v19. A v20 fica para o #694 (a arvore). Atras da chave
+    LUTA_POC_LIGADA (desligada): com ela desligada, os ovos novos seguem v19 e nenhum pet v21 nasce no jogo; VERSOES_PET nao muda */
+export const VERSAO_V21 = 21;
+/** as versoes que abrem com a luta da POC ligada (LP-6: os v13 a v19 saem, com aviso) */
+export const VERSOES_PET_POC: readonly number[] = [VERSAO_V21];
 /** os cerebros que o evento "cb" escolhe: o DigiBrain modular e o cerebro A (os lobos, a linha de base) */
 export const CEREBROS = ["modular", "a"] as const;
 /** a versao de pet da bola no golpe (a chave bolaNoGolpe do Mundo) */

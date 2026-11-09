@@ -41,7 +41,7 @@ import { ORBITA, aplicarOrbita, ligarControles, recentrar } from "../orbita.ts";
 import { CONSULTA_SOLTA, VISTA, despublicarVista, focoDoQuadro, ligarCameraLivre, publicarVista, type Limites, type MapaDaIlha, type Par } from "../cameraLivre.ts";
 import { CAMERA_DEV, ligarCameraDev } from "../cameraDev.ts";
 import { pixelsDoMapa } from "./minimapa.ts";
-import { PRESETS, Pos } from "./pos.ts";
+import { PRESETS, Pos, SEM_CONTORNO } from "./pos.ts";
 import { SACO_NA_TELA, VIAGEM, ZOOM_LUGAR_MOVEL, lugarAberto, progressoViagem, type Lugar } from "../../../viagem.ts";
 import { LUGARES, ORDEM_LUGARES, chaoDoLugar, estadoDoLugar, gradeDosLugares, pontoDoLugar as pontoLugarDe, pontoDoPet, type BaseDoMundo } from "./lugares.ts";
 import { Apagador, montarMarcadores, type Marcadores } from "./marcadoresLugar.ts";
@@ -123,6 +123,7 @@ class VistaIlha {
     this.estilo = estiloDe(habitat.mapa, document.baseURI);
     this.cam = CAMERAS[habitat.camera];
     this.camera = new THREE.PerspectiveCamera(this.cam.fov, 1, PERTO, LONGE);
+    this.camera.layers.enable(SEM_CONTORNO);
     CURVA.uCurva.value = this.estilo.dobra;
     THREE.ColorManagement.enabled = true;
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
@@ -544,7 +545,9 @@ class VistaIlha {
     });
     /* o foco do HD-2D: a altura do pet na tela (0 embaixo, 1 em cima) */
     this.renderer.info.reset();
-    this.pos.desenhar(this.cenaIlha.cena, this.camera, PRESETS[habitatAtual().visual], 1 - (ret.y + ret.h * 0.6) / this.alturaCss);
+    /* o pet em papel fica sem o traco do estilo (pos.ts, SEM_CONTORNO): os filhos dele mudam, entao a camada e posta a cada quadro */
+    if (this.estilo.contorno) this.papel.raiz.traverse(o => o.layers.set(SEM_CONTORNO));
+    this.pos.desenhar(this.cenaIlha.cena, this.camera, PRESETS[habitatAtual().visual], 1 - (ret.y + ret.h * 0.6) / this.alturaCss, this.estilo.contorno ?? null);
     this.publicar(mu, m.e.tick, ret, pode);
     this.publicarLugaresTela();
     return ret;

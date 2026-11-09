@@ -3,14 +3,9 @@
   "generator": "Khronos glTF Blender I/O v4.5.51",
   "version": "2.0",
   "extras": {
-   "gerado_por_ia": true,
-   "gerador": "Meshy (meshy.ai), plano Pro, conta do Matheus",
-   "tarefas_meshy": {
-    "concept": "01a1aef5-afde-7109-8f0c-fd8e99b6dccc",
-    "vistas": "01a1af01-464b-7377-83a4-ce49a7e79b3c",
-    "malha": "01a1af01-ed0a-70e4-b5d1-b159c3257f5c"
-   },
-   "pipeline": "docs/TAREFA_V3_ITENS_3D.md; a cor da malha da Meshy passada a uma esfera limpa e chapada na paleta do concept",
+   "gerado_por_ia": false,
+   "gerador": "Blender 4.5 LTS por script (docs/itens3d/bola/fazer_bola.py), sem IA e sem Meshy",
+   "pipeline": "esfera UV de 24 x 12 com sombreado suave, polos inclinados 32 graus; UVs em faixa e dois discos; textura pintada por numpy (6 gomos em 4 tons, emendas, tampas, um brilho)",
    "licenca": "License.txt ao lado"
   }
  },
@@ -43,7 +38,7 @@
  ],
  "meshes": [
   {
-   "name": "Sphere",
+   "name": "bola",
    "primitives": [
     {
      "attributes": {
@@ -74,61 +69,61 @@
   {
    "bufferView": 0,
    "componentType": 5126,
-   "count": 271,
+   "count": 327,
    "max": [
-    0.921791672706604,
-    0.9217914938926697,
-    0.9217918515205383
+    0.9154950976371765,
+    0.9212384819984436,
+    0.921411395072937
    ],
    "min": [
-    -0.9217919111251831,
-    -0.9217914938926697,
-    -0.9217920303344727
+    -0.9154950976371765,
+    -0.9212384819984436,
+    -0.9214115142822266
    ],
    "type": "VEC3"
   },
   {
    "bufferView": 1,
    "componentType": 5126,
-   "count": 271,
+   "count": 327,
    "type": "VEC3"
   },
   {
    "bufferView": 2,
    "componentType": 5126,
-   "count": 271,
+   "count": 327,
    "type": "VEC2"
   },
   {
    "bufferView": 3,
    "componentType": 5123,
-   "count": 1320,
+   "count": 1584,
    "type": "SCALAR"
   }
  ],
  "bufferViews": [
   {
    "buffer": 0,
-   "byteLength": 3252,
+   "byteLength": 3924,
    "byteOffset": 0,
    "target": 34962
   },
   {
    "buffer": 0,
-   "byteLength": 3252,
-   "byteOffset": 3252,
+   "byteLength": 3924,
+   "byteOffset": 3924,
    "target": 34962
   },
   {
    "buffer": 0,
-   "byteLength": 2168,
-   "byteOffset": 6504,
+   "byteLength": 2616,
+   "byteOffset": 7848,
    "target": 34962
   },
   {
    "buffer": 0,
-   "byteLength": 2640,
-   "byteOffset": 8672,
+   "byteLength": 3168,
+   "byteOffset": 10464,
    "target": 34963
   }
  ],
@@ -140,7 +135,7 @@
  ],
  "buffers": [
   {
-   "byteLength": 11312,
+   "byteLength": 13632,
    "uri": "bola.bin"
   }
  ]
