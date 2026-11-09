@@ -284,3 +284,35 @@ textura cartoon foi aprovada pelo Matheus, pelo Gerente, depois da prancha. A ma
 **Ficam:** as rodas encaixadas no corpo (da malha) e alguns pontos amarelos no para-choque, onde a ferrugem encosta no farol. As capturas
 (`prancha_carro_r3.png`, `r3_ilha_carro_1280.png`, `r3_digital_carro_1280.png`) estão em `D:\Trab\digilab\capturas_objetos3d\carro\`.
 Os desvios estão em `docs/registro/2026-11.md`, D-OBJ-CARRO-7 a 9.
+
+## 14. O poste em blocos (2026-11-08, worker, Claude Code, Opus 5.5, branch `v3-objeto-poste`)
+
+**O pedido:** o Matheus achou os objetos feios e "sem textura"; o poste da E1 era o lampião achatado em quatro cores. O retrabalho parte do
+esboço `docs/objetos3d/poste/esbocos/esboco_1_ferro_hera.png`: o poste antigo de ferro fundido verde, a lanterna de vidro amarelo quente, a
+hera subindo e a base de pedra com musgo.
+
+**Tentativa 1, pela Meshy (fora do jogo):** a multivista e a malha (36 créditos, saldo 50 → 14), 460 triângulos, a textura pintada sem
+achatar com retoques no espaço 3D da malha, e três rodadas do revisor (APROVA COM RESSALVA). O Matheus achou o poste "ainda feio" e pediu
+"um pouco mais fino", "uma estética mais pixelada", "mais digitais". Os arquivos dela ficam em `docs/objetos3d/poste/` como histórico.
+
+**A direção C, escolhida pelo Matheus:** depois de uma prancha de referências (postes de voxel, o esboço 2 "ferro digital", uma maquete em
+blocos e testes de pixel no poste da Meshy; fora do git, em `D:\Trab\digilab\capturas_objetos3d\poste\referencias_pixel\`), um poste em
+blocos, feito à mão, com textura de pixel. O pixel sobre a malha da Meshy virava ruído (o atlas dela vem em ilhas pequenas).
+
+**O poste em blocos (`docs/objetos3d/poste/blocos/`):**
+- `poste_blocos.py`: 39 caixas (a base e o degrau de pedra, o pé com o alargado, o fuste de 2 blocos com dois anéis, os braços curtos, o
+  colar de latão, a lanterna com as quinas, o teto em degraus com as pontas, o pináculo, os tufos de musgo e as folhas da hera) e a pintura
+  em pixel art de cada material, pela posição de cada texel no mundo (a pedra, o ferro, a hera e o musgo continuam de uma face para a
+  outra); 4 texels por bloco, o atlas de 256 px ampliado sem filtro a 1 024 px, o "nearest" no sampler do glTF; a máscara da luz âmbar no
+  miolo dos vidros. Sem IA, sem Blender, determinístico;
+- `previa_blocos.py`: as prévias no Blender; `publicar_blocos.py`: a procedência, a troca em `web/app/public/enfeites/poste/` e o
+  validador (0 erros, 0 avisos).
+
+**No jogo:** 390 triângulos (teto 554), 39 942 bytes (de 307 200); a altura fica 4,5 e a grade e as posições não mudam (E-G0, E-G10). O
+halo (`ENFEITE_HALO`) vai para o meio dos vidros novos (0,86 → 0,77) e fica mais fraco (0,08 → 0,06). O `web/app/test/ilha_enfeites.test.ts`
+passa a aceitar a procedência "feito à mão por script" ao lado da da Meshy (D-OBJ-POSTE-5). Os fios do Digital, a 0,93 da altura, caem no
+pináculo.
+
+**O revisor** (um subagente Sonnet novo, que não fez o trabalho nem viu a tentativa 1): **APROVA COM RESSALVA** nas duas rodadas. A rodada 1 pediu o vidro âmbar à noite, o fuste mais claro, menos peso em cima, os braços curtos (compridos pareciam placa) e a hera mais limpa; a rodada 2 deu tudo por resolvido, menos o contraste do fuste e da hera à noite no Digital (ainda escuros), que não bloqueia. A prancha está em
+`docs/objetos3d/poste/blocos/prancha_poste_blocos.jpg`; as capturas (antes e blocos, Ilha e Digital, dia e noite) estão fora do git, em
+`D:\Trab\digilab\capturas_objetos3d\poste\blocos\`. Os desvios estão em `docs/registro/2026-11.md`, D-OBJ-POSTE-1 a 9.
