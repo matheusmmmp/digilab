@@ -64,9 +64,12 @@ export function formaRivalSalao(s: number, est: Estagio): Forma {
 }
 /** o lutador do rival: o bot canonico do estagio (ver o cabecalho); com a escala ligada (o app), E = vida do estagio na escala dos pets v6 x
     fator, sem treino */
+/** o carater do rival do Salao: nenhum no Rookie; o canonico da forma adulta (ou da primeira forma da linha, no Champion) */
+export const caraterDoRivalSalao = (f: Forma): ReturnType<typeof caraterCanonico> | null =>
+  f.est === "crianca" ? null : caraterCanonico(f.adulta ? f.adulta as FormaAdultaNormal : primeiraForma(f.linha!));
 export function rivalSalao(s: number, est: Estagio, R: RegrasLuta, fator: number = fatorSalao(est, R)): Lutador {
   const f = formaRivalSalao(s, est);
-  const car = f.est === "crianca" ? null : caraterCanonico(f.adulta ? f.adulta as FormaAdultaNormal : primeiraForma(f.linha!));
+  const car = caraterDoRivalSalao(f);
   const hoje = f.est === "crianca" ? CRIANCA_V21[f.ramo!] : f.est === "adolescente" ? ADOL_V21[f.linha!] : gambitsAdulto(f.adulta as FormaAdultaNormal, R);
   const g = listaDaForma(f.adulta ?? f.linha ?? f.ramo!, R, hoje);
   const p = perfilDe(f, car, 1, null, true, VERSAO_PET);

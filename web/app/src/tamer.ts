@@ -255,9 +255,10 @@ export class Tamer {
     t.trocar();
   }
   /** a tentativa nova da Fabrica, com o alugado escolhido (0 a 2) entre os 3 dela, nas regras de hoje (VERSAO_FABRICA_ATUAL) */
-  alugarFabrica(escolha: number, quando: number = Date.now()): TentativaFabrica {
+  alugarFabrica(escolha: number, quando: number = Date.now(), versao: number = VERSAO_FABRICA_ATUAL): TentativaFabrica {
     const n = this.fabrica.length + 1;
-    this._gravar(["fabrica", { n, s: sementeFabrica(n), alugado: escolha, quando, v: VERSAO_FABRICA_ATUAL }]);
+    if (!VERSOES_FABRICA.includes(versao)) throw new Error(`versão das regras da Fábrica desconhecida: ${versao}`);
+    this._gravar(["fabrica", { n, s: sementeFabrica(n), alugado: escolha, quando, v: versao }]);
     return this.fabrica[this.fabrica.length - 1];
   }
   /** a proxima luta da tentativa em andamento (grava e joga) */

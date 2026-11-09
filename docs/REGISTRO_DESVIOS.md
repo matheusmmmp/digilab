@@ -584,3 +584,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-08 — LUTA_POC, LP1: o núcleo da luta da POC no motor (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp1`)](registro/2026-11.md)
 - [2026-11-08 — UX_TELA_PET, a planta A na ilha 3D, só a vista (worker, Claude Code, Opus 5.5, branch `v3-ux-ilha-planta-a`)](registro/2026-11.md)
 - [2026-11-08 — LUTA_POC, LP2: o pet luta no núcleo da POC, atrás da chave (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp2`)](registro/2026-11.md)
+- [2026-11-08 — LUTA_POC, LP2b: os torneios no núcleo da POC (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp2b`)](registro/2026-11.md)
