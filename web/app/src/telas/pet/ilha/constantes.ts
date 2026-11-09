@@ -49,14 +49,15 @@ export const NOITE = {
 } as const;
 /** a luz fraca do ninho a noite: o raio (celulas) e a cor */
 export const LUZ_NINHO = { raio: 2.2, cor: "255,214,140" } as const;
-/** a hierarquia de luz (a regra 1 de "guiar o olhar sem texto", docs/pranchas/ux-ilha-luz/; PROTOTIPO da prancha, so com `?luz=a|b|c`):
-    perto dos destinos (o lar, a praca, o portao, a barraca e o cais, a `raio` celulas) e dos caminhos (focos pequenos a cada `passo`
+/** a hierarquia de luz (a regra 1 de "guiar o olhar sem texto", docs/pranchas/ux-ilha-luz/; LZ-1 a LZ-5 aprovadas pelo Matheus em
+    2026-11-09, "B com tudo"): liga por padrao com a proposta `escolhida`; `?luz=a|b|c` troca a proposta e `?luz=0` desliga (so para
+    comparar). Perto dos destinos (o lar, a praca e os lugares abertos, a `raio` celulas; o cais trancado nao acende, LUGAR_ABERTO) e dos caminhos (focos pequenos a cada `passo`
     celulas, de `raioCaminho`) a cor fica inteira e puxa para a cor da luz do ninho (`quente`); longe deles ela escurece (`escuro`, o
     fator) e perde saturacao (`dessat`). A borda de cada foco esfuma de `miolo` (a fracao do raio) ate o raio. No chao, nas flores e
     nos tufos o efeito vale `pesoChao` (a grama nao fica cinza): quem muda e o que fica de pe. So de dia; o pet, as
     sombras, os halos e as particulas nao mudam. Os numeros sao do desenho: PROPOSTO, SEM FONTE */
 export const LUZ_HIERARQUIA = {
-  raio: { lar: 7, praca: 7.5, portao: 6, barraca: 6.5, cais: 6 }, passo: 3, raioCaminho: 2.6, miolo: 0.2, pesoChao: 0.3,
+  raio: { lar: 7, praca: 7.5, portao: 6, barraca: 6.5, cais: 6 }, passo: 3, raioCaminho: 2.6, miolo: 0.2, pesoChao: 0.3, escolhida: "b",
   propostas: {
     a: { escuro: 0.78, dessat: 0.45, quente: 0.14 },
     b: { escuro: 0.9, dessat: 0.25, quente: 0.08 },

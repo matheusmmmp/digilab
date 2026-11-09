@@ -49,7 +49,7 @@ const glslVento = (amp: number) => `
 transformed.x += uVento * sin(uTempo * 1.7 + baseVento.x * 0.9 + baseVento.z * 0.6) * ${amp.toFixed(3)} * max(transformed.y, 0.0);
 transformed.z += uVento * cos(uTempo * 1.3 + baseVento.x * 0.5) * ${(amp * 0.5).toFixed(3)} * max(transformed.y, 0.0);`;
 
-/* ---------- a hierarquia de luz (PROTOTIPO da prancha docs/pranchas/ux-ilha-luz/, so com ?luz=a|b|c) ---------- */
+/* ---------- a hierarquia de luz (docs/pranchas/ux-ilha-luz/, LZ-1 a LZ-5: a B por padrao, ?luz=a|b|c|0 para comparar) ---------- */
 /** os uniforms da luz: os focos (x, z, raio), quantos, a forca (escuro, dessat, quente), a cor quente e o liga (1 de dia, 0 de noite) */
 export const LUZ = {
   uLuzFocos: { value: Array.from({ length: LUZ_MAX }, () => new THREE.Vector3()) }, uLuzN: { value: 0 },
@@ -77,7 +77,7 @@ const GLSL_LUZ = `
   gl_FragColor.rgb = mix(luzC, mix(luzFora, luzDentro, luzL), uLuzLigada * LUZ_PESO);
 }`;
 /** a luz vale nos materiais que recebem cor do mundo: nao nos aditivos (halos, particulas), nas sombras transparentes nem nas linhas */
-/** poe os focos e a forca da proposta da pagina nos uniforms; sem `?luz=` nao faz nada */
+/** poe os focos e a forca da proposta nos uniforms; com `?luz=0` nao faz nada */
 export function focosDaLuz(ilha: Ilha): void {
   if (!LUZ_PROPOSTA) return;
   const f = listaDeFocos(ilha);
