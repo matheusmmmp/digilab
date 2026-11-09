@@ -15,7 +15,7 @@ D-PV0-7), com o registro da run na seção 11 (`545a4a86`), empurrado antes da p
 - **As conferências da seção 2.3 passaram:** o script falha alto em cada uma, e saiu com o código 0. Elas cobrem os sha256 do código da
   C4, os sha256 da fonte e dos gabaritos (gravados no `auditoria.json`), o G1 de cada vida e o G1 com o contrafactual ligado.
 - **Os artefatos** ficam em `artifacts_v3_pet_vivo/auditoria/`:
-  - `auditoria.json`, sha256 `9eb17b31…7ccd`;
+  - `auditoria.json`, sha256 `9eb17b31…7ccd` no disco, como o script gravou (com CRLF); no git, com o LF do `.gitattributes`, `3bb42d95…a780`;
   - `auditoria_vidas.json.gz`, sha256 `14a4b75f…b63b`.
 
   Todo número deste documento sai do `auditoria.json`, nos campos `grupos.<fonte|braço|lugar>`.
