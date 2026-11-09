@@ -594,3 +594,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-08 — OBJETOS_3D, o poste em blocos (worker, Claude Code, Opus 5.5, branch `v3-objeto-poste`)](registro/2026-11.md)
 - [2026-11-09 — CONVERSA_PET, DC4b, a voz-v3b e a recalibração do dec-v3 (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc4b`)](registro/2026-11.md)
 - [2026-11-09 — LUTA_POC, LP3: a tela da luta da POC (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp3`)](registro/2026-11.md)
+- [2026-11-09 — UX_TELA_PET, a prancha da hierarquia de luz (Gerente da UX_TELA_PET, Claude Code, Opus 5.5, branch `v3-ux-luz`)](registro/2026-11.md)
+- [2026-11-09 — UX_TELA_PET, a hierarquia de luz ligada (Gerente da UX_TELA_PET, Claude Code, Opus 5.5, branch `v3-ux-luz-padrao`)](registro/2026-11.md)
