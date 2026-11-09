@@ -702,3 +702,21 @@ vai até um objeto. Esta etapa faz só a prancha da A, sem código do jogo (bran
 - **As contas** ficam em `src/telas/pet/objetosIlha.ts`, e os testes em `test/objetos_ilha.test.ts`.
 - **Interpretações:** D-I1-1 a D-I1-4, em `docs/registro/2026-11.md`.
 - **Pendente do #694:** a árvore que dá fruta.
+
+## 24. A prancha do layout da ilha inicial (2026-11-08)
+
+O Matheus pediu de novo uma análise do layout da ilha, com referências de outros jogos:
+> "As árvores estão longe do patch, não tem nenhuma árvore perto do ninho dele. [...] qual que seria o melhor layout dessa ilha inicial? Para a
+> gente modelar e deixar bem interessante, não apenas vários postes aleatórios, um monte de árvore aleatória e os outros objetos um do lado do
+> outro."
+
+**O que foi feito (só a prancha; nenhum código do jogo mudou):**
+- **A prancha:** `docs/pranchas/ux-ilha-layout/`, com a planta de hoje (tirada dos dados do jogo) e três propostas: A, o lar no bosque e a
+  praça; B, a vila em roda; e C, a trilha.
+- **O levantamento** das referências fica no Obsidian (`20 Temas/Layout da ilha inicial.md`). Ele cobre Animal Crossing, Stardew, Tamagotchi
+  Plaza, Cult of the Lamb, Slime Rancher, Digimon World, Pokémon Sleep, Lynch e Upton, os weenies, o prospect-refuge e a arte de florestas.
+- **A página para escolher:** https://claude.ai/artifact/Tq149bn7Jmaq9btokYVavK.
+
+**As decisões:** IL-1 a IL-4 foram DECIDIDAS pela recomendação, na resposta do Matheus "A, com IL-2 a IL-4" (2026-11-08). Fica a planta A,
+com as frutíferas do sacudir no bosque do lar, os postes nos caminhos e o ferro-velho num canto. A parte do motor (o ninho, a tigela, a bola e
+as três frutíferas) vai para o `CMU_ILHA` do #694, e a parte da vista vai para uma etapa própria: uma prancha 3D e depois o código.
