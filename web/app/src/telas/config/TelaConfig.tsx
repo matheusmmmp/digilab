@@ -23,7 +23,7 @@ import { AvisoSom } from "../../componentes/AvisoSom.tsx";
 import { SOM, useSom } from "../../som.ts";
 import { dicasLigadas, ligarDicas } from "../../dicas.ts";
 import { reverOTutorial } from "../../nivelTela.ts";
-import { ligarDetalhesPet, useDetalhesPet } from "../../hudPet.ts";
+import { ligarDetalhesPet, temPainelMovido, useDetalhesPet, voltarPaineis } from "../../hudPet.ts";
 import { textoSave } from "../../save.ts";
 import { useHabitat } from "../../habitat.ts";
 import { usePele } from "../../pele.ts";
@@ -100,6 +100,20 @@ function Visual() {
       </div>
       <p className="mc-apoio">Sistema segue o claro ou escuro do aparelho. Os menus são sempre escuros; o tema vale para o habitat, o balão, o retrato e o relógio.</p>
       <EscolhaHabitat temMundo={!!m.mundo} />
+      <VoltarPaineis />
+    </>
+  );
+}
+/** os paineis e avisos arrastados (a pilha da direita, o painel de um lugar ou dos Ajustes, o balao, o alerta) voltam ao lugar de sempre (2026-11-08) */
+function VoltarPaineis() {
+  const [movido, setMovido] = useState(temPainelMovido);
+  return (
+    <>
+      <h3 className="mc-sec" id="cfg-paineis">Painéis</h3>
+      <p className="mc-apoio">Arraste um painel pelo título para mudá-lo de lugar. A posição fica neste navegador.</p>
+      <BotaoHx disabled={!movido} onClick={() => { voltarPaineis(); setMovido(false); }}>
+        <RotateCcw aria-hidden="true" />Voltar os painéis ao lugar
+      </BotaoHx>
     </>
   );
 }
@@ -211,7 +225,7 @@ function Sobre() {
           fica fora do repositório; sem ele, o jogo usa os sprites de reserva, de arte própria.</p>
         {/* os kits 3D da ilha (docs/TAREFA_V3_HABITAT_ILHA_3D.md, H1 e H-1): CC0, com as licencas em public/kits3d/ */}
         <p className="mc-credito-kits">As árvores, as plantas e as pedras da ilha são dos kits 3D de Quaternius (Stylized Nature MegaKit) e de Kay
-          Lousberg (KayKit Forest Nature Pack), em domínio público (CC0). A bola, o saco de pancada, o kit médico, o cocô, os postes de luz, o carro, a geladeira e o trilho foram gerados com a Meshy (meshy.ai) e consertados no Blender; o céu do mapa Digital também é da Meshy.</p></section>
+          Lousberg (KayKit Forest Nature Pack), em domínio público (CC0). O saco de pancada, o kit médico, o cocô, os postes de luz, o carro, a geladeira e o trilho foram gerados com a Meshy (meshy.ai) e consertados no Blender; o céu do mapa Digital também é da Meshy. A bola foi feita no Blender pelo próprio projeto, sem IA.</p></section>
     </>
   );
 }

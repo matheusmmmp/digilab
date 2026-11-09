@@ -1,0 +1,308 @@
+{
+ "interpretador": {
+  "executavel": "C:\\Users\\mathe\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+  "implementacao": "CPython",
+  "maquina": "AMD64",
+  "sistema": "Windows-11-10.0.26300-SP0",
+  "sonda_soma": {
+   "math_fsum": "2.0",
+   "sum": "2.0",
+   "sum_10x0_1": "1.0"
+  },
+  "versao": "3.13.0"
+ },
+ "modo": "tempo",
+ "parede_script_s": 27.387,
+ "vidas": [
+  {
+   "braco": "REL",
+   "dias": 14,
+   "dono": "atencioso",
+   "estado_interno_sha256": "2df867daec4c1c8313726db92ad87f2d9e36e25b0f67ccf0ba715eb9040f717f",
+   "fases": {
+    "conferir_e_medir": {
+     "parede_s": 0.1233
+    },
+    "gravar_log": {
+     "parede_s": 0.0153
+    },
+    "replay_g1": {
+     "parede_s": 1.2522
+    },
+    "viver": {
+     "parede_s": 1.2197
+    }
+   },
+   "log_bytes": 76657,
+   "log_eventos": 1563,
+   "log_sha256": "2c049dab1894cc6830ac560842ef2135589c45dbf87b5d0b73fdc92633cf94e7",
+   "lugar": "longe_fixo",
+   "medidas_sha256": "9fc752c6dcfbb420354403cb8c85c26712259013b4fcea8bb219fdb19f88af3d",
+   "parede_total_s": 2.6635,
+   "repeticao": 0,
+   "resumo_motor_sha256": "c9004d2470aa78d9c46454f6f1d7e00bedf1b14209acfff54b05e19be73f2831",
+   "semente": 101
+  },
+  {
+   "braco": "REL",
+   "dias": 14,
+   "dono": "atencioso",
+   "estado_interno_sha256": "b433bb3e4a026512e38c1d559e9908b4cadc2ed97f862d9f1e8c5c133e7a416d",
+   "fases": {
+    "conferir_e_medir": {
+     "parede_s": 0.096
+    },
+    "gravar_log": {
+     "parede_s": 0.0121
+    },
+    "replay_g1": {
+     "parede_s": 1.3183
+    },
+    "viver": {
+     "parede_s": 1.2646
+    }
+   },
+   "log_bytes": 76280,
+   "log_eventos": 1563,
+   "log_sha256": "8fb712a777af2c8bc0e259483085bbeabcf9303322e12ce0abe344d50e0036fe",
+   "lugar": "longe_fixo",
+   "medidas_sha256": "dcf424e45a89c2f5afb4daf6cd86371c9e586c7e3e9c396e240a7b074216c08b",
+   "parede_total_s": 2.742,
+   "repeticao": 0,
+   "resumo_motor_sha256": "28c1613c76300a42aef15663624249d85fe0ca74189c7e6ab0e18c196db1848c",
+   "semente": 202
+  },
+  {
+   "braco": "REL",
+   "dias": 14,
+   "dono": "atencioso",
+   "estado_interno_sha256": "12795a565eeecf6d910a422697d49e85c400ac18937d12e281dae0dc27e483b2",
+   "fases": {
+    "conferir_e_medir": {
+     "parede_s": 0.1014
+    },
+    "gravar_log": {
+     "parede_s": 0.0118
+    },
+    "replay_g1": {
+     "parede_s": 1.2726
+    },
+    "viver": {
+     "parede_s": 1.2949
+    }
+   },
+   "log_bytes": 76281,
+   "log_eventos": 1563,
+   "log_sha256": "57b36e9d3443157d53e9854f447b7370f2704cc2c40c0f460c55e600757a9f4f",
+   "lugar": "longe_fixo",
+   "medidas_sha256": "8c511a17c902f9fb08e1b07bc3286afece32f19ec2c768717846cb8db0386984",
+   "parede_total_s": 2.7255,
+   "repeticao": 0,
+   "resumo_motor_sha256": "f42908eba7b2a120bf55e7df09b9adb71cfacc8a215cd4e7d27029ac545717c5",
+   "semente": 303
+  },
+  {
+   "braco": "REL",
+   "dias": 14,
+   "dono": "atencioso",
+   "estado_interno_sha256": "91a6bf562020ad93f7dc0fa6de0920ac26a26a6eecce7e87cff7ddc634c3bdbb",
+   "fases": {
+    "conferir_e_medir": {
+     "parede_s": 0.1001
+    },
+    "gravar_log": {
+     "parede_s": 0.0094
+    },
+    "replay_g1": {
+     "parede_s": 1.2823
+    },
+    "viver": {
+     "parede_s": 1.2826
+    }
+   },
+   "log_bytes": 74074,
+   "log_eventos": 1529,
+   "log_sha256": "c05bb4f85ef25caada057788f0e30fa78faee96e23fcace7281b1fc43b87027f",
+   "lugar": "longe_fixo",
+   "medidas_sha256": "b4c7aa56a94a9e88325070d61f5559eaf457aee5221af327511880b6c55cca95",
+   "parede_total_s": 2.7239,
+   "repeticao": 0,
+   "resumo_motor_sha256": "6970e4a24bd6e56109e999b0653e93ea43aeb7424fe15e7d4366554b70067df0",
+   "semente": 404
+  },
+  {
+   "braco": "REL",
+   "dias": 14,
+   "dono": "atencioso",
+   "estado_interno_sha256": "b57d2575e82fc655e7d7d98cd2a9f84c2eb77c9c2e88e5c61cf6ab0fc17c75f0",
+   "fases": {
+    "conferir_e_medir": {
+     "parede_s": 0.0971
+    },
+    "gravar_log": {
+     "parede_s": 0.0109
+    },
+    "replay_g1": {
+     "parede_s": 1.3436
+    },
+    "viver": {
+     "parede_s": 1.2347
+    }
+   },
+   "log_bytes": 73619,
+   "log_eventos": 1522,
+   "log_sha256": "0fddbc2ed453fccf97ecf3ce8500c985d2e829cad6c1e619ac04bd8b9df9b09b",
+   "lugar": "longe_fixo",
+   "medidas_sha256": "db6aa8060afe1b711b7fed644e4345c24038a59a666e554a05f9d0d93cb6cd6c",
+   "parede_total_s": 2.7334,
+   "repeticao": 0,
+   "resumo_motor_sha256": "f57498f70efe798ef408dfc3053a9e0dd2a27ea393c28675002b0522f36c0c33",
+   "semente": 505
+  },
+  {
+   "braco": "REL",
+   "dias": 14,
+   "dono": "atencioso",
+   "estado_interno_sha256": "2df867daec4c1c8313726db92ad87f2d9e36e25b0f67ccf0ba715eb9040f717f",
+   "fases": {
+    "conferir_e_medir": {
+     "parede_s": 0.107
+    },
+    "gravar_log": {
+     "parede_s": 0.0107
+    },
+    "replay_g1": {
+     "parede_s": 1.316
+    },
+    "viver": {
+     "parede_s": 1.2087
+    }
+   },
+   "log_bytes": 76657,
+   "log_eventos": 1563,
+   "log_sha256": "2c049dab1894cc6830ac560842ef2135589c45dbf87b5d0b73fdc92633cf94e7",
+   "lugar": "longe_fixo",
+   "medidas_sha256": "9fc752c6dcfbb420354403cb8c85c26712259013b4fcea8bb219fdb19f88af3d",
+   "parede_total_s": 2.6868,
+   "repeticao": 1,
+   "resumo_motor_sha256": "c9004d2470aa78d9c46454f6f1d7e00bedf1b14209acfff54b05e19be73f2831",
+   "semente": 101
+  },
+  {
+   "braco": "REL",
+   "dias": 14,
+   "dono": "atencioso",
+   "estado_interno_sha256": "b433bb3e4a026512e38c1d559e9908b4cadc2ed97f862d9f1e8c5c133e7a416d",
+   "fases": {
+    "conferir_e_medir": {
+     "parede_s": 0.1008
+    },
+    "gravar_log": {
+     "parede_s": 0.0117
+    },
+    "replay_g1": {
+     "parede_s": 1.3894
+    },
+    "viver": {
+     "parede_s": 1.2907
+    }
+   },
+   "log_bytes": 76280,
+   "log_eventos": 1563,
+   "log_sha256": "8fb712a777af2c8bc0e259483085bbeabcf9303322e12ce0abe344d50e0036fe",
+   "lugar": "longe_fixo",
+   "medidas_sha256": "dcf424e45a89c2f5afb4daf6cd86371c9e586c7e3e9c396e240a7b074216c08b",
+   "parede_total_s": 2.8462,
+   "repeticao": 1,
+   "resumo_motor_sha256": "28c1613c76300a42aef15663624249d85fe0ca74189c7e6ab0e18c196db1848c",
+   "semente": 202
+  },
+  {
+   "braco": "REL",
+   "dias": 14,
+   "dono": "atencioso",
+   "estado_interno_sha256": "12795a565eeecf6d910a422697d49e85c400ac18937d12e281dae0dc27e483b2",
+   "fases": {
+    "conferir_e_medir": {
+     "parede_s": 0.0975
+    },
+    "gravar_log": {
+     "parede_s": 0.0165
+    },
+    "replay_g1": {
+     "parede_s": 1.2979
+    },
+    "viver": {
+     "parede_s": 1.2463
+    }
+   },
+   "log_bytes": 76281,
+   "log_eventos": 1563,
+   "log_sha256": "57b36e9d3443157d53e9854f447b7370f2704cc2c40c0f460c55e600757a9f4f",
+   "lugar": "longe_fixo",
+   "medidas_sha256": "8c511a17c902f9fb08e1b07bc3286afece32f19ec2c768717846cb8db0386984",
+   "parede_total_s": 2.7033,
+   "repeticao": 1,
+   "resumo_motor_sha256": "f42908eba7b2a120bf55e7df09b9adb71cfacc8a215cd4e7d27029ac545717c5",
+   "semente": 303
+  },
+  {
+   "braco": "REL",
+   "dias": 14,
+   "dono": "atencioso",
+   "estado_interno_sha256": "91a6bf562020ad93f7dc0fa6de0920ac26a26a6eecce7e87cff7ddc634c3bdbb",
+   "fases": {
+    "conferir_e_medir": {
+     "parede_s": 0.1011
+    },
+    "gravar_log": {
+     "parede_s": 0.011
+    },
+    "replay_g1": {
+     "parede_s": 1.2946
+    },
+    "viver": {
+     "parede_s": 1.3253
+    }
+   },
+   "log_bytes": 74074,
+   "log_eventos": 1529,
+   "log_sha256": "c05bb4f85ef25caada057788f0e30fa78faee96e23fcace7281b1fc43b87027f",
+   "lugar": "longe_fixo",
+   "medidas_sha256": "b4c7aa56a94a9e88325070d61f5559eaf457aee5221af327511880b6c55cca95",
+   "parede_total_s": 2.7792,
+   "repeticao": 1,
+   "resumo_motor_sha256": "6970e4a24bd6e56109e999b0653e93ea43aeb7424fe15e7d4366554b70067df0",
+   "semente": 404
+  },
+  {
+   "braco": "REL",
+   "dias": 14,
+   "dono": "atencioso",
+   "estado_interno_sha256": "b57d2575e82fc655e7d7d98cd2a9f84c2eb77c9c2e88e5c61cf6ab0fc17c75f0",
+   "fases": {
+    "conferir_e_medir": {
+     "parede_s": 0.1002
+    },
+    "gravar_log": {
+     "parede_s": 0.0119
+    },
+    "replay_g1": {
+     "parede_s": 1.2812
+    },
+    "viver": {
+     "parede_s": 1.2917
+    }
+   },
+   "log_bytes": 73619,
+   "log_eventos": 1522,
+   "log_sha256": "0fddbc2ed453fccf97ecf3ce8500c985d2e829cad6c1e619ac04bd8b9df9b09b",
+   "lugar": "longe_fixo",
+   "medidas_sha256": "db6aa8060afe1b711b7fed644e4345c24038a59a666e554a05f9d0d93cb6cd6c",
+   "parede_total_s": 2.7329,
+   "repeticao": 1,
+   "resumo_motor_sha256": "f57498f70efe798ef408dfc3053a9e0dd2a27ea393c28675002b0522f36c0c33",
+   "semente": 505
+  }
+ ]
+}

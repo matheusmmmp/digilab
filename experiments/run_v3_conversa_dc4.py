@@ -4,8 +4,9 @@ usam este arquivo.
 
 O caminho de cada fala e o do jogo (secao 0): as entradas (`entradas_dc4`, o `dec-v2`/`dec-v3` montado como a pagina monta) vao ao
 `ServicoFalaLivre` do servidor como a pagina as manda (`situacao`, `estado` so com a identidade, `conceitos`, `semente`, e na conversa a
-`fala_jogador`, o `historico` de fronteira da M2 e o `comando`), e o servidor valida, gera a voz (`voz-v2`/`voz-v3`) e confere pelo verificador
-(`verif-v8`/`verif-v9`). Os bracos (secao 2, DC4-2) so trocam o cliente da voz:
+`fala_jogador`, o `historico` de fronteira da M2 e o `comando`), e o servidor valida, gera a voz (`voz-v2` no dec-v2; no dec-v3, a `voz-v3b`,
+decisao do Matheus em 2026-11-09, pelo `ServicoDC4.voz_dos_conceitos`; o jogo segue com a `voz-v3`) e confere pelo verificador
+(`verif-v8`/`verif-v9`, que nao dependem da voz). Os bracos (secao 2, DC4-2) so trocam o cliente da voz:
 
 | braco | modelo | cliente |
 |---|---|---|
@@ -34,6 +35,7 @@ os clientes falsos so na fumaca.
 
     python experiments/run_v3_conversa_dc4.py --config experiments/configs/v3_conversa_dc4/fumaca.json --falso     # fumaca, sem modelo
     python experiments/run_v3_conversa_dc4.py --config experiments/configs/v3_conversa_dc4/calibracao.json         # DC4b
+    python experiments/run_v3_conversa_dc4.py --config experiments/configs/v3_conversa_dc4/calibracao.json --so-dec-v3   # DC4b, a voz-v3b
     python experiments/run_v3_conversa_dc4.py --config experiments/configs/v3_conversa_dc4/validacao.json          # DC4c, uma vez
     python experiments/run_v3_conversa_dc4.py --registro                                                           # o texto da secao 13
 """
@@ -60,7 +62,8 @@ from bancada.faixas import FAIXAS_RESERVADAS  # noqa: E402
 
 from digilab.protocol import derivar_semente  # noqa: E402
 from digilab_fala_livre.ollama import ClienteOllama, Resposta  # noqa: E402
-from digilab_fala_livre.prompt import MAX_TROCAS  # noqa: E402
+from digilab_fala_livre.conceitos import VERSAO_DEC_V3  # noqa: E402
+from digilab_fala_livre.prompt import MAX_TROCAS, VERSAO_VOZ_V3B  # noqa: E402
 from servidor.fala_livre import MAX_TEXTO_JOGADOR, ServicoFalaLivre  # noqa: E402
 from servidor.fala_livre_claude import ARQUIVO_GASTO_LIVRE, ClienteClaude, _partir  # noqa: E402
 from servidor.fala_llm import LIMITE_USD_LIVRE_PADRAO, ControleGasto, custo_usd  # noqa: E402
@@ -86,6 +89,10 @@ PAPEIS = ("cumprimento", "como_esta", "lembranca_falsa", "injecao", "pedido_acao
 PAPEL_INJECAO = "injecao"
 REGISTRO_TITULO = "## 13. O registro da rodada"
 SEMENTE_MAX = 2**31                                                               # o `_semente` do servidor: 0 <= s < 2**31
+# a voz do dec-v3 na DC4 (decisao do Matheus em 2026-11-09, antes da DC4c; plano, secao 10: ajuste de texto so na calibracao e so como versao
+# nova). O dec-v2 segue com a voz-v2; o verificador (verif-v9) nao muda.
+VOZ_DEC_V3 = VERSAO_VOZ_V3B
+SUFIXO_V3B = "_v3b"                                                               # a recalibracao so das falas do dec-v3 (`--so-dec-v3`)
 
 
 class ParadaNoTeto(RuntimeError):
@@ -94,6 +101,11 @@ class ParadaNoTeto(RuntimeError):
 
 class ModeloTrocado(RuntimeError):
     """O cliente devolveu outro modelo que o pedido (secao 9)."""
+
+
+class RespostaSemModelo(OSError):
+    """A resposta veio sem o nome do modelo (o servidor do Ollama caiu no meio, D-CP-DC4b-2): e falha de chamada, como a de rede. A voz cai
+    na fala generica, e o verificador registra o erro (conta como "marcou", 4.3). Um modelo com outro nome continua sendo `ModeloTrocado`."""
 
 
 # ================================================================== a config e as travas
@@ -137,6 +149,8 @@ def conferir_config(cfg: dict) -> None:
         raise ValueError(f"os bracos sao {list(BRACOS)} (DC4-2)")
     if cfg["teto_usd"] != TETO_USD:
         raise ValueError(f"o teto e US$ {TETO_USD} (DC4-6)")
+    if cfg.get("voz_dec_v3") != VOZ_DEC_V3:
+        raise ValueError(f"a voz do dec-v3 e a {VOZ_DEC_V3} (decisao do Matheus em 2026-11-09), nao {cfg.get('voz_dec_v3')!r}")
     if fase == "fumaca":
         if bases[0] not in SEMENTES_DOS_TESTES:
             raise ValueError(f"a fumaca so roda nas sementes dos testes {SEMENTES_DOS_TESTES}")
@@ -257,6 +271,11 @@ class ClienteRegistrado:
                        completa=None)
             self.chamadas.append(reg)
             raise
+        if not r.modelo:
+            reg.update(erro=f"RespostaSemModelo: {r.modelo!r}", modelo_devolvido=None, tokens_entrada=r.tokens_entrada,
+                       tokens_saida=r.tokens_saida, latencia_s=r.latencia_s, completa=r.completa)
+            self.chamadas.append(reg)
+            raise RespostaSemModelo(f"a resposta de {self.modelo} veio sem o modelo")
         reg.update(erro=None, modelo_devolvido=r.modelo, tokens_entrada=r.tokens_entrada, tokens_saida=r.tokens_saida,
                    latencia_s=r.latencia_s, completa=r.completa)
         self.chamadas.append(reg)
@@ -275,6 +294,10 @@ class ServicoDC4(ServicoFalaLivre):
     @property
     def cliente_verif(self):
         return self._verif_dc4
+
+    def voz_dos_conceitos(self, conceitos):
+        """a voz-v3b no dec-v3 (`VOZ_DEC_V3`); no dec-v2, a do formato (voz-v2)"""
+        return VOZ_DEC_V3 if conceitos.versao == VERSAO_DEC_V3 else None
 
 
 class ClienteFalso:
@@ -308,9 +331,37 @@ class SdkFalso:
                                usage=SimpleNamespace(input_tokens=1500, output_tokens=30))
 
 
+META_CALIBRACAO = "artifacts_v3_conversa_dc4/calibracao/meta.json"
+META_CALIBRACAO_V3B = "artifacts_v3_conversa_dc4/calibracao_v3b/meta.json"
+
+
+def piso_do_gasto(fase: str) -> float:
+    """O gasto que ja aconteceu antes da fase (DC4b, D-CP-DC4b): o arquivo de gasto da fala livre fica fora do git, um por pasta, e a
+    validacao roda noutra worktree. Na validacao o piso e o maior gasto do fim da calibracao e da recalibracao da voz-v3b (os `meta.json`
+    delas, no repo); sem um deles, falha alto."""
+    if fase != "validacao":
+        return 0.0
+    fins = []
+    for m in (META_CALIBRACAO, META_CALIBRACAO_V3B):
+        arq = RAIZ / m
+        if not arq.exists():
+            raise RuntimeError(f"a validacao sem o {m}: o gasto acumulado da calibracao e o piso do teto (DC4-6)")
+        fins.append(float(json.loads(arq.read_text(encoding="utf-8"))["gasto"]["fim_usd"]))
+    return max(fins)
+
+
+def gasto_com_piso(gasto: ControleGasto, piso: float) -> ControleGasto:
+    """o gasto do arquivo, nunca abaixo do piso: um arquivo novo (outra worktree) comeca do que a calibracao ja gastou"""
+    if gasto.gasto < piso:
+        gasto.gasto = piso
+        gasto._salvar()
+    return gasto
+
+
 def clientes_reais(cfg: dict) -> dict:
-    """os clientes de verdade (calibracao e validacao): construir nao chama nada (o SDK so e importado na primeira chamada)"""
-    gasto = ControleGasto(cfg["teto_usd"], ARQUIVO_GASTO_LIVRE)
+    """os clientes de verdade (calibracao e validacao): construir nao chama nada (o SDK so e importado na primeira chamada). O gasto e o da
+    fala livre, com o piso do que as fases anteriores gastaram (`piso_do_gasto`)."""
+    gasto = gasto_com_piso(ControleGasto(cfg["teto_usd"], ARQUIVO_GASTO_LIVRE), piso_do_gasto(cfg["fase"]))
     voz = {b: ClienteOllama(m) if p == "ollama" else ClienteClaude(m, gasto) for b, (p, m) in BRACOS.items()}
     return {"voz": voz, "verif": ClienteOllama(MODELO_VERIF), "gasto": gasto, "falso": False}
 
@@ -468,13 +519,14 @@ def rodar(cfg: dict, roteiros: list[dict], pasta: Path, clientes: dict, exportar
     arq = (pasta / "falas.jsonl").open("w", encoding="utf-8", newline="\n")
     chamadas = {"voz": [], "verif": []}
     verif = ClienteRegistrado(clientes["verif"], "verif", chamadas["verif"])
-    regs, parada = [], None
+    regs, parada, gravadas = [], None, []
     meta = {"fase": cfg["fase"], "base": base, "plano": PLANO, "plano_sha256": sha_arquivo(RAIZ / PLANO), "arquivos": sha_dos_arquivos(),
             "clientes_falsos": clientes["falso"], "ollama": tags, "python": platform.python_version()}
 
     def gravar(reg: dict) -> None:
         arq.write(json.dumps(reg, ensure_ascii=False, sort_keys=True) + "\n")
         arq.flush()
+        gravadas.append(reg)
 
     try:
         for b in cfg["bracos"]:
@@ -486,16 +538,12 @@ def rodar(cfg: dict, roteiros: list[dict], pasta: Path, clientes: dict, exportar
         parada = str(err)
     finally:
         arq.close()
-        meta["gasto"] = {"limite_usd": gasto.limite, "inicio_usd": round(gasto_inicio, 6), "fim_usd": round(gasto.gasto, 6),
-                         "da_rodada_usd": round(gasto.gasto - gasto_inicio, 6),
-                         "pelo_usage_usd": {b: round(sum(custo_usd(BRACOS[b][1], r["usage"]["entrada"], r["usage"]["saida"]) for r in regs
-                                                         if r["braco"] == b and r["usage"]["entrada"] is not None), 6)
-                                            for b in cfg["bracos"] if BRACOS[b][0] == "claude"}}
+        meta["gasto"] = _meta_do_gasto(gasto, gasto_inicio, gravadas, cfg["bracos"])
         meta["parada_no_teto"] = parada
         meta["modelos_devolvidos"] = {b: sorted({c["modelo_devolvido"] for c in chamadas["voz"] if c["papel"] == f"voz/{b}" and c["modelo_devolvido"]})
                                       for b in cfg["bracos"]}
         meta["verificador_devolvido"] = sorted({c["modelo_devolvido"] for c in chamadas["verif"] if c["modelo_devolvido"]})
-        meta["falas"] = len(regs)
+        meta["falas"] = len(gravadas)                  # as gravadas no disco, inclusive as de um braco que nao terminou
         _json(pasta / "meta.json", meta)
     if parada is not None:
         raise ParadaNoTeto(parada + f" (a rodada parou com {len(regs)} falas no disco)")
@@ -510,6 +558,113 @@ def rodar(cfg: dict, roteiros: list[dict], pasta: Path, clientes: dict, exportar
     return meta
 
 
+def _meta_do_gasto(gasto: ControleGasto, inicio: float, gravadas: list[dict], bracos) -> dict:
+    return {"limite_usd": gasto.limite, "inicio_usd": round(inicio, 6), "fim_usd": round(gasto.gasto, 6),
+            "da_rodada_usd": round(gasto.gasto - inicio, 6),
+            "pelo_usage_usd": {b: round(sum(custo_usd(BRACOS[b][1], r["usage"]["entrada"], r["usage"]["saida"]) for r in gravadas
+                                            if r["braco"] == b and r["usage"]["entrada"] is not None), 6)
+                               for b in bracos if BRACOS[b][0] == "claude"}}
+
+
+def ler_falas(pasta: Path) -> dict:
+    """as falas de uma rodada, por id (`<braco>/<item>`)"""
+    regs = [json.loads(x) for x in (pasta / "falas.jsonl").read_text(encoding="utf-8").splitlines() if x.strip()]
+    por_id = {r["id"]: r for r in regs}
+    if len(por_id) != len(regs):
+        raise RuntimeError(f"{pasta}: falas com o mesmo id")
+    return por_id
+
+
+def recalibrar_dec_v3(cfg: dict, roteiros: list[dict], origem: Path, pasta: Path, clientes: dict) -> dict:
+    """A recalibracao da voz-v3b (DC4b, decisao do Matheus em 2026-11-09): so as falas cuja entrada e dec-v3 (as espontaneas do E3 e os
+    turnos de conversa com entrada dec-v3), com as mesmas entradas (o `entradas.json` da calibracao), sementes e roteiros. Os turnos dec-v2
+    das conversas nao se refazem: a fala gravada na calibracao entra no historico dos turnos seguintes, como estava. Grava so as falas novas,
+    numa pasta nova; a calibracao nao muda."""
+    if cfg["fase"] != "calibracao":
+        raise RuntimeError("a recalibracao da voz-v3b e so da calibracao (a validacao roda inteira, uma vez)")
+    if pasta.exists():
+        raise RuntimeError(f"a pasta {pasta} ja existe: nada se grava por cima")
+    entradas = json.loads((origem / "entradas.json").read_text(encoding="utf-8"))
+    if entradas["base"] != cfg["unidades"]["bases"][0]:
+        raise RuntimeError("as entradas da calibracao sao de outra base")
+    originais = ler_falas(origem)
+    pasta.mkdir(parents=True)
+    gasto = clientes["gasto"]
+    gasto_inicio = gasto.gasto
+    tags = {"falso": True} if clientes["falso"] else tag_ollama(clientes["verif"])
+    base = entradas["base"]
+    chamadas = {"voz": [], "verif": []}
+    verif = ClienteRegistrado(clientes["verif"], "verif", chamadas["verif"])
+    gravadas, reaproveitadas, parada = [], [], None
+    meta = {"fase": "calibracao_v3b", "base": base, "plano": PLANO, "plano_sha256": sha_arquivo(RAIZ / PLANO), "arquivos": sha_dos_arquivos(),
+            "voz_dec_v3": VOZ_DEC_V3, "origem": origem.relative_to(RAIZ).as_posix() if origem.is_relative_to(RAIZ) else origem.as_posix(),
+            "origem_sha256": {f: sha_arquivo(origem / f) for f in ("entradas.json", "falas.jsonl")},
+            "clientes_falsos": clientes["falso"], "ollama": tags, "python": platform.python_version()}
+    arq = (pasta / "falas.jsonl").open("w", encoding="utf-8", newline=chr(10))
+
+    def gravar(reg: dict) -> None:
+        arq.write(json.dumps(reg, ensure_ascii=False, sort_keys=True) + chr(10))
+        arq.flush()
+        gravadas.append(reg)
+
+    try:
+        for b in cfg["bracos"]:
+            voz = ClienteRegistrado(clientes["voz"][b], f"voz/{b}", chamadas["voz"])
+            if voz.modelo != BRACOS[b][1]:
+                raise ModeloTrocado(f"o braco {b} com o cliente de {voz.modelo!r}")
+            servico = ServicoDC4(voz, verif)
+            for e in entradas["E3"]:
+                if e["conceitos"]["versao"] != VERSAO_DEC_V3:
+                    raise RuntimeError(f"a entrada {e['id']} do E3 nao e dec-v3")
+                gravar(falar(servico, chamadas, b, f"{b}/{e['id']}", e, "espontanea", semente_do_turno(base, e["id"])))
+            for roteiro in roteiros:
+                for seq in entradas["sequencias"]:
+                    historico = []
+                    for t, turno in enumerate(roteiro["turnos"]):
+                        e = seq["entradas"][t]
+                        item = f"{roteiro['id']}-{seq['id']}-t{t}"
+                        if e["conceitos"]["versao"] == VERSAO_DEC_V3:
+                            hist = [h for h in historico if h[2] == e["estagio"]][-MAX_TROCAS:]
+                            reg = falar(servico, chamadas, b, f"{b}/{item}", e, "conversa", semente_do_turno(base, item), turno["texto"], hist)
+                            reg.update(conversa=f"{roteiro['id']}-{seq['id']}", roteiro=roteiro["id"], sequencia=seq["id"], turno=t,
+                                       papel=turno["papel"])
+                            gravar(reg)
+                        else:
+                            reg = originais[f"{b}/{item}"]
+                            if reg["versao_dec"] == VERSAO_DEC_V3 or reg["fala_jogador"] != turno["texto"]:
+                                raise RuntimeError(f"{b}/{item}: a fala da calibracao nao e a do turno")
+                            reaproveitadas.append(reg["id"])
+                        historico.append([turno["texto"], reg["fala"], e["estagio"]])
+    except ParadaNoTeto as err:
+        parada = str(err)
+    finally:
+        arq.close()
+        meta["gasto"] = _meta_do_gasto(gasto, gasto_inicio, gravadas, cfg["bracos"])
+        meta["parada_no_teto"] = parada
+        meta["modelos_devolvidos"] = {b: sorted({c["modelo_devolvido"] for c in chamadas["voz"] if c["papel"] == f"voz/{b}" and c["modelo_devolvido"]})
+                                      for b in cfg["bracos"]}
+        meta["verificador_devolvido"] = sorted({c["modelo_devolvido"] for c in chamadas["verif"] if c["modelo_devolvido"]})
+        meta["falas"] = len(gravadas)
+        meta["reaproveitadas_no_historico"] = len(reaproveitadas)
+        _json(pasta / "meta.json", meta)
+    if parada is not None:
+        raise ParadaNoTeto(parada + f" (a recalibracao parou com {len(gravadas)} falas no disco)")
+    if gasto.gasto > gasto.limite:
+        raise RuntimeError(f"o gasto passou do teto: US$ {gasto.gasto} > {gasto.limite}")
+    for b in cfg["bracos"]:
+        meus = [r for r in gravadas if r["braco"] == b]
+        esperadas = [f"{b}/{e['id']}" for e in entradas["E3"]] + [
+            f"{b}/{r['id']}-{s['id']}-t{t}" for r in roteiros for s in entradas["sequencias"] for t in range(len(PAPEIS))
+            if s["entradas"][t]["conceitos"]["versao"] == VERSAO_DEC_V3]
+        if [r["id"] for r in meus] != esperadas:
+            raise RuntimeError(f"{b}: as falas refeitas nao sao as do dec-v3")
+        for r in meus:
+            conferir_registro(r)
+            if r["versao_prompt"] != VOZ_DEC_V3:
+                raise RuntimeError(f"{r['id']}: a voz {r['versao_prompt']!r}, nao a {VOZ_DEC_V3}")
+    return meta
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="a avaliacao da voz da rede, DC4 (docs/PLANO_ANALISE_V3_CONVERSA_DC4.md)")
     ap.add_argument("--config")
@@ -517,6 +672,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--falso", action="store_true", help="os clientes sem rede (so na fumaca)")
     ap.add_argument("--saida", help="outra pasta de saida (so na fumaca)")
     ap.add_argument("--registro", action="store_true", help="imprime o texto da secao 13 do plano (o registro da rodada) e sai")
+    ap.add_argument("--so-dec-v3", action="store_true",
+                    help="a recalibracao da voz-v3b: so as falas do dec-v3 da calibracao, na pasta da config com o sufixo _v3b")
     a = ap.parse_args(argv)
     if a.registro:
         print(texto_do_registro(), end="")
@@ -536,12 +693,17 @@ def main(argv: list[str] | None = None) -> int:
         raise RuntimeError("os clientes falsos sao so da fumaca, e a fumaca so roda com eles (a DC4a nao chama modelo)")
     if a.saida is not None and not fumaca:
         raise RuntimeError("a pasta de saida da calibracao e da validacao e a da config")
+    if a.so_dec_v3 and cfg["fase"] != "calibracao":
+        raise RuntimeError("--so-dec-v3 e so da calibracao")
     if cfg["fase"] == "validacao":
         exigir_registro(plano)
     roteiros = carregar_roteiros(cfg)
     pasta = RAIZ / (a.saida or cfg["saida"])
     clientes = clientes_falsos() if fumaca else clientes_reais(cfg)
-    meta = rodar(cfg, roteiros, pasta, clientes)
+    if a.so_dec_v3:
+        meta = recalibrar_dec_v3(cfg, roteiros, pasta, pasta.with_name(pasta.name + SUFIXO_V3B), clientes)
+    else:
+        meta = rodar(cfg, roteiros, pasta, clientes)
     print(json.dumps({k: meta[k] for k in ("fase", "base", "falas", "gasto", "parada_no_teto", "modelos_devolvidos")}, ensure_ascii=False, indent=1))
     return 0
 

@@ -16,7 +16,7 @@ import { afterEach, beforeEach, describe, expect, test } from "vitest";
 import { CMU, CMU_MVP } from "../motor/index.ts";
 import type { Destino } from "../src/rotas.ts";
 import { CENA } from "../src/telas/pet/cenaEstado.ts";
-import { LUGARES_GRADE } from "../src/telas/pet/ilha/constantes.ts";
+import { PLANTA_ILHA } from "../src/telas/pet/ilha/constantes.ts";
 import { LUGAR_ABERTO, LUGAR_DESTINO, NOMES_LUGARES } from "../src/telas/pet/lugaresIlha.ts";
 import { lugarNoPonto } from "../src/telas/pet/ilha/curva.ts";
 import { TOQUE } from "../src/telas/pet/ToquePet.tsx";
@@ -24,37 +24,37 @@ import { destinoNoPonto, ligarToqueLugar } from "../src/telas/pet/ToqueLugar.tsx
 import { ilhaDe } from "../src/telas/pet/ilha/grade.ts";
 import { LUGARES_LUZ, LUGARES_MODELOS, type NomeLugar } from "../src/telas/pet/ilha/modelos.ts";
 
-describe("onde ficam os lugares (LG-G1 a LG-G4)", () => {
+describe("onde ficam os lugares (LG-G1 a LG-G4, desde a planta A)", () => {
   for (const cm of [CMU_MVP, CMU]) test(`layout ${cm.layout.nome}`, () => {
-    const ilha = ilhaDe(cm), nomes = Object.keys(LUGARES_MODELOS) as NomeLugar[];
+    const ilha = ilhaDe(cm), nomes = Object.keys(LUGARES_MODELOS) as NomeLugar[], P = PLANTA_ILHA;
     expect(ilha.lugares.map(l => l.nome).sort()).toEqual([...nomes].sort());
     for (const l of ilha.lugares) {
-      expect(ilha.naArea(Math.floor(l.x), Math.floor(l.z)), l.nome).toBe(false);
       if (l.nome === "cais") {
         const c = ilha.cel(Math.floor(l.x), Math.floor(l.z) - 1)!, agua = ilha.cel(Math.floor(l.x), Math.floor(l.z))!;
         expect(c.tipo).toBe("areia"); expect(agua.tipo).toBe("agua"); expect(l.giro).toBeCloseTo(Math.PI);
+        expect(l.x).toBe(P.lugares.cais.x);
         continue;
       }
-      const G = LUGARES_GRADE[l.nome], d = ilha.distanciaDaArea(l.x, l.z), c = ilha.cel(Math.floor(l.x), Math.floor(l.z))!;
+      const G = P.lugares[l.nome], c = ilha.cel(Math.floor(l.x), Math.floor(l.z))!;
       expect(c.tipo).toBe("grama"); expect(c.cantos.every(h => h === c.cantos[0])).toBe(true);
-      expect(l.z).toBeLessThan(0); expect(d).toBeGreaterThanOrEqual(G.perto - 1e-9); expect(d).toBeLessThanOrEqual(G.longe + 1e-9);
+      expect(Math.hypot(l.x - G.alvo[0], l.z - G.alvo[1])).toBeLessThanOrEqual(G.busca);
       expect(l.y).toBe(ilha.altura(l.x, l.z));
-      for (const e of ilha.enfeites) expect(Math.hypot(e.x - l.x, e.z - l.z), `${l.nome} e ${e.nome}`).toBeGreaterThanOrEqual(G.deEnfeite);
-      /* a frente (+z do glTF girado) aponta para o ponto mais perto da area */
-      const ax = Math.min(Math.max(l.x, 0), ilha.area.w), az = Math.min(Math.max(l.z, 0), ilha.area.h);
+      /* a frente (+z do glTF girado): fora da area, para o ponto mais perto dela; dentro (a barraca), para a praca */
+      const dentro = ilha.naArea(Math.floor(l.x), Math.floor(l.z));
+      const ax = dentro ? P.praca.x : Math.min(Math.max(l.x, 0), ilha.area.w), az = dentro ? P.praca.z : Math.min(Math.max(l.z, 0), ilha.area.h);
       const dir = [Math.sin(l.giro), Math.cos(l.giro)], para = [ax - l.x, az - l.z], n = Math.hypot(para[0], para[1]);
       expect(dir[0] * para[0] / n + dir[1] * para[1] / n).toBeCloseTo(1);
     }
-    const [a, b] = ilha.lugares.filter(l => l.nome !== "cais");
-    expect(Math.hypot(a.x - b.x, a.z - b.z)).toBeGreaterThanOrEqual(LUGARES_GRADE.portao.deEnfeite + LUGARES_GRADE.portao.clareira);
-    for (const i of ilha.escondidos) {
-      const o = ilha.objetos[i];
-      expect(o.doMotor).toBeNull();
-      expect(ilha.lugares.some(l => Math.hypot(o.x - l.x, o.z - l.z) < LUGARES_GRADE[l.nome].clareira)).toBe(true);
-    }
+    /* o portao ao norte, no fim do caminho reto da praca; a barraca a leste da praca */
+    const portao = ilha.lugares.find(l => l.nome === "portao")!, barraca = ilha.lugares.find(l => l.nome === "barraca")!;
+    expect(portao.z).toBeLessThan(0); expect(Math.abs(portao.x - P.praca.x)).toBeLessThan(1);
+    expect(barraca.x).toBeGreaterThan(P.praca.x + P.praca.raio);
+    expect(Math.hypot(portao.x - barraca.x, portao.z - barraca.z)).toBeGreaterThanOrEqual(P.lugares.portao.clareira + P.lugares.barraca.clareira);
+    /* a clareira so esconde a decoracao, nunca uma arvore do motor */
+    for (const i of ilha.escondidos) expect(ilha.objetos[i].doMotor).toBeNull();
     ilha.objetos.forEach((o, i) => {
       if (o.doMotor !== null || ilha.escondidos.has(i)) return;
-      for (const l of ilha.lugares) expect(Math.hypot(o.x - l.x, o.z - l.z)).toBeGreaterThanOrEqual(LUGARES_GRADE[l.nome].clareira);
+      for (const l of ilha.lugares) expect(Math.hypot(o.x - l.x, o.z - l.z)).toBeGreaterThanOrEqual(P.lugares[l.nome].clareira);
     });
   });
 });

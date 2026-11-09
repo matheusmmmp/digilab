@@ -1,0 +1,38 @@
+         1633993 function calls (1633985 primitive calls) in 0.361 seconds
+
+   Ordered by: internal time
+   List reduced from 208 to 30 due to restriction <30>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+     9430    0.031    0.000    0.055    0.000 {method 'join' of 'str' objects}
+    22493    0.030    0.000    0.049    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab_fala_livre\memoria_fala.py:55(raiz)
+   181440    0.024    0.000    0.033    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab\metrics.py:2417(<genexpr>)
+   361069    0.024    0.000    0.024    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab_fala_livre\memoria_fala.py:52(<genexpr>)
+    62211    0.019    0.000    0.052    0.000 {built-in method builtins.min}
+        2    0.018    0.009    0.072    0.036 D:\Trab\digilab\v3-desempenho-perfil\digilab\metrics.py:2403(viabilidade_do_corpo)
+   196938    0.015    0.000    0.015    0.000 {method 'endswith' of 'str' objects}
+        1    0.012    0.012    0.025    0.025 D:\Trab\digilab\v3-desempenho-perfil\experiments\run_v2_digibrain_prototipo.py:701(_medidas_conserto_mundo)
+     5881    0.011    0.000    0.125    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab_fala_livre\memoria_fala.py:62(_raizes)
+   157656    0.009    0.000    0.009    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab\metrics.py:1204(_escala01)
+    28374    0.009    0.000    0.061    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab_fala_livre\memoria_fala.py:63(<genexpr>)
+     3549    0.009    0.000    0.181    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab_fala_livre\memoria_fala.py:89(conferir)
+147112/147108    0.009    0.000    0.009    0.000 {built-in method builtins.len}
+    87236    0.008    0.000    0.008    0.000 {method 'get' of 'dict' objects}
+        4    0.007    0.002    0.015    0.004 D:\Trab\digilab\v3-desempenho-perfil\digilab\metrics.py:2152(influencia_por_modulo)
+      111    0.007    0.000    0.011    0.000 D:\Trab\digilab\v3-desempenho-perfil\experiments\run_v2_digibrain_prototipo.py:781(maduras_no_chao)
+        1    0.006    0.006    0.215    0.215 D:\Trab\digilab\v3-desempenho-perfil\experiments\run_v2_memoria_autobio.py:216(conferencia_da_fala)
+     9430    0.006    0.000    0.064    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab_fala_livre\memoria_fala.py:50(norm)
+    14196    0.006    0.000    0.006    0.000 {method 'search' of 're.Pattern' objects}
+     3549    0.006    0.000    0.042    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab_fala_livre\memoria_fala.py:71(alegacoes)
+    11371    0.006    0.000    0.013    0.000 {built-in method builtins.any}
+     1344    0.006    0.000    0.020    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab_fala_livre\memoria_fala.py:122(fatos_de_memoria)
+        1    0.006    0.006    0.064    0.064 D:\Trab\digilab\v3-desempenho-perfil\experiments\run_v2_digibrain_prototipo.py:611(medidas)
+    23367    0.005    0.000    0.007    0.000 D:\Trab\digilab\v3-desempenho-perfil\experiments\run_v2_digibrain_prototipo.py:719(dist)
+     5881    0.005    0.000    0.005    0.000 {method 'findall' of 're.Pattern' objects}
+    45857    0.004    0.000    0.004    0.000 D:\Trab\digilab\v3-desempenho-perfil\experiments\run_v2_digibrain_prototipo.py:694(_no_chao)
+     3672    0.003    0.000    0.010    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab_fala_livre\fatos.py:68(_txt)
+     9430    0.003    0.000    0.005    0.000 C:\Users\mathe\AppData\Local\Programs\Python\Python313\Lib\re\__init__.py:330(_compile)
+    22497    0.003    0.000    0.003    0.000 {method 'startswith' of 'str' objects}
+    20160    0.003    0.000    0.004    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab\metrics.py:2162(<genexpr>)
+
+

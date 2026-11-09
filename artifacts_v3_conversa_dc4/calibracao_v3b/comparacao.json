@@ -1,0 +1,56 @@
+{
+  "falas": "as do dec-v3 da calibracao (E3 e os turnos dec-v3 das conversas), as mesmas nas duas vozes",
+  "voz-v3": {
+    "G": {
+      "falas": 38,
+      "fome_sem_conceito": 4,
+      "fome_na_fala_sem_conceito": 0,
+      "id_na_fala": 4,
+      "marcou": 14,
+      "genericas": 4
+    },
+    "H": {
+      "falas": 38,
+      "fome_sem_conceito": 12,
+      "fome_na_fala_sem_conceito": 13,
+      "id_na_fala": 0,
+      "marcou": 30,
+      "genericas": 0
+    },
+    "S": {
+      "falas": 38,
+      "fome_sem_conceito": 7,
+      "fome_na_fala_sem_conceito": 3,
+      "id_na_fala": 0,
+      "marcou": 19,
+      "genericas": 0
+    }
+  },
+  "voz-v3b": {
+    "G": {
+      "falas": 38,
+      "fome_sem_conceito": 2,
+      "fome_na_fala_sem_conceito": 0,
+      "id_na_fala": 0,
+      "marcou": 18,
+      "genericas": 0
+    },
+    "H": {
+      "falas": 38,
+      "fome_sem_conceito": 6,
+      "fome_na_fala_sem_conceito": 0,
+      "id_na_fala": 0,
+      "marcou": 29,
+      "genericas": 0
+    },
+    "S": {
+      "falas": 38,
+      "fome_sem_conceito": 5,
+      "fome_na_fala_sem_conceito": 0,
+      "id_na_fala": 0,
+      "marcou": 26,
+      "genericas": 0
+    }
+  },
+  "fonte": "artifacts_v3_conversa_dc4/calibracao/falas.jsonl (voz-v3) e calibracao_v3b/falas.jsonl (voz-v3b); entradas.json"
+}

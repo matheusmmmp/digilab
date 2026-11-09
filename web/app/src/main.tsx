@@ -15,6 +15,7 @@ import { iniciarTema } from "./tema.ts";
 import { iniciarTempo } from "./tempo.ts";
 import { CHAVE_GUARDADOS, semearGuardados } from "./pets.ts";
 import { descartarPetsAntigos } from "./tamer.ts";
+import { lutaPocLigada } from "./lutaPoc.ts";
 import { ligarEscala } from "../motor/index.ts";
 import { comerAgora, dormirAgora, emburrarAgora, reacaoAtual } from "./telas/pet/cenaAcao.ts";
 import { CENA } from "./telas/pet/cenaEstado.ts";
@@ -51,7 +52,7 @@ ligarEscala(new URLSearchParams(location.search).get("escala") !== "0");
 /* descarte unico dos pets antigos (decisoes do Matheus): os v1-v5 na chegada das medalhas do Tamer
    (docs/DESIGN_MEDALHAS_ARENAS.md) e os v6 de antes do combate V21D (docs/VALIDACAO_V21D.md); o aviso fica pendente para o
    App; roda uma vez por versao do descarte (tamer.CHAVE_DESCARTE). Antes de abrir o save */
-try { descartarPetsAntigos(localStorage, CHAVE_GUARDADOS); } catch (err) { console.error("descarte dos pets antigos falhou", err); }
+try { descartarPetsAntigos(localStorage, CHAVE_GUARDADOS, lutaPocLigada()); } catch (err) { console.error("descarte dos pets antigos falhou", err); }
 iniciarJogo(localStorage);
 /* a constante CLIPES_UP (ligada desde a H1b da ilha) liga os clipes do UP; ?clipes_up=1 tambem os liga naquela aba, como antes */
 carregarAtlas(ATLAS_URL, CLIPES_UP || new URLSearchParams(location.search).get("clipes_up") === "1");

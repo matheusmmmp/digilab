@@ -13,6 +13,9 @@ import { CHAVE_GUARDADOS } from "../../pets.ts";
 import type { Tamer } from "../../tamer.ts";
 import { LUTA } from "../../luta.ts";
 import { ENDERECO_LUTA } from "../../rotas.ts";
+/** a duracao de uma luta da Fabrica: a do combate de antes, ou a da luta da POC (v21, LP2b: o relogio da simulacao) */
+import type { LutaFabrica } from "../../../motor/index.ts";
+const duracaoFabrica = (l: LutaFabrica): string => l.res ? duracaoLuta(l.res) : `${Math.round(l.poc!.relogio / 1000)} s`;
 
 const pct = (x: number): string => `${Math.round(x * 100)}%`;
 const series = (n: number): string => `${n} série${n === 1 ? "" : "s"}`;
@@ -34,7 +37,7 @@ function LutasFabrica({ t }: { t: TentativaFabrica }) {
       {[...t.lutas].reverse().slice(0, 6).map(l => (
         <li key={l.k} className={l.venceu ? "vit" : "der"}>
           <span className="dl-lcd">S{Math.floor(l.k / LUTAS_SERIE_FABRICA) + 1}·L{l.k % LUTAS_SERIE_FABRICA + 1}</span>
-          <span>{nomeForma(l.alugado)} × {nomeForma(l.rival)} ({arq(l.rival)}): <b>{l.venceu ? "venceu" : "perdeu"}</b> em {duracaoLuta(l.res)}, com {pct(l.vidaFim)} da vida no fim{l.trocou ? "; trocou por ele" : ""}.</span>
+          <span>{nomeForma(l.alugado)} × {nomeForma(l.rival)} ({arq(l.rival)}): <b>{l.venceu ? "venceu" : "perdeu"}</b> em {duracaoFabrica(l)}, com {pct(l.vidaFim)} da vida no fim{l.trocou ? "; trocou por ele" : ""}.</span>
         </li>
       ))}
     </ol>
@@ -69,7 +72,7 @@ export function CartaoFabrica({ t, lutando }: { t: Tamer; lutando: boolean }) {
               <small>{p.naSerie === 1 ? "inteiro: a série começa com a vida cheia" : `${pct(atual.vidaAgora)} da vida: sem cura dentro da série`}</small></span>
           </span>
         </div>
-        {u && <p className="fb-ultima" role="status">Luta {u.k + 1}: venceu {nomeForma(u.rival)} ({arq(u.rival)}) em {duracaoLuta(u.res)}.</p>}
+        {u && <p className="fb-ultima" role="status">Luta {u.k + 1}: venceu {nomeForma(u.rival)} ({arq(u.rival)}) em {duracaoFabrica(u)}.</p>}
         {troca && u && <div className="fb-troca">
           <span>Trocar o alugado pelo rival derrotado? {nomeForma(u.rival)} {atual!.regra.trocaInteira ? "entra com a vida cheia." : "entra com a mesma parte da vida: a troca não cura."}</span>
           <button type="button" className="dl-btn dl-btn--sec fb-trocar" disabled={lutando} onClick={() => agir(trocarFabrica)}>Trocar por {nomeForma(u.rival)} ({arq(u.rival)})</button>

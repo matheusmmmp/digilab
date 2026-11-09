@@ -1,0 +1,38 @@
+         10501039 function calls (10476562 primitive calls) in 3.235 seconds
+
+   Ordered by: internal time
+   List reduced from 479 to 30 due to restriction <30>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+    20160    0.258    0.000    0.741    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab\corpo.py:937(passo)
+    73891    0.180    0.000    0.322    0.000 C:\Users\mathe\AppData\Local\Programs\Python\Python313\Lib\dataclasses.py:1599(_replace)
+     1344    0.146    0.000    0.500    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab\digibrain\mem.py:247(lembrar)
+   425951    0.121    0.000    0.182    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab\policies\lobos.py:449(div_arred)
+   474286    0.114    0.000    0.181    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab\digibrain\mem.py:270(<genexpr>)
+    42220    0.084    0.000    0.120    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab\corpo.py:658(_somar)
+   136295    0.083    0.000    0.333    0.000 {built-in method builtins.sum}
+   383040    0.080    0.000    0.104    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab\corpo_grafo.py:158(<genexpr>)
+866919/850778    0.080    0.000    0.085    0.000 {built-in method builtins.getattr}
+     4691    0.072    0.000    0.072    0.000 C:\Users\mathe\AppData\Local\Programs\Python\Python313\Lib\json\encoder.py:205(iterencode)
+   540859    0.070    0.000    0.070    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab\digibrain\mem.py:77(_faixa)
+   444636    0.064    0.000    0.091    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab\mundo.py:180(distancia)
+    20160    0.059    0.000    3.222    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab\motor_corpo.py:323(_laco)
+    27189    0.058    0.000    0.132    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab\mundo.py:262(campo_em)
+    20160    0.057    0.000    0.331    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab\state.py:60(avancar_um_tick)
+    73891    0.052    0.000    0.400    0.000 C:\Users\mathe\AppData\Local\Programs\Python\Python313\Lib\dataclasses.py:1580(replace)
+    40320    0.052    0.000    0.156    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab\corpo_grafo.py:157(da_fase)
+   519556    0.047    0.000    0.049    0.000 {built-in method builtins.max}
+   574592    0.047    0.000    0.047    0.000 {built-in method builtins.divmod}
+   661678    0.046    0.000    0.046    0.000 {built-in method builtins.abs}
+   218970    0.041    0.000    0.132    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab\digibrain\_comum.py:15(mul)
+458764/455143    0.041    0.000    0.050    0.000 {built-in method builtins.min}
+    99398    0.039    0.000    0.057    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab\corpo.py:286(div_arred)
+     1344    0.038    0.000    1.172    0.001 D:\Trab\digilab\v3-desempenho-perfil\digilab\digibrain\adapt.py:176(agir)
+     1344    0.038    0.000    0.181    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab\digibrain\impulso.py:130(unidades)
+     3021    0.037    0.000    0.284    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab\mundo.py:913(perceber)
+   262080    0.036    0.000    0.036    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab\corpo.py:923(_dispara)
+   295289    0.035    0.000    0.035    0.000 {method 'get' of 'dict' objects}
+     1344    0.034    0.000    0.095    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab\digibrain\arb.py:93(escolher)
+    47419    0.031    0.000    0.031    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab\corpo.py:1012(drives)
+
+
