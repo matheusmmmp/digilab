@@ -5,7 +5,7 @@ import { defineConfig } from "@playwright/test";
 const PORTA = Number(process.env.DIGILAB_PORTA_LP3 ?? 5233);
 export default defineConfig({
   testDir: ".",
-  testMatch: /luta_poc_lp3\.spec\.ts$/,
+  testMatch: /luta_poc_lp3(_jogo)?\.spec\.ts$/,
   timeout: 300_000,
   fullyParallel: true,
   expect: { timeout: 60_000 },

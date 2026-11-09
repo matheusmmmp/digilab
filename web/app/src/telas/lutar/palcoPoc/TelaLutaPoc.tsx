@@ -44,7 +44,7 @@ function Resultado({ p, continuar }: { p: PalcoPoc; continuar: () => void }) {
     <dialog className="modal-conf ab-hx dl poc-resultado" ref={ref} aria-labelledby="poc-res-tit" onClose={continuar} data-testid="poc-resultado">
       <h2 id="poc-res-tit">{p.fim.titulo}</h2>
       <p>{p.fim.texto}</p>
-      <div className="modal-bts"><BotaoContinuar data-autofocus onClick={() => ref.current?.close()}>Continuar</BotaoContinuar></div>
+      <div className="modal-bts"><BotaoContinuar data-autofocus onClick={() => { ref.current?.close(); continuar(); }}>Continuar</BotaoContinuar></div>
     </dialog>
   );
 }

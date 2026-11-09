@@ -58,9 +58,16 @@ export const DESENHO_POC = { efeito: .22, pes: 9, margem: [70, 90] } as const;
 /** o usuario pediu menos movimento: sem tremida, clarao, poeira nem camera lenta (os numeros, o "K.O." e a barra ficam) */
 export const movimentoReduzido = (): boolean => typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-export interface LadoDesenhoPoc { sprite: string; nomeTela: string; forma: DadosFormaPoc }
+/** um lado no palco: a chave da tabela da arena (a forma do jogo ou o NPC: o elemento sai dela), o sprite do atlas (o NPC usa o de outro
+    Digimon: NPC.sprite), o nome na tela e os dados da forma */
+export interface LadoDesenhoPoc { chave: string; sprite: string; nomeTela: string; forma: DadosFormaPoc }
 export interface CenaPocDesenho { L: LutaPoc; v: VisualPoc; A: LadoDesenhoPoc; B: LadoDesenhoPoc }
 
+/** o elemento de um lado (E2, D-LE-1): o da chave da tabela; o NPC que usa o sprite de outro Digimon (o Piedmon, com o do Soberano) e sem
+    elemento proprio cai no do sprite, que falha alto se tambem nao tiver */
+export function elementoDoLado(f: LadoDesenhoPoc): ElementoTR {
+  try { return elementoDoSprite(f.chave); } catch { return elementoDoSprite(f.sprite); }
+}
 /** o clipe de um lutador e o tempo dentro dele (ms da luta): o estado da simulacao vira o clipe do atlas */
 export function clipeDoLutador(u: LutadorPoc, extraMs: number): { clipe: Clipe; t: number } {
   if (u.morto || u.estado === "die") return { clipe: "Die", t: u.t + extraMs };
@@ -255,7 +262,7 @@ export function desenharLutaPoc(cv: HTMLCanvasElement, c: CenaPocDesenho, a: Atl
   if (escuro > 0) { ctx.fillStyle = `rgba(4,8,20,${escuro.toFixed(3)})`; ctx.fillRect(0, 0, Wp, Hp); }
   n.escuro = escuro.toFixed(2);
   ctx.imageSmoothingEnabled = false;
-  const formas = [c.A, c.B], els: ElementoTR[] = formas.map(f => elementoDoSprite(f.sprite));
+  const formas = [c.A, c.B], els: ElementoTR[] = formas.map(elementoDoLado);
   const dims: [number, number][] = formas.map(f => (a ? dimSprite(a.dados, f.sprite) : [28, 40]));
   /* o pixel de efeito (E2): VOO.pixel pixels do sprite, entre VOO.pixelMinCss e 1,5 vez isso em px de CSS (o sprite grande no zoom deixava o
      efeito em blocos) */

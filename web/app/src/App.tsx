@@ -27,7 +27,6 @@ import { AvisoSom } from "./componentes/AvisoSom.tsx";
 import { AvisoPetsDescartados } from "./componentes/Medalha.tsx";
 import { AvisoCombateTR, avisoTRPendente } from "./componentes/AvisoCombateTR.tsx";
 import { AvisoLutaPoc, avisoPocPendente } from "./componentes/AvisoLutaPoc.tsx";
-import { LutaPocSemTela } from "./componentes/LutaPocSemTela.tsx";
 import { TelaLutaPoc } from "./telas/lutar/palcoPoc/TelaLutaPoc.tsx";
 import { TelaArenaPoc, TelaCampanhaPoc } from "./telas/lutar/palcoPoc/TelaLugaresPoc.tsx";
 import { assistirPoc, fimDoPet, lutaMontadaDoEndereco, useLutaPoc } from "./lutaPocTela.ts";
@@ -238,12 +237,11 @@ export function App() {
       if (barra) barra.focus(); else if (document.activeElement === document.body) document.querySelector<HTMLElement>(".mm-retrato")?.focus();
     }, 60);
   };
-  /* um pet v21 (a luta da POC): a Arena e a Campanha no palco novo (LP3); a Fronteira ainda sem tela */
+  /* um pet v21 (a luta da POC): a Arena e a Campanha no palco novo (LP3); a Fronteira usa a tela dela, com o palco novo por baixo */
   const pocSemTela = jogo.motor.versao === VERSAO_V21;
   const corpoDestino = (): ReactNode => rota.aba === "treinar" ? <TelaTreinar /> : rota.aba === "aprend" ? <TelaAprend /> : rota.aba === "evolucao" ? <TelaEvolucao /> : rota.aba === "itens" ? <TelaItens />
     : pocSemTela && rota.aba === "arena" ? <TelaArenaPoc />
     : pocSemTela && rota.aba === "campanha" ? <TelaCampanhaPoc />
-    : pocSemTela && rota.aba === "fronteira" ? <LutaPocSemTela lugar="Fronteira" />
     : rota.aba === "arena" ? <TelaArena voltarPet={irPet} verReplay={abrirReplay} />
     : rota.aba === "campanha" ? <TelaCampanha voltarPet={irPet} irTreinar={() => { ir({ destino: "crescer", aba: "treinar" }); scrollTo(0, 0); }} />
     : rota.aba === "medalhas" ? <TelaMedalhas />

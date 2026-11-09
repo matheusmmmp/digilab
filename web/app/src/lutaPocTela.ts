@@ -7,7 +7,7 @@
    quadro. A pausa do acerto (E1) e a camera lenta do nocaute (E5) so mudam o desenho: os passos e o fim sao os mesmos. */
 import { useEffect, useReducer } from "react";
 import {
-  CENAS, FORMAS_ARENA, LIMITE_POC_MS, NOME_BOT, NPC, configLutaPoc, criarLutaPoc, formaDaChave, naTabela, nomeForma, passoPoc, sementeDaSerie,
+  CENAS, FORMAS_ARENA, LIGA, VERSAO_V21, arenaDaLuta, RIVAL_LIGA, ehInstalacao, LIMITE_POC_MS, NOME_BOT, NPC, configLutaPoc, criarLutaPoc, formaDaChave, naTabela, nomeForma, passoPoc, sementeDaSerie,
   sorteiosPoc, statsNpc, statsRivalArena, type EntradaLutaPoc, type IdCena, type LutaPoc, type ResultadoLutaPoc,
 } from "../motor/index.ts";
 import { lutaPocLigada } from "./lutaPoc.ts";
@@ -45,19 +45,23 @@ export function nomeDaChave(k: string): string {
   if (NPC[k]) return NOME_BOT[k] ?? NPC[k]!.nome;
   return nomeForma(formaDaChave(k));
 }
+/** o sprite do atlas de uma chave da tabela: a propria forma, ou o sprite do NPC (alguns NPCs usam o de outro Digimon) */
+export const spriteDaChave = (k: string): string => (NPC[k] ? NPC[k]!.sprite ?? k : k);
 export const ladoDesenho = (k: string): LadoDesenhoPoc => {
   const f = FORMAS_ARENA[k]; if (!f) throw new Error(`palco: ${k} nao esta na tabela da arena`);
-  return { sprite: k, nomeTela: nomeDaChave(k), forma: f };
+  return { chave: k, sprite: spriteDaChave(k), nomeTela: nomeDaChave(k), forma: f };
 };
 
 /** as lutas de um resultado do motor (uma, ou a serie: a Cidadela, a Liga, a Torre), com a mesma entrada que o motor usou (Motor._lutarPoc) */
 export function lutasDoResultado(r: ResultadoLutaPoc): LutaNaTela[] {
-  const n = r.serie.length;
+  /* a serie da Cidadela: as lutas que ela tem (as jogadas param na primeira que nao for vitoria) */
+  const nSerie = NPC[r.rival] ? arenaDaLuta(r.rival, VERSAO_V21)?.lutas ?? 1 : 1;
   return r.serie.map((s, k) => ({
     entrada: { cena: s.mapa, semente: sementeDaSerie(r.semente, k), a: { forma: r.forma, stats: r.pet, ...(k ? { vida0: s.vida0 } : {}) }, b: { forma: s.contra, stats: s.rivalStats } },
     esperado: { vencedor: s.vencedor, relogio: s.relogio, passos: s.passos, ko: s.vidaA <= 0 || s.vidaB <= 0 },
     A: ladoDesenho(r.forma), B: ladoDesenho(s.contra),
-    rotulo: n > 1 ? `Luta ${k + 1}${r.torneio ? "" : ` de ${n}`}` : "",
+    /* a Liga tem 6 lutas, a Cidadela 3; a Torre vai ate a primeira que nao for vitoria (o numero de lutas nao aparece) */
+    rotulo: r.rival === RIVAL_LIGA ? `Luta ${k + 1} de ${LIGA.length}` : ehInstalacao(r.rival) ? `vitória ${k + 1}` : nSerie > 1 ? `Luta ${k + 1} de ${nSerie}` : "",
   }));
 }
 
@@ -122,13 +126,16 @@ export function assistirPoc(lutas: readonly LutaNaTela[], contexto: string, fim:
   timer = setTimeout(quadro, RITMO_POC.quadroMs);
 }
 
+/** "no Coliseu", "na Floresta Green Shade": o artigo de cada mapa */
+const NA: Record<IdCena, string> = { campo: "no", coliseu: "no", floresta: "na", praia: "na", deserto: "no", castelo: "no", caverna: "na", ringue: "no" };
+export const naCena = (id: IdCena): string => `${NA[id]} ${CENAS[id].nome}`;
 /** o texto do fim de uma luta do pet (o lado a) */
 export function fimDoPet(L: LutaPoc, A: LadoDesenhoPoc, B: LadoDesenhoPoc, extra = ""): FimPoc {
   const s = (L.relogio / 1000).toFixed(1).replace(".", ",");
   const venceu = L.vencedor === "a" ? true : L.vencedor === "b" ? false : null;
   const duplo = L.a.morto && L.b.morto, titulo = venceu ? `${A.nomeTela} venceu` : venceu === false ? `${B.nomeTela} venceu` : "Empate";
   const como = duplo ? "os dois caíram (nocaute duplo)" : L.vencedor !== null ? "por nocaute" : "no limite de tempo";
-  return { titulo, venceu, texto: `${titulo} em ${s} s, ${como}, no ${CENAS[L.cena.id].nome}.${extra ? " " + extra : ""}` };
+  return { titulo, venceu, texto: `${titulo} em ${s} s, ${como}, ${naCena(L.cena.id)}.${extra ? " " + extra : ""}` };
 }
 
 /* ---------------------------------------------------------------- a luta montada (a conferencia e as capturas) */

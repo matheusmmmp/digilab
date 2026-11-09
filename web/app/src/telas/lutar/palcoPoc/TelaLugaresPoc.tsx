@@ -6,13 +6,14 @@ import { Swords } from "lucide-react";
 import { CENAS, IDS_CENA, NPC, hashSemente, mapaDoLugar, type IdCena } from "../../../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../../../atlas.ts";
 import { mudarMotor, useJogo } from "../../../jogo.ts";
-import { assistirPoc, fimDoPet, ladoDesenho, lutasDoResultado, nomeDaChave, useLutaPoc } from "../../../lutaPocTela.ts";
-import type { ResultadoLutaPoc } from "../../../../motor/index.ts";
+import { assistirPoc, fimDoPet, ladoDesenho, lutasDoResultado, nomeDaChave, spriteDaChave, useLutaPoc } from "../../../lutaPocTela.ts";
+import type { Motor, ResultadoLutaPoc } from "../../../../motor/index.ts";
 
-/** grava a luta (o motor decide e entra no registro) e abre o palco; o erro do motor aparece na tela */
-function lutar(rival: string, mapa: IdCena | null, contexto: string, setErro: (e: string | null) => void): void {
+/** grava a luta (o motor decide e entra no registro) e abre o palco; o erro do motor aparece na tela. A semente e a de sempre (a da luta no
+    registro), ou a que o motor da (as instalacoes: a da proxima tentativa) */
+export function lutarNoPalco(rival: string, mapa: IdCena | null, contexto: string, setErro: (e: string | null) => void, semente?: (m: Motor) => number): void {
   let r: ResultadoLutaPoc | null = null;
-  try { mudarMotor(m => { r = m.lutarPoc(rival, hashSemente("luta", m.semente, m.log.length), mapa); }); }
+  try { mudarMotor(m => { r = m.lutarPoc(rival, semente ? semente(m) : hashSemente("luta", m.semente, m.log.length), mapa); }); }
   catch (err) { setErro(err instanceof Error ? err.message : String(err)); return; }
   setErro(null);
   const res = r as unknown as ResultadoLutaPoc, lutas = lutasDoResultado(res);
@@ -23,7 +24,7 @@ function lutar(rival: string, mapa: IdCena | null, contexto: string, setErro: (e
 }
 
 function Retrato({ k }: { k: string }) {
-  const a = useAtlas(), img = a.tipo === "ok" ? imagemAtlas(a, k) : null;
+  const a = useAtlas(), img = a.tipo === "ok" ? imagemAtlas(a, spriteDaChave(k)) : null;
   return <span className="poc-ret" aria-hidden="true">{img && <img className="dl-pix" src={img.url} width={img.w} height={img.h} alt="" />}</span>;
 }
 
@@ -56,7 +57,7 @@ export function TelaArenaPoc() {
         </div>
       </fieldset>
       {erro && <p className="aviso" role="alert">A luta não começou: {erro}</p>}
-      <button type="button" className="hx-continuar poc-lutar" disabled={luta.lutando} onClick={() => lutar(sel, mapa, `Arena · ${CENAS[mapa].nome}`, setErro)} data-testid="poc-lutar">
+      <button type="button" className="hx-continuar poc-lutar" disabled={luta.lutando} onClick={() => lutarNoPalco(sel, mapa, `Arena · ${CENAS[mapa].nome}`, setErro)} data-testid="poc-lutar">
         <Swords aria-hidden="true" /> Lutar</button>
     </section>
   );
@@ -76,7 +77,7 @@ export function TelaCampanhaPoc() {
             <li key={k} className="poc-desafio">
               <Retrato k={k} />
               <span><b>{nomeDaChave(k)}</b><small>{L.nome} · {CENAS[mapa].nome}{m.campanha[k] ? ` · vencido ${m.campanha[k]}×` : ""}</small></span>
-              <button type="button" className="hx-btn" disabled={luta.lutando || !aberto} onClick={() => lutar(k, mapa, `Campanha · ${L.nome}`, setErro)}
+              <button type="button" className="hx-btn" disabled={luta.lutando || !aberto} onClick={() => lutarNoPalco(k, mapa, `Campanha · ${L.nome}`, setErro)}
                 data-testid={`poc-desafio-${k}`}>{aberto ? "Lutar" : "Trancado"}</button>
             </li>
           );
