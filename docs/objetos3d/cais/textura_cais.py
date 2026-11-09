@@ -72,6 +72,8 @@ if __name__ == "__main__":
     im = Image.composite(im, Image.new("RGB", (lado, lado), media), m)
     if cores > 256:
         raise SystemExit("o PNG de paleta vai ate 256 cores")
-    im = im.quantize(cores, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.FLOYDSTEINBERG)
+    # cores 0: so o realce, em RGB (a fonte de cor do voxel_cais.py, que pinta cada bloco com uma cor so)
+    if cores > 0:
+        im = im.quantize(cores, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.FLOYDSTEINBERG)
     im.save(sai, optimize=True)
     print(sai, os.path.getsize(sai) // 1024, "KB")
