@@ -23,7 +23,7 @@ import { AvisoSom } from "../../componentes/AvisoSom.tsx";
 import { SOM, useSom } from "../../som.ts";
 import { dicasLigadas, ligarDicas } from "../../dicas.ts";
 import { reverOTutorial } from "../../nivelTela.ts";
-import { ligarDetalhesPet, useDetalhesPet } from "../../hudPet.ts";
+import { ligarDetalhesPet, temPainelMovido, useDetalhesPet, voltarPaineis } from "../../hudPet.ts";
 import { textoSave } from "../../save.ts";
 import { useHabitat } from "../../habitat.ts";
 import { usePele } from "../../pele.ts";
@@ -100,6 +100,20 @@ function Visual() {
       </div>
       <p className="mc-apoio">Sistema segue o claro ou escuro do aparelho. Os menus são sempre escuros; o tema vale para o habitat, o balão, o retrato e o relógio.</p>
       <EscolhaHabitat temMundo={!!m.mundo} />
+      <VoltarPaineis />
+    </>
+  );
+}
+/** os paineis e avisos arrastados (a pilha da direita, o painel de um lugar ou dos Ajustes, o balao, o alerta) voltam ao lugar de sempre (2026-11-08) */
+function VoltarPaineis() {
+  const [movido, setMovido] = useState(temPainelMovido);
+  return (
+    <>
+      <h3 className="mc-sec" id="cfg-paineis">Painéis</h3>
+      <p className="mc-apoio">Arraste um painel pelo título para mudá-lo de lugar. A posição fica neste navegador.</p>
+      <BotaoHx disabled={!movido} onClick={() => { voltarPaineis(); setMovido(false); }}>
+        <RotateCcw aria-hidden="true" />Voltar os painéis ao lugar
+      </BotaoHx>
     </>
   );
 }

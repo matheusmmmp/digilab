@@ -1,0 +1,29 @@
+/* LUTA_POC, LP2: as vidas de hoje (v13 a v19 e o pet de teste v16), com cuidado e lutas, gravadas ANTES da luta nova no motor
+   (test/gabaritos/lp2_vidas_hoje.json, por test/lp2_hoje.ts --gravar), saem byte a byte com a chave LUTA_POC_LIGADA desligada; o replay tambem. */
+import { readFileSync } from "node:fs";
+import { describe, expect, test } from "vitest";
+import { Motor } from "../motor/index.ts";
+import { DIAS_HOJE, SEMENTES_HOJE, VARIANTES_HOJE, gravarHoje, viverHoje, type VidaHoje } from "./lp2_hoje.ts";
+
+const gab = JSON.parse(readFileSync(new URL("./gabaritos/lp2_vidas_hoje.json", import.meta.url), "utf8")) as
+  { versao: number; dias: number; sementes: number[]; variantes: string[]; vidas: VidaHoje[] };
+
+describe("LP2: as vidas de hoje com lutas saem iguais ao gabarito gravado antes da luta nova", () => {
+  test("a forma do gabarito: as 8 variantes x as 5 sementes, todas com lutas", () => {
+    expect(gab.versao).toBe(1);
+    expect(gab.dias).toBe(DIAS_HOJE);
+    expect(gab.sementes).toEqual([...SEMENTES_HOJE]);
+    expect(gab.variantes).toEqual([...VARIANTES_HOJE]);
+    expect(gab.vidas.map(v => [v.variante, v.semente])).toEqual(VARIANTES_HOJE.flatMap(v => SEMENTES_HOJE.map(s => [v, s])));
+    expect(gab.vidas.every(v => v.lutas > 0)).toBe(true);
+  });
+  for (const v of VARIANTES_HOJE) for (const s of SEMENTES_HOJE) {
+    test(`${v} @${s}: o registro, a assinatura e o resultado de cada luta; o replay tambem`, () => {
+      const g = gab.vidas.find(x => x.variante === v && x.semente === s)!;
+      const { m, log, res } = viverHoje(v, s);
+      expect(gravarHoje(v, s, m, log, res)).toEqual(g);
+      const r = Motor.reproduzir(s, log, m.versao);
+      expect({ ...gravarHoje(v, s, r, log, res), resultados: g.resultados }).toEqual(g);
+    });
+  }
+});

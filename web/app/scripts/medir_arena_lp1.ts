@@ -7,12 +7,13 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { execSync } from "node:child_process";
 import os from "node:os";
 import { fileURLToPath } from "node:url";
-import { lutar, type IdCena, type Stats } from "../motor/arena/index.ts";
+import { ERRO_MIRA_POC, lutar, type IdCena, type Stats } from "../motor/arena/index.ts";
 
 const REPETICOES = 5;
 const gab = JSON.parse(readFileSync(new URL("../test/gabaritos/arena_poc_1x1.json", import.meta.url), "utf8")) as
-  { stats: Stats; lutas: { cena: IdCena; a: string; b: string; semente: number }[] };
-const entradas = gab.lutas.map(l => ({ cena: l.cena, semente: l.semente, a: { forma: l.a, stats: gab.stats }, b: { forma: l.b, stats: gab.stats } }));
+  { stats: Omit<Stats, "erro">; lutas: { cena: IdCena; a: string; b: string; semente: number }[] };
+const st: Stats = { ...gab.stats, erro: ERRO_MIRA_POC.normal };
+const entradas = gab.lutas.map(l => ({ cena: l.cena, semente: l.semente, a: { forma: l.a, stats: st }, b: { forma: l.b, stats: st } }));
 
 /* aquecimento: uma volta inteira sem medir (o JIT) */
 let passos = 0, segundos: number[] = [], semFim = 0;

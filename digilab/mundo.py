@@ -94,6 +94,14 @@ o registro do consumo (`consumos_mundo`, e com ele o `ocorrido["comeu"]` do `com
 madura e None na podre; a fruta na mao (sempre madura) tambem. O mundo nao usa o perfil para nada: nao muda a nutricao, o humor, o cheiro,
 a percepcao, os candidatos nem nenhuma rng. O corpo (o orgao do Paladar, do B) o le daqui.
 
+O sacudir a arvore (docs/TAREFA_V3_ARVORE_SACODE.md, S1; AS-1 a AS-11 aprovadas em 2026-11-08): `cfg_sacudir` (ConfigSacudir) liga, so com
+o mundo e um pet. Desligado, nada muda. Ligado, cada arvore tem um galho (ate `galho_max`, nasce cheio, repoe uma fruta a cada
+`recarga_galho_min` ticks), e o evento `sacudir_arvore(tick, arvore)` (events.sacudir_arvore; o replay o refaz) derruba uma fruta do galho
+num ponto a ate `raio_queda_celulas` do tronco, pelo fluxo proprio `arvore-sacode`, se houver lugar no chao (o teto de hoje). Nao e
+contato nem cuidado e vale com o pet dormindo. O registro e do `Mundo` (`galhos`, `sacudidas`). A queda natural nao muda.
+`cfg_fruta_comida` (ConfigFrutaComoComida, AS-11): ligada, o laco nao entrega o `fruta_comida` ao cerebro, e a fruta do mundo chega como a
+racao (o A do v11 com o corpo quebra com o aviso, o MV-10).
+
 A fruta ao lado da racao (o RP-2 de docs/futuro/paladar.md; `cfg_fruta_ao_lado`, ConfigFrutaAoLado): so com o mundo e um pet. Desligada,
 nada muda. Ligada, o motor aceita o evento `deixar_fruta(tipo, x, y)` (events.deixar_fruta; o replay o refaz), so logo depois de uma racao
 deixada pelo dono no mesmo tick (a racao de referencia); a fruta nasce madura com a origem `dono_ao_lado` (ORIGEM_AO_LADO), entra em
@@ -118,6 +126,7 @@ from .genoma import TIPO_EVENTO as TIPO_GENOMA, Genoma
 from .config import CONFIG_FRUTA_AO_LADO, ConfigFrutaAoLado
 from .config import CONFIG_CONTRATO, ConfigContrato
 from .config import CONFIG_BOLA_NO_GOLPE, CONFIG_DECISAO_NA_COMIDA, ConfigBolaNoGolpe, ConfigDecisaoNaComida
+from .config import CONFIG_FRUTA_COMO_COMIDA, CONFIG_SACUDIR, ConfigFrutaComoComida, ConfigSacudir
 from . import contrato as ct
 from .config import ConfigOlfato, ConfigOuvido, ConfigSentidos
 from .corpo import leitura_orgao
@@ -133,6 +142,8 @@ from .events import deixar_fruta as evento_deixar_fruta
 from .events import LutaSemChave, ler_deixar_fruta, ler_resumo_luta
 from .events import resumo_luta as evento_resumo_luta
 from .events import deixar_comida as evento_deixar_comida
+from .events import ler_sacudir_arvore
+from .events import sacudir_arvore as evento_sacudir_arvore
 from .frutas import MotorFrutas
 from .policy import Observacao, Transicao
 from .protocol import derivar_semente
@@ -160,6 +171,10 @@ class BanheiroSemMundo(ValueError):
 
 class PetQuePensaSemChave(ValueError):
     """a fruta na mao, a troca de tipo ou a ConfigPetQuePensaMundo sem o mundo, sem a chave ou no grupo"""
+
+
+class SacudirSemChave(ValueError):
+    """o sacudir a arvore (docs/TAREFA_V3_ARVORE_SACODE.md) sem o mundo, sem a ConfigSacudir ou no grupo"""
 
 
 class GestoForaDoMundo(ValueError):
@@ -655,8 +670,9 @@ class _PoliticaComMundo:
         self._pm.observar(Transicao(observacao=m._obs_decisao, acao=transicao.acao, observacao_seguinte=obs_depois,
                                     recompensa=transicao.recompensa))
         comeu = ocorrido["comeu"] if ocorrido is not None else None
-        if comeu is not None and comeu["tipo"] in FRUTAS:
-            aviso = getattr(self._pm, "fruta_comida", None)     # E2: os cerebros que ja o usam
+        if comeu is not None and comeu["tipo"] in FRUTAS and not m.cfc.ligada:
+            # E2: os cerebros que ja o usam. Com a fruta do mundo como comida (AS-11), o aviso nao vai: a fruta chega como a racao
+            aviso = getattr(self._pm, "fruta_comida", None)
             if aviso is not None:
                 aviso(comeu["tipo"], obs_depois)
         if ocorrido is not None:
@@ -687,7 +703,11 @@ class Mundo:
     A atualizacao (quedas, apodrecer, sumir) e idempotente por tick (`atualizar`): a segunda chamada no mesmo tick nao faz nada, e um tick
     para tras falha alto. Com dois pets, quem decide primeiro no tick a dispara, e o resultado so le o tick e o fluxo `mundo-arvores`."""
 
-    def __init__(self, cfg_mundo: ConfigMundo, semente: int) -> None:
+    def __init__(self, cfg_mundo: ConfigMundo, semente: int, arvores_na_casa: bool = False) -> None:
+        # `arvores_na_casa` (TAREFA_V3_ARVORE_SACODE, D-AS-S1-7): so o motor com a ConfigSacudir ligada; a arvore na casa (o bosque do lar
+        # da planta A da ilha) cai como a do jardim. Sem ele, a arvore na casa falha alto, como hoje
+        if type(arvores_na_casa) is not bool:
+            raise TypeError(f"arvores_na_casa e bool: {arvores_na_casa!r}")
         if not cfg_mundo.ligada:
             raise MundoSemChave("o Mundo so existe com a ConfigMundo ligada")
         cm = self.cmf = cfg_mundo
@@ -706,7 +726,7 @@ class Mundo:
                 raise ValueError(f"arvore {ident} com fruta desconhecida: {fruta!r}")
             ax, ay = centro_da_celula((x, y), cm)
             nome = nomes[regiao_de(ax, cm)]
-            if nome == "jardim":
+            if nome == "jardim" or (nome == "casa" and arvores_na_casa):
                 p = cm.p_queda_jardim * cm.mult_queda
             elif nome == "mata":
                 p = cm.p_queda_mata * cm.mult_queda
@@ -736,6 +756,12 @@ class Mundo:
         # dois pets, etapa 8 (o degrau 1b): o rastro de cada pet, {id: [(x, y, tick), ...]} em ordem de tick, so depois de `ligar_marcas`
         # (o grupo com a ConfigSentidos ligada); sem ele, None e nada muda (nem o resumo)
         self.marcas: dict[str, list[tuple[int, int, int]]] | None = None
+        # o sacudir a arvore (TAREFA_V3_ARVORE_SACODE, secao 3.2): o galho de cada arvore, as sacudidas e o fluxo `arvore-sacode`, so depois
+        # de `ligar_sacudir` (o motor com a ConfigSacudir); sem ele, None e nada muda (nem o resumo)
+        self.galhos: dict[str, dict] | None = None
+        self.sacudidas: list[dict] | None = None
+        self.rng_sacode: random.Random | None = None
+        self.csa: ConfigSacudir | None = None
 
     # ------------------------------------------------------------ dois pets, etapa 8: o rastro (secao 5.3)
     def ligar_marcas(self) -> None:
@@ -815,6 +841,67 @@ class Mundo:
                 perto.append((arv["id"], dx, dy, d))
         perto.sort(key=lambda t: (t[3], t[0]))
         return perto
+
+    # ------------------------------------------------------------ o sacudir a arvore (TAREFA_V3_ARVORE_SACODE, secoes 3.2 e 3.3)
+    def ligar_sacudir(self, cs: ConfigSacudir) -> None:
+        """liga o galho (cheio, com o relogio parado), o registro das sacudidas e o fluxo proprio `arvore-sacode`, que so anda quando cai
+        uma fruta; nenhum outro fluxo muda"""
+        if not isinstance(cs, ConfigSacudir) or not cs.ligada:
+            raise SacudirSemChave(f"ligar_sacudir precisa da ConfigSacudir ligada: {cs!r}")
+        if self.galhos is not None:
+            raise RuntimeError("o sacudir ja esta ligado neste Mundo")
+        self.csa = cs
+        self.galhos = {a["id"]: {"no_galho": cs.galho_max, "repoe_em": None} for a in self.arvores}
+        self.sacudidas = []
+        self.rng_sacode = random.Random(derivar_semente("arvore-sacode", self.semente))
+
+    def galho_em(self, ident: str, tick: int) -> tuple[int, int | None]:
+        """Pura: (frutas no galho, o tick da proxima reposicao ou None) da arvore no tick. O galho abaixo do maximo repoe uma fruta a cada
+        `recarga_galho_min` ticks, contados da primeira fruta que saiu com ele cheio; cheio, o relogio para."""
+        if self.galhos is None:
+            raise SacudirSemChave("o galho so existe com a ConfigSacudir ligada")
+        g = self.galhos[ident]
+        n, prox = g["no_galho"], g["repoe_em"]
+        cs = self.csa
+        while prox is not None and tick >= prox:
+            n += 1
+            prox = prox + cs.recarga_galho_min if n < cs.galho_max else None
+        return n, prox
+
+    def sacudir(self, ident: str, tick: int) -> dict:
+        """O dono sacode a arvore `ident` no tick (o mundo ja atualizado ate ele). Com fruta no galho e lugar no chao (o teto de hoje,
+        `max_frutas_por_arvore` frutas da arvore no chao, maduras ou podres), cai uma fruta do tipo da arvore, madura, com a origem = o id
+        da arvore, num ponto sorteado como o da queda natural (direcao em 16 e distancia ate `raio_queda_celulas`, no fluxo
+        `arvore-sacode`). Sem fruta no galho, com o chao cheio ou com a arvore parada (o J5), nada cai e nada se sorteia. Devolve o registro
+        da sacudida (tambem em `sacudidas`)."""
+        if self.galhos is None:
+            raise SacudirSemChave("sacudir a arvore sem a ConfigSacudir ligada")
+        if self.tick_atualizado is None or tick != self.tick_atualizado:
+            raise RuntimeError(f"sacudir no tick {tick} com o mundo atualizado ate {self.tick_atualizado}")
+        arv = next((a for a in self.arvores if a["id"] == ident), None)
+        if arv is None:
+            raise ValueError(f"sacudir uma arvore que nao existe no layout {self.cmf.layout.nome!r}: {ident!r}")
+        cm = self.cmf
+        n, prox = self.galho_em(ident, tick)
+        no_chao = sum(1 for c in self.comidas.values() if c["origem"] == ident and self.situacao(c, tick) is not None)
+        reg = {"tick": tick, "arvore": ident, "no_galho_antes": n, "no_chao_antes": no_chao, "caiu": None}
+        if n == 0:
+            reg["motivo"] = "galho_vazio"
+        elif arv.get("parada"):
+            reg["motivo"] = "parada"
+        elif no_chao >= cm.max_frutas_por_arvore:
+            reg["motivo"] = "chao_cheio"
+        else:
+            rng = self.rng_sacode
+            x, y = deslocar(arv["x"], arv["y"], rng.randrange(16), rng.randrange(cm.raio_queda_celulas * cm.sub + 1), cm)
+            c = self.nova_comida(arv["fruta"], x, y, tick, ident)
+            if prox is None:                       # o galho estava cheio: o relogio comeca agora
+                prox = tick + self.csa.recarga_galho_min
+            n -= 1
+            reg.update(motivo="caiu", caiu=c["id"], x=x, y=y, tipo=arv["fruta"])
+        self.galhos[ident] = {"no_galho": n, "repoe_em": prox}
+        self.sacudidas.append(reg)
+        return reg
 
     # ------------------------------------------------------------ o banheiro
     def ligar_necessidades(self) -> None:
@@ -1006,7 +1093,9 @@ class Mundo:
                     "recolhidas": self.recolhidas}),
                 **({} if self.trocas_tipo is None else {"trocas_tipo": self.trocas_tipo}),
                 **({} if self.paradas_arvores is None else {"paradas_arvores": self.paradas_arvores}),
-                **({} if self.marcas is None else {"marcas": {i: [list(m) for m in l] for i, l in sorted(self.marcas.items())}})}
+                **({} if self.marcas is None else {"marcas": {i: [list(m) for m in l] for i, l in sorted(self.marcas.items())}}),
+                **({} if self.galhos is None else {"galhos": {i: dict(g) for i, g in self.galhos.items()}, "sacudidas": self.sacudidas,
+                                                   "rng_sacode": self.rng_sacode.getstate()})}
 
 
 # ================================================================== o motor
@@ -1021,8 +1110,15 @@ class MotorMundo(MotorFrutas):
                  entrada_mundo: int = 0, cfg_banheiro: ConfigBanheiro | None = None, cfg_pqp: ConfigPetQuePensaMundo | None = None,
                  cfg_paladar: ConfigPaladar | None = None, cfg_fruta_ao_lado: ConfigFrutaAoLado | None = None,
                  cfg_contrato: ConfigContrato | None = None, cfg_decisao_comida: ConfigDecisaoNaComida | None = None,
-                 cfg_bola_golpe: ConfigBolaNoGolpe | None = None, **kw) -> None:
+                 cfg_bola_golpe: ConfigBolaNoGolpe | None = None, cfg_sacudir: ConfigSacudir | None = None,
+                 cfg_fruta_comida: ConfigFrutaComoComida | None = None, **kw) -> None:
         super().__init__(*a, **kw)
+        self.csa = cfg_sacudir or CONFIG_SACUDIR
+        if not isinstance(self.csa, ConfigSacudir):
+            raise TypeError(f"cfg_sacudir e uma ConfigSacudir: {self.csa!r}")
+        self.cfc = cfg_fruta_comida or CONFIG_FRUTA_COMO_COMIDA
+        if not isinstance(self.cfc, ConfigFrutaComoComida):
+            raise TypeError(f"cfg_fruta_comida e uma ConfigFrutaComoComida: {self.cfc!r}")
         self.cct = cfg_contrato or CONFIG_CONTRATO
         if not isinstance(self.cct, ConfigContrato):
             raise TypeError(f"cfg_contrato e uma ConfigContrato: {self.cct!r}")
@@ -1058,6 +1154,10 @@ class MotorMundo(MotorFrutas):
                 raise ValueError("a decisao na comida (ConfigDecisaoNaComida) exige o mundo fisico (ConfigMundo.ligada)")
             if self.cbg.ligada:
                 raise ValueError("a bola no golpe (ConfigBolaNoGolpe) exige o mundo fisico (ConfigMundo.ligada)")
+            if self.csa.ligada:
+                raise SacudirSemChave("o sacudir a arvore (ConfigSacudir) exige o mundo fisico (ConfigMundo.ligada)")
+            if self.cfc.ligada:
+                raise ValueError("a fruta do mundo como comida (ConfigFrutaComoComida) exige o mundo fisico (ConfigMundo.ligada)")
             return                                     # desligado: o MotorFrutas byte a byte (nem embrulho, nem Mundo)
         if self.cf.ligada or self.cb.ligada:
             raise ValueError("o mundo substitui o cenario do N4 e da A1: ConfigFrutas e ConfigBola desligadas com ConfigMundo.ligada")
@@ -1076,7 +1176,7 @@ class MotorMundo(MotorFrutas):
         if mundo is None:
             if entrada_mundo:
                 raise ValueError("entrada_mundo so com um Mundo dado (o do grupo)")
-            self.mundo = Mundo(cm, semente)           # com um pet, o motor e dono do proprio mundo (a semente do mundo e a do pet)
+            self.mundo = Mundo(cm, semente, arvores_na_casa=True) if self.csa.ligada else Mundo(cm, semente)   # com um pet, o motor e dono do proprio mundo (a semente do mundo e a do pet)
         else:                                         # no grupo (digilab/grupo.py): o mundo e de todos, e o pet entra num tick dele
             if not isinstance(mundo, Mundo) or mundo.cmf != cm:
                 raise ValueError("o Mundo dado tem de ser um Mundo com a mesma ConfigMundo do motor")
@@ -1126,6 +1226,12 @@ class MotorMundo(MotorFrutas):
                 raise PetQuePensaSemChave("o J5 (ConfigPetQuePensaMundo) roda com um pet, fora do grupo")
             self.troncos_vistos: dict[str, int] = {}     # id -> o primeiro tick do mundo em que o pet viu o tronco
             self.mundo.ligar_trocas()
+
+        if self.csa.ligada:
+            # o sacudir a arvore (TAREFA_V3_ARVORE_SACODE, S1): so com um pet, fora do grupo (o registro do grupo nao tem o evento)
+            if mundo is not None:
+                raise SacudirSemChave("o sacudir a arvore (ConfigSacudir) roda com um pet, fora do grupo")
+            self.mundo.ligar_sacudir(self.csa)
 
         if self.cct.ligada:
             # a P4 (docs/TAREFA_V2_P4_CEREBRO_MUNDO.md, secao 3.1): o contrato, so com um pet (o grupo nao tem o controlador nem o cone)
@@ -1848,6 +1954,34 @@ class MotorMundo(MotorFrutas):
         self.levadas.append({"tick": self._tm(tick), "de": list(de), "pedido": [x, y], "para": list(self.pet)})
         self._n_eventos += 1                     # e um evento do log, mas NAO e contato (o deixar_bola)
 
+    def sacudir_arvore(self, arvore: str) -> None:
+        """O dono sacode a arvore (docs/TAREFA_V3_ARVORE_SACODE.md; os pets v20 do jogo web). Valida o evento e a arvore antes do log."""
+        if not (self.cmf.ligada and self.csa.ligada):
+            raise SacudirSemChave("sacudir_arvore sem o mundo e a ConfigSacudir ligados")
+        evento = evento_sacudir_arvore(self._estado.tick, arvore)
+        self._aplicar_sacudir_arvore(ler_sacudir_arvore(evento))
+        self._log.anexar(evento)
+
+    def _aplicar_sacudir_arvore(self, arvore: str) -> None:
+        """So o mundo muda (AS-1): o galho, e a fruta que cai. Nao e contato nem cuidado: nao passa pelo estado, pelo corpo nem pelo
+        cerebro (nenhum gancho), como o deixar_bola. Vale com o pet acordado ou dormindo. O mundo e atualizado ate o tick antes (as quedas
+        naturais ate ele, as que sumiram), como na troca de tipo do J5."""
+        if not (self.cmf.ligada and self.csa.ligada):
+            raise SacudirSemChave("sacudir_arvore sem o mundo e a ConfigSacudir ligados")
+        tm = self._tm(self._estado.tick)
+        if not any(a["id"] == arvore for a in self.mundo.arvores):
+            raise ValueError(f"sacudir uma arvore que nao existe no layout {self.cmf.layout.nome!r}: {arvore!r}")
+        self.mundo.atualizar(tm)
+        self.mundo.sacudir(arvore, tm)
+        self._n_eventos += 1                     # e um evento do log, mas NAO e contato (o deixar_bola)
+
+    def no_galho(self) -> dict[str, int]:
+        """as frutas no galho de cada arvore agora (o que o cartao da arvore mostra); so le"""
+        if not (self.cmf.ligada and self.csa.ligada):
+            raise SacudirSemChave("o galho so existe com o mundo e a ConfigSacudir ligados")
+        t = self._tm(self._estado.tick)
+        return {a["id"]: self.mundo.galho_em(a["id"], t)[0] for a in self.mundo.arvores}
+
     def _aplicar_deixar_comida(self, tipo: str, x: int, y: int) -> None:
         if not self.cmf.ligada:
             raise MundoSemChave("deixar_comida com ConfigMundo.ligada = False")
@@ -1901,6 +2035,8 @@ class MotorMundo(MotorFrutas):
                              "necessidades": len(self.mundo.necessidades), "na_zona": self.necessidades_na_zona()}
         if self.cfal.ligada:
             d["fruta_ao_lado"] = {"no_chao": self.ao_lado_no_chao(), "postas": len(self.frutas_ao_lado)}
+        if self.csa.ligada:
+            d["sacudir"] = {"no_galho": self.no_galho(), "sacudidas": len(self.mundo.sacudidas)}
         return d
 
     def resumo_mundo_fisico(self) -> dict:
@@ -1924,7 +2060,9 @@ class MotorMundo(MotorFrutas):
                 **({} if m.paradas_arvores is None else {"paradas_arvores": m.paradas_arvores}),
                 **({} if not self.cfal.ligada else {"frutas_ao_lado": self.frutas_ao_lado}),
                 **({} if not self.cct.ligada else {"orientacao": self.orientacao, "contrato_decisoes": self.contrato_decisoes}),
-                **({} if not self.levadas else {"levadas": self.levadas})}     # so com alguma levada: a vida de antes sai byte a byte
+                **({} if not self.levadas else {"levadas": self.levadas}),
+                **({} if m.galhos is None else {"galhos": {i: dict(g) for i, g in m.galhos.items()}, "sacudidas": m.sacudidas,
+                                                "rng_sacode": m.rng_sacode.getstate()})}     # so com alguma levada: a vida de antes sai byte a byte
 
     # ------------------------------------------------------------ o avanco em ticks (o grupo, dois pets, etapa 2)
     # O `_avancar(n)` de hoje e: o que cada classe faz uma vez por avanco (o MotorPersonalidade conta o evento de avanco no indice dos
@@ -1950,7 +2088,7 @@ class MotorMundo(MotorFrutas):
 def reproduzir_mundo(log: LogDeEventos, politica_fabrica: Callable, cfg: Config | None = None, semente: int = 42,
                      fabrica_motor: Callable | None = None, ate_tick: int | None = None,
                      cfg_genoma: ConfigGenoma | None = None) -> MotorMundo:
-    """O replay que entende os eventos do mundo (`deixar_comida`, `deixar_bola`, `levar_pet`). `ate_tick`: para antes do primeiro evento nesse
+    """O replay que entende os eventos do mundo (`deixar_comida`, `deixar_bola`, `levar_pet`, `sacudir_arvore`). `ate_tick`: para antes do primeiro evento nesse
     tick (corta o avanco que o atravessa), como o reproduzir_educacao. Evento desconhecido levanta erro; luta, origem, fala e
     decisao externa tambem: o mundo minimo roda sem educacao e sem lesoes.
 
@@ -1983,6 +2121,8 @@ def reproduzir_mundo(log: LogDeEventos, politica_fabrica: Callable, cfg: Config 
             motor._aplicar_levar_pet(*ler_levar_pet(evento))
         elif evento.tipo == "deixar_fruta":
             motor._aplicar_deixar_fruta(*ler_deixar_fruta(evento))
+        elif evento.tipo == "sacudir_arvore":
+            motor._aplicar_sacudir_arvore(ler_sacudir_arvore(evento))
         elif evento.tipo == "lt":
             motor._aplicar_resumo_luta(*ler_resumo_luta(evento))
         else:
