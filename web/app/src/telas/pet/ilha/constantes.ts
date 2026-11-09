@@ -162,8 +162,10 @@ export const CHAMADO = { raio: 1.9, sai: 3, amplitude: 0.12, periodo: 260, tau: 
 export const LUGAR_LUZ = { cor: { portao: "110,240,230", barraca: "110,240,230", cais: "131,228,218" }, forca: 0.55 } as const;
 /** a luz dos enfeites a noite (enfeites.ts): o halo na lanterna, na fracao `altura` da altura do modelo, com `tamanho` celulas de
     diametro, em cascas (as fracoes do tamanho) de opacidade `forca` cada (aditiva), e o quanto os vidros brilham (emissiveIntensity).
-    PROPOSTO, SEM FONTE */
-export const ENFEITE_HALO = { altura: 0.86, tamanho: 1.1, cascas: [0.55, 0.78, 1], forca: 0.08, vidro: 1.6 } as const;
+    PROPOSTO, SEM FONTE. Com o poste em blocos (2026-11-08, docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 14): a altura 0,86 -> 0,77, o meio
+    dos vidros da lanterna nova (33,5 de 43,2 blocos; o 0,86 era o do lampiao antigo); a forca 0,08 -> 0,06 (o revisor leu o halo como um
+    anel no Digital, na primeira tentativa do retrabalho) */
+export const ENFEITE_HALO = { altura: 0.77, tamanho: 1.1, cascas: [0.55, 0.78, 1], forca: 0.06, vidro: 1.6 } as const;
 /** o ceu do estilo digital (estilos.ts; docs/TAREFA_V3_MAPA_DIGITAL.md, D1): a cor do horizonte do ceu pintado (a media da faixa de baixo
     da imagem), para a nevoa, a cor de baixo da luz do ceu de dia, azulada (a sombra do anime), e a nevoa mais longe que a da ilha (o fundo
     de anime tem as arvores de tras nitidas; a de 26 a 62 desbotava tudo, e a de 42 a 95 as deixava pesadas; D2). PROPOSTO, SEM FONTE */

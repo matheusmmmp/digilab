@@ -1,0 +1,1059 @@
+......................................................s................. [  1%]
+........................................................................ [  2%]
+........................................................................ [  4%]
+........................................................................ [  5%]
+........................................................................ [  6%]
+........................................................................ [  8%]
+........................................................................ [  9%]
+............................................F........................... [ 11%]
+............................F............F.............................. [ 12%]
+........................................................................ [ 13%]
+........................................................................ [ 15%]
+........................................................................ [ 16%]
+........................................................................ [ 18%]
+........................................................................ [ 19%]
+........................................................................ [ 20%]
+........................................................................ [ 22%]
+........................................................................ [ 23%]
+........................................................................ [ 25%]
+........................................................................ [ 26%]
+........................................................................ [ 27%]
+...................................F.................................... [ 29%]
+...........F............................................................ [ 30%]
+........................................................................ [ 32%]
+........................................................................ [ 33%]
+........................................................................ [ 34%]
+........................................................................ [ 36%]
+........................................................................ [ 37%]
+..................F...............................................F..... [ 39%]
+........................................................................ [ 40%]
+........................................................................ [ 41%]
+..........................................................F............. [ 43%]
+...................F...........................................F........ [ 44%]
+....................................F.................F................. [ 46%]
+...............................................................F........ [ 47%]
+........................................................................ [ 48%]
+........................................................................ [ 50%]
+........................................................................ [ 51%]
+..........................F...F.F...F.F................F..F............. [ 53%]
+............................F...........F............................... [ 54%]
+..............................F......................................... [ 55%]
+........................................................................ [ 57%]
+........................................................................ [ 58%]
+........................................................................ [ 60%]
+........................................................................ [ 61%]
+........................................................................ [ 62%]
+.....................................................F.................. [ 64%]
+........................................................................ [ 65%]
+........................................................................ [ 67%]
+........................................F....F.......................... [ 68%]
+.........................................F..............s.ss............ [ 69%]
+.........................s.ss........................................... [ 71%]
+........................................................................ [ 72%]
+........................................................................ [ 74%]
+........................................................................ [ 75%]
+........................................................................ [ 76%]
+........................................................................ [ 78%]
+...............F........................................................ [ 79%]
+........................................................................ [ 81%]
+........................................................................ [ 82%]
+........................................................................ [ 83%]
+.................................F............F......................... [ 85%]
+.................................................................FF..... [ 86%]
+.....................................................................FFF [ 88%]
+F............FFFF....................F.................................. [ 89%]
+...........F............................................................ [ 90%]
+.......................................................F................ [ 92%]
+........................................................................ [ 93%]
+.............................s.......................................... [ 95%]
+........................................................................ [ 96%]
+........................................................................ [ 97%]
+........................................................................ [ 99%]
+..................................                                       [100%]
+================================== FAILURES ===================================
+___________________ test_g2_com_a_chave_explicita_desligada ___________________
+
+    def test_g2_com_a_chave_explicita_desligada():
+>       assert g4.vidas_j5(_cfg(contrato=False)) == GRAVADO["j5_adendo8"]
+E       AssertionError: assert {'P1~T1@101':...57eb16'}, ...} == {'P1-plan-con...b526ec'}, ...}
+E         
+E         Differing items:
+E         {'P1~T1@101': {'log': 'ab1d1ce46d96751a2f5eef121d6610908ef344d68cc7ee7815b31f295db627d7', 'medidas': '61485d1c16b55ac237c8ea999f771101b14c272d12c583606806e6fe84c4f631'}} != {'P1~T1@101': {'log': 'ab1d1ce46d96751a2f5eef121d6610908ef344d68cc7ee7815b31f295db627d7', 'medidas': 'b0917d3309c64b6ea8f5b09c01943959dfd81be23fc4d3bef2f99e2e203cb3de'}}
+E         {'P1~T1@202': {'log': 'dfe62aead2da510432791924332f13b95a8c6035ae556db93ca62a23000f0488', 'medidas': '5acd0e9003a80dd99353473ca487b880115b8b384e67204de3c1bcbe83731b8b'}} != {'P1~T1@202': {'log': 'dfe62aead2da5104327919...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+tests\test_bancada_p4_contrato.py:61: AssertionError
+_____________ test_g2_sem_o_adendo_7_as_vidas_sao_as_do_gabarito ______________
+
+    def test_g2_sem_o_adendo_7_as_vidas_sao_as_do_gabarito():
+        gravado = json.loads((RAIZ / "tests" / "gabaritos" / "pqp_ao_lado_vidas.json").read_text(encoding="utf-8"))
+>       assert gab.vidas() == gravado
+E       AssertionError: assert {'P1~T1@101':...8a3e071e97f'}} == {'P1-plan-des...1f89203f685'}}
+E         
+E         Differing items:
+E         {'P1~T1@101': {'log': 'cde35f0c26103f4183d6f8c6ac51d0e3acb61be894aea5045894d29a833f8e92', 'medidas': '7aebab90cd9e1b2af39f7803e7a1d13dd55008c03a59c073fe31a36e1741d03a'}} != {'P1~T1@101': {'log': 'cde35f0c26103f4183d6f8c6ac51d0e3acb61be894aea5045894d29a833f8e92', 'medidas': '44f5e30df1720596b70c6530f5c0dea4a9fd319348b0ec17642377211b2fb8d1'}}
+E         {'P1-plan~T1@202': {'log': '4562d1ed3ee1378104d8a7613d838c7011b59fba1fe335005f90d0b91501336e', 'medidas': '895569baab753183e6b33a7e815054918b35a0d10192f9a4fb40efc0033dc91f'}} != {'P1-plan~T1@202': {'log': '4562d1ed3ee1...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+tests\test_bancada_pqp_adendo7.py:62: AssertionError
+____________ test_g2_sem_o_adendo_8_as_vidas_sao_as_dos_gabaritos _____________
+
+    def test_g2_sem_o_adendo_8_as_vidas_sao_as_dos_gabaritos():
+        g7 = json.loads((RAIZ / "tests" / "gabaritos" / "pqp_adendo7_vidas.json").read_text(encoding="utf-8"))
+        g5 = json.loads((RAIZ / "tests" / "gabaritos" / "pqp_ao_lado_vidas.json").read_text(encoding="utf-8"))
+>       assert gab7.vidas() == g7 and gab7.vidas({**gab7.config(), "adendo_8": False}) == g7
+E       AssertionError: assert ({'P1~T1@101':...930e64cb9d5'}} == {'P1-plan-des...034c843b950'}}
+E         
+E         Differing items:
+E         {'P1~T1@101': {'log': 'c0b679b760c5fc0068ff6eaedd0ab1d5c33dae42e0d3125feee3925af546890b', 'medidas': '0a0a7eb12a92258b194e01fc9abf47f5c8d29f5d294608736080f6d0616ecf07'}} != {'P1~T1@101': {'log': 'c0b679b760c5fc0068ff6eaedd0ab1d5c33dae42e0d3125feee3925af546890b', 'medidas': '8ba8ef5986a9e334163172422d54ee3eeff3922f0ac809f979cbe51d49c1df32'}}
+E         {'P1-plan~T1@202': {'log': '54728c50c395e88ebe90d90e9e51fe436cbdfdb4d15f45314012e8cfbf90a0ea', 'medidas': 'aa0453ee48cd4bd00bb8625288666e3b02953633850630d982e50128a097fa84'}} != {'P1-plan~T1@202': {'log': '54728c50c395...
+E         
+E         ...Full output truncated, use '-vv' to show)
+
+tests\test_bancada_pqp_adendo8.py:65: AssertionError
+_______________________ test_o_artefato_se_refaz_igual ________________________
+
+    def test_o_artefato_se_refaz_igual():
+        """a etapa 0: a sombra nao muda a vida (o G2 e conferido dentro da medida, falha alto), e o artefato se refaz igual"""
+        import medir_competicao_etapa0 as m
+        gravado = json.loads(m.ARQUIVO.read_text(encoding="utf-8"))
+        m.main()
+>       assert json.loads(m.ARQUIVO.read_text(encoding="utf-8")) == gravado
+E       AssertionError: assert {'analise': {...erente'], ...} == {'analise': {...erente'], ...}
+E         
+E         Omitting 8 identical items, use -vv to show
+E         Differing items:
+E         {'analise': {'abertas_por_regras': {'abandono+fome_moderada': 955, 'pedido_necessidade+abandono': 1, 'pedido_necessida...80, 'frac_abertas': 0.1738467261904762, 'frac_das_forcadas_que_abrem': 0.3146377592243469, ...}, 'kappa_cr2': 16, ...}} != {'analise': {'abertas_por_regras': {'abandono+fome_moderada': 955, 'pedido_necessidade+abandono': 1, 'pedido_necessida...80, 'frac_abertas': 0.1738467261904762, 'frac_das_forcadas_que_abrem': 0.3146377592243469, ...}, 'kappa_cr2': 16, ...}}
+E         Use -v to get more diff
+
+tests\test_competicao_etapa0.py:42: AssertionError
+__________ test_gate_g1_vida_69001_byte_a_byte_com_a_chave_desligada __________
+
+tmp_path = WindowsPath('C:/Users/mathe/AppData/Local/Temp/pytest-of-mathe/pytest-1114/test_gate_g1_vida_69001_byte_a0')
+
+    def test_gate_g1_vida_69001_byte_a_byte_com_a_chave_desligada(tmp_path):
+        """GATE G1: a vida atencioso@69001 de run_educacao._vida (V3) e a mesma do gabarito gerado antes do M1."""
+        import run_educacao
+        from digilab.events import LogDeEventos
+        g = json.loads(GABARITO_G1.read_text(encoding="utf-8"))
+        (_, s), spec, dados, _ = run_educacao._vida(("atencioso", S, g["dias"], str(tmp_path), {}))
+        log = (tmp_path / "vidas" / f"atencioso@{S}.jsonl").read_bytes()
+        assert hashlib.sha256(log).hexdigest() == g["log_sha256"] and log.count(b"\n") == g["eventos"]
+        esp, temp_ovo = ovo(S)
+        fp, _, fm, _ = run_educacao._fabricas("atencioso", S, esp, sortear(S), temp_ovo)
+        r = reproduzir_educacao(LogDeEventos.de_jsonl(log.decode("utf-8")), fp, semente=S, fabrica_motor=fm)
+        assert r.resumo_educacao() == g["resumo_educacao"]
+        assert r.historico_lutas == g["historico_lutas"] and r.transicoes == g["transicoes"]
+>       assert json.dumps(spec, sort_keys=True) == json.dumps(g["spec"], sort_keys=True)
+E       assert '{"carater": ...32929011788}}' == '{"carater": ...32929011788}}'
+E         
+E         Skipping 448 identical trailing characters in diff, use -v to show
+E         - {"carater": {"atento": -0.07499999999999997, "impetuoso": 0.005468749999999979, "paciente": 0.13749999999999943, "resistente": -0.07343749999999996}, "condi
+E         ?                             ^^^^^^^^^^^^^^^                                 ^^                                -                                   ^
+E         + {"carater": {"atento": -0.07500000000000002, "impetuoso": 0.005468749999999953, "paciente": 0.13749999999999934, "resistente": -0.07343749999999998}, "condi
+E         ?                             ^^^^^^^^^^^^^^^...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+tests\test_confianca.py:250: AssertionError
+_______________________ test_o_artefato_se_refaz_igual ________________________
+
+    def test_o_artefato_se_refaz_igual():
+        """a etapa 0: as sombras nao mudam a vida (o G2 e conferido dentro da medida, falha alto), e o artefato se refaz igual"""
+        import medir_credito_canal_etapa0 as m
+        gravado = json.loads(m.ARQUIVO.read_text(encoding="utf-8"))
+        m.main()
+>       assert json.loads(m.ARQUIVO.read_text(encoding="utf-8")) == gravado
+E       AssertionError: assert {'analise': {...o8.json', ...} == {'analise': {...o8.json', ...}
+E         
+E         Omitting 9 identical items, use -vv to show
+E         Differing items:
+E         {'analise': {'cl': {'passo': 512, 'teto': 16384, 'w0_alvo': 64}, 'cortes_no_teto': {'c1_gosto': 0, 'c1_humor': 0, 'c1_...ar': 0.0, 'frac_c1_mudaria_a_classe': 0.0, 'limiar': 0.05, 'media_dp_c1_menos_hoje': 4.594185335129055e-07, ...}, ...}} != {'analise': {'cl': {'passo': 512, 'teto': 16384, 'w0_alvo': 64}, 'cortes_no_teto': {'c1_gosto': 0, 'c1_humor': 0, 'c1_...ar': 0.0, 'frac_c1_mudaria_a_classe': 0.0, 'limiar': 0.05, 'media_dp_c1_menos_hoje': 4.594185335129055e-07, ...}, ...}}
+E         Use -v to get more diff
+
+tests\test_credito_canal_etapa0.py:71: AssertionError
+______________________ test_o_custo_do_k_se_refaz_igual _______________________
+
+    def test_o_custo_do_k_se_refaz_igual():
+        d = ck.calcular()
+>       assert ck.SAIDA.read_text(encoding="utf-8") == bv._dump(d)
+E       assert '{\n  "compar...ade": 48\n}\n' == '{\n  "compar...ade": 48\n}\n'
+E         
+E         Skipping 820 identical leading characters in diff, use -v to show
+E         Skipping 1029 identical trailing characters in diff, use -v to show
+E         - 982674718411,
+E         ?           ^^
+E         + 982674718425,
+E         ?           ^^...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+tests\test_custo_k_l2_digibrain.py:19: AssertionError
+____________ test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave ____________
+
+    def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
+        """o G2: a chave nao chega ao motor, a bancada nem as ferramentas; so o config, o pacote, o orquestrador do prototipo e o exportador
+        do gabarito do modular para a web (LM0, #543: monta a config do braco REL pelo orquestrador; desvio de 2026-11-03)"""
+        nomes = re.compile(r"\b(ConfigDigibrain\w*|CONFIG_DIGIBRAIN\w*)\b|digilab\.digibrain|from \.digibrain|from \.\.digibrain")
+        citam = {p.relative_to(RAIZ).as_posix() for pasta in ("digilab", "experiments", "tools") for p in (RAIZ / pasta).rglob("*.py")
+                 if nomes.search(p.read_text(encoding="utf-8"))}
+>       assert {c for c in citam if not c.startswith("digilab/digibrain/")} == {"digilab/config.py",
+                                                                                 "experiments/run_v2_digibrain_prototipo.py",
+                                                                                 "experiments/exportar_gabarito_digibrain_modular.py",
+                                                                                 # a AN0 (#575): so le as constantes (CONFIG_DIGIBRAIN_INATOS, RECEPTORES_DIGIBRAIN); nenhuma vida
+                                                                                 "experiments/medir_v3_acoes_novas_hoje.py",
+                                                                                 # a DC1 (2026-11-06): o gabarito do decodificador de conceitos le o motivo; nenhuma vida
+                                                                                 "experiments/exportar_decodificador.py",
+                                                                                 # a DC3 (#672, #679, #686): o orquestrador da run unica monta o LAB e o LAB+F; a calibracao
+                                                                                 # do ganho_conteudo so le as constantes; o exportador do gabarito da fala_unidades para a web
+                                                                                 "experiments/run_v3_conversa_dc3.py", "experiments/calibrar_ganho_conteudo_dc3.py",
+                                                                                 "experiments/exportar_gabarito_fala_unidades.py"}
+E       AssertionError: assert {'digilab/con...ades.py', ...} == {'digilab/con...hoje.py', ...}
+E         
+E         Extra items in the left set:
+E         'experiments/entradas_dc4.py'
+E         Use -v to get more diff
+
+tests\test_digibrain_etapa0.py:66: AssertionError
+______________________ test_o_poder_da_l2_se_refaz_igual ______________________
+
+    def test_o_poder_da_l2_se_refaz_igual():
+        import bancada_v2 as bv
+        import poder_l2_digibrain as pw
+>       assert pw.SAIDA.read_text(encoding="utf-8") == bv._dump(pw.calcular(json.loads(pw.ENTRADA.read_text(encoding="utf-8"))))
+E       assert '{\n  "C-L2-2..., o M3*"\n}\n' == '{\n  "C-L2-2..., o M3*"\n}\n'
+E         
+E         Skipping 189 identical leading characters in diff, use -v to show
+E         - 74457396023,
+E         ?           ^
+E         + 74457396022,
+E         ?           ^
+E                   "K=30": 0.29073080287377984,...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+tests\test_digibrain_l2.py:330: AssertionError
+________________ test_o_k_fixado_se_refaz_igual_e_e_o_da_a5_9 _________________
+
+    def test_o_k_fixado_se_refaz_igual_e_e_o_da_a5_9():
+        d = kf.calcular()
+>       assert kf.SAIDA.read_text(encoding="utf-8") == bv._dump(d)
+E       assert '{\n  "aprova...55"\n  }\n}\n' == '{\n  "aprova...55"\n  }\n}\n'
+E         
+E         Skipping 124 identical leading characters in diff, use -v to show
+E         Skipping 1002 identical trailing characters in diff, use -v to show
+E         - 05720124037
+E         ?           ^
+E         + 05720124036
+E         ?           ^
+E             },
+E             "
+
+tests\test_digibrain_l2_k.py:51: AssertionError
+_______ test_as_analises_das_fases_antigas_se_refazem_iguais[avaliacao] _______
+
+pasta = 'avaliacao'
+
+    @pytest.mark.parametrize("pasta", ["avaliacao"] + [f"{c}calibracao/rodada_{n}" for c in ("", "conserto/") for n in (1, 2, 3)])
+    def test_as_analises_das_fases_antigas_se_refazem_iguais(pasta):
+        """a avaliacao do #420 e as calibracoes, refeitas das medidas gravadas com o codigo de hoje, saem byte a byte o resultado.json gravado
+        (os pilotos, com a simulacao do poder, sao conferidos no relato do PR, pela mesma conta)"""
+        p = RAIZ / "artifacts_v2_digibrain_prototipo" / pasta
+>       assert _refazer(p) == (p / "resultado.json").read_text(encoding="utf-8")
+E       assert '{\n  "D-1": ...TIPO.md"\n}\n' == '{\n  "D-1": ...TIPO.md"\n}\n'
+E         
+E         Skipping 152 identical leading characters in diff, use -v to show
+E         - 40817885375,
+E         + 408178853745,
+E         ?           +
+E                     "nivel": 0.9
+E                   },...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+tests\test_digibrain_reavaliacao.py:252: AssertionError
+_______ test_t_ponto_3_so_o_orquestrador_do_prototipo_monta_o_digibrain _______
+
+    def test_t_ponto_3_so_o_orquestrador_do_prototipo_monta_o_digibrain():
+        """o G2 das 196 vidas e o tests/test_gabarito_digibrain.py, que passa sem mudanca; aqui, o resto: nenhum modulo do motor, da bancada
+        nem das ferramentas cita o pacote (e o explorar do motor nao ganha candidato)"""
+        nomes = re.compile(r"digilab\.digibrain|from \.digibrain|from \.\.digibrain|import digibrain")
+        citam = {p.relative_to(RAIZ).as_posix() for pasta in ("digilab", "experiments", "tools") for p in (RAIZ / pasta).rglob("*.py")
+                 if nomes.search(p.read_text(encoding="utf-8"))}
+>       assert {c for c in citam if not c.startswith("digilab/digibrain/")} == {"experiments/run_v2_digibrain_prototipo.py",
+                                                                                 # o exportador do gabarito do modular (LM0, #543) monta o braco REL pelo orquestrador
+                                                                                 "experiments/exportar_gabarito_digibrain_modular.py",
+                                                                                 # o gabarito do decodificador de conceitos (DC1) so le o motivo; nenhuma vida
+                                                                                 "experiments/exportar_decodificador.py",
+                                                                                 # a DC3 (#672, #686): o orquestrador da run unica e o exportador do gabarito da fala_unidades
+                                                                                 "experiments/run_v3_conversa_dc3.py", "experiments/exportar_gabarito_fala_unidades.py"}
+E       AssertionError: assert {'experiments...versa_dc3.py'} == {'experiments...versa_dc3.py'}
+E         
+E         Extra items in the left set:
+E         'experiments/entradas_dc4.py'
+E         Use -v to get more diff
+
+tests\test_digibrain_vidas.py:174: AssertionError
+_______ test_sem_habituacao_reproduz_a_personalidade_completa_bit_a_bit _______
+
+    def test_sem_habituacao_reproduz_a_personalidade_completa_bit_a_bit():
+        """Emocao e extremos sao somente leitura: habituacao desligada = run gravada da personalidade."""
+        p = PROTOCOLO_ARENA_V1_PERSONALIDADE
+        t = sortear(101)
+        v, _, _ = _vida("atencioso", 101, t, False, p.v("dias_simulados"), p.v("orcamento_interacoes"))
+        pasta = RAIZ / "artifacts_v1_personalidade" / "completa" / "vidas"
+        assert v.motor.log.para_jsonl() == (pasta / "atencioso@101.jsonl").read_text(encoding="utf-8")
+>       assert json.loads(json.dumps(v.motor.politica.estado_interno(), sort_keys=True)) == \
+            json.loads((pasta / "atencioso@101.politica.json").read_text(encoding="utf-8"))
+E       AssertionError: assert {'A_inv': {'b...ue, ...}, ...} == {'A_inv': {'b...ue, ...}, ...}
+E         
+E         Omitting 11 identical items, use -vv to show
+E         Differing items:
+E         {'A_inv': {'brincar': [[0.8145454457986047, -0.13224177929153014, -0.09871216225448577, -0.07043332364128384, -0.14728...9516807933029092, -0.10957589630330875, -0.07868423419059005, -0.161850315880759, 0.7625941498570038, ...], ...], ...}} != {'A_inv': {'brincar': [[0.8145454457986044, -0.13224177929153008, -0.0987121622544857, -0.07043332364128378, -0.147288...16807933029083, -0.10957589630330886, -0.07868423419059016, -0.16185031588075896, 0.7625941498570036, ...], ...], ...}}
+E         {'theta': {'brincar': [-0.027227...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+tests\test_emocao_habituacao.py:156: AssertionError
+____________________________ test_gabarito_em_dia _____________________________
+
+    def test_gabarito_em_dia():
+        gravado = json.loads(eg.ARQUIVO.read_text(encoding="utf-8"))
+>       assert json.loads(json.dumps(eg.gerar(), sort_keys=True)) == gravado
+E       AssertionError: assert {'ccp': {'amo...': 0.015, ...} == {'ccp': {'amo...': 0.015, ...}
+E         
+E         Omitting 6 identical items, use -vv to show
+E         Differing items:
+E         {'vidas': [{'dono': 'atencioso', 'momentos': [{'bruto': {'atento': 0.0015625000000000014, 'impetuoso': -0.000937499999...sistente': 0.0}, 'dist': [{...}, {...}, {...}, {...}, {...}, {...}, ...], 'forma': 'duelista', ...}], 'semente': 404}]} != {'vidas': [{'dono': 'atencioso', 'momentos': [{'bruto': {'atento': 0.0015625000000000014, 'impetuoso': -0.000937499999...sistente': 0.0}, 'dist': [{...}, {...}, {...}, {...}, {...}, {...}, ...], 'forma': 'duelista', ...}], 'semente': 404}]}
+E         Use -v to get more diff
+
+tests\test_gabarito_carater_v11_web.py:21: AssertionError
+___________________ test_o_gabarito_esta_em_dia_byte_a_byte ___________________
+
+    def test_o_gabarito_esta_em_dia_byte_a_byte():
+>       assert TEXTO == json.dumps(G.gerar(), sort_keys=True, indent=1) + "\n"
+E       assert '{\n "LAB|ale...206"\n }\n}\n' == '{\n "LAB|ale...206"\n }\n}\n'
+E         
+E         Skipping 295 identical leading characters in diff, use -v to show
+E         Skipping 369 identical trailing characters in diff, use -v to show
+E         - edidas": "1c92f06fcdb0f8cc0c0562e749f4e5118f1d03d742cfde6bfd8c055f17e9ef19"
+E         + edidas": "379435c505fc826efbdeb729e2adbd57d427f614157393e1165d3af78dfa1606"
+E            },
+E            "LAB|aleatorio|comedouro|202": {...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+tests\test_gabarito_conversa_dc3.py:22: AssertionError
+___________________ test_o_gabarito_esta_em_dia_byte_a_byte ___________________
+
+    def test_o_gabarito_esta_em_dia_byte_a_byte():
+>       assert TEXTO == json.dumps(G.gerar(), sort_keys=True, indent=1) + "\n"
+E       assert '{\n "dois_pe...n  }\n }\n}\n' == '{\n "dois_pe...n  }\n }\n}\n'
+E         
+E         Skipping 40034 identical leading characters in diff, use -v to show
+E         Skipping 31045 identical trailing characters in diff, use -v to show
+E         - ressao": "b55aa361dbc90736dbb379e1c6b5e4ddb67d1bf2cdd05852fc44293a35d71422",
+E         + ressao": "d7bd0dd4cbf9f2e9feaf803e32a3dfd84d12b9b7564c1f905c4cc74683fb5ae5",
+E             "n": {
+E              "brincar": 38,...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+tests\test_gabarito_digibrain.py:32: AssertionError
+_____________ test_o_gabarito_do_conserto_esta_em_dia_byte_a_byte _____________
+
+    def test_o_gabarito_do_conserto_esta_em_dia_byte_a_byte():
+>       assert TEXTO == json.dumps(G.gerar(), sort_keys=True, indent=1) + "\n"
+E       assert '{\n "M0|alea...70a"\n }\n}\n' == '{\n "M0|alea...70a"\n }\n}\n'
+E         
+E         Skipping 215 identical leading characters in diff, use -v to show
+E         Skipping 572 identical trailing characters in diff, use -v to show
+E         - edidas": "de7c694faf7252d00e72631367be796941585b3d46e2d0fd08dc51459cf0e7c0"
+E         + edidas": "98ac11fb3a3e09fcc5805ee1561017af741d671782eea26dace88c7a713b3087"
+E            },
+E            "M0|aleatorio|comedouro|202": {...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+tests\test_gabarito_digibrain_conserto.py:23: AssertionError
+_____________ test_o_gabarito_do_modular_esta_em_dia_byte_a_byte ______________
+
+    def test_o_gabarito_do_modular_esta_em_dia_byte_a_byte():
+>       assert TEXTO == json.dumps(G.gerar(), sort_keys=True, indent=1) + "\n"
+E       assert '{\n "M0|alea...6c5"\n }\n}\n' == '{\n "M0|alea...538"\n }\n}\n'
+E         
+E         Skipping 215 identical leading characters in diff, use -v to show
+E         - edidas": "bbd10faa68d1043e01ab1ac38c1df27b478fd9e2b12fc48a1bea273f44a1d300"
+E         + edidas": "33f24f037ad87c58238cd5ca9e8f404e13a7987d1b379b29408f8bbe97a789a1"
+E            },
+E            "M0|aleatorio|comedouro|202": {
+E             "decisoes": 288,...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+tests\test_gabarito_digibrain_modular.py:24: AssertionError
+___________________ test_o_gabarito_esta_em_dia_byte_a_byte ___________________
+
+duas_geracoes = ({'A|padrao|quimica|lobos|perto|101': {'log': 'b35225b76583c516fad91199d3648acf4e94853434b652e96f6febbf47e75dc4', 'tra...370d0150443e89e6', 'resumo': 'f973349c978f8fe261d2f6bcfec2b6cbac1082d53687ad5dcf82841a9da5042b'}, 'passos': 192}, ...})
+
+    def test_o_gabarito_esta_em_dia_byte_a_byte(duas_geracoes):
+>       assert TEXTO == G.serializar(duas_geracoes[0])
+E       assert '{\n "A|afast...e31"\n }\n}\n' == '{\n "A|afast...996"\n }\n}\n'
+E         
+E         Skipping 9987 identical leading characters in diff, use -v to show
+E         - resumo": "2b6700f00917e5f5a9d8d49293684a4b1b081c44c969163df2853602b57d35f8"
+E         + resumo": "1bf9b562a112cc1ecdf74cb4820897b4b1186791efdf991ff1a61ea078f125de"
+E             },
+E             "passos": 288,
+E         -   "trajetoria": "db161504bf7c7be51537d9d15e32a28f3536c51624b8329c58c2e40cfd9c5b56"...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+tests\test_gabarito_genoma_g0.py:33: AssertionError
+___________________ test_o_gabarito_esta_em_dia_byte_a_byte ___________________
+
+    def test_o_gabarito_esta_em_dia_byte_a_byte():
+>       assert TEXTO == json.dumps(G.gerar(), sort_keys=True, indent=1) + "\n"
+E       assert '{\n "M1|alea...c1f"\n }\n}\n' == '{\n "M1|alea...34d"\n }\n}\n'
+E         
+E         Skipping 215 identical leading characters in diff, use -v to show
+E         - edidas": "feb24af6efb9439e98e21f19558e9cdc5eb448104e0b905bc94e10fd57da0fdd"
+E         + edidas": "ecff26445d60181f81b2d43f953816fedd37ab79332576c87222bccb9fead74a"
+E            },
+E            "M1|aleatorio|comedouro|202": {
+E             "decisoes": 288,...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+tests\test_gabarito_habito_intencao.py:21: AssertionError
+___________________ test_o_gabarito_esta_em_dia_byte_a_byte ___________________
+
+    def test_o_gabarito_esta_em_dia_byte_a_byte():
+>       assert TEXTO == json.dumps(G.gerar(), sort_keys=True, indent=1) + "\n"
+E       assert '{\n "M3|alea...03f"\n }\n}\n' == '{\n "M3|alea...c00"\n }\n}\n'
+E         
+E         Skipping 508 identical leading characters in diff, use -v to show
+E         - edidas": "6eb3aa806ac2500c23c0c83ee4e2db93d826c5452100b2604efd7424e2fd13e3"
+E         + edidas": "70abbbc4f3fe56cb5023f2b95e8463618f8d1c14cc3d23731f24fd67d8e0ae54"
+E            },
+E            "M3|aleatorio|comedouro|303": {
+E             "decisoes": 288,...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+tests\test_gabarito_memoria_autobio.py:22: AssertionError
+___________________ test_o_gabarito_esta_em_dia_byte_a_byte ___________________
+
+    def test_o_gabarito_esta_em_dia_byte_a_byte():
+>       assert TEXTO == json.dumps(G.gerar(), sort_keys=True, indent=1) + "\n"
+E       assert '{\n "M3|alea...818"\n }\n}\n' == '{\n "M3|alea...4b6"\n }\n}\n'
+E         
+E         Skipping 508 identical leading characters in diff, use -v to show
+E         - edidas": "6eb3aa806ac2500c23c0c83ee4e2db93d826c5452100b2604efd7424e2fd13e3"
+E         + edidas": "70abbbc4f3fe56cb5023f2b95e8463618f8d1c14cc3d23731f24fd67d8e0ae54"
+E            },
+E            "M3|aleatorio|comedouro|303": {
+E             "decisoes": 288,...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+tests\test_gabarito_redecidir_evento.py:22: AssertionError
+_ test_e2_chave_desligada_as_vidas_da_e0_saem_iguais_ao_gabarito_no_log_e_na_trajetoria _
+
+vidas_de_hoje = {'A|padrao|quimica|lobos|perto|101': {'log': 'b35225b76583c516fad91199d3648acf4e94853434b652e96f6febbf47e75dc4', 'traj...3370d0150443e89e6', 'resumo': 'f973349c978f8fe261d2f6bcfec2b6cbac1082d53687ad5dcf82841a9da5042b'}, 'passos': 192}, ...}
+
+    def test_e2_chave_desligada_as_vidas_da_e0_saem_iguais_ao_gabarito_no_log_e_na_trajetoria(vidas_de_hoje):
+        gravado = json.loads(GAB.ARQUIVO.read_text(encoding="utf-8"))
+        assert set(vidas_de_hoje) == set(gravado) and len(gravado) == 40
+        for chave, v in gravado.items():
+            assert vidas_de_hoje[chave]["log"] == v["log"], chave
+>           assert vidas_de_hoje[chave]["trajetoria"] == v["trajetoria"], chave
+E           AssertionError: PAL|P1-plan|T2|101
+E           assert 'db161504bf7c...2e40cfd9c5b56' == 'da3f2be482c3...019607652e796'
+E             
+E             - da3f2be482c347ff08a62cc59211326db4760ac9b43f5c611fd019607652e796
+E             + db161504bf7c7be51537d9d15e32a28f3536c51624b8329c58c2e40cfd9c5b56
+
+tests\test_genoma_g0.py:201: AssertionError
+__________________ test_a_leitura_se_refaz_igual_das_partes ___________________
+
+    def test_a_leitura_se_refaz_igual_das_partes():
+>       d = lt.calcular()
+               ^^^^^^^^
+
+tests\test_leitura_l2_digibrain.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def calcular() -> dict:
+        registros = list(l2.ler_medidas(AVALIACAO).values())
+        resultado = json.loads((AVALIACAO / "resultado.json").read_text(encoding="utf-8"))
+        refeito = {"fase": "l2_avaliacao", "modo": "l2_avaliacao", "plano": resultado["plano"],
+                   **l2.analisar(registros, "l2_avaliacao")}
+        if bv._dump(refeito) != bv._dump(resultado):
+>           raise RuntimeError("o resultado.json nao se refaz igual das partes relidas")
+E           RuntimeError: o resultado.json nao se refaz igual das partes relidas
+
+experiments\leitura_l2_digibrain.py:83: RuntimeError
+_______________________ test_o_artefato_se_refaz_igual ________________________
+
+    def test_o_artefato_se_refaz_igual():
+        gravado = json.loads(m.ARQUIVO.read_text(encoding="utf-8"))
+        agora = json.loads(json.dumps(m.medir(), ensure_ascii=False))
+>       assert {k: v for k, v in agora.items() if k != "codigo"} == {k: v for k, v in gravado.items() if k != "codigo"}
+E       AssertionError: assert {'descricao':...04, 505], ...} == {'descricao':...04, 505], ...}
+E         
+E         Omitting 9 identical items, use -vv to show
+E         Differing items:
+E         {'criterio': {'linhas': {'tvd': 0.14999999999999997, 'p95_nulo': 0.35000000000000003, 'p': 0.8196, 'perto': True}, 'fo... 0.002734375}, 'razao': 0.2966101694915254, 'cortados': {'v10': 0.00625, 'v11': 0.0}, 'perto': False}, 'perto': False}} != {'criterio': {'linhas': {'tvd': 0.14999999999999997, 'p95_nulo': 0.35, 'p': 0.8196, 'perto': True}, 'formas': {'tvd': ... 0.002734375}, 'razao': 0.2966101694915254, 'cortados': {'v10': 0.00625, 'v11': 0.0}, 'perto': False}, 'perto': False}}
+E         {'pets': [{'versao': 'v10', 'dono...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+tests\test_medir_carater_v11.py:27: AssertionError
+_______________________ test_o_artefato_se_refaz_igual ________________________
+
+    def test_o_artefato_se_refaz_igual():
+        gravado = json.loads(m.ARQUIVO.read_text(encoding="utf-8"))
+        m.main()
+>       assert json.loads(m.ARQUIVO.read_text(encoding="utf-8")) == gravado
+E       AssertionError: assert {'braco': 'P1...]}, ...}, ...} == {'braco': 'P1...]}, ...}, ...}
+E         
+E         Omitting 9 identical items, use -vv to show
+E         Differing items:
+E         {'v11': {'acoes_por_frequencia': {'brincar': 3765, 'chamar_atencao': 4969, 'comer': 423, 'dormir': 10604, ...}, 'credi...s_com_outra_regra_urgente': 0.3446673848639914, 'forcadas_com_uniao_so_urgentes_maior_que_1': 0.3211688661459736, ...}} != {'v11': {'acoes_por_frequencia': {'brincar': 3765, 'chamar_atencao': 4969, 'comer': 423, 'dormir': 10604, ...}, 'credi...s_com_outra_regra_urgente': 0.3446673848639914, 'forcadas_com_uniao_so_urgentes_maior_que_1': 0.3211688661459736, ...}}
+E         Use -v to get more diff
+
+tests\test_medir_v3_espaco_acoes.py:41: AssertionError
+---------------------------- Captured stdout call -----------------------------
+{
+ "frac_forcadas": 0.5525297619047619,
+ "forcadas_com_outra_regra_urgente": 0.3446673848639914,
+ "forcadas_uniao_media_so_urgentes": 1.4737409103151091,
+ "credito": {
+  "forcadas": {
+   "aplicacoes": 2658,
+   "com_peso_mudado": 0,
+   "frac_mudou": 0.0,
+   "abs_f": 3320804
+  },
+  "com_escolha": {
+   "aplicacoes": 19402,
+   "com_peso_mudado": 18156,
+   "frac_mudou": 0.9357798165137615,
+   "abs_f": 3918648
+  },
+  "frac_abs_f_nas_forcadas": 0.4587093056214752,
+  "por_regra": {
+   "abandono": {
+    "aplicacoes": 338,
+    "com_peso_mudado": 0,
+    "frac_mudou": 0.0,
+    "abs_f": 429804
+   },
+   "fome_moderada": {
+    "aplicacoes": 968,
+    "com_peso_mudado": 966,
+    "frac_mudou": 0.9979338842975206,
+    "abs_f": 331094
+   },
+   "pedido_necessidade": {
+    "aplicacoes": 382,
+    "com_peso_mudado": 0,
+    "frac_mudou": 0.0,
+    "abs_f": 899886
+   },
+   "sono_continuar": {
+    "aplicacoes": 1666,
+    "com_peso_mudado": 0,
+    "frac_mudou": 0.0,
+    "abs_f": 1686060
+   },
+   "sono_exaustao": {
+    "aplicacoes": 130,
+    "com_peso_mudado": 0,
+    "frac_mudou": 0.0,
+    "abs_f": 161016
+   },
+   "sono_noite": {
+    "aplicacoes": 142,
+    "com_peso_mudado": 0,
+    "frac_mudou": 0.0,
+    "abs_f": 144038
+   },
+   "tempo_livre": {
+    "aplicacoes": 18434,
+    "com_peso_mudado": 17190,
+    "frac_mudou": 0.9325160030378649,
+    "abs_f": 3587554
+   }
+  }
+ }
+}
+{
+ "config": "experiments/configs/v2_mundo_alvo/fumaca_piloto.json",
+ "braco": "P1-alvo",
+ "dias": 4,
+ "subdecisoes": {
+  "comer": {
+   "n": 858,
+   "candidatos_medio": 3.2867132867132867,
+   "classes_medio": 1.6503496503496504,
+   "frac_mais_de_uma_classe": 0.5559440559440559,
+   "frac_alvo_fora_do_padrao": 0.013986013986013986
+  },
+  "explorar": {
+   "n": 642,
+   "candidatos_medio": 2.7476635514018692,
+   "classes_medio": 2.7476635514018692,
+   "frac_mais_de_uma_classe": 1.0,
+   "frac_alvo_fora_do_padrao": 0.1806853582554517
+  },
+  "brincar": {
+   "n": 679,
+   "candidatos_medio": 0.0014727540500736377,
+   "classes_medio": 0.0014727540500736377,
+   "frac_mais_de_uma_classe": 0.0,
+   "frac_alvo_fora_do_padrao": 0.0
+  }
+ }
+}
+{
+ "P1": {
+  "x_proprio_depois_total": 36,
+  "x_na_mao_total": 10,
+  "vidas_sem_x_proprio_depois": 0,
+  "classe_x_desceu": 4,
+  "sinal_x_proprio_depois": {
+   "n": 36,
+   "f_drives_medio": -86.58333333333333,
+   "gosto_medio": 65.94444444444444,
+   "frac_total_positivo": 0.3611111111111111,
+   "frac_gosto_maior_que_perda": 0.0
+  },
+  "humor_previsto_desceu": 0
+ },
+ "P1-plan": {
+  "x_proprio_depois_total": 31,
+  "x_na_mao_total": 10,
+  "vidas_sem_x_proprio_depois": 0,
+  "classe_x_desceu": 3,
+  "sinal_x_proprio_depois": {
+   "n": 31,
+   "f_drives_medio": 110.96774193548387,
+   "gosto_medio": 82.80645161290323,
+   "frac_total_positivo": 0.45161290322580644,
+   "frac_gosto_maior_que_perda": 0.0
+  },
+  "humor_previsto_desceu": 5
+ }
+}
+_______________ test_g2_separado_nada_fora_do_pacote_le_a_chave _______________
+
+    def test_g2_separado_nada_fora_do_pacote_le_a_chave():
+        donos_da_chave = {"digilab/config.py", "digilab/digibrain/adapt.py", "digilab/digibrain/impulso.py", "digilab/digibrain/mem.py",
+                          # a M6 (a fala, que a espec 9 permite ler a chave): a chave do estado da fala e o fato Q1 so existem com ela
+                          "digilab_fala_livre/fatos.py", "digilab_fala_livre/memoria_fala.py", "digilab_fala_livre/verificador.py",
+                          "web/app/src/falaMemoria.ts",
+                          # o plano da validacao (o adendo 9, que a espec 9 permite: o orquestrador): os bracos SUBCHAVES_C4, a run e o poder
+                          "experiments/run_v2_digibrain_prototipo.py", "experiments/run_v2_memoria_autobio.py",
+                          "experiments/adendo9_poder_memoria_autobio.py",
+                          # o espelho TS do modular (LM1-LM4, #545-#548) porta o pacote para a web e so le; o exportador do gabarito (LM0, #543) monta o braco REL pelo orquestrador
+                          "web/app/motor/digibrain/adapt.ts", "web/app/motor/digibrain/constantes.ts", "web/app/motor/digibrain/impulso.ts",
+                          "web/app/motor/digibrain/mem.ts", "web/app/test/digibrain_modular_arb.test.ts", "web/app/test/digibrain_modular_mem.test.ts",
+                          "experiments/exportar_gabarito_digibrain_modular.py",
+                          # o poder da AN3 (#577): so le o artefato da run da C4 no git e importa o poder do adendo 9; nenhuma vida
+                          "experiments/plano_an3_poder_acoes_novas.py",
+                          # o orquestrador da AN4: importa o da C4 so pela conferir_memoria (o papel REL nos dois bracos); a config passa pelo
+                          # orquestrador do prototipo
+                          "experiments/run_v3_acoes_novas.py",
+                          # o descritivo da D-C1-3 no REL (adendo 11, #646): so le os artefatos da run da C4 e importa o orquestrador dela; nenhuma vida
+                          "experiments/descritivo_dc13_rel.py",
+                          # o orquestrador da DC3 (#672): monta o LAB (o REL da C4) e o LAB+F pela config do orquestrador da C4
+                          "experiments/run_v3_conversa_dc3.py",
+                          # a bateria da INDIVIDUALIDADE (I1): importa o orquestrador da C4 so pela vida (`viver`); nao le a chave
+                          "experiments/sondas_individualidade.py",
+                          # o orquestrador do I2 da INDIVIDUALIDADE: importa o da C4 pela vida, pela conferir_memoria e pelo COM_FACETAS; nao le a chave
+                          "experiments/run_v3_individualidade.py"}
+        achados = set()
+        for pasta in ("digilab", "experiments", "web", "tools", "servidor", "digilab_fala_livre"):
+            if not (RAIZ / pasta).exists():
+                continue
+            for f in (RAIZ / pasta).rglob("*"):
+                if f.suffix in (".py", ".ts", ".tsx", ".js") and "node_modules" not in f.parts and "memoria_autobio" in f.read_text(
+                        encoding="utf-8", errors="ignore"):
+                    achados.add(f.relative_to(RAIZ).as_posix())
+>       assert achados == donos_da_chave
+E       AssertionError: assert {'digilab/con...fala.py', ...} == {'digilab/con...fala.py', ...}
+E         
+E         Extra items in the left set:
+E         'experiments/auditoria_pet_vivo.py'
+E         'experiments/medir_desempenho_perfil.py'
+E         Use -v to get more diff
+
+tests\test_memoria_autobio.py:709: AssertionError
+_________________ test_bateria_combate_v2_reproduz_artefatos __________________
+
+tmp_path = WindowsPath('C:/Users/mathe/AppData/Local/Temp/pytest-of-mathe/pytest-1114/test_bateria_combate_v2_reprod0')
+
+    def test_bateria_combate_v2_reproduz_artefatos(tmp_path):
+        import run_bateria_combate
+    
+        cfg = json.loads((RAIZ / "experiments" / "configs" / "bateria_canonico.json").read_text(encoding="utf-8"))
+        cfg["saida"] = str(tmp_path / "bat")
+        (tmp_path / "cfg.json").write_text(json.dumps(cfg), encoding="utf-8")
+        assert run_bateria_combate.main(["--config", str(tmp_path / "cfg.json")]) == 2  # REPROVADA, como gravado
+        canon = RAIZ / "artifacts_combate_v2"
+        for arq in ("matriz.json", "equilibrio.json", "partidas.csv", "amostra_replay.jsonl"):
+>           assert (canon / arq).read_bytes() == (tmp_path / "bat" / arq).read_bytes(), arq
+E           AssertionError: equilibrio.json
+E           assert b'{\n  "bots_...    ]\n  }\n}' == b'{\n  "bots_...    ]\n  }\n}'
+E             
+E             At index 220 diff: b'8' != b'7'
+E             Use -v to get more diff
+
+tests\test_motivo_expressao.py:109: AssertionError
+---------------------------- Captured stdout call -----------------------------
+bateria REPROVADA  conjunto validacao  saida C:\Users\mathe\AppData\Local\Temp\pytest-of-mathe\pytest-1114\test_bateria_combate_v2_reprod0\bat
+  [ok] G1_sem_estrategia_dominante: nenhum fixo vence todos os outros; suporte do equilibrio ['agressivo', 'atirador', 'tartaruga'] (>= 3)
+  [ok] G2_existe_habilidade: adaptativo x aleatorio 0.999 (>= 0.7), IC95 [0.997, 1.000] (inferior > 0.5: True); media contra fixos: oraculo 0.946 x adaptativo 0.913 (oraculo >= adaptativo: True)
+  [ok] G3_sanidade: pontos do lado 0 nos espelhos (vies de posicao) dentro de 0.5 +- 0.03: sim; 200 partidas rejogadas do disco bit a bit
+  [REPROVA] G4_ritmo: mediana de turnos 25.0 (entre 8.0 e 30.0); 0.313 das partidas no limite de turnos (< 0.2)
+  [REPROVA] G5_sem_acao_morta: fracao de cada acao nas decisoes dos bots do suporte ['agressivo', 'atirador', 'tartaruga']; abaixo de 0.03: ['esquivar']
+  [ok] G6_condicao_nao_domina_estilo: maior efeito da condicao (mesmo estilo) 0.197 (atirador) vs efeito do estilo (condicao neutra, melhor - pior) 0.388
+  [ok] G7_ordem_dos_gambits_importa: adaptativo original contra 5 permutacoes da ordem: media 0.705 (>= 0.6)
+____________ test_g2_as_vidas_do_j5_com_o_adendo_8_sao_as_de_hoje _____________
+
+    def test_g2_as_vidas_do_j5_com_o_adendo_8_sao_as_de_hoje():
+>       assert gp.vidas_j5() == GABARITO["j5_adendo8"]
+E       AssertionError: assert {'P1~T1@101':...57eb16'}, ...} == {'P1-plan-con...b526ec'}, ...}
+E         
+E         Differing items:
+E         {'P1~T1@101': {'log': 'ab1d1ce46d96751a2f5eef121d6610908ef344d68cc7ee7815b31f295db627d7', 'medidas': '61485d1c16b55ac237c8ea999f771101b14c272d12c583606806e6fe84c4f631'}} != {'P1~T1@101': {'log': 'ab1d1ce46d96751a2f5eef121d6610908ef344d68cc7ee7815b31f295db627d7', 'medidas': 'b0917d3309c64b6ea8f5b09c01943959dfd81be23fc4d3bef2f99e2e203cb3de'}}
+E         {'P1~T1@202': {'log': 'dfe62aead2da510432791924332f13b95a8c6035ae556db93ca62a23000f0488', 'medidas': '5acd0e9003a80dd99353473ca487b880115b8b384e67204de3c1bcbe83731b8b'}} != {'P1~T1@202': {'log': 'dfe62aead2da5104327919...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+tests\test_p4_gabaritos.py:30: AssertionError
+__________________ test_r2_reproduz_a_analise_dono_ambiente ___________________
+
+    def test_r2_reproduz_a_analise_dono_ambiente():
+        """0,9585 (640 pets, 14 categorias) e 0,9290 (atencioso e permissivo), do artefato do E1"""
+        pasta = RAIZ / "artifacts_linhagem" / "natureza_criacao" / "especie_fixa"
+        pets = json.loads((pasta / "pets.json").read_text(encoding="utf-8"))
+        taxa = json.loads((pasta / "resultado.json").read_text(encoding="utf-8"))["taxa_por_celula"]
+        ref = json.loads((RAIZ / "artifacts_linhagem" / "dono_ambiente" / "resultado.json").read_text(encoding="utf-8"))
+        ff = ref["rodadas"]["especie_fixa"]["forma_final"]
+    
+        def cat(p):
+            return "morto" if p["morta"] else (p["forma"]["adulta"] or f"adolescente:{p['forma']['linha']}")
+        chaves = sorted((int(k.split("|")[0]), k.split("|")[1], int(k.split("|")[2])) for k in taxa)
+        for rot, donos in (("todos", None), ("so_donos_sem_mortes", {"atencioso", "permissivo"})):
+            ks = [k for k in chaves if donos is None or k[1] in donos]
+            r = r2_por_categoria([taxa[f"{g}|{b}|{r}"] for g, b, r in ks], [cat(pets[f"{b}@g{g}r{r}"]) for g, b, r in ks])
+>           assert r["r2"] == ff[rot]["r2"] and r["n_categorias"] == ff[rot]["n_formas"]
+E           assert (0.9585126627588181 == 0.9585126627588196)
+
+tests\test_painel_v21d.py:95: AssertionError
+_ test_equivalencia_neutro_sem_obediencia_reproduz_memoria_por_espacos[atencioso] _
+
+dono = 'atencioso'
+
+    @pytest.mark.parametrize("dono", ["atencioso", "aleatorio"])
+    def test_equivalencia_neutro_sem_obediencia_reproduz_memoria_por_espacos(dono):
+        """Temperamento neutro + obediencia desligada = a run gravada da memoria por espacos, bit a bit."""
+        dias, orc = PROTOCOLO_ARENA_V1_MEMORIA_ESPACOS.v("dias_simulados"), PROTOCOLO_ARENA_V1_MEMORIA_ESPACOS.v("orcamento_interacoes")
+        v, _ = _vida(dono, 101, NEUTRO, desligada=True, dias=dias, orc=orc)
+        pasta = RAIZ / "artifacts_v1_memoria_espacos" / "vidas"
+        assert v.motor.log.para_jsonl() == (pasta / f"{dono}@101.jsonl").read_text(encoding="utf-8")
+>       assert json.loads(json.dumps(v.motor.politica.estado_interno(), sort_keys=True)) == \
+            json.loads((pasta / f"{dono}@101.politica.json").read_text(encoding="utf-8"))
+E       AssertionError: assert {'A_inv': {'b...se, ...}, ...} == {'A_inv': {'b...se, ...}, ...}
+E         
+E         Omitting 11 identical items, use -vv to show
+E         Differing items:
+E         {'A_inv': {'brincar': [[0.7838359258639642, -0.10456602479006974, -0.1369895052702172, -0.08191811517374056, -0.180436...986339354005837, -0.0941239204172613, -0.06005091559141636, -0.20214467069970946, 0.7625882059429816, ...], ...], ...}} != {'A_inv': {'brincar': [[0.7838359258639641, -0.10456602479006977, -0.1369895052702172, -0.08191811517374052, -0.180436...986339354005833, -0.09412392041726138, -0.06005091559141631, -0.2021446706997095, 0.7625882059429814, ...], ...], ...}}
+E         {'theta': {'brincar': [-0.194010...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+tests\test_personalidade.py:47: AssertionError
+_ test_equivalencia_neutro_sem_obediencia_reproduz_memoria_por_espacos[aleatorio] _
+
+dono = 'aleatorio'
+
+    @pytest.mark.parametrize("dono", ["atencioso", "aleatorio"])
+    def test_equivalencia_neutro_sem_obediencia_reproduz_memoria_por_espacos(dono):
+        """Temperamento neutro + obediencia desligada = a run gravada da memoria por espacos, bit a bit."""
+        dias, orc = PROTOCOLO_ARENA_V1_MEMORIA_ESPACOS.v("dias_simulados"), PROTOCOLO_ARENA_V1_MEMORIA_ESPACOS.v("orcamento_interacoes")
+        v, _ = _vida(dono, 101, NEUTRO, desligada=True, dias=dias, orc=orc)
+        pasta = RAIZ / "artifacts_v1_memoria_espacos" / "vidas"
+        assert v.motor.log.para_jsonl() == (pasta / f"{dono}@101.jsonl").read_text(encoding="utf-8")
+>       assert json.loads(json.dumps(v.motor.politica.estado_interno(), sort_keys=True)) == \
+            json.loads((pasta / f"{dono}@101.politica.json").read_text(encoding="utf-8"))
+E       AssertionError: assert {'A_inv': {'b...se, ...}, ...} == {'A_inv': {'b...se, ...}, ...}
+E         
+E         Omitting 11 identical items, use -vv to show
+E         Differing items:
+E         {'A_inv': {'brincar': [[0.7393140819798037, -0.07964105527784056, -0.12422600741303717, -0.16165925843035428, -0.16669...50664358992433, 0.028427186112640432, 0.022714486454242195, -0.1514209838634656, 0.42230792522005517, ...], ...], ...}} != {'A_inv': {'brincar': [[0.7393140819798037, -0.07964105527784054, -0.12422600741303717, -0.1616592584303543, -0.166699...506643589924344, 0.02842718611264039, 0.02271448645424217, -0.15142098386346556, 0.42230792522005506, ...], ...], ...}}
+E         {'theta': {'brincar': [-0.038833...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+tests\test_personalidade.py:47: AssertionError
+_ test_g2_g_plano_zero_e_a_vida_de_hoje[padrao|metabolismo|P1-plano-motivo|comedouro|101] _
+
+chave = 'padrao|metabolismo|P1-plano-motivo|comedouro|101'
+
+    @pytest.mark.parametrize("chave", sorted(CASOS))
+    def test_g2_g_plano_zero_e_a_vida_de_hoje(chave):
+>       assert gp.impressao_de(CASOS[chave]) == GABARITO[chave]
+E       AssertionError: assert {'motor': 'Mo...d6b7b15', ...} == {'acoes': 'ab...28dd39f', ...}
+E         
+E         Omitting 14 identical items, use -vv to show
+E         Differing items:
+E         {'motivos': '7116ee48f8e7c55ddffcafebfc5102a7a4d12c9ef0495b735945312c9a4e8235'} != {'motivos': '7dc3665168dcc0f0ee408526157f3bceda57a48e7e36f509ae6fea9e2b0b063a'}
+E         Use -v to get more diff
+
+tests\test_planejador.py:109: AssertionError
+_ test_g2_g_plano_zero_e_a_vida_de_hoje[padrao|metabolismo|P1-plano-motivo|comedouro|202] _
+
+chave = 'padrao|metabolismo|P1-plano-motivo|comedouro|202'
+
+    @pytest.mark.parametrize("chave", sorted(CASOS))
+    def test_g2_g_plano_zero_e_a_vida_de_hoje(chave):
+>       assert gp.impressao_de(CASOS[chave]) == GABARITO[chave]
+E       AssertionError: assert {'motor': 'Mo...201030e', ...} == {'acoes': 'd7...77fd280', ...}
+E         
+E         Omitting 14 identical items, use -vv to show
+E         Differing items:
+E         {'motivos': 'f4547ef5f55e52f74fd267ebf889681be887f07bcb5d25aac2feeaa886970b2d'} != {'motivos': '1d6c385c4c67a1d682b765dfd557e425961e8322d0b883080a1fbdb22a31e51f'}
+E         Use -v to get more diff
+
+tests\test_planejador.py:109: AssertionError
+_ test_g2_g_plano_zero_e_a_vida_de_hoje[padrao|metabolismo|P1-plano-motivo|longe|101] _
+
+chave = 'padrao|metabolismo|P1-plano-motivo|longe|101'
+
+    @pytest.mark.parametrize("chave", sorted(CASOS))
+    def test_g2_g_plano_zero_e_a_vida_de_hoje(chave):
+>       assert gp.impressao_de(CASOS[chave]) == GABARITO[chave]
+E       AssertionError: assert {'motor': 'Mo...94a40ed', ...} == {'acoes': '3c...2eb1009', ...}
+E         
+E         Omitting 14 identical items, use -vv to show
+E         Differing items:
+E         {'motivos': '00f5a2344b0dece6131a34bab5a9a617511d5dd1e9b5cb4fb26f33bac22ec8f2'} != {'motivos': '989aaa639be07eb3d78de273ed33a9e3e24456449c77bd253a4ceb76a32a1315'}
+E         Use -v to get more diff
+
+tests\test_planejador.py:109: AssertionError
+_ test_g2_g_plano_zero_e_a_vida_de_hoje[padrao|metabolismo|P1-plano-motivo|longe|202] _
+
+chave = 'padrao|metabolismo|P1-plano-motivo|longe|202'
+
+    @pytest.mark.parametrize("chave", sorted(CASOS))
+    def test_g2_g_plano_zero_e_a_vida_de_hoje(chave):
+>       assert gp.impressao_de(CASOS[chave]) == GABARITO[chave]
+E       AssertionError: assert {'motor': 'Mo...0dea0f4', ...} == {'acoes': 'e1...360c3ab', ...}
+E         
+E         Omitting 14 identical items, use -vv to show
+E         Differing items:
+E         {'motivos': '0f813a62c5d766c59b692d5213d28b513bbc19ea81a33a1108df0dfe4cbe574c'} != {'motivos': 'c5cc1431d9fc471fa1bb3ce17b9cd754342f0b930baba35e056ed9cd7110f69a'}
+E         Use -v to get more diff
+
+tests\test_planejador.py:109: AssertionError
+_ test_g2_g_plano_zero_e_a_vida_de_hoje[padrao|quimica|P1-plano-motivo|comedouro|101] _
+
+chave = 'padrao|quimica|P1-plano-motivo|comedouro|101'
+
+    @pytest.mark.parametrize("chave", sorted(CASOS))
+    def test_g2_g_plano_zero_e_a_vida_de_hoje(chave):
+>       assert gp.impressao_de(CASOS[chave]) == GABARITO[chave]
+E       AssertionError: assert {'motor': 'Mo...f76d491', ...} == {'acoes': 'cd...62ff468', ...}
+E         
+E         Omitting 14 identical items, use -vv to show
+E         Differing items:
+E         {'motivos': '9df198862efef2136659c7823faf416700b5dc5edc717b2270b350dec422281d'} != {'motivos': 'c8f2e5f8e2481008c0cf5fc0ab32b37d977aa7c6610fa5b97e75ccddce686286'}
+E         Use -v to get more diff
+
+tests\test_planejador.py:109: AssertionError
+_ test_g2_g_plano_zero_e_a_vida_de_hoje[padrao|quimica|P1-plano-motivo|comedouro|202] _
+
+chave = 'padrao|quimica|P1-plano-motivo|comedouro|202'
+
+    @pytest.mark.parametrize("chave", sorted(CASOS))
+    def test_g2_g_plano_zero_e_a_vida_de_hoje(chave):
+>       assert gp.impressao_de(CASOS[chave]) == GABARITO[chave]
+E       AssertionError: assert {'motor': 'Mo...f07ae11', ...} == {'acoes': '03...7923979', ...}
+E         
+E         Omitting 14 identical items, use -vv to show
+E         Differing items:
+E         {'motivos': '6e31909dc5908aaec353f5e200e00a1e9dca81559f0dc06b9fc5aa62ff46b628'} != {'motivos': '07ba63a0e6b4d0c808bf0888fca01f701ae0bd6f5a6214326479361f5d38da94'}
+E         Use -v to get more diff
+
+tests\test_planejador.py:109: AssertionError
+_ test_g2_g_plano_zero_e_a_vida_de_hoje[padrao|quimica|P1-plano-motivo|longe|101] _
+
+chave = 'padrao|quimica|P1-plano-motivo|longe|101'
+
+    @pytest.mark.parametrize("chave", sorted(CASOS))
+    def test_g2_g_plano_zero_e_a_vida_de_hoje(chave):
+>       assert gp.impressao_de(CASOS[chave]) == GABARITO[chave]
+E       AssertionError: assert {'motor': 'Mo...ff97af2', ...} == {'acoes': 'd3...9606bd3', ...}
+E         
+E         Omitting 14 identical items, use -vv to show
+E         Differing items:
+E         {'motivos': '8f314149e0d159dca52524512bf8216b47307888c69e7e47877bea78a41e5ab1'} != {'motivos': '5ee97943e257b1ea3652984c78f94067d2c19886f4645ed8e16a8e4464ee9f6b'}
+E         Use -v to get more diff
+
+tests\test_planejador.py:109: AssertionError
+_ test_g2_g_plano_zero_e_a_vida_de_hoje[padrao|quimica|P1-plano-motivo|longe|202] _
+
+chave = 'padrao|quimica|P1-plano-motivo|longe|202'
+
+    @pytest.mark.parametrize("chave", sorted(CASOS))
+    def test_g2_g_plano_zero_e_a_vida_de_hoje(chave):
+>       assert gp.impressao_de(CASOS[chave]) == GABARITO[chave]
+E       AssertionError: assert {'motor': 'Mo...a78d3b8', ...} == {'acoes': '7f...81a45ed', ...}
+E         
+E         Omitting 14 identical items, use -vv to show
+E         Differing items:
+E         {'motivos': '5690e920231ae1c4f19f4407d07ef5bcb5f1bf7e4af26e7718a58e6d2d8850f8'} != {'motivos': 'cf10868ff98c01117a504c052acb65d0502cb0afd11633857111ec45c14074fc'}
+E         Use -v to get more diff
+
+tests\test_planejador.py:109: AssertionError
+______________ test_o_artefato_gravado_e_o_de_uma_execucao_nova _______________
+
+    def test_o_artefato_gravado_e_o_de_uma_execucao_nova():
+        novo = bv._dump(p.calcular(p.ler_medidas(), p.ler_meta()))
+        gravado = p.SAIDA.read_bytes().decode("utf-8")
+>       assert novo == gravado
+E       assert '{\n  "alfa":...an4": 16\n}\n' == '{\n  "alfa":...an4": 16\n}\n'
+E         
+E         Skipping 266 identical leading characters in diff, use -v to show
+E         - 85619332872,
+E         ?           ^
+E         + 8561933287198,
+E         ?           ^^^
+E         -       "g1": 0.07490567047133408,...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+tests\test_plano_an3_poder.py:19: AssertionError
+________________ test_a_lista_de_processos_da_maquina_responde ________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002520ed6fe18>
+
+    def test_a_lista_de_processos_da_maquina_responde(monkeypatch):
+        """Sem a lista falsa, o pre_run consegue listar os processos Python da máquina (este pytest entre eles)."""
+        monkeypatch.delenv("DIGILAB_PRE_RUN_PROCESSOS", raising=False)
+        linhas = pre_run.linhas_de_comando()
+>       assert any("pytest" in c for _, c in linhas)
+E       assert False
+E        +  where False = any(<generator object test_a_lista_de_processos_da_maquina_responde.<locals>.<genexpr> at 0x00000251c32b69b0>)
+
+tests\test_pre_run.py:129: AssertionError
+______ test_g2_separado_nada_fora_do_pacote_e_do_orquestrador_le_a_chave ______
+
+    def test_g2_separado_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
+        donos_da_chave = {"digilab/config.py", "digilab/digibrain/adapt.py", "digilab/digibrain/arb.py", "digilab/digibrain/estado.py",
+                          "experiments/run_v2_digibrain_prototipo.py",
+                          "experiments/run_v2_redecidir_evento.py", "experiments/adendo8_poder_redecidir_evento.py",   # a run e o poder da C3 (adendo 8)
+                          "experiments/adendo9_poder_memoria_autobio.py",   # o poder da C4 (adendo 9): so le o artefato da run da C3, pelo caminho
+                          # o espelho TS do modular (LM1-LM4, #545-#548) porta o pacote para a web e so le; o exportador do gabarito (LM0, #543) monta o braco REL pelo orquestrador
+                          "web/app/motor/digibrain/adapt.ts", "web/app/motor/digibrain/arb.ts", "web/app/motor/digibrain/constantes.ts",
+                          "web/app/motor/digibrain/estado.ts", "web/app/test/digibrain_modular_estado.test.ts",
+                          "experiments/exportar_gabarito_digibrain_modular.py"}
+        achados = set()
+        for pasta in ("digilab", "experiments", "web", "tools", "servidor"):
+            if not (RAIZ / pasta).exists():
+                continue
+            for f in (RAIZ / pasta).rglob("*"):
+                if f.suffix in (".py", ".ts", ".tsx", ".js") and "node_modules" not in f.parts and "redecidir_evento" in f.read_text(
+                        encoding="utf-8", errors="ignore"):
+                    achados.add(f.relative_to(RAIZ).as_posix())
+>       assert achados == donos_da_chave
+E       AssertionError: assert {'digilab/con...obio.py', ...} == {'digilab/con...obio.py', ...}
+E         
+E         Extra items in the left set:
+E         'experiments/auditoria_pet_vivo.py'
+E         Use -v to get more diff
+
+tests\test_redecidir_evento.py:344: AssertionError
+============================ slowest 30 durations =============================
+42.28s call     tests/test_bancada_montagem.py::test_simples_e_sem_chave_byte_a_byte_pelo_gabarito
+40.31s call     tests/test_calibracao_rede_de_si.py::test_a_fumaca_inteira
+37.71s call     tests/test_medir_v3_espaco_acoes.py::test_o_artefato_se_refaz_igual
+34.74s call     tests/test_digibrain_conserto.py::test_t_cenario_1_e_a_fumaca_da_reavaliacao
+31.28s call     tests/test_competicao_etapa0.py::test_o_artefato_se_refaz_igual
+29.81s call     tests/test_digibrain_vidas.py::test_a_fumaca_de_ponta_a_ponta
+28.20s setup    tests/test_descritivo_dc13.py::test_a_particao_cobre_cada_episodio_uma_vez_e_as_somas_fecham
+25.26s call     tests/test_bancada_p2d_p3i.py::test_bracos_de_antes_byte_a_byte_pelo_gabarito
+24.95s call     tests/test_gabarito_digibrain_conserto.py::test_o_gabarito_do_conserto_esta_em_dia_byte_a_byte
+23.74s call     tests/test_adendo3.py::test_fumaca_com_o_bloco_de_duracoes
+22.93s call     tests/test_mundo_componente.py::test_g2_vidas_do_mundo_fisico_de_hoje_com_um_pet
+22.69s call     tests/test_poder.py::test_piloto_reproduz_com_a_mesma_semente
+22.20s call     tests/test_gabarito_digibrain.py::test_o_gabarito_esta_em_dia_byte_a_byte
+22.02s call     tests/test_canonico_intacto.py::test_run_canonica_reproduz_artifacts
+21.87s call     tests/test_corpo_no_mundo.py::test_g2_vidas_do_mundo_de_hoje_com_o_corpo_desligado
+21.66s call     tests/test_bancada_k4_canais.py::test_bracos_de_antes_byte_a_byte_pelo_gabarito
+19.73s call     tests/test_validacao_blocos.py::test_fumaca_com_os_blocos
+19.06s setup    tests/test_descritivo_dc13_rel.py::test_a_particao_cobre_cada_episodio_uma_vez_e_as_somas_fecham
+18.85s call     tests/test_bancada_liga_n6_n7.py::test_bracos_antigos_byte_a_byte_pelo_gabarito
+17.97s call     tests/test_calibracao_corpo.py::test_a_fumaca_inteira
+17.78s call     tests/test_paladar_mundo.py::test_ligado_a_vida_e_a_mesma_e_o_consumo_leva_o_perfil
+17.65s call     tests/test_bancada_montagem.py::test_g1_toda_vida_e_acoplado_na_completa
+17.02s call     tests/test_metabolismo.py::test_g2_a_subchave_desligada_e_a_vida_de_hoje_byte_a_byte
+16.79s call     tests/test_gabarito_digibrain_modular.py::test_o_gabarito_do_modular_esta_em_dia_byte_a_byte
+16.09s call     tests/test_mundo_alvo.py::test_fumaca_da_validacao
+16.06s setup    tests/test_gabarito_digibrain_modular_web.py::test_o_exportador_sai_igual_em_duas_execucoes_byte_a_byte
+15.89s call     tests/test_run_v2_competicao.py::test_a_fumaca_de_ponta_a_ponta
+15.70s call     tests/test_bancada_pqp_ao_lado.py::test_a_fumaca_dos_quatro_passos
+15.51s setup    tests/test_gabarito_genoma_g0.py::test_o_gabarito_se_regera_igual_duas_vezes
+14.94s call     tests/test_bancada_pqp_adendo7.py::test_a_fumaca_do_piloto
+=========================== short test summary info ===========================
+FAILED tests/test_bancada_p4_contrato.py::test_g2_com_a_chave_explicita_desligada
+FAILED tests/test_bancada_pqp_adendo7.py::test_g2_sem_o_adendo_7_as_vidas_sao_as_do_gabarito
+FAILED tests/test_bancada_pqp_adendo8.py::test_g2_sem_o_adendo_8_as_vidas_sao_as_dos_gabaritos
+FAILED tests/test_competicao_etapa0.py::test_o_artefato_se_refaz_igual - Asse...
+FAILED tests/test_confianca.py::test_gate_g1_vida_69001_byte_a_byte_com_a_chave_desligada
+FAILED tests/test_credito_canal_etapa0.py::test_o_artefato_se_refaz_igual - A...
+FAILED tests/test_custo_k_l2_digibrain.py::test_o_custo_do_k_se_refaz_igual
+FAILED tests/test_digibrain_etapa0.py::test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave
+FAILED tests/test_digibrain_l2.py::test_o_poder_da_l2_se_refaz_igual - assert...
+FAILED tests/test_digibrain_l2_k.py::test_o_k_fixado_se_refaz_igual_e_e_o_da_a5_9
+FAILED tests/test_digibrain_reavaliacao.py::test_as_analises_das_fases_antigas_se_refazem_iguais[avaliacao]
+FAILED tests/test_digibrain_vidas.py::test_t_ponto_3_so_o_orquestrador_do_prototipo_monta_o_digibrain
+FAILED tests/test_emocao_habituacao.py::test_sem_habituacao_reproduz_a_personalidade_completa_bit_a_bit
+FAILED tests/test_gabarito_carater_v11_web.py::test_gabarito_em_dia - Asserti...
+FAILED tests/test_gabarito_conversa_dc3.py::test_o_gabarito_esta_em_dia_byte_a_byte
+FAILED tests/test_gabarito_digibrain.py::test_o_gabarito_esta_em_dia_byte_a_byte
+FAILED tests/test_gabarito_digibrain_conserto.py::test_o_gabarito_do_conserto_esta_em_dia_byte_a_byte
+FAILED tests/test_gabarito_digibrain_modular.py::test_o_gabarito_do_modular_esta_em_dia_byte_a_byte
+FAILED tests/test_gabarito_genoma_g0.py::test_o_gabarito_esta_em_dia_byte_a_byte
+FAILED tests/test_gabarito_habito_intencao.py::test_o_gabarito_esta_em_dia_byte_a_byte
+FAILED tests/test_gabarito_memoria_autobio.py::test_o_gabarito_esta_em_dia_byte_a_byte
+FAILED tests/test_gabarito_redecidir_evento.py::test_o_gabarito_esta_em_dia_byte_a_byte
+FAILED tests/test_genoma_g0.py::test_e2_chave_desligada_as_vidas_da_e0_saem_iguais_ao_gabarito_no_log_e_na_trajetoria
+FAILED tests/test_leitura_l2_digibrain.py::test_a_leitura_se_refaz_igual_das_partes
+FAILED tests/test_medir_carater_v11.py::test_o_artefato_se_refaz_igual - Asse...
+FAILED tests/test_medir_v3_espaco_acoes.py::test_o_artefato_se_refaz_igual - ...
+FAILED tests/test_memoria_autobio.py::test_g2_separado_nada_fora_do_pacote_le_a_chave
+FAILED tests/test_motivo_expressao.py::test_bateria_combate_v2_reproduz_artefatos
+FAILED tests/test_p4_gabaritos.py::test_g2_as_vidas_do_j5_com_o_adendo_8_sao_as_de_hoje
+FAILED tests/test_painel_v21d.py::test_r2_reproduz_a_analise_dono_ambiente - ...
+FAILED tests/test_personalidade.py::test_equivalencia_neutro_sem_obediencia_reproduz_memoria_por_espacos[atencioso]
+FAILED tests/test_personalidade.py::test_equivalencia_neutro_sem_obediencia_reproduz_memoria_por_espacos[aleatorio]
+FAILED tests/test_planejador.py::test_g2_g_plano_zero_e_a_vida_de_hoje[padrao|metabolismo|P1-plano-motivo|comedouro|101]
+FAILED tests/test_planejador.py::test_g2_g_plano_zero_e_a_vida_de_hoje[padrao|metabolismo|P1-plano-motivo|comedouro|202]
+FAILED tests/test_planejador.py::test_g2_g_plano_zero_e_a_vida_de_hoje[padrao|metabolismo|P1-plano-motivo|longe|101]
+FAILED tests/test_planejador.py::test_g2_g_plano_zero_e_a_vida_de_hoje[padrao|metabolismo|P1-plano-motivo|longe|202]
+FAILED tests/test_planejador.py::test_g2_g_plano_zero_e_a_vida_de_hoje[padrao|quimica|P1-plano-motivo|comedouro|101]
+FAILED tests/test_planejador.py::test_g2_g_plano_zero_e_a_vida_de_hoje[padrao|quimica|P1-plano-motivo|comedouro|202]
+FAILED tests/test_planejador.py::test_g2_g_plano_zero_e_a_vida_de_hoje[padrao|quimica|P1-plano-motivo|longe|101]
+FAILED tests/test_planejador.py::test_g2_g_plano_zero_e_a_vida_de_hoje[padrao|quimica|P1-plano-motivo|longe|202]
+FAILED tests/test_plano_an3_poder.py::test_o_artefato_gravado_e_o_de_uma_execucao_nova
+FAILED tests/test_pre_run.py::test_a_lista_de_processos_da_maquina_responde
+FAILED tests/test_redecidir_evento.py::test_g2_separado_nada_fora_do_pacote_e_do_orquestrador_le_a_chave
+43 failed, 5095 passed, 8 skipped in 2260.72s (0:37:40)
+rc 1 fim 22:39:25
