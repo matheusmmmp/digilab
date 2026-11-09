@@ -283,6 +283,12 @@ PROPOSTOS até a LP5.
     do lugar;
   - **LP2-6:** na v21 saem os gambits (o gp, o aprender e o "g"), as cartas ("k") e os chips de regra; ficam os chips de stat, a confiança,
     a lesão, o sparring, as contagens e as medalhas.
+- Matheus, 2026-11-09, repassado pelo Gerente de sprites e luta: "siga aí até implementar o combate do jogo" (a LP3 liga o palco aos lugares de
+  luta da v21) e, depois das capturas, "Aprovo, abre a LP3b" (as capturas da LP3 aprovadas; a LP3b, o golpe de longe da LP-8 no núcleo,
+  liberada).
+- Matheus, 2026-11-09, repassado pelo Gerente de sprites e luta: "deixa os mesmos botões que tinha no loop anterior, que era de deixar a
+  luta mais rápida, coisa assim". O dock da tela de antes (pausar, ×2, Desistir e, no replay, Sair do replay) volta na luta da POC. Troca o
+  "sem botão durante a luta" do item 3 da seção 3.2 e o que a LP-10 deixava valendo (D-LP3-11).
 
 ## Resultado da LP1 (2026-11-08)
 
@@ -406,6 +412,51 @@ nova são da LP3: com a chave ligada, a Fronteira de um pet v21 segue dizendo qu
 - a Fábrica v21, com as séries, a troca e o Tamer que refaz a tentativa;
 - o gabarito `test/gabaritos/lp2b_torneios_v21.json` (5 vidas muito treinadas, 71 lutas de torneio; 5 tentativas da Fábrica) e o replay bit
   a bit.
+
+## Resultado da LP3 (2026-11-09)
+
+Worker: Claude Code (Opus 5.5), worktree e branch `v3-luta-poc-lp3`, a pedido do Gerente de sprites e luta. Os desvios estão em
+`docs/registro/2026-11.md`, seção "LUTA_POC, LP3". As capturas foram aprovadas pelo Matheus (seção 9).
+
+**O palco** (`web/app/src/telas/lutar/palcoPoc/`, só vista):
+- **o chão:** a elipse 2D da POC, no mundo de 480 × 280, com os 8 mapas do UP e a regra de cada um à vista:
+  - a área que fecha no Coliseu;
+  - a maré na Praia;
+  - a areia e a tempestade no Deserto;
+  - a runa e os pilares que quebram no Castelo;
+  - a lava e as erupções na Caverna;
+  - as árvores e as moitas na Floresta;
+  - o Ringue sem cerca.
+  O cartão "O mapa" diz a regra e os avisos dela (a arena fecha, a tempestade, a runa);
+- **os lutadores:** os sprites do atlas em escala inteira, com os clipes `Idle`, `Run`, `Attack_1`, `Stun` e `Die` pelo estado da simulação,
+  sem nada acrescentado às poses;
+- **os projéteis:** em voo, com o prefab do jogo (`Assets/arena_up/efeitos`, fora do git) por cima do rastro e do brilho do elemento (E2);
+- **o projétil nosso da LP-8:** só desenho nesta etapa (D-LP3-3; a regra é a LP3b);
+- **os efeitos da seção 3.3a,** de E1 a E5 (D-LP3-4);
+- **o dock da tela de antes** (decisão do Matheus de 2026-11-09, D-LP3-11; no lugar do "nenhum botão" das capturas aprovadas): pausar,
+  ×2 e Desistir com a confirmação; no fim, Ver replay e Continuar; no replay, Sair do replay e Ver de novo. No desktop e no celular, nas
+  duas peles. Nada disso muda o resultado nem o registro.
+
+**O jogo** (com `?luta_poc=1`, os pets v21):
+- **a Arena:** o rival do estágio e um dos 8 mapas;
+- **a Campanha:** o mapa do lugar (LP-4), com a série da Cidadela;
+- **a Fronteira:** a Liga (6 lutas sem cura), a Torre, o Salão e a Fábrica.
+O motor grava a luta, e o palco a refaz da mesma entrada e confere o fim (D-LP3-2). Uma luta montada direto no núcleo
+(`?luta_poc=1&palco_poc=<mapa>,<forma>,<forma>,<semente>`) serve às capturas e ao e2e e não grava nada.
+
+**Os testes:**
+- `test/luta_poc_lp3.test.ts` (14): os E1–E5 portados para o palco 2D (o determinismo dos efeitos, o fim igual ao da luta sem tela, cada
+  efeito no seu evento, o movimento reduzido) e o palco refazendo as lutas do motor (a Arena, a Liga, a Torre e o Salão de um pet v21);
+- `e2e/luta_poc_lp3.spec.ts` (4): a luta montada até o fim com o dock, a luta da Arena no registro, o movimento reduzido sem tremida e o
+  dock (pausar para o relógio, Desistir com a confirmação, Ver replay, Sair do replay, o registro igual);
+- o `e2e/luta_poc_lp2.spec.ts` passou a esperar as telas novas;
+- as capturas: `e2e_capturas/luta_poc_lp3.spec.ts` (as 8 lutas montadas), `luta_poc_lp3_jogo.spec.ts` (o jogo com um pet v21 treinado)
+  e `luta_poc_lp3_dock.spec.ts` (o dock em cada estado).
+
+**O que fica:**
+- a regra da LP-8 (a LP3b);
+- ligar a chave por padrão, proposto para o PR da LP4 (o descarte 7 é de mão única);
+- os achados D-LP3-7 a D-LP3-9.
 
 ## Resultado da LP3b (2026-11-09)
 
