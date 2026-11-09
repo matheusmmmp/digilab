@@ -8,6 +8,7 @@ import {
   chaveSprite, corDominante, estadoV2, formaLiga, formaRival, formaRivalInstalacao, hashSemente, instalacaoDe, lutadorBot, lutadorPet, medalhaDoLider, nomeForma,
   passoTR, type Arena, type Estagio, type EstadoTR, type EventoTR, type FormaAdultaNormal, type IdInstalacao, type Instalacao, type Lutador, type LutaTR, Motor,
   type ResultadoLuta, type TracoCombate, duracaoLuta, jogarLuta, tamanhoLuta,
+  VERSAO_V21,
 } from "../motor/index.ts";
 import { cenaDaLuta, type IdCenaTR } from "./telas/lutar/palcoTR/cenasTR.ts";
 import { aplicarEventosTR, visualNovoTR, type VisualTR } from "./telas/lutar/palcoTR/desenhoTR.ts";
@@ -540,6 +541,15 @@ export function lutasDoRegistro(m: Motor): LutaDoRegistro[] {
   m.log.forEach((ev, idx) => {
     if (ev[1] !== "l") { m0.aplicarEvento(ev); return; }
     const { r, s } = ev[2] as { r: string; s: number };
+    if (m0.versao === VERSAO_V21) {
+      /* a luta da POC (LP2): sem turnos nem regras; o resultado e o da ultima luta da serie, lido das contagens do pet refeito */
+      const L0 = { ...m0.lutas };
+      m0.aplicarEvento(ev);
+      const L1 = m0.lutas, ultima = L1.vitorias > L0.vitorias && L1.derrotas === L0.derrotas && L1.empates === L0.empates ? 1
+        : L1.derrotas > L0.derrotas ? 0 : 0.5;
+      lutas.push({ idx, rival: r, turnos: 0, pontosA: ultima, regrasNovas: 0 });
+      return;
+    }
     /* a luta como o motor a jogou (nas seguidas da Cidadela, a serie: turnos somados, o resultado da ultima) */
     const serie = m0.montarLuta(r, s).serie, res = serie[serie.length - 1], antes = m0.gp ? [...m0.gp.ativas] : [];
     m0.aplicarEvento(ev);
