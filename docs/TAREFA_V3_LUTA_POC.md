@@ -477,6 +477,6 @@ desligada.
 **O efeito** (`scripts/medicoes/lp3b_lp8.json`): as vitórias das cinco formas mudam de −0,4 a +3,5 pontos e as lutas ficam de 0,2 a 1,3 s
 mais longas. O equilíbrio é da LP5.
 
-**A tela:** o desenho da LP3 não muda. O voo das cinco formas passa a ser o da simulação, e o projétil só desenhado da LP3 fica sem uso
-(D-LP3b-6).
+**A tela:** o desenho da LP3 não muda. O voo das cinco formas passa a ser o da simulação; o projétil só desenhado da LP3 saiu neste PR,
+depois do merge da LP3 na `main` (D-LP3b-6).
 
