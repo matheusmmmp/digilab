@@ -83,6 +83,7 @@ def custo_dc4() -> dict:
 
 
 CALIBRACAO_DC4 = RAIZ / "artifacts_v3_conversa_dc4" / "calibracao"
+CALIBRACAO_DC4_V3B = RAIZ / "artifacts_v3_conversa_dc4" / "calibracao_v3b"
 
 
 def custo_dc4_medido() -> dict | None:
@@ -91,7 +92,31 @@ def custo_dc4_medido() -> dict | None:
     if not (CALIBRACAO_DC4 / "meta.json").exists():
         return None
     meta = json.loads((CALIBRACAO_DC4 / "meta.json").read_text(encoding="utf-8"))
-    regs = [json.loads(x) for x in (CALIBRACAO_DC4 / "falas.jsonl").read_text(encoding="utf-8").splitlines() if x.strip()]
+    regs = _falas(CALIBRACAO_DC4)
+    return _projecao(regs, meta["gasto"]["fim_usd"], meta["gasto"]["limite_usd"],
+                     "artifacts_v3_conversa_dc4/calibracao/falas.jsonl (usage) e meta.json (gasto acumulado)")
+
+
+def _falas(pasta: Path) -> list[dict]:
+    return [json.loads(x) for x in (pasta / "falas.jsonl").read_text(encoding="utf-8").splitlines() if x.strip()]
+
+
+def custo_dc4_medido_v3b() -> dict | None:
+    """DC4b, a voz-v3b (decisao do Matheus em 2026-11-09): a mesma projecao, com as falas do dec-v3 da recalibracao (calibracao_v3b) no lugar
+    das da calibracao (as do dec-v2 nao mudam, a voz-v2 e a mesma) e o gasto acumulado do fim da recalibracao. None sem ela no disco."""
+    if not (CALIBRACAO_DC4_V3B / "meta.json").exists():
+        return None
+    meta = json.loads((CALIBRACAO_DC4_V3B / "meta.json").read_text(encoding="utf-8"))
+    novas = {r["id"]: r for r in _falas(CALIBRACAO_DC4_V3B)}
+    regs = [novas.pop(r["id"]) if r["versao_dec"] == "dec-v3" else r for r in _falas(CALIBRACAO_DC4)]
+    if novas or any(r["versao_dec"] == "dec-v3" and r.get("versao_prompt") != "voz-v3b" for r in regs):
+        raise ValueError("a recalibracao da voz-v3b nao cobre exatamente as falas do dec-v3 da calibracao")
+    return _projecao(regs, meta["gasto"]["fim_usd"], meta["gasto"]["limite_usd"],
+                     "artifacts_v3_conversa_dc4/calibracao_v3b/falas.jsonl (usage do dec-v3, voz-v3b), calibracao/falas.jsonl (usage do "
+                     "dec-v2) e calibracao_v3b/meta.json (gasto acumulado)")
+
+
+def _projecao(regs: list[dict], acumulado: float, limite: float, fonte: str) -> dict:
     bracos, proj_media, proj_max = {}, 0.0, 0.0
     for b, m in (("H", "claude-haiku-5-5"), ("S", "claude-sonnet-5-5")):
         us = [r["usage"] for r in regs if r["braco"] == b and r["usage"]["entrada"] is not None]
@@ -106,12 +131,11 @@ def custo_dc4_medido() -> dict | None:
                      "usd_validacao_pela_maior": round(n_val * max(cs), 4)}
         proj_media += n_val * statistics.mean(cs)
         proj_max += n_val * max(cs)
-    acumulado = meta["gasto"]["fim_usd"]
-    return {"bracos": bracos, "gasto_acumulado_usd": acumulado, "teto_usd": meta["gasto"]["limite_usd"],
+    return {"bracos": bracos, "gasto_acumulado_usd": acumulado, "teto_usd": limite,
             "validacao_pela_media_usd": round(proj_media, 4), "validacao_pela_maior_usd": round(proj_max, 4),
-            "folga_pela_media_usd": round(meta["gasto"]["limite_usd"] - acumulado - proj_media, 4),
-            "folga_pela_maior_usd": round(meta["gasto"]["limite_usd"] - acumulado - proj_max, 4),
-            "fonte": "artifacts_v3_conversa_dc4/calibracao/falas.jsonl (usage) e meta.json (gasto acumulado)"}
+            "folga_pela_media_usd": round(limite - acumulado - proj_media, 4),
+            "folga_pela_maior_usd": round(limite - acumulado - proj_max, 4),
+            "fonte": fonte}
 
 
 def tokens_pedido() -> tuple[int, int]:
@@ -171,6 +195,10 @@ def main() -> int:
     if medido is not None:
         (CALIBRACAO_DC4 / "custo_medido.json").write_text(json.dumps(medido, indent=2, ensure_ascii=False) + chr(10), encoding="utf-8")
         print(json.dumps({"voz_da_rede_dc4_medido": medido}, indent=1))
+    medido_v3b = custo_dc4_medido_v3b()             # DC4b, a voz-v3b: num artefato da recalibracao; o da calibracao nao muda
+    if medido_v3b is not None:
+        (CALIBRACAO_DC4_V3B / "custo_medido.json").write_text(json.dumps(medido_v3b, indent=2, ensure_ascii=False) + chr(10), encoding="utf-8")
+        print(json.dumps({"voz_da_rede_dc4_medido_v3b": medido_v3b}, indent=1))
     SAIDA.mkdir(exist_ok=True)
     (SAIDA / "estimativa.json").write_text(json.dumps(res, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     ln = [f"tokens/chamada: {ent} entrada, {sai} saida (pior caso)", "",
