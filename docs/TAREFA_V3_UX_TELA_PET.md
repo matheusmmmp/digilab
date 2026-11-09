@@ -703,6 +703,45 @@ vai até um objeto. Esta etapa faz só a prancha da A, sem código do jogo (bran
 - **Interpretações:** D-I1-1 a D-I1-4, em `docs/registro/2026-11.md`.
 - **Pendente do #694:** a árvore que dá fruta.
 
+## 23. A tela Pet mais limpa: os ícones no hover, o minimapa menor, as faixas por 5 s e o pet que anda até o lugar (2026-11-08)
+
+O Matheus, sobre a tela Pet já com a ilha A (#691):
+> "Eu não quero que fique aparecendo esses ícones o tempo todo na tela. Eu quero que eles só fiquem aparentes se o jogador passar o mouse por cima,
+> sabe? E daí fique bem translúcido. O minimapa tá muito grande, diminui um pouco o minimapa também."
+
+> "[...] na batalha, o Pet vai até o portal, ele não teleporta até lá, ele vai correndo na velocidade dele mesmo, sabe? [...] o modal vai até o local
+> preparado já, mas o Pet ele demora um pouquinho para chegar."
+
+> "[...] o menu à esquerda, um sobreposto ao outro. [...] aquele menu do estado da fome e o agora dormindo, eles não precisam estar ali, eles estão
+> ocupando muito, muito espaço. Então, tira eles, ou quando notifica, deixa eles durante 5 segundos e daí eles saem."
+
+**O que foi feito (só vista; o motor, o save, o registro e o replay não mudam):**
+- **Os ícones da ilha só aparecem com o mouse sobre o objeto, translúcidos** (opacidade 0,55):
+  - os selos do saco e da barraca (`ObjetosDaIlha.tsx`) e as etiquetas da tigela, da bola e dos lugares;
+  - a etiqueta do alvo atual do pet não aparece mais sozinha; ela só ganha o destaque quando o mouse está sobre ela;
+  - o cadeado do lugar trancado (`CadeadosDaIlha.tsx`, `nivel.css`) fica invisível e continua clicável. Ele aparece com o mouse sobre o lugar ou
+    sobre ele, e inteiro com o foco do teclado. O toque no lugar trancado continua abrindo o motivo.
+- **O minimapa** passou de 232 para 176 px (`MINIMAPA_PX`, `minimapa.css`). O "seguir o pet" e a altura da pilha da direita acompanham.
+- **As faixas "Agora" e do resumo** (a fome, "quer carinho", o Estado) aparecem por 5 s quando mudam e depois saem (`NOTIFICA_MS`, `hudPet.ts`).
+  A fome crítica, que antes ficava, também sai. Com o DigiBrain aberto, a linha do agora fica, e ao fechá-lo ela volta por 5 s, para o foco voltar a
+  ela. O cartão do chamado e a morte continuam como antes, e o balão da fala continua com os 15 s.
+- **O pet anda até o lugar no ritmo dele** (`ilha/vista.ts`, `petNaViagem`): a câmera e o painel chegam em 0,7 s, como antes, e o pet vai do ponto
+  em que estava desenhado até o lugar a 3,5 células por segundo, no máximo 6 s (`PET_VIAGEM_CEL_MS`, `PET_VIAGEM_MAX_MS`). A volta é igual. Com
+  "reduzir movimento", chega na hora.
+- **O painel de Ajustes** abre à direita do trilho de ícones, não por baixo dele (`lugar_l3.css`).
+- **O Estado com outro painel aberto:** com os Ajustes ou um lugar aberto, a lista das necessidades da pilha da direita virava duas colunas e o
+  texto se sobrepunha (`pet.css`, sem o `.app--pet`). Agora continua uma coluna (`pet_hud.css`).
+
+**Os números** (0,55, 176 px, 5 s, 3,5 células por segundo, 6 s) são de interface: PROPOSTO, SEM FONTE. As interpretações estão em D-TP23-1 a
+D-TP23-3, em `docs/registro/2026-11.md`.
+
+**Os painéis arrastáveis** (o Matheus: "Sim, arrastáveis", 2026-11-08):
+- **O que se arrasta:** a pilha da direita (Estado, Evolução, Últimas ações e DigiBrain) e o painel ao lado (os Ajustes e cada lugar). Eles se
+  arrastam pelo cabeçalho (`useArrastavelPorAlca`, `hudPet.ts`). O resto do painel continua a clicar e a rolar, e um arraste não vira clique.
+- **A posição** fica no navegador, como a do balão e a do alerta, e nunca no save.
+- **Voltar ao lugar:** o botão "Voltar os painéis ao lugar" fica em Ajustes > Visual > Painéis.
+- **Celular:** a folha de baixo não se arrasta.
+
 ## 24. A prancha do layout da ilha inicial (2026-11-08)
 
 O Matheus pediu de novo uma análise do layout da ilha, com referências de outros jogos:

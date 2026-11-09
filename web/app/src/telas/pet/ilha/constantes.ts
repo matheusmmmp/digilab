@@ -56,6 +56,12 @@ export const LUZ_NINHO = { raio: 2.2, cor: "255,214,140" } as const;
 export const SACO_DESDE_NINHO: readonly [number, number] = [3, -4], KIT_DESDE_NINHO: readonly [number, number] = [1.3, -1];
 /** o treino na ilha: a ida ate o saco, os golpes e a volta (ms); um golpe a cada GOLPE_MS; o pet para a GOLPE_DIST celulas do saco */
 export const TREINO_MS = { ida: 900, golpes: 2400, volta: 900 } as const, GOLPE_MS = 600, GOLPE_DIST = 1.35;
+/** a ida do pet ate o lugar aberto (e a volta), separada da camera: ele anda na velocidade dele (celulas por ms) e a camera e o painel chegam antes
+    (o Matheus, 2026-11-08: "ele não teleporta até lá, ele vai correndo na velocidade dele mesmo"); a caminhada nunca passa de PET_VIAGEM_MAX_MS.
+    PROPOSTO, SEM FONTE (numero de interface, nao de jogo) */
+export const PET_VIAGEM_CEL_MS = 3.5 / 1000, PET_VIAGEM_MAX_MS = 6000;
+/** quanto a ida do pet ao lugar dura (ms) para `dist` celulas: a velocidade dele, com o teto; "reduzir movimento" chega na hora */
+export const duracaoPetViagem = (dist: number, reduzido: boolean): number => (reduzido ? 0 : Math.min(PET_VIAGEM_MAX_MS, dist / PET_VIAGEM_CEL_MS));
 /** a batida na bola: quanto dura o golpe (ms) */
 export const BATER_BOLA_MS = 450;
 /** a bola desenhada vai ate a do motor com esta constante de tempo (ms); salta quando a distancia passa de BOLA_SALTO celulas */

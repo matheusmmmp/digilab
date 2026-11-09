@@ -1,5 +1,5 @@
 /* O minimapa da tela Pet (L1 de "Lugares da ilha", docs/PROPOSTAS_V3_UX_TELA_PET.md, so a partir de 900 px; quem o monta decide a largura):
-   um circulo de 232 px com a ilha vista de cima (VISTA.atual.mapa, publicada pela cena 3D), o cone da vista, o pet e os lugares.
+   um circulo de 176 px com a ilha vista de cima (VISTA.atual.mapa, publicada pela cena 3D), o cone da vista, o pet e os lugares.
    - A roda aproxima da escala A (a ilha inteira) ate a B (a janela em volta do ponto olhado), e o nivel fica nesta pagina (fora do save).
    - Com `podeSoltar`: um clique leva a camera ao ponto (com transicao), segurar e arrastar leva junto (sem transicao), e com o foco as
      setas andam a camera e o Enter volta ao pet. Com a camera "Fixa" o minimapa so mostra (L1-3).
