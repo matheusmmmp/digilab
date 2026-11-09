@@ -49,13 +49,17 @@ parado às 13:00.
   `CAP_ROTULO=b CAP_MAPA=ilha CAP_LUZ=b npx playwright test -c playwright.capturas.config.ts e2e_capturas/luz.spec.ts --project gpu`.
   Apague a cópia depois.
 
-## As decisões (PROPOSTAS)
+## As decisões (APROVADAS em 2026-11-09)
+
+O Matheus respondeu "B com tudo" (2026-11-09): a B e as recomendações de LZ-2 a LZ-5, como estão abaixo. A etapa de código está na
+seção 28 de `docs/TAREFA_V3_UX_TELA_PET.md`.
+
 
 - **LZ-1, a proposta.** Recomendação: **B, suave**. O Matheus pediu algo natural, e B guia sem aparecer. A lê como filtro, e C quase não
   muda nada. Custo de errar: baixo, porque é só trocar três números em `LUZ_HIERARQUIA`.
 - **LZ-2, quem acende.** Recomendação: o lar, a praça, o portão, a barraca e os caminhos, **sem o cais enquanto ele estiver trancado**. O cais
   é do multiplayer futuro (`LUGAR_ABERTO`), e acender um lugar que não abre ensina errado; a regra do sinal único (Norman) vale também para a
-  luz. O protótipo ainda acende o cais. Custo de errar: baixo, porque o foco do cais liga quando ele abrir.
+  luz. Na etapa de código, o cais trancado saiu dos focos. Custo de errar: baixo, porque o foco do cais liga quando ele abrir.
 - **LZ-3, a noite.** Recomendação: **sem o efeito à noite.** A noite já tem a hierarquia dela (os lampiões e os halos dos enfeites e dos
   lugares). Custo de errar: baixo.
 - **LZ-4, o chão.** Recomendação: **o chão com peso 0,3.** Com peso 1, a grama fica cinza e os focos viram manchas (a primeira versão). Custo
