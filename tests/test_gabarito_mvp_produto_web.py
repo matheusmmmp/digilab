@@ -78,7 +78,9 @@ def test_o_layout_do_mvp_nao_vaza_para_a_pesquisa():
                   Path("experiments/exportar_gabarito_decisao_na_comida.py"),   # a chave do produto (b), no mundo do pet v12
                   Path("tests/test_decisao_na_comida.py"),
                   Path("experiments/exportar_gabarito_levar_pet.py"),   # o levar pet (PEGAR_PET, P1), no mundo do pet v19
-                  Path("tests/test_levar_pet.py")}
+                  Path("tests/test_levar_pet.py"),
+                  Path("tests/gabarito_arvore_sacode.py"),          # o sacudir (ARVORE_SACODE, S1): a vida de hoje no MVP e o mundo da ilha
+                  Path("tests/test_arvore_sacode.py")}
     citam = {p.relative_to(RAIZ) for pasta in ("digilab", "experiments", "tests", "tools") for p in (RAIZ / pasta).rglob("*.py")
              if nomes.search(p.read_text(encoding="utf-8"))}
     assert citam == permitidos
