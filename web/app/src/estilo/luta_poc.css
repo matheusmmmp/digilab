@@ -32,3 +32,5 @@
 .poc-desafio button{ min-height:44px; min-width:88px; padding:0 12px; flex:none; background:var(--hx-tecla); color:var(--hx-texto); border:1px solid var(--hx-borda-topo);
   font:700 14px/1 var(--hx-f); letter-spacing:.06em; text-transform:uppercase; cursor:pointer }
 .poc-desafio button:disabled{ opacity:.55; cursor:default }
+/* o dock da luta (o mesmo da tela de antes, luta_hud.css): Sair do replay numa linha so no celular */
+.luta-tela--poc .luta-dock .luta-desistir{ white-space:nowrap }

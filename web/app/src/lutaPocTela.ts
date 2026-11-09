@@ -2,7 +2,9 @@
    entrada no registro e devolve o resultado) e refeita aqui passo a passo, da mesma entrada (o mapa, as duas formas, os numeros de cada lado e
    a semente), so para desenhar. No fim de cada luta o palco confere que ela acabou como a do motor (o vencedor, o relogio e os passos) e falha
    alto se nao. A tela nao muda o resultado nem o log: nada aqui grava.
-   Durante a luta nao ha botao nenhum (o pet luta sozinho); o que vem depois (o resultado e Continuar) so aparece no fim.
+   Durante a luta, o dock da tela de antes (decisao do Matheus de 2026-11-09, que troca o "nenhum botao" da LP3): pausar, x2 e Desistir
+   (pula a animacao e sai; a luta ja foi gravada pelo motor). No fim, o resultado com Ver replay (a mesma luta de novo, so no desenho) e
+   Continuar; no replay, Sair do replay e, no fim dele, Ver de novo. Nada disso muda o resultado nem o log.
    O ritmo e o do palco de antes (src/luta.ts): um quadro a cada 48 ms com 3 passos de 16 ms (o tempo real); com o movimento reduzido, 12 por
    quadro. A pausa do acerto (E1) e a camera lenta do nocaute (E5) so mudam o desenho: os passos e o fim sao os mesmos. */
 import { useEffect, useReducer } from "react";
@@ -30,7 +32,10 @@ export interface PalcoPoc {
   /** no fim de todas: o resultado (o que aparece depois da luta) */
   fim: FimPoc | null;
 }
-export const LUTA_POC = { palco: null as PalcoPoc | null, lutando: false };
+/** pausado e rapido: os botoes do dock (so o ritmo do desenho); replay: a luta vista de novo pelo Ver replay (nada grava) */
+export const LUTA_POC = { palco: null as PalcoPoc | null, lutando: false, pausado: false, rapido: false, replay: false };
+/** as lutas da tela de agora, para o Ver replay e o Ver de novo */
+let atual: { lutas: readonly LutaNaTela[]; contexto: string; fim: (L: LutaPoc) => FimPoc } | null = null;
 
 const ouvintes = new Set<() => void>();
 const avisar = (): void => { for (const o of ouvintes) o(); };
@@ -67,11 +72,25 @@ export function lutasDoResultado(r: ResultadoLutaPoc): LutaNaTela[] {
 
 /* ---------------------------------------------------------------- o ritmo */
 /** quadros da tela e a espera do fim. PROPOSTOS, SEM FONTE (os do palco de antes: src/luta.ts) */
-export const RITMO_POC = { quadroMs: 48, passos: 3, passosReduzido: 12, pausaFim: 900, pausaFimKo: 1800, pausaSerie: 1500 } as const;
+export const RITMO_POC = { quadroMs: 48, passos: 3, passosRapido: 6, passosReduzido: 12, pausaFim: 900, pausaFimKo: 1800, pausaSerie: 1500 } as const;
 
 let timer: ReturnType<typeof setTimeout> | undefined;
 /** para o palco (sai da tela: Continuar, ou outra luta comecou) */
-export function fecharPalcoPoc(): void { clearTimeout(timer); LUTA_POC.palco = null; LUTA_POC.lutando = false; avisar(); }
+export function fecharPalcoPoc(): void {
+  clearTimeout(timer); pular = null; atual = null;
+  Object.assign(LUTA_POC, { palco: null, lutando: false, pausado: false, replay: false }); avisar();
+}
+/** o pular da luta em andamento (Desistir e Sair do replay): leva todas as lutas que faltam ao fim, conferindo cada uma, sem desenhar */
+let pular: (() => void) | null = null;
+export function pularAnimacaoPoc(): void { if (LUTA_POC.lutando && pular) pular(); }
+export function alternarPausaPoc(): void { LUTA_POC.pausado = !LUTA_POC.pausado; avisar(); }
+export function alternarRapidoPoc(): void { LUTA_POC.rapido = !LUTA_POC.rapido; avisar(); }
+/** Ver replay (no resultado) e Ver de novo (no fim do replay): as mesmas lutas outra vez no palco, da mesma entrada; nada grava */
+export function verReplayPoc(): void {
+  if (!atual) throw new Error("palco: nenhuma luta para rever");
+  const a = atual;
+  assistirPoc(a.lutas, a.contexto, a.fim, true);
+}
 
 function criar(l: LutaNaTela): LutaPoc {
   const L = criarLutaPoc(configLutaPoc(l.entrada), sorteiosPoc(l.entrada.semente));
@@ -80,16 +99,18 @@ function criar(l: LutaNaTela): LutaPoc {
 }
 
 /** assiste as lutas (ja decididas) no palco, uma depois da outra; no fim, `fim(ultima)` da o resultado que aparece depois da luta */
-export function assistirPoc(lutas: readonly LutaNaTela[], contexto: string, fim: (L: LutaPoc) => FimPoc): void {
+export function assistirPoc(lutas: readonly LutaNaTela[], contexto: string, fim: (L: LutaPoc) => FimPoc, replay = false): void {
   if (!lutas.length) throw new Error("palco: nenhuma luta para assistir");
   clearTimeout(timer);
+  atual = { lutas, contexto, fim };
+  Object.assign(LUTA_POC, { pausado: false, replay });
   for (const l of lutas) arquivosPoc(l.entrada.cena);
   void carregarEfeitos();
   const reduz = movimentoReduzido();
   let j = 0;
   const abrir = () => {
     const l = lutas[j];
-    LUTA_POC.palco = { L: criar(l), v: visualNovoPoc(), A: l.A, B: l.B, cena: l.entrada.cena, k: j, n: lutas.length, rotulo: l.rotulo, contexto, fim: null };
+    LUTA_POC.palco = { L: criar(l), v: visualNovoPoc(), A: l.A, B: l.B, cena: l.entrada.cena, k: j, n: lutas.length, rotulo: l.rotulo, contexto: replay ? `Replay · ${contexto}` : contexto, fim: null };
   };
   const conferir = (p: PalcoPoc) => {
     const e = lutas[j].esperado; if (!e) return;
@@ -102,7 +123,8 @@ export function assistirPoc(lutas: readonly LutaNaTela[], contexto: string, fim:
   /** um quadro: os passos da luta deste quadro (a camera lenta no fim de uma luta que acaba em nocaute) */
   const quadro = () => {
     const p = LUTA_POC.palco; if (!p) return;
-    const L = p.L, e = lutas[j].esperado, base = reduz ? RITMO_POC.passosReduzido : RITMO_POC.passos;
+    if (LUTA_POC.pausado) { timer = setTimeout(quadro, RITMO_POC.quadroMs); return; }
+    const L = p.L, e = lutas[j].esperado, base = reduz ? RITMO_POC.passosReduzido : LUTA_POC.rapido ? RITMO_POC.passosRapido : RITMO_POC.passos;
     const n = e ? passosDoQuadro(passoDe(L), base, { passos: e.passos, fim: e.ko ? "ko" : "limite" }, reduz) : base;
     for (let q = 0; q < n && !L.fim && L.relogio < LIMITE_POC_MS; q++) aplicarEventosPoc(p.v, L, passoPoc(L), [p.A.forma, p.B.forma]);
     avisar();
@@ -114,12 +136,25 @@ export function assistirPoc(lutas: readonly LutaNaTela[], contexto: string, fim:
     const p = LUTA_POC.palco!, ko = p.L.a.morto || p.L.b.morto, ultima = j === lutas.length - 1;
     let falta = Math.ceil((ultima ? (ko ? RITMO_POC.pausaFimKo : RITMO_POC.pausaFim) : RITMO_POC.pausaSerie) / RITMO_POC.quadroMs), k = 0;
     const tic = () => {
+      if (LUTA_POC.pausado) { timer = setTimeout(tic, RITMO_POC.quadroMs); return; }
       p.v.extra += passosDaEspera(k++, RITMO_POC.passos, ko, reduz); avisar();
       if (--falta > 0) { timer = setTimeout(tic, RITMO_POC.quadroMs); return; }
       if (!ultima) { j++; abrir(); avisar(); timer = setTimeout(quadro, RITMO_POC.quadroMs); return; }
-      p.fim = fim(p.L); LUTA_POC.lutando = false; avisar();
+      p.fim = fim(p.L); LUTA_POC.lutando = false; pular = null; avisar();
     };
     timer = setTimeout(tic, RITMO_POC.quadroMs);
+  };
+  pular = () => {
+    clearTimeout(timer);
+    for (;;) {
+      const p = LUTA_POC.palco!, L = p.L;
+      while (!L.fim && L.relogio < LIMITE_POC_MS) passoPoc(L);
+      conferir(p);
+      if (j === lutas.length - 1) break;
+      j++; abrir();
+    }
+    const p = LUTA_POC.palco!;
+    p.fim = fim(p.L); LUTA_POC.lutando = false; pular = null; avisar();
   };
   LUTA_POC.lutando = true;
   abrir(); avisar();

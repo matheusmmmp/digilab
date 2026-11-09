@@ -1,12 +1,15 @@
 /* A tela da luta da POC (LUTA_POC, LP3): a luta em tempo real na tela inteira, com o palco 2D (desenhoPoc.ts), o HUD das peles de hoje (as
-   plaquinhas com a vida e o dano atrasado da E5, a carga da habilidade, o relogio) e o cartao do mapa com a regra dele. Nenhum botao durante
-   a luta, no desktop e no celular: o pet luta sozinho e o dono assiste. No fim, o resultado e Continuar. */
-import { useEffect, useReducer, useRef } from "react";
+   plaquinhas com a vida e o dano atrasado da E5, a carga da habilidade, o relogio) e o cartao do mapa com a regra dele. O pet luta sozinho;
+   no rodape, o dock da tela de antes (TelaLuta.tsx; decisao do Matheus de 2026-11-09): Pausar, x2 e Desistir (com a confirmacao), ou Sair
+   do replay. No fim, o resultado com Ver replay e Continuar; no fim do replay, Ver de novo e Continuar. */
+import { useEffect, useReducer, useRef, useState } from "react";
 import { CENAS, LIMITE_POC_MS } from "../../../../motor/index.ts";
 import { atlasAtual, imagemAtlas, useAtlas } from "../../../atlas.ts";
 import { abrirModal } from "../../../componentes/modal.ts";
-import { BotaoContinuar } from "../../../componentes/hx/index.ts";
-import { LUTA_POC, fecharPalcoPoc, useLutaPoc, type PalcoPoc } from "../../../lutaPocTela.ts";
+import { BotaoContinuar, BotaoHx } from "../../../componentes/hx/index.ts";
+import {
+  LUTA_POC, alternarPausaPoc, alternarRapidoPoc, fecharPalcoPoc, pularAnimacaoPoc, useLutaPoc, verReplayPoc, type PalcoPoc,
+} from "../../../lutaPocTela.ts";
 import { falhasMapa, ouvirMapas } from "../palcoTR/cenasTR.ts";
 import { relogio } from "../palcoTR/PalcoTR.tsx";
 import { arquivosPoc, desenharLutaPoc, type LadoDesenhoPoc } from "./desenhoPoc.ts";
@@ -14,6 +17,7 @@ import { efeitosAtuais, falhasEfeito, ouvirEfeitos } from "./efeitosJogo.ts";
 import { barraDoPasso, passoDe, type LadoN } from "./visualPoc.ts";
 import "../../../estilo/abertas.css";
 import "../../../estilo/luta_hud.css";
+import "../../../estilo/luta_poc.css";
 
 /** um lado do HUD: o retrato, o nome, a vida (com o pedaco atrasado da E5) e a carga da habilidade */
 function Lado({ p, i }: { p: PalcoPoc; i: LadoN }) {
@@ -35,16 +39,36 @@ function Lado({ p, i }: { p: PalcoPoc; i: LadoN }) {
   );
 }
 
-/** o resultado: so depois da luta (Continuar fecha a tela) */
-function Resultado({ p, continuar }: { p: PalcoPoc; continuar: () => void }) {
-  const ref = useRef<HTMLDialogElement>(null);
+/** a confirmacao do Desistir, a mesma da tela de antes (TelaLuta.tsx) */
+function ConfirmarDesistir({ ficar, desistir }: { ficar: () => void; desistir: () => void }) {
+  const ref = useRef<HTMLDialogElement>(null), saiu = useRef(false);
+  useEffect(() => { abrirModal(ref.current); }, []);
+  return (
+    <dialog className="modal-conf ab-hx dl" ref={ref} aria-labelledby="poc-des-tit" onClose={() => (saiu.current ? desistir() : ficar())} data-testid="poc-desistir-conf">
+      <h2 id="poc-des-tit">Desistir da luta?</h2>
+      <p>A luta já foi decidida quando começou e fica no registro. Desistir só pula a animação e volta para a aba de onde você veio.</p>
+      <div className="modal-bts">
+        <BotaoContinuar data-autofocus onClick={() => ref.current?.close()}>Continuar vendo</BotaoContinuar>
+        <BotaoHx tom="perigo" onClick={() => { saiu.current = true; ref.current?.close(); }}>Desistir</BotaoHx>
+      </div>
+    </dialog>
+  );
+}
+
+/** o resultado: so depois da luta. Ver replay mostra a mesma luta de novo; Continuar fecha a tela. No fim de um replay: Ver de novo */
+function Resultado({ p, replay, continuar }: { p: PalcoPoc; replay: boolean; continuar: () => void }) {
+  const ref = useRef<HTMLDialogElement>(null), rever = useRef(false);
   useEffect(() => { abrirModal(ref.current); }, []);
   if (!p.fim) return null;
+  const fechar = () => { if (rever.current) { rever.current = false; verReplayPoc(); } else continuar(); };
   return (
-    <dialog className="modal-conf ab-hx dl poc-resultado" ref={ref} aria-labelledby="poc-res-tit" onClose={continuar} data-testid="poc-resultado">
-      <h2 id="poc-res-tit">{p.fim.titulo}</h2>
-      <p>{p.fim.texto}</p>
-      <div className="modal-bts"><BotaoContinuar data-autofocus onClick={() => { ref.current?.close(); continuar(); }}>Continuar</BotaoContinuar></div>
+    <dialog className="modal-conf ab-hx dl poc-resultado" ref={ref} aria-labelledby="poc-res-tit" onClose={fechar} data-testid="poc-resultado">
+      <h2 id="poc-res-tit">{replay ? "Fim do replay" : p.fim.titulo}</h2>
+      <p>{replay ? `${p.fim.texto} ${/nada foi gravado/.test(p.fim.texto) ? "A luta foi refeita da mesma entrada." : "A luta foi refeita do registro; nada foi gravado."}` : p.fim.texto}</p>
+      <div className="modal-bts">
+        <BotaoHx className="res-replay" data-testid="poc-ver-replay" onClick={() => { rever.current = true; ref.current?.close(); }}>{replay ? "Ver de novo" : "Ver replay"}</BotaoHx>
+        <BotaoContinuar data-autofocus onClick={() => { ref.current?.close(); continuar(); }}>Continuar</BotaoContinuar>
+      </div>
     </dialog>
   );
 }
@@ -69,7 +93,7 @@ function Palco() {
 }
 
 export function TelaLutaPoc({ sair }: { sair: () => void }) {
-  const luta = useLutaPoc(), p = luta.palco, a = useAtlas();
+  const luta = useLutaPoc(), p = luta.palco, a = useAtlas(), [desistindo, setDesistindo] = useState(false);
   useEffect(() => { document.body.classList.add("tela-cheia"); scrollTo(0, 0); return () => document.body.classList.remove("tela-cheia"); }, []);
   if (!p) return null;
   const cena = CENAS[p.cena], faltamMapa = arquivosPoc(p.cena).filter(x => falhasMapa.has(x)), ef = efeitosAtuais();
@@ -104,7 +128,18 @@ export function TelaLutaPoc({ sair }: { sair: () => void }) {
       <div className="luta-contexto hud-caixa">
         <h1 className="luta-modo" id="poc-tit">{p.contexto}{p.rotulo ? ` · ${p.rotulo}` : ""}</h1>
       </div>
-      {p.fim && !luta.lutando && <Resultado p={p} continuar={continuar} />}
+      <div className="luta-dock hud-caixa" role="group" aria-label="Controles da luta" data-testid="poc-dock">
+        {luta.lutando && <>
+          <button type="button" className="luta-ctl" aria-label={luta.pausado ? "Continuar a animação" : "Pausar a animação"} aria-pressed={luta.pausado} onClick={alternarPausaPoc}>
+            {luta.pausado ? <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3l9 5-9 5z" /></svg> : <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3h3v10H4zM9 3h3v10H9z" /></svg>}</button>
+          <button type="button" className="luta-ctl luta-ctl--x2" aria-label="Velocidade dobrada" aria-pressed={luta.rapido} onClick={alternarRapidoPoc}>×2</button>
+          <span className="luta-dock-sep" aria-hidden="true" /></>}
+        {luta.replay
+          ? <BotaoHx className="luta-desistir" onClick={() => { pularAnimacaoPoc(); continuar(); }}>Sair do replay</BotaoHx>
+          : <BotaoHx tom="perigo" className="luta-desistir" disabled={!luta.lutando} onClick={() => setDesistindo(true)}>Desistir</BotaoHx>}
+      </div>
+      {p.fim && !luta.lutando && <Resultado key={luta.replay ? "r" : "l"} p={p} replay={luta.replay} continuar={continuar} />}
+      {desistindo && luta.lutando && <ConfirmarDesistir ficar={() => setDesistindo(false)} desistir={() => { setDesistindo(false); pularAnimacaoPoc(); continuar(); }} />}
     </section>
   );
 }

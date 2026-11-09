@@ -34,7 +34,7 @@ async function momento(page: Page, nome: string, cond: string, timeout = 120_000
   await page.waitForFunction((c: string) => { const cv = document.querySelector("[data-testid=poc-canvas]") as HTMLElement | null; return !!cv && new Function("d", `return (${c})`)(cv.dataset); }, cond, { timeout, polling: "raf" });
   await foto(page, nome);
 }
-const fim = async (page: Page, nome: string) => { await expect(page.getByTestId("poc-resultado")).toBeVisible({ timeout: 240_000 }); await foto(page, nome); await page.getByTestId("poc-resultado").getByRole("button").click(); };
+const fim = async (page: Page, nome: string) => { await expect(page.getByTestId("poc-resultado")).toBeVisible({ timeout: 240_000 }); await foto(page, nome); await page.getByTestId("poc-resultado").getByRole("button", { name: "Continuar" }).click(); };
 
 for (const t of TELAS) for (const pele of PELES) {
   test(`LP3 no jogo ${t.nome} ${pele}`, async ({ browser }) => {

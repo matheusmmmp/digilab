@@ -286,6 +286,9 @@ PROPOSTOS até a LP5.
 - Matheus, 2026-11-09, repassado pelo Gerente de sprites e luta: "siga aí até implementar o combate do jogo" (a LP3 liga o palco aos lugares de
   luta da v21) e, depois das capturas, "Aprovo, abre a LP3b" (as capturas da LP3 aprovadas; a LP3b, o golpe de longe da LP-8 no núcleo,
   liberada).
+- Matheus, 2026-11-09, repassado pelo Gerente de sprites e luta: "deixa os mesmos botões que tinha no loop anterior, que era de deixar a
+  luta mais rápida, coisa assim". O dock da tela de antes (pausar, ×2, Desistir e, no replay, Sair do replay) volta na luta da POC. Troca o
+  "sem botão durante a luta" do item 3 da seção 3.2 e o que a LP-10 deixava valendo (D-LP3-11).
 
 ## Resultado da LP1 (2026-11-08)
 
@@ -430,7 +433,9 @@ Worker: Claude Code (Opus 5.5), worktree e branch `v3-luta-poc-lp3`, a pedido do
 - **os projéteis:** em voo, com o prefab do jogo (`Assets/arena_up/efeitos`, fora do git) por cima do rastro e do brilho do elemento (E2);
 - **o projétil nosso da LP-8:** só desenho nesta etapa (D-LP3-3; a regra é a LP3b);
 - **os efeitos da seção 3.3a,** de E1 a E5 (D-LP3-4);
-- **nenhum botão durante a luta,** no desktop e no celular, nas duas peles.
+- **o dock da tela de antes** (decisão do Matheus de 2026-11-09, D-LP3-11; no lugar do "nenhum botão" das capturas aprovadas): pausar,
+  ×2 e Desistir com a confirmação; no fim, Ver replay e Continuar; no replay, Sair do replay e Ver de novo. No desktop e no celular, nas
+  duas peles. Nada disso muda o resultado nem o registro.
 
 **O jogo** (com `?luta_poc=1`, os pets v21):
 - **a Arena:** o rival do estágio e um dos 8 mapas;
@@ -442,9 +447,11 @@ O motor grava a luta, e o palco a refaz da mesma entrada e confere o fim (D-LP3-
 **Os testes:**
 - `test/luta_poc_lp3.test.ts` (14): os E1–E5 portados para o palco 2D (o determinismo dos efeitos, o fim igual ao da luta sem tela, cada
   efeito no seu evento, o movimento reduzido) e o palco refazendo as lutas do motor (a Arena, a Liga, a Torre e o Salão de um pet v21);
-- `e2e/luta_poc_lp3.spec.ts` (3): a luta montada até o fim sem botão, a luta da Arena no registro, o movimento reduzido sem tremida;
+- `e2e/luta_poc_lp3.spec.ts` (4): a luta montada até o fim com o dock, a luta da Arena no registro, o movimento reduzido sem tremida e o
+  dock (pausar para o relógio, Desistir com a confirmação, Ver replay, Sair do replay, o registro igual);
 - o `e2e/luta_poc_lp2.spec.ts` passou a esperar as telas novas;
-- as capturas: `e2e_capturas/luta_poc_lp3.spec.ts` (as 8 lutas montadas) e `luta_poc_lp3_jogo.spec.ts` (o jogo com um pet v21 treinado).
+- as capturas: `e2e_capturas/luta_poc_lp3.spec.ts` (as 8 lutas montadas), `luta_poc_lp3_jogo.spec.ts` (o jogo com um pet v21 treinado)
+  e `luta_poc_lp3_dock.spec.ts` (o dock em cada estado).
 
 **O que fica:**
 - a regra da LP-8 (a LP3b);
