@@ -81,3 +81,7 @@ Valem as ressalvas da seção 6 do plano:
 
 A escolha da frente da etapa 1 é do Matheus. Pela tabela da seção 5, o indeterminado da C4 deixa a recomendação da rodada (PV-2 primeiro)
 como está. O HP da AN0 sugeriria a revisão dos pesos inatos, que esbarra na regra "calibração no fim".
+
+**DECIDIDO (2026-11-09):** o Matheus decidiu, com as palavras "Faça as recomendações", repassadas pelo Gerente da V3 (D-PV0R-7).
+- O D-PV0R-6 fica registrado como limitação, sem rodar de novo.
+- A frente da etapa 1 é o PV-2 primeiro, pela regra.
