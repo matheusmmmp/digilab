@@ -8,6 +8,7 @@ import { imagemAtlas, useAtlas } from "../../../atlas.ts";
 import { mudarMotor, useJogo } from "../../../jogo.ts";
 import { assistirPoc, fimDoPet, ladoDesenho, lutasDoResultado, nomeDaChave, spriteDaChave, useLutaPoc } from "../../../lutaPocTela.ts";
 import type { Motor, ResultadoLutaPoc } from "../../../../motor/index.ts";
+import "../../../estilo/luta_poc.css";
 
 /** grava a luta (o motor decide e entra no registro) e abre o palco; o erro do motor aparece na tela. A semente e a de sempre (a da luta no
     registro), ou a que o motor da (as instalacoes: a da proxima tentativa) */

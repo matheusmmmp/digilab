@@ -1,0 +1,34 @@
+/* A Arena e a Campanha da luta da POC (LUTA_POC, LP3; TelaLugaresPoc.tsx): a pele dos menus (tokens --hx-*), no estilo da Arena de antes
+   (lugar_l3.css: o rival em radio, o Lutar grande). Pouco texto: o mapa leva o nome e a regra em uma linha curta. */
+.poc-lugar{ display:grid; gap:12px; padding:4px 2px 12px; color:var(--hx-texto); font-family:var(--hx-f) }
+.poc-lugar h2{ margin:0; color:var(--hx-rotulo); font:700 14px/1.1 var(--hx-f); letter-spacing:.12em; text-transform:uppercase }
+.poc-nota{ margin:0; color:var(--hx-texto-2); font:500 14px/1.35 var(--hx-f) }
+.poc-pet{ display:flex; align-items:center; gap:10px; font:700 15px/1.1 var(--hx-f) }
+.poc-ret{ display:grid; place-items:center; width:40px; height:40px; flex:none; background:var(--hx-miolo-2); border:1px solid var(--hx-borda); overflow:hidden }
+.poc-ret img{ max-width:36px; max-height:36px; width:auto; height:auto; image-rendering:pixelated }
+.poc-grupo{ margin:0; padding:0; border:0; display:grid; gap:6px; min-width:0 }
+.poc-grupo legend{ padding:0 0 6px; color:var(--hx-rotulo); font:600 12px/1 var(--hx-f); letter-spacing:.12em; text-transform:uppercase }
+.poc-rivais{ display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:6px }
+.poc-mapas{ display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:6px }
+.poc-rival, .poc-mapa{ display:flex; align-items:center; gap:8px; min-height:44px; padding:4px 8px; border:1px solid var(--hx-borda); background:var(--hx-tecla);
+  color:var(--hx-texto); text-align:left; min-width:0; cursor:pointer; font:600 14px/1.15 var(--hx-f) }
+.poc-rival span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
+.poc-mapa{ flex-direction:column; align-items:flex-start; justify-content:center; gap:2px; padding:6px 10px }
+.poc-mapa b{ font:700 14px/1.1 var(--hx-f) }
+.poc-mapa small{ color:var(--hx-sec); font:500 12px/1.25 var(--hx-f); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden }
+.poc-rival[aria-checked="true"], .poc-mapa[aria-checked="true"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido-borda); box-shadow:var(--hx-escolhido-brilho) }
+.poc-mapa[aria-checked="true"] small{ color:inherit }
+.poc-rival:disabled, .poc-mapa:disabled{ cursor:default; opacity:.7 }
+.poc-rival:focus-visible, .poc-mapa:focus-visible, .poc-lutar:focus-visible, .poc-desafio button:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:2px }
+.poc-lutar{ display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:56px; padding:0 18px; background:var(--hx-btn-bg); color:var(--hx-btn-ink);
+  border:1px solid var(--hx-btn-borda); font:700 18px/1 var(--hx-f); letter-spacing:.08em; text-transform:uppercase; cursor:pointer }
+.poc-lutar svg{ width:22px; height:22px }
+.poc-lutar:disabled{ opacity:.6; cursor:default }
+.poc-desafios{ list-style:none; margin:0; padding:0; display:grid; gap:6px }
+.poc-desafio{ display:flex; align-items:center; gap:10px; min-height:52px; padding:4px 8px; border:1px solid var(--hx-borda); background:var(--hx-miolo-2) }
+.poc-desafio > span:not(.poc-ret){ display:grid; gap:2px; min-width:0; flex:1 }
+.poc-desafio b{ font:700 14px/1.1 var(--hx-f) }
+.poc-desafio small{ color:var(--hx-sec); font:500 12px/1.25 var(--hx-f) }
+.poc-desafio button{ min-height:44px; min-width:88px; padding:0 12px; flex:none; background:var(--hx-tecla); color:var(--hx-texto); border:1px solid var(--hx-borda-topo);
+  font:700 14px/1 var(--hx-f); letter-spacing:.06em; text-transform:uppercase; cursor:pointer }
+.poc-desafio button:disabled{ opacity:.55; cursor:default }

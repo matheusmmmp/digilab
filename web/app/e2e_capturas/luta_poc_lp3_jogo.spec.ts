@@ -42,13 +42,23 @@ for (const t of TELAS) for (const pele of PELES) {
     test.setTimeout(900_000);
     mkdirSync(PASTA, { recursive: true });
     const ctx = await browser.newContext({ viewport: { width: t.w, height: t.h }, deviceScaleFactor: t.dpr }), page = await ctx.newPage();
+    page.setDefaultTimeout(30_000);
     const erros: string[] = []; page.on("pageerror", e => erros.push(String(e)));
     const n = (x: string) => `lp3_jogo_${t.nome}_${pele === "xcom" ? "militar" : "vidro"}_${x}`;
     await semear(page);
-    /* a Arena: a escolha do rival (o Gabumon, o do projetil nosso) e do mapa (a Floresta) */
+    /* a Liga dos Lideres: a serie de 6, sem cura */
+    await page.goto(`/?luta_poc=1&pele=${pele}#/lutar/fronteira`);
+    await page.getByRole("button", { name: /Desafiar a Liga/ }).click();
+    await page.waitForFunction(() => /Luta 3 de 6/.test(document.querySelector(".luta-modo")?.textContent ?? ""), null, { timeout: 240_000 });
+    await momento(page, n("5_liga_luta3"), "+d.impactos > 0 || +d.projeteisDesenho > 0 || +d.nossos > 0");
+    await fim(page, n("6_liga_resultado"));
+    /* a Liga vencida conclui a jornada: o cartao "Campeao!" sai (continua com o pet) */
+    const seguir0 = page.getByRole("button", { name: /Continuar com/ });
+    await seguir0.waitFor({ timeout: 10_000 }).then(() => seguir0.click(), () => undefined);
+    /* a Arena: a escolha do rival (o Garurumon, com o projetil nosso da LP-8) e do mapa (a Floresta) */
     await page.goto(`/?luta_poc=1&pele=${pele}#/lutar/arena`);
     await expect(page.getByTestId("poc-arena")).toBeVisible({ timeout: 60_000 });
-    const rival = page.locator("[data-testid^=poc-rival-]").nth(1); await rival.click();
+    await page.getByTestId("poc-rival-cirro_adolescente_brigao").click();
     await page.getByTestId("poc-mapa-floresta").click();
     await foto(page, n("1_arena_escolha"));
     await page.getByTestId("poc-lutar").click();
@@ -58,17 +68,12 @@ for (const t of TELAS) for (const pele of PELES) {
     await page.goto(`/?luta_poc=1&pele=${pele}#/lutar/campanha`);
     await expect(page.getByTestId("poc-campanha")).toBeVisible({ timeout: 60_000 });
     await foto(page, n("4_campanha"));
-    /* a Liga dos Lideres: a serie de 6, sem cura */
-    await page.goto(`/?luta_poc=1&pele=${pele}#/lutar/fronteira`);
-    await page.getByRole("button", { name: /Desafiar a Liga/ }).click();
-    await page.waitForFunction(() => /Luta 3 de 6/.test(document.querySelector(".luta-modo")?.textContent ?? ""), null, { timeout: 240_000 });
-    await momento(page, n("5_liga_luta3"), "+d.impactos > 0 || +d.projeteisDesenho > 0 || +d.nossos > 0");
-    await fim(page, n("6_liga_resultado"));
-    /* a Liga vencida conclui a jornada: o cartao "Campeao!" sai (continua com o pet), e a Fronteira abre de novo */
-    const seguir = page.getByRole("button", { name: /Continuar com/ });
-    if (await seguir.isVisible({ timeout: 5_000 }).catch(() => false)) await seguir.click();
+    /* de volta a Fronteira */
     await page.goto(`/?luta_poc=1&pele=${pele}#/lutar/fronteira`);
     await page.reload();
+    await expect(page.locator(".fr-inst-card", { hasText: "Fábrica" })).toBeVisible({ timeout: 30_000 });
+    /* o atlas recarrega com a pagina: os sprites antes da luta (sem ele, o palco desenha os marcadores) */
+    await expect(page.locator(".fr-lista img").first()).toBeVisible({ timeout: 30_000 });
     /* a Fabrica: aluga o primeiro e luta */
     const fb = page.locator(".fr-inst-card", { hasText: "Fábrica" });
     await fb.getByRole("button", { name: /Tentar/ }).click();
