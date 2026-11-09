@@ -589,3 +589,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-08 — LUTA_POC, LP2: o pet luta no núcleo da POC, atrás da chave (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp2`)](registro/2026-11.md)
 - [2026-11-08 — LUTA_POC, LP2b: os torneios no núcleo da POC (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp2b`)](registro/2026-11.md)
 - [2026-11-09 — CONVERSA_PET, DC4b, a voz-v3b e a recalibração do dec-v3 (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc4b`)](registro/2026-11.md)
+- [2026-11-09 — UX_TELA_PET, a prancha da hierarquia de luz (Gerente da UX_TELA_PET, Claude Code, Opus 5.5, branch `v3-ux-luz`)](registro/2026-11.md)
