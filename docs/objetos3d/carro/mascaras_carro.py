@@ -3,9 +3,11 @@
 # cada triangulo cai numa regiao e e pintado na mascara pelos UVs dele:
 #   R: a grama do teto (o centro do triangulo acima de Z_GRAMA);
 #   G: a frente na altura dos farois (o centro com y < Y_FRENTE e z entre Z_FAROL);
-#   B: a boca do teto (o centro acima de Z_TETO e a menos de R_BOCA do pe da grama, no plano).
+#   B: a boca do teto (o centro acima de Z_TETO e a menos de R_BOCA do pe da grama, no plano);
+#   a faixa das janelas (o centro com z entre Z_JANELA), num PNG a parte e so se pedido: o estilizar_carro.py pinta o vidro chapado nela
+#   (rodada 3).
 # Os limiares sao PROPOSTO, SEM FONTE: medidos no histograma das alturas desta malha (o teto em ~0,31 a 0,46, a grama acima).
-# uso (da raiz): blender -b --factory-startup --python docs/objetos3d/carro/mascaras_carro.py -- <meshy.glb> <mascaras.png> [lado]
+# uso (da raiz): blender -b --factory-startup --python docs/objetos3d/carro/mascaras_carro.py -- <meshy.glb> <mascaras.png> [lado [janelas.png]]
 import math, sys, bpy
 import numpy as np
 from mathutils import Matrix
@@ -14,6 +16,8 @@ args = sys.argv[sys.argv.index("--") + 1:]
 ent, sai = args[:2]
 LADO = int(args[2]) if len(args) > 2 else 2048
 Z_GRAMA, Z_TETO, R_BOCA, Y_FRENTE, Z_FAROL = 0.48, 0.38, 0.22, -0.80, (-0.55, -0.05)
+Z_JANELA = (-0.02, 0.32)
+JANELAS = args[3] if len(args) > 3 else None
 
 bpy.ops.wm.read_factory_settings(use_empty=True)
 bpy.ops.import_scene.gltf(filepath=ent)
@@ -26,9 +30,9 @@ uv = me.uv_layers.active.data
 pe = [v.co for v in me.vertices if v.co.z > Z_GRAMA]
 cx, cy = sum(p.x for p in pe) / len(pe), sum(p.y for p in pe) / len(pe)
 print("MASCARA pe da grama", round(cx, 3), round(cy, 3), len(pe), "vertices")
-m = np.zeros((LADO, LADO, 3), np.uint8)
+m = np.zeros((LADO, LADO, 4), np.uint8)
 yy, xx = np.mgrid[0:LADO, 0:LADO]
-cont = [0, 0, 0]
+cont = [0, 0, 0, 0]
 for t in me.loop_triangles:
     c = sum((me.vertices[i].co for i in t.vertices), me.vertices[t.vertices[0]].co * 0) / 3
     canais = []
@@ -38,6 +42,8 @@ for t in me.loop_triangles:
         canais.append(1)
     if Z_TETO < c.z <= Z_GRAMA and math.hypot(c.x - cx, c.y - cy) < R_BOCA:
         canais.append(2)
+    if JANELAS and Z_JANELA[0] < c.z < Z_JANELA[1]:
+        canais.append(3)
     if not canais:
         continue
     p = [(uv[l].uv[0] * LADO, (1 - uv[l].uv[1]) * LADO) for l in t.loops]
@@ -54,11 +60,19 @@ for t in me.loop_triangles:
     for k in canais:
         m[y0:y1 + 1, x0:x1 + 1, k][dentro] = 255
         cont[k] += 1
-print("MASCARA triangulos: grama", cont[0], "frente", cont[1], "boca", cont[2])
-img = bpy.data.images.new("mascaras", LADO, LADO, alpha=False)
-px = np.concatenate([m[::-1].astype(np.float32) / 255, np.ones((LADO, LADO, 1), np.float32)], axis=2)
-img.pixels.foreach_set(px.ravel())
-img.filepath_raw = sai
-img.file_format = "PNG"
-img.save()
-print("MASCARA ok", sai)
+print("MASCARA triangulos: grama", cont[0], "frente", cont[1], "boca", cont[2], "janelas", cont[3])
+
+
+def gravar(rgb: np.ndarray, nome: str, caminho: str) -> None:
+    img = bpy.data.images.new(nome, LADO, LADO, alpha=False)
+    px = np.concatenate([rgb[::-1].astype(np.float32) / 255, np.ones((LADO, LADO, 1), np.float32)], axis=2)
+    img.pixels.foreach_set(px.ravel())
+    img.filepath_raw = caminho
+    img.file_format = "PNG"
+    img.save()
+    print("MASCARA ok", caminho)
+
+
+gravar(m[..., :3], "mascaras", sai)
+if JANELAS:
+    gravar(np.repeat(m[..., 3:], 3, axis=2), "janelas", JANELAS)
