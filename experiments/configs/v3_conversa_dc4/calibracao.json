@@ -15,6 +15,7 @@
     "S"
   ],
   "teto_usd": 3.0,
+  "voz_dec_v3": "voz-v3b",
   "n_e3_por_pedido": 10,
   "n_e2": 15,
   "min_ep_e2": 5,

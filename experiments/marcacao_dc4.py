@@ -295,6 +295,13 @@ def tratador(pasta: Path, porta: int):
                 self._json(404, {"erro": "rota"})
 
         def do_POST(self):
+            try:
+                n = int(self.headers.get("Content-Length") or 0)
+            except ValueError:
+                return self._json(400, {"erro": "Content-Length"})
+            if not 0 < n <= MAX_CORPO:
+                return self._json(413, {"erro": "corpo"})
+            corpo = self.rfile.read(n)                    # le o corpo antes de recusar: senao o Windows reinicia a conexao do cliente
             if not self._host_ok():
                 return
             if self.path != "/api/resposta":
@@ -303,11 +310,8 @@ def tratador(pasta: Path, porta: int):
                 return self._json(403, {"erro": "origem"})
             if (self.headers.get("Content-Type") or "").split(";")[0].strip() != "application/json":
                 return self._json(415, {"erro": "so JSON"})
-            n = int(self.headers.get("Content-Length") or 0)
-            if not 0 < n <= MAX_CORPO:
-                return self._json(413, {"erro": "corpo"})
             try:
-                tarefa, iid, resp = validar_resposta(itens, json.loads(self.rfile.read(n).decode("utf-8")))
+                tarefa, iid, resp = validar_resposta(itens, json.loads(corpo.decode("utf-8")))
             except (ValueError, UnicodeDecodeError) as err:
                 return self._json(400, {"erro": str(err)})
             gravar_resposta(pasta, tarefa, iid, resp)

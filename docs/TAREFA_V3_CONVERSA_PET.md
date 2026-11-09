@@ -438,3 +438,68 @@ mudaram. Desvios D-CP-DC4a-1 a 12 em `docs/registro/2026-11.md`.
 - **Testes:** `tests/test_conversa_dc4a.py` (50) e `web/app/test/fala_rede_montador.test.ts` (3).
 - **Falta (DC4b):** a calibração com os modelos de verdade, o formato real da API, o registro da rodada com as versões dos modelos e a tag do
   Ollama, e o ensaio da marcação.
+
+## DC4b — a calibração da voz da rede (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc4b`, 2026-11-08)
+
+A linha DC4b do [plano da DC4](PLANO_ANALISE_V3_CONVERSA_DC4.md) (seção 10): a calibração com os três modelos de verdade, na base 20262200.
+A validação não rodou, e os roteiros dela não foram abertos. A voz-v3 não mudou. Desvios D-CP-DC4b-1 a 10 em `docs/registro/2026-11.md`.
+
+- **A rodada:** `artifacts_v3_conversa_dc4/calibracao/`, com 243 falas (81 por braço), o material da marcação, os pares e o `meta.json`.
+  - Os modelos devolvidos são os pedidos, sem sufixo de data, e não houve parada no teto.
+  - A primeira tentativa parou quando o Ollama caiu e fica em `calibracao_tentativa1/` (D-CP-DC4b-2).
+- **O formato da API** (o "não verificado" da M5): aceito pelos dois modelos Claude, sem recusa nem corte.
+- **O gasto real:** US$ 0,588 nesta rodada (Haiku US$ 0,027, Sonnet US$ 0,560), US$ 0,606 acumulados com a sonda e a primeira tentativa.
+- **A estimativa pelo `usage` real** (`artifacts_v3_conversa_dc4/calibracao/custo_medido.json`):
+  - os pedidos têm cerca de 3 000 tokens de entrada em média (o máximo, cerca de 4 000) e 70 a 90 de saída;
+  - a validação projeta US$ 1,18 pela média e US$ 1,55 pela chamada mais cara;
+  - a folga no teto de US$ 3 fica em US$ 1,22 ou US$ 0,84.
+- **A latência** (`falas.jsonl`):
+  - a voz sozinha tem p50/p90 de G 8,4/30,0 s, H 1,2/1,5 s e S 2,0/2,3 s;
+  - o turno com o verificador tem G 15,5/151 s, H 9,8/29,8 s e S 12,5/19,6 s;
+  - a do G não é limpa, porque a máquina tinha outra carga (D-CP-DC4b-4).
+- **O verificador marcou** 38 falas do G, 63 do H e 44 do S, de 81 cada. Não é resultado: a referência é a marcação (4.1).
+- **Os consertos:**
+  - o piso do gasto entre as worktrees (D-CP-DC4b-1);
+  - a resposta sem modelo como falha de chamada (D-CP-DC4b-2);
+  - a estimativa medida no `tools/estimar_custo_llm.py`.
+- **O ensaio da marcação:** a página abriu numa cópia do material (fora do repo), com as quatro tarefas. Uma resposta de ensaio foi gravada
+  na cópia, e a pasta `respostas/` da calibração continua vazia.
+- **O registro da rodada:** a seção 13 do plano, com as versões, o digest do `gemma2:9b` e os 31 sha256.
+- **Para o Gerente decidir antes da DC4c:**
+  - a voz que enfeita o pedido de comida (D-CP-DC4b-5) e o `P` na fala do G (D-CP-DC4b-6): mudar só com uma `voz-v3b`, que muda o que a
+    validação mede;
+  - a máquina livre durante a validação (D-CP-DC4b-4).
+
+### DC4b, a voz-v3b (decisão do Matheus em 2026-11-09, no mesmo PR)
+
+O Matheus decidiu criar a `voz-v3b` antes da DC4c, contra a recomendação do worker de validar a voz-v3 como estava. Desvios D-CP-DC4b-11 a
+16 em `docs/registro/2026-11.md`.
+
+- **A voz-v3b** (`digilab_fala_livre/prompt.py`) é uma revisão só da regra do pedido:
+  - (a) o pedido sai como desejo, sem afirmar estado do corpo ou do humor fora dos conceitos ativos;
+  - (b) a fala nunca traz um id interno.
+  - A voz-v3 não mudou e continua sendo a do jogo. O verificador não mudou: a verif-v9 não depende da voz.
+- **O orquestrador e as configs:** o dec-v3 usa a voz-v3b na calibração e na validação (`"voz_dec_v3": "voz-v3b"`), e o dec-v2 segue com a
+  voz-v2. O `--so-dec-v3` refaz só as falas do dec-v3.
+- **A recalibração:** `artifacts_v3_conversa_dc4/calibracao_v3b/`, com 114 falas (38 por braço: as 30 espontâneas do E3 e os 8 turnos
+  dec-v3 das conversas) e as mesmas entradas, sementes e roteiros. A calibração com a voz-v3 ficou como estava.
+  - Ela rodou com a máquina livre, pela vez dada pelo Gerente da V3, num processo lançado fora do app (01:22–01:59).
+  - Não houve fala genérica, erro do verificador nem parada no teto, e os modelos devolvidos foram os pedidos.
+- **O gasto:** US$ 0,272 na rodada (Haiku US$ 0,013, Sonnet US$ 0,260), com US$ 0,878 acumulados.
+- **A projeção da validação com a v3b** (`calibracao_v3b/custo_medido.json`): US$ 1,20 pela média e US$ 1,55 pela chamada mais cara. A folga
+  fica em US$ 0,93 ou US$ 0,57. Cabe no teto.
+- **A latência da voz** (p50/p90, máquina livre): G 20,3/24,5 s, H 1,1/1,3 s, S 1,9/2,2 s. O turno: G 30,0/34,1 s, H 10,6/15,2 s,
+  S 14,7/17,5 s.
+- **v3 × v3b** nas mesmas 38 falas do dec-v3 por braço (`calibracao_v3b/comparacao.json`):
+
+| braço | "fome" sem o conceito (verificador) | "fome" sem o conceito (texto) | id na fala | o verificador marcou | genéricas |
+|---|---|---|---|---|---|
+| G | 4 → 2 | 0 → 0 | 4 → 0 | 14 → 18 | 4 → 0 |
+| H | 12 → 6 | 13 → 0 | 0 → 0 | 30 → 29 | 0 → 0 |
+| S | 7 → 5 | 3 → 0 | 0 → 0 | 19 → 26 | 0 → 0 |
+
+  - A fome dita sem o conceito caiu, e o "P" sumiu.
+  - As marcas não caíram: a v3b leva os modelos a pedir companhia com "fica comigo?", e o verificador conta isso como manipulação
+    (D-CP-DC4b-14).
+  - O texto não foi iterado: o G-FIEL da validação diz o resultado.
+- **O registro da rodada:** a seção 13 do plano, refeita com a voz-v3b, o gasto de US$ 0,878 e os 31 sha256 de hoje.
