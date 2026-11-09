@@ -38,7 +38,7 @@ test("o nucleo so importa de motor/arena/ e da RNG do motor", () => {
   assert.deepEqual(fora, []);
 });
 
-test("chave desligada: LUTA_POC_LIGADA e false e nada fora do nucleo importa dele (motor e telas)", async () => {
+test("chave desligada: LUTA_POC_LIGADA e false; no motor, so o Motor (a luta dos pets v21), a Fabrica (LP2b), o luta_poc e o index leem o nucleo; nenhuma tela o importa direto", async () => {
   const A = await import("../motor/arena/index.ts");
   assert.equal(A.LUTA_POC_LIGADA, false);
   const APP = fileURLToPath(new URL("../", import.meta.url));
@@ -51,13 +51,13 @@ test("chave desligada: LUTA_POC_LIGADA e false e nada fora do nucleo importa del
     }
   };
   for (const d of ["motor", "src"]) varrer(join(APP, d));
-  assert.deepEqual(quem, []);
+  assert.deepEqual(quem.map(p => p.split("\\").join("/")).sort(), ["motor/fabrica.ts", "motor/index.ts", "motor/luta_poc.ts", "motor/motor.ts"]);
 });
 
 test("o nucleo carrega e luta num contexto sem nada de navegador", async () => {
   const A = await import("../motor/arena/index.ts");
   assert.equal(typeof globalThis.window, "undefined");
-  const st = { hp: 900, atk: 100, def: 50, vel: 70, cad: 2000, crit: 10, hcd: 8, hpot: 2, esquiva: 0, atordoa: 0 };
+  const st = { hp: 900, atk: 100, def: 50, vel: 70, cad: 2000, crit: 10, hcd: 8, hpot: 2, esquiva: 0, atordoa: 0, erro: 18 };
   const r = A.lutar({ cena: "coliseu", a: { forma: "cirro_crianca_arisco", stats: st }, b: { forma: "brasa_crianca_sereno", stats: st }, semente: 4242 });
   assert.ok(r.relogio > 0 && r.fim);
 });

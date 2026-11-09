@@ -18,6 +18,7 @@ dado de pesquisa e nao so um save file.
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass
 from enum import Enum
 from typing import Iterator, Sequence
@@ -387,6 +388,28 @@ def ler_levar_pet(evento: Evento) -> tuple[int, int]:
     if len(partes) != 2:
         raise ValueError(f"levar_pet malformado: {evento.valor!r}")
     return _ponto_solto(_inteiro_com_sinal_do_log(partes[0]), _inteiro_com_sinal_do_log(partes[1]))
+
+
+TIPO_SACUDIR = "sacudir_arvore"      # o dono sacode a arvore (docs/TAREFA_V3_ARVORE_SACODE.md, S1): so com a ConfigSacudir ligada
+_ID_ARVORE = re.compile(r"[A-Za-z0-9]{1,16}")
+
+
+def _id_arvore(arvore) -> str:
+    """o id da arvore no log: letras e digitos ASCII, de 1 a 16; se e uma arvore do layout, quem confere e o Mundo"""
+    if type(arvore) is not str or _ID_ARVORE.fullmatch(arvore) is None:
+        raise ValueError(f"sacudir_arvore com id de arvore invalido: {arvore!r}")
+    return arvore
+
+
+def sacudir_arvore(tick: int, arvore: str) -> Evento:
+    """o dono sacode a arvore `arvore` (o id do layout, por exemplo "J1"); o jogo web, pets v20"""
+    return Evento(tick=tick, tipo=TIPO_SACUDIR, valor=_id_arvore(arvore))
+
+
+def ler_sacudir_arvore(evento: Evento) -> str:
+    if evento.tipo != TIPO_SACUDIR:
+        raise ValueError(f"evento nao e {TIPO_SACUDIR}: {evento.tipo!r}")
+    return _id_arvore(evento.valor)
 
 
 def _inteiro_do_log(texto: str) -> int:

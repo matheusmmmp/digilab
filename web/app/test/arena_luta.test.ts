@@ -4,12 +4,12 @@
 import { expect, test } from "vitest";
 import { readFileSync } from "node:fs";
 import {
-  CENAS, FORMAS_ARENA, IDS_CENA, LIMITE_MS, configLuta, criarLuta, formaArena, lutar, passo, rodarAteOFim, sementeArena, sorteiosPorFluxo,
+  CENAS, ERRO_MIRA_POC, FORMAS_ARENA, IDS_CENA, LIMITE_MS, configLuta, criarLuta, formaArena, lutar, passo, rodarAteOFim, sementeArena, sorteiosPorFluxo,
   type EntradaLuta, type Evento, type IdCena, type Luta, type Sorteios, type Stats,
 } from "../motor/arena/index.ts";
-import { DIGIMON_DA_FORMA } from "../motor/index.ts";
+import { DIGIMON_DA_FORMA, LUGARES_V6, NPC } from "../motor/index.ts";
 
-const ST: Stats = { hp: 900, atk: 100, def: 50, vel: 70, cad: 2000, crit: 10, hcd: 8, hpot: 2, esquiva: 0, atordoa: 0 };
+const ST: Stats = { hp: 900, atk: 100, def: 50, vel: 70, cad: 2000, crit: 10, hcd: 8, hpot: 2, esquiva: 0, atordoa: 0, erro: 18 };
 const entrada = (cena: IdCena, semente: number, a = "cirro_crianca_arisco", b = "brasa_crianca_sereno", sa: Stats = ST, sb: Stats = ST): EntradaLuta =>
   ({ cena, semente, a: { forma: a, stats: sa }, b: { forma: b, stats: sb } });
 
@@ -21,10 +21,11 @@ function jogar(e: EntradaLuta, r: Sorteios = sorteiosPorFluxo(e.semente)) {
   return { ev, res, fim: fim(L) };
 }
 
-test("a tabela tem as 60 formas do jogo, com o Digimon do catalogo", () => {
-  expect(Object.keys(FORMAS_ARENA).sort()).toEqual(Object.keys(DIGIMON_DA_FORMA).sort());
+test("a tabela tem as 60 formas do jogo, com o Digimon do catalogo, e os 10 rivais da Campanha (LP2)", () => {
+  const npcs = LUGARES_V6.flatMap(L => L.rivais);
+  expect(Object.keys(FORMAS_ARENA).sort()).toEqual([...Object.keys(DIGIMON_DA_FORMA), ...npcs].sort());
   for (const [k, f] of Object.entries(FORMAS_ARENA)) {
-    expect(f.nome, k).toBe(DIGIMON_DA_FORMA[k][0]);
+    expect(f.nome, k).toBe(DIGIMON_DA_FORMA[k]?.[0] ?? NPC[k]!.nome);
     expect(f.msGolpe, k).toBeGreaterThan(0);
     expect(f.golpe.t, k).toBeGreaterThan(0);
   }
@@ -96,11 +97,13 @@ test("passo devolve e limpa os eventos; a luta comeca pelo evento de inicio", ()
 
 interface LutaGab { cena: IdCena; a: string; b: string; semente: number; vencedor: "a" | "b" | null; fim: boolean; relogio: number; vidaA: number; vidaB: number }
 test("fidelidade: o nucleo novo da o mesmo resultado que a POC (efb2ded) 1 contra 1 nas 60 formas e nos 8 mapas", () => {
-  const gab = JSON.parse(readFileSync(new URL("./gabaritos/arena_poc_1x1.json", import.meta.url), "utf8")) as { stats: Stats; lutas: LutaGab[] };
+  const gab = JSON.parse(readFileSync(new URL("./gabaritos/arena_poc_1x1.json", import.meta.url), "utf8")) as { stats: Omit<Stats, "erro">; lutas: LutaGab[] };
+  /* o gabarito e da POC, em que o erro de mira era o da dificuldade "normal" (18 px); desde a LP2 ele e do lutador */
+  const st: Stats = { ...gab.stats, erro: ERRO_MIRA_POC.normal };
   expect(gab.lutas.length).toBe(480);
   const dif: string[] = [];
   for (const g of gab.lutas) {
-    const r = lutar(entrada(g.cena, g.semente, g.a, g.b, gab.stats, gab.stats));
+    const r = lutar(entrada(g.cena, g.semente, g.a, g.b, st, st));
     const obtido = { vencedor: r.vencedor, fim: r.fim, relogio: r.relogio, vidaA: r.vidaA, vidaB: r.vidaB };
     const esperado = { vencedor: g.vencedor, fim: g.fim, relogio: g.relogio, vidaA: g.vidaA, vidaB: g.vidaB };
     if (JSON.stringify(obtido) !== JSON.stringify(esperado)) dif.push(`${g.cena} ${g.a} x ${g.b} (${g.semente}): ${JSON.stringify(esperado)} -> ${JSON.stringify(obtido)}`);

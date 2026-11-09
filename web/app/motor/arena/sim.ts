@@ -27,19 +27,21 @@ const mult = (L: Luta, a: Lutador, b: Lutador) => multAtr(a.atr, b.atr, L.cfg.fo
 
 function conferirStats(l: Lado, cfg: ConfigLuta): void {
   const s = cfg[l].stats;
-  for (const k of ["hp", "atk", "def", "vel", "cad", "crit", "hcd", "hpot", "esquiva", "atordoa"] as const)
+  for (const k of ["hp", "atk", "def", "vel", "cad", "crit", "hcd", "hpot", "esquiva", "atordoa", "erro"] as const)
     if (typeof s[k] !== "number" || !Number.isFinite(s[k])) throw new Error(`arena: stat ${k} do lado ${l} nao e numero (${String(s[k])})`);
   if (s.hp < 1) throw new Error(`arena: vida do lado ${l} menor que 1 (${s.hp})`);
+  const v0 = cfg[l].vida0;
+  if (v0 !== undefined && !(Number.isInteger(v0) && v0 >= 1 && v0 <= s.hp)) throw new Error(`arena: vida inicial do lado ${l} fora de [1, ${s.hp}] (${v0})`);
 }
 
 function criarLutador(L: Luta, lado: Lado): Lutador {
-  const { forma, stats } = L.cfg[lado];
+  const { forma, stats, vida0 } = L.cfg[lado];
   const g = forma.golpe, sk = forma.habilidade || g, st = { ...stats };
   /* a ordem dos sorteios e a do literal do prototipo: recSk, recarga, fase */
   const recSk = ACAO.recSkIni + L.r.ia() * ACAO.recSkVar, recarga = ACAO.recargaIni + L.r.ia() * ACAO.recargaVar, fase = L.r.ia() * 6.28;
   return {
     n: forma.digimon, lado, g, sk, propria: !!forma.habilidade, usandoHab: false, st, atr: forma.atributo,
-    x: 0, y: 0, hp: st.hp, viraEsq: lado === "b", estado: "idle", t: 0,
+    x: 0, y: 0, hp: vida0 ?? st.hp, viraEsq: lado === "b", estado: "idle", t: 0,
     recarga, recSk, golpeDado: false,
     msAtk: forma.msGolpe, msSk: forma.msHabilidade,
     alcance: g.proj ? ACAO.alcanceDist : EQ.alcanceCorpo, raio: EQ.raio, alvo: null, fase,
@@ -179,8 +181,8 @@ function atualizar(L: Luta, u: Lutador, dt: number): void {
   u.viraEsq = dx < 0;
   desviar(L, u, dt);
   if (u.dash > 0) { u.dash -= dt; andar(L, u, u.dashDir[0], u.dashDir[1], ACAO.desvioCpu, dt); mudar(u, "run"); return; }
-  // mira: erro da dificuldade, maior se o alvo esta numa moita ou se a arena atrapalha (tempestade)
-  const e = dific(L).erro * (o.escondido ? 4 : 1) * (def(L).erro?.(L.cena) ?? 1);
+  // mira: o erro de mira do lutador (LP2; na POC, o da dificuldade), maior se o alvo esta numa moita ou se a arena atrapalha (tempestade)
+  const e = u.st.erro * (o.escondido ? 4 : 1) * (def(L).erro?.(L.cena) ?? 1);
   const mira = (): [number, number] => [o.x + (L.r.ia() - 0.5) * 2 * e, o.y - EQ.peito + (L.r.ia() - 0.5) * e];
   // pilar quebravel no caminho nao impede atirar (o tiro abre caminho); arvore ou rocha sim, e o lutador contorna
   const ob = bloqueio(L, u, o), livre = !ob || ob.hp !== undefined;

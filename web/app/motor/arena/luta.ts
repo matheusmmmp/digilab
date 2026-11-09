@@ -14,12 +14,14 @@ export function formaArena(chave: string) {
   return f;
 }
 
-export interface EntradaLuta { cena: IdCena; a: { forma: string; stats: Stats }; b: { forma: string; stats: Stats }; semente: number }
+/** a entrada de uma luta; `vida0`: a vida com que o lado entra numa serie sem cura (sem ela, cheia) */
+export interface EntradaLuta { cena: IdCena; a: { forma: string; stats: Stats; vida0?: number }; b: { forma: string; stats: Stats; vida0?: number }; semente: number }
 
 /** a configuracao da luta 1 contra 1: os dois pela IA, com a dificuldade, o atributo e os projeteis do padrao da POC */
 export function configLuta(e: EntradaLuta): ConfigLuta {
   return { cena: e.cena, dific: OPCOES_PADRAO.dific, forca: OPCOES_PADRAO.forca, pvel: OPCOES_PADRAO.pvel,
-    a: { forma: formaArena(e.a.forma), stats: e.a.stats }, b: { forma: formaArena(e.b.forma), stats: e.b.stats } };
+    a: { forma: formaArena(e.a.forma), stats: e.a.stats, ...(e.a.vida0 !== undefined ? { vida0: e.a.vida0 } : {}) },
+    b: { forma: formaArena(e.b.forma), stats: e.b.stats, ...(e.b.vida0 !== undefined ? { vida0: e.b.vida0 } : {}) } };
 }
 
 export interface ResultadoLuta {
