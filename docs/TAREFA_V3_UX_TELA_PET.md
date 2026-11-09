@@ -865,3 +865,24 @@ tigela, a bola e as frutíferas no `CMU_ILHA`, v20) é do #694.
 - a regra 4, esconder e revelar;
 - a regra 5, os pássaros, que precisam da árvore madura do #694;
 - a regra 6, a câmera do primeiro dia.
+
+## 27. A prancha da hierarquia de luz (2026-11-09)
+
+O Matheus disse "Sim, a prancha" (2026-11-09) para a regra 1 de "guiar o olhar sem texto", que a seção 26 deixou como proposta: a luz dá a
+prioridade, com os destinos quentes, os caminhos claros e a decoração mais apagada (Level Design Book, no Obsidian
+`20 Temas/Ensinar a olhar.md`).
+
+**O que foi feito (a prancha e um protótipo desligado):**
+- **A prancha** fica em `docs/pranchas/ux-ilha-luz/`. São capturas do jogo de hoje e das propostas A (forte), B (suave) e C (só quente), nos
+  mapas Ilha e Digital, no desktop e no celular, com o script que as refaz.
+- **O protótipo** é um termo no fragmento do `curvar` (`cena.ts`), pela posição no chão. Os focos e as regras puras ficam em `luzConta.ts`,
+  e os números em `LUZ_HIERARQUIA` (`constantes.ts`). Ele só liga com `?luz=a|b|c`: sem o parâmetro, nenhum material ganha o termo, e a
+  chave do programa fica a de antes.
+- **O teste** é o `test/ilha_luz.test.ts`. Ele confere que sem o parâmetro nada liga, que os aditivos, as sombras e as linhas ficam de fora,
+  que os focos cobrem o lar, a praça, os lugares e todo ponto dos caminhos dentro de 48, e que as propostas vão da forte à só quente.
+
+**As decisões** LZ-1 a LZ-5 estão no `LEIA.md` da prancha, como PROPOSTAS: B, sem o cais enquanto estiver trancado, sem efeito à noite, o chão
+com peso 0,3 e todos os mapas do `curvar`. Os números são PROPOSTO, SEM FONTE. A interpretação está em D-LZ-1, em `docs/registro/2026-11.md`.
+
+**Fica para a etapa de código, depois da aprovação:** ligar a proposta escolhida sem o parâmetro, medir o custo no celular e recapturar o e2e
+(o `--update-snapshots` só com o ok do Matheus).
