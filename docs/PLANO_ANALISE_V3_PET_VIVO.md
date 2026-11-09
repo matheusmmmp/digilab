@@ -380,3 +380,22 @@ Cada plano de mecanismo da etapa 2 traz, escritos antes da run:
 - **A verificação das referências:** é a 0a, a tabela `v3c5`. Toda referência nova deste plano (Zhang et al. 2009, Dill 2015, Flavell
   et al. 2013 e Dulberg et al. 2023) fica como **pista, a verificar**, até entrar numa tabela do repositório. Luce 1977 e Usher e McClelland 2001 são as da espec, com o estado que a espec
   registra.
+
+## 11. O registro da run (antes da primeira vida)
+
+Escrito em 2026-11-08, às 10:45 (horário da máquina), num commit próprio, empurrado antes da primeira vida. O Gerente da V3 liberou a
+máquina nesse dia: o I2 terminou e a R3 da luta está pausada. Nada da seção 1 à 10 muda.
+
+- **O código de hoje:** a `main` em `e6548917` (o merge do #711), na worktree `D:\Trab\digilab\v3-pet-vivo-run`, branch
+  `v3-pet-vivo-run`. A AN0 roda nele.
+- **O código da C4:** a worktree destacada `D:\Trab\digilab\v3-pet-vivo-a287ba2`, em `a287ba20`, limpa. O script confere os sha256 dela
+  contra o `meta.json` antes da primeira vida (seção 2.3).
+- **A fonte da C4:** a pasta de fora do git da seção 2.2, com os quatro sha256 conferidos pelo script.
+- **A subamostra do A-4:** a da seção 8, fixada no código antes da run (`K_SUBAMOSTRA = 8`, os k de 0 a 7 de cada base), isto é, 960
+  vidas da C4 e toda a AN0.
+- **O comando:**
+  `python experiments/auditoria_pet_vivo.py --codigo D:\Trab\digilab\v3-pet-vivo-a287ba2 --processos 4`.
+- **A saída:** `artifacts_v3_pet_vivo/auditoria/auditoria.json` e `auditoria_vidas.json.gz`.
+- **O tempo previsto:** de 2,3 a 2,9 h de parede com 4 processos (o `tempo_a4.json` do #711). Se a parede passar de 8 h, a run para e o
+  Gerente é avisado; nada se reduz por conta própria.
+- **A máquina:** só esta run, no máximo 4 processos, em segundo plano.
