@@ -1,0 +1,14 @@
+{
+ "id": "01a1b8b6-f7d8-716c-9617-2398bef4e9aa",
+ "type": "image-to-image",
+ "ai_model": "nano-banana-2",
+ "prompt": "Multiple views of the same small rounded retro hatchback car abandoned in nature: front, side and back, same style, same colors, same hand-painted detail. Faded sky-blue paint with rust patches and chipped edges, four chunky dark tires with grey hubcaps, clear glass windows, round headlights, an open hole in the roof with tall grass and pink flowers growing out of it, and green moss on the hood. Plain light grey background.",
+ "status": "SUCCEEDED",
+ "consumed_credits": 6,
+ "created_at": 1794100361495,
+ "finished_at": 1794100384100,
+ "saldo": {
+  "antes": 122,
+  "depois": 116
+ }
+}

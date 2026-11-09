@@ -31,7 +31,7 @@ export type RegrasLuta = RegrasV21;
 /** as regras das lutas de uma versao de pet: a v13 (CV21E_TR) e a v14 e a v15 (CV21E_TR14, o candidato da rodada de equilibrio; a v15 so
     muda a bola); as outras falham alto */
 export const regrasDaVersao = (versao: number): RegrasLuta => {
-  if (versao === CV21E_TR18.versaoPet || versao === 19) return CV21E_TR18;     // a v18: a v17 com o empurrao (o RELOGIO_V18); a v19 (o levar pet) luta como a v18
+  if (versao === CV21E_TR18.versaoPet || versao === 19 || versao === 21) return CV21E_TR18;     // a v18: a v17 com o empurrao (o RELOGIO_V18); a v19 (o levar pet) luta como a v18; a v21 nao luta por estas regras (a luta da POC), mas o resto do pet le as da v19
   if (versao === CV21E_TR14.versaoPet || versao === 15 || versao === VERSAO_PET_LAB || versao === 17) return CV21E_TR14;     // a v15 (a bola no golpe), o pet de teste do laboratorio e a v17 (o cerebro trocavel) lutam como a v14
   if (versao !== CV21E_TR.versaoPet) throw new Error(`regras de luta da versão ${versao} não existem mais (só a ${VERSOES_PET.join(" e a ")})`);
   return CV21E_TR;
@@ -62,7 +62,7 @@ export type Desafiado = 0 | 1 | null;
 export const VERSAO_LIMITE_DESAFIADO = 6;
 /** o desafiado nas lutas do motor (o pet e o lado A): o rival (lado B); so a v13 existe, as outras falham alto */
 export const desafiadoDaVersao = (versao: number): Desafiado => {
-  if (!VERSOES_PET.includes(versao) && versao !== VERSAO_PET_LAB) throw new Error(`desafiado da versão ${versao} não existe mais (só a ${VERSOES_PET.join(" e a ")})`);
+  if (!VERSOES_PET.includes(versao) && versao !== VERSAO_PET_LAB && versao !== 21) throw new Error(`desafiado da versão ${versao} não existe mais (só a ${VERSOES_PET.join(" e a ")})`);
   return 1;
 };
 

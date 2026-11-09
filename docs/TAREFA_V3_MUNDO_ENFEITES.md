@@ -213,3 +213,53 @@ E-G9: dois draw calls a mais, de dia e de noite (80 → 81 e 101 → 103 em 390;
 `D:\Trab\digilab\capturas_enfeites\referencia_e3\` e `\e3\`). E-G11: o revisor reprovou o trilho e aprovou a geladeira com ressalva na
 rodada 1 (traços sujos, o trilho atrás do HUD); a rodada 2 está no corpo do PR. Os postes e o carro ficam sem traços nesta etapa.
 
+
+## 12. O trem refeito no retrabalho dos objetos (2026-11-07, worker, Claude Code, Opus 5.5, branch `v3-objeto-trem`)
+
+**O pedido:** o Matheus achou o trilho da E3 "muito feio, com o cel shading esquisito". As causas estão em `docs/objetos3d/REFERENCIAS.md`
+(seções 1 e 5): a textura achatada em 7 cores e as normais facetadas, que fazem o toon de dois tons manchar cada face.
+
+**A malha:** pela Meshy, a partir do esboço 1 (o vagão de madeira vermelho, o teto creme curvo, as escotilhas de latão, as rodas de ferro e o
+trilho com dormentes e grama): a multivista (6 créditos) e a malha (30), uma tentativa, dentro do teto de 36 da sessão
+(`docs/objetos3d/trem/saldo.json`). A malha tem 2 157 triângulos (teto 2 414 dos marcos).
+
+**O acabamento** (`docs/objetos3d/trem/acabar_trem.py`, Blender 4.5 pela linha de comando, e `textura_trem.py`):
+- a textura pintada da Meshy fica: as tábuas, a tinta descascada, a ferrugem, o latão, o musgo e a grama; só um realce leve de saturação no
+  latão, no vidro, nos verdes e no metal (D-OB-TREM-3);
+- as normais vêm de uma cópia suavizada da malha, sem quinas duras (D-OB-TREM-1): é o que tira as manchas do toon;
+- a textura fica em 512 px com 256 cores, para caber nos 300 KB do teste (D-OB-TREM-2); o enfeite tem ~294 KB.
+
+**No jogo:** os três arquivos de `web/app/public/enfeites/trilho/` trocados; a altura fica em 2,0 e a sombra cai para 1,6 (D-OB-TREM-4). A
+grade e as posições não mudam: o E-G0 e o E-G10 passam, e o E-G1 a E-G8 também, sem trocar teste nenhum.
+
+**A revisão:** um revisor que não fez o trabalho comparou a prancha (o esboço, o antes, o depois e o vagão no jogo nos mapas Digital e
+Ilha; `D:\Trab\digilab\capturas_objetos3d\trem\prancha_trem.png`) e deu APROVA COM RESSALVA nas duas rodadas. Na primeira, apontou o latão
+desbotado, o musgo e a grama apagados, o vidro escuro e o teto facetado de frente; a rodada 2 consertou os quatro pela textura e pelas
+normais. Ficam como ressalva o que pede malha nova: os para-choques e o engate, o chassi de frente, os degraus na borda do teto e os
+trilhos pintados de marrom.
+
+## 13. O carro retrabalhado (2026-11-08, worker, Claude Code, Opus 5.5, branch `v3-objeto-carro`)
+
+**O pedido:** o Matheus achou os objetos feios e "sem textura", e o carro "completamente sem detalhe" (a caminhonete da E2, achatada em 7
+cores). O retrabalho segue `docs/objetos3d/REFERENCIAS.md` (seção 5) e o esboço `docs/objetos3d/carro/esbocos/esboco_1_hatch_retro.png`: o
+hatch retrô azul com ferrugem, as rodas grandes, as janelas, os faróis, o jardim no teto e o musgo no capô.
+
+**Pela Meshy:** a multivista a partir do esboço (6 créditos) e a malha (30): 2 175 triângulos (teto 2 414 dos marcos). Saldo 122 → 86
+(`docs/objetos3d/carro/`, `saldo.json`).
+
+**O acabamento, por script (`docs/objetos3d/carro/`):**
+- `acabar_carro.py` (Blender 4.5 pela linha de comando): a malha girada 90°, com a frente em +z do glTF; os vértices repetidos soldados; as
+  normais suavizadas e ponderadas; a base no y = 0;
+- `textura_carro.py`: a textura pintada da Meshy sem achatar, 512 px em paleta de 256 cores, com um retoque leve nas máscaras do
+  `mascaras_carro.py`: os verdes mais vivos, flores rosa no teto e os faróis amarelos;
+- `publicar_carro.py`: a marca de IA no `asset.extras`, a troca em `web/app/public/enfeites/carro/` e o validador (0 erros, 0 avisos).
+
+**No jogo:** a altura vai de 3,4 para 4,8 (`ENFEITES_MODELOS`); a grade e as posições não mudam. São 297 010 bytes, de um teto de 307 200.
+
+**O revisor** (um subagente Sonnet que não fez o trabalho e viu só o esboço e as capturas) deu **APROVA COM RESSALVA** nas duas rodadas. Na
+rodada 1, pediu o teto, o musgo, os faróis e a escala; a rodada 2 fez o retoque e a altura. Ficam, porque só uma malha nova resolve:
+- as rodas encaixadas no corpo, com o pneu liso;
+- a boca escura do teto e o tufo estreito; as flores só leem na vitrine.
+
+As capturas (a prancha, a vitrine no D5, a Ilha e o Digital, antes e depois) estão fora do git, em `D:\Trab\digilab\capturas_objetos3d\carro\`.
+Os desvios estão em `docs/registro/2026-11.md`, D-OBJ-CARRO-1 a 6.

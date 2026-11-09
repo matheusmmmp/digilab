@@ -12,6 +12,7 @@ import { ACOES_DONO_JOGO_V11, CAT, CD, CMD, CTR, Motor, TPD, criarDono, criarRng
 import { jogoAtual, motorReal, sairDoLab, trocarMotor } from "./jogo.ts";
 import { LUTA, previa } from "./luta.ts";
 import { CHAVE, textoSave } from "./save.ts";
+import { lutaPocLigada } from "./lutaPoc.ts";
 
 export const CHAVE_GUARDADOS = CHAVE + "-guardados";
 export interface Guardado { semente: number; log: EventoRegistro[]; versao: number }
@@ -101,6 +102,8 @@ export function petDaReceita(r: Receita, tratarLesao = false): Motor {
 /** primeiro acesso a esta versao: cria a escada de exemplo, se ainda nao houver guardados */
 export function semearGuardados(): boolean {
   try { if (localStorage.getItem(CHAVE_GUARDADOS) !== null) return false; } catch { return false; }
+  /* com a luta da POC ligada (LP2), a escada (pets v19, que lutam por outras regras) nao e semeada: os guardados comecam vazios */
+  if (lutaPocLigada()) { gravarGuardados([]); return true; }
   gravarGuardados(ESCADA.map(r => JSON.parse(textoSave(petDaReceita(r))) as Guardado));
   return true;
 }
