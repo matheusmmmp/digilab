@@ -8,6 +8,7 @@ import { FATORES_TXT, NOME_PET, leituraDecisao, type AcaoPet, type LeituraDecisa
 import { BotaoMovel } from "../../componentes/BotaoMovel.tsx";
 import { ACAO_CURTA, REGRA_TXT } from "../../componentes/DigiBrain.tsx";
 import { useJogo } from "../../jogo.ts";
+import { NOTIFICA_MS, useAviso } from "../../hudPet.ts";
 import { CENA } from "./cenaEstado.ts";
 
 export type CasoAgora = "modular" | "sem" | "aprendido" | "instinto" | "uma";
@@ -78,13 +79,16 @@ export function LinhaAgoraVista({ v, aoAbrir, aberto = false, sobPainel = false 
   );
 }
 
-/** a linha sempre visivel da tela Pet: some com o ovo chocando e com o pet morto. A leitura e refeita so quando o motor muda (a revisao) */
+/** a linha do agora da tela Pet: desde 2026-11-08 aparece por NOTIFICA_MS quando a acao muda e depois sai; com o DigiBrain aberto, fica
+    (o Matheus: "eles estão ocupando muito, muito espaço"). Some com o ovo chocando e com o pet morto. A leitura e refeita so quando o motor muda (a revisao) */
 /** `sobPainel`: um painel da tela Pet esta aberto (a 390 px ele cobre a linha, e o painel vence: a linha se esconde por CSS, sem sair da arvore,
     para o foco voltar a ela ao fechar) */
 export function LinhaAgora({ aoAbrir, aberto, sobPainel = false }: { aoAbrir?: () => void; aberto: boolean; sobPainel?: boolean }) {
   const { motor: m, revisao, nascendo } = useJogo();
   const v = useMemo(() => vistaAgora(m), [m, revisao]);
-  if (nascendo > 0 || m.morte) return null;
+  /* fechar o DigiBrain mostra a linha de novo por NOTIFICA_MS: o foco volta a ela (quem abriu) */
+  const vis = useAviso(v.acao + (aberto ? "|aberto" : ""), aberto, NOTIFICA_MS);
+  if (nascendo > 0 || m.morte || !vis) return null;
   return <LinhaAgoraVista v={v} aoAbrir={aoAbrir} aberto={aberto} sobPainel={sobPainel} />;
 }
 

@@ -372,3 +372,37 @@ Node. As vidas que lutam sem parar morrem por lesão (20 num estágio) antes das
   da vida nova (`test/gabaritos/lp2_vidas_v21.json`, 10 vidas v21, 200 lutas) com o replay bit a bit;
 - `tamer.test.ts`: o descarte 7;
 - `e2e/luta_poc_lp2.spec.ts`: a chave no app.
+
+## Resultado da LP2b (2026-11-08)
+
+Worker: Claude Code (Opus 5.5), worktree e branch `v3-luta-poc-lp2b`, a pedido do Gerente de sprites e luta. Os desvios estão em
+`docs/registro/2026-11.md`, seção "LUTA_POC, LP2b". Nenhuma decisão nova foi levada ao Matheus. Os três mapas dos torneios sem lugar são
+PROPOSTOS, como o Gerente pediu.
+
+**Os torneios na v21** (`Motor.lutarPoc`, atrás da `LUTA_POC_LIGADA`):
+- **O evento:** cada tentativa é um evento `"l"` `{r, s}`, sem mapa, porque cada luta tem o dela. As entradas de sempre valem: as 6
+  medalhas na Liga, o título na Torre e no Salão e a semente da tentativa, que sai do registro do pet.
+- **A Liga:** os 6 líderes em sequência, sem cura entre as lutas. Cada um é o Mega da tabela da Liga, com o perfil canônico pelo mapeamento
+  da LP2-2, no mapa do lugar do líder (LP-4: Campo, Coliseu, Floresta, Castelo, Praia e Caverna). O título vem com as 6 vitórias.
+- **A Torre de Batalha:** os Megas sorteados da semente da tentativa, sem cura, até a primeira que não for vitória ou até o teto de 100, no
+  Ringue (PROPOSTO). O recorde do pet fica ali. O **Palácio juntou-se à Torre**: na v21 ele responde que a luta é na Torre.
+- **O Salão:** um rival sorteado do estágio do pet, com o perfil canônico de antes, no Coliseu (PROPOSTO).
+- **Os chips de stat** valem pelos stats do pet, como na LP2. As cartas e os chips de regra continuam fora.
+
+**A Fábrica da luta da POC** (`motor/fabrica.ts`, regras `v: 21`, no registro do Tamer):
+- os 3 alugados e os rivais são os Megas sorteados de antes, com os números do perfil canônico pelo mapeamento, sem o fator dos rivais (o
+  mapeamento não tem escala), no Campo de treino (PROPOSTO);
+- ficam as séries de 3 sem cura dentro da série e a troca pelo derrotado, que entra inteiro;
+- os eventos do Tamer não mudam de forma (`"fabrica"`, `"fabrica_luta"`, `"fabrica_troca"`); o `v: 21` entra nas versões conhecidas;
+- com a chave ligada, a tentativa nova grava `v: 21`; com ela desligada, a de hoje (`v: 14`).
+
+**O que não muda.** Com a chave desligada, as vidas de hoje (`lp2_vidas_hoje`), a vida v21 da LP2 (`lp2_vidas_v21`) e os gabaritos saem
+iguais. A dor e a memória da luta seguem como na LP2, e a confiança conta por rival como antes. As telas dos torneios e da Fábrica na luta
+nova são da LP3: com a chave ligada, a Fronteira de um pet v21 segue dizendo que a tela vem.
+
+**Os testes novos:** `luta_poc_torneios.test.ts`:
+- as entradas;
+- a Liga, a Torre e o Salão, com o rival, o mapa e a vida que passa de uma luta para a outra;
+- a Fábrica v21, com as séries, a troca e o Tamer que refaz a tentativa;
+- o gabarito `test/gabaritos/lp2b_torneios_v21.json` (5 vidas muito treinadas, 71 lutas de torneio; 5 tentativas da Fábrica) e o replay bit
+  a bit.

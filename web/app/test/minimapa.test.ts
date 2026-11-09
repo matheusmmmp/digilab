@@ -9,9 +9,9 @@ const AREA = { w: 64, h: 30 };
 const perto = (a: number[], b: number[]) => a.forEach((x, i) => expect(x).toBeCloseTo(b[i], 9));
 
 describe("a escala", () => {
-  test("A cabe a area inteira no circulo (~3,3 px por celula) e B e 9", () => {
-    expect(escalaA(AREA)).toBeCloseTo(232 / Math.hypot(64, 30), 12);
-    expect(escalaA(AREA)).toBeGreaterThan(3.2); expect(escalaA(AREA)).toBeLessThan(3.4);
+  test("A cabe a area inteira no circulo (~2,5 px por celula) e B e 9", () => {
+    expect(escalaA(AREA)).toBeCloseTo(MINIMAPA_PX / Math.hypot(64, 30), 12);
+    expect(escalaA(AREA)).toBeGreaterThan(2.4); expect(escalaA(AREA)).toBeLessThan(2.6);
     expect(pxPorCelula(AREA, 0)).toBeCloseTo(escalaA(AREA), 12);
     expect(pxPorCelula(AREA, 1)).toBeCloseTo(ESCALA_B, 12);
   });

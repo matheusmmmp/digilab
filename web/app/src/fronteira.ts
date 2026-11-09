@@ -7,7 +7,8 @@
      tentativa e jogada antes em copias (o resultado do motor e deterministico) e so entao gravada: nos registros dos pets, na ordem, e
      por fim no Tamer. Se a gravacao der outro resultado que a copia, falha alto. */
 import { ESTAGIOS_SALAO, LUTAS_SERIE_FABRICA, Motor, NOME_ARQ, NOME_EST, RIVAL_SALAO, VERSAO_SALAO, chaveSprite, duracaoLuta, formaRivalSalao, nomeForma, type Estagio, type Forma, type LutaFabrica, type Lutador,
-  type ResultadoLuta, tamanhoLuta } from "../motor/index.ts";
+  type ResultadoLuta, tamanhoLuta, VERSAO_FABRICA_ATUAL, VERSAO_FABRICA_POC, VERSAO_V21 } from "../motor/index.ts";
+import { lutaPocLigada } from "./lutaPoc.ts";
 import { jogoAtual, mudarMotor, mudarTamer, tamerAtual } from "./jogo.ts";
 import { abrirGuardado, atualizarGuardado, lerGuardados } from "./pets.ts";
 import { sincronizarPet, type LutaSalao, type Tamer, type TentativaSalao } from "./tamer.ts";
@@ -15,7 +16,8 @@ import { exibirPet, exibirRivalSalao, mostrarLutas, type LutadorTela } from "./l
 
 /* ------------------------------------------------ Fabrica */
 /** comeca a tentativa nova da Fabrica com o alugado i (0 a 2) */
-export const alugarFabrica = (i: number): void => { mudarTamer(t => t.alugarFabrica(i)); };
+/* com a luta da POC ligada (LP2b), a tentativa nova grava as regras dela (v: 21) */
+export const alugarFabrica = (i: number): void => { mudarTamer(t => t.alugarFabrica(i, Date.now(), lutaPocLigada() ? VERSAO_FABRICA_POC : VERSAO_FABRICA_ATUAL)); };
 /** um Mega da Fabrica como lutador de tela: o sprite, o nome e, no estilo, o arquetipo e o papel (alugado ou rival) */
 function exibirMega(f: Forma, L: Lutador, papel: string): LutadorTela {
   return { ...L, sprite: chaveSprite(f), grade: "adulto", cor: "carga", estagioFala: "mega", nomeTela: nomeForma(f),
@@ -27,12 +29,14 @@ export const lutarFabrica = (): void => {
   mudarTamer(t => { luta = t.lutarFabrica(); });
   const x = luta as LutaFabrica | null;
   if (!x) throw new Error("a luta da Fábrica não voltou do registro do Tamer");
-  const en = x.res.tr!.entrada, A = exibirMega(x.alugado, en.A, "alugado"), B = exibirMega(x.rival, en.B, "rival");
+  /* a Fabrica da luta da POC (v21, LP2b) ainda nao tem palco: a tela dela e a LP3 */
+  if (!x.res) throw new Error("a luta da Fábrica na luta nova ainda não tem tela (LUTA_POC, LP3)");
+  const res = x.res, en = res.tr!.entrada, A = exibirMega(x.alugado, en.A, "alugado"), B = exibirMega(x.rival, en.B, "rival");
   const serie = Math.floor(x.k / LUTAS_SERIE_FABRICA) + 1, naSerie = x.k % LUTAS_SERIE_FABRICA + 1;
-  mostrarLutas([{ A, B, res: x.res }], {
+  mostrarLutas([{ A, B, res }], {
     tag: "Fronteira · Fábrica", tituloSerie: "", avisoSerie: "",
     textoDe: () => `Fábrica · série ${serie}, luta ${naSerie} de ${LUTAS_SERIE_FABRICA}: ${A.nomeTela} (alugado) × ${B.nomeTela}.`,
-    fimTexto: x.venceu ? `${A.nomeTela} venceu ${B.nomeTela} em ${duracaoLuta(x.res)}.` : `${B.nomeTela} venceu em ${duracaoLuta(x.res)}: a tentativa acabou.`,
+    fimTexto: x.venceu ? `${A.nomeTela} venceu ${B.nomeTela} em ${duracaoLuta(res)}.` : `${B.nomeTela} venceu em ${duracaoLuta(res)}: a tentativa acabou.`,
   });
 };
 /** troca o alugado pelo rival que ele acabou de derrotar */
@@ -83,6 +87,8 @@ export function tentarSalao(escolha: readonly OrigemPet[]): ResultadoSalao {
     if (!c) throw new Error(`o pet escolhido para o nível ${nivel(est)} não está mais aqui`);
     if (c.erro) throw new Error(`${c.nome}: ${c.erro}`);
     if (c.est !== est) throw new Error(`${c.nome} é ${nivel(c.est)}, não ${nivel(est)}`);
+    /* o Salao da luta da POC (pets v21, LP2b) esta no motor (Motor.lutarPoc), mas a tela dele e a LP3 */
+    if (c.m.versao === VERSAO_V21) throw new Error("o Salão na luta nova ainda não tem tela (LUTA_POC, LP3)");
     const m = copiaSincronizada(t, c.m.semente, c.m.log, c.m.versao), k = m.salao.tentativas + 1, s = m.sementeSalao(), r = m.lutar(RIVAL_SALAO, s);
     plano.push({ c, res: r.res, luta: { est, pet: c.semente, forma: c.nome, k, s, tick: m.e.tick, venceu: r.venceu } });
     if (!r.venceu) break;
