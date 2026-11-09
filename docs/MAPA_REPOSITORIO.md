@@ -82,6 +82,9 @@ python run_demo.py                                                            # 
 Ambiente do usuário: Windows, pasta `D:\Trab\digilab\v2` (referência da `main`; o trabalho é nas worktrees `D:\Trab\digilab\v2-<frente>`,
 `docs/V2_TRABALHO_PARALELO.md`; a `v1` é só leitura). Python 3.10+.
 
+**Desde 2026-11-09, vale o CPython 3.12 ou mais novo, e não o "3.10+" acima.** Os gabaritos dependem da soma compensada de floats do
+`sum()`, que só existe a partir do 3.12 (decisão D-DES-4; `DESEMPENHO_PERFIL_2026-11.md`, seção 8).
+
 ## A bancada em módulos (2026-10-14, rodada de saúde, etapa 3)
 
 A tabela acima é a de antes da rodada e fica como está. Desde a etapa 3, o código da bancada está no pacote `experiments/bancada/`, um
