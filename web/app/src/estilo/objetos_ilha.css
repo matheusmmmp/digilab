@@ -24,6 +24,9 @@
 .obj-hora{ display:inline-flex; align-items:center; gap:3px; font:700 14px/1 var(--hx-f-num); color:var(--hx-num) }
 .obj-ponto{ width:9px; height:9px; border-radius:50%; background:var(--hx-necessidade); box-shadow:0 0 0 2px var(--hx-chao) }
 
+/* so com o mouse sobre o objeto, e bem translucidos (o Matheus, 2026-11-08); a opacidade e de layout: PROPOSTO, SEM FONTE */
+.obj-etq, .obj-selo{ opacity:.55 }
+
 /* o cartao do toque */
 .obj-cartao{ width:300px; max-width:calc(100vw - 16px); padding:12px 12px 12px 14px; font:500 15px/1.25 var(--hx-f); pointer-events:auto }
 .obj-cartao-topo{ display:flex; align-items:center; gap:8px }

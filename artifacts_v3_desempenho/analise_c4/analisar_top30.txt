@@ -1,0 +1,38 @@
+         26854675 function calls in 22.821 seconds
+
+   Ordered by: internal time
+   List reduced from 114 to 30 due to restriction <30>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+      576    7.716    0.013    7.716    0.013 D:\Trab\digilab\v3-desempenho-perfil\experiments\run_v2_digibrain_prototipo.py:864(_idx)
+   119592    4.884    0.000    6.803    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab\metrics.py:880(_beta_cf)
+      576    4.625    0.008   13.109    0.023 D:\Trab\digilab\v3-desempenho-perfil\experiments\run_v2_digibrain_prototipo.py:880(por_unidade)
+ 20197512    1.918    0.000    1.918    0.000 {built-in method builtins.abs}
+        6    0.558    0.093    0.714    0.119 D:\Trab\digilab\v3-desempenho-perfil\experiments\run_v2_memoria_autobio.py:449(_somar)
+      373    0.377    0.001    8.739    0.023 D:\Trab\digilab\v3-desempenho-perfil\experiments\run_v2_memoria_autobio.py:324(nivel)
+  1033600    0.330    0.000    0.330    0.000 {method 'get' of 'dict' objects}
+        8    0.216    0.027    0.892    0.111 D:\Trab\digilab\v3-desempenho-perfil\digilab\metrics.py:860(_medias_bootstrap_agrupadas)
+      203    0.211    0.001    4.961    0.024 D:\Trab\digilab\v3-desempenho-perfil\experiments\run_v2_memoria_autobio.py:329(diferenca)
+   119592    0.190    0.000    7.133    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab\metrics.py:899(beta_incompleta)
+   400000    0.173    0.000    0.271    0.000 C:\Users\mathe\AppData\Local\Programs\Python\Python313\Lib\random.py:245(_randbelow_with_getrandbits)
+   230400    0.155    0.000    0.155    0.000 D:\Trab\digilab\v3-desempenho-perfil\experiments\run_v2_memoria_autobio.py:513(<lambda>)
+   400000    0.150    0.000    0.457    0.000 C:\Users\mathe\AppData\Local\Programs\Python\Python313\Lib\random.py:295(randrange)
+   196420    0.132    0.000    0.159    0.000 {built-in method builtins.sum}
+        1    0.118    0.118    5.952    5.952 D:\Trab\digilab\v3-desempenho-perfil\experiments\run_v2_memoria_autobio.py:518(outros)
+   400000    0.103    0.000    0.103    0.000 {method 'extend' of 'list' objects}
+     1286    0.085    0.000    0.085    0.000 {built-in method builtins.sorted}
+   358776    0.081    0.000    0.081    0.000 {built-in method math.lgamma}
+   544000    0.078    0.000    0.078    0.000 {method 'append' of 'list' objects}
+   119592    0.062    0.000    7.196    0.000 D:\Trab\digilab\v3-desempenho-perfil\digilab\metrics.py:911(t_unilateral)
+   640616    0.055    0.000    0.055    0.000 {method 'getrandbits' of '_random.Random' objects}
+    86400    0.053    0.000    0.053    0.000 D:\Trab\digilab\v3-desempenho-perfil\experiments\run_v2_memoria_autobio.py:529(<lambda>)
+    14400    0.045    0.000    0.047    0.000 D:\Trab\digilab\v3-desempenho-perfil\experiments\run_v2_memoria_autobio.py:497(<lambda>)
+   400000    0.044    0.000    0.044    0.000 {method 'bit_length' of 'int' objects}
+      592    0.039    0.000    7.235    0.012 D:\Trab\digilab\v3-desempenho-perfil\digilab\metrics.py:948(quantil_t)
+    80000    0.038    0.000    0.038    0.000 D:\Trab\digilab\v3-desempenho-perfil\experiments\run_v2_longe_regular.py:262(<lambda>)
+   400000    0.036    0.000    0.036    0.000 {built-in method _operator.index}
+    14400    0.030    0.000    0.031    0.000 D:\Trab\digilab\v3-desempenho-perfil\experiments\run_v2_memoria_autobio.py:478(<lambda>)
+    39200    0.026    0.000    0.026    0.000 D:\Trab\digilab\v3-desempenho-perfil\experiments\run_v2_memoria_autobio.py:348(<lambda>)
+    38400    0.025    0.000    0.025    0.000 D:\Trab\digilab\v3-desempenho-perfil\experiments\run_v2_memoria_autobio.py:468(<lambda>)
+
+

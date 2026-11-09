@@ -27,7 +27,9 @@ import { caraterCanonico, perfilDe } from "./catalogo.ts";
 import { jogarLuta } from "./combate_tr/adaptador.ts";
 import { desafiadoDaVersao, regrasDaVersao, type Lutador, type RegrasLuta, type ResultadoLuta } from "./combate.ts";
 import { CV, ESPECIES, FORMAS_AD, LINHA_DA_FORMA } from "./constantes.ts";
-import { nomeForma } from "./nomes.ts";
+import { chaveSprite, nomeForma } from "./nomes.ts";
+import { lutar as lutarArena, sorteiosPorFluxo, type ResultadoLuta as ResultadoArena, type Stats as StatsArena } from "./arena/index.ts";
+import { MAPA_FABRICA, statsRivalForma } from "./luta_poc.ts";
 import { criarRng, hashSemente } from "./rng.ts";
 import type { Forma, FormaAdultaNormal } from "./tipos.ts";
 
@@ -50,14 +52,22 @@ export const VERSAO_FABRICA_TR = 13;
 /** a Fabrica do candidato v14 (B2; DE-1): as regras CV21E_TR14, o fator dos rivais e as listas candidatas. As tentativas v13 do registro do
     Tamer seguem refazendo-se iguais (CV14-1); as novas gravam esta */
 export const VERSAO_FABRICA_V14 = 14;
-/** as versoes das regras da Fabrica que o registro conhece (a v13 e a v14) */
-export const VERSOES_FABRICA: readonly number[] = [VERSAO_FABRICA_TR, VERSAO_FABRICA_V14];
+/** a Fabrica da luta da POC (LUTA_POC, LP2b; LP-5 revista): os alugados e os rivais lutam no nucleo de motor/arena/, com os numeros do perfil
+    canonico do Mega pelo mapeamento da LP2-2 (sem o fator dos rivais: o mapeamento nao tem escala), no mapa MAPA_FABRICA (PROPOSTO). As series
+    de 3, sem cura dentro da serie, e a troca pelo derrotado, que entra inteiro, ficam. So com a chave da luta da POC ligada (o app grava `v: 21`) */
+export const VERSAO_FABRICA_POC = 21;
+/** as versoes das regras da Fabrica que o registro conhece (a v13, a v14 e a da luta da POC) */
+export const VERSOES_FABRICA: readonly number[] = [VERSAO_FABRICA_TR, VERSAO_FABRICA_V14, VERSAO_FABRICA_POC];
 export const VERSAO_FABRICA_ATUAL = VERSAO_FABRICA_V14;
 /** as regras da Fabrica: as regras da luta, o fator dos rivais e se a troca entra inteira */
-export interface RegraFabrica { versao: number; R: RegrasLuta; fatorRival: number; trocaInteira: boolean }
+export interface RegraFabrica { versao: number; R: RegrasLuta; fatorRival: number; trocaInteira: boolean; poc: boolean }
 export function regraFabrica(versao: number, fatorRival?: number): RegraFabrica {
-  if (versao === VERSAO_FABRICA_TR) return { versao, R: regrasDaVersao(VERSAO_FABRICA_TR), fatorRival: fatorRival ?? FATOR_RIVAL_FABRICA_V9, trocaInteira: true };
-  if (versao === VERSAO_FABRICA_V14) return { versao, R: regrasDaVersao(VERSAO_FABRICA_V14), fatorRival: fatorRival ?? FATORES_V14.fabrica, trocaInteira: true };
+  if (versao === VERSAO_FABRICA_TR) return { versao, R: regrasDaVersao(VERSAO_FABRICA_TR), fatorRival: fatorRival ?? FATOR_RIVAL_FABRICA_V9, trocaInteira: true, poc: false };
+  if (versao === VERSAO_FABRICA_V14) return { versao, R: regrasDaVersao(VERSAO_FABRICA_V14), fatorRival: fatorRival ?? FATORES_V14.fabrica, trocaInteira: true, poc: false };
+  if (versao === VERSAO_FABRICA_POC) {
+    if (fatorRival !== undefined) throw new Error("a Fábrica da luta da POC não tem fator de rival");
+    return { versao, R: regrasDaVersao(VERSAO_FABRICA_POC), fatorRival: 1, trocaInteira: true, poc: true };
+  }
   throw new Error("versão das regras da Fábrica desconhecida: " + JSON.stringify(versao));
 }
 
@@ -98,7 +108,8 @@ export function megaFabrica(f: Forma, nome: string, fator: number = FATOR_FABRIC
 
 /** uma luta jogada da tentativa: o indice (0 = a primeira), a semente, o alugado e o rival, o resultado e a vida do alugado no fim (fracao) */
 export interface LutaFabrica {
-  k: number; s: number; alugado: Forma; rival: Forma; res: ResultadoLuta; venceu: boolean; vidaFim: number;
+  /** `res`: a luta do combate de antes (v13 e v14); `poc`: a da luta da POC (v21). Uma das duas, pela versao das regras da tentativa */
+  k: number; s: number; alugado: Forma; rival: Forma; res: ResultadoLuta | null; poc: ResultadoArena | null; venceu: boolean; vidaFim: number;
   /** depois desta vitoria o jogador trocou o alugado por este rival */
   trocou: boolean;
 }
@@ -122,6 +133,8 @@ export class TentativaFabrica {
   acabou = false;
   /** a vida e o guts com que o alugado comeca a proxima luta, dentro da serie; null = inteiro (comeco de serie) */
   private ini: { hp: number; guts: number } | null = null;
+  /** na luta da POC: a vida (inteira) com que o alugado comeca a proxima luta, dentro da serie; null = inteiro */
+  private iniPoc: number | null = null;
   constructor(n: number, escolha: number, versao: number = VERSAO_FABRICA_ATUAL, semente: number = sementeFabrica(n), fatorRival?: number) {
     this.regra = regraFabrica(versao, fatorRival);
     this.n = n; this.s = semente; this.alugueis = alugueisFabrica(this.s);
@@ -133,6 +146,7 @@ export class TentativaFabrica {
   get series(): number { return Math.floor(this.vitorias / LUTAS_SERIE_FABRICA); }
   /** a fracao da vida com que o alugado entra na proxima luta (1 no comeco de serie) */
   get vidaAgora(): number {
+    if (this.regra.poc) return this.iniPoc === null ? 1 : this.iniPoc / this.statsPoc(this.alugado).hp;
     if (!this.ini) return 1;
     return this.ini.hp / this.mega(this.alugado, "Alugado").cond.hpMax;
   }
@@ -145,8 +159,15 @@ export class TentativaFabrica {
     const k = this.lutas.length;
     return { k, s: sementeLutaFabrica(this.s, k), serie: Math.floor(k / LUTAS_SERIE_FABRICA) + 1, naSerie: k % LUTAS_SERIE_FABRICA + 1, rival: formaRivalFabrica(this.s, k) };
   }
+  /** os numeros de um Mega na luta da POC: o perfil canonico pelo mapeamento da LP2-2 (alugado e rival iguais, sem fator) */
+  statsPoc(f: Forma): StatsArena {
+    const adulta = f.adulta as FormaAdultaNormal;
+    if (f.est !== "mega" || !FORMAS_AD.includes(adulta)) throw new Error("a Fábrica só tem Megas das 8 formas adultas: " + JSON.stringify(f));
+    return statsRivalForma(f, caraterCanonico(adulta));
+  }
   /** os lutadores da proxima luta (o alugado no lado A), sem jogar */
   lutadores(): { A: Lutador; B: Lutador; ini: { hp: number; guts: number } | null } {
+    if (this.regra.poc) throw new Error("a Fábrica da luta da POC não tem os lutadores do combate de antes (statsPoc)");
     const p = this.proxima();
     if (!p) throw new Error(`a tentativa ${this.n} da Fábrica já acabou`);
     return { A: this.mega(this.alugado, "Alugado " + nomeForma(this.alugado)), B: this.mega(p.rival, "Rival " + nomeForma(p.rival), true), ini: p.naSerie === 1 ? null : this.ini };
@@ -156,9 +177,20 @@ export class TentativaFabrica {
     const p = this.proxima();
     if (!p) throw new Error(`a tentativa ${this.n} da Fábrica já acabou`);
     if (s !== p.s) throw new Error(`a luta ${p.k + 1} da tentativa ${this.n} da Fábrica tem a semente ${p.s}, não ${s}`);
+    if (this.regra.poc) {
+      /* a luta da POC: o alugado leva a vida dentro da serie (iniPoc), e cada rival entra inteiro */
+      const A = this.statsPoc(this.alugado), B = this.statsPoc(p.rival), v0 = p.naSerie === 1 ? null : this.iniPoc;
+      const r = lutarArena({ cena: MAPA_FABRICA, semente: s, a: { forma: chaveSprite(this.alugado), stats: A, ...(v0 !== null ? { vida0: v0 } : {}) },
+        b: { forma: chaveSprite(p.rival), stats: B } }, sorteiosPorFluxo(s));
+      const venceu = r.vencedor === "a";
+      const luta: LutaFabrica = { k: p.k, s, alugado: this.alugado, rival: p.rival, res: null, poc: r, venceu, vidaFim: Math.max(0, r.vidaA) / A.hp, trocou: false };
+      this.lutas.push(luta);
+      if (venceu) this.iniPoc = r.vidaA; else { this.acabou = true; this.iniPoc = null; }
+      return luta;
+    }
     const { A, B, ini } = this.lutadores(), res = jogarLuta(A, B, s, this.regra.R, ini, desafiadoDaVersao(this.regra.versao));
     const fim = res.E.L[0], venceu = res.pontosA === 1;
-    const luta: LutaFabrica = { k: p.k, s, alugado: this.alugado, rival: p.rival, res, venceu, vidaFim: Math.max(0, fim.hp) / fim.hpMax, trocou: false };
+    const luta: LutaFabrica = { k: p.k, s, alugado: this.alugado, rival: p.rival, res, poc: null, venceu, vidaFim: Math.max(0, fim.hp) / fim.hpMax, trocou: false };
     this.lutas.push(luta);
     if (venceu) this.ini = { hp: fim.hp, guts: fim.guts }; else { this.acabou = true; this.ini = null; }
     return luta;
@@ -176,7 +208,7 @@ export class TentativaFabrica {
     const erro = this.porqueNaoTroca();
     if (erro) throw new Error(`troca na Fábrica recusada: ${erro}`);
     const u = this.lutas[this.lutas.length - 1];
-    this.ini = null;
+    this.ini = null; this.iniPoc = null;
     this.alugado = u.rival; u.trocou = true;
   }
 }

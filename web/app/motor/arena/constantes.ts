@@ -32,12 +32,15 @@ export const EQ = {
 } as const;
 
 export type Dificuldade = "facil" | "normal" | "dificil";
-/** a IA: chance de desviar, tempo de reacao (ms), erro de mira (px). PROPOSTO, PROTOTIPO. A LP-3 usa a "normal" para os dois lados */
-export const DIFIC: Record<Dificuldade, { desvio: number; reacao: number; erro: number }> = {
-  facil: { desvio: 0.15, reacao: 450, erro: 40 },
-  normal: { desvio: 0.45, reacao: 260, erro: 18 },
-  dificil: { desvio: 0.8, reacao: 140, erro: 6 },
+/** a IA: chance de desviar e tempo de reacao (ms). PROPOSTO, PROTOTIPO. A LP-3 usa a "normal" para os dois lados. O erro de mira da POC
+    (facil 40, normal 18, dificil 6 px) passou a ser do lutador (Stats.erro; LP2, decisao 2): ERRO_MIRA_POC guarda os da POC */
+export const DIFIC: Record<Dificuldade, { desvio: number; reacao: number }> = {
+  facil: { desvio: 0.15, reacao: 450 },
+  normal: { desvio: 0.45, reacao: 260 },
+  dificil: { desvio: 0.8, reacao: 140 },
 };
+/** o erro de mira (px) de cada dificuldade da POC: o "normal" e o do lutador neutro do mapeamento da LP2. PROPOSTO, PROTOTIPO */
+export const ERRO_MIRA_POC: Record<Dificuldade, number> = { facil: 40, normal: 18, dificil: 6 };
 
 /** as opcoes da luta e os padroes do prototipo (os da medicao). PROPOSTO, EQ: vantagem de atributo 1,5x, projeteis 0,15x. O ritmo (a
     vida do jogo / 6) nao e mais da simulacao: a vida chega pronta nos Stats */

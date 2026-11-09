@@ -1,0 +1,110 @@
+{
+ "gabaritos": {
+  "gabarito_conversa_dc3": {
+   "chaves_por_vida": [
+    "corpo",
+    "decisoes",
+    "estado",
+    "log",
+    "medidas"
+   ],
+   "parede_s": 6.7,
+   "vidas": 20,
+   "vidas_que_divergem_por_chave": {
+    "medidas": 17
+   }
+  },
+  "gabarito_digibrain": {
+   "chaves_por_vida": [
+    "candidatos",
+    "impressao",
+    "n",
+    "tipos_explorar"
+   ],
+   "parede_s": 44.6,
+   "vidas": 196,
+   "vidas_que_divergem_por_chave": {
+    "impressao": 8
+   }
+  },
+  "gabarito_digibrain_conserto": {
+   "chaves_por_vida": [
+    "decisoes",
+    "estado",
+    "log",
+    "medidas"
+   ],
+   "parede_s": 43.6,
+   "vidas": 264,
+   "vidas_que_divergem_por_chave": {
+    "medidas": 227
+   }
+  },
+  "gabarito_digibrain_modular": {
+   "chaves_por_vida": [
+    "decisoes",
+    "estado",
+    "log",
+    "medidas"
+   ],
+   "parede_s": 37.7,
+   "vidas": 192,
+   "vidas_que_divergem_por_chave": {
+    "medidas": 155
+   }
+  },
+  "gabarito_habito_intencao": {
+   "chaves_por_vida": [
+    "decisoes",
+    "estado",
+    "log",
+    "medidas"
+   ],
+   "parede_s": 12.9,
+   "vidas": 80,
+   "vidas_que_divergem_por_chave": {
+    "medidas": 73
+   }
+  },
+  "gabarito_memoria_autobio": {
+   "chaves_por_vida": [
+    "decisoes",
+    "estado",
+    "log",
+    "medidas"
+   ],
+   "parede_s": 10.7,
+   "vidas": 60,
+   "vidas_que_divergem_por_chave": {
+    "medidas": 52
+   }
+  },
+  "gabarito_redecidir_evento": {
+   "chaves_por_vida": [
+    "decisoes",
+    "estado",
+    "log",
+    "medidas"
+   ],
+   "parede_s": 7.2,
+   "vidas": 40,
+   "vidas_que_divergem_por_chave": {
+    "medidas": 35
+   }
+  }
+ },
+ "interpretador": {
+  "executavel": "D:\\Trab\\digilab\\_ferramentas\\pypy3.12-v8.0.1-win64\\pypy3.exe",
+  "implementacao": "PyPy",
+  "maquina": "AMD64",
+  "sistema": "Windows-11-10.0.26300-SP0",
+  "sonda_soma": {
+   "math_fsum": "2.0",
+   "sum": "0.0",
+   "sum_10x0_1": "0.9999999999999999"
+  },
+  "versao": "3.12.15"
+ },
+ "modo": "gabaritos",
+ "parede_script_s": 163.533
+}

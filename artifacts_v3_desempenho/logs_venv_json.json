@@ -1,0 +1,41 @@
+{
+ "eventos": 1563,
+ "gzip9_bytes": 4680,
+ "interpretador": {
+  "executavel": "D:\\Trab\\digilab\\_ferramentas\\venv-json\\Scripts\\python.exe",
+  "implementacao": "CPython",
+  "maquina": "AMD64",
+  "sistema": "Windows-11-10.0.26300-SP0",
+  "versao": "3.13.0"
+ },
+ "log_bytes": 76657,
+ "melhor_de": 5,
+ "modo": "logs",
+ "msgspec": {
+  "bytes_identicos_ao_json": true,
+  "bytes_identicos_ao_log": false,
+  "dumps_por_linha": 0.00013,
+  "loads_igual": true,
+  "loads_por_linha": 0.00021,
+  "versao": "0.22.0"
+ },
+ "orjson": {
+  "bytes_identicos_ao_json": true,
+  "bytes_identicos_ao_log": false,
+  "dumps_por_linha": 0.00106,
+  "loads_igual": true,
+  "loads_por_linha": 0.00025,
+  "versao": "3.13.0"
+ },
+ "parede_script_s": 1.371,
+ "s": {
+  "de_jsonl": 0.00203,
+  "gzip_compress_6": 0.00027,
+  "gzip_compress_9": 0.00074,
+  "gzip_decompress": 0.00082,
+  "para_jsonl": 0.00207,
+  "so_json_dumps_por_linha": 0.002,
+  "so_json_loads_por_linha": 0.00128,
+  "so_para_dict": 0.00011
+ }
+}

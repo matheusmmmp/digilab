@@ -55,6 +55,8 @@ export const CHAVE_AVISO_TR = CHAVE + "-aviso-tr";
 /** os saves dos pets que o descarte 6 tirou, como estavam ({semente, log, versao}[]): o aviso oferece baixar o arquivo deles. Fica ate o
     jogador baixar ou dispensar */
 export const CHAVE_DESCARTADOS = CHAVE + "-descartados";
+/** aviso pendente do descarte 7 (a luta da POC, pets v21; LUTA_POC, LP2 e LP-6): JSON {pets, fabrica}. So com a chave da luta da POC ligada */
+export const CHAVE_AVISO_POC = CHAVE + "-aviso-poc";
 /** versao do registro do Tamer: 1 = medalhas (parte 1); 2 = medalhas e itens (parte 3); 3 = e o titulo da Liga (parte 4a); 4 = e os
     recordes das instalacoes da Fronteira (parte 4b); 5 = e a Fabrica e o Salao (parte 4c); 6 = e a versao das regras de cada tentativa da
     Fabrica (campo `v`, equilibrio geral fase 3); 7 = so a Fabrica em tempo real (v: 13; COMBATE-TR, D-4). Grava a 7; le as sete. A Fabrica da B2 (v: 14, o candidato da rodada de equilibrio) cabe no mesmo registro 7: as tentativas v: 13 seguem iguais */
@@ -253,9 +255,10 @@ export class Tamer {
     t.trocar();
   }
   /** a tentativa nova da Fabrica, com o alugado escolhido (0 a 2) entre os 3 dela, nas regras de hoje (VERSAO_FABRICA_ATUAL) */
-  alugarFabrica(escolha: number, quando: number = Date.now()): TentativaFabrica {
+  alugarFabrica(escolha: number, quando: number = Date.now(), versao: number = VERSAO_FABRICA_ATUAL): TentativaFabrica {
     const n = this.fabrica.length + 1;
-    this._gravar(["fabrica", { n, s: sementeFabrica(n), alugado: escolha, quando, v: VERSAO_FABRICA_ATUAL }]);
+    if (!VERSOES_FABRICA.includes(versao)) throw new Error(`versão das regras da Fábrica desconhecida: ${versao}`);
+    this._gravar(["fabrica", { n, s: sementeFabrica(n), alugado: escolha, quando, v: versao }]);
     return this.fabrica[this.fabrica.length - 1];
   }
   /** a proxima luta da tentativa em andamento (grava e joga) */
@@ -441,20 +444,25 @@ export function sincronizarPet(t: Tamer, m: Motor): boolean {
     senao 0 */
 export const CHAVE_DESCARTE = CHAVE + "-descarte";
 export const VERSAO_DESCARTE = 6;
+/** 7 = a luta da POC (LUTA_POC, LP2 e LP-6, decisao do Matheus de 2026-11-08): os pets v13 a v19 lutavam pelo combate de antes e saem; o
+    Tamer fica inteiro (as medalhas, os itens, o titulo e os recordes). So roda com a chave da luta da POC ligada (src/lutaPoc.ts) */
+export const VERSAO_DESCARTE_POC = 7;
 /** cada descarte apaga os pets ate esta versao (inclusive) */
-const DESCARTA_ATE: Record<number, number> = { 1: 5, 2: 6, 3: 6, 4: 6, 5: 6, 6: 12 };
+const DESCARTA_ATE: Record<number, number> = { 1: 5, 2: 6, 3: 6, 4: 6, 5: 6, 6: 12, 7: 19 };
 
 /** decisoes do Matheus: os pets de antes da trava das medalhas (v1-v5, 2026-09-29) e os v6 de antes do combate V21D
     (2026-09-30) sao descartados, o ativo e os guardados, e o jogo comeca num ovo novo v6 com o Tamer sem medalhas. Roda uma
     vez por versao do descarte (CHAVE_DESCARTE). Save que nao e JSON fica como esta (o app mostra o erro e nao grava por
     cima, como sempre). Devolve quantos pets sairam, ou null se ja tinha rodado. As geracoes aposentadas (Diario ·
     Geracoes, so para ver) ficam. Sem pet nenhum para descartar, o Tamer que ja existe fica como esta (sem aviso). */
-export function descartarPetsAntigos(armaz: Armazenamento & { removeItem(k: string): void }, chaveGuardados: string): number | null {
+export function descartarPetsAntigos(armaz: Armazenamento & { removeItem(k: string): void }, chaveGuardados: string, lutaPoc = false): number | null {
   const marca = armaz.getItem(CHAVE_DESCARTE), tinhaTamer = armaz.getItem(CHAVE_TAMER) !== null;
   const feito = marca !== null ? Number(marca) : tinhaTamer ? 1 : 0;
-  if (!Number.isInteger(feito) || feito < 0 || feito > VERSAO_DESCARTE) throw new Error(`marcador do descarte inválido: ${JSON.stringify(marca)}`);
-  if (feito >= VERSAO_DESCARTE) return null;
-  const ate = DESCARTA_ATE[VERSAO_DESCARTE];
+  if (!Number.isInteger(feito) || feito < 0 || feito > VERSAO_DESCARTE_POC) throw new Error(`marcador do descarte inválido: ${JSON.stringify(marca)}`);
+  /* o descarte que esta aba pede: o 7 com a luta da POC ligada (LP2), o 6 sem ela */
+  const alvo = lutaPoc ? VERSAO_DESCARTE_POC : VERSAO_DESCARTE;
+  if (feito >= alvo) return null;
+  const ate = DESCARTA_ATE[alvo];
   const antigo = (txt: string | null): boolean => {
     if (txt === null) return false;
     try { const d = JSON.parse(txt) as { versao?: number } | null; return !!d && (d.versao ?? 1) <= ate; } catch { return false; }
@@ -478,18 +486,21 @@ export function descartarPetsAntigos(armaz: Armazenamento & { removeItem(k: stri
   if (descartados && armaz.getItem(chaveGuardados) === null) armaz.setItem(chaveGuardados, "[]");
   /* o descarte 6 (D-4): o Tamer fica, sem a Fabrica de antes; os saves descartados ficam para o arquivo; o aviso conta os dois */
   let fabrica = 0;
-  if (tinhaTamer) {
-    const r = semFabricaAntiga(lerLogTamer(armaz)!.log);
-    fabrica = r.tentativas;
-    gravarTamer(armaz, Tamer.reproduzir(r.log));
-  } else gravarTamer(armaz, new Tamer());
+  /* a parte do Tamer e a do descarte 6; o 7 nao mexe no Tamer (LP-6), a nao ser num navegador que ainda nao tinha rodado o 6 */
+  if (feito < VERSAO_DESCARTE) {
+    if (tinhaTamer) {
+      const r = semFabricaAntiga(lerLogTamer(armaz)!.log);
+      fabrica = r.tentativas;
+      gravarTamer(armaz, Tamer.reproduzir(r.log));
+    } else gravarTamer(armaz, new Tamer());
+  }
   if (saves.length) {
     let ja: unknown[] = [];
     try { const x = JSON.parse(armaz.getItem(CHAVE_DESCARTADOS) ?? "[]"); if (Array.isArray(x)) ja = x; } catch { /* ilegivel: recomeca */ }
     armaz.setItem(CHAVE_DESCARTADOS, JSON.stringify([...ja, ...saves]));
   }
-  armaz.setItem(CHAVE_DESCARTE, String(VERSAO_DESCARTE));
-  if (descartados || fabrica) armaz.setItem(CHAVE_AVISO_TR, JSON.stringify({ pets: descartados, fabrica }));
+  armaz.setItem(CHAVE_DESCARTE, String(alvo));
+  if (descartados || fabrica) armaz.setItem(alvo === VERSAO_DESCARTE_POC ? CHAVE_AVISO_POC : CHAVE_AVISO_TR, JSON.stringify({ pets: descartados, fabrica }));
   return descartados;
 }
 

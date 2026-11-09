@@ -5,14 +5,15 @@ o retrabalho em 2026-11-08.
 Pelos termos de uso da Meshy (atualizados em 2026-09-19, secao 3.2), a saida de um plano pago e do cliente.
 Os termos proibem tirar a marca de IA (secao 2.4): a marca fica no asset.extras do cais.gltf e neste arquivo.
 
-Como foi feito (docs/TAREFA_V3_LUGARES_3D.md, secao 16, e docs/objetos3d/cais/ no repositorio):
+Como foi feito (docs/TAREFA_V3_LUGARES_3D.md, secoes 16 e 17, e docs/objetos3d/cais/ no repositorio):
 - esboco: Meshy Image to Image (nano-banana-2), com uma referencia de estilo gerada pela propria Meshy para o DigiLab (a maquete B do
   mapa digital), sem o pet e sem imagem de terceiros; sem texto, sem marca, sem simbolo (docs/objetos3d/cais/esbocos, esboco 1, o pier
   com o barco de pesca);
 - vistas: Meshy Image to Image com multivista, a partir do esboco;
 - malha: Meshy Multi-Image to 3D (remesh em triangulos, so a cor);
-- acabamento no Blender 4.5 LTS e em Python, por script: a malha da Meshy como veio, os vertices repetidos soldados e as normais
-  suavizadas; a textura pintada da Meshy fica (sem achatar), com um realce leve do azul, do amarelo e do musgo, em 512 px.
+- voxel no Blender 4.5 LTS e em Python, por script (secao 17, o pedido do Matheus de 2026-11-08, "mais digital, mais pixelado"): a forma
+  e a cor vem da malha da Meshy e da textura pintada dela, com um realce leve do azul, do amarelo, do musgo e da madeira; o modelo vira
+  48 blocos no comprido, 2 x 2 texels por face de bloco, com o filtro NEAREST.
 As tarefas da Meshy (esboco, vistas, malha) estao no asset.extras do cais.gltf.
 
 Uso: no jogo DigiLab, publicado. Credito: "Cais gerado com a Meshy (meshy.ai)".
