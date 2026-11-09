@@ -131,3 +131,7 @@ artifacts_v3_acoes_novas/**/vidas/
 !artifacts_v3_pet_vivo/
 # contabilidade local do gasto da fala livre com o Claude (CONVERSA_PET M5; nao versionar)
 servidor/gasto_fala_livre.json
+
+# V3, DESEMPENHO: as medidas do docs/DESEMPENHO_PERFIL_2026-11.md; os .prof (binarios do cProfile) sao regeneraveis pelo script
+!artifacts_v3_desempenho/
+artifacts_v3_desempenho/**/*.prof
