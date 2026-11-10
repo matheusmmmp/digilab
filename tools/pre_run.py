@@ -12,7 +12,8 @@ Sai com código 0 (pode rodar) ou 2 (recusa, com todos os motivos no stderr). N�
    quando o próprio orquestrador chama o gate);
 5. passam de 4 processos (V3-D8).
 
-**As medições do combate** (`web/app/scripts/equilibrio_tr/*.py` e `*.ts`; a V3-D8 diz que elas contam) entram por
+**As medições do combate** (`web/app/scripts/equilibrio_tr/*.py` e `*.ts`, e desde a LUTA_POC LP5-0 `web/app/scripts/equilibrio_poc/*.ts`; a V3-D8
+diz que elas contam) entram por
 `python tools/pre_run.py <script> --medicao`: só a regra 4, porque elas não têm config com plano nem bases (as faixas delas vão por nome,
 `--faixa calibracao2`). E uma medição em andamento conta como run para as outras (INFRA_AGENTES E7).
 
@@ -37,7 +38,7 @@ RAIZ = Path(__file__).resolve().parents[1]
 FAIXAS = Path("experiments") / "bancada" / "faixas.py"
 MAX_PROCESSOS = 4                                          # V3-D8 (docs/PLANO_V3.md, seção 7)
 RUN = re.compile(r"experiments[\\/]+run_v[23]_[A-Za-z0-9_]+\.py")
-MEDICAO = re.compile(r"scripts[\\/]+equilibrio_tr[\\/]+[A-Za-z0-9_]+\.(py|ts)")      # as medições do combate (E7)
+MEDICAO = re.compile(r"scripts[\\/]+equilibrio_(?:tr|poc)[\\/]+[A-Za-z0-9_]+\.(py|ts)")      # as medições do combate (E7)
 
 
 class Recusa(Exception):
@@ -149,7 +150,7 @@ def conferir(orquestrador: str, config: str, processos: int = 1, raiz: Path = RA
 def conferir_medicao(script: str) -> list[str]:
     """Uma medição do combate: só a regra de uma carga por vez (V3-D8)."""
     if not MEDICAO.search(script.replace("\\", "/")):
-        return [f"{script} não é uma medição do combate (web/app/scripts/equilibrio_tr/*.py ou *.ts)"]
+        return [f"{script} não é uma medição do combate (web/app/scripts/equilibrio_tr/*.py ou *.ts, ou web/app/scripts/equilibrio_poc/*.ts)"]
     return motivos_de_outra_run()
 
 
