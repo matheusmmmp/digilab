@@ -114,6 +114,7 @@ const lider = (k: string, sem: number, tip: number, pior: number | null) => {
 {
   const a1: Record<string, unknown> = {}, v1: Record<string, unknown> = {}, s1: Record<string, unknown> = {};
   let okA = true, okV = true, okS = true;
+  const empForaEspelho: Record<string, Record<string, number>> = {};
   for (const e of ESTAGIOS_LUTA) {
     const F = G[`formas_${e}`].dados, fs = F.formas as string[], P = F.pares as Record<string, Record<string, Conta>>;
     const longe = fs.filter(atira), perto = fs.filter(f => !atira(f));
@@ -141,10 +142,16 @@ const lider = (k: string, sem: number, tip: number, pior: number | null) => {
     /* S1: o espelho, por mapa */
     const esp = Object.fromEntries(mapas.map(m => { const c = fs.reduce((a, f) => juntar(a, P[m][`${f}|${f}`]), novaConta()); return [m, r3(c.v / c.n)]; }));
     if (Object.values(esp).some(x => !dentro(x, .45, .55))) okS = false;
-    s1[e] = esp;
+    /* so leitura, sem decidir (desvio D-LP5-0-6): o lado B e os empates do espelho, e o lado A sem os empates */
+    const tudo = mapas.reduce((a, m) => fs.reduce((b, f) => juntar(b, P[m][`${f}|${f}`]), a), novaConta());
+    s1[e] = { lado_a: esp, leitura: { a: r3(tudo.v / tudo.n), b: r3((tudo.n - tudo.v - tudo.e) / tudo.n), empate: r3(tudo.e / tudo.n), a_sem_empates: r3(tudo.v / (tudo.n - tudo.e)) } };
+    /* so leitura: os empates de cada forma fora do espelho (o D2 conta o espelho junto) */
+    empForaEspelho[e] = Object.fromEntries(fs.map(f => { let em = 0, n = 0; for (const m of mapas) for (const y of fs) if (y !== f) for (const k of [`${f}|${y}`, `${y}|${f}`]) { em += P[m][k].e; n += P[m][k].n; } return [f, r3(em / n)]; }));
   }
   meta("A1", "de longe x de perto", "as que atiram contra as de perto: de 0,45 a 0,55 na soma dos 8 mapas; de 0,30 a 0,70 em cada mapa", okA, a1);
   meta("V1", "a variedade no estagio", "cada forma contra as outras de 0,35 a 0,65; amplitude <= 0,30; toda forma vence >= 2 outras", okV, v1);
+  const D2 = metas.find(m => m.id === "D2")!;
+  D2.valores.leitura_empate_fora_do_espelho = Object.fromEntries(Object.entries(empForaEspelho).map(([e, m]) => [e, { max: Math.max(...Object.values(m)), acima_de_2pc: Object.entries(m).filter(([, x]) => x > .02).map(([f, x]) => `${f} (${x})`) }]));
   meta("S1", "o espelho", "o mesmo lutador dos dois lados: o lado A de 0,45 a 0,55 em cada mapa", okS, s1);
 }
 /* ---------------------------------------------------------------- G1-G4 */
