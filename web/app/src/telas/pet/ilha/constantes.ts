@@ -155,18 +155,11 @@ export const PLANTA_ILHA = {
     - a leste do rio, a mata sobe em `degraus` ate o morro: a coluna (a partir da margem leste do rio) onde comeca cada nivel, com a borda
       ondulando ate `ondula` celulas; a decoracao rente a um degrau novo some (a lista `objetos` nao muda, E-G0);
     - o mar em volta da grade inteira, ate o horizonte (`mar`, o lado do quadrado, em celulas);
-    - as silhuetas ao longe: duas faixas em volta do ponto olhado (as ilhas perto e os morros longe), a `raio` celulas dele, com a cor da
-      nevoa puxada para a sombra (`sombra`, a fracao) e o pe `fundo` celulas abaixo da linha do horizonte do mar curvo, para o mar o cobrir;
-      `altura` e a altura da faixa e `alto`, a fracao dela que a silhueta mais alta ocupa; `ilhas` e `morros`, quantos picos por volta.
+    - as silhuetas ao longe (as ilhas e os morros) sairam em 2026-11-10, a pedido do Matheus.
     PROPOSTO, SEM FONTE */
 export const FIM_ILHA = {
   degraus: [4, 7], ondula: 2,
   mar: 1200,
-  silhuetas: {
-    sal: 0xf1a17e, fundo: -5, altura: 18,
-    longe: { raio: 60, sombra: 0.3, alto: 0.72, morros: 7 },
-    perto: { raio: 52, sombra: 0.55, alto: 0.42, ilhas: 9 },
-  },
 } as const;
 /** o sinal so (a regra 3 de "guiar o olhar sem texto"): o que se toca (a tigela, a bola e o saco) da um pulinho quando o pet chega a `raio`
     celulas dele; de novo so depois que o pet sair de `sai` celulas. O pulinho: achata e estica `amplitude`, com o periodo e o amortecimento
