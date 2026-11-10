@@ -605,3 +605,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-10 — LUTA_POC, LP5: o plano do equilíbrio da luta em tempo real (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5`)](registro/2026-11.md)
 - [2026-11-10 — INDIVIDUALIDADE, I7: o plano APROVADO (worker, Claude Code, Opus 5.5, branch `v3-individualidade-i7-plano`)](registro/2026-11.md)
 - [2026-11-10 — LUTA_POC, LP5-0: a bancada nova e o ponto de partida (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-0`)](registro/2026-11.md)
+- [2026-11-10 — LUTA_POC, LP5-1: a rodada 1 do mapeamento, parada pelo S1 (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-calib`)](registro/2026-11.md)

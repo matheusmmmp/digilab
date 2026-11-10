@@ -586,3 +586,31 @@ Nenhum número do jogo mudou.
 - o Gazimon que ficou forte sem o `eps`: o único líder que trava.
 
 A calibração (LP5-1) espera a leitura do S1 pelo Matheus.
+
+## Resultado da LP5-1 (a rodada 1 do mapeamento, parada pelo S1)
+
+**A régua do S1** passou a contar só as lutas com vencedor (a D-LP5-11, decidida pelo Matheus em 2026-11-10). **A rodada 1** foi uma
+grade em quatro partes (r1a a r1d, 49 pontos, `web/app/scripts/medicoes/equilibrio_poc/lp5_1/r1*/tabela.md`) e a medida inteira do
+candidato escolhido, o `lp5_1_r1` (1 364 118 lutas em 252 s, 4 processos; `lp5_1/calibracao/resumo.md`). Os desvios são o D-LP5-1-1 a 6
+(`docs/registro/2026-11.md`).
+
+**Passam 4 das 20 metas: T3, E1, D1 e D3** (na LP5-0 passavam P3, P4, P5, D3 e V2).
+
+- **O treino ganhou teto (T1, T3).** O expoente baixo com o ponto mais pesado satura a curva. O típico contra o mesmo pet sem treino fica
+  em 0,77 no Rookie, 0,89 no Champion, 0,93 no Ultimate e 0,94 no Mega (o T1 pede de 0,80 a 0,97). No teto, contra as formas do estágio,
+  fica de 0,72 a 0,86, e o maior degrau de 4 pontos é 0,17.
+- **A evolução pesa mais que o treino (E1).** O típico contra o estágio seguinte fica de 0,13 a 0,16 (o teto, de 0,12 a 0,17), e dois
+  estágios acima fica em 0.
+- **A duração (D1):** a mediana fica de 16,4 a 17,3 s em todos os estágios, com o p90 abaixo de 20 s.
+- **O que não fecha com o mapeamento** (o D-LP5-1-5):
+  - o fôlego não pesa (T2): de 0,47 a 0,49;
+  - a variedade vem da tabela das formas (V1): a amplitude fica de 0,41 a 0,43 do Champion ao Mega;
+  - a espécie pesa (V2): a amplitude entre as espécies fica de 0,09 a 0,25, e a brasa é a pior no Rookie, no Champion e no Mega;
+  - o sparring trava (P4): de 0,69 a 0,87 de média. Por isso só 15 de 100 vidas chegam ao Mega (P5), e 72 ficam no Champion;
+  - os dois últimos passaram na LP5-0 só porque o pet típico vencia tudo.
+- **De longe x de perto (A1):** o movimento base de 60 aproxima a soma de 0,50 (0,48 a 0,58; o A1 pede de 0,45 a 0,55).
+- **Os líderes e os torneios** ficam para a LP5-2 e a LP5-3: os NPCs e os rivais dos torneios ainda têm os números da v21.
+
+**A rodada para pelo S1** (D-LP5-1-4). Na Praia, o lado A fica de 0,42 a 0,46. Com o v21 (a LP5-0 relida pela régua nova) isso vale em
+todos os estágios, e com o `lp5_1_r1` do Champion ao Mega. É o núcleo, não o candidato. A LP5-2 espera a decisão do Matheus sobre o S1 e sobre as metas que o
+mapeamento não fecha.
