@@ -19,23 +19,23 @@
    "estagio": "crianca",
    "eventos": 181,
    "lutas": 20,
-   "vitorias": 8,
+   "vitorias": 6,
    "lesoes": 3,
-   "log_sha": "2fec9cb90233ccda337cd62b05e7e820cfe28eee442d18c0850ddea01525681b",
-   "assinatura": "9de4bdd3b4a16b9e60c5e512ed77fe064393e05d2d5f98cdf64df5fbb74acfd4",
-   "resultados": "4517850ec8c8d0e7f6fb8567b35edce8eef2dd2bcc7a3cd99b623faf76bda316"
+   "log_sha": "d2a533939025058fe6f5e78412859a6dba00788de5037590f30211d0200d7d14",
+   "assinatura": "15c1058aa497ed7bb289af96be3fc2a3e428c18e78f0fbb3cf449922fb7ee9f3",
+   "resultados": "63e01a89b1d14b589109426cc530e6bb2761a6a7e2c48c6b3190ecd3fbb1351d"
   },
   {
    "variante": "v21_modular",
    "semente": 202,
    "estagio": "crianca",
-   "eventos": 178,
+   "eventos": 177,
    "lutas": 20,
-   "vitorias": 8,
-   "lesoes": 1,
-   "log_sha": "1b3110ab2b2fed49e4f8906dc4ead7ea493296c71e2abbefb421da4d6bc0bfe5",
-   "assinatura": "ed885a7b1186d7fdde46f3112e1c77d9622c8bccdbb346d24d21c1966c08a545",
-   "resultados": "6c31cda33c2f096f802cbb41d76e37ac2dbf20166812e4426cad1c4c39fd3af4"
+   "vitorias": 6,
+   "lesoes": 2,
+   "log_sha": "a79da207a5d45914702a6c195c6a022362fa754ee0f2c59fca94237163a9fb35",
+   "assinatura": "c3614f4a2445015dc4c1876d01a6b9ec34050c5fcab9bfe35d4ba66aa4d86c6f",
+   "resultados": "a421192fcb6b7958dcf41df0b25690aa14ed9c52e87d5cd78971a4b8cadffc8b"
   },
   {
    "variante": "v21_modular",
@@ -46,20 +46,20 @@
    "vitorias": 6,
    "lesoes": 4,
    "log_sha": "43f87c9997e6b4f35632a902fd77c60026325bf33a7ec508eecd60650ae6f7b3",
-   "assinatura": "0318fc846547a56596e510a1f39e039b0a25754b67a3cba5d7fc321ebf478e0a",
-   "resultados": "f42d4b7c62a1f54f5f79f4378b40c5ec528d64815e4b47bcfee9c2b9a6298312"
+   "assinatura": "64ba5b3d239ad73fa962424dfc8a39103c8b5618d9bae4b32a4015c38c03369f",
+   "resultados": "0e4c45f2c569852e34c0565a3a8053e226934166f2666253373c91e399204ce4"
   },
   {
    "variante": "v21_modular",
    "semente": 404,
    "estagio": "crianca",
-   "eventos": 169,
+   "eventos": 175,
    "lutas": 20,
-   "vitorias": 6,
+   "vitorias": 8,
    "lesoes": 3,
-   "log_sha": "f0f94a49c0f4bcd026e8cdcf769397ee628dca9c55c166614b126401528d2df8",
-   "assinatura": "a1dbfffdc0965e4fd861e547f47fbb8217a3270841d701eb1b76c0fdbdacb3b4",
-   "resultados": "b5aaab88c7a35002c0069633500758daf9c28366f1ab92664dcca520ba454c1a"
+   "log_sha": "9bd647b2a370aa1f3733d89bdf09f26814f7fe536882400b81c847a96515e13b",
+   "assinatura": "b4a4b567dc7ec0833c98b5a6ca706006fc61322eac5ca89ff29b7e862602a658",
+   "resultados": "b7e0d5332e6a4c34b1702765d5c2437629831098549e2a85255b27695f349270"
   },
   {
    "variante": "v21_modular",
@@ -67,11 +67,11 @@
    "estagio": "crianca",
    "eventos": 161,
    "lutas": 20,
-   "vitorias": 5,
+   "vitorias": 6,
    "lesoes": 3,
-   "log_sha": "e4c299d442fc07465f71bc4c98a54017ff8a1371597e693ade70b8434de59933",
-   "assinatura": "8a73a91e15d1ad80a6b5e8f4a2fbe0574ab4f97e0201df5920702b6f474ab0cf",
-   "resultados": "bd23d667eaf14fda6c476912ba02f931efd70daec9dd1862b9df3cbc74cba99b"
+   "log_sha": "0c219874698f1cad7cd328f91d148a6e1860c902393654e78339f713064c237b",
+   "assinatura": "ec3c206f0ad74513641c6e6c4831aae83ad350b45d967f62b2be4f0ee0b505d7",
+   "resultados": "64e16571684c2c5cc9cbcc6f5eba097c9992a722d4389ebb10d007fe88e2deff"
   },
   {
    "variante": "v21_a",
@@ -79,23 +79,23 @@
    "estagio": "crianca",
    "eventos": 237,
    "lutas": 20,
-   "vitorias": 8,
+   "vitorias": 6,
    "lesoes": 3,
    "log_sha": "72703dddadbe9e75f364a19491bdd084a038e6dd02f6ebb9ba6a1db169636f83",
-   "assinatura": "754a5828e4f7a37a6145c475b189e5b8a432cfe855cf4258fb04c808797a4b74",
-   "resultados": "4517850ec8c8d0e7f6fb8567b35edce8eef2dd2bcc7a3cd99b623faf76bda316"
+   "assinatura": "fceed8934d4ef1611de2ba8193406b54543fcbefdd4e4e11c1f20df84561473f",
+   "resultados": "63e01a89b1d14b589109426cc530e6bb2761a6a7e2c48c6b3190ecd3fbb1351d"
   },
   {
    "variante": "v21_a",
    "semente": 202,
    "estagio": "crianca",
-   "eventos": 321,
+   "eventos": 323,
    "lutas": 20,
    "vitorias": 5,
-   "lesoes": 2,
-   "log_sha": "def18d93154b6267ebf5106122dfd8f39de574bea9b96d65b689c1fc8866b001",
-   "assinatura": "5679cfa68ad07e037552d83a8e60f36bde9442a64b796c10b2111d1edc7156f6",
-   "resultados": "3416449882938bf21da3abcd19a789b993f8b8930fc96b74ad1593b61a1a7055"
+   "lesoes": 3,
+   "log_sha": "8f52920d3038fe23db790b3dfa2f8fe1452eeb332dc9237ab254d868ca664a1f",
+   "assinatura": "9755526c383d2ae592e908177c714ebd16c80e057837f3bd2eca3fe3ed204fc1",
+   "resultados": "7339272a455ac0160cb6de19741e74da5f9807e637ed8b91481acc526ae1cf8b"
   },
   {
    "variante": "v21_a",
@@ -106,8 +106,8 @@
    "vitorias": 6,
    "lesoes": 4,
    "log_sha": "8e8980f109d3620f3a74fe032621ac841a3ff4c80d880d069ac814efb3f4641e",
-   "assinatura": "90de1a7955e105819318f197a44bc8d828c6cb4c1eb46afa4fdabb4411bc4bea",
-   "resultados": "f42d4b7c62a1f54f5f79f4378b40c5ec528d64815e4b47bcfee9c2b9a6298312"
+   "assinatura": "4e6b383f58fe4a24972879ac83e9424115be539d1c6a69bb5f237744a4d01734",
+   "resultados": "0e4c45f2c569852e34c0565a3a8053e226934166f2666253373c91e399204ce4"
   },
   {
    "variante": "v21_a",
@@ -115,11 +115,11 @@
    "estagio": "crianca",
    "eventos": 314,
    "lutas": 20,
-   "vitorias": 3,
+   "vitorias": 7,
    "lesoes": 3,
    "log_sha": "03d648b4d8ae5fdbb6eb80fafeb83d918ce9ca964102bf97035d8367e4ebaaea",
-   "assinatura": "0b38905540bbf926db48ef2f0428e38731c0cf1fde014f0865be44df8cbf5e63",
-   "resultados": "cc0ba049c701b823dad3a13c34b25ff6acdd8d68db448c25631f936bfd874a30"
+   "assinatura": "313c4008aaa0503a70a060235e2305bea44a49106602cae5d0122129b5995f36",
+   "resultados": "3baabb96494323abd37173510bb11bc385cf9719344ad76afb0ba063d9d56c86"
   },
   {
    "variante": "v21_a",
@@ -127,11 +127,11 @@
    "estagio": "crianca",
    "eventos": 309,
    "lutas": 20,
-   "vitorias": 5,
+   "vitorias": 6,
    "lesoes": 3,
    "log_sha": "4ef9f3a594127ceb85f20ae36a7bb93120530b2d478853189295db691dc2a56b",
-   "assinatura": "3499fefe9cd97fa3b324aafeaf50e01b3b9d0e027ef64c65dbbe389bf0525b2c",
-   "resultados": "4e62c877937cb721c662a1a9348a34e9425b73e76cf6d3fcf24bcd68e76d0cb4"
+   "assinatura": "ea614a89558ca1c359cd4667b49a197086e2fbc9d9be5666ef039bf17c04c22b",
+   "resultados": "c647d8a4665bc3b90b46be47aae83f901a7129ab6f512f7ab67cae83f0576cea"
   }
  ]
 }

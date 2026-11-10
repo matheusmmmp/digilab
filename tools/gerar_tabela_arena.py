@@ -50,6 +50,20 @@ NPCS = {
 # nomes do catalogo do DigiLab que o atlas da arena escreve de outro jeito (alem de espaco e caixa): o APELIDO_ATLAS do #448
 APELIDO_ATLAS = {"Ankylomon": "Ankiromon"}
 ATRIBUTOS = ("Vaccine", "Virus", "Data", "Free", "None", "Unknown")
+# LP-8 (docs/TAREFA_V3_LUTA_POC.md, secao 8; a LP3b): os golpes que sao de longe na serie, mas sem projetil nos dados do jogo, ganham um
+# projetil nosso, com o proprio efeito de acerto do Digimon voando. A lista e a da LP3 (web/app/src/telas/lutar/palcoPoc/projetilNosso.ts),
+# PROPOSTA, SEM FONTE alem da serie. A velocidade e o tipo sao os de todos os projeteis da tabela (30 unidades/s, "Guide": a mediana e o
+# unico tipo nos dados do jogo), PROPOSTOS, SEM FONTE. Com a velocidade 30, o fatorRitmo nao muda ((30/30)^kProj = 1). A tabela da POC
+# sem estes projeteis continua no git (GOLPES_DA_POC) para a fidelidade da LP1
+PROJETEIS_LP8 = {
+    "Gabumon": "Fx_Gabumon_Attack_Hit",
+    "Garurumon": "Fx_Garurumon_Attack_Hit",
+    "MetalGarurumon": "Fx_MetalGarurumon_Attack_Hit",
+    "Angemon": "Fx_Angelmon_Attack_Hit",
+    "Gargomon": "Fx_Gargomon_Attack_Hit",
+}
+VEL_LP8 = 30.0
+TIPO_LP8 = "Guide"
 
 
 def falha(msg: str) -> None:
@@ -131,6 +145,8 @@ def gerar(dados: Path) -> str:
     idx = {norma(n): n for n in atlas}
     linhas = []
     recuos = []
+    da_poc = []
+    usados_lp8 = set()
     for chave, (nome, estagio) in {**ler_formas(), **NPCS}.items():
         dig = idx.get(norma(APELIDO_ATLAS.get(nome, nome)))
         if not dig:
@@ -145,6 +161,15 @@ def gerar(dados: Path) -> str:
             bruto = GOLPE_GENERICO
             recuos.append(f"{dig}: sem script de ataque no jogo, golpe generico")
         g = golpe_base(bruto, f"{dig}.golpe")
+        if dig in PROJETEIS_LP8:
+            if g["proj"] or bruto.get("skill"):
+                falha(f"{dig}: a LP-8 e so para golpe sem projetil e sem habilidade propria")
+            prefab = PROJETEIS_LP8[dig]
+            if prefab not in [h["prefab"] for h in g["hits"]]:
+                falha(f"{dig}: o projetil da LP-8 tem de ser o efeito de acerto dele ({prefab})")
+            da_poc.append(f"  {json.dumps(chave)}: {json.dumps(g, ensure_ascii=False)},")
+            g = golpe_base({**bruto, "proj": {"prefab": prefab, "vel": VEL_LP8, "tipo": TIPO_LP8}}, f"{dig}.golpe (LP-8)")
+            usados_lp8.add(dig)
         sk = golpe_base(bruto["skill"], f"{dig}.habilidade") if bruto.get("skill") else None
         ms_atk, tag_atk = duracao(A, g["anim"])
         ms_sk, tag_sk = duracao(A, (sk or g)["anim"])
@@ -155,6 +180,8 @@ def gerar(dados: Path) -> str:
         item = {"digimon": dig, "nome": nome, "estagio": estagio, "atributo": atr, "generico": generico,
                 "golpe": g, "habilidade": sk, "msGolpe": ms_atk, "msHabilidade": ms_sk}
         linhas.append(f"  {json.dumps(chave)}: {json.dumps(item, ensure_ascii=False)},")
+    if usados_lp8 != set(PROJETEIS_LP8):
+        falha(f"LP-8: sem forma no jogo para {sorted(set(PROJETEIS_LP8) - usados_lp8)}")
     shas = "\n".join(f"   - {n}.json sha256 {sha(p)}" for n, p in arqs.items())
     rec = "\n".join(f"   - {r}" for r in recuos) or "   - nenhum"
     return f"""/* GERADO por tools/gerar_tabela_arena.py; nao editar a mao (python tools/gerar_tabela_arena.py --conferir confere).
@@ -166,12 +193,23 @@ def gerar(dados: Path) -> str:
    entram (LP-3). `fr` e o fatorRitmo da POC ja calculado (kGolpe = {K_GOLPE}, kProj = {K_PROJ}); msGolpe e msHabilidade sao a duracao (ms) dos
    clipes no atlas. Os recuos do prototipo (explicitos, como a P4 da UP-ARENA):
 {rec}
-   Os numeros sao do jogo; o uso deles na luta e PROPOSTO ate a LP5. */
-import type {{ DadosForma }} from "./tipos.ts";
+   Os numeros sao do jogo; o uso deles na luta e PROPOSTO ate a LP5.
+   LP-8 (a LP3b): {", ".join(sorted(PROJETEIS_LP8))} atiram o proprio efeito de acerto como projetil (velocidade {VEL_LP8:g}, "{TIPO_LP8}"; PROPOSTO,
+   SEM FONTE); o golpe deles na POC, sem projetil, fica em GOLPES_DA_POC (a fidelidade da LP1 usa FORMAS_ARENA_POC). */
+import type {{ DadosForma, GolpeBase }} from "./tipos.ts";
 
 export const FORMAS_ARENA: Readonly<Record<string, DadosForma>> = {{
 {chr(10).join(linhas)}
 }};
+
+/** o golpe da POC (sem o projetil da LP-8) das formas que ganharam o projetil nosso */
+export const GOLPES_DA_POC: Readonly<Record<string, GolpeBase>> = {{
+{chr(10).join(da_poc)}
+}};
+
+/** a tabela como na POC (a fidelidade da LP1 contra o gabarito do harness): as formas da LP-8 com o golpe de antes */
+export const FORMAS_ARENA_POC: Readonly<Record<string, DadosForma>> = Object.fromEntries(
+  Object.entries(FORMAS_ARENA).map(([k, f]) => [k, GOLPES_DA_POC[k] ? {{ ...f, golpe: GOLPES_DA_POC[k] }} : f]));
 """
 
 
