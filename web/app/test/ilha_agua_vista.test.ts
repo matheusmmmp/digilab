@@ -69,7 +69,7 @@ describe("a grade da ilha com agua", () => {
     for (const [x, z] of ilha.pontes) expect(ilha.cel(x, z)!.tipo).toBe("caminho");
     /* o corrimao so nas beiras que dao para a agua: cada celula de ponte tem agua de um lado pelo menos em uma das pontes */
     const beiras = celulasDoCorrimao(ilha);
-    expect(beiras.length).toBeGreaterThanOrEqual(6);
+    expect(beiras.length).toBe(8);
     for (const b of beiras) {
       expect(ilha.pontes.some(([x, z]) => x === b.x && z === b.z)).toBe(true);
       expect(ilha.cel(b.x + b.dx, b.z + b.dz)!.tipo).toBe("agua");

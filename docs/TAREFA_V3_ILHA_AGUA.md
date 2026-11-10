@@ -127,3 +127,15 @@ A água no mundo do Python, sem mudar nenhuma vida de antes.
   categoria `obstaculo`; a bola para na margem em vez de quicar. Os motivos estão em `docs/registro/2026-11.md`.
 - **Os gates:** G-AG-1 (os gabaritos de antes byte a byte), G-AG-2 (nada na água, tick a tick, em duas vidas de 2 dias do gabarito e uma
   na ilha com árvores), G-AG-3 (o layout ilhado falha alto) e G-AG-5 (o pet cruza pela ponte) em `tests/test_ilha_agua.py`.
+
+## 10. IA2 e IA3: o que foi construído (2026-11-10)
+
+- **IA2, a web:** o espelho da água no motor TypeScript (`web/app/motor/`), com a paridade contra o gabarito do Python decisão a decisão
+  (`web/app/test/ilha_agua.test.ts`). O jogo de hoje não muda.
+- **IA3, a vista:** com água no layout, a grade da ilha (`web/app/src/telas/pet/ilha/grade.ts`) desenha a terra do motor célula a célula,
+  com a praia em volta, o rio, a lagoa e o mar na moldura. Os lugares e os marcos ficam dentro da ilha (`PLANTA_ILHA_AGUA`), e as pontes
+  são feitas por código (`ponte.ts`). A prévia é `?ilha=agua`; o jogo só passa a usá-la na IA4.
+- **O mapa mudou na IA3:** o rio ficou reto debaixo das duas pontes (6 células). A terra tem 1 321 células.
+- **Fica para a IA4:** ligar no jogo (a versão do pet e a passagem dos pets vivos), o pet que hoje atravessa os marcos, e a ida do pet
+  até um lugar aberto, que é em linha reta e cruzaria o rio.
+
