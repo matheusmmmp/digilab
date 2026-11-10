@@ -603,3 +603,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-10 — MUNDO_ENFEITES, a lata gigante feita à mão por script e posta no mapa (Gerente, Claude Code, Fable 5.2, branch `v3-objeto-lata-mao`)](registro/2026-11.md)
 - [2026-11-09 — INDIVIDUALIDADE, as decisões depois do I2 (worker, Claude Code, Opus 5.5, branch `v3-individualidade-i5-plano`)](registro/2026-11.md)
 - [2026-11-09 — INDIVIDUALIDADE, I5: o plano APROVADO (worker, Claude Code, Opus 5.5, branch `v3-individualidade-i5-plano`)](registro/2026-11.md)
+- [2026-11-10 — UX_TELA_PET, o céu sem as silhuetas (Gerente de MUNDO_ENFEITES, Claude Code, Fable 5.2, branch `v3-ceu-sem-silhuetas`)](registro/2026-11.md)
