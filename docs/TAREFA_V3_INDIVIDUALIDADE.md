@@ -197,3 +197,14 @@ O plano (#700) e a faixa 85101…85505 estão APROVADOS. O I2a é o código ante
   - O afastamento do ramo é medido pelos perfis do I5, contra um gêmeo com outro acaso desde o nascimento.
   - Três hipóteses rivais ficam escritas antes: a canalização, o ciclo que se reforça e o caos.
 - **Sem mecanismo novo** (IN-7). O I7a depende do I5a na `main` (#751), e o I7b roda depois do I5b.
+
+## O adendo 1 do plano do I7 (2026-11-10, Claude Code, Opus 5.5, branch `v3-individualidade-i7-adendo1`)
+
+- **O adendo** está PROPOSTO, na seção 12 do `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md`. Ele traz:
+  - uma quarta hipótese, a H-TRANS (caos cedo, canalização depois);
+  - a régua crua e a forma em U como condições das frases;
+  - a expectativa da malha fechada;
+  - dois descritivos: o estado interno e o efeito comum do tapa.
+
+  As decisões A1-1 a A1-5 ficam com o Matheus.
+- **A D-IND-I5b-1** (o dono separa os pets) está confirmada pelo Matheus.
