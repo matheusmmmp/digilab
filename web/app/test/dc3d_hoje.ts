@@ -1,13 +1,16 @@
 /* DC3d da CONVERSA_PET (docs/TAREFA_V3_CONVERSA_PET.md, secao DC3d): as vidas de hoje dos pets que abrem no jogo, gravadas ANTES do porte da
    subchave `fala_unidades` (o espelho TS, a marca do ovo de teste e a intencao da voz). Com a marca ausente (todo pet de hoje), estas vidas tem
    de sair byte a byte: o registro, a assinatura do pet, os motivos do modular e os conceitos do `dec-v2` da ultima decisao.
-   O dono cuida (racao no comedouro perto do pet, limpeza, carinho) e nao luta (as lutas sao o gabarito da PE0). So le o motor. */
+   O dono cuida (racao no comedouro perto do pet, limpeza, carinho) e nao luta. So le o motor.
+   Desde a LP4 da LUTA_POC so a v21 e o pet de teste v16 abrem: as variantes v13 a v19 sairam, e o gabarito foi regravado com as vidas v21 (o
+   modular e o A) e a v16. Antes de regravar, as vidas v21 e v16 sairam iguais as v19, v17_a e v16 gravadas em tudo menos na assinatura (o
+   GambitsPet, que a luta da POC nao tem; desvio no registro de 2026-11, LUTA_POC, LP4). */
 import { createHash } from "node:crypto";
 import { TPD } from "../motor/constantes.ts";
 import { hashSemente, Motor, PetMorto, petDeTeste, type EventoRegistro } from "../motor/index.ts";
 
-export type VarianteHoje = "v13" | "v14" | "v15" | "v16" | "v17_modular" | "v17_a" | "v18" | "v19";
-export const VARIANTES_HOJE: readonly VarianteHoje[] = ["v13", "v14", "v15", "v16", "v17_modular", "v17_a", "v18", "v19"];
+export type VarianteHoje = "v16" | "v21_modular" | "v21_a";
+export const VARIANTES_HOJE: readonly VarianteHoje[] = ["v16", "v21_modular", "v21_a"];
 export const SEMENTES_HOJE = [101, 202, 303, 404, 505] as const;
 export const DIAS_HOJE = 3;
 
@@ -21,13 +24,10 @@ export function nascerHoje(v: VarianteHoje, semente: number): Motor {
     m.ligarPonteLuta(true);
     return m;
   }
-  const versao = Number(v.slice(1, 3));
-  const m = new Motor(semente, versao);
+  const m = new Motor(semente);
   m.ligarProduto(PRODUTO);
-  if (versao >= 17) {
-    m.trocarCerebro(v === "v17_a" ? "a" : "modular");
-    m.ligarPonteLuta(true);
-  }
+  m.trocarCerebro(v === "v21_a" ? "a" : "modular");
+  m.ligarPonteLuta(true);
   return m;
 }
 
