@@ -485,7 +485,8 @@ depois do merge da LP3 na `main` (D-LP3b-6).
 
 Worker: Claude Code (Opus 5.5), worktree e branch `v3-luta-poc-lp4`, a pedido do Gerente de sprites e luta, com a liberação do Matheus
 ("Sim, abre a LP4", 2026-11-10, repassado). Os desvios estão em `docs/registro/2026-11.md`, seção "LUTA_POC, LP4". Três escolhas que perdem
-ou escondem dado são PROPOSTAS para o Matheus: a D-LP4-1, a D-LP4-2 e a D-LP4-3.
+ou escondem dado foram DECIDIDAS pelo Matheus em 2026-11-10 ("Aprovo tudo", repassado pelo Gerente, junto com as capturas): a D-LP4-1, a
+D-LP4-2 e a D-LP4-3. O risco do Gazimon (D-LP4-6) fica para a LP5.
 
 **A chave ligada.** `LUTA_POC_LIGADA = true` (`web/app/motor/arena/constantes.ts`). Com isso, para todos e sem `?luta_poc=1`:
 - os ovos novos e o pet de exemplo nascem v21 (`VERSAO_PET = 21`);
@@ -493,7 +494,7 @@ ou escondem dado são PROPOSTAS para o Matheus: a D-LP4-1, a D-LP4-2 e a D-LP4-3
 - o Importar só abre a v21;
 - a Arena, a Campanha e a Fronteira são as do palco novo.
 
-**O descarte 8 (PROPOSTA, D-LP4-2).** Roda uma vez, também onde o 7 já rodou pelo `?luta_poc=1`:
+**O descarte 8 (DECIDIDO, Matheus, 2026-11-10, D-LP4-2).** Roda uma vez, também onde o 7 já rodou pelo `?luta_poc=1`:
 - os pets v13 a v19 saem, o ativo e os guardados, com o aviso "A luta agora é na arena" e o arquivo para baixar;
 - no Tamer, sai a Fábrica do combate por turnos (v13 e v14), que não se refaz mais, com o registro de antes guardado no mesmo arquivo; o
   recorde da Fábrica recomeça. O resto do Tamer fica byte a byte;
@@ -511,7 +512,7 @@ ou escondem dado são PROPOSTAS para o Matheus: a D-LP4-1, a D-LP4-2 e a D-LP4-3
 - os testes e os scripts: os do combate por turnos, os gabaritos das versões antigas, `scripts/equilibrio_tr/` e
   `scripts/gerar_gabarito_vidas_v13.ts`; no e2e, os specs das telas de antes, e os saves regerados na v21.
 
-**O pet de teste (PROPOSTA, D-LP4-3).** Ele não luta mais. Um save v16 com luta não abre e fica no armazenamento, com o erro visível.
+**O pet de teste (DECIDIDO, Matheus, 2026-11-10, D-LP4-3).** Ele não luta mais. Um save v16 com luta não abre e fica no armazenamento, com o erro visível.
 
 **O que não mudou.** As vidas v21 dos gabaritos da LP2 e da LP2b, com o replay bit a bit: o lugar dos gambits e das cartas na assinatura
 ficou. O Python ficou (LP-7). Os registros não se apagaram, e o G-NADA-PERDIDO passa.
