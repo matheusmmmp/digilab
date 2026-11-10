@@ -65,6 +65,9 @@ export const ENFEITES_MODELOS = {
   /* o trilho refeito (docs/objetos3d/REFERENCIAS.md, 2026-11-07): o vagao de madeira do esboco, com a textura pintada e as normais
      suavizadas; a altura fica (o alto do vagao, como antes), mas o trecho de trilho e mais curto (~2,5 x 1,4), e a sombra encolhe junto */
   trilho: { arquivos: ["trilho/trilho.gltf"], altura: 2.0, vento: 0, sombra: 1.6, baixo: false },
+  /* a lata gigante de refrigerante (as faixas pastel e as cerejas; feita a mao por script em 2026-11-10, secao 17): era o marco do horizonte
+     do Digital (D4) e agora fica dentro do mapa, tombada de leve, mais alta que os pinheiros (PROPOSTO, SEM FONTE) */
+  lata: { arquivos: ["lata/lata.gltf"], altura: 7, vento: 0, sombra: 2.4, baixo: false },
 } as const satisfies Record<string, Modelo>;
 export type NomeEnfeite = keyof typeof ENFEITES_MODELOS;
 /** a mascara das partes que acendem a noite (o emissiveMap; fora do glTF, ao lado dele), por enfeite que tem luz */

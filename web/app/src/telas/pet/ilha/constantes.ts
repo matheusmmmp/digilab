@@ -99,13 +99,15 @@ export const SACO_FOLGA_POSTE = 0.14;
 export const COCO = { raio: 0.85, passo: 0.25, surgirMs: 380 } as const;
 
 /** os enfeites do mundo humano (docs/TAREFA_V3_MUNDO_ENFEITES.md; grade.ts, porEnfeites), desde a planta A (PLANTA_ILHA) em pontos fixos:
-    por enfeite, quantos por mapa e a folga de chao plano em volta (celulas); dos marcos (o carro, a geladeira e o trilho), o chao em que
+    por enfeite, quantos por mapa e a folga de chao plano em volta (celulas); dos marcos (o carro, a geladeira, o trilho e a lata gigante), o chao em que
     cada um pode ficar e a clareira que ele abre na decoracao. PROPOSTO, SEM FONTE */
 export const ENFEITES_GRADE = {
   poste: { quantos: 6, folga: 0 },
   carro: { quantos: 1, folga: 1, chao: ["grama"], clareira: 2.2 },
   geladeira: { quantos: 1, folga: 1, chao: ["areia"], clareira: 1.4 },
   trilho: { quantos: 1, folga: 1, chao: ["grama"], clareira: 2.2 },
+  /* a lata gigante (2026-11-10): saiu do horizonte do Digital e virou um marco da grade, ao norte, atras da area */
+  lata: { quantos: 1, folga: 2, chao: ["grama"], clareira: 3.2 },
 } as const;
 /** a planta A da ilha inicial (docs/pranchas/ux-ilha-layout/, IL-1 a IL-4 DECIDIDAS em 2026-11-08; a vista em docs/pranchas/ux-ilha-planta-a/):
     so a parte da vista, em celulas do mundo (x leste, z sul), a mesma em todo mapa de 64 x 30. O ninho, a tigela, a bola e as frutiferas sao
@@ -146,6 +148,7 @@ export const PLANTA_ILHA = {
     carro: { ponto: [-6.5, 19.5], entorno: { arbusto: 6, grama_alta: 8, pedra: 1, raio: 2.8 } },
     geladeira: { ponto: [50, 31.2], entorno: { arbusto: 0, grama_alta: 0, pedra: 3, raio: 2 } },
     trilho: { ponto: [69, 21], entorno: { arbusto: 4, grama_alta: 6, pedra: 2, raio: 2.8 } },
+    lata: { ponto: [16, -5], entorno: { arbusto: 3, grama_alta: 8, pedra: 2, raio: 3.8 } },
   },
   bosques: [[8, -6, 8, 4.2], [-6, 4, 3.4, 4.6], [-6, 25.6, 3.2, 2.6], [19, -8, 4, 3.4], [44, -6, 6, 3.6], [-5, -6, 4, 3.4], [56, -6, 6, 3.6]],
   vaos: [[31, -6, 5, 5]],
@@ -230,12 +233,4 @@ export const DIGITAL = {
      no alto (`topo`, a fracao da forca la em cima) */
   grade: { cor: "#b0e8f0", alfa: 0.3, espessura: 2.5, meridianos: 9, paralelos: 8, fuga: 0.25, topo: 0.55 },
   fios: { alto: 0.93, alcance: 10, porPoste: 2, queda: 0.06, segmentos: 12, cor: 0x2b2a33 },
-  /* a lata gigante (D4, o marco), no horizonte como na maquete B: a grade tem 64 celulas de largura e a camera segue o pet, entao um
-     marco parado num ponto so apareceria perto dele, e o mundo curvo o afundaria. Ela fica a `longe` celulas ao norte do pet e anda com
-     ele so com a fracao 1 - `paralaxe` (o que esta longe quase nao corre na tela); `lado` e a fracao da meia largura visivel a direita
-     do meio da tela (a mesma no celular e no desktop, longe do aviso do meio e do painel da direita); o pe fica a `base` do chao do pet,
-     com a dobra do mundo descontada (ela nao afunda), e a parte de baixo some atras do penhasco e da mata. A altura passa o dobro de
-     um pinheiro; o giro vira a frente (as cerejas, +z do glTF) um pouco para o lado, em tres quartos. Ajustados nas capturas da D4
-     (1280 e 390 px): PROPOSTO, SEM FONTE */
-  lata: { arquivo: "mapa_digital/lata/lata.gltf", longe: 46, lado: 0.22, paralaxe: 0.12, base: -12, altura: 9, giro: -0.35 },
 } as const;

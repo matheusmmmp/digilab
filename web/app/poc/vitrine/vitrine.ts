@@ -4,7 +4,7 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { CURVA, carregarVariante, usarDoisTons } from "../../src/telas/pet/ilha/cena.ts";
-import { CONTORNO_DIGITAL, DIGITAL } from "../../src/telas/pet/ilha/constantes.ts";
+import { CONTORNO_DIGITAL } from "../../src/telas/pet/ilha/constantes.ts";
 import { ENFEITES_MODELOS, ITENS_MODELOS, LUGARES_MODELOS, MODELOS, type Modelo } from "../../src/telas/pet/ilha/modelos.ts";
 import { Pos, PRESETS } from "../../src/telas/pet/ilha/pos.ts";
 
@@ -13,7 +13,6 @@ const base = document.baseURI.replace(/poc\/.*$/, "");
 const itens: Item[] = [];
 for (const [n, m] of Object.entries(LUGARES_MODELOS)) itens.push({ grupo: "Lugares", nome: n, url: "lugares/" + m.arquivos[0], modelo: m });
 for (const [n, m] of Object.entries(ENFEITES_MODELOS)) itens.push({ grupo: "Enfeites", nome: n, url: "enfeites/" + m.arquivos[0], modelo: m });
-itens.push({ grupo: "Enfeites", nome: "lata", url: DIGITAL.lata.arquivo, modelo: { arquivos: [DIGITAL.lata.arquivo], altura: 4, vento: 0, sombra: 0, baixo: false } });
 for (const [n, m] of Object.entries(ITENS_MODELOS)) itens.push({ grupo: "Itens", nome: n, url: "itens/" + m.arquivos[0], modelo: m });
 for (const [n, m] of Object.entries(MODELOS)) for (const a of m.arquivos) itens.push({ grupo: "Kits da natureza (Digital)", nome: `${n} · ${a.split("/").pop()!.replace(/\.gl(tf|b)$/, "")}`, url: "kits3d_digital/" + a, modelo: m });
 
