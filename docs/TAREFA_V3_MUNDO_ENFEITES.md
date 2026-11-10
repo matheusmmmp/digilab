@@ -393,3 +393,29 @@ faixas em manchas picotadas, bem longe do concept.
 **Não feito:** não houve revisor separado nem prancha de capturas no git; a conferência foi na vitrine e no jogo, no estilo da Ilha. O
 estilo Digital dentro do jogo, o celular e o e2e não foram conferidos. Os arquivos da lata da Meshy ficam em `docs/mapa_digital/lata/`
 como histórico. Os desvios estão em `docs/registro/2026-11.md`, D-OBJ-LATA-1 a 4.
+
+## 18. O poste e o trilho em cartoon, feitos à mão por script (2026-11-10, Gerente, Claude Code, Fable 5.2, branch `v3-objetos-cartoon`)
+
+**O pedido do Matheus (2026-11-10):** depois do levantamento do padrão dos objetos (cinco jeitos de fazer, cada um com uma cara), "então
+faz tudo em estilo cartoon pra ver como fica". É um teste para ele olhar: a decisão entre o cartoon e o voxel continua dele.
+
+**O que mudou:**
+
+- **O poste** (`docs/objetos3d/cartoon/poste.py`) troca o poste em blocos da seção 14. É o mesmo lampião de ferro verde com a hera: o pé,
+  a coluna e o colar são uma superfície de revolução, a lanterna e o chapéu são troncos de pirâmide, e a hera é uma faixa pintada em
+  espiral. 366 triângulos (teto 554). A máscara `poste_luz.png` acende os vidros à noite, como antes; o meio da lanterna fica a 0,77 da
+  altura, e o `ENFEITE_HALO` não muda.
+- **O trilho** (`docs/objetos3d/cartoon/trilho.py`) troca o vagão da Meshy. Segue o esboço 1 do trem: o vagão vermelho de tábuas, as três
+  escotilhas douradas de cada lado, o teto de lona e um trecho de trilho com cinco dormentes. 841 triângulos (teto 2 414).
+- **A base comum** (`docs/objetos3d/cartoon/comum.py`): a superfície de revolução, o prisma, o tronco de pirâmide, os tons pela normal e
+  a máscara de luz. Os sólidos, o atlas e a escrita do glTF continuam os do `carro_mao.py`. O `docs/objetos3d/cartoon/publicar.py`
+  publica qualquer um dos quatro objetos (o portão e a barraca estão no `docs/TAREFA_V3_LUGARES_3D.md`, seção 19).
+- A altura, a sombra e o lugar de cada um no mapa não mudam. O motor, o log e o save não mudam.
+- Sem IA, sem Blender e determinístico. Não gastou crédito da Meshy.
+
+**Os testes:** o `web/app/test/ilha_enfeites.test.ts` confere a procedência dos dois e a máscara do poste.
+
+**Não feito:** o saco, o kit e o cocô (os itens) e os kits da natureza continuam como estão. Não houve revisor separado nem prancha de
+capturas no git; a conferência foi na vitrine e no jogo, no estilo da Ilha, de dia. A noite (o poste aceso), o estilo Digital, o celular
+e o e2e não foram conferidos. Os arquivos do poste em blocos e do vagão da Meshy ficam em `docs/objetos3d/poste/` e
+`docs/objetos3d/trem/` como histórico. Os desvios estão em `docs/registro/2026-11.md`, D-CARTOON-1 a 5.

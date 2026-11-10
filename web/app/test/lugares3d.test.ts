@@ -56,6 +56,15 @@ describe("os arquivos dos lugares (G1 a G8, teto dos marcos)", () => {
 
   /* o cais feito a mao (secao 18): sai do script, sem IA, uma malha e uma textura; as medidas dele estao em celulas, entao a altura da
      tabela e a do modelo (escala 1) e o pe fica no fundo do mar (as estacas e o casco entram na agua) */
+  /* o portao e a barraca em cartoon (docs/TAREFA_V3_LUGARES_3D.md, secao 19): saem dos scripts de docs/objetos3d/cartoon/, sem IA; o portao
+     continua com a mascara do portal */
+  for (const n of ["portao", "barraca"] as const) test(`${n} em cartoon: a procedencia e uma malha so`, () => {
+    const g = JSON.parse(readFileSync(join(LUG, LUGARES_MODELOS[n].arquivos[0]), "utf8")) as Gltf;
+    expect(g.asset.extras?.gerado_por_ia).toBe(false);
+    expect(g.asset.extras?.gerador).toContain(`docs/objetos3d/cartoon/${n}.py`);
+    expect(g.meshes.length).toBe(1); expect(g.meshes[0].primitives.length).toBe(1); expect(g.images?.length).toBe(1);
+    expect(LUGARES_LUZ[n]).toBe(n === "portao" ? "portao/portao_luz.png" : undefined);
+  });
   test("o cais feito a mao: a procedencia, a escala 1 e o pe no fundo do mar", () => {
     const g = JSON.parse(readFileSync(join(LUG, LUGARES_MODELOS.cais.arquivos[0]), "utf8")) as Gltf & { accessors: { min?: number[]; max?: number[] }[] };
     expect(g.asset.extras?.gerado_por_ia).toBe(false);

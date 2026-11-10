@@ -329,3 +329,29 @@ fora os anéis de corda nos postes, a janela da cabine e os tons por tábua, que
 **Não feito:** não houve revisor separado nem prancha de capturas no git; a conferência foi na vitrine e no jogo, no estilo da Ilha, de dia
 e de noite. O estilo Digital dentro do jogo, o celular e o e2e não foram conferidos. O toque no cais usa a caixa do modelo, que mudou de
 forma; o cais segue trancado. Os desvios estão em `docs/registro/2026-11.md`, D-OBJ-CAIS-M1 a M4.
+
+## 19. O portão e a barraca em cartoon, feitos à mão por script (2026-11-10, Gerente, Claude Code, Fable 5.2, branch `v3-objetos-cartoon`)
+
+**O pedido do Matheus (2026-11-10):** "então faz tudo em estilo cartoon pra ver como fica", depois do levantamento do padrão dos objetos.
+É um teste para ele olhar: a decisão entre o cartoon e o voxel continua dele.
+
+**O que mudou:**
+
+- **O portão** (`docs/objetos3d/cartoon/portao.py`) troca o da Meshy. Segue o esboço 1: dois pilares de quatro blocos de pedra, um arco
+  de sete pedras em cunha com a chave maior, o portal ciano (a grade e o redemoinho pintados num plano), duas flâmulas vermelhas na
+  frente e o musgo. 457 triângulos. A máscara `portao_luz.png` acende o portal quando o lugar abre, como antes.
+- **A barraca** (`docs/objetos3d/cartoon/barraca.py`) troca a da Meshy. Segue o esboço 1: o domo turquesa de base quadrada arredondada,
+  as costuras nas quatro varetas, os remendos, o rolo da porta, a antena no alto, os quatro estais com as estacas e o banquinho com os
+  livros. A porta é pintada no domo (a entrada sem vão, como antes). 743 triângulos.
+- A altura, a sombra e o ponto de cada lugar não mudam. O motor, o log e o save não mudam.
+- A base comum e o script que publica estão em `docs/objetos3d/cartoon/` (o `docs/TAREFA_V3_MUNDO_ENFEITES.md`, seção 18).
+- **O conserto do cais (D-OBJ-CAIS-M5):** ao fazer o vagão, a caixa de quinas vivas do `cais_mao.py` mostrou duas das cinco faces de
+  costas. O conserto entrou no branch do cais (#752), e o cais foi regerado.
+
+**Os testes:** o `web/app/test/lugares3d.test.ts` confere a procedência dos dois; o `web/app/test/ilha_lugares.test.ts` troca o teste do
+chão de dentro da barraca (ele lia um ponto da textura da Meshy) por um que confere o escuro pintado da porta.
+
+**Não feito:** não houve revisor separado nem prancha de capturas no git. No jogo, o portão e a barraca aparecem apagados porque estão
+trancados no save de teste (o nível do Tamer); as cores foram conferidas na vitrine. O lugar aberto (o portal aceso), o estilo Digital,
+o celular e o e2e não foram conferidos. Os arquivos da Meshy ficam em `docs/objetos3d/portao/` e `docs/objetos3d/barraca/` como
+histórico. Os desvios estão em `docs/registro/2026-11.md`, D-CARTOON-1 a 5.

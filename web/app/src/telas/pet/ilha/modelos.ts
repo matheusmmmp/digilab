@@ -51,8 +51,8 @@ export type NomeItem = keyof typeof ITENS_MODELOS;
 
 /* Os enfeites do mundo humano na moldura (docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 3): outra tabela irma, em public/enfeites/<nome>/, com
    o License.txt de procedencia propria. A grade (grade.ts, porEnfeites) sorteia onde ficam; a vista (enfeites.ts) os poe instanciados.
-   O poste: o lampiao gerado pela Meshy (o poste do City Kit Roads da Kenney, CC0, foi testado e saiu um poste de rodovia, sem nada da
-   ilha); a altura e a de um poste na escala do pet (o pet tem cerca de 1 celula). PROPOSTO, SEM FONTE */
+   O poste: o lampiao de ferro verde com a hera, em cartoon, feito a mao por script desde 2026-11-10 (secao 18; antes, o da Meshy e o em
+   blocos); a altura e a de um poste na escala do pet (o pet tem cerca de 1 celula). PROPOSTO, SEM FONTE */
 export const ENFEITES_MODELOS = {
   poste: { arquivos: ["poste/poste.gltf"], altura: 4.5, vento: 0, sombra: 0.4, baixo: false },
   /* o carro: o hatch retro azul com ferrugem e o jardim no teto, feito a mao por script desde 2026-11-09 (secao 15; antes, o da Meshy do retrabalho de 2026-11-07, secao 12; a caminhonete da
@@ -62,8 +62,8 @@ export const ENFEITES_MODELOS = {
   carro: { arquivos: ["carro/carro.gltf"], altura: 4.8, vento: 0, sombra: 2.3, baixo: false },
   /* a geladeira com o vaso (feita a mao por script desde 2026-11-09, secao 16) e o trilho com o vagao (E3); na escala de brinquedo do carro */
   geladeira: { arquivos: ["geladeira/geladeira.gltf"], altura: 3.0, vento: 0, sombra: 1.4, baixo: false },
-  /* o trilho refeito (docs/objetos3d/REFERENCIAS.md, 2026-11-07): o vagao de madeira do esboco, com a textura pintada e as normais
-     suavizadas; a altura fica (o alto do vagao, como antes), mas o trecho de trilho e mais curto (~2,5 x 1,4), e a sombra encolhe junto */
+  /* o trilho com o vagao de madeira do esboco, em cartoon, feito a mao por script desde 2026-11-10 (secao 18; antes, o da Meshy com a
+     textura pintada); a altura fica (o alto do vagao, como antes), mas o trecho de trilho e mais curto (~2,5 x 1,4), e a sombra encolhe junto */
   trilho: { arquivos: ["trilho/trilho.gltf"], altura: 2.0, vento: 0, sombra: 1.6, baixo: false },
   /* a lata gigante de refrigerante (as faixas pastel e as cerejas; feita a mao por script em 2026-11-10, secao 17): era o marco do horizonte
      do Digital (D4) e agora fica dentro do mapa, tombada de leve, mais alta que os pinheiros (PROPOSTO, SEM FONTE) */
@@ -74,7 +74,7 @@ export type NomeEnfeite = keyof typeof ENFEITES_MODELOS;
 export const ENFEITES_LUZ: Partial<Record<NomeEnfeite, string>> = { poste: "poste/poste_luz.png" };
 
 /* Os lugares da ilha (docs/TAREFA_V3_LUGARES_3D.md; os "Lugares da ilha" de docs/PLANO_V3_PROGRESSAO_TUTORIAL.md, P-11): outra tabela irma,
-   em public/lugares/<nome>/, gerada pela Meshy (o portao e a barraca) ou feita a mao por script (o cais), com o License.txt ao lado. Quem os poe na cena (o ponto, o giro, o trancado e o aberto) e o
+   em public/lugares/<nome>/, feita a mao por script (o cais; o portao e a barraca em cartoon desde 2026-11-10, secao 19; antes, os da Meshy), com o License.txt ao lado. Quem os poe na cena (o ponto, o giro, o trancado e o aberto) e o
    modulo ilha/lugaresCena.ts (a tabela da UX_TELA_PET em ilha/lugares.ts), pelo carregarVariante (cena.ts), que normaliza o modelo para a altura daqui. O portao: o arco
    de pedra com o portal ciano (o lugar do Lutar), um pouco mais alto que um pinheiro baixo, para o pet (~1 celula) passar folgado. A barraca:
    o domo de lona com a antena (o lugar do Diario; refeita em 2026-11-08, docs/TAREFA_V3_LUGARES_3D.md, secao 14), 3,6 celulas com a

@@ -130,3 +130,17 @@ describe("a lata gigante feita a mao por script", () => {
     expect(ENFEITES_LUZ.lata).toBeUndefined();
   });
 });
+
+/* o poste e o trilho em cartoon (docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 18): saem dos scripts de docs/objetos3d/cartoon/, sem IA */
+describe("o poste e o trilho em cartoon, feitos a mao por script", () => {
+  for (const n of ["poste", "trilho"] as const) test(n, () => {
+    const g = JSON.parse(readFileSync(join(ENF, ENFEITES_MODELOS[n].arquivos[0]), "utf8")) as Gltf;
+    expect(g.asset.extras?.gerado_por_ia).toBe(false);
+    expect(g.asset.extras?.gerador).toContain(`docs/objetos3d/cartoon/${n}.py`);
+    expect(g.meshes.length).toBe(1); expect(g.meshes[0].primitives.length).toBe(1); expect(g.images?.length).toBe(1);
+  });
+  test("o poste continua com a mascara dos vidros, e o trilho sem luz", () => {
+    expect(ENFEITES_LUZ.poste).toBe("poste/poste_luz.png"); expect(ENFEITES_LUZ.trilho).toBeUndefined();
+    expect(existsSync(join(ENF, ENFEITES_LUZ.poste!))).toBe(true);
+  });
+});
