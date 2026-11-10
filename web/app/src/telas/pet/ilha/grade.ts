@@ -7,8 +7,8 @@
      (com a cachoeira onde ele desce do plato) e a mata densa; ao sul, a areia e o mar. Na borda do mapa do motor fica o pe do penhasco
      (norte e oeste), o rio (leste) ou a areia (sul): o pet para ali porque o motor o prende, e a vista mostra um limite.
    A vista (cena.ts) so desenha o que esta aqui. Todos os numeros sao do desenho: PROPOSTO, SEM FONTE. */
-import type { ConfigMundo } from "../../../../motor/index.ts";
-import { ENFEITES_GRADE, FIM_ILHA, PLANTA_ILHA } from "./constantes.ts";
+import { AGUA_DOCE, AGUA_MAR, AGUA_POR_LAYOUT, PONTE, celulasSecas, type ConfigMundo } from "../../../../motor/index.ts";
+import { ENFEITES_GRADE, FIM_ILHA, ILHA_AGUA, PLANTA_ILHA, PLANTA_ILHA_AGUA, type PlantaIlha } from "./constantes.ts";
 import { ENFEITES_MODELOS, MODELOS, MODELO_ARVORE_DO_MOTOR, type NomeEnfeite, type NomeLugar, type NomeModelo } from "./modelos.ts";
 
 /** a moldura em volta da area andavel, em celulas (pelo menos 8 de cada lado, secao 5) */
@@ -105,15 +105,34 @@ export class Ilha {
   readonly rioX: number;
 
   readonly cm: ConfigMundo;
+  /** a ilha onde so a agua barra o pet (docs/TAREFA_V3_ILHA_AGUA.md, IA3): o layout do motor tem agua (AGUA_POR_LAYOUT). A ilha inteira
+      fica dentro do mapa do motor, a moldura e so mar, e nao ha penhasco, plato nem mata */
+  readonly comAgua: boolean;
+  /** a planta que vale: a A (PLANTA_ILHA) ou a da ilha com agua (PLANTA_ILHA_AGUA) */
+  readonly planta: PlantaIlha;
+  /** as celulas de ponte do layout com agua (ponte.ts as desenha); vazio sem agua */
+  readonly pontes: [number, number][] = [];
 
   constructor(cm: ConfigMundo) {
     this.cm = cm;
     const W = cm.celulas_x, H = cm.celulas_y, L = cm.layout;
     this.area = { w: W, h: H };
-    this.x0 = -MOLDURA.oeste; this.z0 = -MOLDURA.norte;
-    this.larg = W + MOLDURA.oeste + MOLDURA.leste; this.prof = H + MOLDURA.norte + MOLDURA.sul;
+    this.comAgua = celulasSecas(cm) !== null;
+    this.planta = this.comAgua ? PLANTA_ILHA_AGUA : PLANTA_ILHA;
+    const M = this.comAgua ? { oeste: ILHA_AGUA.moldura, leste: ILHA_AGUA.moldura, norte: ILHA_AGUA.moldura, sul: ILHA_AGUA.moldura } : MOLDURA;
+    this.x0 = -M.oeste; this.z0 = -M.norte;
+    this.larg = W + M.oeste + M.leste; this.prof = H + M.norte + M.sul;
     this.rioX = W + RIO.desde;
     const semente = sementeDoLayout(L.nome);
+    if (this.comAgua) {
+      this.porAgua();
+      const ninhoA: [number, number] = [L.ninho[0] + 0.5, L.ninho[1] + 0.5], comedouroA: [number, number] = [L.comedouro[0] + 0.5, L.comedouro[1] + 0.5];
+      this.porObjetos(semente, ninhoA, comedouroA);
+      this.porLugares();
+      this.porPlanta(semente, comedouroA);
+      this.porEnfeites(semente);
+      return;
+    }
     const bordaMorro = ruido1(semente ^ 0x11, 9), bordaMar = ruido1(semente ^ 0x23, 11), bordaPlato = ruido1(semente ^ 0x37, 7);
     const ninho: [number, number] = [L.ninho[0] + 0.5, L.ninho[1] + 0.5], comedouro: [number, number] = [L.comedouro[0] + 0.5, L.comedouro[1] + 0.5];
     const caminho: [number, number][] = [ninho, comedouro, [comedouro[0] + 3.5, comedouro[1] + 2], [Math.min(W - 1, comedouro[0] + 7), comedouro[1] + 1.5]];
@@ -151,6 +170,34 @@ export class Ilha {
     this.porLugares();
     this.porPlanta(semente, comedouro);
     this.porEnfeites(semente);
+  }
+
+  /* as celulas da ilha com agua, do mapa do motor (AGUA_POR_LAYOUT): o mar (fora do mapa e onde o mapa diz) no nivel -1, a agua doce
+     (o rio e a lagoa) no nivel 0, a ponte como caminho, e a terra em grama, ou em areia a ate `praia` celulas do mar (`praiaSul` no sul) */
+  private porAgua(): void {
+    const W = this.area.w, H = this.area.h, L = this.cm.layout, linhas = AGUA_POR_LAYOUT[L.nome], A = ILHA_AGUA;
+    const mar = (x: number, z: number) => x < 0 || z < 0 || x >= W || z >= H || linhas[z][x] === AGUA_MAR;
+    for (let j = 0; j < this.prof; j++) for (let i = 0; i < this.larg; i++) {
+      const x = this.x0 + i, z = this.z0 + j;
+      let nivel = 0, tipo: Tipo = "grama", regiao: Regiao = FORA;
+      if (mar(x, z)) { tipo = "agua"; nivel = -1; }
+      else {
+        const r = L.regioes.find(([, a, b]) => a <= x && x <= b);
+        if (!r) throw new Error(`celula ${x} do mapa fora de toda regiao do layout`);
+        regiao = r[0];
+        const ch = linhas[z][x];
+        if (ch === AGUA_DOCE) tipo = "agua";
+        else if (ch === PONTE) { tipo = "caminho"; this.pontes.push([x, z]); }
+        else {
+          const d = z >= A.sulDesde ? A.praiaSul : A.praia;
+          let praia = false;
+          for (let dz = -d; dz <= d && !praia; dz++) for (let dx = -d; dx <= d; dx++) if (mar(x + dx, z + dz)) { praia = true; break; }
+          if (praia) tipo = "areia";
+        }
+      }
+      const h = nivel < 0 ? FUNDO_AGUA - 0.5 : tipo === "agua" ? FUNDO_AGUA : 0;
+      this.celulas.push({ tipo, nivel, cantos: [h, h, h, h], regiao });
+    }
   }
 
   /** a celula (x, z) em celulas do motor, ou undefined fora da grade */
@@ -271,7 +318,7 @@ export class Ilha {
      das arvores do motor (a clareira) e um do outro; o cais na ultima linha de areia antes do mar, na coluna da planta. A frente (+z do glTF):
      fora da area, para o ponto mais perto dela; dentro (a barraca), para a praca. Cada um abre a clareira dele. Falha alto se faltar lugar */
   private porLugares(): void {
-    const P = PLANTA_ILHA, doMotor = this.objetos.filter(o => o.doMotor !== null);
+    const P = this.planta, doMotor = this.objetos.filter(o => o.doMotor !== null);
     for (const nome of ["portao", "barraca"] as const) {
       const G = P.lugares[nome];
       const [x, z] = this.pertoDe(G.alvo, G.busca, (x, z) => this.plana(x, z, G.folga)
@@ -285,6 +332,8 @@ export class Ilha {
     const C = P.lugares.cais, i = Math.floor(C.x);
     let j = this.area.h;
     while (this.cel(i, j + 1)?.tipo === "areia") j++;
+    /* na ilha com agua a praia fica dentro do mapa: a ultima linha de terra da coluna, de sul para norte */
+    if (this.comAgua) { j = this.area.h - 1; while (j > 0 && this.cel(i, j)?.tipo === "agua") j--; }
     if (this.cel(i, j)?.tipo !== "areia" || this.cel(i, j + 1)?.tipo !== "agua") throw new Error(`sem beira de mar para o cais na coluna ${i} da ilha ${this.cm.layout.nome}`);
     if (doMotor.some(o => Math.hypot(o.x - C.x, o.z - (j + 1)) < C.clareira)) throw new Error(`uma arvore do motor na clareira do cais na ilha ${this.cm.layout.nome}`);
     this.lugares.push({ nome: "cais", x: C.x, z: j + 1, giro: Math.PI, y: this.altura(C.x, j + 0.5) });
@@ -296,7 +345,7 @@ export class Ilha {
      arbusto da moldura so ficam num bosque (PLANTA_ILHA.bosques) ou na mata a leste do rio, e nunca num vao; e cada bosque ganha as arvores
      e os arbustos dele (extras) */
   private porPlanta(semente: number, comedouro: [number, number]): void {
-    const P = PLANTA_ILHA, par = (p: readonly number[]): [number, number] => [p[0], p[1]];
+    const P = this.planta, par = (p: readonly number[]): [number, number] => [p[0], p[1]];
     this.caminhos.push([comedouro, ...P.caminhos.lar.map(par)], ...(["portao", "barraca", "cais"] as const).map(n => P.caminhos[n].map(par)));
     const naBase = (x: number, z: number) => this.lugares.some(l => l.nome !== "cais" && Math.hypot(l.x - x, l.z - z) < P.lugares[l.nome].base + P.folgaLugar);
     for (let z = 0; z < this.area.h; z++) for (let x = 0; x < this.area.w; x++) {
@@ -343,7 +392,9 @@ export class Ilha {
      perto de um caminho; o carro, a geladeira e o trilho, cada um num canto da moldura, no ponto que cabe mais perto do da planta, no chao
      plano dele, fora dos caminhos e das clareiras dos lugares, com o entorno dele. Cada marco abre a clareira dele. Falha alto se faltar lugar */
   private porEnfeites(semente: number): void {
-    const P = PLANTA_ILHA;
+    const P = this.planta;
+    /* sem agua os marcos e o entorno deles ficam na moldura; na ilha com agua, dentro do mapa (a moldura e mar) */
+    const noLado = (x: number, z: number) => this.naArea(Math.floor(x), Math.floor(z)) === this.comAgua;
     for (const [x, z] of P.postes) {
       if (!this.plana(x, z, ENFEITES_GRADE.poste.folga, ["grama", "caminho", "areia"])) throw new Error(`o poste em ${x}, ${z} nao fica em chao plano na ilha ${this.cm.layout.nome}`);
       let melhor: [number, number] = [x, z], dm = Infinity;
@@ -359,17 +410,18 @@ export class Ilha {
     const M = P.marcos, r = rng(semente ^ P.sal ^ 0x3a7c05);
     for (const nome of ["carro", "geladeira", "trilho"] as const) {
       const G = ENFEITES_GRADE[nome], D = M[nome];
-      const [x, z] = this.pertoDe(D.ponto, M.busca, (x, z) => !this.naArea(Math.floor(x), Math.floor(z)) && this.plana(x, z, G.folga, G.chao)
+      const [x, z] = this.pertoDe(D.ponto, M.busca, (x, z) => noLado(x, z) && this.plana(x, z, G.folga, this.comAgua ? ["grama", "areia"] : G.chao)
         && !this.caminhos.some(l => pertoDaLinha(x, z, l, P.raioCaminho + G.clareira))
         && !this.lugares.some(l => Math.hypot(l.x - x, l.z - z) < P.lugares[l.nome].clareira + G.clareira), "o enfeite " + nome);
-      const ax = Math.min(Math.max(x, 0), this.area.w), az = Math.min(Math.max(z, 0), this.area.h);
+      /* a frente para o ponto mais perto da area; dentro dela (a ilha com agua), para a praca */
+      const ax = this.comAgua ? P.praca.x : Math.min(Math.max(x, 0), this.area.w), az = this.comAgua ? P.praca.z : Math.min(Math.max(z, 0), this.area.h);
       this.enfeites.push({ nome, x, z, giro: Math.atan2(ax - x, az - z) });
       this.abrir(x, z, G.clareira);
       const E = D.entorno;
       for (const [modelo, quantos, escala] of [["arbusto", E.arbusto, [0.8, 1.15]], ["grama_alta", E.grama_alta, [0.9, 1.3]], ["pedra", E.pedra, [0.6, 0.95]]] as const) {
         for (let k = 0, tent = 0; k < quantos && tent < quantos * 60; tent++) {
           const a = r() * Math.PI * 2, d = G.clareira * 0.55 + r() * (E.raio - G.clareira * 0.55), ox = x + Math.cos(a) * d, oz = z + Math.sin(a) * d;
-          if (this.naArea(Math.floor(ox), Math.floor(oz)) || !this.plana(ox, oz, 0, modelo === "pedra" ? ["grama", "areia"] : ["grama"])) continue;
+          if (!noLado(ox, oz) || !this.plana(ox, oz, 0, modelo === "pedra" ? ["grama", "areia"] : ["grama"])) continue;
           if (this.extras.some(o => Math.hypot(o.x - ox, o.z - oz) < (modelo === "grama_alta" ? 0.5 : 1))) continue;
           this.extras.push({ modelo, x: ox, z: oz, giro: r() * Math.PI * 2, escala: escala[0] + r() * (escala[1] - escala[0]), doMotor: null });
           k++;

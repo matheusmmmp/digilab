@@ -20,8 +20,10 @@
      mao.ts), e a sombra fica onde ele vai cair, ja no mapa (noMapa, PP-4). Ao soltar, o desenho comeca onde o motor o pos (sem caminhar
      de volta: Seguidor.pular), com a queda e o quique, e o foco volta ao pet em ~MAO.focoTauMs.
    Os kits carregam depois do terreno; se um modelo nao carrega, a cena cai na reserva (MundoReserva), com o erro no console. */
+import { ILHA_DEV_AGUA } from "./ilhaDev.ts";
+import { ponte } from "./ponte.ts";
 import * as THREE from "three";
-import { TPD, eNoite, noMapa, type Mundo } from "../../../../motor/index.ts";
+import { CMU_MVP_AGUA, TPD, eNoite, noMapa, type Mundo } from "../../../../motor/index.ts";
 import { habitatAtual, voltarParaIlha, type Habitat } from "../../../habitat.ts";
 import { jogoAtual } from "../../../jogo.ts";
 import { CENA, reservaDoPe } from "../cenaEstado.ts";
@@ -138,10 +140,13 @@ class VistaIlha {
     /* com o visual, um quadro sao dois desenhos (a cena no alvo e o quadro na tela): a contagem de draw calls da M3 e zerada por quadro */
     this.renderer.info.autoReset = false;
     this.pos = new Pos(this.renderer);
-    this.ilha = ilhaDe(mu.cm);
+    /* ?ilha=agua (ilhaDev.ts): so a vista troca de ilha, para ver o desenho antes de o motor ligar a agua (a IA4) */
+    this.ilha = ilhaDe(ILHA_DEV_AGUA ? CMU_MVP_AGUA : mu.cm);
     this.cenaIlha = this.estilo.montar(this.ilha);
     this.fim = fimDaIlha(this.ilha);
     this.cenaIlha.cena.add(this.fim.grupo);
+    /* a ilha com agua (docs/TAREFA_V3_ILHA_AGUA.md, IA3): as pontes do mapa do motor */
+    if (this.ilha.pontes.length) this.cenaIlha.cena.add(ponte(this.ilha));
     const v = new THREE.Vector3();
     this.lida = {
       projetar: (x, y, z) => { v.set(x, y, z).project(this.camera); return [v.x, v.y]; },
