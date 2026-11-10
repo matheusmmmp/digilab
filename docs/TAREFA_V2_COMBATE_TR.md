@@ -1,5 +1,7 @@
 # TAREFA V2 — COMBATE-TR: a batalha em tempo real como o combate do jogo inteiro (2026-10-29)
 
+> **SUBSTITUÍDO** pela [`docs/TAREFA_V3_LUTA_POC.md`](TAREFA_V3_LUTA_POC.md) (2026-11-08): a luta do jogo é a simulação da POC. O combate por turnos saiu do jogo na LP4 (2026-11-10); este documento fica como registro.
+
 Coordenador: sessão de coordenação da integração UP (Claude Code). Worker: a definir. Worktree e branch: `v2-combate-tr`. Status: ABERTA
 (etapa R0 entregue no #449; D-1 a D-9 DECIDIDAS e etapa R1 liberada pelo Matheus em 2026-10-29).
 

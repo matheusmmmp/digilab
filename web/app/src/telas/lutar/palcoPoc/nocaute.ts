@@ -5,8 +5,9 @@
      vida de verdade a partir de BARRA.segura passos depois do ultimo golpe.
    - A camera lenta do nocaute e so do desenho: nos ultimos NOCAUTE.lentaAntes passos de uma luta que acaba em nocaute (o resultado ja esta
      decidido e guardado), a tela mostra menos passos por quadro; os passos e o fim sao os mesmos. Sem ela com o movimento reduzido.
-   - Depois do nocaute: o fundo escurece (o cenario, nao os lutadores) e o "K.O." grande sobe no meio do palco, em fonte de pixel. */
-
+   - Depois do nocaute: o fundo escurece (o cenario, nao os lutadores) e o "K.O." grande sobe no meio do palco, em fonte de pixel.
+   Portado do palcoTR/ (o palco 1D do combate por turnos) na LUTA_POC, LP4: ficaram so os geradores de pixel que o palco 2D usa
+   (desenhoPoc.ts, visualPoc.ts); o que lia o estado da luta 1D saiu com ela. */
 /** A barra com o dano atrasado (E5). PROPOSTO, SEM FONTE: ajustar nas capturas.
     - branco: os passos em que o pedaco que saiu fica branco (16 ms cada: ~0,2 s);
     - segura: os passos parado antes de esvaziar (~0,5 s);

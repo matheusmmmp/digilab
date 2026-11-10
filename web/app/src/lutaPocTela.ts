@@ -34,6 +34,9 @@ export interface PalcoPoc {
 }
 /** pausado e rapido: os botoes do dock (so o ritmo do desenho); replay: a luta vista de novo pelo Ver replay (nada grava) */
 export const LUTA_POC = { palco: null as PalcoPoc | null, lutando: false, pausado: false, rapido: false, replay: false };
+/** o tempo do pet nao anda com o palco na tela (a luta, o resultado e o replay), como no palco de antes: o que passou ali e descartado, como
+    na Pausa (src/tempo.ts) */
+export const lutaSeguraTempo = (): boolean => LUTA_POC.palco !== null;
 /** as lutas da tela de agora, para o Ver replay e o Ver de novo */
 let atual: { lutas: readonly LutaNaTela[]; contexto: string; fim: (L: LutaPoc) => FimPoc } | null = null;
 

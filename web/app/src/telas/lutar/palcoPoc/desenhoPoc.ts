@@ -7,16 +7,17 @@
      seguindo o estado da simulacao; o tempo do clipe e o da luta (os passos de 16 ms). Nada se acrescenta as poses.
    - Os projeteis voam com o desenho do jogo (os prefabs de Assets/arena_up/efeitos, efeitosJogo.ts), por cima do rastro e do brilho do
      elemento (E2); o projetil nosso (LP-8) do mesmo jeito.
-   - Os efeitos da LUTA_EFEITOS (E1 a E5) vem dos geradores de pixel do palcoTR/ (a mesma grade, as mesmas cores, os mesmos numeros). */
+   - Os efeitos da LUTA_EFEITOS (E1 a E5) vem dos geradores de pixel do palco de antes (portados para efeitos.ts, projeteis.ts, chao.ts,
+     posturas.ts, elementos.ts e nocaute.ts na LP4: a mesma grade, as mesmas cores, os mesmos numeros). */
 import { CENAS, ELIPSE_POC, EQ_POC, MUNDO_POC, PASSO_POC_MS, type IdCena, type LutadorPoc } from "../../../../motor/index.ts";
 import { chaveUp, desenharSprite, dimSprite, quadroDoClipe, type AtlasOk, type Clipe } from "../../../atlas.ts";
 import { zoomAtual } from "../../../escala.ts";
-import { imagemMapa, prontas } from "../palcoTR/cenasTR.ts";
-import { ELEMENTO, elementoDoSprite, type ElementoTR } from "../palcoTR/elementosTR.ts";
-import { COR_FORTE, COR_TINTA, MOVIMENTO, faiscaDoPasso, pixelsDoTexto, poeiraDoPasso } from "../palcoTR/efeitosTR.ts";
-import { VOO, pixelsDaCabeca, pixelsDoEstouro, pixelsDoRastro, type PixelTR } from "../palcoTR/projeteisTR.ts";
-import { CHAO, alfaDaMarca, pixelsDaCratera, pixelsDaOnda, pixelsDaTelegrafia, pixelsDoArrasto, poeiraDaNuvem } from "../palcoTR/chaoTR.ts";
-import { POSTURA, pixelsDaAura } from "../palcoTR/posturasTR.ts";
+import { imagemMapa, prontas } from "./imagensMapa.ts";
+import { ELEMENTO, elementoDoSprite, type ElementoTR } from "./elementos.ts";
+import { COR_FORTE, COR_TINTA, MOVIMENTO, faiscaDoPasso, pixelsDoTexto, poeiraDoPasso } from "./efeitos.ts";
+import { VOO, pixelsDaCabeca, pixelsDoEstouro, pixelsDoRastro, type PixelTR } from "./projeteis.ts";
+import { CHAO, alfaDaMarca, pixelsDaCratera, pixelsDaOnda, pixelsDaTelegrafia, pixelsDoArrasto, poeiraDaNuvem } from "./chao.ts";
+import { POSTURA, pixelsDaAura } from "./posturas.ts";
 import { efeitosAtuais, folhaEfeito, type EfeitoRef } from "./efeitosJogo.ts";
 import {
   TELA_POC, claraoPoc, escuroDoPasso, koDoPasso, lutadorN, nivelDoQuadro, passoDe, pixelsDoKO, preparoDaHabilidade, puloDoEmpurrao, tremidaPoc,
@@ -105,7 +106,7 @@ function ajustar(cv: HTMLCanvasElement): { K: number; W: number; H: number } {
   return { K, W, H };
 }
 
-/** pinta pixels de efeito (os geradores do palcoTR) em volta de (X, Y), px do canvas, com u px do canvas por pixel de efeito; dir -1 espelha */
+/** pinta pixels de efeito (os geradores portados do palco de antes) em volta de (X, Y), px do canvas, com u px do canvas por pixel de efeito; dir -1 espelha */
 function pintar(cx: CanvasRenderingContext2D, px: readonly PixelTR[], X: number, Y: number, u: number, dir: number): void {
   const x0 = Math.round(X), y0 = Math.round(Y);
   for (const luz of [true, false]) {

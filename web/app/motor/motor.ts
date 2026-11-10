@@ -1,27 +1,27 @@
 /* Motor com registro de eventos (espelho de engine.py + treino.py + personalidade). Event sourcing: o estado
    nunca e salvo, so o registro (acoes do dono, tempo, lutas, intervencoes, treinos); a vida e reconstruida
    reprocessando o registro. Mesma semente + mesmo registro = mesma assinatura, no mesmo runtime.
-   So os pets da versao de hoje (v13: o cerebro A e o corpo dos v11, o mundo dos v12 e a luta em tempo real) abrem: os ramos das versoes
-   v1-v12 sairam com o descarte 6 (COMBATE-TR, etapa R2b; D-9, decisao do Matheus de 2026-10-29). Alguns campos dessas versoes ficam com o
-   valor fixo porque entram na assinatura (a educacao, a mentira e a obediencia, sempre zeradas; a memoria por espacos do Bandit): a
-   assinatura das vidas v13 nao muda (test/vidas_v13.test.ts). */
+   So os pets da versao de hoje abrem: a v21 (o cerebro trocavel, o mundo, o levar pet e a luta da POC, motor/arena/) e o pet de teste do
+   laboratorio (v16). Os ramos das versoes v1-v12 sairam com o descarte 6 (COMBATE-TR, R2b) e os das v13 a v19, com o combate por turnos, no
+   descarte 7 (LUTA_POC, LP4; LP-6 e D-9). Alguns campos dessas versoes ficam com o valor fixo porque entram na assinatura (a educacao, a
+   mentira e a obediencia, sempre zeradas; a memoria por espacos do Bandit; os gambits e as cartas, sempre vazios): a assinatura das vidas
+   v21 nao muda (test/luta_poc_pet.test.ts). */
 import {
   ACAO_CHAMADO, ACOES_DONO_JOGO_V11, ACOES_PET, CAT, CDJ, CHAMADO_BEBE, CHAMADO_BEBE_CORPO, CHAMADO_FOME_CORPO, CHE, CLE, CMG, EIXOS_TEMP, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
-  TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V14, VERSAO_V15, VERSAO_V17, VERSAO_V19, VERSOES_PET, CEREBROS, ehCerebroTrocavel,
+  TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V17, VERSAO_V19, VERSOES_PET, CEREBROS, ehCerebroTrocavel,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
-import { APRENDIZADO_V14, CHIP_ANTES_V14 } from "./combate_tr/constantes_tr.ts";
 import { LUGARES_V6, NOME_BOT, NPC, campanhaDe, lugaresDe, type Lugar } from "./bots.ts";
 import { MEDALHAS, medalhasPara } from "./medalhas.ts";
-import { ARENA_POR_ID, arenaDaLuta, jogarSequencia, jogarSerie, sementeDaSerie, type Arena } from "./arenas.ts";
-import { LIGA, MEDALHAS_LIGA, RIVAL_LIGA, formaLiga, jogarLiga, lutadoresLiga, nomeMegaLiga } from "./liga.ts";
+import { ARENA_POR_ID, arenaDaLuta, sementeDaSerie, type Arena } from "./arenas.ts";
+import { LIGA, MEDALHAS_LIGA, RIVAL_LIGA, formaLiga, nomeMegaLiga } from "./liga.ts";
 import {
-  INSTALACOES, LUTAS_MAX_INSTALACAO, ehInstalacao, formaRivalInstalacao, instalacaoDe, rivalInstalacao, sementeTentativa,
+  INSTALACOES, LUTAS_MAX_INSTALACAO, ehInstalacao, formaRivalInstalacao, instalacaoDe, sementeTentativa,
   type IdInstalacao, type Instalacao,
 } from "./instalacoes.ts";
-import { ESTAGIOS_SALAO, RIVAL_SALAO, caraterDoRivalSalao, formaRivalSalao, rivalSalao, sementeSalao } from "./salao.ts";
-import { CIT_V9, CMU_MVP } from "./constantes.ts";
-import { cartaDe, chipDe, chipServe, estagioMinimo, itensValem, porqueItensNaoValem, pontosComChips, vagasDeChip } from "./itens.ts";
+import { ESTAGIOS_SALAO, RIVAL_SALAO, caraterDoRivalSalao, formaRivalSalao, sementeSalao } from "./salao.ts";
+import { CMU_MVP } from "./constantes.ts";
+import { chipDe, chipServe, itensValem, porqueItensNaoValem, pontosComChips, vagasDeChip } from "./itens.ts";
 import { caraterV11, formaAdultaDe, linhaDoCarater, type QuandoCarater } from "./carater.ts";
 import { CCO_CORPO_V11, CONFIG_LUTA_CORPO_LIGADA } from "./corpo.ts";
 import { desejoLobos, type BracoConsequencia, type CerebroA, type ObservacaoLobos } from "./lobos.ts";
@@ -34,21 +34,19 @@ import { decodificar, decodificarV2, type ConceitosDec } from "./digibrain/decod
 import { DigiBrain } from "./digibrain/adapt.ts";
 import { CONFIG_DIGIBRAIN_LAB_FALA, CONTEUDOS_FALA, INATOS_MODULAR, type ConteudoFala } from "./digibrain/constantes.ts";
 import { leituraAprendido, leituraDecisao, mapaDecisao, mapaPesos, type ArestaMapa, type LeituraDecisao, type MapaDecisao } from "./digibrain.ts";
-import { desafiadoDaVersao, regrasDaVersao, type Lutador, type RegrasLuta, type ResultadoLuta, type Desafiado } from "./combate.ts";
 import { ConfiancaCombate } from "./confianca.ts";
 import { lutar as lutarArena, sorteiosPorFluxo, type IdCena, type ResultadoLuta as ResultadoArena, type Stats as StatsArena } from "./arena/index.ts";
 import { MAPA_SALAO, MAPA_TORRE, statsRivalForma, ehMapa, formaDaChave as formaDaChaveMotor, mapaDoLugar, naTabela, rivaisArena, statsDaLuta, statsDoPet, statsNpc, statsRivalArena } from "./luta_poc.ts";
 import { condicaoDe } from "./treino.ts";
 import { caraterCanonico } from "./catalogo.ts";
 import { estadoInicial, observacao, temperamentoDe } from "./estado.ts";
-import { GambitsPet, chaveRegra, lutadorBot, lutadorPet, regraDe, rotuloRegra } from "./gambits_pet.ts";
 import { NOME_EXERCICIO, chaveSprite, nomeArquetipo, nomeForma } from "./nomes.ts";
 import { criarRng, hashSemente } from "./rng.ts";
 import { TreinoPet, type ResultadoSessao } from "./treino.ts";
 import { Vinculo } from "./vinculo.ts";
 import type {
   AcaoDono, AcaoPet, Carater, Chamado, ChavesProduto, Desejo, Especie, Estagio, EstadoVida, EventoRegistro, Exercicio, Forma, FormaAdulta, FormaAdultaNormal,
-  EstagioTreino, ItemHistorico, Linha, MotivoVida, Observacao, OpGambit, OpItem, Origem, Ramo, Ritmo, Stats, Temperamento, VersaoPet,
+  EstagioTreino, ItemHistorico, Linha, MotivoVida, Observacao, OpItem, Origem, Ramo, Ritmo, Stats, Temperamento, VersaoPet,
 } from "./tipos.ts";
 
 /** medalhas do Tamer para uma evolucao (pets v6): tem X, precisa Y */
@@ -66,23 +64,6 @@ export interface Evolucao {
 }
 interface Chamados { abertos: Partial<Record<Chamado, number>>; atendidos: number; total: number }
 interface RegistroDesejo { atual: { tick: number; tipo: Desejo["tipo"]; alvo: string } | null; vontades: number; cumpridas: number; abertas: [number, string][]; tVontade: number }
-
-/** a luta como o motor a joga (Motor.montarLuta): os lutadores, a arena (pets v6 contra o lider; null fora dela), as regras
-    do pet com que ele lutou (a lista ativa, ou a do Lago) e as lutas: uma, ou as seguidas da Cidadela (ate a primeira que
-    nao for vitoria) */
-export interface LutaMontada {
-  A: Lutador; B: Lutador; arena: Arena | null; usadas: string[] | null; serie: ResultadoLuta[];
-  /** pets v6, a Liga dos Lideres (liga.ts): os 6 rivais, na ordem (B e o primeiro); null fora dela */
-  lideres: Lutador[] | null;
-  /** pets v6: a carta do Tamer que valeu nesta luta (itens.ts; evento "k" logo antes da luta); null sem carta */
-  carta: string | null;
-  /** pets v6, uma instalacao da Fronteira (instalacoes.ts): qual, e os rivais sorteados das lutas jogadas, na ordem (B e o primeiro);
-      null fora dela */
-  instalacao: Instalacao | null;
-  rivais: Lutador[] | null;
-}
-/** `res`: a ultima luta da serie (a unica, fora da Cidadela); `venceu`: todas as lutas da serie foram vitorias */
-export interface ResultadoLutaPet extends LutaMontada { res: ResultadoLuta; venceu: boolean; lesao?: boolean }
 
 /* ---------------------------------------------------------------- educacao-v1 (pets v4) */
 /** janela de travessura aberta: o dono ve tipo e pedido, nunca se e falsa */
@@ -115,8 +96,6 @@ export interface ResultadoLutaPoc {
 }
 /** pets v21 (LP2b; LP-5 revista): o Palacio juntou-se a Torre de Batalha, porque na luta nova todo pet decide sozinho */
 export const PALACIO_NA_TORRE = "o Palácio juntou-se à Torre de Batalha na luta nova: lute na Torre";
-const NIVEL_CHIP: Partial<Record<Estagio, string>> = { crianca: "Rookie", adolescente: "Champion", adulto: "Ultimate", mega: "Mega" };
-const nomeEstagioChip = (e: Estagio): string => NIVEL_CHIP[e] ?? e;
 const lutasZeradas = (): Lutas => ({ lutas: 0, vitorias: 0, derrotas: 0, empates: 0, lesoes: 0, tratadas: 0 });
 
 /* ---------------------------------------------------------------- confianca (pets v8, M1): o rival de cada luta
@@ -182,22 +161,13 @@ export class Motor {
   /** DC3d da CONVERSA_PET: o registro tem a marca "fu" (so o pet de teste v16): o modular decide com a subchave `fala_unidades` (o
       `chamar_atencao` em tres unidades de fala com conteudo, docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, 3.1 e A1.1); sem ela, o modular de hoje */
   falaUnidades = false;
-  /** PE4: a marca "pl" tem eps; o epsilon da luta le o g_exp da ultima decisao do modular (so com o modular ativo) */
+  /** PE4: a marca "pl" tem eps (o epsilon da luta do combate por turnos lia o g_exp do modular; a luta da POC nao tem epsilon: a marca so
+      fica no registro e na assinatura) */
   epsLuta = false;
-  /** PE4 (docs/TAREFA_V3_PONTE_LUTA.md, 3.3 e 3.7): o fator g_exp / e0 do epsilon da luta, lido da ultima decisao do modular (sem decisao nova
-      nem rng; e0 = 512 e S = 1024 sao potencias de 2, a divisao e exata). null: o epsilon e o de hoje (sem a marca eps, com o A ativo, ou
-      antes da primeira decisao do modular) */
-  fatorEpsLuta(): number | null {
-    if (!this.epsLuta || this.lab === null) return null;
-    const m = this.lab.ultimoMotivo;
-    if (m === null) return null;
-    return (m["afeto"] as { g_exp: number }).g_exp / INATOS_MODULAR.e0;
-  }
   sparring = 0;
   motivos: MotivoVida[] = [];
   motivo: MotivoVida | null = null;
   nDono = 0;
-  gp: GambitsPet | null = null;
   campanha: Record<string, number>;
   /* a educacao dos v4-v10 e a mentira dos v7-v10 nao existem mais; o estado delas fica zerado, so na assinatura */
   edu: Educacao;
@@ -226,10 +196,6 @@ export class Motor {
   medalhas = 0;
   /** v6 (itens, medalhas parte 3; motor/itens.ts): os chips do Tamer equipados neste pet, na ordem em que entraram (evento "i") */
   chips: string[] = [];
-  /** v6: a carta que vale na proxima luta (evento "k"); a luta a consome */
-  carta: string | null = null;
-  /** v6: as cartas que valeram nas lutas deste pet, na ordem */
-  cartasUsadas: string[] = [];
   /** v6: o registro tem evento de item; so entao os itens entram na assinatura (a dos pets sem item nao muda) */
   comItens = false;
   /** v6: a Liga dos Lideres (liga.ts): tentativas e titulos (as 6 vencidas) deste pet. Entra na assinatura so depois da primeira
@@ -257,8 +223,8 @@ export class Motor {
   private modularAtivo = false;
 
   constructor(semente: number, versao: number = VERSAO_PET) {
-    /* so a v13 e a v14 (CV14-1): os pets de antes (v1-v12, com o combate por turnos) foram descartados (o descarte 6, src/tamer.ts) */
-    if (!VERSOES_PET.includes(versao) && versao !== VERSAO_PET_LAB && versao !== VERSAO_V21) throw new Error(`versão de pet desconhecida: ${versao} (só a ${VERSOES_PET.join(" e a ")} abrem; os pets de antes, com o combate por turnos, foram descartados)`);
+    /* so a v21 e o pet de teste (v16): os pets de antes (v1-v19, com o combate por turnos) foram descartados (os descartes 6 e 7, src/tamer.ts) */
+    if (!VERSOES_PET.includes(versao) && versao !== VERSAO_PET_LAB) throw new Error(`versão de pet desconhecida: ${versao} (só a ${VERSOES_PET.join(" e a ")} e o pet de teste v${VERSAO_PET_LAB} abrem; os pets de antes, com o combate por turnos, foram descartados)`);
     this.semente = semente; this.versao = versao as VersaoPet;
     /* temperamento do ovo: rng propria, nao mexe nas outras */
     this.temp = temperamentoDe(semente);
@@ -326,7 +292,7 @@ export class Motor {
        a regra de cada decisao vai ao registro do mundo, como o ultima_regra do Python */
     const laco = new MotorCorpoMundo(politica, semente, CCO_CORPO_V11, estadoNascimentoPy(TICK_INICIAL),
                                      { regra: () => braco.cerebro.ultimaRegra, cfgMundo: CMU_MVP, digibrain: lab !== null,
-                                       bolaNoGolpe: versao === VERSAO_V15 || ehCerebroTrocavel(versao) });     // o pet de teste (v16) e a v14 com o modular: a bola de antes; a v17 e a v15
+                                       bolaNoGolpe: ehCerebroTrocavel(versao) });     // o pet de teste (v16): a bola de antes; a v21, a bola no golpe
     this.v11 = { braco, laco };
     this.e = laco.estado;
     /* o vinculo B (coerencia por situacao, sem pedido), sem obediencia */
@@ -346,8 +312,6 @@ export class Motor {
     /* v8 (M1): a confianca de combate e a novidade por rival (estado derivado das lutas "l"; nenhum evento novo) */
     this.conf = new ConfiancaCombate();
   }
-  /** a disciplina (0: a educacao dos v4-v10 nao existe mais); o epsilon da luta ainda a le (gambits_pet.estiloDoPet) */
-  get disciplina(): number { return this.edu.disciplina; }
   /** o cerebro A do pet */
   get cerebro(): CerebroA | null { return this.v11 ? this.v11.braco.cerebro : null; }
   /** v11: a leitura do painel DigiBrain (digibrain.ts): a da ultima decisao do cerebro (null antes da primeira), o "o que aprendeu"
@@ -501,10 +465,6 @@ export class Motor {
   /* ---------------------------------------------------------------- campanha e lutas */
   /** lugares da campanha desta versao (pets v5: a Montanha Espiral, com o Piedmon) */
   get lugares(): Lugar[] { return lugaresDe(this.versao); }
-  /** regras das lutas deste pet: CV21E_TR (a luta em tempo real dos pets v13) */
-  get regras(): RegrasLuta { return regrasDaVersao(this.versao); }
-  /** quem fica com a luta no limite de tempo: o rival (o pet sempre desafia) */
-  get desafiado(): Desafiado { return desafiadoDaVersao(this.versao); }
   lugarVencido(L: number): boolean { return this.lugares[L].rivais.some(r => this.campanha[r] > 0); }
   /** indice do lugar do NPC na campanha deste pet (na v6 o Myotismon e a Montanha Espiral mudam de indice) */
   lugarDe(k: string): number {
@@ -516,91 +476,6 @@ export class Motor {
   desafioAberto(k: string): boolean { const L = this.lugarDe(k); return L === 0 || this.lugarVencido(L - 1); }
   /** a arena cuja regra vale na luta contra o rival (pets v6 contra o lider; docs/DESIGN_MEDALHAS_ARENAS.md, secao 3) */
   arenaDe(rival: string): Arena | null { return NPC[rival] ? arenaDaLuta(rival, this.versao) : null; }
-  /** luta contra bot: entra no registro (rival + semente) e ensina os gambits */
-  lutar(rival: string, semente: number, carta: string | null = null): ResultadoLutaPet {
-    if (this.versao === VERSAO_V21) throw new Error(`os pets v${VERSAO_V21} lutam pela luta da POC (Motor.lutarPoc), com o mapa`);
-    if (rival !== RIVAL_LIGA && rival !== RIVAL_SALAO && !ehInstalacao(rival) && !NOME_BOT[rival]) throw new Error("rival desconhecido: " + rival);
-    this._conferirMorte(); this._vivo();
-    if (rival === RIVAL_LIGA) { const erro = this.porqueNaoLiga(); if (erro) throw new Error(erro); if (carta !== null) throw new Error("as cartas não valem na Liga dos Líderes"); }
-    if (ehInstalacao(rival)) {
-      /* a Fronteira depois do titulo: a entrada, a carta (nao vale) e a semente da tentativa (sai do registro; ninguem escolhe os rivais) */
-      const x = instalacaoDe(rival), erro = this.porqueNaoInstalacao(rival);
-      if (erro) throw new Error(erro);
-      if (carta !== null) throw new Error(`as cartas não valem na ${x.nome}`);
-      if (semente !== this.sementeInstalacao(rival)) throw new Error(`a semente da tentativa na ${x.nome} sai do registro do pet: ${this.sementeInstalacao(rival)}, não ${semente}`);
-    }
-    if (rival === RIVAL_SALAO) {
-      /* o Salao depois do titulo: a entrada, a carta (nao vale) e a semente da luta (sai do registro do pet) */
-      const erro = this.porqueNaoSalao(); if (erro) throw new Error(erro);
-      if (carta !== null) throw new Error("as cartas não valem no Salão");
-      if (semente !== this.sementeSalao()) throw new Error(`a semente da luta no Salão sai do registro do pet: ${this.sementeSalao()}, não ${semente}`);
-    }
-    if (NPC[rival] && !(rival in this.campanha)) throw new Error(`${NPC[rival]!.nome} não está na campanha deste pet`);
-    if (NPC[rival] && !this.desafioAberto(rival)) throw new Error(`desafio bloqueado: vença alguém em ${this.lugares[this.lugarDe(rival) - 1].nome} antes`);
-    /* pets v6: a carta do Tamer entra no registro logo antes da luta, e a luta a consome; nos v9, so contra NPC e com o treino minimo */
-    if (carta !== null) { const e9 = this.porqueSemCartaV9(rival); if (e9) throw new Error(e9); }
-    if (carta !== null) { this._validarCarta(carta); this.log.push([this.e.tick, "k", { id: carta }]); this._armarCarta(carta); }
-    this.log.push([this.e.tick, "l", { r: rival, s: semente }]);
-    return this._lutar(rival, semente);
-  }
-  /** a luta contra o rival como o motor a joga, sem mexer no pet. Campanha contra NPC: stats treinados absolutos; arena
-      contra bots: normalizados ao orcamento. Nas arenas (pets v6 contra o lider, arenas.ts) vale a regra dela: o lider com o
-      fator calibrado (e o contra-golpe, na Torre de pedra), o pet com a lista sem o dono (Lago) e as lutas seguidas sem cura
-      (Cidadela). O _lutar joga por aqui; a tela refaz as lutas do registro por aqui tambem */
-  montarLuta(rival: string, semente: number): LutaMontada {
-    if (this.versao === VERSAO_V21) throw new Error(`os pets v${VERSAO_V21} lutam pela luta da POC (Motor.lutarPoc)`);
-    const L = this.lutadores(rival, semente), carta = this.carta;
-    /* a Liga (liga.ts): os 6 lideres em sequencia, sem carta (a carta armada antes dela falha em _lutar); sem cura nos pets v6-v8, com a
-       cura parcial entre as lutas nos v9 (liga.curaLiga) */
-    if (L.lideres) return { ...L, carta: null, rivais: null, serie: jogarLiga(L.A, semente, this.regras, this.desafiado, L.lideres) };
-    /* o Salao (salao.ts): uma luta contra o rival sorteado do estagio do pet, sem carta */
-    if (rival === RIVAL_SALAO) return { ...L, carta: null, rivais: null, serie: jogarSerie(L.A, [L.B], semente, this.regras, this.desafiado, null) };
-    /* uma instalacao da Fronteira (instalacoes.ts): rivais sorteados da semente, um por luta, ate a primeira que nao for vitoria (ou o
-       teto); sem cura e sem carta (a carta armada antes dela falha em _lutar) */
-    if (L.instalacao) {
-      const rivais: Lutador[] = [];
-      const serie = jogarSequencia(L.A, k => { const B = k ? rivalInstalacao(semente, k, this.regras) : L.B; rivais.push(B); return B; },
-        LUTAS_MAX_INSTALACAO, semente, this.regras, this.desafiado, null);
-      return { ...L, carta: null, rivais, serie };
-    }
-    return { ...L, carta, rivais: null, serie: jogarSerie(L.A, Array.from({ length: L.arena?.lutas ?? 1 }, () => L.B), semente, this.regras, this.desafiado, carta ? cartaDe(carta).carta : null) };
-  }
-  /** os dois lados da luta contra o rival, sem jogar (a previa do palco usa isto): o pet (no Lago, com a lista sem o dono),
-      o rival (o lider com a regra da arena) e as regras do pet com que ele luta */
-  lutadores(rival: string, semente?: number): Omit<LutaMontada, "serie" | "carta" | "rivais"> {
-    if (this.versao === VERSAO_V21) throw new Error(`os pets v${VERSAO_V21} lutam pela luta da POC (Motor.lutarPoc)`);
-    /* a lista com que o pet luta; nos pets v9, com as regras dos chips no fim quando os itens valem (a mesma de estiloDoPet) */
-    const lista = (base: string[]): string[] => this.gp && this.chipsValem() ? this.gp.comChips(base) : base.slice();
-    if (rival === RIVAL_LIGA) {
-      /* a Liga: o pet como na campanha (treino absoluto, na escala) com a lista dele (chips valem); os 6 Megas dos lideres */
-      const lideres = lutadoresLiga(this.regras);
-      return { A: lutadorPet(this, "Seu pet", true), B: lideres[0], lideres, arena: null, usadas: this.gp ? lista(this.gp.ativas) : null, instalacao: null };
-    }
-    if (ehInstalacao(rival)) {
-      /* a Fronteira: o pet como na Liga; no Palacio, com a lista que ele faria sozinho (sem travas, vetos e chips de regra; os chips de
-         stat valem). B: o rival da primeira luta da tentativa (sem a semente, a da proxima tentativa deste pet) */
-      const instalacao = instalacaoDe(rival), s = semente ?? this.sementeInstalacao(rival);
-      let A = lutadorPet(this, "Seu pet", true), usadas = this.gp ? lista(this.gp.ativas) : null;
-      if (instalacao.regra === "sozinho" && this.gp) {
-        usadas = this.gp.listaPalacio();
-        A = { ...A, estilo: { ...A.estilo, gambits: { regras: usadas.map(regraDe), final: this.gp.final } } };
-      }
-      return { A, B: rivalInstalacao(s, 0, this.regras), lideres: null, arena: null, usadas, instalacao };
-    }
-    if (rival === RIVAL_SALAO) {
-      /* o Salao: o pet como na Liga (chips valem); o rival sorteado do estagio dele (sem a semente, a da proxima luta deste pet la) */
-      const s = semente ?? this.sementeSalao();
-      return { A: lutadorPet(this, "Seu pet", true), B: rivalSalao(s, this.estagioAtual, this.regras), lideres: null, arena: null,
-        usadas: this.gp ? lista(this.gp.ativas) : null, instalacao: null };
-    }
-    const npc = !!NPC[rival], arena = this.arenaDe(rival);
-    let A = lutadorPet(this, "Seu pet", npc), usadas = this.gp ? lista(this.gp.ativas) : null;
-    if (arena?.regra === "vinculo" && this.gp) {
-      usadas = lista(this.gp.listaSozinho());
-      A = { ...A, estilo: { ...A.estilo, gambits: { regras: usadas.map(regraDe), final: this.gp.final } } };
-    }
-    return { A, B: lutadorBot(rival, this.regras, arena), arena, usadas, lideres: null, instalacao: null };
-  }
   /* ---------------------------------------------------------------- a Liga dos Lideres (pets v6; liga.ts) */
   /** por que o pet nao pode desafiar a Liga agora (null: pode). A entrada pede as 6 medalhas, que o pet conhece pelo evento "u" (o
       motor nunca le o Tamer) */
@@ -632,7 +507,7 @@ export class Motor {
   porqueNaoInstalacao(id: string): string | null {
     const x = instalacaoDe(id);
     if (this.morte) return "o pet morreu";
-    if (this.versao === VERSAO_V21 && x.id === "palacio") return PALACIO_NA_TORRE;
+    if (x.id === "palacio") return PALACIO_NA_TORRE;
     if (this.estagioAtual === "bebe") return "o In-Training ainda não luta na Fronteira";
     if (!this.fronteira) return `a ${x.nome} abre depois do título da Liga dos Líderes`;
     return null;
@@ -649,94 +524,9 @@ export class Motor {
   }
   /** a semente da proxima luta deste pet no Salao (sai do registro: a semente do pet e quantas vezes ele ja lutou la) */
   sementeSalao(): number { return sementeSalao(this.semente, this.salao.tentativas + 1); }
-  private _lutar(rival: string, semente: number): ResultadoLutaPet {
-    const liga = rival === RIVAL_LIGA, inst = ehInstalacao(rival) ? instalacaoDe(rival) : null, salao = rival === RIVAL_SALAO;
-    if (liga) {
-      /* no replay tambem: a entrada (as medalhas que o pet conhecia) e a carta, que nao vale na Liga */
-      const erro = this.porqueNaoLiga(); if (erro) throw new Error(`luta da Liga no registro sem poder: ${erro}`);
-      if (this.carta !== null) throw new Error("as cartas não valem na Liga dos Líderes: carta no registro logo antes da luta da Liga");
-    }
-    if (inst) {
-      /* no replay tambem: a entrada (o titulo que o pet conhecia), a carta e a semente, que sai do registro */
-      const erro = this.porqueNaoInstalacao(inst.id); if (erro) throw new Error(`luta da ${inst.nome} no registro sem poder: ${erro}`);
-      if (this.carta !== null) throw new Error(`as cartas não valem na ${inst.nome}: carta no registro logo antes da luta`);
-      const s = this.sementeInstalacao(inst.id);
-      if (semente !== s) throw new Error(`luta da ${inst.nome} no registro com a semente ${semente}; a tentativa ${this.instalacoes[inst.id].tentativas + 1} deste pet tem a ${s}`);
-    }
-    if (salao) {
-      /* no replay tambem: a entrada (o titulo que o pet conhecia), a carta e a semente, que sai do registro */
-      const erro = this.porqueNaoSalao(); if (erro) throw new Error(`luta do Salão no registro sem poder: ${erro}`);
-      if (this.carta !== null) throw new Error("as cartas não valem no Salão: carta no registro logo antes da luta");
-      const s = this.sementeSalao();
-      if (semente !== s) throw new Error(`luta do Salão no registro com a semente ${semente}; a luta ${this.salao.tentativas + 1} deste pet lá tem a ${s}`);
-    }
-    /* no replay tambem: a carta dos pets v9 so contra NPC e com o treino minimo */
-    if (this.carta !== null) { const e9 = this.porqueSemCartaV9(rival); if (e9) throw new Error(`carta no registro logo antes da luta sem poder: ${e9}`); }
-    const estSalao = this.estagioAtual;
-    const M = this.montarLuta(rival, semente), n = M.lideres ? M.lideres.length : inst ? LUTAS_MAX_INSTALACAO : M.arena?.lutas ?? 1;
-    if (this.carta) {
-      this._hist({ t: this.e.tick, quem: "carta", a: `usou a ${cartaDe(this.carta).nome} contra ${NOME_BOT[rival]}` });
-      this.cartasUsadas.push(this.carta); this.carta = null;
-    }
-    let lesao = false;
-    const ordemL = this.nEventosLuta++;
-    M.serie.forEach((res, k) => {
-      /* cada luta da serie ensina e conta, com a semente dela (a primeira e a do evento) */
-      const s = sementeDaSerie(semente, k);
-      /* v8 (M1, espelho de MotorEducacao._lutar): a confianca decai desde a ultima luta e e empurrada pelo resultado, pesado pela
-         novidade do rival DESTA luta (a derrota pesa mais pela sensibilidade). O passo dos gambits e a experiencia de combate somam a
-         novidade em vez de 1: repetir o mesmo rival ensina e rende menos. Nas series (Cidadela, Liga, Fronteira) cada luta conta */
-      const rc = this.conf ? this.conf.registrar(this.e.tick, rivalDaConfianca(rival, semente, k, estSalao),
-        res.pontosA === 1 ? 1 : res.pontosA === 0 ? -1 : 0, this.temp.sensibilidade) : null;
-      if (rc) this.confEvento.push(ordemL);
-      if (this.gp) this.gp.aprender(res, s, M.usadas!, rc ? rc.novidade : 1);
-      if (this.ponteLuta) this._resumoDaLuta(rivalDaConfianca(rival, semente, k, estSalao), res);   // a ponte da luta (PE3): so com a marca "pl"
-      if (this.estagioAtual === "adolescente") this.sparring++;
-      const contra = liga ? `na Liga dos Líderes, contra ${nomeMegaLiga(k)} de ${NOME_BOT[LIGA[k].lider]}`
-        : inst ? `${inst.id === "palacio" ? "no" : "na"} ${inst.nome}, contra ${nomeForma(formaRivalInstalacao(semente, k))}`
-        : salao ? `no Salão, contra ${nomeForma(formaRivalSalao(semente, estSalao))}` : `contra ${NOME_BOT[rival]}`;
-      this._hist({ t: this.e.tick, quem: "luta", a: `${contra}${inst ? ` (luta ${k + 1})` : n > 1 ? ` (luta ${k + 1} de ${n})` : ""}: ${res.pontosA === 1 ? "venceu" : res.pontosA === 0 ? "perdeu" : "empatou"}` });
-      {
-        const L = this.lutas;
-        L.lutas++;
-        if (res.pontosA === 1) { L.vitorias++; this.vitoriasVida += rc ? rc.novidade : 1; } else if (res.pontosA === 0) L.derrotas++; else L.empates++;
-        /* lesao: so na derrota, numa rng derivada da semente da LUTA */
-        const l = res.pontosA === 0 && criarRng(hashSemente("lesao", s)).random() < CLE.probLesao;
-        if (l) {
-          lesao = true;
-          L.lesoes++;
-          if (this.lesionadoDesde === null) this.lesionadoDesde = this.e.tick;
-          if (L.lesoes >= CLE.lesoesMorte) this.morte = { tick: this.e.tick, causa: "lesoes" };
-          this._hist({ t: this.e.tick, quem: "lesao", a: "se machucou na luta" });
-        }
-      }
-    });
-    const res = M.serie[M.serie.length - 1], venceu = M.serie.length === n && res.pontosA === 1;
-    /* campanha: vitorias por desafio; na Cidadela, so a serie inteira conta. A Liga: a tentativa e o titulo (as 6 vencidas) */
-    if (NPC[rival] && venceu) this.campanha[rival]++;
-    if (liga) { this.liga.tentativas++; if (venceu) this.liga.titulos++; }
-    if (salao) { this.salao.tentativas++; if (venceu) this.salao.vitorias++; }
-    /* a instalacao: a tentativa, a sequencia de vitorias dela e o recorde do pet ali (o do Tamer sai daqui, src/tamer.ts) */
-    if (inst) {
-      const x = this.instalacoes[inst.id], v = M.serie.filter(r => r.pontosA === 1).length;
-      x.tentativas++; x.ultima = v; x.recorde = Math.max(x.recorde, v);
-    }
-    this.vida5.lutas.push({ tick: this.e.tick, rival, lesao,
-      resultado: res.pontosA === 1 ? "vitoria" : res.pontosA === 0 ? "derrota" : "empate" });
-    return { ...M, res, venceu, lesao };
-  }
-  /** a ponte da luta (PE3; docs/TAREFA_V3_PONTE_LUTA.md, 3.2 e 3.7): o resumo de uma luta da serie, em inteiros (o rival, o resultado, a vida
-      perdida em S), vai ao corpo (a dor, com qualquer cerebro) e, so com o modular ativo, ao DigiBrain. Com o A ativo o modular esta parado e
-      nao recebe nada (a regra do #562); o A nunca recebe o resumo. Sem rng */
-  private _resumoDaLuta(rival: string, res: ResultadoLuta): void {
-    const resultado = res.pontosA === 1 ? 1 : res.pontosA === 0 ? -1 : 0;
-    /* a vida da luta e float (hp em decimos de ponto): a vida perdida em S e o arredondamento (meio para cima; o dano e >= 0) de dano x S / vida
-       maxima, com o dano da vida do comeco da luta ate a do fim (cortada em 0: o golpe que passa da vida nao conta a mais), e cortada em [0, S] */
-    const lado = res.E0.L[0], depois = res.E.L[0];
-    this._aplicarResumo(rival, resultado, Math.max(0, lado.hp - Math.max(0, depois.hp)), lado.hpMax);
-  }
-  /** a ponte da luta, a parte comum aos dois nucleos: o dano da luta (da vida do comeco ate a do fim) e a vida maxima viram a vida perdida
-      em S; o corpo recebe o resumo, e o modular ativo tambem. O formato do resumo (rival, resultado, vida perdida em S) nao muda (PONTE_LUTA) */
+  /** a ponte da luta (PE3; docs/TAREFA_V3_PONTE_LUTA.md, 3.2 e 3.7): o dano da luta (da vida do comeco ate a do fim) e a vida maxima viram a
+      vida perdida em S; o corpo recebe o resumo (a dor, com qualquer cerebro), e o modular ativo tambem; com o A ativo o modular esta parado
+      e nao recebe nada (a regra do #562). O formato do resumo (rival, resultado, vida perdida em S) nao muda (PONTE_LUTA). Sem rng */
   private _aplicarResumo(rival: string, resultado: number, dano: number, hpMax: number): void {
     if (!(hpMax > 0)) throw new Error(`vida maxima da luta invalida: ${hpMax}`);
     const s = (this.v11!.laco as MotorCorpoMundo).corpo.S;
@@ -758,7 +548,7 @@ export class Motor {
       NPC da campanha deste pet, com o desafio aberto, no mapa do lugar dele (LP-4). Os torneios (LP2b): a Liga, a Torre de Batalha e o
       Salao, sem mapa no evento (cada luta tem o dela), com as entradas e as sementes de sempre; o Palacio juntou-se a Torre (LP-5) */
   porqueNaoLutaPoc(rival: string, mapa: unknown, semente?: number): string | null {
-    if (this.versao !== VERSAO_V21) return `só os pets v${VERSAO_V21} lutam pela luta da POC (este é v${this.versao})`;
+    if (this.versao !== VERSAO_V21) return this.versao === VERSAO_PET_LAB ? `o pet de teste (v${VERSAO_PET_LAB}) não luta: a luta em tempo real é dos pets v${VERSAO_V21}` : `só os pets v${VERSAO_V21} lutam (este é v${this.versao})`;
     if (this.morte) return "o pet morreu";
     if (rival === RIVAL_LIGA || ehInstalacao(rival) || rival === RIVAL_SALAO) {
       if (mapa !== undefined && mapa !== null) return `os torneios não escolhem mapa: cada luta tem o dela (${JSON.stringify(mapa)})`;
@@ -874,28 +664,6 @@ export class Motor {
     this.vida5.lutas.push({ tick: this.e.tick, rival, lesao, resultado: ult.pontosA === 1 ? "vitoria" : ult.pontosA === 0 ? "derrota" : "empate" });
     return { rival, mapa: torneio ? null : mapa as IdCena, semente, arena: !npc && !torneio, torneio, pet, rivalStats: serie[0].rivalStats, forma, serie, venceu, lesao };
   }
-  /** intervencao do dono nos gambits: travar, destravar, vetar, liberar */
-  intervirGambit(op: OpGambit, k: string): void {
-    if (this.versao === VERSAO_V21) throw new Error(`os pets v${VERSAO_V21} não têm regras de combate: o pet decide sozinho na luta da POC`);
-    if (!this.gp) throw new Error("o bebê ainda não tem gambits");
-    this.gp.intervir(op, k);                     /* valida antes de gravar */
-    this.log.push([this.e.tick, "g", { op, k }]);
-    this._hist({ t: this.e.tick, quem: "gambit", a: `${op} ${rotuloRegra(regraDe(k))}` });
-  }
-  private _gambit(op: OpGambit, k: string): void {
-    /* no replay, uma intervencao que nao cabe mais (ex.: pet salvo antes da troca da regra de evolucao)
-       e ignorada com aviso em vez de perder o pet inteiro */
-    try {
-      if (!this.gp) throw new Error("intervenção antes da evolução");
-      this.gp.intervir(op, k);
-      this._hist({ t: this.e.tick, quem: "gambit", a: `${op} ${rotuloRegra(regraDe(k))}` });
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      console.warn("intervencao do registro ignorada no replay:", op, msg);
-      if (this.gp) this.gp.mudancas.push({ luta: this.gp.nLutas, texto: `intervenção antiga ignorada (${op}): ${msg}`, dono: true });
-    }
-  }
-
   /* ---------------------------------------------------------------- itens do Tamer (pets v6; motor/itens.ts) */
   /** chips que este pet pode ter equipados, pelas medalhas que ele conhece (0 nos v1-v5) */
   get vagasChip(): number { return vagasDeChip(this.medalhas); }
@@ -903,12 +671,12 @@ export class Motor {
   porqueNaoEquipa(id: string): string | null {
     const c = chipDe(id);
     if (this.morte) return "o pet morreu";
-    if (c.tipo === "chip_regra" && this.versao === VERSAO_V21) return `${c.nome} é um chip de regra, e os pets v${VERSAO_V21} não têm regras de combate`;
+    if (c.tipo === "chip_regra") return `${c.nome} é um chip de regra da luta de antes: a luta em tempo real não tem regras de combate`;
     if (this.chips.includes(id)) return `${c.nome} já está equipado`;
-    if (!chipServe(c, this.estagioAtual)) return `${c.nome} pede um ${nomeEstagioChip(estagioMinimo(c))} ou mais`;
+    if (!chipServe(c, this.estagioAtual)) return `${c.nome} pede um Rookie ou mais`;
     if (this.chips.length >= this.vagasChip)
       return this.vagasChip ? `as ${this.vagasChip} vaga${this.vagasChip === 1 ? "" : "s"} de chip estão ocupadas: desequipe um antes` : "sem vaga de chip: a primeira vem com a primeira medalha";
-    return c.tipo === "chip_regra" ? this.gp!.porqueNaoEquipaRegra(chaveRegra(c.regra)) : null;
+    return null;
   }
   equipar(id: string): void { this._conferirMorte(); this._vivo(); this._validarItem("equipar", id); this.log.push([this.e.tick, "i", { op: "equipar", id }]); this._item("equipar", id); }
   desequipar(id: string): void { this._conferirMorte(); this._vivo(); this._validarItem("desequipar", id); this.log.push([this.e.tick, "i", { op: "desequipar", id }]); this._item("desequipar", id); }
@@ -920,16 +688,11 @@ export class Motor {
   private _item(op: OpItem, id: string): void {
     this._validarItem(op, id);
     const c = chipDe(id);
-    if (op === "equipar") { this.chips.push(id); if (c.tipo === "chip_regra") this.gp!.equiparRegra(chaveRegra(c.regra), c.nome); }
-    else { this.chips.splice(this.chips.indexOf(id), 1); if (c.tipo === "chip_regra") this.gp!.desequiparRegra(chaveRegra(c.regra), c.nome); }
+    if (op === "equipar") this.chips.push(id);
+    else this.chips.splice(this.chips.indexOf(id), 1);
     this.comItens = true;
     this._hist({ t: this.e.tick, quem: "item", a: `${op === "equipar" ? "equipou" : "desequipou"} ${c.nome}` });
   }
-  private _validarCarta(id: string): void {
-    cartaDe(id);
-    if (this.carta !== null) throw new Error("já tem uma carta para a próxima luta");
-  }
-  private _armarCarta(id: string): void { this._validarCarta(id); this.carta = id; this.comItens = true; }
   /** o treino com que o pet luta: o dele mais o dos chips de stat, dentro dos tetos (itens.bonusChipsStat); sem chip, o de sempre. Nos
       pets v9 os chips so somam com o treino minimo (itens.itensValem) e cada ponto vale CIT_V9.fatorChipStat */
   pontosDeLuta(): Stats | null {
@@ -942,15 +705,6 @@ export class Motor {
   get itensValem(): boolean { return itensValem(this.versao, this.estagioAtual, this.treino.total); }
   /** por que os itens nao fazem efeito agora (null: fazem); a frase da tela */
   porqueItensNaoValem(): string | null { return porqueItensNaoValem(this.versao, this.estagioAtual, this.treino.total); }
-  /** pets v9: os chips de regra fazem efeito (no fim da lista de luta; gambits_pet.estiloDoPet) */
-  chipsValem(): boolean { return this.itensValem; }
-  /** pets v9: por que a carta nao vale contra este rival agora (null: vale). So contra os NPCs da campanha (CIT_V9.cartaSoContraNpc) e com o
-      treino minimo; nos v6-v8, null (as outras regras da carta, como a Fronteira, ficam em lutar/_lutar) */
-  porqueSemCartaV9(rival: string): string | null {
-    if (CIT_V9.cartaSoContraNpc && !NPC[rival]) return "nos pets v9 a carta só vale contra os rivais da campanha";
-    return this.porqueItensNaoValem();
-  }
-
   /* ---------------------------------------------------------------- dono */
   observar(a: AcaoDono): void {
     if (!ACOES_DONO_JOGO_V11.includes(a)) throw new Error(`acao de dono fora dos pets v11: ${a} (sem elogio, bronca, petisco e banheiro)`);
@@ -1245,15 +999,7 @@ export class Motor {
     this.evolucoes.push({ tick: this.e.tick, ...nova, forma: { ...this.forma } });
     this.chamados = { abertos: {}, atendidos: 0, total: 0 }; this.sparring = 0;   /* contadores zeram */
     this.lutas = lutasZeradas();
-    /* os chips de regra vao para o fim da lista (os itens dos v9) */
-    /* os pets v21 nao tem regras de combate (LP2, decisao 6): a luta da POC decide pelos dois lados */
-    if (this.versao === VERSAO_V21) return;
-    if (!this.gp) {
-      this.gp = new GambitsPet(); this.gp.chipsNoFim = true;
-      /* pets v14 (B2): o candidato da rodada de equilibrio, como a bancada o mediu (DE-10, DR2-1, DR2-5) */
-      if (this.versao >= VERSAO_V14) { this.gp.reservaNoFim = true; this.gp.aprendizadoTR = APRENDIZADO_V14; this.gp.chipAntes = CHIP_ANTES_V14; }
-    }
-    this.gp.semear(this.forma, nomeForma(this.forma), this.regras);
+    /* sem regras de combate (LP2, decisao 6; LP4): a luta da POC decide pelos dois lados */
   }
   /* ---------------------------------------------------------------- Mega (pets v5; docs/DESIGN_EVOLUCAO_CANONICA.md) */
   /** tick em que virou Ultimate (null antes) */
@@ -1330,14 +1076,6 @@ export class Motor {
     this.cerebroEscolhido = true;
     (this.v11!.laco as MotorCorpoMundo).digibrain = this.modularAtivo;   // o modular ve o mundo, escolhe o alvo e recebe a consequencia dele
   }
-  /** um pet v15 vivo como v17, para trocar de cerebro: o mesmo registro, reproduzido na v17 (sem "cb", a v17 e a v15). Confere que o pet
-      refeito e o mesmo (a assinatura) antes de devolver; o pet de entrada nao muda */
-  static promoverV17(m: Motor): Motor {
-    if (m.versao !== VERSAO_V15) throw new Error(`só um pet v${VERSAO_V15} passa a v${VERSAO_V17} (este é v${m.versao})`);
-    const p = Motor.reproduzir(m.semente, m.log, VERSAO_V17);
-    if (p.assinatura() !== m.assinatura()) throw new Error("o pet refeito na v17 não é o mesmo da v15: a promoção não vale");
-    return p;
-  }
   /** o Tamer ganhou medalha: grava "o Tamer tem n medalhas a partir deste tick" e re-verifica a evolucao na hora */
   liberar(n: number): void {
     this._conferirMorte(); this._vivo();
@@ -1363,7 +1101,6 @@ export class Motor {
       sobrecarga: this.treino.sobrecarga, forma: { ...this.forma } });
     this.chamados = { abertos: {}, atendidos: 0, total: 0 }; this.sparring = 0;
     this.lutas = lutasZeradas();
-    this.gp!.promover(this.forma, nomeForma(this.forma));
   }
   /** carater medido agora: pelo cerebro A (carater.caraterV11) */
   caraterAgora(quando: QuandoCarater): Carater { return caraterV11(this.v11!.braco.cerebro, quando); }
@@ -1373,10 +1110,12 @@ export class Motor {
 
   /* ---------------------------------------------------------------- assinatura e replay */
   assinatura(): string {
-    return JSON.stringify([this.e, this.acao, this.tracos, this.pol.assinatura(), this.evolucoes, this.forma, this.chamados, this.sparring, this.gp ? this.gp.assinatura() : null, this.campanha,
+    return JSON.stringify([this.e, this.acao, this.tracos, this.pol.assinatura(), this.evolucoes, this.forma, this.chamados, this.sparring, null, this.campanha,
       [this.vinc.assinatura(), this.obed, this.dz], this.treino.assinatura(), this.pausas, this.falaFria, this.sombria,
       [this.edu, this.lutas, this.lesionadoDesde, this.morte, this.origem, this.especie, this.temp, this.vitoriasVida, this.ritmo],
-      this.medalhas, ...(this.comItens ? [[this.chips, this.carta, this.cartasUsadas]] : []),
+      /* os gambits (o null acima) e as cartas (o null e o [] abaixo) sairam com o combate por turnos (LP4): o lugar deles fica, e a assinatura
+         dos v21 nao muda */
+      this.medalhas, ...(this.comItens ? [[this.chips, null, []]] : []),
       ...(this.liga.tentativas ? [["liga", this.liga]] : []),
       ...(this.fronteira ? [["fronteira", this.instalacoes]] : []), ...(this.salao.tentativas ? [["salao", this.salao]] : []),
       [this.men, this.honestidadeEspecie], this.conf.assinatura(),
@@ -1394,12 +1133,11 @@ export class Motor {
   aplicarEvento(ev: EventoRegistro): void {
     const t = ev[0];
     if (this.e.tick !== t) throw new Error(`registro fora de ordem no tick ${t}`);
-    if (this.carta !== null && ev[1] !== "l") throw new Error(`carta para a próxima luta, mas o evento seguinte do registro não é luta (tick ${t})`);
     switch (ev[1]) {
       case "t": this._avancar(ev[2]); break;
       case "d": this._aplicar(ev[2]); break;
-      case "l": if (this.versao === VERSAO_V21) this._lutarPoc(ev[2].r, ev[2].s, ev[2].m); else this._lutar(ev[2].r, ev[2].s); break;
-      case "g": if (this.versao === VERSAO_V21) throw new Error(`evento "g" (regras de combate) num pet v${VERSAO_V21} (tick ${t})`); this._gambit(ev[2].op, ev[2].k); break;
+      case "l": this._lutarPoc(ev[2].r, ev[2].s, ev[2].m); break;
+      case "g": throw new Error(`evento "g" (regras de combate) no registro (tick ${t}): o combate por turnos saiu (LUTA_POC, LP4)`);
       case "tr": this._treinar(ev[2]); break;
       case "o": this._origem(ev[2]); break;
       case "c": this._config(ev[2].dur); break;
@@ -1409,7 +1147,7 @@ export class Motor {
       case "fu": this._falaUnidades(ev[2]); break;
       case "u": this._liberar(ev[2].n); break;
       case "i": this._item(ev[2].op, ev[2].id); break;
-      case "k": if (this.versao === VERSAO_V21) throw new Error(`evento "k" (carta) num pet v${VERSAO_V21} (tick ${t})`); this._armarCarta(ev[2].id); break;
+      case "k": throw new Error(`evento "k" (carta) no registro (tick ${t}): as cartas sairam com o combate por turnos (LUTA_POC, LP4)`);
       case "dc": {
         const c = ev[2] as unknown;
         if (!c || typeof c !== "object" || Object.keys(c).sort().join() !== "tipo,x,y")

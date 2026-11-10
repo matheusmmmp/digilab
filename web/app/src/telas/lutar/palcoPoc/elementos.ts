@@ -4,9 +4,10 @@
      o elemento sai da linhagem (brasa fogo, cirro gelo e vento, ferrugem raio e metal, limo agua e planta).
    - Os bots classicos e os NPCs da campanha nao tem linhagem: cada um ganha um elemento na tabela ELEMENTO_SEM_LINHAGEM.
    - Uma excecao por Digimon (a chave do sprite) passa por cima dos dois (ELEMENTO_EXCECAO; vazia nesta etapa).
-   Sprite sem elemento falha alto. */
+   Sprite sem elemento falha alto.
+   Portado do palcoTR/ (o palco 1D do combate por turnos) na LUTA_POC, LP4: ficaram so os geradores de pixel que o palco 2D usa
+   (desenhoPoc.ts, visualPoc.ts); o que lia o estado da luta 1D saiu com ela. */
 import type { Especie } from "../../../../motor/index.ts";
-
 export type ElementoTR = Especie;
 
 /** As cores de cada elemento (D-LE-1). PROPOSTO, SEM FONTE: ajustar nas capturas da E2.

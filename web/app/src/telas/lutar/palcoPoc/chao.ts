@@ -7,11 +7,11 @@
    - A onda de choque: no acerto do pesado, aneis no chao que abrem a partir dos pes do alvo.
    - A marca no piso: a cratera no ponto do acerto do pesado e o arrasto dos pes no deslize do empurrao (a v18). Ficam presas ao chao (no x
      da luta, nao no lutador) e somem em ~2 s.
-   - A poeira nos pes: na corrida, na arrancada, no deslize do empurrao, no pouso da queda e no acerto do pesado. */
-import type { EventoTR, LadoTR, LutaTR } from "../../../../motor/index.ts";
-import { ELEMENTO, type ElementoTR } from "./elementosTR.ts";
-import type { PixelTR } from "./projeteisTR.ts";
-
+   - A poeira nos pes: na corrida, na arrancada, no deslize do empurrao, no pouso da queda e no acerto do pesado.
+   Portado do palcoTR/ (o palco 1D do combate por turnos) na LUTA_POC, LP4: ficaram so os geradores de pixel que o palco 2D usa
+   (desenhoPoc.ts, visualPoc.ts); o que lia o estado da luta 1D saiu com ela. */
+import { ELEMENTO, type ElementoTR } from "./elementos.ts";
+import { VOO, type PixelTR } from "./projeteis.ts";
 /** O chao da E3. PROPOSTO, SEM FONTE: ajustar nas capturas.
     - pixel: quantos pixels do sprite tem cada pixel de chao (inteiro: a grade e a do sprite).
     - elipseAberta, elipseFechada: o raio da elipse (fracao da meia-largura do sprite) no comeco e no fim do preparo; achatado: a altura
@@ -31,17 +31,6 @@ export const CHAO = {
 
 /** a telegrafia de um lado neste passo: o tipo, quanto ja fechou (0 aberta, 1 fechada) e se o pesado esta pronto (fechada, a espera do golpe) */
 export interface TelegrafiaTR { tipo: "pesado" | "carregar"; f: number; pronto: boolean }
-export function telegrafiaDoPasso(l: LadoTR, passo: number): TelegrafiaTR | null {
-  if (l.hp <= 0) return null;
-  const a = l.acao;
-  const fracao = (): number => !a || a.fim <= a.inicio ? 1 : Math.max(0, Math.min(1, (passo - a.inicio) / (a.fim - a.inicio)));
-  if (a?.nome === "preparar_pesado") return { tipo: "pesado", f: fracao(), pronto: false };
-  /* o preparo pronto: ate a decisao seguinte (l.prep) e, depois dela, no pesado ou na finta, ate o golpe sair */
-  if (l.prep || ((a?.nome === "pesado" || a?.nome === "fintar") && !a.feito)) return { tipo: "pesado", f: 1, pronto: true };
-  if (a?.nome === "carregar") return { tipo: "carregar", f: fracao(), pronto: false };
-  return null;
-}
-
 /** os pixels (inteiros) de um anel de elipse de raios rx e ry, em pixels de chao, sem repetir: a ordem e a do angulo (sem acaso) */
 export function anelDaElipse(rx: number, ry: number): [number, number][] {
   const out: [number, number][] = [], vistos = new Set<string>(), n = Math.max(16, Math.ceil(2 * Math.PI * Math.max(rx, ry) * 1.5));
@@ -80,28 +69,6 @@ export function pixelsDaTelegrafia(tg: TelegrafiaTR, el: ElementoTR, meia: numbe
 
 /** uma marca no piso, presa ao chao: x0 e x1 no x da luta (a cratera tem x1 = x0); de 'ate' em diante ela para de mudar e conta o sumico */
 export interface MarcaTR { tipo: "cratera" | "arrasto"; lado: number; t0: number; x0: number; x1: number; ate: number }
-
-/** as marcas de um passo: a cratera no acerto do pesado (o x do alvo), o arrasto no empurrao (do x de onde o alvo saiu ao x de agora, ate o
-    fim do deslize). Chamado a cada passo pelo aplicarEventosTR, depois dos impactos (ultimoGolpe ja e o do passo) */
-export function seguirChaoTR(v: { marcas: MarcaTR[]; ultimoGolpe: string[] }, sim: LutaTR, ev: readonly EventoTR[]): void {
-  const S = sim.S, t = S.passo;
-  for (const e of ev) {
-    if (e.tipo === "dano" && v.ultimoGolpe[1 - e.lado] === "pesado") {
-      const x = S.L[e.lado].x;
-      if (!v.marcas.some(m => m.tipo === "cratera" && m.lado === e.lado && m.t0 === e.t)) v.marcas.push({ tipo: "cratera", lado: e.lado, t0: e.t, x0: x, x1: x, ate: e.t });
-    } else if (e.tipo === "empurrao" && e.px > 0) {
-      const l = S.L[e.lado];
-      v.marcas.push({ tipo: "arrasto", lado: e.lado, t0: e.t, x0: l.x, x1: l.x, ate: l.deslizeAte });
-    }
-  }
-  for (const m of v.marcas) if (m.tipo === "arrasto" && t > m.t0 && t <= m.ate) {
-    const l = S.L[m.lado];
-    /* um empurrao novo trocou o deslize: este arrasto para aqui */
-    if (l.deslizeAte !== m.ate) { m.ate = t - 1; continue; }
-    m.x1 = l.x;
-  }
-  v.marcas = v.marcas.filter(m => t - m.ate < CHAO.durMarca);
-}
 
 /** a opacidade da marca no passo (1 ate comecar a sumir; 0 depois de durMarca passos do fim) */
 export function alfaDaMarca(m: MarcaTR, passo: number): number {
@@ -155,29 +122,6 @@ export function pixelsDaOnda(el: ElementoTR, idade: number, meia: number, reduzi
       if (!reduzido) out.push({ dx: dx - 1, dy: dy - 1, cor: c.halo, alfa: alfa * .5, tam: 3, luz: true });
     }
   }
-  return out;
-}
-
-/** uma fonte de poeira nos pes de um lado: o tipo, os passos desde que comecou e para que lado a poeira vai (1: para tras de quem esta
-    virado para o rival; -1: para a frente; 0: para os dois lados, a nuvem do pouso e do acerto do pesado). x: o x da luta da nuvem (null: os
-    pes do lutador agora) */
-export interface PoeiraTR { lado: number; tipo: "corrida" | "arrancada" | "deslize" | "pouso" | "pesado"; idade: number; sentido: -1 | 0 | 1; x: number | null }
-
-/** as fontes de poeira do passo, so do estado da luta e das marcas (sem acaso). A corrida: no avanco (para tras) e no recuo (para a frente);
-    a arrancada da investida (para tras); o deslize do empurrao (para a frente, o lado de onde veio o golpe); o pouso da queda, no fim do
-    deslize em que o lado caiu; o acerto do pesado, nos pes do alvo */
-export function poeiraDoPassoTR(sim: LutaTR, marcas: readonly MarcaTR[], passo: number): PoeiraTR[] {
-  const S = sim.S, out: PoeiraTR[] = [], desl = S.C.empurraoAlvo?.deslize ?? 0;
-  S.L.forEach((l, lado) => {
-    const a = l.acao;
-    if (passo < l.deslizeAte) out.push({ lado, tipo: "deslize", idade: passo - (l.deslizeAte - desl), sentido: -1, x: null });
-    else if (a?.nome === "investida" && !a.feito) out.push({ lado, tipo: "arrancada", idade: passo - a.inicio, sentido: 1, x: null });
-    else if (a && (a.nome === "avancar" || a.nome === "recuar") && passo < a.fim) out.push({ lado, tipo: "corrida", idade: passo - a.inicio, sentido: a.nome === "avancar" ? 1 : -1, x: null });
-    /* o pouso: a queda (quedaDe) que veio com o deslize que acabou ha menos de durPouso passos */
-    const pouso = passo - l.deslizeAte;
-    if (l.quedaDe >= 0 && l.deslizeAte > 0 && l.quedaDe >= l.deslizeAte - desl - 1 && pouso >= 0 && pouso < CHAO.durPouso) out.push({ lado, tipo: "pouso", idade: pouso, sentido: 0, x: null });
-  });
-  for (const m of marcas) if (m.tipo === "cratera" && passo - m.t0 >= 0 && passo - m.t0 < CHAO.durPouso) out.push({ lado: m.lado, tipo: "pesado", idade: passo - m.t0, sentido: 0, x: m.x0 });
   return out;
 }
 

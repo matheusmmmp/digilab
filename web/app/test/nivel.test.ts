@@ -18,7 +18,8 @@ const tamer = (n: number, titulo = false): Tamer =>
 
 /* os pets de exemplo da escada (pets.ts): um In-Training, um Rookie treinado e um Champion treinado */
 let bebe: Motor, rookie: Motor, champion: Motor;
-beforeAll(() => { bebe = petDaReceita(ESCADA[0]); rookie = petDaReceita(ESCADA[2]); champion = petDaReceita(ESCADA[3]); }, 120_000);
+/* as receitas da escada de exemplo (que deixou de ser semeada na LUTA_POC), com o dono tratando a lesao do sparring da luta da POC */
+beforeAll(() => { bebe = petDaReceita(ESCADA[0], true); rookie = petDaReceita(ESCADA[2], true); champion = petDaReceita(ESCADA[3], true); }, 120_000);
 
 describe("os marcos do pet", () => {
   test("o pet de exemplo intocado nao e do jogador, mesmo com o tempo passando; um evento a mais o faz do jogador (R1)", () => {
@@ -31,14 +32,6 @@ describe("os marcos do pet", () => {
     expect(ehPetIntocado(cuidado, sem)).toBe(false);
     expect(ehPetDoJogador(cuidado)).toBe(true);
     expect(ehPetDoJogador(new Motor(7))).toBe(true);
-  });
-  test("um criterio so para o ativo e os guardados: o pet da escada semeada so nao conta intocado; jogado, conta (R2)", () => {
-    const semeado = petDaReceita(ESCADA[2]);
-    expect(ehPetDoJogador(semeado)).toBe(false);
-    const jogado = petDaReceita(ESCADA[2]); jogado.observar("acariciar");
-    expect(ehPetDoJogador(jogado)).toBe(true);
-    const comTempo = petDaReceita(ESCADA[2]); comTempo.avancar(30);
-    expect(ehPetDoJogador(comTempo)).toBe(false);
   });
   test("o aviso de leitor de tela do que abriu", () => {
     expect(anuncioDeAbertura([2])).toBe("Diário aberto");

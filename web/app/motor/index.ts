@@ -10,7 +10,6 @@ export * from "./vinculo.ts";
 export * from "./treino.ts";
 export * from "./nomes.ts";
 export * from "./catalogo.ts";
-export * from "./combate.ts";
 export * from "./bots.ts";
 export * from "./medalhas.ts";
 export * from "./arenas.ts";
@@ -21,7 +20,6 @@ export * from "./fabrica.ts";
 export * from "./salao.ts";
 export * from "./carater.ts";
 export * from "./confianca.ts";
-export * from "./gambits_pet.ts";
 export * from "./motivo.ts";
 export * from "./expressao.ts";
 export * from "./motor.ts";
@@ -33,7 +31,6 @@ export * from "./lobos.ts";
 export * from "./motor_corpo.ts";
 export * from "./motor_corpo_mundo.ts";
 export * from "./digibrain.ts";
-export * from "./combate_tr/index.ts";
 export * from "./pet_lab.ts";
 export { decodificar, decodificarV2, episodioDec, desfechoDoEpisodio, CATALOGO_CONCEITOS, CLASSES_EPISODIO_DEC, DESFECHOS, VERSAO_DECODIFICADOR, VERSAO_DECODIFICADOR_V2, type Conceito, type ConceitosDec, type EpisodioDec, type NomeConceito } from "./digibrain/decodificador.ts";
 export { CONTEUDOS_FALA, type ConteudoFala } from "./digibrain/constantes.ts";
@@ -46,7 +43,7 @@ export { CENAS, ERRO_MIRA_POC, FORMAS_ARENA, GOLPES_DA_POC, IDS_CENA, LUTA_POC_L
    nao colidir com os do motor */
 export {
   ACAO as ACAO_POC, ELIPSE as ELIPSE_POC, EQ as EQ_POC, LIMITE_MS as LIMITE_POC_MS, MUNDO as MUNDO_POC, PASSO_MS as PASSO_POC_MS,
-  configLuta as configLutaPoc, criarLuta as criarLutaPoc, passo as passoPoc, sorteiosPorFluxo as sorteiosPoc,
+  configLuta as configLutaPoc, criarLuta as criarLutaPoc, lutar as lutarNucleoPoc, passo as passoPoc, sorteiosPorFluxo as sorteiosPoc,
   type DadosForma as DadosFormaPoc, type EntradaLuta as EntradaLutaPoc, type Evento as EventoPoc, type Luta as LutaPoc,
   type Lutador as LutadorPoc, type ProjetilVoo as ProjetilPoc, type Stats as StatsPoc,
 } from "./arena/index.ts";

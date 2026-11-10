@@ -6,10 +6,10 @@
    de 5 px, azul ou vermelho, na altura dos pes, saindo do centro do corpo do atirador (atras da frente do sprite). No motor ele vive pouco
    (a 4,8 px por passo, de 5 passos no contato a ~20 no medio), e a tela desenha 1 quadro a cada 3 passos (12 com o movimento reduzido):
    saia em 1 ou 2 quadros, ou nenhum, e azul sobre o ringue azul. Aqui o voo vai da boca do atirador a frente do alvo, na altura do peito, com
-   o tamanho dos pixels do sprite, cor do elemento, halo e rastro, e fica na tela pelo menos VOO.minVisivel passos. */
-import { CTR_TR, type LutaTR } from "../../../../motor/index.ts";
-import { ELEMENTO, type ElementoTR } from "./elementosTR.ts";
-
+   o tamanho dos pixels do sprite, cor do elemento, halo e rastro, e fica na tela pelo menos VOO.minVisivel passos.
+   Portado do palcoTR/ (o palco 1D do combate por turnos) na LUTA_POC, LP4: ficaram so os geradores de pixel que o palco 2D usa
+   (desenhoPoc.ts, visualPoc.ts); o que lia o estado da luta 1D saiu com ela. */
+import { ELEMENTO, type ElementoTR } from "./elementos.ts";
 /** O voo e o brilho dos golpes (E2). PROPOSTO, SEM FONTE: ajustar nas capturas.
     - minVisivel: passos (desde o disparo) em que o projetil fica na tela mesmo que o motor ja o tenha acertado (o resto do voo e no ponto do
       acerto); 12 passos = 4 quadros normais ou 1 quadro do movimento reduzido.
@@ -21,79 +21,6 @@ import { ELEMENTO, type ElementoTR } from "./elementosTR.ts";
     - boca: a fracao da meia-largura do sprite onde o projetil nasce e acerta (na frente do corpo); altura: a fracao da altura do sprite
       (do chao) na altura do peito. */
 export const VOO = { minVisivel: 12, rastro: 8, rastroReduzido: 2, rastroFica: 8, durImpacto: 14, rajada: 4, pixel: 2, pixelMinCss: 6, boca: .45, altura: .55, halo: .38 } as const;
-
-/** o voo de um projetil, lido do estado da luta: x e o do projetil e alvo o do alvo, um por passo desde t0 (o passo em que ele apareceu);
-    tFim e o passo em que ele saiu do estado (acertou), ou null no ar */
-export interface VooTR { de: number; t0: number; x0: number; x: number[]; alvo: number[]; tFim: number | null }
-
-/** os voos em andamento de cada estado visual (a referencia do projetil do motor, so para segui-lo; fora do estado visual comparavel) */
-const seguidos = new WeakMap<object, Map<object, VooTR>>();
-
-/** le os projeteis do passo atual: abre o voo de quem apareceu, anota a posicao de quem segue e fecha o de quem saiu. Chamado uma vez por
-    passo (o luta.ts aplica os eventos a cada passo). durVida: os passos que um voo fechado fica guardado */
-export function seguirProjeteisTR(v: { voos: VooTR[] }, sim: LutaTR): void {
-  const S = sim.S, t = S.passo;
-  let m = seguidos.get(v); if (!m) { m = new Map(); seguidos.set(v, m); }
-  const vivos = new Set<object>(S.projeteis);
-  for (const pr of S.projeteis) {
-    let voo = m.get(pr);
-    /* o motor ja moveu o projetil no passo em que nasceu: o comeco do voo e o x do atirador (de onde ele saiu) */
-    if (!voo) { voo = { de: pr.de, t0: t, x0: pr.x - (pr.de === 0 ? 1 : -1) * S.C.projetil, x: [], alvo: [], tFim: null }; m.set(pr, voo); v.voos.push(voo); }
-    voo.x.push(pr.x); voo.alvo.push(S.L[1 - voo.de].x);
-  }
-  for (const [pr, voo] of m) if (!vivos.has(pr)) {
-    /* o projetil que acertou fica com de = -1 e o x do acerto */
-    voo.x.push((pr as { x: number }).x); voo.alvo.push(S.L[1 - voo.de].x); voo.tFim = t; m.delete(pr);
-  }
-  v.voos = v.voos.filter(o => o.tFim === null || t - o.tFim < VOO.durImpacto + VOO.rastroFica + VOO.minVisivel);
-}
-
-/** a fracao do caminho (0 na boca do atirador, 1 no ponto do acerto) do voo no passo dado; null antes de ele nascer */
-export function fracaoDoVoo(o: VooTR, passo: number): number | null {
-  if (passo < o.t0) return null;
-  const i = Math.min(passo - o.t0, o.x.length - 1);
-  if (o.tFim !== null && passo >= o.tFim) return 1;
-  const dir = o.de === 0 ? 1 : -1, ate = dir * (o.alvo[i] - dir * CTR_TR.raio - o.x0), foi = dir * (o.x[i] - o.x0);
-  return ate <= 0 ? 1 : Math.max(0, Math.min(1, foi / ate));
-}
-/** Os golpes corpo a corpo com rajada (E2, o defeito do Gabumon contra o Vigia): no contato do motor (44 px entre os centros) o sprite largo
-    do alvo fica longe na tela, e o sopro do clipe Attack_1 nao chega a ele. No acerto, uma rajada curta na cor do elemento liga a boca de quem
-    bate a frente do alvo. A investida (o corpo vai junto) e o disparo (tem o voo) ficam fora */
-export const GOLPES_RAJADA: readonly string[] = ["golpe_rapido", "fintar", "pesado"];
-/** a fracao da rajada idade passos depois do acerto (chega a frente do alvo em VOO.rajada - 1 passos); null fora dela */
-export const fracaoDaRajada = (idade: number): number | null => idade < 0 || idade >= VOO.rajada ? null : Math.min(1, (idade + 1) / (VOO.rajada - 1));
-
-/** a cabeca do projetil esta na tela neste passo? (no ar, ou ate VOO.minVisivel passos desde o disparo) */
-export const cabecaVisivel = (o: VooTR, passo: number): boolean =>
-  passo >= o.t0 && (o.tFim === null || passo < o.tFim || passo < o.t0 + VOO.minVisivel);
-
-/** a geometria da luta na tela (px de CSS), a mesma que o desenho usa: a escala inteira dos sprites, o centro, a meia-largura e o topo de cada
-    lutador e a linha dos pes. Com a camera (E5, cameraTR.ts): s e o zoom do mundo (o cenario, o x da luta e os tamanhos em px de CSS), cx o x
-    da tela base que fica no meio, e x(xm) o x de tela de um x da luta (sem o excesso do sprite). Sem camera, s = 1 e x = xTela, como antes */
-export interface GeometriaTR { e: number; K: number; PES: number; centros: number[]; meias: number[]; topo: number[]; esc: number; s: number; cx: number; x: (xm: number) => number }
-/** a camera de um quadro: a escala inteira dos sprites (e, em px do canvas por pixel do sprite), o zoom do mundo e o centro (px da tela base) */
-export interface CameraQuadro { e: number; s: number; cx: number }
-const FRACAO_CHAO = .84, ESQ = CTR_TR.centro - CTR_TR.meiaLargura, LARG = 2 * CTR_TR.meiaLargura;
-export const xTela = (x: number, W: number): number => W * (1 - FRACAO_CHAO) / 2 + (x - ESQ) / LARG * W * FRACAO_CHAO;
-/** a escala inteira dos sprites no chao novo sem zoom (B3, palco a tela inteira): limitada pela altura e tambem pela largura, para os dois nao
-    se cobrirem numa tela estreita (390 px: 2; 1280 e 1920 px: 3) */
-export const escalaBaseTR = (W: number, H: number, dims: readonly (readonly [number, number])[]): number =>
-  Math.max(1, Math.min(3, Math.floor(H * .45 / Math.max(...dims.map(d => d[1]))), Math.floor(W / (Math.max(...dims.map(d => d[0])) * 1.6))));
-export function geometriaTR(W: number, H: number, K: number, dims: readonly (readonly [number, number])[], xs: readonly number[], cam?: CameraQuadro): GeometriaTR {
-  const PES = H * .8, s = cam?.s ?? 1, cx = cam?.cx ?? W / 2;
-  const e = cam?.e ?? Math.max(1, Math.floor(escalaBaseTR(W, H, dims) * K)), escLuta = e / K, raioTela = CTR_TR.raio / LARG * W * FRACAO_CHAO * s;
-  const x = s === 1 && cx === W / 2 ? (xm: number) => xTela(xm, W) : (xm: number) => (xTela(xm, W) - cx) * s + W / 2;
-  /* o centro de cada lutador na tela: o corpo do motor tem o raio CTR_TR.raio e o sprite e mais largo, entao a frente do sprite fica na
-     frente do corpo (o excesso vai para tras) e os dois nao se sobrepoem no contato */
-  const meias = dims.map(d => d[0] * e / K / 2);
-  const centros = xs.map((xm, i) => { const exc = Math.max(0, meias[i] - raioTela); return x(xm) + (i ? exc : -exc); });
-  return { e, K, PES, centros, meias, topo: dims.map(d => PES - d[1] * e / K), esc: escLuta, s, cx, x };
-}
-/** o ponto do voo na tela (px de CSS) na fracao f: da boca do atirador a frente do alvo, na altura do peito do atirador */
-export function pontoDoVoo(g: GeometriaTR, de: number, f: number): { x: number; y: number } {
-  const dir = de === 0 ? 1 : -1, boca = g.centros[de] + dir * g.meias[de] * VOO.boca, frente = g.centros[1 - de] - dir * g.meias[1 - de] * VOO.boca;
-  return { x: boca + (frente - boca) * f, y: g.PES - (g.PES - g.topo[de]) * VOO.altura };
-}
 
 /** um pixel de efeito: deslocamento em pixels do sprite (a escala e) a partir do ponto, a cor, a opacidade e o tamanho (em pixels do sprite);
     luz: somado ao fundo (globalCompositeOperation "lighter") */

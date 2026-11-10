@@ -5,7 +5,6 @@
      - o pet decide de verdade pelo modular (motivos por modulo), come a racao posta e lembra o lugar. */
 import { describe, expect, test } from "vitest";
 import { CMU_MVP, TPD, VERSAO_PET, VERSAO_PET_LAB, VERSOES_PET } from "../motor/constantes.ts";
-import { regrasDaVersao, desafiadoDaVersao, ehV14 } from "../motor/combate.ts";
 import { DigiBrain } from "../motor/digibrain/adapt.ts";
 import { Motor } from "../motor/motor.ts";
 import { MotorCorpoMundo } from "../motor/motor_corpo_mundo.ts";
@@ -27,10 +26,10 @@ function viver(m: Motor, dias: number, longe: boolean): void {
 
 describe("o pet de teste do laboratorio (v16)", () => {
   test("a fabrica e a unica porta: o ovo padrao segue o padrao (a v15 do PR #525) e as versoes que abrem nao incluem o pet de teste", () => {
-    expect(VERSAO_PET).toBe(19);
-    expect(VERSOES_PET).toEqual([13, 14, 15, 17, 18, 19]);
+    expect(VERSAO_PET).toBe(21);
+    expect(VERSOES_PET).toEqual([21]);
     expect(VERSAO_PET_LAB).toBe(16);
-    expect(new Motor(101).versao).toBe(19);
+    expect(new Motor(101).versao).toBe(21);
     expect(new Motor(101).lab).toBeNull();
     const p = petDeTeste(101);
     expect(p.versao).toBe(16);
@@ -41,11 +40,16 @@ describe("o pet de teste do laboratorio (v16)", () => {
     expect(() => new Motor(101, 20)).toThrow(/versão de pet desconhecida/);
   });
 
-  test("herda a v14 menos o cerebro: as regras de luta sao as do candidato v14", () => {
-    expect(regrasDaVersao(16)).toBe(regrasDaVersao(14));
-    expect(ehV14(regrasDaVersao(16))).toBe(true);
-    expect(desafiadoDaVersao(16)).toBe(1);
-    expect(petDeTeste(101).regras).toBe(regrasDaVersao(14));
+  /* PROPOSTA da LP4 da LUTA_POC: o pet de teste lutava pelo combate por turnos (as regras do candidato v14), que saiu; ele nao luta mais, e
+     um registro dele com luta ("l"), regras ("g") ou carta ("k") nao abre */
+  test("o pet de teste nao luta (desde a LP4): a luta e os eventos dela falham alto", () => {
+    const m = petDeTeste(101);
+    m.liberar(6);
+    while (m.estagioAtual === "bebe") m.avancar(60);
+    expect(m.porqueNaoLutaPoc(m.rivaisArenaPoc()[0], "campo")).toMatch(/pet de teste/);
+    expect(() => m.lutarPoc(m.rivaisArenaPoc()[0], 1, "campo")).toThrow(/pet de teste/);
+    for (const ev of [[m.e.tick, "l", { r: "aleatorio", s: 1 }], [m.e.tick, "g", { op: "travar", k: "x" }], [m.e.tick, "k", { id: "carta_foco" }]])
+      expect(() => petDeTesteDoRegistro(101, [...JSON.parse(JSON.stringify(m.log)), ev] as EventoRegistro[])).toThrow();
   });
 
   for (const [semente, longe] of [[101, false], [202, true], [303, false]] as const) {
@@ -81,7 +85,7 @@ describe("o pet de teste do laboratorio (v16)", () => {
     expect(passos[passos.length - 1]).toBe(m.assinatura());
   });
 
-  test("o ovo padrao v14 nao muda: a assinatura nao traz o laboratorio e o pet v16 a traz", () => {
+  test("o ovo padrao nao traz o laboratorio na assinatura, e o pet v16 traz", () => {
     const a = new Motor(101);
     a.avancar(60);
     expect(a.assinatura()).not.toContain('"lab"');
