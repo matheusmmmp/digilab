@@ -536,3 +536,53 @@ A `PLANO_V3` (a trilha B), a `TAREFA_V3_PONTE_LUTA`, o `DESIGN_MEDALHAS_ARENAS` 
 - os itens;
 - a Fábrica só v21.
 Também `test/tamer.test.ts`, com o descarte 8 e a Fábrica de antes, e `e2e_capturas/luta_poc_lp4.spec.ts`, com as capturas.
+
+## Resultado da LP5-0 (2026-11-10)
+
+Worker: Claude Code (Opus 5.5), worktree `D:\Trab\digilab\v3-luta-poc-lp5`, branch `v3-luta-poc-lp5-0`, a pedido do Gerente de sprites e
+luta. O plano é o `docs/PLANO_EQUILIBRIO_LUTA_POC.md`, APROVADO: as D-LP5-1 a D-LP5-10 foram decididas como recomendadas ("Tá, então faz toda a
+recomendação aí que você deu", o Matheus, 2026-11-10, repassado). Os desvios estão em `docs/registro/2026-11.md`, seção "LUTA_POC, LP5-0".
+Nenhum número do jogo mudou.
+
+**O que entrou:**
+- as faixas `86101…86505` (calibração) e `87101…87505` (conferência) na `FAIXAS_RESERVADAS`, num commit próprio;
+- o H10 e o `pre_run --medicao` reconhecem `scripts/equilibrio_poc/`;
+- a bancada nova `web/app/scripts/equilibrio_poc/`:
+  - o candidato e o `CANDIDATO_V21`, que refaz os números do jogo (`web/app/test/equilibrio_poc_bancada.test.ts`);
+  - o treino típico pelo `TreinoPet.sessao`;
+  - os 10 grupos das metas;
+  - o `medir_tudo`, em até 4 processos;
+  - o `resumo_metas`;
+  - a prova de reprodução, que refaz o `lp4_gazimon.json` campo a campo;
+  - a sonda das formas do Motor.
+
+**O ponto de partida** (a calibração, o candidato v21: 1 427 674 lutas;
+`web/app/scripts/medicoes/equilibrio_poc/lp5_0/calibracao/resumo.json` e `resumo.md`). Passam 5 das 20 metas: P3, P4, P5, D3 e V2.
+
+- **O treino decide tudo.** O pet típico vence o mesmo pet sem treino em 1,00 de cada estágio (T1). Contra as formas do estágio, 2 pontos
+  levam o Rookie de 0,51 a 0,91, e do Champion em diante a curva chega a 1,00 aos 12 pontos (T3). O típico de um estágio vence as formas do
+  estágio seguinte de 0,94 a 1,00, e o Rookie típico vence 0,92 contra os Ultimates (E1). A evolução não pesa contra o treino.
+- **Os stats não pesam igual (T2).** Com 8 pontos num stat só, o fôlego dá 0,50 no Rookie e 0,60 no Ultimate, e a mira dá 0,74 e 0,81. O
+  vigor, a força, a guarda e a recuperação dão de 0,96 a 1,00.
+- **Os líderes (P1, P2).** O Gazimon trava: o Rookie típico vence 0,30. Por espécie, a brasa vence 0,55, o limo 0,47, a ferrugem 0,01 e o
+  cirro 0,00. A Cidadela (o Myotismon, a série de 3) dá 0,72, com a pior espécie a 0,48. Os outros quatro líderes vencem de 0,97 a 1,00
+  com o típico e perdem sem treino.
+- **Os desafiantes, o sparring e a vida passam (P3, P4, P5).** O dono simulado que treina chega ao Mega nas 100 vidas.
+- **As formas (V1, A1).** Sem treino, uma forma contra as outras do estágio vai de 0,10 a 0,77 no Rookie e de 0,001 a 0,97 nos outros
+  estágios. As que atiram vencem as de perto de 0,26 a 0,44.
+- **A duração (D1).** A mediana vai de 11,1 s a 16,2 s, abaixo dos 15 s em três estágios. O p90 fica entre 19,8 e 47,8 s, e 7 formas têm
+  mediana abaixo de 8 s.
+- **Os empates (D2).** Passam de 2 % em 4 Rookies, também fora do espelho (até 5,9 %).
+- **Os torneios.**
+  - A Liga sai em todas as tentativas (G1). A Torre tem o recorde mediano de 35 (G2).
+  - A Fábrica, de Mega canônico contra Mega canônico, vence uma série em 0,018 (G3).
+  - O Salão vence de 0,97 a 1,00 (G4).
+- **O espelho (S1) reprova pelos empates, não pelo lado** (D-LP5-0-6). Sem os empates, o lado A fica em 0,48 a 0,51. Pela regra do plano,
+  a rodada para aqui, e o achado vai ao Gerente antes de qualquer ajuste.
+
+**As hipóteses da seção 1 do plano:**
+- o treino que compõe: confirmada, a curva satura em poucos pontos;
+- a mira que pesa pouco: confirmada em parte, porque o fôlego pesa menos ainda;
+- o Gazimon que ficou forte sem o `eps`: o único líder que trava.
+
+A calibração (LP5-1) espera a leitura do S1 pelo Matheus.
