@@ -200,11 +200,12 @@ O plano (#700) e a faixa 85101…85505 estão APROVADOS. O I2a é o código ante
 
 ## O adendo 1 do plano do I7 (2026-11-10, Claude Code, Opus 5.5, branch `v3-individualidade-i7-adendo1`)
 
-- **O adendo** está PROPOSTO, na seção 12 do `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md`. Ele traz:
+- **O adendo** está DECIDIDO pelo Matheus em 2026-11-10 ("E daí a gente parte para seguir as recomendações"), na seção 12 do
+  `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md`, depois da conferência das 29 referências (vault, seções 9 e 10). Ele traz:
   - uma quarta hipótese, a H-TRANS (caos cedo, canalização depois);
   - a régua crua e a forma em U como condições das frases;
   - a expectativa da malha fechada;
   - dois descritivos: o estado interno e o efeito comum do tapa.
 
-  As decisões A1-1 a A1-5 ficam com o Matheus.
+  As decisões A1-1 a A1-5 estão DECIDIDAS, todas pela recomendação.
 - **A D-IND-I5b-1** (o dono separa os pets) está confirmada pelo Matheus.

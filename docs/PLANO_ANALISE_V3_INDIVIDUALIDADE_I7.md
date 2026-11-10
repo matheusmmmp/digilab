@@ -8,8 +8,8 @@ recomendação. **Nenhuma conta do I7 roda antes de cinco coisas:**
 4. a fumaça do orquestrador com as sementes dos testes (101…505), com o custo medido;
 5. o registro da análise (seção 10), num commit empurrado antes da primeira vida.
 
-**O adendo 1 (seção 12) está PROPOSTO** (2026-11-10): uma quarta hipótese, a régua crua e a forma em U nas frases, e dois
-descritivos. Ele é decidido pelo Matheus antes do registro; até lá, o que vale é o texto das seções 0 a 11.
+**O adendo 1 (seção 12) está DECIDIDO pelo Matheus em 2026-11-10** ("E daí a gente parte para seguir as recomendações", depois da conferência das
+referências): uma quarta hipótese, a régua crua e a forma em U nas frases, e dois descritivos. Ele vale junto com as seções 0 a 11.
 
 **De onde vem:** a conversa de 2026-11-10 sobre como tirar da frente um achado e não só uma implementação organizada. Dela saíram as
 perguntas Q1 a Q4, e o Matheus escolheu começar pela Q3, o desenvolvimento contrafactual ("Segue a recomendação").
@@ -222,9 +222,10 @@ Antes da primeira vida, numa seção nova no fim deste plano, ficam:
 | **IR-8** | o evento | **o tapa**, o susto das sondas | o carinho é um gesto que o I2 já tem todo dia, e mais um não seria uma experiência nova; a comida a mais mexe no corpo e no lugar ao mesmo tempo |
 | **IR-9** | o perfil da leitura | **os três perfis do I5, cada um com as frases dele**, sem um primário | um primário escolhido agora seria escolhido sem o I5b; os três sem correção de multiplicidade pedem cautela na leitura, e a tabela diz isso |
 
-## 12. Adendo 1: a transição, a régua crua e a forma em U (2026-11-10, PROPOSTO, Claude Code, Opus 5.5)
+## 12. Adendo 1: a transição, a régua crua e a forma em U (2026-11-10, DECIDIDO, Claude Code, Opus 5.5)
 
-**Status: PROPOSTO.** Nada do I7 rodou: o I7a (o código) não começou, e nenhuma vida foi vivida. O adendo muda só as regras de leitura
+**Status: DECIDIDO pelo Matheus em 2026-11-10** ("E daí a gente parte para seguir as recomendações"), as A1-1 a A1-5 pela
+recomendação. Nada do I7 rodou: o I7a (o código) não começou, e nenhuma vida foi vivida. O adendo muda só as regras de leitura
 (seção 7) e acrescenta medidas descritivas, antes do registro (seção 10).
 
 **De onde vem:** a busca dirigida de 2026-11-10, que o cabeçalho dava como não feita. Ela está no vault, na nota
@@ -233,14 +234,24 @@ Antes da primeira vida, numa seção nova no fim deste plano, ficam:
   redes que aprendem. Cada peça do I7 tem precedente separado, e o que sobra é a junção num pet com corpo, mundo e dono. Isso é uma
   contribuição de aplicação e de desenho, não de método. **A regra de não alegar novidade continua.**
 - **As referências do adendo são cinza:** preprints de 2025 e 2026, conferidos nos metadados e no resumo, fora do
-  `docs/referencias/referencias_verificadas.csv`. O texto completo está sendo lido na sessão da busca, e se ele contradisser o resumo, o
-  adendo volta antes da decisão.
-  - **Kwok, Altıntaş, Raffel e Rolnick (2025),** arXiv:2506.13234, preprint: perturbações minúsculas no começo do treino fazem trajetórias
-    idênticas divergirem, e o efeito diminui rápido com o tempo de treino.
-  - **Kimiyasu e Igarashi (2026),** `10.5281/zenodo.21439958`, preprint: gêmeos exatos bifurcados de um agente que aprende em vida só
-    ficam diferentes de forma persistente quando as ações mudam o mundo e a consequência volta para o agente. Com o estado congelado, não.
+  `docs/referencias/referencias_verificadas.csv`. A conferência das 29 referências recentes e o texto completo dos cinco mais próximos
+  estão nas seções 9 e 10 da nota do vault: todas existem, nenhuma foi retratada, e as ressalvas abaixo vêm do texto completo.
+  - **Kwok, Altıntaş, Raffel e Rolnick (2025),** arXiv:2506.13234, ICML 2025: a mesma perturbação deixa menos divergência final quanto
+    mais tarde é aplicada. **Três ressalvas:**
+    - depois de aplicada, a divergência sempre cresce, então a fase tardia não é canalização no sentido de Waddington, só "a mesma bacia";
+    - os autores negam que a divergência cresça de forma exponencial, e "caos" só cabe entre aspas;
+    - os modelos são supervisionados, sem agente e sem a régua de outra semente.
+  - **Igarashi (2026),** `10.5281/zenodo.21439958`, preprint, um autor só (Kimiyasu Igarashi): gêmeos exatos bifurcados de um agente que
+    aprende em vida só ficam diferentes de forma persistente quando as ações mudam o mundo e a consequência volta para o agente. Com o
+    agente congelado, não.
   - **Speck e Shepard (2026),** arXiv:2608.19168, preprint: um único exemplo contra um gêmeo sem ele. O efeito some do desempenho, mas o
     deslocamento dos pesos continua mensurável.
+- **Ali Nasser, Harel e Stern (2023),** *eLife*, `10.7554/elife.84312`, revisado por pares: em *C. elegans*, a fome precoce pesa nas
+  fases inicial e tardia e é amortecida nas intermediárias. É o precedente biológico da forma em U (A1-3).
+- **Duas cautelas para o Φ** (vault, seção 9):
+  - em Qin (2026), uma história inteira diferente rendeu só 1,14 vez a distância entre sementes, então um Φ pequeno para um único tapa
+    é o esperado, e não um defeito da medida;
+  - um D_G perto do teto da variação total satura a régua. A régua crua (12.2) mostra o D_G em nível e deixa ver isso.
 - **O I5b** (o #768) é contexto, não motivo: o pet varia 0,34 a 0,50 de um dia para o outro, e o dono separa os pets (D-IND-I5b-1).
 
 ### 12.1 A quarta hipótese, H-TRANS (A1-1)
@@ -260,7 +271,11 @@ Antes da primeira vida, numa seção nova no fim deste plano, ficam:
 - **O mesmo para o evento, só no descritivo:** Φ_E(2), Φ_E(10) e β_E, lidos do mesmo jeito, sem frase.
 
 **Por que é escrita antes:** com as regras de hoje, esse resultado cai em "nenhuma das três hipóteses descreve sozinha". É verdade, mas
-perde o padrão que a literatura de redes descreve (Kwok et al. 2025).
+perde o padrão que Kwok et al. (2025) descrevem em redes supervisionadas: a mesma perturbação pesa menos quanto mais tarde.
+
+**O que a H-TRANS não afirma:** que a fase tardia é canalização no sentido de Waddington, nem que a fase cedo é caos no sentido
+matemático. "Caos cedo" quer dizer que o ramo vira um gêmeo, e "canalização depois" quer dizer que ele fica abaixo do gêmeo. Os nomes
+são os da leitura, como na seção 1.
 
 ### 12.2 A régua crua (A1-2)
 
@@ -286,8 +301,8 @@ O β é uma reta. Um Φ(t) que desce e sobe (U), ou o contrário (∩), dá β p
 ### 12.4 A expectativa da malha fechada (A1-4)
 
 **E-I7b, escrita antes e sem gate:** Φ_E > Φ_E°, isto é, o dono que reage aumenta o efeito do tapa (ΔΦ > 0, seção 4). Ela vem de
-Kimiyasu e Igarashi (2026), com uma diferença de desenho que se diz ao lado: lá o congelado é o agente, e aqui é o dono. A expectativa é
-relida contra a tabela, sem ajuste.
+Igarashi (2026), com uma diferença de desenho que se diz ao lado: lá a malha aberta é o agente congelado, e aqui é o dono que repete o log,
+com o pet ainda aprendendo. Esse E° não tem par nos trabalhos lidos. A expectativa é relida contra a tabela, sem ajuste.
 
 ### 12.5 Dois descritivos (A1-5)
 
@@ -308,7 +323,7 @@ Os dois ficam só no descritivo, sem frase de leitura.
 - **Seção 9, o I7a:** as medidas novas vão para o `digilab/metrics.py`, com teste contra casos feitos à mão.
 - **Seção 8, o custo:** não há vida a mais, porque o estado interno sai das mesmas vidas.
 
-### 12.7 As decisões do adendo (PROPOSTAS; cada uma com a recomendação e o custo de errar)
+### 12.7 As decisões do adendo (DECIDIDAS pelo Matheus em 2026-11-10, todas pela recomendação; cada uma com a recomendação e o custo de errar)
 
 | | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|
