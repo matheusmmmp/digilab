@@ -1,13 +1,13 @@
 /* M1: confianca de combate e desgaste por rival repetido (docs/DESIGN_MVP_M1_CONFIANCA.md).
    Gate G2: motor/confianca.ts reproduz o gabarito do Python (experiments/exportar_gabarito_confianca.py) ate 1e-12,
-   inclusive a frase de estado com histerese. E o pet v13 (com a confianca desde o v8): a confianca entra no epsilon, na
-   experiencia e no passo dos gambits, tambem nas series (Cidadela, Liga, Fronteira). */
+   inclusive a frase de estado com histerese. E o pet de hoje (a v21, com a confianca desde o v8): a confianca conta por rival e entra na
+   experiencia, tambem nas series (Cidadela, Liga, Fronteira). O epsilon do lutador e o passo dos gambits eram do combate por turnos e sairam
+   com ele (LUTA_POC, LP4). */
 import { describe, expect, test } from "vitest";
 import { readFileSync } from "node:fs";
-import { CCF, CLE, DUR_EVO, GA, TICK_INICIAL } from "../motor/constantes.ts";
+import { CCF, DUR_EVO, TICK_INICIAL, VERSAO_PET } from "../motor/constantes.ts";
 import { ConfiancaCombate, atualizarConfianca, atualizarEncontros, epsilonConfianca, novidade, tickSaidaFaixa } from "../motor/confianca.ts";
 import { CONFIANCA_TXT, expressarConfianca } from "../motor/expressao.ts";
-import { lutadorPet } from "../motor/gambits_pet.ts";
 import { LIGA, RIVAL_LIGA } from "../motor/liga.ts";
 import { RIVAL_SALAO } from "../motor/salao.ts";
 import { Motor, nomeRivalConfianca, rivalDaConfianca } from "../motor/motor.ts";
@@ -79,24 +79,25 @@ describe("confianca (M1)", () => {
   });
 });
 
-describe("pet v13 com confianca", () => {
+describe("pet v21 com confianca", () => {
   const INI_ADOL = TICK_INICIAL + DUR_EVO.bebe + DUR_EVO.crianca;
-  /** vive ate o Champion cuidando o basico, depois luta contra os rivais pedidos (30 min entre lutas) */
-  function viverELutar(rivais: string[]): Motor {
-    const m = new Motor(515, 13);
+  /** vive ate o Champion cuidando o basico, depois luta na Arena contra as formas pedidas (o indice nos rivais do estagio; 30 min entre lutas) */
+  function viverELutar(rivais: number[]): Motor {
+    const m = new Motor(515);
     while (m.e.tick < INI_ADOL + 30) { m.avancar(15); if (m.e.fome < .5) m.observar("alimentar"); if (m.e.higiene < .5) m.observar("limpar"); }
-    rivais.forEach((r, k) => { m.lutar(r, 7000 + k); m.avancar(30); });
+    const rv = m.rivaisArenaPoc();
+    rivais.forEach((r, k) => { m.lutarPoc(rv[r], 7000 + k, "campo"); if (m.lesionadoDesde !== null) m.observar("tratar_lesao"); m.avancar(30); });
     return m;
   }
 
-  test("v13: conf existe, e recalculada no replay e entra na assinatura", () => {
-    expect(new Motor(1, 13).conf).not.toBeNull();   /* os ovos novos herdam a confianca */
-    const m = viverELutar(["aleatorio", "aleatorio", "agressivo", "aleatorio"]);
+  test("v21: conf existe, e recalculada no replay e entra na assinatura", () => {
+    expect(new Motor(1).conf).not.toBeNull();   /* os ovos novos herdam a confianca */
+    const m = viverELutar([0, 0, 1, 0]);
     expect(m.conf!.historico.length).toBe(4);
     const h = m.conf!.historico;
     expect(h[0].novidade).toBe(1); expect(h[2].novidade).toBe(1); expect(h[1].novidade).toBeLessThan(1); expect(h[3].novidade).toBeLessThan(h[1].novidade);
     expect(m.estadoConfianca()).not.toBeNull();
-    const r = Motor.reproduzir(m.semente, m.log, 13);
+    const r = Motor.reproduzir(m.semente, m.log, VERSAO_PET);
     expect(r.assinatura()).toBe(m.assinatura());
     expect(r.conf!.historico).toEqual(h);
     /* a experiencia de combate soma a novidade das vitorias (nao 1) */
@@ -106,41 +107,16 @@ describe("pet v13 com confianca", () => {
     expect(r.assinatura()).not.toBe(m.assinatura());
   });
 
-  test("v13: a inseguranca sobe o epsilon do lutador; a confianca positiva nao baixa", () => {
-    const m = viverELutar([]);
-    const base = lutadorPet(m, "x").estilo.eps;
-    m.conf!.c = -1; m.conf!.tickC = m.e.tick;
-    expect(lutadorPet(m, "x").estilo.eps).toBeCloseTo(base + CCF.kappaEps, 12);
-    m.conf!.c = 1;
-    expect(lutadorPet(m, "x").estilo.eps).toBeCloseTo(base, 12);
-  });
-
-  test("v13: repetir o rival ensina menos aos gambits (passo GA.alfa x novidade)", () => {
-    const m = viverELutar([]);
-    const g1 = Motor.reproduzir(m.semente, m.log, 13), g2 = Motor.reproduzir(m.semente, m.log, 13);
-    /* mesma luta, mesmo estado: no g2 o rival ja foi visto muitas vezes (novidade baixa) */
-    for (let k = 0; k < 6; k++) g2.conf!.registrar(g2.e.tick, "aleatorio", 0, 0);
-    const n1 = { ...g1.gp!.notas }, n2 = { ...g2.gp!.notas };
-    g1.lutar("aleatorio", 4321); g2.lutar("aleatorio", 4321);
-    const d1 = Object.keys(n1).map(k => Math.abs(g1.gp!.notas[k] - n1[k])), d2 = Object.keys(n2).map(k => Math.abs(g2.gp!.notas[k] - n2[k]));
-    const s1 = d1.reduce((a, b) => a + b, 0), s2 = d2.reduce((a, b) => a + b, 0);
-    expect(s1).toBeGreaterThan(0);
-    expect(s2).toBeLessThan(s1 * 0.2);
-    expect(g2.conf!.historico.at(-1)!.novidade).toBeLessThan(0.1);
-    expect(GA.alfa).toBe(0.2); expect(CLE.expPorVitoria).toBe(0.002);
-  });
-
   /** um Rookie que conhece as 6 medalhas (a Liga e, com o titulo, a Fronteira valem do Rookie em diante) */
   function rookie(semente = 8008): Motor {
-    const m = new Motor(semente, 13);
+    const m = new Motor(semente);
     m.liberar(6);
     while (m.estagioAtual === "bebe") m.avancar(30);
     return m;
   }
-  test("v13: nas series (Liga, Salao, instalacao) cada luta conta, com o rival dela; o replay da o mesmo pet", () => {
+  test("v21: nas series (Liga, Salao, instalacao) cada luta conta, com o rival dela; o replay da o mesmo pet", () => {
     const m = rookie(), sLiga = 90210;
-    const liga = m.montarLuta(RIVAL_LIGA, sLiga).serie.length;
-    m.lutar(RIVAL_LIGA, sLiga);
+    const liga = m.lutarPoc(RIVAL_LIGA, sLiga, null).serie.length;
     if (m.lesionadoDesde !== null) m.observar("tratar_lesao");
     const h = m.conf!.historico;
     expect(h).toHaveLength(liga);
@@ -151,14 +127,13 @@ describe("pet v13 com confianca", () => {
     m.abrirFronteira();
     m.avancar(30);
     const sSalao = m.sementeSalao(), est = m.estagioAtual;
-    m.lutar(RIVAL_SALAO, sSalao);
+    m.lutarPoc(RIVAL_SALAO, sSalao, null);
     if (m.lesionadoDesde !== null) m.observar("tratar_lesao");
     expect(m.conf!.historico.at(-1)!.rival).toBe(rivalDaConfianca(RIVAL_SALAO, sSalao, 0, est));
     expect(m.conf!.historico.at(-1)!.rival).toMatch(/^forma:/);
     m.avancar(30);
     const sInst = m.sementeInstalacao("torre_batalha"), n0 = m.conf!.historico.length;
-    const nInst = m.montarLuta("torre_batalha", sInst).serie.length;
-    m.lutar("torre_batalha", sInst);
+    const nInst = m.lutarPoc("torre_batalha", sInst, null).serie.length;
     const hi = m.conf!.historico.slice(n0);
     expect(hi).toHaveLength(nInst);
     hi.forEach((x, k) => {
@@ -166,12 +141,12 @@ describe("pet v13 com confianca", () => {
       expect(nomeRivalConfianca(x.rival)).toContain(nomeForma(formaRivalInstalacao(sInst, k)));
     });
     expect(m.confEvento.slice(n0)).toEqual(Array(nInst).fill(2));
-    const r = Motor.reproduzir(m.semente, m.log, 13);
+    const r = Motor.reproduzir(m.semente, m.log, VERSAO_PET);
     expect(r.assinatura()).toBe(m.assinatura());
     expect(r.confEvento).toEqual(m.confEvento);
     expect(m.vitoriasVida).toBeCloseTo(m.conf!.historico.filter(x => x.sinal === 1).reduce((a, x) => a + x.novidade, 0), 12);
   });
-  test("v13: as lutas seguidas da Cidadela sao o mesmo rival repetido (a novidade cai dentro da serie)", () => {
+  test("v21: as lutas seguidas da Cidadela sao o mesmo rival repetido (a novidade cai dentro da serie)", () => {
     const c = new ConfiancaCombate();
     const rs = [0, 1, 2].map(k => rivalDaConfianca("npc_v5_myotismon", 5, k, "adulto"));
     expect(new Set(rs)).toEqual(new Set(["npc_v5_myotismon"]));

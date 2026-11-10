@@ -1,4 +1,4 @@
-/* Medalhas do Tamer no motor (docs/DESIGN_MEDALHAS_ARENAS.md, secoes 4 e 5; pets v6 em diante, hoje o v13): a trava da evolucao
+/* Medalhas do Tamer no motor (docs/DESIGN_MEDALHAS_ARENAS.md, secoes 4 e 5; pets v6 em diante, hoje a v21 da LUTA_POC): a trava da evolucao
    (1/3/5 medalhas), o evento "u" no registro do pet (o pet pronto espera e evolui no tick em que o "u" chega), o replay
    com "u". */
 import { createHash } from "node:crypto";
@@ -18,7 +18,7 @@ const FIM_ROOKIE = DUR_EVO.bebe + DUR_EVO.crianca;
 /** vida com o dono simulado: cuida, trata lesao, luta na Campina no Rookie, faz as lutas de treino e treina.
     `medalhas(m, p)`: quando o Tamer "ganha" medalhas nesta vida (so v6) */
 function vida(tipo: "atencioso" | "aleatorio", semente: number, dias: number, medalhas?: (m: Motor, p: number) => void): Motor {
-  const m = new Motor(semente, 13), dono = criarDono(tipo), r = criarRng(hashSemente("dono", semente, tipo));
+  const m = new Motor(semente), dono = criarDono(tipo), r = criarRng(hashSemente("dono", semente, tipo));
   const passos = Math.round(dias * TPD / CD.passo), orc = Math.round(16 * dias);
   let gasto = 0;
   for (let p = 0; p < passos; p++) {
@@ -27,10 +27,15 @@ function vida(tipo: "atencioso" | "aleatorio", semente: number, dias: number, me
     const v: VisaoDono = { e: m.e, acao: m.acao, passo: p, passos, orc, gasto, min, max, atrasado: gasto < orc * (p + 1) / passos, chamados: m.chamadosAbertos() };
     const acoes = dono.decidir(v, r).filter(a => ACOES_DONO_JOGO_V11.includes(a));
     if (m.lesionadoDesde !== null && acoes.length) acoes[0] = "tratar_lesao";
+    /* a luta da POC (LP4) machuca mais o Rookie que o combate de antes: a lesao e tratada no passo mesmo sem a vez do dono */
+    else if (m.lesionadoDesde !== null) m.observar("tratar_lesao");
     for (const a of acoes) { m.observar(a); gasto++; }
-    if (m.estagioAtual === "crianca" && p % 7 === 0) m.lutar("npc_tier1_brutamontes", hashSemente("camp", semente, p));
-    if ((m.estagioAtual === "adolescente" && m.sparring < CAT.sparring) || (m.estagioAtual === "adulto" && m.lutas.lutas < 12))
-      m.lutar("aleatorio", hashSemente("sparring", semente, p));
+    /* a luta da POC (LP4): a Campina no mapa dela; o sparring contra uma forma do estagio, no Campo de treino */
+    if (m.estagioAtual === "crianca" && p % 7 === 0) m.lutarPoc("npc_tier1_brutamontes", hashSemente("camp", semente, p), "campo");
+    if ((m.estagioAtual === "adolescente" && m.sparring < CAT.sparring) || (m.estagioAtual === "adulto" && m.lutas.lutas < 12)) {
+      const rv = m.rivaisArenaPoc(), s = hashSemente("sparring", semente, p);
+      m.lutarPoc(rv[s % rv.length], s, "campo");
+    }
     if (m.estagioAtual !== "bebe" && p % 5 === 0 && m.treino.podeTocar(m.e.tick)) { try { m.treinar("corrida"); } catch { /* dormindo */ } }
     medalhas?.(m, p);
   }
@@ -38,10 +43,10 @@ function vida(tipo: "atencioso" | "aleatorio", semente: number, dias: number, me
 }
 
 describe("a versao dos ovos novos", () => {
-  test("ovos novos sao v13 (v6 + confianca + combate equilibrado + vinculo B + o cerebro A e o corpo + o mundo fisico + a luta em tempo real)", () => { expect(VERSAO_PET).toBe(19); expect(new Motor(1).versao).toBe(19); });
+  test("ovos novos sao v21 (v6 + confianca + vinculo B + o cerebro A e o corpo + o mundo fisico + o cerebro trocavel + a luta da POC)", () => { expect(VERSAO_PET).toBe(21); expect(new Motor(1).versao).toBe(21); });
 });
 
-describe("a trava (pet v13)", () => {
+describe("a trava (pet v21)", () => {
   test("a mesma vida no v6, sem medalha, fica no Rookie pronta para evoluir", () => {
     ligarEscala(true);
     const m = vida("atencioso", 5202, 3);
@@ -51,7 +56,7 @@ describe("a trava (pet v13)", () => {
     expect(r.alvo).toBe("adolescente"); expect(r.tempo).toBe(true); expect(r.pronto).toBe(false);
   });
   test("Rookie -> Champion: espera a 1a medalha e evolui no tick do evento u", () => {
-    const m = new Motor(77, 13);
+    const m = new Motor(77);
     m.avancar(FIM_ROOKIE + 120);
     expect(m.estagioAtual).toBe("crianca");
     const t = m.e.tick;
@@ -63,14 +68,14 @@ describe("a trava (pet v13)", () => {
     expect(m.esperandoMedalha()).toBeNull();
   });
   test("medalha antes da hora: o Rookie evolui no tempo de sempre", () => {
-    const m = new Motor(78, 13);
+    const m = new Motor(78);
     m.avancar(30); m.liberar(1);
     m.avancar(FIM_ROOKIE + 30);
     expect(m.estagioAtual).toBe("adolescente");
     expect(m.evolucoes[m.evolucoes.length - 1].tick).toBe(TICK_INICIAL + FIM_ROOKIE);   /* no tempo de sempre, sem esperar */
   });
   test("Champion -> Ultimate: pede 3 medalhas; com 1 e 2 espera", () => {
-    const m = new Motor(79, 13);
+    const m = new Motor(79);
     m.liberar(1);
     m.avancar(FIM_ROOKIE + 15);
     expect(m.estagioAtual).toBe("adolescente");
@@ -86,7 +91,7 @@ describe("a trava (pet v13)", () => {
     expect(m.evolucoes[m.evolucoes.length - 1].tick).toBe(m.e.tick);
   });
   test("o Champion dura o tempo inteiro mesmo quando o Rookie esperou a medalha (tempo desde a evolucao anterior)", () => {
-    const m = new Motor(80, 13);
+    const m = new Motor(80);
     m.avancar(FIM_ROOKIE + 600);
     expect(m.estagioAtual).toBe("crianca");
     m.liberar(1);
@@ -103,7 +108,7 @@ describe("a trava (pet v13)", () => {
     expect(m.estagioAtual).toBe("adulto");
   });
   test("Ultimate -> Mega: pede 5 medalhas; requisitosMega mostra tem e precisa", () => {
-    const m = new Motor(80, 13);
+    const m = new Motor(80);
     m.liberar(3);
     m.avancar(FIM_ROOKIE + 15);
     m.sparring = CAT.sparring;
@@ -125,7 +130,7 @@ describe("a trava (pet v13)", () => {
     expect(m.requisitosEvolucao()).toBeNull();
   });
   test("liberacao invalida falha alto", () => {
-    const m = new Motor(81, 13);
+    const m = new Motor(81);
     m.liberar(2);
     expect(() => m.liberar(2)).toThrow(/liberação inválida/);
     expect(() => m.liberar(1)).toThrow(/liberação inválida/);
@@ -148,17 +153,17 @@ describe("replay com o evento u", () => {
       if (mm.esperandoMedalha()) dar(mm, mm.esperandoMedalha()!.precisa);
     });
     expect(m.log.filter(e => e[1] === "u").length).toBeGreaterThanOrEqual(1);
-    const r = Motor.reproduzir(m.semente, m.log, 13);
+    const r = Motor.reproduzir(m.semente, m.log, VERSAO_PET);
     expect(r.assinatura()).toBe(m.assinatura());
     expect(r.medalhas).toBe(m.medalhas);
     expect(r.estagioAtual).toBe(m.estagioAtual);
     const semU = m.log.filter(e => e[1] !== "u");
     let outra: string;
-    try { outra = Motor.reproduzir(m.semente, semU, 13).assinatura(); } catch (err) { outra = "morreu: " + String(err); }
+    try { outra = Motor.reproduzir(m.semente, semU, VERSAO_PET).assinatura(); } catch (err) { outra = "morreu: " + String(err); }
     expect(outra).not.toBe(m.assinatura());
   });
   test("a assinatura dos v6 inclui as medalhas (um u no In-Training ja muda)", () => {
-    const a = new Motor(90, 13), b = new Motor(90, 13);
+    const a = new Motor(90), b = new Motor(90);
     a.avancar(30); b.avancar(30); b.liberar(1);
     a.avancar(30); b.avancar(30);
     expect(a.estagioAtual).toBe(b.estagioAtual);
@@ -166,13 +171,13 @@ describe("replay com o evento u", () => {
   });
   test("u fora de ordem e evento desconhecido: o replay falha alto", () => {
     const u: EventoRegistro = [TICK_INICIAL, "u", { n: 1 }];
-    expect(() => Motor.reproduzir(1, [u, [TICK_INICIAL, "u", { n: 1 }]], 13)).toThrow(/liberação inválida/);
-    expect(() => Motor.reproduzir(1, [[TICK_INICIAL, "x", 1] as unknown as EventoRegistro], 13)).toThrow(/desconhecido/);
-    const m = Motor.reproduzir(1, [u], 13);
+    expect(() => Motor.reproduzir(1, [u, [TICK_INICIAL, "u", { n: 1 }]], VERSAO_PET)).toThrow(/liberação inválida/);
+    expect(() => Motor.reproduzir(1, [[TICK_INICIAL, "x", 1] as unknown as EventoRegistro], VERSAO_PET)).toThrow(/desconhecido/);
+    const m = Motor.reproduzir(1, [u], VERSAO_PET);
     expect(m.medalhas).toBe(1);
   });
   test("o filho da heranca nasce na versao atual (v7) e recebe as medalhas depois da origem", () => {
-    const p = new Motor(91, 13), q = new Motor(92, 13);
+    const p = new Motor(91), q = new Motor(92);
     for (const x of [p, q]) {
       x.liberar(3); x.avancar(FIM_ROOKIE + 15); x.sparring = CAT.sparring;
       x.lutas = { lutas: 10, vitorias: 10, derrotas: 0, empates: 0, lesoes: 0, tratadas: 0 }; x.avancar(DUR_EVO.adolescente);

@@ -29,7 +29,7 @@ async function abrir(browser: import("@playwright/test").Browser, esquema: "ligh
   await page.goto("/Assets/digilab_atlas_up.json");
   await page.evaluate(([chave, s]) => {
     localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", JSON.stringify({ versao: 1, log: [] }));
-    localStorage.setItem(chave + "-descarte", "6"); localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
+    localStorage.setItem(chave + "-descarte", "8"); localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
     localStorage.setItem(chave, s);
   }, [CHAVE, JSON.stringify(SAVES.dia)] as const);
   await page.goto(APP + "?medir3d=1" + hash);

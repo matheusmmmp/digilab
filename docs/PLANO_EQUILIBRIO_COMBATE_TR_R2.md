@@ -1,5 +1,7 @@
 # Plano da segunda rodada de equilíbrio do combate em tempo real (em cima do candidato v14)
 
+> **SUBSTITUÍDO** pela [`docs/TAREFA_V3_LUTA_POC.md`](TAREFA_V3_LUTA_POC.md) (2026-11-08): a luta do jogo é a simulação da POC. O combate por turnos saiu do jogo na LP4 (2026-11-10); este documento fica como registro.
+
 Worker: Claude Code, Opus 5.5, worktree `v2-combate-tr`, branch `v2-combate-tr-rodada2`, 2026-10-30. **Aprovado pelo Matheus em 2026-10-30** (no chat da coordenação: as recomendações DR2-1 a DR2-6, seção 5).
 Os números novos da rodada seguem PROPOSTOS. Nenhuma luta roda
 antes de o Matheus aprovar este plano e de as faixas novas entrarem na `FAIXAS_RESERVADAS` num commit próprio.

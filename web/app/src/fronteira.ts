@@ -6,26 +6,19 @@
      que esta, o que o ativo receberia (o "u" das medalhas e o "f" da Fronteira, tamer.sincronizarPet) e a luta; ele continua guardado. A
      tentativa e jogada antes em copias (o resultado do motor e deterministico) e so entao gravada: nos registros dos pets, na ordem, e
      por fim no Tamer. Se a gravacao der outro resultado que a copia, falha alto. */
-import { ESTAGIOS_SALAO, LUTAS_SERIE_FABRICA, Motor, NOME_ARQ, NOME_EST, RIVAL_SALAO, VERSAO_SALAO, chaveSprite, duracaoLuta, formaRivalSalao, nomeForma, type Estagio, type Forma, type LutaFabrica, type Lutador,
-  type ResultadoLuta, tamanhoLuta, VERSAO_FABRICA_ATUAL, VERSAO_FABRICA_POC, VERSAO_V21 } from "../motor/index.ts";
-import { lutaPocLigada } from "./lutaPoc.ts";
+import { ESTAGIOS_SALAO, LUTAS_SERIE_FABRICA, Motor, NOME_EST, RIVAL_SALAO, chaveSprite, formaRivalSalao, nomeForma, type Estagio, type Forma, type LutaFabrica,
+  VERSAO_FABRICA_ATUAL } from "../motor/index.ts";
 import { jogoAtual, mudarMotor, mudarTamer, tamerAtual } from "./jogo.ts";
 import { abrirGuardado, atualizarGuardado, lerGuardados } from "./pets.ts";
 import { sincronizarPet, type LutaSalao, type Tamer, type TentativaSalao } from "./tamer.ts";
-import { exibirPet, exibirRivalSalao, mostrarLutas, type LutadorTela } from "./luta.ts";
 import { assistirPoc, fimDoPet, ladoDesenho, lutasDoResultado, type LutaNaTela } from "./lutaPocTela.ts";
 import { MAPA_FABRICA, type ResultadoLutaPoc } from "../motor/index.ts";
 
 /* ------------------------------------------------ Fabrica */
 /** comeca a tentativa nova da Fabrica com o alugado i (0 a 2) */
-/* com a luta da POC ligada (LP2b), a tentativa nova grava as regras dela (v: 21) */
-export const alugarFabrica = (i: number): void => { mudarTamer(t => t.alugarFabrica(i, Date.now(), lutaPocLigada() ? VERSAO_FABRICA_POC : VERSAO_FABRICA_ATUAL)); };
-/** um Mega da Fabrica como lutador de tela: o sprite, o nome e, no estilo, o arquetipo e o papel (alugado ou rival) */
-function exibirMega(f: Forma, L: Lutador, papel: string): LutadorTela {
-  return { ...L, sprite: chaveSprite(f), grade: "adulto", cor: "carga", estagioFala: "mega", nomeTela: nomeForma(f),
-    estiloTela: `${NOME_ARQ[f.adulta!].toLowerCase()} · ${papel}` };
-}
-/** a proxima luta da tentativa em andamento (so no registro do Tamer), e depois ela no palco (COMBATE-TR, etapa R4) */
+/* a tentativa nova grava as regras da luta da POC (v: 21; LP2b), as unicas desde a LP4 */
+export const alugarFabrica = (i: number): void => { mudarTamer(t => t.alugarFabrica(i, Date.now(), VERSAO_FABRICA_ATUAL)); };
+/** a proxima luta da tentativa em andamento (so no registro do Tamer), e depois ela no palco da luta da POC (LP3) */
 export const lutarFabrica = (): void => {
   let luta: LutaFabrica | null = null;
   mudarTamer(t => { luta = t.lutarFabrica(); });
@@ -34,26 +27,15 @@ export const lutarFabrica = (): void => {
   const serieF = Math.floor(x.k / LUTAS_SERIE_FABRICA) + 1, naSerieF = x.k % LUTAS_SERIE_FABRICA + 1;
   /* a Fabrica da luta da POC (v21, LP2b) no palco novo (LP3): a mesma entrada que a TentativaFabrica usou (o alugado leva a vida dentro da
      serie, menos logo depois de uma troca; cada rival entra inteiro). O palco confere o fim com o do registro */
-  if (x.poc) {
-    const tent = tamerAtual().fabrica[tamerAtual().fabrica.length - 1], ant = tent.lutas[tent.lutas.length - 2];
-    if (!tent || tent.lutas[tent.lutas.length - 1].k !== x.k) throw new Error("a tentativa da Fábrica não bate com a luta que voltou");
-    const v0 = naSerieF > 1 && ant && !ant.trocou && ant.poc ? ant.poc.vidaA : undefined, ka = chaveSprite(x.alugado), kr = chaveSprite(x.rival);
-    const luta: LutaNaTela = {
-      entrada: { cena: MAPA_FABRICA, semente: x.s, a: { forma: ka, stats: tent.statsPoc(x.alugado), ...(v0 !== undefined ? { vida0: v0 } : {}) }, b: { forma: kr, stats: tent.statsPoc(x.rival) } },
-      esperado: { vencedor: x.poc.vencedor, relogio: x.poc.relogio, passos: x.poc.passos, ko: x.poc.vidaA <= 0 || x.poc.vidaB <= 0 },
-      A: ladoDesenho(ka), B: ladoDesenho(kr), rotulo: `série ${serieF}, luta ${naSerieF} de ${LUTAS_SERIE_FABRICA}`,
-    };
-    assistirPoc([luta], "Fronteira · Fábrica", L => fimDoPet(L, luta.A, luta.B, x.venceu ? "O alugado segue na tentativa." : "A tentativa acabou."));
-    return;
-  }
-  if (!x.res) throw new Error("a luta da Fábrica voltou sem resultado");
-  const res = x.res, en = res.tr!.entrada, A = exibirMega(x.alugado, en.A, "alugado"), B = exibirMega(x.rival, en.B, "rival");
-  const serie = Math.floor(x.k / LUTAS_SERIE_FABRICA) + 1, naSerie = x.k % LUTAS_SERIE_FABRICA + 1;
-  mostrarLutas([{ A, B, res }], {
-    tag: "Fronteira · Fábrica", tituloSerie: "", avisoSerie: "",
-    textoDe: () => `Fábrica · série ${serie}, luta ${naSerie} de ${LUTAS_SERIE_FABRICA}: ${A.nomeTela} (alugado) × ${B.nomeTela}.`,
-    fimTexto: x.venceu ? `${A.nomeTela} venceu ${B.nomeTela} em ${duracaoLuta(res)}.` : `${B.nomeTela} venceu em ${duracaoLuta(res)}: a tentativa acabou.`,
-  });
+  const tent = tamerAtual().fabrica[tamerAtual().fabrica.length - 1], ant = tent.lutas[tent.lutas.length - 2];
+  if (!tent || tent.lutas[tent.lutas.length - 1].k !== x.k) throw new Error("a tentativa da Fábrica não bate com a luta que voltou");
+  const v0 = naSerieF > 1 && ant && !ant.trocou ? ant.poc.vidaA : undefined, ka = chaveSprite(x.alugado), kr = chaveSprite(x.rival);
+  const lt: LutaNaTela = {
+    entrada: { cena: MAPA_FABRICA, semente: x.s, a: { forma: ka, stats: tent.statsPoc(x.alugado), ...(v0 !== undefined ? { vida0: v0 } : {}) }, b: { forma: kr, stats: tent.statsPoc(x.rival) } },
+    esperado: { vencedor: x.poc.vencedor, relogio: x.poc.relogio, passos: x.poc.passos, ko: x.poc.vidaA <= 0 || x.poc.vidaB <= 0 },
+    A: ladoDesenho(ka), B: ladoDesenho(kr), rotulo: `série ${serieF}, luta ${naSerieF} de ${LUTAS_SERIE_FABRICA}`,
+  };
+  assistirPoc([lt], "Fronteira · Fábrica", L => fimDoPet(L, lt.A, lt.B, x.venceu ? "O alugado segue na tentativa." : "A tentativa acabou."));
 };
 /** troca o alugado pelo rival que ele acabou de derrotar */
 export const trocarFabrica = (): void => { mudarTamer(t => t.trocarFabrica()); };
@@ -71,7 +53,7 @@ function copiaSincronizada(t: Tamer, semente: number, log: Motor["log"], versao:
   sincronizarPet(t, m);
   return m;
 }
-/** os pets v6 do jogador (o ativo e os guardados) que o Salao ve, com o estagio de cada um. O ativo e o proprio (o app ja o sincroniza a cada
+/** os pets do jogador (o ativo e os guardados) que o Salao ve, com o estagio de cada um. O ativo e o proprio (o app ja o sincroniza a cada
     mudanca; so leitura); os guardados, copias sincronizadas. Os guardados que nao abrem falham alto */
 export function candidatosSalao(t: Tamer = tamerAtual()): CandidatoSalao[] {
   const out: CandidatoSalao[] = [], a = jogoAtual().motor;
@@ -86,9 +68,9 @@ export const estagiosQueFaltam = (c: readonly CandidatoSalao[]): Estagio[] => ES
 /** uma luta de uma tentativa do Salao, para a tela: o nivel, o pet, o rival (sorteado da semente e do estagio) e o resultado */
 export interface LutaSalaoTela { est: Estagio; nome: string; rival: Forma; venceu: boolean; segundos: number }
 /** a tentativa: as lutas (ate a primeira que nao foi vitoria) e o evento do Tamer */
-export interface ResultadoSalao { tentativa: TentativaSalao; lutas: LutaSalaoTela[]; palco: { A: LutadorTela; B: LutadorTela; res: ResultadoLuta }[];
-  /** os pets v21 (a luta da POC, LP3): as lutas no palco novo, uma por nivel */
-  poc: LutaNaTela[] | null }
+export interface ResultadoSalao { tentativa: TentativaSalao; lutas: LutaSalaoTela[];
+  /** as lutas no palco da luta da POC (LP3), uma por nivel */
+  poc: LutaNaTela[] }
 const nivel = (e: Estagio): string => NOME_EST[e];
 
 /** uma tentativa do Salao com os pets escolhidos (um por estagio, na ordem de ESTAGIOS_SALAO) */
@@ -99,23 +81,17 @@ export function tentarSalao(escolha: readonly OrigemPet[]): ResultadoSalao {
   if (new Set(escolha).size !== escolha.length) throw new Error("o mesmo pet em dois níveis do Salão");
   const cands = candidatosSalao(t);
   /* 1. a tentativa nas copias: quem luta, com que semente, e quem venceu (para na primeira que nao for vitoria) */
-  const plano: { c: CandidatoSalao; luta: LutaSalao; res: ResultadoLuta | null; poc: ResultadoLutaPoc | null }[] = [];
+  const plano: { c: CandidatoSalao; luta: LutaSalao; poc: ResultadoLutaPoc }[] = [];
   for (const [i, est] of ESTAGIOS_SALAO.entries()) {
     const c = cands.find(x => x.origem === escolha[i]);
     if (!c) throw new Error(`o pet escolhido para o nível ${nivel(est)} não está mais aqui`);
     if (c.erro) throw new Error(`${c.nome}: ${c.erro}`);
     if (c.est !== est) throw new Error(`${c.nome} é ${nivel(c.est)}, não ${nivel(est)}`);
     const m = copiaSincronizada(t, c.m.semente, c.m.log, c.m.versao), k = m.salao.tentativas + 1, s = m.sementeSalao();
-    /* o Salao da luta da POC (pets v21, LP2b): Motor.lutarPoc, e o palco novo (LP3) */
-    if (m.versao === VERSAO_V21) {
-      const rp = m.lutarPoc(RIVAL_SALAO, s, null);
-      plano.push({ c, res: null, poc: rp, luta: { est, pet: c.semente, forma: c.nome, k, s, tick: m.e.tick, venceu: rp.venceu } });
-      if (!rp.venceu) break;
-      continue;
-    }
-    const r = m.lutar(RIVAL_SALAO, s);
-    plano.push({ c, res: r.res, poc: null, luta: { est, pet: c.semente, forma: c.nome, k, s, tick: m.e.tick, venceu: r.venceu } });
-    if (!r.venceu) break;
+    /* o Salao da luta da POC (LP2b): Motor.lutarPoc, e o palco novo (LP3) */
+    const rp = m.lutarPoc(RIVAL_SALAO, s, null);
+    plano.push({ c, poc: rp, luta: { est, pet: c.semente, forma: c.nome, k, s, tick: m.e.tick, venceu: rp.venceu } });
+    if (!rp.venceu) break;
   }
   /* 2. a gravacao: a luta de cada um no registro dele (o ativo pela porta de sempre; o guardado continua guardado) */
   for (const { c, luta } of plano) {
@@ -124,39 +100,27 @@ export function tentarSalao(escolha: readonly OrigemPet[]): ResultadoSalao {
       venceu = false;
       mudarMotor(m => {
         if (m.semente !== c.semente) throw new Error("o pet ativo mudou antes da luta do Salão");
-        venceu = m.versao === VERSAO_V21 ? m.lutarPoc(RIVAL_SALAO, luta.s, null).venceu : m.lutar(RIVAL_SALAO, luta.s).venceu;
+        venceu = m.lutarPoc(RIVAL_SALAO, luta.s, null).venceu;
       });
     } else {
       const g = lerGuardados()[c.origem];
       if (!g || g.semente !== c.semente) throw new Error(`o pet guardado ${c.nome} mudou antes da luta do Salão`);
       const m = abrirGuardado(g);
       sincronizarPet(tamerAtual(), m);
-      venceu = m.versao === VERSAO_V21 ? m.lutarPoc(RIVAL_SALAO, luta.s, null).venceu : m.lutar(RIVAL_SALAO, luta.s).venceu;
+      venceu = m.lutarPoc(RIVAL_SALAO, luta.s, null).venceu;
       atualizarGuardado(c.origem, m);
     }
     if (venceu !== luta.venceu) throw new Error(`a luta de ${c.nome} no Salão deu outro resultado ao gravar`);
   }
   /* 3. a tentativa no registro do Tamer (o recorde sai dela) */
   const tentativa = mudarTamer(tm => tm.registrarSalao(plano.map(p => p.luta)));
-  const poc = plano.every(p => p.poc) ? plano.map((p, i) => ({ ...lutasDoResultado(p.poc!)[0], rotulo: `nível ${nivel(p.luta.est)} (${i + 1} de ${ESTAGIOS_SALAO.length})` })) : null;
-  if (!poc && plano.some(p => p.poc)) throw new Error("o Salão misturou pets da luta nova com pets do combate de antes");
+  const poc = plano.map((p, i) => ({ ...lutasDoResultado(p.poc)[0], rotulo: `nível ${nivel(p.luta.est)} (${i + 1} de ${ESTAGIOS_SALAO.length})` }));
   return { tentativa, poc,
     lutas: plano.map(p => ({ est: p.luta.est, nome: p.c.nome, rival: formaRivalSalao(p.luta.s, p.luta.est), venceu: p.luta.venceu,
-      segundos: p.poc ? Math.round(p.poc.serie[0].relogio / 1000) : tamanhoLuta(p.res!) })),
-    palco: plano.filter(p => p.res).map(p => ({ A: exibirPet(p.c.m, p.res!.tr!.entrada.A), B: exibirRivalSalao(p.luta.s, p.luta.est, p.res!.tr!.entrada.B), res: p.res! })) };
+      segundos: Math.round(p.poc.serie[0].relogio / 1000) })) };
 }
-/** a tentativa do Salao no palco (COMBATE-TR, etapa R4): as lutas, um pet de cada nivel, ate a primeira que nao foi vitoria */
+/** a tentativa do Salao no palco da luta da POC (LP3): as lutas, um pet de cada nivel, ate a primeira que nao foi vitoria */
 export function mostrarSalao(r: ResultadoSalao): void {
-  const n = ESTAGIOS_SALAO.length, v = r.lutas.filter(x => x.venceu).length;
-  if (r.poc) {
-    const lutas = r.poc;
-    assistirPoc(lutas, "Fronteira · Salão", L => fimDoPet(L, lutas[lutas.length - 1].A, lutas[lutas.length - 1].B, v === n ? `Venceu os ${n} níveis!` : `Venceu ${v} de ${n} níveis seguidos.`));
-    return;
-  }
-  mostrarLutas(r.palco, {
-    tag: "Fronteira · Salão", tituloSerie: `Salão · um pet de cada nível, ${n} lutas seguidas`,
-    avisoSerie: "Salão: um pet de cada nível, um depois do outro; a sequência para na primeira luta que não for vitória.",
-    textoDe: k => `Salão · nível ${nivel(r.lutas[k].est)}: ${r.palco[k].A.nomeTela} × ${r.palco[k].B.nomeTela}.`,
-    fimTexto: v === n ? `Venceu os ${n} níveis!` : `Venceu ${v} de ${n} níveis seguidos.`,
-  });
+  const n = ESTAGIOS_SALAO.length, v = r.lutas.filter(x => x.venceu).length, lutas = r.poc;
+  assistirPoc(lutas, "Fronteira · Salão", L => fimDoPet(L, lutas[lutas.length - 1].A, lutas[lutas.length - 1].B, v === n ? `Venceu os ${n} níveis!` : `Venceu ${v} de ${n} níveis seguidos.`));
 }
