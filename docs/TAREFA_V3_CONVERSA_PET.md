@@ -503,3 +503,49 @@ O Matheus decidiu criar a `voz-v3b` antes da DC4c, contra a recomendação do wo
     (D-CP-DC4b-14).
   - O texto não foi iterado: o G-FIEL da validação diz o resultado.
 - **O registro da rodada:** a seção 13 do plano, refeita com a voz-v3b, o gasto de US$ 0,878 e os 31 sha256 de hoje.
+
+## DC4c — a validação da voz da rede e o D-COMIDA (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc4c`, 2026-11-09)
+
+A linha DC4c do [plano da DC4](PLANO_ANALISE_V3_CONVERSA_DC4.md): a validação, uma vez, na base 20262500, com a voz-v3b no dec-v3. Depois
+dela, o descritivo D-COMIDA (seção 6) e os pacotes da marcação. Nenhum gate foi calculado: os gates são da DC4d. Desvios D-DC4C-1 a 4 em
+`docs/registro/2026-11.md`.
+
+- **A rodada:** `artifacts_v3_conversa_dc4/validacao/`, com 486 falas (162 por braço) e o material da marcação, os pares e o `meta.json`.
+  - Por braço: as 60 espontâneas do E3 e as 30 do E2, e os 72 turnos das 12 conversas, sendo 12 do dec-v3 com a voz-v3b e 60 do dec-v2
+    com a voz-v2.
+  - Ela rodou inteira na sexta tentativa (19:35–21:33). As cinco anteriores caíram e ficam em `validacao_caida_1/` a `_5/`, sem ajuste
+    entre elas (D-DC4C-1).
+- **As conferências da seção 9:** todas passaram e falham alto no orquestrador.
+  - Os modelos devolvidos são os pedidos: `gemma2:9b` (G e o verificador), `claude-haiku-5-5` (H) e `claude-sonnet-5-5` (S).
+  - Toda fala tem a entrada, o braço, a semente e o `usage`; a ordem dos pares é a sorteada.
+  - Não houve parada no teto, e o gasto não passou dele.
+  - O registro da rodada (seção 13) conferiu os 31 sha256 em cada lançamento.
+- **O gasto real:**
+  - US$ 1,176 na rodada (H US$ 0,055, S US$ 1,121), contra a projeção de US$ 1,20 pela média;
+  - US$ 0,023 na queda 5, nas 76 chamadas do H;
+  - US$ 2,077 acumulados, contra o teto de US$ 3.
+- **A latência** (`falas.jsonl`, p50/p90/máximo; a máquina sem jogo, pela confirmação do Matheus):
+  - a voz: G 8,7/12,0/19,7 s, H 1,3/1,7/12,8 s, S 2,0/2,3/8,5 s;
+  - o turno com o verificador: G 15,6/21,6/34,7 s, H 11,4/16,6/26,4 s, S 16,2/20,3/26,5 s.
+- **As falas genéricas:** nenhuma em nenhum braço. As 486 verificações não tiveram falha de chamada.
+- **Os pacotes da marcação** (`validacao/marcacao/`), gerados pelo orquestrador e não marcados:
+  - o `itens.json` da página tem 180 itens de legibilidade, 48 de referência, 36 de injeção e 24 pares;
+  - o pacote cego do marcador Opus, o `pacote_referencia.jsonl`, tem 486 falas;
+  - a pasta `respostas/` está vazia.
+  - Nenhum dos dois traz o braço nem o nome de um modelo: a busca por `braco`, `gemma`, `haiku` e `sonnet` dá zero.
+  - O `chave.json` (o id opaco para o braço) vai no commit, como o da calibração. A página só serve `/`, `/app.js`, `/app.css` e
+    `/api/estado`, que lê o `itens.json` e as respostas, e nunca o `chave.json`.
+- **O D-COMIDA** (`artifacts_v3_conversa_dc4/d_comida/`, `experiments/d_comida_dc4.py`, 4 processos, 46 min): descritivo, sem gate.
+  - **A conferência passou.** As 1 600 vidas do LAB+F da DC3 foram refeitas. Os 1 600 logs são byte a byte os do `vidas.tar.gz`, as medidas
+    são as do `medidas.json` (tirado o `custo`), e o r_n gravado se reproduz em toda decisão fechada. O código da DC3 mudou desde a run, e o
+    replay reproduziu mesmo assim (D-DC4C-3).
+  - **Os pedidos atendidos** (as 800 vidas do dono que atende): 22 543 de comida e 18 366 de companhia.
+  - **A fome demora a cair:** 150 ticks na mediana e 330 no p90, com 144 pedidos censurados. A solidão cai em 15 ticks, uma decisão, com
+    1 095 censurados.
+  - **O pet não come antes da decisão seguinte:** 0 pedidos, zero por construção (D-DC4C-2). Ele come na decisão seguinte em 428 (1,9 %) e
+    leva 9 decisões até comer na mediana (p90 21; 16 não comem até o fim da vida).
+  - **O sinal do crédito mudaria.** O r_n de hoje é negativo em 21 975 dos 22 543 pedidos de comida (97,5 %), com média −219,9. Se o crédito
+    fosse até o pet comer, seria positivo em 13 314 dos 22 527 que comem (59,1 %), com média +139,0. O sinal muda em 12 881 deles (57,2 %).
+  - O atencioso e o incoerente têm os mesmos números, porque as células são duplicadas na DC3 (D-DC4C-4).
+  - **O que isso pede:** pela seção 6, uma mudança de sinal vira proposta de adendo ou de etapa nova, e quem decide é o Matheus. Este PR não
+    muda o crédito.
