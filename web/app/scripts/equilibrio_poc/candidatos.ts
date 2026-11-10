@@ -3,6 +3,7 @@
    Os candidatos com nome ficam no CANDIDATOS; os da grade (grade.ts) vem de um JSON e so rodam com --grade. Os numeros novos sao
    PROPOSTOS, SEM FONTE, ate o Matheus decidir. */
 import { readFileSync } from "node:fs";
+import { conferirTiro as conferirTiroPoc } from "../../motor/arena/luta.ts";
 import { CANDIDATO_V21, type Candidato } from "./comum.ts";
 
 /** as trocas de um candidato: cada chave do Candidato, com as sub-chaves que mudam */
@@ -23,12 +24,13 @@ export function candidatoDe(t: Troca): Candidato {
     const alvo = atual as Record<string, number>;
     for (const [s, x] of Object.entries(v)) {
       if (!(s in alvo)) throw new Error(`candidato ${t.nome}: ${k}.${s} nao existe`);
-      /* o treino dos rivais pode ser 0; o resto e positivo */
-      if (typeof x !== "number" || !Number.isFinite(x) || x < 0 || (x === 0 && k !== "treinoRival")) throw new Error(`candidato ${t.nome}: ${k}.${s} invalido (${x})`);
+      /* o treino dos rivais e o tiro podem ser 0 (o nucleo confere a faixa do tiro); o resto e positivo */
+      if (typeof x !== "number" || !Number.isFinite(x) || x < 0 || (x === 0 && k !== "treinoRival" && k !== "tiro")) throw new Error(`candidato ${t.nome}: ${k}.${s} invalido (${x})`);
       alvo[s] = x;
     }
   }
   out.nome = t.nome;
+  conferirTiroPoc(base.tiro);
   return Object.freeze(base);
 }
 

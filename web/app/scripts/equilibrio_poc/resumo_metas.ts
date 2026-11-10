@@ -14,7 +14,7 @@ const pasta = argumento("pasta", ""), dir = pasta ? pasta.replace(/[\\/]?$/, "/"
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type J = any;
 const ler = (g: string): J => JSON.parse(readFileSync(dir + `${g}.json`, "utf-8"));
-const TODOS = ["lideres", "sparring", "vida", "treino", "estagio", "torneios", ...ESTAGIOS_LUTA.map(e => `formas_${e}`)];
+const TODOS = ["lideres", "sparring", "vida", "treino", "estagio", "torneios", "tiro", ...ESTAGIOS_LUTA.map(e => `formas_${e}`)];
 if (parcial && !pasta) throw new Error("resumo: o --parcial so vale com --pasta (a grade)");
 const G: Record<string, J> = Object.fromEntries(TODOS.filter(g => !parcial || existsSync(dir + `${g}.json`)).map(g => [g, ler(g)]));
 const tem = (...gs: string[]) => gs.every(g => g in G);
@@ -163,6 +163,14 @@ if (tem(...ESTAGIOS_LUTA.map(e => `formas_${e}`))) {
   D2.valores.leitura_empate_fora_do_espelho = Object.fromEntries(Object.entries(empForaEspelho).map(([e, m]) => [e, { max: Math.max(...Object.values(m)), acima_de_2pc: Object.entries(m).filter(([, x]) => x > .02).map(([f, x]) => `${f} (${x})`) }]));
   meta("S1", "o espelho", "o mesmo lutador dos dois lados: o lado A de 0,45 a 0,55 em cada mapa, so nas lutas com vencedor (D-LP5-11)", okS, s1);
 }
+/* ---------------------------------------------------------------- A2 (D-LP5-12): a distancia do tiro contra quem luta de perto */
+if (tem("tiro")) {
+  const T = G.tiro.dados, med = (h: Record<string, number>, q: number) => { const ks = Object.keys(h).map(Number).sort((a, b) => a - b), n = ks.reduce((a, k) => a + h[k], 0); let acc = 0; for (const k of ks) { acc += h[k]; if (acc >= q * n) return k; } return ks[ks.length - 1]; };
+  const ate = (h: Record<string, number>, px: number) => { const n = Object.values(h).reduce((a, x) => a + x, 0); if (!n) throw new Error("resumo: nenhum tiro no A2"); return Object.entries(h).filter(([k]) => Number(k) + 4 <= px + 1e-9).reduce((a, [, x]) => a + x, 0) / n; };
+  const v = Object.fromEntries(ESTAGIOS_LUTA.map(e => { const h = T[e].distancia_px; return [e, { mediana_px: med(h.perto, .5), ate_48px: r3(ate(h.perto, 48)), tiros: Object.values(h.perto as Record<string, number>).reduce((a, x) => a + x, 0), leitura_contra_quem_atira: { mediana_px: Object.keys(h.longe).length ? med(h.longe, .5) : null } }]; }));
+  meta("A2", "a distancia do tiro", "contra quem luta de perto: a mediana da distancia no tiro >= 90 px; <= 15 % dos tiros a 48 px ou menos, em cada estagio (D-LP5-12)",
+    Object.values(v).every(x => x.mediana_px >= 90 && x.ate_48px <= .15), v);
+}
 /* ---------------------------------------------------------------- G1-G4 */
 if (tem("torneios")) {
   const T = G.torneios.dados, liga = T.liga, g1 = liga.titulos / liga.tentativas;
@@ -178,9 +186,9 @@ if (tem("torneios")) {
   meta("G4", "o Salao", "o pet tipico vence o rival do Salao de 0,70 a 0,95 em cada estagio", Object.values(sal).every(x => dentro(x as number, .7, .95)), { taxa: sal });
 }
 
-const ORDEM_METAS = ["P1", "P2", "P3", "P4", "P5", "T1", "T2", "T3", "E1", "D1", "D2", "D3", "A1", "V1", "V2", "G1", "G2", "G3", "G4", "S1"];
+const ORDEM_METAS = ["P1", "P2", "P3", "P4", "P5", "T1", "T2", "T3", "E1", "D1", "D2", "D3", "A1", "A2", "V1", "V2", "G1", "G2", "G3", "G4", "S1"];
 metas.sort((a, b) => ORDEM_METAS.indexOf(a.id) - ORDEM_METAS.indexOf(b.id));
-if ((!parcial && metas.length !== 20) || metas.some(m => !ORDEM_METAS.includes(m.id))) throw new Error("resumo: as metas nao sao as 20 do plano");
+if ((!parcial && metas.length !== 21) || metas.some(m => !ORDEM_METAS.includes(m.id))) throw new Error("resumo: as metas nao sao as 21 do plano (com o A2, D-LP5-12)");
 const lutas = Object.values(G).reduce((a, x) => a + x.lutas, 0), segundos = Object.values(G).reduce((a, x) => a + x.segundos, 0);
 const saida = { tarefa: "LUTA_POC, LP5, o resumo das metas", fase, faixa, parcial, grupos: Object.keys(G), commit: [...commits][0], candidato: JSON.parse([...candidatos][0]), lutas, segundos_somados: r3(segundos),
   passam: metas.filter(m => m.passa).map(m => m.id), falham: metas.filter(m => !m.passa).map(m => m.id), metas };

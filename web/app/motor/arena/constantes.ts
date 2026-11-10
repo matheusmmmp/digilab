@@ -46,6 +46,18 @@ export const ERRO_MIRA_POC: Record<Dificuldade, number> = { facil: 40, normal: 1
     vida do jogo / 6) nao e mais da simulacao: a vida chega pronta nos Stats */
 export const OPCOES_PADRAO = { forca: 1.5, pvel: 0.15, dific: "normal" as Dificuldade };
 
+/** a distancia do tiro (LUTA_POC, LP5, D-LP5-12: "Desenho agora, motor na LP5"): como quem atira mantem distancia de quem luta de perto.
+    So vale quando a entrada da luta traz o `tiro` (o candidato da bancada; no jogo, a versao do pet que o ligar, na LP5-5). Sem ele, a luta
+    e a de sempre, byte a byte. Os valores do TIRO_V21 sao os da POC; os do candidato sao PROPOSTOS, SEM FONTE.
+    - distMin: abaixo dela (px) quem atira nao solta o tiro de projetil e recua; 0 = sem distancia minima;
+    - esperaMax: quanto tempo (ms) ele espera abaixo da distMin antes de atirar mesmo assim (encurralado na borda);
+    - recuaAbaixo: recua quando a distancia fica abaixo desta fracao do alcance (a POC: 0,5);
+    - recuo: a velocidade do recuo de quem atira (x o movimento; a POC: o EQ.recuo, 1);
+    - recuaNaPrep: a velocidade (x o movimento) com que ele se afasta na preparacao do tiro, se o alvo esta mais perto que a distMin ou que
+      o recuaAbaixo; 0 = parado, como na POC */
+export interface Tiro { distMin: number; esperaMax: number; recuaAbaixo: number; recuo: number; recuaNaPrep: number }
+export const TIRO_V21: Readonly<Tiro> = Object.freeze({ distMin: 0, esperaMax: 0, recuaAbaixo: 0.5, recuo: EQ.recuo, recuaNaPrep: 0 });
+
 /** movimento e tempos das acoes. PROPOSTO, PROTOTIPO */
 export const ACAO = {
   entradaX: 130,             // px do centro onde cada lado entra

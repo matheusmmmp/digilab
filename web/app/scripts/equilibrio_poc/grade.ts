@@ -26,7 +26,7 @@ const rodar = (script: string, args: string[]): Promise<void> => new Promise((ok
   p.on("exit", cod => cod === 0 ? ok() : falha(new Error(`${script} ${args.join(" ")}: codigo ${cod}`)));
 });
 /* os grupos caros primeiro */
-const PESO: Record<string, number> = { formas_mega: 9, formas_adulto: 8, formas_adolescente: 7, treino: 6, torneios: 5, sparring: 4, lideres: 3, formas_crianca: 2, estagio: 1 };
+const PESO: Record<string, number> = { tiro: 4.5, formas_mega: 9, formas_adulto: 8, formas_adolescente: 7, treino: 6, torneios: 5, sparring: 4, lideres: 3, formas_crianca: 2, estagio: 1 };
 const fila: { t: Troca; grupo: string }[] = [];
 for (const t of g.candidatos) {
   const dir = `${raiz}/${t.nome}/`;
@@ -66,6 +66,7 @@ const linha = (m: J): string => {
     case "V1": return Object.values(v as Record<string, { amplitude: number; taxa: Record<string, number> }>).map(x => `${r2(Math.min(...Object.values(x.taxa)))}-${r2(Math.max(...Object.values(x.taxa)))}`).join(" ");
     case "V2": return Object.values(v.amplitude).map(x => r2(x as number)).join("/");
     case "S1": return Object.values(v as Record<string, { lado_a_com_vencedor: Record<string, number> }>).map(x => { const xs = Object.values(x.lado_a_com_vencedor); return `${r2(Math.min(...xs))}-${r2(Math.max(...xs))}`; }).join(" ");
+    case "A2": return Object.values(v as Record<string, { mediana_px: number; ate_48px: number }>).map(x => `${x.mediana_px}|${r2(x.ate_48px)}`).join(" ");
     case "P4": return Object.values(v.taxa_media).map(x => r2(x as number)).join("/");
     default: return JSON.stringify(v).slice(0, 80);
   }

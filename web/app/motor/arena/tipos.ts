@@ -1,7 +1,7 @@
 /* Tipos da luta da POC no motor (docs/TAREFA_V3_LUTA_POC.md, LP1): porte de web/app/arena/tipos.ts do commit efb2ded, so 1 contra 1,
    sem jogador e sem equipes. Os dados do Digimon vem da tabela do git (formas.ts, a LP-2); os numeros do lutador vem prontos (Stats, a
    LP-3: na LP2 saem dos 6 stats do pet). */
-import type { Dificuldade } from "./constantes.ts";
+import type { Dificuldade, Tiro } from "./constantes.ts";
 
 export type Lado = "a" | "b";
 export type IdCena = "campo" | "coliseu" | "floresta" | "praia" | "deserto" | "castelo" | "caverna" | "ringue";
@@ -32,6 +32,8 @@ export interface ConfigLuta {
   pvel: number;       // velocidade dos projeteis em relacao ao jogo
   a: LadoLuta;        // o lado azul (o pet, na LP2)
   b: LadoLuta;
+  /** a distancia do tiro (D-LP5-12); sem ela, a luta da POC */
+  tiro?: Tiro;
 }
 
 // ---------- estado ----------
@@ -50,6 +52,8 @@ export interface Lutador {
   dash: number; dashCd: number; dashDir: [number, number]; reacao: number; desvioDir: [number, number];
   atordoado: number; caiuEm: number; foraAte: number;
   escondido: boolean; naRuna: number; buffAte: number; bloq: number; ladoDesvio: number;
+  /** ms abaixo da distancia minima do tiro (D-LP5-12; so com o `tiro` da entrada) */
+  esperaTiro: number;
   acDano: number; ultAmb: number; ultNum: number;
   /** a ultima situacao em que a IA da POC pensou em trocar (o sorteio dela fica; ver sim.ts, sorteioDaTroca) */
   decisao: string;

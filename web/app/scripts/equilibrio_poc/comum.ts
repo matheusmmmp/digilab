@@ -12,9 +12,9 @@
 import { execSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import {
-  CMG, CTR, CIT, FORMAS_ARENA, LIMITE_POC_MS, MAPA_STATS, STATS, TreinoPet,
+  CMG, CTR, CIT, FORMAS_ARENA, TIRO_POC_V21, LIMITE_POC_MS, MAPA_STATS, STATS, TreinoPet,
   caraterCanonico, criarRng, rivaisArena, formaDaChave, hashSemente, lutarNucleoPoc, multEstagio, NPC, sorteiosPoc, statsDe,
-  type Carater, type Especie, type Estagio, type Exercicio, type Forma, type FormaAdultaNormal, type IdCena, type Stat, type Stats, type StatsPoc,
+  type Carater, type Especie, type Estagio, type Exercicio, type Forma, type FormaAdultaNormal, type IdCena, type Stat, type Stats, type StatsPoc, type TiroPoc,
 } from "../../motor/index.ts";
 
 /* ---------------------------------------------------------------- o candidato */
@@ -35,6 +35,8 @@ export interface Candidato {
   npcTotal: Record<string, number>;
   /** os pontos de treino dos rivais de cada lugar (hoje 0), postos pela trajetoria do dono tipico da especie do rival */
   treinoRival: { arena: number; salao: number; liga: number; torre: number; fabrica: number };
+  /** a distancia do tiro (o nucleo, D-LP5-12; hoje o TIRO_POC_V21, a luta da POC) */
+  tiro: TiroPoc;
 }
 const NPCS_V6 = ["npc_tier1_brutamontes", "npc_tier2_sentinela", "npc_tier2_carcereiro", "npc_tier2_porteiro", "npc_v6_youkomon",
   "npc_v5_myotismon", "npc_v6_marinbullmon", "npc_v5_puppetmon", "npc_v5_machinedramon", "npc_v5_piedmon"] as const;
@@ -47,7 +49,10 @@ export const CANDIDATO_V21: Candidato = Object.freeze({
   multAtk: { crianca: 1, adolescente: 1, adulto: 1, mega: 1 },
   npcTotal: Object.fromEntries(NPCS_V6.map(k => { const n = NPC[k]; if (!n) throw new Error(`bancada: o NPC ${k} sumiu`); return [k, n.total]; })),
   treinoRival: { arena: 0, salao: 0, liga: 0, torre: 0, fabrica: 0 },
+  tiro: { ...TIRO_POC_V21 },
 });
+/** o tiro do candidato e o da POC? (entao a luta nao leva o `tiro` na entrada, e sai a de sempre, byte a byte) */
+export const tiroDaPoc = (t: TiroPoc): boolean => (Object.keys(TIRO_POC_V21) as (keyof TiroPoc)[]).every(k => t[k] === TIRO_POC_V21[k]);
 const ehEstagioLuta = (e: string): e is EstagioLuta => (ESTAGIOS_LUTA as readonly string[]).includes(e);
 
 /** os numeros da luta de 6 stats pelo candidato (a mesma conta do statsDaLuta, com os expoentes e os multiplicadores do candidato) */
@@ -145,8 +150,8 @@ export const lutadorDoPet = (c: Candidato, p: PetBancada, n: number): StatsPoc =
 export const sementeLuta = (base: number, k: number): number => hashSemente("equilibrio-poc", base, k);
 export interface Lado { forma: string; stats: StatsPoc; vida0?: number }
 export interface Luta1 { vencedor: "a" | "b" | null; fim: boolean; relogio: number; vidaA: number }
-export function lutar(cena: IdCena, semente: number, a: Lado, b: Lado): Luta1 {
-  const r = lutarNucleoPoc({ cena, semente, a, b }, sorteiosPoc(semente));
+export function lutar(cena: IdCena, semente: number, a: Lado, b: Lado, tiro?: TiroPoc): Luta1 {
+  const r = lutarNucleoPoc({ cena, semente, a, b, ...(tiro && !tiroDaPoc(tiro) ? { tiro } : {}) }, sorteiosPoc(semente));
   return { vencedor: r.vencedor, fim: r.fim, relogio: r.relogio, vidaA: r.vidaA };
 }
 /** um contador de vitorias, empates, lutas sem fim e o relogio (histograma em 100 ms) */

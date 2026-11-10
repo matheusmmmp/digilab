@@ -46,7 +46,7 @@ function criarLutador(L: Luta, lado: Lado): Lutador {
     msAtk: forma.msGolpe, msSk: forma.msHabilidade,
     alcance: g.proj ? ACAO.alcanceDist : EQ.alcanceCorpo, raio: EQ.raio, alvo: null, fase,
     morto: false, dano: 0, golpes: 0, mira: null, dash: 0, dashCd: 0, dashDir: [0, 0], reacao: 0, desvioDir: [0, 0],
-    atordoado: 0, caiuEm: 0, foraAte: 0, escondido: false, naRuna: 0, buffAte: 0, bloq: 0, ladoDesvio: 0,
+    atordoado: 0, caiuEm: 0, foraAte: 0, escondido: false, naRuna: 0, buffAte: 0, bloq: 0, ladoDesvio: 0, esperaTiro: 0,
     acDano: 0, ultAmb: 0, ultNum: 0, decisao: "",
   };
 }
@@ -172,6 +172,12 @@ function atualizar(L: Luta, u: Lutador, dt: number): void {
       if (id > EQ.alcanceCorpo * 0.6 + o.raio) andar(L, u, ix / id, iy / id / ACAO.eixoY, EQ.investida / Math.max(0.15, dg.t), dt);
       u.viraEsq = ix < 0;
     }
+    /* a distancia do tiro (D-LP5-12): na preparacao do tiro, se afasta do alvo que esta perto */
+    const T = L.cfg.tiro;
+    if (T && T.recuaNaPrep > 0 && dg.proj && !u.golpeDado && !o.morto) {
+      const ix = o.x - u.x, iy = o.y - u.y, id = dist(ix, iy) || 1;
+      if (id < Math.max(T.distMin, u.alcance * T.recuaAbaixo)) andar(L, u, -ix / id, -iy / id, u.st.vel * T.recuaNaPrep, dt);
+    }
     if (!u.golpeDado && u.t >= dg.t * 1000) { u.golpeDado = true; if (!o.morto) soltarGolpe(L, u); }
     if (u.t >= (u.usandoHab ? u.msSk : u.msAtk)) { mudar(u, "idle"); u.recarga = Math.max(ACAO.recargaMin, u.st.cad - u.msAtk); u.usandoHab = false; }
     return;
@@ -190,8 +196,12 @@ function atualizar(L: Luta, u: Lutador, dt: number): void {
   const alcHab = u.sk.proj ? ACAO.alcanceDist : EQ.alcanceCorpo;
   // corpo a corpo conta o corpo do alvo: sem isso, dois grandes se empurram para fora do alcance
   const folga = (p: unknown) => p ? 0 : o.raio * 0.8 + EQ.investida * 0.8;
-  if (u.recSk <= 0 && d <= alcHab + folga(u.sk.proj) && (livre || !u.sk.proj)) { iniciarAtaque(L, u, mira(), true); return; }
-  if (d <= u.alcance + folga(u.g.proj) && u.recarga <= 0 && (livre || !u.g.proj)) { iniciarAtaque(L, u, mira(), false); return; }
+  /* a distancia do tiro (D-LP5-12): abaixo da distMin o tiro de projetil espera ate o esperaMax; sem o `tiro`, a luta da POC */
+  const T = L.cfg.tiro;
+  let perto = false;
+  if (T && T.distMin > 0 && (u.g.proj || u.sk.proj) && d < T.distMin) { u.esperaTiro += dt; perto = u.esperaTiro < T.esperaMax; } else u.esperaTiro = 0;
+  if (u.recSk <= 0 && d <= alcHab + folga(u.sk.proj) && (livre || !u.sk.proj) && !(perto && u.sk.proj)) { iniciarAtaque(L, u, mira(), true); return; }
+  if (d <= u.alcance + folga(u.g.proj) && u.recarga <= 0 && (livre || !u.g.proj) && !(perto && u.g.proj)) { iniciarAtaque(L, u, mira(), false); return; }
   let mx = 0, my = 0;
   if (!livre) {
     // contorna andando de lado; os dois lados desviam para o mesmo lado do mundo e trocam juntos a cada 4 s
@@ -201,7 +211,7 @@ function atualizar(L: Luta, u: Lutador, dt: number): void {
   } else {
     u.ladoDesvio = 0;
     if (d > u.alcance * 0.9) { mx = dx / d; my = dy / d; }
-    else if (u.g.proj && d < u.alcance * 0.5) { mx = -dx / d; my = -dy / d; }
+    else if (u.g.proj && d < (T ? Math.max(T.distMin, u.alcance * T.recuaAbaixo) : u.alcance * 0.5)) { mx = -dx / d; my = -dy / d; }
     else { u.fase += dt / 700; mx = -dy / d * seno(u.fase) * 0.6; my = dx / d * seno(u.fase) * 0.6; }
   }
   // regras da arena: fugir de perigos, buscar vantagens; obstaculos proximos empurram o rumo
@@ -213,7 +223,8 @@ function atualizar(L: Luta, u: Lutador, dt: number): void {
   }
   const m = dist(mx, my);
   const recua = mx * dx + my * dy < 0;
-  if (m > 0.15) { andar(L, u, mx / Math.max(1, m), my / Math.max(1, m), u.st.vel * (recua ? EQ.recuo : 1), dt); mudar(u, "run"); } else mudar(u, "idle");
+  const vRecuo = T && u.g.proj ? T.recuo : EQ.recuo;
+  if (m > 0.15) { andar(L, u, mx / Math.max(1, m), my / Math.max(1, m), u.st.vel * (recua ? vRecuo : 1), dt); mudar(u, "run"); } else mudar(u, "idle");
 }
 
 /** um passo de PASSO_MS: a regra da arena, os dois lutadores, os corpos, os projeteis e o fim. Devolve os eventos do passo. */

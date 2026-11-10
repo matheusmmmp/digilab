@@ -9,7 +9,7 @@ import { GRUPOS } from "./bancada.ts";
 const faixa = argumento("faixa"), fase = argumento("fase"), candidato = argumento("candidato", "v21"), processos = Number(argumento("processos", "4"));
 if (!(Number.isInteger(processos) && processos >= 1 && processos <= 4)) throw new Error(`medir_tudo: de 1 a 4 processos (V3-D8), nao ${processos}`);
 /* os grupos mais caros primeiro, para os 4 processos acabarem juntos */
-const ORDEM = ["formas_adolescente", "formas_adulto", "formas_mega", "treino", "torneios", "sparring", "lideres", "formas_crianca", "estagio", "vida"];
+const ORDEM = ["formas_adolescente", "formas_adulto", "formas_mega", "treino", "torneios", "tiro", "sparring", "lideres", "formas_crianca", "estagio", "vida"];
 if (ORDEM.length !== GRUPOS.length || !GRUPOS.every(g => ORDEM.includes(g))) throw new Error("medir_tudo: a ordem nao tem todos os grupos");
 const aqui = (f: string) => fileURLToPath(new URL(f, import.meta.url));
 const rodar = (script: string, args: string[]): Promise<void> => new Promise((ok, falha) => {

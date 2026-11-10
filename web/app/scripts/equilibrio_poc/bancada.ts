@@ -8,11 +8,11 @@ import { fileURLToPath } from "node:url";
 import {
   ACOES_DONO_JOGO_V11, ARENA_POR_ID, CAMPANHA_V6, CAT, CD, CMD, CTR, IDS_CENA, LIGA, LUGARES_V6, LUTAS_MAX_INSTALACAO, MAPA_FABRICA, MAPA_SALAO,
   MAPA_TORRE, Motor, NPC, STATS, TPD, alugueisFabrica, arenaDaLuta, caraterCanonico, caraterDoRivalSalao, chaveSprite, criarDono, criarRng,
-  condicaoDe, formaLiga, formaRivalFabrica, formaRivalInstalacao, formaRivalSalao, hashSemente, mapaDoLugar, rivaisArena, sementeDaSerie, sementeLutaFabrica,
-  type Exercicio, type Forma, type FormaAdultaNormal, type IdCena, type Stat, type StatsPoc, type VisaoDono,
+  LIMITE_POC_MS, condicaoDe, configLutaPoc, criarLutaPoc, formaLiga, formaRivalFabrica, passoPoc, sorteiosPoc, formaRivalInstalacao, formaRivalSalao, hashSemente, mapaDoLugar, rivaisArena, sementeDaSerie, sementeLutaFabrica,
+  type Exercicio, type Forma, type FormaAdultaNormal, type IdCena, type Stat, type StatsPoc, type TiroPoc, type VisaoDono,
 } from "../../motor/index.ts";
 import {
-  CANDIDATO_V21, ESTAGIOS_LUTA, TETO, TIPICO, argumento, commitAtual, contar, juntar, lutador, lutadorDoPet, lutar, novaConta, npc,
+  CANDIDATO_V21, ESTAGIOS_LUTA, atira, tiroDaPoc, TETO, TIPICO, argumento, commitAtual, contar, juntar, lutador, lutadorDoPet, lutar, novaConta, npc,
   petDoEstagio, pontosNumStat, rivalCanonico, rivalDaForma, sementeLuta, taxa,
   type Candidato, type Conta, type EstagioLuta, type Lado, type Luta1, type PetBancada,
 } from "./comum.ts";
@@ -27,13 +27,14 @@ export const TAM: Record<string, number> = {
   lutasGrade: 2,     // T3: a grade dos pontos contra todas as formas do estagio
   lutasE1: 4,        // E1: contra todas as formas do estagio de cima
   lutasFormas: 25,   // A1, V1, S1: por par ordenado e mapa, em cada base
+  lutasTiro: 1,      // A2: por par (quem atira, o outro), mapa, lado e base (D-LP5-12)
   tentativas: 20,    // torneios: tentativas por pet (a Liga, a Torre, o Salao) e por pet-equivalente (a Fabrica)
   vidas: 20,         // P5: vidas por base
   diasVida: 4,       // P5: a vida vai ate o Mega ou ate 4 dias de jogo (o Mega precisa de ~2,4 dias)
   seriesFabrica: 7,  // G3: a tentativa para no fim da 7a serie (21 lutas), para acabar
 };
 /** --rapido: a fumaca (1 pet, poucas lutas, 1 base), so para conferir que o grupo roda; o artefato vai para --saida, fora das medicoes */
-const RAPIDO = { pets: 1, lutas: 2, lutasT2: 1, lutasGrade: 1, lutasE1: 1, lutasFormas: 1, tentativas: 2, vidas: 1 };
+const RAPIDO = { pets: 1, lutas: 2, lutasT2: 1, lutasGrade: 1, lutasE1: 1, lutasFormas: 1, lutasTiro: 1, tentativas: 2, vidas: 1 };
 
 const LIDERES = LIGA.map(x => x.lider);
 const DESAFIANTES = ["npc_tier2_sentinela", "npc_tier2_porteiro", "npc_v5_puppetmon", "npc_v5_machinedramon"];
@@ -49,8 +50,10 @@ class Duracao {
 }
 const D = new Duracao();
 let LUTAS = 0;
+/** o tiro do candidato que roda (rodar() o poe; a luta so o leva quando ele nao e o da POC) */
+let TIRO: TiroPoc | undefined;
 function luta(est: string, cena: IdCena, s: number, a: Lado, b: Lado): Luta1 {
-  const r = lutar(cena, s, a, b); LUTAS++; D.add(est, [a.forma, b.forma], r); return r;
+  const r = lutar(cena, s, a, b, TIRO); LUTAS++; D.add(est, [a.forma, b.forma], r); return r;
 }
 /** uma serie sem cura para o pet (a Cidadela, a Liga, a Torre): vai ate a primeira que nao for vitoria ou ate n. Cada rival entra inteiro */
 function serie(est: string, s: number, pet: Lado, rivais: (j: number) => { lado: Lado; mapa: IdCena } | null, n: number): { vitorias: number; relogio: number } {
@@ -127,6 +130,8 @@ export function motorDoCandidato(c: Candidato, semente: number, remendar = c.nom
   return m;
 }
 function vida(c: Candidato, bases: number[]) {
+  /* o Motor.lutarPoc nao le o tiro do candidato: um tiro novo so entra na vida com a versao do pet (a LP5-5) ou com o Motor aberto a ele */
+  if (!tiroDaPoc(c.tiro)) throw new Error(`bancada: a vida (P5) nao le o tiro do candidato ${c.nome} (desvio D-LP5-1-8)`);
   const vidas: unknown[] = [];
   for (const base of bases) for (let i = 0; i < TAM.vidas; i++) {
     const semente = hashSemente("equilibrio-poc-pet", base, i), m = motorDoCandidato(c, semente), dono = criarDono("atencioso");
@@ -214,6 +219,34 @@ function formas(c: Candidato, bases: number[], est: EstagioLuta) {
   return { estagio: est, formas: rv, pares };
 }
 
+/* ---------------------------------------------------------------- A2: a distancia do tiro contra quem luta de perto (D-LP5-12) */
+/** a distancia (px) no instante em que cada tiro de projetil nasce, em histograma de 4 px: quem atira contra quem luta de perto, nos dois
+    lados e nos 8 mapas, sem treino (como o A1); e, so para leitura, quem atira contra quem atira */
+function tiro(c: Candidato, bases: number[]) {
+  const out: Record<string, unknown> = {};
+  for (const est of ESTAGIOS_LUTA) {
+    const rv = rivaisArena(est), longe = rv.filter(atira), perto = rv.filter(k => !atira(k)), lados = Object.fromEntries(rv.map(k => [k, { forma: k, stats: rivalCanonico(c, k) }]));
+    const hist = { perto: {} as Record<string, number>, longe: {} as Record<string, number> }, voo = { perto: {} as Record<string, number>, longe: {} as Record<string, number> };
+    for (const [tipo, alvos] of [["perto", perto], ["longe", longe]] as const) for (const x of longe) for (const y of alvos) for (const m of IDS_CENA) for (const base of bases)
+      for (let q = 0; q < TAM.lutasTiro; q++) for (const ladoX of ["a", "b"] as const) {
+        const s = sementeLuta(base, 12_000_000 + q), A = ladoX === "a" ? lados[x] : lados[y], B = ladoX === "a" ? lados[y] : lados[x];
+        const L = criarLutaPoc(configLutaPoc({ cena: m, semente: s, a: A, b: B, ...(TIRO && !tiroDaPoc(TIRO) ? { tiro: TIRO } : {}) }), sorteiosPoc(s));
+        const quem = ladoX === "a" ? L.a : L.b, vistos = new Map<unknown, number>();
+        while (!L.fim && L.relogio < LIMITE_POC_MS) {
+          passoPoc(L);
+          for (const p of L.projeteis) if (p.de === quem && !vistos.has(p)) {
+            vistos.set(p, 0);
+            const b = String(4 * Math.floor(Math.hypot(L.a.x - L.b.x, L.a.y - L.b.y) / 4)); hist[tipo][b] = (hist[tipo][b] ?? 0) + 1;
+          }
+          for (const [p, n] of vistos) if (n >= 0) { if (L.projeteis.includes(p as never)) vistos.set(p, n + 1); else { const k = String(n); voo[tipo][k] = (voo[tipo][k] ?? 0) + 1; vistos.set(p, -1); } }
+        }
+        LUTAS++;
+      }
+    out[est] = { longe, perto, distancia_px: hist, voo_passos: voo };
+  }
+  return out;
+}
+
 /* ---------------------------------------------------------------- G1-G4: os torneios */
 function torneios(c: Candidato, bases: number[]) {
   const pets = petsDo(bases, "mega");
@@ -263,9 +296,11 @@ function torneios(c: Candidato, bases: number[]) {
 }
 
 /* ---------------------------------------------------------------- a linha de comando */
-export const GRUPOS = ["lideres", "sparring", "vida", "treino", "estagio", "formas_crianca", "formas_adolescente", "formas_adulto", "formas_mega", "torneios"] as const;
+export const GRUPOS = ["lideres", "sparring", "vida", "treino", "estagio", "formas_crianca", "formas_adolescente", "formas_adulto", "formas_mega", "torneios", "tiro"] as const;
 function rodar(grupo: string, c: Candidato, bases: number[]): unknown {
+  TIRO = c.tiro;
   switch (grupo) {
+    case "tiro": return tiro(c, bases);
     case "lideres": return lideres(c, bases);
     case "sparring": return sparring(c, bases);
     case "vida": return vida(c, bases);

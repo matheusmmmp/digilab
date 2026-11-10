@@ -4,7 +4,7 @@
 import { describe, expect, test } from "vitest";
 import {
   CAMPANHA_V6, CMD, CTR, DUR_EVO, LIGA, Motor, STATS, TICK_INICIAL, TentativaFabrica, caraterCanonico, condicaoDe, formaLiga, rivaisArena,
-  statsDoPet, statsNpc, statsRivalArena, statsRivalForma, type Stats,
+  statsDoPet, statsNpc, statsRivalArena, statsRivalForma, TIRO_POC_V21, lutarNucleoPoc, sorteiosPoc, type Stats,
 } from "../motor/index.ts";
 import {
   CANDIDATO_V21, ESTAGIOS_LUTA, TETO, TIPICO, npc, petDoEstagio, pontosNoTotal, rivalCanonico, rivalDaForma, statsLuta,
@@ -97,5 +97,22 @@ describe("os candidatos da rodada (LP5-1 a LP5-3)", () => {
       }
       expect(b.sparring).toBe(a.sparring);
     }
+  });
+});
+
+describe("a distancia do tiro no nucleo (D-LP5-12)", () => {
+  const A = { forma: "brasa_crianca_sereno", stats: statsRivalArena("brasa_crianca_sereno") };
+  const B = { forma: "ferrugem_crianca_arisco", stats: statsRivalArena("ferrugem_crianca_arisco") };
+  test("o tiro da POC na entrada da a mesma luta que a entrada sem ele", () => {
+    for (const cena of ["campo", "praia", "caverna"] as const) for (const s of [1, 2, 3]) {
+      const sem = lutarNucleoPoc({ cena, semente: s, a: A, b: B }, sorteiosPoc(s));
+      expect(lutarNucleoPoc({ cena, semente: s, a: A, b: B, tiro: { ...TIRO_POC_V21 } }, sorteiosPoc(s))).toEqual(sem);
+    }
+  });
+  test("o candidato v21 nao leva o tiro; um tiro fora da faixa falha alto", () => {
+    expect(c.tiro).toEqual(TIRO_POC_V21);
+    expect(() => candidatoDe({ nome: "teste", tiro: { distMin: 500 } })).toThrow();
+    expect(() => candidatoDe({ nome: "teste", tiro: { recuo: 0 } })).toThrow();
+    expect(candidatoDe({ nome: "teste", tiro: { distMin: 90, esperaMax: 800 } }).tiro.distMin).toBe(90);
   });
 });
