@@ -369,7 +369,11 @@ class VistaIlha {
     const para = a.chave === "0" ? motorCel0 : this.pontoDoPetNo(VIAGEM.lugar);
     const f = a.dur > 0 ? Math.min(1, (agora - a.desde) / a.dur) : 1;
     if (f >= 1 && a.chave === "0") { this.andaPet = null; return { cel: motorCel0, andando: false }; }
-    if (a.rota && f < 1) return { cel: naRota(a.rota, f), andando: true };
+    if (a.rota && f < 1) {
+      /* a volta segue o pet do motor, que pode ter andado desde a partida: o desvio do fim da rota entra aos poucos, sem salto na chegada */
+      const [x, z] = naRota(a.rota, f), u = a.rota[a.rota.length - 1];
+      return { cel: [x + (para[0] - u[0]) * f, z + (para[1] - u[1]) * f], andando: true };
+    }
     return { cel: f >= 1 ? para : this.entre(a.de, para, f), andando: f < 1 };
   }
   private suave(f: number): number { return f * f * (3 - 2 * f); }

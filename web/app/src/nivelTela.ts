@@ -9,6 +9,7 @@
    - o cartao de destrave: pede a fila das dicas (dicas.ts) e sai dela quando visto.
    NADA acontece durante o render: `calcularNivel` so le (a chave, o jogo) e guarda o resultado; gravar a chave, as travas, os brilhos e o aviso saem no efeito
    (`confirmarNivel`, chamado pelo useNivelRaiz). So vista: nada aqui muda o motor, o save, o registro do Tamer nem o replay; "a vista nunca abre antes do motor". */
+import { VERSOES_PET } from "../motor/index.ts";
 import { useEffect, useSyncExternalStore } from "react";
 import { type Motor } from "../motor/index.ts";
 import { motorReal, tamerAtual, useJogo } from "./jogo.ts";
@@ -34,7 +35,8 @@ function pecasSemeadas() {
     const exemplo = petExemplo();
     /* desde a LP2 da LUTA_POC (e para todos desde a LP4) a escada de exemplo nao e semeada: so o pet de exemplo */
     semeadas = { sementes: new Set([exemplo.semente]), assinaturas: new Set() };
-    (semeadas.assinaturas as Set<string>).add(assinaturaIntocada(exemplo));
+    /* o pet de exemplo de quem abriu o jogo antes da v22 (ILHA_AGUA, IA4) e v21: continua valendo como "nao e do jogador" */
+    for (const v of VERSOES_PET) (semeadas.assinaturas as Set<string>).add(assinaturaIntocada(petExemplo(v)));
   }
   return semeadas;
 }

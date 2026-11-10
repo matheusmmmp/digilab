@@ -16,7 +16,8 @@ import { passarParaIlhaComAgua } from "../src/ilhaAgua.ts";
 import { iniciarJogo, jogoAtual, novoPet, trocarMotor } from "../src/jogo.ts";
 import { versaoDoOvo, versoesQueAbrem } from "../src/lutaPoc.ts";
 import { ligarProduto } from "../src/produto.ts";
-import { CHAVE, textoSave, type Armazenamento } from "../src/save.ts";
+import { ehPetDoJogador } from "../src/nivelTela.ts";
+import { CHAVE, petExemplo, textoSave, type Armazenamento } from "../src/save.ts";
 
 const SOLIDOS = solidosDaAgua(CMU_MVP_AGUA), R = CONFIG_CONTRATO_AGUA.r_pet;
 const emTerra = (m: Motor): boolean => bloqueioEm(m.mundo!.pet[0], m.mundo!.pet[1], R, SOLIDOS) === null;
@@ -149,6 +150,30 @@ describe("no app", () => {
     iniciarJogo(a);
     expect(a.d[CHAVE]).toBe(texto);
     expect(jogoAtual().motor.log.filter(e => e[1] === "mi").length).toBe(1);
+  });
+
+  test("o pet de exemplo de antes da v22 (v21) segue nao sendo do jogador, antes e depois de passar para a ilha com agua", () => {
+    const hoje = petExemplo(), antigo = petExemplo(21);
+    expect([hoje.versao, antigo.versao]).toEqual([22, 21]);
+    expect([ehPetDoJogador(hoje), ehPetDoJogador(antigo)]).toEqual([false, false]);
+    antigo.avancar(90);
+    expect(passarParaIlhaComAgua(antigo)).toBe(true);
+    antigo.avancar(60);
+    expect(ehPetDoJogador(antigo)).toBe(false);                  // o "mi" e do jogo, nao do jogador
+    antigo.observar("acariciar");
+    expect(ehPetDoJogador(antigo)).toBe(true);                   // um cuidado a mais o faz do jogador, como antes
+  });
+
+  test("a bola que rolava para onde esta na troca (o espelho do teste do Python)", () => {
+    const m = new Motor(303, 21), w = m.mundo!;
+    w.deixarBola(60, 300, 240);
+    (w as unknown as { rolarBola(t: number, de: [number, number]): void }).rolarBola(60, [280, 240]);
+    const meio = w.bolaEm(62), fim = w.bolaEm(9999);
+    expect(meio).not.toEqual(fim);
+    expect(meio).not.toEqual([300, 240]);
+    const reg = w.mudarIlha(62, "mvp_agua");
+    expect(reg.bola).toEqual({ de: meio, para: w.emTerra(...meio) });
+    expect(w.bolaEm(9999)).toEqual(w.emTerra(...meio));
   });
 
   test("o pet v21 que entra pela troca de pet tambem passa; o ovo novo ja nasce v22 na ilha com agua", () => {
