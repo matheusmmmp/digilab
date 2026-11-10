@@ -360,3 +360,36 @@ teste da procedência. Os arquivos da geladeira da Meshy ficam em `docs/enfeites
 
 **Não feito:** não houve revisor separado nem prancha de capturas no git; a conferência foi na vitrine e no jogo, no estilo da Ilha. O
 estilo Digital dentro do jogo e o celular não foram conferidos. Os desvios estão em `docs/registro/2026-11.md`, D-OBJ-GEL-1 a 3.
+
+## 17. A lata gigante feita à mão por script, dentro do mapa (2026-11-10, Gerente, Claude Code, Fable 5.2, branch `v3-objeto-lata-mao`)
+
+**O pedido:** o Matheus, em 2026-11-10: a lata gigante "tá fora do mapa e ainda tá toda errada. Vê a malha dela, a textura dela e daí
+bota ela dentro do mapa".
+
+**O que estava errado:** a lata era a da D4 do mapa Digital (`docs/TAREFA_V3_MAPA_DIGITAL.md`, seção 12). Ela só existia no estilo
+Digital, presa ao horizonte: andava com a câmera e nunca ficava num ponto da ilha. A textura da Meshy, achatada em nove cores, tinha as
+faixas em manchas picotadas, bem longe do concept.
+
+**A lata nova (`docs/objetos3d/lata/mao/`):**
+- `lata_mao.py`: segue o concept 1 (a lata de refrigerante em faixas pastel, com o adesivo das cerejas), mas nada vem da Meshy. O corpo é
+  uma superfície de revolução de 32 lados (o fundo, o corpo, o ombro, o gargalo, a borda e a tampa rebaixada), com o anel de abrir em
+  cima. A pintura é uma função da posição: as faixas em onda pelo ângulo e pela altura (lisas, e a emenda de trás fecha), as cerejas com
+  a borda branca do adesivo, o metal da tampa e o furo de beber. Sem marca e sem texto. A lata fica limpa, como no concept (sem ferrugem
+  nem amassado), tombada 5 graus, com cinco tufos de musgo e oito folhas de capim no pé;
+- `publicar_mao.py`: a procedência no `asset.extras`, os arquivos em `web/app/public/enfeites/lata/` e o validador (0 erros, 0 avisos).
+
+**No jogo:**
+- **A lata vira um marco da grade,** o quarto, com o carro, a geladeira e o trilho: `ENFEITES_MODELOS.lata` (7 células de altura),
+  `ENFEITES_GRADE.lata` e `PLANTA_ILHA.marcos.lata`, no ponto (16, −5), ao norte, atrás da área, entre o lar e o portão. Ela aparece em
+  todo estilo que tem os enfeites, não só no Digital, e é vista do ninho por cima do barranco.
+- **A lata do horizonte sai:** a função `lata` (`digital.ts`), o `lugarDaLata` (`digitalConta.ts`), o `DIGITAL.lata` e a pasta
+  `web/app/public/mapa_digital/lata/`. O gancho `quadro` dos objetos (`cena.ts`, `vista.ts`) fica, sem uso hoje.
+- 904 triângulos (teto 2 414), 91 kB com o `License.txt` (teto 300 kB), um nó, uma malha, uma textura de 1024 px.
+- Os objetos da grade não mudam (E-G0); a clareira da lata só esconde decoração.
+
+**Os testes:** o `web/app/test/ilha_enfeites.test.ts` confere o arquivo e o lugar da lata como os dos outros marcos, e a procedência; o
+`web/app/test/mapa_digital.test.ts` troca os dois testes da D4 por um que confere que o Digital não tem mais a lata própria.
+
+**Não feito:** não houve revisor separado nem prancha de capturas no git; a conferência foi na vitrine e no jogo, no estilo da Ilha. O
+estilo Digital dentro do jogo, o celular e o e2e não foram conferidos. Os arquivos da lata da Meshy ficam em `docs/mapa_digital/lata/`
+como histórico. Os desvios estão em `docs/registro/2026-11.md`, D-OBJ-LATA-1 a 4.

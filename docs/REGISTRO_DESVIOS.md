@@ -598,3 +598,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-09 — MUNDO_ENFEITES, o carro feito à mão por script (Gerente, Claude Code, Fable 5.2, branch `v3-objeto-carro-mao`)](registro/2026-11.md)
 - [2026-11-09 — MUNDO_ENFEITES, a geladeira feita à mão por script (Gerente, Claude Code, Fable 5.2, branch `v3-objeto-geladeira-mao`)](registro/2026-11.md)
 - [2026-11-10 — LUGARES_3D, o cais feito à mão por script (Gerente, Claude Code, Fable 5.2, branch `v3-objeto-cais-mao`)](registro/2026-11.md)
+- [2026-11-10 — MUNDO_ENFEITES, a lata gigante feita à mão por script e posta no mapa (Gerente, Claude Code, Fable 5.2, branch `v3-objeto-lata-mao`)](registro/2026-11.md)
