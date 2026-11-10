@@ -4,7 +4,7 @@ Coordenador: Matheus (sessão direta). Worker da etapa I0: Claude Code, Opus 5.5
 `v3-individualidade` (as etapas seguintes com sufixo, como `v3-individualidade-i0`). Status: **ABERTA; a proposta na `main` (#676);
 as IN-1 a IN-8 DECIDIDAS em 2026-11-07, pela recomendação; o I0 (a conferência) na `main` (#684); o I1 (a bateria como ferramenta)
 na `main` (#695); o plano do I2 APROVADO (#700); o I2a na `main` (#707); o I2b (a run da linha de base, faixa 85101…85505)
-na `main` (#718); o adendo 1 entregue (#746); o plano do I5 APROVADO (#747).**
+na `main` (#718); o adendo 1 na `main` (#746); o plano do I5 APROVADO, na `main` (#747); o I5a (as medidas e o orquestrador) entregue.**
 
 Categoria: documentacao. Origem: Matheus, 2026-11-07: depois da conversa sobre o connectome e a escala, direcionar a pesquisa para o
 temperamento herdado, o sinal do dono, a memória de episódios e o hábito, com uma medida comum de individualidade.
@@ -153,6 +153,21 @@ O plano (#700) e a faixa 85101…85505 estão APROVADOS. O I2a é o código ante
   vidas do I2 rejogadas do log: três perfis por dia (SEQ, LUGAR e HORA) e a distintividade de cada pet contra o dono e o mundo da
   semente.
 
+## Resultado da etapa I5a (2026-11-10, Claude Code, Opus 5.5, branch `v3-individualidade-i5a`)
+
+- **As medidas** (`digilab/metrics.py`, IH-7): `perfis_habito_dia` (SEQ, LUGAR e HORA de um dia, com o mínimo de 16 decisões
+  acordadas), `distancia_entre_dias` (o D_si), `distancia_mesmo_dia` (o D_dono, o D_mundo e o D_braço), `distintividade_habito` (os H) e
+  `media_habito`. Os testes, contra casos feitos à mão, estão em `tests/test_individualidade_i5.py`.
+- **O orquestrador:** `experiments/run_v3_individualidade_i5.py`, com as configs `individualidade_i5.json` (a análise) e
+  `individualidade_i5_fumaca.json`.
+  - Ele lê o `vidas.tar.gz` do I2, rejoga cada vida e confere que o log refeito é o do disco e que há 96 decisões por dia.
+  - Grava o `perfis.jsonl`, e a análise sai desse arquivo.
+  - **A trava:** o cabeçalho APROVADO, a seção 11 do plano (o registro), o pacote, as bases e o K do I2, no máximo 4 processos e nada
+    por cima de uma pasta.
+- **A fumaça** (as sementes 101 e 202, K = 2, 14 dias, 24 vidas, 4 processos): o replay custou 3,1 s por vida, e a fumaça inteira
+  1 min 36 s. Duas fumaças seguidas deram a mesma análise. Estimativa para as 360 vidas do I2: uns 5 min de replay com 4 processos.
+- **As leituras do plano** estão no registro: D-IND-I5a-1 a 3.
+
 ## As etapas seguintes
 
 | etapa | o quê | entrega |
@@ -161,3 +176,15 @@ O plano (#700) e a faixa 85101…85505 estão APROVADOS. O I2a é o código ante
 | I2 | a linha de base descritiva no modular de hoje | `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE.md` e uma faixa pedida antes; a run; o `RESULTADO_V3_INDIVIDUALIDADE.md` |
 | Gate I | o Gate I no modular (IN-4), entre o I2 e o I3 | pela `docs/TAREFA_V2_GATE_I.md`, com os critérios no modular |
 | I3, I4, I5, I6 | o temperamento, o dono, o hábito como medida e a ficha | pela proposta, seção 5 |
+| I7 | o desenvolvimento contrafactual: a mesma vida com uma coisa diferente num dia, e o quanto o pet se afasta depois | `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md` (APROVADO); o I7a e o I7b, depois do I5b |
+
+## O plano do I7, o desenvolvimento contrafactual (2026-11-10, Claude Code, Opus 5.5, branch `v3-individualidade-i7-plano`)
+
+- **De onde vem:** a conversa de 2026-11-10 sobre como tirar da frente um achado. O Matheus escolheu a Q3, o desenvolvimento
+  contrafactual, pela recomendação.
+- **O plano:** `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md`, APROVADO pelo Matheus em 2026-11-10 ("Aprovo todas"), com as IR-1 a
+  IR-9 decididas pela recomendação.
+  - Cada pet do I2 é vivido de novo com uma única coisa diferente num dia (outra rng de política, ou um tapa), nos dias 2, 4, 6, 8 e 10.
+  - O afastamento do ramo é medido pelos perfis do I5, contra um gêmeo com outro acaso desde o nascimento.
+  - Três hipóteses rivais ficam escritas antes: a canalização, o ciclo que se reforça e o caos.
+- **Sem mecanismo novo** (IN-7). O I7a depende do I5a na `main` (#751), e o I7b roda depois do I5b.

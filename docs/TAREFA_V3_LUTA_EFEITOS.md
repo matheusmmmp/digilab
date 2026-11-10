@@ -1,5 +1,7 @@
 # TAREFA V3 — LUTA_EFEITOS (2026-11-06)
 
+> **SUBSTITUÍDO, na parte do palco 1D**, pela [`docs/TAREFA_V3_LUTA_POC.md`](TAREFA_V3_LUTA_POC.md) (2026-11-08): a luta do jogo é a simulação da POC. Os efeitos E1 a E5 foram portados para o palco 2D na LP3 (seção 3.3a da tarefa); o palco 1D (`palcoTR/`) saiu na LP4 (2026-11-10), e os geradores de desenho dele foram para `web/app/src/telas/lutar/palcoPoc/`. O escudo, o contra-golpe e a pele dura da E4 não têm ação na luta nova e saíram (LP-10).
+
 Coordenador: o Gerente da missão SPRITES_GERACAO (Claude Code, Opus 5.5). Worker: a definir por etapa. Worktree e branch: `v3-luta-efeitos`.
 Status: ENTREGUE (E1 a E5 na `main`; a E5 no #690, 2026-11-07). Era PROPOSTA (a seção 8 ficou com o Matheus); o status foi atualizado na
 organização de 2026-11-10.

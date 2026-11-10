@@ -1,5 +1,11 @@
 # Design — medalhas, arenas, itens e a Fronteira de Batalha
 
+> **Na luta da POC (LUTA_POC, LP2, LP2b e LP4; `docs/TAREFA_V3_LUTA_POC.md`).** As medalhas, a trava da evolução, a campanha, a Liga, a Torre de
+> Batalha, a Fábrica e o Salão continuam. Mudou o que era regra do combate por turnos: cada lugar luta no mapa dele (LP-4); das regras das
+> arenas fica só a série da Cidadela (LP2-5); o Palácio juntou-se à Torre (LP-5); os fatores dos líderes saíram. Dos itens fica só o chip de
+> stat; os chips de regra e as cartas saíram (LP-5), ficam no registro do Tamer sem efeito, e as medalhas e as revanches não os dão mais
+> (LP4). A Fábrica do combate por turnos (v13 e v14) saiu do registro do Tamer no descarte 8 (LP4, PROPOSTA).
+
 Status: **aprovado** (Matheus, 2026-09-29). **Partes 1 e 2 implementadas no jogo web**: parte 1 (branch `medalhas-parte1`, 2026-09-29; seção 11) e parte 2, as arenas com líderes (branch `medalhas-parte2`, 2026-09-30; seção 12). Parte 3 (itens) implementada no jogo web **sem equilíbrio** (branch `medalhas-parte3`, 2026-09-30; seção 13); parte 4 detalhada em `docs/DESIGN_FRONTEIRA.md`, com a 4a (a Liga dos Líderes e o fim do jogo) implementada (branch `fronteira-4a`, 2026-09-30). Todo número é PROPOSTO; os fatores dos líderes têm artefato (seção 12).
 
 **Decisões do Matheus (2026-09-29):**

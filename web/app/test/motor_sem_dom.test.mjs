@@ -15,7 +15,7 @@ const PROIBIDOS = ["window", "document", "localStorage", "sessionStorage", "inde
 const codigo = s => s.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "").replace(/`(?:\\.|[^`\\])*`|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'/g, '""');
 
 test("o motor tem os modulos esperados", () => {
-  for (const f of ["motor.ts", "rng.ts", "constantes.ts", "combate.ts", "gambits_pet.ts", "index.ts"]) assert.ok(FONTES.includes(f), f);
+  for (const f of ["motor.ts", "rng.ts", "constantes.ts", "luta_poc.ts", "index.ts"]) assert.ok(FONTES.includes(f), f);
 });
 
 test("nenhuma API do navegador nem relogio no motor", () => {

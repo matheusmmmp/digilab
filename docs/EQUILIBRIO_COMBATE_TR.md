@@ -1,5 +1,7 @@
 # Equilíbrio do combate em tempo real — relatório por fase
 
+> **SUBSTITUÍDO** pela [`docs/TAREFA_V3_LUTA_POC.md`](TAREFA_V3_LUTA_POC.md) (2026-11-08): a luta do jogo é a simulação da POC. O combate por turnos saiu do jogo na LP4 (2026-11-10); este documento fica como registro.
+
 O plano está em `docs/PLANO_EQUILIBRIO_COMBATE_TR.md` (#459), e as decisões DE-1 a DE-7 foram DECIDIDAS pelo Matheus em 2026-10-30, pela
 recomendação. Todo número novo é PROPOSTO e vem de um artefato em `web/app/scripts/medicoes/equilibrio_tr/`. As fases de ajuste usam só as
 sementes de calibração (68101…68505). A conferência (70101…70505) roda uma vez, na fase 5.
