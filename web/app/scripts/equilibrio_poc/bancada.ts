@@ -122,6 +122,8 @@ export function motorDoCandidato(c: Candidato, semente: number, remendar = c.nom
   if (!remendar) return m;
   const x = m as unknown as Record<string, unknown>, rivalDoMotor = (x._rivalPoc as (...a: unknown[]) => { forma: string; stats: StatsPoc } | null).bind(m);
   x.statsLutaPoc = () => lutador(c, m.forma, m.carater(), m.pontosDeLuta(), condicaoDe(m.e.saude));
+  /* o tiro do candidato pela entrada opcional do Motor (desvio D-LP5-1-11); o da POC fica fora, e a luta sai a de sempre */
+  if (!tiroDaPoc(c.tiro)) m.tiroLutaPoc = { ...c.tiro };
   x._rivalPoc = (rival: string, ...resto: unknown[]) => {
     if (!rivaisArena(m.estagioAtual).includes(rival)) throw new Error(`bancada: a vida do candidato so luta na Arena, nao com ${rival}`);
     const rv = rivalDoMotor(rival, ...resto);
@@ -130,8 +132,6 @@ export function motorDoCandidato(c: Candidato, semente: number, remendar = c.nom
   return m;
 }
 function vida(c: Candidato, bases: number[]) {
-  /* o Motor.lutarPoc nao le o tiro do candidato: um tiro novo so entra na vida com a versao do pet (a LP5-5) ou com o Motor aberto a ele */
-  if (!tiroDaPoc(c.tiro)) throw new Error(`bancada: a vida (P5) nao le o tiro do candidato ${c.nome} (desvio D-LP5-1-8)`);
   const vidas: unknown[] = [];
   for (const base of bases) for (let i = 0; i < TAM.vidas; i++) {
     const semente = hashSemente("equilibrio-poc-pet", base, i), m = motorDoCandidato(c, semente), dono = criarDono("atencioso");

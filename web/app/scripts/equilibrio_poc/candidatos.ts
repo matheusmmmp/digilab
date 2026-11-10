@@ -43,7 +43,15 @@ export const LP5_1_R1 = candidatoDe({
   gama: { vigor: .02, recuperacao: .02, guarda: .06, forca: .02, mira: .14, folego: .14 },
   mapa: { hp: 1300, vel: 60 }, multVida: E(.6, .9, 1.35, 2.025), multAtk: E(1, 1.5, 2.25, 3.375),
 });
-export const CANDIDATOS: Readonly<Record<string, Candidato>> = { v21: CANDIDATO_V21, lp5_1_r1: LP5_1_R1 };
+/** LP5-1, rodada 2: o g02_d7_v1 da grade r2 (scripts/medicoes/equilibrio_poc/lp5_1/r2): o lp5_1_r1 com a distancia do tiro (o recuo na
+    preparacao a 2 vezes o movimento) e o dano do projetil a 0,7 (D-LP5-12 e D-LP5-13). PROPOSTO, SEM FONTE */
+export const LP5_1_R2 = candidatoDe({
+  nome: "lp5_1_r2", pesoPonto: 15,
+  gama: { vigor: .02, recuperacao: .02, guarda: .06, forca: .02, mira: .14, folego: .14 },
+  mapa: { hp: 1300, vel: 60 }, multVida: E(.6, .9, 1.35, 2.025), multAtk: E(1, 1.5, 2.25, 3.375),
+  tiro: { distMin: 110, esperaMax: 1500, recuo: 1.5, recuaNaPrep: 2, recuaAbaixo: .75, danoProj: .7, velProj: 1 },
+});
+export const CANDIDATOS: Readonly<Record<string, Candidato>> = { v21: CANDIDATO_V21, lp5_1_r1: LP5_1_R1, lp5_1_r2: LP5_1_R2 };
 /** o candidato da linha de comando: --candidato <nome>, ou --candidato-json <arquivo> (so a grade) */
 export function candidatoDaLinha(nome: string, json: string, grade: boolean): Candidato {
   if (json) {
