@@ -3,7 +3,7 @@
 **Status: APROVADO pelo Matheus em 2026-11-10 ("Aprovo todas").** As decisões IR-1 a IR-9 (seção 11) estão DECIDIDAS, todas pela
 recomendação. **Nenhuma conta do I7 roda antes de cinco coisas:**
 1. este cabeçalho com a marca "APROVADO pelo Matheus" (feito);
-2. o I5a na `main` (o #751): o I7 usa os perfis de hábito do `digilab/metrics.py`;
+2. o I5a na `main` (o #751, `f628105`): o I7 usa os perfis de hábito do `digilab/metrics.py` (feito);
 3. o código do I7a na `main` (seção 9), com os testes e a trava;
 4. a fumaça do orquestrador com as sementes dos testes (101…505), com o custo medido;
 5. o registro da análise (seção 10), num commit empurrado antes da primeira vida.
