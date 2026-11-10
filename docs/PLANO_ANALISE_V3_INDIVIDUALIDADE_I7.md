@@ -8,6 +8,9 @@ recomendação. **Nenhuma conta do I7 roda antes de cinco coisas:**
 4. a fumaça do orquestrador com as sementes dos testes (101…505), com o custo medido;
 5. o registro da análise (seção 10), num commit empurrado antes da primeira vida.
 
+**O adendo 1 (seção 12) está DECIDIDO pelo Matheus em 2026-11-10** ("E daí a gente parte para seguir as recomendações", depois da conferência das
+referências): uma quarta hipótese, a régua crua e a forma em U nas frases, e dois descritivos. Ele vale junto com as seções 0 a 11.
+
 **De onde vem:** a conversa de 2026-11-10 sobre como tirar da frente um achado e não só uma implementação organizada. Dela saíram as
 perguntas Q1 a Q4, e o Matheus escolheu começar pela Q3, o desenvolvimento contrafactual ("Segue a recomendação").
 - **Por que esta pergunta:** o motor é determinístico e guarda o log. Dá para viver de novo a vida de um pet com uma única coisa diferente
@@ -218,3 +221,114 @@ Antes da primeira vida, numa seção nova no fim deste plano, ficam:
 | **IR-7** | o limiar do "vira um gêmeo" | **0,8**, PROPOSTO, SEM FONTE | mais baixo, a H-CAOS ganha fácil; 1 exato nunca se afirma com IC |
 | **IR-8** | o evento | **o tapa**, o susto das sondas | o carinho é um gesto que o I2 já tem todo dia, e mais um não seria uma experiência nova; a comida a mais mexe no corpo e no lugar ao mesmo tempo |
 | **IR-9** | o perfil da leitura | **os três perfis do I5, cada um com as frases dele**, sem um primário | um primário escolhido agora seria escolhido sem o I5b; os três sem correção de multiplicidade pedem cautela na leitura, e a tabela diz isso |
+
+## 12. Adendo 1: a transição, a régua crua e a forma em U (2026-11-10, DECIDIDO, Claude Code, Opus 5.5)
+
+**Status: DECIDIDO pelo Matheus em 2026-11-10** ("E daí a gente parte para seguir as recomendações"), as A1-1 a A1-5 pela
+recomendação. Nada do I7 rodou: o I7a (o código) não começou, e nenhuma vida foi vivida. O adendo muda só as regras de leitura
+(seção 7) e acrescenta medidas descritivas, antes do registro (seção 10).
+
+**De onde vem:** a busca dirigida de 2026-11-10, que o cabeçalho dava como não feita. Ela está no vault, na nota
+`DigiLab — Revisão de escopo/BUSCA_I7_CONTRAFACTUAL_2026-11-10.md`, seções 0 a 8.
+- **A busca não muda o desenho:** a régua do gêmeo, a bifurcação de cópias exatas e a variação total já têm precedente em agentes e em
+  redes que aprendem. Cada peça do I7 tem precedente separado, e o que sobra é a junção num pet com corpo, mundo e dono. Isso é uma
+  contribuição de aplicação e de desenho, não de método. **A regra de não alegar novidade continua.**
+- **As referências do adendo são cinza:** preprints de 2025 e 2026, conferidos nos metadados e no resumo, fora do
+  `docs/referencias/referencias_verificadas.csv`. A conferência das 29 referências recentes e o texto completo dos cinco mais próximos
+  estão nas seções 9 e 10 da nota do vault: todas existem, nenhuma foi retratada, e as ressalvas abaixo vêm do texto completo.
+  - **Kwok, Altıntaş, Raffel e Rolnick (2025),** arXiv:2506.13234, ICML 2025: a mesma perturbação deixa menos divergência final quanto
+    mais tarde é aplicada. **Três ressalvas:**
+    - depois de aplicada, a divergência sempre cresce, então a fase tardia não é canalização no sentido de Waddington, só "a mesma bacia";
+    - os autores negam que a divergência cresça de forma exponencial, e "caos" só cabe entre aspas;
+    - os modelos são supervisionados, sem agente e sem a régua de outra semente.
+  - **Igarashi (2026),** `10.5281/zenodo.21439958`, preprint, um autor só (Kimiyasu Igarashi): gêmeos exatos bifurcados de um agente que
+    aprende em vida só ficam diferentes de forma persistente quando as ações mudam o mundo e a consequência volta para o agente. Com o
+    agente congelado, não.
+  - **Speck e Shepard (2026),** arXiv:2608.19168, preprint: um único exemplo contra um gêmeo sem ele. O efeito some do desempenho, mas o
+    deslocamento dos pesos continua mensurável.
+- **Ali Nasser, Harel e Stern (2023),** *eLife*, `10.7554/elife.84312`, revisado por pares: em *C. elegans*, a fome precoce pesa nas
+  fases inicial e tardia e é amortecida nas intermediárias. É o precedente biológico da forma em U (A1-3).
+- **Duas cautelas para o Φ** (vault, seção 9):
+  - em Qin (2026), uma história inteira diferente rendeu só 1,14 vez a distância entre sementes, então um Φ pequeno para um único tapa
+    é o esperado, e não um defeito da medida;
+  - um D_G perto do teto da variação total satura a régua. A régua crua (12.2) mostra o D_G em nível e deixa ver isso.
+- **O I5b** (o #768) é contexto, não motivo: o pet varia 0,34 a 0,50 de um dia para o outro, e o dono separa os pets (D-IND-I5b-1).
+
+### 12.1 A quarta hipótese, H-TRANS (A1-1)
+
+| hipótese | o que prevê | a leitura se ela vencer |
+|---|---|---|
+| **H-TRANS, caos cedo e canalização depois** | o outro acaso cedo faz do ramo um gêmeo, e o mesmo acaso tarde não: Φ_A cai com a idade (β_A < 0), sem a diferença crescer com os dias (γ_E não positivo) | a história só começa a pesar depois de uma idade: antes dela o pet é o acaso, depois dela ele é o que viveu |
+
+**A regra (soma-se à seção 7.2):**
+- **H-TRANS** vale se:
+  - o IC95 de Φ_A(2) ficar inteiro acima de 0,8 (IR-7);
+  - o IC95 de Φ_A(10) ficar inteiro abaixo de 0,8;
+  - o IC95 de β_A ficar inteiro abaixo de 0;
+  - o IC95 de γ_E não ficar inteiro acima de 0.
+- **A ordem:** quando as condições da H-TRANS valem, ela se escreve no lugar da H-CAN, porque as duas podem valer juntas e a H-TRANS é a
+  mais específica. A H-CAOS e a H-AMP não valem junto com ela: a H-CAOS pede Φ_A acima de 0,8 em toda idade, e a H-AMP pede γ_E positivo.
+- **O mesmo para o evento, só no descritivo:** Φ_E(2), Φ_E(10) e β_E, lidos do mesmo jeito, sem frase.
+
+**Por que é escrita antes:** com as regras de hoje, esse resultado cai em "nenhuma das três hipóteses descreve sozinha". É verdade, mas
+perde o padrão que Kwok et al. (2025) descrevem em redes supervisionadas: a mesma perturbação pesa menos quanto mais tarde.
+
+**O que a H-TRANS não afirma:** que a fase tardia é canalização no sentido de Waddington, nem que a fase cedo é caos no sentido
+matemático. "Caos cedo" quer dizer que o ramo vira um gêmeo, e "canalização depois" quer dizer que ele fica abaixo do gêmeo. Os nomes
+são os da leitura, como na seção 1.
+
+### 12.2 A régua crua (A1-2)
+
+Φ e γ são razões contra o gêmeo. **Se o D_G muda com a idade ou com os dias, a razão muda sem o ramo mudar.** Um D_b parado com o D_G
+crescendo, por exemplo, dá γ < 0, e isso pareceria canalização.
+- **As medidas novas:** γ_b^cru é a inclinação de Σ D_b(t+k) contra k = 1 a 4, e β_b^cru é a inclinação de Σ_{d=t+1..t+4} D_b(d)
+  contra t, as duas sem dividir pelo gêmeo. O gêmeo tem as dele, γ_G^cru e β_G^cru. Todas levam o IC95 pelo bootstrap da seção 3.6.
+- **A regra (soma-se à seção 7.2):** as frases do γ ("cresce", "some") e do β ("cedo afasta mais") só se escrevem quando o IC95 da
+  inclinação crua do mesmo ramo também ficar inteiro do mesmo lado de 0. Se a razão passa e a crua não, a frase é "a inclinação vem da
+  régua: o D_b cru não se distingue de parado", e a hipótese que pede aquela inclinação não se declara.
+- **A tabela (soma-se à seção 7.1):** o Σ D_b e o Σ D_G crus por idade e por dia depois da perturbação.
+
+### 12.3 A forma em U (A1-3)
+
+O β é uma reta. Um Φ(t) que desce e sobe (U), ou o contrário (∩), dá β perto de 0 e esconde o efeito da idade.
+- **A medida nova:** as diferenças Φ_b(2) − Φ_b(6) e Φ_b(10) − Φ_b(6), com o IC95 pelo mesmo bootstrap.
+- **A regra:**
+  - se as duas diferenças ficarem com o IC95 inteiro acima de 0, a forma é U; se ficarem inteiro abaixo de 0, é ∩;
+  - com U ou ∩, as frases do β não se escrevem, e a H-AMP e a H-TRANS não se declaram;
+  - a leitura escreve então "o afastamento muda com a idade sem ser em linha (U)", ou "(∩)";
+  - a H-CAN e a H-CAOS não usam o β e não mudam.
+
+### 12.4 A expectativa da malha fechada (A1-4)
+
+**E-I7b, escrita antes e sem gate:** Φ_E > Φ_E°, isto é, o dono que reage aumenta o efeito do tapa (ΔΦ > 0, seção 4). Ela vem de
+Igarashi (2026), com uma diferença de desenho que se diz ao lado: lá a malha aberta é o agente congelado, e aqui é o dono que repete o log,
+com o pet ainda aprendendo. Esse E° não tem par nos trabalhos lidos. A expectativa é relida contra a tabela, sem ajuste.
+
+### 12.5 Dois descritivos (A1-5)
+
+Os dois ficam só no descritivo, sem frase de leitura.
+- **O estado interno contra o gêmeo:** Φ_b^est é a mesma razão de somas da seção 3.2, sobre uma distância entre o `estado_interno` do ramo
+  e o do original no fim de cada dia. Ele mede se o evento some do comportamento e fica no cérebro, como no Speck e Shepard 2026.
+  - **A distância exata** (quais campos, e como normalizar) é escrita pelo I7a no `digilab/metrics.py`, com teste, e entra no registro
+    antes da run. Até lá, ela é PROPOSTA.
+- **O efeito comum do tapa:** C_E(t) = TV(o perfil somado de todos os ramos E(t) do braço, o perfil somado de todos os originais) / a média
+  dos D_E dos pets, por perfil e por dia.
+  - Perto de 1: o tapa empurra todos os pets para o mesmo lado.
+  - Perto de 0: cada pet muda para um lado, e o efeito é individual.
+
+### 12.6 O que muda no resto do plano
+
+- **Seção 6:** o `analise.json` ganha as inclinações cruas, as diferenças do U, o Φ^est e o C_E, e o `ramos.jsonl` ganha o sha256 do
+  `estado_interno` do fim de cada dia.
+- **Seção 9, o I7a:** as medidas novas vão para o `digilab/metrics.py`, com teste contra casos feitos à mão.
+- **Seção 8, o custo:** não há vida a mais, porque o estado interno sai das mesmas vidas.
+
+### 12.7 As decisões do adendo (DECIDIDAS pelo Matheus em 2026-11-10, todas pela recomendação; cada uma com a recomendação e o custo de errar)
+
+| | a decisão | a recomendação | o custo de errar |
+|---|---|---|---|
+| **A1-1** | a H-TRANS | **entra**, com a regra da 12.1 | sem ela, o padrão "caos cedo, canalização depois" sai como "nenhuma das três"; com ela, há uma frase a mais declarada por quatro ICs sem correção de multiplicidade |
+| **A1-2** | a régua crua | **entra como condição** das frases do γ e do β | sem ela, uma régua que se mexe fabrica uma H-CAN ou uma H-AMP; com ela, uma inclinação real e pequena pode deixar de ser escrita |
+| **A1-3** | a forma em U | **entra**, com as duas diferenças | sem ela, um U vira "a idade não importa"; com ela, o Φ(6) pesa mais que as outras idades na leitura do β |
+| **A1-4** | a E-I7b | **entra como expectativa**, sem gate | nenhum, porque é só escrita antes; sem ela, a leitura do E − E° fica sem expectativa |
+| **A1-5** | o estado interno e o efeito comum | **entram só no descritivo**, com a distância do estado escrita pelo I7a | como leitura, pediriam regras sem base; fora do plano, perde-se o caso do evento que some do comportamento e fica no cérebro |
