@@ -1,7 +1,8 @@
 # PLANO DE ANÁLISE V3 — INDIVIDUALIDADE, I7: o desenvolvimento contrafactual (2026-11-10, Claude Code, Opus 5.5)
 
-**Status: PROPOSTO.** As decisões IR-1 a IR-9 (seção 11) esperam o Matheus. **Nenhuma conta do I7 roda antes de cinco coisas:**
-1. este cabeçalho com a marca "APROVADO pelo Matheus";
+**Status: APROVADO pelo Matheus em 2026-11-10 ("Aprovo todas").** As decisões IR-1 a IR-9 (seção 11) estão DECIDIDAS, todas pela
+recomendação. **Nenhuma conta do I7 roda antes de cinco coisas:**
+1. este cabeçalho com a marca "APROVADO pelo Matheus" (feito);
 2. o I5a na `main` (o #751): o I7 usa os perfis de hábito do `digilab/metrics.py`;
 3. o código do I7a na `main` (seção 9), com os testes e a trava;
 4. a fumaça do orquestrador com as sementes dos testes (101…505), com o custo medido;
@@ -191,7 +192,7 @@ a IR-6 volta ao Matheus antes da run.
 
 | missão | o quê |
 |---|---|
-| **I7-plano** | este documento (PROPOSTO) e as IR-1 a IR-9 |
+| **I7-plano** | este documento (APROVADO) e as IR-1 a IR-9 |
 | **I7a** | as medidas (Φ, as inclinações, o reencontro) no `digilab/metrics.py`, com testes contra casos feitos à mão; o orquestrador `experiments/run_v3_individualidade_i7.py`, com o embrulho do ramo, as conferências G-I7-0 a 3 e a trava (o cabeçalho APROVADO, o registro, no máximo 4 processos, nada por cima de uma pasta); a fumaça com as sementes dos testes |
 | **I7b** | o registro, a run uma vez e a seção do I7 no `docs/RESULTADO_V3_INDIVIDUALIDADE.md` |
 
@@ -204,11 +205,11 @@ Antes da primeira vida, numa seção nova no fim deste plano, ficam:
 - o custo da fumaça por pet;
 - o comando e a contagem da suíte do dia.
 
-## 11. As decisões (PROPOSTAS; cada uma com a recomendação e o custo de errar)
+## 11. As decisões (DECIDIDAS pelo Matheus em 2026-11-10, todas pela recomendação; cada uma com a recomendação e o custo de errar)
 
 | | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|
-| **IR-1** | os pets | **os 360 do I2, vividos de novo com as sementes da faixa 85101…85505**, sem faixa nova; a linha da faixa em `experiments/bancada/faixas.py` ganha a fonte do I7 | uma faixa nova perde o laço com o I2 e o I5 (o original deixa de ser o pet já medido) e pede vidas de base novas; reusar exige o ok do Matheus, porque a linha da faixa diz "a run única" do I2 |
+| **IR-1** | os pets | **os 360 do I2, vividos de novo com as sementes da faixa 85101…85505**, sem faixa nova; a linha da faixa em `experiments/bancada/faixas.py` ganha a fonte do I7 (feito no PR do plano) | uma faixa nova perde o laço com o I2 e o I5 (o original deixa de ser o pet já medido) e pede vidas de base novas; reusar exige o ok do Matheus, porque a linha da faixa diz "a run única" do I2 |
 | **IR-2** | os braços | **o REL e o REL+F** do modular, como no I2; o cérebro A fica para a Q4 | o A agora pede vidas de base novas e uma faixa; sem ele, a frase vale só para o modular |
 | **IR-3** | as idades | **os dias 2, 4, 6, 8 e 10**, com a janela de quatro dias depois | idades demais custam sem ganho; o dia 1 é do bebê ainda sem o laço com o dono; depois do dia 10 a janela de quatro dias não cabe nos 14 |
 | **IR-4** | a régua | **o gêmeo G** (outra rng de política desde o nascimento) | um estranho de outra semente misturaria o mundo e inflaria o denominador, e todo Φ pareceria pequeno |

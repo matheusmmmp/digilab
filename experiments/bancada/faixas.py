@@ -135,7 +135,9 @@ FAIXAS_RESERVADAS = (
                    "conferida livre pelo Gerente da CONVERSA_PET e aprovada pelo Matheus em 2026-11-07, DC3-8)"),
     (85101, 85505, "INDIVIDUALIDADE, I2: a linha de base descritiva, a run unica (docs/PLANO_ANALISE_V3_INDIVIDUALIDADE.md, secao 2, IP-9; "
                    "bases 85101, 85202, 85303, 85404 e 85505, K = 12; conferida livre e proposta pelo Gerente da V3 em 2026-11-07; "
-                   "aprovada pelo Matheus em 2026-11-07, \"Aprovo a faixa\")"),
+                   "aprovada pelo Matheus em 2026-11-07, \"Aprovo a faixa\"; reusada pelo I7, o desenvolvimento contrafactual, que vive de "
+                   "novo as mesmas vidas: docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md, IR-1, aprovada pelo Matheus em 2026-11-10, "
+                   "\"Aprovo todas\")"),
 )
 
 
