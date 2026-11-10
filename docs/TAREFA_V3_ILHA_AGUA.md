@@ -111,3 +111,19 @@ relatado, não ajustado.
 - **NÃO CONFIRMADO:** como o pet de laboratório (v16), a luta (v21) e o segundo pet usam o mundo. Lê-se na IA1, antes do gabarito.
 - **NÃO CONFIRMADO:** o `ConfigContrato` no Python só vale "com um pet (fora do grupo)" (`digilab/mundo.py`, cabeçalho). Se o jogo tiver
   mais de um pet no mundo, a IA1 trata disso antes.
+
+## 9. IA1: o que foi construído (2026-11-10)
+
+A água no mundo do Python, sem mudar nenhuma vida de antes.
+
+- **O mapa:** `AGUA_ILHA` em `digilab/config.py`, 30 linhas de 64 caracteres (`~` mar, `r` água doce, `.` terra, `=` ponte), na tabela
+  `AGUA_POR_LAYOUT` pelo nome do layout. Dois mundos a usam: `CONFIG_MUNDO_ILHA_AGUA` (a ilha com árvores) e `CONFIG_MUNDO_MVP_AGUA` (o
+  mundo do produto que o jogo web roda hoje).
+- **A barreira:** `solidos_da_agua` vira os sólidos que o controlador do contrato contorna (`CONFIG_CONTRATO_AGUA`). O layout com água
+  exige o controlador.
+- **Nada cai na água:** a comida, a bola e a necessidade postas na água vão para a célula de terra mais perto; a bola que rola para na
+  margem; o alvo sem objeto escolhido na água vale a terra mais perto; o pet solto na água, ou rente a ela, cai no centro da célula.
+- **Diferenças para a seção 4:** não há chave `ConfigContrato.agua` nem categoria `agua`; a água vai pelo nome do layout e usa a
+  categoria `obstaculo`; a bola para na margem em vez de quicar. Os motivos estão em `docs/registro/2026-11.md`.
+- **Os gates:** G-AG-1 (os gabaritos de antes byte a byte), G-AG-2 (nada na água, tick a tick, em duas vidas de 2 dias do gabarito e uma
+  na ilha com árvores), G-AG-3 (o layout ilhado falha alto) e G-AG-5 (o pet cruza pela ponte) em `tests/test_ilha_agua.py`.
