@@ -862,6 +862,28 @@ class Mundo:
             x, y = px, py
         return x, y
 
+    def rolagem_seca(self, x0: int, y0: int, x1: int, y1: int) -> tuple[int, int]:
+        """onde a bola que rola de (x0, y0) para (x1, y1) para: na margem (`ate_a_margem`) e, depois, encurtada ate que todo ponto por
+        onde ela passa tick a tick (a conta do `bola_em`, que arredonda pela distancia e pode sair 1 subunidade da linha) esteja em
+        terra. Sem agua, (x1, y1)."""
+        if self.secas is None:
+            return x1, y1
+        x1, y1 = self.ate_a_margem(x0, y0, x1, y1)
+        atrito = self.cmf.atrito
+        while True:
+            d = distancia(x1 - x0, y1 - y0)
+            px, py = x0, y0
+            for j in range(1, -(-d // atrito)):
+                qx, qy = x0 + div_arred((x1 - x0) * atrito * j, d), y0 + div_arred((y1 - y0) * atrito * j, d)
+                if not self.seca(qx, qy):
+                    break
+                px, py = qx, qy
+            else:
+                return x1, y1
+            if distancia(px - x0, py - y0) >= d:
+                raise RuntimeError(f"a rolagem da bola nao encurtou: ({x0}, {y0}) -> ({x1}, {y1})")
+            x1, y1 = px, py
+
     # ------------------------------------------------------------ dois pets, etapa 8: o rastro (secao 5.3)
     def ligar_marcas(self) -> None:
         if self.marcas is None:
@@ -997,7 +1019,7 @@ class Mundo:
             if prox is None:                       # o galho estava cheio: o relogio comeca agora
                 prox = tick + self.csa.recarga_galho_min
             n -= 1
-            reg.update(motivo="caiu", caiu=c["id"], x=x, y=y, tipo=arv["fruta"])
+            reg.update(motivo="caiu", caiu=c["id"], x=c["x"], y=c["y"], tipo=arv["fruta"])     # onde a fruta ficou (a agua, IA1)
         self.galhos[ident] = {"no_galho": n, "repoe_em": prox}
         self.sacudidas.append(reg)
         return reg
@@ -1157,7 +1179,7 @@ class Mundo:
         celulas = self.rng_bola.randint(cm.bola_min_celulas, cm.bola_max_celulas)
         if cm.layout.regioes[regiao_de(bx, cm)][0] == "campo":
             celulas *= cm.mult_bola_campo
-        x1, y1 = self.ate_a_margem(bx, by, *deslocar(bx, by, direcao, celulas * cm.sub, cm))    # a agua (IA1): a bola para na margem
+        x1, y1 = self.rolagem_seca(bx, by, *deslocar(bx, by, direcao, celulas * cm.sub, cm))    # a agua (IA1): a bola para na margem
         self.bola = {"x0": bx, "y0": by, "x1": x1, "y1": y1, "t0": tick, "d": distancia(x1 - bx, y1 - by)}
         rolagem = {"tick": tick, "de": (bx, by), "para": (x1, y1), "direcao": direcao, "celulas": celulas}
         self.rolagens.append(rolagem)
@@ -2124,7 +2146,7 @@ class MotorMundo(MotorFrutas):
         if racao is None:
             raise ValueError(f"fruta ao lado sem racao deixada no tick {tm}: a fruta vai logo depois da racao, no mesmo passo")
         c = self.mundo.deixar_fruta_ao_lado(tipo, x, y, tm)
-        self.frutas_ao_lado.append({"tick": tm, "id": c["id"], "tipo": tipo, "x": x, "y": y, "racao": racao["id"]})
+        self.frutas_ao_lado.append({"tick": tm, "id": c["id"], "tipo": tipo, "x": c["x"], "y": c["y"], "racao": racao["id"]})
         self._n_eventos += 1                     # e um evento do log, mas NAO e contato
 
     def ao_lado_no_chao(self) -> dict[str, int]:

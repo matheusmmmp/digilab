@@ -7,7 +7,8 @@ nela.
   gerador falha alto).
 - G-AG-3: toda celula de terra do layout se alcanca a pe a partir do ninho; o layout que nao cumpre falha alto.
 - G-AG-5: o controlador leva o pet de um lado ao outro do rio, pela ponte.
-- O gabarito do G-PAR do TS (web/app/test/gabaritos/ilha_agua_python.json) esta em dia byte a byte, e o replay refaz a vida.
+- O gabarito do G-PAR do TS (web/app/test/gabaritos/ilha_agua_python.json, no mundo do produto com a agua) esta em dia byte a byte, e
+  o replay refaz a vida. A ilha com arvores (a bola posta pelo dono, as arvores sacudidas) roda o mesmo roteiro so aqui.
 Sementes: so as dos testes.
 """
 from __future__ import annotations
@@ -27,8 +28,9 @@ import exportar_gabarito_ilha_agua as G  # noqa: E402
 
 from digilab import contrato as ct  # noqa: E402
 from digilab.config import (AGUA_DOCE, AGUA_ILHA, AGUA_MAR, AGUA_POR_LAYOUT, CONFIG_CONTRATO, CONFIG_CONTRATO_AGUA, CONFIG_MUNDO_ILHA,  # noqa: E402
-                            CONFIG_MUNDO_ILHA_AGUA, CONFIG_PADRAO, PONTE, TERRA)
-from digilab.mundo import Mundo, MotorMundo, celulas_secas, centro_da_celula, fabricas_mundo, reproduzir_mundo, solidos_da_agua  # noqa: E402
+                            CONFIG_MUNDO_ILHA_AGUA, CONFIG_MUNDO_MVP, CONFIG_MUNDO_MVP_AGUA, CONFIG_PADRAO, CONFIG_SACUDIR_LIGADA, PONTE, TERRA)
+from digilab.mundo import (Mundo, MotorMundo, celulas_secas, centro_da_celula, deslocar, fabricas_mundo, reproduzir_mundo,  # noqa: E402
+                           solidos_da_agua)
 from digilab.instinto_mundo import PoliticaInstintoMundo  # noqa: E402
 from digilab.policy import PoliticaInstinto  # noqa: E402
 
@@ -54,10 +56,16 @@ def _tabela_limpa():
 
 # ------------------------------------------------------------------ G-AG-1: sem agua, nada muda
 def test_o_layout_sem_agua_nao_tem_solido_nem_celulas():
-    assert set(AGUA_POR_LAYOUT) == {"ilha_agua"} and CONFIG_MUNDO_ILHA.layout.nome == "ilha"
+    assert set(AGUA_POR_LAYOUT) == {"ilha_agua", "mvp_agua"} and CONFIG_MUNDO_ILHA.layout.nome == "ilha"
+    # a agua vai pelo nome do layout: os dois mundos com agua a tem, e os de antes (o mesmo layout com o nome de antes) nao
+    for com, sem in ((CONFIG_MUNDO_ILHA_AGUA, CONFIG_MUNDO_ILHA), (CONFIG_MUNDO_MVP_AGUA, CONFIG_MUNDO_MVP)):
+        assert celulas_secas(com) is not None and celulas_secas(sem) is None
+        assert replace(com.layout, nome=sem.layout.nome) == sem.layout
+    assert _mundo(CONFIG_MUNDO_MVP_AGUA).secas == _mundo().secas
     assert celulas_secas(CONFIG_MUNDO_ILHA) is None and solidos_da_agua(CONFIG_MUNDO_ILHA) == ()
     m = _mundo(CONFIG_MUNDO_ILHA)
     assert m.secas is None and m.seca(5, 5) and m.em_terra(5, 5) == (5, 5) and m.ate_a_margem(0, 0, 900, 400) == (900, 400)
+    assert m.rolagem_seca(0, 0, 900, 400) == (900, 400)
 
 
 # ------------------------------------------------------------------ o mapa
@@ -133,12 +141,63 @@ def test_a_bola_para_na_margem():
     assert m.ate_a_margem(560, 250, 600, 250) == (600, 250)           # sem agua no caminho, chega
     x, y = m.ate_a_margem(560, 250, 900, 250)                         # o rio no caminho: para antes dele
     assert m.seca(x, y) and x == 41 * SUB - 1 and y == 250 and not m.seca(x + 1, y)
-    for semente in (101, 202, 303):                                   # as rolagens de verdade acabam em terra
+    for semente in (101, 202, 303):                                   # as rolagens de verdade ficam em terra, tick a tick
         w = Mundo(CM, semente, arvores_na_casa=True)
         w.deixar_bola(640, 250, 0)
         for t in range(1, 60):
             r = w.rolar_bola(t * 100)
             assert w.seca(*r["para"]) and w.seca(*r["de"])
+            assert all(w.seca(*w.bola_em(t * 100 + k)) for k in range(100))
+            assert [w.bola_em(t * 100 + k) for k in range(len(G.pontos_da_rolagem(r, CM.atrito)))][:-1] == G.pontos_da_rolagem(r, CM.atrito)[:-1]
+
+
+def test_a_bola_nao_entra_na_agua_no_meio_da_rolagem():
+    """a conta do `bola_em` arredonda pela distancia e sai ate 1 subunidade da linha que o `ate_a_margem` conferiu: a `rolagem_seca`
+    encurta a rolagem ate todo ponto do caminho ficar em terra (os casos abaixo entravam na agua so com o `ate_a_margem`)"""
+    m = _mundo()
+    for x, y in ((601, 76), (867, 114), (86, 136), (291, 50), (662, 153)):
+        achou = 0
+        for d in range(16):
+            for c in range(1, 25):
+                alvo = deslocar(x, y, d, c * SUB, CM)
+                x1, y1 = m.rolagem_seca(x, y, *alvo)
+                pontos = G.pontos_da_rolagem({"de": (x, y), "para": (x1, y1)}, CM.atrito)
+                assert all(m.seca(*q) for q in pontos), (x, y, d, c)
+                margem = m.ate_a_margem(x, y, *alvo)
+                achou += (x1, y1) != margem
+                if (x1, y1) != margem:                                # so encurta: fica antes da margem, na mesma rolagem
+                    assert not all(m.seca(*q) for q in G.pontos_da_rolagem({"de": (x, y), "para": margem}, CM.atrito))
+        assert achou, (x, y)
+
+
+# ------------------------------------------------------------------ a fruta que cairia na agua
+def test_a_fruta_que_cairia_na_agua_cai_na_terra_mais_perto():
+    """um mapa de teste com agua ao lado das arvores (no mapa de verdade nenhuma fruta chega a agua): a fruta da queda natural e a da
+    sacudida ficam em terra, no ponto que o `em_terra` da para o ponto sorteado; o gemeo sem agua, com a mesma semente, sorteia o mesmo"""
+    linhas = list(AGUA_ILHA)
+    for y in (8, 10, 6, 13):                                          # faixas de agua doce acima e abaixo das arvores (9, 9), (14, 7), (6, 14)
+        linhas[y] = linhas[y][:8] + AGUA_DOCE * 3 + linhas[y][11:]
+    for y in (15,):
+        linhas[y] = linhas[y][:5] + AGUA_DOCE * 3 + linhas[y][8:]
+    cm = _com_agua(linhas)
+    com, sem = Mundo(cm, 202, arvores_na_casa=True), Mundo(CONFIG_MUNDO_ILHA, 202, arvores_na_casa=True)
+    for w in (com, sem):
+        w.ligar_sacudir(CONFIG_SACUDIR_LIGADA)
+    movidas = 0
+    for t in range(60, 6000, 60):
+        for w in (com, sem):
+            w.atualizar(t)
+        for arv in ("J1", "J2", "J3"):
+            a, b = com.sacudir(arv, t), sem.sacudir(arv, t)
+            assert a["motivo"] == b["motivo"]
+            if a["caiu"] is not None:
+                assert (a["x"], a["y"]) == com.em_terra(b["x"], b["y"]) and com.seca(a["x"], a["y"])
+                c = com.comidas[a["caiu"]]
+                assert (c["x"], c["y"]) == (a["x"], a["y"])            # o registro guarda onde a fruta ficou
+                movidas += (a["x"], a["y"]) != (b["x"], b["y"])
+    assert movidas >= 3 and len(com.sacudidas) == len(sem.sacudidas)
+    assert [q["pontos"] for q in com.quedas] == [q["pontos"] for q in sem.quedas]
+    assert all(com.seca(c["x"], c["y"]) for c in list(com.comidas.values()) + com.sumidas)
 
 
 # ------------------------------------------------------------------ o motor
@@ -191,8 +250,20 @@ def test_o_gabarito_do_ts_esta_em_dia_e_as_vidas_passam_nos_gates():
     gerado = G.gerar()                                                # o `conferir` de cada vida falha alto se algo ficou na agua
     texto = json.dumps(gerado, sort_keys=True, separators=(",", ":")) + "\n"
     assert texto == G.ARQUIVO.read_text(encoding="utf-8")
+    assert gerado["config"]["mundo"]["layout"]["nome"] == "mvp_agua" and gerado["config"]["contrato"]["controlador"] is True
     for v in gerado["vidas"]:
-        assert v["conferido"]["cruzou_o_rio"] >= 1 and all(n >= 1 for n in v["conferido"]["tirados_da_agua"].values())
+        c = v["conferido"]
+        assert c["cruzou_pela_ponte"] >= 1 and all(n >= 1 for n in c["tirados_da_agua"].values())
+        assert c["rolagens_paradas_na_margem"] >= 1 and not any(e["tipo"] in ("deixar_bola", "sacudir_arvore") for e in v["log"])
+
+
+def test_a_ilha_com_arvores_passa_nos_gates_com_a_bola_e_a_sacudida():
+    """o mesmo roteiro na ilha com arvores (o que o TS de hoje nao roda): a bola posta pelo dono na agua e as arvores sacudidas"""
+    m, pedidos = G.viver(202, CM, com_arvores=True)
+    c = G.conferir(m, pedidos)
+    assert c["cruzou_pela_ponte"] >= 1
+    assert sum(p["pedido"] != p["ficou"] for p in pedidos["bola"]) >= 1
+    assert sum(s["caiu"] is not None for s in m.mundo.sacudidas) >= 3
 
 
 def test_o_replay_refaz_a_vida_com_agua():

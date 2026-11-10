@@ -1916,8 +1916,12 @@ AGUA_ILHA = (
     "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
 )                                                                                        # PROPOSTO, SEM FONTE
 LAYOUT_MUNDO_ILHA_AGUA = replace(LAYOUT_MUNDO_ILHA, nome="ilha_agua")
-AGUA_POR_LAYOUT = {LAYOUT_MUNDO_ILHA_AGUA.nome: AGUA_ILHA}
+# o mundo do produto de hoje no jogo web (o MVP, sem arvores) com a mesma agua: e o que o TS roda, e o do gabarito da paridade (IA1/IA2).
+# O ninho (4, 15), o comedouro (10, 15) e a bola (40, 15) do MVP ficam em terra neste mapa (o Mundo confere e falha alto).
+LAYOUT_MUNDO_MVP_AGUA = replace(LAYOUT_MUNDO_MVP, nome="mvp_agua")
+AGUA_POR_LAYOUT = {LAYOUT_MUNDO_ILHA_AGUA.nome: AGUA_ILHA, LAYOUT_MUNDO_MVP_AGUA.nome: AGUA_ILHA}
 CONFIG_MUNDO_ILHA_AGUA = replace(CONFIG_MUNDO_ILHA, layout=LAYOUT_MUNDO_ILHA_AGUA)
+CONFIG_MUNDO_MVP_AGUA = replace(CONFIG_MUNDO_MVP, layout=LAYOUT_MUNDO_MVP_AGUA)
 
 
 # =====================================================================

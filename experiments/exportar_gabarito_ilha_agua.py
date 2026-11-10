@@ -1,14 +1,16 @@
-"""Gabarito da ilha onde so a agua barra o pet (docs/TAREFA_V3_ILHA_AGUA.md, IA1): vidas do pet no `CONFIG_MUNDO_ILHA_AGUA` (a planta A
-da ilha com o mar em volta, o rio com duas pontes e a lagoa), com o corpo, o A do v11 e as chaves dos ovos de hoje do jogo, como no
-gabarito do sacudir a arvore (experiments/exportar_gabarito_arvore_sacode.py), mais o controlador do contrato (`CONFIG_CONTRATO_AGUA`),
-que e quem desvia da agua.
+"""Gabarito da ilha onde so a agua barra o pet (docs/TAREFA_V3_ILHA_AGUA.md, IA1): vidas do pet no `CONFIG_MUNDO_MVP_AGUA` (o mundo do
+produto de hoje no jogo web, sem arvores, com o mar em volta, o rio com duas pontes e a lagoa), com o corpo, o A do v11 e as chaves dos
+ovos de hoje do jogo (a decisao na comida, a bola no golpe), mais o controlador do contrato (`CONFIG_CONTRATO_AGUA`), que e quem desvia
+da agua. E o mundo que o TS roda: o G-PAR do laco do TS (a IA2, web/app/test/ilha_agua.test.ts) confere o TS contra este arquivo.
 
 O dono e um roteiro que testa a agua de proposito: a racao em PONTOS_COMIDA (na terra dos dois lados do rio, no rio, na lagoa e no mar),
-o pet levado a PONTOS_LEVAR (idem, e fora do mapa), a bola posta em PONTOS_BOLA e as arvores sacudidas, cada um no seu passo. O gerador
-confere em cada vida: nenhuma comida, nenhuma bola parada e nenhuma posicao do pet (a trajetoria tick a tick) fica na agua; o pet cruzou o
-rio a pe pelo menos uma vez; e pelo menos uma comida, uma bola e um pet soltos na agua foram para a terra.
+o pet levado a PONTOS_LEVAR (idem, e fora do mapa) e a travessia (o pet solto numa cabeceira da ponte do norte e a racao na outra). O
+gerador confere em cada vida (`conferir`, que falha alto): nenhuma comida, nenhum ponto da bola (tick a tick, em toda rolagem) e nenhuma
+posicao do pet (a trajetoria tick a tick) fica na agua; o pet cruzou o rio pisando na ponte pelo menos uma vez; e pelo menos uma comida e
+um pet soltos na agua foram para a terra.
 
-O G-PAR do laco do TS (a IA2, web/app/test/ilha_agua.test.ts) confere o TS contra este arquivo. So as sementes dos testes.
+O mesmo roteiro, com a bola posta pelo dono (PONTOS_BOLA) e as arvores sacudidas, roda na ilha com arvores (`CONFIG_MUNDO_ILHA_AGUA`) so
+no teste do Python (tests/test_ilha_agua.py): o TS de hoje nao tem o sacudir nem o deixar_bola no laco. So as sementes dos testes.
 
     python experiments/exportar_gabarito_ilha_agua.py      # grava web/app/test/gabaritos/ilha_agua_python.json
 """
@@ -29,18 +31,19 @@ import exportar_gabarito_mvp_mundo as e0  # noqa: E402
 
 from digilab import contrato as ct  # noqa: E402
 from digilab.config import (AGUA_POR_LAYOUT, CONFIG_BOLA_NO_GOLPE_LIGADA, CONFIG_CONTRATO_AGUA, CONFIG_DECISAO_NA_COMIDA_LIGADA,  # noqa: E402
-                            CONFIG_FRUTA_COMO_COMIDA_LIGADA, CONFIG_MUNDO_ILHA_AGUA, CONFIG_PADRAO, CONFIG_SACUDIR_LIGADA, TICKS_POR_DIA)
-from digilab.mundo import solidos_da_agua  # noqa: E402
+                            CONFIG_FRUTA_COMO_COMIDA_LIGADA, CONFIG_MUNDO_MVP_AGUA, CONFIG_PADRAO, CONFIG_SACUDIR_LIGADA, PONTE,
+                            TICKS_POR_DIA)
+from digilab.mundo import deslocar, distancia, div_arred, solidos_da_agua  # noqa: E402
 
 ARQUIVO = RAIZ / "web" / "app" / "test" / "gabaritos" / "ilha_agua_python.json"
-CM = CONFIG_MUNDO_ILHA_AGUA
+CM = CONFIG_MUNDO_MVP_AGUA
 CC = CONFIG_CONTRATO_AGUA
 CS = CONFIG_SACUDIR_LIGADA
 DIAS = 2
 ROTEIRO_COMIDA, ROTEIRO_LEVAR, ROTEIRO_SACODE, ROTEIRO_BOLA = 97, 61, 53, 211      # fora do passo de 15 das decisoes
-ROTEIRO_PONTE = 389          # a travessia: o pet solto numa cabeceira da ponte do norte e a racao posta na outra, um lado de cada vez
-CABECEIRAS = ((632, 190), (744, 190))        # a oeste e a leste da ponte do norte (as celulas 42 e 43 das linhas 11 e 12)
-MEIO_DA_PONTE = 704          # x do meio da ponte do norte
+ROTEIRO_PONTE = 131          # a travessia: o pet solto numa cabeceira da ponte do norte e a racao posta na outra, um lado de cada vez
+CABECEIRAS = ((664, 190), (712, 190))        # a oeste e a leste da ponte do norte
+PONTE_NORTE = (42, 44, 11, 13)               # as celulas da ponte do norte: as colunas 42 e 43 das linhas 11 e 12 (x0, x1, y0, y1)
 # em subunidades (o mapa vai de 0 a 1023 e de 0 a 479). O rio corre perto de x = 672 a 720; a lagoa, perto de (200, 370)
 PONTOS_COMIDA = ((300, 240), (690, 250), (820, 200), (200, 370), (5, 5), (560, 300), (900, 330), (690, 60), (420, 120), (1020, 470))
 PONTOS_LEVAR = ((640, 240), (690, 300), (850, 240), (-40, 120), (210, 372), (512, -7), (760, 100), (1500, 50), (300, 200), (0, 0))
@@ -49,33 +52,39 @@ PONTOS_BOLA = ((500, 240), (700, 150), (8, 470), (880, 260), (205, 368))
 VIDAS = (("a_v11_agua_202", 202), ("a_v11_agua_505", 505))
 
 
-def motor(semente: int):
+def motor(semente: int, cm=CM, com_arvores: bool = False):
     b = e0._bancada()
     espec = bv.EspecVida("atencioso", gl.BRACO_V11, semente)
-    return e0.MotorMundoCorpoGravado(b.politica(espec, CONFIG_PADRAO), CONFIG_PADRAO, semente, obediencia_desligada=True, cfg_mundo=CM,
+    extras = {"cfg_sacudir": CS, "cfg_fruta_comida": CONFIG_FRUTA_COMO_COMIDA_LIGADA} if com_arvores else {}
+    return e0.MotorMundoCorpoGravado(b.politica(espec, CONFIG_PADRAO), CONFIG_PADRAO, semente, obediencia_desligada=True, cfg_mundo=cm,
                                      cfg_corpo=b.cfg_corpo_de(espec), cfg_decisao_comida=CONFIG_DECISAO_NA_COMIDA_LIGADA,
-                                     cfg_bola_golpe=CONFIG_BOLA_NO_GOLPE_LIGADA, cfg_sacudir=CS,
-                                     cfg_fruta_comida=CONFIG_FRUTA_COMO_COMIDA_LIGADA, cfg_contrato=CC)
+                                     cfg_bola_golpe=CONFIG_BOLA_NO_GOLPE_LIGADA, cfg_contrato=CC, **extras)
 
 
-def viver(semente: int):
-    """a vida do roteiro; devolve o motor e o que o roteiro pediu (o ponto pedido e onde a coisa foi parar)"""
-    m = motor(semente)
-    arvores = [a[0] for a in CM.layout.arvores]
+def viver(semente: int, cm=CM, com_arvores: bool = False):
+    """a vida do roteiro; devolve o motor e o que o roteiro pediu (o ponto pedido e onde a coisa foi parar). Com `com_arvores` (so no
+    teste do Python, na ilha com arvores), o dono tambem poe a bola e sacode as arvores."""
+    m = motor(semente, cm, com_arvores)
+    arvores = [a[0] for a in cm.layout.arvores]
+    if com_arvores != bool(arvores):
+        raise ValueError(f"o layout {cm.layout.nome!r} e o roteiro nao combinam (com_arvores = {com_arvores})")
     fim, agora, k = DIAS * TICKS_POR_DIA, 0, {"c": 0, "l": 0, "s": 0, "b": 0, "p": 0}
     pedidos = {"comida": [], "levar": [], "bola": [], "ponte": [], "dormindo_em": []}
-    passos = (ROTEIRO_COMIDA, ROTEIRO_LEVAR, ROTEIRO_SACODE, ROTEIRO_BOLA, ROTEIRO_PONTE)
+    passos = (ROTEIRO_COMIDA, ROTEIRO_LEVAR, ROTEIRO_PONTE) + ((ROTEIRO_SACODE, ROTEIRO_BOLA) if com_arvores else ())
+
+    def comida(t: int, x: int, y: int) -> None:
+        antes = set(m.mundo.comidas)
+        m.deixar_comida("racao", x, y)
+        (novo,) = set(m.mundo.comidas) - antes
+        c = m.mundo.comidas[novo]
+        pedidos["comida"].append({"tick": t, "id": novo, "pedido": [x, y], "ficou": [c["x"], c["y"]]})
+
     for t in sorted({t for t in range(1, fim + 1) if any(t % p == 0 for p in passos)} | {fim}):
         m.avancar(t - agora)
         agora = t
         if t % ROTEIRO_COMIDA == 0:
-            x, y = PONTOS_COMIDA[k["c"] % len(PONTOS_COMIDA)]
+            comida(t, *PONTOS_COMIDA[k["c"] % len(PONTOS_COMIDA)])
             k["c"] += 1
-            antes = set(m.mundo.comidas)
-            m.deixar_comida("racao", x, y)
-            (novo,) = set(m.mundo.comidas) - antes
-            c = m.mundo.comidas[novo]
-            pedidos["comida"].append({"tick": t, "pedido": [x, y], "ficou": [c["x"], c["y"]]})
         if t % ROTEIRO_LEVAR == 0:
             x, y = PONTOS_LEVAR[k["l"] % len(PONTOS_LEVAR)]
             if m._estado.dormindo:
@@ -84,10 +93,10 @@ def viver(semente: int):
                 k["l"] += 1
                 m.levar_pet(x, y)
                 pedidos["levar"].append({"tick": t, "pedido": [x, y], "ficou": list(m.pet)})
-        if t % ROTEIRO_SACODE == 0:
+        if com_arvores and t % ROTEIRO_SACODE == 0:
             m.sacudir_arvore(arvores[k["s"] % len(arvores)])
             k["s"] += 1
-        if t % ROTEIRO_BOLA == 0:
+        if com_arvores and t % ROTEIRO_BOLA == 0:
             x, y = PONTOS_BOLA[k["b"] % len(PONTOS_BOLA)]
             k["b"] += 1
             m.deixar_bola(x, y)
@@ -97,25 +106,70 @@ def viver(semente: int):
             de, para = CABECEIRAS[k["p"] % 2], CABECEIRAS[(k["p"] + 1) % 2]
             k["p"] += 1
             m.levar_pet(*de)
-            m.deixar_comida("racao", *para)
+            comida(t, *para)
             pedidos["ponte"].append({"tick": t, "pet": list(de), "racao": list(para)})
     return m, pedidos
 
 
+def pontos_da_rolagem(rol: dict, atrito: int) -> list[tuple[int, int]]:
+    """por onde a bola passa numa rolagem, tick a tick (a conta do `Mundo.bola_em`), da saida ao ponto final"""
+    (x0, y0), (x1, y1) = rol["de"], rol["para"]
+    d = distancia(x1 - x0, y1 - y0)
+    meio = [(x0 + div_arred((x1 - x0) * atrito * j, d), y0 + div_arred((y1 - y0) * atrito * j, d)) for j in range(1, -(-d // atrito))]
+    return [(x0, y0)] + meio + [(x1, y1)]
+
+
+def travessias(m, pedidos: dict, agua) -> int:
+    """quantas vezes o pet cruzou o rio pela ponte do norte: depois de solto numa cabeceira (e antes de o dono leva-lo de novo), a
+    trajetoria sai do lado em que ele foi solto, pisa em celulas da ponte e chega ao outro lado sem sair dela"""
+    sub = m.cmf.sub
+    cx0, cx1, cy0, cy1 = PONTE_NORTE
+    if any(agua[y][x] != PONTE for y in range(cy0, cy1) for x in range(cx0, cx1)):
+        raise RuntimeError("a ponte do norte nao esta onde o roteiro espera")
+    levadas = sorted(m._tm(p["tick"]) for p in pedidos["levar"] + pedidos["ponte"])       # no tempo do mundo, como o das decisoes
+    n = 0
+    for p in pedidos["ponte"]:
+        ini = m._tm(p["tick"])
+        fim = next((t for t in levadas if t > ini), None)
+        oeste = p["pet"][0] < cx0 * sub
+        pisou, cruzou = False, False
+        for d in m.contrato_decisoes:
+            if d["tick"] < ini or (fim is not None and d["tick"] >= fim) or not d["trajetoria"]:
+                continue
+            for x, y in d["trajetoria"]:
+                if cx0 * sub <= x < cx1 * sub:                        # na faixa do rio: so vale se for sobre a ponte
+                    pisou = cy0 * sub <= y < cy1 * sub
+                elif pisou and (x >= cx1 * sub) == oeste:             # saiu da ponte pelo lado oposto ao da partida
+                    cruzou = True
+                    break
+                else:
+                    pisou = False
+            if cruzou:
+                break
+        n += cruzou
+    return n
+
+
 def conferir(m, pedidos: dict) -> dict:
     """os gates da agua nesta vida (G-AG-2 e G-AG-5); falha alto se algum nao vale"""
-    mundo, solidos, r = m.mundo, solidos_da_agua(CM), CC.r_pet
-    for c in list(mundo.comidas.values()) + [{"x": p["ficou"][0], "y": p["ficou"][1]} for p in pedidos["comida"]]:
-        if not mundo.seca(c["x"], c["y"]):
-            raise RuntimeError(f"comida na agua: {c}")
-    for q in mundo.quedas:
-        for i in q["colocadas"]:
-            c = mundo.comidas.get(i)
-            if c is not None and not mundo.seca(c["x"], c["y"]):
-                raise RuntimeError(f"fruta na agua: {c}")
+    mundo, cm, r = m.mundo, m.cmf, CC.r_pet
+    solidos, agua = solidos_da_agua(cm), AGUA_POR_LAYOUT[cm.layout.nome]
+    # toda comida que ja existiu: as do dono (onde ficaram), as das arvores (as quedas e as sacudidas) e as que estao no chao
+    do_dono = {p["id"]: p["ficou"] for p in pedidos["comida"]}
+    das_arvores = {i: None for q in mundo.quedas for i in q["colocadas"]}
+    das_arvores.update({s["caiu"]: [s["x"], s["y"]] for s in (mundo.sacudidas or ()) if s["caiu"] is not None})
+    nascidas = sorted([*do_dono, *das_arvores])
+    if nascidas != list(range(mundo.prox_id - len(nascidas), mundo.prox_id)):
+        raise RuntimeError("ha comida que o roteiro nao viu nascer")
+    for ponto in [*do_dono.values(), *(p for p in das_arvores.values() if p is not None), *([c["x"], c["y"]] for c in mundo.comidas.values())]:
+        if not mundo.seca(*ponto):
+            raise RuntimeError(f"comida na agua: {ponto}")
+    paradas = 0
     for rol in mundo.rolagens:
-        if not mundo.seca(*rol["para"]):
-            raise RuntimeError(f"a bola rolou para a agua: {rol}")
+        for x, y in pontos_da_rolagem(rol, cm.atrito):
+            if not mundo.seca(x, y):
+                raise RuntimeError(f"a bola na agua em ({x}, {y}): {rol}")
+        paradas += tuple(rol["para"]) != deslocar(*rol["de"], rol["direcao"], rol["celulas"] * cm.sub, cm)
     for p in pedidos["bola"]:
         if not mundo.seca(*p["ficou"]):
             raise RuntimeError(f"a bola posta na agua: {p}")
@@ -123,31 +177,25 @@ def conferir(m, pedidos: dict) -> dict:
     for x, y in pontos:
         if ct.bloqueio_em(x, y, r, solidos) is not None:
             raise RuntimeError(f"o pet na agua: ({x}, {y})")
-    # o pet cruzou o rio a pe: numa mesma decisao, a trajetoria comeca de um lado do meio da ponte e acaba do outro
-    cruzou = 0
-    for d in m.contrato_decisoes:
-        t = d["trajetoria"]
-        if t and len(t) > 1:
-            cruzou += (t[0][0] < MEIO_DA_PONTE) != (t[-1][0] < MEIO_DA_PONTE)
-    movidos = {k: sum(p["pedido"] != p["ficou"] for p in pedidos[k]) for k in ("comida", "levar", "bola")}
+    cruzou = travessias(m, pedidos, agua)
+    movidos = {k: sum(p["pedido"] != p["ficou"] for p in pedidos[k]) for k in ("comida", "levar")}
     if not cruzou or not all(movidos.values()):
-        raise RuntimeError(f"o roteiro precisa de uma travessia do rio ({cruzou}) e de uma comida, um pet e uma bola tirados da agua ({movidos})")
-    return {"cruzou_o_rio": cruzou, "tirados_da_agua": movidos, "posicoes_do_pet": len(pontos)}
+        raise RuntimeError(f"o roteiro precisa de uma travessia pela ponte ({cruzou}) e de uma comida e um pet tirados da agua ({movidos})")
+    return {"cruzou_pela_ponte": cruzou, "tirados_da_agua": movidos, "posicoes_do_pet": len(pontos), "rolagens": len(mundo.rolagens),
+            "rolagens_paradas_na_margem": int(paradas)}
 
 
 def _vida(nome: str, semente: int) -> dict:
     m, pedidos = viver(semente)
     return {**e0.retrato(m, nome, "a_v11", "roteiro", "pontos_fixos", semente), "dias": DIAS, "pedidos": pedidos,
-            "conferido": conferir(m, pedidos), "no_galho_fim": m.no_galho()}
+            "conferido": conferir(m, pedidos)}
 
 
 def gerar() -> dict:
-    return {"versao": 1, "config": {**e0.config(), "dias": DIAS, "mundo": json.loads(json.dumps(asdict(CM))), "agua": list(AGUA_POR_LAYOUT[CM.layout.nome]),
-                                    "contrato": asdict(CC),
-                                    "sacudir": asdict(CS),
-                                    "roteiro": {"comida": ROTEIRO_COMIDA, "levar": ROTEIRO_LEVAR, "sacode": ROTEIRO_SACODE, "bola": ROTEIRO_BOLA, "ponte": ROTEIRO_PONTE,
-                                                "cabeceiras": CABECEIRAS,
-                                                "pontos_comida": PONTOS_COMIDA, "pontos_levar": PONTOS_LEVAR, "pontos_bola": PONTOS_BOLA}},
+    return {"versao": 1, "config": {**e0.config(), "dias": DIAS, "mundo": json.loads(json.dumps(asdict(CM))),
+                                    "agua": list(AGUA_POR_LAYOUT[CM.layout.nome]), "contrato": asdict(CC),
+                                    "roteiro": {"comida": ROTEIRO_COMIDA, "levar": ROTEIRO_LEVAR, "ponte": ROTEIRO_PONTE,
+                                                "cabeceiras": CABECEIRAS, "pontos_comida": PONTOS_COMIDA, "pontos_levar": PONTOS_LEVAR}},
             "vidas": [_vida(n, s) for n, s in VIDAS]}
 
 
