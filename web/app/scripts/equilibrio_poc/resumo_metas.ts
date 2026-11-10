@@ -101,7 +101,7 @@ if (tem("estagio")) {
   meta("E1", "a evolucao pesa mais que o treino", "tipico contra o estagio seguinte de 0,10 a 0,35; dois acima <= 0,05; o teto contra o seguinte <= 0,50", ok, { taxa: v });
 }
 /* ---------------------------------------------------------------- D1, D2: todas as lutas de todos os grupos */
-{
+if (!parcial || ESTAGIOS_LUTA.every(e => Object.values(G).some(x => e in x.duracao.por_estagio))) {
   const est: Record<string, Conta> = {}, forma: Record<string, Conta> = {};
   for (const x of Object.values(G)) {
     for (const [e, c] of Object.entries(x.duracao.por_estagio as Record<string, Conta>)) est[e] = est[e] ? juntar(est[e], c) : c;

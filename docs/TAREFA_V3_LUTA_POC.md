@@ -614,3 +614,15 @@ candidato escolhido, o `lp5_1_r1` (1 364 118 lutas em 252 s, 4 processos; `lp5_1
 **A rodada para pelo S1** (D-LP5-1-4). Na Praia, o lado A fica de 0,42 a 0,46. Com o v21 (a LP5-0 relida pela régua nova) isso vale em
 todos os estágios, e com o `lp5_1_r1` do Champion ao Mega. É o núcleo, não o candidato. A LP5-2 espera a decisão do Matheus sobre o S1 e sobre as metas que o
 mapeamento não fecha.
+
+### A distância do tiro (D-LP5-12)
+
+O núcleo ganhou o `Tiro` desligado. A luta de hoje sai igual: o teste confere, e a fidelidade da LP1 dá 3276 de 3276. O candidato da
+bancada leva o tiro, e a meta nova é o A2 (PROPOSTA, SEM FONTE). Os desvios são o D-LP5-1-7 a 10.
+
+- **O ponto de partida do A2** (o v21, as 5 bases): contra quem luta de perto, a mediana da distância no tiro é 48 a 52 px, e de 26 % a
+  46 % dos tiros saem a 48 px ou menos. Contra quem atira, a mediana é 132 px. O A2 pede pelo menos 90 px e no máximo 15 %.
+- **As grades:** o recuo na preparação do tiro é a alavanca que move. A 2 vezes o movimento, o A2 passa (100 a 108 px, 6 % a 8 %).
+  Mas as que atiram passam a vencer as de perto de 0,67 a 0,92 (o A1), e o S1 na Praia não muda.
+- **A ordem das fases não muda:** o tiro é parte do mapeamento (LP5-1), antes dos NPCs. Mas o ponto de partida ganha o A2, e o
+  `lp5_1_r1` precisa ser medido de novo com o tiro, nas rodadas 2 e 3 da LP5-1.
