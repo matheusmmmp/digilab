@@ -81,7 +81,14 @@ def bloco(nome, c, t, pinta, R=None, fundo=False) -> Peca:
                 p = np.zeros(3); p[e] = s * t[e]; p[a] = sa * t[a]; p[b] = sb * t[b]
                 V.append(c + R @ p); N.append(R @ n)
             F += [(base, base + 1, base + 2), (base, base + 2, base + 3)]
-    return Peca(nome, V, F, pinta, N=N, centro=c)
+    # cada face olha para onde a normal dela olha: o orientar da Peca vira todas de uma vez, e aqui duas das cinco saiam de costas
+    V, N, F = np.array(V, float), np.array(N, float), np.array(F)
+    fn = np.cross(V[F[:, 1]] - V[F[:, 0]], V[F[:, 2]] - V[F[:, 0]])
+    vira = (fn * N[F[:, 0]]).sum(axis=1) < 0
+    F[vira] = F[vira][:, ::-1]
+    p = Peca(nome, V, F, pinta, N=N, centro=c)
+    p.F = F
+    return p
 
 
 # ---------------------------------------------------------------- a pintura (P e N por texel; devolve RGB 0..255)
