@@ -437,6 +437,48 @@ export const CMU: ConfigMundo = {
 export const LAYOUT_MUNDO_MVP: LayoutMundo = { ...LAYOUT_MUNDO_PADRAO, nome: "mvp", arvores: [] };
 export const CMU_MVP: ConfigMundo = { ...CMU, layout: LAYOUT_MUNDO_MVP };
 
+/* A ilha onde so a agua barra o pet (docs/TAREFA_V3_ILHA_AGUA.md; o espelho de digilab/config.py: AGUA_ILHA, AGUA_POR_LAYOUT e
+   CONFIG_MUNDO_MVP_AGUA). A agua e uma linha de texto por linha de celulas, de cima para baixo, com um caractere por celula; ela barra o
+   corpo e nao tapa a visao, e a ponte e terra. O mapa fica na tabela, pelo nome do layout (o LayoutMundo nao ganha campo: os gabaritos de
+   antes o gravam campo a campo); o layout fora da tabela nao tem agua. O desenho e PROPOSTO, SEM FONTE. Quem roda um layout com agua precisa
+   do controlador do contrato (o Mundo confere e falha alto). */
+export const AGUA_MAR = "~", AGUA_DOCE = "r", TERRA = ".", PONTE = "=";
+export const AGUA_ILHA: readonly string[] = [
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~.......................~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~.................................~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~..............................rrrr......~~~~~~~~~~~~~",
+  "~~~~~~~~~...............................rrrrrr........~~~~~~~~~~",
+  "~~~~~~~..................................rrrr............~~~~~~~",
+  "~~~~~~.....................................rr.............~~~~~~",
+  "~~~~~......................................rr...............~~~~",
+  "~~~~.......................................rr................~~~",
+  "~~~~.......................................rr................~~~",
+  "~~~.......................................rr..................~~",
+  "~~~.......................................==..................~~",
+  "~~~.......................................==..................~~",
+  "~~~......................................rr....................~",
+  "~~~......................................rr....................~",
+  "~~~......................................rr....................~",
+  "~~~......................................rr....................~",
+  "~~~.....................................rr....................~~",
+  "~~~.....................................rr....................~~",
+  "~~~......................................rr...................~~",
+  "~~~~.....................................rr..................~~~",
+  "~~~~......................................==................~~~~",
+  "~~~~~.....rrrrr............................==..............~~~~~",
+  "~~~~~~...rrrrrrr...........................rr.............~~~~~~",
+  "~~~~~~~...rrrrr.............................rr..........~~~~~~~~",
+  "~~~~~~~~~....................................rr.......~~~~~~~~~~",
+  "~~~~~~~~~~~~..................................rr...~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~..............................rr~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+];
+export const LAYOUT_MUNDO_MVP_AGUA: LayoutMundo = { ...LAYOUT_MUNDO_MVP, nome: "mvp_agua" };
+export const CMU_MVP_AGUA: ConfigMundo = { ...CMU_MVP, layout: LAYOUT_MUNDO_MVP_AGUA };
+export const AGUA_POR_LAYOUT: Readonly<Record<string, readonly string[]>> = { [LAYOUT_MUNDO_MVP_AGUA.nome]: AGUA_ILHA };
+
 /* V2, o corpo do Creatures 3 por baixo dos drives (docs/TAREFA_V2_CORPO_DRIVES.md, etapa 7): espelho da ConfigCorpo de
    digilab/config.py, campo a campo (snake_case de proposito, conferido pelo nome contra o gabarito do Python). O motor do corpo e
    motor/corpo.ts. Aqui e o padrao: desligado (o corpo so existe com `ligada`); corpo.configCorpo troca campos e confere as

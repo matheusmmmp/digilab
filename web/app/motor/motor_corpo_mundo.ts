@@ -27,6 +27,7 @@
 import { C } from "./constantes.ts";
 import type { ConfigCorpo, ConfigMundo } from "./constantes.ts";
 import { CCO_CORPO_V11 } from "./corpo.ts";
+import type { ConfigContrato } from "./contrato.ts";
 import { efeitoAcaoPet } from "./estado.ts";
 import { ACOES_DONO_V11, MotorCorpo, estadoNascimentoPy, type EventoCorpo, type PoliticaCorpo } from "./motor_corpo.ts";
 import type { ObservacaoLobos } from "./lobos.ts";
@@ -63,6 +64,8 @@ export interface OpcoesLacoMundo {
   decidirNaComida?: boolean;
   /** a chave dos pets v15 (a ConfigBolaNoGolpe do Python), desligada: com ela, a bola sai na direcao em que o pet vinha (Mundo, OpcoesMundo) */
   bolaNoGolpe?: boolean;
+  /** o contrato da P4 (o `cfg_contrato` do Python), desligado: o layout com agua exige o controlador (docs/TAREFA_V3_ILHA_AGUA.md) */
+  contrato?: ConfigContrato;
 }
 
 /** as acoes do dono no laco com o mundo: as do v11 sem o alimentar (ele vira o deixar_comida) */
@@ -84,7 +87,7 @@ export class MotorCorpoMundo extends MotorCorpo {
               opcoes: OpcoesLacoMundo = {}) {
     super(politica, semente, cc, estado, true);
     if (!cc.drives_novos) throw new Error("o laco com o mundo e o do regime `corpo` com os drives novos (a novidade e a atividade)");
-    this.mundo = new Mundo({ semente, cfg: opcoes.cfgMundo, bolaNoGolpe: opcoes.bolaNoGolpe ?? false });
+    this.mundo = new Mundo({ semente, cfg: opcoes.cfgMundo, bolaNoGolpe: opcoes.bolaNoGolpe ?? false, contrato: opcoes.contrato });
     this.regra = opcoes.regra ?? (() => null);
     this.paridade = opcoes.paridade ?? false;
     this.digibrain = opcoes.digibrain ?? false;
