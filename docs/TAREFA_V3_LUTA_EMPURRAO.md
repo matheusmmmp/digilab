@@ -1,5 +1,7 @@
 # TAREFA V3 — LUTA_EMPURRAO (2026-11-06)
 
+> **SUBSTITUÍDO** pela [`docs/TAREFA_V3_LUTA_POC.md`](TAREFA_V3_LUTA_POC.md) (2026-11-08): a luta do jogo é a simulação da POC. O combate por turnos saiu do jogo na LP4 (2026-11-10); este documento fica como registro.
+
 Coordenador: o Gerente da missão SPRITES_GERACAO (Claude Code). Worker: Claude Code, Opus 5.5. Worktree e branch: `v3-luta-empurrao`.
 Status: EM ANDAMENTO (as EMP-1 a EMP-8 DECIDIDAS pelo Matheus em 2026-11-06, pela recomendação; seção 8).
 

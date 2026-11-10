@@ -3,10 +3,9 @@
    confere cobertura, bebe sem causa e marcadores unicos (falha alto).
    Estagio da fala: o estagio da evolucao (bebe, crianca, adolescente, adulto). */
 import { ACOES_PET, CDJ, EIXOS_TEMP, FATORES_ESPACOS } from "./constantes.ts";
-import { CATALOGO_V2 } from "./combate.ts";
 import { ESTADOS_CONFIANCA, type EstadoConfianca } from "./confianca.ts";
 import type { Emocao } from "./memoria.ts";
-import { FATOR_DA_FEATURE } from "./motivo.ts";
+import { CONDICOES_FALA, FATOR_DA_FEATURE } from "./motivo.ts";
 import type { CategoriaMemoria } from "./constantes.ts";
 import type { Desejo, Estagio, EstagioBase, Motivo, Temperamento } from "./tipos.ts";
 import { baseDe } from "./constantes.ts";
@@ -230,5 +229,5 @@ export function expressar(mot: Motivo, est0: Estagio, refs?: readonly number[] |
 }
 
 /* confere as tabelas na carga (como o HTML): falha alto */
-validarTabelasFala(["fadiga_treino", ...FATOR_DA_FEATURE, ...FATORES_ESPACOS, ...Object.keys(CATALOGO_V2), "vinculo_baixo", "teimosia", ...["fome", "higiene", "energia", "humor"].map(n => "necessidade_" + n)]);
+validarTabelasFala(["fadiga_treino", ...FATOR_DA_FEATURE, ...FATORES_ESPACOS, ...CONDICOES_FALA, "vinculo_baixo", "teimosia", ...["fome", "higiene", "energia", "humor"].map(n => "necessidade_" + n)]);
 validarTabelasPersonalidade();

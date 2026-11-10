@@ -14,7 +14,7 @@ const PELES = (process.env.DIGILAB_LP3_PELES ?? "vidro,militar").split(",");
 async function semear(page: Page): Promise<void> {
   await page.goto("/motor/index.ts");
   await page.evaluate((chave) => {
-    localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-descarte", "7");
+    localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-descarte", "8");
     localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
   }, CHAVE);
 }

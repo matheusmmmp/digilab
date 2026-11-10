@@ -1,13 +1,12 @@
 // Laboratorio > Cenarios (2026-11-07): os pets do cenario nascem na versao de hoje (VERSAO_PET), e nao na v5 do treinarPet do motor,
 // que nao abre mais (D-LE-E2-9). Sem DOM (vitest em node):
 //   - cada cenario pronto monta os dois pets vivos na versao de hoje; o A vira o pet ativo e o save dele reabre (lerSave) com o mesmo
-//     registro; o B vira o rival fixo da arena;
-//   - a luta monta: as 10 lutas contra o rival fixo (melhorDe10, o caminho da arena) e a luta em tempo real A x B rodam;
+//     registro; o B fica para a comparacao;
+//   - a luta monta: desde a LP4 da LUTA_POC, a luta da POC A x B (os numeros dos 6 stats de cada um) roda no nucleo;
 //   - o pet de antes fica guardado para voltar; a escada de exemplo (sem tratar a lesao) nao muda: o mesmo pet de antes da opcao.
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
-import { Motor, VERSAO_PET, jogarLuta, lutadorPet } from "../motor/index.ts";
+import { Motor, VERSAO_PET, lutarNucleoPoc, sorteiosPoc } from "../motor/index.ts";
 import { iniciarJogo, jogoAtual } from "../src/jogo.ts";
-import { LUTA, melhorDe10 } from "../src/luta.ts";
 import { CHAVE, lerSave, textoSave, type Armazenamento } from "../src/save.ts";
 import { ESCADA, petDaReceita } from "../src/pets.ts";
 import { CHAVE_ANTERIOR } from "../src/telas/pet/MeusPets.tsx";
@@ -19,7 +18,7 @@ beforeEach(() => {
   dados = {};
   vi.stubGlobal("localStorage", { getItem: (k: string) => (k in dados ? dados[k]! : null), setItem: (k: string, v: string) => { dados[k] = v; }, removeItem: (k: string) => { delete dados[k]; } });
 });
-afterEach(() => { vi.unstubAllGlobals(); LUTA.rivalFixo = null; LUTA.palco = null; });
+afterEach(() => { vi.unstubAllGlobals(); });
 
 describe("os Cenarios do Lab", () => {
   test.each(CENARIOS.map(c => [c.id, c] as const))("%s: os dois pets na versao de hoje, o A abre e a luta monta", (_id, cen) => {
@@ -37,12 +36,9 @@ describe("os Cenarios do Lab", () => {
     expect(textoSave(lido.motor)).toBe(textoSave(A));
     /* o pet de antes ficou guardado para voltar */
     expect(dados[CHAVE_ANTERIOR]).toBe(textoSave(hoje));
-    /* o B e o rival fixo; a luta monta pelo caminho da arena e a A x B corre em tempo real */
-    expect(LUTA.rivalFixo?.rival).toBe(B);
-    expect(melhorDe10()).toMatch(/^10 lutas: \d+ vitórias, \d+ derrotas, \d+ empates/);
-    expect(A.regras.tempoReal).toBe(true);
-    const r = jogarLuta(lutadorPet(A, "Pet A"), lutadorPet(B, "Pet B"), 7, A.regras);
-    expect(r.tr.acoes.length).toBeGreaterThan(0);
+    /* a luta da POC A x B, no Campo de treino, com os numeros de cada um (a tela roda 100 delas) */
+    const r = lutarNucleoPoc({ cena: "campo", semente: 7, a: { forma: A.formaLutaPoc, stats: A.statsLutaPoc() }, b: { forma: B.formaLutaPoc, stats: B.statsLutaPoc() } }, sorteiosPoc(7));
+    expect(r.passos).toBeGreaterThan(0);
     /* a tabela lado a lado sai dos dois pets */
     for (const [m, l] of [[A, cen.a], [B, cen.b]] as const) expect(resumoPet(m, l).total).toBeGreaterThanOrEqual(0);
   }, 120_000);

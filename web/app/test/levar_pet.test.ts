@@ -3,12 +3,11 @@
      - o formato do log (eventoLevarPet, lerLevarPet): os mesmos casos do Python;
      - o G-PAR do laco: o TS refaz o gabarito do Python (test/gabaritos/levar_pet_python.json, experiments/exportar_gabarito_levar_pet.py)
        decisao a decisao e bit a bit no Node, pelo laco gravado do MVP (test/laco_gravado.ts), e recusa em cada tick de `dormindo_em`;
-     - o "lp" do Motor: so a v19; vai ao registro e refaz no replay bit a bit; so a posicao muda (PP-1), fora do mapa cai na borda (PP-4),
+     - o "lp" do Motor: da v19 em diante (desde a LP4 da LUTA_POC so a v21 abre); vai ao registro e refaz no replay bit a bit; so a posicao muda (PP-1), fora do mapa cai na borda (PP-4),
        o pendente se perde; dormindo falha alto (PP-2), e o registro invalido tambem. */
 import { describe, expect, test } from "vitest";
 import { createHash } from "node:crypto";
-import { CMU_MVP, VERSAO_PET, VERSAO_V19, VERSOES_PET, ehCerebroTrocavel } from "../motor/constantes.ts";
-import { CV21E_TR18 } from "../motor/constantes.ts";
+import { CMU_MVP, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V19, VERSOES_PET, ehCerebroTrocavel } from "../motor/constantes.ts";
 import { CCO_CORPO_V11 } from "../motor/corpo.ts";
 import { Motor } from "../motor/motor.ts";
 import { estadoNascimentoPy } from "../motor/motor_corpo.ts";
@@ -106,14 +105,13 @@ const semMundo = (m: Motor): unknown => {
 };
 
 describe("o levar pet no Motor (o evento lp, pets v19)", () => {
-  test("a v19 e o ovo novo: o v18 com o levar pet, luta como a v18 e tem o cerebro trocavel", () => {
-    expect(VERSAO_PET).toBe(19);
+  test("o ovo novo (a v21) tem o levar pet da v19 e o cerebro trocavel", () => {
+    expect(VERSAO_PET).toBe(21);
     expect(VERSAO_V19).toBe(19);
-    expect(VERSOES_PET).toEqual([13, 14, 15, 17, 18, 19]);
+    expect(VERSOES_PET).toEqual([21]);
     const m = new Motor(101);
-    expect(m.versao).toBe(19);
-    expect(m.regras).toBe(CV21E_TR18);
-    expect(ehCerebroTrocavel(19)).toBe(true);
+    expect(m.versao).toBe(21);
+    expect(ehCerebroTrocavel(21)).toBe(true);
     expect(m.mundo!.bolaNoGolpe).toBe(true);
     expect(m.v11!.laco).toBeInstanceOf(MotorCorpoMundo);
   });
@@ -170,8 +168,8 @@ describe("o levar pet no Motor (o evento lp, pets v19)", () => {
     expect(() => Motor.reproduzir(101, [...m.log, [m.e.tick, "lp", { x: 10, y: 10 }]])).toThrow(/dormindo/);
   });
 
-  test("antes da v19 o evento nao existe, e o registro invalido falha alto", () => {
-    for (const v of [13, 14, 15, 17, 18]) {
+  test("antes da v19 o evento nao existe (so o pet de teste v16 abre, das de antes), e o registro invalido falha alto", () => {
+    for (const v of [VERSAO_PET_LAB]) {
       const m = new Motor(101, v);
       m.avancar(60);
       expect(() => m.levarPet(10, 10), `v${v}`).toThrow(/v19/);
