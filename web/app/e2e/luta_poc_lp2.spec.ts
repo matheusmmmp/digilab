@@ -1,6 +1,6 @@
 /* LUTA_POC, LP2 (docs/TAREFA_V3_LUTA_POC.md): a chave da luta da POC no app. Desligada (o padrao), o jogo de hoje: o pet v19 abre, sem aviso.
-   Ligada por ?luta_poc=1: o descarte 7 tira o pet v19 com o aviso da luta nova (LP-6), e um pet v21 abre; a Arena e a Campanha dizem que a
-   tela da luta nova ainda vem (a LP3), em vez de abrir as telas do combate de antes. */
+   Ligada por ?luta_poc=1: o descarte 7 tira o pet v19 com o aviso da luta nova (LP-6), e um pet v21 abre; a Arena e a Campanha abrem as telas
+   da luta nova (desde a LP3), em vez das telas do combate de antes. */
 import { expect, test, type Page } from "@playwright/test";
 import { basename } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -49,7 +49,7 @@ test("chave ligada (?luta_poc=1): o descarte 7 tira o pet v19, com o aviso da lu
   expect(erros).toEqual([]);
 });
 
-test("chave ligada: um pet v21 abre, e a Arena e a Campanha dizem que a tela da luta nova ainda vem", async ({ page }) => {
+test("chave ligada: um pet v21 abre, e a Arena e a Campanha abrem as telas da luta nova (LP3)", async ({ page }) => {
   const erros = errosDa(page);
   await semear(page, save(21), "7");
   await page.goto(APP + "?luta_poc=1#/pet/estado");
@@ -57,8 +57,7 @@ test("chave ligada: um pet v21 abre, e a Arena e a Campanha dizem que a tela da 
   expect(await versaoDoSave(page)).toBe(21);
   for (const rota of ["#/lutar/arena", "#/lutar/campanha"]) {
     await page.goto(APP + "?luta_poc=1" + rota);
-    await expect(page.locator(".luta-poc-sem-tela")).toBeVisible();
-    await expect(page.locator(".luta-poc-sem-tela")).toContainText("a tela dela ainda está sendo feita");
+    await expect(page.getByTestId(rota.endsWith("arena") ? "poc-arena" : "poc-campanha")).toBeVisible();
   }
   expect(erros).toEqual([]);
 });

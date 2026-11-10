@@ -5,10 +5,11 @@
    Depois do titulo (medalhas parte 4b, motor/instalacoes.ts), as instalacoes: a Torre de Batalha e o Palacio, cada uma com a regra em uma
    frase, o recorde do Tamer (o evento "recorde"), as tentativas deste pet (Motor.instalacoes) e "Tentar" (a luta em tela cheia).
    E (medalhas parte 4c) a Fabrica e o Salao, com a escolha dos alugados e dos pets de cada nivel no proprio card (FabricaSalao.tsx). */
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   INSTALACOES, LIGA, MEDALHAS_LIGA, NOME_ARQ, NOME_ESP, NOME_V2, NPC, RIVAL_LIGA, LUGARES_V6, MEDALHA_POR_ID, chaveSprite, formaLiga, nomeMegaLiga,
-  type Instalacao, type Motor, duracaoLuta } from "../../../motor/index.ts";
+  type Instalacao, type Motor, duracaoLuta, VERSAO_V21 } from "../../../motor/index.ts";
+import { lutarNoPalco } from "./palcoPoc/TelaLugaresPoc.tsx";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
 import { SeloMedalha } from "../../componentes/Medalha.tsx";
 import { tamerAtual, useJogo } from "../../jogo.ts";
@@ -31,8 +32,13 @@ const vitorias = (n: number): string => `${n} vitória${n === 1 ? "" : "s"}`;
 
 /** uma instalacao da Fronteira: a regra em uma frase, o recorde do Tamer, o que este pet fez nela e "Tentar". Antes do titulo, trancada */
 function CartaoInstalacao({ x, m, t, lutando }: { x: Instalacao; m: Motor; t: Tamer; lutando: boolean }) {
+  const [erroPoc, setErroPoc] = useState<string | null>(null);
   const erro = m.porqueNaoInstalacao(x.id), rec = t.recorde(x.id), c = m.instalacoes[x.id];
-  const tentar = () => { lutarInstalacao(x.id); if (LUTA.lutando) location.hash = ENDERECO_LUTA; };
+  /* os pets v21 (a luta da POC, LP3): a tentativa no palco novo, com a semente da proxima tentativa do pet */
+  const tentar = () => {
+    if (m.versao === VERSAO_V21) { lutarNoPalco(x.id, null, `Fronteira · ${x.nome}`, setErroPoc, mm => mm.sementeInstalacao(x.id)); return; }
+    lutarInstalacao(x.id); if (LUTA.lutando) location.hash = ENDERECO_LUTA;
+  };
   return (
     <li className={`dl-card fr-inst-card${t.titulo ? "" : " fr-inst-card--fechada"}`} aria-labelledby={`fr-inst-${x.id}`}>
       <span className="fr-inst-cab">
@@ -43,6 +49,7 @@ function CartaoInstalacao({ x, m, t, lutando }: { x: Instalacao; m: Motor; t: Ta
       <span className="fr-inst-quem">{rec ? `Recorde do Tamer: ${vitorias(rec.valor)} seguidas, com ${rec.forma}, no dia ${diaDe(rec.tick)}.` : t.titulo ? "Sem recorde ainda: a primeira vitória já é um." : "Abre depois do título da Liga dos Líderes."}</span>
       {c && c.tentativas > 0 && <span className="fr-inst-pet">Este pet: {c.tentativas} tentativa{c.tentativas === 1 ? "" : "s"}, melhor {c.recorde}, última {c.ultima} (vitórias seguidas).</span>}
       {t.titulo && erro && <span className="dl-apoio">Agora não dá para entrar: {erro}.</span>}
+      {erroPoc && <span className="aviso" role="alert">A luta não começou: {erroPoc}</span>}
       <button type="button" className="dl-btn fr-inst-tentar" disabled={!!erro || lutando} onClick={tentar}>{c && c.tentativas ? "Tentar de novo" : "Tentar"}</button>
     </li>
   );
@@ -50,14 +57,19 @@ function CartaoInstalacao({ x, m, t, lutando }: { x: Instalacao; m: Motor; t: Ta
 
 export function TelaFronteira() {
   const { motor: m, erroTamer } = useJogo(), luta = useLuta(), a = useAtlas(), t = tamerAtual();
-  useEffect(() => { if (!LUTA.lutando && (!LUTA.palco || LUTA.palco.modo !== "fronteira")) previa("fronteira"); }, []);
-  const erro = m.porqueNaoLiga();
+  /* a previa do palco de antes (os pets v21 lutam no palco novo, sem previa) */
+  useEffect(() => { if (m.versao !== VERSAO_V21 && !LUTA.lutando && (!LUTA.palco || LUTA.palco.modo !== "fronteira")) previa("fronteira"); }, []);
+  const erro = m.porqueNaoLiga(), [erroPoc, setErroPoc] = useState<string | null>(null);
   const nLiga = m.liga.tentativas;
   /* a ultima tentativa, refeita do registro (so muda com luta nova da Liga) */
-  const ult = useMemo(() => (nLiga ? ultimaTentativa(m) : null), [nLiga, m.semente]);
+  /* a ultima tentativa refeita do registro e do combate de antes; os pets v21 mostram so as contas (LP3) */
+  const ult = useMemo(() => (nLiga && m.versao !== VERSAO_V21 ? ultimaTentativa(m) : null), [nLiga, m.semente]);
   const img = (k: string, cls: string) => { if (a.tipo !== "ok") return null; const i = imagemAtlas(a, k); return <img className={`dl-pix ${cls}`} src={i.url} width={i.w} height={i.h} alt="" />; };
   const titulo = t.titulo, meu = t.tituloDe(m.semente), parou = ult ? ult.lutas.length : 0, venceuUlt = !!ult && ult.lutas.length === LIGA.length && ult.lutas[LIGA.length - 1].venceu;
-  const desafiar = () => { lutarLiga(); if (LUTA.lutando) location.hash = ENDERECO_LUTA; };
+  const desafiar = () => {
+    if (m.versao === VERSAO_V21) { lutarNoPalco(RIVAL_LIGA, null, "Fronteira · Liga dos Líderes", setErroPoc); return; }
+    lutarLiga(); if (LUTA.lutando) location.hash = ENDERECO_LUTA;
+  };
   return (
     <div className="tela dl fr-tela">
       <div className="fr-lado">
@@ -85,6 +97,7 @@ export function TelaFronteira() {
         </section>
         <button type="button" className="dl-btn fr-lutar" disabled={!!erro || luta.lutando} onClick={desafiar}>
           {nLiga ? "Tentar a Liga de novo" : "Desafiar a Liga"} ({LIGA.length} lutas seguidas)</button>
+        {erroPoc && <p className="aviso" role="alert">A luta não começou: {erroPoc}</p>}
         <section className="fr-inst" aria-labelledby="fr-inst-tit">
           <h2 id="fr-inst-tit">Instalações</h2>
           <p className="dl-apoio">{t.titulo ? "Para rejogar por recorde: nada daqui deixa o pet mais forte fora da Fronteira." : "Abrem depois do título da Liga dos Líderes, para rejogar por recorde."}</p>

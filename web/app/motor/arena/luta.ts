@@ -3,13 +3,17 @@
    passo com a mesma configuracao. */
 import { LIMITE_MS, OPCOES_PADRAO } from "./constantes.ts";
 import { FORMAS_ARENA } from "./formas.ts";
+import type { DadosForma } from "./tipos.ts";
 import { sorteiosPorFluxo } from "./rng.ts";
 import { criarLuta, passo } from "./sim.ts";
 import type { ConfigLuta, Evento, IdCena, Lado, Luta, Sorteios, Stats } from "./tipos.ts";
 
+/** uma tabela de formas: a do jogo (FORMAS_ARENA, com o projetil da LP-8) ou a da POC (FORMAS_ARENA_POC, so a fidelidade da LP1) */
+export type TabelaFormas = Readonly<Record<string, DadosForma>>;
+
 /** a forma do jogo (chaveSprite, como "cirro_crianca_arisco") na tabela do git; forma fora da tabela levanta erro */
-export function formaArena(chave: string) {
-  const f = FORMAS_ARENA[chave];
+export function formaArena(chave: string, tabela: TabelaFormas = FORMAS_ARENA) {
+  const f = tabela[chave];
   if (!f) throw new Error(`arena: a forma ${chave} nao esta na tabela (motor/arena/formas.ts)`);
   return f;
 }
@@ -18,10 +22,10 @@ export function formaArena(chave: string) {
 export interface EntradaLuta { cena: IdCena; a: { forma: string; stats: Stats; vida0?: number }; b: { forma: string; stats: Stats; vida0?: number }; semente: number }
 
 /** a configuracao da luta 1 contra 1: os dois pela IA, com a dificuldade, o atributo e os projeteis do padrao da POC */
-export function configLuta(e: EntradaLuta): ConfigLuta {
+export function configLuta(e: EntradaLuta, tabela: TabelaFormas = FORMAS_ARENA): ConfigLuta {
   return { cena: e.cena, dific: OPCOES_PADRAO.dific, forca: OPCOES_PADRAO.forca, pvel: OPCOES_PADRAO.pvel,
-    a: { forma: formaArena(e.a.forma), stats: e.a.stats, ...(e.a.vida0 !== undefined ? { vida0: e.a.vida0 } : {}) },
-    b: { forma: formaArena(e.b.forma), stats: e.b.stats, ...(e.b.vida0 !== undefined ? { vida0: e.b.vida0 } : {}) } };
+    a: { forma: formaArena(e.a.forma, tabela), stats: e.a.stats, ...(e.a.vida0 !== undefined ? { vida0: e.a.vida0 } : {}) },
+    b: { forma: formaArena(e.b.forma, tabela), stats: e.b.stats, ...(e.b.vida0 !== undefined ? { vida0: e.b.vida0 } : {}) } };
 }
 
 export interface ResultadoLuta {
@@ -39,7 +43,7 @@ export function rodarAteOFim(L: Luta, aoPasso?: (ev: Evento[], L: Luta) => void)
   return { vencedor: L.vencedor, fim: L.fim, relogio: L.relogio, passos, vidaA: L.a.hp, vidaB: L.b.hp, danoA: L.a.dano, danoB: L.b.dano };
 }
 
-/** a luta inteira do jogo: um fluxo de sorteio por uso, semeado pela semente da luta */
-export function lutar(e: EntradaLuta, r: Sorteios = sorteiosPorFluxo(e.semente)): ResultadoLuta {
-  return rodarAteOFim(criarLuta(configLuta(e), r));
+/** a luta inteira do jogo: um fluxo de sorteio por uso, semeado pela semente da luta (a tabela da POC so na fidelidade da LP1) */
+export function lutar(e: EntradaLuta, r: Sorteios = sorteiosPorFluxo(e.semente), tabela: TabelaFormas = FORMAS_ARENA): ResultadoLuta {
+  return rodarAteOFim(criarLuta(configLuta(e, tabela), r));
 }
