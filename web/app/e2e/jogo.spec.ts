@@ -915,10 +915,13 @@ for (const largura of [390, 1280]) {
   test(`evolução: o momento em ${largura} px, a aba nova e o "Ver a revelação de novo"`, async ({ page }) => {
     await page.setViewportSize({ width: largura, height: largura >= 1100 ? 800 : 844 });
     await semear(page, SAVE_EVO, undefined, TAMER_1);
+    /* o cartao: com movimento reduzido a cena oficial (CENA_EVOLUCAO_UP) nao abre; ela tem o teste dela logo abaixo */
+    await page.emulateMedia({ reducedMotion: "reduce" });
     const erros = vigiarErros(page);
     await page.goto(APP + "#/crescer/evolucao");
     const rev = page.locator("dialog.revelacao[open]");
     await expect(rev).toBeVisible();
+    await expect(page.getByTestId("cena-evolucao")).toHaveCount(0);
     await expect(rev.locator(".revel-tit")).toHaveText("EVOLUÇÃO!");
     await expect(rev.locator(".revel-de")).toHaveText("Rookie → Champion");
     await expect(rev.locator(".evm-nome")).toHaveText("Growlmon");
@@ -1370,5 +1373,34 @@ test("pele dos menus: Ajustes › Visual troca na hora e a escolha sobrevive ao 
   await page.goto(APP + "#/config");
   await expect(page.locator(".mc-cfg")).toContainText("pele Militar · tema");
   expect(await pele()).toBe("xcom");
+  expect(erros).toEqual([]);
+});
+
+/* a cena oficial da evolucao (CENA_EVOLUCAO_UP, ligada em 2026-11-10; docs/TAREFA_V2_UP_EVOLUCAO.md): o mesmo pet do momento da evolucao
+   (Agumon -> Growlmon, a cena da Tamers). Os pacotes ficam fora do git, em Assets/evolucao_up: sem eles o teste nao se aplica */
+test("evolução: a cena oficial toca antes do cartão e o Pular leva ao cartão", async ({ page }) => {
+  const temCena = (await page.request.get("/Assets/evolucao_up/mapa.json")).ok();
+  test.skip(!temCena, "sem Assets/evolucao_up (fora do git)");
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await semear(page, SAVE_EVO, undefined, TAMER_1);
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/crescer/evolucao");
+  const rev = page.locator("dialog.revelacao[open]"), cena = page.getByTestId("cena-evolucao");
+  await expect(rev).toBeVisible();
+  await expect(cena).toBeVisible();
+  /* baixou e esta tocando: o "carregando" some e o canvas tem pixels pintados */
+  await expect(cena.getByRole("status")).toHaveCount(0);
+  await expect.poll(() => cena.locator("canvas").evaluate((cv: HTMLCanvasElement) => {
+    const g = cv.getContext("2d")!, d = g.getImageData(0, 0, cv.width, cv.height).data;
+    let n = 0; for (let i = 3; i < d.length; i += 4 * 97) if (d[i] > 0) n++;
+    return n;
+  })).toBeGreaterThan(50);
+  await expect(page.getByTestId("aviso-cena-evolucao")).toHaveCount(0);
+  await cena.getByRole("button", { name: "Pular" }).click();
+  await expect(cena).toHaveCount(0);
+  await expect(rev.locator(".evm-nome")).toHaveText("Growlmon");
+  await rev.getByRole("button", { name: "Continuar" }).click();
+  await expect(page.locator("dialog.revelacao[open]")).toHaveCount(0);
   expect(erros).toEqual([]);
 });

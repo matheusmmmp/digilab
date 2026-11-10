@@ -106,7 +106,7 @@ const DECIDIDO: Record<string, string> = { crianca: "o cuidado", adolescente: "o
 function Revelacao({ i, m, fechar }: { i: number; m: Motor; fechar: () => void }) {
   const ref = useRef<HTMLDialogElement>(null), x = m.evolucoes[i], f = x.forma, antes = formaAntes(m, i), cor = corDominante(m.tracos);
   const med = medalhasDaEvolucao(m, x), arq = nomeArquetipo(f), br = BRASAO[m.especie], largo = matchMedia("(min-width: 900px)").matches;
-  /* a cena oficial antes do cartao (CENA_EVOLUCAO_UP, desligada: o cartao de hoje); com movimento reduzido, direto ao cartao */
+  /* a cena oficial antes do cartao (CENA_EVOLUCAO_UP, ligada; desligada, o cartao de hoje); com movimento reduzido, direto ao cartao */
   const [cena, setCena] = useState(() => CENA_EVOLUCAO_UP && !matchMedia("(prefers-reduced-motion: reduce)").matches);
   const [aviso, setAviso] = useState<string | null>(null), tocouCena = useRef(false);
   /* abre no topo (o foco inicial iria para o Continuar, embaixo, e rolaria a tela) */
