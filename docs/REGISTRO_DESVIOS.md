@@ -593,6 +593,8 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-09 — OBJETOS_3D, o carro em cartoon limpo (worker, Claude Code, Opus 5.5, branch `v3-objeto-carro-cartoon`)](registro/2026-11.md)
 - [2026-11-08 — OBJETOS_3D, o poste em blocos (worker, Claude Code, Opus 5.5, branch `v3-objeto-poste`)](registro/2026-11.md)
 - [2026-11-09 — CONVERSA_PET, DC4b, a voz-v3b e a recalibração do dec-v3 (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc4b`)](registro/2026-11.md)
+- [2026-11-09 — PET_VIVO, etapa 1: o plano do PV-2 e as seis lacunas (worker, Claude Code, Opus 5.5, branch `v3-pet-vivo-pv2`)](registro/2026-11.md)
+- [2026-11-09 — PET_VIVO, etapa 1: o plano do PV-2 APROVADO, com as PV2-1 a PV2-10 DECIDIDAS (worker, Claude Code, Opus 5.5, branch `v3-pet-vivo-pv2`)](registro/2026-11.md)
 - [2026-11-09 — LUTA_POC, LP3b: o golpe de longe da LP-8 no núcleo (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp3b`)](registro/2026-11.md)
 - [2026-11-09 — LUTA_POC, LP3: a tela da luta da POC (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp3`)](registro/2026-11.md)
 - [2026-11-09 — UX_TELA_PET, a prancha da hierarquia de luz (Gerente da UX_TELA_PET, Claude Code, Opus 5.5, branch `v3-ux-luz`)](registro/2026-11.md)
@@ -606,3 +608,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-10 — INDIVIDUALIDADE, I7: o plano APROVADO (worker, Claude Code, Opus 5.5, branch `v3-individualidade-i7-plano`)](registro/2026-11.md)
 - [2026-11-10 — LUTA_POC, LP5-0: a bancada nova e o ponto de partida (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-0`)](registro/2026-11.md)
 - [2026-11-10 — LUTA_POC, LP5-1: a rodada 1 do mapeamento, parada pelo S1 (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-calib`)](registro/2026-11.md)
+- [2026-11-10 — INDIVIDUALIDADE, I5b: a análise única do hábito e a leitura do H_mundo (worker, Claude Code, Opus 5.5, branch `v3-individualidade-i5b`)](registro/2026-11.md)

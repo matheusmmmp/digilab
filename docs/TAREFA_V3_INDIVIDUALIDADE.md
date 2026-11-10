@@ -168,6 +168,15 @@ O plano (#700) e a faixa 85101…85505 estão APROVADOS. O I2a é o código ante
   1 min 36 s. Duas fumaças seguidas deram a mesma análise. Estimativa para as 360 vidas do I2: uns 5 min de replay com 4 processos.
 - **As leituras do plano** estão no registro: D-IND-I5a-1 a 3.
 
+## Resultado da etapa I5b (2026-11-10, Claude Code, Opus 5.5, branch `v3-individualidade-i5b`)
+
+- **A análise única do I5** rodou sobre as 360 vidas do I2, com o registro antes (`977b33c`) e todos os logs refeitos iguais aos do disco.
+  O resultado está no `docs/RESULTADO_V3_INDIVIDUALIDADE.md`, seção 8, e o artefato em `artifacts_v3_individualidade_i5/`.
+- **O achado:** o H_dono não se distingue de zero em nenhum perfil nem braço, e o H_mundo fica acima de zero em todos. O pet se parece
+  com os outros pets do mesmo dono tanto quanto com ele mesmo em outro dia: o que separa os pets é o dono (D-IND-I5b-1).
+- **As expectativas:** a E1 não se confirma, a E2 sai ao contrário e a E3 se confirma sem separar a SEQ.
+- **O custo:** 2,0 s por vida, 3 min 53 s ao todo com 4 processos.
+
 ## As etapas seguintes
 
 | etapa | o quê | entrega |
