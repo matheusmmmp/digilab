@@ -24,7 +24,7 @@ async function semear(page: Page): Promise<void> {
   const s = saveDoPet(), tamer = JSON.stringify({ versao: 7, log: MEDALHAS6.map((id, i) => ["medalha", { id, n: i + 1, quando: 1, pet: 101, forma: "Garurumon", tick: 480 }]) });
   await page.goto("/motor/index.ts");
   await page.evaluate(([chave, s, t]) => {
-    localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-descarte", "7"); localStorage.setItem(chave + "-tamer", t);
+    localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-descarte", "8"); localStorage.setItem(chave + "-tamer", t);
     localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]"); localStorage.setItem(chave, s);
   }, [CHAVE, s, tamer] as const);
 }

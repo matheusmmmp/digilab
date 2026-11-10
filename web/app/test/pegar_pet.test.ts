@@ -2,7 +2,7 @@
 // (ilha/mao.ts). Sem DOM (vitest em node): o alvo e um EventTarget com o retangulo, e a vista do mundo e uma falsa, que poe o chao no
 // ponto do cliente (1 px = 1 subunidade). O jogo e o do app (iniciarJogo), com um pet v19 no save.
 import { afterEach, beforeEach, describe, expect, test } from "vitest";
-import { Motor, VERSAO_V19 } from "../motor/index.ts";
+import { Motor, VERSAO_PET_LAB } from "../motor/index.ts";
 import { CHAVE, textoSave, type Armazenamento } from "../src/save.ts";
 import { iniciarJogo, jogoAtual } from "../src/jogo.ts";
 import { CENA } from "../src/telas/pet/cenaEstado.ts";
@@ -15,7 +15,7 @@ const armaz = (dados: Record<string, string> = {}): Armazenamento => ({ getItem:
 
 /** um pet v19 acordado (ou dormindo) no mundo */
 function petV19(dormindo: boolean): Motor {
-  const m = new Motor(4242, VERSAO_V19);
+  const m = new Motor(4242);   // a v21 (desde a LP4 da LUTA_POC so ela abre), com o levar pet da v19
   m.avancar(120);
   for (let i = 0; i < 2000 && m.e.dormindo !== dormindo; i++) m.avancar(5);
   if (m.e.dormindo !== dormindo) throw new Error("o teste nao achou o pet " + (dormindo ? "dormindo" : "acordado"));
@@ -143,7 +143,7 @@ describe("o gesto de pegar o pet", () => {
     expect(podePegar(m, 0, { ...ok, bolaNaMao: true })).toBe(false);
     expect(podePegar(m, 0, { ...ok, pousoEm: false }), "a reserva do mundo nao pega").toBe(false);
     expect(podePegar(petV19(true), 0, ok)).toBe(false);
-    const v18 = new Motor(4242, 18); v18.avancar(120);
+    const v18 = new Motor(4242, VERSAO_PET_LAB); v18.avancar(120);   // antes da v19: so o pet de teste v16 abre, das de antes (LP4)
     expect(podePegar(v18, 0, ok)).toBe(false);
     expect(arrastoPega(LIMIAR_ARRASTO, 0)).toBe(false);
     expect(arrastoPega(LIMIAR_ARRASTO + 0.5, 0)).toBe(true);

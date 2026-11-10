@@ -1,31 +1,9 @@
-/* Arenas com lideres (docs/DESIGN_MEDALHAS_ARENAS.md, secao 3; parte 2; so no jogo, pets v6). Cada lugar da campanha v6
-   (bots.LUGARES_V6) tem uma arena, com um lider e uma regra propria; vencer o lider da a medalha da arena (medalhas.ts).
-   A regra so vale na luta de um pet v6 contra o lider, e depende so do rival e da versao do pet, que o registro ja tem (o
-   evento de luta "l" grava rival e semente): o replay refaz a mesma luta sem campo novo no evento.
-
-   As regras (o que cada arena testa):
-   - Campina (Rookie), Gazimon: nenhuma (o basico: cuidado e treino);
-   - Torre de pedra (Champion), Guardromon: PACIENCIA. O lider tem o contra-golpe (a tecnica do guardiao) e a lista do espelho
-     com as regras dele: quem prepara o pesado de perto ou insiste no golpe rapido leva o golpe de volta; contra quem atira com
-     frequencia ele vai buscar (bots.GAMBITS_ARENA.torre, desde a escala dos pets v6);
-   - Floresta (Champion, nova), Youkomon: LEITURA. O lider muda de padrao no turno 10 (bots.GAMBITS_ARENA.floresta, pela
-     condicao de turno da linguagem de gambits): de atirador vira brigao;
-   - Cidadela (Ultimate), Myotismon: RESISTENCIA. Tres lutas seguidas, sem cura: a vida e o guts do pet passam de uma para a
-     outra (o lider volta inteiro); a vitoria (e a medalha) so vem com as tres;
-   - Lago (Ultimate, novo), MarinBullmon: VINCULO. As travas e os vetos do dono nao valem: o pet luta com a lista que ele
-     mesmo faria (GambitsPet.listaSozinho);
-   - Montanha Espiral (Mega), Piedmon: o chefe da campanha, sem regra a mais.
-
-   Fatores dos lideres: calibrados no motor web com as regras e a escala dos pets v6 (hoje a vida e o beta da CESC_V9, os mesmos; test/calibrar_arenas.mjs,
-   artifacts_campanha/arenas/). Metas (decisao do Matheus, 2026-09-30: o treino tem que decidir): sem treino <= 0,05 e com o
-   treino tipico >= 0,80, sem forma travada. PROPOSTOS. O fator fica aqui quando o lider e um NPC que ja existia (Gazimon 1,3,
-   Guardromon 1,6, Myotismon 0,9 na serie, Piedmon 1,6; fora da arena e nos pets v1-v5, os de sempre); os lideres novos tem o
-   fator no proprio NPC (bots.CAMPANHA_V6: Youkomon 1,5, MarinBullmon 1,5). */
-import { jogarLuta, curouA } from "./combate_tr/adaptador.ts";
-import { comCarta, type Desafiado, type EfeitoCarta, type Lutador, type RegrasLuta, type ResultadoLuta } from "./combate.ts";
-import type { Tecnica } from "./constantes.ts";
+/* Arenas com lideres (docs/DESIGN_MEDALHAS_ARENAS.md, secao 3; parte 2; so no jogo). Cada lugar da campanha (bots.LUGARES_V6) tem uma
+   arena, com um lider; vencer o lider da a medalha da arena (medalhas.ts). Na luta da POC (LUTA_POC, LP2, decisao 5; LP4) das regras das
+   arenas fica so a serie da Cidadela (tres lutas seguidas sem cura para o pet; o lider volta inteiro), e cada lugar luta no mapa dele (LP-4,
+   luta_poc.mapaDoLugar). A regra depende so do rival, que o registro ja tem (o evento de luta "l" grava rival, semente e mapa).
+   Os fatores, as tecnicas e as listas dos lideres eram do combate por turnos e sairam com ele (LP4). */
 import { hashSemente } from "./rng.ts";
-import { FATORES_V14 } from "./combate_tr/constantes_tr.ts";
 
 export type RegraArena = "nenhuma" | "paciencia" | "leitura" | "resistencia" | "vinculo" | "chefe";
 export interface Arena {
@@ -40,99 +18,27 @@ export interface Arena {
   titulo: string;
   /** a regra em uma frase, na tela */
   frase: string;
-  /** fator de escala do lider na luta de arena; sem ele, o do NPC (fator ou CESC.fatorNpc) */
-  fator?: number;
-  /** tecnica do lider (Torre de pedra: contra-golpe); as regras dela ficam na lista dele */
-  tecnica?: Tecnica;
-  /** lista propria do lider na luta de arena (bots.GAMBITS_ARENA); sem ela, a do NPC (com as regras da tecnica) */
-  lista?: string;
   /** lutas seguidas, sem cura (Cidadela: 3); sem ele, 1 */
   lutas?: number;
 }
-/** versao de pet em que as arenas valem (a das medalhas) */
-export const VERSAO_ARENAS = 6;
 export const ARENAS: readonly Arena[] = [
-  { id: "campina", lugar: 0, lider: "npc_tier1_brutamontes", regra: "nenhuma", titulo: "O básico", fator: 1.3,
+  { id: "campina", lugar: 0, lider: "npc_tier1_brutamontes", regra: "nenhuma", titulo: "O básico",
     frase: "Sem regra especial: vence o pet bem cuidado e treinado." },
-  { id: "torre", lugar: 1, lider: "npc_tier2_carcereiro", regra: "paciencia", titulo: "Paciência", tecnica: "contra_golpe", lista: "torre", fator: 1.6,
-    frase: "O líder devolve golpe forte: preparar o pesado de perto ou insistir no golpe rápido volta contra você. Quem só atira de longe, ele vai buscar." },
-  { id: "floresta", lugar: 2, lider: "npc_v6_youkomon", regra: "leitura", titulo: "Leitura",
-    frase: "O líder muda de padrão aos 20 segundos: de longe e disparando, depois colado e golpeando. Vence quem lê o rival." },
-  { id: "cidadela", lugar: 3, lider: "npc_v5_myotismon", regra: "resistencia", titulo: "Resistência", lutas: 3, fator: .9,
-    frase: "Três lutas seguidas, sem cura: a vida e o guts passam de uma para a outra. A medalha só vem com as três." },
-  { id: "lago", lugar: 4, lider: "npc_v6_marinbullmon", regra: "vinculo", titulo: "Vínculo",
-    frase: "Aqui as travas e os vetos do dono não valem: o pet decide sozinho, com as regras que ele mesmo aprendeu." },
-  { id: "espiral", lugar: 5, lider: "npc_v5_piedmon", regra: "chefe", titulo: "O chefe", fator: 1.6,
-    frase: "O chefe da campanha: forte em tudo. Pede tudo o que o pet aprendeu." },
+  { id: "torre", lugar: 1, lider: "npc_tier2_carcereiro", regra: "paciencia", titulo: "A arena que fecha",
+    frase: "Luta no Coliseu: aos 30 segundos a área segura começa a encolher, e fora dela a vida cai." },
+  { id: "floresta", lugar: 2, lider: "npc_v6_youkomon", regra: "leitura", titulo: "A mata",
+    frase: "Luta na Floresta: as árvores bloqueiam corpos e tiros, e quem entra na moita fica escondido." },
+  { id: "cidadela", lugar: 3, lider: "npc_v5_myotismon", regra: "resistencia", titulo: "Resistência", lutas: 3,
+    frase: "Três lutas seguidas, sem cura: a vida passa de uma para a outra. A medalha só vem com as três." },
+  { id: "lago", lugar: 4, lider: "npc_v6_marinbullmon", regra: "vinculo", titulo: "A maré",
+    frase: "Luta na Praia: a maré sobe e desce, e na água o pet anda mais devagar." },
+  { id: "espiral", lugar: 5, lider: "npc_v5_piedmon", regra: "chefe", titulo: "O chefe",
+    frase: "O chefe da campanha, na Caverna: a lava queima e o chão entra em erupção." },
 ];
 export const ARENA_POR_ID: Readonly<Record<string, Arena>> = Object.fromEntries(ARENAS.map(a => [a.id, a]));
-/* fatores dos lideres nas lutas de arena dos pets v9 (rodada de equilibrio geral, fase 2; docs/EQUILIBRIO_GERAL.md, meta M-B2):
-   recalibrados com as regras das lutas dos pets v9 (combate V21E) e a escala deles (CESC_V9), pelo mesmo metodo e as mesmas metas da
-   parte 2 (test/calibrar_arenas.mjs, artifacts_equilibrio_geral/fase2/arenas_calibracao.json; so as sementes de calibracao). Os fatores
-   dos pets v6-v8 (ARENAS, e o do NPC para Youkomon e MarinBullmon) nao mudam. PROPOSTOS */
-/** versao de pet dos fatores dos lideres da fase 2 (a do combate V21E) */
-export const VERSAO_ARENAS_V9 = 9;
-/* na calibracao (sementes 3101...3505): a Torre cai de 1,6 para 1,5 e a Montanha Espiral de 1,6 para 1,4 (com 1,6 a sentinela Mega ficava
-   travada, 0,455); as outras quatro ficam com o fator dos v6 (o Youkomon e o MarinBullmon com o do NPC, 1,5). A lista da Torre
-   (GAMBITS_ARENA.torre) nao muda: com ela a Torre fecha */
-export const FATOR_LIDER_V9: Readonly<Record<string, number>> = { campina: 1.3, torre: 1.5, floresta: 1.5, cidadela: .9, lago: 1.5, espiral: 1.4 };
-/** as arenas como valem nas lutas dos pets v9: as mesmas, com o fator do lider de FATOR_LIDER_V9 */
-export const ARENAS_V9: readonly Arena[] = ARENAS.map(a => {
-  const fator = FATOR_LIDER_V9[a.id];
-  if (fator === undefined) throw new Error("arena sem fator dos pets v9: " + a.id);
-  return { ...a, fator };
-});
-if (Object.keys(FATOR_LIDER_V9).length !== ARENAS.length) throw new Error("FATOR_LIDER_V9 com arena a mais");
-/** as arenas como valem nas lutas dos pets v14: as mesmas, com o fator do lider do candidato (FATORES_V14.lider; DE-1) */
-export const ARENAS_V14: readonly Arena[] = ARENAS.map(a => {
-  const fator = FATORES_V14.lider[a.id];
-  if (fator === undefined) throw new Error("arena sem fator dos pets v14: " + a.id);
-  return { ...a, fator };
-});
-if (Object.keys(FATORES_V14.lider).length !== ARENAS.length) throw new Error("FATORES_V14.lider com arena a mais");
-/** a arena de que o NPC e lider (null: ele e desafiante); `versao` >= 9: a arena com o fator dos pets v9; >= 14, o do candidato v14 */
-export const arenaDoLider = (k: string, versao = VERSAO_ARENAS): Arena | null =>
-  (versao >= 14 ? ARENAS_V14 : versao >= VERSAO_ARENAS_V9 ? ARENAS_V9 : ARENAS).find(a => a.lider === k) ?? null;
-/** a arena cuja regra vale nesta luta: so pets v6 em diante contra o lider (nos v9, com o fator dos v9) */
-export const arenaDaLuta = (rival: string, versao: number): Arena | null => versao >= VERSAO_ARENAS ? arenaDoLider(rival, versao) : null;
+/** a arena de que o NPC e lider (null: ele e desafiante) */
+export const arenaDoLider = (k: string): Arena | null => ARENAS.find(a => a.lider === k) ?? null;
+/** a arena cuja regra vale nesta luta: contra o lider dela. `versao` fica na assinatura por quem chama (a v21 e o unico pet que luta) */
+export const arenaDaLuta = (rival: string, _versao?: number): Arena | null => arenaDoLider(rival);
 /** semente da luta k (0 = a primeira) de uma serie: a primeira e a semente do evento; as outras saem dela */
 export const sementeDaSerie = (semente: number, k: number): number => k ? hashSemente("serie-arena", semente, k) : semente;
-/** a luta (ou as lutas seguidas) de arena: `lutas` lutas, parando na primeira que nao for vitoria; da segunda em diante o
-    pet (lado A) comeca com a vida e o guts do fim da anterior, e o lider (B) volta inteiro. Deterministico. `desafiado`: o do
-    limite de tempo (combate_tr/luta.ts, fimTR); o rival, e uma luta da serie que chega ao limite e derrota e quebra a serie */
-export function jogarArena(A: Lutador, B: Lutador, semente: number, R: RegrasLuta, lutas = 1, desafiado: Desafiado = null,
-  carta: EfeitoCarta | null = null): ResultadoLuta[] {
-  if (!Number.isInteger(lutas) || lutas < 1) throw new Error("lutas da arena inválidas: " + lutas);
-  return jogarSerie(A, Array.from({ length: lutas }, () => B), semente, R, desafiado, carta);
-}
-/** lutas seguidas sem cura, uma contra cada rival de `Bs`, na ordem (a Cidadela: o mesmo lider tres vezes; a Liga dos Lideres,
-    liga.ts: os 6 lideres). Para na primeira que nao for vitoria; da segunda em diante o pet (lado A) comeca com a vida e o guts do
-    fim da anterior, e cada rival comeca inteiro. A luta k usa a semente sementeDaSerie(semente, k). Deterministico */
-export function jogarSerie(A: Lutador, Bs: readonly Lutador[], semente: number, R: RegrasLuta, desafiado: Desafiado = null,
-  carta: EfeitoCarta | null = null, curaEntre = 0): ResultadoLuta[] {
-  if (!Bs.length) throw new Error("série de lutas sem rival");
-  return jogarSequencia(A, k => Bs[k], Bs.length, semente, R, desafiado, carta, curaEntre);
-}
-/** a mesma conta de jogarSerie, com o rival de cada luta dado na hora (rivalDe(k), so para as lutas que acontecem) e no maximo `max`
-    lutas: as instalacoes da Fronteira (instalacoes.ts), em que os rivais sao sorteados e a sequencia vai ate a primeira luta que nao for
-    vitoria. jogarSerie e esta funcao com os rivais de uma lista: as lutas sao as mesmas.
-    `curaEntre`: a cura parcial entre as lutas (a Liga dos pets v9, liga.ts): depois de cada vitoria o pet recupera esta fracao da vida
-    maxima (ate o maximo); o guts passa como esta. 0 = sem cura, as lutas de sempre (nenhuma conta muda) */
-export function jogarSequencia(A: Lutador, rivalDe: (k: number) => Lutador, max: number, semente: number, R: RegrasLuta, desafiado: Desafiado = null,
-  carta: EfeitoCarta | null = null, curaEntre = 0): ResultadoLuta[] {
-  if (!Number.isInteger(max) || max < 1) throw new Error("sequência de lutas sem luta: " + max);
-  if (!(curaEntre >= 0 && curaEntre <= 1)) throw new Error("cura entre as lutas inválida: " + curaEntre);
-  /* a carta do pet (itens.ts; pets v6) vale para o evento inteiro: o guts a mais no comeco da primeira luta (nas seguintes, o que
-     sobrou), o foco em todas e a cura uma vez so na serie */
-  const Ac = comCarta(A, carta), serie: ResultadoLuta[] = [];
-  let ini: { hp: number; guts: number } | null = null, cura = carta?.cura ?? null;
-  for (let k = 0; k < max; k++) {
-    const res = jogarLuta(Ac, rivalDe(k), sementeDaSerie(semente, k), R, ini, desafiado, cura ? [cura, null] : null);
-    serie.push(res);
-    if (cura && curouA(res)) cura = null;
-    if (res.pontosA !== 1) break;
-    const fim = res.E.L[0];
-    ini = { hp: curaEntre > 0 ? Math.min(fim.hpMax, fim.hp + curaEntre * fim.hpMax) : fim.hp, guts: fim.guts };
-  }
-  return serie;
-}

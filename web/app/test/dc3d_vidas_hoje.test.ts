@@ -1,5 +1,6 @@
-/* DC3d da CONVERSA_PET: as vidas de hoje (v13 a v19 e o pet de teste v16), gravadas antes do porte da `fala_unidades`
-   (test/gabaritos/dc3d_vidas_hoje.json, por test/gerar_gabarito_dc3d.ts), saem byte a byte: sem a marca da fala com conteudo, nada muda. */
+/* DC3d da CONVERSA_PET: as vidas de hoje (a v21 e o pet de teste v16; test/gabaritos/dc3d_vidas_hoje.json, por test/gerar_gabarito_dc3d.ts)
+   saem byte a byte: sem a marca da fala com conteudo, nada muda. A v1 do gabarito tinha as v13 a v19, gravadas antes do porte da
+   `fala_unidades`; a v2 foi regravada na LP4 da LUTA_POC (test/dc3d_hoje.ts diz o que foi conferido antes). */
 import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
 import { Motor } from "../motor/index.ts";
@@ -9,8 +10,8 @@ const gab = JSON.parse(readFileSync(new URL("./gabaritos/dc3d_vidas_hoje.json", 
   { versao: number; dias: number; sementes: number[]; variantes: string[]; vidas: VidaHoje[] };
 
 describe("DC3d: as vidas de hoje saem iguais ao gabarito gravado antes do porte", () => {
-  test("a forma do gabarito: as 8 variantes x as 5 sementes", () => {
-    expect(gab.versao).toBe(1);
+  test("a forma do gabarito: as 3 variantes x as 5 sementes", () => {
+    expect(gab.versao).toBe(2);
     expect(gab.dias).toBe(DIAS_HOJE);
     expect(gab.sementes).toEqual([...SEMENTES_HOJE]);
     expect(gab.variantes).toEqual([...VARIANTES_HOJE]);

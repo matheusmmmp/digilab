@@ -1,5 +1,12 @@
 # TAREFA V3 — PONTE_LUTA (2026-11-04)
 
+> **Na luta da POC (LUTA_POC, LP2 e LP4).** O combate por turnos (`web/app/motor/combate_tr/`, o `GambitsPet`, o `ResultadoLuta` dele) saiu do
+> jogo na LP4 (2026-11-10, `docs/TAREFA_V3_LUTA_POC.md`). A ponte ficou: o resumo da luta (o rival, o resultado e a vida perdida em S) tem o
+> mesmo formato e sai agora do resultado da luta da POC (`Motor._aplicarResumo`: o dano é a vida do começo da luta menos a do fim, e a vida
+> máxima é a dos stats). O ε pelo `g_exp` (a PE4) era o do controlador do combate por turnos e não tem lugar na luta nova: a marca `eps` ainda
+> é lida e fica na assinatura, mas não muda nada. O pet de teste v16 não luta mais (PROPOSTA da LP4); os testes da PE0 e da PE3 rodam nos
+> pets v21 (o modular, o A e um `"cb"` entre duas lutas), e o gabarito das lutas da PE0 (v16 e v17) saiu com as versões antigas (LP-6).
+
 Coordenador: Gerente da V3 (Claude Code). Worker: Claude Code, Opus 5.5, worktree `v3-ponte-luta`. Worktree e branch: `v3-ponte-luta`. Status: ENTREGUE (só o papel); as PL-1 a PL-9 (seção 8) DECIDIDAS pelo Matheus em 2026-11-04, todas pela recomendação ("Aprovo e mescle"); o código (PE0 em diante) liberado.
 
 Categoria: arquitetura. Origem: Matheus, 2026-11-04: o Matheus pediu o cérebro presente na luta, aprendendo com ela; o Gerente mostrou três opções e ele aprovou ligar o cérebro à luta, começando por esta tarefa no papel.

@@ -5,7 +5,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
 import {
   DIGIMON_DA_FORMA, PALACIO_NA_TORRE, FORMAS_ARENA, IDS_CENA, LUGARES_V6, LUTA_POC_LIGADA, MAPA_DO_LUGAR, MAPA_STATS, Motor, NPC, STATS,
-  VERSAO_PET, VERSAO_V21, VERSOES_PET, VERSOES_PET_POC, chaveSprite, formaDaChave, hashSemente, rivaisArena, statsDaLuta, statsDoPet, statsNpc,
+  VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSOES_PET, VERSOES_PET_POC, chaveSprite, formaDaChave, hashSemente, rivaisArena, statsDaLuta, statsDoPet, statsNpc,
   statsRivalArena, type EventoRegistro, type Stats,
 } from "../motor/index.ts";
 import { DIAS_V21, SEMENTES_V21, VARIANTES_V21, gravarV21, nascerV21, viverV21, type VidaV21 } from "./lp2_v21.ts";
@@ -13,11 +13,12 @@ import { DIAS_V21, SEMENTES_V21, VARIANTES_V21, gravarV21, nascerV21, viverV21, 
 const neutro = Object.fromEntries(STATS.map(k => [k, 10])) as Stats;
 
 describe("a chave e a versao", () => {
-  test("a chave esta desligada, os ovos de hoje seguem v19, e a v21 abre so com ela ligada", () => {
-    expect(LUTA_POC_LIGADA).toBe(false);
-    expect(VERSAO_PET).toBe(19);
-    expect(VERSOES_PET).not.toContain(VERSAO_V21);
+  test("a chave ligou na LP4: os ovos de hoje nascem v21, e so a v21 abre", () => {
+    expect(LUTA_POC_LIGADA).toBe(true);
+    expect(VERSAO_PET).toBe(21);
+    expect(VERSOES_PET).toEqual([VERSAO_V21]);
     expect(VERSOES_PET_POC).toEqual([21]);
+    for (const v of [13, 14, 15, 17, 18, 19]) expect(() => new Motor(101, v), `v${v}`).toThrow(/versão de pet desconhecida/);
     expect(new Motor(101, VERSAO_V21).versao).toBe(21);
     expect(() => new Motor(101, 20)).toThrow(/versão de pet desconhecida/);
   });
@@ -103,9 +104,8 @@ describe("a luta do pet v21", () => {
   });
   test("sai da v21: o combate de antes, os gambits, as cartas e os chips de regra; os torneios pedem as entradas de sempre (LP2b) e o Palacio foi para a Torre", () => {
     const m = rookie();
-    expect(m.gp).toBeNull();
-    expect(() => m.lutar("agressivo", 1)).toThrow(/lutarPoc/);
-    expect(() => m.intervirGambit("travar", "x")).toThrow(/regras de combate/);
+    /* o combate por turnos saiu do motor na LP4: nada de gp, lutar, montarLuta nem intervirGambit */
+    for (const k of ["gp", "lutar", "montarLuta", "intervirGambit", "regras", "carta"]) expect(k in m, k).toBe(false);
     expect(m.porqueNaoLiga()).toMatch(/6 medalhas/);
     expect(m.porqueNaoSalao()).toMatch(/título da Liga/);
     expect(m.porqueNaoInstalacao("torre_batalha")).toMatch(/título da Liga/);
@@ -117,10 +117,13 @@ describe("a luta do pet v21", () => {
     expect(() => Motor.reproduzir(101, log, VERSAO_V21)).toThrow(/evento "g"/);
     const log2 = [...m.log, [m.e.tick, "k", { id: "x" }]] as EventoRegistro[];
     expect(() => Motor.reproduzir(101, log2, VERSAO_V21)).toThrow(/evento "k"/);
+    /* um "l" sem mapa de um rival de antes (o bot do combate por turnos) tambem nao refaz */
+    const log3 = [...m.log, [m.e.tick, "l", { r: "aleatorio", s: 1 }]] as EventoRegistro[];
+    expect(() => Motor.reproduzir(101, log3, VERSAO_V21)).toThrow(/sem poder/);
   });
-  test("o pet v19 nao luta pela luta da POC, e o \"l\" dele segue sem mapa", () => {
-    const m = new Motor(101, 19);
-    expect(m.porqueNaoLutaPoc("x", "campo")).toMatch(/v21/);
+  test("o pet de teste (v16) nao luta (LP4)", () => {
+    const m = new Motor(101, VERSAO_PET_LAB);
+    expect(m.porqueNaoLutaPoc("x", "campo")).toMatch(/pet de teste/);
   });
   test("a ponte da luta le o resultado novo: com ela, as lutas chegam ao corpo e ao cerebro (a vida muda)", () => {
     const com = viverV21("v21_modular", 202, 3, true), sem = viverV21("v21_modular", 202, 3, false);

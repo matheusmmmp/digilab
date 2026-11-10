@@ -72,27 +72,3 @@ export function criarDono(tipo: TipoDono): Dono {
   }
   throw new Error("dono desconhecido: " + tipo);
 }
-export function treinarRival(tipo: TipoDono, dias: number, semente: number): Motor { return treinarPet(tipo, dias, CD.porDia, semente); }
-/** pet simulado dos Cenarios: v5 de proposito (os pets v6 esperam as medalhas do Tamer, e a simulacao nao tem Tamer;
-    docs/DESIGN_MEDALHAS_ARENAS.md). Um v5 nao ganha medalha */
-export const VERSAO_CENARIO = 5;
-export function treinarPet(tipo: TipoDono, dias: number, porDia: number, semente: number): Motor {
-  const m = new Motor(semente, VERSAO_CENARIO), dono = criarDono(tipo), r = criarRng(hashSemente("dono", semente, tipo));
-  const passos = Math.round(dias * TPD / CD.passo), orc = Math.round(porDia * dias);
-  if (passos < 1) throw new Error("dias de vida precisa ser positivo");
-  if (orc < 1) throw new Error("o orçamento precisa ter pelo menos 1 interação");
-  if (orc > passos * CD.maxPasso) throw new Error(`orçamento de ${orc} interações não cabe em ${passos} passos (máximo ${CD.maxPasso} por passo)`);
-  let gasto = 0;
-  for (let p = 0; p < passos; p++) {
-    m.avancar(CD.passo);
-    const rest = orc - gasto, min = Math.max(0, rest - (passos - p - 1) * CD.maxPasso), max = Math.min(rest, CD.maxPasso);
-    const v: VisaoDono = { e: m.e, acao: m.acao, passo: p, passos, orc, gasto, min, max, atrasado: gasto < orc * (p + 1) / passos, chamados: m.chamadosAbertos() };
-    const acoes = dono.decidir(v, r);
-    if (acoes.length > max || acoes.length < min) throw new Error(`dono ${tipo} violou o orçamento no passo ${p}`);
-    for (const a of acoes) { m.observar(a); gasto++; }
-    /* sparring do adolescente (cronograma): uma luta por passo contra o bot aleatorio, ate o minimo */
-    if (m.estagioAtual === "adolescente" && m.sparring < CAT.sparring) m.lutar("aleatorio", hashSemente("sparring", semente, p));
-  }
-  if (gasto !== orc) throw new Error(`rival terminou com ${gasto}/${orc} interações`);
-  return m;
-}

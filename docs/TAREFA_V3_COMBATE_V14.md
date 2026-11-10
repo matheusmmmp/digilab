@@ -1,5 +1,7 @@
 # TAREFA V3 — COMBATE_V14: ligar a v14 no jogo, a B2 (2026-10-30)
 
+> **SUBSTITUÍDO** pela [`docs/TAREFA_V3_LUTA_POC.md`](TAREFA_V3_LUTA_POC.md) (2026-11-08): a luta do jogo é a simulação da POC. O combate por turnos saiu do jogo na LP4 (2026-11-10); este documento fica como registro.
+
 Coordenador: Gerente da V3 (Claude Code). Worker: a definir (Sonnet). Worktree e branch: `v3-combate-v14`. Status: ABERTA.
 
 Categoria: implementacao. Origem: Matheus, 2026-10-30, depois da conferência única da rodada 2 (#502): "Ligar a v14 já". A

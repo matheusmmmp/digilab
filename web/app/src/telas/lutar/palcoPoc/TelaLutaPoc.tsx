@@ -10,14 +10,16 @@ import { BotaoContinuar, BotaoHx } from "../../../componentes/hx/index.ts";
 import {
   LUTA_POC, alternarPausaPoc, alternarRapidoPoc, fecharPalcoPoc, pularAnimacaoPoc, useLutaPoc, verReplayPoc, type PalcoPoc,
 } from "../../../lutaPocTela.ts";
-import { falhasMapa, ouvirMapas } from "../palcoTR/cenasTR.ts";
-import { relogio } from "../palcoTR/PalcoTR.tsx";
+import { falhasMapa, ouvirMapas } from "./imagensMapa.ts";
 import { arquivosPoc, desenharLutaPoc, type LadoDesenhoPoc } from "./desenhoPoc.ts";
 import { efeitosAtuais, falhasEfeito, ouvirEfeitos } from "./efeitosJogo.ts";
 import { barraDoPasso, passoDe, type LadoN } from "./visualPoc.ts";
 import "../../../estilo/abertas.css";
 import "../../../estilo/luta_hud.css";
 import "../../../estilo/luta_poc.css";
+
+/** o relogio da luta na tela (m:ss), o mesmo do palco de antes */
+const relogio = (s: number): string => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 
 /** um lado do HUD: o retrato, o nome, a vida (com o pedaco atrasado da E5) e a carga da habilidade */
 function Lado({ p, i }: { p: PalcoPoc; i: LadoN }) {

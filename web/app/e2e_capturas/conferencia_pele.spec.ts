@@ -16,9 +16,9 @@ const SAVES: Record<string, { semente: number; log: unknown[]; versao?: number }
 const PREFIXO = "/" + basename(fileURLToPath(new URL("../../..", import.meta.url)));
 const APP = `${PREFIXO}/web/dist/`, CHAVE = "digilab-web-v21-sprites";
 /* o pet v11 do DigiBrain (e2e/jogo.spec.ts) e o v13 da luta em tempo real */
-const SAVE_V11 = { semente: 4242, versao: 13, log: [[480, "t", 120], [600, "d", "acariciar"], [600, "t", 120], [720, "d", "tapa"], [720, "t", 120],
+const SAVE_V11 = { semente: 4242, versao: 21, log: [[480, "t", 120], [600, "d", "acariciar"], [600, "t", 120], [720, "d", "tapa"], [720, "t", 120],
   [840, "dc", { tipo: "racao", x: 168, y: 248 }], [840, "t", 60]] };
-const SAVE_V13 = { semente: 101, versao: 13, log: [[480, "u", { n: 1 }], [480, "t", 210]] };
+const SAVE_V13 = { semente: 101, versao: 21, log: [[480, "u", { n: 1 }], [480, "t", 210]] };
 const TAMER_V13 = { versao: 7, log: [["medalha", { id: "campina", n: 1, quando: 1, pet: 101, forma: "Agumon", tick: 480 }]] };
 /* as rotas do portao, para o contraste */
 const ROTAS = ["#/pet/estado", "#/crescer/treinar", "#/crescer/aprend", "#/crescer/evolucao", "#/crescer/itens", "#/lutar/arena", "#/lutar/campanha",
@@ -32,7 +32,7 @@ async function semear(page: Page, save: object | null, tamer: object = { versao:
   await page.goto("/Assets/digilab_atlas_up.json");
   await page.evaluate(([chave, s, t, bv]) => {
     localStorage.clear(); if (bv) localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", t);
-    localStorage.setItem(chave + "-descarte", "6"); localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
+    localStorage.setItem(chave + "-descarte", "8"); localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
     if (s) localStorage.setItem(chave, s);
   }, [CHAVE, save ? JSON.stringify(save) : null, JSON.stringify(tamer), boasVindas] as const);
 }
