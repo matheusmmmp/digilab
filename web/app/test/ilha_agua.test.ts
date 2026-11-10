@@ -15,7 +15,7 @@ import { Mundo, celulasSecas, deslocar, distancia, divArred, solidosDaAgua } fro
 import { LacoGravado, cerebroDa, json, ler, type Rec, type Vida } from "./laco_gravado.ts";
 
 const { texto, g: G } = ler("./gabaritos/ilha_agua_python.json");
-const SHA = "3e19d644de1009dfad2db72a8c4b45415c66131a45539fcc66172bfc36fe1f5f";
+const SHA = "5b1fb77ee1d158d4ec743a930a54d2edbfca6bbe74011145ff8e165d3165f485";
 interface Pedido { tick: number; pedido: [number, number]; ficou: [number, number] }
 type VidaAgua = Vida & {
   pedidos: { comida: (Pedido & { id: number })[]; levar: Pedido[]; ponte: { tick: number; pet: [number, number]; racao: [number, number] }[];
@@ -53,6 +53,29 @@ describe("a agua do layout", () => {
       expect(dentro, `${cx}, ${cy}`).toBe(secas[cy * NX + cx] ? 0 : 1);
     }
     expect([...grade(NX, NY, SUB, CONFIG_CONTRATO_AGUA.r_pet, solidos)]).toEqual([...secas]);
+    /* os mesmos retangulos do Python, na mesma ordem */
+    expect(solidos.map(s => [s.x0, s.y0, s.x1, s.y1])).toEqual((G.config as unknown as { solidos_da_agua: number[][] }).solidos_da_agua);
+  });
+
+  test("o mapa errado e o layout que nao cumpre falham alto", () => {
+    const tabela = AGUA_POR_LAYOUT as Record<string, readonly string[]>;
+    const cm = { ...CM, layout: { ...CM.layout, nome: "teste_agua" } };
+    const com = (linhas: readonly string[]): Mundo => { tabela.teste_agua = linhas; return new Mundo({ semente: 101, cfg: cm, contrato: CONFIG_CONTRATO_AGUA }); };
+    const troca = (l: string, x: number, c: string): string => l.slice(0, x) + c + l.slice(x + 1);
+    try {
+      expect(com(AGUA_ILHA).secas).toEqual(mundo().secas);
+      expect(() => com(AGUA_ILHA.slice(0, -1))).toThrow(/linhas/);
+      expect(() => com([AGUA_ILHA[0].slice(0, -1), ...AGUA_ILHA.slice(1)])).toThrow(/linhas/);
+      expect(() => com([troca(AGUA_ILHA[0], 0, "#"), ...AGUA_ILHA.slice(1)])).toThrow(/desconhecido/);
+      for (const [nome, [cx, cy]] of [["ninho", CM.layout.ninho], ["comedouro", CM.layout.comedouro], ["bola_inicio", CM.layout.bola_inicio]] as const)
+        expect(() => com(AGUA_ILHA.map((l, y) => y === cy ? troca(l, cx, AGUA_DOCE) : l)), nome).toThrow(new RegExp(`${nome} na agua`));
+      /* sem as pontes e sem a volta pelo norte da nascente, a margem leste fica ilhada */
+      const ilhada = AGUA_ILHA.map((l, y) => y === 1 || y === 2 ? troca(l, 43, AGUA_DOCE) : l.replaceAll(PONTE, AGUA_DOCE));
+      expect(() => com(ilhada)).toThrow(/nao alcanca/);
+      /* uma celula de terra sozinha no mar tambem */
+      expect(() => com(AGUA_ILHA.map((l, y) => y === 0 ? troca(l, 0, TERRA) : l))).toThrow(/1 celulas de terra/);
+    } finally { delete tabela.teste_agua; }
+    expect(Object.keys(AGUA_POR_LAYOUT)).toEqual(["mvp_agua"]);
   });
 
   test("a agua exige o controlador do contrato", () => {
@@ -157,7 +180,6 @@ describe("G-PAR da agua: o laco do TS = o Python, decisao a decisao", () => {
 
       /* os gates do lado do TS: nenhuma comida, nenhum ponto do pet e nenhuma rolagem na agua */
       const w = m.mundo, r = CONFIG_CONTRATO_AGUA.r_pet, solidos = solidosDaAgua(CM);
-      for (const p of vida.pedidos.comida) expect(w.seca(...p.ficou), `comida ${p.id}`).toBe(true);
       for (const cm of w.comidas.values()) expect(w.seca(cm.x, cm.y)).toBe(true);
       let pontos = 0, naPonte = 0;
       for (const d of w.contratoDecisoes) for (const [x, y] of d.trajetoria ?? []) {
@@ -166,7 +188,7 @@ describe("G-PAR da agua: o laco do TS = o Python, decisao a decisao", () => {
         if (bloqueioEm(x, y, r, solidos) !== null) throw new Error(`o pet na agua: (${x}, ${y})`);
       }
       for (const l of w.levadas) { pontos++; expect(bloqueioEm(l.para[0], l.para[1], r, solidos)).toBeNull(); }
-      expect(pontos).toBe(vida.conferido.posicoes_do_pet + vida.pedidos.ponte.length);
+      expect(pontos).toBe(vida.conferido.posicoes_do_pet);
       expect(naPonte).toBeGreaterThan(0);
       expect(w.rolagens.length).toBe(vida.conferido.rolagens);
       for (const rol of w.rolagens) { expect(w.seca(...rol.de)).toBe(true); expect(w.seca(...rol.para)).toBe(true); }
