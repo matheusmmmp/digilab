@@ -20,6 +20,7 @@
      mao.ts), e a sombra fica onde ele vai cair, ja no mapa (noMapa, PP-4). Ao soltar, o desenho comeca onde o motor o pos (sem caminhar
      de volta: Seguidor.pular), com a queda e o quique, e o foco volta ao pet em ~MAO.focoTauMs.
    Os kits carregam depois do terreno; se um modelo nao carrega, a cena cai na reserva (MundoReserva), com o erro no console. */
+import { comprimento, naRota, rotaEmTerra } from "./rotaConta.ts";
 import { ILHA_DEV_AGUA } from "./ilhaDev.ts";
 import { ponte } from "./ponte.ts";
 import * as THREE from "three";
@@ -117,7 +118,7 @@ class VistaIlha {
   private bateBola: { desde: number; alvo: [number, number] } | null = null;
   /** a ida do pet ao lugar aberto (ou a volta), separada da camera: a chave da viagem ("1:<lugar>" ou "0"), de onde partiu, quando e quanto dura;
       null fora da viagem (constantes.ts, PET_VIAGEM_CEL_MS) */
-  private andaPet: { chave: string; de: [number, number]; desde: number; dur: number } | null = null;
+  private andaPet: { chave: string; de: [number, number]; desde: number; dur: number; rota: [number, number][] | null } | null = null;
 
   readonly canvas: HTMLCanvasElement;
   private readonly mu: Mundo;
@@ -358,14 +359,17 @@ class VistaIlha {
     const chave = VIAGEM.alvo === 1 ? "1:" + VIAGEM.lugar : "0";
     if (chave !== (this.andaPet?.chave ?? "0")) {
       const de: [number, number] = [this.petCel[0], this.petCel[1]], para = chave === "0" ? motorCel0 : this.pontoDoPetNo(VIAGEM.lugar);
-      const dur = duracaoPetViagem(Math.hypot(para[0] - de[0], para[1] - de[1]), reduzido);
-      this.andaPet = { chave, de, desde: agora, dur };
+      /* na ilha com agua o pet contorna a agua pelo caminho em terra (rotaConta.ts; IA4); sem agua, a reta de sempre */
+      const rota = this.ilha.comAgua ? rotaEmTerra(this.ilha.cm, de, [para[0], para[1]]) : null;
+      const dur = duracaoPetViagem(rota ? comprimento(rota) : Math.hypot(para[0] - de[0], para[1] - de[1]), reduzido);
+      this.andaPet = { chave, de, desde: agora, dur, rota };
     }
     const a = this.andaPet;
     if (!a) return { cel: motorCel0, andando: false };
     const para = a.chave === "0" ? motorCel0 : this.pontoDoPetNo(VIAGEM.lugar);
     const f = a.dur > 0 ? Math.min(1, (agora - a.desde) / a.dur) : 1;
     if (f >= 1 && a.chave === "0") { this.andaPet = null; return { cel: motorCel0, andando: false }; }
+    if (a.rota && f < 1) return { cel: naRota(a.rota, f), andando: true };
     return { cel: f >= 1 ? para : this.entre(a.de, para, f), andando: f < 1 };
   }
   private suave(f: number): number { return f * f * (3 - 2 * f); }

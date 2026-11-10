@@ -11,6 +11,7 @@ import { ilhaDe } from "../src/telas/pet/ilha/grade.ts";
 import { MODELOS } from "../src/telas/pet/ilha/modelos.ts";
 import { listaDeFocos } from "../src/telas/pet/ilha/luzConta.ts";
 import { caixasDaPonte, celulasDoCorrimao } from "../src/telas/pet/ilha/ponteConta.ts";
+import { comprimento, naRota, rotaEmTerra, type Ponto } from "../src/telas/pet/ilha/rotaConta.ts";
 
 const CM = CMU_MVP_AGUA, W = CM.celulas_x, H = CM.celulas_y, secas = celulasSecas(CM)!;
 const seca = (x: number, z: number): boolean => x >= 0 && z >= 0 && x < W && z < H && secas[Math.floor(z) * W + Math.floor(x)];
@@ -168,5 +169,40 @@ describe("a grade da ilha com agua", () => {
     });
     /* e nenhum foco de luz cai na agua */
     for (const [x, z] of listaDeFocos(ilha)) expect(seca(x, z), `foco em ${x},${z}`).toBe(true);
+  });
+});
+
+describe("a rota do pet ate um lugar aberto (so vista; IA4)", () => {
+  const ilha = ilhaDe(CM);
+  test("sem agua no layout, a reta de sempre", () => {
+    expect(rotaEmTerra(CMU_MVP, [4.5, 15.5], [48.5, 8.5])).toEqual([[4.5, 15.5], [48.5, 8.5]]);
+  });
+
+  test("na ilha com agua a rota fica em terra de ponta a ponta e passa por uma ponte para cruzar o rio", () => {
+    const destinos: Ponto[] = [[ilha.lugares[1].x, ilha.lugares[1].z + 1.5], [PLANTA_ILHA_AGUA.lugares.saco[0] - 1.35, PLANTA_ILHA_AGUA.lugares.saco[1]], [ilha.lugares[0].x, ilha.lugares[0].z + 1.5]];
+    for (const de of [[4.5, 15.5], [36.5, 16.5], [55.2, 20.7], [12.3, 26.1]] as Ponto[]) for (const para of destinos) {
+      const rota = rotaEmTerra(CM, de, para);
+      expect(rota[0]).toEqual(de);
+      expect(rota.at(-1)).toEqual(para);
+      let ponte = 0;
+      for (let k = 0; k <= 400; k++) {
+        const [x, z] = naRota(rota, k / 400);
+        expect(seca(x, z), `de ${de} a ${para}, em ${x},${z}`).toBe(true);
+        if (AGUA_ILHA[Math.floor(z)][Math.floor(x)] === PONTE) ponte++;
+      }
+      /* cruzar o rio (de um lado ao outro da coluna 43) so pela ponte */
+      const cruza = (de[0] < 42) !== (para[0] < 42) && de[1] > 6;
+      if (cruza) expect(ponte, `de ${de} a ${para}`).toBeGreaterThan(0);
+      expect(comprimento(rota)).toBeGreaterThanOrEqual(Math.hypot(para[0] - de[0], para[1] - de[1]) - 1e-9);
+      expect(naRota(rota, 0)).toEqual(de);
+      expect(naRota(rota, 1)).toEqual(para);
+    }
+  });
+
+  test("a ponta que cai na agua vale o centro da celula de terra mais perto", () => {
+    const rota = rotaEmTerra(CM, [43.5, 8.5], [0.5, 0.5]);            // do rio ao mar
+    for (const [x, z] of rota) expect(seca(x, z)).toBe(true);
+    expect(rota[0]).not.toEqual([43.5, 8.5]);
+    expect(rota[0].map(v => v % 1)).toEqual([0.5, 0.5]);
   });
 });

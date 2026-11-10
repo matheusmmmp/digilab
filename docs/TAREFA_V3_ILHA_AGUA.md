@@ -140,6 +140,16 @@ A água no mundo do Python, sem mudar nenhuma vida de antes.
   até um lugar aberto, que é em linha reta e cruzaria o rio.
 
 
+## 10b. IA4: o que foi construído (2026-11-10)
+
+- **Decidido pelo Matheus:** a versão que liga a água é a **v22**, e os pets vivos **migram por evento**.
+- **A v22** nasce na ilha com água. A v21 segue abrindo e passa para a mesma ilha pelo evento `mudar_ilha` (o `mi` do registro do jogo),
+  uma vez, ao abrir: o que estiver na água vai para a terra mais perto.
+- **O evento** existe no Python (`MotorMundo.mudar_ilha`) e na web, com a paridade conferida por um gabarito próprio
+  (`web/app/test/gabaritos/mudar_ilha_python.json`): duas vidas, uma troca com o pet acordado e outra com ele dormindo.
+- **A ida do pet a um lugar aberto** contorna a água pelo caminho em terra.
+- **O pet de teste (v16)** fica na ilha sem água.
+
 ## 11. Depois da IA4: os ajustes do desenho (planejamento futuro)
 
 **Estado: PROPOSTO.** O Matheus confirmou em 2026-11-10 que o desenho da ilha ainda vai ser ajustado e que entram mais árvores
