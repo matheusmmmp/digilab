@@ -15,7 +15,7 @@ import { Mundo, celulasSecas, deslocar, distancia, divArred, solidosDaAgua } fro
 import { LacoGravado, cerebroDa, json, ler, type Rec, type Vida } from "./laco_gravado.ts";
 
 const { texto, g: G } = ler("./gabaritos/ilha_agua_python.json");
-const SHA = "5b1fb77ee1d158d4ec743a930a54d2edbfca6bbe74011145ff8e165d3165f485";
+const SHA = "619a3bccf4e04c9f96d2d2b512f369d4e4c9dd2dddf515d3634316693898beba";
 interface Pedido { tick: number; pedido: [number, number]; ficou: [number, number] }
 type VidaAgua = Vida & {
   pedidos: { comida: (Pedido & { id: number })[]; levar: Pedido[]; ponte: { tick: number; pet: [number, number]; racao: [number, number] }[];
