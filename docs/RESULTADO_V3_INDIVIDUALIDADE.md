@@ -130,3 +130,87 @@ O susto fica pela regra, mas é o traço com o R_dia indistinguível de zero (se
 
 Pela tarefa, o Gate I no modular (IN-4) vem antes do I3. A bateria do I3 são os seis traços (7.4). As questões abertas para o Matheus são o
 incoerente duplicado (D-IND-I2b-1) e as facetas no sentido contrário.
+
+## 7. Adendo 1: as facetas dentro do dono (2026-11-09, descritivo, sem run)
+
+Este é o adendo 1 do plano (seção 13), decidido pelo Matheus em 2026-11-09 e commitado antes da conta (`39e4ae7`).
+- **O artefato:** `artifacts_v3_individualidade/facetas_por_dono.json`, gravado por
+  `experiments/descritivo_individualidade_facetas.py`. Ele lê o `medidas.json` do I2 e grava o sha256 dele.
+- **O que entra:** só os pets do REL+F, 60 por dono. O incoerente fica fora (D-IND-I2c-2).
+
+| dono | apego × `apego_dono` | neofilia × `cautela_comida` | ousadia × `ousadia_longe` |
+|---|---|---|---|
+| atencioso | indefinido (a faceta não varia) | indefinido (a faceta não varia) | +0,15 [−0,16; +0,43] |
+| relapso | +0,18 [−0,08; +0,42] | indefinido (a faceta não varia) | −0,13 [−0,41; +0,13] |
+| aleatório | −0,00 [−0,27; +0,25] | +0,08 [−0,09; +0,24] | −0,00 [−0,26; +0,24] |
+
+- **A frase que a leitura pode escrever (7.2):** dentro de cada dono, **nenhuma faceta acompanha o traço**. Todos os IC95 contêm 0.
+- **A conta sobre o `medidas.json`:** as facetas ficam no teto, `teto_faceta` = S/4 = 192 (`digilab/config.py`):
+  - no atencioso, o `apego_dono` é +192 nos 60 pets, e a `cautela_comida` é −192 nos 60;
+  - no relapso, a `cautela_comida` também é −192 nos 60;
+  - no aleatório, ela é −192 em 53 dos 60.
+- **O que isso diz:** a correlação no sentido contrário da seção 2 vem da diferença entre os donos. O relapso e o aleatório deixam o
+  `apego_dono` abaixo do teto e põem o apego medido acima do atencioso. Dentro do dono, a faceta quase não se move, porque está no teto.
+- **O que não diz:** a run não diz se a faceta causa algo no traço; isso é da sonda `sem_faceta` do I4. O teto é um número DECIDIDO
+  (ME-4), e o adendo não o calibra.
+
+## 8. O I5: o hábito como medida (2026-11-10, a análise única, Claude Code, Opus 5.5, branch `v3-individualidade-i5b`)
+
+O plano é o `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I5.md` (APROVADO), com o registro na seção 11, commitado antes da primeira vida
+(`977b33c`). A análise rodou uma vez.
+
+- **Os dados:** as 360 vidas do I2 (2 braços × 3 donos × 60 sementes), rejogadas do `vidas.tar.gz`. Todos os logs refeitos saíram iguais
+  aos do disco, com 96 decisões por dia. Nenhum dia ficou fora (todos tiveram 16 ou mais decisões acordadas).
+- **O artefato:** `artifacts_v3_individualidade_i5/` (`meta.json`, `perfis.jsonl`, `analise.json`, `custo.json`). O `meta.json` grava o
+  `git_head` `977b33c`, a árvore limpa e os sha256 do registro.
+- **O custo:** 2,0 s por vida rejogada (o máximo foi 2,3 s), e 3 min 53 s ao todo, com 4 processos.
+
+### 8.1 A tabela (os dias 8 a 14; a média sobre 180 pets; o IC95 pelo bootstrap sobre as sementes, 2 000 reamostras)
+
+| braço | perfil | H_dono [IC95] | H_mundo [IC95] | D_si | D_dono | D_mundo | D_braço |
+|---|---|---|---|---|---|---|---|
+| REL | SEQ | −0,0007 [−0,0064; 0,0052] | 0,0363 [0,0278; 0,0447] | 0,3405 | 0,3398 | 0,3768 | 0,2800 |
+| REL | LUGAR | 0,0006 [−0,0036; 0,0052] | 0,0176 [0,0098; 0,0248] | 0,5009 | 0,5015 | 0,5184 | 0,4074 |
+| REL | HORA | −0,0011 [−0,0037; 0,0015] | 0,0133 [0,0095; 0,0169] | 0,4280 | 0,4269 | 0,4412 | 0,3475 |
+| REL+F | SEQ | −0,0005 [−0,0050; 0,0041] | 0,0335 [0,0272; 0,0397] | 0,3465 | 0,3461 | 0,3800 | 0,2800 |
+| REL+F | LUGAR | 0,0014 [−0,0029; 0,0055] | 0,0156 [0,0075; 0,0235] | 0,5041 | 0,5055 | 0,5197 | 0,4074 |
+| REL+F | HORA | −0,0008 [−0,0037; 0,0022] | 0,0114 [0,0082; 0,0145] | 0,4301 | 0,4294 | 0,4415 | 0,3475 |
+
+O D_braço é o mesmo nos dois braços porque é o mesmo par visto de cada lado.
+
+### 8.2 As frases (seção 6.2 do plano)
+
+- **H_dono:** nos três perfis e nos dois braços, "não se distingue de zero nesta análise".
+- **H_mundo:** nos três perfis e nos dois braços, "o pet tem hábito próprio além do mundo da semente" (o IC95 inteiro acima de 0).
+
+### 8.3 As expectativas, relidas sem ajuste
+
+- **E1** (o lugar tem hábito além do dono): **não se confirma.** O H_dono do LUGAR não se distingue de zero nos dois braços.
+- **E2** (o H_mundo do LUGAR é menor que o H_dono): **sai ao contrário.** O H_mundo é maior que o H_dono nos três perfis e nos dois braços.
+- **E3** (a sequência quase não tem hábito além do dono): **confirma-se**, mas não separa a SEQ: o H_dono está perto de 0 nos três perfis.
+
+### 8.4 O que a tabela mostra, além das frases (descritivo)
+
+- **O que separa os pets é o dono, não o pet.** Um pet se parece com ele mesmo em outro dia tanto quanto com outro pet do mesmo dono no
+  mesmo dia (D_si ≈ D_dono), mesmo vivendo num mundo diferente. Com o mesmo mundo e outro dono, a distância é maior (D_mundo > D_si). O
+  H_mundo positivo vem dessa diferença entre donos. A frase do plano é a que a regra permite, mas o hábito que ela descreve é o do dono:
+  nesta análise não aparece um hábito do pet além do dono. É a leitura D-IND-I5b-1 do registro.
+- **Por dono, o H_mundo muda de sinal.** O do atencioso é negativo na HORA (−0,0155 no REL, −0,0232 no REL+F), e o do relapso é negativo
+  no LUGAR (−0,0277 e −0,0427). O H_mundo de um dono compara o pet com os pets dos outros dois donos, então o sinal depende de quais donos
+  estão na comparação. Está por dono no `analise.json`, em `por_dono`.
+- **Os dias 1 a 7:** o H_dono é negativo nos três perfis (SEQ −0,038, HORA −0,020, LUGAR −0,004 a −0,006). Nos primeiros dias, o pet muda
+  mais de um dia para o outro do que difere dos outros pets no mesmo dia. Na janela de 8 a 14, o H_dono sobe para perto de 0.
+- **O par dos braços é o mais próximo.** O pet do outro braço, com a mesma semente e o mesmo dono, fica mais perto (D_braço 0,28 na SEQ)
+  do que o próprio pet em outro dia (D_si 0,34). As facetas mudam menos o dia do que a passagem de um dia para o outro.
+- **REL × REL+F:** os dois braços dão os mesmos sinais e ICs que se sobrepõem em todos os perfis. As facetas não mudam o hábito medido aqui.
+
+### 8.5 O que a análise não demonstra
+
+- que o pet não tem hábito (a medida só não o separa do dono nesta janela e nestes perfis);
+- qualquer efeito do genoma (vazio no I2);
+- que a medida é nova.
+
+### 8.6 O que isso muda no I7
+
+O I7 mede o afastamento contra o gêmeo (D_G). Esta tabela dá a escala: o pet já varia 0,34 a 0,50 de um dia para o outro, e o par mais
+próximo que existe hoje (D_braço) fica em 0,28 a 0,41. O D_G do I7 vai se medir contra esse ruído. É só contexto, não muda o plano do I7.

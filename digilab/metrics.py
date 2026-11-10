@@ -19,7 +19,7 @@ from dataclasses import dataclass
 from typing import Iterable, Mapping, Sequence
 
 from .arena import ResultadoPartida
-from .config import CONFIG_METRICAS, TICKS_POR_DIA, ConfigMetricas
+from .config import CONFIG_METRICAS, TICKS_POR_DIA, ConfigMetricas, ConfigMundo
 from .events import ACOES_PET_HOJE
 from .policy import Observacao, Politica
 from .protocol import derivar_semente
@@ -2839,3 +2839,96 @@ def quantis(valores: Sequence[float], qs: Sequence[float]) -> list[float]:
     if not n:
         raise ValueError("PET_VIVO: quantis de uma lista vazia")
     return [xs[min(n, max(1, math.ceil(q * n))) - 1] for q in qs]
+
+
+# ================================================================== INDIVIDUALIDADE, I5: o habito como medida
+# docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I5.md (APROVADO pelo Matheus em 2026-11-09), secoes 2 a 4. Os perfis de um dia e a distintividade
+# de um pet (IH-7). As caixas (IH-3), o minimo de decisoes acordadas do dia (secao 2) e a distancia (IH-4, a `distancia_tv`) sao DECIDIDOS
+# no plano; SEM FONTE como escolha dele. O bootstrap, o replay e a leitura ficam no orquestrador (experiments/run_v3_individualidade_i5.py).
+
+ACOES_ACORDADAS_HABITO = ("ocioso", "comer", "brincar", "chamar_atencao", "explorar", "emburrar", "aliviar")   # as oito menos `dormir`
+PERFIS_HABITO = ("SEQ", "LUGAR", "HORA")
+BLOCO_CELULAS_HABITO = 4                         # IH-3: os blocos de 4 x 4 celulas
+FAIXAS_HORA_HABITO = 12                          # IH-3: a faixa de 2 h (12 por dia)
+MIN_ACORDADAS_DIA_HABITO = 16                    # secao 2: um dia com menos decisoes acordadas fica fora daquele pet
+CELULAS_X_HABITO, CELULAS_Y_HABITO, SUB_HABITO = ConfigMundo.celulas_x, ConfigMundo.celulas_y, ConfigMundo.sub   # 64 x 30 de 16
+BLOCOS_X_HABITO = -(-CELULAS_X_HABITO // BLOCO_CELULAS_HABITO)   # 16
+BLOCOS_Y_HABITO = -(-CELULAS_Y_HABITO // BLOCO_CELULAS_HABITO)   # 8 (a ultima linha de blocos tem so as celulas 28 e 29)
+CAIXAS_HABITO = {"SEQ": len(ACOES_ACORDADAS_HABITO) ** 2, "LUGAR": BLOCOS_X_HABITO * BLOCOS_Y_HABITO,
+                 "HORA": FAIXAS_HORA_HABITO * len(ACOES_ACORDADAS_HABITO)}                 # 49, 128 e 84 (secao 3)
+
+
+def perfis_habito_dia(decisoes: Sequence[Mapping], dia: int) -> dict | None:
+    """Os tres perfis do dia `dia` (1 = o nascimento), secao 3 do plano do I5, como contagens inteiras:
+    - SEQ: o par (a_t, a_t+1) de duas decisoes seguidas do dia, as duas acordadas (a caixa a_t x 7 + a_t+1);
+    - LUGAR: o bloco de 4 x 4 celulas da posicao (x, y) de cada decisao acordada (a caixa by x 16 + bx);
+    - HORA: a faixa de 2 h do tick no dia e a acao de cada decisao acordada (a caixa faixa x 7 + acao).
+    `decisoes` sao as do `MotorMundo.decisoes_mundo` (as chaves `tick`, `acao`, `x` e `y`, em subunidades), da vida inteira, em ordem de
+    tick. Devolve None se o dia tem menos de `MIN_ACORDADAS_DIA_HABITO` decisoes acordadas. Falha alto com acao desconhecida, tick fora de
+    ordem ou posicao fora do mapa."""
+    ini, fim = janela_dias(dia, dia)
+    ticks = [d["tick"] for d in decisoes]
+    if any(b <= a for a, b in zip(ticks, ticks[1:])):
+        raise ValueError("I5: as decisoes nao estao em ordem estrita de tick")
+    do_dia = [d for d in decisoes if ini <= d["tick"] < fim]
+    idx = {a: i for i, a in enumerate(ACOES_ACORDADAS_HABITO)}
+    for d in do_dia:
+        if d["acao"] != "dormir" and d["acao"] not in idx:
+            raise ValueError(f"I5: acao desconhecida {d['acao']!r}")
+    acordadas = [d for d in do_dia if d["acao"] != "dormir"]
+    if len(acordadas) < MIN_ACORDADAS_DIA_HABITO:
+        return None
+    n = len(ACOES_ACORDADAS_HABITO)
+    seq, lugar, hora = [0] * CAIXAS_HABITO["SEQ"], [0] * CAIXAS_HABITO["LUGAR"], [0] * CAIXAS_HABITO["HORA"]
+    for a, b in zip(do_dia, do_dia[1:]):
+        if a["acao"] != "dormir" and b["acao"] != "dormir":
+            seq[idx[a["acao"]] * n + idx[b["acao"]]] += 1
+    faixa_ticks = TICKS_POR_DIA // FAIXAS_HORA_HABITO
+    for d in acordadas:
+        cx, cy = d["x"] // SUB_HABITO, d["y"] // SUB_HABITO
+        if type(d["x"]) is not int or type(d["y"]) is not int or not (0 <= cx < CELULAS_X_HABITO and 0 <= cy < CELULAS_Y_HABITO):
+            raise ValueError(f"I5: posicao fora do mapa: ({d['x']}, {d['y']})")
+        lugar[(cy // BLOCO_CELULAS_HABITO) * BLOCOS_X_HABITO + cx // BLOCO_CELULAS_HABITO] += 1
+        hora[((d["tick"] - ini) // faixa_ticks) * n + idx[d["acao"]]] += 1
+    return {"SEQ": seq, "LUGAR": lugar, "HORA": hora}
+
+
+def distancia_entre_dias(perfil: Mapping[int, Sequence[int] | None], dias: Sequence[int]) -> float | None:
+    """O D_si (4.2): a media da `distancia_tv` entre os dias d < d' do proprio pet, sobre os pares de `dias` com os dois dias dentro (um dia
+    None fica fora). None com menos de dois dias dentro."""
+    dentro = [d for d in sorted(set(dias)) if perfil.get(d) is not None]
+    pares = [distancia_tv(perfil[a], perfil[b]) for i, a in enumerate(dentro) for b in dentro[i + 1:]]
+    return sum(pares) / len(pares) if pares else None
+
+
+def distancia_mesmo_dia(perfil: Mapping[int, Sequence[int] | None], outros: Sequence[Mapping[int, Sequence[int] | None]],
+                        dias: Sequence[int]) -> float | None:
+    """O D_dono e o D_mundo (4.2), e o D_braco (4.4): em cada dia d de `dias` com o pet dentro, a media da `distancia_tv` entre o dia d dele
+    e o dia d de cada outro pet com o dia d dentro; depois, a media sobre os dias com ao menos um par. None sem nenhum par."""
+    por_dia = []
+    for d in sorted(set(dias)):
+        if perfil.get(d) is None:
+            continue
+        ds = [distancia_tv(perfil[d], o[d]) for o in outros if o.get(d) is not None]
+        if ds:
+            por_dia.append(sum(ds) / len(ds))
+    return sum(por_dia) / len(por_dia) if por_dia else None
+
+
+def distintividade_habito(perfil: Mapping[int, Sequence[int] | None], do_dono: Sequence[Mapping[int, Sequence[int] | None]],
+                          do_mundo: Sequence[Mapping[int, Sequence[int] | None]], dias: Sequence[int]) -> dict:
+    """A distintividade de um pet num perfil (4.2): o D_si, o D_dono (os outros pets do mesmo braco e do mesmo dono), o D_mundo (os pets do
+    mesmo braco e da mesma semente, com os outros donos), o H_dono = D_dono - D_si e o H_mundo = D_mundo - D_si (None se um dos dois termos
+    e None) e os dias de `dias` com o pet dentro."""
+    d_si = distancia_entre_dias(perfil, dias)
+    d_dono, d_mundo = distancia_mesmo_dia(perfil, do_dono, dias), distancia_mesmo_dia(perfil, do_mundo, dias)
+    return {"D_si": d_si, "D_dono": d_dono, "D_mundo": d_mundo,
+            "H_dono": None if d_si is None or d_dono is None else d_dono - d_si,
+            "H_mundo": None if d_si is None or d_mundo is None else d_mundo - d_si,
+            "dias_dentro": sum(1 for d in sorted(set(dias)) if perfil.get(d) is not None)}
+
+
+def media_habito(valores: Sequence[float | None]) -> dict:
+    """a media dos valores que nao sao None (4.3) e quantos ficaram fora; a media e None se todos ficaram fora"""
+    vs = [v for v in valores if v is not None]
+    return {"media": sum(vs) / len(vs) if vs else None, "n": len(vs), "fora": len(valores) - len(vs)}

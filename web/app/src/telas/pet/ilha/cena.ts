@@ -12,8 +12,9 @@
    O vento e a agua andam por uTempo; com movimento reduzido, a vista o deixa parado. Todos os numeros sao do desenho: PROPOSTO, SEM FONTE. */
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { CEU_SEM_PINTURA, DIA, DOBRA_K, NOITE } from "./constantes.ts";
+import { CEU_SEM_PINTURA, DIA, DOBRA_K, LUZ_HIERARQUIA, LUZ_NINHO, NOITE } from "./constantes.ts";
 import { ALTURA_NIVEL, FORA, NIVEL_AGUA, rng, type Celula, type Ilha, type Objeto } from "./grade.ts";
+import { LUZ_MAX, LUZ_PROPOSTA, listaDeFocos, pesoLuz, recebeLuz } from "./luzConta.ts";
 import { MODELOS, type Modelo, type NomeLugar, type NomeModelo } from "./modelos.ts";
 
 /* ---------- o mundo curvo ---------- */
@@ -48,16 +49,59 @@ const glslVento = (amp: number) => `
 transformed.x += uVento * sin(uTempo * 1.7 + baseVento.x * 0.9 + baseVento.z * 0.6) * ${amp.toFixed(3)} * max(transformed.y, 0.0);
 transformed.z += uVento * cos(uTempo * 1.3 + baseVento.x * 0.5) * ${(amp * 0.5).toFixed(3)} * max(transformed.y, 0.0);`;
 
+/* ---------- a hierarquia de luz (docs/pranchas/ux-ilha-luz/, LZ-1 a LZ-5: a B por padrao, ?luz=a|b|c|0 para comparar) ---------- */
+/** os uniforms da luz: os focos (x, z, raio), quantos, a forca (escuro, dessat, quente), a cor quente e o liga (1 de dia, 0 de noite) */
+export const LUZ = {
+  uLuzFocos: { value: Array.from({ length: LUZ_MAX }, () => new THREE.Vector3()) }, uLuzN: { value: 0 },
+  uLuzForca: { value: new THREE.Vector3(1, 0, 0) }, uLuzCor: { value: new THREE.Color(`rgb(${LUZ_NINHO.cor})`) }, uLuzLigada: { value: 0 },
+};
+const GLSL_LUZ_PARS = `uniform vec3 uLuzFocos[${LUZ_MAX}];
+uniform float uLuzN;
+uniform vec3 uLuzForca;
+uniform vec3 uLuzCor;
+uniform float uLuzLigada;
+varying vec2 vLuzXZ;
+`;
+const GLSL_LUZ = `
+{
+  float luzL = 0.0;
+  for (int i = 0; i < ${LUZ_MAX}; i++) {
+    if (float(i) >= uLuzN) break;
+    vec3 f = uLuzFocos[i];
+    luzL = max(luzL, 1.0 - smoothstep(f.z * ${LUZ_HIERARQUIA.miolo.toFixed(2)}, f.z, distance(vLuzXZ, f.xy)));
+  }
+  vec3 luzC = gl_FragColor.rgb;
+  float luzG = dot(luzC, vec3(0.299, 0.587, 0.114));
+  vec3 luzFora = mix(luzC, vec3(luzG), uLuzForca.y) * uLuzForca.x;
+  vec3 luzDentro = luzC * mix(vec3(1.0), uLuzCor * 1.25, uLuzForca.z);
+  gl_FragColor.rgb = mix(luzC, mix(luzFora, luzDentro, luzL), uLuzLigada * LUZ_PESO);
+}`;
+/** a luz vale nos materiais que recebem cor do mundo: nao nos aditivos (halos, particulas), nas sombras transparentes nem nas linhas */
+/** poe os focos e a forca da proposta nos uniforms; com `?luz=0` nao faz nada */
+export function focosDaLuz(ilha: Ilha): void {
+  if (!LUZ_PROPOSTA) return;
+  const f = listaDeFocos(ilha);
+  f.forEach(([x, z, r], i) => LUZ.uLuzFocos.value[i].set(x, z, r));
+  LUZ.uLuzN.value = f.length;
+  const P = LUZ_HIERARQUIA.propostas[LUZ_PROPOSTA];
+  LUZ.uLuzForca.value.set(P.escuro, P.dessat, P.quente);
+}
+
 /** liga a dobra do mundo (e o vento, se amp > 0) num material do three; devolve o mesmo material. `mexer`: um trecho de GLSL depois do
     begin_vertex (pode mudar `transformed`, com os uniforms da curva; as particulas do estilo digital, digital.ts), com o nome dele na chave */
 export function curvar<M extends THREE.Material>(m: M, vento = 0, mexer?: { nome: string; glsl: string }): M {
   m.onBeforeCompile = s => {
     Object.assign(s.uniforms, CURVA);
-    s.vertexShader = GLSL_CURVA_PARS + s.vertexShader
+    const luz = recebeLuz(m);
+    s.vertexShader = GLSL_CURVA_PARS + (luz ? GLSL_LUZ_PARS : "") + s.vertexShader
       .replace("#include <begin_vertex>", "#include <begin_vertex>" + (vento > 0 ? glslVento(vento) : "") + (mexer?.glsl ?? ""))
-      .replace("#include <project_vertex>", GLSL_PROJETAR);
+      .replace("#include <project_vertex>", GLSL_PROJETAR + (luz ? "\nvLuzXZ = pMundo.xz;" : ""));
+    if (luz) {
+      Object.assign(s.uniforms, LUZ);
+      s.fragmentShader = GLSL_LUZ_PARS + s.fragmentShader.replace("#include <opaque_fragment>", "#include <opaque_fragment>" + GLSL_LUZ.replace("LUZ_PESO", pesoLuz(m).toFixed(2)));
+    }
   };
-  m.customProgramCacheKey = () => `curva-${vento}-${mexer?.nome ?? ""}`;
+  m.customProgramCacheKey = () => `curva-${vento}-${mexer?.nome ?? ""}${recebeLuz(m) ? "-luz" + pesoLuz(m) : ""}`;
   return m;
 }
 
@@ -188,6 +232,7 @@ export function terreno(ilha: Ilha, COR: PaletaTerreno = PALETA_ILHA): THREE.Mes
     for (const e of ARESTAS) parede(m, ilha, c, x, z, e, COR);
   }
   const mat = toon({ vertexColors: true });
+  mat.userData.luzChao = true;
   return new THREE.Mesh(m.geometria(), COR.pintado ? pintarTerreno(mat) : mat);
 }
 
@@ -286,7 +331,7 @@ export function flores(ilha: Ilha): THREE.Mesh {
       }
     }
   }
-  const malha = new THREE.Mesh(m.geometria(), toon({ vertexColors: true, polygonOffset: true, polygonOffsetFactor: -1, side: THREE.DoubleSide, depthWrite: false }));
+  const malha = new THREE.Mesh(m.geometria(), Object.assign(toon({ vertexColors: true, polygonOffset: true, polygonOffsetFactor: -1, side: THREE.DoubleSide, depthWrite: false }), { userData: { luzChao: true } }));
   malha.frustumCulled = false;
   return malha;
 }
@@ -321,7 +366,7 @@ export function tufos(ilha: Ilha): THREE.Mesh {
   g.setAttribute("color", new THREE.Float32BufferAttribute(col, 3));
   /* sem escrever a profundidade: o contorno (pos.ts) nao pega cada folha (viravam pontinhos de nanquim), e a folha continua atras do que
      esta na frente dela */
-  const malha = new THREE.Mesh(g, toon({ vertexColors: true, side: THREE.DoubleSide, depthWrite: false }));
+  const malha = new THREE.Mesh(g, Object.assign(toon({ vertexColors: true, side: THREE.DoubleSide, depthWrite: false }), { userData: { luzChao: true } }));
   malha.frustumCulled = false;
   return malha;
 }
@@ -744,10 +789,12 @@ export function montarCena(ilha: Ilha, chao: THREE.Object3D = terreno(ilha),
     hemi.color.setHex(p.hemi[0]); hemi.groundColor.setHex(!noite && opcoes.chaoHemi !== undefined ? opcoes.chaoHemi : p.hemi[1]); hemi.intensity = p.hemi[2];
     sol.color.setHex(p.sol[0]); sol.intensity = p.sol[1];
     CURVA.uNoite.value = noite ? 1 : 0;
+    LUZ.uLuzLigada.value = LUZ_PROPOSTA && !noite ? 1 : 0;
     /* todas as nuvens, mesmo dentro de um grupo (o anel das da pintura); as que ainda vao chegar leem a opacidade daqui */
     ceuNuvens.userData.opacidade = p.nuvens;
     ceuNuvens.traverse(o => { const m = (o as THREE.Mesh).material as THREE.Material | undefined; if (m) m.opacity = p.nuvens; });
   };
+  focosDaLuz(ilha);
   aplicarNoite(false);
   return { cena, aplicarNoite };
 }

@@ -865,3 +865,44 @@ tigela, a bola e as frutíferas no `CMU_ILHA`, v20) é do #694.
 - a regra 4, esconder e revelar;
 - a regra 5, os pássaros, que precisam da árvore madura do #694;
 - a regra 6, a câmera do primeiro dia.
+
+## 27. A prancha da hierarquia de luz (2026-11-09)
+
+O Matheus disse "Sim, a prancha" (2026-11-09) para a regra 1 de "guiar o olhar sem texto", que a seção 26 deixou como proposta: a luz dá a
+prioridade, com os destinos quentes, os caminhos claros e a decoração mais apagada (Level Design Book, no Obsidian
+`20 Temas/Ensinar a olhar.md`).
+
+**O que foi feito (a prancha e um protótipo desligado):**
+- **A prancha** fica em `docs/pranchas/ux-ilha-luz/`. São capturas do jogo de hoje e das propostas A (forte), B (suave) e C (só quente), nos
+  mapas Ilha e Digital, no desktop e no celular, com o script que as refaz.
+- **O protótipo** é um termo no fragmento do `curvar` (`cena.ts`), pela posição no chão. Os focos e as regras puras ficam em `luzConta.ts`,
+  e os números em `LUZ_HIERARQUIA` (`constantes.ts`). Ele só liga com `?luz=a|b|c`: sem o parâmetro, nenhum material ganha o termo, e a
+  chave do programa fica a de antes.
+- **O teste** é o `test/ilha_luz.test.ts`. Ele confere que sem o parâmetro nada liga, que os aditivos, as sombras e as linhas ficam de fora,
+  que os focos cobrem o lar, a praça, os lugares e todo ponto dos caminhos dentro de 48, e que as propostas vão da forte à só quente.
+
+**As decisões** LZ-1 a LZ-5 estão no `LEIA.md` da prancha, como PROPOSTAS: B, sem o cais enquanto estiver trancado, sem efeito à noite, o chão
+com peso 0,3 e todos os mapas do `curvar`. Os números são PROPOSTO, SEM FONTE. A interpretação está em D-LZ-1, em `docs/registro/2026-11.md`.
+
+**Fica para a etapa de código, depois da aprovação:** ligar a proposta escolhida sem o parâmetro, medir o custo no celular e recapturar o e2e
+(o `--update-snapshots` só com o ok do Matheus).
+
+## 28. A hierarquia de luz ligada (2026-11-09)
+
+O Matheus respondeu "B com tudo" (2026-11-09) à prancha da seção 27: LZ-1 a LZ-5 aprovadas.
+
+**O que mudou:**
+- **A B liga por padrão** (`LUZ_HIERARQUIA.escolhida`), sem parâmetro. O `?luz=a|b|c` continua para comparar, e `?luz=0` desliga. Um
+  valor desconhecido levanta erro (`propostaDe`, `luzConta.ts`).
+- **O cais trancado não acende** (LZ-2): `listaDeFocos` pula os lugares fechados em `LUGAR_ABERTO`. O portão e a barraca trancados pelo
+  nível do Tamer continuam acesos (D-LZ-3).
+- **Já vinham do protótipo:** sem o efeito à noite (LZ-3), o chão com peso 0,3 (LZ-4) e todos os mapas do `curvar` (LZ-5).
+
+**Testes:**
+- `test/ilha_luz.test.ts`: a B sem parâmetro, o `?luz=0`, o erro, e o cais fora dos focos (com ele aberto, entra um foco a mais).
+- O Vitest inteiro: 1 461 testes passam.
+- O e2e inteiro: 184 passam e 4 falham. As 4 já falhavam antes desta mudança, no branch da prancha: as três da chave "Fala do pet" nos
+  Ajustes e o destrave do `niveis.spec.ts`. Nenhuma comparação de tela quebrou, e por isso o `--update-snapshots` não foi preciso.
+- As capturas (o script da prancha, Ilha e Digital, desktop e celular, Vidro e Militar) saem iguais às da B da prancha, sem erro de shader.
+
+**Não medido:** o custo no celular. São até 48 focos num laço do fragmento, e falta medir num aparelho de verdade.

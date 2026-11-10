@@ -46,7 +46,8 @@ function viverDias(m: Motor, dias: number, dono: "roteiro" | "calmo"): void {
     if (m.lesionadoDesde !== null) m.observar("tratar_lesao");
     if (m.estagioAtual === "crianca" && m.medalhas === 0) m.liberar(1);
     if ((m.estagioAtual === "crianca" || m.estagioAtual === "adolescente") && m.treino.podeTocar(m.e.tick) && p % 3 === 0) m.treinar("levantar_pedra");
-    if (m.estagioAtual === "adolescente" && p % 6 === 0) m.lutar("aleatorio", 1000 + p);
+    /* a luta da POC (LUTA_POC, LP4): uma forma do estagio, no Campo de treino */
+    if (m.estagioAtual === "adolescente" && p % 6 === 0) { const rv = m.rivaisArenaPoc(); m.lutarPoc(rv[p % rv.length], 1000 + p, "campo"); }
   }
 }
 

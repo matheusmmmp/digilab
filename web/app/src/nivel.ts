@@ -5,7 +5,9 @@
    - os marcos (3.3): 1 chocou o ovo, 2 atendeu 3 chamados, 3 virou Rookie, 4 o primeiro treino, 5 a primeira medalha, 6 virou Champion, 7 tres
      medalhas, 8 seis medalhas, 9 o titulo da Liga. O nivel 10 em diante (multiplayer) e futuro e nao tem marco;
    - CADA PECA ABRE PELO PROPRIO MARCO, nao pelo numero (pergunta 11 da prancha): "Tamer Nv N" e so a contagem. Um save com o Champion e sem a
-     primeira medalha tem o Nv 5 (chocou, chamados, Rookie, treino, Champion), e as Regras (marco 6) abrem enquanto os Itens (marco 5) nao;
+     primeira medalha tem o Nv 5 (chocou, chamados, Rookie, treino, Champion), e o Forcar (marco 6) abre enquanto os Itens (marco 5) nao.
+     As Regras de luta (o editor dos gambits, tambem no marco 6) sairam com o combate por turnos (LUTA_POC, LP4): o cartao do Nv 6 passou a ser
+     o do Forcar;
    - o estado que a tela guarda (EstadoNivel) tem os marcos ja feitos (a uniao de tudo que ja se viu: o nivel nunca desce, mesmo que um pet
      guardado saia) e os cartoes de destrave ja vistos. Quem tem pet ou Tamer e nao tem o estado entra com o PISO 4 (P-6): os marcos 1 a 4 e os
      cartoes deles vistos em silencio, para nunca trancar o que o jogador ja usava.
@@ -35,7 +37,7 @@ export const CARTOES: readonly Cartao[] = [
   { n: 3, icone: "dumbbell", titulo: "Crescer", frase: "Treine no saco de pancada.", rota: { destino: "crescer", aba: "treinar" }, lugar: "saco" },
   { n: 4, icone: "swords", titulo: "Lutar", frase: "Vença rivais. Medalhas fazem evoluir.", rota: { destino: "lutar", aba: "arena" }, lugar: "portao" },
   { n: 5, icone: "package", titulo: "Itens", frase: "A medalha trouxe um chip.", rota: { destino: "crescer", aba: "itens" } },
-  { n: 6, icone: "shield", titulo: "Regras de luta", frase: "Trave o que ele faz bem.", rota: { destino: "lutar", aba: "arena" } },
+  { n: 6, icone: "shield", titulo: "Forçar o treino", frase: "Treine além do cansaço, com cuidado.", rota: { destino: "crescer", aba: "treinar" } },
   { n: 7, icone: "medal", titulo: "3 medalhas", frase: "O Ultimate está a caminho." },
   { n: 8, icone: "flag", titulo: "Fronteira", frase: "Seis medalhas. A Liga abriu.", rota: { destino: "lutar", aba: "fronteira" } },
   { n: 9, icone: "trophy", titulo: "Campeão", frase: "A Fábrica e o Salão abriram.", rota: { destino: "lutar", aba: "fronteira" } },
@@ -43,8 +45,8 @@ export const CARTOES: readonly Cartao[] = [
 export const cartaoDe = (n: number): Cartao | undefined => CARTOES.find(c => c.n === n);
 
 /* ---------------------------------------------------------------------------------------------------- as pecas */
-/** o que a trava segura: os menus (Diario, Crescer, Lutar, Conversar), as abas Itens e Fronteira e, dentro delas, as Regras e o Forcar */
-export type Peca = "diario" | "crescer" | "conversar" | "lutar" | "itens" | "regras" | "forcar" | "fronteira";
+/** o que a trava segura: os menus (Diario, Crescer, Lutar, Conversar), as abas Itens e Fronteira e, dentro do treino, o Forcar */
+export type Peca = "diario" | "crescer" | "conversar" | "lutar" | "itens" | "forcar" | "fronteira";
 export interface DadosPeca { nome: string; marco: number; motivo: string }
 /** o marco de cada peca e o motivo dito ao jogador (os textos da prancha, 3.4 "Abre quando ele virar Rookie" e afins) */
 export const PECAS: Readonly<Record<Peca, DadosPeca>> = {
@@ -53,7 +55,6 @@ export const PECAS: Readonly<Record<Peca, DadosPeca>> = {
   conversar: { nome: "Conversar", marco: 3, motivo: "Abre quando ele virar Rookie" },
   lutar: { nome: "Lutar", marco: 4, motivo: "Abre com o primeiro treino" },
   itens: { nome: "Itens", marco: 5, motivo: "Abre com a primeira medalha" },
-  regras: { nome: "Regras", marco: 6, motivo: "Abre quando ele virar Champion" },
   forcar: { nome: "Forçar", marco: 6, motivo: "Abre quando ele virar Champion" },
   fronteira: { nome: "Fronteira", marco: 8, motivo: "Abre com 6 medalhas" },
 };

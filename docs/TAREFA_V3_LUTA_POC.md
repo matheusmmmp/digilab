@@ -283,6 +283,12 @@ PROPOSTOS até a LP5.
     do lugar;
   - **LP2-6:** na v21 saem os gambits (o gp, o aprender e o "g"), as cartas ("k") e os chips de regra; ficam os chips de stat, a confiança,
     a lesão, o sparring, as contagens e as medalhas.
+- Matheus, 2026-11-09, repassado pelo Gerente de sprites e luta: "siga aí até implementar o combate do jogo" (a LP3 liga o palco aos lugares de
+  luta da v21) e, depois das capturas, "Aprovo, abre a LP3b" (as capturas da LP3 aprovadas; a LP3b, o golpe de longe da LP-8 no núcleo,
+  liberada).
+- Matheus, 2026-11-09, repassado pelo Gerente de sprites e luta: "deixa os mesmos botões que tinha no loop anterior, que era de deixar a
+  luta mais rápida, coisa assim". O dock da tela de antes (pausar, ×2, Desistir e, no replay, Sair do replay) volta na luta da POC. Troca o
+  "sem botão durante a luta" do item 3 da seção 3.2 e o que a LP-10 deixava valendo (D-LP3-11).
 
 ## Resultado da LP1 (2026-11-08)
 
@@ -406,3 +412,127 @@ nova são da LP3: com a chave ligada, a Fronteira de um pet v21 segue dizendo qu
 - a Fábrica v21, com as séries, a troca e o Tamer que refaz a tentativa;
 - o gabarito `test/gabaritos/lp2b_torneios_v21.json` (5 vidas muito treinadas, 71 lutas de torneio; 5 tentativas da Fábrica) e o replay bit
   a bit.
+
+## Resultado da LP3 (2026-11-09)
+
+Worker: Claude Code (Opus 5.5), worktree e branch `v3-luta-poc-lp3`, a pedido do Gerente de sprites e luta. Os desvios estão em
+`docs/registro/2026-11.md`, seção "LUTA_POC, LP3". As capturas foram aprovadas pelo Matheus (seção 9).
+
+**O palco** (`web/app/src/telas/lutar/palcoPoc/`, só vista):
+- **o chão:** a elipse 2D da POC, no mundo de 480 × 280, com os 8 mapas do UP e a regra de cada um à vista:
+  - a área que fecha no Coliseu;
+  - a maré na Praia;
+  - a areia e a tempestade no Deserto;
+  - a runa e os pilares que quebram no Castelo;
+  - a lava e as erupções na Caverna;
+  - as árvores e as moitas na Floresta;
+  - o Ringue sem cerca.
+  O cartão "O mapa" diz a regra e os avisos dela (a arena fecha, a tempestade, a runa);
+- **os lutadores:** os sprites do atlas em escala inteira, com os clipes `Idle`, `Run`, `Attack_1`, `Stun` e `Die` pelo estado da simulação,
+  sem nada acrescentado às poses;
+- **os projéteis:** em voo, com o prefab do jogo (`Assets/arena_up/efeitos`, fora do git) por cima do rastro e do brilho do elemento (E2);
+- **o projétil nosso da LP-8:** só desenho nesta etapa (D-LP3-3; a regra é a LP3b);
+- **os efeitos da seção 3.3a,** de E1 a E5 (D-LP3-4);
+- **o dock da tela de antes** (decisão do Matheus de 2026-11-09, D-LP3-11; no lugar do "nenhum botão" das capturas aprovadas): pausar,
+  ×2 e Desistir com a confirmação; no fim, Ver replay e Continuar; no replay, Sair do replay e Ver de novo. No desktop e no celular, nas
+  duas peles. Nada disso muda o resultado nem o registro.
+
+**O jogo** (com `?luta_poc=1`, os pets v21):
+- **a Arena:** o rival do estágio e um dos 8 mapas;
+- **a Campanha:** o mapa do lugar (LP-4), com a série da Cidadela;
+- **a Fronteira:** a Liga (6 lutas sem cura), a Torre, o Salão e a Fábrica.
+O motor grava a luta, e o palco a refaz da mesma entrada e confere o fim (D-LP3-2). Uma luta montada direto no núcleo
+(`?luta_poc=1&palco_poc=<mapa>,<forma>,<forma>,<semente>`) serve às capturas e ao e2e e não grava nada.
+
+**Os testes:**
+- `test/luta_poc_lp3.test.ts` (14): os E1–E5 portados para o palco 2D (o determinismo dos efeitos, o fim igual ao da luta sem tela, cada
+  efeito no seu evento, o movimento reduzido) e o palco refazendo as lutas do motor (a Arena, a Liga, a Torre e o Salão de um pet v21);
+- `e2e/luta_poc_lp3.spec.ts` (4): a luta montada até o fim com o dock, a luta da Arena no registro, o movimento reduzido sem tremida e o
+  dock (pausar para o relógio, Desistir com a confirmação, Ver replay, Sair do replay, o registro igual);
+- o `e2e/luta_poc_lp2.spec.ts` passou a esperar as telas novas;
+- as capturas: `e2e_capturas/luta_poc_lp3.spec.ts` (as 8 lutas montadas), `luta_poc_lp3_jogo.spec.ts` (o jogo com um pet v21 treinado)
+  e `luta_poc_lp3_dock.spec.ts` (o dock em cada estado).
+
+**O que fica:**
+- a regra da LP-8 (a LP3b);
+- ligar a chave por padrão, proposto para o PR da LP4 (o descarte 7 é de mão única);
+- os achados D-LP3-7 a D-LP3-9.
+
+## Resultado da LP3b (2026-11-09)
+
+Worker: Claude Code (Opus 5.5), worktree e branch `v3-luta-poc-lp3b`, a pedido do Gerente de sprites e luta, com a liberação do Matheus
+("Aprovo, abre a LP3b", 2026-11-09, repassado). Os desvios estão em `docs/registro/2026-11.md`, seção "LUTA_POC, LP3b".
+
+**A regra da LP-8 no núcleo** (`tools/gerar_tabela_arena.py` → `web/app/motor/arena/formas.ts`):
+- o Gabumon, o Garurumon, o MetalGarurumon, o Angemon e o Gargomon atiram o próprio efeito de acerto, com a velocidade 30 e o tipo
+  "Guide" (PROPOSTOS, SEM FONTE);
+- a simulação não mudou: com projétil na tabela, a forma passa a ter o alcance de quem atira (150 px) e o voo de verdade, que acerta o
+  primeiro inimigo que cruza, some fora do alcance, bate nas árvores, nas rochas e nos pilares e pode ser desviado;
+- o golpe da POC fica no git (`GOLPES_DA_POC`, `FORMAS_ARENA_POC`) para a fidelidade da LP1, que continua com 480 de 480 lutas iguais
+  ao gabarito do harness.
+
+**Os gabaritos:** os v21 foram regravados num commit próprio, com o motivo (D-LP3b-4). As vidas de hoje não mudam, e a chave segue
+desligada.
+
+**O efeito** (`scripts/medicoes/lp3b_lp8.json`): as vitórias das cinco formas mudam de −0,4 a +3,5 pontos e as lutas ficam de 0,2 a 1,3 s
+mais longas. O equilíbrio é da LP5.
+
+**A tela:** o desenho da LP3 não muda. O voo das cinco formas passa a ser o da simulação; o projétil só desenhado da LP3 saiu neste PR,
+depois do merge da LP3 na `main` (D-LP3b-6).
+
+
+## Resultado da LP4 (2026-11-10)
+
+Worker: Claude Code (Opus 5.5), worktree e branch `v3-luta-poc-lp4`, a pedido do Gerente de sprites e luta, com a liberação do Matheus
+("Sim, abre a LP4", 2026-11-10, repassado). Os desvios estão em `docs/registro/2026-11.md`, seção "LUTA_POC, LP4". Três escolhas que perdem
+ou escondem dado foram DECIDIDAS pelo Matheus em 2026-11-10 ("Aprovo tudo", repassado pelo Gerente, junto com as capturas): a D-LP4-1, a
+D-LP4-2 e a D-LP4-3. O risco do Gazimon (D-LP4-6) fica para a LP5.
+
+**A chave ligada.** `LUTA_POC_LIGADA = true` (`web/app/motor/arena/constantes.ts`). Com isso, para todos e sem `?luta_poc=1`:
+- os ovos novos e o pet de exemplo nascem v21 (`VERSAO_PET = 21`);
+- só a v21 abre (`VERSOES_PET = [21]`), e o pet de teste v16 segue no laboratório;
+- o Importar só abre a v21;
+- a Arena, a Campanha e a Fronteira são as do palco novo.
+
+**O descarte 8 (DECIDIDO, Matheus, 2026-11-10, D-LP4-2).** Roda uma vez, também onde o 7 já rodou pelo `?luta_poc=1`:
+- os pets v13 a v19 saem, o ativo e os guardados, com o aviso "A luta agora é na arena" e o arquivo para baixar;
+- no Tamer, sai a Fábrica do combate por turnos (v13 e v14), que não se refaz mais, com o registro de antes guardado no mesmo arquivo; o
+  recorde da Fábrica recomeça. O resto do Tamer fica byte a byte;
+- o registro do Tamer passa à versão 8.
+
+**O que saiu** (o inventário da seção 3.4):
+- o motor: `motor/combate_tr/`, `motor/combate.ts`, `motor/gambits_pet.ts`, as listas de gambits de `motor/bots.ts`, os fatores das arenas,
+  da Liga, do Salão e da Fábrica, as regras das arenas (fica a série da Cidadela), o `CV`, o `CV21E` e o `GA`, o `Motor.lutar`, o
+  `montarLuta`, os gambits (`"g"`), as cartas (`"k"`) e os chips de regra. Os eventos `"g"` e `"k"` no registro levantam erro;
+- as telas: `src/luta.ts`, o palco 1D (`palcoTR/`; os geradores de desenho que o palco 2D usa foram para `palcoPoc/`), a `TelaLuta`, a
+  `TelaArena`, a `TelaCampanha`, o `ModalResultado`, o `EditorRegras`, o `PainelAprendizado`, o `aprendizadoLuta.ts`, a `EscolhaCarta`, o mapa
+  3D da Exploração e o "Ver replay" do Diário. Os Cenários do Diário lutam na luta da POC; o Nv 6 da progressão passou a ser o Forçar;
+- os itens: só o chip de stat faz efeito. Os chips de regra e as cartas ficam no catálogo, sem efeito, porque o registro do Tamer os guarda,
+  e as medalhas e as revanches não os dão mais;
+- os testes e os scripts: os do combate por turnos, os gabaritos das versões antigas, `scripts/equilibrio_tr/` e
+  `scripts/gerar_gabarito_vidas_v13.ts`; no e2e, os specs das telas de antes, e os saves regerados na v21.
+
+**O pet de teste (DECIDIDO, Matheus, 2026-11-10, D-LP4-3).** Ele não luta mais. Um save v16 com luta não abre e fica no armazenamento, com o erro visível.
+
+**O que não mudou.** As vidas v21 dos gabaritos da LP2 e da LP2b, com o replay bit a bit: o lugar dos gambits e das cartas na assinatura
+ficou. O Python ficou (LP-7). Os registros não se apagaram, e o G-NADA-PERDIDO passa.
+
+**Os documentos.** Os do combate por turnos levam a marca SUBSTITUÍDO, com o link para esta tarefa:
+- a `ESPEC_COMBATE_TR`, a `TAREFA_V2_COMBATE_TR` e a `TAREFA_V3_COMBATE_V14`;
+- os três `PLANO_EQUILIBRIO_COMBATE_TR*` e o `EQUILIBRIO_COMBATE_TR`;
+- a `TAREFA_V3_LUTA_EMPURRAO` e, no palco 1D, a `TAREFA_V3_LUTA_EFEITOS`.
+A `PLANO_V3` (a trilha B), a `TAREFA_V3_PONTE_LUTA`, o `DESIGN_MEDALHAS_ARENAS` e o `MAPA_REPOSITORIO` ganharam a nota do que mudou.
+
+**Os achados.**
+- O Mega da v21 quebrava (D-LP4-5): o conserto saiu junto com o `gp`.
+- A progressão pode travar (D-LP4-6, para a LP5; `web/app/scripts/medicoes/lp4_gazimon.json`):
+  - um Rookie sem treino não vence o Gazimon;
+  - com o treino típico, vence de 0 a 32 %;
+  - o dono simulado que luta contra o próprio estágio não chega à taxa do Ultimate.
+
+**Os testes novos:** `test/luta_poc_lp4.test.ts`:
+- a chave e as versões;
+- pela fonte, que nada do combate por turnos existe nem é importado;
+- os itens;
+- a Fábrica só v21.
+Também `test/tamer.test.ts`, com o descarte 8 e a Fábrica de antes, e `e2e_capturas/luta_poc_lp4.spec.ts`, com as capturas.

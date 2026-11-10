@@ -6,7 +6,7 @@
      - ligada, cada rolagem sai na direcao em que o pet vinha, com a distancia do sorteio de sempre;
      - o "db": vai ao registro, refaz no replay bit a bit e falha alto se invalido. */
 import { describe, expect, test } from "vitest";
-import { CMU_MVP, DIR16, Motor, Mundo, TPD, direcaoDoGolpe, type EventoRegistro } from "../motor/index.ts";
+import { CMU_MVP, DIR16, Motor, Mundo, TPD, VERSAO_PET, VERSAO_PET_LAB, direcaoDoGolpe, type EventoRegistro } from "../motor/index.ts";
 
 /** o dono que poe a bola perto do pet todo passo: o pet que quer brincar anda ate ela e bate */
 function viver(m: Motor, dias: number): void {
@@ -49,22 +49,20 @@ describe("a bola no golpe (pets v15)", () => {
     expect(JSON.stringify(b.resumo())).toBe(JSON.stringify(a.resumo()));
   });
 
-  test("so o v15 liga a chave; o v14 e o v13 seguem com a bola de antes", () => {
+  /* desde a LP4 da LUTA_POC so a v21 (que tem a bola no golpe da v15) e o pet de teste v16 abrem: os v13 e v14 sairam com o combate por
+     turnos, e a comparacao com eles saiu junto */
+  test("a v21 liga a chave; o pet de teste (v16) segue com a bola de antes", () => {
     expect(new Motor(101).mundo!.bolaNoGolpe).toBe(true);
-    expect(new Motor(101, 14).mundo!.bolaNoGolpe).toBe(false);
-    expect(new Motor(101, 13).mundo!.bolaNoGolpe).toBe(false);
+    expect(new Motor(101, VERSAO_PET_LAB).mundo!.bolaNoGolpe).toBe(false);
   });
 
   test("ligada, a bola sai na direcao em que o pet vinha, com a distancia de sempre na primeira batida", () => {
     let golpes = 0;
     for (const semente of [101, 202, 303]) {
-      const v15 = new Motor(semente), v14 = new Motor(semente, 14);
-      viver(v15, 4); viver(v14, 4);
+      const v15 = new Motor(semente);
+      viver(v15, 4);
       const r15 = v15.mundo!.rolagens as { tick: number; de: [number, number]; direcao: number; celulas: number }[];
-      const r14 = v14.mundo!.rolagens as typeof r15;
       expect(r15.length).toBeGreaterThan(0);
-      /* ate a primeira batida a vida e a mesma; a distancia dela sai do mesmo sorteio */
-      expect([r15[0].tick, r15[0].celulas]).toEqual([r14[0].tick, r14[0].celulas]);
       const antes = antesDasBatidas(v15.mundo!);
       expect(antes.length).toBe(r15.length);
       r15.forEach((r, i) => {
@@ -77,8 +75,8 @@ describe("a bola no golpe (pets v15)", () => {
 });
 
 describe("a bola do dono (o evento db)", () => {
-  test("vai ao registro e refaz no replay bit a bit, no v15 e no v14", () => {
-    for (const versao of [15, 14]) {
+  test("vai ao registro e refaz no replay bit a bit, na v21 e no pet de teste (v16)", () => {
+    for (const versao of [VERSAO_PET, VERSAO_PET_LAB]) {
       const m = new Motor(4242, versao);
       viver(m, 2);
       const log = m.log, dbs = log.filter(ev => ev[1] === "db");
