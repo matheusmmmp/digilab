@@ -247,3 +247,23 @@ Escrito em 2026-11-08, antes da primeira vida da faixa, no branch `v3-individual
 - **A suíte do dia:** `python -m pytest tests/ -q` no commit `ad207f7`: 5108 passed, 7 skipped, em 3 h 13 min (Python 3.13.0).
 - **A run roda uma vez.** Se ela cair por bug, a pasta vai para `artifacts_v3_individualidade/caida_1/`, o conserto vai num PR e o
   desvio vai para o registro, antes de rodar de novo.
+
+## 13. Adendo 1: as facetas dentro do dono (descritivo, sem run; 2026-11-09)
+
+**Status do adendo: DECIDIDO pelo Matheus em 2026-11-09** (a escolha "Descritivo dentro do dono", depois do resultado do I2). Escrito e
+commitado antes da conta.
+
+- **A pergunta:** as três correlações da 4.4 saíram no sentido contrário ao esperado (`docs/RESULTADO_V3_INDIVIDUALIDADE.md`, seção 2).
+  Como o dono move muito o traço (η² alto), a inversão pode vir do dono mover o traço e a faceta juntos. O adendo olha a mesma
+  correlação dentro de cada dono.
+- **Os dados:** só os artefatos do I2 (`artifacts_v3_individualidade/medidas.json`). Nenhuma vida nova, nenhuma semente nova.
+- **A conta:** a mesma da 4.4 (`facetas` do orquestrador), com o mesmo bootstrap (2 000 reamostras sobre os pets, a mesma rng), sobre
+  os pets do REL+F de cada dono, separadamente:
+  - o atencioso, o relapso e o aleatório, com 60 pets cada;
+  - o incoerente fica fora, porque as vidas dele são as do atencioso (D-IND-I2b-1).
+- **O artefato:** `artifacts_v3_individualidade/facetas_por_dono.json`, gravado por `experiments/descritivo_individualidade_facetas.py`,
+  com o sha256 do `medidas.json` lido.
+- **A leitura:** só descritiva, com as frases da 7.2: "a faceta acompanha o traço dentro do dono D" só se o IC95 excluir 0.
+  - **Não se lê causa:** a correlação dentro do dono ainda não separa a faceta que move o traço do traço que move a faceta. Isso é da
+    sonda `sem_faceta` do I4.
+  - **Não se ajusta nada:** o adendo não muda o I2, a regra 7.4 nem o I3.
