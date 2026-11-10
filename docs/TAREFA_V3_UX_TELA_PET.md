@@ -906,3 +906,17 @@ O Matheus respondeu "B com tudo" (2026-11-09) à prancha da seção 27: LZ-1 a L
 - As capturas (o script da prancha, Ilha e Digital, desktop e celular, Vidro e Militar) saem iguais às da B da prancha, sem erro de shader.
 
 **Não medido:** o custo no celular. São até 48 focos num laço do fragmento, e falta medir num aparelho de verdade.
+
+## 29. As 4 falhas antigas do e2e (2026-11-10)
+
+As 4 falhas que vinham de antes (seção 28) eram testes atrasados em relação à tela, não defeitos do jogo:
+- **`conversa_nova.spec.ts` e `fala_rede.spec.ts` (a chave "Fala do pet"):** os testes procuravam a linha antiga dos Ajustes (`.hx-linha`).
+  Os Ajustes viraram ícones, e agora os testes acham o botão pelo nome acessível ("Fala do pet").
+- **`fala_rede.spec.ts`, o pet de teste do modular:** o pet sai do ovo bebê, e o nível do Tamer tranca o Conversar até o Rookie (marco 3,
+  `nivel.ts`). O teste agora semeia a chave do nível com o Conversar aberto.
+- **`niveis.spec.ts`, o destrave com as dicas desligadas:** na planta A (#734), a barraca fica fora do primeiro quadro. O cadeado aberto só
+  aparece com o lugar na tela e some em 2,4 s (`ABRE_MS`), e por isso nunca ficava visível. O teste agora confere que o cadeado aberto
+  existe (D-E2E-1).
+
+**Achado (fica para o Matheus):** pela mesma razão, o brilho do "acabou de abrir" da barraca nunca é visto no começo do jogo. O tempo dele
+corre mesmo com o lugar fora da tela.

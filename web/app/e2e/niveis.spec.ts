@@ -204,7 +204,9 @@ test("destrave: com 'Mostrar dicas' desligado nao ha cartao, e o lugar abre do m
   await semear(page, { save: BEBE_70, nivel: { marcos: [1], cartoes: [1] }, dicas: false });
   await page.goto(APP + "#/pet/estado");
   await expect(page.locator(".pet-tela")).toBeVisible();
-  await expect(page.locator('.cadeado-ilha.aberto[data-lugar="barraca"]')).toBeVisible();           // o cadeado se abre mesmo assim
+  /* o cadeado se abre mesmo assim. Existe, e nao "visivel": na planta A (#734) a barraca fica fora do primeiro quadro, e o cadeado aberto so
+     aparece quando o lugar esta na tela (CadeadosDaIlha.tsx) */
+  await expect(page.locator('.cadeado-ilha.aberto[data-lugar="barraca"]')).toBeAttached();
   await expect(page.locator(".cartao-destrave")).toHaveCount(0);
   await trilho(page, "Diário").click();
   await expect(painel(page)).toBeVisible();
