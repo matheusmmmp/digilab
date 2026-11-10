@@ -1874,6 +1874,51 @@ LAYOUT_MUNDO_ILHA = replace(LAYOUT_MUNDO_MVP, nome="ilha", ninho=(11, 13), comed
                             arvores=(("J1", 9, 9, "a"), ("J2", 14, 7, "b"), ("J3", 6, 14, "c")))                   # PROPOSTO, SEM FONTE
 CONFIG_MUNDO_ILHA = replace(CONFIG_MUNDO_MVP, layout=LAYOUT_MUNDO_ILHA)
 
+# A ilha onde so a agua barra o pet (docs/TAREFA_V3_ILHA_AGUA.md, APROVADA em 2026-11-10; o Matheus: "Eu quero que o pet consiga andar pela
+# ilha inteira, so nao atravesse a agua"): o layout da ilha (a planta A) com o mar em volta, um rio com duas pontes e uma lagoa, dentro do
+# mesmo mundo de 64 x 30 (IA-1). O desenho e PROPOSTO, SEM FONTE, e muda aqui sem mexer no codigo (IA-2); o espelho e o
+# web/app/motor/constantes.ts. Quem roda este layout precisa do controlador do contrato (o MotorMundo confere e falha alto).
+# A agua e uma linha de texto por linha de celulas, de cima para baixo, com um caractere por celula: AGUA_MAR, AGUA_DOCE, TERRA ou PONTE.
+# Ela barra o corpo e nao tapa a visao; a ponte e terra (a vista e que a desenha). O mapa fica em AGUA_POR_LAYOUT, pelo nome do layout, e
+# nao num campo do LayoutMundo: os gabaritos de antes gravam o layout campo a campo, e um campo novo os mudaria. O layout que nao esta na
+# tabela nao tem agua. Quem monta os solidos e o digilab/mundo.py (solidos_da_agua).
+AGUA_MAR, AGUA_DOCE, TERRA, PONTE = "~", "r", ".", "="
+AGUA_ILHA = (
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~.......................~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~.................................~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~..............................rrrr......~~~~~~~~~~~~~",
+    "~~~~~~~~~...............................rrrrrr........~~~~~~~~~~",
+    "~~~~~~~..................................rrrr............~~~~~~~",
+    "~~~~~~.....................................rr.............~~~~~~",
+    "~~~~~......................................rr...............~~~~",
+    "~~~~.......................................rr................~~~",
+    "~~~~.......................................rr................~~~",
+    "~~~.......................................rr..................~~",
+    "~~~.......................................==..................~~",
+    "~~~.......................................==..................~~",
+    "~~~......................................rr....................~",
+    "~~~......................................rr....................~",
+    "~~~......................................rr....................~",
+    "~~~......................................rr....................~",
+    "~~~.....................................rr....................~~",
+    "~~~.....................................rr....................~~",
+    "~~~......................................rr...................~~",
+    "~~~~.....................................rr..................~~~",
+    "~~~~......................................==................~~~~",
+    "~~~~~.....rrrrr............................==..............~~~~~",
+    "~~~~~~...rrrrrrr...........................rr.............~~~~~~",
+    "~~~~~~~...rrrrr.............................rr..........~~~~~~~~",
+    "~~~~~~~~~....................................rr.......~~~~~~~~~~",
+    "~~~~~~~~~~~~..................................rr...~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~..............................rr~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+)                                                                                        # PROPOSTO, SEM FONTE
+LAYOUT_MUNDO_ILHA_AGUA = replace(LAYOUT_MUNDO_ILHA, nome="ilha_agua")
+AGUA_POR_LAYOUT = {LAYOUT_MUNDO_ILHA_AGUA.nome: AGUA_ILHA}
+CONFIG_MUNDO_ILHA_AGUA = replace(CONFIG_MUNDO_ILHA, layout=LAYOUT_MUNDO_ILHA_AGUA)
+
 
 # =====================================================================
 # V2, o banheiro (docs/TAREFA_V2_BANHEIRO.md; BN-1 a BN-6 decididas em 2026-10-07). Desligado por padrao: a vida de hoje byte a byte.
@@ -2366,6 +2411,8 @@ class ConfigContrato:
 
 CONFIG_CONTRATO = ConfigContrato()
 CONFIG_CONTRATO_LIGADO = ConfigContrato(sensores=True, controlador=True)
+# a ilha com agua (docs/TAREFA_V3_ILHA_AGUA.md, IA1): so o controlador, que e quem desvia da agua; o cone e as paredes ficam desligados
+CONFIG_CONTRATO_AGUA = ConfigContrato(controlador=True)
 
 
 # =====================================================================
